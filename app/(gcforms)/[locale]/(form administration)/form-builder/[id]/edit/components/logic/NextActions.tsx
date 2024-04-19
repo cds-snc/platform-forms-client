@@ -21,8 +21,10 @@ export const NextActions = ({
   const { t } = useTranslation("form-builder");
   const formId = `form-${Date.now()}`;
 
+  const getId = useGroupStore((state) => state.getId);
   const findParentGroup = useGroupStore((state) => state.findParentGroup);
   const setGroupNextAction = useGroupStore((state) => state.setGroupNextAction);
+  const getGroupNextAction = useGroupStore((state) => state.getGroupNextAction);
   // const autoSetNextActions = useGroupStore((state) => state.autoSetNextActions);
 
   if (initialNextActionRules.length == 0) {
@@ -51,8 +53,20 @@ export const NextActions = ({
 
   return (
     <div>
-      <pre>{JSON.stringify(item.properties.titleEn)}</pre>
-      <pre>{JSON.stringify(nextActions)}</pre>
+      <div className="text-sm">
+        <div className="mb-2 font-bold">Section:</div>
+        <div className="mb-2">{getId()}</div>
+      </div>
+      <div className="text-sm">
+        <div className="mb-2 font-bold">Selected Question: </div>
+        <div className="mb-2">{item.properties.titleEn}</div>
+      </div>
+      <div className="max-w-['100px'] text-sm">
+        <div className="mb-2 font-bold">Section next Action: </div>
+        <pre className="overflow-scroll border-2 border-black/50 p-2">
+          {JSON.stringify(getGroupNextAction(getId()))}
+        </pre>
+      </div>
       <form
         onSubmit={(e: React.FormEvent<HTMLFormElement>) => e.preventDefault()}
         id={formId}

@@ -60,15 +60,17 @@ export const Flow = () => {
       type: "groupNode",
     };
 
-    x_pos += 275;
+    x_pos += 300;
 
     if (prevNodeId) {
+      /*
       edges.push({
         id: `e-${prevNodeId}-${id}`,
         source: prevNodeId,
         target: id,
         type: "smoothstep",
       });
+      */
     }
 
     prevNodeId = id;
@@ -93,21 +95,18 @@ export const Flow = () => {
   });
 
   // Add edge from last group to confirmation node
+  /*
   edges.push({
     id: `e-${prevNodeId}-end`,
     source: prevNodeId,
     target: "end",
     type: "smoothstep",
   });
+  */
 
   return (
     <div className="my-10 w-full border-1" style={{ height: "calc(100vh - 300px)" }}>
-      <ReactFlow
-        fitView={true}
-        nodes={nodes}
-        edges={edges}
-        nodeTypes={nodeTypes}
-      >
+      <ReactFlow fitView={true} nodes={nodes} edges={edges} nodeTypes={nodeTypes}>
         <Background />
         <Controls />
       </ReactFlow>
