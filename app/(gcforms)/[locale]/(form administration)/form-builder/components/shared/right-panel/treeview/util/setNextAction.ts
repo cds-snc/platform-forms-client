@@ -29,6 +29,11 @@ export const setGroupNextAction = (
   groupId: string,
   nextAction: Group["nextAction"]
 ) => {
-  formGroups[groupId].nextAction = nextAction;
-  return formGroups;
+  const currentAction = formGroups[groupId].nextAction;
+
+  if (currentAction === nextAction) {
+    return currentAction;
+  }
+
+  return nextAction;
 };

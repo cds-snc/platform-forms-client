@@ -7,6 +7,7 @@ import { Button } from "@clientComponents/globals";
 import { FormElement } from "@lib/types";
 import { NextActionRule } from "@lib/formContext";
 import { NextActionSelector } from "./conditionals/NextActionSelector";
+import { useGroupStore } from "@formBuilder/components/shared/right-panel/treeview/store/useGroupStore";
 
 export const NextActions = ({
   item,
@@ -20,8 +21,12 @@ export const NextActions = ({
   const { t } = useTranslation("form-builder");
   const formId = `form-${Date.now()}`;
 
+  const findParentGroup = useGroupStore((state) => state.findParentGroup);
+  const setGroupNextAction = useGroupStore((state) => state.setGroupNextAction);
+  // const autoSetNextActions = useGroupStore((state) => state.autoSetNextActions);
+
   if (initialNextActionRules.length == 0) {
-    initialNextActionRules.push({ groupId: "start", choiceId: `${item.id}.0` });
+    initialNextActionRules.push({ groupId: "start", choiceId: "" });
   }
 
   const [nextActions, setNextActions] = useState(initialNextActionRules);
@@ -82,7 +87,11 @@ export const NextActions = ({
           <Button
             className="ml-4"
             onClick={() => {
-              alert("Save");
+              const group = findParentGroup(String(item.id));
+              const parent = group?.index;
+              // first auto set the next actions for all the groups
+              // autoSetNextActions();
+              parent && setGroupNextAction(parent as string, nextActions);
             }}
           >
             Save

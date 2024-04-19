@@ -52,13 +52,19 @@ const ChoiceSelect = ({
         )}
         aria-labelledby={labelId}
       >
-        {choices.map(({ label, value }) => {
-          return (
-            <option key={value} value={value}>
-              {label}
-            </option>
-          );
-        })}
+        {choices
+          .filter(({ label }) => {
+            if (label === "") {
+              return false;
+            }
+          })
+          .map(({ label, value }) => {
+            return (
+              <option key={value} value={value}>
+                {label}
+              </option>
+            );
+          })}
       </select>
     </div>
   );
@@ -135,7 +141,17 @@ export const NextActionSelector = ({
     return { label: item.name, value: key };
   });
 
+  groupItems.push({ label: "End", value: "end" });
+
   const choices = useMemo(() => {
+    if (!selectedElement) {
+      return [];
+    }
+
+    if (selectedElement.properties?.choices?.length === 0) {
+      return [];
+    }
+
     return selectedElement?.properties.choices?.map((choice, index) => {
       const result = { label: choice[language], value: `${selectedElement.id}.${index}` };
       return result;
