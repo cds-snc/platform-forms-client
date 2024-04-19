@@ -2,7 +2,7 @@
 
 import { useGroupStore } from "@formBuilder/components/shared/right-panel/treeview/store/useGroupStore";
 import React, { useMemo } from "react";
-import ReactFlow, { Edge, Background, Controls } from "reactflow";
+import ReactFlow, { Edge, Background, Controls, MarkerType } from "reactflow";
 import "reactflow/dist/style.css";
 import { TreeItem } from "react-complex-tree";
 import { GroupNode } from "./GroupNode";
@@ -36,6 +36,12 @@ const endNode = {
   type: "groupNode",
 };
 
+const defaultEdgeOptions = {
+  type: "smoothstep",
+  markerEnd: { type: MarkerType.ArrowClosed },
+  pathOptions: { offset: 5 },
+};
+
 export const FormFlow = () => {
   const getGroups = useGroupStore((s) => s.getGroups);
   const treeItems = getGroups();
@@ -44,7 +50,7 @@ export const FormFlow = () => {
   const { edges, nodes } = useMemo(() => {
     let prevNodeId: string = "start";
     let x_pos = 50;
-    const y_pos = 50;
+    let y_pos = 50;
     const edges: Edge[] = [];
     const children = treeItems.root.children;
 
@@ -84,7 +90,6 @@ export const FormFlow = () => {
           id: `e-${prevNodeId}-${id}`,
           source: id,
           target: group.nextAction,
-          type: "smoothstep",
         });
       }
 
@@ -96,9 +101,11 @@ export const FormFlow = () => {
             id: `e-${prevNodeId}-${id}-${action}`,
             source: id,
             target: action.groupId,
-            type: "smoothstep",
           });
         });
+
+        x_pos -= 350;
+        y_pos += 200;
       }
 
       if (prevNodeId && group && typeof group.nextAction === "undefined") {
@@ -124,7 +131,13 @@ export const FormFlow = () => {
 
   return (
     <div className="my-10 w-full border-1" style={{ height: "calc(100vh - 300px)" }}>
-      <ReactFlow fitView={true} nodes={nodes} edges={edges} nodeTypes={nodeTypes}>
+      <ReactFlow
+        fitView={true}
+        nodes={nodes}
+        edges={edges}
+        nodeTypes={nodeTypes}
+        defaultEdgeOptions={defaultEdgeOptions}
+      >
         <Background />
         <Controls />
       </ReactFlow>
