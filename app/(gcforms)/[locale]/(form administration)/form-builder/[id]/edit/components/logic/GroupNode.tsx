@@ -1,9 +1,13 @@
-import { Handle, Position } from "reactflow";
+import { Handle } from "reactflow";
 import { NodeProps } from "reactflow";
 import { TreeItem } from "react-complex-tree";
+
+import { getSourceHandlePosition, getTargetHandlePosition } from "./utils";
+import { layoutOptions } from "./options";
 import { useGroupStore } from "@formBuilder/components/shared/right-panel/treeview/store/useGroupStore";
 
 export const GroupNode = (node: NodeProps) => {
+  const direction = layoutOptions.direction;
   const setId = useGroupStore((state) => state.setId);
   const setSelectedElementId = useGroupStore((state) => state.setSelectedElementId);
   return (
@@ -30,8 +34,21 @@ export const GroupNode = (node: NodeProps) => {
           );
         })}
 
-        <Handle type="source" position={Position.Right} isConnectable={false} />
-        <Handle type="target" position={Position.Left} isConnectable={false} />
+        {node.id !== "end" && (
+          <Handle
+            type="source"
+            position={getSourceHandlePosition(direction)}
+            isConnectable={false}
+          />
+        )}
+
+        {node.id !== "start" && (
+          <Handle
+            type="target"
+            position={getTargetHandlePosition(direction)}
+            isConnectable={false}
+          />
+        )}
       </div>
     </div>
   );

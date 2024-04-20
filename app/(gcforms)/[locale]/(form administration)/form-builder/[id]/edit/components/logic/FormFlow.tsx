@@ -4,7 +4,6 @@ import React, { useEffect } from "react";
 import ReactFlow, {
   Background,
   Controls,
-  MarkerType,
   useStoreApi,
   ReactFlowProvider,
   useReactFlow,
@@ -13,16 +12,13 @@ import ReactFlow, {
 } from "reactflow";
 
 import "reactflow/dist/style.css";
-import useAutoLayout, { type LayoutOptions } from "./useAutoLayout";
+import useAutoLayout from "./useAutoLayout";
 import { useFlowData } from "./useFlowData";
 import { GroupNode } from "./GroupNode";
-const nodeTypes = { groupNode: GroupNode };
+import { layoutOptions } from "./options";
+import { edgeOptions } from "./options";
 
-const defaultEdgeOptions = {
-  type: "smoothstep",
-  markerEnd: { type: MarkerType.ArrowClosed },
-  pathOptions: { offset: 5 },
-};
+const nodeTypes = { groupNode: GroupNode };
 
 export const FormFlow = () => {
   const { nodes: initialNodes, edges: initialEdges } = useFlowData();
@@ -42,12 +38,6 @@ export const FormFlow = () => {
     };
   }
 
-  const layoutOptions: LayoutOptions = {
-    algorithm: "d3-hierarchy",
-    direction: "LR",
-    spacing: [50, 50],
-  };
-
   useAutoLayout(layoutOptions);
 
   useEffect(() => {
@@ -62,7 +52,7 @@ export const FormFlow = () => {
         onNodesChange={onNodesChange}
         onEdgesChange={onEdgesChange}
         nodeTypes={nodeTypes}
-        defaultEdgeOptions={defaultEdgeOptions}
+        defaultEdgeOptions={edgeOptions}
       >
         <Background />
         <Controls />
