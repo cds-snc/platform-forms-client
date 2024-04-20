@@ -86,8 +86,8 @@ export const useFlowData = () => {
     const edges: Edge[] = [];
     const treeIndexes = treeItems.root.children;
 
-    let x_pos = 50;
-    let y_pos = 50;
+    const x_pos = 0;
+    const y_pos = 0;
     let prevNodeId: string = "start";
 
     if (!treeIndexes) {
@@ -111,14 +111,8 @@ export const useFlowData = () => {
 
       const newEdges = getEdges(key as string, prevNodeId, group);
 
-      if (newEdges.length >= 2) {
-        y_pos += 300;
-      } else {
-        x_pos += 300;
-      }
-
       const flowNode = {
-        id: key,
+        id: key as string,
         position: { x: x_pos, y: y_pos },
         data: { label: treeItem.data, children: elements },
         type: "groupNode",
@@ -130,7 +124,7 @@ export const useFlowData = () => {
     });
 
     // Push down the end node
-    nodes.push({ ...endNode, position: { x: x_pos, y: y_pos + 200 } });
+    nodes.push({ ...endNode, position: { x: x_pos, y: y_pos } });
 
     return { edges, nodes };
   }, [treeItems, formGroups]);
