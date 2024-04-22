@@ -39,6 +39,9 @@ ENV TAG_VERSION=$TAG_VERSION
 ENV AWS_LWA_ENABLE_COMPRESSION=true
 ENV HOSTNAME=localhost
 ENV PORT=3000
+# Use the REVIEW_ENV environment variable to determine if the app is running in a review environment
+# Enables memory caching for the prerendering of pages
+ENV REVIEW_ENV=1
 
 WORKDIR /src
 
