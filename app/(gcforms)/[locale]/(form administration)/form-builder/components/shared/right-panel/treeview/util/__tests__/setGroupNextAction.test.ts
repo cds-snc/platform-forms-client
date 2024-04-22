@@ -9,8 +9,15 @@ describe("Sets next action for a specific group", () => {
       "4": { name: "4", elements: [] },
       "5": { name: "5", elements: [] },
     };
-    const result = setGroupNextAction(formGroups, "1", "2");
+    const nextAction = setGroupNextAction(formGroups, "1", "2");
+    expect(nextAction).toBe("2");
 
-    expect(result["1"].nextAction).toBe("2");
+    // This should be untouched - as groupId is empty
+    const nextActionArr = setGroupNextAction(formGroups, "1", [{ groupId: "", choiceId: "1.0" }]);
+    expect(nextActionArr).toBe("");
+
+    // Take the group id as the next action from the array when there is no choiceId
+    const nextActionGroupAsString = setGroupNextAction(formGroups, "1", [{ groupId: "5", choiceId: "" }]);
+    expect(nextActionGroupAsString).toBe("5");
   });
 });

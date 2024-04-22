@@ -43,7 +43,7 @@ export const setGroupNextAction = (
       const choiceId = action.choiceId;
       const nextGroupId = action.groupId;
 
-      if (choiceId && nextGroupId) {
+      if (choiceId && nextGroupId && nextGroupId !== "") {
         filteredActions.push(action);
       }
 
