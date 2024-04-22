@@ -64,7 +64,7 @@ const ChoiceSelect = ({
   );
 };
 
-const GroupSelect = ({
+export const GroupSelect = ({
   selected,
   groups,
   onChange,
