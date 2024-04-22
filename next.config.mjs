@@ -38,10 +38,11 @@ const nextConfig = {
     // removeConsole: false,
   },
   output: isOutputStandalone ? "standalone" : undefined,
-  ...(process.env.NODE_ENV === "production" && {
-    cacheHandler: require.resolve("./nextCacheHandler.mjs"),
-    cacheMaxMemorySize: 0, // disable default in-memory caching
-  }),
+  ...(process.env.NODE_ENV === "production" &&
+    process.env.REVIEW_ENV && {
+      cacheHandler: require.resolve("./nextCacheHandler.mjs"),
+      cacheMaxMemorySize: 0, // disable default in-memory caching
+    }),
   webpack: (config) => {
     // Support reading markdown
     config.module.rules.push({
