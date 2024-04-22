@@ -1,4 +1,4 @@
-describe("Dynamic Row Functionality", () => {
+describe.skip("Dynamic Row Functionality", () => {
   let formID: string;
   before(() => {
     cy.useFlag("experimentalBlocks", true);

@@ -1,7 +1,6 @@
 import React from "react";
 import { cleanup, render, screen, waitFor, fireEvent } from "@testing-library/react";
 import { Form } from "@clientComponents/forms/Form/Form";
-import { useFlag } from "@lib/hooks/useFlag";
 import { submitForm } from "app/(gcforms)/[locale]/(form filler)/id/[...props]/actions";
 
 jest.mock("@lib/client/clientHelpers", () => {
@@ -25,24 +24,21 @@ let mockFormTimerState = {
   timeLock: 0,
 };
 
-jest.mock("@lib/hooks", () => {
-  const originalModule = jest.requireActual("@lib/hooks");
-  return {
-    __esModule: true,
-    ...originalModule,
-    useFlag: jest.fn((flag) => {
-      return useFlag(flag);
-    }),
-    useFormTimer: jest.fn(() => [
-      mockFormTimerState,
-      {
-        startTimer: jest.fn(),
-        checkTimer: jest.fn(),
-        disableTimer: jest.fn(),
-      },
-    ]),
-  };
-});
+jest.mock("@lib/hooks/useFlag", () => ({
+  useFlag: jest.fn(),
+}));
+
+jest.mock("@lib/hooks/useFormTimer", () => ({
+  __esModule: true,
+  default: jest.fn(() => [
+    mockFormTimerState,
+    {
+      startTimer: jest.fn(),
+      checkTimer: jest.fn(),
+      disableTimer: jest.fn(),
+    },
+  ]),
+}));
 
 const formRecord = {
   form: {

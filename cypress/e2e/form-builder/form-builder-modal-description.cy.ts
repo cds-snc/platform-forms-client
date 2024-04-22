@@ -1,7 +1,7 @@
 describe("Form builder modal description", () => {
   beforeEach(() => {
-    cy.login({ acceptableUse: true });
-    cy.visitPage("/en/form-builder/edit");
+    // cy.login({ acceptableUse: true });
+    cy.visitPage("/en/form-builder/0000/edit");
   });
 
   it("Renders matching element description in more modal", () => {

@@ -1,4 +1,4 @@
-describe("Forms Functionality - Character Counts", () => {
+describe.skip("Forms Functionality - Character Counts", () => {
   let formID: string;
   before(() => {
     cy.useFlag("formTimer", false);

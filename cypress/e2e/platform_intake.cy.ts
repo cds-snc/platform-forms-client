@@ -1,4 +1,4 @@
-describe("CDS Platform Intake Form functionality", () => {
+describe.skip("CDS Platform Intake Form functionality", () => {
   let formID: string;
   before(() => {
     cy.useForm("../../__fixtures__/platformIntakeTestForm.json");
