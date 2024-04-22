@@ -4,9 +4,9 @@ import { auth } from "@lib/auth";
 import { checkPrivilegesAsBoolean, createAbility } from "@lib/privileges";
 import { getUsers } from "@lib/users";
 import { ManageForm } from "./ManageForm";
-import { notFound, redirect } from "next/navigation";
-
 import { Metadata } from "next";
+import { UserAbility } from "@lib/types";
+import { Session } from "next-auth";
 
 export async function generateMetadata({
   params: { locale },
@@ -19,70 +19,92 @@ export async function generateMetadata({
   };
 }
 
-/*
-@todo re enable back button
-const BackToManageForms = async ({ backLink }: { backLink: string }) => {
-  const { t } = await serverTranslation("admin-users");
-
-  if (!backLink) return null;
-
-  return (
-    <div className="mb-10">
-      <BackLink href={`/admin/accounts/${backLink}/manage-forms`}>
-        {t("backToManageForms")}
-      </BackLink>
-    </div>
-  );
-};
-*/
-
-export default async function Page({
-  params: { id, locale },
-}: {
-  params: { id: string; locale: string };
-}) {
+const getSessionAndAbility = async () => {
   const session = await auth();
-  if (!session) redirect(`/${locale}/auth/login`);
-  const ability = createAbility(session);
 
-  if (
-    checkPrivilegesAsBoolean(ability, [
-      {
-        action: "view",
-        subject: {
-          type: "User",
-          // Empty object to force the ability to check for any user
-          object: {},
-        },
+  const ability = session && createAbility(session);
+
+  return { session, ability };
+};
+
+const getCanManageOwnership = (formId: string, ability: UserAbility | null) => {
+  if (!ability || formId === "0000") {
+    return false;
+  }
+
+  return checkPrivilegesAsBoolean(ability, [
+    {
+      action: "view",
+      subject: {
+        type: "User",
+        // Empty object to force the ability to check for any user
+        object: {},
       },
-      {
-        action: "view",
-        subject: {
-          type: "FormRecord",
-          // We want to make sure the user has the permission to view all templates
-          object: {},
-        },
+    },
+    {
+      action: "view",
+      subject: {
+        type: "FormRecord",
+        // We want to make sure the user has the permission to view all templates
+        object: {},
       },
-    ])
-  ) {
-    if (!id || Array.isArray(id)) notFound();
+    },
+  ]);
+};
 
-    const templateWithAssociatedUsers = await getTemplateWithAssociatedUsers(ability, id);
-    if (!templateWithAssociatedUsers) notFound();
+const getCanSetClosingDate = (
+  formId: string,
+  ability: UserAbility | null,
+  session: Session | null
+) => {
+  if (!ability || !session || formId === "0000") {
+    return false;
+  }
 
-    const allUsers = (await getUsers(ability)).map((user) => {
-      return { id: user.id, name: user.name || "", email: user.email || "" };
-    });
+  return session ? true : false;
+};
+
+const getAllUsers = async (ability: UserAbility) => {
+  const users = await getUsers(ability);
+  return users.map((user) => ({
+    id: user.id,
+    name: user.name || "",
+    email: user.email || "",
+  }));
+};
+
+export default async function Page({ params: { id } }: { params: { id: string } }) {
+  const { session, ability } = await getSessionAndAbility();
+  const canManageOwnership = getCanManageOwnership(id, ability);
+  const canSetClosingDate = getCanSetClosingDate(id, ability, session);
+
+  if (!canManageOwnership || id === "0000") {
     return (
       <ManageForm
         id={id}
-        formRecord={templateWithAssociatedUsers.formRecord}
-        usersAssignedToFormRecord={templateWithAssociatedUsers.users}
-        allUsers={allUsers}
-        canManageOwnership={true}
+        canManageOwnership={canManageOwnership}
+        canSetClosingDate={canSetClosingDate}
       />
     );
   }
 
-  return <ManageForm id={id} canManageOwnership={false} />;
+  const templateWithAssociatedUsers =
+    ability && (await getTemplateWithAssociatedUsers(ability, id));
+
+  if (!templateWithAssociatedUsers) {
+    throw new Error("Template not found");
+  }
+
+  const allUsers = await getAllUsers(ability);
+
+  return (
+    <ManageForm
+      id={id}
+      canManageOwnership={canManageOwnership}
+      canSetClosingDate={canSetClosingDate}
+      formRecord={templateWithAssociatedUsers.formRecord}
+      usersAssignedToFormRecord={templateWithAssociatedUsers.users}
+      allUsers={allUsers}
+    />
+  );
 }
