@@ -1,10 +1,11 @@
 import { FormElement } from "@lib/types";
 import { PublicFormRecord, ConditionalRule } from "@lib/types";
 
-export type Group = { name: string; nextAction?: string; elements: string[] };
+export type Group = { name: string; nextAction?: string | NextActionRule[]; elements: string[] };
 export type GroupsType = Record<string, Group>;
 export type FormValues = Record<string, string | string[]>;
 export type ChoiceRule = { elementId: string; choiceId: string };
+export type NextActionRule = { groupId: string; choiceId: string };
 
 /**
  * Ensure the choiceId is in the format "1.0"

@@ -34,6 +34,8 @@ export const GCFormsProvider = ({
 
   const handleNextAction = () => {
     if (!currentGroup) return;
+
+    // @todo add a test for this
     if (hasNextAction(currentGroup)) {
       let nextAction = groups[currentGroup].nextAction || "";
 
@@ -42,19 +44,22 @@ export const GCFormsProvider = ({
        i.e. multiple next actions based on choice
        
       "nextAction": [
-        { "choiceId": "1.0", "next": "f3e91cd0-343c-46a2-acab-3346865974cb" },
-        { "choiceId": "1.1", "next": "93278f8e-5d47-4507-a104-c47e8a950da0" }
+        { "choiceId": "1.0", "groupId": "f3e91cd0-343c-46a2-acab-3346865974cb" },
+        { "choiceId": "1.1", "groupId": "93278f8e-5d47-4507-a104-c47e8a950da0" }
       ]
       */
       if (Array.isArray(nextAction)) {
         nextAction.forEach((action) => {
           const match = matchedIds.includes(action.choiceId);
           if (match) {
-            nextAction = action.next;
+            nextAction = action.groupId;
           }
         });
       }
-      setCurrentGroup(nextAction);
+
+      if (typeof nextAction === "string") {
+        setCurrentGroup(nextAction);
+      }
     }
   };
 
