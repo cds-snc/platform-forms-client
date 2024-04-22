@@ -20,7 +20,7 @@ import { edgeOptions } from "./options";
 
 const nodeTypes = { groupNode: GroupNode };
 
-export const FormFlow = () => {
+export const Flow = () => {
   const { nodes: initialNodes, edges: initialEdges } = useFlowData();
   const { fitView } = useReactFlow();
 
@@ -61,10 +61,10 @@ export const FormFlow = () => {
   );
 };
 
-export const Flow = () => {
+export const FlowWithProvider = () => {
   return (
     <ReactFlowProvider>
-      <FormFlow />
+      <Flow />
     </ReactFlowProvider>
   );
 };

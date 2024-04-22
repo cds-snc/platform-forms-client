@@ -1,76 +1,92 @@
 "use client";
-import React, { useState } from "react";
-import PropTypes from "prop-types";
+import React, { useMemo, useState } from "react";
 import { useTranslation } from "@i18n/client";
 
-import { Button } from "@clientComponents/globals";
 import { FormElement } from "@lib/types";
+import { GroupsType } from "@lib/formContext";
+
+import { GroupSelect } from "./GroupSelect";
+import { ChoiceSelect } from "./ChoiceSelect";
+import { Button } from "@clientComponents/globals";
+
 import { NextActionRule } from "@lib/formContext";
-import { NextActionSelector } from "./conditionals/NextActionSelector";
 import { useGroupStore } from "@formBuilder/components/shared/right-panel/treeview/store/useGroupStore";
 import { useTemplateStore } from "@lib/store/useTemplateStore";
-import { GroupsType } from "@lib/formContext";
-import { GroupSelect } from "./conditionals/NextActionSelector";
 
-const SingleNextAction = ({
-  item,
-  nextAction = "end",
+export const GroupAndChoiceSelect = ({
+  selectedElement,
+  groupId,
+  choiceId,
+  index,
+  updateChoiceId,
+  updateGroupId,
+  removeSelector,
 }: {
-  item: FormElement;
-  nextAction: string | undefined;
+  selectedElement: FormElement | null;
+  groupId: string | null;
+  choiceId: string | null;
+  index: number;
+  updateChoiceId: (index: number, id: string) => void;
+  updateGroupId: (index: number, id: string) => void;
+  removeSelector: (index: number) => void;
 }) => {
-  const getId = useGroupStore((state) => state.getId);
-  const findParentGroup = useGroupStore((state) => state.findParentGroup);
-  const setGroupNextAction = useGroupStore((state) => state.setGroupNextAction);
+  const { t } = useTranslation("form-builder");
 
-  const currentGroup = getId();
-  const [nextActionId, setNextActionId] = useState(nextAction);
+  const { translationLanguagePriority } = useTemplateStore((s) => ({
+    translationLanguagePriority: s.translationLanguagePriority,
+  }));
+
+  const language = translationLanguagePriority;
 
   const formGroups: GroupsType = useTemplateStore((s) => s.form.groups) || {};
-  let groupItems = Object.keys(formGroups).map((key) => {
+  const groupItems = Object.keys(formGroups).map((key) => {
     const item = formGroups[key];
     return { label: item.name, value: key };
   });
 
   groupItems.push({ label: "End", value: "end" });
 
-  groupItems = groupItems.filter((group) => group.value !== currentGroup);
+  const choices = useMemo(() => {
+    return selectedElement?.properties.choices?.map((choice, index) => {
+      const result = { label: choice[language], value: `${selectedElement.id}.${index}` };
+      return result;
+    });
+  }, [selectedElement, language]);
 
   const handleGroupChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const value = e.target.value;
-    setNextActionId(value);
+    updateGroupId(index, value);
+  };
+
+  const handleChoiceChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const value = e.target.value;
+    updateChoiceId(index, value);
+  };
+
+  const handleRemove = () => {
+    removeSelector(index);
   };
 
   return (
-    <div>
-      <div>
-        <div>
+    <>
+      {choices && (
+        <fieldset className="border-b border-dotted border-slate-500">
           <div className="mb-4">
-            <GroupSelect
-              selected={nextAction ? nextAction : null}
-              groups={groupItems}
-              onChange={handleGroupChange}
-            />
+            <ChoiceSelect selected={choiceId} choices={choices} onChange={handleChoiceChange} />
           </div>
-          <div>
-            <Button
-              className="ml-4"
-              onClick={() => {
-                const group = findParentGroup(String(item.id));
-                const parent = group?.index;
-                parent && setGroupNextAction(parent as string, nextActionId);
-              }}
-            >
-              Save
-            </Button>
+          <div className="mb-4">
+            <GroupSelect selected={groupId} groups={groupItems} onChange={handleGroupChange} />
           </div>
-        </div>
-      </div>
-    </div>
+          <Button className="mb-8 inline-block" theme="link" onClick={handleRemove}>
+            {t("addConditionalRules.removeRule")}
+          </Button>
+        </fieldset>
+      )}
+    </>
   );
 };
 
-const MultiNextActions = ({
+export const MultiActionSelector = ({
   item,
   descriptionId,
   initialNextActionRules,
@@ -114,7 +130,7 @@ const MultiNextActions = ({
       <div className="mb-6" aria-live="polite" aria-relevant="all">
         {nextActions.map((action, index) => {
           return (
-            <NextActionSelector
+            <GroupAndChoiceSelect
               index={index}
               key={`${action.choiceId}-${index}`}
               selectedElement={item}
@@ -150,36 +166,4 @@ const MultiNextActions = ({
       </div>
     </form>
   );
-};
-
-export const NextActions = ({ item }: { item: FormElement }) => {
-  const getId = useGroupStore((state) => state.getId);
-  const getGroupNextAction = useGroupStore((state) => state.getGroupNextAction);
-  const typesWithOptions = ["radio", "checkbox", "select"];
-  const currentNextActions = getGroupNextAction(getId());
-
-  return (
-    <div>
-      {typesWithOptions.includes(item.type) ? (
-        <MultiNextActions
-          item={item}
-          initialNextActionRules={
-            Array.isArray(currentNextActions)
-              ? currentNextActions
-              : [{ groupId: "end", choiceId: `${item.id}.0` }]
-          }
-        />
-      ) : (
-        <div>
-          {!Array.isArray(currentNextActions) && (
-            <SingleNextAction item={item} nextAction={currentNextActions} />
-          )}
-        </div>
-      )}
-    </div>
-  );
-};
-
-NextActions.propTypes = {
-  item: PropTypes.object,
 };
