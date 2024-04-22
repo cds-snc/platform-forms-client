@@ -8,8 +8,8 @@ import createLruHandler from "@neshca/cache-handler/local-lru";
 CacheHandler.onCreation(async () => {
   // Create an in-memory Least Recently Used cache for use in PR review environments
   const localHandler = createLruHandler({
-    maxItemsNumber: 1000, // 1000 items
-    maxItemSizeBytes: 1024 * 1024 * 50, // 50 MB
+    maxItemsNumber: 25, // 25 items
+    maxItemSizeBytes: 1024 * 1024 * 2, // 2 MB
   });
 
   return {
