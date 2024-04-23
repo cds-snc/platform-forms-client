@@ -174,7 +174,9 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
       window.grecaptcha.ready = function (cb) {
         if (typeof window.grecaptcha === "undefined") {
           const c = "___grecaptcha_cfg";
+          // @ts-expect-error ignoring next line
           window[c] = window[c] || {};
+          // @ts-expect-error ignoring next line
           (window[c]["fns"] = window[c]["fns"] || []).push(cb);
         } else {
           cb();
