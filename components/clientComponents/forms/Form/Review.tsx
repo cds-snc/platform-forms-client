@@ -73,7 +73,7 @@ export default function Review({
             })}
         </dl>
       </div>
-      <div className="flex">{children}</div>
+      {children}
     </div>
   );
 }

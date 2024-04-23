@@ -310,37 +310,41 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
             props.setStatus(undefined);
           }}
         >
-          <Button
-            secondary={true}
-            onClick={() => {
-              props.setStatus(undefined);
-            }}
-          >
-            {t("goBack", { ns: "review" })}
-          </Button>
+          {/* Using inline blocks to allow the submit button to grow and shrink and more easily align with the go back button */}
           <div>
-            {props.renderSubmit ? (
-              props.renderSubmit({
-                validateForm: props.validateForm,
-                fallBack: () => {
-                  return (
-                    <SubmitButton
-                      numberOfRequiredQuestions={numberOfRequiredQuestions}
-                      formID={formID}
-                      formTitle={form.titleEn}
-                      callback={submissionCallback}
-                    />
-                  );
-                },
-              })
-            ) : (
-              <SubmitButton
-                numberOfRequiredQuestions={numberOfRequiredQuestions}
-                formID={formID}
-                formTitle={form.titleEn}
-                callback={submissionCallback}
-              />
-            )}
+            <Button
+              secondary={true}
+              onClick={() => {
+                props.setStatus(undefined);
+              }}
+              className="inline-block mr-4"
+            >
+              {t("goBack", { ns: "review" })}
+            </Button>
+            <div className="inline-block">
+              {props.renderSubmit ? (
+                props.renderSubmit({
+                  validateForm: props.validateForm,
+                  fallBack: () => {
+                    return (
+                      <SubmitButton
+                        numberOfRequiredQuestions={numberOfRequiredQuestions}
+                        formID={formID}
+                        formTitle={form.titleEn}
+                        callback={submissionCallback}
+                      />
+                    );
+                  },
+                })
+              ) : (
+                <SubmitButton
+                  numberOfRequiredQuestions={numberOfRequiredQuestions}
+                  formID={formID}
+                  formTitle={form.titleEn}
+                  callback={submissionCallback}
+                />
+              )}
+            </div>
           </div>
         </Review>
       )}
