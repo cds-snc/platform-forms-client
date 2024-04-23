@@ -88,8 +88,8 @@ export const validAuthorizationHeader = (): MiddlewareRequest => {
  * @returns
  */
 export const POST = middleware([validAuthorizationHeader()], async (req, props) => {
-  const submissionID = props.body.reference;
-  const deliveryStatus = props.body.status;
+  const submissionID: string = props.body.reference as string;
+  const deliveryStatus: string = props.body.status as string;
 
   if (submissionID === undefined || deliveryStatus === undefined) {
     return NextResponse.json(
