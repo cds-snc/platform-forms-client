@@ -38,11 +38,10 @@ const nextConfig = {
     // removeConsole: false,
   },
   output: isOutputStandalone ? "standalone" : undefined,
-  ...(process.env.NODE_ENV === "production" &&
-    process.env.REVIEW_ENV && {
-      cacheHandler: require.resolve("./nextCacheHandler.mjs"),
-      cacheMaxMemorySize: 0, // disable default in-memory caching
-    }),
+  ...(process.env.REVIEW_ENV && {
+    cacheHandler: require.resolve("./nextCacheHandler.mjs"),
+    cacheMaxMemorySize: 0, // disable default in-memory caching
+  }),
   webpack: (config) => {
     // Support reading markdown
     config.module.rules.push({
@@ -85,6 +84,7 @@ const nextConfig = {
 
   experimental: {
     instrumentationHook: true,
+    // PPR is only supported in Next.js Canary branches
     // ppr: true,
     serverComponentsExternalPackages: ["@aws-sdk/lib-dynamodb"],
     turbo: {

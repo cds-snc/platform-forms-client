@@ -15,9 +15,12 @@ import { findPreviousGroup } from "../util/findPreviousGroup";
 import { getGroupFromId } from "../util/getGroupFromId";
 import { Group } from "@lib/formContext";
 import { TreeItem, TreeItemIndex } from "react-complex-tree";
+import { autoSetNextAction } from "../util/setNextAction";
+import { setGroupNextAction } from "../util/setNextAction";
 
 export interface GroupStoreProps {
   id: string;
+  selectedElementId?: number;
   groups: TreeItems;
   templateStore: TemplateStore;
 }
@@ -25,6 +28,7 @@ export interface GroupStoreProps {
 export interface GroupStoreState extends GroupStoreProps {
   getId: () => string;
   setId: (id: string) => void;
+  setSelectedElementId: (id: number) => void;
   addGroup: (id: string, name: string) => void;
   deleteGroup: (id: string) => void;
   getGroups: () => TreeItems;
@@ -37,11 +41,15 @@ export interface GroupStoreState extends GroupStoreProps {
   updateElementTitle: ({ id, text }: { id: number; text: string }) => void;
   updateGroupName: ({ id, name }: { id: string; name: string }) => void;
   getElementsGroupById: (id: string) => Group;
+  getGroupNextAction: (groupId: string) => Group["nextAction"];
+  setGroupNextAction: (groupId: string, nextAction: Group["nextAction"]) => void;
+  autoSetNextActions: () => void;
 }
 
 const createGroupStore = (initProps?: Partial<GroupStoreProps>) => {
   const DEFAULT_PROPS: GroupStoreProps = {
     id: "start",
+    elementId: 0,
     groups: [],
     ...initProps,
   } as GroupStoreProps;
@@ -52,6 +60,10 @@ const createGroupStore = (initProps?: Partial<GroupStoreProps>) => {
       setId: (id) =>
         set((state) => {
           state.id = id;
+        }),
+      setSelectedElementId: (id) =>
+        set((state) => {
+          state.selectedElementId = id;
         }),
       findParentGroup: (id: string) => {
         return findParentGroup(get().getGroups(), id);
@@ -134,6 +146,36 @@ const createGroupStore = (initProps?: Partial<GroupStoreProps>) => {
             }
           });
           setChangeKey(String(new Date().getTime()));
+        }
+      },
+      getGroupNextAction: (groupId: string) => {
+        const formGroups = get().templateStore.getState().form.groups;
+        if (formGroups && formGroups[groupId]) {
+          return formGroups[groupId].nextAction;
+        }
+      },
+      setGroupNextAction: (groupId: string, nextAction: Group["nextAction"]) => {
+        const formGroups = get().templateStore.getState().form.groups;
+        if (formGroups && formGroups[groupId]) {
+          get().templateStore.setState((s) => {
+            if (s.form.groups && nextAction) {
+              s.form.groups[groupId].nextAction = setGroupNextAction(
+                formGroups,
+                groupId,
+                nextAction
+              );
+            }
+          });
+        }
+      },
+      autoSetNextActions: () => {
+        const formGroups = get().templateStore.getState().form.groups;
+        if (formGroups) {
+          get().templateStore.setState((s) => {
+            if (s.form.groups) {
+              s.form.groups = autoSetNextAction(formGroups);
+            }
+          });
         }
       },
     }))

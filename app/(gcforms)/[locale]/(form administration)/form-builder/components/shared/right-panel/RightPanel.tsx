@@ -14,6 +14,9 @@ import { useTreeRef } from "./treeview/provider/TreeRefProvider";
 import { TreeView } from "./treeview/TreeView";
 import { useRehydrate } from "@lib/store/useTemplateStore";
 
+import { SelectNextAction } from "./logic/SelectNextAction";
+import { useGroupStore } from "./treeview/store/useGroupStore";
+
 const TabButton = ({
   text,
   onClick,
@@ -49,8 +52,11 @@ export const RightPanel = ({ id }: { id: string }) => {
   const { t, i18n } = useTranslation("form-builder");
   const { activePathname } = useActivePathname();
   const { treeView } = useTreeRef();
-
+  const getElement = useGroupStore((s) => s.getElement);
   const hasHydrated = useRehydrate();
+
+  const selectedElementId = useGroupStore((s) => s.selectedElementId);
+  const item = (selectedElementId && getElement(selectedElementId)) || null;
 
   useEffect(() => {
     if (hasHydrated) {
@@ -180,7 +186,11 @@ export const RightPanel = ({ id }: { id: string }) => {
                       <Tab.Panel>
                         <DownloadCSV />
                       </Tab.Panel>
-                      <Tab.Panel>{t("logic.heading")}</Tab.Panel>
+                      <Tab.Panel>
+                        <div className="m-0 mt-1 w-full border-t-1 border-slate-200 p-10">
+                          {item && <SelectNextAction item={item} />}
+                        </div>
+                      </Tab.Panel>
                     </Tab.Panels>
                   </Tab.Group>
                   {/* --> */}
