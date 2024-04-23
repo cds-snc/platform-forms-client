@@ -3,7 +3,7 @@ import { createInstance } from "i18next";
 import resourcesToBackend from "i18next-resources-to-backend";
 import { initReactI18next } from "react-i18next/initReactI18next";
 import { getOptions, languages } from "./settings";
-import { headers } from "next/headers";
+import { headers, cookies } from "next/headers";
 import { pathLanguageDetection } from "./utils";
 
 const initI18next = async (lang: string, ns: string | string[]) => {
@@ -24,18 +24,11 @@ export async function serverTranslation(
   ns?: string | string[],
   options?: { keyPrefix?: string; lang?: string }
 ) {
-  let path = headers().get("x-path") ?? "";
-
-  const refererPath = headers().get("referer") ?? "";
-  // remove domain from referer
-  const refererPathWithoutDomain = refererPath.replace(/https?:\/\/[^/]+/, "");
-  if (!path && refererPathWithoutDomain) {
-    path = refererPathWithoutDomain;
-  }
-
+  const path = headers().get("x-path") ?? "";
   const pathLang = pathLanguageDetection(path, languages);
+  const cookieLang = cookies().get("i18next")?.value;
 
-  const i18nLang = options?.lang || pathLang || languages[0];
+  const i18nLang = options?.lang || pathLang || cookieLang || languages[0];
 
   const i18nextInstance = await initI18next(i18nLang, ns ?? ["common"]);
   return {
