@@ -169,7 +169,7 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
     try {
       // See: https://developers.google.com/recaptcha/docs/loading
       if (typeof window.grecaptcha === "undefined") {
-        window.grecaptcha = {};
+        window.grecaptcha = {} as Window["grecaptcha"];
       }
       window.grecaptcha.ready = function (cb) {
         if (typeof window.grecaptcha === "undefined") {
