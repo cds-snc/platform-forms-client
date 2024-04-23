@@ -37,8 +37,6 @@ export async function serverTranslation(
 
   const i18nLang = options?.lang || pathLang || languages[0];
 
-  // console.log("serverTranslation path lang", pathLang);
-
   const i18nextInstance = await initI18next(i18nLang, ns ?? ["common"]);
   return {
     t: i18nextInstance.getFixedT(i18nLang, ns, options?.keyPrefix),

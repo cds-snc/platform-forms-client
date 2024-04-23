@@ -221,7 +221,6 @@ const setCSP = (
     requestHeaders.set("x-nonce", nonce);
     requestHeaders.set("content-security-policy", csp);
   }
-
   // Set path on request headers so we can access it in the app router
   requestHeaders.set("x-path", pathname);
 
