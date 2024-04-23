@@ -1,5 +1,7 @@
 {
-  "review": "[FR]Review",
+  "title": "[FR]Review",
+  "reviewForm": "[FR]Review your answers before submitting.",
+  "edit": "[FR]Edit",
   "goBack": "[FR]Go back",
   "submit": "[FR]Submit"
 }

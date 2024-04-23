@@ -270,28 +270,24 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
       // TODO move this to each child container but that I think will take some thought.
       aria-live="polite"
     >
+      {formStatusError && (
+        <Alert type={ErrorStatus.ERROR} heading={formStatusError} tabIndex={0} id={serverErrorId} />
+      )}
+      {errorList && (
+        <Alert
+          type={ErrorStatus.ERROR}
+          heading={t("input-validation.heading")}
+          validation={true}
+          id={errorId}
+          tabIndex={0}
+        >
+          {errorList}
+        </Alert>
+      )}
+
       {/* Form filler as the defaul status/state */}
       {status === undefined && (
         <>
-          {formStatusError && (
-            <Alert
-              type={ErrorStatus.ERROR}
-              heading={formStatusError}
-              tabIndex={0}
-              id={serverErrorId}
-            />
-          )}
-          {errorList && (
-            <Alert
-              type={ErrorStatus.ERROR}
-              heading={t("input-validation.heading")}
-              validation={true}
-              id={errorId}
-              tabIndex={0}
-            >
-              {errorList}
-            </Alert>
-          )}
           <RichText>
             {form.introduction &&
               form.introduction[props.language == "en" ? "descriptionEn" : "descriptionFr"]}
@@ -307,7 +303,13 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
 
       {/* Review page is placed in the form to work with Formik - ideally refactor out/new pattern when removing Formik */}
       {status === "review" && (
-        <Review formRecord={props.formRecord} values={values}>
+        <Review
+          formRecord={props.formRecord}
+          values={values}
+          editCallback={() => {
+            props.setStatus(undefined);
+          }}
+        >
           <Button
             secondary={true}
             onClick={() => {
@@ -316,28 +318,30 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
           >
             {t("goBack", { ns: "review" })}
           </Button>
-          {props.renderSubmit ? (
-            props.renderSubmit({
-              validateForm: props.validateForm,
-              fallBack: () => {
-                return (
-                  <SubmitButton
-                    numberOfRequiredQuestions={numberOfRequiredQuestions}
-                    formID={formID}
-                    formTitle={form.titleEn}
-                    callback={submissionCallback}
-                  />
-                );
-              },
-            })
-          ) : (
-            <SubmitButton
-              numberOfRequiredQuestions={numberOfRequiredQuestions}
-              formID={formID}
-              formTitle={form.titleEn}
-              callback={submissionCallback}
-            />
-          )}
+          <div>
+            {props.renderSubmit ? (
+              props.renderSubmit({
+                validateForm: props.validateForm,
+                fallBack: () => {
+                  return (
+                    <SubmitButton
+                      numberOfRequiredQuestions={numberOfRequiredQuestions}
+                      formID={formID}
+                      formTitle={form.titleEn}
+                      callback={submissionCallback}
+                    />
+                  );
+                },
+              })
+            ) : (
+              <SubmitButton
+                numberOfRequiredQuestions={numberOfRequiredQuestions}
+                formID={formID}
+                formTitle={form.titleEn}
+                callback={submissionCallback}
+              />
+            )}
+          </div>
         </Review>
       )}
     </form>
