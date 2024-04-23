@@ -6566,15 +6566,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/jsonwebtoken@npm:^8.5.9":
-  version: 8.5.9
-  resolution: "@types/jsonwebtoken@npm:8.5.9"
-  dependencies:
-    "@types/node": "npm:*"
-  checksum: 10c0/4374b0f1b5641d1dd8847fa6f50bd34ec215f3244ea045556d2caa74ed559b2571502db73526bb8fbff038a60ff7e6bf56ffa79679c0b03539b55fda32617a23
-  languageName: node
-  linkType: hard
-
 "@types/lodash.debounce@npm:^4.0.9":
   version: 4.0.9
   resolution: "@types/lodash.debounce@npm:4.0.9"
@@ -10961,7 +10952,6 @@ __metadata:
     "@types/ioredis-mock": "npm:^8.2.5"
     "@types/jest": "npm:^29.5.11"
     "@types/json2md": "npm:^1.5.4"
-    "@types/jsonwebtoken": "npm:^8.5.9"
     "@types/lodash.debounce": "npm:^4.0.9"
     "@types/lodash.isequal": "npm:^4"
     "@types/lodash.set": "npm:^4.3.9"
@@ -11025,7 +11015,6 @@ __metadata:
     jest-environment-node: "npm:^29.7.0"
     jest-mock-extended: "npm:^3.0.5"
     jsonschema: "npm:1.4.1"
-    jsonwebtoken: "npm:9.0.2"
     jszip: "npm:^3.10.1"
     lexical: "npm:^0.12.6"
     lint-staged: "npm:^15.2.2"
@@ -12924,7 +12913,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"jsonwebtoken@npm:9.0.2, jsonwebtoken@npm:^9.0.0":
+"jsonwebtoken@npm:^9.0.0":
   version: 9.0.2
   resolution: "jsonwebtoken@npm:9.0.2"
   dependencies:

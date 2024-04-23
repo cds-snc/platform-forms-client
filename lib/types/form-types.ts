@@ -153,10 +153,9 @@ export type FormRecord = {
   deliveryOption?: DeliveryOption;
   securityAttribute: SecurityAttribute;
   closingDate?: string;
-  bearerToken?: string;
   reCaptchaID?: string;
   [key: string]: string | boolean | FormProperties | DeliveryOption | undefined;
 };
 
 // defines the fields for the form record that is available to unauthenticated users
-export type PublicFormRecord = TypeOmit<FormRecord, "name" | "deliveryOption" | "bearerToken">;
+export type PublicFormRecord = TypeOmit<FormRecord, "name" | "deliveryOption">;

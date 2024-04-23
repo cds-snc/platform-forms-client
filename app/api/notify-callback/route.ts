@@ -2,10 +2,10 @@ import { NextResponse } from "next/server";
 import { logMessage } from "@lib/logger";
 import { SQSClient, GetQueueUrlCommand, SendMessageCommand } from "@aws-sdk/client-sqs";
 import { middleware } from "@lib/middleware";
-import { extractBearerTokenFromReq } from "@lib/middleware/validTemporaryToken";
 import { MiddlewareRequest, MiddlewareReturn } from "@lib/types";
 import { UpdateCommand } from "@aws-sdk/lib-dynamodb";
 import { connectToDynamo } from "@lib/integration/dynamodbConnector";
+import { headers } from "next/headers";
 const SQS_REPROCESS_SUBMISSION_QUEUE_NAME = "reprocess_submission_queue.fifo";
 
 const sqsClient = new SQSClient({
@@ -44,6 +44,24 @@ async function removeProcessedMark(submissionID: string) {
 
   return documentClient.send(new UpdateCommand(updateItem));
 }
+
+/**
+ * Extracts the bearer token from the authorization header
+ *
+ * @returns The bearer token string
+ *
+ * @throws
+ * This exception is thrown if the bearer token is not found
+ */
+const extractBearerTokenFromReq = () => {
+  const reqHeaders = headers();
+  const authHeader = reqHeaders.get("authorization") ?? "";
+  if (authHeader.startsWith("Bearer ")) {
+    return authHeader.substring(7, authHeader.length);
+  } else {
+    throw new Error("Missing bearer token.");
+  }
+};
 
 /**
  * This is a middleware function that will validate the bearer token in the authorization header.

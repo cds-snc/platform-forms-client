@@ -76,9 +76,7 @@ const publishedPut = async (templates: string[]): Promise<void> => {
   return modifyValue(`form:published`, templates);
 };
 
-const unpublishedCheck = async (): Promise<
-  (Array<Omit<FormRecord, "bearerToken">> | undefined)[] | null
-> => {
+const unpublishedCheck = async (): Promise<(Array<FormRecord> | undefined)[] | null> => {
   return checkValue(`form:unpublished`);
 };
 

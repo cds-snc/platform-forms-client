@@ -9,7 +9,7 @@ export const FormWrapper = ({
   formRecord,
   currentForm,
 }: {
-  formRecord: TypeOmit<FormRecord, "name" | "deliveryOption" | "bearerToken">;
+  formRecord: TypeOmit<FormRecord, "name" | "deliveryOption">;
   currentForm: JSX.Element[];
 }) => {
   // TODO cast language as "en" | "fr" in TS below
