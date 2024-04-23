@@ -1,9 +1,10 @@
 "use client";
 import { useTranslation } from "@i18n/client";
+import { useFocusIt } from "@lib/hooks/useFocusIt";
 import { FormRecord, Responses, TypeOmit } from "@lib/types";
 import { getLocalizedProperty } from "@lib/utils";
 import Link from "next/link";
-import { ReactNode } from "react";
+import { ReactNode, useRef } from "react";
 
 interface ReviewItem {
   id: number;
@@ -29,6 +30,9 @@ export default function Review({
     i18n: { language },
   } = useTranslation("review");
 
+  const headingRef = useRef(null);
+  useFocusIt({ elRef: headingRef });
+
   const questionsAnswers =
     formRecord?.form?.elements &&
     (formRecord.form.elements.map((element) => {
@@ -42,7 +46,7 @@ export default function Review({
   return (
     <div>
       {formTitle && <h1>{formTitle}</h1>}
-      <h2>{t("title")}</h2>
+      <h2 ref={headingRef}>{t("title")}</h2>
       <p>{t("reviewForm")}</p>
       <div className="mt-10 mb-10">
         <dl>
