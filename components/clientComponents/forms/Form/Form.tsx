@@ -167,22 +167,6 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
   const handleSubmitReCaptcha = (evt: React.FormEvent<HTMLFormElement>) => {
     evt.preventDefault();
     try {
-      // See: https://developers.google.com/recaptcha/docs/loading
-      if (typeof window.grecaptcha === "undefined") {
-        window.grecaptcha = {} as Window["grecaptcha"];
-      }
-      window.grecaptcha.ready = function (cb) {
-        if (typeof window.grecaptcha === "undefined") {
-          const c = "___grecaptcha_cfg";
-          // @ts-expect-error ignoring next line
-          window[c] = window[c] || {};
-          // @ts-expect-error ignoring next line
-          (window[c]["fns"] = window[c]["fns"] || []).push(cb);
-        } else {
-          cb();
-        }
-      };
-
       window.grecaptcha.ready(async () => {
         // get reCAPTCHA response
         const clientToken = await window.grecaptcha.execute(reCaptchaID, {
