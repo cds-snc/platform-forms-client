@@ -74,7 +74,6 @@ export const validAuthorizationHeader = (): MiddlewareRequest => {
   return async (): Promise<MiddlewareReturn> => {
     try {
       const bearerToken = extractBearerTokenFromReq();
-
       if (bearerToken !== process.env.GC_NOTIFY_CALLBACK_BEARER_TOKEN) {
         return {
           next: false,
@@ -92,11 +91,6 @@ export const validAuthorizationHeader = (): MiddlewareRequest => {
   };
 };
 
-interface ApiProps {
-  submissionID?: string;
-  deliveryStatus?: string;
-}
-
 /**
  * @description
  * Request type: POST
@@ -106,12 +100,14 @@ interface ApiProps {
  *  -H "Authorization: Bearer {token}"
  *  -d '{"id": "fcc82d18-622b-4cea-8843-ac7e28695696", "reference": "1c19ebc1-908c-4997-9d88-31498cd5cd70", "to": "clement.janin@cds-snc.ca", "status": "delivered", "provider_response": "nil", "created_at": "2017-05-14T12:15:30.000000Z", "completed_at": "2017-05-14T12:15:30.000000Z", "sent_at": "2017-05-14T12:15:30.000000Z", "notification_type": "email"}'
  *
- * Using the delivery status from the GC Nofity callback payload it will determine if a submission has to be reprocessed by the Reliability lambda.
+ * Using the delivery status from the GC Nofity callback payload it will determine if a submission (reference) has to be reprocessed by the Reliability lambda.
  *
+ * https://documentation.notification.canada.ca/en/callbacks.html#message-delivery-receipts
  * @returns
  */
 export const POST = middleware([validAuthorizationHeader()], async (req, props) => {
-  const { submissionID, deliveryStatus }: ApiProps = props.body;
+  const submissionID: string = props.body.reference as string;
+  const deliveryStatus: string = props.body.status as string;
 
   if (submissionID === undefined || deliveryStatus === undefined) {
     return NextResponse.json(
