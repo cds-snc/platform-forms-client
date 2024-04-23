@@ -24,10 +24,20 @@ export async function serverTranslation(
   ns?: string | string[],
   options?: { keyPrefix?: string; lang?: string }
 ) {
-  const path = headers().get("x-path") ?? "";
+  let path = headers().get("x-path") ?? "";
+
+  const refererPath = headers().get("referer") ?? "";
+  // remove domain from referer
+  const refererPathWithoutDomain = refererPath.replace(/https?:\/\/[^/]+/, "");
+  if (!path && refererPathWithoutDomain) {
+    path = refererPathWithoutDomain;
+  }
+
   const pathLang = pathLanguageDetection(path, languages);
 
   const i18nLang = options?.lang || pathLang || languages[0];
+
+  // console.log("serverTranslation path lang", pathLang);
 
   const i18nextInstance = await initI18next(i18nLang, ns ?? ["common"]);
   return {
