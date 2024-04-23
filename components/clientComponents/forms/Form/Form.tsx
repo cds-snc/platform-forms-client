@@ -167,7 +167,7 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
   const handleSubmitReCaptcha = (evt: React.FormEvent<HTMLFormElement>) => {
     evt.preventDefault();
     try {
-      window.grecaptcha.ready(async () => {
+      window?.grecaptcha?.ready(async () => {
         // get reCAPTCHA response
         const clientToken = await window.grecaptcha.execute(reCaptchaID, {
           action: "submit",
