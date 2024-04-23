@@ -15,18 +15,21 @@ import { ErrorStatus } from "../Alert/Alert";
 import { submitForm } from "app/(gcforms)/[locale]/(form filler)/id/[...props]/actions";
 import useFormTimer from "@lib/hooks/useFormTimer";
 import { useFormValuesChanged } from "@lib/hooks/useValueChanged";
+import Review from "./Review";
 
 interface SubmitButtonProps {
   numberOfRequiredQuestions: number;
   formID: string;
   formTitle: string;
+  callback: () => void;
 }
 const SubmitButton: React.FC<SubmitButtonProps> = ({
   numberOfRequiredQuestions,
   formID,
   formTitle,
+  callback,
 }) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation("review");
   const [formTimerState, { startTimer, checkTimer, disableTimer }] = useFormTimer();
   const [submitTooEarly, setSubmitTooEarly] = useState(false);
   const screenReaderRemainingTime = useRef(formTimerState.remainingTime);
@@ -121,9 +124,12 @@ const SubmitButton: React.FC<SubmitButtonProps> = ({
           }
           // Only change state if submitTooEarly is already set to true
           submitTooEarly && setSubmitTooEarly(false);
+
+          // Run any success operations like submitting the form and analytics
+          callback && callback();
         }}
       >
-        {t("submitButton")}
+        {t("submit")}
       </Button>
     </>
   );
@@ -142,11 +148,12 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
     status,
     formRecord: { id: formID, reCaptchaID, form },
     isPreview = false,
+    values,
   }: InnerFormProps = props;
   const [canFocusOnError, setCanFocusOnError] = useState(false);
   const [lastSubmitCount, setLastSubmitCount] = useState(-1);
 
-  const { t } = useTranslation();
+  const { t } = useTranslation(["common", "review"]);
 
   useFormValuesChanged();
 
@@ -215,84 +222,125 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
     (element) => element.properties.validation?.required === true
   ).length;
 
+  const submissionCallback = () => {
+    props.setStatus("submitting");
+    submitForm(values, props.language, props.formRecord)
+      .then((result) => {
+        result && props.onSuccess(result);
+      })
+      .catch((err) => {
+        logMessage.error(err as Error);
+        props.setStatus("Error");
+      })
+      .finally(() => {
+        if (props && !props.isPreview) {
+          window.dataLayer = window.dataLayer || [];
+          window.dataLayer.push({
+            event: "form_submission_trigger",
+            formID: props.formRecord.id,
+            formTitle: props.formRecord.form.titleEn,
+          });
+        }
+        props.setSubmitting(false);
+      });
+  };
+
   return status === "submitting" ? (
     <Loader message={t("loading")} />
   ) : (
-    <>
-      {formStatusError && (
-        <Alert type={ErrorStatus.ERROR} heading={formStatusError} tabIndex={0} id={serverErrorId} />
-      )}
-      {errorList && (
-        <Alert
-          type={ErrorStatus.ERROR}
-          heading={t("input-validation.heading")}
-          validation={true}
-          id={errorId}
-          tabIndex={0}
-        >
-          {errorList}
-        </Alert>
-      )}
+    <form
+      id="form"
+      data-testid="form"
+      /**
+       * method attribute needs to stay here in case javascript does not load
+       * otherwise GET request will be sent which will result in leaking all the user data
+       * to the URL
+       */
+      method="POST"
+      onSubmit={(e) => {
+        e.preventDefault();
 
-      {
+        if (shouldUseRecaptcha) {
+          handleSubmitReCaptcha(e);
+        } else {
+          handleSubmit(e);
+        }
+      }}
+      noValidate
+      // TODO move this to each child container but that I think will take some thought.
+      aria-live="polite"
+    >
+      {/* Form filler as the defaul status/state */}
+      {status === undefined && (
         <>
+          {formStatusError && (
+            <Alert
+              type={ErrorStatus.ERROR}
+              heading={formStatusError}
+              tabIndex={0}
+              id={serverErrorId}
+            />
+          )}
+          {errorList && (
+            <Alert
+              type={ErrorStatus.ERROR}
+              heading={t("input-validation.heading")}
+              validation={true}
+              id={errorId}
+              tabIndex={0}
+            >
+              {errorList}
+            </Alert>
+          )}
           <RichText>
             {form.introduction &&
               form.introduction[props.language == "en" ? "descriptionEn" : "descriptionFr"]}
           </RichText>
-
-          <form
-            id="form"
-            data-testid="form"
-            /**
-             * method attribute needs to stay here in case javascript does not load
-             * otherwise GET request will be sent which will result in leaking all the user data
-             * to the URL
-             */
-            method="POST"
-            onSubmit={(e) => {
-              e.preventDefault();
-
-              if (shouldUseRecaptcha) {
-                handleSubmitReCaptcha(e);
-              } else {
-                handleSubmit(e);
-              }
-            }}
-            noValidate
-            // TODO move this to each child container but that I think will take some thought.
-            aria-live="polite"
-          >
-            {children}
-
-            <RichText>
-              {form.privacyPolicy &&
-                form.privacyPolicy[props.language == "en" ? "descriptionEn" : "descriptionFr"]}
-            </RichText>
-            {props.renderSubmit ? (
-              props.renderSubmit({
-                validateForm: props.validateForm,
-                fallBack: () => {
-                  return (
-                    <SubmitButton
-                      numberOfRequiredQuestions={numberOfRequiredQuestions}
-                      formID={formID}
-                      formTitle={form.titleEn}
-                    />
-                  );
-                },
-              })
-            ) : (
-              <SubmitButton
-                numberOfRequiredQuestions={numberOfRequiredQuestions}
-                formID={formID}
-                formTitle={form.titleEn}
-              />
-            )}
-          </form>
+          {children}
+          <RichText>
+            {form.privacyPolicy &&
+              form.privacyPolicy[props.language == "en" ? "descriptionEn" : "descriptionFr"]}
+          </RichText>
+          <Button type="submit">{t("next")}</Button>
         </>
-      }
-    </>
+      )}
+
+      {/* Review page is placed in the form to work with Formik - ideally refactor out/new pattern when removing Formik */}
+      {status === "review" && (
+        <Review formRecord={props.formRecord} values={values}>
+          <Button
+            secondary={true}
+            onClick={() => {
+              props.setStatus(undefined);
+            }}
+          >
+            {t("goBack", { ns: "review" })}
+          </Button>
+          {props.renderSubmit ? (
+            props.renderSubmit({
+              validateForm: props.validateForm,
+              fallBack: () => {
+                return (
+                  <SubmitButton
+                    numberOfRequiredQuestions={numberOfRequiredQuestions}
+                    formID={formID}
+                    formTitle={form.titleEn}
+                    callback={submissionCallback}
+                  />
+                );
+              },
+            })
+          ) : (
+            <SubmitButton
+              numberOfRequiredQuestions={numberOfRequiredQuestions}
+              formID={formID}
+              formTitle={form.titleEn}
+              callback={submissionCallback}
+            />
+          )}
+        </Review>
+      )}
+    </form>
   );
 };
 
@@ -330,25 +378,7 @@ export const Form = withFormik<FormProps, Responses>({
   validate: (values, props) => validateOnSubmit(values, props),
 
   handleSubmit: async (values, formikBag) => {
-    // Needed so the Loader is displayed
-    formikBag.setStatus("submitting");
-    try {
-      const result = await submitForm(values, formikBag.props.language, formikBag.props.formRecord);
-      result && formikBag.props.onSuccess(result);
-    } catch (err) {
-      logMessage.error(err as Error);
-      formikBag.setStatus("Error");
-    } finally {
-      if (formikBag.props && !formikBag.props.isPreview) {
-        window.dataLayer = window.dataLayer || [];
-        window.dataLayer.push({
-          event: "form_submission_trigger",
-          formID: formikBag.props.formRecord.id,
-          formTitle: formikBag.props.formRecord.form.titleEn,
-        });
-      }
-
-      formikBag.setSubmitting(false);
-    }
+    // At this step the form input has been validated and the the review page will be displayed
+    formikBag.setStatus("review");
   },
 })(InnerForm);
