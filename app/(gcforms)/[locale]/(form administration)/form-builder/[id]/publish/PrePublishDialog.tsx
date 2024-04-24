@@ -6,9 +6,13 @@ import { UpdateSalesforceRecords } from "./PrePublishActions";
 import Select, { SingleValue } from "react-select";
 
 export const PrePublishDialog = ({
+  formId,
+  formName,
   handleClose,
   handleConfirm,
 }: {
+  formId: string;
+  formName: string;
   handleClose: () => void;
   handleConfirm: () => void;
 }) => {
@@ -24,7 +28,7 @@ export const PrePublishDialog = ({
     if (prePublishStep == 0) {
       setPrePublishStep(1);
     } else {
-      UpdateSalesforceRecords(formType, description, reasonForPublish);
+      UpdateSalesforceRecords(formId, formName, formType, description, reasonForPublish);
       handleConfirm();
     }
   }

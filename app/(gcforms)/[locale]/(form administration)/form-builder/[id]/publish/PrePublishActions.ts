@@ -3,6 +3,8 @@
 import { SalesforceConnector } from "@lib/integration/salesforceConnector";
 
 export async function UpdateSalesforceRecords(
+  formId: string,
+  formName: string,
   formType: string,
   description: string,
   reasonForPublish: string
@@ -12,7 +14,8 @@ export async function UpdateSalesforceRecords(
   await sfConnector.AddPublishRecord(
     "test department",
     reasonForPublish,
-    "test form id",
+    formId,
+    formName,
     "Vivian",
     "Nobrega",
     "vivian.nobrega@cds-snc.ca",

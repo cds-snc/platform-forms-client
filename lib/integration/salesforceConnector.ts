@@ -121,6 +121,7 @@ export class SalesforceConnector {
   public async AddPublishRecord(
     departmentName: string,
     reasonForPublish: string,
+    formId: string,
     formName: string,
     contactFirstName: string,
     contactLastName: string,
