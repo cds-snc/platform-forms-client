@@ -10,52 +10,33 @@ import {
 import { FormOwnership, FormOwnershipAdmin } from "./authenticatedFlows/ownership";
 import FormBuilderNamesAndTitle from "./authenticatedFlows/names-and-titles";
 import AccountsPage from "./authenticatedFlows/accounts_page";
-
-let userSessionToken: string;
-let adminSessionToken: string;
+import ShareForm from "./authenticatedFlows/share";
+import SetupSecurityQuestions from "./authenticatedFlows/setup_security_questions_page";
 
 describe("Authentication Paths", () => {
-  LoginPageSuite();
   AcceptableUse();
+  LoginPageSuite();
   DeactivatedUserPage();
+  SetupSecurityQuestions();
 });
 
 describe("Authenticated User Suite", () => {
   describe("Application Flows Regular User", () => {
     // Get the JWT Session Token from the cookie
     before(() => {
-      cy.login({ acceptableUse: true });
-      cy.getCookie("authjs.session-token").then((cookie) => {
-        if (cookie?.value) {
-          userSessionToken = cookie?.value;
-        }
-      });
-    });
-
-    // Reuse the same JWT session token for all tests
-    beforeEach(() => {
-      cy.setCookie("authjs.session-token", userSessionToken);
+      cy.userSession({ admin: false, acceptableUse: true });
     });
 
     ProfileRegularUser();
     FormOwnership();
     FormBuilderNamesAndTitle();
+    ShareForm();
   });
 
   describe("Application Flows Admin User", () => {
     // Get the JWT Session Token from the cookie
     before(() => {
-      cy.login({ admin: true, acceptableUse: true });
-      cy.getCookie("authjs.session-token").then((cookie) => {
-        if (cookie?.value) {
-          adminSessionToken = cookie?.value;
-        }
-      });
-    });
-
-    // Reuse the same JWT session token for all tests
-    beforeEach(() => {
-      cy.setCookie("authjs.session-token", adminSessionToken);
+      cy.userSession({ admin: true, acceptableUse: true });
     });
 
     ProfileAdminUser();

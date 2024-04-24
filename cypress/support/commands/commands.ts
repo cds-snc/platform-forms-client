@@ -29,6 +29,65 @@
  * @param file JSON fixture file
  */
 
+let regularUserSession: string;
+let regularUserSessionAcceptableUse: string;
+let adminUserSession: string;
+let adminUserSessionAcceptableUse: string;
+
+Cypress.Commands.add("userSession", (options?: { admin?: boolean; acceptableUse?: boolean }) => {
+  const { admin = false, acceptableUse = false } = options || {};
+
+  if (admin) {
+    if (acceptableUse) {
+      if (!adminUserSessionAcceptableUse) {
+        cy.login(options);
+        cy.getCookie("authjs.session-token").then((cookie) => {
+          if (cookie?.value) {
+            adminUserSessionAcceptableUse = cookie.value;
+          }
+        });
+      } else {
+        cy.setCookie("authjs.session-token", adminUserSessionAcceptableUse);
+      }
+    } else {
+      if (!adminUserSession) {
+        cy.login(options);
+        cy.getCookie("authjs.session-token").then((cookie) => {
+          if (cookie?.value) {
+            adminUserSession = cookie.value;
+          }
+        });
+      } else {
+        cy.setCookie("authjs.session-token", adminUserSession);
+      }
+    }
+  } else {
+    if (acceptableUse) {
+      if (!regularUserSessionAcceptableUse) {
+        cy.login(options);
+        cy.getCookie("authjs.session-token").then((cookie) => {
+          if (cookie?.value) {
+            regularUserSessionAcceptableUse = cookie.value;
+          }
+        });
+      } else {
+        cy.setCookie("authjs.session-token", regularUserSessionAcceptableUse);
+      }
+    } else {
+      if (!regularUserSession) {
+        cy.login(options);
+        cy.getCookie("authjs.session-token").then((cookie) => {
+          if (cookie?.value) {
+            regularUserSession = cookie.value;
+          }
+        });
+      } else {
+        cy.setCookie("authjs.session-token", regularUserSession);
+      }
+    }
+  }
+});
+
 Cypress.Commands.add("useForm", (file, published = true) => {
   // If a session already exists use the existing session
   cy.getCookie("authjs.session-token")
@@ -40,7 +99,7 @@ Cypress.Commands.add("useForm", (file, published = true) => {
     })
     .then((sessionExists) => {
       if (!sessionExists) {
-        cy.login({ acceptableUse: true });
+        cy.userSession({ acceptableUse: true });
       }
       cy.fixture(file).then((mockedForm) => {
         cy.request({

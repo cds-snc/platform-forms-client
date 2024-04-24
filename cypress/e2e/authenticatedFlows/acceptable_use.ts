@@ -1,7 +1,7 @@
 const AcceptableUsePage = () => {
   describe("Test acceptable use Page", () => {
     beforeEach(() => {
-      cy.login();
+      cy.userSession({ admin: false, acceptableUse: false });
       cy.visitPage("/en/auth/policy");
     });
 

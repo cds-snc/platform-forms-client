@@ -32,7 +32,7 @@ export const FormOwnershipAdmin = () => {
       cy.visitPage(`/en/form-builder/${formID}/settings/manage`);
       cy.get("h2").contains("Manage ownership").should("be.visible");
 
-      cy.get("[aria-label='Remove test.user@cds-snc.ca']").click();
+      cy.get("[aria-label='Remove test.admin@cds-snc.ca']").click();
       cy.get("[data-testid='save-ownership']").click();
       cy.get("[data-testid='alert']")
         .contains("Must assign at least one user")

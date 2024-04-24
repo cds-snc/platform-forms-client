@@ -5,7 +5,7 @@ declare global {
     interface Chainable {
       mount: typeof mount;
       tab: typeof tab;
-      useForm: (file: string) => Chainable<void>;
+      useForm: (file: string, published?: boolean) => Chainable<void>;
       visitForm: (formID: string, language?: string) => Chainable<Window>;
       visitPage: (path: string) => Chainable<Window>;
       securityQuestions: () => Chainable<void>;
@@ -37,6 +37,13 @@ declare global {
       safeClick: (query: string) => Chainable<void>;
       serverSideRendered: (path: string) => Chainable<void>;
       switchLanguage: (language: string) => Chainable<void>;
+      userSession: ({
+        admin,
+        acceptableUse,
+      }?: {
+        admin?: boolean;
+        acceptableUse?: boolean;
+      }) => Chainable<void>;
     }
   }
 }
