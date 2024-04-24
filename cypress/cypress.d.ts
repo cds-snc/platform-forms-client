@@ -17,7 +17,6 @@ declare global {
         acceptableUse?: boolean;
       }) => Chainable<void>;
       logout: () => Chainable<void>;
-      useFlag: (flagName: string, value: boolean, alreadyAuth?: boolean) => Chainable<void>;
       selection: (fn: (el: JQuery<HTMLElement>) => void) => Chainable<JQuery<HTMLElement>>;
       setSelection: (
         query:
@@ -34,7 +33,6 @@ declare global {
       setCursorAfter: (query: string) => Chainable<void>;
       resetDB: () => Chainable<void>;
       resetFlags: () => Chainable<void>;
-      resetAll: () => Chainable<void>;
       typeInField: (query: string, typedText: string, outputText?: string) => Chainable<void>;
       safeClick: (query: string) => Chainable<void>;
       serverSideRendered: (path: string) => Chainable<void>;
