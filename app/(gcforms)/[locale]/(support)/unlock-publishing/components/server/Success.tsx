@@ -3,7 +3,7 @@ import { LinkButton } from "@serverComponents/globals/Buttons/LinkButton";
 import { FocusHeader } from "../../../components/client/FocusHeader";
 
 export const Success = async ({ lang }: { lang: string }) => {
-  const { t } = await serverTranslation("unlock-publishing", { lang });
+  const { t } = await serverTranslation(["unlock-publishing", "common"], { lang });
   return (
     <>
       <FocusHeader>{t("unlockPublishingSubmitted.title")}</FocusHeader>
