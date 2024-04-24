@@ -12,6 +12,7 @@ import { Button } from "@clientComponents/globals";
 import { NextActionRule } from "@lib/formContext";
 import { useGroupStore } from "@formBuilder/components/shared/right-panel/treeview/store/useGroupStore";
 import { useTemplateStore } from "@lib/store/useTemplateStore";
+import { useFlowRef } from "@formBuilder/[id]/edit/logic/components/flow/provider/FlowRefProvider";
 
 export const GroupAndChoiceSelect = ({
   selectedElement,
@@ -120,6 +121,7 @@ export const MultiActionSelector = ({
 
   const { t } = useTranslation("form-builder");
   const formId = `form-${Date.now()}`;
+  const { flow } = useFlowRef();
 
   return (
     <form
@@ -159,6 +161,7 @@ export const MultiActionSelector = ({
             const group = findParentGroup(String(item.id));
             const parent = group?.index;
             parent && setGroupNextAction(parent as string, nextActions);
+            flow.current.updateEdges();
           }}
         >
           Save

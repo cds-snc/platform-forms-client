@@ -1,4 +1,4 @@
-import { useMemo } from "react";
+import { useCallback } from "react";
 import { Edge } from "reactflow";
 import { TreeItem, TreeItemIndex } from "react-complex-tree";
 
@@ -82,7 +82,7 @@ export const useFlowData = () => {
   const treeItems = getGroups();
   const formGroups = useTemplateStore((s) => s.form.groups);
 
-  const { edges, nodes } = useMemo(() => {
+  const getData = useCallback(() => {
     const edges: Edge[] = [];
     const treeIndexes = treeItems.root.children;
 
@@ -129,5 +129,7 @@ export const useFlowData = () => {
     return { edges, nodes };
   }, [treeItems, formGroups]);
 
-  return { edges, nodes };
+  const { edges, nodes } = getData();
+
+  return { edges, nodes, getData };
 };
