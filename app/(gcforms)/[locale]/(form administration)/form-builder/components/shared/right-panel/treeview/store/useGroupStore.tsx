@@ -31,7 +31,7 @@ export interface GroupStoreState extends GroupStoreProps {
   setSelectedElementId: (id: number) => void;
   addGroup: (id: string, name: string) => void;
   deleteGroup: (id: string) => void;
-  getGroups: () => TreeItems;
+  getTreeData: () => TreeItems;
   updateGroup: (parent: TreeItemIndex, children: TreeItemIndex[] | undefined) => void;
   findParentGroup: (id: string) => TreeItem | undefined;
   findNextGroup: (id: string) => TreeItem | undefined;
@@ -66,16 +66,16 @@ const createGroupStore = (initProps?: Partial<GroupStoreProps>) => {
           state.selectedElementId = id;
         }),
       findParentGroup: (id: string) => {
-        return findParentGroup(get().getGroups(), id);
+        return findParentGroup(get().getTreeData(), id);
       },
       findNextGroup: (id: string) => {
-        return findNextGroup(get().getGroups(), id);
+        return findNextGroup(get().getTreeData(), id);
       },
       findPreviousGroup: (id: string) => {
-        return findPreviousGroup(get().getGroups(), id);
+        return findPreviousGroup(get().getTreeData(), id);
       },
       getGroupFromId: (id: string) => {
-        return getGroupFromId(get().getGroups(), id);
+        return getGroupFromId(get().getTreeData(), id);
       },
       getId: () => get().id,
       getElement: (id) => {
@@ -106,7 +106,7 @@ const createGroupStore = (initProps?: Partial<GroupStoreProps>) => {
           setChangeKey(String(new Date().getTime()));
         }
       },
-      getGroups: () => {
+      getTreeData: () => {
         const formGroups = get().templateStore.getState().form.groups;
         const elements = get().templateStore.getState().form.elements;
         if (!formGroups) return {};
