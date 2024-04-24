@@ -54,6 +54,7 @@ model Template {
   name              String          @default("")
   jsonConfig        Json
   isPublished       Boolean         @default(false)
+  formPurpose       String          @default("")
   deliveryOption    DeliveryOption?
   securityAttribute String          @default("Protected A")
   bearerToken       String?
