@@ -17,7 +17,7 @@ describe("Register Page", () => {
         "Complete the required field to continue."
       );
     });
-    it.skip("No error on submitting a form with a name", () => {
+    it("No error on submitting a form with a name", () => {
       cy.typeInField("input[id='name']", "My Name");
       cy.get("[type='submit']").click();
       cy.get("[id='errorMessagename']").should("not.exist");
@@ -32,12 +32,12 @@ describe("Register Page", () => {
         "Complete the required field to continue."
       );
     });
-    it.skip("Error on submitting a form with an invalid email", () => {
+    it("Error on submitting a form with an invalid email", () => {
       cy.typeInField("input[id='username']", "myemail@email");
       cy.get("[type='submit']").click();
       cy.get("[id='errorMessageusername']").should("contain", "Enter a valid email address.");
     });
-    it.skip("Error on submitting a form with a non government email", () => {
+    it("Error on submitting a form with a non government email", () => {
       cy.typeInField("input[id='username']", "myemail@email.com");
       cy.get("[type='submit']").click();
       cy.get("[id='errorMessageusername']").should(
@@ -45,14 +45,14 @@ describe("Register Page", () => {
         "This field must be a valid federal government email"
       );
     });
-    it.skip("No error on submitting a form with a valid government email", () => {
+    it("No error on submitting a form with a valid government email", () => {
       cy.typeInField("input[id='username']", "myemail@cds-snc.ca");
       cy.get("[type='submit']").click();
       cy.get("[id='errorMessageusername']").should("not.exist");
     });
   });
 
-  describe.skip("Password validation errors when submitting a form.", () => {
+  describe("Password validation errors when submitting a form.", () => {
     it("Error on submitting a form with an empty password field", () => {
       cy.get("[type='submit']").click();
       cy.get("[id='errorMessagepassword']").should(
@@ -116,7 +116,7 @@ describe("Register Page", () => {
         "Complete the required field to continue."
       );
     });
-    it.skip("Error on submitting a form with a non matching password confirmation field", () => {
+    it("Error on submitting a form with a non matching password confirmation field", () => {
       cy.typeInField("input[id='password']", "Password1!");
       cy.typeInField("input[id='passwordConfirmation']", "Password1!!!!!!!");
       cy.get("[type='submit']").click();
@@ -125,7 +125,7 @@ describe("Register Page", () => {
         "The entries for password must match."
       );
     });
-    it.skip("No error on submitting a form with a matching password confirmation field", () => {
+    it("No error on submitting a form with a matching password confirmation field", () => {
       cy.typeInField("input[id='password']", "Password1!");
       cy.typeInField("input[id='passwordConfirmation']", "Password1!");
       cy.get("[type='submit']").click();

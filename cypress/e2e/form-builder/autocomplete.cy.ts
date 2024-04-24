@@ -1,6 +1,5 @@
 describe("Test FormBuilder autocomplete props", () => {
   beforeEach(() => {
-    // cy.login({ acceptableUse: true });
     cy.visitPage("/en/form-builder");
   });
 

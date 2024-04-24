@@ -1,6 +1,5 @@
 describe("Form builder description text", () => {
   beforeEach(() => {
-    // cy.login({ acceptableUse: true });
     cy.visitPage("/en/form-builder/0000/edit");
   });
 

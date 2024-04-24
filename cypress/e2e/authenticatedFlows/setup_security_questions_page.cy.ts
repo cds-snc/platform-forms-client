@@ -17,7 +17,7 @@ describe.skip("Security Questions Page", () => {
     cy.get("button[type='submit']").click();
   });
   afterEach(() => {
-    cy.resetAll();
+    cy.resetDB();
   });
 
   it("En page renders", () => {

@@ -1,6 +1,6 @@
 describe.skip("Restricted Access Page", () => {
   afterEach(() => {
-    cy.resetAll();
+    cy.resetDB();
   });
 
   it("Accounts page loads with title", () => {

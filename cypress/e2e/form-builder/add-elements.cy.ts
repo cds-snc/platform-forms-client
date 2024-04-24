@@ -1,6 +1,5 @@
 describe("Test FormBuilder Add Elements", () => {
   beforeEach(() => {
-    // cy.login({ acceptableUse: true });
     cy.visitPage("/en/form-builder");
   });
 

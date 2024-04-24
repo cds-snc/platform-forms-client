@@ -74,7 +74,7 @@ Cypress.Commands.add("useForm", (file, published = true) => {
  */
 Cypress.Commands.add("visitForm", (formID, language = "en") => {
   cy.visitPage(`/${language}/id/${formID}`);
-  cy.get("#form-ready-indicator").should("exist");
+  cy.get("#form-submit-button").should("exist");
 });
 
 /**
