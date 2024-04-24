@@ -11,7 +11,7 @@ export const ProfileRegularUser = () => {
     });
     it("Redirects to user profile page if security questions are already completed", () => {
       cy.visitPage("/en/auth/setup-security-questions");
-      cy.url().should("contain", "/en/auth/profile");
+      cy.url().should("contain", "/en/profile");
       cy.get("h1").should("contain", "Profile");
       cy.get("h2").should("contain", "Security questions");
     });
