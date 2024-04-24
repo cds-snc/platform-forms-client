@@ -29,7 +29,12 @@ import { useFlowRef } from "./provider/FlowRefProvider";
 
 const nodeTypes = { groupNode: GroupNode };
 
-const Flow: ForwardRefRenderFunction<unknown, FlowRefProviderProps> = ({ children }, ref) => {
+export interface FlowProps {
+  children?: ReactElement;
+  updateEdges?: () => void;
+}
+
+const Flow: ForwardRefRenderFunction<unknown, FlowProps> = ({ children }, ref) => {
   const { nodes: flowNodes, edges: flowEdges, getData } = useFlowData();
   const { fitView } = useReactFlow();
   const [nodes, , onNodesChange] = useNodesState(flowNodes);
@@ -79,17 +84,11 @@ const Flow: ForwardRefRenderFunction<unknown, FlowRefProviderProps> = ({ childre
 
 export const FlowWithProvider = () => {
   const { flow } = useFlowRef();
-
   return (
     <ReactFlowProvider>
       <FlowWithRef ref={flow} />
     </ReactFlowProvider>
   );
 };
-
-export interface FlowRefProviderProps {
-  children?: ReactElement;
-  updateEdges?: () => void;
-}
 
 const FlowWithRef = forwardRef(Flow);

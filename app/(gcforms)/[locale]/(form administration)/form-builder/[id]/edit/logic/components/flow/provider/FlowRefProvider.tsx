@@ -1,8 +1,11 @@
 import React, { createContext, useContext, useRef, MutableRefObject } from "react";
 
+export type FlowRefHandle = {
+  updateEdges: () => void;
+};
+
 export type flowContextType = {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  flow: MutableRefObject<any>;
+  flow: MutableRefObject<FlowRefHandle | null>;
 } | null;
 
 // Create a context for the ref

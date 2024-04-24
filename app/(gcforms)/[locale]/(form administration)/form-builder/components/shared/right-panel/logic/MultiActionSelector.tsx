@@ -161,7 +161,7 @@ export const MultiActionSelector = ({
             const group = findParentGroup(String(item.id));
             const parent = group?.index;
             parent && setGroupNextAction(parent as string, nextActions);
-            flow.current.updateEdges();
+            flow.current?.updateEdges();
           }}
         >
           Save
