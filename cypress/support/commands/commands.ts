@@ -156,34 +156,8 @@ Cypress.Commands.add("securityQuestions", () => {
  * Logout the test user from the application
  */
 Cypress.Commands.add("logout", () => {
-  cy.request({
-    method: "GET",
-    url: "/api/auth/csrf",
-  }).then((response) => {
-    expect(response.body).to.have.property("csrfToken");
-    const { csrfToken } = response.body;
-    cy.request({
-      method: "POST",
-      url: "/api/auth/signout",
-      form: true,
-      body: {
-        csrfToken,
-        callbackUrl: "/en/auth/logout",
-        json: true,
-      },
-    }).then(() => {
-      // Ensure cookie is removed
-      cy.clearCookie("authjs.session-token");
-
-      cy.waitUntil(
-        () =>
-          cy
-            .request({ method: "GET", url: "/api/auth/session" })
-            .then((response) => response.body === null),
-        { timeout: 10000, interval: 500 }
-      );
-    });
-  });
+  // Ensure JWT Token in cookie is removed
+  cy.clearCookie("authjs.session-token");
 });
 
 /**
