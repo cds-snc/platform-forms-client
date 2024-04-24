@@ -14,8 +14,8 @@ import ShareForm from "./authenticatedFlows/share";
 import SetupSecurityQuestions from "./authenticatedFlows/setup_security_questions_page";
 
 describe("Authentication Paths", () => {
-  AcceptableUse();
   LoginPageSuite();
+  AcceptableUse();
   DeactivatedUserPage();
   SetupSecurityQuestions();
 });
