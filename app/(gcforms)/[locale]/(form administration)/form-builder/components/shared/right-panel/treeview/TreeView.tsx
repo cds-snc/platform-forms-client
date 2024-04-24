@@ -34,10 +34,10 @@ const ControlledTree: ForwardRefRenderFunction<unknown, TreeDataProviderProps> =
   ref
 ) => {
   // export const TreeView = () => {
-  const { getGroups, addGroup, setId, updateGroupName, updateGroup, updateElementTitle } =
+  const { getTreeData, addGroup, setId, updateGroupName, updateGroup, updateElementTitle } =
     useGroupStore((s) => {
       return {
-        getGroups: s.getGroups,
+        getTreeData: s.getTreeData,
         addGroup: s.addGroup,
         setId: s.setId,
         updateGroupName: s.updateGroupName,
@@ -61,12 +61,12 @@ const ControlledTree: ForwardRefRenderFunction<unknown, TreeDataProviderProps> =
 
   useImperativeHandle(ref, () => ({
     addItem: async (id: string) => {
-      const parent = findParentGroup(getGroups(), id);
+      const parent = findParentGroup(getTreeData(), id);
       setExpandedItems([parent?.index as TreeItemIndex]);
       setSelectedItems([id]);
     },
     updateItem: (id: string) => {
-      const parent = findParentGroup(getGroups(), id);
+      const parent = findParentGroup(getTreeData(), id);
       setExpandedItems([parent?.index as TreeItemIndex]);
       setSelectedItems([id]);
     },
@@ -75,7 +75,7 @@ const ControlledTree: ForwardRefRenderFunction<unknown, TreeDataProviderProps> =
   return (
     <ControlledTreeEnvironment
       ref={environment}
-      items={getGroups()}
+      items={getTreeData()}
       getItemTitle={(item) => item.data}
       // renderItem={({ title, arrow, context, children }) => {
       //   return (
@@ -135,7 +135,7 @@ const ControlledTree: ForwardRefRenderFunction<unknown, TreeDataProviderProps> =
         let itemsPriorToInsertion = 0;
 
         // current state of the tree
-        const currentItems = getGroups();
+        const currentItems = getTreeData();
 
         // Ids of the items being dragged
         const itemsIndices = items.map((i) => i.index);
@@ -188,7 +188,7 @@ const ControlledTree: ForwardRefRenderFunction<unknown, TreeDataProviderProps> =
         });
 
         // Get the new state of the tree
-        const newItems = getGroups();
+        const newItems = getTreeData();
 
         // Get the target parent in the new state
         const targetParent = newItems[targetParentIndex];
@@ -209,7 +209,7 @@ const ControlledTree: ForwardRefRenderFunction<unknown, TreeDataProviderProps> =
       }}
       onFocusItem={(item) => {
         setFocusedItem(item.index);
-        const parent = findParentGroup(getGroups(), String(item.index));
+        const parent = findParentGroup(getTreeData(), String(item.index));
         setId(item.isFolder ? String(item.index) : String(parent?.index));
       }}
       onExpandItem={(item) => setExpandedItems([...expandedItems, item.index])}

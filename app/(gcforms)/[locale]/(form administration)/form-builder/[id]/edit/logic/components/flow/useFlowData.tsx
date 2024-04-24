@@ -78,8 +78,8 @@ const getEdges = (nodeId: string, prevNodeId: string, group: Group | undefined):
 };
 
 export const useFlowData = () => {
-  const getGroups = useGroupStore((s) => s.getGroups);
-  const treeItems = getGroups();
+  const getTreeData = useGroupStore((s) => s.getTreeData);
+  const treeItems = getTreeData();
   const formGroups = useTemplateStore((s) => s.form.groups);
 
   const { edges, nodes } = useMemo(() => {
