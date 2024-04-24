@@ -23,7 +23,7 @@ describe("Authentication Paths", () => {
 describe("Authenticated User Suite", () => {
   describe("Application Flows Regular User", () => {
     // Get the JWT Session Token from the cookie
-    before(() => {
+    beforeEach(() => {
       cy.userSession({ admin: false, acceptableUse: true });
     });
 
@@ -35,7 +35,7 @@ describe("Authenticated User Suite", () => {
 
   describe("Application Flows Admin User", () => {
     // Get the JWT Session Token from the cookie
-    before(() => {
+    beforeEach(() => {
       cy.userSession({ admin: true, acceptableUse: true });
     });
 
