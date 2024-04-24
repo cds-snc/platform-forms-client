@@ -8978,7 +8978,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"cypress@npm:*, cypress@npm:^13.6.4":
+"cypress@npm:*":
   version: 13.6.6
   resolution: "cypress@npm:13.6.6"
   dependencies:
@@ -9027,6 +9027,58 @@ __metadata:
   bin:
     cypress: bin/cypress
   checksum: 10c0/1f152ac3708fc35c822b6fe428c0856b568c9b2d3f03a22de0526b9f21d6c345139061ae3515a652538a9570a2a632516e4548b29b39843865b9c88288b2d668
+  languageName: node
+  linkType: hard
+
+"cypress@npm:^13.8.1":
+  version: 13.8.1
+  resolution: "cypress@npm:13.8.1"
+  dependencies:
+    "@cypress/request": "npm:^3.0.0"
+    "@cypress/xvfb": "npm:^1.2.4"
+    "@types/sinonjs__fake-timers": "npm:8.1.1"
+    "@types/sizzle": "npm:^2.3.2"
+    arch: "npm:^2.2.0"
+    blob-util: "npm:^2.0.2"
+    bluebird: "npm:^3.7.2"
+    buffer: "npm:^5.7.1"
+    cachedir: "npm:^2.3.0"
+    chalk: "npm:^4.1.0"
+    check-more-types: "npm:^2.24.0"
+    cli-cursor: "npm:^3.1.0"
+    cli-table3: "npm:~0.6.1"
+    commander: "npm:^6.2.1"
+    common-tags: "npm:^1.8.0"
+    dayjs: "npm:^1.10.4"
+    debug: "npm:^4.3.4"
+    enquirer: "npm:^2.3.6"
+    eventemitter2: "npm:6.4.7"
+    execa: "npm:4.1.0"
+    executable: "npm:^4.1.1"
+    extract-zip: "npm:2.0.1"
+    figures: "npm:^3.2.0"
+    fs-extra: "npm:^9.1.0"
+    getos: "npm:^3.2.1"
+    is-ci: "npm:^3.0.1"
+    is-installed-globally: "npm:~0.4.0"
+    lazy-ass: "npm:^1.6.0"
+    listr2: "npm:^3.8.3"
+    lodash: "npm:^4.17.21"
+    log-symbols: "npm:^4.0.0"
+    minimist: "npm:^1.2.8"
+    ospath: "npm:^1.2.2"
+    pretty-bytes: "npm:^5.6.0"
+    process: "npm:^0.11.10"
+    proxy-from-env: "npm:1.0.0"
+    request-progress: "npm:^3.0.0"
+    semver: "npm:^7.5.3"
+    supports-color: "npm:^8.1.1"
+    tmp: "npm:~0.2.1"
+    untildify: "npm:^4.0.0"
+    yauzl: "npm:^2.10.0"
+  bin:
+    cypress: bin/cypress
+  checksum: 10c0/68e2604e628a54a714d071de1abcc0dc5392d15ac7159fe91c2e443866dcf22d457db4c07e78dc2e2617531d7732af56af41033e2cffee26d814e09a84214cd2
   languageName: node
   linkType: hard
 
@@ -10991,7 +11043,7 @@ __metadata:
     css-loader: "npm:^6.8.1"
     cssnano: "npm:^5.1.15"
     csv-writer: "npm:^1.6.0"
-    cypress: "npm:^13.6.4"
+    cypress: "npm:^13.8.1"
     cypress-axe: "npm:^1.5.0"
     cypress-each: "npm:^1.13.3"
     cypress-network-idle: "npm:^1.14.2"
