@@ -26,10 +26,7 @@ import { layoutOptions } from "./options";
 import { edgeOptions } from "./options";
 
 import { useFlowRef } from "./provider/FlowRefProvider";
-import { useTemplateStore } from "@lib/store/useTemplateStore";
-import { useGroupStore } from "@formBuilder/components/shared/right-panel/treeview/store/useGroupStore";
 import { GroupOutput } from "@formBuilder/components/shared/GroupOutput";
-import { GroupsType, Group } from "@lib/formContext";
 
 const nodeTypes = { groupNode: GroupNode };
 
@@ -41,11 +38,8 @@ export interface FlowProps {
 const Flow: ForwardRefRenderFunction<unknown, FlowProps> = ({ children }, ref) => {
   const { nodes: flowNodes, edges: flowEdges, getData } = useFlowData();
   const { fitView } = useReactFlow();
-  const [nodes, setNodes, onNodesChange] = useNodesState(flowNodes);
-  const [edges, setEdges, onEdgesChange] = useEdgesState(flowEdges);
-
-  const formGroups = useTemplateStore((state) => state.form.groups);
-  const replaceGroups = useGroupStore((state) => state.replaceGroups);
+  const [nodes, , onNodesChange] = useNodesState(flowNodes);
+  const [, setEdges, onEdgesChange] = useEdgesState(flowEdges);
 
   // temp fix see: https://github.com/xyflow/xyflow/issues/3243
   const store = useStoreApi();
@@ -67,59 +61,23 @@ const Flow: ForwardRefRenderFunction<unknown, FlowProps> = ({ children }, ref) =
     updateEdges: () => {
       const { edges } = getData();
       setEdges(edges);
-      fitView();
     },
   }));
 
   return (
     <div className="my-10 w-full border-1" style={{ height: "calc(100vh - 300px)" }}>
-      <button
-        onClick={() => {
-          /*
-        const groups: GroupsType = {
-          "a": { name: "a", elements: [] },
-          "b": { name: "b", elements: [] },
-          "c": { name: "c", elements: [] },
-          "d": { name: "d", elements: [] },
-        }
-        */
-
-          const groups = formGroups || {};
-
-          const newOrder = ["yep", "attending", "start", "nope"];
-
-          const newGroups = newOrder.reduce((acc: GroupsType, key) => {
-            const data = groups[key] as Group;
-            acc[key] = data;
-            return acc;
-          }, {});
-
-          replaceGroups(newGroups);
-
-          const { edges, nodes } = getData();
-          setNodes(nodes);
-          setEdges(edges);
-          fitView();
-        }}
+      <ReactFlow
+        nodes={nodes}
+        edges={flowEdges}
+        onNodesChange={onNodesChange}
+        onEdgesChange={onEdgesChange}
+        nodeTypes={nodeTypes}
+        defaultEdgeOptions={edgeOptions}
       >
-        Replace groups
-      </button>
-
-      <div style={{ display: "hidden" }}>
-        <ReactFlow
-          nodes={nodes}
-          edges={edges}
-          onNodesChange={onNodesChange}
-          onEdgesChange={onEdgesChange}
-          nodeTypes={nodeTypes}
-          defaultEdgeOptions={edgeOptions}
-        >
-          <Background />
-          <Controls />
-          {children}
-        </ReactFlow>
-      </div>
-
+        <Background />
+        <Controls />
+        {children}
+      </ReactFlow>
       <GroupOutput />
     </div>
   );

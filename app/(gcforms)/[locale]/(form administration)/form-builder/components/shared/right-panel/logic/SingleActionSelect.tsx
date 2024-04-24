@@ -51,7 +51,7 @@ export const SingleActionSelect = ({
                 const group = findParentGroup(String(item.id));
                 const parent = group?.index;
                 parent && setGroupNextAction(parent as string, nextActionId);
-                flow.current.updateEdges();
+                flow.current?.updateEdges();
               }}
             >
               Save
