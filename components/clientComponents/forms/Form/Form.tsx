@@ -297,7 +297,9 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
             {form.privacyPolicy &&
               form.privacyPolicy[props.language == "en" ? "descriptionEn" : "descriptionFr"]}
           </RichText>
-          <Button type="submit">{t("next")}</Button>
+          <Button type="submit" secondary={true}>
+            {t("next")}
+          </Button>
         </>
       )}
 
