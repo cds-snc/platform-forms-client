@@ -1,6 +1,7 @@
 import React, { createContext, useContext, useRef, MutableRefObject } from "react";
 
 export type flowContextType = {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   flow: MutableRefObject<any>;
 } | null;
 
@@ -13,7 +14,7 @@ export const FlowRefProvider: React.FC<{ children: React.ReactNode }> = ({ child
   return (
     <FlowRefContext.Provider
       value={{
-        flow: flow
+        flow: flow,
       }}
     >
       {children}
