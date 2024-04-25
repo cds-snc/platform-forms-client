@@ -48,13 +48,15 @@ export const Responses = ({
 
   return (
     <>
-      <div className="has-[.gc-confirm-success]:hidden">
-        <TitleAndDescription
-          statusFilter={ucfirst(statusFilter)}
-          formId={id}
-          responseDownloadLimit={responseDownloadLimit}
-        />
-      </div>
+      {vaultSubmissions.length > 0 && (
+        <div className="has-[.gc-confirm-success]:hidden">
+          <TitleAndDescription
+            statusFilter={ucfirst(statusFilter)}
+            formId={id}
+            responseDownloadLimit={responseDownloadLimit}
+          />
+        </div>
+      )}
       {nagwareResult && <Nagware nagwareResult={nagwareResult} />}
       <div aria-live="polite">
         <ClosedBanner id={formId} />
