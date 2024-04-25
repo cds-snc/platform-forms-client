@@ -104,7 +104,7 @@ const CardLinks = async ({ isPublished, url, id, deliveryOption }: CardLinksProp
 const CardTitle = async ({ name }: { name: string }) => {
   const { t } = await serverTranslation("my-forms");
   const classes = "mb-0 mr-2 overflow-hidden pb-0 text-base font-bold";
-  return <h2 className={classes}>{name ? name : t("unnamedForm", { ns: "form-builder" })}</h2>;
+  return <h2 className={classes}>{name ? name : t("card.unnamedForm")}</h2>;
 };
 
 const CardDate = async ({ id, date }: { id: string; date: string }) => {
