@@ -50,10 +50,7 @@ export default async function Page({
       redirect: true,
     });
 
-    const {
-      t,
-      i18n: { language },
-    } = await serverTranslation("my-forms");
+    const { t } = await serverTranslation("my-forms", { lang: locale });
 
     // Moved from Cards to Page to avoid component being cached when navigating back to this page
     const where = {
@@ -76,7 +73,7 @@ export default async function Page({
         name,
         isPublished,
         date: updatedAt ?? Date.now().toString(),
-        url: `/${language}/id/${id}`,
+        url: `/${locale}/id/${id}`,
         overdue: 0,
       };
     });
