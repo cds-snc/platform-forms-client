@@ -182,7 +182,6 @@
     "jest-html-reporter": "^3.10.2",
     "jest-mock-extended": "^3.0.5",
     "lint-staged": "^15.2.2",
-    "next-test-api-route-handler": "^4.0.7",
     "pino-pretty": "^9.4.1",
     "postcss": "^8.4.32",
     "postcss-import": "^15.1.0",

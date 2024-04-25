@@ -22,7 +22,6 @@ const customJestConfig: Config = {
     "<rootDir>/__utils__/",
     "<rootDir>/__fixtures__/",
     "<rootDir>/__tests__/",
-    "<rootDir>/__vitests__/",
     "<rootDir>/lib/vitests/",
   ],
   testMatch: ["/**/*.test.+(ts|tsx|js|jsx)"],
@@ -46,15 +45,6 @@ const customJestConfig: Config = {
   ],
   testEnvironment: "jsdom",
   preset: "ts-jest",
-  reporters: [
-    "default",
-    [
-      "./node_modules/jest-html-reporter",
-      {
-        pageTitle: "Test Report",
-      },
-    ],
-  ],
 };
 
 const jestConfig = async () => ({
