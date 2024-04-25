@@ -14,10 +14,14 @@ import { findNextGroup } from "../util/findNextGroup";
 import { findPreviousGroup } from "../util/findPreviousGroup";
 import { getGroupFromId } from "../util/getGroupFromId";
 import { Group } from "@lib/formContext";
+import { GroupsType } from "@lib/formContext";
 import { TreeItem, TreeItemIndex } from "react-complex-tree";
+import { autoSetNextAction } from "../util/setNextAction";
+import { setGroupNextAction } from "../util/setNextAction";
 
 export interface GroupStoreProps {
   id: string;
+  selectedElementId?: number;
   groups: TreeItems;
   templateStore: TemplateStore;
 }
@@ -25,9 +29,11 @@ export interface GroupStoreProps {
 export interface GroupStoreState extends GroupStoreProps {
   getId: () => string;
   setId: (id: string) => void;
+  setSelectedElementId: (id: number) => void;
   addGroup: (id: string, name: string) => void;
   deleteGroup: (id: string) => void;
-  getGroups: () => TreeItems;
+  replaceGroups: (groups: GroupsType) => void;
+  getTreeData: () => TreeItems;
   updateGroup: (parent: TreeItemIndex, children: TreeItemIndex[] | undefined) => void;
   findParentGroup: (id: string) => TreeItem | undefined;
   findNextGroup: (id: string) => TreeItem | undefined;
@@ -37,11 +43,15 @@ export interface GroupStoreState extends GroupStoreProps {
   updateElementTitle: ({ id, text }: { id: number; text: string }) => void;
   updateGroupName: ({ id, name }: { id: string; name: string }) => void;
   getElementsGroupById: (id: string) => Group;
+  getGroupNextAction: (groupId: string) => Group["nextAction"];
+  setGroupNextAction: (groupId: string, nextAction: Group["nextAction"]) => void;
+  autoSetNextActions: () => void;
 }
 
 const createGroupStore = (initProps?: Partial<GroupStoreProps>) => {
   const DEFAULT_PROPS: GroupStoreProps = {
     id: "start",
+    elementId: 0,
     groups: [],
     ...initProps,
   } as GroupStoreProps;
@@ -53,17 +63,21 @@ const createGroupStore = (initProps?: Partial<GroupStoreProps>) => {
         set((state) => {
           state.id = id;
         }),
+      setSelectedElementId: (id) =>
+        set((state) => {
+          state.selectedElementId = id;
+        }),
       findParentGroup: (id: string) => {
-        return findParentGroup(get().getGroups(), id);
+        return findParentGroup(get().getTreeData(), id);
       },
       findNextGroup: (id: string) => {
-        return findNextGroup(get().getGroups(), id);
+        return findNextGroup(get().getTreeData(), id);
       },
       findPreviousGroup: (id: string) => {
-        return findPreviousGroup(get().getGroups(), id);
+        return findPreviousGroup(get().getTreeData(), id);
       },
       getGroupFromId: (id: string) => {
-        return getGroupFromId(get().getGroups(), id);
+        return getGroupFromId(get().getTreeData(), id);
       },
       getId: () => get().id,
       getElement: (id) => {
@@ -94,7 +108,7 @@ const createGroupStore = (initProps?: Partial<GroupStoreProps>) => {
           setChangeKey(String(new Date().getTime()));
         }
       },
-      getGroups: () => {
+      getTreeData: () => {
         const formGroups = get().templateStore.getState().form.groups;
         const elements = get().templateStore.getState().form.elements;
         if (!formGroups) return {};
@@ -119,6 +133,11 @@ const createGroupStore = (initProps?: Partial<GroupStoreProps>) => {
           delete s.form.groups[id];
         });
       },
+      replaceGroups: (groups: GroupsType) => {
+        get().templateStore.setState((s) => {
+          s.form.groups = groups;
+        });
+      },
       updateGroup: (parent: TreeItemIndex, children: TreeItemIndex[] | undefined) => {
         if (!children) return;
 
@@ -134,6 +153,36 @@ const createGroupStore = (initProps?: Partial<GroupStoreProps>) => {
             }
           });
           setChangeKey(String(new Date().getTime()));
+        }
+      },
+      getGroupNextAction: (groupId: string) => {
+        const formGroups = get().templateStore.getState().form.groups;
+        if (formGroups && formGroups[groupId]) {
+          return formGroups[groupId].nextAction;
+        }
+      },
+      setGroupNextAction: (groupId: string, nextAction: Group["nextAction"]) => {
+        const formGroups = get().templateStore.getState().form.groups;
+        if (formGroups && formGroups[groupId]) {
+          get().templateStore.setState((s) => {
+            if (s.form.groups && nextAction) {
+              s.form.groups[groupId].nextAction = setGroupNextAction(
+                formGroups,
+                groupId,
+                nextAction
+              );
+            }
+          });
+        }
+      },
+      autoSetNextActions: () => {
+        const formGroups = get().templateStore.getState().form.groups;
+        if (formGroups) {
+          get().templateStore.setState((s) => {
+            if (s.form.groups) {
+              s.form.groups = autoSetNextAction(formGroups);
+            }
+          });
         }
       },
     }))

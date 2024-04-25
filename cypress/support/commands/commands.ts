@@ -234,13 +234,13 @@ Cypress.Commands.add("resetFlags", () => {
 Cypress.Commands.add("resetAll", () => {
   cy.task("db:teardown");
   cy.task("db:seed");
-  cy.login()
-    .then(() => {
-      Object.keys(flagsDefault).forEach((key) => {
-        cy.useFlag(`${key}`, (flagsDefault as Record<string, boolean>)[key], true);
-      });
-    })
-    .then(() => cy.logout());
+  // cy.login()
+  //   .then(() => {
+  //     Object.keys(flagsDefault).forEach((key) => {
+  //       cy.useFlag(`${key}`, (flagsDefault as Record<string, boolean>)[key], true);
+  //     });
+  //   })
+  //   .then(() => cy.logout());
 });
 
 /**

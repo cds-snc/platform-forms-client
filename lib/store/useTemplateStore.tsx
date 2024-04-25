@@ -14,8 +14,8 @@ import {
 import React, { createContext, useRef, useContext, useEffect } from "react";
 import { getPathString } from "../utils/form-builder/getPath";
 import { TreeRefProvider } from "@formBuilder/components/shared/right-panel/treeview/provider/TreeRefProvider";
+import { FlowRefProvider } from "@formBuilder/[id]/edit/logic/components/flow/provider/FlowRefProvider";
 import { initializeGroups } from "@formBuilder/components/shared/right-panel/treeview/util/initializeGroups";
-import { allowGrouping } from "@formBuilder/components/shared/right-panel/treeview/util/allowGrouping";
 
 import {
   moveDown,
@@ -99,6 +99,7 @@ export interface TemplateStoreProps {
   securityAttribute: SecurityAttribute;
   closingDate?: string | null;
   changeKey: string;
+  allowGroupsFlag: boolean;
 }
 
 export interface InitialTemplateStoreProps extends TemplateStoreProps {
@@ -197,6 +198,7 @@ const createTemplateStore = (initProps?: Partial<InitialTemplateStoreProps>) => 
     securityAttribute: "Protected A",
     closingDate: initProps?.closingDate,
     changeKey: String(new Date().getTime()),
+    allowGroupsFlag: initProps?.allowGroupsFlag || false,
   };
 
   // Ensure any required properties by Form Builder are defaulted by defaultForm
@@ -306,9 +308,10 @@ const createTemplateStore = (initProps?: Partial<InitialTemplateStoreProps>) => 
                 }
               }),
             add: async (elIndex = 0, type = FormElementTypes.radio, data, groupId) => {
-              const allowGroups = await allowGrouping();
               return new Promise((resolve) => {
                 set((state) => {
+                  const allowGroups = state.allowGroupsFlag;
+
                   const id = incrementElementId(state.form.elements);
                   const item = {
                     ...defaultField,
@@ -365,8 +368,8 @@ const createTemplateStore = (initProps?: Partial<InitialTemplateStoreProps>) => 
                 });
               }),
             remove: async (elementId, groupId = "") => {
-              const allowGroups = await allowGrouping();
               set((state) => {
+                const allowGroups = state.allowGroupsFlag;
                 state.form.elements = removeElementById(state.form.elements, elementId);
                 state.form.layout = removeById(state.form.layout, elementId);
 
@@ -422,9 +425,8 @@ const createTemplateStore = (initProps?: Partial<InitialTemplateStoreProps>) => 
                 const element = JSON.parse(JSON.stringify(state.form.elements[elIndex]));
                 element.id = id;
                 if (element.type !== "richText") {
-                  element.properties[state.localizeField("title")] = `${
-                    element.properties[state.localizeField("title")]
-                  } copy`;
+                  element.properties[state.localizeField("title")] = `${element.properties[state.localizeField("title")]
+                    } copy`;
                 }
                 state.form.elements.splice(elIndex + 1, 0, element);
                 state.form.layout.splice(elIndex + 1, 0, id);
@@ -437,9 +439,8 @@ const createTemplateStore = (initProps?: Partial<InitialTemplateStoreProps>) => 
                 if (subElements) {
                   const element = JSON.parse(JSON.stringify(subElements[subIndex]));
                   element.id = incrementElementId(subElements);
-                  element.properties[state.localizeField("title")] = `${
-                    element.properties[state.localizeField("title")]
-                  } copy`;
+                  element.properties[state.localizeField("title")] = `${element.properties[state.localizeField("title")]
+                    } copy`;
 
                   state.form.elements[elIndex].properties.subElements?.splice(
                     subIndex + 1,
@@ -471,12 +472,12 @@ const createTemplateStore = (initProps?: Partial<InitialTemplateStoreProps>) => 
               });
             },
             initialize: async (language = "en") => {
-              const allowGroups = await allowGrouping();
               set((state) => {
+                const allowGroups = state.allowGroupsFlag;
                 state.id = "";
                 state.lang = language as Language;
                 state.translationLanguagePriority = language as Language;
-                state.form = initializeGroups(defaultForm, allowGroups);
+                state.form = initializeGroups({ ...defaultForm }, allowGroups);
                 state.isPublished = false;
                 state.name = "";
                 state.deliveryOption = undefined;
@@ -484,8 +485,8 @@ const createTemplateStore = (initProps?: Partial<InitialTemplateStoreProps>) => 
               });
             },
             importTemplate: async (jsonConfig) => {
-              const allowGroups = await allowGrouping();
               set((state) => {
+                const allowGroups = state.allowGroupsFlag;
                 state.id = "";
                 state.lang = "en";
                 state.form = initializeGroups({ ...defaultForm, ...jsonConfig }, allowGroups);
@@ -534,7 +535,9 @@ export const TemplateStoreProvider = ({
 
   return (
     <TemplateStoreContext.Provider value={storeRef.current}>
-      <TreeRefProvider>{children}</TreeRefProvider>
+      <FlowRefProvider>
+        <TreeRefProvider>{children}</TreeRefProvider>
+      </FlowRefProvider>
     </TemplateStoreContext.Provider>
   );
 };

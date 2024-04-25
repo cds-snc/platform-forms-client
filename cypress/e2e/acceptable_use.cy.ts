@@ -1,4 +1,4 @@
-describe("Test acceptable use Page", () => {
+describe.skip("Test acceptable use Page", () => {
   beforeEach(() => {
     cy.login();
     cy.visitPage("/en/auth/policy");

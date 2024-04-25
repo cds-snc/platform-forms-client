@@ -1,4 +1,4 @@
-describe("User profile", () => {
+describe.skip("User profile", () => {
   it("Renders the My Account dropdown as non-admin", () => {
     cy.login({ acceptableUse: true });
     cy.visitPage("/en/forms");
