@@ -179,7 +179,6 @@
     "jest-css-modules": "^2.1.0",
     "jest-environment-jsdom": "^29.7.0",
     "jest-environment-node": "^29.7.0",
-    "jest-html-reporter": "^3.10.2",
     "jest-mock-extended": "^3.0.5",
     "lint-staged": "^15.2.2",
     "pino-pretty": "^9.4.1",
