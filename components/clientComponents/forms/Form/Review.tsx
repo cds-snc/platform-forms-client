@@ -4,7 +4,7 @@ import { useFocusIt } from "@lib/hooks/useFocusIt";
 import { FormRecord, Responses, TypeOmit } from "@lib/types";
 import { getLocalizedProperty } from "@lib/utils";
 import Link from "next/link";
-import { ReactNode, useRef } from "react";
+import { ReactNode, useMemo, useRef } from "react";
 
 interface ReviewItem {
   id: number;
@@ -33,22 +33,25 @@ export default function Review({
   const headingRef = useRef(null);
   useFocusIt({ elRef: headingRef });
 
-  const questionsAnswers =
-    formRecord?.form?.elements &&
-    (formRecord.form.elements.map((element) => {
-      const rawAnswer = values[element.id] as string | string[] | undefined | null;
-      const answer = Array.isArray(rawAnswer)
-        ? rawAnswer.length > 1
-          ? rawAnswer.join(", ")
-          : rawAnswer[0] || "-"
-        : rawAnswer || "-";
+  const questionsAnswers = useMemo(() => {
+    return (
+      formRecord?.form?.elements &&
+      (formRecord.form.elements.map((element) => {
+        const rawAnswer = values[element.id] as string | string[] | undefined | null;
+        const answer = Array.isArray(rawAnswer)
+          ? rawAnswer.length > 1
+            ? rawAnswer.join(", ")
+            : rawAnswer[0] || "-"
+          : rawAnswer || "-";
 
-      return {
-        id: element.id,
-        question: element.properties[getLocalizedProperty("title", language)],
-        answer,
-      };
-    }) as ReviewItem[]);
+        return {
+          id: element.id,
+          question: element.properties[getLocalizedProperty("title", language)],
+          answer,
+        };
+      }) as ReviewItem[])
+    );
+  }, [formRecord, values, language]);
 
   return (
     <div>
