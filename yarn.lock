@@ -2831,7 +2831,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@jest/test-result@npm:^29.7.0":
+"@jest/test-result@npm:^29.0.2, @jest/test-result@npm:^29.7.0":
   version: 29.7.0
   resolution: "@jest/test-result@npm:29.7.0"
   dependencies:
@@ -2878,7 +2878,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@jest/types@npm:^29.6.3":
+"@jest/types@npm:^29.0.2, @jest/types@npm:^29.6.3":
   version: 29.6.3
   resolution: "@jest/types@npm:29.6.3"
   dependencies:
@@ -9525,6 +9525,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"dateformat@npm:3.0.2":
+  version: 3.0.2
+  resolution: "dateformat@npm:3.0.2"
+  checksum: 10c0/92d11de3d58f98810a8c66e182431a33cafcb87c848a6186417561f862a092e7a440ce3b80b5dd2bd7178803e8631581c57a07a92d775f9a9078afd85d07a7c3
+  languageName: node
+  linkType: hard
+
 "dateformat@npm:^4.6.3":
   version: 4.6.3
   resolution: "dateformat@npm:4.6.3"
@@ -11493,6 +11500,7 @@ __metadata:
     jest-css-modules: "npm:^2.1.0"
     jest-environment-jsdom: "npm:^29.7.0"
     jest-environment-node: "npm:^29.7.0"
+    jest-html-reporter: "npm:^3.10.2"
     jest-mock-extended: "npm:^3.0.5"
     jsonschema: "npm:1.4.1"
     jsonwebtoken: "npm:9.0.2"
@@ -12929,6 +12937,23 @@ __metadata:
     fsevents:
       optional: true
   checksum: 10c0/2683a8f29793c75a4728787662972fedd9267704c8f7ef9d84f2beed9a977f1cf5e998c07b6f36ba5603f53cb010c911fe8cd0ac9886e073fe28ca66beefd30c
+  languageName: node
+  linkType: hard
+
+"jest-html-reporter@npm:^3.10.2":
+  version: 3.10.2
+  resolution: "jest-html-reporter@npm:3.10.2"
+  dependencies:
+    "@jest/test-result": "npm:^29.0.2"
+    "@jest/types": "npm:^29.0.2"
+    dateformat: "npm:3.0.2"
+    mkdirp: "npm:^1.0.3"
+    strip-ansi: "npm:6.0.1"
+    xmlbuilder: "npm:15.0.0"
+  peerDependencies:
+    jest: 19.x - 29.x
+    typescript: ^3.7.x || ^4.3.x || ^5.x
+  checksum: 10c0/b94ed8f14c82632e5a20d354e05fb92e582322a52bb6d494e5ba2e9c60ef914f02d49e846bb66a5c76f8eb9f36ad7f99d63ec7fc8a8c3921ad133c794cb43af4
   languageName: node
   linkType: hard
 
@@ -17219,7 +17244,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"strip-ansi-cjs@npm:strip-ansi@^6.0.1, strip-ansi@npm:^6.0.0, strip-ansi@npm:^6.0.1":
+"strip-ansi-cjs@npm:strip-ansi@^6.0.1, strip-ansi@npm:6.0.1, strip-ansi@npm:^6.0.0, strip-ansi@npm:^6.0.1":
   version: 6.0.1
   resolution: "strip-ansi@npm:6.0.1"
   dependencies:
@@ -18720,6 +18745,13 @@ __metadata:
   version: 4.0.0
   resolution: "xml-name-validator@npm:4.0.0"
   checksum: 10c0/c1bfa219d64e56fee265b2bd31b2fcecefc063ee802da1e73bad1f21d7afd89b943c9e2c97af2942f60b1ad46f915a4c81e00039c7d398b53cf410e29d3c30bd
+  languageName: node
+  linkType: hard
+
+"xmlbuilder@npm:15.0.0":
+  version: 15.0.0
+  resolution: "xmlbuilder@npm:15.0.0"
+  checksum: 10c0/38f27d6960b7fe05bc8d6a50c5ec0fad8daaf43bc27830772172a78a4b47d88224628911fa4c1d6f7909c28841ec2970acf7d4df1fa76db01224afe4eaa4c936
   languageName: node
   linkType: hard
 
