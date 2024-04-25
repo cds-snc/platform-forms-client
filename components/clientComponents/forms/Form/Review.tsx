@@ -36,10 +36,17 @@ export default function Review({
   const questionsAnswers =
     formRecord?.form?.elements &&
     (formRecord.form.elements.map((element) => {
+      const rawAnswer = values[element.id] as string | string[] | undefined | null;
+      const answer = Array.isArray(rawAnswer)
+        ? rawAnswer.length > 1
+          ? rawAnswer.join(", ")
+          : rawAnswer[0] || "-"
+        : rawAnswer || "-";
+
       return {
         id: element.id,
         question: element.properties[getLocalizedProperty("title", language)],
-        answer: values[element.id] || "-",
+        answer,
       };
     }) as ReviewItem[]);
 
@@ -67,11 +74,7 @@ export default function Review({
                       {t("edit")}
                     </Link>
                   </dt>
-                  <dl>
-                    {Array.isArray(item.answer) && item.answer.length > 1
-                      ? item.answer.join(", ")
-                      : item.answer}
-                  </dl>
+                  <dl>{item.answer}</dl>
                 </div>
               );
             })}
