@@ -1,4 +1,5 @@
 import { logMessage } from "@lib/logger";
+import { vi } from "vitest";
 
 describe("logMessage function", () => {
   it("Logs an error message", () => {

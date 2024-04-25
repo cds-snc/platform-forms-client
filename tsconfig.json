@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
     "typeRoots": ["./types", "./node_modules/@types"],
-    "target": "es2020",
+    "target": "es2022",
     "downlevelIteration": true,
     "lib": ["dom", "dom.iterable", "esnext"],
     "allowJs": true,
@@ -34,8 +34,7 @@
       {
         "name": "next"
       }
-    ],
-    "types": ["vitest/globals"]
+    ]
   },
   "include": [
     "next-env.d.ts",
