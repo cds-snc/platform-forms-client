@@ -8,6 +8,7 @@ import { useParams } from "next/navigation";
 import { DownloadTable } from "./DownloadTable";
 import { NoResponses } from "./NoResponses";
 import { useRehydrate } from "@lib/store/useTemplateStore";
+import { TitleAndDescription } from "./TitleAndDescription";
 
 export interface ResponsesProps {
   initialForm: FormRecord | null;
@@ -44,14 +45,20 @@ export const Responses = ({
   }
 
   const hasHydrated = useRehydrate();
-  if (!hasHydrated) return null;
 
   return (
     <>
+      <div className="has-[.gc-confirm-success]:hidden">
+        <TitleAndDescription
+          statusFilter={ucfirst(statusFilter)}
+          formId={id}
+          responseDownloadLimit={responseDownloadLimit}
+        />
+      </div>
       {nagwareResult && <Nagware nagwareResult={nagwareResult} />}
       <div aria-live="polite">
         <ClosedBanner id={formId} />
-        {vaultSubmissions.length > 0 && (
+        {hasHydrated && vaultSubmissions.length > 0 && (
           <>
             <DownloadTable
               vaultSubmissions={vaultSubmissions}
