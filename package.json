@@ -38,6 +38,7 @@
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "test": "jest",
+    "test:vitest": "vitest run",
     "test:watch": "DEBUG_PRINT_LIMIT=10000  jest --watch",
     "cypress": "cypress open",
     "cypress:run": "CYPRESS_DEBUG=true cypress run --browser chrome",
@@ -192,6 +193,8 @@
     "ts-jest": "^29.1.1",
     "ts-node": "^10.9.2",
     "typescript": "^5.3.3",
+    "vite-tsconfig-paths": "^4.3.2",
+    "vitest": "^1.5.2",
     "webpack": "^5.89.0"
   },
   "browserslist": [

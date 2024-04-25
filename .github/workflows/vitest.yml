@@ -1,0 +1,34 @@
+name: Vitest Tests
+on:
+  pull_request:
+    branches: [develop, main, feature/*]
+
+jobs:
+  vitest-run:
+    name: Vitest
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@50fbc622fc4ef5163becd7fab6573eac35f8462e # v1.2.0
+      - name: Node.JS Setup
+        uses: actions/setup-node@1a4442cacd436585916779262731d5b162bc6ec7 # v3.8.2
+        with:
+          node-version-file: .nvmrc
+      - name: Yarn update to V4
+        run: corepack enable && yarn set version berry
+
+      - name: Get yarn cache directory path
+        id: yarn-cache-dir-path
+        run: echo "dir=$(yarn config get cacheFolder)" >> $GITHUB_OUTPUT
+
+      - uses: actions/cache@e12d46a63a90f2fae62d114769bbf2a179198b5c # v3.3.3
+        id: yarn-cache # use this to check for `cache-hit` (`steps.yarn-cache.outputs.cache-hit != 'true'`)
+        with:
+          path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
+          key: linux-yarn-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: |
+            linux-yarn-
+      - name: "Install dependencies"
+        run: yarn workspaces focus gcforms flag_initialization
+
+      - name: Vitest Tests
+        run: yarn test:vitest
