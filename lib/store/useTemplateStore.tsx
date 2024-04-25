@@ -14,6 +14,7 @@ import {
 import React, { createContext, useRef, useContext, useEffect } from "react";
 import { getPathString } from "../utils/form-builder/getPath";
 import { TreeRefProvider } from "@formBuilder/components/shared/right-panel/treeview/provider/TreeRefProvider";
+import { FlowRefProvider } from "@formBuilder/[id]/edit/logic/components/flow/provider/FlowRefProvider";
 import { initializeGroups } from "@formBuilder/components/shared/right-panel/treeview/util/initializeGroups";
 
 import {
@@ -424,9 +425,8 @@ const createTemplateStore = (initProps?: Partial<InitialTemplateStoreProps>) => 
                 const element = JSON.parse(JSON.stringify(state.form.elements[elIndex]));
                 element.id = id;
                 if (element.type !== "richText") {
-                  element.properties[state.localizeField("title")] = `${
-                    element.properties[state.localizeField("title")]
-                  } copy`;
+                  element.properties[state.localizeField("title")] = `${element.properties[state.localizeField("title")]
+                    } copy`;
                 }
                 state.form.elements.splice(elIndex + 1, 0, element);
                 state.form.layout.splice(elIndex + 1, 0, id);
@@ -439,9 +439,8 @@ const createTemplateStore = (initProps?: Partial<InitialTemplateStoreProps>) => 
                 if (subElements) {
                   const element = JSON.parse(JSON.stringify(subElements[subIndex]));
                   element.id = incrementElementId(subElements);
-                  element.properties[state.localizeField("title")] = `${
-                    element.properties[state.localizeField("title")]
-                  } copy`;
+                  element.properties[state.localizeField("title")] = `${element.properties[state.localizeField("title")]
+                    } copy`;
 
                   state.form.elements[elIndex].properties.subElements?.splice(
                     subIndex + 1,
@@ -536,7 +535,9 @@ export const TemplateStoreProvider = ({
 
   return (
     <TemplateStoreContext.Provider value={storeRef.current}>
-      <TreeRefProvider>{children}</TreeRefProvider>
+      <FlowRefProvider>
+        <TreeRefProvider>{children}</TreeRefProvider>
+      </FlowRefProvider>
     </TemplateStoreContext.Provider>
   );
 };

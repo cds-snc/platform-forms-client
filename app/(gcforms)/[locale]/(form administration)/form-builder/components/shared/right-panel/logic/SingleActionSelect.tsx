@@ -5,6 +5,7 @@ import { GroupsType } from "@lib/formContext";
 import { GroupSelect } from "./GroupSelect";
 import { Button } from "@clientComponents/globals";
 import { useGroupStore } from "@formBuilder/components/shared/right-panel/treeview/store/useGroupStore";
+import { useFlowRef } from "@formBuilder/[id]/edit/logic/components/flow/provider/FlowRefProvider";
 
 export const SingleActionSelect = ({
   item,
@@ -13,6 +14,7 @@ export const SingleActionSelect = ({
   item: FormElement;
   nextAction: string | undefined;
 }) => {
+  const { flow } = useFlowRef();
   const getId = useGroupStore((state) => state.getId);
   const findParentGroup = useGroupStore((state) => state.findParentGroup);
   const setGroupNextAction = useGroupStore((state) => state.setGroupNextAction);
@@ -49,6 +51,7 @@ export const SingleActionSelect = ({
                 const group = findParentGroup(String(item.id));
                 const parent = group?.index;
                 parent && setGroupNextAction(parent as string, nextActionId);
+                flow.current?.updateEdges();
               }}
             >
               Save

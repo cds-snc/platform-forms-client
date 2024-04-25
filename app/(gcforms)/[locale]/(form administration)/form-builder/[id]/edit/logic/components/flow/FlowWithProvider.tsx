@@ -1,6 +1,13 @@
 "use client";
 
-import React, { useEffect } from "react";
+import React, {
+  useEffect,
+  useImperativeHandle,
+  forwardRef,
+  ReactElement,
+  ForwardRefRenderFunction,
+} from "react";
+
 import ReactFlow, {
   Background,
   Controls,
@@ -18,14 +25,21 @@ import { GroupNode } from "./GroupNode";
 import { layoutOptions } from "./options";
 import { edgeOptions } from "./options";
 
+import { useFlowRef } from "./provider/FlowRefProvider";
+import { GroupOutput } from "@formBuilder/components/shared/GroupOutput";
+
 const nodeTypes = { groupNode: GroupNode };
 
-export const Flow = () => {
-  const { nodes: initialNodes, edges: initialEdges } = useFlowData();
-  const { fitView } = useReactFlow();
+export interface FlowProps {
+  children?: ReactElement;
+  updateEdges?: () => void;
+}
 
-  const [nodes, , onNodesChange] = useNodesState(initialNodes);
-  const [edges, , onEdgesChange] = useEdgesState(initialEdges);
+const Flow: ForwardRefRenderFunction<unknown, FlowProps> = ({ children }, ref) => {
+  const { nodes: flowNodes, edges: flowEdges, getData } = useFlowData();
+  const { fitView } = useReactFlow();
+  const [nodes, , onNodesChange] = useNodesState(flowNodes);
+  const [, setEdges, onEdgesChange] = useEdgesState(flowEdges);
 
   // temp fix see: https://github.com/xyflow/xyflow/issues/3243
   const store = useStoreApi();
@@ -34,7 +48,6 @@ export const Flow = () => {
       if (code === "002") {
         return;
       }
-      // console.warn(message);
     };
   }
 
@@ -44,11 +57,18 @@ export const Flow = () => {
     fitView();
   }, [nodes, fitView]);
 
+  useImperativeHandle(ref, () => ({
+    updateEdges: () => {
+      const { edges } = getData();
+      setEdges(edges);
+    },
+  }));
+
   return (
     <div className="my-10 w-full border-1" style={{ height: "calc(100vh - 300px)" }}>
       <ReactFlow
         nodes={nodes}
-        edges={edges}
+        edges={flowEdges}
         onNodesChange={onNodesChange}
         onEdgesChange={onEdgesChange}
         nodeTypes={nodeTypes}
@@ -56,15 +76,20 @@ export const Flow = () => {
       >
         <Background />
         <Controls />
+        {children}
       </ReactFlow>
+      <GroupOutput />
     </div>
   );
 };
 
 export const FlowWithProvider = () => {
+  const { flow } = useFlowRef();
   return (
     <ReactFlowProvider>
-      <Flow />
+      <FlowWithRef ref={flow} />
     </ReactFlowProvider>
   );
 };
+
+const FlowWithRef = forwardRef(Flow);
