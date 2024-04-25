@@ -48,7 +48,4 @@ module.exports = {
     "no-await-in-loop": "error",
     "no-return-await": "error",
   },
-  globals: {
-    vi: true,
-  },
 };

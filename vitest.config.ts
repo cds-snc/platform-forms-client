@@ -7,6 +7,6 @@ export default defineConfig({
     globals: true, // migration from Jest - By default, vitest does not provide global APIs for explicitness
     environment: "node",
     // TODO: remove include after complete Vitest migration
-    include: ["__vitests__/**/*.ts", "lib/vitests/**/*.ts"],
+    include: ["__vitests__/**/*.test.ts", "lib/vitests/**/*.test.ts"],
   },
 });
