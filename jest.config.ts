@@ -46,6 +46,15 @@ const customJestConfig: Config = {
   ],
   testEnvironment: "jsdom",
   preset: "ts-jest",
+  reporters: [
+    "default",
+    [
+      "./node_modules/jest-html-reporter",
+      {
+        pageTitle: "Test Report",
+      },
+    ],
+  ],
 };
 
 const jestConfig = async () => ({
