@@ -27,7 +27,7 @@ if (window.location.host === "forms-formulaires.alpha.canada.ca") {
 `;
 
 export const generateCSP = (req: NextRequest): { csp: string; nonce: string } => {
-  const authCookie = req.cookies.get("authjs.session-token");
+  const authCookie = req.cookies.get("authjs.session-token")?.value;
 
   const nonce = Buffer.from(crypto.randomUUID()).toString("base64");
 
