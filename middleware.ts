@@ -214,7 +214,7 @@ const setCSP = (
   pathLang: string
 ) => {
   // Set the Content Security Policy (CSP) header
-  const { csp, nonce } = generateCSP();
+  const { csp, nonce } = generateCSP(req);
   const requestHeaders = new Headers(req.headers);
   if (process.env.NODE_ENV !== "development") {
     // Set the CSP header on the request to the server

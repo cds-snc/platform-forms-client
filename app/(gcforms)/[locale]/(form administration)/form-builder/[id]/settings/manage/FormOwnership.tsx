@@ -1,11 +1,12 @@
 "use client";
-import React, { ReactElement, useId, useState } from "react";
+import React, { ReactElement, useState } from "react";
 import { useTranslation } from "@i18n/client";
 import { Alert } from "@clientComponents/globals";
 import { logMessage } from "@lib/logger";
 import { Button } from "@clientComponents/globals";
-import Select from "react-select";
-import makeAnimated from "react-select/animated";
+import { FormOwnerSelect, usersToOptions } from "./FormOwnerSelect";
+
+// import makeAnimated from "react-select/animated";
 import axios from "axios";
 import { FormRecord } from "@lib/types";
 
@@ -14,14 +15,6 @@ interface AssignUsersToTemplateProps {
   usersAssignedToFormRecord: { id: string; name: string | null; email: string }[];
   allUsers: { id: string; name: string | null; email: string }[];
 }
-
-const usersToOptions = (
-  users: { id: string; email: string }[]
-): { value: string; label: string | null }[] => {
-  return users.map((user) => {
-    return { value: user.id, label: user.email };
-  });
-};
 
 const updateUsersToTemplateAssignations = async (formID: string, users: { id: string }[]) => {
   try {
@@ -87,21 +80,16 @@ export const FormOwnership = ({
     <>
       <div className="mb-20" data-testid="form-ownership">
         <h2>{t("Manage ownership")}</h2>
-
         {message && message}
-
         <p className="mb-4">{t("assignUsersToTemplate")}</p>
         <p className="mb-2 font-bold">{t("enterOwnersEmail")} </p>
-        <Select
-          instanceId={useId()}
-          isClearable
-          isSearchable
-          isMulti
-          components={makeAnimated()}
-          options={usersToOptions(allUsers)}
-          value={selectedUsers}
-          onChange={(value) => setSelectedUsers(value as { value: string; label: string | null }[])}
-        />
+        <div className="w-9/12">
+          <FormOwnerSelect
+            allUsers={allUsers}
+            selectedUsers={selectedUsers}
+            setSelectedUsers={setSelectedUsers}
+          />
+        </div>
         <br />
         <Button
           dataTestId="save-ownership"

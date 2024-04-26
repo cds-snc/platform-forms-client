@@ -1,3 +1,5 @@
+import type { NextRequest } from "next/server";
+
 const prodGTM = "GTM-W3ZVVX5";
 const devGTM = "GTM-KNMJRS8";
 // Values are currently hardcoded because nextjs and CSP and GTM don't play well together
@@ -24,8 +26,15 @@ if (window.location.host === "forms-formulaires.alpha.canada.ca") {
 }
 `;
 
-export const generateCSP = (): { csp: string; nonce: string } => {
+export const generateCSP = (req: NextRequest): { csp: string; nonce: string } => {
+  const { pathname } = req.nextUrl;
+
   const nonce = Buffer.from(crypto.randomUUID()).toString("base64");
+
+  // Allow inline styles for certain paths
+  const stylesAllowSafeList = ["/settings/manage"];
+  const allowInlineStyles = stylesAllowSafeList.some((path) => pathname.includes(path));
+  const styleSrc = allowInlineStyles ? "'unsafe-inline'" : `'${nonce}'`;
 
   // Keeping old CSP for reference
   // let csp = ``;
@@ -45,7 +54,7 @@ export const generateCSP = (): { csp: string; nonce: string } => {
   const cspHeader = `
     default-src 'self';
     script-src 'self' 'nonce-${nonce}' 'strict-dynamic';
-    style-src 'self' 'nonce-${nonce}';
+    style-src 'self' ${styleSrc};
     img-src 'self' blob: data:;
     font-src 'self';
     object-src 'none';
