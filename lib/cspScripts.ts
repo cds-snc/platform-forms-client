@@ -27,13 +27,13 @@ if (window.location.host === "forms-formulaires.alpha.canada.ca") {
 `;
 
 export const generateCSP = (req: NextRequest): { csp: string; nonce: string } => {
-  const { pathname } = req.nextUrl;
+  const authCookie = req.cookies.get("authjs.session-token");
 
   const nonce = Buffer.from(crypto.randomUUID()).toString("base64");
 
-  // Allow inline styles for certain paths
-  const stylesAllowSafeList = ["/settings/manage"];
-  const allowInlineStyles = stylesAllowSafeList.some((path) => pathname.includes(path));
+  // @TODO: when we refactor the ownership component, remove unsafe-inline
+  // Allow inline styles for authenticated users
+  const allowInlineStyles = authCookie || false;
   const styleSrc = allowInlineStyles ? "'unsafe-inline'" : `'nonce-${nonce}'`;
 
   // Keeping old CSP for reference
