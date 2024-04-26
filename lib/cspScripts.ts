@@ -33,6 +33,7 @@ export const generateCSP = (req: NextRequest): { csp: string; nonce: string } =>
 
   // @TODO: when we refactor the ownership component, remove unsafe-inline
   // Allow inline styles for authenticated users
+  // see: https://github.com/cds-snc/platform-forms-client/pull/3521
   const allowInlineStyles = authCookie || false;
   const styleSrc = allowInlineStyles ? "'unsafe-inline'" : `'nonce-${nonce}'`;
 
