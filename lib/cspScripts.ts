@@ -34,7 +34,7 @@ export const generateCSP = (req: NextRequest): { csp: string; nonce: string } =>
   // Allow inline styles for certain paths
   const stylesAllowSafeList = ["/settings/manage"];
   const allowInlineStyles = stylesAllowSafeList.some((path) => pathname.includes(path));
-  const styleSrc = allowInlineStyles ? "'unsafe-inline'" : `'${nonce}'`;
+  const styleSrc = allowInlineStyles ? "'unsafe-inline'" : `'nonce-${nonce}'`;
 
   // Keeping old CSP for reference
   // let csp = ``;
