@@ -1,5 +1,3 @@
-import type { NextRequest } from "next/server";
-
 const prodGTM = "GTM-W3ZVVX5";
 const devGTM = "GTM-KNMJRS8";
 // Values are currently hardcoded because nextjs and CSP and GTM don't play well together
@@ -26,16 +24,9 @@ if (window.location.host === "forms-formulaires.alpha.canada.ca") {
 }
 `;
 
-export const generateCSP = (req: NextRequest): { csp: string; nonce: string } => {
-  const authCookie = req.cookies.get("authjs.session-token")?.value;
-
+export const generateCSP = () => {
   const nonce = Buffer.from(crypto.randomUUID()).toString("base64");
-
-  // @TODO: when we refactor the ownership component, remove unsafe-inline
-  // Allow inline styles for authenticated users
-  // see: https://github.com/cds-snc/platform-forms-client/pull/3521
-  const allowInlineStyles = authCookie || false;
-  const styleSrc = allowInlineStyles ? "'unsafe-inline'" : `'nonce-${nonce}'`;
+  const styleSrc = `'nonce-${nonce}'`;
 
   // Keeping old CSP for reference
   // let csp = ``;

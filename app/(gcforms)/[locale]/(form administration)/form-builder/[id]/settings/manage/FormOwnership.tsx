@@ -6,6 +6,9 @@ import { logMessage } from "@lib/logger";
 import { Button } from "@clientComponents/globals";
 import { FormOwnerSelect, usersToOptions } from "./FormOwnerSelect";
 
+import { CacheProvider, EmotionCache } from "@emotion/react";
+import createCache from "@emotion/cache";
+
 // import makeAnimated from "react-select/animated";
 import axios from "axios";
 import { FormRecord } from "@lib/types";
@@ -15,6 +18,11 @@ interface AssignUsersToTemplateProps {
   usersAssignedToFormRecord: { id: string; name: string | null; email: string }[];
   allUsers: { id: string; name: string | null; email: string }[];
 }
+
+const cache: EmotionCache = createCache({
+  key: "gc-forms",
+  nonce: "123",
+});
 
 const updateUsersToTemplateAssignations = async (formID: string, users: { id: string }[]) => {
   try {
@@ -84,11 +92,13 @@ export const FormOwnership = ({
         <p className="mb-4">{t("assignUsersToTemplate")}</p>
         <p className="mb-2 font-bold">{t("enterOwnersEmail")} </p>
         <div className="w-9/12">
-          <FormOwnerSelect
-            allUsers={allUsers}
-            selectedUsers={selectedUsers}
-            setSelectedUsers={setSelectedUsers}
-          />
+          <CacheProvider value={cache}>
+            <FormOwnerSelect
+              allUsers={allUsers}
+              selectedUsers={selectedUsers}
+              setSelectedUsers={setSelectedUsers}
+            />
+          </CacheProvider>
         </div>
         <br />
         <Button
