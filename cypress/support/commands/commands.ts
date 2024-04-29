@@ -212,6 +212,7 @@ Cypress.Commands.add("logout", () => {
  * Type in a field and wait for the field to be updated
  */
 Cypress.Commands.add("typeInField", (field, typedText, outputText) => {
+  cy.get(field).focus();
   cy.get(field).type(typedText, { delay: 50 });
 
   // Use passed in outputText or Remove actions in brackets from typedText
