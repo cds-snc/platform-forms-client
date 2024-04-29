@@ -26,7 +26,6 @@ if (window.location.host === "forms-formulaires.alpha.canada.ca") {
 
 export const generateCSP = () => {
   const nonce = Buffer.from(crypto.randomUUID()).toString("base64");
-  const styleSrc = `'nonce-${nonce}'`;
 
   // Keeping old CSP for reference
   // let csp = ``;
@@ -46,7 +45,7 @@ export const generateCSP = () => {
   const cspHeader = `
     default-src 'self';
     script-src 'self' 'nonce-${nonce}' 'strict-dynamic';
-    style-src 'self' ${styleSrc};
+    style-src 'self' 'nonce-${nonce}';
     img-src 'self' blob: data:;
     font-src 'self';
     object-src 'none';
