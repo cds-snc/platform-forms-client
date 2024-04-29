@@ -10,10 +10,6 @@
   "featureStatus": "Status",
   "featureSwitch": "On/Off",
   "features": {
-    "reCaptcha": {
-      "title": "I am not a robot",
-      "description": "Enable protected by reCaptcha on forms before submission"
-    },
     "formTimer": {
       "title": "Form timer",
       "description": "Wait a specific amount of time before being allowed to submit the form"
