@@ -24,7 +24,7 @@ if (window.location.host === "forms-formulaires.alpha.canada.ca") {
 }
 `;
 
-export const generateCSP = () => {
+export const generateCSP = (): { csp: string; nonce: string } => {
   const nonce = Buffer.from(crypto.randomUUID()).toString("base64");
 
   // Keeping old CSP for reference
