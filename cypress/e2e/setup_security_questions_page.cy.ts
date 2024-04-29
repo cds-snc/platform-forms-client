@@ -5,9 +5,11 @@ describe("Security Questions Page", () => {
   const questions2 = "What was the name of your first manager?";
   const questions3 = "What was the make of your first car?";
 
-  beforeEach(() => {
+  let userSession: string | undefined;
+
+  before(() => {
     cy.visitPage("/en/auth/login");
-    cy.typeInField("input[id='username']", "test.withoutSecurityAnswers@cds-snc.ca");
+    cy.typeInField("input[id='username']", "test.withoutsecurityanswers@cds-snc.ca");
     cy.typeInField("input[id='password']", "testTesttest");
     cy.get("button[type='submit']").click();
     cy.get("input[id='verificationCode']").should("be.visible");
@@ -15,6 +17,16 @@ describe("Security Questions Page", () => {
     cy.typeInField("input[id='verificationCode']", "12345");
     cy.get("button[type='submit']").should("be.visible");
     cy.get("button[type='submit']").click();
+    cy.url().should("contain", "/en/auth/setup-security-questions");
+    cy.get("h1").should("contain", "Set up security questions");
+    cy.getCookie("authjs.session-token").then((cookie) => {
+      userSession = cookie?.value;
+    });
+  });
+
+  beforeEach(() => {
+    cy.setCookie("authjs.session-token", userSession ?? "");
+    cy.visitPage("/en/auth/setup-security-questions");
   });
 
   it("En page renders", () => {

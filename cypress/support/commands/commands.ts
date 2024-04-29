@@ -213,7 +213,7 @@ Cypress.Commands.add("logout", () => {
  */
 Cypress.Commands.add("typeInField", (field, typedText, outputText) => {
   cy.get(field).focus();
-  cy.get(field).type(typedText);
+  cy.get(field).type(typedText, { delay: 20 });
 
   // Use passed in outputText or Remove actions in brackets from typedText
   const text = outputText ?? typedText.replace(/\{.*\}/, "");
