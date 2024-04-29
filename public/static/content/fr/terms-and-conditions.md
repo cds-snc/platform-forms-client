@@ -1,19 +1,20 @@
 # Conditions générales
+
 Les présentes conditions d’utilisation définissent les rôles et responsabilités d'[Emploi et Développement social Canada (EDSC)](https://www.canada.ca/fr/emploi-developpement-social.html) quant à l’hébergement de ce formulaire au nom d’un ministère ou organisme.
 
-Pour savoir comment le ministère ou l’organisme gère vos soumissions du formulaire, revenez au formulaire que vous consultiez.  
+Pour savoir comment le ministère ou l’organisme gère vos soumissions du formulaire, revenez au formulaire que vous consultiez.
 
 ## Protection de votre vie privée
 
 Lorsque vous soumettez un formulaire, ce dernier est temporairement conservé dans une base de données sécurisée gérée par Emploi et Développement social Canada pour une durée maximale de 60 jours. La soumission est ensuite traitée et stockée par le ministère ou l’organisme qui a créé le formulaire conformément à ses propres politiques et processus.
 
-[Emploi et Développement social Canada](https://www.canada.ca/fr/emploi-developpement-social.html) n’utilise pas les renseignements personnels que vous inscrivez au formulaire à des fins administratives, à moins qu’il n’ait créé le formulaire et l’administre lui-même. La Section 5.1 de la [*Loi sur le ministère de l’Emploi et du Développement social*](https://laws-lois.justice.gc.ca/fra/lois/h-5.7/TexteComplet.html) nous autorise à recueillir et à stocker des renseignements personnels.
+[Emploi et Développement social Canada](https://www.canada.ca/fr/emploi-developpement-social.html) n’utilise pas les renseignements personnels que vous inscrivez au formulaire à des fins administratives, à moins qu’il n’ait créé le formulaire et l’administre lui-même. La Section 5.1 de la [_Loi sur le ministère de l’Emploi et du Développement social_](https://laws-lois.justice.gc.ca/fra/lois/h-5.7/TexteComplet.html) nous autorise à recueillir et à stocker des renseignements personnels.
 
-Le ministère ou l’organisme avec lequel vous communiquez protège également vos renseignements personnels. L’avis de confidentialité figurant sur le formulaire devrait préciser comment ils procèdent.  
+Le ministère ou l’organisme avec lequel vous communiquez protège également vos renseignements personnels. L’avis de confidentialité figurant sur le formulaire devrait préciser comment ils procèdent.
 
 Les renseignements personnels sont recueillis conformément à la [Loi sur la protection des renseignements personnels](https://laws.justice.gc.ca/fra/lois/p-21/index.html).
 
-### Analytique Web pour améliorer votre expérience  
+### Analytique Web pour améliorer votre expérience
 
 L’analytique Web nous renseigne sur des données telles que le type de navigateur utilisé pour visiter le site Web, les pages visitées et les liens suivis. Ces renseignements nous aident à savoir comment s’utilise notre site Web afin d’améliorer votre expérience.
 
@@ -38,6 +39,7 @@ En cas de problème lié à la gestion de vos renseignements personnels, dépose
 ## Protection de la sécurité des sites Web du gouvernement du Canada
 
 Des logiciels sont utilisés pour surveiller le trafic réseau et pour détecter les tentatives non autorisées de télécharger ou de modifier des données, ou de causer d’autres dommages. Lorsque vous visitez un site Web d'[Emploi et Développement social Canada](https://www.canada.ca/fr/emploi-developpement-social.html), ces logiciels reçoivent automatiquement les données fournies par votre navigateur et les stockent temporairement dans les journaux de notre serveur Web pendant trois mois. Parmi les données recueillies automatiquement par notre serveur lorsque vous naviguez sur notre site Web on trouve :
+
 - le nom du formulaire rempli (mais non votre réponse).
 - l’emplacement du réseau et l’adresse du protocole Internet (IP) de l’ordinateur et d’autres appareils que vous avez utilisés pour contacter notre site Web.
 - le nom du domaine que vous avez utilisé pour accéder à Internet (.com, .org, .net, .ca, etc.).
@@ -51,13 +53,11 @@ Il s'agit de données statistiques qui ne permettent pas de vous identifier dire
 
 Lorsque l’on détecte une menace pour le site du Service numérique canadien ou les systèmes informatiques du gouvernement du Canada, on recueille des données conformément à l’article 161 de la _[Loi sur la gestion des finances publiques](https://laws-lois.justice.gc.ca/fra/lois/f-11/)_. Si des activités criminelles sont détectées, ces données peuvent être communiquées aux autorités compétentes chargées de l’application de la loi. De tels renseignements peuvent être utilisés pour établir des statistiques sur la sécurité du réseau ainsi qu’à des fins de vérification, d’évaluation, de recherche, de planification et d’établissement de rapports, et figurent dans le [fichier de renseignements personnels POU 939 Incidents de sécurité et atteintes à la vie privée](https://www.canada.ca/fr/secretariat-conseil-tresor/services/acces-information-protection-reseignements-personnels/acces-information/renseignements-programmes-fonds-renseignements/fichiers-renseignements-personnels-ordinaires.html#pou939).
 
-Ce site a recours à un fournisseur de services tiers, Google Inc., afin de réduire les activités malveillantes et détecter la fraude. Les données recueillies relatives aux consultations de ce site Web sont communiquées à Google Inc. par le biais du service reCAPTCHA. Ces données comportent : des adresses IP, des mouvements avec la souris, et la durée de la visite. Ces renseignements sont utilisés afin de déterminer si la visite au site Web est faite par une personne ou par un robot.
-
 [Emploi et Développement social Canada](https://www.canada.ca/fr/emploi-developpement-social.html) est un défenseur de la divulgation responsable des vulnérabilités. Si vous avez repéré une vulnérabilité, nous aimerions le savoir afin de la corriger. Veuillez consulter cet [Avis de sécurité](https://numerique.canada.ca/avis-de-securite/) pour en savoir plus.
 
 ## Emploi de fichiers situés sur des serveurs autres que ceux du gouvernement du Canada
 
-Afin d’améliorer la fonctionnalité des sites Web du gouvernement du Canada, certains fichiers (tels que les bibliothèques à code source ouvert, les images et les scripts) peuvent être téléchargés automatiquement vers votre navigateur à l’aide d’un serveur tiers ou d’un réseau de diffusion de contenu de confiance. La diffusion de ces fichiers vise à offrir une expérience utilisateur transparente en diminuant les temps de réponse et en évitant le téléchargement de ces fichiers par chaque visiteur. 
+Afin d’améliorer la fonctionnalité des sites Web du gouvernement du Canada, certains fichiers (tels que les bibliothèques à code source ouvert, les images et les scripts) peuvent être téléchargés automatiquement vers votre navigateur à l’aide d’un serveur tiers ou d’un réseau de diffusion de contenu de confiance. La diffusion de ces fichiers vise à offrir une expérience utilisateur transparente en diminuant les temps de réponse et en évitant le téléchargement de ces fichiers par chaque visiteur.
 
 ## Hyperliens vers des sites Web autres que ceux du gouvernement du Canada
 
@@ -72,6 +72,7 @@ Les formulaires présents sur ce site Web ont été créés dans le but de trans
 ### Reproduction non commerciale
 
 À moins d’avis contraire, vous pouvez reproduire le contenu en totalité ou en partie à des fins non commerciales, dans tout format, sans frais ni autre permission, à condition :
+
 - de faire preuve de diligence raisonnable quant à l’exactitude du contenu reproduit.
 - d’indiquer le titre complet du contenu reproduit ainsi que son auteur (s’il y a lieu).
 - de préciser qu’il s’agit d’une reproduction de la version disponible au [adresse URL de l’emplacement du document original].
@@ -92,7 +93,7 @@ Votre interaction avec le gouvernement du Canada sur les médias sociaux est en 
 
 ### Contenu et fréquence des médias sociaux
 
-Les comptes de médias sociaux du gouvernement du Canada sont un autre moyen de diffuser le contenu affiché sur ses sites Web et d’échanger avec les intervenants. 
+Les comptes de médias sociaux du gouvernement du Canada sont un autre moyen de diffuser le contenu affiché sur ses sites Web et d’échanger avec les intervenants.
 
 Étant donné que les plateformes de médias sociaux et leurs serveurs sont gérés par un tiers, les comptes de médias sociaux sont sujets à des interruptions de service qui échappent au contrôle du gouvernement du Canada. Le gouvernement du Canada n’assume donc aucune responsabilité en cas de non-disponibilité des plateformes.
 
@@ -116,6 +117,4 @@ Le gouvernement du Canada utilise les médias sociaux pour étendre sa présence
 
 Bon nombre de plateformes de médias sociaux offrent plusieurs choix de langues et donnent des instructions pour définir des préférences. Le gouvernement du Canada respecte la _[Loi sur les langues officielles](https://laws-lois.justice.gc.ca/fra/lois/o-3.01/)_ et est déterminé à prendre les moyens nécessaires pour que son contenu soit disponible en français et en anglais et pour que la qualité soit égale dans les deux versions.
 
-
-
-**Dernière mise à jour :** 14 décembre 2023
+**Dernière mise à jour :** 24 Avril 2024

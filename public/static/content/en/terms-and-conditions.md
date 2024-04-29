@@ -1,5 +1,6 @@
 # Terms and conditions
-These terms and conditions outline the roles and responsibilities of [Employment and Social Development Canada (ESDC)](https://www.canada.ca/en/employment-social-development.html) in hosting this form.  
+
+These terms and conditions outline the roles and responsibilities of [Employment and Social Development Canada (ESDC)](https://www.canada.ca/en/employment-social-development.html) in hosting this form.
 
 To learn about how a department or agency manages your form submissions, return to the form you were viewing.
 
@@ -7,7 +8,7 @@ To learn about how a department or agency manages your form submissions, return 
 
 When you submit a form, it is temporarily stored in a secure database managed by Employment and Social Development Canada for up to 60 days. It is then processed and stored by the department or agency that created the form according to their own policies and processes.
 
-[Employment and Social Development Canada](https://www.canada.ca/en/employment-social-development.html) does not use the personal information you provide on a form for any administrative purpose, unless it created and administers the form itself. Section 5.1 of the [*Department of Employment and Social Development Act*](https://laws-lois.justice.gc.ca/eng/acts/h-5.7/FullText.html), allows us to collect and store personal information.
+[Employment and Social Development Canada](https://www.canada.ca/en/employment-social-development.html) does not use the personal information you provide on a form for any administrative purpose, unless it created and administers the form itself. Section 5.1 of the [_Department of Employment and Social Development Act_](https://laws-lois.justice.gc.ca/eng/acts/h-5.7/FullText.html), allows us to collect and store personal information.
 
 The department or agency you’re communicating with also protects your personal information. The Privacy Notice on the form should explain how they do this.
 
@@ -33,11 +34,12 @@ Send complaints about how your personal information has been handled to the [Off
 
 ## Providing content in Canada's official languages
 
-[Employment and Social Development Canada](https://www.canada.ca/en/employment-social-development.html) enables the creation of forms in both official languages, English and French. The [*Official Languages Act*](http://laws-lois.justice.gc.ca/eng/acts/O-3.01/), the [Official Languages (Communications with and Services to the Public) Regulations](http://laws.justice.gc.ca/eng/regulations/SOR-92-48/index.html) and [Treasury Board policy requirements](https://www.tbs-sct.canada.ca/pol/doc-eng.aspx?id=26160) establish the use of both English and French to provide services to or communicate with members of the public. When there is no obligation to provide information in both official languages, content may be available in one official language only.
+[Employment and Social Development Canada](https://www.canada.ca/en/employment-social-development.html) enables the creation of forms in both official languages, English and French. The [_Official Languages Act_](http://laws-lois.justice.gc.ca/eng/acts/O-3.01/), the [Official Languages (Communications with and Services to the Public) Regulations](http://laws.justice.gc.ca/eng/regulations/SOR-92-48/index.html) and [Treasury Board policy requirements](https://www.tbs-sct.canada.ca/pol/doc-eng.aspx?id=26160) establish the use of both English and French to provide services to or communicate with members of the public. When there is no obligation to provide information in both official languages, content may be available in one official language only.
 
 ## Protecting the Security of Government of Canada Websites
 
 Software programs are used to monitor network traffic and to identify unauthorized attempts to upload or change information, or otherwise cause damage. When you visit an [Employment and Social Development Canada](https://www.canada.ca/en/employment-social-development.html) website, these software programs automatically receive and temporarily store information supplied by your browser in our Web server logs for 3 months. Some of the information automatically collected by our server when you browse our website includes:
+
 - the name of the form you completed (not your response).
 - the network location and the Internet Protocol (IP) address of the computer and other devices you used to contact our website.
 - the name of the domain you used to access the Internet (.com, .org, .net, .ca, etc.).
@@ -49,21 +51,19 @@ Software programs are used to monitor network traffic and to identify unauthoriz
 
 This is statistical data and does not directly identify you. No attempt is made to link this data, nor the IP addresses of devices that have contacted our website, with the identity of individuals visiting our site, unless an attempt to damage the site has been detected. The programs are never used to gather specific personal information such as your name, your phone number, or your email address.
 
-When a threat to the website or computer systems of the Government of Canada is detected, information is collected pursuant to section 161 of the [*Financial Administration Act*](https://laws-lois.justice.gc.ca/eng/acts/f-11/). The information may be shared with appropriate law enforcement authorities if suspected criminal activities are detected. Such information may be used for network security related statistical purposes, audit, evaluation, research, planning and reporting, and is included in [Personal Information Bank Security Incidents and Privacy Breaches (PSU 939)](https://www.canada.ca/en/treasury-board-secretariat/services/access-information-privacy/access-information/information-about-programs-information-holdings/standard-personal-information-banks.html#psu939).
-
-This website uses a third-party service provider, Google Inc. to reduce malicious activity and detect fraud. Information about visits to this website is transferred to Google Inc. through the reCAPTCHA service. This information may include: IP addresses, mouse movements, and the length of a visit. This information is used to determine whether or not the visit is from a human being or a bot. 
+When a threat to the website or computer systems of the Government of Canada is detected, information is collected pursuant to section 161 of the [_Financial Administration Act_](https://laws-lois.justice.gc.ca/eng/acts/f-11/). The information may be shared with appropriate law enforcement authorities if suspected criminal activities are detected. Such information may be used for network security related statistical purposes, audit, evaluation, research, planning and reporting, and is included in [Personal Information Bank Security Incidents and Privacy Breaches (PSU 939)](https://www.canada.ca/en/treasury-board-secretariat/services/access-information-privacy/access-information/information-about-programs-information-holdings/standard-personal-information-banks.html#psu939).
 
 [Employment and Social Development Canada](https://www.canada.ca/en/employment-social-development.html) is an advocate of responsible vulnerability disclosure. If you’ve found a vulnerability, let us know so we can fix it as soon as possible. Please visit the [Security Notice](https://digital.canada.ca/security-notice/) to learn more about that process.
 
 ## Using files located on non-Government of Canada servers
 
-To improve the functionality of this website, certain files (such as open source libraries, images, and scripts) may be delivered automatically to your browser via a trusted third-party server or content delivery network. The delivery of these files is intended to provide a seamless user experience by speeding response times and avoiding the need for each visitor to download these files. 
+To improve the functionality of this website, certain files (such as open source libraries, images, and scripts) may be delivered automatically to your browser via a trusted third-party server or content delivery network. The delivery of these files is intended to provide a seamless user experience by speeding response times and avoiding the need for each visitor to download these files.
 
 ## Linking to non-Government of Canada websites
 
 Links to websites not under the control of [Employment and Social Development Canada (ESDC)](https://www.canada.ca/en/employment-social-development.html), including those to our social media accounts, are provided solely for the convenience of our website visitors. We are not responsible for the accuracy, currency, or reliability of the content of such websites. [Employment and Social Development Canada](https://www.canada.ca/en/employment-social-development.html) does not offer any guarantee in that regard and is not responsible for the information found through these links, nor does it endorse the sites and their content.
 
-Visitors should also be aware that information offered by non-[Employment and Social Development Canada](https://www.canada.ca/en/employment-social-development.html) sites to which this website links is not subject to the [*Privacy Act*](http://laws-lois.justice.gc.ca/eng/acts/P-21/index.html) or the [*Official Languages Act*](http://laws-lois.justice.gc.ca/eng/acts/O-3.01/) and may not be accessible to persons with disabilities. The information offered may be available only in the language(s) used by the sites in question. With respect to privacy, visitors should research the privacy policies of these non-government websites before providing personal information.
+Visitors should also be aware that information offered by non-[Employment and Social Development Canada](https://www.canada.ca/en/employment-social-development.html) sites to which this website links is not subject to the [_Privacy Act_](http://laws-lois.justice.gc.ca/eng/acts/P-21/index.html) or the [_Official Languages Act_](http://laws-lois.justice.gc.ca/eng/acts/O-3.01/) and may not be accessible to persons with disabilities. The information offered may be available only in the language(s) used by the sites in question. With respect to privacy, visitors should research the privacy policies of these non-government websites before providing personal information.
 
 ## Ownership and usage of content provided on this site
 
@@ -72,6 +72,7 @@ Forms on this website were created for the purpose of submitting information rel
 ### Non-commercial reproduction
 
 Unless otherwise specified you may reproduce the materials in whole or in part for non-commercial purposes, and in any format, without charge or further permission, provided you do the following:
+
 - exercise due diligence in ensuring the accuracy of the materials reproduced.
 - indicate both the complete title of the materials reproduced, as well as the author (where available).
 - indicate that the reproduction is a copy of the version available at [URL where original document is available].
@@ -80,7 +81,7 @@ Unless otherwise specified you may reproduce the materials in whole or in part f
 
 Unless otherwise specified, you may not reproduce materials on this site, in whole or in part, for the purposes of commercial redistribution without prior written permission from the copyright administrator. To obtain permission to reproduce any content owned by the Government of Canada available on this site for commercial purposes, please contact the institution responsible for that content by referring to the institutions list available on the [Government of Canada contacts](https://www.canada.ca/en/contact.html) page.
 
-Some of the content on this site may be subject to the copyright of another party. Where information has been produced or copyright is not held by the Government of Canada, the materials are protected under the [*Copyright Act*](http://laws-lois.justice.gc.ca/eng/acts/C-42/index.html), and international agreements. Details concerning copyright ownership are indicated on the relevant page(s).
+Some of the content on this site may be subject to the copyright of another party. Where information has been produced or copyright is not held by the Government of Canada, the materials are protected under the [_Copyright Act_](http://laws-lois.justice.gc.ca/eng/acts/C-42/index.html), and international agreements. Details concerning copyright ownership are indicated on the relevant page(s).
 
 ### Trademark notice
 
@@ -92,7 +93,7 @@ Your engagement with the Government of Canada via social media is in part govern
 
 ### Content and frequency of social media
 
-The Government of Canada uses its social media accounts as an alternative method of sharing the content posted on its websites and interacting with stakeholders. 
+The Government of Canada uses its social media accounts as an alternative method of sharing the content posted on its websites and interacting with stakeholders.
 
 Because the servers of social media platforms are managed by a third party, social media accounts are subject to downtime that may be out of the Government of Canada's control. The Government accepts no responsibility for platforms becoming unresponsive or unavailable.
 
@@ -114,8 +115,6 @@ The Government of Canada's use of social media serves as an extension of its pre
 
 ### Official languages on social media
 
-Many social media platforms have multiple language options and provide instructions on how to set your preferences. The Government of Canada respects the [*Official Languages Act*](http://laws-lois.justice.gc.ca/eng/acts/O-3.01/) and is committed to ensuring that our information is available in both French and English and that both versions are of equal quality.
+Many social media platforms have multiple language options and provide instructions on how to set your preferences. The Government of Canada respects the [_Official Languages Act_](http://laws-lois.justice.gc.ca/eng/acts/O-3.01/) and is committed to ensuring that our information is available in both French and English and that both versions are of equal quality.
 
-
-
-**Last update:** December 14, 2023
+**Last update:** April 24, 2024

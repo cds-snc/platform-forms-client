@@ -7,7 +7,6 @@ import { Alert, Button, RichText } from "@clientComponents/forms";
 import { logMessage } from "@lib/logger";
 import { useTranslation } from "@i18n/client";
 import { TFunction } from "i18next";
-import axios from "axios";
 import Loader from "../../globals/Loader";
 import classNames from "classnames";
 import { Responses, PublicFormRecord, Validate } from "@lib/types";
@@ -146,8 +145,8 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
     children,
     handleSubmit,
     status,
-    formRecord: { id: formID, reCaptchaID, form },
-    isPreview = false,
+    formRecord: { id: formID, form },
+    // isPreview = false,
     values,
   }: InnerFormProps = props;
   const [canFocusOnError, setCanFocusOnError] = useState(false);
@@ -161,44 +160,6 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
   const errorId = "gc-form-errors";
   const serverErrorId = `${errorId}-server`;
   const formStatusError = props.status === "Error" ? t("server-error") : null;
-
-  const shouldUseRecaptcha = !isPreview && reCaptchaID;
-
-  const handleSubmitReCaptcha = (evt: React.FormEvent<HTMLFormElement>) => {
-    evt.preventDefault();
-    try {
-      window.grecaptcha.ready(async () => {
-        // get reCAPTCHA response
-        const clientToken = await window.grecaptcha.execute(reCaptchaID, {
-          action: "submit",
-        });
-        if (clientToken) {
-          const scoreData = await sendClientTokenForVerification(clientToken);
-          const { score, success } = scoreData.data;
-          logMessage.info(`score : ${score}  status: ${success}`);
-          // assuming you're not a Robot
-          handleSubmit(evt);
-        }
-      });
-    } catch (error) {
-      logMessage.error(error as string);
-    }
-  };
-
-  const sendClientTokenForVerification = (token: string) => {
-    // call a backend API to verify reCAPTCHA response
-    return axios({
-      url: "/api/verify",
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      data: {
-        userToken: token,
-      },
-      timeout: process.env.NODE_ENV === "production" ? 60000 : 0,
-    });
-  };
 
   //  If there are errors on the page, set focus the first error field
   useEffect(() => {
@@ -259,12 +220,7 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
       method="POST"
       onSubmit={(e) => {
         e.preventDefault();
-
-        if (shouldUseRecaptcha) {
-          handleSubmitReCaptcha(e);
-        } else {
-          handleSubmit(e);
-        }
+        handleSubmit(e);
       }}
       noValidate
       // TODO move this to each child container but that I think will take some thought.
@@ -357,7 +313,6 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
 interface FormProps {
   formRecord: PublicFormRecord;
   language: string;
-  isReCaptchaEnableOnSite?: boolean;
   isPreview?: boolean;
   renderSubmit?: ({
     validateForm,
