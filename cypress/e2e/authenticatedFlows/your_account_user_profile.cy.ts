@@ -1,5 +1,9 @@
-export const ProfileRegularUser = () => {
-  describe("User profile", () => {
+describe("User profile", () => {
+  describe("Regular User", () => {
+    beforeEach(() => {
+      cy.userSession({ admin: false });
+    });
+
     it("Can navigate to Profile page", () => {
       cy.visitPage("/en/forms");
       cy.get("button[id^='radix-']").click();
@@ -25,10 +29,11 @@ export const ProfileRegularUser = () => {
       cy.get("[data-testid='yourAccountDropdownContent']").should("not.contain", "Administration");
     });
   });
-};
 
-export const ProfileAdminUser = () => {
-  describe("User profile", () => {
+  describe("Admin User", () => {
+    beforeEach(() => {
+      cy.userSession({ admin: true });
+    });
     it("Can navigate to Profile page", () => {
       cy.visitPage("/en/forms");
       cy.get("button[id^='radix-']").click();
@@ -49,4 +54,4 @@ export const ProfileAdminUser = () => {
       cy.get("[data-testid='yourAccountDropdownContent']").should("contain", "Administration");
     });
   });
-};
+});

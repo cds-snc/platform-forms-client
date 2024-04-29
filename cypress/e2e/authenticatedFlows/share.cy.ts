@@ -1,6 +1,7 @@
-const ShareForm = () => {
-  describe("Form builder share", () => {
+describe("Form builder share", () => {
+  describe("Authenticated", () => {
     beforeEach(() => {
+      cy.userSession();
       cy.visitPage("/en/form-builder/0000/edit");
     });
 
@@ -11,13 +12,9 @@ const ShareForm = () => {
       cy.get("[role='menuitem'] span").contains("name your form").click();
       cy.focused().should("have.attr", "id", "fileName");
     });
-    it.skip("Renders share flyout for authenticated", () => {
-      // @todo replace with typeInField
-      // Getting weird error in GitHub actions where text is missing first character
-      // "Cypress Share Test Form" is rendered as "ypress Share Test Form"
-      cy.get("#fileName")
-        .should("have.attr", "placeholder", "Unnamed form file")
-        .type("Cypress Share Test Form");
+    it("Renders share flyout for authenticated", () => {
+      cy.get("#fileName").should("have.attr", "placeholder", "Unnamed form file");
+      cy.typeInField("#fileName", "Cypress Share Test Form");
       cy.get("button").contains("Share").click();
       cy.get("[role='menuitem']").should("have.length", 1);
       cy.get("span").contains("Share by email").click();
@@ -28,9 +25,12 @@ const ShareForm = () => {
         .should("exist");
       cy.get("[data-testid='close-dialog']").click();
     });
-    it("Renders share flyout for unAuthenticated", () => {
-      cy.logout();
+  });
+  describe("UnAuthenticated", () => {
+    beforeEach(() => {
       cy.visitPage("/en/form-builder/0000/edit");
+    });
+    it("Renders share flyout for unAuthenticated", () => {
       cy.get("#fileName")
         .should("have.attr", "placeholder", "Unnamed form file")
         .type("Cypress Share Test Form");
@@ -48,6 +48,4 @@ const ShareForm = () => {
       cy.get("button").contains("Close").click();
     });
   });
-};
-
-export default ShareForm;
+});

@@ -35,7 +35,7 @@ let adminUserSession: string;
 let adminUserSessionAcceptableUse: string;
 
 Cypress.Commands.add("userSession", (options?: { admin?: boolean; acceptableUse?: boolean }) => {
-  const { admin = false, acceptableUse = false } = options || {};
+  const { admin = false, acceptableUse = true } = options || {};
 
   if (admin) {
     if (acceptableUse) {
@@ -158,7 +158,7 @@ Cypress.Commands.add("visitPage", (path) => {
  */
 
 Cypress.Commands.add("login", (options?: { admin?: boolean; acceptableUse?: boolean }) => {
-  const { admin = false, acceptableUse = false } = options || {};
+  const { admin = false, acceptableUse = true } = options || {};
   cy.request({
     method: "GET",
     url: "/api/auth/csrf",
