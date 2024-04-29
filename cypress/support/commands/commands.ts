@@ -29,63 +29,52 @@
  * @param file JSON fixture file
  */
 
-let regularUserSession: string;
-let regularUserSessionAcceptableUse: string;
-let adminUserSession: string;
-let adminUserSessionAcceptableUse: string;
-
 Cypress.Commands.add("userSession", (options?: { admin?: boolean; acceptableUse?: boolean }) => {
   const { admin = false, acceptableUse = true } = options || {};
 
-  if (admin) {
-    if (acceptableUse) {
-      if (!adminUserSessionAcceptableUse) {
-        cy.login(options);
-        cy.getCookie("authjs.session-token").then((cookie) => {
-          if (cookie?.value) {
-            adminUserSessionAcceptableUse = cookie.value;
-          }
-        });
+  cy.session(
+    [`${admin ? "admin" : "user"}`, `${acceptableUse ? "AcceptableUse" : "NoAcceptableUse"}`],
+    () => {
+      cy.visitPage("/en/auth/login");
+      cy.get("input[id='username']").should("be.visible");
+      cy.get("input[id='password']").should("be.visible");
+      if (admin) {
+        cy.typeInField("input[id='username']", "test.admin@cds-snc.ca");
       } else {
-        cy.setCookie("authjs.session-token", adminUserSessionAcceptableUse);
+        cy.typeInField("input[id='username']", "test.user@cds-snc.ca");
       }
-    } else {
-      if (!adminUserSession) {
-        cy.login(options);
-        cy.getCookie("authjs.session-token").then((cookie) => {
-          if (cookie?.value) {
-            adminUserSession = cookie.value;
-          }
-        });
-      } else {
-        cy.setCookie("authjs.session-token", adminUserSession);
+      cy.typeInField("input[id='password']", "testTesttest");
+      cy.get("button[type='submit']").should("be.visible");
+      cy.get("button[type='submit']").click();
+      cy.get("[id='verificationCodeForm']").should("be.visible");
+
+      cy.typeInField("input[id='verificationCode']", "12345");
+      cy.get("button[type='submit']").should("be.visible");
+      cy.get("button[type='submit']").click();
+      cy.url().should("contain", "/en/auth/policy");
+
+      // Ensure cookie is created
+      cy.waitUntil(
+        () =>
+          cy.getCookie("authjs.session-token").then((cookie) => Boolean(cookie && cookie.value)),
+        { timeout: 10000, interval: 500 }
+      );
+
+      if (acceptableUse) {
+        cy.visitPage("/en/auth/policy");
+        cy.get("#acceptableUse").click();
+        cy.location("pathname").should("eq", "/en/forms");
+        cy.get("#react-hydration-loader").should("not.exist");
+        cy.get("main").should("be.visible");
       }
+    },
+    {
+      validate() {
+        cy.getCookie("authjs.session-token").should("exist");
+      },
+      cacheAcrossSpecs: true,
     }
-  } else {
-    if (acceptableUse) {
-      if (!regularUserSessionAcceptableUse) {
-        cy.login(options);
-        cy.getCookie("authjs.session-token").then((cookie) => {
-          if (cookie?.value) {
-            regularUserSessionAcceptableUse = cookie.value;
-          }
-        });
-      } else {
-        cy.setCookie("authjs.session-token", regularUserSessionAcceptableUse);
-      }
-    } else {
-      if (!regularUserSession) {
-        cy.login(options);
-        cy.getCookie("authjs.session-token").then((cookie) => {
-          if (cookie?.value) {
-            regularUserSession = cookie.value;
-          }
-        });
-      } else {
-        cy.setCookie("authjs.session-token", regularUserSession);
-      }
-    }
-  }
+  );
 });
 
 Cypress.Commands.add("useForm", (file, published = true) => {
@@ -217,14 +206,6 @@ Cypress.Commands.add("securityQuestions", () => {
 Cypress.Commands.add("logout", () => {
   // Ensure JWT Token in cookie is removed
   cy.clearCookie("authjs.session-token");
-});
-
-/**
- * Reset the database to it's default state
- */
-Cypress.Commands.add("resetDB", () => {
-  cy.task("db:teardown");
-  cy.task("db:seed");
 });
 
 /**

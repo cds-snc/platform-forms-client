@@ -2,7 +2,7 @@
   "compilerOptions": {
     "typeRoots": ["./types", "./node_modules/@types", "cypress/types"],
     "target": "es5",
-    "lib": ["esnext", "dom"],
+    "lib": ["es5", "dom"],
     "types": ["cypress", "node", "cypress-axe"],
     "skipLibCheck": true,
     "strict": true,

@@ -31,7 +31,6 @@ declare global {
       setCursor: (query: string, atStart?: boolean) => Chainable<void>;
       setCursorBefore: (query: string) => Chainable<void>;
       setCursorAfter: (query: string) => Chainable<void>;
-      resetDB: () => Chainable<void>;
       resetFlags: () => Chainable<void>;
       typeInField: (query: string, typedText: string, outputText?: string) => Chainable<void>;
       safeClick: (query: string) => Chainable<void>;

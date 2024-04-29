@@ -16,9 +16,6 @@ describe("Security Questions Page", () => {
     cy.get("button[type='submit']").should("be.visible");
     cy.get("button[type='submit']").click();
   });
-  afterEach(() => {
-    cy.resetDB();
-  });
 
   it("En page renders", () => {
     cy.get("h1").should("contain", "Set up security questions");

@@ -26,8 +26,3 @@ import terminalReport from "cypress-terminal-report/src/installLogsCollector";
 // import flagsDefault from "../../flag_initialization/default_flag_settings.json";
 
 if (Cypress.env("DEBUG")) terminalReport();
-// Reset the Database at a minimum between test suites
-before(() => {
-  cy.task("db:teardown");
-  cy.task("db:seed");
-});
