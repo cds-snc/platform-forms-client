@@ -1,11 +1,8 @@
 import { isEmailDelivery } from "@lib/utils/form-builder";
-import { getAppSetting } from "@lib/appSettings";
 import { auth } from "@lib/auth";
-import { ucfirst } from "@lib/client/clientHelpers";
 import { DeliveryOptionEmail } from "./components/DeliveryOptionEmail";
 import { NavigationTabs } from "./components/NavigationTabs";
-import { TitleAndDescription } from "./components/TitleAndDescription";
-import { fetchSubmissions, fetchTemplate } from "./actions";
+import { fetchTemplate } from "./actions";
 import { LoggedOutTab, LoggedOutTabName } from "@serverComponents/form-builder/LoggedOutTab";
 import { ResponsesFooter } from "./components/ResponsesFooter";
 
@@ -28,14 +25,8 @@ export default async function Layout({
   }
 
   const initialForm = await fetchTemplate(id);
-  const responseDownloadLimit = Number(await getAppSetting("responseDownloadLimit"));
   const deliveryOption = initialForm?.deliveryOption;
   const isPublished = initialForm?.isPublished || false;
-
-  const { submissions } = await fetchSubmissions({
-    formId: id,
-    status: statusFilter,
-  });
 
   if (deliveryOption && isEmailDelivery(deliveryOption)) {
     return (
@@ -54,15 +45,6 @@ export default async function Layout({
   return (
     <div className="mr-10">
       <NavigationTabs statusFilter={statusFilter} formId={id} locale={locale} />
-      <div className="has-[.gc-confirm-success]:hidden">
-        {isAuthenticated && submissions.length > 0 && (
-          <TitleAndDescription
-            statusFilter={ucfirst(statusFilter)}
-            formId={id}
-            responseDownloadLimit={responseDownloadLimit}
-          />
-        )}
-      </div>
       {children}
       <ResponsesFooter formId={id} />
     </div>
