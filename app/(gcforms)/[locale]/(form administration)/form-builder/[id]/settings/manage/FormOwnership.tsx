@@ -90,7 +90,6 @@ export const FormOwnership = ({
     <>
       <div className="mb-20" data-testid="form-ownership">
         <h2>{t("Manage ownership")}</h2>
-        {nonce && <input type="hidden" name="_csrf" value={nonce} />}
         {message && message}
         <p className="mb-4">{t("assignUsersToTemplate")}</p>
         <p className="mb-2 font-bold">{t("enterOwnersEmail")} </p>
