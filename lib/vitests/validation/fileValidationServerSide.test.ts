@@ -3,9 +3,10 @@ import {
   FileValidationResult,
   validateFileToUpload,
 } from "@lib/validation/fileValidationServerSide";
+import { vi } from "vitest";
 
-jest.mock("file-type");
-const mockFileTypeFromBuffer = jest.mocked(fileTypeFromBuffer, { shallow: true });
+vi.mock("file-type");
+const mockFileTypeFromBuffer = vi.mocked(fileTypeFromBuffer);
 
 describe("Regarless of the MIME type detection, it", () => {
   beforeAll(() => {
