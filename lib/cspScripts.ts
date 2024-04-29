@@ -52,7 +52,7 @@ export const generateCSP = () => {
     object-src 'none';
     base-uri 'self';
     form-action 'self';
-    frame-src www.googletagmanager.com www.google.com/recaptcha/ recaptcha.google.com/recaptcha/;
+    frame-src www.googletagmanager.com;
     connect-src 'self' www.googletagmanager.com www.google-analytics.com;
     block-all-mixed-content;
     upgrade-insecure-requests;
