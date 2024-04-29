@@ -216,9 +216,9 @@ const setCSP = (
   // Set the Content Security Policy (CSP) header
   const { csp, nonce } = generateCSP();
   const requestHeaders = new Headers(req.headers);
+  // Set the CSP header on the request to the server
+  requestHeaders.set("x-nonce", nonce);
   if (process.env.NODE_ENV !== "development") {
-    // Set the CSP header on the request to the server
-    requestHeaders.set("x-nonce", nonce);
     requestHeaders.set("content-security-policy", csp);
   }
   // Set path on request headers so we can access it in the app router

@@ -14,15 +14,11 @@ import axios from "axios";
 import { FormRecord } from "@lib/types";
 
 interface AssignUsersToTemplateProps {
+  nonce: string | null;
   formRecord: FormRecord;
   usersAssignedToFormRecord: { id: string; name: string | null; email: string }[];
   allUsers: { id: string; name: string | null; email: string }[];
 }
-
-const cache: EmotionCache = createCache({
-  key: "gc-forms",
-  nonce: "123",
-});
 
 const updateUsersToTemplateAssignations = async (formID: string, users: { id: string }[]) => {
   try {
@@ -40,11 +36,17 @@ const updateUsersToTemplateAssignations = async (formID: string, users: { id: st
 };
 
 export const FormOwnership = ({
+  nonce,
   formRecord,
   usersAssignedToFormRecord,
   allUsers,
 }: AssignUsersToTemplateProps) => {
   const { t } = useTranslation(["admin-users", "form-builder"]);
+
+  const cache: EmotionCache = createCache({
+    key: "gc-forms",
+    nonce: nonce || "xyz123",
+  });
 
   const [message, setMessage] = useState<ReactElement | null>(null);
   const assignedToFormRecord = usersToOptions(usersAssignedToFormRecord);
