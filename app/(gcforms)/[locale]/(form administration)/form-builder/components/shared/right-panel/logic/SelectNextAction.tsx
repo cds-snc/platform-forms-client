@@ -47,18 +47,7 @@ export const SelectNextAction = ({ item }: { item: FormElement | null }) => {
               : [{ groupId: "end", choiceId: `${item.id}.0` }]
           }
         />
-      ) : (
-        <div>
-          {!Array.isArray(currentNextActions) && (
-            /* If it's a question without options 
-               we need to show the single action selector 
-               to allow the user to select the next action
-               section 1 => section 2
-            */
-            <SingleActionSelect nextAction={currentNextActions} item={item} />
-          )}
-        </div>
-      )}
+      ) : null}
     </div>
   );
 };
