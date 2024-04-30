@@ -11,6 +11,7 @@ import {
   updateClosingDateForTemplate,
   updateTemplate as updateDbTemplate,
   updateIsPublishedForTemplate,
+  updateFormPurposeForTemplate,
   deleteTemplate as deleteDbTemplate,
   TemplateHasUnprocessedSubmissions,
   updateSecurityAttribute,
@@ -128,6 +129,34 @@ export const updateTemplate = async ({
     return response;
   } catch (error) {
     if (error instanceof AccessControlError || error instanceof TemplateAlreadyPublishedError) {
+      throw error;
+    } else {
+      logMessage.error(error);
+      throw error;
+    }
+  }
+};
+
+export const updateTemplateFormPurpose = async ({
+  id: formID,
+  formPurpose,
+}: {
+  id: string;
+  formPurpose: string;
+}) => {
+  try {
+    const { ability } = await _getSessionAndAbility();
+
+    const response = await updateFormPurposeForTemplate(ability, formID, formPurpose);
+    if (!response) {
+      throw new Error(
+        `Template API response was null. Request information: { ${formID}, ${formPurpose} }`
+      );
+    }
+
+    return response;
+  } catch (error) {
+    if (error instanceof AccessControlError) {
       throw error;
     } else {
       logMessage.error(error);

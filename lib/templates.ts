@@ -32,6 +32,7 @@ const _parseTemplate = (template: {
     emailSubjectFr: string | null;
   } | null;
   securityAttribute: string;
+  formPurpose: string;
   closingDate?: Date | null;
 }): FormRecord => {
   return {
@@ -60,6 +61,7 @@ const _parseTemplate = (template: {
     ...(process.env.RECAPTCHA_V3_SITE_KEY && {
       reCaptchaID: process.env.RECAPTCHA_V3_SITE_KEY,
     }),
+    formPurpose: template.formPurpose,
     ...(template.closingDate && {
       closingDate: template.closingDate.toString(),
     }),
@@ -96,6 +98,7 @@ async function _unprotectedGetTemplateByID(formID: string): Promise<FormRecord |
         deliveryOption: true,
         securityAttribute: true,
         closingDate: true,
+        formPurpose: true,
         ttl: true,
       },
     })
@@ -133,6 +136,7 @@ async function _unprotectedGetTemplateWithAssociatedUsers(formID: string): Promi
         isPublished: true,
         deliveryOption: true,
         securityAttribute: true,
+        formPurpose: true,
         closingDate: true,
         ttl: true,
         users: {
@@ -176,6 +180,7 @@ export type UpdateTemplateCommand = {
   name?: string;
   deliveryOption?: DeliveryOption;
   securityAttribute?: SecurityAttribute;
+  formPurpose?: string;
 };
 
 export class TemplateAlreadyPublishedError extends Error {}
@@ -247,6 +252,7 @@ export async function createTemplate(command: CreateTemplateCommand): Promise<Fo
           isPublished: true,
           deliveryOption: true,
           securityAttribute: true,
+          formPurpose: true,
         },
       })
     );
@@ -307,6 +313,7 @@ export async function getAllTemplates(
           jsonConfig: true,
           isPublished: true,
           deliveryOption: true,
+          formPurpose: true,
           securityAttribute: true,
         },
         ...(sortByDateUpdated && {
@@ -381,6 +388,7 @@ export async function getAllTemplatesForUser(
           name: true,
           jsonConfig: true,
           isPublished: true,
+          formPurpose: true,
           deliveryOption: true,
           securityAttribute: true,
         },
@@ -570,6 +578,7 @@ export async function updateTemplate(command: UpdateTemplateCommand): Promise<Fo
           ...(command.securityAttribute && {
             securityAttribute: command.securityAttribute as string,
           }),
+          formPurpose: command.formPurpose,
         },
         select: {
           id: true,
@@ -577,6 +586,7 @@ export async function updateTemplate(command: UpdateTemplateCommand): Promise<Fo
           updated_at: true,
           name: true,
           jsonConfig: true,
+          formPurpose: true,
           isPublished: true,
           deliveryOption: true,
           securityAttribute: true,
@@ -626,6 +636,63 @@ export async function updateTemplate(command: UpdateTemplateCommand): Promise<Fo
         { type: "Form", id: command.formID },
         "AccessDenied",
         "Attempted to update Form"
+      );
+    throw e;
+  }
+}
+
+/**
+ * Update `formPurpose` value for a specific form.
+ */
+export async function updateFormPurposeForTemplate(
+  ability: UserAbility,
+  formID: string,
+  formPurpose: string
+): Promise<FormRecord | null> {
+  try {
+    checkPrivileges(ability, [
+      {
+        action: "update",
+        subject: "FormRecord",
+      },
+    ]);
+
+    const updatedTemplate = await prisma.template
+      .update({
+        where: {
+          id: formID,
+        },
+        data: {
+          formPurpose,
+        },
+        select: {
+          id: true,
+          created_at: true,
+          updated_at: true,
+          name: true,
+          jsonConfig: true,
+          formPurpose: true,
+          isPublished: true,
+          deliveryOption: true,
+          securityAttribute: true,
+        },
+      })
+      .catch((e) => prismaErrors(e, null));
+
+    if (updatedTemplate === null) return updatedTemplate;
+
+    if (formCache.cacheAvailable) formCache.formID.invalidate(formID);
+
+    logEvent(ability.userID, { type: "Form", id: formID }, "ChangeFormPurpose", formPurpose);
+
+    return _parseTemplate(updatedTemplate);
+  } catch (e) {
+    if (e instanceof AccessControlError)
+      logEvent(
+        ability.userID,
+        { type: "Form", id: formID },
+        "AccessDenied",
+        "Attempted to update Form Purpose"
       );
     throw e;
   }
@@ -691,6 +758,7 @@ export async function updateIsPublishedForTemplate(
           updated_at: true,
           name: true,
           jsonConfig: true,
+          formPurpose: true,
           isPublished: true,
           deliveryOption: true,
           securityAttribute: true,
@@ -765,6 +833,7 @@ export async function updateAssignedUsersForTemplate(
           name: true,
           jsonConfig: true,
           isPublished: true,
+          formPurpose: true,
           deliveryOption: true,
           securityAttribute: true,
           users: true,
@@ -903,6 +972,7 @@ export async function updateResponseDeliveryOption(
           updated_at: true,
           name: true,
           jsonConfig: true,
+          formPurpose: true,
           isPublished: true,
           deliveryOption: true,
           securityAttribute: true,
@@ -987,6 +1057,7 @@ export async function removeDeliveryOption(
           updated_at: true,
           name: true,
           jsonConfig: true,
+          formPurpose: true,
           isPublished: true,
           deliveryOption: true,
           securityAttribute: true,
@@ -1063,6 +1134,7 @@ export async function deleteTemplate(
           updated_at: true,
           name: true,
           jsonConfig: true,
+          formPurpose: true,
           isPublished: true,
           deliveryOption: true,
           securityAttribute: true,
@@ -1220,6 +1292,7 @@ export const updateSecurityAttribute = async (
           updated_at: true,
           name: true,
           jsonConfig: true,
+          formPurpose: true,
           isPublished: true,
           deliveryOption: true,
           securityAttribute: true,

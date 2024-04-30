@@ -20,7 +20,14 @@ import {
   sendResponsesToVault,
   updateTemplateDeliveryOption,
   updateTemplateSecurityAttribute,
+  updateTemplateFormPurpose,
 } from "@formBuilder/actions";
+
+export enum PurposeOption {
+  none = "",
+  admin = "admin",
+  nonAdmin = "nonAdmin",
+}
 
 enum DeliveryOption {
   vault = "vault",
@@ -39,6 +46,7 @@ export const ResponseDelivery = () => {
     id,
     resetDeliveryOption,
     getDeliveryOption,
+    getFormPurpose,
     updateField,
     subjectEn: initialSubjectEn,
     subjectFr: initialSubjectFr,
@@ -46,7 +54,9 @@ export const ResponseDelivery = () => {
     defaultSubjectFr,
     securityAttribute,
     updateSecurityAttribute,
+    updateFormPurpose,
     isPublished,
+    formPurpose,
   } = useTemplateStore((s) => ({
     id: s.id,
     email: s.deliveryOption?.emailAddress,
@@ -56,10 +66,13 @@ export const ResponseDelivery = () => {
     defaultSubjectFr: s.form[s.localizeField(LocalizedFormProperties.TITLE, "fr")] + " - Réponse",
     resetDeliveryOption: s.resetDeliveryOption,
     getDeliveryOption: s.getDeliveryOption,
+    getFormPurpose: s.getFormPurpose,
     updateField: s.updateField,
     updateSecurityAttribute: s.updateSecurityAttribute,
+    updateFormPurpose: s.setFormPurpose,
     securityAttribute: s.securityAttribute,
     isPublished: s.isPublished,
+    formPurpose: s.formPurpose,
   }));
 
   const [classification, setClassification] = useState<ClassificationType>(
@@ -80,6 +93,9 @@ export const ResponseDelivery = () => {
   const initialDeliveryOption = !email ? DeliveryOption.vault : DeliveryOption.email;
 
   const [deliveryOption, setDeliveryOption] = useState(initialDeliveryOption);
+
+  const [purposeOption, setPurposeOption] = useState(getFormPurpose() as PurposeOption);
+
   const [inputEmail, setInputEmail] = useState(email ? email : userEmail);
   const [subjectEn, setSubjectEn] = useState(
     initialSubjectEn ? initialSubjectEn : defaultSubjectEn
@@ -110,7 +126,7 @@ export const ResponseDelivery = () => {
       return isValidDeliveryOption && emailDeliveryOptionsChanged;
     }
 
-    if (deliveryOption === initialDeliveryOption) {
+    if (deliveryOption === initialDeliveryOption && purposeOption === formPurpose) {
       return false;
     }
 
@@ -127,6 +143,7 @@ export const ResponseDelivery = () => {
     initialSubjectFr,
     classification,
     securityAttribute,
+    purposeOption,
   ]);
 
   /*--------------------------------------------*
@@ -171,7 +188,7 @@ export const ResponseDelivery = () => {
   /*--------------------------------------------*
    * Save Delivery Option
    *--------------------------------------------*/
-  const saveDeliveryOption = useCallback(async () => {
+  const saveDeliveryOptions = useCallback(async () => {
     try {
       if (email !== "" && deliveryOption === DeliveryOption.vault) {
         await setToDatabaseDelivery();
@@ -182,6 +199,13 @@ export const ResponseDelivery = () => {
       updateTemplateSecurityAttribute({
         id,
         securityAttribute: classification,
+      });
+
+      updateFormPurpose(purposeOption);
+
+      updateTemplateFormPurpose({
+        id,
+        formPurpose: purposeOption as string,
       });
     } catch (error) {
       toast.error(t("settingsResponseDelivery.savedErrorMessage"));
@@ -205,6 +229,11 @@ export const ResponseDelivery = () => {
   const updateDeliveryOption = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
     const { value } = event.target;
     setDeliveryOption(value as DeliveryOption);
+  }, []);
+
+  const updatePurposeOption = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
+    const { value } = event.target;
+    setPurposeOption(value as PurposeOption);
   }, []);
 
   const responsesLink = `/${i18n.language}/form-builder/${id}/responses`;
@@ -280,7 +309,52 @@ export const ResponseDelivery = () => {
               setIsInvalidEmailError={setIsInvalidEmailError}
             />
           )}
-          <Button disabled={!isValid || isPublished} theme="secondary" onClick={saveDeliveryOption}>
+
+          <div className="mb-4">
+            <h2 className="mb-6">{t("settingsPurposeAndUse.title")}</h2>
+            <p className="mb-2">{t("settingsPurposeAndUse.helpUs")}</p>
+            <p className="text-sm mb-6">{t("settingsPurposeAndUse.description")}</p>
+            <Radio
+              id="purposeAndUseAdmin"
+              name="purpose-use"
+              label={t("settingsPurposeAndUse.personalInfo")}
+              disabled={isPublished}
+              checked={purposeOption === PurposeOption.admin}
+              value={PurposeOption.admin}
+              onChange={updatePurposeOption}
+            />
+            <div className="text-sm ml-10 mb-4">
+              <p>{t("settingsPurposeAndUse.personalInfoDetails")}</p>
+              <ul>
+                <li>{t("settingsPurposeAndUse.personalInfoDetailsVals.1")}</li>
+                <li>{t("settingsPurposeAndUse.personalInfoDetailsVals.2")}</li>
+                <li>{t("settingsPurposeAndUse.personalInfoDetailsVals.3")}</li>
+              </ul>
+            </div>
+            <Radio
+              id="purposeAndUseNonAdmin"
+              name="purpose-use"
+              label={t("settingsPurposeAndUse.nonAdminInfo")}
+              disabled={isPublished}
+              checked={purposeOption === PurposeOption.nonAdmin}
+              value={PurposeOption.nonAdmin}
+              onChange={updatePurposeOption}
+            />
+            <div className="text-sm ml-10 mb-4">
+              <p>{t("settingsPurposeAndUse.nonAdminInfoDetails")}</p>
+              <ul>
+                <li>{t("settingsPurposeAndUse.nonAdminInfoDetailsVals.1")}</li>
+                <li>{t("settingsPurposeAndUse.nonAdminInfoDetailsVals.2")}</li>
+                <li>{t("settingsPurposeAndUse.nonAdminInfoDetailsVals.3")}</li>
+              </ul>
+            </div>
+          </div>
+
+          <Button
+            disabled={!isValid || isPublished}
+            theme="secondary"
+            onClick={saveDeliveryOptions}
+          >
             {t("settingsResponseDelivery.saveButton")}
           </Button>
           <ResponseDeliveryHelpButton />

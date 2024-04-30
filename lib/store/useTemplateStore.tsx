@@ -91,6 +91,7 @@ export interface TemplateStoreProps {
   isPublished: boolean;
   name: string;
   deliveryOption?: DeliveryOption;
+  formPurpose: string;
   securityAttribute: SecurityAttribute;
   closingDate?: string | null;
 }
@@ -150,6 +151,8 @@ export interface TemplateStoreState extends TemplateStoreProps {
   setIsPublished: (isPublished: boolean) => void;
   getName: () => string;
   getDeliveryOption: () => DeliveryOption | undefined;
+  getFormPurpose: () => string;
+  setFormPurpose: (formPurpose: string) => void;
   resetDeliveryOption: () => void;
   getSecurityAttribute: () => SecurityAttribute;
   setClosingDate: (closingDate: string | null) => void;
@@ -182,6 +185,7 @@ const createTemplateStore = (initProps?: Partial<InitialTemplateStoreProps>) => 
     form: defaultForm,
     isPublished: false,
     name: "",
+    formPurpose: "",
     securityAttribute: "Protected A",
     closingDate: initProps?.closingDate,
   };
@@ -423,6 +427,12 @@ const createTemplateStore = (initProps?: Partial<InitialTemplateStoreProps>) => 
                 state.isPublished = isPublished;
               });
             },
+            getFormPurpose: () => get().formPurpose,
+            setFormPurpose: (formPurpose: string) => {
+              set((state) => {
+                state.formPurpose = formPurpose;
+              });
+            },
             getName: () => get().name,
             getDeliveryOption: () => get().deliveryOption,
             resetDeliveryOption: () => {
@@ -444,6 +454,7 @@ const createTemplateStore = (initProps?: Partial<InitialTemplateStoreProps>) => 
                 state.form = defaultForm;
                 state.isPublished = false;
                 state.name = "";
+                state.formPurpose = "";
                 state.deliveryOption = undefined;
                 state.closingDate = null;
               });
@@ -455,6 +466,7 @@ const createTemplateStore = (initProps?: Partial<InitialTemplateStoreProps>) => 
                 state.form = { ...defaultForm, ...jsonConfig };
                 state.isPublished = false;
                 state.name = "";
+                state.formPurpose = "";
                 state.securityAttribute = "Protected A";
                 state.deliveryOption = undefined;
                 state.closingDate = null;
