@@ -51,7 +51,7 @@ const Flow: ForwardRefRenderFunction<unknown, FlowProps> = ({ children }, ref) =
     };
   }
 
-  useAutoLayout(layoutOptions);
+  const { runLayout } = useAutoLayout(layoutOptions);
 
   useEffect(() => {
     fitView();
@@ -61,6 +61,7 @@ const Flow: ForwardRefRenderFunction<unknown, FlowProps> = ({ children }, ref) =
     updateEdges: () => {
       const { edges } = getData();
       setEdges(edges);
+      runLayout();
     },
   }));
 
