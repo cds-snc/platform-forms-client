@@ -5,9 +5,12 @@ import { mapIdsToValues, FormValues, idArraysMatch, GroupsType } from "@lib/form
 
 interface GCFormsContextValueType {
   updateValues: ({ formValues }: { formValues: FormValues }) => void;
+  getValues: () => FormValues;
   matchedIds: string[];
   groups?: GroupsType;
   currentGroup: string | null;
+  previousGroup: string | null;
+  setGroup: (group: string | null) => void;
   handleNextAction: () => void;
   hasNextAction: (group: string) => boolean;
   formRecord: PublicFormRecord;
@@ -27,6 +30,7 @@ export const GCFormsProvider = ({
   const values = React.useRef({});
   const [matchedIds, setMatchedIds] = React.useState<string[]>([]);
   const [currentGroup, setCurrentGroup] = React.useState<string | null>(initialGroup);
+  const [previousGroup, setPreviousGroup] = React.useState<string | null>(initialGroup);
 
   const hasNextAction = (group: string) => {
     return groups[group]?.nextAction ? true : false;
@@ -57,6 +61,9 @@ export const GCFormsProvider = ({
         });
       }
 
+      // Helpful for navigating to the last group
+      setPreviousGroup(currentGroup);
+
       if (typeof nextAction === "string") {
         setCurrentGroup(nextAction);
       }
@@ -76,14 +83,26 @@ export const GCFormsProvider = ({
     }
   };
 
+  // Helper to not expose the setter
+  const setGroup = (group: string | null) => {
+    setCurrentGroup(group);
+  };
+
+  const getValues = () => {
+    return values.current as FormValues;
+  };
+
   return (
     <GCFormsContext.Provider
       value={{
         formRecord,
         updateValues,
+        getValues,
         matchedIds,
         groups,
         currentGroup,
+        previousGroup,
+        setGroup,
         handleNextAction,
         hasNextAction,
       }}
@@ -101,9 +120,14 @@ export const useGCFormsContext = () => {
       updateValues: () => {
         return "noop";
       },
+      getValues: () => {
+        return;
+      },
       matchedIds: [""],
       groups: {},
       currentGroup: "",
+      previousGroup: "",
+      setGroup: () => void 0,
       hasNextAction: () => void 0,
       handleNextAction: () => void 0,
       formRecord: {} as PublicFormRecord,

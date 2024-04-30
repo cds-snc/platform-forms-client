@@ -16,6 +16,7 @@ import { useIsFormClosed } from "@lib/hooks/useIsFormClosed";
 import { GCFormsProvider } from "@lib/hooks/useGCFormContext";
 import Skeleton from "react-loading-skeleton";
 import { Form } from "@clientComponents/forms/Form/Form";
+import { BackButton } from "./BackButton";
 
 export const Preview = ({ disableSubmit = true }: { disableSubmit?: boolean }) => {
   const { status } = useSession();
@@ -177,18 +178,21 @@ export const Preview = ({ disableSubmit = true }: { disableSubmit?: boolean }) =
                             validateForm={validateForm}
                             fallBack={() => {
                               return (
-                                <Button
-                                  type="submit"
-                                  id="SubmitButton"
-                                  className="mb-4"
-                                  onClick={(e) => {
-                                    if (disableSubmit) {
-                                      return preventSubmit(e);
-                                    }
-                                  }}
-                                >
-                                  {t("submitButton", { ns: "common", lng: language })}
-                                </Button>
+                                <>
+                                  <BackButton />
+                                  <Button
+                                    type="submit"
+                                    id="SubmitButton"
+                                    className="mb-4"
+                                    onClick={(e) => {
+                                      if (disableSubmit) {
+                                        return preventSubmit(e);
+                                      }
+                                    }}
+                                  >
+                                    {t("submitButton", { ns: "common", lng: language })}
+                                  </Button>
+                                </>
                               );
                             }}
                           />

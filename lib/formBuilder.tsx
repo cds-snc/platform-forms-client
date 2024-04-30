@@ -24,6 +24,7 @@ import {
 } from "@lib/types";
 import { getLocalizedProperty } from "@lib/utils";
 import { managedData } from "@lib/managedData";
+import { Review } from "@clientComponents/forms/Review/Review";
 
 // This function is used for select/radio/checkbox i18n change of form labels
 function getLocaleChoices(choices: Array<PropertyChoices> | undefined, lang: string) {
@@ -231,7 +232,7 @@ function _buildForm(element: FormElement, lang: string): ReactElement {
         />
       );
     }
-    case FormElementTypes.combobox:
+    case FormElementTypes.combobox: {
       return (
         <div className="focus-group">
           {labelComponent}
@@ -244,6 +245,10 @@ function _buildForm(element: FormElement, lang: string): ReactElement {
           />
         </div>
       );
+    }
+    case FormElementTypes.review: {
+      return <Review id={id} />;
+    }
     default:
       return <></>;
   }
@@ -279,6 +284,7 @@ const _getElementInitialValue = (element: FormElement, language: string): Respon
     case FormElementTypes.combobox:
     case FormElementTypes.textField:
     case FormElementTypes.textArea:
+    case FormElementTypes.review:
       return "";
     case FormElementTypes.checkbox:
       return [];

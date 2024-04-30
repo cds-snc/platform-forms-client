@@ -117,6 +117,7 @@ const isFieldResponseValid = (
     }
     case FormElementTypes.radio:
     case FormElementTypes.combobox:
+    case FormElementTypes.review:
     case FormElementTypes.dropdown: {
       if (validator.required && (value === undefined || value === "")) {
         return t("input-validation.required");
@@ -126,7 +127,12 @@ const isFieldResponseValid = (
     case FormElementTypes.fileInput: {
       const fileInputResponse = value as FileInputResponse;
 
-      if (validator.required && (!fileInputResponse.name || !fileInputResponse.size || !fileInputResponse.based64EncodedFile))
+      if (
+        validator.required &&
+        (!fileInputResponse.name ||
+          !fileInputResponse.size ||
+          !fileInputResponse.based64EncodedFile)
+      )
         return t("input-validation.required");
 
       if (fileInputResponse.size && !isFileSizeValid(fileInputResponse.size))
