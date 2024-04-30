@@ -1,5 +1,4 @@
-import { checkFlag } from "@formBuilder/actions";
-
 export const allowGrouping = async () => {
-  return checkFlag("conditionalLogic");
+  // force allow grouping for this preview branch
+  return true;
 };
