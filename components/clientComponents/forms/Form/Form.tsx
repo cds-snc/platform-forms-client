@@ -65,7 +65,7 @@ const SubmitButton: React.FC<SubmitButtonProps> = ({
 
   return (
     <>
-      {formReady && <div id="form-ready-indicator" hidden={true} aria-hidden={true} />}
+      {formReady && <div id="form-ready-indicator" aria-hidden={true} />}
       <div
         className={classNames({
           "border-l-2": submitTooEarly,
