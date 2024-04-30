@@ -51,30 +51,6 @@ const insertItemAtIndex = (items: string[], item: string, index: number) => {
   return updatedItems;
 };
 
-const handleDrop = (items: TreeItem[], targetIndex: number, elements: string[]) => {
-  let itemsPriorToInsertion = 0;
-
-  items.forEach((item, index) => {
-    // Original location
-    const originIndex = findItemIndex(elements, item.index);
-
-    // Adjust index if dragging down
-    itemsPriorToInsertion += isOldItemPriorToNewItem(elements, item.index, targetIndex) ? 1 : 0;
-
-    // Remove from old position
-    elements = removeItemAtIndex(elements, originIndex);
-
-    // Insert at new position
-    elements = insertItemAtIndex(
-      elements,
-      String(item.index),
-      targetIndex - itemsPriorToInsertion + index
-    );
-  });
-
-  return elements;
-};
-
 const ControlledTree: ForwardRefRenderFunction<unknown, TreeDataProviderProps> = (
   { children },
   ref
@@ -163,10 +139,24 @@ const ControlledTree: ForwardRefRenderFunction<unknown, TreeDataProviderProps> =
       }}
       canDropAt={(items, target) => {
         const folderItemsCount = items.filter((item) => item.isFolder).length;
+        const nonFolderItemsCount = items.filter((item) => !item.isFolder).length;
+
+        // can't drag mixed item types
+        if (folderItemsCount > 0 && nonFolderItemsCount > 0) {
+          return false;
+        }
+
         // if any of the selected items is a folder, disallow dropping on a folder
         if (folderItemsCount >= 1) {
           const { parentItem } = target as DraggingPositionBetweenItems;
           if (items[0].isFolder && parentItem !== "root") {
+            return false;
+          }
+        }
+
+        // if any of the items is not a folder, disallow dropping on root
+        if (nonFolderItemsCount >= 1) {
+          if (target.depth === 0) {
             return false;
           }
         }
@@ -187,23 +177,42 @@ const ControlledTree: ForwardRefRenderFunction<unknown, TreeDataProviderProps> =
       }}
       onDrop={async (items: TreeItem[], target: DraggingPosition) => {
         // Current state of the tree in Groups format
-        const currentGroups = getGroups();
-
-        if (!currentGroups) {
-          return;
-        }
+        let currentGroups = getGroups() as GroupsType;
 
         // Target parent and index
         const { parentItem: targetParent, childIndex: targetIndex } =
           target as DraggingPositionBetweenItems;
 
         let newGroups: GroupsType;
-        let selectedItems: string[] = [];
+        const selectedItems: string[] = [];
 
-        // Handle root level elements
+        // Dragging/dropping root-level items
         if (targetParent === "root") {
           let elements = Object.keys(currentGroups);
-          elements = handleDrop(items, targetIndex, elements);
+
+          let itemsPriorToInsertion = 0;
+
+          items.forEach((item, index) => {
+            // Original location
+            const originIndex = findItemIndex(elements, item.index);
+
+            // Adjust index if dragging down
+            itemsPriorToInsertion += isOldItemPriorToNewItem(elements, item.index, targetIndex)
+              ? 1
+              : 0;
+
+            // Remove from old position
+            elements = removeItemAtIndex(elements, originIndex);
+
+            // Insert at new position
+            elements = insertItemAtIndex(
+              elements,
+              String(item.index),
+              targetIndex - itemsPriorToInsertion + index
+            );
+
+            selectedItems.push(String(item.index));
+          });
 
           // Create a new Groups object
           newGroups = elements.reduce((acc: GroupsType, key) => {
@@ -212,24 +221,110 @@ const ControlledTree: ForwardRefRenderFunction<unknown, TreeDataProviderProps> =
             return acc;
           }, {});
 
-          selectedItems = [targetParent];
-        } else {
-          // Handle sub level elements
-          const parentGroup = currentGroups[targetParent];
-          let elements = [...parentGroup.elements];
-          elements = handleDrop(items, targetIndex, elements);
+          replaceGroups(newGroups);
+          setSelectedItems(selectedItems);
 
-          // Create a new Groups object
-          newGroups = { ...currentGroups };
-          newGroups[targetParent] = {
-            name: parentGroup.name,
-            elements,
-          };
-
-          selectedItems = [targetParent as string];
+          return;
         }
 
-        replaceGroups(newGroups);
+        // Dragging/dropping other non-root level items
+        const targetParentGroup = currentGroups[targetParent];
+        let targetGroupElements = [...targetParentGroup.elements];
+
+        let itemsPriorToInsertion = 0;
+
+        let originParentGroup;
+        let originGroupElements: string[] = [];
+
+        items.forEach((item, index) => {
+          // Remove item from original location
+          const originParent = findParentGroup(getTreeData(), String(item.index));
+          originParentGroup = currentGroups[originParent?.index as string];
+
+          // Dragging/dropping item within same group
+          if (originParentGroup == targetParentGroup) {
+            originGroupElements = (originParent?.children || []) as string[];
+            const originIndex = originGroupElements.indexOf(String(item.index));
+
+            // Adjust index if dragging down
+            itemsPriorToInsertion += isOldItemPriorToNewItem(
+              targetGroupElements,
+              item.index,
+              targetIndex
+            )
+              ? 1
+              : 0;
+
+            // Remove item from previous location
+            originGroupElements = removeItemAtIndex(originGroupElements, originIndex);
+
+            // Insert item at new location
+            originGroupElements = insertItemAtIndex(
+              originGroupElements,
+              String(item.index),
+              targetIndex - itemsPriorToInsertion + index
+            );
+
+            // Create a new Groups object
+            const newGroups = { ...currentGroups };
+            newGroups[String(originParent?.index)] = {
+              name: String(originParent?.index),
+              elements: originGroupElements,
+            };
+
+            selectedItems.push(String(item.index));
+
+            // Replace the groups object and set selected items.
+            replaceGroups(newGroups);
+
+            return;
+          }
+
+          // Dragging/dropping item between groups
+          originGroupElements = (originParent?.children || []) as string[];
+          const originIndex = originGroupElements.indexOf(String(item.index));
+
+          // @TODO: do we need?
+          // Adjust index if dragging down
+          itemsPriorToInsertion += isOldItemPriorToNewItem(
+            targetGroupElements,
+            item.index,
+            targetIndex
+          )
+            ? 1
+            : 0;
+
+          // Remove item from previous location
+          originGroupElements = removeItemAtIndex(originGroupElements, originIndex);
+
+          // Create a new Groups object
+          let newGroups = { ...currentGroups };
+          newGroups[String(originParent?.index)] = {
+            name: String(originParent?.index),
+            elements: originGroupElements,
+          };
+
+          // Replace the original groups object
+          currentGroups = newGroups;
+
+          // Insert at new position
+          targetGroupElements = insertItemAtIndex(
+            targetGroupElements,
+            String(item.index),
+            targetIndex + index
+          );
+
+          newGroups = { ...currentGroups };
+          newGroups[targetParentGroup.name] = {
+            name: targetParentGroup.name,
+            elements: targetGroupElements,
+          };
+
+          selectedItems.push(String(item.index));
+
+          replaceGroups(newGroups);
+        });
+
         setSelectedItems(selectedItems);
       }}
       onFocusItem={(item) => {
