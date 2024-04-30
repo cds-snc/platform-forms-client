@@ -1,5 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from "next";
-import { LambdaClient, InvokeCommand } from "@aws-sdk/client-lambda";
+import { LambdaClient, InvokeCommand, InvokeCommandOutput } from "@aws-sdk/client-lambda";
 import { rehydrateFormResponses } from "@lib/clientHelpers";
 import { getPublicTemplateByID } from "@lib/templates";
 import { logMessage } from "@lib/logger";
@@ -72,28 +72,49 @@ const callLambda = async (
   securityAttribute: string
 ) => {
   const encoder = new TextEncoder();
+  const encodedPayload = encoder.encode(
+    JSON.stringify({
+      formID,
+      language,
+      responses: fields,
+      securityAttribute,
+    })
+  );
 
-  const command = new InvokeCommand({
-    FunctionName: "Submission",
-    Payload: encoder.encode(
-      JSON.stringify({
-        formID,
-        language,
-        responses: fields,
-        securityAttribute,
-      })
-    ),
-  });
+  const buildCommand = (lambdaFunctionName = "submission") => {
+    return new InvokeCommand({
+      FunctionName: lambdaFunctionName,
+      Payload: encodedPayload,
+    });
+  };
 
+  /**
+   * The Submission lambda name has been changed in April 2024.
+   * We decided to implement a hack to prevent the web application from being temporarily incompatible with the infra (even it is for a matter of minutes during the deployment process).
+   * We will be able to remove it once the infra has been deployed in Production.
+   */
   try {
-    const response = await lambdaClient.send(command);
+    let response: InvokeCommandOutput | undefined = undefined;
+
+    try {
+      response = await lambdaClient.send(buildCommand());
+    } catch (error) {
+      if ((error as Error).name === "ResourceNotFoundException") {
+        // Let the function try the old lambda function name
+        response = await lambdaClient.send(buildCommand("Submission"));
+      } else {
+        throw error;
+      }
+    }
+
     const decoder = new TextDecoder();
     const payload = decoder.decode(response.Payload);
+
     if (response.FunctionError || !JSON.parse(payload).status) {
       throw new Error("Submission API could not process form response");
     }
-  } catch (err) {
-    logMessage.error(err as Error);
+  } catch (error) {
+    logMessage.error(error as Error);
     throw new Error("Could not process request with Lambda Submission function");
   }
 };
