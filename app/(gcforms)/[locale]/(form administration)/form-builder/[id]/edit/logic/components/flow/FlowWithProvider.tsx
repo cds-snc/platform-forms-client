@@ -66,21 +66,23 @@ const Flow: ForwardRefRenderFunction<unknown, FlowProps> = ({ children }, ref) =
   }));
 
   return (
-    <div className="my-10 w-full border-1" style={{ height: "calc(100vh - 300px)" }}>
-      <ReactFlow
-        nodes={nodes}
-        edges={flowEdges}
-        onNodesChange={onNodesChange}
-        onEdgesChange={onEdgesChange}
-        nodeTypes={nodeTypes}
-        defaultEdgeOptions={edgeOptions}
-      >
-        <Background />
-        <Controls />
-        {children}
-      </ReactFlow>
+    <>
+      <div className="my-10 w-full border-1" style={{ height: "calc(100vh - 300px)" }}>
+        <ReactFlow
+          nodes={nodes}
+          edges={flowEdges}
+          onNodesChange={onNodesChange}
+          onEdgesChange={onEdgesChange}
+          nodeTypes={nodeTypes}
+          defaultEdgeOptions={edgeOptions}
+        >
+          <Background />
+          <Controls />
+          {children}
+        </ReactFlow>
+      </div>
       <GroupOutput />
-    </div>
+    </>
   );
 };
 
