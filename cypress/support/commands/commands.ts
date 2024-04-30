@@ -122,24 +122,18 @@ Cypress.Commands.add("useForm", (file, published = true) => {
  */
 Cypress.Commands.add("visitForm", (formID, language = "en") => {
   cy.visitPage(`/${language}/id/${formID}`);
-  cy.get("#form-submit-button").should("exist");
 });
 
 /**
  * Navigate to a page and wait for it to load
  */
 Cypress.Commands.add("visitPage", (path) => {
-  cy.waitForNetworkIdlePrepare({
-    method: "GET",
-    pattern: "/api/auth/*",
-    alias: "calls",
-  });
   cy.visit(path);
-  // Ensure page has fully loaded
+
   cy.get("#react-hydration-loader").should("not.exist");
   cy.get("main").should("be.visible");
-  //  Ensure network calls have ended that drive renders
-  cy.waitForNetworkIdle("@calls", 1000);
+  cy.get("#hydration-complete").should("exist");
+  //  cy.waitForIdleNetwork();
 });
 
 /**
@@ -212,8 +206,8 @@ Cypress.Commands.add("logout", () => {
  * Type in a field and wait for the field to be updated
  */
 Cypress.Commands.add("typeInField", (field, typedText, outputText) => {
-  cy.get(field).focus();
-  cy.get(field).type(typedText, { delay: 20 });
+  cy.get(field).click();
+  cy.get(field).type(typedText);
 
   // Use passed in outputText or Remove actions in brackets from typedText
   const text = outputText ?? typedText.replace(/\{.*\}/, "");
@@ -251,4 +245,26 @@ Cypress.Commands.add("serverSideRendered", (path) => {
       cy.document().then((doc) => doc.write(html));
     });
   cy.get("script").should("not.exist");
+});
+
+// Wait for the all the resources to be loaded after visting a page
+Cypress.Commands.add("waitForIdleNetwork", () => {
+  const idleTimesInit = 3;
+  let idleTimes = idleTimesInit;
+  let resourcesLengthPrevious: number;
+
+  cy.window().then((win) =>
+    cy.waitUntil(() => {
+      const resourcesLoaded = win.performance.getEntriesByType("resource");
+
+      if (resourcesLoaded.length === resourcesLengthPrevious) {
+        idleTimes--;
+      } else {
+        idleTimes = idleTimesInit;
+        resourcesLengthPrevious = resourcesLoaded.length;
+      }
+
+      return !idleTimes;
+    })
+  );
 });

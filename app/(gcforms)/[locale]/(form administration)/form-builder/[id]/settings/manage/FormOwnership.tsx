@@ -1,27 +1,22 @@
 "use client";
-import React, { ReactElement, useId, useState } from "react";
+import React, { ReactElement, useState } from "react";
 import { useTranslation } from "@i18n/client";
 import { Alert } from "@clientComponents/globals";
 import { logMessage } from "@lib/logger";
 import { Button } from "@clientComponents/globals";
-import Select from "react-select";
-import makeAnimated from "react-select/animated";
+import { FormOwnerSelect, usersToOptions } from "./FormOwnerSelect";
+
+import { CacheProvider, EmotionCache } from "@emotion/react";
+import createCache from "@emotion/cache";
 import axios from "axios";
 import { FormRecord } from "@lib/types";
 
 interface AssignUsersToTemplateProps {
+  nonce: string | null;
   formRecord: FormRecord;
   usersAssignedToFormRecord: { id: string; name: string | null; email: string }[];
   allUsers: { id: string; name: string | null; email: string }[];
 }
-
-const usersToOptions = (
-  users: { id: string; email: string }[]
-): { value: string; label: string | null }[] => {
-  return users.map((user) => {
-    return { value: user.id, label: user.email };
-  });
-};
 
 const updateUsersToTemplateAssignations = async (formID: string, users: { id: string }[]) => {
   try {
@@ -39,11 +34,17 @@ const updateUsersToTemplateAssignations = async (formID: string, users: { id: st
 };
 
 export const FormOwnership = ({
+  nonce,
   formRecord,
   usersAssignedToFormRecord,
   allUsers,
 }: AssignUsersToTemplateProps) => {
   const { t } = useTranslation(["admin-users", "form-builder"]);
+
+  const cache: EmotionCache = createCache({
+    key: "gc-forms",
+    nonce: nonce || "xyz123",
+  });
 
   const [message, setMessage] = useState<ReactElement | null>(null);
   const assignedToFormRecord = usersToOptions(usersAssignedToFormRecord);
@@ -87,21 +88,18 @@ export const FormOwnership = ({
     <>
       <div className="mb-20" data-testid="form-ownership">
         <h2>{t("Manage ownership")}</h2>
-
         {message && message}
-
         <p className="mb-4">{t("assignUsersToTemplate")}</p>
         <p className="mb-2 font-bold">{t("enterOwnersEmail")} </p>
-        <Select
-          instanceId={useId()}
-          isClearable
-          isSearchable
-          isMulti
-          components={makeAnimated()}
-          options={usersToOptions(allUsers)}
-          value={selectedUsers}
-          onChange={(value) => setSelectedUsers(value as { value: string; label: string | null }[])}
-        />
+        <div className="w-9/12">
+          <CacheProvider value={cache}>
+            <FormOwnerSelect
+              allUsers={allUsers}
+              selectedUsers={selectedUsers}
+              setSelectedUsers={setSelectedUsers}
+            />
+          </CacheProvider>
+        </div>
         <br />
         <Button
           dataTestId="save-ownership"

@@ -29,7 +29,6 @@ const SubmitButton: React.FC<SubmitButtonProps> = ({
   const [formTimerState, { startTimer, checkTimer, disableTimer }] = useFormTimer();
   const [submitTooEarly, setSubmitTooEarly] = useState(false);
   const screenReaderRemainingTime = useRef(formTimerState.remainingTime);
-  const [formReady, setFormReady] = useState(false);
 
   // calculate initial delay for submit timer
   const secondsBaseDelay = 2;
@@ -44,13 +43,11 @@ const SubmitButton: React.FC<SubmitButtonProps> = ({
   useEffect(() => {
     if (!formTimerEnabled && !formTimerState.canSubmit) {
       disableTimer();
-      setFormReady(true);
     }
   }, [disableTimer, formTimerEnabled, formTimerState.canSubmit]);
 
   useEffect(() => {
     if (formTimerEnabled) {
-      if (formTimerState.timerDelay) setFormReady(true);
       // Initiate a callback to ensure that state of submit button is correctly displayed
 
       // Calling the checkTimer modifies the state of the formTimerState
@@ -65,7 +62,6 @@ const SubmitButton: React.FC<SubmitButtonProps> = ({
 
   return (
     <>
-      {formReady && <div id="form-ready-indicator" aria-hidden={true} />}
       <div
         className={classNames({
           "border-l-2": submitTooEarly,

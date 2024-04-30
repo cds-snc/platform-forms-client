@@ -62,6 +62,7 @@ export const Dialog = ({
       className="h-full w-full bg-transparent bg-clip-padding p-0"
       aria-labelledby="modal-title"
       ref={dialogRef}
+      data-testid="dialog"
     >
       <div
         className={cn(

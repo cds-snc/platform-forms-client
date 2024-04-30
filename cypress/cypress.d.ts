@@ -43,6 +43,7 @@ declare global {
         admin?: boolean;
         acceptableUse?: boolean;
       }) => Chainable<void>;
+      waitForIdleNetwork: () => Chainable<void>;
     }
   }
 }
