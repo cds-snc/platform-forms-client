@@ -16298,6 +16298,17 @@ __metadata:
   languageName: node
   linkType: hard
 
+"reliability_queue_table_ttl_data_type_migration@workspace:utils/reliabilityQueueTableTTLDataTypeMigration":
+  version: 0.0.0-use.local
+  resolution: "reliability_queue_table_ttl_data_type_migration@workspace:utils/reliabilityQueueTableTTLDataTypeMigration"
+  dependencies:
+    "@aws-sdk/client-dynamodb": "npm:^3.518.0"
+    "@aws-sdk/lib-dynamodb": "npm:^3.518.0"
+    dotenv: "npm:^16.3.1"
+    tsx: "npm:^3.14.0"
+  languageName: unknown
+  linkType: soft
+
 "request-progress@npm:^3.0.0":
   version: 3.0.0
   resolution: "request-progress@npm:3.0.0"
