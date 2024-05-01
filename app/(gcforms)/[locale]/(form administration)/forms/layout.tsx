@@ -1,11 +1,12 @@
 import React from "react";
 import { ToastContainer } from "@formBuilder/components/shared/Toast";
-import { Header } from "@clientComponents/globals";
-import { Footer, SkipLink } from "@serverComponents/globals";
+import { Header } from "@clientComponents/globals/Header/Header";
 import { auth } from "@lib/auth";
 import { redirect } from "next/navigation";
 import { SaveTemplateProvider } from "@lib/hooks/form-builder/useTemplateContext";
 import { TemplateStoreProvider } from "@lib/store/useTemplateStore";
+import { SkipLink } from "@serverComponents/globals/SkipLink";
+import { Footer } from "@serverComponents/globals/Footer";
 
 export default async function Layout({
   children,
@@ -20,7 +21,7 @@ export default async function Layout({
   return (
     <TemplateStoreProvider {...{ locale }}>
       <SaveTemplateProvider>
-        <div className="flex h-auto flex-col bg-gray-soft">
+        <div className="flex h-full flex-col bkd-soft">
           <SkipLink />
           <Header context={"default"} />
           <div className="mx-4 shrink-0 grow basis-auto laptop:mx-32 desktop:mx-64">

@@ -1,13 +1,8 @@
 "use client";
 import React from "react";
-// import { AddElementButton } from "../AddElementButton";
-const AddElementButton = () => <></>;
+import { AddElementButton } from "../AddElementButton";
 
-/**
- * Does not work because AddElementButton imports ElementDialog which imports
- * useElementOptions which imports useFlag which imports a server action.
- */
-describe.skip("<AddElementButton />", () => {
+describe("<AddElementButton />", () => {
   beforeEach(() => {
     cy.intercept("/api/flags/experimentalBlocks/check", { status: true });
   });

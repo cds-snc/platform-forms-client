@@ -1,7 +1,7 @@
 import React from "react";
 import { cleanup, render, act, waitFor } from "@testing-library/react";
 import { Question } from "../question/Question";
-import { useTemplateStore } from "@lib/store";
+import { useTemplateStore } from "@lib/store/useTemplateStore";
 import {
   defaultStore as store,
   Providers,

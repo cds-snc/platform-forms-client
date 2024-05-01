@@ -1,7 +1,6 @@
 import { serverTranslation } from "@i18n";
 import { Metadata } from "next";
-import UserNavLayout from "@clientComponents/globals/layouts/UserNavLayout";
-import { Login } from "./clientSide";
+import { LoginForm } from "./components/client/LoginForm";
 import { auth } from "@lib/auth";
 import { redirect } from "next/navigation";
 
@@ -10,7 +9,7 @@ export async function generateMetadata({
 }: {
   params: { locale: string };
 }): Promise<Metadata> {
-  const { t } = await serverTranslation(["login", "cognito-errors", "common"], { lang: locale });
+  const { t } = await serverTranslation(["login"], { lang: locale });
   return {
     title: t("title"),
   };
@@ -21,9 +20,10 @@ export default async function Page({ params: { locale } }: { params: { locale: s
   if (session) {
     redirect(`/${locale}/forms`);
   }
+
   return (
-    <UserNavLayout contentWidth="tablet:w-[658px]">
-      <Login />
-    </UserNavLayout>
+    <div id="auth-panel">
+      <LoginForm />
+    </div>
   );
 }

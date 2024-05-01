@@ -1,10 +1,9 @@
 "use client";
 import React, { useEffect, useRef } from "react";
-
-import { clearTemplateStore } from "@lib/store";
 import Link from "next/link";
 import { useTranslation } from "@i18n/client";
 import Skeleton from "react-loading-skeleton";
+import { clearTemplateStore } from "@lib/store/useTemplateStore";
 
 export const ResumeEditingForm = () => {
   const [hasSession, setHasSession] = React.useState(false);
@@ -56,6 +55,10 @@ export const ResumeEditingForm = () => {
       <span aria-hidden="true"> ← </span> {t("actions.resumeForm")}
     </Link>
   ) : (
-    loading && <Skeleton className="h-6 w-[200px]" />
+    loading && (
+      <div data-testid="resume-editing-form">
+        <Skeleton className="h-6 w-[200px]" />
+      </div>
+    )
   );
 };

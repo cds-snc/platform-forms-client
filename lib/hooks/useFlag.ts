@@ -1,5 +1,5 @@
 "use client";
-import { checkFlag } from "app/(gcforms)/[locale]/(app administration)/admin/(with nav)/flags/actions";
+import { checkFlag } from "@formBuilder/actions";
 import { useEffect, useState } from "react";
 
 // TODO probably a beter way to do this.

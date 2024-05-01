@@ -1,15 +1,14 @@
 "use client";
 import { Nagware } from "@formBuilder/components/Nagware";
 import { ClosedBanner } from "@formBuilder/components/shared/ClosedBanner";
-import { useRehydrate } from "@lib/hooks/form-builder";
 import { useTranslation } from "@i18n/client";
 import { ucfirst } from "@lib/client/clientHelpers";
 import { FormRecord, NagwareResult, VaultSubmissionList } from "@lib/types";
-import Link from "next/link";
 import { useParams } from "next/navigation";
-import { ReportDialog } from "./Dialogs/ReportDialog";
 import { DownloadTable } from "./DownloadTable";
 import { NoResponses } from "./NoResponses";
+import { useRehydrate } from "@lib/store/useTemplateStore";
+import { TitleAndDescription } from "./TitleAndDescription";
 
 export interface ResponsesProps {
   initialForm: FormRecord | null;
@@ -20,9 +19,6 @@ export interface ResponsesProps {
   overdueAfter: number;
 }
 
-// TODO: move to an app setting variable
-const MAX_REPORT_COUNT = 20;
-
 export const Responses = ({
   initialForm,
   vaultSubmissions,
@@ -32,7 +28,6 @@ export const Responses = ({
   overdueAfter,
 }: ResponsesProps) => {
   const {
-    t,
     i18n: { language },
   } = useTranslation("form-builder-responses");
   const { id, statusFilter: rawStatusFilter } = useParams<{ id: string; statusFilter: string }>();
@@ -50,14 +45,22 @@ export const Responses = ({
   }
 
   const hasHydrated = useRehydrate();
-  if (!hasHydrated) return null;
 
   return (
     <>
+      {vaultSubmissions.length > 0 && (
+        <div className="has-[.gc-confirm-success]:hidden">
+          <TitleAndDescription
+            statusFilter={ucfirst(statusFilter)}
+            formId={id}
+            responseDownloadLimit={responseDownloadLimit}
+          />
+        </div>
+      )}
       {nagwareResult && <Nagware nagwareResult={nagwareResult} />}
       <div aria-live="polite">
         <ClosedBanner id={formId} />
-        {vaultSubmissions.length > 0 && (
+        {hasHydrated && vaultSubmissions.length > 0 && (
           <>
             <DownloadTable
               vaultSubmissions={vaultSubmissions}
@@ -71,18 +74,6 @@ export const Responses = ({
           </>
         )}
         {vaultSubmissions.length <= 0 && <NoResponses statusFilter={statusFilter} />}
-      </div>
-      <div className="mt-8">
-        <ReportDialog
-          apiUrl={`/api/id/${formId}/submission/report`}
-          maxEntries={MAX_REPORT_COUNT}
-        />
-        <Link
-          href={`/form-builder/${formId}/responses/problem`}
-          className="ml-12 text-black visited:text-black"
-        >
-          {t("responses.viewAllProblemResponses")}
-        </Link>
       </div>
     </>
   );

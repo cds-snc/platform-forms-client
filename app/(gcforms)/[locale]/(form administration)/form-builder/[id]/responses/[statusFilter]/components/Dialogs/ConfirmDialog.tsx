@@ -8,7 +8,7 @@ import { Button, Alert } from "@clientComponents/globals";
 import { randomId, runPromisesSynchronously } from "@lib/client/clientHelpers";
 import axios from "axios";
 import Link from "next/link";
-import { isUUID } from "@lib/validation";
+import { isUUID } from "@lib/validation/validation";
 import { DialogStates } from "./DialogStates";
 import { chunkArray } from "@lib/utils";
 

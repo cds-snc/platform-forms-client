@@ -1,34 +1,103 @@
-import { TreeItem } from "../types";
 import { GroupsType } from "@lib/formContext";
+import { TreeItems } from "../types";
+import { FormElement } from "@lib/types";
 
-export const groupsToTreeData = (formGroups: GroupsType): TreeItem[] => {
-  const items = [];
-  if (formGroups) {
-    for (const [key, value] of Object.entries(formGroups)) {
-      const children =
-        value.elements &&
-        value.elements.map((id) => {
-          return {
-            id: id,
-            name: "",
-            icon: null,
-            readOnly: false,
-          };
-        });
+export const groupsToTreeData = (formGroups: GroupsType, elements: FormElement[]): TreeItems => {
+  const items: TreeItems = {
+    root: {
+      index: "root",
+      data: "Root",
+      children: [],
+    },
+  };
 
-      if (!children) continue;
+  if (!formGroups) {
+    return items;
+  }
 
-      const item = {
-        id: key,
-        name: formGroups[key].name,
-        icon: null,
-        readOnly: false,
-        children: children.filter((el) => el !== undefined) as TreeItem[],
+  for (const [key, value] of Object.entries(formGroups)) {
+    const children =
+      value.elements &&
+      value.elements.map((id) => {
+        return id;
+      });
+
+    if (!children) continue;
+
+    const item = {
+      index: key,
+      isFolder: true,
+      canRename: true,
+      canMove: true,
+      data: formGroups[key].name,
+      children: children,
+    };
+
+    items[key] = item;
+    items.root.children?.push(key);
+
+    children.forEach((childId) => {
+      const element = elements.find((el) => el.id === Number(childId));
+      if (!element) return;
+
+      const childItem = {
+        index: childId,
+        isFolder: false,
+        canRename: true,
+        canMove: true,
+        children: [],
+        data: element.properties.titleEn, // @TODO
       };
 
-      items.push(item);
-    }
+      items[childId] = childItem;
+    });
   }
+
+  // Add items to start
+  // @todo re-add these
+  /*
+  const introItem = {
+    index: "intro",
+    isFolder: false,
+    canRename: true,
+    canMove: true,
+    children: [],
+    data: "Introduction",
+  };
+  */
+
+  // items["intro"] = introItem;
+
+  /*
+  const policyItem = {
+    index: "policy",
+    isFolder: false,
+    canRename: true,
+    canMove: true,
+    children: [],
+    data: "Policy",
+  };
+  */
+
+  // items["policy"] = policyItem;
+
+  // Add start item to the beginning
+  // items["start"].children = ["intro", "policy"];
+
+  // Add confirmation item to the end
+  /*
+  const confirmationItem = {
+    index: "confirm",
+    isFolder: false,
+    canRename: true,
+    canMove: true,
+    children: [],
+    data: "Confirmation",
+  };
+  */
+
+  // items["confirm"] = confirmationItem;
+  // items["end"].children = ["confirm"];
 
   return items;
 };

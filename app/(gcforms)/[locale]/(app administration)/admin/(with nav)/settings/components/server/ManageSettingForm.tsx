@@ -1,6 +1,6 @@
 import { serverTranslation } from "@i18n";
 import { createSetting, getSetting, updateSetting } from "../../actions";
-import { SecondaryLinkButton } from "@clientComponents/globals";
+import { LinkButton } from "@serverComponents/globals/Buttons/LinkButton";
 import { SaveButton } from "../client/SaveButton";
 import { redirect } from "next/navigation";
 import { Danger } from "@clientComponents/globals/Alert/Alert";
@@ -114,17 +114,17 @@ export const ManageSettingForm = async ({ settingId }: { settingId?: string }) =
           />
           <div className="mt-8">
             <SaveButton />
-            <SecondaryLinkButton href={`/${language}/admin/settings`}>
+            <LinkButton.Secondary href={`/${language}/admin/settings`}>
               {t("cancel")}
-            </SecondaryLinkButton>
+            </LinkButton.Secondary>
           </div>
         </form>
       ) : (
         <>
           <Danger title={t("settingNotFound")} focussable={true} />
-          <SecondaryLinkButton href={`/${language}/admin/settings`} className="mt-8">
+          <LinkButton.Secondary href={`/${language}/admin/settings`} className="mt-8">
             {t("back")}
-          </SecondaryLinkButton>
+          </LinkButton.Secondary>
         </>
       )}
     </div>

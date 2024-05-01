@@ -1,13 +1,14 @@
 import { Suspense } from "react";
 import { serverTranslation } from "@i18n";
-import { requireAuthentication } from "@lib/auth";
-import { checkPrivilegesAsBoolean } from "@lib/privileges";
+import { auth } from "@lib/auth";
+import { checkPrivilegesAsBoolean, createAbility } from "@lib/privileges";
 import { getUser } from "@lib/users";
 import { BackLink } from "@clientComponents/admin/LeftNav/BackLink";
 import { Metadata } from "next";
 import { getAllTemplatesForUser } from "@lib/templates";
 import { FormCard } from "./components/server/FormCard";
 import { Loader } from "@clientComponents/globals/Loader";
+import { redirect } from "next/navigation";
 
 export async function generateMetadata({
   params: { locale },
@@ -25,9 +26,12 @@ export default async function Page({
 }: {
   params: { id: string; locale: string };
 }) {
-  const { user } = await requireAuthentication();
+  const session = await auth();
+  if (!session) redirect(`/${locale}/auth/login`);
+  const ability = createAbility(session);
+
   checkPrivilegesAsBoolean(
-    user.ability,
+    ability,
     [
       { action: "view", subject: "User" },
       {
@@ -43,9 +47,9 @@ export default async function Page({
     { redirect: true }
   );
 
-  const formUser = await getUser(user.ability, id);
+  const formUser = await getUser(ability, id);
 
-  const templates = (await getAllTemplatesForUser(user.ability, id as string)).map((template) => {
+  const templates = (await getAllTemplatesForUser(ability, id as string)).map((template) => {
     const {
       id,
       form: { titleEn, titleFr },

@@ -1,55 +1,60 @@
 "use client";
 
 import { FormRecord } from "@lib/types";
-import { useSession } from "next-auth/react";
-import { useRehydrate } from "@lib/hooks/form-builder";
 import { DownloadForm } from "./DownloadForm";
 import { SetClosingDate } from "./SetClosingDate";
 import { FormOwnership } from "./FormOwnership";
+import { ErrorPanel } from "@clientComponents/globals/ErrorPanel";
 
-interface AssignUsersToTemplateProps {
-  formRecord?: FormRecord;
-  usersAssignedToFormRecord?: { id: string; name: string | null; email: string }[];
-  allUsers?: { id: string; name: string | null; email: string }[];
+interface User {
+  id: string;
+  name: string | null;
+  email: string;
+}
+
+interface ManageFormProps {
+  nonce: string | null;
   canManageOwnership: boolean;
+  canSetClosingDate: boolean;
+  formRecord?: FormRecord;
+  usersAssignedToFormRecord?: User[];
+  allUsers?: User[];
   id: string;
 }
 
-export const ManageForm = ({
-  formRecord,
-  usersAssignedToFormRecord,
-  allUsers,
-  canManageOwnership,
-  id,
-}: AssignUsersToTemplateProps) => {
-  const { status } = useSession();
+export const ManageForm = (props: ManageFormProps) => {
+  const {
+    nonce,
+    formRecord,
+    usersAssignedToFormRecord,
+    allUsers,
+    canManageOwnership,
+    canSetClosingDate,
+    id,
+  } = props;
 
-  const hasHydrated = useRehydrate();
-  if (!hasHydrated) return null;
-
-  // Can definitely be refactored once the parent components are refactored to server components
-  if (
-    canManageOwnership &&
-    typeof formRecord !== "undefined" &&
-    typeof usersAssignedToFormRecord !== "undefined" &&
-    typeof allUsers !== "undefined"
-  ) {
+  if (!canManageOwnership) {
     return (
       <>
-        {status === "authenticated" && <SetClosingDate formID={id} />}
-        <FormOwnership
-          formRecord={formRecord}
-          usersAssignedToFormRecord={usersAssignedToFormRecord}
-          allUsers={allUsers}
-        />
+        {canSetClosingDate && <SetClosingDate formID={id} />}
         <DownloadForm />
       </>
     );
   }
 
+  if (!formRecord || !usersAssignedToFormRecord || !allUsers) {
+    return <ErrorPanel>There has been an error.</ErrorPanel>;
+  }
+
   return (
     <>
-      {status === "authenticated" && <SetClosingDate formID={id} />}
+      {canSetClosingDate && <SetClosingDate formID={id} />}
+      <FormOwnership
+        nonce={nonce}
+        formRecord={formRecord}
+        usersAssignedToFormRecord={usersAssignedToFormRecord}
+        allUsers={allUsers}
+      />
       <DownloadForm />
     </>
   );

@@ -5,9 +5,10 @@ import { useTranslation } from "@i18n/client";
 import { ElementProperties } from "@lib/types";
 import { ModalForm, ModalButton } from "../../index";
 import { FormElementWithIndex } from "@lib/types/form-builder-types";
-import { useModalStore, useTemplateStore } from "@lib/store";
 import { Button } from "@clientComponents/globals";
 import { Modal } from "../../Modal";
+import useModalStore from "@lib/store/useModalStore";
+import { useTemplateStore } from "@lib/store/useTemplateStore";
 
 export const SubElementModal = ({
   item,

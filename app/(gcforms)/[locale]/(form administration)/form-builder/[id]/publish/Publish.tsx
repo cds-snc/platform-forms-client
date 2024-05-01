@@ -2,8 +2,7 @@
 import React, { useCallback, useState } from "react";
 import { useTranslation } from "@i18n/client";
 import { useRouter } from "next/navigation";
-import { useTemplateStore } from "@lib/store";
-import { useAllowPublish, useRehydrate } from "@lib/hooks/form-builder";
+import { useRehydrate, useTemplateStore } from "@lib/store/useTemplateStore";
 import { CancelIcon, CircleCheckIcon, LockIcon } from "@serverComponents/icons";
 import { Button, Alert } from "@clientComponents/globals";
 import Link from "next/link";
@@ -14,6 +13,7 @@ import { DownloadFileButton } from "@formBuilder/components/shared";
 import Skeleton from "react-loading-skeleton";
 import LinkButton from "@serverComponents/globals/Buttons/LinkButton";
 import { updateTemplate, updateTemplatePublishedStatus } from "@formBuilder/actions";
+import { useAllowPublish } from "@lib/hooks/form-builder/useAllowPublish";
 
 export const Publish = ({ id }: { id: string }) => {
   const { t, i18n } = useTranslation("form-builder");
@@ -31,6 +31,7 @@ export const Publish = ({ id }: { id: string }) => {
   const {
     id: storeId,
     setId,
+    setIsPublished,
     getSchema,
     getName,
     getDeliveryOption,
@@ -38,6 +39,7 @@ export const Publish = ({ id }: { id: string }) => {
   } = useTemplateStore((s) => ({
     id: s.id,
     setId: s.setId,
+    setIsPublished: s.setIsPublished,
     getSchema: s.getSchema,
     getName: s.getName,
     getDeliveryOption: s.getDeliveryOption,
@@ -78,6 +80,7 @@ export const Publish = ({ id }: { id: string }) => {
     try {
       const result = await updateTemplatePublishedStatus({ id, isPublished: true });
       setId(result?.id);
+      setIsPublished(result?.isPublished);
 
       window.dataLayer = window.dataLayer || [];
       window.dataLayer.push({

@@ -16,7 +16,6 @@ export const privilegeCheck = async (userID: string): Promise<Permission[] | nul
       const redis = await getRedisInstance();
       const value = await redis.get(checkParameter);
       if (value) {
-        logMessage.debug(`Using Cached Privileges for ${checkParameter}`);
         return JSON.parse(value);
       }
     } catch (e) {

@@ -2,11 +2,10 @@
 import React, { useState } from "react";
 import { useTranslation } from "@i18n/client";
 import { useRouter } from "next/navigation";
-
-import { useTemplateStore, clearTemplateStore } from "@lib/store";
 import { DesignIcon, ExternalLinkIcon, WarningIcon } from "@serverComponents/icons";
 import { errorMessage, validateTemplate } from "@lib/utils/form-builder/validate";
 import Link from "next/link";
+import { clearTemplateStore, useTemplateStore } from "@lib/store/useTemplateStore";
 
 export const Start = () => {
   const {
@@ -120,24 +119,24 @@ export const Start = () => {
           <h2 className="mb-1 p-0 group-hover:underline group-focus:underline">{t("startH2")}</h2>
           <p className="text-sm">{t("startP1")}</p>
         </button>
-        <div
-          tabIndex={0}
-          role="button"
-          className={boxClass}
-          onKeyDown={(e) => {
-            if (e.key === "Enter" || e.key === " ") {
-              const uploadButton = document.getElementById("file-upload");
-              if (uploadButton) uploadButton.click();
-            }
-          }}
-        >
-          <label>
+        <label>
+          <div
+            tabIndex={0}
+            role="button"
+            className={boxClass}
+            onKeyDown={(e) => {
+              if (e.key === "Enter" || e.key === " ") {
+                const uploadButton = document.getElementById("file-upload");
+                if (uploadButton) uploadButton.click();
+              }
+            }}
+          >
             <ExternalLinkIcon className="mb-2 scale-125" />
             <h2 className="mb-1 p-0 group-hover:underline group-focus:underline">{t("startH3")}</h2>
             <p className="text-sm">{t("startP2")}</p>
             <input id="file-upload" type="file" onChange={handleChange} className="hidden" />
-          </label>
-        </div>
+          </div>
+        </label>
       </div>
     </>
   );

@@ -6,8 +6,8 @@ import { useTranslation } from "@i18n/client";
 import { cn } from "@lib/utils";
 
 import { SiteLogo } from "@serverComponents/icons";
-import { FileNameInput } from "@clientComponents/globals/Header/FileName";
-import { ShareDropdown } from "@clientComponents/globals/Header/ShareDropdown";
+import { FileNameInput } from "./FileName";
+import { ShareDropdown } from "./ShareDropdown";
 import LanguageToggle from "./LanguageToggle";
 import { YourAccountDropdown } from "./YourAccountDropdown";
 
@@ -47,9 +47,9 @@ export const Header = ({ context = "default", className }: HeaderParams) => {
                 <Link href={`/${language}/forms`}>{t("adminNav.allForms", { ns: "common" })}</Link>
                 {isFormBuilder && <span className="mx-2 inline-block"> / </span>}
               </div>
-              {isFormBuilder && <FileNameInput />}
             </>
           )}
+          {isFormBuilder && <FileNameInput />}
         </div>
         <nav className="justify-self-end" aria-label={t("mainNavAriaLabel", { ns: "common" })}>
           <ul className="mt-2 flex list-none px-0 text-base">

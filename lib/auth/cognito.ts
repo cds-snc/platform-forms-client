@@ -9,6 +9,16 @@ import { prisma, prismaErrors } from "@lib/integration/prismaConnector";
 import { generateVerificationCode, sendVerificationCode } from "./2fa";
 import { registerFailed2FAAttempt, clear2FALockout } from "./2faLockout";
 import { logMessage } from "@lib/logger";
+import { serverTranslation } from "@i18n";
+import { getOrigin } from "@lib/origin";
+
+if (
+  (!process.env.COGNITO_APP_CLIENT_ID ||
+    !process.env.COGNITO_REGION ||
+    !process.env.COGNITO_USER_POOL_ID) &&
+  process.env.APP_ENV !== "test"
+)
+  throw new Error("Missing Cognito Credentials");
 
 type Credentials = {
   username: string;
@@ -28,15 +38,8 @@ type DecodedCognitoToken = {
 
 export type AuthenticationFlowToken = string;
 
-export enum Validate2FAVerificationCodeResultStatus {
-  VALID,
-  INVALID,
-  EXPIRED,
-  LOCKED_OUT,
-}
-
 export type Validate2FAVerificationCodeResult = {
-  status: Validate2FAVerificationCodeResultStatus;
+  valid: boolean;
   decodedCognitoToken?: DecodedCognitoToken;
 };
 
@@ -61,8 +64,7 @@ export const initiateSignIn = async ({
   try {
     const cognitoClient = new CognitoIdentityProviderClient({
       region: process.env.COGNITO_REGION,
-      ...((process.env.NODE_ENV === "development" ||
-        process.env.NEXTAUTH_URL === "http://localhost:3000") && {
+      ...((process.env.NODE_ENV === "development" || getOrigin() === "http://localhost:3000") && {
         credentials: {
           accessKeyId: process.env.COGNITO_ACCESS_KEY ?? "",
           secretAccessKey: process.env.COGNITO_SECRET_KEY ?? "",
@@ -111,8 +113,7 @@ export const initiateSignIn = async ({
       logMessage.warn("Cognito Lockout: Password attempts exceeded");
     }
 
-    // throw new Error with cognito error converted to string so as to include the exception name
-    throw new Error((e as CognitoIdentityProviderServiceException).toString());
+    throw e;
   }
 };
 
@@ -178,7 +179,7 @@ export const begin2FAAuthentication = async ({
 export const requestNew2FAVerificationCode = async (
   authenticationFlowToken: AuthenticationFlowToken,
   email: string
-): Promise<void> => {
+): Promise<string> => {
   const sanitizedEmail = sanitizeEmailAddressForCognito(email);
 
   const verificationCode = await generateVerificationCode();
@@ -201,6 +202,7 @@ export const requestNew2FAVerificationCode = async (
     if (result === null) throw new Missing2FASession();
 
     await sendVerificationCode(sanitizedEmail, verificationCode);
+    return verificationCode;
   } catch (error) {
     if (error instanceof Missing2FASession) {
       throw error;
@@ -218,14 +220,6 @@ export const validate2FAVerificationCode = async (
   const sanitizedEmail = sanitizeEmailAddressForCognito(email);
 
   try {
-    const delete2FAVerificationCode = async () => {
-      await prisma.cognitoCustom2FA.deleteMany({
-        where: {
-          email: sanitizedEmail,
-        },
-      });
-    };
-
     // Verify if the verification code is valid
     const mfaEntry = await prisma.cognitoCustom2FA.findUnique({
       where: {
@@ -236,27 +230,20 @@ export const validate2FAVerificationCode = async (
       },
     });
 
-    // ensure the user account is active
     const prismaUser = await prisma.user.findUnique({
       where: {
         email: sanitizedEmail,
       },
       select: {
         id: true,
-        active: true,
       },
     });
-
-    if (prismaUser?.active === false) {
-      await delete2FAVerificationCode();
-      throw new Error("AccountDeactivated");
-    }
 
     // If the verification code and username do not match fail the login
     if (mfaEntry === null || mfaEntry.verificationCode !== verificationCode) {
       const lockoutResponse = await registerFailed2FAAttempt(sanitizedEmail);
       if (lockoutResponse.isLockedOut) {
-        await delete2FAVerificationCode();
+        await delete2FAVerificationCode(sanitizedEmail);
         await clear2FALockout(sanitizedEmail);
 
         logEvent(
@@ -267,29 +254,26 @@ export const validate2FAVerificationCode = async (
         );
 
         logMessage.warn("2FA Lockout: Verification code attempts exceeded");
-
-        return { status: Validate2FAVerificationCodeResultStatus.LOCKED_OUT };
-      } else {
-        return { status: Validate2FAVerificationCodeResultStatus.INVALID };
       }
+      return { valid: false };
     }
 
     // If the verification code is expired remove it from the database
     if (mfaEntry.expires.getTime() < new Date().getTime()) {
-      await delete2FAVerificationCode();
+      await delete2FAVerificationCode(sanitizedEmail);
       await clear2FALockout(sanitizedEmail);
-      return { status: Validate2FAVerificationCodeResultStatus.EXPIRED };
+      return { valid: false };
     }
 
     // 2FA is valid, remove the verification code from the database and return user info
-    await delete2FAVerificationCode();
+    await delete2FAVerificationCode(sanitizedEmail);
 
     await clear2FALockout(sanitizedEmail);
 
     const decodedCognitoToken = decodeCognitoToken(mfaEntry.cognitoToken);
 
     return {
-      status: Validate2FAVerificationCodeResultStatus.VALID,
+      valid: true,
       decodedCognitoToken: {
         id: decodedCognitoToken.id,
         name: decodedCognitoToken.name,
@@ -297,7 +281,10 @@ export const validate2FAVerificationCode = async (
       },
     };
   } catch (error) {
-    throw new Error(`Failed to validate verification code. Reason: ${(error as Error).message}.`);
+    logMessage.warn(`Failed to validate verification code. Reason: ${(error as Error).message}.`);
+    return {
+      valid: false,
+    };
   }
 };
 
@@ -320,3 +307,66 @@ const decodeCognitoToken = (token: string): DecodedCognitoToken => {
     email: cognitoIDTokenClaims.email,
   };
 };
+/**
+ * Remove the 2FA verification code from the database
+ * @param email
+ */
+const delete2FAVerificationCode = async (email: string) => {
+  await prisma.cognitoCustom2FA.deleteMany({
+    where: {
+      email,
+    },
+  });
+};
+
+export async function handleErrorById(id: string, language: string) {
+  const { t } = await serverTranslation("cognito-errors", { lang: language });
+  const errorObj: {
+    title: string;
+    description?: string;
+    callToActionText?: string;
+    callToActionLink?: string;
+  } = { title: t("InternalServiceException") };
+  switch (id) {
+    // Custom and specific message. Would a more generic message be better?
+    case "InternalServiceExceptionLogin":
+      errorObj.title = t("InternalServiceExceptionLogin.title");
+      errorObj.description = t("InternalServiceExceptionLogin.description");
+      errorObj.callToActionText = t("InternalServiceExceptionLogin.linkText");
+      errorObj.callToActionLink = t("InternalServiceExceptionLogin.link");
+      break;
+    case "UsernameOrPasswordIncorrect":
+    case "UserNotFoundException":
+    case "NotAuthorizedException":
+      errorObj.title = t("UsernameOrPasswordIncorrect.title");
+      errorObj.description = t("UsernameOrPasswordIncorrect.description");
+      errorObj.callToActionLink = t("UsernameOrPasswordIncorrect.link");
+      errorObj.callToActionText = t("UsernameOrPasswordIncorrect.linkText");
+      break;
+    case "UsernameExistsException":
+      errorObj.title = t("UsernameExistsException"); // TODO ask design/content for error message
+      break;
+    case "IncorrectSecurityAnswerException":
+      errorObj.title = t("IncorrectSecurityAnswerException.title");
+      errorObj.description = t("IncorrectSecurityAnswerException.description");
+      break;
+    case "2FAInvalidVerificationCode":
+    case "CodeMismatchException":
+      errorObj.title = t("CodeMismatchException"); // TODO ask design/content for error message
+      break;
+    case "ExpiredCodeException":
+    case "2FAExpiredSession":
+      errorObj.title = t("ExpiredCodeException"); // TODO ask design/content for error message
+      break;
+    case "TooManyRequestsException":
+      errorObj.title = t("TooManyRequestsException.title");
+      errorObj.description = t("TooManyRequestsException.description");
+      errorObj.callToActionLink = t("TooManyRequestsException.link");
+      errorObj.callToActionText = t("TooManyRequestsException.linkText");
+      break;
+    default:
+      errorObj.title = t("InternalServiceException"); // TODO ask design/content for error message
+  }
+
+  return errorObj;
+}

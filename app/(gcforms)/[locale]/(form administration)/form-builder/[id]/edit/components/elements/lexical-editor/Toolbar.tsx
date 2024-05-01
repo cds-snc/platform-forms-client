@@ -233,7 +233,7 @@ export const Toolbar = ({ editorId }: { editorId: string }) => {
   return (
     <>
       <div
-        className="toolbar-container"
+        className="gc-toolbar-container rounded-t-[2px] border-b border-slate-200 bg-slate-100 p-[10px]"
         role="toolbar"
         aria-label={t("textFormatting")}
         aria-controls={editorId}

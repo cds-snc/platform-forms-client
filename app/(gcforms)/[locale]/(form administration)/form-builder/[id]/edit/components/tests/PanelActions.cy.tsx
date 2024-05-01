@@ -1,14 +1,8 @@
 "use client";
 import React from "react";
-// import { PanelActions } from "../PanelActions";
-const PanelActions = () => <></>;
+import { PanelActions } from "../PanelActions";
 
-/**
- * Does not work because PanelActions imports ElementDialog which
- * imports useElementOptions which imports useFlag which imports
- * a server action.
- */
-describe.skip("<PanelActions />", () => {
+describe("<PanelActions />", () => {
   it("enables move buttons for item that is not first or last", () => {
     cy.viewport(800, 80);
     // see: https://on.cypress.io/mounting-react
@@ -81,9 +75,9 @@ describe.skip("<PanelActions />", () => {
     // Keyboard navigation should start at duplicate
     cy.get("body").tab();
     cy.focused().should("have.attr", "data-testid", "duplicate");
-    cy.typeInField("body", "{leftArrow}");
+    cy.get("body").type("{leftArrow}");
     cy.focused().should("have.attr", "data-testid", "duplicate");
-    cy.typeInField("body", "{rightArrow}");
+    cy.get("body").type("{rightArrow}");
     cy.focused().should("have.attr", "data-testid", "remove");
   });
 
@@ -116,23 +110,23 @@ describe.skip("<PanelActions />", () => {
     );
     cy.get("body").tab();
     cy.focused().should("have.attr", "data-testid", "moveUp");
-    cy.typeInField("body", "{rightArrow}");
+    cy.get("body").type("{rightArrow}");
     cy.focused().should("have.attr", "data-testid", "moveDown");
-    cy.typeInField("body", "{rightArrow}");
+    cy.get("body").type("{rightArrow}");
     cy.focused().should("have.attr", "data-testid", "duplicate");
-    cy.typeInField("body", "{rightArrow}");
+    cy.get("body").type("{rightArrow}");
     cy.focused().should("have.attr", "data-testid", "remove");
-    cy.typeInField("body", "{rightArrow}");
+    cy.get("body").type("{rightArrow}");
     cy.focused().should("have.attr", "data-testid", "more");
-    cy.typeInField("body", "{rightArrow}");
+    cy.get("body").type("{rightArrow}");
     cy.focused().should("have.attr", "data-testid", "more");
-    cy.typeInField("body", "{leftArrow}");
+    cy.get("body").type("{leftArrow}");
     cy.focused().should("have.attr", "data-testid", "remove");
-    cy.typeInField("body", "{leftArrow}");
+    cy.get("body").type("{leftArrow}");
     cy.focused().should("have.attr", "data-testid", "duplicate");
-    cy.typeInField("body", "{leftArrow}");
+    cy.get("body").type("{leftArrow}");
     cy.focused().should("have.attr", "data-testid", "moveDown");
-    cy.typeInField("body", "{leftArrow}");
+    cy.get("body").type("{leftArrow}");
     cy.focused().should("have.attr", "data-testid", "moveUp");
     cy.tab();
     cy.focused().should("have.attr", "data-testid", "add-element");

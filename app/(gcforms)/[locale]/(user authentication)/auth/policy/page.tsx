@@ -1,9 +1,10 @@
+import { Suspense } from "react";
 import { serverTranslation } from "@i18n";
 import { Metadata } from "next";
-import UserNavLayout from "@clientComponents/globals/layouts/UserNavLayout";
 import { redirect } from "next/navigation";
-import { AcceptableUseTerms } from "@clientComponents/auth/AcceptableUse";
-import { requireAuthentication } from "@lib/auth";
+import { AcceptableUseTerms } from "./components/server/AcceptableUse";
+import { auth } from "@lib/auth";
+import Loading from "./components/server/Loading";
 
 export async function generateMetadata({
   params: { locale },
@@ -17,19 +18,19 @@ export async function generateMetadata({
 }
 
 export default async function Page({ params: { locale } }: { params: { locale: string } }) {
-  const { user } = await requireAuthentication();
+  const session = await auth();
 
-  if (user.acceptableUse) {
+  if (!session) {
+    return null;
+  }
+  // If already accepted redirect to forms
+  if (session.user.acceptableUse) {
     redirect(`/${locale}/forms`);
   }
 
-  const termsOfUseContent = await import(
-    `public/static/content/${locale}/responsibilities.md`
-  ).then((res) => res.default);
-
   return (
-    <UserNavLayout contentWidth="tablet:w-[768px] laptop:w-[850px]">
-      <AcceptableUseTerms content={termsOfUseContent} />
-    </UserNavLayout>
+    <Suspense fallback={<Loading />}>
+      <AcceptableUseTerms locale={locale} />
+    </Suspense>
   );
 }

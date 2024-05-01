@@ -10,7 +10,7 @@ Formulaires GC est un service infonuagique créé et exploité par le Service nu
 
 - d’héberger et de maintenir le système Formulaires GC.
 - de répondre aux demandes de soutien et aux questions durant les heures normales de travail (de 9 h à 17 h, heure de l’Est).
-- de répondre aux demandes de soutien liées à l’intégration API dans le respect des [délais fournis](#temps-de-reponse-du-service-et-mode-de-contact).
+- de répondre aux demandes de soutien liées à l’intégration API dans le respect des [délais fournis](#contacts-relatifs-au-service-et-temps-de-reponse).
 - de veiller à ce que le transfert de données à la clientèle par courriel puisse traiter des données PROTÉGÉ A ou respecte les mêmes exigences en matière de sécurité que d’autres options de livraison de données par courriel.
 - de veiller à ce que le transfert de données à la clientèle par l’intermédiaire de la base de données de réponses puisse traiter des données PROTÉGÉ B.
 - de corriger les vulnérabilités de sécurité en temps et lieu, là où le SNC est responsable d’évaluer le niveau de menace d’une vulnérabilité de sécurité; Les vulnérabilités majeures sont corrigées le plus tôt possible et au plus tard une semaine après la découverte de la cause racine. Les délais de traitement peuvent être plus longs pour les aspects qui dépendent de code externe. Tout correctif apporté à l’infrastructure est la responsabilité d’[Amazon Web Services (AWS)](<https://d1.awsstatic.com/legal/awsserviceterms/AWS_Service_Terms_French_(2022-03-31).pdf>).

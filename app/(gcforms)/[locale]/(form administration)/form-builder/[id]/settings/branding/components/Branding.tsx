@@ -4,7 +4,7 @@ import { useSession } from "next-auth/react";
 import { useTranslation } from "@i18n/client";
 import Link from "next/link";
 import { Logos, options } from ".";
-import { useTemplateStore } from "@lib/store";
+import { useTemplateStore } from "@lib/store/useTemplateStore";
 import { LoggedOutTabName, LoggedOutTab } from "@formBuilder/components/LoggedOutTab";
 import { toast } from "@formBuilder/components/shared";
 import { Button } from "@clientComponents/globals";

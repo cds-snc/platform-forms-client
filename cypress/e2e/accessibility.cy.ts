@@ -28,12 +28,12 @@ describe("Accessibility (A11Y) Check", () => {
     it.each([
       { title: "Language selection", path: "/" },
       { title: "Form builder landing", path: "/en/form-builder" },
-      { title: "Form builder edit", path: "/en/form-builder/edit" },
-      { title: "Form builder translation", path: "/en/form-builder/edit/translate" },
-      { title: "Form builder settings", path: "/en/form-builder/settings" },
+      { title: "Form builder edit", path: "/en/form-builder/0000/edit" },
+      { title: "Form builder translation", path: "/en/form-builder/0000/edit/translate" },
+      { title: "Form builder settings", path: "/en/form-builder/0000/settings" },
       { title: "Terms and conditions", path: "/en/terms-and-conditions" },
       { title: "Service-level agreement", path: "/en/sla" },
-      { title: "Create an account", path: "/en/signup/register" },
+      { title: "Create an account", path: "/en/auth/register" },
       { title: "Sign in", path: "/en/auth/login" },
       { title: "Sign out", path: "/en/auth/logout" },
     ])(

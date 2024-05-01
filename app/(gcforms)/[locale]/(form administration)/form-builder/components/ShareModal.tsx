@@ -6,7 +6,7 @@ import axios from "axios";
 
 import { useDialogRef, Dialog, TagInput, InfoDetails } from "./shared";
 import { Button } from "@clientComponents/globals";
-import { useTemplateStore } from "@lib/store";
+import { useTemplateStore } from "@lib/store/useTemplateStore";
 import { useSession } from "next-auth/react";
 import Markdown from "markdown-to-jsx";
 

@@ -1,3 +1,4 @@
+"use client";
 import { Dialog, TextArea, useDialogRef } from "@formBuilder/components/shared";
 import { Alert, Button } from "@clientComponents/globals";
 import {
@@ -7,7 +8,7 @@ import {
 import { useTranslation } from "@i18n/client";
 import { randomId } from "@lib/client/clientHelpers";
 import { logMessage } from "@lib/logger";
-import { isResponseId } from "@lib/validation";
+import { isResponseId } from "@lib/validation/validation";
 import { WarningIcon } from "@serverComponents/icons";
 import axios from "axios";
 import Link from "next/link";
@@ -20,10 +21,12 @@ export const ReportDialog = ({
   apiUrl,
   inputRegex = isResponseId,
   maxEntries = 20,
+  onSuccess,
 }: {
   apiUrl: string;
   inputRegex?: (field: string) => boolean;
   maxEntries?: number;
+  onSuccess?: () => void;
 }) => {
   const [isShowReportProblemsDialog, setIsShowReportProblemsDialog] = useState(false);
   const { t, i18n } = useTranslation(["form-builder-responses", "common"]);
@@ -96,6 +99,7 @@ export const ReportDialog = ({
 
         // Success, close the dialog
         setStatus(DialogStates.SENT);
+        onSuccess && onSuccess();
         handleClose();
       })
       .catch((err) => {

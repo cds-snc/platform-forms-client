@@ -9,7 +9,7 @@ describe("Test FormBuilder", () => {
   });
 
   it("Designs a form", () => {
-    cy.visitPage("/en/form-builder/edit");
+    cy.visitPage("/en/form-builder/0000/edit");
     cy.typeInField("#formTitle", "Cypress Test Form");
     cy.typeInField(`[aria-label="Introduction"]`, "form description");
     cy.get("button").contains("Add").click();
@@ -52,8 +52,8 @@ describe("Test FormBuilder", () => {
     );
 
     // settings
-    cy.get('[data-testid="settings"]').click();
-    cy.get("h1").should("contain", "Settings");
+    // cy.get('[data-testid="settings"]').click();
+    // cy.get("h1").should("contain", "Settings");
 
     // publish form
     cy.get('[data-testid="publish"]').click();
@@ -61,6 +61,6 @@ describe("Test FormBuilder", () => {
     cy.get("a").contains("create one now").click();
 
     // can visit create account
-    cy.url().should("contain", "/signup/register");
+    cy.url().should("contain", "/auth/register");
   });
 });

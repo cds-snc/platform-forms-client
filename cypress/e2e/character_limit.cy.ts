@@ -1,7 +1,6 @@
 describe("Forms Functionality - Character Counts", () => {
   let formID: string;
   before(() => {
-    cy.useFlag("formTimer", false);
     cy.useForm("../../__fixtures__/textFieldTestForm.json");
     cy.get<string>("@formID").then((createdID) => (formID = createdID));
   });

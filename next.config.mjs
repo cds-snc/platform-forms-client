@@ -2,8 +2,11 @@
 
 import path from "path";
 import { fileURLToPath } from "url";
+import { createRequire } from "node:module";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
+
+const require = createRequire(import.meta.url);
 
 const isOutputStandalone = process.env.NEXT_OUTPUT_STANDALONE === "true";
 const securityHeaders = [
@@ -35,6 +38,10 @@ const nextConfig = {
     // removeConsole: false,
   },
   output: isOutputStandalone ? "standalone" : undefined,
+  ...(process.env.REVIEW_ENV && {
+    cacheHandler: require.resolve("./nextCacheHandler.mjs"),
+    cacheMaxMemorySize: 0, // disable default in-memory caching
+  }),
   webpack: (config) => {
     // Support reading markdown
     config.module.rules.push({
@@ -77,7 +84,8 @@ const nextConfig = {
 
   experimental: {
     instrumentationHook: true,
-    ppr: true,
+    // PPR is only supported in Next.js Canary branches
+    // ppr: true,
     serverComponentsExternalPackages: ["@aws-sdk/lib-dynamodb"],
     turbo: {
       rules: {

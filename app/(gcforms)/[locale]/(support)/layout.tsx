@@ -1,7 +1,8 @@
-import { Footer, SkipLink } from "@serverComponents/globals";
 import { Fip } from "@clientComponents/globals";
 import LanguageToggle from "@clientComponents/globals/Header/LanguageToggle";
 import { cn } from "@lib/utils";
+import { Footer } from "@serverComponents/globals/Footer";
+import { SkipLink } from "@serverComponents/globals/SkipLink";
 export default async function Layout({ children }: { children: React.ReactNode }) {
   return (
     <div className="flex h-full flex-col">

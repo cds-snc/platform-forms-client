@@ -12,3 +12,8 @@ jest.mock("@formBuilder/actions", () => ({
   __esModule: true,
   getTranslatedProperties: jest.fn(),
 }));
+
+jest.mock("@formBuilder/actions", () => ({
+  __esModule: true,
+  checkFlag: jest.fn(),
+}));

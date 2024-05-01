@@ -3,10 +3,10 @@ import React from "react";
 import * as DropdownMenu from "@radix-ui/react-dropdown-menu";
 import { ChevronDown } from "@serverComponents/icons";
 import { useTranslation } from "@i18n/client";
-import { useAccessControl } from "@lib/hooks";
 import Link from "next/link";
 import { signOut } from "next-auth/react";
-import { clearTemplateStore } from "@lib/store";
+import { clearTemplateStore } from "@lib/store/useTemplateStore";
+import { useAccessControl } from "@lib/hooks/useAccessControl";
 
 type YourAccountDropdownProps = {
   isAuthenticated: boolean;
@@ -71,10 +71,7 @@ export const YourAccountDropdown = ({ isAuthenticated }: YourAccountDropdownProp
                   />
                 )}
                 <DropdownMenu.Separator className="mb-2 border-b pt-2" />
-
-                {isAuthenticated && (
-                  <DropdownMenuItem href="#" onClick={handleLogout} text={t("adminNav.logout")} />
-                )}
+                <DropdownMenuItem href="#" onClick={handleLogout} text={t("adminNav.logout")} />
               </DropdownMenu.Content>
             </DropdownMenu.Portal>
           </DropdownMenu.Root>

@@ -1,6 +1,6 @@
 "use client";
 import React from "react";
-import { useTemplateStore } from "@lib/store/useTemplateStore";
+import { useRehydrate, useTemplateStore } from "@lib/store/useTemplateStore";
 import { useTranslation } from "@i18n/client";
 import { RichText } from "./RichText";
 import { Title } from "./Title";
@@ -19,7 +19,6 @@ import { SaveButton } from "@formBuilder/components/shared/SaveButton";
 
 import { FormElement } from "@lib/types";
 import { alphabet, sortByLayout } from "@lib/utils/form-builder";
-import { useRehydrate } from "@lib/hooks/form-builder";
 
 const Element = ({
   element,

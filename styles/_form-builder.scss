@@ -189,13 +189,7 @@
     }
   }
 
-  .toolbar-container {
-    border-bottom: 1px solid #ddd;
-    background-color: #f7f7f7;
-    border-top-left-radius: 8px;
-    border-top-right-radius: 8px;
-    padding: 10px;
-
+  .gc-toolbar-container {
     &:focus-within {
       margin: -2px;
       border: 2px solid #015ecc;
@@ -368,4 +362,15 @@
   .react-loading-skeleton {
     --pseudo-element-display: none; /* Disable animation */
   }
+}
+
+.rct-tree-items-container {
+  padding: 0;
+  margin: 0;
+  margin-right: 1px;
+  padding-left: 0;
+}
+
+.react-flow__attribution {
+  display: none !important;
 }

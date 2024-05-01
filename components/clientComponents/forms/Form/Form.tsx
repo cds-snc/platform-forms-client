@@ -2,19 +2,18 @@
 import React, { useEffect, useState, useRef } from "react";
 import { FormikProps, withFormik } from "formik";
 import { getFormInitialValues } from "@lib/formBuilder";
-import { getErrorList, setFocusOnErrorMessage, validateOnSubmit } from "@lib/validation";
-import { useFormTimer } from "@lib/hooks";
+import { getErrorList, setFocusOnErrorMessage, validateOnSubmit } from "@lib/validation/validation";
 import { Alert, Button, RichText } from "@clientComponents/forms";
 import { logMessage } from "@lib/logger";
 import { useTranslation } from "@i18n/client";
 import { TFunction } from "i18next";
-import axios from "axios";
 import Loader from "../../globals/Loader";
 import classNames from "classnames";
 import { Responses, PublicFormRecord, Validate } from "@lib/types";
 import { ErrorStatus } from "../Alert/Alert";
-import { useFormValuesChanged } from "@lib/hooks";
 import { submitForm } from "app/(gcforms)/[locale]/(form filler)/id/[...props]/actions";
+import useFormTimer from "@lib/hooks/useFormTimer";
+import { useFormValuesChanged } from "@lib/hooks/useValueChanged";
 
 interface SubmitButtonProps {
   numberOfRequiredQuestions: number;
@@ -30,7 +29,6 @@ const SubmitButton: React.FC<SubmitButtonProps> = ({
   const [formTimerState, { startTimer, checkTimer, disableTimer }] = useFormTimer();
   const [submitTooEarly, setSubmitTooEarly] = useState(false);
   const screenReaderRemainingTime = useRef(formTimerState.remainingTime);
-  const [formReady, setFormReady] = useState(false);
 
   // calculate initial delay for submit timer
   const secondsBaseDelay = 2;
@@ -45,13 +43,11 @@ const SubmitButton: React.FC<SubmitButtonProps> = ({
   useEffect(() => {
     if (!formTimerEnabled && !formTimerState.canSubmit) {
       disableTimer();
-      setFormReady(true);
     }
   }, [disableTimer, formTimerEnabled, formTimerState.canSubmit]);
 
   useEffect(() => {
     if (formTimerEnabled) {
-      if (formTimerState.timerDelay) setFormReady(true);
       // Initiate a callback to ensure that state of submit button is correctly displayed
 
       // Calling the checkTimer modifies the state of the formTimerState
@@ -66,7 +62,6 @@ const SubmitButton: React.FC<SubmitButtonProps> = ({
 
   return (
     <>
-      {formReady && <div id="form-ready-indicator" hidden={true} aria-hidden={true} />}
       <div
         className={classNames({
           "border-l-2": submitTooEarly,
@@ -140,8 +135,7 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
     children,
     handleSubmit,
     status,
-    formRecord: { id: formID, reCaptchaID, form },
-    isPreview = false,
+    formRecord: { id: formID, form },
   }: InnerFormProps = props;
   const [canFocusOnError, setCanFocusOnError] = useState(false);
   const [lastSubmitCount, setLastSubmitCount] = useState(-1);
@@ -154,44 +148,6 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
   const errorId = "gc-form-errors";
   const serverErrorId = `${errorId}-server`;
   const formStatusError = props.status === "Error" ? t("server-error") : null;
-
-  const shouldUseRecaptcha = !isPreview && reCaptchaID;
-
-  const handleSubmitReCaptcha = (evt: React.FormEvent<HTMLFormElement>) => {
-    evt.preventDefault();
-    try {
-      window.grecaptcha.ready(async () => {
-        // get reCAPTCHA response
-        const clientToken = await window.grecaptcha.execute(reCaptchaID, {
-          action: "submit",
-        });
-        if (clientToken) {
-          const scoreData = await sendClientTokenForVerification(clientToken);
-          const { score, success } = scoreData.data;
-          logMessage.info(`score : ${score}  status: ${success}`);
-          // assuming you're not a Robot
-          handleSubmit(evt);
-        }
-      });
-    } catch (error) {
-      logMessage.error(error as string);
-    }
-  };
-
-  const sendClientTokenForVerification = (token: string) => {
-    // call a backend API to verify reCAPTCHA response
-    return axios({
-      url: "/api/verify",
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      data: {
-        userToken: token,
-      },
-      timeout: process.env.NODE_ENV === "production" ? 60000 : 0,
-    });
-  };
 
   //  If there are errors on the page, set focus the first error field
   useEffect(() => {
@@ -252,12 +208,7 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
             method="POST"
             onSubmit={(e) => {
               e.preventDefault();
-
-              if (shouldUseRecaptcha) {
-                handleSubmitReCaptcha(e);
-              } else {
-                handleSubmit(e);
-              }
+              handleSubmit(e);
             }}
             noValidate
             // TODO move this to each child container but that I think will take some thought.
@@ -299,7 +250,6 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
 interface FormProps {
   formRecord: PublicFormRecord;
   language: string;
-  isReCaptchaEnableOnSite?: boolean;
   isPreview?: boolean;
   renderSubmit?: ({
     validateForm,

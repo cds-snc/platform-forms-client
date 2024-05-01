@@ -1,4 +1,6 @@
 import fetch from "node-fetch";
+import { logMessage } from "@lib/logger";
+import { getOrigin } from "@lib/origin";
 
 interface createTicketProps {
   type: "branding" | "publishing" | "contact" | "problem";
@@ -15,7 +17,7 @@ export const formatTicketData = ({
   description,
   language,
 }: createTicketProps) => {
-  const HOST = process.env.HOST_URL || "";
+  const HOST = getOrigin() || "";
   const hostTag = tagHost(HOST);
 
   const ticket = {
@@ -81,6 +83,7 @@ export const createTicket = async ({
   language,
 }: createTicketProps) => {
   if (process.env.APP_ENV === "test") {
+    logMessage.info("Not sending to Fresh Desk, application in Test mode");
     return { status: 200 };
   }
 
@@ -90,7 +93,7 @@ export const createTicket = async ({
 
   if (!username) throw new Error("Freshdesk API key not found");
 
-  const result = await fetch("https://cds-snc.freshdesk.com/api/v2/tickets", {
+  const response = await fetch("https://cds-snc.freshdesk.com/api/v2/tickets", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -99,5 +102,12 @@ export const createTicket = async ({
     body: JSON.stringify(data),
   });
 
-  return result;
+  if (response?.ok === false) {
+    logMessage.error(`Bad http response: ${response.status} - ${email} - ${JSON.stringify(data)}`);
+
+    const errorDetail = await response.text();
+    throw new Error(`Freshdesk error with response: ${errorDetail}`);
+  }
+
+  return response;
 };

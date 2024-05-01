@@ -1,97 +1,232 @@
-import React, { useEffect, useRef } from "react";
-import { Tree } from "react-arborist";
-import { useTranslation } from "react-i18next";
-
-import { useTemplateStore } from "@lib/store";
-import { Node } from "./Node";
-import { useDynamicTree } from "./hooks/useDynamicTree";
-import { Cursor } from "./Cursor";
-import { Button } from "@clientComponents/globals";
-import { start, end } from "./data";
+import {
+  ForwardRefRenderFunction,
+  ReactElement,
+  forwardRef,
+  useImperativeHandle,
+  useState,
+} from "react";
+import {
+  ControlledTreeEnvironment,
+  DraggingPosition,
+  DraggingPositionBetweenItems,
+  Tree,
+  TreeItem,
+  TreeItemIndex,
+} from "react-complex-tree";
+import { useGroupStore } from "./store/useGroupStore";
+import { useTreeRef } from "./provider/TreeRefProvider";
 import { v4 as uuid } from "uuid";
-import { TreeApi } from "react-arborist";
-import { TreeItem } from "./types";
+import { findParentGroup } from "./util/findParentGroup";
+import "react-complex-tree/lib/style-modern.css";
+// import { Item } from "./Item";
 
-export const TreeView = () => {
-  const { elements } = useTemplateStore((s) => ({
-    elements: s.form.elements,
+export interface TreeDataProviderProps {
+  children?: ReactElement;
+  addItem: (id: string) => void;
+  // addGroup: (id: string) => void;
+  updateItem: (id: string, value: string) => void;
+  // removeItem: (id: string) => void;
+  // openSection?: (id: string) => void;
+}
+
+const ControlledTree: ForwardRefRenderFunction<unknown, TreeDataProviderProps> = (
+  { children },
+  ref
+) => {
+  // export const TreeView = () => {
+  const { getTreeData, addGroup, setId, updateGroupName, updateGroup, updateElementTitle } =
+    useGroupStore((s) => {
+      return {
+        getTreeData: s.getTreeData,
+        addGroup: s.addGroup,
+        setId: s.setId,
+        updateGroupName: s.updateGroupName,
+        updateElementTitle: s.updateElementTitle,
+        updateGroup: s.updateGroup,
+      };
+    });
+
+  const { tree, environment } = useTreeRef();
+  const [focusedItem, setFocusedItem] = useState<TreeItemIndex | undefined>();
+  const [expandedItems, setExpandedItems] = useState<TreeItemIndex[]>([]);
+  const [selectedItems, setSelectedItems] = useState<TreeItemIndex[]>([]);
+
+  const addSection = () => {
+    const id = uuid();
+    addGroup(id, "New section");
+    setSelectedItems([id]);
+    setExpandedItems([id]);
+    setId(id);
+  };
+
+  useImperativeHandle(ref, () => ({
+    addItem: async (id: string) => {
+      const parent = findParentGroup(getTreeData(), id);
+      setExpandedItems([parent?.index as TreeItemIndex]);
+      setSelectedItems([id]);
+    },
+    updateItem: (id: string) => {
+      const parent = findParentGroup(getTreeData(), id);
+      setExpandedItems([parent?.index as TreeItemIndex]);
+      setSelectedItems([id]);
+    },
   }));
 
-  const treeRef = useRef<TreeApi<TreeItem>>();
-
-  const { t } = useTranslation("form-builder");
-
-  const { groups, addGroup, setGroups, controllers } = useDynamicTree();
-  const [lastNodeAdded, setLastNodeAdded] = React.useState<string | null>(null);
-
-  useEffect(() => {
-    // If there are no groups create them
-    if (groups.length < 1) {
-      const startGroup = {
-        id: uuid(),
-        name: "Default Section",
-        readOnly: true,
-        icon: null,
-        children: [
-          ...elements.map((element) => {
-            return {
-              id: String(element.id),
-              name: "default",
-              icon: null,
-              readOnly: false,
-            };
-          }),
-        ],
-      };
-      setGroups([startGroup]);
-    }
-  }, [setGroups, elements, groups]);
-
   return (
-    <div className="relative mr-[1px]">
-      <div className="m-4 flex">
-        <Button
-          theme="secondary"
-          onClick={() => {
-            const id = uuid();
-            addGroup(id, "New Section");
-            setLastNodeAdded(id);
-            if (!treeRef.current) return;
-
-            // const tree = treeRef.current;
-
-            // lastNodeAdded && tree
-            //treeRef.current.focus(id);
-          }}
-        >
-          {t("rightPanel.treeView.addSection")}
-        </Button>
-      </div>
-      <div data-last-element={lastNodeAdded}>
-        <Tree
-          ref={treeRef}
-          data={[start, ...groups, end]}
-          {...controllers}
-          onRename={(data) => {
-            controllers.onRename(data);
-            setLastNodeAdded(data.id);
-          }}
-          disableEdit={(data) => data.readOnly}
-          renderCursor={Cursor}
-          indent={40}
-          rowHeight={46}
-          width="100%"
-          disableDrop={({ parentNode }) => {
-            if (parentNode.data.id === "end") {
-              return true;
-            }
+    <ControlledTreeEnvironment
+      ref={environment}
+      items={getTreeData()}
+      getItemTitle={(item) => item.data}
+      // renderItem={({ title, arrow, context, children }) => {
+      //   return (
+      //     <Item title={title} arrow={arrow} context={context}>
+      //       {children}
+      //     </Item>
+      //   );
+      // }}
+      // renderItemTitle={({ title }) => <Item.Title title={title} />}
+      // renderItemArrow={({ item, context }) => <Item.Arrow item={item} context={context} />}
+      renderLiveDescriptorContainer={() => null}
+      viewState={{
+        ["default"]: {
+          focusedItem,
+          expandedItems,
+          selectedItems,
+        },
+      }}
+      canDragAndDrop={true}
+      canReorderItems={true}
+      canDrag={(items: TreeItem[]) => {
+        return items.some((item) => {
+          return (
+            item.data !== "Start" &&
+            item.data !== "Introduction" &&
+            item.data !== "Policy" &&
+            item.data !== "End" &&
+            item.data !== "Confirmation"
+          );
+        });
+      }}
+      canDropAt={(items, target) => {
+        const folderItemsCount = items.filter((item) => item.isFolder).length;
+        // if any of the selected items is a folder, disallow dropping on a folder
+        if (folderItemsCount >= 1) {
+          const { parentItem } = target as DraggingPositionBetweenItems;
+          if (items[0].isFolder && parentItem !== "root") {
             return false;
-          }}
-          disableDrag={(data) => data.readOnly}
-        >
-          {Node}
-        </Tree>
-      </div>
-    </div>
+          }
+        }
+
+        return true;
+      }}
+      onRenameItem={(item, name) => {
+        item.isFolder && updateGroupName({ id: String(item.index), name });
+
+        // Rename the element
+        !item.isFolder &&
+          updateElementTitle({
+            id: Number(item.index),
+            text: name,
+          });
+
+        setSelectedItems([item.index]);
+      }}
+      onDrop={async (items: TreeItem[], target: DraggingPosition) => {
+        let itemsPriorToInsertion = 0;
+
+        // current state of the tree
+        const currentItems = getTreeData();
+
+        // Ids of the items being dragged
+        const itemsIndices = items.map((i) => i.index);
+
+        // Target parent and index
+        const { parentItem: targetParentIndex, childIndex: targetIndex } =
+          target as DraggingPositionBetweenItems;
+
+        // Loop over the items being dragged
+        items.forEach((item) => {
+          // Find the parent of the item being dragged
+          const originParent = findParentGroup(currentItems, String(item.index));
+
+          if (!originParent) {
+            throw Error(`Could not find parent of item "${item.index}"`);
+          }
+
+          if (!originParent.children) {
+            throw Error(
+              `Parent "${originParent.index}" of item "${item.index}" did not have any children`
+            );
+          }
+
+          if (target.targetType === "between-items" && target.parentItem === item.index) {
+            // Trying to drop inside itself
+            return;
+          }
+
+          // Origin index of the item being dragged
+          const originIndex = originParent.children.indexOf(String(item.index));
+
+          if (originIndex === -1) {
+            throw Error(`Item "${item.index}" not found in parent "${originParent.index}"`);
+          }
+
+          // Get the target parent
+          const targetParent = currentItems[targetParentIndex];
+
+          // Adjust the index if the item is being moved to a position after itself
+          const isOldItemPriorToNewItem =
+            ((targetParent.children ?? []).findIndex((child) => child === item.index) ?? Infinity) <
+            targetIndex;
+          itemsPriorToInsertion += isOldItemPriorToNewItem ? 1 : 0;
+
+          // Remove the item from the origin parent
+          originParent.children.splice(originIndex, 1);
+
+          // Update groups
+          updateGroup(originParent.index, originParent.children);
+        });
+
+        // Get the new state of the tree
+        const newItems = getTreeData();
+
+        // Get the target parent in the new state
+        const targetParent = newItems[targetParentIndex];
+
+        // Initialize children if there are none
+        if (!targetParent.children) {
+          targetParent.children = [];
+        }
+
+        // Insert the items into the target parent
+        targetParent.children.splice(targetIndex - itemsPriorToInsertion, 0, ...itemsIndices);
+
+        // Update groups
+        updateGroup(targetParentIndex, targetParent.children);
+
+        // Set selected to trigger a re-render
+        setSelectedItems([targetParentIndex]);
+      }}
+      onFocusItem={(item) => {
+        setFocusedItem(item.index);
+        const parent = findParentGroup(getTreeData(), String(item.index));
+        setId(item.isFolder ? String(item.index) : String(parent?.index));
+      }}
+      onExpandItem={(item) => setExpandedItems([...expandedItems, item.index])}
+      onCollapseItem={(item) =>
+        setExpandedItems(
+          expandedItems.filter((expandedItemIndex) => expandedItemIndex !== item.index)
+        )
+      }
+      onSelectItems={(items) => setSelectedItems(items)}
+    >
+      <Tree treeId="default" rootItem="root" treeLabel="GC Forms sections" ref={tree} />
+      <button className="ml-2 mt-2 rounded-md border border-slate-500 p-2" onClick={addSection}>
+        New section
+      </button>
+      <>{children}</>
+    </ControlledTreeEnvironment>
   );
 };
+
+export const TreeView = forwardRef(ControlledTree);

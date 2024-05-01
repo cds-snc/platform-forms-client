@@ -46,10 +46,7 @@ export const RichTextLocked = ({
 
   return (
     <div
-      className={cn(
-        "-mt-px h-auto max-w-[800px] border-1 border-slate-500 bg-white last-of-type:rounded-b-lg",
-        className
-      )}
+      className={cn("-mt-px h-auto max-w-[800px] border-1 border-slate-500 bg-white", className)}
     >
       <div className="mx-5 mb-7 mt-5">
         <LockedBadge />
