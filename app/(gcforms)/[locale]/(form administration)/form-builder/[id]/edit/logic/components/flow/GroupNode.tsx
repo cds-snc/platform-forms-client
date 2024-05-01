@@ -17,6 +17,23 @@ export const GroupNode = (node: NodeProps) => {
   const groupIsSelected = selectedGroupId === node.id;
   const typesWithOptions = ["radio", "checkbox", "select"];
 
+  const handleClick =
+    node.id === "end"
+      ? {
+          onClick: () => {
+            setId("");
+            // Reset selected element id
+            setSelectedElementId(0);
+          },
+        }
+      : {
+          onClick: () => {
+            setId(node.id);
+            // Reset selected element id
+            setSelectedElementId(0);
+          },
+        };
+
   return (
     <div>
       <div>
@@ -30,11 +47,7 @@ export const GroupNode = (node: NodeProps) => {
           "space-y-2 rounded-md border-1 border-violet-800 bg-gray-200 p-4 text-white",
           groupIsSelected ? "bg-violet-300" : "bg-gray-200"
         )}
-        onClick={() => {
-          setId(node.id);
-          // Reset selected element id
-          setSelectedElementId(0);
-        }}
+        {...handleClick}
       >
         {node.data.children.map((child: TreeItem) => {
           const selected =
@@ -90,14 +103,7 @@ export const GroupNode = (node: NodeProps) => {
             isConnectable={false}
           />
         )}
-
-        {node.id !== "start" && (
-          <Handle
-            type="target"
-            position={getTargetHandlePosition(direction)}
-            isConnectable={false}
-          />
-        )}
+        <Handle type="target" position={getTargetHandlePosition(direction)} isConnectable={false} />
       </div>
     </div>
   );
