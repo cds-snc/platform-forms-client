@@ -8,7 +8,7 @@
     "aws-cli": {
       "version": "2.5.6"
     },
-    "ghcr.io/devcontainers/features/docker-outside-of-docker:1": {}
+    "ghcr.io/devcontainers/features/docker-outside-of-docker:1@sha256:853fe12eb71b5de8baf2dbd2bb7574bb251251b780332b77b00c866210d76610": {}
   },
   "customizations": {
     "vscode": {
