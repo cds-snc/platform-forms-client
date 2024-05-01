@@ -1,15 +1,19 @@
 "use client";
 import { Button } from "@clientComponents/globals";
-// import { GroupOutput } from "@formBuilder/components/shared/GroupOutput";
+import { GroupOutput } from "@formBuilder/components/shared/GroupOutput";
 import { useTranslation } from "@i18n/client";
 import { useFocusIt } from "@lib/hooks/useFocusIt";
 import { useGCFormsContext } from "@lib/hooks/useGCFormContext";
+import { getLocalizedProperty } from "@lib/utils";
 import { useRef } from "react";
 
 // export const Review = ({ id }: { id: string | number }): React.ReactElement => {
 export const Review = (): React.ReactElement => {
-  const { t } = useTranslation("review");
-  const { groups, getValues, setGroup } = useGCFormsContext();
+  const {
+    t,
+    i18n: { language: lang },
+  } = useTranslation("review");
+  const { groups, getValues, setGroup, formRecord } = useGCFormsContext();
   const formValues = getValues();
   const headingRef = useRef(null);
   useFocusIt({ elRef: headingRef });
@@ -17,6 +21,11 @@ export const Review = (): React.ReactElement => {
   // Remove the "fake" review group so it won't show  as a group in the review page
   const groupsTemp = { ...groups };
   delete groupsTemp["review"];
+
+  function getElementNameById(id: string | number) {
+    const element = formRecord.form.elements.find((item) => String(item.id) === String(id));
+    return element ? element.properties?.[getLocalizedProperty("title", lang)] : t("unknown");
+  }
 
   const questionsAndAnswers = Object.keys(groupsTemp).map((key) => {
     return {
@@ -47,7 +56,9 @@ export const Review = (): React.ReactElement => {
                     {group.elements.map((element) => {
                       return (
                         <div key={Object.keys(element)[0]} className="mb-8">
-                          <dt className="font-bold mb-2">{Object.keys(element)[0]}</dt>
+                          <dt className="font-bold mb-2">
+                            <>{getElementNameById(Object.keys(element)[0])}</>
+                          </dt>
                           <dd>{Object.values(element)[0]}</dd>
                         </div>
                       );
@@ -68,7 +79,8 @@ export const Review = (): React.ReactElement => {
           })}
       </div>
 
-      {/* <GroupOutput /> */}
+      {JSON.stringify(formRecord.form.elements, null, 2)}
+      <GroupOutput />
     </>
   );
 };
