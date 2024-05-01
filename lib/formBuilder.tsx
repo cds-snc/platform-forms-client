@@ -247,7 +247,7 @@ function _buildForm(element: FormElement, lang: string): ReactElement {
       );
     }
     case FormElementTypes.review: {
-      return <Review id={id} />;
+      return <Review />;
     }
     default:
       return <></>;

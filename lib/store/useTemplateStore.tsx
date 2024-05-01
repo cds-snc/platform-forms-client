@@ -185,7 +185,7 @@ const storage: StateStorage = {
   },
 };
 
-const addReviewElement = (defaultForm:FormProperties) => {
+const addReviewElement = (defaultForm: FormProperties) => {
   // TODO: find a way to make the Id unique probably by using the layout and grabbing the last Id+1
   const reviewElement = {
     id: 10000000000001,
@@ -197,16 +197,12 @@ const addReviewElement = (defaultForm:FormProperties) => {
       descriptionFr: "n/a",
     },
   };
-  const result ={
+  const result = {
     ...defaultForm,
-    elements: [
-      ...defaultForm.elements,
-      reviewElement
-    ]
+    elements: [...defaultForm.elements, reviewElement],
   };
-  debugger;
   return result;
-}
+};
 
 const createTemplateStore = (initProps?: Partial<InitialTemplateStoreProps>) => {
   const DEFAULT_PROPS: TemplateStoreProps = {
@@ -448,8 +444,9 @@ const createTemplateStore = (initProps?: Partial<InitialTemplateStoreProps>) => 
                 const element = JSON.parse(JSON.stringify(state.form.elements[elIndex]));
                 element.id = id;
                 if (element.type !== "richText") {
-                  element.properties[state.localizeField("title")] = `${element.properties[state.localizeField("title")]
-                    } copy`;
+                  element.properties[state.localizeField("title")] = `${
+                    element.properties[state.localizeField("title")]
+                  } copy`;
                 }
                 state.form.elements.splice(elIndex + 1, 0, element);
                 state.form.layout.splice(elIndex + 1, 0, id);
@@ -462,8 +459,9 @@ const createTemplateStore = (initProps?: Partial<InitialTemplateStoreProps>) => 
                 if (subElements) {
                   const element = JSON.parse(JSON.stringify(subElements[subIndex]));
                   element.id = incrementElementId(subElements);
-                  element.properties[state.localizeField("title")] = `${element.properties[state.localizeField("title")]
-                    } copy`;
+                  element.properties[state.localizeField("title")] = `${
+                    element.properties[state.localizeField("title")]
+                  } copy`;
 
                   state.form.elements[elIndex].properties.subElements?.splice(
                     subIndex + 1,
@@ -512,7 +510,10 @@ const createTemplateStore = (initProps?: Partial<InitialTemplateStoreProps>) => 
                 const allowGroups = state.allowGroupsFlag;
                 state.id = "";
                 state.lang = "en";
-                state.form = initializeGroups({ ...addReviewElement(defaultForm), ...jsonConfig }, allowGroups);
+                state.form = initializeGroups(
+                  { ...addReviewElement(defaultForm), ...jsonConfig },
+                  allowGroups
+                );
                 state.isPublished = false;
                 state.name = "";
                 state.securityAttribute = "Protected A";

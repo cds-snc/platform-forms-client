@@ -1,6 +1,5 @@
 "use client";
 import { Button } from "@clientComponents/globals";
-import { GroupOutput } from "@formBuilder/components/shared/GroupOutput";
 import { useTranslation } from "@i18n/client";
 import { useFocusIt } from "@lib/hooks/useFocusIt";
 import { useGCFormsContext } from "@lib/hooks/useGCFormContext";
@@ -78,8 +77,6 @@ export const Review = (): React.ReactElement => {
             );
           })}
       </div>
-
-      <GroupOutput />
     </>
   );
 };
