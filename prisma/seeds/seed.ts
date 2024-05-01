@@ -15,13 +15,21 @@ const prisma = new PrismaClient();
 
 async function createTemplates(env: string) {
   // see https://github.com/prisma/prisma/issues/9247#issuecomment-1249322729 for why this check is needed
-  const typeSafeTemplateData = seedTemplates[env].map((formConfig) => ({
-    jsonConfig: formConfig !== null ? (formConfig as Prisma.JsonObject) : Prisma.JsonNull,
-  }));
+  const templatePromises = seedTemplates[env].map((formConfig, index) =>
+    prisma.template.upsert({
+      where: {
+        id: `${index + 1}`,
+      },
+      update: {},
+      create: {
+        id: `${index + 1}`,
+        name: formConfig.titleEn?.toString() ?? "",
+        jsonConfig: formConfig !== null ? (formConfig as Prisma.JsonObject) : Prisma.JsonNull,
+      },
+    })
+  );
 
-  return prisma.template.createMany({
-    data: [...typeSafeTemplateData],
-  });
+  return Promise.all(templatePromises);
 }
 
 async function createPrivileges(env: string) {
@@ -52,13 +60,6 @@ async function createPrivileges(env: string) {
   });
 
   await Promise.all(privilegePromises);
-
-  /*
-  return prisma.privilege.createMany({
-    data: typeSafePrivilegeData,
-    skipDuplicates: true,
-  });
-  */
 }
 
 async function createSettings(env: string) {
@@ -69,15 +70,25 @@ async function createSettings(env: string) {
 }
 
 async function createUsers() {
-  await prisma.user.create({
-    data: UserWithoutSecurityAnswers,
+  await prisma.user.upsert({
+    where: {
+      email: UserWithoutSecurityAnswers.email,
+    },
+    update: {},
+    create: {
+      ...UserWithoutSecurityAnswers,
+    },
   });
 
   const [q1, q2, q3] = await prisma.securityQuestion.findMany();
 
   const users = seedUsers["test"].map((user) => {
-    return prisma.user.create({
-      data: {
+    return prisma.user.upsert({
+      where: {
+        email: user.email,
+      },
+      update: {},
+      create: {
         ...user,
         securityAnswers: {
           create: [
