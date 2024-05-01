@@ -7,4 +7,4 @@ export { Footer } from "./Footer";
 export { SkipLink } from "./SkipLink";
 export * as Alert from "./Alert/Alert";
 export { ErrorStatus } from "./Alert/Alert";
-export { HydrationCheck } from "./HydrationCheck";
+export { ReactHydrationCheck } from "./ReactHydrationCheck";

@@ -1,7 +1,7 @@
 "use client";
 import { useEffect, useState } from "react";
 
-export const HydrationCheck = () => {
+export const ReactHydrationCheck = () => {
   const [hydrationComplete, setHydrationComplete] = useState(false);
 
   useEffect(() => {

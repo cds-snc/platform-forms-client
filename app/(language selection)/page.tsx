@@ -3,7 +3,7 @@ import { languages } from "@i18n/settings";
 import { useTranslation } from "@i18n/client";
 import Link from "next/link";
 import { Fip } from "@clientComponents/globals";
-import { themes, HydrationCheck } from "@clientComponents/globals";
+import { themes, ReactHydrationCheck } from "@clientComponents/globals";
 
 import { SiteLogo } from "@serverComponents/icons";
 
@@ -46,7 +46,7 @@ const Home = () => {
         {" "}
         <Fip className="my-0 py-6" />
       </header>
-      <HydrationCheck />
+      <ReactHydrationCheck />
       <div className="flex flex-col h-full">
         <div id="page-container">
           <main id="content">
