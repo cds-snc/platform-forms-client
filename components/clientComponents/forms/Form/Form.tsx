@@ -14,6 +14,7 @@ import { ErrorStatus } from "../Alert/Alert";
 import { submitForm } from "app/(gcforms)/[locale]/(form filler)/id/[...props]/actions";
 import useFormTimer from "@lib/hooks/useFormTimer";
 import { useFormValuesChanged } from "@lib/hooks/useValueChanged";
+import { BackButton } from "@formBuilder/[id]/preview/BackButton";
 
 interface SubmitButtonProps {
   numberOfRequiredQuestions: number;
@@ -229,20 +230,30 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
                 validateForm: props.validateForm,
                 fallBack: () => {
                   return (
-                    <SubmitButton
-                      numberOfRequiredQuestions={numberOfRequiredQuestions}
-                      formID={formID}
-                      formTitle={form.titleEn}
-                    />
+                    <div>
+                      <BackButton />
+                      <div className="inline-block">
+                        <SubmitButton
+                          numberOfRequiredQuestions={numberOfRequiredQuestions}
+                          formID={formID}
+                          formTitle={form.titleEn}
+                        />
+                      </div>
+                    </div>
                   );
                 },
               })
             ) : (
-              <SubmitButton
-                numberOfRequiredQuestions={numberOfRequiredQuestions}
-                formID={formID}
-                formTitle={form.titleEn}
-              />
+              <div>
+                <BackButton />
+                <div className="inline-block">
+                  <SubmitButton
+                    numberOfRequiredQuestions={numberOfRequiredQuestions}
+                    formID={formID}
+                    formTitle={form.titleEn}
+                  />
+                </div>
+              </div>
             )}
           </form>
         </>
