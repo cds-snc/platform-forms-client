@@ -1,4 +1,5 @@
 "use client";
+
 import { SessionProvider } from "next-auth/react";
 import { Session } from "next-auth";
 import { AccessControlProvider } from "@lib/hooks/useAccessControl";

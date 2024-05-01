@@ -1,8 +1,6 @@
-// skipping this test until we re-look at this feature
+// Skipping because it needs experimentalBlocks flag
 describe.skip("Test FormBuilder Repeating set", () => {
   beforeEach(() => {
-    cy.useFlag("experimentalBlocks", true);
-    cy.login({ acceptableUse: true });
     cy.visitPage("/en/form-builder");
   });
 
