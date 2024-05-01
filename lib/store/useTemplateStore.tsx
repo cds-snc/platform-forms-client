@@ -185,6 +185,29 @@ const storage: StateStorage = {
   },
 };
 
+const addReviewElement = (defaultForm:FormProperties) => {
+  // TODO: find a way to make the Id unique probably by using the layout and grabbing the last Id+1
+  const reviewElement = {
+    id: 10000000000001,
+    type: FormElementTypes.review,
+    properties: {
+      titleEn: "n/a",
+      titleFr: "n/a",
+      descriptionEn: "n/a",
+      descriptionFr: "n/a",
+    },
+  };
+  const result ={
+    ...defaultForm,
+    elements: [
+      ...defaultForm.elements,
+      reviewElement
+    ]
+  };
+  debugger;
+  return result;
+}
+
 const createTemplateStore = (initProps?: Partial<InitialTemplateStoreProps>) => {
   const DEFAULT_PROPS: TemplateStoreProps = {
     id: "",
@@ -204,7 +227,7 @@ const createTemplateStore = (initProps?: Partial<InitialTemplateStoreProps>) => 
   // Ensure any required properties by Form Builder are defaulted by defaultForm
   if (initProps?.form) {
     initProps.form = {
-      ...defaultForm,
+      ...addReviewElement(defaultForm),
       ...initProps?.form,
     };
   }
@@ -477,7 +500,7 @@ const createTemplateStore = (initProps?: Partial<InitialTemplateStoreProps>) => 
                 state.id = "";
                 state.lang = language as Language;
                 state.translationLanguagePriority = language as Language;
-                state.form = initializeGroups({ ...defaultForm }, allowGroups);
+                state.form = initializeGroups(addReviewElement(defaultForm), allowGroups);
                 state.isPublished = false;
                 state.name = "";
                 state.deliveryOption = undefined;
@@ -489,7 +512,7 @@ const createTemplateStore = (initProps?: Partial<InitialTemplateStoreProps>) => 
                 const allowGroups = state.allowGroupsFlag;
                 state.id = "";
                 state.lang = "en";
-                state.form = initializeGroups({ ...defaultForm, ...jsonConfig }, allowGroups);
+                state.form = initializeGroups({ ...addReviewElement(defaultForm), ...jsonConfig }, allowGroups);
                 state.isPublished = false;
                 state.name = "";
                 state.securityAttribute = "Protected A";

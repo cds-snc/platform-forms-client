@@ -79,7 +79,6 @@ export const Review = (): React.ReactElement => {
           })}
       </div>
 
-      {JSON.stringify(formRecord.form.elements, null, 2)}
       <GroupOutput />
     </>
   );

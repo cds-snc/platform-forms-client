@@ -13,13 +13,21 @@ export const initializeGroups = (form: FormProperties, allowGroups: boolean): Fo
 
   // Check if the form groups is an empty object
   if (form.groups && Object.keys(form.groups).length === 0) {
+    // TODO check for elements also
+
     // Default the forms groups with a start and an end group
-    const elementIds = form.elements.map((element) => String(element.id));
+    // also do not push the Review element into the start group (10000000000001 is the Review Id)
+    const elementIds = form.elements.filter((element) => String(element.id) !== String(10000000000001)).map((element) => String(element.id));
 
     const groups = {
       start: {
         name: "Start",
         elements: [...elementIds],
+      },
+      review: {
+        name: "Review",
+        elements: ["10000000000001"],
+        nextAction: "end",
       },
     };
 
