@@ -1,4 +1,4 @@
-import { getNotifyInstance } from "./integration/notifyConnector";
+import { sendEmail } from "./integration/notifyConnector";
 import { logMessage } from "@lib/logger";
 import { getOrigin } from "./origin";
 
@@ -19,16 +19,13 @@ export const transferOwnershipEmail = async ({
 }) => {
   try {
     const HOST = getOrigin();
-    const TEMPLATE_ID = process.env.TEMPLATE_ID;
-    const notify = getNotifyInstance();
 
     const formUrlEn = `${HOST}/en/form-builder/${formId}/responses`;
     const formUrlFr = `${HOST}/fr/form-builder/${formId}/responses`;
 
-    await notify.sendEmail(TEMPLATE_ID, emailTo, {
-      personalisation: {
-        subject: "Transferred form and responses | Formulaire et réponses transférés",
-        formResponse: `
+    await sendEmail(emailTo, {
+      subject: "Transferred form and responses | Formulaire et réponses transférés",
+      formResponse: `
 (la version française suit)
 
 Hello,
@@ -54,7 +51,6 @@ Assurez-vous de [télécharger et approuver la suppression de toutes les répons
 
 Merci,
 L’équipe Formulaires GC`,
-      },
     });
   } catch (err) {
     logMessage.error(
@@ -62,7 +58,7 @@ L’équipe Formulaires GC`,
         (err as Error).message
       }}`
     );
-    throw new Error("Notify failed to transfer ownership email");
+    throw err;
   }
 };
 
@@ -81,16 +77,13 @@ export const addOwnershipEmail = async ({
 }) => {
   try {
     const HOST = getOrigin();
-    const TEMPLATE_ID = process.env.TEMPLATE_ID;
-    const notify = getNotifyInstance();
 
     const formUrlEn = `${HOST}/en/form-builder/${formId}/responses`;
     const formUrlFr = `${HOST}/fr/form-builder/${formId}/responses`;
 
-    await notify.sendEmail(TEMPLATE_ID, emailTo, {
-      personalisation: {
-        subject: "Shared form access | Accès partagé au formulaire",
-        formResponse: `
+    await sendEmail(emailTo, {
+      subject: "Shared form access | Accès partagé au formulaire",
+      formResponse: `
 (la version française suit)
 
 Hello,
@@ -111,7 +104,6 @@ ${formOwner}
 
 Merci,
 L’équipe Formulaires GC`,
-      },
     });
   } catch (err) {
     logMessage.error(
@@ -119,6 +111,6 @@ L’équipe Formulaires GC`,
         (err as Error).message
       }}`
     );
-    throw new Error("Notify failed to add ownership email");
+    throw err;
   }
 };
