@@ -1,6 +1,6 @@
-describe.skip("Form builder names and titles", () => {
+describe("Form builder names and titles", () => {
   beforeEach(() => {
-    cy.login({ acceptableUse: true });
+    cy.userSession();
     cy.visitPage("/en/form-builder/0000/edit");
   });
 
