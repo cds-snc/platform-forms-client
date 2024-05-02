@@ -19,13 +19,13 @@ describe("Support Pages", () => {
       cy.get("p[data-testid='errorMessage']").should("be.visible");
     });
 
-    it.skip("Invalid email stops submission", () => {
+    it("Invalid email stops submission", () => {
       cy.typeInField("#email", "bad@email");
       cy.get("button[type='submit']").click();
       cy.get("#errorMessageemail").should("be.visible");
     });
 
-    it.skip("Valid submission succeeds", () => {
+    it("Valid submission succeeds", () => {
       cy.typeInField("#name", "1");
       cy.typeInField("#email", "good@email.com");
       cy.get("label[for='request-question']").click();
@@ -55,13 +55,13 @@ describe("Support Pages", () => {
       cy.get("p[data-testid='errorMessage']").should("be.visible");
     });
 
-    it.skip("Invalid email stops submission", () => {
+    it("Invalid email stops submission", () => {
       cy.typeInField("#email", "bad@email");
       cy.get("button[type='submit']").click();
       cy.get("#errorMessageemail").should("be.visible");
     });
 
-    it.skip("Valid submission succeeds", () => {
+    it("Valid submission succeeds", () => {
       cy.typeInField("#name", "1");
       cy.typeInField("#email", "good@email.com");
       cy.typeInField("#department", "1");

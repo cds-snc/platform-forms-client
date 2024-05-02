@@ -141,7 +141,9 @@ const setCORS = (req: NextRequest, pathname: string) => {
     } else {
       response.headers.set(
         "Access-Control-Allow-Origin",
-        process.env.NEXTAUTH_URL ?? "MISSING ORIGIN URL IN .env FILE!"
+        process.env.NEXTAUTH_URL ?? process.env.APP_ENV !== "test"
+          ? "MISSING ORIGIN URL IN .env FILE!"
+          : "localhost:3000"
       );
     }
 
@@ -216,9 +218,10 @@ const setCSP = (
   // Set the Content Security Policy (CSP) header
   const { csp, nonce } = generateCSP();
   const requestHeaders = new Headers(req.headers);
+
+  requestHeaders.set("x-nonce", nonce);
   if (process.env.NODE_ENV !== "development") {
     // Set the CSP header on the request to the server
-    requestHeaders.set("x-nonce", nonce);
     requestHeaders.set("content-security-policy", csp);
   }
   // Set path on request headers so we can access it in the app router

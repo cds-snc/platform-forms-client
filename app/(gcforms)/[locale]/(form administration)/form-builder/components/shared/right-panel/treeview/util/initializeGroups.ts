@@ -25,5 +25,16 @@ export const initializeGroups = (form: FormProperties, allowGroups: boolean): Fo
 
     form.groups = groups;
   }
+
+  form.groups.review = {
+    name: "Review",
+    elements: [],
+  };
+
+  form.groups.end = {
+    name: "End",
+    elements: [],
+  };
+
   return form;
 };

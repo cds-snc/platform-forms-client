@@ -2,23 +2,39 @@
 import React from "react";
 
 import { FormElement } from "@lib/types";
+import { GroupsType } from "@lib/formContext";
 import { useGroupStore } from "@formBuilder/components/shared/right-panel/treeview/store/useGroupStore";
+import { useTemplateStore } from "@lib/store/useTemplateStore";
 
 import { SingleActionSelect } from "./SingleActionSelect";
 import { MultiActionSelector } from "./MultiActionSelector";
 
 export const SelectNextAction = ({ item }: { item: FormElement | null }) => {
-  const getId = useGroupStore((state) => state.getId);
-  const getGroupNextAction = useGroupStore((state) => state.getGroupNextAction);
   const typesWithOptions = ["radio", "checkbox", "select"];
-  const currentNextActions = getGroupNextAction(getId());
+  const getGroupNextAction = useGroupStore((state) => state.getGroupNextAction);
+  const formGroups: GroupsType = useTemplateStore((s) => s.form.groups) || {};
 
-  if (!item && !Array.isArray(currentNextActions)) {
+  const selectedGroupId = useGroupStore((state) => state.id);
+  const selectedGroupNextActions = getGroupNextAction(selectedGroupId);
+  const selectedGroup = formGroups[selectedGroupId];
+
+  if (selectedGroupId === "end") {
+    <div>
+      <h4>Section End</h4>
+    </div>;
+  }
+
+  if (!selectedGroup) {
+    return null;
+  }
+
+  if (!item && !Array.isArray(selectedGroupNextActions)) {
     // No "question" selected handle section->section next actions
     // section 1 => section 2
     return (
       <div>
-        <SingleActionSelect nextAction={currentNextActions} />
+        <h4>Section {selectedGroupId && `${selectedGroup?.name}:`}</h4>
+        <SingleActionSelect nextAction={selectedGroupNextActions || "end"} />
       </div>
     );
   }
@@ -30,9 +46,10 @@ export const SelectNextAction = ({ item }: { item: FormElement | null }) => {
   // If we have an item a question is selected
   return (
     <div>
+      <h4>{selectedGroupId && selectedGroup?.name}</h4>
       {typesWithOptions.includes(item.type) ? (
         /* 
-          If it's a question with options 
+          If the item (form element) has options 
           we need to show the multi action selector 
           to allow the user to select the next actions
           based on an option value
@@ -42,23 +59,12 @@ export const SelectNextAction = ({ item }: { item: FormElement | null }) => {
         <MultiActionSelector
           item={item}
           initialNextActionRules={
-            Array.isArray(currentNextActions)
-              ? currentNextActions
-              : [{ groupId: "end", choiceId: `${item.id}.0` }]
+            Array.isArray(selectedGroupNextActions)
+              ? selectedGroupNextActions
+              : [{ groupId: "end", choiceId: `${item.id}.0` }] // Default to end
           }
         />
-      ) : (
-        <div>
-          {!Array.isArray(currentNextActions) && (
-            /* If it's a question without options 
-               we need to show the single action selector 
-               to allow the user to select the next action
-               section 1 => section 2
-            */
-            <SingleActionSelect nextAction={currentNextActions} item={item} />
-          )}
-        </div>
-      )}
+      ) : null}
     </div>
   );
 };

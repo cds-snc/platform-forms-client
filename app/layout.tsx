@@ -10,7 +10,6 @@ import { Noto_Sans, Lato } from "next/font/google";
 import { googleTagManager } from "@lib/cspScripts";
 import { headers } from "next/headers";
 import { auth } from "@lib/auth";
-import { checkFlag } from "@formBuilder/actions";
 
 const notoSans = Noto_Sans({
   weight: ["100", "200", "300", "400", "500", "600", "700", "800", "900"],
@@ -42,7 +41,6 @@ export default async function Layout({ children }: { children: React.ReactNode }
   const locale = cookies().get("i18next")?.value ?? languages[0];
   const nonce = headers().get("x-nonce") ?? "";
   const session = await auth();
-  const reCaptcha = await checkFlag("reCaptcha");
   return (
     <html lang={locale} dir={dir(locale)} className={`${notoSans.variable} ${lato.variable}`}>
       <head>
@@ -77,15 +75,6 @@ export default async function Layout({ children }: { children: React.ReactNode }
             <Script id="GoogleTagManager" nonce={nonce} async type="text/javascript">
               {googleTagManager}
             </Script>
-            {process.env.RECAPTCHA_V3_SITE_KEY && reCaptcha && (
-              <Script
-                id="ReCaptcha"
-                nonce={nonce}
-                async
-                type="text/javascript"
-                src={`https://www.google.com/recaptcha/api.js?render=${process.env.RECAPTCHA_V3_SITE_KEY}`}
-              />
-            )}
           </>
         )}
 

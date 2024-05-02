@@ -5,7 +5,7 @@ declare global {
     interface Chainable {
       mount: typeof mount;
       tab: typeof tab;
-      useForm: (file: string) => Chainable<void>;
+      useForm: (file: string, published?: boolean) => Chainable<void>;
       visitForm: (formID: string, language?: string) => Chainable<Window>;
       visitPage: (path: string) => Chainable<Window>;
       securityQuestions: () => Chainable<void>;
@@ -17,7 +17,6 @@ declare global {
         acceptableUse?: boolean;
       }) => Chainable<void>;
       logout: () => Chainable<void>;
-      useFlag: (flagName: string, value: boolean, alreadyAuth?: boolean) => Chainable<void>;
       selection: (fn: (el: JQuery<HTMLElement>) => void) => Chainable<JQuery<HTMLElement>>;
       setSelection: (
         query:
@@ -32,13 +31,19 @@ declare global {
       setCursor: (query: string, atStart?: boolean) => Chainable<void>;
       setCursorBefore: (query: string) => Chainable<void>;
       setCursorAfter: (query: string) => Chainable<void>;
-      resetDB: () => Chainable<void>;
       resetFlags: () => Chainable<void>;
-      resetAll: () => Chainable<void>;
       typeInField: (query: string, typedText: string, outputText?: string) => Chainable<void>;
       safeClick: (query: string) => Chainable<void>;
       serverSideRendered: (path: string) => Chainable<void>;
       switchLanguage: (language: string) => Chainable<void>;
+      userSession: ({
+        admin,
+        acceptableUse,
+      }?: {
+        admin?: boolean;
+        acceptableUse?: boolean;
+      }) => Chainable<void>;
+      waitForIdleNetwork: () => Chainable<void>;
     }
   }
 }

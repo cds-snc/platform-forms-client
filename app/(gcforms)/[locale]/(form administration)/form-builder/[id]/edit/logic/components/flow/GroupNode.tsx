@@ -11,10 +11,31 @@ export const GroupNode = (node: NodeProps) => {
   const direction = layoutOptions.direction;
   const setId = useGroupStore((state) => state.setId);
   const setSelectedElementId = useGroupStore((state) => state.setSelectedElementId);
-
   const selectedElementId = useGroupStore((state) => state.selectedElementId);
   const selectedGroupId = useGroupStore((state) => state.id);
+  const getElement = useGroupStore((state) => state.getElement);
   const groupIsSelected = selectedGroupId === node.id;
+  const typesWithOptions = ["radio", "checkbox", "select"];
+
+  const handleClick =
+    node.id === "end"
+      ? {
+          onClick: () => {
+            setId("end");
+            // Reset selected element id
+            setSelectedElementId(0);
+          },
+        }
+      : {
+          onClick: () => {
+            setId(node.id);
+            // Reset selected element id
+            setSelectedElementId(0);
+          },
+        };
+
+  const nodeClassName =
+    "flex w-[100%] min-w-[200px] max-w-[250px] rounded-sm bg-slate-50 p-1 text-sm text-slate-600";
 
   return (
     <div>
@@ -26,10 +47,11 @@ export const GroupNode = (node: NodeProps) => {
       <div
         id={node.id}
         className={cn(
-          "space-y-2 rounded-md border-1 border-violet-800 bg-gray-200 p-4 text-white",
-          groupIsSelected ? "bg-violet-300" : "bg-gray-200"
+          "space-y-2 rounded-md border-1 border-indigo-500 p-4 text-white",
+          groupIsSelected ? "bg-violet-300" : "bg-gray-soft",
+          "cursor-pointer hover:bg-violet-300"
         )}
-        onClick={() => setId(node.id)}
+        {...handleClick}
       >
         {node.data.children.map((child: TreeItem) => {
           const selected =
@@ -37,14 +59,46 @@ export const GroupNode = (node: NodeProps) => {
               ? "border-violet-800 border-1 border-dashed"
               : "border-transparent";
 
+          const item = getElement(Number(child.index));
+
+          if (!item) {
+            // Check for "start" and "end" nodes "no elements"
+            // see: useFlowData.tsx
+            if (
+              child.index === "introduction" ||
+              child.index === "privacy" ||
+              child.index === "confirmation"
+            ) {
+              return (
+                <div key={child.index} className={cn(nodeClassName)}>
+                  {child.data}
+                </div>
+              );
+            }
+            return null;
+          }
+
+          // Render "non-option" elements
+          // No click event as we can't select these
+          if (!typesWithOptions.includes(item.type)) {
+            return (
+              <div key={child.index} className={cn(nodeClassName)}>
+                {child.data}
+              </div>
+            );
+          }
+
+          // Render "option" elements
+          // This will allow the user to select the next action
+          // based on the option value
           return (
             <div
               key={child.index}
-              onClick={() => setSelectedElementId(Number(child.index))}
-              className={cn(
-                "flex w-[100%] min-w-[200px] max-w-[250px] rounded-sm bg-white p-1 text-sm text-slate-600",
-                selected
-              )}
+              onClick={(evt) => {
+                evt.stopPropagation();
+                setSelectedElementId(Number(child.index));
+              }}
+              className={cn(nodeClassName, selected)}
             >
               {child.data}
             </div>
@@ -58,14 +112,7 @@ export const GroupNode = (node: NodeProps) => {
             isConnectable={false}
           />
         )}
-
-        {node.id !== "start" && (
-          <Handle
-            type="target"
-            position={getTargetHandlePosition(direction)}
-            isConnectable={false}
-          />
-        )}
+        <Handle type="target" position={getTargetHandlePosition(direction)} isConnectable={false} />
       </div>
     </div>
   );

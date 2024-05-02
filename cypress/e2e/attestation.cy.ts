@@ -1,4 +1,4 @@
-describe.skip("Attestation functionality", () => {
+describe("Attestation functionality", () => {
   let formID: string;
   before(() => {
     cy.useForm("../../__fixtures__/attestationTestForm.json");
