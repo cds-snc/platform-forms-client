@@ -274,6 +274,8 @@ const ControlledTree: ForwardRefRenderFunction<unknown, TreeDataProviderProps> =
 
             // Replace the original groups object
             currentGroups = newGroups;
+
+            // Target/Origin groups are the same
             targetGroupElements = originGroupElements;
 
             selectedItems.push(String(item.index));
@@ -288,7 +290,6 @@ const ControlledTree: ForwardRefRenderFunction<unknown, TreeDataProviderProps> =
           originGroupElements = (originParent?.children || []) as string[];
           const originIndex = originGroupElements.indexOf(String(item.index));
 
-          // @TODO: do we need?
           // Adjust index if dragging down
           itemsPriorToInsertion += isOldItemPriorToNewItem(
             targetGroupElements,
