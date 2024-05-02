@@ -34,7 +34,7 @@ export const SelectNextAction = ({ item }: { item: FormElement | null }) => {
     return (
       <div>
         <h4>Section {selectedGroupId && `${selectedGroup?.name}:`}</h4>
-        <SingleActionSelect nextAction={selectedGroupNextActions} />
+        <SingleActionSelect nextAction={selectedGroupNextActions || "end"} />
       </div>
     );
   }
