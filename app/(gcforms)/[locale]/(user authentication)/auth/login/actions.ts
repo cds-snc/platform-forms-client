@@ -64,6 +64,26 @@ export const login = async (
     };
   }
 
+  if (process.env.APP_ENV === "test") {
+    const authenticationFlowToken = await begin2FAAuthentication({
+      email: validationResult.output.username,
+      token: "testCognitoToken",
+    }).catch((err) => {
+      if (hasError("AccountDeactivated", err)) {
+        redirect(`/${language}/auth/account-deactivated`);
+      } else {
+        throw err;
+      }
+    });
+    return {
+      validationErrors: [],
+      authFlowToken: {
+        email: validationResult.output.username,
+        authenticationFlowToken,
+      },
+    };
+  }
+
   const cognitoResult: {
     email?: string;
     token?: string;
@@ -101,6 +121,12 @@ export const login = async (
     const authenticationFlowToken = await begin2FAAuthentication({
       email: cognitoResult.email,
       token: cognitoResult.token,
+    }).catch((err) => {
+      if (hasError("AccountDeactivated", err)) {
+        redirect(`/${language}/auth/account-deactivated`);
+      } else {
+        throw err;
+      }
     });
 
     return {

@@ -1,6 +1,8 @@
 import { defineConfig } from "cypress";
 import { logMessage } from "@lib/logger";
 import terminalReport from "cypress-terminal-report/src/installLogsPrinter";
+import dbTearDown from "./__utils__/dbTearDown";
+import dbSeed from "./prisma/seeds/seed";
 
 export default defineConfig({
   video: false,
@@ -8,19 +10,11 @@ export default defineConfig({
   e2e: {
     baseUrl: "http://localhost:3000",
     setupNodeEvents(on) {
-      on("task", {
-        "db:teardown": async () => {
-          logMessage.info("Tearing down database");
-          const dbTearDown = await import("./__utils__/dbTearDown");
-          await dbTearDown.default();
-          return null;
-        },
-        "db:seed": async () => {
-          logMessage.info("Seeding database");
-          const seed = await import("./prisma/seeds/seed");
-          await seed.default("test");
-          return null;
-        },
+      on("before:run", async () => {
+        logMessage.info("Tearing down database");
+        await dbTearDown();
+        logMessage.info("Seeding database");
+        await dbSeed("test");
       });
       if (process.env.CYPRESS_DEBUG) {
         logMessage.info("Enabling terminal report for Debugging");

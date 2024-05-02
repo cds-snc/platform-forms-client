@@ -141,7 +141,9 @@ const setCORS = (req: NextRequest, pathname: string) => {
     } else {
       response.headers.set(
         "Access-Control-Allow-Origin",
-        process.env.NEXTAUTH_URL ?? "MISSING ORIGIN URL IN .env FILE!"
+        process.env.NEXTAUTH_URL ?? process.env.APP_ENV !== "test"
+          ? "MISSING ORIGIN URL IN .env FILE!"
+          : "localhost:3000"
       );
     }
 
