@@ -86,7 +86,7 @@ jobs:
           report-json: "eslint_report.json"
         continue-on-error: true
       - name: Upload ESLint report
-        uses: actions/upload-artifact@3446296876d12d4e3a0f3145a3c87e67bf0a16b5 # tag=v1
+        uses: actions/upload-artifact@65462800fd760344b1a7b4382951275a0abb4808 # tag=v4.3.3
         with:
           name: eslint_report.json
           path: eslint_report.json
