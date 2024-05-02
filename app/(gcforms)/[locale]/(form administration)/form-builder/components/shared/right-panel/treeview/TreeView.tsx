@@ -141,12 +141,12 @@ const ControlledTree: ForwardRefRenderFunction<unknown, TreeDataProviderProps> =
         const folderItemsCount = items.filter((item) => item.isFolder).length;
         const nonFolderItemsCount = items.filter((item) => !item.isFolder).length;
 
-        // can't drag mixed item types
+        // Can't drag mixed item types
         if (folderItemsCount > 0 && nonFolderItemsCount > 0) {
           return false;
         }
 
-        // if any of the selected items is a folder, disallow dropping on a folder
+        // If any of the selected items is a folder, disallow dropping on a folder
         if (folderItemsCount >= 1) {
           const { parentItem } = target as DraggingPositionBetweenItems;
           if (items[0].isFolder && parentItem !== "root") {
@@ -154,7 +154,7 @@ const ControlledTree: ForwardRefRenderFunction<unknown, TreeDataProviderProps> =
           }
         }
 
-        // if any of the items is not a folder, disallow dropping on root
+        // If any of the items is not a folder, disallow dropping on root
         if (nonFolderItemsCount >= 1) {
           if (target.depth === 0) {
             return false;
