@@ -371,6 +371,18 @@
   padding-left: 0;
 }
 
-.react-flow__attribution {
-  display: none !important;
+.react-flow {
+  .react-flow__edge-path, .react-flow__edge-interaction {
+    stroke: #6366F1;
+    stroke-width: 1px;
+    fill: none;
+  }
+
+  .react-flow__arrowhead polyline{
+    stroke: #6366F1 !important;
+    fill: #6366F1 !important;
+    stroke-width: 1 !important;
+  }
+  
+
 }
