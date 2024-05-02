@@ -81,7 +81,7 @@ export const defaultForm = {
     referrerUrlEn: "",
     referrerUrlFr: "",
   },
-  layout: [],
+  layout: [10000000000001], // TEMP: temp fix to make Review element render
   elements: [],
   groups: {},
 };
