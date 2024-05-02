@@ -21,7 +21,7 @@ export const GroupNode = (node: NodeProps) => {
     node.id === "end"
       ? {
           onClick: () => {
-            setId("");
+            setId("end");
             // Reset selected element id
             setSelectedElementId(0);
           },
@@ -45,7 +45,8 @@ export const GroupNode = (node: NodeProps) => {
         id={node.id}
         className={cn(
           "space-y-2 rounded-md border-1 border-violet-800 bg-gray-200 p-4 text-white",
-          groupIsSelected ? "bg-violet-300" : "bg-gray-200"
+          groupIsSelected ? "bg-violet-300" : "bg-gray-200",
+          "cursor-pointer hover:bg-violet-300"
         )}
         {...handleClick}
       >

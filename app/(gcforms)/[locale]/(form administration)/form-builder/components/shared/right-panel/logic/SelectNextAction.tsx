@@ -16,9 +16,15 @@ export const SelectNextAction = ({ item }: { item: FormElement | null }) => {
 
   const selectedGroupId = useGroupStore((state) => state.id);
   const selectedGroupNextActions = getGroupNextAction(selectedGroupId);
-  const selectedGroupName = formGroups[selectedGroupId];
+  const selectedGroup = formGroups[selectedGroupId];
 
-  if (!selectedGroupName) {
+  if (selectedGroupId === "end") {
+    <div>
+      <h4>Section End</h4>
+    </div>;
+  }
+
+  if (!selectedGroup) {
     return null;
   }
 
@@ -27,7 +33,7 @@ export const SelectNextAction = ({ item }: { item: FormElement | null }) => {
     // section 1 => section 2
     return (
       <div>
-        <h4>Section {selectedGroupId && `${selectedGroupName?.name}:`}</h4>
+        <h4>Section {selectedGroupId && `${selectedGroup?.name}:`}</h4>
         <SingleActionSelect nextAction={selectedGroupNextActions} />
       </div>
     );
@@ -40,7 +46,7 @@ export const SelectNextAction = ({ item }: { item: FormElement | null }) => {
   // If we have an item a question is selected
   return (
     <div>
-      <h4>{selectedGroupId && selectedGroupName?.name}</h4>
+      <h4>{selectedGroupId && selectedGroup?.name}</h4>
       {typesWithOptions.includes(item.type) ? (
         /* 
           If the item (form element) has options 
