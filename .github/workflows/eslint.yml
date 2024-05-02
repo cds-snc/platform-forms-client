@@ -80,7 +80,7 @@ jobs:
         # Continue to the next step even if this fails
         continue-on-error: true
       - name: Annotate Code Linting Results
-        uses: ataylorme/eslint-annotate-action@4d57a1193d4c59cbfbf3f86c271f42612f9dbd9e9 # tag=3.0.0
+        uses: ataylorme/eslint-annotate-action@d57a1193d4c59cbfbf3f86c271f42612f9dbd9e9 # tag=3.0.0
         with:
           GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
           report-json: "eslint_report.json"
