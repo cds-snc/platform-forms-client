@@ -272,6 +272,10 @@ const ControlledTree: ForwardRefRenderFunction<unknown, TreeDataProviderProps> =
               elements: originGroupElements,
             };
 
+            // Replace the original groups object
+            currentGroups = newGroups;
+            targetGroupElements = originGroupElements;
+
             selectedItems.push(String(item.index));
 
             // Replace the groups object and set selected items.
