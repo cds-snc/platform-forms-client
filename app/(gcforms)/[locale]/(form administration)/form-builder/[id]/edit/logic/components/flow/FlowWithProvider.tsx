@@ -69,11 +69,12 @@ const Flow: ForwardRefRenderFunction<unknown, FlowProps> = ({ children }, ref) =
     <>
       <div className="my-10 w-full border-1" style={{ height: "calc(100vh - 300px)" }}>
         <ReactFlow
+          nodesDraggable={false}
           nodes={nodes}
-          edges={flowEdges}
-          onNodesChange={onNodesChange}
-          onEdgesChange={onEdgesChange}
           nodeTypes={nodeTypes}
+          onNodesChange={onNodesChange}
+          edges={flowEdges}
+          onEdgesChange={onEdgesChange}
           defaultEdgeOptions={edgeOptions}
         >
           <Background />
