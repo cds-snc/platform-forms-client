@@ -495,6 +495,11 @@
     "briefDesc": "Description of the form and its use",
     "thisInformation": "This help us understand how GC Forms is used, so we can better serve your needs.",
     "helpsUnderstand": "This helps us understand who forms are intended for.",
+    "purpose": {
+      "admin": "Administrative purposes",
+      "nonAdmin": "Non-administrative purposes",
+      "unset": "Unset"
+    },
     "formtypes": {
       "Application": "Application",
       "Consent": "Consent",

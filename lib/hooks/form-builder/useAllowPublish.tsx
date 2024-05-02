@@ -83,8 +83,9 @@ export const isFormTranslated = (form: FormProperties) => {
 
 export const useAllowPublish = () => {
   const { ability } = useAccessControl();
-  const { form } = useTemplateStore((s) => ({
+  const { form, getFormPurpose } = useTemplateStore((s) => ({
     form: s.form,
+    getFormPurpose: s.getFormPurpose,
   }));
 
   const userCanPublish = ability?.can("update", "FormRecord", "isPublished");
@@ -112,7 +113,7 @@ export const useAllowPublish = () => {
 
   const isPublishable = useCallback(() => {
     const fields = Object.keys(data) as unknown as publishRequiredFields[];
-    return hasData(fields);
+    return hasData(fields) && getFormPurpose() !== "";
   }, [data, hasData]);
 
   return { data, hasData, isPublishable, userCanPublish };

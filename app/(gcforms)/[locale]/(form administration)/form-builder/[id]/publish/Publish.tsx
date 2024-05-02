@@ -36,6 +36,7 @@ export const Publish = ({ id }: { id: string }) => {
     getSchema,
     getName,
     getDeliveryOption,
+    getFormPurpose,
     securityAttribute,
   } = useTemplateStore((s) => ({
     id: s.id,
@@ -44,6 +45,7 @@ export const Publish = ({ id }: { id: string }) => {
     getSchema: s.getSchema,
     getName: s.getName,
     getDeliveryOption: s.getDeliveryOption,
+    getFormPurpose: s.getFormPurpose,
     securityAttribute: s.securityAttribute,
   }));
 
@@ -89,6 +91,16 @@ export const Publish = ({ id }: { id: string }) => {
     setShowPrePublishDialog(false);
     handlePublish();
   };
+
+  const formPurpose = getFormPurpose();
+
+  let formPurposeText = t("prePublishFormDialog.purpose.unset");
+  if (formPurpose === "admin") {
+    formPurposeText = t("prePublishFormDialog.purpose.admin");
+  }
+  if (formPurpose === "nonAdmin") {
+    formPurposeText = t("prePublishFormDialog.purpose.nonAdmin");
+  }
 
   const handlePublish = async () => {
     setError(false);
@@ -203,19 +215,33 @@ export const Publish = ({ id }: { id: string }) => {
         </li>
 
         <li className="my-4">
-          {hasHydrated ? <Icon checked /> : IconLoading}
+          {hasHydrated ? <Icon checked={formPurpose != ""} /> : IconLoading}
           <strong>
-            {securityAttributeText}
-            {t("publishYourFormInstructions.text2")},{" "}
+            <LinkButton href={`/${i18n.language}/form-builder/${id}/settings`}>
+              {t("publishYourFormInstructions.settings")}
+            </LinkButton>
           </strong>
-          {isVaultDelivery(getDeliveryOption()) ? (
-            <span>{t("publishYourFormInstructions.vaultOption")}</span>
-          ) : (
-            <span>{t("publishYourFormInstructions.emailOption")}</span>
-          )}
-          <LinkButton href={`/${i18n.language}/form-builder/${id}/settings`}>
-            {t("publishYourFormInstructions.change")}
-          </LinkButton>
+          <div>
+            <ul>
+              <li>
+                <strong>{t("publishYourFormInstructions.classification")}:&nbsp;</strong>
+                {securityAttributeText}
+                {t("publishYourFormInstructions.text2")}
+              </li>
+              <li>
+                <strong>{t("publishYourFormInstructions.deliveryOption")}:&nbsp;</strong>
+                {isVaultDelivery(getDeliveryOption()) ? (
+                  <span>{t("publishYourFormInstructions.vaultOption")}</span>
+                ) : (
+                  <span>{t("publishYourFormInstructions.emailOption")}</span>
+                )}
+              </li>
+              <li>
+                <strong>{t("publishYourFormInstructions.purpose")}:&nbsp;</strong>
+                {formPurposeText}
+              </li>
+            </ul>
+          </div>
         </li>
       </ul>
 
@@ -237,6 +263,8 @@ export const Publish = ({ id }: { id: string }) => {
 
       {showPrePublishDialog && (
         <PrePublishDialog
+          formId={id}
+          formName={getName()}
           handleClose={() => handlePrePublishClose()}
           handleConfirm={() => handlePrePublish()}
         />
