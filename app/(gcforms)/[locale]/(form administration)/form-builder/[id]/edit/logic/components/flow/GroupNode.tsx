@@ -35,7 +35,7 @@ export const GroupNode = (node: NodeProps) => {
         };
 
   const nodeClassName =
-    "flex w-[100%] min-w-[200px] max-w-[250px] rounded-sm bg-white p-1 text-sm text-slate-600";
+    "flex w-[100%] min-w-[200px] max-w-[250px] rounded-sm bg-slate-50 p-1 text-sm text-slate-600";
 
   return (
     <div>
@@ -47,8 +47,8 @@ export const GroupNode = (node: NodeProps) => {
       <div
         id={node.id}
         className={cn(
-          "space-y-2 rounded-md border-1 border-violet-800 bg-gray-200 p-4 text-white",
-          groupIsSelected ? "bg-violet-300" : "bg-gray-200",
+          "space-y-2 rounded-md border-1 border-indigo-500 p-4 text-white",
+          groupIsSelected ? "bg-violet-300" : "bg-gray-soft",
           "cursor-pointer hover:bg-violet-300"
         )}
         {...handleClick}
