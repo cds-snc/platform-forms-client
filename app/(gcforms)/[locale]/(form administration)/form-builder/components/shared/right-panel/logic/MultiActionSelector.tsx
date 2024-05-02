@@ -40,6 +40,7 @@ export const GroupAndChoiceSelect = ({
   const language = translationLanguagePriority;
   const id = useGroupStore((state) => state.id);
   const currentGroup = id;
+
   const formGroups: GroupsType = useTemplateStore((s) => s.form.groups) || {};
   let groupItems = Object.keys(formGroups).map((key) => {
     const item = formGroups[key];
