@@ -9,7 +9,7 @@ import { Group, NextActionRule } from "@lib/formContext";
 const startElements = [
   {
     data: "Introduction",
-    index: "start",
+    index: "introduction",
   },
   {
     data: "Privacy Policy",
@@ -24,7 +24,7 @@ const endNode = {
     children: [
       {
         data: "Confirmation",
-        index: "end",
+        index: "confirmation",
       },
     ],
   },
@@ -100,13 +100,16 @@ export const useFlowData = () => {
       let elements: TreeItem[] = [];
 
       if (key === "start") {
+        // Add "default" start elements
+        // introduction, privacy
         elements = startElements;
       }
 
       if (treeItem.children && treeItem.children.length > 0) {
-        elements = treeItem.children.map((childId) => {
+        const children = treeItem.children.map((childId) => {
           return treeItems[childId];
         });
+        elements = [...elements, ...children];
       }
 
       const newEdges = getEdges(key as string, prevNodeId, group);
@@ -123,7 +126,8 @@ export const useFlowData = () => {
       return flowNode;
     });
 
-    // Push down the end node
+    // Push "end" node to the end
+    // And add confirmation element
     nodes.push({ ...endNode, position: { x: x_pos, y: y_pos } });
 
     return { edges, nodes };

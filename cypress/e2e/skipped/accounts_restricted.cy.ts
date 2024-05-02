@@ -1,8 +1,4 @@
 describe.skip("Restricted Access Page", () => {
-  afterEach(() => {
-    cy.resetAll();
-  });
-
   it("Accounts page loads with title", () => {
     cy.intercept("/api/account/submissions/overdue", {
       statusCode: 200,

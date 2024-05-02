@@ -9,7 +9,7 @@ const A11Y_OPTIONS: Options = {
 };
 
 describe("Accessibility (A11Y) Check", () => {
-  describe.skip("Form Components", () => {
+  describe("Form Components", () => {
     it("All components page Accessibility (A11Y) Check", () => {
       cy.useForm("../../__fixtures__/accessibilityTestForm.json");
       cy.get<string>("@formID").then((formID) => cy.visitForm(formID));

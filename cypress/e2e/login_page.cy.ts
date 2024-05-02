@@ -32,14 +32,14 @@ describe("Login Page", () => {
         "Complete the required field to continue."
       );
     });
-    it.skip("Displays an error message when submitting an invalid email", () => {
+    it("Displays an error message when submitting an invalid email", () => {
       cy.typeInField("input[id='username']", "myemail@cds-snc");
       cy.get("button[type='submit']").should("be.visible");
       cy.get("button[type='submit']").click();
       cy.get("[id='errorMessageusername']").should("be.visible");
       cy.get("[id='errorMessageusername']").should("contain", "Enter a valid email address.");
     });
-    it.skip("Displays no error message when submitting a valid email", () => {
+    it("Displays no error message when submitting a valid email", () => {
       cy.typeInField("input[id='username']", "test@cds-snc.ca");
       cy.get("button[type='submit']").should("be.visible");
       cy.get("button[type='submit']").click();
@@ -56,7 +56,7 @@ describe("Login Page", () => {
       );
     });
 
-    it.skip("Displays an error message when submitting a password greater than 50 characters", () => {
+    it("Displays an error message when submitting a password greater than 50 characters", () => {
       cy.typeInField("input[id='password']", "AAAaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaH");
       cy.get("button[type='submit']").should("be.visible");
       cy.get("button[type='submit']").click();
@@ -66,14 +66,14 @@ describe("Login Page", () => {
       );
     });
 
-    it.skip("Displays no error message when submitting a valid password", () => {
+    it("Displays no error message when submitting a valid password", () => {
       cy.typeInField("input[id='password']", "AAAaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
       cy.get("button[type='submit']").should("be.visible");
       cy.get("[type='submit']").click();
       cy.get("[id='errorMessagepassword']").should("not.exist");
     });
   });
-  describe.skip("User 2FA screen", () => {
+  describe("User 2FA screen", () => {
     beforeEach(() => {
       cy.visitPage("/en/auth/login");
       cy.get("input[id='username']").should("be.visible");

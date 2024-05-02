@@ -55,6 +55,10 @@ export const ResumeEditingForm = () => {
       <span aria-hidden="true"> ← </span> {t("actions.resumeForm")}
     </Link>
   ) : (
-    loading && <Skeleton className="h-6 w-[200px]" />
+    loading && (
+      <div data-testid="resume-editing-form">
+        <Skeleton className="h-6 w-[200px]" />
+      </div>
+    )
   );
 };
