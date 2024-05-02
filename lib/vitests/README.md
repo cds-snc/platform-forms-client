@@ -2,7 +2,7 @@
 
 This guide provides step-by-step instructions for migrating your test suite from Jest to Vitest, highlighting key differences and helpful tips.
 
-## Step 1: Enable Vitest and Set Globals as Default
+## Step 1: Enable Vitest and Set Globals as Default (This is already set up for this project.)
 
 - Follow the changes outlined in [this pull request](https://github.com/cds-snc/platform-forms-client/pull/3520) to enable Vitest in your project.
 - After installing Vitest, ensure that global objects like `describe`, `test`, and `expect` are accessible in your tests by setting Globals as the default scope.
