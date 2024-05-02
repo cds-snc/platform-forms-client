@@ -51,6 +51,8 @@ const getEdges = (nodeId: string, prevNodeId: string, group: Group | undefined):
   // Add edge from this node to next action
   if (prevNodeId && group && typeof group.nextAction === "string") {
     const nextAction = group.nextAction;
+
+    // @todo update this to use nextAction name
     return [
       {
         id: `e-${nodeId}-${nextAction}`,
