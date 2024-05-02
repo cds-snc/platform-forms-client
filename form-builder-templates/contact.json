@@ -35,11 +35,11 @@
         "validation": {
           "required": false
         },
-        "descriptionEn": "Enter your phone number. For example: 111-222-3333",
-        "descriptionFr": "Entrez votre numéro de téléphone. Par exemple : 111-222-3333",
+        "descriptionEn": "For example: 111-222-3333",
+        "descriptionFr": "Par exemple : 111-222-3333",
         "placeholderEn": "",
         "placeholderFr": "",
-        "autoComplete": "phone"
+        "autoComplete": "tel"
       }
     },
     {
@@ -58,8 +58,8 @@
           "required": false,
           "type": "email"
         },
-        "descriptionEn": "Enter an email address. For example: name@example.com",
-        "descriptionFr": "Entrez une adresse courriel. Par exemple : nom@exemple.com",
+        "descriptionEn": "For example: name@example.com",
+        "descriptionFr": "Par exemple : nom@exemple.com",
         "placeholderEn": "",
         "placeholderFr": "",
         "autoComplete": "email"
@@ -79,13 +79,13 @@
             "fr": "français"
           }
         ],
-        "titleEn": "What is your preferred language for communication?",
-        "titleFr": "Quelle est votre langue préférée de communication?",
+        "titleEn": "Preferred language for communication",
+        "titleFr": "Langue de communication préférée",
         "validation": {
           "required": false
         },
-        "descriptionEn": "We offer our services in both official languages, French and English",
-        "descriptionFr": "Nous offrons nos services dans les deux langues officielles, le français et l'anglais.",
+        "descriptionEn": "",
+        "descriptionFr": "",
         "placeholderEn": "",
         "placeholderFr": ""
       }

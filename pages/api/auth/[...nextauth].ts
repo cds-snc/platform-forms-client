@@ -1,25 +1,21 @@
 import NextAuth, { NextAuthOptions } from "next-auth";
-import GoogleProvider from "next-auth/providers/google";
 import CredentialsProvider from "next-auth/providers/credentials";
 import {
-  CognitoIdentityProviderClient,
-  AdminInitiateAuthCommand,
-  AdminInitiateAuthCommandInput,
-  CognitoIdentityProviderServiceException,
-} from "@aws-sdk/client-cognito-identity-provider";
+  Validate2FAVerificationCodeResultStatus,
+  begin2FAAuthentication,
+  initiateSignIn,
+  userHasSecurityQuestions,
+  validate2FAVerificationCode,
+} from "@lib/auth/";
 import { PrismaAdapter } from "@next-auth/prisma-adapter";
 import { logMessage } from "@lib/logger";
 import { getOrCreateUser } from "@lib/users";
-import { prisma, prismaErrors } from "@lib/integration/prismaConnector";
-import { acceptableUseCheck, removeAcceptableUse } from "@lib/acceptableUseCache";
+import { prisma } from "@lib/integration/prismaConnector";
+import { acceptableUseCheck, removeAcceptableUse } from "@lib/cache/acceptableUseCache";
 import { getPrivilegeRulesForUser } from "@lib/privileges";
 import { logEvent } from "@lib/auditLogs";
-
-if (
-  (!process.env.GOOGLE_CLIENT_ID || !process.env.GOOGLE_CLIENT_SECRET) &&
-  process.env.APP_ENV !== "test"
-)
-  throw new Error("Missing Google Authentication Credentials");
+import type { NextApiRequest, NextApiResponse } from "next";
+import { activeStatusCheck, activeStatusUpdate } from "@lib/cache/userActiveStatus";
 
 if (
   (!process.env.COGNITO_APP_CLIENT_ID ||
@@ -31,93 +27,58 @@ if (
 
 export const authOptions: NextAuthOptions = {
   providers: [
-    GoogleProvider({
-      clientId: process.env.GOOGLE_CLIENT_ID ?? "",
-      clientSecret: process.env.GOOGLE_CLIENT_SECRET ?? "",
-    }),
     CredentialsProvider({
+      id: "cognito",
       name: "CognitoLogin",
       credentials: {
-        username: { label: "Email", type: "text" },
-        password: { label: "Password", type: "password" },
+        authenticationFlowToken: { label: "Authentication flow token", type: "text" },
+        username: { label: "Username", type: "text" },
+        verificationCode: { label: "Verification Code", type: "text" },
       },
       async authorize(credentials) {
-        // Application is in test mode, return test user
-        if (process.env.APP_ENV === "test") {
+        const { authenticationFlowToken, username, verificationCode } = credentials ?? {};
+
+        // Check to ensure all required credentials were passed in
+        if (!authenticationFlowToken || !username || !verificationCode) return null;
+
+        // Check for test accounts being used
+        if (
+          [
+            "test.user@cds-snc.ca",
+            "test.admin@cds-snc.ca",
+            "test.deactivated@cds-snc.ca",
+            "test.withoutSecurityAnswers@cds-snc.ca",
+          ].includes(username)
+        ) {
+          // If we're not in test mode throw an error
+          if (process.env.APP_ENV !== "test")
+            throw new Error("Test accounts only available in testing mode");
+
           return {
-            id: "1",
-            name: "Test User",
-            email: "test.user@cds-snc.ca",
+            // id is not used by the app, but is required by next-auth
+            id: "test",
+            email: username,
           };
         }
 
-        if (!credentials?.username || !credentials?.password) return null;
-        const params: AdminInitiateAuthCommandInput = {
-          AuthFlow: "ADMIN_USER_PASSWORD_AUTH",
-          ClientId: process.env.COGNITO_APP_CLIENT_ID,
-          UserPoolId: process.env.COGNITO_USER_POOL_ID,
-          AuthParameters: {
-            USERNAME: credentials.username,
-            PASSWORD: credentials.password,
-          },
-        };
+        const validationResult = await validate2FAVerificationCode(
+          authenticationFlowToken,
+          username,
+          verificationCode
+        );
 
-        // NextAuth signIn callback cannot be used to check . The check has to be included in here as the url field
-        // of the response of the sign in callback is not populated
-        const prismaUser = await prisma.user
-          .findUnique({
-            where: {
-              email: credentials.username,
-            },
-            select: {
-              accounts: true,
-            },
-          })
-          .catch((e) => prismaErrors(e, null));
-
-        if (
-          prismaUser &&
-          prismaUser.accounts.length > 0 &&
-          prismaUser.accounts[0].provider === "google"
-        ) {
-          throw new Error("GoogleCredentialsExist");
-        }
-
-        try {
-          const cognitoClient = new CognitoIdentityProviderClient({
-            region: process.env.COGNITO_REGION,
-          });
-
-          const adminInitiateAuthCommand = new AdminInitiateAuthCommand(params);
-
-          const response = await cognitoClient.send(adminInitiateAuthCommand);
-          const idToken = response.AuthenticationResult?.IdToken;
-          if (idToken) {
-            const cognitoIDTokenParts = idToken.split(".");
-            const claimsBuff = Buffer.from(cognitoIDTokenParts[1], "base64");
-            const cognitoIDTokenClaims = JSON.parse(claimsBuff.toString("utf8"));
-            return {
-              id: cognitoIDTokenClaims.sub,
-              name: cognitoIDTokenClaims.name,
-              email: cognitoIDTokenClaims.email,
-            };
+        switch (validationResult.status) {
+          case Validate2FAVerificationCodeResultStatus.VALID: {
+            if (!validationResult.decodedCognitoToken)
+              throw new Error("Missing decoded Cognito token");
+            return validationResult.decodedCognitoToken;
           }
-          return null;
-        } catch (e) {
-          if (
-            e instanceof CognitoIdentityProviderServiceException &&
-            e.name === "NotAuthorizedException" &&
-            e.message === "Password attempts exceeded"
-          )
-            logEvent(
-              prismaUser?.accounts[0].id ?? "unknown",
-              { type: "User", id: prismaUser?.accounts[0].id ?? "unknown" },
-              "UserTooManyFailedAttempts",
-              `Password attempts exceeded for ${credentials.username}`
-            );
-
-          // throw new Error with cognito error converted to string so as to include the exception name
-          throw new Error((e as CognitoIdentityProviderServiceException).toString());
+          case Validate2FAVerificationCodeResultStatus.INVALID:
+            throw new Error("2FAInvalidVerificationCode");
+          case Validate2FAVerificationCodeResultStatus.EXPIRED:
+            throw new Error("2FAExpiredSession");
+          case Validate2FAVerificationCodeResultStatus.LOCKED_OUT:
+            throw new Error("2FALockedOutSession");
         }
       },
     }),
@@ -128,53 +89,64 @@ export const authOptions: NextAuthOptions = {
     // Seconds - How long until an idle session expires and is no longer valid.
     maxAge: 2 * 60 * 60, // 2 hours
   },
+
   debug: process.env.NODE_ENV !== "production",
   logger: {
     error(code, metadata) {
-      logMessage.error(code, metadata);
+      logMessage.error(
+        `NextAuth error - Code: ${code}. Error: ${JSON.stringify(metadata, (_, value) => {
+          if (value?.constructor.name === "Error") {
+            return {
+              name: value.name,
+              message: value.message,
+              stack: value.stack,
+              cause: value.cause,
+            };
+          }
+          return value;
+        })}`
+      );
     },
     warn(code) {
-      logMessage.warn(code);
+      logMessage.warn(`NextAuth warning - Code: ${code}`);
     },
   },
 
   adapter: PrismaAdapter(prisma),
   events: {
     async signIn({ user }) {
-      logEvent(user.id, { type: "User", id: user.id }, "UserSignIn");
+      if (!user.email) {
+        throw new Error(
+          "Could not produce UserSignIn audit log because of undefined email information"
+        );
+      }
+
+      const internalUser = await prisma.user.findUnique({
+        where: {
+          email: user.email,
+        },
+        select: {
+          id: true,
+        },
+      });
+
+      if (internalUser === null) {
+        throw new Error("Could not produce UserSignIn audit log because user does not exist");
+      }
+
+      logEvent(
+        internalUser.id,
+        { type: "User", id: internalUser.id },
+        "UserSignIn",
+        `Cognito user unique identifier (sub): ${user.id}`
+      );
     },
     async signOut({ token }) {
       logEvent(token.userId, { type: "User", id: token.userId }, "UserSignOut");
     },
-    async createUser({ user }) {
-      // This only fires for non-credential providers
-      // CredentialProvider user registration is triggered in getOrCreateUser
-      logEvent(user.id, { type: "User", id: user.id }, "UserRegistration");
-    },
   },
 
   callbacks: {
-    async signIn({ account, profile }) {
-      // redirect google login if there is an existing cognito account
-      if (account?.provider === "google") {
-        const prismaUser = await prisma.user
-          .findUnique({
-            where: {
-              email: profile?.email,
-            },
-            select: {
-              accounts: true,
-            },
-          })
-          .catch((e) => prismaErrors(e, null));
-
-        // in this case we know there is an existing cognito account
-        if (prismaUser?.accounts.length === 0) {
-          return "/auth/login";
-        }
-      }
-      return true;
-    },
     async jwt({ token, account }) {
       // account is only available on the first call to the JWT function
       if (account?.provider) {
@@ -187,26 +159,62 @@ export const authOptions: NextAuthOptions = {
 
         token.userId = user.id;
         token.lastLoginTime = new Date();
-        token.acceptableUse = false;
+        token.newlyRegistered = user.newlyRegistered;
+        // If name isn't passed in by the provider, use the name from the database
+        if (!token.name) {
+          token.name = user.name ?? "";
+        }
       }
 
       // Any logic that needs to happen after JWT initializtion needs to be below this point.
+
+      // Check if user has accepted the Acceptable Use Policy
       if (!token.acceptableUse) {
-        token.acceptableUse = await getAcceptableUseValue(token.userId as string);
+        token.acceptableUse = await getAcceptableUseValue(token.userId);
+      }
+
+      // Check if user has setup required Security Questions
+      if (!token.hasSecurityQuestions) {
+        token.hasSecurityQuestions = await userHasSecurityQuestions({ userId: token.userId });
+      }
+
+      // Check if user has been deactivated
+      const userActive = await checkUserActiveStatus(token.userId);
+      if (!userActive) {
+        // Client side auth lib will use this to immediately log out a user if they have been deactivated
+        // Server side API calls will be caught in sessionExists middleware
+        logMessage.warn(
+          `User ${token.userId} (${token.email}) was Deactivated during an active session`
+        );
+        token.deactivated = true;
       }
 
       return token;
     },
     async session({ session, token }) {
       // Add info like 'role' to session object
-      session.user.id = token.userId;
-      session.user.lastLoginTime = token.lastLoginTime;
-      session.user.acceptableUse = token.acceptableUse;
-      session.user.name = token.name ?? null;
-      session.user.image = session.user?.image ?? null;
-      session.user.privileges = await getPrivilegeRulesForUser(token.userId as string);
+      session.user = {
+        id: token.userId,
+        lastLoginTime: token.lastLoginTime,
+        acceptableUse: token.acceptableUse,
+        name: token.name ?? null,
+        email: token.email,
+        image: token.picture ?? null,
+        privileges: await getPrivilegeRulesForUser(token.userId as string),
+        ...(token.newlyRegistered && { newlyRegistered: token.newlyRegistered }),
+        // Used client side to immidiately log out a user if they have been deactivated
+        ...(token.deactivated && { deactivated: token.deactivated }),
+        hasSecurityQuestions: token.hasSecurityQuestions,
+      };
 
       return session;
+    },
+    async redirect({ url, baseUrl }) {
+      // Allows relative callback URLs
+      if (url.startsWith("/")) return `${url}`;
+      // Allows callback URLs on the same origin
+      else if (new URL(url).origin === baseUrl) return url;
+      return baseUrl;
     },
   },
 };
@@ -228,4 +236,88 @@ const getAcceptableUseValue = async (userId: string) => {
   return acceptableUse;
 };
 
-export default NextAuth(authOptions);
+/**
+ * Checks the active status of a user using a cache strategy
+ * @param userID id of the user to check
+ * @returns boolean active status
+ */
+const checkUserActiveStatus = async (userID: string): Promise<boolean> => {
+  // Check cache first
+  const cachedStatus = await activeStatusCheck(userID);
+  if (cachedStatus !== null) {
+    return cachedStatus;
+  }
+
+  const user = await prisma.user.findUnique({
+    where: {
+      id: userID,
+    },
+    select: {
+      active: true,
+    },
+  });
+
+  // Update cache with new value
+  // Do not need to await promise.  This is an update only action that on fail will
+  // force a recheck of the database on next call
+  activeStatusUpdate(userID, user?.active ?? false);
+
+  return user?.active ?? false;
+};
+
+export default async function auth(req: NextApiRequest, res: NextApiResponse) {
+  // Listens for the sign-in action for Cognito to initiate the sign in process
+  if (
+    Array.isArray(req.query.nextauth) &&
+    req.query.nextauth?.includes("signin") &&
+    req.query.nextauth?.includes("cognito")
+  ) {
+    const { username, password } = req.body;
+
+    if (!username || !password)
+      return res.status(400).json({ status: "error", error: "Missing username or password" });
+    try {
+      if (process.env.APP_ENV === "test") {
+        const authenticationFlowToken = await begin2FAAuthentication({
+          email: username,
+          token: "testCognitoToken",
+        });
+        return res.status(200).json({
+          status: "success",
+          challengeState: "MFA",
+          authenticationFlowToken: authenticationFlowToken,
+        });
+      }
+
+      const cognitoToken = await initiateSignIn({
+        username: username,
+        password: password,
+      });
+
+      if (cognitoToken) {
+        const authenticationFlowToken = await begin2FAAuthentication(cognitoToken);
+        return res.status(200).json({
+          status: "success",
+          challengeState: "MFA",
+          authenticationFlowToken: authenticationFlowToken,
+        });
+      } else {
+        return res.status(400).json({
+          status: "error",
+          error: "Cognito authentication failed",
+          reason: "Missing Cognito token",
+        });
+      }
+    } catch (error) {
+      return res.status(401).json({
+        status: "error",
+        error: "Cognito authentication failed",
+        reason: (error as Error).message,
+      });
+    }
+  }
+
+  // Runs the NextAuth.js flow
+
+  return NextAuth(req, res, authOptions);
+}

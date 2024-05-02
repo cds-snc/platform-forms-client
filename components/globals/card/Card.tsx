@@ -1,23 +1,37 @@
 import React from "react";
 
-interface CardProps {
+export enum HeadingLevel {
+  H1 = "h1",
+  H2 = "h2",
+  H3 = "h3",
+  H4 = "h4",
+  H5 = "h5",
+  H6 = "h6",
+}
+
+export const Card = ({
+  children,
+  icon,
+  title,
+  content,
+  headingTag: HeadingTag = HeadingLevel.H2,
+  headingStyle,
+}: {
   children?: React.ReactNode;
   icon?: JSX.Element;
   title?: string;
   content?: string;
-}
-
-export const Card = (props: CardProps) => {
-  const { children, icon, title, content } = props;
-
+  headingTag?: HeadingLevel;
+  headingStyle?: string;
+}) => {
   return (
-    <div className="inline-flex justify-between p-4 border-2 border-solid border-[#ebf0f4] rounded-lg">
+    <div className="inline-flex justify-between rounded-lg border-2 border-solid border-[#ebf0f4] p-4">
       {icon && <div>{icon}</div>}
-      <div className="flex flex-col justify-center ml-8 mr-8">
+      <div className="mx-8 mt-4 flex flex-col justify-start">
         {children && children}
         {!children && (
           <>
-            {title && <p className="gc-h2 text-[#748094]">{title}</p>}
+            {title && <HeadingTag className={headingStyle}>{title}</HeadingTag>}
             {content && <p>{content}</p>}
           </>
         )}

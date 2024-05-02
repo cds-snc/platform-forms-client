@@ -10,6 +10,9 @@ import { RichTextLocked } from "./elements";
 import { ExpandingInput } from "../shared";
 import { useTemplateStore } from "../../store";
 import { getQuestionNumber, sortByLayout } from "../../util";
+import { Panel } from "../settings-modal/panel";
+import { cleanInput } from "@formbuilder/util";
+import { SaveButton } from "../shared/SaveButton";
 
 export const Edit = () => {
   const { t } = useTranslation("form-builder");
@@ -21,7 +24,6 @@ export const Edit = () => {
     updateField,
     translationLanguagePriority,
     getLocalizationAttribute,
-    getName,
   } = useTemplateStore((s) => ({
     title:
       s.form[s.localizeField(LocalizedFormProperties.TITLE, s.translationLanguagePriority)] ?? "",
@@ -31,7 +33,6 @@ export const Edit = () => {
     updateField: s.updateField,
     translationLanguagePriority: s.translationLanguagePriority,
     getLocalizationAttribute: s.getLocalizationAttribute,
-    getName: s.getName,
   }));
 
   const [value, setValue] = useState<string>(title);
@@ -76,12 +77,6 @@ export const Edit = () => {
     [setValue, translationLanguagePriority]
   );
 
-  const updateName = useCallback(() => {
-    if (getName() === "") {
-      updateField("name", value);
-    }
-  }, [value, getName, updateField]);
-
   useEffect(() => {
     if (focusTitle) {
       titleInput && titleInput.current && titleInput.current?.focus();
@@ -91,26 +86,33 @@ export const Edit = () => {
   return (
     <>
       <h1 className="visually-hidden">{t("edit")}</h1>
+      <div className="mb-4">
+        <SaveButton />
+      </div>
+      <Panel />
       <RichTextLocked
+        className="rounded-t-lg"
         beforeContent={
           <>
             <label htmlFor="formTitle" className="visually-hidden" {...getLocalizationAttribute()}>
               {t("formTitle")}
             </label>
-            <div className="mb-4 my-2">
+            <div className="my-2 mb-4">
               <ExpandingInput
                 id="formTitle"
                 wrapperClassName="w-full laptop:w-3/4 mt-2 laptop:mt-0 font-bold laptop:text-3xl"
-                className="font-bold laptop:text-3xl"
+                className="font-bold placeholder:text-slate-500 laptop:text-3xl"
                 ref={titleInput}
                 placeholder={t("placeHolderFormTitle")}
                 value={value}
+                onBlur={() => {
+                  setValue(cleanInput(value));
+                }}
                 onChange={updateValue}
-                onBlur={updateName}
                 {...getLocalizationAttribute()}
               />
             </div>
-            <p className="text-sm mb-4">{t("startFormIntro")}</p>
+            <p className="mb-4 text-sm">{t("startFormIntro")}</p>
           </>
         }
         addElement={true}
@@ -136,7 +138,7 @@ export const Edit = () => {
           ariaLabel={t("richTextPrivacyTitle")}
         >
           <div id="privacy-text">
-            <h2 className="mt-4 laptop:mt-0 text-h3 pb-3">{t("richTextPrivacyTitle")}</h2>
+            <h2 className="mt-4 text-2xl laptop:mt-0">{t("richTextPrivacyTitle")}</h2>
             <PrivacyDescription />
           </div>
         </RichTextLocked>
@@ -146,7 +148,7 @@ export const Edit = () => {
           ariaLabel={t("richTextConfirmationTitle")}
         >
           <div id="confirmation-text">
-            <h2 className="mt-4 laptop:mt-0 text-h3 pb-3">{t("richTextConfirmationTitle")}</h2>
+            <h2 className="mt-4 text-2xl laptop:mt-0">{t("richTextConfirmationTitle")}</h2>
             <ConfirmationDescription />
           </div>
         </RichTextLocked>

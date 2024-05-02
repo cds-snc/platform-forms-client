@@ -6,6 +6,7 @@ import {
 } from "@aws-sdk/client-cognito-identity-provider";
 import { NextApiRequest, NextApiResponse } from "next";
 import { middleware, cors, csrfProtected } from "@lib/middleware";
+import { sanitizeEmailAddressForCognito } from "@lib/auth";
 
 const confirmpassword = async (req: NextApiRequest, res: NextApiResponse) => {
   const { COGNITO_REGION, COGNITO_APP_CLIENT_ID } = process.env;
@@ -13,14 +14,16 @@ const confirmpassword = async (req: NextApiRequest, res: NextApiResponse) => {
   if (!req.body.username || !req.body.password || !req.body.confirmationCode) {
     return res.status(400).json({
       message:
-        "username, password and confirmation code needs to be provided in the body of the request",
+        "username, password and security code needs to be provided in the body of the request",
     });
   }
+
+  const sanitizedUsername = sanitizeEmailAddressForCognito(req.body.username);
 
   const params: ConfirmForgotPasswordCommandInput = {
     ClientId: COGNITO_APP_CLIENT_ID,
     ConfirmationCode: req.body.confirmationCode,
-    Username: req.body.username,
+    Username: sanitizedUsername,
     Password: req.body.password,
   };
 

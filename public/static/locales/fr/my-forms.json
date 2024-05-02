@@ -1,5 +1,5 @@
 {
-  "title": "Vos formulaires ",
+  "title": "Formulaires",
   "nav": {
     "drafts": "Ébauches",
     "published": "Publiés",
@@ -38,31 +38,56 @@
       "delete": "Supprimer",
       "coppiedToClipboard": "Copié dans le presse-papier",
       "somethingWentWrong": "Il y a eu un problème"
+    },
+    "actionRequired": {
+      "description": "Action requise : ",
+      "linkSingular": "<a href=\"{{link}}\">Approuver la suppression de {{responses}} réponse</a>",
+      "linkPlural": "<a href=\"{{link}}\">Approuver la suppression de {{responses}} réponses</a>"
     }
   },
   "responseTemplate": {
-    "responseNumber": "Numéro de réponse",
+    "responseNumber": "Identifiant de soumission",
     "submissionDate": "Date de soumission",
     "errorNoQuestionsAnswers": "Aucune question ou réponse n'a été trouvée.",
     "jumpTo": "Passer à :",
     "columnTable": "Tableau de colonnes",
     "rowTable": "Tableau de lignes",
     "rowTableInfo": "Un tableau de lignes est plus utile lorsqu'il s'agit de copier-coller dans une feuille de calcul.",
-    "confirmReceiptResponse": "Confirmer la réception de réponses",
-    "confirmReceipt": "Confirmer la réception",
-    "confirmReceiptInfo": "Copiez le code ci-dessous et collez-le dans la page Confirmation de réception des réponses du site Web.",
+    "confirmReceiptResponse": "Approuver la suppression des réponses",
+    "confirmReceipt": "Approuver la suppression",
+    "confirmReceiptInfo": "Copiez le code ci-dessous et collez-le dans la boîte dialogue « Approuver la suppression avec les codes de réception » dans Formulaires GC.",
     "copyCode": "Copier le code",
     "copyCodeClipboard": "Copier le code dans le presse-papiers",
     "copiedToCipboard": "Copié dans le presse-papiers",
     "errorrCopyingToClipboard": "Erreur lors de la copie dans le presse-papiers",
-    "submissionID": "Identifiant de la soumission",
+    "submissionID": "Identifiant de soumission",
     "copyResponse": "Copier la ligne de réponse dans le presse-papiers"
+  },
+  "responseAggregatedTemplate": {
+    "title": "Réponses au formulaire",
+    "officialReceipt": "Reçu et registre officiel des réponses",
+    "responsesDownloaded": "réponses téléchargées :",
+    "needToVerify": "Vous aurez besoin de ce reçu pour vérifier que toutes les réponses sont bien passées de Formulaires GC à votre ordinateur.",
+    "useTheCopy": "Utilisez le bouton « Copier les codes de réception »  pour copier et coller tous les codes, approuvant ainsi la suppression des réponses de Formulaires GC.",
+    "copyCodes": {
+      "title": "Approuver la suppression des réponses de Formulaires GC",
+      "description": "Une fois que vous aurez vérifié les réponses téléchargées et que vous êtes prêt à les supprimer de Formulaires GC, copiez et collez les codes de réception. Cela nous permet de savoir quand les réponses vous ont été transférées et d’enlever les données de notre système.",
+      "copyButton": "Copier les codes de réception"
+    },
+    "goToGcForms": "Aller sur Formulaires GC pour approuver la suppression des réponses",
+    "dataList": {
+      "title": "Réponses au formulaire : liste des réponses sélectionnées",
+      "formResponse": "Réponse"
+    }
   },
   "dataClassification": {
     "officialRecord": "Ceci est un document officiel",
     "retainCopy": "Conservez cette copie conformément à votre politique de conservation.",
-    "unclassified": "Non classifié",
-    "protectedA": "Protégé A",
-    "protectedB": "Protégé B"
-  }
+    "unclassified": "NON CLASSIFIÉ",
+    "protectedA": "PROTÉGÉ A",
+    "protectedB": "PROTÉGÉ B"
+  },
+  "viewForm": "Afficher le formulaire (ouvre un nouvel onglet)",
+  "editForm": "Modifier le formulaire",
+  "navLabel": "Navigation des formulaires"
 }

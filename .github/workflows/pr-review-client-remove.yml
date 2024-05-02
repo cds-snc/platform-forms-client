@@ -1,0 +1,43 @@
+name: Remove PR Review Client deployment
+
+on:
+  pull_request:
+    branches:
+      - develop
+      - feature/*
+    types:
+      - closed
+
+env:
+  AWS_ACCOUNT_ID: ${{ vars.STAGING_AWS_ACCOUNT_ID }}
+  AWS_DEFAULT_REGION: ca-central-1
+  FUNCTION_NAME: "forms-client-pr"
+  IMAGE: pr_review
+  REGISTRY: ${{ vars.STAGING_AWS_ACCOUNT_ID }}.dkr.ecr.ca-central-1.amazonaws.com
+
+permissions:
+  id-token: write
+  contents: read
+
+jobs:
+  remove-test-client:
+    if: ${{ !contains(github.event.pull_request.labels.*.name, 'Renovate') }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Set envs
+        run: echo "PR_NUMBER=$(jq --raw-output .pull_request.number "$GITHUB_EVENT_PATH")" >> $GITHUB_ENV
+
+      - name: Configure AWS credentials using OIDC
+        uses: aws-actions/configure-aws-credentials@010d0da01d0b5a38af31e9c3470dbfdabdecca3a # v4.0.1
+        with:
+          role-to-assume: arn:aws:iam::${{ env.AWS_ACCOUNT_ID }}:role/platform-forms-client-pr-review-env
+          role-session-name: PRReviewRemove
+          aws-region: ${{ env.AWS_DEFAULT_REGION }}
+
+      - name: Delete lambda function resources
+        run: |
+          aws lambda wait function-active --function-name $FUNCTION_NAME-$PR_NUMBER > /dev/null 2>&1
+          aws lambda delete-function-url-config --function-name $FUNCTION_NAME-$PR_NUMBER > /dev/null 2>&1
+          aws lambda delete-function --function-name $FUNCTION_NAME-$PR_NUMBER > /dev/null 2>&1
+          aws logs delete-log-group --log-group-name /aws/lambda/$FUNCTION_NAME-$PR_NUMBER > /dev/null 2>&1
+          aws ecr batch-delete-image --repository-name $IMAGE --image-ids imageTag=$PR_NUMBER > /dev/null 2>&1

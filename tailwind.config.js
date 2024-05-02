@@ -1,9 +1,13 @@
 const colors = require("tailwindcss/colors");
-const defaultTheme = require("tailwindcss/defaultTheme");
 
 module.exports = {
   theme: {
     extend: {
+      fontFamily: {
+        "noto-sans": "var(--font-noto-sans)",
+        lato: "var(--font-lato)",
+        mono: ["monospace"],
+      },
       width: {
         "cr-label-desktop": "50rem",
         "cr-label-1025": "30rem",
@@ -34,8 +38,6 @@ module.exports = {
         prose: "75ch",
       },
       listStyleType: {
-        disc: "disc",
-        decimal: "decimal",
         circle: "circle",
       },
       colors: {
@@ -45,6 +47,7 @@ module.exports = {
           default: "#b10e1e",
           100: "#f3e9e8",
           destructive: "#BC3331",
+          required: "#D3080C", // DTO requirement for required labels
           hover: "#892406",
         },
         purple: {
@@ -73,7 +76,26 @@ module.exports = {
           700: "#335075",
           800: "#26374a",
         },
+        indigo: {
+          50: "#EEF2FF",
+          500: "#6366F1",
+          700: "#4338CA",
+        },
+        violet: {
+          50: "#EDE9FE",
+          500: "#A78BFA",
+          700: "#7C3AED",
+        },
+        slate: {
+          50: "#F8FAFC",
+          100: "#F3F4F6",
+          300: "#CBD5E1",
+          500: "#64748B",
+          800: "#1E293B",
+          950: "#020617",
+        },
         gray: {
+          front: "#333333", // DTO requirement for frontend pages/forms
           DEFAULT: "#EEE",
           default: "#EEE",
           selected: "#e1e4e7",
@@ -82,6 +104,8 @@ module.exports = {
           light: "#E2E8EF",
           dark: "#748094",
           soft: "#F9FAFB",
+          50: "#F9FAFB",
+          100: "#F1F2F3",
           500: "#a0aec0",
           600: "#718096",
           700: "#4a5568",
@@ -107,19 +131,8 @@ module.exports = {
         transparent: "transparent",
       },
       fontSize: {
-        badge: ["14px", "14px"],
         sm: ["16px", "22px"],
-        base: ["20px", "28px"],
-        p: ["20px", "28px"],
-        h3: ["26px", "32px"],
-        h2: ["30px", "38px"],
-        h1: ["34px", "44px"],
-        small_sm: ["12px", "14px"],
-        small_base: ["16px", "22px"],
-        small_p: ["16px", "22px"],
-        small_h3: ["18px", "22px"],
-        small_h2: ["20px", "28px"],
-        small_h1: ["24px", "28px"],
+        base: ["18px", "28px"],
       },
       zIndex: {
         "-1": "-1,",
@@ -151,11 +164,6 @@ module.exports = {
     },
     container: {
       center: true,
-    },
-    fontFamily: {
-      sans: ["Lato", ...defaultTheme.fontFamily.sans],
-      body: ['"Noto Sans"'],
-      mono: ["monospace"],
     },
     screens: {
       xxl: { max: "1200px" },

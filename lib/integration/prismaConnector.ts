@@ -4,13 +4,12 @@ import { logMessage } from "@lib/logger";
 // See https://www.prisma.io/docs/support/help-articles/nextjs-prisma-client-dev-practices
 // Needed to ensure we only instantiate Prisma Client once
 
-interface CustomNodeJsGlobal {
-  prisma: PrismaClient;
-}
-declare const global: CustomNodeJsGlobal;
+export const globalForPrisma = globalThis as unknown as {
+  prisma: PrismaClient | undefined;
+};
 
 export const prisma =
-  global.prisma ||
+  globalForPrisma.prisma ??
   new PrismaClient({
     log:
       process.env.NODE_ENV === "development"
@@ -18,7 +17,7 @@ export const prisma =
         : ["info", "warn", "error"],
   });
 
-if (process.env.NODE_ENV !== "production") global.prisma = prisma;
+if (process.env.NODE_ENV !== "production") globalForPrisma.prisma = prisma;
 
 /**
  * Filters Prisma Connection and DB errors

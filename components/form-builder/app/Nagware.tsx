@@ -1,6 +1,6 @@
 import React, { useMemo } from "react";
 import { useTranslation } from "next-i18next";
-import { Attention, AttentionTypes } from "@components/globals/Attention/Attention";
+import { Alert } from "@components/globals";
 import { NagLevel, NagwareResult } from "@lib/types";
 
 export const Nagware = ({ nagwareResult }: { nagwareResult: NagwareResult }) => {
@@ -21,13 +21,13 @@ export const Nagware = ({ nagwareResult }: { nagwareResult: NagwareResult }) => 
               {nagwareResult.numberOfSubmissions > 20 ? (
                 <>
                   {t("nagware.unsavedSubmissionsOver21DaysOld.body1")}{" "}
-                  {nagwareResult.numberOfSubmissions}{" "}
+                  <span data-testid="numberOfSubmissions">{nagwareResult.numberOfSubmissions}</span>{" "}
                   {t("nagware.unsavedSubmissionsOver21DaysOld.body2.moreThan20Responses")}
                 </>
               ) : (
                 <>
                   {t("nagware.unsavedSubmissionsOver21DaysOld.body1")}{" "}
-                  {nagwareResult.numberOfSubmissions}{" "}
+                  <span data-testid="numberOfSubmissions">{nagwareResult.numberOfSubmissions}</span>{" "}
                   {t("nagware.unsavedSubmissionsOver21DaysOld.body2.lessThan20Responses")}
                 </>
               )}
@@ -45,7 +45,7 @@ export const Nagware = ({ nagwareResult }: { nagwareResult: NagwareResult }) => 
           body: (
             <>
               {t("nagware.unconfirmedSubmissionsOver21DaysOld.body1")}{" "}
-              {nagwareResult.numberOfSubmissions}{" "}
+              <span data-testid="numberOfSubmissions">{nagwareResult.numberOfSubmissions}</span>{" "}
               {t("nagware.unconfirmedSubmissionsOver21DaysOld.body2")}
               <br />
               <br />
@@ -62,13 +62,13 @@ export const Nagware = ({ nagwareResult }: { nagwareResult: NagwareResult }) => 
               {nagwareResult.numberOfSubmissions > 20 ? (
                 <>
                   {t("nagware.unsavedSubmissionsOver35DaysOld.body1")}{" "}
-                  {nagwareResult.numberOfSubmissions}{" "}
+                  <span data-testid="numberOfSubmissions">{nagwareResult.numberOfSubmissions}</span>{" "}
                   {t("nagware.unsavedSubmissionsOver35DaysOld.body2.moreThan20Responses")}
                 </>
               ) : (
                 <>
                   {t("nagware.unsavedSubmissionsOver35DaysOld.body1")}{" "}
-                  {nagwareResult.numberOfSubmissions}{" "}
+                  <span data-testid="numberOfSubmissions">{nagwareResult.numberOfSubmissions}</span>{" "}
                   {t("nagware.unsavedSubmissionsOver35DaysOld.body2.lessThan20Responses")}
                 </>
               )}
@@ -82,7 +82,7 @@ export const Nagware = ({ nagwareResult }: { nagwareResult: NagwareResult }) => 
           body: (
             <>
               {t("nagware.unconfirmedSubmissionsOver35DaysOld.body1")}{" "}
-              {nagwareResult.numberOfSubmissions}{" "}
+              <span data-testid="numberOfSubmissions">{nagwareResult.numberOfSubmissions}</span>{" "}
               {t("nagware.unconfirmedSubmissionsOver35DaysOld.body2")}
             </>
           ),
@@ -94,12 +94,19 @@ export const Nagware = ({ nagwareResult }: { nagwareResult: NagwareResult }) => 
 
   if (!notificationContent) return <></>;
 
+  if (notificationContent.type === "warning") {
+    return (
+      <Alert.Warning>
+        <Alert.Title>{notificationContent.title}</Alert.Title>
+        <p>{notificationContent.body}</p>
+      </Alert.Warning>
+    );
+  }
+
   return (
-    <Attention
-      type={notificationContent.type === "warning" ? AttentionTypes.WARNING : AttentionTypes.ERROR}
-      heading={notificationContent.title}
-    >
-      <div className="text-sm">{notificationContent.body}</div>
-    </Attention>
+    <Alert.Danger>
+      <Alert.Title>{notificationContent.title}</Alert.Title>
+      <p>{notificationContent.body}</p>
+    </Alert.Danger>
   );
 };

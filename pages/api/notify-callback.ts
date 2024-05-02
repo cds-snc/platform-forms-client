@@ -111,7 +111,7 @@ async function removeProcessedMark(submissionID: string) {
     ExpressionAttributeValues: {
       ":processed": false,
     },
-    ReturnValues: "NONE",
+    ReturnValues: "NONE" as const,
   };
 
   return documentClient.send(new UpdateCommand(updateItem));

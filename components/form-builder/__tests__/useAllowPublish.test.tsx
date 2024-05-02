@@ -92,7 +92,7 @@ describe("useAllowPublish", () => {
       },
     };
     const {
-      current: { data, hasData, isSaveable, isPublishable },
+      current: { data, hasData, isPublishable },
     } = createTemplateStore({
       form: store.form,
       isPublished: store.isPublished,
@@ -106,7 +106,6 @@ describe("useAllowPublish", () => {
     expect(hasData(["title", "questions"])).toBe(true);
     expect(hasData(["title", "privacyPolicy"])).toBe(false);
     expect(hasData(["title", "confirmationMessage"])).toBe(true);
-    expect(isSaveable()).toBe(true);
     expect(isPublishable()).toBe(false);
 
     // see: https://kentcdodds.com/blog/fix-the-not-wrapped-in-act-warning#an-alternative-waiting-for-the-mocked-promise

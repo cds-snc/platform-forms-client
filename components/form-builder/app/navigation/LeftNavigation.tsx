@@ -1,61 +1,92 @@
 import React from "react";
 import { useTranslation } from "next-i18next";
-import { DesignIcon, PreviewIcon, PublishIcon, GearIcon, MessageIcon } from "../../icons";
-import { LeftNavLink } from "./LeftNavLink";
-import { SaveButton } from "../shared/SaveButton";
+import {
+  NavEditIcon,
+  NavPreviewIcon,
+  NavPublishIcon,
+  NavSettingsIcon,
+  NavResponsesIcon,
+} from "../../icons";
+import { useTemplateContext } from "@components/form-builder/hooks";
 import { useTemplateStore } from "../../store/useTemplateStore";
-import { useSession } from "next-auth/react";
+import { useActivePathname, cleanPath } from "../../hooks/useActivePathname";
+import { LinkButton } from "@components/globals";
+
+const linkHelper = (url: string, activePathname: string) => {
+  const baseUrl = "/form-builder";
+  const href = `${baseUrl}${url}`;
+  const matchPathWithoutTrailingSlash = cleanPath(href).replace(/\/$/, "");
+
+  return {
+    href,
+    isActive: activePathname.startsWith(matchPathWithoutTrailingSlash),
+  };
+};
 
 export const LeftNavigation = () => {
   const { t } = useTranslation("form-builder");
   const { isPublished, id } = useTemplateStore((s) => ({ id: s.id, isPublished: s.isPublished }));
-  const { status } = useSession();
-
-  const iconClassname =
-    "inline-block w-6 h-6 group-hover:fill-blue-hover group-focus:fill-white-default group-active:fill-white-default mr-2 -mt-1";
+  const { activePathname } = useActivePathname();
+  const { saveForm } = useTemplateContext();
 
   return (
-    <nav className="absolute" aria-label={t("navLabelFormBuilder")}>
-      {!isPublished && (
-        <LeftNavLink href="/form-builder/edit">
-          <>
-            <DesignIcon className={iconClassname} />
-            {t("edit")}
-          </>
-        </LeftNavLink>
-      )}
-
-      <LeftNavLink href="/form-builder/preview">
-        <>
-          <PreviewIcon className={iconClassname} />
-          {status === "authenticated" ? t("test") : t("pagePreview")}
-        </>
-      </LeftNavLink>
-
-      {!isPublished && (
-        <LeftNavLink href="/form-builder/publish">
-          <>
-            <PublishIcon className={iconClassname} />
-            {t("publish")}
-          </>
-        </LeftNavLink>
-      )}
-
-      <LeftNavLink href={`/form-builder/responses/${id}`}>
-        <>
-          <MessageIcon className={iconClassname} />
-          {t("responsesNavLabel")}
-        </>
-      </LeftNavLink>
-
-      <LeftNavLink href={`/form-builder/settings/${id}`}>
-        <>
-          <GearIcon className={iconClassname} />
-          {t("pageSettings")}
-        </>
-      </LeftNavLink>
-
-      {!isPublished && <SaveButton />}
+    <nav aria-label={t("navLabelFormBuilder")}>
+      <ul className="m-0 list-none p-0">
+        {!isPublished && (
+          <li>
+            <LinkButton.LeftNav
+              testid="edit"
+              {...linkHelper("/edit", activePathname)}
+              onClick={saveForm}
+              title={t("edit")}
+            >
+              <NavEditIcon />
+            </LinkButton.LeftNav>
+          </li>
+        )}
+        <li>
+          <LinkButton.LeftNav
+            testid="preview"
+            {...linkHelper("/preview", activePathname)}
+            onClick={saveForm}
+            title={t("test")}
+          >
+            <NavPreviewIcon />
+          </LinkButton.LeftNav>
+        </li>
+        <li>
+          <LinkButton.LeftNav
+            testid="settings"
+            {...linkHelper(`/settings/${id}`, activePathname)}
+            onClick={saveForm}
+            title={t("pageSettings")}
+          >
+            <NavSettingsIcon />
+          </LinkButton.LeftNav>
+        </li>
+        {!isPublished && (
+          <li>
+            <LinkButton.LeftNav
+              testid="publish"
+              {...linkHelper("/publish", activePathname)}
+              onClick={saveForm}
+              title={t("publish")}
+            >
+              <NavPublishIcon />
+            </LinkButton.LeftNav>
+          </li>
+        )}
+        <li>
+          <LinkButton.LeftNav
+            testid="responses"
+            {...linkHelper(`/responses/${id}`, activePathname)}
+            onClick={saveForm}
+            title={t("responsesNavLabel")}
+          >
+            <NavResponsesIcon />
+          </LinkButton.LeftNav>
+        </li>
+      </ul>
     </nav>
   );
 };

@@ -8,7 +8,7 @@ interface CASL_FormRecord extends FormRecord {
 
 interface CASL_User extends User {
   kind: "User";
-  [key: string]: string | null | Date;
+  [key: string]: string | boolean | null | Date;
 }
 
 interface CASL_Privilege extends Privilege {

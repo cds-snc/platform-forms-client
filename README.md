@@ -2,22 +2,31 @@
 
 # Platform - GC Forms
 
-This repository is work-in-progress for the GC Forms platform product. "Alpha" will be arriving in Spring 2021.
+This repository is the web application for the GC Forms platform product.
 
 - Explore it here: [https://forms-staging.cdssandbox.xyz/](https://forms-staging.cdssandbox.xyz/).
-- View our UI inventory and documentation on [Storybook](https://cds-snc.github.io/platform-forms-client/?path=/story/introduction--page)
 
 ## Built with
 
 This is a [Next.js](https://nextjs.org/) and is built with:
 
-- Next.js >= 10.x
+- Next.js >= 14.x
 - Sass (Syntactically Awesome Style Sheets) for reusable styles
 - [Tailwindcss](https://tailwindcss.com/) a utility-first css framework for rapidly building custom designs
 - [PostCSS](https://postcss.org/)
 - [Prisma](https://www.prisma.io/)
 
 ## Running locally
+
+### Infrastructure setup
+
+Clone the [forms-terraform repository](https://github.com/cds-snc/forms-terraform) and follow the instructions in our [README](https://github.com/cds-snc/forms-terraform/blob/develop/README.md) to launch the Localstack infrastructure locally.
+
+```sh
+git clone https://github.com/cds-snc/forms-terraform.git
+```
+
+### Web application setup
 
 Clone this repository
 
@@ -32,203 +41,89 @@ cd platform-forms-client
 yarn install
 ```
 
-Set .env variables
+### Set your environment variables
 
-For local development of the NextJS application but leveraging the AWS backend (Reliability Queue, Templates DB, etc.)
+Create an `.env` file at the root of the project and use the `.env.example` as a template. If you want you can find a ready to use version of the `.env` file in 1Password > Local Development .ENV secure note.
 
-```
-NOTIFY_API_KEY= // Can be found in LastPass
-SUBMISSION_API=Submission
-TEMPLATES_API=Templates
-AWS_ACCESS_KEY_ID= // Can be found in LastPass
-AWS_SECRET_ACCESS_KEY= // Can be found in LastPass
-GOOGLE_CLIENT_ID= // Can be found in LastPass
-GOOGLE_CLIENT_SECRET= // Can be found in LastPass
-NEXTAUTH_URL=http://localhost:3000
-REDIS_URL=localhost
-```
-
-For local development of the complete solution (running SAM for local Lambdas) add the following two environment variables to your .env file and see the instructions for launching the Lambda's locally in our [Infrastructure ReadME](https://github.com/cds-snc/forms-staging-terraform)
-
-```
-LOCAL_LAMBDA_ENDPOINT=http://127.0.0.1:3001
-DATABASE_URL=postgres://postgres:password@localhost:5432/formsDB
-```
-
-Start Redis in docker locally
+### Run the web application in development mode
 
 ```sh
-docker-compose up -d redis
+yarn dev
 ```
 
-Set up local database (only if you want to run the project in isolation)
+Browse web application on `http://localhost:3000`.
 
-Run postgres by using the following command
+### How to access databases
 
-```sh
-docker-compose up -d db
-```
+#### PostgreSQL GUI
 
 A GUI manager is installed with prisma and can be launched with `yarn prisma:studio`
-You can optionally install a gui manager like PgAdmin if you would like.
 For more information about developing with prisma migrate please visit: https://www.prisma.io/docs/guides/database/developing-with-prisma-migrate
 
-In your main forms .env file, DATABASE_URL can be filled in as followed (replace values in {} with the values you used in your migrations env file)
-`DATABASE_URL=postgres://{DB_USERNAME}:{DB_PASSWORD}@DB_HOST:5432/{DB_NAME}`
+You can optionally install a GUI manager like pgAdmin4 ([MacOS download link](https://www.postgresql.org/ftp/pgadmin/pgadmin4/v8.4/macos/)) if you would like.
+Here are the credentials to access your local PostgreSQL instance:
 
-As an example, here's the DB string with the example values from above:
-`DATABASE_URL=postgres://postgres:chummy@localhost:5432/formsDB`
-
-Run in development mode:
-
-```sh
-yarn dev
+```
+Hostname/Address: 127.0.0.1
+Port: 4510
+Maintenance database: forms
+Username: localstack_postgres
+Password: chummy
 ```
 
-Browse application on `http://localhost:3000`
+#### Redis GUI
 
-## Configuration
+You can download RedisInsight (see download link at the bottom of this [page](https://redis.com/redis-enterprise/redis-insight/)).
 
-There are some environment variables that can optionally be configured. You can see a list in `.env.example`.
+Here are the credentials to access your local Redis instance:
 
-### Grant yourself admin access locally
+```
+Host: localhost
+Port: 6379
+```
 
-There are 2 ways to connect to the database. Either directly using PGAdmin or a PSQL cli tool or through Prisma Studio. Once the change is made you will need to "Log Out" using the
+## Grant yourself admin access locally
 
-## Connect to DataBase Directly
+There are several ways to connect to the database, but here's how to do it through Prisma Studio:
 
-- Login using your email via Google SSO
-- Connect to the local database `psql -h db -U postgres -d formsDB`
-- Retrieve your users id from the User table in the formsDB `SELECT * FROM "public"."User" WHERE email='$YOUR_EMAIL';`
-- Update the record to elevate yourself as an admin `UPDATE "public"."User" SET role='ADMINISTRATOR' WHERE id='$YOUR_ID';`
-
-## Prisma Studio
-
-- Login using your email via Google SSO
+- Login using your Staging account
 - Launch prisma studio with `yarn prisma:studio` or if you have prisma installed globally `prisma studio`
 - A browser window will open at `localhost:5555`. Open the model `User`
-- A table will appear. Find your username in the list and double-click on the value under the `role` column to modify to "ADMINISTRATOR".
+- A table will appear. Find your username and add all the privileges under the `privileges` column.
 - Click on "Save Change" button in the top menu bar once completed.
 
-### Notify integration
+Once the change is made, you will need to 'Log Out' and log back in. Alternatively, if you want to avoid logging out, you can open RedisInsight and delete the key named `auth:privileges:<your_user_id>`. Then you just need to refresh the web application for the new privileges to be applied.
 
-To send a form submission to an email address, you should configure the following environment variables in a `.env` file:
+## Testing
 
-```sh
-NOTIFY_API_KEY=
-```
+This application uses Cypress for end-to-end testing.
 
-### Debugging
-
-For verbose debug logging set an environment variable called DEBUG to `true` before running `yarn dev`
-ex. `DEBUG=true yarn dev`
-
-## ---------------------------------------------------------------------
-
-# Plate-forme - Formulaires GC
-
-Ce dépôt est un travail en cours pour le produit de la plate-forme GC Forms. "Alpha" arrivera au printemps 2021.
-
-- Explorez le ici : [https://forms-staging.cdssandbox.xyz/](https://forms-staging.cdssandbox.xyz/).
-- Explorez le [Storybook](https://cds-snc.github.io/platform-forms-client/?path=/story/introduction--page)
-
-## Contributions
-
-Ce projet est conçu sur une de base [Next.js](https://nextjs.org/) et utilise les contributions suivantes :
-
-- Next.js >= 10.x
-- Feuilles de styles Sass (Syntactically Awesome Style Sheets)
-- [Tailwindcss](https://tailwindcss.com/) un environnement CSS modulaire accélérant la conception de pages web
-- [PostCSS](https://postcss.org/)
-
-## Exécuter localement
-
-Cloner ce référentiel
-
-```sh
-git clone https://github.com/cds-snc/platform-forms-client.git
-```
-
-Installer les dépendances
-
-```sh
-cd platform-forms-client
-yarn install
-```
-
-Définir les variables .env
-
-Pour le développement local de l'application NextJS mais en s'appuyant sur le backend AWS (File d'attente de fiabilité, DB de modèles, etc.)
+If you want to clear the database and run the tests in a clean slate:
 
 ```
-NOTIFY_API_KEY= // Can be found in LastPass
-SUBMISSION_API=Submission
-TEMPLATES_API=Templates
-AWS_ACCESS_KEY_ID= // Can be found in LastPass
-AWS_SECRET_ACCESS_KEY= // Can be found in LastPass
-GOOGLE_CLIENT_ID= // Can be found in LastPass
-GOOGLE_CLIENT_SECRET= // Can be found in LastPass
-NEXTAUTH_URL=http://localhost:3000
-REDIS_URL=localhost
+yarn dev:test # run in a separate terminal
 ```
 
-Pour le développement local de la solution complète (exécutant SAM pour les Lambda locaux), ajoutez les deux variables d'environnement suivantes à votre fichier .env et consultez les instructions pour lancer les Lambda localement dans notre [Infrastructure ReadME] (https://github.com/cds -snc/forms-staging-terraform)
+If you want to run a specific test:
 
 ```
-LOCAL_LAMBDA_ENDPOINT=http://127.0.0.1:3001
-DATABASE_URL=postgres://postgres:password@localhost:5432/formsDB
+yarn cypress:e2e --spec "PATH_TO_TEST"
 ```
 
-Démarrer Redis dans docker localement
-
-```sh
-docker run --name local-redis -p 6379:6379 -d redis:alpine
-```
-
-Configurer la base de données locale (uniquement si vous souhaitez exécuter le projet de manière isolée)
-
-- Assurez-vous que postgres est installé et en cours d'exécution sur votre machine locale
-- Installez un gestionnaire d'interface graphique comme PgAdmin si vous le souhaitez (facultatif)
-
-dans `/migrations`, remplissez le fichier .env séparé.
-Exemples de valeurs :
+If you want to run the entire test suite:
 
 ```
-DB_NAME=formsDB
-DB_USERNAME=postgres
-DB_PASSWORD=password
-DB_HOST=localhost
+yarn cypress:e2e
+# an error? see the screenshot in ./cypress/screenshots
 ```
 
-dans le dossier `/migrations`, exécutez `node index.js` pour exécuter des migrations sur la base de données locale.
+If a test is failing, you can run the test tool:
 
-Dans votre fichier .env de formulaires principaux, DATABASE_URL peut être rempli comme suit (remplacez les valeurs dans {} par les valeurs que vous avez utilisées dans votre fichier env de migrations)
-`DATABASE_URL=postgres://{DB_USERNAME}:{DB_PASSWORD}@DB_HOST:5432/{DB_NAME}`
-
-À titre d'exemple, voici la chaîne de base de données avec les exemples de valeurs ci-dessus :
-`DATABASE_URL=postgres://postgres:password@localhost:5432/formsDB`
-
-Exécuter en mode développement
-
-```sh
-yarn dev
+```
+yarn cypress
+# A chrome instance starts, then manually start and watch that test running
 ```
 
-Accéder à l’application au `http://localhost:3000`
+The application also uses Jest for unit testing. To run the tests, run `yarn test`.
 
-## Configuration
-
-Certaines valeurs d'environnement peuvent être configurés. Cette étape est optionnelle. Consultez la liste des valeurs disponibles dans `.env.example`.
-
-### Intégration avec Notify
-
-Pour envoyer les réponses d'une formulaire à une adresse courriel, vous devez configurer les variables suivantes :
-
-```sh
-NOTIFY_API_KEY=
-```
-
-### Débougage
-
-Pour des logs plus verbose en fin de débougage, définissez une variable d'environnement appelée DEBUG comme `true` avant d'exécuter` yarn dev`
-ex. `DEBUG=true yarn dev`
+# Traduction en français à venir...

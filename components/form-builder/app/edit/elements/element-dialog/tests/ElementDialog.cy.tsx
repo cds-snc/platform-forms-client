@@ -14,7 +14,7 @@ describe("<ElementDialog />", () => {
 
     cy.mount(<ElementDialog handleClose={handleCloseSpy} handleAddType={handleAddTypeSpy} />);
     cy.get('[data-testid="richText"]').click();
-    cy.get("body").type("{enter}");
+    cy.typeInField("body", "{enter}");
     cy.get("@handleAddTypeSpy").should("have.been.calledWith", "richText");
     cy.get("@handleCloseSpy").should("have.been.calledOnce");
   });
@@ -28,7 +28,7 @@ describe("<ElementDialog />", () => {
     cy.mount(<ElementDialog handleClose={handleCloseSpy} handleAddType={handleAddTypeSpy} />);
 
     cy.get('[data-testid="textField"]').click();
-    cy.get("body").type("{enter}");
+    cy.typeInField("body", "{enter}");
     cy.get("@handleAddTypeSpy").should("have.been.calledWith", "textField");
     cy.get("@handleCloseSpy").should("have.been.calledOnce");
   });
@@ -42,7 +42,7 @@ describe("<ElementDialog />", () => {
     cy.mount(<ElementDialog handleClose={handleCloseSpy} handleAddType={handleAddTypeSpy} />);
 
     cy.get('[data-testid="textArea"]').click();
-    cy.get("body").type("{enter}");
+    cy.typeInField("body", "{enter}");
     cy.get("@handleAddTypeSpy").should("have.been.calledWith", "textArea");
     cy.get("@handleCloseSpy").should("have.been.calledOnce");
   });
@@ -56,7 +56,7 @@ describe("<ElementDialog />", () => {
     cy.mount(<ElementDialog handleClose={handleCloseSpy} handleAddType={handleAddTypeSpy} />);
 
     cy.get('[data-testid="radio"]').click();
-    cy.get("body").type("{enter}");
+    cy.typeInField("body", "{enter}");
     cy.get("@handleAddTypeSpy").should("have.been.calledWith", "radio");
     cy.get("@handleCloseSpy").should("have.been.calledOnce");
   });
@@ -70,7 +70,7 @@ describe("<ElementDialog />", () => {
     cy.mount(<ElementDialog handleClose={handleCloseSpy} handleAddType={handleAddTypeSpy} />);
 
     cy.get('[data-testid="checkbox"]').click();
-    cy.get("body").type("{enter}");
+    cy.typeInField("body", "{enter}");
     cy.get("@handleAddTypeSpy").should("have.been.calledWith", "checkbox");
     cy.get("@handleCloseSpy").should("have.been.calledOnce");
   });
@@ -84,7 +84,7 @@ describe("<ElementDialog />", () => {
     cy.mount(<ElementDialog handleClose={handleCloseSpy} handleAddType={handleAddTypeSpy} />);
 
     cy.get('[data-testid="dropdown"]').click();
-    cy.get("body").type("{enter}");
+    cy.typeInField("body", "{enter}");
     cy.get("@handleAddTypeSpy").should("have.been.calledWith", "dropdown");
     cy.get("@handleCloseSpy").should("have.been.calledOnce");
   });
@@ -98,7 +98,7 @@ describe("<ElementDialog />", () => {
     cy.mount(<ElementDialog handleClose={handleCloseSpy} handleAddType={handleAddTypeSpy} />);
 
     cy.get('[data-testid="date"]').click();
-    cy.get("body").type("{enter}");
+    cy.typeInField("body", "{enter}");
     cy.get("@handleAddTypeSpy").should("have.been.calledWith", "date");
     cy.get("@handleCloseSpy").should("have.been.calledOnce");
   });
@@ -111,8 +111,9 @@ describe("<ElementDialog />", () => {
 
     cy.mount(<ElementDialog handleClose={handleCloseSpy} handleAddType={handleAddTypeSpy} />);
 
+    cy.get('[data-testid="preset-filter"]').click();
     cy.get('[data-testid="number"]').click();
-    cy.get("body").type("{enter}");
+    cy.typeInField("body", "{enter}");
     cy.get("@handleAddTypeSpy").should("have.been.calledWith", "number");
     cy.get("@handleCloseSpy").should("have.been.calledOnce");
   });
@@ -126,7 +127,7 @@ describe("<ElementDialog />", () => {
     cy.mount(<ElementDialog handleClose={handleCloseSpy} handleAddType={handleAddTypeSpy} />);
 
     cy.get('[data-testid="attestation"]').click();
-    cy.get("body").type("{enter}");
+    cy.typeInField("body", "{enter}");
     cy.get("@handleAddTypeSpy").should("have.been.calledWith", "attestation");
     cy.get("@handleCloseSpy").should("have.been.calledOnce");
   });
@@ -140,7 +141,7 @@ describe("<ElementDialog />", () => {
     cy.mount(<ElementDialog handleClose={handleCloseSpy} handleAddType={handleAddTypeSpy} />);
 
     cy.get('[data-testid="name"]').click();
-    cy.get("body").type("{enter}");
+    cy.typeInField("body", "{enter}");
     cy.get("@handleAddTypeSpy").should("have.been.calledWith", "name");
     cy.get("@handleCloseSpy").should("have.been.calledOnce");
   });
@@ -154,7 +155,7 @@ describe("<ElementDialog />", () => {
     cy.mount(<ElementDialog handleClose={handleCloseSpy} handleAddType={handleAddTypeSpy} />);
 
     cy.get('[data-testid="firstMiddleLastName"]').click();
-    cy.get("body").type("{enter}");
+    cy.typeInField("body", "{enter}");
     cy.get("@handleAddTypeSpy").should("have.been.calledWith", "firstMiddleLastName");
     cy.get("@handleCloseSpy").should("have.been.calledOnce");
   });
@@ -168,7 +169,7 @@ describe("<ElementDialog />", () => {
     cy.mount(<ElementDialog handleClose={handleCloseSpy} handleAddType={handleAddTypeSpy} />);
 
     cy.get('[data-testid="address"]').click();
-    cy.get("body").type("{enter}");
+    cy.typeInField("body", "{enter}");
     cy.get("@handleAddTypeSpy").should("have.been.calledWith", "address");
     cy.get("@handleCloseSpy").should("have.been.calledOnce");
   });
@@ -182,7 +183,7 @@ describe("<ElementDialog />", () => {
     cy.mount(<ElementDialog handleClose={handleCloseSpy} handleAddType={handleAddTypeSpy} />);
 
     cy.get('[data-testid="contact"]').click();
-    cy.get("body").type("{enter}");
+    cy.typeInField("body", "{enter}");
     cy.get("@handleAddTypeSpy").should("have.been.calledWith", "contact");
     cy.get("@handleCloseSpy").should("have.been.calledOnce");
   });
@@ -197,7 +198,7 @@ describe("<ElementDialog />", () => {
 
     // Not sure how to turn on Feature Flags in Cypress Component tests ??
     cy.get('[data-testid="dynamicRow"]').click();
-    cy.get("body").type("{enter}");
+    cy.typeInField("body", "{enter}");
     cy.get("@handleAddTypeSpy").should("have.been.calledWith", "dynamicRow");
     cy.get("@handleCloseSpy").should("have.been.calledOnce");
   });
@@ -222,10 +223,13 @@ describe("<ElementDialog />", () => {
 
     cy.mount(<ElementDialog handleClose={handleCloseSpy} handleAddType={handleAddTypeSpy} />);
 
+    cy.get("body").tab();
     cy.focused().should("have.attr", "data-testid", "listbox");
-    cy.get('[data-testid="listbox"').tab();
+    cy.get('[data-testid="listbox"').tab().tab(); // tab past the example element
     cy.focused().should("have.attr", "data-testid", "element-description-add-element");
     cy.get('[data-testid="element-description-add-element"').tab();
+    cy.focused().should("have.attr", "data-testid", "cancel-button");
+    cy.get('[data-testid="cancel-button"').tab();
     cy.focused().should("have.attr", "data-testid", "close-dialog");
   });
 
@@ -237,46 +241,99 @@ describe("<ElementDialog />", () => {
 
     cy.mount(<ElementDialog handleClose={handleCloseSpy} handleAddType={handleAddTypeSpy} />);
 
+    cy.get("body").tab();
     cy.focused().should("have.attr", "data-testid", "listbox");
-    cy.get('[data-testid="richText"]').should("have.attr", "aria-selected", "true");
-
-    cy.get("body").type("{downarrow}");
     cy.get('[data-testid="textField"]').should("have.attr", "aria-selected", "true");
 
-    cy.get("body").type("{downarrow}");
+    // cy.typeInField("body", "{downarrow}");
+    // cy.get('[data-testid="textField"]').should("have.attr", "aria-selected", "true");
+
+    cy.typeInField("body", "{downarrow}");
     cy.get('[data-testid="textArea"]').should("have.attr", "aria-selected", "true");
 
-    cy.get("body").type("{downarrow}");
+    cy.typeInField("body", "{downarrow}");
     cy.get('[data-testid="radio"]').should("have.attr", "aria-selected", "true");
 
-    cy.get("body").type("{downarrow}");
+    cy.typeInField("body", "{downarrow}");
     cy.get('[data-testid="checkbox"]').should("have.attr", "aria-selected", "true");
 
-    cy.get("body").type("{downarrow}");
+    cy.typeInField("body", "{downarrow}");
     cy.get('[data-testid="dropdown"]').should("have.attr", "aria-selected", "true");
 
-    cy.get("body").type("{downarrow}");
-    cy.get('[data-testid="date"]').should("have.attr", "aria-selected", "true");
-
-    cy.get("body").type("{downarrow}");
-    cy.get('[data-testid="number"]').should("have.attr", "aria-selected", "true");
-
-    cy.get("body").type("{downarrow}");
+    cy.typeInField("body", "{downarrow}");
     cy.get('[data-testid="attestation"]').should("have.attr", "aria-selected", "true");
 
-    cy.get("body").type("{downarrow}");
+    cy.typeInField("body", "{downarrow}");
     cy.get('[data-testid="name"]').should("have.attr", "aria-selected", "true");
 
-    cy.get("body").type("{downarrow}");
+    cy.typeInField("body", "{downarrow}");
     cy.get('[data-testid="firstMiddleLastName"]').should("have.attr", "aria-selected", "true");
 
-    cy.get("body").type("{downarrow}");
-    cy.get('[data-testid="address"]').should("have.attr", "aria-selected", "true");
-
-    cy.get("body").type("{downarrow}");
+    cy.typeInField("body", "{downarrow}");
     cy.get('[data-testid="contact"]').should("have.attr", "aria-selected", "true");
 
-    cy.get("body").type("{downarrow}");
+    cy.typeInField("body", "{downarrow}");
+    cy.get('[data-testid="address"]').should("have.attr", "aria-selected", "true");
+
+    cy.typeInField("body", "{downarrow}");
+    cy.get('[data-testid="date"]').should("have.attr", "aria-selected", "true");
+
+    cy.typeInField("body", "{downarrow}");
+    cy.get('[data-testid="number"]').should("have.attr", "aria-selected", "true");
+
+    cy.typeInField("body", "{downarrow}");
+    cy.get('[data-testid="richText"]').should("have.attr", "aria-selected", "true");
+
+    cy.typeInField("body", "{downarrow}");
     cy.get('[data-testid="dynamicRow"]').should("have.attr", "aria-selected", "true");
+  });
+
+  it("Keybaord navigate the filters", () => {
+    cy.viewport(950, 900);
+
+    const handleCloseSpy = cy.spy().as("handleCloseSpy");
+    const handleAddTypeSpy = cy.spy().as("handleAddTypeSpy");
+
+    cy.mount(<ElementDialog handleClose={handleCloseSpy} handleAddType={handleAddTypeSpy} />);
+
+    cy.focused().should("have.attr", "data-testid", "all-filter");
+    cy.typeInField("body", "{rightarrow}");
+    cy.focused().should("have.attr", "data-testid", "basic-filter");
+    cy.typeInField("body", "{rightarrow}");
+    cy.focused().should("have.attr", "data-testid", "preset-filter");
+    cy.typeInField("body", "{rightarrow}");
+    cy.focused().should("have.attr", "data-testid", "other-filter");
+    cy.get('[data-testid="other-filter"]').tab();
+    cy.focused().should("have.attr", "data-testid", "listbox");
+    cy.get('[data-testid="listbox"]').tab({ shift: true });
+    cy.focused().should("have.attr", "data-testid", "other-filter");
+    cy.typeInField("body", "{leftarrow}");
+    cy.focused().should("have.attr", "data-testid", "preset-filter");
+    cy.typeInField("body", "{leftarrow}");
+    cy.focused().should("have.attr", "data-testid", "basic-filter");
+    cy.typeInField("body", "{leftarrow}");
+    cy.focused().should("have.attr", "data-testid", "all-filter");
+  });
+
+  it("Can filter the listbox", () => {
+    cy.viewport(950, 900);
+
+    const handleCloseSpy = cy.spy().as("handleCloseSpy");
+    const handleAddTypeSpy = cy.spy().as("handleAddTypeSpy");
+
+    cy.mount(<ElementDialog handleClose={handleCloseSpy} handleAddType={handleAddTypeSpy} />);
+
+    cy.focused().should("have.attr", "data-testid", "all-filter");
+    cy.typeInField("body", "{rightarrow}");
+    cy.focused().should("have.attr", "data-testid", "basic-filter");
+    cy.get('[data-testid="basic-filter').click();
+    cy.get('[data-testid="listbox"] li[role="option"]').should("have.length", 6);
+    cy.get('[data-testid="preset-filter').click();
+    cy.get('[data-testid="listbox"] li[role="option"]').should("have.length", 6);
+    cy.get('[data-testid="other-filter').click();
+    cy.get('[data-testid="listbox"] li[role="option"]').should("have.length", 2);
+
+    cy.get('[data-testid="all-filter').click();
+    cy.get('[data-testid="listbox"] li[role="option"]').should("have.length", 14);
   });
 });

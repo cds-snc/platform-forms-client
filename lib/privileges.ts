@@ -1,11 +1,6 @@
 import { Prisma } from "@prisma/client";
 import { prisma, prismaErrors } from "@lib/integration/prismaConnector";
-import {
-  privilegeCheck,
-  privilegePut,
-  privilegeDelete,
-  flushValues,
-} from "@lib/cache/privilegeCache";
+import { privilegeCheck, privilegePut, privilegeDelete } from "@lib/cache/privilegeCache";
 import {
   createMongoAbility,
   MongoAbility,
@@ -136,8 +131,10 @@ export const updatePrivilegesForUser = async (
 ) => {
   try {
     checkPrivileges(ability, [{ action: "update", subject: "User" }]);
+
     const addPrivileges: { id: string }[] = [];
     const removePrivileges: { id: string }[] = [];
+
     privileges.forEach((privilege) => {
       if (privilege.action === "add") {
         addPrivileges.push({ id: privilege.id });
@@ -145,28 +142,66 @@ export const updatePrivilegesForUser = async (
         removePrivileges.push({ id: privilege.id });
       }
     });
-    const user = await prisma.user.update({
-      where: {
-        id: userID,
-      },
-      data: {
-        privileges: {
-          connect: addPrivileges,
-          disconnect: removePrivileges,
+
+    // Run prisma calls in parallel
+
+    const [privilegesInfo, user, privilegedUser] = await Promise.all([
+      prisma.privilege.findMany({
+        select: {
+          id: true,
+          name: true,
         },
-      },
-      select: {
-        privileges: true,
-      },
-    });
+      }),
+      prisma.user.update({
+        where: {
+          id: userID,
+        },
+        data: {
+          privileges: {
+            connect: addPrivileges,
+            disconnect: removePrivileges,
+          },
+        },
+        select: {
+          id: true,
+          email: true,
+          privileges: true,
+        },
+      }),
+      prisma.user.findUniqueOrThrow({
+        where: {
+          id: ability.userID,
+        },
+        select: {
+          email: true,
+        },
+      }),
+    ]);
 
     // Logging the events asynchronously to not block the function
     addPrivileges.forEach((privilege) =>
-      logEvent(ability.userID, { type: "Privilege", id: privilege.id }, "GrantPrivilege")
+      logEvent(
+        userID,
+        { type: "Privilege", id: privilege.id },
+        "GrantPrivilege",
+        `Granted privilege : ${privilegesInfo.find((p) => p.id === privilege.id)?.name} to ${
+          user.email
+        } (userID: ${user.id}) by ${privilegedUser?.email} (userID: ${ability.userID})`
+      )
     );
+
     removePrivileges.forEach((privilege) =>
-      logEvent(ability.userID, { type: "Privilege", id: privilege.id }, "RevokePrivilege")
+      logEvent(
+        userID,
+        { type: "Privilege", id: privilege.id },
+        "RevokePrivilege",
+        `Revoked privilege : ${privilegesInfo.find((p) => p.id === privilege.id)?.name} from ${
+          user.email
+        } (userID: ${user.id}) by ${privilegedUser?.email} (userID: ${ability.userID})`
+      )
     );
+
+    // Remove existing values from Cache
     await privilegeDelete(userID);
 
     return user.privileges;
@@ -198,8 +233,7 @@ export const getAllPrivileges = async (ability: UserAbility) => {
     return await prisma.privilege.findMany({
       select: {
         id: true,
-        nameEn: true,
-        nameFr: true,
+        name: true,
         descriptionEn: true,
         descriptionFr: true,
         permissions: true,
@@ -211,57 +245,6 @@ export const getAllPrivileges = async (ability: UserAbility) => {
     });
   } catch (e) {
     return prismaErrors(e, []);
-  }
-};
-
-export const updatePrivilege = async (ability: UserAbility, privilege: Privilege) => {
-  try {
-    checkPrivileges(ability, [{ action: "update", subject: "Privilege" }]);
-
-    const response = await prisma.privilege.update({
-      where: {
-        id: privilege.id,
-      },
-      data: privilege,
-
-      select: {
-        id: true,
-      },
-    });
-    // Flush existing privilege cache for all users asynchronously
-    flushValues();
-    return response;
-  } catch (error) {
-    logMessage.error(error as Error);
-    if (error instanceof Prisma.PrismaClientKnownRequestError && error.code === "P2025") {
-      // Error P2025: Record to update not found.
-      return null;
-    }
-    throw error;
-  }
-};
-
-export const createPrivilege = async (ability: UserAbility, privilege: Privilege) => {
-  try {
-    checkPrivileges(ability, [{ action: "create", subject: "Privilege" }]);
-
-    const response = await prisma.privilege.create({
-      data: privilege,
-
-      select: {
-        id: true,
-      },
-    });
-    // Flush existing privilege cache for all users asynchronously
-    flushValues();
-    return response;
-  } catch (error) {
-    logMessage.error(error as Error);
-    if (error instanceof Prisma.PrismaClientKnownRequestError && error.code === "P2025") {
-      // Error P2025: Record to update not found.
-      return null;
-    }
-    throw error;
   }
 };
 
@@ -288,7 +271,7 @@ export const checkPrivileges = (
   rules: {
     action: Action;
     subject: Subject | ForcedSubjectType;
-    field?: string;
+    field?: string | string[];
   }[],
   logic: "all" | "one" = "all"
 ): void => {
@@ -296,6 +279,17 @@ export const checkPrivileges = (
   try {
     const result = rules.map(({ action, subject, field }) => {
       let ruleResult = false;
+      if (Array.isArray(field)) {
+        field.forEach((f) => {
+          try {
+            checkPrivileges(ability, [{ action, subject, field: f }], logic);
+            ruleResult = true;
+          } catch (error) {
+            ruleResult = false;
+          }
+        });
+        return ruleResult;
+      }
       if (_isForceTyping(subject)) {
         ruleResult = ability.can(action, setSubjectType(subject.type, subject.object), field);
         logMessage.debug(

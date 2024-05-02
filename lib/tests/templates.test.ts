@@ -38,7 +38,7 @@ import {
 } from "__utils__/permissions";
 import { Session } from "next-auth";
 import { logEvent } from "@lib/auditLogs";
-import { numberOfUnprocessedSubmissions } from "@lib/vault";
+import { unprocessedSubmissions } from "@lib/vault";
 
 const redis = new Redis();
 
@@ -56,7 +56,7 @@ const mockedLogEvent = jest.mocked(logEvent, { shallow: true });
 
 jest.mock("@lib/vault");
 
-const mockNumberOfUnprocessedSubmissions = jest.mocked(numberOfUnprocessedSubmissions, {
+const mockNumberOfUnprocessedSubmissions = jest.mocked(unprocessedSubmissions, {
   shallow: true,
 });
 
@@ -109,12 +109,14 @@ describe("Template CRUD functions", () => {
       },
     });
 
-    expect(newTemplate).toEqual({
-      id: "formtestID",
-      form: formConfiguration,
-      isPublished: false,
-      securityAttribute: "Unclassified",
-    });
+    expect(newTemplate).toEqual(
+      expect.objectContaining({
+        id: "formtestID",
+        form: formConfiguration,
+        isPublished: false,
+        securityAttribute: "Unclassified",
+      })
+    );
 
     expect(mockedLogEvent).toHaveBeenCalledWith(
       fakeSession.user.id,
@@ -137,18 +139,18 @@ describe("Template CRUD functions", () => {
     const templates = await getAllTemplates(ability, "1");
 
     expect(templates).toEqual([
-      {
+      expect.objectContaining({
         id: "formtestID",
         form: formConfiguration,
         isPublished: false,
         securityAttribute: "Unclassified",
-      },
-      {
+      }),
+      expect.objectContaining({
         id: "formtestID2",
         form: formConfiguration,
         isPublished: false,
         securityAttribute: "Unclassified",
-      },
+      }),
     ]);
     if (
       // Can manage all forms
@@ -282,6 +284,7 @@ describe("Template CRUD functions", () => {
       },
       select: {
         id: true,
+        closingDate: true,
         created_at: true,
         updated_at: true,
         name: true,
@@ -293,12 +296,15 @@ describe("Template CRUD functions", () => {
       },
     });
 
-    expect(template).toEqual({
-      id: "formtestID",
-      form: formConfiguration,
-      isPublished: false,
-      securityAttribute: "Unclassified",
-    });
+    expect(template).toEqual(
+      expect.objectContaining({
+        closingDate: undefined,
+        id: "formtestID",
+        form: formConfiguration,
+        isPublished: false,
+        securityAttribute: "Unclassified",
+      })
+    );
     expect(mockedLogEvent).toHaveBeenCalledTimes(0);
   });
 
@@ -321,6 +327,7 @@ describe("Template CRUD functions", () => {
       },
       select: {
         id: true,
+        closingDate: true,
         created_at: true,
         updated_at: true,
         name: true,
@@ -332,18 +339,21 @@ describe("Template CRUD functions", () => {
         users: {
           select: {
             id: true,
+            email: true,
             name: true,
           },
         },
       },
     });
 
-    expect(template).toEqual({
-      id: "formtestID",
-      form: formConfiguration,
-      isPublished: false,
-      securityAttribute: "Unclassified",
-    });
+    expect(template).toEqual(
+      expect.objectContaining({
+        id: "formtestID",
+        form: formConfiguration,
+        isPublished: false,
+        securityAttribute: "Unclassified",
+      })
+    );
     expect(mockedLogEvent).toHaveBeenCalledWith(
       fakeSession.user.id,
       { type: "Form", id: "formTestID" },
@@ -392,6 +402,7 @@ describe("Template CRUD functions", () => {
       },
       select: {
         id: true,
+        closingDate: true,
         created_at: true,
         updated_at: true,
         name: true,
@@ -402,6 +413,7 @@ describe("Template CRUD functions", () => {
         ttl: true,
         users: {
           select: {
+            email: true,
             id: true,
             name: true,
           },
@@ -458,12 +470,14 @@ describe("Template CRUD functions", () => {
       },
     });
 
-    expect(updatedTemplate).toEqual({
-      id: "test1",
-      form: updatedFormConfig,
-      isPublished: true,
-      securityAttribute: "Unclassified",
-    });
+    expect(updatedTemplate).toEqual(
+      expect.objectContaining({
+        id: "test1",
+        form: updatedFormConfig,
+        isPublished: true,
+        securityAttribute: "Unclassified",
+      })
+    );
     expect(mockedLogEvent).toHaveBeenCalledWith(
       fakeSession.user.id,
       { id: "test1", type: "Form" },
@@ -511,12 +525,14 @@ describe("Template CRUD functions", () => {
       },
     });
 
-    expect(updatedTemplate).toEqual({
-      id: "formtestID",
-      form: formConfiguration,
-      isPublished: true,
-      securityAttribute: "Unclassified",
-    });
+    expect(updatedTemplate).toEqual(
+      expect.objectContaining({
+        id: "formtestID",
+        form: formConfiguration,
+        isPublished: true,
+        securityAttribute: "Unclassified",
+      })
+    );
     expect(mockedLogEvent).toHaveBeenCalledWith(
       fakeSession.user.id,
       { id: "formtestID", type: "Form" },
@@ -600,25 +616,32 @@ describe("Template CRUD functions", () => {
     };
     const ability = createAbility(fakeSession as Session);
 
+    // Template has one user assigned to it to start
+    (prismaMock.template.findFirst as jest.MockedFunction<any>).mockResolvedValue({
+      ...buildPrismaResponse("formtestID", formConfiguration, true),
+      users: [{ id: "1" }],
+    });
     (prismaMock.template.update as jest.MockedFunction<any>).mockResolvedValue(
       buildPrismaResponse("formtestID", formConfiguration, true)
     );
+    (prismaMock.user.findUniqueOrThrow as jest.MockedFunction<any>).mockResolvedValueOnce({
+      email: "user2@test.ca",
+    });
 
-    const users: { id: string; action: "add" | "remove" }[] = [
-      { id: "1", action: "add" },
-      { id: "2", action: "remove" },
-    ];
+    // We're just adding an additional user (2)
+    const users: { id: string }[] = [{ id: "1" }, { id: "2" }];
 
     await updateAssignedUsersForTemplate(ability, "formTestID", users);
 
+    // Should just connect the new user
     expect(prismaMock.template.update).toHaveBeenCalledWith({
       where: {
         id: "formTestID",
       },
       data: {
         users: {
-          connect: [{ id: "1" }],
-          disconnect: [{ id: "2" }],
+          connect: [{ id: "2" }],
+          disconnect: [],
         },
       },
       select: {
@@ -630,21 +653,85 @@ describe("Template CRUD functions", () => {
         isPublished: true,
         deliveryOption: true,
         securityAttribute: true,
+        users: true,
       },
     });
+
+    // should just log the new user
     expect(mockedLogEvent).toHaveBeenNthCalledWith(
       1,
       fakeSession.user.id,
       { id: "formTestID", type: "Form" },
       "GrantFormAccess",
-      "Access granted to 1"
+      "Access granted to user2@test.ca"
     );
+
+    // Template has three users assigned to it to start
+    const templateRecord = {
+      ...buildPrismaResponse("formtestID", formConfiguration, true),
+      users: [{ id: "2" }, { id: "3" }, { id: "4" }],
+    };
+
+    (prismaMock.template.findFirst as jest.MockedFunction<any>).mockResolvedValue(templateRecord);
+    (prismaMock.template.update as jest.MockedFunction<any>).mockResolvedValue(
+      buildPrismaResponse("formtestID", formConfiguration, true)
+    );
+    (prismaMock.user.findUniqueOrThrow as jest.MockedFunction<any>)
+      .mockResolvedValueOnce({
+        email: "user1@test.ca",
+      })
+      .mockResolvedValueOnce({
+        email: "user2@test.ca",
+      })
+      .mockResolvedValueOnce({
+        email: "user4@test.ca",
+      });
+
+    // We're removing two (2,4) and adding one (1)
+    const users2: { id: string }[] = [{ id: "1" }, { id: "3" }];
+
+    await updateAssignedUsersForTemplate(ability, "formTestID", users2);
+
+    // Connect 1, disconnect 2,4
+    expect(prismaMock.template.update).toHaveBeenCalledWith({
+      where: {
+        id: "formTestID",
+      },
+      data: {
+        users: {
+          connect: [{ id: "1" }],
+          disconnect: [{ id: "2" }, { id: "4" }],
+        },
+      },
+      select: {
+        id: true,
+        created_at: true,
+        updated_at: true,
+        name: true,
+        jsonConfig: true,
+        isPublished: true,
+        deliveryOption: true,
+        securityAttribute: true,
+        users: true,
+      },
+    });
+
+    // Log one added
     expect(mockedLogEvent).toHaveBeenNthCalledWith(
       2,
       fakeSession.user.id,
       { id: "formTestID", type: "Form" },
+      "GrantFormAccess",
+      "Access granted to user1@test.ca"
+    );
+
+    // Log two removed
+    expect(mockedLogEvent).toHaveBeenNthCalledWith(
+      3,
+      fakeSession.user.id,
+      { id: "formTestID", type: "Form" },
       "RevokeFormAccess",
-      "Access revoked for 1"
+      "Access revoked for user2@test.ca,user4@test.ca"
     );
   });
 
@@ -672,7 +759,7 @@ describe("Template CRUD functions", () => {
 
     await expect(async () => {
       await updateTemplate({ ability: ability, formID: "test1", formConfig: updatedFormConfig });
-    }).rejects.toThrowError(new TemplateAlreadyPublishedError());
+    }).rejects.toThrowError(TemplateAlreadyPublishedError);
     expect(mockedLogEvent).toBeCalledTimes(0);
   });
 
@@ -720,12 +807,14 @@ describe("Template CRUD functions", () => {
         })
       );
 
-      expect(updatedTemplate).toEqual({
-        id: "formtestID",
-        form: formConfiguration,
-        isPublished: false,
-        securityAttribute: "Unclassified",
-      });
+      expect(updatedTemplate).toEqual(
+        expect.objectContaining({
+          id: "formtestID",
+          form: formConfiguration,
+          isPublished: false,
+          securityAttribute: "Unclassified",
+        })
+      );
       expect(mockedLogEvent).toHaveBeenCalledWith(
         fakeSession.user.id,
         { id: "formtestID", type: "Form" },
@@ -775,12 +864,14 @@ describe("Template CRUD functions", () => {
       })
     );
 
-    expect(deletedTemplate).toEqual({
-      id: "formtestID",
-      form: formConfiguration,
-      isPublished: false,
-      securityAttribute: "Unclassified",
-    });
+    expect(deletedTemplate).toEqual(
+      expect.objectContaining({
+        id: "formtestID",
+        form: formConfiguration,
+        isPublished: false,
+        securityAttribute: "Unclassified",
+      })
+    );
 
     expect(mockedLogEvent).toHaveBeenCalledWith(
       fakeSession.user.id,
@@ -810,7 +901,7 @@ describe("Template CRUD functions", () => {
 
       await expect(async () => {
         await deleteTemplate(ability, "formtestID");
-      }).rejects.toThrowError(new TemplateHasUnprocessedSubmissions());
+      }).rejects.toThrowError(TemplateHasUnprocessedSubmissions);
     }
   );
 

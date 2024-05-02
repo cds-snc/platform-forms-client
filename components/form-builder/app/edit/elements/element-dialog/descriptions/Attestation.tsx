@@ -1,41 +1,27 @@
 import React from "react";
 import { useTranslation } from "next-i18next";
+import { ExampleWrapper } from "./ExampleWrapper";
+import { Checkbox, Label } from "@components/forms";
 
-import { CheckBoxEmptyIcon } from "@formbuilder/icons";
-
-export const Attestation = ({ title, description }: { title: string; description: string }) => {
+export const Attestation = () => {
   const { t } = useTranslation("form-builder");
   return (
     <div>
-      <div className="font-bold text-[1.5rem]">{title}</div>
-      <p className="mb-2">{description}</p>
+      <h3 className="mb-0">{t("addElementDialog.attestation.title")}</h3>
+      <p>{t("addElementDialog.attestation.description")}</p>
 
-      <div className="mt-8 ml-1">
-        <p className="mb-5 font-bold">
+      <ExampleWrapper className="mt-4">
+        <Label className="gc-label">
           {t("addElementDialog.attest")}{" "}
           <span className="text-red-default">({t("addElementDialog.allRequired")})</span>
-        </p>
-        <div className="flex flex-col ml-5">
-          <div className="flex mb-5">
-            <div>
-              <CheckBoxEmptyIcon className="scale-150" />
-            </div>
-            <div className="-mt-1 ml-5">{t("addElementDialog.condition1")}</div>
-          </div>
-          <div className="flex mb-5">
-            <div>
-              <CheckBoxEmptyIcon className="scale-150" />
-            </div>
-            <div className="-mt-1 ml-5">{t("addElementDialog.condition2")}</div>
-          </div>
-          <div className="flex">
-            <div>
-              <CheckBoxEmptyIcon className="scale-150" />
-            </div>
-            <div className="-mt-1 ml-5">{t("addElementDialog.condition3")}</div>
-          </div>
+        </Label>
+
+        <div className="overflow-hidden">
+          <Checkbox id="one" label={t("addElementDialog.condition1")} name={"nameOne"} />
+          <Checkbox id="two" label={t("addElementDialog.condition2")} name={"nameTwo"} />
+          <Checkbox id="three" label={t("addElementDialog.condition3")} name={"nameThree"} />
         </div>
-      </div>
+      </ExampleWrapper>
     </div>
   );
 };

@@ -1,8 +1,9 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import { cors, middleware, sessionExists } from "@lib/middleware";
-import { NotifyClient } from "notifications-node-client";
+import { getNotifyInstance } from "@lib/integration/notifyConnector";
 import { logMessage } from "@lib/logger";
 import { MiddlewareProps, WithRequired } from "@lib/types";
+import { slugify } from "@lib/clientHelpers";
 
 const shareFormJSON = async (req: NextApiRequest, res: NextApiResponse, props: MiddlewareProps) => {
   try {
@@ -17,10 +18,7 @@ const shareFormJSON = async (req: NextApiRequest, res: NextApiResponse, props: M
     const base64data = Buffer.from(form).toString("base64");
 
     const templateID = process.env.TEMPLATE_ID;
-    const notifyClient = new NotifyClient(
-      "https://api.notification.canada.ca",
-      process.env.NOTIFY_API_KEY
-    );
+    const notifyClient = getNotifyInstance();
 
     // Here is the documentation for the `sendEmail` function: https://docs.notifications.service.gov.uk/node.html#send-an-email
     await Promise.all(
@@ -29,7 +27,7 @@ const shareFormJSON = async (req: NextApiRequest, res: NextApiResponse, props: M
           personalisation: {
             application_file: {
               file: base64data,
-              filename: `${filename}.json`,
+              filename: `${slugify(filename)}.json`,
               sending_method: "attach",
             },
             subject: "Form shared | Formulaire partagé",

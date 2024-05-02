@@ -8,9 +8,14 @@ body,
   height: 100%;
 }
 
+/* prevent scrolling when there is an open dialog */
+body:has(dialog[open]) {
+  overflow: hidden;
+}
+
 footer,
 header {
-  @apply xs:px-4 md:px-8 lg:px-16 px-32;
+  background-color: #fff;
 }
 
 #page-container {
@@ -19,32 +24,6 @@ header {
 
 .gc-richText {
   @apply xxs:w-cr-label-fold xs:w-cr-label-5s sm:w-cr-label-6s md:w-cr-label-duo md:mt-10px lg:w-cr-label-ipad xl:w-cr-label-1025 w-cr-label-desktop mt-2;
-}
-
-.gc-homepage {
-  @apply md:text-small_base text-base;
-
-  div {
-    @apply md:mb-12 mb-14 max-w-prose;
-  }
-
-  div:last-of-type {
-    @apply md:mb-14 mb-20;
-  }
-
-  h2 {
-    @apply md:text-small_h2 text-h2 mb-5;
-  }
-}
-
-.gc-ul {
-  @apply md:text-small_base list-disc text-base;
-}
-
-.gc-ul {
-  li {
-    @apply ml-6 block;
-  }
 }
 
 ul.custom {
@@ -59,10 +38,6 @@ ul.custom {
     margin: 0 0.5em 0.1em -0.9em;
     font-size: 22px;
   }
-}
-
-.gc-ul li:last-of-type {
-  @apply mb-12;
 }
 
 /* Adjustments for tailwind defaults that conflict with the node-starter-app defaults */
@@ -108,48 +83,6 @@ a:active {
   li:last-of-type {
     @apply mb-0;
   }
-}
-
-body {
-  margin: 0;
-  font-size: 1.25em;
-  font-family: "Noto Sans", sans-serif;
-  line-height: 1.65;
-}
-
-// gc-h# 
-// Allow styling an h1 like an h2 or h3 or an h3 like an etc. similar to how bootstrap does it
-// e.g. Make this h2 look like an h1 `<h2 className="gc-h1">...`
-
-h1,
-h2,
-h3,
-h4,
-h5,
-h6,
-.gc-h1,
-.gc-h2,
-.gc-h3 {
-  font-family: "Lato", sans-serif;
-  line-height: 1.33;
-  font-weight: 600;
-}
-
-h1, .gc-h1 {
-  @apply md:text-small_h1 md:mb-10 border-b-2 border-red-default text-h1 font-bold pb-2 mb-16;
-}
-
-h2, .gc-h2  {
-  @apply md:text-small_h2 font-bold text-h2 pb-6;
-}
-
-h3, .gc-h3 {
-  @apply sm:text-small_h3 font-bold text-h3 pb-0 mb-6;
-}
-
-.gc-h2 {
-  margin-bottom: 0;
-  border: 0;
 }
 
 .outer-container {

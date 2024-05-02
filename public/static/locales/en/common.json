@@ -50,7 +50,7 @@
   "required": "required",
   "all-required": "all checkboxes required",
   "required-field": "Required field",
-  "file-upload-button-text": "Upload a file",
+  "file-upload-button-text": "Select file",
   "file-upload-sr-only-file-selected": "Currently selected file is",
   "file-upload-no-file-selected": "No file currently selected",
   "dropdown-initial-option-text": "No selection",
@@ -69,14 +69,16 @@
   "adminNav": {
     "dashboard": "Home",
     "formbuilder": "Form builder",
-    "users": "Users",
+    "users": "Accounts",
     "templates": "Templates",
     "features": "Feature flags",
     "login": "Sign in",
     "logout": "Sign out",
     "privileges": "Privileges",
     "settings": "Settings",
-    "myForms": "Your forms"
+    "administration": "Administration",
+    "myForms": "Forms",
+    "profile": "Profile"
   },
   "formElements": {
     "characterCount": {
@@ -110,9 +112,9 @@
   },
   "errorPanel": {
     "defaultTitle": "Something went wrong",
-    "defaultMessage": "Sorry, there was a problem and we lost you.",
+    "defaultMessage": "Sorry, there was a problem and we lost you. Please try again later.",
     "cta": {
-      "yourForms": "Back to Your forms",
+      "yourForms": "Back to Forms",
       "home": "Back to home",
       "support": "Get support"
     }
@@ -141,5 +143,8 @@
         }
       }
     }
-  }
+  },
+  "mainNavAriaLabel": "Main",
+  "yourAccount": "Your account",
+  "dateModified": "Date modified"
 }

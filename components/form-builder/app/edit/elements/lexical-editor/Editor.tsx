@@ -48,7 +48,7 @@ export const Editor = ({
     content = "";
   }
   return (
-    <div className="rich-text-wrapper">
+    <div className="rich-text-wrapper gc-formview">
       <LexicalComposer
         initialConfig={{
           ...editorConfig,

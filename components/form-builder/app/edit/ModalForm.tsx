@@ -9,13 +9,13 @@ import { useTemplateStore } from "../../store";
 import { AutocompleteDropdown } from "./AutocompleteDropdown";
 
 const ModalLabel = ({ children, ...props }: React.LabelHTMLAttributes<HTMLLabelElement>) => (
-  <label {...props} className="block mb-50 font-[700]">
+  <label {...props} className="mb-2 block font-[700]">
     {children}
   </label>
 );
 
 const Hint = ({ children, ...props }: React.HTMLAttributes<HTMLParagraphElement>) => (
-  <p {...props} className="font[16.5px] mb-5 leading-snug">
+  <p {...props} className="mb-5 leading-snug">
     {children}
   </p>
 );
@@ -41,10 +41,7 @@ export const ModalForm = ({
   const autocompleteSelectedValue = properties.autoComplete || "";
 
   return (
-    <form
-      className="modal-form"
-      onSubmit={(e: React.FormEvent<HTMLFormElement>) => e.preventDefault()}
-    >
+    <form onSubmit={(e: React.FormEvent<HTMLFormElement>) => e.preventDefault()}>
       <div className="mb-2">
         <ModalLabel htmlFor={`titleEn--modal--${item.index}`}>{t("question")}</ModalLabel>
         <Input
@@ -67,7 +64,7 @@ export const ModalForm = ({
         />
       </div>
       <div className="mb-2">
-        <ModalLabel>{t("description")}</ModalLabel>
+        <ModalLabel>{t("inputDescription")}</ModalLabel>
         <Hint>{t("descriptionDescription")}</Hint>
         <TextArea
           id={`description--modal--${item.index}`}
@@ -151,7 +148,7 @@ export const ModalForm = ({
       )}
 
       {item.type === FormElementTypes.textField && (
-        <div className="mt-8 mb-2">
+        <div className="mb-2 mt-8">
           <ModalLabel htmlFor="">{t("selectAutocomplete")}</ModalLabel>
           <Hint>{t("selectAutocompleteHint")}</Hint>
           <div>
@@ -166,9 +163,9 @@ export const ModalForm = ({
               selectedValue={autocompleteSelectedValue as string}
             />{" "}
             <InfoDetails summary={t("autocompleteWhenNotToUse.title")}>
-              <div className="mt-4 mb-8 border-l-3 border-gray-500 pl-8">
-                <p className="text-md mb-4">{t("autocompleteWhenNotToUse.text1")}</p>
-                <p className="text-md">{t("autocompleteWhenNotToUse.text2")}</p>
+              <div className="mb-8 mt-4 border-l-3 border-gray-500 pl-8">
+                <p className="mb-4 text-sm">{t("autocompleteWhenNotToUse.text1")}</p>
+                <p className="text-sm">{t("autocompleteWhenNotToUse.text2")}</p>
               </div>
             </InfoDetails>
           </div>
@@ -216,10 +213,10 @@ export const ModalForm = ({
                 />
               </div>
               <InfoDetails className="mb-4" summary={t("characterLimitWhenToUse.title")}>
-                <div className="mt-4 mb-8 border-l-3 border-gray-500 pl-8">
-                  <p className="text-md mb-4">{t("characterLimitWhenToUse.text1")}</p>
-                  <p className="text-md mb-4">{t("characterLimitWhenToUse.text2")}</p>
-                  <p className="text-md">{t("characterLimitWhenToUse.text3")}</p>
+                <div className="mb-8 mt-4 border-l-3 border-gray-500 pl-8">
+                  <p className="mb-4 text-sm">{t("characterLimitWhenToUse.text1")}</p>
+                  <p className="mb-4 text-sm">{t("characterLimitWhenToUse.text2")}</p>
+                  <p className="text-sm">{t("characterLimitWhenToUse.text3")}</p>
                 </div>
               </InfoDetails>
             </>

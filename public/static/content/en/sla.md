@@ -1,7 +1,7 @@
 # Service-level agreement
 Version 2
 
-GC Forms is a cloud-based service that is owned and operated by the Canadian Digital Service (CDS) at the Treasury Board of Canada Secretariat (TBS). This service enables Canadian federal departments and agencies to create and publish forms, which are hosted by CDS. 
+GC Forms is a cloud-based service that is owned and operated by the Canadian Digital Service (CDS) at [Employment and Social Development Canada (ESDC)](https://www.canada.ca/en/employment-social-development.html). This service enables Canadian federal departments and agencies to create and publish forms, which are hosted by CDS. 
 
 ## Responsibilities
 
@@ -10,10 +10,11 @@ GC Forms is a cloud-based service that is owned and operated by the Canadian Dig
 - Handling support requests and inquiries during regular business hours (9am to 5pm Eastern Time). 
 - Responding to API integration support within the [timelines provided](#service-response-time-and-contacts).
 - Ensuring data transfer to the client via email is able to support Protected A data or meet the same security requirements as other email-based data delivery options.
+- Ensuring data transfer to the client via the response database is able to support up to PROTECTED B data. 
 - Patching security vulnerabilities in a timely manner, where CDS determines the level of threat a security vulnerability possesses. Major vulnerabilities are patched as soon as possible but no more than a week after the root cause is found. External dependencies for code are subject to longer timelines. Any infrastructure-level patching is the responsibility of [Amazon Web Services (AWS)](https://aws.amazon.com/service-terms/).
 - Restoring the system to operation in case of any unplanned outages.
 - Alerting clients if GC Forms is inaccessible for whatever reasons as soon as CDS learns of this. See our real-time [Status page](https://status-statut.cds-snc.ca/history/gc-forms-formulaires-gc).
-- Ensuring the GC Forms system sends form responses to clients in a timely manner, as provided by [GC Notify](https://notification.canada.ca/service-level-agreement). 
+- Ensuring the GC Forms system sends form responses and two-factor authentication to clients in a timely manner, as provided by [GC Notify](https://notification.canada.ca/service-level-agreement). 
 - Ensuring the infrastructure providers do not disconnect the GC Forms or GC Notify system due to misuse by clients. 
 - Ensuring the system is available for use, with page load time less than 10 seconds in Canada on high-speed Internet, unless the product is experiencing a denial of service attack or there are issues with AWS. 
 - Limiting the rate at which end users can submit responses to preserve the security of CDS and client systems.
@@ -81,4 +82,4 @@ GC Forms is open source and available for others to stand up their own version b
   
   
 
-**Last update:** April 12, 2023
+**Last update:** December 14, 2023

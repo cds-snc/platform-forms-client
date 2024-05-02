@@ -2,10 +2,11 @@ import React from "react";
 import { FormElementTypes, HTMLTextInputTypeAttribute } from "@lib/types";
 import { useTranslation } from "next-i18next";
 
-import { CheckBoxEmptyIcon, RadioEmptyIcon } from "../../icons";
+import { CheckBoxEmptyIcon, CheckIcon, RadioEmptyIcon } from "../../icons";
 import { ShortAnswer, Options, SubOptions, RichText, SubElement } from "./elements";
 import { ElementOption, FormElementWithIndex } from "../../types";
 import { useElementOptions } from "../../hooks";
+import { ConditionalIndicator } from "../shared/conditionals/ConditionalIndicator";
 
 const filterSelected = (
   item: FormElementWithIndex,
@@ -86,7 +87,7 @@ export const SelectedElement = ({
       element = <ShortAnswer>{t("longAnswerText")}</ShortAnswer>;
       break;
     case "fileInput":
-      element = <ShortAnswer>{t("addElementDialog.fileInput.label")}</ShortAnswer>;
+      element = <ShortAnswer>{t("addElementDialog.fileInput.title")}</ShortAnswer>;
       break;
     case "radio":
       if (elIndex !== -1) {
@@ -110,7 +111,12 @@ export const SelectedElement = ({
       } else {
         element = (
           <>
-            <ShortAnswer>{t("addElementDialog.checkbox.title")}</ShortAnswer>
+            <ShortAnswer>
+              <div className="flex items-center ">
+                <CheckIcon />
+                <span className="ml-2 text-lg">{t("addElementDialog.checkbox.title")}</span>
+              </div>
+            </ShortAnswer>
             <Options item={item} renderIcon={() => <CheckBoxEmptyIcon />} />
           </>
         );
@@ -152,5 +158,9 @@ export const SelectedElement = ({
       element = null;
   }
 
-  return element;
+  return (
+    <>
+      {element} <ConditionalIndicator item={item} />
+    </>
+  );
 };

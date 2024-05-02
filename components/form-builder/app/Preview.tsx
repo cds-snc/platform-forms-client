@@ -6,11 +6,13 @@ import Markdown from "markdown-to-jsx";
 
 import { getRenderedForm } from "@lib/formBuilder";
 import { PublicFormRecord } from "@lib/types";
-import { Button, Form, RichText } from "@components/forms";
+import { Button, Form, RichText, ClosedPage, NextButton } from "@components/forms";
 import { LocalizedElementProperties, LocalizedFormProperties } from "../types";
 import { useTemplateStore } from "../store";
 import { BackArrowIcon } from "../icons";
 import Brand from "@components/globals/Brand";
+import { useIsFormClosed } from "@lib/hooks/useIsFormClosed";
+import { GCFormsProvider } from "@lib/hooks/useGCFormContext";
 
 export const Preview = () => {
   const { status } = useSession();
@@ -58,23 +60,46 @@ export const Preview = () => {
 
   const brand = formRecord?.form ? formRecord.form.brand : null;
 
+  const isPastClosingDate = useIsFormClosed();
+
+  if (isPastClosingDate) {
+    return (
+      <>
+        <div className="h-12"></div>
+        <div
+          className={`mb-8 border-3 border-dashed border-blue-focus bg-white p-4 ${
+            status !== "authenticated" && ""
+          }`}
+          {...getLocalizationAttribute()}
+        >
+          <div className="gc-formview">
+            <div className="mb-20 mt-0 border-b-4 border-blue-dark py-9">
+              <Brand brand={brand} lang={language} className="max-w-[360px]" />
+            </div>
+            <ClosedPage language={language} formRecord={formRecord} />
+          </div>
+        </div>
+      </>
+    );
+  }
+
   return (
     <>
       <div className="h-12"></div>
       <div
-        className={`border-3 border-dashed border-blue-focus p-4 mb-8 ${
+        className={`mb-8 border-3 border-dashed border-blue-focus bg-white p-4 ${
           status !== "authenticated" && ""
         }`}
         {...getLocalizationAttribute()}
       >
         {status !== "authenticated" ? (
-          <div className="bg-purple-200 p-2 inline-block mb-1">
+          <div className="mb-1 inline-block bg-purple-200 p-2">
             <Markdown options={{ forceBlock: true }}>
               {t("signInToTest", { ns: "form-builder", lng: language })}
             </Markdown>
           </div>
         ) : email ? (
-          <div className="bg-purple-200 p-2 inline-block mb-1">
+          <div className="mb-1 inline-block bg-purple-200 p-2">
             {t("submittedResponsesText", { ns: "form-builder", email })}{" "}
             <a className="visited:text-black-default" href={settingsLink}>
               {t("submittedResponsesChange", { ns: "form-builder" })}
@@ -82,7 +107,7 @@ export const Preview = () => {
             .
           </div>
         ) : (
-          <div className="bg-purple-200 p-2 inline-block mb-1">
+          <div className="mb-1 inline-block bg-purple-200 p-2">
             {t("submittedResponsesTextVault.text1", { ns: "form-builder" })}{" "}
             <a className="visited:text-black-default" href={responsesLink}>
               {t("submittedResponsesTextVault.text2", { ns: "form-builder" })}
@@ -97,17 +122,21 @@ export const Preview = () => {
 
         {sent && (
           <>
-            <button className="mt-4 clear-both block" onClick={() => clearSent()}>
+            <button className="clear-both mt-4 block" onClick={() => clearSent()}>
               <BackArrowIcon className="inline-block" /> {t("backToForm", { ns: "form-builder" })}
             </button>
           </>
         )}
 
-        <Brand brand={brand} className="mt-8 mb-12" />
-        <h1 className="mt-4">
-          {formRecord.form[localizeField(LocalizedFormProperties.TITLE, language)] ||
-            t("pagePreview", { ns: "form-builder" })}
-        </h1>
+        <div className="gc-formview">
+          <div className="mb-20 mt-0 border-b-4 border-blue-dark py-9">
+            <Brand brand={brand} lang={language} className="max-w-[360px]" />
+          </div>
+          <h1 className="mt-4">
+            {formRecord.form[localizeField(LocalizedFormProperties.TITLE, language)] ||
+              t("gcFormsTest", { ns: "form-builder" })}
+          </h1>
+        </div>
 
         {sent ? (
           <>
@@ -120,53 +149,66 @@ export const Preview = () => {
             </RichText>
           </>
         ) : (
-          <Form
-            formRecord={formRecord}
-            isPreview={true}
-            language={language}
-            router={router}
-            t={t}
-            onSuccess={setSent}
-            renderSubmit={() => (
-              <div id="PreviewSubmitButton">
-                <span {...getLocalizationAttribute()}>
-                  <Button
-                    type="submit"
-                    id="SubmitButton"
-                    className="mb-4"
-                    onClick={(e) => {
-                      if (status !== "authenticated") {
-                        return preventSubmit(e);
-                      }
-                    }}
-                  >
-                    {t("submitButton", { ns: "common", lng: language })}
-                  </Button>
-                </span>
-                {status !== "authenticated" && (
-                  <div
-                    className="inline-block py-1 px-4 bg-purple-200"
-                    {...getLocalizationAttribute()}
-                  >
-                    <Markdown options={{ forceBlock: true }}>
-                      {t("signInToTest", { ns: "form-builder", lng: language })}
-                    </Markdown>
-                  </div>
-                )}
-              </div>
-            )}
-          >
-            {currentForm}
-          </Form>
+          <div className="gc-formview">
+            <GCFormsProvider formRecord={formRecord}>
+              <Form
+                formRecord={formRecord}
+                isPreview={true}
+                language={language}
+                router={router}
+                t={t}
+                onSuccess={setSent}
+                renderSubmit={({ validateForm }) => {
+                  return (
+                    <div id="PreviewSubmitButton">
+                      <span {...getLocalizationAttribute()}>
+                        <NextButton
+                          validateForm={validateForm}
+                          fallBack={() => {
+                            return (
+                              <Button
+                                type="submit"
+                                id="SubmitButton"
+                                className="mb-4"
+                                onClick={(e) => {
+                                  if (status !== "authenticated") {
+                                    return preventSubmit(e);
+                                  }
+                                }}
+                              >
+                                {t("submitButton", { ns: "common", lng: language })}
+                              </Button>
+                            );
+                          }}
+                        />
+                      </span>
+                      {status !== "authenticated" && (
+                        <div
+                          className="inline-block bg-purple-200 px-4 py-1"
+                          {...getLocalizationAttribute()}
+                        >
+                          <Markdown options={{ forceBlock: true }}>
+                            {t("signInToTest", { ns: "form-builder", lng: language })}
+                          </Markdown>
+                        </div>
+                      )}
+                    </div>
+                  );
+                }}
+              >
+                {currentForm}
+              </Form>
+            </GCFormsProvider>
+          </div>
         )}
       </div>
 
       {status !== "authenticated" && (
         <>
-          <span className="bg-slate-200 p-2 inline-block mb-1">
+          <span className="mb-1 inline-block bg-slate-200 p-2">
             {t("confirmationPage", { ns: "form-builder" })}
           </span>
-          <div className="border-3 border-dashed border-blue-focus p-4 mb-8">
+          <div className="mb-8 border-3 border-dashed border-blue-focus bg-white p-4">
             <RichText {...getLocalizationAttribute()}>
               {formRecord.form.confirmation
                 ? formRecord.form.confirmation[

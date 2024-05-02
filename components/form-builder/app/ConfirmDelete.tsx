@@ -26,7 +26,8 @@ export const ConfirmDelete = ({
     if (result && "error" in result) {
       if (
         result.error.response?.status === 405 &&
-        result.error.response?.data.error === "Found unprocessed submissions"
+        (result.error.response?.data as Record<string, unknown> | undefined)?.error ===
+          "Found unprocessed submissions"
       ) {
         toast.error(t("formDeletedResponsesExist"));
         return;
@@ -52,7 +53,7 @@ export const ConfirmDelete = ({
         />
       )}
       <div className="sticky top-0">
-        <ToastContainer autoClose={false} />
+        <ToastContainer autoClose={false} containerId="default" />
       </div>
     </>
   );

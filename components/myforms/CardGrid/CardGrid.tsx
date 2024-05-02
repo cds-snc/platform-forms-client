@@ -3,8 +3,12 @@ import { Card, CardProps } from "@components/myforms/Card/Card";
 import { ConfirmDelete } from "@components/form-builder/app/ConfirmDelete";
 import { useRefresh } from "@lib/hooks";
 
+/* handle delete gets added via the CardGrid component */
+type CardWithoutHandleDelete = Omit<CardProps, "handleDelete">;
+
 interface CardGridProps {
-  cards: Array<CardProps>;
+  cards: Array<CardWithoutHandleDelete>;
+  gridType: "all" | "published" | "drafts";
 }
 
 export const CardGrid = (props: CardGridProps): React.ReactElement => {
@@ -26,11 +30,11 @@ export const CardGrid = (props: CardGridProps): React.ReactElement => {
       >
         {cards &&
           cards?.length > 0 &&
-          cards.map((card: CardProps) => {
+          cards.map((card: CardWithoutHandleDelete) => {
             return (
               <li className="flex flex-col" key={card.id}>
                 <Card
-                  id={card.id}
+                  id={`${card.id}`}
                   name={card.name}
                   titleEn={card.titleEn}
                   titleFr={card.titleFr}
@@ -39,6 +43,7 @@ export const CardGrid = (props: CardGridProps): React.ReactElement => {
                   isPublished={card.isPublished}
                   deliveryOption={card.deliveryOption || null}
                   handleDelete={handleDelete}
+                  overdue={card.overdue}
                 ></Card>
               </li>
             );

@@ -92,14 +92,23 @@ export const useAuthErrors = (): [AuthErrorsState, AuthErrorsDispatch] => {
       case "UsernameExistsException":
         errorObj.title = t("UsernameExistsException"); // TODO ask design/content for error message
         break;
+      case "IncorrectSecurityAnswerException":
+        errorObj.title = t("IncorrectSecurityAnswerException.title");
+        errorObj.description = t("IncorrectSecurityAnswerException.description");
+        break;
+      case "2FAInvalidVerificationCode":
       case "CodeMismatchException":
         errorObj.title = t("CodeMismatchException"); // TODO ask design/content for error message
         break;
       case "ExpiredCodeException":
+      case "2FAExpiredSession":
         errorObj.title = t("ExpiredCodeException"); // TODO ask design/content for error message
         break;
       case "TooManyRequestsException":
-        errorObj.title = t("TooManyRequestsException"); // TODO ask design/content for error message
+        errorObj.title = t("TooManyRequestsException.title");
+        errorObj.description = t("TooManyRequestsException.description");
+        errorObj.callToActionLink = t("TooManyRequestsException.link");
+        errorObj.callToActionText = t("TooManyRequestsException.linkText");
         break;
       default:
         errorObj.title = t("InternalServiceException"); // TODO ask design/content for error message

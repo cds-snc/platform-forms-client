@@ -7,6 +7,7 @@ import {
   getFullTemplateByID,
   removeDeliveryOption,
   TemplateHasUnprocessedSubmissions,
+  updateClosingDateForTemplate,
 } from "@lib/templates";
 
 import { middleware, jsonValidator, cors, sessionExists } from "@lib/middleware";
@@ -43,7 +44,12 @@ const templates = async (req: NextApiRequest, res: NextApiResponse, props: Middl
       ...req.body,
     });
 
-    if (!response) throw new Error("Null operation response");
+    if (!response)
+      throw new Error(
+        `Template API response was null. Request information: method = ${
+          req.method
+        } ; query = ${JSON.stringify(req.query)} ; body = ${JSON.stringify(req.body)}`
+      );
 
     return res.status(200).json(response);
   } catch (e) {
@@ -73,6 +79,7 @@ const route = async ({
   deliveryOption,
   securityAttribute,
   isPublished,
+  closingDate,
   users,
   sendResponsesToVault,
 }: {
@@ -84,6 +91,7 @@ const route = async ({
   deliveryOption?: DeliveryOption;
   securityAttribute?: SecurityAttribute;
   isPublished?: boolean;
+  closingDate?: string;
   users?: { id: string; action: "add" | "remove" }[];
   sendResponsesToVault?: boolean;
 }) => {
@@ -108,7 +116,12 @@ const route = async ({
         });
       } else if (isPublished !== undefined) {
         return updateIsPublishedForTemplate(ability, formID, isPublished);
+      } else if (closingDate) {
+        return updateClosingDateForTemplate(ability, formID, closingDate);
       } else if (users) {
+        if (!users.length) {
+          return { error: true, message: "mustHaveAtLeastOneUser" };
+        }
         return updateAssignedUsersForTemplate(ability, formID, users);
       } else if (sendResponsesToVault) {
         return removeDeliveryOption(ability, formID);

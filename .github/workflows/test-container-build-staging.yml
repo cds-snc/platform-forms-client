@@ -5,9 +5,6 @@ on:
     branches: [develop]
 
 env:
-  GITHUB_SHA: ${{ github.sha }}
-  GOOGLE_CLIENT_SECRET: ${{ secrets.STAGING_GOOGLE_CLIENT_SECRET }}
-  GOOGLE_CLIENT_ID: ${{ secrets.STAGING_GOOGLE_CLIENT_ID }}
   COGNITO_APP_CLIENT_ID: ${{secrets.STAGING_COGNITO_APP_CLIENT_ID}}
   COGNITO_USER_POOL_ID: ${{ secrets.STAGING_COGNITO_USER_POOL_ID}}
 
@@ -21,8 +18,5 @@ jobs:
       - name: Build Container
         run: |
           docker build -t base \
-            --build-arg GITHUB_SHA_ARG=$GITHUB_SHA \
-            --build-arg GOOGLE_CLIENT_SECRET=$GOOGLE_CLIENT_SECRET \
-            --build-arg GOOGLE_CLIENT_ID=$GOOGLE_CLIENT_ID \
             --build-arg COGNITO_APP_CLIENT_ID=$COGNITO_APP_CLIENT_ID \
             --build-arg COGNITO_USER_POOL_ID=$COGNITO_USER_POOL_ID .

@@ -97,6 +97,7 @@ describe("Settings API", () => {
           name: "Testing Forms",
           privileges: mockUserPrivileges(managePrivileges, { user: { id: "1" } }),
           acceptableUse: true,
+          hasSecurityQuestions: true,
         },
       };
 
@@ -277,6 +278,7 @@ describe("Settings API", () => {
           name: "Testing Forms",
           privileges: mockUserPrivileges(managePrivileges, { user: { id: "1" } }),
           acceptableUse: true,
+          hasSecurityQuestions: true,
         },
       };
 

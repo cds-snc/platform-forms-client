@@ -1,6 +1,7 @@
 import React from "react";
-import { ChevronDown } from "@formbuilder/icons";
 import { useTranslation } from "react-i18next";
+import { ExampleWrapper } from "./ExampleWrapper";
+import { Description, Dropdown, Label } from "@components/forms";
 
 export const DropDown = () => {
   const { t } = useTranslation("form-builder");
@@ -9,20 +10,19 @@ export const DropDown = () => {
       <h3 className="mb-0">{t("addElementDialog.dropdown.title")}</h3>
       <p>{t("addElementDialog.dropdown.description")}</p>
 
-      <div className="mt-8 ml-1">
-        <div className="flex rounded justify-between outline outline-offset-2 outline-blue-focus border-2 border-black w-[280px] p-1 px-2">
-          <div>{t("addElementDialog.dropdown.example.select")}</div>{" "}
-          <div className="mt-1">
-            <ChevronDown className="scale-125" />
-          </div>
+      <ExampleWrapper className="mt-4">
+        <Label htmlFor="dropdown" className="gc-label">
+          {t("addElementDialog.dropdown.selectOption")}
+        </Label>
+        <Description>{t("addElementDialog.dropdown.selectOne")}</Description>
+        <div className="overflow-hidden">
+          <Dropdown
+            name="name"
+            id="dropdown"
+            choices={t("addElementDialog.dropdown.choices").split(",")}
+          />
         </div>
-
-        <div className="rounded mt-3 outline outline-2 outline-blue-focus">
-          <div className="border-b-2 p-1 px-2">option</div>
-          <div className="border-b-2 p-1 px-2">option</div>
-          <div className="border-b-2 p-1 px-2">option</div>
-        </div>
-      </div>
+      </ExampleWrapper>
     </>
   );
 };

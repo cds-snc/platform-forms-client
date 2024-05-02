@@ -9,6 +9,7 @@ import React, {
 } from "react";
 
 import { ChevronRight } from "@components/form-builder/icons";
+import { SelectedGroupState } from "../edit/elements/element-dialog/ElementDialog";
 
 // for specs see:
 // https://www.w3.org/WAI/ARIA/apg/patterns/listbox
@@ -20,6 +21,7 @@ export const ListBox = ({
   options,
   handleChange,
   ariaLabel,
+  selectedGroup,
 }: {
   options: {
     id: string;
@@ -30,6 +32,7 @@ export const ListBox = ({
   }[];
   handleChange: (val: number) => void;
   ariaLabel?: string;
+  selectedGroup: SelectedGroupState;
 }) => {
   const listBoxRef = useRef<HTMLDivElement>(null);
   const rowsRef = useRef<[HTMLElement] | []>([]);
@@ -49,13 +52,18 @@ export const ListBox = ({
     [options]
   );
 
+  // Reset focusIndex when the group changes
+  useEffect(() => {
+    setFocusIndex(0);
+  }, [selectedGroup]);
+
   useEffect(() => {
     const el = rowsRef.current[`row-${focusIndex}` as unknown as number] as HTMLElement;
     if (el && rowsRef.current) {
       setActiveId(el.id);
       handleChange(focusIndex);
       if (el && el.scrollIntoView) {
-        el.scrollIntoView({ block: "center" });
+        el.scrollIntoView({ block: "nearest" });
       }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -69,7 +77,6 @@ export const ListBox = ({
       data-testid="listbox"
       ref={listBoxRef}
       role="listbox"
-      className="list-box"
       tabIndex={0}
       onKeyDown={handleFocus}
       aria-activedescendant={activeId ? activeId : options[0]?.id}
@@ -99,7 +106,7 @@ export const ListBox = ({
               groupOption = (
                 <li
                   role="presentation"
-                  className="pl-1 mb-2 text-[#6A6D7B] font-bold uppercase text-[1.1rem]"
+                  className="mb-2 pl-4 text-[1.1rem] font-bold uppercase text-[#6A6D7B]"
                 >
                   {group.value}
                 </li>
@@ -122,24 +129,26 @@ export const ListBox = ({
                     }
                   }}
                   className={`${
-                    focussed ? "font-bold bg-[#E9ECEF]" : "font-normal"
-                  } group pl-1 pr-2 pt-2 pb-2 mb-2 text-black hover:font-bold cursor-pointer`}
+                    focussed
+                      ? "border-[0.5px] border-l-8 border-indigo-700 bg-indigo-50 font-bold"
+                      : "border-l-8 border-l-transparent font-normal"
+                  } group mb-2 cursor-pointer p-2 text-lg text-black hover:font-bold hover:text-indigo-700`}
                   tabIndex={-1}
                   role="option"
                   onClick={() => setFocusIndex(index)}
                   aria-selected={focussed}
                 >
-                  <span className="flex justify-between items-center">
+                  <span className="flex items-center justify-between">
                     <span>
-                      {Icon && <Icon className="inline-block mr-2" />} {value}
+                      {Icon && <Icon className="mr-2 inline-block" />} {value}
                     </span>
                     {focussed && (
-                      <ChevronRight className="fill-black inline-block mr-1 scale-150" />
+                      <ChevronRight className="mr-1 inline-block scale-150 fill-black" />
                     )}
                   </span>
                 </li>
                 {className && className === "separator" ? (
-                  <li role="separator" className="border-b border-1 border-grey-default mb-2" />
+                  <li role="separator" className="mb-2 border-1 border-b border-gray" />
                 ) : null}
               </React.Fragment>
             );

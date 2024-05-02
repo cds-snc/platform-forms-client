@@ -3,6 +3,7 @@ import { CDSHTMLDialogElement } from "../../types";
 import { useTranslation } from "next-i18next";
 import { Button } from "@components/globals";
 import { Close } from "../../icons/Close";
+import { cn } from "@lib/utils";
 
 export const useDialogRef = () => {
   const ref = useRef<CDSHTMLDialogElement>(null);
@@ -16,7 +17,6 @@ export const Dialog = ({
   actions,
   className,
   handleClose,
-  headerStyle,
 }: {
   dialogRef: React.RefObject<CDSHTMLDialogElement>;
   children: React.ReactElement;
@@ -24,7 +24,6 @@ export const Dialog = ({
   actions?: React.ReactElement;
   className?: string;
   handleClose?: () => void;
-  headerStyle?: string;
 }) => {
   const { t } = useTranslation("form-builder");
   const [isOpen, changeOpen] = useState(true);
@@ -59,31 +58,35 @@ export const Dialog = ({
 
   return (
     <dialog
-      className="p-0 bg-clip-padding w-full h-full bg-transparent"
+      className="h-full w-full bg-transparent bg-clip-padding p-0"
       aria-labelledby="modal-title"
       ref={dialogRef}
     >
       <div
-        className={`relative mx-8 tablet:max-w-[700px] overflow-y-scroll max-h-[80%] tablet:mx-auto mt-12 laptop:mt-24 bg-white border-2 border-black rounded-xl ${className}`}
+        className={cn(
+          `relative max-h-[80%] overflow-y-auto rounded-xl border-1 border-slate-500 bg-white tablet:mx-auto max-w-[700px] laptop:mt-24`,
+          className
+        )}
       >
         {title && (
-          <h2 className={headerStyle ? headerStyle : "pb-4 inline-block mt-4 ml-4"} tabIndex={-1}>
-            {title}
-          </h2>
+          <div className="border-b-[0.5px] border-slate-500 bg-slate-50">
+            <h2 className="ml-4 mt-4 inline-block pb-4 text-2xl" tabIndex={-1}>
+              {title}
+            </h2>
+          </div>
         )}
 
-        <div className={`px-4 ${title ? "" : "mt-10"}`}>{children}</div>
-        {actions && <div className="py-4 px-4 border-t-1 border-gray-400 flex">{actions}</div>}
+        <>{children}</>
+        {actions && <div className="flex p-4">{actions}</div>}
         <Button
           theme="link"
-          className="group absolute right-0 top-0 mr-4 mt-4 z-[1000]"
+          className="group absolute right-0 top-0 z-[1000] mr-4 mt-4"
           aria-label={t("close")}
           onClick={close}
           dataTestId="close-dialog"
         >
-          <span className="block w-30 mr-2">
-            <Close className="group-focus:fill-white-default inline-block mr-2" />
-            {t("close")}
+          <span className="block">
+            <Close className="inline-block group-focus:fill-white-default" />
           </span>
         </Button>
       </div>

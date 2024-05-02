@@ -1,21 +1,20 @@
 name: Production — Push container to ECR
 
 on:
-  push:
-    branches: [main]
-    paths-ignore:
-      # Ignore all files and folders that start with '.'
-      - ".**"
-      # Ignore all files and folder in fixtures, tests, utils, etc.
-      - "__*/**"
+  release:
+    types: [published]
 
 env:
+  AWS_ACCOUNT_ID: ${{ vars.PRODUCTION_AWS_ACCOUNT_ID }}
+  AWS_REGION: ca-central-1
   ECR_REPOSITORY: form_viewer_production
-  GITHUB_SHA: ${{ github.sha }}
-  GOOGLE_CLIENT_SECRET: ${{ secrets.PRODUCTION_GOOGLE_CLIENT_SECRET }}
-  GOOGLE_CLIENT_ID: ${{ secrets.PRODUCTION_GOOGLE_CLIENT_ID }}
+  TAG_VERSION: ${{  github.ref_name }}
   COGNITO_APP_CLIENT_ID: ${{secrets.PRODUCTION_COGNITO_APP_CLIENT_ID}}
   COGNITO_USER_POOL_ID: ${{ secrets.PRODUCTION_COGNITO_USER_POOL_ID}}
+
+permissions:
+  id-token: write
+  contents: read
 
 jobs:
   push-production:
@@ -23,41 +22,39 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@ee0669bd1cc54295c223e0bb666b733df41de1c5 # v2.7.0
+        with:
+          ref: ${{ env.TAG_VERSION }}
 
       - name: Build Form Viewer
         run: |
           docker build -t base \
-          --build-arg PRODUCTION_ENV=true \
-          --build-arg GITHUB_SHA_ARG=$GITHUB_SHA \
-          --build-arg GOOGLE_CLIENT_SECRET=$GOOGLE_CLIENT_SECRET \
-          --build-arg GOOGLE_CLIENT_ID=$GOOGLE_CLIENT_ID \
           --build-arg COGNITO_APP_CLIENT_ID=$COGNITO_APP_CLIENT_ID \
-          --build-arg COGNITO_USER_POOL_ID=$COGNITO_USER_POOL_ID .
+          --build-arg COGNITO_USER_POOL_ID=$COGNITO_USER_POOL_ID . \
+          --build-arg INDEX_SITE=true
 
-      - name: Configure Production AWS credentials
-        id: aws-form-viewer
-        uses: aws-actions/configure-aws-credentials@375a690dc0af3921541e5f427167f333d7e85f67
+      - name: Configure AWS credentials using OIDC
+        uses: aws-actions/configure-aws-credentials@010d0da01d0b5a38af31e9c3470dbfdabdecca3a # v4.0.1
         with:
-          aws-access-key-id: ${{ secrets.PROD_AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.PROD_AWS_SECRET_ACCESS_KEY }}
-          aws-region: ca-central-1
+          role-to-assume: arn:aws:iam::${{ env.AWS_ACCOUNT_ID }}:role/platform-forms-client-release
+          role-session-name: ECRPush
+          aws-region: ${{ env.AWS_REGION }}
 
       - name: Login to Production Amazon ECR
         id: login-ecr-production
-        uses: aws-actions/amazon-ecr-login@b5f9031d829ac39b7fd26092019aeca3ee6b3ebd
+        uses: aws-actions/amazon-ecr-login@039b1642a3b6ca5a34a4a5cc9ffa2ddc195fdd2f
 
       - name: Tag Images for Production
         env:
           ECR_REGISTRY: ${{ steps.login-ecr-production.outputs.registry }}
         run: |
-          docker tag base $ECR_REGISTRY/$ECR_REPOSITORY:$GITHUB_SHA
+          docker tag base $ECR_REGISTRY/$ECR_REPOSITORY:$TAG_VERSION
           docker tag base $ECR_REGISTRY/$ECR_REPOSITORY:latest
 
       - name: Push containers to Production Amazon ECR
         env:
           ECR_REGISTRY: ${{ steps.login-ecr-production.outputs.registry }}
         run: |
-          docker push $ECR_REGISTRY/$ECR_REPOSITORY:$GITHUB_SHA
+          docker push $ECR_REGISTRY/$ECR_REPOSITORY:$TAG_VERSION
           docker push $ECR_REGISTRY/$ECR_REPOSITORY:latest
 
       - name: Logout of Production Amazon ECR

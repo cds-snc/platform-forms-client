@@ -1,8 +1,8 @@
 import React from "react";
-import { render } from "@testing-library/react";
+import { render, act } from "@testing-library/react";
 import { DownloadTable } from "../DownloadTable";
 import { VaultSubmissionList, VaultStatus } from "@lib/types";
-import { sortVaultSubmission } from "../DownloadTableReducer";
+import axios from "axios";
 
 jest.mock("next/router", () => require("next-router-mock"));
 
@@ -11,35 +11,31 @@ jest.mock("react-i18next", () => ({
 }));
 
 describe("Download Table", () => {
-  it("Download Table should render", () => {
+  it("Download Table should render", async () => {
+    const promise = Promise.resolve();
+    const axiosSpy = jest.spyOn(axios, "get");
+
+    axiosSpy.mockImplementation((url: string) => {
+      if (url === "/api/settings/nagwarePhaseEncouraged") {
+        return Promise.resolve({ data: 21 });
+      } else if (url === "/api/settings/nagwarePhaseWarned") {
+        return Promise.resolve({ data: 35 });
+      } else {
+        return Promise.reject(new Error("Invalid URL"));
+      }
+    });
+
     const rendered = render(
       <DownloadTable vaultSubmissions={vaultSubmissions} formId="clg17xha50008efkgfgxa8l4f" />
     );
     const table = rendered.getByRole("table");
     expect(table).toHaveAttribute("aria-live", "polite");
-  });
 
-  // For expected sorting behavior see:
-  // https://app.zenhub.com/workspaces/gcforms-60cb8929764d71000e481cab/issues/gh/cds-snc/platform-forms-client/1865
-  it("Function sortVaultSubmission() sorts correctly", () => {
-    const sortedVaultSubmissions = sortVaultSubmission(vaultSubmissions);
-    expect(sortedVaultSubmissions.length === vaultSubmissions.length);
-
-    // Status = New sorted "sub list", test order of first three
-    expect(sortedVaultSubmissions[0].name).toEqual("06-04-c718");
-    expect(sortedVaultSubmissions[0].status).toEqual(VaultStatus.NEW.valueOf()); // Just being explicit with these, can also manually check by looking at the data
-    expect(sortedVaultSubmissions[1].name).toEqual("06-04-4aab");
-    expect(sortedVaultSubmissions[1].status).toEqual(VaultStatus.NEW.valueOf());
-    expect(sortedVaultSubmissions[2].name).toEqual("06-04-7f15");
-    expect(sortedVaultSubmissions[2].status).toEqual(VaultStatus.NEW.valueOf());
-
-    // Status !== New sorted "sub list", test order of first three
-    expect(sortedVaultSubmissions[11].name).toEqual("03-04-18df");
-    expect(sortedVaultSubmissions[11].status).not.toEqual(VaultStatus.NEW.valueOf());
-    expect(sortedVaultSubmissions[12].name).toEqual("03-04-6ca5");
-    expect(sortedVaultSubmissions[12].status).not.toEqual(VaultStatus.NEW.valueOf());
-    expect(sortedVaultSubmissions[13].name).toEqual("03-04-2ce6");
-    expect(sortedVaultSubmissions[13].status).not.toEqual(VaultStatus.NEW.valueOf());
+    // see: https://kentcdodds.com/blog/fix-the-not-wrapped-in-act-warning#an-alternative-waiting-for-the-mocked-promise
+    // > especially if there's no visual indication of the async task completing.
+    await act(async () => {
+      await promise;
+    });
   });
 });
 
@@ -51,10 +47,10 @@ const vaultSubmissions: VaultSubmissionList[] = [
     securityAttribute: "Unclassified",
     name: "03-04-0022",
     createdAt: 1680549853671,
-    lastDownloadedBy: null,
-    confirmedAt: null,
-    downloadedAt: null,
-    removedAt: null,
+    lastDownloadedBy: "",
+    confirmedAt: undefined,
+    downloadedAt: undefined,
+    removedAt: undefined,
   },
   {
     formID: "clg17xha50008efkgfgxa8l4f",
@@ -74,9 +70,9 @@ const vaultSubmissions: VaultSubmissionList[] = [
     name: "03-04-0caa",
     createdAt: 1680549836782,
     lastDownloadedBy: "peter.thiessen@cds-snc.ca",
-    confirmedAt: null,
+    confirmedAt: undefined,
     downloadedAt: 1680551178000,
-    removedAt: null,
+    removedAt: undefined,
   },
   {
     formID: "clg17xha50008efkgfgxa8l4f",
@@ -85,9 +81,9 @@ const vaultSubmissions: VaultSubmissionList[] = [
     name: "03-04-0d87",
     createdAt: 1680549838736,
     lastDownloadedBy: "peter.thiessen@cds-snc.ca",
-    confirmedAt: null,
+    confirmedAt: undefined,
     downloadedAt: 1680551178035,
-    removedAt: null,
+    removedAt: undefined,
   },
   {
     formID: "clg17xha50008efkgfgxa8l4f",
@@ -161,10 +157,10 @@ const vaultSubmissions: VaultSubmissionList[] = [
     securityAttribute: "Unclassified",
     name: "03-04-54de",
     createdAt: 1680549841683,
-    lastDownloadedBy: null,
-    confirmedAt: null,
-    downloadedAt: null,
-    removedAt: null,
+    lastDownloadedBy: "",
+    confirmedAt: undefined,
+    downloadedAt: undefined,
+    removedAt: undefined,
   },
   {
     formID: "clg17xha50008efkgfgxa8l4f",
@@ -172,10 +168,10 @@ const vaultSubmissions: VaultSubmissionList[] = [
     securityAttribute: "Unclassified",
     name: "03-04-6ca5",
     createdAt: 1680549856861,
-    lastDownloadedBy: null,
-    confirmedAt: null,
-    downloadedAt: null,
-    removedAt: null,
+    lastDownloadedBy: "",
+    confirmedAt: undefined,
+    downloadedAt: undefined,
+    removedAt: undefined,
   },
   {
     formID: "clg17xha50008efkgfgxa8l4f",
@@ -183,10 +179,10 @@ const vaultSubmissions: VaultSubmissionList[] = [
     securityAttribute: "Unclassified",
     name: "03-04-8a87",
     createdAt: 1680549855408,
-    lastDownloadedBy: null,
-    confirmedAt: null,
-    downloadedAt: null,
-    removedAt: null,
+    lastDownloadedBy: "",
+    confirmedAt: undefined,
+    downloadedAt: undefined,
+    removedAt: undefined,
   },
   {
     formID: "clg17xha50008efkgfgxa8l4f",
@@ -194,10 +190,10 @@ const vaultSubmissions: VaultSubmissionList[] = [
     securityAttribute: "Unclassified",
     name: "03-04-914b",
     createdAt: 1680549849354,
-    lastDownloadedBy: null,
-    confirmedAt: null,
-    downloadedAt: null,
-    removedAt: null,
+    lastDownloadedBy: "",
+    confirmedAt: undefined,
+    downloadedAt: undefined,
+    removedAt: undefined,
   },
   {
     formID: "clg17xha50008efkgfgxa8l4f",
@@ -205,10 +201,10 @@ const vaultSubmissions: VaultSubmissionList[] = [
     securityAttribute: "Unclassified",
     name: "03-04-a4c5",
     createdAt: 1680549844830,
-    lastDownloadedBy: null,
-    confirmedAt: null,
-    downloadedAt: null,
-    removedAt: null,
+    lastDownloadedBy: "",
+    confirmedAt: undefined,
+    downloadedAt: undefined,
+    removedAt: undefined,
   },
   {
     formID: "clg17xha50008efkgfgxa8l4f",
@@ -216,10 +212,10 @@ const vaultSubmissions: VaultSubmissionList[] = [
     securityAttribute: "Unclassified",
     name: "03-04-affc",
     createdAt: 1680549847443,
-    lastDownloadedBy: null,
-    confirmedAt: null,
-    downloadedAt: null,
-    removedAt: null,
+    lastDownloadedBy: "",
+    confirmedAt: undefined,
+    downloadedAt: undefined,
+    removedAt: undefined,
   },
   {
     formID: "clg17xha50008efkgfgxa8l4f",
@@ -227,10 +223,10 @@ const vaultSubmissions: VaultSubmissionList[] = [
     securityAttribute: "Unclassified",
     name: "03-04-bff8",
     createdAt: 1680549819049,
-    lastDownloadedBy: null,
-    confirmedAt: null,
-    downloadedAt: null,
-    removedAt: null,
+    lastDownloadedBy: "",
+    confirmedAt: undefined,
+    downloadedAt: undefined,
+    removedAt: undefined,
   },
   {
     formID: "clg17xha50008efkgfgxa8l4f",
@@ -238,10 +234,10 @@ const vaultSubmissions: VaultSubmissionList[] = [
     securityAttribute: "Unclassified",
     name: "03-04-d9b1",
     createdAt: 1680549823799,
-    lastDownloadedBy: null,
-    confirmedAt: null,
-    downloadedAt: null,
-    removedAt: null,
+    lastDownloadedBy: "",
+    confirmedAt: undefined,
+    downloadedAt: undefined,
+    removedAt: undefined,
   },
   {
     formID: "clg17xha50008efkgfgxa8l4f",
@@ -260,10 +256,10 @@ const vaultSubmissions: VaultSubmissionList[] = [
     securityAttribute: "Unclassified",
     name: "03-04-fe4e",
     createdAt: 1680549834891,
-    lastDownloadedBy: null,
-    confirmedAt: null,
-    downloadedAt: null,
-    removedAt: null,
+    lastDownloadedBy: "",
+    confirmedAt: undefined,
+    downloadedAt: undefined,
+    removedAt: undefined,
   },
   {
     formID: "clg17xha50008efkgfgxa8l4f",
@@ -271,10 +267,10 @@ const vaultSubmissions: VaultSubmissionList[] = [
     securityAttribute: "Unclassified",
     name: "06-04-4aab",
     createdAt: 1680794669621,
-    lastDownloadedBy: null,
-    confirmedAt: null,
-    downloadedAt: null,
-    removedAt: null,
+    lastDownloadedBy: "",
+    confirmedAt: undefined,
+    downloadedAt: undefined,
+    removedAt: undefined,
   },
   {
     formID: "clg17xha50008efkgfgxa8l4f",
@@ -282,10 +278,10 @@ const vaultSubmissions: VaultSubmissionList[] = [
     securityAttribute: "Unclassified",
     name: "06-04-7f15",
     createdAt: 1680794662371,
-    lastDownloadedBy: null,
-    confirmedAt: null,
-    downloadedAt: null,
-    removedAt: null,
+    lastDownloadedBy: "",
+    confirmedAt: undefined,
+    downloadedAt: undefined,
+    removedAt: undefined,
   },
   {
     formID: "clg17xha50008efkgfgxa8l4f",
@@ -293,9 +289,9 @@ const vaultSubmissions: VaultSubmissionList[] = [
     securityAttribute: "Unclassified",
     name: "06-04-c718",
     createdAt: 1680794671753,
-    lastDownloadedBy: null,
-    confirmedAt: null,
-    downloadedAt: null,
-    removedAt: null,
+    lastDownloadedBy: "",
+    confirmedAt: undefined,
+    downloadedAt: undefined,
+    removedAt: undefined,
   },
 ];

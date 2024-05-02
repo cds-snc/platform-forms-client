@@ -34,6 +34,7 @@ export const Option = ({
     setFocusInput,
     translationLanguagePriority,
     getLocalizationAttribute,
+    removeChoiceFromRules,
   } = useTemplateStore((s) => ({
     addChoice: s.addChoice,
     removeChoice: s.removeChoice,
@@ -42,6 +43,7 @@ export const Option = ({
     getFocusInput: s.getFocusInput,
     translationLanguagePriority: s.translationLanguagePriority,
     getLocalizationAttribute: s.getLocalizationAttribute,
+    removeChoiceFromRules: s.removeChoiceFromRules,
   }));
 
   const icon = renderIcon && renderIcon(index);
@@ -88,9 +90,16 @@ export const Option = ({
     [setValue, translationLanguagePriority]
   );
 
+  const cleanUpRules = useCallback(
+    (parentIndex: number, index: number) => {
+      removeChoiceFromRules(parentIndex, index);
+    },
+    [removeChoiceFromRules]
+  );
+
   return (
-    <div className="flex mt-3">
-      <div className="flex mt-2 w-5 justify-end">{icon}</div>
+    <div className="mt-3 flex">
+      <div className="mt-2 flex w-5 justify-end">{icon}</div>
       <Input
         id={`option--${id}--${index + 1}`}
         ref={input}
@@ -101,7 +110,7 @@ export const Option = ({
           updateValue(parentIndex, e.target.value)
         }
         onKeyDown={handleKeyDown}
-        className="ml-5 w-full max-h-9 !my-0"
+        className="!my-0 ml-5 max-h-9 w-full"
         {...getLocalizationAttribute()}
       />
       <Button
@@ -111,6 +120,7 @@ export const Option = ({
         icon={<Close className="group-focus:fill-white-default" />}
         aria-label={`${t("removeOption")} ${value}`}
         onClick={() => {
+          cleanUpRules(parentIndex, index);
           removeChoice(parentIndex, index);
         }}
       ></Button>

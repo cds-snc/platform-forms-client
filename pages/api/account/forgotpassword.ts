@@ -8,6 +8,7 @@ import { NextApiRequest, NextApiResponse } from "next";
 import { middleware, cors, csrfProtected } from "@lib/middleware";
 import { logEvent } from "@lib/auditLogs";
 import { prisma, prismaErrors } from "@lib/integration/prismaConnector";
+import { sanitizeEmailAddressForCognito } from "@lib/auth";
 
 const forgotpassword = async (req: NextApiRequest, res: NextApiResponse) => {
   const { COGNITO_REGION, COGNITO_APP_CLIENT_ID } = process.env;
@@ -18,9 +19,11 @@ const forgotpassword = async (req: NextApiRequest, res: NextApiResponse) => {
     });
   }
 
+  const sanitizedUsername = sanitizeEmailAddressForCognito(req.body.username);
+
   const params: ForgotPasswordCommandInput = {
     ClientId: COGNITO_APP_CLIENT_ID,
-    Username: req.body.username,
+    Username: sanitizedUsername,
   };
 
   const cognitoClient = new CognitoIdentityProviderClient({
@@ -32,7 +35,7 @@ const forgotpassword = async (req: NextApiRequest, res: NextApiResponse) => {
   try {
     // send command to cognito
     const response = await cognitoClient.send(forgotPasswordCommand);
-    logPasswordReset(req.body.username);
+    logPasswordReset(sanitizedUsername);
     return res.status(response["$metadata"].httpStatusCode as number).send("");
   } catch (err) {
     const cognitoError = err as CognitoIdentityProviderServiceException;

@@ -1,9 +1,10 @@
 /* eslint-disable no-console */
 import { Prisma, PrismaClient } from "@prisma/client";
-import { parse } from "ts-command-line-args";
 import seedTemplates from "./fixtures/templates";
 import seedPrivileges from "./fixtures/privileges";
 import seedSettings from "./fixtures/settings";
+import seedUsers, { UserWithoutSecurityAnswers } from "./fixtures/users";
+import seedSecurityQuestions from "./fixtures/security-questions";
 
 type AnyObject = {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -28,10 +29,36 @@ async function createPrivileges(env: string) {
     ...privilege,
     permissions: privilege.permissions !== null ? privilege.permissions : Prisma.JsonNull,
   }));
+
+  const privilegePromises = typeSafePrivilegeData.map((privilege) => {
+    return prisma.privilege.upsert({
+      where: {
+        name: privilege.name,
+      },
+      update: {
+        permissions: privilege.permissions,
+        descriptionEn: privilege.descriptionEn,
+        descriptionFr: privilege.descriptionFr,
+        priority: privilege.priority,
+      },
+      create: {
+        name: privilege.name,
+        permissions: privilege.permissions,
+        descriptionEn: privilege.descriptionEn,
+        descriptionFr: privilege.descriptionFr,
+        priority: privilege.priority,
+      },
+    });
+  });
+
+  await Promise.all(privilegePromises);
+
+  /*
   return prisma.privilege.createMany({
     data: typeSafePrivilegeData,
     skipDuplicates: true,
   });
+  */
 }
 
 async function createSettings(env: string) {
@@ -41,26 +68,57 @@ async function createSettings(env: string) {
   });
 }
 
-async function createTestUser() {
-  return prisma.user.create({
-    data: {
-      id: "1",
-      name: "Test User",
-      email: "test.user@cds-snc.ca",
-      privileges: {
-        connect: [
-          { nameEn: "Base" },
-          { nameEn: "PublishForms" },
-          { nameEn: "ManageApplicationSettings" },
-        ],
+async function createTestUsers() {
+  await prisma.user.create({
+    data: UserWithoutSecurityAnswers,
+  });
+
+  const [q1, q2, q3] = await prisma.securityQuestion.findMany();
+
+  const users = seedUsers["test"].map((user) => {
+    return prisma.user.create({
+      data: {
+        ...user,
+        securityAnswers: {
+          create: [
+            {
+              question: {
+                connect: {
+                  id: q1.id,
+                },
+              },
+              answer: "example-answer",
+            },
+            {
+              question: {
+                connect: {
+                  id: q2.id,
+                },
+              },
+              answer: "example-answer",
+            },
+            {
+              question: {
+                connect: {
+                  id: q3.id,
+                },
+              },
+              answer: "example-answer",
+            },
+          ],
+        },
       },
-    },
-    select: {
-      id: true,
-      name: true,
-      email: true,
-      privileges: true,
-    },
+    });
+  });
+  await Promise.all(users);
+}
+
+async function createSecurityQuestions() {
+  return prisma.securityQuestion.createMany({
+    data: seedSecurityQuestions.map((question) => {
+      return { questionEn: question.en, questionFr: question.fr };
+    }),
+    skipDuplicates: true,
   });
 }
 
@@ -174,35 +232,77 @@ async function templateSchemaMigration() {
   console.log(`${templatesToMigrate.length} were migrated for new Template schema`);
 }
 
-async function main() {
-  const { environment = "production" } = parse<{ environment?: string }>({
-    environment: { type: String, optional: true },
-  });
+async function lowercaseEmailAddressMigration() {
+  const users = (await prisma.user.findMany({
+    select: {
+      id: true,
+      email: true,
+    },
+  })) as {
+    id: string;
+    email: string;
+  }[];
 
-  console.log(`Seeding Database for ${environment} enviroment`);
-  await Promise.all([
-    createTemplates(environment),
-    createPrivileges(environment),
-    createSettings(environment),
-  ]);
+  const usersToMigrate = users
+    .filter((user) => /[A-Z]/.test(user.email))
+    .map((user) => {
+      return prisma.user
+        .update({
+          where: {
+            id: user.id,
+          },
+          data: {
+            email: user.email.toLowerCase(),
+          },
+        })
+        .then(() =>
+          console.log(`Converted email address ${user.email} to ${user.email.toLowerCase()}.`)
+        )
+        .catch((e: Error) =>
+          console.log(
+            `Failed to migrate user email address ${user.email} because of following error: ${e.message}`
+          )
+        );
+    });
 
-  console.log("Running 'publishingStatus' migration");
-  await publishingStatusMigration();
+  await Promise.all(usersToMigrate);
 
-  console.log("Running 'templateSchema' migration");
-  await templateSchemaMigration();
+  console.log(
+    `${usersToMigrate.length} users required migration to lowercase email address but some may have failed (see logs above)`
+  );
+}
 
-  if (environment === "test") {
-    console.log("Creating test User");
-    await createTestUser();
+async function main(environment: string) {
+  try {
+    console.log(`Seeding Database for ${environment} enviroment`);
+    await Promise.all([
+      createTemplates(environment),
+      createPrivileges(environment),
+      createSettings(environment),
+      createSecurityQuestions(),
+    ]);
+
+    if (environment === "test") {
+      console.log("Creating test Users");
+      await createTestUsers();
+
+      // No migrations need to run on pure new test database
+      return;
+    }
+
+    console.log("Running 'publishingStatus' migration");
+    await publishingStatusMigration();
+
+    console.log("Running 'templateSchema' migration");
+    await templateSchemaMigration();
+
+    console.log("Running 'lowercaseEmailAddress' migration");
+    await lowercaseEmailAddressMigration();
+  } catch (e) {
+    console.error(e);
+  } finally {
+    prisma.$disconnect;
   }
 }
 
-main()
-  .catch((e) => {
-    console.error(e);
-    process.exit(1);
-  })
-  .finally(async () => {
-    await prisma.$disconnect();
-  });
+export default main;

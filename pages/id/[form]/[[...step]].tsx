@@ -5,12 +5,14 @@ import React, { ReactElement } from "react";
 import classnames from "classnames";
 import { useTranslation } from "next-i18next";
 import Head from "next/head";
-import { Form, TextPage } from "@components/forms";
+import { Form, TextPage, ClosedPage, NextButton } from "@components/forms";
 import { getProperty, getRenderedForm } from "@lib/formBuilder";
 import { useRouter } from "next/router";
 import { PublicFormRecord } from "@lib/types";
 import { GetServerSideProps } from "next";
 import { NextPageWithLayout } from "@pages/_app";
+import { dateHasPast } from "@lib/utils";
+import { GCFormsProvider } from "@lib/hooks/useGCFormContext";
 
 import FormDisplayLayout from "@components/globals/layouts/FormDisplayLayout";
 
@@ -26,12 +28,22 @@ const RenderForm: NextPageWithLayout<RenderFormProps> = ({
   formRecord,
 }: RenderFormProps): React.ReactElement => {
   const { t, i18n } = useTranslation();
-  const language = i18n.language as string;
+  const language = i18n.language as "en" | "fr";
   const classes = classnames("gc-form-wrapper");
   const currentForm = getRenderedForm(formRecord, language, t);
   const formTitle = formRecord.form[getProperty("title", language)] as string;
   const router = useRouter();
   const { step } = router.query;
+
+  let isPastClosingDate = false;
+
+  if (formRecord.closingDate) {
+    isPastClosingDate = dateHasPast(Date.parse(formRecord.closingDate));
+  }
+
+  if (isPastClosingDate) {
+    return <ClosedPage language={language} formRecord={formRecord} />;
+  }
 
   // render text pages
   if (step == "confirmation") {
@@ -45,9 +57,19 @@ const RenderForm: NextPageWithLayout<RenderFormProps> = ({
       </Head>
       <div className={classes}>
         <h1>{formTitle}</h1>
-        <Form formRecord={formRecord} language={language} router={router} t={t}>
-          {currentForm}
-        </Form>
+        <GCFormsProvider formRecord={formRecord}>
+          <Form
+            formRecord={formRecord}
+            language={language}
+            router={router}
+            t={t}
+            renderSubmit={({ validateForm, fallBack }) => {
+              return <NextButton validateForm={validateForm} fallBack={fallBack} />;
+            }}
+          >
+            {currentForm}
+          </Form>
+        </GCFormsProvider>
       </div>
     </>
   );
@@ -100,12 +122,23 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   if (!publicForm || (!publicForm?.isPublished && !unpublishedForms)) {
     return redirect(context.locale);
   }
+
+  // undefined will throw a serialization error in which case delete the key as it's uneeded
+  if (typeof publicForm.closingDate === "undefined") {
+    delete publicForm.closingDate;
+  }
+
   return {
     props: {
       formRecord: publicForm,
       isEmbeddable: isEmbeddable,
       ...(context.locale &&
-        (await serverSideTranslations(context.locale, ["common", "welcome", "confirmation"]))),
+        (await serverSideTranslations(context.locale, [
+          "common",
+          "welcome",
+          "confirmation",
+          "form-closed",
+        ]))),
     }, // will be passed to the page component as props
   };
 };

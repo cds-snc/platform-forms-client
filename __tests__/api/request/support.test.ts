@@ -17,33 +17,20 @@ jest.mock("next-auth/react");
 const mockGetSession = jest.mocked(getServerSession, { shallow: true });
 jest.mock("next-auth/next");
 
-let IsGCNotifyServiceAvailable = true;
-
-const mockSendEmail = {
-  sendEmail: jest.fn(() => {
-    if (IsGCNotifyServiceAvailable) {
-      return Promise.resolve();
-    } else {
-      return Promise.reject(new Error("something went wrong"));
-    }
-  }),
-};
-
-jest.mock("notifications-node-client", () => ({
-  NotifyClient: jest.fn(() => mockSendEmail),
+jest.mock("@lib/integration/freshdesk", () => ({
+  createTicket: jest.fn(() => Promise.resolve()),
 }));
 
 describe("Support email API tests - WITHOUT an active session", () => {
   beforeEach(() => {
     mockGetCSRFToken.mockResolvedValueOnce("valid_csrf");
-    IsGCNotifyServiceAvailable = true;
   });
 
   afterEach(() => {
     mockGetCSRFToken.mockReset();
   });
 
-  runEmailAPITests();
+  runAPITests();
 });
 
 describe("Support email API tests - WITH an active session", () => {
@@ -56,9 +43,9 @@ describe("Support email API tests - WITH an active session", () => {
         name: "Testing Forms",
         privileges: [],
         acceptableUse: true,
+        hasSecurityQuestions: true,
       },
     };
-    IsGCNotifyServiceAvailable = true;
     mockGetSession.mockResolvedValue(mockSession);
     mockGetCSRFToken.mockResolvedValueOnce("valid_csrf");
   });
@@ -67,10 +54,10 @@ describe("Support email API tests - WITH an active session", () => {
     mockGetSession.mockReset();
   });
 
-  runEmailAPITests();
+  runAPITests();
 });
 
-function runEmailAPITests() {
+function runAPITests() {
   it("Should fail if CSRF token is not valid", async () => {
     const { req, res } = createMocks({
       method: "POST",
@@ -83,6 +70,9 @@ function runEmailAPITests() {
         supportType: "support",
         name: "name",
         email: "email@email.com",
+        department: "Department",
+        branch: "Branch",
+        jobTitle: "Job title",
         request: "request",
         description: "description",
       },
@@ -105,6 +95,9 @@ function runEmailAPITests() {
         supportType: "support",
         name: "name",
         email: "email@email.com",
+        department: "Department",
+        branch: "Branch",
+        jobTitle: "Job title",
         request: "request",
         description: "description",
       },
@@ -129,6 +122,9 @@ function runEmailAPITests() {
           name: "name",
           email: "email@email.com",
           request: "request",
+          department: "Department",
+          branch: "Branch",
+          jobTitle: "Job title",
           description: "description",
         },
       });
@@ -154,34 +150,7 @@ function runEmailAPITests() {
 
     await support(req, res);
 
-    expect(res.statusCode).toEqual(404);
+    expect(res.statusCode).toEqual(400);
     expect(JSON.parse(res._getData())).toMatchObject({ error: "Malformed request" });
-  });
-
-  it("Should fail if GC Notify service is unavailable", async () => {
-    IsGCNotifyServiceAvailable = false;
-
-    const { req, res } = createMocks({
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Origin: "http://localhost:3000",
-        "X-CSRF-Token": "valid_csrf",
-      },
-      body: {
-        supportType: "support",
-        name: "name",
-        email: "email@email.com",
-        request: "request",
-        description: "description",
-      },
-    });
-
-    await support(req, res);
-
-    expect(res.statusCode).toEqual(500);
-    expect(JSON.parse(res._getData())).toMatchObject({
-      error: "Internal Service Error: Failed to send request",
-    });
   });
 }

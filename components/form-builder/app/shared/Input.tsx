@@ -39,7 +39,7 @@ const Input = React.forwardRef<Ref, Props>((props, ref) => {
   } = props;
   const themes = {
     default:
-      "py-2 px-3 my-2 rounded border-1.5 border-black-default border-solid focus:outline-2 focus:outline-blue-focus focus:outline focus:border-blue-focus",
+      "py-2 px-3 my-2 rounded border-1.5 border-slate-500 border-solid focus:outline-2 focus:outline-blue-focus focus:outline focus:border-blue-focus",
     title:
       "pt-2.5 pb-1.5 px-2.5 text-base font-bold border-b-1.5 border-solid border-black-default rounded-t focus:bg-gray-default focus:outline-0",
     error:

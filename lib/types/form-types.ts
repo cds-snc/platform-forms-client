@@ -5,6 +5,7 @@
 import { ChangeEvent } from "react";
 import { HTMLTextInputTypeAttribute } from "./utility-types";
 import { TypeOmit } from ".";
+import { GroupsType } from "@lib/formContext";
 
 /**
  * form element types which is used to configure a single field or element in a form
@@ -29,6 +30,10 @@ export interface PropertyChoices {
   [key: string]: string;
 }
 
+export type ConditionalRule = {
+  choiceId: string;
+};
+
 // used to define attributes for the properties of an element in the form
 export interface ElementProperties {
   titleEn: string;
@@ -45,6 +50,7 @@ export interface ElementProperties {
   isSectional?: boolean;
   maxNumberOfRows?: number;
   autoComplete?: string;
+  conditionalRules?: ConditionalRule[];
   [key: string]:
     | string
     | number
@@ -52,6 +58,7 @@ export interface ElementProperties {
     | Array<PropertyChoices>
     | Array<FormElement>
     | ValidationProperties
+    | Array<ConditionalRule>
     | undefined;
 }
 
@@ -106,7 +113,9 @@ export interface FormProperties {
   introduction?: Record<string, string>;
   privacyPolicy?: Record<string, string>;
   confirmation?: Record<string, string>;
+  closedMessage?: Record<string, string>;
   layout: number[];
+  groups?: GroupsType;
   elements: FormElement[];
   brand?: BrandProperties;
   [key: string]:
@@ -116,6 +125,7 @@ export interface FormProperties {
     | Array<string | number | FormElement>
     | Record<string, string>
     | BrandProperties
+    | GroupsType
     | undefined;
 }
 
@@ -139,6 +149,7 @@ export type FormRecord = {
   isPublished: boolean;
   deliveryOption?: DeliveryOption;
   securityAttribute: SecurityAttribute;
+  closingDate?: string;
   bearerToken?: string;
   reCaptchaID?: string;
   [key: string]: string | boolean | FormProperties | DeliveryOption | undefined;

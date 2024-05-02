@@ -32,12 +32,12 @@
   "submitButton": "Soumettre",
   "input-validation": {
     "heading": "Veuillez corriger les erreurs sur la page.",
-    "required": "Compléter le champs obligatoire afin de continuer.",
+    "required": "Compléter le champ obligatoire afin de continuer.",
     "alphanumeric": "Entrer uniquement des lettres et des chiffres.",
     "text": "",
     "number": "Entrer un numéro.",
     "email": "Entrer une adresse courriel valide.",
-    "date": "Utiliser le format de date mm/jj/aaaa.",
+    "date": "Entrer une date valide au format mm/jj/aaaa.",
     "phone": "Entrer un numéro de téléphone valide.",
     "regex": "Veuillez utiliser le bon format.",
     "file-size-too-large": "Sélectionner un fichier plus petit.",
@@ -50,7 +50,7 @@
   "required": "obligatoire",
   "all-required": "toutes les cases à cocher sont obligatoires",
   "required-field": "Champ obligatoire",
-  "file-upload-button-text": "Téléverser un fichier",
+  "file-upload-button-text": "Sélectionner un fichier",
   "file-upload-sr-only-file-selected": "Le fichier actuellement sélectionné est",
   "file-upload-no-file-selected": "Aucun fichier actuellement sélectionné",
   "dropdown-initial-option-text": "Pas de sélection",
@@ -69,14 +69,16 @@
   "adminNav": {
     "dashboard": "Accueil",
     "formbuilder": "Générateur de formulaires",
-    "users": "Usagers",
+    "users": "Comptes",
     "templates": "Modèles",
     "features": "Indicateurs de fonction",
     "login": "Se connecter",
     "logout": "Se déconnecter",
     "privileges": "Privilèges",
     "settings": "Paramètres",
-    "myForms": "Vos formulaires"
+    "administration": "Administration",
+    "myForms": "Formulaires",
+    "profile": "Profil"
   },
   "formElements": {
     "characterCount": {
@@ -111,9 +113,9 @@
   },
   "errorPanel": {
     "defaultTitle": "Quelque chose a mal tourné",
-    "defaultMessage": "Désolé, il y a un problème et nous vous avons perdu.",
+    "defaultMessage": "Désolé, il y a un problème et nous vous avons perdu. Veuillez réessayer plus tard.",
     "cta": {
-      "yourForms": "Retourner à Vos formulaires",
+      "yourForms": "Retourner aux formulaires",
       "home": "Retourner à l’accueil",
       "support": "Obtenir du soutien"
     }
@@ -142,5 +144,8 @@
         }
       }
     }
-  }
+  },
+  "mainNavAriaLabel": "Navigation principale",
+  "yourAccount": "Votre compte",
+  "dateModified": "Date de modification "
 }

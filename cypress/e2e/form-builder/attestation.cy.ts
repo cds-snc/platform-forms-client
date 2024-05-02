@@ -1,33 +1,14 @@
-import { NextData } from "types";
 describe("Form builder attestation", () => {
   beforeEach(() => {
-    cy.visit("/form-builder/edit", {
-      onBeforeLoad: (win) => {
-        win.sessionStorage.clear();
-        let nextData: NextData;
-        Object.defineProperty(win, "__NEXT_DATA__", {
-          set(serverSideProps) {
-            serverSideProps.context = {
-              user: {
-                acceptableUse: false,
-                name: null,
-                userId: "testId",
-              },
-            };
-            nextData = serverSideProps;
-          },
-          get() {
-            return nextData;
-          },
-        });
-      },
-    });
+    cy.login({ acceptableUse: true });
+    cy.visitPage("/form-builder/edit");
   });
 
   it("Renders attestation block", () => {
     cy.get("button").contains("Add").click();
+    cy.get('[data-testid="basic-filter"]').click();
     cy.get('[data-testid="attestation"]').click();
-    cy.get("button").contains("Select block").click();
+    cy.get('[data-testid="element-description-add-element"]').click();
     cy.get("#item-1").scrollIntoView();
     cy.get("#item-1").should("have.value", "I agree to:");
     cy.get("#option--1--1").should("have.value", "Condition 1");
@@ -36,10 +17,10 @@ describe("Form builder attestation", () => {
     cy.get("#required-1-id").should("be.disabled");
     cy.get("#required-1-id").should("be.checked");
 
-    cy.visit("/form-builder/preview");
-    cy.get("#label-1").contains("all checkboxes required").should("exist");
-    cy.get("label").contains("Condition 1").should("exist");
-    cy.get("label").contains("Condition 2").should("exist");
-    cy.get("label").contains("Condition 3").should("exist");
+    cy.visitPage("/form-builder/preview");
+    cy.get("#label-1").contains("all checkboxes required").should("be.visible");
+    cy.get("label").contains("Condition 1").should("be.visible");
+    cy.get("label").contains("Condition 2").should("be.visible");
+    cy.get("label").contains("Condition 3").should("be.visible");
   });
 });

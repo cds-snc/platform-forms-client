@@ -74,9 +74,9 @@ describe("<PanelActions />", () => {
     // Keyboard navigation should start at duplicate
     cy.get("body").tab();
     cy.focused().should("have.attr", "data-testid", "duplicate");
-    cy.get("body").type("{leftArrow}");
+    cy.typeInField("body", "{leftArrow}");
     cy.focused().should("have.attr", "data-testid", "duplicate");
-    cy.get("body").type("{rightArrow}");
+    cy.typeInField("body", "{rightArrow}");
     cy.focused().should("have.attr", "data-testid", "remove");
   });
 
@@ -109,23 +109,23 @@ describe("<PanelActions />", () => {
     );
     cy.get("body").tab();
     cy.focused().should("have.attr", "data-testid", "moveUp");
-    cy.get("body").type("{rightArrow}");
+    cy.typeInField("body", "{rightArrow}");
     cy.focused().should("have.attr", "data-testid", "moveDown");
-    cy.get("body").type("{rightArrow}");
+    cy.typeInField("body", "{rightArrow}");
     cy.focused().should("have.attr", "data-testid", "duplicate");
-    cy.get("body").type("{rightArrow}");
+    cy.typeInField("body", "{rightArrow}");
     cy.focused().should("have.attr", "data-testid", "remove");
-    cy.get("body").type("{rightArrow}");
+    cy.typeInField("body", "{rightArrow}");
     cy.focused().should("have.attr", "data-testid", "more");
-    cy.get("body").type("{rightArrow}");
+    cy.typeInField("body", "{rightArrow}");
     cy.focused().should("have.attr", "data-testid", "more");
-    cy.get("body").type("{leftArrow}");
+    cy.typeInField("body", "{leftArrow}");
     cy.focused().should("have.attr", "data-testid", "remove");
-    cy.get("body").type("{leftArrow}");
+    cy.typeInField("body", "{leftArrow}");
     cy.focused().should("have.attr", "data-testid", "duplicate");
-    cy.get("body").type("{leftArrow}");
+    cy.typeInField("body", "{leftArrow}");
     cy.focused().should("have.attr", "data-testid", "moveDown");
-    cy.get("body").type("{leftArrow}");
+    cy.typeInField("body", "{leftArrow}");
     cy.focused().should("have.attr", "data-testid", "moveUp");
     cy.tab();
     cy.focused().should("have.attr", "data-testid", "add-element");

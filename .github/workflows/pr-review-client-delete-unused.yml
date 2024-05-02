@@ -1,0 +1,49 @@
+name: Delete unused PR review environments
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "0 4 * * *" # Nightly at 4am
+
+env:
+  AWS_ACCOUNT_ID: ${{ vars.STAGING_AWS_ACCOUNT_ID }}
+  AWS_DEFAULT_REGION: ca-central-1
+  DELETE_AFTER_DAYS: 21
+  FUNCTION_PREFIX: "forms-client-pr"
+  IMAGE: pr_review
+
+permissions:
+  id-token: write
+  contents: read
+
+jobs:
+  delete-unused-test-client:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Configure AWS credentials using OIDC
+        uses: aws-actions/configure-aws-credentials@010d0da01d0b5a38af31e9c3470dbfdabdecca3a # v4.0.1
+        with:
+          role-to-assume: arn:aws:iam::${{ env.AWS_ACCOUNT_ID }}:role/platform-forms-client-apply
+          role-session-name: PRReviewDeleteUnused
+          aws-region: ${{ env.AWS_DEFAULT_REGION }}
+
+      - name: Delete old PR review environments
+        run: |
+          IFS=$'\n\t'
+          DELETE_DATE_EPOCH=$(date -d "-${{ env.DELETE_AFTER_DAYS }} days" +%s)
+          PR_REVIEW_ENVS="$(aws lambda list-functions --query 'Functions[?starts_with(FunctionName, `${{ env.FUNCTION_PREFIX }}`) == `true`]' | jq -c -r '.[]')"
+
+          for ENV in $PR_REVIEW_ENVS; do
+              FUNCTION_NAME="$(jq -r '.FunctionName' <<< $ENV)"
+              LAST_MODIFIED="$(jq -r '.LastModified' <<< $ENV)"
+              LAST_MODIFIED_EPOCH="$(date -d $LAST_MODIFIED +%s)"
+
+              if [ $LAST_MODIFIED_EPOCH -lt $DELETE_DATE_EPOCH ]; then
+                  echo "Deleting $FUNCTION_NAME"
+                  PR_NUMBER="${FUNCTION_NAME##*-}"
+                  aws lambda delete-function-url-config --function-name ${{ env.FUNCTION_PREFIX }}-$PR_NUMBER > /dev/null 2>&1
+                  aws lambda delete-function --function-name ${{ env.FUNCTION_PREFIX }}-$PR_NUMBER > /dev/null 2>&1
+                  aws logs delete-log-group --log-group-name /aws/lambda/${{ env.FUNCTION_PREFIX }}-$PR_NUMBER > /dev/null 2>&1
+                  aws ecr batch-delete-image --repository-name $IMAGE --image-ids imageTag=$PR_NUMBER > /dev/null 2>&1
+              fi
+          done

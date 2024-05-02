@@ -1,13 +1,10 @@
-import React, { ReactElement } from "react";
+import React, { ReactElement, useRef } from "react";
 import { Formik } from "formik";
-import { TextInput, Label, Alert, ErrorListItem, Description } from "@components/forms";
+import { TextInput, Label, Alert, ErrorListItem } from "@components/forms";
 import { Button } from "@components/globals";
-import { useFlag } from "@lib/hooks";
-import { useRegister } from "@lib/hooks/auth";
 import { useTranslation } from "next-i18next";
 import { GetServerSideProps } from "next";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
-import { Confirmation } from "@components/auth/Confirmation/Confirmation";
 import * as Yup from "yup";
 import {
   isValidGovEmail,
@@ -17,18 +14,73 @@ import {
   containsSymbol,
 } from "@lib/validation";
 import UserNavLayout from "@components/globals/layouts/UserNavLayout";
-import Loader from "@components/globals/Loader";
 import { authOptions } from "@pages/api/auth/[...nextauth]";
 import { getServerSession } from "next-auth/next";
 import Link from "next/link";
 import Head from "next/head";
 import { ErrorStatus } from "@components/forms/Alert/Alert";
+import { fetchWithCsrfToken } from "@lib/hooks/auth/fetchWithCsrfToken";
+import { hasError } from "@lib/hasError";
+import { logMessage } from "@lib/logger";
+import { Verify } from "@components/auth/Verify";
+import { useLogin } from "@lib/hooks/auth";
+import { useFocusIt } from "@lib/hooks/useFocusIt";
 
 const Register = () => {
-  const { isLoading, status: registrationOpen } = useFlag("accountRegistration");
-  const { username, password, needsConfirmation, register, authErrorsState, authErrorsReset } =
-    useRegister();
   const { t } = useTranslation(["signup", "common"]);
+  const {
+    username,
+    password,
+    authenticationFlowToken,
+    needsVerification,
+    setNeedsVerification,
+    authErrorsState,
+    authErrorsReset,
+    login,
+    handleErrorById,
+  } = useLogin();
+
+  const headingRef = useRef(null);
+  useFocusIt({ elRef: headingRef });
+
+  const register = async ({
+    username,
+    password,
+    name,
+  }: {
+    username: string;
+    password: string;
+    name: string;
+  }) => {
+    authErrorsReset();
+    try {
+      // Register the user. An error is thrown if the username exists etc.
+      await fetchWithCsrfToken("/api/account/register", {
+        username,
+        password,
+        name,
+      });
+
+      // Try signing in the newly registered user
+      const result = await login({ username: username, password: password });
+      if (result) {
+        window.dataLayer = window.dataLayer || [];
+        window.dataLayer.push({
+          event: "sign_up",
+          method: "cognito",
+        });
+
+        setNeedsVerification(true);
+      }
+    } catch (err) {
+      logMessage.error(err);
+      if (hasError("UsernameExistsException", err)) {
+        handleErrorById("UsernameExistsException");
+        return;
+      }
+      handleErrorById(t("InternalServiceException"));
+    }
+  };
 
   const validationSchema = Yup.object().shape({
     name: Yup.string()
@@ -74,28 +126,15 @@ const Register = () => {
       ),
   });
 
-  if (isLoading) {
+  if (needsVerification) {
     return (
       <>
-        <Head>
-          <title>{t("signUpRegistration.title")}</title>
-        </Head>
-        <Loader message={t("loading")} />
+        <Verify
+          type="register"
+          username={username}
+          authenticationFlowToken={authenticationFlowToken}
+        />
       </>
-    );
-  }
-
-  if (!registrationOpen) {
-    return <div>{t("registrationClosed")}</div>;
-  }
-
-  if (needsConfirmation) {
-    return (
-      <Confirmation
-        username={username.current}
-        password={password.current}
-        confirmationCallback={() => undefined}
-      />
     );
   }
 
@@ -105,11 +144,16 @@ const Register = () => {
         <title>{t("signUpRegistration.title")}</title>
       </Head>
       <Formik
-        initialValues={{ username: "", password: "", name: "" }}
-        onSubmit={async (values, formikHelpers) => {
+        initialValues={{ username: "", password: "", passwordConfirmation: "", name: "" }}
+        onSubmit={async (values, { setSubmitting }) => {
           username.current = values.username;
           password.current = values.password;
-          await register({ ...values }, formikHelpers);
+          await register({
+            username: username.current,
+            password: password.current,
+            name: values.name,
+          });
+          setSubmitting(false);
         }}
         validateOnChange={false}
         validateOnBlur={false}
@@ -122,8 +166,8 @@ const Register = () => {
                 type={ErrorStatus.ERROR}
                 heading={authErrorsState.title}
                 onDismiss={authErrorsReset}
+                focussable={true}
                 id="cognitoErrors"
-                // dismissible={cognitoErrorIsDismissible}
               >
                 {authErrorsState.description}&nbsp;
                 {authErrorsState.callToActionLink ? (
@@ -135,13 +179,15 @@ const Register = () => {
             )}
             {Object.keys(errors).length > 0 && !authErrorsState.isError && (
               <Alert
+                className="w-full"
                 type={ErrorStatus.ERROR}
                 validation={true}
                 tabIndex={0}
+                focussable={true}
                 id="registrationValidationErrors"
                 heading={t("input-validation.heading", { ns: "common" })}
               >
-                <ol className="gc-ordered-list">
+                <ol className="gc-ordered-list p-0">
                   {Object.entries(errors).map(([fieldKey, fieldValue]) => {
                     return (
                       <ErrorListItem
@@ -154,8 +200,10 @@ const Register = () => {
                 </ol>
               </Alert>
             )}
-            <h1 className="border-b-0 mt-6 mb-12">{t("signUpRegistration.title")}</h1>
-            <p className="mb-10 -mt-6">
+            <h1 ref={headingRef} className="mb-12 mt-6 border-b-0">
+              {t("signUpRegistration.title")}
+            </h1>
+            <p className="-mt-6 mb-10">
               {t("signUpRegistration.alreadyHaveAnAccount")}&nbsp;
               <Link href={"/auth/login"}>{t("signUpRegistration.alreadyHaveAnAccountLink")}</Link>
             </p>
@@ -175,30 +223,36 @@ const Register = () => {
                 <Label id={"label-username"} htmlFor={"username"} className="required" required>
                   {t("signUpRegistration.fields.username.label")}
                 </Label>
-                <Description className="text-p text-black-default" id={"username-hint"}>
+                <div className="mb-2 text-sm" id={"username-hint"}>
                   {t("signUpRegistration.fields.username.hint")}
-                </Description>
+                </div>
                 <TextInput
                   className="h-10 w-full max-w-lg rounded"
                   type={"email"}
                   id={"username"}
                   name={"username"}
-                  ariaDescribedBy={"desc-username-hint"}
+                  ariaDescribedBy={"username-hint"}
                 />
               </div>
               <div className="focus-group">
                 <Label id={"label-password"} htmlFor={"password"} className="required" required>
-                  {t("account.fields.password.label", { ns: "common" })}
+                  {t("signUpRegistration.fields.password.label")}
                 </Label>
-                <Description className="text-p text-black-default" id={"password-hint"}>
-                  {t("account.fields.password.hint", { ns: "common" })}
-                </Description>
+                <div className="mb-2 text-sm text-black" id={"password-hint"}>
+                  {t("signUpRegistration.fields.password.hintList.title")}
+                  <ul className="mt-2">
+                    <li>{t("signUpRegistration.fields.password.hintList.characters")}</li>
+                    <li>{t("signUpRegistration.fields.password.hintList.number")}</li>
+                    <li>{t("signUpRegistration.fields.password.hintList.capital")}</li>
+                    <li>{t("signUpRegistration.fields.password.hintList.symbol")}</li>
+                  </ul>
+                </div>
                 <TextInput
                   className="h-10 w-full max-w-lg rounded"
                   type={"password"}
                   id={"password"}
                   name={"password"}
-                  ariaDescribedBy={"desc-username-hint"}
+                  ariaDescribedBy={"password-hint"}
                 />
               </div>
               <div className="focus-group">
@@ -217,12 +271,12 @@ const Register = () => {
                   name={"passwordConfirmation"}
                 />
               </div>
-              <p className="mb-10 -mt-8 gc-description">
+              <p className="-mt-2 mb-10">
                 {t("signUpRegistration.termsAgreement")}&nbsp;
                 <Link href={"/terms-of-use"}>{t("signUpRegistration.termsAgreementLink")}</Link>
               </p>
 
-              <Button className="gc-button--blue" type="submit">
+              <Button theme="primary" type="submit">
                 {t("signUpRegistration.signUpButton")}
               </Button>
             </form>
@@ -234,7 +288,7 @@ const Register = () => {
 };
 
 Register.getLayout = (page: ReactElement) => {
-  return <UserNavLayout>{page}</UserNavLayout>;
+  return <UserNavLayout contentWidth="tablet:w-[658px]">{page}</UserNavLayout>;
 };
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
@@ -243,14 +297,19 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   if (session)
     return {
       redirect: {
-        destination: `/${context.locale}/myforms/`,
+        destination: `/${context.locale}/forms/`,
         permanent: false,
       },
     };
   return {
     props: {
       ...(context.locale &&
-        (await serverSideTranslations(context.locale, ["common", "cognito-errors", "signup"]))),
+        (await serverSideTranslations(context.locale, [
+          "common",
+          "cognito-errors",
+          "signup",
+          "auth-verify",
+        ]))),
     },
   };
 };

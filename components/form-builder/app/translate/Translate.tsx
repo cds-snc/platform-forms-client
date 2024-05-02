@@ -10,6 +10,7 @@ import { DownloadCSV } from "./DownloadCSV";
 import { RichTextEditor } from "../edit/elements/lexical-editor/RichTextEditor";
 import { LanguageLabel } from "./LanguageLabel";
 import { FieldsetLegend, SectionTitle } from ".";
+import { SaveButton } from "../shared/SaveButton";
 
 import { FormElement } from "@lib/types";
 import { alphabet, sortByLayout } from "../../util";
@@ -116,17 +117,19 @@ export const Translate = () => {
         <p>{t("translateDescription")}</p>
         <br />
 
+        <div className="mb-4">
+          <SaveButton />
+        </div>
+
         <div className="mb-8">
           <DownloadCSV />
         </div>
 
         <section>
-          <SectionTitle>{t("start")}</SectionTitle>
+          <SectionTitle>{t("formIntroduction")}</SectionTitle>
           {/* FORM TITLE */}
           <fieldset>
-            <FieldsetLegend>
-              {t("formIntroduction")}: {t("title")}
-            </FieldsetLegend>
+            <FieldsetLegend>{t("title")}</FieldsetLegend>
             <div className="flex gap-px border border-gray-300 mb-10 divide-x-2">
               <label htmlFor="form-title-en" className="sr-only">
                 {t(`${primaryLanguage}-text`)}
@@ -177,9 +180,7 @@ export const Translate = () => {
           {/* INTRO */}
           {(form.introduction?.descriptionEn || form.introduction?.descriptionFr) && (
             <fieldset>
-              <FieldsetLegend>
-                {t("formIntroduction")}: {t("description")}
-              </FieldsetLegend>
+              <FieldsetLegend>{t("description")}</FieldsetLegend>
               <div
                 className="flex gap-px border border-gray-300 mb-10 divide-x-2"
                 key={primaryLanguage}
@@ -199,7 +200,7 @@ export const Translate = () => {
                       ]
                     }
                     lang={primaryLanguage}
-                    ariaLabel={t("formIntroduction")}
+                    ariaLabel={t("description")}
                     ariaDescribedBy="form-introduction-english-language"
                   />
                 </div>
@@ -218,7 +219,7 @@ export const Translate = () => {
                       ]
                     }
                     lang={secondaryLanguage}
-                    ariaLabel={t("formIntroduction")}
+                    ariaLabel={t("description")}
                     ariaDescribedBy="form-introduction-french-language"
                   />
                 </div>
@@ -250,9 +251,7 @@ export const Translate = () => {
         <section>
           <SectionTitle>{t("privacyStatement")}</SectionTitle>
           <fieldset>
-            <FieldsetLegend>
-              {t("pageText")}: {t("description")}
-            </FieldsetLegend>
+            <FieldsetLegend>{t("pageText")}</FieldsetLegend>
 
             <div
               className="flex gap-px border border-gray-300 mb-10 divide-x-2"
@@ -311,9 +310,7 @@ export const Translate = () => {
         <section>
           <SectionTitle>{t("confirmationMessage")}</SectionTitle>
           <fieldset>
-            <FieldsetLegend>
-              {t("pageText")}: {t("description")}
-            </FieldsetLegend>
+            <FieldsetLegend>{t("pageText")}</FieldsetLegend>
             <div
               className="flex gap-px border border-gray-300 mb-10 divide-x-2"
               key={primaryLanguage}

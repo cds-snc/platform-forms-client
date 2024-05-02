@@ -12,8 +12,11 @@ declare module "next-auth" {
       privileges: RawRuleOf<MongoAbility<Abilities>>[];
       acceptableUse: boolean;
       name: string | null;
-      email: string | null;
+      email: string;
       image?: string | null;
+      newlyRegistered?: boolean;
+      deactivated?: boolean;
+      hasSecurityQuestions: boolean;
     };
   }
 }
@@ -23,8 +26,11 @@ declare module "next-auth/jwt" {
   interface JWT {
     userId: string;
     name: string;
+    email: string;
     lastLoginTime: Date;
-    privileges: RawRuleOf<MongoAbility<Abilities>>[];
     acceptableUse: boolean;
+    hasSecurityQuestions: boolean;
+    newlyRegistered?: boolean;
+    deactivated?: boolean;
   }
 }

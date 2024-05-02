@@ -30,25 +30,13 @@
       "title": "Minuteur de formulaire",
       "description": "Attendre un certain temps avant d'être autorisé à soumettre le formulaire"
     },
-    "accountRegistration": {
-      "title": "Création de compte",
-      "description": "Permet aux utilisateurs de créer un compte"
-    },
-    "passwordReset": {
-      "title": "Autoriser les réinitialisations de mot de passe",
-      "description": "Permet aux utilisateurs de réinitialiser leurs mots de passe"
-    },
-    "supportForms": {
-      "title": "Formulaires de support",
-      "description": "Activation ou désactivation des formulaires de support"
-    },
-    "nagware": {
-      "title": "Notifications Nagware",
-      "description": "Activer les notifications du module Nagware"
-    },
     "experimentalBlocks": {
       "title": "Blocs expérimentaux",
       "description": "Activer les blocs expérimentaux"
+    },
+    "conditionalLogic": {
+      "title": "[FR] Conditional logic",
+      "description": "[FR] Enable conditional logic + right panel"
     }
   }
 }

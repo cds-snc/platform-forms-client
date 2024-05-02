@@ -6,32 +6,35 @@ import { ErrorMessage } from "@components/forms";
 import { InputFieldProps } from "@lib/types";
 
 interface DropdownProps extends InputFieldProps {
-  choices: string[];
+  children?: React.ReactElement;
+  choices?: string[];
 }
 
 interface DropdownOptionProps {
+  id: string;
   name: string;
   value: string;
 }
 
 const DropdownOption = (props: DropdownOptionProps): React.ReactElement => {
-  return <option value={props.value}>{props.name}</option>;
+  return (
+    <option id={props.id} value={props.value}>
+      {props.name}
+    </option>
+  );
 };
 
 export const Dropdown = (props: DropdownProps): React.ReactElement => {
-  const { id, className, choices, required, ariaDescribedBy } = props;
-
+  const { children, id, name, className, choices = [], required, ariaDescribedBy } = props;
   const { t } = useTranslation("common");
-
   const classes = classnames("gc-dropdown", className);
-
   const [field, meta] = useField(props);
 
   const initialDropdownOption = <option value="">{t("dropdown-initial-option-text")}</option>;
 
   const options = choices.map((choice, i) => {
-    const innerId = `${id}-${i}`;
-    return <DropdownOption key={`key-${innerId}`} value={choice} name={choice} />;
+    const innerId = `${id}.${i}`;
+    return <DropdownOption id={innerId} key={`key-${innerId}`} value={choice} name={choice} />;
   });
 
   return (
@@ -42,12 +45,19 @@ export const Dropdown = (props: DropdownProps): React.ReactElement => {
         data-testid="dropdown"
         className={classes}
         id={id}
+        {...(name && { name })}
         required={required}
         aria-describedby={ariaDescribedBy}
         {...field}
       >
-        {initialDropdownOption}
-        {options}
+        {children ? (
+          children
+        ) : (
+          <>
+            {initialDropdownOption}
+            {options}
+          </>
+        )}
       </select>
     </>
   );

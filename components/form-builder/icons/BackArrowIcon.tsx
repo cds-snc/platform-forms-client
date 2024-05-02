@@ -1,4 +1,5 @@
 import React from "react";
+
 export const BackArrowIcon = ({ className, title }: { className?: string; title?: string }) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
@@ -11,6 +12,6 @@ export const BackArrowIcon = ({ className, title }: { className?: string; title?
     role={title ? "img" : "presentation"}
   >
     {title && <title>{title}</title>}
-    <path d="m12 20-8-8 8-8 1.425 1.4-5.6 5.6H20v2H7.825l5.6 5.6Z" />
+    <path d="m7.825 13 5.6 5.6L12 20l-8-8 8-8 1.425 1.4-5.6 5.6H20v2H7.825Z" />
   </svg>
 );
