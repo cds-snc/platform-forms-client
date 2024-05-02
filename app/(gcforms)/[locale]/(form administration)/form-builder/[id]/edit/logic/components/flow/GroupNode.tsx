@@ -34,6 +34,9 @@ export const GroupNode = (node: NodeProps) => {
           },
         };
 
+  const nodeClassName =
+    "flex w-[100%] min-w-[200px] max-w-[250px] rounded-sm bg-white p-1 text-sm text-slate-600";
+
   return (
     <div>
       <div>
@@ -59,6 +62,19 @@ export const GroupNode = (node: NodeProps) => {
           const item = getElement(Number(child.index));
 
           if (!item) {
+            // Check for "start" and "end" nodes "no elements"
+            // see: useFlowData.tsx
+            if (
+              child.index === "introduction" ||
+              child.index === "privacy" ||
+              child.index === "confirmation"
+            ) {
+              return (
+                <div key={child.index} className={cn(nodeClassName)}>
+                  {child.data}
+                </div>
+              );
+            }
             return null;
           }
 
@@ -66,12 +82,7 @@ export const GroupNode = (node: NodeProps) => {
           // No click event as we can't select these
           if (!typesWithOptions.includes(item.type)) {
             return (
-              <div
-                key={child.index}
-                className={cn(
-                  "flex w-[100%] min-w-[200px] max-w-[250px] rounded-sm bg-gray-soft p-1 text-sm text-slate-600"
-                )}
-              >
+              <div key={child.index} className={cn(nodeClassName)}>
                 {child.data}
               </div>
             );
@@ -87,10 +98,7 @@ export const GroupNode = (node: NodeProps) => {
                 evt.stopPropagation();
                 setSelectedElementId(Number(child.index));
               }}
-              className={cn(
-                "flex w-[100%] min-w-[200px] max-w-[250px] rounded-sm bg-white p-1 text-sm text-slate-600",
-                selected
-              )}
+              className={cn(nodeClassName, selected)}
             >
               {child.data}
             </div>
