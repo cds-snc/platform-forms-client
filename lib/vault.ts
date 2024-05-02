@@ -249,7 +249,8 @@ export async function listAllSubmissions(
       lastEvaluatedKey: paginationLastEvaluatedKey,
     };
   } catch (e) {
-    logMessage.error(e);
+    // Expected to error in APP_ENV test mode as dynamodb is not available
+    if (process.env.APP_ENV !== "test") logMessage.error(e);
     return { submissions: [], submissionsRemaining: true, lastEvaluatedKey: undefined };
   }
 }
@@ -351,7 +352,8 @@ export async function retrieveSubmissions(
         "AccessDenied",
         `Attempted to retrieve responses for form ${formID}`
       );
-    logMessage.error(e);
+    // Expected to error in APP_ENV test mode as dynamodb is not available
+    if (process.env.APP_ENV !== "test") logMessage.error(e);
     return [];
   }
 }

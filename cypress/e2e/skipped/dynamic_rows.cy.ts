@@ -1,12 +1,11 @@
+// Skipping because it needs experimentalBlocks flag
 describe.skip("Dynamic Row Functionality", () => {
   let formID: string;
   before(() => {
-    cy.useFlag("experimentalBlocks", true);
     cy.useForm("../../__fixtures__/dynamicRowsTestForm.json");
     cy.get<string>("@formID").then((createdID) => (formID = createdID));
   });
   beforeEach(() => {
-    cy.useFlag("formTimer", false);
     cy.visitForm(formID);
   });
   it("Adds then deletes a dynamic row", () => {

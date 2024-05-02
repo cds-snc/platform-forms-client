@@ -3210,10 +3210,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@next/env@npm:14.2.2":
-  version: 14.2.2
-  resolution: "@next/env@npm:14.2.2"
-  checksum: 10c0/45f5fe2e47b20b10e71400ae0a201a6f36644ff77681b4f4342106d69dead85a968940f1bb55e6ed9293089a7f2f51ab41ac90bad970fde7722afa840491b61f
+"@next/env@npm:14.2.3":
+  version: 14.2.3
+  resolution: "@next/env@npm:14.2.3"
+  checksum: 10c0/25ab3ac2739c8e5ce35e1f50373238c5c428ab6b01d448ba78a6068dcdef88978b64f9a92790c324b2926ccc41390a67107154a0b0fee32fe980a485f4ef20d8
   languageName: node
   linkType: hard
 
@@ -3235,65 +3235,65 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@next/swc-darwin-arm64@npm:14.2.2":
-  version: 14.2.2
-  resolution: "@next/swc-darwin-arm64@npm:14.2.2"
+"@next/swc-darwin-arm64@npm:14.2.3":
+  version: 14.2.3
+  resolution: "@next/swc-darwin-arm64@npm:14.2.3"
   conditions: os=darwin & cpu=arm64
   languageName: node
   linkType: hard
 
-"@next/swc-darwin-x64@npm:14.2.2":
-  version: 14.2.2
-  resolution: "@next/swc-darwin-x64@npm:14.2.2"
+"@next/swc-darwin-x64@npm:14.2.3":
+  version: 14.2.3
+  resolution: "@next/swc-darwin-x64@npm:14.2.3"
   conditions: os=darwin & cpu=x64
   languageName: node
   linkType: hard
 
-"@next/swc-linux-arm64-gnu@npm:14.2.2":
-  version: 14.2.2
-  resolution: "@next/swc-linux-arm64-gnu@npm:14.2.2"
+"@next/swc-linux-arm64-gnu@npm:14.2.3":
+  version: 14.2.3
+  resolution: "@next/swc-linux-arm64-gnu@npm:14.2.3"
   conditions: os=linux & cpu=arm64 & libc=glibc
   languageName: node
   linkType: hard
 
-"@next/swc-linux-arm64-musl@npm:14.2.2":
-  version: 14.2.2
-  resolution: "@next/swc-linux-arm64-musl@npm:14.2.2"
+"@next/swc-linux-arm64-musl@npm:14.2.3":
+  version: 14.2.3
+  resolution: "@next/swc-linux-arm64-musl@npm:14.2.3"
   conditions: os=linux & cpu=arm64 & libc=musl
   languageName: node
   linkType: hard
 
-"@next/swc-linux-x64-gnu@npm:14.2.2":
-  version: 14.2.2
-  resolution: "@next/swc-linux-x64-gnu@npm:14.2.2"
+"@next/swc-linux-x64-gnu@npm:14.2.3":
+  version: 14.2.3
+  resolution: "@next/swc-linux-x64-gnu@npm:14.2.3"
   conditions: os=linux & cpu=x64 & libc=glibc
   languageName: node
   linkType: hard
 
-"@next/swc-linux-x64-musl@npm:14.2.2":
-  version: 14.2.2
-  resolution: "@next/swc-linux-x64-musl@npm:14.2.2"
+"@next/swc-linux-x64-musl@npm:14.2.3":
+  version: 14.2.3
+  resolution: "@next/swc-linux-x64-musl@npm:14.2.3"
   conditions: os=linux & cpu=x64 & libc=musl
   languageName: node
   linkType: hard
 
-"@next/swc-win32-arm64-msvc@npm:14.2.2":
-  version: 14.2.2
-  resolution: "@next/swc-win32-arm64-msvc@npm:14.2.2"
+"@next/swc-win32-arm64-msvc@npm:14.2.3":
+  version: 14.2.3
+  resolution: "@next/swc-win32-arm64-msvc@npm:14.2.3"
   conditions: os=win32 & cpu=arm64
   languageName: node
   linkType: hard
 
-"@next/swc-win32-ia32-msvc@npm:14.2.2":
-  version: 14.2.2
-  resolution: "@next/swc-win32-ia32-msvc@npm:14.2.2"
+"@next/swc-win32-ia32-msvc@npm:14.2.3":
+  version: 14.2.3
+  resolution: "@next/swc-win32-ia32-msvc@npm:14.2.3"
   conditions: os=win32 & cpu=ia32
   languageName: node
   linkType: hard
 
-"@next/swc-win32-x64-msvc@npm:14.2.2":
-  version: 14.2.2
-  resolution: "@next/swc-win32-x64-msvc@npm:14.2.2"
+"@next/swc-win32-x64-msvc@npm:14.2.3":
+  version: 14.2.3
+  resolution: "@next/swc-win32-x64-msvc@npm:14.2.3"
   conditions: os=win32 & cpu=x64
   languageName: node
   linkType: hard
@@ -8507,9 +8507,9 @@ __metadata:
   linkType: hard
 
 "caniuse-lite@npm:^1.0.0, caniuse-lite@npm:^1.0.30001578, caniuse-lite@npm:^1.0.30001579, caniuse-lite@npm:^1.0.30001587":
-  version: 1.0.30001589
-  resolution: "caniuse-lite@npm:1.0.30001589"
-  checksum: 10c0/20debfb949413f603011bc7dacaf050010778bc4f8632c86fafd1bd0c43180c95ae7c31f6c82348f6309e5e221934e327c3607a216e3f09640284acf78cd6d4d
+  version: 1.0.30001614
+  resolution: "caniuse-lite@npm:1.0.30001614"
+  checksum: 10c0/54873ef47f5f04448f1dafe371dece0129f1f2e4644c377956e66ebfa4bfa16dd3529062b7b4d95d9e3a80129907558c19200532669c6dcd5733eff724fdf2b6
   languageName: node
   linkType: hard
 
@@ -9312,13 +9312,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"cypress-network-idle@npm:^1.14.2":
-  version: 1.14.2
-  resolution: "cypress-network-idle@npm:1.14.2"
-  checksum: 10c0/68f61b588920a3d9b08899be95a44c008042228944e541db45f2c2ad22778f5a36defd843a40508432e270cc8b5402ee69ec03aa54f22a477c882151cb2f717e
-  languageName: node
-  linkType: hard
-
 "cypress-plugin-tab@npm:^1.0.5":
   version: 1.0.5
   resolution: "cypress-plugin-tab@npm:1.0.5"
@@ -9350,7 +9343,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"cypress@npm:*, cypress@npm:^13.6.4":
+"cypress@npm:*":
   version: 13.6.6
   resolution: "cypress@npm:13.6.6"
   dependencies:
@@ -9399,6 +9392,58 @@ __metadata:
   bin:
     cypress: bin/cypress
   checksum: 10c0/1f152ac3708fc35c822b6fe428c0856b568c9b2d3f03a22de0526b9f21d6c345139061ae3515a652538a9570a2a632516e4548b29b39843865b9c88288b2d668
+  languageName: node
+  linkType: hard
+
+"cypress@npm:^13.8.1":
+  version: 13.8.1
+  resolution: "cypress@npm:13.8.1"
+  dependencies:
+    "@cypress/request": "npm:^3.0.0"
+    "@cypress/xvfb": "npm:^1.2.4"
+    "@types/sinonjs__fake-timers": "npm:8.1.1"
+    "@types/sizzle": "npm:^2.3.2"
+    arch: "npm:^2.2.0"
+    blob-util: "npm:^2.0.2"
+    bluebird: "npm:^3.7.2"
+    buffer: "npm:^5.7.1"
+    cachedir: "npm:^2.3.0"
+    chalk: "npm:^4.1.0"
+    check-more-types: "npm:^2.24.0"
+    cli-cursor: "npm:^3.1.0"
+    cli-table3: "npm:~0.6.1"
+    commander: "npm:^6.2.1"
+    common-tags: "npm:^1.8.0"
+    dayjs: "npm:^1.10.4"
+    debug: "npm:^4.3.4"
+    enquirer: "npm:^2.3.6"
+    eventemitter2: "npm:6.4.7"
+    execa: "npm:4.1.0"
+    executable: "npm:^4.1.1"
+    extract-zip: "npm:2.0.1"
+    figures: "npm:^3.2.0"
+    fs-extra: "npm:^9.1.0"
+    getos: "npm:^3.2.1"
+    is-ci: "npm:^3.0.1"
+    is-installed-globally: "npm:~0.4.0"
+    lazy-ass: "npm:^1.6.0"
+    listr2: "npm:^3.8.3"
+    lodash: "npm:^4.17.21"
+    log-symbols: "npm:^4.0.0"
+    minimist: "npm:^1.2.8"
+    ospath: "npm:^1.2.2"
+    pretty-bytes: "npm:^5.6.0"
+    process: "npm:^0.11.10"
+    proxy-from-env: "npm:1.0.0"
+    request-progress: "npm:^3.0.0"
+    semver: "npm:^7.5.3"
+    supports-color: "npm:^8.1.1"
+    tmp: "npm:~0.2.1"
+    untildify: "npm:^4.0.0"
+    yauzl: "npm:^2.10.0"
+  bin:
+    cypress: bin/cypress
+  checksum: 10c0/68e2604e628a54a714d071de1abcc0dc5392d15ac7159fe91c2e443866dcf22d457db4c07e78dc2e2617531d7732af56af41033e2cffee26d814e09a84214cd2
   languageName: node
   linkType: hard
 
@@ -11461,10 +11506,9 @@ __metadata:
     css-loader: "npm:^6.8.1"
     cssnano: "npm:^5.1.15"
     csv-writer: "npm:^1.6.0"
-    cypress: "npm:^13.6.4"
+    cypress: "npm:^13.8.1"
     cypress-axe: "npm:^1.5.0"
     cypress-each: "npm:^1.13.3"
-    cypress-network-idle: "npm:^1.14.2"
     cypress-plugin-tab: "npm:^1.0.5"
     cypress-terminal-report: "npm:^6.0.0"
     cypress-wait-until: "npm:^3.0.1"
@@ -11504,7 +11548,7 @@ __metadata:
     lodash.set: "npm:4.3.2"
     lodash.unset: "npm:4.5.2"
     markdown-to-jsx: "npm:7.3.2"
-    next: "npm:14.2.2"
+    next: "npm:14.2.3"
     next-auth: "npm:5.0.0-beta.16"
     node-fetch: "npm:^3.3.2"
     notifications-node-client: "npm:7.0.6"
@@ -14316,20 +14360,20 @@ __metadata:
   languageName: node
   linkType: hard
 
-"next@npm:14.2.2":
-  version: 14.2.2
-  resolution: "next@npm:14.2.2"
+"next@npm:14.2.3":
+  version: 14.2.3
+  resolution: "next@npm:14.2.3"
   dependencies:
-    "@next/env": "npm:14.2.2"
-    "@next/swc-darwin-arm64": "npm:14.2.2"
-    "@next/swc-darwin-x64": "npm:14.2.2"
-    "@next/swc-linux-arm64-gnu": "npm:14.2.2"
-    "@next/swc-linux-arm64-musl": "npm:14.2.2"
-    "@next/swc-linux-x64-gnu": "npm:14.2.2"
-    "@next/swc-linux-x64-musl": "npm:14.2.2"
-    "@next/swc-win32-arm64-msvc": "npm:14.2.2"
-    "@next/swc-win32-ia32-msvc": "npm:14.2.2"
-    "@next/swc-win32-x64-msvc": "npm:14.2.2"
+    "@next/env": "npm:14.2.3"
+    "@next/swc-darwin-arm64": "npm:14.2.3"
+    "@next/swc-darwin-x64": "npm:14.2.3"
+    "@next/swc-linux-arm64-gnu": "npm:14.2.3"
+    "@next/swc-linux-arm64-musl": "npm:14.2.3"
+    "@next/swc-linux-x64-gnu": "npm:14.2.3"
+    "@next/swc-linux-x64-musl": "npm:14.2.3"
+    "@next/swc-win32-arm64-msvc": "npm:14.2.3"
+    "@next/swc-win32-ia32-msvc": "npm:14.2.3"
+    "@next/swc-win32-x64-msvc": "npm:14.2.3"
     "@swc/helpers": "npm:0.5.5"
     busboy: "npm:1.6.0"
     caniuse-lite: "npm:^1.0.30001579"
@@ -14370,7 +14414,7 @@ __metadata:
       optional: true
   bin:
     next: dist/bin/next
-  checksum: 10c0/775fe33021051def673946dbd2dea0b3f66c3f550ffc0544e55a6e0411b400b64229fe375730f009588cf7263d69b2b828ca7bb984fd3e3883cdddeaba82c31d
+  checksum: 10c0/2c409154720846d07a7a995cc3bfba24b9ee73c87360ce3266528c8a217f5f1ab6f916cffbe1be83509b4e8d7b1d713921bb5c69338b4ecaa57df3212f79a8c5
   languageName: node
   linkType: hard
 
