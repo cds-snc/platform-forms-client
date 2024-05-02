@@ -1,7 +1,7 @@
 import { prisma } from "@lib/integration/prismaConnector";
 import { generateVerificationCode } from "./2fa";
 import { logMessage } from "@lib/logger";
-import { getNotifyInstance } from "@lib/integration/notifyConnector";
+import { sendEmail } from "@lib/integration/notifyConnector";
 import { userHasSecurityQuestions } from "@lib/auth/securityQuestions";
 import { getOrigin } from "@lib/origin";
 
@@ -82,14 +82,11 @@ export const getPasswordResetAuthenticatedUserEmailAddress = async (
 
 const sendPasswordResetEmail = async (email: string, token: string) => {
   try {
-    const notify = getNotifyInstance();
-
     const baseUrl = getOrigin();
 
-    await notify.sendEmail(process.env.TEMPLATE_ID, email, {
-      personalisation: {
-        subject: "Password reset | Réinitialisation de mot de passe",
-        formResponse: `
+    await sendEmail(email, {
+      subject: "Password reset | Réinitialisation de mot de passe",
+      formResponse: `
 Reset your password with this link:
 
 [${baseUrl}/en/auth/reset-password/${token}](${baseUrl}/en/auth/reset-password/${token})
@@ -97,14 +94,13 @@ Reset your password with this link:
 Réinitialisez votre mot de passe avec ce lien :
 
 [${baseUrl}/fr/auth/reset-password/${token}](${baseUrl}/fr/auth/reset-password/${token})`,
-      },
     });
   } catch (err) {
     logMessage.error(
-      `{"status": "failed", "message": "Notify failed to send the password reset email", "error":${
+      `{"status": "failed", "message": "Notify failed to send the password reset email to ${email}", "error": ${
         (err as Error).message
-      }}`
+      }.`
     );
-    throw new Error("Notify failed to send the password reset email");
+    throw err;
   }
 };
