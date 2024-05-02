@@ -22,6 +22,7 @@ const customJestConfig: Config = {
     "<rootDir>/__utils__/",
     "<rootDir>/__fixtures__/",
     "<rootDir>/__tests__/",
+    "<rootDir>/lib/vitests/",
   ],
   testMatch: ["/**/*.test.+(ts|tsx|js|jsx)"],
   moduleNameMapper: {

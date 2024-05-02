@@ -58,6 +58,7 @@ const validate = async (
         ),
       ]),
       password: v.string([
+        v.minLength(1, t("input-validation.required", { ns: "common" })),
         v.minLength(8, t("account.fields.password.error.minLength", { ns: "common" })),
         v.maxLength(50, t("account.fields.password.error.maxLength", { ns: "common" })),
         v.custom(

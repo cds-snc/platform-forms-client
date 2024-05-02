@@ -71,7 +71,7 @@ export const {
             "test.user@cds-snc.ca",
             "test.admin@cds-snc.ca",
             "test.deactivated@cds-snc.ca",
-            "test.withoutSecurityAnswers@cds-snc.ca",
+            "test.withoutsecurityanswers@cds-snc.ca",
           ].includes(username)
         ) {
           // If we're not in test mode throw an error

@@ -1,0 +1,18 @@
+{
+  "name": "reliability_queue_table_ttl_data_type_migration",
+  "version": "0.1.0",
+  "description": "Update existing items in the ReliabilityQueue table to convert the TTL data type from String to Number",
+  "main": "change_ttl_data_type_from_string_to_number.ts",
+  "scripts": {
+    "migrate-ttl-data-type": "tsx change_ttl_data_type_from_string_to_number.ts"
+  },
+  "keywords": [],
+  "author": "Clément Janin",
+  "dependencies": {
+    "@aws-sdk/client-dynamodb": "^3.518.0",
+    "@aws-sdk/lib-dynamodb": "^3.518.0",
+    "dotenv": "^16.3.1",
+    "tsx": "^3.14.0"
+  },
+  "packageManager": "yarn@4.0.2"
+}
