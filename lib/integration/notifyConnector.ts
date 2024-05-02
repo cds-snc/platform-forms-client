@@ -53,7 +53,7 @@ export const getNotifyInstance = () => {
 export const sendEmail = async (email: string, personalisation: Record<string, string>) => {
   try {
     const templateId = process.env.TEMPLATE_ID;
-    if (!templateId) {
+    if (!templateId && process.env.APP_ENV !== "test") {
       throw new Error("No Notify template ID configured.");
     }
 
