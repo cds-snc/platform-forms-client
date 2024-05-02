@@ -15,20 +15,23 @@ export const SingleActionSelect = ({
   nextAction: string | undefined;
 }) => {
   const { flow } = useFlowRef();
-  const getId = useGroupStore((state) => state.getId);
+  const id = useGroupStore((state) => state.id);
   const findParentGroup = useGroupStore((state) => state.findParentGroup);
   const setGroupNextAction = useGroupStore((state) => state.setGroupNextAction);
 
-  const currentGroup = getId();
+  const currentGroup = id;
   const [nextActionId, setNextActionId] = useState(nextAction);
 
   const formGroups: GroupsType = useTemplateStore((s) => s.form.groups) || {};
-  const groupItems = Object.keys(formGroups).map((key) => {
+  let groupItems = Object.keys(formGroups).map((key) => {
     const item = formGroups[key];
     return { label: item.name, value: key };
   });
 
   groupItems.push({ label: "End", value: "end" });
+
+  // Filter out the current group
+  groupItems = groupItems.filter((item) => item.value !== currentGroup);
 
   const handleGroupChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const value = e.target.value;
