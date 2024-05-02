@@ -7,6 +7,7 @@ import { ManageForm } from "./ManageForm";
 import { Metadata } from "next";
 import { UserAbility } from "@lib/types";
 import { Session } from "next-auth";
+import { getNonce } from "./actions";
 
 export async function generateMetadata({
   params: { locale },
@@ -14,6 +15,7 @@ export async function generateMetadata({
   params: { locale: string };
 }): Promise<Metadata> {
   const { t } = await serverTranslation("form-builder", { lang: locale });
+
   return {
     title: `${t("branding.heading")} — ${t("gcForms")}`,
   };
@@ -77,10 +79,12 @@ export default async function Page({ params: { id } }: { params: { id: string } 
   const { session, ability } = await getSessionAndAbility();
   const canManageOwnership = getCanManageOwnership(id, ability);
   const canSetClosingDate = getCanSetClosingDate(id, ability, session);
+  const nonce = await getNonce();
 
   if (!canManageOwnership || id === "0000") {
     return (
       <ManageForm
+        nonce={nonce}
         id={id}
         canManageOwnership={canManageOwnership}
         canSetClosingDate={canSetClosingDate}
@@ -99,6 +103,7 @@ export default async function Page({ params: { id } }: { params: { id: string } 
 
   return (
     <ManageForm
+      nonce={nonce}
       id={id}
       canManageOwnership={canManageOwnership}
       canSetClosingDate={canSetClosingDate}

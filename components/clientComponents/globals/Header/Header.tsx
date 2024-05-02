@@ -47,9 +47,9 @@ export const Header = ({ context = "default", className }: HeaderParams) => {
                 <Link href={`/${language}/forms`}>{t("adminNav.allForms", { ns: "common" })}</Link>
                 {isFormBuilder && <span className="mx-2 inline-block"> / </span>}
               </div>
-              {isFormBuilder && <FileNameInput />}
             </>
           )}
+          {isFormBuilder && <FileNameInput />}
         </div>
         <nav className="justify-self-end" aria-label={t("mainNavAriaLabel", { ns: "common" })}>
           <ul className="mt-2 flex list-none px-0 text-base">

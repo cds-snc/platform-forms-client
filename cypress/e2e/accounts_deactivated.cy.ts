@@ -1,8 +1,4 @@
-describe.skip("Deactivated Page", () => {
-  afterEach(() => {
-    cy.resetAll();
-  });
-
+describe("Deactivated Page", () => {
   it("Reaches deactivated page after login", () => {
     cy.visitPage("/en/auth/login");
     cy.typeInField("input[id='username']", "test.deactivated@cds-snc.ca");

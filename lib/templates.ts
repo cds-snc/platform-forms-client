@@ -56,9 +56,6 @@ const _parseTemplate = (template: {
       },
     }),
     securityAttribute: template.securityAttribute as SecurityAttribute,
-    ...(process.env.RECAPTCHA_V3_SITE_KEY && {
-      reCaptchaID: process.env.RECAPTCHA_V3_SITE_KEY,
-    }),
     ...(template.closingDate && {
       closingDate: template.closingDate.toString(),
     }),
@@ -1116,9 +1113,6 @@ export const onlyIncludePublicProperties = (template: FormRecord): PublicFormRec
     form: template.form,
     isPublished: template.isPublished,
     securityAttribute: template.securityAttribute,
-    ...(process.env.RECAPTCHA_V3_SITE_KEY && {
-      reCaptchaID: process.env.RECAPTCHA_V3_SITE_KEY,
-    }),
   };
 };
 

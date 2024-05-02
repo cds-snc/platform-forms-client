@@ -1,13 +1,9 @@
-describe.skip("Test acceptable use Page", () => {
+describe("Test acceptable use Page", () => {
   beforeEach(() => {
-    cy.login();
+    cy.userSession({ acceptableUse: false });
     cy.visitPage("/en/auth/policy");
   });
-  afterEach(() => {
-    cy.logout();
-  });
-  // The calls to api/session are causing the Accept button to become in a detached state when trying to click on it.
-  // The test is not able to click on the button and the test fails.
+
   it("En page renders proprerly", () => {
     cy.contains("h1", "Know your responsibilities");
     cy.get("[type='button']").should("contain.text", "Agree");

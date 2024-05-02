@@ -12,6 +12,7 @@ import { Button } from "@clientComponents/globals";
 import { NextActionRule } from "@lib/formContext";
 import { useGroupStore } from "@formBuilder/components/shared/right-panel/treeview/store/useGroupStore";
 import { useTemplateStore } from "@lib/store/useTemplateStore";
+import { useFlowRef } from "@formBuilder/[id]/edit/logic/components/flow/provider/FlowRefProvider";
 
 export const GroupAndChoiceSelect = ({
   selectedElement,
@@ -37,14 +38,19 @@ export const GroupAndChoiceSelect = ({
   }));
 
   const language = translationLanguagePriority;
+  const id = useGroupStore((state) => state.id);
+  const currentGroup = id;
 
   const formGroups: GroupsType = useTemplateStore((s) => s.form.groups) || {};
-  const groupItems = Object.keys(formGroups).map((key) => {
+  let groupItems = Object.keys(formGroups).map((key) => {
     const item = formGroups[key];
     return { label: item.name, value: key };
   });
 
   groupItems.push({ label: "End", value: "end" });
+
+  // Filter out the current group
+  groupItems = groupItems.filter((item) => item.value !== currentGroup);
 
   const choices = useMemo(() => {
     return selectedElement?.properties.choices?.map((choice, index) => {
@@ -120,6 +126,7 @@ export const MultiActionSelector = ({
 
   const { t } = useTranslation("form-builder");
   const formId = `form-${Date.now()}`;
+  const { flow } = useFlowRef();
 
   return (
     <form
@@ -159,6 +166,7 @@ export const MultiActionSelector = ({
             const group = findParentGroup(String(item.id));
             const parent = group?.index;
             parent && setGroupNextAction(parent as string, nextActions);
+            flow.current?.updateEdges();
           }}
         >
           Save

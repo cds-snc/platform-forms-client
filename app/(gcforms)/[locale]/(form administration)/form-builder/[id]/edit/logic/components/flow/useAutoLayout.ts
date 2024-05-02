@@ -32,6 +32,31 @@ function useAutoLayout(options: LayoutOptions) {
     compareElements
   );
 
+  // The callback passed to `useEffect` cannot be `async` itself, so instead we
+  // create an async function here and call it immediately afterwards.
+  const runLayout = async () => {
+    const layoutAlgorithm = layoutAlgorithms[options.algorithm];
+    const nodes = [...elements.nodeMap.values()];
+    const edges = [...elements.edgeMap.values()];
+
+    const { nodes: nextNodes, edges: nextEdges } = await layoutAlgorithm(nodes, edges, options);
+
+    // Mutating the nodes and edges directly here is fine because we expect our
+    // layouting algorithms to return a new array of nodes/edges.
+    for (const node of nextNodes) {
+      node.style = { ...node.style, opacity: 1 };
+      node.sourcePosition = getSourceHandlePosition(options.direction);
+      node.targetPosition = getTargetHandlePosition(options.direction);
+    }
+
+    for (const edge of edges) {
+      edge.style = { ...edge.style, opacity: 1 };
+    }
+
+    setNodes(nextNodes);
+    setEdges(nextEdges);
+  };
+
   useEffect(() => {
     // Only run the layout if there are nodes and they have been initialized with
     // their dimensions
@@ -39,34 +64,11 @@ function useAutoLayout(options: LayoutOptions) {
       return;
     }
 
-    // The callback passed to `useEffect` cannot be `async` itself, so instead we
-    // create an async function here and call it immediately afterwards.
-    const runLayout = async () => {
-      const layoutAlgorithm = layoutAlgorithms[options.algorithm];
-      const nodes = [...elements.nodeMap.values()];
-      const edges = [...elements.edgeMap.values()];
-
-      const { nodes: nextNodes, edges: nextEdges } = await layoutAlgorithm(nodes, edges, options);
-
-      // Mutating the nodes and edges directly here is fine because we expect our
-      // layouting algorithms to return a new array of nodes/edges.
-      for (const node of nextNodes) {
-        node.style = { ...node.style, opacity: 1 };
-        node.sourcePosition = getSourceHandlePosition(options.direction);
-        node.targetPosition = getTargetHandlePosition(options.direction);
-      }
-
-      for (const edge of edges) {
-        edge.style = { ...edge.style, opacity: 1 };
-      }
-
-      setNodes(nextNodes);
-      setEdges(nextEdges);
-    };
-
     runLayout();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [nodesInitialized]);
+
+  return { runLayout };
 }
 
 export default useAutoLayout;

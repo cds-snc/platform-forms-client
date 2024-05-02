@@ -43,7 +43,8 @@
       "description": "Action requise : ",
       "linkSingular": "<a href=\"{{link}}\">Approuver la suppression de {{responses}} réponse</a>",
       "linkPlural": "<a href=\"{{link}}\">Approuver la suppression de {{responses}} réponses</a>"
-    }
+    },
+    "unnamedForm": "Fichier sans nom"
   },
   "responseTemplate": {
     "responseNumber": "Identifiant de soumission",

@@ -1,4 +1,4 @@
-import { useMemo } from "react";
+import { useCallback } from "react";
 import { Edge } from "reactflow";
 import { TreeItem, TreeItemIndex } from "react-complex-tree";
 
@@ -9,7 +9,7 @@ import { Group, NextActionRule } from "@lib/formContext";
 const startElements = [
   {
     data: "Introduction",
-    index: "start",
+    index: "introduction",
   },
   {
     data: "Privacy Policy",
@@ -24,7 +24,7 @@ const endNode = {
     children: [
       {
         data: "Confirmation",
-        index: "end",
+        index: "confirmation",
       },
     ],
   },
@@ -78,11 +78,11 @@ const getEdges = (nodeId: string, prevNodeId: string, group: Group | undefined):
 };
 
 export const useFlowData = () => {
-  const getGroups = useGroupStore((s) => s.getGroups);
-  const treeItems = getGroups();
+  const getTreeData = useGroupStore((s) => s.getTreeData);
+  const treeItems = getTreeData();
   const formGroups = useTemplateStore((s) => s.form.groups);
 
-  const { edges, nodes } = useMemo(() => {
+  const getData = useCallback(() => {
     const edges: Edge[] = [];
     const treeIndexes = treeItems.root.children;
 
@@ -100,13 +100,16 @@ export const useFlowData = () => {
       let elements: TreeItem[] = [];
 
       if (key === "start") {
+        // Add "default" start elements
+        // introduction, privacy
         elements = startElements;
       }
 
       if (treeItem.children && treeItem.children.length > 0) {
-        elements = treeItem.children.map((childId) => {
+        const children = treeItem.children.map((childId) => {
           return treeItems[childId];
         });
+        elements = [...elements, ...children];
       }
 
       const newEdges = getEdges(key as string, prevNodeId, group);
@@ -123,11 +126,14 @@ export const useFlowData = () => {
       return flowNode;
     });
 
-    // Push down the end node
+    // Push "end" node to the end
+    // And add confirmation element
     nodes.push({ ...endNode, position: { x: x_pos, y: y_pos } });
 
     return { edges, nodes };
   }, [treeItems, formGroups]);
 
-  return { edges, nodes };
+  const { edges, nodes } = getData();
+
+  return { edges, nodes, getData };
 };

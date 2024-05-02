@@ -8,7 +8,6 @@ import { ErrorStates, register } from "../../action";
 import Link from "next/link";
 import { ErrorStatus } from "@clientComponents/forms/Alert/Alert";
 import { useRouter } from "next/navigation";
-import { useFocusIt } from "@lib/hooks/useFocusIt";
 
 const SubmitButton = () => {
   const { t } = useTranslation("signup");
@@ -50,7 +49,6 @@ export const RegistrationForm = () => {
     return result;
   };
 
-  useFocusIt({ elRef: headingRef });
   const [state, formAction] = useFormState(localFormAction, {});
 
   return (

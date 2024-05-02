@@ -153,7 +153,6 @@ export type FormRecord = {
   deliveryOption?: DeliveryOption;
   securityAttribute: SecurityAttribute;
   closingDate?: string;
-  reCaptchaID?: string;
   [key: string]: string | boolean | FormProperties | DeliveryOption | undefined;
 };
 

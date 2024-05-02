@@ -13,6 +13,7 @@ interface User {
 }
 
 interface ManageFormProps {
+  nonce: string | null;
   canManageOwnership: boolean;
   canSetClosingDate: boolean;
   formRecord?: FormRecord;
@@ -23,6 +24,7 @@ interface ManageFormProps {
 
 export const ManageForm = (props: ManageFormProps) => {
   const {
+    nonce,
     formRecord,
     usersAssignedToFormRecord,
     allUsers,
@@ -48,6 +50,7 @@ export const ManageForm = (props: ManageFormProps) => {
     <>
       {canSetClosingDate && <SetClosingDate formID={id} />}
       <FormOwnership
+        nonce={nonce}
         formRecord={formRecord}
         usersAssignedToFormRecord={usersAssignedToFormRecord}
         allUsers={allUsers}
