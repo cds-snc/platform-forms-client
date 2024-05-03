@@ -29,7 +29,7 @@ export default async function Page({
 
   const { t } = await serverTranslation("form-builder", { lang: locale });
   const Loading = () => (
-    <div className="flex items-center justify-center ">
+    <div className="flex h-full items-center justify-center ">
       <Loader />
     </div>
   );
