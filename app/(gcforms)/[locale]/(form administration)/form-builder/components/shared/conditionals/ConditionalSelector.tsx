@@ -36,12 +36,10 @@ const ChoiceSelect = ({
   }
 
   return (
-    <div className="my-4 mr-4 flex flex-col">
-      <div className="mb-2">
-        <h4 className="mb-2" id={labelId}>
-          {t("addConditionalRules.optionTitle")}
-        </h4>
-      </div>
+    <div className="my-2 mr-4 flex flex-col">
+      <label className="mb-2 inline-block text-sm" id={labelId}>
+        {t("addConditionalRules.optionTitle")}
+      </label>
       <select
         value={selected}
         data-selected={selected}
@@ -192,7 +190,7 @@ export const ConditionalSelector = ({
   return (
     <>
       {choices && (
-        <fieldset className="border-b border-dotted border-slate-500">
+        <fieldset className="mb-2 border-b border-dotted border-slate-500">
           <div className="mb-4">
             <ChoiceSelect selected={choiceId} choices={choices} onChange={handleChoiceChange} />
           </div>
@@ -203,7 +201,7 @@ export const ConditionalSelector = ({
               onChange={handleQuestionChange}
             />
           </div>
-          <Button className="mb-8 inline-block" theme="link" onClick={handleRemove}>
+          <Button className="mb-8 inline-block text-sm" theme="link" onClick={handleRemove}>
             {t("addConditionalRules.removeRule")}
           </Button>
         </fieldset>
