@@ -74,14 +74,14 @@ export const GroupAndChoiceSelect = ({
   return (
     <>
       {choices && (
-        <fieldset className="border-b border-dotted border-slate-500">
+        <fieldset className="mb-4 border-b border-dotted border-slate-500">
           <div className="mb-4">
             <ChoiceSelect selected={choiceId} choices={choices} onChange={handleChoiceChange} />
           </div>
           <div className="mb-4">
             <GroupSelect selected={groupId} groups={groupItems} onChange={handleGroupChange} />
           </div>
-          <Button className="mb-8 inline-block" theme="link" onClick={handleRemove}>
+          <Button className="mb-8 inline-block text-sm" theme="link" onClick={handleRemove}>
             {t("addConditionalRules.removeRule")}
           </Button>
         </fieldset>
@@ -154,12 +154,13 @@ export const MultiActionSelector = ({
             setNextActions([...nextActions, { groupId: "", choiceId: String(item.id) }]);
           }}
           theme={"secondary"}
+          className="px-4 py-1"
           aria-controls={formId}
         >
           {t("addConditionalRules.addAnotherRule")}
         </Button>
         <Button
-          className="ml-4"
+          className="ml-4 px-4 py-1"
           onClick={() => {
             const group = findParentGroup(String(item.id));
             const parent = group?.index;

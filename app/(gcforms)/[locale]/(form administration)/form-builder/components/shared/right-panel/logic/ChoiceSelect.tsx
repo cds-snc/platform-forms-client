@@ -25,18 +25,16 @@ export const ChoiceSelect = ({
   }
 
   return (
-    <div className="my-4 mr-4 flex flex-col">
-      <div className="mb-2">
-        <h4 className="mb-2" id={labelId}>
-          {t("addConditionalRules.optionTitle")}
-        </h4>
-      </div>
+    <div className="my-2 flex flex-col">
+      <label className="mb-2 inline-block text-sm" id={labelId}>
+        {t("addConditionalRules.optionTitle")}
+      </label>
       <select
         value={selected}
         data-selected={selected}
         onChange={onChange}
         className={cn(
-          "center-right-15px inline-block p-2 border-black border-1 form-builder-dropdown my-0 w-[300px] text-black-default",
+          "center-right-15px inline-block p-2 border-black border-1 form-builder-dropdown my-0 w-[375px] text-black-default text-sm",
           className
         )}
         aria-labelledby={labelId}

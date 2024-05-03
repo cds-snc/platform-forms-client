@@ -132,6 +132,7 @@ const ControlledTree: ForwardRefRenderFunction<unknown, TreeDataProviderProps> =
             item.data !== "Start" &&
             item.data !== "Introduction" &&
             item.data !== "Policy" &&
+            item.data !== "Review" &&
             item.data !== "End" &&
             item.data !== "Confirmation"
           );
@@ -345,10 +346,10 @@ const ControlledTree: ForwardRefRenderFunction<unknown, TreeDataProviderProps> =
       }
       onSelectItems={(items) => setSelectedItems(items)}
     >
-      <Tree treeId="default" rootItem="root" treeLabel="GC Forms sections" ref={tree} />
       <button className="ml-2 mt-2 rounded-md border border-slate-500 p-2" onClick={addSection}>
         New section
       </button>
+      <Tree treeId="default" rootItem="root" treeLabel="GC Forms sections" ref={tree} />
       <>{children}</>
     </ControlledTreeEnvironment>
   );
