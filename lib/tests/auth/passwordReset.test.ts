@@ -38,7 +38,13 @@ const mockSendEmail = {
 };
 
 jest.mock("@lib/integration/notifyConnector", () => ({
-  getNotifyInstance: jest.fn(() => mockSendEmail),
+  sendEmail: jest.fn(() => {
+    if (IsGCNotifyServiceAvailable) {
+      return Promise.resolve();
+    } else {
+      return Promise.reject(new Error("something went wrong"));
+    }
+  }),
 }));
 
 describe.skip("Test Password Reset library", () => {
