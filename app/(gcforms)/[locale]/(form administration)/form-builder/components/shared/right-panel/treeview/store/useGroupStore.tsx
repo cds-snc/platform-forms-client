@@ -123,9 +123,21 @@ const createGroupStore = (initProps?: Partial<GroupStoreProps>) => {
       addGroup: (id: string, name: string) => {
         get().templateStore.setState((s) => {
           if (!s.form.groups) {
-            s.form.groups = {};
+            s.form.groups = {} as GroupsType;
           }
-          s.form.groups[id] = { name, elements: [] };
+          const newObject: GroupsType = {};
+          const keys = Object.keys(s.form.groups);
+
+          for (let i = 0; i < keys.length; i++) {
+            const key = keys[i];
+            if (key === "review") {
+              newObject[id] = { name, elements: [] };
+              newObject[key] = s.form.groups[key];
+            }
+            newObject[key] = s.form.groups[key];
+          }
+
+          s.form.groups = newObject;
         });
       },
       deleteGroup: (id: string) => {
