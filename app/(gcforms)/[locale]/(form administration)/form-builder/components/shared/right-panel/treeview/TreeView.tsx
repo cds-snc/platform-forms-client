@@ -132,6 +132,7 @@ const ControlledTree: ForwardRefRenderFunction<unknown, TreeDataProviderProps> =
             item.data !== "Start" &&
             item.data !== "Introduction" &&
             item.data !== "Policy" &&
+            item.data !== "Review" &&
             item.data !== "End" &&
             item.data !== "Confirmation"
           );
