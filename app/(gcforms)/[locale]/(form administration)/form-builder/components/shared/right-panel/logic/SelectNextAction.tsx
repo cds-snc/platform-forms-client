@@ -19,11 +19,13 @@ export const SelectNextAction = ({ item }: { item: FormElement | null }) => {
   const selectedGroup = formGroups[selectedGroupId];
 
   if (selectedGroupId === "end") {
-    <div>
-      <h3 className="block text-sm font-normal">
-        <strong>Section:</strong> End{" "}
-      </h3>
-    </div>;
+    return (
+      <div>
+        <h3 className="block text-sm font-normal">
+          <strong>Section:</strong> End{" "}
+        </h3>
+      </div>
+    );
   }
 
   if (!selectedGroup) {
