@@ -187,7 +187,7 @@ export const RightPanel = ({ id }: { id: string }) => {
                         <DownloadCSV />
                       </Tab.Panel>
                       <Tab.Panel>
-                        <div className="m-0 mt-1 w-full border-t-1 border-slate-200 p-10">
+                        <div className="m-0 mt-1 w-full p-4">
                           {<SelectNextAction item={item} />}
                         </div>
                       </Tab.Panel>

@@ -20,7 +20,9 @@ export const SelectNextAction = ({ item }: { item: FormElement | null }) => {
 
   if (selectedGroupId === "end") {
     <div>
-      <h4>Section End</h4>
+      <h3 className="block text-sm font-normal">
+        <strong>Section:</strong> End{" "}
+      </h3>
     </div>;
   }
 
@@ -31,9 +33,12 @@ export const SelectNextAction = ({ item }: { item: FormElement | null }) => {
   if (!item && !Array.isArray(selectedGroupNextActions)) {
     // No "question" selected handle section->section next actions
     // section 1 => section 2
+    const sectionName = selectedGroupId ? selectedGroup?.name : null;
     return (
       <div>
-        <h4>Section {selectedGroupId && `${selectedGroup?.name}:`}</h4>
+        <h3 className="block text-sm font-normal">
+          <strong>Section:</strong> {sectionName}{" "}
+        </h3>
         <SingleActionSelect nextAction={selectedGroupNextActions || "end"} />
       </div>
     );
@@ -44,9 +49,12 @@ export const SelectNextAction = ({ item }: { item: FormElement | null }) => {
   }
 
   // If we have an item a question is selected
+  const sectionName = selectedGroupId ? selectedGroup?.name : null;
   return (
     <div>
-      <h4>{selectedGroupId && selectedGroup?.name}</h4>
+      <h3 className="block text-sm font-normal">
+        <strong>Section:</strong> {sectionName}{" "}
+      </h3>
       {typesWithOptions.includes(item.type) ? (
         /* 
           If the item (form element) has options 
