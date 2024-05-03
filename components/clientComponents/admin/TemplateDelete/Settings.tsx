@@ -9,7 +9,6 @@ import { logMessage } from "@lib/logger";
 import { FormRecord } from "@lib/types";
 import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
 import "react-tabs/style/react-tabs.css";
-import BearerRefresh from "@clientComponents/admin/BearerRefresh/BearerRefresh";
 import FormAccess from "@clientComponents/admin/FormAccess/FormAccess";
 import { getLocalizedProperty } from "@lib/utils";
 
@@ -62,7 +61,6 @@ const FormSettings = (props: FormSettingsProps): React.ReactElement => {
       <Tabs>
         <TabList>
           <Tab>{t("settings.tabLabels.jsonUpload")}</Tab>
-          <Tab>{t("settings.tabLabels.bearerToken")}</Tab>
           <Tab>{t("settings.tabLabels.formAccess")}</Tab>
         </TabList>
 
@@ -78,9 +76,6 @@ const FormSettings = (props: FormSettingsProps): React.ReactElement => {
               redirect={`/admin/view-templates`}
             />
           </div>
-        </TabPanel>
-        <TabPanel>
-          <BearerRefresh formID={formRecord.id} />
         </TabPanel>
         <TabPanel>
           <FormAccess formID={formRecord.id} />
