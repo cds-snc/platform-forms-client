@@ -26,6 +26,7 @@ import { edgeOptions } from "./options";
 
 import { useFlowRef } from "./provider/FlowRefProvider";
 import { GroupOutput } from "@formBuilder/components/shared/GroupOutput";
+import { useRehydrate } from "@lib/store/useTemplateStore";
 
 const nodeTypes = { groupNode: GroupNode };
 
@@ -88,6 +89,13 @@ const Flow: ForwardRefRenderFunction<unknown, FlowProps> = ({ children }, ref) =
 
 export const FlowWithProvider = () => {
   const { flow } = useFlowRef();
+
+  const hasHydrated = useRehydrate();
+
+  if (!hasHydrated) {
+    return null;
+  }
+
   return (
     <ReactFlowProvider>
       <FlowWithRef ref={flow} />

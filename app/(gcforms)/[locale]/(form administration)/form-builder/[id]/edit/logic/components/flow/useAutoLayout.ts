@@ -35,26 +35,35 @@ function useAutoLayout(options: LayoutOptions) {
   // The callback passed to `useEffect` cannot be `async` itself, so instead we
   // create an async function here and call it immediately afterwards.
   const runLayout = async () => {
+    if (elements.nodeMap.size === 0) return;
+
     const layoutAlgorithm = layoutAlgorithms[options.algorithm];
     const nodes = [...elements.nodeMap.values()];
     const edges = [...elements.edgeMap.values()];
 
-    const { nodes: nextNodes, edges: nextEdges } = await layoutAlgorithm(nodes, edges, options);
+    try {
+      const nodeData = await layoutAlgorithm(nodes, edges, options);
+      const { nodes: nextNodes, edges: nextEdges } = nodeData;
 
-    // Mutating the nodes and edges directly here is fine because we expect our
-    // layouting algorithms to return a new array of nodes/edges.
-    for (const node of nextNodes) {
-      node.style = { ...node.style, opacity: 1 };
-      node.sourcePosition = getSourceHandlePosition(options.direction);
-      node.targetPosition = getTargetHandlePosition(options.direction);
+      // Mutating the nodes and edges directly here is fine because we expect our
+      // layouting algorithms to return a new array of nodes/edges.
+      for (const node of nextNodes) {
+        node.style = { ...node.style, opacity: 1 };
+        node.sourcePosition = getSourceHandlePosition(options.direction);
+        node.targetPosition = getTargetHandlePosition(options.direction);
+      }
+
+      for (const edge of edges) {
+        edge.style = { ...edge.style, opacity: 1 };
+      }
+
+      setNodes(nextNodes);
+      setEdges(nextEdges);
+    } catch (e) {
+      return false;
     }
 
-    for (const edge of edges) {
-      edge.style = { ...edge.style, opacity: 1 };
-    }
-
-    setNodes(nextNodes);
-    setEdges(nextEdges);
+    return true;
   };
 
   useEffect(() => {
