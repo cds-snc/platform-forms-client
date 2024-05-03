@@ -45,7 +45,7 @@ export const SingleActionSelect = ({
       </div>
       <div>
         <Button
-          className="ml-4"
+          className="ml-0 px-4 py-1"
           onClick={() => {
             if (item) {
               const group = findParentGroup(String(item.id));
