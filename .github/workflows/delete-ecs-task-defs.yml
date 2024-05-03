@@ -19,12 +19,12 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - account: '687401027353'
-          - account: '957818836222'
+          - account: "687401027353"
+          - account: "957818836222"
 
     steps:
       - name: Checkout
-        uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
+        uses: actions/checkout@0ad4b8fadaa221de15dcec353f45205ec38ea70b # v4.1.4
 
       - name: Configure AWS credentials using OIDC
         uses: aws-actions/configure-aws-credentials@010d0da01d0b5a38af31e9c3470dbfdabdecca3a # v4.0.1
@@ -39,12 +39,12 @@ jobs:
           TASK_STATUS: ACTIVE
           TASKS_TO_KEEP: 6 # 1 greater than number to keep
         run: |
-            aws ecs list-task-definitions \
-                --sort ASC \
-                --status ${{ env.TASK_STATUS }} \
-                --region ${{ env.AWS_REGION }} \
-                --no-cli-pager \
-                | jq -r '(.taskDefinitionArns[:length-${{ env.TASKS_TO_KEEP }}])[]' > task-def-active-arns.txt
+          aws ecs list-task-definitions \
+              --sort ASC \
+              --status ${{ env.TASK_STATUS }} \
+              --region ${{ env.AWS_REGION }} \
+              --no-cli-pager \
+              | jq -r '(.taskDefinitionArns[:length-${{ env.TASKS_TO_KEEP }}])[]' > task-def-active-arns.txt
 
       - name: Set ECS tasks to INACTIVE
         run: |
@@ -56,13 +56,13 @@ jobs:
           TASK_STATUS: INACTIVE
           TASKS_TO_KEEP: 101 # 1 greater than number to keep
         run: |
-            aws ecs list-task-definitions \
-                --sort ASC \
-                --status ${{ env.TASK_STATUS }} \
-                --region ${{ env.AWS_REGION }} \
-                --no-cli-pager \
-                | jq -r '(.taskDefinitionArns[:length-${{ env.TASKS_TO_KEEP }}])[]' > task-def-inactive-arns.txt
+          aws ecs list-task-definitions \
+              --sort ASC \
+              --status ${{ env.TASK_STATUS }} \
+              --region ${{ env.AWS_REGION }} \
+              --no-cli-pager \
+              | jq -r '(.taskDefinitionArns[:length-${{ env.TASKS_TO_KEEP }}])[]' > task-def-inactive-arns.txt
 
       - name: Delete INACTIVE ECS task definitions
         run: |
-          ./bin/delete-ecs-task-defs.sh DELETE task-def-inactive-arns.txt          
+          ./bin/delete-ecs-task-defs.sh DELETE task-def-inactive-arns.txt
