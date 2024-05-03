@@ -9,7 +9,6 @@ import {
   SecurityAttribute,
 } from "@lib/types";
 import { Prisma } from "@prisma/client";
-import jwt, { Secret } from "jsonwebtoken";
 import { AccessControlError, checkPrivileges, checkPrivilegesAsBoolean } from "./privileges";
 import { logEvent } from "./auditLogs";
 import { logMessage } from "@lib/logger";
@@ -188,7 +187,7 @@ export async function createTemplate(command: CreateTemplateCommand): Promise<Fo
   try {
     checkPrivileges(command.ability, [{ action: "create", subject: "FormRecord" }]);
 
-    const createdTemplateId = await prisma.template.create({
+    const createdTemplate = await prisma.template.create({
       data: {
         jsonConfig: command.formConfig as Prisma.JsonObject,
         ...(command.name && {
@@ -212,41 +211,19 @@ export async function createTemplate(command: CreateTemplateCommand): Promise<Fo
       },
       select: {
         id: true,
+        created_at: true,
+        updated_at: true,
+        name: true,
+        jsonConfig: true,
+        isPublished: true,
+        deliveryOption: true,
+        securityAttribute: true,
       },
     });
 
-    logEvent(command.ability.userID, { type: "Form", id: createdTemplateId?.id }, "CreateForm");
+    logEvent(command.ability.userID, { type: "Form", id: createdTemplate?.id }, "CreateForm");
 
-    const bearerToken = jwt.sign(
-      {
-        formID: createdTemplateId.id,
-      },
-      process.env.TOKEN_SECRET as Secret,
-      {
-        expiresIn: "1y",
-      }
-    );
-
-    return _parseTemplate(
-      await prisma.template.update({
-        where: {
-          id: createdTemplateId.id,
-        },
-        data: {
-          bearerToken,
-        },
-        select: {
-          id: true,
-          created_at: true,
-          updated_at: true,
-          name: true,
-          jsonConfig: true,
-          isPublished: true,
-          deliveryOption: true,
-          securityAttribute: true,
-        },
-      })
-    );
+    return _parseTemplate(createdTemplate);
   } catch (e) {
     if (e instanceof AccessControlError)
       logEvent(

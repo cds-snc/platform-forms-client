@@ -1,5 +1,3 @@
-export { LoggingAction, validateTemporaryToken } from "./auth";
-
 export { generateVerificationCode, sendVerificationCode } from "./2fa";
 
 export { registerFailed2FAAttempt, clear2FALockout } from "./2faLockout";
