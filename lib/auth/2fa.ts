@@ -10,9 +10,11 @@ export const sendVerificationCode = async (email: string, verificationCode: stri
     await sendEmail(email, {
       subject: "Your security code | Votre code de sécurité",
       formResponse: `
-      **Your security code | Votre code de sécurité**
-      \n\n
-      ${verificationCode}`,
+**Your security code | Votre code de sécurité**
+
+
+
+${verificationCode}`,
     });
   } catch (err) {
     logMessage.error(
