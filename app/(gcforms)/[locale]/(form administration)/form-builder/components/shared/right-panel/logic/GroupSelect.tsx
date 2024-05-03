@@ -33,9 +33,9 @@ export const GroupSelect = ({
         )}
         aria-labelledby={labelId}
       >
-        {groups.map(({ label, value }) => {
+        {groups.map(({ label, value }, i) => {
           return (
-            <option key={value} value={value}>
+            <option key={`${value}-${i}`} value={value}>
               {label}
             </option>
           );

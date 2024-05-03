@@ -38,14 +38,17 @@ export const GroupAndChoiceSelect = ({
   }));
 
   const language = translationLanguagePriority;
+  const id = useGroupStore((state) => state.id);
+  const currentGroup = id;
 
   const formGroups: GroupsType = useTemplateStore((s) => s.form.groups) || {};
-  const groupItems = Object.keys(formGroups).map((key) => {
+  let groupItems = Object.keys(formGroups).map((key) => {
     const item = formGroups[key];
     return { label: item.name, value: key };
   });
 
-  groupItems.push({ label: "End", value: "end" });
+  // Filter out the current group
+  groupItems = groupItems.filter((item) => item.value !== currentGroup);
 
   const choices = useMemo(() => {
     return selectedElement?.properties.choices?.map((choice, index) => {

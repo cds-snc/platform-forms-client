@@ -13,8 +13,7 @@ import { FormElement } from "@lib/types";
 import { findNextGroup } from "../util/findNextGroup";
 import { findPreviousGroup } from "../util/findPreviousGroup";
 import { getGroupFromId } from "../util/getGroupFromId";
-import { Group } from "@lib/formContext";
-import { GroupsType } from "@lib/formContext";
+import { Group, GroupsType } from "@lib/formContext";
 import { TreeItem, TreeItemIndex } from "react-complex-tree";
 import { autoSetNextAction } from "../util/setNextAction";
 import { setGroupNextAction } from "../util/setNextAction";
@@ -33,6 +32,7 @@ export interface GroupStoreState extends GroupStoreProps {
   addGroup: (id: string, name: string) => void;
   deleteGroup: (id: string) => void;
   replaceGroups: (groups: GroupsType) => void;
+  getGroups: () => GroupsType | undefined;
   getTreeData: () => TreeItems;
   updateGroup: (parent: TreeItemIndex, children: TreeItemIndex[] | undefined) => void;
   findParentGroup: (id: string) => TreeItem | undefined;
@@ -108,6 +108,7 @@ const createGroupStore = (initProps?: Partial<GroupStoreProps>) => {
           setChangeKey(String(new Date().getTime()));
         }
       },
+      getGroups: () => get().templateStore.getState().form.groups,
       getTreeData: () => {
         const formGroups = get().templateStore.getState().form.groups;
         const elements = get().templateStore.getState().form.elements;

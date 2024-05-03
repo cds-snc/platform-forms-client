@@ -9,7 +9,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Actions
-        uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11
+        uses: actions/checkout@0ad4b8fadaa221de15dcec353f45205ec38ea70b # v4.1.4
         with:
           fetch-depth: 0
       - name: Run Backstage Catalog Info Helper
@@ -28,10 +28,10 @@ jobs:
         uses: peter-evans/create-pull-request@v3
         with:
           token: ${{ steps.generate_token.outputs.token}}
-          commit-message: 'Add catalog-info.yaml'
-          branch: 'backstage/catalog-info'
-          title: 'Add catalog-info.yaml'
-          body: 'Adding a basic catalog-info.yaml to start populating the backstage catalog with your components.'
-          labels: 'backstage'
+          commit-message: "Add catalog-info.yaml"
+          branch: "backstage/catalog-info"
+          title: "Add catalog-info.yaml"
+          body: "Adding a basic catalog-info.yaml to start populating the backstage catalog with your components."
+          labels: "backstage"
           add-paths: |
             catalog-info.yaml
