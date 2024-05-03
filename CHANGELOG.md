@@ -5,6 +5,18 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.13.0](https://github.com/cds-snc/platform-forms-client/compare/v3.12.11...v3.13.0) (2024-05-03)
+
+
+### Features
+
+* implement temporary hack to handle Submission lambda name change ([#3486](https://github.com/cds-snc/platform-forms-client/issues/3486)) ([48919e3](https://github.com/cds-snc/platform-forms-client/commit/48919e38b00c4ce591009f7dd076e3f8b4bbf5c3))
+
+
+### Bug Fixes
+
+* Revert "chore(deps): pin dependencies ([#3230](https://github.com/cds-snc/platform-forms-client/issues/3230))" ([#3537](https://github.com/cds-snc/platform-forms-client/issues/3537)) ([589b879](https://github.com/cds-snc/platform-forms-client/commit/589b879c7a4b4dbec8460238b3b3a7af09a7c301))
+
 ## [3.12.11](https://github.com/cds-snc/platform-forms-client/compare/v3.12.10...v3.12.11) (2024-03-26)
 
 
