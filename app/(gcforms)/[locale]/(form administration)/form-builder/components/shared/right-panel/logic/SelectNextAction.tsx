@@ -32,8 +32,6 @@ export const SelectNextAction = ({ item }: { item: FormElement | null }) => {
     return null;
   }
 
-  console.log(item);
-
   if (!item && !Array.isArray(selectedGroupNextActions)) {
     // No "question" selected handle section->section next actions
     // section 1 => section 2
