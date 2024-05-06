@@ -19,7 +19,7 @@ import { v4 as uuid } from "uuid";
 import { findParentGroup } from "./util/findParentGroup";
 import "react-complex-tree/lib/style-modern.css";
 import { Group, GroupsType } from "@lib/formContext";
-// import { Item } from "./Item";
+import { Item } from "./Item";
 
 export interface TreeDataProviderProps {
   children?: ReactElement;
@@ -107,15 +107,15 @@ const ControlledTree: ForwardRefRenderFunction<unknown, TreeDataProviderProps> =
       ref={environment}
       items={getTreeData()}
       getItemTitle={(item) => item.data}
-      // renderItem={({ title, arrow, context, children }) => {
-      //   return (
-      //     <Item title={title} arrow={arrow} context={context}>
-      //       {children}
-      //     </Item>
-      //   );
-      // }}
-      // renderItemTitle={({ title }) => <Item.Title title={title} />}
-      // renderItemArrow={({ item, context }) => <Item.Arrow item={item} context={context} />}
+      renderItem={({ title, arrow, context, children }) => {
+        return (
+          <Item title={title} arrow={arrow} context={context}>
+            {children}
+          </Item>
+        );
+      }}
+      renderItemTitle={({ title }) => <Item.Title title={title} />}
+      renderItemArrow={({ item, context }) => <Item.Arrow item={item} context={context} />}
       renderLiveDescriptorContainer={() => null}
       viewState={{
         ["default"]: {
