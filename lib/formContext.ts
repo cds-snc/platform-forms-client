@@ -380,32 +380,32 @@ export const checkRelatedRulesAsBoolean = (
   return getRelatedIdsPassingRules(elements, rules, matchedIds).length > 0;
 };
 
-const nextBasedOnValues = (nextActions: Group["nextAction"], values: FormValues) => {
-  let nextAction = "";
+// const nextBasedOnValues = (nextActions: Group["nextAction"], values: FormValues) => {
+//   let nextAction = "";
 
-  if (!Array.isArray(nextActions)) {
-    return nextActions;
-  }
+//   if (!Array.isArray(nextActions)) {
+//     return nextActions;
+//   }
 
-  nextActions.forEach((action) => {
-    const val = action.choiceId;
+//   nextActions.forEach((action) => {
+//     const val = action.choiceId;
 
-    Object.keys(values).forEach((key) => {
-      // check if the val is in the values
-      if (values[key] === val) {
-        nextAction = action.groupId;
-      }
-    });
-  });
+//     Object.keys(values).forEach((key) => {
+//       // check if the val is in the values
+//       if (values[key] === val) {
+//         nextAction = action.groupId;
+//       }
+//     });
+//   });
 
-  return nextAction;
-};
+//   return nextAction;
+// };
 
 export const getNextAction = (
   groups: GroupsType,
   currentGroup: string,
-  matchedIds: string[],
-  values: FormValues
+  matchedIds: string[]
+  // values: FormValues
 ) => {
   let nextAction = groups[currentGroup].nextAction || "";
 
@@ -442,5 +442,5 @@ export const getNextAction = (
     return nextAction;
   }
 
-  return nextBasedOnValues(groups[currentGroup].nextAction, values);
+  return nextAction; // nextBasedOnValues(groups[currentGroup].nextAction, values);
 };

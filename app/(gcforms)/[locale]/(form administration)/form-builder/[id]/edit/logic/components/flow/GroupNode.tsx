@@ -15,7 +15,7 @@ export const GroupNode = (node: NodeProps) => {
   const selectedGroupId = useGroupStore((state) => state.id);
   const getElement = useGroupStore((state) => state.getElement);
   const groupIsSelected = selectedGroupId === node.id;
-  const typesWithOptions = ["radio", "checkbox", "select", "combobox"];
+  const typesWithOptions = ["radio", "checkbox", "select"];
 
   const handleClick =
     node.id === "end"
