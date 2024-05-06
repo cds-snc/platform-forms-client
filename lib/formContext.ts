@@ -380,7 +380,33 @@ export const checkRelatedRulesAsBoolean = (
   return getRelatedIdsPassingRules(elements, rules, matchedIds).length > 0;
 };
 
-export const getNextAction = (groups: GroupsType, currentGroup: string, matchedIds: string[]) => {
+const nextBasedOnValues = (nextActions: Group["nextAction"], values: FormValues) => {
+  let nextAction = "";
+
+  if (!Array.isArray(nextActions)) {
+    return nextActions;
+  }
+
+  nextActions.forEach((action) => {
+    const val = action.choiceId;
+
+    Object.keys(values).forEach((key) => {
+      // check if the val is in the values
+      if (values[key] === val) {
+        nextAction = action.groupId;
+      }
+    });
+  });
+
+  return nextAction;
+};
+
+export const getNextAction = (
+  groups: GroupsType,
+  currentGroup: string,
+  matchedIds: string[],
+  values: FormValues
+) => {
   let nextAction = groups[currentGroup].nextAction || "";
 
   // Check to see if next action is an array
@@ -412,5 +438,9 @@ export const getNextAction = (groups: GroupsType, currentGroup: string, matchedI
     }
   }
 
-  return nextAction;
+  if (typeof nextAction === "string") {
+    return nextAction;
+  }
+
+  return nextBasedOnValues(groups[currentGroup].nextAction, values);
 };

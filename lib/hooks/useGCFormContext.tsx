@@ -41,9 +41,8 @@ export const GCFormsProvider = ({
   const handleNextAction = () => {
     if (!currentGroup) return;
 
-    // @todo add a test for this
     if (hasNextAction(currentGroup)) {
-      const nextAction = getNextAction(groups, currentGroup, matchedIds);
+      const nextAction = getNextAction(groups, currentGroup, matchedIds, values.current);
 
       if (typeof nextAction === "string") {
         setCurrentGroup(nextAction);
@@ -58,7 +57,6 @@ export const GCFormsProvider = ({
   }): void => {
     values.current = formValues;
     const valueIds = mapIdsToValues(formRecord, formValues);
-
     if (!idArraysMatch(matchedIds, valueIds)) {
       setMatchedIds(valueIds);
     }
