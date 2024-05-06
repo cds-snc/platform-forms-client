@@ -57,6 +57,18 @@ export const GroupAndChoiceSelect = ({
     });
   }, [selectedElement, language]);
 
+  console.log(selectedElement?.properties);
+
+  if (selectedElement?.properties.managedChoices) {
+    const options = selectedElement.properties.managedChoices.split(",");
+    const managedChoices = options.map((value) => {
+      const result = { label: value, value: value };
+      return result;
+    });
+
+    console.log("managedChoices", managedChoices);
+  }
+
   const handleGroupChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const value = e.target.value;
     updateGroupId(index, value);
