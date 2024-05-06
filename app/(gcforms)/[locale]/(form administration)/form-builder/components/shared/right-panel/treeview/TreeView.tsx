@@ -51,6 +51,11 @@ const insertItemAtIndex = (items: string[], item: string, index: number) => {
   return updatedItems;
 };
 
+const getReviewIndex = (currentGroups: GroupsType) => {
+  const elements = Object.keys(currentGroups);
+  return elements.indexOf("review");
+};
+
 const ControlledTree: ForwardRefRenderFunction<unknown, TreeDataProviderProps> = (
   { children },
   ref
@@ -141,6 +146,14 @@ const ControlledTree: ForwardRefRenderFunction<unknown, TreeDataProviderProps> =
       canDropAt={(items, target) => {
         const folderItemsCount = items.filter((item) => item.isFolder).length;
         const nonFolderItemsCount = items.filter((item) => !item.isFolder).length;
+
+        const currentGroups = getGroups() as GroupsType;
+        const reviewIndex = getReviewIndex(currentGroups);
+
+        // Can't drop after Review
+        if (target.linearIndex >= reviewIndex + 1) {
+          return false;
+        }
 
         // Can't drag mixed item types
         if (folderItemsCount > 0 && nonFolderItemsCount > 0) {
