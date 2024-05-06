@@ -26,18 +26,20 @@ export const Review = (): React.ReactElement => {
     return element ? element.properties?.[getLocalizedProperty("title", lang)] : t("unknown");
   }
 
-  const questionsAndAnswers = Object.keys(groupsTemp).map((key) => {
-    return {
-      id: key,
-      name: groupsTemp[key].name,
-      elements: groupsTemp[key].elements.map((element) => {
-        return {
-          // @ts-expect-error todo
-          [element]: formValues[element] || "-",
-        };
-      }),
-    };
-  });
+  const questionsAndAnswers = Object.keys(groupsTemp)
+    .map((key) => {
+      return {
+        id: key,
+        name: groupsTemp[key].name,
+        elements: groupsTemp[key].elements.map((element) => {
+          return {
+            // @ts-expect-error todo
+            [element]: formValues[element] || "-",
+          };
+        }),
+      };
+    })
+    .filter((item) => item.id !== "end"); // The end "group" shouldn't show in the Review page
 
   return (
     <>
