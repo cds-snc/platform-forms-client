@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { middleware, sessionExists } from "@lib/middleware";
-import { getNotifyInstance } from "@lib/integration/notifyConnector";
+import { sendEmail } from "@lib/integration/notifyConnector";
 import { logMessage } from "@lib/logger";
 import { MiddlewareProps, WithRequired } from "@lib/types";
 import { slugify } from "@lib/client/clientHelpers";
@@ -19,21 +19,17 @@ export const POST = middleware([sessionExists()], async (req, props) => {
 
     const base64data = Buffer.from(form).toString("base64");
 
-    const templateID = process.env.TEMPLATE_ID;
-    const notifyClient = getNotifyInstance();
-
     // Here is the documentation for the `sendEmail` function: https://docs.notifications.service.gov.uk/node.html#send-an-email
     await Promise.all(
       emails.map((email: string) => {
-        return notifyClient.sendEmail(templateID, email, {
-          personalisation: {
-            application_file: {
-              file: base64data,
-              filename: `${slugify(filename)}.json`,
-              sending_method: "attach",
-            },
-            subject: "Form shared | Formulaire partagé",
-            formResponse: `
+        return sendEmail(email, {
+          application_file: {
+            file: base64data,
+            filename: `${slugify(filename)}.json`,
+            sending_method: "attach",
+          },
+          subject: "Form shared | Formulaire partagé",
+          formResponse: `
 **${session.user.name} (${session.user.email}) has shared a form with you.**
 
 To preview this form:
@@ -55,8 +51,6 @@ Pour prévisualiser ce formulaire :
   Aller sur [Formulaires GC](https://${host}). Aucun compte n'est nécessaire.
 - **Étape 3 :**
   Sélectionner "Ouvrir un formulaire".`,
-          },
-          reference: null,
         });
       })
     );

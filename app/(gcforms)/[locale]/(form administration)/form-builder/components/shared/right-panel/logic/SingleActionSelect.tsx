@@ -28,8 +28,6 @@ export const SingleActionSelect = ({
     return { label: item.name, value: key };
   });
 
-  groupItems.push({ label: "End", value: "end" });
-
   // Filter out the current group
   groupItems = groupItems.filter((item) => item.value !== currentGroup);
 
