@@ -17,10 +17,15 @@ export const Question = ({
   onQuestionChange: (itemId: number, val: string, lang: Language) => void;
   describedById?: string;
 }) => {
-  const { localizeField, translationLanguagePriority } = useTemplateStore((s) => ({
-    localizeField: s.localizeField,
-    translationLanguagePriority: s.translationLanguagePriority,
-  }));
+  const { localizeField, translationLanguagePriority, getGroupsEnabled } = useTemplateStore(
+    (s) => ({
+      localizeField: s.localizeField,
+      translationLanguagePriority: s.translationLanguagePriority,
+      getGroupsEnabled: s.getGroupsEnabled,
+    })
+  );
+
+  const groupsEnabled = getGroupsEnabled();
 
   const itemIndex = item.index;
   const isRichText = item.type === "richText";
@@ -30,7 +35,7 @@ export const Question = ({
 
   return isRichText ? null : (
     <>
-      <QuestionNumber index={itemIndex} questionNumber={item.questionNumber} />
+      {!groupsEnabled && <QuestionNumber index={itemIndex} questionNumber={item.questionNumber} />}
       <QuestionInput
         initialValue={title}
         index={itemIndex}
