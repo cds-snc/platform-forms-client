@@ -13,7 +13,7 @@ describe("getNextAction function", () => {
     expect(getNextAction(groups, "group1", [])).toBe("group2");
   });
 
-  it("Gets next action when using a arrat value", () => {
+  it("Gets next action when using a array value", () => {
     const groups = {
       "start": { name: "start", nextAction: "group1", elements: [] },
       "group1": {
