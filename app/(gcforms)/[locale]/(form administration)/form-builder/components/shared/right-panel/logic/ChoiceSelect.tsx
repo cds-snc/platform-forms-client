@@ -28,11 +28,11 @@ export const ChoiceSelect = ({
 
   if (addCatchAll) {
     choices = [
-      ...choices,
       {
         label: "Catch all (any other value)",
         value: "catch-all",
       },
+      ...choices,
     ];
   }
 
