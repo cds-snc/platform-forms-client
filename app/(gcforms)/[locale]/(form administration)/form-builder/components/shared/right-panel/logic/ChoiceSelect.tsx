@@ -11,17 +11,29 @@ export const ChoiceSelect = ({
   choices,
   onChange,
   className,
+  addCatchAll,
 }: {
   selected: string | null;
   choices: Choice[];
   onChange: (e: React.ChangeEvent<HTMLSelectElement>) => void;
   className?: string;
+  addCatchAll?: boolean;
 }) => {
   const { t } = useTranslation("form-builder");
   const labelId = `choice-select-${Date.now()}`;
 
   if (!selected || selected === "1") {
     selected = "1.0";
+  }
+
+  if (addCatchAll) {
+    choices = [
+      ...choices,
+      {
+        label: "Catch all (any other value)",
+        value: "catch-all",
+      },
+    ];
   }
 
   return (

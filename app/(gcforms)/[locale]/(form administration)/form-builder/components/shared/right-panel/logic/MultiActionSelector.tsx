@@ -76,7 +76,12 @@ export const GroupAndChoiceSelect = ({
       {choices && (
         <fieldset className="mb-4 border-b border-dotted border-slate-500">
           <div className="mb-4">
-            <ChoiceSelect selected={choiceId} choices={choices} onChange={handleChoiceChange} />
+            <ChoiceSelect
+              selected={choiceId}
+              choices={choices}
+              onChange={handleChoiceChange}
+              addCatchAll={true}
+            />
           </div>
           <div className="mb-4">
             <GroupSelect selected={groupId} groups={groupItems} onChange={handleGroupChange} />

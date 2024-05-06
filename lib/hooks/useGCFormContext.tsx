@@ -49,12 +49,23 @@ export const GCFormsProvider = ({
       ]
       */
       if (Array.isArray(nextAction)) {
+        let matched = false;
+
+        // Check for catch-all value
+        const catchAllRule = nextAction.find((action) => action.choiceId === "catch-all");
+
         nextAction.forEach((action) => {
           const match = matchedIds.includes(action.choiceId);
           if (match) {
             nextAction = action.groupId;
+            matched = true;
           }
         });
+
+        // If no match, try using catch-all
+        if (!matched && catchAllRule) {
+          nextAction = catchAllRule.groupId;
+        }
       }
 
       if (typeof nextAction === "string") {
