@@ -379,3 +379,68 @@ export const checkRelatedRulesAsBoolean = (
 ) => {
   return getRelatedIdsPassingRules(elements, rules, matchedIds).length > 0;
 };
+
+// const nextBasedOnValues = (nextActions: Group["nextAction"], values: FormValues) => {
+//   let nextAction = "";
+
+//   if (!Array.isArray(nextActions)) {
+//     return nextActions;
+//   }
+
+//   nextActions.forEach((action) => {
+//     const val = action.choiceId;
+
+//     Object.keys(values).forEach((key) => {
+//       // check if the val is in the values
+//       if (values[key] === val) {
+//         nextAction = action.groupId;
+//       }
+//     });
+//   });
+
+//   return nextAction;
+// };
+
+export const getNextAction = (
+  groups: GroupsType,
+  currentGroup: string,
+  matchedIds: string[]
+  // values: FormValues
+) => {
+  let nextAction = groups[currentGroup].nextAction || "";
+
+  // Check to see if next action is an array
+  /*
+   i.e. multiple next actions based on choice
+
+  "nextAction": [
+    { "choiceId": "1.0", "groupId": "f3e91cd0-343c-46a2-acab-3346865974cb" },
+    { "choiceId": "1.1", "groupId": "93278f8e-5d47-4507-a104-c47e8a950da0" }
+  ]
+  */
+  if (Array.isArray(nextAction)) {
+    let matched = false;
+
+    // Check for catch-all value
+    const catchAllRule = nextAction.find((action) => action.choiceId === "catch-all");
+
+    nextAction.forEach((action) => {
+      const match = matchedIds.includes(action.choiceId);
+      if (match) {
+        nextAction = action.groupId;
+        matched = true;
+      }
+    });
+
+    // If no match, try using catch-all
+    if (!matched && catchAllRule) {
+      nextAction = catchAllRule.groupId;
+    }
+  }
+
+  if (typeof nextAction === "string") {
+    return nextAction;
+  }
+
+  return nextAction; // nextBasedOnValues(groups[currentGroup].nextAction, values);
+};
