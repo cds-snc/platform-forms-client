@@ -64,6 +64,14 @@ export const GCFormsProvider = ({
       // Helpful for navigating to the last group
       setPreviousGroup(currentGroup);
 
+      // TODO: on forms-form is landing on start
+      // if (nextAction === "") {
+      //   setCurrentGroup("review");
+      // } else if (nextAction === "review") {
+      //   setCurrentGroup("end");
+      // } else if (typeof nextAction === "string") {
+      //   setCurrentGroup(nextAction);
+      // }
       if (typeof nextAction === "string") {
         setCurrentGroup(nextAction);
       }

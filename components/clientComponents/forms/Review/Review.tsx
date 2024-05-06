@@ -6,7 +6,6 @@ import { useGCFormsContext } from "@lib/hooks/useGCFormContext";
 import { getLocalizedProperty } from "@lib/utils";
 import { useRef } from "react";
 
-// export const Review = ({ id }: { id: string | number }): React.ReactElement => {
 export const Review = (): React.ReactElement => {
   const {
     t,
@@ -17,29 +16,28 @@ export const Review = (): React.ReactElement => {
   const headingRef = useRef(null);
   useFocusIt({ elRef: headingRef });
 
-  // Remove the "fake" review group so it won't show  as a group in the review page
+  // Remove the review and end groups so it won't show as a group in the review page
   const groupsTemp = { ...groups };
   delete groupsTemp["review"];
+  delete groupsTemp["end"];
 
   function getElementNameById(id: string | number) {
     const element = formRecord.form.elements.find((item) => String(item.id) === String(id));
     return element ? element.properties?.[getLocalizedProperty("title", lang)] : t("unknown");
   }
 
-  const questionsAndAnswers = Object.keys(groupsTemp)
-    .map((key) => {
-      return {
-        id: key,
-        name: groupsTemp[key].name,
-        elements: groupsTemp[key].elements.map((element) => {
-          return {
-            // @ts-expect-error todo
-            [element]: formValues[element] || "-",
-          };
-        }),
-      };
-    })
-    .filter((item) => item.id !== "end"); // The end "group" shouldn't show in the Review page
+  const questionsAndAnswers = Object.keys(groupsTemp).map((key) => {
+    return {
+      id: key,
+      name: groupsTemp[key].name,
+      elements: groupsTemp[key].elements.map((element) => {
+        return {
+          // @ts-expect-error todo
+          [element]: formValues[element] || "-",
+        };
+      }),
+    };
+  });
 
   return (
     <>

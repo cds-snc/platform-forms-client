@@ -191,10 +191,10 @@ const addReviewElement = (defaultForm: FormProperties) => {
     id: 10000000000001,
     type: FormElementTypes.review,
     properties: {
-      titleEn: "n/a",
-      titleFr: "n/a",
-      descriptionEn: "n/a",
-      descriptionFr: "n/a",
+      titleEn: "-",
+      titleFr: "-",
+      descriptionEn: "-",
+      descriptionFr: "-",
     },
   };
   const result = {
