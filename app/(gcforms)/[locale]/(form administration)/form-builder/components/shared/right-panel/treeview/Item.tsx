@@ -21,7 +21,7 @@ export const Item = ({
     <li
       {...context.itemContainerWithChildrenProps}
       className={cn(
-        "flex flex-col p-2",
+        "flex flex-col",
         arrow && "border-b-1 border-slate-00 border-x-1 border-r-2 b-t-1",
         !context.isExpanded && "",
         children && "bg-slate-50"
@@ -36,7 +36,7 @@ export const Item = ({
           {...context.interactiveElementProps}
           type="button"
           className={cn(
-            "text-left group relative w-full overflow-hidden truncate p-1",
+            "text-left group relative w-full overflow-hidden truncate p-3",
             !arrow && "bg-white",
             !arrow && "border-slate-500 border-1 rounded-md"
           )}
@@ -66,7 +66,7 @@ const Title = ({ title }: { title: string }) => {
 
 const Arrow = ({ item, context }: { item: TreeItem; context: TreeItemRenderContext }) => {
   return item.isFolder ? (
-    <span {...context.arrowProps} className="absolute left-5 top-2 mr-2 inline-block">
+    <span {...context.arrowProps} className="absolute left-5 top-2 mr-2 mt-3 inline-block">
       {context.isExpanded ? <ArrowDown className="absolute top-1" /> : <ArrowRight />}
     </span>
   ) : null;
