@@ -42,7 +42,7 @@ export const GCFormsProvider = ({
     if (!currentGroup) return;
 
     if (hasNextAction(currentGroup)) {
-      const nextAction = getNextAction(groups, currentGroup, matchedIds, values.current);
+      const nextAction = getNextAction(groups, currentGroup, matchedIds);
 
       if (typeof nextAction === "string") {
         setCurrentGroup(nextAction);
