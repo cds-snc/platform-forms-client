@@ -144,32 +144,33 @@ const ControlledTree: ForwardRefRenderFunction<unknown, TreeDataProviderProps> =
         });
       }}
       canDropAt={(items, target) => {
-        const folderItemsCount = items.filter((item) => item.isFolder).length;
-        const nonFolderItemsCount = items.filter((item) => !item.isFolder).length;
+        const groupItemsCount = items.filter((item) => item.isFolder).length;
+        const nonGroupItemsCount = items.filter((item) => !item.isFolder).length;
 
-        const currentGroups = getGroups() as GroupsType;
-        const reviewIndex = getReviewIndex(currentGroups);
-
-        // Can't drop after Review
-        if (target.linearIndex >= reviewIndex + 1) {
+        // Can't drag Groups + Items together
+        if (groupItemsCount > 0 && nonGroupItemsCount > 0) {
           return false;
         }
 
-        // Can't drag mixed item types
-        if (folderItemsCount > 0 && nonFolderItemsCount > 0) {
-          return false;
-        }
-
-        // If any of the selected items is a folder, disallow dropping on a folder
-        if (folderItemsCount >= 1) {
+        // If any of the selected items is a group
+        if (groupItemsCount >= 1) {
+          // Groups can't be dropped on another group
           const { parentItem } = target as DraggingPositionBetweenItems;
           if (items[0].isFolder && parentItem !== "root") {
             return false;
           }
+
+          // Groups can't be dropped after Review
+          const currentGroups = getGroups() as GroupsType;
+          const reviewIndex = getReviewIndex(currentGroups);
+
+          if (target.linearIndex >= reviewIndex + 1) {
+            return false;
+          }
         }
 
-        // If any of the items is not a folder, disallow dropping on root
-        if (nonFolderItemsCount >= 1) {
+        // If any of the items is not a group, disallow dropping on root
+        if (nonGroupItemsCount >= 1) {
           if (target.depth === 0) {
             return false;
           }
