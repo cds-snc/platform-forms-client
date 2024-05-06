@@ -13,6 +13,7 @@ import { NextActionRule } from "@lib/formContext";
 import { useGroupStore } from "@formBuilder/components/shared/right-panel/treeview/store/useGroupStore";
 import { useTemplateStore } from "@lib/store/useTemplateStore";
 import { useFlowRef } from "@formBuilder/[id]/edit/logic/components/flow/provider/FlowRefProvider";
+import { managedData } from "@lib/managedData";
 
 export const GroupAndChoiceSelect = ({
   selectedElement,
@@ -51,23 +52,20 @@ export const GroupAndChoiceSelect = ({
   groupItems = groupItems.filter((item) => item.value !== currentGroup);
 
   const choices = useMemo(() => {
-    return selectedElement?.properties.choices?.map((choice, index) => {
+    let choices = selectedElement?.properties.choices?.map((choice, index) => {
       const result = { label: choice[language], value: `${selectedElement.id}.${index}` };
       return result;
     });
+    if (selectedElement?.properties.managedChoices) {
+      const dataFile = selectedElement.properties.managedChoices;
+      const data = managedData[dataFile];
+
+      choices = data.map((choice) => {
+        return { label: choice[language], value: choice[language] };
+      });
+    }
+    return choices;
   }, [selectedElement, language]);
-
-  console.log(selectedElement?.properties);
-
-  if (selectedElement?.properties.managedChoices) {
-    const options = selectedElement.properties.managedChoices.split(",");
-    const managedChoices = options.map((value) => {
-      const result = { label: value, value: value };
-      return result;
-    });
-
-    console.log("managedChoices", managedChoices);
-  }
 
   const handleGroupChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const value = e.target.value;
