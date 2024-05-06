@@ -10,7 +10,7 @@ import { SingleActionSelect } from "./SingleActionSelect";
 import { MultiActionSelector } from "./MultiActionSelector";
 
 export const SelectNextAction = ({ item }: { item: FormElement | null }) => {
-  const typesWithOptions = ["radio", "checkbox", "select"];
+  const typesWithOptions = ["radio", "checkbox", "select", "combobox"];
   const getGroupNextAction = useGroupStore((state) => state.getGroupNextAction);
   const formGroups: GroupsType = useTemplateStore((s) => s.form.groups) || {};
 
