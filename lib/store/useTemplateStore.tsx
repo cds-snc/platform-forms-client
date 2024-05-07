@@ -168,6 +168,7 @@ export interface TemplateStoreState extends TemplateStoreProps {
   initialize: (language?: string) => void;
   removeChoiceFromRules: (elIndex: number, choiceIndex: number) => void;
   setChangeKey: (key: string) => void;
+  getGroupsEnabled: () => boolean;
 }
 
 /* Note: "async" getItem is intentional here to work-around a hydration issue   */
@@ -521,6 +522,7 @@ const createTemplateStore = (initProps?: Partial<InitialTemplateStoreProps>) => 
                 state.closingDate = null;
               });
             },
+            getGroupsEnabled: () => get().allowGroupsFlag,
           }),
           {
             name: "form-storage",
