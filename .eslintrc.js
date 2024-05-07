@@ -8,7 +8,7 @@ module.exports = {
       parserOptions: {
         project: ["./tsconfig.json"],
       },
-      plugins: ["@typescript-eslint", "jsx-a11y", "prettier"],
+      plugins: ["@typescript-eslint", "jsx-a11y"],
       rules: {
         "@typescript-eslint/await-thenable": "error",
       },
@@ -20,7 +20,7 @@ module.exports = {
         project: ["./cypress/tsconfig.json"],
       },
       extends: ["plugin:@typescript-eslint/recommended", "plugin:cypress/recommended"],
-      plugins: ["@typescript-eslint", "prettier", "cypress"],
+      plugins: ["@typescript-eslint", "cypress"],
     },
   ],
   env: {
@@ -29,15 +29,7 @@ module.exports = {
     node: true,
     jest: true,
   },
-  extends: [
-    "eslint:recommended",
-    "plugin:react/recommended",
-    "plugin:react-hooks/recommended",
-    "plugin:jsx-a11y/recommended",
-    "plugin:prettier/recommended",
-    "plugin:@next/next/recommended",
-    "prettier",
-  ],
+  extends: ["eslint:recommended", "next/core-web-vitals"],
   parserOptions: {
     ecmaFeatures: {
       jsx: true,
@@ -50,9 +42,8 @@ module.exports = {
       version: "detect",
     },
   },
-  plugins: ["react", "jsx-a11y", "prettier"],
+  plugins: ["react", "jsx-a11y"],
   rules: {
-    "prettier/prettier": "error",
     "no-console": "error",
     "no-await-in-loop": "error",
     "no-return-await": "error",

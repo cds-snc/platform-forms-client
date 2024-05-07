@@ -6,11 +6,11 @@ describe("Forms Functionality", () => {
   });
   describe("text field tests", () => {
     beforeEach(() => {
-      cy.useFlag("formTimer", false);
       cy.visitForm(formID);
     });
+
     it("the form displays an error when it is submitted and a field is required", () => {
-      cy.get("[type='submit']").click();
+      cy.get("#form-submit-button").click();
       cy.get("h2").contains("Please correct the errors on the page");
       cy.get("div.gc-alert__body a").contains("Complete the required field to continue.");
       cy.get("div.gc-alert__body a").click();
@@ -19,42 +19,7 @@ describe("Forms Functionality", () => {
     });
     it("fills the text field successfully and submits the form", () => {
       cy.typeInField("input[id='2']", "Test Value");
-      cy.get("[type='submit']").click();
-      cy.get("#submitted-thank-you").contains("Submitted thank you!");
-    });
-  });
-
-  describe("Submit Delay", () => {
-    beforeEach(() => {
-      cy.useFlag("formTimer", true);
-      cy.visitForm(formID);
-    });
-    it("should display alert message when submitting too quickly", () => {
-      cy.typeInField("input[id='2']", "Test Value");
-      cy.get("[type='submit']").click();
-      cy.get("[role='alert']").should("be.visible");
-      cy.get("[role='alert']").contains("Button cannot be used");
-    });
-    it("should display the 'button ready' alert after waiting for delay", () => {
-      cy.clock();
-      cy.typeInField("input[id='2']", "Test Value");
-      cy.tick(1000);
-      cy.get("[type='submit']").click();
-      cy.get("[role='alert']").should("be.visible");
-      cy.get("[role='alert']").contains("Button cannot be used");
-      cy.tick(6000);
-      cy.get("[role='alert']").contains("The button is ready.");
-    });
-    it("should submit the button after the proper delay", () => {
-      cy.clock();
-      cy.tick(1000);
-      cy.typeInField("input[id='2']", "Test Value");
-      cy.get("[type='submit']").click();
-      cy.get("[role='alert']").should("be.visible");
-      cy.get("[role='alert']").contains("Button cannot be used");
-      cy.tick(6000);
-      cy.get("[role='alert']").contains("The button is ready.");
-      cy.get("[type='submit']").click();
+      cy.get("#form-submit-button").click();
       cy.get("#submitted-thank-you").contains("Submitted thank you!");
     });
   });

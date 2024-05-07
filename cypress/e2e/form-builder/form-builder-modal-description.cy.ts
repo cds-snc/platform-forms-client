@@ -1,7 +1,6 @@
 describe("Form builder modal description", () => {
   beforeEach(() => {
-    cy.login({ acceptableUse: true });
-    cy.visitPage("/form-builder/edit");
+    cy.visitPage("/en/form-builder/0000/edit");
   });
 
   it("Renders matching element description in more modal", () => {
@@ -28,7 +27,6 @@ describe("Form builder modal description", () => {
     cy.get('#element-2 [data-testid="more"]').click();
     cy.get('[data-testid="description-input"]').contains("Enter a number");
     cy.get("button").contains("Close").click();
-
     // rearrange the first element
     cy.get('#element-2 [data-testid="moveDown"]').click();
 

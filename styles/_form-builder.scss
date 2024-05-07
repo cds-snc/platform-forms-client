@@ -189,13 +189,7 @@
     }
   }
 
-  .toolbar-container {
-    border-bottom: 1px solid #ddd;
-    background-color: #f7f7f7;
-    border-top-left-radius: 8px;
-    border-top-right-radius: 8px;
-    padding: 10px;
-
+  .gc-toolbar-container {
     &:focus-within {
       margin: -2px;
       border: 2px solid #015ecc;
@@ -293,5 +287,102 @@
     background-position: center right 5px;
   }
 
+  /* start page laoding animation */
+  @keyframes maple-leaf-dash {
+    from {
+      stroke-dashoffset: 400;
+    }
+    to {
+      stroke-dashoffset: 0;
+    }
+  }
+
+  .maple-leaf-loader {
+    stroke-dasharray: 400;
+    stroke-dashoffset: 400;
+    animation: maple-leaf-dash 0.8s linear alternate infinite;
+  }
+  /* end page laoding animation */
+
   /* end form builder styles */
+}
+
+@keyframes react-loading-skeleton {
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+/* Skeleton styles */
+
+.react-loading-skeleton {
+  --base-color: #ebebeb;
+  --highlight-color: #f5f5f5;
+  --animation-duration: 1.5s;
+  --animation-direction: normal;
+  --pseudo-element-display: block; /* Enable animation */
+
+  background-color: var(--base-color);
+
+  width: 100%;
+  border-radius: 0.25rem;
+  display: inline-flex;
+  line-height: 1;
+
+  position: relative;
+  user-select: none;
+  overflow: hidden;
+}
+
+.react-loading-skeleton::after {
+  content: " ";
+  display: var(--pseudo-element-display);
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 100%;
+  background-repeat: no-repeat;
+  background-image: linear-gradient(
+    90deg,
+    var(--base-color),
+    var(--highlight-color),
+    var(--base-color)
+  );
+  transform: translateX(-100%);
+
+  animation-name: react-loading-skeleton;
+  animation-direction: var(--animation-direction);
+  animation-duration: var(--animation-duration);
+  animation-timing-function: ease-in-out;
+  animation-iteration-count: infinite;
+}
+
+@media (prefers-reduced-motion) {
+  .react-loading-skeleton {
+    --pseudo-element-display: none; /* Disable animation */
+  }
+}
+
+.rct-tree-items-container {
+  padding: 0;
+  margin: 0;
+  margin-right: 1px;
+  padding-left: 0;
+}
+
+.react-flow {
+  .react-flow__edge-path, .react-flow__edge-interaction {
+    stroke: #6366F1;
+    stroke-width: 1px;
+    fill: none;
+  }
+
+  .react-flow__arrowhead polyline{
+    stroke: #6366F1 !important;
+    fill: #6366F1 !important;
+    stroke-width: 1 !important;
+  }
+  
+
 }

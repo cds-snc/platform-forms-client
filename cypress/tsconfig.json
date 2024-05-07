@@ -1,9 +1,9 @@
 {
   "compilerOptions": {
-    "typeRoots": ["../types", "../node_modules/@types", "./types"],
+    "typeRoots": ["./types", "./node_modules/@types", "cypress/types"],
     "target": "es5",
     "lib": ["es5", "dom"],
-    "types": ["cypress", "node", "cypress-axe"],
+    "types": ["cypress", "node", "cypress-axe", "cypress-wait-until"],
     "skipLibCheck": true,
     "strict": true,
     "forceConsistentCasingInFileNames": true,
@@ -11,21 +11,28 @@
     "esModuleInterop": true,
     "resolveJsonModule": true,
     "jsx": "preserve",
-    "baseUrl": ".",
+    "baseUrl": "./",
     "paths": {
       "@lib/*": ["../lib/*"],
-      "@components/*": ["../components/*"],
-      "@formbuilder/*": ["../components/form-builder/*"],
-      "@pages/*": ["../pages/*"]
+      "@api/*": ["../app/api/*"],
+      "@formBuilder/*": ["../app/(gcforms)/[locale]/(form administration)/form-builder/*"],
+      "@serverComponents/*": ["../components/serverComponents/*"],
+      "@clientComponents/*": ["../components/clientComponents/*"],
+      "@jestFixtures/*": ["../__fixtures__/*"],
+      "@jestUtils": ["../__utils__"],
+      "@i18n": ["../i18n"],
+      "@i18n/*": ["../i18n/*"],
+      "@content/*": ["../public/static/content/*"],
+      "@public/*": ["../public/*"]
     }
   },
   "include": [
-    "**/*.ts",
-    "**/*.tsx",
-    "**/*.js",
-    "**/*.jsx",
-    "../**/*.cy.tsx",
-    "../**/*.cy.ts",
+    "../**/*.ts",
+    "../**/*.tsx",
+    "../**/*.js",
+    "../**/*.jsx",
+    "**/*.cy.tsx",
+    "**/*.cy.ts",
     "../cypress.config.ts",
     "support/commands/selection-command.js"
   ]

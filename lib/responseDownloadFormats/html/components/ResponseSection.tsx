@@ -2,8 +2,7 @@ import React from "react";
 import { Form, Submission } from "../../types";
 import { ColumnTable } from "./ColumnTable";
 import { RowTable } from "./RowTable";
-import { customTranslate } from "@lib/responseDownloadFormats/helpers";
-import { getProperty } from "@lib/formBuilder";
+import { customTranslate, getProperty } from "@lib/i18nHelpers";
 
 export interface ResponseSectionProps {
   confirmReceiptCode: string;

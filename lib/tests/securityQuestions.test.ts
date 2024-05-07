@@ -12,7 +12,7 @@ import {
   InvalidSecurityQuestionId,
   DuplicatedQuestionsNotAllowed,
   SecurityAnswersNotFound,
-} from "@lib/auth";
+} from "@lib/auth/securityQuestions";
 import { createAbility } from "@lib/privileges";
 import { Base, mockUserPrivileges } from "__utils__/permissions";
 import { Session } from "next-auth";

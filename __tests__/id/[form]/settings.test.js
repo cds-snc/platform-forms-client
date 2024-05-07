@@ -14,18 +14,22 @@ However the 'requireAuthentication' lib which is referenced as an import in the 
 import React from "react";
 import { cleanup, render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import Settings from "@components/admin/TemplateDelete/Settings";
+import Settings from "@clientComponents/admin/TemplateDelete/Settings";
 import mockedAxios from "axios";
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 import validFormTemplate from "../../../__fixtures__/validFormTemplate.json";
 
 jest.mock("axios");
-jest.mock("next/router", () => ({
-  useRouter: jest.fn(),
+jest.mock("next/navigation", () => ({
+  useRouter() {
+    return {
+      prefetch: () => null,
+    };
+  },
 }));
 
 // Mock your i18n
-jest.mock("next-i18next", () => ({
+jest.mock("@i18n/client", () => ({
   useTranslation: () => {
     return {
       t: (str) => str,

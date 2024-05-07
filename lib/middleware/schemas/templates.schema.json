@@ -199,7 +199,8 @@
             "fileInput",
             "dynamicRow",
             "richText",
-            "attestation"
+            "attestation",
+            "combobox"
           ]
         },
         "properties": {
@@ -244,6 +245,10 @@
                   }
                 }
               }
+            },
+            "managedChoices": {
+              "type": "string",
+              "description": "The name of the data file containing the choices for this element."
             },
             "conditionalRules": {
               "type": "array",

@@ -2,9 +2,6 @@ import { Abilities } from "@lib/types";
 import { RawRuleOf, MongoAbility } from "@casl/ability";
 
 declare module "next-auth" {
-  /**
-   * Returned by `useSession`, `getSession`, `getServerSession` and received as a prop on the `SessionProvider` React Context
-   */
   interface Session {
     user: {
       id: string;
@@ -19,17 +16,24 @@ declare module "next-auth" {
       hasSecurityQuestions: boolean;
     };
   }
+
+  interface User {
+    id: string;
+    name?: string | null;
+    email: string;
+  }
 }
 
+// Hopefully guidance will be provided soon by Next-Auth on how to better augment this module
+
 declare module "next-auth/jwt" {
-  /** Returned by the `jwt` callback and `getToken`, when using JWT sessions */
   interface JWT {
-    userId: string;
+    userId?: string;
     name: string;
     email: string;
-    lastLoginTime: Date;
-    acceptableUse: boolean;
-    hasSecurityQuestions: boolean;
+    lastLoginTime?: Date;
+    acceptableUse?: boolean;
+    hasSecurityQuestions?: boolean;
     newlyRegistered?: boolean;
     deactivated?: boolean;
   }

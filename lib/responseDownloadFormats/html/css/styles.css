@@ -73,7 +73,7 @@
   }
 
   .gc-button--blue {
-    @apply h-16 rounded-lg py-3 px-6 text-white mx-auto bg-blue-800 shadow;
+    @apply rounded-lg py-3 px-6 text-white bg-blue-800 shadow;
 
     &:hover {
       @apply bg-blue-light;

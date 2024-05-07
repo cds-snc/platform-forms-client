@@ -4,13 +4,13 @@
 
 /* eslint-disable  @typescript-eslint/no-explicit-any */
 import { createMocks, RequestMethod } from "node-mocks-http";
-import { getCsrfToken } from "next-auth/react";
+import { getCsrfToken } from "@lib/client/csrfToken";
 import { mocked } from "jest-mock";
 import {
   CognitoIdentityProviderClient,
   ConfirmForgotPasswordCommand,
 } from "@aws-sdk/client-cognito-identity-provider";
-import confirmpassword from "@pages/api/account/confirmpassword";
+import confirmpassword from "old_pages/api/account/confirmpassword";
 
 const mockGetCSRFToken = mocked(getCsrfToken, { shallow: true });
 

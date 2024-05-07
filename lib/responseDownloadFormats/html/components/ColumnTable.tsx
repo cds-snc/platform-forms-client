@@ -1,9 +1,9 @@
 import React from "react";
 import { capitalize } from "./ResponseSection";
-import { customTranslate, orderLangugeStrings } from "../../helpers";
+import { customTranslate, orderLangugeStrings } from "../../../i18nHelpers";
 import { Answer, Submission } from "../../types";
 import { TableProps } from "../types";
-import { formatDateTimeUTC } from "@components/form-builder/util";
+import { formatDateTimeUTC } from "@lib/utils/form-builder";
 
 const QuestionColumns = ({
   submission,

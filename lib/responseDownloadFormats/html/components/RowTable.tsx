@@ -1,6 +1,6 @@
 import React from "react";
 import { capitalize } from "./ResponseSection";
-import { customTranslate, getProperty } from "../../helpers";
+import { customTranslate, getProperty } from "@lib/i18nHelpers";
 import { Answer, Submission } from "../../types";
 import { TableProps } from "../types";
 

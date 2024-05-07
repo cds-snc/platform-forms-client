@@ -1,0 +1,261 @@
+{
+  "tabs": {
+    "newResponses": {
+      "title": "New responses available",
+      "message1": "Start by downloading responses.",
+      "message2": "Then, sign off on their removal, as GC Forms only stores responses temporarily."
+    },
+    "downloadedResponses": {
+      "title": "Downloaded responses",
+      "message1": "Sign off on the removal of responses within the time indicated.",
+      "message2": "Responses will be available on GC Forms temporarily, before being removed permanently."
+    },
+    "confirmedResponses": {
+      "title": "Responses signed off for removal",
+      "message1": "GC Forms stores responses temporarily.",
+      "message2": "These responses will be removed permanently after 30 days."
+    },
+    "problemResponses": {
+      "title": "Responses reported with problems",
+      "message1": "The GC Forms Support Team has been notified.",
+      "message2": "Someone will reach out to help resolve the problem. Sign off on the removal of these problem responses once resolved."
+    }
+  },
+  "tooltips": {
+    "downloadTable": {
+      "submissionID": {
+        "title": "Submission ID",
+        "body": "Used to track specific form submissions or report a problem with responses."
+      },
+      "date": {
+        "title": "Submission date",
+        "body": "Indicates when the response was received by GC Forms."
+      },
+      "nextSteps": {
+        "title": "Next steps",
+        "body": "Since GC Forms does not store responses indefinitely, you’ll need to retrieve and clear all response data within 45 days of submission."
+      }
+    }
+  },
+  "responses": {
+    "recentlyDownloaded": "Recently downloaded",
+    "deleted": "Signed off for removal",
+    "changeSetup": "Change settings",
+    "confirmReceipt": "Sign off on removal with receipt codes",
+    "navLabel": "Responses",
+    "reportProblems": "Report a problem with responses",
+    "title": "Responses",
+    "unauthenticated": {
+      "createOne": "create one",
+      "noAccount": "If you do not have a GC Forms account,",
+      "signIn": "sign in",
+      "title": "Sign in to access responses",
+      "toAccessPagePart1": "To access this page,",
+      "toAccessPagePart2": "to your GC Forms account."
+    },
+    "email": {
+      "title": "Email response settings",
+      "submitTo": "Submitted responses are sent to:",
+      "subjectLine": "Subject line will appear as:"
+    },
+    "status": {
+      "new": "New",
+      "downloaded": "Downloaded",
+      "deleted": "Signed off for removal",
+      "problem": "Problems"
+    },
+    "viewAllProblemResponses": "View reported responses"
+  },
+  "supportWillContact": "Support will contact you",
+  "reportedAsProblem": "Response reported as a problem",
+  "downloadSuccess": {
+    "title": "Responses moved to the “Downloaded” tab",
+    "body": "Next: sign off on the removal of responses from GC Forms."
+  },
+  "confirmSuccess": {
+    "title": "Responses moved to the “Signed off for removal” tab",
+    "body": "Responses will be removed in 30 days."
+  },
+  "downloadResponsesTable": {
+    "download": "Download",
+    "delete": "Delete",
+    "movedToDownloaded": "Moved to Downloaded",
+    "header": {
+      "tableTitle": "Responses table",
+      "select": "Select",
+      "selectAll": "Select all",
+      "deselectAll": "Deselect all",
+      "number": "Submission ID",
+      "status": "Status",
+      "downloadResponse": "Download window",
+      "lastDownloadedBy": "Downloaded by",
+      "confirmReceipt": "Confirmation of receipt",
+      "removal": "Data removal",
+      "more": "More",
+      "download": "Download",
+      "nextStep": "Next step",
+      "date": "Date",
+      "warning": "Warning",
+      "pagination": {
+        "start": "Start",
+        "showing": "Showing responses {{start}} to {{end}}",
+        "next": "Next",
+        "previous": "Previous",
+        "new": {
+          "remainingResponses": "You have more than {{max}} new responses."
+        },
+        "downloaded": {
+          "remainingResponses": "You have more than {{max}} downloaded responses."
+        },
+        "confirmed": {
+          "remainingResponses": "You have more than {{max}} responses waiting to be removed."
+        }
+      }
+    },
+    "status": {
+      "downloaded": "Downloaded",
+      "notDownloaded": "Not downloaded",
+      "new": "New",
+      "confirmed": "Confirmed",
+      "unconfirmed": "Unconfirmed",
+      "problem": "Problem",
+      "done": "Done",
+      "downloadWithinXDays": "Download within {{daysLeft}} days",
+      "confirmWithinXDays": "Sign off on removal within {{daysLeft}} days",
+      "removeWithinXDays": "Will be removed permanently in {{daysLeft}} days",
+      "overdue": "Overdue",
+      "wontRemove": "Cannot remove",
+      "notSet": "Not set"
+    },
+    "card": {
+      "noNewResponses": "No new responses",
+      "noNewResponsesMessage": "Submitted form responses will appear here and be available in GC Forms for 45 days.",
+      "noDownloadedResponses": "No recently downloaded responses",
+      "noDownloadedResponsesMessage": "Downloaded responses will appear here until you sign off on their removal from GC Forms.",
+      "noDeletedResponses": "No responses for removal",
+      "noDeletedResponsesMessage": "Once you’ve downloaded and signed off on the removal of responses, they will be available here for 30 days.",
+      "noProblemResponses": "No responses reported with problems",
+      "noProblemResponsesMessage": "Problem responses will appear here until signed off for removal from GC Forms."
+    },
+    "notifications": {
+      "downloadComplete": "Responses moved to the “Downloaded” tab",
+      "downloadCompleteNew": "Next: Sign off on the removal of responses from GC Forms",
+      "downloadingXFiles": "Downloading {{fileCount}} files"
+    },
+    "errors": {
+      "trySelectingLessFilesHeader": "Only {{max}} responses can be downloaded at a time.",
+      "trySelectingLessFiles": "You have {{max}} responses selected. Uncheck at least 1 response before downloading.",
+      "atLeastOneFileHeader": "At least one file must be selected to download.",
+      "atLeastOneFile": "Try selecting at least one file to download.",
+      "errorDownloadingFilesHeader": "Error downloading the selected files.",
+      "errorDownloadingFiles": "Try again in a few minutes. If the problem persists, ",
+      "errorDownloadingFilesLink": "contact Support",
+      "overdueAlert": {
+        "title": "Access to new responses is restricted until overdue responses are retrieved.",
+        "description": "There are {{numberOfOverdueResponses}} responses that are {{escalatedAfter}} days old. Download and sign off on the removal of overdue responses to remove this restriction."
+      }
+    },
+    "downloadSelectedResponses": "Download selected",
+    "deleteSelectedResponses": "Delete selected",
+    "skipLink": "Skip the response table",
+    "unknown": "Unknown"
+  },
+  "downloadResponsesModals": {
+    "downloadDialog": {
+      "title": "Download responses",
+      "chooseDownloadFormat": "Choose the format of response files",
+      "downloadFormatContext1": "You’ll get an ",
+      "downloadFormatContext2": "Official receipt",
+      "downloadFormatContext3": " with the response files you download. Keep this receipt to verify that responses made it safely from GC Forms to your computer.",
+      "html": "Individual response files",
+      "htmlDescription": "Separate files for each form submission",
+      "csv": "CSV",
+      "csvDescription": "For lists, spreadsheets, or tables",
+      "json": "JSON",
+      "jsonDescription": "For API or data configuration",
+      "downloadAllAsZip": "Download all as ZIP (compressed) file",
+      "cancel": "Cancel",
+      "download": "Download"
+    },
+    "confirmDeleteNewDialog": {
+      "confirmAndDelete": "Confirm the removal of new responses",
+      "responsesNotYetDownloaded": "Responses not yet downloaded",
+      "alertBody": "You’ve not downloaded the responses you’re about to remove. If you remove these responses, they will be deleted permanently from GC Forms after 30 days.",
+      "deletePrompt": "To proceed with the removal of non-downloaded responses enter the word “DELETE” below.",
+      "required": "Required",
+      "cancel": "Cancel",
+      "delete": "Delete",
+      "deleteConfirmationString": "DELETE"
+    },
+    "confirmReceiptDialog": {
+      "title": "Sign off on the removal of responses from GC Forms",
+      "contentHeading": "GC Forms requires verification that responses were downloaded successfully",
+      "contentBody": "Why? Because things can go wrong when digital files move between computers. This step helps to verify that all files made it safely to your computer.",
+      "copyCode": "Copy-paste receipt codes from the <italic>Official Receipt and Record</italic> file",
+      "copyCodeNote": "Use button at the top of the receipt file you got with the downloaded responses",
+      "confirmReceipt": "Submit receipt codes",
+      "errors": {
+        "minEntries": {
+          "title": "At least one response must be specified",
+          "description": "Enter receipt codes from downloaded responses to confirm having received them."
+        },
+        "maxEntries": {
+          "title": "Only {{max}} responses can be reported at a time.",
+          "description": "Submit {{max}} receipt codes before adding more."
+        },
+        "errorEntries": {
+          "title": "Some receipt codes could not be submitted",
+          "description": "Check that the receipt codes are correct and try again."
+        },
+        "invalidEntry": {
+          "title": "The receipt code does not match the required format",
+          "description": "Receipt codes for sign off are found in the <italic>Official receipt and record</italic> file that downloaded with your responses."
+        },
+        "unknown": {
+          "title": "Sorry, there’s a problem with the site",
+          "description": "Wait a few minutes and try again, or ",
+          "descriptionLink": " contact Support"
+        }
+      }
+    },
+    "reportProblemsDialog": {
+      "title": "Report a problem with responses",
+      "findForm": "Find the submission ID in the list for responses that will not download or open. It looks like 31-12-XCRV.",
+      "enterFormNumbers": "Enter up-to {{max}} submission IDs, one per line.",
+      "problemReported": "After you report the problem, we will contact you to help resolve the problem.",
+      "reportProblems": "Report problem",
+      "describeProblem": "Describe the problem",
+      "errors": {
+        "minEntries": {
+          "title": "At least one submission must be specified",
+          "description": "Enter submission IDs for responses that have a problem."
+        },
+        "maxEntries": {
+          "title": "Only {{max}} problems can be reported at a time",
+          "description": "Submit {{max}} submission IDs before adding more."
+        },
+        "errorEntries": {
+          "title": "Some submission IDs were not submitted",
+          "description": "Check that the submission IDs are correct and try again."
+        },
+        "invalidEntry": {
+          "title": "The submission ID does not match the required format",
+          "description": "Check that the submission ID format is correct and try again."
+        },
+        "unknown": {
+          "title": "Sorry, there’s a problem with the site",
+          "description": "Wait a few minutes and try again, or  ",
+          "descriptionLink": "contact Support"
+        },
+        "notEmpty": "Cannot be empty."
+      }
+    },
+    "lineItemEntries": {
+      "added": "Added",
+      "removed": "Removed"
+    },
+    "sending": "Sending...",
+    "cancel": "Cancel"
+  },
+  "loading": "Loading..."
+}

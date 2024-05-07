@@ -2,17 +2,10 @@ describe("Accounts Page", () => {
   const adminUserEmail = "test.admin@cds-snc.ca";
   const testUserEmail = "test.user@cds-snc.ca";
   const deactivatedUserEmail = "test.deactivated@cds-snc.ca";
-
   beforeEach(() => {
-    cy.login({ admin: true, acceptableUse: true });
+    cy.userSession({ admin: true });
     cy.visitPage("/en/admin/accounts");
   });
-
-  // Note: monitor perf of this. So far seems excellent!
-  afterEach(() => {
-    cy.resetAll();
-  });
-
   it("Accounts page loads with title", () => {
     cy.get("h1").should("contain", "Accounts");
   });

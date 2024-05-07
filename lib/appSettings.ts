@@ -53,6 +53,40 @@ export const getAppSetting = async (internalId: string) => {
   return uncachedSetting?.value ?? null;
 };
 
+export const getFullAppSetting = async (ability: UserAbility, internalId: string) => {
+  checkPrivileges(ability, [{ action: "view", subject: "Setting" }]);
+  // Note: the setting is not cached here because it's not expected to be called frequently
+  const result = prisma.setting
+    .findUnique({
+      where: {
+        internalId,
+      },
+      select: {
+        internalId: true,
+        nameEn: true,
+        nameFr: true,
+        descriptionEn: true,
+        descriptionFr: true,
+        value: true,
+      },
+    })
+    .catch((e) => {
+      if (e instanceof AccessControlError) {
+        logEvent(
+          ability.userID,
+          { type: "Setting", id: internalId },
+          "AccessDenied",
+          "Attempted to get full setting"
+        );
+        throw e;
+      }
+      prismaErrors(e, null);
+    });
+
+  logEvent(ability.userID, { type: "Setting" }, "ListSetting");
+  return result;
+};
+
 interface SettingUpdateData {
   nameEn?: string;
   nameFr?: string;

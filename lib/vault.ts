@@ -18,7 +18,7 @@ import { AccessControlError, checkPrivileges } from "./privileges";
 import { chunkArray } from "@lib/utils";
 import { TemplateAlreadyPublishedError } from "@lib/templates";
 import { getAppSetting } from "./appSettings";
-import { runPromisesSynchronously } from "./clientHelpers";
+import { runPromisesSynchronously } from "./client/clientHelpers";
 
 /**
  * Returns the users associated with a Template
@@ -122,6 +122,7 @@ export async function listAllSubmissions(
   ability: UserAbility,
   formID: string,
   status?: VaultStatus,
+  responseDownloadLimit?: number,
   lastEvaluatedKey: Record<string, string> | null | undefined = null
 ): Promise<{
   submissions: VaultSubmissionList[];
@@ -143,7 +144,9 @@ export async function listAllSubmissions(
         );
       throw e;
     });
-    const responseDownloadLimit = Number(await getAppSetting("responseDownloadLimit"));
+    if (!responseDownloadLimit) {
+      responseDownloadLimit = Number(await getAppSetting("responseDownloadLimit"));
+    }
     // We're going to request one more than the limit so we can consistently determine if there are more responses
     const responseRetrievalLimit = responseDownloadLimit + 1;
 
@@ -246,7 +249,8 @@ export async function listAllSubmissions(
       lastEvaluatedKey: paginationLastEvaluatedKey,
     };
   } catch (e) {
-    logMessage.error(e);
+    // Expected to error in APP_ENV test mode as dynamodb is not available
+    if (process.env.APP_ENV !== "test") logMessage.error(e);
     return { submissions: [], submissionsRemaining: true, lastEvaluatedKey: undefined };
   }
 }
@@ -348,7 +352,8 @@ export async function retrieveSubmissions(
         "AccessDenied",
         `Attempted to retrieve responses for form ${formID}`
       );
-    logMessage.error(e);
+    // Expected to error in APP_ENV test mode as dynamodb is not available
+    if (process.env.APP_ENV !== "test") logMessage.error(e);
     return [];
   }
 }

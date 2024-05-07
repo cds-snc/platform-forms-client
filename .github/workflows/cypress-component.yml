@@ -1,0 +1,48 @@
+name: Cypress Component Tests
+on:
+  pull_request:
+    branches: [develop, main, feature/*]
+
+jobs:
+  cypress-run:
+    name: Cypress Component Tests
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@0ad4b8fadaa221de15dcec353f45205ec38ea70b # v1.2.0
+      - name: Node.JS Setup
+        uses: actions/setup-node@60edb5dd545a775178f52524783378180af0d1f8 # v4.0.2
+        with:
+          node-version-file: .nvmrc
+
+      - name: Yarn update to V4
+        run: corepack enable && yarn set version berry
+
+      - name: Get yarn cache directory path
+        id: yarn-cache-dir-path
+        run: echo "dir=$(yarn config get cacheFolder)" >> $GITHUB_OUTPUT
+
+      - uses: actions/cache@0c45773b623bea8c8e75f6c82b208c3cf94ea4f9 # v4.0.2
+        id: yarn-cache # use this to check for `cache-hit` (`steps.yarn-cache.outputs.cache-hit != 'true'`)
+        with:
+          path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
+          key: linux-yarn-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: |
+            linux-yarn-
+
+      - name: "Install dependencies"
+        run: yarn workspaces focus gcforms flag_initialization
+
+      - name: Cypress Component Tests
+        uses: cypress-io/github-action@1b70233146622b69e789ccdd4f9452adc638d25a # v6.6.1
+        with:
+          # we have already installed all dependencies above
+          install: false
+          browser: chrome
+          component: true
+          headed: false
+      - uses: actions/upload-artifact@65462800fd760344b1a7b4382951275a0abb4808 # tag=v4.3.3
+        if: failure()
+        with:
+          name: cypress-screenshots
+          path: cypress/screenshots

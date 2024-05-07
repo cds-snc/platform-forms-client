@@ -1,4 +1,4 @@
-import { NextApiRequest, NextApiResponse } from "next";
+import { type NextRequest, NextResponse } from "next/server";
 import { Session } from "next-auth";
 
 export interface LambdaResponse<T> {
@@ -14,12 +14,13 @@ export type UploadResult = {
 
 export interface MiddlewareReturn {
   next: boolean;
-  props?: MiddlewareProps;
+  props?: Record<string, unknown>;
+  response?: NextResponse;
 }
 
 export type MiddlewareRequest = (
-  req: NextApiRequest,
-  res: NextApiResponse
+  req: NextRequest,
+  reqBody: Record<string, unknown>
 ) => Promise<MiddlewareReturn>;
 
 export interface MiddlewareProps {
@@ -27,6 +28,8 @@ export interface MiddlewareProps {
   session?: Session;
   email?: string;
   temporaryToken?: string;
+  params?: Record<string, string | string[]>;
+  body: Record<string, unknown>;
 }
 
 export type WithRequired<T, K extends keyof T> = T & Required<Pick<T, K>>;
@@ -40,3 +43,5 @@ export type HTMLTextInputTypeAttribute =
   | "search"
   | "tel"
   | "url";
+
+export type SearchParams = { [key: string]: string | string[] | undefined };

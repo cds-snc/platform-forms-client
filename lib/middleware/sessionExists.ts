@@ -1,15 +1,7 @@
-import { NextApiRequest, NextApiResponse } from "next";
-import { isAuthenticated } from "@lib/auth";
-import { MiddlewareReturn } from "@lib/types";
+import { NextResponse } from "next/server";
 
-const useMethods = (req: NextApiRequest, methods?: string[]) => {
-  if (methods && req.method) {
-    return methods.includes(req.method);
-  } else {
-    // If no methods are defined check user session against all requests
-    return true;
-  }
-};
+import { MiddlewareReturn } from "@lib/types";
+import { auth } from "@lib/auth";
 
 /**
  * Checks if the session is authenticated for requested HTTP method
@@ -17,22 +9,18 @@ const useMethods = (req: NextApiRequest, methods?: string[]) => {
  * @returns boolean, true if middleware blocked the request
  */
 
-export const sessionExists = (methods?: string[]) => {
-  return async (req: NextApiRequest, res: NextApiResponse): Promise<MiddlewareReturn> => {
-    const session = await isAuthenticated({ req, res });
+export const sessionExists = () => {
+  return async (): Promise<MiddlewareReturn> => {
+    const session = await auth();
 
     // If user is not authenticated or has a deactivated account, return 401
-    if (useMethods(req, methods) && (!session || session.user.deactivated)) {
-      res.status(401).json({ error: "Unauthorized" });
-      return { next: false };
+    if (!session || session.user.deactivated) {
+      return {
+        next: false,
+        response: NextResponse.json({ error: "Unauthorized" }, { status: 401 }),
+      };
     }
 
-    // If there is a session, return the session as props
-    if (session) {
-      return { next: true, props: { session } };
-    }
-
-    // If there is no session but the method is not required to be authenticated
-    return { next: true };
+    return { next: true, props: { session } };
   };
 };

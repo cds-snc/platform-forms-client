@@ -19,7 +19,7 @@ export type { Submission, SubmissionRequestBody } from "./submission-types";
 
 export type { Response, Responses, FileInputResponse } from "./form-response-types";
 
-export type PageProps = {
+export type FormBuilderPageProps = {
   tab: string;
   initialForm: FormRecord | null;
   publicForm: FormRecord | null;
@@ -40,15 +40,10 @@ export type {
   MiddlewareProps,
   HTMLTextInputTypeAttribute,
   WithRequired,
+  SearchParams,
 } from "./utility-types";
 
-export type {
-  BearerTokenPayload,
-  TemporaryTokenPayload,
-  BearerResponse,
-  VaultSubmission,
-  VaultSubmissionList,
-} from "./retrieval-types";
+export type { VaultSubmission, VaultSubmissionList } from "./retrieval-types";
 
 export { VaultStatus } from "./retrieval-types";
 

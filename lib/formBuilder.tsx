@@ -12,7 +12,8 @@ import {
   TextArea,
   TextInput,
   ConditionalWrapper,
-} from "@components/forms";
+  Combobox,
+} from "@clientComponents/forms";
 import {
   FormElement,
   FormElementTypes,
@@ -21,20 +22,8 @@ import {
   Responses,
   Response,
 } from "@lib/types";
-import { TFunction } from "next-i18next";
-
-// This function is used for the i18n change of form labels
-export function getProperty(field: string, lang: string): string {
-  try {
-    if (!field) {
-      return lang;
-    }
-    return field + lang.charAt(0).toUpperCase() + lang.slice(1);
-  } catch (err) {
-    logMessage.error(err as Error);
-    throw err;
-  }
-}
+import { getLocalizedProperty } from "@lib/utils";
+import { managedData } from "@lib/managedData";
 
 // This function is used for select/radio/checkbox i18n change of form labels
 function getLocaleChoices(choices: Array<PropertyChoices> | undefined, lang: string) {
@@ -53,13 +42,20 @@ function getLocaleChoices(choices: Array<PropertyChoices> | undefined, lang: str
 }
 
 // This function renders the form elements with passed in properties.
-function _buildForm(element: FormElement, lang: string, t: TFunction): ReactElement {
+function _buildForm(element: FormElement, lang: string): ReactElement {
   const id = element.subId ?? element.id;
 
-  const choices =
+  let choices =
     element.properties && element.properties.choices
       ? getLocaleChoices(element.properties.choices, lang)
       : [];
+
+  // Retrieve managed data from static json file if specified
+  if (element.properties.managedChoices) {
+    const dataFile = element.properties.managedChoices;
+    const data = managedData[dataFile];
+    choices = data ? getLocaleChoices(data, lang) : [];
+  }
 
   const subElements =
     element.properties && element.properties.subElements ? element.properties.subElements : [];
@@ -68,7 +64,7 @@ function _buildForm(element: FormElement, lang: string, t: TFunction): ReactElem
     ? element.properties.validation.required
     : false;
 
-  const labelText = element.properties[getProperty("title", lang)]?.toString();
+  const labelText = element.properties[getLocalizedProperty("title", lang)]?.toString();
   const labelComponent = labelText ? (
     <Label
       key={`label-${id}`}
@@ -92,10 +88,10 @@ function _buildForm(element: FormElement, lang: string, t: TFunction): ReactElem
       ? element.properties.validation.type
       : "text";
 
-  const placeHolderPerLocale = element.properties[getProperty("placeholder", lang)];
+  const placeHolderPerLocale = element.properties[getLocalizedProperty("placeholder", lang)];
   const placeHolder = placeHolderPerLocale ? placeHolderPerLocale.toString() : "";
 
-  const descriptionPerLocale = element.properties[getProperty("description", lang)];
+  const descriptionPerLocale = element.properties[getLocalizedProperty("description", lang)];
   const description = descriptionPerLocale ? descriptionPerLocale.toString() : "";
 
   switch (element.type) {
@@ -113,12 +109,6 @@ function _buildForm(element: FormElement, lang: string, t: TFunction): ReactElem
             placeholder={placeHolder.toString()}
             autoComplete={element.properties.autoComplete?.toString()}
             maxLength={element.properties.validation?.maxLength}
-            characterCountMessages={{
-              part1: t("formElements.characterCount.part1"),
-              part2: t("formElements.characterCount.part2"),
-              part1Error: t("formElements.characterCount.part1-error"),
-              part2Error: t("formElements.characterCount.part2-error"),
-            }}
           />
         </div>
       );
@@ -134,12 +124,6 @@ function _buildForm(element: FormElement, lang: string, t: TFunction): ReactElem
             ariaDescribedBy={description ? `desc-${id}` : undefined}
             placeholder={placeHolder.toString()}
             maxLength={element.properties.validation?.maxLength}
-            characterCountMessages={{
-              part1: t("formElements.characterCount.part1"),
-              part2: t("formElements.characterCount.part2"),
-              part1Error: t("formElements.characterCount.part1-error"),
-              part2Error: t("formElements.characterCount.part2-error"),
-            }}
           />
         </div>
       );
@@ -243,11 +227,23 @@ function _buildForm(element: FormElement, lang: string, t: TFunction): ReactElem
           rowLabel={placeHolder}
           rowElements={subElements}
           lang={lang}
-          t={t}
           maxNumberOfRows={element.properties.maxNumberOfRows}
         />
       );
     }
+    case FormElementTypes.combobox:
+      return (
+        <div className="focus-group">
+          {labelComponent}
+          {description && <Description id={`${id}`}>{description}</Description>}
+          <Combobox
+            id={`${id}`}
+            name={`${id}`}
+            ariaDescribedBy={description ? `desc-${id}` : undefined}
+            choices={choices}
+          />
+        </div>
+      );
     default:
       return <></>;
   }
@@ -259,12 +255,12 @@ function _buildForm(element: FormElement, lang: string, t: TFunction): ReactElem
  * @param formRecord
  * @param language
  */
-export const getRenderedForm = (formRecord: PublicFormRecord, language: string, t: TFunction) => {
+export const getRenderedForm = (formRecord: PublicFormRecord, language: string) => {
   return formRecord.form.layout
     .map((item: number) => {
       const element = formRecord.form.elements.find((element: FormElement) => element.id === item);
       if (element) {
-        return <GenerateElement key={element.id} element={element} language={language} t={t} />;
+        return <GenerateElement key={element.id} element={element} language={language} />;
       }
     })
     .filter((element): element is JSX.Element => typeof element !== "undefined");
@@ -280,13 +276,14 @@ const _getElementInitialValue = (element: FormElement, language: string): Respon
     // Radio and dropdown resolve to string values
     case FormElementTypes.radio:
     case FormElementTypes.dropdown:
+    case FormElementTypes.combobox:
     case FormElementTypes.textField:
     case FormElementTypes.textArea:
       return "";
     case FormElementTypes.checkbox:
       return [];
     case FormElementTypes.fileInput:
-      return { file: null, src: null, name: "", size: 0 };
+      return { name: null, size: null, based64EncodedFile: null };
     case FormElementTypes.dynamicRow: {
       const dynamicRowInitialValue: Responses =
         element.properties.subElements?.reduce((accumulator, currentValue, currentIndex) => {
@@ -330,11 +327,10 @@ export const getFormInitialValues = (formRecord: PublicFormRecord, language: str
 type GenerateElementProps = {
   element: FormElement;
   language: string;
-  t: TFunction;
 };
 export const GenerateElement = (props: GenerateElementProps): React.ReactElement => {
-  const { element, language, t } = props;
-  const generatedElement = _buildForm(element, language, t);
+  const { element, language } = props;
+  const generatedElement = _buildForm(element, language);
   return (
     <ConditionalWrapper element={element} rules={element.properties.conditionalRules || null}>
       {generatedElement}

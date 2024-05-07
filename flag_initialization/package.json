@@ -10,8 +10,8 @@
   "keywords": [],
   "author": "Bryan Robitaille",
   "dependencies": {
-    "dotenv": "16.0.1",
-    "ioredis": "5.2.3"
+    "dotenv": "16.3.1",
+    "ioredis": "5.3.2"
   },
   "packageManager": "yarn@4.0.2"
 }

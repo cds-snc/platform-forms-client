@@ -56,7 +56,7 @@ const mockedLogEvent = jest.mocked(logEvent, { shallow: true });
 
 jest.mock("@lib/vault");
 
-const mockNumberOfUnprocessedSubmissions = jest.mocked(unprocessedSubmissions, {
+const mockUnprocessedSubmissions = jest.mocked(unprocessedSubmissions, {
   shallow: true,
 });
 
@@ -106,6 +106,13 @@ describe("Template CRUD functions", () => {
       },
       select: {
         id: true,
+        created_at: true,
+        deliveryOption: true,
+        isPublished: true,
+        jsonConfig: true,
+        name: true,
+        securityAttribute: true,
+        updated_at: true,
       },
     });
 
@@ -136,7 +143,7 @@ describe("Template CRUD functions", () => {
       buildPrismaResponse("formtestID2", formConfiguration),
     ]);
 
-    const templates = await getAllTemplates(ability, "1");
+    const templates = await getAllTemplates(ability);
 
     expect(templates).toEqual([
       expect.objectContaining({
@@ -188,7 +195,7 @@ describe("Template CRUD functions", () => {
 
     (prismaMock.template.findMany as jest.MockedFunction<any>).mockResolvedValue([]);
 
-    const template = await getAllTemplates(ability, "1");
+    const template = await getAllTemplates(ability);
     expect(template).toEqual([]);
     expect(mockedLogEvent).toBeCalledTimes(0);
   });
@@ -206,7 +213,7 @@ describe("Template CRUD functions", () => {
       buildPrismaResponse("formtestID", formConfiguration),
     ]);
 
-    await getAllTemplates(ability, "1");
+    await getAllTemplates(ability);
 
     expect(prismaMock.template.findMany).toHaveBeenCalledWith({
       where: {
@@ -241,7 +248,7 @@ describe("Template CRUD functions", () => {
       buildPrismaResponse("formtestID", formConfiguration),
     ]);
 
-    await getAllTemplates(ability, "1");
+    await getAllTemplates(ability);
 
     expect(prismaMock.template.findMany).toHaveBeenCalledWith({
       where: {
@@ -839,7 +846,7 @@ describe("Template CRUD functions", () => {
       buildPrismaResponse("formtestID", formConfiguration)
     );
 
-    mockNumberOfUnprocessedSubmissions.mockResolvedValueOnce(0);
+    mockUnprocessedSubmissions.mockResolvedValueOnce(false);
 
     const deletedTemplate = await deleteTemplate(ability, "formtestID");
 
@@ -897,7 +904,7 @@ describe("Template CRUD functions", () => {
         buildPrismaResponse("formtestID", formConfiguration)
       );
 
-      mockNumberOfUnprocessedSubmissions.mockResolvedValueOnce(1);
+      mockUnprocessedSubmissions.mockResolvedValueOnce(true);
 
       await expect(async () => {
         await deleteTemplate(ability, "formtestID");
@@ -949,7 +956,7 @@ describe("Template CRUD functions", () => {
     }).rejects.toThrowError(new AccessControlError(`Access Control Forbidden Action`));
 
     await expect(async () => {
-      await getAllTemplates(ability, "1");
+      await getAllTemplates(ability);
     }).rejects.toThrowError(new AccessControlError(`Access Control Forbidden Action`));
 
     await expect(async () => {

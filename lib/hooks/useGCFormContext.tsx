@@ -1,6 +1,13 @@
+"use client";
 import React, { createContext, useContext, ReactNode } from "react";
 import { PublicFormRecord } from "@lib/types";
-import { mapIdsToValues, FormValues, idArraysMatch, GroupsType } from "@lib/formContext";
+import {
+  mapIdsToValues,
+  FormValues,
+  idArraysMatch,
+  GroupsType,
+  getNextAction,
+} from "@lib/formContext";
 
 interface GCFormsContextValueType {
   updateValues: ({ formValues }: { formValues: FormValues }) => void;
@@ -33,8 +40,13 @@ export const GCFormsProvider = ({
 
   const handleNextAction = () => {
     if (!currentGroup) return;
+
     if (hasNextAction(currentGroup)) {
-      setCurrentGroup(groups[currentGroup].nextAction as string);
+      const nextAction = getNextAction(groups, currentGroup, matchedIds);
+
+      if (typeof nextAction === "string") {
+        setCurrentGroup(nextAction);
+      }
     }
   };
 
@@ -45,7 +57,6 @@ export const GCFormsProvider = ({
   }): void => {
     values.current = formValues;
     const valueIds = mapIdsToValues(formRecord, formValues);
-
     if (!idArraysMatch(matchedIds, valueIds)) {
       setMatchedIds(valueIds);
     }

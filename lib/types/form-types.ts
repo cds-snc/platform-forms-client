@@ -44,6 +44,7 @@ export interface ElementProperties {
   descriptionFr?: string;
   validation?: ValidationProperties | undefined;
   choices?: PropertyChoices[];
+  managedChoices?: string;
   subElements?: FormElement[];
   fileType?: string | undefined;
   headingLevel?: string | undefined;
@@ -76,7 +77,9 @@ export enum FormElementTypes {
   address = "address",
   name = "name",
   firstMiddleLastName = "firstMiddleLastName",
+  departments = "departments",
   contact = "contact",
+  combobox = "combobox",
 }
 // used to define attributes for a form element or field
 export interface FormElement {
@@ -150,10 +153,8 @@ export type FormRecord = {
   deliveryOption?: DeliveryOption;
   securityAttribute: SecurityAttribute;
   closingDate?: string;
-  bearerToken?: string;
-  reCaptchaID?: string;
   [key: string]: string | boolean | FormProperties | DeliveryOption | undefined;
 };
 
 // defines the fields for the form record that is available to unauthenticated users
-export type PublicFormRecord = TypeOmit<FormRecord, "name" | "deliveryOption" | "bearerToken">;
+export type PublicFormRecord = TypeOmit<FormRecord, "name" | "deliveryOption">;

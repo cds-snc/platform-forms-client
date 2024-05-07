@@ -5,7 +5,6 @@ describe("TSB Contact Form functionality", () => {
     cy.get<string>("@formID").then((createdID) => (formID = createdID));
   });
   beforeEach(() => {
-    cy.useFlag("formTimer", false);
     cy.visitForm(formID);
   });
 

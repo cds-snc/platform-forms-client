@@ -5,14 +5,11 @@ describe("CDS Intake Form functionality", () => {
     cy.get<string>("@formID").then((createdID) => (formID = createdID));
   });
   beforeEach(() => {
-    cy.useFlag("formTimer", false);
     cy.visitForm(formID);
-  });
-  it("CDS Intake Form renders", () => {
-    cy.get("h1").contains("CDS Intake Form");
   });
 
   it("Fill out and Submit the form", () => {
+    cy.get("h1").contains("CDS Intake Form");
     cy.typeInField("input[id='1']", "Santa");
     cy.typeInField("input[id='2']", "santa@northpole.global");
     cy.typeInField("input[id='3']", "Self-Employed");

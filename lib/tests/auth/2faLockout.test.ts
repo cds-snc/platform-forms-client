@@ -3,7 +3,7 @@
  */
 
 import Redis from "ioredis-mock";
-import { registerFailed2FAAttempt, clear2FALockout } from "@lib/auth";
+import { registerFailed2FAAttempt, clear2FALockout } from "@lib/auth/2faLockout";
 
 const redis = new Redis();
 
