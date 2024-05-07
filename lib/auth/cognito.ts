@@ -1,5 +1,4 @@
 import {
-  CognitoIdentityProviderClient,
   AdminInitiateAuthCommand,
   AdminInitiateAuthCommandInput,
   CognitoIdentityProviderServiceException,
@@ -10,12 +9,10 @@ import { generateVerificationCode, sendVerificationCode } from "./2fa";
 import { registerFailed2FAAttempt, clear2FALockout } from "./2faLockout";
 import { logMessage } from "@lib/logger";
 import { serverTranslation } from "@i18n";
-import { getOrigin } from "@lib/origin";
+import { cognitoIdentityProviderClient } from "@lib/integration/awsServicesConnector";
 
 if (
-  (!process.env.COGNITO_APP_CLIENT_ID ||
-    !process.env.COGNITO_REGION ||
-    !process.env.COGNITO_USER_POOL_ID) &&
+  (!process.env.COGNITO_APP_CLIENT_ID || !process.env.COGNITO_USER_POOL_ID) &&
   process.env.APP_ENV !== "test"
 )
   throw new Error("Missing Cognito Credentials");
@@ -62,19 +59,9 @@ export const initiateSignIn = async ({
   };
 
   try {
-    const cognitoClient = new CognitoIdentityProviderClient({
-      region: process.env.COGNITO_REGION,
-      ...((process.env.NODE_ENV === "development" || getOrigin() === "http://localhost:3000") && {
-        credentials: {
-          accessKeyId: process.env.COGNITO_ACCESS_KEY ?? "",
-          secretAccessKey: process.env.COGNITO_SECRET_KEY ?? "",
-        },
-      }),
-    });
-
     const adminInitiateAuthCommand = new AdminInitiateAuthCommand(params);
 
-    const response = await cognitoClient.send(adminInitiateAuthCommand);
+    const response = await cognitoIdentityProviderClient.send(adminInitiateAuthCommand);
 
     const idToken = response.AuthenticationResult?.IdToken;
 

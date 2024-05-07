@@ -1,5 +1,6 @@
-import { SQSClient, GetQueueUrlCommand, SendMessageCommand } from "@aws-sdk/client-sqs";
+import { GetQueueUrlCommand, SendMessageCommand } from "@aws-sdk/client-sqs";
 import { logMessage } from "./logger";
+import { sqsClient } from "./integration/awsServicesConnector";
 
 export enum AuditLogEvent {
   // Form Events
@@ -54,29 +55,23 @@ export enum AuditSubjectType {
   Setting = "Setting",
 }
 
-let sqsClient: SQSClient | null = null;
-let queueUrl: string | null = null;
+let queueUrlRef: string | null = null;
 
-const getQueueURL = async (client: SQSClient) => {
-  const data = await client.send(
-    new GetQueueUrlCommand({
-      QueueName: "audit_log_queue",
-    })
-  );
-  return data.QueueUrl ?? null;
-};
+const getQueueURL = async () => {
+  if (!queueUrlRef) {
+    if (process.env.AUDIT_LOG_QUEUE_URL) {
+      queueUrlRef = process.env.AUDIT_LOG_QUEUE_URL;
+    } else {
+      const data = await sqsClient.send(
+        new GetQueueUrlCommand({
+          QueueName: "audit_log_queue",
+        })
+      );
+      queueUrlRef = data.QueueUrl ?? null;
+    }
+  }
 
-const getSQSClient = async () => {
-  if (!sqsClient) {
-    sqsClient = new SQSClient({
-      region: process.env.AWS_REGION ?? "ca-central-1",
-      ...(process.env.LOCAL_AWS_ENDPOINT && { endpoint: process.env.LOCAL_AWS_ENDPOINT }),
-    });
-  }
-  if (!queueUrl) {
-    queueUrl = process.env.AUDIT_LOG_QUEUE_URL ?? (await getQueueURL(sqsClient));
-  }
-  return sqsClient;
+  return queueUrlRef;
 };
 
 export const logEvent = async (
@@ -93,9 +88,9 @@ export const logEvent = async (
     description,
   });
   try {
-    const client = await getSQSClient();
-    if (!queueUrl || !sqsClient) throw new Error("Audit Log Queue not connected");
-    await client.send(
+    const queueUrl = await getQueueURL();
+    if (!queueUrl) throw new Error("Audit Log Queue not connected");
+    await sqsClient.send(
       new SendMessageCommand({
         MessageBody: auditLog,
         QueueUrl: queueUrl,

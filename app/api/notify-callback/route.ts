@@ -1,25 +1,31 @@
 import { NextResponse } from "next/server";
 import { logMessage } from "@lib/logger";
-import { SQSClient, GetQueueUrlCommand, SendMessageCommand } from "@aws-sdk/client-sqs";
+import { GetQueueUrlCommand, SendMessageCommand } from "@aws-sdk/client-sqs";
 import { middleware } from "@lib/middleware";
 import { MiddlewareRequest, MiddlewareReturn } from "@lib/types";
 import { UpdateCommand } from "@aws-sdk/lib-dynamodb";
-import { dynamodbClient } from "@lib/integration/dynamodbConnector";
+import { dynamoDBDocumentClient, sqsClient } from "@lib/integration/awsServicesConnector";
 import { headers } from "next/headers";
+
 const SQS_REPROCESS_SUBMISSION_QUEUE_NAME = "reprocess_submission_queue.fifo";
 
-const sqsClient = new SQSClient({
-  region: process.env.AWS_REGION ?? "ca-central-1",
-  endpoint: process.env.LOCAL_AWS_ENDPOINT,
-});
+let queueUrlRef: string | null = null;
 
 const getQueueURL = async () => {
-  const data = await sqsClient.send(
-    new GetQueueUrlCommand({
-      QueueName: SQS_REPROCESS_SUBMISSION_QUEUE_NAME,
-    })
-  );
-  return data.QueueUrl;
+  if (!queueUrlRef) {
+    if (process.env.REPROCESS_SUBMISSION_QUEUE_URL) {
+      queueUrlRef = process.env.REPROCESS_SUBMISSION_QUEUE_URL;
+    } else {
+      const data = await sqsClient.send(
+        new GetQueueUrlCommand({
+          QueueName: SQS_REPROCESS_SUBMISSION_QUEUE_NAME,
+        })
+      );
+      queueUrlRef = data.QueueUrl ?? null;
+    }
+  }
+
+  return queueUrlRef;
 };
 
 /**
@@ -40,7 +46,7 @@ async function removeProcessedMark(submissionID: string) {
     ReturnValues: "NONE" as const,
   };
 
-  return dynamodbClient.send(new UpdateCommand(updateItem));
+  return dynamoDBDocumentClient.send(new UpdateCommand(updateItem));
 }
 
 /**
@@ -147,13 +153,14 @@ export const POST = middleware([validAuthorizationHeader()], async (req, props) 
     // Remove previous process completion identifier
     await removeProcessedMark(submissionID);
 
-    const reprocessQueueURL = process.env.REPROCESS_SUBMISSION_QUEUE_URL ?? (await getQueueURL());
+    const queueUrl = await getQueueURL();
+    if (!queueUrl) throw new Error("Reprocess Submission Queue not connected");
 
     const sendMessageCommand = new SendMessageCommand({
       MessageBody: JSON.stringify({ submissionID: submissionID }),
       MessageDeduplicationId: submissionID,
       MessageGroupId: "Group-" + submissionID,
-      QueueUrl: reprocessQueueURL,
+      QueueUrl: queueUrl,
     });
 
     await sqsClient.send(sendMessageCommand);

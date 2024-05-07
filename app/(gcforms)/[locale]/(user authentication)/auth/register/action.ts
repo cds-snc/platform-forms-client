@@ -10,11 +10,11 @@ import {
 import { serverTranslation } from "@i18n";
 import { begin2FAAuthentication, initiateSignIn } from "@lib/auth";
 import {
-  CognitoIdentityProviderClient,
   SignUpCommand,
   SignUpCommandInput,
   CognitoIdentityProviderServiceException,
 } from "@aws-sdk/client-cognito-identity-provider";
+import { cognitoIdentityProviderClient } from "@lib/integration/awsServicesConnector";
 
 export interface ErrorStates {
   authError?: {
@@ -99,7 +99,7 @@ export const register = async (
   _: ErrorStates,
   formData: FormData
 ): Promise<ErrorStates> => {
-  const { COGNITO_REGION, COGNITO_APP_CLIENT_ID } = process.env;
+  const { COGNITO_APP_CLIENT_ID } = process.env;
   const { t } = await serverTranslation("cognito-errors", { lang: language });
   const rawFormData = Object.fromEntries(formData.entries());
 
@@ -126,16 +126,11 @@ export const register = async (
     ],
   };
 
-  // instantiate the cognito client object. cognito is region specific and so a region must be specified
-  const cognitoClient = new CognitoIdentityProviderClient({
-    region: COGNITO_REGION,
-  });
-
   // instantiate the signup command object
   const signUpCommand = new SignUpCommand(params);
 
   try {
-    await cognitoClient.send(signUpCommand);
+    await cognitoIdentityProviderClient.send(signUpCommand);
   } catch (err) {
     // if there is an error, forward the status code and the error message as the body
 
