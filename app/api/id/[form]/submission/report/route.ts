@@ -3,13 +3,9 @@ import { logMessage } from "@lib/logger";
 import { middleware, jsonValidator, sessionExists } from "@lib/middleware";
 import { createTicket } from "@lib/integration/freshdesk";
 import downloadReportProblemSchema from "@lib/middleware/schemas/download-report-problem-schema.json";
-import {
-  BatchGetCommand,
-  DynamoDBDocumentClient,
-  TransactWriteCommand,
-} from "@aws-sdk/lib-dynamodb";
+import { BatchGetCommand, TransactWriteCommand } from "@aws-sdk/lib-dynamodb";
 import { MiddlewareProps, VaultStatus, WithRequired } from "@lib/types";
-import { connectToDynamo } from "@lib/integration/dynamodbConnector";
+import { dynamodbClient } from "@lib/integration/dynamodbConnector";
 import { createAbility, AccessControlError } from "@lib/privileges";
 import { checkUserHasTemplateOwnership } from "@lib/templates";
 import { logEvent } from "@lib/auditLogs";
@@ -18,8 +14,7 @@ const MAXIMUM_SUBMISSION_NAMES_PER_REQUEST = 20;
 
 async function getSubmissionsFromSubmissionNames(
   formId: string,
-  submissionNames: string[],
-  dynamoDbClient: DynamoDBDocumentClient
+  submissionNames: string[]
 ): Promise<{
   submissionsToReport: { name: string; confirmationCode: string }[];
   submissionNamesAlreadyUsed: string[];
@@ -48,7 +43,7 @@ async function getSubmissionsFromSubmissionNames(
     });
 
     // eslint-disable-next-line no-await-in-loop
-    const response = await dynamoDbClient.send(request);
+    const response = await dynamodbClient.send(request);
 
     if (response.Responses?.Vault) {
       response.Responses.Vault.forEach((record) => {
@@ -95,8 +90,7 @@ async function getSubmissionsFromSubmissionNames(
 
 async function report(
   formId: string,
-  submissionsToReport: { name: string; confirmationCode: string }[],
-  dynamoDbClient: DynamoDBDocumentClient
+  submissionsToReport: { name: string; confirmationCode: string }[]
 ): Promise<void> {
   const request = new TransactWriteCommand({
     TransactItems: submissionsToReport.flatMap((submission) => {
@@ -133,7 +127,7 @@ async function report(
     }),
   });
 
-  await dynamoDbClient.send(request);
+  await dynamodbClient.send(request);
 }
 
 async function notifySupport(
@@ -229,16 +223,13 @@ export const PUT = middleware(
     }
 
     try {
-      const dynamoDbClient = connectToDynamo();
-
       const submissionsFromSubmissionNames = await getSubmissionsFromSubmissionNames(
         formId,
-        entries,
-        dynamoDbClient
+        entries
       );
 
       if (submissionsFromSubmissionNames.submissionsToReport.length > 0) {
-        await report(formId, submissionsFromSubmissionNames.submissionsToReport, dynamoDbClient);
+        await report(formId, submissionsFromSubmissionNames.submissionsToReport);
         // Note: may throw an error and handled in below catch e.g. if api key missing
         await notifySupport(
           formId,

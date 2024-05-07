@@ -2,21 +2,16 @@ import { NextResponse } from "next/server";
 import { logMessage } from "@lib/logger";
 import { middleware, jsonValidator, sessionExists } from "@lib/middleware";
 import uuidArraySchema from "@lib/middleware/schemas/uuid-array.schema.json";
-import {
-  DynamoDBDocumentClient,
-  BatchGetCommand,
-  TransactWriteCommand,
-} from "@aws-sdk/lib-dynamodb";
+import { BatchGetCommand, TransactWriteCommand } from "@aws-sdk/lib-dynamodb";
 import { MiddlewareProps, WithRequired } from "@lib/types";
-import { connectToDynamo } from "@lib/integration/dynamodbConnector";
+import { dynamodbClient } from "@lib/integration/dynamodbConnector";
 import { AccessControlError, createAbility } from "@lib/privileges";
 import { checkUserHasTemplateOwnership } from "@lib/templates";
 import { logEvent } from "@lib/auditLogs";
 
 async function getSubmissionsFromConfirmationCodes(
   formId: string,
-  confirmationCodes: string[],
-  dynamoDbClient: DynamoDBDocumentClient
+  confirmationCodes: string[]
 ): Promise<{
   submissionsToConfirm: { name: string; confirmationCode: string }[];
   confirmationCodesAlreadyUsed: string[];
@@ -44,7 +39,7 @@ async function getSubmissionsFromConfirmationCodes(
     });
 
     // eslint-disable-next-line no-await-in-loop
-    const response = await dynamoDbClient.send(request);
+    const response = await dynamodbClient.send(request);
 
     if (response.Responses?.Vault) {
       response.Responses.Vault.forEach((record) => {
@@ -91,8 +86,7 @@ async function getSubmissionsFromConfirmationCodes(
 
 async function confirm(
   formId: string,
-  submissionsToConfirm: { name: string; confirmationCode: string }[],
-  dynamoDbClient: DynamoDBDocumentClient
+  submissionsToConfirm: { name: string; confirmationCode: string }[]
 ): Promise<void> {
   const confirmationTimestamp = Date.now();
   const removalDate = confirmationTimestamp + 2592000000; // 2592000000 milliseconds = 30 days
@@ -136,7 +130,7 @@ async function confirm(
     }),
   });
 
-  await dynamoDbClient.send(request);
+  await dynamodbClient.send(request);
 }
 
 export const PUT = middleware(
@@ -184,22 +178,15 @@ export const PUT = middleware(
     }
 
     try {
-      const dynamoDbClient = connectToDynamo();
-
       // max 100 confirmation codes per request
       const submissionsFromConfirmationCodes = await getSubmissionsFromConfirmationCodes(
         formId,
-        confirmationCodes,
-        dynamoDbClient
+        confirmationCodes
       );
 
       if (submissionsFromConfirmationCodes.submissionsToConfirm.length > 0) {
         // max 50 submissions per request
-        await confirm(
-          formId,
-          submissionsFromConfirmationCodes.submissionsToConfirm,
-          dynamoDbClient
-        );
+        await confirm(formId, submissionsFromConfirmationCodes.submissionsToConfirm);
         // Done asychronously to not block response back to client
         submissionsFromConfirmationCodes.submissionsToConfirm.forEach((confirmation) =>
           logEvent(
