@@ -25,7 +25,7 @@ export const NextButton = ({
     return false;
   };
 
-  if (!currentGroup || !hasNextAction(currentGroup)) {
+  if (!currentGroup || currentGroup === "review" || !hasNextAction(currentGroup)) {
     return fallBack ? fallBack() : <></>;
   }
 

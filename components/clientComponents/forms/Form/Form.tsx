@@ -14,6 +14,8 @@ import { ErrorStatus } from "../Alert/Alert";
 import { submitForm } from "app/(gcforms)/[locale]/(form filler)/id/[...props]/actions";
 import useFormTimer from "@lib/hooks/useFormTimer";
 import { useFormValuesChanged } from "@lib/hooks/useValueChanged";
+import { BackButton } from "@formBuilder/[id]/preview/BackButton";
+import { useGCFormsContext } from "@lib/hooks/useGCFormContext";
 
 interface SubmitButtonProps {
   numberOfRequiredQuestions: number;
@@ -139,6 +141,7 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
   }: InnerFormProps = props;
   const [canFocusOnError, setCanFocusOnError] = useState(false);
   const [lastSubmitCount, setLastSubmitCount] = useState(-1);
+  const { currentGroup } = useGCFormsContext();
 
   const { t } = useTranslation();
 
@@ -192,10 +195,12 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
 
       {
         <>
-          <RichText>
-            {form.introduction &&
-              form.introduction[props.language == "en" ? "descriptionEn" : "descriptionFr"]}
-          </RichText>
+          {currentGroup === "start" && (
+            <RichText>
+              {form.introduction &&
+                form.introduction[props.language == "en" ? "descriptionEn" : "descriptionFr"]}
+            </RichText>
+          )}
 
           <form
             id="form"
@@ -216,29 +221,41 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
           >
             {children}
 
-            <RichText>
-              {form.privacyPolicy &&
-                form.privacyPolicy[props.language == "en" ? "descriptionEn" : "descriptionFr"]}
-            </RichText>
+            {currentGroup === "start" && (
+              <RichText>
+                {form.privacyPolicy &&
+                  form.privacyPolicy[props.language == "en" ? "descriptionEn" : "descriptionFr"]}
+              </RichText>
+            )}
             {props.renderSubmit ? (
               props.renderSubmit({
                 validateForm: props.validateForm,
                 fallBack: () => {
                   return (
-                    <SubmitButton
-                      numberOfRequiredQuestions={numberOfRequiredQuestions}
-                      formID={formID}
-                      formTitle={form.titleEn}
-                    />
+                    <div>
+                      <BackButton />
+                      <div className="inline-block">
+                        <SubmitButton
+                          numberOfRequiredQuestions={numberOfRequiredQuestions}
+                          formID={formID}
+                          formTitle={form.titleEn}
+                        />
+                      </div>
+                    </div>
                   );
                 },
               })
             ) : (
-              <SubmitButton
-                numberOfRequiredQuestions={numberOfRequiredQuestions}
-                formID={formID}
-                formTitle={form.titleEn}
-              />
+              <div>
+                <BackButton />
+                <div className="inline-block">
+                  <SubmitButton
+                    numberOfRequiredQuestions={numberOfRequiredQuestions}
+                    formID={formID}
+                    formTitle={form.titleEn}
+                  />
+                </div>
+              </div>
             )}
           </form>
         </>
