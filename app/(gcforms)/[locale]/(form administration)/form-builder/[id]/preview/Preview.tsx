@@ -16,7 +16,7 @@ import { useIsFormClosed } from "@lib/hooks/useIsFormClosed";
 import { GCFormsProvider } from "@lib/hooks/useGCFormContext";
 import Skeleton from "react-loading-skeleton";
 import { Form } from "@clientComponents/forms/Form/Form";
-import { BackButton } from "./BackButton";
+// import { BackButton } from "./BackButton";
 
 export const Preview = ({ disableSubmit = true }: { disableSubmit?: boolean }) => {
   const { status } = useSession();
@@ -179,7 +179,8 @@ export const Preview = ({ disableSubmit = true }: { disableSubmit?: boolean }) =
                             fallBack={() => {
                               return (
                                 <>
-                                  <BackButton />
+                                  {/* TODO allowGroups */}
+                                  {/* <BackButton /> */}
                                   <Button
                                     type="submit"
                                     id="SubmitButton"
