@@ -218,23 +218,6 @@ export const Preview = ({ disableSubmit = true }: { disableSubmit?: boolean }) =
           </div>
         )}
       </div>
-
-      {status !== "authenticated" && (
-        <>
-          <span className="mb-1 inline-block bg-slate-200 p-2">
-            {t("confirmationPage", { ns: "form-builder" })}
-          </span>
-          <div className="mb-8 border-3 border-dashed border-blue-focus bg-white p-4">
-            <RichText {...getLocalizationAttribute()}>
-              {formRecord.form.confirmation
-                ? formRecord.form.confirmation[
-                    localizeField(LocalizedElementProperties.DESCRIPTION, language)
-                  ]
-                : ""}
-            </RichText>
-          </div>
-        </>
-      )}
     </div>
   );
 };
