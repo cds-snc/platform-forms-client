@@ -14,6 +14,7 @@ import Skeleton from "react-loading-skeleton";
 import LinkButton from "@serverComponents/globals/Buttons/LinkButton";
 import { updateTemplate, updateTemplatePublishedStatus } from "@formBuilder/actions";
 import { useAllowPublish } from "@lib/hooks/form-builder/useAllowPublish";
+import { PrePublishDialog } from "./PrePublishDialog";
 
 export const Publish = ({ id }: { id: string }) => {
   const { t, i18n } = useTranslation("form-builder");
@@ -35,6 +36,7 @@ export const Publish = ({ id }: { id: string }) => {
     getSchema,
     getName,
     getDeliveryOption,
+    getFormPurpose,
     securityAttribute,
   } = useTemplateStore((s) => ({
     id: s.id,
@@ -43,6 +45,7 @@ export const Publish = ({ id }: { id: string }) => {
     getSchema: s.getSchema,
     getName: s.getName,
     getDeliveryOption: s.getDeliveryOption,
+    getFormPurpose: s.getFormPurpose,
     securityAttribute: s.securityAttribute,
   }));
 
@@ -73,6 +76,31 @@ export const Publish = ({ id }: { id: string }) => {
   };
 
   const supportHref = `/${i18n.language}/support`;
+
+  const [showPrePublishDialog, setShowPrePublishDialog] = useState(false);
+
+  const handleOpenPrePublish = async () => {
+    setShowPrePublishDialog(true);
+  };
+
+  const handlePrePublishClose = async () => {
+    setShowPrePublishDialog(false);
+  };
+
+  const handlePrePublish = async () => {
+    setShowPrePublishDialog(false);
+    handlePublish();
+  };
+
+  const formPurpose = getFormPurpose();
+
+  let formPurposeText = t("prePublishFormDialog.purpose.unset");
+  if (formPurpose === "admin") {
+    formPurposeText = t("prePublishFormDialog.purpose.admin");
+  }
+  if (formPurpose === "nonAdmin") {
+    formPurposeText = t("prePublishFormDialog.purpose.nonAdmin");
+  }
 
   const handlePublish = async () => {
     setError(false);
@@ -187,25 +215,39 @@ export const Publish = ({ id }: { id: string }) => {
         </li>
 
         <li className="my-4">
-          {hasHydrated ? <Icon checked /> : IconLoading}
+          {hasHydrated ? <Icon checked={formPurpose != ""} /> : IconLoading}
           <strong>
-            {securityAttributeText}
-            {t("publishYourFormInstructions.text2")},{" "}
+            <LinkButton href={`/${i18n.language}/form-builder/${id}/settings`}>
+              {t("publishYourFormInstructions.settings")}
+            </LinkButton>
           </strong>
-          {isVaultDelivery(getDeliveryOption()) ? (
-            <span>{t("publishYourFormInstructions.vaultOption")}</span>
-          ) : (
-            <span>{t("publishYourFormInstructions.emailOption")}</span>
-          )}
-          <LinkButton href={`/${i18n.language}/form-builder/${id}/settings`}>
-            {t("publishYourFormInstructions.change")}
-          </LinkButton>
+          <div>
+            <ul>
+              <li>
+                <strong>{t("publishYourFormInstructions.classification")}:&nbsp;</strong>
+                {securityAttributeText}
+                {t("publishYourFormInstructions.text2")}
+              </li>
+              <li>
+                <strong>{t("publishYourFormInstructions.deliveryOption")}:&nbsp;</strong>
+                {isVaultDelivery(getDeliveryOption()) ? (
+                  <span>{t("publishYourFormInstructions.vaultOption")}</span>
+                ) : (
+                  <span>{t("publishYourFormInstructions.emailOption")}</span>
+                )}
+              </li>
+              <li>
+                <strong>{t("publishYourFormInstructions.purpose")}:&nbsp;</strong>
+                {formPurposeText}
+              </li>
+            </ul>
+          </div>
         </li>
       </ul>
 
       {userCanPublish && isPublishable() && (
         <>
-          <Button className="mt-5" onClick={handlePublish}>
+          <Button className="mt-5" onClick={handleOpenPrePublish}>
             {t("publish")}
           </Button>
           <div
@@ -217,6 +259,15 @@ export const Publish = ({ id }: { id: string }) => {
             <>{error && <p>{t("thereWasAnErrorPublishing")}</p>}</>
           </div>
         </>
+      )}
+
+      {showPrePublishDialog && (
+        <PrePublishDialog
+          formId={id}
+          formName={getName()}
+          handleClose={() => handlePrePublishClose()}
+          handleConfirm={() => handlePrePublish()}
+        />
       )}
     </div>
   );

@@ -473,11 +473,43 @@
   "publishingRemovesTestResponsesDescription": "Any prior responses will be removed from the system.",
   "publishYourForm": "Publish your form",
   "publishYourFormInstructions": {
+    "settings": "Settings",
+    "classification": "Data classification",
+    "deliveryOption": "Delivery option",
+    "purpose": "Purpose and use",
     "text1": "Complete the following items before you publish your form.",
     "text2": "",
-    "vaultOption": "Responses to be downloaded — ",
+    "vaultOption": "Responses to be downloaded",
     "emailOption": "Responses delivered by email — ",
     "change": "Change settings"
+  },
+  "prePublishFormDialog": {
+    "title": "Publish form",
+    "text1": "What is your reason for publishing?",
+    "readyForPublicUse": "Ready for public use",
+    "readyForInternalUse": "Ready for internal use",
+    "sharingForFeedback": "Sharing for feedback or approval",
+    "other": "Other",
+    "text2": "Tell us more about your form",
+    "whatType": "Type of form",
+    "briefDesc": "Description of the form and its use",
+    "thisInformation": "This help us understand how GC Forms is used, so we can better serve your needs.",
+    "helpsUnderstand": "This helps us understand who forms are intended for.",
+    "purpose": {
+      "admin": "Administrative purposes",
+      "nonAdmin": "Non-administrative purposes",
+      "unset": "Unset"
+    },
+    "formtypes": {
+      "Application": "Application",
+      "Consent": "Consent",
+      "Declaration": "Declaration",
+      "Feedback": "Feedback",
+      "Registration": "Registration",
+      "Request": "Request",
+      "Survey": "Survey",
+      "Other": "Other"
+    }
   },
   "question": "Question",
   "questions": "Questions",
@@ -527,6 +559,25 @@
   "settingsNavHome": "Response delivery",
   "settingsResponseEmailTitle": "Email address",
   "settingsResponseHint1": "Submitted responses will be emailed to this inbox. This can be a shared inbox.",
+  "settingsPurposeAndUse": {
+    "title": "Purpose and use",
+    "description": "We'll use this to inform the retention of responses in GC Forms beyond 45 days.",
+    "personalInfo": "Personal information used to make a decision about an individual",
+    "helpUs": "Help us understand how form responses will be used",
+    "personalInfoDetails": "Administrative purposes, such as:",
+    "personalInfoDetailsVals": {
+      "1": "applications for programs or benefits",
+      "2": "eligibility determination",
+      "3": "identity validation"
+    },
+    "nonAdminInfo": "Information not used to make a decision about an individual",
+    "nonAdminInfoDetails": "Non-administrative purposes, such as:",
+    "nonAdminInfoDetailsVals": {
+      "1": "statistics",
+      "2": "research",
+      "3": "audits"
+    }
+  },
   "settingsResponseDelivery": {
     "selectClassification": "Data classification",
     "beforePublishMessage": "You can change these settings anytime before publishing.",

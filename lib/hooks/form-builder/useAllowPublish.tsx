@@ -95,7 +95,9 @@ export const useAllowPublish = () => {
       questions: !!form?.elements?.length,
       privacyPolicy: !!form?.privacyPolicy?.descriptionEn || !!form?.privacyPolicy?.descriptionFr,
       confirmationMessage:
-        !!form?.confirmation?.descriptionEn || !!form?.confirmation?.descriptionFr,
+        !!form?.confirmation?.descriptionEn ||
+        !!form?.confirmation?.descriptionFr ||
+        !!form?.formPurpose,
       translate: isFormTranslated(form),
     }),
     [form]
