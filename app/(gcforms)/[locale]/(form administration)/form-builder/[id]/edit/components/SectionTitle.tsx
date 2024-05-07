@@ -35,6 +35,8 @@ export const SectionTitle = ({ groupName, groupId }: { groupName: string; groupI
     <h4
       ref={groupNameRef}
       onDoubleClick={(e) => {
+        if (["start", "review", "end"].includes(groupId)) return;
+
         setEditing(true);
         e.currentTarget.focus();
       }}
