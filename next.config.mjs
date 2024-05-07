@@ -79,6 +79,11 @@ const nextConfig = {
         destination: "/:locale/form-builder/:id/responses/new",
         permanent: true,
       },
+      {
+        source: "/:locale/form-builder/edit",
+        destination: "/:locale/form-builder/0000/edit",
+        permanent: true,
+      },
     ];
   },
 

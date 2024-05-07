@@ -4,7 +4,7 @@ import { SQSClient, GetQueueUrlCommand, SendMessageCommand } from "@aws-sdk/clie
 import { middleware } from "@lib/middleware";
 import { MiddlewareRequest, MiddlewareReturn } from "@lib/types";
 import { UpdateCommand } from "@aws-sdk/lib-dynamodb";
-import { connectToDynamo } from "@lib/integration/dynamodbConnector";
+import { dynamodbClient } from "@lib/integration/dynamodbConnector";
 import { headers } from "next/headers";
 const SQS_REPROCESS_SUBMISSION_QUEUE_NAME = "reprocess_submission_queue.fifo";
 
@@ -28,8 +28,6 @@ const getQueueURL = async () => {
  * @returns void
  */
 async function removeProcessedMark(submissionID: string) {
-  const documentClient = connectToDynamo();
-
   const updateItem = {
     TableName: "ReliabilityQueue",
     Key: {
@@ -42,7 +40,7 @@ async function removeProcessedMark(submissionID: string) {
     ReturnValues: "NONE" as const,
   };
 
-  return documentClient.send(new UpdateCommand(updateItem));
+  return dynamodbClient.send(new UpdateCommand(updateItem));
 }
 
 /**
