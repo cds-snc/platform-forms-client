@@ -3,7 +3,7 @@ import { Metadata } from "next";
 import { Edit } from "./components/Edit";
 import { EditNavigation } from "./components/EditNavigation";
 import { EditWithGroups } from "./components/EditWithGroups";
-import { checkFlag } from "@formBuilder/actions";
+import { allowGrouping } from "@formBuilder/components/shared/right-panel/treeview/util/allowGrouping";
 
 export async function generateMetadata({
   params: { locale },
@@ -17,7 +17,7 @@ export async function generateMetadata({
 }
 
 export default async function Page({ params: { id } }: { params: { id: string } }) {
-  const conditionalLogic = await checkFlag("conditionalLogic");
+  const conditionalLogic = await allowGrouping();
 
   return (
     <>
