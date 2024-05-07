@@ -1,11 +1,15 @@
+import React, { useRef } from "react";
 import { useTreeRef } from "@formBuilder/components/shared/right-panel/treeview/provider/TreeRefProvider";
 import { useGroupStore } from "@formBuilder/components/shared/right-panel/treeview/store/useGroupStore";
-import { LockedSections } from "@formBuilder/components/shared/right-panel/treeview/types";
-import { useEffect, useRef, useState } from "react";
+import { ExpandingInput } from "@formBuilder/components/shared";
+import { useTemplateStore } from "@lib/store/useTemplateStore";
 
 export const SectionTitle = ({ groupName, groupId }: { groupName: string; groupId: string }) => {
-  const [editing, setEditing] = useState(false);
-  const groupNameRef = useRef<HTMLHeadingElement>(null);
+  const { getLocalizationAttribute } = useTemplateStore((s) => ({
+    getLocalizationAttribute: s.getLocalizationAttribute,
+  }));
+
+  const groupNameRef = useRef(null);
   const { treeView } = useTreeRef();
   const updateGroupName = useGroupStore((state) => state.updateGroupName);
 
@@ -13,40 +17,26 @@ export const SectionTitle = ({ groupName, groupId }: { groupName: string; groupI
     saveGroupName(e.currentTarget.textContent || "");
   };
 
-  const handleOnKeyUp = (e: React.KeyboardEvent) => {
-    if (e.key === "Enter") {
-      e.preventDefault();
-      saveGroupName(e.currentTarget.textContent || "");
-    }
+  const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    saveGroupName(e.target.value || "");
   };
 
   const saveGroupName = (groupName: string) => {
     updateGroupName({ id: groupId, name: groupName });
-    setEditing(false);
     treeView?.current?.updateItem(groupId, groupName);
   };
 
-  useEffect(() => {
-    if (editing && groupNameRef.current) {
-      groupNameRef.current.focus();
-    }
-  }, [editing]);
-
   return (
-    <h4
+    <ExpandingInput
+      id="sectionTitle"
       ref={groupNameRef}
-      onDoubleClick={(e) => {
-        if (Object.values(LockedSections).includes(groupId as LockedSections)) return;
-
-        setEditing(true);
-        e.currentTarget.focus();
-      }}
-      suppressContentEditableWarning={true}
-      contentEditable={editing}
+      wrapperClassName="w-full laptop:w-3/4 mt-2 laptop:mt-0 font-bold laptop:text-3xl"
+      className="font-bold placeholder:text-slate-500 laptop:text-3xl"
+      placeholder={"SectionTitle"}
+      value={groupName}
       onBlur={handleOnBlur}
-      onKeyUp={handleOnKeyUp}
-    >
-      {groupName}
-    </h4>
+      onChange={handleChange}
+      {...getLocalizationAttribute()}
+    />
   );
 };

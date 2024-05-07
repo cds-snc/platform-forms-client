@@ -30,7 +30,7 @@ export const Section = ({ groupId }: { groupId: string }) => {
           text={t("addElement")}
         />
       </div>
-      <div className="flex max-w-[800px] justify-center rounded-t-lg border-1 border-slate-700 p-2">
+      <div className="flex max-w-[800px] rounded-t-lg border-1 border-slate-700 p-2">
         <SectionTitle groupName={groupName} groupId={groupId} />
       </div>
     </>
