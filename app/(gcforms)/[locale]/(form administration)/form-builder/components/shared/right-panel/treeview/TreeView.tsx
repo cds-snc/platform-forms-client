@@ -20,6 +20,9 @@ import { findParentGroup } from "./util/findParentGroup";
 import "react-complex-tree/lib/style-modern.css";
 import { Group, GroupsType } from "@lib/formContext";
 import { Item } from "./Item";
+import { autoSetNextAction } from "./util/setNextAction";
+import { Tooltip } from "@formBuilder/components/shared/Tooltip";
+import { SortIcon } from "@serverComponents/icons";
 
 export interface TreeDataProviderProps {
   children?: ReactElement;
@@ -85,6 +88,12 @@ const ControlledTree: ForwardRefRenderFunction<unknown, TreeDataProviderProps> =
   const [focusedItem, setFocusedItem] = useState<TreeItemIndex | undefined>();
   const [expandedItems, setExpandedItems] = useState<TreeItemIndex[]>([]);
   const [selectedItems, setSelectedItems] = useState<TreeItemIndex[]>([]);
+
+  const autoFlow = () => {
+    const groups = getGroups() as GroupsType;
+    const newGroups = autoSetNextAction({ ...groups }, true);
+    replaceGroups(newGroups);
+  };
 
   const addSection = () => {
     const id = uuid();
@@ -236,6 +245,8 @@ const ControlledTree: ForwardRefRenderFunction<unknown, TreeDataProviderProps> =
             return acc;
           }, {});
 
+          // newGroups = autoTreeViewFlow(newGroups);
+
           replaceGroups(newGroups);
           setSelectedItems(selectedItems);
 
@@ -360,11 +371,38 @@ const ControlledTree: ForwardRefRenderFunction<unknown, TreeDataProviderProps> =
       }
       onSelectItems={(items) => setSelectedItems(items)}
     >
-      <button className="ml-2 mt-2 rounded-md border border-slate-500 p-2" onClick={addSection}>
-        New section
-      </button>
+      <div className="flex justify-between">
+        <div className="">
+          New section
+          <button
+            className="ml-2 mt-2 rounded-md border border-slate-500 px-2"
+            onClick={addSection}
+          >
+            <span className="sr-only">Add section</span>+
+          </button>
+        </div>
+      </div>
+
       <Tree treeId="default" rootItem="root" treeLabel="GC Forms sections" ref={tree} />
       <>{children}</>
+
+      <div>
+        Auto flow
+        <button className="ml-2 mt-2 rounded-md border border-slate-500 p-1" onClick={autoFlow}>
+          <SortIcon />
+        </button>
+        <Tooltip.Info
+          side="top"
+          triggerClassName="align-middle ml-1"
+          tooltipClassName="font-normal whitespace-normal"
+        >
+          <strong>Auto flow</strong>
+          <p>
+            Auto flow will automatically set a linear flow for your sections, overriding any
+            existing rules.
+          </p>
+        </Tooltip.Info>
+      </div>
     </ControlledTreeEnvironment>
   );
 };
