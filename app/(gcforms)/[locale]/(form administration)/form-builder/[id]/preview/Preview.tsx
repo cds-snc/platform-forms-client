@@ -16,9 +16,15 @@ import { useIsFormClosed } from "@lib/hooks/useIsFormClosed";
 import { GCFormsProvider } from "@lib/hooks/useGCFormContext";
 import Skeleton from "react-loading-skeleton";
 import { Form } from "@clientComponents/forms/Form/Form";
-// import { BackButton } from "./BackButton";
+import { BackButton } from "./BackButton";
 
-export const Preview = ({ disableSubmit = true }: { disableSubmit?: boolean }) => {
+export const Preview = ({
+  disableSubmit = true,
+  allowGrouping = false,
+}: {
+  disableSubmit?: boolean;
+  allowGrouping?: boolean;
+}) => {
   const { status } = useSession();
   const { i18n } = useTranslation("common");
   const { id, getSchema, getIsPublished, getSecurityAttribute } = useTemplateStore((s) => ({
@@ -179,8 +185,7 @@ export const Preview = ({ disableSubmit = true }: { disableSubmit?: boolean }) =
                             fallBack={() => {
                               return (
                                 <>
-                                  {/* TODO allowGroups */}
-                                  {/* <BackButton /> */}
+                                  {allowGrouping && <BackButton />}
                                   <Button
                                     type="submit"
                                     id="SubmitButton"
