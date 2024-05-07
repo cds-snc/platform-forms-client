@@ -30,14 +30,7 @@
     "edit": "Edit form config file:",
     "tabLabels": {
       "jsonUpload": "JSON upload",
-      "bearerToken": "Bearer token",
       "formAccess": "Form access"
-    },
-    "bearerToken": {
-      "current": "Current token:",
-      "refreshButton": "Refresh token",
-      "refreshError": "Unable to refresh bearer token.",
-      "currentAriaLabel": "Current token"
     },
     "formAccess": {
       "formOwnersError": "Unable to retrieve form owners.",

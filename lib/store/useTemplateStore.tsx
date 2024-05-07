@@ -168,6 +168,7 @@ export interface TemplateStoreState extends TemplateStoreProps {
   initialize: (language?: string) => void;
   removeChoiceFromRules: (elIndex: number, choiceIndex: number) => void;
   setChangeKey: (key: string) => void;
+  getGroupsEnabled: () => boolean;
 }
 
 /* Note: "async" getItem is intentional here to work-around a hydration issue   */
@@ -425,8 +426,9 @@ const createTemplateStore = (initProps?: Partial<InitialTemplateStoreProps>) => 
                 const element = JSON.parse(JSON.stringify(state.form.elements[elIndex]));
                 element.id = id;
                 if (element.type !== "richText") {
-                  element.properties[state.localizeField("title")] = `${element.properties[state.localizeField("title")]
-                    } copy`;
+                  element.properties[state.localizeField("title")] = `${
+                    element.properties[state.localizeField("title")]
+                  } copy`;
                 }
                 state.form.elements.splice(elIndex + 1, 0, element);
                 state.form.layout.splice(elIndex + 1, 0, id);
@@ -439,8 +441,9 @@ const createTemplateStore = (initProps?: Partial<InitialTemplateStoreProps>) => 
                 if (subElements) {
                   const element = JSON.parse(JSON.stringify(subElements[subIndex]));
                   element.id = incrementElementId(subElements);
-                  element.properties[state.localizeField("title")] = `${element.properties[state.localizeField("title")]
-                    } copy`;
+                  element.properties[state.localizeField("title")] = `${
+                    element.properties[state.localizeField("title")]
+                  } copy`;
 
                   state.form.elements[elIndex].properties.subElements?.splice(
                     subIndex + 1,
@@ -497,6 +500,7 @@ const createTemplateStore = (initProps?: Partial<InitialTemplateStoreProps>) => 
                 state.closingDate = null;
               });
             },
+            getGroupsEnabled: () => get().allowGroupsFlag,
           }),
           {
             name: "form-storage",

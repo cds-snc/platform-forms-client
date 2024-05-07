@@ -19,7 +19,7 @@ import { v4 as uuid } from "uuid";
 import { findParentGroup } from "./util/findParentGroup";
 import "react-complex-tree/lib/style-modern.css";
 import { Group, GroupsType } from "@lib/formContext";
-// import { Item } from "./Item";
+import { Item } from "./Item";
 
 export interface TreeDataProviderProps {
   children?: ReactElement;
@@ -49,6 +49,11 @@ const insertItemAtIndex = (items: string[], item: string, index: number) => {
   const updatedItems = [...items];
   updatedItems.splice(index, 0, item);
   return updatedItems;
+};
+
+const getReviewIndex = (currentGroups: GroupsType) => {
+  const elements = Object.keys(currentGroups);
+  return elements.indexOf("review");
 };
 
 const ControlledTree: ForwardRefRenderFunction<unknown, TreeDataProviderProps> = (
@@ -107,15 +112,15 @@ const ControlledTree: ForwardRefRenderFunction<unknown, TreeDataProviderProps> =
       ref={environment}
       items={getTreeData()}
       getItemTitle={(item) => item.data}
-      // renderItem={({ title, arrow, context, children }) => {
-      //   return (
-      //     <Item title={title} arrow={arrow} context={context}>
-      //       {children}
-      //     </Item>
-      //   );
-      // }}
-      // renderItemTitle={({ title }) => <Item.Title title={title} />}
-      // renderItemArrow={({ item, context }) => <Item.Arrow item={item} context={context} />}
+      renderItem={({ title, arrow, context, children }) => {
+        return (
+          <Item title={title} arrow={arrow} context={context}>
+            {children}
+          </Item>
+        );
+      }}
+      renderItemTitle={({ title }) => <Item.Title title={title} />}
+      renderItemArrow={({ item, context }) => <Item.Arrow item={item} context={context} />}
       renderLiveDescriptorContainer={() => null}
       viewState={{
         ["default"]: {
@@ -132,30 +137,40 @@ const ControlledTree: ForwardRefRenderFunction<unknown, TreeDataProviderProps> =
             item.data !== "Start" &&
             item.data !== "Introduction" &&
             item.data !== "Policy" &&
+            item.data !== "Review" &&
             item.data !== "End" &&
             item.data !== "Confirmation"
           );
         });
       }}
       canDropAt={(items, target) => {
-        const folderItemsCount = items.filter((item) => item.isFolder).length;
-        const nonFolderItemsCount = items.filter((item) => !item.isFolder).length;
+        const groupItemsCount = items.filter((item) => item.isFolder).length;
+        const nonGroupItemsCount = items.filter((item) => !item.isFolder).length;
 
-        // Can't drag mixed item types
-        if (folderItemsCount > 0 && nonFolderItemsCount > 0) {
+        // Can't drag Groups + Items together
+        if (groupItemsCount > 0 && nonGroupItemsCount > 0) {
           return false;
         }
 
-        // If any of the selected items is a folder, disallow dropping on a folder
-        if (folderItemsCount >= 1) {
+        // If any of the selected items is a group
+        if (groupItemsCount >= 1) {
+          // Groups can't be dropped on another group
           const { parentItem } = target as DraggingPositionBetweenItems;
           if (items[0].isFolder && parentItem !== "root") {
             return false;
           }
+
+          // Groups can't be dropped after Review
+          const currentGroups = getGroups() as GroupsType;
+          const reviewIndex = getReviewIndex(currentGroups);
+
+          if (target.linearIndex >= reviewIndex + 1) {
+            return false;
+          }
         }
 
-        // If any of the items is not a folder, disallow dropping on root
-        if (nonFolderItemsCount >= 1) {
+        // If any of the items is not a group, disallow dropping on root
+        if (nonGroupItemsCount >= 1) {
           if (target.depth === 0) {
             return false;
           }
@@ -345,10 +360,10 @@ const ControlledTree: ForwardRefRenderFunction<unknown, TreeDataProviderProps> =
       }
       onSelectItems={(items) => setSelectedItems(items)}
     >
-      <Tree treeId="default" rootItem="root" treeLabel="GC Forms sections" ref={tree} />
       <button className="ml-2 mt-2 rounded-md border border-slate-500 p-2" onClick={addSection}>
         New section
       </button>
+      <Tree treeId="default" rootItem="root" treeLabel="GC Forms sections" ref={tree} />
       <>{children}</>
     </ControlledTreeEnvironment>
   );

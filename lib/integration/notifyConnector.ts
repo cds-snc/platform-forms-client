@@ -1,68 +1,38 @@
-import { NotifyClient } from "notifications-node-client";
 import { logMessage } from "@lib/logger";
-import { AxiosError } from "axios";
+import axios from "axios";
 
-// TODO: create a type for NotifyClient
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-let notifyInstance: any = null;
-
-// For unit and e2e tests
-const mockNotify = {
-  sendEmail: () => {
-    logMessage.info("Mock Notify email sent.");
-
-    // Returns an example Notify response with sender etc. replaced with generic text
-    return {
-      id: "740e5834-3a29-46b4-9a6f-16142fde533a",
-      reference: "STRING",
-      content: {
-        subject: "SUBJECT TEXT",
-        body: "MESSAGE TEXT",
-        from_email: "SENDER EMAIL",
-      },
-      uri: "https://api.notification.canada.ca/v2/notifications/740e5834-3a29-46b4-9a6f-16142fde533a",
-      template: {
-        id: "f33517ff-2a88-4f6e-b855-c550268ce08a",
-        version: 1,
-        uri: "https://api.notification.canada.ca/v2/template/f33517ff-2a88-4f6e-b855-c550268ce08a",
-      },
-    };
+const NotifyClient = axios.create({
+  baseURL: "https://api.notification.canada.ca",
+  timeout: 2000,
+  headers: {
+    "Content-Type": "application/json",
+    Authorization: `ApiKey-v1 ${process.env.NOTIFY_API_KEY}`,
   },
-};
+});
 
-const createNotifyInstance = () => {
-  if (process.env.APP_ENV === "test") {
-    return mockNotify;
-  }
-
-  if (!process.env.NOTIFY_API_KEY) {
-    throw new Error("No Notify API key configured");
-  }
-
-  return new NotifyClient("https://api.notification.canada.ca", process.env.NOTIFY_API_KEY);
-};
-
-export const getNotifyInstance = () => {
-  if (!notifyInstance) {
-    notifyInstance = createNotifyInstance();
-  }
-
-  return notifyInstance;
-};
-
-export const sendEmail = async (email: string, personalisation: Record<string, string>) => {
+export const sendEmail = async (
+  email: string,
+  personalisation: Record<string, string | Record<string, string>>
+) => {
   try {
+    if (process.env.APP_ENV === "test") {
+      logMessage.info("Mock Notify email sent.");
+      return;
+    }
+
     const templateId = process.env.TEMPLATE_ID;
-    if (!templateId && process.env.APP_ENV !== "test") {
+    if (!templateId) {
       throw new Error("No Notify template ID configured.");
     }
 
-    const notify = getNotifyInstance();
-    await notify.sendEmail(templateId, email, { personalisation });
+    await NotifyClient.post("/v2/notifications/email", {
+      email_address: email,
+      template_id: templateId,
+      personalisation,
+    });
   } catch (error) {
     let errorMessage = "";
-
-    if (error instanceof AxiosError) {
+    if (axios.isAxiosError(error)) {
       if (error.response) {
         /*
          * The request was made and the server responded with a
@@ -78,7 +48,7 @@ export const sendEmail = async (email: string, personalisation: Record<string, s
          * is an instance of XMLHttpRequest in the browser and an instance
          * of http.ClientRequest in Node.js
          */
-        errorMessage = `Error sending to Notify with request :${error.request}.`;
+        errorMessage = `Error sending to Notify with request :${JSON.stringify(error.request)}.`;
       }
     } else if (error instanceof Error) {
       errorMessage = `${(error as Error).message}.`;

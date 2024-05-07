@@ -13,6 +13,7 @@ import { NextActionRule } from "@lib/formContext";
 import { useGroupStore } from "@formBuilder/components/shared/right-panel/treeview/store/useGroupStore";
 import { useTemplateStore } from "@lib/store/useTemplateStore";
 import { useFlowRef } from "@formBuilder/[id]/edit/logic/components/flow/provider/FlowRefProvider";
+import { managedData } from "@lib/managedData";
 
 export const GroupAndChoiceSelect = ({
   selectedElement,
@@ -51,10 +52,19 @@ export const GroupAndChoiceSelect = ({
   groupItems = groupItems.filter((item) => item.value !== currentGroup);
 
   const choices = useMemo(() => {
-    return selectedElement?.properties.choices?.map((choice, index) => {
+    let choices = selectedElement?.properties.choices?.map((choice, index) => {
       const result = { label: choice[language], value: `${selectedElement.id}.${index}` };
       return result;
     });
+    if (selectedElement?.properties.managedChoices) {
+      const dataFile = selectedElement.properties.managedChoices;
+      const data = managedData[dataFile];
+
+      choices = data.map((choice) => {
+        return { label: choice[language], value: choice[language] };
+      });
+    }
+    return choices;
   }, [selectedElement, language]);
 
   const handleGroupChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
@@ -74,14 +84,19 @@ export const GroupAndChoiceSelect = ({
   return (
     <>
       {choices && (
-        <fieldset className="border-b border-dotted border-slate-500">
+        <fieldset className="mb-4 border-b border-dotted border-slate-500">
           <div className="mb-4">
-            <ChoiceSelect selected={choiceId} choices={choices} onChange={handleChoiceChange} />
+            <ChoiceSelect
+              selected={choiceId}
+              choices={choices}
+              onChange={handleChoiceChange}
+              addCatchAll={true}
+            />
           </div>
           <div className="mb-4">
             <GroupSelect selected={groupId} groups={groupItems} onChange={handleGroupChange} />
           </div>
-          <Button className="mb-8 inline-block" theme="link" onClick={handleRemove}>
+          <Button className="mb-8 inline-block text-sm" theme="link" onClick={handleRemove}>
             {t("addConditionalRules.removeRule")}
           </Button>
         </fieldset>
@@ -154,12 +169,13 @@ export const MultiActionSelector = ({
             setNextActions([...nextActions, { groupId: "", choiceId: String(item.id) }]);
           }}
           theme={"secondary"}
+          className="px-4 py-1"
           aria-controls={formId}
         >
           {t("addConditionalRules.addAnotherRule")}
         </Button>
         <Button
-          className="ml-4"
+          className="ml-4 px-4 py-1"
           onClick={() => {
             const group = findParentGroup(String(item.id));
             const parent = group?.index;

@@ -28,8 +28,6 @@ export const SingleActionSelect = ({
     return { label: item.name, value: key };
   });
 
-  groupItems.push({ label: "End", value: "end" });
-
   // Filter out the current group
   groupItems = groupItems.filter((item) => item.value !== currentGroup);
 
@@ -45,7 +43,7 @@ export const SingleActionSelect = ({
       </div>
       <div>
         <Button
-          className="ml-4"
+          className="ml-0 px-4 py-1"
           onClick={() => {
             if (item) {
               const group = findParentGroup(String(item.id));

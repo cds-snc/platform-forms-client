@@ -25,7 +25,7 @@ import { layoutOptions } from "./options";
 import { edgeOptions } from "./options";
 
 import { useFlowRef } from "./provider/FlowRefProvider";
-import { GroupOutput } from "@formBuilder/components/shared/GroupOutput";
+import { useRehydrate } from "@lib/store/useTemplateStore";
 
 const nodeTypes = { groupNode: GroupNode };
 
@@ -66,28 +66,32 @@ const Flow: ForwardRefRenderFunction<unknown, FlowProps> = ({ children }, ref) =
 
   return (
     <>
-      <div className="my-10 w-full border-1" style={{ height: "calc(100vh - 300px)" }}>
-        <ReactFlow
-          proOptions={{ hideAttribution: true }}
-          nodesDraggable={false}
-          nodes={nodes}
-          nodeTypes={nodeTypes}
-          onNodesChange={onNodesChange}
-          edges={flowEdges}
-          onEdgesChange={onEdgesChange}
-          defaultEdgeOptions={edgeOptions}
-        >
-          <Controls />
-          {children}
-        </ReactFlow>
-      </div>
-      <GroupOutput />
+      <ReactFlow
+        proOptions={{ hideAttribution: true }}
+        nodesDraggable={false}
+        nodes={nodes}
+        nodeTypes={nodeTypes}
+        onNodesChange={onNodesChange}
+        edges={flowEdges}
+        onEdgesChange={onEdgesChange}
+        defaultEdgeOptions={edgeOptions}
+      >
+        <Controls />
+        {children}
+      </ReactFlow>
     </>
   );
 };
 
 export const FlowWithProvider = () => {
   const { flow } = useFlowRef();
+
+  const hasHydrated = useRehydrate();
+
+  if (!hasHydrated) {
+    return null;
+  }
+
   return (
     <ReactFlowProvider>
       <FlowWithRef ref={flow} />
