@@ -128,6 +128,7 @@ export const GroupNode = (node: NodeProps) => {
               key={child.index}
               onClick={(evt) => {
                 evt.stopPropagation();
+                setId(node.id);
                 setSelectedElementId(Number(child.index));
               }}
               className={cn(nodeClassName, selected)}

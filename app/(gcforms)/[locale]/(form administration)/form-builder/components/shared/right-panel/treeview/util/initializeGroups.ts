@@ -29,6 +29,7 @@ export const initializeGroups = (form: FormProperties, allowGroups: boolean): Fo
   form.groups.review = {
     name: "Review",
     elements: [],
+    nextAction: "end",
   };
 
   form.groups.end = {
