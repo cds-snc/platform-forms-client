@@ -92,7 +92,7 @@ const ControlledTree: ForwardRefRenderFunction<unknown, TreeDataProviderProps> =
 
   const autoFlow = () => {
     const groups = getGroups() as GroupsType;
-    const newGroups = autoSetNextAction({ ...groups }, true);
+    const newGroups = autoSetNextAction({ ...groups }, true); // forces overwrite of existing next actions
     replaceGroups(newGroups);
     toast.success("Auto flow applied");
   };
