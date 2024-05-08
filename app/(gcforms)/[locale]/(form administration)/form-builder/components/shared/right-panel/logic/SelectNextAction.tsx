@@ -69,9 +69,7 @@ export const SelectNextAction = ({ item }: { item: FormElement | null }) => {
         <MultiActionSelector
           item={item}
           initialNextActionRules={
-            Array.isArray(selectedGroupNextActions)
-              ? selectedGroupNextActions
-              : [{ groupId: "end", choiceId: `${item.id}.0` }] // Default to end
+            Array.isArray(selectedGroupNextActions) ? selectedGroupNextActions : [] // Default to end
           }
         />
       ) : null}

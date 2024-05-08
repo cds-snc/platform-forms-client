@@ -58,12 +58,12 @@ export const GroupNode = (node: NodeProps) => {
         };
 
   const nodeClassName =
-    "relative flex w-[100%] min-w-[200px] max-w-[250px] rounded-sm bg-slate-50 p-4 text-sm text-slate-600";
+    "relative flex w-[100%] min-w-[200px] max-w-[250px] rounded-sm bg-slate-50 p-4 text-sm text-slate-600 pr-12";
 
   return (
     <div>
       <div>
-        <label htmlFor={node.id} className="inline-block text-sm text-slate-600">
+        <label htmlFor={node.id} className="inline-block w-5/6 truncate text-sm text-slate-600">
           {node.data.label}
         </label>
       </div>

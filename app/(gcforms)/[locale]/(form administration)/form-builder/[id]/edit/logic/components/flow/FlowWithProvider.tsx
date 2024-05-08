@@ -1,7 +1,6 @@
 "use client";
 
 import React, {
-  useEffect,
   useImperativeHandle,
   forwardRef,
   ReactElement,
@@ -12,7 +11,6 @@ import ReactFlow, {
   Controls,
   useStoreApi,
   ReactFlowProvider,
-  useReactFlow,
   useNodesState,
   useEdgesState,
 } from "reactflow";
@@ -36,7 +34,6 @@ export interface FlowProps {
 
 const Flow: ForwardRefRenderFunction<unknown, FlowProps> = ({ children }, ref) => {
   const { nodes: flowNodes, edges: flowEdges, getData } = useFlowData();
-  const { fitView } = useReactFlow();
   const [nodes, , onNodesChange] = useNodesState(flowNodes);
   const [, setEdges, onEdgesChange] = useEdgesState(flowEdges);
 
@@ -51,10 +48,6 @@ const Flow: ForwardRefRenderFunction<unknown, FlowProps> = ({ children }, ref) =
   }
 
   const { runLayout } = useAutoLayout(layoutOptions);
-
-  useEffect(() => {
-    fitView();
-  }, [nodes, fitView]);
 
   useImperativeHandle(ref, () => ({
     updateEdges: () => {
