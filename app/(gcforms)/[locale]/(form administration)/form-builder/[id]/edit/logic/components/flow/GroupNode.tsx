@@ -71,7 +71,7 @@ export const GroupNode = (node: NodeProps) => {
         id={node.id}
         className={cn(
           "space-y-2 rounded-md border-1 border-indigo-500 p-4 text-white",
-          groupIsSelected ? "bg-violet-100 border-2" : "bg-gray-soft",
+          groupIsSelected ? "bg-violet-200 border-2" : "bg-gray-soft",
           "relative"
         )}
       >
@@ -87,7 +87,7 @@ export const GroupNode = (node: NodeProps) => {
           const selected =
             selectedElementId === Number(child.index)
               ? "border-violet-800 border-2 border-dashed"
-              : "border-transparent";
+              : "border-violet-200 border-2 border-solid";
 
           const item = getElement(Number(child.index));
 
