@@ -37,6 +37,12 @@ const { auth } = NextAuth({
   secret: process.env.TOKEN_SECRET ?? crypto.randomUUID(),
   debug: process.env.NODE_ENV !== "production",
   trustHost: process.env.AUTH_URL ? false : true,
+  session: {
+    strategy: "jwt",
+    // Seconds - How long until an idle session expires and is no longer valid.
+    updateAge: 30 * 60, // 30 minutes
+    maxAge: 2 * 60 * 60, // 2 hours
+  },
   callbacks: {
     async session(params) {
       const { session, token } = params as { session: Session; token: JWT };
