@@ -20,3 +20,9 @@ export interface TreeDataProviderProps {
 }
 
 export type TreeItems = Record<TreeItemIndex, TreeItem>;
+
+export enum LockedSections {
+  START = "start",
+  REVIEW = "review",
+  END = "end",
+}

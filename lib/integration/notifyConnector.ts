@@ -48,7 +48,7 @@ export const sendEmail = async (
          * is an instance of XMLHttpRequest in the browser and an instance
          * of http.ClientRequest in Node.js
          */
-        errorMessage = `Error sending to Notify with request :${JSON.stringify(error.request)}.`;
+        errorMessage = `Error sending to Notify with request :${error.request}.`;
       }
     } else if (error instanceof Error) {
       errorMessage = `${(error as Error).message}.`;
