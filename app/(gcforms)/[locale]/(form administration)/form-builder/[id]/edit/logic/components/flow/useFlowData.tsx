@@ -31,6 +31,20 @@ const endNode = {
   type: "groupNode",
 };
 
+const reviewNode = {
+  id: "review",
+  data: {
+    label: "Review",
+    children: [
+      {
+        data: "Review",
+        index: "review",
+      },
+    ],
+  },
+  type: "groupNode",
+};
+
 const defaultEdges = {
   start: "start",
   end: "end",
@@ -157,6 +171,9 @@ export const useFlowData = () => {
       prevNodeId = key as string;
       return flowNode;
     });
+
+    // Add review node
+    nodes.push({ ...reviewNode, position: { x: x_pos, y: y_pos } });
 
     // Push "end" node to the end
     // And add confirmation element
