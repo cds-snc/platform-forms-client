@@ -30,7 +30,7 @@ export const SectionTitle = ({ groupName, groupId }: { groupName: string; groupI
     <ExpandingInput
       id="sectionTitle"
       ref={groupNameRef}
-      wrapperClassName="w-full mr-6 mt-2 laptop:mt-0 font-bold laptop:text-3xl"
+      wrapperClassName="w-full mr-5 mt-2 laptop:mt-0 font-bold laptop:text-3xl"
       className="font-bold placeholder:text-slate-500 laptop:text-3xl"
       placeholder={"SectionTitle"}
       value={groupName}
