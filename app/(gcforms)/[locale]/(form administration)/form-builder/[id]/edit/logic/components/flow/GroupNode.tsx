@@ -78,11 +78,12 @@ export const GroupNode = (node: NodeProps) => {
         {node.id !== "end" && (
           <div
             {...handleClick}
-            className="absolute right-[-20px] top-[-20px] cursor-pointer hover:scale-105"
+            className="absolute right-[-20px] top-[-20px] cursor-pointer hover:scale-125"
           >
             <QuestionRuleSvg />
           </div>
         )}
+        {!node.data.children.length && <div className="min-h-[50px] min-w-[150px]"></div>}
         {node.data.children.map((child: TreeItem) => {
           const selected =
             selectedElementId === Number(child.index)
@@ -132,13 +133,12 @@ export const GroupNode = (node: NodeProps) => {
               className={cn(nodeClassName, selected)}
             >
               {child.data}
-              <div className="absolute right-[10px] top-[10px] cursor-pointer hover:scale-105">
+              <div className="absolute right-[10px] top-[10px] cursor-pointer hover:scale-125">
                 <OptionRuleSvg />
               </div>
             </div>
           );
         })}
-
         {node.id !== "end" && (
           <Handle
             type="source"
