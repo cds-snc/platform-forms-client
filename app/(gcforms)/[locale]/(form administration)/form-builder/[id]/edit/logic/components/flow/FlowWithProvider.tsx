@@ -6,6 +6,7 @@ import React, {
   ReactElement,
   ForwardRefRenderFunction,
   useEffect,
+  useState,
 } from "react";
 
 import ReactFlow, {
@@ -15,6 +16,7 @@ import ReactFlow, {
   useNodesState,
   useEdgesState,
   useReactFlow,
+  ReactFlowInstance,
 } from "reactflow";
 
 import "reactflow/dist/style.css";
@@ -39,6 +41,7 @@ const Flow: ForwardRefRenderFunction<unknown, FlowProps> = ({ children }, ref) =
   const [nodes, , onNodesChange] = useNodesState(flowNodes);
   const [, setEdges, onEdgesChange] = useEdgesState(flowEdges);
   const { fitView } = useReactFlow();
+  const [rfInstance, setRfInstance] = useState<ReactFlowInstance | null>();
 
   // temp fix see: https://github.com/xyflow/xyflow/issues/3243
   const store = useStoreApi();
@@ -50,11 +53,26 @@ const Flow: ForwardRefRenderFunction<unknown, FlowProps> = ({ children }, ref) =
     };
   }
 
-  const { runLayout } = useAutoLayout(layoutOptions);
-
   useEffect(() => {
+    let flowZoom = 0.5;
+    if (rfInstance) {
+      const obj = rfInstance.toObject();
+
+      if (obj.viewport.zoom) {
+        flowZoom = obj.viewport.zoom;
+      }
+      return;
+    }
+
+    if (flowZoom >= 0.5) {
+      return;
+    }
+
     fitView();
-  }, [fitView, nodes, flowEdges]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [fitView, nodes]);
+
+  const { runLayout } = useAutoLayout(layoutOptions);
 
   useImperativeHandle(ref, () => ({
     updateEdges: () => {
@@ -75,6 +93,9 @@ const Flow: ForwardRefRenderFunction<unknown, FlowProps> = ({ children }, ref) =
         edges={flowEdges}
         onEdgesChange={onEdgesChange}
         defaultEdgeOptions={edgeOptions}
+        onInit={(instance) => {
+          setRfInstance(instance);
+        }}
       >
         <Controls />
         {children}
