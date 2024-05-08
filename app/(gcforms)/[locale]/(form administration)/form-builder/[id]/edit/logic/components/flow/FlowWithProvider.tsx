@@ -5,6 +5,7 @@ import React, {
   forwardRef,
   ReactElement,
   ForwardRefRenderFunction,
+  useEffect,
 } from "react";
 
 import ReactFlow, {
@@ -13,6 +14,7 @@ import ReactFlow, {
   ReactFlowProvider,
   useNodesState,
   useEdgesState,
+  useReactFlow,
 } from "reactflow";
 
 import "reactflow/dist/style.css";
@@ -36,6 +38,7 @@ const Flow: ForwardRefRenderFunction<unknown, FlowProps> = ({ children }, ref) =
   const { nodes: flowNodes, edges: flowEdges, getData } = useFlowData();
   const [nodes, , onNodesChange] = useNodesState(flowNodes);
   const [, setEdges, onEdgesChange] = useEdgesState(flowEdges);
+  const { fitView } = useReactFlow();
 
   // temp fix see: https://github.com/xyflow/xyflow/issues/3243
   const store = useStoreApi();
@@ -48,6 +51,10 @@ const Flow: ForwardRefRenderFunction<unknown, FlowProps> = ({ children }, ref) =
   }
 
   const { runLayout } = useAutoLayout(layoutOptions);
+
+  useEffect(() => {
+    fitView();
+  }, [fitView, nodes, flowEdges]);
 
   useImperativeHandle(ref, () => ({
     updateEdges: () => {

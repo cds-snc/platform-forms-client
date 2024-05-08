@@ -38,7 +38,7 @@ export const GroupNode = (node: NodeProps) => {
   const selectedGroupId = useGroupStore((state) => state.id);
   const getElement = useGroupStore((state) => state.getElement);
   const groupIsSelected = selectedGroupId === node.id;
-  const typesWithOptions = ["radio", "checkbox", "select"];
+  const typesWithOptions = ["radio", "checkbox", "select", "dropdown"];
 
   const handleClick =
     node.id === "end"
@@ -83,7 +83,7 @@ export const GroupNode = (node: NodeProps) => {
             <QuestionRuleSvg />
           </div>
         )}
-        {!node.data.children.length && <div className="min-h-[50px] min-w-[150px]"></div>}
+        {!node.data.children.length && <div className="min-h-[50px] min-w-[150px]">d</div>}
         {node.data.children.map((child: TreeItem) => {
           const selected =
             selectedElementId === Number(child.index)
@@ -107,6 +107,9 @@ export const GroupNode = (node: NodeProps) => {
                 </div>
               );
             }
+          }
+
+          if (!item) {
             return null;
           }
 

@@ -8,9 +8,10 @@ import { useTemplateStore } from "@lib/store/useTemplateStore";
 
 import { SingleActionSelect } from "./SingleActionSelect";
 import { MultiActionSelector } from "./MultiActionSelector";
+import { ClearMultiRules } from "./ClearMultiRules";
 
 export const SelectNextAction = ({ item }: { item: FormElement | null }) => {
-  const typesWithOptions = ["radio", "checkbox", "select"];
+  const typesWithOptions = ["radio", "checkbox", "select", "dropdown"];
   const getGroupNextAction = useGroupStore((state) => state.getGroupNextAction);
   const formGroups: GroupsType = useTemplateStore((s) => s.form.groups) || {};
 
@@ -47,7 +48,7 @@ export const SelectNextAction = ({ item }: { item: FormElement | null }) => {
   }
 
   if (!item) {
-    return null;
+    return <ClearMultiRules />;
   }
 
   // If we have an item a question is selected
