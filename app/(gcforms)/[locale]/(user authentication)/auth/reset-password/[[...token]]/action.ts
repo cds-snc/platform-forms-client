@@ -9,7 +9,6 @@ import { logMessage } from "@lib/logger";
 import { handleErrorById } from "@lib/auth/cognito";
 import {
   CognitoIdentityProviderServiceException,
-  CognitoIdentityProviderClient,
   ForgotPasswordCommandInput,
   ForgotPasswordCommand,
   ConfirmForgotPasswordCommand,
@@ -23,6 +22,7 @@ import {
   containsSymbol,
 } from "@lib/validation/validation";
 import { deleteMagicLinkEntry } from "@lib/auth/passwordReset";
+import { cognitoIdentityProviderClient } from "@lib/integration/awsServicesConnector";
 
 export interface ErrorStates {
   authError?: {
@@ -315,20 +315,16 @@ const logPasswordReset = async (email: string) => {
 };
 
 const sendCongnitoCode = async (email: string) => {
-  const { COGNITO_REGION, COGNITO_APP_CLIENT_ID } = process.env;
+  const { COGNITO_APP_CLIENT_ID } = process.env;
   const params: ForgotPasswordCommandInput = {
     ClientId: COGNITO_APP_CLIENT_ID,
     Username: email,
   };
 
-  const cognitoClient = new CognitoIdentityProviderClient({
-    region: COGNITO_REGION,
-  });
-
   const forgotPasswordCommand = new ForgotPasswordCommand(params);
 
   // send command to cognito
-  await cognitoClient.send(forgotPasswordCommand).catch((err) => {
+  await cognitoIdentityProviderClient.send(forgotPasswordCommand).catch((err) => {
     const cognitoError = err as CognitoIdentityProviderServiceException;
     throw new Error(cognitoError.toString());
   });
@@ -339,7 +335,7 @@ const resetCognitoPassword = async (
   confirmationCode: string,
   password: string
 ) => {
-  const { COGNITO_REGION, COGNITO_APP_CLIENT_ID } = process.env;
+  const { COGNITO_APP_CLIENT_ID } = process.env;
 
   const params: ConfirmForgotPasswordCommandInput = {
     ClientId: COGNITO_APP_CLIENT_ID,
@@ -348,13 +344,9 @@ const resetCognitoPassword = async (
     Password: password,
   };
 
-  const cognitoClient = new CognitoIdentityProviderClient({
-    region: COGNITO_REGION,
-  });
-
   const resetPasswordCommand = new ConfirmForgotPasswordCommand(params);
 
-  await cognitoClient.send(resetPasswordCommand).catch((err) => {
+  await cognitoIdentityProviderClient.send(resetPasswordCommand).catch((err) => {
     const cognitoError = err as CognitoIdentityProviderServiceException;
     throw new Error(cognitoError.toString());
   });

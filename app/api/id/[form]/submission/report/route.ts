@@ -5,7 +5,7 @@ import { createTicket } from "@lib/integration/freshdesk";
 import downloadReportProblemSchema from "@lib/middleware/schemas/download-report-problem-schema.json";
 import { BatchGetCommand, TransactWriteCommand } from "@aws-sdk/lib-dynamodb";
 import { MiddlewareProps, VaultStatus, WithRequired } from "@lib/types";
-import { dynamodbClient } from "@lib/integration/dynamodbConnector";
+import { dynamoDBDocumentClient } from "@lib/integration/awsServicesConnector";
 import { createAbility, AccessControlError } from "@lib/privileges";
 import { checkUserHasTemplateOwnership } from "@lib/templates";
 import { logEvent } from "@lib/auditLogs";
@@ -43,7 +43,7 @@ async function getSubmissionsFromSubmissionNames(
     });
 
     // eslint-disable-next-line no-await-in-loop
-    const response = await dynamodbClient.send(request);
+    const response = await dynamoDBDocumentClient.send(request);
 
     if (response.Responses?.Vault) {
       response.Responses.Vault.forEach((record) => {
@@ -127,7 +127,7 @@ async function report(
     }),
   });
 
-  await dynamodbClient.send(request);
+  await dynamoDBDocumentClient.send(request);
 }
 
 async function notifySupport(

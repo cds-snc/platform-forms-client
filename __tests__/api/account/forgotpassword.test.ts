@@ -27,11 +27,9 @@ describe("/account/confirmpassword", () => {
     mockGetCSRFToken.mockReset();
   });
   beforeAll(() => {
-    process.env.COGNITO_REGION = "ca-central-1";
     process.env.COGNITO_APP_CLIENT_ID = "somemockvalue";
   });
   afterAll(() => {
-    process.env.COGNITO_REGION = undefined;
     process.env.COGNITO_APP_CLIENT_ID = undefined;
   });
 

@@ -4,7 +4,7 @@ import { middleware, jsonValidator, sessionExists } from "@lib/middleware";
 import uuidArraySchema from "@lib/middleware/schemas/uuid-array.schema.json";
 import { BatchGetCommand, TransactWriteCommand } from "@aws-sdk/lib-dynamodb";
 import { MiddlewareProps, WithRequired } from "@lib/types";
-import { dynamodbClient } from "@lib/integration/dynamodbConnector";
+import { dynamoDBDocumentClient } from "@lib/integration/awsServicesConnector";
 import { AccessControlError, createAbility } from "@lib/privileges";
 import { checkUserHasTemplateOwnership } from "@lib/templates";
 import { logEvent } from "@lib/auditLogs";
@@ -39,7 +39,7 @@ async function getSubmissionsFromConfirmationCodes(
     });
 
     // eslint-disable-next-line no-await-in-loop
-    const response = await dynamodbClient.send(request);
+    const response = await dynamoDBDocumentClient.send(request);
 
     if (response.Responses?.Vault) {
       response.Responses.Vault.forEach((record) => {
@@ -130,7 +130,7 @@ async function confirm(
     }),
   });
 
-  await dynamodbClient.send(request);
+  await dynamoDBDocumentClient.send(request);
 }
 
 export const PUT = middleware(

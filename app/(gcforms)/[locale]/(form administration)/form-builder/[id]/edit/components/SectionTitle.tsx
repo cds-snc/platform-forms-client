@@ -1,5 +1,6 @@
 import { useTreeRef } from "@formBuilder/components/shared/right-panel/treeview/provider/TreeRefProvider";
 import { useGroupStore } from "@formBuilder/components/shared/right-panel/treeview/store/useGroupStore";
+import { LockedSections } from "@formBuilder/components/shared/right-panel/treeview/types";
 import { useEffect, useRef, useState } from "react";
 
 export const SectionTitle = ({ groupName, groupId }: { groupName: string; groupId: string }) => {
@@ -35,6 +36,8 @@ export const SectionTitle = ({ groupName, groupId }: { groupName: string; groupI
     <h4
       ref={groupNameRef}
       onDoubleClick={(e) => {
+        if (Object.values(LockedSections).includes(groupId as LockedSections)) return;
+
         setEditing(true);
         e.currentTarget.focus();
       }}
