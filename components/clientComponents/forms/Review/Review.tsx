@@ -25,9 +25,9 @@ export const Review = (): React.ReactElement => {
         id: key,
         name: reviewGroups[key].name,
         elements: reviewGroups[key].elements.map((element) => {
+          const elementName = element as keyof typeof formValues;
           return {
-            // @ts-expect-error todo
-            [element]: formValues[element] || "-",
+            [element]: formValues[elementName] || "-",
           };
         }),
       };
