@@ -44,6 +44,7 @@ import {
 import { logMessage } from "@lib/logger";
 import { BrandProperties } from "@lib/types/form-types";
 import { removeChoiceFromRules } from "@lib/formContext";
+import { addReviewElement, getReviewElementId } from "@lib/utils/form-builder/addReviewElement";
 
 const defaultField: FormElement = {
   id: 0,
@@ -81,7 +82,7 @@ export const defaultForm = {
     referrerUrlEn: "",
     referrerUrlFr: "",
   },
-  layout: [10000000000001], // TEMP: temp fix to make Review element render
+  layout: [getReviewElementId()],
   elements: [],
   groups: {},
 };
@@ -184,25 +185,6 @@ const storage: StateStorage = {
   removeItem: async (name: string) => {
     sessionStorage.removeItem(name);
   },
-};
-
-const addReviewElement = (defaultForm: FormProperties) => {
-  // TODO: find a way to make the Id unique probably by using the layout and grabbing the last Id+1
-  const reviewElement = {
-    id: 10000000000001,
-    type: FormElementTypes.review,
-    properties: {
-      titleEn: "-",
-      titleFr: "-",
-      descriptionEn: "-",
-      descriptionFr: "-",
-    },
-  };
-  const result = {
-    ...defaultForm,
-    elements: [...defaultForm.elements, reviewElement],
-  };
-  return result;
 };
 
 const createTemplateStore = (initProps?: Partial<InitialTemplateStoreProps>) => {
@@ -499,7 +481,11 @@ const createTemplateStore = (initProps?: Partial<InitialTemplateStoreProps>) => 
                 state.id = "";
                 state.lang = language as Language;
                 state.translationLanguagePriority = language as Language;
-                state.form = initializeGroups(addReviewElement(defaultForm), allowGroups);
+                state.form = initializeGroups(
+                  addReviewElement(defaultForm),
+                  allowGroups,
+                  String(getReviewElementId())
+                );
                 state.isPublished = false;
                 state.name = "";
                 state.deliveryOption = undefined;
@@ -513,7 +499,8 @@ const createTemplateStore = (initProps?: Partial<InitialTemplateStoreProps>) => 
                 state.lang = "en";
                 state.form = initializeGroups(
                   { ...addReviewElement(defaultForm), ...jsonConfig },
-                  allowGroups
+                  allowGroups,
+                  String(getReviewElementId())
                 );
                 state.isPublished = false;
                 state.name = "";

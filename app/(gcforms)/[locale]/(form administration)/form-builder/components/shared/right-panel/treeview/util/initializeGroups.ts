@@ -3,7 +3,7 @@ import { FormProperties } from "@lib/types/form-types";
 export const initializeGroups = (
   form: FormProperties,
   allowGroups: boolean,
-  reviewId: string = "10000000000001"
+  reviewId: string
 ): FormProperties => {
   // Clean and remove any existing groups
   if (!allowGroups) {
