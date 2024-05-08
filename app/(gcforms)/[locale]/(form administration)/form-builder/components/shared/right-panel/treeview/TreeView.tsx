@@ -22,7 +22,8 @@ import { Group, GroupsType } from "@lib/formContext";
 import { Item } from "./Item";
 import { autoSetNextAction } from "./util/setNextAction";
 import { Tooltip } from "@formBuilder/components/shared/Tooltip";
-import { SortIcon } from "@serverComponents/icons";
+import { AddIcon, SortIcon } from "@serverComponents/icons";
+import { toast } from "../../Toast";
 
 export interface TreeDataProviderProps {
   children?: ReactElement;
@@ -93,6 +94,7 @@ const ControlledTree: ForwardRefRenderFunction<unknown, TreeDataProviderProps> =
     const groups = getGroups() as GroupsType;
     const newGroups = autoSetNextAction({ ...groups }, true);
     replaceGroups(newGroups);
+    toast.success("Auto flow applied");
   };
 
   const addSection = () => {
@@ -371,38 +373,34 @@ const ControlledTree: ForwardRefRenderFunction<unknown, TreeDataProviderProps> =
       }
       onSelectItems={(items) => setSelectedItems(items)}
     >
-      <div className="flex justify-between">
+      <div className="mb-4 flex justify-between align-middle">
         <div className="">
           New section
-          <button
-            className="ml-2 mt-2 rounded-md border border-slate-500 px-2"
-            onClick={addSection}
-          >
-            <span className="sr-only">Add section</span>+
+          <button className="ml-2 mt-2 rounded-md border border-slate-500 p-1" onClick={addSection}>
+            <AddIcon title="Add section" />
           </button>
+        </div>
+        <div>
+          Auto flow
+          <button className="ml-2 mt-2 rounded-md border border-slate-500 p-1" onClick={autoFlow}>
+            <SortIcon title="Auto flow" />
+          </button>
+          <Tooltip.Info
+            side="top"
+            triggerClassName="align-middle ml-1"
+            tooltipClassName="font-normal whitespace-normal"
+          >
+            <strong>Auto flow</strong>
+            <p>
+              Auto flow will automatically set a linear flow for your sections, overriding any
+              existing rules.
+            </p>
+          </Tooltip.Info>
         </div>
       </div>
 
       <Tree treeId="default" rootItem="root" treeLabel="GC Forms sections" ref={tree} />
       <>{children}</>
-
-      <div>
-        Auto flow
-        <button className="ml-2 mt-2 rounded-md border border-slate-500 p-1" onClick={autoFlow}>
-          <SortIcon />
-        </button>
-        <Tooltip.Info
-          side="top"
-          triggerClassName="align-middle ml-1"
-          tooltipClassName="font-normal whitespace-normal"
-        >
-          <strong>Auto flow</strong>
-          <p>
-            Auto flow will automatically set a linear flow for your sections, overriding any
-            existing rules.
-          </p>
-        </Tooltip.Info>
-      </div>
     </ControlledTreeEnvironment>
   );
 };
