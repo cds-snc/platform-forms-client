@@ -12,7 +12,7 @@ import {
   unprocessedSubmissionsCacheCheck,
   unprocessedSubmissionsCachePut,
 } from "./cache/unprocessedSubmissionsCache";
-import { dynamodbClient } from "./integration/dynamodbConnector";
+import { dynamoDBDocumentClient } from "./integration/awsServicesConnector";
 import { logMessage } from "./logger";
 import { AccessControlError, checkPrivileges } from "./privileges";
 import { chunkArray } from "@lib/utils";
@@ -107,7 +107,7 @@ const submissionTypeExists = async (ability: UserAbility, formID: string, status
   };
   const queryCommand = new QueryCommand(getItemsDbParams);
   // eslint-disable-next-line no-await-in-loop
-  const response = await dynamodbClient.send(queryCommand);
+  const response = await dynamoDBDocumentClient.send(queryCommand);
   return Boolean(response.Items?.length);
 };
 
@@ -175,7 +175,7 @@ export async function listAllSubmissions(
       };
       const queryCommand = new QueryCommand(getItemsDbParams);
       // eslint-disable-next-line no-await-in-loop
-      const response = await dynamodbClient.send(queryCommand);
+      const response = await dynamoDBDocumentClient.send(queryCommand);
 
       if (response.Items?.length) {
         accumulatedResponses = accumulatedResponses.concat(
@@ -291,7 +291,7 @@ export async function retrieveSubmissions(
         });
 
         // eslint-disable-next-line no-await-in-loop
-        const response = await dynamodbClient.send(queryCommand);
+        const response = await dynamoDBDocumentClient.send(queryCommand);
 
         if (response.Responses?.Vault.length) {
           accumulatedResponses = accumulatedResponses.concat(
@@ -395,7 +395,7 @@ export async function updateLastDownloadedBy(
       }),
     });
 
-    return () => dynamodbClient.send(request);
+    return () => dynamoDBDocumentClient.send(request);
   });
 
   // @todo - handle errors that can result from failing TransactWriteCommand operations
@@ -482,7 +482,7 @@ export async function deleteDraftFormResponses(ability: UserAbility, formID: str
       };
       const queryCommand = new QueryCommand(getItemsDbParams);
       // eslint-disable-next-line no-await-in-loop
-      const response = await dynamodbClient.send(queryCommand);
+      const response = await dynamoDBDocumentClient.send(queryCommand);
 
       if (response.Items?.length) {
         accumulatedResponses = accumulatedResponses.concat(
@@ -500,7 +500,7 @@ export async function deleteDraftFormResponses(ability: UserAbility, formID: str
 
     const asyncDeleteRequests = chunkArray(accumulatedResponses, 25).map((request) => {
       return () =>
-        dynamodbClient.send(
+        dynamoDBDocumentClient.send(
           new BatchWriteCommand({
             RequestItems: {
               Vault: request.map((entryName) => ({
