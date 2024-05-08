@@ -374,13 +374,14 @@ const ControlledTree: ForwardRefRenderFunction<unknown, TreeDataProviderProps> =
       onSelectItems={(items) => setSelectedItems(items)}
     >
       <div className="mb-4 flex justify-between align-middle">
-        <div className="">
+        <label>
           New section
           <button className="ml-2 mt-2 rounded-md border border-slate-500 p-1" onClick={addSection}>
             <AddIcon title="Add section" />
           </button>
-        </div>
-        <div>
+        </label>
+
+        <label>
           Auto flow
           <button className="ml-2 mt-2 rounded-md border border-slate-500 p-1" onClick={autoFlow}>
             <SortIcon title="Auto flow" />
@@ -396,7 +397,7 @@ const ControlledTree: ForwardRefRenderFunction<unknown, TreeDataProviderProps> =
               existing rules.
             </p>
           </Tooltip.Info>
-        </div>
+        </label>
       </div>
 
       <Tree treeId="default" rootItem="root" treeLabel="GC Forms sections" ref={tree} />
