@@ -216,6 +216,7 @@ export const Preview = ({
                       </div>
                     );
                   }}
+                  allowGrouping={allowGrouping}
                 >
                   {currentForm}
                 </Form>

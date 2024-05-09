@@ -14,6 +14,7 @@ import { ErrorStatus } from "../Alert/Alert";
 import { submitForm } from "app/(gcforms)/[locale]/(form filler)/id/[...props]/actions";
 import useFormTimer from "@lib/hooks/useFormTimer";
 import { useFormValuesChanged } from "@lib/hooks/useValueChanged";
+import { useGCFormsContext } from "@lib/hooks/useGCFormContext";
 
 interface SubmitButtonProps {
   numberOfRequiredQuestions: number;
@@ -140,6 +141,11 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
   const [canFocusOnError, setCanFocusOnError] = useState(false);
   const [lastSubmitCount, setLastSubmitCount] = useState(-1);
 
+  // Used to determine to show the intro text or not
+  const { currentGroup } = useGCFormsContext();
+  const allowGrouping = props.allowGrouping ?? false;
+  const showIntro = allowGrouping ? currentGroup === "start" : true;
+
   const { t } = useTranslation();
 
   useFormValuesChanged();
@@ -192,10 +198,12 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
 
       {
         <>
-          <RichText>
-            {form.introduction &&
-              form.introduction[props.language == "en" ? "descriptionEn" : "descriptionFr"]}
-          </RichText>
+          {showIntro && (
+            <RichText>
+              {form.introduction &&
+                form.introduction[props.language == "en" ? "descriptionEn" : "descriptionFr"]}
+            </RichText>
+          )}
 
           <form
             id="form"
@@ -216,10 +224,12 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
           >
             {children}
 
-            <RichText>
-              {form.privacyPolicy &&
-                form.privacyPolicy[props.language == "en" ? "descriptionEn" : "descriptionFr"]}
-            </RichText>
+            {showIntro && (
+              <RichText>
+                {form.privacyPolicy &&
+                  form.privacyPolicy[props.language == "en" ? "descriptionEn" : "descriptionFr"]}
+              </RichText>
+            )}
             {props.renderSubmit ? (
               props.renderSubmit({
                 validateForm: props.validateForm,
@@ -261,6 +271,7 @@ interface FormProps {
   onSuccess: (id: string) => void;
   children?: (JSX.Element | undefined)[] | null;
   t: TFunction;
+  allowGrouping: boolean | undefined;
 }
 
 /**
