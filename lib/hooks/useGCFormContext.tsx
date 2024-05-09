@@ -32,7 +32,8 @@ export const GCFormsProvider = ({
   formRecord: PublicFormRecord;
 }) => {
   const groups: GroupsType = formRecord.form.groups || {};
-  const initialGroup = groups ? (Object.keys(groups)[0] as string) : null;
+  // TODO: use an enum for "start"
+  const initialGroup = groups ? "start" : null;
   const values = React.useRef({});
   const [matchedIds, setMatchedIds] = React.useState<string[]>([]);
   const [currentGroup, setCurrentGroup] = React.useState<string | null>(initialGroup);
@@ -51,14 +52,6 @@ export const GCFormsProvider = ({
       // Helpful for navigating to the last group
       setPreviousGroup(currentGroup);
 
-      // TODO: on forms-form is landing on start
-      // if (nextAction === "") {
-      //   setCurrentGroup("review");
-      // } else if (nextAction === "review") {
-      //   setCurrentGroup("end");
-      // } else if (typeof nextAction === "string") {
-      //   setCurrentGroup(nextAction);
-      // }
       if (typeof nextAction === "string") {
         setCurrentGroup(nextAction);
       }
