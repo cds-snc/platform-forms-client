@@ -233,7 +233,6 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
               </RichText>
             )}
 
-            {/* TODO use an enum */}
             {allowGrouping && currentGroup === LockedSections.REVIEW && <Review />}
 
             {props.renderSubmit ? (
@@ -277,7 +276,7 @@ interface FormProps {
   onSuccess: (id: string) => void;
   children?: (JSX.Element | undefined)[] | null;
   t: TFunction;
-  allowGrouping: boolean | undefined;
+  allowGrouping?: boolean | undefined;
 }
 
 /**

@@ -80,7 +80,6 @@ export enum FormElementTypes {
   departments = "departments",
   contact = "contact",
   combobox = "combobox",
-  review = "review",
 }
 // used to define attributes for a form element or field
 export interface FormElement {

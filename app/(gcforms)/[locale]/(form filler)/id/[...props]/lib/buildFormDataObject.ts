@@ -84,7 +84,6 @@ function _handleFormDataType(
     case FormElementTypes.dropdown:
     case FormElementTypes.combobox:
     case FormElementTypes.radio:
-    case FormElementTypes.review:
       return value instanceof Object
         ? _handleFormDataText(element.id.toString(), "")
         : _handleFormDataText(element.id.toString(), value as string);

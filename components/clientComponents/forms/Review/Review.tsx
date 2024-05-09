@@ -42,23 +42,24 @@ export const Review = (): React.ReactElement => {
     <>
       <h2 ref={headingRef}>{t("reviewForm")}</h2>
       <div className="my-16">
-        {questionsAndAnswers &&
+        {Array.isArray(questionsAndAnswers) &&
           questionsAndAnswers.map((group) => {
             return (
               <div key={group.id} className="py-4 px-6 mb-10 border-2 border-slate-400 rounded-lg">
                 <h3 className="text-slate-700 underline">{group.name}</h3>
                 <div className="mb-10 ml-1">
                   <dl className="mt-10 mb-10">
-                    {group.elements.map((element) => {
-                      return (
-                        <div key={Object.keys(element)[0]} className="mb-8">
-                          <dt className="font-bold mb-2">
-                            <>{getElementNameById(Object.keys(element)[0])}</>
-                          </dt>
-                          <dd>{Object.values(element)[0]}</dd>
-                        </div>
-                      );
-                    })}
+                    {Array.isArray(group.elements) &&
+                      group.elements.map((element) => {
+                        return (
+                          <div key={Object.keys(element)[0]} className="mb-8">
+                            <dt className="font-bold mb-2">
+                              <>{getElementNameById(Object.keys(element)[0])}</>
+                            </dt>
+                            <dd>{Object.values(element)[0]}</dd>
+                          </div>
+                        );
+                      })}
                   </dl>
                 </div>
                 <Button
