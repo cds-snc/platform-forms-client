@@ -200,8 +200,7 @@
             "dynamicRow",
             "richText",
             "attestation",
-            "combobox",
-            "review"
+            "combobox"
           ]
         },
         "properties": {

@@ -3,7 +3,7 @@ import React, { useEffect, useState, useRef } from "react";
 import { FormikProps, withFormik } from "formik";
 import { getFormInitialValues } from "@lib/formBuilder";
 import { getErrorList, setFocusOnErrorMessage, validateOnSubmit } from "@lib/validation/validation";
-import { Alert, Button, RichText } from "@clientComponents/forms";
+import { Alert, Button, FormGroup, RichText } from "@clientComponents/forms";
 import { logMessage } from "@lib/logger";
 import { useTranslation } from "@i18n/client";
 import { TFunction } from "i18next";
@@ -15,6 +15,7 @@ import { submitForm } from "app/(gcforms)/[locale]/(form filler)/id/[...props]/a
 import useFormTimer from "@lib/hooks/useFormTimer";
 import { useFormValuesChanged } from "@lib/hooks/useValueChanged";
 import { useGCFormsContext } from "@lib/hooks/useGCFormContext";
+import { Review } from "../Review/Review";
 
 interface SubmitButtonProps {
   numberOfRequiredQuestions: number;
@@ -230,6 +231,10 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
                   form.privacyPolicy[props.language == "en" ? "descriptionEn" : "descriptionFr"]}
               </RichText>
             )}
+
+            {/* TODO use an enum */}
+            {allowGrouping && currentGroup === "review" && <Review />}
+
             {props.renderSubmit ? (
               props.renderSubmit({
                 validateForm: props.validateForm,

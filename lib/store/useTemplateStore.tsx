@@ -44,7 +44,6 @@ import {
 import { logMessage } from "@lib/logger";
 import { BrandProperties } from "@lib/types/form-types";
 import { removeChoiceFromRules } from "@lib/formContext";
-import { addReviewElement, getReviewElementId } from "@lib/utils/form-builder/addReviewElement";
 
 const defaultField: FormElement = {
   id: 0,
@@ -82,7 +81,7 @@ export const defaultForm = {
     referrerUrlEn: "",
     referrerUrlFr: "",
   },
-  layout: [getReviewElementId()],
+  layout: [],
   elements: [],
   groups: {},
 };
@@ -206,7 +205,7 @@ const createTemplateStore = (initProps?: Partial<InitialTemplateStoreProps>) => 
   // Ensure any required properties by Form Builder are defaulted by defaultForm
   if (initProps?.form) {
     initProps.form = {
-      ...addReviewElement(defaultForm),
+      ...defaultForm,
       ...initProps?.form,
     };
   }
@@ -482,9 +481,8 @@ const createTemplateStore = (initProps?: Partial<InitialTemplateStoreProps>) => 
                 state.lang = language as Language;
                 state.translationLanguagePriority = language as Language;
                 state.form = initializeGroups(
-                  addReviewElement(defaultForm),
-                  allowGroups,
-                  String(getReviewElementId())
+                  defaultForm,
+                  allowGroups
                 );
                 state.isPublished = false;
                 state.name = "";
@@ -498,9 +496,8 @@ const createTemplateStore = (initProps?: Partial<InitialTemplateStoreProps>) => 
                 state.id = "";
                 state.lang = "en";
                 state.form = initializeGroups(
-                  { ...addReviewElement(defaultForm), ...jsonConfig },
-                  allowGroups,
-                  String(getReviewElementId())
+                  { ...defaultForm, ...jsonConfig },
+                  allowGroups
                 );
                 state.isPublished = false;
                 state.name = "";
