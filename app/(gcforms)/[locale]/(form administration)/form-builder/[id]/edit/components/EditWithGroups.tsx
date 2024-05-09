@@ -14,7 +14,7 @@ import { cleanInput } from "@lib/utils/form-builder";
 import { SaveButton } from "@formBuilder/components/shared/SaveButton";
 import { useGroupStore } from "@formBuilder/components/shared/right-panel/treeview/store/useGroupStore";
 import { Section } from "./Section";
-import { FormElement, FormElementTypes } from "@lib/types";
+import { FormElement } from "@lib/types";
 
 export const EditWithGroups = () => {
   const { t } = useTranslation("form-builder");
@@ -152,9 +152,6 @@ export const EditWithGroups = () => {
           sortedElements.map((element, index) => {
             const questionNumber = 0;
             const item = { ...element, index, questionNumber };
-            if (item.type === FormElementTypes.review) {
-              return null;
-            }
             return <ElementPanel elements={sortedElements} item={item} key={item.id} />;
           })}
       </RefsProvider>

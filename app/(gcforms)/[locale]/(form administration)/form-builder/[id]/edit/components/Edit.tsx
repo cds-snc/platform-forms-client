@@ -13,7 +13,6 @@ import { getQuestionNumber, sortByLayout } from "@lib/utils/form-builder";
 import { SettingsPanel } from "./settings/SettingsPanel";
 import { cleanInput } from "@lib/utils/form-builder";
 import { SaveButton } from "@formBuilder/components/shared/SaveButton";
-import { FormElementTypes } from "@lib/types";
 
 export const Edit = ({ formId }: { formId: string }) => {
   const router = useRouter();
@@ -149,9 +148,6 @@ export const Edit = ({ formId }: { formId: string }) => {
             if (element) {
               const questionNumber = getQuestionNumber(element, elementTypes);
               const item = { ...element, index, questionNumber };
-              if (item.type === FormElementTypes.review) {
-                return null;
-              }
               return <ElementPanel elements={sortedElements} item={item} key={item.id} />;
             }
           })}
