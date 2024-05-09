@@ -44,6 +44,7 @@ export const NextButton = ({
             handleNextAction();
           }
         }}
+        type="button"
       >
         {t("Next")}
       </Button>

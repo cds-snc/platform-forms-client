@@ -21,6 +21,7 @@ interface GCFormsContextValueType {
   handleNextAction: () => void;
   hasNextAction: (group: string) => boolean;
   formRecord: PublicFormRecord;
+  groupsCheck: (groupsFlag: boolean | undefined) => boolean;
 }
 
 const GCFormsContext = createContext<GCFormsContextValueType | undefined>(undefined);
@@ -79,6 +80,12 @@ export const GCFormsProvider = ({
     return values.current as FormValues;
   };
 
+  // Helper to test whether groups are really enabled and in use with the current form. This should
+  // return false for legacy forms and true for forms with groups.
+  const groupsCheck = (groupsFlag: boolean | undefined) => {
+    return Boolean(groupsFlag && currentGroup && groups && Object.keys(groups).length > 1);
+  };
+
   return (
     <GCFormsContext.Provider
       value={{
@@ -92,6 +99,7 @@ export const GCFormsProvider = ({
         setGroup,
         handleNextAction,
         hasNextAction,
+        groupsCheck,
       }}
     >
       {children}
@@ -118,6 +126,7 @@ export const useGCFormsContext = () => {
       hasNextAction: () => void 0,
       handleNextAction: () => void 0,
       formRecord: {} as PublicFormRecord,
+      groupsCheck: () => false,
     };
   }
   return formsContext;

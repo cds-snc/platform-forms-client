@@ -144,10 +144,9 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
   const [canFocusOnError, setCanFocusOnError] = useState(false);
   const [lastSubmitCount, setLastSubmitCount] = useState(-1);
 
-  // Used to determine to show the intro text or not
-  const { currentGroup } = useGCFormsContext();
-  const allowGrouping = props.allowGrouping ?? false;
-  const showIntro = allowGrouping ? currentGroup === LockedSections.START : true;
+  const { currentGroup, groupsCheck } = useGCFormsContext();
+  const isGroupsCheck = groupsCheck(props.allowGrouping);
+  const showIntro = isGroupsCheck ? currentGroup === LockedSections.START : true;
 
   const { t } = useTranslation();
 
@@ -219,6 +218,10 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
             method="POST"
             onSubmit={(e) => {
               e.preventDefault();
+              // For groups enabled forms only allow submitting on the Review page
+              if (isGroupsCheck && currentGroup !== LockedSections.REVIEW) {
+                return;
+              }
               handleSubmit(e);
             }}
             noValidate
@@ -234,7 +237,7 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
               </RichText>
             )}
 
-            {allowGrouping && currentGroup === LockedSections.REVIEW && <Review />}
+            {isGroupsCheck && currentGroup === LockedSections.REVIEW && <Review />}
 
             {props.renderSubmit ? (
               props.renderSubmit({
@@ -242,7 +245,7 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
                 fallBack: () => {
                   return (
                     <div>
-                      {allowGrouping && currentGroup === LockedSections.REVIEW && <BackButton />}
+                      {isGroupsCheck && currentGroup === LockedSections.REVIEW && <BackButton />}
                       <div className="inline-block">
                         <SubmitButton
                           numberOfRequiredQuestions={numberOfRequiredQuestions}
