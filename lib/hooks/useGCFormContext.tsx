@@ -8,6 +8,7 @@ import {
   GroupsType,
   getNextAction,
 } from "@lib/formContext";
+import { LockedSections } from "@formBuilder/components/shared/right-panel/treeview/types";
 
 interface GCFormsContextValueType {
   updateValues: ({ formValues }: { formValues: FormValues }) => void;
@@ -32,8 +33,7 @@ export const GCFormsProvider = ({
   formRecord: PublicFormRecord;
 }) => {
   const groups: GroupsType = formRecord.form.groups || {};
-  // TODO: use an enum for "start"
-  const initialGroup = groups ? "start" : null;
+  const initialGroup = groups ? LockedSections.START : null;
   const values = React.useRef({});
   const [matchedIds, setMatchedIds] = React.useState<string[]>([]);
   const [currentGroup, setCurrentGroup] = React.useState<string | null>(initialGroup);

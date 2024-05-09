@@ -16,6 +16,7 @@ import useFormTimer from "@lib/hooks/useFormTimer";
 import { useFormValuesChanged } from "@lib/hooks/useValueChanged";
 import { useGCFormsContext } from "@lib/hooks/useGCFormContext";
 import { Review } from "../Review/Review";
+import { LockedSections } from "@formBuilder/components/shared/right-panel/treeview/types";
 
 interface SubmitButtonProps {
   numberOfRequiredQuestions: number;
@@ -145,7 +146,7 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
   // Used to determine to show the intro text or not
   const { currentGroup } = useGCFormsContext();
   const allowGrouping = props.allowGrouping ?? false;
-  const showIntro = allowGrouping ? currentGroup === "start" : true;
+  const showIntro = allowGrouping ? currentGroup === LockedSections.START : true;
 
   const { t } = useTranslation();
 
@@ -233,7 +234,7 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
             )}
 
             {/* TODO use an enum */}
-            {allowGrouping && currentGroup === "review" && <Review />}
+            {allowGrouping && currentGroup === LockedSections.REVIEW && <Review />}
 
             {props.renderSubmit ? (
               props.renderSubmit({
