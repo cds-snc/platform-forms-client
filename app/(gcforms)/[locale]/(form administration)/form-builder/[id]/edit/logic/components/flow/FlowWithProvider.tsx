@@ -57,17 +57,16 @@ const Flow: ForwardRefRenderFunction<unknown, FlowProps> = ({ children }, ref) =
     let flowZoom = 0.5;
     if (rfInstance) {
       const obj = rfInstance.toObject();
-
       if (obj.viewport.zoom) {
         flowZoom = obj.viewport.zoom;
       }
+    }
+
+    if (flowZoom > 0.5) {
       return;
     }
 
-    if (flowZoom >= 0.5) {
-      return;
-    }
-
+    // Only fit view if the user has not zoomed in
     fitView();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [fitView, nodes]);
@@ -94,6 +93,7 @@ const Flow: ForwardRefRenderFunction<unknown, FlowProps> = ({ children }, ref) =
         onEdgesChange={onEdgesChange}
         defaultEdgeOptions={edgeOptions}
         onInit={(instance) => {
+          // Keep a reference to the instance so we can check zoom level for fitView.
           setRfInstance(instance);
         }}
       >
@@ -110,6 +110,7 @@ export const FlowWithProvider = () => {
   const hasHydrated = useRehydrate();
 
   if (!hasHydrated) {
+    // Wait for group to be available
     return null;
   }
 
