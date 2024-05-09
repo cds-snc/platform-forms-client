@@ -12,7 +12,7 @@ import {
   unprocessedSubmissionsCacheCheck,
   unprocessedSubmissionsCachePut,
 } from "./cache/unprocessedSubmissionsCache";
-import { connectToDynamo } from "./integration/dynamodbConnector";
+import { dynamoDBDocumentClient } from "./integration/awsServicesConnector";
 import { logMessage } from "./logger";
 import { AccessControlError, checkPrivileges } from "./privileges";
 import { chunkArray } from "@lib/utils";
@@ -86,8 +86,6 @@ const submissionTypeExists = async (ability: UserAbility, formID: string, status
       );
     throw e;
   });
-  const documentClient = connectToDynamo();
-
   const getItemsDbParams: QueryCommandInput = {
     TableName: "Vault",
     IndexName: "Status",
@@ -109,7 +107,7 @@ const submissionTypeExists = async (ability: UserAbility, formID: string, status
   };
   const queryCommand = new QueryCommand(getItemsDbParams);
   // eslint-disable-next-line no-await-in-loop
-  const response = await documentClient.send(queryCommand);
+  const response = await dynamoDBDocumentClient.send(queryCommand);
   return Boolean(response.Items?.length);
 };
 
@@ -150,8 +148,6 @@ export async function listAllSubmissions(
     // We're going to request one more than the limit so we can consistently determine if there are more responses
     const responseRetrievalLimit = responseDownloadLimit + 1;
 
-    const documentClient = connectToDynamo();
-
     let accumulatedResponses: VaultSubmissionList[] = [];
     let submissionsRemaining = false;
     let paginationLastEvaluatedKey = null;
@@ -179,7 +175,7 @@ export async function listAllSubmissions(
       };
       const queryCommand = new QueryCommand(getItemsDbParams);
       // eslint-disable-next-line no-await-in-loop
-      const response = await documentClient.send(queryCommand);
+      const response = await dynamoDBDocumentClient.send(queryCommand);
 
       if (response.Items?.length) {
         accumulatedResponses = accumulatedResponses.concat(
@@ -278,7 +274,6 @@ export async function retrieveSubmissions(
     // DynamoDB BatchGetItem can only retrieve 100 items at a time
     // Create function that will run the batch in parallel
     const dbQuery = async (keys: Record<string, string>[]) => {
-      const documentClient = connectToDynamo();
       let accumulatedResponses: VaultSubmission[] = [];
       while (keys && keys.length > 0) {
         const queryCommand = new BatchGetCommand({
@@ -296,7 +291,7 @@ export async function retrieveSubmissions(
         });
 
         // eslint-disable-next-line no-await-in-loop
-        const response = await documentClient.send(queryCommand);
+        const response = await dynamoDBDocumentClient.send(queryCommand);
 
         if (response.Responses?.Vault.length) {
           accumulatedResponses = accumulatedResponses.concat(
@@ -370,8 +365,6 @@ export async function updateLastDownloadedBy(
   formID: string,
   email: string
 ) {
-  const documentClient = connectToDynamo();
-
   // TransactWriteItem can only update 100 items at a time
   const asyncUpdateRequests = chunkArray(responses, 100).map((chunkedResponses) => {
     const request = new TransactWriteCommand({
@@ -402,7 +395,7 @@ export async function updateLastDownloadedBy(
       }),
     });
 
-    return () => documentClient.send(request);
+    return () => dynamoDBDocumentClient.send(request);
   });
 
   // @todo - handle errors that can result from failing TransactWriteCommand operations
@@ -444,8 +437,6 @@ export async function unprocessedSubmissions(
  */
 export async function deleteDraftFormResponses(ability: UserAbility, formID: string) {
   try {
-    const documentClient = connectToDynamo();
-
     // Ensure users are owners of the form
     await checkAbilityToAccessSubmissions(ability, formID).catch((error) => {
       if (error instanceof AccessControlError) {
@@ -491,7 +482,7 @@ export async function deleteDraftFormResponses(ability: UserAbility, formID: str
       };
       const queryCommand = new QueryCommand(getItemsDbParams);
       // eslint-disable-next-line no-await-in-loop
-      const response = await documentClient.send(queryCommand);
+      const response = await dynamoDBDocumentClient.send(queryCommand);
 
       if (response.Items?.length) {
         accumulatedResponses = accumulatedResponses.concat(
@@ -509,7 +500,7 @@ export async function deleteDraftFormResponses(ability: UserAbility, formID: str
 
     const asyncDeleteRequests = chunkArray(accumulatedResponses, 25).map((request) => {
       return () =>
-        documentClient.send(
+        dynamoDBDocumentClient.send(
           new BatchWriteCommand({
             RequestItems: {
               Vault: request.map((entryName) => ({

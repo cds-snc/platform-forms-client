@@ -1,7 +1,8 @@
 import { Responses } from "@lib/types";
 import { logMessage } from "@lib/logger";
-import { LambdaClient, InvokeCommand } from "@aws-sdk/client-lambda";
+import { InvokeCommand } from "@aws-sdk/client-lambda";
 import { SubmissionApiError } from "./exceptions";
+import { lambdaClient } from "@lib/integration/awsServicesConnector";
 
 export const callLambda = async (
   formID: string,
@@ -35,9 +36,3 @@ export const callLambda = async (
     throw new SubmissionApiError("Could not process request with Lambda Submission function");
   }
 };
-
-const lambdaClient = new LambdaClient({
-  region: "ca-central-1",
-  retryMode: "standard",
-  ...(process.env.LOCAL_AWS_ENDPOINT && { endpoint: process.env.LOCAL_AWS_ENDPOINT }),
-});

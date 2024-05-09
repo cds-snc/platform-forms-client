@@ -1,5 +1,5 @@
 import { useCallback } from "react";
-import { Edge } from "reactflow";
+import { Edge, MarkerType } from "reactflow";
 import { TreeItem, TreeItemIndex } from "react-complex-tree";
 
 import { useGroupStore } from "@formBuilder/components/shared/right-panel/treeview/store/useGroupStore";
@@ -31,10 +31,36 @@ const endNode = {
   type: "groupNode",
 };
 
+const reviewNode = {
+  id: "review",
+  data: {
+    label: "Review",
+    children: [
+      {
+        data: "Review",
+        index: "review",
+      },
+    ],
+  },
+  type: "groupNode",
+};
+
 const defaultEdges = {
   start: "start",
   end: "end",
 } as const;
+
+const lineStyle = {
+  strokeWidth: 2,
+  stroke: "#6366F1",
+};
+
+const arrowStyle = {
+  type: MarkerType.ArrowClosed,
+  width: 18,
+  height: 18,
+  color: "#6366F1",
+};
 
 const getEdges = (nodeId: string, prevNodeId: string, group: Group | undefined): Edge[] => {
   // Connect to end node as we don't have a next action
@@ -44,6 +70,12 @@ const getEdges = (nodeId: string, prevNodeId: string, group: Group | undefined):
         id: `e-${nodeId}-end`,
         source: nodeId,
         target: defaultEdges.end,
+        style: {
+          ...lineStyle,
+        },
+        markerEnd: {
+          ...arrowStyle,
+        },
       },
     ];
   }
@@ -58,6 +90,12 @@ const getEdges = (nodeId: string, prevNodeId: string, group: Group | undefined):
         id: `e-${nodeId}-${nextAction}`,
         source: nodeId,
         target: nextAction,
+        style: {
+          ...lineStyle,
+        },
+        markerEnd: {
+          ...arrowStyle,
+        },
       },
     ];
   }
@@ -70,6 +108,12 @@ const getEdges = (nodeId: string, prevNodeId: string, group: Group | undefined):
         id: `e-${nodeId}-${action.choiceId}-${action.groupId}`,
         source: nodeId,
         target: action.groupId,
+        style: {
+          ...lineStyle,
+        },
+        markerEnd: {
+          ...arrowStyle,
+        },
       };
     });
 
@@ -127,6 +171,9 @@ export const useFlowData = () => {
       prevNodeId = key as string;
       return flowNode;
     });
+
+    // Add review node
+    nodes.push({ ...reviewNode, position: { x: x_pos, y: y_pos } });
 
     // Push "end" node to the end
     // And add confirmation element
