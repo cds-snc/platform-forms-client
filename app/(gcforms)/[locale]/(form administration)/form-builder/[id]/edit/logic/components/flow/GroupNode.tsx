@@ -38,7 +38,7 @@ export const GroupNode = (node: NodeProps) => {
   const selectedGroupId = useGroupStore((state) => state.id);
   const getElement = useGroupStore((state) => state.getElement);
   const groupIsSelected = selectedGroupId === node.id;
-  const typesWithOptions = ["radio", "checkbox", "select"];
+  const typesWithOptions = ["radio", "checkbox", "select", "dropdown"];
 
   const handleClick =
     node.id === "end"
@@ -58,12 +58,12 @@ export const GroupNode = (node: NodeProps) => {
         };
 
   const nodeClassName =
-    "relative flex w-[100%] min-w-[200px] max-w-[250px] rounded-sm bg-slate-50 p-4 text-sm text-slate-600";
+    "relative flex w-[100%] min-w-[200px] max-w-[250px] rounded-sm bg-slate-50 p-4 text-sm text-slate-600 pr-12";
 
   return (
     <div>
       <div>
-        <label htmlFor={node.id} className="inline-block text-sm text-slate-600">
+        <label htmlFor={node.id} className="inline-block w-5/6 truncate text-sm text-slate-600">
           {node.data.label}
         </label>
       </div>
@@ -83,7 +83,7 @@ export const GroupNode = (node: NodeProps) => {
             <QuestionRuleSvg />
           </div>
         )}
-        {!node.data.children.length && <div className="min-h-[50px] min-w-[150px]"></div>}
+        {!node.data.children.length && <div className="min-h-[50px] min-w-[150px]">d</div>}
         {node.data.children.map((child: TreeItem) => {
           const selected =
             selectedElementId === Number(child.index)
@@ -107,6 +107,9 @@ export const GroupNode = (node: NodeProps) => {
                 </div>
               );
             }
+          }
+
+          if (!item) {
             return null;
           }
 
@@ -128,6 +131,7 @@ export const GroupNode = (node: NodeProps) => {
               key={child.index}
               onClick={(evt) => {
                 evt.stopPropagation();
+                setId(node.id);
                 setSelectedElementId(Number(child.index));
               }}
               className={cn(nodeClassName, selected)}
