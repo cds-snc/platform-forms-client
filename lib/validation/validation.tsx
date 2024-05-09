@@ -117,7 +117,6 @@ const isFieldResponseValid = (
     }
     case FormElementTypes.radio:
     case FormElementTypes.combobox:
-    case FormElementTypes.review:
     case FormElementTypes.dropdown: {
       if (validator.required && (value === undefined || value === "")) {
         return t("input-validation.required");

@@ -17,6 +17,7 @@ import { useFormValuesChanged } from "@lib/hooks/useValueChanged";
 import { useGCFormsContext } from "@lib/hooks/useGCFormContext";
 import { Review } from "../Review/Review";
 import { LockedSections } from "@formBuilder/components/shared/right-panel/treeview/types";
+import { BackButton } from "@formBuilder/[id]/preview/BackButton";
 
 interface SubmitButtonProps {
   numberOfRequiredQuestions: number;
@@ -240,11 +241,16 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
                 validateForm: props.validateForm,
                 fallBack: () => {
                   return (
-                    <SubmitButton
-                      numberOfRequiredQuestions={numberOfRequiredQuestions}
-                      formID={formID}
-                      formTitle={form.titleEn}
-                    />
+                    <div>
+                      {allowGrouping && currentGroup === LockedSections.REVIEW && <BackButton />}
+                      <div className="inline-block">
+                        <SubmitButton
+                          numberOfRequiredQuestions={numberOfRequiredQuestions}
+                          formID={formID}
+                          formTitle={form.titleEn}
+                        />
+                      </div>
+                    </div>
                   );
                 },
               })
