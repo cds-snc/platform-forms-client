@@ -38,7 +38,7 @@ export const initializeGroups = (
 
   form.groups.review = {
     name: "Review",
-    elements: [reviewId],
+    elements: [],
     nextAction: "end",
   };
 

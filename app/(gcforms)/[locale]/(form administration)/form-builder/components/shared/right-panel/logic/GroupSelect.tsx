@@ -33,6 +33,9 @@ export const GroupSelect = ({
         )}
         aria-labelledby={labelId}
       >
+        <option key="none" value="">
+          Select a section to go to
+        </option>
         {groups.map(({ label, value }, i) => {
           return (
             <option key={`${value}-${i}`} value={value}>
