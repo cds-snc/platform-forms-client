@@ -1,20 +1,22 @@
 "use client";
 
 import React, {
-  useEffect,
   useImperativeHandle,
   forwardRef,
   ReactElement,
   ForwardRefRenderFunction,
+  useEffect,
+  useState,
 } from "react";
 
 import ReactFlow, {
   Controls,
   useStoreApi,
   ReactFlowProvider,
-  useReactFlow,
   useNodesState,
   useEdgesState,
+  useReactFlow,
+  ReactFlowInstance,
 } from "reactflow";
 
 import "reactflow/dist/style.css";
@@ -36,9 +38,10 @@ export interface FlowProps {
 
 const Flow: ForwardRefRenderFunction<unknown, FlowProps> = ({ children }, ref) => {
   const { nodes: flowNodes, edges: flowEdges, getData } = useFlowData();
-  const { fitView } = useReactFlow();
   const [nodes, , onNodesChange] = useNodesState(flowNodes);
   const [, setEdges, onEdgesChange] = useEdgesState(flowEdges);
+  const { fitView } = useReactFlow();
+  const [rfInstance, setRfInstance] = useState<ReactFlowInstance | null>();
 
   // temp fix see: https://github.com/xyflow/xyflow/issues/3243
   const store = useStoreApi();
@@ -50,11 +53,25 @@ const Flow: ForwardRefRenderFunction<unknown, FlowProps> = ({ children }, ref) =
     };
   }
 
-  const { runLayout } = useAutoLayout(layoutOptions);
-
   useEffect(() => {
+    let flowZoom = 0.5;
+    if (rfInstance) {
+      const obj = rfInstance.toObject();
+      if (obj.viewport.zoom) {
+        flowZoom = obj.viewport.zoom;
+      }
+    }
+
+    if (flowZoom > 0.5) {
+      return;
+    }
+
+    // Only fit view if the user has not zoomed in
     fitView();
-  }, [nodes, fitView]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [fitView, nodes]);
+
+  const { runLayout } = useAutoLayout(layoutOptions);
 
   useImperativeHandle(ref, () => ({
     updateEdges: () => {
@@ -75,6 +92,10 @@ const Flow: ForwardRefRenderFunction<unknown, FlowProps> = ({ children }, ref) =
         edges={flowEdges}
         onEdgesChange={onEdgesChange}
         defaultEdgeOptions={edgeOptions}
+        onInit={(instance) => {
+          // Keep a reference to the instance so we can check zoom level for fitView.
+          setRfInstance(instance);
+        }}
       >
         <Controls />
         {children}
@@ -89,6 +110,7 @@ export const FlowWithProvider = () => {
   const hasHydrated = useRehydrate();
 
   if (!hasHydrated) {
+    // Wait for group to be available
     return null;
   }
 
