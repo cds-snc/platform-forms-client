@@ -27,7 +27,8 @@
       "dynamicRow": "Add repeating set",
       "richText": "Add page text",
       "departments": "Add department",
-      "combobox": "Add searchable list"
+      "combobox": "Add searchable list",
+      "formattedDate": "Add date"
     },
     "address": {
       "whatIsYourAddress": "What is your address?",
@@ -148,6 +149,14 @@
         "label": "Middle name"
       },
       "title": "Individual names"
+    },
+    "formattedDate": {
+      "title": "Date",
+      "description": "A date with formatting",
+      "label": "Enter the date",
+      "year": "Year",
+      "month": "Month",
+      "day": "Day"
     },
     "listItem": "List item ",
     "name": {
@@ -360,6 +369,7 @@
   "formatH3": "Format Heading 3",
   "formatItalic": "Format italic",
   "formatNumberedList": "Format numbered list",
+  "formattedDate": "Date",
   "formConfirmationMessage": "Confirmation message",
   "formDeleteResponses": {
     "title": "Sign off on the removal of responses before deleting form",
