@@ -139,19 +139,20 @@ export const Edit = ({ formId }: { formId: string }) => {
         schemaProperty="introduction"
         ariaLabel={t("richTextIntroTitle")}
       />
+      <div className="form-builder-editor">
+        <RefsProvider>
+          {layout.length >= 1 &&
+            layout.map((id, index) => {
+              const element = sortedElements.find((element) => element.id === id);
 
-      <RefsProvider>
-        {layout.length >= 1 &&
-          layout.map((id, index) => {
-            const element = sortedElements.find((element) => element.id === id);
-
-            if (element) {
-              const questionNumber = getQuestionNumber(element, elementTypes);
-              const item = { ...element, index, questionNumber };
-              return <ElementPanel elements={sortedElements} item={item} key={item.id} />;
-            }
-          })}
-      </RefsProvider>
+              if (element) {
+                const questionNumber = getQuestionNumber(element, elementTypes);
+                const item = { ...element, index, questionNumber };
+                return <ElementPanel elements={sortedElements} item={item} key={item.id} />;
+              }
+            })}
+        </RefsProvider>
+      </div>
       <>
         <div id="privacy-text">
           <RichTextLocked
