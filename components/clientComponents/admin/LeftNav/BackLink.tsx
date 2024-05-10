@@ -1,6 +1,6 @@
 "use client";
 import React from "react";
-import { StyledLink } from "@clientComponents/globals";
+import Link from "next/link";
 import { BackArrowIcon } from "@serverComponents/icons";
 
 type BackLinkProps = {
@@ -12,12 +12,9 @@ export const BackLink = ({ href, children }: BackLinkProps) => {
   return (
     <div className="mb-10">
       <BackArrowIcon className="mr-2 inline-block" />
-      <StyledLink
-        className="text-lg text-slate-800 visited:text-slate-800 active:text-white"
-        href={href}
-      >
+      <Link className="text-lg text-slate-800 visited:text-slate-800 active:text-white" href={href}>
         {children}
-      </StyledLink>
+      </Link>
     </div>
   );
 };
