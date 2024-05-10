@@ -80,10 +80,11 @@ export const GCFormsProvider = ({
     return values.current as FormValues;
   };
 
-  // Helper to test whether groups are really enabled and in use with the current form. This should
-  // return false for legacy forms and true for forms with groups.
   const groupsCheck = (groupsFlag: boolean | undefined) => {
-    return Boolean(groupsFlag && currentGroup && groups && Object.keys(groups).length > 1);
+    // Check that the conditional logic flag is on and that this is a groups enabled form
+    if (!groupsFlag || !currentGroup || !groups) return false;
+    // Do an additional check to really make sure, there should be at least a star,review,end group
+    return Object.keys(groups).length > 1;
   };
 
   return (
