@@ -83,7 +83,7 @@ export const GCFormsProvider = ({
   const groupsCheck = (groupsFlag: boolean | undefined) => {
     // Check that the conditional logic flag is on and that this is a groups enabled form
     if (!groupsFlag || !currentGroup || !groups) return false;
-    // Do an additional check to really make sure, there should be at least a star,review,end group
+    // Do an additional check to really make sure, there should be at least a start and end group
     return Object.keys(groups).length > 1;
   };
 
