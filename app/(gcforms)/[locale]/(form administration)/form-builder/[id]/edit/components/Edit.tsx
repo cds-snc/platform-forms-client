@@ -38,7 +38,7 @@ export const Edit = ({ formId }: { formId: string }) => {
 
   const [value, setValue] = useState<string>(title);
   const searchParams = useSearchParams();
-  const focusTitle = searchParams.get("focusTitle") ? true : false;
+  const focusTitle = searchParams?.get("focusTitle") ? true : false;
   const titleInput = useRef<HTMLTextAreaElement>(null);
 
   useEffect(() => {
