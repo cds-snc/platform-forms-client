@@ -69,9 +69,13 @@ export const GroupNode = (node: NodeProps) => {
       </div>
       <div
         id={node.id}
+        style={{
+          boxShadow: groupIsSelected ? "inset 0 0 0 2px #6366F1" : "inset 0 0 0 5px transparent",
+        }}
         className={cn(
+          "space-y-2 rounded-md border-2 border-indigo-500 p-4 text-white",
           "space-y-2 rounded-md border-1 border-indigo-500 p-4 text-white",
-          groupIsSelected ? "bg-violet-200 border-2" : "bg-gray-soft",
+          groupIsSelected ? "bg-violet-200" : "bg-gray-soft",
           "relative"
         )}
       >
@@ -83,7 +87,7 @@ export const GroupNode = (node: NodeProps) => {
             <QuestionRuleSvg />
           </div>
         )}
-        {!node.data.children.length && <div className="min-h-[50px] min-w-[150px]">d</div>}
+        {!node.data.children.length && <div className="min-h-[50px] min-w-[150px]"></div>}
         {node.data.children.map((child: TreeItem) => {
           const selected =
             selectedElementId === Number(child.index)
