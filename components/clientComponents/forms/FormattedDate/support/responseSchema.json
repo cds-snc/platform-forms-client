@@ -1,0 +1,6 @@
+{
+  "dateInput": {
+    "datetime": "2017-01-01T00:00:00Z", // Store in db or json format?
+    "format": "YYYY-MM" // Format for display
+  }
+}

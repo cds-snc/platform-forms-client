@@ -2,7 +2,7 @@
 import { InputFieldProps } from "@lib/types";
 import classnames from "classnames";
 import { useField } from "formik";
-import React from "react";
+import React, { useState } from "react";
 import { Description } from "../Description/Description";
 import { useTranslation } from "@i18n/client";
 
@@ -23,7 +23,6 @@ export const FormattedDate = (props: FormattedDateProps): React.ReactElement => 
   const {
     id,
     name,
-    className,
     required,
     ariaDescribedBy,
     dateParts = [DatePart.YYYY, DatePart.MM, DatePart.DD],
@@ -33,6 +32,28 @@ export const FormattedDate = (props: FormattedDateProps): React.ReactElement => 
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [field, meta, helpers] = useField(props);
+
+  const [selectedMonth, setSelectedMonth] = useState(1);
+  const [selectedYear, setSelectedYear] = useState(new Date().getFullYear());
+
+  const isLeapYear = (year: number) => {
+    return year % 400 === 0 || (year % 100 !== 0 && year % 4 === 0);
+  };
+
+  const getMaxDay = (month: number, year: number) => {
+    // Months are 1-indexed
+    switch (month) {
+      case 2:
+        return isLeapYear(year) ? 29 : 28;
+      case 4:
+      case 6:
+      case 9:
+      case 11:
+        return 30;
+      default:
+        return 31;
+    }
+  };
 
   return (
     <fieldset aria-describedby={id}>
@@ -46,7 +67,12 @@ export const FormattedDate = (props: FormattedDateProps): React.ReactElement => 
           return part === DatePart.MM && props.monthSelector === "select" ? (
             <div key={part}>
               <label>{t(`formattedDate.${part}`)}</label>
-              <select name={`${name}-${part}`} className="gc-dropdown w-36">
+              <select
+                name={`${name}-${part}`}
+                className="gc-dropdown w-36"
+                onChange={(e) => setSelectedMonth(Number(e.target.value))}
+                required={required}
+              >
                 {Array.from({ length: 12 }, (_, i) => i + 1).map((month) => (
                   <option key={month} value={month}>
                     {t(`formattedDate.months.${month}`)}
@@ -54,15 +80,41 @@ export const FormattedDate = (props: FormattedDateProps): React.ReactElement => 
                 ))}
               </select>
             </div>
+          ) : part === DatePart.MM ? (
+            <div key={part} className="flex flex-col">
+              <label>{t(`formattedDate.${part}`)}</label>
+              <input
+                name={`${name}-${part}`}
+                type="number"
+                min={1}
+                max={12}
+                className={classnames("gc-input-text", "w-16")}
+                onChange={(e) => setSelectedMonth(Number(e.target.value))}
+                required={required}
+              />
+            </div>
+          ) : part === DatePart.YYYY ? (
+            <div key={part} className="flex flex-col">
+              <label>{t(`formattedDate.${part}`)}</label>
+              <input
+                name={`${name}-${part}`}
+                type="number"
+                min={1900}
+                className={classnames("gc-input-text", "w-28")}
+                onChange={(e) => setSelectedYear(Number(e.target.value))}
+                required={required}
+              />
+            </div>
           ) : (
             <div key={part} className="flex flex-col">
               <label>{t(`formattedDate.${part}`)}</label>
               <input
                 name={`${name}-${part}`}
                 type="number"
-                min={part === DatePart.YYYY ? 1900 : 1}
-                max={part === DatePart.MM ? 12 : part === DatePart.YYYY ? undefined : 31}
-                className={classnames("gc-input-text", part === DatePart.YYYY ? "w-28" : "w-16")}
+                min={1}
+                max={getMaxDay(selectedMonth, selectedYear)}
+                className={classnames("gc-input-text", "w-16")}
+                required={required}
               />
             </div>
           );
