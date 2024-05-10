@@ -252,7 +252,8 @@
     },
     "lineItemEntries": {
       "added": "Added",
-      "removed": "Removed"
+      "removed": "Removed",
+      "remove": "Remove"
     },
     "sending": "Sending...",
     "cancel": "Cancel"
