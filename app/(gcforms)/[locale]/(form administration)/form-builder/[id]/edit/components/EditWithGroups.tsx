@@ -35,7 +35,7 @@ export const EditWithGroups = () => {
 
   const [value, setValue] = useState<string>(title);
   const searchParams = useSearchParams();
-  const focusTitle = searchParams.get("focusTitle") ? true : false;
+  const focusTitle = searchParams?.get("focusTitle") ? true : false;
   const titleInput = useRef<HTMLTextAreaElement>(null);
   const groupId = useGroupStore((state) => state.id);
   const getElement = useGroupStore((state) => state.getElement);

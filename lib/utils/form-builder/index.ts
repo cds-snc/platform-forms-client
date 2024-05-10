@@ -1,6 +1,8 @@
 import { FormElement, FormProperties, FormElementTypes, DeliveryOption } from "@lib/types";
 import { TemplateStoreState } from "../../store/useTemplateStore";
 import { GroupsType } from "@lib/formContext";
+import { getLayoutFromGroups } from "./getLayoutFromGroups";
+import { formHasGroups } from "./formHasGroups";
 
 export const completeEmailAddressRegex =
   /^([a-zA-Z0-9!#$%&'*+-/=?^_`{|}~.])+@([a-zA-Z0-9-.]+)\.([a-zA-Z0-9]{2,})+$/;
@@ -95,7 +97,7 @@ export const sortByLayout = ({
   });
 };
 
-export const getSchemaFromState = (state: TemplateStoreState) => {
+export const getSchemaFromState = (state: TemplateStoreState, allowGroups = false) => {
   const {
     form: {
       titleEn,
@@ -123,6 +125,14 @@ export const getSchemaFromState = (state: TemplateStoreState) => {
     brand,
     groups,
   };
+
+  // Force this is off until a enable in a follow-up PR
+  const sortUsingGroups = allowGroups;
+
+  if (sortUsingGroups && formHasGroups(form)) {
+    const groups = form.groups as GroupsType;
+    form.layout = getLayoutFromGroups(groups);
+  }
 
   return form;
 };

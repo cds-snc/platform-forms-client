@@ -9,6 +9,7 @@ import {
   getNextAction,
 } from "@lib/formContext";
 import { LockedSections } from "@formBuilder/components/shared/right-panel/treeview/types";
+import { formHasGroups } from "@lib/utils/form-builder/formHasGroups";
 
 interface GCFormsContextValueType {
   updateValues: ({ formValues }: { formValues: FormValues }) => void;
@@ -80,11 +81,12 @@ export const GCFormsProvider = ({
     return values.current as FormValues;
   };
 
+  // TODO: once groups flag is on, just use formHasGroups
   const groupsCheck = (groupsFlag: boolean | undefined) => {
     // Check that the conditional logic flag is on and that this is a groups enabled form
-    if (!groupsFlag || !currentGroup || !groups) return false;
+    if (!groupsFlag || !currentGroup) return false;
     // Do an additional check to really make sure, there should be at least a start and end group
-    return Object.keys(groups).length > 1;
+    return formHasGroups(formRecord.form);
   };
 
   return (
