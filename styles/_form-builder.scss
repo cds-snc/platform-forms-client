@@ -1,7 +1,9 @@
 .form-builder {
-  .radio-label-text,
-  .checkbox-label-text {
-    @apply w-auto;
+  .form-builder-editor {
+    .radio-label-text,
+    .checkbox-label-text {
+      @apply w-auto;
+    }
   }
 
   /*--------------------------------------------*
