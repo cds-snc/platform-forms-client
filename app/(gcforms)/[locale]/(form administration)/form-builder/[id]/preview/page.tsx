@@ -1,9 +1,8 @@
 import { serverTranslation } from "@i18n";
 import { Metadata } from "next";
-import { auth } from "@lib/auth";
+import { authCheck } from "@lib/actions";
 
 import { notFound } from "next/navigation";
-import { createAbility } from "@lib/privileges";
 import { getFullTemplateByID } from "@lib/templates";
 import { Preview } from "./Preview";
 import { LockIcon } from "@serverComponents/icons";
@@ -25,7 +24,7 @@ export default async function Page({
 }: {
   params: { locale: string; id: string };
 }) {
-  const session = await auth();
+  const { session, ability } = await authCheck().catch(() => ({ session: null, ability: null }));
   const disableSubmit = id === "0000" || !session?.user;
   const { t } = await serverTranslation("form-builder", { lang: locale });
 
@@ -39,7 +38,6 @@ export default async function Page({
 
   if (session) {
     try {
-      const ability = createAbility(session);
       const initialForm = ability && (await getFullTemplateByID(ability, id));
       isPublished = initialForm?.isPublished || false;
     } catch (e) {

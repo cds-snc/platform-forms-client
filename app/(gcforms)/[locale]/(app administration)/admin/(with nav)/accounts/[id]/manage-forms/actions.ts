@@ -1,19 +1,13 @@
 "use server";
 import { cache } from "react";
-import { auth } from "@lib/auth";
-import { createAbility } from "@lib/privileges";
+
 import { listAllSubmissions } from "@lib/vault";
 import { detectOldUnprocessedSubmissions } from "@lib/nagware";
 import { deleteTemplate } from "@lib/templates";
 import { TemplateHasUnprocessedSubmissions } from "@lib/templates";
 import { getAppSetting } from "@lib/appSettings";
 import { revalidatePath } from "next/cache";
-
-export const authCheck = cache(async () => {
-  const session = await auth();
-  if (!session) throw new Error("No session found");
-  return createAbility(session);
-});
+import { authCheck } from "@lib/actions";
 
 export const overdueSettings = cache(async () => {
   const promptPhaseDays = await getAppSetting("nagwarePhasePrompted");
@@ -23,7 +17,7 @@ export const overdueSettings = cache(async () => {
 });
 
 export const getUnprocessedSubmissionsForTemplate = async (templateId: string) => {
-  const ability = await authCheck();
+  const { ability } = await authCheck();
   const { promptPhaseDays, warnPhaseDays, responseDownloadLimit } = await overdueSettings();
   const allSubmissions = await listAllSubmissions(
     ability,
@@ -39,7 +33,7 @@ export const getUnprocessedSubmissionsForTemplate = async (templateId: string) =
 };
 
 export const deleteForm = async (id: string) => {
-  const ability = await authCheck();
+  const { ability } = await authCheck();
 
   try {
     await deleteTemplate(ability, id);

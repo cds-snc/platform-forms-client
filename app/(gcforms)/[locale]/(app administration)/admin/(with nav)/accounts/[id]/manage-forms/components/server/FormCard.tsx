@@ -1,5 +1,6 @@
 import { serverTranslation } from "@i18n";
-import { getUnprocessedSubmissionsForTemplate, authCheck } from "../../actions";
+import { getUnprocessedSubmissionsForTemplate } from "../../actions";
+import { authCheck } from "@lib/actions";
 import { OverdueStatus } from "./OverdueStatus";
 import { LinkButton } from "@serverComponents/globals/Buttons/LinkButton";
 import { MoreMenu } from "../client/MoreMenu";
@@ -22,7 +23,7 @@ export const FormCard = async ({
     i18n: { language },
   } = await serverTranslation("admin-forms");
   const overdue = await getUnprocessedSubmissionsForTemplate(id);
-  const ability = await authCheck();
+  const { ability } = await authCheck();
   return (
     <li className="mb-4 max-w-2xl rounded-md border-2 border-black p-4" key={id} id={`form-${id}`}>
       <div className="flex flex-row items-start justify-between">

@@ -2,7 +2,7 @@ import { redirect } from "next/navigation";
 import { Metadata } from "next";
 
 import { serverTranslation } from "@i18n";
-import { auth } from "@lib/auth";
+import { authCheck } from "@lib/actions";
 import { getAppSetting } from "@lib/appSettings";
 import { Branding } from "./components";
 
@@ -18,7 +18,7 @@ export async function generateMetadata({
 }
 
 export default async function Page({ params: { locale } }: { params: { locale: string } }) {
-  const session = await auth();
+  const { session } = await authCheck().catch(() => ({ session: null }));
 
   if (session && !session.user.acceptableUse) {
     // If they haven't agreed to Acceptable Use redirect to policy page for acceptance

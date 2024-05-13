@@ -1,6 +1,6 @@
 import { serverTranslation } from "@i18n";
 import { LoggedOutTab, LoggedOutTabName } from "@serverComponents/form-builder/LoggedOutTab";
-import { auth } from "@lib/auth";
+import { authCheck } from "@lib/actions";
 import { SettingsNavigation } from "./components/SettingsNavigation";
 
 export default async function Layout({
@@ -12,7 +12,7 @@ export default async function Layout({
 }) {
   const { t } = await serverTranslation("form-builder", { lang: locale });
 
-  const session = await auth();
+  const { session } = await authCheck().catch(() => ({ session: null }));
 
   if (!session) {
     return <LoggedOutTab tabName={LoggedOutTabName.SETTINGS} />;

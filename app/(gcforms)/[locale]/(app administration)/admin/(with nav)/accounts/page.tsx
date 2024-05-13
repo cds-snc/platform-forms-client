@@ -1,7 +1,7 @@
 import { Suspense } from "react";
 import { serverTranslation } from "@i18n";
-import { auth } from "@lib/auth";
-import { checkPrivilegesAsBoolean, createAbility } from "@lib/privileges";
+import { authCheck } from "@lib/actions";
+import { checkPrivilegesAsBoolean } from "@lib/privileges";
 import { Metadata } from "next";
 import { NavigtationFrame } from "./components/server/NavigationFrame";
 import { Loader } from "@clientComponents/globals/Loader";
@@ -27,9 +27,9 @@ export default async function Page({
   params: { locale: string };
   searchParams: { userState?: string };
 }) {
-  const session = await auth();
-  if (!session) redirect(`/${locale}/auth/login`);
-  const ability = createAbility(session);
+  const { ability } = await authCheck().catch(() => {
+    redirect(`/${locale}/auth/login`);
+  });
 
   // Can the user view this page
   checkPrivilegesAsBoolean(

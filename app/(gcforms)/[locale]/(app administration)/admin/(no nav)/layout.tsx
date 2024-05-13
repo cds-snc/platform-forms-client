@@ -7,7 +7,7 @@ import { SiteLogo } from "@serverComponents/icons";
 
 import LanguageToggle from "@serverComponents/globals/LanguageToggle";
 import { YourAccountDropdown } from "@clientComponents/globals/Header/YourAccountDropdown";
-import { auth } from "@lib/auth";
+import { authCheck } from "@lib/actions";
 import { SkipLink } from "@serverComponents/globals/SkipLink";
 import { Footer } from "@serverComponents/globals/Footer";
 export default async function Layout({
@@ -17,8 +17,9 @@ export default async function Layout({
   children: React.ReactNode;
   params: { locale: string };
 }) {
-  const session = await auth();
-  if (!session) redirect(`${locale}/auth/login`);
+  await authCheck().catch(() => {
+    redirect(`/${locale}/auth/login`);
+  });
 
   const { t } = await serverTranslation(["common", "admin-login"], { lang: locale });
 
@@ -54,7 +55,7 @@ export default async function Layout({
                   <LanguageToggle />
                 </li>
                 <li className="mr-5 text-base">
-                  <YourAccountDropdown isAuthenticated={Boolean(session)} />
+                  <YourAccountDropdown isAuthenticated={true} />
                 </li>
               </ul>
             </nav>

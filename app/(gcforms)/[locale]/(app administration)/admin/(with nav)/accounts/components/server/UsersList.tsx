@@ -1,16 +1,14 @@
 import { UserCard } from "./UserCard";
 import { getPublishedFormsPrivilegeId, getAllUsers } from "../../actions";
-import { auth } from "@lib/auth";
-import { createAbility } from "@lib/privileges";
+
+import { authCheck } from "@lib/actions";
 import { serverTranslation } from "@i18n";
 import { Card } from "@clientComponents/globals/card/Card";
 import { ScrollHelper } from "../client/ScrollHelper";
 import { checkPrivilegesAsBoolean } from "@lib/privileges";
 
 export const UsersList = async ({ filter }: { filter?: string }) => {
-  const session = await auth();
-  if (!session) throw new Error("No session found");
-  const ability = createAbility(session);
+  const { ability } = await authCheck();
 
   const canManageUser = checkPrivilegesAsBoolean(ability, [
     { action: "update", subject: { type: "User", object: {} } },
@@ -42,7 +40,7 @@ export const UsersList = async ({ filter }: { filter?: string }) => {
                   user={user}
                   canManageUser={canManageUser}
                   canManageForms={canManageForms}
-                  currentUserId={session.user.id}
+                  currentUserId={ability.userID}
                   publishFormsId={publishFormsId}
                 />
               </li>

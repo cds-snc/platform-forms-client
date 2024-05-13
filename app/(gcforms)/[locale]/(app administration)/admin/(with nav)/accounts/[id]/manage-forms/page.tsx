@@ -1,7 +1,7 @@
 import { Suspense } from "react";
 import { serverTranslation } from "@i18n";
-import { auth } from "@lib/auth";
-import { checkPrivilegesAsBoolean, createAbility } from "@lib/privileges";
+import { authCheck } from "@lib/actions";
+import { checkPrivilegesAsBoolean } from "@lib/privileges";
 import { getUser } from "@lib/users";
 import { BackLink } from "@clientComponents/admin/LeftNav/BackLink";
 import { Metadata } from "next";
@@ -26,9 +26,9 @@ export default async function Page({
 }: {
   params: { id: string; locale: string };
 }) {
-  const session = await auth();
-  if (!session) redirect(`/${locale}/auth/login`);
-  const ability = createAbility(session);
+  const { ability } = await authCheck().catch(() => {
+    redirect(`/${locale}/auth/login`);
+  });
 
   checkPrivilegesAsBoolean(
     ability,

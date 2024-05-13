@@ -1,5 +1,5 @@
 "use server";
-import { auth } from "@lib/auth";
+import { authCheck } from "@lib/actions";
 import { serverTranslation } from "@i18n";
 import { createTicket } from "@lib/integration/freshdesk";
 import { logMessage } from "@lib/logger";
@@ -64,8 +64,9 @@ export async function unlockPublishing(
   _: ErrorStates,
   formData: FormData
 ): Promise<ErrorStates> {
-  const session = await auth();
-  if (!session) throw new Error("No session");
+  const { session } = await authCheck().catch(() => {
+    redirect(`/${language}/auth/login`);
+  });
 
   const rawData = Object.fromEntries(formData.entries());
   const validatedData = await validate(language, userEmail, rawData);

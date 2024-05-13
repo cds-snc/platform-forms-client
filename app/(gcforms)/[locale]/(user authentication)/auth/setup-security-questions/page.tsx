@@ -1,8 +1,9 @@
 import { serverTranslation } from "@i18n";
 import { Metadata } from "next";
 import { SecurityQuestionsForm } from "./components/client/SecurityQuestionsForm";
-import { auth, retrievePoolOfSecurityQuestions } from "@lib/auth";
+import { retrievePoolOfSecurityQuestions } from "@lib/auth";
 import { redirect } from "next/navigation";
+import { authCheck } from "@lib/actions";
 
 export async function generateMetadata({
   params: { locale },
@@ -16,8 +17,9 @@ export async function generateMetadata({
 }
 
 export default async function Page({ params: { locale } }: { params: { locale: string } }) {
-  const session = await auth();
-  if (!session) return null;
+  const { session } = await authCheck().catch(() => {
+    redirect(`/${locale}/auth/login`);
+  });
 
   if (session.user.hasSecurityQuestions) {
     redirect(`/${locale}/profile`);

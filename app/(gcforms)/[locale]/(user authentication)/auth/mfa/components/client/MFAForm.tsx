@@ -13,7 +13,7 @@ import { ToastContainer } from "@formBuilder/components/shared/Toast";
 import { useFocusIt } from "@lib/hooks/useFocusIt";
 import { Loader } from "@clientComponents/globals/Loader";
 import { useRouter } from "next/navigation";
-import { getSession } from "next-auth/react";
+import { useSession } from "next-auth/react";
 
 export const MFAForm = () => {
   const {
@@ -24,6 +24,8 @@ export const MFAForm = () => {
   const headingRef = useRef(null);
 
   useFocusIt({ elRef: headingRef });
+
+  const { update } = useSession();
 
   const [isLocked, setIsLocked] = useState(false);
   const [isExpired, setIsExpired] = useState(false);
@@ -55,7 +57,7 @@ export const MFAForm = () => {
       sessionStorage.removeItem("authFlowToken");
       const result = await getRedirectPath(language);
       // update session provider with latest user data
-      await getSession();
+      await update();
       if (result.callback) router.push(result.callback);
       else router.push(`/${language}/auth/policy`);
       return {};

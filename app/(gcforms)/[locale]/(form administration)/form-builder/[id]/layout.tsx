@@ -1,10 +1,10 @@
-import { auth } from "@lib/auth";
+import { authCheck } from "@lib/actions";
 import { LeftNavigation } from "./components/LeftNavigation";
 import { ToastContainer } from "@formBuilder/components/shared/Toast";
 import { SkipLink, Footer } from "@clientComponents/globals";
 import { Header } from "@clientComponents/globals/Header/Header";
 import { FormRecord } from "@lib/types";
-import { AccessControlError, createAbility } from "@lib/privileges";
+import { AccessControlError } from "@lib/privileges";
 import { getFullTemplateByID } from "@lib/templates";
 import { redirect } from "next/navigation";
 import { SaveTemplateProvider } from "@lib/hooks/form-builder/useTemplateContext";
@@ -27,7 +27,7 @@ export default async function Layout({
   };
   let initialForm;
 
-  const session = await auth();
+  const { session, ability } = await authCheck().catch(() => ({ session: null, ability: null }));
 
   const formID = id || null;
 
@@ -35,8 +35,6 @@ export default async function Layout({
 
   if (session && formID) {
     try {
-      const ability = createAbility(session);
-
       initialForm = await getFullTemplateByID(ability, formID);
 
       if (initialForm === null) {

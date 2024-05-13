@@ -1,5 +1,5 @@
 import { isEmailDelivery } from "@lib/utils/form-builder";
-import { auth } from "@lib/auth";
+import { authCheck } from "@lib/actions";
 import { DeliveryOptionEmail } from "./components/DeliveryOptionEmail";
 import { NavigationTabs } from "./components/NavigationTabs";
 import { fetchTemplate } from "./actions";
@@ -13,7 +13,7 @@ export default async function Layout({
   children: React.ReactNode;
   params: { locale: string; statusFilter: string; id: string };
 }) {
-  const session = await auth();
+  const { session } = await authCheck().catch(() => ({ session: null }));
   const isAuthenticated = session !== null;
 
   if (!isAuthenticated) {

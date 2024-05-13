@@ -2,16 +2,16 @@
 import * as v from "valibot";
 import { serverTranslation } from "@i18n";
 import { redirect } from "next/navigation";
-import { requestNew2FAVerificationCode, auth } from "@lib/auth";
+import { requestNew2FAVerificationCode } from "@lib/auth";
 import { signIn } from "@lib/auth";
 import { handleErrorById } from "@lib/auth/cognito";
 import { cookies } from "next/headers";
 import { prisma } from "@lib/integration/prismaConnector";
 import { AuthError } from "next-auth";
-import { createAbility } from "@lib/privileges";
 import { getUnprocessedSubmissionsForUser } from "@lib/users";
 import { logMessage } from "@lib/logger";
 import { revalidatePath } from "next/cache";
+import { authCheck } from "@lib/actions";
 
 export interface ErrorStates {
   authError?: {
@@ -168,7 +168,7 @@ export const getErrorText = async (language: string, errorID: string) => {
 };
 
 export const getRedirectPath = async (locale: string) => {
-  const session = await auth();
+  const { session, ability } = await authCheck().catch(() => ({ session: null, ability: null }));
 
   if (!session) {
     // The sessions between client and server are not in sync.
@@ -179,8 +179,6 @@ export const getRedirectPath = async (locale: string) => {
   if (session.user.newlyRegistered || !session.user.hasSecurityQuestions) {
     return { callback: `/${locale}/auth/setup-security-questions` };
   }
-
-  const ability = createAbility(session);
 
   // Get user
   const user = session.user;

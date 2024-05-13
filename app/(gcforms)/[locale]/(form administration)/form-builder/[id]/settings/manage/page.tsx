@@ -1,7 +1,7 @@
 import { serverTranslation } from "@i18n";
 import { getTemplateWithAssociatedUsers } from "@lib/templates";
-import { auth } from "@lib/auth";
-import { checkPrivilegesAsBoolean, createAbility } from "@lib/privileges";
+import { authCheck } from "@lib/actions";
+import { checkPrivilegesAsBoolean } from "@lib/privileges";
 import { getUsers } from "@lib/users";
 import { ManageForm } from "./ManageForm";
 import { Metadata } from "next";
@@ -20,14 +20,6 @@ export async function generateMetadata({
     title: `${t("branding.heading")} — ${t("gcForms")}`,
   };
 }
-
-const getSessionAndAbility = async () => {
-  const session = await auth();
-
-  const ability = session && createAbility(session);
-
-  return { session, ability };
-};
 
 const getCanManageOwnership = (formId: string, ability: UserAbility | null) => {
   if (!ability || formId === "0000") {
@@ -76,7 +68,7 @@ const getAllUsers = async (ability: UserAbility) => {
 };
 
 export default async function Page({ params: { id } }: { params: { id: string } }) {
-  const { session, ability } = await getSessionAndAbility();
+  const { session, ability } = await authCheck().catch(() => ({ session: null, ability: null }));
   const canManageOwnership = getCanManageOwnership(id, ability);
   const canSetClosingDate = getCanSetClosingDate(id, ability, session);
   const nonce = await getNonce();

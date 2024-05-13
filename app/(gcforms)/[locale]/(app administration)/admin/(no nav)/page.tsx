@@ -1,5 +1,5 @@
-import { auth } from "@lib/auth";
-import { checkPrivilegesAsBoolean, createAbility } from "@lib/privileges";
+import { authCheck } from "@lib/actions";
+import { checkPrivilegesAsBoolean } from "@lib/privileges";
 import { serverTranslation } from "@i18n";
 import Link from "next/link";
 import { ManageAccountsIcon, SettingsApplicationsIcon } from "@serverComponents/icons";
@@ -21,9 +21,9 @@ export async function generateMetadata({
 export default async function Page({ params: { locale } }: { params: { locale: string } }) {
   const { t } = await serverTranslation(["admin-home", "common"]);
 
-  const session = await auth();
-  if (!session) redirect(`/${locale}/auth/login`);
-  const ability = createAbility(session);
+  const { ability } = await authCheck().catch(() => {
+    redirect(`/${locale}/auth/login`);
+  });
 
   const canViewUsers = checkPrivilegesAsBoolean(ability, [{ action: "view", subject: "User" }], {
     redirect: true,
