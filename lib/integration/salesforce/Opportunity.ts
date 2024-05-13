@@ -26,6 +26,7 @@ export class Opportunity {
   // Product_to_Add__c is the "Product" field hardcoded to "GC Forms", as a dropdown in Salesforce
   description: string; // description of the form from GC-Forms
   formType: string; // form type from GC-Forms
+  administrative: string; // if the form is adminsitrative or not.
 
   constructor({
     departmentId,
@@ -34,6 +35,7 @@ export class Opportunity {
     recordType,
     description,
     formType,
+    administrative,
   }: {
     departmentId: string;
     formName: string;
@@ -41,6 +43,7 @@ export class Opportunity {
     recordType: string;
     description: string;
     formType: string;
+    administrative: string;
   }) {
     this.departmentId = departmentId;
     this.formName = formName;
@@ -48,6 +51,7 @@ export class Opportunity {
     this.recordType = recordType;
     this.description = description;
     this.formType = formType;
+    this.administrative = administrative;
   }
 
   public toJSON(): object {
@@ -62,6 +66,8 @@ export class Opportunity {
       Product_to_Add__c: "GC Forms",
       RecordTypeId: this.recordType,
       Description: this.description,
+      Form_Type__c: this.formType,
+      Administrative__c: this.administrative,
     };
   }
 }

@@ -9,11 +9,13 @@ import { useSession } from "next-auth/react";
 export const PrePublishDialog = ({
   formId,
   formName,
+  formPurpose,
   handleClose,
   handleConfirm,
 }: {
   formId: string;
   formName: string;
+  formPurpose: string;
   handleClose: () => void;
   handleConfirm: () => void;
 }) => {
@@ -41,7 +43,8 @@ export const PrePublishDialog = ({
         reasonForPublish,
         userEmail,
         userId,
-        userName
+        userName,
+        formPurpose
       );
       handleConfirm();
     }

@@ -10,12 +10,20 @@ export async function UpdateSalesforceRecords(
   reasonForPublish: string,
   userEmail: string,
   userId: string,
-  userName: string
+  userName: string,
+  administrative: string
 ) {
   //Split userName into first and last name
   const nameArray = userName.split(" ");
   const firstName = nameArray[0] ?? "";
   const lastName = nameArray[1] ?? "";
+
+  //administrative should be yes (Admin) or no (nonAdmin)
+  if (administrative === "admin") {
+    administrative = "Yes";
+  } else {
+    administrative = "No";
+  }
 
   const sfConnector = new SalesforceConnector();
   await sfConnector.login();
@@ -29,6 +37,7 @@ export async function UpdateSalesforceRecords(
     userEmail,
     userId,
     description,
-    formType
+    formType,
+    administrative
   );
 }

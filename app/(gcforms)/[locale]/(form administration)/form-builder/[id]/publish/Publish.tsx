@@ -265,6 +265,7 @@ export const Publish = ({ id }: { id: string }) => {
         <PrePublishDialog
           formId={id}
           formName={getName()}
+          formPurpose={formPurpose}
           handleClose={() => handlePrePublishClose()}
           handleConfirm={() => handlePrePublish()}
         />
