@@ -3,6 +3,7 @@ import { useTreeRef } from "@formBuilder/components/shared/right-panel/treeview/
 import { useGroupStore } from "@formBuilder/components/shared/right-panel/treeview/store/useGroupStore";
 import { ExpandingInput } from "@formBuilder/components/shared";
 import { useTemplateStore } from "@lib/store/useTemplateStore";
+import { LockedSections } from "@formBuilder/components/shared/right-panel/treeview/types";
 
 export const SectionTitle = ({ groupName, groupId }: { groupName: string; groupId: string }) => {
   const { getLocalizationAttribute } = useTemplateStore((s) => ({
@@ -26,7 +27,11 @@ export const SectionTitle = ({ groupName, groupId }: { groupName: string; groupI
     treeView?.current?.updateItem(groupId, groupName);
   };
 
-  return (
+  const lockedInput = Object.values(LockedSections).includes(groupId as LockedSections);
+
+  return lockedInput ? (
+    <h4 className="font-bold laptop:text-3xl">{groupName}</h4>
+  ) : (
     <ExpandingInput
       id="sectionTitle"
       ref={groupNameRef}

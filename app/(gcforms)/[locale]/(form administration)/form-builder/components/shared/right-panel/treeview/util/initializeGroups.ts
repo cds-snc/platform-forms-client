@@ -1,4 +1,5 @@
 import { FormProperties } from "@lib/types/form-types";
+import { LockedSections } from "../types";
 
 export const initializeGroups = (form: FormProperties, allowGroups: boolean): FormProperties => {
   // Clean and remove any existing groups
@@ -20,6 +21,7 @@ export const initializeGroups = (form: FormProperties, allowGroups: boolean): Fo
       start: {
         name: "Start",
         elements: [...elementIds],
+        nextAction: LockedSections.REVIEW,
       },
     };
 
