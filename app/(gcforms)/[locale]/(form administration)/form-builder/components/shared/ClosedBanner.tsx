@@ -2,7 +2,7 @@
 import React from "react";
 import { useIsFormClosed } from "@lib/hooks/useIsFormClosed";
 import { useTranslation } from "@i18n/client";
-import { StyledLink } from "@clientComponents/globals";
+import Link from "next/link";
 
 export const ClosedBanner = ({ id }: { id: string | undefined }) => {
   const isPastClosingDate = useIsFormClosed();
@@ -19,9 +19,9 @@ export const ClosedBanner = ({ id }: { id: string | undefined }) => {
   return (
     <div className="mb-5 block bg-purple-200 p-3 font-bold">
       {t("closedBanner.text1")}{" "}
-      <StyledLink className="font-normal" href={href}>
+      <Link className="font-normal" href={href}>
         {t("closedBanner.text2")}
-      </StyledLink>
+      </Link>
     </div>
   );
 };

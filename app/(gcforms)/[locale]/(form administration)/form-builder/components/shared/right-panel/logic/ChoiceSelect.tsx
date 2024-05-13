@@ -29,6 +29,10 @@ export const ChoiceSelect = ({
   if (addCatchAll) {
     choices = [
       {
+        label: "Select an option",
+        value: "",
+      },
+      {
         label: "Catch all (any other value)",
         value: "catch-all",
       },

@@ -38,7 +38,7 @@ export const GroupNode = (node: NodeProps) => {
   const selectedGroupId = useGroupStore((state) => state.id);
   const getElement = useGroupStore((state) => state.getElement);
   const groupIsSelected = selectedGroupId === node.id;
-  const typesWithOptions = ["radio", "checkbox", "select"];
+  const typesWithOptions = ["radio", "checkbox", "select", "dropdown"];
 
   const handleClick =
     node.id === "end"
@@ -58,20 +58,24 @@ export const GroupNode = (node: NodeProps) => {
         };
 
   const nodeClassName =
-    "relative flex w-[100%] min-w-[200px] max-w-[250px] rounded-sm bg-slate-50 p-4 text-sm text-slate-600";
+    "relative flex w-[100%] min-w-[200px] max-w-[250px] rounded-sm bg-slate-50 p-4 text-sm text-slate-600 pr-12";
 
   return (
     <div>
       <div>
-        <label htmlFor={node.id} className="inline-block text-sm text-slate-600">
+        <label htmlFor={node.id} className="inline-block w-5/6 truncate text-sm text-slate-600">
           {node.data.label}
         </label>
       </div>
       <div
         id={node.id}
+        style={{
+          boxShadow: groupIsSelected ? "inset 0 0 0 2px #6366F1" : "inset 0 0 0 5px transparent",
+        }}
         className={cn(
+          "space-y-2 rounded-md border-2 border-indigo-500 p-4 text-white",
           "space-y-2 rounded-md border-1 border-indigo-500 p-4 text-white",
-          groupIsSelected ? "bg-violet-200 border-2" : "bg-gray-soft",
+          groupIsSelected ? "bg-violet-200" : "bg-gray-soft",
           "relative"
         )}
       >
@@ -107,6 +111,9 @@ export const GroupNode = (node: NodeProps) => {
                 </div>
               );
             }
+          }
+
+          if (!item) {
             return null;
           }
 
@@ -128,6 +135,7 @@ export const GroupNode = (node: NodeProps) => {
               key={child.index}
               onClick={(evt) => {
                 evt.stopPropagation();
+                setId(node.id);
                 setSelectedElementId(Number(child.index));
               }}
               className={cn(nodeClassName, selected)}
