@@ -252,7 +252,8 @@
     },
     "lineItemEntries": {
       "added": "Ajouté",
-      "removed": "Supprimé"
+      "removed": "Supprimé",
+      "remove": "Supprime"
     },
     "sending": "Envoi en cours...",
     "cancel": "Annuler"
