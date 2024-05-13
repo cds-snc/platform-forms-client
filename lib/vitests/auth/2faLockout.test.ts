@@ -1,14 +1,13 @@
-/**
- * @jest-environment node
- */
+// @vitest-environment node
 
 import Redis from "ioredis-mock";
 import { registerFailed2FAAttempt, clear2FALockout } from "@lib/auth/2faLockout";
+import { vi } from "vitest";
 
 const redis = new Redis();
 
-jest.mock("@lib/integration/redisConnector", () => ({
-  getRedisInstance: jest.fn(() => redis),
+vi.mock("@lib/integration/redisConnector", () => ({
+  getRedisInstance: vi.fn(() => redis),
 }));
 
 const TEST_EMAIL = "myEmail@email.com";
