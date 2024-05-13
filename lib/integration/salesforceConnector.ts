@@ -77,7 +77,7 @@ export class SalesforceConnector {
     lastName: string,
     email: string
   ): Promise<string> {
-    let retObj = await this.GetContactId(userId);
+    let retObj = await this.GetContactId(email);
     if (retObj == "") {
       const contactDetails = new Contact({
         firstName: firstName,
@@ -94,7 +94,7 @@ export class SalesforceConnector {
   }
 
   private async GetContactId(userId: string): Promise<string> {
-    const salesForceQuery = "SELECT Id FROM Contact WHERE CDS_Contact_ID__c = '" + userId + "'";
+    const salesForceQuery = "SELECT Id FROM Contact WHERE Email = '" + userId + "'";
     const retObj = await this.conn.query(salesForceQuery);
     if (retObj.totalSize === 0) {
       return "";

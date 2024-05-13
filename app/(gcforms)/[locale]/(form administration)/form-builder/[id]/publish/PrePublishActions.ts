@@ -7,8 +7,16 @@ export async function UpdateSalesforceRecords(
   formName: string,
   formType: string,
   description: string,
-  reasonForPublish: string
+  reasonForPublish: string,
+  userEmail: string,
+  userId: string,
+  userName: string
 ) {
+  //Split userName into first and last name
+  const nameArray = userName.split(" ");
+  const firstName = nameArray[0] ?? "";
+  const lastName = nameArray[1] ?? "";
+
   const sfConnector = new SalesforceConnector();
   await sfConnector.login();
   await sfConnector.AddPublishRecord(
@@ -16,10 +24,10 @@ export async function UpdateSalesforceRecords(
     reasonForPublish,
     formId,
     formName,
-    "Vivian",
-    "Nobrega",
-    "vivian.nobrega@cds-snc.ca",
-    "testAPIID",
+    firstName,
+    lastName,
+    userEmail,
+    userId,
     description,
     formType
   );

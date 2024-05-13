@@ -4,6 +4,7 @@ import { Dialog, useDialogRef, Radio, TextArea } from "@formBuilder/components/s
 import React, { useState } from "react";
 import { UpdateSalesforceRecords } from "./PrePublishActions";
 import Select, { SingleValue } from "react-select";
+import { useSession } from "next-auth/react";
 
 export const PrePublishDialog = ({
   formId,
@@ -23,12 +24,25 @@ export const PrePublishDialog = ({
   const [formType, setFormType] = useState("Application");
   const [description, setDescription] = useState("");
   const [reasonForPublish, setReasonForPublish] = useState("");
+  const session = useSession();
 
   async function ContinuePublishSteps() {
     if (prePublishStep == 0) {
       setPrePublishStep(1);
     } else {
-      UpdateSalesforceRecords(formId, formName, formType, description, reasonForPublish);
+      const userEmail = session.data?.user.email ?? "";
+      const userId = session.data?.user.id ?? "";
+      const userName = session.data?.user.name ?? "";
+      UpdateSalesforceRecords(
+        formId,
+        formName,
+        formType,
+        description,
+        reasonForPublish,
+        userEmail,
+        userId,
+        userName
+      );
       handleConfirm();
     }
   }
