@@ -11,7 +11,7 @@ import { authCheck } from "@lib/actions";
 
 export const sessionExists = () => {
   return async (): Promise<MiddlewareReturn> => {
-    const { session } = await authCheck();
+    const { session } = await authCheck().catch(() => ({ session: null }));
 
     // If user is not authenticated or has a deactivated account, return 401
     if (!session || session.user.deactivated) {

@@ -31,7 +31,6 @@ describe.skip("requireAuthentication", () => {
       user: {
         email: "test@cds.ca",
         name: "test",
-        image: "null",
         id: "1",
         privileges: mockUserPrivileges(Base, { user: { id: "1" } }),
         acceptableUse: false,
@@ -49,7 +48,6 @@ describe.skip("requireAuthentication", () => {
       user: {
         email: "test@cds.ca",
         name: "test",
-        image: "null",
         id: "1",
         privileges: mockUserPrivileges(Base, { user: { id: "1" } }),
         acceptableUse: false,
