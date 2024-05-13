@@ -147,15 +147,16 @@ export const EditWithGroups = () => {
       )}
 
       <Section groupId={groupId} />
-      <RefsProvider>
-        {!["end"].includes(groupId) &&
-          sortedElements.map((element, index) => {
-            const questionNumber = 0;
-            const item = { ...element, index, questionNumber };
-            return <ElementPanel elements={sortedElements} item={item} key={item.id} />;
-          })}
-      </RefsProvider>
-
+      <div className="form-builder-editor">
+        <RefsProvider>
+          {!["end"].includes(groupId) &&
+            sortedElements.map((element, index) => {
+              const questionNumber = 0;
+              const item = { ...element, index, questionNumber };
+              return <ElementPanel elements={sortedElements} item={item} key={item.id} />;
+            })}
+        </RefsProvider>
+      </div>
       <>
         {groupId === "start" && (
           <RichTextLocked
