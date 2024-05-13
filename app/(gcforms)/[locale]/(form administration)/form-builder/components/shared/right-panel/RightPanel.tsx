@@ -108,7 +108,7 @@ export const RightPanel = ({ id }: { id: string }) => {
 
   return (
     <div className="relative">
-      <div className={cn("fixed right-0", isIntersecting ? "top-20" : "top-0", open && "hidden")}>
+      <div className={cn("right-0", isIntersecting ? "top-20" : "top-0", open && "hidden")}>
         <Button
           theme="link"
           className="mr-8 mt-5 whitespace-nowrap [&_svg]:focus:fill-white"
@@ -123,7 +123,7 @@ export const RightPanel = ({ id }: { id: string }) => {
       </div>
       <Transition.Root show={open} as={Fragment}>
         <div className="h-full">
-          <div className="sticky top-0 z-auto flex h-dvh">
+          <div className="flex h-full">
             <Transition.Child
               as={Fragment}
               enter="transform transition ease-in-out duration-500"
