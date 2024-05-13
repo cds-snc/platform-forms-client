@@ -97,7 +97,7 @@ export const sortByLayout = ({
   });
 };
 
-export const getSchemaFromState = (state: TemplateStoreState) => {
+export const getSchemaFromState = (state: TemplateStoreState, allowGroups = false) => {
   const {
     form: {
       titleEn,
@@ -127,7 +127,7 @@ export const getSchemaFromState = (state: TemplateStoreState) => {
   };
 
   // Force this is off until a enable in a follow-up PR
-  const sortUsingGroups = false;
+  const sortUsingGroups = allowGroups;
 
   if (sortUsingGroups && formHasGroups(form)) {
     const groups = form.groups as GroupsType;

@@ -8,6 +8,7 @@ import { getFullTemplateByID } from "@lib/templates";
 import { Preview } from "./Preview";
 import { LockIcon } from "@serverComponents/icons";
 import Markdown from "markdown-to-jsx";
+import { allowGrouping } from "@formBuilder/components/shared/right-panel/treeview/util/allowGrouping";
 
 export async function generateMetadata({
   params: { locale },
@@ -28,6 +29,7 @@ export default async function Page({
   const session = await auth();
   const disableSubmit = id === "0000" || !session?.user;
   const { t } = await serverTranslation("form-builder", { lang: locale });
+  const isAllowGrouping = await allowGrouping();
 
   const formID = id;
 
@@ -64,5 +66,5 @@ export default async function Page({
     );
   }
 
-  return <Preview disableSubmit={disableSubmit} />;
+  return <Preview disableSubmit={disableSubmit} allowGrouping={isAllowGrouping} />;
 }

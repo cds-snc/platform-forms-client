@@ -16,8 +16,15 @@ import { useIsFormClosed } from "@lib/hooks/useIsFormClosed";
 import { GCFormsProvider } from "@lib/hooks/useGCFormContext";
 import Skeleton from "react-loading-skeleton";
 import { Form } from "@clientComponents/forms/Form/Form";
+import { BackButton } from "./BackButton";
 
-export const Preview = ({ disableSubmit = true }: { disableSubmit?: boolean }) => {
+export const Preview = ({
+  disableSubmit = true,
+  allowGrouping = false,
+}: {
+  disableSubmit?: boolean;
+  allowGrouping?: boolean;
+}) => {
   const { status } = useSession();
   const { i18n } = useTranslation("common");
   const { id, getSchema, getIsPublished, getSecurityAttribute } = useTemplateStore((s) => ({
@@ -177,18 +184,21 @@ export const Preview = ({ disableSubmit = true }: { disableSubmit?: boolean }) =
                             validateForm={validateForm}
                             fallBack={() => {
                               return (
-                                <Button
-                                  type="submit"
-                                  id="SubmitButton"
-                                  className="mb-4"
-                                  onClick={(e) => {
-                                    if (disableSubmit) {
-                                      return preventSubmit(e);
-                                    }
-                                  }}
-                                >
-                                  {t("submitButton", { ns: "common", lng: language })}
-                                </Button>
+                                <>
+                                  {allowGrouping && <BackButton />}
+                                  <Button
+                                    type="submit"
+                                    id="SubmitButton"
+                                    className="mb-4"
+                                    onClick={(e) => {
+                                      if (disableSubmit) {
+                                        return preventSubmit(e);
+                                      }
+                                    }}
+                                  >
+                                    {t("submitButton", { ns: "common", lng: language })}
+                                  </Button>
+                                </>
                               );
                             }}
                           />
@@ -206,6 +216,7 @@ export const Preview = ({ disableSubmit = true }: { disableSubmit?: boolean }) =
                       </div>
                     );
                   }}
+                  allowGrouping={allowGrouping}
                 >
                   {currentForm}
                 </Form>
