@@ -27,6 +27,7 @@ export class Opportunity {
   description: string; // description of the form from GC-Forms
   formType: string; // form type from GC-Forms
   administrative: string; // if the form is adminsitrative or not.
+  formId: string; // CDS_Opportunity_Number__c in Salesforce == GC Forms Form ID
 
   constructor({
     departmentId,
@@ -36,6 +37,7 @@ export class Opportunity {
     description,
     formType,
     administrative,
+    formId,
   }: {
     departmentId: string;
     formName: string;
@@ -44,6 +46,7 @@ export class Opportunity {
     description: string;
     formType: string;
     administrative: string;
+    formId: string;
   }) {
     this.departmentId = departmentId;
     this.formName = formName;
@@ -52,6 +55,7 @@ export class Opportunity {
     this.description = description;
     this.formType = formType;
     this.administrative = administrative;
+    this.formId = formId;
   }
 
   public toJSON(): object {
@@ -68,6 +72,7 @@ export class Opportunity {
       Description: this.description,
       Form_Type__c: this.formType,
       Administrative__c: this.administrative,
+      CDS_Opportunity_Number__c: this.formId,
     };
   }
 }

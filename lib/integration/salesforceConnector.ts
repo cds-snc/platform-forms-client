@@ -148,6 +148,7 @@ export class SalesforceConnector {
       description: description,
       formType: formType,
       administrative: administrative,
+      formId: formId,
     });
 
     const newOpportunityId = await this.CreateOpportunity(opportunity);
