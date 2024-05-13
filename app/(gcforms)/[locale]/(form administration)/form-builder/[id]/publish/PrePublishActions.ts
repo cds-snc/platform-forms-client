@@ -20,7 +20,7 @@ export async function UpdateSalesforceRecords(
   const sfConnector = new SalesforceConnector();
   await sfConnector.login();
   await sfConnector.AddPublishRecord(
-    "test department",
+    "Department Not Listed", //Will set to this if user does not exist.
     reasonForPublish,
     formId,
     formName,
@@ -31,5 +31,4 @@ export async function UpdateSalesforceRecords(
     description,
     formType
   );
-  //TODO : ^ Apply correct values, and do something with the object returned.
 }
