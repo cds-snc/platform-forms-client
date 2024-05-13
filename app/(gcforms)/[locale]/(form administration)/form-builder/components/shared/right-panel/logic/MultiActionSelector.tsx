@@ -43,7 +43,7 @@ export const GroupAndChoiceSelect = ({
   const currentGroup = useGroupStore((state) => state.id);
 
   // Get the parent question of the next action choice
-  let choiceParentQuestion = choiceId?.split(".")[0] || null;
+  const choiceParentQuestion = choiceId?.split(".")[0] || null;
 
   // Get the element associated with the parent question
   const choiceElement = getElement(Number(choiceParentQuestion));
@@ -80,10 +80,6 @@ export const GroupAndChoiceSelect = ({
   const title = choiceElement
     ? choiceElement.properties[localizeField(LocalizedElementProperties.TITLE, language)]
     : "";
-
-  if (choiceId === "catch-all") {
-    choiceParentQuestion = "catch-all";
-  }
 
   return (
     <>

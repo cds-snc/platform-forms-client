@@ -26,6 +26,9 @@ export const ChoiceSelect = ({
     selected = "1.0";
   }
 
+  // Get the parent question of the next action choice
+  const choiceParentQuestion = selected?.split(".")[0] || null;
+
   if (addCatchAll) {
     choices = [
       {
@@ -33,8 +36,8 @@ export const ChoiceSelect = ({
         value: "",
       },
       {
-        label: "Catch all (any other value)",
-        value: "catch-all",
+        label: `Catch all (any other value)`,
+        value: `${choiceParentQuestion}.catch-all`,
       },
       ...choices,
     ];
