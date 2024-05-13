@@ -7,7 +7,7 @@ export default async function Layout({ children }: { children: React.ReactNode }
   return (
     <>
       <ReactHydrationCheck />
-      <ClientContexts session={session}>{children}</ClientContexts>;
+      <ClientContexts session={session}>{children}</ClientContexts>
     </>
   );
 }

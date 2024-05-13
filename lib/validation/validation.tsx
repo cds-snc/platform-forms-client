@@ -126,7 +126,12 @@ const isFieldResponseValid = (
     case FormElementTypes.fileInput: {
       const fileInputResponse = value as FileInputResponse;
 
-      if (validator.required && (!fileInputResponse.name || !fileInputResponse.size || !fileInputResponse.based64EncodedFile))
+      if (
+        validator.required &&
+        (!fileInputResponse.name ||
+          !fileInputResponse.size ||
+          !fileInputResponse.based64EncodedFile)
+      )
         return t("input-validation.required");
 
       if (fileInputResponse.size && !isFileSizeValid(fileInputResponse.size))
