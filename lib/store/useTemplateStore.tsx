@@ -453,7 +453,8 @@ const createTemplateStore = (initProps?: Partial<InitialTemplateStoreProps>) => 
                 }
               });
             },
-            getSchema: () => JSON.stringify(getSchemaFromState(get()), null, 2),
+            getSchema: () =>
+              JSON.stringify(getSchemaFromState(get(), get().allowGroupsFlag), null, 2),
             getId: () => get().id,
             getIsPublished: () => get().isPublished,
             setIsPublished: (isPublished) => {

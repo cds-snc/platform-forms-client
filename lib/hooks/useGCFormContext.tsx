@@ -8,15 +8,21 @@ import {
   GroupsType,
   getNextAction,
 } from "@lib/formContext";
+import { LockedSections } from "@formBuilder/components/shared/right-panel/treeview/types";
+import { formHasGroups } from "@lib/utils/form-builder/formHasGroups";
 
 interface GCFormsContextValueType {
   updateValues: ({ formValues }: { formValues: FormValues }) => void;
+  getValues: () => FormValues;
   matchedIds: string[];
   groups?: GroupsType;
   currentGroup: string | null;
+  previousGroup: string | null;
+  setGroup: (group: string | null) => void;
   handleNextAction: () => void;
   hasNextAction: (group: string) => boolean;
   formRecord: PublicFormRecord;
+  groupsCheck: (groupsFlag: boolean | undefined) => boolean;
 }
 
 const GCFormsContext = createContext<GCFormsContextValueType | undefined>(undefined);
@@ -29,10 +35,11 @@ export const GCFormsProvider = ({
   formRecord: PublicFormRecord;
 }) => {
   const groups: GroupsType = formRecord.form.groups || {};
-  const initialGroup = groups ? (Object.keys(groups)[0] as string) : null;
+  const initialGroup = groups ? LockedSections.START : null;
   const values = React.useRef({});
   const [matchedIds, setMatchedIds] = React.useState<string[]>([]);
   const [currentGroup, setCurrentGroup] = React.useState<string | null>(initialGroup);
+  const [previousGroup, setPreviousGroup] = React.useState<string | null>(initialGroup);
 
   const hasNextAction = (group: string) => {
     return groups[group]?.nextAction ? true : false;
@@ -43,6 +50,9 @@ export const GCFormsProvider = ({
 
     if (hasNextAction(currentGroup)) {
       const nextAction = getNextAction(groups, currentGroup, matchedIds);
+
+      // Helpful for navigating to the last group
+      setPreviousGroup(currentGroup);
 
       if (typeof nextAction === "string") {
         setCurrentGroup(nextAction);
@@ -62,16 +72,37 @@ export const GCFormsProvider = ({
     }
   };
 
+  // Helper to not expose the setter
+  const setGroup = (group: string | null) => {
+    setCurrentGroup(group);
+  };
+
+  const getValues = () => {
+    return values.current as FormValues;
+  };
+
+  // TODO: once groups flag is on, just use formHasGroups
+  const groupsCheck = (groupsFlag: boolean | undefined) => {
+    // Check that the conditional logic flag is on and that this is a groups enabled form
+    if (!groupsFlag || !currentGroup) return false;
+    // Do an additional check to really make sure, there should be at least a start and end group
+    return formHasGroups(formRecord.form);
+  };
+
   return (
     <GCFormsContext.Provider
       value={{
         formRecord,
         updateValues,
+        getValues,
         matchedIds,
         groups,
         currentGroup,
+        previousGroup,
+        setGroup,
         handleNextAction,
         hasNextAction,
+        groupsCheck,
       }}
     >
       {children}
@@ -87,12 +118,18 @@ export const useGCFormsContext = () => {
       updateValues: () => {
         return "noop";
       },
+      getValues: () => {
+        return;
+      },
       matchedIds: [""],
       groups: {},
       currentGroup: "",
+      previousGroup: "",
+      setGroup: () => void 0,
       hasNextAction: () => void 0,
       handleNextAction: () => void 0,
       formRecord: {} as PublicFormRecord,
+      groupsCheck: () => false,
     };
   }
   return formsContext;

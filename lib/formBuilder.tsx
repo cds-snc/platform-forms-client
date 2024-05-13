@@ -231,7 +231,7 @@ function _buildForm(element: FormElement, lang: string): ReactElement {
         />
       );
     }
-    case FormElementTypes.combobox:
+    case FormElementTypes.combobox: {
       return (
         <div className="focus-group">
           {labelComponent}
@@ -244,6 +244,7 @@ function _buildForm(element: FormElement, lang: string): ReactElement {
           />
         </div>
       );
+    }
     default:
       return <></>;
   }
