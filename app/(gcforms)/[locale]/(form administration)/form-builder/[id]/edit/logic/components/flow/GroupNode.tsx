@@ -6,7 +6,7 @@ import { cn } from "@lib/utils";
 import { getSourceHandlePosition, getTargetHandlePosition } from "./utils";
 import { layoutOptions } from "./options";
 import { useGroupStore } from "@formBuilder/components/shared/right-panel/treeview/store/useGroupStore";
-import { useElementTitle, ElementProp } from "@lib/hooks/useElementTitle";
+import { useElementTitle, ElementProperties } from "@lib/hooks/useElementTitle";
 
 const OptionRuleSvg = () => {
   return (
@@ -58,7 +58,7 @@ export const GroupNode = (node: NodeProps) => {
     <div>
       <div>
         <label htmlFor={node.id} className="inline-block w-5/6 truncate text-sm text-slate-600">
-          {node.data.label}
+          {node.data.label.titleEn || node.data.label}
         </label>
       </div>
       <div
@@ -102,7 +102,7 @@ export const GroupNode = (node: NodeProps) => {
             ) {
               return (
                 <div key={child.index} className={cn(nodeClassName)}>
-                  {getTitle(child.data as ElementProp)}
+                  {child.data}
                 </div>
               );
             }
@@ -117,7 +117,7 @@ export const GroupNode = (node: NodeProps) => {
           if (!typesWithOptions.includes(item.type)) {
             return (
               <div key={child.index} className={cn(nodeClassName)}>
-                {getTitle(child.data as ElementProp)}
+                {getTitle(child.data as ElementProperties)}
               </div>
             );
           }
@@ -135,7 +135,7 @@ export const GroupNode = (node: NodeProps) => {
               }}
               className={cn(nodeClassName, selected)}
             >
-              {getTitle(child.data as ElementProp)}
+              {getTitle(child.data as ElementProperties)}
               <div className="absolute right-[10px] top-[10px] cursor-pointer hover:scale-125">
                 <OptionRuleSvg />
               </div>
