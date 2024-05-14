@@ -28,9 +28,9 @@ export const LogicNavigation = () => {
     <div className="flex gap-4">
       <LangSwitcher descriptionLangKey="editingIn" />
       <div className="flex items-baseline text-sm">
-        <label>
+        <label className="ml-4 font-bold">
           {t("logic.resetRules")}
-          <button className="ml-2 mt-2 rounded-md border border-slate-500 p-1" onClick={autoFlow}>
+          <button className="ml-2 rounded-md border border-slate-500 p-1" onClick={autoFlow}>
             <SortIcon title={t("logic.resetRules")} />
           </button>
           <Tooltip.Info
