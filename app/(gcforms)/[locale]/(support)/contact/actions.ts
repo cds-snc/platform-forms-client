@@ -117,7 +117,7 @@ ${description}<br/>
       language,
     });
   } catch (error) {
-    logMessage.error(error);
+    logMessage.error(`Failed to send contact request: ${(error as Error).message}`);
     throw new Error("Internal Service Error: Failed to send request");
   }
 
