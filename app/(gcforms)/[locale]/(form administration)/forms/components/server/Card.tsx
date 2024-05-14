@@ -38,8 +38,10 @@ const CardLinks = async ({ isPublished, url, id, deliveryOption }: CardLinksProp
     i18n: { language },
   } = await serverTranslation("my-forms");
   const responsesLink = `/${language}/form-builder/${id}/responses/new`;
-  const nagwareResult = await getUnprocessedSubmissionsForTemplate(id);
-  const overdue = nagwareResult.numberOfSubmissions;
+  const { result: nagwareResult } = await getUnprocessedSubmissionsForTemplate(id);
+
+  // Fail silently as it is not critcal to the page rendering.
+  const overdue = nagwareResult?.numberOfSubmissions ?? 0;
 
   const textData = {
     responses: overdue,
