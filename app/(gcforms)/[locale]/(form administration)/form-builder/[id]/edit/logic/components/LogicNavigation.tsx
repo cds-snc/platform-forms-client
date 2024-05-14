@@ -6,8 +6,10 @@ import { useGroupStore } from "@formBuilder/components/shared/right-panel/treevi
 import { autoSetNextAction } from "@formBuilder/components/shared/right-panel/treeview/util/setNextAction";
 import { GroupsType } from "@lib/formContext";
 import { SortIcon } from "@serverComponents/icons";
+import { useTranslation } from "@i18n/client";
 
 export const LogicNavigation = () => {
+  const { t } = useTranslation("form-builder");
   const { getGroups, replaceGroups } = useGroupStore((s) => {
     return {
       getGroups: s.getGroups,
@@ -27,9 +29,9 @@ export const LogicNavigation = () => {
       <LangSwitcher descriptionLangKey="editingIn" />
       <div className="flex items-baseline text-sm">
         <label>
-          Auto flow
+          {t("logic.resetRules")}
           <button className="ml-2 mt-2 rounded-md border border-slate-500 p-1" onClick={autoFlow}>
-            <SortIcon title="Auto flow" />
+            <SortIcon title={t("logic.resetRules")} />
           </button>
           <Tooltip.Info
             side="top"

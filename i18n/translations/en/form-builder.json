@@ -809,6 +809,7 @@
     "addRule": "Add rule",
     "saveRule": "Save",
     "saveNote": "Adding and saving a rule, turns off Auto-flow sections",
+    "resetRules": "Reset all rules",
     "multiRulesWarning": "To add rules at the section level please clear your existing option rule(s) first",
     "choiceSelect": {
       "selectOption": "Select an option",
