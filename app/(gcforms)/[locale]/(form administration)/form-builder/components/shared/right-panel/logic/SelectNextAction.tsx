@@ -53,8 +53,7 @@ export const SelectNextAction = ({ item }: { item: FormElement | null }) => {
   // Allow the user to clear the multi rules
   if (!item) {
     return (
-      <div className="p-4">
-        <SectionName sectionName={sectionName} />
+      <div>
         <ClearMultiRules />
       </div>
     );

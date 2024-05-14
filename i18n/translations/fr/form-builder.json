@@ -802,7 +802,7 @@
   "logic": {
     "heading": "Logic [fr]",
     "description": "Apply conditional rules to sections with radio buttons, checkboxes, and dropdown form elements.",
-    "clear": "clear [fr]",
+    "clear": "Clear [fr]",
     "gotoSection": "Go to section [fr]",
     "questionTitle": "Question [fr]:",
     "sectionTitle": "Section: [fr]",
@@ -810,8 +810,12 @@
     "resetRules": "Reset all rules [fr]",
     "resetRulesDescription": "Auto flow will automatically set a linear flow for your sections, overriding any existing rules. [fr]",
     "saveRule": "Save [fr]",
-    "saveNote": "Adding and saving a rule, turns off Auto-flow sections [FR]",
-    "multiRulesWarning": "To add rules at the section level please clear your existing option rule(s) first [fr]",
+    "saveNote": "Adding and saving a rule, turns off Auto-flow sections [fr]",
+    "multiRulesWarning": {
+      "text1": "The flow is currently set based on the rules applied. [fr]",
+      "text2": "Flow sections: [fr]",
+      "text3": "To flow sections, you must clear the rules applied to question elements. [fr]"
+    },
     "choiceSelect": {
       "selectOption": "Select an option [fr]",
       "catchAllOption": "Catch all (any other value) [fr]"
@@ -819,6 +823,7 @@
     "groupSelect": {
       "default": "Select a section to go to [fr]",
       "catchAllGroup": "Catch all (any other value) [fr]"
-    }
+    },
+    "actionsSaved": "Actions saved [fr]"
   }
 }
