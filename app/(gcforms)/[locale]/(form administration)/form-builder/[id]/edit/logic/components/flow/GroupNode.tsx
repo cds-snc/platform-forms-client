@@ -6,6 +6,7 @@ import { cn } from "@lib/utils";
 import { getSourceHandlePosition, getTargetHandlePosition } from "./utils";
 import { layoutOptions } from "./options";
 import { useGroupStore } from "@formBuilder/components/shared/right-panel/treeview/store/useGroupStore";
+import { useElementTitle, ElementProp } from "@lib/hooks/useElementTitle";
 
 const OptionRuleSvg = () => {
   return (
@@ -39,6 +40,8 @@ export const GroupNode = (node: NodeProps) => {
   const getElement = useGroupStore((state) => state.getElement);
   const groupIsSelected = selectedGroupId === node.id;
   const typesWithOptions = ["radio", "checkbox", "select", "dropdown"];
+
+  const { getTitle } = useElementTitle();
 
   const handleClick = {
     onClick: () => {
@@ -99,7 +102,7 @@ export const GroupNode = (node: NodeProps) => {
             ) {
               return (
                 <div key={child.index} className={cn(nodeClassName)}>
-                  {child.data}
+                  {getTitle(child.data as ElementProp)}
                 </div>
               );
             }
@@ -114,7 +117,7 @@ export const GroupNode = (node: NodeProps) => {
           if (!typesWithOptions.includes(item.type)) {
             return (
               <div key={child.index} className={cn(nodeClassName)}>
-                {child.data}
+                {getTitle(child.data as ElementProp)}
               </div>
             );
           }
@@ -132,7 +135,7 @@ export const GroupNode = (node: NodeProps) => {
               }}
               className={cn(nodeClassName, selected)}
             >
-              {child.data}
+              {getTitle(child.data as ElementProp)}
               <div className="absolute right-[10px] top-[10px] cursor-pointer hover:scale-125">
                 <OptionRuleSvg />
               </div>

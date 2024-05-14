@@ -97,7 +97,7 @@ const ControlledTree: ForwardRefRenderFunction<unknown, TreeDataProviderProps> =
     <ControlledTreeEnvironment
       ref={environment}
       items={getTreeData()}
-      getItemTitle={(item) => item.data}
+      getItemTitle={(item) => item.data.titleEn}
       renderItem={({ title, arrow, context, children }) => {
         return (
           <Item title={title} arrow={arrow} context={context}>
@@ -120,12 +120,12 @@ const ControlledTree: ForwardRefRenderFunction<unknown, TreeDataProviderProps> =
       canDrag={(items: TreeItem[]) => {
         return items.some((item) => {
           return (
-            item.data !== "Start" &&
-            item.data !== "Introduction" &&
-            item.data !== "Policy" &&
-            item.data !== "Review" &&
-            item.data !== "End" &&
-            item.data !== "Confirmation"
+            item.data.titleEn !== "Start" &&
+            item.data.titleEn !== "Introduction" &&
+            item.data.titleEn !== "Policy" &&
+            item.data.titleEn !== "Review" &&
+            item.data.titleEn !== "End" &&
+            item.data.titleEn !== "Confirmation"
           );
         });
       }}

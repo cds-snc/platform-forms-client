@@ -2,7 +2,14 @@
 
 import { useTemplateStore } from "@lib/store/useTemplateStore";
 import { LocalizedElementProperties } from "@lib/types/form-builder-types";
-import { FormElement } from "@lib/types";
+
+export type ElementProp = {
+  type: string;
+  titleEn: string;
+  titleFr: string;
+  descriptionEn: string;
+  descriptionFr: string;
+};
 
 export const useElementTitle = () => {
   const { translationLanguagePriority, localizeField } = useTemplateStore((s) => ({
@@ -20,12 +27,13 @@ export const useElementTitle = () => {
     translationLanguagePriority
   );
 
-  const getTitle = (element: FormElement) => {
+  const getTitle = (element: ElementProp) => {
     if (element.type === "richText") {
-      return element.properties[localizedDescription];
+      return element[localizedDescription];
     }
 
-    return element.properties[localizedTitle];
+    return element[localizedTitle];
   };
-  return getTitle;
+
+  return { getTitle };
 };

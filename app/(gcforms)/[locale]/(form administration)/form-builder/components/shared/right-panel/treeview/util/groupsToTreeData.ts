@@ -46,7 +46,13 @@ export const groupsToTreeData = (formGroups: GroupsType, elements: FormElement[]
         canRename: true,
         canMove: true,
         children: [],
-        data: element.properties.titleEn, // @TODO
+        data: {
+          type: element.type,
+          titleEn: element.properties.titleEn,
+          titleFr: element.properties.titleFr,
+          descriptionEn: element.properties.descriptionEn,
+          descriptionFr: element.properties.descriptionFr,
+        },
       };
 
       items[childId] = childItem;

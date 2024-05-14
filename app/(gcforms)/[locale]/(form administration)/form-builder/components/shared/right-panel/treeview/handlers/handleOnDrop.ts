@@ -120,7 +120,7 @@ export const handleOnDrop = (
       // Create a new Groups object
       const newGroups = { ...currentGroups };
       newGroups[String(originParent?.index)] = {
-        name: String(originParent?.data),
+        name: String(originParent?.data.titleEn),
         elements: originGroupElements,
       };
 
@@ -153,7 +153,7 @@ export const handleOnDrop = (
     // Create a new Groups object
     let newGroups = { ...currentGroups };
     newGroups[String(originParent?.index)] = {
-      name: String(originParent?.data),
+      name: String(originParent?.data.titleEn),
       elements: originGroupElements,
     };
 
