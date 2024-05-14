@@ -39,7 +39,7 @@ describe("getNextAction function", () => {
       "group1": {
         name: "group1", nextAction: [
           { "choiceId": "1.0", "groupId": "group2" },
-          { "choiceId": "catch-all", "groupId": "group3" }
+          { "choiceId": "1.catch-all", "groupId": "group3" }
         ], elements: []
       },
       "group2": { name: "group2", nextAction: "end", elements: [] },

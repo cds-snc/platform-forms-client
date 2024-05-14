@@ -26,15 +26,18 @@ export const ChoiceSelect = ({
     selected = "1.0";
   }
 
+  // Get the parent question of the next action choice
+  const choiceParentQuestion = selected?.split(".")[0] || null;
+
   if (addCatchAll) {
     choices = [
       {
-        label: "Select an option",
+        label: t("logic.choiceSelect.selectOption"),
         value: "",
       },
       {
-        label: "Catch all (any other value)",
-        value: "catch-all",
+        label: t("logic.choiceSelect.catchAllOption"),
+        value: `${choiceParentQuestion}.catch-all`,
       },
       ...choices,
     ];
