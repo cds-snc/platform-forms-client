@@ -1,7 +1,5 @@
 import { LockedSections } from "@formBuilder/components/shared/right-panel/treeview/types";
 
-// TODO Unit tests
-
 export const getGroupHistory = (history: string[]) => {
   if (!Array.isArray(history)) return [LockedSections.START];
   return history;
