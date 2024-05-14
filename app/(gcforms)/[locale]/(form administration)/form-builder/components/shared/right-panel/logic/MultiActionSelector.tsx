@@ -1,6 +1,7 @@
 "use client";
 import React, { useMemo, useState } from "react";
 import { useTranslation } from "@i18n/client";
+import { cn } from "@lib/utils";
 
 import { FormElement } from "@lib/types";
 import { GroupsType } from "@lib/formContext";
@@ -197,7 +198,7 @@ export const MultiActionSelector = ({
         </div>
         <div className="mb-6 px-4">
           <Button
-            className="px-4 py-1"
+            className={cn("px-4 py-1", nextActions.length === 0 && "disabled")}
             onClick={() => {
               const group = findParentGroup(String(item.id));
               const parent = group?.index;
