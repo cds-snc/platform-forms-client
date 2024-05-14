@@ -808,6 +808,7 @@
     "sectionTitle": "Section: [fr]",
     "addRule": "Add rule [fr]",
     "resetRules": "Reset all rules [fr]",
+    "resetRulesDescription": "Auto flow will automatically set a linear flow for your sections, overriding any existing rules. [fr]",
     "saveRule": "Save [fr]",
     "saveNote": "Adding and saving a rule, turns off Auto-flow sections [FR]",
     "multiRulesWarning": "To add rules at the section level please clear your existing option rule(s) first [fr]",

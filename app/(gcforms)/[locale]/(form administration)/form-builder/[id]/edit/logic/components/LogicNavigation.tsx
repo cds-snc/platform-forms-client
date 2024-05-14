@@ -38,11 +38,8 @@ export const LogicNavigation = () => {
             triggerClassName="align-middle ml-1"
             tooltipClassName="font-normal whitespace-normal"
           >
-            <strong>Auto flow</strong>
-            <p>
-              Auto flow will automatically set a linear flow for your sections, overriding any
-              existing rules.
-            </p>
+            <strong>{t("logic.resetRules")}</strong>
+            <p>{t("logic.resetRulesDescription")}</p>
           </Tooltip.Info>
         </label>
       </div>
