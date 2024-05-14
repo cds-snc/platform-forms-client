@@ -1,4 +1,5 @@
 import { cn } from "@lib/utils";
+import { useTranslation } from "@i18n/client";
 
 type GroupItem = {
   label: string;
@@ -17,11 +18,11 @@ export const GroupSelect = ({
   className?: string;
 }) => {
   const labelId = `section-select-${Date.now()}`;
-
+  const { t } = useTranslation("form-builder");
   return (
     <div className="mb-4">
       <label className="mb-2 block text-sm" id={labelId}>
-        Go to section
+        {t("logic.gotoSection")}
       </label>
       <select
         value={selected || ""}
@@ -34,7 +35,7 @@ export const GroupSelect = ({
         aria-labelledby={labelId}
       >
         <option key="none" value="">
-          Select a section to go to
+          {t("logic.groupSelect.default")}
         </option>
         {groups.map(({ label, value }, i) => {
           return (

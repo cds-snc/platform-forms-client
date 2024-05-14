@@ -108,7 +108,7 @@ export const RightPanel = ({ id }: { id: string }) => {
 
   return (
     <div className="relative">
-      <div className={cn("right-0", isIntersecting ? "top-20" : "top-0", open && "hidden")}>
+      <div className={cn("fixed right-0", isIntersecting ? "top-20" : "top-0", open && "hidden")}>
         <Button
           theme="link"
           className="mr-8 mt-5 whitespace-nowrap [&_svg]:focus:fill-white"
