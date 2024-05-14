@@ -823,6 +823,7 @@
     "groupSelect": {
       "default": "Select a section to go to [fr]",
       "catchAllGroup": "Catch all (any other value) [fr]"
-    }
+    },
+    "actionsSaved": "Actions saved [fr]"
   }
 }

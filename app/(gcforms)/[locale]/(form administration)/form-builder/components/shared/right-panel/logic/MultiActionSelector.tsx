@@ -18,6 +18,7 @@ import { useFlowRef } from "@formBuilder/[id]/edit/logic/components/flow/provide
 import { ensureChoiceId } from "@lib/formContext";
 import { LocalizedElementProperties } from "@lib/types/form-builder-types";
 import { SaveNote } from "./SaveNote";
+import { toast } from "@formBuilder/components/shared/Toast";
 
 export const GroupAndChoiceSelect = ({
   groupId,
@@ -207,6 +208,7 @@ export const MultiActionSelector = ({
               const parent = group?.index;
               parent && setGroupNextAction(parent as string, nextActions);
               flow.current?.updateEdges();
+              toast.success(t("logic.actionsSaved"));
             }}
           >
             {t("logic.saveRule")}

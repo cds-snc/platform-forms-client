@@ -8,6 +8,7 @@ import { useFlowRef } from "@formBuilder/[id]/edit/logic/components/flow/provide
 import { FormElement } from "@lib/types";
 import { useTranslation } from "@i18n/client";
 import { SaveNote } from "./SaveNote";
+import { toast } from "@formBuilder/components/shared/Toast";
 
 export const SingleActionSelect = ({
   item,
@@ -58,6 +59,7 @@ export const SingleActionSelect = ({
             }
 
             flow.current?.updateEdges();
+            toast.success(t("logic.actionsSaved"));
           }}
         >
           {t("logic.saveRule")}
