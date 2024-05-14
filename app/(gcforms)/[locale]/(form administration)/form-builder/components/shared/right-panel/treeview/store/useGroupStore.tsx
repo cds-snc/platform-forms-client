@@ -100,8 +100,8 @@ const createGroupStore = (initProps?: Partial<GroupStoreProps>) => {
           get().templateStore.setState((s) => {
             if (s.form.groups) {
               s.form.groups[id] = {
+                ...formGroups[id],
                 name,
-                elements: formGroups[id].elements,
               };
             }
           });
