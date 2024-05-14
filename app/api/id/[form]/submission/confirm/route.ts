@@ -150,7 +150,7 @@ async function sendWithExponentialBackoff(
         retryCount < maxRetries
       ) {
         const delay = Math.pow(2, retryCount) * baseDelay;
-        logMessage.warn(`Retrying after ${delay} milliseconds...`);
+        logMessage.warn(`Submission Confirmation Throttle Exception, Retrying after ${delay} milliseconds...`);
         await new Promise((resolve) => setTimeout(resolve, delay));
         retryCount++;
         return execute();
