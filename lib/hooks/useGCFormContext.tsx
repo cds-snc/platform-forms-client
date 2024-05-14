@@ -10,6 +10,11 @@ import {
 } from "@lib/formContext";
 import { LockedSections } from "@formBuilder/components/shared/right-panel/treeview/types";
 import { formHasGroups } from "@lib/utils/form-builder/formHasGroups";
+import {
+  addGroupHistory,
+  getGroupHistory,
+  removeGroupHistory,
+} from "@lib/utils/form-builder/groupsHistory";
 
 interface GCFormsContextValueType {
   updateValues: ({ formValues }: { formValues: FormValues }) => void;
@@ -23,6 +28,9 @@ interface GCFormsContextValueType {
   hasNextAction: (group: string) => boolean;
   formRecord: PublicFormRecord;
   groupsCheck: (groupsFlag: boolean | undefined) => boolean;
+  getHistory: () => string[];
+  addHistory: (groupId: string) => string[];
+  removeHistory: (groupId: string) => string[];
 }
 
 const GCFormsContext = createContext<GCFormsContextValueType | undefined>(undefined);
@@ -37,6 +45,7 @@ export const GCFormsProvider = ({
   const groups: GroupsType = formRecord.form.groups || {};
   const initialGroup = groups ? LockedSections.START : null;
   const values = React.useRef({});
+  const history = React.useRef<string[]>([LockedSections.START]);
   const [matchedIds, setMatchedIds] = React.useState<string[]>([]);
   const [currentGroup, setCurrentGroup] = React.useState<string | null>(initialGroup);
   const [previousGroup, setPreviousGroup] = React.useState<string | null>(initialGroup);
@@ -56,6 +65,7 @@ export const GCFormsProvider = ({
 
       if (typeof nextAction === "string") {
         setCurrentGroup(nextAction);
+        addHistory(nextAction);
       }
     }
   };
@@ -89,6 +99,13 @@ export const GCFormsProvider = ({
     return formHasGroups(formRecord.form);
   };
 
+  const getHistory = () => getGroupHistory(history.current);
+
+  const addHistory = (groupId: string) => addGroupHistory(groupId, history.current);
+
+  // TODO: may want to also remove form values from groupId positing in history on
+  const removeHistory = (groupId: string) => removeGroupHistory(groupId, history.current);
+
   return (
     <GCFormsContext.Provider
       value={{
@@ -103,6 +120,9 @@ export const GCFormsProvider = ({
         handleNextAction,
         hasNextAction,
         groupsCheck,
+        getHistory,
+        addHistory,
+        removeHistory,
       }}
     >
       {children}
@@ -130,6 +150,9 @@ export const useGCFormsContext = () => {
       handleNextAction: () => void 0,
       formRecord: {} as PublicFormRecord,
       groupsCheck: () => false,
+      getHistory: () => [],
+      addHistory: () => [],
+      removeHistory: () => [],
     };
   }
   return formsContext;
