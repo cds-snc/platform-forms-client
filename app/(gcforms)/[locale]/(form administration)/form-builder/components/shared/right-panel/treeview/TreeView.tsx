@@ -25,6 +25,7 @@ import { AddIcon, SortIcon } from "@serverComponents/icons";
 import { toast } from "../../Toast";
 import { handleCanDropAt } from "./handlers/handleCanDropAt";
 import { handleOnDrop } from "./handlers/handleOnDrop";
+import { ElementProperties, useElementTitle } from "@lib/hooks/useElementTitle";
 
 export interface TreeDataProviderProps {
   children?: ReactElement;
@@ -65,6 +66,8 @@ const ControlledTree: ForwardRefRenderFunction<unknown, TreeDataProviderProps> =
   const [expandedItems, setExpandedItems] = useState<TreeItemIndex[]>([]);
   const [selectedItems, setSelectedItems] = useState<TreeItemIndex[]>([]);
 
+  const { getTitle } = useElementTitle();
+
   const autoFlow = () => {
     const groups = getGroups() as GroupsType;
     const newGroups = autoSetNextAction({ ...groups }, true); // forces overwrite of existing next actions
@@ -97,7 +100,7 @@ const ControlledTree: ForwardRefRenderFunction<unknown, TreeDataProviderProps> =
     <ControlledTreeEnvironment
       ref={environment}
       items={getTreeData()}
-      getItemTitle={(item) => item.data}
+      getItemTitle={(item) => getTitle(item.data as ElementProperties)}
       renderItem={({ title, arrow, context, children }) => {
         return (
           <Item title={title} arrow={arrow} context={context}>
@@ -120,12 +123,12 @@ const ControlledTree: ForwardRefRenderFunction<unknown, TreeDataProviderProps> =
       canDrag={(items: TreeItem[]) => {
         return items.some((item) => {
           return (
-            item.data !== "Start" &&
-            item.data !== "Introduction" &&
-            item.data !== "Policy" &&
-            item.data !== "Review" &&
-            item.data !== "End" &&
-            item.data !== "Confirmation"
+            item.data.titleEn !== "Start" &&
+            item.data.titleEn !== "Introduction" &&
+            item.data.titleEn !== "Policy" &&
+            item.data.titleEn !== "Review" &&
+            item.data.titleEn !== "End" &&
+            item.data.titleEn !== "Confirmation"
           );
         });
       }}
