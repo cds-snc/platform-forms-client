@@ -2,6 +2,7 @@ import { Group, GroupsType } from "@lib/formContext";
 import { DraggingPosition, DraggingPositionBetweenItems, TreeItem } from "react-complex-tree";
 import { findParentGroup } from "../util/findParentGroup";
 import { TreeItems } from "../types";
+import { autoSetGroupNextAction } from "../util/setNextAction";
 
 const findItemIndex = (items: string[], itemIndex: string | number) =>
   items.indexOf(String(itemIndex));
@@ -75,7 +76,17 @@ export const handleOnDrop = (
       return acc;
     }, {});
 
-    // newGroups = autoTreeViewFlow(newGroups);
+    // Auto flow nextActions
+    const movedItems = items.map((i) => i["index"]);
+    const originalKeys = Object.keys(currentGroups);
+    movedItems.forEach((item) => {
+      const oldIndex = originalKeys.indexOf(item as string);
+      const prev = originalKeys[oldIndex - 1];
+      // Set the nextAction for the new location of the current item in its new location
+      newGroups = autoSetGroupNextAction(newGroups, item as string);
+      // Set the nextAction for the item that was before the current item in its original location
+      newGroups = autoSetGroupNextAction(newGroups, prev);
+    });
 
     replaceGroups(newGroups);
     setSelectedItems(selectedItems);
