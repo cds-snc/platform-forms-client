@@ -201,6 +201,7 @@ export const MultiActionSelector = ({
           <SaveNote />
           <Button
             className={cn("px-4 py-1", nextActions.length === 0 && "disabled")}
+            disabled={nextActions.length === 0}
             onClick={() => {
               const group = findParentGroup(String(item.id));
               const parent = group?.index;
