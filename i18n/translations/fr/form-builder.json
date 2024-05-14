@@ -801,6 +801,7 @@
   },
   "logic": {
     "heading": "Logic [fr]",
+    "description": "Apply conditional rules to sections with radio buttons, checkboxes, and dropdown form elements.",
     "clear": "clear [fr]",
     "gotoSection": "Go to section [fr]",
     "questionTitle": "Question [fr]:",
