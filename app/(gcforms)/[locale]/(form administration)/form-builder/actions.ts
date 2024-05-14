@@ -2,7 +2,7 @@
 
 import { auth } from "@lib/auth";
 import { AccessControlError, createAbility } from "@lib/privileges";
-import { DeliveryOption, FormProperties, SecurityAttribute } from "@lib/types";
+import { DeliveryOption, FormProperties, FormRecord, SecurityAttribute } from "@lib/types";
 import {
   TemplateAlreadyPublishedError,
   createTemplate as createDbTemplate,
@@ -47,13 +47,30 @@ export const createOrUpdateTemplate = async ({
   name,
   deliveryOption,
   securityAttribute,
-}: CreateOrUpdateTemplateType) => {
-  revalidatePath("/[locale]/forms", "page");
+}: CreateOrUpdateTemplateType): Promise<{
+  formRecord: FormRecord | null;
+  error?: string;
+}> => {
+  try {
+    revalidatePath("/[locale]/forms", "page");
 
-  if (id) {
-    return updateTemplate({ id, formConfig, name, deliveryOption, securityAttribute });
+    if (id) {
+      return {
+        formRecord: await updateTemplate({
+          id,
+          formConfig,
+          name,
+          deliveryOption,
+          securityAttribute,
+        }),
+      };
+    }
+    return {
+      formRecord: await createTemplate({ formConfig, name, deliveryOption, securityAttribute }),
+    };
+  } catch (e) {
+    return { formRecord: null, error: (e as Error).message };
   }
-  return createTemplate({ formConfig, name, deliveryOption, securityAttribute });
 };
 
 export const createTemplate = async ({
