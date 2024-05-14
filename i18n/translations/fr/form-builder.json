@@ -806,7 +806,8 @@
     "gotoSection": "Go to section [fr]",
     "questionTitle": "Question [fr]:",
     "sectionTitle": "Section: [fr]",
-    "saveRule": "save [fr]",
+    "addRule": "Add rule [fr]",
+    "saveRule": "Save [fr]",
     "multiRulesWarning": "To add rules at the section level please clear your existing option rule(s) first [fr]",
     "choiceSelect": {
       "selectOption": "Select an option [fr]",
