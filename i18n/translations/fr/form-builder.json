@@ -808,6 +808,7 @@
     "sectionTitle": "Section: [fr]",
     "addRule": "Add rule [fr]",
     "saveRule": "Save [fr]",
+    "saveNote": "Adding and saving a rule, turns off Auto-flow sections [FR]",
     "multiRulesWarning": "To add rules at the section level please clear your existing option rule(s) first [fr]",
     "choiceSelect": {
       "selectOption": "Select an option [fr]",

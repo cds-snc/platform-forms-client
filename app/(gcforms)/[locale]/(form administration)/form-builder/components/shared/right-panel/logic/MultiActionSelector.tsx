@@ -17,6 +17,7 @@ import { useTemplateStore } from "@lib/store/useTemplateStore";
 import { useFlowRef } from "@formBuilder/[id]/edit/logic/components/flow/provider/FlowRefProvider";
 import { ensureChoiceId } from "@lib/formContext";
 import { LocalizedElementProperties } from "@lib/types/form-builder-types";
+import { SaveNote } from "./SaveNote";
 
 export const GroupAndChoiceSelect = ({
   groupId,
@@ -197,6 +198,7 @@ export const MultiActionSelector = ({
           })}
         </div>
         <div className="mb-6 px-4">
+          <SaveNote />
           <Button
             className={cn("px-4 py-1", nextActions.length === 0 && "disabled")}
             onClick={() => {
