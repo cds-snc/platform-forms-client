@@ -19,10 +19,8 @@ import { findParentGroup } from "./util/findParentGroup";
 import "react-complex-tree/lib/style-modern.css";
 import { GroupsType } from "@lib/formContext";
 import { Item } from "./Item";
-import { autoSetNextAction } from "./util/setNextAction";
-import { Tooltip } from "@formBuilder/components/shared/Tooltip";
-import { AddIcon, SortIcon } from "@serverComponents/icons";
-import { toast } from "../../Toast";
+import { autoSetGroupNextAction } from "./util/setNextAction";
+import { AddIcon } from "@serverComponents/icons";
 import { handleCanDropAt } from "./handlers/handleCanDropAt";
 import { handleOnDrop } from "./handlers/handleOnDrop";
 import { ElementProperties, useElementTitle } from "@lib/hooks/useElementTitle";
@@ -68,16 +66,11 @@ const ControlledTree: ForwardRefRenderFunction<unknown, TreeDataProviderProps> =
 
   const { getTitle } = useElementTitle();
 
-  const autoFlow = () => {
-    const groups = getGroups() as GroupsType;
-    const newGroups = autoSetNextAction({ ...groups }, true); // forces overwrite of existing next actions
-    replaceGroups(newGroups);
-    toast.success("Auto flow applied");
-  };
-
   const addSection = () => {
     const id = uuid();
     addGroup(id, "New section");
+    const newGroups = autoSetGroupNextAction(getGroups() as GroupsType, id);
+    replaceGroups(newGroups);
     setSelectedItems([id]);
     setExpandedItems([id]);
     setId(id);
@@ -167,24 +160,6 @@ const ControlledTree: ForwardRefRenderFunction<unknown, TreeDataProviderProps> =
           <button className="ml-2 mt-2 rounded-md border border-slate-500 p-1" onClick={addSection}>
             <AddIcon title="Add section" />
           </button>
-        </label>
-
-        <label>
-          Auto flow
-          <button className="ml-2 mt-2 rounded-md border border-slate-500 p-1" onClick={autoFlow}>
-            <SortIcon title="Auto flow" />
-          </button>
-          <Tooltip.Info
-            side="top"
-            triggerClassName="align-middle ml-1"
-            tooltipClassName="font-normal whitespace-normal"
-          >
-            <strong>Auto flow</strong>
-            <p>
-              Auto flow will automatically set a linear flow for your sections, overriding any
-              existing rules.
-            </p>
-          </Tooltip.Info>
         </label>
       </div>
 
