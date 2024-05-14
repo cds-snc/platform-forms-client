@@ -123,7 +123,7 @@ export const RightPanel = ({ id }: { id: string }) => {
       </div>
       <Transition.Root show={open} as={Fragment}>
         <div className="h-full">
-          <div className="sticky top-0 z-auto flex h-dvh">
+          <div className="flex h-full">
             <Transition.Child
               as={Fragment}
               enter="transform transition ease-in-out duration-500"
