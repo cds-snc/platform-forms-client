@@ -44,7 +44,7 @@ export const ChoiceSelect = ({
   }
 
   return (
-    <div className="my-2 flex flex-col">
+    <div className="my-2 flex flex-col pt-4">
       <label className="mb-2 inline-block text-sm" id={labelId}>
         {t("addConditionalRules.optionTitle")}
       </label>

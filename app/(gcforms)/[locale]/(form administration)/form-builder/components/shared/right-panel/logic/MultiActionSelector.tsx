@@ -85,7 +85,7 @@ export const GroupAndChoiceSelect = ({
   }
 
   return (
-    <>
+    <div className="px-4">
       {choices && (
         <fieldset className="mb-4 border-b border-dotted border-slate-500">
           <div className="mb-4">
@@ -104,7 +104,7 @@ export const GroupAndChoiceSelect = ({
           </Button>
         </fieldset>
       )}
-    </>
+    </div>
   );
 };
 
@@ -155,18 +155,20 @@ export const MultiActionSelector = ({
 
   return (
     <>
-      <h3 className="block text-sm font-normal">
-        <strong>{t("logic.questionTitle")}</strong> {title}
-      </h3>
+      <div className="p-4">
+        <h3 className="block text-sm font-normal">
+          <strong>{t("logic.questionTitle")}</strong> {title}
+        </h3>
+      </div>
 
       <div className="flex items-center border-b-2 border-black bg-slate-50 p-3">
-        <span className="mr-2 inline-block">{t("logic.addRule")}</span>
+        <span className="mr-2 inline-block pl-3">{t("logic.addRule")}</span>
         <Button
           onClick={() => {
             setNextActions([...nextActions, { groupId: "", choiceId: String(item.id) }]);
           }}
           theme={"secondary"}
-          className="p-2"
+          className="p-1"
           aria-controls={formId}
         >
           <AddIcon title={t("logic.addRule")} />
@@ -193,7 +195,7 @@ export const MultiActionSelector = ({
             );
           })}
         </div>
-        <div className="mb-6">
+        <div className="mb-6 px-4">
           <Button
             className="px-4 py-1"
             onClick={() => {
