@@ -155,7 +155,7 @@ export const MultiActionSelector = ({
   return (
     <>
       <h3 className="block text-sm font-normal">
-        <strong>Question:</strong> {title}
+        <strong>{t("logic.questionTitle")}</strong> {title}
       </h3>
       <form
         onSubmit={(e: React.FormEvent<HTMLFormElement>) => e.preventDefault()}
@@ -198,7 +198,7 @@ export const MultiActionSelector = ({
               flow.current?.updateEdges();
             }}
           >
-            Save
+            {t("logic.saveRule")}
           </Button>
         </div>
       </form>

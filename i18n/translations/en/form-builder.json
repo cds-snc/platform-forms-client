@@ -800,6 +800,20 @@
     }
   },
   "logic": {
-    "heading": "Logic"
+    "heading": "Logic",
+    "clear": "clear",
+    "gotoSection": "Go to section",
+    "questionTitle": "Question:",
+    "sectionTitle": "Section:",
+    "saveRule": "save",
+    "multiRulesWarning": "To add rules at the section level please clear your existing option rule(s) first",
+    "choiceSelect": {
+      "selectOption": "Select an option",
+      "catchAllOption": "Catch all (any other value)"
+    },
+    "groupSelect": {
+      "default": "Select a section to go to",
+      "catchAllGroup": "Catch all (any other value)"
+    }
   }
 }

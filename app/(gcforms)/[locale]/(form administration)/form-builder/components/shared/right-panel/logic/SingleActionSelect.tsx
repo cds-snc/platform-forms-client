@@ -6,6 +6,7 @@ import { Button } from "@clientComponents/globals";
 import { useGroupStore } from "@formBuilder/components/shared/right-panel/treeview/store/useGroupStore";
 import { useFlowRef } from "@formBuilder/[id]/edit/logic/components/flow/provider/FlowRefProvider";
 import { FormElement } from "@lib/types";
+import { useTranslation } from "@i18n/client";
 
 export const SingleActionSelect = ({
   item,
@@ -18,6 +19,7 @@ export const SingleActionSelect = ({
   const id = useGroupStore((state) => state.id);
   const findParentGroup = useGroupStore((state) => state.findParentGroup);
   const setGroupNextAction = useGroupStore((state) => state.setGroupNextAction);
+  const { t } = useTranslation("form-builder");
 
   const currentGroup = id;
   const [nextActionId, setNextActionId] = useState(nextAction);
@@ -56,7 +58,7 @@ export const SingleActionSelect = ({
             flow.current?.updateEdges();
           }}
         >
-          Save
+          {t("logic.saveRule")}
         </Button>
       </div>
     </div>

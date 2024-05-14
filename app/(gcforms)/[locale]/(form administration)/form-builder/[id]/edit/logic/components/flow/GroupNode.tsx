@@ -40,22 +40,13 @@ export const GroupNode = (node: NodeProps) => {
   const groupIsSelected = selectedGroupId === node.id;
   const typesWithOptions = ["radio", "checkbox", "select", "dropdown"];
 
-  const handleClick =
-    node.id === "end"
-      ? {
-          onClick: () => {
-            setId("end");
-            // Reset selected element id
-            setSelectedElementId(0);
-          },
-        }
-      : {
-          onClick: () => {
-            setId(node.id);
-            // Reset selected element id
-            setSelectedElementId(0);
-          },
-        };
+  const handleClick = {
+    onClick: () => {
+      setId(node.id);
+      // Reset selected element id
+      setSelectedElementId(0);
+    },
+  };
 
   const nodeClassName =
     "relative flex w-[100%] min-w-[200px] max-w-[250px] rounded-sm bg-slate-50 p-4 text-sm text-slate-600 pr-12";
@@ -79,7 +70,8 @@ export const GroupNode = (node: NodeProps) => {
           "relative"
         )}
       >
-        {node.id !== "end" && (
+        {/* Don't allow the end or review group rules to be edited */}
+        {node.id !== "end" && node.id !== "review" && (
           <div
             {...handleClick}
             className="absolute right-[-20px] top-[-20px] cursor-pointer hover:scale-125"

@@ -32,11 +32,11 @@ export const ChoiceSelect = ({
   if (addCatchAll) {
     choices = [
       {
-        label: "Select an option",
+        label: t("logic.choiceSelect.selectOption"),
         value: "",
       },
       {
-        label: `Catch all (any other value)`,
+        label: t("logic.choiceSelect.catchAllOption"),
         value: `${choiceParentQuestion}.catch-all`,
       },
       ...choices,
