@@ -24,6 +24,37 @@ export const autoSetNextAction = (formGroups: GroupsType, force: boolean = false
 };
 
 /*
+ * When adding a new group, set the nextAction for both the new group and the previous group
+ */
+export const autoSetGroupNextAction = (formGroups: GroupsType, groupId: string) => {
+  const keys = Object.keys(formGroups);
+  const index = keys.indexOf(groupId);
+  const newGroups = { ...formGroups };
+
+  if (index === -1) {
+    return formGroups;
+  }
+
+  const nextKey = keys[index + 1];
+
+  newGroups[groupId] = {
+    ...newGroups[groupId],
+    nextAction: nextKey,
+  };
+
+  const prevKey = keys[index - 1];
+
+  if (prevKey) {
+    newGroups[prevKey] = {
+      ...newGroups[prevKey],
+      nextAction: groupId,
+    };
+  }
+
+  return newGroups;
+};
+
+/*
   This function sets the nextAction for a specific group
   The nextAction is the key of the next group in the formGroups object
 */
