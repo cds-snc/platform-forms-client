@@ -231,7 +231,7 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
             {isGroupsCheck &&
               currentGroup !== LockedSections.REVIEW &&
               currentGroup !== LockedSections.START && (
-                <h2 className="pb-8">{getGroupTitle(currentGroup, props.language)}</h2>
+                <h2 className="pb-8">{getGroupTitle(currentGroup)}</h2>
               )}
 
             {children}
