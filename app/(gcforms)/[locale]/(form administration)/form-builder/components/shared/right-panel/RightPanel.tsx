@@ -194,7 +194,7 @@ export const RightPanel = ({ id }: { id: string }) => {
                       </Tab.Panel>
                       <Tab.Panel>
                         {/* Logic */}
-                        <div className="m-0 mt-1 w-full p-4">
+                        <div className="m-0 w-full">
                           {activePathname.endsWith("/logic") && <SelectNextAction item={item} />}
                         </div>
                         {/* end logic */}

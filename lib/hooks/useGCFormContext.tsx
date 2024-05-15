@@ -10,6 +10,11 @@ import {
 } from "@lib/formContext";
 import { LockedSections } from "@formBuilder/components/shared/right-panel/treeview/types";
 import { formHasGroups } from "@lib/utils/form-builder/formHasGroups";
+import {
+  getGroupHistory as _getGroupHistory,
+  pushIdToHistory as _pushIdToHistory,
+  clearHistoryAfterId as _clearHistoryAfterId,
+} from "@lib/utils/form-builder/groupsHistory";
 
 interface GCFormsContextValueType {
   updateValues: ({ formValues }: { formValues: FormValues }) => void;
@@ -23,6 +28,9 @@ interface GCFormsContextValueType {
   hasNextAction: (group: string) => boolean;
   formRecord: PublicFormRecord;
   groupsCheck: (groupsFlag: boolean | undefined) => boolean;
+  getGroupHistory: () => string[];
+  pushIdToHistory: (groupId: string) => string[];
+  clearHistoryAfterId: (groupId: string) => string[];
 }
 
 const GCFormsContext = createContext<GCFormsContextValueType | undefined>(undefined);
@@ -37,6 +45,7 @@ export const GCFormsProvider = ({
   const groups: GroupsType = formRecord.form.groups || {};
   const initialGroup = groups ? LockedSections.START : null;
   const values = React.useRef({});
+  const history = React.useRef<string[]>([LockedSections.START]);
   const [matchedIds, setMatchedIds] = React.useState<string[]>([]);
   const [currentGroup, setCurrentGroup] = React.useState<string | null>(initialGroup);
   const [previousGroup, setPreviousGroup] = React.useState<string | null>(initialGroup);
@@ -56,6 +65,7 @@ export const GCFormsProvider = ({
 
       if (typeof nextAction === "string") {
         setCurrentGroup(nextAction);
+        pushIdToHistory(nextAction);
       }
     }
   };
@@ -89,6 +99,13 @@ export const GCFormsProvider = ({
     return formHasGroups(formRecord.form);
   };
 
+  const getGroupHistory = () => _getGroupHistory(history.current);
+
+  const pushIdToHistory = (groupId: string) => _pushIdToHistory(groupId, history.current);
+
+  // Note: this only removes the group entry and not the values
+  const clearHistoryAfterId = (groupId: string) => _clearHistoryAfterId(groupId, history.current);
+
   return (
     <GCFormsContext.Provider
       value={{
@@ -103,6 +120,9 @@ export const GCFormsProvider = ({
         handleNextAction,
         hasNextAction,
         groupsCheck,
+        getGroupHistory,
+        pushIdToHistory,
+        clearHistoryAfterId,
       }}
     >
       {children}
@@ -130,6 +150,9 @@ export const useGCFormsContext = () => {
       handleNextAction: () => void 0,
       formRecord: {} as PublicFormRecord,
       groupsCheck: () => false,
+      getGroupHistory: () => [],
+      pushIdToHistory: () => [],
+      clearHistoryAfterId: () => [],
     };
   }
   return formsContext;
