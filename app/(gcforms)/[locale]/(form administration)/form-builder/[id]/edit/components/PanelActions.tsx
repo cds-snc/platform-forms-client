@@ -214,7 +214,7 @@ export const PanelActions = ({
       </div>
       {!isSubPanel && (
         <div className="flex">
-          <div className="absolute -bottom-5 left-1/2 transform -translate-x-1/2 z-10">
+          <div className="absolute -bottom-5 left-1/2 z-10 -translate-x-1/2">
             <AddElementButton
               handleAdd={handleAdd}
               filterElements={filterElements}
