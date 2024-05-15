@@ -25,6 +25,30 @@ const insertItemAtIndex = (items: string[], item: string, index: number) => {
   return updatedItems;
 };
 
+/**
+ * Autoflow moved items
+ * This block will update the nextAction for the moved items in their new location, and update
+ * the nextAction for the item that was before the moved items in their original location.
+ */
+const updateMovedItemsNextAction = (
+  items: TreeItem[],
+  originalGroups: GroupsType,
+  newGroups: GroupsType
+) => {
+  const movedItems = items.map((item) => item["index"]);
+  const originalKeys = Object.keys(originalGroups);
+  movedItems.forEach((item) => {
+    const oldIndex = originalKeys.indexOf(item as string);
+    const prev = originalKeys[oldIndex - 1];
+    // Set the nextAction for the new location of the current item in its new location
+    newGroups = autoSetGroupNextAction(newGroups, item as string);
+    // Set the nextAction for the item that was before the current item in its original location
+    newGroups = autoSetGroupNextAction(newGroups, prev);
+  });
+
+  return newGroups;
+};
+
 export const handleOnDrop = (
   items: TreeItem[],
   target: DraggingPosition,
@@ -76,17 +100,7 @@ export const handleOnDrop = (
       return acc;
     }, {});
 
-    // Auto flow nextActions
-    const movedItems = items.map((i) => i["index"]);
-    const originalKeys = Object.keys(currentGroups);
-    movedItems.forEach((item) => {
-      const oldIndex = originalKeys.indexOf(item as string);
-      const prev = originalKeys[oldIndex - 1];
-      // Set the nextAction for the new location of the current item in its new location
-      newGroups = autoSetGroupNextAction(newGroups, item as string);
-      // Set the nextAction for the item that was before the current item in its original location
-      newGroups = autoSetGroupNextAction(newGroups, prev);
-    });
+    newGroups = updateMovedItemsNextAction(items, currentGroups, newGroups);
 
     replaceGroups(newGroups);
     setSelectedItems(selectedItems);

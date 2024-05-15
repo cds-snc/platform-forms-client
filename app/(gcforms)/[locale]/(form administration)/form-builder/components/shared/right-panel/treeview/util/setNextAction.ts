@@ -24,7 +24,8 @@ export const autoSetNextAction = (formGroups: GroupsType, force: boolean = false
 };
 
 /*
- * When adding a new group, set the nextAction for both the new group and the previous group
+ * Autoflow: set the nextAction for both the provided groupId and the previous
+ * group in the object to maintain a linear flow.
  */
 export const autoSetGroupNextAction = (formGroups: GroupsType, groupId: string) => {
   const keys = Object.keys(formGroups);
