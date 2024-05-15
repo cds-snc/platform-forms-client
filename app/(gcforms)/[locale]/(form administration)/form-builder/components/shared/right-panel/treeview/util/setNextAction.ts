@@ -19,6 +19,7 @@ export const autoFlowAllNextActions = (formGroups: GroupsType, force: boolean = 
       formGroups[key] = {
         ...formGroups[key],
         nextAction: nextKey,
+        autoFlow: true,
       };
     }
   }
@@ -48,6 +49,7 @@ export const autoFlowGroupNextActions = (formGroups: GroupsType, groupId: string
   newGroups[groupId] = {
     ...newGroups[groupId],
     nextAction: nextKey,
+    autoFlow: true,
   };
 
   const prevKey = keys[index - 1];
@@ -56,6 +58,7 @@ export const autoFlowGroupNextActions = (formGroups: GroupsType, groupId: string
     newGroups[prevKey] = {
       ...newGroups[prevKey],
       nextAction: groupId,
+      autoFlow: true,
     };
   }
 

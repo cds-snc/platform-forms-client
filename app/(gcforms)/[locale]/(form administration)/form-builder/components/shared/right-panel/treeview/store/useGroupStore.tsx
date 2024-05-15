@@ -184,6 +184,7 @@ const createGroupStore = (initProps?: Partial<GroupStoreProps>) => {
                 groupId,
                 nextAction
               );
+              s.form.groups[groupId].autoFlow = false;
             }
           });
         }
