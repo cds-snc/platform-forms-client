@@ -11,7 +11,7 @@ export const Review = (): React.ReactElement => {
     t,
     i18n: { language: lang },
   } = useTranslation("review");
-  const { groups, getValues, setGroup, formRecord, removeHistory, getHistory } =
+  const { groups, getValues, setGroup, formRecord, clearHistoryAfterId, getGroupHistory } =
     useGCFormsContext();
   const formValues = getValues();
   const headingRef = useRef(null);
@@ -19,7 +19,7 @@ export const Review = (): React.ReactElement => {
   useFocusIt({ elRef: headingRef });
 
   const reviewGroups = { ...groups };
-  const questionsAndAnswers = getHistory()
+  const questionsAndAnswers = getGroupHistory()
     .filter((key) => key !== "review") // Removed to avoid showing as a group
     .map((key) => {
       return {
@@ -53,7 +53,7 @@ export const Review = (): React.ReactElement => {
                     type="button"
                     onClick={() => {
                       setGroup(group.id);
-                      removeHistory(group.id);
+                      clearHistoryAfterId(group.id);
                     }}
                   >
                     {group.name}
@@ -79,7 +79,7 @@ export const Review = (): React.ReactElement => {
                   theme="secondary"
                   onClick={() => {
                     setGroup(group.id);
-                    removeHistory(group.id);
+                    clearHistoryAfterId(group.id);
                   }}
                 >
                   {t("edit")}

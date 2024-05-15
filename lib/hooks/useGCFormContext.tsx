@@ -11,9 +11,9 @@ import {
 import { LockedSections } from "@formBuilder/components/shared/right-panel/treeview/types";
 import { formHasGroups } from "@lib/utils/form-builder/formHasGroups";
 import {
-  addGroupHistory,
-  getGroupHistory,
-  removeGroupHistory,
+  getGroupHistory as _getGroupHistory,
+  pushIdToHistory as _pushIdToHistory,
+  clearHistoryAfterId as _clearHistoryAfterId,
 } from "@lib/utils/form-builder/groupsHistory";
 
 interface GCFormsContextValueType {
@@ -28,9 +28,9 @@ interface GCFormsContextValueType {
   hasNextAction: (group: string) => boolean;
   formRecord: PublicFormRecord;
   groupsCheck: (groupsFlag: boolean | undefined) => boolean;
-  getHistory: () => string[];
-  addHistory: (groupId: string) => string[];
-  removeHistory: (groupId: string) => string[];
+  getGroupHistory: () => string[];
+  pushIdToHistory: (groupId: string) => string[];
+  clearHistoryAfterId: (groupId: string) => string[];
 }
 
 const GCFormsContext = createContext<GCFormsContextValueType | undefined>(undefined);
@@ -65,7 +65,7 @@ export const GCFormsProvider = ({
 
       if (typeof nextAction === "string") {
         setCurrentGroup(nextAction);
-        addHistory(nextAction);
+        pushIdToHistory(nextAction);
       }
     }
   };
@@ -99,12 +99,12 @@ export const GCFormsProvider = ({
     return formHasGroups(formRecord.form);
   };
 
-  const getHistory = () => getGroupHistory(history.current);
+  const getGroupHistory = () => _getGroupHistory(history.current);
 
-  const addHistory = (groupId: string) => addGroupHistory(groupId, history.current);
+  const pushIdToHistory = (groupId: string) => _pushIdToHistory(groupId, history.current);
 
   // Note: this only removes the group entry and not the values
-  const removeHistory = (groupId: string) => removeGroupHistory(groupId, history.current);
+  const clearHistoryAfterId = (groupId: string) => _clearHistoryAfterId(groupId, history.current);
 
   return (
     <GCFormsContext.Provider
@@ -120,9 +120,9 @@ export const GCFormsProvider = ({
         handleNextAction,
         hasNextAction,
         groupsCheck,
-        getHistory,
-        addHistory,
-        removeHistory,
+        getGroupHistory,
+        pushIdToHistory,
+        clearHistoryAfterId,
       }}
     >
       {children}
@@ -150,9 +150,9 @@ export const useGCFormsContext = () => {
       handleNextAction: () => void 0,
       formRecord: {} as PublicFormRecord,
       groupsCheck: () => false,
-      getHistory: () => [],
-      addHistory: () => [],
-      removeHistory: () => [],
+      getGroupHistory: () => [],
+      pushIdToHistory: () => [],
+      clearHistoryAfterId: () => [],
     };
   }
   return formsContext;

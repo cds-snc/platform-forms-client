@@ -1,5 +1,5 @@
 import { LockedSections } from "@formBuilder/components/shared/right-panel/treeview/types";
-import { getGroupHistory, addGroupHistory, removeGroupHistory } from "@lib/utils/form-builder/groupsHistory";
+import { getGroupHistory, pushIdToHistory, clearHistoryAfterId } from "@lib/utils/form-builder/groupsHistory";
 
 const defaultHistory:string[] = [
   LockedSections.START,
@@ -31,15 +31,15 @@ describe("addGroupHistory tests", () => {
 
   it("handles invalid input", () => {
     // @ts-expect-error - testing invalid input
-    expect(addGroupHistory("INVALID", "INVALID").length).toEqual(1);
+    expect(pushIdToHistory("INVALID", "INVALID").length).toEqual(1);
   });
 
   it("adds history", () => {
-    history = addGroupHistory("group6", history);
-    history = addGroupHistory("group7", history);
-    history = addGroupHistory("group8", history);
-    history = addGroupHistory("group9", history);
-    history = addGroupHistory("group10", history);
+    history = pushIdToHistory("group6", history);
+    history = pushIdToHistory("group7", history);
+    history = pushIdToHistory("group8", history);
+    history = pushIdToHistory("group9", history);
+    history = pushIdToHistory("group10", history);
     expect(history.length).toEqual(11);
     expect(history[6]).toEqual("group6");
     expect(history[10]).toEqual("group10");
@@ -51,16 +51,16 @@ describe("removeGroupHistory tests", () => {
 
   it("handles invalid input", () => {
     // @ts-expect-error - testing invalid input
-    expect(removeGroupHistory("INVALID", "INVALID").length).toEqual(1);
+    expect(clearHistoryAfterId("INVALID", "INVALID").length).toEqual(1);
   });
 
   it("removes/sets history in the middle", () => {
-    history = removeGroupHistory("group3", history);
+    history = clearHistoryAfterId("group3", history);
     expect(history.length).toEqual(4);
   });
 
   it("removes/sets history at the end", () => {
-    history = removeGroupHistory("group3", history);
+    history = clearHistoryAfterId("group3", history);
     expect(history.length).toEqual(4);
   });
 });
