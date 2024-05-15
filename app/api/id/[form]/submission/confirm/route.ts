@@ -8,6 +8,7 @@ import { dynamoDBDocumentClient } from "@lib/integration/awsServicesConnector";
 import { AccessControlError, createAbility } from "@lib/privileges";
 import { checkUserHasTemplateOwnership } from "@lib/templates";
 import { logEvent } from "@lib/auditLogs";
+import { DynamoDBServiceException } from "@aws-sdk/client-dynamodb";
 
 async function getSubmissionsFromConfirmationCodes(
   formId: string,
@@ -130,7 +131,35 @@ async function confirm(
     }),
   });
 
-  await dynamoDBDocumentClient.send(request);
+  await sendWithExponentialBackoff(request);
+}
+
+async function sendWithExponentialBackoff(
+  request: TransactWriteCommand,
+  maxRetries = 3,
+  baseDelay = 1000
+) {
+  let retryCount = 0;
+  const execute = async (): Promise<unknown> => {
+    try {
+      return await dynamoDBDocumentClient.send(request);
+    } catch (error) {
+      if (
+        error instanceof DynamoDBServiceException &&
+        error.name === "ThrottlingException" &&
+        retryCount < maxRetries
+      ) {
+        const delay = Math.pow(2, retryCount) * baseDelay;
+        logMessage.warn(`Submission Confirmation Throttle Exception, Retrying after ${delay} milliseconds...`);
+        await new Promise((resolve) => setTimeout(resolve, delay));
+        retryCount++;
+        return execute();
+      } else {
+        throw error; // Throw the error if it's not retryable or max retries exceeded
+      }
+    }
+  };
+  return execute();
 }
 
 export const PUT = middleware(
