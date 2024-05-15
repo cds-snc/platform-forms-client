@@ -16,6 +16,19 @@ export const Review = (): React.ReactElement => {
   const formValues = getValues();
   const headingRef = useRef(null);
 
+  function getElementNameById(id: string | number) {
+    const element = formRecord.form.elements.find((item) => String(item.id) === String(id));
+    return element ? element.properties?.[getLocalizedProperty("title", lang)] : t("unknown");
+  }
+
+  function formatElementValue(elementName: string | null) {
+    const value = formValues[elementName as keyof typeof formValues];
+    if (Array.isArray(value)) {
+      return (value as Array<string>).join(", ");
+    }
+    return value || "-";
+  }
+
   useFocusIt({ elRef: headingRef });
 
   const reviewGroups = { ...groups };
@@ -28,16 +41,11 @@ export const Review = (): React.ReactElement => {
         elements: reviewGroups[key].elements.map((element) => {
           const elementName = element as keyof typeof formValues;
           return {
-            [element]: formValues[elementName] || "-",
+            [element]: formatElementValue(elementName),
           };
         }),
       };
     });
-
-  function getElementNameById(id: string | number) {
-    const element = formRecord.form.elements.find((item) => String(item.id) === String(id));
-    return element ? element.properties?.[getLocalizedProperty("title", lang)] : t("unknown");
-  }
 
   return (
     <>
