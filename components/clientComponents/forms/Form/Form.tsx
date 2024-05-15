@@ -144,7 +144,7 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
   const [canFocusOnError, setCanFocusOnError] = useState(false);
   const [lastSubmitCount, setLastSubmitCount] = useState(-1);
 
-  const { currentGroup, groupsCheck } = useGCFormsContext();
+  const { currentGroup, groupsCheck, getGroupTitle } = useGCFormsContext();
   const isGroupsCheck = groupsCheck(props.allowGrouping);
   const showIntro = isGroupsCheck ? currentGroup === LockedSections.START : true;
 
@@ -228,6 +228,12 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
             // TODO move this to each child container but that I think will take some thought.
             aria-live="polite"
           >
+            {isGroupsCheck &&
+              currentGroup !== LockedSections.REVIEW &&
+              currentGroup !== LockedSections.START && (
+                <h2 className="pb-8">{getGroupTitle(currentGroup, props.language)}</h2>
+              )}
+
             {children}
 
             {showIntro && (
