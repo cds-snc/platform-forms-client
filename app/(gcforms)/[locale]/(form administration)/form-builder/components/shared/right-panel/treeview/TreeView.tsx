@@ -19,7 +19,7 @@ import { findParentGroup } from "./util/findParentGroup";
 import "react-complex-tree/lib/style-modern.css";
 import { GroupsType } from "@lib/formContext";
 import { Item } from "./Item";
-import { autoSetGroupNextAction } from "./util/setNextAction";
+import { autoFlowGroupNextActions } from "./util/setNextAction";
 import { AddIcon } from "@serverComponents/icons";
 import { handleCanDropAt } from "./handlers/handleCanDropAt";
 import { handleOnDrop } from "./handlers/handleOnDrop";
@@ -69,7 +69,7 @@ const ControlledTree: ForwardRefRenderFunction<unknown, TreeDataProviderProps> =
   const addSection = () => {
     const id = uuid();
     addGroup(id, "New section");
-    const newGroups = autoSetGroupNextAction(getGroups() as GroupsType, id);
+    const newGroups = autoFlowGroupNextActions(getGroups() as GroupsType, id);
     replaceGroups(newGroups);
     setSelectedItems([id]);
     setExpandedItems([id]);

@@ -3,7 +3,7 @@ import { LangSwitcher } from "@formBuilder/components/shared/LangSwitcher";
 import { toast } from "@formBuilder/components/shared/Toast";
 import { Tooltip } from "@formBuilder/components/shared/Tooltip";
 import { useGroupStore } from "@formBuilder/components/shared/right-panel/treeview/store/useGroupStore";
-import { autoSetNextAction } from "@formBuilder/components/shared/right-panel/treeview/util/setNextAction";
+import { autoFlowAllNextActions } from "@formBuilder/components/shared/right-panel/treeview/util/setNextAction";
 import { GroupsType } from "@lib/formContext";
 import { SortIcon } from "@serverComponents/icons";
 import { useTranslation } from "@i18n/client";
@@ -19,7 +19,7 @@ export const LogicNavigation = () => {
 
   const autoFlow = () => {
     const groups = getGroups() as GroupsType;
-    const newGroups = autoSetNextAction({ ...groups }, true); // forces overwrite of existing next actions
+    const newGroups = autoFlowAllNextActions({ ...groups }, true); // forces overwrite of existing next actions
     replaceGroups(newGroups);
     toast.success("Auto flow applied");
   };

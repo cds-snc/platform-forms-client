@@ -1,4 +1,4 @@
-import { autoSetNextAction } from "../setNextAction";
+import { autoFlowAllNextActions } from "../setNextAction";
 
 describe("Sets next action", () => {
   it("Sets next action for each group", () => {
@@ -8,9 +8,8 @@ describe("Sets next action", () => {
       "3": { name: "3", elements: [], nextAction: [{ groupId: "2", choiceId: "1.0" }] },
       "4": { name: "4", elements: [] },
       "5": { name: "5", elements: [] },
-
     };
-    const result = autoSetNextAction(formGroups);
+    const result = autoFlowAllNextActions(formGroups);
 
     expect(result["1"].nextAction).toBe("2");
     expect(result["1"].elements).toEqual(["1", "2"]);
@@ -24,4 +23,3 @@ describe("Sets next action", () => {
     expect(result["5"].nextAction).toBeUndefined();
   });
 });
-
