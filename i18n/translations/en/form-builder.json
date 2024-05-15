@@ -825,5 +825,13 @@
       "catchAllGroup": "Catch all (any other value)"
     },
     "actionsSaved": "Actions saved"
+  },
+  "groups": {
+    "addElement": {
+      "empty": {
+        "title": "Empty section",
+        "text1": "This section doesn’t have any form elements in it."
+      }
+    }
   }
 }

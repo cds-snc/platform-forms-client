@@ -825,5 +825,13 @@
       "catchAllGroup": "Catch all (any other value) [fr]"
     },
     "actionsSaved": "Actions saved [fr]"
+  },
+  "groups": {
+    "addElement": {
+      "empty": {
+        "title": "Empty section [fr]",
+        "text1": "This section doesn’t have any form elements in it. [fr]"
+      }
+    }
   }
 }
