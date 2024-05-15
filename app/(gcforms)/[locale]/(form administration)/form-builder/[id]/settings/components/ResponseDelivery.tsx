@@ -142,6 +142,7 @@ export const ResponseDelivery = () => {
     classification,
     securityAttribute,
     purposeOption,
+    formPurpose,
   ]);
 
   /*--------------------------------------------*
@@ -217,6 +218,8 @@ export const ResponseDelivery = () => {
     classification,
     setToDatabaseDelivery,
     setToEmailDelivery,
+    updateFormPurpose,
+    purposeOption,
   ]);
 
   const updateDeliveryOption = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
