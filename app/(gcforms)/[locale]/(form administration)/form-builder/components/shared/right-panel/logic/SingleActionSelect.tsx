@@ -7,6 +7,8 @@ import { useGroupStore } from "@formBuilder/components/shared/right-panel/treevi
 import { useFlowRef } from "@formBuilder/[id]/edit/logic/components/flow/provider/FlowRefProvider";
 import { FormElement } from "@lib/types";
 import { useTranslation } from "@i18n/client";
+import { SaveNote } from "./SaveNote";
+import { toast } from "@formBuilder/components/shared/Toast";
 
 export const SingleActionSelect = ({
   item,
@@ -44,6 +46,7 @@ export const SingleActionSelect = ({
         <GroupSelect selected={nextAction} groups={groupItems} onChange={handleGroupChange} />
       </div>
       <div>
+        <SaveNote />
         <Button
           className="ml-0 px-4 py-1"
           onClick={() => {
@@ -56,6 +59,7 @@ export const SingleActionSelect = ({
             }
 
             flow.current?.updateEdges();
+            toast.success(t("logic.actionsSaved"));
           }}
         >
           {t("logic.saveRule")}

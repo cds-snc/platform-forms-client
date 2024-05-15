@@ -11,15 +11,13 @@ export const GroupOutput = () => {
     getValues,
     currentGroup,
     previousGroup,
+    getGroupHistory,
   } = useGCFormsContext();
   const formValues = getValues();
   return (
     <details>
       <summary>Group JSON Schema and Misc</summary>
       <pre className="mt-5 overflow-scroll border-2 border-black/50 p-5">
-        {JSON.stringify(schema.groups, null, 2)}
-        <br />
-        <br />
         Form Id = {formId}
         <br />
         Form Values = {JSON.stringify(formValues, null, 2)}
@@ -27,6 +25,11 @@ export const GroupOutput = () => {
         Current Group = {currentGroup}
         <br />
         Previous Group = {previousGroup}
+        <br />
+        Group History = {JSON.stringify(getGroupHistory(), null, 2)}
+        <br />
+        <br />
+        {JSON.stringify(schema.groups, null, 2)}
       </pre>
     </details>
   );

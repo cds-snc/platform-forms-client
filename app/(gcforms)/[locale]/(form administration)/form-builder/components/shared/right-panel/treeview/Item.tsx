@@ -22,7 +22,7 @@ export const Item = ({
       {...context.itemContainerWithChildrenProps}
       className={cn(
         "flex flex-col",
-        arrow && "border-b-1 border-slate-00 border-x-1 border-r-2 b-t-1",
+        arrow && "border-b-1 border-slate-200 border-x-1 border-r-2 b-t-1",
         !context.isExpanded && "",
         children && "bg-slate-50"
       )}

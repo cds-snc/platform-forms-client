@@ -37,6 +37,8 @@ export const NextButton = ({
 
   return (
     <>
+      {/* For debugging */}
+      <div className="hidden">{`currentGroup=${currentGroup}`}</div>
       <Button
         onClick={async (e) => {
           e.preventDefault();
