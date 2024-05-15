@@ -27,7 +27,7 @@ const insertItemAtIndex = (items: string[], item: string, index: number) => {
 
 /**
  * Autoflow moved items
- * This block will update the nextAction for the moved items in their new location, and update
+ * Update the nextAction for the moved items in their new location, and update
  * the nextAction for the item that was before the moved items in their original location.
  */
 const updateMovedItemsNextAction = (
