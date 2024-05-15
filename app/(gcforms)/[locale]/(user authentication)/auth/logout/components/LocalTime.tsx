@@ -3,8 +3,8 @@
 import { useEffect, useState } from "react";
 
 /**
- * Get the users local time.
- * The server time on AWS will always be in UTC. To get the users local time, the browesrs locale
+ * Get the user's local time.
+ * The server time on AWS will always be in UTC. To get the user's local time, the browesrs locale
  * (run client side) is used to construct and return the user's local time.
  */
 export const LocalTime = ({ locale }: { locale: string }) => {
