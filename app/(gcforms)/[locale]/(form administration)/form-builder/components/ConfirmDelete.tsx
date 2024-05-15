@@ -3,7 +3,7 @@ import { useTranslation } from "@i18n/client";
 import { ConfirmFormDeleteDialog } from "./shared";
 import { toast, ToastContainer } from "./shared/Toast";
 import axios, { AxiosError, AxiosResponse } from "axios";
-import { clearTemplateStore } from "@lib/store/useTemplateStore";
+import { clearTemplateStorage } from "@lib/store/useTemplateStore";
 
 const handleDelete = async (formID?: string): Promise<AxiosResponse | { error: AxiosError }> => {
   try {
@@ -53,7 +53,7 @@ export const ConfirmDelete = ({
       return;
     }
 
-    clearTemplateStore();
+    clearTemplateStorage(id);
     onDeleted(id);
   }, [id, onDeleted, t]);
 
