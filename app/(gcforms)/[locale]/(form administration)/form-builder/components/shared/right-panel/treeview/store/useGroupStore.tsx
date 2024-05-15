@@ -15,7 +15,7 @@ import { findPreviousGroup } from "../util/findPreviousGroup";
 import { getGroupFromId } from "../util/getGroupFromId";
 import { Group, GroupsType } from "@lib/formContext";
 import { TreeItem, TreeItemIndex } from "react-complex-tree";
-import { autoSetNextAction } from "../util/setNextAction";
+import { autoFlowAllNextActions } from "../util/setNextAction";
 import { setGroupNextAction } from "../util/setNextAction";
 
 export interface GroupStoreProps {
@@ -100,8 +100,8 @@ const createGroupStore = (initProps?: Partial<GroupStoreProps>) => {
           get().templateStore.setState((s) => {
             if (s.form.groups) {
               s.form.groups[id] = {
+                ...formGroups[id],
                 name,
-                elements: formGroups[id].elements,
               };
             }
           });
@@ -193,7 +193,7 @@ const createGroupStore = (initProps?: Partial<GroupStoreProps>) => {
         if (formGroups) {
           get().templateStore.setState((s) => {
             if (s.form.groups) {
-              s.form.groups = autoSetNextAction(formGroups);
+              s.form.groups = autoFlowAllNextActions(formGroups);
             }
           });
         }
