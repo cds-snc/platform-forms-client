@@ -1,10 +1,13 @@
 import { GroupsType, NextActionRule, Group } from "@lib/formContext";
 
-/*
-  This function "auto" sets the nextAction for each group
-  The nextAction is the key of the next group in the formGroups object
-  This is used to navigate between groups in the form builder
-*/
+/**
+ * Autoflow: Set nextAction for all groups **if the nextAction has not already been set**.
+ * You may optionally `force` an update to all groups.
+ *
+ * @param formGroups
+ * @param force
+ * @returns New groups object
+ */
 export const autoFlowAllNextActions = (formGroups: GroupsType, force: boolean = false) => {
   const keys = Object.keys(formGroups);
   for (let i = 0; i < keys.length; i++) {
@@ -23,9 +26,13 @@ export const autoFlowAllNextActions = (formGroups: GroupsType, force: boolean = 
   return formGroups;
 };
 
-/*
- * Autoflow: set the nextAction for both the provided groupId and the previous
- * group in the object to maintain a linear flow.
+/**
+ * Autoflow: set the nextAction for both the provided groupId and the previous group
+ * in the object to maintain a linear flow.
+ *
+ * @param formGroups
+ * @param groupId
+ * @returns New groups object
  */
 export const autoFlowGroupNextActions = (formGroups: GroupsType, groupId: string) => {
   const keys = Object.keys(formGroups);
@@ -55,10 +62,15 @@ export const autoFlowGroupNextActions = (formGroups: GroupsType, groupId: string
   return newGroups;
 };
 
-/*
-  This function sets the nextAction for a specific group
-  The nextAction is the key of the next group in the formGroups object
-*/
+/**
+ * Set the nextAction for a specific group. The nextAction is the key of the next
+ * group in the formGroups object.
+ *
+ * @param formGroups
+ * @param groupId
+ * @param nextAction
+ * @returns Updated nextAction
+ */
 export const setGroupNextAction = (
   formGroups: GroupsType,
   groupId: string,
