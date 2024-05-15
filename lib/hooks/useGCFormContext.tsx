@@ -103,7 +103,7 @@ export const GCFormsProvider = ({
 
   const addHistory = (groupId: string) => addGroupHistory(groupId, history.current);
 
-  // TODO: may want to also remove form values from groupId positing in history on
+  // Note: this only removes the group entry and not the values
   const removeHistory = (groupId: string) => removeGroupHistory(groupId, history.current);
 
   return (
