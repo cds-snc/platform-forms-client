@@ -14,7 +14,7 @@ import { getAppSetting } from "@lib/appSettings";
 import { FormRecord, NagwareResult } from "@lib/types";
 
 // Note: copied from manage-forms actions
-export const authCheck = cache(async () => {
+const authCheck = cache(async () => {
   const session = await auth();
   if (!session) throw new Error("No session found");
   return createAbility(session);

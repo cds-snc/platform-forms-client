@@ -1,10 +1,9 @@
 "use server";
 
 import { auth } from "@lib/auth";
-import { AccessControlError, createAbility } from "@lib/privileges";
+import { createAbility } from "@lib/privileges";
 import { DeliveryOption, FormProperties, FormRecord, SecurityAttribute } from "@lib/types";
 import {
-  TemplateAlreadyPublishedError,
   createTemplate as createDbTemplate,
   removeDeliveryOption,
   updateAssignedUsersForTemplate,
@@ -12,11 +11,10 @@ import {
   updateTemplate as updateDbTemplate,
   updateIsPublishedForTemplate,
   deleteTemplate as deleteDbTemplate,
-  TemplateHasUnprocessedSubmissions,
   updateSecurityAttribute,
   updateResponseDeliveryOption,
 } from "@lib/templates";
-import { logMessage } from "@lib/logger";
+
 import { serverTranslation } from "@i18n";
 import { revalidatePath } from "next/cache";
 import { checkOne } from "@lib/cache/flags";
@@ -55,19 +53,15 @@ export const createOrUpdateTemplate = async ({
     revalidatePath("/[locale]/forms", "page");
 
     if (id) {
-      return {
-        formRecord: await updateTemplate({
-          id,
-          formConfig,
-          name,
-          deliveryOption,
-          securityAttribute,
-        }),
-      };
+      return await updateTemplate({
+        id,
+        formConfig,
+        name,
+        deliveryOption,
+        securityAttribute,
+      });
     }
-    return {
-      formRecord: await createTemplate({ formConfig, name, deliveryOption, securityAttribute }),
-    };
+    return await createTemplate({ formConfig, name, deliveryOption, securityAttribute });
   } catch (e) {
     return { formRecord: null, error: (e as Error).message };
   }
@@ -83,7 +77,10 @@ export const createTemplate = async ({
   name?: string;
   deliveryOption?: DeliveryOption;
   securityAttribute?: SecurityAttribute;
-}) => {
+}): Promise<{
+  formRecord: FormRecord | null;
+  error?: string;
+}> => {
   try {
     const { session, ability } = await _getSessionAndAbility();
 
@@ -102,14 +99,9 @@ export const createTemplate = async ({
       );
     }
 
-    return response;
+    return { formRecord: response };
   } catch (error) {
-    if (error instanceof AccessControlError) {
-      throw error;
-    } else {
-      logMessage.error(error);
-      throw error;
-    }
+    return { formRecord: null, error: (error as Error).message };
   }
 };
 
@@ -125,7 +117,10 @@ export const updateTemplate = async ({
   name?: string;
   deliveryOption?: DeliveryOption;
   securityAttribute?: SecurityAttribute;
-}) => {
+}): Promise<{
+  formRecord: FormRecord | null;
+  error?: string;
+}> => {
   try {
     const { ability } = await _getSessionAndAbility();
 
@@ -142,14 +137,9 @@ export const updateTemplate = async ({
         `Template API response was null. Request information: { formConfig: ${formConfig}, name: ${name}, deliveryOption: ${deliveryOption}, securityAttribute: ${securityAttribute}`
       );
     }
-    return response;
+    return { formRecord: response };
   } catch (error) {
-    if (error instanceof AccessControlError || error instanceof TemplateAlreadyPublishedError) {
-      throw error;
-    } else {
-      logMessage.error(error);
-      throw error;
-    }
+    return { formRecord: null, error: (error as Error).message };
   }
 };
 
@@ -159,7 +149,10 @@ export const updateTemplatePublishedStatus = async ({
 }: {
   id: string;
   isPublished: boolean;
-}) => {
+}): Promise<{
+  formRecord: FormRecord | null;
+  error?: string;
+}> => {
   try {
     const { ability } = await _getSessionAndAbility();
 
@@ -172,14 +165,9 @@ export const updateTemplatePublishedStatus = async ({
 
     revalidatePath("/form-builder/[id]", "layout");
 
-    return response;
+    return { formRecord: response };
   } catch (error) {
-    if (error instanceof AccessControlError) {
-      throw error;
-    } else {
-      logMessage.error(error);
-      throw error;
-    }
+    return { formRecord: null, error: (error as Error).message };
   }
 };
 
@@ -189,7 +177,10 @@ export const updateTemplateSecurityAttribute = async ({
 }: {
   id: string;
   securityAttribute: SecurityAttribute;
-}) => {
+}): Promise<{
+  formRecord: FormRecord | null;
+  error?: string;
+}> => {
   try {
     const { ability } = await _getSessionAndAbility();
 
@@ -200,14 +191,9 @@ export const updateTemplateSecurityAttribute = async ({
       );
     }
 
-    return response;
+    return { formRecord: response };
   } catch (error) {
-    if (error instanceof AccessControlError) {
-      throw error;
-    } else {
-      logMessage.error(error);
-      throw error;
-    }
+    return { formRecord: null, error: (error as Error).message };
   }
 };
 
@@ -217,7 +203,11 @@ export const updateTemplateClosingDate = async ({
 }: {
   id: string;
   closingDate: string;
-}) => {
+}): Promise<{
+  formID: string;
+  closingDate: string | null;
+  error?: string;
+}> => {
   try {
     const { ability } = await _getSessionAndAbility();
 
@@ -230,12 +220,7 @@ export const updateTemplateClosingDate = async ({
 
     return response;
   } catch (error) {
-    if (error instanceof AccessControlError) {
-      throw error;
-    } else {
-      logMessage.error(error);
-      throw error;
-    }
+    return { formID: "", closingDate: null, error: (error as Error).message };
   }
 };
 
@@ -245,7 +230,10 @@ export const updateTemplateUsers = async ({
 }: {
   id: string;
   users: { id: string; action: "add" | "remove" }[];
-}) => {
+}): Promise<{
+  formRecord: FormRecord | null;
+  error?: string;
+}> => {
   if (!users.length) {
     throw new Error("mustHaveAtLeastOneUser");
   }
@@ -260,14 +248,9 @@ export const updateTemplateUsers = async ({
       );
     }
 
-    return response;
+    return { formRecord: response };
   } catch (error) {
-    if (error instanceof AccessControlError) {
-      throw error;
-    } else {
-      logMessage.error(error);
-      throw error;
-    }
+    return { formRecord: null, error: (error as Error).message };
   }
 };
 
@@ -277,9 +260,12 @@ export const updateTemplateDeliveryOption = async ({
 }: {
   id: string;
   deliveryOption: DeliveryOption | undefined;
-}) => {
+}): Promise<{
+  formRecord: FormRecord | null;
+  error?: string;
+}> => {
   if (!deliveryOption) {
-    return; // use sendResponsesToVault to remove delivery option should this be an exception?
+    throw new Error("Require Delivery Option Data");
   }
 
   try {
@@ -292,18 +278,20 @@ export const updateTemplateDeliveryOption = async ({
       );
     }
 
-    return response;
+    return { formRecord: response };
   } catch (error) {
-    if (error instanceof AccessControlError) {
-      throw error;
-    } else {
-      logMessage.error(error);
-      throw error;
-    }
+    return { formRecord: null, error: (error as Error).message };
   }
 };
 
-export const sendResponsesToVault = async ({ id: formID }: { id: string }) => {
+export const sendResponsesToVault = async ({
+  id: formID,
+}: {
+  id: string;
+}): Promise<{
+  formRecord: FormRecord | null;
+  error?: string;
+}> => {
   try {
     const { ability } = await _getSessionAndAbility();
 
@@ -312,18 +300,20 @@ export const sendResponsesToVault = async ({ id: formID }: { id: string }) => {
       throw new Error(`Template API response was null. Request information: { ${formID} }`);
     }
 
-    return response;
+    return { formRecord: response };
   } catch (error) {
-    if (error instanceof AccessControlError) {
-      throw error;
-    } else {
-      logMessage.error(error);
-      throw error;
-    }
+    return { formRecord: null, error: (error as Error).message };
   }
 };
 
-export const deleteTemplate = async ({ id: formID }: { id: string }) => {
+export const deleteTemplate = async ({
+  id: formID,
+}: {
+  id: string;
+}): Promise<{
+  formRecord: FormRecord | null;
+  error?: string;
+}> => {
   try {
     const { ability } = await _getSessionAndAbility();
 
@@ -333,14 +323,9 @@ export const deleteTemplate = async ({ id: formID }: { id: string }) => {
       throw new Error(`Template API response was null. Request information: { ${formID} }`);
     }
 
-    return response;
+    return { formRecord: response };
   } catch (error) {
-    if (error instanceof AccessControlError || error instanceof TemplateHasUnprocessedSubmissions) {
-      throw error;
-    } else {
-      logMessage.error(error);
-      throw error;
-    }
+    return { formRecord: null, error: (error as Error).message };
   }
 };
 

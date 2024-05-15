@@ -22,6 +22,7 @@ export interface ErrorStates {
     fieldKey: string;
     fieldValue: string;
   }[];
+  error?: string;
 }
 
 const validate = async (
@@ -109,11 +110,10 @@ export async function unlockPublishing(
       description: emailBody,
       language: language,
     });
+    // Success
+    redirect(`/${language}/unlock-publishing?success`);
   } catch (error) {
-    logMessage.error(error);
-    throw new Error("Failed to send request");
+    logMessage.error(`Failed to unlock publishing: ${(error as Error).message}`);
+    return { error: "Failed to send request", validationErrors: [] };
   }
-
-  // Success
-  redirect(`/${language}/unlock-publishing?success`);
 }

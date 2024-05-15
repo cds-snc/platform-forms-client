@@ -10,6 +10,7 @@ export interface ErrorStates {
     fieldKey: string;
     fieldValue: string;
   }[];
+  error?: string;
 }
 
 const validate = async (
@@ -116,11 +117,10 @@ ${description}<br/>
       description: emailBody,
       language,
     });
+    // Success
+    redirect(`/${language}/contact?success`);
   } catch (error) {
     logMessage.error(`Failed to send contact request: ${(error as Error).message}`);
-    throw new Error("Internal Service Error: Failed to send request");
+    return { error: "Internal Service Error: Failed to send request", validationErrors: [] };
   }
-
-  // Success
-  redirect(`/${language}/contact?success`);
 }

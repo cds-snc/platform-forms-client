@@ -78,9 +78,12 @@ export const Publish = ({ id }: { id: string }) => {
     setError(false);
     setErrorCode(null);
     try {
-      const result = await updateTemplatePublishedStatus({ id, isPublished: true });
-      setId(result?.id);
-      setIsPublished(result?.isPublished);
+      const { formRecord, error } = await updateTemplatePublishedStatus({ id, isPublished: true });
+      if (error || !formRecord) {
+        throw new Error(error);
+      }
+      setId(formRecord?.id);
+      setIsPublished(formRecord?.isPublished);
 
       window.dataLayer = window.dataLayer || [];
       window.dataLayer.push({

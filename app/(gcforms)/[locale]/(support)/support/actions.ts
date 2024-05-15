@@ -10,6 +10,7 @@ export interface ErrorStates {
     fieldKey: string;
     fieldValue: string;
   }[];
+  error?: string;
 }
 
 const validate = async (
@@ -92,11 +93,11 @@ ${description}<br/>
       description: emailBody,
       language,
     });
-  } catch (error) {
-    logMessage.error(error);
-    throw new Error("Internal Service Error: Failed to send request");
-  }
 
-  // Success
-  redirect(`/${language}/support?success`);
+    // Success
+    redirect(`/${language}/support?success`);
+  } catch (error) {
+    logMessage.error(`Failed to send support request: ${(error as Error).message}`);
+    return { error: "Internal Service Error: Failed to send request", validationErrors: [] };
+  }
 }
