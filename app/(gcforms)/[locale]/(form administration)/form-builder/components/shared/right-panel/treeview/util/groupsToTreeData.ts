@@ -6,6 +6,7 @@ export type TreeDataOptions = {
   addIntroElement?: boolean;
   addPolicyElement?: boolean;
   addConfirmationElement?: boolean;
+  reviewGroup?: boolean;
 };
 
 export const groupsToTreeData = (
@@ -142,6 +143,11 @@ export const groupsToTreeData = (
 
   if (endChildren.length > 0) {
     items["end"].children = endChildren;
+  }
+
+  if (options.reviewGroup === false) {
+    items.root.children = items.root.children?.filter((child) => child !== "review");
+    delete items["review"];
   }
 
   return items;

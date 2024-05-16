@@ -96,6 +96,7 @@ const ControlledTree: ForwardRefRenderFunction<unknown, TreeDataProviderProps> =
         addIntroElement: true,
         addPolicyElement: true,
         addConfirmationElement: true,
+        reviewGroup: false,
       })}
       getItemTitle={(item) => getTitle(item.data as ElementProperties)}
       renderItem={({ title, arrow, context, children }) => {
@@ -149,6 +150,7 @@ const ControlledTree: ForwardRefRenderFunction<unknown, TreeDataProviderProps> =
         setFocusedItem(item.index);
         const parent = findParentGroup(getTreeData(), String(item.index));
 
+        // Don't set ids for pseudo elements
         if (item.index === "intro" || item.index === "policy" || item.index === "confirmation") {
           return;
         }
