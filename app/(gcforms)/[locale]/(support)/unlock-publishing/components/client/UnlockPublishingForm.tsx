@@ -25,6 +25,7 @@ export const UnlockPublishingForm = ({ userEmail }: { userEmail: string }) => {
 
   return (
     <>
+      {/* @todo  Add general error to show user there was an internal service error */}
       {Object.keys(state.validationErrors).length > 0 && (
         <Alert
           type={ErrorStatus.ERROR}

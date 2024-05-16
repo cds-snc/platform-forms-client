@@ -15,6 +15,7 @@ import { SaveButton } from "@formBuilder/components/shared/SaveButton";
 import { useGroupStore } from "@formBuilder/components/shared/right-panel/treeview/store/useGroupStore";
 import { Section } from "./Section";
 import { FormElement } from "@lib/types";
+import { LangSwitcher } from "@formBuilder/components/shared/LangSwitcher";
 
 export const EditWithGroups = () => {
   const { t } = useTranslation("form-builder");
@@ -106,7 +107,7 @@ export const EditWithGroups = () => {
       <div className="mb-4">
         <SaveButton />
       </div>
-
+      <LangSwitcher descriptionLangKey="editingIn" />
       {groupId === "start" && <SettingsPanel />}
       {groupId === "start" && (
         <RichTextLocked

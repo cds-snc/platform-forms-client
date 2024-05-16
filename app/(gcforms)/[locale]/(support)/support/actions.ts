@@ -10,6 +10,7 @@ export interface ErrorStates {
     fieldKey: string;
     fieldValue: string;
   }[];
+  error?: string;
 }
 
 const validate = async (
@@ -93,10 +94,9 @@ ${description}<br/>
       language,
     });
   } catch (error) {
-    logMessage.error(error);
-    throw new Error("Internal Service Error: Failed to send request");
+    logMessage.error(`Failed to send support request: ${(error as Error).message}`);
+    return { error: "Internal Service Error: Failed to send request", validationErrors: [] };
   }
-
-  // Success
+  // The redirect must be outside of the try/catch block to avoid the NEXT_REDIRECT being caught by the error boundary
   redirect(`/${language}/support?success`);
 }
