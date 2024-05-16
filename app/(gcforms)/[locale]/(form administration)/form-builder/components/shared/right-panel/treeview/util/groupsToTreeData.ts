@@ -2,7 +2,18 @@ import { GroupsType } from "@lib/formContext";
 import { TreeItems } from "../types";
 import { FormElement } from "@lib/types";
 
-export const groupsToTreeData = (formGroups: GroupsType, elements: FormElement[]): TreeItems => {
+export type TreeDataOptions = {
+  addIntroElement?: boolean;
+  addPolicyElement?: boolean;
+  addConfirmationElement?: boolean;
+  reviewGroup?: boolean;
+};
+
+export const groupsToTreeData = (
+  formGroups: GroupsType,
+  elements: FormElement[],
+  options: TreeDataOptions = {}
+): TreeItems => {
   const items: TreeItems = {
     root: {
       index: "root",
@@ -64,51 +75,80 @@ export const groupsToTreeData = (formGroups: GroupsType, elements: FormElement[]
     });
   }
 
-  // Add items to start
-  // @todo re-add these
-  /*
+  const startChildren = [];
+  const endChildren = [];
+
   const introItem = {
     index: "intro",
     isFolder: false,
-    canRename: true,
-    canMove: true,
+    canRename: false,
+    canMove: false,
     children: [],
-    data: "Introduction",
+    data: {
+      titleEn: "Introduction",
+      titleFr: "Introduction",
+      descriptionEn: "",
+      descriptionFr: "",
+    },
   };
-  */
 
-  // items["intro"] = introItem;
+  if (options.addIntroElement) {
+    items["intro"] = introItem;
+    startChildren.push("intro");
+  }
 
-  /*
   const policyItem = {
     index: "policy",
     isFolder: false,
-    canRename: true,
-    canMove: true,
+    canRename: false,
+    canMove: false,
     children: [],
-    data: "Policy",
+    data: {
+      titleEn: "Policy",
+      titleFr: "Policy",
+      descriptionEn: "",
+      descriptionFr: "",
+    },
   };
-  */
 
-  // items["policy"] = policyItem;
+  if (options.addPolicyElement) {
+    items["policy"] = policyItem;
+    startChildren.push("policy");
+  }
 
-  // Add start item to the beginning
-  // items["start"].children = ["intro", "policy"];
+  if (startChildren.length > 0) {
+    items["start"].children = startChildren;
+  }
 
-  // Add confirmation item to the end
-  /*
+  // ----
+
   const confirmationItem = {
-    index: "confirm",
+    index: "confirmation",
     isFolder: false,
-    canRename: true,
-    canMove: true,
+    canRename: false,
+    canMove: false,
     children: [],
-    data: "Confirmation",
+    data: {
+      titleEn: "Confirmation",
+      titleFr: "Confirmation",
+      descriptionEn: "",
+      descriptionFr: "",
+    },
   };
-  */
 
-  // items["confirm"] = confirmationItem;
-  // items["end"].children = ["confirm"];
+  if (options.addConfirmationElement) {
+    items["confirmation"] = confirmationItem;
+    endChildren.push("confirmation");
+  }
+
+  if (endChildren.length > 0) {
+    items["end"].children = endChildren;
+  }
+
+  if (options.reviewGroup === false) {
+    items.root.children = items.root.children?.filter((child) => child !== "review");
+    delete items["review"];
+  }
 
   return items;
 };
