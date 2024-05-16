@@ -25,6 +25,10 @@ const insertItemAtIndex = (items: string[], item: string, index: number) => {
   return updatedItems;
 };
 
+const groupsHaveCustomRules = (items: Group[]) => {
+  return items.some((item) => Object.hasOwn(item, "autoFlow") && !item.autoFlow);
+};
+
 /**
  * Autoflow moved items
  * Update the nextAction for the moved items in their new location, and update
@@ -37,13 +41,38 @@ const updateMovedItemsNextAction = (
 ) => {
   const movedItems = items.map((item) => item["index"]);
   const originalKeys = Object.keys(originalGroups);
+  const newKeys = Object.keys(newGroups);
+
   movedItems.forEach((item) => {
+    // Check the current item for autoFlow
+    const movedGroup = newGroups[item as string] as Group;
+
+    // Check the previous item in the new location for autoFlow (@TODO: only for the first item?)
     const oldIndex = originalKeys.indexOf(item as string);
-    const prev = originalKeys[oldIndex - 1];
+    const newIndex = newKeys.indexOf(item as string);
+
+    const prev = newKeys[newIndex - 1];
+    const previousGroup = newGroups[prev] as Group;
+
+    // Check the previous item in the old location for autoFlow
+    const prevOld = originalKeys[oldIndex - 1];
+    const previousGroupOld = originalGroups[prevOld] as Group;
+
+    if (groupsHaveCustomRules([movedGroup, previousGroup, previousGroupOld])) {
+      if (
+        !confirm(
+          "It seems the item you are moving has one or more cutom rules. Would you like to overwrite those rules with the default autoFlow rules?"
+        )
+      ) {
+        return;
+      }
+    }
+
     // Set the nextAction for the new location of the current item in its new location
     newGroups = autoFlowGroupNextActions(newGroups, item as string);
+
     // Set the nextAction for the item that was before the current item in its original location
-    newGroups = autoFlowGroupNextActions(newGroups, prev);
+    // newGroups = autoFlowGroupNextActions(newGroups, prevOld);
   });
 
   return newGroups;
