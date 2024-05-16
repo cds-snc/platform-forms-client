@@ -164,6 +164,7 @@ export const EditWithGroups = () => {
             addElement={false}
             schemaProperty="privacyPolicy"
             ariaLabel={t("richTextPrivacyTitle")}
+            className={"rounded-b-lg"}
           >
             <div id="privacy-text">
               <h2 className="mt-4 text-2xl laptop:mt-0">{t("richTextPrivacyTitle")}</h2>
@@ -177,6 +178,7 @@ export const EditWithGroups = () => {
             addElement={false}
             schemaProperty="confirmation"
             ariaLabel={t("richTextConfirmationTitle")}
+            className={"rounded-lg"}
           >
             <div id="confirmation-text">
               <h2 className="mt-4 text-2xl laptop:mt-0">{t("richTextConfirmationTitle")}</h2>
