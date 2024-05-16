@@ -6,7 +6,7 @@ import { shallow } from "zustand/shallow";
 import React, { createContext, useRef, useContext } from "react";
 import { TemplateStore, TemplateStoreContext } from "@lib/store/useTemplateStore";
 import { LocalizedElementProperties } from "@lib/types/form-builder-types";
-import { groupsToTreeData } from "../util/groupsToTreeData";
+import { groupsToTreeData, TreeDataOptions } from "../util/groupsToTreeData";
 import { findParentGroup } from "../util/findParentGroup";
 import { TreeItems } from "../types";
 import { FormElement } from "@lib/types";
@@ -33,7 +33,7 @@ export interface GroupStoreState extends GroupStoreProps {
   deleteGroup: (id: string) => void;
   replaceGroups: (groups: GroupsType) => void;
   getGroups: () => GroupsType | undefined;
-  getTreeData: () => TreeItems;
+  getTreeData: (options?: TreeDataOptions) => TreeItems;
   updateGroup: (parent: TreeItemIndex, children: TreeItemIndex[] | undefined) => void;
   findParentGroup: (id: string) => TreeItem | undefined;
   findNextGroup: (id: string) => TreeItem | undefined;
@@ -109,11 +109,11 @@ const createGroupStore = (initProps?: Partial<GroupStoreProps>) => {
         }
       },
       getGroups: () => get().templateStore.getState().form.groups,
-      getTreeData: () => {
+      getTreeData: (options: TreeDataOptions = {}) => {
         const formGroups = get().templateStore.getState().form.groups;
         const elements = get().templateStore.getState().form.elements;
         if (!formGroups) return {};
-        return groupsToTreeData(formGroups, elements);
+        return groupsToTreeData(formGroups, elements, options);
       },
       getElementsGroupById: (id: string) => {
         const formGroups = get().templateStore.getState().form.groups;
