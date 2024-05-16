@@ -4,49 +4,19 @@ import { useStoreWithEqualityFn } from "zustand/traditional";
 import { immer } from "zustand/middleware/immer";
 import { shallow } from "zustand/shallow";
 import React, { createContext, useRef, useContext } from "react";
-import { TemplateStore, TemplateStoreContext } from "@lib/store/useTemplateStore";
+import { TemplateStoreContext } from "@lib/store/useTemplateStore";
 import { LocalizedElementProperties } from "@lib/types/form-builder-types";
-import { groupsToTreeData } from "../util/groupsToTreeData";
+import { groupsToTreeData, TreeDataOptions } from "../util/groupsToTreeData";
 import { findParentGroup } from "../util/findParentGroup";
-import { TreeItems } from "../types";
-import { FormElement } from "@lib/types";
+import { GroupStoreProps, GroupStoreState } from "./types";
+
 import { findNextGroup } from "../util/findNextGroup";
 import { findPreviousGroup } from "../util/findPreviousGroup";
 import { getGroupFromId } from "../util/getGroupFromId";
 import { Group, GroupsType } from "@lib/formContext";
-import { TreeItem, TreeItemIndex } from "react-complex-tree";
-import { autoSetNextAction } from "../util/setNextAction";
+import { TreeItemIndex } from "react-complex-tree";
+import { autoFlowAllNextActions } from "../util/setNextAction";
 import { setGroupNextAction } from "../util/setNextAction";
-
-export interface GroupStoreProps {
-  id: string;
-  selectedElementId?: number;
-  groups: TreeItems;
-  templateStore: TemplateStore;
-}
-
-export interface GroupStoreState extends GroupStoreProps {
-  getId: () => string;
-  setId: (id: string) => void;
-  setSelectedElementId: (id: number) => void;
-  addGroup: (id: string, name: string) => void;
-  deleteGroup: (id: string) => void;
-  replaceGroups: (groups: GroupsType) => void;
-  getGroups: () => GroupsType | undefined;
-  getTreeData: () => TreeItems;
-  updateGroup: (parent: TreeItemIndex, children: TreeItemIndex[] | undefined) => void;
-  findParentGroup: (id: string) => TreeItem | undefined;
-  findNextGroup: (id: string) => TreeItem | undefined;
-  findPreviousGroup: (id: string) => TreeItem | undefined;
-  getGroupFromId: (id: string) => TreeItem | undefined;
-  getElement: (id: number) => FormElement | undefined;
-  updateElementTitle: ({ id, text }: { id: number; text: string }) => void;
-  updateGroupName: ({ id, name }: { id: string; name: string }) => void;
-  getElementsGroupById: (id: string) => Group;
-  getGroupNextAction: (groupId: string) => Group["nextAction"];
-  setGroupNextAction: (groupId: string, nextAction: Group["nextAction"]) => void;
-  autoSetNextActions: () => void;
-}
 
 const createGroupStore = (initProps?: Partial<GroupStoreProps>) => {
   const DEFAULT_PROPS: GroupStoreProps = {
@@ -100,8 +70,8 @@ const createGroupStore = (initProps?: Partial<GroupStoreProps>) => {
           get().templateStore.setState((s) => {
             if (s.form.groups) {
               s.form.groups[id] = {
+                ...formGroups[id],
                 name,
-                elements: formGroups[id].elements,
               };
             }
           });
@@ -109,11 +79,11 @@ const createGroupStore = (initProps?: Partial<GroupStoreProps>) => {
         }
       },
       getGroups: () => get().templateStore.getState().form.groups,
-      getTreeData: () => {
+      getTreeData: (options: TreeDataOptions = {}) => {
         const formGroups = get().templateStore.getState().form.groups;
         const elements = get().templateStore.getState().form.elements;
         if (!formGroups) return {};
-        return groupsToTreeData(formGroups, elements);
+        return groupsToTreeData(formGroups, elements, options);
       },
       getElementsGroupById: (id: string) => {
         const formGroups = get().templateStore.getState().form.groups;
@@ -193,7 +163,7 @@ const createGroupStore = (initProps?: Partial<GroupStoreProps>) => {
         if (formGroups) {
           get().templateStore.setState((s) => {
             if (s.form.groups) {
-              s.form.groups = autoSetNextAction(formGroups);
+              s.form.groups = autoFlowAllNextActions(formGroups);
             }
           });
         }

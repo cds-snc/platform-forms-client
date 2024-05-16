@@ -14,6 +14,10 @@ import { ErrorStatus } from "../Alert/Alert";
 import { submitForm } from "app/(gcforms)/[locale]/(form filler)/id/[...props]/actions";
 import useFormTimer from "@lib/hooks/useFormTimer";
 import { useFormValuesChanged } from "@lib/hooks/useValueChanged";
+import { useGCFormsContext } from "@lib/hooks/useGCFormContext";
+import { Review } from "../Review/Review";
+import { LockedSections } from "@formBuilder/components/shared/right-panel/treeview/types";
+import { BackButton } from "@formBuilder/[id]/preview/BackButton";
 
 interface SubmitButtonProps {
   numberOfRequiredQuestions: number;
@@ -140,6 +144,10 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
   const [canFocusOnError, setCanFocusOnError] = useState(false);
   const [lastSubmitCount, setLastSubmitCount] = useState(-1);
 
+  const { currentGroup, groupsCheck, getGroupTitle } = useGCFormsContext();
+  const isGroupsCheck = groupsCheck(props.allowGrouping);
+  const showIntro = isGroupsCheck ? currentGroup === LockedSections.START : true;
+
   const { t } = useTranslation();
 
   useFormValuesChanged();
@@ -192,10 +200,12 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
 
       {
         <>
-          <RichText>
-            {form.introduction &&
-              form.introduction[props.language == "en" ? "descriptionEn" : "descriptionFr"]}
-          </RichText>
+          {showIntro && (
+            <RichText>
+              {form.introduction &&
+                form.introduction[props.language == "en" ? "descriptionEn" : "descriptionFr"]}
+            </RichText>
+          )}
 
           <form
             id="form"
@@ -208,28 +218,48 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
             method="POST"
             onSubmit={(e) => {
               e.preventDefault();
+              // For groups enabled forms only allow submitting on the Review page
+              if (isGroupsCheck && currentGroup !== LockedSections.REVIEW) {
+                return;
+              }
               handleSubmit(e);
             }}
             noValidate
             // TODO move this to each child container but that I think will take some thought.
             aria-live="polite"
           >
+            {isGroupsCheck &&
+              currentGroup !== LockedSections.REVIEW &&
+              currentGroup !== LockedSections.START && (
+                <h2 className="pb-8">{getGroupTitle(currentGroup)}</h2>
+              )}
+
             {children}
 
-            <RichText>
-              {form.privacyPolicy &&
-                form.privacyPolicy[props.language == "en" ? "descriptionEn" : "descriptionFr"]}
-            </RichText>
+            {showIntro && (
+              <RichText>
+                {form.privacyPolicy &&
+                  form.privacyPolicy[props.language == "en" ? "descriptionEn" : "descriptionFr"]}
+              </RichText>
+            )}
+
+            {isGroupsCheck && currentGroup === LockedSections.REVIEW && <Review />}
+
             {props.renderSubmit ? (
               props.renderSubmit({
                 validateForm: props.validateForm,
                 fallBack: () => {
                   return (
-                    <SubmitButton
-                      numberOfRequiredQuestions={numberOfRequiredQuestions}
-                      formID={formID}
-                      formTitle={form.titleEn}
-                    />
+                    <div>
+                      {isGroupsCheck && currentGroup === LockedSections.REVIEW && <BackButton />}
+                      <div className="inline-block">
+                        <SubmitButton
+                          numberOfRequiredQuestions={numberOfRequiredQuestions}
+                          formID={formID}
+                          formTitle={form.titleEn}
+                        />
+                      </div>
+                    </div>
                   );
                 },
               })
@@ -261,6 +291,7 @@ interface FormProps {
   onSuccess: (id: string) => void;
   children?: (JSX.Element | undefined)[] | null;
   t: TFunction;
+  allowGrouping?: boolean | undefined;
 }
 
 /**

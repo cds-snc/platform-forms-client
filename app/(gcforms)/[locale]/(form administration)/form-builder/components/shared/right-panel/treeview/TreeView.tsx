@@ -19,12 +19,11 @@ import { findParentGroup } from "./util/findParentGroup";
 import "react-complex-tree/lib/style-modern.css";
 import { GroupsType } from "@lib/formContext";
 import { Item } from "./Item";
-import { autoSetNextAction } from "./util/setNextAction";
-import { Tooltip } from "@formBuilder/components/shared/Tooltip";
-import { AddIcon, SortIcon } from "@serverComponents/icons";
-import { toast } from "../../Toast";
+import { autoFlowGroupNextActions } from "./util/setNextAction";
+import { AddIcon } from "@serverComponents/icons";
 import { handleCanDropAt } from "./handlers/handleCanDropAt";
 import { handleOnDrop } from "./handlers/handleOnDrop";
+import { ElementProperties, useElementTitle } from "@lib/hooks/useElementTitle";
 
 export interface TreeDataProviderProps {
   children?: ReactElement;
@@ -65,16 +64,13 @@ const ControlledTree: ForwardRefRenderFunction<unknown, TreeDataProviderProps> =
   const [expandedItems, setExpandedItems] = useState<TreeItemIndex[]>([]);
   const [selectedItems, setSelectedItems] = useState<TreeItemIndex[]>([]);
 
-  const autoFlow = () => {
-    const groups = getGroups() as GroupsType;
-    const newGroups = autoSetNextAction({ ...groups }, true); // forces overwrite of existing next actions
-    replaceGroups(newGroups);
-    toast.success("Auto flow applied");
-  };
+  const { getTitle } = useElementTitle();
 
   const addSection = () => {
     const id = uuid();
     addGroup(id, "New section");
+    const newGroups = autoFlowGroupNextActions(getGroups() as GroupsType, id);
+    replaceGroups(newGroups);
     setSelectedItems([id]);
     setExpandedItems([id]);
     setId(id);
@@ -96,8 +92,13 @@ const ControlledTree: ForwardRefRenderFunction<unknown, TreeDataProviderProps> =
   return (
     <ControlledTreeEnvironment
       ref={environment}
-      items={getTreeData()}
-      getItemTitle={(item) => item.data}
+      items={getTreeData({
+        addIntroElement: true,
+        addPolicyElement: true,
+        addConfirmationElement: true,
+        reviewGroup: false,
+      })}
+      getItemTitle={(item) => getTitle(item.data as ElementProperties)}
       renderItem={({ title, arrow, context, children }) => {
         return (
           <Item title={title} arrow={arrow} context={context}>
@@ -120,12 +121,12 @@ const ControlledTree: ForwardRefRenderFunction<unknown, TreeDataProviderProps> =
       canDrag={(items: TreeItem[]) => {
         return items.some((item) => {
           return (
-            item.data !== "Start" &&
-            item.data !== "Introduction" &&
-            item.data !== "Policy" &&
-            item.data !== "Review" &&
-            item.data !== "End" &&
-            item.data !== "Confirmation"
+            item.data.titleEn !== "Start" &&
+            item.data.titleEn !== "Introduction" &&
+            item.data.titleEn !== "Policy" &&
+            item.data.titleEn !== "Review" &&
+            item.data.titleEn !== "End" &&
+            item.data.titleEn !== "Confirmation"
           );
         });
       }}
@@ -148,6 +149,17 @@ const ControlledTree: ForwardRefRenderFunction<unknown, TreeDataProviderProps> =
       onFocusItem={(item) => {
         setFocusedItem(item.index);
         const parent = findParentGroup(getTreeData(), String(item.index));
+
+        if (item.index === "intro" || item.index === "policy") {
+          setId("start");
+          return;
+        }
+
+        if (item.index === "confirmation") {
+          setId("end");
+          return;
+        }
+
         setId(item.isFolder ? String(item.index) : String(parent?.index));
       }}
       onExpandItem={(item) => setExpandedItems([...expandedItems, item.index])}
@@ -156,7 +168,9 @@ const ControlledTree: ForwardRefRenderFunction<unknown, TreeDataProviderProps> =
           expandedItems.filter((expandedItemIndex) => expandedItemIndex !== item.index)
         )
       }
-      onSelectItems={(items) => setSelectedItems(items)}
+      onSelectItems={(items) => {
+        setSelectedItems(items);
+      }}
     >
       <div className="mb-4 flex justify-between align-middle">
         <label>
@@ -165,27 +179,11 @@ const ControlledTree: ForwardRefRenderFunction<unknown, TreeDataProviderProps> =
             <AddIcon title="Add section" />
           </button>
         </label>
-
-        <label>
-          Auto flow
-          <button className="ml-2 mt-2 rounded-md border border-slate-500 p-1" onClick={autoFlow}>
-            <SortIcon title="Auto flow" />
-          </button>
-          <Tooltip.Info
-            side="top"
-            triggerClassName="align-middle ml-1"
-            tooltipClassName="font-normal whitespace-normal"
-          >
-            <strong>Auto flow</strong>
-            <p>
-              Auto flow will automatically set a linear flow for your sections, overriding any
-              existing rules.
-            </p>
-          </Tooltip.Info>
-        </label>
       </div>
 
-      <Tree treeId="default" rootItem="root" treeLabel="GC Forms sections" ref={tree} />
+      <div className="border-t-1 border-slate-200">
+        <Tree treeId="default" rootItem="root" treeLabel="GC Forms sections" ref={tree} />
+      </div>
       <>{children}</>
     </ControlledTreeEnvironment>
   );

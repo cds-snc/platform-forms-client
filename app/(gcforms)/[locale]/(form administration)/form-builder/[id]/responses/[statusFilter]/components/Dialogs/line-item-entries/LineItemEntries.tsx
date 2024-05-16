@@ -42,6 +42,7 @@ export const LineItemEntries = ({
         "downloadResponsesModals.lineItemEntries.removed"
       )} ${text}`;
     }
+
     inputRef.current?.focus();
   };
 
@@ -113,7 +114,13 @@ export const LineItemEntries = ({
       }
       return cleanedText;
     });
+
+    if (cleanedText.length + inputs.length > maxEntries) {
+      setStatus(DialogStates.MAX_ERROR);
+    }
+
     setInputs([...new Set([...inputs, ...cleanedText])]);
+
     e.preventDefault();
   };
 

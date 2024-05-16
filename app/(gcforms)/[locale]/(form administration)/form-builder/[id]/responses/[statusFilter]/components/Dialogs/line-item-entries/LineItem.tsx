@@ -11,7 +11,7 @@ type LineItemProps = {
 
 export const LineItem = ({ value, isInvalid = false, onRemove }: LineItemProps) => {
   const { t } = useTranslation("form-builder-responses");
-  const label = `${t("lineItemEntries.remove")} ${value}`;
+  const label = `${t("downloadResponsesModals.lineItemEntries.remove")} ${value}`;
   return (
     <li data-testid="value" className="pl-6 hover:bg-[#fffbf3]">
       <div className="flex items-center justify-between py-2 pr-4">

@@ -800,6 +800,38 @@
     }
   },
   "logic": {
-    "heading": "Logic"
+    "heading": "Logic",
+    "description": "Apply conditional rules to sections with radio buttons, checkboxes, and dropdown form elements.",
+    "clear": "Clear",
+    "gotoSection": "Go to section",
+    "questionTitle": "Question:",
+    "sectionTitle": "Section:",
+    "addRule": "Add rule",
+    "saveRule": "Save",
+    "saveNote": "Adding and saving a rule, turns off Auto-flow sections",
+    "resetRules": "Reset all rules",
+    "resetRulesDescription": "Auto flow will automatically set a linear flow for your sections, overriding any existing rules.",
+    "multiRulesWarning": {
+      "text1": "The flow is currently set based on the rules applied.",
+      "text2": "Flow sections:",
+      "text3": "To flow sections, you must clear the rules applied to question elements."
+    },
+    "choiceSelect": {
+      "selectOption": "Select an option",
+      "catchAllOption": "Catch all (any other value)"
+    },
+    "groupSelect": {
+      "default": "Select a section to go to",
+      "catchAllGroup": "Catch all (any other value)"
+    },
+    "actionsSaved": "Actions saved"
+  },
+  "groups": {
+    "addElement": {
+      "empty": {
+        "title": "Empty section",
+        "text1": "This section doesn’t have any form elements in it."
+      }
+    }
   }
 }

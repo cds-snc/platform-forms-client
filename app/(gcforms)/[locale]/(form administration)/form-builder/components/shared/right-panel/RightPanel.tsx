@@ -123,7 +123,7 @@ export const RightPanel = ({ id }: { id: string }) => {
       </div>
       <Transition.Root show={open} as={Fragment}>
         <div className="h-full">
-          <div className="sticky top-0 z-auto flex h-dvh">
+          <div className="flex h-full">
             <Transition.Child
               as={Fragment}
               enter="transform transition ease-in-out duration-500"
@@ -194,7 +194,7 @@ export const RightPanel = ({ id }: { id: string }) => {
                       </Tab.Panel>
                       <Tab.Panel>
                         {/* Logic */}
-                        <div className="m-0 mt-1 w-full p-4">
+                        <div className="m-0 w-full">
                           {activePathname.endsWith("/logic") && <SelectNextAction item={item} />}
                         </div>
                         {/* end logic */}

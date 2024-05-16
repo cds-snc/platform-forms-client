@@ -49,6 +49,7 @@ export const ResumeEditingForm = () => {
 
   return hasSession ? (
     <Link
+      id={formIdRef.current}
       href={`/${i18n.language}/form-builder/${formIdRef.current}/edit`}
       className="mb-4 inline-block"
     >

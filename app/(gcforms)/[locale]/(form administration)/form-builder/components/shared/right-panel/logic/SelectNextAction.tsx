@@ -9,6 +9,16 @@ import { useTemplateStore } from "@lib/store/useTemplateStore";
 import { SingleActionSelect } from "./SingleActionSelect";
 import { MultiActionSelector } from "./MultiActionSelector";
 import { ClearMultiRules } from "./ClearMultiRules";
+import { useTranslation } from "@i18n/client";
+
+const SectionName = ({ sectionName }: { sectionName: string | null }) => {
+  const { t } = useTranslation("form-builder");
+  return sectionName ? (
+    <h3 className="block text-sm font-normal">
+      <strong>{t("logic.sectionTitle")}</strong> {sectionName}
+    </h3>
+  ) : null;
+};
 
 export const SelectNextAction = ({ item }: { item: FormElement | null }) => {
   const typesWithOptions = ["radio", "checkbox", "select", "dropdown"];
@@ -18,46 +28,43 @@ export const SelectNextAction = ({ item }: { item: FormElement | null }) => {
   const selectedGroupId = useGroupStore((state) => state.id);
   const selectedGroupNextActions = getGroupNextAction(selectedGroupId);
   const selectedGroup = formGroups[selectedGroupId];
+  const sectionName = selectedGroupId ? selectedGroup?.name : null;
 
-  if (selectedGroupId === "end") {
-    return (
-      <div>
-        <h3 className="block text-sm font-normal">
-          <strong>Section:</strong> End{" "}
-        </h3>
-      </div>
-    );
+  if (selectedGroupId === "end" || selectedGroupId === "review") {
+    return <SectionName sectionName={sectionName} />;
   }
 
   if (!selectedGroup) {
     return null;
   }
 
+  // No "question" selected handle section->section next actions
+  // section 1 => section 2
   if (!item && !Array.isArray(selectedGroupNextActions)) {
-    // No "question" selected handle section->section next actions
-    // section 1 => section 2
-    const sectionName = selectedGroupId ? selectedGroup?.name : null;
     return (
-      <div>
-        <h3 className="block text-sm font-normal">
-          <strong>Section:</strong> {sectionName}{" "}
-        </h3>
+      <div className="p-4">
+        <SectionName sectionName={sectionName} />
         <SingleActionSelect nextAction={selectedGroupNextActions || "end"} />
       </div>
     );
   }
 
+  // No "question" selected but ... array of next actions is set
+  // Allow the user to clear the multi rules
   if (!item) {
-    return <ClearMultiRules />;
+    return (
+      <div>
+        <ClearMultiRules />
+      </div>
+    );
   }
 
   // If we have an item a question is selected
-  const sectionName = selectedGroupId ? selectedGroup?.name : null;
   return (
     <div>
-      <h3 className="block text-sm font-normal">
-        <strong>Section:</strong> {sectionName}{" "}
-      </h3>
+      <div className="px-4 pt-4">
+        <SectionName sectionName={sectionName} />
+      </div>
       {typesWithOptions.includes(item.type) ? (
         /* 
           If the item (form element) has options 
