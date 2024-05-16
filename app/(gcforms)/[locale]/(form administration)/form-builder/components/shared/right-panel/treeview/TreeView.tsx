@@ -92,7 +92,12 @@ const ControlledTree: ForwardRefRenderFunction<unknown, TreeDataProviderProps> =
   return (
     <ControlledTreeEnvironment
       ref={environment}
-      items={getTreeData()}
+      items={getTreeData({
+        addIntroElement: true,
+        addPolicyElement: true,
+        addConfirmationElement: true,
+        reviewGroup: false,
+      })}
       getItemTitle={(item) => getTitle(item.data as ElementProperties)}
       renderItem={({ title, arrow, context, children }) => {
         return (
@@ -144,6 +149,17 @@ const ControlledTree: ForwardRefRenderFunction<unknown, TreeDataProviderProps> =
       onFocusItem={(item) => {
         setFocusedItem(item.index);
         const parent = findParentGroup(getTreeData(), String(item.index));
+
+        if (item.index === "intro" || item.index === "policy") {
+          setId("start");
+          return;
+        }
+
+        if (item.index === "confirmation") {
+          setId("end");
+          return;
+        }
+
         setId(item.isFolder ? String(item.index) : String(parent?.index));
       }}
       onExpandItem={(item) => setExpandedItems([...expandedItems, item.index])}
@@ -152,7 +168,9 @@ const ControlledTree: ForwardRefRenderFunction<unknown, TreeDataProviderProps> =
           expandedItems.filter((expandedItemIndex) => expandedItemIndex !== item.index)
         )
       }
-      onSelectItems={(items) => setSelectedItems(items)}
+      onSelectItems={(items) => {
+        setSelectedItems(items);
+      }}
     >
       <div className="mb-4 flex justify-between align-middle">
         <label>
