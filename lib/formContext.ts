@@ -422,7 +422,7 @@ export const getNextAction = (
     let matched = false;
 
     // Check for catch-all value
-    const catchAllRule = nextAction.find((action) => action.choiceId === "catch-all");
+    const catchAllRule = nextAction.find((action) => action.choiceId.includes("catch-all"));
 
     nextAction.forEach((action) => {
       const match = matchedIds.includes(action.choiceId);

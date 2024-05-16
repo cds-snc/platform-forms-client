@@ -2,6 +2,7 @@ import { Group, GroupsType } from "@lib/formContext";
 import { DraggingPosition, DraggingPositionBetweenItems, TreeItem } from "react-complex-tree";
 import { findParentGroup } from "../util/findParentGroup";
 import { TreeItems } from "../types";
+import { autoFlowGroupNextActions } from "../util/setNextAction";
 
 const findItemIndex = (items: string[], itemIndex: string | number) =>
   items.indexOf(String(itemIndex));
@@ -22,6 +23,30 @@ const insertItemAtIndex = (items: string[], item: string, index: number) => {
   const updatedItems = [...items];
   updatedItems.splice(index, 0, item);
   return updatedItems;
+};
+
+/**
+ * Autoflow moved items
+ * Update the nextAction for the moved items in their new location, and update
+ * the nextAction for the item that was before the moved items in their original location.
+ */
+const updateMovedItemsNextAction = (
+  items: TreeItem[],
+  originalGroups: GroupsType,
+  newGroups: GroupsType
+) => {
+  const movedItems = items.map((item) => item["index"]);
+  const originalKeys = Object.keys(originalGroups);
+  movedItems.forEach((item) => {
+    const oldIndex = originalKeys.indexOf(item as string);
+    const prev = originalKeys[oldIndex - 1];
+    // Set the nextAction for the new location of the current item in its new location
+    newGroups = autoFlowGroupNextActions(newGroups, item as string);
+    // Set the nextAction for the item that was before the current item in its original location
+    newGroups = autoFlowGroupNextActions(newGroups, prev);
+  });
+
+  return newGroups;
 };
 
 export const handleOnDrop = (
@@ -75,7 +100,7 @@ export const handleOnDrop = (
       return acc;
     }, {});
 
-    // newGroups = autoTreeViewFlow(newGroups);
+    newGroups = updateMovedItemsNextAction(items, currentGroups, newGroups);
 
     replaceGroups(newGroups);
     setSelectedItems(selectedItems);
@@ -120,7 +145,7 @@ export const handleOnDrop = (
       // Create a new Groups object
       const newGroups = { ...currentGroups };
       newGroups[String(originParent?.index)] = {
-        name: String(originParent?.data),
+        name: String(originParent?.data.titleEn),
         elements: originGroupElements,
       };
 
@@ -153,7 +178,7 @@ export const handleOnDrop = (
     // Create a new Groups object
     let newGroups = { ...currentGroups };
     newGroups[String(originParent?.index)] = {
-      name: String(originParent?.data),
+      name: String(originParent?.data.titleEn),
       elements: originGroupElements,
     };
 

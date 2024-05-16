@@ -228,7 +228,9 @@ export const ConfirmDialog = ({
                 </Button>
                 <Button
                   onClick={handleSubmit}
-                  disabled={status === DialogStates.SENDING || status === DialogStates.FORMAT_ERROR}
+                  disabled={
+                    status === DialogStates.SENDING || DialogStates[status].includes("ERROR")
+                  }
                 >
                   {status === DialogStates.SENDING
                     ? t("downloadResponsesModals.sending")

@@ -1,6 +1,7 @@
 "use client";
 import React, { useMemo, useState } from "react";
 import { useTranslation } from "@i18n/client";
+import { cn } from "@lib/utils";
 
 import { FormElement } from "@lib/types";
 import { GroupsType } from "@lib/formContext";
@@ -8,16 +9,20 @@ import { GroupsType } from "@lib/formContext";
 import { GroupSelect } from "./GroupSelect";
 import { ChoiceSelect } from "./ChoiceSelect";
 import { Button } from "@clientComponents/globals";
+import { AddIcon } from "@serverComponents/icons";
 
 import { NextActionRule } from "@lib/formContext";
 import { useGroupStore } from "@formBuilder/components/shared/right-panel/treeview/store/useGroupStore";
 import { useTemplateStore } from "@lib/store/useTemplateStore";
 import { useFlowRef } from "@formBuilder/[id]/edit/logic/components/flow/provider/FlowRefProvider";
-import { LocalizedElementProperties } from "@lib/types/form-builder-types";
 import { ensureChoiceId } from "@lib/formContext";
+import { LocalizedElementProperties } from "@lib/types/form-builder-types";
+import { SaveNote } from "./SaveNote";
+import { toast } from "@formBuilder/components/shared/Toast";
 
 export const GroupAndChoiceSelect = ({
   groupId,
+  item,
   choiceId,
   index,
   updateChoiceId,
@@ -25,6 +30,7 @@ export const GroupAndChoiceSelect = ({
   removeSelector,
 }: {
   groupId: string | null;
+  item: FormElement;
   choiceId: string | null;
   index: number;
   updateChoiceId: (index: number, id: string) => void;
@@ -32,8 +38,7 @@ export const GroupAndChoiceSelect = ({
   removeSelector: (index: number) => void;
 }) => {
   const { t } = useTranslation("form-builder");
-  const { localizeField, language } = useTemplateStore((s) => ({
-    localizeField: s.localizeField,
+  const { language } = useTemplateStore((s) => ({
     language: s.translationLanguagePriority,
   }));
   const getElement = useGroupStore((state) => state.getElement);
@@ -43,7 +48,7 @@ export const GroupAndChoiceSelect = ({
   const currentGroup = useGroupStore((state) => state.id);
 
   // Get the parent question of the next action choice
-  let choiceParentQuestion = choiceId?.split(".")[0] || null;
+  const choiceParentQuestion = choiceId?.split(".")[0] || null;
 
   // Get the element associated with the parent question
   const choiceElement = getElement(Number(choiceParentQuestion));
@@ -77,17 +82,13 @@ export const GroupAndChoiceSelect = ({
     removeSelector(index);
   };
 
-  const title = choiceElement
-    ? choiceElement.properties[localizeField(LocalizedElementProperties.TITLE, language)]
-    : "";
-
-  if (choiceId === "catch-all") {
-    choiceParentQuestion = "catch-all";
+  // If the parent question of the choice is not the current question, return null
+  if (String(item.id) !== choiceParentQuestion) {
+    return null;
   }
 
   return (
-    <>
-      <div>{title}</div>
+    <div className="px-4">
       {choices && (
         <fieldset className="mb-4 border-b border-dotted border-slate-500">
           <div className="mb-4">
@@ -106,7 +107,7 @@ export const GroupAndChoiceSelect = ({
           </Button>
         </fieldset>
       )}
-    </>
+    </div>
   );
 };
 
@@ -122,6 +123,11 @@ export const MultiActionSelector = ({
   const [nextActions, setNextActions] = useState(initialNextActionRules);
   const findParentGroup = useGroupStore((state) => state.findParentGroup);
   const setGroupNextAction = useGroupStore((state) => state.setGroupNextAction);
+
+  const { localizeField, language } = useTemplateStore((s) => ({
+    localizeField: s.localizeField,
+    language: s.translationLanguagePriority,
+  }));
 
   const updateGroupId = (index: number, id: string) => {
     const rules = [...nextActions];
@@ -146,50 +152,69 @@ export const MultiActionSelector = ({
   const formId = `form-${Date.now()}`;
   const { flow } = useFlowRef();
 
+  const title = item
+    ? item.properties[localizeField(LocalizedElementProperties.TITLE, language)]
+    : "";
+
   return (
-    <form
-      onSubmit={(e: React.FormEvent<HTMLFormElement>) => e.preventDefault()}
-      id={formId}
-      {...(descriptionId && { "aria-describedby": descriptionId })}
-    >
-      <div className="mb-6" aria-live="polite" aria-relevant="all">
-        {nextActions.map((action, index) => {
-          return (
-            <GroupAndChoiceSelect
-              index={index}
-              key={`${action.choiceId}-${index}`}
-              groupId={action.groupId}
-              choiceId={action.choiceId}
-              updateGroupId={updateGroupId}
-              updateChoiceId={updateChoiceId}
-              removeSelector={removeSelector}
-            />
-          );
-        })}
+    <>
+      <div className="p-4">
+        <h3 className="block text-sm font-normal">
+          <strong>{t("logic.questionTitle")}</strong> {title}
+        </h3>
       </div>
-      <div className="mb-6">
+
+      <div className="flex items-center border-b-2 border-black bg-slate-50 p-3">
+        <span className="mr-2 inline-block pl-3">{t("logic.addRule")}</span>
         <Button
           onClick={() => {
             setNextActions([...nextActions, { groupId: "", choiceId: String(item.id) }]);
           }}
           theme={"secondary"}
-          className="px-4 py-1"
+          className="p-1"
           aria-controls={formId}
         >
-          {t("addConditionalRules.addAnotherRule")}
-        </Button>
-        <Button
-          className="ml-4 px-4 py-1"
-          onClick={() => {
-            const group = findParentGroup(String(item.id));
-            const parent = group?.index;
-            parent && setGroupNextAction(parent as string, nextActions);
-            flow.current?.updateEdges();
-          }}
-        >
-          Save
+          <AddIcon title={t("logic.addRule")} />
         </Button>
       </div>
-    </form>
+      <form
+        onSubmit={(e: React.FormEvent<HTMLFormElement>) => e.preventDefault()}
+        id={formId}
+        {...(descriptionId && { "aria-describedby": descriptionId })}
+      >
+        <div className="mb-6" aria-live="polite" aria-relevant="all">
+          {nextActions.map((action, index) => {
+            return (
+              <GroupAndChoiceSelect
+                index={index}
+                item={item}
+                key={`${action.choiceId}-${index}`}
+                groupId={action.groupId}
+                choiceId={action.choiceId}
+                updateGroupId={updateGroupId}
+                updateChoiceId={updateChoiceId}
+                removeSelector={removeSelector}
+              />
+            );
+          })}
+        </div>
+        <div className="mb-6 px-4">
+          <SaveNote />
+          <Button
+            className={cn("px-4 py-1", nextActions.length === 0 && "disabled")}
+            disabled={nextActions.length === 0}
+            onClick={() => {
+              const group = findParentGroup(String(item.id));
+              const parent = group?.index;
+              parent && setGroupNextAction(parent as string, nextActions);
+              flow.current?.updateEdges();
+              toast.success(t("logic.actionsSaved"));
+            }}
+          >
+            {t("logic.saveRule")}
+          </Button>
+        </div>
+      </form>
+    </>
   );
 };
