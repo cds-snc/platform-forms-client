@@ -4,7 +4,7 @@ import { getAppSetting } from "@lib/appSettings";
 import { logEvent } from "@lib/auditLogs";
 
 import { ucfirst } from "@lib/client/clientHelpers";
-import { AccessControlError, createAbility } from "@lib/privileges";
+import { createAbility } from "@lib/privileges";
 import {
   Answer,
   DownloadFormat,
@@ -23,6 +23,8 @@ import { logMessage } from "@lib/logger";
 import { revalidatePath } from "next/cache";
 import { authCheck } from "@lib/actions";
 
+// Can throw because it is not called by Client Components
+// @todo Should these types of functions be moved to a different file?
 export const fetchTemplate = async (id: string) => {
   const { session, ability } = await authCheck().catch(() => ({ session: null, ability: null }));
   if (!session) {
@@ -34,6 +36,8 @@ export const fetchTemplate = async (id: string) => {
   return template;
 };
 
+// Can throw because it is not called by Client Components
+// @todo Should these types of functions be moved to a different file?
 export const fetchSubmissions = async ({
   formId,
   status,
@@ -255,11 +259,7 @@ export const getSubmissionsByFormat = async ({
         throw new Error(`Invalid format: ${format}`);
     }
   } catch (err) {
-    if (err instanceof AccessControlError) {
-      throw new Error("Forbidden");
-    } else {
-      logMessage.error(err);
-      throw new Error("There was an error. Please try again later.");
-    }
+    logMessage.error(`Could not create submissions in format ${format}: ${(err as Error).message}`);
+    return { error: "There was an error. Please try again later." };
   }
 };

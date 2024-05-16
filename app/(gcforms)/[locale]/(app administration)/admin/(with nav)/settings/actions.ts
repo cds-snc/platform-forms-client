@@ -9,6 +9,7 @@ import {
 import { revalidatePath } from "next/cache";
 import { logMessage } from "@lib/logger";
 import { authCheck } from "@lib/actions";
+import { redirect } from "next/navigation";
 
 function nullCheck(formData: FormData, key: string) {
   const result = formData.get(key);
@@ -22,7 +23,7 @@ export async function getSetting(internalId: string) {
   return getFullAppSetting(ability, internalId);
 }
 
-export async function updateSetting(formData: FormData) {
+export async function updateSetting(language: string, formData: FormData) {
   try {
     const { ability } = await authCheck();
     const setting = {
@@ -36,13 +37,12 @@ export async function updateSetting(formData: FormData) {
 
     await updateAppSetting(ability, setting.internalId, setting);
   } catch (e) {
-    logMessage.error("Error updating setting: " + e);
-    throw e;
+    redirect(`/${language}/admin/settings?error=errorUpdating`);
   }
-  revalidatePath("(gcforms)/[locale]/(app administration)/admin/(with nav)/settings", "page");
+  redirect(`/${language}/admin/settings?success=updated`);
 }
 
-export async function createSetting(formData: FormData) {
+export async function createSetting(language: string, formData: FormData) {
   try {
     const { ability } = await authCheck();
     const setting = {
@@ -62,10 +62,9 @@ export async function createSetting(formData: FormData) {
       }
     );
   } catch (e) {
-    logMessage.error("Error creating setting: " + e);
-    throw e;
+    redirect(`/${language}/admin/settings?error=errorCreating`);
   }
-  revalidatePath("(gcforms)/[locale]/(app administration)/admin/(with nav)/settings", "page");
+  redirect(`/${language}/admin/settings?success=created`);
 }
 
 export async function deleteSetting(internalId: string) {

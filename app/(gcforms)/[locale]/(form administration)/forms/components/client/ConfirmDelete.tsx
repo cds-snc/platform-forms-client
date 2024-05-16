@@ -23,13 +23,14 @@ export const ConfirmDelete = ({
   const { t } = useTranslation("form-builder");
 
   const handleConfirm = useCallback(async () => {
-    await deleteForm(id).catch((error) => {
-      if ((error as Error).message === "Responses Exist") {
+    const { error } = (await deleteForm(id)) ?? {};
+    if (error) {
+      if (error === "Responses Exist") {
         toast.error(t("formDeletedResponsesExist"));
       } else {
         toast.error(t("formDeletedDialogMessageFailed"));
       }
-    });
+    }
 
     clearTemplateStorage(id);
 

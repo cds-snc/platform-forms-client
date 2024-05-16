@@ -96,7 +96,9 @@ export const RegistrationForm = () => {
       </h1>
       <p className="-mt-6 mb-10">
         {t("signUpRegistration.alreadyHaveAnAccount")}&nbsp;
-        <Link href={"/auth/login"}>{t("signUpRegistration.alreadyHaveAnAccountLink")}</Link>
+        <Link href={`/${language}/auth/login`}>
+          {t("signUpRegistration.alreadyHaveAnAccountLink")}
+        </Link>
       </p>
       <form id="registration" action={formAction} noValidate>
         <div className="focus-group">
@@ -174,7 +176,9 @@ export const RegistrationForm = () => {
         </div>
         <p className="-mt-2 mb-10">
           {t("signUpRegistration.termsAgreement")}&nbsp;
-          <Link href={"/terms-of-use"}>{t("signUpRegistration.termsAgreementLink")}</Link>
+          <Link href={`/${language}/terms-of-use`}>
+            {t("signUpRegistration.termsAgreementLink")}
+          </Link>
         </p>
         <SubmitButton />
       </form>

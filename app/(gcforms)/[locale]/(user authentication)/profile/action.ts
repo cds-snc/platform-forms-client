@@ -23,9 +23,16 @@ export const updateSecurityQuestion = async (
   const data = validateData({ oldQuestionId, newQuestionId, newAnswer: answer });
 
   if (!data.success) {
-    throw new Error("Data not Valid");
+    return {
+      error: "Data did not pass validation",
+    };
   }
 
-  await updateSecurityAnswer(ability, data.output);
+  const response = await updateSecurityAnswer(ability, data.output).catch(() => {
+    return {
+      error: "Failed to update security question",
+    };
+  });
   revalidatePath("(gcforms)/[locale]/(user authentication)/profile");
+  return response;
 };
