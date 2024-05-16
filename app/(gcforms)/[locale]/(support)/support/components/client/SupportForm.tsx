@@ -30,6 +30,7 @@ export const SupportForm = () => {
 
   return (
     <>
+      {/* @todo  Add general error to show user there was an internal service error */}
       {Object.keys(state.validationErrors).length > 0 && (
         <ValidationMessage
           type={ErrorStatus.ERROR}

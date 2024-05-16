@@ -77,21 +77,22 @@ export const Menu = ({
   }
 
   async function downloadForm(name: string, id: string) {
-    const response = await getForm(id).catch((error) => {
-      if ((error as Error).message === "Form Not Found") {
+    const { formRecord, error } = await getForm(id);
+    if (error) {
+      if (error === "Form Not Found") {
         toast.error(t("errors.formDownloadNotExist"));
       } else {
         toast.error(t("errors.formDownloadFailed"));
       }
-    });
+    }
 
-    if (response) {
+    if (formRecord) {
       const fileName = name
         ? name
         : language === "fr"
-        ? response.form.titleFr
-        : response.form.titleEn;
-      const data = JSON.stringify(response.form, null, 2);
+        ? formRecord.form.titleFr
+        : formRecord.form.titleEn;
+      const data = JSON.stringify(formRecord.form, null, 2);
       const tempUrl = window.URL.createObjectURL(new Blob([data]));
       const link = document.createElement("a");
       link.href = tempUrl;

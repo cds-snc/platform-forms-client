@@ -78,15 +78,18 @@ export const Publish = ({ id }: { id: string }) => {
     setError(false);
     setErrorCode(null);
     try {
-      const result = await updateTemplatePublishedStatus({ id, isPublished: true });
-      setId(result?.id);
-      setIsPublished(result?.isPublished);
+      const { formRecord, error } = await updateTemplatePublishedStatus({ id, isPublished: true });
+      if (error || !formRecord) {
+        throw new Error(error);
+      }
+      setId(formRecord?.id);
+      setIsPublished(formRecord?.isPublished);
 
       window.dataLayer = window.dataLayer || [];
       window.dataLayer.push({
         event: "publish_form",
       });
-      router.replace(`/form-builder/${id}/published`);
+      router.replace(`/${i18n.language}/form-builder/${id}/published`);
     } catch (e) {
       logMessage.error(e);
       setError(true);
@@ -105,14 +108,14 @@ export const Publish = ({ id }: { id: string }) => {
         formConfig: JSON.parse(getSchema()),
       });
 
-      router.push(`/unlock-publishing`);
+      router.push(`/${i18n.language}/unlock-publishing`);
     } catch (e) {
       logMessage.error(e);
       setError(true);
       setErrorCode(500);
       return;
     }
-  }, [getSchema, getName, id, router]);
+  }, [getSchema, getName, id, router, i18n.language]);
 
   const hasHydrated = useRehydrate();
 
