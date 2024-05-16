@@ -47,7 +47,7 @@ export const ConfirmDeactivateModal = ({
         className="max-h-[80%] overflow-y-scroll"
         handleClose={handleClose}
       >
-        <div className="my-8 mx-5 flex flex-col gap-4">
+        <div className="mx-5 my-8 flex flex-col gap-4">
           <p>{t("deactivatingWillNotifyUser")}</p>
           <p>
             {user.name} <br />
