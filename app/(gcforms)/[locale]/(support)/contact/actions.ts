@@ -117,10 +117,10 @@ ${description}<br/>
       description: emailBody,
       language,
     });
-    // Success
-    redirect(`/${language}/contact?success`);
   } catch (error) {
     logMessage.error(`Failed to send contact request: ${(error as Error).message}`);
     return { error: "Internal Service Error: Failed to send request", validationErrors: [] };
   }
+  // The redirect must be outside of the try/catch block to avoid the NEXT_REDIRECT being caught by the error boundary
+  redirect(`/${language}/contact?success`);
 }
