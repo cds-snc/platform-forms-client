@@ -188,7 +188,7 @@ export const ReportDialog = ({
                   </Alert.Title>
                   <p>
                     {t("downloadResponsesModals.reportProblemsDialog.errors.unknown.description")}
-                    <Link href={"/support"}>
+                    <Link href={`/${i18n.language}/support`}>
                       {t(
                         "downloadResponsesModals.reportProblemsDialog.errors.unknown.descriptionLink"
                       )}

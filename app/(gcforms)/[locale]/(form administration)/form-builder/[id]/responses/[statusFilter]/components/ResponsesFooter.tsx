@@ -8,7 +8,7 @@ import { useRouter } from "next/navigation";
 const MAX_REPORT_COUNT = 20;
 
 export const ResponsesFooter = ({ formId }: { formId: string }) => {
-  const { t } = useTranslation("form-builder-responses");
+  const { t, i18n } = useTranslation("form-builder-responses");
   const router = useRouter();
 
   const onSuccessfulReport = () => {
@@ -23,7 +23,7 @@ export const ResponsesFooter = ({ formId }: { formId: string }) => {
         onSuccess={onSuccessfulReport}
       />
       <Link
-        href={`/form-builder/${formId}/responses/problem`}
+        href={`/${i18n.language}/form-builder/${formId}/responses/problem`}
         className="ml-12 text-black visited:text-black"
       >
         {t("responses.viewAllProblemResponses")}

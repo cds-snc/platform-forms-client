@@ -89,7 +89,7 @@ export const Publish = ({ id }: { id: string }) => {
       window.dataLayer.push({
         event: "publish_form",
       });
-      router.replace(`/form-builder/${id}/published`);
+      router.replace(`/${i18n.language}/form-builder/${id}/published`);
     } catch (e) {
       logMessage.error(e);
       setError(true);
@@ -108,14 +108,14 @@ export const Publish = ({ id }: { id: string }) => {
         formConfig: JSON.parse(getSchema()),
       });
 
-      router.push(`/unlock-publishing`);
+      router.push(`/${i18n.language}/unlock-publishing`);
     } catch (e) {
       logMessage.error(e);
       setError(true);
       setErrorCode(500);
       return;
     }
-  }, [getSchema, getName, id, router]);
+  }, [getSchema, getName, id, router, i18n.language]);
 
   const hasHydrated = useRehydrate();
 
