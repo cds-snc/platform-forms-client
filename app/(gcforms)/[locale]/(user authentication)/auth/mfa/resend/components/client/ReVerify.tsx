@@ -44,7 +44,7 @@ export const ReVerify = (): ReactElement => {
     } catch (err) {
       if (hasError(["Missing 2FA session"], err)) {
         // Missing 2FA session so have the user try signing in again
-        router.push("/auth/login");
+        router.push(`/${language}/auth/login`);
         router.refresh();
       } else {
         // Internal Error

@@ -116,7 +116,11 @@ export const DownloadDialog = ({
           format: DownloadFormat.HTML_ZIPPED,
           lang: i18n.language as Language,
           revalidate: pathname.includes("new"),
-        })) as HtmlZippedResponse;
+        })) as HtmlZippedResponse | { error: string };
+
+        if ("error" in response) {
+          throw new Error(response.error);
+        }
 
         downloadFormatEvent(formId, selectedFormat, ids.length);
 
@@ -142,8 +146,11 @@ export const DownloadDialog = ({
           format: DownloadFormat.CSV,
           lang: i18n.language as Language,
           revalidate: pathname.includes("new"),
-        })) as CSVResponse;
+        })) as CSVResponse | { error: string };
 
+        if ("error" in response) {
+          throw new Error(response.error);
+        }
         downloadFormatEvent(formId, selectedFormat, ids.length);
 
         if (zipAllFiles) {
@@ -175,8 +182,10 @@ export const DownloadDialog = ({
           format: DownloadFormat.JSON,
           lang: i18n.language as Language,
           revalidate: pathname.includes("new"),
-        })) as JSONResponse;
-
+        })) as JSONResponse | { error: string };
+        if ("error" in response) {
+          throw new Error(response.error);
+        }
         downloadFormatEvent(formId, selectedFormat, ids.length);
 
         if (zipAllFiles) {

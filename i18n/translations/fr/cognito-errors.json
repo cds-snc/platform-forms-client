@@ -4,13 +4,13 @@
   "InternalServiceExceptionLogin": {
     "title": "Il y a eu un problème lors de la connexion.",
     "description": "Veuillez réessayer plus tard ou contacter ",
-    "link": "/support",
+    "link": "/fr/support",
     "linkText": "contacter l'équipe de soutien."
   },
   "TooManyRequestsException": {
     "title": "Trop de demandes.",
     "description": "Réessayez plus tard ou ",
-    "link": "fr/support",
+    "link": "/fr/support",
     "linkText": "contactez l'équipe de soutien."
   },
   "UsernameExistsException": "Ce compte existe déjà.",
@@ -24,7 +24,7 @@
   "UsernameOrPasswordIncorrect": {
     "title": "L’adresse courriel ou le mot de passe que vous avez entré est incorrect.",
     "description": "L’adresse courriel ou le mot de passe que vous avez entré est incorrect ou le compte n’existe pas. ",
-    "link": "/auth/register",
+    "link": "/fr/auth/register",
     "linkText": "Si vous n’avez pas de compte, créez-en un maintenant."
   },
   "2FALockedOutSession": {

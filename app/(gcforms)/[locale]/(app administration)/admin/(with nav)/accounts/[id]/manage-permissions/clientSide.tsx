@@ -206,7 +206,7 @@ export const ManagePermissions = ({
         </Button>
       )}
 
-      <LinkButton.Secondary href={`/admin/accounts?id=${formUser.id}`}>
+      <LinkButton.Secondary href={`/${language}/admin/accounts?id=${formUser.id}`}>
         {t("cancel")}
       </LinkButton.Secondary>
     </div>

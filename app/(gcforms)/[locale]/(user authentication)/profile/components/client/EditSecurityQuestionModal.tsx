@@ -121,8 +121,10 @@ const EditSecurityQuestionModal = ({
         return;
       }
 
-      await updateSecurityQuestion(originalQuestionId, questionId, questionAnswer);
-
+      const response = await updateSecurityQuestion(originalQuestionId, questionId, questionAnswer);
+      if (response?.error) {
+        throw new Error(response.error);
+      }
       dialog.current?.close();
       handleClose();
     } catch (err) {
