@@ -235,7 +235,6 @@ export const {
         acceptableUse: token.acceptableUse ?? false,
         name: token.name ?? null,
         email: token.email,
-        image: token.picture ?? null,
         privileges: await getPrivilegeRulesForUser(token.userId as string),
         ...(token.newlyRegistered && { newlyRegistered: token.newlyRegistered }),
         // Used client side to immidiately log out a user if they have been deactivated
