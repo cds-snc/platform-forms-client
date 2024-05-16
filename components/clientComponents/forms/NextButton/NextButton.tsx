@@ -6,6 +6,7 @@ import { Validate } from "@lib/types";
 import { useGCFormsContext } from "@lib/hooks/useGCFormContext";
 import { Button } from "@clientComponents/globals";
 import { LockedSections } from "@formBuilder/components/shared/right-panel/treeview/types";
+import { formHasGroups } from "@lib/utils/form-builder/formHasGroups";
 
 export const NextButton = ({
   validateForm,
@@ -14,7 +15,7 @@ export const NextButton = ({
   validateForm: Validate["validateForm"];
   fallBack?: () => JSX.Element;
 }) => {
-  const { currentGroup, hasNextAction, handleNextAction } = useGCFormsContext();
+  const { currentGroup, hasNextAction, handleNextAction, formRecord } = useGCFormsContext();
   const { t } = useTranslation("form-builder");
 
   const handleValidation = async () => {
@@ -48,7 +49,10 @@ export const NextButton = ({
         }}
         type="button"
       >
-        {t("Next")}
+        <>
+          {t("Next")}
+          {formHasGroups(formRecord.form) && <span className="sr-only">{t("formSection")}</span>}
+        </>
       </Button>
     </>
   );

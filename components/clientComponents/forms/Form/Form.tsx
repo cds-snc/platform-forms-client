@@ -180,7 +180,10 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
   ).length;
 
   return status === "submitting" ? (
-    <Loader message={t("loading")} />
+    <>
+      <title>{t("loading")}</title>
+      <Loader message={t("loading")} />
+    </>
   ) : (
     <>
       {formStatusError && (
