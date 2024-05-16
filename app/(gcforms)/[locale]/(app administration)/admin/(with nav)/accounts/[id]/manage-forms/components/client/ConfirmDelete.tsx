@@ -28,7 +28,6 @@ export const ConfirmDelete = ({
         toast.error(t("formDeletedDialogMessageFailed"));
       }
     });
-
     onDeleted(id);
   }, [id, onDeleted, t]);
 
