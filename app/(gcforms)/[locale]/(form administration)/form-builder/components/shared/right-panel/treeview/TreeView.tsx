@@ -150,8 +150,13 @@ const ControlledTree: ForwardRefRenderFunction<unknown, TreeDataProviderProps> =
         setFocusedItem(item.index);
         const parent = findParentGroup(getTreeData(), String(item.index));
 
-        // Don't set ids for pseudo elements
-        if (item.index === "intro" || item.index === "policy" || item.index === "confirmation") {
+        if (item.index === "intro" || item.index === "policy") {
+          setId("start");
+          return;
+        }
+
+        if (item.index === "confirmation") {
+          setId("end");
           return;
         }
 
