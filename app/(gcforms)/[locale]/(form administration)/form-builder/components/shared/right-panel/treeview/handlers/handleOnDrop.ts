@@ -43,11 +43,14 @@ const updateMovedItemsNextAction = (
   const originalKeys = Object.keys(originalGroups);
   const newKeys = Object.keys(newGroups);
 
+  const keysToReflow: string[] = [];
+  let promptForReflow = false;
+
   movedItems.forEach((item) => {
     // Check the current item for autoFlow
     const movedGroup = newGroups[item as string] as Group;
 
-    // Check the previous item in the new location for autoFlow (@TODO: only for the first item?)
+    // Check the previous item in the new location for autoFlow
     const oldIndex = originalKeys.indexOf(item as string);
     const newIndex = newKeys.indexOf(item as string);
 
@@ -59,20 +62,30 @@ const updateMovedItemsNextAction = (
     const previousGroupOld = originalGroups[prevOld] as Group;
 
     if (groupsHaveCustomRules([movedGroup, previousGroup, previousGroupOld])) {
-      if (
-        !confirm(
-          "It seems the item you are moving has one or more cutom rules. Would you like to overwrite those rules with the default autoFlow rules?"
-        )
-      ) {
-        return;
-      }
+      promptForReflow = true;
     }
 
+    keysToReflow.push(item as string);
+
     // Set the nextAction for the new location of the current item in its new location
-    newGroups = autoFlowGroupNextActions(newGroups, item as string);
+    // newGroups = autoFlowGroupNextActions(newGroups, item as string);
 
     // Set the nextAction for the item that was before the current item in its original location
     // newGroups = autoFlowGroupNextActions(newGroups, prevOld);
+  });
+
+  if (promptForReflow) {
+    if (
+      !confirm(
+        "It seems the item you are moving has one or more cutom rules. Would you like to overwrite those rules with the default autoFlow rules?"
+      )
+    ) {
+      return newGroups;
+    }
+  }
+
+  keysToReflow.forEach((key) => {
+    newGroups = autoFlowGroupNextActions(newGroups, key);
   });
 
   return newGroups;
