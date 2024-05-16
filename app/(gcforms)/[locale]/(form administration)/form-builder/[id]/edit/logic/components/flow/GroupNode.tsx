@@ -117,7 +117,9 @@ export const GroupNode = (node: NodeProps) => {
           if (!typesWithOptions.includes(item.type)) {
             return (
               <div key={child.index} className={cn(nodeClassName)}>
-                {getTitle(child.data as ElementProperties)}
+                <div className="line-clamp-2 truncate text-wrap">
+                  {getTitle(child.data as ElementProperties).substring(0, 300)}
+                </div>
               </div>
             );
           }
@@ -135,7 +137,9 @@ export const GroupNode = (node: NodeProps) => {
               }}
               className={cn(nodeClassName, selected)}
             >
-              {getTitle(child.data as ElementProperties)}
+              <div className="line-clamp-2 truncate text-wrap">
+                {getTitle(child.data as ElementProperties).substring(0, 300)}
+              </div>
               <div className="absolute right-[10px] top-[10px] cursor-pointer hover:scale-125">
                 <OptionRuleSvg />
               </div>

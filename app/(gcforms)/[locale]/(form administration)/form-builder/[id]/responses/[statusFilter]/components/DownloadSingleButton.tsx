@@ -28,29 +28,33 @@ export const DownloadSingleButton = ({
 
   const handleDownload = async () => {
     try {
-      const submissionHtml: HtmlResponse = (await getSubmissionsByFormat({
+      const submissionHtml = (await getSubmissionsByFormat({
         formID: formId,
         ids: [responseId],
         format: DownloadFormat.HTML,
         lang: i18n.language as Language,
         revalidate: pathname.includes("new"),
-      })) as HtmlResponse;
+      })) as HtmlResponse | { error: string };
 
-      const interval = 200;
-      const submission = submissionHtml[0];
-      const fileName = `${submission.id}.html`;
-      const href = window.URL.createObjectURL(new Blob([submission.html]));
-      const anchorElement = document.createElement("a");
-      anchorElement.href = href;
-      anchorElement.download = fileName;
-      document.body.appendChild(anchorElement);
-      anchorElement.click();
-      document.body.removeChild(anchorElement);
-      window.URL.revokeObjectURL(href);
+      if (Array.isArray(submissionHtml)) {
+        const interval = 200;
+        const submission = submissionHtml[0];
+        const fileName = `${submission.id}.html`;
+        const href = window.URL.createObjectURL(new Blob([submission.html]));
+        const anchorElement = document.createElement("a");
+        anchorElement.href = href;
+        anchorElement.download = fileName;
+        document.body.appendChild(anchorElement);
+        anchorElement.click();
+        document.body.removeChild(anchorElement);
+        window.URL.revokeObjectURL(href);
 
-      setTimeout(() => {
-        onDownloadSuccess();
-      }, interval);
+        setTimeout(() => {
+          onDownloadSuccess();
+        }, interval);
+      } else {
+        throw new Error(submissionHtml.error);
+      }
     } catch (err) {
       logMessage.error(err as Error);
       setDownloadError(true);

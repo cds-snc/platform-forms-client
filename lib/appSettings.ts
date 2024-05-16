@@ -128,7 +128,11 @@ export const updateAppSetting = async (
       );
       throw e;
     }
-    logMessage.error(e);
+    if (e instanceof Error) {
+      logMessage.warn(
+        `Could not update setting with internalId: ${internalId} due to error: ${e.message}`
+      );
+    }
     return null;
   }
 };
@@ -160,7 +164,11 @@ export const createAppSetting = async (ability: UserAbility, settingData: Settin
       logEvent(ability.userID, { type: "Setting" }, "AccessDenied", "Attempted to create setting");
       throw e;
     }
-    logMessage.error(e);
+    if (e instanceof Error) {
+      logMessage.warn(
+        `Could not create setting with name: ${settingData.nameEn} due to error: ${e.message}`
+      );
+    }
     return null;
   }
 };
@@ -191,6 +199,10 @@ export const deleteAppSetting = async (ability: UserAbility, internalId: string)
       );
       throw e;
     }
-    logMessage.error(e);
+    if (e instanceof Error) {
+      logMessage.warn(
+        `Could not delete setting with internalId: ${internalId} due to error: ${e.message}`
+      );
+    }
   }
 };

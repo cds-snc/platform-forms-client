@@ -126,13 +126,17 @@ export const SaveButton = () => {
         return;
       }
 
-      const template = await createOrUpdateTemplate({
+      const { formRecord: template, error } = await createOrUpdateTemplate({
         id: getId(),
         formConfig: JSON.parse(formConfig),
         name: getName(),
         deliveryOption: getDeliveryOption(),
         securityAttribute: securityAttribute,
       });
+
+      if (!template || error) {
+        throw new Error("Error saving template");
+      }
 
       setId(template.id);
       setUpdatedAt(new Date(template.updatedAt ? template.updatedAt : "").getTime());
