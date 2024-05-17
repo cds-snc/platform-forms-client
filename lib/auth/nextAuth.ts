@@ -113,19 +113,8 @@ export const {
   debug: process.env.NODE_ENV !== "production",
   logger: {
     error(code, ...message) {
-      logMessage.error(
-        `NextAuth error - Code: ${code}. Error: ${JSON.stringify(message, (_, value) => {
-          if (value?.constructor.name === "Error") {
-            return {
-              name: value.name,
-              message: value.message,
-              stack: value.stack,
-              cause: value.cause,
-            };
-          }
-          return value;
-        })}`
-      );
+      // Log the auth error as warn to avoid triggering a Slack alert and leave it to the front end to handle
+      logMessage.warn(`NextAuth error - Code: ${code} - Message: ${message}`);
     },
     warn(code) {
       logMessage.warn(`NextAuth warning - Code: ${code}`);

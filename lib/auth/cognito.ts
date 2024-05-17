@@ -46,6 +46,7 @@ export const initiateSignIn = async ({
   username,
   password,
 }: Credentials): Promise<CognitoToken | null> => {
+  logMessage.info(`Initiating sign in for ${username}`);
   const sanitizedUsername = sanitizeEmailAddressForCognito(username);
 
   const params: AdminInitiateAuthCommandInput = {
@@ -76,6 +77,9 @@ export const initiateSignIn = async ({
       return null;
     }
   } catch (e) {
+    logMessage.error(
+      `Failed to initiate sign in for ${sanitizedUsername}. Reason: ${(e as Error).message}.`
+    );
     if (
       e instanceof CognitoIdentityProviderServiceException &&
       e.name === "NotAuthorizedException" &&

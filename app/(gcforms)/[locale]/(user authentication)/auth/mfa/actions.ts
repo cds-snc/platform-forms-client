@@ -120,7 +120,7 @@ export const verify = async (
     });
   } catch (err) {
     // Failed login attempt
-    if ((err as AuthError).name === "CredentialsSignin") {
+    if ((err as AuthError).type === "CredentialsSignin") {
       return {
         success: false,
         authError: {
@@ -129,7 +129,8 @@ export const verify = async (
         },
       };
     }
-
+    // Log the error that is not a failed login attempt
+    logMessage.error(`Error signing in:` + JSON.stringify(err));
     return {
       success: false,
       authError: {
