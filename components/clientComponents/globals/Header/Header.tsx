@@ -30,16 +30,15 @@ export const Header = ({ context = "default", className }: HeaderParams) => {
     >
       <div className="grid w-full grid-flow-col">
         <div className="flex">
-          <Link href={`/${language}/form-builder`} legacyBehavior>
-            {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
-            <a
-              id="logo"
-              className="mr-7 flex border-r-1 pr-[14px] text-3xl font-semibold !text-black no-underline focus:bg-white"
-            >
-              <div className="inline-block h-[45px] w-[46px] p-2">
-                <SiteLogo title={t("title")} />
-              </div>
-            </a>
+          <Link
+            href={`/${language}/form-builder`}
+            prefetch={false}
+            id="logo"
+            className="mr-7 flex border-r-1 pr-[14px] text-3xl font-semibold !text-black no-underline focus:bg-white"
+          >
+            <div className="inline-block h-[45px] w-[46px] p-2">
+              <SiteLogo title={t("title")} />
+            </div>
           </Link>
           {status === "authenticated" && (
             <>
@@ -55,7 +54,9 @@ export const Header = ({ context = "default", className }: HeaderParams) => {
           <ul className="mt-2 flex list-none px-0 text-base">
             {status !== "authenticated" && (
               <li className="mr-2 py-2 text-base tablet:mr-4">
-                <Link href={`/${language}/auth/login`}>{t("loginMenu.login")}</Link>
+                <Link href={`/${language}/auth/login`} prefetch={false}>
+                  {t("loginMenu.login")}
+                </Link>
               </li>
             )}
             {
