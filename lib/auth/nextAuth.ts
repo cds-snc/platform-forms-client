@@ -112,10 +112,7 @@ export const {
   trustHost: process.env.AUTH_URL ? false : true,
   debug: process.env.NODE_ENV !== "production",
   logger: {
-    error(code, ...message) {
-      // Log the auth error as warn to avoid triggering a Slack alert and leave it to the front end to handle
-      logMessage.warn(`NextAuth error - Code: ${code} - Message: ${message}`);
-    },
+    error() {},
     warn(code) {
       logMessage.warn(`NextAuth warning - Code: ${code}`);
     },
