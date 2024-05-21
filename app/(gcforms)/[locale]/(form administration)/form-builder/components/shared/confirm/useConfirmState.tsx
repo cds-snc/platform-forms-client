@@ -1,4 +1,4 @@
-import { useState, useCallback } from "react";
+import { useState } from "react";
 
 export type resolveType = (value?: boolean) => void;
 export type rejectType = (reason?: string) => void;
@@ -6,15 +6,16 @@ export type rejectType = (reason?: string) => void;
 export const useConfirmState = () => {
   const [resolve, setResolve] = useState<resolveType | null>(null);
   const [reject, setReject] = useState<rejectType | null>(null);
+  const [openDialog, setOpenDialog] = useState(false);
 
-  const getPromise = useCallback(() => {
+  const getPromise = () => {
     const promise: Promise<boolean> = new Promise((res, rej) => {
       setResolve(() => res);
       setReject(() => rej);
     });
 
     return promise;
-  }, [setResolve, setReject]);
+  };
 
-  return { resolve, reject, getPromise };
+  return { resolve, reject, getPromise, openDialog, setOpenDialog };
 };

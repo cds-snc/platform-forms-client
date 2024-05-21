@@ -34,10 +34,12 @@ const groupsHaveCustomRules = (items: Group[]) => {
  * Update the nextAction for the moved items in their new location, and update
  * the nextAction for the item that was before the moved items in their original location.
  */
-const updateMovedItemsNextAction = (
+const updateMovedItemsNextAction = async (
   items: TreeItem[],
   originalGroups: GroupsType,
-  newGroups: GroupsType
+  newGroups: GroupsType,
+  getPromise: () => Promise<boolean>,
+  setOpenDialog: (value: boolean) => void
 ) => {
   const movedItems = items.map((item) => item["index"]);
   const originalKeys = Object.keys(originalGroups);
@@ -75,29 +77,33 @@ const updateMovedItemsNextAction = (
   });
 
   if (promptForReflow) {
-    if (
-      !confirm(
-        "It seems the item you are moving has one or more cutom rules. Would you like to overwrite those rules with the default autoFlow rules?"
-      )
-    ) {
-      return newGroups;
+    setOpenDialog(true);
+    const confirm = getPromise();
+
+    const confirmed = await confirm;
+
+    if (confirmed) {
+      keysToReflow.forEach((key) => {
+        newGroups = autoFlowGroupNextActions(newGroups, key);
+      });
+      setOpenDialog(false);
+    } else {
+      setOpenDialog(false);
     }
   }
-
-  keysToReflow.forEach((key) => {
-    newGroups = autoFlowGroupNextActions(newGroups, key);
-  });
 
   return newGroups;
 };
 
-export const handleOnDrop = (
+export const handleOnDrop = async (
   items: TreeItem[],
   target: DraggingPosition,
   getGroups: () => GroupsType | undefined,
   replaceGroups: (groups: GroupsType) => void,
   setSelectedItems: (items: string[]) => void,
-  getTreeData: () => TreeItems
+  getTreeData: () => TreeItems,
+  getPromise: () => Promise<boolean>,
+  setOpenDialog: (value: boolean) => void
 ) => {
   // Current state of the tree in Groups format
   let currentGroups = getGroups() as GroupsType;
@@ -142,7 +148,13 @@ export const handleOnDrop = (
       return acc;
     }, {});
 
-    newGroups = updateMovedItemsNextAction(items, currentGroups, newGroups);
+    newGroups = await updateMovedItemsNextAction(
+      items,
+      currentGroups,
+      newGroups,
+      getPromise,
+      setOpenDialog
+    );
 
     replaceGroups(newGroups);
     setSelectedItems(selectedItems);
