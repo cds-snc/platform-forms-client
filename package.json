@@ -84,7 +84,7 @@
     "lodash.unset": "4.5.2",
     "markdown-to-jsx": "7.3.2",
     "next": "14.2.3",
-    "next-auth": "^5.0.0-beta.17",
+    "next-auth": "^5.0.0-beta.18",
     "node-fetch": "^3.3.2",
     "pino": "8.17.2",
     "prisma": "^5.10.2",
