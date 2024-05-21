@@ -52,6 +52,9 @@ const updateMovedItemsNextAction = async (
     // Check the current item for autoFlow
     const movedGroup = newGroups[item as string] as Group;
 
+    // @TODO: all these commented out blocks are related to autoFlowing sections surrounding
+    // the moved item. Not sure this will be required, keeping the code for now.
+
     // Check the previous item in the new location for autoFlow
     // const oldIndex = originalKeys.indexOf(item as string);
     // const newIndex = newKeys.indexOf(item as string);
