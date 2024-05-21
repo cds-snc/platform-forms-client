@@ -42,8 +42,8 @@ const updateMovedItemsNextAction = async (
   setOpenDialog: (value: boolean) => void
 ) => {
   const movedItems = items.map((item) => item["index"]);
-  const originalKeys = Object.keys(originalGroups);
-  const newKeys = Object.keys(newGroups);
+  // const originalKeys = Object.keys(originalGroups);
+  // const newKeys = Object.keys(newGroups);
 
   const keysToReflow: string[] = [];
   let promptForReflow = false;
@@ -53,17 +53,17 @@ const updateMovedItemsNextAction = async (
     const movedGroup = newGroups[item as string] as Group;
 
     // Check the previous item in the new location for autoFlow
-    const oldIndex = originalKeys.indexOf(item as string);
-    const newIndex = newKeys.indexOf(item as string);
+    // const oldIndex = originalKeys.indexOf(item as string);
+    // const newIndex = newKeys.indexOf(item as string);
 
-    const prev = newKeys[newIndex - 1];
-    const previousGroup = newGroups[prev] as Group;
+    // const prev = newKeys[newIndex - 1];
+    // const previousGroup = newGroups[prev] as Group;
 
     // Check the previous item in the old location for autoFlow
-    const prevOld = originalKeys[oldIndex - 1];
-    const previousGroupOld = originalGroups[prevOld] as Group;
+    // const prevOld = originalKeys[oldIndex - 1];
+    // const previousGroupOld = originalGroups[prevOld] as Group;
 
-    if (groupsHaveCustomRules([movedGroup, previousGroup, previousGroupOld])) {
+    if (groupsHaveCustomRules([movedGroup])) {
       promptForReflow = true;
     }
 
