@@ -11,7 +11,7 @@ import { Button } from "@clientComponents/globals";
 import Brand from "@clientComponents/globals/Brand";
 import { ExternalLinkIcon } from "@serverComponents/icons";
 import { updateTemplate } from "@formBuilder/actions";
-import { logMessage } from "@lib/logger";
+import { FormServerErrorCodes } from "@lib/types/form-builder-types";
 
 const Label = ({ htmlFor, children }: { htmlFor: string; children?: JSX.Element | string }) => {
   return (
@@ -22,7 +22,7 @@ const Label = ({ htmlFor, children }: { htmlFor: string; children?: JSX.Element 
 };
 
 export const Branding = ({ hasBrandingRequestForm }: { hasBrandingRequestForm: boolean }) => {
-  const { t, i18n } = useTranslation("form-builder");
+  const { t, i18n } = useTranslation(["form-builder", "common"]);
   const { status } = useSession();
   const { id, isPublished, brandName, updateField, unsetField, getSchema, getName, brand } =
     useTemplateStore((s) => ({
@@ -54,20 +54,24 @@ export const Branding = ({ hasBrandingRequestForm }: { hasBrandingRequestForm: b
   const savedErrorMessage = t("settingsResponseDelivery.savedErrorMessage");
 
   const handleSave = useCallback(async () => {
-    try {
-      await updateTemplate({
-        id,
-        formConfig: JSON.parse(getSchema()),
-        name: getName(),
-      });
-    } catch (e) {
-      logMessage.error(e);
-      toast.error(savedErrorMessage);
+    const result = await updateTemplate({
+      id,
+      formConfig: JSON.parse(getSchema()),
+      name: getName(),
+    });
+
+    if (!result?.error) {
+      toast.success(savedSuccessMessage);
       return;
     }
 
-    toast.success(savedSuccessMessage);
-  }, [id, getSchema, getName, savedSuccessMessage, savedErrorMessage]);
+    toast.error(
+      `${savedErrorMessage} ${t("errorCode", {
+        ns: "common",
+        code: FormServerErrorCodes.BRANDING,
+      })}`
+    );
+  }, [id, getSchema, getName, savedSuccessMessage, savedErrorMessage, t]);
 
   const lang = i18n.language;
   const logoTitle = lang === "en" ? "logoTitleEn" : "logoTitleFr";
