@@ -12,6 +12,7 @@ import Brand from "@clientComponents/globals/Brand";
 import { ExternalLinkIcon } from "@serverComponents/icons";
 import { updateTemplate } from "@formBuilder/actions";
 import { FormServerErrorCodes } from "@lib/types/form-builder-types";
+import { safeParse } from "@lib/utils";
 
 const Label = ({ htmlFor, children }: { htmlFor: string; children?: JSX.Element | string }) => {
   return (
@@ -54,9 +55,16 @@ export const Branding = ({ hasBrandingRequestForm }: { hasBrandingRequestForm: b
   const savedErrorMessage = t("settingsResponseDelivery.savedErrorMessage");
 
   const handleSave = useCallback(async () => {
+    const formConfig = safeParse(getSchema());
+    if (formConfig?.error) {
+      // TODO error for this
+      toast.error("JSON ERROR");
+      return;
+    }
+
     const result = await updateTemplate({
       id,
-      formConfig: JSON.parse(getSchema()),
+      formConfig,
       name: getName(),
     });
 

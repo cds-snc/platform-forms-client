@@ -26,3 +26,25 @@ export function dateHasPast(timestamp: number) {
 
   return false;
 }
+
+/**
+  Example usage:
+  const config = safeParse(schema());
+  if (config?.error) {
+    toast.error("JSON ERROR");
+    return;
+  }
+ */
+export function safeParse(rawJSON: string) {
+  try {
+    return JSON.parse(rawJSON);
+  } catch (e) {
+    // Note: SyntaxError is the only error thrown by JSON.parse(). More info on specific errors:
+    // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Errors/JSON_bad_parse
+    if (e instanceof SyntaxError) {
+      // Why not just throw the error? NextJS will give an error about a non plain-object crossing
+      // the server/client boundary.
+      return { error: "JSON parse error" };
+    }
+  }
+}
