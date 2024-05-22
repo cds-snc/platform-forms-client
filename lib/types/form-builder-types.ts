@@ -1,5 +1,5 @@
 import { ComponentType, JSXElementConstructor } from "react";
-import { FormElement, ElementProperties } from "@lib/types";
+import { FormElement, ElementProperties, FormRecord } from "@lib/types";
 export type Language = "en" | "fr";
 
 import { FormElementTypes } from "@lib/types";
@@ -114,3 +114,13 @@ export interface CDSHTMLDialogElement extends HTMLElement {
 export interface RenderMoreFunc {
   (moreButton: JSX.Element | undefined): React.ReactElement | string | undefined;
 }
+
+export interface FormServerError {
+  formRecord: FormRecord | null;
+  error?: string;
+}
+
+export const FormServerErrorCodes = {
+  BRANDING: "550",
+  CLASSIFICATION: "551",
+} as const;
