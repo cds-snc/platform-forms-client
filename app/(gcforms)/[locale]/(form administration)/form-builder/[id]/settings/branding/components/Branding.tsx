@@ -69,7 +69,8 @@ export const Branding = ({ hasBrandingRequestForm }: { hasBrandingRequestForm: b
       `${savedErrorMessage} ${t("errorCode", {
         ns: "common",
         code: FormServerErrorCodes.BRANDING,
-      })}`
+      })}`,
+      "wide"
     );
   }, [id, getSchema, getName, savedSuccessMessage, savedErrorMessage, t]);
 
