@@ -44,7 +44,6 @@ export const ResponseDelivery = () => {
     email,
     id,
     resetDeliveryOption,
-    getDeliveryOption,
     updateField,
     subjectEn: initialSubjectEn,
     subjectFr: initialSubjectFr,
@@ -61,7 +60,6 @@ export const ResponseDelivery = () => {
     defaultSubjectEn: s.form[s.localizeField(LocalizedFormProperties.TITLE, "en")] + " - Response",
     defaultSubjectFr: s.form[s.localizeField(LocalizedFormProperties.TITLE, "fr")] + " - Réponse",
     resetDeliveryOption: s.resetDeliveryOption,
-    getDeliveryOption: s.getDeliveryOption,
     updateField: s.updateField,
     updateSecurityAttribute: s.updateSecurityAttribute,
     securityAttribute: s.securityAttribute,
@@ -169,7 +167,11 @@ export const ResponseDelivery = () => {
     // Call server action
     const result = await updateTemplateDeliveryOption({
       id,
-      deliveryOption: getDeliveryOption(),
+      deliveryOption: {
+        emailAddress: inputEmailValue,
+        emailSubjectEn: subjectEnValue,
+        emailSubjectFr: subjectFrValue,
+      },
     });
 
     if (!result.error) {
@@ -186,7 +188,6 @@ export const ResponseDelivery = () => {
     subjectEnValue,
     subjectFrValue,
     id,
-    getDeliveryOption,
     updateField,
     classification,
     updateSecurityAttribute,
@@ -211,11 +212,16 @@ export const ResponseDelivery = () => {
       return;
     }
 
-    // Update the template store with the new settings
-    updateTemplateSecurityAttribute({
+    // Update security attribute server action
+    result = (await updateTemplateSecurityAttribute({
       id,
       securityAttribute: classification,
-    });
+    })) as FormServerError;
+
+    if (result?.error) {
+      toast.error(<ErrorSaving errorCode={FormServerErrorCodes.DELIVERY_OPTION} />, "wide");
+      return;
+    }
 
     toast.success(t("settingsResponseDelivery.savedSuccessMessage"));
 
