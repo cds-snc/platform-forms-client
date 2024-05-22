@@ -1,5 +1,5 @@
 import CredentialsProvider from "next-auth/providers/credentials";
-import NextAuth, { Session } from "next-auth";
+import NextAuth, { CredentialsSignin, Session } from "next-auth";
 import { validate2FAVerificationCode, userHasSecurityQuestions } from "@lib/auth/";
 import { PrismaAdapter } from "@auth/prisma-adapter";
 import { logMessage } from "@lib/logger";
@@ -62,8 +62,9 @@ export const {
           typeof authenticationFlowToken !== "string" ||
           typeof username !== "string" ||
           typeof verificationCode !== "string"
-        )
+        ) {
           return null;
+        }
 
         // Check for test accounts being used
         if (
@@ -75,8 +76,10 @@ export const {
           ].includes(username)
         ) {
           // If we're not in test mode throw an error
-          if (process.env.APP_ENV !== "test")
-            throw new Error("Test accounts only available in testing mode");
+          if (process.env.APP_ENV !== "test") {
+            logMessage.error(`Test account ${username} was used in a non-testing environment.`);
+            throw new Error("Test accounts misuse");
+          }
 
           return {
             // id is not used by the app, but is required by next-auth
@@ -92,8 +95,10 @@ export const {
         );
 
         if (valid) {
-          if (!decodedCognitoToken)
-            throw new Error("Missing decoded Cognito token in 2FA validation result");
+          if (!decodedCognitoToken) {
+            logMessage.error("Missing decoded Cognito token in 2FA validation result");
+            throw new Error("2FA validation");
+          }
           return decodedCognitoToken;
         }
         return null;
@@ -112,7 +117,13 @@ export const {
   trustHost: process.env.AUTH_URL ? false : true,
   debug: process.env.NODE_ENV !== "production",
   logger: {
-    error() {},
+    error(error) {
+      if (error instanceof CredentialsSignin) {
+        logMessage.warn(`NextAuth - CredentialsSignin exception: ${JSON.stringify(error)}.`);
+      } else {
+        logMessage.error(`NextAuth error: ${JSON.stringify(error)}.`);
+      }
+    },
     warn(code) {
       logMessage.warn(`NextAuth warning - Code: ${code}`);
     },
@@ -122,9 +133,10 @@ export const {
   events: {
     async signIn({ user }) {
       if (!user.email) {
-        throw new Error(
+        logMessage.error(
           "Could not produce UserSignIn audit log because of undefined email information"
         );
+        return;
       }
 
       const internalUser = await prisma.user.findUnique({
@@ -137,7 +149,8 @@ export const {
       });
 
       if (internalUser === null) {
-        throw new Error("Could not produce UserSignIn audit log because user does not exist");
+        logMessage.error("Could not produce UserSignIn audit log because user does not exist");
+        return;
       }
 
       logEvent(
@@ -161,11 +174,14 @@ export const {
       // account is only available on the first call to the JWT function
       if (account?.provider) {
         if (!token.email) {
-          throw new Error(`JWT token does not have an email for user with name ${token.name}`);
+          logMessage.error(`JWT token does not have an email for user with name ${token.name}`);
+          throw new Error(`JWT token`);
         }
         const user = await getOrCreateUser(token);
-        if (user === null)
-          throw new Error(`Could not get or create user with email: ${token.email}`);
+        if (user === null) {
+          logMessage.error(`Could not get or create user with email: ${token.email}`);
+          throw new Error(`Invalid user`);
+        }
 
         token.userId = user.id;
         token.lastLoginTime = new Date();
@@ -189,11 +205,6 @@ export const {
       }
 
       // Any logic that needs to happen after JWT initializtion needs to be below this point.
-
-      // Check if user has accepted the Acceptable Use Policy
-      // if (!token.acceptableUse && token.userId) {
-      //   token.acceptableUse = await getAcceptableUseValue(token.userId);
-      // }
 
       // Check if user has setup required Security Questions
       if (!token.hasSecurityQuestions) {
