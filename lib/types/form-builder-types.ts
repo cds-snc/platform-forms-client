@@ -119,3 +119,8 @@ export interface FormServerError {
   formRecord: FormRecord | null;
   error?: string;
 }
+
+export const FormServerErrorCodes = {
+  BRANDING: "550",
+  CLASSIFICATION: "551",
+} as const;
