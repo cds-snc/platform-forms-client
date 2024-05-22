@@ -79,12 +79,12 @@ export const ResponseDelivery = () => {
   const userEmail = session.data?.user.email ?? "";
   const initialDeliveryOption = !email ? DeliveryOption.vault : DeliveryOption.email;
 
-  const [deliveryOption, setDeliveryOption] = useState(initialDeliveryOption);
-  const [inputEmail, setInputEmail] = useState(email ? email : userEmail);
-  const [subjectEn, setSubjectEn] = useState(
+  const [deliveryOptionValue, setDeliveryOptionValue] = useState(initialDeliveryOption);
+  const [inputEmailValue, setInputEmailValue] = useState(email ? email : userEmail);
+  const [subjectEnValue, setSubjectEnValue] = useState(
     initialSubjectEn ? initialSubjectEn : defaultSubjectEn
   );
-  const [subjectFr, setSubjectFr] = useState(
+  const [subjectFrValue, setSubjectFrValue] = useState(
     initialSubjectFr ? initialSubjectFr : defaultSubjectFr
   );
 
@@ -99,31 +99,36 @@ export const ResponseDelivery = () => {
     }
 
     const isValidDeliveryOption =
-      !isInvalidEmailError && inputEmail !== "" && subjectEn !== "" && subjectFr !== "";
+      !isInvalidEmailError &&
+      inputEmailValue !== "" &&
+      subjectEnValue !== "" &&
+      subjectFrValue !== "";
     const emailDeliveryOptionsChanged =
-      inputEmail !== email || subjectEn !== initialSubjectEn || subjectFr !== initialSubjectFr;
+      inputEmailValue !== email ||
+      subjectEnValue !== initialSubjectEn ||
+      subjectFrValue !== initialSubjectFr;
 
-    if (deliveryOption === DeliveryOption.email) {
-      if (!completeEmailAddressRegex.test(inputEmail)) {
+    if (deliveryOptionValue === DeliveryOption.email) {
+      if (!completeEmailAddressRegex.test(inputEmailValue)) {
         return false;
       }
       return isValidDeliveryOption && emailDeliveryOptionsChanged;
     }
 
-    if (deliveryOption === initialDeliveryOption) {
+    if (deliveryOptionValue === initialDeliveryOption) {
       return false;
     }
 
     return true;
   }, [
-    deliveryOption,
+    deliveryOptionValue,
     initialDeliveryOption,
     isInvalidEmailError,
-    inputEmail,
+    inputEmailValue,
     email,
-    subjectEn,
+    subjectEnValue,
     initialSubjectEn,
-    subjectFr,
+    subjectFrValue,
     initialSubjectFr,
     classification,
     securityAttribute,
@@ -133,23 +138,23 @@ export const ResponseDelivery = () => {
    * Set as Database Storage
    *--------------------------------------------*/
   const setToDatabaseDelivery = useCallback(async () => {
-    setInputEmail("");
+    setInputEmailValue("");
     resetDeliveryOption();
     updateSecurityAttribute(classification);
 
     await sendResponsesToVault({
       id: id,
     });
-  }, [id, resetDeliveryOption, setInputEmail, classification, updateSecurityAttribute]);
+  }, [id, resetDeliveryOption, setInputEmailValue, classification, updateSecurityAttribute]);
 
   /*--------------------------------------------*
    * Set as Email Delivery
    *--------------------------------------------*/
   const setToEmailDelivery = useCallback(async () => {
-    if (!isValidGovEmail(inputEmail)) return false;
-    updateField("deliveryOption.emailAddress", inputEmail);
-    updateField("deliveryOption.emailSubjectEn", subjectEn);
-    updateField("deliveryOption.emailSubjectFr", subjectFr);
+    if (!isValidGovEmail(inputEmailValue)) return false;
+    updateField("deliveryOption.emailAddress", inputEmailValue);
+    updateField("deliveryOption.emailSubjectEn", subjectEnValue);
+    updateField("deliveryOption.emailSubjectFr", subjectFrValue);
 
     updateSecurityAttribute(classification);
 
@@ -158,9 +163,9 @@ export const ResponseDelivery = () => {
       deliveryOption: getDeliveryOption(),
     });
   }, [
-    inputEmail,
-    subjectEn,
-    subjectFr,
+    inputEmailValue,
+    subjectEnValue,
+    subjectFrValue,
     id,
     getDeliveryOption,
     updateField,
@@ -173,7 +178,7 @@ export const ResponseDelivery = () => {
    *--------------------------------------------*/
   const saveDeliveryOption = useCallback(async () => {
     try {
-      if (email !== "" && deliveryOption === DeliveryOption.vault) {
+      if (email !== "" && deliveryOptionValue === DeliveryOption.vault) {
         await setToDatabaseDelivery();
       } else {
         await setToEmailDelivery();
@@ -195,7 +200,7 @@ export const ResponseDelivery = () => {
     t,
     refreshData,
     email,
-    deliveryOption,
+    deliveryOptionValue,
     id,
     classification,
     setToDatabaseDelivery,
@@ -204,14 +209,14 @@ export const ResponseDelivery = () => {
 
   const updateDeliveryOption = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
     const { value } = event.target;
-    setDeliveryOption(value as DeliveryOption);
+    setDeliveryOptionValue(value as DeliveryOption);
   }, []);
 
   const responsesLink = `/${i18n.language}/form-builder/${id}/responses`;
 
   const handleUpdateClassification = useCallback((value: ClassificationType) => {
     if (value === "Protected B") {
-      setDeliveryOption(DeliveryOption.vault);
+      setDeliveryOptionValue(DeliveryOption.vault);
     }
     setClassification(value);
   }, []);
@@ -245,7 +250,7 @@ export const ResponseDelivery = () => {
             <Radio
               disabled={isPublished}
               id={`delivery-option-${DeliveryOption.vault}`}
-              checked={deliveryOption === DeliveryOption.vault}
+              checked={deliveryOptionValue === DeliveryOption.vault}
               name="response-delivery"
               value={DeliveryOption.vault}
               label={t("settingsResponseDelivery.vaultOption")}
@@ -260,7 +265,7 @@ export const ResponseDelivery = () => {
             <Radio
               disabled={isPublished || protectedBSelected}
               id={`delivery-option-${DeliveryOption.email}`}
-              checked={deliveryOption === DeliveryOption.email}
+              checked={deliveryOptionValue === DeliveryOption.email}
               name="response-delivery"
               value={DeliveryOption.email}
               label={emailLabel}
@@ -268,14 +273,14 @@ export const ResponseDelivery = () => {
             />
           </div>
 
-          {deliveryOption === DeliveryOption.email && (
+          {deliveryOptionValue === DeliveryOption.email && (
             <ResponseEmail
-              inputEmail={inputEmail}
-              setInputEmail={setInputEmail}
-              subjectEn={subjectEn}
-              setSubjectEn={setSubjectEn}
-              subjectFr={subjectFr}
-              setSubjectFr={setSubjectFr}
+              inputEmail={inputEmailValue}
+              setInputEmail={setInputEmailValue}
+              subjectEn={subjectEnValue}
+              setSubjectEn={setSubjectEnValue}
+              subjectFr={subjectFrValue}
+              setSubjectFr={setSubjectFrValue}
               isInvalidEmailError={isInvalidEmailError}
               setIsInvalidEmailError={setIsInvalidEmailError}
             />
