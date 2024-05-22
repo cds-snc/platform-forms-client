@@ -38,6 +38,7 @@
     }
   },
   "errors": {
+    "errorCode": "Error code:",
     "retrieval": {
       "title": "There was an error retrieving responses",
       "message": "Something went wrong while trying to retrieve responses.",
