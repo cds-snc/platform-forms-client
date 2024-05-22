@@ -44,8 +44,8 @@
       "tryAgain": "Try again"
     },
     "generic": {
-      "title": "Sorry something went wront",
-      "message": "Dunno what it is but it's not good",
+      "title": "There has been an error",
+      "message": "Something went wrong fulfilling your request.",
       "tryAgain": "Try again"
     }
   },
