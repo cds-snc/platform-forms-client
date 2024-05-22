@@ -13,6 +13,7 @@ import { ExternalLinkIcon } from "@serverComponents/icons";
 import { updateTemplate } from "@formBuilder/actions";
 import { FormServerErrorCodes } from "@lib/types/form-builder-types";
 import { safeParse } from "@lib/utils";
+import { ErrorSaving } from "@formBuilder/components/shared/ErrorSaving";
 
 const Label = ({ htmlFor, children }: { htmlFor: string; children?: JSX.Element | string }) => {
   return (
@@ -57,8 +58,7 @@ export const Branding = ({ hasBrandingRequestForm }: { hasBrandingRequestForm: b
   const handleSave = useCallback(async () => {
     const formConfig = safeParse(getSchema());
     if (formConfig?.error) {
-      // TODO error for this
-      toast.error("JSON ERROR");
+      toast.error(<ErrorSaving errorCode={FormServerErrorCodes.JSON_PARSE} />, "wide");
       return;
     }
 
@@ -74,13 +74,10 @@ export const Branding = ({ hasBrandingRequestForm }: { hasBrandingRequestForm: b
     }
 
     toast.error(
-      `${savedErrorMessage} ${t("errorCode", {
-        ns: "common",
-        code: FormServerErrorCodes.BRANDING,
-      })}`,
+      <ErrorSaving errorCode={FormServerErrorCodes.BRANDING} message={savedErrorMessage} />,
       "wide"
     );
-  }, [id, getSchema, getName, savedSuccessMessage, savedErrorMessage, t]);
+  }, [id, getSchema, getName, savedSuccessMessage, savedErrorMessage]);
 
   const lang = i18n.language;
   const logoTitle = lang === "en" ? "logoTitleEn" : "logoTitleFr";
