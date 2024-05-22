@@ -70,6 +70,7 @@ export const SettingsPanel = () => {
 
       if (!result.error) {
         updateSecurityAttribute(value);
+        return;
       }
 
       toast.error(<ErrorSaving errorCode={FormServerErrorCodes.BRANDING} />, "wide");
