@@ -4,6 +4,7 @@ import { getAppSetting } from "@lib/appSettings";
 import { Responses, ResponsesProps } from "./components/Responses";
 import { fetchSubmissions, fetchTemplate } from "./actions";
 import { auth } from "@lib/auth";
+import { RetrievalError } from "./components/RetrievalError";
 
 export async function generateMetadata({
   params: { locale },
@@ -37,19 +38,23 @@ export default async function Page({
     overdueAfter: Number(await getAppSetting("nagwarePhaseEncouraged")),
   };
 
-  if (isAuthenticated) {
-    const initialForm = await fetchTemplate(id);
+  try {
+    if (isAuthenticated) {
+      const initialForm = await fetchTemplate(id);
 
-    pageProps.initialForm = initialForm;
+      pageProps.initialForm = initialForm;
 
-    const { submissions, lastEvaluatedKey } = await fetchSubmissions({
-      formId: id,
-      status: statusFilter,
-      lastKey,
-    });
+      const { submissions, lastEvaluatedKey } = await fetchSubmissions({
+        formId: id,
+        status: statusFilter,
+        lastKey,
+      });
 
-    pageProps.vaultSubmissions = submissions;
-    pageProps.lastEvaluatedKey = lastEvaluatedKey;
+      pageProps.vaultSubmissions = submissions;
+      pageProps.lastEvaluatedKey = lastEvaluatedKey;
+    }
+  } catch (error) {
+    return <RetrievalError />;
   }
 
   // TODO: re-enable nagware when we have a better solution for how to handle filtered statuses
