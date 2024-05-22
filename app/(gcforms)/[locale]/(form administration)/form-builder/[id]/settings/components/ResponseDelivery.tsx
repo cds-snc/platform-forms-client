@@ -1,6 +1,10 @@
 "use client";
 import React, { useCallback, useState, useMemo } from "react";
-import { LocalizedFormProperties } from "@lib/types/form-builder-types";
+import {
+  LocalizedFormProperties,
+  FormServerError,
+  FormServerErrorCodes,
+} from "@lib/types/form-builder-types";
 import { useTranslation } from "@i18n/client";
 import { useSession } from "next-auth/react";
 import { isValidGovEmail } from "@lib/validation/validation";
@@ -9,7 +13,6 @@ import { Radio } from "@formBuilder/components/shared";
 import { Button } from "@clientComponents/globals";
 import { useTemplateStore } from "@lib/store/useTemplateStore";
 import { completeEmailAddressRegex } from "@lib/utils/form-builder";
-import { toast } from "@formBuilder/components/shared/Toast";
 import { ResponseDeliveryHelpButton } from "@formBuilder/components/shared";
 import {
   ClassificationType,
@@ -21,6 +24,9 @@ import {
   updateTemplateSecurityAttribute,
 } from "@formBuilder/actions";
 import { useRefresh } from "@lib/hooks/useRefresh";
+
+import { toast } from "@formBuilder/components/shared/Toast";
+import { ErrorSaving } from "@formBuilder/components/shared/ErrorSaving";
 
 enum DeliveryOption {
   vault = "vault",
@@ -143,7 +149,10 @@ export const ResponseDelivery = () => {
     });
 
     if (!result.error) {
+      // Update local state
       setInputEmailValue("");
+
+      // Update the template store
       resetDeliveryOption();
       updateSecurityAttribute(classification);
     }
@@ -187,21 +196,26 @@ export const ResponseDelivery = () => {
    * Save Delivery Option
    *--------------------------------------------*/
   const saveDeliveryOption = useCallback(async () => {
-    try {
-      if (email !== "" && deliveryOptionValue === DeliveryOption.vault) {
-        await setToDatabaseDelivery();
-      } else {
-        await setToEmailDelivery();
-      }
+    let result;
 
-      updateTemplateSecurityAttribute({
-        id,
-        securityAttribute: classification,
-      });
-    } catch (error) {
-      toast.error(t("settingsResponseDelivery.savedErrorMessage"));
+    if (email !== "" && deliveryOptionValue === DeliveryOption.vault) {
+      // Call local callBack which will call the server action
+      result = (await setToDatabaseDelivery()) as FormServerError;
+    } else {
+      // Call local callBack which will call the server action
+      result = (await setToEmailDelivery()) as FormServerError;
+    }
+
+    if (result?.error) {
+      toast.error(<ErrorSaving errorCode={FormServerErrorCodes.DELIVERY_OPTION} />, "wide");
       return;
     }
+
+    // Update the template store with the new settings
+    updateTemplateSecurityAttribute({
+      id,
+      securityAttribute: classification,
+    });
 
     toast.success(t("settingsResponseDelivery.savedSuccessMessage"));
 
@@ -217,6 +231,7 @@ export const ResponseDelivery = () => {
     setToEmailDelivery,
   ]);
 
+  // Update local state
   const updateDeliveryOption = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
     const { value } = event.target;
     setDeliveryOptionValue(value as DeliveryOption);
@@ -224,6 +239,7 @@ export const ResponseDelivery = () => {
 
   const responsesLink = `/${i18n.language}/form-builder/${id}/responses`;
 
+  // Update local state
   const handleUpdateClassification = useCallback((value: ClassificationType) => {
     if (value === "Protected B") {
       setDeliveryOptionValue(DeliveryOption.vault);
