@@ -151,6 +151,5 @@
   },
   "mainNavAriaLabel": "Main",
   "yourAccount": "Your account",
-  "dateModified": "Date modified",
-  "errorCode": "Error code: {{code}}"
+  "dateModified": "Date modified"
 }

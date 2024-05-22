@@ -152,6 +152,5 @@
   },
   "mainNavAriaLabel": "Navigation principale",
   "yourAccount": "Votre compte",
-  "dateModified": "Date de modification ",
-  "errorCode": "[FR]Error code: {{code}}"
+  "dateModified": "Date de modification "
 }
