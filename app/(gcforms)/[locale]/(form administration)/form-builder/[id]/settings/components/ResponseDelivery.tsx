@@ -138,13 +138,17 @@ export const ResponseDelivery = () => {
    * Set as Database Storage
    *--------------------------------------------*/
   const setToDatabaseDelivery = useCallback(async () => {
-    setInputEmailValue("");
-    resetDeliveryOption();
-    updateSecurityAttribute(classification);
-
-    await sendResponsesToVault({
+    const result = await sendResponsesToVault({
       id: id,
     });
+
+    if (!result.error) {
+      setInputEmailValue("");
+      resetDeliveryOption();
+      updateSecurityAttribute(classification);
+    }
+
+    return result;
   }, [id, resetDeliveryOption, setInputEmailValue, classification, updateSecurityAttribute]);
 
   /*--------------------------------------------*
@@ -152,16 +156,22 @@ export const ResponseDelivery = () => {
    *--------------------------------------------*/
   const setToEmailDelivery = useCallback(async () => {
     if (!isValidGovEmail(inputEmailValue)) return false;
-    updateField("deliveryOption.emailAddress", inputEmailValue);
-    updateField("deliveryOption.emailSubjectEn", subjectEnValue);
-    updateField("deliveryOption.emailSubjectFr", subjectFrValue);
 
-    updateSecurityAttribute(classification);
-
-    await updateTemplateDeliveryOption({
+    // Call server action
+    const result = await updateTemplateDeliveryOption({
       id,
       deliveryOption: getDeliveryOption(),
     });
+
+    if (!result.error) {
+      // Update the template store
+      updateField("deliveryOption.emailAddress", inputEmailValue);
+      updateField("deliveryOption.emailSubjectEn", subjectEnValue);
+      updateField("deliveryOption.emailSubjectFr", subjectFrValue);
+      updateSecurityAttribute(classification);
+    }
+
+    return result;
   }, [
     inputEmailValue,
     subjectEnValue,
