@@ -129,8 +129,7 @@ export const verify = async (
         },
       };
     }
-    // Log the error that is not a failed login attempt
-    logMessage.error(`Error signing in:` + JSON.stringify(err));
+
     return {
       success: false,
       authError: {
