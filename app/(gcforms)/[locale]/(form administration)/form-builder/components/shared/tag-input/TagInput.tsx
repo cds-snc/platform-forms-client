@@ -48,7 +48,7 @@ export const TagInput = ({
 
   return (
     <div
-      className="flex flex-wrap rounded-md box-border border-black-default border-2 w-[533px]"
+      className="box-border flex w-[533px] flex-wrap rounded-md border-2 border-black-default"
       data-testid="tags"
     >
       <Tags tags={tags} onRemove={onRemove} />
