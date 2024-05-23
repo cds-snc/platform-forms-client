@@ -28,7 +28,7 @@ export function dateHasPast(timestamp: number) {
 }
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
-export function safeParse(rawJSON: string, reviver?: (key: string, value: any) => any) {
+export function safeJSONParse(rawJSON: string, reviver?: (key: string, value: any) => any) {
   try {
     if (reviver && typeof reviver === "function") {
       return JSON.parse(rawJSON, reviver);
