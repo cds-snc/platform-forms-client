@@ -41,6 +41,11 @@ export const ShareModal = ({
     setStatus("sending");
     const filename = name ? name : i18n.language === "fr" ? form.titleFr : form.titleEn;
     try {
+      if (!emails.length) {
+        setStatus("error");
+        return;
+      }
+
       await axios({
         url: "/api/share",
         method: "POST",
@@ -50,6 +55,7 @@ export const ShareModal = ({
         data: { name, form: getSchema(), emails: emails, filename },
         timeout: process.env.NODE_ENV === "production" ? 60000 : 0,
       });
+
       setStatus("sent");
     } catch (err) {
       setStatus("error");
