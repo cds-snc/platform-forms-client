@@ -123,5 +123,6 @@ export interface FormServerError {
 export const FormServerErrorCodes = {
   BRANDING: "550",
   CLASSIFICATION: "551",
+  DELIVERY_OPTION: "552",
   JSON_PARSE: "560",
 } as const;
