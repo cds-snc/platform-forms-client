@@ -23,19 +23,13 @@ const PageContent = ({ pageText, urlQuery }: PageContextProps) => {
 
   // Check if there's a custom text for the end page specified in the form's JSON config
   if (pageText && pageText !== undefined) {
-    return (
-      <>
-        <h1 tabIndex={-1}>{t("title")}</h1>
-        <RichText className="confirmation">{pageText}</RichText>;
-      </>
-    );
+    return <RichText className="confirmation">{pageText}</RichText>;
   }
 
   // Otherwise, display the default confirmation text
   const backToLink = urlQuery ? <a href={urlQuery}>{t("backLink")}</a> : null;
   return (
     <>
-      <h1 tabIndex={-1}>{t("title")}</h1>
       <div>
         <p>{t("body")}</p>
       </div>
@@ -46,6 +40,7 @@ const PageContent = ({ pageText, urlQuery }: PageContextProps) => {
 
 export const TextPage = (props: TextPageProps): React.ReactElement => {
   const { i18n } = useTranslation("confirmation");
+  const { t } = useTranslation("confirmation");
   const {
     formRecord: {
       form: { confirmation },
@@ -66,6 +61,7 @@ export const TextPage = (props: TextPageProps): React.ReactElement => {
 
   return (
     <>
+      <h1 tabIndex={-1}>{t("title")}</h1>
       <PageContent pageText={pageText} urlQuery={urlQuery} />
     </>
   );

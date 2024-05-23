@@ -232,6 +232,7 @@ export const Preview = ({
             {t("confirmationPage", { ns: "form-builder" })}
           </span>
           <div className="mb-8 border-3 border-dashed border-blue-focus bg-white p-4">
+            <h1 tabIndex={-1}>{t("title", { ns: "confirmation" })}</h1>
             <RichText {...getLocalizationAttribute()}>
               {formRecord.form.confirmation
                 ? formRecord.form.confirmation[
