@@ -124,6 +124,20 @@ export const FormServerErrorCodes = {
   BRANDING: "550",
   CLASSIFICATION: "551",
   DELIVERY_OPTION: "552",
-  RESPONSES_RETRIEVAL: "555",
-  RESPONSES: "556",
+  RESPONSES: "RS01",
+  RESPONSES_RETRIEVAL: "RS02",
+  DOWNLOAD_INVALID_FORMAT: "RS05",
+  DOWNLOAD_LIMIT_SELECTION: "RS06",
+  DOWNLOAD_LIMIT_EXCEEDED: "RS07",
+  DOWNLOAD_RETRIEVE_SUBMISSIONS: "RS08",
+  NO_RESPONSES_FOUND: "RS09",
 } as const;
+
+type ObjectValues<T> = T[keyof T];
+
+export type FormServerErrorCodes = ObjectValues<typeof FormServerErrorCodes>;
+
+export interface ServerActionError {
+  error: string;
+  code?: FormServerErrorCodes;
+}
