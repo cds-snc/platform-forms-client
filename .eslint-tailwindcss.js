@@ -34,6 +34,7 @@ module.exports = {
         "example-text",
         "section",
         "maple-leaf-loader",
+        "confirmation",
       ],
     },
   },

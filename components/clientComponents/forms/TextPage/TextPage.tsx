@@ -23,7 +23,12 @@ const PageContent = ({ pageText, urlQuery }: PageContextProps) => {
 
   // Check if there's a custom text for the end page specified in the form's JSON config
   if (pageText && pageText !== undefined) {
-    return <RichText className="confirmation">{pageText}</RichText>;
+    return (
+      <>
+        <h1 tabIndex={-1}>{t("title")}</h1>
+        <RichText className="confirmation">{pageText}</RichText>;
+      </>
+    );
   }
 
   // Otherwise, display the default confirmation text
