@@ -27,16 +27,12 @@ export function dateHasPast(timestamp: number) {
   return false;
 }
 
-/**
-  Example usage:
-  const config = safeParse(schema());
-  if (config?.error) {
-    toast.error("JSON ERROR");
-    return;
-  }
- */
-export function safeParse(rawJSON: string) {
+/* eslint-disable @typescript-eslint/no-explicit-any */
+export function safeParse(rawJSON: string, reviver?: (key: string, value: any) => any) {
   try {
+    if (reviver && typeof reviver === "function") {
+      return JSON.parse(rawJSON, reviver);
+    }
     return JSON.parse(rawJSON);
   } catch (e) {
     // Note: SyntaxError is the only error thrown by JSON.parse(). More info on specific errors:
