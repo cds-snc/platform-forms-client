@@ -24,6 +24,8 @@ import { AddIcon } from "@serverComponents/icons";
 import { handleCanDropAt } from "./handlers/handleCanDropAt";
 import { handleOnDrop } from "./handlers/handleOnDrop";
 import { ElementProperties, useElementTitle } from "@lib/hooks/useElementTitle";
+import { ConfirmDialog } from "../../confirm/ConfirmDialog";
+import { useConfirmState } from "../../confirm/useConfirmState";
 
 export interface TreeDataProviderProps {
   children?: ReactElement;
@@ -89,103 +91,129 @@ const ControlledTree: ForwardRefRenderFunction<unknown, TreeDataProviderProps> =
     },
   }));
 
+  const { resolve, getPromise, openDialog, setOpenDialog } = useConfirmState();
+
   return (
-    <ControlledTreeEnvironment
-      ref={environment}
-      items={getTreeData({
-        addIntroElement: true,
-        addPolicyElement: true,
-        addConfirmationElement: true,
-        reviewGroup: false,
-      })}
-      getItemTitle={(item) => getTitle(item.data as ElementProperties)}
-      renderItem={({ title, arrow, context, children }) => {
-        return (
-          <Item title={title} arrow={arrow} context={context}>
-            {children}
-          </Item>
-        );
-      }}
-      renderItemTitle={({ title }) => <Item.Title title={title} />}
-      renderItemArrow={({ item, context }) => <Item.Arrow item={item} context={context} />}
-      renderLiveDescriptorContainer={() => null}
-      viewState={{
-        ["default"]: {
-          focusedItem,
-          expandedItems,
-          selectedItems,
-        },
-      }}
-      canDragAndDrop={true}
-      canReorderItems={true}
-      canDrag={(items: TreeItem[]) => {
-        return items.some((item) => {
+    <>
+      <ControlledTreeEnvironment
+        ref={environment}
+        items={getTreeData({
+          addIntroElement: true,
+          addPolicyElement: true,
+          addConfirmationElement: true,
+          reviewGroup: false,
+        })}
+        getItemTitle={(item) => getTitle(item.data as ElementProperties)}
+        renderItem={({ title, arrow, context, children }) => {
           return (
-            item.data.titleEn !== "Start" &&
-            item.data.titleEn !== "Introduction" &&
-            item.data.titleEn !== "Policy" &&
-            item.data.titleEn !== "Review" &&
-            item.data.titleEn !== "End" &&
-            item.data.titleEn !== "Confirmation"
+            <Item title={title} arrow={arrow} context={context}>
+              {children}
+            </Item>
           );
-        });
-      }}
-      canDropAt={(items, target) => handleCanDropAt(items, target, getGroups)}
-      onRenameItem={(item, name) => {
-        item.isFolder && updateGroupName({ id: String(item.index), name });
-
-        // Rename the element
-        !item.isFolder &&
-          updateElementTitle({
-            id: Number(item.index),
-            text: name,
+        }}
+        renderItemTitle={({ title }) => <Item.Title title={title} />}
+        renderItemArrow={({ item, context }) => <Item.Arrow item={item} context={context} />}
+        renderLiveDescriptorContainer={() => null}
+        viewState={{
+          ["default"]: {
+            focusedItem,
+            expandedItems,
+            selectedItems,
+          },
+        }}
+        canDragAndDrop={true}
+        canReorderItems={true}
+        canDrag={(items: TreeItem[]) => {
+          return items.some((item) => {
+            return (
+              item.data.titleEn !== "Start" &&
+              item.data.titleEn !== "Introduction" &&
+              item.data.titleEn !== "Policy" &&
+              item.data.titleEn !== "Review" &&
+              item.data.titleEn !== "End" &&
+              item.data.titleEn !== "Confirmation"
+            );
           });
+        }}
+        canDropAt={(items, target) => handleCanDropAt(items, target, getGroups)}
+        onRenameItem={(item, name) => {
+          item.isFolder && updateGroupName({ id: String(item.index), name });
 
-        setSelectedItems([item.index]);
-      }}
-      onDrop={async (items: TreeItem[], target: DraggingPosition) =>
-        handleOnDrop(items, target, getGroups, replaceGroups, setSelectedItems, getTreeData)
-      }
-      onFocusItem={(item) => {
-        setFocusedItem(item.index);
-        const parent = findParentGroup(getTreeData(), String(item.index));
+          // Rename the element
+          !item.isFolder &&
+            updateElementTitle({
+              id: Number(item.index),
+              text: name,
+            });
 
-        if (item.index === "intro" || item.index === "policy") {
-          setId("start");
-          return;
+          setSelectedItems([item.index]);
+        }}
+        onDrop={async (items: TreeItem[], target: DraggingPosition) =>
+          handleOnDrop(
+            items,
+            target,
+            getGroups,
+            replaceGroups,
+            setSelectedItems,
+            getTreeData,
+            getPromise,
+            setOpenDialog
+          )
         }
+        onFocusItem={(item) => {
+          setFocusedItem(item.index);
+          const parent = findParentGroup(getTreeData(), String(item.index));
 
-        if (item.index === "confirmation") {
-          setId("end");
-          return;
+          if (item.index === "intro" || item.index === "policy") {
+            setId("start");
+            return;
+          }
+
+          if (item.index === "confirmation") {
+            setId("end");
+            return;
+          }
+
+          setId(item.isFolder ? String(item.index) : String(parent?.index));
+        }}
+        onExpandItem={(item) => setExpandedItems([...expandedItems, item.index])}
+        onCollapseItem={(item) =>
+          setExpandedItems(
+            expandedItems.filter((expandedItemIndex) => expandedItemIndex !== item.index)
+          )
         }
+        onSelectItems={(items) => {
+          setSelectedItems(items);
+        }}
+      >
+        <div className="mb-4 flex justify-between align-middle">
+          <label>
+            New section
+            <button
+              className="ml-2 mt-2 rounded-md border border-slate-500 p-1"
+              onClick={addSection}
+            >
+              <AddIcon title="Add section" />
+            </button>
+          </label>
+        </div>
 
-        setId(item.isFolder ? String(item.index) : String(parent?.index));
-      }}
-      onExpandItem={(item) => setExpandedItems([...expandedItems, item.index])}
-      onCollapseItem={(item) =>
-        setExpandedItems(
-          expandedItems.filter((expandedItemIndex) => expandedItemIndex !== item.index)
-        )
-      }
-      onSelectItems={(items) => {
-        setSelectedItems(items);
-      }}
-    >
-      <div className="mb-4 flex justify-between align-middle">
-        <label>
-          New section
-          <button className="ml-2 mt-2 rounded-md border border-slate-500 p-1" onClick={addSection}>
-            <AddIcon title="Add section" />
-          </button>
-        </label>
-      </div>
-
-      <div className="border-t-1 border-slate-200">
-        <Tree treeId="default" rootItem="root" treeLabel="GC Forms sections" ref={tree} />
-      </div>
-      <>{children}</>
-    </ControlledTreeEnvironment>
+        <div className="border-t-1 border-slate-200">
+          <Tree treeId="default" rootItem="root" treeLabel="GC Forms sections" ref={tree} />
+        </div>
+        <>{children}</>
+      </ControlledTreeEnvironment>
+      <ConfirmDialog
+        open={openDialog}
+        handleClose={(value) => {
+          if (value) {
+            resolve && resolve(true);
+          } else {
+            resolve && resolve(false);
+          }
+        }}
+      ></ConfirmDialog>
+    </>
   );
 };
 
