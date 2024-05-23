@@ -234,7 +234,9 @@ export const Preview = ({
           </span>
           <div className="mb-8 border-3 border-dashed border-blue-focus bg-white p-4">
             <div className="gc-formview">
-              <h1 tabIndex={-1}>{t("title", { ns: "confirmation" })}</h1>
+              <h1 className="mt-10" tabIndex={-1}>
+                {t("title", { ns: "confirmation" })}
+              </h1>
               <RichText {...getLocalizationAttribute()}>
                 {formRecord.form.confirmation
                   ? formRecord.form.confirmation[
