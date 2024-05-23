@@ -1,5 +1,6 @@
 {
   "title": "Votre formulaire a été soumis",
   "body": "Merci. Notre équipe vous contactera par courriel sous peu.",
-  "backLink": "Retour"
+  "backLink": "Retour",
+  "sectionTitle": "Titre de la section"
 }
