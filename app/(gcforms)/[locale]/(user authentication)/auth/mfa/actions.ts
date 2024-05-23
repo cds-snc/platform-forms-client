@@ -7,7 +7,7 @@ import { signIn } from "@lib/auth";
 import { handleErrorById } from "@lib/auth/cognito";
 import { cookies } from "next/headers";
 import { prisma } from "@lib/integration/prismaConnector";
-import { AuthError } from "next-auth";
+import { CredentialsSignin } from "next-auth";
 import { createAbility } from "@lib/privileges";
 import { getUnprocessedSubmissionsForUser } from "@lib/users";
 import { logMessage } from "@lib/logger";
@@ -120,7 +120,7 @@ export const verify = async (
     });
   } catch (err) {
     // Failed login attempt
-    if ((err as AuthError).name === "CredentialsSignin") {
+    if (err instanceof CredentialsSignin) {
       return {
         success: false,
         authError: {

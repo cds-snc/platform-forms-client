@@ -34,7 +34,7 @@ export const ShareModal = ({
 
   const validateEmail = (email: string) => {
     /* eslint-disable-next-line */
-    return new RegExp(/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/).test(email);
+    return new RegExp(/^[\w-\.]+(\+[\w-]*)?@([\w-]+\.)+[\w-]{2,4}$/).test(email);
   };
 
   const handleSend = async () => {
