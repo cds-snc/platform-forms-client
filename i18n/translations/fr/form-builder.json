@@ -833,5 +833,8 @@
         "text1": "This section doesn’t have any form elements in it. [fr]"
       }
     }
+  },
+  "confirmation": {
+    "sectionTitle": "Titre de la section"
   }
 }

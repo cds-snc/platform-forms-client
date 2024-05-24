@@ -3,8 +3,6 @@
 import React from "react";
 import { useTranslation } from "@i18n/client";
 
-// {t("sectionTitle")}
-
 export const ConfirmationTitle = () => {
   const { t } = useTranslation(["form-builder"]);
   return (
@@ -18,7 +16,7 @@ export const ConfirmationTitle = () => {
         }}
       ></div>
       <div className="mb-2 inline-block rounded-md border-1 border-slate-500 bg-slate-50 px-2 py-1 text-slate-500">
-        section title
+        {t("confirmation.sectionTitle")}
       </div>
       <h2 className="mt-0 text-2xl text-slate-500 laptop:mt-0"> {t("title")}</h2>
     </div>
