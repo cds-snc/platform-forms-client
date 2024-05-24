@@ -198,7 +198,6 @@ export const {
         token = {
           ...token,
           acceptableUse: session.user.acceptableUse,
-          ...(session.user.newlyRegistered && { newlyRegistered: session.user.newlyRegistered }),
         };
       }
 

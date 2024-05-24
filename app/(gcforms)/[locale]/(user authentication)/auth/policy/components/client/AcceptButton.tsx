@@ -14,7 +14,7 @@ export const AcceptButton = () => {
     i18n: { language },
   } = useTranslation("common");
 
-  const { data: session, update } = useSession();
+  const { update } = useSession();
 
   let referer = searchParams.get("referer");
   const defaultRoute = `/${language}/forms`;
@@ -25,13 +25,13 @@ export const AcceptButton = () => {
   }
 
   const agree = async () => {
-    // Undefined Session
-    if (!session) return router.push(`/${language}/auth/login`);
-
     // Update the session to reflect the user has accepted the terms of use.
-    await update({ ...session, user: { ...session.user, acceptableUse: true } });
 
-    if (session.user.newlyRegistered) router.push(`/${language}/auth/account-created`);
+    const session = await update({
+      user: { acceptableUse: true },
+    });
+
+    if (session?.user.newlyRegistered) router.push(`/${language}/auth/account-created`);
     // Go back to the page the user was redirected from.
     else router.push(referer ?? defaultRoute);
   };
