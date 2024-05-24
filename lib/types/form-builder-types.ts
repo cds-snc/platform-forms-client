@@ -115,17 +115,13 @@ export interface RenderMoreFunc {
   (moreButton: JSX.Element | undefined): React.ReactElement | string | undefined;
 }
 
-export interface FormServerError {
-  formRecord: FormRecord | null;
-  error?: string;
-}
-
 export const FormServerErrorCodes = {
   BRANDING: "550",
   CLASSIFICATION: "551",
   DELIVERY_OPTION: "552",
   RESPONSES: "RS01",
   RESPONSES_RETRIEVAL: "RS02",
+  FORM_NOT_FOUND: "RS03",
   DOWNLOAD_INVALID_FORMAT: "RS05",
   DOWNLOAD_LIMIT_SELECTION: "RS06",
   DOWNLOAD_LIMIT_EXCEEDED: "RS07",
@@ -140,4 +136,9 @@ export type FormServerErrorCodes = ObjectValues<typeof FormServerErrorCodes>;
 export interface ServerActionError {
   error: string;
   code?: FormServerErrorCodes;
+}
+
+export interface FormServerError {
+  formRecord: FormRecord | null;
+  error?: string;
 }

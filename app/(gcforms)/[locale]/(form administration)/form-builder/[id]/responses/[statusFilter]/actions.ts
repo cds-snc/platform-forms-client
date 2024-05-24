@@ -97,7 +97,6 @@ const sortByLayout = ({ layout, elements }: { layout: number[]; elements: Answer
 const logDownload = async (
   responseIdStatusArray: { id: string; status: string }[],
   format: DownloadFormat,
-  formId: string,
   ability: ReturnType<typeof createAbility>
 ) => {
   responseIdStatusArray.forEach((item) => {
@@ -151,7 +150,7 @@ export const getSubmissionsByFormat = async ({
     const fullFormTemplate = await getFullTemplateByID(ability, formID);
 
     if (fullFormTemplate === null) {
-      throw new FormBuilderError("Form not found");
+      throw new FormBuilderError("Form not found", FormServerErrorCodes.FORM_NOT_FOUND);
     }
 
     if (ids.length > responseConfirmLimit) {
@@ -240,7 +239,7 @@ export const getSubmissionsByFormat = async ({
     });
 
     await updateLastDownloadedBy(responseIdStatusArray, formID, userEmail);
-    await logDownload(responseIdStatusArray, format, formID, ability);
+    await logDownload(responseIdStatusArray, format, ability);
 
     const revalidateNewTab = async () => {
       // delay revalidation so new tab doesn't refresh immediately
