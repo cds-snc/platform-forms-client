@@ -11,7 +11,9 @@ import { Button } from "@clientComponents/globals";
 import Brand from "@clientComponents/globals/Brand";
 import { ExternalLinkIcon } from "@serverComponents/icons";
 import { updateTemplate } from "@formBuilder/actions";
-import { logMessage } from "@lib/logger";
+import { FormServerErrorCodes } from "@lib/types/form-builder-types";
+import { safeJSONParse } from "@lib/utils";
+import { ErrorSaving } from "@formBuilder/components/shared/ErrorSaving";
 
 const Label = ({ htmlFor, children }: { htmlFor: string; children?: JSX.Element | string }) => {
   return (
@@ -22,7 +24,7 @@ const Label = ({ htmlFor, children }: { htmlFor: string; children?: JSX.Element 
 };
 
 export const Branding = ({ hasBrandingRequestForm }: { hasBrandingRequestForm: boolean }) => {
-  const { t, i18n } = useTranslation("form-builder");
+  const { t, i18n } = useTranslation(["form-builder", "common"]);
   const { status } = useSession();
   const { id, isPublished, brandName, updateField, unsetField, getSchema, getName, brand } =
     useTemplateStore((s) => ({
@@ -54,19 +56,27 @@ export const Branding = ({ hasBrandingRequestForm }: { hasBrandingRequestForm: b
   const savedErrorMessage = t("settingsResponseDelivery.savedErrorMessage");
 
   const handleSave = useCallback(async () => {
-    try {
-      await updateTemplate({
-        id,
-        formConfig: JSON.parse(getSchema()),
-        name: getName(),
-      });
-    } catch (e) {
-      logMessage.error(e);
-      toast.error(savedErrorMessage);
+    const formConfig = safeJSONParse(getSchema());
+    if (formConfig?.error) {
+      toast.error(<ErrorSaving errorCode={FormServerErrorCodes.JSON_PARSE} />, "wide");
       return;
     }
 
-    toast.success(savedSuccessMessage);
+    const result = await updateTemplate({
+      id,
+      formConfig,
+      name: getName(),
+    });
+
+    if (!result?.error) {
+      toast.success(savedSuccessMessage);
+      return;
+    }
+
+    toast.error(
+      <ErrorSaving errorCode={FormServerErrorCodes.BRANDING} message={savedErrorMessage} />,
+      "wide"
+    );
   }, [id, getSchema, getName, savedSuccessMessage, savedErrorMessage]);
 
   const lang = i18n.language;

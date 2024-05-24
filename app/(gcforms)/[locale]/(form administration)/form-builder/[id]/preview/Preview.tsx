@@ -8,7 +8,11 @@ import { PreviewNavigation } from "./PreviewNavigation";
 import { getRenderedForm } from "@lib/formBuilder";
 import { PublicFormRecord } from "@lib/types";
 import { Button, RichText, ClosedPage, NextButton } from "@clientComponents/forms";
-import { LocalizedElementProperties, LocalizedFormProperties } from "@lib/types/form-builder-types";
+import {
+  FormServerErrorCodes,
+  LocalizedElementProperties,
+  LocalizedFormProperties,
+} from "@lib/types/form-builder-types";
 import { useRehydrate, useTemplateStore } from "@lib/store/useTemplateStore";
 import { BackArrowIcon } from "@serverComponents/icons";
 import Brand from "@clientComponents/globals/Brand";
@@ -17,6 +21,9 @@ import { GCFormsProvider } from "@lib/hooks/useGCFormContext";
 import Skeleton from "react-loading-skeleton";
 import { Form } from "@clientComponents/forms/Form/Form";
 import { BackButton } from "./BackButton";
+import { safeJSONParse } from "@lib/utils";
+import { ErrorSaving } from "@formBuilder/components/shared/ErrorSaving";
+import { toast } from "@formBuilder/components/shared";
 
 export const Preview = ({
   disableSubmit = true,
@@ -34,9 +41,15 @@ export const Preview = ({
     getSecurityAttribute: s.getSecurityAttribute,
   }));
 
+  // TODO probably redirecting to the error page makes more sense since the error is not recoverable
+  const formParsed = safeJSONParse(getSchema());
+  if (formParsed?.error) {
+    toast.error(<ErrorSaving errorCode={FormServerErrorCodes.JSON_PARSE} />, "wide");
+  }
+
   const formRecord: PublicFormRecord = {
     id: id || "test0form00000id000asdf11",
-    form: JSON.parse(getSchema()),
+    form: formParsed,
     isPublished: getIsPublished(),
     securityAttribute: getSecurityAttribute(),
   };

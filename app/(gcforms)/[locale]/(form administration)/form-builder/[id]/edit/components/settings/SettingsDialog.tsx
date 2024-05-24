@@ -7,7 +7,11 @@ import { useTemplateStore } from "@lib/store/useTemplateStore";
 import { useDialogRef, Dialog, Radio } from "@formBuilder/components/shared";
 import { Logos, options } from "../../../settings/branding/components";
 import Brand from "@clientComponents/globals/Brand";
-import { LocalizedFormProperties, FormServerError } from "@lib/types/form-builder-types";
+import {
+  LocalizedFormProperties,
+  FormServerError,
+  FormServerErrorCodes,
+} from "@lib/types/form-builder-types";
 import { ResponseEmail } from "@formBuilder/components/ResponseEmail";
 import { isValidGovEmail } from "@lib/validation/validation";
 import { completeEmailAddressRegex } from "@lib/utils/form-builder";
@@ -23,6 +27,7 @@ import {
 
 import { toast } from "@formBuilder/components/shared/Toast";
 import { ErrorSaving } from "@formBuilder/components/shared/ErrorSaving";
+import { safeJSONParse } from "@lib/utils";
 
 enum DeliveryOption {
   vault = "vault",
@@ -290,9 +295,15 @@ export const SettingsDialog = ({
 
     updateSecurityAttribute(classificationValue);
 
+    const formConfig = safeJSONParse(getSchema());
+    if (formConfig.error) {
+      handleClose();
+      toast.error(<ErrorSaving errorCode={FormServerErrorCodes.JSON_PARSE} />, "wide");
+      return;
+    }
     updateTemplate({
       id,
-      formConfig: JSON.parse(getSchema()),
+      formConfig,
       securityAttribute: classificationValue,
       deliveryOption: getDeliveryOption(),
     });
