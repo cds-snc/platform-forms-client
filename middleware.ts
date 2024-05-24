@@ -44,13 +44,9 @@ const { auth } = NextAuth({
     maxAge: 2 * 60 * 60, // 2 hours
   },
   callbacks: {
-    async jwt({ token }) {
-      logMessage.info(`JWT Callback in Middleware`);
-      return token;
-    },
     async session(params) {
       const { session, token } = params as { session: Session; token: JWT };
-      logMessage.info(`Session Callback in Middleware`);
+
       // Copy token contents into session for middleware
       session.user = {
         id: token.userId ?? "",
