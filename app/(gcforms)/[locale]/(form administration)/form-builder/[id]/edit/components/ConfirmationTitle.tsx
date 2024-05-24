@@ -1,12 +1,12 @@
 "use client";
+
 import React from "react";
-// import { useTranslation } from "@i18n/client";
+import { useTranslation } from "@i18n/client";
 
 // {t("sectionTitle")}
-// {t("title")}
 
 export const ConfirmationTitle = () => {
-  // const { t } = useTranslation("confirmation");
+  const { t } = useTranslation(["form-builder"]);
   return (
     <div className="mb-8 text-[1rem]">
       <div
@@ -20,7 +20,7 @@ export const ConfirmationTitle = () => {
       <div className="mb-2 inline-block rounded-md border-1 border-slate-500 bg-slate-50 px-2 py-1 text-slate-500">
         section title
       </div>
-      <h2 className="mt-0 text-2xl text-slate-500 laptop:mt-0">title</h2>
+      <h2 className="mt-0 text-2xl text-slate-500 laptop:mt-0"> {t("title")}</h2>
     </div>
   );
 };
