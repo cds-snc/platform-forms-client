@@ -1,15 +1,14 @@
 "use client";
-import React, { useRef, useState, useEffect } from "react";
+import React, { useRef } from "react";
 import { useTranslation } from "@i18n/client";
-import { getSession } from "next-auth/react";
-import { Session } from "next-auth";
 
 import { LinkButton } from "@serverComponents/globals/Buttons/LinkButton";
 import { BackArrowIcon } from "@serverComponents/icons";
 import { useFocusIt } from "@lib/hooks/useFocusIt";
+import { useSessionCookie } from "@lib/hooks/useSessionCookie";
 
 // Start the async call before the component renders
-const getSessionPromise = getSession();
+//const getSessionPromise = getSession();
 
 export const ErrorPanel = ({
   title,
@@ -24,12 +23,7 @@ export const ErrorPanel = ({
 }) => {
   const { t, i18n } = useTranslation("common");
 
-  const [session, setSession] = useState<Session | null>(null);
-  useEffect(() => {
-    getSessionPromise.then((session) => {
-      setSession(session);
-    });
-  });
+  const session = useSessionCookie();
 
   const headingRef = useRef(null);
 
