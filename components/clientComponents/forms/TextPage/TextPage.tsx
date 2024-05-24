@@ -30,7 +30,6 @@ const PageContent = ({ pageText, urlQuery }: PageContextProps) => {
   const backToLink = urlQuery ? <a href={urlQuery}>{t("backLink")}</a> : null;
   return (
     <>
-      <h1 tabIndex={-1}>{t("title")}</h1>
       <div>
         <p>{t("body")}</p>
       </div>
@@ -41,6 +40,7 @@ const PageContent = ({ pageText, urlQuery }: PageContextProps) => {
 
 export const TextPage = (props: TextPageProps): React.ReactElement => {
   const { i18n } = useTranslation("confirmation");
+  const { t } = useTranslation("confirmation");
   const {
     formRecord: {
       form: { confirmation },
@@ -61,6 +61,7 @@ export const TextPage = (props: TextPageProps): React.ReactElement => {
 
   return (
     <>
+      <h1 tabIndex={-1}>{t("title")}</h1>
       <PageContent pageText={pageText} urlQuery={urlQuery} />
     </>
   );
