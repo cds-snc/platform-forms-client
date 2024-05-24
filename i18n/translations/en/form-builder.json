@@ -833,5 +833,9 @@
         "text1": "This section doesn’t have any form elements in it."
       }
     }
+  },
+  "confirmation": {
+    "title": "Your form has been submitted",
+    "sectionTitle": "Section title"
   }
 }

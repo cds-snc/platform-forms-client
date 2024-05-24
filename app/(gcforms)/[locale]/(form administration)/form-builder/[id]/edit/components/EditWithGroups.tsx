@@ -16,6 +16,7 @@ import { useGroupStore } from "@formBuilder/components/shared/right-panel/treevi
 import { Section } from "./Section";
 import { FormElement } from "@lib/types";
 import { LangSwitcher } from "@formBuilder/components/shared/LangSwitcher";
+import { ConfirmationTitle } from "./ConfirmationTitle";
 
 export const EditWithGroups = () => {
   const { t } = useTranslation("form-builder");
@@ -184,6 +185,7 @@ export const EditWithGroups = () => {
             <div id="confirmation-text">
               <h2 className="mt-4 text-2xl laptop:mt-0">{t("richTextConfirmationTitle")}</h2>
               <ConfirmationDescription />
+              <ConfirmationTitle />
             </div>
           </RichTextLocked>
         )}

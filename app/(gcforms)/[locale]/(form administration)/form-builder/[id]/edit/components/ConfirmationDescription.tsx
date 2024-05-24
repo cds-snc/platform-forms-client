@@ -7,7 +7,7 @@ export const ConfirmationDescription = () => {
   return (
     <div className="mb-8 text-[1rem]">
       <p>{t("confirmationDescriptionParagraph")}</p>
-      <ul className="mt-2 mb-2">
+      <ul className="my-2">
         <li>{t("confirmationDescriptionItem1")}</li>
         <li>{t("confirmationDescriptionItem2")}</li>
         <li>{t("confirmationDescriptionItem3")}</li>
