@@ -69,6 +69,11 @@ export const ContactForm = () => {
         </p>
       </Alert.Warning>
       <form id="contactus" action={formAction} noValidate>
+        {state.error && (
+          <Alert.Danger focussable={true} title={t("error")} className="mb-2 mt-2">
+            <p>{t(state.error)}</p>
+          </Alert.Danger>
+        )}
         <fieldset className="focus-group mt-14">
           <legend className="gc-label required">
             {t("contactus.request.title")}{" "}
