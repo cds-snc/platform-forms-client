@@ -1,4 +1,7 @@
+"use client";
+import React from "react";
 import { useTranslation } from "react-i18next";
+
 export const ConfirmationTitle = () => {
   const { t } = useTranslation("confirmation");
   return (
