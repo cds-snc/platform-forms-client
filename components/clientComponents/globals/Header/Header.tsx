@@ -59,7 +59,7 @@ export const Header = ({ context = "default", className }: HeaderParams) => {
         </div>
         <nav className="justify-self-end" aria-label={t("mainNavAriaLabel", { ns: "common" })}>
           <ul className="mt-2 flex list-none px-0 text-base">
-            {authenticated && (
+            {!authenticated && (
               <li className="mr-2 py-2 text-base tablet:mr-4">
                 <Link href={`/${language}/auth/login`} prefetch={false}>
                   {t("loginMenu.login")}
