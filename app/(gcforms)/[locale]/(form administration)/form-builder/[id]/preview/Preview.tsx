@@ -1,7 +1,7 @@
 "use client";
 import React, { useState } from "react";
 import { useTranslation } from "@i18n/client";
-import { useSession } from "next-auth/react";
+import { useSessionCookie } from "@lib/hooks/auth/useSessionCookie";
 import Markdown from "markdown-to-jsx";
 
 import { PreviewNavigation } from "./PreviewNavigation";
@@ -32,7 +32,7 @@ export const Preview = ({
   disableSubmit?: boolean;
   allowGrouping?: boolean;
 }) => {
-  const { status } = useSession();
+  const authenticated = useSessionCookie();
   const { i18n } = useTranslation(["common", "confirmation"]);
   const { id, getSchema, getIsPublished, getSecurityAttribute } = useTemplateStore((s) => ({
     id: s.id,
@@ -97,7 +97,7 @@ export const Preview = ({
         <div className="h-12"></div>
         <div
           className={`mb-8 border-3 border-dashed border-blue-focus bg-white p-4 ${
-            status !== "authenticated" && ""
+            !authenticated && ""
           }`}
           {...getLocalizationAttribute()}
         >
@@ -118,11 +118,11 @@ export const Preview = ({
       <div className="h-12"></div>
       <div
         className={`mb-8 border-3 border-dashed border-blue-focus bg-white p-4 ${
-          status !== "authenticated" && ""
+          !authenticated && ""
         }`}
         {...getLocalizationAttribute()}
       >
-        {status !== "authenticated" ? (
+        {!authenticated ? (
           <div className="mb-1 inline-block bg-purple-200 p-2">
             <Markdown options={{ forceBlock: true }}>
               {t("signInToTest", { ns: "form-builder", lng: language })}
@@ -217,7 +217,7 @@ export const Preview = ({
                             }}
                           />
                         </span>
-                        {status !== "authenticated" && (
+                        {!authenticated && (
                           <div
                             className="inline-block bg-purple-200 px-4 py-1"
                             {...getLocalizationAttribute()}
@@ -240,7 +240,7 @@ export const Preview = ({
         )}
       </div>
 
-      {status !== "authenticated" && (
+      {!authenticated && (
         <>
           <span className="mb-1 inline-block bg-slate-200 p-2">
             {t("confirmationPage", { ns: "form-builder" })}

@@ -1,7 +1,7 @@
 "use client";
 import { useEffect, useState, useRef } from "react";
 import { useTranslation } from "@i18n/client";
-import { useSession } from "next-auth/react";
+import { useSessionCookie } from "@lib/hooks/auth/useSessionCookie";
 import { cn, safeJSONParse } from "@lib/utils";
 import { toast } from "@formBuilder/components/shared/Toast";
 import { Button } from "@clientComponents/globals";
@@ -104,14 +104,14 @@ export const SaveButton = () => {
 
   const { templateIsDirty, createOrUpdateTemplate, resetState, updatedAt, setUpdatedAt } =
     useTemplateContext();
-  const { status } = useSession();
+  const authenticated = useSessionCookie();
 
   const [error, setError] = useState(false);
   const pathname = usePathname();
   const timeRef = useRef(new Date().getTime());
 
   const handleSave = async () => {
-    if (status !== "authenticated") {
+    if (!authenticated) {
       return;
     }
 
@@ -169,7 +169,7 @@ export const SaveButton = () => {
     return null;
   }
 
-  return status === "authenticated" ? (
+  return authenticated ? (
     <div
       data-id={id}
       className={cn(

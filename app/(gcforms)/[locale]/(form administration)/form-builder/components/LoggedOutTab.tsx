@@ -2,7 +2,7 @@
 import React from "react";
 import { Card } from "@clientComponents/globals/card/Card";
 import { LinkButton } from "@serverComponents/globals/Buttons/LinkButton";
-import { useSession } from "next-auth/react";
+import { useSessionCookie } from "@lib/hooks/auth/useSessionCookie";
 import { useTranslation } from "@i18n/client";
 
 export enum LoggedOutTabName {
@@ -16,12 +16,12 @@ interface LoggedOutTabProps {
 }
 
 export const LoggedOutTab = ({ tabName }: LoggedOutTabProps) => {
-  const { status } = useSession();
+  const authenticated = useSessionCookie();
   const { t, i18n } = useTranslation("form-builder");
   const signInLink = `/${i18n.language}/auth/login`;
   const createAccountLink = `/${i18n.language}/auth/register`;
 
-  if (status === "authenticated" || status === "loading") {
+  if (authenticated) {
     return null;
   }
 
