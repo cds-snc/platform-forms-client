@@ -2,7 +2,12 @@
 import { useTranslation } from "@i18n/client";
 import { useFormState } from "react-dom";
 import { unlockPublishing } from "../../actions";
-import { Label, ErrorListItem, Description } from "@clientComponents/forms";
+import {
+  Label,
+  ErrorListItem,
+  Description,
+  Alert as ValidationMessage,
+} from "@clientComponents/forms";
 import { Alert } from "@clientComponents/globals";
 import { ErrorStatus } from "@clientComponents/forms/Alert/Alert";
 import { LinkButton } from "@serverComponents/globals/Buttons/LinkButton";
@@ -28,7 +33,7 @@ export const UnlockPublishingForm = ({ userEmail }: { userEmail: string }) => {
     <>
       {/* @todo  Add general error to show user there was an internal service error */}
       {Object.keys(state.validationErrors).length > 0 && (
-        <Alert
+        <ValidationMessage
           type={ErrorStatus.ERROR}
           validation={true}
           tabIndex={0}
@@ -46,7 +51,7 @@ export const UnlockPublishingForm = ({ userEmail }: { userEmail: string }) => {
               );
             })}
           </ol>
-        </Alert>
+        </ValidationMessage>
       )}
 
       <h1>{t("unlockPublishing.title")}</h1>
