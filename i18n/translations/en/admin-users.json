@@ -54,5 +54,8 @@
   },
   "systemAdministration": "System administration",
   "accountAdministration": "Account administration",
-  "userAdministration": "User administration"
+  "userAdministration": "User administration",
+  "error": {
+    "permissions": "Failed to update permissions."
+  }
 }

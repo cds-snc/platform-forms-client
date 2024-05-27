@@ -61,10 +61,7 @@ export const RowTable = (props: TableProps): React.ReactElement => {
 
   return (
     <div className="overflow-x-scroll">
-      <dl
-        id={`responseTableRow${capitalize(lang)}`}
-        className="flex overflow-x-auto border-y-2 border-gray"
-      >
+      <dl id={`responseTableRow${capitalize(lang)}`} className="flex border-y-2 border-gray">
         <div className="flex flex-col">
           <dt className="flex whitespace-nowrap border-b border-gray p-4 font-bold">
             {t("responseTemplate.responseNumber", { lng: lang })}
