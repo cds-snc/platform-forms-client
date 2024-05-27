@@ -52,7 +52,7 @@ export const DownloadTable = ({
 
   const { statusFilter: rawStatusFilter } = useParams<{ statusFilter: string }>();
   const statusFilter = ucfirst(rawStatusFilter);
-  const [downloadError, setDownloadError] = useState(false);
+  const [downloadError, setDownloadError] = useState<boolean | string>(false);
   const [noSelectedItemsError, setNoSelectedItemsError] = useState(false);
   const [showConfirmNewtDialog, setShowConfirmNewDialog] = useState(false);
   const [showDownloadDialog, setShowDownloadDialog] = useState(false);
@@ -126,6 +126,7 @@ export const DownloadTable = ({
                 </Link>
                 .
               </p>
+              <p>{typeof downloadError !== "boolean" && <p>Error code: {downloadError}</p>}</p>
             </Alert.Danger>
           )}
         </div>
