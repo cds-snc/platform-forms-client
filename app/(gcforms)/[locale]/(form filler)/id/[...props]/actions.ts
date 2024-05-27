@@ -31,6 +31,7 @@ export async function submitForm(
     logMessage.error(
       `Could not submit response for form ${formRecord.id}. Received error: ${(e as Error).message}`
     );
-    return { id: formRecord.id, error: e as Error };
+
+    return { id: formRecord.id, error: { name: (e as Error).name, message: (e as Error).message } };
   }
 }
