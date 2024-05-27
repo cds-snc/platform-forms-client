@@ -38,16 +38,16 @@
     }
   },
   "errors": {
-    "errorCode": "Error code:",
+    "errorCode": "Contactez l'équipe de soutien avec le code d'erreur :",
     "retrieval": {
-      "title": "There was an error retrieving responses",
-      "message": "Something went wrong while trying to retrieve responses.",
-      "tryAgain": "Try again"
+      "title": "Quelque chose a mal tourné",
+      "message": "Une erreur s'est produite lors de la récupération des réponses.",
+      "tryAgain": "Réessayer"
     },
     "generic": {
-      "title": "There has been an error",
-      "message": "Something went wrong fulfilling your request.",
-      "tryAgain": "Try again"
+      "title": "Quelque chose a mal tourné",
+      "message": "Une erreur s'est produite lors du chargement de la page ou de l'exécution de la demande.",
+      "tryAgain": "Réessayer"
     }
   },
   "responses": {
