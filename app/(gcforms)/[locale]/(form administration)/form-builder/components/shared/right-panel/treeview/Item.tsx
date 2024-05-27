@@ -2,9 +2,13 @@ import { DragHandle } from "./icons/DragHandle";
 import { LockIcon } from "@serverComponents/icons";
 import { cn } from "@lib/utils";
 import { ReactElement, ReactNode } from "react";
-import { TreeItem, TreeItemRenderContext } from "react-complex-tree";
+import { TreeItem, TreeItemIndex, TreeItemRenderContext } from "react-complex-tree";
 import { ArrowRight } from "./icons/ArrowRight";
 import { ArrowDown } from "./icons/ArrowDown";
+import { useTreeRef } from "./provider/TreeRefProvider";
+import { useState } from "react";
+import React from "react";
+import { LockedSections } from "./types";
 
 export const Item = ({
   title,
@@ -17,6 +21,61 @@ export const Item = ({
   context: TreeItemRenderContext;
   children: ReactNode | ReactElement;
 }) => {
+  const { tree } = useTreeRef();
+  const isRenaming = context && context?.isRenaming ? true : false;
+  const [name, setName] = useState("");
+
+  if (isRenaming) {
+    return (
+      <li
+        {...context.itemContainerWithChildrenProps}
+        className={cn(
+          "flex flex-col",
+          arrow && "border-b-1 border-slate-200 border-x-1 border-r-2 b-t-1",
+          !context.isExpanded && "",
+          children && "bg-slate-50"
+        )}
+        style={{
+          margin: 0,
+        }}
+      >
+        <div
+          className={cn(
+            "text-left group relative w-full overflow-hidden truncate p-3",
+            !arrow && "bg-white",
+            !arrow && "border-slate-500 border-1 rounded-md"
+          )}
+        >
+          <input
+            {...context.interactiveElementProps}
+            type="text"
+            autoFocus
+            className="ml-10"
+            value={name}
+            onFocus={(e) => {
+              e.target.select();
+            }}
+            onKeyDown={(e) => {
+              if (e.key === "Enter") {
+                const props = context.interactiveElementProps as unknown as Record<string, unknown>;
+                const id = props["data-rct-item-id"] as unknown as TreeItemIndex;
+                tree?.current?.renameItem(id, name);
+                context.stopRenamingItem();
+              }
+            }}
+            onChange={(e) => {
+              setName(e.target.value);
+            }}
+          />
+          {arrow}
+        </div>
+      </li>
+    );
+  }
+
+  const titleString = (React.isValidElement(title) && title.props.title).toLowerCase();
+  const isLocked = [LockedSections.START, LockedSections.END].includes(titleString);
+
   return (
     <li
       {...context.itemContainerWithChildrenProps}
@@ -42,7 +101,18 @@ export const Item = ({
           )}
         >
           {arrow}
-          <span className="ml-10">{title}</span>
+
+          <span
+            className="ml-10"
+            {...(!isLocked && {
+              onDoubleClick: () => {
+                tree?.current?.collapseAll();
+                context.startRenamingItem();
+              },
+            })}
+          >
+            {title}
+          </span>
           {context.canDrag ? (
             <DragHandle
               className={cn(
