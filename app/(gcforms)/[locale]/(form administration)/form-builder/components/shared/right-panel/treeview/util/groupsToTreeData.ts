@@ -117,7 +117,9 @@ export const groupsToTreeData = (
   }
 
   if (startChildren.length > 0) {
-    items["start"].children = startChildren;
+    // Add startChildren to existing start children
+    const currentStartChildren = items["start"].children ? items["start"].children : [];
+    items["start"].children = [...startChildren, ...currentStartChildren];
   }
 
   // ----

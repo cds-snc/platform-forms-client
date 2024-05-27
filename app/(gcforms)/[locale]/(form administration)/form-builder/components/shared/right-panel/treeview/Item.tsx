@@ -8,7 +8,6 @@ import { ArrowDown } from "./icons/ArrowDown";
 import { useTreeRef } from "./provider/TreeRefProvider";
 import { useState } from "react";
 import React from "react";
-import { LockedSections } from "./types";
 
 export const Item = ({
   title,
@@ -23,7 +22,8 @@ export const Item = ({
 }) => {
   const { tree } = useTreeRef();
   const isRenaming = context && context?.isRenaming ? true : false;
-  const [name, setName] = useState("");
+  const itemName = React.isValidElement(title) && title.props.title;
+  const [name, setName] = useState(itemName);
 
   if (isRenaming) {
     return (
@@ -50,7 +50,7 @@ export const Item = ({
             {...context.interactiveElementProps}
             type="text"
             autoFocus
-            className="ml-10"
+            className="ml-10 w-auto"
             value={name}
             onFocus={(e) => {
               e.target.select();
@@ -73,8 +73,7 @@ export const Item = ({
     );
   }
 
-  const titleString = (React.isValidElement(title) && title.props.title).toLowerCase();
-  const isLocked = [LockedSections.START, LockedSections.END].includes(titleString);
+  const isLocked = !context.canDrag;
 
   return (
     <li
@@ -101,12 +100,10 @@ export const Item = ({
           )}
         >
           {arrow}
-
           <span
-            className="ml-10"
+            className="ml-10 inline-block w-[100%] overflow-hidden"
             {...(!isLocked && {
               onDoubleClick: () => {
-                tree?.current?.collapseAll();
                 context.startRenamingItem();
               },
             })}
