@@ -73,7 +73,7 @@ export const ErrorSavingForm = () => {
       </span>
       <LinkButton
         href={supportHref}
-        className="mr-2 !text-red-700 underline hover:no-underline focus:bg-transparent active:bg-transparent"
+        className="mr-2 !text-red-700 underline hover:no-underline focus:bg-transparent focus:!text-red-700 active:bg-transparent active:!text-red-700"
       >
         {t("errorSavingForm.failedLink", { ns: "form-builder" })}
       </LinkButton>
