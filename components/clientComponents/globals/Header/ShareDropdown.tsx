@@ -118,9 +118,7 @@ export const ShareDropdown = () => {
         </DropdownMenuPrimitive.Portal>
       </DropdownMenuPrimitive.Root>
       {shareModal && authenticated && <ShareModal handleClose={handleCloseDialog} />}
-      {shareModal && !authenticated && (
-        <ShareModalUnauthenticated handleClose={handleCloseDialog} />
-      )}
+      {shareModal && authenticated && <ShareModalUnauthenticated handleClose={handleCloseDialog} />}
     </div>
   );
 };

@@ -7,6 +7,9 @@ import { BackArrowIcon } from "@serverComponents/icons";
 import { useFocusIt } from "@lib/hooks/useFocusIt";
 import { useSessionCookie } from "@lib/hooks/auth/useSessionCookie";
 
+// Start the async call before the component renders
+//const getSessionPromise = getSession();
+
 export const ErrorPanel = ({
   title,
   children,
@@ -29,13 +32,14 @@ export const ErrorPanel = ({
   const defaultMessage = <p>{t("errorPanel.defaultMessage")}</p>;
 
   // links
-  const homeHref = session
-    ? `/${i18n.language}/forms`
-    : `https://articles.alpha.canada.ca/forms-formulaires/${
-        String(i18n.language).toLowerCase() === "fr" ? "fr/" : ""
-      }`;
+  const homeHref =
+    session !== null
+      ? `/${i18n.language}/forms`
+      : `https://articles.alpha.canada.ca/forms-formulaires/${
+          String(i18n.language).toLowerCase() === "fr" ? "fr/" : ""
+        }`;
 
-  const homeText = session ? t("errorPanel.cta.yourForms") : t("errorPanel.cta.home");
+  const homeText = session !== null ? t("errorPanel.cta.yourForms") : t("errorPanel.cta.home");
 
   const supportHref = `/${i18n.language}/support`;
 
