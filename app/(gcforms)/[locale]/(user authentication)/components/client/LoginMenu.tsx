@@ -2,7 +2,7 @@
 import { useTranslation } from "@i18n/client";
 import Link from "next/link";
 import { logout } from "../action";
-import { useSessionCookie } from "@lib/hooks/auth/useSessionCookie";
+import { useSession } from "next-auth/react";
 import { clearTemplateStore } from "@lib/store/useTemplateStore";
 
 export const LoginMenu = () => {
@@ -11,15 +11,15 @@ export const LoginMenu = () => {
     clearTemplateStore();
     await logout(i18n.language);
   };
-  const authenticated = useSessionCookie();
+  const session = useSession();
 
   return (
     <div
       id="login-menu"
       className="text-base font-normal not-italic"
-      data-authenticated={`${authenticated}`}
+      data-authenticated={`${session.status === "authenticated"}`}
     >
-      {authenticated ? (
+      {session.status === "authenticated" ? (
         <button
           type="button"
           className="border-0 bg-transparent text-blue-dark underline hover:text-blue-hover"

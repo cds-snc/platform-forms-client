@@ -1,8 +1,8 @@
 "use client";
 import React, { useState, useCallback } from "react";
 import { useTranslation } from "@i18n/client";
+import { useSession } from "next-auth/react";
 
-import { useSessionCookie } from "@lib/hooks/auth/useSessionCookie";
 import {
   ClassificationType,
   ClassificationSelect,
@@ -26,7 +26,7 @@ enum DeliveryOption {
 export const SettingsPanel = () => {
   const { t, i18n } = useTranslation("form-builder");
   const lang = i18n.language === "en" ? "en" : "fr";
-  const authenticated = useSessionCookie();
+  const { status } = useSession();
 
   const {
     id,
@@ -135,7 +135,7 @@ export const SettingsPanel = () => {
   // More ...
   const [showSettings, setShowShowSettings] = useState<boolean>(false);
 
-  if (!authenticated) {
+  if (status !== "authenticated") {
     return null;
   }
 

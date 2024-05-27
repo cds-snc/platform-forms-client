@@ -11534,7 +11534,6 @@ __metadata:
     babel-plugin-dynamic-import-node: "npm:^2.3.3"
     babel-plugin-transform-require-context: "npm:^0.1.1"
     classnames: "npm:2.4.0"
-    client-only: "npm:^0.0.1"
     clsx: "npm:^2.0.0"
     copy-to-clipboard: "npm:3.3.3"
     css-loader: "npm:^6.8.1"

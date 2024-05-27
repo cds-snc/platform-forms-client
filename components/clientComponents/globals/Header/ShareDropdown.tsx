@@ -2,7 +2,7 @@
 import React, { useCallback, useState } from "react";
 import * as DropdownMenuPrimitive from "@radix-ui/react-dropdown-menu";
 import { useTranslation } from "@i18n/client";
-import { useSessionCookie } from "@lib/hooks/auth/useSessionCookie";
+import { useSession } from "next-auth/react";
 import { ChevronDown, ChevronRight, ShareIcon, LinkIcon } from "@serverComponents/icons";
 import { useTemplateStore } from "@lib/store/useTemplateStore";
 import { LinksSubMenu } from "./LinksSubMenu";
@@ -11,7 +11,7 @@ import { useRefStore } from "@lib/hooks/form-builder/useRefStore";
 
 export const ShareDropdown = () => {
   const { t } = useTranslation("form-builder");
-  const authenticated = useSessionCookie();
+  const { status } = useSession();
 
   const [shareModal, showShareModal] = useState(false);
 
@@ -117,8 +117,10 @@ export const ShareDropdown = () => {
           </DropdownMenuPrimitive.Content>
         </DropdownMenuPrimitive.Portal>
       </DropdownMenuPrimitive.Root>
-      {shareModal && authenticated && <ShareModal handleClose={handleCloseDialog} />}
-      {shareModal && authenticated && <ShareModalUnauthenticated handleClose={handleCloseDialog} />}
+      {shareModal && status === "authenticated" && <ShareModal handleClose={handleCloseDialog} />}
+      {shareModal && status !== "authenticated" && (
+        <ShareModalUnauthenticated handleClose={handleCloseDialog} />
+      )}
     </div>
   );
 };

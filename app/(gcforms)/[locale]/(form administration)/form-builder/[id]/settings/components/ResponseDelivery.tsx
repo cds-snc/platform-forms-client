@@ -35,8 +35,8 @@ enum DeliveryOption {
 
 export const ResponseDelivery = () => {
   const { t, i18n } = useTranslation("form-builder");
-  const { status, data: session } = useSession();
-
+  const { status } = useSession();
+  const session = useSession();
   const { refreshData } = useRefresh();
   const lang = i18n.language === "en" ? "en" : "fr";
 
@@ -80,7 +80,7 @@ export const ResponseDelivery = () => {
     t("formSettingsModal.emailOption.label")
   );
 
-  const userEmail = session?.user.email ?? "";
+  const userEmail = session.data?.user.email ?? "";
   const initialDeliveryOption = !email ? DeliveryOption.vault : DeliveryOption.email;
 
   const [deliveryOptionValue, setDeliveryOptionValue] = useState(initialDeliveryOption);

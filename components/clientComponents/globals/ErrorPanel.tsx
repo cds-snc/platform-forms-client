@@ -5,7 +5,7 @@ import { useTranslation } from "@i18n/client";
 import { LinkButton } from "@serverComponents/globals/Buttons/LinkButton";
 import { BackArrowIcon } from "@serverComponents/icons";
 import { useFocusIt } from "@lib/hooks/useFocusIt";
-import { useSessionCookie } from "@lib/hooks/auth/useSessionCookie";
+import { useSessionCookie } from "@lib/hooks/useSessionCookie";
 
 // Start the async call before the component renders
 //const getSessionPromise = getSession();

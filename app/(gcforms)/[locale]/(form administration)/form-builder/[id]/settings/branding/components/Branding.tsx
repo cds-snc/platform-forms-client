@@ -1,6 +1,6 @@
 "use client";
 import React, { useCallback } from "react";
-import { useSessionCookie } from "@lib/hooks/auth/useSessionCookie";
+import { useSession } from "next-auth/react";
 import { useTranslation } from "@i18n/client";
 import Link from "next/link";
 import { Logos, options } from ".";
@@ -25,7 +25,7 @@ const Label = ({ htmlFor, children }: { htmlFor: string; children?: JSX.Element 
 
 export const Branding = ({ hasBrandingRequestForm }: { hasBrandingRequestForm: boolean }) => {
   const { t, i18n } = useTranslation(["form-builder", "common"]);
-  const authenticated = useSessionCookie();
+  const { status } = useSession();
   const { id, isPublished, brandName, updateField, unsetField, getSchema, getName, brand } =
     useTemplateStore((s) => ({
       id: s.id,
@@ -95,7 +95,7 @@ export const Branding = ({ hasBrandingRequestForm }: { hasBrandingRequestForm: b
     label: `${t("branding.defaultOption")} ${t("branding.default")}`,
   });
 
-  if (!authenticated) {
+  if (status !== "authenticated") {
     return <LoggedOutTab tabName={LoggedOutTabName.SETTINGS} />;
   }
 

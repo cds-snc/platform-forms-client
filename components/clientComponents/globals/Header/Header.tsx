@@ -1,6 +1,6 @@
 "use client";
 import React from "react";
-import { useSessionCookie } from "@lib/hooks/auth/useSessionCookie";
+import { useSession } from "next-auth/react";
 import Link from "next/link";
 import { useTranslation } from "@i18n/client";
 import { cn } from "@lib/utils";
@@ -18,7 +18,7 @@ type HeaderParams = {
 
 export const Header = ({ context = "default", className }: HeaderParams) => {
   const isFormBuilder = context === "formBuilder";
-  const authenticated = useSessionCookie();
+  const { status } = useSession();
   const {
     t,
     i18n: { language },
@@ -47,7 +47,7 @@ export const Header = ({ context = "default", className }: HeaderParams) => {
             </div>
           )}
 
-          {authenticated && (
+          {status === "authenticated" && (
             <>
               <div className="mt-3 box-border block h-[40px] px-2 py-1 font-semibold">
                 <Link href={`/${language}/forms`}>{t("adminNav.allForms", { ns: "common" })}</Link>
@@ -59,7 +59,7 @@ export const Header = ({ context = "default", className }: HeaderParams) => {
         </div>
         <nav className="justify-self-end" aria-label={t("mainNavAriaLabel", { ns: "common" })}>
           <ul className="mt-2 flex list-none px-0 text-base">
-            {authenticated && (
+            {status !== "authenticated" && (
               <li className="mr-2 py-2 text-base tablet:mr-4">
                 <Link href={`/${language}/auth/login`} prefetch={false}>
                   {t("loginMenu.login")}
