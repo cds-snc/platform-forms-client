@@ -52,8 +52,8 @@ export type { FormOwner } from "./user-types";
 export type { Abilities, Privilege, UserAbility, Permission, AnyObject } from "./privileges-types";
 
 // Utility type creator
-export type TypeOmit<T, K extends PropertyKey> = {
-  [P in keyof T as P extends K ? never : P]: T[P];
+export type TypeOmit<Type, Key extends PropertyKey> = {
+  [Property in keyof Type as Exclude<Property, Key>]: Type[Property];
 };
 
 export type { NagwareSubmission, NagwareResult } from "./nagware-types";
