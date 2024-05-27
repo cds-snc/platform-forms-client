@@ -7,6 +7,8 @@ import { ArrowRight } from "./icons/ArrowRight";
 import { ArrowDown } from "./icons/ArrowDown";
 import { useTreeRef } from "./provider/TreeRefProvider";
 import { useState } from "react";
+import React from "react";
+import { LockedSections } from "./types";
 
 export const Item = ({
   title,
@@ -71,6 +73,9 @@ export const Item = ({
     );
   }
 
+  const titleString = (React.isValidElement(title) && title.props.title).toLowerCase();
+  const isLocked = [LockedSections.START, LockedSections.END].includes(titleString);
+
   return (
     <li
       {...context.itemContainerWithChildrenProps}
@@ -96,13 +101,15 @@ export const Item = ({
           )}
         >
           {arrow}
+
           <span
             className="ml-10"
-            onDoubleClick={() => {
-              // Go to edit mode on double click
-              tree?.current?.collapseAll();
-              context.startRenamingItem();
-            }}
+            {...(!isLocked && {
+              onDoubleClick: () => {
+                tree?.current?.collapseAll();
+                context.startRenamingItem();
+              },
+            })}
           >
             {title}
           </span>
