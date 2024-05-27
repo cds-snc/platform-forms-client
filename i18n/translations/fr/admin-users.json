@@ -56,6 +56,6 @@
   "accountAdministration": "Administration des comptes",
   "userAdministration": "Administration des l’utilisateurs",
   "error": {
-    "permissions": "[FR]Failed to update permissions."
+    "permissions": "Les autorisations n'ont pas pu être mises à jour."
   }
 }
