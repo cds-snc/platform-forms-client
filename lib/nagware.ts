@@ -30,7 +30,7 @@ export async function detectOldUnprocessedSubmissions(
           const diffMs = Math.abs(currentDate - current.createdAt);
 
           // 86400000 milliseconds = 1 Day
-          const diffDays = Math.ceil(diffMs / 86400000);
+          const diffDays = Math.floor(diffMs / 86400000);
 
           if (current.status === VaultStatus.NEW) {
             if (diffDays > warnDays) {

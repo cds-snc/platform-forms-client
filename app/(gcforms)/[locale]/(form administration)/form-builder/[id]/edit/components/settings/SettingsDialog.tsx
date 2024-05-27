@@ -7,7 +7,11 @@ import { useTemplateStore } from "@lib/store/useTemplateStore";
 import { useDialogRef, Dialog, Radio } from "@formBuilder/components/shared";
 import { Logos, options } from "../../../settings/branding/components";
 import Brand from "@clientComponents/globals/Brand";
-import { LocalizedFormProperties } from "@lib/types/form-builder-types";
+import {
+  LocalizedFormProperties,
+  FormServerError,
+  FormServerErrorCodes,
+} from "@lib/types/form-builder-types";
 import { ResponseEmail } from "@formBuilder/components/ResponseEmail";
 import { isValidGovEmail } from "@lib/validation/validation";
 import { completeEmailAddressRegex } from "@lib/utils/form-builder";
@@ -20,6 +24,10 @@ import {
   updateTemplate,
   updateTemplateDeliveryOption,
 } from "@formBuilder/actions";
+
+import { toast } from "@formBuilder/components/shared/Toast";
+import { ErrorSaving } from "@formBuilder/components/shared/ErrorSaving";
+import { safeJSONParse } from "@lib/utils";
 
 enum DeliveryOption {
   vault = "vault",
@@ -86,17 +94,18 @@ export const SettingsDialog = ({
   /*--------------------------------------------*
    * Classification state and handlers
    *--------------------------------------------*/
-  const [classification, setClassification] = useState<ClassificationType>(
+  const [classificationValue, setClassificationValue] = useState<ClassificationType>(
     securityAttribute ? (securityAttribute as ClassificationType) : "Protected A"
   );
 
-  const protectedBSelected = classification === "Protected B";
+  const protectedBSelected = classificationValue === "Protected B";
 
+  // Update local state
   const handleUpdateClassification = useCallback((value: ClassificationType) => {
     if (value === "Protected B") {
-      setDeliveryOption(DeliveryOption.vault);
+      setDeliveryOptionValue(DeliveryOption.vault);
     }
-    setClassification(value);
+    setClassificationValue(value);
   }, []);
 
   /*--------------------------------------------*
@@ -141,8 +150,8 @@ export const SettingsDialog = ({
     t("formSettingsModal.emailOption.label")
   );
 
-  const [deliveryOption, setDeliveryOption] = useState(initialDeliveryOption);
-  const [inputEmail, setInputEmail] = useState(email ? email : userEmail);
+  const [deliveryOptionValue, setDeliveryOptionValue] = useState(initialDeliveryOption);
+  const [inputEmailValue, setInputEmailValue] = useState(email ? email : userEmail);
   const [subjectEn, setSubjectEn] = useState(
     initialSubjectEn ? initialSubjectEn : defaultSubjectEn
   );
@@ -150,26 +159,27 @@ export const SettingsDialog = ({
     initialSubjectFr ? initialSubjectFr : defaultSubjectFr
   );
 
+  // Update local state
   const updateDeliveryOption = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
     const { value } = event.target;
-    setDeliveryOption(value as DeliveryOption);
+    setDeliveryOptionValue(value as DeliveryOption);
   }, []);
 
   /*--------------------------------------------*
    * Form Validation
    *--------------------------------------------*/
   const isValid = useMemo(() => {
-    if (classification !== securityAttribute) {
+    if (classificationValue !== securityAttribute) {
       return true;
     }
 
     const isValidDeliveryOption =
-      !isInvalidEmailError && inputEmail !== "" && subjectEn !== "" && subjectFr !== "";
+      !isInvalidEmailError && inputEmailValue !== "" && subjectEn !== "" && subjectFr !== "";
     const emailDeliveryOptionsChanged =
-      inputEmail !== email || subjectEn !== initialSubjectEn || subjectFr !== initialSubjectFr;
+      inputEmailValue !== email || subjectEn !== initialSubjectEn || subjectFr !== initialSubjectFr;
 
-    if (deliveryOption === DeliveryOption.email) {
-      if (!completeEmailAddressRegex.test(inputEmail)) {
+    if (deliveryOptionValue === DeliveryOption.email) {
+      if (!completeEmailAddressRegex.test(inputEmailValue)) {
         return false;
       }
       return isValidDeliveryOption && emailDeliveryOptionsChanged;
@@ -179,22 +189,22 @@ export const SettingsDialog = ({
       return true;
     }
 
-    if (deliveryOption === initialDeliveryOption) {
+    if (deliveryOptionValue === initialDeliveryOption) {
       return false;
     }
 
     return true;
   }, [
-    classification,
+    classificationValue,
     securityAttribute,
     isInvalidEmailError,
-    inputEmail,
+    inputEmailValue,
     subjectEn,
     subjectFr,
     email,
     initialSubjectEn,
     initialSubjectFr,
-    deliveryOption,
+    deliveryOptionValue,
     brandName,
     initialBrandName,
     initialDeliveryOption,
@@ -204,25 +214,31 @@ export const SettingsDialog = ({
    * Set as Email Delivery
    *--------------------------------------------*/
   const setToEmailDelivery = useCallback(async () => {
-    if (!isValidGovEmail(inputEmail)) return false;
-    updateField("deliveryOption.emailAddress", inputEmail);
-    updateField("deliveryOption.emailSubjectEn", subjectEn);
-    updateField("deliveryOption.emailSubjectFr", subjectFr);
+    if (!isValidGovEmail(inputEmailValue)) return false;
 
-    updateSecurityAttribute(classification);
-
-    await updateTemplateDeliveryOption({
+    // Call to server action
+    const result = await updateTemplateDeliveryOption({
       id,
       deliveryOption: getDeliveryOption(),
     });
+
+    if (!result.error) {
+      // Update the template store with the new email delivery settings
+      updateSecurityAttribute(classificationValue);
+      updateField("deliveryOption.emailAddress", inputEmailValue);
+      updateField("deliveryOption.emailSubjectEn", subjectEn);
+      updateField("deliveryOption.emailSubjectFr", subjectFr);
+    }
+
+    return result;
   }, [
-    inputEmail,
+    inputEmailValue,
     subjectEn,
     subjectFr,
     id,
     getDeliveryOption,
     updateField,
-    classification,
+    classificationValue,
     updateSecurityAttribute,
   ]);
 
@@ -230,20 +246,45 @@ export const SettingsDialog = ({
    * Set as Database Storage
    *--------------------------------------------*/
   const setToDatabaseDelivery = useCallback(async () => {
-    setInputEmail("");
-    resetDeliveryOption();
-    updateSecurityAttribute(classification);
-
-    await sendResponsesToVault({
+    const result = await sendResponsesToVault({
       id: id,
     });
-  }, [id, resetDeliveryOption, setInputEmail, classification, updateSecurityAttribute]);
+
+    if (!result.error) {
+      // Reset local state
+      setInputEmailValue("");
+
+      // Update the template store with the new vault delivery settings
+      resetDeliveryOption();
+      updateSecurityAttribute(classificationValue);
+    }
+
+    return result;
+  }, [id, resetDeliveryOption, setInputEmailValue, classificationValue, updateSecurityAttribute]);
 
   /*--------------------------------------------*
    * Save Settings
    *--------------------------------------------*/
 
   const saveSettings = useCallback(async () => {
+    let result;
+    if (email !== "" && deliveryOptionValue === DeliveryOption.vault) {
+      // Call local callBack which will call the server action
+      result = (await setToDatabaseDelivery()) as FormServerError;
+    } else {
+      // Call local callBack which will call the server action
+      result = (await setToEmailDelivery()) as FormServerError;
+    }
+
+    if (result?.error) {
+      // Close the dialog and show an error saving toast
+      // The dialog is closed first to prevent the obscuring the toast message
+      handleClose();
+      toast.error(<ErrorSaving />, "wide");
+      return;
+    }
+
+    // Update the template store with the new settings
     if (brandName === "") {
       unsetField("form.brand");
     }
@@ -252,25 +293,27 @@ export const SettingsDialog = ({
       updateField("form.brand", brand);
     }
 
-    updateSecurityAttribute(classification);
+    updateSecurityAttribute(classificationValue);
 
-    if (email !== "" && deliveryOption === DeliveryOption.vault) {
-      await setToDatabaseDelivery();
-    } else {
-      await setToEmailDelivery();
+    const formConfig = safeJSONParse(getSchema());
+    if (formConfig.error) {
+      handleClose();
+      toast.error(<ErrorSaving errorCode={FormServerErrorCodes.JSON_PARSE} />, "wide");
+      return;
     }
-
     updateTemplate({
       id,
-      formConfig: JSON.parse(getSchema()),
-      securityAttribute: classification,
+      formConfig,
+      securityAttribute: classificationValue,
       deliveryOption: getDeliveryOption(),
     });
+
+    handleClose();
   }, [
     brand,
     brandName,
-    classification,
-    deliveryOption,
+    classificationValue,
+    deliveryOptionValue,
     email,
     getDeliveryOption,
     getSchema,
@@ -281,6 +324,7 @@ export const SettingsDialog = ({
     unsetField,
     updateField,
     updateSecurityAttribute,
+    handleClose,
   ]);
 
   const actions = (
@@ -299,8 +343,6 @@ export const SettingsDialog = ({
         theme="primary"
         disabled={!isValid || isPublished}
         onClick={() => {
-          dialog.current?.close();
-          handleClose();
           saveSettings();
         }}
       >
@@ -342,7 +384,7 @@ export const SettingsDialog = ({
                   className="max-w-[400px] truncate border-none p-1 pr-10"
                   lang={lang}
                   isPublished={isPublished}
-                  classification={classification}
+                  classification={classificationValue}
                   handleUpdateClassification={handleUpdateClassification}
                 />
               </div>
@@ -368,7 +410,7 @@ export const SettingsDialog = ({
                 <Radio
                   disabled={isPublished}
                   id={`delivery - option - ${DeliveryOption.vault} `}
-                  checked={deliveryOption === DeliveryOption.vault}
+                  checked={deliveryOptionValue === DeliveryOption.vault}
                   name="response-delivery"
                   value={DeliveryOption.vault}
                   label={t("settingsResponseDelivery.vaultOption")}
@@ -385,17 +427,17 @@ export const SettingsDialog = ({
                 <Radio
                   disabled={isPublished || protectedBSelected}
                   id={`delivery - option - ${DeliveryOption.email} `}
-                  checked={deliveryOption === DeliveryOption.email}
+                  checked={deliveryOptionValue === DeliveryOption.email}
                   name="response-delivery"
                   value={DeliveryOption.email}
                   label={emailLabel}
                   onChange={updateDeliveryOption}
                 />
               </div>
-              {deliveryOption === DeliveryOption.email && (
+              {deliveryOptionValue === DeliveryOption.email && (
                 <ResponseEmail
-                  inputEmail={inputEmail}
-                  setInputEmail={setInputEmail}
+                  inputEmail={inputEmailValue}
+                  setInputEmail={setInputEmailValue}
                   subjectEn={subjectEn}
                   setSubjectEn={setSubjectEn}
                   subjectFr={subjectFr}

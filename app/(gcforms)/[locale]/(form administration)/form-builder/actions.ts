@@ -251,11 +251,11 @@ export const updateTemplateDeliveryOption = async ({
   formRecord: FormRecord | null;
   error?: string;
 }> => {
-  if (!deliveryOption) {
-    throw new Error("Require Delivery Option Data");
-  }
-
   try {
+    if (!deliveryOption) {
+      throw new Error("Require Delivery Option Data");
+    }
+
     const { ability } = await authCheck();
 
     const response = await updateResponseDeliveryOption(ability, formID, deliveryOption);

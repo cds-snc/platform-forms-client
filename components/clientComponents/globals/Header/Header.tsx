@@ -40,6 +40,13 @@ export const Header = ({ context = "default", className }: HeaderParams) => {
               <SiteLogo title={t("title")} />
             </div>
           </Link>
+
+          {context === "default" && (
+            <div className="mt-3 box-border block h-[40px] px-2 py-1 text-xl font-semibold">
+              {t("title", { ns: "common" })}
+            </div>
+          )}
+
           {status === "authenticated" && (
             <>
               <div className="mt-3 box-border block h-[40px] px-2 py-1 font-semibold">

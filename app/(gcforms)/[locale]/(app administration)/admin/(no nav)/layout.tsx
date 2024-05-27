@@ -24,7 +24,7 @@ export default async function Layout({
   const { t } = await serverTranslation(["common", "admin-login"], { lang: locale });
 
   return (
-    <div className={`flex h-full flex-col  "bg-gray-50"`}>
+    <div className={`flex h-full flex-col bg-gray-50`}>
       <div className="flex h-full flex-col">
         <SkipLink />
         <header className={"mb-5 border-b-1 border-gray-500 bg-white px-0 py-2"}>
