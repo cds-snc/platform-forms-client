@@ -2,7 +2,8 @@
 import { useTranslation } from "@i18n/client";
 import { useFormState } from "react-dom";
 import { unlockPublishing } from "../../actions";
-import { Label, Alert, ErrorListItem, Description } from "@clientComponents/forms";
+import { Label, ErrorListItem, Description } from "@clientComponents/forms";
+import { Alert } from "@clientComponents/globals";
 import { ErrorStatus } from "@clientComponents/forms/Alert/Alert";
 import { LinkButton } from "@serverComponents/globals/Buttons/LinkButton";
 import { TextInput } from "../../../components/client/TextInput";
@@ -51,6 +52,11 @@ export const UnlockPublishingForm = ({ userEmail }: { userEmail: string }) => {
       <h1>{t("unlockPublishing.title")}</h1>
       <p className="mb-14">{t("unlockPublishing.paragraph1")}</p>
       <form id="unlock-publishing" action={formAction} noValidate>
+        {state.error && (
+          <Alert.Danger focussable={true} title={t("error")} className="mb-2 mt-2">
+            <p>{t(state.error)}</p>
+          </Alert.Danger>
+        )}
         <div className="focus-group">
           <Label id="label-managerEmail" htmlFor="managerEmail" className="required" required>
             {t("unlockPublishing.form.field1.title")}
