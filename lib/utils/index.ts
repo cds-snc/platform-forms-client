@@ -28,7 +28,10 @@ export function dateHasPast(timestamp: number) {
 }
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
-export function safeJSONParse(rawJSON: string, reviver?: (key: string, value: any) => any) {
+export function safeJSONParse(
+  rawJSON: string,
+  reviver?: ((this: any, key: string, value: any) => any) | undefined
+): any {
   try {
     if (reviver && typeof reviver === "function") {
       return JSON.parse(rawJSON, reviver);
@@ -40,7 +43,56 @@ export function safeJSONParse(rawJSON: string, reviver?: (key: string, value: an
     if (e instanceof SyntaxError) {
       // Why not just throw the error? NextJS will give an error about a non plain-object crossing
       // the server/client boundary.
-      return { error: "JSON parse error" };
+      return { error: "JSON parse syntaxt error" };
     }
+    return { error: "JSON parse error" }; // This should never happen but just encase
+  }
+}
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+export function safeJSONStringify(
+  value: any,
+  replacer?: ((this: any, key: string, value: any) => any) | undefined,
+  space?: string | number | undefined
+): string | { error: string } {
+  try {
+    // Note: JSON.stringify will ignore a replacer if it's not a function and space if it's not a
+    // string or number.
+    return JSON.stringify(value, replacer, space);
+  } catch (e) {
+    // Note: TypeError is the only error thrown by JSON.stringify()
+    if (e instanceof TypeError) {
+      return { error: "JSON stringify type error" };
+    }
+    return { error: "JSON stringify error" }; // This should never happen but just encase
+  }
+}
+
+function legacyDeepCopy<T>(obj: T): T | { error: string } {
+  const stringified = safeJSONStringify(obj);
+  // @ts-expect-error - todo
+  if (stringified?.error) {
+    return { error: "deepCopy failed with JSON stringify error" };
+  }
+  // @ts-expect-error - todo
+  const parsed = safeJSONParse(stringified);
+  if (parsed?.error) {
+    return { error: "deepCopy failed with JSON parse error" };
+  }
+  return parsed;
+}
+
+// Note: Deep copy is limited by JSON.stringify that can only convert serializable objects. So any
+// functions/* will be lost in the process.
+export function deepCopy<T>(obj: T): T | { error: string } {
+  // Prefer the the built in Browser/Node API over the slower legacy way
+  if (typeof structuredClone !== "function") {
+    return legacyDeepCopy(obj);
+  }
+
+  try {
+    return structuredClone(obj);
+  } catch (e) {
+    return { error: "deepCopy failed with structured clone error" };
   }
 }
