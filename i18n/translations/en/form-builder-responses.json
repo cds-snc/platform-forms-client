@@ -38,15 +38,15 @@
     }
   },
   "errors": {
-    "errorCode": "Error code:",
+    "errorCode": "Contact Support with this error code:",
     "retrieval": {
-      "title": "There was an error retrieving responses",
-      "message": "Something went wrong while trying to retrieve responses.",
+      "title": "Something went wrong",
+      "message": "There was an error while trying to retrieve responses.",
       "tryAgain": "Try again"
     },
     "generic": {
-      "title": "There has been an error",
-      "message": "Something went wrong fulfilling your request.",
+      "title": "Something went wrong",
+      "message": "There was an error loading the page or fulfilling the request.",
       "tryAgain": "Try again"
     }
   },
