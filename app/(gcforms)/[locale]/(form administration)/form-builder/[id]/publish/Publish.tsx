@@ -9,11 +9,14 @@ import Link from "next/link";
 import { isVaultDelivery } from "@lib/utils/form-builder";
 import { classificationOptions } from "@formBuilder/components/ClassificationSelect";
 import { logMessage } from "@lib/logger";
-import { DownloadFileButton } from "@formBuilder/components/shared";
+import { DownloadFileButton, toast } from "@formBuilder/components/shared";
 import Skeleton from "react-loading-skeleton";
 import LinkButton from "@serverComponents/globals/Buttons/LinkButton";
 import { updateTemplate, updateTemplatePublishedStatus } from "@formBuilder/actions";
 import { useAllowPublish } from "@lib/hooks/form-builder/useAllowPublish";
+import { safeJSONParse } from "@lib/utils";
+import { ErrorSaving } from "@formBuilder/components/shared/ErrorSaving";
+import { FormServerErrorCodes } from "@lib/types/form-builder-types";
 
 export const Publish = ({ id }: { id: string }) => {
   const { t, i18n } = useTranslation("form-builder");
@@ -100,12 +103,19 @@ export const Publish = ({ id }: { id: string }) => {
   const handleSaveAndRequest = useCallback(async () => {
     setError(false);
     setErrorCode(null);
+
+    const formConfig = safeJSONParse(getSchema());
+    if (formConfig.error) {
+      toast.error(<ErrorSaving errorCode={FormServerErrorCodes.JSON_PARSE} />, "wide");
+      return;
+    }
+
     try {
       // @TODO: do we need this save?
       updateTemplate({
         id,
         name: getName(),
-        formConfig: JSON.parse(getSchema()),
+        formConfig,
       });
 
       router.push(`/${i18n.language}/unlock-publishing`);

@@ -2,7 +2,7 @@
 import { useEffect, useState, useRef } from "react";
 import { useTranslation } from "@i18n/client";
 import { useSession } from "next-auth/react";
-import { cn } from "@lib/utils";
+import { cn, safeJSONParse } from "@lib/utils";
 import { toast } from "@formBuilder/components/shared/Toast";
 import { Button } from "@clientComponents/globals";
 import LinkButton from "@serverComponents/globals/Buttons/LinkButton";
@@ -12,6 +12,7 @@ import { formatDateTime } from "@lib/utils/form-builder";
 import { SavedFailIcon, SavedCheckIcon } from "@serverComponents/icons";
 import { usePathname } from "next/navigation";
 import { ErrorSaving } from "./ErrorSaving";
+import { FormServerErrorCodes } from "@lib/types/form-builder-types";
 
 const SaveDraft = ({
   updatedAt,
@@ -72,7 +73,7 @@ export const ErrorSavingForm = () => {
       </span>
       <LinkButton
         href={supportHref}
-        className="mr-2 !text-red-700 underline hover:no-underline focus:bg-transparent active:bg-transparent"
+        className="mr-2 !text-red-700 underline hover:no-underline focus:bg-transparent focus:!text-red-700 active:bg-transparent active:!text-red-700"
       >
         {t("errorSavingForm.failedLink", { ns: "form-builder" })}
       </LinkButton>
@@ -118,8 +119,11 @@ export const SaveButton = () => {
     if (timeRef.current && new Date().getTime() - timeRef.current < 2000) {
       return;
     }
-
-    const formConfig = getSchema();
+    const formConfig = safeJSONParse(getSchema());
+    if (formConfig.error) {
+      toast.error(<ErrorSaving errorCode={FormServerErrorCodes.JSON_PARSE} />, "wide");
+      return;
+    }
 
     try {
       if (!createOrUpdateTemplate) {
@@ -128,7 +132,7 @@ export const SaveButton = () => {
 
       const { formRecord: template, error } = await createOrUpdateTemplate({
         id: getId(),
-        formConfig: JSON.parse(formConfig),
+        formConfig,
         name: getName(),
         deliveryOption: getDeliveryOption(),
         securityAttribute: securityAttribute,

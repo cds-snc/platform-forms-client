@@ -16,6 +16,7 @@ import { updateTemplate, updateTemplateSecurityAttribute } from "@formBuilder/ac
 import { toast } from "@formBuilder/components/shared/Toast";
 import { ErrorSaving } from "@formBuilder/components/shared/ErrorSaving";
 import { FormServerErrorCodes } from "@lib/types/form-builder-types";
+import { safeJSONParse } from "@lib/utils";
 
 enum DeliveryOption {
   vault = "vault",
@@ -96,10 +97,16 @@ export const SettingsPanel = () => {
 
   const updateBrand = useCallback(
     async (type: string) => {
+      const formConfig = safeJSONParse(getSchema());
+      if (formConfig.error) {
+        toast.error(<ErrorSaving errorCode={FormServerErrorCodes.JSON_PARSE} />, "wide");
+        return;
+      }
+
       if (type === "") {
         const result = await updateTemplate({
           id,
-          formConfig: JSON.parse(getSchema()),
+          formConfig,
         });
 
         if (!result.error) {
@@ -111,7 +118,7 @@ export const SettingsPanel = () => {
       if (type !== brandName) {
         const result = await updateTemplate({
           id,
-          formConfig: JSON.parse(getSchema()),
+          formConfig,
         });
 
         if (!result.error) {

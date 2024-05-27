@@ -127,6 +127,7 @@ export const FormServerErrorCodes = {
   DOWNLOAD_LIMIT_EXCEEDED: "RS07",
   DOWNLOAD_RETRIEVE_SUBMISSIONS: "RS08",
   NO_RESPONSES_FOUND: "RS09",
+  JSON_PARSE: "560",
 } as const;
 
 type ObjectValues<T> = T[keyof T];

@@ -542,7 +542,7 @@
     "emailOption": "Receive responses by email",
     "saveButton": "Save changes",
     "savedSuccessMessage": "Your changes have been saved.",
-    "savedErrorMessage": "There was an error saving your changes. Try again later or contact Support.",
+    "savedErrorMessage": "There was an error saving your changes. Try again later or",
     "emailSubjectEn": {
       "title": "English response subject line",
       "hint": "When form responses are submitted in English."
@@ -833,5 +833,9 @@
         "text1": "This section doesn’t have any form elements in it."
       }
     }
+  },
+  "confirmation": {
+    "title": "Your form has been submitted",
+    "sectionTitle": "Section title"
   }
 }
