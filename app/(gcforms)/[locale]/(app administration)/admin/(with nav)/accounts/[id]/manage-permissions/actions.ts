@@ -11,10 +11,15 @@ export const updatePrivileges = async (
 ) => {
   const { ability } = await authCheck();
   if (ability.can("update", "User")) {
-    await updatePrivilegesForUser(ability, userID, [{ id: privilegeID, action }]);
-    revalidatePath(
-      "(gcforms)/[locale]/(app administration)/admin/(with nav)/accounts/[id]/manage-permissions",
-      "page"
-    );
+    try {
+      const result = await updatePrivilegesForUser(ability, userID, [{ id: privilegeID, action }]);
+      revalidatePath(
+        "(gcforms)/[locale]/(app administration)/admin/(with nav)/accounts/[id]/manage-permissions",
+        "page"
+      );
+      return { data: result };
+    } catch (e) {
+      return { error: "Failed to update permissions." };
+    }
   }
 };
