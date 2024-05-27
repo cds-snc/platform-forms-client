@@ -68,26 +68,13 @@ export function safeJSONStringify(
   }
 }
 
-function legacyDeepCopy<T>(obj: T): T | { error: string } {
-  const stringified = safeJSONStringify(obj);
-  // @ts-expect-error - todo
-  if (stringified?.error) {
-    return { error: "deepCopy failed with JSON stringify error" };
-  }
-  // @ts-expect-error - todo
-  const parsed = safeJSONParse(stringified);
-  if (parsed?.error) {
-    return { error: "deepCopy failed with JSON parse error" };
-  }
-  return parsed;
-}
-
-// Note: Deep copy is limited by JSON.stringify that can only convert serializable objects. So any
-// functions/* will be lost in the process.
+// Note: structuredClone is supported in modern browsers and Node.js v17.0.0 and above. So we're
+// good to use it. If not a polyfill could be writtin with safeJSONStringify and safeJSONParse.
+// Note: deepCopy can only convert serializable objects. So any functions/* will be lost in the
+// process. Also, unlike JSON.stringify it can handle bigInts.
 export function deepCopy<T>(obj: T): T | { error: string } {
-  // Prefer the the built in Browser/Node API over the slower legacy way
   if (typeof structuredClone !== "function") {
-    return legacyDeepCopy(obj);
+    return { error: "deepCopy requires a modern browser and Node version with structuredClone" };
   }
 
   try {
