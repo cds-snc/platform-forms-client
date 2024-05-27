@@ -68,15 +68,26 @@ export function safeJSONStringify(
   }
 }
 
-// Note: structuredClone is supported in modern browsers and Node.js v17.0.0 and above. So we're
-// good to use it. If not a polyfill could be writtin with safeJSONStringify and safeJSONParse.
-// Note: deepCopy can only convert serializable objects. So any functions/* will be lost in the
-// process. Also, unlike JSON.stringify it can handle bigInts.
+// Note: The JSON copy way works but is not very performant. If we find many of our users are using
+// pre 2022 browsers, there are libs that do  recursive deep copies that may be more performant.
+// More testing is needed to see if this is a real issue and if it really is more performant.
+function legacyDeepCopy<T>(obj: T): T | { error: string } {
+  try {
+    return JSON.parse(JSON.stringify(obj));
+  } catch (e) {
+    return { error: "legacyDeepCopy failed with JSON stringify error" };
+  }
+}
+
 export function deepCopy<T>(obj: T): T | { error: string } {
+  // Note: structuredClone is supported in modern browsers (around 2022) and Node.js v17.0.0 and
+  // above. So a check with a fallback is still a good idea.
   if (typeof structuredClone !== "function") {
-    return { error: "deepCopy requires a modern browser and Node version with structuredClone" };
+    return legacyDeepCopy(obj);
   }
 
+  // Note: deepCopy can only convert serializable objects. So any functions/* will be lost in the
+  // process. Also, unlike JSON.stringify it can handle bigInts.
   try {
     return structuredClone(obj);
   } catch (e) {
