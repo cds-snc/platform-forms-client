@@ -8,13 +8,11 @@ import CredentialsProvider from "next-auth/providers/credentials";
 import NextAuth, { Session } from "next-auth";
 import { JWT } from "next-auth/jwt";
 
-const localPathRegEx = new RegExp("^(?!((?:[a-z+]+:)?//))", "i");
-
 const verboseDebug = false;
 
 const debugLogger = async (message: string) => {
   if (verboseDebug) {
-    logMessage.debug(message);
+    logMessage.info(message);
   }
 };
 
@@ -318,10 +316,7 @@ const authFlowRedirect = (
       // If they haven't agreed to Acceptable Use redirect to policy page for acceptance
       // Also check that the path is local and not an external URL
 
-      const acceptableUsePage = new URL(
-        `/${lang}/auth/policy?referer=/${lang}${localPathRegEx.test(path) ? path : "/forms"}`,
-        origin
-      );
+      const acceptableUsePage = new URL(`/${lang}/auth/policy`, origin);
       return NextResponse.redirect(acceptableUsePage);
     }
   }
