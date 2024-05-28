@@ -68,20 +68,21 @@ export function safeJSONStringify(
   }
 }
 
-// Note: The JSON copy way works but is not very performant. If we find many of our users are using
-// pre 2022 browsers, there are libs that do  recursive deep copies that may be more performant.
-// More testing is needed to see if this is a real issue and if it really is more performant.
+// Note: Using JSON to deep coopy works but may not be very performant. If we find many of our users
+// are using pre 2022 browsers, there are libs that should do more performant recursive deep copies.
+// More testing is needed to see what browser versions our users are using and if recursively
+// copying an object is really more performant than a JSON copy with our typical data.
 function legacyDeepCopy<T>(obj: T): T | { error: string } {
   try {
     return JSON.parse(JSON.stringify(obj));
   } catch (e) {
-    return { error: "legacyDeepCopy failed with JSON stringify error" };
+    return { error: "legacyDeepCopy failed with JSON error" };
   }
 }
 
 export function deepCopy<T>(obj: T): T | { error: string } {
   // Note: structuredClone is supported in modern browsers (around 2022) and Node.js v17.0.0 and
-  // above. So a check with a fallback is still a good idea.
+  // above. So a check with a fallback to a legacy deep copy is still a good idea.
   if (typeof structuredClone !== "function") {
     return legacyDeepCopy(obj);
   }
