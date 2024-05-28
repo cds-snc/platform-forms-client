@@ -832,7 +832,8 @@
         "title": "Empty section [fr]",
         "text1": "This section doesn’t have any form elements in it. [fr]"
       }
-    }
+    },
+    "sectionTitle": "Titre de la section"
   },
   "confirmation": {
     "title": "Votre formulaire a été soumis",
