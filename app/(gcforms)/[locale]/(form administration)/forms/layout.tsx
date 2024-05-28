@@ -2,7 +2,6 @@ import React from "react";
 import { ToastContainer } from "@formBuilder/components/shared/Toast";
 import { Header } from "@clientComponents/globals/Header/Header";
 import { authCheckAndRedirect } from "@lib/actions";
-import { redirect } from "next/navigation";
 import { SaveTemplateProvider } from "@lib/hooks/form-builder/useTemplateContext";
 import { TemplateStoreProvider } from "@lib/store/useTemplateStore";
 import { SkipLink } from "@serverComponents/globals/SkipLink";
@@ -15,9 +14,7 @@ export default async function Layout({
   children: React.ReactNode;
   params: { locale: string };
 }) {
-  await authCheckAndRedirect().catch(() => {
-    redirect(`/${locale}/auth/login`);
-  });
+  await authCheckAndRedirect();
 
   return (
     <TemplateStoreProvider {...{ locale }}>
