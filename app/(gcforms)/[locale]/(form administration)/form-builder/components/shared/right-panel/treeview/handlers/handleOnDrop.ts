@@ -204,6 +204,8 @@ export const handleOnDrop = async (
       newGroups[String(originParent?.index)] = {
         name: String(originParent?.data.titleEn),
         elements: originGroupElements,
+        titleEn: originParent?.data.titleEn,
+        titleFr: originParent?.data.titleFr,
       };
 
       // Replace the original groups object
@@ -237,6 +239,8 @@ export const handleOnDrop = async (
     newGroups[String(originParent?.index)] = {
       name: String(originParent?.data.titleEn),
       elements: originGroupElements,
+      titleEn: originParent?.data.titleEn,
+      titleFr: originParent?.data.titleFr,
     };
 
     // Replace the original groups object
@@ -253,6 +257,8 @@ export const handleOnDrop = async (
     newGroups[targetParent] = {
       name: targetParentGroup.name,
       elements: targetGroupElements,
+      titleEn: targetParentGroup.titleEn,
+      titleFr: targetParentGroup.titleFr,
     };
 
     selectedItems.push(String(item.index));
