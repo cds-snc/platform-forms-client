@@ -32,7 +32,7 @@ export interface TreeDataProviderProps {
   addItem: (id: string) => void;
   // addGroup: (id: string) => void;
   updateItem: (id: string, value: string) => void;
-  // removeItem: (id: string) => void;
+  removeItem: (id: string) => void;
   // openSection?: (id: string) => void;
 }
 
@@ -88,6 +88,11 @@ const ControlledTree: ForwardRefRenderFunction<unknown, TreeDataProviderProps> =
       const parent = findParentGroup(getTreeData(), id);
       setExpandedItems([parent?.index as TreeItemIndex]);
       setSelectedItems([id]);
+    },
+    removeItem: (id: string) => {
+      const parent = findParentGroup(getTreeData(), id);
+      setExpandedItems([parent?.index as TreeItemIndex]);
+      setSelectedItems([parent?.index as TreeItemIndex]);
     },
   }));
 
