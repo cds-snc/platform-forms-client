@@ -61,7 +61,7 @@ export const GroupAndChoiceSelect = ({
   });
 
   // Filter out the current group
-  groupItems = groupItems.filter((item) => item.value !== currentGroup);
+  groupItems = groupItems.filter((item) => item.value !== currentGroup && item.value !== "end");
 
   const choices = useMemo(() => {
     return choiceElement?.properties.choices?.map((choice, index) => {

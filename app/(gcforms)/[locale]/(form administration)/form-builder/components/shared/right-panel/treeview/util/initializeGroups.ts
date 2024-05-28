@@ -20,6 +20,8 @@ export const initializeGroups = (form: FormProperties, allowGroups: boolean): Fo
     const groups = {
       start: {
         name: "Start",
+        titleEn: "",
+        titleFr: "",
         elements: [...elementIds],
         nextAction: LockedSections.REVIEW,
       },
@@ -30,12 +32,16 @@ export const initializeGroups = (form: FormProperties, allowGroups: boolean): Fo
 
   form.groups.review = {
     name: "Review",
+    titleEn: "",
+    titleFr: "",
     elements: [],
     nextAction: "end",
   };
 
   form.groups.end = {
     name: "End",
+    titleEn: "",
+    titleFr: "",
     elements: [],
   };
 

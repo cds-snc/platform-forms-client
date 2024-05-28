@@ -19,6 +19,7 @@ export const GroupSelect = ({
 }) => {
   const labelId = `section-select-${Date.now()}`;
   const { t } = useTranslation("form-builder");
+
   return (
     <div className="mb-4">
       <label className="mb-2 block text-sm" id={labelId}>

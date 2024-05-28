@@ -4,6 +4,7 @@ import { Group, GroupsType } from "@lib/formContext";
 import { TreeItems } from "../types";
 import { TemplateStore } from "@lib/store/useTemplateStore";
 import { TreeDataOptions } from "../util/groupsToTreeData";
+import { Language } from "@lib/types/form-builder-types";
 
 export interface GroupStoreProps {
   id: string;
@@ -33,4 +34,5 @@ export interface GroupStoreState extends GroupStoreProps {
   getGroupNextAction: (groupId: string) => Group["nextAction"];
   setGroupNextAction: (groupId: string, nextAction: Group["nextAction"]) => void;
   autoSetNextActions: () => void;
+  updateGroupTitle: ({ id, locale, title }: { id: string, locale: Language; title: string }) => void;
 }

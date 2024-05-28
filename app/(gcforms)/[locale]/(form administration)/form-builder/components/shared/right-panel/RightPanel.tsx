@@ -181,7 +181,12 @@ export const RightPanel = ({ id }: { id: string }) => {
                       <Tab.Panel>
                         {/* Tree */}
                         <div className="m-0 mt-1 w-full p-4">
-                          <TreeView ref={treeView} addItem={() => {}} updateItem={() => {}} />
+                          <TreeView
+                            ref={treeView}
+                            addItem={() => {}}
+                            updateItem={() => {}}
+                            removeItem={() => {}}
+                          />
                         </div>
                         {/* end tree */}
                       </Tab.Panel>

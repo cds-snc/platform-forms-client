@@ -220,10 +220,14 @@
   "groups": {
     "start": {
       "name": "Start",
+      "titleEn": "",
+      "titleFr": "",
       "elements": ["1", "2", "3", "5", "6", "8"]
     },
     "9d1b6bcd-bbfd-4b2d-9b5d-ab8dfbbd4bed": {
       "name": "Group 1",
+      "titleEn": "",
+      "titleFr": "",
       "elements": ["4"]
     }
   }

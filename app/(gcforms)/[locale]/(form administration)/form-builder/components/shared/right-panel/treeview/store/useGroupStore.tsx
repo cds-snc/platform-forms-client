@@ -5,7 +5,7 @@ import { immer } from "zustand/middleware/immer";
 import { shallow } from "zustand/shallow";
 import React, { createContext, useRef, useContext } from "react";
 import { TemplateStoreContext } from "@lib/store/useTemplateStore";
-import { LocalizedElementProperties } from "@lib/types/form-builder-types";
+import { Language, LocalizedElementProperties } from "@lib/types/form-builder-types";
 import { groupsToTreeData, TreeDataOptions } from "../util/groupsToTreeData";
 import { findParentGroup } from "../util/findParentGroup";
 import { GroupStoreProps, GroupStoreState } from "./types";
@@ -17,6 +17,7 @@ import { Group, GroupsType } from "@lib/formContext";
 import { TreeItemIndex } from "react-complex-tree";
 import { autoFlowAllNextActions } from "../util/setNextAction";
 import { setGroupNextAction } from "../util/setNextAction";
+import { localizeField } from "@lib/utils/form-builder/itemHelper";
 
 const createGroupStore = (initProps?: Partial<GroupStoreProps>) => {
   const DEFAULT_PROPS: GroupStoreProps = {
@@ -78,6 +79,30 @@ const createGroupStore = (initProps?: Partial<GroupStoreProps>) => {
           setChangeKey(String(new Date().getTime()));
         }
       },
+      updateGroupTitle: ({
+        id,
+        locale,
+        title,
+      }: {
+        id: string;
+        locale: Language;
+        title: string;
+      }) => {
+        const formGroups = get().templateStore.getState().form.groups;
+        const setChangeKey = get().templateStore.getState().setChangeKey;
+        const fieldName = localizeField("title", locale);
+        if (formGroups && formGroups[id]) {
+          get().templateStore.setState((s) => {
+            if (s.form.groups) {
+              s.form.groups[id] = {
+                ...formGroups[id],
+                [fieldName]: title,
+              };
+            }
+          });
+          setChangeKey(String(new Date().getTime()));
+        }
+      },
       getGroups: () => get().templateStore.getState().form.groups,
       getTreeData: (options: TreeDataOptions = {}) => {
         const formGroups = get().templateStore.getState().form.groups;
@@ -87,7 +112,7 @@ const createGroupStore = (initProps?: Partial<GroupStoreProps>) => {
       },
       getElementsGroupById: (id: string) => {
         const formGroups = get().templateStore.getState().form.groups;
-        if (!formGroups) return { id, elements: [], name: "" };
+        if (!formGroups) return { id, elements: [], name: "", titleEn: "", titleFr: "" };
         return formGroups[id];
       },
       addGroup: (id: string, name: string) => {
@@ -101,7 +126,7 @@ const createGroupStore = (initProps?: Partial<GroupStoreProps>) => {
           for (let i = 0; i < keys.length; i++) {
             const key = keys[i];
             if (key === "review") {
-              newObject[id] = { name, elements: [] };
+              newObject[id] = { name, elements: [], titleEn: "", titleFr: "" };
               newObject[key] = s.form.groups[key];
             }
             newObject[key] = s.form.groups[key];
@@ -131,6 +156,8 @@ const createGroupStore = (initProps?: Partial<GroupStoreProps>) => {
             if (s.form.groups) {
               s.form.groups[parent] = {
                 name: formGroups[parent].name,
+                titleEn: formGroups[parent].titleEn,
+                titleFr: formGroups[parent].titleFr,
                 elements: children as string[],
               };
             }
