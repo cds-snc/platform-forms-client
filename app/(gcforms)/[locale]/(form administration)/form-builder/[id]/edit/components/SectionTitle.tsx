@@ -1,5 +1,4 @@
 import React, { useRef } from "react";
-import { useTreeRef } from "@formBuilder/components/shared/right-panel/treeview/provider/TreeRefProvider";
 import { useGroupStore } from "@formBuilder/components/shared/right-panel/treeview/store/useGroupStore";
 import { ExpandingInput } from "@formBuilder/components/shared";
 import { useTemplateStore } from "@lib/store/useTemplateStore";
@@ -13,7 +12,6 @@ export const SectionTitle = ({ groupTitle, groupId }: { groupTitle: string; grou
   const language = getLocalizationAttribute()?.lang as Language;
 
   const groupNameRef = useRef(null);
-  const { treeView } = useTreeRef();
   const updateGroupTitle = useGroupStore((state) => state.updateGroupTitle);
 
   const handleOnBlur = (e: React.FocusEvent) => {
@@ -25,8 +23,7 @@ export const SectionTitle = ({ groupTitle, groupId }: { groupTitle: string; grou
   };
 
   const saveGroupTitle = (groupTitle: string) => {
-    updateGroupTitle({ locale: language || "en", title: groupTitle });
-    treeView?.current?.updateItem(groupId, groupTitle);
+    updateGroupTitle({ id: groupId, locale: language || "en", title: groupTitle });
   };
 
   const lockedInput = Object.values(LockedSections).includes(groupId as LockedSections);

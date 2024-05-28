@@ -53,11 +53,11 @@ export const Section = ({ groupId }: { groupId: string }) => {
   }));
 
   const localizedTitle = localizeField(
-      LocalizedElementProperties.TITLE,
-      translationLanguagePriority
-    );
+    LocalizedElementProperties.TITLE,
+    translationLanguagePriority
+  );
 
-  const groupTitle = groups?.[groupId][localizedTitle] || "";
+  const groupTitle = groups?.[groupId]?.[localizedTitle] || "";
 
   if (groupId === "start" || groupId === "end" || groupId === "review") {
     return null;
