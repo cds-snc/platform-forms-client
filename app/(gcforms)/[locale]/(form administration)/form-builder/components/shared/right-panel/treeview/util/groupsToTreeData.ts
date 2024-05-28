@@ -41,8 +41,9 @@ export const groupsToTreeData = (
       canRename: true,
       canMove: true,
       data: {
-        titleEn: formGroups[key].name,
-        titleFr: formGroups[key].name,
+        name: formGroups[key].name,
+        titleEn: formGroups[key].titleEn,
+        titleFr: formGroups[key].titleFr,
         descriptionEn: "",
         descriptionFr: "",
       },
