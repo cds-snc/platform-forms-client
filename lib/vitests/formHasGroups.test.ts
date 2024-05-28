@@ -29,13 +29,13 @@ describe("formHasGroups function", () => {
 
   it("Handles groups with no elements", () => {
     const form = validFormTemplate as FormProperties;
-    form.groups = { group1: { name: "group1", nextAction: "group2", elements: [] } };
+    form.groups = { group1: { name: "group1", titleEn:"", titleFr:"", nextAction: "group2", elements: [] } };
     expect(formHasGroups(form)).toBe(true);
   });
 
   it("Handles groups with elements", () => {
     const form = validFormTemplate as FormProperties;
-    form.groups = { group1: { name: "group1", nextAction: "group2", elements: ["5", "8", "10"] } };
+    form.groups = { group1: { name: "group1", titleEn:"", titleFr:"", nextAction: "group2", elements: ["5", "8", "10"] } };
     expect(formHasGroups(form)).toBe(true);
   });
 });
