@@ -9,5 +9,11 @@ export const logMessage = pino({
   formatters: {
     level: (label) => ({ level: label }),
   },
+  ...(process.env.NODE_ENV === "development" && {
+    transport: {
+      target: "pino-pretty",
+    },
+  }),
+
   base: null,
 });

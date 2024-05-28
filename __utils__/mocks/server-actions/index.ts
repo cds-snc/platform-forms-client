@@ -17,3 +17,9 @@ jest.mock("@formBuilder/actions", () => ({
   __esModule: true,
   checkFlag: jest.fn(),
 }));
+
+jest.mock("@lib/actions/auth", () => ({
+  __esModule: true,
+  authCheckAndThrow: jest.fn(),
+  authCheckAndRedirect: jest.fn(),
+}));

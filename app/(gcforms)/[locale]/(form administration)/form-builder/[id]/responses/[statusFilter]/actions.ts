@@ -2,7 +2,7 @@
 import { Language, FormServerErrorCodes, ServerActionError } from "@lib/types/form-builder-types";
 import { getAppSetting } from "@lib/appSettings";
 import { logEvent } from "@lib/auditLogs";
-import { auth } from "@lib/auth";
+
 import { ucfirst } from "@lib/client/clientHelpers";
 import { AccessControlError, createAbility } from "@lib/privileges";
 import {
@@ -26,18 +26,20 @@ import { transform as zipTransform } from "@lib/responseDownloadFormats/html-zip
 import { transform as jsonTransform } from "@lib/responseDownloadFormats/json";
 import { logMessage } from "@lib/logger";
 import { revalidatePath } from "next/cache";
+import { authCheckAndThrow } from "@lib/actions";
 import { FormBuilderError } from "./exceptions";
 
 // Can throw because it is not called by Client Components
 // @todo Should these types of functions be moved to a different file?
 export const fetchTemplate = async (id: string) => {
-  const session = await auth();
-
+  const { session, ability } = await authCheckAndThrow().catch(() => ({
+    session: null,
+    ability: null,
+  }));
   if (!session) {
     throw new Error("User is not authenticated");
   }
 
-  const ability = createAbility(session);
   const template = await getFullTemplateByID(ability, id);
 
   return template;
@@ -54,13 +56,14 @@ export const fetchSubmissions = async ({
   status: string;
   lastKey?: string;
 }) => {
-  const session = await auth();
+  const { session, ability } = await authCheckAndThrow().catch(() => ({
+    session: null,
+    ability: null,
+  }));
 
   if (!session) {
     throw new Error("User is not authenticated");
   }
-
-  const ability = createAbility(session);
 
   // get status from url params (default = new) and capitalize/cast to VaultStatus
   // Protect against invalid status query
@@ -130,7 +133,10 @@ export const getSubmissionsByFormat = async ({
   | ServerActionError
 > => {
   try {
-    const session = await auth();
+    const { session, ability } = await authCheckAndThrow().catch(() => ({
+      session: null,
+      ability: null,
+    }));
 
     if (!session) {
       throw new AccessControlError("User is not authenticated");
@@ -146,7 +152,6 @@ export const getSubmissionsByFormat = async ({
       );
     }
 
-    const ability = createAbility(session);
     const fullFormTemplate = await getFullTemplateByID(ability, formID);
 
     if (fullFormTemplate === null) {
