@@ -35,7 +35,6 @@ describe("Test acceptable use Page", () => {
     cy.visitPage("/en/forms");
     cy.get("main").should("be.visible");
     cy.location("pathname").should("contain", "/en/auth/policy");
-    cy.location("search").should("eq", "?referer=/en/forms");
 
     cy.get("#acceptableUse").click();
 

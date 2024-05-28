@@ -27,21 +27,6 @@ if (window.location.host === "forms-formulaires.alpha.canada.ca") {
 export const generateCSP = (): { csp: string; nonce: string } => {
   const nonce = Buffer.from(crypto.randomUUID()).toString("base64");
 
-  // Keeping old CSP for reference
-  // let csp = ``;
-  // csp += `object-src 'none';`;
-  // csp += `base-uri 'self';`;
-  // csp += `form-action 'self';`;
-  // csp += `default-src 'self';`;
-  // csp += `script-src 'self' 'strict-dynamic' 'nonce-${nonce}' ${
-  //   process.env.NODE_ENV === "production" ? "" : "'unsafe-eval'"
-  // } 'unsafe-inline' https:;`;
-  // csp += `style-src 'self' 'unsafe-inline' data:;`;
-  // csp += `img-src 'self';`;
-  // csp += `font-src 'self';`;
-  // csp += `frame-src www.googletagmanager.com www.google.com/recaptcha/ recaptcha.google.com/recaptcha/;`;
-  // csp += `connect-src 'self' www.googletagmanager.com www.google-analytics.com`;
-
   const cspHeader = `
     default-src 'self';
     script-src 'self' 'nonce-${nonce}' 'strict-dynamic';
@@ -52,6 +37,7 @@ export const generateCSP = (): { csp: string; nonce: string } => {
     base-uri 'self';
     form-action 'self';
     frame-src www.googletagmanager.com;
+    frame-ancestors 'none';
     connect-src 'self' www.googletagmanager.com www.google-analytics.com;
     block-all-mixed-content;
     upgrade-insecure-requests;

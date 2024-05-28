@@ -91,7 +91,7 @@ const nextConfig = {
     instrumentationHook: true,
     // PPR is only supported in Next.js Canary branches
     // ppr: true,
-    serverComponentsExternalPackages: ["@aws-sdk/lib-dynamodb"],
+    serverComponentsExternalPackages: ["@aws-sdk/lib-dynamodb", "pino"],
     turbo: {
       rules: {
         "*.md": ["raw-loader"],

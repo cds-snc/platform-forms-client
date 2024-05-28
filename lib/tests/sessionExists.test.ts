@@ -1,15 +1,14 @@
 /**
  * @jest-environment node
  */
+/* eslint-disable @typescript-eslint/no-explicit-any */
 
-import { auth } from "@lib/auth/nextAuth";
+import { authCheckAndThrow } from "@lib/actions";
 import { sessionExists } from "@lib/middleware";
-import { MiddlewareReturn } from "@lib/types";
-import { Session } from "next-auth";
+import { MiddlewareReturn, UserAbility } from "@lib/types";
 
-const mockedAuth = auth as unknown as jest.MockedFunction<
-  () => Promise<Omit<Session, "expires"> | null>
->;
+const mockedAuth = jest.mocked(authCheckAndThrow, { shallow: true });
+jest.mock("@lib/actions");
 
 describe("Test a session middleware", () => {
   beforeEach(() => {
@@ -17,7 +16,7 @@ describe("Test a session middleware", () => {
   });
 
   it("Shouldn't allow a request with an invalid session", async () => {
-    mockedAuth.mockResolvedValueOnce(null);
+    (mockedAuth as jest.MockedFunction<any>).mockRejectedValue(new Error("No session found"));
     const { response, next }: MiddlewareReturn = await sessionExists()();
     expect((await response?.json())?.error).toEqual("Unauthorized");
     expect(next).toBe(false);
@@ -37,7 +36,7 @@ describe("Test a session middleware", () => {
       },
     };
 
-    mockedAuth.mockResolvedValueOnce(mockSession);
+    mockedAuth.mockResolvedValueOnce({ session: mockSession, ability: {} as UserAbility });
 
     const { next, response }: MiddlewareReturn = await sessionExists()();
     expect((await response?.json())?.error).toEqual("Unauthorized");
@@ -58,7 +57,7 @@ describe("Test a session middleware", () => {
         privileges: [],
       },
     };
-    mockedAuth.mockResolvedValueOnce(mockSession);
+    mockedAuth.mockResolvedValueOnce({ session: mockSession, ability: {} as UserAbility });
     const { next, response }: MiddlewareReturn = await sessionExists()();
     expect(response).toBeUndefined();
     expect(next).toBe(true);

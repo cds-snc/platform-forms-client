@@ -1,9 +1,10 @@
 "use server";
 import * as v from "valibot";
 import { serverTranslation } from "@i18n";
-import { createSecurityAnswers, auth } from "@lib/auth";
+import { createSecurityAnswers } from "@lib/auth";
 import { createAbility } from "@lib/privileges";
 import { logMessage } from "@lib/logger";
+import { authCheckAndThrow } from "@lib/actions";
 
 export interface ErrorStates {
   validationErrors?: {
@@ -73,7 +74,7 @@ export const setupQuestions = async (
   formData: FormData
 ): Promise<ErrorStates> => {
   const { t } = await serverTranslation(["setup-security-questions"], { lang: language });
-  const session = await auth();
+  const { session } = await authCheckAndThrow().catch(() => ({ session: null }));
   if (!session) return { generalError: t("errors.serverError.title") };
 
   const ability = createAbility(session);
