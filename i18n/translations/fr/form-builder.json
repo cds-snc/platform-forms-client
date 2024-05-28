@@ -542,7 +542,7 @@
     "emailOption": "Recevoir les réponses par courriel",
     "saveButton": "Enregistrer les modifications",
     "savedSuccessMessage": "Vos modifications ont été enregistrées.",
-    "savedErrorMessage": "Une erreur s'est produite lors de l'enregistrement de vos modifications. Réessayez plus tard ou contacter l’équipe de soutien.",
+    "savedErrorMessage": "Une erreur s'est produite lors de l'enregistrement de vos modifications. Réessayez plus tard ou",
     "emailSubjectEn": {
       "title": "Ligne d'objet en anglais",
       "hint": "Lorsque les réponses au formulaire sont soumises en anglais."
@@ -614,7 +614,7 @@
     "toPreview": "Pour prévisualiser ce formulaire :",
     "unauthenticated": {
       "copyInstructions": "Copier les instructions",
-      "description": "Vous ne pouvez pas partager un formulaire directement de Formulaires GC sans compte. <a href=\"/auth/login\">Connectez-vous</a> ou <a href=\"/auth/register\">créez un compte</a> pour accéder à cette fonctionalité et d'autres.",
+      "description": "Vous ne pouvez pas partager un formulaire directement de Formulaires GC sans compte. <a href=\"/fr/auth/login\">Connectez-vous</a> ou <a href=\"/fr/auth/register\">créez un compte</a> pour accéder à cette fonctionalité et d'autres.",
       "downloadFormFile": "Télécharger le fichier du formulaire",
       "instructions": "Vous pouvez télécharger une copie de ce fichier de formulaire sur votre ordinateur et le partager par courriel.",
       "step1": "Étape 1",
@@ -632,7 +632,7 @@
   },
   "shortAnswer": "Réponse courte",
   "shortAnswerText": "Réponse courte",
-  "signInToTest": "<a href=\"\">Connectez-vous</a> pour tester comment vous pouvez soumettre et visualiser les réponses.",
+  "signInToTest": "<a href=\"/fr/auth/login\">Connectez-vous</a> pour tester comment vous pouvez soumettre et visualiser les réponses.",
   "singleChoice": "Boutons radio",
   "start": "Commencer",
   "startErrorParse": "L’ouverture du fichier de formulaire a échoué",
@@ -833,5 +833,9 @@
         "text1": "This section doesn’t have any form elements in it. [fr]"
       }
     }
+  },
+  "confirmation": {
+    "title": "Votre formulaire a été soumis",
+    "sectionTitle": "Titre de la section"
   }
 }

@@ -50,6 +50,8 @@ export type HtmlResponse = {
   html: string;
 }[];
 
+export type HtmlAggregatedResponse = string;
+
 export type HtmlZippedResponse = {
   receipt: string;
   responses: {

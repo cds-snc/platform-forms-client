@@ -19,15 +19,22 @@ export const updateSecurityQuestion = async (
   answer: string | undefined
 ) => {
   const session = await auth();
-  if (!session) throw new Error("User not authenticated");
+  if (!session) return { error: "User not authenticated" };
   const ability = createAbility(session);
 
   const data = validateData({ oldQuestionId, newQuestionId, newAnswer: answer });
 
   if (!data.success) {
-    throw new Error("Data not Valid");
+    return {
+      error: "Data did not pass validation",
+    };
   }
 
-  await updateSecurityAnswer(ability, data.output);
+  const response = await updateSecurityAnswer(ability, data.output).catch(() => {
+    return {
+      error: "Failed to update security question",
+    };
+  });
   revalidatePath("(gcforms)/[locale]/(user authentication)/profile");
+  return response;
 };

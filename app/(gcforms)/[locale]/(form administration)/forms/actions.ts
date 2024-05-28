@@ -11,40 +11,49 @@ import { listAllSubmissions } from "@lib/vault";
 import { detectOldUnprocessedSubmissions } from "@lib/nagware";
 import { cache } from "react";
 import { getAppSetting } from "@lib/appSettings";
+import { FormRecord, NagwareResult } from "@lib/types";
 
 // Note: copied from manage-forms actions
-export const authCheck = cache(async () => {
+const authCheck = cache(async () => {
   const session = await auth();
   if (!session) throw new Error("No session found");
   return createAbility(session);
 });
 
-export async function getForm(formId: string) {
-  const ability = await authCheck();
-  const response = await getFullTemplateByID(ability, formId).catch(() => {
-    throw new Error("Failed to Get Form");
-  });
-  if (response === null) {
-    throw new Error("Form Not Found");
+export async function getForm(
+  formId: string
+): Promise<{ formRecord: FormRecord | null; error?: string }> {
+  try {
+    const ability = await authCheck();
+    const response = await getFullTemplateByID(ability, formId).catch(() => {
+      throw new Error("Failed to Get Form");
+    });
+    if (response === null) {
+      throw new Error("Form Not Found");
+    }
+    return { formRecord: response };
+  } catch (e) {
+    return { formRecord: null, error: (e as Error).message };
   }
-  return response;
 }
 
 // Note: copied from manage-forms actions and added revalidatePath()
-export const deleteForm = async (id: string) => {
-  const ability = await authCheck();
+export const deleteForm = async (id: string): Promise<void | { error?: string }> => {
+  try {
+    const ability = await authCheck();
 
-  const result = deleteTemplate(ability, id).catch((error) => {
-    if (error instanceof TemplateHasUnprocessedSubmissions) {
-      throw new Error("Responses Exist");
-    } else {
-      throw new Error("Failed to Delete Form");
-    }
-  });
+    await deleteTemplate(ability, id).catch((error) => {
+      if (error instanceof TemplateHasUnprocessedSubmissions) {
+        throw new Error("Responses Exist");
+      } else {
+        throw new Error("Failed to Delete Form");
+      }
+    });
 
-  revalidatePath("(gcforms)/[locale]/(form administration)/forms", "page");
-
-  return result;
+    revalidatePath("(gcforms)/[locale]/(form administration)/forms", "page");
+  } catch (e) {
+    return { error: (e as Error).message };
+  }
 };
 
 const overdueSettings = cache(async () => {
@@ -55,18 +64,25 @@ const overdueSettings = cache(async () => {
 });
 
 // Note: copied from manage-forms actions
-export const getUnprocessedSubmissionsForTemplate = async (templateId: string) => {
-  const ability = await authCheck();
-  const { promptPhaseDays, warnPhaseDays, responseDownloadLimit } = await overdueSettings();
-  const allSubmissions = await listAllSubmissions(
-    ability,
-    templateId,
-    undefined,
-    Number(responseDownloadLimit)
-  );
-  return detectOldUnprocessedSubmissions(
-    allSubmissions.submissions,
-    promptPhaseDays,
-    warnPhaseDays
-  );
+export const getUnprocessedSubmissionsForTemplate = async (
+  templateId: string
+): Promise<{ result: NagwareResult | null; error?: string }> => {
+  try {
+    const ability = await authCheck();
+    const { promptPhaseDays, warnPhaseDays, responseDownloadLimit } = await overdueSettings();
+    const allSubmissions = await listAllSubmissions(
+      ability,
+      templateId,
+      undefined,
+      Number(responseDownloadLimit)
+    );
+    const result = await detectOldUnprocessedSubmissions(
+      allSubmissions.submissions,
+      promptPhaseDays,
+      warnPhaseDays
+    );
+    return { result };
+  } catch (e) {
+    return { result: null, error: (e as Error).message };
+  }
 };

@@ -6,6 +6,7 @@ import { DesignIcon, ExternalLinkIcon, WarningIcon } from "@serverComponents/ico
 import { errorMessage, validateTemplate } from "@lib/utils/form-builder/validate";
 import Link from "next/link";
 import { clearTemplateStore, useTemplateStore } from "@lib/store/useTemplateStore";
+import { safeJSONParse } from "@lib/utils";
 
 export const Start = () => {
   const {
@@ -39,16 +40,11 @@ export const Start = () => {
       fileReader.readAsText(e.target.files[0], "UTF-8");
       fileReader.onload = (e) => {
         if (!e.target || !e.target.result || typeof e.target.result !== "string") return;
-        let data;
-
-        try {
-          data = JSON.parse(e.target.result, cleaner);
-        } catch (e) {
-          if (e instanceof SyntaxError) {
-            setErrors([{ message: t("startErrorParse") }]);
-            target.value = "";
-            return;
-          }
+        const data = safeJSONParse(e.target.result, cleaner);
+        if (data?.error) {
+          setErrors([{ message: t("startErrorParse") }]);
+          target.value = "";
+          return;
         }
 
         const validationResult = validateTemplate(data);

@@ -4,6 +4,8 @@ import Link from "next/link";
 import { useTranslation } from "@i18n/client";
 import Skeleton from "react-loading-skeleton";
 import { clearTemplateStore } from "@lib/store/useTemplateStore";
+import { safeJSONParse } from "@lib/utils";
+import { FormServerErrorCodes } from "@lib/types/form-builder-types";
 
 export const ResumeEditingForm = () => {
   const [hasSession, setHasSession] = React.useState(false);
@@ -22,7 +24,11 @@ export const ResumeEditingForm = () => {
     try {
       // check if there is a valid form session
       const data = sessionStorage.getItem("form-storage");
-      const parsedData = data && JSON.parse(data);
+      const parsedData = data && safeJSONParse(data);
+      if (parsedData.error) {
+        throw new Error(FormServerErrorCodes.JSON_PARSE);
+      }
+
       const {
         state: {
           id,
@@ -49,6 +55,7 @@ export const ResumeEditingForm = () => {
 
   return hasSession ? (
     <Link
+      id={formIdRef.current}
       href={`/${i18n.language}/form-builder/${formIdRef.current}/edit`}
       className="mb-4 inline-block"
     >

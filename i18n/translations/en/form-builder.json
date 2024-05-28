@@ -542,7 +542,7 @@
     "emailOption": "Receive responses by email",
     "saveButton": "Save changes",
     "savedSuccessMessage": "Your changes have been saved.",
-    "savedErrorMessage": "There was an error saving your changes. Try again later or contact Support.",
+    "savedErrorMessage": "There was an error saving your changes. Try again later or",
     "emailSubjectEn": {
       "title": "English response subject line",
       "hint": "When form responses are submitted in English."
@@ -614,7 +614,7 @@
     "toPreview": "To preview this form:",
     "unauthenticated": {
       "copyInstructions": "Copy instructions",
-      "description": "You cannot share a form directly from GC Forms without an account. <a href=\"/auth/login\">Sign in</a> or <a href=\"/auth/register\">create an account</a> to get access to this feature and more.",
+      "description": "You cannot share a form directly from GC Forms without an account. <a href=\"/en/auth/login\">Sign in</a> or <a href=\"/en/auth/register\">create an account</a> to get access to this feature and more.",
       "downloadFormFile": "Download form file",
       "instructions": "You can download a copy of this form file to your computer and share it through your email.",
       "step1": "Step 1",
@@ -632,7 +632,7 @@
   },
   "shortAnswer": "Short answer",
   "shortAnswerText": "Short answer",
-  "signInToTest": "<a href=\"/auth/login\">Sign in</a> to test how you can submit and view responses",
+  "signInToTest": "<a href=\"/en/auth/login\">Sign in</a> to test how you can submit and view responses",
   "singleChoice": "Radio buttons",
   "start": "Start",
   "startErrorParse": "Failed to read form file",
@@ -833,5 +833,9 @@
         "text1": "This section doesn’t have any form elements in it."
       }
     }
+  },
+  "confirmation": {
+    "title": "Your form has been submitted",
+    "sectionTitle": "Section title"
   }
 }

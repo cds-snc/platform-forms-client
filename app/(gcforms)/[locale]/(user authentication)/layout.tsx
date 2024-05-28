@@ -59,7 +59,7 @@ export default async function Layout({
         {currentPath?.startsWith("/auth/setup-security-questions") && <Info locale={locale} />}
         <div className="account-wrapper mt-10 flex items-center justify-center">
           <div
-            className={`has-[#auth-panel]:tablet:w-[658px] tablet:w-[768px] laptop:w-[850px] rounded-2xl border-1 border-[#D1D5DB] bg-white p-10`}
+            className={`rounded-2xl border-1 border-[#D1D5DB] bg-white p-10 tablet:w-[768px] has-[#auth-panel]:tablet:w-[658px] laptop:w-[850px]`}
           >
             <main id="content">
               <Link

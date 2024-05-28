@@ -7,13 +7,15 @@ import { useRouter } from "next/navigation";
 import Loader from "../../globals/Loader";
 import { logMessage } from "@lib/logger";
 import { useRefresh } from "@lib/hooks/useRefresh";
+import { safeJSONParse } from "@lib/utils";
+import { toast } from "@formBuilder/components/shared";
 
 interface JSONUploadProps {
   form?: FormRecord;
 }
 
 export const JSONUpload = (props: JSONUploadProps): React.ReactElement => {
-  const { t, i18n } = useTranslation("admin-templates");
+  const { t, i18n } = useTranslation(["admin-templates", "form-builder"]);
   const { form } = props;
   const { id: formID, form: formConfig } = form || { id: undefined };
   const [jsonConfig, setJsonConfig] = useState(formID ? JSON.stringify(formConfig, null, 2) : "");
@@ -30,9 +32,8 @@ export const JSONUpload = (props: JSONUploadProps): React.ReactElement => {
     setErrorState({ message: "" });
     setSubmitStatus("");
     // Test if the json config is valid
-    try {
-      JSON.parse(jsonConfig);
-    } catch {
+    const jsonTestParse = safeJSONParse(jsonConfig);
+    if (jsonTestParse?.error) {
       setSubmitting(false);
       setErrorState({ message: "JSON Formatting error" });
       return;
@@ -79,6 +80,12 @@ export const JSONUpload = (props: JSONUploadProps): React.ReactElement => {
   const uploadJson = async (jsonConfig: string, formID?: string) => {
     const url = formID ? `/api/templates/${formID}` : "/api/templates";
 
+    const formConfig = safeJSONParse(jsonConfig);
+    if (formConfig?.error) {
+      toast.error(t("startErrorParse", { ns: "form-builder" }), "wide");
+      return;
+    }
+
     return axios({
       url: url,
       method: formID ? "PUT" : "POST",
@@ -86,7 +93,7 @@ export const JSONUpload = (props: JSONUploadProps): React.ReactElement => {
         "Content-Type": "application/json",
       },
       data: {
-        formConfig: JSON.parse(jsonConfig),
+        formConfig,
       },
       timeout: process.env.NODE_ENV === "production" ? 60000 : 0,
     });

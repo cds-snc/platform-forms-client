@@ -180,7 +180,10 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
   ).length;
 
   return status === "submitting" ? (
-    <Loader message={t("loading")} />
+    <>
+      <title>{t("loading")}</title>
+      <Loader message={t("loading")} />
+    </>
   ) : (
     <>
       {formStatusError && (
@@ -315,7 +318,11 @@ export const Form = withFormik<FormProps, Responses>({
     formikBag.setStatus("submitting");
     try {
       const result = await submitForm(values, formikBag.props.language, formikBag.props.formRecord);
-      result && formikBag.props.onSuccess(result);
+      if (result.error) {
+        formikBag.setStatus("Error");
+      } else {
+        formikBag.props.onSuccess(result.id);
+      }
     } catch (err) {
       logMessage.error(err as Error);
       formikBag.setStatus("Error");
