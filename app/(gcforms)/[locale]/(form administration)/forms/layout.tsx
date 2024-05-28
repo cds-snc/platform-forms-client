@@ -1,7 +1,7 @@
 import React from "react";
 import { ToastContainer } from "@formBuilder/components/shared/Toast";
 import { Header } from "@clientComponents/globals/Header/Header";
-import { authCheck } from "@lib/actions";
+import { authCheckAndRedirect } from "@lib/actions";
 import { redirect } from "next/navigation";
 import { SaveTemplateProvider } from "@lib/hooks/form-builder/useTemplateContext";
 import { TemplateStoreProvider } from "@lib/store/useTemplateStore";
@@ -15,7 +15,7 @@ export default async function Layout({
   children: React.ReactNode;
   params: { locale: string };
 }) {
-  await authCheck().catch(() => {
+  await authCheckAndRedirect().catch(() => {
     redirect(`/${locale}/auth/login`);
   });
 

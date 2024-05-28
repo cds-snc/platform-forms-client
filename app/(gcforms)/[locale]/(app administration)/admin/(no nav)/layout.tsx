@@ -2,12 +2,11 @@ import { ToastContainer } from "@formBuilder/components/shared/Toast";
 
 import Link from "next/link";
 import { serverTranslation } from "@i18n";
-import { redirect } from "next/navigation";
 import { SiteLogo } from "@serverComponents/icons";
 
 import LanguageToggle from "@serverComponents/globals/LanguageToggle";
 import { YourAccountDropdown } from "@clientComponents/globals/Header/YourAccountDropdown";
-import { authCheck } from "@lib/actions";
+import { authCheckAndRedirect } from "@lib/actions";
 import { SkipLink } from "@serverComponents/globals/SkipLink";
 import { Footer } from "@serverComponents/globals/Footer";
 export default async function Layout({
@@ -17,9 +16,7 @@ export default async function Layout({
   children: React.ReactNode;
   params: { locale: string };
 }) {
-  await authCheck().catch(() => {
-    redirect(`/${locale}/auth/login`);
-  });
+  await authCheckAndRedirect();
 
   const { t } = await serverTranslation(["common", "admin-login"], { lang: locale });
 

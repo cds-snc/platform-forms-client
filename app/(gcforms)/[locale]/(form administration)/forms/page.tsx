@@ -1,6 +1,6 @@
 import { serverTranslation } from "@i18n";
 import { Metadata } from "next";
-import { authCheck } from "@lib/actions";
+import { authCheckAndRedirect } from "@lib/actions";
 import { checkPrivilegesAsBoolean } from "@lib/privileges";
 import { AccessControlError } from "@lib/privileges";
 import { redirect } from "next/navigation";
@@ -42,9 +42,7 @@ export default async function Page({
   searchParams: { status?: string };
 }) {
   try {
-    const { ability } = await authCheck().catch(() => {
-      redirect(`/${locale}/auth/login`);
-    });
+    const { ability } = await authCheckAndRedirect();
 
     checkPrivilegesAsBoolean(ability, [{ action: "view", subject: "FormRecord" }], {
       redirect: true,

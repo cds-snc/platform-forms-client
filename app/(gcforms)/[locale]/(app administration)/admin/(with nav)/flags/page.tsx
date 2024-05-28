@@ -1,11 +1,10 @@
 import { Suspense } from "react";
 import { serverTranslation } from "@i18n";
-import { authCheck } from "@lib/actions";
+import { authCheckAndRedirect } from "@lib/actions";
 import { checkPrivilegesAsBoolean } from "@lib/privileges";
 import { Metadata } from "next";
 import { FlagList } from "./components/server/FlagList";
 import { Loader } from "@clientComponents/globals/Loader";
-import { redirect } from "next/navigation";
 
 export async function generateMetadata({
   params: { locale },
@@ -18,10 +17,8 @@ export async function generateMetadata({
   };
 }
 
-export default async function Page({ params: { locale } }: { params: { locale: string } }) {
-  const { ability } = await authCheck().catch(() => {
-    redirect(`/${locale}/auth/login`);
-  });
+export default async function Page() {
+  const { ability } = await authCheckAndRedirect();
 
   checkPrivilegesAsBoolean(ability, [{ action: "view", subject: "Flag" }], { redirect: true });
 

@@ -11,7 +11,7 @@ import { CredentialsSignin } from "next-auth";
 import { getUnprocessedSubmissionsForUser } from "@lib/users";
 import { logMessage } from "@lib/logger";
 import { revalidatePath } from "next/cache";
-import { authCheck } from "@lib/actions";
+import { authCheckAndThrow } from "@lib/actions";
 
 export interface ErrorStates {
   authError?: {
@@ -168,7 +168,10 @@ export const getErrorText = async (language: string, errorID: string) => {
 };
 
 export const getRedirectPath = async (locale: string) => {
-  const { session, ability } = await authCheck().catch(() => ({ session: null, ability: null }));
+  const { session, ability } = await authCheckAndThrow().catch(() => ({
+    session: null,
+    ability: null,
+  }));
 
   if (!session) {
     // The sessions between client and server are not in sync.

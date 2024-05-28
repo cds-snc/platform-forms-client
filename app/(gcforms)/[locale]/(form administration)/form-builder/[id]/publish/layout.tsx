@@ -1,5 +1,5 @@
 import { serverTranslation } from "@i18n";
-import { authCheck } from "@lib/actions";
+import { authCheckAndThrow } from "@lib/actions";
 
 import Markdown from "markdown-to-jsx";
 
@@ -17,7 +17,10 @@ export default async function Layout({
 }) {
   const { t } = await serverTranslation("form-builder", { lang: locale });
 
-  const { session, ability } = await authCheck().catch(() => ({ session: null, ability: null }));
+  const { session, ability } = await authCheckAndThrow().catch(() => ({
+    session: null,
+    ability: null,
+  }));
   let userCanPublish = false;
   let isVaultDelivery = false;
 

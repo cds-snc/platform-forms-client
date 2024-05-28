@@ -1,14 +1,14 @@
 import { UserCard } from "./UserCard";
 import { getPublishedFormsPrivilegeId, getAllUsers } from "../../actions";
 
-import { authCheck } from "@lib/actions";
+import { authCheckAndThrow } from "@lib/actions";
 import { serverTranslation } from "@i18n";
 import { Card } from "@clientComponents/globals/card/Card";
 import { ScrollHelper } from "../client/ScrollHelper";
 import { checkPrivilegesAsBoolean } from "@lib/privileges";
 
 export const UsersList = async ({ filter }: { filter?: string }) => {
-  const { ability } = await authCheck();
+  const { ability } = await authCheckAndThrow();
 
   const canManageUser = checkPrivilegesAsBoolean(ability, [
     { action: "update", subject: { type: "User", object: {} } },

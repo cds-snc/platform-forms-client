@@ -4,7 +4,7 @@ import { Metadata } from "next";
 import { RedirectType, redirect } from "next/navigation";
 import { Success } from "./components/server/Success";
 import { UnlockPublishingForm } from "./components/client/UnlockPublishingForm";
-import { authCheck } from "@lib/actions";
+import { authCheckAndRedirect } from "@lib/actions";
 
 export async function generateMetadata({
   params: { locale },
@@ -24,9 +24,7 @@ export default async function Page({
   params: { locale: string };
   searchParams: { success?: string };
 }) {
-  const { ability, session } = await authCheck().catch(() => {
-    redirect(`/${locale}/auth/login`);
-  });
+  const { ability, session } = await authCheckAndRedirect();
 
   if (
     checkPrivilegesAsBoolean(ability, [

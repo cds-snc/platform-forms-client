@@ -4,8 +4,7 @@ import { Metadata } from "next";
 import { ManageSettingForm } from "../components/server/ManageSettingForm";
 import { Suspense } from "react";
 import Loader from "@clientComponents/globals/Loader";
-import { redirect } from "next/navigation";
-import { authCheck } from "@lib/actions";
+import { authCheckAndRedirect } from "@lib/actions";
 export async function generateMetadata({
   params: { locale },
 }: {
@@ -17,14 +16,8 @@ export async function generateMetadata({
   };
 }
 
-export default async function Page({
-  params: { settingId, locale },
-}: {
-  params: { settingId: string; locale: string };
-}) {
-  const { ability } = await authCheck().catch(() => {
-    redirect(`/${locale}/auth/login`);
-  });
+export default async function Page({ params: { settingId } }: { params: { settingId: string } }) {
+  const { ability } = await authCheckAndRedirect();
 
   checkPrivilegesAsBoolean(ability, [{ action: "update", subject: "Setting" }], {
     redirect: true,

@@ -4,7 +4,7 @@ import { serverTranslation } from "@i18n";
 import { createSecurityAnswers } from "@lib/auth";
 import { createAbility } from "@lib/privileges";
 import { logMessage } from "@lib/logger";
-import { authCheck } from "@lib/actions";
+import { authCheckAndThrow } from "@lib/actions";
 
 export interface ErrorStates {
   validationErrors?: {
@@ -74,7 +74,7 @@ export const setupQuestions = async (
   formData: FormData
 ): Promise<ErrorStates> => {
   const { t } = await serverTranslation(["setup-security-questions"], { lang: language });
-  const { session } = await authCheck().catch(() => ({ session: null }));
+  const { session } = await authCheckAndThrow().catch(() => ({ session: null }));
   if (!session) return { generalError: t("errors.serverError.title") };
 
   const ability = createAbility(session);

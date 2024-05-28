@@ -1,11 +1,10 @@
 import { serverTranslation } from "@i18n";
-import { authCheck } from "@lib/actions";
+import { authCheckAndRedirect } from "@lib/actions";
 import { checkPrivilegesAsBoolean, getAllPrivileges } from "@lib/privileges";
 import { getUser } from "@lib/users";
 import { BackLink } from "@clientComponents/admin/LeftNav/BackLink";
 import { Metadata } from "next";
 import { PrivilegeList } from "./components/server/PrivilegeList";
-import { redirect } from "next/navigation";
 
 export async function generateMetadata({
   params: { locale },
@@ -23,9 +22,7 @@ export default async function Page({
 }: {
   params: { id: string; locale: string };
 }) {
-  const { ability } = await authCheck().catch(() => {
-    redirect(`/${locale}/auth/login`);
-  });
+  const { ability } = await authCheckAndRedirect();
 
   checkPrivilegesAsBoolean(
     ability,

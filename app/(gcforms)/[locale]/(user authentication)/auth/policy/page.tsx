@@ -3,7 +3,7 @@ import { serverTranslation } from "@i18n";
 import { Metadata } from "next";
 import { redirect } from "next/navigation";
 import { AcceptableUseTerms } from "./components/server/AcceptableUse";
-import { authCheck } from "@lib/actions";
+import { authCheckAndRedirect } from "@lib/actions";
 import Loading from "./components/server/Loading";
 
 export async function generateMetadata({
@@ -18,9 +18,7 @@ export async function generateMetadata({
 }
 
 export default async function Page({ params: { locale } }: { params: { locale: string } }) {
-  const { session } = await authCheck().catch(() => {
-    redirect(`/${locale}/auth/login`);
-  });
+  const { session } = await authCheckAndRedirect();
 
   // If already accepted redirect to forms
   if (session.user.acceptableUse) {

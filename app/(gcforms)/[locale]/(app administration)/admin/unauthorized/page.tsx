@@ -2,8 +2,7 @@ import React from "react";
 import { serverTranslation } from "@i18n";
 import { ErrorPanel } from "@clientComponents/globals/ErrorPanel";
 import { Metadata } from "next";
-import { authCheck } from "@lib/actions";
-import { redirect } from "next/navigation";
+import { authCheckAndRedirect } from "@lib/actions";
 
 export async function generateMetadata({
   params: { locale },
@@ -16,11 +15,9 @@ export async function generateMetadata({
   };
 }
 
-export default async function Page({ params: { locale } }: { params: { locale: string } }) {
+export default async function Page() {
   const { t } = await serverTranslation("admin-login");
-  await authCheck().catch(() => {
-    redirect(`/${locale}/auth/login`);
-  });
+  await authCheckAndRedirect();
   return (
     <div className="mt-10">
       <ErrorPanel headingTag="h1" title={t("unauthorized.title")}>

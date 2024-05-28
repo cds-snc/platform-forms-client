@@ -1,6 +1,6 @@
 import { serverTranslation } from "@i18n";
 import { Metadata } from "next";
-import { authCheck } from "@lib/actions";
+import { authCheckAndThrow } from "@lib/actions";
 
 import { notFound } from "next/navigation";
 import { getFullTemplateByID } from "@lib/templates";
@@ -25,7 +25,10 @@ export default async function Page({
 }: {
   params: { locale: string; id: string };
 }) {
-  const { session, ability } = await authCheck().catch(() => ({ session: null, ability: null }));
+  const { session, ability } = await authCheckAndThrow().catch(() => ({
+    session: null,
+    ability: null,
+  }));
   const disableSubmit = id === "0000" || !session?.user;
   const { t } = await serverTranslation("form-builder", { lang: locale });
   const isAllowGrouping = await allowGrouping();

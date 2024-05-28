@@ -1,10 +1,9 @@
 import React from "react";
 import { LinkButton } from "@serverComponents/globals/Buttons/LinkButton";
 import { DeleteSettingsButton } from "../client/DeleteSettingsButton";
-import { authCheck } from "@lib/actions";
+import { authCheckAndRedirect } from "@lib/actions";
 import { getAllAppSettings } from "@lib/appSettings";
 import { serverTranslation } from "@i18n";
-import { redirect } from "next/navigation";
 
 export const Settings = async () => {
   const {
@@ -12,9 +11,7 @@ export const Settings = async () => {
     i18n: { language },
   } = await serverTranslation("admin-settings");
 
-  const { ability } = await authCheck().catch(() => {
-    redirect(`/${language}/auth/login`);
-  });
+  const { ability } = await authCheckAndRedirect();
 
   // Note: could add a util to return an array if this is useful elsewhere
   const canUpdateSettings = ability?.can("update", "Setting") ?? false;

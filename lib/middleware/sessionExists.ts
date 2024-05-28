@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 
 import { MiddlewareReturn } from "@lib/types";
-import { authCheck } from "@lib/actions";
+import { authCheckAndThrow } from "@lib/actions";
 
 /**
  * Checks if the session is authenticated for requested HTTP method
@@ -11,7 +11,7 @@ import { authCheck } from "@lib/actions";
 
 export const sessionExists = () => {
   return async (): Promise<MiddlewareReturn> => {
-    const { session } = await authCheck().catch(() => ({ session: null }));
+    const { session } = await authCheckAndThrow().catch(() => ({ session: null }));
 
     // If user is not authenticated or has a deactivated account, return 401
     if (!session || session.user.deactivated) {

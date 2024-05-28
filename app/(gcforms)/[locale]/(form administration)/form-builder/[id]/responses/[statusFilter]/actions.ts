@@ -26,13 +26,16 @@ import { transform as zipTransform } from "@lib/responseDownloadFormats/html-zip
 import { transform as jsonTransform } from "@lib/responseDownloadFormats/json";
 import { logMessage } from "@lib/logger";
 import { revalidatePath } from "next/cache";
-import { authCheck } from "@lib/actions";
+import { authCheckAndThrow } from "@lib/actions";
 import { FormBuilderError } from "./exceptions";
 
 // Can throw because it is not called by Client Components
 // @todo Should these types of functions be moved to a different file?
 export const fetchTemplate = async (id: string) => {
-  const { session, ability } = await authCheck().catch(() => ({ session: null, ability: null }));
+  const { session, ability } = await authCheckAndThrow().catch(() => ({
+    session: null,
+    ability: null,
+  }));
   if (!session) {
     throw new Error("User is not authenticated");
   }
@@ -53,7 +56,10 @@ export const fetchSubmissions = async ({
   status: string;
   lastKey?: string;
 }) => {
-  const { session, ability } = await authCheck().catch(() => ({ session: null, ability: null }));
+  const { session, ability } = await authCheckAndThrow().catch(() => ({
+    session: null,
+    ability: null,
+  }));
 
   if (!session) {
     throw new Error("User is not authenticated");
@@ -127,7 +133,10 @@ export const getSubmissionsByFormat = async ({
   | ServerActionError
 > => {
   try {
-    const { session, ability } = await authCheck().catch(() => ({ session: null, ability: null }));
+    const { session, ability } = await authCheckAndThrow().catch(() => ({
+      session: null,
+      ability: null,
+    }));
 
     if (!session) {
       throw new AccessControlError("User is not authenticated");

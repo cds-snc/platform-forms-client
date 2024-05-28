@@ -1,12 +1,11 @@
 import { serverTranslation } from "@i18n";
-import { authCheck } from "@lib/actions";
+import { authCheckAndRedirect } from "@lib/actions";
 import { checkPrivilegesAsBoolean } from "@lib/privileges";
 import { Metadata } from "next";
 import { Settings } from "./components/server/Settings";
 import { Suspense } from "react";
 import Loader from "@clientComponents/globals/Loader";
 import { Messages } from "./components/client/Messages";
-import { redirect } from "next/navigation";
 
 export async function generateMetadata({
   params: { locale },
@@ -21,15 +20,12 @@ export async function generateMetadata({
 
 // Note: the searchParam is used as the language key to display the success or error message
 export default async function Page({
-  params: { locale },
   searchParams: { success, error },
 }: {
   params: { locale: string };
   searchParams: { success?: string; error?: string };
 }) {
-  const { ability } = await authCheck().catch(() => {
-    redirect(`/${locale}/auth/login`);
-  });
+  const { ability } = await authCheckAndRedirect();
 
   checkPrivilegesAsBoolean(ability, [{ action: "view", subject: "Setting" }], {
     redirect: true,

@@ -1,4 +1,4 @@
-import { authCheck } from "@lib/actions";
+import { authCheckAndThrow } from "@lib/actions";
 import { LeftNavigation } from "./components/LeftNavigation";
 import { ToastContainer } from "@formBuilder/components/shared/Toast";
 import { SkipLink, Footer } from "@clientComponents/globals";
@@ -27,7 +27,10 @@ export default async function Layout({
   };
   let initialForm;
 
-  const { session, ability } = await authCheck().catch(() => ({ session: null, ability: null }));
+  const { session, ability } = await authCheckAndThrow().catch(() => ({
+    session: null,
+    ability: null,
+  }));
 
   const formID = id || null;
 

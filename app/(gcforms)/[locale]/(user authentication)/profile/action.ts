@@ -1,6 +1,6 @@
 "use server";
 import { updateSecurityAnswer } from "@lib/auth";
-import { authCheck } from "@lib/actions";
+import { authCheckAndThrow } from "@lib/actions";
 import { revalidatePath } from "next/cache";
 import * as v from "valibot";
 
@@ -18,7 +18,7 @@ export const updateSecurityQuestion = async (
   newQuestionId: string,
   answer: string | undefined
 ) => {
-  const { ability } = await authCheck();
+  const { ability } = await authCheckAndThrow();
 
   const data = validateData({ oldQuestionId, newQuestionId, newAnswer: answer });
 

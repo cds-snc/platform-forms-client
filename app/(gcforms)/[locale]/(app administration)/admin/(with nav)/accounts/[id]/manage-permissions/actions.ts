@@ -2,14 +2,14 @@
 import { updatePrivilegesForUser } from "@lib/privileges";
 
 import { revalidatePath } from "next/cache";
-import { authCheck } from "@lib/actions";
+import { authCheckAndThrow } from "@lib/actions";
 
 export const updatePrivileges = async (
   userID: string,
   privilegeID: string,
   action: "add" | "remove"
 ) => {
-  const { ability } = await authCheck();
+  const { ability } = await authCheckAndThrow();
   if (ability.can("update", "User")) {
     try {
       const result = await updatePrivilegesForUser(ability, userID, [{ id: privilegeID, action }]);

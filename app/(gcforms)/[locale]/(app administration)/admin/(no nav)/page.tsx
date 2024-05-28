@@ -1,4 +1,4 @@
-import { authCheck } from "@lib/actions";
+import { authCheckAndRedirect } from "@lib/actions";
 import { checkPrivilegesAsBoolean } from "@lib/privileges";
 import { serverTranslation } from "@i18n";
 import Link from "next/link";
@@ -21,9 +21,7 @@ export async function generateMetadata({
 export default async function Page({ params: { locale } }: { params: { locale: string } }) {
   const { t } = await serverTranslation(["admin-home", "common"]);
 
-  const { ability } = await authCheck().catch(() => {
-    redirect(`/${locale}/auth/login`);
-  });
+  const { ability } = await authCheckAndRedirect();
 
   const canViewUsers = checkPrivilegesAsBoolean(ability, [{ action: "view", subject: "User" }], {
     redirect: true,

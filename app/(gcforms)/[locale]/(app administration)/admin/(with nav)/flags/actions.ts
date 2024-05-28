@@ -1,12 +1,12 @@
 "use server";
 import { enableFlag, disableFlag, checkAll, checkOne } from "@lib/cache/flags";
 import { revalidatePath } from "next/cache";
-import { authCheck } from "@lib/actions";
+import { authCheckAndThrow } from "@lib/actions";
 
 // Note: any thrown errors will be caught in the Error boundary/component
 
 export async function modifyFlag(id: string, value: boolean) {
-  const { ability } = await authCheck();
+  const { ability } = await authCheckAndThrow();
 
   if (value) {
     await enableFlag(ability, id);
@@ -17,13 +17,13 @@ export async function modifyFlag(id: string, value: boolean) {
 }
 
 export async function getAllFlags() {
-  const { ability } = await authCheck();
+  const { ability } = await authCheckAndThrow();
 
   return checkAll(ability);
 }
 
 export async function checkFlag(id: string) {
-  await authCheck();
+  await authCheckAndThrow();
 
   return checkOne(id);
 }

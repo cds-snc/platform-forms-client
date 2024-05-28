@@ -2,7 +2,7 @@ import { serverTranslation } from "@i18n";
 import { Metadata } from "next";
 import { MFAForm } from "./components/client/MFAForm";
 import { redirect } from "next/navigation";
-import { authCheck } from "@lib/actions";
+import { authCheckAndThrow } from "@lib/actions";
 
 export async function generateMetadata({
   params: { locale },
@@ -16,7 +16,7 @@ export async function generateMetadata({
 }
 
 export default async function Page({ params: { locale } }: { params: { locale: string } }) {
-  const { session } = await authCheck().catch(() => ({ session: null }));
+  const { session } = await authCheckAndThrow().catch(() => ({ session: null }));
 
   if (session) {
     redirect(`/${locale}/forms`);

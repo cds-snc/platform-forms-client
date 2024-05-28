@@ -7,7 +7,7 @@ import { deleteTemplate } from "@lib/templates";
 import { TemplateHasUnprocessedSubmissions } from "@lib/templates";
 import { getAppSetting } from "@lib/appSettings";
 import { revalidatePath } from "next/cache";
-import { authCheck } from "@lib/actions";
+import { authCheckAndThrow } from "@lib/actions";
 
 export const overdueSettings = cache(async () => {
   const promptPhaseDays = await getAppSetting("nagwarePhasePrompted");
@@ -17,7 +17,7 @@ export const overdueSettings = cache(async () => {
 });
 
 export const getUnprocessedSubmissionsForTemplate = async (templateId: string) => {
-  const { ability } = await authCheck();
+  const { ability } = await authCheckAndThrow();
   const { promptPhaseDays, warnPhaseDays, responseDownloadLimit } = await overdueSettings();
   const allSubmissions = await listAllSubmissions(
     ability,
@@ -33,7 +33,7 @@ export const getUnprocessedSubmissionsForTemplate = async (templateId: string) =
 };
 
 export const deleteForm = async (id: string) => {
-  const { ability } = await authCheck();
+  const { ability } = await authCheckAndThrow();
 
   try {
     await deleteTemplate(ability, id);

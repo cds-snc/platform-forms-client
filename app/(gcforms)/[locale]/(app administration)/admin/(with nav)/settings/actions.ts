@@ -8,7 +8,7 @@ import {
 } from "@lib/appSettings";
 import { revalidatePath } from "next/cache";
 import { logMessage } from "@lib/logger";
-import { authCheck } from "@lib/actions";
+import { authCheckAndThrow } from "@lib/actions";
 import { redirect } from "next/navigation";
 
 function nullCheck(formData: FormData, key: string) {
@@ -18,14 +18,14 @@ function nullCheck(formData: FormData, key: string) {
 }
 
 export async function getSetting(internalId: string) {
-  const { ability } = await authCheck();
+  const { ability } = await authCheckAndThrow();
   logMessage.error("Getting setting with internalId: " + internalId);
   return getFullAppSetting(ability, internalId);
 }
 
 export async function updateSetting(language: string, formData: FormData) {
   try {
-    const { ability } = await authCheck();
+    const { ability } = await authCheckAndThrow();
     const setting = {
       internalId: nullCheck(formData, "internalId"),
       nameEn: nullCheck(formData, "nameEn"),
@@ -44,7 +44,7 @@ export async function updateSetting(language: string, formData: FormData) {
 
 export async function createSetting(language: string, formData: FormData) {
   try {
-    const { ability } = await authCheck();
+    const { ability } = await authCheckAndThrow();
     const setting = {
       internalId: nullCheck(formData, "internalId"),
       nameEn: nullCheck(formData, "nameEn"),
@@ -68,7 +68,7 @@ export async function createSetting(language: string, formData: FormData) {
 }
 
 export async function deleteSetting(internalId: string) {
-  const { ability } = await authCheck();
+  const { ability } = await authCheckAndThrow();
   await deleteAppSetting(ability, internalId).catch(() => {
     throw new Error("Error deleting setting");
   });

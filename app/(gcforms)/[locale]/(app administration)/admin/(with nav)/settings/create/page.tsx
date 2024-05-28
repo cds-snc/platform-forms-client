@@ -1,5 +1,5 @@
 import { serverTranslation } from "@i18n";
-import { authCheck } from "@lib/actions";
+import { authCheckAndThrow } from "@lib/actions";
 import { checkPrivilegesAsBoolean } from "@lib/privileges";
 import { Metadata } from "next";
 import { ManageSettingForm } from "../components/server/ManageSettingForm";
@@ -16,7 +16,7 @@ export async function generateMetadata({
 }
 
 export default async function Page() {
-  const { ability } = await authCheck();
+  const { ability } = await authCheckAndThrow();
   checkPrivilegesAsBoolean(ability, [{ action: "create", subject: "Setting" }], {
     redirect: true,
   });

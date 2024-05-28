@@ -3,7 +3,7 @@ import { LeftNav } from "@clientComponents/admin/LeftNav/NavLink";
 import { AccountsIcon } from "@serverComponents/icons/AccountsIcon";
 import { SettingsIcon } from "@serverComponents/icons/SettingsIcon";
 import { FlagsIcon } from "@serverComponents/icons/FlagsIcon";
-import { authCheck } from "@lib/actions";
+import { authCheckAndThrow } from "@lib/actions";
 
 export const LeftNavigation = async () => {
   const {
@@ -11,7 +11,7 @@ export const LeftNavigation = async () => {
     i18n: { language },
   } = await serverTranslation(["admin-users", "admin-login", "common"]);
 
-  const { ability } = await authCheck().catch(() => ({ ability: null }));
+  const { ability } = await authCheckAndThrow().catch(() => ({ ability: null }));
   if (!ability) return null;
 
   return (

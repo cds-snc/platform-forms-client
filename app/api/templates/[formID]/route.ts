@@ -28,7 +28,7 @@ import {
 } from "@lib/types";
 import { AccessControlError, createAbility } from "@lib/privileges";
 import { logMessage } from "@lib/logger";
-import { authCheck } from "@lib/actions";
+import { authCheckAndThrow } from "@lib/actions";
 
 class MalformedAPIRequest extends Error {}
 
@@ -44,7 +44,10 @@ export const GET = async (req: NextRequest, { params }: { params: Record<string,
       throw new MalformedAPIRequest("Invalid or missing formID");
     }
 
-    const { session, ability } = await authCheck().catch(() => ({ session: null, ability: null }));
+    const { session, ability } = await authCheckAndThrow().catch(() => ({
+      session: null,
+      ability: null,
+    }));
 
     if (!session) {
       const response = await getPublicTemplateByID(formID);

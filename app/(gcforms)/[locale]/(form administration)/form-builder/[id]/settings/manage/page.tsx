@@ -1,6 +1,6 @@
 import { serverTranslation } from "@i18n";
 import { getTemplateWithAssociatedUsers } from "@lib/templates";
-import { authCheck } from "@lib/actions";
+import { authCheckAndThrow } from "@lib/actions";
 import { checkPrivilegesAsBoolean } from "@lib/privileges";
 import { getUsers } from "@lib/users";
 import { ManageForm } from "./ManageForm";
@@ -68,7 +68,10 @@ const getAllUsers = async (ability: UserAbility) => {
 };
 
 export default async function Page({ params: { id } }: { params: { id: string } }) {
-  const { session, ability } = await authCheck().catch(() => ({ session: null, ability: null }));
+  const { session, ability } = await authCheckAndThrow().catch(() => ({
+    session: null,
+    ability: null,
+  }));
   const canManageOwnership = getCanManageOwnership(id, ability);
   const canSetClosingDate = getCanSetClosingDate(id, ability, session);
   const nonce = await getNonce();

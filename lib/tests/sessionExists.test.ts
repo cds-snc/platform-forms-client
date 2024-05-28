@@ -3,11 +3,11 @@
  */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
-import { authCheck } from "@lib/actions";
+import { authCheckAndThrow } from "@lib/actions";
 import { sessionExists } from "@lib/middleware";
 import { MiddlewareReturn, UserAbility } from "@lib/types";
 
-const mockedAuth = jest.mocked(authCheck, { shallow: true });
+const mockedAuth = jest.mocked(authCheckAndThrow, { shallow: true });
 jest.mock("@lib/actions");
 
 describe("Test a session middleware", () => {
