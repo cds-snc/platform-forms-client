@@ -8,13 +8,11 @@ import CredentialsProvider from "next-auth/providers/credentials";
 import NextAuth, { Session } from "next-auth";
 import { JWT } from "next-auth/jwt";
 
-const localPathRegEx = new RegExp("^(?!((?:[a-z+]+:)?//))", "i");
-
 const verboseDebug = false;
 
 const debugLogger = async (message: string) => {
   if (verboseDebug) {
-    logMessage.debug(message);
+    logMessage.info(message);
   }
 };
 
@@ -66,30 +64,25 @@ const { auth } = NextAuth({
 
 export const config = {
   matcher: [
+    //Match all request paths except for ones that reference files with a file extension
+    "/((?!.*\\.[^/]+?$).*)",
     /*
-     * Match all request paths except for the ones starting with:
-     * - _next/static (static files)
-     * - _next/image (image optimization files)
-     * - favicon.ico (favicon file)
-     * - img (public image files)
-     * - static (public static files)
-     * - react_devtools (React DevTools)
+     Match all request paths except for the ones starting with:
+     - _next/static (static files)
+     - _next/image (image optimization files)
+     - img (public image files)
+     - static (public static files)
+     - react_devtools (React DevTools)
      */
-    {
-      source:
-        "/((?!_next/static|_next/image|favicon.ico|img|static|react_devtools|unsupported-browser|javascript-disabled|__nextjs_).*)",
-      missing: [
-        { type: "header", key: "next-router-prefetch" },
-        { type: "header", key: "next-action" },
-        { type: "header", key: "purpose", value: "prefetch" },
-      ],
-    },
+
+    "/((?!_next/static|_next/image|img|static|react_devtools|unsupported-browser|javascript-disabled|__nextjs_).*)",
   ],
 };
 
-const allowedOrigins = [process.env.NEXTAUTH_URL];
+// TOMORROW
+// Stop files like .map.js from being included in the middleware
 
-export default auth((req) => {
+export default function middlware(req: NextRequest) {
   const pathname = req.nextUrl.pathname;
   const searchParams = req.nextUrl.searchParams.toString();
 
@@ -101,6 +94,10 @@ export default auth((req) => {
   const pathLang = pathname.split("/")[1];
   const cookieLang = req.cookies.get("i18next")?.value;
 
+  const prefetchedRoute = Boolean(req.headers.get("next-url"));
+
+  debugLogger(`Middleware: ${prefetchedRoute ? "PREFECTHED LINK" : ""} path = ${pathname}`);
+
   // Layer 1 - Redirect to language selector if app path is not provided
 
   const layer1 = languageSelectorRedirect(req, pathname, pathLang);
@@ -111,19 +108,23 @@ export default auth((req) => {
   const layer2 = addLangToPath(req, pathname, cookieLang, searchParams);
   if (layer2) return layer2;
 
-  // Layer 3 - Pages with Required Auth
-  const layer3 = pageRequiresAuth(req, pathname, pathLang);
-  if (layer3) return layer3;
+  // Add Session Data to the req for the remaining levels
 
-  // Layer 4 - Auth Users Redirect
+  return auth((reqWithAuth) => {
+    // Layer 3 - Pages with Required Auth
+    const layer3 = pageRequiresAuth(reqWithAuth, pathname, pathLang);
+    if (layer3) return layer3;
 
-  const layer4 = authFlowRedirect(req, pathname, pathLang, cookieLang);
-  if (layer4) return layer4;
+    // Layer 4 - Auth Users Redirect
 
-  // Final Layer - Set Content Security Policy
+    const layer4 = authFlowRedirect(reqWithAuth, pathname, pathLang, cookieLang);
+    if (layer4) return layer4;
 
-  return setCSP(req, pathname, cookieLang, pathLang);
-});
+    // Final Layer - Set Content Security Policy
+
+    return setCSP(reqWithAuth, pathname, cookieLang, pathLang);
+  })(req, {});
+}
 
 /**
  *************************
@@ -136,12 +137,26 @@ export default auth((req) => {
  */
 
 const setCORS = (req: NextRequest, pathname: string) => {
+  const reqHeaders = new Headers(req.headers);
   // Response
-  if (pathname.startsWith("/api")) {
+  if (pathname.startsWith("/api") || reqHeaders.get("next-action")) {
+    debugLogger(`Middleware: API / Server Action path = ${pathname}`);
     const response = NextResponse.next();
+    const origin = req.headers.get("origin") ?? "";
+
+    const allowedOrigins = [
+      // These are hardcoded and set in Staging and Production
+      process.env.NEXTAUTH_URL,
+      process.env.AUTH_URL,
+      // If we're running in local development or E2E testing use localhost as origin
+      process.env.NODE_ENV !== "production" || process.env.APP_ENV === "test"
+        ? "http://localhost:3000"
+        : undefined,
+      // If we're in a PR Review environment use the passed in origin as there is currently no way to get the existing origin from the container
+      process.env.REVIEW_ENV ? origin : undefined,
+    ].filter((origin: string | undefined) => origin);
 
     // Allowed origins check
-    const origin = req.headers.get("origin") ?? "";
     if (allowedOrigins.includes(origin)) {
       response.headers.set("Access-Control-Allow-Origin", origin);
     } else {
@@ -161,7 +176,7 @@ const setCORS = (req: NextRequest, pathname: string) => {
       "X-CSRF-Token,X-Requested-With,Accept,Accept-Version,Content-Length,Content-MD5,Content-Type,Date,X-Api-Version"
     );
     response.headers.set("Access-Control-Max-Age", "86400"); // 60 * 60 * 24 = 24 hours;
-
+    response.headers.set("content-security-policy", 'default-src "none"');
     debugLogger(`Middleware Action: Setting CORS on API route: ${pathname}`);
 
     return response;
@@ -301,10 +316,7 @@ const authFlowRedirect = (
       // If they haven't agreed to Acceptable Use redirect to policy page for acceptance
       // Also check that the path is local and not an external URL
 
-      const acceptableUsePage = new URL(
-        `/${lang}/auth/policy?referer=/${lang}${localPathRegEx.test(path) ? path : "/forms"}`,
-        origin
-      );
+      const acceptableUsePage = new URL(`/${lang}/auth/policy`, origin);
       return NextResponse.redirect(acceptableUsePage);
     }
   }
