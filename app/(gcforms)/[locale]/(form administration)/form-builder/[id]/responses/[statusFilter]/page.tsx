@@ -3,7 +3,7 @@ import { serverTranslation } from "@i18n";
 import { getAppSetting } from "@lib/appSettings";
 import { Responses, ResponsesProps } from "./components/Responses";
 import { fetchSubmissions, fetchTemplate } from "./actions";
-import { auth } from "@lib/auth";
+import { authCheckAndThrow } from "@lib/actions";
 import { RetrievalError } from "./components/RetrievalError";
 
 export async function generateMetadata({
@@ -26,7 +26,7 @@ export default async function Page({
   params: { locale: string; id: string; statusFilter: string };
   searchParams: { lastKey?: string };
 }) {
-  const session = await auth();
+  const { session } = await authCheckAndThrow().catch(() => ({ session: null }));
   const isAuthenticated = session !== null;
 
   const pageProps: ResponsesProps = {
