@@ -1,7 +1,6 @@
 "use server";
 
-import { auth } from "@lib/auth";
-import { createAbility } from "@lib/privileges";
+import { authCheckAndThrow } from "@lib/actions";
 import { DeliveryOption, FormProperties, FormRecord, SecurityAttribute } from "@lib/types";
 import {
   createTemplate as createDbTemplate,
@@ -18,18 +17,6 @@ import {
 import { serverTranslation } from "@i18n";
 import { revalidatePath } from "next/cache";
 import { checkOne } from "@lib/cache/flags";
-
-const _getSessionAndAbility = async () => {
-  const session = await auth();
-
-  if (!session) {
-    throw new Error("User is not authenticated");
-  }
-
-  const ability = createAbility(session);
-
-  return { session, ability };
-};
 
 export type CreateOrUpdateTemplateType = {
   id?: string;
@@ -82,7 +69,7 @@ export const createTemplate = async ({
   error?: string;
 }> => {
   try {
-    const { session, ability } = await _getSessionAndAbility();
+    const { session, ability } = await authCheckAndThrow();
 
     const response = await createDbTemplate({
       ability: ability,
@@ -122,7 +109,7 @@ export const updateTemplate = async ({
   error?: string;
 }> => {
   try {
-    const { ability } = await _getSessionAndAbility();
+    const { ability } = await authCheckAndThrow();
 
     const response = await updateDbTemplate({
       ability: ability,
@@ -154,7 +141,7 @@ export const updateTemplatePublishedStatus = async ({
   error?: string;
 }> => {
   try {
-    const { ability } = await _getSessionAndAbility();
+    const { ability } = await authCheckAndThrow();
 
     const response = await updateIsPublishedForTemplate(ability, formID, isPublished);
     if (!response) {
@@ -182,7 +169,7 @@ export const updateTemplateSecurityAttribute = async ({
   error?: string;
 }> => {
   try {
-    const { ability } = await _getSessionAndAbility();
+    const { ability } = await authCheckAndThrow();
 
     const response = await updateSecurityAttribute(ability, formID, securityAttribute);
     if (!response) {
@@ -209,7 +196,7 @@ export const updateTemplateClosingDate = async ({
   error?: string;
 }> => {
   try {
-    const { ability } = await _getSessionAndAbility();
+    const { ability } = await authCheckAndThrow();
 
     const response = await updateClosingDateForTemplate(ability, formID, closingDate);
     if (!response) {
@@ -239,7 +226,7 @@ export const updateTemplateUsers = async ({
   }
 
   try {
-    const { ability } = await _getSessionAndAbility();
+    const { ability } = await authCheckAndThrow();
 
     const response = await updateAssignedUsersForTemplate(ability, formID, users);
     if (!response) {
@@ -269,7 +256,7 @@ export const updateTemplateDeliveryOption = async ({
       throw new Error("Require Delivery Option Data");
     }
 
-    const { ability } = await _getSessionAndAbility();
+    const { ability } = await authCheckAndThrow();
 
     const response = await updateResponseDeliveryOption(ability, formID, deliveryOption);
     if (!response) {
@@ -293,7 +280,7 @@ export const sendResponsesToVault = async ({
   error?: string;
 }> => {
   try {
-    const { ability } = await _getSessionAndAbility();
+    const { ability } = await authCheckAndThrow();
 
     const response = await removeDeliveryOption(ability, formID);
     if (!response) {
@@ -315,7 +302,7 @@ export const deleteTemplate = async ({
   error?: string;
 }> => {
   try {
-    const { ability } = await _getSessionAndAbility();
+    const { ability } = await authCheckAndThrow();
 
     const response = await deleteDbTemplate(ability, formID);
 

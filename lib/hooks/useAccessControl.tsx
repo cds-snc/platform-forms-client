@@ -11,13 +11,12 @@ import { Session } from "next-auth";
 
 interface AccessControlInterface {
   ability: PureAbility<Abilities, unknown> | null;
-  forceSessionUpdate: () => Promise<void>;
 }
 const AbilityContext = createContext<AccessControlInterface>({} as AccessControlInterface);
 
 export const AccessControlProvider = ({ children }: { children: React.ReactNode }) => {
   const [ability, setAbility] = useState<PureAbility<Abilities, unknown> | null>(null);
-  const { data, status, update } = useSession();
+  const { data, status } = useSession();
   const [user, setUser] = useState<Session["user"] | undefined>(data?.user);
   const {
     i18n: { language },
@@ -51,31 +50,14 @@ export const AccessControlProvider = ({ children }: { children: React.ReactNode 
     logMessage.debug("Refreshing Ability - useAccessControl hook - Session Updated");
   }, [refreshAbility]);
 
-  /*
-   * Use this function to force a session update. This is useful if you need to ensure
-   * the session is in sync with the server. For example, if you perform an action and
-   * a user's privileges has changed, you can call this function to ensure the session is updated.
-   */
-  const forceSessionUpdate = useCallback(async () => {
-    logMessage.debug(
-      "Refreshing Ability - useAccessControl hook - Forcing call to Server to updated session"
-    );
-    await update();
-  }, [update]);
-
-  return (
-    <AbilityContext.Provider value={{ ability, forceSessionUpdate }}>
-      {children}
-    </AbilityContext.Provider>
-  );
+  return <AbilityContext.Provider value={{ ability }}>{children}</AbilityContext.Provider>;
 };
 
 /**
  * useAccessControl hook
  * @returns ability - The ability object for a User
- * @returns forceSessionUpdate - A function to force a session update.  Use this only if you need to ensure the session is in sync with the server.
  */
 export const useAccessControl = () => {
-  const { ability, forceSessionUpdate } = useContext(AbilityContext);
-  return { ability, forceSessionUpdate };
+  const { ability } = useContext(AbilityContext);
+  return { ability };
 };
