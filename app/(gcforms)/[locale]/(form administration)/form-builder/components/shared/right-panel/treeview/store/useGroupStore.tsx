@@ -79,16 +79,24 @@ const createGroupStore = (initProps?: Partial<GroupStoreProps>) => {
           setChangeKey(String(new Date().getTime()));
         }
       },
-      updateGroupTitle: ({ id, locale, title }: { id: string, locale: Language; title: string }) => {
+      updateGroupTitle: ({
+        id,
+        locale,
+        title,
+      }: {
+        id: string;
+        locale: Language;
+        title: string;
+      }) => {
         const formGroups = get().templateStore.getState().form.groups;
         const setChangeKey = get().templateStore.getState().setChangeKey;
-        const fieldName = localizeField("title", locale );
+        const fieldName = localizeField("title", locale);
         if (formGroups && formGroups[id]) {
           get().templateStore.setState((s) => {
             if (s.form.groups) {
               s.form.groups[id] = {
                 ...formGroups[id],
-                fieldName: title,
+                [fieldName]: title,
               };
             }
           });
@@ -104,7 +112,7 @@ const createGroupStore = (initProps?: Partial<GroupStoreProps>) => {
       },
       getElementsGroupById: (id: string) => {
         const formGroups = get().templateStore.getState().form.groups;
-        if (!formGroups) return { id, elements: [], name: "" };
+        if (!formGroups) return { id, elements: [], name: "", titleEn: "", titleFr: "" };
         return formGroups[id];
       },
       addGroup: (id: string, name: string) => {
@@ -118,7 +126,7 @@ const createGroupStore = (initProps?: Partial<GroupStoreProps>) => {
           for (let i = 0; i < keys.length; i++) {
             const key = keys[i];
             if (key === "review") {
-              newObject[id] = { name, elements: [] };
+              newObject[id] = { name, elements: [], titleEn: "", titleFr: "" };
               newObject[key] = s.form.groups[key];
             }
             newObject[key] = s.form.groups[key];
@@ -148,6 +156,8 @@ const createGroupStore = (initProps?: Partial<GroupStoreProps>) => {
             if (s.form.groups) {
               s.form.groups[parent] = {
                 name: formGroups[parent].name,
+                titleEn: formGroups[parent].titleEn,
+                titleFr: formGroups[parent].titleFr,
                 elements: children as string[],
               };
             }
