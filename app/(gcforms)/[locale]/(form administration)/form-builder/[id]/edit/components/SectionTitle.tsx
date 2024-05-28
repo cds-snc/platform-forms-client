@@ -4,33 +4,35 @@ import { useGroupStore } from "@formBuilder/components/shared/right-panel/treevi
 import { ExpandingInput } from "@formBuilder/components/shared";
 import { useTemplateStore } from "@lib/store/useTemplateStore";
 import { LockedSections } from "@formBuilder/components/shared/right-panel/treeview/types";
+import { Language } from "@lib/types/form-builder-types";
 
-export const SectionTitle = ({ groupName, groupId }: { groupName: string; groupId: string }) => {
+export const SectionTitle = ({ groupTitle, groupId }: { groupTitle: string; groupId: string }) => {
   const { getLocalizationAttribute } = useTemplateStore((s) => ({
     getLocalizationAttribute: s.getLocalizationAttribute,
   }));
+  const language = getLocalizationAttribute()?.lang as Language;
 
   const groupNameRef = useRef(null);
   const { treeView } = useTreeRef();
-  const updateGroupName = useGroupStore((state) => state.updateGroupName);
+  const updateGroupTitle = useGroupStore((state) => state.updateGroupTitle);
 
   const handleOnBlur = (e: React.FocusEvent) => {
-    saveGroupName(e.currentTarget.textContent || "");
+    saveGroupTitle(e.currentTarget.textContent || "");
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-    saveGroupName(e.target.value || "");
+    saveGroupTitle(e.target.value || "");
   };
 
-  const saveGroupName = (groupName: string) => {
-    updateGroupName({ id: groupId, name: groupName });
-    treeView?.current?.updateItem(groupId, groupName);
+  const saveGroupTitle = (groupTitle: string) => {
+    updateGroupTitle({ locale: language || "en", title: groupTitle });
+    treeView?.current?.updateItem(groupId, groupTitle);
   };
 
   const lockedInput = Object.values(LockedSections).includes(groupId as LockedSections);
 
   return lockedInput ? (
-    <h4 className="font-bold laptop:text-3xl">{groupName}</h4>
+    <h4 className="font-bold laptop:text-3xl">{groupTitle}</h4>
   ) : (
     <ExpandingInput
       id="sectionTitle"
@@ -38,7 +40,7 @@ export const SectionTitle = ({ groupName, groupId }: { groupName: string; groupI
       wrapperClassName="w-full mr-5 mt-2 laptop:mt-0 font-bold laptop:text-3xl"
       className="font-bold placeholder:text-slate-500 laptop:text-3xl"
       placeholder={"SectionTitle"}
-      value={groupName}
+      value={groupTitle}
       onBlur={handleOnBlur}
       onChange={handleChange}
       {...getLocalizationAttribute()}

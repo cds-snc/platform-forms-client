@@ -5,6 +5,7 @@ import { useTranslation } from "@i18n/client";
 import { FormElementTypes } from "@lib/types";
 import { useTemplateStore } from "@lib/store/useTemplateStore";
 import { SectionTitle } from "./SectionTitle";
+import { LocalizedElementProperties } from "@lib/types/form-builder-types";
 
 const AddElement = () => {
   const { t } = useTranslation("form-builder");
@@ -46,7 +47,17 @@ export const Section = ({ groupId }: { groupId: string }) => {
     groups: s.form.groups,
   }));
 
-  const groupName = groups?.[groupId]?.name || "";
+  const { translationLanguagePriority, localizeField } = useTemplateStore((s) => ({
+    localizeField: s.localizeField,
+    translationLanguagePriority: s.translationLanguagePriority,
+  }));
+
+  const localizedTitle = localizeField(
+      LocalizedElementProperties.TITLE,
+      translationLanguagePriority
+    );
+
+  const groupTitle = groups?.[groupId][localizedTitle] || "";
 
   if (groupId === "start" || groupId === "end" || groupId === "review") {
     return null;
@@ -63,7 +74,7 @@ export const Section = ({ groupId }: { groupId: string }) => {
         noElements ? "border-b-1 rounded-b-lg" : "last:border-b-1"
       )}
     >
-      <SectionTitle groupName={groupName} groupId={groupId} />
+      <SectionTitle groupTitle={groupTitle} groupId={groupId} />
       {noElements ? (
         <AddElementEmpty />
       ) : (

@@ -5,7 +5,7 @@ import { immer } from "zustand/middleware/immer";
 import { shallow } from "zustand/shallow";
 import React, { createContext, useRef, useContext } from "react";
 import { TemplateStoreContext } from "@lib/store/useTemplateStore";
-import { LocalizedElementProperties } from "@lib/types/form-builder-types";
+import { Language, LocalizedElementProperties } from "@lib/types/form-builder-types";
 import { groupsToTreeData, TreeDataOptions } from "../util/groupsToTreeData";
 import { findParentGroup } from "../util/findParentGroup";
 import { GroupStoreProps, GroupStoreState } from "./types";
@@ -17,6 +17,7 @@ import { Group, GroupsType } from "@lib/formContext";
 import { TreeItemIndex } from "react-complex-tree";
 import { autoFlowAllNextActions } from "../util/setNextAction";
 import { setGroupNextAction } from "../util/setNextAction";
+import { localizeField } from "@lib/utils/form-builder/itemHelper";
 
 const createGroupStore = (initProps?: Partial<GroupStoreProps>) => {
   const DEFAULT_PROPS: GroupStoreProps = {
@@ -72,6 +73,22 @@ const createGroupStore = (initProps?: Partial<GroupStoreProps>) => {
               s.form.groups[id] = {
                 ...formGroups[id],
                 name,
+              };
+            }
+          });
+          setChangeKey(String(new Date().getTime()));
+        }
+      },
+      updateGroupTitle: ({ id, locale, title }: { id: string, locale: Language; title: string }) => {
+        const formGroups = get().templateStore.getState().form.groups;
+        const setChangeKey = get().templateStore.getState().setChangeKey;
+        const fieldName = localizeField("title", locale );
+        if (formGroups && formGroups[id]) {
+          get().templateStore.setState((s) => {
+            if (s.form.groups) {
+              s.form.groups[id] = {
+                ...formGroups[id],
+                fieldName: title,
               };
             }
           });
