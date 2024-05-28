@@ -1,6 +1,5 @@
 import { serverTranslation } from "@i18n";
-import { auth } from "@lib/auth";
-import { createAbility } from "@lib/privileges";
+import { authCheckAndThrow } from "@lib/actions";
 import { getFullTemplateByID } from "@lib/templates";
 import { Metadata } from "next";
 import { notFound } from "next/navigation";
@@ -22,13 +21,14 @@ export default async function Page({
 }: {
   params: { locale: string; id: string };
 }) {
-  const session = await auth();
+  const { session, ability } = await authCheckAndThrow().catch(() => ({
+    session: null,
+    ability: null,
+  }));
 
   if (!session) {
     return null;
   }
-
-  const ability = createAbility(session);
 
   const initialForm = await getFullTemplateByID(ability, id);
 
