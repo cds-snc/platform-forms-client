@@ -28,6 +28,7 @@ export const GroupAndChoiceSelect = ({
   updateChoiceId,
   updateGroupId,
   removeSelector,
+  nextActions,
 }: {
   groupId: string | null;
   item: FormElement;
@@ -36,6 +37,7 @@ export const GroupAndChoiceSelect = ({
   updateChoiceId: (index: number, id: string) => void;
   updateGroupId: (index: number, id: string) => void;
   removeSelector: (index: number) => void;
+  nextActions: NextActionRule[];
 }) => {
   const { t } = useTranslation("form-builder");
   const { language } = useTemplateStore((s) => ({
@@ -68,6 +70,12 @@ export const GroupAndChoiceSelect = ({
     });
   }, [choiceElement, language]);
 
+  // Filter out choices that are already used in other rules
+  const usedChoices = nextActions
+    .map((action) => (action.choiceId && action.choiceId !== choiceId ? action.choiceId : null))
+    .filter(Boolean);
+  const filteredChoices = choices?.filter((choice) => !usedChoices.includes(choice.value));
+
   const handleGroupChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const value = e.target.value;
     updateGroupId(index, value);
@@ -87,16 +95,19 @@ export const GroupAndChoiceSelect = ({
     return null;
   }
 
+  // Check if the nextActions array has a catch all rule
+  const catchAllRule = nextActions.find((action) => action.choiceId.includes("catch-all"));
+
   return (
     <div className="px-4">
-      {choices && (
+      {filteredChoices && (
         <fieldset className="mb-4 border-b border-dotted border-slate-500">
           <div className="mb-4">
             <ChoiceSelect
               selected={choiceId}
-              choices={choices}
+              choices={filteredChoices}
               onChange={handleChoiceChange}
-              addCatchAll={true}
+              addCatchAll={catchAllRule ? false : true}
             />
           </div>
           <div className="mb-4">
@@ -194,6 +205,7 @@ export const MultiActionSelector = ({
                 updateGroupId={updateGroupId}
                 updateChoiceId={updateChoiceId}
                 removeSelector={removeSelector}
+                nextActions={nextActions}
               />
             );
           })}
