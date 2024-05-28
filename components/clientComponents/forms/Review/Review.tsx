@@ -35,9 +35,12 @@ export const Review = (): React.ReactElement => {
   const questionsAndAnswers = getGroupHistory()
     .filter((key) => key !== "review") // Removed to avoid showing as a group
     .map((key) => {
+      const titleLanguageKey = getLocalizedProperty("title", lang) as "titleEn" | "titleFr";
+      const title = reviewGroups?.[key]?.[titleLanguageKey];
       return {
         id: key,
         name: reviewGroups[key].name,
+        title,
         elements: reviewGroups[key].elements.map((element) => {
           const elementName = element as keyof typeof formValues;
           return {
@@ -64,19 +67,20 @@ export const Review = (): React.ReactElement => {
                       clearHistoryAfterId(group.id);
                     }}
                   >
-                    {group.name}
+                    {/* group.name fallback is needed for sections without titles like Start */}
+                    {group.title || group.name}
                   </Button>
                 </h3>
                 <div className="mb-10 ml-1">
                   <dl className="mt-10 mb-10">
                     {Array.isArray(group.elements) &&
                       group.elements.map((element) => {
+                        const question = getElementNameById(Object.keys(element)[0]) as string;
+                        const answer = Object.values(element)[0] as string;
                         return (
                           <div key={Object.keys(element)[0]} className="mb-8">
-                            <dt className="font-bold mb-2">
-                              <>{getElementNameById(Object.keys(element)[0])}</>
-                            </dt>
-                            <dd>{Object.values(element)[0]}</dd>
+                            <dt className="font-bold mb-2">{question}</dt>
+                            <dd>{answer}</dd>
                           </div>
                         );
                       })}
