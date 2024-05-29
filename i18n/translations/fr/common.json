@@ -80,9 +80,9 @@
     "administration": "Administration",
     "myForms": "Formulaires",
     "profile": "Profil",
-    "typography": "[FR]Typography",
-    "upload": "[FR]Upload",
-    "viewTemplates": "[FR]View Templates",
+    "typography": "Typographie",
+    "upload": "Téléverser",
+    "viewTemplates": "Afficher les modèles",
     "allForms": "Formulaires"
   },
   "formElements": {

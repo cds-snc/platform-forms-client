@@ -92,7 +92,7 @@
   "editForm": "Modifier le formulaire",
   "navLabel": "Navigation des formulaires",
   "errors": {
-    "formDownloadNotExist": "[FR]The form you are trying to download does not exist.",
-    "formDownloadFailed": "[FR]Failed to download the form."
+    "formDownloadNotExist": "Le forulaire que vous essayez de télécharger n'existe pas.",
+    "formDownloadFailed": "Le téléchargement du formulaire a échoué."
   }
 }
