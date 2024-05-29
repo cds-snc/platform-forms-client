@@ -1,8 +1,8 @@
 {
-  "title": "[FR]Review",
-  "reviewForm": "[FR]Review your answers before submitting.",
-  "edit": "[FR]Edit",
-  "goBack": "[FR]Go back",
-  "submit": "[FR]Submit",
-  "unknown": "Unknown"
+  "title": "Révision",
+  "reviewForm": "Révisez vos réponses avant de soumettre le formulaire.",
+  "edit": "Modifier",
+  "goBack": "Retourner",
+  "submit": "Soumettre",
+  "unknown": "Réponse inconnue"
 }

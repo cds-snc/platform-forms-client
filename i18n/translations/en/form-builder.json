@@ -794,15 +794,15 @@
     "closePanel": "Close panel",
     "questions": "Questions",
     "logic": "Logic",
-    "translation": "Translation",
+    "translation": "Translations",
     "treeView": {
       "addSection": "New section"
     }
   },
   "logic": {
     "heading": "Logic",
-    "description": "Apply conditional rules to sections with radio buttons, checkboxes, and dropdown form elements.",
-    "clear": "Clear",
+    "description": "Apply conditional rules to sections with radio buttons, checkboxes, or a dropdown.",
+    "clear": "Remove",
     "gotoSection": "Go to section",
     "questionTitle": "Question:",
     "sectionTitle": "Section:",
@@ -810,19 +810,19 @@
     "saveRule": "Save",
     "saveNote": "Adding and saving a rule, turns off Auto-flow sections",
     "resetRules": "Reset all rules",
-    "resetRulesDescription": "Auto flow will automatically set a linear flow for your sections, overriding any existing rules.",
+    "resetRulesDescription": "The autoflow feature will reset the progression between sections into a simple linear flow, overriding any existing branching rules that were applied.",
     "multiRulesWarning": {
-      "text1": "The flow is currently set based on the rules applied.",
-      "text2": "Flow sections:",
-      "text3": "To flow sections, you must clear the rules applied to question elements."
+      "text1": "The order and flow is set based on the rules applied.",
+      "text2": "Linking the sections:",
+      "text3": "To link the sections, you must remove the rules applied to form elements."
     },
     "choiceSelect": {
       "selectOption": "Select an option",
-      "catchAllOption": "Catch all (any other value)"
+      "catchAllOption": "For any other value"
     },
     "groupSelect": {
-      "default": "Select a section to go to",
-      "catchAllGroup": "Catch all (any other value)"
+      "default": "Select a section",
+      "catchAllGroup": "Pour toute autre valeur"
     },
     "actionsSaved": "Actions saved"
   },
@@ -830,7 +830,7 @@
     "addElement": {
       "empty": {
         "title": "Empty section",
-        "text1": "This section doesn’t have any form elements in it."
+        "text1": "No form elements have been added."
       }
     },
     "sectionTitle": "Section title"
