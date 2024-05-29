@@ -140,6 +140,7 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
     children,
     handleSubmit,
     status,
+    language,
     formRecord: { id: formID, form },
   }: InnerFormProps = props;
   const [canFocusOnError, setCanFocusOnError] = useState(false);
@@ -149,10 +150,7 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
   const isGroupsCheck = groupsCheck(props.allowGrouping);
   const showIntro = isGroupsCheck ? currentGroup === LockedSections.START : true;
 
-  const {
-    t,
-    i18n: { language },
-  } = useTranslation();
+  const { t } = useTranslation();
 
   useFormValuesChanged();
 
