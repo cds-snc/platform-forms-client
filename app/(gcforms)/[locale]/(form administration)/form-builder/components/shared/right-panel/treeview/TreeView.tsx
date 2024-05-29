@@ -29,6 +29,7 @@ import { useConfirmState } from "../../confirm/useConfirmState";
 import { useConfirmState as useConfirmDeleteDialogState } from "../../confirm/useConfirmState";
 import { ConfirmDeleteSectionDialog } from "../../confirm/ConfirmDeleteSectionDialog";
 import { useTemplateStore } from "@lib/store/useTemplateStore";
+import { toast } from "@formBuilder/components/shared";
 
 export interface TreeDataProviderProps {
   children?: ReactElement;
@@ -149,6 +150,12 @@ const ControlledTree: ForwardRefRenderFunction<unknown, TreeDataProviderProps> =
                   }
                   deleteGroup(String(item.index));
                   setOpenConfirmDeleteDialog(false);
+                  toast.success(
+                    <>
+                      <h3>Group deleted</h3>
+                      <p>{`${item.data.name} was successfully deleted`}</p>
+                    </>
+                  );
                   return;
                 }
                 setOpenConfirmDeleteDialog(false);
