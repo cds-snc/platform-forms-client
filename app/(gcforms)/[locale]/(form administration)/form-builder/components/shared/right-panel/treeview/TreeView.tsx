@@ -145,11 +145,11 @@ const ControlledTree: ForwardRefRenderFunction<unknown, TreeDataProviderProps> =
                 setOpenConfirmDeleteDialog(true);
                 const confirm = await getConfirmDeletePromise();
                 if (confirm) {
-                  if (item.children) {
+                  item.children &&
                     item.children.map((child) => {
                       removeItem(Number(child));
                     });
-                  }
+
                   deleteGroup(String(item.index));
                   setOpenConfirmDeleteDialog(false);
                   toast.success(
