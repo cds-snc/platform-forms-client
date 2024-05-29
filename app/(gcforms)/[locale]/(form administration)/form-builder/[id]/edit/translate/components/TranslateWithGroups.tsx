@@ -19,6 +19,7 @@ import { SaveButton } from "@formBuilder/components/shared/SaveButton";
 
 import { FormElement } from "@lib/types";
 import { alphabet, sortByLayout } from "@lib/utils/form-builder";
+import { getLayoutFromGroups } from "@lib/utils/form-builder/getLayoutFromGroups";
 
 const Element = ({
   element,
@@ -100,20 +101,23 @@ const Element = ({
   );
 };
 
-export const Translate = () => {
-  const { updateField, form, localizeField, getLocalizationAttribute } = useTemplateStore((s) => ({
-    updateField: s.updateField,
-    form: s.form,
-    localizeField: s.localizeField,
-    getLocalizationAttribute: s.getLocalizationAttribute,
-  }));
+export const TranslateWithGroups = () => {
+  const { updateField, form, groups, localizeField, getLocalizationAttribute } = useTemplateStore(
+    (s) => ({
+      updateField: s.updateField,
+      form: s.form,
+      groups: s.form.groups,
+      localizeField: s.localizeField,
+      getLocalizationAttribute: s.getLocalizationAttribute,
+    })
+  );
   const { t } = useTranslation("form-builder");
 
   // Set default left-hand language
   const primaryLanguage = "en";
   const secondaryLanguage = primaryLanguage === "en" ? "fr" : "en";
 
-  let questionsIndex = 1;
+  const layout = (groups && getLayoutFromGroups(groups)) || form.layout;
 
   const hasHydrated = useRehydrate();
   if (!hasHydrated) return null;
@@ -147,7 +151,7 @@ export const Translate = () => {
                   <>{primaryLanguage}</>
                 </LanguageLabel>
                 <textarea
-                  className="h-full w-full p-4 focus:outline-blue-focus"
+                  className="size-full p-4 focus:outline-blue-focus"
                   id="form-title-en"
                   aria-describedby="form-title-en-language"
                   value={form[localizeField(LocalizedFormProperties.TITLE, primaryLanguage)]}
@@ -239,19 +243,13 @@ export const Translate = () => {
 
         {/* ELEMENTS */}
         <section>
-          {sortByLayout({ layout: form.layout, elements: [...form.elements] }).map(
-            (element, index) => {
-              return (
-                <div className="section" id={`section-${index}`} key={element.id}>
-                  <SectionTitle>
-                    {element.type === "richText" && <>{t("pageText")}</>}
-                    {element.type !== "richText" && <>{"Question " + questionsIndex++}</>}
-                  </SectionTitle>
-                  <Element index={index} element={element} primaryLanguage={primaryLanguage} />
-                </div>
-              );
-            }
-          )}
+          {sortByLayout({ layout, elements: [...form.elements] }).map((element, index) => {
+            return (
+              <div className="section" id={`section-${index}`} key={element.id}>
+                <Element index={index} element={element} primaryLanguage={primaryLanguage} />
+              </div>
+            );
+          })}
         </section>
         {/* END ELEMENTS */}
 

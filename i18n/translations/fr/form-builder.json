@@ -790,47 +790,47 @@
   "saved": "Enregistré",
   "opensInNewTab": "ouvre un nouvel onglet",
   "rightPanel": {
-    "openPanel": "Design form [FR]",
-    "closePanel": "Close panel [FR]",
-    "questions": "Questions [FR]",
-    "logic": "Logic  [FR]",
-    "translation": "Translation [FR]",
+    "openPanel": "Conception du formulaire",
+    "closePanel": "Fermer le panneau",
+    "questions": "Questions",
+    "logic": "Logique",
+    "translation": "Traductions",
     "treeView": {
-      "addSection": "New section [FR]"
+      "addSection": "Nouvelle section"
     }
   },
   "logic": {
-    "heading": "Logic [fr]",
-    "description": "Apply conditional rules to sections with radio buttons, checkboxes, and dropdown form elements.",
-    "clear": "Clear [fr]",
-    "gotoSection": "Go to section [fr]",
-    "questionTitle": "Question [fr]:",
-    "sectionTitle": "Section: [fr]",
-    "addRule": "Add rule [fr]",
-    "resetRules": "Reset all rules [fr]",
-    "resetRulesDescription": "Auto flow will automatically set a linear flow for your sections, overriding any existing rules. [fr]",
-    "saveRule": "Save [fr]",
-    "saveNote": "Adding and saving a rule, turns off Auto-flow sections [fr]",
+    "heading": "Logique",
+    "description": "Appliquer des règles conditionnelles aux sections comportant des boutons radio, des cases à cocher ou une liste déroulante.",
+    "clear": "Enlever",
+    "gotoSection": "Aller à la section",
+    "questionTitle": "Question :",
+    "sectionTitle": "Section :",
+    "addRule": "Ajouter une régle",
+    "resetRules": "Réinitialiser toutes les règles",
+    "resetRulesDescription": "La fonction de flux automatique réinitialise la progression entre les sections en un flux linéaire simple, remplaçant ainsi toutes les règles de logique de branchement qui s'appliquent.",
+    "saveRule": "Enregistrer",
+    "saveNote": "Ajouter et enregistrer une règle, désactive le ",
     "multiRulesWarning": {
-      "text1": "The flow is currently set based on the rules applied. [fr]",
-      "text2": "Flow sections: [fr]",
-      "text3": "To flow sections, you must clear the rules applied to question elements. [fr]"
+      "text1": "L'ordre et le flux sont définis en fonction des règles appliquées.",
+      "text2": "Relier les sections :",
+      "text3": "Pour relier les section, vous devez enlever les règles appliquées aux éléments du formulaire."
     },
     "choiceSelect": {
-      "selectOption": "Select an option [fr]",
-      "catchAllOption": "Catch all (any other value) [fr]"
+      "selectOption": "Sélectionner une option",
+      "catchAllOption": "Pour toute autre option"
     },
     "groupSelect": {
-      "default": "Select a section to go to [fr]",
-      "catchAllGroup": "Catch all (any other value) [fr]"
+      "default": "Sélectionner une section",
+      "catchAllGroup": "Pour toute autre valeur"
     },
-    "actionsSaved": "Actions saved [fr]"
+    "actionsSaved": "Actions enregistrées"
   },
   "groups": {
     "addElement": {
       "empty": {
-        "title": "Empty section [fr]",
-        "text1": "This section doesn’t have any form elements in it. [fr]"
+        "title": "Section vide",
+        "text1": "Aucun élément de formulaire n'a été ajouté."
       }
     },
     "sectionTitle": "Titre de la section"
