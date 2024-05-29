@@ -109,10 +109,10 @@ const ControlledTree: ForwardRefRenderFunction<unknown, TreeDataProviderProps> =
 
   const { resolve, getPromise, openDialog, setOpenDialog } = useConfirmState();
   const {
-    resolve: resolveDeleteConfirm,
-    getPromise: getDeletePromise,
-    openDialog: openDeleteDialog,
-    setOpenDialog: setOpenDeleteDialog,
+    resolve: resolveConfirmDelete,
+    getPromise: getConfirmDeletePromise,
+    openDialog: openConfirmDeleteDialog,
+    setOpenDialog: setOpenConfirmDeleteDialog,
   } = useConfirmDeleteDialogState();
 
   return (
@@ -134,8 +134,8 @@ const ControlledTree: ForwardRefRenderFunction<unknown, TreeDataProviderProps> =
               context={context}
               handleDelete={async (e) => {
                 e.stopPropagation();
-                setOpenDeleteDialog(true);
-                const confirm = await getDeletePromise();
+                setOpenConfirmDeleteDialog(true);
+                const confirm = await getConfirmDeletePromise();
                 if (confirm) {
                   if (item.children) {
                     item.children.map((child) => {
@@ -143,10 +143,10 @@ const ControlledTree: ForwardRefRenderFunction<unknown, TreeDataProviderProps> =
                     });
                   }
                   deleteGroup(String(item.index));
-                  setOpenDeleteDialog(false);
+                  setOpenConfirmDeleteDialog(false);
                   return;
                 }
-                setOpenDeleteDialog(false);
+                setOpenConfirmDeleteDialog(false);
               }}
             >
               {children}
@@ -251,12 +251,12 @@ const ControlledTree: ForwardRefRenderFunction<unknown, TreeDataProviderProps> =
         }}
       />
       <ConfirmDeleteSectionDialog
-        open={openDeleteDialog}
+        open={openConfirmDeleteDialog}
         handleClose={(value) => {
           if (value) {
-            resolveDeleteConfirm && resolveDeleteConfirm(true);
+            resolveConfirmDelete && resolveConfirmDelete(true);
           } else {
-            resolveDeleteConfirm && resolveDeleteConfirm(false);
+            resolveConfirmDelete && resolveConfirmDelete(false);
           }
         }}
       />
