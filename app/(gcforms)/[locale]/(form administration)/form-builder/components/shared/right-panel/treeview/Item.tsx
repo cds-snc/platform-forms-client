@@ -62,6 +62,9 @@ export const Item = ({
                 tree?.current?.renameItem(id, name);
                 context.stopRenamingItem();
               }
+              if (e.key === "Escape") {
+                context.stopRenamingItem();
+              }
             }}
             onChange={(e) => {
               setName(e.target.value);
