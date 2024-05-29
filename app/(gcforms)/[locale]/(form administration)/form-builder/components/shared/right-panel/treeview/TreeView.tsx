@@ -107,7 +107,12 @@ const ControlledTree: ForwardRefRenderFunction<unknown, TreeDataProviderProps> =
     },
   }));
 
-  const { resolve, getPromise, openDialog, setOpenDialog } = useConfirmState();
+  const {
+    resolve: resolveConfirmMove,
+    getPromise: getConfirmMovePromise,
+    openDialog: openConfirmMoveDialog,
+    setOpenDialog: setOpenConfirmMoveDialog,
+  } = useConfirmState();
   const {
     resolve: resolveConfirmDelete,
     getPromise: getConfirmDeletePromise,
@@ -193,8 +198,8 @@ const ControlledTree: ForwardRefRenderFunction<unknown, TreeDataProviderProps> =
             replaceGroups,
             setSelectedItems,
             getTreeData,
-            getPromise,
-            setOpenDialog
+            getConfirmMovePromise,
+            setOpenConfirmMoveDialog
           )
         }
         onFocusItem={(item) => {
@@ -241,12 +246,12 @@ const ControlledTree: ForwardRefRenderFunction<unknown, TreeDataProviderProps> =
         <>{children}</>
       </ControlledTreeEnvironment>
       <ConfirmMoveSectionDialog
-        open={openDialog}
+        open={openConfirmMoveDialog}
         handleClose={(value) => {
           if (value) {
-            resolve && resolve(true);
+            resolveConfirmMove && resolveConfirmMove(true);
           } else {
-            resolve && resolve(false);
+            resolveConfirmMove && resolveConfirmMove(false);
           }
         }}
       />
