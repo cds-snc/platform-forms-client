@@ -30,6 +30,7 @@ import { useConfirmState as useConfirmDeleteDialogState } from "../../confirm/us
 import { ConfirmDeleteSectionDialog } from "../../confirm/ConfirmDeleteSectionDialog";
 import { useTemplateStore } from "@lib/store/useTemplateStore";
 import { toast } from "@formBuilder/components/shared";
+import { useTranslation } from "@i18n/client";
 
 export interface TreeDataProviderProps {
   children?: ReactElement;
@@ -73,6 +74,7 @@ const ControlledTree: ForwardRefRenderFunction<unknown, TreeDataProviderProps> =
     };
   });
 
+  const { t } = useTranslation("form-builder");
   const { tree, environment } = useTreeRef();
   const [focusedItem, setFocusedItem] = useState<TreeItemIndex | undefined>();
   const [expandedItems, setExpandedItems] = useState<TreeItemIndex[]>([]);
@@ -152,8 +154,8 @@ const ControlledTree: ForwardRefRenderFunction<unknown, TreeDataProviderProps> =
                   setOpenConfirmDeleteDialog(false);
                   toast.success(
                     <>
-                      <h3>Group deleted</h3>
-                      <p>{`${item.data.name} was successfully deleted`}</p>
+                      <h3>{t("groups.groupDeleted")}</h3>
+                      <p>{t("groups.groupSuccessfullyDeleted", { group: item.data.name })}</p>
                     </>
                   );
                   return;

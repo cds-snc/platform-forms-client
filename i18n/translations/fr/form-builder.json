@@ -833,7 +833,9 @@
         "text1": "Aucun élément de formulaire n'a été ajouté."
       }
     },
-    "sectionTitle": "Titre de la section"
+    "sectionTitle": "Titre de la section",
+    "groupDeleted": "Group deleted",
+    "groupSuccessfullyDeleted": "{{group}} successfully deleted"
   },
   "confirmation": {
     "title": "Votre formulaire a été soumis",
