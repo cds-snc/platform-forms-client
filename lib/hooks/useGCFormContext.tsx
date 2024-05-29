@@ -112,8 +112,7 @@ export const GCFormsProvider = ({
   const getGroupTitle = (groupId: string | null, language: Language) => {
     if (!groupId) return "";
     const titleLanguageKey = getLocalizedProperty("title", language) as "titleEn" | "titleFr";
-    const title = groups?.[groupId]?.[titleLanguageKey];
-    return title || groups[groupId]?.name || "";
+    return groups?.[groupId]?.[titleLanguageKey] || "";
   };
 
   return (

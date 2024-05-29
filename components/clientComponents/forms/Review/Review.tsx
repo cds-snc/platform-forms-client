@@ -22,11 +22,8 @@ type QuestionAnswer = {
   [x: string]: string;
 };
 
-export const Review = (): React.ReactElement => {
-  const {
-    t,
-    i18n: { language: lang },
-  } = useTranslation("review");
+export const Review = ({ language }: { language: Language }): React.ReactElement => {
+  const { t } = useTranslation(["review", "common"]);
   const { groups, getValues, formRecord, getGroupHistory, getGroupTitle } = useGCFormsContext();
   const headingRef = useRef(null);
 
@@ -55,11 +52,11 @@ export const Review = (): React.ReactElement => {
         return {
           id: key,
           name: reviewGroups[key].name,
-          title: getGroupTitle(key, lang as Language),
+          title: getGroupTitle(key, language),
           elements,
         };
       });
-  }, [groups, getValues, getGroupHistory, getGroupTitle, lang]);
+  }, [groups, getValues, getGroupHistory, getGroupTitle, language]);
 
   return (
     <>
@@ -67,7 +64,7 @@ export const Review = (): React.ReactElement => {
       <div className="my-16">
         {Array.isArray(questionsAndAnswers) &&
           questionsAndAnswers.map((group) => {
-            const title = group.title || group.name; // group.name as fallback for groups like Start
+            const title = group.title ? group.title : t("start", { ns: "common" }); // group.name as fallback for groups like Start
             return (
               <div key={group.id} className="py-4 px-6 mb-10 border-2 border-slate-400 rounded-lg">
                 <h3 className="text-slate-700">
@@ -83,7 +80,7 @@ export const Review = (): React.ReactElement => {
                           key={Object.keys(element)[0]}
                           element={element}
                           formRecord={formRecord}
-                          lang={lang}
+                          lang={language}
                         />
                       ))}
                   </dl>

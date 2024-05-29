@@ -248,7 +248,9 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
               </RichText>
             )}
 
-            {isGroupsCheck && currentGroup === LockedSections.REVIEW && <Review />}
+            {isGroupsCheck && currentGroup === LockedSections.REVIEW && (
+              <Review language={language as Language} />
+            )}
 
             {props.renderSubmit ? (
               props.renderSubmit({
