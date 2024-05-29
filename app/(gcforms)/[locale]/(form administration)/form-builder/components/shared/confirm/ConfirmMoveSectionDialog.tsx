@@ -3,7 +3,7 @@ import * as AlertDialog from "@radix-ui/react-alert-dialog";
 
 export type handleCloseType = (value: boolean) => void;
 
-export const ConfirmDialog = ({
+export const ConfirmMoveSectionDialog = ({
   open,
   handleClose,
 }: {

@@ -24,7 +24,7 @@ import { AddIcon } from "@serverComponents/icons";
 import { handleCanDropAt } from "./handlers/handleCanDropAt";
 import { handleOnDrop } from "./handlers/handleOnDrop";
 import { ElementProperties, useElementTitle } from "@lib/hooks/useElementTitle";
-import { ConfirmDialog } from "../../confirm/ConfirmDialog";
+import { ConfirmMoveSectionDialog } from "../../confirm/ConfirmMoveSectionDialog";
 import { useConfirmState } from "../../confirm/useConfirmState";
 import { useConfirmState as useConfirmDeleteDialogState } from "../../confirm/useConfirmState";
 import { ConfirmDeleteSectionDialog } from "../../confirm/ConfirmDeleteSectionDialog";
@@ -240,7 +240,7 @@ const ControlledTree: ForwardRefRenderFunction<unknown, TreeDataProviderProps> =
         </div>
         <>{children}</>
       </ControlledTreeEnvironment>
-      <ConfirmDialog
+      <ConfirmMoveSectionDialog
         open={openDialog}
         handleClose={(value) => {
           if (value) {
