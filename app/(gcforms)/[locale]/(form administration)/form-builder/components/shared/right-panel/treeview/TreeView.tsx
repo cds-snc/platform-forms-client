@@ -25,7 +25,7 @@ import { handleCanDropAt } from "./handlers/handleCanDropAt";
 import { handleOnDrop } from "./handlers/handleOnDrop";
 import { ElementProperties, useElementTitle } from "@lib/hooks/useElementTitle";
 import { ConfirmMoveSectionDialog } from "../../confirm/ConfirmMoveSectionDialog";
-import { useConfirmState } from "../../confirm/useConfirmState";
+import { useConfirmState as useConfirmMoveDialogState } from "../../confirm/useConfirmState";
 import { useConfirmState as useConfirmDeleteDialogState } from "../../confirm/useConfirmState";
 import { ConfirmDeleteSectionDialog } from "../../confirm/ConfirmDeleteSectionDialog";
 import { useTemplateStore } from "@lib/store/useTemplateStore";
@@ -115,7 +115,7 @@ const ControlledTree: ForwardRefRenderFunction<unknown, TreeDataProviderProps> =
     getPromise: getConfirmMovePromise,
     openDialog: openConfirmMoveDialog,
     setOpenDialog: setOpenConfirmMoveDialog,
-  } = useConfirmState();
+  } = useConfirmMoveDialogState();
   const {
     resolve: resolveConfirmDelete,
     getPromise: getConfirmDeletePromise,
