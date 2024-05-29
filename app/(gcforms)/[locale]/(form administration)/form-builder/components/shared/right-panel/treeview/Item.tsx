@@ -62,9 +62,12 @@ export const Item = ({
                 tree?.current?.renameItem(id, name);
                 context.stopRenamingItem();
               }
-              if (e.key === "Escape") {
+              if (e.key === "Escape" || e.key === "Tab") {
                 context.stopRenamingItem();
               }
+            }}
+            onBlur={() => {
+              context.stopRenamingItem();
             }}
             onChange={(e) => {
               setName(e.target.value);
@@ -72,6 +75,7 @@ export const Item = ({
           />
           {arrow}
         </div>
+        {children}
       </li>
     );
   }
