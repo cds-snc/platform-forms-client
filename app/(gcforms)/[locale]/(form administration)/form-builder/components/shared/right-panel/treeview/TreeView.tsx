@@ -203,7 +203,7 @@ const ControlledTree: ForwardRefRenderFunction<unknown, TreeDataProviderProps> =
           </label>
         </div>
 
-        <div className="border-t-1 border-slate-200">
+        <div className="border-1 border-slate-200">
           <Tree treeId="default" rootItem="root" treeLabel="GC Forms sections" ref={tree} />
         </div>
         <>{children}</>
