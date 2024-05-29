@@ -15,6 +15,8 @@ import {
   pushIdToHistory as _pushIdToHistory,
   clearHistoryAfterId as _clearHistoryAfterId,
 } from "@lib/utils/form-builder/groupsHistory";
+import { getLocalizedProperty } from "@lib/utils";
+import { Language } from "@lib/types/form-builder-types";
 
 interface GCFormsContextValueType {
   updateValues: ({ formValues }: { formValues: FormValues }) => void;
@@ -31,7 +33,7 @@ interface GCFormsContextValueType {
   getGroupHistory: () => string[];
   pushIdToHistory: (groupId: string) => string[];
   clearHistoryAfterId: (groupId: string) => string[];
-  getGroupTitle: (groupId: string | null) => string;
+  getGroupTitle: (groupId: string | null, language: Language) => string;
 }
 
 const GCFormsContext = createContext<GCFormsContextValueType | undefined>(undefined);
@@ -107,11 +109,11 @@ export const GCFormsProvider = ({
   // Note: this only removes the group entry and not the values
   const clearHistoryAfterId = (groupId: string) => _clearHistoryAfterId(groupId, history.current);
 
-  // Note: once localized versions of the section name have been added, update the below to use
-  // something like `getLocalizedProperty("name", locale || "en")`
-  const getGroupTitle = (groupId: string | null) => {
+  const getGroupTitle = (groupId: string | null, language: Language) => {
     if (!groupId) return "";
-    return groups[groupId]?.name || "";
+    const titleLanguageKey = getLocalizedProperty("title", language) as "titleEn" | "titleFr";
+    const title = groups?.[groupId]?.[titleLanguageKey];
+    return title || groups[groupId]?.name || "";
   };
 
   return (

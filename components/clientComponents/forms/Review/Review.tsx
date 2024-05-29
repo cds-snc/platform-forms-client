@@ -5,6 +5,7 @@ import { useTranslation } from "@i18n/client";
 import { useFocusIt } from "@lib/hooks/useFocusIt";
 import { useGCFormsContext } from "@lib/hooks/useGCFormContext";
 import { FormRecord, TypeOmit } from "@lib/types";
+import { Language } from "@lib/types/form-builder-types";
 import { getLocalizedProperty } from "@lib/utils";
 import { useMemo, useRef } from "react";
 
@@ -26,7 +27,7 @@ export const Review = (): React.ReactElement => {
     t,
     i18n: { language: lang },
   } = useTranslation("review");
-  const { groups, getValues, formRecord, getGroupHistory } = useGCFormsContext();
+  const { groups, getValues, formRecord, getGroupHistory, getGroupTitle } = useGCFormsContext();
   const headingRef = useRef(null);
 
   useFocusIt({ elRef: headingRef });
@@ -45,21 +46,20 @@ export const Review = (): React.ReactElement => {
     return groupHistory
       .filter((key) => key !== "review") // Removed to avoid showing as a group
       .map((key) => {
-        const titleLanguageKey = getLocalizedProperty("title", lang) as "titleEn" | "titleFr";
-        const title = reviewGroups?.[key]?.[titleLanguageKey];
+        const elements = reviewGroups[key].elements.map((element) => {
+          const elementName = element as keyof typeof formValues;
+          return {
+            [element]: formatElementValue(elementName),
+          };
+        });
         return {
           id: key,
           name: reviewGroups[key].name,
-          title,
-          elements: reviewGroups[key].elements.map((element) => {
-            const elementName = element as keyof typeof formValues;
-            return {
-              [element]: formatElementValue(elementName),
-            };
-          }),
+          title: getGroupTitle(key, lang as Language),
+          elements,
         };
       });
-  }, [groups, getValues, getGroupHistory, lang]);
+  }, [groups, getValues, getGroupHistory, getGroupTitle, lang]);
 
   return (
     <>

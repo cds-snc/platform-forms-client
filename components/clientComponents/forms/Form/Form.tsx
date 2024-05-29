@@ -18,6 +18,7 @@ import { useGCFormsContext } from "@lib/hooks/useGCFormContext";
 import { Review } from "../Review/Review";
 import { LockedSections } from "@formBuilder/components/shared/right-panel/treeview/types";
 import { BackButton } from "@formBuilder/[id]/preview/BackButton";
+import { Language } from "@lib/types/form-builder-types";
 
 interface SubmitButtonProps {
   numberOfRequiredQuestions: number;
@@ -148,7 +149,10 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
   const isGroupsCheck = groupsCheck(props.allowGrouping);
   const showIntro = isGroupsCheck ? currentGroup === LockedSections.START : true;
 
-  const { t } = useTranslation();
+  const {
+    t,
+    i18n: { language },
+  } = useTranslation();
 
   useFormValuesChanged();
 
@@ -234,7 +238,7 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
             {isGroupsCheck &&
               currentGroup !== LockedSections.REVIEW &&
               currentGroup !== LockedSections.START && (
-                <h2 className="pb-8">{getGroupTitle(currentGroup)}</h2>
+                <h2 className="pb-8">{getGroupTitle(currentGroup, language as Language)}</h2>
               )}
 
             {children}
