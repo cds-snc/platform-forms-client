@@ -5,6 +5,7 @@ import { FormElement } from "@lib/types";
 import { LocalizedElementProperties } from "@lib/types/form-builder-types";
 
 export type ElementProperties = {
+  name?: string;
   type: string;
   titleEn: string;
   titleFr: string;
@@ -31,6 +32,12 @@ export const useElementTitle = () => {
   const getTitle = (element: ElementProperties | FormElement) => {
     let data = element as ElementProperties;
 
+    // Groups have a name property
+    if (data.name) {
+      return data.name;
+    }
+
+    // Elements have a properties object and type
     if ((element as FormElement).properties) {
       const formElement = element as FormElement;
       data = {
