@@ -60,7 +60,7 @@ const nagwarePhaseEscalated: Setting = {
 const responseDownloadLimit: Setting = {
   internalId: "responseDownloadLimit",
   nameEn: "Limit the number of responses that can be downloaded at once",
-  nameFr: "[FR] Limit the number of responses that can be downloaded at once",
+  nameFr: "Limitez le nombre de réponses pouvant être téléchargées à la fois",
   descriptionEn: null,
   descriptionFr: null,
   value: "20",

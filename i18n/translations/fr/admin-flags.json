@@ -23,8 +23,8 @@
       "description": "Activer les blocs expérimentaux"
     },
     "conditionalLogic": {
-      "title": "[FR] Conditional logic",
-      "description": "[FR] Enable conditional logic + right panel"
+      "title": "Logique conditionnelle",
+      "description": "Activer la logique conditionnelle et le panneau de droite"
     }
   }
 }
