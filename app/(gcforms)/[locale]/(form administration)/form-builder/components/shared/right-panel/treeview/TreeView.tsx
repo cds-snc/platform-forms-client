@@ -26,6 +26,9 @@ import { handleOnDrop } from "./handlers/handleOnDrop";
 import { ElementProperties, useElementTitle } from "@lib/hooks/useElementTitle";
 import { ConfirmDialog } from "../../confirm/ConfirmDialog";
 import { useConfirmState } from "../../confirm/useConfirmState";
+import { useConfirmState as useConfirmDeleteDialogState } from "../../confirm/useConfirmState";
+import { ConfirmDeleteSectionDialog } from "../../confirm/ConfirmDeleteSectionDialog";
+import { useTemplateStore } from "@lib/store/useTemplateStore";
 
 export interface TreeDataProviderProps {
   children?: ReactElement;
@@ -49,6 +52,7 @@ const ControlledTree: ForwardRefRenderFunction<unknown, TreeDataProviderProps> =
     updateGroupName,
     replaceGroups,
     updateElementTitle,
+    deleteGroup,
   } = useGroupStore((s) => {
     return {
       getTreeData: s.getTreeData,
@@ -58,6 +62,13 @@ const ControlledTree: ForwardRefRenderFunction<unknown, TreeDataProviderProps> =
       setId: s.setId,
       updateGroupName: s.updateGroupName,
       updateElementTitle: s.updateElementTitle,
+      deleteGroup: s.deleteGroup,
+    };
+  });
+
+  const { remove: removeItem } = useTemplateStore((s) => {
+    return {
+      remove: s.remove,
     };
   });
 
@@ -97,6 +108,12 @@ const ControlledTree: ForwardRefRenderFunction<unknown, TreeDataProviderProps> =
   }));
 
   const { resolve, getPromise, openDialog, setOpenDialog } = useConfirmState();
+  const {
+    resolve: resolveDeleteConfirm,
+    getPromise: getDeletePromise,
+    openDialog: openDeleteDialog,
+    setOpenDialog: setOpenDeleteDialog,
+  } = useConfirmDeleteDialogState();
 
   return (
     <>
@@ -109,9 +126,29 @@ const ControlledTree: ForwardRefRenderFunction<unknown, TreeDataProviderProps> =
           reviewGroup: false,
         })}
         getItemTitle={(item) => getTitle(item.data as ElementProperties)}
-        renderItem={({ title, arrow, context, children }) => {
+        renderItem={({ item, title, arrow, context, children }) => {
           return (
-            <Item title={title} arrow={arrow} context={context}>
+            <Item
+              title={title}
+              arrow={arrow}
+              context={context}
+              handleDelete={async (e) => {
+                e.stopPropagation();
+                setOpenDeleteDialog(true);
+                const confirm = await getDeletePromise();
+                if (confirm) {
+                  if (item.children) {
+                    item.children.map((child) => {
+                      removeItem(Number(child));
+                    });
+                  }
+                  deleteGroup(String(item.index));
+                  setOpenDeleteDialog(false);
+                  return;
+                }
+                setOpenDeleteDialog(false);
+              }}
+            >
               {children}
             </Item>
           );
@@ -212,7 +249,17 @@ const ControlledTree: ForwardRefRenderFunction<unknown, TreeDataProviderProps> =
             resolve && resolve(false);
           }
         }}
-      ></ConfirmDialog>
+      />
+      <ConfirmDeleteSectionDialog
+        open={openDeleteDialog}
+        handleClose={(value) => {
+          if (value) {
+            resolveDeleteConfirm && resolveDeleteConfirm(true);
+          } else {
+            resolveDeleteConfirm && resolveDeleteConfirm(false);
+          }
+        }}
+      />
     </>
   );
 };

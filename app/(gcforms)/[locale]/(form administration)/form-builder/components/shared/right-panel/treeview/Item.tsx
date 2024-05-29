@@ -1,5 +1,5 @@
 import { DragHandle } from "./icons/DragHandle";
-import { LockIcon } from "@serverComponents/icons";
+import { DeleteIcon, LockIcon } from "@serverComponents/icons";
 import { cn } from "@lib/utils";
 import { ReactElement, ReactNode } from "react";
 import { TreeItem, TreeItemIndex, TreeItemRenderContext } from "react-complex-tree";
@@ -14,11 +14,13 @@ export const Item = ({
   arrow,
   context,
   children,
+  handleDelete,
 }: {
   title: ReactNode;
   arrow: ReactNode;
   context: TreeItemRenderContext;
   children: ReactNode | ReactElement;
+  handleDelete: (e: React.MouseEvent<HTMLButtonElement>) => Promise<void>;
 }) => {
   const { tree } = useTreeRef();
   const isRenaming = context && context?.isRenaming ? true : false;
@@ -118,12 +120,19 @@ export const Item = ({
             {title}
           </span>
           {context.canDrag ? (
-            <DragHandle
-              className={cn(
-                "absolute right-0 top-0 mr-4 mt-3 hidden cursor-pointer group-hover:block",
-                !arrow && "mt-2"
+            <>
+              {context.isExpanded && (
+                <span className="cursor-pointer" onClick={handleDelete}>
+                  <DeleteIcon className="absolute right-0 top-0 mr-10 mt-3 size-5" />
+                </span>
               )}
-            />
+              <DragHandle
+                className={cn(
+                  "absolute right-0 top-0 mr-4 mt-3 hidden cursor-pointer group-hover:block",
+                  !arrow && "mt-2"
+                )}
+              />
+            </>
           ) : (
             <LockIcon className="absolute right-0 mr-2 inline-block scale-75" />
           )}
