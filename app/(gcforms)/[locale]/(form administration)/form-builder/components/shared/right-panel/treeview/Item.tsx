@@ -123,7 +123,10 @@ export const Item = ({
             <>
               {context.isExpanded && (
                 <span className="cursor-pointer" onClick={handleDelete}>
-                  <DeleteIcon className="absolute right-0 top-0 mr-10 mt-3 size-5" />
+                  <DeleteIcon
+                    title="Delete group"
+                    className="absolute right-0 top-0 mr-10 mt-3 size-5"
+                  />
                 </span>
               )}
               <DragHandle
