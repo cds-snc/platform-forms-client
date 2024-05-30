@@ -140,6 +140,7 @@ export const MultiActionSelector = ({
   const [nextActions, setNextActions] = useState(initialNextActionRules);
   const findParentGroup = useGroupStore((state) => state.findParentGroup);
   const setGroupNextAction = useGroupStore((state) => state.setGroupNextAction);
+  const setChangeKey = useTemplateStore((s) => s.setChangeKey);
 
   const { localizeField, language } = useTemplateStore((s) => ({
     localizeField: s.localizeField,
@@ -234,6 +235,7 @@ export const MultiActionSelector = ({
               const group = findParentGroup(String(item.id));
               const parent = group?.index;
               parent && setGroupNextAction(parent as string, nextActions);
+              setChangeKey(String(new Date().getTime()));
               flow.current?.updateEdges();
               toast.success(t("logic.actionsSaved"));
             }}
