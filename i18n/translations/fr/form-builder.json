@@ -472,9 +472,13 @@
   "publishingRemovesTestResponsesDescription": "Toutes les réponses antérieures seront supprimées du système.",
   "publishYourForm": "Publier votre formulaire",
   "publishYourFormInstructions": {
+    "settings": "Paramètres",
+    "classification": "Classification des données",
+    "deliveryOption": "Option de livraison",
+    "purpose": "Objectif et utilisation",
     "text1": "Veuillez franchir les étapes suivantes avant de publier votre formulaire.",
     "text2": "",
-    "vaultOption": "Réponses à télécharger — ",
+    "vaultOption": "Réponses à télécharger",
     "emailOption": "Réponses envoyées par courriel — ",
     "change": "Modifier ces paramètres"
   },
@@ -527,6 +531,30 @@
   "settingsResponseEmailTitle": "Adresse courriel",
   "settingsResponseHint1": "Les réponses seront envoyées par courriel à cette boîte de réception. Il peut s'agir d'une boîte de réception partagée.",
   "settingsResponseTitle": "Destination de livraison des réponses.",
+  "settingsPurposeAndUse": {
+    "title": "Usage prévu",
+    "description": "Nous utiliserons cette information pour déterminer comment traiter les réponses qui sont dans Formulaires GC depuis plus de 45 jours.",
+    "personalInfo": "Renseignements personnels servant à prendre une décision qui touche un individu",
+    "helpUs": "Dites-nous comment vous prévoyez utiliser les réponses recueillies",
+    "personalInfoDetails": "C’est-à-dire à des fins administratives, par exemple:",
+    "personalInfoDetailsVals": {
+      "1": "demandes ou candidatures",
+      "2": "vérification d’admissibilité",
+      "3": "validation d’identité"
+    },
+    "nonAdminInfo": "Renseignements ne servant pas à prendre une décision qui touche un individu",
+    "nonAdminInfoDetails": "C’est-à-dire à des fins non-administratives, par exemple:",
+    "nonAdminInfoDetailsVals": {
+      "1": "statistiques",
+      "2": "activités de recherche",
+      "3": "audits"
+    },
+    "purpose": {
+      "admin": "fins administratives",
+      "nonAdmin": "fins non-administratives",
+      "unset": "pas définie"
+    }
+  },
   "settingsResponseDelivery": {
     "selectClassification": "Classification des données",
     "beforePublishMessage": "Vous pouvez modifier ces paramètres à tout moment avant de publier le formulaire.",
