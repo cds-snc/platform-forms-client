@@ -70,8 +70,8 @@ const getEdges = (
 ): Edge[] => {
   // Connect to end node as we don't have a next action
   if (prevNodeId && group && typeof group.nextAction === "undefined") {
-    // @ts-expect-error - todo
-    const fromName = group?.[nodeId as keyof typeof group].name;
+    const fromGroup = group?.[nodeId as keyof typeof group];
+    const fromName = fromGroup?.["name" as keyof typeof fromGroup];
     return [
       {
         id: `e-${nodeId}-end`,
@@ -121,7 +121,7 @@ const getEdges = (
         markerEnd: {
           ...arrowStyle,
         },
-        ariaLabel: `From ${group.name} to ${groups?.[action.groupId]}`,
+        ariaLabel: `From ${group.name} to ${groups?.[action.groupId]?.name}`,
       };
     });
 
