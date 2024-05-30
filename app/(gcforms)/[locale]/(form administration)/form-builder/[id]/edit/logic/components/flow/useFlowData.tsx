@@ -83,7 +83,7 @@ const getEdges = (
         markerEnd: {
           ...arrowStyle,
         },
-        ariaLabel: `From ${fromName} to End`,
+        ariaLabel: `From ${fromName} to Confirmation`,
       },
     ];
   }
