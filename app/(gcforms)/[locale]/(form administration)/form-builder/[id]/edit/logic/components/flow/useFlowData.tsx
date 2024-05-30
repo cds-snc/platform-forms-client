@@ -4,7 +4,7 @@ import { TreeItem, TreeItemIndex } from "react-complex-tree";
 
 import { useGroupStore } from "@formBuilder/components/shared/right-panel/treeview/store/useGroupStore";
 import { useTemplateStore } from "@lib/store/useTemplateStore";
-import { Group, NextActionRule } from "@lib/formContext";
+import { Group, GroupsType, NextActionRule } from "@lib/formContext";
 
 const startElements = [
   {
@@ -62,9 +62,16 @@ const arrowStyle = {
   color: "#6366F1",
 };
 
-const getEdges = (nodeId: string, prevNodeId: string, group: Group | undefined): Edge[] => {
+const getEdges = (
+  nodeId: string,
+  prevNodeId: string,
+  group: Group | undefined,
+  groups: GroupsType | undefined
+): Edge[] => {
   // Connect to end node as we don't have a next action
   if (prevNodeId && group && typeof group.nextAction === "undefined") {
+    // @ts-expect-error - todo
+    const fromName = group?.[nodeId as keyof typeof group].name;
     return [
       {
         id: `e-${nodeId}-end`,
@@ -76,6 +83,7 @@ const getEdges = (nodeId: string, prevNodeId: string, group: Group | undefined):
         markerEnd: {
           ...arrowStyle,
         },
+        ariaLabel: `From ${fromName} to End`,
       },
     ];
   }
@@ -83,8 +91,6 @@ const getEdges = (nodeId: string, prevNodeId: string, group: Group | undefined):
   // Add edge from this node to next action
   if (prevNodeId && group && typeof group.nextAction === "string") {
     const nextAction = group.nextAction;
-
-    // @todo update this to use nextAction name
     return [
       {
         id: `e-${nodeId}-${nextAction}`,
@@ -96,6 +102,7 @@ const getEdges = (nodeId: string, prevNodeId: string, group: Group | undefined):
         markerEnd: {
           ...arrowStyle,
         },
+        ariaLabel: `From ${group.name} to ${groups?.[nextAction]?.name}`,
       },
     ];
   }
@@ -114,6 +121,7 @@ const getEdges = (nodeId: string, prevNodeId: string, group: Group | undefined):
         markerEnd: {
           ...arrowStyle,
         },
+        ariaLabel: `From ${group.name} to ${groups?.[action.groupId]}`,
       };
     });
 
@@ -158,7 +166,7 @@ export const useFlowData = () => {
         elements = [...elements, ...children];
       }
 
-      const newEdges = getEdges(key as string, prevNodeId, group);
+      const newEdges = getEdges(key as string, prevNodeId, group, formGroups);
 
       const flowNode = {
         id: key as string,
