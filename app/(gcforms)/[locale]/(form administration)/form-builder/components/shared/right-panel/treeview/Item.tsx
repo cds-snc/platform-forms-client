@@ -98,12 +98,11 @@ export const Item = ({
       }}
     >
       <>
-        <button
+        <div
           {...context.itemContainerWithoutChildrenProps}
           {...context.interactiveElementProps}
-          type="button"
           className={cn(
-            "text-left group relative w-full overflow-hidden truncate p-3",
+            "text-left group relative w-full overflow-hidden truncate p-3 cursor-pointer",
             !arrow && "bg-white",
             !arrow && "border-slate-500 border-1 rounded-md"
           )}
@@ -122,12 +121,12 @@ export const Item = ({
           {context.canDrag ? (
             <>
               {context.isExpanded && (
-                <span className="cursor-pointer" onClick={handleDelete}>
+                <button className="cursor-pointer" onClick={handleDelete}>
                   <DeleteIcon
                     title="Delete group"
                     className="absolute right-0 top-0 mr-10 mt-3 size-5"
                   />
-                </span>
+                </button>
               )}
               <DragHandle
                 className={cn(
@@ -139,7 +138,7 @@ export const Item = ({
           ) : (
             <LockIcon className="absolute right-0 mr-2 inline-block scale-75" />
           )}
-        </button>
+        </div>
         {children}
       </>
     </li>
