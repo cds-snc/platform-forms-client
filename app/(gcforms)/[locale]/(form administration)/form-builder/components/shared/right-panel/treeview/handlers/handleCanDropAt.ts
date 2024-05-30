@@ -31,7 +31,7 @@ export const handleCanDropAt = (
     const currentGroups = getGroups() as GroupsType;
     const reviewIndex = getReviewIndex(currentGroups);
 
-    if (target.linearIndex >= reviewIndex + 1) {
+    if (target.depth === 0 && (<DraggingPositionBetweenItems>target).childIndex > reviewIndex) {
       return false;
     }
 
