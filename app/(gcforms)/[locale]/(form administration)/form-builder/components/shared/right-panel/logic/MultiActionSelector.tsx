@@ -96,7 +96,13 @@ export const GroupAndChoiceSelect = ({
   }
 
   // Check if the nextActions array has a catch all rule
-  const catchAllRule = nextActions.find((action) => action.choiceId.includes("catch-all"));
+  const catchAllRule = nextActions.find(
+    (action) => action.choiceId.includes("catch-all") && choiceId && !choiceId.includes("catch-all")
+  );
+
+  if (!filteredChoices?.length && catchAllRule) {
+    return null;
+  }
 
   return (
     <div className="px-4">
@@ -167,6 +173,28 @@ export const MultiActionSelector = ({
     ? item.properties[localizeField(LocalizedElementProperties.TITLE, language)]
     : "";
 
+  const nextActionSelectors: React.JSX.Element[] | null = [];
+
+  nextActions.forEach((action, index) => {
+    const el = (
+      <GroupAndChoiceSelect
+        index={index}
+        item={item}
+        key={`${action.choiceId}-${index}`}
+        groupId={action.groupId}
+        choiceId={action.choiceId}
+        updateGroupId={updateGroupId}
+        updateChoiceId={updateChoiceId}
+        removeSelector={removeSelector}
+        nextActions={nextActions}
+      />
+    );
+
+    nextActionSelectors.push(el);
+  });
+
+  const disableAdd = nextActions.some((action) => action.choiceId.includes("catch-all"));
+
   return (
     <>
       <div className="p-4">
@@ -178,14 +206,15 @@ export const MultiActionSelector = ({
       <div className="flex items-center border-b-2 border-black bg-slate-50 p-3">
         <span className="mr-2 inline-block pl-3">{t("logic.addRule")}</span>
         <Button
+          disabled={disableAdd}
           onClick={() => {
             setNextActions([...nextActions, { groupId: "", choiceId: String(item.id) }]);
           }}
           theme={"secondary"}
-          className="p-1"
+          className="p-1 focus:fill-white"
           aria-controls={formId}
         >
-          <AddIcon title={t("logic.addRule")} />
+          <AddIcon className=" active:fill-white " title={t("logic.addRule")} />
         </Button>
       </div>
       <form
@@ -194,21 +223,7 @@ export const MultiActionSelector = ({
         {...(descriptionId && { "aria-describedby": descriptionId })}
       >
         <div className="mb-6" aria-live="polite" aria-relevant="all">
-          {nextActions.map((action, index) => {
-            return (
-              <GroupAndChoiceSelect
-                index={index}
-                item={item}
-                key={`${action.choiceId}-${index}`}
-                groupId={action.groupId}
-                choiceId={action.choiceId}
-                updateGroupId={updateGroupId}
-                updateChoiceId={updateChoiceId}
-                removeSelector={removeSelector}
-                nextActions={nextActions}
-              />
-            );
-          })}
+          {nextActionSelectors}
         </div>
         <div className="mb-6 px-4">
           <SaveNote />
