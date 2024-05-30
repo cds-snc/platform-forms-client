@@ -1,9 +1,9 @@
 import { serverTranslation } from "@i18n";
 import { Metadata } from "next";
-import { auth, retrievePoolOfSecurityQuestions, retrieveUserSecurityQuestions } from "@lib/auth";
-import { createAbility } from "@lib/privileges";
+import { retrievePoolOfSecurityQuestions, retrieveUserSecurityQuestions } from "@lib/auth";
 import { checkPrivilegesAsBoolean } from "@lib/privileges";
 import { Profile } from "./components/server/Profile";
+import { authCheckAndRedirect } from "@lib/actions";
 
 export async function generateMetadata({
   params: { locale },
@@ -17,10 +17,7 @@ export async function generateMetadata({
 }
 
 export default async function Page({ params: { locale } }: { params: { locale: string } }) {
-  const session = await auth();
-  if (!session) return null;
-
-  const ability = createAbility(session);
+  const { session, ability } = await authCheckAndRedirect();
 
   const hasPublishPrivilege = checkPrivilegesAsBoolean(ability, [
     { action: "update", subject: "FormRecord", field: "isPublished" },

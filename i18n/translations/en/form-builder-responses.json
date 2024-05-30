@@ -37,6 +37,19 @@
       }
     }
   },
+  "errors": {
+    "errorCode": "Contact Support with this error code:",
+    "retrieval": {
+      "title": "Something went wrong",
+      "message": "There was an error while trying to retrieve responses.",
+      "tryAgain": "Try again"
+    },
+    "generic": {
+      "title": "Something went wrong",
+      "message": "There was an error loading the page or fulfilling the request.",
+      "tryAgain": "Try again"
+    }
+  },
   "responses": {
     "recentlyDownloaded": "Recently downloaded",
     "deleted": "Signed off for removal",
@@ -252,7 +265,8 @@
     },
     "lineItemEntries": {
       "added": "Added",
-      "removed": "Removed"
+      "removed": "Removed",
+      "remove": "Remove"
     },
     "sending": "Sending...",
     "cancel": "Cancel"

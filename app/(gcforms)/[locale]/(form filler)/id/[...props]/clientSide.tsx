@@ -8,9 +8,11 @@ import { Form } from "@clientComponents/forms/Form/Form";
 export const FormWrapper = ({
   formRecord,
   currentForm,
+  allowGrouping,
 }: {
   formRecord: TypeOmit<FormRecord, "name" | "deliveryOption">;
   currentForm: JSX.Element[];
+  allowGrouping?: boolean | undefined;
 }) => {
   // TODO cast language as "en" | "fr" in TS below
   const {
@@ -30,6 +32,7 @@ export const FormWrapper = ({
       renderSubmit={({ validateForm, fallBack }) => {
         return <NextButton validateForm={validateForm} fallBack={fallBack} />;
       }}
+      allowGrouping={allowGrouping}
     >
       {currentForm}
     </Form>

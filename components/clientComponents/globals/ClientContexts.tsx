@@ -15,7 +15,7 @@ export const ClientContexts: React.FC<{ session: Session | null; children: React
       // Re-fetch session every 30 minutes if no user activity
       refetchInterval={30 * 60}
       // Re-fetches session when window is focused
-      refetchOnWindowFocus={true}
+      refetchOnWindowFocus={false}
     >
       <AccessControlProvider>{children}</AccessControlProvider>
     </SessionProvider>

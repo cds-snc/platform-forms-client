@@ -14,8 +14,9 @@ import JSZip from "jszip";
 import { getDate, slugify } from "@lib/client/clientHelpers";
 import { SpinnerIcon } from "@serverComponents/icons/SpinnerIcon";
 import { getSubmissionsByFormat } from "../../actions";
-import { Language } from "@lib/types/form-builder-types";
+import { FormServerErrorCodes, Language, ServerActionError } from "@lib/types/form-builder-types";
 import { usePathname } from "next/navigation";
+import { FormBuilderError } from "../../exceptions";
 
 export const DownloadDialog = ({
   checkedItems,
@@ -30,7 +31,7 @@ export const DownloadDialog = ({
   checkedItems: Map<string, boolean>;
   isDialogVisible: boolean;
   setIsDialogVisible: React.Dispatch<React.SetStateAction<boolean>>;
-  setDownloadError: React.Dispatch<React.SetStateAction<boolean>>;
+  setDownloadError: React.Dispatch<React.SetStateAction<boolean | string>>;
   formId: string;
   formName: string;
   onSuccessfulDownload: () => void;
@@ -95,12 +96,12 @@ export const DownloadDialog = ({
     setIsDownloading(true);
     setDownloadError(false);
     if (!selectedFormat || !availableFormats.includes(selectedFormat)) {
-      setDownloadError(true);
+      setDownloadError(FormServerErrorCodes.DOWNLOAD_INVALID_FORMAT);
       return;
     }
 
     if (!checkedItems.size || checkedItems.size > responseDownloadLimit) {
-      setDownloadError(true);
+      setDownloadError(FormServerErrorCodes.DOWNLOAD_LIMIT_SELECTION);
       return;
     }
 
@@ -116,7 +117,11 @@ export const DownloadDialog = ({
           format: DownloadFormat.HTML_ZIPPED,
           lang: i18n.language as Language,
           revalidate: pathname.includes("new"),
-        })) as HtmlZippedResponse;
+        })) as HtmlZippedResponse | ServerActionError;
+
+        if ("error" in response) {
+          throw new FormBuilderError(response.error, response.code);
+        }
 
         downloadFormatEvent(formId, selectedFormat, ids.length);
 
@@ -142,7 +147,11 @@ export const DownloadDialog = ({
           format: DownloadFormat.CSV,
           lang: i18n.language as Language,
           revalidate: pathname.includes("new"),
-        })) as CSVResponse;
+        })) as CSVResponse | ServerActionError;
+
+        if ("error" in response) {
+          throw new FormBuilderError(response.error, response.code);
+        }
 
         downloadFormatEvent(formId, selectedFormat, ids.length);
 
@@ -175,7 +184,11 @@ export const DownloadDialog = ({
           format: DownloadFormat.JSON,
           lang: i18n.language as Language,
           revalidate: pathname.includes("new"),
-        })) as JSONResponse;
+        })) as JSONResponse | ServerActionError;
+
+        if ("error" in response) {
+          throw new FormBuilderError(response.error, response.code);
+        }
 
         downloadFormatEvent(formId, selectedFormat, ids.length);
 
@@ -201,7 +214,8 @@ export const DownloadDialog = ({
       }
     } catch (err) {
       logMessage.error(err as Error);
-      setDownloadError(true);
+      setDownloadError((err as ServerActionError).code || true);
+      setIsDownloading(false);
       handleClose();
     }
   };

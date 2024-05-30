@@ -8,7 +8,11 @@ import { PreviewNavigation } from "./PreviewNavigation";
 import { getRenderedForm } from "@lib/formBuilder";
 import { PublicFormRecord } from "@lib/types";
 import { Button, RichText, ClosedPage, NextButton } from "@clientComponents/forms";
-import { LocalizedElementProperties, LocalizedFormProperties } from "@lib/types/form-builder-types";
+import {
+  FormServerErrorCodes,
+  LocalizedElementProperties,
+  LocalizedFormProperties,
+} from "@lib/types/form-builder-types";
 import { useRehydrate, useTemplateStore } from "@lib/store/useTemplateStore";
 import { BackArrowIcon } from "@serverComponents/icons";
 import Brand from "@clientComponents/globals/Brand";
@@ -16,10 +20,20 @@ import { useIsFormClosed } from "@lib/hooks/useIsFormClosed";
 import { GCFormsProvider } from "@lib/hooks/useGCFormContext";
 import Skeleton from "react-loading-skeleton";
 import { Form } from "@clientComponents/forms/Form/Form";
+import { BackButton } from "./BackButton";
+import { safeJSONParse } from "@lib/utils";
+import { ErrorSaving } from "@formBuilder/components/shared/ErrorSaving";
+import { toast } from "@formBuilder/components/shared";
 
-export const Preview = ({ disableSubmit = true }: { disableSubmit?: boolean }) => {
+export const Preview = ({
+  disableSubmit = true,
+  allowGrouping = false,
+}: {
+  disableSubmit?: boolean;
+  allowGrouping?: boolean;
+}) => {
   const { status } = useSession();
-  const { i18n } = useTranslation("common");
+  const { i18n } = useTranslation(["common", "confirmation"]);
   const { id, getSchema, getIsPublished, getSecurityAttribute } = useTemplateStore((s) => ({
     id: s.id,
     getSchema: s.getSchema,
@@ -27,9 +41,15 @@ export const Preview = ({ disableSubmit = true }: { disableSubmit?: boolean }) =
     getSecurityAttribute: s.getSecurityAttribute,
   }));
 
+  // TODO probably redirecting to the error page makes more sense since the error is not recoverable
+  const formParsed = safeJSONParse(getSchema());
+  if (formParsed?.error) {
+    toast.error(<ErrorSaving errorCode={FormServerErrorCodes.JSON_PARSE} />, "wide");
+  }
+
   const formRecord: PublicFormRecord = {
     id: id || "test0form00000id000asdf11",
-    form: JSON.parse(getSchema()),
+    form: formParsed,
     isPublished: getIsPublished(),
     securityAttribute: getSecurityAttribute(),
   };
@@ -142,14 +162,11 @@ export const Preview = ({ disableSubmit = true }: { disableSubmit?: boolean }) =
           <div className="mb-20 mt-0 border-b-4 border-blue-dark py-9">
             <Brand brand={brand} lang={language} className="max-w-[360px]" />
           </div>
-          <h1 className="mt-4">
-            {formRecord.form[localizeField(LocalizedFormProperties.TITLE, language)] ||
-              t("gcFormsTest", { ns: "form-builder" })}
-          </h1>
         </div>
 
         {sent ? (
-          <>
+          <div className="gc-formview">
+            <h1 tabIndex={-1}>{t("title", { ns: "confirmation" })}</h1>
             <RichText {...getLocalizationAttribute()}>
               {formRecord.form.confirmation
                 ? formRecord.form.confirmation[
@@ -157,9 +174,13 @@ export const Preview = ({ disableSubmit = true }: { disableSubmit?: boolean }) =
                   ]
                 : ""}
             </RichText>
-          </>
+          </div>
         ) : (
           <div className="gc-formview">
+            <h1 className="mt-4">
+              {formRecord.form[localizeField(LocalizedFormProperties.TITLE, language)] ||
+                t("gcFormsTest", { ns: "form-builder" })}
+            </h1>
             {!hasHydrated && <Skeleton count={5} height={40} className="mb-4" />}
             {hasHydrated && (
               <GCFormsProvider formRecord={formRecord}>
@@ -177,18 +198,21 @@ export const Preview = ({ disableSubmit = true }: { disableSubmit?: boolean }) =
                             validateForm={validateForm}
                             fallBack={() => {
                               return (
-                                <Button
-                                  type="submit"
-                                  id="SubmitButton"
-                                  className="mb-4"
-                                  onClick={(e) => {
-                                    if (disableSubmit) {
-                                      return preventSubmit(e);
-                                    }
-                                  }}
-                                >
-                                  {t("submitButton", { ns: "common", lng: language })}
-                                </Button>
+                                <>
+                                  {allowGrouping && <BackButton />}
+                                  <Button
+                                    type="submit"
+                                    id="SubmitButton"
+                                    className="mb-4"
+                                    onClick={(e) => {
+                                      if (disableSubmit) {
+                                        return preventSubmit(e);
+                                      }
+                                    }}
+                                  >
+                                    {t("submitButton", { ns: "common", lng: language })}
+                                  </Button>
+                                </>
                               );
                             }}
                           />
@@ -206,6 +230,7 @@ export const Preview = ({ disableSubmit = true }: { disableSubmit?: boolean }) =
                       </div>
                     );
                   }}
+                  allowGrouping={allowGrouping}
                 >
                   {currentForm}
                 </Form>
@@ -221,13 +246,18 @@ export const Preview = ({ disableSubmit = true }: { disableSubmit?: boolean }) =
             {t("confirmationPage", { ns: "form-builder" })}
           </span>
           <div className="mb-8 border-3 border-dashed border-blue-focus bg-white p-4">
-            <RichText {...getLocalizationAttribute()}>
-              {formRecord.form.confirmation
-                ? formRecord.form.confirmation[
-                    localizeField(LocalizedElementProperties.DESCRIPTION, language)
-                  ]
-                : ""}
-            </RichText>
+            <div className="gc-formview">
+              <h1 className="mt-10" tabIndex={-1}>
+                {t("title", { ns: "confirmation" })}
+              </h1>
+              <RichText {...getLocalizationAttribute()}>
+                {formRecord.form.confirmation
+                  ? formRecord.form.confirmation[
+                      localizeField(LocalizedElementProperties.DESCRIPTION, language)
+                    ]
+                  : ""}
+              </RichText>
+            </div>
           </div>
         </>
       )}

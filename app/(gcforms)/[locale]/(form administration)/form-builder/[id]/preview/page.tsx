@@ -1,13 +1,13 @@
 import { serverTranslation } from "@i18n";
 import { Metadata } from "next";
-import { auth } from "@lib/auth";
+import { authCheckAndThrow } from "@lib/actions";
 
 import { notFound } from "next/navigation";
-import { createAbility } from "@lib/privileges";
 import { getFullTemplateByID } from "@lib/templates";
 import { Preview } from "./Preview";
 import { LockIcon } from "@serverComponents/icons";
 import Markdown from "markdown-to-jsx";
+import { allowGrouping } from "@formBuilder/components/shared/right-panel/treeview/util/allowGrouping";
 
 export async function generateMetadata({
   params: { locale },
@@ -25,9 +25,13 @@ export default async function Page({
 }: {
   params: { locale: string; id: string };
 }) {
-  const session = await auth();
+  const { session, ability } = await authCheckAndThrow().catch(() => ({
+    session: null,
+    ability: null,
+  }));
   const disableSubmit = id === "0000" || !session?.user;
   const { t } = await serverTranslation("form-builder", { lang: locale });
+  const isAllowGrouping = await allowGrouping();
 
   const formID = id;
 
@@ -39,7 +43,6 @@ export default async function Page({
 
   if (session) {
     try {
-      const ability = createAbility(session);
       const initialForm = ability && (await getFullTemplateByID(ability, id));
       isPublished = initialForm?.isPublished || false;
     } catch (e) {
@@ -64,5 +67,5 @@ export default async function Page({
     );
   }
 
-  return <Preview disableSubmit={disableSubmit} />;
+  return <Preview disableSubmit={disableSubmit} allowGrouping={isAllowGrouping} />;
 }

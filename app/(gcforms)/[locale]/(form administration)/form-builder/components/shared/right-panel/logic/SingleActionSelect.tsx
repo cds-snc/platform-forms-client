@@ -6,10 +6,13 @@ import { Button } from "@clientComponents/globals";
 import { useGroupStore } from "@formBuilder/components/shared/right-panel/treeview/store/useGroupStore";
 import { useFlowRef } from "@formBuilder/[id]/edit/logic/components/flow/provider/FlowRefProvider";
 import { FormElement } from "@lib/types";
+import { useTranslation } from "@i18n/client";
+import { SaveNote } from "./SaveNote";
+import { toast } from "@formBuilder/components/shared/Toast";
 
 export const SingleActionSelect = ({
   item,
-  nextAction = "end",
+  nextAction = "review",
 }: {
   item?: FormElement | null;
   nextAction: string | undefined;
@@ -18,6 +21,7 @@ export const SingleActionSelect = ({
   const id = useGroupStore((state) => state.id);
   const findParentGroup = useGroupStore((state) => state.findParentGroup);
   const setGroupNextAction = useGroupStore((state) => state.setGroupNextAction);
+  const { t } = useTranslation("form-builder");
 
   const currentGroup = id;
   const [nextActionId, setNextActionId] = useState(nextAction);
@@ -29,7 +33,7 @@ export const SingleActionSelect = ({
   });
 
   // Filter out the current group
-  groupItems = groupItems.filter((item) => item.value !== currentGroup);
+  groupItems = groupItems.filter((item) => item.value !== currentGroup && item.value !== "end");
 
   const handleGroupChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const value = e.target.value;
@@ -42,6 +46,7 @@ export const SingleActionSelect = ({
         <GroupSelect selected={nextAction} groups={groupItems} onChange={handleGroupChange} />
       </div>
       <div>
+        <SaveNote />
         <Button
           className="ml-0 px-4 py-1"
           onClick={() => {
@@ -54,9 +59,10 @@ export const SingleActionSelect = ({
             }
 
             flow.current?.updateEdges();
+            toast.success(t("logic.actionsSaved"));
           }}
         >
-          Save
+          {t("logic.saveRule")}
         </Button>
       </div>
     </div>

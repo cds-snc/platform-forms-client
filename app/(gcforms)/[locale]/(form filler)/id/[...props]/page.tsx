@@ -9,6 +9,8 @@ import { Metadata } from "next";
 import FormDisplayLayout from "@clientComponents/globals/layouts/FormDisplayLayout";
 import { GCFormsProvider } from "@lib/hooks/useGCFormContext";
 import { FormWrapper } from "./clientSide";
+import { allowGrouping } from "@formBuilder/components/shared/right-panel/treeview/util/allowGrouping";
+import { serverTranslation } from "@i18n";
 
 export async function generateMetadata({
   params: { locale, props },
@@ -16,12 +18,19 @@ export async function generateMetadata({
   params: { locale: string; props: string[] };
 }): Promise<Metadata> {
   const formID = props[0];
+  const step = props[1] ?? "";
   const publicForm = await getPublicTemplateByID(formID);
   if (!publicForm) return {};
 
-  const formTitle = publicForm.form[getLocalizedProperty("title", locale)] as string;
+  const { t } = await serverTranslation(["form-builder"], { lang: locale });
+
+  // Update the browser title so AT users know they are on the confirmation page
+  const title = `${step === "confirmation" ? t("confirmationPage") + ": " : ""}${
+    publicForm.form[getLocalizedProperty("title", locale)]
+  }`;
+
   return {
-    title: formTitle,
+    title,
   };
 }
 
@@ -48,6 +57,7 @@ export default async function Page({
   const classes = classnames("gc-form-wrapper");
   const currentForm = getRenderedForm(formRecord, language);
   const formTitle = formRecord.form[getLocalizedProperty("title", language)] as string;
+  const isAllowGrouping = await allowGrouping();
 
   let isPastClosingDate = false;
 
@@ -79,7 +89,11 @@ export default async function Page({
       <div className={classes}>
         <h1>{formTitle}</h1>
         <GCFormsProvider formRecord={formRecord}>
-          <FormWrapper formRecord={formRecord} currentForm={currentForm} />
+          <FormWrapper
+            formRecord={formRecord}
+            currentForm={currentForm}
+            allowGrouping={isAllowGrouping}
+          />
         </GCFormsProvider>
       </div>
     </FormDisplayLayout>

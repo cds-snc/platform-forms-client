@@ -30,6 +30,7 @@ export const SupportForm = () => {
 
   return (
     <>
+      {/* @todo  Add general error to show user there was an internal service error */}
       {Object.keys(state.validationErrors).length > 0 && (
         <ValidationMessage
           type={ErrorStatus.ERROR}
@@ -68,6 +69,12 @@ export const SupportForm = () => {
         </p>
       </Alert.Warning>
       <form id="support" action={formAction} noValidate>
+        {state.error && (
+          <Alert.Danger focussable={true} title={t("error")} className="mb-2 mt-2">
+            <p>{t(state.error)}</p>
+          </Alert.Danger>
+        )}
+
         <div className="focus-group mt-14">
           <Label id={"label-name"} htmlFor={"name"} className="required" required>
             {t("support.name")}

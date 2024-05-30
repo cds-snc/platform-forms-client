@@ -26,22 +26,29 @@ export const ChoiceSelect = ({
     selected = "1.0";
   }
 
+  // Get the parent question of the next action choice
+  const choiceParentQuestion = selected?.split(".")[0] || null;
+
   if (addCatchAll) {
     choices = [
       {
-        label: "Select an option",
+        label: t("logic.choiceSelect.selectOption"),
         value: "",
       },
       {
-        label: "Catch all (any other value)",
-        value: "catch-all",
+        label: t("logic.choiceSelect.catchAllOption"),
+        value: `${choiceParentQuestion}.catch-all`,
       },
       ...choices,
     ];
   }
 
+  if (!choices.length) {
+    return null;
+  }
+
   return (
-    <div className="my-2 flex flex-col">
+    <div className="my-2 flex flex-col pt-4">
       <label className="mb-2 inline-block text-sm" id={labelId}>
         {t("addConditionalRules.optionTitle")}
       </label>

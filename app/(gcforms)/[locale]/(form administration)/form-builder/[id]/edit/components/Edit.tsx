@@ -13,6 +13,7 @@ import { getQuestionNumber, sortByLayout } from "@lib/utils/form-builder";
 import { SettingsPanel } from "./settings/SettingsPanel";
 import { cleanInput } from "@lib/utils/form-builder";
 import { SaveButton } from "@formBuilder/components/shared/SaveButton";
+import { ConfirmationTitle } from "./ConfirmationTitle";
 
 export const Edit = ({ formId }: { formId: string }) => {
   const router = useRouter();
@@ -38,7 +39,7 @@ export const Edit = ({ formId }: { formId: string }) => {
 
   const [value, setValue] = useState<string>(title);
   const searchParams = useSearchParams();
-  const focusTitle = searchParams.get("focusTitle") ? true : false;
+  const focusTitle = searchParams?.get("focusTitle") ? true : false;
   const titleInput = useRef<HTMLTextAreaElement>(null);
 
   useEffect(() => {
@@ -179,6 +180,7 @@ export const Edit = ({ formId }: { formId: string }) => {
             <div>
               <h2 className="mt-4 text-2xl laptop:mt-0">{t("richTextConfirmationTitle")}</h2>
               <ConfirmationDescription />
+              <ConfirmationTitle />
             </div>
           </RichTextLocked>
         </div>

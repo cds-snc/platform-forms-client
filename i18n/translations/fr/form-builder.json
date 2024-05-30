@@ -542,7 +542,7 @@
     "emailOption": "Recevoir les réponses par courriel",
     "saveButton": "Enregistrer les modifications",
     "savedSuccessMessage": "Vos modifications ont été enregistrées.",
-    "savedErrorMessage": "Une erreur s'est produite lors de l'enregistrement de vos modifications. Réessayez plus tard ou contacter l’équipe de soutien.",
+    "savedErrorMessage": "Une erreur s'est produite lors de l'enregistrement de vos modifications. Réessayez plus tard ou",
     "emailSubjectEn": {
       "title": "Ligne d'objet en anglais",
       "hint": "Lorsque les réponses au formulaire sont soumises en anglais."
@@ -614,7 +614,7 @@
     "toPreview": "Pour prévisualiser ce formulaire :",
     "unauthenticated": {
       "copyInstructions": "Copier les instructions",
-      "description": "Vous ne pouvez pas partager un formulaire directement de Formulaires GC sans compte. <a href=\"/auth/login\">Connectez-vous</a> ou <a href=\"/auth/register\">créez un compte</a> pour accéder à cette fonctionalité et d'autres.",
+      "description": "Vous ne pouvez pas partager un formulaire directement de Formulaires GC sans compte. <a href=\"/fr/auth/login\">Connectez-vous</a> ou <a href=\"/fr/auth/register\">créez un compte</a> pour accéder à cette fonctionalité et d'autres.",
       "downloadFormFile": "Télécharger le fichier du formulaire",
       "instructions": "Vous pouvez télécharger une copie de ce fichier de formulaire sur votre ordinateur et le partager par courriel.",
       "step1": "Étape 1",
@@ -632,7 +632,7 @@
   },
   "shortAnswer": "Réponse courte",
   "shortAnswerText": "Réponse courte",
-  "signInToTest": "<a href=\"\">Connectez-vous</a> pour tester comment vous pouvez soumettre et visualiser les réponses.",
+  "signInToTest": "<a href=\"/fr/auth/login\">Connectez-vous</a> pour tester comment vous pouvez soumettre et visualiser les réponses.",
   "singleChoice": "Boutons radio",
   "start": "Commencer",
   "startErrorParse": "L’ouverture du fichier de formulaire a échoué",
@@ -790,16 +790,55 @@
   "saved": "Enregistré",
   "opensInNewTab": "ouvre un nouvel onglet",
   "rightPanel": {
-    "openPanel": "Design form [FR]",
-    "closePanel": "Close panel [FR]",
-    "questions": "Questions [FR]",
-    "logic": "Logic  [FR]",
-    "translation": "Translation [FR]",
+    "openPanel": "Conception du formulaire",
+    "closePanel": "Fermer le panneau",
+    "questions": "Questions",
+    "logic": "Logique",
+    "translation": "Traductions",
     "treeView": {
-      "addSection": "New section [FR]"
+      "addSection": "Nouvelle section"
     }
   },
   "logic": {
-    "heading": "Logic [FR]"
+    "heading": "Logique",
+    "description": "Appliquer des règles conditionnelles aux sections comportant des boutons radio, des cases à cocher ou une liste déroulante.",
+    "clear": "Enlever",
+    "gotoSection": "Aller à la section",
+    "questionTitle": "Question :",
+    "sectionTitle": "Section :",
+    "addRule": "Ajouter une régle",
+    "resetRules": "Réinitialiser toutes les règles",
+    "resetRulesDescription": "La fonction de flux automatique réinitialise la progression entre les sections en un flux linéaire simple, remplaçant ainsi toutes les règles de logique de branchement qui s'appliquent.",
+    "saveRule": "Enregistrer",
+    "saveNote": "Ajouter et enregistrer une règle, désactive le ",
+    "multiRulesWarning": {
+      "text1": "L'ordre et le flux sont définis en fonction des règles appliquées.",
+      "text2": "Relier les sections :",
+      "text3": "Pour relier les section, vous devez enlever les règles appliquées aux éléments du formulaire."
+    },
+    "choiceSelect": {
+      "selectOption": "Sélectionner une option",
+      "catchAllOption": "Pour toute autre option"
+    },
+    "groupSelect": {
+      "default": "Sélectionner une section",
+      "catchAllGroup": "Pour toute autre valeur"
+    },
+    "actionsSaved": "Actions enregistrées"
+  },
+  "groups": {
+    "addElement": {
+      "empty": {
+        "title": "Section vide",
+        "text1": "Aucun élément de formulaire n'a été ajouté."
+      }
+    },
+    "sectionTitle": "Titre de la section",
+    "groupDeleted": "Group deleted",
+    "groupSuccessfullyDeleted": "{{group}} successfully deleted"
+  },
+  "confirmation": {
+    "title": "Votre formulaire a été soumis",
+    "sectionTitle": "Titre de la section"
   }
 }

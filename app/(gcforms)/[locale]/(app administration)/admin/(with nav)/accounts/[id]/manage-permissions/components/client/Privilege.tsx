@@ -2,6 +2,7 @@
 import { useTranslation } from "@i18n/client";
 import { PermissionToggle } from "./PermissionToggle";
 import { updatePrivileges } from "../../actions";
+import { toast } from "@formBuilder/components/shared";
 
 export const Privilege = ({
   canManageUsers,
@@ -26,7 +27,10 @@ export const Privilege = ({
           offLabel={t("off")}
           description={description || ""}
           handleToggle={async () => {
-            await updatePrivileges(userId, privilegeId, active ? "remove" : "add");
+            const result = await updatePrivileges(userId, privilegeId, active ? "remove" : "add");
+            if (result?.error) {
+              toast.error(t("error.permissions"), "wide");
+            }
           }}
         />
       ) : (

@@ -37,6 +37,19 @@
       }
     }
   },
+  "errors": {
+    "errorCode": "Contactez l'équipe de soutien avec le code d'erreur :",
+    "retrieval": {
+      "title": "Quelque chose a mal tourné",
+      "message": "Une erreur s'est produite lors de la récupération des réponses.",
+      "tryAgain": "Réessayer"
+    },
+    "generic": {
+      "title": "Quelque chose a mal tourné",
+      "message": "Une erreur s'est produite lors du chargement de la page ou de l'exécution de la demande.",
+      "tryAgain": "Réessayer"
+    }
+  },
   "responses": {
     "recentlyDownloaded": "Téléchargements récents",
     "deleted": "Pour suppression",
@@ -252,7 +265,8 @@
     },
     "lineItemEntries": {
       "added": "Ajouté",
-      "removed": "Supprimé"
+      "removed": "Supprimé",
+      "remove": "Supprime"
     },
     "sending": "Envoi en cours...",
     "cancel": "Annuler"

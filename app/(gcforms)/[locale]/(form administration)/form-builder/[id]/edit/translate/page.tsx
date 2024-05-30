@@ -2,7 +2,8 @@ import { serverTranslation } from "@i18n";
 import { Metadata } from "next";
 import { EditNavigation } from "../components/EditNavigation";
 import { Translate } from "./components";
-import { checkFlag } from "@formBuilder/actions";
+import { TranslateWithGroups } from "./components/TranslateWithGroups";
+import { allowGrouping } from "@formBuilder/components/shared/right-panel/treeview/util/allowGrouping";
 
 export async function generateMetadata({
   params: { locale },
@@ -16,12 +17,12 @@ export async function generateMetadata({
 }
 
 export default async function Page({ params: { id } }: { params: { id: string } }) {
-  const showNavigation = !(await checkFlag("conditionalLogic"));
+  const conditionalLogic = await allowGrouping();
 
   return (
     <>
-      {showNavigation && <EditNavigation id={id} />}
-      <Translate />
+      {!conditionalLogic && <EditNavigation id={id} />}
+      {conditionalLogic ? <TranslateWithGroups /> : <Translate />}
     </>
   );
 }

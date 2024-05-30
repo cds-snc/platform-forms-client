@@ -86,6 +86,18 @@
     "groups": {
       "type": "object",
       "properties": {
+        "name": {
+          "description": "The name of the group.",
+          "type": "string"
+        },
+        "titleEn": {
+          "description": "The title of the group in English.",
+          "type": "string"
+        },
+        "titleFr": {
+          "description": "The title of the group in French.",
+          "type": "string"
+        },
         "nextAction": {
           "description": "The next action to take i.e. next group or submit.",
           "type": "string"

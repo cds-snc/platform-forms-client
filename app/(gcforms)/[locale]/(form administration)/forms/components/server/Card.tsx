@@ -38,8 +38,10 @@ const CardLinks = async ({ isPublished, url, id, deliveryOption }: CardLinksProp
     i18n: { language },
   } = await serverTranslation("my-forms");
   const responsesLink = `/${language}/form-builder/${id}/responses/new`;
-  const nagwareResult = await getUnprocessedSubmissionsForTemplate(id);
-  const overdue = nagwareResult.numberOfSubmissions;
+  const { result: nagwareResult } = await getUnprocessedSubmissionsForTemplate(id);
+
+  // Fail silently as it is not critcal to the page rendering.
+  const overdue = nagwareResult?.numberOfSubmissions ?? 0;
 
   const textData = {
     responses: overdue,
@@ -51,7 +53,7 @@ const CardLinks = async ({ isPublished, url, id, deliveryOption }: CardLinksProp
     <div className="mb-4 px-3">
       <Link
         href={isPublished ? url : `/${language}/form-builder/${id}/edit/`}
-        className="my-4 block text-sm focus:fill-white active:fill-white"
+        className="my-4 block text-sm focus:fill-slate-500 active:fill-slate-500"
         target={isPublished ? "_blank" : "_self"}
         aria-describedby={`card-title-${id} card-date-${id}`}
         rel="noreferrer"
@@ -87,7 +89,7 @@ const CardLinks = async ({ isPublished, url, id, deliveryOption }: CardLinksProp
             </span>
           ) : (
             <Link
-              className="mt-4 block text-sm focus:fill-white active:fill-white"
+              className="mt-4 block text-sm focus:fill-slate-500 active:fill-slate-500"
               href={responsesLink}
               prefetch={false}
             >

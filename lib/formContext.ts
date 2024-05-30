@@ -1,7 +1,14 @@
 import { FormElement } from "@lib/types";
 import { PublicFormRecord, ConditionalRule } from "@lib/types";
 
-export type Group = { name: string; nextAction?: string | NextActionRule[]; elements: string[] };
+export type Group = {
+  name: string;
+  titleEn: string;
+  titleFr: string;
+  nextAction?: string | NextActionRule[];
+  elements: string[];
+  autoFlow?: boolean;
+};
 export type GroupsType = Record<string, Group>;
 export type FormValues = Record<string, string | string[]>;
 export type ChoiceRule = { elementId: string; choiceId: string };
@@ -422,7 +429,7 @@ export const getNextAction = (
     let matched = false;
 
     // Check for catch-all value
-    const catchAllRule = nextAction.find((action) => action.choiceId === "catch-all");
+    const catchAllRule = nextAction.find((action) => action.choiceId.includes("catch-all"));
 
     nextAction.forEach((action) => {
       const match = matchedIds.includes(action.choiceId);

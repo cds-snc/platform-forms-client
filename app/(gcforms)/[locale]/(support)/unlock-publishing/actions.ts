@@ -1,5 +1,5 @@
 "use server";
-import { auth } from "@lib/auth";
+import { authCheckAndRedirect } from "@lib/actions";
 import { serverTranslation } from "@i18n";
 import { createTicket } from "@lib/integration/freshdesk";
 import { logMessage } from "@lib/logger";
@@ -22,6 +22,7 @@ export interface ErrorStates {
     fieldKey: string;
     fieldValue: string;
   }[];
+  error?: string;
 }
 
 const validate = async (
@@ -64,8 +65,7 @@ export async function unlockPublishing(
   _: ErrorStates,
   formData: FormData
 ): Promise<ErrorStates> {
-  const session = await auth();
-  if (!session) throw new Error("No session");
+  const { session } = await authCheckAndRedirect();
 
   const rawData = Object.fromEntries(formData.entries());
   const validatedData = await validate(language, userEmail, rawData);
@@ -110,10 +110,9 @@ export async function unlockPublishing(
       language: language,
     });
   } catch (error) {
-    logMessage.error(error);
-    throw new Error("Failed to send request");
+    logMessage.error(`Failed to unlock publishing: ${(error as Error).message}`);
+    return { error: "Failed to send request", validationErrors: [] };
   }
-
-  // Success
+  // The redirect must be outside of the try/catch block to avoid the NEXT_REDIRECT being caught by the error boundary
   redirect(`/${language}/unlock-publishing?success`);
 }

@@ -2,6 +2,7 @@ import { Group, GroupsType } from "@lib/formContext";
 import { DraggingPosition, DraggingPositionBetweenItems, TreeItem } from "react-complex-tree";
 import { findParentGroup } from "../util/findParentGroup";
 import { TreeItems } from "../types";
+import { autoFlowGroupNextActions } from "../util/setNextAction";
 
 const findItemIndex = (items: string[], itemIndex: string | number) =>
   items.indexOf(String(itemIndex));
@@ -24,13 +25,88 @@ const insertItemAtIndex = (items: string[], item: string, index: number) => {
   return updatedItems;
 };
 
-export const handleOnDrop = (
+const groupsHaveCustomRules = (items: Group[]) => {
+  return items.some((item) => Object.hasOwn(item, "autoFlow") && !item.autoFlow);
+};
+
+/**
+ * Autoflow moved items
+ * Update the nextAction for the moved items in their new location, and update
+ * the nextAction for the item that was before the moved items in their original location.
+ */
+const updateMovedItemsNextAction = async (
+  items: TreeItem[],
+  originalGroups: GroupsType,
+  newGroups: GroupsType,
+  getPromise: () => Promise<boolean>,
+  setOpenDialog: (value: boolean) => void
+) => {
+  const movedItems = items.map((item) => item["index"]);
+  // const originalKeys = Object.keys(originalGroups);
+  // const newKeys = Object.keys(newGroups);
+
+  const keysToReflow: string[] = [];
+  let promptForReflow = false;
+
+  movedItems.forEach((item) => {
+    // Check the current item for autoFlow
+    const movedGroup = newGroups[item as string] as Group;
+
+    // @TODO: all these commented out blocks are related to autoFlowing sections surrounding
+    // the moved item. Not sure this will be required, keeping the code for now.
+
+    // Check the previous item in the new location for autoFlow
+    // const oldIndex = originalKeys.indexOf(item as string);
+    // const newIndex = newKeys.indexOf(item as string);
+
+    // const prev = newKeys[newIndex - 1];
+    // const previousGroup = newGroups[prev] as Group;
+
+    // Check the previous item in the old location for autoFlow
+    // const prevOld = originalKeys[oldIndex - 1];
+    // const previousGroupOld = originalGroups[prevOld] as Group;
+
+    if (groupsHaveCustomRules([movedGroup])) {
+      promptForReflow = true;
+    }
+
+    keysToReflow.push(item as string);
+
+    // Set the nextAction for the new location of the current item in its new location
+    // newGroups = autoFlowGroupNextActions(newGroups, item as string);
+
+    // Set the nextAction for the item that was before the current item in its original location
+    // newGroups = autoFlowGroupNextActions(newGroups, prevOld);
+  });
+
+  if (promptForReflow) {
+    setOpenDialog(true);
+    const confirm = getPromise();
+
+    const confirmed = await confirm;
+
+    if (confirmed) {
+      keysToReflow.forEach((key) => {
+        newGroups = autoFlowGroupNextActions(newGroups, key);
+      });
+      setOpenDialog(false);
+    } else {
+      setOpenDialog(false);
+    }
+  }
+
+  return newGroups;
+};
+
+export const handleOnDrop = async (
   items: TreeItem[],
   target: DraggingPosition,
   getGroups: () => GroupsType | undefined,
   replaceGroups: (groups: GroupsType) => void,
   setSelectedItems: (items: string[]) => void,
-  getTreeData: () => TreeItems
+  getTreeData: () => TreeItems,
+  getPromise: () => Promise<boolean>,
+  setOpenDialog: (value: boolean) => void
 ) => {
   // Current state of the tree in Groups format
   let currentGroups = getGroups() as GroupsType;
@@ -75,7 +151,13 @@ export const handleOnDrop = (
       return acc;
     }, {});
 
-    // newGroups = autoTreeViewFlow(newGroups);
+    newGroups = await updateMovedItemsNextAction(
+      items,
+      currentGroups,
+      newGroups,
+      getPromise,
+      setOpenDialog
+    );
 
     replaceGroups(newGroups);
     setSelectedItems(selectedItems);
@@ -120,8 +202,10 @@ export const handleOnDrop = (
       // Create a new Groups object
       const newGroups = { ...currentGroups };
       newGroups[String(originParent?.index)] = {
-        name: String(originParent?.data),
+        name: String(originParent?.data.name),
         elements: originGroupElements,
+        titleEn: originParent?.data.titleEn,
+        titleFr: originParent?.data.titleFr,
       };
 
       // Replace the original groups object
@@ -153,8 +237,10 @@ export const handleOnDrop = (
     // Create a new Groups object
     let newGroups = { ...currentGroups };
     newGroups[String(originParent?.index)] = {
-      name: String(originParent?.data),
+      name: String(originParent?.data.titleEn),
       elements: originGroupElements,
+      titleEn: originParent?.data.titleEn,
+      titleFr: originParent?.data.titleFr,
     };
 
     // Replace the original groups object
@@ -171,6 +257,8 @@ export const handleOnDrop = (
     newGroups[targetParent] = {
       name: targetParentGroup.name,
       elements: targetGroupElements,
+      titleEn: targetParentGroup.titleEn,
+      titleFr: targetParentGroup.titleFr,
     };
 
     selectedItems.push(String(item.index));

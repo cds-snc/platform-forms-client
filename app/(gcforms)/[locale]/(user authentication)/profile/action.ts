@@ -1,6 +1,6 @@
 "use server";
-import { updateSecurityAnswer, auth } from "@lib/auth";
-import { createAbility } from "@lib/privileges";
+import { updateSecurityAnswer } from "@lib/auth";
+import { authCheckAndThrow } from "@lib/actions";
 import { revalidatePath } from "next/cache";
 import * as v from "valibot";
 
@@ -18,16 +18,21 @@ export const updateSecurityQuestion = async (
   newQuestionId: string,
   answer: string | undefined
 ) => {
-  const session = await auth();
-  if (!session) throw new Error("User not authenticated");
-  const ability = createAbility(session);
+  const { ability } = await authCheckAndThrow();
 
   const data = validateData({ oldQuestionId, newQuestionId, newAnswer: answer });
 
   if (!data.success) {
-    throw new Error("Data not Valid");
+    return {
+      error: "Data did not pass validation",
+    };
   }
 
-  await updateSecurityAnswer(ability, data.output);
+  const response = await updateSecurityAnswer(ability, data.output).catch(() => {
+    return {
+      error: "Failed to update security question",
+    };
+  });
   revalidatePath("(gcforms)/[locale]/(user authentication)/profile");
+  return response;
 };

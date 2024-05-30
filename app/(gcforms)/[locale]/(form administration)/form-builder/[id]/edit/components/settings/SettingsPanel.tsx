@@ -13,6 +13,11 @@ import { SettingsModal } from "./SettingsDialog";
 import { Tooltip } from "@formBuilder/components/shared/Tooltip";
 import { updateTemplate, updateTemplateSecurityAttribute } from "@formBuilder/actions";
 
+import { toast } from "@formBuilder/components/shared/Toast";
+import { ErrorSaving } from "@formBuilder/components/shared/ErrorSaving";
+import { FormServerErrorCodes } from "@lib/types/form-builder-types";
+import { safeJSONParse } from "@lib/utils";
+
 enum DeliveryOption {
   vault = "vault",
   email = "email",
@@ -53,17 +58,23 @@ export const SettingsPanel = () => {
     : "Protected A";
 
   const handleUpdateClassification = useCallback(
-    (value: ClassificationType) => {
+    async (value: ClassificationType) => {
       if (value === "Protected B") {
         setDeliveryOption(DeliveryOption.vault);
       }
 
-      updateSecurityAttribute(value);
-
-      updateTemplateSecurityAttribute({
+      // Call sever action
+      const result = await updateTemplateSecurityAttribute({
         id,
         securityAttribute: value,
       });
+
+      if (!result.error) {
+        updateSecurityAttribute(value);
+        return;
+      }
+
+      toast.error(<ErrorSaving errorCode={FormServerErrorCodes.BRANDING} />, "wide");
     },
     [updateSecurityAttribute, id]
   );
@@ -85,22 +96,37 @@ export const SettingsPanel = () => {
   });
 
   const updateBrand = useCallback(
-    (type: string) => {
-      if (type === "") {
-        unsetField("form.brand");
-        updateTemplate({
-          id,
-          formConfig: JSON.parse(getSchema()),
-        });
+    async (type: string) => {
+      const formConfig = safeJSONParse(getSchema());
+      if (formConfig.error) {
+        toast.error(<ErrorSaving errorCode={FormServerErrorCodes.JSON_PARSE} />, "wide");
         return;
       }
 
-      if (type !== brandName) {
-        updateField("form.brand", options.filter((o) => o.name === type)[0]);
-        updateTemplate({
+      if (type === "") {
+        const result = await updateTemplate({
           id,
-          formConfig: JSON.parse(getSchema()),
+          formConfig,
         });
+
+        if (!result.error) {
+          unsetField("form.brand");
+          return;
+        }
+      }
+
+      if (type !== brandName) {
+        const result = await updateTemplate({
+          id,
+          formConfig,
+        });
+
+        if (!result.error) {
+          updateField("form.brand", options.filter((o) => o.name === type)[0]);
+          return;
+        }
+
+        toast.error(<ErrorSaving errorCode={FormServerErrorCodes.CLASSIFICATION} />, "wide");
       }
     },
     [brandName, unsetField, updateField, id, getSchema]
