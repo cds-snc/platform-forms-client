@@ -65,12 +65,14 @@ const buildPrismaResponse = (
   jsonConfig: object,
   isPublished = false,
   deliveryOption?: DeliveryOption,
+  formPurpose?: string,
   securityAttribute = "Unclassified"
 ) => {
   return {
     id,
     jsonConfig,
     deliveryOption,
+    formPurpose,
     isPublished,
     securityAttribute,
   };
@@ -88,7 +90,7 @@ describe("Template CRUD functions", () => {
     );
 
     (prismaMock.template.update as jest.MockedFunction<any>).mockResolvedValue(
-      buildPrismaResponse("formtestID", formConfiguration)
+      buildPrismaResponse("formtestID", formConfiguration, false)
     );
 
     const newTemplate = await createTemplate({
@@ -108,6 +110,7 @@ describe("Template CRUD functions", () => {
         id: true,
         created_at: true,
         deliveryOption: true,
+        formPurpose: true,
         isPublished: true,
         jsonConfig: true,
         name: true,
@@ -226,6 +229,7 @@ describe("Template CRUD functions", () => {
         name: true,
         jsonConfig: true,
         isPublished: true,
+        formPurpose: true,
         deliveryOption: true,
         securityAttribute: true,
       },
@@ -267,6 +271,7 @@ describe("Template CRUD functions", () => {
         jsonConfig: true,
         isPublished: true,
         deliveryOption: true,
+        formPurpose: true,
         securityAttribute: true,
       },
     });
@@ -298,6 +303,7 @@ describe("Template CRUD functions", () => {
         jsonConfig: true,
         isPublished: true,
         deliveryOption: true,
+        formPurpose: true,
         securityAttribute: true,
         ttl: true,
       },
@@ -341,6 +347,7 @@ describe("Template CRUD functions", () => {
         jsonConfig: true,
         isPublished: true,
         deliveryOption: true,
+        formPurpose: true,
         securityAttribute: true,
         ttl: true,
         users: {
@@ -416,6 +423,7 @@ describe("Template CRUD functions", () => {
         jsonConfig: true,
         isPublished: true,
         deliveryOption: true,
+        formPurpose: true,
         securityAttribute: true,
         ttl: true,
         users: {
@@ -473,6 +481,7 @@ describe("Template CRUD functions", () => {
         jsonConfig: true,
         isPublished: true,
         deliveryOption: true,
+        formPurpose: true,
         securityAttribute: true,
       },
     });
@@ -528,6 +537,7 @@ describe("Template CRUD functions", () => {
         jsonConfig: true,
         isPublished: true,
         deliveryOption: true,
+        formPurpose: true,
         securityAttribute: true,
       },
     });
@@ -607,6 +617,7 @@ describe("Template CRUD functions", () => {
         jsonConfig: true,
         isPublished: true,
         deliveryOption: true,
+        formPurpose: true,
         securityAttribute: true,
       },
     });
@@ -659,6 +670,7 @@ describe("Template CRUD functions", () => {
         jsonConfig: true,
         isPublished: true,
         deliveryOption: true,
+        formPurpose: true,
         securityAttribute: true,
         users: true,
       },
@@ -718,6 +730,7 @@ describe("Template CRUD functions", () => {
         jsonConfig: true,
         isPublished: true,
         deliveryOption: true,
+        formPurpose: true,
         securityAttribute: true,
         users: true,
       },
@@ -809,6 +822,7 @@ describe("Template CRUD functions", () => {
             jsonConfig: true,
             isPublished: true,
             deliveryOption: true,
+            formPurpose: true,
             securityAttribute: true,
           },
         })
@@ -866,6 +880,7 @@ describe("Template CRUD functions", () => {
           jsonConfig: true,
           isPublished: true,
           deliveryOption: true,
+          formPurpose: true,
           securityAttribute: true,
         },
       })
