@@ -33,6 +33,12 @@ enum DeliveryOption {
   email = "email",
 }
 
+export enum PurposeOption {
+  none = "",
+  admin = "admin",
+  nonAdmin = "nonAdmin",
+}
+
 export const ResponseDelivery = () => {
   const { t, i18n } = useTranslation("form-builder");
   const { status } = useSession();
@@ -44,6 +50,8 @@ export const ResponseDelivery = () => {
     email,
     id,
     resetDeliveryOption,
+    getDeliveryOption,
+    getFormPurpose,
     updateField,
     subjectEn: initialSubjectEn,
     subjectFr: initialSubjectFr,
@@ -51,7 +59,9 @@ export const ResponseDelivery = () => {
     defaultSubjectFr,
     securityAttribute,
     updateSecurityAttribute,
+    updateFormPurpose,
     isPublished,
+    formPurpose,
   } = useTemplateStore((s) => ({
     id: s.id,
     email: s.deliveryOption?.emailAddress,
@@ -60,10 +70,14 @@ export const ResponseDelivery = () => {
     defaultSubjectEn: s.form[s.localizeField(LocalizedFormProperties.TITLE, "en")] + " - Response",
     defaultSubjectFr: s.form[s.localizeField(LocalizedFormProperties.TITLE, "fr")] + " - Réponse",
     resetDeliveryOption: s.resetDeliveryOption,
+    getDeliveryOption: s.getDeliveryOption,
+    getFormPurpose: s.getFormPurpose,
     updateField: s.updateField,
     updateSecurityAttribute: s.updateSecurityAttribute,
+    updateFormPurpose: s.setFormPurpose,
     securityAttribute: s.securityAttribute,
     isPublished: s.isPublished,
+    formPurpose: s.formPurpose,
   }));
 
   const [classification, setClassification] = useState<ClassificationType>(
@@ -84,6 +98,8 @@ export const ResponseDelivery = () => {
   const initialDeliveryOption = !email ? DeliveryOption.vault : DeliveryOption.email;
 
   const [deliveryOptionValue, setDeliveryOptionValue] = useState(initialDeliveryOption);
+  const [purposeOption, setPurposeOption] = useState(getFormPurpose() as PurposeOption);
+
   const [inputEmailValue, setInputEmailValue] = useState(email ? email : userEmail);
   const [subjectEnValue, setSubjectEnValue] = useState(
     initialSubjectEn ? initialSubjectEn : defaultSubjectEn
@@ -119,7 +135,7 @@ export const ResponseDelivery = () => {
       return isValidDeliveryOption && emailDeliveryOptionsChanged;
     }
 
-    if (deliveryOptionValue === initialDeliveryOption) {
+    if (deliveryOptionValue === initialDeliveryOption && purposeOption === formPurpose) {
       return false;
     }
 
@@ -136,6 +152,8 @@ export const ResponseDelivery = () => {
     initialSubjectFr,
     classification,
     securityAttribute,
+    purposeOption,
+    formPurpose,
   ]);
 
   /*--------------------------------------------*
@@ -188,6 +206,7 @@ export const ResponseDelivery = () => {
     subjectEnValue,
     subjectFrValue,
     id,
+    getDeliveryOption,
     updateField,
     classification,
     updateSecurityAttribute,
@@ -196,7 +215,7 @@ export const ResponseDelivery = () => {
   /*--------------------------------------------*
    * Save Delivery Option
    *--------------------------------------------*/
-  const saveDeliveryOption = useCallback(async () => {
+  const saveDeliveryOptions = useCallback(async () => {
     let result;
 
     if (email !== "" && deliveryOptionValue === DeliveryOption.vault) {
@@ -223,6 +242,8 @@ export const ResponseDelivery = () => {
       return;
     }
 
+    updateFormPurpose(purposeOption);
+
     toast.success(t("settingsResponseDelivery.savedSuccessMessage"));
 
     refreshData && refreshData();
@@ -235,12 +256,20 @@ export const ResponseDelivery = () => {
     classification,
     setToDatabaseDelivery,
     setToEmailDelivery,
+    updateFormPurpose,
+    purposeOption,
   ]);
 
   // Update local state
   const updateDeliveryOption = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
     const { value } = event.target;
     setDeliveryOptionValue(value as DeliveryOption);
+  }, []);
+
+  // Update local state
+  const updatePurposeOption = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
+    const { value } = event.target;
+    setPurposeOption(value as PurposeOption);
   }, []);
 
   const responsesLink = `/${i18n.language}/form-builder/${id}/responses`;
@@ -271,53 +300,97 @@ export const ResponseDelivery = () => {
                 handleUpdateClassification={handleUpdateClassification}
               />
             </div>
-          </div>
-          <div className="mb-4">
-            <h2 className="mb-6">{t("settingsResponseDelivery.title")}</h2>
-            {protectedBSelected ? (
-              <p className="mb-5 inline-block bg-purple-200 p-3 text-sm font-bold">
-                {t("settingsResponseDelivery.protectedBMessage")}
-              </p>
-            ) : null}
+
+            <div className="mb-4">
+              <h2 className="mb-6">{t("settingsResponseDelivery.title")}</h2>
+              {protectedBSelected ? (
+                <p className="mb-5 inline-block bg-purple-200 p-3 text-sm font-bold">
+                  {t("settingsResponseDelivery.protectedBMessage")}
+                </p>
+              ) : null}
+              <Radio
+                disabled={isPublished}
+                id={`delivery-option-${DeliveryOption.vault}`}
+                checked={deliveryOptionValue === DeliveryOption.vault}
+                name="response-delivery"
+                value={DeliveryOption.vault}
+                label={t("settingsResponseDelivery.vaultOption")}
+                onChange={updateDeliveryOption}
+              >
+                <span className="mb-1 ml-3 block text-sm">
+                  {t("settingsResponseDelivery.vaultOptionHint.text1")}{" "}
+                  <a href={responsesLink}>{t("settingsResponseDelivery.vaultOptionHint.text2")}</a>.
+                  {t("settingsResponseDelivery.vaultOptionHint.text3")}
+                </span>
+              </Radio>
+              <Radio
+                disabled={isPublished || protectedBSelected}
+                id={`delivery-option-${DeliveryOption.email}`}
+                checked={deliveryOptionValue === DeliveryOption.email}
+                name="response-delivery"
+                value={DeliveryOption.email}
+                label={emailLabel}
+                onChange={updateDeliveryOption}
+              />
+            </div>
+
+            {deliveryOptionValue === DeliveryOption.email && (
+              <ResponseEmail
+                inputEmail={inputEmailValue}
+                setInputEmail={setInputEmailValue}
+                subjectEn={subjectEnValue}
+                setSubjectEn={setSubjectEnValue}
+                subjectFr={subjectFrValue}
+                setSubjectFr={setSubjectFrValue}
+                isInvalidEmailError={isInvalidEmailError}
+                setIsInvalidEmailError={setIsInvalidEmailError}
+              />
+            )}
+
+            <h2 className="mb-6">{t("settingsPurposeAndUse.title")}</h2>
+            <p className="mb-2">{t("settingsPurposeAndUse.helpUs")}</p>
+            <p className="text-sm mb-6">{t("settingsPurposeAndUse.description")}</p>
             <Radio
+              id="purposeAndUseAdmin"
+              name="purpose-use"
+              label={t("settingsPurposeAndUse.personalInfo")}
               disabled={isPublished}
-              id={`delivery-option-${DeliveryOption.vault}`}
-              checked={deliveryOptionValue === DeliveryOption.vault}
-              name="response-delivery"
-              value={DeliveryOption.vault}
-              label={t("settingsResponseDelivery.vaultOption")}
-              onChange={updateDeliveryOption}
-            >
-              <span className="mb-1 ml-3 block text-sm">
-                {t("settingsResponseDelivery.vaultOptionHint.text1")}{" "}
-                <a href={responsesLink}>{t("settingsResponseDelivery.vaultOptionHint.text2")}</a>.
-                {t("settingsResponseDelivery.vaultOptionHint.text3")}
-              </span>
-            </Radio>
-            <Radio
-              disabled={isPublished || protectedBSelected}
-              id={`delivery-option-${DeliveryOption.email}`}
-              checked={deliveryOptionValue === DeliveryOption.email}
-              name="response-delivery"
-              value={DeliveryOption.email}
-              label={emailLabel}
-              onChange={updateDeliveryOption}
+              checked={purposeOption === PurposeOption.admin}
+              value={PurposeOption.admin}
+              onChange={updatePurposeOption}
             />
+            <div className="text-sm ml-10 mb-4">
+              <p>{t("settingsPurposeAndUse.personalInfoDetails")}</p>
+              <ul>
+                <li>{t("settingsPurposeAndUse.personalInfoDetailsVals.1")}</li>
+                <li>{t("settingsPurposeAndUse.personalInfoDetailsVals.2")}</li>
+                <li>{t("settingsPurposeAndUse.personalInfoDetailsVals.3")}</li>
+              </ul>
+            </div>
+            <Radio
+              id="purposeAndUseNonAdmin"
+              name="purpose-use"
+              label={t("settingsPurposeAndUse.nonAdminInfo")}
+              disabled={isPublished}
+              checked={purposeOption === PurposeOption.nonAdmin}
+              value={PurposeOption.nonAdmin}
+              onChange={updatePurposeOption}
+            />
+            <div className="text-sm ml-10 mb-4">
+              <p>{t("settingsPurposeAndUse.nonAdminInfoDetails")}</p>
+              <ul>
+                <li>{t("settingsPurposeAndUse.nonAdminInfoDetailsVals.1")}</li>
+                <li>{t("settingsPurposeAndUse.nonAdminInfoDetailsVals.2")}</li>
+                <li>{t("settingsPurposeAndUse.nonAdminInfoDetailsVals.3")}</li>
+              </ul>
+            </div>
           </div>
 
-          {deliveryOptionValue === DeliveryOption.email && (
-            <ResponseEmail
-              inputEmail={inputEmailValue}
-              setInputEmail={setInputEmailValue}
-              subjectEn={subjectEnValue}
-              setSubjectEn={setSubjectEnValue}
-              subjectFr={subjectFrValue}
-              setSubjectFr={setSubjectFrValue}
-              isInvalidEmailError={isInvalidEmailError}
-              setIsInvalidEmailError={setIsInvalidEmailError}
-            />
-          )}
-          <Button disabled={!isValid || isPublished} theme="secondary" onClick={saveDeliveryOption}>
+          <Button
+            disabled={!isValid || isPublished}
+            theme="secondary"
+            onClick={saveDeliveryOptions}
+          >
             {t("settingsResponseDelivery.saveButton")}
           </Button>
           <ResponseDeliveryHelpButton />
