@@ -833,7 +833,9 @@
         "text1": "No form elements have been added."
       }
     },
-    "sectionTitle": "Section title"
+    "sectionTitle": "Section title",
+    "groupDeleted": "Group deleted",
+    "groupSuccessfullyDeleted": "{{group}} successfully deleted"
   },
   "confirmation": {
     "title": "Your form has been submitted",
