@@ -34,6 +34,11 @@ export const handleCanDropAt = (
     if (target.linearIndex >= reviewIndex + 1) {
       return false;
     }
+
+    // Groups can't be dropped before Start
+    if (target.linearIndex === 0) {
+      return false;
+    }
   }
 
   // If any of the items is not a group, disallow dropping on root
