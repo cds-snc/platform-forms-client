@@ -96,7 +96,13 @@ export const GroupAndChoiceSelect = ({
   }
 
   // Check if the nextActions array has a catch all rule
-  const catchAllRule = nextActions.find((action) => action.choiceId.includes("catch-all"));
+  const catchAllRule = nextActions.find(
+    (action) => action.choiceId.includes("catch-all") && choiceId && !choiceId.includes("catch-all")
+  );
+
+  if (!filteredChoices?.length) {
+    return null;
+  }
 
   return (
     <div className="px-4">
@@ -182,10 +188,10 @@ export const MultiActionSelector = ({
             setNextActions([...nextActions, { groupId: "", choiceId: String(item.id) }]);
           }}
           theme={"secondary"}
-          className="p-1"
+          className="p-1 focus:fill-white"
           aria-controls={formId}
         >
-          <AddIcon title={t("logic.addRule")} />
+          <AddIcon className=" active:fill-white " title={t("logic.addRule")} />
         </Button>
       </div>
       <form
