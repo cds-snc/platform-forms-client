@@ -100,7 +100,7 @@ export const GroupAndChoiceSelect = ({
     (action) => action.choiceId.includes("catch-all") && choiceId && !choiceId.includes("catch-all")
   );
 
-  if (!filteredChoices?.length) {
+  if (!filteredChoices?.length && catchAllRule) {
     return null;
   }
 
