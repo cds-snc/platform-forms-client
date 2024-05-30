@@ -201,7 +201,7 @@ export const Publish = ({ id }: { id: string }) => {
           </Link>
         </li>
         <li className="my-4">
-          {hasHydrated ? <Icon checked={confirmationMessage} /> : IconLoading}
+          {hasHydrated ? <Icon checked={confirmationMessage !== undefined} /> : IconLoading}
           <Link href={`/${i18n.language}/form-builder/${id}/edit#confirmation-text`}>
             {t("formConfirmationMessage")}
           </Link>
