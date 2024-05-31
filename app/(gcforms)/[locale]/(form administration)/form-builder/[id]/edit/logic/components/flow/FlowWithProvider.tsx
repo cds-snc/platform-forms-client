@@ -17,6 +17,7 @@ import ReactFlow, {
   useEdgesState,
   useReactFlow,
   ReactFlowInstance,
+  Background,
 } from "reactflow";
 
 import "reactflow/dist/style.css";
@@ -98,6 +99,7 @@ const Flow: ForwardRefRenderFunction<unknown, FlowProps> = ({ children }, ref) =
         }}
       >
         <Controls />
+        <Background />
         {children}
       </ReactFlow>
     </>
