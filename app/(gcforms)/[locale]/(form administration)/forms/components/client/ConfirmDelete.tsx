@@ -3,7 +3,7 @@ import { useTranslation } from "@i18n/client";
 import { ConfirmFormDeleteDialog } from "@formBuilder/components/shared";
 import { toast, ToastContainer } from "@formBuilder/components/shared/Toast";
 import { deleteForm } from "../../actions";
-import { clearTemplateStorage } from "@lib/store/useTemplateStore";
+import { clearTemplateStorage } from "@lib/store/utils";
 
 // Note: copied from accounts manage-forms.
 // If there are no difference this component should become a shared component

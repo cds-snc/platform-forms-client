@@ -3,7 +3,7 @@ import React, { useEffect, useRef } from "react";
 import Link from "next/link";
 import { useTranslation } from "@i18n/client";
 import Skeleton from "react-loading-skeleton";
-import { clearTemplateStore } from "@lib/store/useTemplateStore";
+import { clearTemplateStore } from "@lib/store/utils";
 import { safeJSONParse } from "@lib/utils";
 import { FormServerErrorCodes } from "@lib/types/form-builder-types";
 
