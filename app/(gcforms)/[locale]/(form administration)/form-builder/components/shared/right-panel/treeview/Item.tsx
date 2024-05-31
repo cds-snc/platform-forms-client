@@ -87,15 +87,7 @@ export const Item = ({
   return (
     <li
       {...context.itemContainerWithChildrenProps}
-      className={cn(
-        "flex flex-col",
-        arrow && "first:border-t-1 last:border-b-0 border-b-1 border-slate-200 b-t-1",
-        !context.isExpanded && "",
-        children && "bg-slate-50"
-      )}
-      style={{
-        margin: 0,
-      }}
+      className={cn("flex flex-col", !context.isExpanded && "h-[60px]", children && "bg-slate-50")}
     >
       <>
         <div

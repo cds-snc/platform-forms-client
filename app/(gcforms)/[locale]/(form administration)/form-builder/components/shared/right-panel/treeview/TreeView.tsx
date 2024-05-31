@@ -176,10 +176,17 @@ const ControlledTree: ForwardRefRenderFunction<unknown, TreeDataProviderProps> =
             <div
               {...lineProps}
               className={cn(
-                "h-[64px] w-full border-t-2 border-blue-focus",
+                "w-full border-b-2 border-blue-focus",
                 draggingPosition.depth > 0 && "ml-10"
               )}
             />
+          );
+        }}
+        renderItemsContainer={({ children, containerProps }) => {
+          return (
+            <ul className="divide-y-1 p-0" {...containerProps}>
+              {children}
+            </ul>
           );
         }}
         viewState={{
