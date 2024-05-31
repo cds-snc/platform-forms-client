@@ -31,6 +31,7 @@ import { ConfirmDeleteSectionDialog } from "../../confirm/ConfirmDeleteSectionDi
 import { useTemplateStore } from "@lib/store/useTemplateStore";
 import { toast } from "@formBuilder/components/shared";
 import { useTranslation } from "@i18n/client";
+import { cn } from "@lib/utils";
 
 export interface TreeDataProviderProps {
   children?: ReactElement;
@@ -170,6 +171,24 @@ const ControlledTree: ForwardRefRenderFunction<unknown, TreeDataProviderProps> =
         renderItemTitle={({ title }) => <Item.Title title={title} />}
         renderItemArrow={({ item, context }) => <Item.Arrow item={item} context={context} />}
         renderLiveDescriptorContainer={() => null}
+        renderDragBetweenLine={({ draggingPosition, lineProps }) => {
+          return (
+            <div
+              {...lineProps}
+              className={cn(
+                "w-full border-b-2 border-blue-focus",
+                draggingPosition.depth > 0 && "ml-10"
+              )}
+            />
+          );
+        }}
+        renderItemsContainer={({ children, containerProps }) => {
+          return (
+            <ul className="divide-y-1 p-0" {...containerProps}>
+              {children}
+            </ul>
+          );
+        }}
         viewState={{
           ["default"]: {
             focusedItem,
@@ -187,6 +206,8 @@ const ControlledTree: ForwardRefRenderFunction<unknown, TreeDataProviderProps> =
           });
         }}
         canDropAt={(items, target) => handleCanDropAt(items, target, getGroups)}
+        canDropBelowOpenFolders={true}
+        canDropOnFolder={true}
         onRenameItem={(item, name) => {
           item.isFolder && updateGroupName({ id: String(item.index), name });
 
