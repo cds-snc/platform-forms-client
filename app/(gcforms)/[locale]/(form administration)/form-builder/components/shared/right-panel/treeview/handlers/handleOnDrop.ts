@@ -237,7 +237,7 @@ export const handleOnDrop = async (
     // Create a new Groups object
     let newGroups = { ...currentGroups };
     newGroups[String(originParent?.index)] = {
-      name: String(originParent?.data.titleEn),
+      name: String(originParent?.data.name),
       elements: originGroupElements,
       titleEn: originParent?.data.titleEn,
       titleFr: originParent?.data.titleFr,
