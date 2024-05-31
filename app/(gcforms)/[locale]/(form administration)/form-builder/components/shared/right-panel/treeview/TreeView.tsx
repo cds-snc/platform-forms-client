@@ -31,6 +31,7 @@ import { ConfirmDeleteSectionDialog } from "../../confirm/ConfirmDeleteSectionDi
 import { useTemplateStore } from "@lib/store/useTemplateStore";
 import { toast } from "@formBuilder/components/shared";
 import { useTranslation } from "@i18n/client";
+import { cn } from "@lib/utils";
 
 export interface TreeDataProviderProps {
   children?: ReactElement;
@@ -170,6 +171,17 @@ const ControlledTree: ForwardRefRenderFunction<unknown, TreeDataProviderProps> =
         renderItemTitle={({ title }) => <Item.Title title={title} />}
         renderItemArrow={({ item, context }) => <Item.Arrow item={item} context={context} />}
         renderLiveDescriptorContainer={() => null}
+        renderDragBetweenLine={({ draggingPosition, lineProps }) => {
+          return (
+            <div
+              {...lineProps}
+              className={cn(
+                "h-[64px] w-full border-t-2 border-blue-focus",
+                draggingPosition.depth > 0 && "ml-10"
+              )}
+            />
+          );
+        }}
         viewState={{
           ["default"]: {
             focusedItem,
