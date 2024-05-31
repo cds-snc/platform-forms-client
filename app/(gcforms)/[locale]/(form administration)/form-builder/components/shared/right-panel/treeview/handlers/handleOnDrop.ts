@@ -4,6 +4,7 @@ import {
   DraggingPositionBetweenItems,
   DraggingPositionItem,
   TreeItem,
+  TreeItemIndex,
 } from "react-complex-tree";
 import { findParentGroup } from "../util/findParentGroup";
 import { TreeItems } from "../types";
@@ -116,8 +117,8 @@ export const handleOnDrop = async (
   // Current state of the tree in Groups format
   let currentGroups = getGroups() as GroupsType;
 
-  let targetParent;
-  let targetIndex;
+  let targetParent: TreeItemIndex;
+  let targetIndex: number;
 
   if ((<DraggingPositionItem>target).targetType === "item") {
     targetParent = (<DraggingPositionItem>target).targetItem;
