@@ -199,6 +199,8 @@ const ControlledTree: ForwardRefRenderFunction<unknown, TreeDataProviderProps> =
           });
         }}
         canDropAt={(items, target) => handleCanDropAt(items, target, getGroups)}
+        canDropBelowOpenFolders={true}
+        canDropOnFolder={true}
         onRenameItem={(item, name) => {
           item.isFolder && updateGroupName({ id: String(item.index), name });
 
