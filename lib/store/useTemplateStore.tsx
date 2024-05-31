@@ -344,11 +344,6 @@ const createTemplateStore = (initProps?: Partial<InitialTemplateStoreProps>) => 
                 state.isPublished = isPublished;
               });
             },
-            setFormPurpose: (formPurpose: string) => {
-              set((state) => {
-                state.formPurpose = formPurpose;
-              });
-            },
             getName: () => get().name,
             getDeliveryOption: () => get().deliveryOption,
             resetDeliveryOption: () => {
