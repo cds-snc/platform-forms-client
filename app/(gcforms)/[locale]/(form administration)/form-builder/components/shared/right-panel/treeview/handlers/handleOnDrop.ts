@@ -116,25 +116,17 @@ export const handleOnDrop = async (
   // Current state of the tree in Groups format
   let currentGroups = getGroups() as GroupsType;
 
-  // When dragging an item to a group
-  if (target.targetType === "item") {
-    console.log({ target });
-    const targetItem = (<DraggingPositionItem>target).targetItem;
-    console.log({ targetItem });
-    const targetGroup = currentGroups[target.targetItem];
-    console.log({ targetGroup });
-    items.forEach((item, index) => {
-      const originParent = findParentGroup(getTreeData(), String(item.index));
-      const originParentGroup = currentGroups[originParent?.index as string];
-      console.log({ originParentGroup });
-    });
+  let targetParent;
+  let targetIndex;
 
-    return;
+  if ((<DraggingPositionItem>target).targetType === "item") {
+    targetParent = (<DraggingPositionItem>target).targetItem;
+    targetIndex = 0;
+  } else {
+    // Target parent and index
+    targetParent = (<DraggingPositionBetweenItems>target).parentItem;
+    targetIndex = (<DraggingPositionBetweenItems>target).childIndex;
   }
-
-  // Target parent and index
-  const { parentItem: targetParent, childIndex: targetIndex } =
-    target as DraggingPositionBetweenItems;
 
   let newGroups: GroupsType;
   const selectedItems: string[] = [];
