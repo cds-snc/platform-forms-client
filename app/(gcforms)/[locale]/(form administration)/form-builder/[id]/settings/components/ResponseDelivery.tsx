@@ -33,6 +33,11 @@ enum DeliveryOption {
   email = "email",
 }
 
+/*
+* PurposeOption is used to determine the purpose of the form
+* admin: The form is used to collect personal information
+* nonAdmin: The form is used to collect non-personal information
+*/
 export enum PurposeOption {
   none = "",
   admin = "admin",
