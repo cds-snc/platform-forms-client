@@ -146,7 +146,7 @@ export const Item = ({
 };
 
 const Title = ({ title }: { title: string }) => {
-  return <span>{title}</span>;
+  return <div className="w-5/6 truncate">{title}</div>;
 };
 
 const Arrow = ({ item, context }: { item: TreeItem; context: TreeItemRenderContext }) => {
