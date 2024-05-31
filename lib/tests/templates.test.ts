@@ -60,12 +60,23 @@ const mockUnprocessedSubmissions = jest.mocked(unprocessedSubmissions, {
   shallow: true,
 });
 
+/*
+* PurposeOption is used to determine the purpose of the form
+* admin: The form is used to collect personal information
+* nonAdmin: The form is used to collect non-personal information
+*/
+export enum PurposeOption {
+  none = "",
+  admin = "admin",
+  nonAdmin = "nonAdmin",
+}
+
 const buildPrismaResponse = (
   id: string,
   jsonConfig: object,
   isPublished = false,
   deliveryOption?: DeliveryOption,
-  formPurpose?: string,
+  formPurpose?: PurposeOption,
   securityAttribute = "Unclassified"
 ) => {
   return {
