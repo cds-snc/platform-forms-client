@@ -1,5 +1,10 @@
 import { GroupsType } from "@lib/formContext";
-import { DraggingPosition, DraggingPositionBetweenItems, TreeItem } from "react-complex-tree";
+import {
+  DraggingPosition,
+  DraggingPositionBetweenItems,
+  DraggingPositionItem,
+  TreeItem,
+} from "react-complex-tree";
 
 const getReviewIndex = (currentGroups: GroupsType) => {
   const elements = Object.keys(currentGroups);
@@ -23,6 +28,10 @@ export const handleCanDropAt = (
   if (groupItemsCount >= 1) {
     // Groups can't be dropped on another group
     if ((<DraggingPositionBetweenItems>target).parentItem !== "root") {
+      return false;
+    }
+
+    if ((<DraggingPositionItem>target).targetType == "item") {
       return false;
     }
 
