@@ -18,9 +18,9 @@ type ReviewGroup = {
   }[];
 };
 
-type QuestionAnswer = {
-  [x: string]: string;
-};
+// type QuestionAnswer = {
+//   [x: string]: string;
+// };
 
 export const Review = ({ language }: { language: Language }): React.ReactElement => {
   const { t } = useTranslation(["review", "common"]);
@@ -64,29 +64,17 @@ export const Review = ({ language }: { language: Language }): React.ReactElement
       <div className="my-16">
         {Array.isArray(questionsAndAnswers) &&
           questionsAndAnswers.map((group) => {
-            const title = group.title ? group.title : t("start", { ns: "common" }); // group.name as fallback for groups like Start
+            const title = group.title ? group.title : t("start", { ns: "common" });
             return (
               <div key={group.id} className="py-4 px-6 mb-10 border-2 border-slate-400 rounded-lg">
                 <h3 className="text-slate-700">
                   <EditButton group={group} theme="link">
-                    <>{title}</>
+                    {title}
                   </EditButton>
                 </h3>
-                <div className="mb-10 ml-1">
-                  <dl className="mt-10 mb-10">
-                    {Array.isArray(group.elements) &&
-                      group.elements.map((element) => (
-                        <QuestionsAnswers
-                          key={Object.keys(element)[0]}
-                          element={element}
-                          formRecord={formRecord}
-                          lang={language}
-                        />
-                      ))}
-                  </dl>
-                </div>
+                <QuestionsAnswers group={group} formRecord={formRecord} />
                 <EditButton group={group} theme="secondary">
-                  <>{t("edit")}</>
+                  {t("edit")}
                 </EditButton>
               </div>
             );
@@ -97,25 +85,35 @@ export const Review = ({ language }: { language: Language }): React.ReactElement
 };
 
 const QuestionsAnswers = ({
-  element,
+  group,
   formRecord,
-  lang,
 }: {
-  element: QuestionAnswer;
+  group: ReviewGroup;
   formRecord: TypeOmit<FormRecord, "name" | "deliveryOption">;
-  lang: string;
 }): React.ReactElement => {
-  const { t } = useTranslation("review");
+  const {
+    t,
+    i18n: { language },
+  } = useTranslation("review");
   function getElementNameById(id: string | number) {
     const element = formRecord.form.elements.find((item) => String(item.id) === String(id));
-    return element ? element.properties?.[getLocalizedProperty("title", lang)] : t("unknown");
+    return element ? element.properties?.[getLocalizedProperty("title", language)] : t("unknown");
   }
-  const question = getElementNameById(Object.keys(element)[0]) as string;
-  const answer = Object.values(element)[0] as string;
   return (
-    <div className="mb-8">
-      <dt className="font-bold mb-2">{question}</dt>
-      <dd>{answer}</dd>
+    <div className="mb-10 ml-1">
+      <dl className="mt-10 mb-10">
+        {Array.isArray(group.elements) &&
+          group.elements.map((element) => {
+            const question = getElementNameById(Object.keys(element)[0]) as string;
+            const answer = Object.values(element)[0] as string;
+            return (
+              <div className="mb-8" key={Object.keys(element)[0]}>
+                <dt className="font-bold mb-2">{question}</dt>
+                <dd>{answer}</dd>
+              </div>
+            );
+          })}
+      </dl>
     </div>
   );
 };
@@ -127,7 +125,7 @@ const EditButton = ({
 }: {
   group: ReviewGroup;
   theme: Theme;
-  children: React.ReactElement;
+  children: React.ReactElement | string;
 }): React.ReactElement => {
   const { setGroup, clearHistoryAfterId } = useGCFormsContext();
   return (
