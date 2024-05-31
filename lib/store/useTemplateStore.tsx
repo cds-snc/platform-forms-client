@@ -53,6 +53,7 @@ const createTemplateStore = (initProps?: Partial<InitialTemplateStoreProps>) => 
     isPublished: false,
     name: "",
     securityAttribute: "Protected A",
+    formPurpose: "",
     closingDate: initProps?.closingDate,
     changeKey: String(new Date().getTime()),
     allowGroupsFlag: initProps?.allowGroupsFlag || false,
@@ -343,6 +344,11 @@ const createTemplateStore = (initProps?: Partial<InitialTemplateStoreProps>) => 
                 state.isPublished = isPublished;
               });
             },
+            setFormPurpose: (formPurpose: string) => {
+              set((state) => {
+                state.formPurpose = formPurpose;
+              });
+            },
             getName: () => get().name,
             getDeliveryOption: () => get().deliveryOption,
             resetDeliveryOption: () => {
@@ -366,6 +372,7 @@ const createTemplateStore = (initProps?: Partial<InitialTemplateStoreProps>) => 
                 state.isPublished = false;
                 state.name = "";
                 state.deliveryOption = undefined;
+                state.formPurpose = "";
                 state.closingDate = null;
               });
             },
@@ -379,6 +386,7 @@ const createTemplateStore = (initProps?: Partial<InitialTemplateStoreProps>) => 
                 state.name = "";
                 state.securityAttribute = "Protected A";
                 state.deliveryOption = undefined;
+                state.formPurpose = "";
                 state.closingDate = null;
               });
             },

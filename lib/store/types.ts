@@ -90,6 +90,7 @@ export interface TemplateStoreProps {
   name: string;
   deliveryOption?: DeliveryOption;
   securityAttribute: SecurityAttribute;
+  formPurpose: string;
   closingDate?: string | null;
   changeKey: string;
   allowGroupsFlag: boolean;
