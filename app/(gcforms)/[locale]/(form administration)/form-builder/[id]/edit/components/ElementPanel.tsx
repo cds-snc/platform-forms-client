@@ -138,7 +138,7 @@ export const ElementPanel = ({
           refs && refs.current && refs.current[previousElement.id].focus();
         }}
         handleMoveUp={() => {
-          moveUp(item.index);
+          moveUp(item.index, groupId);
           if (item.type === "richText") {
             (
               document
@@ -151,7 +151,7 @@ export const ElementPanel = ({
           refs && refs.current && refs.current[item.id].focus();
         }}
         handleMoveDown={() => {
-          moveDown(item.index);
+          moveDown(item.index, groupId);
           if (item.type === "richText") {
             (
               document
