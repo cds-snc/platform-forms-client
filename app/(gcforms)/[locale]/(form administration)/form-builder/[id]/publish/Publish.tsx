@@ -38,6 +38,7 @@ export const Publish = ({ id }: { id: string }) => {
     getSchema,
     getName,
     getDeliveryOption,
+    formPurpose,
     securityAttribute,
   } = useTemplateStore((s) => ({
     id: s.id,
@@ -46,6 +47,7 @@ export const Publish = ({ id }: { id: string }) => {
     getSchema: s.getSchema,
     getName: s.getName,
     getDeliveryOption: s.getDeliveryOption,
+    formPurpose: s.formPurpose,
     securityAttribute: s.securityAttribute,
   }));
 
@@ -76,6 +78,14 @@ export const Publish = ({ id }: { id: string }) => {
   };
 
   const supportHref = `/${i18n.language}/support`;
+
+  let formPurposeText = t("settingsPurposeAndUse.purpose.unset");
+  if (formPurpose === "admin") {
+    formPurposeText = t("settingsPurposeAndUse.purpose.admin");
+  }
+  if (formPurpose === "nonAdmin") {
+    formPurposeText = t("settingsPurposeAndUse.purpose.nonAdmin");
+  }
 
   const handlePublish = async () => {
     setError(false);
@@ -189,7 +199,7 @@ export const Publish = ({ id }: { id: string }) => {
           </Link>
         </li>
         <li className="my-4">
-          {hasHydrated ? <Icon checked={confirmationMessage} /> : IconLoading}
+          {hasHydrated ? <Icon checked={confirmationMessage !== undefined} /> : IconLoading}
           <Link href={`/${i18n.language}/form-builder/${id}/edit#confirmation-text`}>
             {t("formConfirmationMessage")}
           </Link>
@@ -200,19 +210,33 @@ export const Publish = ({ id }: { id: string }) => {
         </li>
 
         <li className="my-4">
-          {hasHydrated ? <Icon checked /> : IconLoading}
+          {hasHydrated ? <Icon checked={formPurpose != ""} /> : IconLoading}
           <strong>
-            {securityAttributeText}
-            {t("publishYourFormInstructions.text2")},{" "}
+            <LinkButton href={`/${i18n.language}/form-builder/${id}/settings`}>
+              {t("publishYourFormInstructions.settings")}
+            </LinkButton>
           </strong>
-          {isVaultDelivery(getDeliveryOption()) ? (
-            <span>{t("publishYourFormInstructions.vaultOption")}</span>
-          ) : (
-            <span>{t("publishYourFormInstructions.emailOption")}</span>
-          )}
-          <LinkButton href={`/${i18n.language}/form-builder/${id}/settings`}>
-            {t("publishYourFormInstructions.change")}
-          </LinkButton>
+          <div>
+            <ul>
+              <li>
+                <strong>{t("publishYourFormInstructions.classification")}:&nbsp;</strong>
+                {securityAttributeText}
+                {t("publishYourFormInstructions.text2")}
+              </li>
+              <li>
+                <strong>{t("publishYourFormInstructions.deliveryOption")}:&nbsp;</strong>
+                {isVaultDelivery(getDeliveryOption()) ? (
+                  <span>{t("publishYourFormInstructions.vaultOption")}</span>
+                ) : (
+                  <span>{t("publishYourFormInstructions.emailOption")}</span>
+                )}
+              </li>
+              <li>
+                <strong>{t("publishYourFormInstructions.purpose")}:&nbsp;</strong>
+                {formPurposeText}
+              </li>
+            </ul>
+          </div>
         </li>
       </ul>
 

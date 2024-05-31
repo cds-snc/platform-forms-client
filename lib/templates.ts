@@ -31,6 +31,7 @@ const _parseTemplate = (template: {
     emailSubjectFr: string | null;
   } | null;
   securityAttribute: string;
+  formPurpose: string;
   closingDate?: Date | null;
 }): FormRecord => {
   return {
@@ -55,6 +56,7 @@ const _parseTemplate = (template: {
         }),
       },
     }),
+    formPurpose: template.formPurpose,
     securityAttribute: template.securityAttribute as SecurityAttribute,
     ...(template.closingDate && {
       closingDate: template.closingDate.toString(),
@@ -91,6 +93,7 @@ async function _unprotectedGetTemplateByID(formID: string): Promise<FormRecord |
         isPublished: true,
         deliveryOption: true,
         securityAttribute: true,
+        formPurpose: true,
         closingDate: true,
         ttl: true,
       },
@@ -129,6 +132,7 @@ async function _unprotectedGetTemplateWithAssociatedUsers(formID: string): Promi
         isPublished: true,
         deliveryOption: true,
         securityAttribute: true,
+        formPurpose: true,
         closingDate: true,
         ttl: true,
         users: {
@@ -163,6 +167,7 @@ export type CreateTemplateCommand = {
   name?: string;
   deliveryOption?: DeliveryOption;
   securityAttribute?: SecurityAttribute;
+  formPurpose?: string;
 };
 
 export type UpdateTemplateCommand = {
@@ -172,6 +177,7 @@ export type UpdateTemplateCommand = {
   name?: string;
   deliveryOption?: DeliveryOption;
   securityAttribute?: SecurityAttribute;
+  formPurpose?: string;
 };
 
 export class TemplateAlreadyPublishedError extends Error {}
@@ -218,6 +224,7 @@ export async function createTemplate(command: CreateTemplateCommand): Promise<Fo
         isPublished: true,
         deliveryOption: true,
         securityAttribute: true,
+        formPurpose: true,
       },
     });
 
@@ -282,6 +289,7 @@ export async function getAllTemplates(
           isPublished: true,
           deliveryOption: true,
           securityAttribute: true,
+          formPurpose: true,
         },
         ...(sortByDateUpdated && {
           orderBy: {
@@ -357,6 +365,7 @@ export async function getAllTemplatesForUser(
           isPublished: true,
           deliveryOption: true,
           securityAttribute: true,
+          formPurpose: true,
         },
       })
       .catch((e) => prismaErrors(e, []));
@@ -554,6 +563,7 @@ export async function updateTemplate(command: UpdateTemplateCommand): Promise<Fo
           isPublished: true,
           deliveryOption: true,
           securityAttribute: true,
+          formPurpose: true,
         },
       })
       .catch((e) => prismaErrors(e, null));
@@ -668,6 +678,7 @@ export async function updateIsPublishedForTemplate(
           isPublished: true,
           deliveryOption: true,
           securityAttribute: true,
+          formPurpose: true,
         },
       })
       .catch((e) => prismaErrors(e, null));
@@ -741,6 +752,7 @@ export async function updateAssignedUsersForTemplate(
           isPublished: true,
           deliveryOption: true,
           securityAttribute: true,
+          formPurpose: true,
           users: true,
         },
       })
@@ -880,6 +892,7 @@ export async function updateResponseDeliveryOption(
           isPublished: true,
           deliveryOption: true,
           securityAttribute: true,
+          formPurpose: true,
         },
       })
       .catch((e) => prismaErrors(e, null));
@@ -964,6 +977,7 @@ export async function removeDeliveryOption(
           isPublished: true,
           deliveryOption: true,
           securityAttribute: true,
+          formPurpose: true,
         },
       })
       .catch((e) => prismaErrors(e, null));
@@ -1040,6 +1054,7 @@ export async function deleteTemplate(
           isPublished: true,
           deliveryOption: true,
           securityAttribute: true,
+          formPurpose: true,
         },
       })
       .catch((e) => prismaErrors(e, null));
@@ -1194,6 +1209,7 @@ export const updateSecurityAttribute = async (
           isPublished: true,
           deliveryOption: true,
           securityAttribute: true,
+          formPurpose: true,
         },
       })
       .catch((e) => prismaErrors(e, null));
