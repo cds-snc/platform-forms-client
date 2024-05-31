@@ -472,9 +472,13 @@
   "publishingRemovesTestResponsesDescription": "Toutes les réponses antérieures seront supprimées du système.",
   "publishYourForm": "Publier votre formulaire",
   "publishYourFormInstructions": {
+    "settings": "Paramètres",
+    "classification": "Classification des données",
+    "deliveryOption": "Option de livraison",
+    "purpose": "Objectif et utilisation",
     "text1": "Veuillez franchir les étapes suivantes avant de publier votre formulaire.",
     "text2": "",
-    "vaultOption": "Réponses à télécharger — ",
+    "vaultOption": "Réponses à télécharger",
     "emailOption": "Réponses envoyées par courriel — ",
     "change": "Modifier ces paramètres"
   },
@@ -527,6 +531,30 @@
   "settingsResponseEmailTitle": "Adresse courriel",
   "settingsResponseHint1": "Les réponses seront envoyées par courriel à cette boîte de réception. Il peut s'agir d'une boîte de réception partagée.",
   "settingsResponseTitle": "Destination de livraison des réponses.",
+  "settingsPurposeAndUse": {
+    "title": "Usage prévu",
+    "description": "Nous utiliserons cette information pour déterminer comment traiter les réponses qui sont dans Formulaires GC depuis plus de 45 jours.",
+    "personalInfo": "Renseignements personnels servant à prendre une décision qui touche un individu",
+    "helpUs": "Dites-nous comment vous prévoyez utiliser les réponses recueillies",
+    "personalInfoDetails": "C’est-à-dire à des fins administratives, par exemple:",
+    "personalInfoDetailsVals": {
+      "1": "demandes ou candidatures",
+      "2": "vérification d’admissibilité",
+      "3": "validation d’identité"
+    },
+    "nonAdminInfo": "Renseignements ne servant pas à prendre une décision qui touche un individu",
+    "nonAdminInfoDetails": "C’est-à-dire à des fins non-administratives, par exemple:",
+    "nonAdminInfoDetailsVals": {
+      "1": "statistiques",
+      "2": "activités de recherche",
+      "3": "audits"
+    },
+    "purpose": {
+      "admin": "fins administratives",
+      "nonAdmin": "fins non-administratives",
+      "unset": "pas définie"
+    }
+  },
   "settingsResponseDelivery": {
     "selectClassification": "Classification des données",
     "beforePublishMessage": "Vous pouvez modifier ces paramètres à tout moment avant de publier le formulaire.",
@@ -790,49 +818,52 @@
   "saved": "Enregistré",
   "opensInNewTab": "ouvre un nouvel onglet",
   "rightPanel": {
-    "openPanel": "Design form [FR]",
-    "closePanel": "Close panel [FR]",
-    "questions": "Questions [FR]",
-    "logic": "Logic  [FR]",
-    "translation": "Translation [FR]",
+    "openPanel": "Conception du formulaire",
+    "closePanel": "Fermer le panneau",
+    "questions": "Questions",
+    "logic": "Logique",
+    "translation": "Traductions",
     "treeView": {
-      "addSection": "New section [FR]"
+      "addSection": "Nouvelle section"
     }
   },
   "logic": {
-    "heading": "Logic [fr]",
-    "description": "Apply conditional rules to sections with radio buttons, checkboxes, and dropdown form elements.",
-    "clear": "Clear [fr]",
-    "gotoSection": "Go to section [fr]",
-    "questionTitle": "Question [fr]:",
-    "sectionTitle": "Section: [fr]",
-    "addRule": "Add rule [fr]",
-    "resetRules": "Reset all rules [fr]",
-    "resetRulesDescription": "Auto flow will automatically set a linear flow for your sections, overriding any existing rules. [fr]",
-    "saveRule": "Save [fr]",
-    "saveNote": "Adding and saving a rule, turns off Auto-flow sections [fr]",
+    "heading": "Logique",
+    "description": "Appliquer des règles conditionnelles aux sections comportant des boutons radio, des cases à cocher ou une liste déroulante.",
+    "clear": "Enlever",
+    "gotoSection": "Aller à la section",
+    "questionTitle": "Question :",
+    "sectionTitle": "Section :",
+    "addRule": "Ajouter une régle",
+    "resetRules": "Réinitialiser toutes les règles",
+    "resetRulesDescription": "La fonction de flux automatique réinitialise la progression entre les sections en un flux linéaire simple, remplaçant ainsi toutes les règles de logique de branchement qui s'appliquent.",
+    "saveRule": "Enregistrer",
+    "saveNote": "Ajouter et enregistrer une règle, désactive le ",
     "multiRulesWarning": {
-      "text1": "The flow is currently set based on the rules applied. [fr]",
-      "text2": "Flow sections: [fr]",
-      "text3": "To flow sections, you must clear the rules applied to question elements. [fr]"
+      "text1": "L'ordre et le flux sont définis en fonction des règles appliquées.",
+      "text2": "Relier les sections :",
+      "text3": "Pour relier les section, vous devez enlever les règles appliquées aux éléments du formulaire."
     },
     "choiceSelect": {
-      "selectOption": "Select an option [fr]",
-      "catchAllOption": "Catch all (any other value) [fr]"
+      "selectOption": "Sélectionner une option",
+      "catchAllOption": "Pour toute autre option"
     },
     "groupSelect": {
-      "default": "Select a section to go to [fr]",
-      "catchAllGroup": "Catch all (any other value) [fr]"
+      "default": "Sélectionner une section",
+      "catchAllGroup": "Pour toute autre valeur"
     },
-    "actionsSaved": "Actions saved [fr]"
+    "actionsSaved": "Actions enregistrées"
   },
   "groups": {
     "addElement": {
       "empty": {
-        "title": "Empty section [fr]",
-        "text1": "This section doesn’t have any form elements in it. [fr]"
+        "title": "Section vide",
+        "text1": "Aucun élément de formulaire n'a été ajouté."
       }
-    }
+    },
+    "sectionTitle": "Titre de la section",
+    "groupDeleted": "Group deleted",
+    "groupSuccessfullyDeleted": "{{group}} successfully deleted"
   },
   "confirmation": {
     "title": "Votre formulaire a été soumis",

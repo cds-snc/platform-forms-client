@@ -1,10 +1,10 @@
 import { serverTranslation } from "@i18n";
-import { auth } from "@lib/auth";
-import { checkPrivilegesAsBoolean, createAbility } from "@lib/privileges";
+import { checkPrivilegesAsBoolean } from "@lib/privileges";
 import { Metadata } from "next";
 import { RedirectType, redirect } from "next/navigation";
 import { Success } from "./components/server/Success";
 import { UnlockPublishingForm } from "./components/client/UnlockPublishingForm";
+import { authCheckAndRedirect } from "@lib/actions";
 
 export async function generateMetadata({
   params: { locale },
@@ -24,9 +24,7 @@ export default async function Page({
   params: { locale: string };
   searchParams: { success?: string };
 }) {
-  const session = await auth();
-  if (!session) return null;
-  const ability = createAbility(session);
+  const { ability, session } = await authCheckAndRedirect();
 
   if (
     checkPrivilegesAsBoolean(ability, [

@@ -1,5 +1,5 @@
 import { DragHandle } from "./icons/DragHandle";
-import { LockIcon } from "@serverComponents/icons";
+import { DeleteIcon, LockIcon } from "@serverComponents/icons";
 import { cn } from "@lib/utils";
 import { ReactElement, ReactNode } from "react";
 import { TreeItem, TreeItemIndex, TreeItemRenderContext } from "react-complex-tree";
@@ -8,22 +8,24 @@ import { ArrowDown } from "./icons/ArrowDown";
 import { useTreeRef } from "./provider/TreeRefProvider";
 import { useState } from "react";
 import React from "react";
-import { LockedSections } from "./types";
 
 export const Item = ({
   title,
   arrow,
   context,
   children,
+  handleDelete,
 }: {
   title: ReactNode;
   arrow: ReactNode;
   context: TreeItemRenderContext;
   children: ReactNode | ReactElement;
+  handleDelete: (e: React.MouseEvent<HTMLButtonElement>) => Promise<void>;
 }) => {
   const { tree } = useTreeRef();
   const isRenaming = context && context?.isRenaming ? true : false;
-  const [name, setName] = useState("");
+  const itemName = React.isValidElement(title) && title.props.title;
+  const [name, setName] = useState(itemName);
 
   if (isRenaming) {
     return (
@@ -50,7 +52,7 @@ export const Item = ({
             {...context.interactiveElementProps}
             type="text"
             autoFocus
-            className="ml-10"
+            className="ml-10 w-auto"
             value={name}
             onFocus={(e) => {
               e.target.select();
@@ -62,6 +64,12 @@ export const Item = ({
                 tree?.current?.renameItem(id, name);
                 context.stopRenamingItem();
               }
+              if (e.key === "Escape" || e.key === "Tab") {
+                context.stopRenamingItem();
+              }
+            }}
+            onBlur={() => {
+              context.stopRenamingItem();
             }}
             onChange={(e) => {
               setName(e.target.value);
@@ -69,19 +77,19 @@ export const Item = ({
           />
           {arrow}
         </div>
+        {children}
       </li>
     );
   }
 
-  const titleString = (React.isValidElement(title) && title.props.title).toLowerCase();
-  const isLocked = [LockedSections.START, LockedSections.END].includes(titleString);
+  const isLocked = !context.canDrag;
 
   return (
     <li
       {...context.itemContainerWithChildrenProps}
       className={cn(
         "flex flex-col",
-        arrow && "border-b-1 border-slate-200 border-x-1 border-r-2 b-t-1",
+        arrow && "first:border-t-1 last:border-b-0 border-b-1 border-slate-200 b-t-1",
         !context.isExpanded && "",
         children && "bg-slate-50"
       )}
@@ -101,12 +109,10 @@ export const Item = ({
           )}
         >
           {arrow}
-
           <span
-            className="ml-10"
+            className="ml-10 inline-block w-[100%] overflow-hidden"
             {...(!isLocked && {
               onDoubleClick: () => {
-                tree?.current?.collapseAll();
                 context.startRenamingItem();
               },
             })}
@@ -114,12 +120,22 @@ export const Item = ({
             {title}
           </span>
           {context.canDrag ? (
-            <DragHandle
-              className={cn(
-                "absolute right-0 top-0 mr-4 mt-3 hidden cursor-pointer group-hover:block",
-                !arrow && "mt-2"
+            <>
+              {context.isExpanded && (
+                <span className="cursor-pointer" onClick={handleDelete}>
+                  <DeleteIcon
+                    title="Delete group"
+                    className="absolute right-0 top-0 mr-10 mt-3 size-5"
+                  />
+                </span>
               )}
-            />
+              <DragHandle
+                className={cn(
+                  "absolute right-0 top-0 mr-4 mt-3 hidden cursor-pointer group-hover:block",
+                  !arrow && "mt-2"
+                )}
+              />
+            </>
           ) : (
             <LockIcon className="absolute right-0 mr-2 inline-block scale-75" />
           )}

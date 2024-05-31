@@ -3,6 +3,8 @@ import { PublicFormRecord, ConditionalRule } from "@lib/types";
 
 export type Group = {
   name: string;
+  titleEn: string;
+  titleFr: string;
   nextAction?: string | NextActionRule[];
   elements: string[];
   autoFlow?: boolean;

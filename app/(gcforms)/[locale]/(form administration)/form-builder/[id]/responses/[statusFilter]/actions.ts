@@ -1,14 +1,19 @@
 "use server";
-import { Language } from "@lib/types/form-builder-types";
+import { Language, FormServerErrorCodes, ServerActionError } from "@lib/types/form-builder-types";
 import { getAppSetting } from "@lib/appSettings";
 import { logEvent } from "@lib/auditLogs";
-import { auth } from "@lib/auth";
+
 import { ucfirst } from "@lib/client/clientHelpers";
-import { createAbility } from "@lib/privileges";
+import { AccessControlError, createAbility } from "@lib/privileges";
 import {
   Answer,
+  CSVResponse,
   DownloadFormat,
   FormResponseSubmissions,
+  HtmlAggregatedResponse,
+  HtmlResponse,
+  HtmlZippedResponse,
+  JSONResponse,
 } from "@lib/responseDownloadFormats/types";
 import { getFullTemplateByID } from "@lib/templates";
 import { FormElementTypes, VaultStatus } from "@lib/types";
@@ -21,17 +26,20 @@ import { transform as zipTransform } from "@lib/responseDownloadFormats/html-zip
 import { transform as jsonTransform } from "@lib/responseDownloadFormats/json";
 import { logMessage } from "@lib/logger";
 import { revalidatePath } from "next/cache";
+import { authCheckAndThrow } from "@lib/actions";
+import { FormBuilderError } from "./exceptions";
 
 // Can throw because it is not called by Client Components
 // @todo Should these types of functions be moved to a different file?
 export const fetchTemplate = async (id: string) => {
-  const session = await auth();
-
+  const { session, ability } = await authCheckAndThrow().catch(() => ({
+    session: null,
+    ability: null,
+  }));
   if (!session) {
     throw new Error("User is not authenticated");
   }
 
-  const ability = createAbility(session);
   const template = await getFullTemplateByID(ability, id);
 
   return template;
@@ -48,13 +56,14 @@ export const fetchSubmissions = async ({
   status: string;
   lastKey?: string;
 }) => {
-  const session = await auth();
+  const { session, ability } = await authCheckAndThrow().catch(() => ({
+    session: null,
+    ability: null,
+  }));
 
   if (!session) {
     throw new Error("User is not authenticated");
   }
-
-  const ability = createAbility(session);
 
   // get status from url params (default = new) and capitalize/cast to VaultStatus
   // Protect against invalid status query
@@ -91,11 +100,8 @@ const sortByLayout = ({ layout, elements }: { layout: number[]; elements: Answer
 const logDownload = async (
   responseIdStatusArray: { id: string; status: string }[],
   format: DownloadFormat,
-  formId: string,
-  ability: ReturnType<typeof createAbility>,
-  userEmail: string
+  ability: ReturnType<typeof createAbility>
 ) => {
-  await updateLastDownloadedBy(responseIdStatusArray, formId, userEmail);
   responseIdStatusArray.forEach((item) => {
     logEvent(
       ability.userID,
@@ -118,12 +124,22 @@ export const getSubmissionsByFormat = async ({
   format: DownloadFormat;
   lang: Language;
   revalidate?: boolean;
-}) => {
+}): Promise<
+  | HtmlResponse
+  | HtmlZippedResponse
+  | HtmlAggregatedResponse
+  | CSVResponse
+  | JSONResponse
+  | ServerActionError
+> => {
   try {
-    const session = await auth();
+    const { session, ability } = await authCheckAndThrow().catch(() => ({
+      session: null,
+      ability: null,
+    }));
 
     if (!session) {
-      throw new Error("User is not authenticated");
+      throw new AccessControlError("User is not authenticated");
     }
 
     const responseConfirmLimit = Number(await getAppSetting("responseDownloadLimit"));
@@ -131,28 +147,31 @@ export const getSubmissionsByFormat = async ({
     const userEmail = session.user.email;
 
     if (userEmail === null) {
-      throw new Error(
-        `User does not have an associated email address: ${JSON.stringify(session.user)} `
+      throw new AccessControlError(
+        `User does not have an associated email address: ${JSON.stringify(session.user)}`
       );
     }
 
-    const ability = createAbility(session);
     const fullFormTemplate = await getFullTemplateByID(ability, formID);
 
     if (fullFormTemplate === null) {
-      throw new Error("Form not found");
+      throw new FormBuilderError("Form not found", FormServerErrorCodes.FORM_NOT_FOUND);
     }
 
     if (ids.length > responseConfirmLimit) {
-      throw new Error(
-        `You can only download a maximum of ${responseConfirmLimit} responses at a time.`
+      throw new FormBuilderError(
+        `You can only download a maximum of ${responseConfirmLimit} responses at a time.`,
+        FormServerErrorCodes.DOWNLOAD_LIMIT_EXCEEDED
       );
     }
 
     const queryResult = await retrieveSubmissions(ability, formID, ids);
 
     if (!queryResult) {
-      throw new Error("Error retrieving submissions");
+      throw new FormBuilderError(
+        "Error retrieving submissions",
+        FormServerErrorCodes.DOWNLOAD_RETRIEVE_SUBMISSIONS
+      );
     }
 
     // Get responses into a ResponseSubmission array containing questions and answers that can be easily transformed
@@ -204,7 +223,7 @@ export const getSubmissionsByFormat = async ({
     }) as FormResponseSubmissions["submissions"];
 
     if (!responses.length) {
-      throw new Error("No responses found.");
+      throw new FormBuilderError("No responses found.", FormServerErrorCodes.NO_RESPONSES_FOUND);
     }
 
     const formResponse = {
@@ -224,7 +243,8 @@ export const getSubmissionsByFormat = async ({
       };
     });
 
-    await logDownload(responseIdStatusArray, format, formID, ability, userEmail);
+    await updateLastDownloadedBy(responseIdStatusArray, formID, userEmail);
+    await logDownload(responseIdStatusArray, format, ability);
 
     const revalidateNewTab = async () => {
       // delay revalidation so new tab doesn't refresh immediately
@@ -260,10 +280,21 @@ export const getSubmissionsByFormat = async ({
         };
 
       default:
-        throw new Error(`Invalid format: ${format}`);
+        throw new FormBuilderError(
+          `Invalid format: ${format}`,
+          FormServerErrorCodes.DOWNLOAD_INVALID_FORMAT
+        );
     }
   } catch (err) {
     logMessage.error(`Could not create submissions in format ${format}: ${(err as Error).message}`);
-    return { error: "There was an error. Please try again later." };
+
+    if (err instanceof FormBuilderError) {
+      return {
+        error: "There was an error. Please try again later.",
+        code: err.code,
+      } as ServerActionError;
+    } else {
+      return { error: "There was an error. Please try again later." } as ServerActionError;
+    }
   }
 };

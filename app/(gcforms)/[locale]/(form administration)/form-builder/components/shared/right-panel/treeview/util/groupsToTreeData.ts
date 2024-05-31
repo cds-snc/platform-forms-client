@@ -41,8 +41,9 @@ export const groupsToTreeData = (
       canRename: true,
       canMove: true,
       data: {
-        titleEn: formGroups[key].name,
-        titleFr: formGroups[key].name,
+        name: formGroups[key].name,
+        titleEn: formGroups[key].titleEn,
+        titleFr: formGroups[key].titleFr,
         descriptionEn: "",
         descriptionFr: "",
       },
@@ -117,7 +118,9 @@ export const groupsToTreeData = (
   }
 
   if (startChildren.length > 0) {
-    items["start"].children = startChildren;
+    // Add startChildren to existing start children
+    const currentStartChildren = items["start"].children ? items["start"].children : [];
+    items["start"].children = [...startChildren, ...currentStartChildren];
   }
 
   // ----

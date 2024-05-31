@@ -1,6 +1,6 @@
 "use server";
-import { updateSecurityAnswer, auth } from "@lib/auth";
-import { createAbility } from "@lib/privileges";
+import { updateSecurityAnswer } from "@lib/auth";
+import { authCheckAndThrow } from "@lib/actions";
 import { revalidatePath } from "next/cache";
 import * as v from "valibot";
 
@@ -18,9 +18,7 @@ export const updateSecurityQuestion = async (
   newQuestionId: string,
   answer: string | undefined
 ) => {
-  const session = await auth();
-  if (!session) return { error: "User not authenticated" };
-  const ability = createAbility(session);
+  const { ability } = await authCheckAndThrow();
 
   const data = validateData({ oldQuestionId, newQuestionId, newAnswer: answer });
 

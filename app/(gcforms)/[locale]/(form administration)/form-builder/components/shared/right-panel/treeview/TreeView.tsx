@@ -24,15 +24,20 @@ import { AddIcon } from "@serverComponents/icons";
 import { handleCanDropAt } from "./handlers/handleCanDropAt";
 import { handleOnDrop } from "./handlers/handleOnDrop";
 import { ElementProperties, useElementTitle } from "@lib/hooks/useElementTitle";
-import { ConfirmDialog } from "../../confirm/ConfirmDialog";
-import { useConfirmState } from "../../confirm/useConfirmState";
+import { ConfirmMoveSectionDialog } from "../../confirm/ConfirmMoveSectionDialog";
+import { useConfirmState as useConfirmMoveDialogState } from "../../confirm/useConfirmState";
+import { useConfirmState as useConfirmDeleteDialogState } from "../../confirm/useConfirmState";
+import { ConfirmDeleteSectionDialog } from "../../confirm/ConfirmDeleteSectionDialog";
+import { useTemplateStore } from "@lib/store/useTemplateStore";
+import { toast } from "@formBuilder/components/shared";
+import { useTranslation } from "@i18n/client";
 
 export interface TreeDataProviderProps {
   children?: ReactElement;
   addItem: (id: string) => void;
   // addGroup: (id: string) => void;
   updateItem: (id: string, value: string) => void;
-  // removeItem: (id: string) => void;
+  removeItem: (id: string) => void;
   // openSection?: (id: string) => void;
 }
 
@@ -49,6 +54,7 @@ const ControlledTree: ForwardRefRenderFunction<unknown, TreeDataProviderProps> =
     updateGroupName,
     replaceGroups,
     updateElementTitle,
+    deleteGroup,
   } = useGroupStore((s) => {
     return {
       getTreeData: s.getTreeData,
@@ -58,9 +64,17 @@ const ControlledTree: ForwardRefRenderFunction<unknown, TreeDataProviderProps> =
       setId: s.setId,
       updateGroupName: s.updateGroupName,
       updateElementTitle: s.updateElementTitle,
+      deleteGroup: s.deleteGroup,
     };
   });
 
+  const { remove: removeItem } = useTemplateStore((s) => {
+    return {
+      remove: s.remove,
+    };
+  });
+
+  const { t } = useTranslation("form-builder");
   const { tree, environment } = useTreeRef();
   const [focusedItem, setFocusedItem] = useState<TreeItemIndex | undefined>();
   const [expandedItems, setExpandedItems] = useState<TreeItemIndex[]>([]);
@@ -89,9 +103,25 @@ const ControlledTree: ForwardRefRenderFunction<unknown, TreeDataProviderProps> =
       setExpandedItems([parent?.index as TreeItemIndex]);
       setSelectedItems([id]);
     },
+    removeItem: (id: string) => {
+      const parent = findParentGroup(getTreeData(), id);
+      setExpandedItems([parent?.index as TreeItemIndex]);
+      setSelectedItems([parent?.index as TreeItemIndex]);
+    },
   }));
 
-  const { resolve, getPromise, openDialog, setOpenDialog } = useConfirmState();
+  const {
+    resolve: resolveConfirmMove,
+    getPromise: getConfirmMovePromise,
+    openDialog: openConfirmMoveDialog,
+    setOpenDialog: setOpenConfirmMoveDialog,
+  } = useConfirmMoveDialogState();
+  const {
+    resolve: resolveConfirmDelete,
+    getPromise: getConfirmDeletePromise,
+    openDialog: openConfirmDeleteDialog,
+    setOpenDialog: setOpenConfirmDeleteDialog,
+  } = useConfirmDeleteDialogState();
 
   return (
     <>
@@ -104,9 +134,35 @@ const ControlledTree: ForwardRefRenderFunction<unknown, TreeDataProviderProps> =
           reviewGroup: false,
         })}
         getItemTitle={(item) => getTitle(item.data as ElementProperties)}
-        renderItem={({ title, arrow, context, children }) => {
+        renderItem={({ item, title, arrow, context, children }) => {
           return (
-            <Item title={title} arrow={arrow} context={context}>
+            <Item
+              title={title}
+              arrow={arrow}
+              context={context}
+              handleDelete={async (e) => {
+                e.stopPropagation();
+                setOpenConfirmDeleteDialog(true);
+                const confirm = await getConfirmDeletePromise();
+                if (confirm) {
+                  item.children &&
+                    item.children.map((child) => {
+                      removeItem(Number(child));
+                    });
+
+                  deleteGroup(String(item.index));
+                  setOpenConfirmDeleteDialog(false);
+                  toast.success(
+                    <>
+                      <h3>{t("groups.groupDeleted")}</h3>
+                      <p>{t("groups.groupSuccessfullyDeleted", { group: item.data.name })}</p>
+                    </>
+                  );
+                  return;
+                }
+                setOpenConfirmDeleteDialog(false);
+              }}
+            >
               {children}
             </Item>
           );
@@ -125,13 +181,8 @@ const ControlledTree: ForwardRefRenderFunction<unknown, TreeDataProviderProps> =
         canReorderItems={true}
         canDrag={(items: TreeItem[]) => {
           return items.some((item) => {
-            return (
-              item.data.titleEn !== "Start" &&
-              item.data.titleEn !== "Introduction" &&
-              item.data.titleEn !== "Policy" &&
-              item.data.titleEn !== "Review" &&
-              item.data.titleEn !== "End" &&
-              item.data.titleEn !== "Confirmation"
+            return !["Start", "Introduction", "Policy", "Review", "End", "Confirmation"].includes(
+              item.data.name
             );
           });
         }}
@@ -156,8 +207,8 @@ const ControlledTree: ForwardRefRenderFunction<unknown, TreeDataProviderProps> =
             replaceGroups,
             setSelectedItems,
             getTreeData,
-            getPromise,
-            setOpenDialog
+            getConfirmMovePromise,
+            setOpenConfirmMoveDialog
           )
         }
         onFocusItem={(item) => {
@@ -198,21 +249,31 @@ const ControlledTree: ForwardRefRenderFunction<unknown, TreeDataProviderProps> =
           </label>
         </div>
 
-        <div className="border-t-1 border-slate-200">
+        <div className="border-1 border-slate-200">
           <Tree treeId="default" rootItem="root" treeLabel="GC Forms sections" ref={tree} />
         </div>
         <>{children}</>
       </ControlledTreeEnvironment>
-      <ConfirmDialog
-        open={openDialog}
+      <ConfirmMoveSectionDialog
+        open={openConfirmMoveDialog}
         handleClose={(value) => {
           if (value) {
-            resolve && resolve(true);
+            resolveConfirmMove && resolveConfirmMove(true);
           } else {
-            resolve && resolve(false);
+            resolveConfirmMove && resolveConfirmMove(false);
           }
         }}
-      ></ConfirmDialog>
+      />
+      <ConfirmDeleteSectionDialog
+        open={openConfirmDeleteDialog}
+        handleClose={(value) => {
+          if (value) {
+            resolveConfirmDelete && resolveConfirmDelete(true);
+          } else {
+            resolveConfirmDelete && resolveConfirmDelete(false);
+          }
+        }}
+      />
     </>
   );
 };

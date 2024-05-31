@@ -97,6 +97,7 @@ export interface TemplateStoreProps {
   name: string;
   deliveryOption?: DeliveryOption;
   securityAttribute: SecurityAttribute;
+  formPurpose: string;
   closingDate?: string | null;
   changeKey: string;
   allowGroupsFlag: boolean;
@@ -162,6 +163,7 @@ export interface TemplateStoreState extends TemplateStoreProps {
   setIsPublished: (isPublished: boolean) => void;
   getName: () => string;
   getDeliveryOption: () => DeliveryOption | undefined;
+  setFormPurpose: (formPurpose: string) => void;
   resetDeliveryOption: () => void;
   getSecurityAttribute: () => SecurityAttribute;
   setClosingDate: (closingDate: string | null) => void;
@@ -197,6 +199,7 @@ const createTemplateStore = (initProps?: Partial<InitialTemplateStoreProps>) => 
     isPublished: false,
     name: "",
     securityAttribute: "Protected A",
+    formPurpose: "",
     closingDate: initProps?.closingDate,
     changeKey: String(new Date().getTime()),
     allowGroupsFlag: initProps?.allowGroupsFlag || false,
@@ -326,7 +329,12 @@ const createTemplateStore = (initProps?: Partial<InitialTemplateStoreProps>) => 
                   if (allowGroups && groupId) {
                     if (!state.form.groups) state.form.groups = {};
                     if (!state.form.groups[groupId])
-                      state.form.groups[groupId] = { name: "", elements: [] };
+                      state.form.groups[groupId] = {
+                        name: "",
+                        titleEn: "",
+                        titleFr: "",
+                        elements: [],
+                      };
                     state.form.groups &&
                       state.form.groups[groupId].elements.splice(elIndex + 1, 0, String(id));
                   }
@@ -462,6 +470,11 @@ const createTemplateStore = (initProps?: Partial<InitialTemplateStoreProps>) => 
                 state.isPublished = isPublished;
               });
             },
+            setFormPurpose: (formPurpose: string) => {
+              set((state) => {
+                state.formPurpose = formPurpose;
+              });
+            },
             getName: () => get().name,
             getDeliveryOption: () => get().deliveryOption,
             resetDeliveryOption: () => {
@@ -485,6 +498,7 @@ const createTemplateStore = (initProps?: Partial<InitialTemplateStoreProps>) => 
                 state.isPublished = false;
                 state.name = "";
                 state.deliveryOption = undefined;
+                state.formPurpose = "";
                 state.closingDate = null;
               });
             },
@@ -498,6 +512,7 @@ const createTemplateStore = (initProps?: Partial<InitialTemplateStoreProps>) => 
                 state.name = "";
                 state.securityAttribute = "Protected A";
                 state.deliveryOption = undefined;
+                state.formPurpose = "";
                 state.closingDate = null;
               });
             },

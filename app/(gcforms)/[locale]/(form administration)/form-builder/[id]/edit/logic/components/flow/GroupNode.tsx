@@ -58,7 +58,7 @@ export const GroupNode = (node: NodeProps) => {
     <div>
       <div>
         <label htmlFor={node.id} className="inline-block w-5/6 truncate text-sm text-slate-600">
-          {node.data.label.titleEn || node.data.label}
+          {node.data.label.name}
         </label>
       </div>
       <div

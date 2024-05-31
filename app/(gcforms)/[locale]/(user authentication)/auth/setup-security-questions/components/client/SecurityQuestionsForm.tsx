@@ -9,7 +9,7 @@ import { useRouter } from "next/navigation";
 import { toast } from "@formBuilder/components/shared";
 import { ErrorStates } from "../../actions";
 import { setupQuestions } from "../../actions";
-import { getSession } from "next-auth/react";
+import { useSession } from "next-auth/react";
 
 export interface Question {
   id: string;
@@ -36,6 +36,8 @@ export const SecurityQuestionsForm = ({ questions = [] }: { questions: Question[
 
   const [selectedQuestions, setSelectedQuestions] = useState<string[]>([]);
 
+  const { update } = useSession();
+
   const formRef = useRef<HTMLFormElement>(null);
 
   const supportHref = `/${language}/support`;
@@ -45,7 +47,7 @@ export const SecurityQuestionsForm = ({ questions = [] }: { questions: Question[
     if (!result.validationErrors && !result.generalError) {
       toast.success(t("success.title"));
       // force JWT token update / Set new Next-Auth cookie
-      await getSession();
+      await update();
       router.push(`/${language}/auth/policy`);
     }
 
