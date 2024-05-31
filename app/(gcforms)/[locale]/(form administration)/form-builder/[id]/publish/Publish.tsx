@@ -38,7 +38,7 @@ export const Publish = ({ id }: { id: string }) => {
     getSchema,
     getName,
     getDeliveryOption,
-    getFormPurpose,
+    formPurpose,
     securityAttribute,
   } = useTemplateStore((s) => ({
     id: s.id,
@@ -47,7 +47,7 @@ export const Publish = ({ id }: { id: string }) => {
     getSchema: s.getSchema,
     getName: s.getName,
     getDeliveryOption: s.getDeliveryOption,
-    getFormPurpose: s.getFormPurpose,
+    formPurpose: s.formPurpose,
     securityAttribute: s.securityAttribute,
   }));
 
@@ -78,8 +78,6 @@ export const Publish = ({ id }: { id: string }) => {
   };
 
   const supportHref = `/${i18n.language}/support`;
-
-  const formPurpose = getFormPurpose();
 
   let formPurposeText = t("settingsPurposeAndUse.purpose.unset");
   if (formPurpose === "admin") {

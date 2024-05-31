@@ -50,7 +50,6 @@ export const ResponseDelivery = () => {
     email,
     id,
     resetDeliveryOption,
-    getFormPurpose,
     updateField,
     subjectEn: initialSubjectEn,
     subjectFr: initialSubjectFr,
@@ -58,7 +57,6 @@ export const ResponseDelivery = () => {
     defaultSubjectFr,
     securityAttribute,
     updateSecurityAttribute,
-    updateFormPurpose,
     isPublished,
     formPurpose,
   } = useTemplateStore((s) => ({
@@ -69,13 +67,11 @@ export const ResponseDelivery = () => {
     defaultSubjectEn: s.form[s.localizeField(LocalizedFormProperties.TITLE, "en")] + " - Response",
     defaultSubjectFr: s.form[s.localizeField(LocalizedFormProperties.TITLE, "fr")] + " - Réponse",
     resetDeliveryOption: s.resetDeliveryOption,
-    getFormPurpose: s.getFormPurpose,
+    formPurpose: s.formPurpose,
     updateField: s.updateField,
     updateSecurityAttribute: s.updateSecurityAttribute,
-    updateFormPurpose: s.setFormPurpose,
     securityAttribute: s.securityAttribute,
     isPublished: s.isPublished,
-    formPurpose: s.formPurpose,
   }));
 
   const [classification, setClassification] = useState<ClassificationType>(
@@ -96,7 +92,7 @@ export const ResponseDelivery = () => {
   const initialDeliveryOption = !email ? DeliveryOption.vault : DeliveryOption.email;
 
   const [deliveryOptionValue, setDeliveryOptionValue] = useState(initialDeliveryOption);
-  const [purposeOption, setPurposeOption] = useState(getFormPurpose() as PurposeOption);
+  const [purposeOption, setPurposeOption] = useState(formPurpose as PurposeOption);
 
   const [inputEmailValue, setInputEmailValue] = useState(email ? email : userEmail);
   const [subjectEnValue, setSubjectEnValue] = useState(
@@ -239,7 +235,7 @@ export const ResponseDelivery = () => {
       return;
     }
 
-    updateFormPurpose(purposeOption);
+    updateField("formPurpose", purposeOption);
 
     toast.success(t("settingsResponseDelivery.savedSuccessMessage"));
 
@@ -253,7 +249,7 @@ export const ResponseDelivery = () => {
     classification,
     setToDatabaseDelivery,
     setToEmailDelivery,
-    updateFormPurpose,
+    updateField,
     purposeOption,
   ]);
 

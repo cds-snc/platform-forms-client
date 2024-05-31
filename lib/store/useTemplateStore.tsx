@@ -163,7 +163,6 @@ export interface TemplateStoreState extends TemplateStoreProps {
   setIsPublished: (isPublished: boolean) => void;
   getName: () => string;
   getDeliveryOption: () => DeliveryOption | undefined;
-  getFormPurpose: () => string;
   setFormPurpose: (formPurpose: string) => void;
   resetDeliveryOption: () => void;
   getSecurityAttribute: () => SecurityAttribute;
@@ -471,7 +470,6 @@ const createTemplateStore = (initProps?: Partial<InitialTemplateStoreProps>) => 
                 state.isPublished = isPublished;
               });
             },
-            getFormPurpose: () => get().formPurpose,
             setFormPurpose: (formPurpose: string) => {
               set((state) => {
                 state.formPurpose = formPurpose;
