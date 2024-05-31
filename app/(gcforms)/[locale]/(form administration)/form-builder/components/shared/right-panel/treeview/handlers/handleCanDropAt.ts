@@ -42,7 +42,7 @@ export const handleCanDropAt = (
 
   // If any of the items is not a group, disallow dropping on root
   if (nonGroupItemsCount >= 1) {
-    if (target.depth === 0) {
+    if (target.targetType === "between-items" && target.parentItem === "root") {
       return false;
     }
   }
