@@ -1,10 +1,12 @@
 "use client";
 import React, { useState, useCallback, useEffect, useRef, useMemo } from "react";
+import { cn } from "@lib/utils";
 import debounce from "lodash.debounce";
 import { useTranslation } from "@i18n/client";
 import { useSearchParams } from "next/navigation";
 import { Language, LocalizedFormProperties } from "@lib/types/form-builder-types";
-import { ElementPanel, ConfirmationDescription, PrivacyDescription } from ".";
+import { ElementPanel, ConfirmationDescription } from ".";
+import { PrivacyDescriptionWithGroups } from "./PrivacyDescriptionWithGroups";
 import { RefsProvider } from "./RefsContext";
 import { RichTextLocked } from "./elements";
 import { ExpandingInput } from "@formBuilder/components/shared";
@@ -109,6 +111,7 @@ export const EditWithGroups = () => {
         <SaveButton />
       </div>
       <LangSwitcher descriptionLangKey="editingIn" />
+      {/* Form Intro + Title Panel */}
       {groupId === "start" && <SettingsPanel />}
       {groupId === "start" && (
         <RichTextLocked
@@ -142,13 +145,29 @@ export const EditWithGroups = () => {
               <p className="mb-4 text-sm">{t("startFormIntro")}</p>
             </>
           }
-          addElement={true}
+          addElement={false}
           schemaProperty="introduction"
           ariaLabel={t("richTextIntroTitle")}
         />
       )}
-
+      {/* Privacy Panel */}
+      {groupId === "start" && (
+        <RichTextLocked
+          hydrated={hasHydrated}
+          addElement={true}
+          schemaProperty="privacyPolicy"
+          ariaLabel={t("richTextPrivacyTitle")}
+          className={cn(sortedElements.length === 0 && "rounded-b-lg")}
+        >
+          <div id="privacy-text">
+            <h2 className="mt-4 text-2xl laptop:mt-0">{t("richTextPrivacyTitle")}</h2>
+            <PrivacyDescriptionWithGroups />
+          </div>
+        </RichTextLocked>
+      )}
+      {/* Section Panel */}
       <Section groupId={groupId} />
+      {/* Form Elements */}
       <div className="form-builder-editor">
         <RefsProvider>
           {!["end"].includes(groupId) &&
@@ -159,37 +178,22 @@ export const EditWithGroups = () => {
             })}
         </RefsProvider>
       </div>
-      <>
-        {groupId === "start" && (
-          <RichTextLocked
-            hydrated={hasHydrated}
-            addElement={false}
-            schemaProperty="privacyPolicy"
-            ariaLabel={t("richTextPrivacyTitle")}
-            className={"rounded-b-lg"}
-          >
-            <div id="privacy-text">
-              <h2 className="mt-4 text-2xl laptop:mt-0">{t("richTextPrivacyTitle")}</h2>
-              <PrivacyDescription />
-            </div>
-          </RichTextLocked>
-        )}
-        {groupId === "end" && (
-          <RichTextLocked
-            hydrated={hasHydrated}
-            addElement={false}
-            schemaProperty="confirmation"
-            ariaLabel={t("richTextConfirmationTitle")}
-            className={"rounded-lg"}
-          >
-            <div id="confirmation-text">
-              <h2 className="mt-4 text-2xl laptop:mt-0">{t("richTextConfirmationTitle")}</h2>
-              <ConfirmationDescription />
-              <ConfirmationTitle />
-            </div>
-          </RichTextLocked>
-        )}
-      </>
+      {/* Confirmation*/}
+      {groupId === "end" && (
+        <RichTextLocked
+          hydrated={hasHydrated}
+          addElement={false}
+          schemaProperty="confirmation"
+          ariaLabel={t("richTextConfirmationTitle")}
+          className={"rounded-lg"}
+        >
+          <div id="confirmation-text">
+            <h2 className="mt-4 text-2xl laptop:mt-0">{t("richTextConfirmationTitle")}</h2>
+            <ConfirmationDescription />
+            <ConfirmationTitle />
+          </div>
+        </RichTextLocked>
+      )}
     </>
   );
 };

@@ -867,7 +867,12 @@
     "sectionTitle": "Section title",
     "groupDeleted": "Group deleted",
     "groupSuccessfullyDeleted": "{{group}} successfully deleted",
-    "linkGroup": "Link group to"
+    "linkGroup": "Link group to",
+    "privacy": {
+      "description": "Add a privacy notice to your form to inform users how you handle their personal information.",
+      "details": "Details here",
+      "summary": "Summary here"
+    }
   },
   "confirmation": {
     "title": "Your form has been submitted",

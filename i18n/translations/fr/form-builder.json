@@ -867,8 +867,14 @@
     "sectionTitle": "Titre de la section",
     "groupDeleted": "Group deleted",
     "groupSuccessfullyDeleted": "{{group}} successfully deleted",
-    "linkGroup": "[FR]Link group to"
+    "linkGroup": "[FR]Link group to",
+    "privacy": {
+      "description": "Add a privacy notice to your form to inform users how you handle their personal information.",
+      "details": "Details here [FR]",
+      "summary": "Summary here [FR]"
+    }
   },
+
   "confirmation": {
     "title": "Votre formulaire a été soumis",
     "sectionTitle": "Titre de la section"
