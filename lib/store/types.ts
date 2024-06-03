@@ -58,7 +58,7 @@ export interface TemplateStoreState extends TemplateStoreProps {
   updateSecurityAttribute: (value: SecurityAttribute) => void;
   propertyPath: (id: number, field: string, lang?: Language) => string;
   unsetField: (path: string) => void;
-  duplicateElement: (id: number) => void;
+  duplicateElement: (id: number, groupId?: string) => void;
   subDuplicateElement: (elIndex: number, subIndex: number) => void;
   importTemplate: (jsonConfig: FormProperties) => void;
   getSchema: () => string;
