@@ -63,24 +63,24 @@ export const GroupNode = (node: NodeProps) => {
       </div>
       <div
         id={node.id}
-        style={{
-          boxShadow: groupIsSelected ? "inset 0 0 0 2px #6366F1" : "inset 0 0 0 5px transparent",
-        }}
         className={cn(
           "space-y-2 rounded-md border-2 border-indigo-500 p-4 text-white",
           "space-y-2 rounded-md border-1 border-indigo-500 p-4 text-white",
-          groupIsSelected ? "bg-violet-200" : "bg-gray-soft",
-          "relative"
+          groupIsSelected
+            ? "bg-violet-200 shadow-logicSelected"
+            : "bg-gray-soft shadow-logicDefault",
+          !groupIsSelected && "focus-within:bg-violet-100 focus-within:border-dashed",
+          "relative "
         )}
       >
         {/* Don't allow the end or review group rules to be edited */}
         {node.id !== "end" && node.id !== "review" && (
-          <div
+          <button
             {...handleClick}
-            className="absolute right-[-20px] top-[-20px] cursor-pointer hover:scale-125"
+            className="absolute right-[-20px] top-[-20px] cursor-pointer outline-2 outline-violet-800 hover:scale-125"
           >
             <QuestionRuleSvg />
-          </div>
+          </button>
         )}
         {!node.data.children.length && <div className="min-h-[50px] min-w-[150px]"></div>}
         {node.data.children.map((child: TreeItem) => {
@@ -128,14 +128,14 @@ export const GroupNode = (node: NodeProps) => {
           // This will allow the user to select the next action
           // based on the option value
           return (
-            <div
+            <button
               key={child.index}
               onClick={(evt) => {
                 evt.stopPropagation();
                 setId(node.id);
                 setSelectedElementId(Number(child.index));
               }}
-              className={cn(nodeClassName, selected)}
+              className={cn(nodeClassName, selected, "focus:border-violet-800")}
             >
               <div className="line-clamp-2 truncate text-wrap">
                 {getTitle(child.data as ElementProperties).substring(0, 300)}
@@ -143,7 +143,7 @@ export const GroupNode = (node: NodeProps) => {
               <div className="absolute right-[10px] top-[10px] cursor-pointer hover:scale-125">
                 <OptionRuleSvg />
               </div>
-            </div>
+            </button>
           );
         })}
         {node.id !== "end" && (
