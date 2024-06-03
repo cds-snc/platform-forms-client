@@ -300,7 +300,7 @@ const createTemplateStore = (initProps?: Partial<InitialTemplateStoreProps>) => 
               const elIndex = get().form.elements.findIndex((el) => el.id === elId);
               return get().form.elements[elIndex]?.properties.choices?.[choiceIndex];
             },
-            duplicateElement: (itemId) => {
+            duplicateElement: (itemId, groupId = "") => {
               const elIndex = get().form.elements.findIndex((el) => el.id === itemId);
               set((state) => {
                 const id = incrementElementId(state.form.elements);
@@ -314,6 +314,23 @@ const createTemplateStore = (initProps?: Partial<InitialTemplateStoreProps>) => 
                 }
                 state.form.elements.splice(elIndex + 1, 0, element);
                 state.form.layout.splice(elIndex + 1, 0, id);
+
+                // Handle groups
+                const allowGroups = state.allowGroupsFlag;
+                groupId = allowGroups && groupId ? groupId : "";
+                if (allowGroups && groupId) {
+                  if (!state.form.groups) state.form.groups = {};
+                  if (!state.form.groups[groupId])
+                    state.form.groups[groupId] = {
+                      name: "",
+                      titleEn: "",
+                      titleFr: "",
+                      elements: [],
+                    };
+                  state.form.groups &&
+                    state.form.groups[groupId].elements.splice(elIndex + 1, 0, String(id));
+                }
+                // end groups
               });
             },
             subDuplicateElement: (elIndex, subIndex) => {
