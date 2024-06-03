@@ -855,6 +855,9 @@
     "actionsSaved": "Actions enregistrées"
   },
   "groups": {
+    "newSection": "Nouvelle section",
+    "addSection": "Ajouter une section",
+    "treeAriaLabel": "Sections Formulaires GC",
     "addElement": {
       "empty": {
         "title": "Section vide",
