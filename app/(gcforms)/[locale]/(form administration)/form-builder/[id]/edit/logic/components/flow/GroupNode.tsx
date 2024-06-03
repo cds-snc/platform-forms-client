@@ -7,10 +7,12 @@ import { getSourceHandlePosition, getTargetHandlePosition } from "./utils";
 import { layoutOptions } from "./options";
 import { useGroupStore } from "@formBuilder/components/shared/right-panel/treeview/store/useGroupStore";
 import { useElementTitle, ElementProperties } from "@lib/hooks/useElementTitle";
+import { useTranslation } from "@i18n/client";
 
-const OptionRuleSvg = () => {
+const OptionRuleSvg = ({ title }: { title?: string }) => {
   return (
     <svg xmlns="http://www.w3.org/2000/svg" width={34} height={34} fill="none">
+      {title && <title>{title}</title>}
       <rect width={33} height={33} x={0.5} y={0.5} fill="#ECFDF5" rx={16.5} />
       <rect width={33} height={33} x={0.5} y={0.5} stroke="#047857" rx={16.5} />
       <path
@@ -21,9 +23,10 @@ const OptionRuleSvg = () => {
   );
 };
 
-const QuestionRuleSvg = () => {
+const QuestionRuleSvg = ({ title }: { title?: string }) => {
   return (
     <svg xmlns="http://www.w3.org/2000/svg" width={36} height={36} fill="none">
+      {title && <title>{title}</title>}
       <rect width={35} height={35} x={0.5} y={0.5} fill="#EDE9FE" rx={17.5} />
       <rect width={35} height={35} x={0.5} y={0.5} stroke="#4338CA" rx={17.5} />
       <path fill="#020617" d="M22.175 19H10v-2h12.175l-5.6-5.6L18 10l8 8-8 8-1.425-1.4 5.6-5.6Z" />
@@ -40,6 +43,7 @@ export const GroupNode = (node: NodeProps) => {
   const getElement = useGroupStore((state) => state.getElement);
   const groupIsSelected = selectedGroupId === node.id;
   const typesWithOptions = ["radio", "checkbox", "select", "dropdown"];
+  const { t } = useTranslation("formBuilder");
 
   const { getTitle } = useElementTitle();
 
@@ -79,7 +83,7 @@ export const GroupNode = (node: NodeProps) => {
             {...handleClick}
             className="absolute right-[-20px] top-[-20px] cursor-pointer outline-2 outline-violet-800 hover:scale-125"
           >
-            <QuestionRuleSvg />
+            <QuestionRuleSvg title={t("linkGroup")} />
           </button>
         )}
         {!node.data.children.length && <div className="min-h-[50px] min-w-[150px]"></div>}
@@ -141,7 +145,7 @@ export const GroupNode = (node: NodeProps) => {
                 {getTitle(child.data as ElementProperties).substring(0, 300)}
               </div>
               <div className="absolute right-[10px] top-[10px] cursor-pointer hover:scale-125">
-                <OptionRuleSvg />
+                <OptionRuleSvg title={t("linkGroup")} />
               </div>
             </button>
           );

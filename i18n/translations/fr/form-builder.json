@@ -863,7 +863,8 @@
     },
     "sectionTitle": "Titre de la section",
     "groupDeleted": "Group deleted",
-    "groupSuccessfullyDeleted": "{{group}} successfully deleted"
+    "groupSuccessfullyDeleted": "{{group}} successfully deleted",
+    "linkGroup": "[FR]Link group to"
   },
   "confirmation": {
     "title": "Votre formulaire a été soumis",
