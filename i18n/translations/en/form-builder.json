@@ -865,9 +865,9 @@
       }
     },
     "sectionTitle": "Section title",
-    "groupDeleted": "Group deleted",
-    "groupSuccessfullyDeleted": "{{group}} successfully deleted",
-    "linkGroup": "Link group to"
+    "groupDeleted": "Section deleted",
+    "groupSuccessfullyDeleted": "{{group}} was deleted",
+    "linkGroup": "Connect section to"
   },
   "confirmation": {
     "title": "Your form has been submitted",

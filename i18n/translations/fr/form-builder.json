@@ -865,9 +865,9 @@
       }
     },
     "sectionTitle": "Titre de la section",
-    "groupDeleted": "Group deleted",
-    "groupSuccessfullyDeleted": "{{group}} successfully deleted",
-    "linkGroup": "[FR]Link group to"
+    "groupDeleted": "Section supprimée",
+    "groupSuccessfullyDeleted": "{{group}} a été supprimé",
+    "linkGroup": "Connecter la section à"
   },
   "confirmation": {
     "title": "Votre formulaire a été soumis",
