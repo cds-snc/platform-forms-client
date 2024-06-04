@@ -47,7 +47,10 @@ export const useHandleAdd = () => {
       // Note add() returns the element id -- we're not using it yet
       const id = await add(index, item.type, item, groupId);
       treeView?.current?.addItem(String(id));
-      // environment?.current?.viewState["tree-1"].focusedItem = String(id);
+
+      const el = document.getElementById(`item-${id}`);
+      if (!el) return;
+      el?.focus();
     },
     [add, create, groupId, treeView]
   );
