@@ -117,9 +117,9 @@ export const groupsToTreeData = (
     startChildren.push("policy");
   }
 
-  if (startChildren.length > 0) {
+  if (startChildren.length > 0 && items["start"]?.children) {
     // Add startChildren to existing start children
-    const currentStartChildren = items["start"].children ? items["start"].children : [];
+    const currentStartChildren = items["start"]?.children ? items["start"].children : [];
     items["start"].children = [...startChildren, ...currentStartChildren];
   }
 
@@ -144,7 +144,7 @@ export const groupsToTreeData = (
     endChildren.push("confirmation");
   }
 
-  if (endChildren.length > 0) {
+  if (endChildren.length > 0 && items["end"]?.children) {
     items["end"].children = endChildren;
   }
 
