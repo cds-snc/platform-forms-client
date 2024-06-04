@@ -11,7 +11,7 @@ describe("Test FormBuilder", () => {
   it("Designs a form", () => {
     cy.visitPage("/en/form-builder/0000/edit");
     cy.typeInField("#formTitle", "Cypress Test Form");
-    cy.typeInField(`[aria-label="Introduction"]`, "form description");
+    cy.typeInField(`[aria-label="Form introduction"]`, "form description");
     cy.get("button").contains("Add").click();
 
     cy.get('[data-testid="radio"]').click();
