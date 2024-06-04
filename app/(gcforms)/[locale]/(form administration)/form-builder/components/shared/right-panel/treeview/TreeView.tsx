@@ -89,6 +89,7 @@ const ControlledTree: ForwardRefRenderFunction<unknown, TreeDataProviderProps> =
     setSelectedItems([id]);
     setExpandedItems([id]);
     setId(id);
+    tree?.current?.startRenamingItem(id);
   };
 
   useImperativeHandle(ref, () => ({

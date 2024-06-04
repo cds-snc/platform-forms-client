@@ -1,3 +1,4 @@
+import React from "react";
 import { DragHandle } from "./icons/DragHandle";
 import { DeleteIcon, LockIcon } from "@serverComponents/icons";
 import { cn } from "@lib/utils";
@@ -7,7 +8,7 @@ import { ArrowRight } from "./icons/ArrowRight";
 import { ArrowDown } from "./icons/ArrowDown";
 import { useTreeRef } from "./provider/TreeRefProvider";
 import { useState } from "react";
-import React from "react";
+import { useTranslation } from "@i18n/client";
 
 export const Item = ({
   title,
@@ -23,6 +24,7 @@ export const Item = ({
   handleDelete: (e: React.MouseEvent<HTMLButtonElement>) => Promise<void>;
 }) => {
   const { tree } = useTreeRef();
+  const { t } = useTranslation("form-builder");
   const isRenaming = context && context?.isRenaming ? true : false;
   const itemName = React.isValidElement(title) && title.props.title;
   const [name, setName] = useState(itemName);
@@ -51,8 +53,9 @@ export const Item = ({
           <input
             {...context.interactiveElementProps}
             type="text"
+            placeholder={t("groups.addSectionPlaceholder")}
             autoFocus
-            className="ml-10 w-auto"
+            className="ml-10 w-auto p-1"
             value={name}
             onFocus={(e) => {
               e.target.select();
@@ -91,7 +94,8 @@ export const Item = ({
         "flex flex-col",
         !context.isExpanded && "h-[60px]",
         children && "bg-slate-50",
-        context.isDraggingOver && "!border-dashed !border-1 !border-blue-focus"
+        context.isDraggingOver && "!border-dashed !border-1 !border-blue-focus",
+        context.isSelected && "border-black !border-1"
       )}
     >
       <>

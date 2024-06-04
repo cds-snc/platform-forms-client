@@ -857,6 +857,7 @@
   "groups": {
     "newSection": "New section",
     "addSection": "Add section",
+    "addSectionPlaceholder": "Add a section name",
     "treeAriaLabel": "GC Forms sections",
     "addElement": {
       "empty": {
