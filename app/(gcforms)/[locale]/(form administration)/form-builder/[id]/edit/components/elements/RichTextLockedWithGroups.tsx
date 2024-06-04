@@ -56,7 +56,6 @@ export const RichTextLockedWithGroups = ({
         <EssentialBadge />
         {beforeContent && beforeContent}
         <div className="flex">{children}</div>
-
         <details>
           <summary className="cursor-pointer text-sm font-bold underline">{summaryText}</summary>
           {detailsText && detailsText}

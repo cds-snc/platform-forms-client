@@ -3,19 +3,14 @@ import React from "react";
 import { useTranslation } from "@i18n/client";
 import { EssentialIcon } from "@serverComponents/icons/EssentialIcon";
 
-export const EssentialBadge = ({ className }: { className?: string }) => {
+export const EssentialBadge = () => {
   const { t } = useTranslation("form-builder");
-  const badgeClass = className
-    ? className
-    : "laptop:absolute laptop:right-[-10px] laptop:top-[-10px]";
   return (
-    <div className="relative">
-      <div className={`${badgeClass} inline-block rounded-sm   bg-gray-200`}>
-        <label className="flex text-sm" data-testid="locked-item">
-          <EssentialIcon className="inline-block " />
-          <span className="inline-block  text-slate-800">{t("lockedBlock")}</span>
-        </label>
-      </div>
+    <div className="inline-block !bg-[#E9ECEF] leading-[24px]">
+      <label data-testid="locked-item">
+        <EssentialIcon className="mr-2 inline-block" />
+        <span className="inline-block pr-2 text-slate-800">{t("lockedBlock")}</span>
+      </label>
     </div>
   );
 };

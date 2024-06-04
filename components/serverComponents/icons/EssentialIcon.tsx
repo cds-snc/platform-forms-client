@@ -1,8 +1,9 @@
 export const EssentialIcon = ({ className, title }: { className?: string; title?: string }) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
-    height="24"
-    width="28"
+    width="24"
+    height="28"
+    fill="none"
     className={className}
     viewBox="0 0 24 28"
     focusable="false"
@@ -10,11 +11,11 @@ export const EssentialIcon = ({ className, title }: { className?: string; title?
     role={title ? "img" : "presentation"}
   >
     {title && <title>{title}</title>}
-    <rect width={24} height={28} fill="#1E293B" rx={3} />
+    <rect width="24" height="28" rx="3" fill="#1E293B" />
     <path
+      d="M7.87544 10.087C7.75197 8.3913 8.43103 5 12.135 5C13.524 5.13458 16.2278 6.34037 15.9315 10.087M5.83908 23H18.1609C19.1766 23 20 22.124 20 21.0435V11.8478C20 10.7673 19.1766 9.8913 18.1609 9.8913H5.83908C4.82338 9.8913 4 10.7673 4 11.8478V21.0435C4 22.124 4.82338 23 5.83908 23Z"
       stroke="#EEF2FF"
-      strokeWidth={2.5}
-      d="M7.875 10.087C7.752 8.391 8.431 5 12.135 5c1.389.135 4.093 1.34 3.796 5.087M5.84 23h12.322C19.177 23 20 22.124 20 21.044v-9.196c0-1.08-.823-1.957-1.84-1.957H5.84c-1.017 0-1.84.876-1.84 1.957v9.196C4 22.123 4.823 23 5.84 23Z"
+      stroke-width="2.5"
     />
   </svg>
 );
