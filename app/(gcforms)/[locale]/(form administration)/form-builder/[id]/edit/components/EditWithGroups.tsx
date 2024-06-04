@@ -5,7 +5,8 @@ import debounce from "lodash.debounce";
 import { useTranslation } from "@i18n/client";
 import { useSearchParams } from "next/navigation";
 import { Language, LocalizedFormProperties } from "@lib/types/form-builder-types";
-import { ElementPanel, ConfirmationDescription } from ".";
+import { ElementPanel } from ".";
+import { ConfirmationDescriptionWithGroups } from "./ConfirmationDescriptionWithGroups";
 import { RefsProvider } from "./RefsContext";
 import { RichTextLockedWithGroups } from "./elements/RichTextLockedWithGroups";
 import { ExpandingInput } from "@formBuilder/components/shared";
@@ -17,7 +18,6 @@ import { useGroupStore } from "@formBuilder/components/shared/right-panel/treevi
 import { Section } from "./Section";
 import { FormElement } from "@lib/types";
 import { LangSwitcher } from "@formBuilder/components/shared/LangSwitcher";
-import { ConfirmationTitle } from "./ConfirmationTitle";
 import { PrivacyDescriptionBefore } from "./PrivacyDescriptionBefore";
 import { PrivacyDescriptionBody } from "./PrivacyDescriptionBody";
 
@@ -185,18 +185,23 @@ export const EditWithGroups = () => {
       {groupId === "end" && (
         <RichTextLockedWithGroups
           summaryText={t("groups.confirmation.summary")}
+          beforeContent={
+            <div>
+              <h2 className="my-4 text-2xl laptop:mt-0">{t("richTextConfirmationTitle")}</h2>
+              <p className="mb-4">{t("groups.confirmation.beforeText")}</p>
+            </div>
+          }
+          detailsText={
+            <div className="mt-4">
+              <ConfirmationDescriptionWithGroups />
+            </div>
+          }
           hydrated={hasHydrated}
           addElement={false}
           schemaProperty="confirmation"
           ariaLabel={t("richTextConfirmationTitle")}
           className={"rounded-lg"}
-        >
-          <div id="confirmation-text">
-            <h2 className="mt-4 text-2xl laptop:mt-0">{t("richTextConfirmationTitle")}</h2>
-            <ConfirmationDescription />
-            <ConfirmationTitle />
-          </div>
-        </RichTextLockedWithGroups>
+        />
       )}
     </>
   );
