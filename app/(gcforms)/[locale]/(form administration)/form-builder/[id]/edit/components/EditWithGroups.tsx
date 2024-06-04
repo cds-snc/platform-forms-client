@@ -6,9 +6,8 @@ import { useTranslation } from "@i18n/client";
 import { useSearchParams } from "next/navigation";
 import { Language, LocalizedFormProperties } from "@lib/types/form-builder-types";
 import { ElementPanel, ConfirmationDescription } from ".";
-import { PrivacyDescriptionWithGroups } from "./PrivacyDescriptionWithGroups";
 import { RefsProvider } from "./RefsContext";
-import { RichTextLocked } from "./elements";
+import { RichTextLockedWithGroups } from "./elements/RichTextLockedWithGroups";
 import { ExpandingInput } from "@formBuilder/components/shared";
 import { useRehydrate, useTemplateStore } from "@lib/store/useTemplateStore";
 import { SettingsPanel } from "./settings/SettingsPanel";
@@ -19,6 +18,8 @@ import { Section } from "./Section";
 import { FormElement } from "@lib/types";
 import { LangSwitcher } from "@formBuilder/components/shared/LangSwitcher";
 import { ConfirmationTitle } from "./ConfirmationTitle";
+import { PrivacyDescriptionBefore } from "./PrivacyDescriptionBefore";
+import { PrivacyDescriptionBody } from "./PrivacyDescriptionBody";
 
 export const EditWithGroups = () => {
   const { t } = useTranslation("form-builder");
@@ -114,9 +115,10 @@ export const EditWithGroups = () => {
       {/* Form Intro + Title Panel */}
       {groupId === "start" && <SettingsPanel />}
       {groupId === "start" && (
-        <RichTextLocked
+        <RichTextLockedWithGroups
           hydrated={hasHydrated}
           className="rounded-t-lg"
+          summaryText={t("startFormIntro")}
           beforeContent={
             <>
               <label
@@ -142,7 +144,6 @@ export const EditWithGroups = () => {
                   {...getLocalizationAttribute()}
                 />
               </div>
-              <p className="mb-4 text-sm">{t("startFormIntro")}</p>
             </>
           }
           addElement={false}
@@ -152,18 +153,20 @@ export const EditWithGroups = () => {
       )}
       {/* Privacy Panel */}
       {groupId === "start" && (
-        <RichTextLocked
+        <RichTextLockedWithGroups
+          beforeContent={<PrivacyDescriptionBefore />}
+          summaryText={t("groups.privacy.summary")}
+          detailsText={
+            <div className="mt-4">
+              <PrivacyDescriptionBody />
+            </div>
+          }
           hydrated={hasHydrated}
           addElement={true}
           schemaProperty="privacyPolicy"
           ariaLabel={t("richTextPrivacyTitle")}
           className={cn(sortedElements.length === 0 && "rounded-b-lg")}
-        >
-          <div id="privacy-text">
-            <h2 className="mt-4 text-2xl laptop:mt-0">{t("richTextPrivacyTitle")}</h2>
-            <PrivacyDescriptionWithGroups />
-          </div>
-        </RichTextLocked>
+        />
       )}
       {/* Section Panel */}
       <Section groupId={groupId} />
@@ -180,7 +183,8 @@ export const EditWithGroups = () => {
       </div>
       {/* Confirmation*/}
       {groupId === "end" && (
-        <RichTextLocked
+        <RichTextLockedWithGroups
+          summaryText={t("groups.confirmation.summary")}
           hydrated={hasHydrated}
           addElement={false}
           schemaProperty="confirmation"
@@ -192,7 +196,7 @@ export const EditWithGroups = () => {
             <ConfirmationDescription />
             <ConfirmationTitle />
           </div>
-        </RichTextLocked>
+        </RichTextLockedWithGroups>
       )}
     </>
   );
