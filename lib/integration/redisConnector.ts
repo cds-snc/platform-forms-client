@@ -2,14 +2,10 @@ import Redis from "ioredis";
 
 let redisConnection: Redis | null = null;
 
-const createRedisInstance = async (): Promise<Redis> => {
-  if (!process.env.REDIS_URL) throw new Error("No Redis URL is configured");
-  return new Redis(process.env.REDIS_URL);
-};
-
-export const getRedisInstance = async (): Promise<Redis> => {
+export const getRedisInstance = (): Redis => {
   if (!redisConnection) {
-    const redis = await createRedisInstance();
+    if (!process.env.REDIS_URL) throw new Error("No Redis URL is configured");
+    const redis = new Redis(process.env.REDIS_URL);
     redisConnection = redis;
     return redisConnection;
   } else {
@@ -19,5 +15,5 @@ export const getRedisInstance = async (): Promise<Redis> => {
 
 // If there is a Redis URL configured instantiate the connection
 if (process.env.REDIS_URL) {
-  getRedisInstance().then((redis) => (redisConnection = redis));
+  getRedisInstance();
 }

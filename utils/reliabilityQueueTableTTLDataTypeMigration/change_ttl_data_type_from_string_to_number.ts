@@ -1,80 +1,80 @@
 /* eslint-disable no-console */
-import { DynamoDBClient } from "@aws-sdk/client-dynamodb";
-import { ScanCommand, ScanCommandOutput, TransactWriteCommand } from "@aws-sdk/lib-dynamodb";
-import { config } from "dotenv";
+import fetch from "node-fetch";
 
-const main = async () => {
-  try {
-    const dynamodbClient = new DynamoDBClient({
-      region: process.env.AWS_REGION ?? "ca-central-1",
-      ...(process.env.LOCAL_AWS_ENDPOINT && { endpoint: process.env.LOCAL_AWS_ENDPOINT }),
-    });
-
-    let lastEvaluatedKey = null;
-    let numberOfReliabilityQueueItems = 0;
-
-    while (lastEvaluatedKey !== undefined) {
-      const scanResults: ScanCommandOutput = await dynamodbClient.send(
-        new ScanCommand({
-          TableName: "ReliabilityQueue",
-          ExclusiveStartKey: lastEvaluatedKey ?? undefined,
-          Limit: 100, // The upcoming `TransactWriteCommand` operation can only update 100 items per request
-          FilterExpression: "attribute_type(#ttl,:type)",
-          ProjectionExpression: "SubmissionID,#ttl",
-          ExpressionAttributeNames: {
-            "#ttl": "TTL",
-          },
-          ExpressionAttributeValues: {
-            ":type": "S",
-          },
-        })
-      );
-
-      if (scanResults.Items && scanResults.Items.length > 0) {
-        await dynamodbClient.send(
-          new TransactWriteCommand({
-            TransactItems: scanResults.Items.map((item) => {
-              return {
-                Update: {
-                  TableName: "ReliabilityQueue",
-                  Key: {
-                    SubmissionID: item["SubmissionID"],
-                  },
-                  UpdateExpression: "SET #ttl = :ttlValue",
-                  ExpressionAttributeNames: {
-                    "#ttl": "TTL",
-                  },
-                  ExpressionAttributeValues: {
-                    ":ttlValue": Number(item["TTL"]),
-                  },
-                },
-              };
-            }),
-          })
-        );
-
-        numberOfReliabilityQueueItems += scanResults.Items.length;
-
-        process.stdout.write(
-          `Migration in progress ... ${numberOfReliabilityQueueItems} ReliabilityQueue items have been updated.\r`
-        );
-      }
-
-      lastEvaluatedKey = scanResults.LastEvaluatedKey;
-
-      // Rate limiting to avoid exceeding provisioned capacity
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-    }
-
-    console.log(
-      `\nMigration completed successfully!\nA total of ${numberOfReliabilityQueueItems} ReliabilityQueue items have been updated and are now compatible with the TTL feature.`
-    );
-  } catch (error) {
-    console.log(error);
-  }
+type ApiConsumer = {
+  identifier: string;
+  numOfReq: number;
+  msBeforeLimitReset: number;
+  isLimited: boolean;
+  limitInNumOfReq: number;
+  limitPeriodInMs: number;
 };
 
-// config() adds the .env variables to process.env
-config();
+const apiConsumers: ApiConsumer[] = [];
+
+function buildApiConsumer(apiConsumer: ApiConsumer): () => Promise<void> {
+  const executor = (): Promise<void> =>
+    fetch("http://localhost:3000/api/prototype", {
+      headers: {
+        "API-Key": apiConsumer.identifier,
+      },
+    })
+      .then((response) => response.json() as unknown as Record<string, unknown>)
+      .then((apiResponse) => {
+        if (apiResponse.success) {
+          apiConsumer.numOfReq++;
+          apiConsumer.isLimited = false;
+          apiConsumer.msBeforeLimitReset = (apiResponse.rateLimit as Record<string, unknown>)
+            .msBeforeNext as number;
+          apiConsumer.limitInNumOfReq = (apiResponse.rateLimit as Record<string, unknown>)
+            .remainingPoints as number;
+        } else {
+          apiConsumer.isLimited = true;
+          apiConsumer.limitPeriodInMs = (apiResponse.error as Record<string, unknown>)
+            .msBeforeNext as number;
+        }
+        displayResult();
+        return executor();
+      })
+      .catch((error) => {
+        console.log(`Consumer ${apiConsumer.identifier} failure => ${error.message}`);
+      });
+  return executor;
+}
+
+function displayResult() {
+  console.clear();
+  for (const consumer of apiConsumers) {
+    console.log("\n");
+    console.log(
+      `Consumer: ${consumer.identifier} => Request counter: ${consumer.numOfReq} - ${
+        consumer.isLimited
+          ? `\x1b[31mLimited for ${consumer.limitPeriodInMs / 1000} seconds\x1b[0m`
+          : `\x1b[32mLimited in ${consumer.limitInNumOfReq} requests - Limit reset in ${
+              consumer.msBeforeLimitReset / 1000
+            } seconds\x1b[0m`
+      }`
+    );
+  }
+  console.log("\n");
+  console.log("Press Ctrl-C to exit...");
+}
+
+const main = async () => {
+  await Promise.all(
+    [...new Array(4)].map((_, i) => {
+      const apiConsumer: ApiConsumer = {
+        identifier: `consumer-${i}`,
+        numOfReq: 0,
+        msBeforeLimitReset: 0,
+        isLimited: false,
+        limitInNumOfReq: 0,
+        limitPeriodInMs: 0,
+      };
+      apiConsumers.push(apiConsumer);
+      return buildApiConsumer(apiConsumer)();
+    })
+  );
+};
 
 main();

@@ -89,6 +89,7 @@
     "node-fetch": "^3.3.2",
     "pino": "9.1.0",
     "prisma": "^5.10.2",
+    "rate-limiter-flexible": "^5.0.3",
     "react": "^18.2.0",
     "react-app-polyfill": "3.0.0",
     "react-aria": "3.31.0",
