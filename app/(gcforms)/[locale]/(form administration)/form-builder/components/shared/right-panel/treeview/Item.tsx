@@ -91,11 +91,11 @@ export const Item = ({
     <li
       {...context.itemContainerWithChildrenProps}
       className={cn(
-        "flex flex-col",
+        "flex flex-col ",
         !context.isExpanded && "h-[60px]",
         children && "bg-slate-50",
         context.isDraggingOver && "!border-dashed !border-1 !border-blue-focus",
-        context.isSelected && "border-black !border-1"
+        context.isSelected && "border-slate-950 !border-1 bg-white"
       )}
     >
       <>
@@ -103,9 +103,10 @@ export const Item = ({
           {...context.itemContainerWithoutChildrenProps}
           {...context.interactiveElementProps}
           className={cn(
-            "text-left group relative w-full overflow-hidden truncate p-3 cursor-pointer",
+            "text-left group relative w-full overflow-hidden truncate p-3 cursor-pointer hover:bg-indigo-100 ",
             !arrow && "bg-white",
-            !arrow && "border-slate-500 border-1 rounded-md"
+            !arrow && "border-slate-500 border-1 rounded-md",
+            "hover:border-indigo-700 hover:border-1"
           )}
         >
           {arrow}
