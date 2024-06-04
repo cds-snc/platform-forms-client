@@ -22,7 +22,7 @@ describe("Test FormBuilder", () => {
     cy.get("button").contains("Add option").click();
     cy.typeInField("#option--1--2", "option 2");
     cy.typeInField(`[aria-label="Privacy statement"]`, "privacy statement");
-    cy.typeInField(`[aria-label="Confirmation page and message"]`, "confirmation page");
+    cy.typeInField(`[aria-label="Confirmation message"]`, "confirmation page");
     cy.get("#item-1").click();
     cy.get("button").contains("More").click();
     // open modal
