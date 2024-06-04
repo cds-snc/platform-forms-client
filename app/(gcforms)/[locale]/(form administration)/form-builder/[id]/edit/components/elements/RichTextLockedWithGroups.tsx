@@ -4,7 +4,7 @@ import { useTemplateStore } from "@lib/store/useTemplateStore";
 import { RichTextEditor } from "./lexical-editor/RichTextEditor";
 import { AddElementButton } from "./element-dialog/AddElementButton";
 import { LocalizedElementProperties } from "@lib/types/form-builder-types";
-import { LockedBadge } from "@formBuilder/components/shared/LockedBadge";
+import { EssentialBadge } from "@formBuilder/components/shared/EssentialBadge";
 import { useHandleAdd } from "@lib/hooks/form-builder/useHandleAdd";
 import { FormElementTypes } from "@lib/types";
 import { cn } from "@lib/utils";
@@ -53,7 +53,7 @@ export const RichTextLockedWithGroups = ({
       className={cn("-mt-px h-auto max-w-[800px] border-1 border-slate-500 bg-white", className)}
     >
       <div className="mx-5 mb-7 mt-5">
-        <LockedBadge />
+        <EssentialBadge />
         {beforeContent && beforeContent}
         <div className="flex">{children}</div>
 
