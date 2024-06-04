@@ -412,6 +412,7 @@
   "formTitle": "Form title",
   "french": "French",
   "gcForms": "GC Forms",
+  "gcFormsApi": "API",
   "gcFormsEdit": "Edit",
   "gcFormsPublish": "Publish",
   "gcFormsPublished": "Published",
@@ -516,6 +517,13 @@
   "selectElement": "Select an element type",
   "send": "Send",
   "settings": {
+    "api": {
+      "title": "API Access",
+      "generateKey": "Generate Key",
+      "refreshKey": "Refresh Key",
+      "deleteKey": "Delete Key",
+      "keyExists": "API Key Exists"
+    },
     "formManagement": "Form management"
   },
   "settingsDeleteButton": "Delete",

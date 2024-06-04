@@ -4,7 +4,7 @@ import { useSession } from "next-auth/react";
 import Link from "next/link";
 import { useTranslation } from "@i18n/client";
 import { cn } from "@lib/utils";
-
+import { Login } from "../Login";
 import { SiteLogo } from "@serverComponents/icons";
 import { FileNameInput } from "./FileName";
 import { ShareDropdown } from "./ShareDropdown";
@@ -61,9 +61,7 @@ export const Header = ({ context = "default", className }: HeaderParams) => {
           <ul className="mt-2 flex list-none px-0 text-base">
             {status !== "authenticated" && (
               <li className="mr-2 py-2 text-base tablet:mr-4">
-                <Link href={`/${language}/auth/login`} prefetch={false}>
-                  {t("loginMenu.login")}
-                </Link>
+                <Login />
               </li>
             )}
             {

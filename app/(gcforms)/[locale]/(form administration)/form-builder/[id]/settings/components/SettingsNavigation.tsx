@@ -2,7 +2,7 @@
 import React from "react";
 import { useTranslation } from "@i18n/client";
 import { SubNavLink } from "@clientComponents/globals/SubNavLink";
-import { EmailIcon, BrandIcon, GearIcon } from "@serverComponents/icons";
+import { EmailIcon, BrandIcon, GearIcon, ProtectedIcon } from "@serverComponents/icons";
 
 export const SettingsNavigation = ({ id }: { id: string }) => {
   const {
@@ -30,6 +30,12 @@ export const SettingsNavigation = ({ id }: { id: string }) => {
             <span className="text-sm laptop:text-base">
               <GearIcon className="mr-2 inline-block laptop:mt-[-2px]" />
               {t("settings.formManagement")}
+            </span>
+          </SubNavLink>
+          <SubNavLink href={`/${language}/form-builder/${id}/settings/api`}>
+            <span className="text-sm laptop:text-base">
+              <ProtectedIcon className="mr-2 inline-block laptop:mt-[-2px]" />
+              {t("settings.api.title")}
             </span>
           </SubNavLink>
         </nav>

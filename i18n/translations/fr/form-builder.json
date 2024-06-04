@@ -411,6 +411,7 @@
   "formTitle": "Titre du formulaire",
   "french": "français",
   "gcForms": "Formulaires GC",
+  "gcFormsApi": "API",
   "gcFormsEdit": "Modifier",
   "gcFormsPublish": "Publier",
   "gcFormsPublished": "Publié",
@@ -515,6 +516,13 @@
   "selectElement": "Sélectionnez un type d'élément",
   "send": "Envoyer",
   "settings": {
+    "api": {
+      "title": "Accès d'API",
+      "generateKey": "Generate Key",
+      "refreshKey": "Refresh Key",
+      "deleteKey": "Delete Key",
+      "keyExists": "API Key Exists"
+    },
     "formManagement": "Gestion du formulaire"
   },
   "settingsDeleteButton": "Supprimer le formulaire",

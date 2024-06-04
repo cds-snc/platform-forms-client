@@ -1,15 +1,15 @@
 "use client";
 import { useTranslation } from "@i18n/client";
-import Link from "next/link";
-import { logout } from "../action";
-import { useSession } from "next-auth/react";
+
+import { useSession, signOut } from "next-auth/react";
 import { clearTemplateStore } from "@lib/store/useTemplateStore";
+import { Login } from "@clientComponents/globals/Login";
 
 export const LoginMenu = () => {
   const { i18n, t } = useTranslation("common");
   const handleClick = async () => {
     clearTemplateStore();
-    await logout(i18n.language);
+    await signOut({ callbackUrl: `/${i18n.language}/auth/logout` });
   };
   const session = useSession();
 
@@ -29,7 +29,7 @@ export const LoginMenu = () => {
           {t("loginMenu.logout")}
         </button>
       ) : (
-        <Link href={`/${i18n.language}/auth/login`}>{t("loginMenu.login")}</Link>
+        <Login />
       )}
     </div>
   );

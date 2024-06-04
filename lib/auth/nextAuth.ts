@@ -1,4 +1,5 @@
 import CredentialsProvider from "next-auth/providers/credentials";
+import ZitadelProvider from "next-auth/providers/zitadel";
 import NextAuth, { CredentialsSignin, Session } from "next-auth";
 import { validate2FAVerificationCode, userHasSecurityQuestions } from "@lib/auth/";
 import { PrismaAdapter } from "@auth/prisma-adapter";
@@ -9,6 +10,36 @@ import { getPrivilegeRulesForUser } from "@lib/privileges";
 import { logEvent } from "@lib/auditLogs";
 import { activeStatusCheck, activeStatusUpdate } from "@lib/cache/userActiveStatus";
 import { JWT } from "next-auth/jwt";
+
+import { Issuer } from "openid-client";
+
+async function refreshAccessToken(token: JWT): Promise<JWT> {
+  try {
+    const issuer = await Issuer.discover(process.env.ZITADEL_ISSUER ?? "");
+    const client = new issuer.Client({
+      client_id: process.env.ZITADEL_CLIENT_ID || "",
+      token_endpoint_auth_method: "none",
+    });
+
+    const { refresh_token, access_token, expires_at } = await client.refresh(
+      token.refreshToken as string
+    );
+
+    return {
+      ...token,
+      accessToken: access_token,
+      expiresAt: (expires_at ?? 0) * 1000,
+      refreshToken: refresh_token, // Fall back to old refresh token
+    };
+  } catch (error) {
+    logMessage.error("Error during refreshAccessToken", error);
+
+    return {
+      ...token,
+      error: "RefreshAccessTokenError",
+    };
+  }
+}
 
 /**
  * Checks the active status of a user using a cache strategy
@@ -46,6 +77,21 @@ export const {
   signOut,
 } = NextAuth({
   providers: [
+    ZitadelProvider({
+      issuer: process.env.ZITADEL_ISSUER,
+      clientId: process.env.ZITADEL_CLIENT_ID,
+      checks: ["pkce"],
+      client: {
+        token_endpoint_auth_method: "none",
+      },
+      async profile(profile) {
+        return {
+          id: profile.sub,
+          name: profile.name,
+          email: profile.email,
+        };
+      },
+    }),
     CredentialsProvider({
       id: "mfa",
       name: "MultiFactorAuth",
@@ -210,6 +256,11 @@ export const {
         token.hasSecurityQuestions = await userHasSecurityQuestions({ userId: token.userId });
       }
 
+      token.accessToken ??= account?.access_token;
+      token.refreshToken ??= account?.refresh_token;
+      token.expiresAt ??= (account?.expires_at ?? 0) * 1000;
+      token.error = undefined;
+
       // Check if user has been deactivated
       const userActive = await checkUserActiveStatus(token.userId ?? "");
       if (!userActive) {
@@ -220,7 +271,13 @@ export const {
         );
         token.deactivated = true;
       }
-      return token;
+      // Return previous token if the access token has not expired yet
+      if (Date.now() < (token.expiresAt as number)) {
+        return token;
+      }
+
+      // Access token has expired, try to update it
+      return refreshAccessToken(token);
     },
     async session(params) {
       const { session, token } = params as { session: Session; token: JWT };
