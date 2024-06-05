@@ -1,14 +1,12 @@
 import React from "react";
-import { DragHandle } from "./icons/DragHandle";
-import { DeleteIcon, LockIcon } from "@serverComponents/icons";
+
 import { cn } from "@lib/utils";
 import { ReactElement, ReactNode } from "react";
-import { TreeItem, TreeItemIndex, TreeItemRenderContext } from "react-complex-tree";
+import { TreeItem, TreeItemRenderContext } from "react-complex-tree";
 import { ArrowRight } from "./icons/ArrowRight";
 import { ArrowDown } from "./icons/ArrowDown";
-import { useTreeRef } from "./provider/TreeRefProvider";
-import { useState } from "react";
-import { useTranslation } from "@i18n/client";
+import { EditableInput } from "./EditableInput";
+import { ItemActions } from "./ItemActions";
 
 export const Item = ({
   title,
@@ -23,79 +21,33 @@ export const Item = ({
   children: ReactNode | ReactElement;
   handleDelete: (e: React.MouseEvent<HTMLButtonElement>) => Promise<void>;
 }) => {
-  const { tree } = useTreeRef();
-  const { t } = useTranslation("form-builder");
   const isRenaming = context && context?.isRenaming ? true : false;
-  const itemName = React.isValidElement(title) && title.props.title;
-  const [name, setName] = useState(itemName);
+  const isLocked = !context.canDrag;
+  let isFormElement = false;
+  let isGhostElement = false;
+  let isSection = false;
 
-  if (isRenaming) {
-    return (
-      <li
-        {...context.itemContainerWithChildrenProps}
-        className={cn(
-          "flex flex-col",
-          arrow && "border-b-1 border-slate-200 border-x-1 border-r-2 b-t-1",
-          !context.isExpanded && "",
-          children && "bg-slate-50"
-        )}
-        style={{
-          margin: 0,
-        }}
-      >
-        <div
-          className={cn(
-            "text-left group relative w-full overflow-hidden truncate p-3",
-            !arrow && "bg-white",
-            !arrow && "border-slate-500 border-1 rounded-md"
-          )}
-        >
-          <input
-            {...context.interactiveElementProps}
-            type="text"
-            placeholder={t("groups.addSectionPlaceholder")}
-            autoFocus
-            className="ml-10 w-auto p-1"
-            value={name}
-            onFocus={(e) => {
-              e.target.select();
-            }}
-            onKeyDown={(e) => {
-              if (e.key === "Enter") {
-                const props = context.interactiveElementProps as unknown as Record<string, unknown>;
-                const id = props["data-rct-item-id"] as unknown as TreeItemIndex;
-                tree?.current?.renameItem(id, name);
-                context.stopRenamingItem();
-              }
-              if (e.key === "Escape" || e.key === "Tab") {
-                context.stopRenamingItem();
-              }
-            }}
-            onBlur={() => {
-              context.stopRenamingItem();
-            }}
-            onChange={(e) => {
-              setName(e.target.value);
-            }}
-          />
-          {arrow}
-        </div>
-        {children}
-      </li>
-    );
+  // Pull item from arrow props
+  let item: TreeItem;
+  if (arrow && typeof arrow === "object" && "props" in arrow) {
+    item = arrow.props.item;
+    isSection = item?.isFolder ? true : false;
+    isFormElement = item?.isFolder ? false : true;
+    isGhostElement = ["intro", "policy", "end"].includes(String(item?.index));
   }
 
-  const isLocked = !context.canDrag;
+  const isSectionClasses = cn("w-full relative");
+  const formElementClasses = "inline-block w-full relative h-[60px]";
+  const ghostElementClasses = "inline-block w-full relative h-[60px]";
 
   return (
     <li
       {...context.itemContainerWithChildrenProps}
       className={cn(
-        "flex flex-col ",
-        !context.isExpanded && "h-[60px]",
-        children && "bg-slate-50",
-        context.isDraggingOver && "!border-dashed !border-1 !border-blue-focus",
-        context.isSelected && "border-slate-950 !border-1 bg-white"
+        "flex flex-col"
+        //children && "bg-slate-50",
+        // context.isDraggingOver && "!border-dashed !border-1 !border-blue-focus",
+        // context.isSelected && "border-slate-950 !border-1 bg-white",
       )}
     >
       <>
@@ -103,42 +55,35 @@ export const Item = ({
           {...context.itemContainerWithoutChildrenProps}
           {...context.interactiveElementProps}
           className={cn(
-            "text-left group relative w-full overflow-hidden truncate p-3 cursor-pointer hover:bg-indigo-100 ",
-            !arrow && "bg-white",
-            !arrow && "border-slate-500 border-1 rounded-md",
-            "hover:border-indigo-700 hover:border-1"
+            "text-left group relative w-full overflow-hidden truncate cursor-pointer h-[60px]",
+            // isFormElement && !isGhostElement && !context.isDraggingOver && "bg-white",
+            //isFormElement && !isGhostElement && !context.isDraggingOver && "border-slate-500 border-1 rounded-md",
+            // "hover:border-indigo-700 hover:border-1",
+            // context.isSelected && "border-slate-900 !border-1 bg-white"
+            isFormElement && formElementClasses,
+            isSection && isSectionClasses,
+            isGhostElement && ghostElementClasses
           )}
         >
           {arrow}
-          <span
-            className="ml-10 inline-block w-[100%] overflow-hidden"
-            {...(!isLocked && {
-              onDoubleClick: () => {
-                context.startRenamingItem();
-              },
-            })}
-          >
-            {title}
-          </span>
-          {context.canDrag ? (
-            <>
-              {context.isExpanded && (
-                <button className="cursor-pointer" onClick={handleDelete}>
-                  <DeleteIcon
-                    title="Delete group"
-                    className="absolute right-0 top-0 mr-10 mt-3 size-5"
-                  />
-                </button>
-              )}
-              <DragHandle
-                className={cn(
-                  "absolute right-0 top-0 mr-4 mt-3 hidden cursor-pointer group-hover:block",
-                  !arrow && "mt-2"
-                )}
-              />
-            </>
+          {isRenaming ? (
+            <EditableInput title={title} context={context} />
           ) : (
-            <LockIcon className="absolute right-0 mr-2 inline-block scale-75" />
+            <div
+              className={cn(
+                "ml-12 flex items-center overflow-hidden relative",
+                isSection && "w-[100%] h-[60px]",
+                isFormElement && "rounded-md border-1 border-slate-500 p-3 w-5/6"
+              )}
+              {...(!isLocked && {
+                onDoubleClick: () => {
+                  context.startRenamingItem();
+                },
+              })}
+            >
+              <ItemActions context={context} arrow={arrow} handleDelete={handleDelete} />
+              {title}
+            </div>
           )}
         </div>
         {children}
