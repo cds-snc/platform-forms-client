@@ -472,9 +472,13 @@
   "publishingRemovesTestResponsesDescription": "Toutes les réponses antérieures seront supprimées du système.",
   "publishYourForm": "Publier votre formulaire",
   "publishYourFormInstructions": {
+    "settings": "Paramètres",
+    "classification": "Classification des données",
+    "deliveryOption": "Option de livraison",
+    "purpose": "Objectif et utilisation",
     "text1": "Veuillez franchir les étapes suivantes avant de publier votre formulaire.",
     "text2": "",
-    "vaultOption": "Réponses à télécharger — ",
+    "vaultOption": "Réponses à télécharger",
     "emailOption": "Réponses envoyées par courriel — ",
     "change": "Modifier ces paramètres"
   },
@@ -527,6 +531,30 @@
   "settingsResponseEmailTitle": "Adresse courriel",
   "settingsResponseHint1": "Les réponses seront envoyées par courriel à cette boîte de réception. Il peut s'agir d'une boîte de réception partagée.",
   "settingsResponseTitle": "Destination de livraison des réponses.",
+  "settingsPurposeAndUse": {
+    "title": "Usage prévu",
+    "description": "Nous utiliserons cette information pour déterminer comment traiter les réponses qui sont dans Formulaires GC depuis plus de 45 jours.",
+    "personalInfo": "Renseignements personnels servant à prendre une décision qui touche un individu",
+    "helpUs": "Dites-nous comment vous prévoyez utiliser les réponses recueillies",
+    "personalInfoDetails": "C’est-à-dire à des fins administratives, par exemple:",
+    "personalInfoDetailsVals": {
+      "1": "demandes ou candidatures",
+      "2": "vérification d’admissibilité",
+      "3": "validation d’identité"
+    },
+    "nonAdminInfo": "Renseignements ne servant pas à prendre une décision qui touche un individu",
+    "nonAdminInfoDetails": "C’est-à-dire à des fins non-administratives, par exemple:",
+    "nonAdminInfoDetailsVals": {
+      "1": "statistiques",
+      "2": "activités de recherche",
+      "3": "audits"
+    },
+    "purpose": {
+      "admin": "fins administratives",
+      "nonAdmin": "fins non-administratives",
+      "unset": "pas définie"
+    }
+  },
   "settingsResponseDelivery": {
     "selectClassification": "Classification des données",
     "beforePublishMessage": "Vous pouvez modifier ces paramètres à tout moment avant de publier le formulaire.",
@@ -827,6 +855,9 @@
     "actionsSaved": "Actions enregistrées"
   },
   "groups": {
+    "newSection": "Nouvelle section",
+    "addSection": "Ajouter une section",
+    "treeAriaLabel": "Sections Formulaires GC",
     "addElement": {
       "empty": {
         "title": "Section vide",
@@ -835,8 +866,22 @@
     },
     "sectionTitle": "Titre de la section",
     "groupDeleted": "Group deleted",
-    "groupSuccessfullyDeleted": "{{group}} successfully deleted"
+    "groupSuccessfullyDeleted": "{{group}} successfully deleted",
+    "linkGroup": "[FR]Link group to",
+    "privacy": {
+      "beforeText": "<p>C’est votre responsabilité de bien connaître les exigences de votre ministère ou organisme en matière de renseignements personnels. Si vous ne savez pas comment procéder, nous vous recommandons de contacter votre <a href=\"https://www.tbs-sct.canada.ca/ap/atip-aiprp/coord-fra.asp\" target=\"_blank\">coordinateur·rice de l'accès à l'information et de la protection de la vie privée</a>.</p>",
+      "body": "<p className=\"mb-4\">Aidez les personnes qui remplissent le formulaire à comprendre comment vous traitez leurs renseignements personnels, comme énoncé à la section 4.2.10 de la <a href=\"https://www.tbs-sct.canada.ca/pol/doc-fra.aspx?id=18309\" target=\"_blank\">Directive sur les pratiques relatives à la protection de la vie privée</a>.</p><p><strong>Ce qu'il faut préciser dans un avis de confidentialité</strong></p><ul><li>Les renseignements personnels qui sont recueillis et les fins de la collecte.</li><li>Les autorisations légales ou de programmes dont vous disposez.</li><li>Les façons dont les reseignements seront utilisés, partagés, stockés et conservés.</li><li>Les droits d’accès ou de correction des renseignements personnels et les droits de déposer une plainte.</li></ul>",
+      "description": "Add a privacy notice to your form to inform users how you handle their personal information.",
+      "summary": "Ce qu'il faut préciser dans un avis de confidentialité"
+    },
+    "confirmation": {
+      "beforeText": "Le message de confirmation s’affichera sur une nouvelle page une fois le formulaire soumis.",
+      "body": "<p className=\"mb-4\">Help people filling out the form understand how you’re handling their personal information, as outlined in Section 4.2.10 of the <a href=\"https://www.tbs-sct.canada.ca/pol/doc-eng.aspx?id=18309\" target=\"_blank\">Directive on privacy practices</a>.</p><p><strong>What to include in a privacy notice</strong></p><ul><li>What personal information is being collected and why.</li><li>What legal or program authorities you have to collect information.</li><li>How their information will be used, shared, stored, and retained.</li><li>How people can access or change their personal information and file complaints.</li></ul>",
+      "description": "Add a privacy notice to your form to inform users how you handle their personal information.",
+      "summary": "What to include in a privacy notice"
+    }
   },
+
   "confirmation": {
     "title": "Votre formulaire a été soumis",
     "sectionTitle": "Titre de la section"

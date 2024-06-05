@@ -1,5 +1,11 @@
 import { Group, GroupsType } from "@lib/formContext";
-import { DraggingPosition, DraggingPositionBetweenItems, TreeItem } from "react-complex-tree";
+import {
+  DraggingPosition,
+  DraggingPositionBetweenItems,
+  DraggingPositionItem,
+  TreeItem,
+  TreeItemIndex,
+} from "react-complex-tree";
 import { findParentGroup } from "../util/findParentGroup";
 import { TreeItems } from "../types";
 import { autoFlowGroupNextActions } from "../util/setNextAction";
@@ -111,9 +117,17 @@ export const handleOnDrop = async (
   // Current state of the tree in Groups format
   let currentGroups = getGroups() as GroupsType;
 
-  // Target parent and index
-  const { parentItem: targetParent, childIndex: targetIndex } =
-    target as DraggingPositionBetweenItems;
+  let targetParent: TreeItemIndex;
+  let targetIndex: number;
+
+  if ((<DraggingPositionItem>target).targetType === "item") {
+    targetParent = (<DraggingPositionItem>target).targetItem;
+    targetIndex = 0;
+  } else {
+    // Target parent and index
+    targetParent = (<DraggingPositionBetweenItems>target).parentItem;
+    targetIndex = (<DraggingPositionBetweenItems>target).childIndex;
+  }
 
   let newGroups: GroupsType;
   const selectedItems: string[] = [];
@@ -237,7 +251,7 @@ export const handleOnDrop = async (
     // Create a new Groups object
     let newGroups = { ...currentGroups };
     newGroups[String(originParent?.index)] = {
-      name: String(originParent?.data.titleEn),
+      name: String(originParent?.data.name),
       elements: originGroupElements,
       titleEn: originParent?.data.titleEn,
       titleFr: originParent?.data.titleFr,

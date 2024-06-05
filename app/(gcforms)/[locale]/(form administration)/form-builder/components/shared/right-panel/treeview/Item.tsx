@@ -89,21 +89,17 @@ export const Item = ({
       {...context.itemContainerWithChildrenProps}
       className={cn(
         "flex flex-col",
-        arrow && "first:border-t-1 last:border-b-0 border-b-1 border-slate-200 b-t-1",
-        !context.isExpanded && "",
-        children && "bg-slate-50"
+        !context.isExpanded && "h-[60px]",
+        children && "bg-slate-50",
+        context.isDraggingOver && "!border-dashed !border-1 !border-blue-focus"
       )}
-      style={{
-        margin: 0,
-      }}
     >
       <>
-        <button
+        <div
           {...context.itemContainerWithoutChildrenProps}
           {...context.interactiveElementProps}
-          type="button"
           className={cn(
-            "text-left group relative w-full overflow-hidden truncate p-3",
+            "text-left group relative w-full overflow-hidden truncate p-3 cursor-pointer",
             !arrow && "bg-white",
             !arrow && "border-slate-500 border-1 rounded-md"
           )}
@@ -122,12 +118,12 @@ export const Item = ({
           {context.canDrag ? (
             <>
               {context.isExpanded && (
-                <span className="cursor-pointer" onClick={handleDelete}>
+                <button className="cursor-pointer" onClick={handleDelete}>
                   <DeleteIcon
                     title="Delete group"
                     className="absolute right-0 top-0 mr-10 mt-3 size-5"
                   />
-                </span>
+                </button>
               )}
               <DragHandle
                 className={cn(
@@ -139,7 +135,7 @@ export const Item = ({
           ) : (
             <LockIcon className="absolute right-0 mr-2 inline-block scale-75" />
           )}
-        </button>
+        </div>
         {children}
       </>
     </li>
@@ -147,7 +143,7 @@ export const Item = ({
 };
 
 const Title = ({ title }: { title: string }) => {
-  return <span>{title}</span>;
+  return <div className="w-5/6 truncate">{title}</div>;
 };
 
 const Arrow = ({ item, context }: { item: TreeItem; context: TreeItemRenderContext }) => {

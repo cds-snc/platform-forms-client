@@ -1,5 +1,10 @@
 import { GroupsType } from "@lib/formContext";
-import { DraggingPosition, DraggingPositionBetweenItems, TreeItem } from "react-complex-tree";
+import {
+  DraggingPosition,
+  DraggingPositionBetweenItems,
+  DraggingPositionItem,
+  TreeItem,
+} from "react-complex-tree";
 
 const getReviewIndex = (currentGroups: GroupsType) => {
   const elements = Object.keys(currentGroups);
@@ -22,8 +27,11 @@ export const handleCanDropAt = (
   // If any of the selected items is a group
   if (groupItemsCount >= 1) {
     // Groups can't be dropped on another group
-    const { parentItem } = target as DraggingPositionBetweenItems;
-    if (items[0].isFolder && parentItem !== "root") {
+    if ((<DraggingPositionBetweenItems>target).parentItem !== "root") {
+      return false;
+    }
+
+    if ((<DraggingPositionItem>target).targetType == "item") {
       return false;
     }
 
@@ -31,14 +39,19 @@ export const handleCanDropAt = (
     const currentGroups = getGroups() as GroupsType;
     const reviewIndex = getReviewIndex(currentGroups);
 
-    if (target.linearIndex >= reviewIndex + 1) {
+    if ((<DraggingPositionBetweenItems>target).childIndex > reviewIndex) {
+      return false;
+    }
+
+    // Groups can't be dropped before Start
+    if ((<DraggingPositionBetweenItems>target).childIndex === 0) {
       return false;
     }
   }
 
   // If any of the items is not a group, disallow dropping on root
   if (nonGroupItemsCount >= 1) {
-    if (target.depth === 0) {
+    if (target.targetType === "between-items" && target.parentItem === "root") {
       return false;
     }
   }

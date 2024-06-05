@@ -1,5 +1,5 @@
 import { FormElement, FormProperties, FormElementTypes, DeliveryOption } from "@lib/types";
-import { TemplateStoreState } from "../../store/useTemplateStore";
+import { TemplateStoreState } from "../../store/types";
 import { GroupsType } from "@lib/formContext";
 import { getLayoutFromGroups } from "./groupedFormHelpers";
 import { formHasGroups } from "./formHasGroups";

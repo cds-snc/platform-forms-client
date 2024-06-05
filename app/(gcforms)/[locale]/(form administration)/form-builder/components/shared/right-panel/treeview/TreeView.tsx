@@ -31,21 +31,19 @@ import { ConfirmDeleteSectionDialog } from "../../confirm/ConfirmDeleteSectionDi
 import { useTemplateStore } from "@lib/store/useTemplateStore";
 import { toast } from "@formBuilder/components/shared";
 import { useTranslation } from "@i18n/client";
+import { cn } from "@lib/utils";
 
 export interface TreeDataProviderProps {
   children?: ReactElement;
   addItem: (id: string) => void;
-  // addGroup: (id: string) => void;
   updateItem: (id: string, value: string) => void;
   removeItem: (id: string) => void;
-  // openSection?: (id: string) => void;
 }
 
 const ControlledTree: ForwardRefRenderFunction<unknown, TreeDataProviderProps> = (
   { children },
   ref
 ) => {
-  // export const TreeView = () => {
   const {
     getTreeData,
     getGroups,
@@ -81,10 +79,11 @@ const ControlledTree: ForwardRefRenderFunction<unknown, TreeDataProviderProps> =
   const [selectedItems, setSelectedItems] = useState<TreeItemIndex[]>([]);
 
   const { getTitle } = useElementTitle();
+  const newSectionText = t("groups.newSection");
 
   const addSection = () => {
     const id = uuid();
-    addGroup(id, "New section");
+    addGroup(id, newSectionText);
     const newGroups = autoFlowGroupNextActions(getGroups() as GroupsType, id);
     replaceGroups(newGroups);
     setSelectedItems([id]);
@@ -170,6 +169,24 @@ const ControlledTree: ForwardRefRenderFunction<unknown, TreeDataProviderProps> =
         renderItemTitle={({ title }) => <Item.Title title={title} />}
         renderItemArrow={({ item, context }) => <Item.Arrow item={item} context={context} />}
         renderLiveDescriptorContainer={() => null}
+        renderDragBetweenLine={({ draggingPosition, lineProps }) => {
+          return (
+            <div
+              {...lineProps}
+              className={cn(
+                "w-full border-b-2 border-blue-focus",
+                draggingPosition.depth > 0 && "ml-10"
+              )}
+            />
+          );
+        }}
+        renderItemsContainer={({ children, containerProps }) => {
+          return (
+            <ul className="divide-y-1 p-0" {...containerProps}>
+              {children}
+            </ul>
+          );
+        }}
         viewState={{
           ["default"]: {
             focusedItem,
@@ -187,6 +204,8 @@ const ControlledTree: ForwardRefRenderFunction<unknown, TreeDataProviderProps> =
           });
         }}
         canDropAt={(items, target) => handleCanDropAt(items, target, getGroups)}
+        canDropBelowOpenFolders={true}
+        canDropOnFolder={true}
         onRenameItem={(item, name) => {
           item.isFolder && updateGroupName({ id: String(item.index), name });
 
@@ -239,18 +258,18 @@ const ControlledTree: ForwardRefRenderFunction<unknown, TreeDataProviderProps> =
       >
         <div className="mb-4 flex justify-between align-middle">
           <label>
-            New section
+            {newSectionText}
             <button
               className="ml-2 mt-2 rounded-md border border-slate-500 p-1"
               onClick={addSection}
             >
-              <AddIcon title="Add section" />
+              <AddIcon title={t("groups.addSection")} />
             </button>
           </label>
         </div>
 
         <div className="border-1 border-slate-200">
-          <Tree treeId="default" rootItem="root" treeLabel="GC Forms sections" ref={tree} />
+          <Tree treeId="default" rootItem="root" treeLabel={t("groups.treeAriaLabel")} ref={tree} />
         </div>
         <>{children}</>
       </ControlledTreeEnvironment>
