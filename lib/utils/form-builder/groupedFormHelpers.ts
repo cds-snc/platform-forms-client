@@ -21,10 +21,6 @@ export const sortGroup = ({ form, group }: { form: FormProperties; group: Group 
   return sortedElements;
 };
 
-//----
-//TODO: Move this into the template store, and use the template store to get the the collection of elements.
-// move the elementHash as a property in the store, so it sits in memory and doesn't need to be reprocessed.
-//----
 // Build a Hash of Form Elements, for quick access.
 export const getFormElementCollection = (form: FormProperties) => {
   const elementCollection: IFormElementHash = {};
