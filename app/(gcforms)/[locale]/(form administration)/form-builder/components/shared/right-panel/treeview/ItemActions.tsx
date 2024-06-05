@@ -20,7 +20,7 @@ export const ItemActions = ({ context, arrow, handleDelete }: ItemActionProps) =
       )}
       <DragHandle
         className={cn(
-          "absolute right-0 top-0 mr-4 mt-3 hidden cursor-pointer group-hover:block",
+          "absolute right-0 top-[20px] mr-4 hidden cursor-pointer group-hover:block",
           !arrow && "mt-2"
         )}
       />

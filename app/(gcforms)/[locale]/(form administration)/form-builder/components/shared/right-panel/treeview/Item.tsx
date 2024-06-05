@@ -36,18 +36,20 @@ export const Item = ({
     isGhostElement = ["intro", "policy", "end"].includes(String(item?.index));
   }
 
-  const isSectionClasses = cn("w-full relative");
-  const formElementClasses = "inline-block w-full relative h-[60px]";
+  const isSectionClasses = cn(
+    "w-full relative",
+    !context.isExpanded && "border-b-1 border-slate-200"
+  );
+  const formElementClasses = cn("inline-block w-full relative h-[60px]");
   const ghostElementClasses = "inline-block w-full relative h-[60px]";
 
   return (
     <li
       {...context.itemContainerWithChildrenProps}
       className={cn(
-        "flex flex-col"
-        //children && "bg-slate-50",
-        // context.isDraggingOver && "!border-dashed !border-1 !border-blue-focus",
-        // context.isSelected && "border-slate-950 !border-1 bg-white",
+        "flex flex-col group",
+        children && context.isExpanded && "bg-slate-50",
+        context.isDraggingOver && "!border-dashed !border-1 !border-blue-focus"
       )}
     >
       <>
@@ -56,10 +58,6 @@ export const Item = ({
           {...context.interactiveElementProps}
           className={cn(
             "text-left group relative w-full overflow-hidden truncate cursor-pointer h-[60px]",
-            // isFormElement && !isGhostElement && !context.isDraggingOver && "bg-white",
-            //isFormElement && !isGhostElement && !context.isDraggingOver && "border-slate-500 border-1 rounded-md",
-            // "hover:border-indigo-700 hover:border-1",
-            // context.isSelected && "border-slate-900 !border-1 bg-white"
             isFormElement && formElementClasses,
             isSection && isSectionClasses,
             isGhostElement && ghostElementClasses
@@ -67,13 +65,23 @@ export const Item = ({
         >
           {arrow}
           {isRenaming ? (
-            <EditableInput title={title} context={context} />
+            <div className="relative flex h-[60px] w-[100%] items-center overflow-hidden text-sm">
+              <EditableInput title={title} context={context} />
+            </div>
           ) : (
             <div
               className={cn(
-                "ml-12 flex items-center overflow-hidden relative",
+                "ml-12 flex items-center overflow-hidden relative text-sm",
                 isSection && "w-[100%] h-[60px]",
-                isFormElement && "rounded-md border-1 border-slate-500 p-3 w-5/6"
+                isFormElement && "rounded-md p-3 w-5/6 border-1 bg-white",
+                isFormElement &&
+                  !context.isSelected &&
+                  " border-slate-500 hover:border-indigo-700 hover:border-1 hover:bg-indigo-50",
+                isFormElement &&
+                  context.isFocused &&
+                  "border-indigo-700 border-1 bg-gray-50 text-indigo-700 ",
+                isFormElement && context.isSelected && "border-2 border-slate-950  bg-white",
+                isSection && context.isExpanded && "font-bold"
               )}
               {...(!isLocked && {
                 onDoubleClick: () => {

@@ -21,7 +21,7 @@ export const EditableInput = ({
       type="text"
       placeholder={t("groups.addSectionPlaceholder")}
       autoFocus
-      className="ml-10 w-auto p-1"
+      className="ml-12 w-5/6 rounded-md border-2 border-slate-950 p-2"
       value={name}
       onFocus={(e) => {
         e.target.select();
