@@ -12,7 +12,7 @@ import {
   LocalizedGroupProperties,
   Language,
 } from "@lib/types/form-builder-types";
-import { DownloadCSV } from "./DownloadCSV";
+import { DownloadCSVWithGroups } from "./DownloadCSVWithGroups";
 import { RichTextEditor } from "../../components/elements/lexical-editor/RichTextEditor";
 import { LanguageLabel } from "./LanguageLabel";
 import { FieldsetLegend, SectionTitle } from ".";
@@ -205,7 +205,7 @@ export const TranslateWithGroups = () => {
         </div>
 
         <div className="mb-8">
-          <DownloadCSV />
+          <DownloadCSVWithGroups />
         </div>
 
         <section>

@@ -9,7 +9,7 @@ import { Button } from "@clientComponents/globals";
 import { RightPanelOpen, RoundCloseIcon } from "@serverComponents/icons";
 import { cn } from "@lib/utils";
 import { useActivePathname } from "@lib/hooks/form-builder";
-import { DownloadCSV } from "@formBuilder/[id]/edit/translate/components/DownloadCSV";
+import { DownloadCSVWithGroups } from "@formBuilder/[id]/edit/translate/components/DownloadCSVWithGroups";
 import { useTreeRef } from "./treeview/provider/TreeRefProvider";
 import { TreeView } from "./treeview/TreeView";
 import { useRehydrate } from "@lib/store/useTemplateStore";
@@ -193,7 +193,7 @@ export const RightPanel = ({ id }: { id: string }) => {
                       <Tab.Panel>
                         {/* Translate */}
                         <div className="m-0 mt-1 w-full p-4">
-                          <DownloadCSV />
+                          <DownloadCSVWithGroups />
                         </div>
                         {/* End translate */}
                       </Tab.Panel>
