@@ -32,6 +32,7 @@ import { useTemplateStore } from "@lib/store/useTemplateStore";
 import { toast } from "@formBuilder/components/shared";
 import { useTranslation } from "@i18n/client";
 import { cn } from "@lib/utils";
+import { KeyboardNavTip } from "./KeyboardNavTip";
 
 export interface TreeDataProviderProps {
   children?: ReactElement;
@@ -258,14 +259,13 @@ const ControlledTree: ForwardRefRenderFunction<unknown, TreeDataProviderProps> =
       >
         <div className="mb-4 flex justify-between align-middle">
           <label>
-            {newSectionText}
-            <button
-              className="ml-2 mt-2 rounded-md border border-slate-500 p-1"
-              onClick={addSection}
-            >
+            <span className="inline-block leading-6">{newSectionText}</span>
+            <button className="ml-2 rounded-md border border-slate-500 p-1 " onClick={addSection}>
               <AddIcon title={t("groups.addSection")} />
             </button>
           </label>
+
+          <KeyboardNavTip />
         </div>
         <div className="border-x-1 border-t-1 border-slate-200">
           <Tree treeId="default" rootItem="root" treeLabel={t("groups.treeAriaLabel")} ref={tree} />
