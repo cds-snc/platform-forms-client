@@ -209,7 +209,6 @@ const ControlledTree: ForwardRefRenderFunction<unknown, TreeDataProviderProps> =
         canDropOnFolder={true}
         onRenameItem={(item, name) => {
           item.isFolder && updateGroupName({ id: String(item.index), name });
-
           // Rename the element
           !item.isFolder &&
             updateElementTitle({

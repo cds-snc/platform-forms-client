@@ -30,20 +30,24 @@ export const initializeGroups = (form: FormProperties, allowGroups: boolean): Fo
     form.groups = groups;
   }
 
-  form.groups.review = {
-    name: "Review",
-    titleEn: "Review",
-    titleFr: "Révision",
-    elements: [],
-    nextAction: "end",
-  };
+  if (!form.groups.review) {
+    form.groups.review = {
+      name: "Review",
+      titleEn: "",
+      titleFr: "",
+      elements: [],
+      nextAction: "end",
+    };
+  }
 
-  form.groups.end = {
-    name: "End",
-    titleEn: "End",
-    titleFr: "Fin",
-    elements: [],
-  };
+  if (!form.groups.end) {
+    form.groups.end = {
+      name: "End",
+      titleEn: "",
+      titleFr: "",
+      elements: [],
+    };
+  }
 
   return form;
 };
