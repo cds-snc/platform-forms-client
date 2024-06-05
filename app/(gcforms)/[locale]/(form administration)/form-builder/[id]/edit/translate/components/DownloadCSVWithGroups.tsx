@@ -92,12 +92,6 @@ export const DownloadCSVWithGroups = () => {
           parseElement(element, elementIndex);
         });
       });
-    } else {
-      // If the form doesn't have groups, use the old method...
-      form.elements.map((element) => {
-        elementIndex++;
-        parseElement(element, elementIndex);
-      });
     }
 
     if (form.privacyPolicy?.descriptionEn || form.privacyPolicy?.descriptionFr) {
