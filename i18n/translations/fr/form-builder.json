@@ -858,6 +858,7 @@
     "newSection": "Nouvelle section",
     "addSection": "Ajouter une section",
     "treeAriaLabel": "Sections Formulaires GC",
+    "addSectionPlaceholder": "Add a section name [FR]",
     "addElement": {
       "empty": {
         "title": "Section vide",
