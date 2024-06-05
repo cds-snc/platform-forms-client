@@ -174,6 +174,7 @@ export const SettingsPanel = () => {
                 setShowShowSettings(true);
               }}
               className="flex h-full rounded-r-md bg-indigo-500 p-1 pt-2 text-white"
+              aria-label={t("more")}
             >
               {"..."}
             </button>
