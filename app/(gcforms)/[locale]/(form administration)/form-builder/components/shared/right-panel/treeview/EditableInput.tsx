@@ -1,4 +1,4 @@
-import React, { useState, ReactNode } from "react";
+import React, { useState } from "react";
 import { useTreeRef } from "./provider/TreeRefProvider";
 import { useTranslation } from "@i18n/client";
 import { TreeItemIndex, TreeItemRenderContext } from "react-complex-tree";
@@ -6,20 +6,21 @@ import { TreeItemIndex, TreeItemRenderContext } from "react-complex-tree";
 export const EditableInput = ({
   title,
   context,
+  isSection,
 }: {
-  title: ReactNode;
+  title: string;
   context: TreeItemRenderContext;
+  isSection: boolean;
 }) => {
   const { tree } = useTreeRef();
   const { t } = useTranslation("form-builder");
 
-  const itemName = React.isValidElement(title) && title.props.title;
-  const [name, setName] = useState(itemName);
+  const [name, setName] = useState(title);
   return (
     <input
       {...context.interactiveElementProps}
       type="text"
-      placeholder={t("groups.addSectionPlaceholder")}
+      placeholder={isSection ? t("groups.addSectionPlaceholder") : ""}
       autoFocus
       className="ml-12 w-5/6 rounded-md border-2 border-slate-950 p-2"
       value={name}

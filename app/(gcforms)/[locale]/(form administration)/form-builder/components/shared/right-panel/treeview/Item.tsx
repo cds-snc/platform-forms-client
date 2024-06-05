@@ -7,6 +7,8 @@ import { ArrowRight } from "./icons/ArrowRight";
 import { ArrowDown } from "./icons/ArrowDown";
 import { EditableInput } from "./EditableInput";
 import { ItemActions } from "./ItemActions";
+import { useTemplateStore } from "@lib/store/useTemplateStore";
+import { LocalizedElementProperties } from "@lib/types/form-builder-types";
 
 export const Item = ({
   title,
@@ -27,10 +29,22 @@ export const Item = ({
   let isGhostElement = false;
   let isSection = false;
 
+  const { translationLanguagePriority, localizeField } = useTemplateStore((s) => ({
+    localizeField: s.localizeField,
+    translationLanguagePriority: s.translationLanguagePriority,
+  }));
+
+  const localizedTitle = localizeField(
+    LocalizedElementProperties.TITLE,
+    translationLanguagePriority
+  );
+
   // Pull item from arrow props
   let item: TreeItem;
+  let titleText = "";
   if (arrow && typeof arrow === "object" && "props" in arrow) {
     item = arrow.props.item;
+    titleText = isSection ? item?.data.name : item?.data[localizedTitle];
     isSection = item?.isFolder ? true : false;
     isFormElement = item?.isFolder ? false : true;
     isGhostElement = ["intro", "policy", "end"].includes(String(item?.index));
@@ -66,7 +80,7 @@ export const Item = ({
           {arrow}
           {isRenaming ? (
             <div className="relative flex h-[60px] w-[100%] items-center overflow-hidden text-sm">
-              <EditableInput title={title} context={context} />
+              <EditableInput isSection={isSection} title={titleText} context={context} />
             </div>
           ) : (
             <div
