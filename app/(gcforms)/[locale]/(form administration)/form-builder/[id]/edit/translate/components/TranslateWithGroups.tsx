@@ -320,6 +320,7 @@ export const TranslateWithGroups = () => {
           {groups &&
             Object.keys(groups).map((groupKey, index) => {
               const thisGroup = groups[groupKey];
+              if (groupKey == "review" || groupKey == "end") return null;
               return (
                 <div key={groupKey}>
                   <SectionTitle>Section # {index}</SectionTitle>
