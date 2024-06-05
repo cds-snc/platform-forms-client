@@ -89,6 +89,7 @@ const ControlledTree: ForwardRefRenderFunction<unknown, TreeDataProviderProps> =
     setSelectedItems([id]);
     setExpandedItems([id]);
     setId(id);
+    tree?.current?.startRenamingItem(id);
   };
 
   useImperativeHandle(ref, () => ({
@@ -182,7 +183,7 @@ const ControlledTree: ForwardRefRenderFunction<unknown, TreeDataProviderProps> =
         }}
         renderItemsContainer={({ children, containerProps }) => {
           return (
-            <ul className="divide-y-1 p-0" {...containerProps}>
+            <ul className="m-0 p-0" {...containerProps}>
               {children}
             </ul>
           );
@@ -208,7 +209,6 @@ const ControlledTree: ForwardRefRenderFunction<unknown, TreeDataProviderProps> =
         canDropOnFolder={true}
         onRenameItem={(item, name) => {
           item.isFolder && updateGroupName({ id: String(item.index), name });
-
           // Rename the element
           !item.isFolder &&
             updateElementTitle({
@@ -267,8 +267,7 @@ const ControlledTree: ForwardRefRenderFunction<unknown, TreeDataProviderProps> =
             </button>
           </label>
         </div>
-
-        <div className="border-1 border-slate-200">
+        <div className="border-x-1 border-t-1 border-slate-200">
           <Tree treeId="default" rootItem="root" treeLabel={t("groups.treeAriaLabel")} ref={tree} />
         </div>
         <>{children}</>
