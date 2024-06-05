@@ -20,8 +20,8 @@ export const initializeGroups = (form: FormProperties, allowGroups: boolean): Fo
     const groups = {
       start: {
         name: "Start",
-        titleEn: "",
-        titleFr: "",
+        titleEn: "Start",
+        titleFr: "Début",
         elements: [...elementIds],
         nextAction: LockedSections.REVIEW,
       },
