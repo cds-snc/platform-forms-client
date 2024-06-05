@@ -61,7 +61,12 @@ const createGroupStore = (initProps?: Partial<GroupStoreProps>) => {
         const updateField = get().templateStore.getState().updateField;
         const propertyPath = get().templateStore.getState().propertyPath;
         const setChangeKey = get().templateStore.getState().setChangeKey;
-        updateField(propertyPath(id, LocalizedElementProperties.TITLE, "en"), text);
+        const translationLanguagePriority =
+          get().templateStore.getState().translationLanguagePriority;
+        updateField(
+          propertyPath(id, LocalizedElementProperties.TITLE, translationLanguagePriority),
+          text
+        );
         setChangeKey(String(new Date().getTime()));
       },
       updateGroupName: ({ id, name }: { id: string; name: string }) => {
