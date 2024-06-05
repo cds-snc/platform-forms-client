@@ -89,7 +89,12 @@ export const Item = ({
                 },
               })}
             >
-              <ItemActions context={context} arrow={arrow} handleDelete={handleDelete} />
+              <ItemActions
+                context={context}
+                arrow={arrow}
+                handleDelete={handleDelete}
+                lockClassName={cn(isFormElement && "absolute right-0", "mr-2 ")}
+              />
               {title}
             </div>
           )}

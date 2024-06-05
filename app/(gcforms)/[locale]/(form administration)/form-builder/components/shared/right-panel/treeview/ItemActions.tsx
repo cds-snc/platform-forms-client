@@ -7,10 +7,11 @@ import { TreeItemRenderContext } from "react-complex-tree";
 type ItemActionProps = {
   context: TreeItemRenderContext;
   arrow: ReactNode;
+  lockClassName: string;
   handleDelete: (e: React.MouseEvent<HTMLButtonElement>) => Promise<void>;
 };
 
-export const ItemActions = ({ context, arrow, handleDelete }: ItemActionProps) => {
+export const ItemActions = ({ context, arrow, lockClassName, handleDelete }: ItemActionProps) => {
   return context.canDrag ? (
     <>
       {context.isExpanded && (
@@ -26,6 +27,6 @@ export const ItemActions = ({ context, arrow, handleDelete }: ItemActionProps) =
       />
     </>
   ) : (
-    <LockIcon className="absolute right-0 mr-2 inline-block scale-75" />
+    <LockIcon className={cn("inline-block scale-75", lockClassName)} />
   );
 };
