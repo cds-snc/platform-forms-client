@@ -38,7 +38,7 @@ export const getFormElementCollection = (form: FormProperties) => {
 };
 
 // A Helper function for loading the old layout.
-export const getLayoutFromGroups = (form: FormProperties, groups: GroupsType) => {
+export const getLayoutFromGroups = (form: FormProperties, groups: GroupsType): number[] => {
   const layout: number[] = [];
   const elementCollection: IFormElementHash = getFormElementCollection(form);
 
@@ -46,7 +46,7 @@ export const getLayoutFromGroups = (form: FormProperties, groups: GroupsType) =>
   for (const key in groups) {
     if (Object.prototype.hasOwnProperty.call(groups, key)) {
       const group: Group = groups[key];
-      if (group.elements === undefined) return elementCollection;
+      if (group.elements === undefined) return [];
       group.elements.forEach((element: string) => {
         layout.push(elementCollection[element].id);
       });
