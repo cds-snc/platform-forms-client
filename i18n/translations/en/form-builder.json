@@ -536,6 +536,16 @@
     "description": "We'll use this to inform the retention of responses in GC Forms beyond 45 days.",
     "personalInfo": "Personal information used to make a decision about an individual",
     "helpUs": "Help us understand how form responses will be used",
+    "learnMore": "Learn more about administrative purposes",
+    "learnMoreBox": {
+      "title": "More about administrative purpose",
+      "description": "The <a href='https://www.justice.gc.ca/eng/csj-sjc/pa-lprp/dp-dd/modern_3.html?wbdisable=true'>Privacy Act</a> defines administrative purpose as \"the use of [personal] information in a decision making process that directly affects that individual\".",
+      "personalInfo": "Examples of administrative use:",
+      "personalInfoList": "<li>Using an individual's SIN to verify identity.</li><li>Using an individual's annual income to assess eligibility.</li><li>Using an individual’s age to administer a benefit.</li>",
+      "nonAdminInfo": "Examples of non-administrative use:",
+      "nonAdminInfoList": "<li>Collecting an individual’s email to register for an event.</li><li>Collecting an individual’s age or gender for a survey.</li><li>Collecting a business's name or address to administer a grant or contribution (provided it is not an individual’s personal information).</li>",
+      "contactCoordinator": "If you’re unsure, we recommend contacting your <a href=\"https://www.tbs-sct.canada.ca/ap/atip-aiprp/coord-eng.asp\">access to information and privacy coordinator.</a>"
+    },
     "personalInfoDetails": "Administrative purposes, such as:",
     "personalInfoDetailsVals": {
       "1": "applications for programs or benefits",

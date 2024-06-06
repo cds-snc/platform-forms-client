@@ -13,7 +13,7 @@ import { Radio } from "@formBuilder/components/shared";
 import { Button } from "@clientComponents/globals";
 import { useTemplateStore } from "@lib/store/useTemplateStore";
 import { completeEmailAddressRegex } from "@lib/utils/form-builder";
-import { ResponseDeliveryHelpButton } from "@formBuilder/components/shared";
+import { ResponseDeliveryHelpButton, FormPurposeHelpButton } from "@formBuilder/components/shared";
 import {
   ClassificationType,
   ClassificationSelect,
@@ -327,20 +327,30 @@ export const ResponseDelivery = () => {
                 label={emailLabel}
                 onChange={updateDeliveryOption}
               />
-            </div>
 
-            {deliveryOptionValue === DeliveryOption.email && (
-              <ResponseEmail
-                inputEmail={inputEmailValue}
-                setInputEmail={setInputEmailValue}
-                subjectEn={subjectEnValue}
-                setSubjectEn={setSubjectEnValue}
-                subjectFr={subjectFrValue}
-                setSubjectFr={setSubjectFrValue}
-                isInvalidEmailError={isInvalidEmailError}
-                setIsInvalidEmailError={setIsInvalidEmailError}
-              />
-            )}
+              {deliveryOptionValue === DeliveryOption.email && (
+                <ResponseEmail
+                  inputEmail={inputEmailValue}
+                  setInputEmail={setInputEmailValue}
+                  subjectEn={subjectEnValue}
+                  setSubjectEn={setSubjectEnValue}
+                  subjectFr={subjectFrValue}
+                  setSubjectFr={setSubjectFrValue}
+                  isInvalidEmailError={isInvalidEmailError}
+                  setIsInvalidEmailError={setIsInvalidEmailError}
+                />
+              )}
+              {deliveryOptionValue !== DeliveryOption.email && <div className="mb-8"></div>}
+
+              <Button
+                disabled={!isValid || isPublished}
+                theme="secondary"
+                onClick={saveDeliveryOptions}
+              >
+                {t("settingsResponseDelivery.saveButton")}
+              </Button>
+              <ResponseDeliveryHelpButton />
+            </div>
 
             <div className="mb-10">
               <h2>{t("settingsPurposeAndUse.title")}</h2>
@@ -392,7 +402,7 @@ export const ResponseDelivery = () => {
           >
             {t("settingsResponseDelivery.saveButton")}
           </Button>
-          <ResponseDeliveryHelpButton />
+          <FormPurposeHelpButton />
         </div>
       )}
     </>
