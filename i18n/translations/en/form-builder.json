@@ -560,7 +560,7 @@
     "beforePublishMessage": "These settings can only be changed before publishing.",
     "protectedBMessage": "PROTECTED B responses must be downloaded from GC Forms.",
     "settingsMessage": "To change these settings, select the data classification of your form responses.",
-    "title": "Response delivery option ",
+    "title": "Delivery option",
     "vaultOption": "Download responses from GC Forms",
     "vaultOptionHint": {
       "text1": "Submitted responses will appear on the",
