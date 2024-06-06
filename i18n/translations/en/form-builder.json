@@ -557,15 +557,15 @@
   },
   "settingsResponseDelivery": {
     "selectClassification": "Data classification",
-    "beforePublishMessage": "You can change these settings anytime before publishing.",
+    "beforePublishMessage": "These settings can only be changed before publishing.",
     "protectedBMessage": "PROTECTED B responses must be downloaded from GC Forms.",
     "settingsMessage": "To change these settings, select the data classification of your form responses.",
-    "title": "Response delivery option ",
+    "title": "Delivery option",
     "vaultOption": "Download responses from GC Forms",
     "vaultOptionHint": {
       "text1": "Submitted responses will appear on the",
       "text2": "Responses page",
-      "text3": " GC Forms holds data temporarily. Retrieve responses within 45 days."
+      "text3": " GC Forms holds data temporarily. GC Forms holds data temporarily for 30 days."
     },
     "emailOption": "Receive responses by email",
     "saveButton": "Save changes",
