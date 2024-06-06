@@ -215,7 +215,7 @@ export const MultiActionSelector = ({
           className="p-1 focus:fill-white"
           aria-controls={formId}
         >
-          <AddIcon className=" active:fill-white " title={t("logic.addRule")} />
+          <AddIcon className="active:fill-white " title={t("logic.addRule")} />
         </Button>
       </div>
       <form
