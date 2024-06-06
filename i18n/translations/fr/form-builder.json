@@ -894,5 +894,6 @@
   "confirmation": {
     "title": "Votre formulaire a été soumis",
     "sectionTitle": "Titre de la section"
-  }
+  },
+  "next": "Next"
 }

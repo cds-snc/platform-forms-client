@@ -893,5 +893,6 @@
   "confirmation": {
     "title": "Your form has been submitted",
     "sectionTitle": "Section title"
-  }
+  },
+  "next": "Next"
 }
