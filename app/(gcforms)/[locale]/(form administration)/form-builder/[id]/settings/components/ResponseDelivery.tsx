@@ -344,7 +344,9 @@ export const ResponseDelivery = () => {
 
             <div className="mb-10">
               <h2>{t("settingsPurposeAndUse.title")}</h2>
-              <p className="mb-2">{t("settingsPurposeAndUse.helpUs")}</p>
+              <p className="mb-2">
+                <strong>{t("settingsPurposeAndUse.helpUs")}</strong>
+              </p>
               <p className="text-sm mb-6">{t("settingsPurposeAndUse.description")}</p>
               <Radio
                 id="purposeAndUseAdmin"
