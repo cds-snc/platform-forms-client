@@ -16,7 +16,6 @@ import { useGroupStore } from "./store/useGroupStore";
 import { useTreeRef } from "./provider/TreeRefProvider";
 import { v4 as uuid } from "uuid";
 import { findParentGroup } from "./util/findParentGroup";
-import "react-complex-tree/lib/style-modern.css";
 import { GroupsType } from "@lib/formContext";
 import { Item } from "./Item";
 import { autoFlowGroupNextActions } from "./util/setNextAction";
@@ -274,7 +273,7 @@ const ControlledTree: ForwardRefRenderFunction<unknown, TreeDataProviderProps> =
           </label>
           <KeyboardNavTip />
         </div>
-        <div className="border-t-1 border-slate-200">
+        <div id="tree-container">
           <Tree treeId="default" rootItem="root" treeLabel={t("groups.treeAriaLabel")} ref={tree} />
         </div>
         <>{children}</>
