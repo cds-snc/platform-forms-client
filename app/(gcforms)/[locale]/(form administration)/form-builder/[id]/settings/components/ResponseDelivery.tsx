@@ -286,9 +286,6 @@ export const ResponseDelivery = () => {
         <div className="mb-10">
           <div className="mb-4">
             <h2 className="mb-6">{t("settingsResponseDelivery.selectClassification")}</h2>
-            <p className="mb-5 inline-block bg-purple-200 p-3 text-sm font-bold">
-              {t("settingsResponseDelivery.beforePublishMessage")}
-            </p>
             <div>
               <ClassificationSelect
                 className="max-w-[400px] truncate bg-gray-soft p-1 pr-10"
