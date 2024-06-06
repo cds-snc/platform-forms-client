@@ -546,14 +546,14 @@
       "nonAdminInfoList": "<li>Collecting an individual’s email to register for an event.</li><li>Collecting an individual’s age or gender for a survey.</li><li>Collecting a business's name or address to administer a grant or contribution (provided it is not an individual’s personal information).</li>",
       "contactCoordinator": "If you’re unsure, we recommend contacting your <a href=\"https://www.tbs-sct.canada.ca/ap/atip-aiprp/coord-eng.asp\">access to information and privacy coordinator.</a>"
     },
-    "personalInfoDetails": "Administrative purposes, such as:",
+    "personalInfoDetails": "<em>Administrative purposes</em>, such as:",
     "personalInfoDetailsVals": {
       "1": "applications for programs or benefits",
       "2": "eligibility determination",
       "3": "identity validation"
     },
     "nonAdminInfo": "Information not used to make a decision about an individual",
-    "nonAdminInfoDetails": "Non-administrative purposes, such as:",
+    "nonAdminInfoDetails": "<em>Non-administrative purposes</em>, such as:",
     "nonAdminInfoDetailsVals": {
       "1": "statistics",
       "2": "research",

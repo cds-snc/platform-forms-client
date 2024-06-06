@@ -25,6 +25,8 @@ import {
 } from "@formBuilder/actions";
 import { useRefresh } from "@lib/hooks/useRefresh";
 
+import Markdown from "markdown-to-jsx";
+
 import { toast } from "@formBuilder/components/shared/Toast";
 import { ErrorSaving } from "@formBuilder/components/shared/ErrorSaving";
 
@@ -368,7 +370,11 @@ export const ResponseDelivery = () => {
                 onChange={updatePurposeOption}
               />
               <div className="text-sm ml-12 mb-4">
-                <p>{t("settingsPurposeAndUse.personalInfoDetails")}</p>
+                <div>
+                  <Markdown options={{ forceBlock: true }}>
+                    {t("settingsPurposeAndUse.personalInfoDetails")}
+                  </Markdown>
+                </div>
                 <ul>
                   <li>{t("settingsPurposeAndUse.personalInfoDetailsVals.1")}</li>
                   <li>{t("settingsPurposeAndUse.personalInfoDetailsVals.2")}</li>
@@ -385,7 +391,11 @@ export const ResponseDelivery = () => {
                 onChange={updatePurposeOption}
               />
               <div className="text-sm ml-12 mb-4">
-                <p>{t("settingsPurposeAndUse.nonAdminInfoDetails")}</p>
+                <div>
+                  <Markdown options={{ forceBlock: true }}>
+                    {t("settingsPurposeAndUse.nonAdminInfoDetails")}
+                  </Markdown>
+                </div>
                 <ul>
                   <li>{t("settingsPurposeAndUse.nonAdminInfoDetailsVals.1")}</li>
                   <li>{t("settingsPurposeAndUse.nonAdminInfoDetailsVals.2")}</li>
