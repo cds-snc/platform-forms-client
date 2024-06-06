@@ -565,7 +565,7 @@
     "vaultOptionHint": {
       "text1": " Les réponses soumises apparaîtront sur",
       "text2": "la page Réponses",
-      "text3": " Formulaires GC conserve les données temporairement. Les réponses doivent être récupérées dans un délai de 45 jours."
+      "text3": " Formulaires GC conserve les données temporairement. Formulaires GC conserve les données temporairement pour 30 hours."
     },
     "emailOption": "Recevoir les réponses par courriel",
     "saveButton": "Enregistrer les modifications",
