@@ -117,7 +117,7 @@ export const Item = ({
               })}
             >
               {fieldType === "richText" && descriptionText === "" && (
-                <span className="text-gray-500">{t("groups.treeView.emptyPagetext")}</span>
+                <span className="text-gray-500">{t("groups.treeView.emptyPageTextElement")}</span>
               )}
               {fieldType !== "richText" && titleText === "" && (
                 <span className="text-gray-500">{t("groups.treeView.emptyFormElement")}</span>

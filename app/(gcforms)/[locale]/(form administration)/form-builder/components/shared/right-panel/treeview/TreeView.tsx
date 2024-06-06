@@ -259,7 +259,7 @@ const ControlledTree: ForwardRefRenderFunction<unknown, TreeDataProviderProps> =
       >
         <div className="flex justify-between border-b-2 border-black bg-gray-50 p-3 align-middle">
           <label className="flex items-center hover:fill-white hover:underline">
-            <span className="mr-2 h-[28px] pl-3 text-sm">{newSectionText}</span>
+            <span className="mr-2 pl-3 text-sm">{newSectionText}</span>
             <Button
               theme="secondary"
               className="p-0 hover:!bg-indigo-500 hover:!fill-white focus:!fill-white"
