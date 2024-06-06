@@ -44,6 +44,36 @@ export const Simple = ({
   );
 };
 
+interface CustomTooltipProps extends TooltipProps {
+  trigger: React.ReactNode | string;
+}
+
+export const CustomTrigger = ({
+  trigger,
+  children,
+  tooltipClassName = "",
+  side = "left",
+}: CustomTooltipProps) => {
+  return (
+    <TooltipPrimitive.Provider delayDuration={100}>
+      <TooltipPrimitive.Root>
+        <TooltipPrimitive.Trigger asChild>{trigger}</TooltipPrimitive.Trigger>
+        <TooltipPrimitive.Content
+          sideOffset={4}
+          side={side}
+          className={cn(
+            "max-w-80 bg-violet-100 p-4 border border-violet-400 z-[1000] rounded-md",
+            tooltipClassName
+          )}
+        >
+          <TooltipPrimitive.Arrow className="fill-current" />
+          {children}
+        </TooltipPrimitive.Content>
+      </TooltipPrimitive.Root>
+    </TooltipPrimitive.Provider>
+  );
+};
+
 export const Info = ({
   children,
   tooltipClassName = "",
@@ -77,4 +107,5 @@ export const Info = ({
 export const Tooltip = {
   Simple,
   Info,
+  CustomTrigger,
 };

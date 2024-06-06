@@ -180,7 +180,7 @@ export const RightPanel = ({ id }: { id: string }) => {
                     <Tab.Panels>
                       <Tab.Panel>
                         {/* Tree */}
-                        <div className="m-0 mt-1 w-full p-4">
+                        <div className="m-0 w-full">
                           <TreeView
                             ref={treeView}
                             addItem={() => {}}
