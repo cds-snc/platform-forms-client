@@ -145,7 +145,7 @@ export const RightPanel = ({ id }: { id: string }) => {
                       <div>
                         <button
                           type="button"
-                          className="relative rounded-md bg-white text-gray-400 hover:text-gray-500 focus:ring-2 focus:ring-indigo-500"
+                          className="relative rounded-md bg-white text-slate-500 hover:text-slate-600 focus:ring-2 focus:ring-indigo-500"
                           onClick={() => setOpen(false)}
                         >
                           <span className="sr-only">{t("rightPanel.closePanel")}</span>
