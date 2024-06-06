@@ -6,7 +6,7 @@ export const KeyboardNavTip = () => {
   const { t } = useTranslation("form-builder");
   return (
     <div className="flex items-center text-sm">
-      <label className="ml-4 flex font-bold">
+      <label className="ml-4 flex">
         {t("groups.treeView.keyboardNav.label")}
         <Tooltip.Info
           side="left"
