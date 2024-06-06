@@ -16,7 +16,7 @@ export const ItemActions = ({ context, arrow, lockClassName, handleDelete }: Ite
     <>
       {context.isExpanded && (
         <button className="cursor-pointer" onClick={handleDelete}>
-          <DeleteIcon title="Delete group" className="absolute right-0 top-0 mr-10 scale-50" />
+          <DeleteIcon title="Delete group" className="absolute right-5 top-0 mr-10 scale-50" />
         </button>
       )}
       <DragHandle

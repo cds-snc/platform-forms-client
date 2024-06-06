@@ -893,12 +893,17 @@
     },
     "treeView": {
       "emptyPageTextElement": "Empty page text [FR]",
-      "emptyFormElement": "Empty form queston element [FR]"
+      "emptyFormElement": "Empty form queston element [FR]",
+      "keyboardNav": {
+        "label": "[FR]Keyboard shortcuts",
+        "body": "[FR]<p className=\"mb-4\">Navigate the questions and sections using the arrow keys.</p><p><strong>Drag and drop:</strong></p>\n<ul><li>control + D to pick up and item</li><li>arrow keys to drag the item</li><li>enter key to drop the item</li></ul>"
+      }
     }
   },
 
   "confirmation": {
     "title": "Votre formulaire a été soumis",
     "sectionTitle": "Titre de la section"
-  }
+  },
+  "next": "Next"
 }

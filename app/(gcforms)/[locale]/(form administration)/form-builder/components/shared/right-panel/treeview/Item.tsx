@@ -67,7 +67,7 @@ export const Item = ({
     "w-full relative",
     !context.isExpanded && "border-b-1 border-slate-200"
   );
-  const formElementClasses = cn("inline-block w-full relative h-[60px]");
+  const formElementClasses = cn("inline-block w-full relative h-[60px] outline-none");
   const ghostElementClasses = "inline-block w-full relative h-[60px]";
 
   return (
@@ -85,8 +85,8 @@ export const Item = ({
           {...context.interactiveElementProps}
           className={cn(
             "text-left group relative w-full overflow-hidden truncate cursor-pointer h-[60px]",
-            isFormElement && formElementClasses,
             isSection && isSectionClasses,
+            isFormElement && formElementClasses,
             isGhostElement && ghostElementClasses
           )}
         >
@@ -106,8 +106,8 @@ export const Item = ({
                   " border-slate-500 hover:border-indigo-700 hover:border-1 hover:bg-indigo-50",
                 isFormElement &&
                   context.isFocused &&
-                  "border-indigo-700 border-1 bg-gray-50 text-indigo-700 ",
-                isFormElement && context.isSelected && "border-2 border-slate-950  bg-white",
+                  "border-indigo-700 border-2 font-bold bg-gray-50 text-indigo-700",
+                isFormElement && context.isSelected && "border-2 border-slate-950  bg-white ",
                 isSection && context.isExpanded && "font-bold"
               )}
               {...(!isLocked && {
@@ -117,7 +117,7 @@ export const Item = ({
               })}
             >
               {fieldType === "richText" && descriptionText === "" && (
-                <span className="text-gray-500">{t("groups.treeView.emptyPagetext")}</span>
+                <span className="text-gray-500">{t("groups.treeView.emptyPageTextElement")}</span>
               )}
               {fieldType !== "richText" && titleText === "" && (
                 <span className="text-gray-500">{t("groups.treeView.emptyFormElement")}</span>
