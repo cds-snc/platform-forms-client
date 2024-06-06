@@ -85,6 +85,9 @@ const Flow: ForwardRefRenderFunction<unknown, FlowProps> = ({ children }, ref) =
   return (
     <>
       <ReactFlow
+        disableKeyboardA11y={true}
+        nodesFocusable={false}
+        edgesFocusable={false}
         proOptions={{ hideAttribution: true }}
         nodesDraggable={false}
         nodes={nodes}

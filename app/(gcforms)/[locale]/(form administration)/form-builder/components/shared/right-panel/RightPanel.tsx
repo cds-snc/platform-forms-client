@@ -56,6 +56,7 @@ export const RightPanel = ({ id }: { id: string }) => {
   const hasHydrated = useRehydrate();
 
   const selectedElementId = useGroupStore((s) => s.selectedElementId);
+  const setId = useGroupStore((state) => state.setId);
   const item = (selectedElementId && getElement(selectedElementId)) || null;
 
   useEffect(() => {
@@ -173,6 +174,8 @@ export const RightPanel = ({ id }: { id: string }) => {
                       <TabButton
                         text={t("rightPanel.logic")}
                         onClick={() => {
+                          // Set the active group to the start group before navigating to the logic tab
+                          setId("start");
                           router.push(`/${i18n.language}/form-builder/${id}/edit/logic`);
                         }}
                       />
