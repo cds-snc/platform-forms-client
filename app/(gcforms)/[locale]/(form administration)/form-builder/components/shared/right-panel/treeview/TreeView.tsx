@@ -16,7 +16,6 @@ import { useGroupStore } from "./store/useGroupStore";
 import { useTreeRef } from "./provider/TreeRefProvider";
 import { v4 as uuid } from "uuid";
 import { findParentGroup } from "./util/findParentGroup";
-import "react-complex-tree/lib/style-modern.css";
 import { GroupsType } from "@lib/formContext";
 import { Item } from "./Item";
 import { autoFlowGroupNextActions } from "./util/setNextAction";
@@ -32,6 +31,8 @@ import { useTemplateStore } from "@lib/store/useTemplateStore";
 import { toast } from "@formBuilder/components/shared";
 import { useTranslation } from "@i18n/client";
 import { cn } from "@lib/utils";
+import { KeyboardNavTip } from "./KeyboardNavTip";
+import { Button } from "@clientComponents/globals";
 
 export interface TreeDataProviderProps {
   children?: ReactElement;
@@ -209,7 +210,6 @@ const ControlledTree: ForwardRefRenderFunction<unknown, TreeDataProviderProps> =
         canDropOnFolder={true}
         onRenameItem={(item, name) => {
           item.isFolder && updateGroupName({ id: String(item.index), name });
-
           // Rename the element
           !item.isFolder &&
             updateElementTitle({
@@ -257,18 +257,23 @@ const ControlledTree: ForwardRefRenderFunction<unknown, TreeDataProviderProps> =
           setSelectedItems(items);
         }}
       >
-        <div className="mb-4 flex justify-between align-middle">
-          <label>
-            {newSectionText}
-            <button
-              className="ml-2 mt-2 rounded-md border border-slate-500 p-1"
+        <div className="flex justify-between border-b-2 border-black bg-gray-50 p-3 align-middle">
+          <label className="flex items-center hover:fill-white hover:underline">
+            <span className="mr-2 pl-3 text-sm">{newSectionText}</span>
+            <Button
+              theme="secondary"
+              className="p-0 hover:!bg-indigo-500 hover:!fill-white focus:!fill-white"
               onClick={addSection}
             >
-              <AddIcon title={t("groups.addSection")} />
-            </button>
+              <AddIcon
+                className="hover:fill-white focus:fill-white"
+                title={t("groups.addSection")}
+              />
+            </Button>
           </label>
+          <KeyboardNavTip />
         </div>
-        <div className="border-x-1 border-t-1 border-slate-200">
+        <div id="tree-container">
           <Tree treeId="default" rootItem="root" treeLabel={t("groups.treeAriaLabel")} ref={tree} />
         </div>
         <>{children}</>

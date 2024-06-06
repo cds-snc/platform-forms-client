@@ -7,6 +7,9 @@ import { ArrowRight } from "./icons/ArrowRight";
 import { ArrowDown } from "./icons/ArrowDown";
 import { EditableInput } from "./EditableInput";
 import { ItemActions } from "./ItemActions";
+import { useTemplateStore } from "@lib/store/useTemplateStore";
+import { LocalizedElementProperties } from "@lib/types/form-builder-types";
+import { useTranslation } from "@i18n/client";
 
 export const Item = ({
   title,
@@ -21,26 +24,50 @@ export const Item = ({
   children: ReactNode | ReactElement;
   handleDelete: (e: React.MouseEvent<HTMLButtonElement>) => Promise<void>;
 }) => {
+  const { t } = useTranslation("form-builder");
+
   const isRenaming = context && context?.isRenaming ? true : false;
   const isLocked = !context.canDrag;
   let isFormElement = false;
   let isGhostElement = false;
   let isSection = false;
 
+  const { translationLanguagePriority, localizeField } = useTemplateStore((s) => ({
+    localizeField: s.localizeField,
+    translationLanguagePriority: s.translationLanguagePriority,
+  }));
+
+  const localizedTitle = localizeField(
+    LocalizedElementProperties.TITLE,
+    translationLanguagePriority
+  );
+
+  const localizedDescription = localizeField(
+    LocalizedElementProperties.DESCRIPTION,
+    translationLanguagePriority
+  );
+
   // Pull item from arrow props
   let item: TreeItem;
+  let titleText = "";
+  let descriptionText = "";
+  let fieldType = "";
   if (arrow && typeof arrow === "object" && "props" in arrow) {
     item = arrow.props.item;
+    fieldType = item?.data.type;
     isSection = item?.isFolder ? true : false;
     isFormElement = item?.isFolder ? false : true;
     isGhostElement = ["intro", "policy", "end"].includes(String(item?.index));
+
+    titleText = isSection ? item?.data.name : item?.data[localizedTitle];
+    descriptionText = isFormElement && item?.data[localizedDescription];
   }
 
   const isSectionClasses = cn(
     "w-full relative",
     !context.isExpanded && "border-b-1 border-slate-200"
   );
-  const formElementClasses = cn("inline-block w-full relative h-[60px]");
+  const formElementClasses = cn("inline-block w-full relative h-[60px] outline-none");
   const ghostElementClasses = "inline-block w-full relative h-[60px]";
 
   return (
@@ -58,29 +85,29 @@ export const Item = ({
           {...context.interactiveElementProps}
           className={cn(
             "text-left group relative w-full overflow-hidden truncate cursor-pointer h-[60px]",
-            isFormElement && formElementClasses,
             isSection && isSectionClasses,
+            isFormElement && formElementClasses,
             isGhostElement && ghostElementClasses
           )}
         >
           {arrow}
           {isRenaming ? (
             <div className="relative flex h-[60px] w-[100%] items-center overflow-hidden text-sm">
-              <EditableInput title={title} context={context} />
+              <EditableInput isSection={isSection} title={titleText} context={context} />
             </div>
           ) : (
             <div
               className={cn(
                 "ml-12 flex items-center overflow-hidden relative text-sm",
                 isSection && "w-[100%] h-[60px]",
-                isFormElement && "rounded-md p-3 w-5/6 border-1 bg-white",
+                isFormElement && "rounded-md p-3 w-5/6 border-1 bg-white min-h-[50px]",
                 isFormElement &&
                   !context.isSelected &&
                   " border-slate-500 hover:border-indigo-700 hover:border-1 hover:bg-indigo-50",
                 isFormElement &&
                   context.isFocused &&
-                  "border-indigo-700 border-1 bg-gray-50 text-indigo-700 ",
-                isFormElement && context.isSelected && "border-2 border-slate-950  bg-white",
+                  "border-indigo-700 border-2 font-bold bg-gray-50 text-indigo-700",
+                isFormElement && context.isSelected && "border-2 border-slate-950  bg-white ",
                 isSection && context.isExpanded && "font-bold"
               )}
               {...(!isLocked && {
@@ -89,13 +116,20 @@ export const Item = ({
                 },
               })}
             >
+              {fieldType === "richText" && descriptionText === "" && (
+                <span className="text-gray-500">{t("groups.treeView.emptyPageTextElement")}</span>
+              )}
+              {fieldType !== "richText" && titleText === "" && (
+                <span className="text-gray-500">{t("groups.treeView.emptyFormElement")}</span>
+              )}
               <ItemActions
                 context={context}
                 arrow={arrow}
                 handleDelete={handleDelete}
                 lockClassName={cn(isFormElement && "absolute right-0", "mr-2 ")}
               />
-              {title}
+
+              {title && title}
             </div>
           )}
         </div>
