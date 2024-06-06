@@ -557,7 +557,7 @@
   },
   "settingsResponseDelivery": {
     "selectClassification": "Classification des données",
-    "beforePublishMessage": "Vous pouvez modifier ces paramètres à tout moment avant de publier le formulaire.",
+    "beforePublishMessage": "Ces paramètres ne peuvent être modifiés qu’avant la publication.",
     "protectedBMessage": "Les réponses classifiées PROTÉGÉ B doivent être téléchargées de Formulaires GC.",
     "settingsMessage": "Pour modifier ces paramètres, sélectionnez la classification des données de vos réponses au formulaire.",
     "title": "Option de livraison des réponses",
