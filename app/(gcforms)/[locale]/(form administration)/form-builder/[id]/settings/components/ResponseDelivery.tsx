@@ -357,7 +357,7 @@ export const ResponseDelivery = () => {
                 value={PurposeOption.admin}
                 onChange={updatePurposeOption}
               />
-              <div className="text-sm ml-10 mb-4">
+              <div className="text-sm ml-12 mb-4">
                 <p>{t("settingsPurposeAndUse.personalInfoDetails")}</p>
                 <ul>
                   <li>{t("settingsPurposeAndUse.personalInfoDetailsVals.1")}</li>
@@ -374,7 +374,7 @@ export const ResponseDelivery = () => {
                 value={PurposeOption.nonAdmin}
                 onChange={updatePurposeOption}
               />
-              <div className="text-sm ml-10 mb-4">
+              <div className="text-sm ml-12 mb-4">
                 <p>{t("settingsPurposeAndUse.nonAdminInfoDetails")}</p>
                 <ul>
                   <li>{t("settingsPurposeAndUse.nonAdminInfoDetailsVals.1")}</li>
