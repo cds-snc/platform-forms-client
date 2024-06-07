@@ -183,7 +183,7 @@ export const RightPanel = ({ id }: { id: string }) => {
                     <Tab.Panels>
                       <Tab.Panel>
                         {/* Tree */}
-                        <div className="m-0 w-full">
+                        <div className="m-0 w-full" aria-live="polite">
                           <TreeView
                             ref={treeView}
                             addItem={() => {}}
@@ -195,14 +195,14 @@ export const RightPanel = ({ id }: { id: string }) => {
                       </Tab.Panel>
                       <Tab.Panel>
                         {/* Translate */}
-                        <div className="m-0 mt-1 w-full p-4">
+                        <div className="m-0 mt-1 w-full p-4" aria-live="polite">
                           <DownloadCSV />
                         </div>
                         {/* End translate */}
                       </Tab.Panel>
                       <Tab.Panel>
                         {/* Logic */}
-                        <div className="m-0 w-full">
+                        <div className="m-0 w-full" aria-live="polite">
                           {activePathname.endsWith("/logic") && <SelectNextAction item={item} />}
                         </div>
                         {/* end logic */}
