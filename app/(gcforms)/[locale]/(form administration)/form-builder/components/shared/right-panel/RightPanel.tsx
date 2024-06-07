@@ -109,9 +109,9 @@ export const RightPanel = ({ id }: { id: string }) => {
 
   return (
     <section className="relative" aria-labelledby="right_panel_title">
-      <h1 className="sr-only" id="right_panel_title">
+      <h2 className="sr-only" id="right_panel_title">
         {t("rightPanel.title")}
-      </h1>
+      </h2>
       <div className={cn("fixed right-0", isIntersecting ? "top-20" : "top-0", open && "hidden")}>
         <Button
           theme="link"
