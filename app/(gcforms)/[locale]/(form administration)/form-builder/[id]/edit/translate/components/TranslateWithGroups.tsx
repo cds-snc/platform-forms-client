@@ -318,12 +318,15 @@ export const TranslateWithGroups = () => {
             // Loop through each group and render the elements in the group
           }
           {groups &&
-            Object.keys(groups).map((groupKey, index) => {
+            Object.keys(groups).map((groupKey) => {
               const thisGroup = groups[groupKey];
+              const groupName = thisGroup.name;
               if (groupKey == "review" || groupKey == "end") return null;
               return (
                 <div key={groupKey}>
-                  <SectionTitle>Section # {index}</SectionTitle>
+                  <SectionTitle>
+                    {t("logic.sectionTitle")} <em>{groupName}</em>
+                  </SectionTitle>
                   <GroupSection
                     group={thisGroup}
                     groupId={groupKey}
