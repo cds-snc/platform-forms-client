@@ -13,7 +13,7 @@ import { Radio } from "@formBuilder/components/shared";
 import { Button } from "@clientComponents/globals";
 import { useTemplateStore } from "@lib/store/useTemplateStore";
 import { completeEmailAddressRegex } from "@lib/utils/form-builder";
-import { ResponseDeliveryHelpButton } from "@formBuilder/components/shared";
+import { ResponseDeliveryHelpButton, FormPurposeHelpButton } from "@formBuilder/components/shared";
 import {
   ClassificationType,
   ClassificationSelect,
@@ -24,6 +24,8 @@ import {
   updateTemplateSecurityAttribute,
 } from "@formBuilder/actions";
 import { useRefresh } from "@lib/hooks/useRefresh";
+
+import Markdown from "markdown-to-jsx";
 
 import { toast } from "@formBuilder/components/shared/Toast";
 import { ErrorSaving } from "@formBuilder/components/shared/ErrorSaving";
@@ -327,20 +329,30 @@ export const ResponseDelivery = () => {
                 label={emailLabel}
                 onChange={updateDeliveryOption}
               />
-            </div>
 
-            {deliveryOptionValue === DeliveryOption.email && (
-              <ResponseEmail
-                inputEmail={inputEmailValue}
-                setInputEmail={setInputEmailValue}
-                subjectEn={subjectEnValue}
-                setSubjectEn={setSubjectEnValue}
-                subjectFr={subjectFrValue}
-                setSubjectFr={setSubjectFrValue}
-                isInvalidEmailError={isInvalidEmailError}
-                setIsInvalidEmailError={setIsInvalidEmailError}
-              />
-            )}
+              {deliveryOptionValue === DeliveryOption.email && (
+                <ResponseEmail
+                  inputEmail={inputEmailValue}
+                  setInputEmail={setInputEmailValue}
+                  subjectEn={subjectEnValue}
+                  setSubjectEn={setSubjectEnValue}
+                  subjectFr={subjectFrValue}
+                  setSubjectFr={setSubjectFrValue}
+                  isInvalidEmailError={isInvalidEmailError}
+                  setIsInvalidEmailError={setIsInvalidEmailError}
+                />
+              )}
+              {deliveryOptionValue !== DeliveryOption.email && <div className="mb-8"></div>}
+
+              <Button
+                disabled={!isValid || isPublished}
+                theme="secondary"
+                onClick={saveDeliveryOptions}
+              >
+                {t("settingsResponseDelivery.saveButton")}
+              </Button>
+              <ResponseDeliveryHelpButton />
+            </div>
 
             <div className="mb-10">
               <h2>{t("settingsPurposeAndUse.title")}</h2>
@@ -358,7 +370,11 @@ export const ResponseDelivery = () => {
                 onChange={updatePurposeOption}
               />
               <div className="text-sm ml-12 mb-4">
-                <p>{t("settingsPurposeAndUse.personalInfoDetails")}</p>
+                <div>
+                  <Markdown options={{ forceBlock: true }}>
+                    {t("settingsPurposeAndUse.personalInfoDetails")}
+                  </Markdown>
+                </div>
                 <ul>
                   <li>{t("settingsPurposeAndUse.personalInfoDetailsVals.1")}</li>
                   <li>{t("settingsPurposeAndUse.personalInfoDetailsVals.2")}</li>
@@ -375,7 +391,11 @@ export const ResponseDelivery = () => {
                 onChange={updatePurposeOption}
               />
               <div className="text-sm ml-12 mb-4">
-                <p>{t("settingsPurposeAndUse.nonAdminInfoDetails")}</p>
+                <div>
+                  <Markdown options={{ forceBlock: true }}>
+                    {t("settingsPurposeAndUse.nonAdminInfoDetails")}
+                  </Markdown>
+                </div>
                 <ul>
                   <li>{t("settingsPurposeAndUse.nonAdminInfoDetailsVals.1")}</li>
                   <li>{t("settingsPurposeAndUse.nonAdminInfoDetailsVals.2")}</li>
@@ -392,7 +412,7 @@ export const ResponseDelivery = () => {
           >
             {t("settingsResponseDelivery.saveButton")}
           </Button>
-          <ResponseDeliveryHelpButton />
+          <FormPurposeHelpButton />
         </div>
       )}
     </>
