@@ -121,7 +121,7 @@ export interface FormProperties {
   groups?: GroupsType;
   elements: FormElement[];
   brand?: BrandProperties;
-  formPurpose: string;
+  formPurpose?: string;
   [key: string]:
     | string
     | number
