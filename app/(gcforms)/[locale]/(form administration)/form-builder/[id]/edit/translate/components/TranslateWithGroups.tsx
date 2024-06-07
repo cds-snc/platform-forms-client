@@ -208,11 +208,18 @@ export const TranslateWithGroups = () => {
           <DownloadCSVWithGroups />
         </div>
 
+        <div>
+          <SectionTitle>
+            {t("logic.sectionTitle")} <em>{groups?.["start"]?.name}</em>
+          </SectionTitle>
+        </div>
+
         <section>
-          <SectionTitle>{t("formIntroduction")}</SectionTitle>
           {/* FORM TITLE */}
           <fieldset>
-            <FieldsetLegend>{t("title")}</FieldsetLegend>
+            <FieldsetLegend>
+              {t("formIntroduction")} - {t("title")}
+            </FieldsetLegend>
             <div className="mb-10 flex gap-px divide-x-2 border border-gray-300">
               <label htmlFor="form-title-en" className="sr-only">
                 <>{primaryLanguage}</>
@@ -314,9 +321,8 @@ export const TranslateWithGroups = () => {
 
         {/* PRIVACY */}
         <section>
-          <SectionTitle>{t("privacyStatement")}</SectionTitle>
           <fieldset>
-            <FieldsetLegend>{t("pageText")}</FieldsetLegend>
+            <FieldsetLegend>{t("privacyStatement")}</FieldsetLegend>
 
             <div
               className="mb-10 flex gap-px divide-x-2 border border-gray-300"
@@ -371,6 +377,25 @@ export const TranslateWithGroups = () => {
         </section>
         {/* END PRIVACY */}
 
+        <div key={"start"}>
+          {groups && (
+            <GroupSection
+              group={groups["start"]}
+              groupId={"start"}
+              primaryLanguage={primaryLanguage}
+              secondaryLanguage={secondaryLanguage}
+            />
+          )}
+          {groups &&
+            sortGroup({ form, group: groups["start"] }).map((element, index) => {
+              return (
+                <div className="section" id={`section-${index}`} key={element.id}>
+                  <Element index={index} element={element} primaryLanguage={primaryLanguage} />
+                </div>
+              );
+            })}
+        </div>
+
         {/* ELEMENTS */}
         <section>
           {
@@ -380,7 +405,7 @@ export const TranslateWithGroups = () => {
             Object.keys(groups).map((groupKey) => {
               const thisGroup = groups[groupKey];
               const groupName = thisGroup.name;
-              if (groupKey == "review" || groupKey == "end") return null;
+              if (groupKey == "review" || groupKey == "end" || groupKey == "start") return null;
               return (
                 <div key={groupKey}>
                   <SectionTitle>
