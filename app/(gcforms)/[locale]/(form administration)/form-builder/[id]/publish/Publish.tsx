@@ -37,8 +37,8 @@ export const Publish = ({ id }: { id: string }) => {
     setIsPublished,
     getSchema,
     getName,
+    formPurposeStr,
     getDeliveryOption,
-    formPurpose,
     securityAttribute,
   } = useTemplateStore((s) => ({
     id: s.id,
@@ -46,8 +46,8 @@ export const Publish = ({ id }: { id: string }) => {
     setIsPublished: s.setIsPublished,
     getSchema: s.getSchema,
     getName: s.getName,
+    formPurposeStr: s.formPurpose,
     getDeliveryOption: s.getDeliveryOption,
-    formPurpose: s.formPurpose,
     securityAttribute: s.securityAttribute,
   }));
 
@@ -80,10 +80,10 @@ export const Publish = ({ id }: { id: string }) => {
   const supportHref = `/${i18n.language}/support`;
 
   let formPurposeText = t("settingsPurposeAndUse.purpose.unset");
-  if (formPurpose === "admin") {
+  if (formPurposeStr === "admin") {
     formPurposeText = t("settingsPurposeAndUse.purpose.admin");
   }
-  if (formPurpose === "nonAdmin") {
+  if (formPurposeStr === "nonAdmin") {
     formPurposeText = t("settingsPurposeAndUse.purpose.nonAdmin");
   }
 
@@ -210,7 +210,7 @@ export const Publish = ({ id }: { id: string }) => {
         </li>
 
         <li className="my-4">
-          {hasHydrated ? <Icon checked={formPurpose != ""} /> : IconLoading}
+          {hasHydrated ? <Icon checked={formPurposeStr != ""} /> : IconLoading}
           <strong>
             <LinkButton href={`/${i18n.language}/form-builder/${id}/settings`}>
               {t("publishYourFormInstructions.settings")}
