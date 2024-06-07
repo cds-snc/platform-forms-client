@@ -844,6 +844,7 @@
     "gotoSection": "Aller à la section",
     "questionTitle": "Question :",
     "sectionTitle": "Section :",
+    "translateTitle": "Section Titre",
     "addRule": "Ajouter une régle",
     "resetRules": "Réinitialiser toutes les règles",
     "resetRulesDescription": "La fonction de flux automatique réinitialise la progression entre les sections en un flux linéaire simple, remplaçant ainsi toutes les règles de logique de branchement qui s'appliquent.",

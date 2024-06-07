@@ -844,6 +844,7 @@
     "gotoSection": "Go to section",
     "questionTitle": "Question:",
     "sectionTitle": "Section:",
+    "translateTitle": "Section Title",
     "addRule": "Add rule",
     "saveRule": "Save",
     "saveNote": "Adding and saving a rule, turns off Auto-flow sections",

@@ -43,7 +43,7 @@ const GroupSection = ({
     <>
       {(group.titleEn || group.titleFr) && (
         <fieldset>
-          <FieldsetLegend>{t("sectionTitle")}</FieldsetLegend>
+          <FieldsetLegend>{t("logic.translateTitle")}</FieldsetLegend>
           <div
             className="mb-10 flex gap-px divide-x-2 border border-gray-300"
             key={primaryLanguage}
