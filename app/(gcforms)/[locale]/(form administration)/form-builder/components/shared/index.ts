@@ -11,6 +11,7 @@ export { TagInput } from "./tag-input";
 export { LockedBadge } from "./LockedBadge";
 export { InfoDetails } from "./InfoDetails";
 export { ResponseDeliveryHelpButton } from "./ResponseDeliveryHelpDialog";
+export { FormPurposeHelpButton } from "./FormPurposeHelpButton";
 export { toast } from "./Toast";
 export { EmailResponseSettings } from "./EmailResponseSettings";
 export { ConditionalIndicatorOption } from "./conditionals/ConditionalIndicatorOption";
