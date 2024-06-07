@@ -146,6 +146,7 @@ describe("useAllowPublish", () => {
         ],
       },
       isPublished: true,
+      formPurpose: "form purpose",
       deliveryOption: {
         emailAddress: "test@example.com",
         emailSubjectEn: "email subject in English",
