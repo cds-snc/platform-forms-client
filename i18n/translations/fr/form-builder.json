@@ -473,9 +473,9 @@
   "publishYourForm": "Publier votre formulaire",
   "publishYourFormInstructions": {
     "settings": "Paramètres",
-    "classification": "Classification des données",
-    "deliveryOption": "Option de livraison",
-    "purpose": "Objectif et utilisation",
+    "classification": "Classification des données ",
+    "deliveryOption": "Option de livraison ",
+    "purpose": "Usage prévu ",
     "text1": "Veuillez franchir les étapes suivantes avant de publier votre formulaire.",
     "text2": "",
     "vaultOption": "Réponses à télécharger",
@@ -560,9 +560,9 @@
       "3": "audits"
     },
     "purpose": {
-      "admin": "fins administratives",
-      "nonAdmin": "fins non-administratives",
-      "unset": "pas définie"
+      "admin": "Fins administratives",
+      "nonAdmin": "Fins non-administratives",
+      "unset": "Pas défini"
     }
   },
   "settingsResponseDelivery": {
@@ -575,7 +575,7 @@
     "vaultOptionHint": {
       "text1": " Les réponses soumises apparaîtront sur",
       "text2": "la page Réponses",
-      "text3": " Formulaires GC conserve les données temporairement. Formulaires GC conserve les données temporairement pour 30 hours."
+      "text3": " Formulaires GC conserve les données temporairement pour 30 hours."
     },
     "emailOption": "Recevoir les réponses par courriel",
     "saveButton": "Enregistrer les modifications",
@@ -868,7 +868,7 @@
     "newSection": "Nouvelle section",
     "addSection": "Ajouter une section",
     "treeAriaLabel": "Sections Formulaires GC",
-    "addSectionPlaceholder": "Add a section name [FR]",
+    "addSectionPlaceholder": "Ajouter un nom à la section",
     "addElement": {
       "empty": {
         "title": "Section vide",
@@ -892,11 +892,11 @@
       "summary": "What to include in a privacy notice"
     },
     "treeView": {
-      "emptyPageTextElement": "Empty page text [FR]",
-      "emptyFormElement": "Empty form queston element [FR]",
+      "emptyPageTextElement": "Élément de texte de page sans contenu",
+      "emptyFormElement": "Élément de question sans contenu",
       "keyboardNav": {
-        "label": "[FR]Keyboard shortcuts",
-        "body": "[FR]<p className=\"mb-4\">Navigate the questions and sections using the arrow keys.</p><p><strong>Drag and drop:</strong></p>\n<ul><li>control + D to pick up and item</li><li>arrow keys to drag the item</li><li>enter key to drop the item</li></ul>"
+        "label": "Raccourcis clavier",
+        "body": "<p className=\"mb-4\">Naviguer les questions et les sections à l'aide des touches fléchées.</p><p><strong>Glisser-déposer :</strong></p>\n<ul><li>Contrôle + D pour prendre un élément</li><li>touches fléchées pour faire glisser l'élément</li><li>Appuyer Entrée pour déposer l'élément</li></ul>"
       }
     }
   },
@@ -905,5 +905,5 @@
     "title": "Votre formulaire a été soumis",
     "sectionTitle": "Titre de la section"
   },
-  "next": "Next"
+  "next": "Continuer"
 }

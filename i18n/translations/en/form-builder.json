@@ -575,7 +575,7 @@
     "vaultOptionHint": {
       "text1": "Submitted responses will appear on the",
       "text2": "Responses page",
-      "text3": " GC Forms holds data temporarily. GC Forms holds data temporarily for 30 days."
+      "text3": " GC Forms holds data temporarily for 30 days."
     },
     "emailOption": "Receive responses by email",
     "saveButton": "Save changes",
@@ -904,5 +904,5 @@
     "title": "Your form has been submitted",
     "sectionTitle": "Section title"
   },
-  "next": "Next"
+  "next": "Continue"
 }
