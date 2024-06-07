@@ -312,44 +312,6 @@ export const TranslateWithGroups = () => {
           {/* END INTRO */}
         </section>
 
-        {/* ELEMENTS */}
-        <section>
-          {
-            // Loop through each group and render the elements in the group
-          }
-          {groups &&
-            Object.keys(groups).map((groupKey) => {
-              const thisGroup = groups[groupKey];
-              const groupName = thisGroup.name;
-              if (groupKey == "review" || groupKey == "end") return null;
-              return (
-                <div key={groupKey}>
-                  <SectionTitle>
-                    {t("logic.sectionTitle")} <em>{groupName}</em>
-                  </SectionTitle>
-                  <GroupSection
-                    group={thisGroup}
-                    groupId={groupKey}
-                    primaryLanguage={primaryLanguage}
-                    secondaryLanguage={secondaryLanguage}
-                  />
-                  {sortGroup({ form, group: thisGroup }).map((element, index) => {
-                    return (
-                      <div className="section" id={`section-${index}`} key={element.id}>
-                        <Element
-                          index={index}
-                          element={element}
-                          primaryLanguage={primaryLanguage}
-                        />
-                      </div>
-                    );
-                  })}
-                </div>
-              );
-            })}
-        </section>
-        {/* END ELEMENTS */}
-
         {/* PRIVACY */}
         <section>
           <SectionTitle>{t("privacyStatement")}</SectionTitle>
@@ -408,6 +370,44 @@ export const TranslateWithGroups = () => {
           </fieldset>
         </section>
         {/* END PRIVACY */}
+
+        {/* ELEMENTS */}
+        <section>
+          {
+            // Loop through each group and render the elements in the group
+          }
+          {groups &&
+            Object.keys(groups).map((groupKey) => {
+              const thisGroup = groups[groupKey];
+              const groupName = thisGroup.name;
+              if (groupKey == "review" || groupKey == "end") return null;
+              return (
+                <div key={groupKey}>
+                  <SectionTitle>
+                    {t("logic.sectionTitle")} <em>{groupName}</em>
+                  </SectionTitle>
+                  <GroupSection
+                    group={thisGroup}
+                    groupId={groupKey}
+                    primaryLanguage={primaryLanguage}
+                    secondaryLanguage={secondaryLanguage}
+                  />
+                  {sortGroup({ form, group: thisGroup }).map((element, index) => {
+                    return (
+                      <div className="section" id={`section-${index}`} key={element.id}>
+                        <Element
+                          index={index}
+                          element={element}
+                          primaryLanguage={primaryLanguage}
+                        />
+                      </div>
+                    );
+                  })}
+                </div>
+              );
+            })}
+        </section>
+        {/* END ELEMENTS */}
 
         {/* CONFIRMATION */}
         <section>
