@@ -536,6 +536,16 @@
     "description": "Nous utiliserons cette information pour déterminer comment traiter les réponses qui sont dans Formulaires GC depuis plus de 45 jours.",
     "personalInfo": "Renseignements personnels servant à prendre une décision qui touche un individu",
     "helpUs": "Dites-nous comment vous prévoyez utiliser les réponses recueillies",
+    "learnMore": "En savoir plus sur les fins administratives",
+    "learnMoreBox": {
+      "title": "En savoir plus sur les fins administratives",
+      "description": "La <a href='https://www.justice.gc.ca/fra/sjc-csj/lprp-pa/dd-dp/modern_3.html?wbdisable=true'>Loi sur la protection des renseignements personnels</a> définit les fins administrative comme étant « l’usage de renseignements personnels concernant un individu dans le cadre d’une décision le touchant directement ».",
+      "personalInfo": "Exemples d’usages administratifs :",
+      "personalInfoList": "<li>Utiliser le numéro d’assurance sociale d'une personne pour vérifier son identité.</li><li>Utiliser le revenu annuel d’une personne pour évaluer son admissibilité.</li><li>Utiliser l’âge d'une personne pour administrer une prestation.</li>",
+      "nonAdminInfo": "Exemples d’usages non administratifs :",
+      "nonAdminInfoList": "<li>Recueillir l’adresse courriel d’une personne pour l’inscrire à un événement.</li><li>Recueillir l’âge ou l’identité de genre d’une personne pour un sondage.</li><li>Recueillir le nom ou l’adresse d’une entreprise pour administrer une subvention ou une contribution (tant qu’il ne s’agit pas des renseignements personnels d’une personne).</li>",
+      "contactCoordinator": "Si vous doutez, nous vous recommandons de contacter votre <a href='https://www.tbs-sct.canada.ca/ap/atip-aiprp/coord-fra.asp'>coordinateur·rice de l’accès à l’information et de la protection de la vie privée.</a>"
+    },
     "personalInfoDetails": "C’est-à-dire à des fins administratives, par exemple:",
     "personalInfoDetailsVals": {
       "1": "demandes ou candidatures",
