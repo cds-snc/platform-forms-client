@@ -37,6 +37,7 @@ export const LogicNavigation = () => {
             side="top"
             triggerClassName="align-middle ml-1"
             tooltipClassName="font-normal whitespace-normal"
+            iconTitle={t("logic.resetRulesHelp")}
           >
             <strong>{t("logic.resetRules")}</strong>
             <p>{t("logic.resetRulesDescription")}</p>
