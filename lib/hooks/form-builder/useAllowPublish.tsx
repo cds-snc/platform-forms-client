@@ -90,6 +90,8 @@ export const useAllowPublish = () => {
 
   const userCanPublish = ability?.can("update", "FormRecord", "isPublished");
 
+  // Note the key names here can be anthing but
+  // the values must be booleans
   const data = useMemo(
     () => ({
       title: !!form?.titleEn || !!form?.titleFr,
@@ -97,7 +99,7 @@ export const useAllowPublish = () => {
       privacyPolicy: !!form?.privacyPolicy?.descriptionEn || !!form?.privacyPolicy?.descriptionFr,
       confirmationMessage:
         !!form?.confirmation?.descriptionEn || !!form?.confirmation?.descriptionFr,
-      formPurpose: !!formPurpose,
+      purpose: !!formPurpose,
       translate: isFormTranslated(form),
     }),
     [form, formPurpose]
