@@ -37,7 +37,7 @@ export const Publish = ({ id }: { id: string }) => {
     setIsPublished,
     getSchema,
     getName,
-    formPurposeStr,
+    formPurpose,
     getDeliveryOption,
     securityAttribute,
   } = useTemplateStore((s) => ({
@@ -46,7 +46,7 @@ export const Publish = ({ id }: { id: string }) => {
     setIsPublished: s.setIsPublished,
     getSchema: s.getSchema,
     getName: s.getName,
-    formPurposeStr: s.formPurpose,
+    formPurpose: s.formPurpose,
     getDeliveryOption: s.getDeliveryOption,
     securityAttribute: s.securityAttribute,
   }));
@@ -73,17 +73,17 @@ export const Publish = ({ id }: { id: string }) => {
     return checked ? (
       <CircleCheckIcon className="mr-2 inline-block w-9 fill-green-700" />
     ) : (
-      <CancelIcon className="mr-2 inline-block h-9 w-9 fill-red-700" />
+      <CancelIcon className="mr-2 inline-block size-9 fill-red-700" />
     );
   };
 
   const supportHref = `/${i18n.language}/support`;
 
   let formPurposeText = t("settingsPurposeAndUse.purpose.unset");
-  if (formPurposeStr === "admin") {
+  if (formPurpose === "admin") {
     formPurposeText = t("settingsPurposeAndUse.purpose.admin");
   }
-  if (formPurposeStr === "nonAdmin") {
+  if (formPurpose === "nonAdmin") {
     formPurposeText = t("settingsPurposeAndUse.purpose.nonAdmin");
   }
 
@@ -121,7 +121,6 @@ export const Publish = ({ id }: { id: string }) => {
     }
 
     try {
-      // @TODO: do we need this save?
       updateTemplate({
         id,
         name: getName(),
@@ -210,7 +209,7 @@ export const Publish = ({ id }: { id: string }) => {
         </li>
 
         <li className="my-4">
-          {hasHydrated ? <Icon checked={formPurposeStr != ""} /> : IconLoading}
+          {hasHydrated ? <Icon checked={formPurpose != ""} /> : IconLoading}
           <strong>
             <LinkButton href={`/${i18n.language}/form-builder/${id}/settings`}>
               {t("publishYourFormInstructions.settings")}
