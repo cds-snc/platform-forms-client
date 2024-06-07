@@ -108,7 +108,10 @@ export const RightPanel = ({ id }: { id: string }) => {
   }
 
   return (
-    <div className="relative">
+    <section className="relative" aria-labelledby="right_panel_title">
+      <h1 className="sr-only" id="right_panel_title">
+        {t("rightPanel.title")}
+      </h1>
       <div className={cn("fixed right-0", isIntersecting ? "top-20" : "top-0", open && "hidden")}>
         <Button
           theme="link"
@@ -216,6 +219,6 @@ export const RightPanel = ({ id }: { id: string }) => {
           </div>
         </div>
       </Transition.Root>
-    </div>
+    </section>
   );
 };

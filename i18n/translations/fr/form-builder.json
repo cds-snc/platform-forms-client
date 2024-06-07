@@ -828,6 +828,7 @@
   "saved": "Enregistré",
   "opensInNewTab": "ouvre un nouvel onglet",
   "rightPanel": {
+    "title": "[FR]Right Panel",
     "openPanel": "Conception du formulaire",
     "closePanel": "Fermer le panneau",
     "questions": "Questions",

@@ -828,6 +828,7 @@
   "saved": "Saved",
   "opensInNewTab": "opens in a new tab",
   "rightPanel": {
+    "title": "Right Panel",
     "openPanel": "Design form",
     "closePanel": "Close panel",
     "questions": "Questions",
