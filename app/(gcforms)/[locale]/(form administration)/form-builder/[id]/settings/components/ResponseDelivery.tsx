@@ -13,7 +13,7 @@ import { Radio } from "@formBuilder/components/shared";
 import { Button } from "@clientComponents/globals";
 import { useTemplateStore } from "@lib/store/useTemplateStore";
 import { completeEmailAddressRegex } from "@lib/utils/form-builder";
-import { ResponseDeliveryHelpButton } from "@formBuilder/components/shared";
+import { ResponseDeliveryHelpButton, FormPurposeHelpButton } from "@formBuilder/components/shared";
 import {
   ClassificationType,
   ClassificationSelect,
@@ -24,6 +24,8 @@ import {
   updateTemplateSecurityAttribute,
 } from "@formBuilder/actions";
 import { useRefresh } from "@lib/hooks/useRefresh";
+
+import Markdown from "markdown-to-jsx";
 
 import { toast } from "@formBuilder/components/shared/Toast";
 import { ErrorSaving } from "@formBuilder/components/shared/ErrorSaving";
@@ -284,12 +286,9 @@ export const ResponseDelivery = () => {
     <>
       {status === "authenticated" && (
         <div className="mb-10">
-          <div className="mb-4">
+          <div className="mb-10">
             <h2 className="mb-6">{t("settingsResponseDelivery.selectClassification")}</h2>
-            <p className="mb-5 inline-block bg-purple-200 p-3 text-sm font-bold">
-              {t("settingsResponseDelivery.beforePublishMessage")}
-            </p>
-            <div>
+            <div className="mb-10">
               <ClassificationSelect
                 className="max-w-[400px] truncate bg-gray-soft p-1 pr-10"
                 lang={lang}
@@ -299,7 +298,7 @@ export const ResponseDelivery = () => {
               />
             </div>
 
-            <div className="mb-4">
+            <div className="mb-10">
               <h2 className="mb-6">{t("settingsResponseDelivery.title")}</h2>
               {protectedBSelected ? (
                 <p className="mb-5 inline-block bg-purple-200 p-3 text-sm font-bold">
@@ -330,57 +329,79 @@ export const ResponseDelivery = () => {
                 label={emailLabel}
                 onChange={updateDeliveryOption}
               />
+
+              {deliveryOptionValue === DeliveryOption.email && (
+                <ResponseEmail
+                  inputEmail={inputEmailValue}
+                  setInputEmail={setInputEmailValue}
+                  subjectEn={subjectEnValue}
+                  setSubjectEn={setSubjectEnValue}
+                  subjectFr={subjectFrValue}
+                  setSubjectFr={setSubjectFrValue}
+                  isInvalidEmailError={isInvalidEmailError}
+                  setIsInvalidEmailError={setIsInvalidEmailError}
+                />
+              )}
+              {deliveryOptionValue !== DeliveryOption.email && <div className="mb-8"></div>}
+
+              <Button
+                disabled={!isValid || isPublished}
+                theme="secondary"
+                onClick={saveDeliveryOptions}
+              >
+                {t("settingsResponseDelivery.saveButton")}
+              </Button>
+              <ResponseDeliveryHelpButton />
             </div>
 
-            {deliveryOptionValue === DeliveryOption.email && (
-              <ResponseEmail
-                inputEmail={inputEmailValue}
-                setInputEmail={setInputEmailValue}
-                subjectEn={subjectEnValue}
-                setSubjectEn={setSubjectEnValue}
-                subjectFr={subjectFrValue}
-                setSubjectFr={setSubjectFrValue}
-                isInvalidEmailError={isInvalidEmailError}
-                setIsInvalidEmailError={setIsInvalidEmailError}
+            <div className="mb-10">
+              <h2>{t("settingsPurposeAndUse.title")}</h2>
+              <p className="mb-2">
+                <strong>{t("settingsPurposeAndUse.helpUs")}</strong>
+              </p>
+              <p className="text-sm mb-6">{t("settingsPurposeAndUse.description")}</p>
+              <Radio
+                id="purposeAndUseAdmin"
+                name="purpose-use"
+                label={t("settingsPurposeAndUse.personalInfo")}
+                disabled={isPublished}
+                checked={purposeOption === PurposeOption.admin}
+                value={PurposeOption.admin}
+                onChange={updatePurposeOption}
               />
-            )}
-
-            <h2 className="mb-6">{t("settingsPurposeAndUse.title")}</h2>
-            <p className="mb-2">{t("settingsPurposeAndUse.helpUs")}</p>
-            <p className="text-sm mb-6">{t("settingsPurposeAndUse.description")}</p>
-            <Radio
-              id="purposeAndUseAdmin"
-              name="purpose-use"
-              label={t("settingsPurposeAndUse.personalInfo")}
-              disabled={isPublished}
-              checked={purposeOption === PurposeOption.admin}
-              value={PurposeOption.admin}
-              onChange={updatePurposeOption}
-            />
-            <div className="text-sm ml-10 mb-4">
-              <p>{t("settingsPurposeAndUse.personalInfoDetails")}</p>
-              <ul>
-                <li>{t("settingsPurposeAndUse.personalInfoDetailsVals.1")}</li>
-                <li>{t("settingsPurposeAndUse.personalInfoDetailsVals.2")}</li>
-                <li>{t("settingsPurposeAndUse.personalInfoDetailsVals.3")}</li>
-              </ul>
-            </div>
-            <Radio
-              id="purposeAndUseNonAdmin"
-              name="purpose-use"
-              label={t("settingsPurposeAndUse.nonAdminInfo")}
-              disabled={isPublished}
-              checked={purposeOption === PurposeOption.nonAdmin}
-              value={PurposeOption.nonAdmin}
-              onChange={updatePurposeOption}
-            />
-            <div className="text-sm ml-10 mb-4">
-              <p>{t("settingsPurposeAndUse.nonAdminInfoDetails")}</p>
-              <ul>
-                <li>{t("settingsPurposeAndUse.nonAdminInfoDetailsVals.1")}</li>
-                <li>{t("settingsPurposeAndUse.nonAdminInfoDetailsVals.2")}</li>
-                <li>{t("settingsPurposeAndUse.nonAdminInfoDetailsVals.3")}</li>
-              </ul>
+              <div className="text-sm ml-12 mb-4">
+                <div>
+                  <Markdown options={{ forceBlock: true }}>
+                    {t("settingsPurposeAndUse.personalInfoDetails")}
+                  </Markdown>
+                </div>
+                <ul>
+                  <li>{t("settingsPurposeAndUse.personalInfoDetailsVals.1")}</li>
+                  <li>{t("settingsPurposeAndUse.personalInfoDetailsVals.2")}</li>
+                  <li>{t("settingsPurposeAndUse.personalInfoDetailsVals.3")}</li>
+                </ul>
+              </div>
+              <Radio
+                id="purposeAndUseNonAdmin"
+                name="purpose-use"
+                label={t("settingsPurposeAndUse.nonAdminInfo")}
+                disabled={isPublished}
+                checked={purposeOption === PurposeOption.nonAdmin}
+                value={PurposeOption.nonAdmin}
+                onChange={updatePurposeOption}
+              />
+              <div className="text-sm ml-12 mb-4">
+                <div>
+                  <Markdown options={{ forceBlock: true }}>
+                    {t("settingsPurposeAndUse.nonAdminInfoDetails")}
+                  </Markdown>
+                </div>
+                <ul>
+                  <li>{t("settingsPurposeAndUse.nonAdminInfoDetailsVals.1")}</li>
+                  <li>{t("settingsPurposeAndUse.nonAdminInfoDetailsVals.2")}</li>
+                  <li>{t("settingsPurposeAndUse.nonAdminInfoDetailsVals.3")}</li>
+                </ul>
+              </div>
             </div>
           </div>
 
@@ -391,7 +412,7 @@ export const ResponseDelivery = () => {
           >
             {t("settingsResponseDelivery.saveButton")}
           </Button>
-          <ResponseDeliveryHelpButton />
+          <FormPurposeHelpButton />
         </div>
       )}
     </>

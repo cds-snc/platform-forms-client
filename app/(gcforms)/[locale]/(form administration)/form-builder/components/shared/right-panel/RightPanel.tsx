@@ -33,7 +33,7 @@ const TabButton = ({
           className={cn(
             selected
               ? "border-indigo-500 text-indigo-600"
-              : "border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700",
+              : "border-transparent text-slate-500 hover:border-gray-300 hover:text-slate-700",
             "whitespace-nowrap border-b-2 px-2 py-2 flex justify-center w-full",
             className
           )}
@@ -56,6 +56,7 @@ export const RightPanel = ({ id }: { id: string }) => {
   const hasHydrated = useRehydrate();
 
   const selectedElementId = useGroupStore((s) => s.selectedElementId);
+  const setId = useGroupStore((state) => state.setId);
   const item = (selectedElementId && getElement(selectedElementId)) || null;
 
   useEffect(() => {
@@ -173,6 +174,8 @@ export const RightPanel = ({ id }: { id: string }) => {
                       <TabButton
                         text={t("rightPanel.logic")}
                         onClick={() => {
+                          // Set the active group to the start group before navigating to the logic tab
+                          setId("start");
                           router.push(`/${i18n.language}/form-builder/${id}/edit/logic`);
                         }}
                       />
@@ -180,7 +183,7 @@ export const RightPanel = ({ id }: { id: string }) => {
                     <Tab.Panels>
                       <Tab.Panel>
                         {/* Tree */}
-                        <div className="m-0 mt-1 w-full p-4">
+                        <div className="m-0 w-full">
                           <TreeView
                             ref={treeView}
                             addItem={() => {}}

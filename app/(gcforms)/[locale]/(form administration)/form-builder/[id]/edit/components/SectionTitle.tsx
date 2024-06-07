@@ -44,6 +44,7 @@ export const SectionTitle = ({ groupTitle, groupId }: { groupTitle: string; grou
       onBlur={handleOnBlur}
       onChange={handleChange}
       {...getLocalizationAttribute()}
+      ariaLabel={t("groups.sectionTitle")}
     />
   );
 };

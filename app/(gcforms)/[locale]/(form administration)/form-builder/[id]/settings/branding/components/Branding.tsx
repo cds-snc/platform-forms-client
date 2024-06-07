@@ -102,9 +102,6 @@ export const Branding = ({ hasBrandingRequestForm }: { hasBrandingRequestForm: b
   return (
     <div>
       <h2 className="mb-6">{t("branding.heading")}</h2>
-      <p className="mb-5 inline-block bg-purple-200 p-3 text-sm font-bold">
-        {t("settingsResponseDelivery.beforePublishMessage")}
-      </p>
       <p className="block text-sm">{t("branding.text1")}</p>
       {/* Logo select */}
       <div>

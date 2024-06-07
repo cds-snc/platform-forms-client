@@ -141,7 +141,7 @@ export const SettingsPanel = () => {
 
   return (
     <>
-      <div className="mb-4 flex w-[800px] justify-between rounded-lg border-1 border-indigo-500 bg-violet-50">
+      <div className="mb-4 flex w-[800px] justify-between rounded-lg border-1 border-indigo-700 bg-violet-50">
         <div className="flex w-full justify-between">
           <div className="ml-4 inline-block">
             <div className="my-[6px] border-[.5px] border-violet-50 p-1 px-2 hover:border-[.5px] hover:border-slate-800">
@@ -173,7 +173,8 @@ export const SettingsPanel = () => {
               onClick={() => {
                 setShowShowSettings(true);
               }}
-              className="flex h-full rounded-r-md bg-indigo-500 p-1 pt-2 text-white"
+              className="flex h-full rounded-r-md bg-indigo-700 p-1 pt-2 text-white font-bold"
+              aria-label={t("more")}
             >
               {"..."}
             </button>

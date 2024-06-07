@@ -11,6 +11,7 @@ interface Props {
   className?: string;
   placeholder?: string;
   describedBy?: string;
+  ariaLabel?: string;
   value: string | number;
   onChange: (e: React.ChangeEvent<HTMLTextAreaElement>) => void;
   onKeyDown?: (e: React.KeyboardEvent<HTMLTextAreaElement>) => void;
@@ -27,6 +28,7 @@ const ExpandingInput = React.forwardRef<Ref, Props>((props, ref) => {
     id,
     name,
     describedBy,
+    ariaLabel, // Use a real <label> instead when possible
     value,
     onChange,
     onKeyDown,
@@ -65,6 +67,7 @@ const ExpandingInput = React.forwardRef<Ref, Props>((props, ref) => {
         ref={ref}
         {...(lang && { lang: lang })}
         autoComplete="off"
+        {...(ariaLabel && { "aria-label": ariaLabel })}
       />
     </div>
   );
