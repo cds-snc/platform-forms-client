@@ -128,6 +128,7 @@ describe("useAllowPublish", () => {
         },
         privacyPolicy: { descriptionEn: "privacy text en", descriptionFr: "privacy text fr" },
         confirmation: { descriptionEn: "confirm text en", descriptionFr: "confirm text fr" },
+        formPurpose: true,
         layout: [],
         elements: [
           {
@@ -155,6 +156,7 @@ describe("useAllowPublish", () => {
       current: { isPublishable },
     } = createTemplateStore({
       form: store.form,
+      formPurpose: store.formPurpose,
       isPublished: store.isPublished,
       deliveryOption: store.deliveryOption,
     });
