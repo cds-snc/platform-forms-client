@@ -9,6 +9,7 @@ interface TooltipProps {
   triggerClassName?: string;
   children: React.ReactNode | string;
   side?: "left" | "right" | "top" | "bottom";
+  iconTitle?: string;
 }
 
 interface TooltipSimpleProps extends TooltipProps {
@@ -79,13 +80,14 @@ export const Info = ({
   tooltipClassName = "",
   triggerClassName = "",
   side = "left",
+  iconTitle,
 }: TooltipProps) => {
   return (
     <TooltipPrimitive.Provider delayDuration={100}>
       <TooltipPrimitive.Root>
         <TooltipPrimitive.Trigger asChild>
           <button className={cn("", triggerClassName)}>
-            <HelpIcon />
+            <HelpIcon {...(iconTitle && { title: iconTitle })} />
           </button>
         </TooltipPrimitive.Trigger>
         <TooltipPrimitive.Content
