@@ -62,7 +62,8 @@ export const GroupNode = (node: NodeProps) => {
     <div>
       <div>
         <label htmlFor={node.id} className="inline-block w-5/6 truncate text-sm text-slate-600">
-          {node.data.label.name}
+          {/* Case of Review and End (no name) hide visuall but include text required for a label */}
+          {node.data.label.name || <span className="sr-only">{node.id}</span>}
         </label>
       </div>
       <div

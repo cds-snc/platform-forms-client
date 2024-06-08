@@ -37,8 +37,8 @@ export const Publish = ({ id }: { id: string }) => {
     setIsPublished,
     getSchema,
     getName,
-    getDeliveryOption,
     formPurpose,
+    getDeliveryOption,
     securityAttribute,
   } = useTemplateStore((s) => ({
     id: s.id,
@@ -46,8 +46,8 @@ export const Publish = ({ id }: { id: string }) => {
     setIsPublished: s.setIsPublished,
     getSchema: s.getSchema,
     getName: s.getName,
-    getDeliveryOption: s.getDeliveryOption,
     formPurpose: s.formPurpose,
+    getDeliveryOption: s.getDeliveryOption,
     securityAttribute: s.securityAttribute,
   }));
 
@@ -73,7 +73,7 @@ export const Publish = ({ id }: { id: string }) => {
     return checked ? (
       <CircleCheckIcon className="mr-2 inline-block w-9 fill-green-700" />
     ) : (
-      <CancelIcon className="mr-2 inline-block h-9 w-9 fill-red-700" />
+      <CancelIcon className="mr-2 inline-block size-9 fill-red-700" />
     );
   };
 
@@ -121,7 +121,6 @@ export const Publish = ({ id }: { id: string }) => {
     }
 
     try {
-      // @TODO: do we need this save?
       updateTemplate({
         id,
         name: getName(),

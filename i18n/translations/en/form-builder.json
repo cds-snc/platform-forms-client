@@ -848,6 +848,7 @@
     "saveRule": "Save",
     "saveNote": "Adding and saving a rule, turns off Auto-flow sections",
     "resetRules": "Reset all rules",
+    "resetRulesHelp": "Reset all rules help",
     "resetRulesDescription": "The autoflow feature will reset the progression between sections into a simple linear flow, overriding any existing branching rules that were applied.",
     "multiRulesWarning": {
       "text1": "The order and flow is set based on the rules applied.",

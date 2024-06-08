@@ -846,6 +846,7 @@
     "sectionTitle": "Section :",
     "addRule": "Ajouter une régle",
     "resetRules": "Réinitialiser toutes les règles",
+    "resetRulesHelp": "[FR]Reset all rules help",
     "resetRulesDescription": "La fonction de flux automatique réinitialise la progression entre les sections en un flux linéaire simple, remplaçant ainsi toutes les règles de logique de branchement qui s'appliquent.",
     "saveRule": "Enregistrer",
     "saveNote": "Ajouter et enregistrer une règle, désactive le ",
