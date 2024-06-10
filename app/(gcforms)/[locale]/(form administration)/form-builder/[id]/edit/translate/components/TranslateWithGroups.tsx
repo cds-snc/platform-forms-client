@@ -12,7 +12,6 @@ import {
   LocalizedGroupProperties,
   Language,
 } from "@lib/types/form-builder-types";
-import { DownloadCSVWithGroups } from "./DownloadCSVWithGroups";
 import { RichTextEditor } from "../../components/elements/lexical-editor/RichTextEditor";
 import { LanguageLabel } from "./LanguageLabel";
 import { FieldsetLegend, SectionTitle } from ".";
@@ -202,10 +201,6 @@ export const TranslateWithGroups = () => {
 
         <div className="mb-4">
           <SaveButton />
-        </div>
-
-        <div className="mb-8">
-          <DownloadCSVWithGroups />
         </div>
 
         <div>
@@ -436,9 +431,11 @@ export const TranslateWithGroups = () => {
 
         {/* CONFIRMATION */}
         <section>
-          <SectionTitle>{t("confirmationMessage")}</SectionTitle>
+          <SectionTitle>
+            {t("logic.sectionTitle")} <em>{groups?.["end"]?.name}</em>
+          </SectionTitle>
           <fieldset>
-            <FieldsetLegend>{t("pageText")}</FieldsetLegend>
+            <FieldsetLegend>{t("confirmationMessage")}</FieldsetLegend>
             <div
               className="mb-10 flex gap-px divide-x-2 border border-gray-300"
               key={primaryLanguage}
