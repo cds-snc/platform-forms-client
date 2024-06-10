@@ -43,7 +43,7 @@ export const GroupNode = (node: NodeProps) => {
   const getElement = useGroupStore((state) => state.getElement);
   const groupIsSelected = selectedGroupId === node.id;
   const typesWithOptions = ["radio", "checkbox", "select", "dropdown"];
-  const { t } = useTranslation("formBuilder");
+  const { t } = useTranslation("form-builder");
 
   const { getTitle } = useElementTitle();
 
@@ -82,9 +82,11 @@ export const GroupNode = (node: NodeProps) => {
         {node.id !== "end" && node.id !== "review" && (
           <button
             {...handleClick}
-            className="absolute right-[-20px] top-[-20px] cursor-pointer outline-2 outline-violet-800 hover:scale-125"
+            className={cn(
+              "absolute right-[-20px] top-[-20px] cursor-pointer outline-offset-8 outline-slate-800 hover:scale-125 rounded-full"
+            )}
           >
-            <QuestionRuleSvg title={t("linkGroup")} />
+            <QuestionRuleSvg title={t("groups.editSection", { name: node.data.label.name })} />
           </button>
         )}
         {!node.data.children.length && <div className="min-h-[50px] min-w-[150px]"></div>}
@@ -140,13 +142,17 @@ export const GroupNode = (node: NodeProps) => {
                 setId(node.id);
                 setSelectedElementId(Number(child.index));
               }}
-              className={cn(nodeClassName, selected, "focus:border-violet-800")}
+              className={cn(
+                nodeClassName,
+                selected,
+                "focus:border-violet-800 outline-offset-8 outline-slate-800 hover:scale-125 rounded-full"
+              )}
             >
               <div className="line-clamp-2 truncate text-wrap">
                 {getTitle(child.data as ElementProperties).substring(0, 300)}
               </div>
               <div className="absolute right-[10px] top-[10px] cursor-pointer hover:scale-125">
-                <OptionRuleSvg title={t("linkGroup")} />
+                <OptionRuleSvg title={t("groups.editRules", { name: node.data.label.name })} />
               </div>
             </button>
           );

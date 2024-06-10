@@ -26,6 +26,11 @@ const TabButton = ({
   onClick: () => void;
   className?: string;
 }) => {
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLButtonElement>) => {
+    if (e.key === "Enter" || e.key === " ") {
+      onClick();
+    }
+  };
   return (
     <Tab as={Fragment}>
       {({ selected }) => (
@@ -38,6 +43,7 @@ const TabButton = ({
             className
           )}
           onClick={onClick}
+          onKeyDown={handleKeyDown}
         >
           <span className={cn(selected && "font-bold")}>{text}</span>
         </button>
@@ -108,7 +114,10 @@ export const RightPanel = ({ id }: { id: string }) => {
   }
 
   return (
-    <div className="relative">
+    <section className="relative" aria-labelledby="right_panel_title">
+      <h2 className="sr-only" id="right_panel_title">
+        {t("rightPanel.title")}
+      </h2>
       <div className={cn("fixed right-0", isIntersecting ? "top-20" : "top-0", open && "hidden")}>
         <Button
           theme="link"
@@ -216,6 +225,6 @@ export const RightPanel = ({ id }: { id: string }) => {
           </div>
         </div>
       </Transition.Root>
-    </div>
+    </section>
   );
 };
