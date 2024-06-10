@@ -109,10 +109,9 @@ export const DownloadTable = ({
         </Alert.Success>
       )}
       <section>
-        <SkipLinkReusable
-          text={t("downloadResponsesTable.skipLink")}
-          anchor="#reportProblemButton"
-        />
+        <SkipLinkReusable anchor="#reportProblemButton">
+          {t("downloadResponsesTable.skipLink")}
+        </SkipLinkReusable>
         <div id="notificationsTop">
           {downloadError && (
             <Alert.Danger>

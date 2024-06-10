@@ -908,5 +908,13 @@
     "sectionTitle": "Section title"
   },
   "next": "Continue",
-  "questionsTitle": "Form Setup (pilot)"
+  "formSetup": {
+    "title": "Set up your form"
+  },
+  "skipLink": {
+    "designForm": "Skip to Design Form",
+    "questions": "Skip to Set up your form",
+    "translate": "Skip to Enter your translation",
+    "logic": "Skip to Logic"
+  }
 }

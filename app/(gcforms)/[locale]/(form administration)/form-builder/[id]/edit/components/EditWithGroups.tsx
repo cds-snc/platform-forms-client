@@ -21,6 +21,7 @@ import { LangSwitcher } from "@formBuilder/components/shared/LangSwitcher";
 import { PrivacyDescriptionBefore } from "./PrivacyDescriptionBefore";
 import { PrivacyDescriptionBody } from "./PrivacyDescriptionBody";
 import { ConfirmationTitle } from "./ConfirmationTitle";
+import { SkipLinkReusable } from "@clientComponents/globals/SkipLinkReusable";
 
 export const EditWithGroups = () => {
   const { t } = useTranslation("form-builder");
@@ -108,8 +109,10 @@ export const EditWithGroups = () => {
 
   return (
     <>
-      <h1 className="visually-hidden">{t("edit")}</h1>
-      <h2>{t("questionsTitle")}</h2>
+      <h2 id="questionsTitle" tabIndex={-1}>
+        {t("formSetup.title")}
+      </h2>
+      <SkipLinkReusable anchor="#rightPanelTitle">{t("skipLink.designForm")}</SkipLinkReusable>
       <div className="mb-4">
         <SaveButton />
       </div>
@@ -206,6 +209,7 @@ export const EditWithGroups = () => {
           className={"rounded-lg"}
         />
       )}
+      <SkipLinkReusable anchor="#rightPanelTitle">{t("skipLink.designForm")}</SkipLinkReusable>
     </>
   );
 };

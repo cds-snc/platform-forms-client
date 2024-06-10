@@ -20,6 +20,7 @@ import { SaveButton } from "@formBuilder/components/shared/SaveButton";
 import { FormElement } from "@lib/types";
 import { alphabet, sortByLayout } from "@lib/utils/form-builder";
 import { getLayoutFromGroups } from "@lib/utils/form-builder/getLayoutFromGroups";
+import { SkipLinkReusable } from "@clientComponents/globals/SkipLinkReusable";
 
 const Element = ({
   element,
@@ -125,7 +126,10 @@ export const TranslateWithGroups = () => {
   return (
     <>
       <div className="mr-10">
-        <h1 className="mb-0 mt-8 border-0">{t("translateTitle")}</h1>
+        <h2 className="mb-0 mt-8 border-0" id="translateTitle" tabIndex={-1}>
+          {t("translateTitle")}
+        </h2>
+        <SkipLinkReusable anchor="#rightPanelTitle">{t("skipLink.designForm")}</SkipLinkReusable>
         <p>{t("translateDescription")}</p>
         <br />
 
@@ -369,6 +373,7 @@ export const TranslateWithGroups = () => {
           </fieldset>
         </section>
         {/* END CONFIRMATION */}
+        <SkipLinkReusable anchor="#rightPanelTitle">{t("skipLink.designForm")}</SkipLinkReusable>
       </div>
     </>
   );

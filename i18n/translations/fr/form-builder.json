@@ -903,11 +903,18 @@
       }
     }
   },
-
   "confirmation": {
     "title": "Votre formulaire a été soumis",
     "sectionTitle": "Titre de la section"
   },
   "next": "Continuer",
-  "questionsTitle": "[FR]Form Setup (pilot)"
+  "formSetup": {
+    "title": "[FR]Set up your form"
+  },
+  "skipLink": {
+    "designForm": "[FR]Skip to Design Form",
+    "questions": "[FR]Skip to Set up your form",
+    "translate": "[FR]Skip to Enter your translation",
+    "logic": "[FR]Skip to Logic"
+  }
 }
