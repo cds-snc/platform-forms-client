@@ -11,6 +11,14 @@ const getReviewIndex = (currentGroups: GroupsType) => {
   return elements.indexOf("review");
 };
 
+const getTargetDraggingPositionType = (target: DraggingPosition) => {
+  if (Object.prototype.hasOwnProperty.call(target, "targetItem")) {
+    return "item";
+  }
+
+  return "between-items";
+};
+
 export const handleCanDropAt = (
   items: TreeItem[],
   target: DraggingPosition,
@@ -18,6 +26,7 @@ export const handleCanDropAt = (
 ) => {
   const groupItemsCount = items.filter((item) => item.isFolder).length;
   const nonGroupItemsCount = items.filter((item) => !item.isFolder).length;
+  const targetDraggingPositionType = getTargetDraggingPositionType(target);
 
   // Can't drag Groups + Items together
   if (groupItemsCount > 0 && nonGroupItemsCount > 0) {
@@ -26,32 +35,43 @@ export const handleCanDropAt = (
 
   // If any of the selected items is a group
   if (groupItemsCount >= 1) {
-    // Groups can't be dropped on another group
-    if ((<DraggingPositionBetweenItems>target).parentItem !== "root") {
+    // Groups can't be dropped on another group or item
+    if (targetDraggingPositionType === "item") {
       return false;
     }
 
-    if ((<DraggingPositionItem>target).targetType == "item") {
-      return false;
+    if (targetDraggingPositionType === "between-items") {
+      const currentGroups = getGroups() as GroupsType;
+      const reviewIndex = getReviewIndex(currentGroups);
+
+      if ((<DraggingPositionBetweenItems>target).childIndex > reviewIndex) {
+        return false;
+      }
+
+      if ((<DraggingPositionBetweenItems>target).childIndex === 0) {
+        return false;
+      }
     }
 
-    // Groups can't be dropped after Review
-    const currentGroups = getGroups() as GroupsType;
-    const reviewIndex = getReviewIndex(currentGroups);
-
-    if ((<DraggingPositionBetweenItems>target).childIndex > reviewIndex) {
-      return false;
-    }
-
-    // Groups can't be dropped before Start
-    if ((<DraggingPositionBetweenItems>target).childIndex === 0) {
-      return false;
-    }
+    // default allow
+    return true;
   }
 
-  // If any of the items is not a group, disallow dropping on root
+  // If any of the items is not a group
   if (nonGroupItemsCount >= 1) {
-    if (target.targetType === "between-items" && target.parentItem === "root") {
+    // Can't drop on End
+    if (
+      targetDraggingPositionType === "item" &&
+      (<DraggingPositionItem>target).targetItem === "end"
+    ) {
+      return false;
+    }
+
+    // Can't drop between items on root
+    if (
+      targetDraggingPositionType === "between-items" &&
+      (<DraggingPositionBetweenItems>target).parentItem === "root"
+    ) {
       return false;
     }
   }
