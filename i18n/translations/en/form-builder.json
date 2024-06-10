@@ -907,5 +907,6 @@
     "title": "Your form has been submitted",
     "sectionTitle": "Section title"
   },
-  "next": "Continue"
+  "next": "Continue",
+  "questionsTitle": "Form Setup (pilot)"
 }

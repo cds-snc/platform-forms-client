@@ -908,5 +908,6 @@
     "title": "Votre formulaire a été soumis",
     "sectionTitle": "Titre de la section"
   },
-  "next": "Continuer"
+  "next": "Continuer",
+  "questionsTitle": "[FR]Form Setup (pilot)"
 }

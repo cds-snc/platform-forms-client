@@ -109,6 +109,7 @@ export const EditWithGroups = () => {
   return (
     <>
       <h1 className="visually-hidden">{t("edit")}</h1>
+      <h2>{t("questionsTitle")}</h2>
       <div className="mb-4">
         <SaveButton />
       </div>

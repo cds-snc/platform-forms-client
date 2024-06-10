@@ -17,10 +17,12 @@ export async function generateMetadata({
 }
 
 export default async function Page({ params: { id } }: { params: { id: string } }) {
+  const { t } = await serverTranslation("form-builder");
   const conditionalLogic = await allowGrouping();
 
   return (
     <>
+      <h1 className="sr-only">{t("edit")}</h1>
       {conditionalLogic ? (
         <EditWithGroups />
       ) : (
