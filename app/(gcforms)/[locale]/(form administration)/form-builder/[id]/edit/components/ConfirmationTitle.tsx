@@ -2,9 +2,12 @@
 
 import React from "react";
 import { useTranslation } from "@i18n/client";
+import { useTemplateStore } from "@lib/store/useTemplateStore";
 
 export const ConfirmationTitle = () => {
   const { t } = useTranslation("form-builder");
+  const getGroupsEnabled = useTemplateStore((s) => s.getGroupsEnabled);
+
   return (
     <div className="mb-8 text-[1rem]">
       <div
@@ -15,9 +18,12 @@ export const ConfirmationTitle = () => {
           backgroundRepeat: "repeat-x",
         }}
       ></div>
-      <div className="mb-2 inline-block rounded-md border-1 border-slate-500 bg-slate-50 px-2 py-1 text-slate-500">
-        {t("confirmation.sectionTitle")}
-      </div>
+
+      {getGroupsEnabled() && (
+        <div className="mb-2 inline-block rounded-md border-1 border-slate-500 bg-slate-50 px-2 py-1 text-slate-500">
+          {t("confirmation.sectionTitle")}
+        </div>
+      )}
       <h2 className="mt-0 text-2xl text-slate-500 laptop:mt-0">{t("confirmation.title")}</h2>
     </div>
   );
