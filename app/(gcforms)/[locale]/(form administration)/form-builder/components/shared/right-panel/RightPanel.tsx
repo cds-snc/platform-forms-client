@@ -26,6 +26,11 @@ const TabButton = ({
   onClick: () => void;
   className?: string;
 }) => {
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLButtonElement>) => {
+    if (e.key === "Enter" || e.key === " ") {
+      onClick();
+    }
+  };
   return (
     <Tab as={Fragment}>
       {({ selected }) => (
@@ -38,6 +43,7 @@ const TabButton = ({
             className
           )}
           onClick={onClick}
+          onKeyDown={handleKeyDown}
         >
           <span className={cn(selected && "font-bold")}>{text}</span>
         </button>
