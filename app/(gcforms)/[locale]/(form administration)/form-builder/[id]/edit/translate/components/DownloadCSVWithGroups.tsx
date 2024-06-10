@@ -77,12 +77,12 @@ export const DownloadCSVWithGroups = () => {
     // Sort thorugh the groups....
     if (form.groups) {
       const groups = form.groups;
-      Object.keys(groups).map((groupKey, index) => {
+      Object.keys(groups).map((groupKey) => {
         const group = groups[groupKey];
         const groupElements = sortGroup({ form, group });
 
         data.push([
-          formatText(`Group ${index + 1}`),
+          formatText(`Section: ` + group.name),
           formatText(group.titleEn),
           formatText(group.titleFr),
         ]);
