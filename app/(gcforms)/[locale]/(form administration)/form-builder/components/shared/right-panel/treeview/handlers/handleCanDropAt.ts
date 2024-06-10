@@ -44,16 +44,22 @@ export const handleCanDropAt = (
       const currentGroups = getGroups() as GroupsType;
       const reviewIndex = getReviewIndex(currentGroups);
 
+      // Can't drop after Review
       if ((<DraggingPositionBetweenItems>target).childIndex > reviewIndex) {
         return false;
       }
 
+      // Can't drop before Start
       if ((<DraggingPositionBetweenItems>target).childIndex === 0) {
+        return false;
+      }
+
+      // Can't drop between items inside a folder
+      if ((<DraggingPositionBetweenItems>target).parentItem !== "root") {
         return false;
       }
     }
 
-    // default allow
     return true;
   }
 
@@ -74,7 +80,10 @@ export const handleCanDropAt = (
     ) {
       return false;
     }
+
+    return true;
   }
 
-  return true;
+  // default false
+  return false;
 };
