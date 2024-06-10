@@ -473,9 +473,9 @@
   "publishYourForm": "Publier votre formulaire",
   "publishYourFormInstructions": {
     "settings": "Paramètres",
-    "classification": "Classification des données",
-    "deliveryOption": "Option de livraison",
-    "purpose": "Objectif et utilisation",
+    "classification": "Classification des données ",
+    "deliveryOption": "Option de livraison ",
+    "purpose": "Usage prévu ",
     "text1": "Veuillez franchir les étapes suivantes avant de publier votre formulaire.",
     "text2": "",
     "vaultOption": "Réponses à télécharger",
@@ -560,9 +560,9 @@
       "3": "audits"
     },
     "purpose": {
-      "admin": "fins administratives",
-      "nonAdmin": "fins non-administratives",
-      "unset": "pas définie"
+      "admin": "Fins administratives",
+      "nonAdmin": "Fins non-administratives",
+      "unset": "Pas défini"
     }
   },
   "settingsResponseDelivery": {
@@ -575,7 +575,7 @@
     "vaultOptionHint": {
       "text1": " Les réponses soumises apparaîtront sur",
       "text2": "la page Réponses",
-      "text3": " Formulaires GC conserve les données temporairement. Formulaires GC conserve les données temporairement pour 30 hours."
+      "text3": " Formulaires GC conserve les données temporairement pour 30 hours."
     },
     "emailOption": "Recevoir les réponses par courriel",
     "saveButton": "Enregistrer les modifications",
@@ -828,6 +828,7 @@
   "saved": "Enregistré",
   "opensInNewTab": "ouvre un nouvel onglet",
   "rightPanel": {
+    "title": "[FR]Right Panel",
     "openPanel": "Conception du formulaire",
     "closePanel": "Fermer le panneau",
     "questions": "Questions",
@@ -869,7 +870,7 @@
     "newSection": "Nouvelle section",
     "addSection": "Ajouter une section",
     "treeAriaLabel": "Sections Formulaires GC",
-    "addSectionPlaceholder": "Add a section name [FR]",
+    "addSectionPlaceholder": "Ajouter un nom à la section",
     "addElement": {
       "empty": {
         "title": "Section vide",
@@ -879,7 +880,8 @@
     "sectionTitle": "Titre de la section",
     "groupDeleted": "Section supprimée",
     "groupSuccessfullyDeleted": "{{group}} a été supprimé",
-    "linkGroup": "Connecter la section à",
+    "editSection": "[FR]Edit section {{name}}",
+    "editRules": "[FR]Edit rules for section {{name}}",
     "privacy": {
       "beforeText": "<p>C’est votre responsabilité de bien connaître les exigences de votre ministère ou organisme en matière de renseignements personnels. Si vous ne savez pas comment procéder, nous vous recommandons de contacter votre <a href=\"https://www.tbs-sct.canada.ca/ap/atip-aiprp/coord-fra.asp\" target=\"_blank\">coordinateur·rice de l'accès à l'information et de la protection de la vie privée</a>.</p>",
       "body": "<p className=\"mb-4\">Aidez les personnes qui remplissent le formulaire à comprendre comment vous traitez leurs renseignements personnels, comme énoncé à la section 4.2.10 de la <a href=\"https://www.tbs-sct.canada.ca/pol/doc-fra.aspx?id=18309\" target=\"_blank\">Directive sur les pratiques relatives à la protection de la vie privée</a>.</p><p><strong>Ce qu'il faut préciser dans un avis de confidentialité</strong></p><ul><li>Les renseignements personnels qui sont recueillis et les fins de la collecte.</li><li>Les autorisations légales ou de programmes dont vous disposez.</li><li>Les façons dont les reseignements seront utilisés, partagés, stockés et conservés.</li><li>Les droits d’accès ou de correction des renseignements personnels et les droits de déposer une plainte.</li></ul>",
@@ -893,11 +895,11 @@
       "summary": "What to include in a privacy notice"
     },
     "treeView": {
-      "emptyPageTextElement": "Empty page text [FR]",
-      "emptyFormElement": "Empty form queston element [FR]",
+      "emptyPageTextElement": "Élément de texte de page sans contenu",
+      "emptyFormElement": "Élément de question sans contenu",
       "keyboardNav": {
-        "label": "[FR]Keyboard shortcuts",
-        "body": "[FR]<p className=\"mb-4\">Navigate the questions and sections using the arrow keys.</p><p><strong>Drag and drop:</strong></p>\n<ul><li>control + D to pick up and item</li><li>arrow keys to drag the item</li><li>enter key to drop the item</li></ul>"
+        "label": "Raccourcis clavier",
+        "body": "<p className=\"mb-4\">Naviguer les questions et les sections à l'aide des touches fléchées.</p><p><strong>Glisser-déposer :</strong></p>\n<ul><li>Contrôle + D pour prendre un élément</li><li>touches fléchées pour faire glisser l'élément</li><li>Appuyer Entrée pour déposer l'élément</li></ul>"
       }
     }
   },
@@ -906,5 +908,5 @@
     "title": "Votre formulaire a été soumis",
     "sectionTitle": "Titre de la section"
   },
-  "next": "Next"
+  "next": "Continuer"
 }

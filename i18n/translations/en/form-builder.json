@@ -575,7 +575,7 @@
     "vaultOptionHint": {
       "text1": "Submitted responses will appear on the",
       "text2": "Responses page",
-      "text3": " GC Forms holds data temporarily. GC Forms holds data temporarily for 30 days."
+      "text3": " GC Forms holds data temporarily for 30 days."
     },
     "emailOption": "Receive responses by email",
     "saveButton": "Save changes",
@@ -828,6 +828,7 @@
   "saved": "Saved",
   "opensInNewTab": "opens in a new tab",
   "rightPanel": {
+    "title": "Right Panel",
     "openPanel": "Design form",
     "closePanel": "Close panel",
     "questions": "Questions",
@@ -878,7 +879,8 @@
     },
     "sectionTitle": "Section title",
     "groupDeleted": "Section deleted",
-    "linkGroup": "Connect section to",
+    "editSection": "Edit section {{name}}",
+    "editRules": "Edit rules for section {{name}}",
     "groupSuccessfullyDeleted": "{{group}} successfully deleted",
     "privacy": {
       "beforeText": "<p>You’re responsible for understanding your department or agency's responsibilities related to personal information. If you’re unsure how to proceed, we recommend contacting your <a href=\"https://www.tbs-sct.canada.ca/ap/atip-aiprp/coord-eng.asp\" target=\"_blank\">access to information and privacy coordinator.</a></p>",
@@ -905,5 +907,5 @@
     "title": "Your form has been submitted",
     "sectionTitle": "Section title"
   },
-  "next": "Next"
+  "next": "Continue"
 }
