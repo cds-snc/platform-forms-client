@@ -114,7 +114,7 @@ export const {
     updateAge: 30 * 60, // 30 minutes
   },
   // Only trust the host if we don't explicitly have a AUTH_URL set
-  trustHost: process.env.AUTH_URL ? false : true,
+  trustHost: process.env.AUTH_URL || process.env.NEXTAUTH_URL ? false : true,
   debug: process.env.NODE_ENV !== "production",
   logger: {
     error(error) {
