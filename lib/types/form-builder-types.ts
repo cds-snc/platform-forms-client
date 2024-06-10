@@ -24,6 +24,10 @@ export interface Title {
   titleFr: string;
 }
 
+export enum LocalizedGroupProperties {
+  TITLE = "title",
+}
+
 export enum LocalizedFormProperties {
   TITLE = "title",
   REFERRER = "referrerUrl",
