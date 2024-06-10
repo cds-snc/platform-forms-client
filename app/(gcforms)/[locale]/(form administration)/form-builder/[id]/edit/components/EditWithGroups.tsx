@@ -20,6 +20,7 @@ import { FormElement } from "@lib/types";
 import { LangSwitcher } from "@formBuilder/components/shared/LangSwitcher";
 import { PrivacyDescriptionBefore } from "./PrivacyDescriptionBefore";
 import { PrivacyDescriptionBody } from "./PrivacyDescriptionBody";
+import { ConfirmationTitle } from "./ConfirmationTitle";
 
 export const EditWithGroups = () => {
   const { t } = useTranslation("form-builder");
@@ -194,6 +195,7 @@ export const EditWithGroups = () => {
           detailsText={
             <div className="mt-4">
               <ConfirmationDescriptionWithGroups />
+              <ConfirmationTitle />
             </div>
           }
           hydrated={hasHydrated}

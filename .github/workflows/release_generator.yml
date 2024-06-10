@@ -1,7 +1,7 @@
 on:
   push:
     branches:
-      - main
+      - develop
 
 permissions:
   contents: write
@@ -23,4 +23,4 @@ jobs:
         with:
           token: ${{ steps.sre_app_token.outputs.token }}
           release-type: node
-          target-branch: main
+          target-branch: develop

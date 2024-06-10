@@ -34,7 +34,7 @@ const { auth } = NextAuth({
   // When building the app use a random UUID as the token secret
   secret: process.env.TOKEN_SECRET ?? crypto.randomUUID(),
   debug: process.env.NODE_ENV !== "production",
-  trustHost: process.env.AUTH_URL ? false : true,
+  trustHost: process.env.AUTH_URL || process.env.NEXTAUTH_URL ? false : true,
   session: {
     strategy: "jwt",
     // Seconds - How long until an idle session expires and is no longer valid.

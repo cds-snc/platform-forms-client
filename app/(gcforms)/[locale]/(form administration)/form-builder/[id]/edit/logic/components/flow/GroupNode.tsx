@@ -82,7 +82,9 @@ export const GroupNode = (node: NodeProps) => {
         {node.id !== "end" && node.id !== "review" && (
           <button
             {...handleClick}
-            className="absolute right-[-20px] top-[-20px] cursor-pointer outline-2 outline-violet-800 hover:scale-125"
+            className={cn(
+              "absolute right-[-20px] top-[-20px] cursor-pointer outline-offset-8 outline-slate-800 hover:scale-125 rounded-full"
+            )}
           >
             <QuestionRuleSvg title={t("groups.editSection", { name: node.data.label.name })} />
           </button>
@@ -140,7 +142,11 @@ export const GroupNode = (node: NodeProps) => {
                 setId(node.id);
                 setSelectedElementId(Number(child.index));
               }}
-              className={cn(nodeClassName, selected, "focus:border-violet-800")}
+              className={cn(
+                nodeClassName,
+                selected,
+                "focus:border-violet-800 outline-offset-8 outline-slate-800 hover:scale-125 rounded-full"
+              )}
             >
               <div className="line-clamp-2 truncate text-wrap">
                 {getTitle(child.data as ElementProperties).substring(0, 300)}
