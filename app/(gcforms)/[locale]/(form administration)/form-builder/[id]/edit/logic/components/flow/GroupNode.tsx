@@ -151,7 +151,7 @@ export const GroupNode = (node: NodeProps) => {
               <div className="line-clamp-2 truncate text-wrap">
                 {getTitle(child.data as ElementProperties).substring(0, 300)}
               </div>
-              <div className="absolute right-[10px] top-[10px] cursor-pointer hover:scale-125 ">
+              <div className="absolute right-[10px] top-[10px] cursor-pointer hover:scale-125">
                 <OptionRuleSvg title={t("linkGroup")} />
               </div>
             </button>
