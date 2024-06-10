@@ -9,17 +9,90 @@ import { Options } from "./Options";
 import {
   LocalizedElementProperties,
   LocalizedFormProperties,
+  LocalizedGroupProperties,
   Language,
 } from "@lib/types/form-builder-types";
-import { DownloadCSV } from "./DownloadCSV";
 import { RichTextEditor } from "../../components/elements/lexical-editor/RichTextEditor";
 import { LanguageLabel } from "./LanguageLabel";
 import { FieldsetLegend, SectionTitle } from ".";
 import { SaveButton } from "@formBuilder/components/shared/SaveButton";
 
 import { FormElement } from "@lib/types";
-import { alphabet, sortByLayout } from "@lib/utils/form-builder";
-import { getLayoutFromGroups } from "@lib/utils/form-builder/getLayoutFromGroups";
+import { alphabet } from "@lib/utils/form-builder";
+import { sortGroup } from "@lib/utils/form-builder/groupedFormHelpers";
+import { Group } from "@lib/formContext";
+
+const GroupSection = ({
+  groupId,
+  group,
+  primaryLanguage,
+  secondaryLanguage,
+}: {
+  groupId: string;
+  group: Group;
+  primaryLanguage: Language;
+  secondaryLanguage: Language;
+}) => {
+  const { t } = useTranslation("form-builder");
+  const { updateField, localizeField } = useTemplateStore((s) => ({
+    updateField: s.updateField,
+    localizeField: s.localizeField,
+  }));
+  return (
+    <>
+      {(group.titleEn || group.titleFr) && (
+        <fieldset>
+          <FieldsetLegend>{t("logic.translateTitle")}</FieldsetLegend>
+          <div
+            className="mb-10 flex gap-px divide-x-2 border border-gray-300"
+            key={primaryLanguage}
+          >
+            <div className="relative w-1/2 flex-1">
+              <LanguageLabel id="form-introduction-english-language" lang={primaryLanguage}>
+                <>{primaryLanguage}</>
+              </LanguageLabel>
+              <textarea
+                className="h-full w-full p-4 focus:outline-blue-focus"
+                id={`group-${groupId}-title-${primaryLanguage}`}
+                aria-describedby={`group-${groupId}-title-${primaryLanguage}-language`}
+                value={group[localizeField(LocalizedGroupProperties.TITLE, primaryLanguage)]}
+                onChange={(e) => {
+                  updateField(
+                    `form.groups[${groupId}].${localizeField(
+                      LocalizedFormProperties.TITLE,
+                      primaryLanguage
+                    )}`,
+                    e.target.value
+                  );
+                }}
+              />
+            </div>
+            <div className="relative w-1/2 flex-1">
+              <LanguageLabel id="form-introduction-french-language" lang={secondaryLanguage}>
+                <>{secondaryLanguage}</>
+              </LanguageLabel>
+              <textarea
+                className="h-full w-full p-4 focus:outline-blue-focus"
+                id={`group-${groupId}-title-${secondaryLanguage}`}
+                aria-describedby={`group-${groupId}-title-${secondaryLanguage}-language`}
+                value={group[localizeField(LocalizedGroupProperties.TITLE, secondaryLanguage)]}
+                onChange={(e) => {
+                  updateField(
+                    `form.groups[${groupId}].${localizeField(
+                      LocalizedFormProperties.TITLE,
+                      secondaryLanguage
+                    )}`,
+                    e.target.value
+                  );
+                }}
+              />
+            </div>
+          </div>
+        </fieldset>
+      )}
+    </>
+  );
+};
 
 const Element = ({
   element,
@@ -116,9 +189,6 @@ export const TranslateWithGroups = () => {
   // Set default left-hand language
   const primaryLanguage = "en";
   const secondaryLanguage = primaryLanguage === "en" ? "fr" : "en";
-
-  const layout = (groups && getLayoutFromGroups(groups)) || form.layout;
-
   const hasHydrated = useRehydrate();
   if (!hasHydrated) return null;
 
@@ -133,15 +203,18 @@ export const TranslateWithGroups = () => {
           <SaveButton />
         </div>
 
-        <div className="mb-8">
-          <DownloadCSV />
+        <div>
+          <SectionTitle>
+            {t("logic.sectionTitle")} <em>{groups?.["start"]?.name}</em>
+          </SectionTitle>
         </div>
 
         <section>
-          <SectionTitle>{t("formIntroduction")}</SectionTitle>
           {/* FORM TITLE */}
           <fieldset>
-            <FieldsetLegend>{t("title")}</FieldsetLegend>
+            <FieldsetLegend>
+              {t("formIntroduction")} - {t("title")}
+            </FieldsetLegend>
             <div className="mb-10 flex gap-px divide-x-2 border border-gray-300">
               <label htmlFor="form-title-en" className="sr-only">
                 <>{primaryLanguage}</>
@@ -241,23 +314,10 @@ export const TranslateWithGroups = () => {
           {/* END INTRO */}
         </section>
 
-        {/* ELEMENTS */}
-        <section>
-          {sortByLayout({ layout, elements: [...form.elements] }).map((element, index) => {
-            return (
-              <div className="section" id={`section-${index}`} key={element.id}>
-                <Element index={index} element={element} primaryLanguage={primaryLanguage} />
-              </div>
-            );
-          })}
-        </section>
-        {/* END ELEMENTS */}
-
         {/* PRIVACY */}
         <section>
-          <SectionTitle>{t("privacyStatement")}</SectionTitle>
           <fieldset>
-            <FieldsetLegend>{t("pageText")}</FieldsetLegend>
+            <FieldsetLegend>{t("privacyStatement")}</FieldsetLegend>
 
             <div
               className="mb-10 flex gap-px divide-x-2 border border-gray-300"
@@ -312,11 +372,70 @@ export const TranslateWithGroups = () => {
         </section>
         {/* END PRIVACY */}
 
+        <div key={"start"}>
+          {groups && (
+            <GroupSection
+              group={groups["start"]}
+              groupId={"start"}
+              primaryLanguage={primaryLanguage}
+              secondaryLanguage={secondaryLanguage}
+            />
+          )}
+          {groups &&
+            sortGroup({ form, group: groups["start"] }).map((element, index) => {
+              return (
+                <div className="section" id={`section-${index}`} key={element.id}>
+                  <Element index={index} element={element} primaryLanguage={primaryLanguage} />
+                </div>
+              );
+            })}
+        </div>
+
+        {/* ELEMENTS */}
+        <section>
+          {
+            // Loop through each group and render the elements in the group
+          }
+          {groups &&
+            Object.keys(groups).map((groupKey) => {
+              const thisGroup = groups[groupKey];
+              const groupName = thisGroup.name;
+              if (groupKey == "review" || groupKey == "end" || groupKey == "start") return null;
+              return (
+                <div key={groupKey}>
+                  <SectionTitle>
+                    {t("logic.sectionTitle")} <em>{groupName}</em>
+                  </SectionTitle>
+                  <GroupSection
+                    group={thisGroup}
+                    groupId={groupKey}
+                    primaryLanguage={primaryLanguage}
+                    secondaryLanguage={secondaryLanguage}
+                  />
+                  {sortGroup({ form, group: thisGroup }).map((element, index) => {
+                    return (
+                      <div className="section" id={`section-${index}`} key={element.id}>
+                        <Element
+                          index={index}
+                          element={element}
+                          primaryLanguage={primaryLanguage}
+                        />
+                      </div>
+                    );
+                  })}
+                </div>
+              );
+            })}
+        </section>
+        {/* END ELEMENTS */}
+
         {/* CONFIRMATION */}
         <section>
-          <SectionTitle>{t("confirmationMessage")}</SectionTitle>
+          <SectionTitle>
+            {t("logic.sectionTitle")} <em>{groups?.["end"]?.name}</em>
+          </SectionTitle>
           <fieldset>
-            <FieldsetLegend>{t("pageText")}</FieldsetLegend>
+            <FieldsetLegend>{t("confirmationMessage")}</FieldsetLegend>
             <div
               className="mb-10 flex gap-px divide-x-2 border border-gray-300"
               key={primaryLanguage}
