@@ -11,12 +11,13 @@ import { Logos, options } from "../../../settings/branding/components";
 import { useTemplateStore } from "@lib/store/useTemplateStore";
 import { SettingsModal } from "./SettingsDialog";
 import { Tooltip } from "@formBuilder/components/shared/Tooltip";
-import { updateTemplate, updateTemplateSecurityAttribute } from "@formBuilder/actions";
 
 import { toast } from "@formBuilder/components/shared/Toast";
 import { ErrorSaving } from "@formBuilder/components/shared/ErrorSaving";
 import { FormServerErrorCodes } from "@lib/types/form-builder-types";
 import { safeJSONParse } from "@lib/utils";
+
+import { useTemplateContext } from "@lib/hooks/form-builder/useTemplateContext";
 
 enum DeliveryOption {
   vault = "vault",
@@ -30,6 +31,7 @@ export const SettingsPanel = () => {
 
   const {
     id,
+    getId,
     email,
     securityAttribute,
     updateSecurityAttribute,
@@ -40,6 +42,7 @@ export const SettingsPanel = () => {
     getSchema,
   } = useTemplateStore((s) => ({
     id: s.id,
+    getId: s.getId,
     email: s.deliveryOption?.emailAddress,
     updateSecurityAttribute: s.updateSecurityAttribute,
     securityAttribute: s.securityAttribute,
@@ -49,6 +52,8 @@ export const SettingsPanel = () => {
     updateField: s.updateField,
     getSchema: s.getSchema,
   }));
+
+  const { createOrUpdateTemplate } = useTemplateContext();
 
   const initialDeliveryOption = !email ? DeliveryOption.vault : DeliveryOption.email;
   const [, setDeliveryOption] = useState(initialDeliveryOption);
@@ -63,20 +68,30 @@ export const SettingsPanel = () => {
         setDeliveryOption(DeliveryOption.vault);
       }
 
-      // Call sever action
-      const result = await updateTemplateSecurityAttribute({
-        id,
+      if (!createOrUpdateTemplate) {
+        return;
+      }
+
+      const formConfig = safeJSONParse(getSchema());
+      if (formConfig.error) {
+        toast.error(<ErrorSaving errorCode={FormServerErrorCodes.JSON_PARSE} />, "wide");
+        return;
+      }
+
+      const { error } = await createOrUpdateTemplate({
+        id: getId(),
+        formConfig,
         securityAttribute: value,
       });
 
-      if (!result.error) {
+      if (!error) {
         updateSecurityAttribute(value);
         return;
       }
 
       toast.error(<ErrorSaving errorCode={FormServerErrorCodes.BRANDING} />, "wide");
     },
-    [updateSecurityAttribute, id]
+    [updateSecurityAttribute, getId, getSchema, createOrUpdateTemplate]
   );
 
   // Branding options
@@ -103,25 +118,26 @@ export const SettingsPanel = () => {
         return;
       }
 
+      if (!createOrUpdateTemplate) {
+        return;
+      }
+
       if (type === "") {
-        const result = await updateTemplate({
-          id,
+        const { error } = await createOrUpdateTemplate({
+          id: getId(),
           formConfig,
         });
 
-        if (!result.error) {
+        if (!error) {
           unsetField("form.brand");
           return;
         }
       }
 
       if (type !== brandName) {
-        const result = await updateTemplate({
-          id,
-          formConfig,
-        });
+        const { error } = await createOrUpdateTemplate({ id: getId(), formConfig });
 
-        if (!result.error) {
+        if (!error) {
           updateField("form.brand", options.filter((o) => o.name === type)[0]);
           return;
         }
@@ -129,7 +145,7 @@ export const SettingsPanel = () => {
         toast.error(<ErrorSaving errorCode={FormServerErrorCodes.CLASSIFICATION} />, "wide");
       }
     },
-    [brandName, unsetField, updateField, id, getSchema]
+    [getSchema, brandName, getId, unsetField, createOrUpdateTemplate, updateField]
   );
 
   // More ...
@@ -173,7 +189,7 @@ export const SettingsPanel = () => {
               onClick={() => {
                 setShowShowSettings(true);
               }}
-              className="flex h-full rounded-r-md bg-indigo-700 p-1 pt-2 text-white font-bold"
+              className="flex h-full rounded-r-md bg-indigo-700 p-1 pt-2 font-bold text-white"
               aria-label={t("more")}
             >
               {"..."}

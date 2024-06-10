@@ -1,7 +1,7 @@
 import { FormElement, FormProperties, FormElementTypes, DeliveryOption } from "@lib/types";
 import { TemplateStoreState } from "../../store/types";
 import { GroupsType } from "@lib/formContext";
-import { getLayoutFromGroups } from "./getLayoutFromGroups";
+import { getLayoutFromGroups } from "./groupedFormHelpers";
 import { formHasGroups } from "./formHasGroups";
 
 export const completeEmailAddressRegex =
@@ -131,7 +131,7 @@ export const getSchemaFromState = (state: TemplateStoreState, allowGroups = fals
 
   if (sortUsingGroups && formHasGroups(form)) {
     const groups = form.groups as GroupsType;
-    form.layout = getLayoutFromGroups(groups);
+    form.layout = getLayoutFromGroups(form, groups);
   }
 
   return form;

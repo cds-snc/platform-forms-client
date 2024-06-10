@@ -845,6 +845,7 @@
     "gotoSection": "Aller à la section",
     "questionTitle": "Question :",
     "sectionTitle": "Section :",
+    "translateTitle": "Section Titre",
     "addRule": "Ajouter une régle",
     "resetRules": "Réinitialiser toutes les règles",
     "resetRulesHelp": "[FR]Reset all rules help",
