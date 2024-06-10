@@ -226,6 +226,8 @@ const ControlledTree: ForwardRefRenderFunction<unknown, TreeDataProviderProps> =
             getGroups,
             replaceGroups,
             setSelectedItems,
+            setExpandedItems,
+            expandedItems,
             getTreeData,
             getConfirmMovePromise,
             setOpenConfirmMoveDialog
