@@ -139,6 +139,10 @@ export const Item = ({
                 />
               )}
               {titleText !== "" && title && title}
+              {titleText === "" &&
+                isFormElement &&
+                fieldType === "richText" &&
+                descriptionText !== "" && <Title title={descriptionText} />}
             </div>
           )}
         </div>
