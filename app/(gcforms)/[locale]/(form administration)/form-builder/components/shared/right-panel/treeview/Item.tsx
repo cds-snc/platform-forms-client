@@ -116,12 +116,17 @@ export const Item = ({
                 },
               })}
             >
-              {fieldType === "richText" && descriptionText === "" && (
+              {isFormElement && fieldType === "richText" && descriptionText === "" && (
                 <span className="text-gray-500">{t("groups.treeView.emptyPageTextElement")}</span>
               )}
-              {fieldType !== "richText" && titleText === "" && (
+              {isFormElement && fieldType !== "richText" && titleText === "" && (
                 <span className="text-gray-500">{t("groups.treeView.emptyFormElement")}</span>
               )}
+
+              {isSection && titleText === "" && (
+                <span className="text-gray-500">{t("groups.newSection")}</span>
+              )}
+
               <ItemActions
                 context={context}
                 arrow={arrow}

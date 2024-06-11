@@ -18,6 +18,7 @@ import { useGroupStore } from "@formBuilder/components/shared/right-panel/treevi
 import { Section } from "./Section";
 import { FormElement } from "@lib/types";
 import { LangSwitcher } from "@formBuilder/components/shared/LangSwitcher";
+import { SectionNameInput } from "@formBuilder/components/shared/SectionNameInput";
 import { PrivacyDescriptionBefore } from "./PrivacyDescriptionBefore";
 import { PrivacyDescriptionBody } from "./PrivacyDescriptionBody";
 import { ConfirmationTitle } from "./ConfirmationTitle";
@@ -49,6 +50,11 @@ export const EditWithGroups = () => {
   const elements = useTemplateStore(
     (s) => (s.form.groups && s.form.groups[groupId]?.elements) || []
   );
+
+  const groupName = useTemplateStore((s) => (s.form.groups && s.form.groups[groupId]?.name) || "");
+
+  const updateGroupName = useGroupStore((state) => state.updateGroupName);
+
   const { changeKey } = useTemplateStore((s) => ({
     changeKey: s.changeKey,
   }));
@@ -112,7 +118,10 @@ export const EditWithGroups = () => {
       <div className="mb-4">
         <SaveButton />
       </div>
-      <LangSwitcher descriptionLangKey="editingIn" />
+      <div className="flex justify-between">
+        <SectionNameInput value={groupName} groupId={groupId} updateGroupName={updateGroupName} />
+        <LangSwitcher descriptionLangKey="editingIn" />
+      </div>
       {/* Form Intro + Title Panel */}
       {groupId === "start" && <SettingsPanel />}
       {groupId === "start" && (
