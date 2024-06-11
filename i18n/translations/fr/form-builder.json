@@ -731,7 +731,7 @@
   },
   "translate": "Traductions",
   "translateDescription": "Traduisez le contenu de votre formulaire côte à côte pour offrir une expérience bilingue aux personnes qui remplissent votre formulaire. ",
-  "translateTitle": "Entrer la traduction",
+  "translateTitle": "Traductions",
   "unlockPublishing": "Déverrouiller la publication",
   "unlockPublishingDescription": "Pour déverrouiller la publication, fournissez les coordonnées de la personne de qui vous relevez. ",
   "unnamedForm": "Fichier sans nom",
@@ -829,7 +829,7 @@
   "opensInNewTab": "ouvre un nouvel onglet",
   "rightPanel": {
     "title": "[FR]Right Panel",
-    "openPanel": "Conception du formulaire",
+    "openPanel": "[FR]Set up your form",
     "closePanel": "Fermer le panneau",
     "questions": "Questions",
     "logic": "Logique",
@@ -905,10 +905,17 @@
       }
     }
   },
-
   "confirmation": {
     "title": "Votre formulaire a été soumis",
     "sectionTitle": "Titre de la section"
   },
-  "next": "Continuer"
+  "next": "Continuer",
+  "skipLink": {
+    "questions": "[FR]Skip to Questions editor",
+    "translate": "[FR]Skip to Translations editor",
+    "logic": "[FR]Skip to Logic editor",
+    "questionsSetup": "[FR]Skip to Questions setup",
+    "translateSetup": "[FR]Skip to Translations setup",
+    "logicSetup": "[FR]Skip to Logic setup"
+  }
 }
