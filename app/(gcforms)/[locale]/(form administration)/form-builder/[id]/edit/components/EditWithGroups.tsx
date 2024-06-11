@@ -113,7 +113,7 @@ export const EditWithGroups = () => {
       <h2 id="questionsTitle" tabIndex={-1}>
         {t("questions")}
       </h2>
-      <SkipLinkReusable anchor="#rightPanelTitle">{t("skipLink.designForm")}</SkipLinkReusable>
+      <SkipLinkReusable anchor="#rightPanelTitle">{t("skipLink.questionsSetup")}</SkipLinkReusable>
       <div className="mb-4">
         <SaveButton />
       </div>
@@ -210,7 +210,7 @@ export const EditWithGroups = () => {
           className={"rounded-lg"}
         />
       )}
-      <SkipLinkReusable anchor="#rightPanelTitle">{t("skipLink.designForm")}</SkipLinkReusable>
+      <SkipLinkReusable anchor="#rightPanelTitle">{t("skipLink.questionsSetup")}</SkipLinkReusable>
     </>
   );
 };

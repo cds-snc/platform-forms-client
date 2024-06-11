@@ -200,7 +200,9 @@ export const TranslateWithGroups = () => {
         <h2 id="translateTitle" tabIndex={-1}>
           {t("translateTitle")}
         </h2>
-        <SkipLinkReusable anchor="#rightPanelTitle">{t("skipLink.designForm")}</SkipLinkReusable>
+        <SkipLinkReusable anchor="#rightPanelTitle">
+          {t("skipLink.translateSetup")}
+        </SkipLinkReusable>
         <p>{t("translateDescription")}</p>
         <br />
 
@@ -493,7 +495,9 @@ export const TranslateWithGroups = () => {
           </fieldset>
         </section>
         {/* END CONFIRMATION */}
-        <SkipLinkReusable anchor="#rightPanelTitle">{t("skipLink.designForm")}</SkipLinkReusable>
+        <SkipLinkReusable anchor="#rightPanelTitle">
+          {t("skipLink.translateSetup")}
+        </SkipLinkReusable>
       </div>
     </>
   );

@@ -910,9 +910,11 @@
   },
   "next": "Continue",
   "skipLink": {
-    "designForm": "Skip to Design Form",
-    "questions": "Skip to Set up your form",
-    "translate": "Skip to Enter your translation",
-    "logic": "Skip to Logic"
+    "questions": "Skip to Questions editor",
+    "translate": "Skip to Translations editor",
+    "logic": "Skip to Logic editor",
+    "questionsSetup": "Skip to Questions setup",
+    "translateSetup": "Skip to Translations setup",
+    "logicSetup": "Skip to Logic setup"
   }
 }
