@@ -62,17 +62,18 @@ export const groupsToTreeData = (
       canRename: true,
       canMove: false,
       data: {
-        titleEn: formGroups[key].titleEn,
-        titleFr: formGroups[key].titleFr,
+        titleEn: formGroups[key].titleEn || "Section title",
+        titleFr: formGroups[key].titleFr || "Section title",
         descriptionEn: "",
         descriptionFr: "",
       },
       children: [],
     };
 
-    items[sectionTitleKey] = sectionTitleItem;
-    // Add to the beginning section children
-    items[key].children?.unshift(sectionTitleKey);
+    if (key !== "start" && key !== "end") {
+      items[sectionTitleKey] = sectionTitleItem;
+      items[key].children?.unshift(sectionTitleKey);
+    }
 
     children.forEach((childId) => {
       const element = elements.find((el) => el.id === Number(childId));
