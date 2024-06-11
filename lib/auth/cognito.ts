@@ -192,9 +192,6 @@ export const requestNew2FAVerificationCode = async (
     return verificationCode;
   } catch (error) {
     if (error instanceof Missing2FASession) {
-      logMessage.warn(
-        `Failed to send new verification code. Reason: Missing 2FA session for user ${email}.`
-      );
       throw error;
     } else {
       throw new Error(`Failed to send new verification code. Reason: ${(error as Error).message}.`);
