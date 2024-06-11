@@ -88,9 +88,10 @@ export const processFormData = async (
         contentLanguage ? contentLanguage : "en",
         reqFields.securityAttribute ? (reqFields.securityAttribute as string) : "Protected A"
       );
-      logMessage.info(`Submitting Response for Form ID: ${form.id}`);
+      logMessage.info(`Response submitted for Form ID: ${form.id}`);
       return true;
     } catch (err) {
+      logMessage.info(`Attempted response submission for Form ID: ${form.id} failed`);
       logMessage.error(err as Error);
       throw err;
     }
