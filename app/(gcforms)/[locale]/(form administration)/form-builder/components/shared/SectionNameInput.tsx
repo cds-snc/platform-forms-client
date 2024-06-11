@@ -27,8 +27,9 @@ export const SectionNameInput = React.forwardRef<Ref, Props>((props, ref) => {
         className,
         !disabled && "border-1 border-[#1B00C2]  hover:border-1 hover:border-gray-default"
       )}
+      aria-label={t("groups.sectionNameInput", { ns: "form-builder" })}
       value={value}
-      placeholder={t("groups.newSection")}
+      placeholder={t("groups.newSection", { ns: "form-builder" })}
       onChange={(e) => {
         tree?.current?.renameItem(groupId, e.target.value);
         const val = e.target.value;
