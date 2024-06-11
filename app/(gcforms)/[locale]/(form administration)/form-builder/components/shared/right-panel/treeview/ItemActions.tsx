@@ -1,6 +1,6 @@
 import { ReactNode } from "react";
 import { DragHandle } from "./icons/DragHandle";
-import { DeleteIcon, LockIcon } from "@serverComponents/icons";
+import { AddIcon, DeleteIcon, LockIcon } from "@serverComponents/icons";
 import { cn } from "@lib/utils";
 import { TreeItemRenderContext } from "react-complex-tree";
 
@@ -11,13 +11,31 @@ type ItemActionProps = {
   handleDelete: (e: React.MouseEvent<HTMLButtonElement>) => Promise<void>;
 };
 
+const handleAdd = () => {
+  alert("Add form element");
+};
+
 export const ItemActions = ({ context, arrow, lockClassName, handleDelete }: ItemActionProps) => {
   return context.canDrag ? (
     <>
       {context.isExpanded && (
-        <button className="cursor-pointer" onClick={handleDelete}>
-          <DeleteIcon title="Delete group" className="absolute right-5 top-0 mr-10 scale-50" />
-        </button>
+        <div className="absolute right-5 top-3 mr-10 flex flex-row">
+          <button
+            className="cursor-pointer rounded-lg border border-transparent p-1 hover:border-blue-focus hover:bg-blue-200"
+            onClick={handleAdd}
+          >
+            <AddIcon
+              title="Add form element"
+              className="rounded-full border-1 border-black fill-black"
+            />
+          </button>
+          <button
+            className=" cursor-pointer rounded-lg border border-transparent p-1 hover:border-blue-focus hover:bg-blue-200"
+            onClick={handleDelete}
+          >
+            <DeleteIcon title="Delete group" className="size-6" />
+          </button>
+        </div>
       )}
       <DragHandle
         className={cn(
