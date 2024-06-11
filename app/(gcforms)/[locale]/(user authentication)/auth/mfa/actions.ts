@@ -4,7 +4,7 @@ import { serverTranslation } from "@i18n";
 import { redirect } from "next/navigation";
 import { requestNew2FAVerificationCode } from "@lib/auth";
 import { signIn } from "@lib/auth";
-import { handleErrorById, Missing2FASession } from "@lib/auth/cognito";
+import { handleErrorById } from "@lib/auth/cognito";
 import { cookies } from "next/headers";
 import { prisma } from "@lib/integration/prismaConnector";
 import { CredentialsSignin } from "next-auth";
@@ -149,27 +149,18 @@ export const resendVerificationCode = async (
   language: string,
   email: string,
   authenticationFlowToken: string
-): Promise<void | { error: string }> => {
-  try {
-    const newCode = await requestNew2FAVerificationCode(authenticationFlowToken, email);
-    cookies().set(
-      "authenticationFlow",
-      JSON.stringify({
-        authenticationFlowToken: newCode,
-        email,
-      }),
-      { secure: true, sameSite: "strict", maxAge: 60 * 15 }
-    );
+): Promise<void> => {
+  const newCode = await requestNew2FAVerificationCode(authenticationFlowToken, email);
+  cookies().set(
+    "authenticationFlow",
+    JSON.stringify({
+      authenticationFlowToken: newCode,
+      email,
+    }),
+    { secure: true, sameSite: "strict", maxAge: 60 * 15 }
+  );
 
-    redirect(`/${language}/auth/mfa`);
-  } catch (e) {
-    if (e instanceof Missing2FASession) {
-      redirect(`/${language}/auth/login`);
-    } else {
-      logMessage.error(e);
-      return { error: "Internal Error" };
-    }
-  }
+  redirect(`/${language}/auth/mfa`);
 };
 
 export const getErrorText = async (language: string, errorID: string) => {
