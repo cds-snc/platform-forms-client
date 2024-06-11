@@ -116,6 +116,8 @@ export const Item = ({
                 },
               })}
             >
+              {/* Render placeholder if title is empty */}
+
               {isFormElement && fieldType === "richText" && descriptionText === "" && (
                 <span className="text-gray-500">{t("groups.treeView.emptyPageTextElement")}</span>
               )}
@@ -124,17 +126,19 @@ export const Item = ({
               )}
 
               {isSection && titleText === "" && (
-                <span className="text-gray-500">{t("groups.newSection")}!!</span>
+                <span className="text-gray-500">{t("groups.newSection")}</span>
               )}
+              {/* End placeholders */}
 
-              <ItemActions
-                context={context}
-                arrow={arrow}
-                handleDelete={handleDelete}
-                lockClassName={cn(isFormElement && "absolute right-0", "mr-2 ")}
-              />
-
-              {title && title}
+              {titleText !== "" && (
+                <ItemActions
+                  context={context}
+                  arrow={arrow}
+                  handleDelete={handleDelete}
+                  lockClassName={cn(isFormElement && "absolute right-0", "mr-2 ")}
+                />
+              )}
+              {titleText !== "" && title && title}
             </div>
           )}
         </div>
