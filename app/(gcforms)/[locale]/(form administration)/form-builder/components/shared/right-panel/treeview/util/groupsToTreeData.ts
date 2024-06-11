@@ -54,7 +54,6 @@ export const groupsToTreeData = (
     items.root.children?.push(key);
 
     // Add section title item
-
     const sectionTitleKey = `section-title-${key}`;
     const sectionTitleItem = {
       index: sectionTitleKey,
