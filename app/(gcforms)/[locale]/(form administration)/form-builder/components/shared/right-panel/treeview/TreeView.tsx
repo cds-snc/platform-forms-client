@@ -124,16 +124,22 @@ const ControlledTree: ForwardRefRenderFunction<unknown, TreeDataProviderProps> =
     setOpenDialog: setOpenConfirmDeleteDialog,
   } = useConfirmDeleteDialogState();
 
+  const items = getTreeData({
+    addIntroElement: true,
+    addPolicyElement: true,
+    addConfirmationElement: true,
+    reviewGroup: false,
+  });
+
+  if (!items) {
+    return null;
+  }
+
   return (
     <>
       <ControlledTreeEnvironment
         ref={environment}
-        items={getTreeData({
-          addIntroElement: true,
-          addPolicyElement: true,
-          addConfirmationElement: true,
-          reviewGroup: false,
-        })}
+        items={items}
         getItemTitle={(item) => getTitle(item.data as ElementProperties)}
         renderItem={({ item, title, arrow, context, children }) => {
           return (

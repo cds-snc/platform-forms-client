@@ -18,6 +18,7 @@ import { useGroupStore } from "@formBuilder/components/shared/right-panel/treevi
 import { Section } from "./Section";
 import { FormElement } from "@lib/types";
 import { LangSwitcher } from "@formBuilder/components/shared/LangSwitcher";
+import { SectionNameInput } from "@formBuilder/components/shared/SectionNameInput";
 import { PrivacyDescriptionBefore } from "./PrivacyDescriptionBefore";
 import { PrivacyDescriptionBody } from "./PrivacyDescriptionBody";
 import { ConfirmationTitle } from "./ConfirmationTitle";
@@ -50,6 +51,11 @@ export const EditWithGroups = () => {
   const elements = useTemplateStore(
     (s) => (s.form.groups && s.form.groups[groupId]?.elements) || []
   );
+
+  const groupName = useTemplateStore((s) => (s.form.groups && s.form.groups[groupId]?.name) || "");
+
+  const updateGroupName = useGroupStore((state) => state.updateGroupName);
+
   const { changeKey } = useTemplateStore((s) => ({
     changeKey: s.changeKey,
   }));
@@ -118,8 +124,15 @@ export const EditWithGroups = () => {
           <SaveButton />
         </div>
       </div>
+<<<<<<< fix/3747-keynav-1
       <LangSwitcher descriptionLangKey="editingIn" />
       <SkipLinkReusable anchor="#rightPanelTitle">{t("skipLink.questionsSetup")}</SkipLinkReusable>
+=======
+      <div className="flex max-w-[800px] justify-between">
+        <SectionNameInput value={groupName} groupId={groupId} updateGroupName={updateGroupName} />
+        <LangSwitcher descriptionLangKey="editingIn" />
+      </div>
+>>>>>>> develop
       {/* Form Intro + Title Panel */}
       {groupId === "start" && <SettingsPanel />}
       {groupId === "start" && (
