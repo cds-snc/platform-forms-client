@@ -116,7 +116,7 @@ export const RightPanel = ({ id }: { id: string }) => {
   }
 
   return (
-    <section className="relative" aria-labelledby="right_panel_title">
+    <section className="relative" aria-labelledby="rightPanelTitle">
       <div className={cn("fixed right-0", isIntersecting ? "top-20" : "top-0", open && "hidden")}>
         <Button
           theme="link"
