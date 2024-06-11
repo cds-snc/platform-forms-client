@@ -124,15 +124,11 @@ export const EditWithGroups = () => {
           <SaveButton />
         </div>
       </div>
-<<<<<<< fix/3747-keynav-1
-      <LangSwitcher descriptionLangKey="editingIn" />
       <SkipLinkReusable anchor="#rightPanelTitle">{t("skipLink.questionsSetup")}</SkipLinkReusable>
-=======
       <div className="flex max-w-[800px] justify-between">
         <SectionNameInput value={groupName} groupId={groupId} updateGroupName={updateGroupName} />
         <LangSwitcher descriptionLangKey="editingIn" />
       </div>
->>>>>>> develop
       {/* Form Intro + Title Panel */}
       {groupId === "start" && <SettingsPanel />}
       {groupId === "start" && (
