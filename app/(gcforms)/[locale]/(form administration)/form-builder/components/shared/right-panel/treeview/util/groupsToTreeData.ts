@@ -53,6 +53,27 @@ export const groupsToTreeData = (
     items[key] = item;
     items.root.children?.push(key);
 
+    // Add section title item
+
+    const sectionTitleKey = `section-title-${key}`;
+    const sectionTitleItem = {
+      index: sectionTitleKey,
+      isFolder: false,
+      canRename: true,
+      canMove: false,
+      data: {
+        titleEn: formGroups[key].titleEn,
+        titleFr: formGroups[key].titleFr,
+        descriptionEn: "",
+        descriptionFr: "",
+      },
+      children: [],
+    };
+
+    items[sectionTitleKey] = sectionTitleItem;
+    // Add to the beginning section children
+    items[key].children?.unshift(sectionTitleKey);
+
     children.forEach((childId) => {
       const element = elements.find((el) => el.id === Number(childId));
       if (!element) return;
