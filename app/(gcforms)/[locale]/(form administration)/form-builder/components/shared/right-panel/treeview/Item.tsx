@@ -67,8 +67,8 @@ export const Item = ({
     "w-full relative",
     !context.isExpanded && "border-b-1 border-slate-200"
   );
-  const formElementClasses = cn("inline-block w-full relative h-[60px] outline-none");
-  const ghostElementClasses = "inline-block w-full relative h-[60px]";
+  const formElementClasses = cn("inline-block w-full relative outline-none py-1.5");
+  const ghostElementClasses = "inline-block w-full relative";
 
   return (
     <li
@@ -100,7 +100,7 @@ export const Item = ({
               className={cn(
                 "ml-12 flex items-center overflow-hidden relative text-sm",
                 isSection && "w-[100%] h-[60px]",
-                isFormElement && "rounded-md p-3 w-5/6 border-1 bg-white min-h-[50px]",
+                isFormElement && "rounded-md px-3 w-5/6 border-1 bg-white min-h-[50px]",
                 isFormElement &&
                   !context.isSelected &&
                   " border-slate-500 hover:border-indigo-700 hover:border-1 hover:bg-indigo-50",
