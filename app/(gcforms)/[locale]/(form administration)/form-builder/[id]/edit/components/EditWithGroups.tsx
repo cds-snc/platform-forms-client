@@ -110,14 +110,16 @@ export const EditWithGroups = () => {
   return (
     <>
       <h1 className="sr-only">{t("edit")}</h1>
-      <h2 id="questionsTitle" tabIndex={-1}>
-        {t("questions")}
-      </h2>
-      <SkipLinkReusable anchor="#rightPanelTitle">{t("skipLink.questionsSetup")}</SkipLinkReusable>
-      <div className="mb-4">
-        <SaveButton />
+      <div className="flex w-[800px]">
+        <h2 id="questionsTitle" tabIndex={-1}>
+          {t("questions")}
+        </h2>
+        <div className="ml-5 mt-2">
+          <SaveButton />
+        </div>
       </div>
       <LangSwitcher descriptionLangKey="editingIn" />
+      <SkipLinkReusable anchor="#rightPanelTitle">{t("skipLink.questionsSetup")}</SkipLinkReusable>
       {/* Form Intro + Title Panel */}
       {groupId === "start" && <SettingsPanel />}
       {groupId === "start" && (
