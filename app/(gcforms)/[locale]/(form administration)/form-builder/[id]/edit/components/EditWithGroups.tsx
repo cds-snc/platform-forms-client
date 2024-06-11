@@ -118,7 +118,7 @@ export const EditWithGroups = () => {
       <div className="mb-4">
         <SaveButton />
       </div>
-      <div className="flex justify-between">
+      <div className="flex max-w-[800px] justify-between">
         <SectionNameInput value={groupName} groupId={groupId} updateGroupName={updateGroupName} />
         <LangSwitcher descriptionLangKey="editingIn" />
       </div>
