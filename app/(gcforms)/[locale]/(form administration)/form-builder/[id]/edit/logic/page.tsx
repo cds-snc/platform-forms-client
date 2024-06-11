@@ -38,7 +38,7 @@ export default async function Page({
   return (
     <div id={id}>
       <h1 className="sr-only">{t("edit")}</h1>
-      <h2 className="mb-4 mt-8 border-0" id="logicTitle" tabIndex={-1}>
+      <h2 className="mb-4 border-0" id="logicTitle" tabIndex={-1}>
         {t("logic.heading")}
       </h2>
       <SkipLinkReusable anchor="#rightPanelTitle">{t("skipLink.designForm")}</SkipLinkReusable>

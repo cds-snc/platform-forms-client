@@ -109,8 +109,9 @@ export const EditWithGroups = () => {
 
   return (
     <>
+      <h1 className="sr-only">{t("edit")}</h1>
       <h2 id="questionsTitle" tabIndex={-1}>
-        {t("formSetup.title")}
+        {t("questions")}
       </h2>
       <SkipLinkReusable anchor="#rightPanelTitle">{t("skipLink.designForm")}</SkipLinkReusable>
       <div className="mb-4">

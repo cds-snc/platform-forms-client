@@ -195,8 +195,9 @@ export const TranslateWithGroups = () => {
 
   return (
     <>
+      <h1 className="sr-only">{t("edit")}</h1>
       <div className="mr-10">
-        <h2 className="mb-0 mt-8 border-0" id="translateTitle" tabIndex={-1}>
+        <h2 id="translateTitle" tabIndex={-1}>
           {t("translateTitle")}
         </h2>
         <SkipLinkReusable anchor="#rightPanelTitle">{t("skipLink.designForm")}</SkipLinkReusable>

@@ -731,7 +731,7 @@
   },
   "translate": "Translations",
   "translateDescription": "Translate your form content side by side to provide a bilingual experience to those filling out your form.",
-  "translateTitle": "Enter your translation",
+  "translateTitle": "Translations",
   "unlockPublishing": "Unlock publishing",
   "unlockPublishingDescription": "To unlock publishing, provide the contact information of the person you report to.",
   "unnamedForm": "Unnamed form file",
@@ -829,7 +829,7 @@
   "opensInNewTab": "opens in a new tab",
   "rightPanel": {
     "title": "Right Panel",
-    "openPanel": "Design form",
+    "openPanel": "Set up your form",
     "closePanel": "Close panel",
     "questions": "Questions",
     "logic": "Logic",
@@ -909,9 +909,6 @@
     "sectionTitle": "Section title"
   },
   "next": "Continue",
-  "formSetup": {
-    "title": "Set up your form"
-  },
   "skipLink": {
     "designForm": "Skip to Design Form",
     "questions": "Skip to Set up your form",
