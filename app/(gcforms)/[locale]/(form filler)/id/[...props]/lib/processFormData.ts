@@ -26,8 +26,6 @@ export const processFormData = async (
       throw new MissingFormDataError("No form submitted with request");
     }
 
-    logMessage.info(`Form ID: ${reqFields ? reqFields.formID : "No form attached"}`);
-
     const form = await getPublicTemplateByID(reqFields.formID as string);
 
     if (!form) {
@@ -90,8 +88,10 @@ export const processFormData = async (
         contentLanguage ? contentLanguage : "en",
         reqFields.securityAttribute ? (reqFields.securityAttribute as string) : "Protected A"
       );
+      logMessage.info(`Response submitted for Form ID: ${form.id}`);
       return true;
     } catch (err) {
+      logMessage.info(`Attempted response submission for Form ID: ${form.id} failed`);
       logMessage.error(err as Error);
       throw err;
     }
