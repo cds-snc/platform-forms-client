@@ -70,6 +70,7 @@ export const groupsToTreeData = (
       children: [],
     };
 
+    // Add section title item to the start of the children array
     if (key !== "start" && key !== "end") {
       items[sectionTitleKey] = sectionTitleItem;
       items[key].children?.unshift(sectionTitleKey);
