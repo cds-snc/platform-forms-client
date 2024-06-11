@@ -124,7 +124,7 @@ export const Item = ({
               )}
 
               {isSection && titleText === "" && (
-                <span className="text-gray-500">{t("groups.newSection")}</span>
+                <span className="text-gray-500">{t("groups.newSection")}!!</span>
               )}
 
               <ItemActions
