@@ -33,6 +33,8 @@ import { useTranslation } from "@i18n/client";
 import { cn } from "@lib/utils";
 import { KeyboardNavTip } from "./KeyboardNavTip";
 import { Button } from "@clientComponents/globals";
+import { Language } from "@lib/types/form-builder-types";
+import { isTitleElementType } from "./util/itemType";
 
 export interface TreeDataProviderProps {
   children?: ReactElement;
@@ -46,6 +48,7 @@ const ControlledTree: ForwardRefRenderFunction<unknown, TreeDataProviderProps> =
   ref
 ) => {
   const {
+    groupId,
     getTreeData,
     getGroups,
     addGroup,
@@ -56,6 +59,7 @@ const ControlledTree: ForwardRefRenderFunction<unknown, TreeDataProviderProps> =
     deleteGroup,
   } = useGroupStore((s) => {
     return {
+      groupId: s.id,
       getTreeData: s.getTreeData,
       getGroups: s.getGroups,
       replaceGroups: s.replaceGroups,
@@ -66,6 +70,12 @@ const ControlledTree: ForwardRefRenderFunction<unknown, TreeDataProviderProps> =
       deleteGroup: s.deleteGroup,
     };
   });
+
+  const updateGroupTitle = useGroupStore((state) => state.updateGroupTitle);
+  const { getLocalizationAttribute } = useTemplateStore((s) => ({
+    getLocalizationAttribute: s.getLocalizationAttribute,
+  }));
+  const language = getLocalizationAttribute()?.lang as Language;
 
   const { remove: removeItem } = useTemplateStore((s) => {
     return {
@@ -128,6 +138,7 @@ const ControlledTree: ForwardRefRenderFunction<unknown, TreeDataProviderProps> =
     addIntroElement: true,
     addPolicyElement: true,
     addConfirmationElement: true,
+    addSectionTitleElements: false,
     reviewGroup: false,
   });
 
@@ -212,6 +223,14 @@ const ControlledTree: ForwardRefRenderFunction<unknown, TreeDataProviderProps> =
         canDropBelowOpenFolders={true}
         canDropOnFolder={true}
         onRenameItem={(item, name) => {
+          if (!item) return;
+          const isTitleElement = isTitleElementType(item);
+          if (isTitleElement) {
+            updateGroupTitle({ id: groupId, locale: language || "en", title: name });
+            setSelectedItems([item.index]);
+            return;
+          }
+
           item.isFolder && updateGroupName({ id: String(item.index), name });
           // Rename the element
           !item.isFolder &&
