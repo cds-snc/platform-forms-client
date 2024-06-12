@@ -828,8 +828,8 @@
   "saved": "Enregistré",
   "opensInNewTab": "ouvre un nouvel onglet",
   "rightPanel": {
-    "title": "[FR]Right Panel",
-    "openPanel": "Conception du formulaire",
+    "title": "Panneau de droite",
+    "openPanel": "Mise en place du formulaire",
     "closePanel": "Fermer le panneau",
     "questions": "Questions",
     "logic": "Logique",
@@ -847,11 +847,12 @@
     "sectionTitle": "Section :",
     "translateTitle": "Section Titre",
     "addRule": "Ajouter une régle",
-    "resetRules": "Réinitialiser toutes les règles",
-    "resetRulesHelp": "[FR]Reset all rules help",
-    "resetRulesDescription": "La fonction de flux automatique réinitialise la progression entre les sections en un flux linéaire simple, remplaçant ainsi toutes les règles de logique de branchement qui s'appliquent.",
     "saveRule": "Enregistrer",
-    "saveNote": "Ajouter et enregistrer une règle, désactive le ",
+    "saveNote": "Ajouter et enregistrer une règle, désactive la fonction de flux automatique entre les sections.",
+    "resetRules": "Réinitialiser toutes les règles",
+    "resetRulesHelp": "Aide pour réinitialiser toutes les règles",
+    "resetRulesDescription": "La fonction de flux automatique réinitialise la progression entre les sections en un flux linéaire simple, remplaçant ainsi toutes les règles de logique de branchement qui s'appliquent.",
+    
     "multiRulesWarning": {
       "text1": "L'ordre et le flux sont définis en fonction des règles appliquées.",
       "text2": "Relier les sections :",
@@ -881,8 +882,8 @@
     "sectionTitle": "Titre de la section",
     "groupDeleted": "Section supprimée",
     "groupSuccessfullyDeleted": "{{group}} a été supprimé",
-    "editSection": "[FR]Edit section {{name}}",
-    "editRules": "[FR]Edit rules for section {{name}}",
+    "editSection": "Modifier la section {{name}}",
+    "editRules": "Modifier les règles de la section {{name}}",
     "privacy": {
       "beforeText": "<p>C’est votre responsabilité de bien connaître les exigences de votre ministère ou organisme en matière de renseignements personnels. Si vous ne savez pas comment procéder, nous vous recommandons de contacter votre <a href=\"https://www.tbs-sct.canada.ca/ap/atip-aiprp/coord-fra.asp\" target=\"_blank\">coordinateur·rice de l'accès à l'information et de la protection de la vie privée</a>.</p>",
       "body": "<p className=\"mb-4\">Aidez les personnes qui remplissent le formulaire à comprendre comment vous traitez leurs renseignements personnels, comme énoncé à la section 4.2.10 de la <a href=\"https://www.tbs-sct.canada.ca/pol/doc-fra.aspx?id=18309\" target=\"_blank\">Directive sur les pratiques relatives à la protection de la vie privée</a>.</p><p><strong>Ce qu'il faut préciser dans un avis de confidentialité</strong></p><ul><li>Les renseignements personnels qui sont recueillis et les fins de la collecte.</li><li>Les autorisations légales ou de programmes dont vous disposez.</li><li>Les façons dont les reseignements seront utilisés, partagés, stockés et conservés.</li><li>Les droits d’accès ou de correction des renseignements personnels et les droits de déposer une plainte.</li></ul>",
