@@ -193,7 +193,7 @@ export const requestNew2FAVerificationCode = async (
   } catch (error) {
     if (error instanceof Missing2FASession) {
       logMessage.warn(
-        `Failed to send new verification code. Reason: Missing 2FA session for user ${email}.`
+        `Failed to send new verificaiton code. User ${email} does not have an existing authentication flow token`
       );
       throw error;
     } else {

@@ -160,16 +160,14 @@ export const resendVerificationCode = async (
       }),
       { secure: true, sameSite: "strict", maxAge: 60 * 15 }
     );
-
-    redirect(`/${language}/auth/mfa`);
-  } catch (e) {
-    if (e instanceof Missing2FASession) {
+  } catch (err) {
+    if (err instanceof Missing2FASession) {
       redirect(`/${language}/auth/login`);
-    } else {
-      logMessage.error(e);
-      return { error: "Internal Error" };
     }
+    return { error: "Internal Error" };
   }
+
+  redirect(`/${language}/auth/mfa`);
 };
 
 export const getErrorText = async (language: string, errorID: string) => {
