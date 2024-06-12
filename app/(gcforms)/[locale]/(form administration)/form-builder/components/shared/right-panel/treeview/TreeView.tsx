@@ -138,6 +138,7 @@ const ControlledTree: ForwardRefRenderFunction<unknown, TreeDataProviderProps> =
     addIntroElement: true,
     addPolicyElement: true,
     addConfirmationElement: true,
+    addSectionTitleElement: true,
     reviewGroup: false,
   });
 

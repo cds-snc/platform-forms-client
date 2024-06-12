@@ -6,6 +6,7 @@ export type TreeDataOptions = {
   addIntroElement?: boolean;
   addPolicyElement?: boolean;
   addConfirmationElement?: boolean;
+  addSectionTitleElement?: boolean;
   reviewGroup?: boolean;
 };
 
@@ -70,7 +71,7 @@ export const groupsToTreeData = (
     };
 
     // Add section title item to the start of the children array
-    if (key !== "start" && key !== "end") {
+    if (options.addSectionTitleElement && key !== "start" && key !== "end") {
       items[sectionTitleKey] = sectionTitleItem;
       items[key].children?.unshift(sectionTitleKey);
     }
