@@ -27,7 +27,7 @@ export const Button = ({
   disabled = false,
   "aria-label": ariaLabel = undefined,
   theme = "primary",
-  tabIndex = 0,
+  tabIndex, // Note: a button should already be in the tab-index rotor. Only add for specific cases.
   buttonRef,
   dataTestId,
   ...rest
@@ -39,7 +39,7 @@ export const Button = ({
       className={cn(themes["base"], themes[theme], className)}
       disabled={disabled}
       aria-label={ariaLabel}
-      tabIndex={tabIndex}
+      {...(tabIndex && { tabIndex })}
       ref={buttonRef}
       data-testid={dataTestId}
       {...rest}

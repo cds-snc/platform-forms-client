@@ -16,6 +16,7 @@ import { useRehydrate } from "@lib/store/useTemplateStore";
 
 import { SelectNextAction } from "./logic/SelectNextAction";
 import { useGroupStore } from "./treeview/store/useGroupStore";
+import { SkipLinkReusable } from "@clientComponents/globals/SkipLinkReusable";
 
 const TabButton = ({
   text,
@@ -35,6 +36,7 @@ const TabButton = ({
     <Tab as={Fragment}>
       {({ selected }) => (
         <button
+          id="questionsTabButton"
           className={cn(
             selected
               ? "border-indigo-500 text-indigo-600"
@@ -114,10 +116,7 @@ export const RightPanel = ({ id }: { id: string }) => {
   }
 
   return (
-    <section className="relative" aria-labelledby="right_panel_title">
-      <h2 className="sr-only" id="right_panel_title">
-        {t("rightPanel.title")}
-      </h2>
+    <section className="relative" aria-labelledby="rightPanelTitle">
       <div className={cn("fixed right-0", isIntersecting ? "top-20" : "top-0", open && "hidden")}>
         <Button
           theme="link"
@@ -149,7 +148,9 @@ export const RightPanel = ({ id }: { id: string }) => {
                   <div className="p-6">
                     <div className="flex justify-between">
                       <div>
-                        <h2 className="text-base">{t("rightPanel.openPanel")}</h2>
+                        <h2 id="rightPanelTitle" className="text-base" tabIndex={-1}>
+                          {t("rightPanel.openPanel")}
+                        </h2>
                       </div>
                       <div>
                         <button
@@ -192,6 +193,9 @@ export const RightPanel = ({ id }: { id: string }) => {
                     <Tab.Panels>
                       <Tab.Panel>
                         {/* Tree */}
+                        <SkipLinkReusable anchor="#questionsTitle">
+                          {t("skipLink.questions")}
+                        </SkipLinkReusable>
                         <div className="m-0 w-full" aria-live="polite">
                           <TreeView
                             ref={treeView}
@@ -204,6 +208,9 @@ export const RightPanel = ({ id }: { id: string }) => {
                       </Tab.Panel>
                       <Tab.Panel>
                         {/* Translate */}
+                        <SkipLinkReusable anchor="#translateTitle">
+                          {t("skipLink.translate")}
+                        </SkipLinkReusable>
                         <div className="m-0 mt-1 w-full p-4" aria-live="polite">
                           <DownloadCSVWithGroups />
                         </div>
@@ -211,6 +218,9 @@ export const RightPanel = ({ id }: { id: string }) => {
                       </Tab.Panel>
                       <Tab.Panel>
                         {/* Logic */}
+                        <SkipLinkReusable anchor="#logicTitle">
+                          {t("skipLink.logic")}
+                        </SkipLinkReusable>
                         <div className="m-0 w-full" aria-live="polite">
                           {activePathname.endsWith("/logic") && <SelectNextAction item={item} />}
                         </div>

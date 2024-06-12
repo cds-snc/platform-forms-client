@@ -6,7 +6,6 @@ import { Button } from "@clientComponents/globals";
 import { LinkButton } from "@serverComponents/globals/Buttons/LinkButton";
 import { getErrorText, resendVerificationCode } from "../../../actions";
 
-import { hasError } from "@lib/hasError";
 import { Alert } from "../../../../../components/client/forms/Alert";
 import { ErrorStatus } from "@clientComponents/forms/Alert/Alert";
 import Link from "next/link";
@@ -34,24 +33,18 @@ export const ReVerify = (): ReactElement => {
   }
 
   const handleReVerify = async () => {
-    try {
-      setResending(true);
-      if (!email || !authenticationFlowToken) {
-        router.push(`/${language}/auth/login`);
-        return;
-      }
-      await resendVerificationCode(language, email, authenticationFlowToken);
-    } catch (err) {
-      if (hasError(["Missing 2FA session"], err)) {
-        // Missing 2FA session so have the user try signing in again
-        router.push(`/${language}/auth/login`);
-        router.refresh();
-      } else {
-        // Internal Error
-        const errorText = await getErrorText(language, "InternalServiceException");
-        setAuthErrorState(errorText);
-        setResending(false);
-      }
+    setResending(true);
+    if (!email || !authenticationFlowToken) {
+      router.push(`/${language}/auth/login`);
+      return;
+    }
+    const result = await resendVerificationCode(language, email, authenticationFlowToken);
+
+    if (result?.error) {
+      // Internal Error
+      const errorText = await getErrorText(language, "InternalServiceException");
+      setAuthErrorState(errorText);
+      setResending(false);
     }
   };
 

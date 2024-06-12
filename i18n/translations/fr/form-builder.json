@@ -731,7 +731,7 @@
   },
   "translate": "Traductions",
   "translateDescription": "Traduisez le contenu de votre formulaire côte à côte pour offrir une expérience bilingue aux personnes qui remplissent votre formulaire. ",
-  "translateTitle": "Entrer la traduction",
+  "translateTitle": "Traductions",
   "unlockPublishing": "Déverrouiller la publication",
   "unlockPublishingDescription": "Pour déverrouiller la publication, fournissez les coordonnées de la personne de qui vous relevez. ",
   "unnamedForm": "Fichier sans nom",
@@ -870,6 +870,7 @@
   },
   "groups": {
     "newSection": "Nouvelle section",
+    "sectionNameInput": "Section name [FR]",
     "addSection": "Ajouter une section",
     "treeAriaLabel": "Sections Formulaires GC",
     "addSectionPlaceholder": "Ajouter un nom à la section",
@@ -905,10 +906,17 @@
       }
     }
   },
-
   "confirmation": {
     "title": "Votre formulaire a été soumis",
     "sectionTitle": "Titre de la section"
   },
-  "next": "Continuer"
+  "next": "Continuer",
+  "skipLink": {
+    "questions": "[FR]Skip to Questions editor",
+    "translate": "[FR]Skip to Translations editor",
+    "logic": "[FR]Skip to Logic editor",
+    "questionsSetup": "[FR]Skip to Questions setup",
+    "translateSetup": "[FR]Skip to Translations setup",
+    "logicSetup": "[FR]Skip to Logic setup"
+  }
 }
