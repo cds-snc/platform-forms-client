@@ -83,6 +83,24 @@ export const Item = ({
         <div
           {...context.itemContainerWithoutChildrenProps}
           {...context.interactiveElementProps}
+          onDragStart={(e) => {
+            context.interactiveElementProps.onDragStart &&
+              context.interactiveElementProps.onDragStart(e);
+
+            // Customize dragging image for form elements
+            if (isFormElement) {
+              // Get the box inside the element being dragged
+              const el = e.currentTarget.children[0];
+
+              // Get the position of the cursor inside the box for the offset
+              const rect = el.getBoundingClientRect();
+              const x = e.clientX - rect.left;
+              const y = e.clientY - rect.top;
+
+              // Use the inner box for the drag image
+              e.dataTransfer.setDragImage(el, x, y);
+            }
+          }}
           className={cn(
             "text-left group relative w-full overflow-hidden truncate cursor-pointer h-[60px]",
             isSection && isSectionClasses,

@@ -177,15 +177,12 @@ const ControlledTree: ForwardRefRenderFunction<unknown, TreeDataProviderProps> =
         renderItemTitle={({ title }) => <Item.Title title={title} />}
         renderItemArrow={({ item, context }) => <Item.Arrow item={item} context={context} />}
         renderLiveDescriptorContainer={() => null}
-        renderDragBetweenLine={({ draggingPosition, lineProps }) => {
+        renderDragBetweenLine={({ lineProps }) => {
           return (
-            <div
-              {...lineProps}
-              className={cn(
-                "w-full border-b-2 border-blue-focus",
-                draggingPosition.depth > 0 && "ml-10"
-              )}
-            />
+            <div {...lineProps}>
+              <div className="absolute left-0 -ml-2 -mt-2 size-0 border-y-8 border-l-8 border-y-transparent border-l-blue-focus" />
+              <div className={cn("w-full border-b-1 border-blue-focus")} />
+            </div>
           );
         }}
         renderItemsContainer={({ children, containerProps }) => {
