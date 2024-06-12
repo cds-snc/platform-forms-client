@@ -19,6 +19,7 @@ import { Review } from "../Review/Review";
 import { LockedSections } from "@formBuilder/components/shared/right-panel/treeview/types";
 import { BackButton } from "@formBuilder/[id]/preview/BackButton";
 import { Language } from "@lib/types/form-builder-types";
+import { BackButtonGroup } from "../BackButtonGroup/BackButtonGroup";
 
 interface SubmitButtonProps {
   numberOfRequiredQuestions: number;
@@ -251,6 +252,8 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
             {isGroupsCheck && currentGroup === LockedSections.REVIEW && (
               <Review language={language as Language} />
             )}
+
+            {isGroupsCheck && <BackButtonGroup />}
 
             {props.renderSubmit ? (
               props.renderSubmit({
