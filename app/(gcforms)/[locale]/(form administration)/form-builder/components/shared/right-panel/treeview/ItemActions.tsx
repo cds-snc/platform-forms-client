@@ -21,7 +21,7 @@ export const ItemActions = ({ context, arrow, lockClassName, handleDelete }: Ite
       {context.isExpanded && (
         <div className="absolute right-5 top-3 mr-10 flex flex-row">
           <button
-            className="cursor-pointer rounded-lg border border-transparent p-1 hover:border-blue-focus hover:bg-blue-200"
+            className="cursor-pointer rounded-lg border border-transparent p-1 hover:border-black hover:bg-violet-50"
             onClick={handleAdd}
           >
             <AddIcon
@@ -30,7 +30,7 @@ export const ItemActions = ({ context, arrow, lockClassName, handleDelete }: Ite
             />
           </button>
           <button
-            className=" cursor-pointer rounded-lg border border-transparent p-1 hover:border-blue-focus hover:bg-blue-200"
+            className=" cursor-pointer rounded-lg border border-transparent p-1 hover:border-black hover:bg-violet-50"
             onClick={handleDelete}
           >
             <DeleteIcon title="Delete group" className="size-6" />
