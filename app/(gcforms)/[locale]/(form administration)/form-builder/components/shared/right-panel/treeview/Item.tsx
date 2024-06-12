@@ -10,6 +10,13 @@ import { ItemActions } from "./ItemActions";
 import { useTemplateStore } from "@lib/store/useTemplateStore";
 import { LocalizedElementProperties } from "@lib/types/form-builder-types";
 import { useTranslation } from "@i18n/client";
+import {
+  getItemFromElement,
+  isTitleElementType,
+  isSectionElementType,
+  isFormElementType,
+  isGhostElementType,
+} from "./util/itemType";
 
 export const Item = ({
   title,
@@ -26,12 +33,6 @@ export const Item = ({
 }) => {
   const { t } = useTranslation("form-builder");
 
-  const isRenaming = context && context?.isRenaming ? true : false;
-  const isLocked = !context.canDrag;
-  let isFormElement = false;
-  let isGhostElement = false;
-  let isSection = false;
-
   const { translationLanguagePriority, localizeField } = useTemplateStore((s) => ({
     localizeField: s.localizeField,
     translationLanguagePriority: s.translationLanguagePriority,
@@ -47,28 +48,41 @@ export const Item = ({
     translationLanguagePriority
   );
 
-  // Pull item from arrow props
-  let item: TreeItem;
-  let titleText = "";
-  let descriptionText = "";
-  let fieldType = "";
-  if (arrow && typeof arrow === "object" && "props" in arrow) {
-    item = arrow.props.item;
-    fieldType = item?.data.type;
-    isSection = item?.isFolder ? true : false;
-    isFormElement = item?.isFolder ? false : true;
-    isGhostElement = ["intro", "policy", "end"].includes(String(item?.index));
+  const item = getItemFromElement(arrow);
 
-    titleText = isSection ? item?.data.name : item?.data[localizedTitle];
-    descriptionText = isFormElement && item?.data[localizedDescription];
-  }
+  // Types
+  const isFormElement = item ? isFormElementType(item) : false;
+  const isGhostElement = item ? isGhostElementType(item) : false;
+  const isSectionElement = item ? isSectionElementType(item) : false;
+  const isTitleElement = item ? isTitleElementType(item) : false;
+  const fieldType = item ? item?.data.fieldType : "";
 
-  const isSectionClasses = cn(
+  // Text
+  const titleText = item ? (isSectionElement ? item?.data.name : item?.data[localizedTitle]) : "";
+  const descriptionText = isFormElement && item ? item?.data[localizedDescription] : "";
+
+  // States
+  const isRenaming = context && context?.isRenaming ? true : false;
+  const isLocked = !context.canDrag;
+  const allowRename = !isLocked || isTitleElement;
+
+  const interactiveSectionElementClasses = cn(
     "w-full relative",
     !context.isExpanded && "border-b-1 border-slate-200"
   );
-  const formElementClasses = cn("inline-block w-full relative outline-none py-1.5");
-  const ghostElementClasses = "inline-block w-full relative";
+  const interactiveFormElementClasses = cn("inline-block w-full relative outline-none py-1.5");
+  const interactiveGhostElementClasses = "inline-block w-full relative";
+  const interactiveTitleElementClasses = cn("text-gray-500 italic");
+
+  const sectionElementClasses = cn("w-[100%] h-[60px]", context.isExpanded && "font-bold");
+
+  const formElementClasses = cn(
+    "rounded-md px-3 w-5/6 border-1 bg-white min-h-[50px]",
+    context.isFocused && "border-indigo-700 border-2 font-bold bg-gray-50 text-indigo-700",
+    context.isSelected && "border-2 border-slate-950 bg-white",
+    !context.isSelected &&
+      "border-slate-500 hover:border-indigo-700 hover:border-1 hover:bg-indigo-50"
+  );
 
   return (
     <li
@@ -83,34 +97,45 @@ export const Item = ({
         <div
           {...context.itemContainerWithoutChildrenProps}
           {...context.interactiveElementProps}
+          onDragStart={(e) => {
+            context.interactiveElementProps.onDragStart &&
+              context.interactiveElementProps.onDragStart(e);
+
+            // Customize dragging image for form elements
+            if (isFormElement) {
+              // Get the box inside the element being dragged
+              const el = e.currentTarget.children[0];
+
+              // Get the position of the cursor inside the box for the offset
+              const rect = el.getBoundingClientRect();
+              const x = e.clientX - rect.left;
+              const y = e.clientY - rect.top;
+
+              // Use the inner box for the drag image
+              e.dataTransfer.setDragImage(el, x, y);
+            }
+          }}
           className={cn(
             "text-left group relative w-full overflow-hidden truncate cursor-pointer h-[60px]",
-            isSection && isSectionClasses,
-            isFormElement && formElementClasses,
-            isGhostElement && ghostElementClasses
+            isSectionElement && interactiveSectionElementClasses,
+            isFormElement && interactiveFormElementClasses,
+            isGhostElement && interactiveGhostElementClasses,
+            isTitleElement && interactiveTitleElementClasses
           )}
         >
           {arrow}
           {isRenaming ? (
             <div className="relative flex h-[60px] w-[100%] items-center overflow-hidden text-sm">
-              <EditableInput isSection={isSection} title={titleText} context={context} />
+              <EditableInput isSection={isSectionElement} title={titleText} context={context} />
             </div>
           ) : (
             <div
               className={cn(
                 "ml-12 flex items-center overflow-hidden relative text-sm",
-                isSection && "w-[100%] h-[60px]",
-                isFormElement && "rounded-md px-3 w-5/6 border-1 bg-white min-h-[50px]",
-                isFormElement &&
-                  !context.isSelected &&
-                  " border-slate-500 hover:border-indigo-700 hover:border-1 hover:bg-indigo-50",
-                isFormElement &&
-                  context.isFocused &&
-                  "border-indigo-700 border-2 font-bold bg-gray-50 text-indigo-700",
-                isFormElement && context.isSelected && "border-2 border-slate-950  bg-white ",
-                isSection && context.isExpanded && "font-bold"
+                isSectionElement && sectionElementClasses,
+                isFormElement && formElementClasses
               )}
-              {...(!isLocked && {
+              {...(allowRename && {
                 onDoubleClick: () => {
                   context.startRenamingItem();
                 },
@@ -125,7 +150,7 @@ export const Item = ({
                 <span className="text-gray-500">{t("groups.treeView.emptyFormElement")}</span>
               )}
 
-              {isSection && titleText === "" && (
+              {isSectionElement && titleText === "" && (
                 <span className="text-gray-500">{t("groups.newSection")}</span>
               )}
               {/* End placeholders */}

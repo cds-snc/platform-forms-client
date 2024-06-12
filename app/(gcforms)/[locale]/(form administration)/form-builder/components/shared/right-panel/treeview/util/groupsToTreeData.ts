@@ -6,6 +6,7 @@ export type TreeDataOptions = {
   addIntroElement?: boolean;
   addPolicyElement?: boolean;
   addConfirmationElement?: boolean;
+  addSectionTitleElements?: boolean;
   reviewGroup?: boolean;
 };
 
@@ -52,6 +53,28 @@ export const groupsToTreeData = (
 
     items[key] = item;
     items.root.children?.push(key);
+
+    // Add section title item
+    const sectionTitleKey = `section-title-${key}`;
+    const sectionTitleItem = {
+      index: sectionTitleKey,
+      isFolder: false,
+      canRename: true,
+      canMove: false,
+      data: {
+        titleEn: formGroups[key].titleEn || "Section title",
+        titleFr: formGroups[key].titleFr || "Section title",
+        descriptionEn: "",
+        descriptionFr: "",
+      },
+      children: [],
+    };
+
+    // Add section title item to the start of the children array
+    if (options.addSectionTitleElements && key !== "start" && key !== "end") {
+      items[sectionTitleKey] = sectionTitleItem;
+      items[key].children?.unshift(sectionTitleKey);
+    }
 
     children.forEach((childId) => {
       const element = elements.find((el) => el.id === Number(childId));
