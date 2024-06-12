@@ -35,6 +35,7 @@ export const BackButtonGroup = () => {
         }}
         type="button"
         className="mr-4"
+        theme="secondary"
       >
         {t("back")}
       </Button>
