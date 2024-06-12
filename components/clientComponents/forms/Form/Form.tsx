@@ -253,33 +253,34 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
               <Review language={language as Language} />
             )}
 
-            {isGroupsCheck && <BackButtonGroup />}
-
-            {props.renderSubmit ? (
-              props.renderSubmit({
-                validateForm: props.validateForm,
-                fallBack: () => {
-                  return (
-                    <div>
-                      {isGroupsCheck && currentGroup === LockedSections.REVIEW && <BackButton />}
-                      <div className="inline-block">
-                        <SubmitButton
-                          numberOfRequiredQuestions={numberOfRequiredQuestions}
-                          formID={formID}
-                          formTitle={form.titleEn}
-                        />
+            <div className="flex">
+              {isGroupsCheck && <BackButtonGroup />}
+              {props.renderSubmit ? (
+                props.renderSubmit({
+                  validateForm: props.validateForm,
+                  fallBack: () => {
+                    return (
+                      <div>
+                        {isGroupsCheck && currentGroup === LockedSections.REVIEW && <BackButton />}
+                        <div className="inline-block">
+                          <SubmitButton
+                            numberOfRequiredQuestions={numberOfRequiredQuestions}
+                            formID={formID}
+                            formTitle={form.titleEn}
+                          />
+                        </div>
                       </div>
-                    </div>
-                  );
-                },
-              })
-            ) : (
-              <SubmitButton
-                numberOfRequiredQuestions={numberOfRequiredQuestions}
-                formID={formID}
-                formTitle={form.titleEn}
-              />
-            )}
+                    );
+                  },
+                })
+              ) : (
+                <SubmitButton
+                  numberOfRequiredQuestions={numberOfRequiredQuestions}
+                  formID={formID}
+                  formTitle={form.titleEn}
+                />
+              )}
+            </div>
           </form>
         </>
       }

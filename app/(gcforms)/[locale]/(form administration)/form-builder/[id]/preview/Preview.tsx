@@ -24,7 +24,6 @@ import { BackButton } from "./BackButton";
 import { safeJSONParse } from "@lib/utils";
 import { ErrorSaving } from "@formBuilder/components/shared/ErrorSaving";
 import { toast } from "@formBuilder/components/shared";
-import { BackButtonGroup } from "@clientComponents/forms/BackButtonGroup/BackButtonGroup";
 
 export const Preview = ({
   disableSubmit = true,
@@ -195,7 +194,6 @@ export const Preview = ({
                     return (
                       <div id="PreviewSubmitButton">
                         <span {...getLocalizationAttribute()}>
-                          {allowGrouping && <BackButtonGroup />}
                           <NextButton
                             validateForm={validateForm}
                             fallBack={() => {
