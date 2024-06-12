@@ -41,6 +41,7 @@ export const ReVerify = (): ReactElement => {
     const result = await resendVerificationCode(language, email, authenticationFlowToken);
 
     if (result?.error) {
+      // Internal Error
       const errorText = await getErrorText(language, "InternalServiceException");
       setAuthErrorState(errorText);
       setResending(false);
