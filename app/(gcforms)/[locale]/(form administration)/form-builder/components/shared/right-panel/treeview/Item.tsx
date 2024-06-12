@@ -78,9 +78,8 @@ export const Item = ({
 
   const formElementClasses = cn(
     "rounded-md px-3 w-5/6 border-1 bg-white min-h-[50px]",
-    context.isSelected && "border-2 border-slate-950  bg-white",
     context.isFocused && "border-indigo-700 border-2 font-bold bg-gray-50 text-indigo-700",
-    context.isSelected && "border-2 border-slate-950  bg-white",
+    context.isSelected && "border-2 border-slate-950 bg-white",
     !context.isSelected &&
       "border-slate-500 hover:border-indigo-700 hover:border-1 hover:bg-indigo-50"
   );
