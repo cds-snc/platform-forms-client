@@ -9,6 +9,7 @@ export const getItemFromElement = (el: ReactNode) => {
 
 export const isTitleElementType = (item: TreeItem) => {
   const key = item?.index as string;
+  if (!key) return false;
   return key.includes("section-title-");
 };
 

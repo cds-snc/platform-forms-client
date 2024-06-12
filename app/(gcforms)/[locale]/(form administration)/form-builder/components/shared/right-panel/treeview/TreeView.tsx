@@ -223,6 +223,7 @@ const ControlledTree: ForwardRefRenderFunction<unknown, TreeDataProviderProps> =
         canDropBelowOpenFolders={true}
         canDropOnFolder={true}
         onRenameItem={(item, name) => {
+          if (!item) return;
           const isTitleElement = isTitleElementType(item);
           if (isTitleElement) {
             updateGroupTitle({ id: groupId, locale: language || "en", title: name });
