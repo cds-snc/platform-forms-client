@@ -347,6 +347,9 @@ export const validConditionalRules = (element: FormElement, matchedIds: string[]
     const rules = element.properties?.conditionalRules;
     return rules.some((rule) => matchedIds.includes(rule?.choiceId));
   }
+
+  // @todo update to handle dynamic row rules
+
   // No rules to match against so it's valid.
   return true;
 };
