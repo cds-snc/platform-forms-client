@@ -58,7 +58,6 @@ export const SingleActionSelect = ({
               currentGroup && setGroupNextAction(currentGroup, nextActionId);
             }
 
-            flow.current?.updateEdges();
             flow.current?.redraw();
 
             toast.success(t("logic.actionsSaved"));

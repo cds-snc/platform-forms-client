@@ -242,7 +242,6 @@ export const MultiActionSelector = ({
               const parent = group?.index;
               parent && setGroupNextAction(parent as string, nextActions);
               setChangeKey(String(new Date().getTime()));
-              flow.current?.updateEdges();
               flow.current?.redraw();
               toast.success(t("logic.actionsSaved"));
             }}

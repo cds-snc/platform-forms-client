@@ -7,6 +7,7 @@ import React, {
   ForwardRefRenderFunction,
   useEffect,
   useState,
+  useRef,
 } from "react";
 
 import ReactFlow, {
@@ -17,6 +18,7 @@ import ReactFlow, {
   useEdgesState,
   useReactFlow,
   Background,
+  ReactFlowInstance,
 } from "reactflow";
 
 import "reactflow/dist/style.css";
@@ -41,7 +43,6 @@ const Loading = () => (
 
 export interface FlowProps {
   children?: ReactElement;
-  updateEdges?: () => void;
   redraw?: () => void;
 }
 
@@ -50,7 +51,9 @@ const Flow: ForwardRefRenderFunction<unknown, FlowProps> = ({ children }, ref) =
   const [nodes, , onNodesChange] = useNodesState(flowNodes);
   const [, setEdges, onEdgesChange] = useEdgesState(flowEdges);
   const { fitView } = useReactFlow();
-  const [redraw, setRedraw] = useState(false);
+  const reset = useRef(false);
+  const [redrawing, setRedrawing] = useState(false);
+  const [rfInstance, setRfInstance] = useState<ReactFlowInstance | null>();
 
   // temp fix see: https://github.com/xyflow/xyflow/issues/3243
   const store = useStoreApi();
@@ -63,6 +66,19 @@ const Flow: ForwardRefRenderFunction<unknown, FlowProps> = ({ children }, ref) =
   }
 
   useEffect(() => {
+    let flowZoom = 0.5;
+    if (rfInstance && reset.current === false) {
+      const obj = rfInstance.toObject();
+      if (obj.viewport.zoom) {
+        flowZoom = obj.viewport.zoom;
+      }
+    }
+
+    if (flowZoom > 0.5) {
+      return;
+    }
+
+    // Only fit view if the user has not zoomed in
     fitView();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [fitView, nodes]);
@@ -75,16 +91,27 @@ const Flow: ForwardRefRenderFunction<unknown, FlowProps> = ({ children }, ref) =
       setEdges(edges);
     },
     redraw: () => {
-      setRedraw(true);
-      runLayout();
+      reset.current = true;
+      const { edges } = getData();
+      setEdges(edges);
+      setRedrawing(true);
+      const reLayout = async () => {
+        await runLayout();
+        setRedrawing(false);
+      };
+
       // Add a small delay to visually indicate the redraw
       setTimeout(() => {
-        setRedraw(false);
-      }, 300);
+        reLayout();
+      }, 200);
+
+      setTimeout(() => {
+        reset.current = false;
+      }, 2000);
     },
   }));
 
-  if (redraw) {
+  if (redrawing) {
     return <Loading />;
   }
 
@@ -102,6 +129,10 @@ const Flow: ForwardRefRenderFunction<unknown, FlowProps> = ({ children }, ref) =
         edges={flowEdges}
         onEdgesChange={onEdgesChange}
         defaultEdgeOptions={edgeOptions}
+        onInit={(instance) => {
+          // Keep a reference to the instance so we can check zoom level for fitView.
+          setRfInstance(instance);
+        }}
       >
         <Controls showInteractive={false} showZoom={true} showFitView={false} />
         <Background />
