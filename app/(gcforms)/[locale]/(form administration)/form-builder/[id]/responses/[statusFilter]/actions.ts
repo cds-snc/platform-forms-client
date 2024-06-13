@@ -17,7 +17,7 @@ import {
 } from "@lib/responseDownloadFormats/types";
 import { getFullTemplateByID } from "@lib/templates";
 import { FormElementTypes, VaultStatus } from "@lib/types";
-import { isResponseId, isUUID } from "@lib/validation/validation";
+import { isResponseId } from "@lib/validation/validation";
 import { listAllSubmissions, retrieveSubmissions, updateLastDownloadedBy } from "@lib/vault";
 import { transform as csvTransform } from "@lib/responseDownloadFormats/csv";
 import { transform as htmlAggregatedTransform } from "@lib/responseDownloadFormats/html-aggregated";
@@ -67,7 +67,7 @@ export const fetchSubmissions = async ({
     throw new Error("User is not authenticated");
   }
 
-  if (formId === "0000" || !isUUID(formId)) {
+  if (formId === "0000") {
     return {
       submissions: [],
       lastEvaluatedKey: null,
