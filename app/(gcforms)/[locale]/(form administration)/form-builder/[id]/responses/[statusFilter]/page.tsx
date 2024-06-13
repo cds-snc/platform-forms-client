@@ -38,21 +38,6 @@ export default async function Page({
     overdueAfter: Number(await getAppSetting("nagwarePhaseEncouraged")),
   };
 
-  // Handle the case where the user is not authenticated and the form ID is 0000
-  // In this case we know no responses will be returned, so we can skip the API call
-  if (isAuthenticated && id === "0000") {
-    return (
-      <Responses
-        initialForm={null}
-        nagwareResult={null}
-        lastEvaluatedKey={null}
-        overdueAfter={pageProps.overdueAfter}
-        responseDownloadLimit={pageProps.responseDownloadLimit}
-        vaultSubmissions={[]}
-      />
-    );
-  }
-
   try {
     if (isAuthenticated) {
       const initialForm = await fetchTemplate(id);
