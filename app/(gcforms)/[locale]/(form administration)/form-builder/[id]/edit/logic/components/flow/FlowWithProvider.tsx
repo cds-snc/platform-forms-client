@@ -17,6 +17,7 @@ import ReactFlow, {
   useEdgesState,
   useReactFlow,
   Background,
+  ReactFlowInstance,
 } from "reactflow";
 
 import "reactflow/dist/style.css";
@@ -51,6 +52,7 @@ const Flow: ForwardRefRenderFunction<unknown, FlowProps> = ({ children }, ref) =
   const [, setEdges, onEdgesChange] = useEdgesState(flowEdges);
   const { fitView } = useReactFlow();
   const [redraw, setRedraw] = useState(false);
+  const [rfInstance, setRfInstance] = useState<ReactFlowInstance | null>();
 
   // temp fix see: https://github.com/xyflow/xyflow/issues/3243
   const store = useStoreApi();
@@ -63,6 +65,19 @@ const Flow: ForwardRefRenderFunction<unknown, FlowProps> = ({ children }, ref) =
   }
 
   useEffect(() => {
+    let flowZoom = 0.5;
+    if (rfInstance && !redraw) {
+      const obj = rfInstance.toObject();
+      if (obj.viewport.zoom) {
+        flowZoom = obj.viewport.zoom;
+      }
+    }
+
+    if (flowZoom > 0.5) {
+      return;
+    }
+
+    // Only fit view if the user has not zoomed in
     fitView();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [fitView, nodes]);
@@ -102,6 +117,10 @@ const Flow: ForwardRefRenderFunction<unknown, FlowProps> = ({ children }, ref) =
         edges={flowEdges}
         onEdgesChange={onEdgesChange}
         defaultEdgeOptions={edgeOptions}
+        onInit={(instance) => {
+          // Keep a reference to the instance so we can check zoom level for fitView.
+          setRfInstance(instance);
+        }}
       >
         <Controls showInteractive={false} showZoom={true} showFitView={false} />
         <Background />
