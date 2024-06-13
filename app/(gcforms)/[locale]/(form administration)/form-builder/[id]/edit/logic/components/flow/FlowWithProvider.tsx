@@ -66,7 +66,7 @@ const Flow: ForwardRefRenderFunction<unknown, FlowProps> = ({ children }, ref) =
 
   useEffect(() => {
     let flowZoom = 0.5;
-    if (rfInstance && !redraw) {
+    if (rfInstance) {
       const obj = rfInstance.toObject();
       if (obj.viewport.zoom) {
         flowZoom = obj.viewport.zoom;
@@ -87,14 +87,20 @@ const Flow: ForwardRefRenderFunction<unknown, FlowProps> = ({ children }, ref) =
   useImperativeHandle(ref, () => ({
     updateEdges: () => {
       const { edges } = getData();
+      rfInstance?.zoomTo(0);
       setEdges(edges);
     },
     redraw: () => {
       setRedraw(true);
-      runLayout();
+
+      const reLayout = async () => {
+        await runLayout();
+        setRedraw(false);
+      };
+
       // Add a small delay to visually indicate the redraw
       setTimeout(() => {
-        setRedraw(false);
+        reLayout();
       }, 300);
     },
   }));
