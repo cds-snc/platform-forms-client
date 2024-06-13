@@ -65,6 +65,13 @@ export const fetchSubmissions = async ({
     throw new Error("User is not authenticated");
   }
 
+  if (formId === "0000") {
+    return {
+      submissions: [],
+      lastEvaluatedKey: null,
+    };
+  }
+
   // get status from url params (default = new) and capitalize/cast to VaultStatus
   // Protect against invalid status query
   const selectedStatus = Object.values(VaultStatus).includes(ucfirst(status) as VaultStatus)

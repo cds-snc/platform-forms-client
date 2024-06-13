@@ -109,7 +109,9 @@ export const handleOnDrop = async (
   target: DraggingPosition,
   getGroups: () => GroupsType | undefined,
   replaceGroups: (groups: GroupsType) => void,
-  setSelectedItems: (items: string[]) => void,
+  setSelectedItems: (items: TreeItemIndex[]) => void,
+  setExpandedItems: (items: TreeItemIndex[]) => void,
+  expandedItems: TreeItemIndex[],
   getTreeData: () => TreeItems,
   getPromise: () => Promise<boolean>,
   setOpenDialog: (value: boolean) => void
@@ -278,6 +280,9 @@ export const handleOnDrop = async (
     selectedItems.push(String(item.index));
 
     replaceGroups(newGroups);
+
+    // Expand the group that the item was dropped into
+    setExpandedItems([targetParent, ...expandedItems]);
   });
 
   setSelectedItems(selectedItems);

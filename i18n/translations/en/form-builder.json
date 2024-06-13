@@ -731,7 +731,7 @@
   },
   "translate": "Translations",
   "translateDescription": "Translate your form content side by side to provide a bilingual experience to those filling out your form.",
-  "translateTitle": "Enter your translation",
+  "translateTitle": "Translations",
   "unlockPublishing": "Unlock publishing",
   "unlockPublishingDescription": "To unlock publishing, provide the contact information of the person you report to.",
   "unnamedForm": "Unnamed form file",
@@ -829,7 +829,7 @@
   "opensInNewTab": "opens in a new tab",
   "rightPanel": {
     "title": "Right Panel",
-    "openPanel": "Design form",
+    "openPanel": "Set up your form",
     "closePanel": "Close panel",
     "questions": "Questions",
     "logic": "Logic",
@@ -869,6 +869,7 @@
   },
   "groups": {
     "newSection": "New section",
+    "sectionNameInput": "Section name",
     "addSection": "Add section",
     "addSectionPlaceholder": "Add a section name",
     "treeAriaLabel": "GC Forms sections",
@@ -908,5 +909,13 @@
     "title": "Your form has been submitted",
     "sectionTitle": "Section title"
   },
-  "next": "Continue"
+  "next": "Continue",
+  "skipLink": {
+    "questions": "Skip to Questions editor",
+    "translate": "Skip to Translations editor",
+    "logic": "Skip to Logic editor",
+    "questionsSetup": "Skip to Questions setup",
+    "translateSetup": "Skip to Translations setup",
+    "logicSetup": "Skip to Logic setup"
+  }
 }

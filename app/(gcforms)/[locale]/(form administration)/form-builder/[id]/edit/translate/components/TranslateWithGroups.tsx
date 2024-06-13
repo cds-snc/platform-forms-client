@@ -18,6 +18,7 @@ import { FieldsetLegend, SectionTitle } from ".";
 import { SaveButton } from "@formBuilder/components/shared/SaveButton";
 
 import { FormElement } from "@lib/types";
+import { SkipLinkReusable } from "@clientComponents/globals/SkipLinkReusable";
 import { alphabet } from "@lib/utils/form-builder";
 import { sortGroup } from "@lib/utils/form-builder/groupedFormHelpers";
 import { Group } from "@lib/formContext";
@@ -194,14 +195,20 @@ export const TranslateWithGroups = () => {
 
   return (
     <>
+      <h1 className="sr-only">{t("edit")}</h1>
       <div className="mr-10">
-        <h1 className="mb-0 mt-8 border-0">{t("translateTitle")}</h1>
-        <p>{t("translateDescription")}</p>
-        <br />
-
-        <div className="mb-4">
-          <SaveButton />
+        <div className="flex w-[800px]">
+          <h2 id="translateTitle" tabIndex={-1}>
+            {t("translateTitle")}
+          </h2>
+          <div className="ml-5 mt-2">
+            <SaveButton />
+          </div>
         </div>
+        <SkipLinkReusable anchor="#rightPanelTitle">
+          {t("skipLink.translateSetup")}
+        </SkipLinkReusable>
+        <p className="mb-8">{t("translateDescription")}</p>
 
         <div>
           <SectionTitle>
@@ -488,6 +495,9 @@ export const TranslateWithGroups = () => {
           </fieldset>
         </section>
         {/* END CONFIRMATION */}
+        <SkipLinkReusable anchor="#rightPanelTitle">
+          {t("skipLink.translateSetup")}
+        </SkipLinkReusable>
       </div>
     </>
   );

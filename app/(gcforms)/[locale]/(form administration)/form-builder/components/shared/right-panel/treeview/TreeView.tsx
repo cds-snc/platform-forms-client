@@ -33,6 +33,8 @@ import { useTranslation } from "@i18n/client";
 import { cn } from "@lib/utils";
 import { KeyboardNavTip } from "./KeyboardNavTip";
 import { Button } from "@clientComponents/globals";
+import { Language } from "@lib/types/form-builder-types";
+import { isTitleElementType } from "./util/itemType";
 
 export interface TreeDataProviderProps {
   children?: ReactElement;
@@ -46,6 +48,7 @@ const ControlledTree: ForwardRefRenderFunction<unknown, TreeDataProviderProps> =
   ref
 ) => {
   const {
+    groupId,
     getTreeData,
     getGroups,
     addGroup,
@@ -56,6 +59,7 @@ const ControlledTree: ForwardRefRenderFunction<unknown, TreeDataProviderProps> =
     deleteGroup,
   } = useGroupStore((s) => {
     return {
+      groupId: s.id,
       getTreeData: s.getTreeData,
       getGroups: s.getGroups,
       replaceGroups: s.replaceGroups,
@@ -66,6 +70,12 @@ const ControlledTree: ForwardRefRenderFunction<unknown, TreeDataProviderProps> =
       deleteGroup: s.deleteGroup,
     };
   });
+
+  const updateGroupTitle = useGroupStore((state) => state.updateGroupTitle);
+  const { getLocalizationAttribute } = useTemplateStore((s) => ({
+    getLocalizationAttribute: s.getLocalizationAttribute,
+  }));
+  const language = getLocalizationAttribute()?.lang as Language;
 
   const { remove: removeItem } = useTemplateStore((s) => {
     return {
@@ -124,16 +134,23 @@ const ControlledTree: ForwardRefRenderFunction<unknown, TreeDataProviderProps> =
     setOpenDialog: setOpenConfirmDeleteDialog,
   } = useConfirmDeleteDialogState();
 
+  const items = getTreeData({
+    addIntroElement: true,
+    addPolicyElement: true,
+    addConfirmationElement: true,
+    addSectionTitleElements: false,
+    reviewGroup: false,
+  });
+
+  if (!items) {
+    return null;
+  }
+
   return (
     <>
       <ControlledTreeEnvironment
         ref={environment}
-        items={getTreeData({
-          addIntroElement: true,
-          addPolicyElement: true,
-          addConfirmationElement: true,
-          reviewGroup: false,
-        })}
+        items={items}
         getItemTitle={(item) => getTitle(item.data as ElementProperties)}
         renderItem={({ item, title, arrow, context, children }) => {
           return (
@@ -171,15 +188,12 @@ const ControlledTree: ForwardRefRenderFunction<unknown, TreeDataProviderProps> =
         renderItemTitle={({ title }) => <Item.Title title={title} />}
         renderItemArrow={({ item, context }) => <Item.Arrow item={item} context={context} />}
         renderLiveDescriptorContainer={() => null}
-        renderDragBetweenLine={({ draggingPosition, lineProps }) => {
+        renderDragBetweenLine={({ lineProps }) => {
           return (
-            <div
-              {...lineProps}
-              className={cn(
-                "w-full border-b-2 border-blue-focus",
-                draggingPosition.depth > 0 && "ml-10"
-              )}
-            />
+            <div {...lineProps}>
+              <div className="absolute left-0 -ml-2 -mt-2 size-0 border-y-8 border-l-8 border-y-transparent border-l-blue-focus" />
+              <div className={cn("w-full border-b-1 border-blue-focus")} />
+            </div>
           );
         }}
         renderItemsContainer={({ children, containerProps }) => {
@@ -209,6 +223,14 @@ const ControlledTree: ForwardRefRenderFunction<unknown, TreeDataProviderProps> =
         canDropBelowOpenFolders={true}
         canDropOnFolder={true}
         onRenameItem={(item, name) => {
+          if (!item) return;
+          const isTitleElement = isTitleElementType(item);
+          if (isTitleElement) {
+            updateGroupTitle({ id: groupId, locale: language || "en", title: name });
+            setSelectedItems([item.index]);
+            return;
+          }
+
           item.isFolder && updateGroupName({ id: String(item.index), name });
           // Rename the element
           !item.isFolder &&
@@ -226,6 +248,8 @@ const ControlledTree: ForwardRefRenderFunction<unknown, TreeDataProviderProps> =
             getGroups,
             replaceGroups,
             setSelectedItems,
+            setExpandedItems,
+            expandedItems,
             getTreeData,
             getConfirmMovePromise,
             setOpenConfirmMoveDialog
