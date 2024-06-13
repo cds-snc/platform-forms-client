@@ -7,6 +7,7 @@ import React, {
   ForwardRefRenderFunction,
   useEffect,
   useState,
+  useRef,
 } from "react";
 
 import ReactFlow, {
@@ -42,7 +43,6 @@ const Loading = () => (
 
 export interface FlowProps {
   children?: ReactElement;
-  updateEdges?: () => void;
   redraw?: () => void;
 }
 
@@ -51,7 +51,8 @@ const Flow: ForwardRefRenderFunction<unknown, FlowProps> = ({ children }, ref) =
   const [nodes, , onNodesChange] = useNodesState(flowNodes);
   const [, setEdges, onEdgesChange] = useEdgesState(flowEdges);
   const { fitView } = useReactFlow();
-  const [redraw, setRedraw] = useState(false);
+  const reset = useRef(false);
+  const [redrawing, setRedrawing] = useState(false);
   const [rfInstance, setRfInstance] = useState<ReactFlowInstance | null>();
 
   // temp fix see: https://github.com/xyflow/xyflow/issues/3243
@@ -66,7 +67,7 @@ const Flow: ForwardRefRenderFunction<unknown, FlowProps> = ({ children }, ref) =
 
   useEffect(() => {
     let flowZoom = 0.5;
-    if (rfInstance) {
+    if (rfInstance && reset.current === false) {
       const obj = rfInstance.toObject();
       if (obj.viewport.zoom) {
         flowZoom = obj.viewport.zoom;
@@ -87,25 +88,30 @@ const Flow: ForwardRefRenderFunction<unknown, FlowProps> = ({ children }, ref) =
   useImperativeHandle(ref, () => ({
     updateEdges: () => {
       const { edges } = getData();
-      rfInstance?.zoomTo(0);
       setEdges(edges);
     },
     redraw: () => {
-      setRedraw(true);
-
+      reset.current = true;
+      const { edges } = getData();
+      setEdges(edges);
+      setRedrawing(true);
       const reLayout = async () => {
         await runLayout();
-        setRedraw(false);
+        setRedrawing(false);
       };
 
       // Add a small delay to visually indicate the redraw
       setTimeout(() => {
         reLayout();
-      }, 300);
+      }, 200);
+
+      setTimeout(() => {
+        reset.current = false;
+      }, 2000);
     },
   }));
 
-  if (redraw) {
+  if (redrawing) {
     return <Loading />;
   }
 
