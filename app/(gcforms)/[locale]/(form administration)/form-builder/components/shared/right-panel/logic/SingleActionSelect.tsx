@@ -59,6 +59,8 @@ export const SingleActionSelect = ({
             }
 
             flow.current?.updateEdges();
+            flow.current?.redraw();
+
             toast.success(t("logic.actionsSaved"));
           }}
         >

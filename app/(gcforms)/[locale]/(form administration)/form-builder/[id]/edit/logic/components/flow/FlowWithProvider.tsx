@@ -16,7 +16,6 @@ import ReactFlow, {
   useNodesState,
   useEdgesState,
   useReactFlow,
-  ReactFlowInstance,
   Background,
 } from "reactflow";
 
@@ -32,9 +31,18 @@ import { useRehydrate } from "@lib/store/useTemplateStore";
 
 const nodeTypes = { groupNode: GroupNode };
 
+import { Loader } from "@clientComponents/globals/Loader";
+
+const Loading = () => (
+  <div className="flex h-full items-center justify-center ">
+    <Loader />
+  </div>
+);
+
 export interface FlowProps {
   children?: ReactElement;
   updateEdges?: () => void;
+  redraw?: () => void;
 }
 
 const Flow: ForwardRefRenderFunction<unknown, FlowProps> = ({ children }, ref) => {
@@ -42,7 +50,7 @@ const Flow: ForwardRefRenderFunction<unknown, FlowProps> = ({ children }, ref) =
   const [nodes, , onNodesChange] = useNodesState(flowNodes);
   const [, setEdges, onEdgesChange] = useEdgesState(flowEdges);
   const { fitView } = useReactFlow();
-  const [rfInstance, setRfInstance] = useState<ReactFlowInstance | null>();
+  const [redraw, setRedraw] = useState(false);
 
   // temp fix see: https://github.com/xyflow/xyflow/issues/3243
   const store = useStoreApi();
@@ -55,19 +63,6 @@ const Flow: ForwardRefRenderFunction<unknown, FlowProps> = ({ children }, ref) =
   }
 
   useEffect(() => {
-    let flowZoom = 0.5;
-    if (rfInstance) {
-      const obj = rfInstance.toObject();
-      if (obj.viewport.zoom) {
-        flowZoom = obj.viewport.zoom;
-      }
-    }
-
-    if (flowZoom > 0.5) {
-      return;
-    }
-
-    // Only fit view if the user has not zoomed in
     fitView();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [fitView, nodes]);
@@ -78,9 +73,20 @@ const Flow: ForwardRefRenderFunction<unknown, FlowProps> = ({ children }, ref) =
     updateEdges: () => {
       const { edges } = getData();
       setEdges(edges);
+    },
+    redraw: () => {
+      setRedraw(true);
       runLayout();
+      // Add a small delay to visually indicate the redraw
+      setTimeout(() => {
+        setRedraw(false);
+      }, 300);
     },
   }));
+
+  if (redraw) {
+    return <Loading />;
+  }
 
   return (
     <>
@@ -96,10 +102,6 @@ const Flow: ForwardRefRenderFunction<unknown, FlowProps> = ({ children }, ref) =
         edges={flowEdges}
         onEdgesChange={onEdgesChange}
         defaultEdgeOptions={edgeOptions}
-        onInit={(instance) => {
-          // Keep a reference to the instance so we can check zoom level for fitView.
-          setRfInstance(instance);
-        }}
       >
         <Controls />
         <Background />

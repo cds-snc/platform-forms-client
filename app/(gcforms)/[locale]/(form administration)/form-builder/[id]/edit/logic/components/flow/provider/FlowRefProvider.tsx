@@ -2,6 +2,7 @@ import React, { createContext, useContext, useRef, MutableRefObject } from "reac
 
 export type FlowRefHandle = {
   updateEdges: () => void;
+  redraw: () => void;
 };
 
 export type flowContextType = {
