@@ -10,5 +10,5 @@ export const edgeOptions = {
 export const layoutOptions: LayoutOptions = {
   algorithm: "d3-hierarchy",
   direction: "LR",
-  spacing: [50, 50],
+  spacing: [10, 10],
 };

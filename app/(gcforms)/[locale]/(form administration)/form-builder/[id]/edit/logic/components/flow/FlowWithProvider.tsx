@@ -103,7 +103,7 @@ const Flow: ForwardRefRenderFunction<unknown, FlowProps> = ({ children }, ref) =
         onEdgesChange={onEdgesChange}
         defaultEdgeOptions={edgeOptions}
       >
-        <Controls />
+        <Controls showInteractive={false} showZoom={true} showFitView={false} />
         <Background />
         {children}
       </ReactFlow>
