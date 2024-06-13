@@ -7,6 +7,7 @@ import React, {
   ForwardRefRenderFunction,
   useEffect,
   useState,
+  useRef,
 } from "react";
 
 import ReactFlow, {
@@ -16,8 +17,8 @@ import ReactFlow, {
   useNodesState,
   useEdgesState,
   useReactFlow,
-  ReactFlowInstance,
   Background,
+  ReactFlowInstance,
 } from "reactflow";
 
 import "reactflow/dist/style.css";
@@ -32,9 +33,17 @@ import { useRehydrate } from "@lib/store/useTemplateStore";
 
 const nodeTypes = { groupNode: GroupNode };
 
+import { Loader } from "@clientComponents/globals/Loader";
+
+const Loading = () => (
+  <div className="flex h-full items-center justify-center ">
+    <Loader />
+  </div>
+);
+
 export interface FlowProps {
   children?: ReactElement;
-  updateEdges?: () => void;
+  redraw?: () => void;
 }
 
 const Flow: ForwardRefRenderFunction<unknown, FlowProps> = ({ children }, ref) => {
@@ -42,6 +51,8 @@ const Flow: ForwardRefRenderFunction<unknown, FlowProps> = ({ children }, ref) =
   const [nodes, , onNodesChange] = useNodesState(flowNodes);
   const [, setEdges, onEdgesChange] = useEdgesState(flowEdges);
   const { fitView } = useReactFlow();
+  const reset = useRef(false);
+  const [redrawing, setRedrawing] = useState(false);
   const [rfInstance, setRfInstance] = useState<ReactFlowInstance | null>();
 
   // temp fix see: https://github.com/xyflow/xyflow/issues/3243
@@ -56,7 +67,7 @@ const Flow: ForwardRefRenderFunction<unknown, FlowProps> = ({ children }, ref) =
 
   useEffect(() => {
     let flowZoom = 0.5;
-    if (rfInstance) {
+    if (rfInstance && reset.current === false) {
       const obj = rfInstance.toObject();
       if (obj.viewport.zoom) {
         flowZoom = obj.viewport.zoom;
@@ -78,9 +89,31 @@ const Flow: ForwardRefRenderFunction<unknown, FlowProps> = ({ children }, ref) =
     updateEdges: () => {
       const { edges } = getData();
       setEdges(edges);
-      runLayout();
+    },
+    redraw: () => {
+      reset.current = true;
+      const { edges } = getData();
+      setEdges(edges);
+      setRedrawing(true);
+      const reLayout = async () => {
+        await runLayout();
+        setRedrawing(false);
+      };
+
+      // Add a small delay to visually indicate the redraw
+      setTimeout(() => {
+        reLayout();
+      }, 200);
+
+      setTimeout(() => {
+        reset.current = false;
+      }, 2000);
     },
   }));
+
+  if (redrawing) {
+    return <Loading />;
+  }
 
   return (
     <>
@@ -101,7 +134,7 @@ const Flow: ForwardRefRenderFunction<unknown, FlowProps> = ({ children }, ref) =
           setRfInstance(instance);
         }}
       >
-        <Controls />
+        <Controls showInteractive={false} showZoom={true} showFitView={false} />
         <Background />
         {children}
       </ReactFlow>
