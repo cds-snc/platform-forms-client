@@ -43,7 +43,7 @@ export const SingleActionSelect = ({
   return (
     <div>
       <div className="mb-4">
-        <GroupSelect selected={nextAction} groups={groupItems} onChange={handleGroupChange} />
+        <GroupSelect selected={nextActionId} groups={groupItems} onChange={handleGroupChange} />
       </div>
       <div>
         <SaveNote />
