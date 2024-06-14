@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { headers } from "next/headers";
 import { AccessControlError } from "@lib/privileges";
-import gcforms_api from "../../../../../../gcforms_api.json";
+import gcforms_api from "./api_key.json";
 import crypto from "crypto";
 import * as jose from "jose";
 import axios from "axios";

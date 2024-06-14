@@ -3,7 +3,7 @@ import * as jose from "jose";
 import axios, { AxiosError } from "axios";
 import crypto from "crypto";
 import { prisma } from "@lib/integration/prismaConnector";
-import zitadelPrivate from "../../../../../../../../gcforms_service.json";
+import zitadelPrivate from "./gcforms_service.json";
 import { logMessage } from "@lib/logger";
 import { revalidatePath } from "next/cache";
 
