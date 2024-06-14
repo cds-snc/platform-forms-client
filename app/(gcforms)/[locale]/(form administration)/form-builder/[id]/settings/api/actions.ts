@@ -3,9 +3,24 @@ import * as jose from "jose";
 import axios, { AxiosError } from "axios";
 import crypto from "crypto";
 import { prisma } from "@lib/integration/prismaConnector";
-import zitadelPrivate from "./gcforms_service.json";
 import { logMessage } from "@lib/logger";
 import { revalidatePath } from "next/cache";
+import fs from "fs";
+
+const zitadelPrivate = (() => {
+  const encryptedFile = fs.readFileSync(
+    process.cwd() +
+      "/app/(gcforms)/[locale]/(form administration)/form-builder/[id]/settings/api/gcforms_service.enc"
+  );
+  const key = crypto
+    .createHash("sha256")
+    .update(process.env.TOKEN_SECRET ?? "")
+    .digest("base64")
+    .substring(0, 32);
+  const decipher = crypto.createDecipheriv("aes-256-ctr", key, encryptedFile.subarray(0, 16));
+  const decrypted = Buffer.concat([decipher.update(encryptedFile.subarray(16)), decipher.final()]);
+  return JSON.parse(decrypted.toString());
+})();
 
 const alg = "RS256";
 const privateKey = crypto.createPrivateKey({ key: zitadelPrivate.key });

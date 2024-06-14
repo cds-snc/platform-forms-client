@@ -8,22 +8,22 @@ import { useParams } from "next/navigation";
 const _createKey = async (templateId: string) => {
   // In the future this could be done in the browser but we'll need to verify that they key meets the requirements
   const key = await createKey(templateId);
-  downloadKey(JSON.stringify(key));
+  downloadKey(JSON.stringify(key), templateId);
 };
 
 const _refreshKey = async (templateId: string) => {
   const key = await refreshKey(templateId);
-  downloadKey(JSON.stringify(key));
+  downloadKey(JSON.stringify(key), templateId);
 };
 
-const downloadKey = (key: string) => {
+const downloadKey = (key: string, templateId: string) => {
   const blob = new Blob([key], { type: "application/json" });
   const href = URL.createObjectURL(blob);
 
   // create "a" HTLM element with href to file
   const link = document.createElement("a");
   link.href = href;
-  link.download = "gcForms_private_api_key.json";
+  link.download = `${templateId}_private_api_key.json`;
   document.body.appendChild(link);
   link.click();
 

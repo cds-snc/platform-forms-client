@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { headers } from "next/headers";
 import { AccessControlError } from "@lib/privileges";
-import gcforms_api from "./api_key.json";
+import fs from "fs";
 import crypto from "crypto";
 import * as jose from "jose";
 import axios from "axios";
@@ -26,6 +26,20 @@ const mockResponses = [
     ],
   },
 ];
+
+const gcforms_api = (() => {
+  const encryptedFile = fs.readFileSync(
+    process.cwd() + "/app/api/id/[form]/submission/retrieve/api_key.enc"
+  );
+  const key = crypto
+    .createHash("sha256")
+    .update(process.env.TOKEN_SECRET ?? "")
+    .digest("base64")
+    .substring(0, 32);
+  const decipher = crypto.createDecipheriv("aes-256-ctr", key, encryptedFile.subarray(0, 16));
+  const decrypted = Buffer.concat([decipher.update(encryptedFile.subarray(16)), decipher.final()]);
+  return JSON.parse(decrypted.toString());
+})();
 
 export const GET = async (req: NextRequest, { params }: { params: { form: string } }) => {
   try {

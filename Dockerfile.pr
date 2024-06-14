@@ -39,6 +39,10 @@ ENV PORT=3000
 # Enables memory caching for the prerendering of pages
 ENV REVIEW_ENV=1
 
+# Temporary addition for Proof Of Concept
+ENV ZITADEL_ISSUER=https://gc-forms-tcxqpm.zitadel.cloud
+ENV ZITADEL_CLIENT_ID=271586375273386943@gc_forms
+
 WORKDIR /src
 
 COPY --from=build /src/.next/standalone ./
