@@ -239,6 +239,9 @@ export async function listAllSubmissions(
       "ListResponses",
       `List all responses ${status ? `of status ${status} ` : ""}for form ${formID}`
     );
+
+    logMessage.info("HealthCheck: list submissions success");
+
     return {
       submissions: accumulatedResponses,
       submissionsRemaining: submissionsRemaining,
@@ -246,7 +249,10 @@ export async function listAllSubmissions(
     };
   } catch (e) {
     // Expected to error in APP_ENV test mode as dynamodb is not available
-    if (process.env.APP_ENV !== "test") logMessage.error(e);
+    if (process.env.APP_ENV !== "test") {
+      logMessage.info("HealthCheck: list submissions failure");
+      logMessage.error(e);
+    }
     return { submissions: [], submissionsRemaining: true, lastEvaluatedKey: undefined };
   }
 }
@@ -335,6 +341,8 @@ export async function retrieveSubmissions(
       );
     });
 
+    logMessage.info("HealthCheck: retrieve submissions success");
+
     return submissions;
   } catch (e) {
     if (e instanceof AccessControlError)
@@ -347,8 +355,13 @@ export async function retrieveSubmissions(
         "AccessDenied",
         `Attempted to retrieve responses for form ${formID}`
       );
+
     // Expected to error in APP_ENV test mode as dynamodb is not available
-    if (process.env.APP_ENV !== "test") logMessage.error(e);
+    if (process.env.APP_ENV !== "test") {
+      logMessage.info("HealthCheck: retrieve submissions failure");
+      logMessage.error(e);
+    }
+
     return [];
   }
 }
