@@ -3,6 +3,9 @@ import { MarkerType } from "reactflow";
 
 export const edgeOptions = {
   type: "simplebezier",
+  selectable: false,
+  focusable: false,
+  animated: true,
   markerEnd: { type: MarkerType.ArrowClosed },
   pathOptions: { offset: 20, type: "straight" },
 };
