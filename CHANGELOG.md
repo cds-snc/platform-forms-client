@@ -5,6 +5,30 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.13.0](https://github.com/cds-snc/platform-forms-client/compare/v3.12.11...v3.13.0) (2024-06-11)
+
+### Features
+
+- Implement NextJS App Router ([d067648](https://github.com/cds-snc/platform-forms-client/commit/d067648ba22d8bb0516434ecf2e97dc2d9d2762c))
+- implement temporary hack to handle Submission lambda name change ([#3486](https://github.com/cds-snc/platform-forms-client/issues/3486)) ([48919e3](https://github.com/cds-snc/platform-forms-client/commit/48919e38b00c4ce591009f7dd076e3f8b4bbf5c3))
+
+### Bug Fixes
+
+- auth error handling noise ([#3666](https://github.com/cds-snc/platform-forms-client/issues/3666)) ([0798684](https://github.com/cds-snc/platform-forms-client/commit/0798684ee89db0d42008c7eb639f49cc83cb5c7d))
+- Checkbox / Radio styling in form builder ([#3593](https://github.com/cds-snc/platform-forms-client/issues/3593)) ([d8244ec](https://github.com/cds-snc/platform-forms-client/commit/d8244ec8f9b297c98fb71eeda0674d366eca2cb7))
+- create only one instance of DynamoDBDocumentClient ([#3565](https://github.com/cds-snc/platform-forms-client/issues/3565)) ([9b1446c](https://github.com/cds-snc/platform-forms-client/commit/9b1446cef14119bfd155a5b96a74546d058e2cfa))
+- Enforce max entries when signing off responses ([#3589](https://github.com/cds-snc/platform-forms-client/issues/3589)) ([a7b382b](https://github.com/cds-snc/platform-forms-client/commit/a7b382bed6a15f99240ecc24f20cffe15d84ebb3))
+- Ensure trusted host also uses nextauth_url ([#3772](https://github.com/cds-snc/platform-forms-client/issues/3772)) ([742c233](https://github.com/cds-snc/platform-forms-client/commit/742c23339e35643cdcee376ebbce9e02080a3028))
+- logic view group node outline styling ([#3773](https://github.com/cds-snc/platform-forms-client/issues/3773)) ([9363fd3](https://github.com/cds-snc/platform-forms-client/commit/9363fd3154684d558cf9b1f51c97b627eacfe584))
+- Only show Translate Navigation when groups off ([#3713](https://github.com/cds-snc/platform-forms-client/issues/3713)) ([8f1c5e5](https://github.com/cds-snc/platform-forms-client/commit/8f1c5e58a708fda19470ecb50d64ae0ce4b9f6dc))
+- Revert "chore(deps): pin dependencies ([#3230](https://github.com/cds-snc/platform-forms-client/issues/3230))" ([#3537](https://github.com/cds-snc/platform-forms-client/issues/3537)) ([589b879](https://github.com/cds-snc/platform-forms-client/commit/589b879c7a4b4dbec8460238b3b3a7af09a7c301))
+- server action error handling ([#3659](https://github.com/cds-snc/platform-forms-client/issues/3659)) ([0d5295a](https://github.com/cds-snc/platform-forms-client/commit/0d5295af9f81e87c719d309b38d5eb09120a526a))
+- Session expiry set to 2 hours ([#3578](https://github.com/cds-snc/platform-forms-client/issues/3578)) ([ef93921](https://github.com/cds-snc/platform-forms-client/commit/ef9392187955cfae5311d55fffda4841b558c3f5))
+- Treeview Drag/Drop fixes ([#3722](https://github.com/cds-snc/platform-forms-client/issues/3722)) ([fed32fe](https://github.com/cds-snc/platform-forms-client/commit/fed32fe85dcb5aa51ee44adf6c70bfc9f15d2d62))
+- Trigger release generation on develop branch ([#3770](https://github.com/cds-snc/platform-forms-client/issues/3770)) ([7f5c4f4](https://github.com/cds-snc/platform-forms-client/commit/7f5c4f4df59563a6bb5f44a9d6b74bf581921344))
+- trusted host check and NEXTAUTH_URL ([#3778](https://github.com/cds-snc/platform-forms-client/issues/3778)) ([58ab090](https://github.com/cds-snc/platform-forms-client/commit/58ab09034916b221322d480799627a58bf3f5b49))
+- WIP JWT session optimization ([#3669](https://github.com/cds-snc/platform-forms-client/issues/3669)) ([f959a34](https://github.com/cds-snc/platform-forms-client/commit/f959a3496e127dbab2839532420dd888dfee2541))
+
 ## [3.12.11](https://github.com/cds-snc/platform-forms-client/compare/v3.12.10...v3.12.11) (2024-03-26)
 
 ### Miscellaneous Chores

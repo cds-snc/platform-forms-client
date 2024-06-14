@@ -6,6 +6,7 @@ export type TreeDataOptions = {
   addIntroElement?: boolean;
   addPolicyElement?: boolean;
   addConfirmationElement?: boolean;
+  addSectionTitleElements?: boolean;
   reviewGroup?: boolean;
 };
 
@@ -53,6 +54,28 @@ export const groupsToTreeData = (
     items[key] = item;
     items.root.children?.push(key);
 
+    // Add section title item
+    const sectionTitleKey = `section-title-${key}`;
+    const sectionTitleItem = {
+      index: sectionTitleKey,
+      isFolder: false,
+      canRename: true,
+      canMove: false,
+      data: {
+        titleEn: formGroups[key].titleEn || "Section title",
+        titleFr: formGroups[key].titleFr || "Section title",
+        descriptionEn: "",
+        descriptionFr: "",
+      },
+      children: [],
+    };
+
+    // Add section title item to the start of the children array
+    if (options.addSectionTitleElements && key !== "start" && key !== "end") {
+      items[sectionTitleKey] = sectionTitleItem;
+      items[key].children?.unshift(sectionTitleKey);
+    }
+
     children.forEach((childId) => {
       const element = elements.find((el) => el.id === Number(childId));
       if (!element) return;
@@ -86,8 +109,8 @@ export const groupsToTreeData = (
     canMove: false,
     children: [],
     data: {
-      titleEn: "Introduction",
-      titleFr: "Introduction",
+      titleEn: "Form introduction",
+      titleFr: "Introduction au formulaire",
       descriptionEn: "",
       descriptionFr: "",
     },
@@ -105,8 +128,8 @@ export const groupsToTreeData = (
     canMove: false,
     children: [],
     data: {
-      titleEn: "Policy",
-      titleFr: "Policy",
+      titleEn: "Privacy statement",
+      titleFr: "Avis de confidentialité",
       descriptionEn: "",
       descriptionFr: "",
     },
@@ -117,9 +140,9 @@ export const groupsToTreeData = (
     startChildren.push("policy");
   }
 
-  if (startChildren.length > 0) {
+  if (startChildren.length > 0 && items["start"]?.children) {
     // Add startChildren to existing start children
-    const currentStartChildren = items["start"].children ? items["start"].children : [];
+    const currentStartChildren = items["start"]?.children ? items["start"].children : [];
     items["start"].children = [...startChildren, ...currentStartChildren];
   }
 
@@ -132,8 +155,8 @@ export const groupsToTreeData = (
     canMove: false,
     children: [],
     data: {
-      titleEn: "Confirmation",
-      titleFr: "Confirmation",
+      titleEn: "Confirmation message",
+      titleFr: "Message de confirmation",
       descriptionEn: "",
       descriptionFr: "",
     },
@@ -144,7 +167,7 @@ export const groupsToTreeData = (
     endChildren.push("confirmation");
   }
 
-  if (endChildren.length > 0) {
+  if (endChildren.length > 0 && items["end"]?.children) {
     items["end"].children = endChildren;
   }
 

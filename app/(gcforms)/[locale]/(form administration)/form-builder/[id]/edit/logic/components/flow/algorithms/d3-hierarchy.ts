@@ -102,8 +102,27 @@ const d3HierarchyLayout: LayoutAlgorithm = async (nodes, edges, options) => {
       y: position.y - (node.height ?? 0) / 2,
     };
 
+    if (node.id === "end" || node.id === "review") {
+      return { ...node };
+    }
+
     return { ...node, position: offsetPosition };
   });
+
+  // Get the last node's position without the review and end nodes
+  const gap = 40;
+
+  const lastNode = nextNodes[nextNodes.length - 3];
+  const lastNodeWidth = lastNode?.width ?? 0;
+
+  const reviewNode = nextNodes[nextNodes.length - 2];
+  const reviewNodeWidth = reviewNode?.width ?? 0;
+
+  const endNode = nextNodes[nextNodes.length - 1];
+
+  // Update the position of the review and end nodes
+  reviewNode.position = { x: lastNode.position.x + lastNodeWidth + gap, y: lastNode.position.y };
+  endNode.position = { x: reviewNode.position.x + reviewNodeWidth + gap, y: lastNode.position.y };
 
   return { nodes: nextNodes, edges };
 };

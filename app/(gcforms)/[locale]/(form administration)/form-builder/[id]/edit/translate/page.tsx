@@ -21,7 +21,7 @@ export default async function Page({ params: { id } }: { params: { id: string } 
 
   return (
     <>
-      {conditionalLogic && <EditNavigation id={id} />}
+      {!conditionalLogic && <EditNavigation id={id} />}
       {conditionalLogic ? <TranslateWithGroups /> : <Translate />}
     </>
   );

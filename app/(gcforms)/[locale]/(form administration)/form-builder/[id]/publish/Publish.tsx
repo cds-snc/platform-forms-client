@@ -37,6 +37,7 @@ export const Publish = ({ id }: { id: string }) => {
     setIsPublished,
     getSchema,
     getName,
+    formPurpose,
     getDeliveryOption,
     securityAttribute,
   } = useTemplateStore((s) => ({
@@ -45,6 +46,7 @@ export const Publish = ({ id }: { id: string }) => {
     setIsPublished: s.setIsPublished,
     getSchema: s.getSchema,
     getName: s.getName,
+    formPurpose: s.formPurpose,
     getDeliveryOption: s.getDeliveryOption,
     securityAttribute: s.securityAttribute,
   }));
@@ -71,11 +73,19 @@ export const Publish = ({ id }: { id: string }) => {
     return checked ? (
       <CircleCheckIcon className="mr-2 inline-block w-9 fill-green-700" />
     ) : (
-      <CancelIcon className="mr-2 inline-block h-9 w-9 fill-red-700" />
+      <CancelIcon className="mr-2 inline-block size-9 fill-red-700" />
     );
   };
 
   const supportHref = `/${i18n.language}/support`;
+
+  let formPurposeText = t("settingsPurposeAndUse.purpose.unset");
+  if (formPurpose === "admin") {
+    formPurposeText = t("settingsPurposeAndUse.purpose.admin");
+  }
+  if (formPurpose === "nonAdmin") {
+    formPurposeText = t("settingsPurposeAndUse.purpose.nonAdmin");
+  }
 
   const handlePublish = async () => {
     setError(false);
@@ -111,7 +121,6 @@ export const Publish = ({ id }: { id: string }) => {
     }
 
     try {
-      // @TODO: do we need this save?
       updateTemplate({
         id,
         name: getName(),
@@ -189,7 +198,7 @@ export const Publish = ({ id }: { id: string }) => {
           </Link>
         </li>
         <li className="my-4">
-          {hasHydrated ? <Icon checked={confirmationMessage} /> : IconLoading}
+          {hasHydrated ? <Icon checked={confirmationMessage !== undefined} /> : IconLoading}
           <Link href={`/${i18n.language}/form-builder/${id}/edit#confirmation-text`}>
             {t("formConfirmationMessage")}
           </Link>
@@ -200,19 +209,33 @@ export const Publish = ({ id }: { id: string }) => {
         </li>
 
         <li className="my-4">
-          {hasHydrated ? <Icon checked /> : IconLoading}
+          {hasHydrated ? <Icon checked={formPurpose != ""} /> : IconLoading}
           <strong>
-            {securityAttributeText}
-            {t("publishYourFormInstructions.text2")},{" "}
+            <LinkButton href={`/${i18n.language}/form-builder/${id}/settings`}>
+              {t("publishYourFormInstructions.settings")}
+            </LinkButton>
           </strong>
-          {isVaultDelivery(getDeliveryOption()) ? (
-            <span>{t("publishYourFormInstructions.vaultOption")}</span>
-          ) : (
-            <span>{t("publishYourFormInstructions.emailOption")}</span>
-          )}
-          <LinkButton href={`/${i18n.language}/form-builder/${id}/settings`}>
-            {t("publishYourFormInstructions.change")}
-          </LinkButton>
+          <div>
+            <ul>
+              <li>
+                <strong>{t("publishYourFormInstructions.classification")}:&nbsp;</strong>
+                {securityAttributeText}
+                {t("publishYourFormInstructions.text2")}
+              </li>
+              <li>
+                <strong>{t("publishYourFormInstructions.deliveryOption")}:&nbsp;</strong>
+                {isVaultDelivery(getDeliveryOption()) ? (
+                  <span>{t("publishYourFormInstructions.vaultOption")}</span>
+                ) : (
+                  <span>{t("publishYourFormInstructions.emailOption")}</span>
+                )}
+              </li>
+              <li>
+                <strong>{t("publishYourFormInstructions.purpose")}:&nbsp;</strong>
+                {formPurposeText}
+              </li>
+            </ul>
+          </div>
         </li>
       </ul>
 

@@ -100,13 +100,16 @@ export const Option = ({
 
   return (
     <div className="mt-3 flex">
-      <div className="mt-2 flex w-5 justify-end">{icon}</div>
+      <div className="mt-2 flex w-5 justify-end" role="presentation">
+        {icon}
+      </div>
       <Input
         id={`option--${id}--${index + 1}`}
         ref={input}
         type="text"
         value={value}
         placeholder={`${t("option")} ${index + 1}`}
+        ariaLabel={`${t("option")} ${index + 1}`}
         onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
           updateValue(parentIndex, e.target.value)
         }

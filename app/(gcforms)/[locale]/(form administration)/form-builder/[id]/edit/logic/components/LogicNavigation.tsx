@@ -7,6 +7,7 @@ import { autoFlowAllNextActions } from "@formBuilder/components/shared/right-pan
 import { GroupsType } from "@lib/formContext";
 import { SortIcon } from "@serverComponents/icons";
 import { useTranslation } from "@i18n/client";
+import { useFlowRef } from "@formBuilder/[id]/edit/logic/components/flow/provider/FlowRefProvider";
 
 export const LogicNavigation = () => {
   const { t } = useTranslation("form-builder");
@@ -17,10 +18,13 @@ export const LogicNavigation = () => {
     };
   });
 
+  const { flow } = useFlowRef();
+
   const autoFlow = () => {
     const groups = getGroups() as GroupsType;
     const newGroups = autoFlowAllNextActions({ ...groups }, true); // forces overwrite of existing next actions
     replaceGroups(newGroups);
+    flow.current?.redraw();
     toast.success("Auto flow applied");
   };
 
@@ -37,6 +41,7 @@ export const LogicNavigation = () => {
             side="top"
             triggerClassName="align-middle ml-1"
             tooltipClassName="font-normal whitespace-normal"
+            iconTitle={t("logic.resetRulesHelp")}
           >
             <strong>{t("logic.resetRules")}</strong>
             <p>{t("logic.resetRulesDescription")}</p>

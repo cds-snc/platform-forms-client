@@ -34,7 +34,8 @@ const { auth } = NextAuth({
   // When building the app use a random UUID as the token secret
   secret: process.env.TOKEN_SECRET ?? crypto.randomUUID(),
   debug: process.env.NODE_ENV !== "production",
-  trustHost: process.env.AUTH_URL ? false : true,
+  // Elastic Load Balancer safely sets the host header and ignores the incoming request headers
+  trustHost: true,
   session: {
     strategy: "jwt",
     // Seconds - How long until an idle session expires and is no longer valid.
@@ -142,33 +143,19 @@ const setCORS = (req: NextRequest, pathname: string) => {
   if (pathname.startsWith("/api") || reqHeaders.get("next-action")) {
     debugLogger(`Middleware: API / Server Action path = ${pathname}`);
     const response = NextResponse.next();
-    const origin = req.headers.get("origin") ?? "";
+    const host = reqHeaders.get("host");
 
-    const allowedOrigins = [
-      // These are hardcoded and set in Staging and Production
-      process.env.NEXTAUTH_URL,
-      process.env.AUTH_URL,
-      // If we're running in local development or E2E testing use localhost as origin
-      process.env.NODE_ENV !== "production" || process.env.APP_ENV === "test"
-        ? "http://localhost:3000"
-        : undefined,
-      // If we're in a PR Review environment use the passed in origin as there is currently no way to get the existing origin from the container
-      process.env.REVIEW_ENV ? origin : undefined,
-    ].filter((origin: string | undefined) => origin);
-
-    // Allowed origins check
-    if (allowedOrigins.includes(origin)) {
-      response.headers.set("Access-Control-Allow-Origin", origin);
-    } else {
-      response.headers.set(
-        "Access-Control-Allow-Origin",
-        process.env.NEXTAUTH_URL ?? process.env.APP_ENV !== "test"
-          ? "MISSING ORIGIN URL IN .env FILE!"
-          : "localhost:3000"
+    // If host header is not set something is seriously wrong.
+    if (!host) {
+      throw new Error(
+        `HOST header is missing from request to ${pathname} from ${req.headers.get(
+          "x-forwarded-for"
+        )}`
       );
     }
 
-    // Set default CORS headers
+    // Set CORS headers
+    response.headers.set("Access-Control-Allow-Origin", host);
     response.headers.set("Access-Control-Allow-Credentials", "true");
     response.headers.set("Access-Control-Allow-Methods", "GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS");
     response.headers.set(

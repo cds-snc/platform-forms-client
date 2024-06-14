@@ -48,7 +48,7 @@ export const NextButton = ({
         }}
         type="button"
       >
-        {t("Next")}
+        {t("next")}
       </Button>
     </>
   );

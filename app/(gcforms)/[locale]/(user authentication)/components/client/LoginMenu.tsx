@@ -2,7 +2,7 @@
 import { useTranslation } from "@i18n/client";
 
 import { useSession, signOut } from "next-auth/react";
-import { clearTemplateStore } from "@lib/store/useTemplateStore";
+import { clearTemplateStore } from "@lib/store/utils";
 import { Login } from "@clientComponents/globals/Login";
 
 export const LoginMenu = () => {

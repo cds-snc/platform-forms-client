@@ -1,126 +1,176 @@
-import { DragHandle } from "./icons/DragHandle";
-import { LockIcon } from "@serverComponents/icons";
+import React from "react";
+
 import { cn } from "@lib/utils";
 import { ReactElement, ReactNode } from "react";
-import { TreeItem, TreeItemIndex, TreeItemRenderContext } from "react-complex-tree";
+import { TreeItem, TreeItemRenderContext } from "react-complex-tree";
 import { ArrowRight } from "./icons/ArrowRight";
 import { ArrowDown } from "./icons/ArrowDown";
-import { useTreeRef } from "./provider/TreeRefProvider";
-import { useState } from "react";
-import React from "react";
+import { EditableInput } from "./EditableInput";
+import { ItemActions } from "./ItemActions";
+import { useTemplateStore } from "@lib/store/useTemplateStore";
+import { LocalizedElementProperties } from "@lib/types/form-builder-types";
+import { useTranslation } from "@i18n/client";
+import {
+  getItemFromElement,
+  isTitleElementType,
+  isSectionElementType,
+  isFormElementType,
+  isGhostElementType,
+} from "./util/itemType";
 
 export const Item = ({
   title,
   arrow,
   context,
   children,
+  handleDelete,
 }: {
   title: ReactNode;
   arrow: ReactNode;
   context: TreeItemRenderContext;
   children: ReactNode | ReactElement;
+  handleDelete: (e: React.MouseEvent<HTMLButtonElement>) => Promise<void>;
 }) => {
-  const { tree } = useTreeRef();
+  const { t } = useTranslation("form-builder");
+
+  const { translationLanguagePriority, localizeField } = useTemplateStore((s) => ({
+    localizeField: s.localizeField,
+    translationLanguagePriority: s.translationLanguagePriority,
+  }));
+
+  const localizedTitle = localizeField(
+    LocalizedElementProperties.TITLE,
+    translationLanguagePriority
+  );
+
+  const localizedDescription = localizeField(
+    LocalizedElementProperties.DESCRIPTION,
+    translationLanguagePriority
+  );
+
+  const item = getItemFromElement(arrow);
+
+  // Types
+  const isFormElement = item ? isFormElementType(item) : false;
+  const isGhostElement = item ? isGhostElementType(item) : false;
+  const isSectionElement = item ? isSectionElementType(item) : false;
+  const isTitleElement = item ? isTitleElementType(item) : false;
+  const fieldType = item ? item?.data.fieldType : "";
+
+  // Text
+  const titleText = item ? (isSectionElement ? item?.data.name : item?.data[localizedTitle]) : "";
+  const descriptionText = isFormElement && item ? item?.data[localizedDescription] : "";
+
+  // States
   const isRenaming = context && context?.isRenaming ? true : false;
-  const itemName = React.isValidElement(title) && title.props.title;
-  const [name, setName] = useState(itemName);
-
-  if (isRenaming) {
-    return (
-      <li
-        {...context.itemContainerWithChildrenProps}
-        className={cn(
-          "flex flex-col",
-          arrow && "border-b-1 border-slate-200 border-x-1 border-r-2 b-t-1",
-          !context.isExpanded && "",
-          children && "bg-slate-50"
-        )}
-        style={{
-          margin: 0,
-        }}
-      >
-        <div
-          className={cn(
-            "text-left group relative w-full overflow-hidden truncate p-3",
-            !arrow && "bg-white",
-            !arrow && "border-slate-500 border-1 rounded-md"
-          )}
-        >
-          <input
-            {...context.interactiveElementProps}
-            type="text"
-            autoFocus
-            className="ml-10 w-auto"
-            value={name}
-            onFocus={(e) => {
-              e.target.select();
-            }}
-            onKeyDown={(e) => {
-              if (e.key === "Enter") {
-                const props = context.interactiveElementProps as unknown as Record<string, unknown>;
-                const id = props["data-rct-item-id"] as unknown as TreeItemIndex;
-                tree?.current?.renameItem(id, name);
-                context.stopRenamingItem();
-              }
-            }}
-            onChange={(e) => {
-              setName(e.target.value);
-            }}
-          />
-          {arrow}
-        </div>
-      </li>
-    );
-  }
-
   const isLocked = !context.canDrag;
+  const allowRename = !isLocked || isTitleElement;
+
+  const interactiveSectionElementClasses = cn(
+    "w-full relative",
+    !context.isExpanded && "border-b-1 border-slate-200"
+  );
+  const interactiveFormElementClasses = cn("inline-block w-full relative outline-none py-1.5");
+  const interactiveGhostElementClasses = "inline-block w-full relative";
+  const interactiveTitleElementClasses = cn("text-gray-500 italic");
+
+  const sectionElementClasses = cn("w-[100%] h-[60px]", context.isExpanded && "font-bold");
+
+  const formElementClasses = cn(
+    "rounded-md px-3 w-5/6 border-1 bg-white min-h-[50px]",
+    context.isFocused && "border-indigo-700 border-2 font-bold bg-gray-50 text-indigo-700",
+    context.isSelected && "border-2 border-slate-950 bg-white",
+    !context.isSelected &&
+      "border-slate-500 hover:border-indigo-700 hover:border-1 hover:bg-indigo-50"
+  );
 
   return (
     <li
       {...context.itemContainerWithChildrenProps}
       className={cn(
-        "flex flex-col",
-        arrow && "border-b-1 border-slate-200 border-x-1 border-r-2 b-t-1",
-        !context.isExpanded && "",
-        children && "bg-slate-50"
+        "flex flex-col group",
+        children && context.isExpanded && "bg-slate-50",
+        context.isDraggingOver && "!border-dashed !border-1 !border-blue-focus"
       )}
-      style={{
-        margin: 0,
-      }}
     >
       <>
-        <button
+        <div
           {...context.itemContainerWithoutChildrenProps}
           {...context.interactiveElementProps}
-          type="button"
+          onDragStart={(e) => {
+            context.interactiveElementProps.onDragStart &&
+              context.interactiveElementProps.onDragStart(e);
+
+            // Customize dragging image for form elements
+            if (isFormElement) {
+              // Get the box inside the element being dragged
+              const el = e.currentTarget.children[0];
+
+              // Get the position of the cursor inside the box for the offset
+              const rect = el.getBoundingClientRect();
+              const x = e.clientX - rect.left;
+              const y = e.clientY - rect.top;
+
+              // Use the inner box for the drag image
+              e.dataTransfer.setDragImage(el, x, y);
+            }
+          }}
           className={cn(
-            "text-left group relative w-full overflow-hidden truncate p-3",
-            !arrow && "bg-white",
-            !arrow && "border-slate-500 border-1 rounded-md"
+            "text-left group relative w-full overflow-hidden truncate cursor-pointer h-[60px]",
+            isSectionElement && interactiveSectionElementClasses,
+            isFormElement && interactiveFormElementClasses,
+            isGhostElement && interactiveGhostElementClasses,
+            isTitleElement && interactiveTitleElementClasses
           )}
         >
           {arrow}
-          <span
-            className="ml-10 inline-block w-[100%] overflow-hidden"
-            {...(!isLocked && {
-              onDoubleClick: () => {
-                context.startRenamingItem();
-              },
-            })}
-          >
-            {title}
-          </span>
-          {context.canDrag ? (
-            <DragHandle
-              className={cn(
-                "absolute right-0 top-0 mr-4 mt-3 hidden cursor-pointer group-hover:block",
-                !arrow && "mt-2"
-              )}
-            />
+          {isRenaming ? (
+            <div className="relative flex h-[60px] w-[100%] items-center overflow-hidden text-sm">
+              <EditableInput isSection={isSectionElement} title={titleText} context={context} />
+            </div>
           ) : (
-            <LockIcon className="absolute right-0 mr-2 inline-block scale-75" />
+            <div
+              className={cn(
+                "ml-12 flex items-center overflow-hidden relative text-sm",
+                isSectionElement && sectionElementClasses,
+                isFormElement && formElementClasses
+              )}
+              {...(allowRename && {
+                onDoubleClick: () => {
+                  context.startRenamingItem();
+                },
+              })}
+            >
+              {/* Render placeholder if title is empty */}
+
+              {isFormElement && fieldType === "richText" && descriptionText === "" && (
+                <span className="text-gray-500">{t("groups.treeView.emptyPageTextElement")}</span>
+              )}
+              {isFormElement && fieldType !== "richText" && titleText === "" && (
+                <span className="text-gray-500">{t("groups.treeView.emptyFormElement")}</span>
+              )}
+
+              {isSectionElement && titleText === "" && (
+                <span className="text-gray-500">{t("groups.newSection")}</span>
+              )}
+              {/* End placeholders */}
+
+              {titleText !== "" && (
+                <ItemActions
+                  context={context}
+                  arrow={arrow}
+                  handleDelete={handleDelete}
+                  lockClassName={cn(isFormElement && "absolute right-0", "mr-2 ")}
+                />
+              )}
+              {titleText !== "" && title && title}
+              {titleText === "" &&
+                isFormElement &&
+                fieldType === "richText" &&
+                descriptionText !== "" && <Title title={descriptionText} />}
+            </div>
           )}
-        </button>
+        </div>
         {children}
       </>
     </li>
@@ -128,7 +178,7 @@ export const Item = ({
 };
 
 const Title = ({ title }: { title: string }) => {
-  return <span>{title}</span>;
+  return <div className="w-5/6 truncate">{title}</div>;
 };
 
 const Arrow = ({ item, context }: { item: TreeItem; context: TreeItemRenderContext }) => {
