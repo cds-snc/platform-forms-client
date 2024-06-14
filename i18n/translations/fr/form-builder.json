@@ -917,5 +917,6 @@
     "questionsSetup": "[FR]Skip to Questions setup",
     "translateSetup": "[FR]Skip to Translations setup",
     "logicSetup": "[FR]Skip to Logic setup"
-  }
+  },
+  "goBack": "[FR]Go back"
 }

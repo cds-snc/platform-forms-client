@@ -14,6 +14,7 @@ import {
   getGroupHistory as _getGroupHistory,
   pushIdToHistory as _pushIdToHistory,
   clearHistoryAfterId as _clearHistoryAfterId,
+  getPreviousIdFromCurrentId,
 } from "@lib/utils/form-builder/groupsHistory";
 import { getLocalizedProperty } from "@lib/utils";
 import { Language } from "@lib/types/form-builder-types";
@@ -27,6 +28,7 @@ interface GCFormsContextValueType {
   previousGroup: string | null;
   setGroup: (group: string | null) => void;
   handleNextAction: () => void;
+  handlePreviousAction: () => void;
   hasNextAction: (group: string) => boolean;
   formRecord: PublicFormRecord;
   groupsCheck: (groupsFlag: boolean | undefined) => boolean;
@@ -70,6 +72,15 @@ export const GCFormsProvider = ({
         setCurrentGroup(nextAction);
         pushIdToHistory(nextAction);
       }
+    }
+  };
+
+  const handlePreviousAction = () => {
+    if (!currentGroup) return;
+    const previousGroupId = getPreviousIdFromCurrentId(currentGroup, history.current);
+    if (previousGroupId) {
+      setGroup(previousGroupId);
+      clearHistoryAfterId(previousGroupId);
     }
   };
 
@@ -127,6 +138,7 @@ export const GCFormsProvider = ({
         previousGroup,
         setGroup,
         handleNextAction,
+        handlePreviousAction,
         hasNextAction,
         groupsCheck,
         getGroupHistory,
@@ -158,6 +170,7 @@ export const useGCFormsContext = () => {
       setGroup: () => void 0,
       hasNextAction: () => void 0,
       handleNextAction: () => void 0,
+      handlePreviousAction: () => void 0,
       formRecord: {} as PublicFormRecord,
       groupsCheck: () => false,
       getGroupHistory: () => [],
