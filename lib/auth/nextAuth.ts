@@ -118,9 +118,8 @@ export const {
   debug: process.env.NODE_ENV !== "production",
   logger: {
     error(error) {
-      if (error instanceof CredentialsSignin) {
-        logMessage.warn(`NextAuth - CredentialsSignin exception: ${JSON.stringify(error)}.`);
-      } else {
+      if (!(error instanceof CredentialsSignin)) {
+        // Not a CredentialsSignin error which is for invalid credentials (including 2FA)
         logMessage.error(`NextAuth error: ${JSON.stringify(error)}.`);
       }
     },
