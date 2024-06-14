@@ -161,4 +161,13 @@ export const options = [
     logoTitleEn: "Library and Archives Canada",
     logoTitleFr: "Bibliothèque et Archives Canada",
   },
+    {
+    name: "isc",
+    urlEn: "https://www.canada.ca/en/indigenous-services-canada.html",
+    urlFr: "https://www.canada.ca/fr/services-autochtones-canada.html",
+    logoEn: "/img/branding/sac-isc-red-en.png",
+    logoFr: "/img/branding/sac-isc-red-fr.png",
+    logoTitleEn: "Indigenous Services Canada",
+    logoTitleFr: "Services aux Autochtones Canada",
+  },
 ];
