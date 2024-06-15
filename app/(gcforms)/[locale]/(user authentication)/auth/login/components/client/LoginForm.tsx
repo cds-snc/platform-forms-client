@@ -8,12 +8,12 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 
 import { ErrorStatus } from "@clientComponents/forms/Alert/Alert";
-import { ButtonSubmit } from "@clientComponents/globals/Buttons/ButtonSubmit";
+import { SubmitButton } from "@clientComponents/globals/Buttons/SubmitButton";
 
-const SubmitButton = () => {
+const ButtonSubmit = () => {
   const { t } = useTranslation("login");
   const { pending } = useFormStatus();
-  return <ButtonSubmit loading={pending}>{t("continueButton")}</ButtonSubmit>;
+  return <SubmitButton loading={pending}>{t("continueButton")}</SubmitButton>;
 };
 
 export const LoginForm = () => {
@@ -118,7 +118,7 @@ export const LoginForm = () => {
             {t("resetPasswordText")}
           </Link>
         </p>
-        <SubmitButton />
+        <ButtonSubmit />
       </form>
     </>
   );

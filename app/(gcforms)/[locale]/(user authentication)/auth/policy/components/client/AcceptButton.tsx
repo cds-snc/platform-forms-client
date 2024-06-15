@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 
 import { useState } from "react";
 import { useSession } from "next-auth/react";
-import { ButtonSubmit } from "@clientComponents/globals/Buttons/ButtonSubmit";
+import { SubmitButton } from "@clientComponents/globals/Buttons/SubmitButton";
 
 export const AcceptButton = () => {
   const router = useRouter();
@@ -37,8 +37,8 @@ export const AcceptButton = () => {
   };
 
   return (
-    <ButtonSubmit loading={isLoading} onClick={agree}>
+    <SubmitButton loading={isLoading} onClick={agree}>
       {t("acceptableUsePage.agree")}
-    </ButtonSubmit>
+    </SubmitButton>
   );
 };

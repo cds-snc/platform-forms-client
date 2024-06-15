@@ -11,7 +11,7 @@ import { SpinnerIcon } from "@serverComponents/icons/SpinnerIcon";
  * TODO look into aria-disabled
  */
 
-interface ButtonSubmitProps {
+interface SubmitButtonProps {
   children?: JSX.Element | string;
   id?: string;
   onClick?: (e: React.MouseEvent<HTMLElement>) => void;
@@ -25,7 +25,7 @@ interface ButtonSubmitProps {
   describeLoading?: string;
 }
 
-export const ButtonSubmit = ({
+export const SubmitButton = ({
   children,
   onClick,
   className,
@@ -37,7 +37,7 @@ export const ButtonSubmit = ({
   loading,
   describeLoading,
   ...rest
-}: ButtonSubmitProps & React.ButtonHTMLAttributes<HTMLButtonElement>) => {
+}: SubmitButtonProps & React.ButtonHTMLAttributes<HTMLButtonElement>) => {
   return (
     <button
       type="submit"
@@ -74,6 +74,6 @@ export const ButtonSubmit = ({
   );
 };
 
-export const RoundedButtonSubmit = ({ className, ...props }: ButtonSubmitProps) => (
-  <ButtonSubmit {...props} className={cn(className, "rounded-[100px]")} />
+export const RoundedSubmitButton = ({ className, ...props }: SubmitButtonProps) => (
+  <SubmitButton {...props} className={cn(className, "rounded-[100px]")} />
 );
