@@ -6,7 +6,7 @@ import { SpinnerIcon } from "@serverComponents/icons/SpinnerIcon";
 
 /**
  * TODO add to auth related pages like 2FA
- * TODO note why disabling a submit button is confusing for AT users
+ * TODO note why disabling a submit button is confusing for AT users e.g. https://adrianroselli.com/2024/02/dont-disable-form-controls.html
  * TODO add active focus hover state for button
  * TODO look into aria-disabled
  */
@@ -15,7 +15,6 @@ interface ButtonSubmitProps {
   children?: JSX.Element | string;
   id?: string;
   onClick?: (e: React.MouseEvent<HTMLElement>) => void;
-  onKeyDown?: (e: React.MouseEvent<HTMLElement>) => void;
   icon?: ReactElement;
   className?: string;
   "aria-label"?: string;
@@ -29,7 +28,6 @@ interface ButtonSubmitProps {
 export const ButtonSubmit = ({
   children,
   onClick,
-  onKeyDown,
   className,
   icon,
   "aria-label": ariaLabel = undefined,
@@ -43,15 +41,12 @@ export const ButtonSubmit = ({
   return (
     <button
       type="submit"
+      // Note: no need to add onKeyDown also, keying enter also triggers onClick. More info see
+      // https://html.spec.whatwg.org/#implicit-submission
       onClick={(e) => {
+        // Simulate a disabled state by blocking the callback when loading
         if (!loading && onClick) {
           onClick(e);
-        }
-      }}
-      onKeyDown={(e) => {
-        if (!loading && onClick && e.key === "Enter") {
-          e.preventDefault(); // Stops browser from also calling on click
-          onKeyDown ? onKeyDown(e) : onClick(e);
         }
       }}
       className={
@@ -69,6 +64,7 @@ export const ButtonSubmit = ({
       {icon && <div className={cn(theme !== "icon" && "-ml-2 mr-2 w-8")}>{icon}</div>}
       {children}
       {loading && (
+        // TODO run this spinner by design
         <SpinnerIcon className="ml-2 h-7 w-7 animate-spin fill-blue-600 text-white dark:text-white" />
       )}
       <div aria-live="polite" className="sr-only">
