@@ -7,7 +7,7 @@ import { SpinnerIcon } from "@serverComponents/icons/SpinnerIcon";
 /**
  * TODO add to auth related pages like 2FA
  * TODO note why disabling a submit button is confusing for AT users e.g. https://adrianroselli.com/2024/02/dont-disable-form-controls.html
- * TODO add active focus hover state for button
+ * TODO add active active hover state for button
  * TODO look into aria-disabled
  */
 
@@ -38,6 +38,11 @@ export const SubmitButton = ({
   describeLoading,
   ...rest
 }: SubmitButtonProps & React.ButtonHTMLAttributes<HTMLButtonElement>) => {
+  const disabledClass = `
+    focus:bg-[#e2e8ef] focus:text-[#748094] focus:border-none focus:outline-offset-0 focus:outline-0
+    active:bg-[#e2e8ef] active:text-[#748094] active:border-none active:outline-offset-0 active:outline-0
+  `;
+
   return (
     <button
       type="submit"
@@ -51,7 +56,7 @@ export const SubmitButton = ({
       }}
       className={
         loading
-          ? cn(themes["base"], themes.disabled, className)
+          ? cn(themes["base"], themes.disabled, disabledClass, className)
           : cn(themes["base"], themes[theme], className)
       }
       aria-label={ariaLabel}
