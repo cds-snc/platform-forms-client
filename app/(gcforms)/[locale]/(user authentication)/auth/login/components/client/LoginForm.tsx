@@ -2,22 +2,18 @@
 
 import { useFormStatus, useFormState } from "react-dom";
 import { Alert, ErrorListItem, Label, TextInput } from "../../../../components/client/forms";
-import { Button } from "@clientComponents/globals";
 import { useTranslation } from "@i18n/client";
 import { login, ErrorStates } from "../../actions";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 
 import { ErrorStatus } from "@clientComponents/forms/Alert/Alert";
+import { ButtonSubmit } from "@clientComponents/globals/Buttons/ButtonSubmit";
 
 const SubmitButton = () => {
   const { t } = useTranslation("login");
   const { pending } = useFormStatus();
-  return (
-    <Button theme="primary" type="submit" disabled={pending} aria-disabled={pending}>
-      {t("continueButton")}
-    </Button>
-  );
+  return <ButtonSubmit loading={pending}>{t("continueButton")}</ButtonSubmit>;
 };
 
 export const LoginForm = () => {
