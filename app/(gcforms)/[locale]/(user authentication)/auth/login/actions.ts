@@ -6,6 +6,7 @@ import { redirect } from "next/navigation";
 import { CognitoIdentityProviderServiceException } from "@aws-sdk/client-cognito-identity-provider";
 import { hasError } from "@lib/hasError";
 import { handleErrorById } from "@lib/auth/cognito";
+import { trace } from "@opentelemetry/api";
 
 export interface ErrorStates {
   authError?: {
@@ -51,95 +52,100 @@ export const login = async (
   _: ErrorStates,
   formData: FormData
 ): Promise<ErrorStates> => {
-  const rawFormData = Object.fromEntries(formData.entries());
+  const span = trace.getTracer("sign-in").startSpan("login-action");
+  try {
+    const rawFormData = Object.fromEntries(formData.entries());
 
-  const validationResult = await validate(language, rawFormData);
+    const validationResult = await validate(language, rawFormData);
 
-  if (!validationResult.success) {
-    return {
-      validationErrors: validationResult.issues.map((issue) => ({
-        fieldKey: issue.path?.[0].key as string,
-        fieldValue: issue.message,
-      })),
-    };
-  }
-
-  if (process.env.APP_ENV === "test") {
-    const authenticationFlowToken = await begin2FAAuthentication({
-      email: validationResult.output.username,
-      token: "testCognitoToken",
-    }).catch((err) => {
-      if (hasError("AccountDeactivated", err)) {
-        redirect(`/${language}/auth/account-deactivated`);
-      } else {
-        throw err;
-      }
-    });
-    return {
-      validationErrors: [],
-      authFlowToken: {
-        email: validationResult.output.username,
-        authenticationFlowToken,
-      },
-    };
-  }
-
-  const cognitoResult: {
-    email?: string;
-    token?: string;
-    authError?: string;
-  } | null = await initiateSignIn({
-    username: validationResult.output.username,
-    password: validationResult.output.password,
-  }).catch(async (err) => {
-    const cognitoError = err as CognitoIdentityProviderServiceException;
-    return { authError: cognitoError.name };
-  });
-
-  if (cognitoResult?.authError) {
-    if (hasError(["UserNotFoundException", "NotAuthorizedException"], cognitoResult.authError)) {
+    if (!validationResult.success) {
       return {
-        validationErrors: [],
-        authError: await handleErrorById("UsernameOrPasswordIncorrect", language),
+        validationErrors: validationResult.issues.map((issue) => ({
+          fieldKey: issue.path?.[0].key as string,
+          fieldValue: issue.message,
+        })),
       };
     }
 
-    if (hasError("PasswordResetRequiredException", cognitoResult.authError)) {
-      redirect(`/${language}/auth/reset-password`);
+    if (process.env.APP_ENV === "test") {
+      const authenticationFlowToken = await begin2FAAuthentication({
+        email: validationResult.output.username,
+        token: "testCognitoToken",
+      }).catch((err) => {
+        if (hasError("AccountDeactivated", err)) {
+          redirect(`/${language}/auth/account-deactivated`);
+        } else {
+          throw err;
+        }
+      });
+      return {
+        validationErrors: [],
+        authFlowToken: {
+          email: validationResult.output.username,
+          authenticationFlowToken,
+        },
+      };
     }
 
-    if (hasError("AccountDeactivated", cognitoResult.authError)) {
-      redirect(`/${language}/auth/account-deactivated`);
-    }
-
-    if (hasError("PasswordResetRequiredException", cognitoResult.authError)) {
-      redirect(`/${language}/auth/reset-password`);
-    }
-  }
-
-  if (cognitoResult?.email && cognitoResult?.token) {
-    const authenticationFlowToken = await begin2FAAuthentication({
-      email: cognitoResult.email,
-      token: cognitoResult.token,
-    }).catch((err) => {
-      if (hasError("AccountDeactivated", err)) {
-        redirect(`/${language}/auth/account-deactivated`);
-      } else {
-        throw err;
-      }
+    const cognitoResult: {
+      email?: string;
+      token?: string;
+      authError?: string;
+    } | null = await initiateSignIn({
+      username: validationResult.output.username,
+      password: validationResult.output.password,
+    }).catch(async (err) => {
+      const cognitoError = err as CognitoIdentityProviderServiceException;
+      return { authError: cognitoError.name };
     });
+
+    if (cognitoResult?.authError) {
+      if (hasError(["UserNotFoundException", "NotAuthorizedException"], cognitoResult.authError)) {
+        return {
+          validationErrors: [],
+          authError: await handleErrorById("UsernameOrPasswordIncorrect", language),
+        };
+      }
+
+      if (hasError("PasswordResetRequiredException", cognitoResult.authError)) {
+        redirect(`/${language}/auth/reset-password`);
+      }
+
+      if (hasError("AccountDeactivated", cognitoResult.authError)) {
+        redirect(`/${language}/auth/account-deactivated`);
+      }
+
+      if (hasError("PasswordResetRequiredException", cognitoResult.authError)) {
+        redirect(`/${language}/auth/reset-password`);
+      }
+    }
+
+    if (cognitoResult?.email && cognitoResult?.token) {
+      const authenticationFlowToken = await begin2FAAuthentication({
+        email: cognitoResult.email,
+        token: cognitoResult.token,
+      }).catch((err) => {
+        if (hasError("AccountDeactivated", err)) {
+          redirect(`/${language}/auth/account-deactivated`);
+        } else {
+          throw err;
+        }
+      });
+
+      return {
+        validationErrors: [],
+        authFlowToken: {
+          email: cognitoResult.email,
+          authenticationFlowToken,
+        },
+      };
+    }
 
     return {
       validationErrors: [],
-      authFlowToken: {
-        email: cognitoResult.email,
-        authenticationFlowToken,
-      },
+      authError: await handleErrorById("InternalServiceExceptionLogin", language),
     };
+  } finally {
+    span.end();
   }
-
-  return {
-    validationErrors: [],
-    authError: await handleErrorById("InternalServiceExceptionLogin", language),
-  };
 };

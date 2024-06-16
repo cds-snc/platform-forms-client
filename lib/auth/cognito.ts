@@ -9,6 +9,7 @@ import { generateVerificationCode, sendVerificationCode } from "./2fa";
 import { registerFailed2FAAttempt, clear2FALockout } from "./2faLockout";
 import { logMessage } from "@lib/logger";
 import { serverTranslation } from "@i18n";
+import { trace } from "@opentelemetry/api";
 import { cognitoIdentityProviderClient } from "@lib/integration/awsServicesConnector";
 
 if (
@@ -57,7 +58,7 @@ export const initiateSignIn = async ({
       PASSWORD: password,
     },
   };
-
+  const span = trace.getTracer("sign-in").startSpan("cognito-auth");
   try {
     const adminInitiateAuthCommand = new AdminInitiateAuthCommand(params);
 
@@ -106,6 +107,8 @@ export const initiateSignIn = async ({
     logMessage.info("HealthCheck: cognito sign-in failure");
 
     throw e;
+  } finally {
+    span.end();
   }
 };
 
@@ -114,60 +117,66 @@ export const begin2FAAuthentication = async ({
   token,
 }: CognitoToken): Promise<AuthenticationFlowToken> => {
   // ensure the user account is active
-
-  const sanitizedEmail = sanitizeEmailAddressForCognito(email);
-
-  const prismaUser = await prisma.user.findUnique({
-    where: {
-      email: sanitizedEmail,
-    },
-    select: {
-      id: true,
-      active: true,
-    },
-  });
-
-  if (prismaUser?.active === false) {
-    throw new Error("AccountDeactivated");
-  }
-
-  const verificationCode = await generateVerificationCode();
-
-  const dateIn15Minutes = new Date(Date.now() + 900000); // 15 minutes (= 900000 ms)
-
+  const span = trace.getTracer("sign-in").startSpan("cognito-2fa");
   try {
-    const result = await prisma.cognitoCustom2FA.upsert({
+    const sanitizedEmail = sanitizeEmailAddressForCognito(email);
+
+    const prismaUser = await prisma.user.findUnique({
       where: {
         email: sanitizedEmail,
       },
-      update: {
-        cognitoToken: token,
-        verificationCode: verificationCode,
-        expires: dateIn15Minutes,
-      },
-      create: {
-        email: sanitizedEmail,
-        cognitoToken: token,
-        verificationCode: verificationCode,
-        expires: dateIn15Minutes,
-      },
       select: {
         id: true,
+        active: true,
       },
     });
 
-    await clear2FALockout(sanitizedEmail);
+    if (prismaUser?.active === false) {
+      throw new Error("AccountDeactivated");
+    }
 
-    await sendVerificationCode(sanitizedEmail, verificationCode);
+    const verificationCode = await generateVerificationCode();
 
-    logMessage.info("HealthCheck: send initial 2fa code success");
+    const dateIn15Minutes = new Date(Date.now() + 900000); // 15 minutes (= 900000 ms)
 
-    return result.id;
-  } catch (error) {
-    logMessage.info("HealthCheck: send initial 2fa code failure");
-    throw new Error(
-      `Failed to generate and send initial verification code. Reason: ${(error as Error).message}.`
-    );
+    try {
+      const result = await prisma.cognitoCustom2FA.upsert({
+        where: {
+          email: sanitizedEmail,
+        },
+        update: {
+          cognitoToken: token,
+          verificationCode: verificationCode,
+          expires: dateIn15Minutes,
+        },
+        create: {
+          email: sanitizedEmail,
+          cognitoToken: token,
+          verificationCode: verificationCode,
+          expires: dateIn15Minutes,
+        },
+        select: {
+          id: true,
+        },
+      });
+
+      await clear2FALockout(sanitizedEmail);
+
+      await sendVerificationCode(sanitizedEmail, verificationCode);
+
+      logMessage.info("HealthCheck: send initial 2fa code success");
+
+      return result.id;
+    } catch (error) {
+      logMessage.info("HealthCheck: send initial 2fa code failure");
+      throw new Error(
+        `Failed to generate and send initial verification code. Reason: ${
+          (error as Error).message
+        }.`
+      );
+    }
+  } finally {
+    span.end();
   }
 };
 

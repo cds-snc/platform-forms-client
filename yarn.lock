@@ -3347,6 +3347,22 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@opentelemetry/api-logs@npm:^0.52.0":
+  version: 0.52.0
+  resolution: "@opentelemetry/api-logs@npm:0.52.0"
+  dependencies:
+    "@opentelemetry/api": "npm:^1.0.0"
+  checksum: 10c0/7871daac39000d56bd82e0fef25ddb3a531b6ce35740386a5e8800523ef4c5363ef585febd951ac08f15ecf71899ff4c62429518353a12c2c177cf3bf7354513
+  languageName: node
+  linkType: hard
+
+"@opentelemetry/api@npm:^1.0.0, @opentelemetry/api@npm:^1.9.0":
+  version: 1.9.0
+  resolution: "@opentelemetry/api@npm:1.9.0"
+  checksum: 10c0/9aae2fe6e8a3a3eeb6c1fdef78e1939cf05a0f37f8a4fae4d6bf2e09eb1e06f966ece85805626e01ba5fab48072b94f19b835449e58b6d26720ee19a58298add
+  languageName: node
+  linkType: hard
+
 "@panva/hkdf@npm:^1.1.1":
   version: 1.1.1
   resolution: "@panva/hkdf@npm:1.1.1"
@@ -7354,6 +7370,21 @@ __metadata:
   version: 1.2.0
   resolution: "@ungap/structured-clone@npm:1.2.0"
   checksum: 10c0/8209c937cb39119f44eb63cf90c0b73e7c754209a6411c707be08e50e29ee81356dca1a848a405c8bdeebfe2f5e4f831ad310ae1689eeef65e7445c090c6657d
+  languageName: node
+  linkType: hard
+
+"@vercel/otel@npm:^1.8.3":
+  version: 1.8.3
+  resolution: "@vercel/otel@npm:1.8.3"
+  peerDependencies:
+    "@opentelemetry/api": ^1.7.0
+    "@opentelemetry/api-logs": ^0.46.0
+    "@opentelemetry/instrumentation": ^0.46.0
+    "@opentelemetry/resources": ^1.19.0
+    "@opentelemetry/sdk-logs": ^0.46.0
+    "@opentelemetry/sdk-metrics": ^1.19.0
+    "@opentelemetry/sdk-trace-base": ^1.19.0
+  checksum: 10c0/4ebef2cb96c0d043d1679c7652e5957ba3fa24828cd4568aeb6bb75226d6d981994f0696d4ceb5d5cf7fec4ca85b8359c822f229b89ef243c9ffe165630cb395
   languageName: node
   linkType: hard
 
@@ -11494,6 +11525,8 @@ __metadata:
     "@lexical/react": "npm:^0.12.6"
     "@neshca/cache-handler": "npm:^1.2.1"
     "@next/eslint-plugin-next": "npm:^13.5.6"
+    "@opentelemetry/api": "npm:^1.9.0"
+    "@opentelemetry/api-logs": "npm:^0.52.0"
     "@prisma/client": "npm:^5.10.2"
     "@radix-ui/react-alert-dialog": "npm:^1.0.5"
     "@radix-ui/react-dropdown-menu": "npm:2.0.6"
@@ -11525,6 +11558,7 @@ __metadata:
     "@typescript-eslint/eslint-plugin": "npm:^6.21.0"
     "@typescript-eslint/parser": "npm:^6.21.0"
     "@typescript-eslint/typescript-estree": "npm:^6.21.0"
+    "@vercel/otel": "npm:^1.8.3"
     add: "npm:^2.0.6"
     autoprefixer: "npm:^10.4.16"
     aws-sdk-client-mock: "npm:^3.0.0"

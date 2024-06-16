@@ -1,5 +1,10 @@
+import { registerOTel } from "@vercel/otel";
+
 export async function register() {
   if (process.env.NEXT_RUNTIME === "nodejs") {
+    // Initialize OpenTelemetry
+    registerOTel({ serviceName: "form-viewer" });
+
     // Flush the privilege cache for users when the app server is started
     // This ensures that if privileges were changed they take immediate global effect.
 
