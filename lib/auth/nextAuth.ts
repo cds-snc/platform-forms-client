@@ -119,7 +119,7 @@ export const {
   logger: {
     error(error) {
       if (!(error instanceof CredentialsSignin)) {
-        // Not a CredentialsSignin error which is for invalid credentials (including 2FA)
+        // Not a CredentialsSignin error which is for invalid 2FA credentials
         logMessage.error(`NextAuth error: ${JSON.stringify(error)}.`);
       }
     },
