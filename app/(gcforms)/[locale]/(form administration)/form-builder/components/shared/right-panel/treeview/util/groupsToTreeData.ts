@@ -63,7 +63,7 @@ export const groupsToTreeData = (
       canMove: false,
       data: {
         titleEn: formGroups[key].titleEn || "Section title",
-        titleFr: formGroups[key].titleFr || "Section title",
+        titleFr: formGroups[key].titleFr || "Titre de section",
         descriptionEn: "",
         descriptionFr: "",
       },
