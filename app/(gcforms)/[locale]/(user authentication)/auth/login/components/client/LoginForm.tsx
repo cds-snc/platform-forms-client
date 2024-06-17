@@ -1,6 +1,6 @@
 "use client";
 
-import { useFormStatus, useFormState } from "react-dom";
+import { useFormState } from "react-dom";
 import { Alert, ErrorListItem, Label, TextInput } from "../../../../components/client/forms";
 import { useTranslation } from "@i18n/client";
 import { login, ErrorStates } from "../../actions";
@@ -8,13 +8,7 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 
 import { ErrorStatus } from "@clientComponents/forms/Alert/Alert";
-import { SubmitButton } from "@clientComponents/globals/Buttons/SubmitButton";
-
-const ButtonSubmit = () => {
-  const { t } = useTranslation("login");
-  const { pending } = useFormStatus();
-  return <SubmitButton loading={pending}>{t("continueButton")}</SubmitButton>;
-};
+import { SubmitButtonAction } from "@clientComponents/globals/Buttons/SubmitButton";
 
 export const LoginForm = () => {
   const {
@@ -118,7 +112,7 @@ export const LoginForm = () => {
             {t("resetPasswordText")}
           </Link>
         </p>
-        <ButtonSubmit />
+        <SubmitButtonAction>{t("continueButton")}</SubmitButtonAction>
       </form>
     </>
   );

@@ -4,6 +4,13 @@ import { themes, Theme } from "./themes";
 import { cn } from "@lib/utils";
 import { SpinnerIcon } from "@serverComponents/icons/SpinnerIcon";
 import { useTranslation } from "@i18n/client";
+import { useFormStatus } from "react-dom";
+
+// Convenience for server actions
+export const SubmitButtonAction = (props: ButtonProps) => {
+  const { pending } = useFormStatus();
+  return <SubmitButton loading={pending} {...props} />;
+};
 
 /**
  * Adds an accessible submit button that has a spinner when loading.
@@ -19,9 +26,7 @@ import { useTranslation } from "@i18n/client";
  * https://adrianroselli.com/2024/02/dont-disable-form-controls.html
  */
 
-// TODO could add a button wrapper to work with server actions useformStatus status
-
-interface SubmitButtonProps {
+interface ButtonProps {
   children?: JSX.Element | string;
   id?: string;
   onClick?: (e: React.MouseEvent<HTMLElement>) => void;
@@ -31,9 +36,12 @@ interface SubmitButtonProps {
   theme?: Theme;
   buttonRef?: (el: HTMLButtonElement) => void;
   dataTestId?: string;
-  loading: boolean;
   describeLoading?: string;
   type?: "button" | "submit" | "reset";
+}
+
+interface SubmitButtonProps extends ButtonProps {
+  loading: boolean;
 }
 
 export const SubmitButton = ({
