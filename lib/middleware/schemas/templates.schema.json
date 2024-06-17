@@ -212,7 +212,8 @@
             "dynamicRow",
             "richText",
             "attestation",
-            "combobox"
+            "combobox",
+            "formattedDate"
           ]
         },
         "properties": {

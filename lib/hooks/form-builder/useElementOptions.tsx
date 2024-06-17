@@ -35,6 +35,7 @@ import {
   FileInput,
   Departments,
   Combobox,
+  FormattedDate,
 } from "@formBuilder/[id]/edit/components/elements/element-dialog";
 import { useIsAdminUser } from "./useIsAdminUser";
 import { ElementOptionsFilter, ElementOption } from "../../types/form-builder-types";
@@ -137,6 +138,14 @@ export const useElementOptions = (filterElements?: ElementOptionsFilter | undefi
       value: t("combobox"),
       icon: SelectMenuIcon,
       description: Combobox,
+      className: "",
+      group: groups.basic,
+    },
+    {
+      id: "formattedDate",
+      value: t("formattedDate"),
+      icon: CalendarIcon,
+      description: FormattedDate,
       className: "separator",
       group: groups.basic,
     },

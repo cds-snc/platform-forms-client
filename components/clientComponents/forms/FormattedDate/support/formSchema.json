@@ -1,0 +1,15 @@
+{
+  "id": 2,
+  "type": "formattedDate",
+  "properties": {
+    "titleEn": "A formatted date question",
+    "titleFr": "",
+    "validation": {
+      "required": false
+    },
+    "dateFormat": "YYYY-MM-DD",
+    "autoComplete": "bday",
+    "dateParts": ["YYYY", "MM", "DD"], // should be in the order of display
+    "monthSelector": "numeric|select"
+  }
+}
