@@ -65,6 +65,10 @@ const Flow: ForwardRefRenderFunction<unknown, FlowProps> = ({ children }, ref) =
   }
 
   useEffect(() => {
+    setRedrawing(false);
+  }, []);
+
+  useEffect(() => {
     let flowZoom = 0.5;
     if (rfInstance && reset.current === false) {
       const obj = rfInstance.toObject();
