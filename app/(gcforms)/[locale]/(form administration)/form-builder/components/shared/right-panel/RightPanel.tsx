@@ -12,7 +12,7 @@ import { useActivePathname } from "@lib/hooks/form-builder";
 import { DownloadCSVWithGroups } from "@formBuilder/[id]/edit/translate/components/DownloadCSVWithGroups";
 import { useTreeRef } from "./treeview/provider/TreeRefProvider";
 import { TreeView } from "./treeview/TreeView";
-import { useRehydrate } from "@lib/store/useTemplateStore";
+import { useRehydrate, useTemplateStore } from "@lib/store/useTemplateStore";
 
 import { SelectNextAction } from "./logic/SelectNextAction";
 import { useGroupStore } from "./treeview/store/useGroupStore";
@@ -66,6 +66,12 @@ export const RightPanel = ({ id }: { id: string }) => {
   const selectedElementId = useGroupStore((s) => s.selectedElementId);
   const setId = useGroupStore((state) => state.setId);
   const item = (selectedElementId && getElement(selectedElementId)) || null;
+  const storeId = useTemplateStore((s) => s.id);
+
+  // Update the id client side if the store id is different
+  if (storeId && storeId !== id) {
+    id = storeId;
+  }
 
   useEffect(() => {
     if (hasHydrated) {
