@@ -75,11 +75,11 @@ export const SubmitButton = ({
       // Note: no need to add onKeyDown also, keying enter also triggers onClick. More info see
       // https://html.spec.whatwg.org/#implicit-submission
       onClick={(e) => {
-        // Simulate a disabled state by blocking the callback when loading
         if (!loading && onClick) {
           onClick(e);
         } else if (loading) {
           // Prevent form submit while loading in the case of a user keying a submit in a form.
+          // This is needed since the onClick is also called for a form submit.
           e.preventDefault();
         }
       }}
