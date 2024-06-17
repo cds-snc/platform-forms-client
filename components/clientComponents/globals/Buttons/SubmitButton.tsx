@@ -36,7 +36,6 @@ interface ButtonProps {
   onClick?: (e: React.MouseEvent<HTMLElement>) => void;
   icon?: ReactElement;
   className?: string;
-  "aria-label"?: string;
   theme?: Theme;
   buttonRef?: (el: HTMLButtonElement) => void;
   dataTestId?: string;
@@ -53,7 +52,6 @@ export const SubmitButton = ({
   onClick,
   className,
   icon,
-  "aria-label": ariaLabel = undefined,
   theme = "primary",
   buttonRef,
   dataTestId,
@@ -88,7 +86,6 @@ export const SubmitButton = ({
           ? cn(themes["base"], themes.disabled, disabledClass, className)
           : cn(themes["base"], themes[theme], className)
       }
-      aria-label={ariaLabel}
       ref={buttonRef}
       data-testid={dataTestId}
       // TODO do more testing on aria-disabled, doesn't seem to do much with AT... worth even
