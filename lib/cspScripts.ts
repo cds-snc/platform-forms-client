@@ -30,7 +30,7 @@ export const generateCSP = (): { csp: string; nonce: string } => {
   const cspHeader = `
     default-src 'self';
     script-src 'self' 'nonce-${nonce}' 'strict-dynamic';
-    style-src 'self' 'nonce-${nonce}' unsafe-inline;
+    style-src 'self' 'nonce-${nonce}' 'unsafe-inline';
     img-src 'self' blob: data:;
     font-src 'self';
     object-src 'none';
