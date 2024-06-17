@@ -814,7 +814,7 @@
   "addConditionalRules": {
     "modalTitle": "Add a rule to a question",
     "modalTitleEdit": "Edit rules",
-    "modalDescription": "Display additional input fields depending on the selection of a specific option. This applies to single choice, multiple choice, or dropdown list questions.",
+    "modalDescription": "Display additional input fields depending on the selection of a specific option. This applies to questions with radio buttons, checkboxes or dropdown options.",
     "optionTitle": "If option selected is:",
     "questionTitle": "Show question:",
     "addCustomRules": "Add a rule",

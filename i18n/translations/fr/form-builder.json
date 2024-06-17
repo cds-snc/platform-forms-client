@@ -27,7 +27,7 @@
       "dynamicRow": "Ajouter un ensemble de réponses",
       "richText": "Ajouter du texte de page",
       "departments": "Ajouter un ministère",
-      "combobox": "Ajouter une liste consultable"
+      "combobox": "Ajouter une liste avec recherche"
     },
     "address": {
       "whatIsYourAddress": "Quelle est votre adresse?",
@@ -64,8 +64,8 @@
     },
     "checkboxItem": "Option",
     "combobox": {
-      "description": "Une liste consultable d'options parmi lesquelles un choix est fait.",
-      "title": "Liste consultable",
+      "description": "Une liste avec recherche est une liste déroulante d'options parmi lesquelles un choix est fait.",
+      "title": "Liste avec recherche",
       "example": {
         "select": "Selectionner"
       },
@@ -247,7 +247,7 @@
   "checkboxes": "Cases à cocher",
   "close": "Fermer",
   "closeModal": "Fermer fenêtre modale",
-  "combobox": "Liste consultable",
+  "combobox": "Liste avec recherche",
   "completed": "Complétée",
   "confirmationDescriptionItem1": "des précisions sur la suite de choses.",
   "confirmationDescriptionItem2": "les coordonnées du service.",
@@ -814,7 +814,7 @@
   "addConditionalRules": {
     "modalTitle": "Ajouter une règle à une question",
     "modalTitleEdit": "Modifier les règles",
-    "modalDescription": "Afficher des champs de saisie supplémentaires en fonction de la sélection d'une option spécifique. Ceci s'applique aux questions à choix unique, à choix multiples ou à liste déroulante.",
+    "modalDescription": "Afficher des champs de saisie supplémentaires en fonction de la sélection d'une option spécifique. Ceci s'applique aux questions avec boutons radio, cases à cocher ou liste déroulante.",
     "optionTitle": "Si l'option sélectionnée est :",
     "questionTitle": "Afficher la question :",
     "addCustomRules": "Ajouter une règle",
