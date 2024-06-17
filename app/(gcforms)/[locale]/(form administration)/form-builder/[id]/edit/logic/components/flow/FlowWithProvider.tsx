@@ -10,6 +10,8 @@ import React, {
   useRef,
 } from "react";
 
+import { useRouter } from "next/navigation";
+
 import ReactFlow, {
   Controls,
   useStoreApi,
@@ -46,12 +48,13 @@ export interface FlowProps {
 }
 
 const Flow: ForwardRefRenderFunction<unknown, FlowProps> = ({ children }, ref) => {
+  const router = useRouter();
   const { nodes: flowNodes, edges: flowEdges, getData } = useFlowData();
   const [nodes, , onNodesChange] = useNodesState(flowNodes);
   const [, setEdges, onEdgesChange] = useEdgesState(flowEdges);
   const { fitView } = useReactFlow();
   const reset = useRef(false);
-  const [redrawing, setRedrawing] = useState(true);
+  const [redrawing, setRedrawing] = useState(false);
   const [rfInstance, setRfInstance] = useState<ReactFlowInstance | null>();
 
   // temp fix see: https://github.com/xyflow/xyflow/issues/3243
@@ -65,8 +68,8 @@ const Flow: ForwardRefRenderFunction<unknown, FlowProps> = ({ children }, ref) =
   }
 
   useEffect(() => {
-    setRedrawing(false);
-  }, []);
+    router.refresh();
+  }, [router]);
 
   useEffect(() => {
     let flowZoom = 0.5;
@@ -149,6 +152,12 @@ export const FlowWithProvider = () => {
   const { flow } = useFlowRef();
 
   const hasHydrated = useRehydrate();
+
+  useEffect(() => {
+    if (typeof window === "undefined") {
+      // return;
+    }
+  }, []);
 
   if (!hasHydrated) {
     // Wait for group to be available
