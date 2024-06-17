@@ -901,7 +901,7 @@
       "emptyFormElement": "Empty form question element",
       "keyboardNav": {
         "label": "Keyboard shortcuts",
-        "body": "<p className=\"mb-4\">Navigate the questions and sections using the arrow keys.</p><p><strong>Drag and drop:</strong></p>\n<ul><li>control + D to pick up and item</li><li>arrow keys to drag the item</li><li>enter key to drop the item</li></ul>"
+        "body": "<p className=\"mb-4\">Navigate the questions and sections using the arrow keys.</p><p><strong>Drag and drop:</strong></p>\n<ul><li>control + D to pick up an item</li><li>arrow keys to drag the item</li><li>enter key to drop the item</li></ul>"
       }
     }
   },
