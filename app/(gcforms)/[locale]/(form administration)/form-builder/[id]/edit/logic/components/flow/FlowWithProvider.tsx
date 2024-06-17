@@ -51,7 +51,7 @@ const Flow: ForwardRefRenderFunction<unknown, FlowProps> = ({ children }, ref) =
   const [, setEdges, onEdgesChange] = useEdgesState(flowEdges);
   const { fitView } = useReactFlow();
   const reset = useRef(false);
-  const [redrawing, setRedrawing] = useState(false);
+  const [redrawing, setRedrawing] = useState(true);
   const [rfInstance, setRfInstance] = useState<ReactFlowInstance | null>();
 
   // temp fix see: https://github.com/xyflow/xyflow/issues/3243
