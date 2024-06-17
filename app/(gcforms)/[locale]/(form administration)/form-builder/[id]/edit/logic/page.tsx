@@ -44,7 +44,7 @@ export default async function Page({
       <SkipLinkReusable anchor="#rightPanelTitle">{t("skipLink.logicSetup")}</SkipLinkReusable>
       <p>{t("logic.description")}</p>
       <LogicNavigation />
-      <div className="my-10 w-full border-1" style={{ height: "calc(100vh - 300px)" }}>
+      <div className="flow-container my-10 w-full border-1">
         <Suspense fallback={<Loading />}>
           <FlowWithProvider />
         </Suspense>
