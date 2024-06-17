@@ -9,8 +9,8 @@ import { generateVerificationCode, sendVerificationCode } from "./2fa";
 import { registerFailed2FAAttempt, clear2FALockout } from "./2faLockout";
 import { logMessage } from "@lib/logger";
 import { serverTranslation } from "@i18n";
-import { trace } from "@opentelemetry/api";
 import { cognitoIdentityProviderClient } from "@lib/integration/awsServicesConnector";
+import { otel } from "@lib/otel";
 
 if (
   (!process.env.COGNITO_APP_CLIENT_ID || !process.env.COGNITO_USER_POOL_ID) &&
@@ -58,58 +58,57 @@ export const initiateSignIn = async ({
       PASSWORD: password,
     },
   };
-  const span = trace.getTracer("sign-in").startSpan("cognito-auth");
-  try {
-    const adminInitiateAuthCommand = new AdminInitiateAuthCommand(params);
+  return otel("initiateSignIn", async () => {
+    try {
+      const adminInitiateAuthCommand = new AdminInitiateAuthCommand(params);
 
-    const response = await cognitoIdentityProviderClient.send(adminInitiateAuthCommand);
+      const response = await cognitoIdentityProviderClient.send(adminInitiateAuthCommand);
 
-    const idToken = response.AuthenticationResult?.IdToken;
+      const idToken = response.AuthenticationResult?.IdToken;
 
-    if (idToken) {
-      const decodedCognitoToken = decodeCognitoToken(idToken);
+      if (idToken) {
+        const decodedCognitoToken = decodeCognitoToken(idToken);
 
-      logMessage.info("HealthCheck: cognito sign-in success");
+        logMessage.info("HealthCheck: cognito sign-in success");
 
-      return {
-        email: decodedCognitoToken.email,
-        token: idToken,
-      };
-    } else {
-      logMessage.info("HealthCheck: cognito sign-in undefined token");
-      return null;
+        return {
+          email: decodedCognitoToken.email,
+          token: idToken,
+        };
+      } else {
+        logMessage.info("HealthCheck: cognito sign-in undefined token");
+        return null;
+      }
+    } catch (e) {
+      if (
+        e instanceof CognitoIdentityProviderServiceException &&
+        e.name === "NotAuthorizedException" &&
+        e.message === "Password attempts exceeded"
+      ) {
+        const prismaUser = await prisma.user.findUnique({
+          where: {
+            email: sanitizedUsername,
+          },
+          select: {
+            id: true,
+          },
+        });
+
+        logEvent(
+          prismaUser?.id ?? "unknown",
+          { type: "User", id: prismaUser?.id ?? "unknown" },
+          "UserTooManyFailedAttempts",
+          `Password attempts exceeded for ${sanitizedUsername}`
+        );
+
+        logMessage.warn("Cognito Lockout: Password attempts exceeded");
+      }
+
+      logMessage.info("HealthCheck: cognito sign-in failure");
+
+      throw e;
     }
-  } catch (e) {
-    if (
-      e instanceof CognitoIdentityProviderServiceException &&
-      e.name === "NotAuthorizedException" &&
-      e.message === "Password attempts exceeded"
-    ) {
-      const prismaUser = await prisma.user.findUnique({
-        where: {
-          email: sanitizedUsername,
-        },
-        select: {
-          id: true,
-        },
-      });
-
-      logEvent(
-        prismaUser?.id ?? "unknown",
-        { type: "User", id: prismaUser?.id ?? "unknown" },
-        "UserTooManyFailedAttempts",
-        `Password attempts exceeded for ${sanitizedUsername}`
-      );
-
-      logMessage.warn("Cognito Lockout: Password attempts exceeded");
-    }
-
-    logMessage.info("HealthCheck: cognito sign-in failure");
-
-    throw e;
-  } finally {
-    span.end();
-  }
+  });
 };
 
 export const begin2FAAuthentication = async ({
@@ -117,8 +116,7 @@ export const begin2FAAuthentication = async ({
   token,
 }: CognitoToken): Promise<AuthenticationFlowToken> => {
   // ensure the user account is active
-  const span = trace.getTracer("sign-in").startSpan("cognito-2fa");
-  try {
+  return otel("begin2FAAuthentication", async () => {
     const sanitizedEmail = sanitizeEmailAddressForCognito(email);
 
     const prismaUser = await prisma.user.findUnique({
@@ -175,9 +173,7 @@ export const begin2FAAuthentication = async ({
         }.`
       );
     }
-  } finally {
-    span.end();
-  }
+  });
 };
 
 export const requestNew2FAVerificationCode = async (

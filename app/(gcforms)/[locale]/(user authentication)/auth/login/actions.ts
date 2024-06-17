@@ -6,7 +6,7 @@ import { redirect } from "next/navigation";
 import { CognitoIdentityProviderServiceException } from "@aws-sdk/client-cognito-identity-provider";
 import { hasError } from "@lib/hasError";
 import { handleErrorById } from "@lib/auth/cognito";
-import { trace } from "@opentelemetry/api";
+import { otel } from "@lib/otel";
 
 export interface ErrorStates {
   authError?: {
@@ -52,10 +52,8 @@ export const login = async (
   _: ErrorStates,
   formData: FormData
 ): Promise<ErrorStates> => {
-  const span = trace.getTracer("sign-in").startSpan("login-action");
-  try {
+  return otel("login", async () => {
     const rawFormData = Object.fromEntries(formData.entries());
-
     const validationResult = await validate(language, rawFormData);
 
     if (!validationResult.success) {
@@ -145,7 +143,5 @@ export const login = async (
       validationErrors: [],
       authError: await handleErrorById("InternalServiceExceptionLogin", language),
     };
-  } finally {
-    span.end();
-  }
+  });
 };
