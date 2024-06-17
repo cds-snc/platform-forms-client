@@ -15,15 +15,19 @@ export const SubmitButtonAction = (props: ButtonProps) => {
 /**
  * Adds an accessible submit button that has a spinner when loading.
  *
+ * Note:
  * The difference between this and the "standard" Button is this does not disable the submit button
  * when loading. The main reason for this is that it is confusing for AT users to have a button
- * that is suddenly out of the tab order (not focussable or activateable). Instead the button
- * gives a visual and AT accessible indication that it is loading.
- * I think it is weird that AT do not work more with a html buttons DOM state switch to disabled or
- * with aria-disabled (announcing change) but this is what we have to work with..
+ * that changes suddenly to be out of the tab order (not focussable or activateable). Instead this
+ * button gives a visual and AT accessible indication that it is loading. The button also
+ * programmatically disables a form submit while loading just like a disabled button would.
  *
  * Here's a helpful article on the topic:
  * https://adrianroselli.com/2024/02/dont-disable-form-controls.html
+ *
+ * Note about above Note:
+ * I think it is weird that AT do not work more with a html buttons DOM state switching to disabled
+ * or with aria-disabled (announcing change) but this is what we have to work with..
  */
 
 interface ButtonProps {
@@ -74,6 +78,9 @@ export const SubmitButton = ({
         // Simulate a disabled state by blocking the callback when loading
         if (!loading && onClick) {
           onClick(e);
+        } else if (loading) {
+          // Prevent form submit while loading in the case of a user keying a form submit
+          e.preventDefault();
         }
       }}
       className={
