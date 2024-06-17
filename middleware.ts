@@ -241,7 +241,9 @@ const setCSP = (
   });
 
   // Set the CSP header on the response to the browser on the built version of the app only
-  if (process.env.NODE_ENV !== "development") response.headers.set("content-security-policy", csp);
+  if (process.env.NODE_ENV !== "development") {
+    response.headers.set("content-security-policy", csp);
+  }
 
   // Set cookie on response back to browser so client can render correct language on client components
   if (pathLang && cookieLang !== pathLang) response.cookies.set("i18next", pathLang);
