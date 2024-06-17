@@ -12,12 +12,14 @@ import { LocalizedElementProperties } from "@lib/types/form-builder-types";
 import { useTranslation } from "@i18n/client";
 
 export const Item = ({
+  item,
   title,
   arrow,
   context,
   children,
   handleDelete,
 }: {
+  item: TreeItem;
   title: ReactNode;
   arrow: ReactNode;
   context: TreeItemRenderContext;
@@ -25,7 +27,6 @@ export const Item = ({
   handleDelete: (e: React.MouseEvent<HTMLButtonElement>) => Promise<void>;
 }) => {
   const { t } = useTranslation("form-builder");
-
   const isRenaming = context && context?.isRenaming ? true : false;
   const isLocked = !context.canDrag;
   let isFormElement = false;
@@ -48,12 +49,12 @@ export const Item = ({
   );
 
   // Pull item from arrow props
-  let item: TreeItem;
+  // let item: TreeItem;
   let titleText = "";
   let descriptionText = "";
   let fieldType = "";
   if (arrow && typeof arrow === "object" && "props" in arrow) {
-    item = arrow.props.item;
+    // item = arrow.props.item;
     fieldType = item?.data.type;
     isSection = item?.isFolder ? true : false;
     isFormElement = item?.isFolder ? false : true;

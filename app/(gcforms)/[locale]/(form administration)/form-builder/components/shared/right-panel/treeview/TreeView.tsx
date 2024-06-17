@@ -144,6 +144,7 @@ const ControlledTree: ForwardRefRenderFunction<unknown, TreeDataProviderProps> =
         renderItem={({ item, title, arrow, context, children }) => {
           return (
             <Item
+              item={item}
               title={title}
               arrow={arrow}
               context={context}
