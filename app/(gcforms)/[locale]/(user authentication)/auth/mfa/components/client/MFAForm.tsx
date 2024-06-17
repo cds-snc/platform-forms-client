@@ -180,7 +180,6 @@ export const MFAForm = () => {
             />
           </div>
 
-          {/* TODO ask design about keeping submit button visible on loading to reduce "surprise! I'm hiding this botton.." */}
           <SubmitButton loading={isSubmittingStep1} dataTestId="verify-submit">
             {t("verify.confirmButton")}
           </SubmitButton>
