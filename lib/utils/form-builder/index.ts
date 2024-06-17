@@ -97,6 +97,18 @@ export const sortByLayout = ({
   });
 };
 
+export const sortByGroups = ({
+  form,
+  elements,
+}: {
+  form: FormProperties;
+  elements: FormElement[];
+}) => {
+  const groups = form.groups || {};
+  const layout = getLayoutFromGroups(form, groups);
+  return sortByLayout({ layout, elements });
+};
+
 export const getSchemaFromState = (state: TemplateStoreState, allowGroups = false) => {
   const {
     form: {
