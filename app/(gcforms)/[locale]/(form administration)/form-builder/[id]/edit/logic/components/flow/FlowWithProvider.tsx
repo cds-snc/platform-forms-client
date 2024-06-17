@@ -66,6 +66,18 @@ const Flow: ForwardRefRenderFunction<unknown, FlowProps> = ({ children }, ref) =
   }
 
   useEffect(() => {
+    const nodeDesc = document.querySelector(".react-flow__node-desc-1");
+    if (nodeDesc) {
+      nodeDesc.remove();
+    }
+
+    const edgeDesc = document.querySelector(".react-flow__edge-desc-1");
+    if (edgeDesc) {
+      edgeDesc.remove();
+    }
+  }, []);
+
+  useEffect(() => {
     let flowZoom = 0.5;
     if (rfInstance && reset.current === false) {
       const obj = rfInstance.toObject();
