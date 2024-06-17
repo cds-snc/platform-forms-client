@@ -5,13 +5,20 @@ import { cn } from "@lib/utils";
 import { SpinnerIcon } from "@serverComponents/icons/SpinnerIcon";
 
 /**
- * TODO could add a button wrapper to work with server actions use useformStatus
+ * Adds an accessible submit button that has a spinner when loading.
  *
- * TODO note why disabling a submit button is confusing for AT users
- * e.g. https://adrianroselli.com/2024/02/dont-disable-form-controls.html
+ * The difference between this and the "standard" Button is this does not disable the submit button
+ * when loading. The main reason for this is that it is confusing for AT users to have a button
+ * that is suddenly out of the tab order (not focussable or activateable). Instead the button
+ * gives a visual and AT accessible indication that it is loading.
+ * I think it is weird that AT do not work more with a html buttons DOM state switch to disabled or
+ * with aria-disabled (announcing change) but this is what we have to work with..
  *
- * TODO look into if aria-disabled has better support now
+ * Here's a helpful article on the topic:
+ * https://adrianroselli.com/2024/02/dont-disable-form-controls.html
  */
+
+// TODO could add a button wrapper to work with server actions use useformStatus
 
 interface SubmitButtonProps {
   children?: JSX.Element | string;
@@ -64,14 +71,14 @@ export const SubmitButton = ({
       aria-label={ariaLabel}
       ref={buttonRef}
       data-testid={dataTestId}
-      // TODO do more testing on aria-disabled, doesn't seem to do much with AT...
+      // TODO do more testing on aria-disabled, doesn't seem to do much with AT... worth even
+      // using with a submit button?
       aria-disabled={loading}
       {...rest}
     >
       {icon && <div className={cn(theme !== "icon" && "-ml-2 mr-2 w-8")}>{icon}</div>}
       {children}
       {loading && (
-        // TODO run this spinner by design
         <SpinnerIcon className="ml-2 h-7 w-7 animate-spin fill-blue-600 text-white dark:text-white" />
       )}
       <div aria-live="polite" className="sr-only">
@@ -80,7 +87,3 @@ export const SubmitButton = ({
     </button>
   );
 };
-
-export const RoundedSubmitButton = ({ className, ...props }: SubmitButtonProps) => (
-  <SubmitButton {...props} className={cn(className, "rounded-[100px]")} />
-);
