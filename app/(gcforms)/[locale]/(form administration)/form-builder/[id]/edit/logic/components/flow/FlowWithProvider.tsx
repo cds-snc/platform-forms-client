@@ -21,7 +21,6 @@ import ReactFlow, {
   ReactFlowInstance,
 } from "reactflow";
 
-import "reactflow/dist/style.css";
 import useAutoLayout from "./useAutoLayout";
 import { useFlowData } from "./useFlowData";
 import { GroupNode } from "./GroupNode";
