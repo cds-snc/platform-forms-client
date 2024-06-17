@@ -104,8 +104,11 @@ export const sortByGroups = ({
   form: FormProperties;
   elements: FormElement[];
 }) => {
-  const groups = form.groups || {};
-  const layout = getLayoutFromGroups(form, groups);
+  if (!form.groups) {
+    return sortByLayout({ layout: form.layout, elements: elements });
+  }
+
+  const layout = getLayoutFromGroups(form, form.groups);
   return sortByLayout({ layout, elements });
 };
 
