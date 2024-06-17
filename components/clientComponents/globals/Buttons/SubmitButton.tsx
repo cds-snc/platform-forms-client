@@ -26,8 +26,8 @@ export const SubmitButtonAction = (props: ButtonProps) => {
  * https://adrianroselli.com/2024/02/dont-disable-form-controls.html
  *
  * Note about above Note:
- * I think it is weird that AT do not work more with a html buttons DOM state switching to disabled
- * or with aria-disabled (announcing change) but this is what we have to work with..
+ * I think it is weird that AT do not do more with an html buttons DOM state switching to disabled
+ * or with aria-disabled but this is what we have to work with.
  */
 
 interface ButtonProps {
@@ -79,7 +79,7 @@ export const SubmitButton = ({
         if (!loading && onClick) {
           onClick(e);
         } else if (loading) {
-          // Prevent form submit while loading in the case of a user keying a form submit
+          // Prevent form submit while loading in the case of a user keying a submit in a form.
           e.preventDefault();
         }
       }}
