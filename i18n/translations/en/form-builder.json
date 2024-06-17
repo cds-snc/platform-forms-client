@@ -829,7 +829,7 @@
   "opensInNewTab": "opens in a new tab",
   "rightPanel": {
     "title": "Right panel",
-    "openPanel": "Set up your form",
+    "openPanel": "Form set-up",
     "closePanel": "Close panel",
     "questions": "Questions",
     "logic": "Logic",
@@ -892,13 +892,13 @@
     },
     "confirmation": {
       "beforeText": "The confirmation message will appear on a new page once the form has been submitted.",
-      "body": "<p className=\"mb-4\">Help people filling out the form understand how you’re handling their personal information, as outlined in Section 4.2.10 of the <a href=\"https://www.tbs-sct.canada.ca/pol/doc-eng.aspx?id=18309\" target=\"_blank\">Directive on privacy practices</a>.</p><p><strong>What to include in a privacy notice</strong></p><ul><li>What personal information is being collected and why.</li><li>What legal or program authorities you have to collect information.</li><li>How their information will be used, shared, stored, and retained.</li><li>How people can access or change their personal information and file complaints.</li></ul>",
-      "description": "Add a privacy notice to your form to inform users how you handle their personal information.",
-      "summary": "What to include in a confirmation message"
+      "body": "",
+      "description": "Add a confirmation message",
+      "summary": "Some useful things you can add to the confirmation are:"
     },
     "treeView": {
       "emptyPageTextElement": "Empty page text",
-      "emptyFormElement": "Empty form queston element",
+      "emptyFormElement": "Empty form question element",
       "keyboardNav": {
         "label": "Keyboard shortcuts",
         "body": "<p className=\"mb-4\">Navigate the questions and sections using the arrow keys.</p><p><strong>Drag and drop:</strong></p>\n<ul><li>control + D to pick up and item</li><li>arrow keys to drag the item</li><li>enter key to drop the item</li></ul>"
@@ -914,8 +914,8 @@
     "questions": "Skip to Questions editor",
     "translate": "Skip to Translations editor",
     "logic": "Skip to Logic editor",
-    "questionsSetup": "Skip to Questions setup",
-    "translateSetup": "Skip to Translations setup",
-    "logicSetup": "Skip to Logic setup"
+    "questionsSetup": "Skip to Questions set-up",
+    "translateSetup": "Skip to Translations set-up",
+    "logicSetup": "Skip to Logic set-up"
   }
 }

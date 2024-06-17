@@ -829,7 +829,7 @@
   "opensInNewTab": "ouvre un nouvel onglet",
   "rightPanel": {
     "title": "Panneau de droite",
-    "openPanel": "Mise en place du formulaire",
+    "openPanel": "Configuration du formulaire",
     "closePanel": "Fermer le panneau",
     "questions": "Questions",
     "logic": "Logique",
@@ -912,11 +912,11 @@
   },
   "next": "Continuer",
   "skipLink": {
-    "questions": "[FR]Skip to Questions editor",
-    "translate": "[FR]Skip to Translations editor",
-    "logic": "[FR]Skip to Logic editor",
-    "questionsSetup": "[FR]Skip to Questions setup",
-    "translateSetup": "[FR]Skip to Translations setup",
-    "logicSetup": "[FR]Skip to Logic setup"
+    "questions": "Passer à l'éditeur de questions",
+    "translate": "Passer à l'éditeur de traductions",
+    "logic": "Passer à l'éditeur de logique",
+    "questionsSetup": "Passer à la configuration des questions",
+    "translateSetup": "Passer à la configuration des traductions",
+    "logicSetup": "Passer à la configuration de la logique"
   }
 }
