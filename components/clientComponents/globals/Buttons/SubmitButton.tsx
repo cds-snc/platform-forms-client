@@ -40,7 +40,7 @@ interface ButtonProps {
   buttonRef?: (el: HTMLButtonElement) => void;
   dataTestId?: string;
   describeLoading?: string;
-  type?: "button" | "submit" | "reset";
+  type?: "submit" | "button";
 }
 
 interface SubmitButtonProps extends ButtonProps {
