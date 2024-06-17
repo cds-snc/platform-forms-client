@@ -870,7 +870,7 @@
   },
   "groups": {
     "newSection": "Nouvelle section",
-    "sectionNameInput": "Section name [FR]",
+    "sectionNameInput": "Nom de ela section",
     "addSection": "Ajouter une section",
     "treeAriaLabel": "Sections Formulaires GC",
     "addSectionPlaceholder": "Ajouter un nom à la section",
