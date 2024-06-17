@@ -5,10 +5,12 @@ import { cn } from "@lib/utils";
 import { SpinnerIcon } from "@serverComponents/icons/SpinnerIcon";
 
 /**
- * TODO add to auth related pages like 2FA
- * TODO note why disabling a submit button is confusing for AT users e.g. https://adrianroselli.com/2024/02/dont-disable-form-controls.html
- * TODO add active active hover state for button
- * TODO look into aria-disabled
+ * TODO could add a button wrapper to work with server actions use useformStatus
+ *
+ * TODO note why disabling a submit button is confusing for AT users
+ * e.g. https://adrianroselli.com/2024/02/dont-disable-form-controls.html
+ *
+ * TODO look into if aria-disabled has better support now
  */
 
 interface SubmitButtonProps {
