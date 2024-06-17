@@ -87,7 +87,7 @@ export default async function Layout({ children }: { children: React.ReactNode }
             width="0"
             style={{ display: "none", visibility: "hidden" }}
           ></iframe>
-          <style type="text/css">{`#__next {display:none;}`}</style>
+          <style nonce={nonce} type="text/css">{`#__next {display:none;}`}</style>
           <meta httpEquiv="Refresh" content="0; url='/javascript-disabled.html'" />
         </noscript>
       </head>
