@@ -153,5 +153,6 @@
   "mainNavAriaLabel": "Navigation principale",
   "yourAccount": "Votre compte",
   "dateModified": "Date de modification ",
-  "start": "Début"
+  "start": "Début",
+  "loadingResult": "Chargement en cours..."
 }

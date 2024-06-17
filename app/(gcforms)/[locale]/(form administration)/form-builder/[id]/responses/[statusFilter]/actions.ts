@@ -28,6 +28,9 @@ import { logMessage } from "@lib/logger";
 import { revalidatePath } from "next/cache";
 import { authCheckAndThrow } from "@lib/actions";
 import { FormBuilderError } from "./exceptions";
+import { FormProperties } from "@lib/types";
+import { getLayoutFromGroups } from "@lib/utils/form-builder/groupedFormHelpers";
+import { allowGrouping } from "@formBuilder/components/shared/right-panel/treeview/util/allowGrouping";
 
 // Can throw because it is not called by Client Components
 // @todo Should these types of functions be moved to a different file?
@@ -102,6 +105,12 @@ export const fetchSubmissions = async ({
 
 const sortByLayout = ({ layout, elements }: { layout: number[]; elements: Answer[] }) => {
   return elements.sort((a, b) => layout.indexOf(a.questionId) - layout.indexOf(b.questionId));
+};
+
+const sortByGroups = ({ form, elements }: { form: FormProperties; elements: Answer[] }) => {
+  const groups = form.groups || {};
+  const layout = getLayoutFromGroups(form, groups);
+  return sortByLayout({ layout, elements });
 };
 
 const logDownload = async (
@@ -181,6 +190,7 @@ export const getSubmissionsByFormat = async ({
       );
     }
 
+    const allowGroupsFlag = await allowGrouping();
     // Get responses into a ResponseSubmission array containing questions and answers that can be easily transformed
     const responses = queryResult.map((item) => {
       const submission = Object.entries(JSON.parse(String(item.formSubmission))).map(
@@ -220,7 +230,13 @@ export const getSubmissionsByFormat = async ({
           } as Answer;
         }
       );
-      const sorted = sortByLayout({ layout: fullFormTemplate.form.layout, elements: submission });
+      let sorted: Answer[];
+      if (allowGroupsFlag) {
+        sorted = sortByGroups({ form: fullFormTemplate.form, elements: submission });
+      } else {
+        sorted = sortByLayout({ layout: fullFormTemplate.form.layout, elements: submission });
+      }
+
       return {
         id: item.name,
         createdAt: parseInt(item.createdAt.toString()),
