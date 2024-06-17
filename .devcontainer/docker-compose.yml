@@ -12,3 +12,26 @@ services:
       - 3000:3000
     expose: 
       - 3000
+
+  db:
+    image: postgres:13.12@sha256:ced3ba927f4cf06e03eac7760f426a95367076fb31fe4e31b679f82d119a3519
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: chummy
+    ports:
+      - "5432:5432"
+    expose:
+      - 5432
+    command:
+      - "postgres"
+      - "-c"
+      - "listen_addresses=*"
+    restart: unless-stopped
+
+  redis:
+    restart: unless-stopped
+    image: redis:latest@sha256:2976bc0437deff693af2dcf081a1d1758de8b413e6de861151a5a136c25eb9e4
+    ports:
+      - "6379:6379"
+    expose:
+      - 6379

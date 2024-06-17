@@ -29,6 +29,7 @@ const endNode = {
     ],
   },
   type: "groupNode",
+  position: { x: 0, y: 0 },
 };
 
 const reviewNode = {
@@ -43,6 +44,7 @@ const reviewNode = {
     ],
   },
   type: "groupNode",
+  position: { x: 0, y: 0 },
 };
 
 const defaultEdges = {
@@ -148,7 +150,9 @@ export const useFlowData = () => {
       return { edges, nodes: [] };
     }
 
-    const nodes = treeIndexes.map((key: TreeItemIndex) => {
+    const nodes = [];
+
+    treeIndexes.forEach((key: TreeItemIndex) => {
       const treeItem: TreeItem = treeItems[key];
       const group: Group | undefined = formGroups && formGroups[key] ? formGroups[key] : undefined;
       let elements: TreeItem[] = [];
@@ -177,15 +181,19 @@ export const useFlowData = () => {
 
       edges.push(...(newEdges as Edge[]));
       prevNodeId = key as string;
-      return flowNode;
+
+      if (key === "review" || key === "end") {
+        return;
+      }
+      nodes.push(flowNode);
     });
 
     // Add review node
-    nodes.push({ ...reviewNode, position: { x: x_pos, y: y_pos } });
+    nodes.push({ ...reviewNode });
 
     // Push "end" node to the end
     // And add confirmation element
-    nodes.push({ ...endNode, position: { x: x_pos, y: y_pos } });
+    nodes.push({ ...endNode });
 
     return { edges, nodes };
   }, [treeItems, formGroups]);

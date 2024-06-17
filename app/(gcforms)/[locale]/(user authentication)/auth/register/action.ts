@@ -15,6 +15,7 @@ import {
   CognitoIdentityProviderServiceException,
 } from "@aws-sdk/client-cognito-identity-provider";
 import { cognitoIdentityProviderClient } from "@lib/integration/awsServicesConnector";
+import { logMessage } from "@lib/logger";
 
 export interface ErrorStates {
   authError?: {
@@ -94,6 +95,7 @@ const validate = async (
   );
   return v.safeParse(formValidationSchema, formEntries, { abortPipeEarly: true });
 };
+
 export const register = async (
   language: string,
   _: ErrorStates,
@@ -131,9 +133,11 @@ export const register = async (
 
   try {
     await cognitoIdentityProviderClient.send(signUpCommand);
+    logMessage.info("HealthCheck: cognito sign-up success");
   } catch (err) {
-    // if there is an error, forward the status code and the error message as the body
+    logMessage.info("HealthCheck: cognito sign-up failure");
 
+    // if there is an error, forward the status code and the error message as the body
     const cognitoError = err as CognitoIdentityProviderServiceException;
     if (cognitoError.name === "UsernameExistsException") {
       return { validationErrors: [], authError: { title: t("UsernameExistsException") } };
