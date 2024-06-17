@@ -96,7 +96,7 @@ export const DownloadCSVWithGroups = () => {
 
     if (form.privacyPolicy?.descriptionEn || form.privacyPolicy?.descriptionFr) {
       data.push([
-        formatText("Privacy statement/Déclaration de confidentialité"),
+        formatText("Privacy statement/Avis de confidentialité"),
         formatText(form.privacyPolicy.descriptionEn),
         formatText(form.privacyPolicy.descriptionFr),
       ]);

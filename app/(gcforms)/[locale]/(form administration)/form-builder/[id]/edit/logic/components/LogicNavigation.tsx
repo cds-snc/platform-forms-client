@@ -25,7 +25,7 @@ export const LogicNavigation = () => {
     const newGroups = autoFlowAllNextActions({ ...groups }, true); // forces overwrite of existing next actions
     replaceGroups(newGroups);
     flow.current?.redraw();
-    toast.success("Auto flow applied");
+    toast.success(t("logic.toastSuccess"));
   };
 
   return (
