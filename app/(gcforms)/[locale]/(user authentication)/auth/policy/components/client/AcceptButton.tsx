@@ -37,7 +37,7 @@ export const AcceptButton = () => {
   };
 
   return (
-    <SubmitButton id="acceptableUse" loading={isLoading} onClick={agree}>
+    <SubmitButton id="acceptableUse" type="button" loading={isLoading} onClick={agree}>
       {t("acceptableUsePage.agree")}
     </SubmitButton>
   );

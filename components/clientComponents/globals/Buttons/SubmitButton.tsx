@@ -3,6 +3,7 @@ import React, { ReactElement } from "react";
 import { themes, Theme } from "./themes";
 import { cn } from "@lib/utils";
 import { SpinnerIcon } from "@serverComponents/icons/SpinnerIcon";
+import { useTranslation } from "@i18n/client";
 
 /**
  * Adds an accessible submit button that has a spinner when loading.
@@ -18,7 +19,7 @@ import { SpinnerIcon } from "@serverComponents/icons/SpinnerIcon";
  * https://adrianroselli.com/2024/02/dont-disable-form-controls.html
  */
 
-// TODO could add a button wrapper to work with server actions use useformStatus
+// TODO could add a button wrapper to work with server actions useformStatus status
 
 interface SubmitButtonProps {
   children?: JSX.Element | string;
@@ -32,6 +33,7 @@ interface SubmitButtonProps {
   dataTestId?: string;
   loading: boolean;
   describeLoading?: string;
+  type?: "button" | "submit" | "reset";
 }
 
 export const SubmitButton = ({
@@ -45,8 +47,10 @@ export const SubmitButton = ({
   dataTestId,
   loading,
   describeLoading,
+  type = "submit",
   ...rest
 }: SubmitButtonProps & React.ButtonHTMLAttributes<HTMLButtonElement>) => {
+  const { t } = useTranslation("common");
   const disabledClass = `
     focus:bg-[#e2e8ef] focus:text-[#748094] focus:border-none focus:outline-offset-0 focus:outline-0
     active:bg-[#e2e8ef] active:text-[#748094] active:border-none active:outline-offset-0 active:outline-0
@@ -54,7 +58,8 @@ export const SubmitButton = ({
 
   return (
     <button
-      type="submit"
+      // "type" because a "submit" button may no longer be in a form element with the new server action patterns
+      type={type}
       // Note: no need to add onKeyDown also, keying enter also triggers onClick. More info see
       // https://html.spec.whatwg.org/#implicit-submission
       onClick={(e) => {
@@ -82,7 +87,7 @@ export const SubmitButton = ({
         <SpinnerIcon className="ml-2 h-7 w-7 animate-spin fill-blue-600 text-white dark:text-white" />
       )}
       <div aria-live="polite" className="sr-only">
-        {loading && `${describeLoading ? describeLoading : "Loading"}`}
+        {loading && `${describeLoading ? describeLoading : t("loadingResult")}`}
       </div>
     </button>
   );
