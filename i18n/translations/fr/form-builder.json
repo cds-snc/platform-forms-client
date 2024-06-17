@@ -851,7 +851,7 @@
     "saveNote": "Ajouter et enregistrer une règle, désactive la fonction de flux linéaire automatique entre les sections.",
     "resetRules": "Réinitialisation au flux linéaire",
     "resetRulesHelp": "Aide pour le flux linéaire",
-    "resetRulesDescription": "La fonction de flux linéaire automatique réinitialise la progression entre les sections en un flux linéaire simple, remplaçant ainsi toutes les règles de logique de branchement qui s'appliquent.",
+    "resetRulesDescription": "La fonction de flux linéaire automatique réinitialise la progression entre les sections en un flux linéaire simple, remplaçant ainsi toutes les règles d'embranchements qui s'appliquent.",
     
     "multiRulesWarning": {
       "text1": "L'ordre et le flux sont définis en fonction des règles appliquées.",
