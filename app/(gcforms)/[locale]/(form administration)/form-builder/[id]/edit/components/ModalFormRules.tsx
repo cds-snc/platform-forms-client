@@ -10,6 +10,7 @@ import { FormElementWithIndex } from "@lib/types/form-builder-types";
 import { ChoiceRule } from "@lib/formContext";
 import { ConditionalSelector } from "@formBuilder/components/shared/conditionals/ConditionalSelector";
 import { sortByGroups, sortByLayout } from "@lib/utils/form-builder";
+import { FormElement } from "@lib/types";
 
 export const ModalFormRules = ({
   item,
@@ -33,7 +34,7 @@ export const ModalFormRules = ({
     groupsEnabled: s.getGroupsEnabled(),
   }));
 
-  let sortedElements;
+  let sortedElements: FormElement[] = [];
 
   if (groupsEnabled) {
     sortedElements = sortByGroups({ form: form, elements: elements });
