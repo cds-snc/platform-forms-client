@@ -19,6 +19,7 @@ import { Review } from "../Review/Review";
 import { LockedSections } from "@formBuilder/components/shared/right-panel/treeview/types";
 import { BackButton } from "@formBuilder/[id]/preview/BackButton";
 import { Language } from "@lib/types/form-builder-types";
+import { getGroupValues } from "@lib/utils/form-builder/groupsHistory";
 
 interface SubmitButtonProps {
   numberOfRequiredQuestions: number;
@@ -152,6 +153,8 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
 
   const { t } = useTranslation();
 
+  // Note: this function is used to set any values we'd like added for use in the below
+  // withFormik handleSubmit(). You'll also need to add the new value to the FormikProps interface.
   useFormValuesChanged();
 
   const errorList = props.errors ? getErrorList(props) : null;
@@ -299,6 +302,7 @@ interface FormProps {
   children?: (JSX.Element | undefined)[] | null;
   t: TFunction;
   allowGrouping?: boolean | undefined;
+  groupHistory?: string[];
 }
 
 /**
@@ -321,7 +325,22 @@ export const Form = withFormik<FormProps, Responses>({
     // Needed so the Loader is displayed
     formikBag.setStatus("submitting");
     try {
-      const result = await submitForm(values, formikBag.props.language, formikBag.props.formRecord);
+      const isGroupsCheck = formikBag.props.allowGrouping;
+      const newValues = isGroupsCheck
+        ? getGroupValues(
+            values,
+            formikBag.props.formRecord.form.groups,
+            values.groupHistory as string[]
+          )
+        : values;
+
+      // TODO remove currentGroup and groupHistory from values?
+
+      const result = await submitForm(
+        newValues,
+        formikBag.props.language,
+        formikBag.props.formRecord
+      );
       if (result.error) {
         formikBag.setStatus("Error");
       } else {
