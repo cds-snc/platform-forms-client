@@ -19,6 +19,7 @@
   },
   "scripts": {
     "dev": "yarn prisma:dev && yarn initialize && next dev --turbo",
+    "dev:secure": "yarn prisma:dev && yarn initialize && next dev --turbo --experimental-https",
     "build": "DATABASE_URL=postgres://postgres:chummy@localhost:5432/formsDB next build --debug",
     "start": "yarn prisma:deploy && yarn initialize && next start -p ${PORT:-3000}",
     "initialize": "yarn workspace flag_initialization initialize",

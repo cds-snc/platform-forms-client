@@ -33,8 +33,8 @@ export const initializeGroups = (form: FormProperties, allowGroups: boolean): Fo
   if (!form.groups.review) {
     form.groups.review = {
       name: "Review",
-      titleEn: "",
-      titleFr: "",
+      titleEn: "Review",
+      titleFr: "Révision",
       elements: [],
       nextAction: "end",
     };
@@ -43,8 +43,8 @@ export const initializeGroups = (form: FormProperties, allowGroups: boolean): Fo
   if (!form.groups.end) {
     form.groups.end = {
       name: "End",
-      titleEn: "",
-      titleFr: "",
+      titleEn: "End",
+      titleFr: "Fin",
       elements: [],
     };
   }

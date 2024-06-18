@@ -152,5 +152,6 @@
   "mainNavAriaLabel": "Main",
   "yourAccount": "Your account",
   "dateModified": "Date modified",
-  "start": "Start"
+  "start": "Start",
+  "loadingResult": "Loading..."
 }
