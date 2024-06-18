@@ -378,9 +378,9 @@
     },
     "okay": "Supprimer le formulaire",
     "published": {
-      "message1": "La suppression d'un formulaire ne peut être annulée. Votre formulaire sera définitivement supprimé, ce qui pourrait créer un lien brisé.",
-      "message2": "Téléchargez une copie du fichier de formulaire pour vos archives. Vous pourrez ainsi le téléverser à nouveau dans Formualaires GC pour recréer le formulaire.",
-      "message3": "Avant de supprimer votre formulaire, veillez à supprimer l'URL existante afin d'éviter d'envoyer les gens vers un lien brisé. Le lien URL de votre formulaire changera si vous publiez à nouveau."
+      "message1": "La suppression d'un formulaire ne peut être annulée. Votre formulaire publié sera définitivement supprimé de l'Internet, ce qui risque de créer des liens brisés.",
+      "message2": "Téléchargez une copie du fichier de formulaire pour vos archives. Vous pourrez ensuite le téléverser à nouveau dans Formulaires GC pour recréer un nouveau formulaire avec de nouveaux liens URL.",
+      "message3": "Avant de supprimer votre formulaire, assurez-vous de supprimer tous les liens publics menant à ce formulaire. Cela permet d'éviter d'envoyer les gens dans une impasse. Pour arrêter les soumissions, vous pouvez plutôt considérer la fermeture du formulaire dans les paramètres."
     },
     "title": "Supprimer ce formulaire?"
   },

@@ -375,13 +375,13 @@
     "downloadButtonText": "Download a copy",
     "draft": {
       "message1": "Deleting a form cannot be undone. Your form will be removed permanently.",
-      "message2": "Download a copy of the form file for your records. You can then upload it in GC Forms to re-create a new form later."
+      "message2": "Download a copy of the form file for your records. You can then upload it in GC Forms to re-create the form later."
     },
     "okay": "Delete form",
     "published": {
-      "message1": "Deleting a form cannot be undone. Your form will be removed permanently, potentially creating a broken link.",
-      "message2": "Download a copy of the form file for your records. You can then upload it in GC Forms to re-create a new form later.",
-      "message3": "Before deleting your form, make sure you remove the existing URL to avoid sending people to a broken link. The form URL link will be different if you publish again."
+      "message1": "Deleting a form cannot be undone. Your published form will be removed from the Internet, potentially creating broken links.",
+      "message2": "Download a copy of the form file for your records. You can then upload it in GC Forms to re-create a new form with new URL links.",
+      "message3": "Before deleting your form, make sure you remove any public links leading to this form. This avoids sending people to a dead end. To stop submissions, you might consider closing the form in Settings instead."
     },
     "title": "Delete this form?"
   },
