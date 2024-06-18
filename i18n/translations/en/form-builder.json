@@ -374,14 +374,14 @@
     "somethingWentWrong": "Something went wrong",
     "downloadButtonText": "Download a copy",
     "draft": {
-      "message1": "Deleting a form cannot be undone. Your form will be removed from your forms list.",
-      "message2": "Download a copy of this form for your records. The saved JSON form file can be uploaded again to create a new form later."
+      "message1": "Deleting a form cannot be undone. Your form will be removed permanently.",
+      "message2": "Download a copy of the form file for your records. You can then upload it in GC Forms to re-create a new form later."
     },
     "okay": "Delete form",
     "published": {
-      "message1": "Deleting a form cannot be undone. Your form will be removed from your forms list and the Internet.",
-      "message2": "Download a copy of this form for your records. The saved JSON form file can be uploaded again to create a new form later.",
-      "message3": "The URL of your form will change if you upload your form again."
+      "message1": "Deleting a form cannot be undone. Your form will be removed permanently, potentially creating a broken link.",
+      "message2": "Download a copy of the form file for your records. You can then upload it in GC Forms to re-create a new form later.",
+      "message3": "Before deleting your form, make sure you remove the existing URL to avoid sending people to a broken link. The form URL link will be different if you publish again."
     },
     "title": "Delete this form?"
   },
