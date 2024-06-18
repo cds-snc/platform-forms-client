@@ -381,7 +381,7 @@
     "published": {
       "message1": "Deleting a form cannot be undone. Your published form will be removed from the Internet, potentially creating broken links.",
       "message2": "Download a copy of the form file for your records. You can then upload it in GC Forms to re-create a new form with new URL links.",
-      "message3": "Before deleting your form, make sure you remove any public links leading to this form. This avoids sending people to a dead end. To stop submissions, you might consider closing the form in Settings instead."
+      "message3": "Before deleting your form, make sure you remove any public links leading to this form. This avoids sending people to a dead end. To stop submissions, you might instead consider closing the form in Settings."
     },
     "title": "Delete this form?"
   },
