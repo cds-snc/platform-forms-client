@@ -30,6 +30,7 @@ import { edgeOptions } from "./options";
 
 import { useFlowRef } from "./provider/FlowRefProvider";
 import { useRehydrate } from "@lib/store/useTemplateStore";
+import { Language } from "@lib/types/form-builder-types";
 
 const nodeTypes = { groupNode: GroupNode };
 
@@ -42,12 +43,13 @@ const Loading = () => (
 );
 
 export interface FlowProps {
+  lang: Language;
   children?: ReactElement;
   redraw?: () => void;
 }
 
-const Flow: ForwardRefRenderFunction<unknown, FlowProps> = ({ children }, ref) => {
-  const { nodes: flowNodes, edges: flowEdges, getData } = useFlowData();
+const Flow: ForwardRefRenderFunction<unknown, FlowProps> = ({ children, lang }, ref) => {
+  const { nodes: flowNodes, edges: flowEdges, getData } = useFlowData(lang);
   const [nodes, , onNodesChange] = useNodesState(flowNodes);
   const [, setEdges, onEdgesChange] = useEdgesState(flowEdges);
   const { fitView } = useReactFlow();
@@ -142,7 +144,7 @@ const Flow: ForwardRefRenderFunction<unknown, FlowProps> = ({ children }, ref) =
   );
 };
 
-export const FlowWithProvider = () => {
+export const FlowWithProvider = ({ lang }: { lang: Language }) => {
   const { flow } = useFlowRef();
 
   const hasHydrated = useRehydrate();
@@ -154,7 +156,7 @@ export const FlowWithProvider = () => {
 
   return (
     <ReactFlowProvider>
-      <FlowWithRef ref={flow} />
+      <FlowWithRef key={`flow-lang-${lang}`} ref={flow} lang={lang} />
     </ReactFlowProvider>
   );
 };
