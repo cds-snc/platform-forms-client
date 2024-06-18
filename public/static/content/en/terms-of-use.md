@@ -59,6 +59,8 @@ GC Forms allows you to create and publish digital forms. You must ensure that th
 You are responsible for:
 
 - Integrating your form into your department or agency’s information architecture. This means embedding the URL to your form so that people or organizations can find it.
+- Maintaining working links to your form. THis includes replacing all instances of the form URL when it is modified, or removing the URL when the form is closed or deleted.
+- Addressing any inquiring or requests from users experiencing issues with your form.
 - Drafting form content based on the [Canada.ca Content Style guide](https://www.canada.ca/en/treasury-board-secretariat/services/government-communications/canada-content-style-guide.html).
 - Following the [Design Standard for the Federal Identity Program](https://www.canada.ca/en/treasury-board-secretariat/services/government-communications/design-standard.html). By default your form will appear with:
   - the Government of Canada signature in the top left corner of the header.
@@ -68,4 +70,4 @@ You may replace the Government of Canada signature with your department or agenc
 
 For questions related to these terms of use, [contact us](/en/contact).
 
-**Last update:** December 14, 2023
+**Last update:** June 19, 2024
