@@ -866,7 +866,11 @@
       "default": "Select a section",
       "catchAllGroup": "Pour toute autre valeur"
     },
-    "actionsSaved": "Actions saved"
+    "actionsSaved": "Actions saved",
+    "legend": {
+      "section": "Apply a rule to a Section",
+      "option": "Apply conditional rules to radio buttons, checkboxes, and dropdown form elements. "
+    }
   },
   "groups": {
     "newSection": "New section",
