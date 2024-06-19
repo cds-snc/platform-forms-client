@@ -39,7 +39,7 @@ export const getGroupValues = (
   groups: GroupsType | undefined,
   groupHistory: string[]
 ) => {
-  if (!Array.isArray(groupHistory) || !groups) return [];
+  if (!Array.isArray(groupHistory) || !groups) return [] as unknown as Responses;
   const history: Responses = {};
   // Iterates over each groupHistory Id and using the matched group Id, match the elements and their
   // values. This removes any "old" answers no longer relevant.
@@ -51,4 +51,20 @@ export const getGroupValues = (
     });
   });
   return history;
+};
+
+/**
+ * Combines all questions with answered questions but only the answer question values are kept.
+ */
+export const cleanValues = (inputValues: Responses, groupValues: Responses) => {
+  // clear all old and new answers
+  const emptyInputValues = {} as Responses;
+  for (const key in inputValues) {
+    // ignore unrelated groups
+    if (key === "currentGroup" || key === "groupHistory") {
+      continue;
+    }
+    emptyInputValues[key] = "";
+  }
+  return { ...emptyInputValues, ...groupValues };
 };
