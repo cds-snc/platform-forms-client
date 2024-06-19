@@ -25,11 +25,11 @@ export const SectionNameInput = React.forwardRef<Ref, Props>((props, ref) => {
 
   // Override the value if it's a reserved name
   if (value === "Start") {
-    value = t("logic.start", { ns: "form-builder" });
+    value = t("logic.start");
   }
 
   if (value === "End") {
-    value = t("logic.end", { ns: "form-builder" });
+    value = t("logic.end");
   }
 
   return (

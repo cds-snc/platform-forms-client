@@ -6,7 +6,7 @@ import { useGroupStore } from "@formBuilder/components/shared/right-panel/treevi
 import { useTemplateStore } from "@lib/store/useTemplateStore";
 import { Group, GroupsType, NextActionRule } from "@lib/formContext";
 import { Language } from "@lib/types/form-builder-types";
-import { getReviewNode, getStartElements, getEndNode } from "./utils";
+import { getReviewNode, getStartElements, getEndNode } from "@lib/utils/form-builder/i18nHelpers";
 
 const defaultEdges = {
   start: "start",
@@ -162,7 +162,7 @@ export const useFlowData = (lang: Language = "en") => {
     nodes.push({ ...endNode });
 
     return { edges, nodes };
-  }, [treeItems, reviewNode, endNode, formGroups, startElements]);
+  }, [treeItems, reviewNode, endNode, formGroups, lang, startElements]);
 
   const { edges, nodes } = getData();
 

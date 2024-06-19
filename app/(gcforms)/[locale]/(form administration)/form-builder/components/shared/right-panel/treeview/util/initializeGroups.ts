@@ -1,10 +1,6 @@
 import { FormProperties } from "@lib/types/form-types";
 import { LockedSections } from "../types";
-import {
-  getStartLabels,
-  getReviewLabels,
-  getEndLabels,
-} from "@formBuilder/[id]/edit/logic/components/flow/utils";
+import { getStartLabels, getReviewLabels, getEndLabels } from "@lib/utils/form-builder/i18nHelpers";
 
 export const initializeGroups = (form: FormProperties, allowGroups: boolean): FormProperties => {
   // Clean and remove any existing groups

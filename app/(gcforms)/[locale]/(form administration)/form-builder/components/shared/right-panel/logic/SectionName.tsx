@@ -8,15 +8,15 @@ export const SectionName = ({
   sectionName: string | null;
   lang: Language;
 }) => {
-  const { t } = useTranslation("form-builder");
+  const { t } = useTranslation(["common", "form-builder"]);
 
   if (sectionName === "Start") {
-    sectionName = t("logic.start", { ns: "form-builder", lang });
+    sectionName = t("logic.start", { lang });
   }
 
   return sectionName ? (
     <h3 className="mb-0 ml-2 block text-sm font-normal">
-      {t("logic.sectionTitle")} <strong> {sectionName}</strong>
+      {t("logic.sectionTitle", { ns: "form-builder" })} <strong> {sectionName}</strong>
     </h3>
   ) : null;
 };
