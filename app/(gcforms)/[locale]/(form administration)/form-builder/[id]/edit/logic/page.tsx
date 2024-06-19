@@ -48,7 +48,7 @@ export default async function Page({
       <LogicNavigation />
       <div className="flow-container my-4 w-full border-1">
         <Suspense fallback={<Loading />}>
-          <FlowWithProvider />
+          <FlowWithProvider lang={locale as Language} />
         </Suspense>
       </div>
       <SkipLinkReusable anchor="#rightPanelTitle">{t("skipLink.logicSetup")}</SkipLinkReusable>

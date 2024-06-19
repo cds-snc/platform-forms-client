@@ -178,6 +178,15 @@ export const Item = ({
 };
 
 const Title = ({ title }: { title: string }) => {
+  const { t } = useTranslation("form-builder");
+  if (title === "Start") {
+    title = t("logic.start");
+  }
+
+  if (title === "End") {
+    title = t("logic.end");
+  }
+
   return <div className="w-5/6 truncate">{title}</div>;
 };
 

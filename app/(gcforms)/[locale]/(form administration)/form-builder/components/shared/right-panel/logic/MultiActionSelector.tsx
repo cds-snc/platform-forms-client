@@ -20,6 +20,7 @@ import { LocalizedElementProperties } from "@lib/types/form-builder-types";
 import { SaveNote } from "./SaveNote";
 import { toast } from "@formBuilder/components/shared/Toast";
 import { SectionName } from "./SectionName";
+import { Language } from "@lib/types/form-builder-types";
 
 export const GroupAndChoiceSelect = ({
   groupId,
@@ -134,11 +135,13 @@ export const MultiActionSelector = ({
   sectionName,
   descriptionId,
   initialNextActionRules,
+  lang,
 }: {
   item: FormElement;
   sectionName: string | null;
   descriptionId?: string;
   initialNextActionRules: NextActionRule[];
+  lang: Language;
 }) => {
   const [nextActions, setNextActions] = useState(initialNextActionRules);
   const findParentGroup = useGroupStore((state) => state.findParentGroup);
@@ -203,7 +206,7 @@ export const MultiActionSelector = ({
     <>
       <div className="flex justify-between border-b-2 border-black bg-gray-50 p-3 align-middle">
         <div>
-          <SectionName sectionName={sectionName} />
+          <SectionName lang={lang} sectionName={sectionName} />
           <h3 className="mb-6 ml-2 mt-2 block text-sm font-normal">
             {t("logic.questionTitle")} <strong> {title}</strong>
           </h3>

@@ -10,8 +10,9 @@ import { SingleActionSelect } from "./SingleActionSelect";
 import { MultiActionSelector } from "./MultiActionSelector";
 import { ClearMultiRules } from "./ClearMultiRules";
 import { SectionName } from "./SectionName";
+import { Language } from "@lib/types/form-builder-types";
 
-export const SelectNextAction = ({ item }: { item: FormElement | null }) => {
+export const SelectNextAction = ({ item, lang }: { item: FormElement | null; lang: Language }) => {
   const typesWithOptions = ["radio", "checkbox", "select", "dropdown"];
   const getGroupNextAction = useGroupStore((state) => state.getGroupNextAction);
   const formGroups: GroupsType = useTemplateStore((s) => s.form.groups) || {};
@@ -24,7 +25,7 @@ export const SelectNextAction = ({ item }: { item: FormElement | null }) => {
   if (selectedGroupId === "end" || selectedGroupId === "review") {
     return (
       <div className="flex justify-between border-b-2 border-black bg-gray-50 p-3 align-middle">
-        <SectionName sectionName={sectionName} />
+        <SectionName lang={lang} sectionName={sectionName} />
       </div>
     );
   }
@@ -39,7 +40,7 @@ export const SelectNextAction = ({ item }: { item: FormElement | null }) => {
     return (
       <div>
         <div className="flex justify-between border-b-2 border-black bg-gray-50 p-3 align-middle">
-          <SectionName sectionName={sectionName} />
+          <SectionName lang={lang} sectionName={sectionName} />
         </div>
         <div className="p-4">
           <SingleActionSelect nextAction={selectedGroupNextActions || "end"} />
@@ -71,6 +72,7 @@ export const SelectNextAction = ({ item }: { item: FormElement | null }) => {
           no - => section 2
         */
         <MultiActionSelector
+          lang={lang}
           sectionName={sectionName}
           item={item}
           initialNextActionRules={
