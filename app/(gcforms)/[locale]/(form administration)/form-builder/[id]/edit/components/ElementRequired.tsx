@@ -22,7 +22,7 @@ export const ElementRequired = ({
         disabled={item.properties.validation?.all}
         id={`required-${item.id}-id`}
         value={`required-${item.id}-value`}
-        checked={checked}
+        defaultChecked={checked}
         onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
           if (!e.target) {
             return;
