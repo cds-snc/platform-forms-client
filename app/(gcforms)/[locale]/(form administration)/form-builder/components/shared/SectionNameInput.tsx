@@ -15,12 +15,23 @@ interface Props {
 type Ref = HTMLInputElement;
 
 export const SectionNameInput = React.forwardRef<Ref, Props>((props, ref) => {
-  const { value, updateGroupName, groupId } = props;
+  let { value } = props;
+  const { updateGroupName, groupId } = props;
   const className =
     "rounded-md px-2 py-1 min-w-[250px] max-w-[400px] text-base font-bold text-ellipsis placeholder-slate-500 h-10";
   const disabled = groupId === "start" || groupId === "end" || groupId === "review";
   const { t } = useTranslation("form-builder");
   const { tree } = useTreeRef();
+
+  // Override the value if it's a reserved name
+  if (value === "Start") {
+    value = t("logic.start", { ns: "form-builder" });
+  }
+
+  if (value === "End") {
+    value = t("logic.end", { ns: "form-builder" });
+  }
+
   return (
     <input
       className={cn(

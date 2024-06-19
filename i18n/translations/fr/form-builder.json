@@ -839,6 +839,8 @@
     }
   },
   "logic": {
+    "start": "Début",
+    "end": "Fin",
     "heading": "Logique",
     "description": "Appliquer des règles conditionnelles aux sections comportant des boutons radio, des cases à cocher ou une liste déroulante.",
     "clear": "Enlever",

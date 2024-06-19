@@ -212,7 +212,7 @@ export const TranslateWithGroups = () => {
 
         <div>
           <SectionTitle>
-            {t("logic.sectionTitle")} <em>{groups?.["start"]?.name}</em>
+            {t("logic.sectionTitle")} <em>{t("logic.start")}</em>
           </SectionTitle>
         </div>
 
@@ -439,7 +439,7 @@ export const TranslateWithGroups = () => {
         {/* CONFIRMATION */}
         <section>
           <SectionTitle>
-            {t("logic.sectionTitle")} <em>{groups?.["end"]?.name}</em>
+            {t("logic.sectionTitle")} <em>{t("logic.end")}</em>
           </SectionTitle>
           <fieldset>
             <FieldsetLegend>{t("confirmationMessage")}</FieldsetLegend>

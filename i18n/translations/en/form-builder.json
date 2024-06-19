@@ -839,6 +839,8 @@
     }
   },
   "logic": {
+    "start": "Beginning",
+    "end": "End",
     "heading": "Logic",
     "description": "Apply conditional rules to sections with radio buttons, checkboxes, or a dropdown.",
     "clear": "Remove",

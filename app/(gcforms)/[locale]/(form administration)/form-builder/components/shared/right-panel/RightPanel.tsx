@@ -17,6 +17,7 @@ import { useRehydrate, useTemplateStore } from "@lib/store/useTemplateStore";
 import { SelectNextAction } from "./logic/SelectNextAction";
 import { useGroupStore } from "./treeview/store/useGroupStore";
 import { SkipLinkReusable } from "@clientComponents/globals/SkipLinkReusable";
+import { Language } from "@lib/types/form-builder-types";
 
 const TabButton = ({
   text,
@@ -54,7 +55,7 @@ const TabButton = ({
   );
 };
 
-export const RightPanel = ({ id }: { id: string }) => {
+export const RightPanel = ({ id, lang }: { id: string; lang: Language }) => {
   const [open, setOpen] = useState(false);
   const router = useRouter();
   const { t, i18n } = useTranslation("form-builder");
@@ -231,7 +232,9 @@ export const RightPanel = ({ id }: { id: string }) => {
                           {t("skipLink.logic")}
                         </SkipLinkReusable>
                         <div className="m-0 w-full" aria-live="polite">
-                          {activePathname.endsWith("/logic") && <SelectNextAction item={item} />}
+                          {activePathname.endsWith("/logic") && (
+                            <SelectNextAction lang={lang} item={item} />
+                          )}
                         </div>
                         {/* end logic */}
                       </Tab.Panel>
