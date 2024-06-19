@@ -56,14 +56,14 @@ export const GroupNode = (node: NodeProps) => {
   };
 
   const nodeClassName =
-    "relative flex w-[100%] min-w-[200px] max-w-[250px] rounded-sm bg-slate-50 p-4 text-sm text-slate-600 pr-12";
+    "relative flex w-[100%] min-w-[200px] max-w-[450px] rounded-sm bg-slate-50 p-2 py-3 text-sm text-slate-600 border-red";
 
   return (
     <div>
       <div>
         <label htmlFor={node.id} className="inline-block w-5/6 truncate text-sm text-slate-600">
-          {/* Case of Review and End (no name) hide visuall but include text required for a label */}
-          {node.data.label.name || <span className="sr-only">{node.id}</span>}
+          {/* Case of Review and End (no name) hide visually but include text required for a label */}
+          {node.data.label || <span className="sr-only">{node.id}</span>}
         </label>
       </div>
       <div
@@ -89,7 +89,7 @@ export const GroupNode = (node: NodeProps) => {
             <QuestionRuleSvg title={t("groups.editSection", { name: node.data.label.name })} />
           </button>
         )}
-        {!node.data.children.length && <div className="min-h-[50px] min-w-[150px]"></div>}
+        {!node.data.children.length && <div className="min-h-[50px] min-w-[200px]"></div>}
         {node.data.children.map((child: TreeItem) => {
           const selected =
             selectedElementId === Number(child.index)
@@ -124,7 +124,7 @@ export const GroupNode = (node: NodeProps) => {
           if (!typesWithOptions.includes(item.type)) {
             return (
               <div key={child.index} className={cn(nodeClassName)}>
-                <div className="line-clamp-2 truncate text-wrap">
+                <div className="truncate">
                   {getTitle(child.data as ElementProperties).substring(0, 300)}
                 </div>
               </div>
@@ -145,13 +145,13 @@ export const GroupNode = (node: NodeProps) => {
               className={cn(
                 nodeClassName,
                 selected,
-                "focus:border-violet-800 outline-offset-8 outline-slate-800 hover:scale-125 rounded-full"
+                "focus:border-violet-800 outline-offset-8 outline-slate-800"
               )}
             >
-              <div className="line-clamp-2 truncate text-wrap">
+              <div className="w-full truncate pr-8">
                 {getTitle(child.data as ElementProperties).substring(0, 300)}
               </div>
-              <div className="absolute right-[10px] top-[10px] cursor-pointer hover:scale-125">
+              <div className="absolute right-[10px] top-[6px] cursor-pointer hover:scale-125">
                 <OptionRuleSvg title={t("groups.editRules", { name: node.data.label.name })} />
               </div>
             </button>

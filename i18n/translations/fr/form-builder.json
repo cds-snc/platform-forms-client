@@ -27,7 +27,7 @@
       "dynamicRow": "Ajouter un ensemble de réponses",
       "richText": "Ajouter du texte de page",
       "departments": "Ajouter un ministère",
-      "combobox": "Ajouter une liste consultable"
+      "combobox": "Ajouter une liste avec recherche"
     },
     "address": {
       "whatIsYourAddress": "Quelle est votre adresse?",
@@ -64,8 +64,8 @@
     },
     "checkboxItem": "Option",
     "combobox": {
-      "description": "Une liste consultable d'options parmi lesquelles un choix est fait.",
-      "title": "Liste consultable",
+      "description": "Une liste avec recherche est une liste déroulante d'options parmi lesquelles un choix est fait.",
+      "title": "Liste avec recherche",
       "example": {
         "select": "Selectionner"
       },
@@ -247,7 +247,7 @@
   "checkboxes": "Cases à cocher",
   "close": "Fermer",
   "closeModal": "Fermer fenêtre modale",
-  "combobox": "Liste consultable",
+  "combobox": "Liste avec recherche",
   "completed": "Complétée",
   "confirmationDescriptionItem1": "des précisions sur la suite de choses.",
   "confirmationDescriptionItem2": "les coordonnées du service.",
@@ -452,10 +452,10 @@
   "paragraph": "Réponse longue",
   "phoneNumber": "Numéro de téléphone",
   "placeHolderFormTitle": "Titre du formulaire",
-  "previewingIn": "Prévisualiser en",
+  "previewingIn": "Prévisualiser en :",
   "previewDisabledForPublishedForm": "La prévisualisation et les tests sont désactivés pour les formulaires publiés",
   "privacyNoticeDescription": "<p className=\"mb-4\">Aidez les personnes qui remplissent le formulaire à comprendre comment vous traitez leurs renseignements personnels, comme énoncé à la section 4.2.10 de la <a href=\"https://www.tbs-sct.canada.ca/pol/doc-fra.aspx?id=18309\" target=\"_blank\">Directive sur les pratiques relatives à la protection de la vie privée</a>.</p><p><strong>Ce qu'il faut préciser dans un avis de confidentialité</strong></p><ul><li>Les renseignements personnels qui sont recueillis et les fins de la collecte.</li><li>Les autorisations légales ou de programmes dont vous disposez.</li><li>Les façons dont les reseignements seront utilisés, partagés, stockés et conservés.</li><li>Les droits d’accès ou de correction des renseignements personnels et les droits de déposer une plainte.</li></ul><p>C’est votre responsabilité de bien connaître les exigences de votre ministère ou organisme en matière de renseignements personnels. Si vous ne savez pas comment procéder, nous vous recommandons de contacter votre <a href=\"https://www.tbs-sct.canada.ca/ap/atip-aiprp/coord-fra.asp\" target=\"_blank\">coordinateur·rice de l'accès à l'information et de la protection de la vie privée</a>.</p>",
-  "privacyStatement": "Déclaration de confidentialité ",
+  "privacyStatement": "Avis de confidentialité ",
   "provideFeedback": "Aidez-nous à nous améliorer",
   "publish": "Publier",
   "published": "Publié",
@@ -510,7 +510,7 @@
   "richTextConfirmationTitle": "Message de confirmation",
   "richTextEditor": "Éditeur de texte enrichi",
   "richTextIntroTitle": "Introduction au formulaire",
-  "richTextPrivacyTitle": "Déclaration de confidentialité",
+  "richTextPrivacyTitle": "Avis de confidentialité",
   "save": "Enregistrer",
   "saveAndRequest": "Demander la capacité de publier",
   "saveDraft": "Enregistrer l’ébauche",
@@ -674,7 +674,7 @@
   "singleChoice": "Boutons radio",
   "start": "Commencer",
   "startErrorParse": "L’ouverture du fichier de formulaire a échoué",
-  "startFormIntro": "Ajoutez une description à votre formulaire pour définir les attentes des personnes qui le remplissent.",
+  "startFormIntro": "Ajoutez une description à votre formulaire pour aider à définir les attentes",
   "startH2": "Créer un formulaire",
   "startH3": "Ouvrir un formulaire",
   "startP1": "Commencez à partir de zéro.",
@@ -814,7 +814,7 @@
   "addConditionalRules": {
     "modalTitle": "Ajouter une règle à une question",
     "modalTitleEdit": "Modifier les règles",
-    "modalDescription": "Afficher des champs de saisie supplémentaires en fonction de la sélection d'une option spécifique. Ceci s'applique aux questions à choix unique, à choix multiples ou à liste déroulante.",
+    "modalDescription": "Afficher des champs de saisie supplémentaires en fonction de la sélection d'une option spécifique. Ceci s'applique aux questions avec boutons radio, cases à cocher ou liste déroulante.",
     "optionTitle": "Si l'option sélectionnée est :",
     "questionTitle": "Afficher la question :",
     "addCustomRules": "Ajouter une règle",
@@ -828,8 +828,8 @@
   "saved": "Enregistré",
   "opensInNewTab": "ouvre un nouvel onglet",
   "rightPanel": {
-    "title": "[FR]Right Panel",
-    "openPanel": "[FR]Set up your form",
+    "title": "Panneau de droite",
+    "openPanel": "Configuration du formulaire",
     "closePanel": "Fermer le panneau",
     "questions": "Questions",
     "logic": "Logique",
@@ -845,13 +845,14 @@
     "gotoSection": "Aller à la section",
     "questionTitle": "Question :",
     "sectionTitle": "Section :",
-    "translateTitle": "Section Titre",
+    "translateTitle": "Titre de section",
     "addRule": "Ajouter une régle",
-    "resetRules": "Réinitialiser toutes les règles",
-    "resetRulesHelp": "[FR]Reset all rules help",
-    "resetRulesDescription": "La fonction de flux automatique réinitialise la progression entre les sections en un flux linéaire simple, remplaçant ainsi toutes les règles de logique de branchement qui s'appliquent.",
     "saveRule": "Enregistrer",
-    "saveNote": "Ajouter et enregistrer une règle, désactive le ",
+    "saveNote": "Ajouter et enregistrer une règle, désactive la fonction de flux linéaire automatique entre les sections.",
+    "resetRules": "Réinitialisation au flux linéaire",
+    "resetRulesHelp": "Aide pour la réinitialisation",
+    "resetRulesDescription": "Cette fonction réinitialisera la progression entre les sections en un flux linéaire simple, remplaçant ainsi toutes les règles d'embranchements qui s'appliquent.",
+    "toastSuccess": "Flux linéaire appliqué",
     "multiRulesWarning": {
       "text1": "L'ordre et le flux sont définis en fonction des règles appliquées.",
       "text2": "Relier les sections :",
@@ -869,7 +870,7 @@
   },
   "groups": {
     "newSection": "Nouvelle section",
-    "sectionNameInput": "Section name [FR]",
+    "sectionNameInput": "Nom de ela section",
     "addSection": "Ajouter une section",
     "treeAriaLabel": "Sections Formulaires GC",
     "addSectionPlaceholder": "Ajouter un nom à la section",
@@ -882,19 +883,19 @@
     "sectionTitle": "Titre de la section",
     "groupDeleted": "Section supprimée",
     "groupSuccessfullyDeleted": "{{group}} a été supprimé",
-    "editSection": "[FR]Edit section {{name}}",
-    "editRules": "[FR]Edit rules for section {{name}}",
+    "editSection": "Modifier la section {{name}}",
+    "editRules": "Modifier les règles de la section {{name}}",
     "privacy": {
       "beforeText": "<p>C’est votre responsabilité de bien connaître les exigences de votre ministère ou organisme en matière de renseignements personnels. Si vous ne savez pas comment procéder, nous vous recommandons de contacter votre <a href=\"https://www.tbs-sct.canada.ca/ap/atip-aiprp/coord-fra.asp\" target=\"_blank\">coordinateur·rice de l'accès à l'information et de la protection de la vie privée</a>.</p>",
       "body": "<p className=\"mb-4\">Aidez les personnes qui remplissent le formulaire à comprendre comment vous traitez leurs renseignements personnels, comme énoncé à la section 4.2.10 de la <a href=\"https://www.tbs-sct.canada.ca/pol/doc-fra.aspx?id=18309\" target=\"_blank\">Directive sur les pratiques relatives à la protection de la vie privée</a>.</p><p><strong>Ce qu'il faut préciser dans un avis de confidentialité</strong></p><ul><li>Les renseignements personnels qui sont recueillis et les fins de la collecte.</li><li>Les autorisations légales ou de programmes dont vous disposez.</li><li>Les façons dont les reseignements seront utilisés, partagés, stockés et conservés.</li><li>Les droits d’accès ou de correction des renseignements personnels et les droits de déposer une plainte.</li></ul>",
-      "description": "Add a privacy notice to your form to inform users how you handle their personal information.",
-      "summary": "Ce qu'il faut préciser dans un avis de confidentialité"
+      "description": "Ce qu'il faut préciser dans une déclaration de confidentialité :",
+      "summary": "Ajouter un avis de confidentialité pour expliquer comment vous traitez les renseignmenets personnels"
     },
     "confirmation": {
       "beforeText": "Le message de confirmation s’affichera sur une nouvelle page une fois le formulaire soumis.",
-      "body": "<p className=\"mb-4\">Help people filling out the form understand how you’re handling their personal information, as outlined in Section 4.2.10 of the <a href=\"https://www.tbs-sct.canada.ca/pol/doc-eng.aspx?id=18309\" target=\"_blank\">Directive on privacy practices</a>.</p><p><strong>What to include in a privacy notice</strong></p><ul><li>What personal information is being collected and why.</li><li>What legal or program authorities you have to collect information.</li><li>How their information will be used, shared, stored, and retained.</li><li>How people can access or change their personal information and file complaints.</li></ul>",
-      "description": "Add a privacy notice to your form to inform users how you handle their personal information.",
-      "summary": "What to include in a privacy notice"
+      "body": "Voici quelques éléments utiles à présenter dans la confirmation :",
+      "description": "Ajouter un message de confirmation",
+      "summary": "Ajouter un message de confirmation"
     },
     "treeView": {
       "emptyPageTextElement": "Élément de texte de page sans contenu",
@@ -911,12 +912,11 @@
   },
   "next": "Continuer",
   "skipLink": {
-    "questions": "[FR]Skip to Questions editor",
-    "translate": "[FR]Skip to Translations editor",
-    "logic": "[FR]Skip to Logic editor",
-    "questionsSetup": "[FR]Skip to Questions setup",
-    "translateSetup": "[FR]Skip to Translations setup",
-    "logicSetup": "[FR]Skip to Logic setup"
-  },
-  "goBack": "[FR]Go back"
+    "questions": "Passer à l'éditeur de questions",
+    "translate": "Passer à l'éditeur de traductions",
+    "logic": "Passer à l'éditeur de logique",
+    "questionsSetup": "Passer à la configuration des questions",
+    "translateSetup": "Passer à la configuration des traductions",
+    "logicSetup": "Passer à la configuration de la logique"
+  }
 }

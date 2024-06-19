@@ -152,5 +152,14 @@
   "mainNavAriaLabel": "Main",
   "yourAccount": "Your account",
   "dateModified": "Date modified",
-  "start": "Start"
+  "start": "Start",
+  "loadingResult": "Loading...",
+  "logic": {
+    "start": "Beginning",
+    "end": "End",
+    "review": "Review",
+    "introduction": "Introduction",
+    "confirmation": "Confirmation message",
+    "privacy": "Privacy"
+  }
 }
