@@ -75,7 +75,7 @@ const main = async () => {
       throw new Error("Identity provider not set in .env file");
     }
 
-    const formID = "clx0gfgj70006x9kzv0ecy8un"; // await getValue("Form ID to retrieve responses for: ");
+    const formID = await getValue("Form ID to retrieve responses for: ");
     const accessToken = await getAccessToken();
 
     const data = await axios
