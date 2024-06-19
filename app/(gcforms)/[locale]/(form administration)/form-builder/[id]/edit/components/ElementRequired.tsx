@@ -23,6 +23,7 @@ export const ElementRequired = ({
         id={`required-${item.id}-id`}
         value={`required-${item.id}-value`}
         defaultChecked={checked}
+        key={`required-${item.id}`}
         onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
           if (!e.target) {
             return;

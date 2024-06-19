@@ -37,7 +37,7 @@ describe("Test FormBuilder", () => {
     cy.get("#item-1").scrollIntoView();
     cy.get("#item-1").should("have.value", "Question 1-1");
     cy.get("#item1-describedby").should("contain", "Question 1 description");
-    cy.get("#required-1-id").should("have.attr", "checked");
+    cy.get("#required-1-id").should("be.checked");
 
     // preview form
     cy.get('[data-testid="preview"]').click();
