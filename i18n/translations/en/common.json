@@ -153,5 +153,13 @@
   "yourAccount": "Your account",
   "dateModified": "Date modified",
   "start": "Start",
-  "loadingResult": "Loading..."
+  "loadingResult": "Loading...",
+  "logic": {
+    "start": "Beginning",
+    "end": "End",
+    "review": "Review",
+    "introduction": "Introduction",
+    "confirmation": "Confirmation message",
+    "privacy": "Privacy"
+  }
 }
