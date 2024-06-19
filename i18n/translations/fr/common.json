@@ -80,9 +80,9 @@
     "administration": "Administration",
     "myForms": "Formulaires",
     "profile": "Profil",
-    "typography": "[FR]Typography",
-    "upload": "[FR]Upload",
-    "viewTemplates": "[FR]View Templates",
+    "typography": "Typographie",
+    "upload": "Téléverser",
+    "viewTemplates": "Afficher les modèles",
     "allForms": "Formulaires"
   },
   "formElements": {
@@ -152,5 +152,15 @@
   },
   "mainNavAriaLabel": "Navigation principale",
   "yourAccount": "Votre compte",
-  "dateModified": "Date de modification "
+  "dateModified": "Date de modification ",
+  "start": "Début",
+  "loadingResult": "Chargement en cours...",
+  "logic": {
+    "start": "Début",
+    "end": "Fin",
+    "review": "Révision",
+    "introduction": "Introduction",
+    "confirmation": "Message de confirmation",
+    "privacy": "Confidentialité"
+  }
 }

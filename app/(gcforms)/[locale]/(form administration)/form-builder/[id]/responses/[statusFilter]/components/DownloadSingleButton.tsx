@@ -5,8 +5,9 @@ import React from "react";
 import { useTranslation } from "@i18n/client";
 import { getSubmissionsByFormat } from "../actions";
 import { DownloadFormat, HtmlResponse } from "@lib/responseDownloadFormats/types";
-import { Language } from "@lib/types/form-builder-types";
+import { Language, ServerActionError } from "@lib/types/form-builder-types";
 import { usePathname } from "next/navigation";
+import { FormBuilderError } from "../exceptions";
 
 export const DownloadSingleButton = ({
   id,
@@ -19,7 +20,7 @@ export const DownloadSingleButton = ({
   id: string;
   formId: string;
   responseId: string;
-  setDownloadError: (downloadError: boolean) => void;
+  setDownloadError: React.Dispatch<React.SetStateAction<boolean | string>>;
   onDownloadSuccess: () => void;
   ariaLabelledBy: string;
 }) => {
@@ -28,16 +29,20 @@ export const DownloadSingleButton = ({
 
   const handleDownload = async () => {
     try {
-      const submissionHtml: HtmlResponse = (await getSubmissionsByFormat({
+      const response = (await getSubmissionsByFormat({
         formID: formId,
         ids: [responseId],
         format: DownloadFormat.HTML,
         lang: i18n.language as Language,
         revalidate: pathname.includes("new"),
-      })) as HtmlResponse;
+      })) as HtmlResponse | ServerActionError;
+
+      if ("error" in response) {
+        throw new FormBuilderError(response.error, response.code);
+      }
 
       const interval = 200;
-      const submission = submissionHtml[0];
+      const submission = response[0];
       const fileName = `${submission.id}.html`;
       const href = window.URL.createObjectURL(new Blob([submission.html]));
       const anchorElement = document.createElement("a");
@@ -53,7 +58,7 @@ export const DownloadSingleButton = ({
       }, interval);
     } catch (err) {
       logMessage.error(err as Error);
-      setDownloadError(true);
+      setDownloadError((err as ServerActionError).code || true);
     }
   };
 

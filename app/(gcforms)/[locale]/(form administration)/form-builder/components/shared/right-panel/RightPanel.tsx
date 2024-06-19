@@ -9,13 +9,15 @@ import { Button } from "@clientComponents/globals";
 import { RightPanelOpen, RoundCloseIcon } from "@serverComponents/icons";
 import { cn } from "@lib/utils";
 import { useActivePathname } from "@lib/hooks/form-builder";
-import { DownloadCSV } from "@formBuilder/[id]/edit/translate/components/DownloadCSV";
+import { DownloadCSVWithGroups } from "@formBuilder/[id]/edit/translate/components/DownloadCSVWithGroups";
 import { useTreeRef } from "./treeview/provider/TreeRefProvider";
 import { TreeView } from "./treeview/TreeView";
-import { useRehydrate } from "@lib/store/useTemplateStore";
+import { useRehydrate, useTemplateStore } from "@lib/store/useTemplateStore";
 
 import { SelectNextAction } from "./logic/SelectNextAction";
 import { useGroupStore } from "./treeview/store/useGroupStore";
+import { SkipLinkReusable } from "@clientComponents/globals/SkipLinkReusable";
+import { Language } from "@lib/types/form-builder-types";
 
 const TabButton = ({
   text,
@@ -26,18 +28,25 @@ const TabButton = ({
   onClick: () => void;
   className?: string;
 }) => {
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLButtonElement>) => {
+    if (e.key === "Enter" || e.key === " ") {
+      onClick();
+    }
+  };
   return (
     <Tab as={Fragment}>
       {({ selected }) => (
         <button
+          id="questionsTabButton"
           className={cn(
             selected
               ? "border-indigo-500 text-indigo-600"
-              : "border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700",
+              : "border-transparent text-slate-500 hover:border-gray-300 hover:text-slate-700",
             "whitespace-nowrap border-b-2 px-2 py-2 flex justify-center w-full",
             className
           )}
           onClick={onClick}
+          onKeyDown={handleKeyDown}
         >
           <span className={cn(selected && "font-bold")}>{text}</span>
         </button>
@@ -46,16 +55,26 @@ const TabButton = ({
   );
 };
 
-export const RightPanel = ({ id }: { id: string }) => {
+export const RightPanel = ({ id, lang }: { id: string; lang: Language }) => {
   const [open, setOpen] = useState(false);
   const router = useRouter();
   const { t, i18n } = useTranslation("form-builder");
+
+  const { id: storeId } = useTemplateStore((s) => ({
+    id: s.id,
+  }));
+
+  if (storeId && storeId !== id) {
+    id = storeId;
+  }
+
   const { activePathname } = useActivePathname();
   const { treeView } = useTreeRef();
   const getElement = useGroupStore((s) => s.getElement);
   const hasHydrated = useRehydrate();
 
   const selectedElementId = useGroupStore((s) => s.selectedElementId);
+  const setId = useGroupStore((state) => state.setId);
   const item = (selectedElementId && getElement(selectedElementId)) || null;
 
   useEffect(() => {
@@ -107,7 +126,7 @@ export const RightPanel = ({ id }: { id: string }) => {
   }
 
   return (
-    <div className="relative">
+    <section className="relative" aria-labelledby="rightPanelTitle">
       <div className={cn("fixed right-0", isIntersecting ? "top-20" : "top-0", open && "hidden")}>
         <Button
           theme="link"
@@ -139,12 +158,14 @@ export const RightPanel = ({ id }: { id: string }) => {
                   <div className="p-6">
                     <div className="flex justify-between">
                       <div>
-                        <h2 className="text-base">{t("rightPanel.openPanel")}</h2>
+                        <h2 id="rightPanelTitle" className="text-base" tabIndex={-1}>
+                          {t("rightPanel.openPanel")}
+                        </h2>
                       </div>
                       <div>
                         <button
                           type="button"
-                          className="relative rounded-md bg-white text-gray-400 hover:text-gray-500 focus:ring-2 focus:ring-indigo-500"
+                          className="relative rounded-md bg-white text-slate-500 hover:text-slate-600 focus:ring-2 focus:ring-indigo-500"
                           onClick={() => setOpen(false)}
                         >
                           <span className="sr-only">{t("rightPanel.closePanel")}</span>
@@ -173,6 +194,8 @@ export const RightPanel = ({ id }: { id: string }) => {
                       <TabButton
                         text={t("rightPanel.logic")}
                         onClick={() => {
+                          // Set the active group to the start group before navigating to the logic tab
+                          setId("start");
                           router.push(`/${i18n.language}/form-builder/${id}/edit/logic`);
                         }}
                       />
@@ -180,22 +203,38 @@ export const RightPanel = ({ id }: { id: string }) => {
                     <Tab.Panels>
                       <Tab.Panel>
                         {/* Tree */}
-                        <div className="m-0 mt-1 w-full p-4">
-                          <TreeView ref={treeView} addItem={() => {}} updateItem={() => {}} />
+                        <SkipLinkReusable anchor="#questionsTitle">
+                          {t("skipLink.questions")}
+                        </SkipLinkReusable>
+                        <div className="m-0 w-full" aria-live="polite">
+                          <TreeView
+                            ref={treeView}
+                            addItem={() => {}}
+                            updateItem={() => {}}
+                            removeItem={() => {}}
+                          />
                         </div>
                         {/* end tree */}
                       </Tab.Panel>
                       <Tab.Panel>
                         {/* Translate */}
-                        <div className="m-0 mt-1 w-full p-4">
-                          <DownloadCSV />
+                        <SkipLinkReusable anchor="#translateTitle">
+                          {t("skipLink.translate")}
+                        </SkipLinkReusable>
+                        <div className="m-0 mt-1 w-full p-4" aria-live="polite">
+                          <DownloadCSVWithGroups />
                         </div>
                         {/* End translate */}
                       </Tab.Panel>
                       <Tab.Panel>
                         {/* Logic */}
-                        <div className="m-0 w-full">
-                          {activePathname.endsWith("/logic") && <SelectNextAction item={item} />}
+                        <SkipLinkReusable anchor="#logicTitle">
+                          {t("skipLink.logic")}
+                        </SkipLinkReusable>
+                        <div className="m-0 w-full" aria-live="polite">
+                          {activePathname.endsWith("/logic") && (
+                            <SelectNextAction lang={lang} item={item} />
+                          )}
                         </div>
                         {/* end logic */}
                       </Tab.Panel>
@@ -208,6 +247,6 @@ export const RightPanel = ({ id }: { id: string }) => {
           </div>
         </div>
       </Transition.Root>
-    </div>
+    </section>
   );
 };

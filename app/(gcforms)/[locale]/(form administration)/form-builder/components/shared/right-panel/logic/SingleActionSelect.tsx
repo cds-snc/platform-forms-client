@@ -12,7 +12,7 @@ import { toast } from "@formBuilder/components/shared/Toast";
 
 export const SingleActionSelect = ({
   item,
-  nextAction = "end",
+  nextAction = "review",
 }: {
   item?: FormElement | null;
   nextAction: string | undefined;
@@ -33,7 +33,7 @@ export const SingleActionSelect = ({
   });
 
   // Filter out the current group
-  groupItems = groupItems.filter((item) => item.value !== currentGroup);
+  groupItems = groupItems.filter((item) => item.value !== currentGroup && item.value !== "end");
 
   const handleGroupChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const value = e.target.value;
@@ -43,7 +43,7 @@ export const SingleActionSelect = ({
   return (
     <div>
       <div className="mb-4">
-        <GroupSelect selected={nextAction} groups={groupItems} onChange={handleGroupChange} />
+        <GroupSelect selected={nextActionId} groups={groupItems} onChange={handleGroupChange} />
       </div>
       <div>
         <SaveNote />
@@ -58,7 +58,8 @@ export const SingleActionSelect = ({
               currentGroup && setGroupNextAction(currentGroup, nextActionId);
             }
 
-            flow.current?.updateEdges();
+            flow.current?.redraw();
+
             toast.success(t("logic.actionsSaved"));
           }}
         >

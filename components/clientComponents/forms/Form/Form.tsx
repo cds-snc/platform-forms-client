@@ -18,6 +18,7 @@ import { useGCFormsContext } from "@lib/hooks/useGCFormContext";
 import { Review } from "../Review/Review";
 import { LockedSections } from "@formBuilder/components/shared/right-panel/treeview/types";
 import { BackButton } from "@formBuilder/[id]/preview/BackButton";
+import { Language } from "@lib/types/form-builder-types";
 
 interface SubmitButtonProps {
   numberOfRequiredQuestions: number;
@@ -139,6 +140,7 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
     children,
     handleSubmit,
     status,
+    language,
     formRecord: { id: formID, form },
   }: InnerFormProps = props;
   const [canFocusOnError, setCanFocusOnError] = useState(false);
@@ -180,7 +182,10 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
   ).length;
 
   return status === "submitting" ? (
-    <Loader message={t("loading")} />
+    <>
+      <title>{t("loading")}</title>
+      <Loader message={t("loading")} />
+    </>
   ) : (
     <>
       {formStatusError && (
@@ -231,7 +236,7 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
             {isGroupsCheck &&
               currentGroup !== LockedSections.REVIEW &&
               currentGroup !== LockedSections.START && (
-                <h2 className="pb-8">{getGroupTitle(currentGroup)}</h2>
+                <h2 className="pb-8">{getGroupTitle(currentGroup, language as Language)}</h2>
               )}
 
             {children}
@@ -243,7 +248,9 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
               </RichText>
             )}
 
-            {isGroupsCheck && currentGroup === LockedSections.REVIEW && <Review />}
+            {isGroupsCheck && currentGroup === LockedSections.REVIEW && (
+              <Review language={language as Language} />
+            )}
 
             {props.renderSubmit ? (
               props.renderSubmit({
@@ -315,7 +322,11 @@ export const Form = withFormik<FormProps, Responses>({
     formikBag.setStatus("submitting");
     try {
       const result = await submitForm(values, formikBag.props.language, formikBag.props.formRecord);
-      result && formikBag.props.onSuccess(result);
+      if (result.error) {
+        formikBag.setStatus("Error");
+      } else {
+        formikBag.props.onSuccess(result.id);
+      }
     } catch (err) {
       logMessage.error(err as Error);
       formikBag.setStatus("Error");

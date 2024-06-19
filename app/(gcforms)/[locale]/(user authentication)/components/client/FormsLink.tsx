@@ -13,6 +13,9 @@ export const FormsLink = () => {
   // Only show for authenticated users
   if (session.status !== "authenticated") return null;
 
+  // Only show for users who have accepted the acceptable use policy
+  if (session.data?.user?.acceptableUse === false) return null;
+
   return (
     <div className="text-base font-normal not-italic md:text-sm">
       <Link id="forms_link" href={`/${language}/forms`}>

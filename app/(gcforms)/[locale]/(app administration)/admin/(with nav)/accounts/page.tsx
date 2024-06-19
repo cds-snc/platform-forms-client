@@ -1,13 +1,12 @@
 import { Suspense } from "react";
 import { serverTranslation } from "@i18n";
-import { auth } from "@lib/auth";
-import { checkPrivilegesAsBoolean, createAbility } from "@lib/privileges";
+import { authCheckAndRedirect } from "@lib/actions";
+import { checkPrivilegesAsBoolean } from "@lib/privileges";
 import { Metadata } from "next";
 import { NavigtationFrame } from "./components/server/NavigationFrame";
 import { Loader } from "@clientComponents/globals/Loader";
 
 import { UsersList } from "./components/server/UsersList";
-import { redirect } from "next/navigation";
 
 export async function generateMetadata({
   params: { locale },
@@ -27,9 +26,7 @@ export default async function Page({
   params: { locale: string };
   searchParams: { userState?: string };
 }) {
-  const session = await auth();
-  if (!session) redirect(`/${locale}/auth/login`);
-  const ability = createAbility(session);
+  const { ability } = await authCheckAndRedirect();
 
   // Can the user view this page
   checkPrivilegesAsBoolean(

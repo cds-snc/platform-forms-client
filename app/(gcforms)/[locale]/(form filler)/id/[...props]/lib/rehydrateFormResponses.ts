@@ -1,5 +1,6 @@
 import { Submission } from "@lib/types/submission-types";
 import { Response, Responses, FormElement, FormElementTypes } from "@lib/types";
+import { safeJSONParse } from "@lib/utils";
 
 export function rehydrateFormResponses(payload: Submission) {
   const { form: formRecord, responses } = payload;
@@ -73,5 +74,9 @@ function _rehydrateDynamicRowResponses(responses: [string, Response][]) {
 }
 
 function _rehydrateCheckBoxResponse(response: Response) {
-  return response ? JSON.parse(response as string).value : [];
+  const responseParsed = safeJSONParse(response as string);
+  if (responseParsed?.error || !responseParsed?.value) {
+    return [];
+  }
+  return responseParsed.value;
 }

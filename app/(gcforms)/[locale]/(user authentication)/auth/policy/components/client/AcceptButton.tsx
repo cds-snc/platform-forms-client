@@ -1,44 +1,44 @@
 "use client";
-import React from "react";
+
 import { useTranslation } from "@i18n/client";
-import { useRouter, useSearchParams } from "next/navigation";
-import { localPathRegEx } from "@lib/validation/validation";
-import { Button } from "@clientComponents/globals";
+import { useRouter } from "next/navigation";
+
+import { useState } from "react";
 import { useSession } from "next-auth/react";
+import { SubmitButton } from "@clientComponents/globals/Buttons/SubmitButton";
 
 export const AcceptButton = () => {
   const router = useRouter();
-  const searchParams = useSearchParams();
+  const [isLoading, setIsLoading] = useState(false);
+
   const {
     t,
     i18n: { language },
   } = useTranslation("common");
-
-  const { data: session, update } = useSession();
-
-  let referer = searchParams.get("referer");
   const defaultRoute = `/${language}/forms`;
 
-  // An extra check just encase a malicous user sets the referer to an external URL
-  if (referer && !localPathRegEx.test(referer)) {
-    referer = defaultRoute;
-  }
+  const { /*status,*/ update } = useSession();
 
   const agree = async () => {
-    // Undefined Session
-    if (!session) return router.push(`/${language}/auth/login`);
+    // status from useSession will jump back and forth between authenticated and loading,
+    // using state instead for reliability. TODO see if "fixed" in future versions of next-auth?
+    setIsLoading(true);
 
     // Update the session to reflect the user has accepted the terms of use.
-    await update({ ...session, user: { ...session.user, acceptableUse: true } });
+    const session = await update({
+      user: { acceptableUse: true },
+    });
 
-    if (session.user.newlyRegistered) router.push(`/${language}/auth/account-created`);
-    // Go back to the page the user was redirected from.
-    else router.push(referer ?? defaultRoute);
+    if (session?.user.newlyRegistered) {
+      router.push(`/${language}/auth/account-created`);
+    } else {
+      router.push(defaultRoute);
+    }
   };
 
   return (
-    <Button id="acceptableUse" onClick={agree}>
+    <SubmitButton id="acceptableUse" type="button" loading={isLoading} onClick={agree}>
       {t("acceptableUsePage.agree")}
-    </Button>
+    </SubmitButton>
   );
 };

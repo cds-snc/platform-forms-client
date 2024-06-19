@@ -1,7 +1,7 @@
 import { serverTranslation } from "@i18n";
 import { Metadata } from "next";
 import { LoginForm } from "./components/client/LoginForm";
-import { auth } from "@lib/auth";
+import { authCheckAndThrow } from "@lib/actions";
 import { redirect } from "next/navigation";
 
 export async function generateMetadata({
@@ -16,7 +16,7 @@ export async function generateMetadata({
 }
 
 export default async function Page({ params: { locale } }: { params: { locale: string } }) {
-  const session = await auth();
+  const { session } = await authCheckAndThrow().catch(() => ({ session: null }));
   if (session) {
     redirect(`/${locale}/forms`);
   }

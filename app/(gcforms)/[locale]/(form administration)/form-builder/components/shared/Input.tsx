@@ -7,6 +7,7 @@ interface Props {
   type?: string;
   placeholder?: string;
   describedBy?: string;
+  ariaLabel?: string;
   value: string | number;
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   onKeyDown?: (e: React.KeyboardEvent<HTMLInputElement>) => void;
@@ -26,6 +27,7 @@ const Input = React.forwardRef<Ref, Props>((props, ref) => {
     id,
     name,
     describedBy,
+    ariaLabel, // Use a real <label> instead when possible
     value,
     onChange,
     onKeyDown,
@@ -58,6 +60,7 @@ const Input = React.forwardRef<Ref, Props>((props, ref) => {
       className={`${className} ${themes[theme]}`}
       value={value}
       placeholder={placeholder}
+      {...(ariaLabel && { "aria-label": ariaLabel })}
       onChange={onChange}
       onKeyDown={onKeyDown}
       onBlur={onBlur && onBlur}

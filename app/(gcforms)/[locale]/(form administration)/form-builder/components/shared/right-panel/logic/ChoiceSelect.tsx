@@ -43,6 +43,10 @@ export const ChoiceSelect = ({
     ];
   }
 
+  if (!choices.length) {
+    return null;
+  }
+
   return (
     <div className="my-2 flex flex-col pt-4">
       <label className="mb-2 inline-block text-sm" id={labelId}>

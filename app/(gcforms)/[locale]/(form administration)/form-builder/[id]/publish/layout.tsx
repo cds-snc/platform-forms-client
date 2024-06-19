@@ -1,6 +1,6 @@
 import { serverTranslation } from "@i18n";
-import { auth } from "@lib/auth";
-import { createAbility } from "@lib/privileges";
+import { authCheckAndThrow } from "@lib/actions";
+
 import Markdown from "markdown-to-jsx";
 
 import { InfoCard } from "@serverComponents/globals/InfoCard/InfoCard";
@@ -17,7 +17,10 @@ export default async function Layout({
 }) {
   const { t } = await serverTranslation("form-builder", { lang: locale });
 
-  const session = await auth();
+  const { session, ability } = await authCheckAndThrow().catch(() => ({
+    session: null,
+    ability: null,
+  }));
   let userCanPublish = false;
   let isVaultDelivery = false;
 
@@ -26,7 +29,6 @@ export default async function Layout({
   }
 
   try {
-    const ability = createAbility(session);
     userCanPublish = ability?.can("update", "FormRecord", "isPublished");
     const initialForm = ability && (await getFullTemplateByID(ability, id));
 

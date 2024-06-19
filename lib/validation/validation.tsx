@@ -325,7 +325,7 @@ export const setFocusOnErrorMessage = (props: FormikProps<Responses>, errorId: s
  */
 export const isValidGovEmail = (email: string): boolean => {
   const regex =
-    /^([a-zA-Z0-9!#$%&'*+-/=?^_`{|}~.])+@((?:[a-zA-Z0-9-.]+\.gc\.ca|cds-snc\.freshdesk\.com)|(canada|cds-snc|elections|rcafinnovation|canadacouncil)\.ca)$/;
+    /^([a-zA-Z0-9!#$%&'*+-/=?^_`{|}~.]+(\+[a-zA-Z0-9!#$%&'*+-/=?^_`{|}~.]*)?)@((?:[a-zA-Z0-9-.]+\.gc\.ca|cds-snc\.freshdesk\.com)|(canada|cds-snc|elections|rcafinnovation|canadacouncil)\.ca)$/;
   return regex.test(email);
 };
 
@@ -381,10 +381,6 @@ export const containsSymbol = (field: string): boolean => {
   }
   return true;
 };
-
-// Helpful to check whether a referer is local vs. an external URL
-// Note: a negated version of https://stackoverflow.com/questions/10687099/how-to-test-if-a-url-string-is-absolute-or-relative
-export const localPathRegEx = new RegExp("^(?!((?:[a-z+]+:)?//))", "i");
 
 /**
  * This function tests whether a string contains a UUID

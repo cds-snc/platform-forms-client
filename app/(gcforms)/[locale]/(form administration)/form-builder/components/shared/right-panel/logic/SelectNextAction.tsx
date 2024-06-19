@@ -9,18 +9,10 @@ import { useTemplateStore } from "@lib/store/useTemplateStore";
 import { SingleActionSelect } from "./SingleActionSelect";
 import { MultiActionSelector } from "./MultiActionSelector";
 import { ClearMultiRules } from "./ClearMultiRules";
-import { useTranslation } from "@i18n/client";
+import { SectionName } from "./SectionName";
+import { Language } from "@lib/types/form-builder-types";
 
-const SectionName = ({ sectionName }: { sectionName: string | null }) => {
-  const { t } = useTranslation("form-builder");
-  return sectionName ? (
-    <h3 className="block text-sm font-normal">
-      <strong>{t("logic.sectionTitle")}</strong> {sectionName}
-    </h3>
-  ) : null;
-};
-
-export const SelectNextAction = ({ item }: { item: FormElement | null }) => {
+export const SelectNextAction = ({ item, lang }: { item: FormElement | null; lang: Language }) => {
   const typesWithOptions = ["radio", "checkbox", "select", "dropdown"];
   const getGroupNextAction = useGroupStore((state) => state.getGroupNextAction);
   const formGroups: GroupsType = useTemplateStore((s) => s.form.groups) || {};
@@ -31,7 +23,11 @@ export const SelectNextAction = ({ item }: { item: FormElement | null }) => {
   const sectionName = selectedGroupId ? selectedGroup?.name : null;
 
   if (selectedGroupId === "end" || selectedGroupId === "review") {
-    return <SectionName sectionName={sectionName} />;
+    return (
+      <div className="flex justify-between border-b-2 border-black bg-gray-50 p-3 align-middle">
+        <SectionName lang={lang} sectionName={sectionName} />
+      </div>
+    );
   }
 
   if (!selectedGroup) {
@@ -42,9 +38,13 @@ export const SelectNextAction = ({ item }: { item: FormElement | null }) => {
   // section 1 => section 2
   if (!item && !Array.isArray(selectedGroupNextActions)) {
     return (
-      <div className="p-4">
-        <SectionName sectionName={sectionName} />
-        <SingleActionSelect nextAction={selectedGroupNextActions || "end"} />
+      <div>
+        <div className="flex justify-between border-b-2 border-black bg-gray-50 p-3 align-middle">
+          <SectionName lang={lang} sectionName={sectionName} />
+        </div>
+        <div className="p-4">
+          <SingleActionSelect nextAction={selectedGroupNextActions || "end"} />
+        </div>
       </div>
     );
   }
@@ -62,9 +62,6 @@ export const SelectNextAction = ({ item }: { item: FormElement | null }) => {
   // If we have an item a question is selected
   return (
     <div>
-      <div className="px-4 pt-4">
-        <SectionName sectionName={sectionName} />
-      </div>
       {typesWithOptions.includes(item.type) ? (
         /* 
           If the item (form element) has options 
@@ -75,6 +72,8 @@ export const SelectNextAction = ({ item }: { item: FormElement | null }) => {
           no - => section 2
         */
         <MultiActionSelector
+          lang={lang}
+          sectionName={sectionName}
           item={item}
           initialNextActionRules={
             Array.isArray(selectedGroupNextActions) ? selectedGroupNextActions : [] // Default to end

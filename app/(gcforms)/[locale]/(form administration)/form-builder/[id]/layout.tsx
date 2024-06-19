@@ -1,10 +1,10 @@
-import { auth } from "@lib/auth";
+import { authCheckAndThrow } from "@lib/actions";
 import { LeftNavigation } from "./components/LeftNavigation";
 import { ToastContainer } from "@formBuilder/components/shared/Toast";
 import { SkipLink, Footer } from "@clientComponents/globals";
 import { Header } from "@clientComponents/globals/Header/Header";
 import { FormRecord } from "@lib/types";
-import { AccessControlError, createAbility } from "@lib/privileges";
+import { AccessControlError } from "@lib/privileges";
 import { getFullTemplateByID } from "@lib/templates";
 import { redirect } from "next/navigation";
 import { SaveTemplateProvider } from "@lib/hooks/form-builder/useTemplateContext";
@@ -13,6 +13,7 @@ import { RightPanel } from "@formBuilder/components/shared/right-panel/RightPane
 import { allowGrouping } from "@formBuilder/components/shared/right-panel/treeview/util/allowGrouping";
 import { GroupStoreProvider } from "@formBuilder/components/shared/right-panel/treeview/store/useGroupStore";
 import { TemplateStoreProvider } from "@lib/store/useTemplateStore";
+import { Language } from "@lib/types/form-builder-types";
 
 export default async function Layout({
   children,
@@ -27,7 +28,10 @@ export default async function Layout({
   };
   let initialForm;
 
-  const session = await auth();
+  const { session, ability } = await authCheckAndThrow().catch(() => ({
+    session: null,
+    ability: null,
+  }));
 
   const formID = id || null;
 
@@ -35,8 +39,6 @@ export default async function Layout({
 
   if (session && formID) {
     try {
-      const ability = createAbility(session);
-
       initialForm = await getFullTemplateByID(ability, formID);
 
       if (initialForm === null) {
@@ -77,7 +79,7 @@ export default async function Layout({
                     <main id="content" className="form-builder my-7 w-full">
                       {children}
                     </main>
-                    {allowGroupsFlag && <RightPanel id={id} />}
+                    {allowGroupsFlag && <RightPanel id={id} lang={locale as Language} />}
                   </GroupStoreProvider>
                 </div>
               </div>

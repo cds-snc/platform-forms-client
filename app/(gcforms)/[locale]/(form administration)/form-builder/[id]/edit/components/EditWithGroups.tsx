@@ -1,12 +1,14 @@
 "use client";
 import React, { useState, useCallback, useEffect, useRef, useMemo } from "react";
+import { cn } from "@lib/utils";
 import debounce from "lodash.debounce";
 import { useTranslation } from "@i18n/client";
 import { useSearchParams } from "next/navigation";
 import { Language, LocalizedFormProperties } from "@lib/types/form-builder-types";
-import { ElementPanel, ConfirmationDescription, PrivacyDescription } from ".";
+import { ElementPanel } from ".";
+import { ConfirmationDescriptionWithGroups } from "./ConfirmationDescriptionWithGroups";
 import { RefsProvider } from "./RefsContext";
-import { RichTextLocked } from "./elements";
+import { RichTextLockedWithGroups } from "./elements/RichTextLockedWithGroups";
 import { ExpandingInput } from "@formBuilder/components/shared";
 import { useRehydrate, useTemplateStore } from "@lib/store/useTemplateStore";
 import { SettingsPanel } from "./settings/SettingsPanel";
@@ -15,6 +17,12 @@ import { SaveButton } from "@formBuilder/components/shared/SaveButton";
 import { useGroupStore } from "@formBuilder/components/shared/right-panel/treeview/store/useGroupStore";
 import { Section } from "./Section";
 import { FormElement } from "@lib/types";
+import { LangSwitcher } from "@formBuilder/components/shared/LangSwitcher";
+import { SectionNameInput } from "@formBuilder/components/shared/SectionNameInput";
+import { PrivacyDescriptionBefore } from "./PrivacyDescriptionBefore";
+import { PrivacyDescriptionBody } from "./PrivacyDescriptionBody";
+import { ConfirmationTitle } from "./ConfirmationTitle";
+import { SkipLinkReusable } from "@clientComponents/globals/SkipLinkReusable";
 
 export const EditWithGroups = () => {
   const { t } = useTranslation("form-builder");
@@ -43,6 +51,11 @@ export const EditWithGroups = () => {
   const elements = useTemplateStore(
     (s) => (s.form.groups && s.form.groups[groupId]?.elements) || []
   );
+
+  const groupName = useTemplateStore((s) => (s.form.groups && s.form.groups[groupId]?.name) || "");
+
+  const updateGroupName = useGroupStore((state) => state.updateGroupName);
+
   const { changeKey } = useTemplateStore((s) => ({
     changeKey: s.changeKey,
   }));
@@ -102,16 +115,27 @@ export const EditWithGroups = () => {
 
   return (
     <>
-      <h1 className="visually-hidden">{t("edit")}</h1>
-      <div className="mb-4">
-        <SaveButton />
+      <h1 className="sr-only">{t("edit")}</h1>
+      <div className="flex w-[800px]">
+        <h2 id="questionsTitle" tabIndex={-1}>
+          {t("questions")}
+        </h2>
+        <div className="ml-5 mt-2">
+          <SaveButton />
+        </div>
       </div>
-
+      <SkipLinkReusable anchor="#rightPanelTitle">{t("skipLink.questionsSetup")}</SkipLinkReusable>
+      <div className="flex max-w-[800px] justify-between">
+        <SectionNameInput value={groupName} groupId={groupId} updateGroupName={updateGroupName} />
+        <LangSwitcher descriptionLangKey="editingIn" />
+      </div>
+      {/* Form Intro + Title Panel */}
       {groupId === "start" && <SettingsPanel />}
       {groupId === "start" && (
-        <RichTextLocked
+        <RichTextLockedWithGroups
           hydrated={hasHydrated}
           className="rounded-t-lg"
+          summaryText={t("startFormIntro")}
           beforeContent={
             <>
               <label
@@ -137,16 +161,33 @@ export const EditWithGroups = () => {
                   {...getLocalizationAttribute()}
                 />
               </div>
-              <p className="mb-4 text-sm">{t("startFormIntro")}</p>
             </>
           }
-          addElement={true}
+          addElement={false}
           schemaProperty="introduction"
           ariaLabel={t("richTextIntroTitle")}
         />
       )}
-
+      {/* Privacy Panel */}
+      {groupId === "start" && (
+        <RichTextLockedWithGroups
+          beforeContent={<PrivacyDescriptionBefore />}
+          summaryText={t("groups.privacy.summary")}
+          detailsText={
+            <div className="mt-4">
+              <PrivacyDescriptionBody />
+            </div>
+          }
+          hydrated={hasHydrated}
+          addElement={true}
+          schemaProperty="privacyPolicy"
+          ariaLabel={t("richTextPrivacyTitle")}
+          className={cn(sortedElements.length === 0 && "rounded-b-lg")}
+        />
+      )}
+      {/* Section Panel */}
       <Section groupId={groupId} />
+      {/* Form Elements */}
       <div className="form-builder-editor">
         <RefsProvider>
           {!["end"].includes(groupId) &&
@@ -157,36 +198,30 @@ export const EditWithGroups = () => {
             })}
         </RefsProvider>
       </div>
-      <>
-        {groupId === "start" && (
-          <RichTextLocked
-            hydrated={hasHydrated}
-            addElement={false}
-            schemaProperty="privacyPolicy"
-            ariaLabel={t("richTextPrivacyTitle")}
-            className={"rounded-b-lg"}
-          >
-            <div id="privacy-text">
-              <h2 className="mt-4 text-2xl laptop:mt-0">{t("richTextPrivacyTitle")}</h2>
-              <PrivacyDescription />
+      {/* Confirmation*/}
+      {groupId === "end" && (
+        <RichTextLockedWithGroups
+          summaryText={t("groups.confirmation.summary")}
+          beforeContent={
+            <div>
+              <h2 className="my-4 text-2xl laptop:mt-0">{t("richTextConfirmationTitle")}</h2>
+              <p className="mb-4">{t("groups.confirmation.beforeText")}</p>
             </div>
-          </RichTextLocked>
-        )}
-        {groupId === "end" && (
-          <RichTextLocked
-            hydrated={hasHydrated}
-            addElement={false}
-            schemaProperty="confirmation"
-            ariaLabel={t("richTextConfirmationTitle")}
-            className={"rounded-lg"}
-          >
-            <div id="confirmation-text">
-              <h2 className="mt-4 text-2xl laptop:mt-0">{t("richTextConfirmationTitle")}</h2>
-              <ConfirmationDescription />
+          }
+          detailsText={
+            <div className="mt-4">
+              <ConfirmationDescriptionWithGroups />
+              <ConfirmationTitle />
             </div>
-          </RichTextLocked>
-        )}
-      </>
+          }
+          hydrated={hasHydrated}
+          addElement={false}
+          schemaProperty="confirmation"
+          ariaLabel={t("richTextConfirmationTitle")}
+          className={"rounded-lg"}
+        />
+      )}
+      <SkipLinkReusable anchor="#rightPanelTitle">{t("skipLink.questionsSetup")}</SkipLinkReusable>
     </>
   );
 };

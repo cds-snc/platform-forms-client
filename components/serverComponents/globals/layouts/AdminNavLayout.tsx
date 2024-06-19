@@ -2,8 +2,8 @@ import PropTypes from "prop-types";
 import { LeftNavigation } from "@clientComponents/admin/LeftNav/LeftNavigation";
 import { TwoColumnLayout } from "./TwoColumnLayout";
 import { FullWidthLayout } from "./FullWidthLayout";
-import { auth } from "@lib/auth";
-import { redirect } from "next/navigation";
+
+import { authCheckAndRedirect } from "@lib/actions";
 
 interface AdminNavLayoutProps extends React.PropsWithChildren {
   backLink?: React.ReactElement;
@@ -11,16 +11,8 @@ interface AdminNavLayoutProps extends React.PropsWithChildren {
   hideLeftNav?: boolean | false;
 }
 
-export const AdminNavLayout = async ({
-  children,
-  backLink,
-  hideLeftNav,
-  locale,
-}: AdminNavLayoutProps) => {
-  const session = await auth();
-  if (!session) {
-    redirect(`/${locale}/auth/login`);
-  }
+export const AdminNavLayout = async ({ children, backLink, hideLeftNav }: AdminNavLayoutProps) => {
+  await authCheckAndRedirect();
   return (
     <div className={`flex h-full flex-col ${hideLeftNav && "bg-gray-50"}`}>
       {hideLeftNav ? (

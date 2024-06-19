@@ -68,11 +68,14 @@ export const initiateSignIn = async ({
     if (idToken) {
       const decodedCognitoToken = decodeCognitoToken(idToken);
 
+      logMessage.info("HealthCheck: cognito sign-in success");
+
       return {
         email: decodedCognitoToken.email,
         token: idToken,
       };
     } else {
+      logMessage.info("HealthCheck: cognito sign-in undefined token");
       return null;
     }
   } catch (e) {
@@ -99,6 +102,8 @@ export const initiateSignIn = async ({
 
       logMessage.warn("Cognito Lockout: Password attempts exceeded");
     }
+
+    logMessage.info("HealthCheck: cognito sign-in failure");
 
     throw e;
   }
@@ -155,8 +160,11 @@ export const begin2FAAuthentication = async ({
 
     await sendVerificationCode(sanitizedEmail, verificationCode);
 
+    logMessage.info("HealthCheck: send initial 2fa code success");
+
     return result.id;
   } catch (error) {
+    logMessage.info("HealthCheck: send initial 2fa code failure");
     throw new Error(
       `Failed to generate and send initial verification code. Reason: ${(error as Error).message}.`
     );
@@ -189,9 +197,16 @@ export const requestNew2FAVerificationCode = async (
     if (result === null) throw new Missing2FASession();
 
     await sendVerificationCode(sanitizedEmail, verificationCode);
+
+    logMessage.info("HealthCheck: request new 2fa code success");
+
     return verificationCode;
   } catch (error) {
+    logMessage.info("HealthCheck: request new 2fa code failure");
     if (error instanceof Missing2FASession) {
+      logMessage.warn(
+        `Failed to send new verificaiton code. User ${email} does not have an existing authentication flow token`
+      );
       throw error;
     } else {
       throw new Error(`Failed to send new verification code. Reason: ${(error as Error).message}.`);
@@ -259,6 +274,8 @@ export const validate2FAVerificationCode = async (
 
     const decodedCognitoToken = decodeCognitoToken(mfaEntry.cognitoToken);
 
+    logMessage.info("HealthCheck: 2fa code validation success");
+
     return {
       valid: true,
       decodedCognitoToken: {
@@ -268,6 +285,7 @@ export const validate2FAVerificationCode = async (
       },
     };
   } catch (error) {
+    logMessage.info("HealthCheck: 2fa code validation failure");
     logMessage.warn(`Failed to validate verification code. Reason: ${(error as Error).message}.`);
     return {
       valid: false,

@@ -9,11 +9,14 @@ import Link from "next/link";
 import { isVaultDelivery } from "@lib/utils/form-builder";
 import { classificationOptions } from "@formBuilder/components/ClassificationSelect";
 import { logMessage } from "@lib/logger";
-import { DownloadFileButton } from "@formBuilder/components/shared";
+import { DownloadFileButton, toast } from "@formBuilder/components/shared";
 import Skeleton from "react-loading-skeleton";
 import LinkButton from "@serverComponents/globals/Buttons/LinkButton";
 import { updateTemplate, updateTemplatePublishedStatus } from "@formBuilder/actions";
 import { useAllowPublish } from "@lib/hooks/form-builder/useAllowPublish";
+import { safeJSONParse } from "@lib/utils";
+import { ErrorSaving } from "@formBuilder/components/shared/ErrorSaving";
+import { FormServerErrorCodes } from "@lib/types/form-builder-types";
 
 export const Publish = ({ id }: { id: string }) => {
   const { t, i18n } = useTranslation("form-builder");
@@ -34,6 +37,7 @@ export const Publish = ({ id }: { id: string }) => {
     setIsPublished,
     getSchema,
     getName,
+    formPurpose,
     getDeliveryOption,
     securityAttribute,
   } = useTemplateStore((s) => ({
@@ -42,6 +46,7 @@ export const Publish = ({ id }: { id: string }) => {
     setIsPublished: s.setIsPublished,
     getSchema: s.getSchema,
     getName: s.getName,
+    formPurpose: s.formPurpose,
     getDeliveryOption: s.getDeliveryOption,
     securityAttribute: s.securityAttribute,
   }));
@@ -68,25 +73,36 @@ export const Publish = ({ id }: { id: string }) => {
     return checked ? (
       <CircleCheckIcon className="mr-2 inline-block w-9 fill-green-700" />
     ) : (
-      <CancelIcon className="mr-2 inline-block h-9 w-9 fill-red-700" />
+      <CancelIcon className="mr-2 inline-block size-9 fill-red-700" />
     );
   };
 
   const supportHref = `/${i18n.language}/support`;
 
+  let formPurposeText = t("settingsPurposeAndUse.purpose.unset");
+  if (formPurpose === "admin") {
+    formPurposeText = t("settingsPurposeAndUse.purpose.admin");
+  }
+  if (formPurpose === "nonAdmin") {
+    formPurposeText = t("settingsPurposeAndUse.purpose.nonAdmin");
+  }
+
   const handlePublish = async () => {
     setError(false);
     setErrorCode(null);
     try {
-      const result = await updateTemplatePublishedStatus({ id, isPublished: true });
-      setId(result?.id);
-      setIsPublished(result?.isPublished);
+      const { formRecord, error } = await updateTemplatePublishedStatus({ id, isPublished: true });
+      if (error || !formRecord) {
+        throw new Error(error);
+      }
+      setId(formRecord?.id);
+      setIsPublished(formRecord?.isPublished);
 
       window.dataLayer = window.dataLayer || [];
       window.dataLayer.push({
         event: "publish_form",
       });
-      router.replace(`/form-builder/${id}/published`);
+      router.replace(`/${i18n.language}/form-builder/${id}/published`);
     } catch (e) {
       logMessage.error(e);
       setError(true);
@@ -97,22 +113,28 @@ export const Publish = ({ id }: { id: string }) => {
   const handleSaveAndRequest = useCallback(async () => {
     setError(false);
     setErrorCode(null);
+
+    const formConfig = safeJSONParse(getSchema());
+    if (formConfig.error) {
+      toast.error(<ErrorSaving errorCode={FormServerErrorCodes.JSON_PARSE} />, "wide");
+      return;
+    }
+
     try {
-      // @TODO: do we need this save?
       updateTemplate({
         id,
         name: getName(),
-        formConfig: JSON.parse(getSchema()),
+        formConfig,
       });
 
-      router.push(`/unlock-publishing`);
+      router.push(`/${i18n.language}/unlock-publishing`);
     } catch (e) {
       logMessage.error(e);
       setError(true);
       setErrorCode(500);
       return;
     }
-  }, [getSchema, getName, id, router]);
+  }, [getSchema, getName, id, router, i18n.language]);
 
   const hasHydrated = useRehydrate();
 
@@ -176,7 +198,7 @@ export const Publish = ({ id }: { id: string }) => {
           </Link>
         </li>
         <li className="my-4">
-          {hasHydrated ? <Icon checked={confirmationMessage} /> : IconLoading}
+          {hasHydrated ? <Icon checked={confirmationMessage !== undefined} /> : IconLoading}
           <Link href={`/${i18n.language}/form-builder/${id}/edit#confirmation-text`}>
             {t("formConfirmationMessage")}
           </Link>
@@ -187,19 +209,33 @@ export const Publish = ({ id }: { id: string }) => {
         </li>
 
         <li className="my-4">
-          {hasHydrated ? <Icon checked /> : IconLoading}
+          {hasHydrated ? <Icon checked={formPurpose != ""} /> : IconLoading}
           <strong>
-            {securityAttributeText}
-            {t("publishYourFormInstructions.text2")},{" "}
+            <LinkButton href={`/${i18n.language}/form-builder/${id}/settings`}>
+              {t("publishYourFormInstructions.settings")}
+            </LinkButton>
           </strong>
-          {isVaultDelivery(getDeliveryOption()) ? (
-            <span>{t("publishYourFormInstructions.vaultOption")}</span>
-          ) : (
-            <span>{t("publishYourFormInstructions.emailOption")}</span>
-          )}
-          <LinkButton href={`/${i18n.language}/form-builder/${id}/settings`}>
-            {t("publishYourFormInstructions.change")}
-          </LinkButton>
+          <div>
+            <ul>
+              <li>
+                <strong>{t("publishYourFormInstructions.classification")}:&nbsp;</strong>
+                {securityAttributeText}
+                {t("publishYourFormInstructions.text2")}
+              </li>
+              <li>
+                <strong>{t("publishYourFormInstructions.deliveryOption")}:&nbsp;</strong>
+                {isVaultDelivery(getDeliveryOption()) ? (
+                  <span>{t("publishYourFormInstructions.vaultOption")}</span>
+                ) : (
+                  <span>{t("publishYourFormInstructions.emailOption")}</span>
+                )}
+              </li>
+              <li>
+                <strong>{t("publishYourFormInstructions.purpose")}:&nbsp;</strong>
+                {formPurposeText}
+              </li>
+            </ul>
+          </div>
         </li>
       </ul>
 

@@ -1,6 +1,6 @@
 import { serverTranslation } from "@i18n";
 import { LoggedOutTab, LoggedOutTabName } from "@serverComponents/form-builder/LoggedOutTab";
-import { auth } from "@lib/auth";
+import { authCheckAndThrow } from "@lib/actions";
 import { SettingsNavigation } from "./components/SettingsNavigation";
 
 export default async function Layout({
@@ -12,7 +12,7 @@ export default async function Layout({
 }) {
   const { t } = await serverTranslation("form-builder", { lang: locale });
 
-  const session = await auth();
+  const { session } = await authCheckAndThrow().catch(() => ({ session: null }));
 
   if (!session) {
     return <LoggedOutTab tabName={LoggedOutTabName.SETTINGS} />;
@@ -22,6 +22,9 @@ export default async function Layout({
     <>
       <h1>{t("gcFormsSettings")}</h1>
       <SettingsNavigation id={id} />
+      <p className="mb-10 inline-block bg-purple-200 p-3 text-sm font-bold">
+        {t("settingsResponseDelivery.beforePublishMessage")}
+      </p>
       {children}
     </>
   );

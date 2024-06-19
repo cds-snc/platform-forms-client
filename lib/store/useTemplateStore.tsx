@@ -1,22 +1,26 @@
 "use client";
+
+/**
+ * External dependencies
+ */
+import React, { createContext, useRef, useContext, useEffect } from "react";
 import { createStore } from "zustand";
 import { useStoreWithEqualityFn } from "zustand/traditional";
 import { immer } from "zustand/middleware/immer";
 import { original } from "immer";
 import { shallow } from "zustand/shallow";
-import {
-  persist,
-  StateStorage,
-  createJSONStorage,
-  subscribeWithSelector,
-} from "zustand/middleware";
+import { persist, createJSONStorage, subscribeWithSelector } from "zustand/middleware";
+import update from "lodash.set";
+import unset from "lodash.unset";
 
-import React, { createContext, useRef, useContext, useEffect } from "react";
+/**
+ * Internal dependencies
+ */
+import { TemplateStoreProps, TemplateStoreState, InitialTemplateStoreProps } from "./types";
 import { getPathString } from "../utils/form-builder/getPath";
 import { TreeRefProvider } from "@formBuilder/components/shared/right-panel/treeview/provider/TreeRefProvider";
 import { FlowRefProvider } from "@formBuilder/[id]/edit/logic/components/flow/provider/FlowRefProvider";
 import { initializeGroups } from "@formBuilder/components/shared/right-panel/treeview/util/initializeGroups";
-
 import {
   moveDown,
   moveElementDown,
@@ -30,161 +34,13 @@ import {
   cleanInput,
   removeGroupElement,
 } from "../utils/form-builder";
-import { Language } from "../types/form-builder-types";
-import update from "lodash.set";
-import unset from "lodash.unset";
-import {
-  FormElement,
-  FormProperties,
-  FormElementTypes,
-  DeliveryOption,
-  ElementProperties,
-  SecurityAttribute,
-} from "@lib/types";
 import { logMessage } from "@lib/logger";
-import { BrandProperties } from "@lib/types/form-types";
 import { removeChoiceFromRules } from "@lib/formContext";
-
-const defaultField: FormElement = {
-  id: 0,
-  type: FormElementTypes.textField,
-  properties: {
-    subElements: [],
-    choices: [{ en: "", fr: "" }],
-    titleEn: "",
-    titleFr: "",
-    validation: {
-      required: false,
-    },
-    descriptionEn: "",
-    descriptionFr: "",
-    placeholderEn: "",
-    placeholderFr: "",
-    conditionalRules: undefined,
-  },
-};
-
-export const defaultForm = {
-  titleEn: "",
-  titleFr: "",
-  introduction: {
-    descriptionEn: "",
-    descriptionFr: "",
-  },
-  privacyPolicy: {
-    descriptionEn: "",
-    descriptionFr: "",
-  },
-  confirmation: {
-    descriptionEn: "",
-    descriptionFr: "",
-    referrerUrlEn: "",
-    referrerUrlFr: "",
-  },
-  layout: [],
-  elements: [],
-  groups: {},
-};
-
-export interface TemplateStoreProps {
-  id: string;
-  lang: Language;
-  translationLanguagePriority: Language;
-  focusInput: boolean;
-  hasHydrated: boolean;
-  form: FormProperties;
-  isPublished: boolean;
-  name: string;
-  deliveryOption?: DeliveryOption;
-  securityAttribute: SecurityAttribute;
-  closingDate?: string | null;
-  changeKey: string;
-  allowGroupsFlag: boolean;
-}
-
-export interface InitialTemplateStoreProps extends TemplateStoreProps {
-  locale?: Language;
-}
-
-export interface TemplateStoreState extends TemplateStoreProps {
-  focusInput: boolean;
-  setHasHydrated: () => void;
-  getFocusInput: () => boolean;
-  moveUp: (index: number) => void;
-  subMoveUp: (elIndex: number, subIndex?: number) => void;
-  moveDown: (index: number) => void;
-  subMoveDown: (elIndex: number, subIndex?: number) => void;
-  localizeField: {
-    <LocalizedProperty extends string>(
-      arg: LocalizedProperty,
-      arg1?: Language
-    ): `${LocalizedProperty}${Capitalize<Language>}`;
-  };
-  getId: () => string;
-  setId: (id: string) => void;
-  setLang: (lang: Language) => void;
-  toggleLang: () => void;
-  toggleTranslationLanguagePriority: () => void;
-  setTranslationLanguagePriority: (lang: Language) => void;
-  setFocusInput: (isSet: boolean) => void;
-  getLocalizationAttribute: () => Record<"lang", Language> | undefined;
-  add: (
-    elIndex?: number,
-    type?: FormElementTypes,
-    data?: FormElement,
-    groupId?: string
-  ) => Promise<number>;
-  addSubItem: (
-    elIndex: number,
-    subIndex?: number,
-    type?: FormElementTypes,
-    data?: FormElement
-  ) => void;
-  remove: (id: number, groupId?: string) => void;
-  removeSubItem: (elIndex: number, id: number) => void;
-  addChoice: (elIndex: number) => void;
-  addSubChoice: (elIndex: number, subIndex: number) => void;
-  removeChoice: (elIndex: number, choiceIndex: number) => void;
-  removeSubChoice: (elIndex: number, subIndex: number, choiceIndex: number) => void;
-  getChoice: (elIndex: number, choiceIndex: number) => { en: string; fr: string } | undefined;
-  updateField: (
-    path: string,
-    value: string | boolean | ElementProperties | BrandProperties
-  ) => void;
-  updateSecurityAttribute: (value: SecurityAttribute) => void;
-  propertyPath: (id: number, field: string, lang?: Language) => string;
-  unsetField: (path: string) => void;
-  duplicateElement: (id: number) => void;
-  subDuplicateElement: (elIndex: number, subIndex: number) => void;
-  importTemplate: (jsonConfig: FormProperties) => void;
-  getSchema: () => string;
-  getIsPublished: () => boolean;
-  setIsPublished: (isPublished: boolean) => void;
-  getName: () => string;
-  getDeliveryOption: () => DeliveryOption | undefined;
-  resetDeliveryOption: () => void;
-  getSecurityAttribute: () => SecurityAttribute;
-  setClosingDate: (closingDate: string | null) => void;
-  initialize: (language?: string) => void;
-  removeChoiceFromRules: (elIndex: number, choiceIndex: number) => void;
-  setChangeKey: (key: string) => void;
-  getGroupsEnabled: () => boolean;
-}
-
-/* Note: "async" getItem is intentional here to work-around a hydration issue   */
-/* https://github.com/pmndrs/zustand/issues/324#issuecomment-1031392610 */
-
-const storage: StateStorage = {
-  getItem: async (name: string) => {
-    return sessionStorage.getItem(name) || null;
-  },
-  setItem: async (name: string, value: string) => {
-    sessionStorage.setItem(name, value);
-  },
-  removeItem: async (name: string) => {
-    sessionStorage.removeItem(name);
-  },
-};
+import { Language } from "../types/form-builder-types";
+import { FormElementTypes } from "@lib/types";
+import { defaultField, defaultForm } from "./defaults";
+import { storage } from "./storage";
+import { clearTemplateStorage } from "./utils";
 
 const createTemplateStore = (initProps?: Partial<InitialTemplateStoreProps>) => {
   const DEFAULT_PROPS: TemplateStoreProps = {
@@ -193,10 +49,11 @@ const createTemplateStore = (initProps?: Partial<InitialTemplateStoreProps>) => 
     translationLanguagePriority: (initProps?.locale as Language) || "en",
     focusInput: false,
     hasHydrated: false,
-    form: defaultForm,
+    form: initializeGroups(defaultForm, initProps?.allowGroupsFlag || false),
     isPublished: false,
     name: "",
     securityAttribute: "Protected A",
+    formPurpose: "",
     closingDate: initProps?.closingDate,
     changeKey: String(new Date().getTime()),
     allowGroupsFlag: initProps?.allowGroupsFlag || false,
@@ -280,9 +137,19 @@ const createTemplateStore = (initProps?: Partial<InitialTemplateStoreProps>) => 
               set((state) => {
                 unset(state, path);
               }),
-            moveUp: (elIndex) =>
+            moveUp: (elIndex, groupId) =>
               set((state) => {
                 state.form.layout = moveUp(state.form.layout, elIndex);
+                const allowGroups = state.allowGroupsFlag;
+                if (allowGroups && groupId) {
+                  const group = state.form.groups && state.form.groups[groupId];
+                  if (group) {
+                    // Convert the elements array to a number array
+                    const els = group.elements.map((el) => Number(el));
+                    // Move the element up and convert back to string array
+                    group.elements = moveUp(els, elIndex).map((el) => String(el));
+                  }
+                }
               }),
             subMoveUp: (elIndex, subIndex = 0) =>
               set((state) => {
@@ -294,9 +161,19 @@ const createTemplateStore = (initProps?: Partial<InitialTemplateStoreProps>) => 
                   );
                 }
               }),
-            moveDown: (elIndex) =>
+            moveDown: (elIndex, groupId) =>
               set((state) => {
                 state.form.layout = moveDown(state.form.layout, elIndex);
+                const allowGroups = state.allowGroupsFlag;
+                if (allowGroups && groupId) {
+                  const group = state.form.groups && state.form.groups[groupId];
+                  if (group) {
+                    // Convert the elements array to a number array
+                    const els = group.elements.map((el) => Number(el));
+                    // Move the element down and convert back to string array
+                    group.elements = moveDown(els, elIndex).map((el) => String(el));
+                  }
+                }
               }),
             subMoveDown: (elIndex, subIndex = 0) =>
               set((state) => {
@@ -326,7 +203,12 @@ const createTemplateStore = (initProps?: Partial<InitialTemplateStoreProps>) => 
                   if (allowGroups && groupId) {
                     if (!state.form.groups) state.form.groups = {};
                     if (!state.form.groups[groupId])
-                      state.form.groups[groupId] = { name: "", elements: [] };
+                      state.form.groups[groupId] = {
+                        name: "",
+                        titleEn: "",
+                        titleFr: "",
+                        elements: [],
+                      };
                     state.form.groups &&
                       state.form.groups[groupId].elements.splice(elIndex + 1, 0, String(id));
                   }
@@ -418,7 +300,7 @@ const createTemplateStore = (initProps?: Partial<InitialTemplateStoreProps>) => 
               const elIndex = get().form.elements.findIndex((el) => el.id === elId);
               return get().form.elements[elIndex]?.properties.choices?.[choiceIndex];
             },
-            duplicateElement: (itemId) => {
+            duplicateElement: (itemId, groupId = "") => {
               const elIndex = get().form.elements.findIndex((el) => el.id === itemId);
               set((state) => {
                 const id = incrementElementId(state.form.elements);
@@ -432,6 +314,23 @@ const createTemplateStore = (initProps?: Partial<InitialTemplateStoreProps>) => 
                 }
                 state.form.elements.splice(elIndex + 1, 0, element);
                 state.form.layout.splice(elIndex + 1, 0, id);
+
+                // Handle groups
+                const allowGroups = state.allowGroupsFlag;
+                groupId = allowGroups && groupId ? groupId : "";
+                if (allowGroups && groupId) {
+                  if (!state.form.groups) state.form.groups = {};
+                  if (!state.form.groups[groupId])
+                    state.form.groups[groupId] = {
+                      name: "",
+                      titleEn: "",
+                      titleFr: "",
+                      elements: [],
+                    };
+                  state.form.groups &&
+                    state.form.groups[groupId].elements.splice(elIndex + 1, 0, String(id));
+                }
+                // end groups
               });
             },
             subDuplicateElement: (elIndex, subIndex) => {
@@ -485,6 +384,7 @@ const createTemplateStore = (initProps?: Partial<InitialTemplateStoreProps>) => 
                 state.isPublished = false;
                 state.name = "";
                 state.deliveryOption = undefined;
+                state.formPurpose = "";
                 state.closingDate = null;
               });
             },
@@ -498,6 +398,7 @@ const createTemplateStore = (initProps?: Partial<InitialTemplateStoreProps>) => 
                 state.name = "";
                 state.securityAttribute = "Protected A";
                 state.deliveryOption = undefined;
+                state.formPurpose = "";
                 state.closingDate = null;
               });
             },
@@ -581,28 +482,4 @@ export const useRehydrate = () => {
   }, [store, hasHydrated]);
 
   return hasHydrated;
-};
-
-export const clearTemplateStore = () => {
-  if (typeof window === "undefined") return;
-
-  sessionStorage.removeItem("form-storage");
-};
-
-export const clearTemplateStorage = (id: string) => {
-  if (typeof window === "undefined") return;
-
-  const formStorage = sessionStorage.getItem("form-storage");
-
-  if (!formStorage) return;
-
-  const storage = JSON.parse(formStorage);
-
-  if (storage && storage.state.id !== id) {
-    sessionStorage.removeItem("form-storage");
-    logMessage.debug(`Cleared form-storage: ${id}, ${storage.state.id}`);
-    return;
-  }
-
-  logMessage.debug(`Keep form-storage: ${id}, ${storage.state.id}`);
 };

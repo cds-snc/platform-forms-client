@@ -5,6 +5,8 @@ import { FlowWithProvider } from "./components/flow/FlowWithProvider";
 import { Suspense } from "react";
 import { Loader } from "@clientComponents/globals/Loader";
 import { LogicNavigation } from "./components/LogicNavigation";
+import { SkipLinkReusable } from "@clientComponents/globals/SkipLinkReusable";
+import { Language } from "@lib/types/form-builder-types";
 
 export async function generateMetadata({
   params: { locale },
@@ -36,15 +38,19 @@ export default async function Page({
   );
   return (
     <div id={id}>
+      <h1 className="sr-only">{t("edit")}</h1>
+      <h2 className="mb-4 border-0" id="logicTitle" tabIndex={-1}>
+        {t("logic.heading")}
+      </h2>
+      <SkipLinkReusable anchor="#rightPanelTitle">{t("skipLink.logicSetup")}</SkipLinkReusable>
+      <p>{t("logic.description")}</p>
       <LogicNavigation />
-      <h1 className="mb-4 mt-8 border-0">{t("logic.heading")}</h1>
-      <p className="max-w-[450px]">{t("logic.description")}</p>
-
-      <div className="my-10 w-full border-1" style={{ height: "calc(100vh - 300px)" }}>
+      <div className="flow-container my-10 w-full border-1">
         <Suspense fallback={<Loading />}>
-          <FlowWithProvider />
+          <FlowWithProvider lang={locale as Language} />
         </Suspense>
       </div>
+      <SkipLinkReusable anchor="#rightPanelTitle">{t("skipLink.logicSetup")}</SkipLinkReusable>
     </div>
   );
 }

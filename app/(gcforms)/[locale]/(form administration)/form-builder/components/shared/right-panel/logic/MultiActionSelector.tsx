@@ -19,6 +19,8 @@ import { ensureChoiceId } from "@lib/formContext";
 import { LocalizedElementProperties } from "@lib/types/form-builder-types";
 import { SaveNote } from "./SaveNote";
 import { toast } from "@formBuilder/components/shared/Toast";
+import { SectionName } from "./SectionName";
+import { Language } from "@lib/types/form-builder-types";
 
 export const GroupAndChoiceSelect = ({
   groupId,
@@ -28,6 +30,7 @@ export const GroupAndChoiceSelect = ({
   updateChoiceId,
   updateGroupId,
   removeSelector,
+  nextActions,
 }: {
   groupId: string | null;
   item: FormElement;
@@ -36,6 +39,7 @@ export const GroupAndChoiceSelect = ({
   updateChoiceId: (index: number, id: string) => void;
   updateGroupId: (index: number, id: string) => void;
   removeSelector: (index: number) => void;
+  nextActions: NextActionRule[];
 }) => {
   const { t } = useTranslation("form-builder");
   const { language } = useTemplateStore((s) => ({
@@ -59,7 +63,7 @@ export const GroupAndChoiceSelect = ({
   });
 
   // Filter out the current group
-  groupItems = groupItems.filter((item) => item.value !== currentGroup);
+  groupItems = groupItems.filter((item) => item.value !== currentGroup && item.value !== "end");
 
   const choices = useMemo(() => {
     return choiceElement?.properties.choices?.map((choice, index) => {
@@ -67,6 +71,12 @@ export const GroupAndChoiceSelect = ({
       return result;
     });
   }, [choiceElement, language]);
+
+  // Filter out choices that are already used in other rules
+  const usedChoices = nextActions
+    .map((action) => (action.choiceId && action.choiceId !== choiceId ? action.choiceId : null))
+    .filter(Boolean);
+  const filteredChoices = choices?.filter((choice) => !usedChoices.includes(choice.value));
 
   const handleGroupChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const value = e.target.value;
@@ -87,16 +97,25 @@ export const GroupAndChoiceSelect = ({
     return null;
   }
 
+  // Check if the nextActions array has a catch all rule
+  const catchAllRule = nextActions.find(
+    (action) => action.choiceId.includes("catch-all") && choiceId && !choiceId.includes("catch-all")
+  );
+
+  if (!filteredChoices?.length && catchAllRule) {
+    return null;
+  }
+
   return (
     <div className="px-4">
-      {choices && (
+      {filteredChoices && (
         <fieldset className="mb-4 border-b border-dotted border-slate-500">
           <div className="mb-4">
             <ChoiceSelect
               selected={choiceId}
-              choices={choices}
+              choices={filteredChoices}
               onChange={handleChoiceChange}
-              addCatchAll={true}
+              addCatchAll={catchAllRule ? false : true}
             />
           </div>
           <div className="mb-4">
@@ -113,16 +132,21 @@ export const GroupAndChoiceSelect = ({
 
 export const MultiActionSelector = ({
   item,
+  sectionName,
   descriptionId,
   initialNextActionRules,
+  lang,
 }: {
   item: FormElement;
+  sectionName: string | null;
   descriptionId?: string;
   initialNextActionRules: NextActionRule[];
+  lang: Language;
 }) => {
   const [nextActions, setNextActions] = useState(initialNextActionRules);
   const findParentGroup = useGroupStore((state) => state.findParentGroup);
   const setGroupNextAction = useGroupStore((state) => state.setGroupNextAction);
+  const setChangeKey = useTemplateStore((s) => s.setChangeKey);
 
   const { localizeField, language } = useTemplateStore((s) => ({
     localizeField: s.localizeField,
@@ -156,47 +180,60 @@ export const MultiActionSelector = ({
     ? item.properties[localizeField(LocalizedElementProperties.TITLE, language)]
     : "";
 
+  const nextActionSelectors: React.JSX.Element[] | null = [];
+
+  nextActions.forEach((action, index) => {
+    const el = (
+      <GroupAndChoiceSelect
+        index={index}
+        item={item}
+        key={`${action.choiceId}-${index}`}
+        groupId={action.groupId}
+        choiceId={action.choiceId}
+        updateGroupId={updateGroupId}
+        updateChoiceId={updateChoiceId}
+        removeSelector={removeSelector}
+        nextActions={nextActions}
+      />
+    );
+
+    nextActionSelectors.push(el);
+  });
+
+  const disableAdd = nextActions.some((action) => action.choiceId.includes("catch-all"));
+
   return (
     <>
-      <div className="p-4">
-        <h3 className="block text-sm font-normal">
-          <strong>{t("logic.questionTitle")}</strong> {title}
-        </h3>
+      <div className="flex justify-between border-b-2 border-black bg-gray-50 p-3 align-middle">
+        <div>
+          <SectionName lang={lang} sectionName={sectionName} />
+          <h3 className="mb-6 ml-2 mt-2 block text-sm font-normal">
+            {t("logic.questionTitle")} <strong> {title}</strong>
+          </h3>
+
+          <label className="flex items-center hover:fill-white hover:underline">
+            <span className="mr-2 pl-3 text-sm">{t("logic.addRule")}</span>
+            <Button
+              theme="secondary"
+              className="p-0 hover:!bg-indigo-500 hover:!fill-white focus:!fill-white"
+              disabled={disableAdd}
+              onClick={() => {
+                setNextActions([...nextActions, { groupId: "", choiceId: String(item.id) }]);
+              }}
+            >
+              <AddIcon className="hover:fill-white focus:fill-white" title={t("logic.addRule")} />
+            </Button>
+          </label>
+        </div>
       </div>
 
-      <div className="flex items-center border-b-2 border-black bg-slate-50 p-3">
-        <span className="mr-2 inline-block pl-3">{t("logic.addRule")}</span>
-        <Button
-          onClick={() => {
-            setNextActions([...nextActions, { groupId: "", choiceId: String(item.id) }]);
-          }}
-          theme={"secondary"}
-          className="p-1"
-          aria-controls={formId}
-        >
-          <AddIcon title={t("logic.addRule")} />
-        </Button>
-      </div>
       <form
         onSubmit={(e: React.FormEvent<HTMLFormElement>) => e.preventDefault()}
         id={formId}
         {...(descriptionId && { "aria-describedby": descriptionId })}
       >
         <div className="mb-6" aria-live="polite" aria-relevant="all">
-          {nextActions.map((action, index) => {
-            return (
-              <GroupAndChoiceSelect
-                index={index}
-                item={item}
-                key={`${action.choiceId}-${index}`}
-                groupId={action.groupId}
-                choiceId={action.choiceId}
-                updateGroupId={updateGroupId}
-                updateChoiceId={updateChoiceId}
-                removeSelector={removeSelector}
-              />
-            );
-          })}
+          {nextActionSelectors}
         </div>
         <div className="mb-6 px-4">
           <SaveNote />
@@ -207,7 +244,8 @@ export const MultiActionSelector = ({
               const group = findParentGroup(String(item.id));
               const parent = group?.index;
               parent && setGroupNextAction(parent as string, nextActions);
-              flow.current?.updateEdges();
+              setChangeKey(String(new Date().getTime()));
+              flow.current?.redraw();
               toast.success(t("logic.actionsSaved"));
             }}
           >

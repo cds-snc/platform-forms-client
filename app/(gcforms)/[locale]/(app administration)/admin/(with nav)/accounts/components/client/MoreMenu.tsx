@@ -39,7 +39,7 @@ export const MoreMenu = ({
         {canManageUser && !isCurrentUser && user.active && (
           <>
             <DropdownMenuPrimitive.Item
-              className={`mt-2 w-full !block !cursor-pointer  ${themes.base} ${
+              className={`mt-2 !block w-full !cursor-pointer  ${themes.base} ${
                 !user.active ? themes.secondary : themes.destructive
               }`}
               onClick={async () => {

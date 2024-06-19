@@ -253,7 +253,7 @@
   "confirmationDescriptionItem2": "contact details for the service.",
   "confirmationDescriptionItem3": "links to information or services that users are likely to need next.",
   "confirmationDescriptionItem4": "a link to your feedback form. (if you don’t have one, you can set one up using GC Forms to be launched along with your main form).",
-  "confirmationDescriptionParagraph": "The confirmation message will appear on a new page once the form has been submitted. Some useful things you can add to your confirmation page are:",
+  "confirmationDescriptionParagraph": "The confirmation message will appear on a new page once the form has been submitted. Some useful things you can add to the confirmation are:",
   "confirmationMessage": "Confirmation message",
   "confirmationPage": "Confirmation page",
   "contactSupport": "Contact support",
@@ -453,7 +453,7 @@
   "paragraph": "Long answer",
   "phoneNumber": "Phone number",
   "placeHolderFormTitle": "Form title",
-  "previewingIn": "Previewing in",
+  "previewingIn": "Previewing in:",
   "previewDisabledForPublishedForm": "Preview and testing is disabled for published forms.",
   "privacyNoticeDescription": "<p className=\"mb-4\">Help people filling out the form understand how you’re handling their personal information, as outlined in Section 4.2.10 of the <a href=\"https://www.tbs-sct.canada.ca/pol/doc-eng.aspx?id=18309\" target=\"_blank\">Directive on privacy practices</a>.</p><p><strong>What to include in a privacy notice</strong></p><ul><li>What personal information is being collected and why.</li><li>What legal or program authorities you have to collect information.</li><li>How their information will be used, shared, stored, and retained.</li><li>How people can access or change their personal information and file complaints.</li></ul><p>You’re responsible for understanding your department or agency's responsibilities related to personal information. If you’re unsure how to proceed, we recommend contacting your <a href=\"https://www.tbs-sct.canada.ca/ap/atip-aiprp/coord-eng.asp\" target=\"_blank\">access to information and privacy coordinator.</a></p>",
   "privacyStatement": "Privacy statement",
@@ -473,9 +473,13 @@
   "publishingRemovesTestResponsesDescription": "Any prior responses will be removed from the system.",
   "publishYourForm": "Publish your form",
   "publishYourFormInstructions": {
+    "settings": "Settings",
+    "classification": "Data classification",
+    "deliveryOption": "Delivery option",
+    "purpose": "Purpose and use",
     "text1": "Complete the following items before you publish your form.",
     "text2": "",
-    "vaultOption": "Responses to be downloaded — ",
+    "vaultOption": "Responses to be downloaded",
     "emailOption": "Responses delivered by email — ",
     "change": "Change settings"
   },
@@ -504,9 +508,9 @@
   "required": "required",
   "responseDelivery": "Response delivery",
   "richText": "Page text",
-  "richTextConfirmationTitle": "Confirmation page and message",
+  "richTextConfirmationTitle": "Confirmation message",
   "richTextEditor": "Rich text editor",
-  "richTextIntroTitle": "Introduction",
+  "richTextIntroTitle": "Form introduction",
   "richTextPrivacyTitle": "Privacy statement",
   "save": "Save",
   "saveAndRequest": "Request publishing ability",
@@ -527,22 +531,56 @@
   "settingsNavHome": "Response delivery",
   "settingsResponseEmailTitle": "Email address",
   "settingsResponseHint1": "Submitted responses will be emailed to this inbox. This can be a shared inbox.",
+  "settingsPurposeAndUse": {
+    "title": "Purpose and use",
+    "description": "We'll use this to inform the retention of responses in GC Forms beyond 45 days.",
+    "personalInfo": "Personal information used to make a decision about an individual",
+    "helpUs": "Help us understand how form responses will be used",
+    "learnMore": "Learn more about administrative purposes",
+    "learnMoreBox": {
+      "title": "More about administrative purpose",
+      "description": "The <a href='https://www.justice.gc.ca/eng/csj-sjc/pa-lprp/dp-dd/modern_3.html?wbdisable=true'>Privacy Act</a> defines administrative purpose as \"the use of [personal] information in a decision making process that directly affects that individual\".",
+      "personalInfo": "Examples of administrative use:",
+      "personalInfoList": "<li>Using an individual's SIN to verify identity.</li><li>Using an individual's annual income to assess eligibility.</li><li>Using an individual’s age to administer a benefit.</li>",
+      "nonAdminInfo": "Examples of non-administrative use:",
+      "nonAdminInfoList": "<li>Collecting an individual’s email to register for an event.</li><li>Collecting an individual’s age or gender for a survey.</li><li>Collecting a business's name or address to administer a grant or contribution (provided it is not an individual’s personal information).</li>",
+      "contactCoordinator": "If you’re unsure, we recommend contacting your <a href=\"https://www.tbs-sct.canada.ca/ap/atip-aiprp/coord-eng.asp\">access to information and privacy coordinator.</a>"
+    },
+    "personalInfoDetails": "<em>Administrative purposes</em>, such as:",
+    "personalInfoDetailsVals": {
+      "1": "applications for programs or benefits",
+      "2": "eligibility determination",
+      "3": "identity validation"
+    },
+    "nonAdminInfo": "Information not used to make a decision about an individual",
+    "nonAdminInfoDetails": "<em>Non-administrative purposes</em>, such as:",
+    "nonAdminInfoDetailsVals": {
+      "1": "statistics",
+      "2": "research",
+      "3": "audits"
+    },
+    "purpose": {
+      "admin": "Administrative purposes",
+      "nonAdmin": "Non-administrative purposes",
+      "unset": "Unset"
+    }
+  },
   "settingsResponseDelivery": {
     "selectClassification": "Data classification",
-    "beforePublishMessage": "You can change these settings anytime before publishing.",
+    "beforePublishMessage": "These settings can only be changed before publishing.",
     "protectedBMessage": "PROTECTED B responses must be downloaded from GC Forms.",
     "settingsMessage": "To change these settings, select the data classification of your form responses.",
-    "title": "Response delivery option ",
+    "title": "Delivery option",
     "vaultOption": "Download responses from GC Forms",
     "vaultOptionHint": {
       "text1": "Submitted responses will appear on the",
       "text2": "Responses page",
-      "text3": " GC Forms holds data temporarily. Retrieve responses within 45 days."
+      "text3": " GC Forms holds data temporarily for 30 days."
     },
     "emailOption": "Receive responses by email",
     "saveButton": "Save changes",
     "savedSuccessMessage": "Your changes have been saved.",
-    "savedErrorMessage": "There was an error saving your changes. Try again later or contact Support.",
+    "savedErrorMessage": "There was an error saving your changes. Try again later or",
     "emailSubjectEn": {
       "title": "English response subject line",
       "hint": "When form responses are submitted in English."
@@ -614,7 +652,7 @@
     "toPreview": "To preview this form:",
     "unauthenticated": {
       "copyInstructions": "Copy instructions",
-      "description": "You cannot share a form directly from GC Forms without an account. <a href=\"/auth/login\">Sign in</a> or <a href=\"/auth/register\">create an account</a> to get access to this feature and more.",
+      "description": "You cannot share a form directly from GC Forms without an account. <a href=\"/en/auth/login\">Sign in</a> or <a href=\"/en/auth/register\">create an account</a> to get access to this feature and more.",
       "downloadFormFile": "Download form file",
       "instructions": "You can download a copy of this form file to your computer and share it through your email.",
       "step1": "Step 1",
@@ -632,11 +670,11 @@
   },
   "shortAnswer": "Short answer",
   "shortAnswerText": "Short answer",
-  "signInToTest": "<a href=\"/auth/login\">Sign in</a> to test how you can submit and view responses",
+  "signInToTest": "<a href=\"/en/auth/login\">Sign in</a> to test how you can submit and view responses",
   "singleChoice": "Radio buttons",
   "start": "Start",
   "startErrorParse": "Failed to read form file",
-  "startFormIntro": "Add a description to your form to set expectations for those filling it out.",
+  "startFormIntro": "Add a description to your form to help set expectations",
   "startH2": "Design a form",
   "startH3": "Open a form file",
   "startP1": "Start with a blank form.",
@@ -693,7 +731,7 @@
   },
   "translate": "Translations",
   "translateDescription": "Translate your form content side by side to provide a bilingual experience to those filling out your form.",
-  "translateTitle": "Enter your translation",
+  "translateTitle": "Translations",
   "unlockPublishing": "Unlock publishing",
   "unlockPublishingDescription": "To unlock publishing, provide the contact information of the person you report to.",
   "unnamedForm": "Unnamed form file",
@@ -776,7 +814,7 @@
   "addConditionalRules": {
     "modalTitle": "Add a rule to a question",
     "modalTitleEdit": "Edit rules",
-    "modalDescription": "Display additional input fields depending on the selection of a specific option. This applies to single choice, multiple choice, or dropdown list questions.",
+    "modalDescription": "Display additional input fields depending on the selection of a specific option. This applies to questions with radio buttons, checkboxes or dropdown options.",
     "optionTitle": "If option selected is:",
     "questionTitle": "Show question:",
     "addCustomRules": "Add a rule",
@@ -790,48 +828,95 @@
   "saved": "Saved",
   "opensInNewTab": "opens in a new tab",
   "rightPanel": {
-    "openPanel": "Design form",
+    "title": "Right panel",
+    "openPanel": "Form set-up",
     "closePanel": "Close panel",
     "questions": "Questions",
     "logic": "Logic",
-    "translation": "Translation",
+    "translation": "Translations",
     "treeView": {
       "addSection": "New section"
     }
   },
   "logic": {
     "heading": "Logic",
-    "description": "Apply conditional rules to sections with radio buttons, checkboxes, and dropdown form elements.",
-    "clear": "Clear",
+    "description": "Apply conditional rules to sections with radio buttons, checkboxes, or a dropdown.",
+    "clear": "Remove",
     "gotoSection": "Go to section",
     "questionTitle": "Question:",
     "sectionTitle": "Section:",
+    "translateTitle": "Section title",
     "addRule": "Add rule",
     "saveRule": "Save",
-    "saveNote": "Adding and saving a rule, turns off Auto-flow sections",
-    "resetRules": "Reset all rules",
-    "resetRulesDescription": "Auto flow will automatically set a linear flow for your sections, overriding any existing rules.",
+    "saveNote": "Adding and saving a rule, turns off linear autoflow between sections.",
+    "resetRules": "Reset to linear flow",
+    "resetRulesHelp": "Reset help",
+    "resetRulesDescription": "This will remove logic and reset the progression between sections to a simple linear flow, overriding any existing branching rules that were applied.",
+    "toastSuccess": "Linear flow applied",
     "multiRulesWarning": {
-      "text1": "The flow is currently set based on the rules applied.",
-      "text2": "Flow sections:",
-      "text3": "To flow sections, you must clear the rules applied to question elements."
+      "text1": "The order and flow is set based on the rules applied.",
+      "text2": "Linking the sections:",
+      "text3": "To link the sections, you must remove the rules applied to form elements."
     },
     "choiceSelect": {
       "selectOption": "Select an option",
-      "catchAllOption": "Catch all (any other value)"
+      "catchAllOption": "For any other value"
     },
     "groupSelect": {
-      "default": "Select a section to go to",
-      "catchAllGroup": "Catch all (any other value)"
+      "default": "Select a section",
+      "catchAllGroup": "Pour toute autre valeur"
     },
     "actionsSaved": "Actions saved"
   },
   "groups": {
+    "newSection": "New section",
+    "sectionNameInput": "Section name",
+    "addSection": "Add section",
+    "addSectionPlaceholder": "Add a section name",
+    "treeAriaLabel": "GC Forms sections",
     "addElement": {
       "empty": {
         "title": "Empty section",
-        "text1": "This section doesn’t have any form elements in it."
+        "text1": "No form elements have been added."
+      }
+    },
+    "sectionTitle": "Section title",
+    "groupDeleted": "Section deleted",
+    "editSection": "Edit section {{name}}",
+    "editRules": "Edit rules for section {{name}}",
+    "groupSuccessfullyDeleted": "{{group}} successfully deleted",
+    "privacy": {
+      "beforeText": "<p>You’re responsible for understanding your department or agency's responsibilities related to personal information. If you’re unsure how to proceed, we recommend contacting your <a href=\"https://www.tbs-sct.canada.ca/ap/atip-aiprp/coord-eng.asp\" target=\"_blank\">access to information and privacy coordinator.</a></p>",
+      "body": "<p className=\"mb-4\">Help people filling out the form understand how you’re handling their personal information, as outlined in Section 4.2.10 of the <a href=\"https://www.tbs-sct.canada.ca/pol/doc-eng.aspx?id=18309\" target=\"_blank\">Directive on privacy practices</a>.</p><p><strong>What to include in a privacy notice</strong></p><ul><li>What personal information is being collected and why.</li><li>What legal or program authorities you have to collect information.</li><li>How their information will be used, shared, stored, and retained.</li><li>How people can access or change their personal information and file complaints.</li></ul>",
+      "description": " What to include in a privacy notice",
+      "summary": "Add a privacy statement to outline how you handle personal information"
+    },
+    "confirmation": {
+      "beforeText": "The confirmation message will appear on a new page once the form has been submitted.",
+      "body": "Some useful things you can add to the confirmation are:",
+      "description": "Add a confirmation message",
+      "summary": "Add a confirmation message"
+    },
+    "treeView": {
+      "emptyPageTextElement": "Empty page text",
+      "emptyFormElement": "Empty form question element",
+      "keyboardNav": {
+        "label": "Keyboard shortcuts",
+        "body": "<p className=\"mb-4\">Navigate the questions and sections using the arrow keys.</p><p><strong>Drag and drop:</strong></p>\n<ul><li>control + D to pick up an item</li><li>arrow keys to drag the item</li><li>enter key to drop the item</li></ul>"
       }
     }
+  },
+  "confirmation": {
+    "title": "Your form has been submitted",
+    "sectionTitle": "Section title"
+  },
+  "next": "Continue",
+  "skipLink": {
+    "questions": "Skip to Questions editor",
+    "translate": "Skip to Translations editor",
+    "logic": "Skip to Logic editor",
+    "questionsSetup": "Skip to Questions set-up",
+    "translateSetup": "Skip to Translations set-up",
+    "logicSetup": "Skip to Logic set-up"
   }
 }

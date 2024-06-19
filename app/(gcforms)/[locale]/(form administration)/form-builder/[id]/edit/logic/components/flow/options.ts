@@ -2,13 +2,16 @@ import { type LayoutOptions } from "./useAutoLayout";
 import { MarkerType } from "reactflow";
 
 export const edgeOptions = {
-  type: "smoothstep",
+  type: "simplebezier",
+  selectable: false,
+  focusable: false,
+  animated: true,
   markerEnd: { type: MarkerType.ArrowClosed },
-  pathOptions: { offset: 5 },
+  pathOptions: { offset: 20, type: "straight" },
 };
 
 export const layoutOptions: LayoutOptions = {
   algorithm: "d3-hierarchy",
   direction: "LR",
-  spacing: [50, 50],
+  spacing: [25, 25],
 };

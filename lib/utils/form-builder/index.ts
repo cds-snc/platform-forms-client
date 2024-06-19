@@ -1,7 +1,7 @@
 import { FormElement, FormProperties, FormElementTypes, DeliveryOption } from "@lib/types";
-import { TemplateStoreState } from "../../store/useTemplateStore";
+import { TemplateStoreState } from "../../store/types";
 import { GroupsType } from "@lib/formContext";
-import { getLayoutFromGroups } from "./getLayoutFromGroups";
+import { getLayoutFromGroups } from "./groupedFormHelpers";
 import { formHasGroups } from "./formHasGroups";
 
 export const completeEmailAddressRegex =
@@ -92,9 +92,24 @@ export const sortByLayout = ({
   layout: number[];
   elements: FormElement[];
 }) => {
-  return elements.sort((a, b) => {
+  return [...elements].sort((a, b) => {
     return layout.indexOf(a.id) - layout.indexOf(b.id);
   });
+};
+
+export const sortByGroups = ({
+  form,
+  elements,
+}: {
+  form: FormProperties;
+  elements: FormElement[];
+}) => {
+  if (!form.groups) {
+    return sortByLayout({ layout: form.layout, elements: elements });
+  }
+
+  const layout = getLayoutFromGroups(form, form.groups);
+  return sortByLayout({ layout, elements });
 };
 
 export const getSchemaFromState = (state: TemplateStoreState, allowGroups = false) => {
@@ -131,7 +146,7 @@ export const getSchemaFromState = (state: TemplateStoreState, allowGroups = fals
 
   if (sortUsingGroups && formHasGroups(form)) {
     const groups = form.groups as GroupsType;
-    form.layout = getLayoutFromGroups(groups);
+    form.layout = getLayoutFromGroups(form, groups);
   }
 
   return form;
