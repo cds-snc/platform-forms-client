@@ -25,8 +25,6 @@ export const clearHistoryAfterId = (groupId: string, history: string[]) => {
   return getGroupHistory(history);
 };
 
-// TODO needs LOTS of unit tests (and related integration tests?)
-
 /**
  * Removes user answers that are no longer relevant based on the group history.
  * A user could navigate a form down one conditional logic path, get to the review page, and then
@@ -54,17 +52,26 @@ export const getGroupValues = (
 };
 
 /**
- * Combines all questions with answered questions but only the answer question values are kept.
+ * Combines all questions with answered questions but only the answered questions values are kept.
  */
-export const cleanValues = (inputValues: Responses, groupValues: Responses) => {
+export const valuesOnlyInHistory = (inputValues: Responses, groupValues: Responses) => {
   // clear all old and new answers
   const emptyInputValues = {} as Responses;
   for (const key in inputValues) {
-    // ignore unrelated groups
-    if (key === "currentGroup" || key === "groupHistory") {
-      continue;
-    }
     emptyInputValues[key] = "";
   }
+  // overwrite the complete empty list of answers with the relevant answers
   return { ...emptyInputValues, ...groupValues };
+};
+
+/**
+ * Another way to do this would be to compare the formResponse against the values, and only keep
+ * the values that are in the formResponse. See buildFormDataObject()
+ */
+export const removeNonFormValues = (values: Responses) => {
+  const formValues = { ...values };
+  // Add any custom properties to be removed here
+  delete formValues["currentGroup"];
+  delete formValues["groupHistory"];
+  return formValues;
 };

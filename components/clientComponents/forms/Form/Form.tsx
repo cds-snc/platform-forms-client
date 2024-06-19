@@ -19,7 +19,11 @@ import { Review } from "../Review/Review";
 import { LockedSections } from "@formBuilder/components/shared/right-panel/treeview/types";
 import { BackButton } from "@formBuilder/[id]/preview/BackButton";
 import { Language } from "@lib/types/form-builder-types";
-import { cleanValues, getGroupValues } from "@lib/utils/form-builder/groupsHistory";
+import {
+  valuesOnlyInHistory,
+  getGroupValues,
+  removeNonFormValues,
+} from "@lib/utils/form-builder/groupsHistory";
 
 interface SubmitButtonProps {
   numberOfRequiredQuestions: number;
@@ -326,8 +330,8 @@ export const Form = withFormik<FormProps, Responses>({
     formikBag.setStatus("submitting");
     try {
       const isGroupsCheck = formikBag.props.allowGrouping;
-      const newValues = isGroupsCheck
-        ? cleanValues(
+      const formValues = isGroupsCheck
+        ? valuesOnlyInHistory(
             values,
             getGroupValues(
               values,
@@ -336,9 +340,11 @@ export const Form = withFormik<FormProps, Responses>({
             )
           )
         : values;
+      // A thorough check is also done below in submitForm(). This is done just for form sake.
+      const formOnlyValues = removeNonFormValues(formValues);
 
       const result = await submitForm(
-        newValues,
+        formOnlyValues,
         formikBag.props.language,
         formikBag.props.formRecord
       );
