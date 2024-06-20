@@ -3,7 +3,6 @@ import React, { useState } from "react";
 import { useTranslation } from "@i18n/client";
 import { useSession } from "next-auth/react";
 import Markdown from "markdown-to-jsx";
-
 import { PreviewNavigation } from "./PreviewNavigation";
 import { getRenderedForm } from "@lib/formBuilder";
 import { PublicFormRecord } from "@lib/types";
@@ -24,8 +23,27 @@ import { BackButton } from "./BackButton";
 import { safeJSONParse } from "@lib/utils";
 import { ErrorSaving } from "@formBuilder/components/shared/ErrorSaving";
 import { toast } from "@formBuilder/components/shared";
+import { LockIcon } from "@serverComponents/icons";
 
-export const Preview = ({
+const PublishedPreview = () => {
+  const { t } = useTranslation(["common", "form-builder"]);
+  return (
+    <div className="my-5 flex bg-purple-200 p-5">
+      <div className="flex">
+        <div className="pr-7">
+          <LockIcon className="mb-2 scale-125" />
+        </div>
+        <div>
+          <Markdown options={{ forceBlock: true }}>
+            {t("previewDisabledForPublishedForm", { ns: "form-builder" })}
+          </Markdown>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+const DraftPreview = ({
   disableSubmit = true,
   allowGrouping = false,
 }: {
@@ -263,4 +281,24 @@ export const Preview = ({
       )}
     </div>
   );
+};
+
+export const Preview = ({
+  disableSubmit = true,
+  allowGrouping = false,
+}: {
+  disableSubmit?: boolean;
+  allowGrouping?: boolean;
+}) => {
+  const { data: session } = useSession();
+
+  const { isPublished } = useTemplateStore((s) => ({
+    isPublished: s.isPublished,
+  }));
+
+  if (session && isPublished) {
+    return <PublishedPreview />;
+  }
+
+  return <DraftPreview disableSubmit={disableSubmit} allowGrouping={allowGrouping} />;
 };
