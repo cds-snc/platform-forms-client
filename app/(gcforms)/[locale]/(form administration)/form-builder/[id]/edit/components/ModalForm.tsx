@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React from "react";
 import PropTypes from "prop-types";
 import { useTranslation } from "@i18n/client";
 import { FormElementTypes, ElementProperties } from "@lib/types";
@@ -40,7 +40,7 @@ export const ModalForm = ({
   }));
 
   const autocompleteSelectedValue = properties.autoComplete || "";
-  const [checked, setChecked] = useState(item.properties.validation?.required);
+  const checked = item.properties.validation?.required;
 
   return (
     <form onSubmit={(e: React.FormEvent<HTMLFormElement>) => e.preventDefault()}>
@@ -98,8 +98,8 @@ export const ModalForm = ({
       <div className="mb-2">
         <Checkbox
           id={`required-${item.index}-id-modal`}
-          value={`required-${item.index}-value-modal`}
-          key={`required-${item.index}-modal`}
+          value={`required-${item.index}-value-modal-` + checked}
+          key={`required-${item.index}-modal-` + checked}
           defaultChecked={checked}
           onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
             // clone the existing properties so that we don't overwrite other keys in "validation"
@@ -110,7 +110,6 @@ export const ModalForm = ({
               ...properties,
               ...{ validation },
             });
-            setChecked(e.target.checked);
           }}
           label={t("required")}
         ></Checkbox>

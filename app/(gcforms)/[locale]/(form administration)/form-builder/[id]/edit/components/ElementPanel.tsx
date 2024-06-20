@@ -58,7 +58,7 @@ export const ElementPanel = ({
   const { focusWithinProps, isWithin } = useIsWithin();
   const { refs } = useRefsContext();
 
-  const handleMoreClose = () => {
+  const forceRefresh = () => {
     setChangeKey(String(new Date().getTime())); //Force a re-render
   };
 
@@ -68,7 +68,7 @@ export const ElementPanel = ({
           moreButtonRenderer: (
             moreButton: JSX.Element | undefined
           ): React.ReactElement | string | undefined => (
-            <MoreModal item={item} moreButton={moreButton} onClose={handleMoreClose} />
+            <MoreModal item={item} moreButton={moreButton} onClose={forceRefresh} />
           ),
         }
       : {};
@@ -107,7 +107,7 @@ export const ElementPanel = ({
         }
       }}
     >
-      <PanelBodyRoot item={item} key={"panel-body-" + item.id} />
+      <PanelBodyRoot item={item} key={"panel-body-" + item.id} onChangeMade={forceRefresh} />
       <PanelActions
         isFirstItem={item.index === 0}
         isLastItem={item.index === elements.length - 1}
