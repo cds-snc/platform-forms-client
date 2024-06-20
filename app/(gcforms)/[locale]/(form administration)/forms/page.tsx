@@ -8,7 +8,7 @@ import { Navigation } from "./components/server/Navigation";
 import { Cards } from "./components/server/Cards";
 import { NewFormButton } from "./components/server/NewFormButton";
 import { ResumeEditingForm } from "./components/ResumeEditingForm";
-import { getAllTemplates } from "@lib/templates";
+import { getAllTemplatesForUser } from "@lib/templates";
 import { DeliveryOption } from "@lib/types";
 
 export type FormsTemplate = {
@@ -51,10 +51,12 @@ export default async function Page({
     const { t } = await serverTranslation("my-forms", { lang: locale });
 
     // Moved from Cards to Page to avoid component being cached when navigating back to this page
-    const where = {
-      isPublished: status === "published" ? true : status === "draft" ? false : undefined,
+    const options = {
+      requestedWhere: {
+        isPublished: status === "published" ? true : status === "draft" ? false : undefined,
+      },
     };
-    const templates = (await getAllTemplates(ability, where, "desc")).map((template) => {
+    const templates = (await getAllTemplatesForUser(ability, options)).map((template) => {
       const {
         id,
         form: { titleEn = "", titleFr = "" },

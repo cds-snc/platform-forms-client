@@ -1,6 +1,10 @@
 import { AccessControlError, createAbility } from "@lib/privileges";
 import { middleware, sessionExists, jsonValidator } from "@lib/middleware";
-import { createTemplate, getAllTemplates, onlyIncludePublicProperties } from "@lib/templates";
+import {
+  createTemplate,
+  getAllTemplatesForUser,
+  onlyIncludePublicProperties,
+} from "@lib/templates";
 import {
   DeliveryOption,
   FormProperties,
@@ -45,7 +49,7 @@ export const GET = middleware(
       const { session } = props as WithRequired<MiddlewareProps, "session">;
 
       const ability = createAbility(session);
-      const templates = await getAllTemplates(ability);
+      const templates = await getAllTemplatesForUser(ability);
       const response = templates.map((template) => onlyIncludePublicProperties(template));
 
       if (!response)
