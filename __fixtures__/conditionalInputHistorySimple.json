@@ -1,0 +1,101 @@
+{
+  "formValues": {
+    "1": "b",
+    "2": "a1",
+    "3": "a2",
+    "4": "a1",
+    "5": "a2",
+    "6": ["checkbox-1", "checkbox-2"],
+    "currentGroup": "review",
+    "groupHistory": [
+      "start",
+      "b3dec26b-dd19-4936-ad05-b2fbcbce929c",
+      "e969496e-2fab-47e4-aa7f-5e51e0439369",
+      "review"
+    ]
+  },
+  "groups": {
+    "start": {
+      "name": "Start",
+      "titleEn": "Start",
+      "titleFr": "Début",
+      "elements": ["1", "6"],
+      "nextAction": [
+        {
+          "groupId": "4b3c957b-bbfd-4a20-bc5d-da7414270bde",
+          "choiceId": "1.0"
+        },
+        {
+          "groupId": "b3dec26b-dd19-4936-ad05-b2fbcbce929c",
+          "choiceId": "1.1"
+        }
+      ],
+      "autoFlow": false
+    },
+    "4b3c957b-bbfd-4a20-bc5d-da7414270bde": {
+      "name": "SA1",
+      "elements": ["2"],
+      "titleEn": "SA1",
+      "titleFr": "SA1-FR",
+      "nextAction": "152567dc-e44d-484e-8bf7-bea163b559a1",
+      "autoFlow": true
+    },
+    "152567dc-e44d-484e-8bf7-bea163b559a1": {
+      "name": "SA2",
+      "elements": ["3"],
+      "titleEn": "SA2",
+      "titleFr": "SA2-FR",
+      "nextAction": "review",
+      "autoFlow": false
+    },
+    "b3dec26b-dd19-4936-ad05-b2fbcbce929c": {
+      "name": "SB1",
+      "elements": ["4"],
+      "titleEn": "SB1",
+      "titleFr": "SB1-FR",
+      "nextAction": "e969496e-2fab-47e4-aa7f-5e51e0439369",
+      "autoFlow": true
+    },
+    "e969496e-2fab-47e4-aa7f-5e51e0439369": {
+      "name": "SB2",
+      "elements": ["5"],
+      "titleEn": "SB2",
+      "titleFr": "SB2-FR",
+      "nextAction": "review",
+      "autoFlow": true
+    },
+    "review": {
+      "name": "Review",
+      "titleEn": "Review",
+      "titleFr": "Révision",
+      "elements": [],
+      "nextAction": "end"
+    },
+    "end": {
+      "name": "End",
+      "titleEn": "End",
+      "titleFr": "Fin",
+      "elements": []
+    }
+  },
+  "groupHistory": [
+    "start",
+    "b3dec26b-dd19-4936-ad05-b2fbcbce929c",
+    "e969496e-2fab-47e4-aa7f-5e51e0439369",
+    "review"
+  ],
+  "groupHistoryInvalid": [
+    "start",
+    "b3dec26b-dd19-4936-ad05-b2fbcbce929c",
+    "e969496e-2fab-47e4-aa7f-5e51e0439369-INVALID",
+    "review"
+  ],
+  "expectedOutput": {
+    "1": "b",
+    "2": "",
+    "3": "",
+    "4": "a1",
+    "5": "a2",
+    "6": ["checkbox-1", "checkbox-2"]
+  }
+}

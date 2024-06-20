@@ -158,8 +158,7 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
 
   const { t } = useTranslation();
 
-  // Note: this function is used to set any values we'd like added for use in the below
-  // withFormik handleSubmit().
+  // Used to set any values we'd like added for use in the below withFormik handleSubmit().
   useFormValuesChanged();
 
   const errorList = props.errors ? getErrorList(props) : null;
