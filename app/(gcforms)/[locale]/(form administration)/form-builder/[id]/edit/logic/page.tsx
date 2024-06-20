@@ -8,6 +8,7 @@ import { LogicNavigation } from "./components/LogicNavigation";
 import { SkipLinkReusable } from "@clientComponents/globals/SkipLinkReusable";
 import { Legend } from "./components/flow/Legend";
 import { Language } from "@lib/types/form-builder-types";
+import { EndMarker } from "./components/flow/EndMarker";
 
 export async function generateMetadata({
   params: { locale },
@@ -48,7 +49,10 @@ export default async function Page({
       <LogicNavigation />
       <div className="flow-container my-4 w-full border-1">
         <Suspense fallback={<Loading />}>
-          <FlowWithProvider lang={locale as Language} />
+          <>
+            <EndMarker />
+            <FlowWithProvider lang={locale as Language} />
+          </>
         </Suspense>
       </div>
       <SkipLinkReusable anchor="#rightPanelTitle">{t("skipLink.logicSetup")}</SkipLinkReusable>
