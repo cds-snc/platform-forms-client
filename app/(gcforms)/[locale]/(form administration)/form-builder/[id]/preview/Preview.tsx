@@ -23,27 +23,8 @@ import { BackButton } from "./BackButton";
 import { safeJSONParse } from "@lib/utils";
 import { ErrorSaving } from "@formBuilder/components/shared/ErrorSaving";
 import { toast } from "@formBuilder/components/shared";
-import { LockIcon } from "@serverComponents/icons";
 
-const PublishedPreview = () => {
-  const { t } = useTranslation(["common", "form-builder"]);
-  return (
-    <div className="my-5 flex bg-purple-200 p-5">
-      <div className="flex">
-        <div className="pr-7">
-          <LockIcon className="mb-2 scale-125" />
-        </div>
-        <div>
-          <Markdown options={{ forceBlock: true }}>
-            {t("previewDisabledForPublishedForm", { ns: "form-builder" })}
-          </Markdown>
-        </div>
-      </div>
-    </div>
-  );
-};
-
-const DraftPreview = ({
+export const Preview = ({
   disableSubmit = true,
   allowGrouping = false,
 }: {
@@ -281,24 +262,4 @@ const DraftPreview = ({
       )}
     </div>
   );
-};
-
-export const Preview = ({
-  disableSubmit = true,
-  allowGrouping = false,
-}: {
-  disableSubmit?: boolean;
-  allowGrouping?: boolean;
-}) => {
-  const { data: session } = useSession();
-
-  const { isPublished } = useTemplateStore((s) => ({
-    isPublished: s.isPublished,
-  }));
-
-  if (session && isPublished) {
-    return <PublishedPreview />;
-  }
-
-  return <DraftPreview disableSubmit={disableSubmit} allowGrouping={allowGrouping} />;
 };
