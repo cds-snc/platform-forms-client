@@ -70,7 +70,7 @@ export const Section = ({ groupId }: { groupId: string }) => {
   return (
     <div
       className={cn(
-        "flex max-w-[800px] flex-col rounded-t-lg border-x-1 border-t-1 border-slate-700 bg-white p-2 py-5 pl-7",
+        "flex max-w-[800px] flex-col rounded-t-lg border-x-1 border-t-1 border-slate-700 bg-white py-5 px-5",
         noElements ? "border-b-1 rounded-b-lg" : "last:border-b-1"
       )}
     >
