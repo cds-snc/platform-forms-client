@@ -107,7 +107,7 @@ export const ElementPanel = ({
         }
       }}
     >
-      <PanelBodyRoot item={item} key={"panel-body-" + item.id} onChangeMade={forceRefresh} />
+      <PanelBodyRoot item={item} onChangeMade={forceRefresh} />
       <PanelActions
         isFirstItem={item.index === 0}
         isLastItem={item.index === elements.length - 1}
