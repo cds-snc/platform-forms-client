@@ -1,5 +1,5 @@
 import { useCallback } from "react";
-import { Edge, MarkerType } from "reactflow";
+import { MarkerType } from "reactflow";
 import { TreeItem, TreeItemIndex } from "react-complex-tree";
 
 import { useGroupStore } from "@formBuilder/components/shared/right-panel/treeview/store/useGroupStore";
@@ -7,6 +7,23 @@ import { useTemplateStore } from "@lib/store/useTemplateStore";
 import { Group, GroupsType, NextActionRule } from "@lib/formContext";
 import { Language } from "@lib/types/form-builder-types";
 import { getReviewNode, getStartElements, getEndNode } from "@lib/utils/form-builder/i18nHelpers";
+
+interface CustomEdge {
+  id: string;
+  source: string;
+  target: string;
+  style: {
+    strokeWidth: number;
+    stroke: string;
+  };
+  markerEnd: {
+    type: string | MarkerType;
+    width?: number | undefined;
+    height?: number | undefined;
+    color?: string | undefined;
+  };
+  ariaLabel: string;
+}
 
 const defaultEdges = {
   start: "start",
@@ -18,11 +35,17 @@ const lineStyle = {
   stroke: "#6366F1",
 };
 
+/*
 const arrowStyle = {
   type: MarkerType.ArrowClosed,
   width: 18,
   height: 18,
   color: "#6366F1",
+};
+*/
+
+const arrowStyle = {
+  type: "1__type=gc-arrow-closed",
 };
 
 const getEdges = (
@@ -30,7 +53,7 @@ const getEdges = (
   prevNodeId: string,
   group: Group | undefined,
   groups: GroupsType | undefined
-): Edge[] => {
+): CustomEdge[] => {
   // Connect to end node as we don't have a next action
   if (prevNodeId && group && typeof group.nextAction === "undefined") {
     const fromGroup = group?.[nodeId as keyof typeof group];
@@ -103,7 +126,7 @@ export const useFlowData = (lang: Language = "en") => {
   const endNode = getEndNode(lang);
 
   const getData = useCallback(() => {
-    const edges: Edge[] = [];
+    const edges: CustomEdge[] = [];
     const treeIndexes = treeItems.root.children;
 
     const x_pos = 0;
@@ -145,7 +168,7 @@ export const useFlowData = (lang: Language = "en") => {
         type: "groupNode",
       };
 
-      edges.push(...(newEdges as Edge[]));
+      edges.push(...(newEdges as CustomEdge[]));
       prevNodeId = key as string;
 
       if (key === "review" || key === "end") {
