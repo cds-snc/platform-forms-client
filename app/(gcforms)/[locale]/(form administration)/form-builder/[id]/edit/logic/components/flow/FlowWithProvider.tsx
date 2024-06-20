@@ -33,6 +33,7 @@ import { useRehydrate } from "@lib/store/useTemplateStore";
 import { Language } from "@lib/types/form-builder-types";
 
 const nodeTypes = { groupNode: GroupNode };
+import { Edge } from "reactflow";
 
 import { Loader } from "@clientComponents/globals/Loader";
 
@@ -51,7 +52,7 @@ export interface FlowProps {
 const Flow: ForwardRefRenderFunction<unknown, FlowProps> = ({ children, lang }, ref) => {
   const { nodes: flowNodes, edges: flowEdges, getData } = useFlowData(lang);
   const [nodes, , onNodesChange] = useNodesState(flowNodes);
-  const [, setEdges, onEdgesChange] = useEdgesState(flowEdges);
+  const [, setEdges, onEdgesChange] = useEdgesState(flowEdges as Edge[]);
   const { fitView } = useReactFlow();
   const reset = useRef(false);
   const [redrawing, setRedrawing] = useState(false);
@@ -90,12 +91,12 @@ const Flow: ForwardRefRenderFunction<unknown, FlowProps> = ({ children, lang }, 
   useImperativeHandle(ref, () => ({
     updateEdges: () => {
       const { edges } = getData();
-      setEdges(edges);
+      setEdges(edges as Edge[]);
     },
     redraw: () => {
       reset.current = true;
       const { edges } = getData();
-      setEdges(edges);
+      setEdges(edges as Edge[]);
       setRedrawing(true);
       const reLayout = async () => {
         await runLayout();
@@ -128,7 +129,7 @@ const Flow: ForwardRefRenderFunction<unknown, FlowProps> = ({ children, lang }, 
         nodes={nodes}
         nodeTypes={nodeTypes}
         onNodesChange={onNodesChange}
-        edges={flowEdges}
+        edges={flowEdges as Edge[]}
         onEdgesChange={onEdgesChange}
         defaultEdgeOptions={edgeOptions}
         onInit={(instance) => {
