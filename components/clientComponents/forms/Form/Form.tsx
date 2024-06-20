@@ -19,8 +19,8 @@ import { Review } from "../Review/Review";
 import { LockedSections } from "@formBuilder/components/shared/right-panel/treeview/types";
 import { BackButton } from "@formBuilder/[id]/preview/BackButton";
 import { Language } from "@lib/types/form-builder-types";
+import { BackButtonGroup } from "../BackButtonGroup/BackButtonGroup";
 import {
-  BackButtonGroup,
   valuesOnlyInHistory,
   getGroupValues,
   removeNonFormValues,
