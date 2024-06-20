@@ -20,6 +20,7 @@ import { LockedSections } from "@formBuilder/components/shared/right-panel/treev
 import { BackButton } from "@formBuilder/[id]/preview/BackButton";
 import { Language } from "@lib/types/form-builder-types";
 import {
+  BackButtonGroup,
   valuesOnlyInHistory,
   getGroupValues,
   removeNonFormValues,
@@ -259,31 +260,34 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
               <Review language={language as Language} />
             )}
 
-            {props.renderSubmit ? (
-              props.renderSubmit({
-                validateForm: props.validateForm,
-                fallBack: () => {
-                  return (
-                    <div>
-                      {isGroupsCheck && currentGroup === LockedSections.REVIEW && <BackButton />}
-                      <div className="inline-block">
-                        <SubmitButton
-                          numberOfRequiredQuestions={numberOfRequiredQuestions}
-                          formID={formID}
-                          formTitle={form.titleEn}
-                        />
+            <div className="flex">
+              {isGroupsCheck && <BackButtonGroup />}
+              {props.renderSubmit ? (
+                props.renderSubmit({
+                  validateForm: props.validateForm,
+                  fallBack: () => {
+                    return (
+                      <div>
+                        {isGroupsCheck && currentGroup === LockedSections.REVIEW && <BackButton />}
+                        <div className="inline-block">
+                          <SubmitButton
+                            numberOfRequiredQuestions={numberOfRequiredQuestions}
+                            formID={formID}
+                            formTitle={form.titleEn}
+                          />
+                        </div>
                       </div>
-                    </div>
-                  );
-                },
-              })
-            ) : (
-              <SubmitButton
-                numberOfRequiredQuestions={numberOfRequiredQuestions}
-                formID={formID}
-                formTitle={form.titleEn}
-              />
-            )}
+                    );
+                  },
+                })
+              ) : (
+                <SubmitButton
+                  numberOfRequiredQuestions={numberOfRequiredQuestions}
+                  formID={formID}
+                  formTitle={form.titleEn}
+                />
+              )}
+            </div>
           </form>
         </>
       }

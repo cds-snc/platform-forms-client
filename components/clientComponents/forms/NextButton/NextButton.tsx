@@ -6,6 +6,7 @@ import { Validate } from "@lib/types";
 import { useGCFormsContext } from "@lib/hooks/useGCFormContext";
 import { Button } from "@clientComponents/globals";
 import { LockedSections } from "@formBuilder/components/shared/right-panel/treeview/types";
+import { ArrowRightNav } from "@serverComponents/icons/ArrowRightNav";
 
 export const NextButton = ({
   validateForm,
@@ -48,7 +49,9 @@ export const NextButton = ({
         }}
         type="button"
       >
-        {t("next")}
+        <>
+          {t("next")} <ArrowRightNav className="ml-4" />
+        </>
       </Button>
     </>
   );

@@ -25,6 +25,16 @@ export const clearHistoryAfterId = (groupId: string, history: string[]) => {
   return getGroupHistory(history);
 };
 
+export const getPreviousIdFromCurrentId = (currentId: string, history: string[]) => {
+  if (Array.isArray(history)) {
+    const currentIndex = history.findIndex((id) => id === currentId);
+    if (currentIndex > 0) {
+      return history[currentIndex - 1];
+    }
+  }
+  return null;
+};
+
 /**
  * Removes user answers that are no longer relevant based on the group history.
  * A user could navigate a form down one conditional logic path, get to the review page, and then

@@ -922,5 +922,6 @@
     "questionsSetup": "Passer à la configuration des questions",
     "translateSetup": "Passer à la configuration des traductions",
     "logicSetup": "Passer à la configuration de la logique"
-  }
+  },
+  "goBack": "[FR]Go back"
 }
