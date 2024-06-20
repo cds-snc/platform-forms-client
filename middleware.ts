@@ -64,20 +64,17 @@ const { auth } = NextAuth({
 });
 
 export const config = {
-  matcher: [
-    //Match all request paths except for ones that reference files with a file extension
-    "/((?!.*\\.[^/]+?$).*)",
-    /*
+  /*
      Match all request paths except for the ones starting with:
      - _next/static (static files)
      - _next/image (image optimization files)
      - img (public image files)
      - static (public static files)
      - react_devtools (React DevTools)
+     - contain files with extentions
      */
-
-    "/((?!_next/static|_next/image|img|static|react_devtools|unsupported-browser|javascript-disabled|__nextjs_).*)",
-  ],
+  matcher:
+    "/((?!_next/static|_next/image|img|static|react_devtools|unsupported-browser|javascript-disabled|__nextjs_|.*\\.[^/]+?$).*)",
 };
 
 // TOMORROW
