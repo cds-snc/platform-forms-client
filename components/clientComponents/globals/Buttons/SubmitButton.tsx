@@ -62,8 +62,9 @@ export const SubmitButton = ({
 }: SubmitButtonProps & React.ButtonHTMLAttributes<HTMLButtonElement>) => {
   const { t } = useTranslation("common");
   const disabledClass = `
-    focus:bg-[#e2e8ef] focus:text-[#748094] focus:border-none focus:outline-offset-0 focus:outline-0
-    active:bg-[#e2e8ef] active:text-[#748094] active:border-none active:outline-offset-0 active:outline-0
+    text-slate-600
+    focus:bg-[#e2e8ef] focus:text-slate-600 focus:border-none focus:outline-offset-0 focus:outline-0
+    active:bg-[#e2e8ef] active:text-slate-600 active:border-none active:outline-offset-0 active:outline-0
   `;
 
   return (

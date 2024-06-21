@@ -8,6 +8,7 @@ export interface TextInputProps extends InputFieldProps {
   type: HTMLTextInputTypeAttribute;
   placeholder?: string;
   validationError?: string;
+  disabled?: boolean;
 }
 
 export const TextInput = (
@@ -23,6 +24,7 @@ export const TextInput = (
     autoComplete,
     maxLength,
     validationError,
+    disabled,
   } = props;
   const classes = classnames("gc-input-text", className);
   const { t } = useTranslation("common");
@@ -75,6 +77,7 @@ export const TextInput = (
         placeholder={placeholder}
         {...ariaDescribedByIds()}
         onChange={handleTextInputChange}
+        {...(disabled && { disabled: true })}
       />
       {characterCountMessages &&
         maxLength &&
