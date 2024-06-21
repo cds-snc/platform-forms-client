@@ -33,7 +33,7 @@ const TabButton = ({
   const [speak] = useLiveMessage();
   const loadTab = () => {
     onClick();
-    speak(t("rightPanel.loadTab", { panel: text }));
+    speak(t("rightPanel.loadTab", { tabPanelLabel: text }));
   };
   return (
     <Tab as={Fragment}>
