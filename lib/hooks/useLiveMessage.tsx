@@ -14,12 +14,12 @@ import { createContext, useContext, useState } from "react";
  * in complex cases.
  */
 
-enum Priority {
+export enum Priority {
   LOW = "polite",
   HIGH = "assertive",
 }
 
-interface Message {
+export interface Message {
   content: string;
   priority: Priority;
 }
