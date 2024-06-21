@@ -30,10 +30,10 @@ const TabButton = ({
   className?: string;
 }) => {
   const { t } = useTranslation("form-builder");
-  const [announce] = useLiveMessage();
+  const [speak] = useLiveMessage();
   const activate = () => {
     onClick();
-    announce(t("rightPanel.activate", { panel: text }));
+    speak(t("rightPanel.activate", { panel: text }));
   };
   const handleKeyDown = (e: React.KeyboardEvent<HTMLButtonElement>) => {
     if (e.key === "Enter" || e.key === " ") {

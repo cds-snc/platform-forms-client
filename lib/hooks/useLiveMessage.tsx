@@ -63,18 +63,18 @@ export const LiveMessage = () => {
 };
 
 /**
- * A Util to access the live region to announce a message.
+ * A Util to access the live region to speak (announce) a message.
  *
  * Example usage:
- *   const [announce] = useLiveMessage();
+ *   const [speak] = useLiveMessage();
  *   ...
- *   <button onClick={() => announce("Hello World")}>Click me</button>
+ *   <button onClick={() => speak("Hello World")}>Click me</button>
  */
 export const useLiveMessage = () => {
   const { message, setMessage } = useContext(LiveMessageContext);
-  function announce(content: string = "", priority: Priority = Priority.LOW) {
+  function speak(content: string = "", priority: Priority = Priority.LOW) {
     if (message.content === content) return;
     setMessage({ content, priority } as Message);
   }
-  return [announce];
+  return [speak];
 };
