@@ -15,9 +15,9 @@ interface Message {
 
 const messageDefault = { content: "", priority: Priority.LOW };
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const LiveMessageContext = createContext({
   message: messageDefault,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   setMessage: (message: Message) => {},
 });
 
@@ -32,9 +32,8 @@ export const LiveMessagePovider = ({ children }: { children: React.ReactNode }) 
 
 /**
  * A component that will announce a message to screen readers (and other assistive technologies).
- *
- * Important:
- * This component <LiveMessage /> should be placed near the root of your nearest Client component.
+ * Currently <LiveMessage /> lives as a global component in Header.tsx. It should remain a
+ * singleton to avoid multiple announcements for the same message.
  *
  * For more info on aria-live defaults and e.g. polite vs assertive, see:
  * https://www.w3.org/TR/wai-aria/#aria-live
