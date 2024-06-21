@@ -28,8 +28,7 @@ export const MFAForm = () => {
   const [isLocked, setIsLocked] = useState(false);
   const [isExpired, setIsExpired] = useState(false);
   const [isReady, setIsReady] = useState(false);
-  const [isSubmittingStep1, setIsSubmittingStep1] = useState(false);
-  const [isSubmittingStep2, setIsSubmittingStep2] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const authToken = useRef<{ email?: string; authenticationFlowToken?: string }>({});
 
@@ -45,12 +44,11 @@ export const MFAForm = () => {
   }, []);
 
   const localFormAction = async (_: ErrorStates, formData: FormData): Promise<ErrorStates> => {
-    setIsSubmittingStep1(true);
     formData.append("email", authToken.current.email ?? "");
     formData.append("authenticationFlowToken", authToken.current.authenticationFlowToken ?? "");
     const mfaState = await verify(language, _, formData);
     if (mfaState.success) {
-      setIsSubmittingStep2(true);
+      setIsSubmitting(true);
       // Let the Session Provider know that the user has been authenticated
       updateSessionProvider();
       sessionStorage.removeItem("authFlowToken");
@@ -60,7 +58,7 @@ export const MFAForm = () => {
       return {};
     }
     // If there are errors re-enable the submit button
-    setIsSubmittingStep1(false);
+    setIsSubmitting(false);
     return mfaState;
   };
 
@@ -149,49 +147,44 @@ export const MFAForm = () => {
         {t("verify.title")}
       </h1>
       <p className="mb-12 mt-10">{t("verify.emailHasBeenSent")}</p>
-      {isSubmittingStep2 ? (
-        <div className="flex items-center justify-center">
-          <Loader />
+      <form id="verificationCodeForm" action={formAction} noValidate>
+        <div className="focus-group">
+          <Label
+            id={"label-verificationCode"}
+            htmlFor="verificationCode"
+            className="required"
+            required
+          >
+            {t("verify.fields.confirmationCode.label")}
+          </Label>
+          <div className="mb-2 text-sm text-black-default" id={"verificationCode-hint"}>
+            {t("verify.fields.confirmationCode.description")}
+          </div>
+          <TextInput
+            className="h-10 w-36 rounded disabled:bg-gray-100 disabled:cursor-not-allowed"
+            type="text"
+            id="verificationCode"
+            name="verificationCode"
+            ariaDescribedBy="verificationCode-hint"
+            required
+            validationError={
+              state.validationErrors?.find((e) => e.fieldKey === "verificationCode")?.fieldValue
+            }
+            disabled={isSubmitting}
+          />
         </div>
-      ) : (
-        <form id="verificationCodeForm" action={formAction} noValidate>
-          <div className="focus-group">
-            <Label
-              id={"label-verificationCode"}
-              htmlFor="verificationCode"
-              className="required"
-              required
-            >
-              {t("verify.fields.confirmationCode.label")}
-            </Label>
-            <div className="mb-2 text-sm text-black-default" id={"verificationCode-hint"}>
-              {t("verify.fields.confirmationCode.description")}
-            </div>
-            <TextInput
-              className="h-10 w-36 rounded"
-              type="text"
-              id="verificationCode"
-              name="verificationCode"
-              ariaDescribedBy="verificationCode-hint"
-              required
-              validationError={
-                state.validationErrors?.find((e) => e.fieldKey === "verificationCode")?.fieldValue
-              }
-            />
-          </div>
 
-          <SubmitButton loading={isSubmittingStep1} dataTestId="verify-submit">
-            {t("verify.confirmButton")}
-          </SubmitButton>
+        <SubmitButton loading={isSubmitting} dataTestId="verify-submit">
+          {t("verify.confirmButton")}
+        </SubmitButton>
 
-          <div className="mt-12 flex">
-            <Link className="mr-8" href={`/${language}/auth/mfa/resend`}>
-              {t("verify.resendConfirmationCodeButton")}
-            </Link>
-            <Link href={`/${language}/support`}>{t("verify.help")}</Link>
-          </div>
-        </form>
-      )}
+        <div className="mt-12 flex">
+          <Link className="mr-8" href={`/${language}/auth/mfa/resend`}>
+            {t("verify.resendConfirmationCodeButton")}
+          </Link>
+          <Link href={`/${language}/support`}>{t("verify.help")}</Link>
+        </div>
+      </form>
     </>
   );
 };
