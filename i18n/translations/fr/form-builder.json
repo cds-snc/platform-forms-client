@@ -836,7 +836,8 @@
     "translation": "Traductions",
     "treeView": {
       "addSection": "Nouvelle section"
-    }
+    },
+    "activate": "[FR]Loaded {{panel}} editor"
   },
   "logic": {
     "heading": "Logique",

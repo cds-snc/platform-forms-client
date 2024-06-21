@@ -18,6 +18,7 @@ import { SelectNextAction } from "./logic/SelectNextAction";
 import { useGroupStore } from "./treeview/store/useGroupStore";
 import { SkipLinkReusable } from "@clientComponents/globals/SkipLinkReusable";
 import { Language } from "@lib/types/form-builder-types";
+import { useLiveMessage } from "@lib/hooks/useLiveMessage";
 
 const TabButton = ({
   text,
@@ -28,9 +29,15 @@ const TabButton = ({
   onClick: () => void;
   className?: string;
 }) => {
+  const { t } = useTranslation("form-builder");
+  const [announce] = useLiveMessage();
+  const activate = () => {
+    onClick();
+    announce(t("rightPanel.activate", { panel: text }));
+  };
   const handleKeyDown = (e: React.KeyboardEvent<HTMLButtonElement>) => {
     if (e.key === "Enter" || e.key === " ") {
-      onClick();
+      activate();
     }
   };
   return (
@@ -45,7 +52,7 @@ const TabButton = ({
             "whitespace-nowrap border-b-2 px-2 py-2 flex justify-center w-full",
             className
           )}
-          onClick={onClick}
+          onClick={activate}
           onKeyDown={handleKeyDown}
         >
           <span className={cn(selected && "font-bold")}>{text}</span>
