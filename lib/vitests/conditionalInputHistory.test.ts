@@ -5,7 +5,14 @@ import testData from "../../__fixtures__/conditionalInputHistorySimple.json";
 
 // TODO test with dental form data
 
+
+
+
 describe("Conditional History", () => {
+//valuesOnlyInHistory()
+//getGroupValues()
+//removeNonFormValues()
+
   it("Simple form case", () => {
     const {formValues, groupHistory, groups, expectedOutput} = testData;
     const values = valuesOnlyInHistory(
