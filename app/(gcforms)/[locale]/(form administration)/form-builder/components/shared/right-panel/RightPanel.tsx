@@ -31,14 +31,9 @@ const TabButton = ({
 }) => {
   const { t } = useTranslation("form-builder");
   const [speak] = useLiveMessage();
-  const activate = () => {
+  const loadTab = () => {
     onClick();
-    speak(t("rightPanel.activate", { panel: text }));
-  };
-  const handleKeyDown = (e: React.KeyboardEvent<HTMLButtonElement>) => {
-    if (e.key === "Enter" || e.key === " ") {
-      activate();
-    }
+    speak(t("rightPanel.loadTab", { panel: text }));
   };
   return (
     <Tab as={Fragment}>
@@ -52,8 +47,10 @@ const TabButton = ({
             "whitespace-nowrap border-b-2 px-2 py-2 flex justify-center w-full",
             className
           )}
-          onClick={activate}
-          onKeyDown={handleKeyDown}
+          onClick={loadTab}
+          onKeyDown={(e: React.KeyboardEvent<HTMLButtonElement>) => {
+            if (e.key === "Enter" || e.key === " ") loadTab();
+          }}
         >
           <span className={cn(selected && "font-bold")}>{text}</span>
         </button>
