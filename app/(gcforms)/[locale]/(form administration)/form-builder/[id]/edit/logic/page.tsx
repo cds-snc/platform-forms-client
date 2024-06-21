@@ -6,6 +6,9 @@ import { Suspense } from "react";
 import { Loader } from "@clientComponents/globals/Loader";
 import { LogicNavigation } from "./components/LogicNavigation";
 import { SkipLinkReusable } from "@clientComponents/globals/SkipLinkReusable";
+import { Legend } from "./components/flow/Legend";
+import { Language } from "@lib/types/form-builder-types";
+import { EndMarker } from "./components/flow/EndMarker";
 
 export async function generateMetadata({
   params: { locale },
@@ -42,11 +45,14 @@ export default async function Page({
         {t("logic.heading")}
       </h2>
       <SkipLinkReusable anchor="#rightPanelTitle">{t("skipLink.logicSetup")}</SkipLinkReusable>
-      <p>{t("logic.description")}</p>
+      <Legend lang={locale as Language} />
       <LogicNavigation />
-      <div className="my-10 w-full border-1" style={{ height: "calc(100vh - 300px)" }}>
+      <div className="flow-container my-4 w-full border-1">
         <Suspense fallback={<Loading />}>
-          <FlowWithProvider />
+          <>
+            <EndMarker />
+            <FlowWithProvider lang={locale as Language} />
+          </>
         </Suspense>
       </div>
       <SkipLinkReusable anchor="#rightPanelTitle">{t("skipLink.logicSetup")}</SkipLinkReusable>

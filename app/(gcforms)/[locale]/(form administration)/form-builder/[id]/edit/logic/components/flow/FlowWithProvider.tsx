@@ -30,8 +30,10 @@ import { edgeOptions } from "./options";
 
 import { useFlowRef } from "./provider/FlowRefProvider";
 import { useRehydrate } from "@lib/store/useTemplateStore";
+import { Language } from "@lib/types/form-builder-types";
 
 const nodeTypes = { groupNode: GroupNode };
+import { Edge } from "reactflow";
 
 import { Loader } from "@clientComponents/globals/Loader";
 
@@ -42,14 +44,15 @@ const Loading = () => (
 );
 
 export interface FlowProps {
+  lang: Language;
   children?: ReactElement;
   redraw?: () => void;
 }
 
-const Flow: ForwardRefRenderFunction<unknown, FlowProps> = ({ children }, ref) => {
-  const { nodes: flowNodes, edges: flowEdges, getData } = useFlowData();
+const Flow: ForwardRefRenderFunction<unknown, FlowProps> = ({ children, lang }, ref) => {
+  const { nodes: flowNodes, edges: flowEdges, getData } = useFlowData(lang);
   const [nodes, , onNodesChange] = useNodesState(flowNodes);
-  const [, setEdges, onEdgesChange] = useEdgesState(flowEdges);
+  const [, setEdges, onEdgesChange] = useEdgesState(flowEdges as Edge[]);
   const { fitView } = useReactFlow();
   const reset = useRef(false);
   const [redrawing, setRedrawing] = useState(false);
@@ -88,12 +91,12 @@ const Flow: ForwardRefRenderFunction<unknown, FlowProps> = ({ children }, ref) =
   useImperativeHandle(ref, () => ({
     updateEdges: () => {
       const { edges } = getData();
-      setEdges(edges);
+      setEdges(edges as Edge[]);
     },
     redraw: () => {
       reset.current = true;
       const { edges } = getData();
-      setEdges(edges);
+      setEdges(edges as Edge[]);
       setRedrawing(true);
       const reLayout = async () => {
         await runLayout();
@@ -126,7 +129,7 @@ const Flow: ForwardRefRenderFunction<unknown, FlowProps> = ({ children }, ref) =
         nodes={nodes}
         nodeTypes={nodeTypes}
         onNodesChange={onNodesChange}
-        edges={flowEdges}
+        edges={flowEdges as Edge[]}
         onEdgesChange={onEdgesChange}
         defaultEdgeOptions={edgeOptions}
         onInit={(instance) => {
@@ -142,7 +145,7 @@ const Flow: ForwardRefRenderFunction<unknown, FlowProps> = ({ children }, ref) =
   );
 };
 
-export const FlowWithProvider = () => {
+export const FlowWithProvider = ({ lang }: { lang: Language }) => {
   const { flow } = useFlowRef();
 
   const hasHydrated = useRehydrate();
@@ -154,7 +157,7 @@ export const FlowWithProvider = () => {
 
   return (
     <ReactFlowProvider>
-      <FlowWithRef ref={flow} />
+      <FlowWithRef key={`flow-lang-${lang}`} ref={flow} lang={lang} />
     </ReactFlowProvider>
   );
 };

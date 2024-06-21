@@ -92,9 +92,24 @@ export const sortByLayout = ({
   layout: number[];
   elements: FormElement[];
 }) => {
-  return elements.sort((a, b) => {
+  return [...elements].sort((a, b) => {
     return layout.indexOf(a.id) - layout.indexOf(b.id);
   });
+};
+
+export const sortByGroups = ({
+  form,
+  elements,
+}: {
+  form: FormProperties;
+  elements: FormElement[];
+}) => {
+  if (!form.groups) {
+    return sortByLayout({ layout: form.layout, elements: elements });
+  }
+
+  const layout = getLayoutFromGroups(form, form.groups);
+  return sortByLayout({ layout, elements });
 };
 
 export const getSchemaFromState = (state: TemplateStoreState, allowGroups = false) => {
