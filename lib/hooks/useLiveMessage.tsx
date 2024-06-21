@@ -3,9 +3,9 @@ import { createContext, useContext, useState } from "react";
 /**
  * Why would I use this?
  *
- * The current problem this solves is announcing when a server action causes a server side page
- * update. Client side ways of detecting/watching this won't really work so we need to manually
- * announced these changes to the user.
+ * The current problem this solves is announcing when a server action causes a server side update
+ * e.g. updating a route. Client side ways of detecting/watching this won't really work so we need
+ * to manually announced these changes for an AT user.
  *
  * Another problem is that as our app becomes more and more complex, predicting how an AT will
  * "understand" and announce the semantics we add to HTML will become more and more difficult and
