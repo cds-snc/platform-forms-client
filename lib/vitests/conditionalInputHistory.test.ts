@@ -1,16 +1,13 @@
 import { getGroupValues, removeNonFormValues, valuesOnlyInHistory } from "@lib/utils/form-builder/groupsHistory";
-import {formOutputWithEmptyInput} from "../../__fixtures__/conditionalInputHistorySimple.json";
-
+import {formOutputWithEmptyInput, formOutputWithEnteredInput} from "../../__fixtures__/conditionalInputHistorySimple.json";
 
 // TODO test with dental form data
 
-// TODO
-//valuesOnlyInHistory
-//removeNonFormValues()
-
+// Tests the composition of util methods to get the final conditional history result
+// Like an integration tests for unit tests :)
 
 describe("Conditional History", () => {
-  it("Simple form case with some empty inputs", () => {
+  it("Simple case: no questions answered", () => {
     const {formValues, groupHistory, groups} = formOutputWithEmptyInput;
     const expectedOutput = {
       "1": "A",
@@ -41,31 +38,34 @@ describe("Conditional History", () => {
     expect(formOnlyValues).toEqual(expectedOutput);
   });
 
-  // it("Simple form case with some empty inputs invalid data should fail", () => {
-  //   const {formValues, groups} = formOutputWithEmptyInput;
-  //   const groupHistoryInvalid = [
-  //     "start",
-  //     "b3dec26b-dd19-4936-ad05-b2fbcbce929c",
-  //     "e969496e-2fab-47e4-aa7f-5e51e0439369-INVALID",
-  //     "review"
-  //   ];
-  //   const expectedOutputInvalid = {
-  //     "1": "b",
-  //     "2": "",
-  //     "3": "",
-  //     "4": "a1",
-  //     "5": "",
-  //     "6": ["checkbox-1", "checkbox-2"]
-  //   };
-  //   const values = valuesOnlyInHistory(
-  //       formValues,
-  //       getGroupValues(
-  //         formValues,
-  //         groups,
-  //         groupHistoryInvalid as string[] // Group 5 is invalid and should be ignored
-  //       )
-  //     );
-  //   const formOnlyValues = removeNonFormValues(values);
-  //   expect(formOnlyValues).toEqual(expectedOutputInvalid);
-  // });
+  it("Simple case: all questions answered", () => {
+    const {formValues, groupHistory, groups} = formOutputWithEnteredInput;
+    const expectedOutput = {
+        "1": "A",
+        "2": [ "1", "3", "2"],
+        "3": "1",
+        "4": "longanswer",
+        "5": "a1",
+        "6": "a2",
+        "7": "",    // empty since not in group history "path"
+        "8": "",    // empty since not in group history "path"
+        "9": "",    // empty since not in group history "path"
+        "10": "",    // empty since not in group history "path"
+        "11": "01/01/2024",
+        "12": "Accessibility Standards Canada",
+        "13": [ "1", "3", "2"],
+        "14": "1",
+        "15": "Ottawa",
+    };
+    const values = valuesOnlyInHistory(
+        formValues,
+        getGroupValues(
+          formValues,
+          groups,
+          groupHistory as string[]
+        )
+      );
+    const formOnlyValues = removeNonFormValues(values);
+    expect(formOnlyValues).toEqual(expectedOutput);
+  });
 });
