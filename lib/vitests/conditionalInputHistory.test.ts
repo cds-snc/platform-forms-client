@@ -50,7 +50,7 @@ describe("Conditional History", () => {
         "7": "",    // empty since not in group history "path"
         "8": "",    // empty since not in group history "path"
         "9": "",    // empty since not in group history "path"
-        "10": "",    // empty since not in group history "path"
+        "10": "",   // empty since not in group history "path"
         "11": "01/01/2024",
         "12": "Accessibility Standards Canada",
         "13": [ "1", "2", "3"],
