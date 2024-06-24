@@ -62,10 +62,12 @@ export const getGroupValues = (
   return history;
 };
 
+// TODO rename to something like combineAnswers
 /**
  * Combines all questions with answered questions but only the answered questions values are kept.
  */
 export const valuesOnlyInHistory = (inputValues: Responses, groupValues: Responses) => {
+  if (!inputValues || !groupValues) return {} as Responses;
   // clear all old and new answers
   const emptyInputValues = {} as Responses;
   for (const key in inputValues) {
@@ -81,7 +83,7 @@ export const valuesOnlyInHistory = (inputValues: Responses, groupValues: Respons
  */
 export const removeNonFormValues = (values: Responses) => {
   const formValues = { ...values };
-  // Add any custom properties to be removed here
+  // Remove any custom properties here
   delete formValues["currentGroup"];
   delete formValues["groupHistory"];
   return formValues;
