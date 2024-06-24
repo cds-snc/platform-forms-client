@@ -52,6 +52,7 @@ export const getGroupValues = (
   // Iterates over each groupHistory Id and using the matched group Id, match the elements and their
   // values. This removes any "old" answers no longer relevant.
   groupHistory.forEach((key) => {
+    if (!groups[key] || !Array.isArray(groups[key].elements)) return;
     groups[key].elements.forEach((element: string) => {
       const elementKey = element as keyof typeof Response;
       const elementName = element as keyof typeof formValues;

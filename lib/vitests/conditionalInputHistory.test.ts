@@ -27,18 +27,17 @@ describe("Conditional History", () => {
     expect(formOnlyValues).toEqual(expectedOutput);
   });
 
-  // TODO this test revealed a bug with getGroupValues(), that needs to be fixed
-  // it("Simple form case with invalid data should fail", () => {
-  //   const {formValues, groupHistoryInvalid, groups, expectedOutput} = testData;
-  //   const values = valuesOnlyInHistory(
-  //       formValues,
-  //       getGroupValues(
-  //         formValues,
-  //         groups,
-  //         groupHistoryInvalid as string[]
-  //       )
-  //     );
-  //   const formOnlyValues = removeNonFormValues(values);
-  //   expect(formOnlyValues).toEqual(expectedOutput);
-  // });
+  it("Simple form case with invalid data should fail", () => {
+    const {formValues, groupHistoryInvalid, groups, expectedOutputInvalid} = testData;
+    const values = valuesOnlyInHistory(
+        formValues,
+        getGroupValues(
+          formValues,
+          groups,
+          groupHistoryInvalid as string[] // Group 5 is invalid and should be ignored
+        )
+      );
+    const formOnlyValues = removeNonFormValues(values);
+    expect(formOnlyValues).toEqual(expectedOutputInvalid);
+  });
 });

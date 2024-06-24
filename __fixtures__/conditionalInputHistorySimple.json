@@ -84,18 +84,26 @@
     "e969496e-2fab-47e4-aa7f-5e51e0439369",
     "review"
   ],
-  "groupHistoryInvalid": [
-    "start",
-    "b3dec26b-dd19-4936-ad05-b2fbcbce929c",
-    "e969496e-2fab-47e4-aa7f-5e51e0439369-INVALID",
-    "review"
-  ],
   "expectedOutput": {
     "1": "b",
     "2": "",
     "3": "",
     "4": "a1",
     "5": "a2",
+    "6": ["checkbox-1", "checkbox-2"]
+  },
+  "groupHistoryInvalid": [
+    "start",
+    "b3dec26b-dd19-4936-ad05-b2fbcbce929c",
+    "e969496e-2fab-47e4-aa7f-5e51e0439369-INVALID",
+    "review"
+  ],
+  "expectedOutputInvalid": {
+    "1": "b",
+    "2": "",
+    "3": "",
+    "4": "a1",
+    "5": "",
     "6": ["checkbox-1", "checkbox-2"]
   }
 }
