@@ -51,7 +51,7 @@ export const AddOther = ({ item }: { item: FormElementWithIndex }) => {
     } else {
       add(item.index, FormElementTypes.textField, data);
     }
-  }, [add, item]);
+  }, [add, item, groupId]);
 
   return (
     <Button className="!m-0 !mt-4" theme="link" onClick={addOther}>
