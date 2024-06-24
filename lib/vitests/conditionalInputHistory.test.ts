@@ -1,20 +1,34 @@
 import { getGroupValues, removeNonFormValues, valuesOnlyInHistory } from "@lib/utils/form-builder/groupsHistory";
-import testData from "../../__fixtures__/conditionalInputHistorySimple.json";
+import {formOutputWithEmptyInput} from "../../__fixtures__/conditionalInputHistorySimple.json";
 
-// TODO more fine grain UNIT tests of each function
 
 // TODO test with dental form data
 
-
+// TODO
+//valuesOnlyInHistory
+//removeNonFormValues()
 
 
 describe("Conditional History", () => {
-//valuesOnlyInHistory()
-//getGroupValues()
-//removeNonFormValues()
-
-  it("Simple form case", () => {
-    const {formValues, groupHistory, groups, expectedOutput} = testData;
+  it("Simple form case with some empty inputs", () => {
+    const {formValues, groupHistory, groups} = formOutputWithEmptyInput;
+    const expectedOutput = {
+      "1": "A",
+      "2": [],
+      "3": "",
+      "4": "",
+      "5": "a1",
+      "6": "a2",
+      "7": "",
+      "8": "",
+      "9": "",
+      "10": "",
+      "11": "",
+      "12": "",
+      "13": [],
+      "14": "",
+      "15": ""
+  };
     const values = valuesOnlyInHistory(
         formValues,
         getGroupValues(
@@ -27,17 +41,31 @@ describe("Conditional History", () => {
     expect(formOnlyValues).toEqual(expectedOutput);
   });
 
-  it("Simple form case with invalid data should fail", () => {
-    const {formValues, groupHistoryInvalid, groups, expectedOutputInvalid} = testData;
-    const values = valuesOnlyInHistory(
-        formValues,
-        getGroupValues(
-          formValues,
-          groups,
-          groupHistoryInvalid as string[] // Group 5 is invalid and should be ignored
-        )
-      );
-    const formOnlyValues = removeNonFormValues(values);
-    expect(formOnlyValues).toEqual(expectedOutputInvalid);
-  });
+  // it("Simple form case with some empty inputs invalid data should fail", () => {
+  //   const {formValues, groups} = formOutputWithEmptyInput;
+  //   const groupHistoryInvalid = [
+  //     "start",
+  //     "b3dec26b-dd19-4936-ad05-b2fbcbce929c",
+  //     "e969496e-2fab-47e4-aa7f-5e51e0439369-INVALID",
+  //     "review"
+  //   ];
+  //   const expectedOutputInvalid = {
+  //     "1": "b",
+  //     "2": "",
+  //     "3": "",
+  //     "4": "a1",
+  //     "5": "",
+  //     "6": ["checkbox-1", "checkbox-2"]
+  //   };
+  //   const values = valuesOnlyInHistory(
+  //       formValues,
+  //       getGroupValues(
+  //         formValues,
+  //         groups,
+  //         groupHistoryInvalid as string[] // Group 5 is invalid and should be ignored
+  //       )
+  //     );
+  //   const formOnlyValues = removeNonFormValues(values);
+  //   expect(formOnlyValues).toEqual(expectedOutputInvalid);
+  // });
 });

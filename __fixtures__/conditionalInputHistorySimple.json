@@ -1,109 +1,119 @@
 {
-  "formValues": {
-    "1": "b",
-    "2": "a1",
-    "3": "a2",
-    "4": "a1",
-    "5": "a2",
-    "6": ["checkbox-1", "checkbox-2"],
-    "currentGroup": "review",
+  "formOutputWithEmptyInput": {
+    "formValues": {
+      "1": "A",
+      "2": [],
+      "3": "",
+      "4": "",
+      "5": "a1",
+      "6": "a2",
+      "7": "b1",
+      "8": "b2",
+      "9": "c1",
+      "10": "c2",
+      "11": "",
+      "12": "",
+      "13": [],
+      "14": "",
+      "15": "",
+      "currentGroup": "review",
+      "groupHistory": [
+        "start",
+        "1739f12e-abbd-46ae-9db6-1b4b2144080d",
+        "5205bacd-da93-4325-832e-9ed4be6ab38d",
+        "review"
+      ]
+    },
+    "groups": {
+      "start": {
+        "name": "Start",
+        "titleEn": "Beginning",
+        "titleFr": "Beginning",
+        "elements": ["1", "2", "3", "4", "11", "12", "15"],
+        "nextAction": [
+          {
+            "groupId": "1739f12e-abbd-46ae-9db6-1b4b2144080d",
+            "choiceId": "1.0"
+          },
+          {
+            "groupId": "911b3fa3-d6d7-4c67-96f8-3aa1f3eed0cf",
+            "choiceId": "1.1"
+          },
+          {
+            "groupId": "14b3be44-754a-45ae-9461-29c8af81d198",
+            "choiceId": "1.2"
+          }
+        ],
+        "autoFlow": false
+      },
+      "1739f12e-abbd-46ae-9db6-1b4b2144080d": {
+        "name": "A-S1",
+        "elements": ["5", "13"],
+        "titleEn": "A-S1",
+        "titleFr": "",
+        "nextAction": "5205bacd-da93-4325-832e-9ed4be6ab38d",
+        "autoFlow": true
+      },
+      "5205bacd-da93-4325-832e-9ed4be6ab38d": {
+        "name": "A-S2",
+        "elements": ["6", "14"],
+        "titleEn": "A-S2",
+        "titleFr": "",
+        "nextAction": "review",
+        "autoFlow": false
+      },
+      "911b3fa3-d6d7-4c67-96f8-3aa1f3eed0cf": {
+        "name": "B-S1",
+        "elements": ["7"],
+        "titleEn": "B-S1",
+        "titleFr": "",
+        "nextAction": "b6f9da0e-453d-4aab-b742-61652c50879f",
+        "autoFlow": true
+      },
+      "b6f9da0e-453d-4aab-b742-61652c50879f": {
+        "name": "B-S2",
+        "elements": ["8"],
+        "titleEn": "B-S2",
+        "titleFr": "",
+        "nextAction": "review",
+        "autoFlow": false
+      },
+      "14b3be44-754a-45ae-9461-29c8af81d198": {
+        "name": "C-S1",
+        "elements": ["9"],
+        "titleEn": "C-S1",
+        "titleFr": "",
+        "nextAction": "a066b786-6bd9-495b-ad4e-ba165d4be049",
+        "autoFlow": true
+      },
+      "a066b786-6bd9-495b-ad4e-ba165d4be049": {
+        "name": "C-S2",
+        "elements": ["10"],
+        "titleEn": "C-S2",
+        "titleFr": "",
+        "nextAction": "review",
+        "autoFlow": false
+      },
+      "review": {
+        "name": "Review",
+        "titleEn": "Review",
+        "titleFr": "Review",
+        "elements": [],
+        "nextAction": "end"
+      },
+      "end": {
+        "name": "End",
+        "titleEn": "End",
+        "titleFr": "End",
+        "elements": []
+      }
+    },
     "groupHistory": [
       "start",
-      "b3dec26b-dd19-4936-ad05-b2fbcbce929c",
-      "e969496e-2fab-47e4-aa7f-5e51e0439369",
+      "1739f12e-abbd-46ae-9db6-1b4b2144080d",
+      "5205bacd-da93-4325-832e-9ed4be6ab38d",
       "review"
     ]
   },
-  "groups": {
-    "start": {
-      "name": "Start",
-      "titleEn": "Start",
-      "titleFr": "Début",
-      "elements": ["1", "6"],
-      "nextAction": [
-        {
-          "groupId": "4b3c957b-bbfd-4a20-bc5d-da7414270bde",
-          "choiceId": "1.0"
-        },
-        {
-          "groupId": "b3dec26b-dd19-4936-ad05-b2fbcbce929c",
-          "choiceId": "1.1"
-        }
-      ],
-      "autoFlow": false
-    },
-    "4b3c957b-bbfd-4a20-bc5d-da7414270bde": {
-      "name": "SA1",
-      "elements": ["2"],
-      "titleEn": "SA1",
-      "titleFr": "SA1-FR",
-      "nextAction": "152567dc-e44d-484e-8bf7-bea163b559a1",
-      "autoFlow": true
-    },
-    "152567dc-e44d-484e-8bf7-bea163b559a1": {
-      "name": "SA2",
-      "elements": ["3"],
-      "titleEn": "SA2",
-      "titleFr": "SA2-FR",
-      "nextAction": "review",
-      "autoFlow": false
-    },
-    "b3dec26b-dd19-4936-ad05-b2fbcbce929c": {
-      "name": "SB1",
-      "elements": ["4"],
-      "titleEn": "SB1",
-      "titleFr": "SB1-FR",
-      "nextAction": "e969496e-2fab-47e4-aa7f-5e51e0439369",
-      "autoFlow": true
-    },
-    "e969496e-2fab-47e4-aa7f-5e51e0439369": {
-      "name": "SB2",
-      "elements": ["5"],
-      "titleEn": "SB2",
-      "titleFr": "SB2-FR",
-      "nextAction": "review",
-      "autoFlow": true
-    },
-    "review": {
-      "name": "Review",
-      "titleEn": "Review",
-      "titleFr": "Révision",
-      "elements": [],
-      "nextAction": "end"
-    },
-    "end": {
-      "name": "End",
-      "titleEn": "End",
-      "titleFr": "Fin",
-      "elements": []
-    }
-  },
-  "groupHistory": [
-    "start",
-    "b3dec26b-dd19-4936-ad05-b2fbcbce929c",
-    "e969496e-2fab-47e4-aa7f-5e51e0439369",
-    "review"
-  ],
-  "expectedOutput": {
-    "1": "b",
-    "2": "",
-    "3": "",
-    "4": "a1",
-    "5": "a2",
-    "6": ["checkbox-1", "checkbox-2"]
-  },
-  "groupHistoryInvalid": [
-    "start",
-    "b3dec26b-dd19-4936-ad05-b2fbcbce929c",
-    "e969496e-2fab-47e4-aa7f-5e51e0439369-INVALID",
-    "review"
-  ],
-  "expectedOutputInvalid": {
-    "1": "b",
-    "2": "",
-    "3": "",
-    "4": "a1",
-    "5": "",
-    "6": ["checkbox-1", "checkbox-2"]
-  }
+  "enteredValues": {}
 }
