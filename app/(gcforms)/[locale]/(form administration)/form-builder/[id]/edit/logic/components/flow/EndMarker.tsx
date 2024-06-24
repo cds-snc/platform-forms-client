@@ -1,6 +1,9 @@
 export const EndMarker = () => {
   return (
-    <svg xmlns="http://www.w3.org/2000/svg" style={{ position: "absolute", top: 0, left: 0 }}>
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      style={{ position: "absolute", top: "-200px", left: "-200px" }}
+    >
       <defs>
         <marker
           id="1__type=1__type=gc-arrow-closed"
