@@ -7,6 +7,8 @@ import { FormElementWithIndex } from "@lib/types/form-builder-types";
 import { useTemplateStore } from "@lib/store/useTemplateStore";
 import { FormElementTypes } from "@lib/types";
 import { getTranslatedProperties } from "../../../actions";
+import { useGroupStore } from "@formBuilder/components/shared/right-panel/treeview/store/useGroupStore";
+import { allowGrouping } from "@formBuilder/components/shared/right-panel/treeview/util/allowGrouping";
 
 export const AddOther = ({ item }: { item: FormElementWithIndex }) => {
   const { t } = useTranslation("form-builder");
@@ -14,6 +16,8 @@ export const AddOther = ({ item }: { item: FormElementWithIndex }) => {
   const { add } = useTemplateStore((s) => ({
     add: s.add,
   }));
+
+  const groupId = useGroupStore((state) => state.id);
 
   const addOther = useCallback(async () => {
     if (!item.properties.choices) return;
@@ -41,8 +45,13 @@ export const AddOther = ({ item }: { item: FormElementWithIndex }) => {
       },
     };
 
-    add(item.index, FormElementTypes.textField, data);
-  }, [add, item]);
+    const allowGroups = await allowGrouping();
+    if (allowGroups) {
+      add(item.index, FormElementTypes.textField, data, groupId);
+    } else {
+      add(item.index, FormElementTypes.textField, data);
+    }
+  }, [add, item, groupId]);
 
   return (
     <Button className="!m-0 !mt-4" theme="link" onClick={addOther}>
