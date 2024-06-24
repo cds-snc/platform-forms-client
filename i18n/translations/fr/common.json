@@ -154,5 +154,13 @@
   "yourAccount": "Votre compte",
   "dateModified": "Date de modification ",
   "start": "Début",
-  "loadingResult": "Chargement en cours..."
+  "loadingResult": "Chargement en cours...",
+  "logic": {
+    "start": "Début",
+    "end": "Fin",
+    "review": "Révision",
+    "introduction": "Introduction",
+    "confirmation": "Message de confirmation",
+    "privacy": "Confidentialité"
+  }
 }
