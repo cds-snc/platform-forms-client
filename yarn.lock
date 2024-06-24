@@ -11914,7 +11914,7 @@ __metadata:
     ts-jest: "npm:^29.1.1"
     ts-node: "npm:^10.9.2"
     tsx: "npm:^4.7.0"
-    typescript: "npm:^5.5.0"
+    typescript: "npm:^5.5.2"
     unorm: "npm:^1.6.0"
     usehooks-ts: "npm:2.9.1"
     uuid: "npm:9.0.1"
@@ -18333,7 +18333,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"typescript@npm:^5.5.0":
+"typescript@npm:^5.5.2":
   version: 5.5.2
   resolution: "typescript@npm:5.5.2"
   bin:
@@ -18353,7 +18353,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"typescript@patch:typescript@npm%3A^5.5.0#optional!builtin<compat/typescript>":
+"typescript@patch:typescript@npm%3A^5.5.2#optional!builtin<compat/typescript>":
   version: 5.5.2
   resolution: "typescript@patch:typescript@npm%3A5.5.2#optional!builtin<compat/typescript>::version=5.5.2&hash=5adc0c"
   bin:
