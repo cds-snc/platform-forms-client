@@ -70,4 +70,4 @@ You may replace the Government of Canada signature with your department or agenc
 
 For questions related to these terms of use, [contact us](/en/contact).
 
-**Last update:** June 19, 2024
+**Last update:** June 25, 2024

@@ -70,4 +70,4 @@ Vous pouvez remplacer la signature du gouvernement du Canada par la signature de
 
 Pour toute question en lien avec les présentes conditions d’utilisation, veuillez [nous contacter](/fr/contact).
 
-**Dernière mise à jour :** 19 juin 2024
+**Dernière mise à jour :** 25 juin 2024

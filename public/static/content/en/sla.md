@@ -41,7 +41,7 @@ CDS commits to a service availability rate of 99.0% — excluding urgent schedul
 
 Downtime is defined as an unplanned interruption to the service resulting in a user-perceptible reduction in the existing quality of service or an event that will impact the existing service to the customer.
 
-GC Forms uses a continuous delivery approach, sometimes patching multiple times a day without any downtime. If we have to plan any downtime we will contact clients with a one week notice and try to ensure that planned downtime does not interfere with their operation of the system.
+GC Forms uses a continuous delivery approach, sometimes patching multiple times a day without any downtime. If we have to plan any downtime we will contact clients with 3 days notice and try to ensure that planned downtime does not interfere with their operation of the system.
 
 This uptime guarantee excludes any downtime experienced by Amazon as they are our infrastructure provider. Amazon promises 99.9% uptime as per [their SLA](https://aws.amazon.com/messaging/sla/).
 
@@ -83,4 +83,4 @@ In the event that CDS needs to decommission the service, GC Forms will work with
 
 GC Forms is open source and available for others to stand up their own version based on the code found in [GitHub](https://github.com/cds-snc/platform-forms-client).
 
-**Last update:** December 14, 2023
+**Last update:** June 25, 2024
