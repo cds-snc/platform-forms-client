@@ -98,6 +98,15 @@ Once the change is made, you will need to 'Log Out' and log back in. Alternative
 
 This application uses Cypress for end-to-end testing.
 
+When running tests, ensure you are not running 'yarn dev', instead run:
+
+```
+yarn build:test
+yarn start:test
+```
+
+Otherwise you'll receive errors about `(uncaught exception)Error: Hydration failed because the initial UI does not match what was rendered on the server.`
+
 If you want to clear the database and run the tests in a clean slate:
 
 ```
