@@ -837,7 +837,7 @@
     "treeView": {
       "addSection": "Nouvelle section"
     },
-    "loadTab": "[FR]Loaded {{tabPanelLabel}} editor"
+    "loadTab": "Éditeur de {{tabPanelLabel}}"
   },
   "logic": {
     "heading": "Logique",
