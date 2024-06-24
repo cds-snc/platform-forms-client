@@ -42,7 +42,7 @@ describe("Conditional History", () => {
     const {formValues, groupHistory, groups} = formOutputWithEnteredInput;
     const expectedOutput = {
         "1": "A",
-        "2": [ "1", "3", "2"],
+        "2": [ "1", "2", "3"],
         "3": "1",
         "4": "longanswer",
         "5": "a1",
@@ -53,7 +53,7 @@ describe("Conditional History", () => {
         "10": "",    // empty since not in group history "path"
         "11": "01/01/2024",
         "12": "Accessibility Standards Canada",
-        "13": [ "1", "3", "2"],
+        "13": [ "1", "2", "3"],
         "14": "1",
         "15": "Ottawa",
     };
