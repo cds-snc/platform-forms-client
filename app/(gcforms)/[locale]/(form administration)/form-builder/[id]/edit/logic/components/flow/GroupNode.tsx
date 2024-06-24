@@ -56,12 +56,15 @@ export const GroupNode = (node: NodeProps) => {
   };
 
   const nodeClassName =
-    "relative flex w-[100%] min-w-[200px] max-w-[450px] rounded-sm bg-slate-50 p-2 py-3 text-sm text-slate-600 border-red";
+    "relative flex w-[100%] min-w-[200px] max-w-[200px] rounded-sm bg-slate-50 p-2 py-3 text-sm text-slate-600 border-red";
 
   return (
     <div>
       <div>
-        <label htmlFor={node.id} className="inline-block w-5/6 truncate text-sm text-slate-600">
+        <label
+          htmlFor={node.id}
+          className="inline-block w-5/6 max-w-[200px] truncate text-sm text-slate-600"
+        >
           {/* Case of Review and End (no name) hide visually but include text required for a label */}
           {node.data.label || <span className="sr-only">{node.id}</span>}
         </label>
@@ -149,7 +152,7 @@ export const GroupNode = (node: NodeProps) => {
               )}
             >
               <div className="w-full truncate pr-8">
-                {getTitle(child.data as ElementProperties).substring(0, 300)}
+                {getTitle(child.data as ElementProperties).substring(0, 200)}
               </div>
               <div className="absolute right-[10px] top-[6px] cursor-pointer hover:scale-125">
                 <OptionRuleSvg title={t("groups.editRules", { name: node.data.label.name })} />
