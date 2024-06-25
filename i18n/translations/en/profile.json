@@ -10,12 +10,12 @@
   "securityPanel": {
     "title": "Security questions",
     "question": "Question",
-    "edit": "Edit"
+    "edit": "Change"
   },
   "securityQuestionModal": {
-    "title": "Edit security questions",
-    "questionLabel": "Question",
-    "answerLabel": "Answer",
+    "title": "Change the security question",
+    "questionLabel": "New question",
+    "answerLabel": "New answer",
     "requirmentsList": {
       "title": "Your answer should be hard for others to guess:",
       "requirement1": "At least 4 characters",

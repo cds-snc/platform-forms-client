@@ -165,7 +165,7 @@ export const Preview = ({
 
         {sent ? (
           <div className="gc-formview">
-            <h1 tabIndex={-1}>{t("title", { ns: "confirmation" })}</h1>
+            <h1 tabIndex={-1}>{t("title", { ns: "confirmation", lng: language })}</h1>
             <RichText {...getLocalizationAttribute()}>
               {formRecord.form.confirmation
                 ? formRecord.form.confirmation[
@@ -194,11 +194,12 @@ export const Preview = ({
                       <div id="PreviewSubmitButton">
                         <span {...getLocalizationAttribute()}>
                           <NextButton
+                            language={language}
                             validateForm={validateForm}
                             fallBack={() => {
                               return (
                                 <>
-                                  {allowGrouping && <BackButton />}
+                                  {allowGrouping && <BackButton language={language} />}
                                   <Button
                                     type="submit"
                                     id="SubmitButton"
@@ -247,7 +248,7 @@ export const Preview = ({
           <div className="mb-8 border-3 border-dashed border-blue-focus bg-white p-4">
             <div className="gc-formview">
               <h1 className="mt-10" tabIndex={-1}>
-                {t("title", { ns: "confirmation" })}
+                {t("title", { ns: "confirmation", lng: language })}
               </h1>
               <RichText {...getLocalizationAttribute()}>
                 {formRecord.form.confirmation

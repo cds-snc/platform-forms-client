@@ -4,6 +4,7 @@ import { useRouter } from "next/navigation";
 import { useTranslation } from "@i18n/client";
 import { FormRecord, TypeOmit } from "@lib/types";
 import { Form } from "@clientComponents/forms/Form/Form";
+import { Language } from "@lib/types/form-builder-types";
 
 export const FormWrapper = ({
   formRecord,
@@ -30,7 +31,13 @@ export const FormWrapper = ({
       }}
       t={t}
       renderSubmit={({ validateForm, fallBack }) => {
-        return <NextButton validateForm={validateForm} fallBack={fallBack} />;
+        return (
+          <NextButton
+            language={language as Language}
+            validateForm={validateForm}
+            fallBack={fallBack}
+          />
+        );
       }}
       allowGrouping={allowGrouping}
     >
