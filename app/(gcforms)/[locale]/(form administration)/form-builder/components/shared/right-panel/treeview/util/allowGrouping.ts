@@ -1,5 +1,9 @@
-import { checkFlag } from "@formBuilder/actions";
+// import { checkFlag } from "@formBuilder/actions";
 
 export const allowGrouping = async () => {
-  return checkFlag("conditionalLogic");
+  if (process.env.APP_ENV === "test") {
+    return false;
+  }
+
+  return true;
 };
