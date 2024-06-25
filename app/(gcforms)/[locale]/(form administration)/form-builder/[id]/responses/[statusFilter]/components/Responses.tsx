@@ -1,77 +1,102 @@
 "use client";
+import { useState, useEffect } from "react";
 import { Nagware } from "@formBuilder/components/Nagware";
 import { ClosedBanner } from "@formBuilder/components/shared/ClosedBanner";
 import { useTranslation } from "@i18n/client";
 import { ucfirst } from "@lib/client/clientHelpers";
-import { FormRecord, NagwareResult, VaultSubmissionList } from "@lib/types";
-import { useParams } from "next/navigation";
+import { useParams, useSearchParams } from "next/navigation";
 import { DownloadTable } from "./DownloadTable";
 import { NoResponses } from "./NoResponses";
-import { useRehydrate } from "@lib/store/useTemplateStore";
+import { useTemplateStore } from "@lib/store/useTemplateStore";
 import { TitleAndDescription } from "./TitleAndDescription";
+import { NagLevel, VaultSubmissionList } from "@lib/types";
+import { RetrievalError } from "./RetrievalError";
+import { fetchSubmissions } from "../actions";
 
 export interface ResponsesProps {
-  initialForm: FormRecord | null;
-  vaultSubmissions: VaultSubmissionList[];
-  nagwareResult: NagwareResult | null;
   responseDownloadLimit: number;
-  lastEvaluatedKey: Record<string, string> | null | undefined;
   overdueAfter: number;
 }
 
-export const Responses = ({
-  initialForm,
-  vaultSubmissions,
-  nagwareResult,
-  responseDownloadLimit,
-  lastEvaluatedKey,
-  overdueAfter,
-}: ResponsesProps) => {
+export const Responses = ({ responseDownloadLimit, overdueAfter }: ResponsesProps) => {
   const {
     i18n: { language },
   } = useTranslation("form-builder-responses");
-  const { id, statusFilter: rawStatusFilter } = useParams<{ id: string; statusFilter: string }>();
-  const statusFilter = ucfirst(rawStatusFilter);
+  const { statusFilter } = useParams<{ statusFilter: string }>();
+  const searchParams = useSearchParams();
+  const lastKey = searchParams.get("lastKey");
 
-  const formId = id;
+  const { initialForm, name, formId } = useTemplateStore((s) => ({
+    initialForm: s.form,
+    name: s.name,
+    formId: s.id,
+  }));
+  const [state, setState] = useState<{
+    loading: boolean;
+    submissions: VaultSubmissionList[];
+    lastEvaluatedKey: Record<string, string> | null | undefined;
+    error: boolean;
+  }>({ loading: true, submissions: [], lastEvaluatedKey: null, error: false });
 
-  let formName = "";
-  if (initialForm) {
-    formName = initialForm.name
-      ? initialForm.name
-      : language === "fr"
-      ? initialForm.form.titleFr
-      : initialForm.form.titleEn;
+  useEffect(() => {
+    fetchSubmissions({
+      formId,
+      lastKey,
+      status: statusFilter,
+    })
+      .then(({ submissions, lastEvaluatedKey, error }) => {
+        setState({
+          loading: false,
+          submissions,
+          lastEvaluatedKey: lastEvaluatedKey,
+          error: Boolean(error),
+        });
+      })
+      .catch(() =>
+        setState({ loading: false, submissions: [], lastEvaluatedKey: null, error: true })
+      );
+  }, [formId, lastKey, statusFilter]);
+
+  const formName = name ? name : language === "fr" ? initialForm.titleFr : initialForm.titleEn;
+
+  // The nagware will be refactored during the database optimiztion work.
+  const nagwareResult = { level: NagLevel.None, numberOfSubmissions: 0 };
+
+  if (state.loading) {
+    return null;
   }
-
-  const hasHydrated = useRehydrate();
+  if (state.error) {
+    return <RetrievalError />;
+  }
 
   return (
     <>
-      {vaultSubmissions.length > 0 && (
+      {state.submissions.length > 0 && (
         <TitleAndDescription
           statusFilter={ucfirst(statusFilter)}
-          formId={id}
+          formId={formId}
           responseDownloadLimit={responseDownloadLimit}
         />
       )}
-      {nagwareResult && <Nagware nagwareResult={nagwareResult} />}
+
+      <Nagware nagwareResult={nagwareResult} />
       <div aria-live="polite">
         <ClosedBanner id={formId} />
-        {hasHydrated && vaultSubmissions.length > 0 && (
+        {state.submissions.length > 0 ? (
           <>
             <DownloadTable
-              vaultSubmissions={vaultSubmissions}
+              vaultSubmissions={state.submissions}
               formName={formName}
               formId={formId}
               nagwareResult={nagwareResult}
               responseDownloadLimit={responseDownloadLimit}
-              lastEvaluatedKey={lastEvaluatedKey}
+              lastEvaluatedKey={state.lastEvaluatedKey}
               overdueAfter={overdueAfter}
             />
           </>
+        ) : (
+          <NoResponses statusFilter={ucfirst(statusFilter)} />
         )}
-        {vaultSubmissions.length <= 0 && <NoResponses statusFilter={statusFilter} />}
       </div>
     </>
   );

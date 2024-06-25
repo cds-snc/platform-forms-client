@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect } from "react";
+import { useState } from "react";
 import Link from "next/link";
 import { useRouter, useSearchParams, useParams } from "next/navigation";
 import { BackArrowIcon, ForwardArrowIcon, StartIcon } from "@serverComponents/icons";
@@ -31,18 +31,13 @@ export const Pagination = ({
 
   // Keep track of the last evaluated key for each of our pages.
   // The first item in the array is always "start" and the last item is always "end"
-  const [keys, setKeys] = React.useState<string[]>(["start"]);
-
-  // Update our keys state when the query param changes
-  useEffect(() => {
+  const [keys, setKeys] = useState<string[]>(() => {
     try {
       // Get the "page" keys as base64 encoded string from url
       const queryKeys = searchParams.get("keys");
 
       // Use atob to decode the base64 encoded keys or we're at the "start"
-      const decodedKeys = queryKeys ? String(atob(String(queryKeys))).split(",") : ["start"];
-
-      setKeys(decodedKeys);
+      return queryKeys ? String(atob(String(queryKeys))).split(",") : ["start"];
     } catch (e) {
       // If the base64 encoded string has been tampered with, redirect to the first page
       router.push(
@@ -50,8 +45,10 @@ export const Pagination = ({
           statusFilter ? `/${statusFilter}` : "/new"
         }`
       );
+      // Needed to satisfy typescript as router.push returns void and not never
+      return ["start"];
     }
-  }, [formId, router, searchParams, statusFilter, language]);
+  });
 
   // When going back, we pop the last item off the keys array
   const previousKeys = keys.slice(0, -1);
