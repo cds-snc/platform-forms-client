@@ -180,7 +180,7 @@ export const Edit = ({ formId }: { formId: string }) => {
             <div>
               <h2 className="mt-4 text-2xl laptop:mt-0">{t("richTextConfirmationTitle")}</h2>
               <ConfirmationDescription />
-              <ConfirmationTitle />
+              <ConfirmationTitle language={translationLanguagePriority} />
             </div>
           </RichTextLocked>
         </div>

@@ -13,7 +13,7 @@ export const Success = async ({ lang }: { lang: string }) => {
       <p>{t("unlockPublishingSubmitted.whatNext.paragraph3")}</p>
       <p className="mt-8">{t("unlockPublishingSubmitted.whatNext.paragraph4")}</p>
       <LinkButton.Primary className="mt-8" href={`/${lang}/forms/`}>
-        {t("continue", { ns: "common" })}
+        {t("continue", { ns: "common", lng: lang })}
       </LinkButton.Primary>
     </>
   );
