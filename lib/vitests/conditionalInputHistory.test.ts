@@ -8,7 +8,7 @@ import {formOutputWithEmptyInput, formOutputWithEnteredInput} from "../../__fixt
 
 describe("Conditional History", () => {
   it("Simple case: no questions answered", () => {
-    const {formValues, groupHistory, groups} = formOutputWithEmptyInput;
+    const {values, groupHistory, groups} = formOutputWithEmptyInput;
     const expectedOutput = {
       "1": "A",
       "2": [],
@@ -26,20 +26,20 @@ describe("Conditional History", () => {
       "14": "",
       "15": ""
   };
-    const values = valuesOnlyInHistory(
-        formValues,
+    const formValues = valuesOnlyInHistory(
+        values,
         getGroupValues(
-          formValues,
+          values,
           groups,
           groupHistory as string[]
         )
       );
-    const formOnlyValues = removeNonFormValues(values);
+    const formOnlyValues = removeNonFormValues(formValues);
     expect(formOnlyValues).toEqual(expectedOutput);
   });
 
   it("Simple case: all questions answered", () => {
-    const {formValues, groupHistory, groups} = formOutputWithEnteredInput;
+    const {values, groupHistory, groups} = formOutputWithEnteredInput;
     const expectedOutput = {
         "1": "A",
         "2": [ "1", "2", "3"],
@@ -57,15 +57,15 @@ describe("Conditional History", () => {
         "14": "1",
         "15": "Ottawa",
     };
-    const values = valuesOnlyInHistory(
-        formValues,
+    const formValues = valuesOnlyInHistory(
+        values,
         getGroupValues(
-          formValues,
+          values,
           groups,
           groupHistory as string[]
         )
       );
-    const formOnlyValues = removeNonFormValues(values);
+    const formOnlyValues = removeNonFormValues(formValues);
     expect(formOnlyValues).toEqual(expectedOutput);
   });
 });

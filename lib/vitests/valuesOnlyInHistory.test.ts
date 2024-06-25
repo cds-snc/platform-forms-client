@@ -3,7 +3,7 @@ import {formOutputWithEmptyInput} from "../../__fixtures__/conditionalInputHisto
 
 describe("valuesOnlyInHistory function", () => {
   it("Combines group history answers with empty unanswered questions", () => {
-    const {formValues} = formOutputWithEmptyInput;
+    const {values} = formOutputWithEmptyInput;
     const groupValues = {
       "1": "A",
       "11": "",
@@ -36,8 +36,8 @@ describe("valuesOnlyInHistory function", () => {
       "currentGroup": "",
       "groupHistory": "",
     };
-    const values = valuesOnlyInHistory(formValues, groupValues);
-    expect(values).toEqual(expectedOutput);
+    const formValues = valuesOnlyInHistory(values, groupValues);
+    expect(formValues).toEqual(expectedOutput);
   });
 
   it("Handles empty formValues input", () => {
@@ -56,22 +56,22 @@ describe("valuesOnlyInHistory function", () => {
     }
     const expectedOutput = {};
     // @ts-expect-error - testing invalid input
-    const values = valuesOnlyInHistory(null, groupValues);
-    expect(values).toEqual(expectedOutput);
+    const formValues = valuesOnlyInHistory(null, groupValues);
+    expect(formValues).toEqual(expectedOutput);
   });
 
   it("Handles empty groupValues input", () => {
-    const {formValues} = formOutputWithEmptyInput;
+    const {values} = formOutputWithEmptyInput;
     const expectedOutput = {};
     // @ts-expect-error - testing invalid input
-    const values = valuesOnlyInHistory(formValues, null);
-    expect(values).toEqual(expectedOutput);
+    const formValues = valuesOnlyInHistory(values, null);
+    expect(formValues).toEqual(expectedOutput);
   });
 
   it("Handles empty input", () => {
     const expectedOutput = {};
     // @ts-expect-error - testing invalid input
-    const values = valuesOnlyInHistory();
-    expect(values).toEqual(expectedOutput);
+    const formValues = valuesOnlyInHistory();
+    expect(formValues).toEqual(expectedOutput);
   });
 });

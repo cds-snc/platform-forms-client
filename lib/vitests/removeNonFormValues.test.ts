@@ -3,8 +3,8 @@ import {formOutputWithEmptyInput} from "../../__fixtures__/conditionalInputHisto
 
 describe("removeNonFormValues function", () => {
   it("Removes any values not related to user input form values", () => {
-    const {formValues} = formOutputWithEmptyInput;
-    const values = removeNonFormValues(formValues);
+    const {values} = formOutputWithEmptyInput;
+    const formValues = removeNonFormValues(values);
     const expectedValues = {
       "1": "A",
       "2": [],
@@ -22,13 +22,13 @@ describe("removeNonFormValues function", () => {
       "14": "",
       "15": ""
     }
-    expect(values).toEqual(expectedValues);
+    expect(formValues).toEqual(expectedValues);
   });
 
   it("Handles empty inputs", () => {
     // @ts-expect-error - testing invalid input
-    const values = removeNonFormValues();
+    const formValues = removeNonFormValues();
     const expectedValues = {};
-    expect(values).toEqual(expectedValues);
+    expect(formValues).toEqual(expectedValues);
   });
 });

@@ -1,6 +1,6 @@
 {
   "formOutputWithEmptyInput": {
-    "formValues": {
+    "values": {
       "1": "A",
       "2": [],
       "3": "",
@@ -116,7 +116,7 @@
     ]
   },
   "formOutputWithEnteredInput": {
-    "formValues": {
+    "values": {
       "1": "A",
       "2": ["1", "2", "3"],
       "3": "1",

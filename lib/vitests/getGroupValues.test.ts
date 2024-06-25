@@ -3,9 +3,9 @@ import {formOutputWithEmptyInput} from "../../__fixtures__/conditionalInputHisto
 
 describe("getGroupValues function", () => {
   it("Gets correct values (only values related to groups with the questions answered)", () => {
-    const {formValues, groupHistory, groups} = formOutputWithEmptyInput;
-    const values = getGroupValues(
-      formValues,
+    const {values, groupHistory, groups} = formOutputWithEmptyInput;
+    const formValues = getGroupValues(
+      values,
       groups,
       groupHistory as string[]
     );
@@ -22,7 +22,7 @@ describe("getGroupValues function", () => {
       "5": "a1",
       "6": "a2",
     }
-    expect(values).toEqual(expectedValues);
+    expect(formValues).toEqual(expectedValues);
   });
 
   it("Handles empty inputs", () => {
@@ -33,15 +33,15 @@ describe("getGroupValues function", () => {
   });
 
   it("Handles invalid group history (should never happen)", () => {
-    const {formValues, groups} = formOutputWithEmptyInput;
+    const {values, groups} = formOutputWithEmptyInput;
     const groupHistoryInvalid = [
       "start",
       "1739f12e-abbd-46ae-9db6-1b4b2144080d",
       "5205bacd-da93-4325-832e-9ed4be6ab38d-INVALID",
       "review"
     ];
-    const values = getGroupValues(
-      formValues,
+    const formValues = getGroupValues(
+      values,
       groups,
       groupHistoryInvalid as string[]
     );
@@ -58,6 +58,6 @@ describe("getGroupValues function", () => {
       "5": "a1",
       //"6": "",        // Related invalid group (A-S2 elements=[6,14]) - should be removed
     };
-    expect(values).toEqual(expectedValues);
+    expect(formValues).toEqual(expectedValues);
   });
 });
