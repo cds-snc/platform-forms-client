@@ -3,8 +3,9 @@
 import React from "react";
 import { useTranslation } from "@i18n/client";
 import { useTemplateStore } from "@lib/store/useTemplateStore";
+import { Language } from "@lib/types/form-builder-types";
 
-export const ConfirmationTitle = () => {
+export const ConfirmationTitle = ({ language }: { language: Language }) => {
   const { t } = useTranslation("form-builder");
   const getGroupsEnabled = useTemplateStore((s) => s.getGroupsEnabled);
 
@@ -24,7 +25,9 @@ export const ConfirmationTitle = () => {
           {t("confirmation.sectionTitle")}
         </div>
       )}
-      <h2 className="mt-0 text-2xl text-slate-500 laptop:mt-0">{t("confirmation.title")}</h2>
+      <h2 className="mt-0 text-2xl text-slate-500 laptop:mt-0">
+        {t("confirmation.title", { lng: language })}
+      </h2>
     </div>
   );
 };
