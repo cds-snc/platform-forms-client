@@ -315,20 +315,18 @@ export async function getAllTemplates(
 export async function getAllTemplatesForUser(
   ability: UserAbility,
   options?: {
-    isPublished?: boolean;
     sortByDateUpdated?: "asc" | "desc";
     requestedWhere?: Prisma.TemplateWhereInput;
   }
 ): Promise<Array<FormRecord>> {
   try {
     checkPrivileges(ability, [{ action: "view", subject: "FormRecord" }]);
-    const { isPublished, sortByDateUpdated, requestedWhere } = options ?? {};
+    const { sortByDateUpdated, requestedWhere } = options ?? {};
     const templates = await prisma.template
       .findMany({
         where: {
           ...(requestedWhere && requestedWhere),
           ttl: null,
-          ...(typeof isPublished !== "undefined" && { isPublished: isPublished }),
           users: {
             some: {
               id: ability.userID,
