@@ -228,7 +228,7 @@
   "backToForm": "Back to form",
   "branding": {
     "defaultOption": "Government of Canada",
-    "default": "(default)",
+    "default": "",
     "heading": "Branding",
     "notFound": "Didn’t find your department or agency in the list?",
     "preview": "Preview",
@@ -836,7 +836,8 @@
     "translation": "Translations",
     "treeView": {
       "addSection": "New section"
-    }
+    },
+    "loadTab": "Loaded {{tabPanelLabel}} editor"
   },
   "logic": {
     "heading": "Logic",
@@ -868,8 +869,8 @@
     },
     "actionsSaved": "Actions saved",
     "legend": {
-      "section": "Apply a rule to a Section",
-      "option": "Apply conditional rules to radio buttons, checkboxes, and dropdown form elements. "
+      "section": "Apply a branching rule to a section",
+      "option": "Apply conditional rules to questions with selectable options"
     }
   },
   "groups": {
