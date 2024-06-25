@@ -33,7 +33,7 @@ export default async function Page({ params: { id } }: { params: { id: string } 
   }
   return (
     <ClientContainer>
-      <Preview disableSubmit={disableSubmit} allowGrouping={isAllowGrouping} />;
+      <Preview disableSubmit={disableSubmit} allowGrouping={isAllowGrouping} />
     </ClientContainer>
   );
 }
