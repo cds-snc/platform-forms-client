@@ -1,9 +1,8 @@
 import { getGroupValues } from "@lib/utils/form-builder/groupsHistory";
-import {formOutputWithEmptyInput} from "../../__fixtures__/conditionalInputHistorySimple.json";
+import {values, groupHistory, groups} from "../../__fixtures__/conditionalInputHistoryEmptySimple.json";
 
 describe("getGroupValues function", () => {
   it("Gets correct values (only values related to groups with the questions answered)", () => {
-    const {values, groupHistory, groups} = formOutputWithEmptyInput;
     const formValues = getGroupValues(
       values,
       groups,
@@ -33,7 +32,6 @@ describe("getGroupValues function", () => {
   });
 
   it("Handles invalid group history (should never happen)", () => {
-    const {values, groups} = formOutputWithEmptyInput;
     const groupHistoryInvalid = [
       "start",
       "1739f12e-abbd-46ae-9db6-1b4b2144080d",

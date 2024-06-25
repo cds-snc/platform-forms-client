@@ -1,9 +1,8 @@
 import { valuesOnlyInHistory } from "@lib/utils/form-builder/groupsHistory";
-import {formOutputWithEmptyInput} from "../../__fixtures__/conditionalInputHistorySimple.json";
+import {values} from "../../__fixtures__/conditionalInputHistoryEmptySimple.json";
 
 describe("valuesOnlyInHistory function", () => {
   it("Combines group history answers with empty unanswered questions", () => {
-    const {values} = formOutputWithEmptyInput;
     const groupValues = {
       "1": "A",
       "11": "",
@@ -61,7 +60,6 @@ describe("valuesOnlyInHistory function", () => {
   });
 
   it("Handles empty groupValues input", () => {
-    const {values} = formOutputWithEmptyInput;
     const expectedOutput = {};
     // @ts-expect-error - testing invalid input
     const formValues = valuesOnlyInHistory(values, null);

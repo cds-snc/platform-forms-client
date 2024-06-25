@@ -1,5 +1,6 @@
 import { getGroupValues, removeNonFormValues, valuesOnlyInHistory } from "@lib/utils/form-builder/groupsHistory";
-import {formOutputWithEmptyInput, formOutputWithEnteredInput} from "../../__fixtures__/conditionalInputHistorySimple.json";
+import {values, groupHistory, groups} from "../../__fixtures__/conditionalInputHistoryEmptySimple.json";
+import {values as valuesEntered, groupHistory as groupHistoryEntered, groups as groupsEntered} from "../../__fixtures__/conditionalInputHistoryEnteredSimple.json";
 
 // TODO test with dental form data
 
@@ -8,7 +9,6 @@ import {formOutputWithEmptyInput, formOutputWithEnteredInput} from "../../__fixt
 
 describe("Conditional History", () => {
   it("Simple case: no questions answered", () => {
-    const {values, groupHistory, groups} = formOutputWithEmptyInput;
     const expectedOutput = {
       "1": "A",
       "2": [],
@@ -39,7 +39,6 @@ describe("Conditional History", () => {
   });
 
   it("Simple case: all questions answered", () => {
-    const {values, groupHistory, groups} = formOutputWithEnteredInput;
     const expectedOutput = {
         "1": "A",
         "2": [ "1", "2", "3"],
@@ -58,11 +57,11 @@ describe("Conditional History", () => {
         "15": "Ottawa",
     };
     const formValues = valuesOnlyInHistory(
-        values,
+        valuesEntered,
         getGroupValues(
-          values,
-          groups,
-          groupHistory as string[]
+          valuesEntered,
+          groupsEntered,
+          groupHistoryEntered as string[]
         )
       );
     const formOnlyValues = removeNonFormValues(formValues);

@@ -1,9 +1,8 @@
 import { removeNonFormValues } from "@lib/utils/form-builder/groupsHistory";
-import {formOutputWithEmptyInput} from "../../__fixtures__/conditionalInputHistorySimple.json";
+import {values} from "../../__fixtures__/conditionalInputHistoryEmptySimple.json";
 
 describe("removeNonFormValues function", () => {
   it("Removes any values not related to user input form values", () => {
-    const {values} = formOutputWithEmptyInput;
     const formValues = removeNonFormValues(values);
     const expectedValues = {
       "1": "A",
