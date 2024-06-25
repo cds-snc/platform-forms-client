@@ -43,9 +43,7 @@ export const EditableInput = ({
           context.stopRenamingItem();
         }
       }}
-      onBlur={() => {
-        renameItem();
-      }}
+      onBlur={renameItem}
       onChange={(e) => {
         setName(e.target.value);
       }}
