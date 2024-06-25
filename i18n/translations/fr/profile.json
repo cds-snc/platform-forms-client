@@ -10,12 +10,12 @@
   "securityPanel": {
     "title": "Questions de sécurité",
     "question": "Question",
-    "edit": "Modifier"
+    "edit": "Changer"
   },
   "securityQuestionModal": {
-    "title": "Modifier les questions de sécurité",
-    "questionLabel": "Question",
-    "answerLabel": "Réponse",
+    "title": "Changer de question de sécurité",
+    "questionLabel": "Nouvelle question",
+    "answerLabel": "Nouvelle réponse",
     "requirmentsList": {
       "title": "Votre réponse devrait être difficile à deviner:",
       "requirement1": "Au moins 4 caractères.",
