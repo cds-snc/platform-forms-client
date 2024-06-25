@@ -41,7 +41,7 @@ Le SNC s’engage à maintenir un taux de disponibilité de 99 % pour les servic
 
 Le temps d’arrêt correspond à une interruption imprévue du service entraînant une réduction perceptible de la qualité du service pour l’utilisateur·rice ou à un évènement ayant des conséquences sur le service existant pour le ou la client·e.
 
-Formulaires GC adopte une approche de livraison continue, aussi peut-il arriver que des corrections soient apportées au produit plusieurs fois par jour sans aucun temps d’arrêt. Si nous devons planifier une interruption de service, nous en informerons la clientèle une semaine à l’avance et tenterons de faire en sorte que le temps d’arrêt planifié n’interfère pas avec leur exploitation du système.
+Formulaires GC adopte une approche de livraison continue, aussi peut-il arriver que des corrections soient apportées au produit plusieurs fois par jour sans aucun temps d’arrêt. Si nous devons planifier une interruption de service, nous en informerons la clientèle 3 jours à l’avance et tenterons de faire en sorte que le temps d’arrêt planifié n’interfère pas avec leur exploitation du système.
 
 Cette garantie sur le temps de fonctionnement exclut toute immobilisation d’Amazon, notre fournisseur d’infrastructure. Amazon promet un taux de temps de fonctionnement de 99,9 % dans [son ENS](<https://d1.awsstatic.com/legal/AmazonMessaging_SQS_SNS/Amazon%20Messaging%20(SQS%2C%20SNS)%20Service%20Level%20Agreement-April%202019_FR.pdf>).
 
@@ -83,4 +83,4 @@ Si le SNC doit mettre hors service Formulaires GC, il collaborera avec la client
 
 Formulaires GC est un produit à code source ouvert permettant à des tiers de créer leur propre version à l’aide du code disponible sur [GitHub](https://github.com/cds-snc/platform-forms-client).
 
-**Dernière mise à jour :** 14 décembre 2023
+**Dernière mise à jour :** 25 juin 2024

@@ -228,7 +228,7 @@
   "backToForm": "Back to form",
   "branding": {
     "defaultOption": "Government of Canada",
-    "default": "(default)",
+    "default": "",
     "heading": "Branding",
     "notFound": "Didn’t find your department or agency in the list?",
     "preview": "Preview",
@@ -374,14 +374,14 @@
     "somethingWentWrong": "Something went wrong",
     "downloadButtonText": "Download a copy",
     "draft": {
-      "message1": "Deleting a form cannot be undone. Your form will be removed from your forms list.",
-      "message2": "Download a copy of this form for your records. The saved JSON form file can be uploaded again to create a new form later."
+      "message1": "Deleting a form cannot be undone. Your form will be removed permanently.",
+      "message2": "Download a copy of the form file for your records. You can then upload it in GC Forms to re-create the form later."
     },
     "okay": "Delete form",
     "published": {
-      "message1": "Deleting a form cannot be undone. Your form will be removed from your forms list and the Internet.",
-      "message2": "Download a copy of this form for your records. The saved JSON form file can be uploaded again to create a new form later.",
-      "message3": "The URL of your form will change if you upload your form again."
+      "message1": "Deleting a form cannot be undone. Your published form will be removed from the Internet, potentially creating broken links.",
+      "message2": "Download a copy of the form file for your records. You can then upload it in GC Forms to re-create a new form with new URL links.",
+      "message3": "Before deleting your form, make sure you remove any public links leading to this form. This avoids sending people to a dead end. To stop submissions, you might instead consider closing the form in Settings."
     },
     "title": "Delete this form?"
   },
@@ -836,7 +836,8 @@
     "translation": "Translations",
     "treeView": {
       "addSection": "New section"
-    }
+    },
+    "loadTab": "Loaded {{tabPanelLabel}} editor"
   },
   "logic": {
     "heading": "Logic",
@@ -868,8 +869,8 @@
     },
     "actionsSaved": "Actions saved",
     "legend": {
-      "section": "Apply a rule to a Section",
-      "option": "Apply conditional rules to radio buttons, checkboxes, and dropdown form elements. "
+      "section": "Apply a branching rule to a section",
+      "option": "Apply conditional rules to questions with selectable options"
     }
   },
   "groups": {
