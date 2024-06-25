@@ -228,7 +228,7 @@
   "backToForm": "Retourner au formulaire",
   "branding": {
     "defaultOption": "Gouvernement du Canada",
-    "default": "(par défaut)",
+    "default": "",
     "heading": "Image de marque",
     "notFound": "Vous ne trouvez pas votre ministère ou votre organisme dans la liste?",
     "preview": "Aperçu",
@@ -869,8 +869,8 @@
     },
     "actionsSaved": "Actions enregistrées",
     "legend": {
-      "section": "[FR] Apply a rule to a Section",
-      "option": "[FR] Apply conditional rules to radio buttons, checkboxes, and dropdown form elements. "
+      "section": "Appliquer une règle d'embranchement à une section",
+      "option": "Appliquer des règles conditionnelles aux questions ayant des options à sélectionner"
     }
   },
   "groups": {
@@ -924,5 +924,5 @@
     "translateSetup": "Passer à la configuration des traductions",
     "logicSetup": "Passer à la configuration de la logique"
   },
-  "goBack": "[FR]Go back"
+  "goBack": "Retourner"
 }
