@@ -195,11 +195,12 @@ export const Preview = ({
                       <div id="PreviewSubmitButton">
                         <span {...getLocalizationAttribute()}>
                           <NextButton
+                            language={language}
                             validateForm={validateForm}
                             fallBack={() => {
                               return (
                                 <>
-                                  {allowGrouping && <BackButton />}
+                                  {allowGrouping && <BackButton language={language} />}
                                   <Button
                                     type="submit"
                                     id="SubmitButton"
