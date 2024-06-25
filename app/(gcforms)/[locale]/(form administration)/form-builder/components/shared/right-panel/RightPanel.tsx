@@ -177,7 +177,11 @@ export const RightPanel = ({ id, lang }: { id: string; lang: Language }) => {
                   {/* Panel Header --> */}
                   {/* <-- Tabs */}
                   <Tab.Group selectedIndex={selectedIndex}>
-                    <Tab.List className={"flex justify-between border-b border-gray-200"}>
+                    <Tab.List
+                      className={
+                        "sticky top-0 z-10 flex justify-between border-b border-gray-200 bg-white"
+                      }
+                    >
                       <TabButton
                         text={t("rightPanel.questions")}
                         onClick={() => {
@@ -203,6 +207,7 @@ export const RightPanel = ({ id, lang }: { id: string; lang: Language }) => {
                     <Tab.Panels>
                       <Tab.Panel>
                         {/* Tree */}
+
                         <SkipLinkReusable anchor="#questionsTitle">
                           {t("skipLink.questions")}
                         </SkipLinkReusable>
