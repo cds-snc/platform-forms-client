@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useCallback, useState } from "react";
 import { useTreeRef } from "./provider/TreeRefProvider";
 import { useTranslation } from "@i18n/client";
 import { TreeItemIndex, TreeItemRenderContext } from "react-complex-tree";
@@ -16,6 +16,14 @@ export const EditableInput = ({
   const { t } = useTranslation("form-builder");
 
   const [name, setName] = useState(title);
+
+  const renameItem = useCallback(() => {
+    const props = context.interactiveElementProps as unknown as Record<string, unknown>;
+    const id = props["data-rct-item-id"] as unknown as TreeItemIndex;
+    tree?.current?.renameItem(id, name);
+    context.stopRenamingItem();
+  }, [context, name, tree]);
+
   return (
     <input
       {...context.interactiveElementProps}
@@ -29,17 +37,14 @@ export const EditableInput = ({
       }}
       onKeyDown={(e) => {
         if (e.key === "Enter") {
-          const props = context.interactiveElementProps as unknown as Record<string, unknown>;
-          const id = props["data-rct-item-id"] as unknown as TreeItemIndex;
-          tree?.current?.renameItem(id, name);
-          context.stopRenamingItem();
+          renameItem();
         }
         if (e.key === "Escape" || e.key === "Tab") {
           context.stopRenamingItem();
         }
       }}
       onBlur={() => {
-        context.stopRenamingItem();
+        renameItem();
       }}
       onChange={(e) => {
         setName(e.target.value);
