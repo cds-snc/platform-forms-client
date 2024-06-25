@@ -4,6 +4,7 @@ import { SessionProvider } from "next-auth/react";
 import { Session } from "next-auth";
 import { AccessControlProvider } from "@lib/hooks/useAccessControl";
 import { RefsProvider } from "@formBuilder/[id]/edit/components/RefsContext";
+import { LiveMessagePovider } from "@lib/hooks/useLiveMessage";
 
 export const ClientContexts: React.FC<{ session: Session | null; children: React.ReactNode }> = ({
   session,
@@ -19,7 +20,9 @@ export const ClientContexts: React.FC<{ session: Session | null; children: React
       refetchOnWindowFocus={false}
     >
       <AccessControlProvider>
-        <RefsProvider>{children}</RefsProvider>
+        <RefsProvider>
+          <LiveMessagePovider>{children}</LiveMessagePovider>
+        </RefsProvider>
       </AccessControlProvider>
     </SessionProvider>
   );
