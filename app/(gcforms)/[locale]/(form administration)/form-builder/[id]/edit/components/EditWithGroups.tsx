@@ -211,7 +211,7 @@ export const EditWithGroups = () => {
           detailsText={
             <div className="mt-4">
               <ConfirmationDescriptionWithGroups />
-              <ConfirmationTitle />
+              <ConfirmationTitle language={translationLanguagePriority} />
             </div>
           }
           hydrated={hasHydrated}

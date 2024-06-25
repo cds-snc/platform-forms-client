@@ -254,14 +254,16 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
             )}
 
             <div className="flex">
-              {isGroupsCheck && <BackButtonGroup />}
+              {isGroupsCheck && <BackButtonGroup language={language as Language} />}
               {props.renderSubmit ? (
                 props.renderSubmit({
                   validateForm: props.validateForm,
                   fallBack: () => {
                     return (
                       <div>
-                        {isGroupsCheck && currentGroup === LockedSections.REVIEW && <BackButton />}
+                        {isGroupsCheck && currentGroup === LockedSections.REVIEW && (
+                          <BackButton language={language as Language} />
+                        )}
                         <div className="inline-block">
                           <SubmitButton
                             numberOfRequiredQuestions={numberOfRequiredQuestions}
