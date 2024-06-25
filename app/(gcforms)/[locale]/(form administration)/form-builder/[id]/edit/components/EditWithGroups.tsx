@@ -23,6 +23,8 @@ import { PrivacyDescriptionBody } from "./PrivacyDescriptionBody";
 import { ConfirmationTitle } from "./ConfirmationTitle";
 import { SkipLinkReusable } from "@clientComponents/globals/SkipLinkReusable";
 
+import { ScrollView } from "@formBuilder/components/shared/right-panel/treeview/ScrollView";
+
 export const EditWithGroups = () => {
   const { t } = useTranslation("form-builder");
   const {
@@ -128,97 +130,103 @@ export const EditWithGroups = () => {
         <SectionNameInput value={groupName} groupId={groupId} updateGroupName={updateGroupName} />
         <LangSwitcher descriptionLangKey="editingIn" />
       </div>
-      {/* Form Intro + Title Panel */}
-      {groupId === "start" && <SettingsPanel />}
-      {groupId === "start" && (
-        <RichTextLockedWithGroups
-          hydrated={hasHydrated}
-          className="rounded-t-lg"
-          summaryText={t("startFormIntro")}
-          beforeContent={
-            <>
-              <label
-                htmlFor="formTitle"
-                className="visually-hidden"
-                {...getLocalizationAttribute()}
-              >
-                {t("formTitle")}
-              </label>
-              <div className="my-2 mb-4">
-                <ExpandingInput
-                  id="formTitle"
-                  wrapperClassName="w-full laptop:w-3/4 mt-2 laptop:mt-0 font-bold laptop:text-3xl"
-                  className="font-bold placeholder:text-slate-500 laptop:text-3xl"
-                  ref={titleInput}
-                  placeholder={t("placeHolderFormTitle")}
-                  value={value}
-                  onBlur={() => {
-                    setValue(cleanInput(value));
-                    //
-                  }}
-                  onChange={updateValue}
-                  {...getLocalizationAttribute()}
-                />
-              </div>
-            </>
-          }
-          addElement={false}
-          schemaProperty="introduction"
-          ariaLabel={t("richTextIntroTitle")}
-        />
-      )}
-      {/* Privacy Panel */}
-      {groupId === "start" && (
-        <RichTextLockedWithGroups
-          beforeContent={<PrivacyDescriptionBefore />}
-          summaryText={t("groups.privacy.summary")}
-          detailsText={
-            <div className="mt-4">
-              <PrivacyDescriptionBody />
-            </div>
-          }
-          hydrated={hasHydrated}
-          addElement={true}
-          schemaProperty="privacyPolicy"
-          ariaLabel={t("richTextPrivacyTitle")}
-          className={cn(sortedElements.length === 0 && "rounded-b-lg")}
-        />
-      )}
-      {/* Section Panel */}
-      <Section groupId={groupId} />
-      {/* Form Elements */}
-      <div className="form-builder-editor">
-        {!["end"].includes(groupId) &&
-          sortedElements.map((element, index) => {
-            const questionNumber = 0;
-            const item = { ...element, index, questionNumber };
-            return <ElementPanel elements={sortedElements} item={item} key={item.id} />;
-          })}
-      </div>
-      {/* Confirmation*/}
-      {groupId === "end" && (
-        <RichTextLockedWithGroups
-          summaryText={t("groups.confirmation.summary")}
-          beforeContent={
-            <div>
-              <h2 className="my-4 text-2xl laptop:mt-0">{t("richTextConfirmationTitle")}</h2>
-              <p className="mb-4">{t("groups.confirmation.beforeText")}</p>
-            </div>
-          }
-          detailsText={
-            <div className="mt-4">
-              <ConfirmationDescriptionWithGroups />
-              <ConfirmationTitle language={translationLanguagePriority} />
-            </div>
-          }
-          hydrated={hasHydrated}
-          addElement={false}
-          schemaProperty="confirmation"
-          ariaLabel={t("richTextConfirmationTitle")}
-          className={"rounded-lg"}
-        />
-      )}
-      <SkipLinkReusable anchor="#rightPanelTitle">{t("skipLink.questionsSetup")}</SkipLinkReusable>
+      <ScrollView className="h-[70vh] pt-4">
+        <>
+          {/* Form Intro + Title Panel */}
+          {groupId === "start" && <SettingsPanel />}
+          {groupId === "start" && (
+            <RichTextLockedWithGroups
+              hydrated={hasHydrated}
+              className="rounded-t-lg"
+              summaryText={t("startFormIntro")}
+              beforeContent={
+                <>
+                  <label
+                    htmlFor="formTitle"
+                    className="visually-hidden"
+                    {...getLocalizationAttribute()}
+                  >
+                    {t("formTitle")}
+                  </label>
+                  <div className="my-2 mb-4">
+                    <ExpandingInput
+                      id="formTitle"
+                      wrapperClassName="w-full laptop:w-3/4 mt-2 laptop:mt-0 font-bold laptop:text-3xl"
+                      className="font-bold placeholder:text-slate-500 laptop:text-3xl"
+                      ref={titleInput}
+                      placeholder={t("placeHolderFormTitle")}
+                      value={value}
+                      onBlur={() => {
+                        setValue(cleanInput(value));
+                        //
+                      }}
+                      onChange={updateValue}
+                      {...getLocalizationAttribute()}
+                    />
+                  </div>
+                </>
+              }
+              addElement={false}
+              schemaProperty="introduction"
+              ariaLabel={t("richTextIntroTitle")}
+            />
+          )}
+          {/* Privacy Panel */}
+          {groupId === "start" && (
+            <RichTextLockedWithGroups
+              beforeContent={<PrivacyDescriptionBefore />}
+              summaryText={t("groups.privacy.summary")}
+              detailsText={
+                <div className="mt-4">
+                  <PrivacyDescriptionBody />
+                </div>
+              }
+              hydrated={hasHydrated}
+              addElement={true}
+              schemaProperty="privacyPolicy"
+              ariaLabel={t("richTextPrivacyTitle")}
+              className={cn(sortedElements.length === 0 && "rounded-b-lg")}
+            />
+          )}
+          {/* Section Panel */}
+          <Section groupId={groupId} />
+          {/* Form Elements */}
+          <div className="form-builder-editor">
+            {!["end"].includes(groupId) &&
+              sortedElements.map((element, index) => {
+                const questionNumber = 0;
+                const item = { ...element, index, questionNumber };
+                return <ElementPanel elements={sortedElements} item={item} key={item.id} />;
+              })}
+          </div>
+          {/* Confirmation*/}
+          {groupId === "end" && (
+            <RichTextLockedWithGroups
+              summaryText={t("groups.confirmation.summary")}
+              beforeContent={
+                <div>
+                  <h2 className="my-4 text-2xl laptop:mt-0">{t("richTextConfirmationTitle")}</h2>
+                  <p className="mb-4">{t("groups.confirmation.beforeText")}</p>
+                </div>
+              }
+              detailsText={
+                <div className="mt-4">
+                  <ConfirmationDescriptionWithGroups />
+                  <ConfirmationTitle language={translationLanguagePriority} />
+                </div>
+              }
+              hydrated={hasHydrated}
+              addElement={false}
+              schemaProperty="confirmation"
+              ariaLabel={t("richTextConfirmationTitle")}
+              className={"rounded-lg"}
+            />
+          )}
+          <SkipLinkReusable anchor="#rightPanelTitle">
+            {t("skipLink.questionsSetup")}
+          </SkipLinkReusable>
+        </>
+      </ScrollView>
     </div>
   );
 };

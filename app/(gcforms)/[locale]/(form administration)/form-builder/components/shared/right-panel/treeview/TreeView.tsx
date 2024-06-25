@@ -37,6 +37,8 @@ import { Language } from "@lib/types/form-builder-types";
 import { isTitleElementType } from "./util/itemType";
 import { useAutoFlowIfNoCustomRules } from "@lib/hooks/useAutoFlowAll";
 
+import { ScrollView } from "@formBuilder/components/shared/right-panel/treeview/ScrollView";
+
 export interface TreeDataProviderProps {
   children?: ReactElement;
   addItem: (id: string) => void;
@@ -302,7 +304,14 @@ const ControlledTree: ForwardRefRenderFunction<unknown, TreeDataProviderProps> =
           <KeyboardNavTip />
         </div>
         <div id="tree-container">
-          <Tree treeId="default" rootItem="root" treeLabel={t("groups.treeAriaLabel")} ref={tree} />
+          <ScrollView className="max-h-[700px]">
+            <Tree
+              treeId="default"
+              rootItem="root"
+              treeLabel={t("groups.treeAriaLabel")}
+              ref={tree}
+            />
+          </ScrollView>
         </div>
         <>{children}</>
       </ControlledTreeEnvironment>
