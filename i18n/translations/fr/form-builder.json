@@ -836,7 +836,8 @@
     "translation": "Traductions",
     "treeView": {
       "addSection": "Nouvelle section"
-    }
+    },
+    "loadTab": "Éditeur de {{tabPanelLabel}}"
   },
   "logic": {
     "heading": "Logique",
