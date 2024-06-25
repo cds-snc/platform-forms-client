@@ -60,20 +60,20 @@ export const Review = ({ language }: { language: Language }): React.ReactElement
 
   return (
     <>
-      <h2 ref={headingRef}>{t("reviewForm")}</h2>
+      <h2 ref={headingRef}>{t("reviewForm", { lng: language })}</h2>
       <div className="my-16">
         {Array.isArray(questionsAndAnswers) &&
           questionsAndAnswers.map((group) => {
-            const title = group.title ? group.title : t("start", { ns: "common" }); // group.name as fallback for groups like Start
+            const title = group.title ? group.title : t("start", { ns: "common", lng: language }); // group.name as fallback for groups like Start
             return (
-              <div key={group.id} className="py-4 px-6 mb-10 border-2 border-slate-400 rounded-lg">
+              <div key={group.id} className="mb-10 rounded-lg border-2 border-slate-400 px-6 py-4">
                 <h3 className="text-slate-700">
                   <EditButton group={group} theme="link">
                     <>{title}</>
                   </EditButton>
                 </h3>
                 <div className="mb-10 ml-1">
-                  <dl className="mt-10 mb-10">
+                  <dl className="my-10">
                     {Array.isArray(group.elements) &&
                       group.elements.map((element) => (
                         <QuestionsAnswers
@@ -86,7 +86,7 @@ export const Review = ({ language }: { language: Language }): React.ReactElement
                   </dl>
                 </div>
                 <EditButton group={group} theme="secondary">
-                  <>{t("edit")}</>
+                  <>{t("edit", { lng: language })}</>
                 </EditButton>
               </div>
             );
