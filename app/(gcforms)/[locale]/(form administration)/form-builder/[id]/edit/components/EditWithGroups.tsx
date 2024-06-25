@@ -7,7 +7,6 @@ import { useSearchParams } from "next/navigation";
 import { Language, LocalizedFormProperties } from "@lib/types/form-builder-types";
 import { ElementPanel } from ".";
 import { ConfirmationDescriptionWithGroups } from "./ConfirmationDescriptionWithGroups";
-import { RefsProvider } from "./RefsContext";
 import { RichTextLockedWithGroups } from "./elements/RichTextLockedWithGroups";
 import { ExpandingInput } from "@formBuilder/components/shared";
 import { useRehydrate, useTemplateStore } from "@lib/store/useTemplateStore";
@@ -114,7 +113,7 @@ export const EditWithGroups = () => {
   const hasHydrated = useRehydrate();
 
   return (
-    <>
+    <div>
       <h1 className="sr-only">{t("edit")}</h1>
       <div className="flex w-[800px]">
         <h2 id="questionsTitle" tabIndex={-1}>
@@ -189,14 +188,12 @@ export const EditWithGroups = () => {
       <Section groupId={groupId} />
       {/* Form Elements */}
       <div className="form-builder-editor">
-        <RefsProvider>
-          {!["end"].includes(groupId) &&
-            sortedElements.map((element, index) => {
-              const questionNumber = 0;
-              const item = { ...element, index, questionNumber };
-              return <ElementPanel elements={sortedElements} item={item} key={item.id} />;
-            })}
-        </RefsProvider>
+        {!["end"].includes(groupId) &&
+          sortedElements.map((element, index) => {
+            const questionNumber = 0;
+            const item = { ...element, index, questionNumber };
+            return <ElementPanel elements={sortedElements} item={item} key={item.id} />;
+          })}
       </div>
       {/* Confirmation*/}
       {groupId === "end" && (
@@ -222,6 +219,6 @@ export const EditWithGroups = () => {
         />
       )}
       <SkipLinkReusable anchor="#rightPanelTitle">{t("skipLink.questionsSetup")}</SkipLinkReusable>
-    </>
+    </div>
   );
 };

@@ -10,6 +10,8 @@ import { ItemActions } from "./ItemActions";
 import { useTemplateStore } from "@lib/store/useTemplateStore";
 import { LocalizedElementProperties } from "@lib/types/form-builder-types";
 import { useTranslation } from "@i18n/client";
+import { useRefsContext } from "@formBuilder/[id]/edit/components/RefsContext";
+
 import {
   getItemFromElement,
   isTitleElementType,
@@ -32,6 +34,7 @@ export const Item = ({
   handleDelete: (e: React.MouseEvent<HTMLButtonElement>) => Promise<void>;
 }) => {
   const { t } = useTranslation("form-builder");
+  const { refs } = useRefsContext();
 
   const { translationLanguagePriority, localizeField } = useTemplateStore((s) => ({
     localizeField: s.localizeField,
@@ -138,6 +141,14 @@ export const Item = ({
               {...(allowRename && {
                 onDoubleClick: () => {
                   context.startRenamingItem();
+                },
+                onClick: () => {
+                  if (refs && refs.current) {
+                    const el = refs?.current?.[item.index];
+                    if (el) {
+                      el.scrollIntoView({ behavior: "smooth", block: "center" });
+                    }
+                  }
                 },
               })}
             >
