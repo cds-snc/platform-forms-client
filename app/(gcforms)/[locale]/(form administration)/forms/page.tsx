@@ -55,6 +55,7 @@ export default async function Page({
       requestedWhere: {
         isPublished: status === "published" ? true : status === "draft" ? false : undefined,
       },
+      sortByDateUpdated: "desc",
     };
     const templates = (await getAllTemplatesForUser(ability, options)).map((template) => {
       const {
