@@ -28,25 +28,10 @@ import { logMessage } from "@lib/logger";
 import { revalidatePath } from "next/cache";
 import { authCheckAndThrow } from "@lib/actions";
 import { FormBuilderError } from "./exceptions";
+import { FormProperties } from "@lib/types";
+import { getLayoutFromGroups } from "@lib/utils/form-builder/groupedFormHelpers";
+import { allowGrouping } from "@formBuilder/components/shared/right-panel/treeview/util/allowGrouping";
 
-// Can throw because it is not called by Client Components
-// @todo Should these types of functions be moved to a different file?
-export const fetchTemplate = async (id: string) => {
-  const { session, ability } = await authCheckAndThrow().catch(() => ({
-    session: null,
-    ability: null,
-  }));
-  if (!session) {
-    throw new Error("User is not authenticated");
-  }
-
-  const template = await getFullTemplateByID(ability, id);
-
-  return template;
-};
-
-// Can throw because it is not called by Client Components
-// @todo Should these types of functions be moved to a different file?
 export const fetchSubmissions = async ({
   formId,
   status,
@@ -54,54 +39,65 @@ export const fetchSubmissions = async ({
 }: {
   formId: string;
   status: string;
-  lastKey?: string;
+  lastKey: string | null;
 }) => {
-  const { session, ability } = await authCheckAndThrow().catch(() => ({
-    session: null,
-    ability: null,
-  }));
+  try {
+    const { session, ability } = await authCheckAndThrow().catch(() => ({
+      session: null,
+      ability: null,
+    }));
 
-  if (!session) {
-    throw new Error("User is not authenticated");
+    if (!session) {
+      throw new Error("User is not authenticated");
+    }
+
+    if (formId === "0000") {
+      return {
+        submissions: [],
+        lastEvaluatedKey: null,
+      };
+    }
+
+    // get status from url params (default = new) and capitalize/cast to VaultStatus
+    // Protect against invalid status query
+    const selectedStatus = Object.values(VaultStatus).includes(ucfirst(status) as VaultStatus)
+      ? (ucfirst(status) as VaultStatus)
+      : VaultStatus.NEW;
+
+    let currentLastEvaluatedKey = null;
+
+    // build up lastEvaluatedKey from lastKey url param
+    if (lastKey && isResponseId(String(lastKey))) {
+      currentLastEvaluatedKey = {
+        Status: selectedStatus,
+        NAME_OR_CONF: `NAME#${lastKey}`,
+        FormID: formId,
+      };
+    }
+
+    const { submissions, lastEvaluatedKey } = await listAllSubmissions(
+      ability,
+      formId,
+      selectedStatus,
+      undefined,
+      currentLastEvaluatedKey
+    );
+
+    return { submissions, lastEvaluatedKey };
+  } catch (e) {
+    logMessage.error(`Error fetching submissions for form ${formId}: ${(e as Error).message}`);
+    return { error: true, submissions: [], lastEvaluatedKey: null };
   }
-
-  if (formId === "0000") {
-    return {
-      submissions: [],
-      lastEvaluatedKey: null,
-    };
-  }
-
-  // get status from url params (default = new) and capitalize/cast to VaultStatus
-  // Protect against invalid status query
-  const selectedStatus = Object.values(VaultStatus).includes(ucfirst(status) as VaultStatus)
-    ? (ucfirst(status) as VaultStatus)
-    : VaultStatus.NEW;
-
-  let currentLastEvaluatedKey = null;
-
-  // build up lastEvaluatedKey from lastKey url param
-  if (lastKey && isResponseId(String(lastKey))) {
-    currentLastEvaluatedKey = {
-      Status: selectedStatus,
-      NAME_OR_CONF: `NAME#${lastKey}`,
-      FormID: formId,
-    };
-  }
-
-  const { submissions, lastEvaluatedKey } = await listAllSubmissions(
-    ability,
-    formId,
-    selectedStatus,
-    undefined,
-    currentLastEvaluatedKey
-  );
-
-  return { submissions, lastEvaluatedKey };
 };
 
 const sortByLayout = ({ layout, elements }: { layout: number[]; elements: Answer[] }) => {
   return elements.sort((a, b) => layout.indexOf(a.questionId) - layout.indexOf(b.questionId));
+};
+
+const sortByGroups = ({ form, elements }: { form: FormProperties; elements: Answer[] }) => {
+  const groups = form.groups || {};
+  const layout = getLayoutFromGroups(form, groups);
+  return sortByLayout({ layout, elements });
 };
 
 const logDownload = async (
@@ -181,6 +177,7 @@ export const getSubmissionsByFormat = async ({
       );
     }
 
+    const allowGroupsFlag = await allowGrouping();
     // Get responses into a ResponseSubmission array containing questions and answers that can be easily transformed
     const responses = queryResult.map((item) => {
       const submission = Object.entries(JSON.parse(String(item.formSubmission))).map(
@@ -220,7 +217,13 @@ export const getSubmissionsByFormat = async ({
           } as Answer;
         }
       );
-      const sorted = sortByLayout({ layout: fullFormTemplate.form.layout, elements: submission });
+      let sorted: Answer[];
+      if (allowGroupsFlag) {
+        sorted = sortByGroups({ form: fullFormTemplate.form, elements: submission });
+      } else {
+        sorted = sortByLayout({ layout: fullFormTemplate.form.layout, elements: submission });
+      }
+
       return {
         id: item.name,
         createdAt: parseInt(item.createdAt.toString()),

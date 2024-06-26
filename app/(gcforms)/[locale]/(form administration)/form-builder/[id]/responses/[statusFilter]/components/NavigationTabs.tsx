@@ -5,15 +5,11 @@ import { TabNavLink } from "@clientComponents/globals/TabNavLink";
 import { usePathname } from "next/navigation";
 import { useTranslation } from "@i18n/client";
 
-export const NavigationTabs = ({
-  formId,
-  locale,
-}: {
-  statusFilter: string;
-  formId: string;
-  locale: string;
-}) => {
-  const { t } = useTranslation("form-builder-responses");
+export const NavigationTabs = ({ formId }: { formId: string }) => {
+  const {
+    t,
+    i18n: { language: locale },
+  } = useTranslation("form-builder-responses");
 
   const pathname = usePathname();
 

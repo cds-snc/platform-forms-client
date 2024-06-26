@@ -35,6 +35,7 @@ import { KeyboardNavTip } from "./KeyboardNavTip";
 import { Button } from "@clientComponents/globals";
 import { Language } from "@lib/types/form-builder-types";
 import { isTitleElementType } from "./util/itemType";
+import { useAutoFlowIfNoCustomRules } from "@lib/hooks/useAutoFlowAll";
 
 export interface TreeDataProviderProps {
   children?: ReactElement;
@@ -90,6 +91,8 @@ const ControlledTree: ForwardRefRenderFunction<unknown, TreeDataProviderProps> =
   const [selectedItems, setSelectedItems] = useState<TreeItemIndex[]>([]);
 
   const { getTitle } = useElementTitle();
+  const { autoFlowAll } = useAutoFlowIfNoCustomRules();
+
   const newSectionText = t("groups.newSection");
 
   const addSection = () => {
@@ -241,7 +244,7 @@ const ControlledTree: ForwardRefRenderFunction<unknown, TreeDataProviderProps> =
 
           setSelectedItems([item.index]);
         }}
-        onDrop={async (items: TreeItem[], target: DraggingPosition) =>
+        onDrop={async (items: TreeItem[], target: DraggingPosition) => {
           handleOnDrop(
             items,
             target,
@@ -252,9 +255,10 @@ const ControlledTree: ForwardRefRenderFunction<unknown, TreeDataProviderProps> =
             expandedItems,
             getTreeData,
             getConfirmMovePromise,
-            setOpenConfirmMoveDialog
-          )
-        }
+            setOpenConfirmMoveDialog,
+            autoFlowAll
+          );
+        }}
         onFocusItem={(item) => {
           setFocusedItem(item.index);
           const parent = findParentGroup(getTreeData(), String(item.index));

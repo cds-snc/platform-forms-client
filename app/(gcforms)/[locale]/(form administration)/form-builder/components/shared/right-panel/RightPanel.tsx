@@ -12,11 +12,13 @@ import { useActivePathname } from "@lib/hooks/form-builder";
 import { DownloadCSVWithGroups } from "@formBuilder/[id]/edit/translate/components/DownloadCSVWithGroups";
 import { useTreeRef } from "./treeview/provider/TreeRefProvider";
 import { TreeView } from "./treeview/TreeView";
-import { useRehydrate } from "@lib/store/useTemplateStore";
+import { useRehydrate, useTemplateStore } from "@lib/store/useTemplateStore";
 
 import { SelectNextAction } from "./logic/SelectNextAction";
 import { useGroupStore } from "./treeview/store/useGroupStore";
 import { SkipLinkReusable } from "@clientComponents/globals/SkipLinkReusable";
+import { Language } from "@lib/types/form-builder-types";
+import { useLiveMessage } from "@lib/hooks/useLiveMessage";
 
 const TabButton = ({
   text,
@@ -27,10 +29,11 @@ const TabButton = ({
   onClick: () => void;
   className?: string;
 }) => {
-  const handleKeyDown = (e: React.KeyboardEvent<HTMLButtonElement>) => {
-    if (e.key === "Enter" || e.key === " ") {
-      onClick();
-    }
+  const { t } = useTranslation("form-builder");
+  const [speak] = useLiveMessage();
+  const loadTab = () => {
+    onClick();
+    speak(t("rightPanel.loadTab", { tabPanelLabel: text }));
   };
   return (
     <Tab as={Fragment}>
@@ -44,8 +47,10 @@ const TabButton = ({
             "whitespace-nowrap border-b-2 px-2 py-2 flex justify-center w-full",
             className
           )}
-          onClick={onClick}
-          onKeyDown={handleKeyDown}
+          onClick={loadTab}
+          onKeyDown={(e: React.KeyboardEvent<HTMLButtonElement>) => {
+            if (e.key === "Enter" || e.key === " ") loadTab();
+          }}
         >
           <span className={cn(selected && "font-bold")}>{text}</span>
         </button>
@@ -54,10 +59,19 @@ const TabButton = ({
   );
 };
 
-export const RightPanel = ({ id }: { id: string }) => {
+export const RightPanel = ({ id, lang }: { id: string; lang: Language }) => {
   const [open, setOpen] = useState(false);
   const router = useRouter();
   const { t, i18n } = useTranslation("form-builder");
+
+  const { id: storeId } = useTemplateStore((s) => ({
+    id: s.id,
+  }));
+
+  if (storeId && storeId !== id) {
+    id = storeId;
+  }
+
   const { activePathname } = useActivePathname();
   const { treeView } = useTreeRef();
   const getElement = useGroupStore((s) => s.getElement);
@@ -222,7 +236,9 @@ export const RightPanel = ({ id }: { id: string }) => {
                           {t("skipLink.logic")}
                         </SkipLinkReusable>
                         <div className="m-0 w-full" aria-live="polite">
-                          {activePathname.endsWith("/logic") && <SelectNextAction item={item} />}
+                          {activePathname.endsWith("/logic") && (
+                            <SelectNextAction lang={lang} item={item} />
+                          )}
                         </div>
                         {/* end logic */}
                       </Tab.Panel>

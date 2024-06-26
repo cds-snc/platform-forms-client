@@ -1,4 +1,3 @@
-"use client";
 import React from "react";
 import { useTranslation } from "@i18n/client";
 
@@ -6,13 +5,17 @@ import { Validate } from "@lib/types";
 import { useGCFormsContext } from "@lib/hooks/useGCFormContext";
 import { Button } from "@clientComponents/globals";
 import { LockedSections } from "@formBuilder/components/shared/right-panel/treeview/types";
+import { ArrowRightNav } from "@serverComponents/icons/ArrowRightNav";
+import { Language } from "@lib/types/form-builder-types";
 
 export const NextButton = ({
   validateForm,
   fallBack,
+  language,
 }: {
   validateForm: Validate["validateForm"];
   fallBack?: () => JSX.Element;
+  language: Language;
 }) => {
   const { currentGroup, hasNextAction, handleNextAction } = useGCFormsContext();
   const { t } = useTranslation("form-builder");
@@ -48,7 +51,9 @@ export const NextButton = ({
         }}
         type="button"
       >
-        {t("next")}
+        <>
+          {t("next", { lng: language })} <ArrowRightNav className="ml-4" />
+        </>
       </Button>
     </>
   );

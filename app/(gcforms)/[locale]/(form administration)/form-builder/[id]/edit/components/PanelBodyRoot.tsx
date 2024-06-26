@@ -9,7 +9,13 @@ import {
 } from "@lib/types/form-builder-types";
 import { useTemplateStore } from "@lib/store/useTemplateStore";
 
-export const PanelBodyRoot = ({ item }: { item: FormElementWithIndex }) => {
+export const PanelBodyRoot = ({
+  item,
+  onChangeMade,
+}: {
+  item: FormElementWithIndex;
+  onChangeMade: () => void;
+}) => {
   const { updateField, propertyPath } = useTemplateStore((s) => ({
     propertyPath: s.propertyPath,
     localizeField: s.localizeField,
@@ -29,6 +35,7 @@ export const PanelBodyRoot = ({ item }: { item: FormElementWithIndex }) => {
 
   const onRequiredChange = (itemId: number, checked: boolean) => {
     updateField(propertyPath(itemId, "validation.required"), checked);
+    onChangeMade();
   };
 
   return (

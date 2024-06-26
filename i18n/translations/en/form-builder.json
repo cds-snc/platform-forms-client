@@ -228,7 +228,7 @@
   "backToForm": "Back to form",
   "branding": {
     "defaultOption": "Government of Canada",
-    "default": "(default)",
+    "default": "",
     "heading": "Branding",
     "notFound": "Didn’t find your department or agency in the list?",
     "preview": "Preview",
@@ -374,14 +374,14 @@
     "somethingWentWrong": "Something went wrong",
     "downloadButtonText": "Download a copy",
     "draft": {
-      "message1": "Deleting a form cannot be undone. Your form will be removed from your forms list.",
-      "message2": "Download a copy of this form for your records. The saved JSON form file can be uploaded again to create a new form later."
+      "message1": "Deleting a form cannot be undone. Your form will be removed permanently.",
+      "message2": "Download a copy of the form file for your records. You can then upload it in GC Forms to re-create the form later."
     },
     "okay": "Delete form",
     "published": {
-      "message1": "Deleting a form cannot be undone. Your form will be removed from your forms list and the Internet.",
-      "message2": "Download a copy of this form for your records. The saved JSON form file can be uploaded again to create a new form later.",
-      "message3": "The URL of your form will change if you upload your form again."
+      "message1": "Deleting a form cannot be undone. Your published form will be removed from the Internet, potentially creating broken links.",
+      "message2": "Download a copy of the form file for your records. You can then upload it in GC Forms to re-create a new form with new URL links.",
+      "message3": "Before deleting your form, make sure you remove any public links leading to this form. This avoids sending people to a dead end. To stop submissions, you might instead consider closing the form in Settings."
     },
     "title": "Delete this form?"
   },
@@ -454,7 +454,7 @@
   "paragraph": "Long answer",
   "phoneNumber": "Phone number",
   "placeHolderFormTitle": "Form title",
-  "previewingIn": "Previewing in",
+  "previewingIn": "Previewing in:",
   "previewDisabledForPublishedForm": "Preview and testing is disabled for published forms.",
   "privacyNoticeDescription": "<p className=\"mb-4\">Help people filling out the form understand how you’re handling their personal information, as outlined in Section 4.2.10 of the <a href=\"https://www.tbs-sct.canada.ca/pol/doc-eng.aspx?id=18309\" target=\"_blank\">Directive on privacy practices</a>.</p><p><strong>What to include in a privacy notice</strong></p><ul><li>What personal information is being collected and why.</li><li>What legal or program authorities you have to collect information.</li><li>How their information will be used, shared, stored, and retained.</li><li>How people can access or change their personal information and file complaints.</li></ul><p>You’re responsible for understanding your department or agency's responsibilities related to personal information. If you’re unsure how to proceed, we recommend contacting your <a href=\"https://www.tbs-sct.canada.ca/ap/atip-aiprp/coord-eng.asp\" target=\"_blank\">access to information and privacy coordinator.</a></p>",
   "privacyStatement": "Privacy statement",
@@ -682,7 +682,7 @@
   "singleChoice": "Radio buttons",
   "start": "Start",
   "startErrorParse": "Failed to read form file",
-  "startFormIntro": "Add a description to your form to set expectations for those filling it out.",
+  "startFormIntro": "Add a description to your form to help set expectations",
   "startH2": "Design a form",
   "startH3": "Open a form file",
   "startP1": "Start with a blank form.",
@@ -822,7 +822,7 @@
   "addConditionalRules": {
     "modalTitle": "Add a rule to a question",
     "modalTitleEdit": "Edit rules",
-    "modalDescription": "Display additional input fields depending on the selection of a specific option. This applies to single choice, multiple choice, or dropdown list questions.",
+    "modalDescription": "Display additional input fields depending on the selection of a specific option. This applies to questions with radio buttons, checkboxes or dropdown options.",
     "optionTitle": "If option selected is:",
     "questionTitle": "Show question:",
     "addCustomRules": "Add a rule",
@@ -836,15 +836,16 @@
   "saved": "Saved",
   "opensInNewTab": "opens in a new tab",
   "rightPanel": {
-    "title": "Right Panel",
-    "openPanel": "Set up your form",
+    "title": "Right panel",
+    "openPanel": "Form set-up",
     "closePanel": "Close panel",
     "questions": "Questions",
     "logic": "Logic",
     "translation": "Translations",
     "treeView": {
       "addSection": "New section"
-    }
+    },
+    "loadTab": "Loaded {{tabPanelLabel}} editor"
   },
   "logic": {
     "heading": "Logic",
@@ -853,13 +854,14 @@
     "gotoSection": "Go to section",
     "questionTitle": "Question:",
     "sectionTitle": "Section:",
-    "translateTitle": "Section Title",
+    "translateTitle": "Section title",
     "addRule": "Add rule",
     "saveRule": "Save",
-    "saveNote": "Adding and saving a rule, turns off Auto-flow sections",
-    "resetRules": "Reset all rules",
-    "resetRulesHelp": "Reset all rules help",
-    "resetRulesDescription": "The autoflow feature will reset the progression between sections into a simple linear flow, overriding any existing branching rules that were applied.",
+    "saveNote": "Adding and saving a rule, turns off linear autoflow between sections.",
+    "resetRules": "Reset to linear flow",
+    "resetRulesHelp": "Reset help",
+    "resetRulesDescription": "This will remove logic and reset the progression between sections to a simple linear flow, overriding any existing branching rules that were applied.",
+    "toastSuccess": "Linear flow applied",
     "multiRulesWarning": {
       "text1": "The order and flow is set based on the rules applied.",
       "text2": "Linking the sections:",
@@ -873,7 +875,11 @@
       "default": "Select a section",
       "catchAllGroup": "Pour toute autre valeur"
     },
-    "actionsSaved": "Actions saved"
+    "actionsSaved": "Actions saved",
+    "legend": {
+      "section": "Apply a branching rule to a section",
+      "option": "Apply conditional rules to questions with selectable options"
+    }
   },
   "groups": {
     "newSection": "New section",
@@ -895,21 +901,21 @@
     "privacy": {
       "beforeText": "<p>You’re responsible for understanding your department or agency's responsibilities related to personal information. If you’re unsure how to proceed, we recommend contacting your <a href=\"https://www.tbs-sct.canada.ca/ap/atip-aiprp/coord-eng.asp\" target=\"_blank\">access to information and privacy coordinator.</a></p>",
       "body": "<p className=\"mb-4\">Help people filling out the form understand how you’re handling their personal information, as outlined in Section 4.2.10 of the <a href=\"https://www.tbs-sct.canada.ca/pol/doc-eng.aspx?id=18309\" target=\"_blank\">Directive on privacy practices</a>.</p><p><strong>What to include in a privacy notice</strong></p><ul><li>What personal information is being collected and why.</li><li>What legal or program authorities you have to collect information.</li><li>How their information will be used, shared, stored, and retained.</li><li>How people can access or change their personal information and file complaints.</li></ul>",
-      "description": "Add a privacy notice to your form to inform users how you handle their personal information.",
-      "summary": "What to include in a privacy notice"
+      "description": " What to include in a privacy notice",
+      "summary": "Add a privacy statement to outline how you handle personal information"
     },
     "confirmation": {
       "beforeText": "The confirmation message will appear on a new page once the form has been submitted.",
-      "body": "<p className=\"mb-4\">Help people filling out the form understand how you’re handling their personal information, as outlined in Section 4.2.10 of the <a href=\"https://www.tbs-sct.canada.ca/pol/doc-eng.aspx?id=18309\" target=\"_blank\">Directive on privacy practices</a>.</p><p><strong>What to include in a privacy notice</strong></p><ul><li>What personal information is being collected and why.</li><li>What legal or program authorities you have to collect information.</li><li>How their information will be used, shared, stored, and retained.</li><li>How people can access or change their personal information and file complaints.</li></ul>",
-      "description": "Add a privacy notice to your form to inform users how you handle their personal information.",
-      "summary": "What to include in a confirmation message"
+      "body": "Some useful things you can add to the confirmation are:",
+      "description": "Add a confirmation message",
+      "summary": "Add a confirmation message"
     },
     "treeView": {
       "emptyPageTextElement": "Empty page text",
-      "emptyFormElement": "Empty form queston element",
+      "emptyFormElement": "Empty form question element",
       "keyboardNav": {
         "label": "Keyboard shortcuts",
-        "body": "<p className=\"mb-4\">Navigate the questions and sections using the arrow keys.</p><p><strong>Drag and drop:</strong></p>\n<ul><li>control + D to pick up and item</li><li>arrow keys to drag the item</li><li>enter key to drop the item</li></ul>"
+        "body": "<p className=\"mb-4\">Navigate the questions and sections using the arrow keys.</p><p><strong>Drag and drop:</strong></p>\n<ul><li>control + D to pick up an item</li><li>arrow keys to drag the item</li><li>enter key to drop the item</li></ul>"
       }
     }
   },
@@ -922,8 +928,9 @@
     "questions": "Skip to Questions editor",
     "translate": "Skip to Translations editor",
     "logic": "Skip to Logic editor",
-    "questionsSetup": "Skip to Questions setup",
-    "translateSetup": "Skip to Translations setup",
-    "logicSetup": "Skip to Logic setup"
-  }
+    "questionsSetup": "Skip to Questions set-up",
+    "translateSetup": "Skip to Translations set-up",
+    "logicSetup": "Skip to Logic set-up"
+  },
+  "goBack": "Go back"
 }
