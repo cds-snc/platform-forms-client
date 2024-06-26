@@ -41,7 +41,7 @@ Le SNC s’engage à maintenir un taux de disponibilité de 99 % pour les servic
 
 Le temps d’arrêt correspond à une interruption imprévue du service entraînant une réduction perceptible de la qualité du service pour l’utilisateur·rice ou à un évènement ayant des conséquences sur le service existant pour le ou la client·e.
 
-Formulaires GC adopte une approche de livraison continue, aussi peut-il arriver que des corrections soient apportées au produit plusieurs fois par jour sans aucun temps d’arrêt. Si nous devons planifier une interruption de service, nous en informerons la clientèle une semaine à l’avance et tenterons de faire en sorte que le temps d’arrêt planifié n’interfère pas avec leur exploitation du système.
+Formulaires GC adopte une approche de livraison continue, aussi peut-il arriver que des corrections soient apportées au produit plusieurs fois par jour sans aucun temps d’arrêt. Si nous devons planifier une interruption de service, nous en informerons la clientèle 3 jours à l’avance et tenterons de faire en sorte que le temps d’arrêt planifié n’interfère pas avec leur exploitation du système. 
 
 Cette garantie sur le temps de fonctionnement exclut toute immobilisation d’Amazon, notre fournisseur d’infrastructure. Amazon promet un taux de temps de fonctionnement de 99,9 % dans [son ENS](<https://d1.awsstatic.com/legal/AmazonMessaging_SQS_SNS/Amazon%20Messaging%20(SQS%2C%20SNS)%20Service%20Level%20Agreement-April%202019_FR.pdf>).
 
@@ -71,7 +71,7 @@ Toutes les demandes d’assistance doivent être soumises sur notre page de [sou
 
 ### Période de maintenance planifiée
 
-Une « période de maintenance planifiée » se définit comme une perte complète ou partielle de disponibilité du service que le fournisseur prévoit pour réaliser des travaux de maintenance. Le SNC notifiera la clientèle de toute période de maintenance planifiée au moins 2 jours ouvrables avant le début de la période en question. Les périodes de maintenance planifiées seront programmées pour survenir en dehors des périodes d’activité élevée.
+Une « période de maintenance planifiée » se définit comme une perte complète ou partielle de disponibilité du service que le fournisseur prévoit pour réaliser des travaux de maintenance. Le SNC notifiera la clientèle de toute période de maintenance planifiée au moins 3 jours ouvrables avant le début de la période en question. Les périodes de maintenance planifiées seront programmées pour survenir en dehors des périodes d’activité élevée.
 
 Une perte de disponibilité du service durant une période de maintenance planifiée n’est pas considérée comme une interruption de service. Une perte de disponibilité du service survenant en dehors d’une période de maintenance planifiée, mais causée par des travaux réalisés durant la période de maintenance planifiée est considérée comme une interruption de service aux fins de la détermination de la conformité de Formulaires GC aux termes relatifs à la disponibilité du service. Les renseignements liés aux périodes de maintenance planifiée sont communiqués par courriel.
 
@@ -83,4 +83,4 @@ Si le SNC doit mettre hors service Formulaires GC, il collaborera avec la client
 
 Formulaires GC est un produit à code source ouvert permettant à des tiers de créer leur propre version à l’aide du code disponible sur [GitHub](https://github.com/cds-snc/platform-forms-client).
 
-**Dernière mise à jour :** 14 décembre 2023
+**Dernière mise à jour :** 26 juin 2024

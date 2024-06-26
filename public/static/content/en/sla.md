@@ -41,7 +41,7 @@ CDS commits to a service availability rate of 99.0% — excluding urgent schedul
 
 Downtime is defined as an unplanned interruption to the service resulting in a user-perceptible reduction in the existing quality of service or an event that will impact the existing service to the customer.
 
-GC Forms uses a continuous delivery approach, sometimes patching multiple times a day without any downtime. If we have to plan any downtime we will contact clients with a one week notice and try to ensure that planned downtime does not interfere with their operation of the system.
+GC Forms uses a continuous delivery approach, sometimes patching multiple times a day without any downtime. If we have to plan any downtime we will provide clients with a 3-day notice and try to ensure that planned downtime does not interfere with their operation of the system.
 
 This uptime guarantee excludes any downtime experienced by Amazon as they are our infrastructure provider. Amazon promises 99.9% uptime as per [their SLA](https://aws.amazon.com/messaging/sla/).
 
@@ -71,7 +71,7 @@ All support requests should be directed to [Get support](/en/support). CDS will 
 
 ### Planned maintenance period
 
-A “planned maintenance period” shall be defined as a complete or partial loss of service availability scheduled by GC Forms to allow GC Forms to perform normal maintenance work. CDS shall notify the client of any planned maintenance period no fewer than 2 business days prior to the commencement of the applicable planned maintenance period. Planned maintenance periods shall be scheduled for non-peak periods of activity.
+A “planned maintenance period” shall be defined as a complete or partial loss of service availability scheduled by GC Forms to allow GC Forms to perform normal maintenance work. CDS shall notify the client of any planned maintenance period no fewer than 3 business days prior to the commencement of the applicable planned maintenance period. Planned maintenance periods shall be scheduled for non-peak periods of activity.
 
 A loss of service availability during a planned maintenance period shall not be considered a service outage. A loss of service availability, which occurs outside of a planned maintenance period but is caused by work performed during the planned maintenance period, shall be considered to be a service outage for the purpose of calculating GC Forms’s compliance with the provisions of service availability. Information regarding planned maintenance periods shall be shared by email.
 
@@ -83,4 +83,4 @@ In the event that CDS needs to decommission the service, GC Forms will work with
 
 GC Forms is open source and available for others to stand up their own version based on the code found in [GitHub](https://github.com/cds-snc/platform-forms-client).
 
-**Last update:** December 14, 2023
+**Last update:** June 26, 2024
