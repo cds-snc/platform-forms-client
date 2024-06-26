@@ -308,16 +308,18 @@ export async function getAllTemplates(
   }
 }
 
+export type TemplateOptions = {
+  sortByDateUpdated?: "asc" | "desc";
+  requestedWhere?: Prisma.TemplateWhereInput;
+};
+
 /**
  * Get all form templates for the User calling the function.
  * @returns An array of Form Records
  */
 export async function getAllTemplatesForUser(
   ability: UserAbility,
-  options?: {
-    sortByDateUpdated?: "asc" | "desc";
-    requestedWhere?: Prisma.TemplateWhereInput;
-  }
+  options?: TemplateOptions
 ): Promise<Array<FormRecord>> {
   try {
     checkPrivileges(ability, [{ action: "view", subject: "FormRecord" }]);
