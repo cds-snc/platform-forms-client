@@ -66,6 +66,15 @@ const responseDownloadLimit: Setting = {
   value: "20",
 };
 
+const zitadelAdministrationKey: Setting = {
+  internalId: "zitadelAdministrationKey",
+  nameEn: "Encrypted Zitadel Administration Key",
+  nameFr: "Clé d'administration cryptée de Zitadel",
+  descriptionEn: null,
+  descriptionFr: null,
+  value: "",
+};
+
 const allSettings = [
   brandingRequestFormSetting,
   nagwarePhaseEncouraged,
@@ -73,6 +82,7 @@ const allSettings = [
   nagwarePhaseWarned,
   nagwarePhaseEscalated,
   responseDownloadLimit,
+  zitadelAdministrationKey,
 ];
 
 export default {
