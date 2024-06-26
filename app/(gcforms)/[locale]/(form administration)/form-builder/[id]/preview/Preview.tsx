@@ -3,7 +3,6 @@ import React, { useState } from "react";
 import { useTranslation } from "@i18n/client";
 import { useSession } from "next-auth/react";
 import Markdown from "markdown-to-jsx";
-
 import { PreviewNavigation } from "./PreviewNavigation";
 import { getRenderedForm } from "@lib/formBuilder";
 import { PublicFormRecord } from "@lib/types";
