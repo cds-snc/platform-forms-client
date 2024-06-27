@@ -20,6 +20,10 @@ import { LockedSections } from "@formBuilder/components/shared/right-panel/treev
 import { BackButton } from "@formBuilder/[id]/preview/BackButton";
 import { Language } from "@lib/types/form-builder-types";
 import { BackButtonGroup } from "../BackButtonGroup/BackButtonGroup";
+import {
+  removeCustomFormValues,
+  getInputHistoryValues,
+} from "@lib/utils/form-builder/groupsHistory";
 
 interface SubmitButtonProps {
   numberOfRequiredQuestions: number;
@@ -153,6 +157,7 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
 
   const { t } = useTranslation();
 
+  // Used to set any values we'd like added for use in the below withFormik handleSubmit().
   useFormValuesChanged();
 
   const errorList = props.errors ? getErrorList(props) : null;
@@ -305,6 +310,7 @@ interface FormProps {
   children?: (JSX.Element | undefined)[] | null;
   t: TFunction;
   allowGrouping?: boolean | undefined;
+  groupHistory?: string[];
 }
 
 /**
@@ -327,7 +333,20 @@ export const Form = withFormik<FormProps, Responses>({
     // Needed so the Loader is displayed
     formikBag.setStatus("submitting");
     try {
-      const result = await submitForm(values, formikBag.props.language, formikBag.props.formRecord);
+      const isGroupsCheck = formikBag.props.allowGrouping;
+      const formValues = isGroupsCheck
+        ? getInputHistoryValues(
+            values,
+            values.groupHistory as string[],
+            formikBag.props.formRecord.form.groups
+          )
+        : removeCustomFormValues(values);
+
+      const result = await submitForm(
+        formValues,
+        formikBag.props.language,
+        formikBag.props.formRecord
+      );
       if (result.error) {
         formikBag.setStatus("Error");
       } else {

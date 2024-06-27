@@ -323,6 +323,10 @@ export const getFormInitialValues = (formRecord: PublicFormRecord, language: str
 
   // Used to track the current group dynamically
   initialValues.currentGroup = "";
+
+  // Used to track the group history dynamically
+  initialValues.groupHistory = [];
+
   return initialValues;
 };
 
