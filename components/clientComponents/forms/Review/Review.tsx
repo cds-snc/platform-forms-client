@@ -1,13 +1,12 @@
-"use client";
+import { useMemo, useRef } from "react";
+import { useTranslation } from "@i18n/client";
 import { Button } from "@clientComponents/globals";
 import { Theme } from "@clientComponents/globals/Buttons/themes";
-import { useTranslation } from "@i18n/client";
 import { useFocusIt } from "@lib/hooks/useFocusIt";
 import { useGCFormsContext } from "@lib/hooks/useGCFormContext";
 import { FormRecord, TypeOmit } from "@lib/types";
 import { Language } from "@lib/types/form-builder-types";
 import { getLocalizedProperty } from "@lib/utils";
-import { useMemo, useRef } from "react";
 
 type ReviewGroup = {
   id: string;
@@ -20,6 +19,65 @@ type ReviewGroup = {
 
 type QuestionAnswer = {
   [x: string]: string;
+};
+
+const QuestionsAnswers = ({
+  group,
+  formRecord,
+  lang,
+}: {
+  group: ReviewGroup;
+  formRecord: TypeOmit<FormRecord, "name" | "deliveryOption">;
+  lang: string;
+}): React.ReactElement => {
+  const { t } = useTranslation("review");
+  function getElementNameById(id: string | number) {
+    const element = formRecord.form.elements.find((item) => String(item.id) === String(id));
+    return element ? element.properties?.[getLocalizedProperty("title", lang)] : t("unknown");
+  }
+  function getQuestionAndAnswer(element: QuestionAnswer) {
+    const question = getElementNameById(Object.keys(element)[0]) as string;
+    const answer = Object.values(element)[0] as string;
+    return { question, answer };
+  }
+  return (
+    <dl className="my-10">
+      {Array.isArray(group.elements) &&
+        group.elements.map((element) => {
+          const { question, answer } = getQuestionAndAnswer(element);
+          return (
+            <div key={Object.keys(element)[0]} className="mb-8">
+              <dt className="font-bold mb-2">{question}</dt>
+              <dd>{answer}</dd>
+            </div>
+          );
+        })}
+    </dl>
+  );
+};
+
+const EditButton = ({
+  group,
+  theme,
+  children,
+}: {
+  group: ReviewGroup;
+  theme: Theme;
+  children: React.ReactElement | string;
+}): React.ReactElement => {
+  const { setGroup, clearHistoryAfterId } = useGCFormsContext();
+  return (
+    <Button
+      type="button"
+      theme={theme}
+      onClick={() => {
+        setGroup(group.id);
+        clearHistoryAfterId(group.id);
+      }}
+    >
+      {children}
+    </Button>
+  );
 };
 
 export const Review = ({ language }: { language: Language }): React.ReactElement => {
@@ -64,82 +122,24 @@ export const Review = ({ language }: { language: Language }): React.ReactElement
       <div className="my-16">
         {Array.isArray(questionsAndAnswers) &&
           questionsAndAnswers.map((group) => {
-            const title = group.title ? group.title : t("start", { ns: "common", lng: language }); // group.name as fallback for groups like Start
+            const title = group.title ? group.title : t("start", { ns: "common", lng: language });
             return (
               <div key={group.id} className="mb-10 rounded-lg border-2 border-slate-400 px-6 py-4">
                 <h3 className="text-slate-700">
                   <EditButton group={group} theme="link">
-                    <>{title}</>
+                    {title}
                   </EditButton>
                 </h3>
                 <div className="mb-10 ml-1">
-                  <dl className="my-10">
-                    {Array.isArray(group.elements) &&
-                      group.elements.map((element) => (
-                        <QuestionsAnswers
-                          key={Object.keys(element)[0]}
-                          element={element}
-                          formRecord={formRecord}
-                          lang={language}
-                        />
-                      ))}
-                  </dl>
+                  <QuestionsAnswers group={group} formRecord={formRecord} lang={language} />
                 </div>
                 <EditButton group={group} theme="secondary">
-                  <>{t("edit", { lng: language })}</>
+                  {t("edit", { lng: language })}
                 </EditButton>
               </div>
             );
           })}
       </div>
     </>
-  );
-};
-
-const QuestionsAnswers = ({
-  element,
-  formRecord,
-  lang,
-}: {
-  element: QuestionAnswer;
-  formRecord: TypeOmit<FormRecord, "name" | "deliveryOption">;
-  lang: string;
-}): React.ReactElement => {
-  const { t } = useTranslation("review");
-  function getElementNameById(id: string | number) {
-    const element = formRecord.form.elements.find((item) => String(item.id) === String(id));
-    return element ? element.properties?.[getLocalizedProperty("title", lang)] : t("unknown");
-  }
-  const question = getElementNameById(Object.keys(element)[0]) as string;
-  const answer = Object.values(element)[0] as string;
-  return (
-    <div className="mb-8">
-      <dt className="font-bold mb-2">{question}</dt>
-      <dd>{answer}</dd>
-    </div>
-  );
-};
-
-const EditButton = ({
-  group,
-  theme,
-  children,
-}: {
-  group: ReviewGroup;
-  theme: Theme;
-  children: React.ReactElement;
-}): React.ReactElement => {
-  const { setGroup, clearHistoryAfterId } = useGCFormsContext();
-  return (
-    <Button
-      type="button"
-      theme={theme}
-      onClick={() => {
-        setGroup(group.id);
-        clearHistoryAfterId(group.id);
-      }}
-    >
-      {children}
-    </Button>
   );
 };
