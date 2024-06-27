@@ -32,24 +32,6 @@ import { FormProperties } from "@lib/types";
 import { getLayoutFromGroups } from "@lib/utils/form-builder/groupedFormHelpers";
 import { allowGrouping } from "@formBuilder/components/shared/right-panel/treeview/util/allowGrouping";
 
-// Can throw because it is not called by Client Components
-// @todo Should these types of functions be moved to a different file?
-export const fetchTemplate = async (id: string) => {
-  const { session, ability } = await authCheckAndThrow().catch(() => ({
-    session: null,
-    ability: null,
-  }));
-  if (!session) {
-    throw new Error("User is not authenticated");
-  }
-
-  const template = await getFullTemplateByID(ability, id);
-
-  return template;
-};
-
-// Can throw because it is not called by Client Components
-// @todo Should these types of functions be moved to a different file?
 export const fetchSubmissions = async ({
   formId,
   status,
@@ -57,50 +39,55 @@ export const fetchSubmissions = async ({
 }: {
   formId: string;
   status: string;
-  lastKey?: string;
+  lastKey: string | null;
 }) => {
-  const { session, ability } = await authCheckAndThrow().catch(() => ({
-    session: null,
-    ability: null,
-  }));
+  try {
+    const { session, ability } = await authCheckAndThrow().catch(() => ({
+      session: null,
+      ability: null,
+    }));
 
-  if (!session) {
-    throw new Error("User is not authenticated");
+    if (!session) {
+      throw new Error("User is not authenticated");
+    }
+
+    if (formId === "0000") {
+      return {
+        submissions: [],
+        lastEvaluatedKey: null,
+      };
+    }
+
+    // get status from url params (default = new) and capitalize/cast to VaultStatus
+    // Protect against invalid status query
+    const selectedStatus = Object.values(VaultStatus).includes(ucfirst(status) as VaultStatus)
+      ? (ucfirst(status) as VaultStatus)
+      : VaultStatus.NEW;
+
+    let currentLastEvaluatedKey = null;
+
+    // build up lastEvaluatedKey from lastKey url param
+    if (lastKey && isResponseId(String(lastKey))) {
+      currentLastEvaluatedKey = {
+        Status: selectedStatus,
+        NAME_OR_CONF: `NAME#${lastKey}`,
+        FormID: formId,
+      };
+    }
+
+    const { submissions, lastEvaluatedKey } = await listAllSubmissions(
+      ability,
+      formId,
+      selectedStatus,
+      undefined,
+      currentLastEvaluatedKey
+    );
+
+    return { submissions, lastEvaluatedKey };
+  } catch (e) {
+    logMessage.error(`Error fetching submissions for form ${formId}: ${(e as Error).message}`);
+    return { error: true, submissions: [], lastEvaluatedKey: null };
   }
-
-  if (formId === "0000") {
-    return {
-      submissions: [],
-      lastEvaluatedKey: null,
-    };
-  }
-
-  // get status from url params (default = new) and capitalize/cast to VaultStatus
-  // Protect against invalid status query
-  const selectedStatus = Object.values(VaultStatus).includes(ucfirst(status) as VaultStatus)
-    ? (ucfirst(status) as VaultStatus)
-    : VaultStatus.NEW;
-
-  let currentLastEvaluatedKey = null;
-
-  // build up lastEvaluatedKey from lastKey url param
-  if (lastKey && isResponseId(String(lastKey))) {
-    currentLastEvaluatedKey = {
-      Status: selectedStatus,
-      NAME_OR_CONF: `NAME#${lastKey}`,
-      FormID: formId,
-    };
-  }
-
-  const { submissions, lastEvaluatedKey } = await listAllSubmissions(
-    ability,
-    formId,
-    selectedStatus,
-    undefined,
-    currentLastEvaluatedKey
-  );
-
-  return { submissions, lastEvaluatedKey };
 };
 
 const sortByLayout = ({ layout, elements }: { layout: number[]; elements: Answer[] }) => {
