@@ -1,7 +1,7 @@
-import { valuesOnlyInHistory } from "@lib/utils/form-builder/groupsHistory";
+import { filterNonRelevantValues } from "@lib/utils/form-builder/groupsHistory";
 import {values} from "../../__fixtures__/conditionalInputHistoryEmptySimple.json";
 
-describe("valuesOnlyInHistory function", () => {
+describe("onlyRelevantValues function", () => {
   it("Combines group history answers with empty unanswered questions", () => {
     const groupValues = {
       "1": "A",
@@ -35,7 +35,7 @@ describe("valuesOnlyInHistory function", () => {
       "currentGroup": "",
       "groupHistory": "",
     };
-    const formValues = valuesOnlyInHistory(values, groupValues);
+    const formValues = filterNonRelevantValues(values, groupValues);
     expect(formValues).toEqual(expectedOutput);
   });
 
@@ -55,21 +55,21 @@ describe("valuesOnlyInHistory function", () => {
     }
     const expectedOutput = {};
     // @ts-expect-error - testing invalid input
-    const formValues = valuesOnlyInHistory(null, groupValues);
+    const formValues = filterNonRelevantValues(null, groupValues);
     expect(formValues).toEqual(expectedOutput);
   });
 
   it("Handles empty groupValues input", () => {
     const expectedOutput = {};
     // @ts-expect-error - testing invalid input
-    const formValues = valuesOnlyInHistory(values, null);
+    const formValues = filterNonRelevantValues(values, null);
     expect(formValues).toEqual(expectedOutput);
   });
 
   it("Handles empty input", () => {
     const expectedOutput = {};
     // @ts-expect-error - testing invalid input
-    const formValues = valuesOnlyInHistory();
+    const formValues = filterNonRelevantValues();
     expect(formValues).toEqual(expectedOutput);
   });
 });

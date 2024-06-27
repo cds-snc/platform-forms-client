@@ -1,4 +1,4 @@
-import { getGroupValues, removeNonFormValues, valuesOnlyInHistory } from "@lib/utils/form-builder/groupsHistory";
+import { getRelevantValues, removeCustomFormValues, filterNonRelevantValues } from "@lib/utils/form-builder/groupsHistory";
 import { GroupsType } from "@lib/formContext";
 import { Responses } from "@lib/types";
 
@@ -8,15 +8,15 @@ import {values as valuesEntered, groupHistory as groupHistoryEntered, groups as 
 import {values as valuesComplex, groupHistory as groupHistoryComplex, groups as groupsComplex} from "../../__fixtures__/conditionalInputHistoryComplex.json";
 
 const getInputHistoryValues = (values: Responses, groupHistory: string[], groups: GroupsType | undefined) => {
-  const formValues = valuesOnlyInHistory(
+  const formValues = filterNonRelevantValues(
     values,
-    getGroupValues(
+    getRelevantValues(
       values,
       groups,
       groupHistory as string[]
     )
   );
-  return removeNonFormValues(formValues);
+  return removeCustomFormValues(formValues);
 };
 
 describe("Conditional History", () => {

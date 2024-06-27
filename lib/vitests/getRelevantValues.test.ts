@@ -1,9 +1,9 @@
-import { getGroupValues } from "@lib/utils/form-builder/groupsHistory";
+import { getRelevantValues } from "@lib/utils/form-builder/groupsHistory";
 import {values, groupHistory, groups} from "../../__fixtures__/conditionalInputHistoryEmptySimple.json";
 
 describe("getGroupValues function", () => {
   it("Gets correct values (only values related to groups with the questions answered)", () => {
-    const formValues = getGroupValues(
+    const formValues = getRelevantValues(
       values,
       groups,
       groupHistory as string[]
@@ -26,7 +26,7 @@ describe("getGroupValues function", () => {
 
   it("Handles empty inputs", () => {
     // @ts-expect-error - testing invalid input
-    const values = getGroupValues();
+    const values = getRelevantValues();
     const expectedValues = [] as string[];
     expect(values).toEqual(expectedValues);
   });
@@ -38,7 +38,7 @@ describe("getGroupValues function", () => {
       "5205bacd-da93-4325-832e-9ed4be6ab38d-INVALID",
       "review"
     ];
-    const formValues = getGroupValues(
+    const formValues = getRelevantValues(
       values,
       groups,
       groupHistoryInvalid as string[]
