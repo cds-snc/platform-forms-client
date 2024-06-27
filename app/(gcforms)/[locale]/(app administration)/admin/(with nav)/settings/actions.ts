@@ -19,8 +19,14 @@ function nullCheck(formData: FormData, key: string) {
 
 export async function getSetting(internalId: string) {
   const { ability } = await authCheckAndThrow();
-  logMessage.error("Getting setting with internalId: " + internalId);
-  return getFullAppSetting(ability, internalId);
+  logMessage.debug("Getting setting with internalId: " + internalId);
+  const setting = await getFullAppSetting(ability, internalId);
+
+  if (setting?.encrypted) {
+    // Do not expose sensitive value to client
+    setting.value = null;
+  }
+  return setting;
 }
 
 export async function updateSetting(language: string, formData: FormData) {

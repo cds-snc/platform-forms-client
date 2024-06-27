@@ -110,6 +110,7 @@ model Setting {
   descriptionEn String?
   descriptionFr String?
   value         String?
+  encrypted     Boolean @default(false)
 }
 
 model CognitoCustom2FA {
