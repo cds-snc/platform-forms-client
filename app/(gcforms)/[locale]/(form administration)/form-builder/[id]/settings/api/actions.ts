@@ -5,29 +5,22 @@ import crypto from "crypto";
 import { prisma } from "@lib/integration/prismaConnector";
 import { logMessage } from "@lib/logger";
 import { revalidatePath } from "next/cache";
-import fs from "fs";
-
-const zitadelPrivate = (() => {
-  const encryptedFile = fs.readFileSync(
-    process.cwd() +
-      "/app/(gcforms)/[locale]/(form administration)/form-builder/[id]/settings/api/gcforms_service.enc"
-  );
-  const key = crypto
-    .createHash("sha256")
-    .update(process.env.TOKEN_SECRET ?? "")
-    .digest("base64")
-    .substring(0, 32);
-  const decipher = crypto.createDecipheriv("aes-256-ctr", key, encryptedFile.subarray(0, 16));
-  const decrypted = Buffer.concat([decipher.update(encryptedFile.subarray(16)), decipher.final()]);
-  return JSON.parse(decrypted.toString());
-})();
-
-const alg = "RS256";
-const privateKey = crypto.createPrivateKey({ key: zitadelPrivate.key });
-const serviceUserId = zitadelPrivate.userId;
-const kid = zitadelPrivate.keyId;
+import { getAppSetting, decryptSetting } from "@lib/appSettings";
+import { safeJSONParse } from "@lib/utils";
 
 const getAccessToken = async () => {
+  const encryptedSetting = await getAppSetting("zitadelAdministrationKey");
+
+  if (!encryptedSetting) throw new Error("No value set for Zitadel Administration Setting");
+
+  const zitadelPrivate = safeJSONParse(decryptSetting(encryptedSetting));
+
+  if (!zitadelPrivate) throw new Error("Zitadel Adminstration Setting is not a valid JSON String");
+
+  const alg = "RS256";
+  const privateKey = crypto.createPrivateKey({ key: zitadelPrivate.key });
+  const serviceUserId = zitadelPrivate.userId;
+  const kid = zitadelPrivate.keyId;
   const jwt = await new jose.SignJWT()
     .setProtectedHeader({ alg, kid })
     .setIssuedAt()
