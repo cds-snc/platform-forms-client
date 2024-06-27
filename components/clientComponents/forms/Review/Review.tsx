@@ -33,7 +33,7 @@ export const Review = ({ language }: { language: Language }): React.ReactElement
     function formatElementValue(elementName: string | null) {
       const value = formValues[elementName as keyof typeof formValues];
       if (Array.isArray(value)) {
-        return (value as Array<string>).join(", ");
+        return (value as Array<string>).join(", ") || "-";
       }
       return value || "-";
     }
