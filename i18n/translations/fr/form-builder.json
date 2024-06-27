@@ -482,6 +482,34 @@
     "emailOption": "Réponses envoyées par courriel — ",
     "change": "Modifier ces paramètres"
   },
+  "prePublishFormDialog": {
+    "title": "Publier le formulaire",
+    "text1": "Pourquoi souhaitez-vous publier le formulaire?",
+    "readyForPublicUse": "Formulaire prêt pour un usage par le public",
+    "readyForInternalUse": "Formulaire prêt pour un usage interne",
+    "sharingForFeedback": "Formulaire à partager pour commentaires ou approbation",
+    "other": "Autre",
+    "text2": "Décrivez-nous votre formulaire",
+    "whatType": "Type de formulaire",
+    "briefDesc": "Description du formulaire et de son usage",
+    "thisInformation": "Cette information nous aide à comprendre comment vous utilisez Formulaires GC, pour que nous puissions mieux répondre à vos besoins.",
+    "helpsUnderstand": "Cette information nous aide à comprendre à qui le formulaire est destiné.",
+    "purpose": {
+      "admin": "fins administratives",
+      "nonAdmin": "fins non-administratives",
+      "unset": "pas définie"
+    },
+    "formtypes": {
+      "Application": "Demande ou candidature",
+      "Consent": "Consentement",
+      "Declaration": "Déclaration",
+      "Feedback": "Commentaires",
+      "Registration": "Inscription",
+      "Request": "Requête",
+      "Survey": "Sondage",
+      "Other": "Autre"
+    }
+  },
   "question": "Question",
   "questions": "Questions",
   "questionSet": {

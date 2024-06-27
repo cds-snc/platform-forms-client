@@ -17,6 +17,7 @@ import { useAllowPublish } from "@lib/hooks/form-builder/useAllowPublish";
 import { safeJSONParse } from "@lib/utils";
 import { ErrorSaving } from "@formBuilder/components/shared/ErrorSaving";
 import { FormServerErrorCodes } from "@lib/types/form-builder-types";
+import { PrePublishDialog } from "./PrePublishDialog";
 
 export const Publish = ({ id }: { id: string }) => {
   const { t, i18n } = useTranslation("form-builder");
@@ -78,6 +79,25 @@ export const Publish = ({ id }: { id: string }) => {
   };
 
   const supportHref = `/${i18n.language}/support`;
+
+  const [showPrePublishDialog, setShowPrePublishDialog] = useState(false);
+
+  const [formType, setFormType] = useState("Application"); // eslint-disable-line
+  const [description, setDescription] = useState(""); // eslint-disable-line
+  const [reasonForPublish, setReasonForPublish] = useState(""); // eslint-disable-line
+
+  const handleOpenPrePublish = async () => {
+    setShowPrePublishDialog(true);
+  };
+
+  const handlePrePublishClose = async () => {
+    setShowPrePublishDialog(false);
+  };
+
+  const handlePrePublish = async () => {
+    setShowPrePublishDialog(false);
+    handlePublish();
+  };
 
   let formPurposeText = t("settingsPurposeAndUse.purpose.unset");
   if (formPurpose === "admin") {
@@ -241,7 +261,7 @@ export const Publish = ({ id }: { id: string }) => {
 
       {userCanPublish && isPublishable() && (
         <>
-          <Button className="mt-5" onClick={handlePublish}>
+          <Button className="mt-5" onClick={handleOpenPrePublish}>
             {t("publish")}
           </Button>
           <div
@@ -253,6 +273,16 @@ export const Publish = ({ id }: { id: string }) => {
             <>{error && <p>{t("thereWasAnErrorPublishing")}</p>}</>
           </div>
         </>
+      )}
+
+      {showPrePublishDialog && (
+        <PrePublishDialog
+          setDescription={setDescription}
+          setFormType={setFormType}
+          setReasonForPublish={setReasonForPublish}
+          handleClose={() => handlePrePublishClose()}
+          handleConfirm={() => handlePrePublish()}
+        />
       )}
     </div>
   );
