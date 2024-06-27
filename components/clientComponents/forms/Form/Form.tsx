@@ -21,9 +21,10 @@ import { BackButton } from "@formBuilder/[id]/preview/BackButton";
 import { Language } from "@lib/types/form-builder-types";
 import { BackButtonGroup } from "../BackButtonGroup/BackButtonGroup";
 import {
-  filterNonRelevantValues,
-  getRelevantValues,
+  // filterNonRelevantValues,
+  // getRelevantValues,
   removeCustomFormValues,
+  getInputHistoryValues,
 } from "@lib/utils/form-builder/groupsHistory";
 
 interface SubmitButtonProps {
@@ -336,20 +337,15 @@ export const Form = withFormik<FormProps, Responses>({
     try {
       const isGroupsCheck = formikBag.props.allowGrouping;
       const formValues = isGroupsCheck
-        ? filterNonRelevantValues(
+        ? getInputHistoryValues(
             values,
-            getRelevantValues(
-              values,
-              formikBag.props.formRecord.form.groups,
-              values.groupHistory as string[]
-            )
+            values.groupHistory as string[],
+            formikBag.props.formRecord.form.groups
           )
-        : values;
-      // A thorough check is also done below in submitForm(). This is done just for form sake.
-      const formOnlyValues = removeCustomFormValues(formValues);
+        : removeCustomFormValues(values);
 
       const result = await submitForm(
-        formOnlyValues,
+        formValues,
         formikBag.props.language,
         formikBag.props.formRecord
       );

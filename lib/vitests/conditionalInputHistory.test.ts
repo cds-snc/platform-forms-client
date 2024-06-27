@@ -1,23 +1,9 @@
-import { getRelevantValues, removeCustomFormValues, filterNonRelevantValues } from "@lib/utils/form-builder/groupsHistory";
-import { GroupsType } from "@lib/formContext";
-import { Responses } from "@lib/types";
+import { getInputHistoryValues } from "@lib/utils/form-builder/groupsHistory";
 
 // Fixtures captured by adding a break point in the form builder and copying the values from the debugger
 import {values, groupHistory, groups} from "../../__fixtures__/conditionalInputHistoryEmptySimple.json";
 import {values as valuesEntered, groupHistory as groupHistoryEntered, groups as groupsEntered} from "../../__fixtures__/conditionalInputHistoryEnteredSimple.json";
 import {values as valuesComplex, groupHistory as groupHistoryComplex, groups as groupsComplex} from "../../__fixtures__/conditionalInputHistoryComplex.json";
-
-const getInputHistoryValues = (values: Responses, groupHistory: string[], groups: GroupsType | undefined) => {
-  const formValues = filterNonRelevantValues(
-    values,
-    getRelevantValues(
-      values,
-      groups,
-      groupHistory as string[]
-    )
-  );
-  return removeCustomFormValues(formValues);
-};
 
 describe("Conditional History", () => {
   it("Handles a simple case with no questions answered", () => {

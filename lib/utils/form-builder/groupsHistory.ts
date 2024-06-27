@@ -68,3 +68,15 @@ export const removeCustomFormValues = (values: Responses) => {
   delete formValues["groupHistory"];
   return formValues;
 };
+
+export const getInputHistoryValues = (
+  values: Responses,
+  groupHistory: string[],
+  groups: GroupsType | undefined
+) => {
+  const formValues = filterNonRelevantValues(
+    values,
+    getRelevantValues(values, groups, groupHistory as string[])
+  );
+  return removeCustomFormValues(formValues);
+};
