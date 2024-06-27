@@ -21,8 +21,6 @@ import { BackButton } from "@formBuilder/[id]/preview/BackButton";
 import { Language } from "@lib/types/form-builder-types";
 import { BackButtonGroup } from "../BackButtonGroup/BackButtonGroup";
 import {
-  // filterNonRelevantValues,
-  // getRelevantValues,
   removeCustomFormValues,
   getInputHistoryValues,
 } from "@lib/utils/form-builder/groupsHistory";
