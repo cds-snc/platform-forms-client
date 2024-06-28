@@ -41,7 +41,7 @@ export const ReVerify = (): ReactElement => {
     if (!existingFlow.current.email || !existingFlow.current.authenticationFlowToken) {
       router.push(`/${language}/auth/login`);
     }
-    if (!existingFlow.current.error) {
+    if (existingFlow.current.error) {
       handleError();
     }
   }, [language, router]);
