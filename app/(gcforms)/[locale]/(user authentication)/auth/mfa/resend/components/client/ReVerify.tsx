@@ -26,7 +26,7 @@ export const ReVerify = (): ReactElement => {
   const [resending, setResending] = useState(false);
 
   // Makes sure NextJS will not try to render sessionStorage on the server
-  const existingFlow = useRef({} as { email?: string; authenticationFlowToken?: string });
+  const existingFlow = useRef<{ email?: string; authenticationFlowToken?: string }>({});
   useEffect(() => {
     existingFlow.current = JSON.parse(sessionStorage.getItem("authFlowToken") || "{}");
     if (!existingFlow.current.email || !existingFlow.current.authenticationFlowToken) {
