@@ -1,5 +1,5 @@
 "use client";
-import React, { ReactElement, useRef, useState } from "react";
+import React, { ReactElement, useRef, useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useTranslation } from "@i18n/client";
 import { Button } from "@clientComponents/globals";
@@ -24,13 +24,19 @@ export const ReVerify = (): ReactElement => {
 
   const [authErrorState, setAuthErrorState] = useState<Record<string, string | undefined>>({});
   const [resending, setResending] = useState(false);
+  const [email, setEmail] = useState<string | undefined>();
+  const [authenticationFlowToken, setAuthenticationFlowToken] = useState<string | undefined>();
 
-  // If there is no existing flow redirect to login
-  const { email, authenticationFlowToken }: { email?: string; authenticationFlowToken?: string } =
-    JSON.parse(sessionStorage.getItem("authFlowToken") || "{}");
-  if (!email || !authenticationFlowToken) {
-    router.push(`/${language}/auth/login`);
-  }
+  useEffect(() => {
+    // If there is no existing flow redirect to login
+    const { email, authenticationFlowToken }: { email?: string; authenticationFlowToken?: string } =
+      JSON.parse(sessionStorage.getItem("authFlowToken") || "{}");
+    if (!email || !authenticationFlowToken) {
+      router.push(`/${language}/auth/login`);
+    }
+    setEmail(email);
+    setAuthenticationFlowToken(authenticationFlowToken);
+  }, [router, language]);
 
   const handleReVerify = async () => {
     setResending(true);
