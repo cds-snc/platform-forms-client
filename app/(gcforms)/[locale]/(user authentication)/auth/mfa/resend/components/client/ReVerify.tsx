@@ -11,6 +11,8 @@ import { ErrorStatus } from "@clientComponents/forms/Alert/Alert";
 import Link from "next/link";
 
 import { useFocusIt } from "@lib/hooks/useFocusIt";
+import { safeJSONParse } from "@lib/utils";
+import { logMessage } from "@lib/logger";
 
 export const ReVerify = (): ReactElement => {
   const router = useRouter();
@@ -26,11 +28,21 @@ export const ReVerify = (): ReactElement => {
   const [resending, setResending] = useState(false);
 
   // Makes sure NextJS will not try to render sessionStorage on the server
-  const existingFlow = useRef<{ email?: string; authenticationFlowToken?: string }>({});
+  const existingFlow = useRef<{ email?: string; authenticationFlowToken?: string; error?: string }>(
+    {}
+  );
   useEffect(() => {
-    existingFlow.current = JSON.parse(sessionStorage.getItem("authFlowToken") || "{}");
+    async function handleError() {
+      logMessage.error("Failed to parse authFlowToken JSON.");
+      const errorText = await getErrorText(language, "InternalServiceException");
+      setAuthErrorState(errorText);
+    }
+    existingFlow.current = safeJSONParse(sessionStorage.getItem("authFlowToken") || "{}");
     if (!existingFlow.current.email || !existingFlow.current.authenticationFlowToken) {
       router.push(`/${language}/auth/login`);
+    }
+    if (!existingFlow.current.error) {
+      handleError();
     }
   }, [language, router]);
 
