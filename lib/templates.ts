@@ -32,6 +32,9 @@ const _parseTemplate = (template: {
   } | null;
   securityAttribute: string;
   formPurpose: string;
+  publishReason: string;
+  publishFormType: string;
+  publishDesc: string;
   closingDate?: Date | null;
 }): FormRecord => {
   return {
@@ -57,6 +60,9 @@ const _parseTemplate = (template: {
       },
     }),
     formPurpose: template.formPurpose,
+    publishReason: template.publishReason,
+    publishFormType: template.publishFormType,
+    publishDesc: template.publishDesc,
     securityAttribute: template.securityAttribute as SecurityAttribute,
     ...(template.closingDate && {
       closingDate: template.closingDate.toString(),
@@ -94,6 +100,9 @@ async function _unprotectedGetTemplateByID(formID: string): Promise<FormRecord |
         deliveryOption: true,
         securityAttribute: true,
         formPurpose: true,
+        publishReason: true,
+        publishFormType: true,
+        publishDesc: true,
         closingDate: true,
         ttl: true,
       },
@@ -133,6 +142,9 @@ async function _unprotectedGetTemplateWithAssociatedUsers(formID: string): Promi
         deliveryOption: true,
         securityAttribute: true,
         formPurpose: true,
+        publishReason: true,
+        publishFormType: true,
+        publishDesc: true,
         closingDate: true,
         ttl: true,
         users: {
@@ -168,6 +180,9 @@ export type CreateTemplateCommand = {
   deliveryOption?: DeliveryOption;
   securityAttribute?: SecurityAttribute;
   formPurpose?: string;
+  publishReason?: string;
+  publishFormType?: string;
+  publishDesc?: string;
 };
 
 export type UpdateTemplateCommand = {
@@ -178,6 +193,9 @@ export type UpdateTemplateCommand = {
   deliveryOption?: DeliveryOption;
   securityAttribute?: SecurityAttribute;
   formPurpose?: string;
+  publishReason?: string;
+  publishFormType?: string;
+  publishDesc?: string;
 };
 
 export class TemplateAlreadyPublishedError extends Error {}
@@ -225,6 +243,9 @@ export async function createTemplate(command: CreateTemplateCommand): Promise<Fo
         deliveryOption: true,
         securityAttribute: true,
         formPurpose: true,
+        publishReason: true,
+        publishFormType: true,
+        publishDesc: true,
       },
     });
 
@@ -284,6 +305,9 @@ export async function getAllTemplates(
           deliveryOption: true,
           securityAttribute: true,
           formPurpose: true,
+          publishReason: true,
+          publishFormType: true,
+          publishDesc: true,
         },
         ...(sortByDateUpdated && {
           orderBy: {
@@ -345,6 +369,9 @@ export async function getAllTemplatesForUser(
           deliveryOption: true,
           securityAttribute: true,
           formPurpose: true,
+          publishReason: true,
+          publishFormType: true,
+          publishDesc: true,
         },
         ...(sortByDateUpdated && {
           orderBy: {
@@ -544,6 +571,9 @@ export async function updateTemplate(command: UpdateTemplateCommand): Promise<Fo
           deliveryOption: true,
           securityAttribute: true,
           formPurpose: true,
+          publishReason: true,
+          publishFormType: true,
+          publishDesc: true,
         },
       })
       .catch((e) => prismaErrors(e, null));
@@ -601,7 +631,10 @@ export async function updateTemplate(command: UpdateTemplateCommand): Promise<Fo
 export async function updateIsPublishedForTemplate(
   ability: UserAbility,
   formID: string,
-  isPublished: boolean
+  isPublished: boolean,
+  publishReason: string,
+  publishFormType: string,
+  publishDescription: string
 ): Promise<FormRecord | null> {
   try {
     // Check ability to update the form based on publishing or unpublishing action
@@ -648,7 +681,12 @@ export async function updateIsPublishedForTemplate(
         where: {
           id: formID,
         },
-        data: { isPublished },
+        data: {
+          isPublished: isPublished,
+          publishReason: publishReason,
+          publishFormType: publishFormType,
+          publishDesc: publishDescription,
+        },
         select: {
           id: true,
           created_at: true,
@@ -659,6 +697,9 @@ export async function updateIsPublishedForTemplate(
           deliveryOption: true,
           securityAttribute: true,
           formPurpose: true,
+          publishReason: true,
+          publishFormType: true,
+          publishDesc: true,
         },
       })
       .catch((e) => prismaErrors(e, null));
@@ -733,6 +774,9 @@ export async function updateAssignedUsersForTemplate(
           deliveryOption: true,
           securityAttribute: true,
           formPurpose: true,
+          publishReason: true,
+          publishFormType: true,
+          publishDesc: true,
           users: true,
         },
       })
@@ -873,6 +917,9 @@ export async function updateResponseDeliveryOption(
           deliveryOption: true,
           securityAttribute: true,
           formPurpose: true,
+          publishReason: true,
+          publishFormType: true,
+          publishDesc: true,
         },
       })
       .catch((e) => prismaErrors(e, null));
@@ -958,6 +1005,9 @@ export async function removeDeliveryOption(
           deliveryOption: true,
           securityAttribute: true,
           formPurpose: true,
+          publishReason: true,
+          publishFormType: true,
+          publishDesc: true,
         },
       })
       .catch((e) => prismaErrors(e, null));
@@ -1035,6 +1085,9 @@ export async function deleteTemplate(
           deliveryOption: true,
           securityAttribute: true,
           formPurpose: true,
+          publishReason: true,
+          publishFormType: true,
+          publishDesc: true,
         },
       })
       .catch((e) => prismaErrors(e, null));
@@ -1190,6 +1243,9 @@ export const updateSecurityAttribute = async (
           deliveryOption: true,
           securityAttribute: true,
           formPurpose: true,
+          publishReason: true,
+          publishFormType: true,
+          publishDesc: true,
         },
       })
       .catch((e) => prismaErrors(e, null));
