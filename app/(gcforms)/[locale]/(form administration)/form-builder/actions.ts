@@ -18,6 +18,7 @@ import {
   deleteTemplate as deleteDbTemplate,
   updateSecurityAttribute,
   updateResponseDeliveryOption,
+  updateFormPurpose,
 } from "@lib/templates";
 
 import { serverTranslation } from "@i18n";
@@ -172,6 +173,32 @@ export const updateTemplatePublishedStatus = async ({
     }
 
     revalidatePath("/form-builder/[id]", "layout");
+
+    return { formRecord: response };
+  } catch (error) {
+    return { formRecord: null, error: (error as Error).message };
+  }
+};
+
+export const updateTemplateFormPurpose = async ({
+  id: formID,
+  formPurpose,
+}: {
+  id: string;
+  formPurpose: string;
+}): Promise<{
+  formRecord: FormRecord | null;
+  error?: string;
+}> => {
+  try {
+    const { ability } = await authCheckAndThrow();
+
+    const response = await updateFormPurpose(ability, formID, formPurpose);
+    if (!response) {
+      throw new Error(
+        `Template API response was null. Request information: { ${formID}, ${formPurpose} }`
+      );
+    }
 
     return { formRecord: response };
   } catch (error) {
