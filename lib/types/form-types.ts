@@ -142,6 +142,7 @@ export interface DeliveryOption {
 }
 
 export type SecurityAttribute = "Unclassified" | "Protected A" | "Protected B";
+export type FormPurpose = "" | "admin" | "nonAdmin";
 
 // defines the fields for the form record that is available in authenticated spaces and backend processes
 export type FormRecord = {

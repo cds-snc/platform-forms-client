@@ -11,6 +11,7 @@ export type {
   FormRecord,
   FormProperties,
   SecurityAttribute,
+  FormPurpose,
   ConditionalRule,
 } from "./form-types";
 export { FormElementTypes } from "./form-types";
