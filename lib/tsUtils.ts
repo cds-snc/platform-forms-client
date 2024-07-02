@@ -13,9 +13,9 @@ export function filterUndef<T>(ts: (T | undefined)[]): T[] {
   return ts.filter((t: T | undefined): t is T => !!t);
 }
 
-export function safeJSONParse<T>(json: string): T | undefined {
+export function safeJSONParseM<T>(args: Parameters<typeof JSON.parse>): T | undefined {
   try {
-    return JSON.parse(json);
+    return JSON.parse(...args);
   } catch (e) {
     return undefined;
   }

@@ -10,9 +10,9 @@
   "featureStatus": "Status",
   "featureSwitch": "On/Off",
   "features": {
-    "formTimer": {
-      "title": "Form timer",
-      "description": "Wait a specific amount of time before being allowed to submit the form"
+    "zitadelAuth": {
+      "title": "Zitadel Auth",
+      "description": "Integrate with Zitadel Auth instead of Cognito"
     },
     "experimentalBlocks": {
       "title": "Experimental blocks",

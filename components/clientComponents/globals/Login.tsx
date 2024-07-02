@@ -1,6 +1,6 @@
 "use client";
-import { signIn } from "next-auth/react";
 import { useTranslation } from "@i18n/client";
+import Link from "next/link";
 
 export const Login = () => {
   const {
@@ -9,13 +9,8 @@ export const Login = () => {
   } = useTranslation("common");
 
   return (
-    <button
-      onClick={async () =>
-        signIn("zitadel", { callbackUrl: `http://localhost:3000/${language}/forms` })
-      }
-      className="border-0 bg-transparent text-blue-dark underline hover:text-blue-hover"
-    >
+    <Link href={`/${language}/auth/login`} prefetch={false}>
       {t("loginMenu.login")}
-    </button>
+    </Link>
   );
 };

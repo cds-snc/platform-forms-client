@@ -10,13 +10,9 @@
   "featureStatus": "Statut",
   "featureSwitch": "Activé/Déactivé",
   "features": {
-    "reCatpcha": {
-      "title": "Je ne suis pas un robot",
-      "description": "Active la protection « Je ne suis pas un robot » pour les formulaires avant leur soumission"
-    },
-    "formTimer": {
-      "title": "Minuteur de formulaire",
-      "description": "Attendre un certain temps avant d'être autorisé à soumettre le formulaire"
+    "zitadelAuth": {
+      "title": "AuthenticationZitadel",
+      "description": "Authentication avec Zitadel en place de Cognito"
     },
     "experimentalBlocks": {
       "title": "Blocs expérimentaux",

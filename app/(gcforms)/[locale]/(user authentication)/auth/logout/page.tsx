@@ -2,6 +2,7 @@ import { serverTranslation } from "@i18n";
 import { Metadata } from "next";
 import { LinkButton } from "@serverComponents/globals/Buttons/LinkButton";
 import { LocalTime } from "./components/LocalTime";
+import { signOut } from "@lib/auth";
 
 export async function generateMetadata({
   params: { locale },
@@ -16,6 +17,8 @@ export async function generateMetadata({
 
 export default async function Page({ params: { locale } }: { params: { locale: string } }) {
   const { t } = await serverTranslation("logout", { lang: locale });
+
+  await signOut();
 
   return (
     <div id="auth-panel">
