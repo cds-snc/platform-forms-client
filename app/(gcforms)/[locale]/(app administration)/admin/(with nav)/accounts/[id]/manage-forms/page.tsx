@@ -5,7 +5,7 @@ import { checkPrivilegesAsBoolean } from "@lib/privileges";
 import { getUser } from "@lib/users";
 import { BackLink } from "@clientComponents/admin/LeftNav/BackLink";
 import { Metadata } from "next";
-import { getAllTemplatesForUser } from "@lib/templates";
+import { getAllTemplates } from "@lib/templates";
 import { FormCard } from "./components/server/FormCard";
 import { Loader } from "@clientComponents/globals/Loader";
 
@@ -46,7 +46,17 @@ export default async function Page({
 
   const formUser = await getUser(ability, id);
 
-  const templates = (await getAllTemplatesForUser(ability, id as string)).map((template) => {
+  const templates = (
+    await getAllTemplates(ability, {
+      requestedWhere: {
+        users: {
+          some: {
+            id,
+          },
+        },
+      },
+    })
+  ).map((template) => {
     const {
       id,
       form: { titleEn, titleFr },
