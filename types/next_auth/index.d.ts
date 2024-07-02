@@ -1,13 +1,7 @@
 import { Abilities } from "@lib/types";
 import { RawRuleOf, MongoAbility } from "@casl/ability";
-import type { User as DefaultUser } from "next-auth";
-import { TypeOmit } from "@lib/types";
-declare module "next-auth" {
-  interface User extends TypeOmit<DefaultUser, "id" | "email"> {
-    id: string;
-    email: string;
-  }
 
+declare module "next-auth" {
   interface Session {
     user: {
       id: string;

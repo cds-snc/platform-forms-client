@@ -4,6 +4,7 @@ import { logEvent } from "./auditLogs";
 import { logMessage } from "@lib/logger";
 import { UserAbility } from "./types";
 import { settingCheck, settingPut, settingDelete } from "@lib/cache/settingCache";
+import crypto from "crypto";
 
 export const getAllAppSettings = async (ability: UserAbility) => {
   try {
@@ -17,6 +18,7 @@ export const getAllAppSettings = async (ability: UserAbility) => {
           descriptionEn: true,
           descriptionFr: true,
           value: true,
+          encrypted: true,
         },
       })
       .catch((e) => prismaErrors(e, []));
@@ -68,6 +70,7 @@ export const getFullAppSetting = async (ability: UserAbility, internalId: string
         descriptionEn: true,
         descriptionFr: true,
         value: true,
+        encrypted: true,
       },
     })
     .catch((e) => {
@@ -102,6 +105,21 @@ export const updateAppSetting = async (
   try {
     checkPrivileges(ability, [{ action: "update", subject: "Setting" }]);
 
+    // Is the setting protected by encryption?
+
+    const { encrypted } = await prisma.setting.findUniqueOrThrow({
+      where: {
+        internalId,
+      },
+      select: {
+        encrypted: true,
+      },
+    });
+
+    if (encrypted && settingData.value) {
+      settingData.value = encryptSetting(settingData.value);
+    }
+
     const updatedSetting = await prisma.setting.update({
       where: {
         internalId,
@@ -115,6 +133,7 @@ export const updateAppSetting = async (
       `Updated setting with ${JSON.stringify(settingData)}`
     );
     if (settingData.value) {
+      // Add the setting to the Settings cache
       settingPut(internalId, settingData.value);
     }
     return updatedSetting;
@@ -205,4 +224,28 @@ export const deleteAppSetting = async (ability: UserAbility, internalId: string)
       );
     }
   }
+};
+
+const encryptSetting = (value: string) => {
+  const secret = process.env.TOKEN_SECRET;
+  if (!secret) throw new Error("No Secret Available to Encrypt Settings");
+
+  const iv = crypto.randomBytes(16);
+  const key = crypto.createHash("sha256").update(secret).digest("base64").substring(0, 32);
+
+  const cipher = crypto.createCipheriv("aes-256-ctr", key, iv);
+  const result = Buffer.concat([iv, cipher.update(value), cipher.final()]);
+
+  return result.toString("base64");
+};
+
+export const decryptSetting = (value: string) => {
+  const secret = process.env.TOKEN_SECRET;
+  if (!secret) throw new Error("No Secret Available to Decrypt Settings");
+
+  const encryptedValue = Buffer.from(value, "base64");
+  const key = crypto.createHash("sha256").update(secret).digest("base64").substring(0, 32);
+  const decipher = crypto.createDecipheriv("aes-256-ctr", key, encryptedValue.subarray(0, 16));
+  const decrypted = Buffer.concat([decipher.update(encryptedValue.subarray(16)), decipher.final()]);
+  return decrypted.toString();
 };
