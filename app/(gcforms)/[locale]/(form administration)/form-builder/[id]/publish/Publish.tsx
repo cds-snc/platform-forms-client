@@ -82,9 +82,9 @@ export const Publish = ({ id }: { id: string }) => {
 
   const [showPrePublishDialog, setShowPrePublishDialog] = useState(false);
 
-  const [formType, setFormType] = useState("Application"); // eslint-disable-line
-  const [description, setDescription] = useState(""); // eslint-disable-line
-  const [reasonForPublish, setReasonForPublish] = useState(""); // eslint-disable-line
+  const [formType, setFormType] = useState("Application");
+  const [description, setDescription] = useState("");
+  const [reasonForPublish, setReasonForPublish] = useState("");
 
   const handleOpenPrePublish = async () => {
     setShowPrePublishDialog(true);
@@ -111,7 +111,13 @@ export const Publish = ({ id }: { id: string }) => {
     setError(false);
     setErrorCode(null);
     try {
-      const { formRecord, error } = await updateTemplatePublishedStatus({ id, isPublished: true });
+      const { formRecord, error } = await updateTemplatePublishedStatus({
+        id,
+        isPublished: true,
+        publishFormType: formType,
+        publishDescription: description,
+        publishReason: reasonForPublish,
+      });
       if (error || !formRecord) {
         throw new Error(error);
       }

@@ -631,7 +631,10 @@ export async function updateTemplate(command: UpdateTemplateCommand): Promise<Fo
 export async function updateIsPublishedForTemplate(
   ability: UserAbility,
   formID: string,
-  isPublished: boolean
+  isPublished: boolean,
+  publishReason: string,
+  publishFormType: string,
+  publishDescription: string
 ): Promise<FormRecord | null> {
   try {
     // Check ability to update the form based on publishing or unpublishing action
@@ -678,7 +681,12 @@ export async function updateIsPublishedForTemplate(
         where: {
           id: formID,
         },
-        data: { isPublished },
+        data: {
+          isPublished: isPublished,
+          publishReason: publishReason,
+          publishFormType: publishFormType,
+          publishDesc: publishDescription,
+        },
         select: {
           id: true,
           created_at: true,
