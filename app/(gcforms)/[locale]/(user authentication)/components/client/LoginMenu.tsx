@@ -1,17 +1,15 @@
 "use client";
 import { useTranslation } from "@i18n/client";
-
-import { useSession } from "next-auth/react";
+import { useSession, signOut } from "next-auth/react";
 import { clearTemplateStore } from "@lib/store/utils";
 import { Login } from "@clientComponents/globals/Login";
-import { useRouter } from "next/navigation";
 
 export const LoginMenu = () => {
   const { i18n, t } = useTranslation("common");
-  const router = useRouter();
+
   const handleClick = async () => {
     clearTemplateStore();
-    router.push(`/${i18n.language}/auth/logout`);
+    await signOut({ callbackUrl: `/${i18n.language}/auth/logout` });
   };
   const session = useSession();
 
