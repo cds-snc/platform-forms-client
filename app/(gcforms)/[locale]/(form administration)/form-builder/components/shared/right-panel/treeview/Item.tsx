@@ -55,7 +55,7 @@ export const Item = ({
   const isGhostElement = item ? isGhostElementType(item) : false;
   const isSectionElement = item ? isSectionElementType(item) : false;
   const isTitleElement = item ? isTitleElementType(item) : false;
-  const fieldType = item ? item?.data.fieldType : "";
+  const fieldType = item ? item?.data.type : "";
 
   // Text
   const titleText = item ? (isSectionElement ? item?.data.name : item?.data[localizedTitle]) : "";
