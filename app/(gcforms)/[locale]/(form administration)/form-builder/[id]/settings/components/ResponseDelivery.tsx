@@ -133,7 +133,9 @@ export const ResponseDelivery = () => {
       if (!completeEmailAddressRegex.test(inputEmailValue)) {
         return false;
       }
-      return isValidDeliveryOption && emailDeliveryOptionsChanged;
+      return (
+        isValidDeliveryOption && (emailDeliveryOptionsChanged || purposeOption !== formPurpose)
+      );
     }
 
     if (deliveryOptionValue === initialDeliveryOption && purposeOption === formPurpose) {

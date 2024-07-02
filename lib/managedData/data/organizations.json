@@ -245,6 +245,13 @@
     "notify_organisation_id": "c5f5aee8-b508-47ad-9e77-7227f0a254a7"
   },
   {
+    "id": "001OO000006vJNYYA2",
+    "name_eng": "Civilian Review and Complaints Commission for the RCMP",
+    "name_fra": "Commission civile d’examen et de traitement des plaintes relatives à la Gendarmerie royale du Canada",
+    "type": "GC Department",
+    "notify_organisation_id": null
+  },
+  {
     "id": "001I9000004zLveIAE",
     "name_eng": "Communications Security Establishment Canada",
     "name_fra": "Centre de la sécurité des télécommunications Canada",
@@ -595,6 +602,13 @@
     "notify_organisation_id": null
   },
   {
+    "id": "001OO00000AhiwAYAR",
+    "name_eng": "Office of the Secretary to the Governor General",
+    "name_fra": "Bureau du secrétaire du gouverneur général",
+    "type": "GC Department",
+    "notify_organisation_id": null
+  },
+  {
     "id": "001I9000005DXSKIA4",
     "name_eng": "Office of the Superintendent of Financial Institutions",
     "name_fra": "Bureau du surintendant des institutions financières",
@@ -640,6 +654,13 @@
     "id": "001I900000504ZTIAY",
     "name_eng": "Parole Board of Canada",
     "name_fra": "Commission des libérations conditionnelles du Canada",
+    "type": "GC Department",
+    "notify_organisation_id": null
+  },
+  {
+    "id": "001OO000006vSnJYAU",
+    "name_eng": "Patented Medicine Prices Review Board Canada",
+    "name_fra": "Conseil d'examen du prix des médicaments brevetés",
     "type": "GC Department",
     "notify_organisation_id": null
   },
