@@ -214,6 +214,7 @@ export async function createTemplate(command: CreateTemplateCommand): Promise<Fo
         users: {
           connect: { id: command.userID },
         },
+        formPurpose: command.formPurpose,
       },
       select: {
         id: true,
@@ -533,6 +534,7 @@ export async function updateTemplate(command: UpdateTemplateCommand): Promise<Fo
           ...(command.securityAttribute && {
             securityAttribute: command.securityAttribute as string,
           }),
+          formPurpose: command.formPurpose,
         },
         select: {
           id: true,
