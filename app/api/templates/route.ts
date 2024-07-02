@@ -116,13 +116,13 @@ export const POST = middleware(
           deliveryOption: deliveryOption,
           securityAttribute: securityAttribute,
         });
-        if (!response)
-          if (!response)
-            throw new Error(
-              `Template API response was null. Request information: method = ${
-                req.method
-              } ; query = ${JSON.stringify(props.params)} ; body = ${JSON.stringify(props.body)}`
-            );
+        if (!response) {
+          throw new Error(
+            `Template API response was null. Request information: method = ${
+              req.method
+            } ; query = ${JSON.stringify(props.params)} ; body = ${JSON.stringify(props.body)}`
+          );
+        }
         return NextResponse.json(response);
       } else {
         throw new MalformedAPIRequest("Missing formConfig");
