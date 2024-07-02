@@ -1,7 +1,13 @@
 "use server";
 
 import { authCheckAndThrow } from "@lib/actions";
-import { DeliveryOption, FormProperties, FormRecord, SecurityAttribute } from "@lib/types";
+import {
+  DeliveryOption,
+  FormProperties,
+  FormRecord,
+  SecurityAttribute,
+  FormPurpose,
+} from "@lib/types";
 import {
   createTemplate as createDbTemplate,
   removeDeliveryOption,
@@ -24,6 +30,7 @@ export type CreateOrUpdateTemplateType = {
   name?: string;
   deliveryOption?: DeliveryOption;
   securityAttribute?: SecurityAttribute;
+  formPurpose?: FormPurpose;
 };
 
 export const createOrUpdateTemplate = async ({
@@ -32,6 +39,7 @@ export const createOrUpdateTemplate = async ({
   name,
   deliveryOption,
   securityAttribute,
+  formPurpose,
 }: CreateOrUpdateTemplateType): Promise<{
   formRecord: FormRecord | null;
   error?: string;
@@ -46,9 +54,16 @@ export const createOrUpdateTemplate = async ({
         name,
         deliveryOption,
         securityAttribute,
+        formPurpose,
       });
     }
-    return await createTemplate({ formConfig, name, deliveryOption, securityAttribute });
+    return await createTemplate({
+      formConfig,
+      name,
+      deliveryOption,
+      securityAttribute,
+      formPurpose,
+    });
   } catch (e) {
     return { formRecord: null, error: (e as Error).message };
   }
@@ -59,11 +74,13 @@ export const createTemplate = async ({
   name,
   deliveryOption,
   securityAttribute,
+  formPurpose,
 }: {
   formConfig: FormProperties;
   name?: string;
   deliveryOption?: DeliveryOption;
   securityAttribute?: SecurityAttribute;
+  formPurpose?: FormPurpose;
 }): Promise<{
   formRecord: FormRecord | null;
   error?: string;
@@ -78,6 +95,7 @@ export const createTemplate = async ({
       name: name,
       deliveryOption: deliveryOption,
       securityAttribute: securityAttribute,
+      formPurpose: formPurpose,
     });
 
     if (!response) {
@@ -98,12 +116,14 @@ export const updateTemplate = async ({
   name,
   deliveryOption,
   securityAttribute,
+  formPurpose,
 }: {
   id: string;
   formConfig: FormProperties;
   name?: string;
   deliveryOption?: DeliveryOption;
   securityAttribute?: SecurityAttribute;
+  formPurpose?: FormPurpose;
 }): Promise<{
   formRecord: FormRecord | null;
   error?: string;
@@ -118,6 +138,7 @@ export const updateTemplate = async ({
       name: name,
       deliveryOption: deliveryOption,
       securityAttribute: securityAttribute,
+      formPurpose: formPurpose,
     });
     if (!response) {
       throw new Error(
