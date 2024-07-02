@@ -12,6 +12,8 @@ Vos responsabilités relatives à l’utilisation de Formulaires GC sont décrit
 - Protéger et traiter les renseignements personnels et sensibles :
   - Obtenir les approbations nécessaires pour collecter des renseignements personnels.
   - Gérer les réponses aux formulaires conformément au calendrier de conservation et d’élimination de votre ministère ou organisme.
-  - Utiliser Formulaires GC pour la collecte de données classées jusqu’à PROTÉGÉ B.
+  - Utiliser Formulaires GC pour la collecte de données classées jusqu’à Protégé B.
+  - Veiller à ce que les informations sensibles ou protégées soient extraites de la base de données et non envoyées par courriel.
+  - Sauvegarder une copie de vos réponses aux formulaires et approuvez la suppression dans les 45 jours suivant la réception de soumissions. Formulaires GC ne sert qu'à stocker temporairement des données. Si les réponses ne sont pas téléchargées et confirmées dans les 45 jours, nous prendrons les mesures nécessaires pour veiller à ce qu'elles soient récupérées par le programme ou le service responsable.
 
 Pour toute question en lien avec les présentes conditions d’utilisation, veuillez [nous contacter](/fr/contact).

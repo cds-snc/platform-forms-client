@@ -83,4 +83,4 @@ Si le SNC doit mettre hors service Formulaires GC, il collaborera avec la client
 
 Formulaires GC est un produit à code source ouvert permettant à des tiers de créer leur propre version à l’aide du code disponible sur [GitHub](https://github.com/cds-snc/platform-forms-client).
 
-**Dernière mise à jour :** 26 juin 2024
+**Dernière mise à jour :** 2 juillet 2024

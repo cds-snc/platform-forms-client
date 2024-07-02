@@ -21,6 +21,7 @@ Vous avez pour responsabilité :
 - d’élaborer et de publier un avis de confidentialité pour votre formulaire conformément à l’article 4.2.10 de la [_directive sur les pratiques relatives à la protection de la vie privée_](https://www.tbs-sct.canada.ca/pol/doc-fra.aspx?id=18309). Nous affichons également les [conditions d’utilisation](/fr/terms-and-conditions) au bas de chaque formulaire afin de répondre aux exigences des politiques liées à l’hébergement du formulaire en votre nom. Nous communiquons des renseignements sur notre conservation et notre élimination des réponses aux formulaires dans nos bases de données, ainsi que sur les fonctionnalités permettant de protéger la sécurité des sites Web du gouvernement du Canada.
 - de déterminer le niveau de confidentialité des renseignements collectés dans vos formulaires. Formulaires GC prend en charge la collecte de données classées jusqu’à PROTÉGÉ B. Apprenez-en davantage sur la détermination du niveau de confidentialité en consultant la [norme sur la catégorisation de sécurité](https://www.tbs-sct.canada.ca/pol/doc-fra.aspx?id=32614).
 - de respecter la [_Loi sur la protection des renseignements personnels_](https://laws-lois.justice.gc.ca/fra/lois/p-21/) et la [_Loi sur l’accès à l’information_](https://laws-lois.justice.gc.ca/fra/lois/a-1/) concernant les renseignements personnels et sensibles contenus dans les réponses soumises dans vos formulaires en cas de demande, d’incident ou d’atteinte à la sécurité des données.
+- de récupérer les réponses directement à partir de la base de données lors du traitement d’informations plus sensibles de type Protégé B. La réception de réponses par courriel n’est possible que pour les informations de type Protégé A.
 
 ### Réponses envoyées par courriel (jusqu’à PROTÉGÉ A)
 
@@ -71,4 +72,4 @@ Nous vous demandons de ne pas intervenir sur le format des fichiers JSON, car to
 
 Pour toute question en lien avec les présentes conditions d’utilisation, veuillez [nous contacter](/fr/contact).
 
-**Dernière mise à jour :** 25 juillet 2024
+**Dernière mise à jour :** 2 juillet 2024

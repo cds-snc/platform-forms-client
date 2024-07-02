@@ -83,4 +83,4 @@ In the event that CDS needs to decommission the service, GC Forms will work with
 
 GC Forms is open source and available for others to stand up their own version based on the code found in [GitHub](https://github.com/cds-snc/platform-forms-client).
 
-**Last update:** June 26, 2024
+**Last update:** July 2, 2024
