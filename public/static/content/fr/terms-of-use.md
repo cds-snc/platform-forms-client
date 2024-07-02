@@ -36,7 +36,7 @@ Vous avez pour responsabilité :
 Vous avez pour responsabilité :
 
 - d’adhérer aux directives ministérielles concernant la bonne utilisation des appareils et des réseaux.
-- d’accuser réception des réponses au formulaire et d’en enregistrer une copie dans les 45 jours suivant la réception d’une réponse.
+- d’accuser réception des réponses au formulaire et d’en enregistrer une copie dans les 45 jours suivant la réception d’une réponse. Formulaires GC ne sert qu’à stocker temporairement des données. Si les réponses ne sont pas sauvegardées et confirmées dans les 45 jours, nous prendrons les mesures nécessaires pour qu’elles soient récupérées par le programme ou le service responsable.
 - de signaler tout problème lié aux réponses enregistrées.
 - de traiter, d'ouvrir et d’enregistrer les réponses aux formulaires conformément à votre calendrier de conservation et d’élimination.
 
@@ -44,6 +44,7 @@ Vous avez pour responsabilité :
 
 - Utilisez une adresse courriel gouvernementale individuelle pour créer votre compte et pour l’authentification à deux facteurs.
 - Ne communiquez pas votre mot de passe à personne et ne le conservez pas dans un endroit où d’autres personnes pourraient le trouver. Si quelqu’un d’autre a besoin d’accéder à un formulaire, [contactez-nous](/fr/support).
+- Assurer la confidentialité et la sécurité des renseignements protégées lors du téléchargement des réponses aux formulaires de Formulaires GC.
 - Signalez toute faille de sécurité et vulnérabilité en utilisant les étapes détaillées dans l’[avis de sécurité](https://numerique.canada.ca/avis-de-securite/).
 
 ## Publication du formulaire dans les deux langues officielles
@@ -66,6 +67,8 @@ Vous avez pour responsabilité :
 
 Vous pouvez remplacer la signature du gouvernement du Canada par la signature de votre ministère ou organisme. Si vous ne connaissez pas la signature de votre ministère ou organisme, veuillez contacter [le coordonnateur ou la coordonnatrice du Programme fédéral de l’image de marque](https://www.tbs-sct.canada.ca/ap/fip-pcim/coord-fra.asp).
 
+Nous vous demandons de ne pas intervenir sur le format des fichiers JSON, car toute mise à jour peut compromettre à la fois l’accessibilité du formulaire et les normes de conception intégrées pour le programme de coordination de l’image de marque.
+
 Pour toute question en lien avec les présentes conditions d’utilisation, veuillez [nous contacter](/fr/contact).
 
-**Dernière mise à jour :** 14 décembre 2023
+**Dernière mise à jour :** 25 juillet 2024

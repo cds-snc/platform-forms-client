@@ -44,6 +44,7 @@ You are responsible for:
 
 - Use a valid individual government email to create your account and for two-factor authentication (2FA).
 - Do not share your password with anyone or store it where others could find it. If someone else needs access to a form, [contact us](/en/support).
+- Ensure the privacy and security of protected information upon downloading form responses from GC Forms. If Responses are not saved and confirmed within 45 days, we will take necessary steps to ensure they are retrieved by the responsible program or service. 
 - Report any security breach or vulnerability using the steps outlined in our [Security notice](https://digital.canada.ca/security-notice/).
 
 ## Publish in both Official Languages
@@ -66,6 +67,8 @@ You are responsible for:
 
 You may replace the Government of Canada signature with your department or agency’s signature. If you are unsure about your department or agency’s signature, contact your [Federal Identity Program coordinator](https://www.tbs-sct.canada.ca/ap/fip-pcim/coord-eng.asp).
 
+We ask that clients not interfere with the format of JSON files, as any updates can compromise both the accessibility of the form as well as embedded design standards for the federal identity program.  
+
 For questions related to these terms of use, [contact us](/en/contact).
 
-**Last update:** December 14, 2023
+**Last update:** July 2, 2024
