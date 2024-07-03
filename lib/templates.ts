@@ -906,6 +906,9 @@ export async function updateFormPurpose(
           deliveryOption: true,
           securityAttribute: true,
           formPurpose: true,
+          publishDesc: true,
+          publishFormType: true,
+          publishReason: true,
         },
       })
       .catch((e) => prismaErrors(e, null));
