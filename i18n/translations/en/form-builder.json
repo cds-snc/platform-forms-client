@@ -509,6 +509,10 @@
       "Request": "Request",
       "Survey": "Survey",
       "Other": "Other"
+    },
+    "error": {
+      "title": "Error",
+      "message": "Please fill out all fields."
     }
   },
   "question": "Question",

@@ -82,7 +82,7 @@ export const Publish = ({ id }: { id: string }) => {
 
   const [showPrePublishDialog, setShowPrePublishDialog] = useState(false);
 
-  const [formType, setFormType] = useState("Application");
+  const [formType, setFormType] = useState("");
   const [description, setDescription] = useState("");
   const [reasonForPublish, setReasonForPublish] = useState("");
 
@@ -91,6 +91,9 @@ export const Publish = ({ id }: { id: string }) => {
   };
 
   const handlePrePublishClose = async () => {
+    setDescription("");
+    setReasonForPublish("");
+    setFormType("");
     setShowPrePublishDialog(false);
   };
 
@@ -285,6 +288,9 @@ export const Publish = ({ id }: { id: string }) => {
         <PrePublishDialog
           setDescription={setDescription}
           setFormType={setFormType}
+          description={description}
+          formType={formType}
+          reasonForPublish={reasonForPublish}
           setReasonForPublish={setReasonForPublish}
           handleClose={() => handlePrePublishClose()}
           handleConfirm={() => handlePrePublish()}

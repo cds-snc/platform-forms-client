@@ -508,6 +508,10 @@
       "Request": "Requête",
       "Survey": "Sondage",
       "Other": "Autre"
+    },
+    "error": {
+      "title": "Erreur",
+      "message": "Veuillez remplir tous les champs."
     }
   },
   "question": "Question",

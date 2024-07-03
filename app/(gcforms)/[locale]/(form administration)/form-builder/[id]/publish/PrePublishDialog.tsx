@@ -1,5 +1,5 @@
 import { useTranslation } from "@i18n/client";
-import { Button } from "@clientComponents/globals";
+import { Button, Alert } from "@clientComponents/globals";
 import { Dialog, useDialogRef, Radio, TextArea } from "@formBuilder/components/shared";
 import React, { useState } from "react";
 import Select, { SingleValue } from "react-select";
@@ -10,12 +10,18 @@ export const PrePublishDialog = ({
   setFormType,
   setDescription,
   setReasonForPublish,
+  reasonForPublish,
+  formType,
+  description,
 }: {
   handleClose: () => void;
   handleConfirm: () => void;
   setFormType: (formType: string) => void;
   setDescription: (description: string) => void;
   setReasonForPublish: (reasonForPublish: string) => void;
+  reasonForPublish: string;
+  formType: string;
+  description: string;
 }) => {
   const { t } = useTranslation("form-builder");
   const dialog = useDialogRef();
@@ -23,12 +29,19 @@ export const PrePublishDialog = ({
   const [prePublishStep, setPrePublishStep] = useState(0);
 
   async function ContinuePublishSteps() {
+    setError(false);
     if (prePublishStep == 0) {
-      setPrePublishStep(1);
+      if (reasonForPublish == "") {
+        setError(true);
+      } else {
+        setPrePublishStep(1);
+      }
     } else {
-      //TODO : Update record.
-
-      handleConfirm();
+      if (formType == "" || description == "") {
+        setError(true);
+      } else {
+        handleConfirm();
+      }
     }
   }
 
@@ -56,6 +69,8 @@ export const PrePublishDialog = ({
     { label: t("prePublishFormDialog.formtypes.Survey"), value: "Survey" },
     { label: t("prePublishFormDialog.formtypes.Other"), value: "Other" },
   ];
+
+  const [error, setError] = useState(false);
 
   const actions = (
     <div className="flex gap-4">
@@ -86,6 +101,12 @@ export const PrePublishDialog = ({
         >
           <div className="my-8 mx-5 flex flex-col gap-4">
             <h3 className="gc-h4 mb-1 pb-0 text-lg">{t("prePublishFormDialog.text1")}</h3>
+            {error && (
+              <Alert.Danger focussable={true} className="mb-5">
+                <Alert.Title headingTag="h3">{t("prePublishFormDialog.error.title")}</Alert.Title>
+                <p className="mb-2">{t("prePublishFormDialog.error.message")} </p>
+              </Alert.Danger>
+            )}
             <p className="text-sm">{t("prePublishFormDialog.helpsUnderstand")}</p>
             <span>
               <Radio
@@ -130,6 +151,12 @@ export const PrePublishDialog = ({
         >
           <div className="my-8 mx-5 flex flex-col gap-4">
             <h3 className="gc-h4 mb-1 pb-0 text-lg">{t("prePublishFormDialog.text2")}</h3>
+            {error && (
+              <Alert.Danger focussable={true} className="mb-5">
+                <Alert.Title headingTag="h3">{t("prePublishFormDialog.error.title")}</Alert.Title>
+                <p className="mb-2">{t("prePublishFormDialog.error.message")} </p>
+              </Alert.Danger>
+            )}
             <p className="text-sm">{t("prePublishFormDialog.thisInformation")}</p>
             <label>{t("prePublishFormDialog.whatType")}</label>
             <div>
