@@ -93,7 +93,7 @@ export const GroupNode = (node: NodeProps) => {
           </button>
         )}
         {!node.data.children.length && (
-          <div className={cn(nodeClassName + " italic")}>{t("logic.emptySection")}</div>
+          <div className={cn(nodeClassName + " italic")}>{t("logic.questionLabel")}</div>
         )}
         {node.data.children.map((child: TreeItem) => {
           const selected =
@@ -130,7 +130,9 @@ export const GroupNode = (node: NodeProps) => {
             return (
               <div key={child.index} className={cn(nodeClassName)}>
                 <div className="truncate">
-                  {getTitle(child.data as ElementProperties).substring(0, 300)}
+                  {getTitle(child.data as ElementProperties).substring(0, 300) || (
+                    <span className="italic">{t("logic.questionLabel")}</span>
+                  )}
                 </div>
               </div>
             );
