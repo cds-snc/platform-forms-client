@@ -31,7 +31,12 @@ const handlePublish = async (formID: string, isPublished: boolean) => {
     headers: {
       "Content-Type": "application/json",
     },
-    data: { isPublished },
+    data: {
+      isPublished: isPublished,
+      publishReason: "",
+      publishFormType: "",
+      publishDescription: "Published via Admin",
+    },
     timeout: process.env.NODE_ENV === "production" ? 60000 : 0,
   }).catch((err) => logMessage.error(err));
 };

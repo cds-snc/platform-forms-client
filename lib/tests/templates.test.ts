@@ -570,7 +570,7 @@ describe("Template CRUD functions", () => {
       buildPrismaResponse("formtestID", formConfiguration, true)
     );
 
-    const updatedTemplate = await updateIsPublishedForTemplate(ability, "formtestID", true);
+    const updatedTemplate = await updateIsPublishedForTemplate(ability, "formtestID", true, "", "", "");
 
     expect(prismaMock.template.update).toHaveBeenCalledWith({
       where: {
@@ -630,7 +630,7 @@ describe("Template CRUD functions", () => {
     );
 
     await expect(async () => {
-      await updateIsPublishedForTemplate(ability, "formtestID", false);
+      await updateIsPublishedForTemplate(ability, "formtestID", false, "", "", "");
     }).rejects.toThrowError(new AccessControlError(`Access Control Forbidden Action`));
   });
 
@@ -653,7 +653,7 @@ describe("Template CRUD functions", () => {
       buildPrismaResponse("formtestID", formConfiguration, true)
     );
 
-    await updateIsPublishedForTemplate(ability, "formtestID", false);
+    await updateIsPublishedForTemplate(ability, "formtestID", false, "", "", "");
 
     expect(prismaMock.template.update).toHaveBeenCalledWith({
       where: {
@@ -1055,7 +1055,7 @@ describe("Template CRUD functions", () => {
     }).rejects.toThrowError(new AccessControlError(`Access Control Forbidden Action`));
 
     await expect(async () => {
-      await updateIsPublishedForTemplate(ability, "formtestID", true);
+      await updateIsPublishedForTemplate(ability, "formtestID", true, "", "", "");
     }).rejects.toThrowError(new AccessControlError(`Access Control Forbidden Action`));
 
     await expect(async () => {
@@ -1141,7 +1141,7 @@ describe("Template CRUD functions", () => {
     }).rejects.toThrowError(new AccessControlError(`Access Control Forbidden Action`));
 
     await expect(async () => {
-      await updateIsPublishedForTemplate(ability, "formtestID", true);
+      await updateIsPublishedForTemplate(ability, "formtestID", true, "", "", "");
     }).rejects.toThrowError(new AccessControlError(`Access Control Forbidden Action`));
 
     await expect(async () => {
