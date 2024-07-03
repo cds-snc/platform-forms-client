@@ -270,6 +270,7 @@ export const ResponseDelivery = () => {
     setToEmailDelivery,
     updateField,
     purposeOption,
+    formPurpose,
   ]);
 
   // Update local state
