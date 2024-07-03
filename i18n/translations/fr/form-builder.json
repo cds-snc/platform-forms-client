@@ -871,7 +871,8 @@
     "legend": {
       "section": "Appliquer une règle d'embranchement à une section",
       "option": "Appliquer des règles conditionnelles aux questions ayant des options à sélectionner"
-    }
+    },
+    "offBoard": "None [Off-board page] [FR]"
   },
   "groups": {
     "newSection": "Nouvelle section",

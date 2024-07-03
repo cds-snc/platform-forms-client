@@ -35,6 +35,9 @@ export const SingleActionSelect = ({
   // Filter out the current group
   groupItems = groupItems.filter((item) => item.value !== currentGroup && item.value !== "end");
 
+  // Add off-board option
+  groupItems.push({ label: t("logic.offBoard"), value: "off-board" });
+
   const handleGroupChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const value = e.target.value;
     setNextActionId(value);

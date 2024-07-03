@@ -30,6 +30,7 @@ interface GCFormsContextValueType {
   handleNextAction: () => void;
   handlePreviousAction: () => void;
   hasNextAction: (group: string) => boolean;
+  isOffBoardSection: (group: string) => boolean;
   formRecord: PublicFormRecord;
   groupsCheck: (groupsFlag: boolean | undefined) => boolean;
   getGroupHistory: () => string[];
@@ -57,6 +58,21 @@ export const GCFormsProvider = ({
 
   const hasNextAction = (group: string) => {
     return groups[group]?.nextAction ? true : false;
+  };
+
+  /**
+   * Handle check if the group is an off-board section
+   * In which case we don't want to navigate to the next group or submit
+   * @param group
+   * @returns boolean
+   */
+  const isOffBoardSection = (group: string) => {
+    const next = groups[group]?.nextAction;
+    if (next === "off-board") {
+      return true;
+    }
+
+    return false;
   };
 
   const handleNextAction = () => {
@@ -140,6 +156,7 @@ export const GCFormsProvider = ({
         handleNextAction,
         handlePreviousAction,
         hasNextAction,
+        isOffBoardSection,
         groupsCheck,
         getGroupHistory,
         pushIdToHistory,
@@ -169,6 +186,7 @@ export const useGCFormsContext = () => {
       previousGroup: "",
       setGroup: () => void 0,
       hasNextAction: () => void 0,
+      isOffBoardSection: () => false,
       handleNextAction: () => void 0,
       handlePreviousAction: () => void 0,
       formRecord: {} as PublicFormRecord,

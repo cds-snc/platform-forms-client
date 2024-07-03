@@ -871,7 +871,8 @@
     "legend": {
       "section": "Apply a branching rule to a section",
       "option": "Apply conditional rules to questions with selectable options"
-    }
+    },
+    "offBoard": "None [Off-board page]"
   },
   "groups": {
     "newSection": "New section",

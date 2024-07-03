@@ -17,7 +17,7 @@ export const NextButton = ({
   fallBack?: () => JSX.Element;
   language: Language;
 }) => {
-  const { currentGroup, hasNextAction, handleNextAction } = useGCFormsContext();
+  const { currentGroup, hasNextAction, handleNextAction, isOffBoardSection } = useGCFormsContext();
   const { t } = useTranslation("form-builder");
 
   const handleValidation = async () => {
@@ -36,6 +36,11 @@ export const NextButton = ({
     !hasNextAction(currentGroup)
   ) {
     return fallBack ? fallBack() : <></>;
+  }
+
+  if (isOffBoardSection(currentGroup)) {
+    // Do not show next button for off-board sections
+    return null;
   }
 
   return (
