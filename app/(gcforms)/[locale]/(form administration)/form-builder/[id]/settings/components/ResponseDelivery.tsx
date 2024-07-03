@@ -252,7 +252,7 @@ export const ResponseDelivery = () => {
     })) as FormServerError;
 
     if (result?.error) {
-      toast.error(<ErrorSaving errorCode={FormServerErrorCodes.DELIVERY_OPTION} />, "wide");
+      toast.error(<ErrorSaving errorCode={FormServerErrorCodes.FORM_PURPOSE} />, "wide");
       return;
     }
 
