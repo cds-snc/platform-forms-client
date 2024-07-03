@@ -578,6 +578,9 @@ describe("Template CRUD functions", () => {
       },
       data: {
         isPublished: true,
+        publishReason: "",
+        publishFormType: "",
+        publishDesc: "",
       },
       select: {
         id: true,
@@ -661,6 +664,9 @@ describe("Template CRUD functions", () => {
       },
       data: {
         isPublished: false,
+        publishReason: "",
+        publishFormType: "",
+        publishDesc: "",
       },
       select: {
         id: true,
