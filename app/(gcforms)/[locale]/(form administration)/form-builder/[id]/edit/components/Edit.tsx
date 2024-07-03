@@ -5,7 +5,6 @@ import { useTranslation } from "@i18n/client";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Language, LocalizedFormProperties } from "@lib/types/form-builder-types";
 import { ElementPanel, ConfirmationDescription, PrivacyDescription } from ".";
-import { RefsProvider } from "./RefsContext";
 import { RichTextLocked } from "./elements";
 import { ExpandingInput } from "@formBuilder/components/shared";
 import { useRehydrate, useTemplateStore } from "@lib/store/useTemplateStore";
@@ -141,18 +140,16 @@ export const Edit = ({ formId }: { formId: string }) => {
         ariaLabel={t("richTextIntroTitle")}
       />
       <div className="form-builder-editor">
-        <RefsProvider>
-          {layout.length >= 1 &&
-            layout.map((id, index) => {
-              const element = sortedElements.find((element) => element.id === id);
+        {layout.length >= 1 &&
+          layout.map((id, index) => {
+            const element = sortedElements.find((element) => element.id === id);
 
-              if (element) {
-                const questionNumber = getQuestionNumber(element, elementTypes);
-                const item = { ...element, index, questionNumber };
-                return <ElementPanel elements={sortedElements} item={item} key={item.id} />;
-              }
-            })}
-        </RefsProvider>
+            if (element) {
+              const questionNumber = getQuestionNumber(element, elementTypes);
+              const item = { ...element, index, questionNumber };
+              return <ElementPanel elements={sortedElements} item={item} key={item.id} />;
+            }
+          })}
       </div>
       <>
         <div id="privacy-text">
