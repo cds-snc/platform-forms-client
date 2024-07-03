@@ -92,7 +92,9 @@ export const GroupNode = (node: NodeProps) => {
             <QuestionRuleSvg title={t("groups.editSection", { name: node.data.label.name })} />
           </button>
         )}
-        {!node.data.children.length && <div className="min-h-[50px] min-w-[200px]"></div>}
+        {!node.data.children.length && (
+          <div className={cn(nodeClassName + " italic")}>{t("logic.emptySection")}</div>
+        )}
         {node.data.children.map((child: TreeItem) => {
           const selected =
             selectedElementId === Number(child.index)
