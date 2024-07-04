@@ -24,7 +24,11 @@ export const LogicNavigation = () => {
   const autoFlow = () => {
     const groups = getGroups() as GroupsType;
     let newGroups = autoFlowAllNextActions({ ...groups }, true); // forces overwrite of existing next actions
-    newGroups = resetLockedSections(newGroups);
+
+    if (newGroups) {
+      newGroups = resetLockedSections(newGroups);
+    }
+
     replaceGroups(newGroups);
     flow.current?.redraw();
     toast.success(t("logic.toastSuccess"));

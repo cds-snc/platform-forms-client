@@ -458,7 +458,7 @@ export const getNextAction = (
  * @returns groups Reset the locked sections to their default state
  * see: https://github.com/cds-snc/platform-forms-client/issues/3933
  */
-export const resetLockedSections = (groups: GroupsType | undefined) => {
+export const resetLockedSections = (groups: GroupsType) => {
   if (!groups) return groups;
 
   const { start, review, end, ...rest } = groups;
