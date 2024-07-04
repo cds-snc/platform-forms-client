@@ -125,19 +125,27 @@ const createGroupStore = (initProps?: Partial<GroupStoreProps>) => {
           if (!s.form.groups) {
             s.form.groups = {} as GroupsType;
           }
-          const newObject: GroupsType = {};
-          const keys = Object.keys(s.form.groups);
 
-          for (let i = 0; i < keys.length; i++) {
-            const key = keys[i];
-            if (key === "review") {
-              newObject[id] = { name, elements: [], titleEn: "", titleFr: "" };
-              newObject[key] = s.form.groups[key];
-            }
-            newObject[key] = s.form.groups[key];
+          // get review group if it exists
+          const reviewGroup = s.form.groups.review;
+
+          const endGroup = s.form.groups.end;
+
+          // delete review and end groups
+          delete s.form.groups.review;
+          delete s.form.groups.end;
+
+          // add new group
+          s.form.groups[id] = { name, elements: [], titleEn: "", titleFr: "" };
+
+          // add review and end groups back
+          if (reviewGroup) {
+            s.form.groups.review = reviewGroup;
           }
 
-          s.form.groups = newObject;
+          if (endGroup) {
+            s.form.groups.end = endGroup;
+          }
         });
       },
       deleteGroup: (id: string) => {
