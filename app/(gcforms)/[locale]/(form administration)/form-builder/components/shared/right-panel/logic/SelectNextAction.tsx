@@ -43,7 +43,10 @@ export const SelectNextAction = ({ item, lang }: { item: FormElement | null; lan
           <SectionName lang={lang} sectionName={sectionName} />
         </div>
         <div className="p-4">
-          <SingleActionSelect nextAction={selectedGroupNextActions || "end"} />
+          <SingleActionSelect
+            key={`single-action-select-${selectedGroupId}`}
+            nextAction={selectedGroupNextActions || "end"}
+          />
         </div>
       </div>
     );
@@ -72,6 +75,7 @@ export const SelectNextAction = ({ item, lang }: { item: FormElement | null; lan
           no - => section 2
         */
         <MultiActionSelector
+          key={`multi-action-select-${selectedGroupId}`}
           lang={lang}
           sectionName={sectionName}
           item={item}
