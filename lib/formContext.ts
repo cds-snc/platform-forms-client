@@ -469,11 +469,11 @@ export const resetLockedSections = (groups: GroupsType) => {
   // Reset the start group to point to the first group in ...rest
   const resetStart = { ...start, autoFlow: true, nextAction: firstGroupKey };
 
-  // Ensure next actions for locked groups points to the correct group
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const { nextAction, ...endWithoutNextAction } = end;
   const resetReview = { ...review, autoFlow: true, nextAction: "end" };
-  const resetEnd = { ...endWithoutNextAction, autoFlow: true };
+
+  const resetEnd = end;
+  delete resetEnd.nextAction; // ensure end group doesn't have a next action
+
   const resetGroups = { start: resetStart, ...rest, review: resetReview, end: resetEnd };
   return resetGroups;
 };
