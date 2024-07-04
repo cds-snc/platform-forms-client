@@ -456,6 +456,7 @@ export const getNextAction = (
  * Util function to ensure locked groups are in the correct order
  * @param groups
  * @returns groups Reset the locked sections to their default state
+ * see: https://github.com/cds-snc/platform-forms-client/issues/3933
  */
 export const resetLockedSections = (groups: GroupsType) => {
   const { start, review, end, ...rest } = groups;
