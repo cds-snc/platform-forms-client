@@ -8,6 +8,7 @@ import { layoutOptions } from "./options";
 import { useGroupStore } from "@formBuilder/components/shared/right-panel/treeview/store/useGroupStore";
 import { useElementTitle, ElementProperties } from "@lib/hooks/useElementTitle";
 import { useTranslation } from "@i18n/client";
+import { FormElementTypes } from "@lib/types";
 
 const OptionRuleSvg = ({ title }: { title?: string }) => {
   return (
@@ -58,6 +59,13 @@ export const GroupNode = (node: NodeProps) => {
   const nodeClassName =
     "relative flex w-[100%] min-w-[200px] max-w-[200px] rounded-sm bg-slate-50 p-2 py-3 text-sm text-slate-600 border-red";
 
+  const getDefaultLabelForElement = (elementType: FormElementTypes) => {
+    if (elementType === FormElementTypes.richText) {
+      return t("group.treeView.emptyPageTextElement");
+    }
+    return t("group.treeView.emptyFormElement");
+  };
+
   return (
     <div>
       <div>
@@ -92,9 +100,7 @@ export const GroupNode = (node: NodeProps) => {
             <QuestionRuleSvg title={t("groups.editSection", { name: node.data.label.name })} />
           </button>
         )}
-        {!node.data.children.length && (
-          <div className={cn(nodeClassName + " italic")}>{t("logic.questionLabel")}</div>
-        )}
+        {!node.data.children.length && <div className="min-h-[50px] min-w-[200px]"></div>}
         {node.data.children.map((child: TreeItem) => {
           const selected =
             selectedElementId === Number(child.index)
@@ -131,7 +137,9 @@ export const GroupNode = (node: NodeProps) => {
               <div key={child.index} className={cn(nodeClassName)}>
                 <div className="truncate">
                   {getTitle(child.data as ElementProperties).substring(0, 300) || (
-                    <span className="italic">{t("logic.questionLabel")}</span>
+                    <span className="italic">
+                      {getDefaultLabelForElement(child.data.type as FormElementTypes)}
+                    </span>
                   )}
                 </div>
               </div>

@@ -854,7 +854,6 @@
     "resetRulesHelp": "Aide pour la réinitialisation",
     "resetRulesDescription": "Cette fonction réinitialisera la progression entre les sections en un flux linéaire simple, remplaçant ainsi toutes les règles d'embranchements qui s'appliquent.",
     "toastSuccess": "Flux linéaire appliqué",
-    "questionLabel": "[FR]Question label",
     "multiRulesWarning": {
       "text1": "L'ordre et le flux sont définis en fonction des règles appliquées.",
       "text2": "Relier les sections :",

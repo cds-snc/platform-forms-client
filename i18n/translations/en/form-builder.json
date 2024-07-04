@@ -854,7 +854,6 @@
     "resetRulesHelp": "Reset help",
     "resetRulesDescription": "This will remove logic and reset the progression between sections to a simple linear flow, overriding any existing branching rules that were applied.",
     "toastSuccess": "Linear flow applied",
-    "questionLabel": "Question label",
     "multiRulesWarning": {
       "text1": "The order and flow is set based on the rules applied.",
       "text2": "Linking the sections:",
