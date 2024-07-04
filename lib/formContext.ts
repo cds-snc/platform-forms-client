@@ -463,6 +463,8 @@ export const resetLockedSections = (groups: GroupsType) => {
 
   const { start, review, end, ...rest } = groups;
 
+  if (start === undefined || review === undefined || end === undefined) return groups;
+
   // Get the key for the first group in ...rest
   const firstGroupKey = Object.keys(rest)[0];
 
