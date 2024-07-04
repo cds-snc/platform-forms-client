@@ -1,21 +1,21 @@
 "use client";
+import { useState, FormEvent } from "react";
 import { getLocalizedProperty } from "@lib/utils";
 import { useTranslation } from "@i18n/client";
 import { useRouter } from "next/navigation";
-import axios from "axios";
-import { logMessage } from "@lib/logger";
 import { Button } from "@clientComponents/globals";
-import { useRefresh } from "@lib/hooks/useRefresh";
 import { useAccessControl } from "@lib/hooks/useAccessControl";
+import { TextInput } from "./components/TextInput";
+import { Label } from "@clientComponents/forms";
+import { getLatestPublishedTemplates } from "./actions";
 
-interface DataViewProps {
-  templates: Array<{
-    id: string;
-    titleEn: string;
-    titleFr: string;
-    isPublished: boolean;
-    [key: string]: string | boolean;
-  }>;
+interface DataViewObject {
+  id: string;
+  titleEn: string;
+  titleFr: string;
+  isPublished: boolean;
+  updatedAt?: string;
+  [key: string]: string | boolean | undefined;
 }
 
 enum WhereToRedirect {
@@ -24,23 +24,10 @@ enum WhereToRedirect {
   Users,
 }
 
-const handlePublish = async (formID: string, isPublished: boolean) => {
-  return axios({
-    url: `/api/templates/${formID}`,
-    method: "PUT",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    data: { isPublished },
-    timeout: process.env.NODE_ENV === "production" ? 60000 : 0,
-  }).catch((err) => logMessage.error(err));
-};
-
-export const DataView = (props: DataViewProps): React.ReactElement => {
+export const DataView = ({ templates }: { templates: DataViewObject[] }) => {
   const { t, i18n } = useTranslation("admin-templates");
-  const { templates } = props;
+  const [dataView, setDataView] = useState<DataViewObject[]>(templates);
   const router = useRouter();
-  const { refreshData } = useRefresh();
 
   const redirectTo = async (where: WhereToRedirect, formID: string) => {
     let pathname = "";
@@ -48,14 +35,28 @@ export const DataView = (props: DataViewProps): React.ReactElement => {
       case WhereToRedirect.Form:
         pathname = `/${i18n.language}/id/${formID}`;
         break;
-      case WhereToRedirect.Settings:
-        pathname = `/${i18n.language}/id/${formID}/settings`;
-        break;
       case WhereToRedirect.Users:
-        pathname = `/${i18n.language}/id/${formID}/users`;
+        pathname = `/${i18n.language}/form-builder/${formID}/settings/manage`;
         break;
     }
     router.push(pathname);
+  };
+
+  const getSingleTemplate = async (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    const data = new FormData(event.currentTarget);
+    const id = data.get("formID");
+    const template = templates.filter((template) => template.id === id);
+    setDataView(template);
+  };
+
+  const clearSearch = async () => {
+    setDataView(templates);
+  };
+
+  const getLatestPublished = async () => {
+    const sortedList = await getLatestPublishedTemplates();
+    setDataView(sortedList);
   };
 
   const { ability } = useAccessControl();
@@ -63,19 +64,42 @@ export const DataView = (props: DataViewProps): React.ReactElement => {
   return (
     <>
       <h1 className="border-0 mb-0">{t("view.title")}</h1>
+      <div className="flex flex-row">
+        <form className="m-6 basis-3/4" onSubmit={getSingleTemplate}>
+          <Label id={"label-formID"} htmlFor={"formID"} className="w-32">
+            {t("view.formID")}
+          </Label>
+
+          <TextInput id="formID" type="text" name="formID" error={""} />
+
+          <div className="flex flex-row gap-3 pt-4">
+            <Button type="submit" className="ml-2">
+              {t("view.search")}
+            </Button>
+            <div>
+              <Button type="button" onClick={clearSearch}>
+                {t("view.clear")}
+              </Button>
+            </div>
+          </div>
+        </form>
+        <Button onClick={getLatestPublished} className="h-12">
+          {t("view.latestPublished")}
+        </Button>
+      </div>
       <table className="w-full table-auto  border-4 border-gray-400">
         <thead className="border-4 border-gray-400">
           <tr>
+            <th>{t("view.formID")}</th>
             <th>{t("view.formTitle")}</th>
             <th>{t("view.status")}</th>
-            <th className="w-1/12">{t("view.update")}</th>
+            <th>{t("view.updatedAt")}</th>
             <th className="w-1/12">{t("view.view")}</th>
             <th className="w-1/12">{t("view.users")}</th>
-            <th className="w-1/12">{t("view.publishForm")}</th>
           </tr>
         </thead>
         <tbody>
-          {templates
+          {dataView
             .sort((a, b) => {
               return (a[getLocalizedProperty("title", i18n.language)] as string).localeCompare(
                 b[getLocalizedProperty("title", i18n.language)] as string
@@ -84,6 +108,7 @@ export const DataView = (props: DataViewProps): React.ReactElement => {
             .map((template) => {
               return (
                 <tr key={template.id} className="border-t-4 border-b-1 border-gray-400">
+                  <td className="pl-4">{template.id} </td>
                   <td className="pl-4">
                     {template[getLocalizedProperty("title", i18n.language)]}{" "}
                   </td>
@@ -91,14 +116,7 @@ export const DataView = (props: DataViewProps): React.ReactElement => {
                     {template.isPublished ? t("view.published") : t("view.draft")}
                   </td>
                   <td className="text-center">
-                    {ability?.can("update", "FormRecord") && (
-                      <Button
-                        theme="link"
-                        onClick={async () => redirectTo(WhereToRedirect.Settings, template.id)}
-                      >
-                        {t("view.update")}
-                      </Button>
-                    )}
+                    {template.updatedAt ? new Date(template.updatedAt).toLocaleDateString() : ""}
                   </td>
                   <td className="text-center">
                     <Button
@@ -115,20 +133,6 @@ export const DataView = (props: DataViewProps): React.ReactElement => {
                         onClick={async () => redirectTo(WhereToRedirect.Users, template.id)}
                       >
                         {t("view.assign")}
-                      </Button>
-                    </td>
-                  )}
-                  {ability?.can("update", "FormRecord", "isPublished") && (
-                    <td>
-                      <Button
-                        theme="link"
-                        onClick={async () => {
-                          await handlePublish(template.id, !template.isPublished);
-                          refreshData();
-                        }}
-                        className=""
-                      >
-                        {template.isPublished ? t("view.unpublishForm") : t("view.publishForm")}
                       </Button>
                     </td>
                   )}
