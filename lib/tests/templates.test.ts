@@ -7,6 +7,7 @@ import { prismaMock } from "@jestUtils";
 import {
   createTemplate,
   getAllTemplates,
+  getAllTemplatesForUser,
   getPublicTemplateByID,
   getFullTemplateByID,
   updateTemplate,
@@ -61,10 +62,10 @@ const mockUnprocessedSubmissions = jest.mocked(unprocessedSubmissions, {
 });
 
 /*
-* PurposeOption is used to determine the purpose of the form
-* admin: The form is used to collect personal information
-* nonAdmin: The form is used to collect non-personal information
-*/
+ * PurposeOption is used to determine the purpose of the form
+ * admin: The form is used to collect personal information
+ * nonAdmin: The form is used to collect non-personal information
+ */
 export enum PurposeOption {
   none = "",
   admin = "admin",
@@ -156,23 +157,6 @@ describe("Template CRUD functions", () => {
       buildPrismaResponse("formtestID", formConfiguration),
       buildPrismaResponse("formtestID2", formConfiguration),
     ]);
-
-    const templates = await getAllTemplates(ability);
-
-    expect(templates).toEqual([
-      expect.objectContaining({
-        id: "formtestID",
-        form: formConfiguration,
-        isPublished: false,
-        securityAttribute: "Unclassified",
-      }),
-      expect.objectContaining({
-        id: "formtestID2",
-        form: formConfiguration,
-        isPublished: false,
-        securityAttribute: "Unclassified",
-      }),
-    ]);
     if (
       // Can manage all forms
       checkPrivilegesAsBoolean(ability, [
@@ -185,6 +169,22 @@ describe("Template CRUD functions", () => {
         },
       ])
     ) {
+      const templates = await getAllTemplates(ability);
+
+      expect(templates).toEqual([
+        expect.objectContaining({
+          id: "formtestID",
+          form: formConfiguration,
+          isPublished: false,
+          securityAttribute: "Unclassified",
+        }),
+        expect.objectContaining({
+          id: "formtestID2",
+          form: formConfiguration,
+          isPublished: false,
+          securityAttribute: "Unclassified",
+        }),
+      ]);
       expect(mockedLogEvent).toHaveBeenCalledWith(
         fakeSession.user.id,
         { type: "Form" },
@@ -192,12 +192,11 @@ describe("Template CRUD functions", () => {
         "Accessed Forms: All System Forms"
       );
     } else {
-      expect(mockedLogEvent).toHaveBeenCalledWith(
-        fakeSession.user.id,
-        { type: "Form" },
-        "ReadForm",
-        "Accessed Forms: formtestID,formtestID2"
-      );
+      // Does not have Manage All Forms privilege
+
+      expect(async () => {
+        await getAllTemplates(ability);
+      }).rejects.toThrow(`Access Control Forbidden Action`);
     }
   });
 
@@ -209,9 +208,28 @@ describe("Template CRUD functions", () => {
 
     (prismaMock.template.findMany as jest.MockedFunction<any>).mockResolvedValue([]);
 
-    const template = await getAllTemplates(ability);
-    expect(template).toEqual([]);
-    expect(mockedLogEvent).toBeCalledTimes(0);
+    if (
+      // Can manage all forms
+      checkPrivilegesAsBoolean(ability, [
+        {
+          action: "view",
+          subject: {
+            type: "FormRecord",
+            object: {},
+          },
+        },
+      ])
+    ) {
+      const template = await getAllTemplates(ability);
+      expect(template).toEqual([]);
+      expect(mockedLogEvent).toBeCalledTimes(0);
+    } else {
+      // Does not have Manage All Forms privilege
+
+      expect(async () => {
+        await getAllTemplates(ability);
+      }).rejects.toThrow(`Access Control Forbidden Action`);
+    }
   });
 
   it("Get all templates if user has the ManageForms privileges", async () => {
@@ -263,7 +281,7 @@ describe("Template CRUD functions", () => {
       buildPrismaResponse("formtestID", formConfiguration),
     ]);
 
-    await getAllTemplates(ability);
+    await getAllTemplatesForUser(ability);
 
     expect(prismaMock.template.findMany).toHaveBeenCalledWith({
       where: {

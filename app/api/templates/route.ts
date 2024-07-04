@@ -1,6 +1,10 @@
 import { AccessControlError, createAbility } from "@lib/privileges";
 import { middleware, sessionExists, jsonValidator } from "@lib/middleware";
-import { createTemplate, getAllTemplates, onlyIncludePublicProperties } from "@lib/templates";
+import {
+  createTemplate,
+  getAllTemplatesForUser,
+  onlyIncludePublicProperties,
+} from "@lib/templates";
 import {
   DeliveryOption,
   FormProperties,
@@ -45,16 +49,16 @@ export const GET = middleware(
       const { session } = props as WithRequired<MiddlewareProps, "session">;
 
       const ability = createAbility(session);
-      const templates = await getAllTemplates(ability);
+      const templates = await getAllTemplatesForUser(ability);
       const response = templates.map((template) => onlyIncludePublicProperties(template));
 
-      if (!response)
-        if (!response)
-          throw new Error(
-            `Template API response was null. Request information: method = ${
-              req.method
-            } ; query = ${JSON.stringify(props.params)} ; body = ${JSON.stringify(props.body)}`
-          );
+      if (!response) {
+        throw new Error(
+          `Template API response was null. Request information: method = ${
+            req.method
+          } ; query = ${JSON.stringify(props.params)} ; body = ${JSON.stringify(props.body)}`
+        );
+      }
       return NextResponse.json(response);
     } catch (e) {
       const error = e as Error;
@@ -112,13 +116,13 @@ export const POST = middleware(
           deliveryOption: deliveryOption,
           securityAttribute: securityAttribute,
         });
-        if (!response)
-          if (!response)
-            throw new Error(
-              `Template API response was null. Request information: method = ${
-                req.method
-              } ; query = ${JSON.stringify(props.params)} ; body = ${JSON.stringify(props.body)}`
-            );
+        if (!response) {
+          throw new Error(
+            `Template API response was null. Request information: method = ${
+              req.method
+            } ; query = ${JSON.stringify(props.params)} ; body = ${JSON.stringify(props.body)}`
+          );
+        }
         return NextResponse.json(response);
       } else {
         throw new MalformedAPIRequest("Missing formConfig");

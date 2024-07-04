@@ -3,6 +3,8 @@
 import { SessionProvider } from "next-auth/react";
 import { Session } from "next-auth";
 import { AccessControlProvider } from "@lib/hooks/useAccessControl";
+import { LiveMessagePovider } from "@lib/hooks/useLiveMessage";
+import { RefsProvider } from "@formBuilder/[id]/edit/components/RefsContext";
 
 export const ClientContexts: React.FC<{ session: Session | null; children: React.ReactNode }> = ({
   session,
@@ -17,7 +19,11 @@ export const ClientContexts: React.FC<{ session: Session | null; children: React
       // Re-fetches session when window is focused
       refetchOnWindowFocus={false}
     >
-      <AccessControlProvider>{children}</AccessControlProvider>
+      <AccessControlProvider>
+        <RefsProvider>
+          <LiveMessagePovider>{children}</LiveMessagePovider>
+        </RefsProvider>
+      </AccessControlProvider>
     </SessionProvider>
   );
 };

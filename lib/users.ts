@@ -301,7 +301,7 @@ export const getUnprocessedSubmissionsForUser = async (
 
   try {
     if (!templates) {
-      templates = (await getAllTemplatesForUser(ability, userId)).map((template) => {
+      templates = (await getAllTemplatesForUser(ability)).map((template) => {
         const {
           id,
           form: { titleEn, titleFr },

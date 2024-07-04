@@ -9,7 +9,7 @@ import {
   SecurityAttribute,
 } from "@lib/types";
 import { Prisma } from "@prisma/client";
-import { AccessControlError, checkPrivileges, checkPrivilegesAsBoolean } from "./privileges";
+import { AccessControlError, checkPrivileges } from "./privileges";
 import { logEvent } from "./auditLogs";
 import { logMessage } from "@lib/logger";
 import { unprocessedSubmissions, deleteDraftFormResponses } from "./vault";
@@ -214,6 +214,7 @@ export async function createTemplate(command: CreateTemplateCommand): Promise<Fo
         users: {
           connect: { id: command.userID },
         },
+        ...(command.formPurpose && { formPurpose: command.formPurpose }),
       },
       select: {
         id: true,
@@ -245,18 +246,19 @@ export async function createTemplate(command: CreateTemplateCommand): Promise<Fo
 }
 
 /**
- * Get all form templates. Depending on the user permissions the function will return either all or a subset of templates.
+ * Get all form templates. Must has Manage All Forms privilege.
  * @returns An array of Form Records
  */
 export async function getAllTemplates(
   ability: UserAbility,
-  requestedWhere?: Prisma.TemplateWhereInput,
-  sortByDateUpdated?: "asc" | "desc"
+  options?: {
+    requestedWhere?: Prisma.TemplateWhereInput;
+    sortByDateUpdated?: "asc" | "desc";
+  }
 ): Promise<Array<FormRecord>> {
   try {
-    checkPrivileges(ability, [{ action: "view", subject: "FormRecord" }]);
-
-    const canUserAccessAllTemplates = checkPrivilegesAsBoolean(ability, [
+    const { requestedWhere, sortByDateUpdated } = options ?? {};
+    checkPrivileges(ability, [
       {
         action: "view",
         subject: {
@@ -272,13 +274,67 @@ export async function getAllTemplates(
         where: {
           ...(requestedWhere && requestedWhere),
           ttl: null,
-          ...(!canUserAccessAllTemplates && {
-            users: {
-              some: {
-                id: ability.userID,
-              },
+        },
+        select: {
+          id: true,
+          created_at: true,
+          updated_at: true,
+          name: true,
+          jsonConfig: true,
+          isPublished: true,
+          deliveryOption: true,
+          securityAttribute: true,
+          formPurpose: true,
+        },
+        ...(sortByDateUpdated && {
+          orderBy: {
+            updated_at: sortByDateUpdated,
+          },
+        }),
+      })
+      .catch((e) => prismaErrors(e, []));
+
+    // Only log the event if templates are found
+    if (templates.length > 0)
+      logEvent(ability.userID, { type: "Form" }, "ReadForm", "Accessed Forms: All System Forms");
+
+    return templates.map((template) => _parseTemplate(template));
+  } catch (e) {
+    if (e instanceof AccessControlError) {
+      logEvent(ability.userID, { type: "Form" }, "AccessDenied", "Attempted to list all Forms");
+      throw e;
+    }
+    logMessage.error(e);
+    return [];
+  }
+}
+
+export type TemplateOptions = {
+  sortByDateUpdated?: "asc" | "desc";
+  requestedWhere?: Prisma.TemplateWhereInput;
+};
+
+/**
+ * Get all form templates for the User calling the function.
+ * @returns An array of Form Records
+ */
+export async function getAllTemplatesForUser(
+  ability: UserAbility,
+  options?: TemplateOptions
+): Promise<Array<FormRecord>> {
+  try {
+    checkPrivileges(ability, [{ action: "view", subject: "FormRecord" }]);
+    const { sortByDateUpdated, requestedWhere } = options ?? {};
+    const templates = await prisma.template
+      .findMany({
+        where: {
+          ...(requestedWhere && requestedWhere),
+          ttl: null,
+          users: {
+            some: {
+              id: ability.userID,
             },
-          }),
+          },
         },
         select: {
           id: true,
@@ -305,82 +361,7 @@ export async function getAllTemplates(
         ability.userID,
         { type: "Form" },
         "ReadForm",
-        `Accessed Forms: ${
-          canUserAccessAllTemplates
-            ? "All System Forms"
-            : templates.map((template) => template.id).toString()
-        }`
-      );
-
-    return templates.map((template) => _parseTemplate(template));
-  } catch (e) {
-    if (e instanceof AccessControlError) {
-      logEvent(ability.userID, { type: "Form" }, "AccessDenied", "Attempted to list all Forms");
-      throw e;
-    }
-    logMessage.error(e);
-    return [];
-  }
-}
-
-/**
- * Get all form templates for a specific User.
- * @returns An array of Form Records
- */
-export async function getAllTemplatesForUser(
-  ability: UserAbility,
-  userID: string,
-  isPublished?: boolean
-): Promise<Array<FormRecord>> {
-  try {
-    checkPrivileges(ability, [{ action: "view", subject: "FormRecord" }]);
-    const canUserAccessAllTemplates = checkPrivilegesAsBoolean(ability, [
-      {
-        action: "view",
-        subject: {
-          type: "FormRecord",
-          // Passing an empty object here just to force CASL evaluate the condition part of a permission.
-          object: {},
-        },
-      },
-    ]);
-
-    const templates = await prisma.template
-      .findMany({
-        where: {
-          ttl: null,
-          ...(typeof isPublished !== "undefined" && { isPublished: isPublished }),
-          users: {
-            some: {
-              id: userID,
-            },
-          },
-        },
-        select: {
-          id: true,
-          created_at: true,
-          updated_at: true,
-          name: true,
-          jsonConfig: true,
-          isPublished: true,
-          deliveryOption: true,
-          securityAttribute: true,
-          formPurpose: true,
-        },
-      })
-      .catch((e) => prismaErrors(e, []));
-
-    // Only log the event if templates are found
-    if (templates.length > 0)
-      logEvent(
-        ability.userID,
-        { type: "Form" },
-        "ReadForm",
-        `Accessed Forms: ${
-          canUserAccessAllTemplates
-            ? "All System Forms"
-            : templates.map((template) => template.id).toString()
-        }`
+        `Accessed Forms: ${templates.map((template) => template.id).toString()}`
       );
 
     return templates.map((template) => _parseTemplate(template));
@@ -553,6 +534,7 @@ export async function updateTemplate(command: UpdateTemplateCommand): Promise<Fo
           ...(command.securityAttribute && {
             securityAttribute: command.securityAttribute as string,
           }),
+          ...(command.formPurpose && { formPurpose: command.formPurpose }),
         },
         select: {
           id: true,
@@ -831,6 +813,77 @@ export async function updateAssignedUsersForTemplate(
         { type: "Form", id: formID },
         "AccessDenied",
         "Attempted to update assigned users for form"
+      );
+    throw e;
+  }
+}
+
+export async function updateFormPurpose(
+  ability: UserAbility,
+  formID: string,
+  formPurpose: string
+): Promise<FormRecord | null> {
+  try {
+    const templateWithAssociatedUsers = await _unprotectedGetTemplateWithAssociatedUsers(formID);
+    if (!templateWithAssociatedUsers) return null;
+
+    checkPrivileges(ability, [
+      {
+        action: "update",
+        subject: {
+          type: "FormRecord",
+          object: {
+            ...templateWithAssociatedUsers.formRecord,
+            users: templateWithAssociatedUsers.users,
+          },
+        },
+      },
+    ]);
+
+    // Prevent already published templates from being updated
+    if (templateWithAssociatedUsers.formRecord.isPublished)
+      throw new TemplateAlreadyPublishedError();
+
+    const updatedTemplate = await prisma.template
+      .update({
+        where: {
+          id: formID,
+        },
+        data: {
+          formPurpose: formPurpose,
+        },
+        select: {
+          id: true,
+          created_at: true,
+          updated_at: true,
+          name: true,
+          jsonConfig: true,
+          isPublished: true,
+          deliveryOption: true,
+          securityAttribute: true,
+          formPurpose: true,
+        },
+      })
+      .catch((e) => prismaErrors(e, null));
+
+    if (updatedTemplate === null) return updatedTemplate;
+
+    logEvent(
+      ability.userID,
+      { type: "Form", id: formID },
+      "ChangeFormPurpose",
+      `Form Purpose set to ${formPurpose}`
+    );
+
+    if (formCache.cacheAvailable) formCache.formID.invalidate(formID);
+    return _parseTemplate(updatedTemplate);
+  } catch (e) {
+    if (e instanceof AccessControlError)
+      logEvent(
+        ability.userID,
+        { type: "Form", id: formID },
+        "AccessDenied",
+        "Attempted to set Form Purpose"
       );
     throw e;
   }
