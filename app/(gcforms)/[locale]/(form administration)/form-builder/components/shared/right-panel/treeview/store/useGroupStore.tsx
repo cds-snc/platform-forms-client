@@ -138,7 +138,7 @@ const createGroupStore = (initProps?: Partial<GroupStoreProps>) => {
           // add new group
           s.form.groups[id] = { name, elements: [], titleEn: "", titleFr: "" };
 
-          // add review and end groups back
+          // Add review and end groups back
           if (reviewGroup) {
             s.form.groups.review = reviewGroup;
           }
