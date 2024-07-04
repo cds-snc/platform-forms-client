@@ -22,6 +22,7 @@ import {
   sendResponsesToVault,
   updateTemplateDeliveryOption,
   updateTemplateSecurityAttribute,
+  updateTemplateFormPurpose,
 } from "@formBuilder/actions";
 import { useRefresh } from "@lib/hooks/useRefresh";
 
@@ -245,6 +246,15 @@ export const ResponseDelivery = () => {
     }
 
     updateField("formPurpose", purposeOption);
+    result = (await updateTemplateFormPurpose({
+      id,
+      formPurpose: formPurpose,
+    })) as FormServerError;
+
+    if (result?.error) {
+      toast.error(<ErrorSaving errorCode={FormServerErrorCodes.FORM_PURPOSE} />, "wide");
+      return;
+    }
 
     toast.success(t("settingsResponseDelivery.savedSuccessMessage"));
 
@@ -260,6 +270,7 @@ export const ResponseDelivery = () => {
     setToEmailDelivery,
     updateField,
     purposeOption,
+    formPurpose,
   ]);
 
   // Update local state
