@@ -164,7 +164,11 @@ export const GroupNode = (node: NodeProps) => {
               )}
             >
               <div className="w-full truncate pr-8">
-                {getTitle(child.data as ElementProperties).substring(0, 200)}
+                {getTitle(child.data as ElementProperties).substring(0, 200) || (
+                  <span className="italic">
+                    {getDefaultLabelForElement(child.data.type as FormElementTypes)}
+                  </span>
+                )}
               </div>
               <div className="absolute right-[10px] top-[6px] cursor-pointer hover:scale-125">
                 <OptionRuleSvg title={t("groups.editRules", { name: node.data.label.name })} />
