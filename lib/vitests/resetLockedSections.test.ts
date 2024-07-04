@@ -5,7 +5,7 @@ import { GroupsType } from "@lib/formContext";
 describe("resetLockedSections function", () => {
   it("Resets locked sections", () => {
     const form = validFormTemplate as FormProperties;
-    const result = resetLockedSections(form.groups) as GroupsType;
+    const result = resetLockedSections(form.groups as GroupsType) as GroupsType;
 
     expect(result).toBeDefined();
 
