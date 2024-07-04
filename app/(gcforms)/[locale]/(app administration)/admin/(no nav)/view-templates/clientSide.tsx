@@ -99,46 +99,38 @@ export const DataView = ({ templates }: { templates: DataViewObject[] }) => {
           </tr>
         </thead>
         <tbody>
-          {dataView
-            .sort((a, b) => {
-              return (a[getLocalizedProperty("title", i18n.language)] as string).localeCompare(
-                b[getLocalizedProperty("title", i18n.language)] as string
-              );
-            })
-            .map((template) => {
-              return (
-                <tr key={template.id} className="border-t-4 border-b-1 border-gray-400">
-                  <td className="pl-4">{template.id} </td>
-                  <td className="pl-4">
-                    {template[getLocalizedProperty("title", i18n.language)]}{" "}
-                  </td>
-                  <td className="text-center">
-                    {template.isPublished ? t("view.published") : t("view.draft")}
-                  </td>
-                  <td className="text-center">
-                    {template.updatedAt ? new Date(template.updatedAt).toLocaleDateString() : ""}
-                  </td>
+          {dataView.map((template) => {
+            return (
+              <tr key={template.id} className="border-t-4 border-b-1 border-gray-400">
+                <td className="pl-4">{template.id} </td>
+                <td className="pl-4">{template[getLocalizedProperty("title", i18n.language)]} </td>
+                <td className="text-center">
+                  {template.isPublished ? t("view.published") : t("view.draft")}
+                </td>
+                <td className="text-center">
+                  {template.updatedAt ? new Date(template.updatedAt).toLocaleDateString() : ""}
+                </td>
+                <td className="text-center">
+                  <Button
+                    onClick={async () => redirectTo(WhereToRedirect.Form, template.id)}
+                    theme="link"
+                  >
+                    {t("view.view")}
+                  </Button>
+                </td>
+                {ability?.can("update", "FormRecord") && (
                   <td className="text-center">
                     <Button
-                      onClick={async () => redirectTo(WhereToRedirect.Form, template.id)}
                       theme="link"
+                      onClick={async () => redirectTo(WhereToRedirect.Users, template.id)}
                     >
-                      {t("view.view")}
+                      {t("view.assign")}
                     </Button>
                   </td>
-                  {ability?.can("update", "FormRecord") && (
-                    <td className="text-center">
-                      <Button
-                        theme="link"
-                        onClick={async () => redirectTo(WhereToRedirect.Users, template.id)}
-                      >
-                        {t("view.assign")}
-                      </Button>
-                    </td>
-                  )}
-                </tr>
-              );
-            })}
+                )}
+              </tr>
+            );
+          })}
         </tbody>
       </table>
     </>
