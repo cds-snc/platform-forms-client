@@ -2,12 +2,12 @@
 import { useState, FormEvent } from "react";
 import { getLocalizedProperty } from "@lib/utils";
 import { useTranslation } from "@i18n/client";
-import { useRouter } from "next/navigation";
 import { Button } from "@clientComponents/globals";
 import { useAccessControl } from "@lib/hooks/useAccessControl";
 import { TextInput } from "./components/TextInput";
 import { Label } from "@clientComponents/forms";
 import { getLatestPublishedTemplates } from "./actions";
+import Link from "next/link";
 
 interface DataViewObject {
   id: string;
@@ -16,12 +16,6 @@ interface DataViewObject {
   isPublished: boolean;
   updatedAt?: string;
   [key: string]: string | boolean | undefined;
-}
-
-enum WhereToRedirect {
-  Form,
-  Settings,
-  Users,
 }
 
 export const DataView = ({ templates }: { templates: DataViewObject[] }) => {
@@ -33,20 +27,6 @@ export const DataView = ({ templates }: { templates: DataViewObject[] }) => {
     );
   });
   const [dataView, setDataView] = useState<DataViewObject[]>(sortedByTitle);
-  const router = useRouter();
-
-  const redirectTo = async (where: WhereToRedirect, formID: string) => {
-    let pathname = "";
-    switch (where) {
-      case WhereToRedirect.Form:
-        pathname = `/${i18n.language}/id/${formID}`;
-        break;
-      case WhereToRedirect.Users:
-        pathname = `/${i18n.language}/form-builder/${formID}/settings/manage`;
-        break;
-    }
-    router.push(pathname);
-  };
 
   const getSingleTemplate = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -117,21 +97,21 @@ export const DataView = ({ templates }: { templates: DataViewObject[] }) => {
                   {template.updatedAt ? new Date(template.updatedAt).toLocaleDateString() : ""}
                 </td>
                 <td className="text-center">
-                  <Button
-                    onClick={async () => redirectTo(WhereToRedirect.Form, template.id)}
-                    theme="link"
+                  <Link
+                    href={
+                      template.isPublished
+                        ? `/${i18n.language}/id/${template.id}`
+                        : `/${i18n.language}/form-builder/${template.id}/edit`
+                    }
                   >
                     {t("view.view")}
-                  </Button>
+                  </Link>
                 </td>
                 {ability?.can("update", "FormRecord") && (
                   <td className="text-center">
-                    <Button
-                      theme="link"
-                      onClick={async () => redirectTo(WhereToRedirect.Users, template.id)}
-                    >
+                    <Link href={`/${i18n.language}/form-builder/${template.id}/settings/manage`}>
                       {t("view.assign")}
-                    </Button>
+                    </Link>
                   </td>
                 )}
               </tr>
