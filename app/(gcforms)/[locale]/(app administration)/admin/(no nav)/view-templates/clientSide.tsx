@@ -26,7 +26,13 @@ enum WhereToRedirect {
 
 export const DataView = ({ templates }: { templates: DataViewObject[] }) => {
   const { t, i18n } = useTranslation("admin-templates");
-  const [dataView, setDataView] = useState<DataViewObject[]>(templates);
+
+  const sortedByTitle = templates.sort((a, b) => {
+    return (a[getLocalizedProperty("title", i18n.language)] as string).localeCompare(
+      b[getLocalizedProperty("title", i18n.language)] as string
+    );
+  });
+  const [dataView, setDataView] = useState<DataViewObject[]>(sortedByTitle);
   const router = useRouter();
 
   const redirectTo = async (where: WhereToRedirect, formID: string) => {
@@ -51,7 +57,7 @@ export const DataView = ({ templates }: { templates: DataViewObject[] }) => {
   };
 
   const clearSearch = async () => {
-    setDataView(templates);
+    setDataView(sortedByTitle);
   };
 
   const getLatestPublished = async () => {
