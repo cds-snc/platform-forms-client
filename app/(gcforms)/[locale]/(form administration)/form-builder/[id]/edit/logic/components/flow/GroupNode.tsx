@@ -61,9 +61,9 @@ export const GroupNode = (node: NodeProps) => {
 
   const getDefaultLabelForElement = (elementType: FormElementTypes) => {
     if (elementType === FormElementTypes.richText) {
-      return t("group.treeView.emptyPageTextElement");
+      return t("groups.treeView.emptyPageTextElement");
     }
-    return t("group.treeView.emptyFormElement");
+    return t("groups.treeView.emptyFormElement");
   };
 
   return (
