@@ -8,6 +8,7 @@ import { layoutOptions } from "./options";
 import { useGroupStore } from "@formBuilder/components/shared/right-panel/treeview/store/useGroupStore";
 import { useElementTitle, ElementProperties } from "@lib/hooks/useElementTitle";
 import { useTranslation } from "@i18n/client";
+import { FormElementTypes } from "@lib/types";
 
 const OptionRuleSvg = ({ title }: { title?: string }) => {
   return (
@@ -57,6 +58,13 @@ export const GroupNode = (node: NodeProps) => {
 
   const nodeClassName =
     "relative flex w-[100%] min-w-[200px] max-w-[200px] rounded-sm bg-slate-50 p-2 py-3 text-sm text-slate-600 border-red";
+
+  const getDefaultLabelForElement = (elementType: FormElementTypes) => {
+    if (elementType === FormElementTypes.richText) {
+      return t("groups.treeView.emptyPageTextElement");
+    }
+    return t("groups.treeView.emptyFormElement");
+  };
 
   return (
     <div>
@@ -128,7 +136,11 @@ export const GroupNode = (node: NodeProps) => {
             return (
               <div key={child.index} className={cn(nodeClassName)}>
                 <div className="truncate">
-                  {getTitle(child.data as ElementProperties).substring(0, 300)}
+                  {getTitle(child.data as ElementProperties).substring(0, 300) || (
+                    <span className="italic">
+                      {getDefaultLabelForElement(child.data.type as FormElementTypes)}
+                    </span>
+                  )}
                 </div>
               </div>
             );
@@ -152,7 +164,11 @@ export const GroupNode = (node: NodeProps) => {
               )}
             >
               <div className="w-full truncate pr-8">
-                {getTitle(child.data as ElementProperties).substring(0, 200)}
+                {getTitle(child.data as ElementProperties).substring(0, 200) || (
+                  <span className="italic">
+                    {getDefaultLabelForElement(child.data.type as FormElementTypes)}
+                  </span>
+                )}
               </div>
               <div className="absolute right-[10px] top-[6px] cursor-pointer hover:scale-125">
                 <OptionRuleSvg title={t("groups.editRules", { name: node.data.label.name })} />
