@@ -451,3 +451,26 @@ export const getNextAction = (
 
   return nextAction; // nextBasedOnValues(groups[currentGroup].nextAction, values);
 };
+
+/**
+ * Util function to ensure locked groups are in the correct order
+ * @param groups
+ * @returns groups Reset the locked sections to their default state
+ */
+export const resetLockedSections = (groups: GroupsType) => {
+  const { start, review, end, ...rest } = groups;
+
+  // Get the key for the first group in ...rest
+  const firstGroupKey = Object.keys(rest)[0];
+
+  // Reset the start group to point to the first group in ...rest
+  const resetStart = { ...start, autoFlow: true, nextAction: firstGroupKey };
+
+  // Ensure next actions for locked groups points to the correct group
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const { nextAction, ...endWithoutNextAction } = end;
+  const resetReview = { ...review, autoFlow: true, nextAction: "end" };
+  const resetEnd = { ...endWithoutNextAction, autoFlow: true };
+  const resetGroups = { start: resetStart, ...rest, review: resetReview, end: resetEnd };
+  return resetGroups;
+};
