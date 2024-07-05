@@ -59,7 +59,7 @@ export const SingleActionSelect = ({
             defaultChecked={isExitAction}
             key={`${exitLabelId}-${nextActionId}`}
             onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-              e.target.checked ? setNextActionId("exit") : setNextActionId("");
+              e.target.checked ? setNextActionId("exit") : setNextActionId("review");
             }}
             label={t("logic.exit.checkboxLabel")}
           ></Checkbox>
