@@ -21,11 +21,8 @@ export default async function Page() {
 
   checkPrivilegesAsBoolean(
     ability,
-    [
-      { action: "view", subject: "FormRecord" },
-      { action: "update", subject: "FormRecord" },
-    ],
-    { logic: "one", redirect: true }
+    [{ action: "update", subject: { type: "FormRecord", object: {} } }],
+    { redirect: true }
   );
 
   const templates = (await getAllTemplates(ability)).map((template) => {
