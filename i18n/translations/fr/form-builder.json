@@ -874,7 +874,8 @@
     },
     "exit": {
       "convertText": "Convert section [FR]",
-      "checkboxLabel": "Exit [FR]"
+      "checkboxLabel": "Exit [FR]",
+      "nodeIconLabel": "Exit"
     }
   },
   "groups": {

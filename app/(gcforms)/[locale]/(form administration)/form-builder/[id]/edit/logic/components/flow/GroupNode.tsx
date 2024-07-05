@@ -26,7 +26,7 @@ const OptionRuleSvg = ({ title }: { title?: string }) => {
 
 const QuestionRuleSvg = ({ title }: { title?: string }) => {
   return (
-    <svg xmlns="http://www.w3.org/2000/svg" width={36} height={36} fill="none">
+    <svg xmlns="http://www.w3.org/2000/svg" width={37} height={37} fill="none">
       {title && <title>{title}</title>}
       <rect width={35} height={35} x={0.5} y={0.5} fill="#EDE9FE" rx={17.5} />
       <rect width={35} height={35} x={0.5} y={0.5} stroke="#4338CA" rx={17.5} />

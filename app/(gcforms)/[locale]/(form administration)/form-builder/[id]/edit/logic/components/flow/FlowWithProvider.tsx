@@ -25,6 +25,7 @@ import "reactflow/dist/style.css";
 import useAutoLayout from "./useAutoLayout";
 import { useFlowData } from "./useFlowData";
 import { GroupNode } from "./GroupNode";
+import { OffboardNode } from "./OffboardNode";
 import { layoutOptions } from "./options";
 import { edgeOptions } from "./options";
 
@@ -32,7 +33,7 @@ import { useFlowRef } from "./provider/FlowRefProvider";
 import { useRehydrate } from "@lib/store/useTemplateStore";
 import { Language } from "@lib/types/form-builder-types";
 
-const nodeTypes = { groupNode: GroupNode };
+const nodeTypes = { groupNode: GroupNode, offboardNode: OffboardNode };
 import { Edge } from "reactflow";
 
 import { Loader } from "@clientComponents/globals/Loader";
