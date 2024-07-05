@@ -45,8 +45,23 @@ export const SingleActionSelect = ({
 
   const exitLabelId = `section-select-check-${currentGroup}-${isExitAction}`;
 
+  if (nextAction === "exit") {
+    return (
+      <div>
+        <div className="p-4">
+          <h4 className="mb-4 block text-sm font-bold">
+            {t("logic.exit.exitPanel.title1")}:
+            <span className="ml-2 font-normal">{t("logic.exit.exitPanel.title2")}</span>
+          </h4>
+          <p className="mb-4 text-sm italic">{t("logic.exit.exitPanel.description")}</p>
+          <Button theme="secondary">{t("logic.exit.exitPanel.buttonLabel")}</Button>
+        </div>
+      </div>
+    );
+  }
+
   return (
-    <div>
+    <div className="p-4">
       <div className="mb-4">
         <GroupSelect selected={nextActionId} groups={groupItems} onChange={handleGroupChange} />
         {/*  Add section Exit checkbox */}

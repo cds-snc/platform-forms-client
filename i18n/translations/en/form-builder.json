@@ -879,6 +879,12 @@
       "offboardNodeContent": {
         "content": "<Content>",
         "exitButton": "Back to the start button"
+      },
+      "exitPanel": {
+        "title1": "Exit section",
+        "title2": "User is not eligiable",
+        "description": "Exit sections will always flow back to the start of the form.",
+        "buttonLabel": "Remove"
       }
     }
   },
