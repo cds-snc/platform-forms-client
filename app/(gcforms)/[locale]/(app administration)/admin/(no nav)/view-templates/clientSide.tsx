@@ -21,23 +21,6 @@ interface DataViewObject {
 export const DataView = ({ templates }: { templates: DataViewObject[] }) => {
   const { t, i18n } = useTranslation("admin-templates");
 
-const handlePublish = async (formID: string, isPublished: boolean) => {
-  return axios({
-    url: `/api/templates/${formID}`,
-    method: "PUT",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    data: {
-      isPublished: isPublished,
-      publishReason: "",
-      publishFormType: "",
-      publishDescription: "Published via Admin",
-    },
-    timeout: process.env.NODE_ENV === "production" ? 60000 : 0,
-  }).catch((err) => logMessage.error(err));
-};
-  
   const sortedByTitle = templates.sort((a, b) => {
     return (a[getLocalizedProperty("title", i18n.language)] as string).localeCompare(
       b[getLocalizedProperty("title", i18n.language)] as string
