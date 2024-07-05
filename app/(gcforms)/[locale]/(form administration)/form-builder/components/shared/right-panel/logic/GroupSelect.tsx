@@ -26,12 +26,14 @@ export const GroupSelect = ({
         {t("logic.gotoSection")}
       </label>
       <select
+        disabled={selected === "exit"}
         value={selected || ""}
         data-selected={selected || ""}
         onChange={onChange}
         className={cn(
           "center-right-15px inline-block p-2 border-black border-1 form-builder-dropdown my-0 w-[375px] text-black-default text-sm",
-          className
+          className,
+          selected === "exit" && "opacity-50 cursor-not-allowed"
         )}
         aria-labelledby={labelId}
       >
