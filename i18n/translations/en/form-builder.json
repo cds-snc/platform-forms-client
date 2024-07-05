@@ -872,7 +872,10 @@
       "section": "Apply a branching rule to a section",
       "option": "Apply conditional rules to questions with selectable options"
     },
-    "offBoard": "None [Off-board page]"
+    "exit": {
+      "convertText": "Convert section",
+      "checkboxLabel": "Exit"
+    }
   },
   "groups": {
     "newSection": "New section",

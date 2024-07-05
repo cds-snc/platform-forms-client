@@ -68,7 +68,7 @@ export const GCFormsProvider = ({
    */
   const isOffBoardSection = (group: string) => {
     const next = groups[group]?.nextAction;
-    if (next === "off-board") {
+    if (next === "exit") {
       return true;
     }
 

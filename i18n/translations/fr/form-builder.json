@@ -872,7 +872,10 @@
       "section": "Appliquer une règle d'embranchement à une section",
       "option": "Appliquer des règles conditionnelles aux questions ayant des options à sélectionner"
     },
-    "offBoard": "None [Off-board page] [FR]"
+    "exit": {
+      "convertText": "Convert section [FR]",
+      "checkboxLabel": "Exit [FR]"
+    }
   },
   "groups": {
     "newSection": "Nouvelle section",

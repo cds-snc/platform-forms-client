@@ -9,6 +9,7 @@ import { FormElement } from "@lib/types";
 import { useTranslation } from "@i18n/client";
 import { SaveNote } from "./SaveNote";
 import { toast } from "@formBuilder/components/shared/Toast";
+import { Checkbox } from "@formBuilder/components/shared";
 
 export const SingleActionSelect = ({
   item,
@@ -35,18 +36,34 @@ export const SingleActionSelect = ({
   // Filter out the current group
   groupItems = groupItems.filter((item) => item.value !== currentGroup && item.value !== "end");
 
-  // Add off-board option
-  groupItems.push({ label: t("logic.offBoard"), value: "off-board" });
-
   const handleGroupChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const value = e.target.value;
     setNextActionId(value);
   };
 
+  const isExitAction = nextActionId === "exit";
+
+  const exitLabelId = `section-select-check-${currentGroup}-${isExitAction}`;
+
   return (
     <div>
+      {nextActionId}: {nextAction}
       <div className="mb-4">
         <GroupSelect selected={nextActionId} groups={groupItems} onChange={handleGroupChange} />
+        {/*  Add section Exit checkbox */}
+        <div>
+          <p className="mb-2 block text-sm">{t("logic.exit.convertText")}</p>
+          <Checkbox
+            id={exitLabelId}
+            value="exit"
+            defaultChecked={isExitAction}
+            key={`${exitLabelId}-${nextActionId}`}
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+              e.target.checked ? setNextActionId("exit") : setNextActionId("");
+            }}
+            label={t("logic.exit.checkboxLabel")}
+          ></Checkbox>
+        </div>
       </div>
       <div>
         <SaveNote />
