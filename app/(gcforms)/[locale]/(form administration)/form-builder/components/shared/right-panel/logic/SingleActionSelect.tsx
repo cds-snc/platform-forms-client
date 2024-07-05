@@ -50,19 +50,23 @@ export const SingleActionSelect = ({
       <div className="mb-4">
         <GroupSelect selected={nextActionId} groups={groupItems} onChange={handleGroupChange} />
         {/*  Add section Exit checkbox */}
-        <div>
-          <p className="mb-2 block text-sm">{t("logic.exit.convertText")}</p>
-          <Checkbox
-            id={exitLabelId}
-            value="exit"
-            defaultChecked={isExitAction}
-            key={`${exitLabelId}-${nextActionId}`}
-            onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-              e.target.checked ? setNextActionId("exit") : setNextActionId("review");
-            }}
-            label={t("logic.exit.checkboxLabel")}
-          ></Checkbox>
-        </div>
+        {currentGroup !== "start" ? (
+          <div className="gc-right-panel">
+            <p className="mb-2 block text-sm">{t("logic.exit.convertText")}</p>
+            <Checkbox
+              id={exitLabelId}
+              value="exit"
+              defaultChecked={isExitAction}
+              key={`${exitLabelId}-${nextActionId}`}
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                e.target.checked ? setNextActionId("exit") : setNextActionId("review");
+              }}
+              checkboxClassName="mr-2 cursor-pointer"
+              labelClassName="cursor-pointer"
+              label={t("logic.exit.checkboxLabel")}
+            ></Checkbox>
+          </div>
+        ) : null}
       </div>
       <div>
         <SaveNote />
