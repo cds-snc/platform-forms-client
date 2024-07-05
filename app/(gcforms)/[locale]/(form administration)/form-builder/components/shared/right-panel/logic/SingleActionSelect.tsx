@@ -87,7 +87,7 @@ export const SingleActionSelect = ({
     <div className="p-4">
       <div className="mb-4">
         <GroupSelect selected={nextActionId} groups={groupItems} onChange={handleGroupChange} />
-        {/*  Add section Exit checkbox */}
+        {/*  Add section Exit checkbox option */}
         {currentGroup !== "start" ? (
           <div className="gc-right-panel">
             <p className="mb-2 block text-sm">{t("logic.exit.convertText")}</p>
@@ -106,6 +106,7 @@ export const SingleActionSelect = ({
           </div>
         ) : null}
       </div>
+
       <div>
         <SaveNote />
         <Button
