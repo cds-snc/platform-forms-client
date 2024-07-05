@@ -22,7 +22,7 @@ export default async function Page() {
 
   checkPrivilegesAsBoolean(
     ability,
-    [{ action: "create", subject: { type: "FormRecord", object: {} } }],
+    [{ action: "update", subject: { type: "FormRecord", object: {} } }],
     {
       redirect: true,
     }
