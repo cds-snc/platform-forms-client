@@ -451,3 +451,31 @@ export const getNextAction = (
 
   return nextAction; // nextBasedOnValues(groups[currentGroup].nextAction, values);
 };
+
+/**
+ * Util function to ensure locked groups are in the correct order
+ * @param groups
+ * @returns groups Reset the locked sections to their default state
+ * see: https://github.com/cds-snc/platform-forms-client/issues/3933
+ */
+export const resetLockedSections = (groups: GroupsType) => {
+  if (!groups) return groups;
+
+  const { start, review, end, ...rest } = groups;
+
+  if (start === undefined || review === undefined || end === undefined) return groups;
+
+  // Get the key for the first group in ...rest
+  const firstGroupKey = Object.keys(rest)[0];
+
+  // Reset the start group to point to the first group in ...rest
+  const resetStart = { ...start, autoFlow: true, nextAction: firstGroupKey };
+
+  const resetReview = { ...review, autoFlow: true, nextAction: "end" };
+
+  const resetEnd = end;
+  delete resetEnd.nextAction; // ensure end group doesn't have a next action
+
+  const resetGroups = { start: resetStart, ...rest, review: resetReview, end: resetEnd };
+  return resetGroups;
+};
