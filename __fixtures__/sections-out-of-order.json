@@ -1,0 +1,322 @@
+{
+  "titleEn": "Public Service Occupational Health Program\nOccupational Health Service Request",
+  "titleFr": "",
+  "introduction": {
+    "descriptionEn": "The Public Service Occupational Health Program (PSOHP) will not action service requests for employees currently on leave.",
+    "descriptionFr": ""
+  },
+  "privacyPolicy": {
+    "descriptionEn": "**Privacy Notice**\n\nThe personal information you provide to the Public Service Occupational Health Program (PSOHP) will be used under the authority of section 4(2)(f) of the Department of Health Act and handled according to the Privacy Act.\n\n**Why is PSOHP collecting your personal health information?**\n\nPSOHP collects personal information to conduct requested services, including occupational health services (e.g., evaluations, testing, immunizations, surveillance exams/testing/analysis) and superannuation services (retirement on medical grounds and the buyback of pensionable service).\n\n**Will PSOHP use or share your personal information for any other reason?**\n\nYour personal information may be used and disclosed for the following reasons: to employing departments following completion of a requested occupational health service; in response to requests for review of outcomes of an occupational health evaluation; in response to legal actions; in response to complaints or requests submitted to federal tribunals; to federal, provincial, and territorial authorities according to reporting requirements; to the Government of Canada Pension Centre if related to superannuation services.\n\n**What happens if you don’t want to provide your personal information?**\n\nFailure to provide requested personal information will result in PSOHP being unable to complete the requested service.\n\n**What are your rights?**\n\nYou have the right to access your personal information or request a correction of your personal information. You have the right to complain to the Privacy Commissioner of Canada if you feel your personal information has been handled improperly (via telephone: 1-800-282-1376; or online: [https://plainte-complaint.priv.gc.ca/en/register-pa](https://plainte-complaint.priv.gc.ca/en/register-pa)). For more details on the collection of your personal information, visit [Health Canada's Info Source](https://www.canada.ca/en/health-canada/corporate/about-health-canada/activities-responsibilities/access-information-privacy/info-source-federal-government-employee-information.html) (Personal Information Bank Number: HC PCE 701).\n\nFor more information about your rights, or about how PSOHP handles your personal information, please contact [psohp-pstfp@hc-sc.gc.ca](mailto:psohp-pstfp@hc-sc.gc.ca).",
+    "descriptionFr": "**Avis de confidentialité**\n\nLes renseignements personnels que vous fournissez au Programme de santé au travail de la fonction publique (PSTFP) seront utilisés en vertu de l'article 4(2)(f) de la Loi sur le ministère de la Santé et traités conformément à la Loi sur la protection de la vie privée.\n\n**Pourquoi le PSTFP recueille-t-il des renseignements personnels sur votre santé?**\n\nLe PSTFP recueille des renseignements personnels pour fournir les services demandés, y compris les services de santé au travail (p. ex., évaluations, tests, immunisations, examen/tests/analyses pour la surveillance) et les services de pension de retraite (retraite pour raisons médicales et rachat de service ouvrant droit à pension).\n\n**Le PSTFP utilisera-t-il ou partagera-t-il vos renseignements personnels pour toute autre raison?**\n\nVos renseignements personnels peuvent être utilisés et divulgués pour les raisons suivantes : aux employeurs à  la suite du traitement d'une demande de service de santé au travail; en réponse à des demandes de révision des résultats d'une évaluation de la santé au travail; en réponse à des procédures en justice; en réponse à des plaintes ou à des demandes soumises à des tribunaux fédéraux; aux autorités fédérales, provinciales et territoriales conformément aux exigences en matière de déclaration; au Centre des pensions du gouvernement du Canada s'il s'agit de services de pension de retraite.\n\n**Que se passe-t-il si vous ne souhaitez pas fournir vos renseignements personnels?**\n\nSi les renseignements personnels demandés ne sont pas fournis, le PSTFP ne sera pas en mesure d’accomplir le service demandé.\n\n**Quels sont vos droits?**\n\nVous avez le droit d'accéder à vos renseignements personnels ou d'en demander la correction. Vous avez le droit de déposer une plainte auprès du Commissaire à la protection de la vie privée du Canada si vous estimez que vos renseignements personnels n'ont pas été traités correctement (par téléphone : 1-800-282-1376; ou en ligne : [https://plainte-complaint.priv.gc.ca/fr/enregistrer-lprp](https://plainte-complaint.priv.gc.ca/fr/enregistrer-lprp)). Pour plus de détails sur la collecte de vos renseignements personnels, consultez [Info Source de Santé Canada](https://www.canada.ca/fr/sante-canada/organisation/a-propos-sante-canada/activites-responsabilites/acces-information-protection-renseignements-personnels/info-source-renseignements-gouvernement-federal-fonctionnaires-federaux.html) (numéro de fichier de renseignements personnels : SC PCE 701).\n\nPour plus d'informations sur vos droits ou sur la manière dont le PSTFP traite vos renseignements personnels, veuillez contacter [psohp-pstfp@hc-sc.gc.ca](mailto:psohp-pstfp@hc-sc.gc.ca)."
+  },
+  "confirmation": {
+    "descriptionEn": "",
+    "descriptionFr": "",
+    "referrerUrlEn": "",
+    "referrerUrlFr": ""
+  },
+  "layout": [4, 5, 6, 7, 8, 1, 2, 3],
+  "elements": [
+    {
+      "id": 8,
+      "type": "richText",
+      "properties": {
+        "choices": [
+          {
+            "en": "",
+            "fr": ""
+          }
+        ],
+        "titleEn": "",
+        "titleFr": "",
+        "validation": {
+          "required": false
+        },
+        "subElements": [],
+        "descriptionEn": "## Service Request Information",
+        "descriptionFr": "",
+        "placeholderEn": "",
+        "placeholderFr": ""
+      }
+    },
+    {
+      "id": 1,
+      "type": "radio",
+      "properties": {
+        "choices": [
+          {
+            "en": "Candidate",
+            "fr": ""
+          },
+          {
+            "en": "Employee",
+            "fr": ""
+          },
+          {
+            "en": "Dependant",
+            "fr": ""
+          }
+        ],
+        "titleEn": "Evaluation for:",
+        "titleFr": "",
+        "validation": {
+          "required": true
+        },
+        "subElements": [],
+        "descriptionEn": "",
+        "descriptionFr": "",
+        "placeholderEn": "",
+        "placeholderFr": "",
+        "conditionalRules": []
+      }
+    },
+    {
+      "id": 2,
+      "type": "textField",
+      "properties": {
+        "choices": [
+          {
+            "en": "",
+            "fr": ""
+          }
+        ],
+        "titleEn": "If dependant, name of employee (last name, first name):",
+        "titleFr": "",
+        "validation": {
+          "required": false
+        },
+        "subElements": [],
+        "descriptionEn": "",
+        "descriptionFr": "",
+        "placeholderEn": "",
+        "placeholderFr": "",
+        "conditionalRules": [
+          {
+            "choiceId": "1.2"
+          }
+        ]
+      }
+    },
+    {
+      "id": 3,
+      "type": "dropdown",
+      "properties": {
+        "choices": [
+          {
+            "en": "Category 1 Health Status Self-declaration",
+            "fr": ""
+          },
+          {
+            "en": "Category 1 Health Care Providers",
+            "fr": ""
+          },
+          {
+            "en": "Category 1 Isolated and Remote",
+            "fr": ""
+          },
+          {
+            "en": "Category 1 Harsh Environmental Conditions",
+            "fr": ""
+          },
+          {
+            "en": "Category 1 Mental Health Declaration",
+            "fr": ""
+          },
+          {
+            "en": "Category 1 Screening questionnaire review for respirator users (e.g., OHEG Form 4)",
+            "fr": ""
+          },
+          {
+            "en": "Category 1 Pre-posting",
+            "fr": ""
+          },
+          {
+            "en": "Category 1 Cross-posting",
+            "fr": ""
+          },
+          {
+            "en": "Category 3 Pre-posting",
+            "fr": ""
+          },
+          {
+            "en": "Category 3 Cross-posting",
+            "fr": ""
+          },
+          {
+            "en": "Category 3 Return from post",
+            "fr": ""
+          },
+          {
+            "en": "Category 3 Return from post (UHI)",
+            "fr": ""
+          },
+          {
+            "en": "Posting in-transit",
+            "fr": ""
+          },
+          {
+            "en": "Temporary Duty",
+            "fr": ""
+          },
+          {
+            "en": "Immunization Review",
+            "fr": ""
+          },
+          {
+            "en": "Surveillance",
+            "fr": ""
+          }
+        ],
+        "titleEn": "Service Type:",
+        "titleFr": "",
+        "validation": {
+          "required": true
+        },
+        "subElements": [],
+        "descriptionEn": "",
+        "descriptionFr": "",
+        "placeholderEn": "",
+        "placeholderFr": ""
+      }
+    },
+    {
+      "id": 4,
+      "type": "textField",
+      "properties": {
+        "choices": [
+          {
+            "en": "",
+            "fr": ""
+          }
+        ],
+        "titleEn": "Posting from (city, country)",
+        "titleFr": "",
+        "validation": {
+          "required": false
+        },
+        "subElements": [],
+        "descriptionEn": "",
+        "descriptionFr": "",
+        "placeholderEn": "",
+        "placeholderFr": ""
+      }
+    },
+    {
+      "id": 5,
+      "type": "textField",
+      "properties": {
+        "choices": [
+          {
+            "en": "",
+            "fr": ""
+          }
+        ],
+        "titleEn": "Posting to (city, country)",
+        "titleFr": "",
+        "validation": {
+          "required": false
+        },
+        "subElements": [],
+        "descriptionEn": "",
+        "descriptionFr": "",
+        "placeholderEn": "",
+        "placeholderFr": ""
+      }
+    },
+    {
+      "id": 6,
+      "type": "textField",
+      "properties": {
+        "choices": [
+          {
+            "en": "",
+            "fr": ""
+          }
+        ],
+        "titleEn": "Duration (number of months/years)",
+        "titleFr": "",
+        "validation": {
+          "required": false
+        },
+        "subElements": [],
+        "descriptionEn": "",
+        "descriptionFr": "",
+        "placeholderEn": "",
+        "placeholderFr": ""
+      }
+    },
+    {
+      "id": 7,
+      "type": "textField",
+      "properties": {
+        "choices": [
+          {
+            "en": "",
+            "fr": ""
+          }
+        ],
+        "titleEn": "Date of posting or date of return from posting",
+        "titleFr": "",
+        "validation": {
+          "type": "date",
+          "required": false
+        },
+        "subElements": [],
+        "descriptionEn": "Format the date as: mm/dd/yyyy",
+        "descriptionFr": "Saisissez une date dans ce format : mm/jj/aaaa",
+        "placeholderEn": "",
+        "placeholderFr": ""
+      }
+    }
+  ],
+  "brand": {
+    "name": "hc",
+    "urlEn": "https://www.canada.ca/en/health-canada.html",
+    "urlFr": "https://www.canada.ca/fr/sante-canada.html",
+    "logoEn": "/img/branding/hc-canada-en.svg",
+    "logoFr": "/img/branding/hc-canada-fr.svg",
+    "logoTitleEn": "Health Canada",
+    "logoTitleFr": "Santé Canada"
+  },
+  "groups": {
+    "start": {
+      "name": "Start",
+      "titleEn": "Beginning",
+      "titleFr": "Début",
+      "autoFlow": true,
+      "elements": [],
+      "nextAction": "3a426f36-bd26-4b82-9556-6a9c26513bb1"
+    },
+    "3a426f36-bd26-4b82-9556-6a9c26513bb1": {
+      "name": "Postings",
+      "titleEn": "Posting-related service request questions",
+      "titleFr": "",
+      "autoFlow": true,
+      "elements": ["4", "5", "6", "7"],
+      "nextAction": "review"
+    },
+    "9a8c1cf4-001f-4cd2-91df-e3804e45c53a": {
+      "name": "SR Info",
+      "titleEn": "SR Info",
+      "titleFr": "",
+      "autoFlow": true,
+      "elements": ["8", "1", "2", "3"]
+    },
+    "review": {
+      "name": "Review",
+      "titleEn": "Review",
+      "titleFr": "Révision",
+      "autoFlow": true,
+      "elements": [],
+      "nextAction": "9a8c1cf4-001f-4cd2-91df-e3804e45c53a"
+    },
+    "end": {
+      "name": "End",
+      "titleEn": "End",
+      "titleFr": "Fin",
+      "autoFlow": true,
+      "elements": [],
+      "nextAction": "start"
+    }
+  }
+}
