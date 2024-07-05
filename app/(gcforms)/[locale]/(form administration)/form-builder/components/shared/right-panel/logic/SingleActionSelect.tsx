@@ -47,7 +47,6 @@ export const SingleActionSelect = ({
 
   return (
     <div>
-      {nextActionId}: {nextAction}
       <div className="mb-4">
         <GroupSelect selected={nextActionId} groups={groupItems} onChange={handleGroupChange} />
         {/*  Add section Exit checkbox */}

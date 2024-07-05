@@ -61,11 +61,10 @@ export const OffboardNode = (node: NodeProps) => {
       <div
         id={node.id}
         className={cn(
-          "space-y-2 rounded-md border-2 border-indigo-500 p-4 text-white",
-          "space-y-2 rounded-md border-1 border-indigo-500 p-4 text-white",
+          "space-y-2 rounded-md border-1 border-slate-800 p-4 text-white",
           groupIsSelected
-            ? "bg-violet-200 shadow-logicSelected"
-            : "bg-gray-soft shadow-logicDefault",
+            ? "bg-[#FEF2F2] shadow-offboardSelected"
+            : "bg-[#FEF2F2] shadow-offboardDefault",
           !groupIsSelected && "focus-within:bg-violet-100 focus-within:border-dashed",
           "relative "
         )}
@@ -81,7 +80,11 @@ export const OffboardNode = (node: NodeProps) => {
 
         {/* Elements */}
         <div className={cn(nodeClassName)}>
-          <div className="truncate">exit</div>
+          <div className="truncate">{t("logic.exit.offboardNodeContent.content")}</div>
+        </div>
+
+        <div className={cn(nodeClassName)}>
+          <div className="truncate">{t("logic.exit.offboardNodeContent.exitButton")}</div>
         </div>
 
         <Handle type="target" position={getTargetHandlePosition(direction)} isConnectable={false} />

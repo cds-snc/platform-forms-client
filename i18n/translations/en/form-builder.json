@@ -875,7 +875,11 @@
     "exit": {
       "convertText": "Convert section",
       "checkboxLabel": "Exit",
-      "nodeIconLabel": "Exit"
+      "nodeIconLabel": "Exit",
+      "offboardNodeContent": {
+        "content": "<Content>",
+        "exitButton": "Back to the start button"
+      }
     }
   },
   "groups": {
