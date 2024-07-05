@@ -258,7 +258,7 @@ export const validateOnSubmit = (
  */
 
 export const getErrorList = (
-  props: { formRecord: PublicFormRecord } & FormikProps<Responses>
+  props: { formRecord: PublicFormRecord; language: string } & FormikProps<Responses>
 ): JSX.Element | null => {
   if (!props.formRecord?.form || !props.errors) {
     return null;
@@ -273,6 +273,19 @@ export const getErrorList = (
       return [element, props.errors[element]];
     });
 
+  // TODO may want to truncate long labels with css instead
+  // TODO test dynamic rows
+  const getLabel = (elementKey: string | number | undefined): string => {
+    const formElement = props.formRecord.form.elements.filter(
+      (element) => element.id === elementKey
+    )[0];
+    const formLabel =
+      (props.language === "fr"
+        ? formElement?.properties?.titleFr
+        : formElement?.properties?.titleEn) || "";
+    return formLabel.length > 24 ? formLabel.substring(0, 24) + "..." : formLabel;
+  };
+
   if (props.touched && sortedFormElementErrors.length) {
     errorList = sortedFormElementErrors.map(([formElementKey, formElementErrorValue]) => {
       if (Array.isArray(formElementErrorValue)) {
@@ -285,6 +298,9 @@ export const getErrorList = (
                     key={`error-${formElementKey}.${dynamicRowIndex}.${dyanamicRowElementKey}`}
                     errorKey={`${formElementKey}.${dynamicRowIndex}.${dyanamicRowElementKey}`}
                     value={`${dyanamicRowElementErrorValue as string}`}
+                    label={getLabel(
+                      `${formElementKey}.${dynamicRowIndex}.${dyanamicRowElementKey}`
+                    )}
                   />
                 )
               );
@@ -297,6 +313,7 @@ export const getErrorList = (
             key={`error-${formElementKey}`}
             errorKey={`${formElementKey}`}
             value={`${formElementErrorValue}`}
+            label={getLabel(formElementKey)}
           />
         );
       }

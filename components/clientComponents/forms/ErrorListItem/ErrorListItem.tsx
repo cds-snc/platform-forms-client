@@ -4,6 +4,7 @@ import React from "react";
 export interface ErrorListProps {
   errorKey: string;
   value: string | undefined;
+  label?: string;
 }
 
 /**
@@ -23,9 +24,10 @@ const scrollErrorInView = (id: string) => {
  * @returns ReactElement for displaying the error list
  * @param errorKey The key for the form element for the error
  * @param value The error to be displayed
+ * @param label The label for the form element
  */
 export const ErrorListItem = (props: ErrorListProps): React.ReactElement => {
-  const { errorKey, value } = props;
+  const { errorKey, value, label } = props;
 
   return (
     <li>
@@ -43,6 +45,7 @@ export const ErrorListItem = (props: ErrorListProps): React.ReactElement => {
           scrollErrorInView(errorKey);
         }}
       >
+        {label && `${label} - `}
         {value}
       </a>
     </li>
