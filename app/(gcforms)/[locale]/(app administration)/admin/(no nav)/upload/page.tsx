@@ -20,9 +20,13 @@ export default async function Page() {
 
   const { ability } = await authCheckAndRedirect();
 
-  checkPrivilegesAsBoolean(ability, [{ action: "create", subject: "FormRecord" }], {
-    redirect: true,
-  });
+  checkPrivilegesAsBoolean(
+    ability,
+    [{ action: "update", subject: { type: "FormRecord", object: {} } }],
+    {
+      redirect: true,
+    }
+  );
   return (
     <>
       <h1>{t("upload.title")}</h1>
