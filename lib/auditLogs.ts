@@ -88,24 +88,6 @@ export const logEvent = async (
     subject,
     description,
   });
-  try {
-    const queueUrl = await getQueueURL();
-    if (!queueUrl) throw new Error("Audit Log Queue not connected");
-    await sqsClient.send(
-      new SendMessageCommand({
-        MessageBody: auditLog,
-        QueueUrl: queueUrl,
-      })
-    );
-  } catch (e) {
-    // Only log the error in Production environment.
-    // Development may be running without LocalStack setup
-    if (process.env.NODE_ENV === "development" || process.env.APP_ENV === "test")
-      return logMessage.info(`AuditLog:${auditLog}`);
-
-    logMessage.error("ERROR with Audit Logging");
-    logMessage.error(e as Error);
-    // Ensure the audit event is not lost by sending to console
-    logMessage.warn(`AuditLog:${auditLog}`);
-  }
+  // Disable Logging
+  return;
 };

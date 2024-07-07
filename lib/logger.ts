@@ -1,19 +1,14 @@
-import pino from "pino";
 
-export const logMessage = pino({
-  level: process.env.NODE_ENV === "development" ? "debug" : "info",
-  browser: {
-    asObject: true,
-    serialize: true,
-  },
-  formatters: {
-    level: (label) => ({ level: label }),
-  },
-  ...(process.env.NODE_ENV === "development" && {
-    transport: {
-      target: "pino-pretty",
-    },
-  }),
 
-  base: null,
-});
+const dummyFn = () => {
+  return;
+}
+// Don't log anything to console
+export const logMessage = {
+  debug: dummyFn,
+  info: dummyFn,
+  warn: dummyFn,
+  error: dummyFn
+
+};
+
