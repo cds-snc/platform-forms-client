@@ -51,6 +51,7 @@ export const groupsToTreeData = (
         titleFr: formGroups[key].titleFr,
         descriptionEn: "",
         descriptionFr: "",
+        nextAction: formGroups[key].nextAction,
       },
       children: children,
     };

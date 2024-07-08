@@ -161,11 +161,17 @@ export const useFlowData = (lang: Language = "en") => {
 
       const titleKey = lang === "en" ? "titleEn" : "titleFr";
 
+      const isOffBoardSection = treeItem.data.nextAction === "exit";
+
       const flowNode = {
         id: key as string,
         position: { x: x_pos, y: y_pos },
-        data: { label: treeItem.data[titleKey], children: elements },
-        type: "groupNode",
+        data: {
+          label: treeItem.data[titleKey],
+          children: elements,
+          nextAction: treeItem.data.nextAction,
+        },
+        type: isOffBoardSection ? "offboardNode" : "groupNode",
       };
 
       edges.push(...(newEdges as CustomEdge[]));

@@ -81,7 +81,6 @@ export const GroupNode = (node: NodeProps) => {
         id={node.id}
         className={cn(
           "space-y-2 rounded-md border-2 border-indigo-500 p-4 text-white",
-          "space-y-2 rounded-md border-1 border-indigo-500 p-4 text-white",
           groupIsSelected
             ? "bg-violet-200 shadow-logicSelected"
             : "bg-gray-soft shadow-logicDefault",

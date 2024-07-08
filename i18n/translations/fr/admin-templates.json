@@ -8,6 +8,7 @@
   },
   "view": {
     "title": "Voir le modèle des formulaires",
+    "updatedAt": "Mis a jour",
     "update": "Modifier",
     "formID": "Identifiant du formulaire :",
     "view": "Afficher",
@@ -18,7 +19,10 @@
     "publishForm": "Publier",
     "unpublishForm": "Ébauche",
     "users": "Utilisateur·rice·s",
-    "assign": "Assigner"
+    "assign": "Assigner",
+    "search": "Recherche",
+    "clear": "Réinitialiser",
+    "latestPublished": "Derniers formulaires publiés"
   },
   "settings": {
     "title": "Paramètres du formulaire",
