@@ -1,5 +1,5 @@
 "use client";
-import { NextButton } from "@clientComponents/forms";
+import { NextButton } from "@clientComponents/forms/NextButton/NextButton";
 import { useRouter } from "next/navigation";
 import { useTranslation } from "@i18n/client";
 import { FormRecord, TypeOmit } from "@lib/types";

@@ -6,7 +6,9 @@ import Markdown from "markdown-to-jsx";
 import { PreviewNavigation } from "./PreviewNavigation";
 import { getRenderedForm } from "@lib/formBuilder";
 import { PublicFormRecord } from "@lib/types";
-import { Button, RichText, ClosedPage, NextButton } from "@clientComponents/forms";
+import { Button, RichText, ClosedPage } from "@clientComponents/forms";
+import { NextButton } from "@clientComponents/forms/NextButton/NextButton";
+
 import {
   FormServerErrorCodes,
   LocalizedElementProperties,
