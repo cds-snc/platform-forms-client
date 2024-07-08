@@ -887,7 +887,18 @@
         "buttonLabel": "Remove"
       }
     },
-    "exitBadge": "Exit"
+    "exitBadge": "Exit",
+    "exitButtonElement": {
+      "description": "Help people exiting your form have a path forward.",
+      "list": {
+        "title": "What to include in your exit section",
+        "item1": "Links to other forms that may apply ",
+        "item2": "Guidance on the application process or form requirements ",
+        "item3": "Point of contact to learn more about the form"
+      },
+      "buttonDescription": "An exit button will route people to the destination set by the branding of the form.",
+      "buttonLabel": "Create a custom destination by copying and pasting the link below:"
+    }
   },
   "groups": {
     "newSection": "New section",

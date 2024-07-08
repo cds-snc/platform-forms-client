@@ -881,7 +881,16 @@
         "exitButton": "Back to the start button [FR]"
       }
     },
-    "exitBadge": "Exit"
+    "exitBadge": "Exit",
+    "exitButtonElement": {
+      "description": "Help people exiting your form have a path forward. [fr]",
+      "list": {
+        "title": "What to include in your exit section [fr]",
+        "item1": "Links to other forms that may apply [fr]",
+        "item2": "Guidance on the application process or form requirements [fr]",
+        "item3": "Point of contact to learn more about the form [fr]"
+      }
+    }
   },
   "groups": {
     "newSection": "Nouvelle section",

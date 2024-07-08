@@ -8,7 +8,8 @@ export type Group = {
   nextAction?: string | NextActionRule[];
   elements: string[];
   autoFlow?: boolean;
-  exitUrl?: string; // Used when a nextAction is set to "exit"
+  exitUrlEn?: string; // Used when a nextAction is set to "exit"
+  exitUrlFr?: string; // Used when a nextAction is set to "exit"
 };
 export type GroupsType = Record<string, Group>;
 export type FormValues = Record<string, string | string[]>;
