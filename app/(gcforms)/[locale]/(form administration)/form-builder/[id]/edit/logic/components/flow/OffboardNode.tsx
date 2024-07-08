@@ -54,8 +54,7 @@ export const OffboardNode = (node: NodeProps) => {
           htmlFor={node.id}
           className="inline-block w-5/6 max-w-[200px] truncate text-sm text-slate-600"
         >
-          {/* Case of Review and End (no name) hide visually but include text required for a label */}
-          {node.data.label || <span className="sr-only">{node.id}</span>}
+          {node.data.label}
         </label>
       </div>
       <div
