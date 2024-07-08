@@ -880,7 +880,8 @@
         "content": "<Content> [FR]",
         "exitButton": "Back to the start button [FR]"
       }
-    }
+    },
+    "exitBadge": "Exit"
   },
   "groups": {
     "newSection": "Nouvelle section",

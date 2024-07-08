@@ -6,6 +6,7 @@ import { FormElementTypes } from "@lib/types";
 import { useTemplateStore } from "@lib/store/useTemplateStore";
 import { SectionTitle } from "./SectionTitle";
 import { LocalizedElementProperties } from "@lib/types/form-builder-types";
+import { ExitBadge } from "@formBuilder/components/shared/ExitBadge";
 
 const AddElement = () => {
   const { t } = useTranslation("form-builder");
@@ -67,6 +68,8 @@ export const Section = ({ groupId }: { groupId: string }) => {
 
   const noElements = !groups[groupId]?.elements || groups[groupId]?.elements.length === 0;
 
+  const nextAction = groups[groupId]?.nextAction;
+
   return (
     <div
       className={cn(
@@ -74,7 +77,14 @@ export const Section = ({ groupId }: { groupId: string }) => {
         noElements ? "border-b-1 rounded-b-lg" : "last:border-b-1"
       )}
     >
-      <SectionTitle groupTitle={groupTitle} groupId={groupId} />
+      <>
+        {nextAction === "exit" && (
+          <div>
+            <ExitBadge />
+          </div>
+        )}
+        <SectionTitle groupTitle={groupTitle} groupId={groupId} />
+      </>
       {noElements ? (
         <AddElementEmpty />
       ) : (

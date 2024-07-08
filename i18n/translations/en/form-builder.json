@@ -886,7 +886,8 @@
         "description": "Exit sections will always flow back to the start of the form.",
         "buttonLabel": "Remove"
       }
-    }
+    },
+    "exitBadge": "Exit"
   },
   "groups": {
     "newSection": "New section",
