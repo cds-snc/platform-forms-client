@@ -126,7 +126,16 @@ export const getOrCreateUser = async ({
  */
 export const getUser = async (ability: UserAbility, id: string): Promise<AppUser> => {
   try {
-    checkPrivileges(ability, [{ action: "view", subject: "User" }]);
+    checkPrivileges(ability, [
+      {
+        action: "view",
+        subject: {
+          type: "User",
+          // Empty object to force the ability to check for any user
+          object: {},
+        },
+      },
+    ]);
 
     const user = await prisma.user.findFirstOrThrow({
       where: {
@@ -222,7 +231,16 @@ export const getUsers = async (
  */
 export const updateActiveStatus = async (ability: UserAbility, userID: string, active: boolean) => {
   try {
-    checkPrivileges(ability, [{ action: "update", subject: "User" }]);
+    checkPrivileges(ability, [
+      {
+        action: "update",
+        subject: {
+          type: "User",
+          // Empty object to force the ability to check for any user
+          object: {},
+        },
+      },
+    ]);
 
     const [user, privilegedUser] = await Promise.all([
       prisma.user.update({
