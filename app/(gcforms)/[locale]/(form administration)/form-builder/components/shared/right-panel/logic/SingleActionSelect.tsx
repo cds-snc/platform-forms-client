@@ -56,6 +56,9 @@ export const SingleActionSelect = ({
   const exitLabelId = `section-select-check-${currentGroup}-${isExitAction}`;
 
   if (nextAction === "exit") {
+    {
+      /* Show Remove exit action panel */
+    }
     return (
       <div>
         <div className="p-4">
@@ -70,6 +73,10 @@ export const SingleActionSelect = ({
           <Button
             onClick={() => {
               currentGroup && setGroupNextAction(currentGroup, "review");
+              // Add a delay to allow group state to update calling for redraw
+              setTimeout(() => {
+                flow.current?.redraw();
+              }, 200);
               toast.success(t("logic.actionsSaved"));
             }}
             theme="secondary"
