@@ -1,3 +1,8 @@
+/*******************************************************
+ * Keeping as an Example for the encoding to be used
+ * in the Express Server that is being built seperately
+ *******************************************************/
+
 import { NextRequest, NextResponse } from "next/server";
 import { headers } from "next/headers";
 import { AccessControlError } from "@lib/privileges";
