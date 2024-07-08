@@ -108,6 +108,15 @@
         }
       }
     },
+    "groupsLayout": {
+      "description": "A list of group IDs that determines the order of the groups in the form.",
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "uniqueItems": true,
+      "examples": [["one", "two"]]
+    },
     "elements": {
       "description": "A list of elements contained within the form.",
       "type": "array",
