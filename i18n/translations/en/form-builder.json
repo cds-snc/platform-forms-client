@@ -874,16 +874,16 @@
     },
     "exit": {
       "convertText": "Convert section",
-      "checkboxLabel": "Exit",
+      "checkboxLabel": "Exit the form",
       "nodeIconLabel": "Exit",
       "offboardNodeContent": {
         "content": "<Content>",
-        "exitButton": "Back to the start button"
+        "exitButton": "Back to the start"
       },
       "exitPanel": {
         "title1": "Exit section",
-        "title2": "User is not eligiable",
-        "description": "Exit sections will always flow back to the start of the form.",
+        "title2": "Ineligible to continue filling out the form",
+        "description": "Exit sections link users back to the start of the form.",
         "buttonLabel": "Remove"
       }
     },
@@ -891,13 +891,13 @@
     "exitButtonElement": {
       "description": "Help people exiting your form have a path forward.",
       "list": {
-        "title": "What to include in your exit section",
-        "item1": "Links to other forms that may apply ",
-        "item2": "Guidance on the application process or form requirements ",
-        "item3": "Point of contact to learn more about the form"
+        "title": "What to include in the exit section",
+        "item1": "Links to other relevant forms or web pages",
+        "item2": "Next steps in the process or guidance on form requirements",
+        "item3": "Contact information to follow up or learn more about the form"
       },
-      "buttonDescription": "An exit button will route people to the destination set by the branding of the form.",
-      "buttonLabel": "Create a custom destination by copying and pasting the link below:"
+      "buttonDescription": "An exit button takes people to the organization website corresponding to the branding of the form.",
+      "buttonLabel": "Customize the button destination by copy-pasting a more relevant link below:"
     }
   },
   "groups": {
