@@ -940,5 +940,6 @@
     "translateSetup": "Skip to Translations set-up",
     "logicSetup": "Skip to Logic set-up"
   },
-  "goBack": "Go back"
+  "goBack": "Go back",
+  "disabled": "disabled"
 }
