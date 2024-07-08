@@ -70,7 +70,7 @@ You are responsible for:
 
 You may replace the Government of Canada signature with your department or agency’s signature. If you are unsure about your department or agency’s signature, contact your [Federal Identity Program coordinator](https://www.tbs-sct.canada.ca/ap/fip-pcim/coord-eng.asp).
 
-We ask that clients not interfere with the format of JSON files, as any updates can compromise both the accessibility of the form as well as embedded design standards for the federal identity program.  
+We ask that clients not interfere with the format of JSON files, as any updates can compromise both the accessibility of the form as well as embedded design standards for the federal identity program. We will not be providing support for forms where the JSON file has been manipulated.
 
 For questions related to these terms of use, [contact us](/en/contact).
 
