@@ -901,6 +901,33 @@
     "legend": {
       "section": "Apply a branching rule to a section",
       "option": "Apply conditional rules to questions with selectable options"
+    },
+    "exit": {
+      "convertText": "Convert section",
+      "checkboxLabel": "Exit",
+      "nodeIconLabel": "Exit",
+      "offboardNodeContent": {
+        "content": "<Content>",
+        "exitButton": "Back to the start button"
+      },
+      "exitPanel": {
+        "title1": "Exit section",
+        "title2": "User is not eligiable",
+        "description": "Exit sections will always flow back to the start of the form.",
+        "buttonLabel": "Remove"
+      }
+    },
+    "exitBadge": "Exit",
+    "exitButtonElement": {
+      "description": "Help people exiting your form have a path forward.",
+      "list": {
+        "title": "What to include in your exit section",
+        "item1": "Links to other forms that may apply ",
+        "item2": "Guidance on the application process or form requirements ",
+        "item3": "Point of contact to learn more about the form"
+      },
+      "buttonDescription": "An exit button will route people to the destination set by the branding of the form.",
+      "buttonLabel": "Create a custom destination by copying and pasting the link below:"
     }
   },
   "groups": {
@@ -954,5 +981,6 @@
     "translateSetup": "Skip to Translations set-up",
     "logicSetup": "Skip to Logic set-up"
   },
-  "goBack": "Go back"
+  "goBack": "Go back",
+  "disabled": "disabled"
 }
