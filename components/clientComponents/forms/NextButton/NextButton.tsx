@@ -1,13 +1,16 @@
+"use client";
+
 import React from "react";
 import { useTranslation } from "@i18n/client";
 
+import { LinkButton } from "@serverComponents/globals/Buttons/LinkButton";
 import { Validate, PublicFormRecord } from "@lib/types";
 import { useGCFormsContext } from "@lib/hooks/useGCFormContext";
-import { Button } from "@clientComponents/globals";
+import { Button } from "@clientComponents/globals/Buttons/Button";
 import { LockedSections } from "@formBuilder/components/shared/right-panel/treeview/types";
 import { ArrowRightNav } from "@serverComponents/icons/ArrowRightNav";
 import { Language } from "@lib/types/form-builder-types";
-import { LinkButton } from "@serverComponents/globals/Buttons/LinkButton";
+
 import { getLocalizedProperty } from "@lib/utils";
 
 export const NextButton = ({
@@ -50,6 +53,7 @@ export const NextButton = ({
 
     // Do not show next button for off-board sections
     // Show exit button instead
+
     return (
       exitUrl && (
         <LinkButton.Primary href={exitUrl}>{t("exit", { lng: language })}</LinkButton.Primary>
