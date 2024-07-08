@@ -27,14 +27,18 @@ export const PrePublishDialog = ({
   const dialog = useDialogRef();
 
   const [prePublishStep, setPrePublishStep] = useState(0);
+  enum PrePublishSteps {
+    ReasonForPublish = 0,
+    FormTypeAndDescription = 1,
+  }
 
   async function ContinuePublishSteps() {
     setError(false);
-    if (prePublishStep == 0) {
+    if (prePublishStep == PrePublishSteps.ReasonForPublish) {
       if (reasonForPublish == "") {
         setError(true);
       } else {
-        setPrePublishStep(1);
+        setPrePublishStep(PrePublishSteps.FormTypeAndDescription);
       }
     } else {
       if (formType == "" || description == "") {
@@ -92,7 +96,7 @@ export const PrePublishDialog = ({
 
   return (
     <div className="form-builder">
-      {prePublishStep == 0 && (
+      {prePublishStep == PrePublishSteps.ReasonForPublish && (
         <Dialog
           title={t("prePublishFormDialog.title")}
           dialogRef={dialog}
@@ -142,7 +146,7 @@ export const PrePublishDialog = ({
           </div>
         </Dialog>
       )}
-      {prePublishStep == 1 && (
+      {prePublishStep == PrePublishSteps.FormTypeAndDescription && (
         <Dialog
           title={t("prePublishFormDialog.title")}
           dialogRef={dialog}
