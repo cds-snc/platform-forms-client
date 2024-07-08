@@ -10,7 +10,6 @@ import { useTranslation } from "@i18n/client";
 import { SaveNote } from "./SaveNote";
 import { toast } from "@formBuilder/components/shared/Toast";
 import { Checkbox } from "@formBuilder/components/shared";
-import { usePathname } from "next/navigation";
 
 const ExitIcon = () => {
   return (
@@ -35,7 +34,6 @@ export const SingleActionSelect = ({
   const findParentGroup = useGroupStore((state) => state.findParentGroup);
   const setGroupNextAction = useGroupStore((state) => state.setGroupNextAction);
   const { t } = useTranslation("form-builder");
-  const pathname = usePathname();
   const currentGroup = id;
   const [nextActionId, setNextActionId] = useState(nextAction);
 
@@ -72,10 +70,6 @@ export const SingleActionSelect = ({
           <Button
             onClick={() => {
               currentGroup && setGroupNextAction(currentGroup, "review");
-              // @todo look for a better way to handle this
-              if (window !== undefined) {
-                window.location.href = `${pathname}`;
-              }
               toast.success(t("logic.actionsSaved"));
             }}
             theme="secondary"
@@ -124,7 +118,10 @@ export const SingleActionSelect = ({
               currentGroup && setGroupNextAction(currentGroup, nextActionId);
             }
 
-            flow.current?.redraw();
+            // Add a delay to allow state to update before redrawing
+            setTimeout(() => {
+              flow.current?.redraw();
+            }, 200);
 
             toast.success(t("logic.actionsSaved"));
           }}
