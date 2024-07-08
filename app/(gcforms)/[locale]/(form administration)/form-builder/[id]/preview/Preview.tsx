@@ -194,6 +194,7 @@ export const Preview = ({
                       <div id="PreviewSubmitButton">
                         <span {...getLocalizationAttribute()}>
                           <NextButton
+                            formRecord={formRecord}
                             language={language}
                             validateForm={validateForm}
                             fallBack={() => {

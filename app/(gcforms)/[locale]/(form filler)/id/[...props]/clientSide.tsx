@@ -33,6 +33,7 @@ export const FormWrapper = ({
       renderSubmit={({ validateForm, fallBack }) => {
         return (
           <NextButton
+            formRecord={formRecord}
             language={language as Language}
             validateForm={validateForm}
             fallBack={fallBack}
