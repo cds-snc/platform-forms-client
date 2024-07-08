@@ -871,6 +871,25 @@
     "legend": {
       "section": "Appliquer une règle d'embranchement à une section",
       "option": "Appliquer des règles conditionnelles aux questions ayant des options à sélectionner"
+    },
+    "exit": {
+      "convertText": "Convert section [FR]",
+      "checkboxLabel": "Exit [FR]",
+      "nodeIconLabel": "Exit",
+      "offboardNodeContent": {
+        "content": "<Content> [FR]",
+        "exitButton": "Back to the start button [FR]"
+      }
+    },
+    "exitBadge": "Exit",
+    "exitButtonElement": {
+      "description": "Help people exiting your form have a path forward. [fr]",
+      "list": {
+        "title": "What to include in your exit section [fr]",
+        "item1": "Links to other forms that may apply [fr]",
+        "item2": "Guidance on the application process or form requirements [fr]",
+        "item3": "Point of contact to learn more about the form [fr]"
+      }
     }
   },
   "groups": {
@@ -924,5 +943,6 @@
     "translateSetup": "Passer à la configuration des traductions",
     "logicSetup": "Passer à la configuration de la logique"
   },
-  "goBack": "Retourner"
+  "goBack": "Retourner",
+  "disabled": "[FR]disabled"
 }
