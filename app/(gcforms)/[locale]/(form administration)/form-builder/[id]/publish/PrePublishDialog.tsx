@@ -157,11 +157,11 @@ export const PrePublishDialog = ({
                 <p className="mb-2">{t("prePublishFormDialog.error.message")} </p>
               </Alert.Danger>
             )}
-            <p className="text-sm">{t("prePublishFormDialog.thisInformation")}</p>
+            <p className="text-sm mb-4">{t("prePublishFormDialog.thisInformation")}</p>
             <label>{t("prePublishFormDialog.whatType")}</label>
-            <div>
+            <div className="mb-1">
               <Select
-                className="gc-dropdown"
+                className="form-builder-dropdown mb-0 mt-0 inline-block text-black-default w-[375px] border-black border-1"
                 options={elementOptions}
                 onChange={(e) => onFormTypeChange(e)}
               />
