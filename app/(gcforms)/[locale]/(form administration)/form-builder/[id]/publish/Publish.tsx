@@ -90,7 +90,7 @@ export const Publish = ({ id }: { id: string }) => {
     setShowPrePublishDialog(true);
   };
 
-  const handlePrePublishClose = async () => {
+  const handlePrePublishClose: () => void = async () => {
     setDescription("");
     setReasonForPublish("");
     setFormType("");
