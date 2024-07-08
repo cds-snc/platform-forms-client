@@ -159,6 +159,8 @@ module.exports = {
         none: "var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)",
         logicSelected: "inset 0 0 0 2px #6366F1",
         logicDefault: "inset 0 0 0 5px transparent",
+        offboardSelected: "inset 0 0 0 2px #1E293B",
+        offboardDefault: "inset 0 0 0 5px transparent",
       },
       screens: {
         tablet: "768px",

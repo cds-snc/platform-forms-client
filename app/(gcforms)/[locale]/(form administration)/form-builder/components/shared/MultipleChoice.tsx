@@ -15,6 +15,8 @@ const MultipleChoice = ({
   onChange,
   onFocus,
   checked,
+  labelClassName,
+  checkboxClassName,
   ...props
 }: {
   label?: JSX.Element | string;
@@ -28,6 +30,8 @@ const MultipleChoice = ({
   onChange?: () => void;
   onFocus?: () => void;
   checked?: boolean;
+  checkboxClassName?: string;
+  labelClassName?: string;
 }) => (
   <div className={cn(className, "multiple-choice-wrapper")}>
     <input
@@ -39,9 +43,10 @@ const MultipleChoice = ({
       onChange={onChange}
       onFocus={onFocus}
       checked={checked}
+      className={cn(checkboxClassName ? checkboxClassName : "")}
       {...props}
     />
-    <label htmlFor={id} id={`${id}-label`}>
+    <label htmlFor={id} id={`${id}-label`} className={cn(labelClassName ? labelClassName : "")}>
       {label}
     </label>
     {children}

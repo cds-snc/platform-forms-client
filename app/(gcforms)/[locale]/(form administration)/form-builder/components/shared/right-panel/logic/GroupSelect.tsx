@@ -23,15 +23,18 @@ export const GroupSelect = ({
   return (
     <div className="mb-4">
       <label className="mb-2 block text-sm" id={labelId}>
+        {selected === "exit" && <span className="sr-only">{t("disabled")}</span>}{" "}
         {t("logic.gotoSection")}
       </label>
       <select
+        disabled={selected === "exit"}
         value={selected || ""}
         data-selected={selected || ""}
         onChange={onChange}
         className={cn(
           "center-right-15px inline-block p-2 border-black border-1 form-builder-dropdown my-0 w-[375px] text-black-default text-sm",
-          className
+          className,
+          selected === "exit" && "opacity-50 cursor-not-allowed"
         )}
         aria-labelledby={labelId}
       >
