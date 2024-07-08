@@ -34,5 +34,14 @@ export interface GroupStoreState extends GroupStoreProps {
   getGroupNextAction: (groupId: string) => Group["nextAction"];
   setGroupNextAction: (groupId: string, nextAction: Group["nextAction"]) => void;
   autoSetNextActions: () => void;
-  updateGroupTitle: ({ id, locale, title }: { id: string, locale: Language; title: string }) => void;
+  updateGroupTitle: ({
+    id,
+    locale,
+    title,
+  }: {
+    id: string;
+    locale: Language;
+    title: string;
+  }) => void;
+  setExitButtonUrl: ({ id, locale, url }: { id: string; locale: Language; url: string }) => void;
 }

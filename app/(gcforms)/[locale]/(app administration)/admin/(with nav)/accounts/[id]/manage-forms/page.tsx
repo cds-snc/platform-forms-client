@@ -30,7 +30,7 @@ export default async function Page({
   checkPrivilegesAsBoolean(
     ability,
     [
-      { action: "view", subject: "User" },
+      { action: "view", subject: { type: "User", object: {} } },
       {
         action: "view",
         subject: {

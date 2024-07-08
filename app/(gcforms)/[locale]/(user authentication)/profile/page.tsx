@@ -24,7 +24,7 @@ export default async function Page({ params: { locale } }: { params: { locale: s
   ]);
 
   const [userQuestions, allQuestions] = await Promise.all([
-    retrieveUserSecurityQuestions({ userId: ability.userID }),
+    retrieveUserSecurityQuestions(ability, { userId: ability.userID }),
     retrievePoolOfSecurityQuestions(),
   ]);
 

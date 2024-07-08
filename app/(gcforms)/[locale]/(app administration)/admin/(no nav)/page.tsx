@@ -23,9 +23,13 @@ export default async function Page({ params: { locale } }: { params: { locale: s
 
   const { ability } = await authCheckAndRedirect();
 
-  const canViewUsers = checkPrivilegesAsBoolean(ability, [{ action: "view", subject: "User" }], {
-    redirect: true,
-  });
+  const canViewUsers = checkPrivilegesAsBoolean(
+    ability,
+    [{ action: "view", subject: { type: "User", object: {} } }],
+    {
+      redirect: true,
+    }
+  );
 
   if (!canViewUsers) {
     redirect(`/${locale}/forms`);

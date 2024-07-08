@@ -39,15 +39,26 @@ export const SelectNextAction = ({ item, lang }: { item: FormElement | null; lan
   if (!item && !Array.isArray(selectedGroupNextActions)) {
     return (
       <div>
-        <div className="flex justify-between border-b-2 border-black bg-gray-50 p-3 align-middle">
-          <SectionName lang={lang} sectionName={sectionName} />
-        </div>
-        <div className="p-4">
-          <SingleActionSelect
-            key={`single-action-select-${selectedGroupId}`}
-            nextAction={selectedGroupNextActions || "end"}
-          />
-        </div>
+        {selectedGroupNextActions === "exit" && (
+          <div className="bg-gray-50 p-3">
+            <SingleActionSelect
+              key={`single-action-select-${selectedGroupId}`}
+              nextAction={selectedGroupNextActions || "end"}
+            />
+          </div>
+        )}
+
+        {selectedGroupNextActions !== "exit" && (
+          <>
+            <div className="flex justify-between border-b-2 border-black bg-gray-50 p-3 align-middle">
+              <SectionName lang={lang} sectionName={sectionName} />
+            </div>
+            <SingleActionSelect
+              key={`single-action-select-${selectedGroupId}`}
+              nextAction={selectedGroupNextActions || "end"}
+            />
+          </>
+        )}
       </div>
     );
   }
