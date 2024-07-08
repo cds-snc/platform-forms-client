@@ -51,12 +51,30 @@ export const NextButton = ({
     const exitUrl =
       (brand?.[getLocalizedProperty("url", language)] as string | undefined) ?? t("fip.link");
 
+    // Check for custom exit url exists for the current group
+    let customExitUrl = "";
+
+    if (formRecord.form.groups && formRecord.form.groups[currentGroup]) {
+      const exitUrlEn = formRecord.form.groups[currentGroup].exitUrlEn;
+      const exitUrlFr = formRecord.form.groups[currentGroup].exitUrlFr;
+
+      if (language === "en" && exitUrlEn) {
+        customExitUrl = exitUrlEn;
+      }
+
+      if (language === "fr" && exitUrlFr) {
+        customExitUrl = exitUrlFr;
+      }
+    }
+
     // Do not show next button for off-board sections
     // Show exit button instead
 
     return (
       exitUrl && (
-        <LinkButton.Primary href={exitUrl}>{t("exit", { lng: language })}</LinkButton.Primary>
+        <LinkButton.Primary href={customExitUrl ? customExitUrl : exitUrl}>
+          {t("exit", { lng: language })}
+        </LinkButton.Primary>
       )
     );
   }
