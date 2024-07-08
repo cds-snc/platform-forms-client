@@ -70,7 +70,7 @@ Vous avez pour responsabilité :
 
 Vous pouvez remplacer la signature du gouvernement du Canada par la signature de votre ministère ou organisme. Si vous ne connaissez pas la signature de votre ministère ou organisme, veuillez contacter [le coordonnateur ou la coordonnatrice du Programme fédéral de l’image de marque](https://www.tbs-sct.canada.ca/ap/fip-pcim/coord-fra.asp).
 
-Nous vous demandons de ne pas intervenir sur le format des fichiers JSON, car toute mise à jour peut compromettre à la fois l’accessibilité du formulaire et les normes de conception intégrées pour le programme de coordination de l’image de marque.
+Nous vous demandons de ne pas intervenir sur le format des fichiers JSON, car toute mise à jour peut compromettre à la fois l’accessibilité du formulaire et les normes de conception intégrées pour le programme de coordination de l’image de marque. Nous ne pourront pas offrir de soutien pour les formulaires dont le fichier JSON a été manipulé.
 
 Pour toute question en lien avec les présentes conditions d’utilisation, veuillez [nous contacter](/fr/contact).
 
