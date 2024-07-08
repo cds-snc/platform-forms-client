@@ -7,6 +7,7 @@ import { Button } from "@clientComponents/globals";
 import { LockedSections } from "@formBuilder/components/shared/right-panel/treeview/types";
 import { ArrowRightNav } from "@serverComponents/icons/ArrowRightNav";
 import { Language } from "@lib/types/form-builder-types";
+import { LinkButton } from "@serverComponents/globals/Buttons/LinkButton";
 
 export const NextButton = ({
   validateForm,
@@ -40,7 +41,8 @@ export const NextButton = ({
 
   if (isOffBoardSection(currentGroup)) {
     // Do not show next button for off-board sections
-    return null;
+    // Show exit button instead
+    return <LinkButton.Primary href="">{t("exit", { lng: language })}</LinkButton.Primary>;
   }
 
   return (
