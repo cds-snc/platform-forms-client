@@ -8,6 +8,7 @@ import { GroupsType } from "@lib/formContext";
 import { SortIcon } from "@serverComponents/icons";
 import { useTranslation } from "@i18n/client";
 import { useFlowRef } from "@formBuilder/[id]/edit/logic/components/flow/provider/FlowRefProvider";
+import { resetLockedSections } from "@lib/formContext";
 
 export const LogicNavigation = () => {
   const { t } = useTranslation("form-builder");
@@ -22,7 +23,12 @@ export const LogicNavigation = () => {
 
   const autoFlow = () => {
     const groups = getGroups() as GroupsType;
-    const newGroups = autoFlowAllNextActions({ ...groups }, true); // forces overwrite of existing next actions
+    let newGroups = autoFlowAllNextActions({ ...groups }, true); // forces overwrite of existing next actions
+
+    if (newGroups) {
+      newGroups = resetLockedSections(newGroups);
+    }
+
     replaceGroups(newGroups);
     flow.current?.redraw();
     toast.success(t("logic.toastSuccess"));

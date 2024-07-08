@@ -5,6 +5,48 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.14.1](https://github.com/cds-snc/platform-forms-client/compare/v3.14.0...v3.14.1) (2024-07-05)
+
+### Bug Fixes
+
+- Add key for next action ([#3956](https://github.com/cds-snc/platform-forms-client/issues/3956)) ([349d4aa](https://github.com/cds-snc/platform-forms-client/commit/349d4aa7a444b5a8a79fc6e284c6c086376e03d6))
+- adds an empty question label ([#3941](https://github.com/cds-snc/platform-forms-client/issues/3941)) ([6099d83](https://github.com/cds-snc/platform-forms-client/commit/6099d839cf0e508adf63b446f8505b4821d8a03a))
+- Email Delivery Component was mistakenly async ([#3961](https://github.com/cds-snc/platform-forms-client/issues/3961)) ([84f0b1c](https://github.com/cds-snc/platform-forms-client/commit/84f0b1c15387e0934ba113bc43be19c29594ccf0))
+- Fix placeholder for empty page text in tree view ([#3919](https://github.com/cds-snc/platform-forms-client/issues/3919)) ([596ac68](https://github.com/cds-snc/platform-forms-client/commit/596ac68de0ee45a672a07e84b1d66f3abb426855))
+- Fixes a server client boundary error ([#3917](https://github.com/cds-snc/platform-forms-client/issues/3917)) ([877d3af](https://github.com/cds-snc/platform-forms-client/commit/877d3afdf378cd956d9fd325d02d8dac9caa7f48))
+- nested check for response ([#3924](https://github.com/cds-snc/platform-forms-client/issues/3924)) ([c489c1b](https://github.com/cds-snc/platform-forms-client/commit/c489c1b0fc4623de6744a0f4de0fd49b3eb497f9))
+- Permissions on Admin pages ([#3959](https://github.com/cds-snc/platform-forms-client/issues/3959)) ([9e129b3](https://github.com/cds-snc/platform-forms-client/commit/9e129b35838fb003a7d5a742a1c31988814ca0d6))
+- Reset locked groups ([#3953](https://github.com/cds-snc/platform-forms-client/issues/3953)) ([ff522dc](https://github.com/cds-snc/platform-forms-client/commit/ff522dca761dc2c9cdf3a6207e9f589653070fb6))
+
+## [3.14.0](https://github.com/cds-snc/platform-forms-client/compare/v3.13.0...v3.14.0) (2024-07-02)
+
+### Features
+
+- add healthcheck logs for Notify callback ([#3907](https://github.com/cds-snc/platform-forms-client/issues/3907)) ([459f389](https://github.com/cds-snc/platform-forms-client/commit/459f389e525d2430947f4bbdd7f3c10434874226))
+- Conditional Logic: back button ([#3866](https://github.com/cds-snc/platform-forms-client/issues/3866)) ([fdf7eaa](https://github.com/cds-snc/platform-forms-client/commit/fdf7eaa03ffce32f1d84a768df748cc2ea0c5476))
+- live message ([#3876](https://github.com/cds-snc/platform-forms-client/issues/3876)) ([f075f2c](https://github.com/cds-snc/platform-forms-client/commit/f075f2c0b88cc32b7f0037e42956da2ef019f1e1))
+
+### Bug Fixes
+
+- "Other" question field isn't showing up, so clicking the link "Other" takes you no where ([#3887](https://github.com/cds-snc/platform-forms-client/issues/3887)) ([4ed450d](https://github.com/cds-snc/platform-forms-client/commit/4ed450d4f206b08a5ef3105187d0d5fbff08da84))
+- add back devcontainer db and redis services ([#3837](https://github.com/cds-snc/platform-forms-client/issues/3837)) ([258300c](https://github.com/cds-snc/platform-forms-client/commit/258300cefcac6d720b747d1bccb842b7b1bce7d1))
+- Add early return for responses page when a form hasn't been saved yet ([#3824](https://github.com/cds-snc/platform-forms-client/issues/3824)) ([88d95ba](https://github.com/cds-snc/platform-forms-client/commit/88d95ba7d545cf2af23be48369226be0e315f783))
+- Add file extention check into single middleware matcher. ([#3870](https://github.com/cds-snc/platform-forms-client/issues/3870)) ([f4b92bc](https://github.com/cds-snc/platform-forms-client/commit/f4b92bc8d03fb6905a9057cacef7d9be1fe6ca46))
+- content for conditional logic feature ([#3818](https://github.com/cds-snc/platform-forms-client/issues/3818)) ([75bbff4](https://github.com/cds-snc/platform-forms-client/commit/75bbff4c9a175496b8771465287e06c46a805b7a))
+- content tweaks in application ([#3893](https://github.com/cds-snc/platform-forms-client/issues/3893)) ([5e6ce4c](https://github.com/cds-snc/platform-forms-client/commit/5e6ce4c7452c07307aa3633338bee39aa9f322b5))
+- Departments dropdown language toggle on Preview ([#3822](https://github.com/cds-snc/platform-forms-client/issues/3822)) ([e34865e](https://github.com/cds-snc/platform-forms-client/commit/e34865e05beea493dd5ea6a78cfe37c4757358c4))
+- Drop targets and drop handler ([#3776](https://github.com/cds-snc/platform-forms-client/issues/3776)) ([123521c](https://github.com/cds-snc/platform-forms-client/commit/123521c1e11cb9331fd4cce86bd114fdea4d9195))
+- Ensure the correct id is being used in RightPanel ([#3854](https://github.com/cds-snc/platform-forms-client/issues/3854)) ([6637111](https://github.com/cds-snc/platform-forms-client/commit/6637111f5ddc558d2d17952fce72b080800cbf0c))
+- Fix for unsaved form Responses error ([#3825](https://github.com/cds-snc/platform-forms-client/issues/3825)) ([32f0164](https://github.com/cds-snc/platform-forms-client/commit/32f01643d3e091246aed2f0d170a62568bfbf39d))
+- force logic view redraw ([#3828](https://github.com/cds-snc/platform-forms-client/issues/3828)) ([b7b4188](https://github.com/cds-snc/platform-forms-client/commit/b7b4188a3298dd660b8bb6a5e14e1b7694e0a527))
+- Improved Drag target indicator and DragImage ([#3806](https://github.com/cds-snc/platform-forms-client/issues/3806)) ([bdf1332](https://github.com/cds-snc/platform-forms-client/commit/bdf13328b0bbbdd4bc571693781535dbfbb53ea7))
+- mfa resend when no session ([#3808](https://github.com/cds-snc/platform-forms-client/issues/3808)) ([496e360](https://github.com/cds-snc/platform-forms-client/commit/496e36060f04b7fd3831ca295adc3ed41d6d7473))
+- move marker off screen for logic view ([#3875](https://github.com/cds-snc/platform-forms-client/issues/3875)) ([e2eefcd](https://github.com/cds-snc/platform-forms-client/commit/e2eefcd62eab4409a9b40fc6e25081a782a35331))
+- Required checkbox not updating ([#3853](https://github.com/cds-snc/platform-forms-client/issues/3853)) ([fc7e525](https://github.com/cds-snc/platform-forms-client/commit/fc7e5254ffee21a9201c221b221780a1bf9607ef))
+- selected state for single action selectors ([#3832](https://github.com/cds-snc/platform-forms-client/issues/3832)) ([c5714d9](https://github.com/cds-snc/platform-forms-client/commit/c5714d92b06a3cce0acf4fa49cbfc09940b3b689))
+- Sort questions in Add Rule question list ([#3851](https://github.com/cds-snc/platform-forms-client/issues/3851)) ([c2f9754](https://github.com/cds-snc/platform-forms-client/commit/c2f9754e4461805c08a39d62151b4e6215d60904))
+- use css rule vs inline style to set container height ([#3852](https://github.com/cds-snc/platform-forms-client/issues/3852)) ([9710406](https://github.com/cds-snc/platform-forms-client/commit/971040646647d23f15595fdc12f6fe4c44a287fb))
+
 ## [3.13.0](https://github.com/cds-snc/platform-forms-client/compare/v3.12.11...v3.13.0) (2024-06-11)
 
 ### Features

@@ -1,5 +1,5 @@
 "use client";
-import React, { ReactElement, useRef, useState, useEffect } from "react";
+import React, { ReactElement, useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useTranslation } from "@i18n/client";
 import { Button } from "@clientComponents/globals";
@@ -11,6 +11,8 @@ import { ErrorStatus } from "@clientComponents/forms/Alert/Alert";
 import Link from "next/link";
 
 import { useFocusIt } from "@lib/hooks/useFocusIt";
+import { safeJSONParse } from "@lib/utils";
+import { logMessage } from "@lib/logger";
 
 export const ReVerify = (): ReactElement => {
   const router = useRouter();
@@ -24,27 +26,37 @@ export const ReVerify = (): ReactElement => {
 
   const [authErrorState, setAuthErrorState] = useState<Record<string, string | undefined>>({});
   const [resending, setResending] = useState(false);
-  const [email, setEmail] = useState<string | undefined>();
-  const [authenticationFlowToken, setAuthenticationFlowToken] = useState<string | undefined>();
 
+  // Makes sure NextJS will not try to render sessionStorage on the server
+  const existingFlow = useRef<{ email?: string; authenticationFlowToken?: string; error?: string }>(
+    {}
+  );
   useEffect(() => {
-    // If there is no existing flow redirect to login
-    const { email, authenticationFlowToken }: { email?: string; authenticationFlowToken?: string } =
-      JSON.parse(sessionStorage.getItem("authFlowToken") || "{}");
-    if (!email || !authenticationFlowToken) {
+    async function handleError() {
+      logMessage.error("Failed to parse authFlowToken JSON.");
+      const errorText = await getErrorText(language, "InternalServiceException");
+      setAuthErrorState(errorText);
+    }
+    existingFlow.current = safeJSONParse(sessionStorage.getItem("authFlowToken") || "{}");
+    if (!existingFlow.current.email || !existingFlow.current.authenticationFlowToken) {
       router.push(`/${language}/auth/login`);
     }
-    setEmail(email);
-    setAuthenticationFlowToken(authenticationFlowToken);
-  }, [router, language]);
+    if (existingFlow.current.error) {
+      handleError();
+    }
+  }, [language, router]);
 
   const handleReVerify = async () => {
     setResending(true);
-    if (!email || !authenticationFlowToken) {
+    if (!existingFlow.current.email || !existingFlow.current.authenticationFlowToken) {
       router.push(`/${language}/auth/login`);
       return;
     }
-    const result = await resendVerificationCode(language, email, authenticationFlowToken);
+    const result = await resendVerificationCode(
+      language,
+      existingFlow.current.email,
+      existingFlow.current.authenticationFlowToken
+    );
 
     if (result?.error) {
       // Internal Error

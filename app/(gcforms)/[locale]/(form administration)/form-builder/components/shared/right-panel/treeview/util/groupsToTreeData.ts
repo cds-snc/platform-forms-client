@@ -1,6 +1,7 @@
 import { GroupsType } from "@lib/formContext";
 import { TreeItems } from "../types";
 import { FormElement } from "@lib/types";
+import { resetLockedSections } from "@lib/formContext";
 
 export type TreeDataOptions = {
   addIntroElement?: boolean;
@@ -26,6 +27,9 @@ export const groupsToTreeData = (
   if (!formGroups) {
     return items;
   }
+
+  // Reset locked sections to ensure they are in the correct order
+  formGroups = formGroups && resetLockedSections(formGroups);
 
   for (const [key, value] of Object.entries(formGroups)) {
     const children =
