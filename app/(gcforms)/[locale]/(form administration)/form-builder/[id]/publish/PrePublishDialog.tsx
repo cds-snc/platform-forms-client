@@ -60,13 +60,14 @@ export const PrePublishDialog = ({
   }
 
   const elementOptions = [
-    { label: t("prePublishFormDialog.formtypes.Application"), value: "Application" },
-    { label: t("prePublishFormDialog.formtypes.Consent"), value: "Consent" },
-    { label: t("prePublishFormDialog.formtypes.Declaration"), value: "Declaration" },
-    { label: t("prePublishFormDialog.formtypes.Feedback"), value: "Feedback" },
-    { label: t("prePublishFormDialog.formtypes.Registration"), value: "Registration" },
-    { label: t("prePublishFormDialog.formtypes.Request"), value: "Request" },
-    { label: t("prePublishFormDialog.formtypes.Survey"), value: "Survey" },
+    {
+      label: t("prePublishFormDialog.formtypes.Collect"),
+      value: "Collection of Feedback or Stats",
+    },
+    { label: t("prePublishFormDialog.formtypes.Administer"), value: "Benefit Administration" },
+    { label: t("prePublishFormDialog.formtypes.Grants"), value: "Grants and Contributions" },
+    { label: t("prePublishFormDialog.formtypes.Regulatory"), value: "Regulatory Compliance" },
+    { label: t("prePublishFormDialog.formtypes.Operations"), value: "Organizational Operations" },
     { label: t("prePublishFormDialog.formtypes.Other"), value: "Other" },
   ];
 

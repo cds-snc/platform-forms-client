@@ -500,13 +500,11 @@
       "unset": "pas définie"
     },
     "formtypes": {
-      "Application": "Demande ou candidature",
-      "Consent": "Consentement",
-      "Declaration": "Déclaration",
-      "Feedback": "Commentaires",
-      "Registration": "Inscription",
-      "Request": "Requête",
-      "Survey": "Sondage",
+      "Collect": "Collecte d'informations ou rétroaction",
+      "Administer": "Administration de prestation ou service",
+      "Grants": "Subventions et contributions",
+      "Regulatory": "Conformité réglementaire",
+      "Operations": "Opérations organisationnelles",
       "Other": "Autre"
     },
     "error": {

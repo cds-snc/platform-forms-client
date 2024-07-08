@@ -501,13 +501,11 @@
       "unset": "Unset"
     },
     "formtypes": {
-      "Application": "Application",
-      "Consent": "Consent",
-      "Declaration": "Declaration",
-      "Feedback": "Feedback",
-      "Registration": "Registration",
-      "Request": "Request",
-      "Survey": "Survey",
+      "Collect": "Collect feedback or statistics",
+      "Administer": "Administer benefit or service ",
+      "Grants": "Grants and contributions",
+      "Regulatory": "Regulatory compliance",
+      "Operations": "Organizational operations",
       "Other": "Other"
     },
     "error": {
