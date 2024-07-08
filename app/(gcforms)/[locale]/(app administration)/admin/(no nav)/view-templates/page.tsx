@@ -3,7 +3,7 @@ import { authCheckAndRedirect } from "@lib/actions";
 import { checkPrivilegesAsBoolean } from "@lib/privileges";
 import { Metadata } from "next";
 import { DataView } from "./clientSide";
-import { getAllTemplates } from "@lib/templates";
+import { getTemplates } from "./actions";
 
 export async function generateMetadata({
   params: { locale },
@@ -21,26 +21,11 @@ export default async function Page() {
 
   checkPrivilegesAsBoolean(
     ability,
-    [
-      { action: "view", subject: "FormRecord" },
-      { action: "update", subject: "FormRecord" },
-    ],
-    { logic: "one", redirect: true }
+    [{ action: "update", subject: { type: "FormRecord", object: {} } }],
+    { redirect: true }
   );
 
-  const templates = (await getAllTemplates(ability)).map((template) => {
-    const {
-      id,
-      form: { titleEn, titleFr },
-      isPublished,
-    } = template;
-    return {
-      id,
-      titleEn,
-      titleFr,
-      isPublished,
-    };
-  });
+  const templates = await getTemplates();
 
   return <DataView templates={templates} />;
 }
