@@ -118,7 +118,7 @@ export const SingleActionSelect = ({
               currentGroup && setGroupNextAction(currentGroup, nextActionId);
             }
 
-            // Add a delay to allow state to update before redrawing
+            // Add a delay to allow group state to update calling for redraw
             setTimeout(() => {
               flow.current?.redraw();
             }, 200);
