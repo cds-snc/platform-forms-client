@@ -22,6 +22,7 @@ import { PrivacyDescriptionBefore } from "./PrivacyDescriptionBefore";
 import { PrivacyDescriptionBody } from "./PrivacyDescriptionBody";
 import { ConfirmationTitle } from "./ConfirmationTitle";
 import { SkipLinkReusable } from "@clientComponents/globals/SkipLinkReusable";
+import { GroupOutput } from "@formBuilder/components/shared/GroupOutput";
 
 export const EditWithGroups = () => {
   const { t } = useTranslation("form-builder");
@@ -123,6 +124,8 @@ export const EditWithGroups = () => {
           <SaveButton />
         </div>
       </div>
+
+      <GroupOutput />
       <SkipLinkReusable anchor="#rightPanelTitle">{t("skipLink.questionsSetup")}</SkipLinkReusable>
       <div className="flex max-w-[800px] justify-between">
         <SectionNameInput value={groupName} groupId={groupId} updateGroupName={updateGroupName} />
