@@ -170,6 +170,27 @@ const createGroupStore = (initProps?: Partial<GroupStoreProps>) => {
           setChangeKey(String(new Date().getTime()));
         }
       },
+      setExitButtonUrl: ({ id, locale, url }: { id: string; locale: Language; url: string }) => {
+        const key = localizeField("exitUrl", locale);
+
+        if (!key) return;
+
+        const formGroups = get().templateStore.getState().form.groups;
+        if (formGroups && formGroups[id]) {
+          get().templateStore.setState((s) => {
+            if (s.form.groups) {
+              switch (key) {
+                case "exitUrlEn":
+                  s.form.groups[id].exitUrlEn = url;
+                  break;
+                case "exitUrlFr":
+                  s.form.groups[id].exitUrlFr = url;
+                  break;
+              }
+            }
+          });
+        }
+      },
       getGroupNextAction: (groupId: string) => {
         const formGroups = get().templateStore.getState().form.groups;
         if (formGroups && formGroups[groupId]) {

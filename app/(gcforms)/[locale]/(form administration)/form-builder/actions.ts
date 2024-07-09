@@ -155,9 +155,15 @@ export const updateTemplate = async ({
 export const updateTemplatePublishedStatus = async ({
   id: formID,
   isPublished,
+  publishReason,
+  publishFormType,
+  publishDescription,
 }: {
   id: string;
   isPublished: boolean;
+  publishReason: string;
+  publishFormType: string;
+  publishDescription: string;
 }): Promise<{
   formRecord: FormRecord | null;
   error?: string;
@@ -165,7 +171,14 @@ export const updateTemplatePublishedStatus = async ({
   try {
     const { ability } = await authCheckAndThrow();
 
-    const response = await updateIsPublishedForTemplate(ability, formID, isPublished);
+    const response = await updateIsPublishedForTemplate(
+      ability,
+      formID,
+      isPublished,
+      publishReason,
+      publishFormType,
+      publishDescription
+    );
     if (!response) {
       throw new Error(
         `Template API response was null. Request information: { ${formID}, ${isPublished} }`

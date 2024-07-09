@@ -483,6 +483,36 @@
     "emailOption": "Réponses envoyées par courriel — ",
     "change": "Modifier ces paramètres"
   },
+  "prePublishFormDialog": {
+    "title": "Publier le formulaire",
+    "text1": "Pourquoi souhaitez-vous publier le formulaire?",
+    "readyForPublicUse": "Formulaire prêt pour un usage par le public",
+    "readyForInternalUse": "Formulaire prêt pour un usage interne",
+    "sharingForFeedback": "Formulaire à partager pour commentaires ou approbation",
+    "other": "Autre",
+    "text2": "Décrivez-nous votre formulaire",
+    "whatType": "Type de formulaire",
+    "briefDesc": "Description du formulaire et de son usage",
+    "thisInformation": "Cette information nous aide à comprendre comment vous utilisez Formulaires GC, pour que nous puissions mieux répondre à vos besoins.",
+    "helpsUnderstand": "Cette information nous aide à comprendre à qui le formulaire est destiné.",
+    "purpose": {
+      "admin": "fins administratives",
+      "nonAdmin": "fins non-administratives",
+      "unset": "pas définie"
+    },
+    "formtypes": {
+      "Collect": "Collecte d'informations ou rétroaction",
+      "Administer": "Administration de prestation ou service",
+      "Grants": "Subventions et contributions",
+      "Regulatory": "Conformité réglementaire",
+      "Operations": "Opérations organisationnelles",
+      "Other": "Autre"
+    },
+    "error": {
+      "title": "Erreur",
+      "message": "Veuillez remplir tous les champs."
+    }
+  },
   "question": "Question",
   "questions": "Questions",
   "questionSet": {
@@ -879,6 +909,25 @@
     "legend": {
       "section": "Appliquer une règle d'embranchement à une section",
       "option": "Appliquer des règles conditionnelles aux questions ayant des options à sélectionner"
+    },
+    "exit": {
+      "convertText": "Convert section [FR]",
+      "checkboxLabel": "Exit [FR]",
+      "nodeIconLabel": "Exit",
+      "offboardNodeContent": {
+        "content": "<Content> [FR]",
+        "exitButton": "Back to the start button [FR]"
+      }
+    },
+    "exitBadge": "Exit",
+    "exitButtonElement": {
+      "description": "Help people exiting your form have a path forward. [fr]",
+      "list": {
+        "title": "What to include in your exit section [fr]",
+        "item1": "Links to other forms that may apply [fr]",
+        "item2": "Guidance on the application process or form requirements [fr]",
+        "item3": "Point of contact to learn more about the form [fr]"
+      }
     }
   },
   "groups": {
@@ -932,5 +981,6 @@
     "translateSetup": "Passer à la configuration des traductions",
     "logicSetup": "Passer à la configuration de la logique"
   },
-  "goBack": "Retourner"
+  "goBack": "Retourner",
+  "disabled": "[FR]disabled"
 }

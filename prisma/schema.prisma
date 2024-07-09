@@ -51,6 +51,9 @@ model Template {
   jsonConfig        Json
   isPublished       Boolean         @default(false)
   formPurpose       String          @default("")
+  publishReason     String          @default("")
+  publishFormType   String          @default("")
+  publishDesc       String          @default("")
   deliveryOption    DeliveryOption?
   apiServiceAccount ApiServiceAccount?
   securityAttribute String          @default("Protected A")
