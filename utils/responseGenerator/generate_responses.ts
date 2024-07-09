@@ -3,7 +3,7 @@ import readline from "readline";
 import { LambdaClient, InvokeCommand } from "@aws-sdk/client-lambda";
 import { config } from "dotenv";
 import { chunkArray } from "../../lib/utils";
-import axios from "axios";
+import axios, { Axios } from "axios";
 import { load } from "cheerio";
 
 const decoder = new TextDecoder();
@@ -84,82 +84,114 @@ const createResponse = (formTemplate: any): SubmissionRequestBody => {
 
 const main = async () => {
   try {
-    const formID = await getValue("Form ID to generate responses for: ");
-    const numberOfResponses = parseInt(await getValue("Number of responses to generate: "), 10);
-    const appEnv = await getValue("App Environment:  [0] Local || [1] Staging: ").then((ans) =>
-      ans === "1" ? "staging" : "local"
-    );
+    // await axios({
+    //   url: "http://localhost:3000/get-submission/e09725ad-a8d8-402d-b755-acdbda564e62",
+    //   onDownloadProgress: (progressEvent) => {
+    //     progressEvent.event.
+    //     console.log(progressEvent.bytes);
+    //   },
+    // }).then(({ data }) => {
+    //   console.log(`Total size = ${Buffer.from(data).byteLength / 1000000} mb.`);
+    //   console.log(JSON.parse(data));
+    // });
 
-    console.log(`Getting form template from ${appEnv}`);
+    try {
+      const response = await axios.get(
+        "http://localhost:3000/get-submission/e09725ad-a8d8-402d-b755-acdbda564e62",
+        {
+          responseType: "stream",
+        }
+      );
 
-    // Get the form template
-    const formTemplate = await axios
-      .get(
-        `${
-          appEnv === "staging" ? "https://forms-staging.cdssandbox.xyz" : "http://localhost:3000"
-        }/api/templates/${formID}`
-      )
-      .then(({ data }) => {
-        return data.form;
-      });
-    console.log(formTemplate);
-    if (!formTemplate) {
-      throw new Error("Could not retrieve form template");
-    }
+      let data = "";
 
-    const encoder = new TextEncoder();
+      response.data.on("data", (chunk: any) => {
+        data += chunk;
 
-    const lambdaClient = new LambdaClient({
-      region: "ca-central-1",
-      retryMode: "standard",
-      ...(process.env.LOCAL_AWS_ENDPOINT && { endpoint: process.env.LOCAL_AWS_ENDPOINT }),
-    });
+        const chunkSizeInBytes = Buffer.from(chunk).byteLength;
+        console.log(`Chunk size = ${chunkSizeInBytes / 1000000} mb.\n`);
 
-    // Generate and submit responses
-    console.log("Generating responses for form.");
-
-    const submissions = chunkArray(
-      Array.from(
-        { length: numberOfResponses },
-        () =>
-          new InvokeCommand({
-            FunctionName: "Submission",
-            Payload: encoder.encode(
-              JSON.stringify({
-                formID,
-                responses: createResponse(formTemplate),
-                language: "en",
-                securityAttribute: "Protected A",
-              })
-            ),
-          })
-      ),
-      appEnv === "staging" ? 50 : 2
-    );
-
-    let numOfProcessed = 0;
-
-    console.log("Sending responses to Lambda Submission function.");
-
-    for (const submission of submissions) {
-      const results = await Promise.all(
-        submission.map((invokeCommand) => lambdaClient.send(invokeCommand))
-      ).catch((err) => {
-        console.error(err);
-        throw new Error("Could not process request with Lambda Submission function");
-      });
-      results.forEach((result) => {
-        const payload = decoder.decode(result.Payload);
-        if (result.FunctionError || !JSON.parse(payload).status) {
-          throw new Error("Submission API could not process form response");
+        if (chunkSizeInBytes > 600) {
+          console.log(Buffer.from(chunk).subarray(0, 20).toString("utf8"));
+        } else {
+          console.log(Buffer.from(chunk).toString("utf8"));
         }
       });
-      if (appEnv === "local") await delay(500);
-      numOfProcessed += submission.length;
-      writeWaitingPercent(numOfProcessed, numberOfResponses);
+
+      response.data.on("end", () => {
+        console.log(`Total size = ${Buffer.from(data).byteLength / 1000000} mb.`);
+        console.log(JSON.parse(data));
+      });
+    } catch (error) {
+      console.error("Error fetching data:", error);
     }
 
-    console.log(`\nData generation completed for ${numberOfResponses} responses.`);
+    // const formID = await getValue("Form ID to generate responses for: ");
+    // const numberOfResponses = parseInt(await getValue("Number of responses to generate: "), 10);
+    // const appEnv = await getValue("App Environment:  [0] Local || [1] Staging: ").then((ans) =>
+    //   ans === "1" ? "staging" : "local"
+    // );
+    // console.log(`Getting form template from ${appEnv}`);
+    // // Get the form template
+    // const formTemplate = await axios
+    //   .get(
+    //     `${
+    //       appEnv === "staging" ? "https://forms-staging.cdssandbox.xyz" : "http://localhost:3000"
+    //     }/api/templates/${formID}`
+    //   )
+    //   .then(({ data }) => {
+    //     return data.form;
+    //   });
+    // console.log(formTemplate);
+    // if (!formTemplate) {
+    //   throw new Error("Could not retrieve form template");
+    // }
+    // const encoder = new TextEncoder();
+    // const lambdaClient = new LambdaClient({
+    //   region: "ca-central-1",
+    //   retryMode: "standard",
+    //   ...(process.env.LOCAL_AWS_ENDPOINT && { endpoint: process.env.LOCAL_AWS_ENDPOINT }),
+    // });
+    // // Generate and submit responses
+    // console.log("Generating responses for form.");
+    // const submissions = chunkArray(
+    //   Array.from(
+    //     { length: numberOfResponses },
+    //     () =>
+    //       new InvokeCommand({
+    //         FunctionName: "Submission",
+    //         Payload: encoder.encode(
+    //           JSON.stringify({
+    //             formID,
+    //             responses: createResponse(formTemplate),
+    //             language: "en",
+    //             securityAttribute: "Protected A",
+    //           })
+    //         ),
+    //       })
+    //   ),
+    //   appEnv === "staging" ? 50 : 2
+    // );
+    // let numOfProcessed = 0;
+    // console.log("Sending responses to Lambda Submission function.");
+    // for (const submission of submissions) {
+    //   const results = await Promise.all(
+    //     submission.map((invokeCommand) => lambdaClient.send(invokeCommand))
+    //   ).catch((err) => {
+    //     console.error(err);
+    //     throw new Error("Could not process request with Lambda Submission function");
+    //   });
+    //   results.forEach((result) => {
+    //     const payload = decoder.decode(result.Payload);
+    //     if (result.FunctionError || !JSON.parse(payload).status) {
+    //       throw new Error("Submission API could not process form response");
+    //     }
+    //   });
+    //   if (appEnv === "local") await delay(500);
+    //   numOfProcessed += submission.length;
+    //   writeWaitingPercent(numOfProcessed, numberOfResponses);
+    // }
+    // console.log(`\nData generation completed for ${numberOfResponses} responses.`);
   } catch (e) {
     console.log(e);
   }
