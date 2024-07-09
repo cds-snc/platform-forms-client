@@ -355,8 +355,9 @@ const createTemplateStore = (initProps?: Partial<InitialTemplateStoreProps>) => 
                 }
               });
             },
-            getSchema: () =>
-              JSON.stringify(getSchemaFromState(get(), get().allowGroupsFlag), null, 2),
+            getSchema: () => {
+              return JSON.stringify(getSchemaFromState(get(), get().allowGroupsFlag), null, 2);
+            },
             getId: () => get().id,
             getIsPublished: () => get().isPublished,
             setIsPublished: (isPublished) => {
@@ -388,10 +389,10 @@ const createTemplateStore = (initProps?: Partial<InitialTemplateStoreProps>) => 
                 state.name = "";
                 state.deliveryOption = undefined;
                 state.formPurpose = "";
-                (state.publishReason = ""),
-                  (state.publishFormType = ""),
-                  (state.publishDesc = ""),
-                  (state.closingDate = null);
+                state.publishReason = "";
+                state.publishFormType = "";
+                state.publishDesc = "";
+                state.closingDate = null;
               });
             },
             importTemplate: async (jsonConfig) => {
@@ -405,13 +406,18 @@ const createTemplateStore = (initProps?: Partial<InitialTemplateStoreProps>) => 
                 state.securityAttribute = "Protected A";
                 state.deliveryOption = undefined;
                 state.formPurpose = "";
-                (state.publishReason = ""),
-                  (state.publishFormType = ""),
-                  (state.publishDesc = ""),
-                  (state.closingDate = null);
+                state.publishReason = "";
+                state.publishFormType = "";
+                state.publishDesc = "";
+                state.closingDate = null;
               });
             },
             getGroupsEnabled: () => get().allowGroupsFlag,
+            setGroupsLayout: (layout) => {
+              set((state) => {
+                state.form.groupLayout = layout;
+              });
+            },
           }),
           {
             name: "form-storage",

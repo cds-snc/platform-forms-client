@@ -125,6 +125,7 @@ export const getSchemaFromState = (state: TemplateStoreState, allowGroups = fals
       securityAttribute,
       layout,
       groups,
+      groupLayout,
     },
   } = state;
 
@@ -139,6 +140,7 @@ export const getSchemaFromState = (state: TemplateStoreState, allowGroups = fals
     securityAttribute,
     brand,
     groups,
+    groupLayout,
   };
 
   // Force this is off until a enable in a follow-up PR

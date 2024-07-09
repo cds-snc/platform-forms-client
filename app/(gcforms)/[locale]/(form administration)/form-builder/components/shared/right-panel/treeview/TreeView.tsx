@@ -27,7 +27,6 @@ import { ConfirmMoveSectionDialog } from "../../confirm/ConfirmMoveSectionDialog
 import { useConfirmState as useConfirmMoveDialogState } from "../../confirm/useConfirmState";
 import { useConfirmState as useConfirmDeleteDialogState } from "../../confirm/useConfirmState";
 import { ConfirmDeleteSectionDialog } from "../../confirm/ConfirmDeleteSectionDialog";
-import { useTemplateStore } from "@lib/store/useTemplateStore";
 import { toast } from "@formBuilder/components/shared";
 import { useTranslation } from "@i18n/client";
 import { cn } from "@lib/utils";
@@ -36,6 +35,7 @@ import { Button } from "@clientComponents/globals";
 import { Language } from "@lib/types/form-builder-types";
 import { isTitleElementType } from "./util/itemType";
 import { useAutoFlowIfNoCustomRules } from "@lib/hooks/useAutoFlowAll";
+import { useTemplateStore } from "@lib/store/useTemplateStore";
 
 export interface TreeDataProviderProps {
   children?: ReactElement;
@@ -136,6 +136,8 @@ const ControlledTree: ForwardRefRenderFunction<unknown, TreeDataProviderProps> =
     openDialog: openConfirmDeleteDialog,
     setOpenDialog: setOpenConfirmDeleteDialog,
   } = useConfirmDeleteDialogState();
+
+  // const setGroupsLayout = useTemplateStore((s) => s.setGroupsLayout);
 
   const items = getTreeData({
     addIntroElement: true,
@@ -258,6 +260,11 @@ const ControlledTree: ForwardRefRenderFunction<unknown, TreeDataProviderProps> =
             setOpenConfirmMoveDialog,
             autoFlowAll
           );
+
+          const rootItems = environment?.current?.items.root.children as string[];
+          if (rootItems) {
+            // setGroupsLayout(rootItems.filter((item) => item !== "start" && item !== "review" && item !== "end"));
+          }
         }}
         onFocusItem={(item) => {
           setFocusedItem(item.index);

@@ -25,6 +25,7 @@ export const GroupOutput = () => {
         Current Group = {currentGroup}
         <br />
         Previous Group = {previousGroup}
+        Group Layout = {JSON.stringify(schema.groupLayout, null, 2)}
         <br />
         Group History = {JSON.stringify(getGroupHistory(), null, 2)}
         <br />
