@@ -44,12 +44,12 @@ export const SectionTitle = ({ groupTitle, groupId }: { groupTitle: string; grou
       ref={groupNameRef}
       wrapperClassName="w-full mr-5 mt-2 laptop:mt-0 font-bold laptop:text-3xl"
       className="font-bold placeholder:text-slate-500 laptop:text-3xl"
-      placeholder={t("groups.sectionTitle")}
+      placeholder={t("groups.pageTitle")}
       value={groupTitle}
       onBlur={handleOnBlur}
       onChange={handleChange}
       {...getLocalizationAttribute()}
-      ariaLabel={t("groups.sectionTitle")}
+      ariaLabel={t("groups.pageTitle")}
     />
   );
 };

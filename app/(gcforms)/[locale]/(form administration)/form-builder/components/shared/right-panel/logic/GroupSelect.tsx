@@ -24,7 +24,7 @@ export const GroupSelect = ({
     <div className="mb-4">
       <label className="mb-2 block text-sm" id={labelId}>
         {selected === "exit" && <span className="sr-only">{t("disabled")}</span>}{" "}
-        {t("logic.gotoSection")}
+        {t("logic.gotoPage")}
       </label>
       <select
         disabled={selected === "exit"}
