@@ -261,11 +261,7 @@ export async function getAllTemplates(
     checkPrivileges(ability, [
       {
         action: "view",
-        subject: {
-          type: "FormRecord",
-          // Passing an empty object here just to force CASL evaluate the condition part of a permission.
-          object: {},
-        },
+        subject: "FormRecord",
       },
     ]);
 
@@ -323,7 +319,9 @@ export async function getAllTemplatesForUser(
   options?: TemplateOptions
 ): Promise<Array<FormRecord>> {
   try {
-    checkPrivileges(ability, [{ action: "view", subject: "FormRecord" }]);
+    // We do not need to check the privileges because we are using the user ID from the ability
+    // in order to return only templates that the user has ownership on
+
     const { sortByDateUpdated, requestedWhere } = options ?? {};
     const templates = await prisma.template
       .findMany({
@@ -366,15 +364,6 @@ export async function getAllTemplatesForUser(
 
     return templates.map((template) => _parseTemplate(template));
   } catch (e) {
-    if (e instanceof AccessControlError) {
-      logEvent(
-        ability.userID,
-        { type: "Form" },
-        "AccessDenied",
-        "Attempted to list all Forms for User"
-      );
-      throw e;
-    }
     logMessage.error(e);
     return [];
   }
@@ -448,11 +437,7 @@ export async function getTemplateWithAssociatedUsers(
     checkPrivileges(ability, [
       {
         action: "view",
-        subject: {
-          type: "FormRecord",
-          // We want to make sure the user has the permission to view all templates
-          object: {},
-        },
+        subject: "FormRecord",
       },
       { action: "view", subject: "User" },
     ]);
@@ -632,11 +617,7 @@ export async function updateIsPublishedForTemplate(
       checkPrivileges(ability, [
         {
           action: "update",
-          subject: {
-            type: "FormRecord",
-            // We want to make sure the user has the permission to manage all templates
-            object: {},
-          },
+          subject: "FormRecord",
         },
       ]);
     }
@@ -690,11 +671,6 @@ export async function updateAssignedUsersForTemplate(
   users: { id: string }[]
 ): Promise<FormRecord | null> {
   try {
-    checkPrivileges(ability, [
-      { action: "update", subject: "FormRecord" },
-      { action: "update", subject: "User" },
-    ]);
-
     if (!users.length) throw new Error("No users provided");
 
     const template = await prisma.template.findFirst({
@@ -705,6 +681,20 @@ export async function updateAssignedUsersForTemplate(
         users: true,
       },
     });
+
+    if (template === null) {
+      logMessage.warn(
+        `Can not update assigned users ${JSON.stringify(
+          users
+        )} on template ${formID}.  Template does not exist`
+      );
+      return null;
+    }
+
+    checkPrivileges(ability, [
+      { action: "update", subject: { type: "FormRecord", object: { users: template.users } } },
+      { action: "update", subject: { type: "User", object: { id: ability.userID } } },
+    ]);
 
     const previouslyAssigned =
       template?.users.map((user) => {
