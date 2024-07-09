@@ -261,11 +261,7 @@ export async function getAllTemplates(
     checkPrivileges(ability, [
       {
         action: "view",
-        subject: {
-          type: "FormRecord",
-          // Passing an empty object here just to force CASL evaluate the condition part of a permission.
-          object: {},
-        },
+        subject: "FormRecord",
       },
     ]);
 
@@ -323,9 +319,8 @@ export async function getAllTemplatesForUser(
   options?: TemplateOptions
 ): Promise<Array<FormRecord>> {
   try {
-    // We do not need to check the object because we are using the user ID from the ability
+    // We do not need to check the privileges because we are using the user ID from the ability
     // in order to return only templates that the user has ownership on
-    checkPrivileges(ability, [{ action: "view", subject: "FormRecord" }]);
 
     const { sortByDateUpdated, requestedWhere } = options ?? {};
     const templates = await prisma.template
@@ -369,15 +364,6 @@ export async function getAllTemplatesForUser(
 
     return templates.map((template) => _parseTemplate(template));
   } catch (e) {
-    if (e instanceof AccessControlError) {
-      logEvent(
-        ability.userID,
-        { type: "Form" },
-        "AccessDenied",
-        "Attempted to list all Forms for User"
-      );
-      throw e;
-    }
     logMessage.error(e);
     return [];
   }
@@ -451,11 +437,7 @@ export async function getTemplateWithAssociatedUsers(
     checkPrivileges(ability, [
       {
         action: "view",
-        subject: {
-          type: "FormRecord",
-          // We want to make sure the user has the permission to view all templates
-          object: {},
-        },
+        subject: "FormRecord",
       },
       { action: "view", subject: "User" },
     ]);
@@ -635,11 +617,7 @@ export async function updateIsPublishedForTemplate(
       checkPrivileges(ability, [
         {
           action: "update",
-          subject: {
-            type: "FormRecord",
-            // We want to make sure the user has the permission to manage all templates
-            object: {},
-          },
+          subject: "FormRecord",
         },
       ]);
     }

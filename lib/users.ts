@@ -129,11 +129,7 @@ export const getUser = async (ability: UserAbility, id: string): Promise<AppUser
     checkPrivileges(ability, [
       {
         action: "view",
-        subject: {
-          type: "User",
-          // Empty object to force the ability to check for any user
-          object: {},
-        },
+        subject: "User",
       },
     ]);
 
@@ -183,11 +179,7 @@ export const getUsers = async (
     checkPrivileges(ability, [
       {
         action: "view",
-        subject: {
-          type: "User",
-          // Empty object to force the ability to check for any user
-          object: {},
-        },
+        subject: "User",
       },
     ]);
 
@@ -234,11 +226,7 @@ export const updateActiveStatus = async (ability: UserAbility, userID: string, a
     checkPrivileges(ability, [
       {
         action: "update",
-        subject: {
-          type: "User",
-          // Empty object to force the ability to check for any user
-          object: {},
-        },
+        subject: "User",
       },
     ]);
 

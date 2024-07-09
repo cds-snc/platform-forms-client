@@ -131,8 +131,7 @@ export const updatePrivilegesForUser = async (
   privileges: { id: string; action: "add" | "remove" }[]
 ) => {
   try {
-    // Pass in an empty object `{}` to ensure the privilege is for all users
-    checkPrivileges(ability, [{ action: "update", subject: { type: "User", object: {} } }]);
+    checkPrivileges(ability, [{ action: "update", subject: "User" }]);
 
     const addPrivileges: { id: string }[] = [];
     const removePrivileges: { id: string }[] = [];
