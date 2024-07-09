@@ -123,6 +123,9 @@ describe("Template CRUD functions", () => {
         created_at: true,
         deliveryOption: true,
         formPurpose: true,
+        publishReason: true,
+        publishFormType: true,
+        publishDesc: true,
         isPublished: true,
         jsonConfig: true,
         name: true,
@@ -259,6 +262,9 @@ describe("Template CRUD functions", () => {
         jsonConfig: true,
         isPublished: true,
         formPurpose: true,
+        publishReason: true,
+        publishFormType: true,
+        publishDesc: true,
         deliveryOption: true,
         securityAttribute: true,
       },
@@ -301,6 +307,9 @@ describe("Template CRUD functions", () => {
         isPublished: true,
         deliveryOption: true,
         formPurpose: true,
+        publishReason: true,
+        publishFormType: true,
+        publishDesc: true,
         securityAttribute: true,
       },
     });
@@ -333,6 +342,9 @@ describe("Template CRUD functions", () => {
         isPublished: true,
         deliveryOption: true,
         formPurpose: true,
+        publishReason: true,
+        publishFormType: true,
+        publishDesc: true,
         securityAttribute: true,
         ttl: true,
       },
@@ -377,6 +389,9 @@ describe("Template CRUD functions", () => {
         isPublished: true,
         deliveryOption: true,
         formPurpose: true,
+        publishReason: true,
+        publishFormType: true,
+        publishDesc: true,
         securityAttribute: true,
         ttl: true,
         users: {
@@ -453,6 +468,9 @@ describe("Template CRUD functions", () => {
         isPublished: true,
         deliveryOption: true,
         formPurpose: true,
+        publishReason: true,
+        publishFormType: true,
+        publishDesc: true,
         securityAttribute: true,
         ttl: true,
         users: {
@@ -511,6 +529,9 @@ describe("Template CRUD functions", () => {
         isPublished: true,
         deliveryOption: true,
         formPurpose: true,
+        publishReason: true,
+        publishFormType: true,
+        publishDesc: true,
         securityAttribute: true,
       },
     });
@@ -549,7 +570,7 @@ describe("Template CRUD functions", () => {
       buildPrismaResponse("formtestID", formConfiguration, true)
     );
 
-    const updatedTemplate = await updateIsPublishedForTemplate(ability, "formtestID", true);
+    const updatedTemplate = await updateIsPublishedForTemplate(ability, "formtestID", true, "", "", "");
 
     expect(prismaMock.template.update).toHaveBeenCalledWith({
       where: {
@@ -557,6 +578,9 @@ describe("Template CRUD functions", () => {
       },
       data: {
         isPublished: true,
+        publishReason: "",
+        publishFormType: "",
+        publishDesc: "",
       },
       select: {
         id: true,
@@ -567,6 +591,9 @@ describe("Template CRUD functions", () => {
         isPublished: true,
         deliveryOption: true,
         formPurpose: true,
+        publishReason: true,
+        publishFormType: true,
+        publishDesc: true,
         securityAttribute: true,
       },
     });
@@ -606,7 +633,7 @@ describe("Template CRUD functions", () => {
     );
 
     await expect(async () => {
-      await updateIsPublishedForTemplate(ability, "formtestID", false);
+      await updateIsPublishedForTemplate(ability, "formtestID", false, "", "", "");
     }).rejects.toThrowError(new AccessControlError(`Access Control Forbidden Action`));
   });
 
@@ -629,7 +656,7 @@ describe("Template CRUD functions", () => {
       buildPrismaResponse("formtestID", formConfiguration, true)
     );
 
-    await updateIsPublishedForTemplate(ability, "formtestID", false);
+    await updateIsPublishedForTemplate(ability, "formtestID", false, "", "", "");
 
     expect(prismaMock.template.update).toHaveBeenCalledWith({
       where: {
@@ -637,6 +664,9 @@ describe("Template CRUD functions", () => {
       },
       data: {
         isPublished: false,
+        publishReason: "",
+        publishFormType: "",
+        publishDesc: "",
       },
       select: {
         id: true,
@@ -647,6 +677,9 @@ describe("Template CRUD functions", () => {
         isPublished: true,
         deliveryOption: true,
         formPurpose: true,
+        publishReason: true,
+        publishFormType: true,
+        publishDesc: true,
         securityAttribute: true,
       },
     });
@@ -700,6 +733,9 @@ describe("Template CRUD functions", () => {
         isPublished: true,
         deliveryOption: true,
         formPurpose: true,
+        publishReason: true,
+        publishFormType: true,
+        publishDesc: true,
         securityAttribute: true,
         users: true,
       },
@@ -760,6 +796,9 @@ describe("Template CRUD functions", () => {
         isPublished: true,
         deliveryOption: true,
         formPurpose: true,
+        publishReason: true,
+        publishFormType: true,
+        publishDesc: true,
         securityAttribute: true,
         users: true,
       },
@@ -852,6 +891,9 @@ describe("Template CRUD functions", () => {
             isPublished: true,
             deliveryOption: true,
             formPurpose: true,
+            publishReason: true,
+            publishFormType: true,
+            publishDesc: true,
             securityAttribute: true,
           },
         })
@@ -910,6 +952,9 @@ describe("Template CRUD functions", () => {
           isPublished: true,
           deliveryOption: true,
           formPurpose: true,
+          publishReason: true,
+          publishFormType: true,
+          publishDesc: true,
           securityAttribute: true,
         },
       })
@@ -1016,7 +1061,7 @@ describe("Template CRUD functions", () => {
     }).rejects.toThrowError(new AccessControlError(`Access Control Forbidden Action`));
 
     await expect(async () => {
-      await updateIsPublishedForTemplate(ability, "formtestID", true);
+      await updateIsPublishedForTemplate(ability, "formtestID", true, "", "", "");
     }).rejects.toThrowError(new AccessControlError(`Access Control Forbidden Action`));
 
     await expect(async () => {
@@ -1102,7 +1147,7 @@ describe("Template CRUD functions", () => {
     }).rejects.toThrowError(new AccessControlError(`Access Control Forbidden Action`));
 
     await expect(async () => {
-      await updateIsPublishedForTemplate(ability, "formtestID", true);
+      await updateIsPublishedForTemplate(ability, "formtestID", true, "", "", "");
     }).rejects.toThrowError(new AccessControlError(`Access Control Forbidden Action`));
 
     await expect(async () => {

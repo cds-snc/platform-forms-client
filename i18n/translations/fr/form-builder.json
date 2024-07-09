@@ -482,6 +482,36 @@
     "emailOption": "Réponses envoyées par courriel — ",
     "change": "Modifier ces paramètres"
   },
+  "prePublishFormDialog": {
+    "title": "Publier le formulaire",
+    "text1": "Pourquoi souhaitez-vous publier le formulaire?",
+    "readyForPublicUse": "Formulaire prêt pour un usage par le public",
+    "readyForInternalUse": "Formulaire prêt pour un usage interne",
+    "sharingForFeedback": "Formulaire à partager pour commentaires ou approbation",
+    "other": "Autre",
+    "text2": "Décrivez-nous votre formulaire",
+    "whatType": "Type de formulaire",
+    "briefDesc": "Description du formulaire et de son usage",
+    "thisInformation": "Cette information nous aide à comprendre comment vous utilisez Formulaires GC, pour que nous puissions mieux répondre à vos besoins.",
+    "helpsUnderstand": "Cette information nous aide à comprendre à qui le formulaire est destiné.",
+    "purpose": {
+      "admin": "fins administratives",
+      "nonAdmin": "fins non-administratives",
+      "unset": "pas définie"
+    },
+    "formtypes": {
+      "Collect": "Collecte d'informations ou rétroaction",
+      "Administer": "Administration de prestation ou service",
+      "Grants": "Subventions et contributions",
+      "Regulatory": "Conformité réglementaire",
+      "Operations": "Opérations organisationnelles",
+      "Other": "Autre"
+    },
+    "error": {
+      "title": "Erreur",
+      "message": "Veuillez remplir tous les champs."
+    }
+  },
   "question": "Question",
   "questions": "Questions",
   "questionSet": {
@@ -873,28 +903,36 @@
       "option": "Appliquer des règles conditionnelles aux questions ayant des options à sélectionner"
     },
     "exit": {
-      "convertText": "Convert section [FR]",
-      "checkboxLabel": "Exit [FR]",
-      "nodeIconLabel": "Exit",
+      "convertText": "Convertir la section",
+      "checkboxLabel": "Quitter le formulaire",
+      "nodeIconLabel": "Sortie",
       "offboardNodeContent": {
-        "content": "<Content> [FR]",
-        "exitButton": "Back to the start button [FR]"
+        "content": "<Content>",
+        "exitButton": "Retourner au départ"
+      },
+    "exitPanel": {
+        "title1": "Section de sortie",
+        "title2": "Inadmissible de continuer à remplir le formulaire",
+        "description": "Les sections de sortie renvoient les utilisateurs au début du formulaire.",
+        "buttonLabel": "Supprimer"
       }
     },
-    "exitBadge": "Exit",
+    "exitBadge": "Sortie",
     "exitButtonElement": {
-      "description": "Help people exiting your form have a path forward. [fr]",
+      "description": "Aidez les personnes qui quittent votre formulaires à avoir un moyen d'aller de l'avant.",
       "list": {
-        "title": "What to include in your exit section [fr]",
-        "item1": "Links to other forms that may apply [fr]",
-        "item2": "Guidance on the application process or form requirements [fr]",
-        "item3": "Point of contact to learn more about the form [fr]"
-      }
+        "title": "Ce que vous pouvez inclure dans la section de sortie",
+        "item1": "Liens vers d'autres formulaires ou pages Web pertinents",
+        "item2": "Prochaines étapes du processus ou conseils sur les exigences du formulaire",
+        "item3": "Informations de contact pour un suivi ou pour en savoir plus sur le formulaire"
+      },
+      "buttonDescription": "Un bouton de sortie renvoie les personnes vers le site Web de l'organisation correspondant à l'image de marque du formulaire.",
+      "buttonLabel": "Personnalisez la destination du bouton en copiant-collant un lien plus pertinent ci-dessous :" 
     }
   },
   "groups": {
     "newSection": "Nouvelle section",
-    "sectionNameInput": "Nom de ela section",
+    "sectionNameInput": "Nom de la section",
     "addSection": "Ajouter une section",
     "treeAriaLabel": "Sections Formulaires GC",
     "addSectionPlaceholder": "Ajouter un nom à la section",

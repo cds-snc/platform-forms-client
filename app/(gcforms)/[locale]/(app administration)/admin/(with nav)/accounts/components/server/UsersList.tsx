@@ -10,11 +10,9 @@ import { checkPrivilegesAsBoolean } from "@lib/privileges";
 export const UsersList = async ({ filter }: { filter?: string }) => {
   const { ability } = await authCheckAndThrow();
 
-  const canManageUser = checkPrivilegesAsBoolean(ability, [
-    { action: "update", subject: { type: "User", object: {} } },
-  ]);
+  const canManageUser = checkPrivilegesAsBoolean(ability, [{ action: "update", subject: "User" }]);
   const canManageForms = checkPrivilegesAsBoolean(ability, [
-    { action: "update", subject: { type: "FormRecord", object: {} } },
+    { action: "update", subject: "FormRecord" },
   ]);
 
   const publishFormsId = await getPublishedFormsPrivilegeId();

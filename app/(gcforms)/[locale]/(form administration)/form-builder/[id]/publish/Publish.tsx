@@ -17,6 +17,7 @@ import { useAllowPublish } from "@lib/hooks/form-builder/useAllowPublish";
 import { safeJSONParse } from "@lib/utils";
 import { ErrorSaving } from "@formBuilder/components/shared/ErrorSaving";
 import { FormServerErrorCodes } from "@lib/types/form-builder-types";
+import { PrePublishDialog } from "./PrePublishDialog";
 
 export const Publish = ({ id }: { id: string }) => {
   const { t, i18n } = useTranslation("form-builder");
@@ -79,6 +80,28 @@ export const Publish = ({ id }: { id: string }) => {
 
   const supportHref = `/${i18n.language}/support`;
 
+  const [showPrePublishDialog, setShowPrePublishDialog] = useState(false);
+
+  const [formType, setFormType] = useState("");
+  const [description, setDescription] = useState("");
+  const [reasonForPublish, setReasonForPublish] = useState("");
+
+  const handleOpenPrePublish = async () => {
+    setShowPrePublishDialog(true);
+  };
+
+  const handlePrePublishClose: () => void = async () => {
+    setDescription("");
+    setReasonForPublish("");
+    setFormType("");
+    setShowPrePublishDialog(false);
+  };
+
+  const handlePrePublish = async () => {
+    setShowPrePublishDialog(false);
+    handlePublish();
+  };
+
   let formPurposeText = t("settingsPurposeAndUse.purpose.unset");
   if (formPurpose === "admin") {
     formPurposeText = t("settingsPurposeAndUse.purpose.admin");
@@ -91,7 +114,13 @@ export const Publish = ({ id }: { id: string }) => {
     setError(false);
     setErrorCode(null);
     try {
-      const { formRecord, error } = await updateTemplatePublishedStatus({ id, isPublished: true });
+      const { formRecord, error } = await updateTemplatePublishedStatus({
+        id,
+        isPublished: true,
+        publishFormType: formType,
+        publishDescription: description,
+        publishReason: reasonForPublish,
+      });
       if (error || !formRecord) {
         throw new Error(error);
       }
@@ -241,7 +270,7 @@ export const Publish = ({ id }: { id: string }) => {
 
       {userCanPublish && isPublishable() && (
         <>
-          <Button className="mt-5" onClick={handlePublish}>
+          <Button className="mt-5" onClick={handleOpenPrePublish}>
             {t("publish")}
           </Button>
           <div
@@ -253,6 +282,19 @@ export const Publish = ({ id }: { id: string }) => {
             <>{error && <p>{t("thereWasAnErrorPublishing")}</p>}</>
           </div>
         </>
+      )}
+
+      {showPrePublishDialog && (
+        <PrePublishDialog
+          setDescription={setDescription}
+          setFormType={setFormType}
+          description={description}
+          formType={formType}
+          reasonForPublish={reasonForPublish}
+          setReasonForPublish={setReasonForPublish}
+          handleClose={() => handlePrePublishClose()}
+          handleConfirm={() => handlePrePublish()}
+        />
       )}
     </div>
   );

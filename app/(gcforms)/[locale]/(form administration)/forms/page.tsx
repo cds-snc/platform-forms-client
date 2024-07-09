@@ -1,7 +1,6 @@
 import { serverTranslation } from "@i18n";
 import { Metadata } from "next";
 import { authCheckAndRedirect } from "@lib/actions";
-import { checkPrivilegesAsBoolean } from "@lib/privileges";
 import { AccessControlError } from "@lib/privileges";
 import { redirect } from "next/navigation";
 import { Navigation } from "./components/server/Navigation";
@@ -43,10 +42,6 @@ export default async function Page({
 }) {
   try {
     const { ability } = await authCheckAndRedirect();
-
-    checkPrivilegesAsBoolean(ability, [{ action: "view", subject: "FormRecord" }], {
-      redirect: true,
-    });
 
     const { t } = await serverTranslation("my-forms", { lang: locale });
 
