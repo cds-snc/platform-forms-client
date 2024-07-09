@@ -3,6 +3,7 @@ import { Button, Alert } from "@clientComponents/globals";
 import { Dialog, useDialogRef, Radio, TextArea } from "@formBuilder/components/shared";
 import React, { useState } from "react";
 import Select, { SingleValue } from "react-select";
+import { cn } from "@lib/utils";
 
 export const PrePublishDialog = ({
   handleClose,
@@ -166,7 +167,9 @@ export const PrePublishDialog = ({
             <label>{t("prePublishFormDialog.whatType")}</label>
             <div className="mb-1">
               <Select
-                className="form-builder-dropdown mb-0 mt-0 inline-block text-black-default w-[375px] border-black border-1"
+                className={cn(
+                  "form-builder-dropdown my-0 inline-block min-w-[400px] text-black-default"
+                )}
                 options={elementOptions}
                 onChange={(e) => onFormTypeChange(e)}
               />
