@@ -137,7 +137,7 @@ const ControlledTree: ForwardRefRenderFunction<unknown, TreeDataProviderProps> =
     setOpenDialog: setOpenConfirmDeleteDialog,
   } = useConfirmDeleteDialogState();
 
-  // const setGroupsLayout = useTemplateStore((s) => s.setGroupsLayout);
+  const setGroupsLayout = useTemplateStore((s) => s.setGroupsLayout);
 
   const items = getTreeData({
     addIntroElement: true,
@@ -261,10 +261,15 @@ const ControlledTree: ForwardRefRenderFunction<unknown, TreeDataProviderProps> =
             autoFlowAll
           );
 
-          const rootItems = environment?.current?.items.root.children as string[];
-          if (rootItems) {
-            // setGroupsLayout(rootItems.filter((item) => item !== "start" && item !== "review" && item !== "end"));
-          }
+          // add a delay to allow the tree to update
+          setTimeout(() => {
+            const rootItems = environment?.current?.items.root.children as string[];
+            if (rootItems) {
+              setGroupsLayout(
+                rootItems.filter((item) => item !== "start" && item !== "review" && item !== "end")
+              );
+            }
+          }, 3000);
         }}
         onFocusItem={(item) => {
           setFocusedItem(item.index);

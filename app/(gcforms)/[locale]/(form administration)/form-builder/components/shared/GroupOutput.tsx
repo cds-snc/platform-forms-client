@@ -14,6 +14,11 @@ export const GroupOutput = () => {
     getGroupHistory,
   } = useGCFormsContext();
   const formValues = getValues();
+
+  const groupLayoutNames = schema.groupLayout
+    ? schema.groupLayout.map((id: string) => schema.groups[id].name)
+    : [];
+
   return (
     <details>
       <summary>Group JSON Schema and Misc</summary>
@@ -25,7 +30,7 @@ export const GroupOutput = () => {
         Current Group = {currentGroup}
         <br />
         Previous Group = {previousGroup}
-        Group Layout = {JSON.stringify(schema.groupLayout, null, 2)}
+        Group Layout = {JSON.stringify(groupLayoutNames, null, 2)}
         <br />
         Group History = {JSON.stringify(getGroupHistory(), null, 2)}
         <br />
