@@ -91,6 +91,9 @@ export interface TemplateStoreProps {
   deliveryOption?: DeliveryOption;
   securityAttribute: SecurityAttribute;
   formPurpose: string;
+  publishReason: string;
+  publishFormType: string;
+  publishDesc: string;
   closingDate?: string | null;
   changeKey: string;
   allowGroupsFlag: boolean;
