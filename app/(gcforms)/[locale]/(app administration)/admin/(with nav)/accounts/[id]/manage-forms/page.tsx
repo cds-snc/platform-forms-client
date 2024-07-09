@@ -33,12 +33,7 @@ export default async function Page({
       { action: "view", subject: "User" },
       {
         action: "view",
-        subject: {
-          type: "FormRecord",
-          // Passing an empty object here just to force CASL evaluate the condition part of a permission.
-          // Will only allow users who have privilege of Manage All Forms
-          object: {},
-        },
+        subject: "FormRecord",
       },
     ],
     { redirect: true }
