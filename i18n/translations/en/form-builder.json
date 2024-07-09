@@ -483,6 +483,36 @@
     "emailOption": "Responses delivered by email — ",
     "change": "Change settings"
   },
+  "prePublishFormDialog": {
+    "title": "Publish form",
+    "text1": "What is your reason for publishing?",
+    "readyForPublicUse": "Ready for public use",
+    "readyForInternalUse": "Ready for internal use",
+    "sharingForFeedback": "Sharing for feedback or approval",
+    "other": "Other",
+    "text2": "Tell us more about your form",
+    "whatType": "Type of form",
+    "briefDesc": "Description of the form and its use",
+    "thisInformation": "This help us understand how GC Forms is used, so we can better serve your needs.",
+    "helpsUnderstand": "This helps us understand who forms are intended for.",
+    "purpose": {
+      "admin": "Administrative purposes",
+      "nonAdmin": "Non-administrative purposes",
+      "unset": "Unset"
+    },
+    "formtypes": {
+      "Collect": "Collect feedback or statistics",
+      "Administer": "Administer benefit or service ",
+      "Grants": "Grants and contributions",
+      "Regulatory": "Regulatory compliance",
+      "Operations": "Organizational operations",
+      "Other": "Other"
+    },
+    "error": {
+      "title": "Error",
+      "message": "Please fill out all fields."
+    }
+  },
   "question": "Question",
   "questions": "Questions",
   "questionSet": {

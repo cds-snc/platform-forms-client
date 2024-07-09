@@ -55,6 +55,9 @@ model Template {
   jsonConfig        Json
   isPublished       Boolean         @default(false)
   formPurpose       String          @default("")
+  publishReason     String          @default("")
+  publishFormType   String          @default("")
+  publishDesc       String          @default("")
   deliveryOption    DeliveryOption?
   securityAttribute String          @default("Protected A")
   // @todo  Need to remove this field
