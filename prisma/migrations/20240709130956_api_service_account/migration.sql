@@ -7,6 +7,9 @@
 -- DropForeignKey
 ALTER TABLE "ApiUser" DROP CONSTRAINT "ApiUser_templateId_fkey";
 
+-- AlterTable
+ALTER TABLE "Setting" ADD COLUMN     "encrypted" BOOLEAN NOT NULL DEFAULT false;
+
 -- DropTable
 DROP TABLE "ApiUser";
 
