@@ -10,6 +10,11 @@ import { safeJSONParse } from "@lib/utils";
 import { logEvent } from "@lib/auditLogs";
 import { authCheckAndThrow } from "@lib/actions";
 import { checkUserHasTemplateOwnership } from "@lib/templates";
+import { checkOne } from "@lib/cache/flags";
+
+if ((await checkOne("zitadelAuth")) && !process.env.ZITADEL_ISSUER) {
+  throw new Error("Zitadel Issuer not set in environment variables");
+}
 
 const getAccessToken = async () => {
   const encryptedSetting = await getAppSetting("zitadelAdministrationKey");
