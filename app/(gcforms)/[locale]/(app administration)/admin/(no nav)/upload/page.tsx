@@ -20,7 +20,7 @@ export default async function Page() {
 
   const { ability } = await authCheckAndRedirect();
 
-  checkPrivilegesAsBoolean(ability, [{ action: "create", subject: "FormRecord" }], {
+  checkPrivilegesAsBoolean(ability, [{ action: "update", subject: "FormRecord" }], {
     redirect: true,
   });
   return (

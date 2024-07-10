@@ -319,7 +319,11 @@ export const checkPrivileges = (
           `Privilege Check ${ruleResult ? "PASS" : "FAIL"}: Can ${action} on ${subject.type} `
         );
       } else {
-        ruleResult = ability.can(action, subject, field);
+        if (typeof subject !== "string") {
+          throw new Error("Subject must be a string or ForcedSubjectType");
+        }
+        // If the object is not forced typed, we need to pass in an empty object to ensure a global privilege check
+        ruleResult = ability.can(action, setSubjectType(subject, {}), field);
         logMessage.debug(
           `Privilege Check ${ruleResult ? "PASS" : "FAIL"}: Can ${action} on ${subject} `
         );

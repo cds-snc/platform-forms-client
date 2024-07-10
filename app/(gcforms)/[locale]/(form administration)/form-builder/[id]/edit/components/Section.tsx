@@ -6,6 +6,8 @@ import { FormElementTypes } from "@lib/types";
 import { useTemplateStore } from "@lib/store/useTemplateStore";
 import { SectionTitle } from "./SectionTitle";
 import { LocalizedElementProperties } from "@lib/types/form-builder-types";
+import { ExitBadge } from "@formBuilder/components/shared/ExitBadge";
+import { ExitButtonElement } from "@formBuilder/[id]/edit/components/ExitButtonElement";
 
 const AddElement = () => {
   const { t } = useTranslation("form-builder");
@@ -59,6 +61,10 @@ export const Section = ({ groupId }: { groupId: string }) => {
 
   const groupTitle = groups?.[groupId]?.[localizedTitle] || "";
 
+  const localizedUrl = localizeField("exitUrl", translationLanguagePriority);
+
+  const exitButtonUrl = groups?.[groupId]?.[localizedUrl] || "";
+
   if (groupId === "start" || groupId === "end" || groupId === "review") {
     return null;
   }
@@ -67,6 +73,8 @@ export const Section = ({ groupId }: { groupId: string }) => {
 
   const noElements = !groups[groupId]?.elements || groups[groupId]?.elements.length === 0;
 
+  const nextAction = groups[groupId]?.nextAction;
+
   return (
     <div
       className={cn(
@@ -74,7 +82,21 @@ export const Section = ({ groupId }: { groupId: string }) => {
         noElements ? "border-b-1 rounded-b-lg" : "last:border-b-1"
       )}
     >
-      <SectionTitle groupTitle={groupTitle} groupId={groupId} />
+      <>
+        {nextAction === "exit" && (
+          <div>
+            <ExitBadge />
+          </div>
+        )}
+        <SectionTitle groupTitle={groupTitle} groupId={groupId} />
+        {nextAction === "exit" && (
+          <ExitButtonElement
+            key={`exit-url-${groupId}-${translationLanguagePriority}`}
+            groupId={groupId}
+            exitButtonUrl={exitButtonUrl}
+          />
+        )}
+      </>
       {noElements ? (
         <AddElementEmpty />
       ) : (

@@ -101,6 +101,9 @@ interface PutApiProps {
   closingDate?: string;
   users?: { id: string; action: "add" | "remove" }[];
   sendResponsesToVault?: boolean;
+  publishFormType?: string;
+  publishDescription?: string;
+  publishReason?: string;
 }
 
 export const PUT = middleware(
@@ -137,6 +140,9 @@ export const PUT = middleware(
         closingDate,
         users,
         sendResponsesToVault,
+        publishFormType,
+        publishDescription,
+        publishReason,
       }: PutApiProps = props.body;
 
       const formID = props.params?.formID;
@@ -164,7 +170,14 @@ export const PUT = middleware(
           );
         return NextResponse.json(response);
       } else if (isPublished !== undefined) {
-        const response = await updateIsPublishedForTemplate(ability, formID, isPublished);
+        const response = await updateIsPublishedForTemplate(
+          ability,
+          formID,
+          isPublished,
+          publishReason || "",
+          publishFormType || "",
+          publishDescription || ""
+        );
         if (!response)
           throw new Error(
             `Template API response was null. Request information: method = ${

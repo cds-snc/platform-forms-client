@@ -1,10 +1,11 @@
+"use client";
 import React from "react";
 import Link from "next/link";
 import { EmailResponseSettings } from "@formBuilder/components/shared";
 import { ClosedBanner } from "@formBuilder/components/shared/ClosedBanner";
-import { serverTranslation } from "@i18n";
+import { useTranslation } from "@i18n/client";
 
-export const DeliveryOptionEmail = async ({
+export const DeliveryOptionEmail = ({
   email,
   emailSubject,
   isPublished,
@@ -18,7 +19,7 @@ export const DeliveryOptionEmail = async ({
   const {
     t,
     i18n: { language },
-  } = await serverTranslation("form-builder-responses");
+  } = useTranslation("form-builder-responses");
 
   return (
     <>

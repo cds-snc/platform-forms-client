@@ -161,5 +161,6 @@
     "introduction": "Introduction",
     "confirmation": "Confirmation message",
     "privacy": "Privacy"
-  }
+  },
+  "exit": "Exit"
 }

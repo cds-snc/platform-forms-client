@@ -64,9 +64,9 @@ export const Secondary = ({ href, className, children, scroll }: LinkButtonProps
   );
 };
 
-export default Default;
-
 export const LinkButton = {
   Primary,
   Secondary,
 };
+
+export default Default;

@@ -81,7 +81,6 @@ export const GroupNode = (node: NodeProps) => {
         id={node.id}
         className={cn(
           "space-y-2 rounded-md border-2 border-indigo-500 p-4 text-white",
-          "space-y-2 rounded-md border-1 border-indigo-500 p-4 text-white",
           groupIsSelected
             ? "bg-violet-200 shadow-logicSelected"
             : "bg-gray-soft shadow-logicDefault",
@@ -97,7 +96,7 @@ export const GroupNode = (node: NodeProps) => {
               "absolute right-[-20px] top-[-20px] cursor-pointer outline-offset-8 outline-slate-800 hover:scale-125 rounded-full"
             )}
           >
-            <QuestionRuleSvg title={t("groups.editSection", { name: node.data.label.name })} />
+            <QuestionRuleSvg title={t("groups.editPage", { name: node.data.label.name })} />
           </button>
         )}
         {!node.data.children.length && <div className="min-h-[50px] min-w-[200px]"></div>}

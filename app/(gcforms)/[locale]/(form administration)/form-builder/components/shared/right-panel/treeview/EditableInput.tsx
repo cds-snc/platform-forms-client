@@ -28,7 +28,7 @@ export const EditableInput = ({
     <input
       {...context.interactiveElementProps}
       type="text"
-      placeholder={isSection ? t("groups.addSectionPlaceholder") : ""}
+      placeholder={isSection ? t("groups.addPagePlaceholder") : ""}
       autoFocus
       className="ml-12 w-5/6 rounded-md border-2 border-slate-950 p-2"
       value={name}
