@@ -106,8 +106,6 @@ const ControlledTree: ForwardRefRenderFunction<unknown, TreeDataProviderProps> =
     setExpandedItems([id]);
     setId(id);
     tree?.current?.startRenamingItem(id);
-
-    updateGroupsLayout();
   };
 
   useImperativeHandle(ref, () => ({
@@ -115,19 +113,16 @@ const ControlledTree: ForwardRefRenderFunction<unknown, TreeDataProviderProps> =
       const parent = findParentGroup(getTreeData(), id);
       setExpandedItems([parent?.index as TreeItemIndex]);
       setSelectedItems([id]);
-      updateGroupsLayout();
     },
     updateItem: (id: string) => {
       const parent = findParentGroup(getTreeData(), id);
       setExpandedItems([parent?.index as TreeItemIndex]);
       setSelectedItems([id]);
-      updateGroupsLayout();
     },
     removeItem: (id: string) => {
       const parent = findParentGroup(getTreeData(), id);
       setExpandedItems([parent?.index as TreeItemIndex]);
       setSelectedItems([parent?.index as TreeItemIndex]);
-      updateGroupsLayout();
     },
   }));
 
@@ -157,7 +152,14 @@ const ControlledTree: ForwardRefRenderFunction<unknown, TreeDataProviderProps> =
   }
 
   return (
-    <>
+    <div
+      onFocus={() => {
+        updateGroupsLayout();
+      }}
+      onBlur={() => {
+        updateGroupsLayout();
+      }}
+    >
       <ControlledTreeEnvironment
         ref={environment}
         items={items}
@@ -186,8 +188,6 @@ const ControlledTree: ForwardRefRenderFunction<unknown, TreeDataProviderProps> =
                       <p>{t("groups.groupSuccessfullyDeleted", { group: item.data.name })}</p>
                     </>
                   );
-
-                  updateGroupsLayout();
 
                   return;
                 }
@@ -255,7 +255,7 @@ const ControlledTree: ForwardRefRenderFunction<unknown, TreeDataProviderProps> =
           setSelectedItems([item.index]);
         }}
         onDrop={async (items: TreeItem[], target: DraggingPosition) => {
-          handleOnDrop(
+          await handleOnDrop(
             items,
             target,
             getGroups,
@@ -268,8 +268,6 @@ const ControlledTree: ForwardRefRenderFunction<unknown, TreeDataProviderProps> =
             setOpenConfirmMoveDialog,
             autoFlowAll
           );
-
-          updateGroupsLayout();
         }}
         onFocusItem={(item) => {
           setFocusedItem(item.index);
@@ -338,7 +336,7 @@ const ControlledTree: ForwardRefRenderFunction<unknown, TreeDataProviderProps> =
           }
         }}
       />
-    </>
+    </div>
   );
 };
 

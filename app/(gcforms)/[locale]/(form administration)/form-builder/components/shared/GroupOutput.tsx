@@ -16,7 +16,7 @@ export const GroupOutput = () => {
   const formValues = getValues();
 
   const groupLayoutNames = schema.groupLayout
-    ? schema.groupLayout.map((id: string) => schema.groups[id]?.name)
+    ? schema.groupLayout.map((id: string) => schema.groups[id]?.name).filter(Boolean)
     : [];
 
   return (
