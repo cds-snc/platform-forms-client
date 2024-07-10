@@ -8,6 +8,7 @@ const sleep = (ms: number) => {
 export const useUpdateGroupLayout = () => {
   const { environment } = useTreeRef();
   const setGroupsLayout = useTemplateStore((s) => s.setGroupsLayout);
+
   const updateGroupsLayout = async () => {
     // Add a delay to ensure the tree from previous actions updates before this is called
     sleep(3000);
