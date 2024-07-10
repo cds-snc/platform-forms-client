@@ -155,12 +155,12 @@
   "start": "Start",
   "loadingResult": "Loading...",
   "logic": {
-    "start": "Beginning",
-    "end": "End",
-    "review": "Review",
-    "introduction": "Introduction",
+    "start": "Start page",
+    "end": "Confirmation page",
+    "review": "Review page",
+    "introduction": "Form introduction",
     "confirmation": "Confirmation message",
-    "privacy": "Privacy"
+    "privacy": "Privacy statement"
   },
   "exit": "Exit"
 }

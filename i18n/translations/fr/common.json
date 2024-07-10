@@ -153,15 +153,15 @@
   "mainNavAriaLabel": "Navigation principale",
   "yourAccount": "Votre compte",
   "dateModified": "Date de modification ",
-  "start": "Début",
+  "start": "Départ",
   "loadingResult": "Chargement en cours...",
   "logic": {
-    "start": "Début",
-    "end": "Fin",
-    "review": "Révision",
-    "introduction": "Introduction",
+    "start": "Page de départ",
+    "end": "Page de confirmation",
+    "review": "Page de révision",
+    "introduction": "Introduction du formulaire",
     "confirmation": "Message de confirmation",
-    "privacy": "Confidentialité"
+    "privacy": "Avis de confidentialité"
   },
   "exit": "Sortie"
 }
