@@ -7,7 +7,6 @@ import {
   updateAppSetting,
 } from "@lib/appSettings";
 import { revalidatePath } from "next/cache";
-import { logMessage } from "@lib/logger";
 import { authCheckAndThrow } from "@lib/actions";
 import { redirect } from "next/navigation";
 
@@ -19,7 +18,6 @@ function nullCheck(formData: FormData, key: string) {
 
 export async function getSetting(internalId: string) {
   const { ability } = await authCheckAndThrow();
-  logMessage.debug("Getting setting with internalId: " + internalId);
   const setting = await getFullAppSetting(ability, internalId);
 
   if (setting?.encrypted) {
