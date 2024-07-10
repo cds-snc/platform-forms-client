@@ -194,7 +194,9 @@ describe("Application Settings", () => {
         encrypted: false,
       };
       prismaMock.setting.findUniqueOrThrow.mockResolvedValue({
-        encrypted: false,
+        ...data,
+        descriptionEn: null,
+        descriptionFr: null,
       });
 
       prismaMock.setting.update.mockResolvedValue({
