@@ -843,7 +843,7 @@
   },
   "addConditionalRules": {
     "modalTitle": "Ajouter une règle à une question",
-    "modalTitleEdit": "Modifier les règles",
+    "modalTitleEdit": "Modifier les règles conditionnelles",
     "modalDescription": "Afficher des champs de saisie supplémentaires en fonction de la sélection d'une option spécifique. Ceci s'applique aux questions avec boutons radio, cases à cocher ou liste déroulante.",
     "optionTitle": "Si l'option sélectionnée est :",
     "questionTitle": "Afficher la question :",
@@ -910,7 +910,7 @@
         "content": "<Content>",
         "exitButton": "Retourner au départ"
       },
-    "exitPanel": {
+      "exitPanel": {
         "title1": "Page de sortie",
         "title2": "Inadmissible de continuer à remplir le formulaire",
         "description": "Les pages de sortie renvoient les personnes qui remplissent le formulaire au début du formulaire.",
@@ -927,7 +927,7 @@
         "item3": "Informations de contact pour un suivi ou pour en savoir plus sur le formulaire"
       },
       "buttonDescription": "Un bouton de sortie renvoie les personnes vers le site Web de l'organisation correspondant à l'image de marque du formulaire.",
-      "buttonLabel": "Personnalisez la destination du bouton en copiant-collant un lien plus pertinent ci-dessous :" 
+      "buttonLabel": "Personnalisez la destination du bouton en copiant-collant un lien plus pertinent ci-dessous :"
     }
   },
   "groups": {
