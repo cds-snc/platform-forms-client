@@ -844,7 +844,8 @@
   "addConditionalRules": {
     "modalTitle": "Add a rule to a question",
     "modalTitleEdit": "Edit conditional rules",
-    "modalDescription": "Display additional input fields depending on the selection of a specific option. This applies to questions with radio buttons, checkboxes or dropdown options.",
+    "modalDescription": "Allow an option in your question to show an additional short or long answer input field when selected. Only drop downs, single choice, and multi-select blocks can apply a rule.",
+    "warning": "Options and questions must exist before adding a conditional rule.",
     "optionTitle": "If option selected is:",
     "questionTitle": "Show question:",
     "addCustomRules": "Add a rule",

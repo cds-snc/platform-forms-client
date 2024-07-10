@@ -844,7 +844,8 @@
   "addConditionalRules": {
     "modalTitle": "Ajouter une règle à une question",
     "modalTitleEdit": "Modifier les règles conditionnelles",
-    "modalDescription": "Afficher des champs de saisie supplémentaires en fonction de la sélection d'une option spécifique. Ceci s'applique aux questions avec boutons radio, cases à cocher ou liste déroulante.",
+    "modalDescription": "Permet à une option de votre question d'afficher un champ de saisie supplémentaire pour la réponse courte ou longue lorsqu'elle est sélectionnée. Seuls les menus déroulants, les blocs à choix unique et les blocs à sélection multiple peuvent appliquer une règle.",
+    "warning": "Des options et des questions doivent exister avant d'ajouter une règle conditionnelle.",
     "optionTitle": "Si l'option sélectionnée est :",
     "questionTitle": "Afficher la question :",
     "addCustomRules": "Ajouter une règle",

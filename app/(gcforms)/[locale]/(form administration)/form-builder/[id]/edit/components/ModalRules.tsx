@@ -121,6 +121,9 @@ export const ModalRules = ({ item }: { item: FormElementWithIndex }) => {
           <p className="mb-4" id={descriptionId}>
             {t("addConditionalRules.modalDescription")}
           </p>
+          <p className="mb-4">
+            <strong>{t("addConditionalRules.warning")}</strong>
+          </p>
           <ModalFormRules
             initialChoiceRules={initialChoiceRules}
             item={item}
