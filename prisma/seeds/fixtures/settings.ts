@@ -82,6 +82,16 @@ const zitadelAdministrationKey: Setting = {
   encrypted: true,
 };
 
+const zitadelProvider: Setting = {
+  internalId: "zitadelProvider",
+  nameEn: "Zitadel Provider",
+  nameFr: "Fournisseur de Zitadel",
+  descriptionEn: "URL to Zitadel provider",
+  descriptionFr: "URL vers le fournisseur Zitadel",
+  value: null,
+  encrypted: false,
+};
+
 const allSettings = [
   brandingRequestFormSetting,
   nagwarePhaseEncouraged,
@@ -90,6 +100,7 @@ const allSettings = [
   nagwarePhaseEscalated,
   responseDownloadLimit,
   zitadelAdministrationKey,
+  zitadelProvider,
 ];
 
 export default {

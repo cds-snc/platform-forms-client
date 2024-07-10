@@ -10,37 +10,62 @@ import { safeJSONParse } from "@lib/utils";
 import { logEvent } from "@lib/auditLogs";
 import { authCheckAndThrow } from "@lib/actions";
 import { checkUserHasTemplateOwnership } from "@lib/templates";
-import { checkOne } from "@lib/cache/flags";
 
-if ((await checkOne("zitadelAuth")) && !process.env.ZITADEL_ISSUER) {
-  throw new Error("Zitadel Issuer not set in environment variables");
-}
+type ZidatelAministrationKey = {
+  type: string;
+  keyId: string;
+  key: string;
+  expirationDate: string;
+  userId: string;
+};
 
-const getAccessToken = async () => {
-  const encryptedSetting = await getAppSetting("zitadelAdministrationKey");
+const getZitadelSettings = async (): Promise<{
+  zitadelAdministrationKey: ZidatelAministrationKey;
+  zitadelProvider: string;
+}> => {
+  const [encryptedAdministrationKey, zitadelProvider] = await Promise.all([
+    getAppSetting("zitadelAdministrationKey"),
+    getAppSetting("zitadelProvider"),
+  ]);
 
-  if (!encryptedSetting) throw new Error("No value set for Zitadel Administration Setting");
+  if (!zitadelProvider) throw new Error("No value set for Zitadel Provider Setting");
 
-  const zitadelPrivate = safeJSONParse(decryptSetting(encryptedSetting));
+  if (!encryptedAdministrationKey)
+    throw new Error("No value set for Zitadel Administration Setting");
 
-  if (!zitadelPrivate) throw new Error("Zitadel Adminstration Setting is not a valid JSON String");
+  const zitadelAdministrationKey: ZidatelAministrationKey | undefined = safeJSONParse(
+    decryptSetting(encryptedAdministrationKey)
+  );
 
+  if (!zitadelAdministrationKey)
+    throw new Error("Zitadel Adminstration Setting is not a valid JSON String");
+
+  return { zitadelAdministrationKey, zitadelProvider };
+};
+
+const getAccessToken = async ({
+  zitadelProvider,
+  zitadelAdministrationKey,
+}: {
+  zitadelProvider: string;
+  zitadelAdministrationKey: ZidatelAministrationKey;
+}) => {
   const alg = "RS256";
-  const privateKey = crypto.createPrivateKey({ key: zitadelPrivate.key });
-  const serviceUserId = zitadelPrivate.userId;
-  const kid = zitadelPrivate.keyId;
+  const privateKey = crypto.createPrivateKey({ key: zitadelAdministrationKey.key });
+  const serviceUserId = zitadelAdministrationKey.userId;
+  const kid = zitadelAdministrationKey.keyId;
   const jwt = await new jose.SignJWT()
     .setProtectedHeader({ alg, kid })
     .setIssuedAt()
     .setIssuer(serviceUserId)
     .setSubject(serviceUserId)
-    .setAudience(process.env.ZITADEL_ISSUER ?? "")
+    .setAudience(zitadelProvider)
     .setExpirationTime("1h")
     .sign(privateKey);
 
   return axios
     .post(
-      `${process.env.ZITADEL_ISSUER}/oauth/v2/token`,
+      `${zitadelProvider}/oauth/v2/token`,
       new URLSearchParams({
         grant_type: "urn:ietf:params:oauth:grant-type:jwt-bearer",
         assertion: jwt,
@@ -56,9 +81,10 @@ const getAccessToken = async () => {
 };
 
 const createUser = async (templateId: string, accessToken: string): Promise<string> => {
+  const { zitadelProvider } = await getZitadelSettings();
   const userId = await axios
     .post(
-      `${process.env.ZITADEL_ISSUER}/management/v1/users/machine`,
+      `${zitadelProvider}/management/v1/users/machine`,
       {
         userName: templateId,
         name: templateId,
@@ -87,12 +113,15 @@ const uploadKey = async (
   userId: string,
   accessToken: string
 ): Promise<string> => {
+  const { zitadelProvider } = await getZitadelSettings();
+
   const keyId = await axios
     .post(
-      `${process.env.ZITADEL_ISSUER}/management/v1/users/${userId}/keys`,
+      `${zitadelProvider}/management/v1/users/${userId}/keys`,
       {
         type: "KEY_TYPE_JSON",
         publicKey: Buffer.from(publicKey).toString("base64"),
+        // Keeping as comment in case we decide to activate expiration dates
         // expirationDate: new Date().setDate(new Date().getDate() + 90),
       },
       {
@@ -119,6 +148,7 @@ const uploadKey = async (
 export const deleteKey = async (templateId: string) => {
   const { ability } = await authCheckAndThrow();
   await checkUserHasTemplateOwnership(ability, templateId);
+  const { zitadelProvider, zitadelAdministrationKey } = await getZitadelSettings();
 
   const { id: serviceAccountId, publicKeyId } =
     (await prisma.apiServiceAccount.findUnique({
@@ -132,10 +162,10 @@ export const deleteKey = async (templateId: string) => {
     throw new Error("No Key Exists in GCForms DB");
   }
 
-  const accessToken = await getAccessToken();
+  const accessToken = await getAccessToken({ zitadelProvider, zitadelAdministrationKey });
 
   await axios
-    .delete(`${process.env.ZITADEL_ISSUER}/management/v1/users/${serviceAccountId}`, {
+    .delete(`${zitadelProvider}/management/v1/users/${serviceAccountId}`, {
       headers: {
         Authorization: `Bearer ${accessToken}`,
         Accept: "application/json",
@@ -168,6 +198,8 @@ export const checkKeyExists = async (templateId: string) => {
   const { ability } = await authCheckAndThrow();
   await checkUserHasTemplateOwnership(ability, templateId);
 
+  const { zitadelProvider, zitadelAdministrationKey } = await getZitadelSettings();
+
   const { id: userId, publicKeyId } =
     (await prisma.apiServiceAccount.findUnique({
       where: {
@@ -181,12 +213,12 @@ export const checkKeyExists = async (templateId: string) => {
   }
 
   // Ensure the key is in sync with Zidatel
-  const accessToken = await getAccessToken();
+  const accessToken = await getAccessToken({ zitadelProvider, zitadelAdministrationKey });
 
   // Add code to check if a key exists
 
   const remoteKey = await axios
-    .get(`${process.env.ZITADEL_ISSUER}/management/v1/users/${userId}/keys/${publicKeyId}`, {
+    .get(`${zitadelProvider}/management/v1/users/${userId}/keys/${publicKeyId}`, {
       headers: {
         Authorization: `Bearer ${accessToken}`,
         Accept: "application/json",
@@ -209,6 +241,8 @@ export const refreshKey = async (templateId: string) => {
   const { ability } = await authCheckAndThrow();
   await checkUserHasTemplateOwnership(ability, templateId);
 
+  const { zitadelProvider, zitadelAdministrationKey } = await getZitadelSettings();
+
   const { id: serviceAccountId, publicKeyId } =
     (await prisma.apiServiceAccount.findUnique({
       where: {
@@ -221,17 +255,14 @@ export const refreshKey = async (templateId: string) => {
     throw new Error("No Key Exists in GCForms DB");
   }
 
-  const accessToken = await getAccessToken();
+  const accessToken = await getAccessToken({ zitadelAdministrationKey, zitadelProvider });
   await axios
-    .delete(
-      `${process.env.ZITADEL_ISSUER}/management/v1/users/${serviceAccountId}/keys/${publicKeyId}`,
-      {
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-          Accept: "application/json",
-        },
-      }
-    )
+    .delete(`${zitadelProvider}/management/v1/users/${serviceAccountId}/keys/${publicKeyId}`, {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+        Accept: "application/json",
+      },
+    })
     .catch((err) => {
       logMessage.error(err);
       return null;
@@ -264,7 +295,9 @@ export const createKey = async (templateId: string) => {
   const { ability } = await authCheckAndThrow();
   await checkUserHasTemplateOwnership(ability, templateId);
 
-  const accessToken = await getAccessToken();
+  const { zitadelProvider, zitadelAdministrationKey } = await getZitadelSettings();
+
+  const accessToken = await getAccessToken({ zitadelAdministrationKey, zitadelProvider });
 
   const serviceAccountId = await createUser(templateId, accessToken);
 

@@ -24,7 +24,9 @@ export default async function Page({
 }) {
   await authCheckAndRedirect();
   const flag = await checkOne("zitadelAuth");
-  if (!flag) redirect(`/${locale}/form-builder/${id}/settings`);
+  if (!flag) {
+    redirect(`/${locale}/form-builder/${id}/settings`);
+  }
 
   const keyExists = await checkKeyExists(id);
 

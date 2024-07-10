@@ -3,12 +3,15 @@ import React from "react";
 import { useTranslation } from "@i18n/client";
 import { SubNavLink } from "@clientComponents/globals/SubNavLink";
 import { EmailIcon, BrandIcon, GearIcon, ProtectedIcon } from "@serverComponents/icons";
+import { useFlag } from "@lib/hooks/useFlag";
 
 export const SettingsNavigation = ({ id }: { id: string }) => {
   const {
     t,
     i18n: { language },
   } = useTranslation("form-builder");
+
+  const isAPIEnalbed = useFlag("zitadelAuth");
 
   return (
     <div className="relative flex">
@@ -32,12 +35,14 @@ export const SettingsNavigation = ({ id }: { id: string }) => {
               {t("settings.formManagement")}
             </span>
           </SubNavLink>
-          <SubNavLink href={`/${language}/form-builder/${id}/settings/api`}>
-            <span className="text-sm laptop:text-base">
-              <ProtectedIcon className="mr-2 inline-block laptop:mt-[-2px]" />
-              {t("settings.api.title")}
-            </span>
-          </SubNavLink>
+          {isAPIEnalbed.status === true && (
+            <SubNavLink href={`/${language}/form-builder/${id}/settings/api`}>
+              <span className="text-sm laptop:text-base">
+                <ProtectedIcon className="mr-2 inline-block laptop:mt-[-2px]" />
+                {t("settings.api.title")}
+              </span>
+            </SubNavLink>
+          )}
         </nav>
       </div>
     </div>
