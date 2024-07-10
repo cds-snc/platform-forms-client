@@ -5,6 +5,20 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.15.0](https://github.com/cds-snc/platform-forms-client/compare/v3.14.1...v3.15.0) (2024-07-10)
+
+
+### Features
+
+* off-board / exit sections ([#3934](https://github.com/cds-snc/platform-forms-client/issues/3934)) ([de5b189](https://github.com/cds-snc/platform-forms-client/commit/de5b1895395d157af0d6fb752b85c062ca90821a))
+
+
+### Bug Fixes
+
+* Change "sections" to "pages" throughout ([#3980](https://github.com/cds-snc/platform-forms-client/issues/3980)) ([4d27c99](https://github.com/cds-snc/platform-forms-client/commit/4d27c990d9d348cd7a725a927adbc8447247454e))
+* **deps:** update all patch dependencies ([#3015](https://github.com/cds-snc/platform-forms-client/issues/3015)) ([3cb2b0c](https://github.com/cds-snc/platform-forms-client/commit/3cb2b0cb8cdc70b1ca5635ea5adf5222a40421fb))
+* Offboarding content translations and tweaks for form exit ([#3977](https://github.com/cds-snc/platform-forms-client/issues/3977)) ([74c33e4](https://github.com/cds-snc/platform-forms-client/commit/74c33e4a7dc20e53dd5ca61b425078624b421d9c))
+
 ## [3.14.1](https://github.com/cds-snc/platform-forms-client/compare/v3.14.0...v3.14.1) (2024-07-05)
 
 
