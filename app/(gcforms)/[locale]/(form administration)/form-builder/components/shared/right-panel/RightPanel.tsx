@@ -60,7 +60,6 @@ const TabButton = ({
 };
 
 export const RightPanel = ({ id, lang }: { id: string; lang: Language }) => {
-  const [open, setOpen] = useState(false);
   const router = useRouter();
   const { t, i18n } = useTranslation("form-builder");
 
@@ -73,7 +72,7 @@ export const RightPanel = ({ id, lang }: { id: string; lang: Language }) => {
   }
 
   const { activePathname } = useActivePathname();
-  const { treeView } = useTreeRef();
+  const { treeView, togglePanel, open } = useTreeRef();
   const getElement = useGroupStore((s) => s.getElement);
   const hasHydrated = useRehydrate();
 
@@ -82,10 +81,13 @@ export const RightPanel = ({ id, lang }: { id: string; lang: Language }) => {
   const item = (selectedElementId && getElement(selectedElementId)) || null;
 
   useEffect(() => {
+    // Note we only want to toggle the panel open if the tree has hydrated
+    // And only once
     if (hasHydrated) {
-      setOpen(true);
+      togglePanel && togglePanel(true);
     }
-  }, [hasHydrated, setOpen]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [hasHydrated]);
 
   // Update once logic tab / screen  is implemented
   let selectedIndex = 0;
@@ -136,7 +138,7 @@ export const RightPanel = ({ id, lang }: { id: string; lang: Language }) => {
           theme="link"
           className="mr-8 mt-5 whitespace-nowrap [&_svg]:focus:fill-white"
           onClick={() => {
-            setOpen(true);
+            togglePanel && togglePanel(true);
           }}
         >
           <>
@@ -170,7 +172,7 @@ export const RightPanel = ({ id, lang }: { id: string; lang: Language }) => {
                         <button
                           type="button"
                           className="relative rounded-md bg-white text-slate-500 hover:text-slate-600 focus:ring-2 focus:ring-indigo-500"
-                          onClick={() => setOpen(false)}
+                          onClick={() => togglePanel && togglePanel(false)}
                         >
                           <span className="sr-only">{t("rightPanel.closePanel")}</span>
                           <RoundCloseIcon />
