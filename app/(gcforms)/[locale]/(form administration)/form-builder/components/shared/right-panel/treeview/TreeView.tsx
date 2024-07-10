@@ -93,7 +93,7 @@ const ControlledTree: ForwardRefRenderFunction<unknown, TreeDataProviderProps> =
   const { getTitle } = useElementTitle();
   const { autoFlowAll } = useAutoFlowIfNoCustomRules();
 
-  const newSectionText = t("groups.newSection");
+  const newSectionText = t("groups.newPage");
 
   const addSection = () => {
     const id = uuid();
@@ -295,7 +295,7 @@ const ControlledTree: ForwardRefRenderFunction<unknown, TreeDataProviderProps> =
             >
               <AddIcon
                 className="hover:fill-white focus:fill-white"
-                title={t("groups.addSection")}
+                title={t("groups.addPage")}
               />
             </Button>
           </label>
