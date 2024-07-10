@@ -2,7 +2,7 @@ import { useTranslation } from "@i18n/client";
 import { Button, Alert } from "@clientComponents/globals";
 import { Dialog, useDialogRef, Radio, TextArea } from "@formBuilder/components/shared";
 import React, { useState } from "react";
-import Select, { SingleValue } from "react-select";
+import { cn } from "@lib/utils";
 
 export const PrePublishDialog = ({
   handleClose,
@@ -53,9 +53,9 @@ export const PrePublishDialog = ({
     setDescription(event.target.value);
   }
 
-  async function onFormTypeChange(event: SingleValue<{ label: string; value: string }>) {
+  async function onFormTypeChange(event: React.ChangeEvent<HTMLSelectElement>) {
     if (event != null) {
-      setFormType(event.value);
+      setFormType(event.target.value);
     }
   }
 
@@ -165,11 +165,21 @@ export const PrePublishDialog = ({
             <p className="text-sm mb-4">{t("prePublishFormDialog.thisInformation")}</p>
             <label>{t("prePublishFormDialog.whatType")}</label>
             <div className="mb-1">
-              <Select
-                className="form-builder-dropdown mb-0 mt-0 inline-block text-black-default w-[375px] border-black border-1"
-                options={elementOptions}
+              <select
+                className={cn(
+                  "center-right-15px p-2 form-builder-dropdown my-0 inline-block min-w-[400px] text-black-default border-1 border-black"
+                )}
                 onChange={(e) => onFormTypeChange(e)}
-              />
+              >
+                <option value="" selected disabled hidden>
+                  {t("logic.choiceSelect.selectOption")}
+                </option>
+                {elementOptions.map((option) => (
+                  <option key={option.value} value={option.value}>
+                    {option.label}
+                  </option>
+                ))}
+              </select>
             </div>
             <label>{t("prePublishFormDialog.briefDesc")}</label>
             <p>
