@@ -22,7 +22,7 @@ export const ConfirmationTitle = ({ language }: { language: Language }) => {
 
       {getGroupsEnabled() && (
         <div className="mb-2 inline-block rounded-md border-1 border-slate-500 bg-slate-50 px-2 py-1 text-slate-500">
-          {t("confirmation.sectionTitle")}
+          {t("confirmation.pageTitle")}
         </div>
       )}
       <h2 className="mt-0 text-2xl text-slate-500 laptop:mt-0">
