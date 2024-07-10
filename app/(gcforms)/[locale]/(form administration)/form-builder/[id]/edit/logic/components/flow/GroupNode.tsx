@@ -96,7 +96,7 @@ export const GroupNode = (node: NodeProps) => {
               "absolute right-[-20px] top-[-20px] cursor-pointer outline-offset-8 outline-slate-800 hover:scale-125 rounded-full"
             )}
           >
-            <QuestionRuleSvg title={t("groups.editSection", { name: node.data.label.name })} />
+            <QuestionRuleSvg title={t("groups.editPage", { name: node.data.label.name })} />
           </button>
         )}
         {!node.data.children.length && <div className="min-h-[50px] min-w-[200px]"></div>}
