@@ -4,9 +4,9 @@ import * as DropdownMenu from "@radix-ui/react-dropdown-menu";
 import { ChevronDown } from "@serverComponents/icons";
 import { useTranslation } from "@i18n/client";
 import Link from "next/link";
+import { signOut } from "next-auth/react";
 import { clearTemplateStore } from "@lib/store/utils";
 import { useAccessControl } from "@lib/hooks/useAccessControl";
-import { signOut } from "next-auth/react";
 
 type YourAccountDropdownProps = {
   isAuthenticated: boolean;
