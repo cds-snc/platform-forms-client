@@ -15,6 +15,9 @@ export enum AuditLogEvent {
   ChangeSecurityAttribute = "ChangeSecurityAttribute",
   GrantFormAccess = "GrantFormAccess",
   RevokeFormAccess = "RevokeFormAccess",
+  CreateAPIKey = "CreateAPIKey",
+  RefreshAPIKey = "RefreshAPIKey",
+  DeleteAPIKey = "DeleteAPIKey",
   // Form Response Events
   DownloadResponse = "DownloadResponse",
   ConfirmResponse = "ConfirmResponse",
@@ -47,6 +50,7 @@ export type AuditLogEventStrings = keyof typeof AuditLogEvent;
 
 export enum AuditSubjectType {
   User = "User",
+  ServiceAccount = "ServiceAccount",
   Form = "Form",
   Response = "Response",
   DeliveryOption = "DeliveryOption",

@@ -2,7 +2,7 @@ import { serverTranslation } from "@i18n";
 import { Metadata } from "next";
 import { ApiKey } from "./components/client/ApiKey";
 import { authCheckAndThrow } from "@lib/actions";
-import { checkKey } from "./actions";
+import { checkKeyExists } from "./actions";
 
 export async function generateMetadata({
   params: { locale },
@@ -19,7 +19,7 @@ export default async function Page({ params: { id } }: { params: { id: string } 
   const session = await authCheckAndThrow().catch(() => null);
   if (session === null) return null;
 
-  const keyExists = await checkKey(id);
+  const keyExists = await checkKeyExists(id);
 
   return <ApiKey keyExists={keyExists} />;
 }

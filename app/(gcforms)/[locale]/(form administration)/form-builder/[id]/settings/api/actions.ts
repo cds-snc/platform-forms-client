@@ -7,6 +7,9 @@ import { logMessage } from "@lib/logger";
 import { revalidatePath } from "next/cache";
 import { getAppSetting, decryptSetting } from "@lib/appSettings";
 import { safeJSONParse } from "@lib/utils";
+import { logEvent } from "@lib/auditLogs";
+import { authCheckAndThrow } from "@lib/actions";
+import { checkUserHasTemplateOwnership } from "@lib/templates";
 
 const getAccessToken = async () => {
   const encryptedSetting = await getAppSetting("zitadelAdministrationKey");
@@ -109,7 +112,10 @@ const uploadKey = async (
 };
 
 export const deleteKey = async (templateId: string) => {
-  const { id: userId, publicKeyId } =
+  const { ability } = await authCheckAndThrow();
+  await checkUserHasTemplateOwnership(ability, templateId);
+
+  const { id: serviceAccountId, publicKeyId } =
     (await prisma.apiServiceAccount.findUnique({
       where: {
         templateId: templateId,
@@ -117,14 +123,14 @@ export const deleteKey = async (templateId: string) => {
       select: { id: true, publicKeyId: true },
     })) ?? {};
 
-  if (!userId || !publicKeyId) {
+  if (!serviceAccountId || !publicKeyId) {
     throw new Error("No Key Exists in GCForms DB");
   }
 
   const accessToken = await getAccessToken();
 
   await axios
-    .delete(`${process.env.ZITADEL_ISSUER}/management/v1/users/${userId}`, {
+    .delete(`${process.env.ZITADEL_ISSUER}/management/v1/users/${serviceAccountId}`, {
       headers: {
         Authorization: `Bearer ${accessToken}`,
         Accept: "application/json",
@@ -141,12 +147,22 @@ export const deleteKey = async (templateId: string) => {
     },
   });
 
+  logEvent(
+    ability.userID,
+    { type: "ServiceAccount" },
+    "DeleteAPIKey",
+    `User :${ability.userID} deleted service account ${serviceAccountId} `
+  );
+
   revalidatePath(
     "/app/(gcforms)/[locale]/(form administration)/form-builder/[id]/settings/api",
     "page"
   );
 };
-export const checkKey = async (templateId: string) => {
+export const checkKeyExists = async (templateId: string) => {
+  const { ability } = await authCheckAndThrow();
+  await checkUserHasTemplateOwnership(ability, templateId);
+
   const { id: userId, publicKeyId } =
     (await prisma.apiServiceAccount.findUnique({
       where: {
@@ -185,7 +201,10 @@ export const checkKey = async (templateId: string) => {
 };
 
 export const refreshKey = async (templateId: string) => {
-  const { id: userId, publicKeyId } =
+  const { ability } = await authCheckAndThrow();
+  await checkUserHasTemplateOwnership(ability, templateId);
+
+  const { id: serviceAccountId, publicKeyId } =
     (await prisma.apiServiceAccount.findUnique({
       where: {
         templateId: templateId,
@@ -193,18 +212,21 @@ export const refreshKey = async (templateId: string) => {
       select: { id: true, publicKeyId: true },
     })) ?? {};
 
-  if (!userId || !publicKeyId) {
+  if (!serviceAccountId || !publicKeyId) {
     throw new Error("No Key Exists in GCForms DB");
   }
 
   const accessToken = await getAccessToken();
   await axios
-    .delete(`${process.env.ZITADEL_ISSUER}/management/v1/users/${userId}/keys/${publicKeyId}`, {
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
-        Accept: "application/json",
-      },
-    })
+    .delete(
+      `${process.env.ZITADEL_ISSUER}/management/v1/users/${serviceAccountId}/keys/${publicKeyId}`,
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+          Accept: "application/json",
+        },
+      }
+    )
     .catch((err) => {
       logMessage.error(err);
       return null;
@@ -212,7 +234,7 @@ export const refreshKey = async (templateId: string) => {
 
   const { privateKey, publicKey } = generateKeys();
 
-  const keyId = await uploadKey(publicKey, userId, accessToken);
+  const keyId = await uploadKey(publicKey, serviceAccountId, accessToken);
   await prisma.apiServiceAccount.update({
     where: {
       templateId,
@@ -223,36 +245,54 @@ export const refreshKey = async (templateId: string) => {
     },
   });
 
-  return { type: "serviceAccount", keyId, key: privateKey, userId };
+  logEvent(
+    ability.userID,
+    { type: "ServiceAccount" },
+    "RefreshAPIKey",
+    `User :${ability.userID} refreshed API key for service account ${serviceAccountId} `
+  );
+
+  return { type: "serviceAccount", keyId, key: privateKey, userId: serviceAccountId };
 };
 
 export const createKey = async (templateId: string) => {
-  // Add code to generate key
+  const { ability } = await authCheckAndThrow();
+  await checkUserHasTemplateOwnership(ability, templateId);
 
   const accessToken = await getAccessToken();
 
-  const userId = await createUser(templateId, accessToken);
+  const serviceAccountId = await createUser(templateId, accessToken);
 
   const { privateKey, publicKey } = generateKeys();
 
-  const keyId = await uploadKey(publicKey, userId, accessToken);
+  const keyId = await uploadKey(publicKey, serviceAccountId, accessToken);
 
   await prisma.apiServiceAccount.create({
     data: {
-      id: userId,
+      id: serviceAccountId,
       publicKeyId: keyId,
       templateId,
       publicKey,
     },
   });
 
+  logEvent(
+    ability.userID,
+    { type: "ServiceAccount" },
+    "CreateAPIKey",
+    `User :${ability.userID} created API key for service account ${serviceAccountId} `
+  );
+
   revalidatePath(
     "/app/(gcforms)/[locale]/(form administration)/form-builder/[id]/settings/api",
     "page"
   );
 
-  return { type: "serviceAccount", keyId, key: privateKey, userId };
+  return { type: "serviceAccount", keyId, key: privateKey, userId: serviceAccountId };
 };
+
+// Look at possibly moving this to the browser so the GCForms System is never in possession
+// of the private key.
 
 const generateKeys = () => {
   const { privateKey, publicKey } = crypto.generateKeyPairSync("rsa", {
