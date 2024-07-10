@@ -737,7 +737,9 @@
       "title": "Raison pour laquelle vous nous contactez"
     },
     "title": "Obtenir du soutien",
-    "useThisForm": "Utilisez ce formulaire pour obtenir du soutien pour tout problème technique avec Formulaires GC.",
+    "experience": "Pour tout problème technique avec Formulaires GC, ",
+    "guidanceLink": "consultez nos guides de références",
+    "useThisForm": " ou utilisez ce formulaire pour communiquer avec notre équipe de soutien.",
     "errors": {
       "submissionError": "Il y a eu une erreur. Veuillez réessayer plus tard."
     }
@@ -910,7 +912,7 @@
         "content": "<Content>",
         "exitButton": "Retourner au départ"
       },
-    "exitPanel": {
+      "exitPanel": {
         "title1": "Section de sortie",
         "title2": "Inadmissible de continuer à remplir le formulaire",
         "description": "Les sections de sortie renvoient les utilisateurs au début du formulaire.",
@@ -927,7 +929,7 @@
         "item3": "Informations de contact pour un suivi ou pour en savoir plus sur le formulaire"
       },
       "buttonDescription": "Un bouton de sortie renvoie les personnes vers le site Web de l'organisation correspondant à l'image de marque du formulaire.",
-      "buttonLabel": "Personnalisez la destination du bouton en copiant-collant un lien plus pertinent ci-dessous :" 
+      "buttonLabel": "Personnalisez la destination du bouton en copiant-collant un lien plus pertinent ci-dessous :"
     }
   },
   "groups": {
