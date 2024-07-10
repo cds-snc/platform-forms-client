@@ -16,7 +16,7 @@ export const SectionName = ({
 
   return sectionName ? (
     <h3 className="mb-0 ml-2 block text-sm font-normal">
-      {t("logic.sectionTitle", { ns: "form-builder" })} <strong> {sectionName}</strong>
+      {t("logic.pageTitle", { ns: "form-builder" })} <strong> {sectionName}</strong>
     </h3>
   ) : null;
 };

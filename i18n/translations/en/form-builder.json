@@ -867,45 +867,45 @@
     "logic": "Logic",
     "translation": "Translations",
     "treeView": {
-      "addSection": "New section"
+      "addPage": "New page"
     },
     "loadTab": "Loaded {{tabPanelLabel}} editor"
   },
   "logic": {
     "heading": "Logic",
-    "description": "Apply conditional rules to sections with radio buttons, checkboxes, or a dropdown.",
+    "description": "Apply branching logic between form pages with questions that have radio buttons, checkboxes, or a dropdown.",
     "clear": "Remove",
-    "gotoSection": "Go to section",
+    "gotoPage": "Go to page",
     "questionTitle": "Question:",
-    "sectionTitle": "Section:",
-    "translateTitle": "Section title",
+    "pageTitle": "Page:",
+    "translateTitle": "Page title",
     "addRule": "Add rule",
     "saveRule": "Save",
-    "saveNote": "Adding and saving a rule, turns off linear autoflow between sections.",
+    "saveNote": "Adding branching turns off linear autoflow between form pages.",
     "resetRules": "Reset to linear flow",
     "resetRulesHelp": "Reset help",
-    "resetRulesDescription": "This will remove logic and reset the progression between sections to a simple linear flow, overriding any existing branching rules that were applied.",
+    "resetRulesDescription": "This will remove logic and reset the progression between pages to a simple linear flow, overriding any existing branching that were applied.",
     "toastSuccess": "Linear flow applied",
     "multiRulesWarning": {
       "text1": "The order and flow is set based on the rules applied.",
-      "text2": "Linking the sections:",
-      "text3": "To link the sections, you must remove the rules applied to form elements."
+      "text2": "Connecting pages:",
+      "text3": "To connect these pages, you must remove the rules applied to form elements."
     },
     "choiceSelect": {
       "selectOption": "Select an option",
       "catchAllOption": "For any other value"
     },
     "groupSelect": {
-      "default": "Select a section",
-      "catchAllGroup": "Pour toute autre valeur"
+      "default": "Select a page",
+      "catchAllGroup": "For remaining values"
     },
     "actionsSaved": "Actions saved",
     "legend": {
-      "section": "Apply a branching rule to a section",
-      "option": "Apply conditional rules to questions with selectable options"
+      "page": "Apply branching rules to pages",
+      "option": "Apply display rules to questions with selectable options"
     },
     "exit": {
-      "convertText": "Convert section",
+      "convertText": "Convert page",
       "checkboxLabel": "Exit the form",
       "nodeIconLabel": "Exit",
       "offboardNodeContent": {
@@ -913,9 +913,9 @@
         "exitButton": "Back to the start"
       },
       "exitPanel": {
-        "title1": "Exit section",
+        "title1": "Exit page",
         "title2": "Ineligible to continue filling out the form",
-        "description": "Exit sections link users back to the start of the form.",
+        "description": "Exit pages link people filling out the form back to the start of the form.",
         "buttonLabel": "Remove"
       }
     },
@@ -923,7 +923,7 @@
     "exitButtonElement": {
       "description": "Help people exiting your form have a path forward.",
       "list": {
-        "title": "What to include in the exit section",
+        "title": "What to include in an exit page",
         "item1": "Links to other relevant forms or web pages",
         "item2": "Next steps in the process or guidance on form requirements",
         "item3": "Contact information to follow up or learn more about the form"
@@ -933,21 +933,21 @@
     }
   },
   "groups": {
-    "newSection": "New section",
-    "sectionNameInput": "Section name",
-    "addSection": "Add section",
-    "addSectionPlaceholder": "Add a section name",
-    "treeAriaLabel": "GC Forms sections",
+    "newPage": "New page",
+    "pageNameInput": "Page name",
+    "addPage": "Add page",
+    "addPagePlaceholder": "Add a page name",
+    "treeAriaLabel": "GC Forms pages",
     "addElement": {
       "empty": {
-        "title": "Empty section",
+        "title": "Empty page",
         "text1": "No form elements have been added."
       }
     },
-    "sectionTitle": "Section title",
-    "groupDeleted": "Section deleted",
-    "editSection": "Edit section {{name}}",
-    "editRules": "Edit rules for section {{name}}",
+    "pageTitle": "Page title",
+    "groupDeleted": "Page deleted",
+    "editPage": "Edit page {{name}}",
+    "editRules": "Edit rules for page {{name}}",
     "groupSuccessfullyDeleted": "{{group}} successfully deleted",
     "privacy": {
       "beforeText": "<p>You’re responsible for understanding your department or agency's responsibilities related to personal information. If you’re unsure how to proceed, we recommend contacting your <a href=\"https://www.tbs-sct.canada.ca/ap/atip-aiprp/coord-eng.asp\" target=\"_blank\">access to information and privacy coordinator.</a></p>",
@@ -966,13 +966,13 @@
       "emptyFormElement": "Empty form question element",
       "keyboardNav": {
         "label": "Keyboard shortcuts",
-        "body": "<p className=\"mb-4\">Navigate the questions and sections using the arrow keys.</p><p><strong>Drag and drop:</strong></p>\n<ul><li>control + D to pick up an item</li><li>arrow keys to drag the item</li><li>enter key to drop the item</li></ul>"
+        "body": "<p className=\"mb-4\">Navigate the questions and pages using the arrow keys.</p><p><strong>Drag and drop:</strong></p>\n<ul><li>control + D to pick up an item</li><li>arrow keys to drag the item</li><li>enter key to drop the item</li></ul>"
       }
     }
   },
   "confirmation": {
     "title": "Your form has been submitted",
-    "sectionTitle": "Section title"
+    "pageTitle": "Page title"
   },
   "next": "Continue",
   "skipLink": {

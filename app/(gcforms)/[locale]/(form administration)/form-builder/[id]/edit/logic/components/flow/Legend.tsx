@@ -11,7 +11,7 @@ export const Legend = async ({ lang }: { lang: Language }) => {
         <span className="inline-block pr-4">
           <LogicSectionArrowIcon />
         </span>
-        {t("logic.legend.section")}
+        {t("logic.legend.page")}
       </div>
       <div className="text-base italic">
         <span className="inline-block pr-4">
