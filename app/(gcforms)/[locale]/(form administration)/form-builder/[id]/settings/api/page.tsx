@@ -1,8 +1,10 @@
 import { serverTranslation } from "@i18n";
 import { Metadata } from "next";
 import { ApiKey } from "./components/client/ApiKey";
-import { authCheckAndThrow } from "@lib/actions";
+import { authCheckAndRedirect } from "@lib/actions";
 import { checkKeyExists } from "./actions";
+import { checkOne } from "@lib/cache/flags";
+import { redirect } from "next/navigation";
 
 export async function generateMetadata({
   params: { locale },
@@ -15,9 +17,14 @@ export async function generateMetadata({
   };
 }
 
-export default async function Page({ params: { id } }: { params: { id: string } }) {
-  const session = await authCheckAndThrow().catch(() => null);
-  if (session === null) return null;
+export default async function Page({
+  params: { id, locale },
+}: {
+  params: { id: string; locale: string };
+}) {
+  await authCheckAndRedirect();
+  const flag = await checkOne("zitadelAuth");
+  if (!flag) redirect(`/${locale}/form-builder/${id}/settings`);
 
   const keyExists = await checkKeyExists(id);
 
