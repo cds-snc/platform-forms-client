@@ -36,6 +36,7 @@ import { Language } from "@lib/types/form-builder-types";
 import { isTitleElementType } from "./util/itemType";
 import { useAutoFlowIfNoCustomRules } from "@lib/hooks/useAutoFlowAll";
 import { useTemplateStore } from "@lib/store/useTemplateStore";
+import { useUpdateGroupLayout } from "./util/useUpdateGroupLayout";
 
 export interface TreeDataProviderProps {
   children?: ReactElement;
@@ -92,6 +93,7 @@ const ControlledTree: ForwardRefRenderFunction<unknown, TreeDataProviderProps> =
 
   const { getTitle } = useElementTitle();
   const { autoFlowAll } = useAutoFlowIfNoCustomRules();
+  const { updateGroupsLayout } = useUpdateGroupLayout();
 
   const newSectionText = t("groups.newSection");
 
@@ -104,6 +106,8 @@ const ControlledTree: ForwardRefRenderFunction<unknown, TreeDataProviderProps> =
     setExpandedItems([id]);
     setId(id);
     tree?.current?.startRenamingItem(id);
+
+    updateGroupsLayout();
   };
 
   useImperativeHandle(ref, () => ({
@@ -111,16 +115,19 @@ const ControlledTree: ForwardRefRenderFunction<unknown, TreeDataProviderProps> =
       const parent = findParentGroup(getTreeData(), id);
       setExpandedItems([parent?.index as TreeItemIndex]);
       setSelectedItems([id]);
+      updateGroupsLayout();
     },
     updateItem: (id: string) => {
       const parent = findParentGroup(getTreeData(), id);
       setExpandedItems([parent?.index as TreeItemIndex]);
       setSelectedItems([id]);
+      updateGroupsLayout();
     },
     removeItem: (id: string) => {
       const parent = findParentGroup(getTreeData(), id);
       setExpandedItems([parent?.index as TreeItemIndex]);
       setSelectedItems([parent?.index as TreeItemIndex]);
+      updateGroupsLayout();
     },
   }));
 
@@ -136,8 +143,6 @@ const ControlledTree: ForwardRefRenderFunction<unknown, TreeDataProviderProps> =
     openDialog: openConfirmDeleteDialog,
     setOpenDialog: setOpenConfirmDeleteDialog,
   } = useConfirmDeleteDialogState();
-
-  const setGroupsLayout = useTemplateStore((s) => s.setGroupsLayout);
 
   const items = getTreeData({
     addIntroElement: true,
@@ -181,6 +186,9 @@ const ControlledTree: ForwardRefRenderFunction<unknown, TreeDataProviderProps> =
                       <p>{t("groups.groupSuccessfullyDeleted", { group: item.data.name })}</p>
                     </>
                   );
+
+                  updateGroupsLayout();
+
                   return;
                 }
                 setOpenConfirmDeleteDialog(false);
@@ -261,15 +269,7 @@ const ControlledTree: ForwardRefRenderFunction<unknown, TreeDataProviderProps> =
             autoFlowAll
           );
 
-          // add a delay to allow the tree to update
-          setTimeout(() => {
-            const rootItems = environment?.current?.items.root.children as string[];
-            if (rootItems) {
-              setGroupsLayout(
-                rootItems.filter((item) => item !== "start" && item !== "review" && item !== "end")
-              );
-            }
-          }, 3000);
+          updateGroupsLayout();
         }}
         onFocusItem={(item) => {
           setFocusedItem(item.index);

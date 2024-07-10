@@ -16,7 +16,7 @@ export const GroupOutput = () => {
   const formValues = getValues();
 
   const groupLayoutNames = schema.groupLayout
-    ? schema.groupLayout.map((id: string) => schema.groups[id].name)
+    ? schema.groupLayout.map((id: string) => schema.groups[id]?.name)
     : [];
 
   return (
@@ -30,7 +30,10 @@ export const GroupOutput = () => {
         Current Group = {currentGroup}
         <br />
         Previous Group = {previousGroup}
+        <br />
         Group Layout = {JSON.stringify(groupLayoutNames, null, 2)}
+        <br />
+        {JSON.stringify(schema.groupLayout, null, 2)}
         <br />
         Group History = {JSON.stringify(getGroupHistory(), null, 2)}
         <br />
