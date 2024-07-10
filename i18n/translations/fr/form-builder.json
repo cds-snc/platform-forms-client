@@ -737,9 +737,9 @@
       "title": "Raison pour laquelle vous nous contactez"
     },
     "title": "Obtenir du soutien",
-    "experience": "Pour tout problème technique avec Formulaires GC, ",
-    "guidanceLink": "consultez nos guides de références",
-    "useThisForm": " ou utilisez ce formulaire pour communiquer avec notre équipe de soutien.",
+    "experience": "Explorer nos ",
+    "guidanceLink": "guides de références",
+    "useThisForm": " ou obtenez du soutien de notre équipe en remplissant ce formulaire.",
     "errors": {
       "submissionError": "Il y a eu une erreur. Veuillez réessayer plus tard."
     }
