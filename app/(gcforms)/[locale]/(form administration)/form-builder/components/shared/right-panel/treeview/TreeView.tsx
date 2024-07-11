@@ -139,7 +139,7 @@ const ControlledTree: ForwardRefRenderFunction<unknown, TreeDataProviderProps> =
     setOpenDialog: setOpenConfirmDeleteDialog,
   } = useConfirmDeleteDialogState();
 
-  const items = getTreeData(false, {
+  const items = getTreeData({
     addIntroElement: true,
     addPolicyElement: true,
     addConfirmationElement: true,

@@ -21,7 +21,7 @@ export interface GroupStoreState extends GroupStoreProps {
   deleteGroup: (id: string) => void;
   replaceGroups: (groups: GroupsType) => void;
   getGroups: () => GroupsType | undefined;
-  getTreeData: (useGroupsLayout?: boolean, options?: TreeDataOptions) => TreeItems;
+  getTreeData: (options?: TreeDataOptions) => TreeItems;
   updateGroup: (parent: TreeItemIndex, children: TreeItemIndex[] | undefined) => void;
   findParentGroup: (id: string) => TreeItem | undefined;
   findNextGroup: (id: string) => TreeItem | undefined;
