@@ -18,6 +18,7 @@ import { TreeItemIndex } from "react-complex-tree";
 import { autoFlowAllNextActions } from "../util/setNextAction";
 import { setGroupNextAction } from "../util/setNextAction";
 import { localizeField } from "@lib/utils/form-builder/itemHelper";
+import { orderGroups } from "../util/orderUsingGroupsLayout";
 
 const createGroupStore = (initProps?: Partial<GroupStoreProps>) => {
   const DEFAULT_PROPS: GroupStoreProps = {
@@ -109,8 +110,13 @@ const createGroupStore = (initProps?: Partial<GroupStoreProps>) => {
         }
       },
       getGroups: () => get().templateStore.getState().form.groups,
-      getTreeData: (options: TreeDataOptions = {}) => {
-        const formGroups = get().templateStore.getState().form.groups;
+      getTreeData: (useGroupsLayout = false, options: TreeDataOptions = {}) => {
+        let formGroups = get().templateStore.getState().form.groups;
+        const groupsLayout = get().templateStore.getState().form.groupsLayout;
+
+        if (useGroupsLayout && formGroups && groupsLayout) {
+          formGroups = orderGroups(formGroups, groupsLayout);
+        }
 
         if (!formGroups) return {};
 

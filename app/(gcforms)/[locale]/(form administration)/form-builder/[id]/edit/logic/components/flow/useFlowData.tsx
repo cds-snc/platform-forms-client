@@ -119,7 +119,7 @@ const getEdges = (
 
 export const useFlowData = (lang: Language = "en") => {
   const getTreeData = useGroupStore((s) => s.getTreeData);
-  const treeItems = getTreeData();
+  const treeItems = getTreeData(true);
   const formGroups = useTemplateStore((s) => s.form.groups);
   const startElements = getStartElements(lang);
   const reviewNode = getReviewNode(lang);
