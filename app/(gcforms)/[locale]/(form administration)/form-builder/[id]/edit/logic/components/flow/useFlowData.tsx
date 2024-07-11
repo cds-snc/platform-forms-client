@@ -159,7 +159,7 @@ export const useFlowData = (lang: Language = "en") => {
 
       const newEdges = getEdges(key as string, prevNodeId, group, formGroups);
 
-      const titleKey = lang === "en" ? "titleEn" : "titleFr";
+      const titleKey = "name" as keyof typeof treeItem.data;
 
       const isOffBoardSection = treeItem.data.nextAction === "exit";
 
@@ -191,7 +191,7 @@ export const useFlowData = (lang: Language = "en") => {
     nodes.push({ ...endNode });
 
     return { edges, nodes };
-  }, [treeItems, reviewNode, endNode, formGroups, lang, startElements]);
+  }, [treeItems, reviewNode, endNode, formGroups, startElements]);
 
   const { edges, nodes } = getData();
 
