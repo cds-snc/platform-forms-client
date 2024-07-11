@@ -114,7 +114,7 @@ const createGroupStore = (initProps?: Partial<GroupStoreProps>) => {
         let formGroups = get().templateStore.getState().form.groups;
         const groupsLayout = get().templateStore.getState().form.groupsLayout;
 
-        if (useGroupsLayout && formGroups && groupsLayout) {
+        if (useGroupsLayout && formGroups && groupsLayout && groupsLayout.length > 0) {
           formGroups = orderGroups(formGroups, groupsLayout);
         }
 

@@ -163,7 +163,7 @@ const ControlledTree: ForwardRefRenderFunction<unknown, TreeDataProviderProps> =
       <ControlledTreeEnvironment
         ref={environment}
         items={items}
-        getItemTitle={(item) => getTitle(item.data as ElementProperties)}
+        getItemTitle={(item) => getTitle(item?.data as ElementProperties)}
         renderItem={({ item, title, arrow, context, children }) => {
           return (
             <Item
@@ -303,10 +303,7 @@ const ControlledTree: ForwardRefRenderFunction<unknown, TreeDataProviderProps> =
               className="p-0 hover:!bg-indigo-500 hover:!fill-white focus:!fill-white"
               onClick={addSection}
             >
-              <AddIcon
-                className="hover:fill-white focus:fill-white"
-                title={t("groups.addPage")}
-              />
+              <AddIcon className="hover:fill-white focus:fill-white" title={t("groups.addPage")} />
             </Button>
           </label>
           <KeyboardNavTip />
