@@ -1,5 +1,5 @@
-import { orderGroups } from "@formBuilder/components/shared/right-panel/treeview/util/orderUsingGroupsLayout";
 import { GroupsType } from "@lib/formContext";
+import { orderGroups } from "@lib/utils/form-builder/orderUsingGroupsLayout";
 
 describe("orderGroups function", () => {
   it("Returns empty object", () => {

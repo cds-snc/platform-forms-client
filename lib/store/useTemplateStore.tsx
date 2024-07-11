@@ -41,6 +41,7 @@ import { FormElementTypes } from "@lib/types";
 import { defaultField, defaultForm } from "./defaults";
 import { storage } from "./storage";
 import { clearTemplateStorage } from "./utils";
+import { orderGroups } from "@lib/utils/form-builder/orderUsingGroupsLayout";
 
 const createTemplateStore = (initProps?: Partial<InitialTemplateStoreProps>) => {
   const DEFAULT_PROPS: TemplateStoreProps = {
@@ -68,6 +69,10 @@ const createTemplateStore = (initProps?: Partial<InitialTemplateStoreProps>) => 
       ...defaultForm,
       ...initProps?.form,
     };
+  }
+
+  if (initProps?.form?.groupsLayout && initProps?.form.groups) {
+    initProps.form.groups = orderGroups(initProps.form.groups, initProps.form.groupsLayout);
   }
 
   return createStore<TemplateStoreState>()(
