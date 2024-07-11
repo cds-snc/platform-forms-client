@@ -120,7 +120,7 @@ const ControlledTree: ForwardRefRenderFunction<unknown, TreeDataProviderProps> =
       setSelectedItems([id]);
     },
     removeItem: (id: string) => {
-      const parent = findParentGroup(getTreeData(false), id);
+      const parent = findParentGroup(getTreeData(), id);
       setExpandedItems([parent?.index as TreeItemIndex]);
       setSelectedItems([parent?.index as TreeItemIndex]);
     },
@@ -139,7 +139,7 @@ const ControlledTree: ForwardRefRenderFunction<unknown, TreeDataProviderProps> =
     setOpenDialog: setOpenConfirmDeleteDialog,
   } = useConfirmDeleteDialogState();
 
-  const items = getTreeData(true, {
+  const items = getTreeData(false, {
     addIntroElement: true,
     addPolicyElement: true,
     addConfirmationElement: true,
