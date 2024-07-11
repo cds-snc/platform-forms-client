@@ -415,7 +415,7 @@ const createTemplateStore = (initProps?: Partial<InitialTemplateStoreProps>) => 
             getGroupsEnabled: () => get().allowGroupsFlag,
             setGroupsLayout: (layout) => {
               set((state) => {
-                state.form.groupLayout = layout;
+                state.form.groupsLayout = layout;
               });
             },
           }),
