@@ -45,7 +45,9 @@ export interface TreeDataProviderProps {
   removeItem: (id: string) => void;
 }
 
-const NamedGroupLayout = () => {
+const debug = false;
+
+const DebugNamedGroupLayout = () => {
   const groupsLayout = useTemplateStore((s) => s.form.groupsLayout);
   const groups = useTemplateStore((s) => s.form.groups);
 
@@ -179,7 +181,8 @@ const ControlledTree: ForwardRefRenderFunction<unknown, TreeDataProviderProps> =
         updateGroupsLayout();
       }}
     >
-      <NamedGroupLayout />
+      {/* @todo remove this once the groupsLayout has been tested further */}
+      {debug && <DebugNamedGroupLayout />}
 
       <ControlledTreeEnvironment
         ref={environment}

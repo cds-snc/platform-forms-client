@@ -69,9 +69,7 @@ const createTemplateStore = (initProps?: Partial<InitialTemplateStoreProps>) => 
       ...defaultForm,
       ...initProps?.form,
     };
-  }
 
-  if (initProps?.form?.groupsLayout && initProps?.form.groups) {
     initProps.form.groups = orderGroups(initProps.form.groups, initProps.form.groupsLayout);
   }
 
@@ -390,6 +388,8 @@ const createTemplateStore = (initProps?: Partial<InitialTemplateStoreProps>) => 
                 state.lang = language as Language;
                 state.translationLanguagePriority = language as Language;
                 state.form = initializeGroups({ ...defaultForm }, allowGroups);
+                // Ensure order by groups layout
+                state.form.groups = orderGroups(state.form.groups, state.form.groupsLayout);
                 state.isPublished = false;
                 state.name = "";
                 state.deliveryOption = undefined;
@@ -406,6 +406,8 @@ const createTemplateStore = (initProps?: Partial<InitialTemplateStoreProps>) => 
                 state.id = "";
                 state.lang = "en";
                 state.form = initializeGroups({ ...defaultForm, ...jsonConfig }, allowGroups);
+                // Ensure order by groups layout
+                state.form.groups = orderGroups(state.form.groups, state.form.groupsLayout);
                 state.isPublished = false;
                 state.name = "";
                 state.securityAttribute = "Protected A";

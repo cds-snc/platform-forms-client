@@ -1,6 +1,6 @@
 import { GroupsType } from "@lib/formContext";
 
-export const orderGroups = (groups: GroupsType, groupsLayout: string[]) => {
+export const orderGroups = (groups?: GroupsType, groupsLayout?: string[]) => {
   if (!groupsLayout || groupsLayout.length <= 0 || !groups) {
     return groups;
   }
@@ -8,7 +8,7 @@ export const orderGroups = (groups: GroupsType, groupsLayout: string[]) => {
   const groupsWithLayout = {} as GroupsType;
 
   if (groups.start) {
-    // groupsWithLayout.start = groups.start;
+    groupsWithLayout.start = groups.start;
   }
 
   // Set group properties in the order of the groupsLayout
