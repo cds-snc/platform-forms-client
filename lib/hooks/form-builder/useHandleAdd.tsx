@@ -52,7 +52,7 @@ export const useHandleAdd = () => {
 
       // Close all panel menus
       const closeAll = new CustomEvent("close-all-panel-menus");
-      window.dispatchEvent(closeAll);
+      window && window.dispatchEvent(closeAll);
 
       if (!el) return;
       el?.focus();
