@@ -5,6 +5,34 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.15.0](https://github.com/cds-snc/platform-forms-client/compare/v3.14.1...v3.15.0) (2024-07-10)
+
+
+### Features
+
+* off-board / exit sections ([#3934](https://github.com/cds-snc/platform-forms-client/issues/3934)) ([de5b189](https://github.com/cds-snc/platform-forms-client/commit/de5b1895395d157af0d6fb752b85c062ca90821a))
+
+
+### Bug Fixes
+
+* Change "sections" to "pages" throughout ([#3980](https://github.com/cds-snc/platform-forms-client/issues/3980)) ([4d27c99](https://github.com/cds-snc/platform-forms-client/commit/4d27c990d9d348cd7a725a927adbc8447247454e))
+* **deps:** update all patch dependencies ([#3015](https://github.com/cds-snc/platform-forms-client/issues/3015)) ([3cb2b0c](https://github.com/cds-snc/platform-forms-client/commit/3cb2b0cb8cdc70b1ca5635ea5adf5222a40421fb))
+* Offboarding content translations and tweaks for form exit ([#3977](https://github.com/cds-snc/platform-forms-client/issues/3977)) ([74c33e4](https://github.com/cds-snc/platform-forms-client/commit/74c33e4a7dc20e53dd5ca61b425078624b421d9c))
+
+## [3.14.1](https://github.com/cds-snc/platform-forms-client/compare/v3.14.0...v3.14.1) (2024-07-05)
+
+
+### Bug Fixes
+
+* Add key for next action ([#3956](https://github.com/cds-snc/platform-forms-client/issues/3956)) ([349d4aa](https://github.com/cds-snc/platform-forms-client/commit/349d4aa7a444b5a8a79fc6e284c6c086376e03d6))
+* adds an empty question label ([#3941](https://github.com/cds-snc/platform-forms-client/issues/3941)) ([6099d83](https://github.com/cds-snc/platform-forms-client/commit/6099d839cf0e508adf63b446f8505b4821d8a03a))
+* Email Delivery Component was mistakenly async ([#3961](https://github.com/cds-snc/platform-forms-client/issues/3961)) ([84f0b1c](https://github.com/cds-snc/platform-forms-client/commit/84f0b1c15387e0934ba113bc43be19c29594ccf0))
+* Fix placeholder for empty page text in tree view ([#3919](https://github.com/cds-snc/platform-forms-client/issues/3919)) ([596ac68](https://github.com/cds-snc/platform-forms-client/commit/596ac68de0ee45a672a07e84b1d66f3abb426855))
+* Fixes a server client boundary error ([#3917](https://github.com/cds-snc/platform-forms-client/issues/3917)) ([877d3af](https://github.com/cds-snc/platform-forms-client/commit/877d3afdf378cd956d9fd325d02d8dac9caa7f48))
+* nested check for response  ([#3924](https://github.com/cds-snc/platform-forms-client/issues/3924)) ([c489c1b](https://github.com/cds-snc/platform-forms-client/commit/c489c1b0fc4623de6744a0f4de0fd49b3eb497f9))
+* Permissions on Admin pages ([#3959](https://github.com/cds-snc/platform-forms-client/issues/3959)) ([9e129b3](https://github.com/cds-snc/platform-forms-client/commit/9e129b35838fb003a7d5a742a1c31988814ca0d6))
+* Reset locked groups ([#3953](https://github.com/cds-snc/platform-forms-client/issues/3953)) ([ff522dc](https://github.com/cds-snc/platform-forms-client/commit/ff522dca761dc2c9cdf3a6207e9f589653070fb6))
+
 ## [3.14.0](https://github.com/cds-snc/platform-forms-client/compare/v3.13.0...v3.14.0) (2024-07-02)
 
 

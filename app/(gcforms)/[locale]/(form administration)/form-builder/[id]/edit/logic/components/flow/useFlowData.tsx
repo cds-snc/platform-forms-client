@@ -159,13 +159,19 @@ export const useFlowData = (lang: Language = "en") => {
 
       const newEdges = getEdges(key as string, prevNodeId, group, formGroups);
 
-      const titleKey = lang === "en" ? "titleEn" : "titleFr";
+      const titleKey = "name" as keyof typeof treeItem.data;
+
+      const isOffBoardSection = treeItem.data.nextAction === "exit";
 
       const flowNode = {
         id: key as string,
         position: { x: x_pos, y: y_pos },
-        data: { label: treeItem.data[titleKey], children: elements },
-        type: "groupNode",
+        data: {
+          label: treeItem.data[titleKey],
+          children: elements,
+          nextAction: treeItem.data.nextAction,
+        },
+        type: isOffBoardSection ? "offboardNode" : "groupNode",
       };
 
       edges.push(...(newEdges as CustomEdge[]));
@@ -185,7 +191,7 @@ export const useFlowData = (lang: Language = "en") => {
     nodes.push({ ...endNode });
 
     return { edges, nodes };
-  }, [treeItems, reviewNode, endNode, formGroups, lang, startElements]);
+  }, [treeItems, reviewNode, endNode, formGroups, startElements]);
 
   const { edges, nodes } = getData();
 

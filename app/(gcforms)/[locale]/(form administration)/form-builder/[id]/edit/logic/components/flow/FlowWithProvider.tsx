@@ -25,6 +25,7 @@ import "reactflow/dist/style.css";
 import useAutoLayout from "./useAutoLayout";
 import { useFlowData } from "./useFlowData";
 import { GroupNode } from "./GroupNode";
+import { OffboardNode } from "./OffboardNode";
 import { layoutOptions } from "./options";
 import { edgeOptions } from "./options";
 
@@ -32,7 +33,7 @@ import { useFlowRef } from "./provider/FlowRefProvider";
 import { useRehydrate } from "@lib/store/useTemplateStore";
 import { Language } from "@lib/types/form-builder-types";
 
-const nodeTypes = { groupNode: GroupNode };
+const nodeTypes = { groupNode: GroupNode, offboardNode: OffboardNode };
 import { Edge } from "reactflow";
 
 import { Loader } from "@clientComponents/globals/Loader";
@@ -51,7 +52,7 @@ export interface FlowProps {
 
 const Flow: ForwardRefRenderFunction<unknown, FlowProps> = ({ children, lang }, ref) => {
   const { nodes: flowNodes, edges: flowEdges, getData } = useFlowData(lang);
-  const [nodes, , onNodesChange] = useNodesState(flowNodes);
+  const [nodes, setNodes, onNodesChange] = useNodesState(flowNodes);
   const [, setEdges, onEdgesChange] = useEdgesState(flowEdges as Edge[]);
   const { fitView } = useReactFlow();
   const reset = useRef(false);
@@ -95,8 +96,9 @@ const Flow: ForwardRefRenderFunction<unknown, FlowProps> = ({ children, lang }, 
     },
     redraw: () => {
       reset.current = true;
-      const { edges } = getData();
+      const { edges, nodes } = getData();
       setEdges(edges as Edge[]);
+      setNodes(nodes);
       setRedrawing(true);
       const reLayout = async () => {
         await runLayout();

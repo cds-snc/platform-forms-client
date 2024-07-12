@@ -54,6 +54,9 @@ const createTemplateStore = (initProps?: Partial<InitialTemplateStoreProps>) => 
     name: "",
     securityAttribute: "Protected A",
     formPurpose: "",
+    publishReason: "",
+    publishFormType: "",
+    publishDesc: "",
     closingDate: initProps?.closingDate,
     changeKey: String(new Date().getTime()),
     allowGroupsFlag: initProps?.allowGroupsFlag || false,
@@ -385,7 +388,10 @@ const createTemplateStore = (initProps?: Partial<InitialTemplateStoreProps>) => 
                 state.name = "";
                 state.deliveryOption = undefined;
                 state.formPurpose = "";
-                state.closingDate = null;
+                (state.publishReason = ""),
+                  (state.publishFormType = ""),
+                  (state.publishDesc = ""),
+                  (state.closingDate = null);
               });
             },
             importTemplate: async (jsonConfig) => {
@@ -399,7 +405,10 @@ const createTemplateStore = (initProps?: Partial<InitialTemplateStoreProps>) => 
                 state.securityAttribute = "Protected A";
                 state.deliveryOption = undefined;
                 state.formPurpose = "";
-                state.closingDate = null;
+                (state.publishReason = ""),
+                  (state.publishFormType = ""),
+                  (state.publishDesc = ""),
+                  (state.closingDate = null);
               });
             },
             getGroupsEnabled: () => get().allowGroupsFlag,
