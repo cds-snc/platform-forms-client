@@ -119,6 +119,7 @@ export interface FormProperties {
   closedMessage?: Record<string, string>;
   layout: number[];
   groups?: GroupsType;
+  groupsLayout?: string[];
   elements: FormElement[];
   brand?: BrandProperties;
   formPurpose?: string;

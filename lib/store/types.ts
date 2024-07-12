@@ -73,6 +73,7 @@ export interface TemplateStoreState extends TemplateStoreProps {
   removeChoiceFromRules: (elIndex: number, choiceIndex: number) => void;
   setChangeKey: (key: string) => void;
   getGroupsEnabled: () => boolean;
+  setGroupsLayout: (layout: string[]) => void;
 }
 
 export interface InitialTemplateStoreProps extends TemplateStoreProps {

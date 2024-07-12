@@ -49,7 +49,13 @@ export const useHandleAdd = () => {
       treeView?.current?.addItem(String(id));
 
       const el = document.getElementById(`item-${id}`);
+
       if (!el) return;
+
+      // Close all panel menus before focussing on the new element
+      const closeAll = new CustomEvent("close-all-panel-menus");
+      window && window.dispatchEvent(closeAll);
+
       el?.focus();
     },
     [add, create, groupId, treeView]

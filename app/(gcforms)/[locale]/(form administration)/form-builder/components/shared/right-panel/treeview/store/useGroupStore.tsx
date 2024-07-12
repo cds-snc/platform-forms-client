@@ -111,8 +111,10 @@ const createGroupStore = (initProps?: Partial<GroupStoreProps>) => {
       getGroups: () => get().templateStore.getState().form.groups,
       getTreeData: (options: TreeDataOptions = {}) => {
         const formGroups = get().templateStore.getState().form.groups;
-        const elements = get().templateStore.getState().form.elements;
         if (!formGroups) return {};
+
+        const elements = get().templateStore.getState().form.elements;
+
         return groupsToTreeData(formGroups, elements, options);
       },
       getElementsGroupById: (id: string) => {
