@@ -19,5 +19,6 @@ export const getRedisInstance = async (): Promise<Redis> => {
 
 // If there is a Redis URL configured instantiate the connection
 if (process.env.REDIS_URL) {
-  getRedisInstance().then((redis) => (redisConnection = redis));
+  // No need to set the client to the variable, as it is already set in the function
+  getRedisInstance();
 }
