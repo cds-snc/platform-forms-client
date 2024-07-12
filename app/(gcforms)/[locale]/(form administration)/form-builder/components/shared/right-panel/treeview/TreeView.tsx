@@ -45,6 +45,25 @@ export interface TreeDataProviderProps {
   removeItem: (id: string) => void;
 }
 
+const NamedGroupLayout = () => {
+  const groupsLayout = useTemplateStore((s) => s.form.groupsLayout);
+  const groups = useTemplateStore((s) => s.form.groups);
+
+  if (!groups) {
+    return null;
+  }
+  const groupLayoutNames = groupsLayout
+    ? groupsLayout
+        .map((id: string) => groups[id]?.name)
+        .filter(Boolean)
+        .map((name, i) => {
+          return <div key={i}>{name}</div>;
+        })
+    : [];
+
+  return groupLayoutNames;
+};
+
 const ControlledTree: ForwardRefRenderFunction<unknown, TreeDataProviderProps> = (
   { children },
   ref
@@ -160,6 +179,8 @@ const ControlledTree: ForwardRefRenderFunction<unknown, TreeDataProviderProps> =
         updateGroupsLayout();
       }}
     >
+      <NamedGroupLayout />
+
       <ControlledTreeEnvironment
         ref={environment}
         items={items}
@@ -255,7 +276,7 @@ const ControlledTree: ForwardRefRenderFunction<unknown, TreeDataProviderProps> =
           setSelectedItems([item.index]);
         }}
         onDrop={async (items: TreeItem[], target: DraggingPosition) => {
-          handleOnDrop(
+          await handleOnDrop(
             items,
             target,
             getGroups,
@@ -268,6 +289,8 @@ const ControlledTree: ForwardRefRenderFunction<unknown, TreeDataProviderProps> =
             setOpenConfirmMoveDialog,
             autoFlowAll
           );
+
+          updateGroupsLayout();
         }}
         onFocusItem={(item) => {
           setFocusedItem(item.index);
