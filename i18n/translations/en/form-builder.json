@@ -737,7 +737,9 @@
       "title": "Reason for reaching out"
     },
     "title": "Get support",
-    "useThisForm": "Use this form if you experience technical issues with GC Forms.",
+    "experience": "Explore our ",
+    "guidanceLink": "guidance articles",
+    "useThisForm": " or get technical help from our team through this form.",
     "errors": {
       "submissionError": "Something went wrong. Please try again later."
     }
