@@ -50,11 +50,12 @@ export const useHandleAdd = () => {
 
       const el = document.getElementById(`item-${id}`);
 
-      // Close all panel menus
+      if (!el) return;
+
+      // Close all panel menus before focussing on the new element
       const closeAll = new CustomEvent("close-all-panel-menus");
       window && window.dispatchEvent(closeAll);
 
-      if (!el) return;
       el?.focus();
     },
     [add, create, groupId, treeView]
