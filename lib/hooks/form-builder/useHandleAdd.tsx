@@ -49,6 +49,11 @@ export const useHandleAdd = () => {
       treeView?.current?.addItem(String(id));
 
       const el = document.getElementById(`item-${id}`);
+
+      // Close all panel menus
+      const closeAll = new CustomEvent("close-all-panel-menus");
+      window.dispatchEvent(closeAll);
+
       if (!el) return;
       el?.focus();
     },
