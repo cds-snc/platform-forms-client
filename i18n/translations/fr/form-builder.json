@@ -912,7 +912,7 @@
         "content": "<Content>",
         "exitButton": "Retourner au départ"
       },
-    "exitPanel": {
+      "exitPanel": {
         "title1": "Page de sortie",
         "title2": "Inadmissible de continuer à remplir le formulaire",
         "description": "Les pages de sortie renvoient les personnes qui remplissent le formulaire au début du formulaire.",
@@ -930,12 +930,19 @@
       },
       "buttonDescription": "Un bouton de sortie renvoie les personnes vers le site Web de l'organisation correspondant à l'image de marque du formulaire.",
       "buttonLabel": "Personnalisez la destination du bouton en copiant-collant un lien plus pertinent ci-dessous :"
+    },
+    "noPages": {
+      "text1": "Add a <strong>New Page</strong> from the [FR]",
+      "text2": "Questions Tab [FR]",
+      "text3": "before adding a branch. [FR]"
     }
   },
   "groups": {
     "newPage": "Nouvelle page",
     "pageNameInput": "Nom de la page",
     "addPage": "Ajouter une page",
+    "addNewPage": "Add a new page [FR]",
+    "addBranch": "Add a branch [FR]",
     "treeAriaLabel": "Pages Formulaires GC",
     "addPagePlaceholder": "Ajouter un nom à la page",
     "addElement": {

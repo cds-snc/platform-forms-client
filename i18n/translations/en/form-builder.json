@@ -930,12 +930,19 @@
       },
       "buttonDescription": "An exit button takes people to the organization website corresponding to the branding of the form.",
       "buttonLabel": "Customize the button destination by copy-pasting a more relevant link below:"
+    },
+    "noPages": {
+      "text1": "Add a <strong>New Page</strong> from the",
+      "text2": "Questions Tab",
+      "text3": "before adding a branch."
     }
   },
   "groups": {
     "newPage": "New page",
     "pageNameInput": "Page name",
     "addPage": "Add page",
+    "addNewPage": "Add a new page",
+    "addBranch": "Add a branch",
     "addPagePlaceholder": "Add a page name",
     "treeAriaLabel": "GC Forms pages",
     "addElement": {
