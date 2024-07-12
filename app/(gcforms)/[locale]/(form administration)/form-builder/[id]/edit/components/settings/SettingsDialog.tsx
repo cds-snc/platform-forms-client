@@ -155,7 +155,7 @@ export const SettingsDialog = ({
         return;
       }
 
-      const formConfig = safeJSONParse(getSchema()) as FormProperties;
+      const formConfig = safeJSONParse<FormProperties>(getSchema());
       if (!formConfig) {
         toast.error(<ErrorSaving />, "wide");
         return;
@@ -329,8 +329,8 @@ export const SettingsDialog = ({
 
     updateSecurityAttribute(classificationValue);
 
-    const formConfig = safeJSONParse(getSchema());
-    if (formConfig.error) {
+    const formConfig = safeJSONParse<FormProperties>(getSchema());
+    if (!formConfig) {
       handleClose();
       toast.error(<ErrorSaving errorCode={FormServerErrorCodes.JSON_PARSE} />, "wide");
       return;

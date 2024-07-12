@@ -27,15 +27,15 @@ export function dateHasPast(timestamp: number) {
   return false;
 }
 
-export function safeJSONParse<T>(json: string): T | undefined {
+export function safeJSONParse<T>(...args: Parameters<typeof JSON.parse>): T | undefined {
   try {
-    return JSON.parse(json);
+    return JSON.parse(...args);
   } catch (e) {
     // Note: SyntaxError is the only error thrown by JSON.parse(). More info on specific errors:
     // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Errors/JSON_bad_parse
 
     // Why not just throw the error? NextJS will give an error about a non plain-object crossing
     // the server/client boundary.
-    return;
+    return undefined;
   }
 }

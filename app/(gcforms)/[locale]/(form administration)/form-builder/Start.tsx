@@ -8,6 +8,7 @@ import Link from "next/link";
 import { useTemplateStore } from "@lib/store/useTemplateStore";
 import { clearTemplateStore } from "@lib/store/utils";
 import { safeJSONParse } from "@lib/utils";
+import { FormProperties, FormRecord } from "@lib/types";
 
 export const Start = () => {
   const {
@@ -42,13 +43,13 @@ export const Start = () => {
       fileReader.onload = (e) => {
         if (!e.target || !e.target.result || typeof e.target.result !== "string") return;
         const data = safeJSONParse(e.target.result, cleaner);
-        if (data?.error) {
+        if (!data) {
           setErrors([{ message: t("startErrorParse") }]);
           target.value = "";
           return;
         }
 
-        const validationResult = validateTemplate(data);
+        const validationResult = validateTemplate(data as FormRecord);
 
         if (!validationResult.valid) {
           setErrors(validationResult.errors);
@@ -56,7 +57,7 @@ export const Start = () => {
           return;
         }
 
-        importTemplate(data);
+        importTemplate(data as FormProperties);
 
         window.dataLayer = window.dataLayer || [];
         window.dataLayer.push({

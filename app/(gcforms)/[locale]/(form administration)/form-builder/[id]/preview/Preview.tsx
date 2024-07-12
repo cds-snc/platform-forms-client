@@ -5,7 +5,7 @@ import { useSession } from "next-auth/react";
 import Markdown from "markdown-to-jsx";
 import { PreviewNavigation } from "./PreviewNavigation";
 import { getRenderedForm } from "@lib/formBuilder";
-import { PublicFormRecord } from "@lib/types";
+import { FormProperties, PublicFormRecord } from "@lib/types";
 import { Button, RichText, ClosedPage } from "@clientComponents/forms";
 import { NextButton } from "@clientComponents/forms/NextButton/NextButton";
 
@@ -44,13 +44,13 @@ export const Preview = ({
 
   // TODO probably redirecting to the error page makes more sense since the error is not recoverable
   const formParsed = safeJSONParse(getSchema());
-  if (formParsed?.error) {
+  if (!formParsed) {
     toast.error(<ErrorSaving errorCode={FormServerErrorCodes.JSON_PARSE} />, "wide");
   }
 
   const formRecord: PublicFormRecord = {
     id: id || "test0form00000id000asdf11",
-    form: formParsed,
+    form: formParsed as FormProperties,
     isPublished: getIsPublished(),
     securityAttribute: getSecurityAttribute(),
   };

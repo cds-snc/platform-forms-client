@@ -28,15 +28,22 @@ export const ReVerify = (): ReactElement => {
   const [resending, setResending] = useState(false);
 
   // Makes sure NextJS will not try to render sessionStorage on the server
-  const existingFlow = useRef<{ email?: string; authenticationFlowToken?: string }>({});
+  const existingFlow = useRef<{
+    email?: string;
+    authenticationFlowToken?: string;
+    error?: boolean;
+  }>({});
   useEffect(() => {
     async function handleError() {
       logMessage.error("Failed to parse authFlowToken JSON.");
       const errorText = await getErrorText(language, "InternalServiceException");
       setAuthErrorState(errorText);
     }
-    existingFlow.current = safeJSONParse(sessionStorage.getItem("authFlowToken") || "{}");
-    if (!existingFlow.current) {
+
+    existingFlow.current = safeJSONParse(sessionStorage.getItem("authFlowToken") as string) || {
+      error: true,
+    };
+    if (existingFlow.current.error) {
       handleError();
     }
 
