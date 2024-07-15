@@ -476,8 +476,17 @@ export const resetLockedSections = (groups: GroupsType) => {
   const resetReview = { ...review, autoFlow: true, nextAction: "end" };
 
   const resetEnd = end;
-  delete resetEnd.nextAction; // ensure end group doesn't have a next action
 
-  const resetGroups = { start: resetStart, ...rest, review: resetReview, end: resetEnd };
+  const resetGroups = {
+    start: resetStart,
+    ...rest,
+    review: resetReview,
+    end: {
+      name: resetEnd.name,
+      titleEn: resetEnd.titleEn,
+      titleFr: resetEnd.titleFr,
+      elements: resetEnd.elements,
+    },
+  };
   return resetGroups;
 };

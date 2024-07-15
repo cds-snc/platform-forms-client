@@ -27,7 +27,6 @@ import { ConfirmMoveSectionDialog } from "../../confirm/ConfirmMoveSectionDialog
 import { useConfirmState as useConfirmMoveDialogState } from "../../confirm/useConfirmState";
 import { useConfirmState as useConfirmDeleteDialogState } from "../../confirm/useConfirmState";
 import { ConfirmDeleteSectionDialog } from "../../confirm/ConfirmDeleteSectionDialog";
-import { useTemplateStore } from "@lib/store/useTemplateStore";
 import { toast } from "@formBuilder/components/shared";
 import { useTranslation } from "@i18n/client";
 import { cn } from "@lib/utils";
@@ -36,13 +35,37 @@ import { Button } from "@clientComponents/globals";
 import { Language } from "@lib/types/form-builder-types";
 import { isTitleElementType } from "./util/itemType";
 import { useAutoFlowIfNoCustomRules } from "@lib/hooks/useAutoFlowAll";
+import { useTemplateStore } from "@lib/store/useTemplateStore";
+import { useUpdateGroupLayout } from "./util/useUpdateGroupLayout";
 
 export interface TreeDataProviderProps {
   children?: ReactElement;
   addItem: (id: string) => void;
   updateItem: (id: string, value: string) => void;
   removeItem: (id: string) => void;
+  addPage: () => void;
 }
+
+const debug = false;
+
+const DebugNamedGroupLayout = () => {
+  const groupsLayout = useTemplateStore((s) => s.form.groupsLayout);
+  const groups = useTemplateStore((s) => s.form.groups);
+
+  if (!groups) {
+    return null;
+  }
+  const groupLayoutNames = groupsLayout
+    ? groupsLayout
+        .map((id: string) => groups[id]?.name)
+        .filter(Boolean)
+        .map((name, i) => {
+          return <div key={i}>{name}</div>;
+        })
+    : [];
+
+  return groupLayoutNames;
+};
 
 const ControlledTree: ForwardRefRenderFunction<unknown, TreeDataProviderProps> = (
   { children },
@@ -92,10 +115,11 @@ const ControlledTree: ForwardRefRenderFunction<unknown, TreeDataProviderProps> =
 
   const { getTitle } = useElementTitle();
   const { autoFlowAll } = useAutoFlowIfNoCustomRules();
+  const { updateGroupsLayout } = useUpdateGroupLayout();
 
   const newSectionText = t("groups.newPage");
 
-  const addSection = () => {
+  const addPage = () => {
     const id = uuid();
     addGroup(id, newSectionText);
     const newGroups = autoFlowGroupNextActions(getGroups() as GroupsType, id);
@@ -121,6 +145,9 @@ const ControlledTree: ForwardRefRenderFunction<unknown, TreeDataProviderProps> =
       const parent = findParentGroup(getTreeData(), id);
       setExpandedItems([parent?.index as TreeItemIndex]);
       setSelectedItems([parent?.index as TreeItemIndex]);
+    },
+    addPage: () => {
+      addPage();
     },
   }));
 
@@ -150,11 +177,21 @@ const ControlledTree: ForwardRefRenderFunction<unknown, TreeDataProviderProps> =
   }
 
   return (
-    <>
+    <div
+      onFocus={() => {
+        updateGroupsLayout();
+      }}
+      onBlur={() => {
+        updateGroupsLayout();
+      }}
+    >
+      {/* @todo remove this once the groupsLayout has been tested further */}
+      {debug && <DebugNamedGroupLayout />}
+
       <ControlledTreeEnvironment
         ref={environment}
         items={items}
-        getItemTitle={(item) => getTitle(item.data as ElementProperties)}
+        getItemTitle={(item) => getTitle(item?.data as ElementProperties)}
         renderItem={({ item, title, arrow, context, children }) => {
           return (
             <Item
@@ -179,6 +216,7 @@ const ControlledTree: ForwardRefRenderFunction<unknown, TreeDataProviderProps> =
                       <p>{t("groups.groupSuccessfullyDeleted", { group: item.data.name })}</p>
                     </>
                   );
+
                   return;
                 }
                 setOpenConfirmDeleteDialog(false);
@@ -245,7 +283,7 @@ const ControlledTree: ForwardRefRenderFunction<unknown, TreeDataProviderProps> =
           setSelectedItems([item.index]);
         }}
         onDrop={async (items: TreeItem[], target: DraggingPosition) => {
-          handleOnDrop(
+          await handleOnDrop(
             items,
             target,
             getGroups,
@@ -258,6 +296,8 @@ const ControlledTree: ForwardRefRenderFunction<unknown, TreeDataProviderProps> =
             setOpenConfirmMoveDialog,
             autoFlowAll
           );
+
+          updateGroupsLayout();
         }}
         onFocusItem={(item) => {
           setFocusedItem(item.index);
@@ -291,12 +331,9 @@ const ControlledTree: ForwardRefRenderFunction<unknown, TreeDataProviderProps> =
             <Button
               theme="secondary"
               className="p-0 hover:!bg-indigo-500 hover:!fill-white focus:!fill-white"
-              onClick={addSection}
+              onClick={addPage}
             >
-              <AddIcon
-                className="hover:fill-white focus:fill-white"
-                title={t("groups.addPage")}
-              />
+              <AddIcon className="hover:fill-white focus:fill-white" title={t("groups.addPage")} />
             </Button>
           </label>
           <KeyboardNavTip />
@@ -326,7 +363,7 @@ const ControlledTree: ForwardRefRenderFunction<unknown, TreeDataProviderProps> =
           }
         }}
       />
-    </>
+    </div>
   );
 };
 
