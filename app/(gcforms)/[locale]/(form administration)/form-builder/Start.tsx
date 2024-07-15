@@ -42,14 +42,14 @@ export const Start = () => {
       fileReader.readAsText(e.target.files[0], "UTF-8");
       fileReader.onload = (e) => {
         if (!e.target || !e.target.result || typeof e.target.result !== "string") return;
-        const data = safeJSONParse(e.target.result, cleaner);
+        const data = safeJSONParse<FormRecord> (e.target.result, cleaner);
         if (!data) {
           setErrors([{ message: t("startErrorParse") }]);
           target.value = "";
           return;
         }
 
-        const validationResult = validateTemplate(data as FormRecord);
+        const validationResult = validateTemplate(data);
 
         if (!validationResult.valid) {
           setErrors(validationResult.errors);
@@ -57,7 +57,7 @@ export const Start = () => {
           return;
         }
 
-        importTemplate(data as FormProperties);
+        importTemplate(data.form);
 
         window.dataLayer = window.dataLayer || [];
         window.dataLayer.push({

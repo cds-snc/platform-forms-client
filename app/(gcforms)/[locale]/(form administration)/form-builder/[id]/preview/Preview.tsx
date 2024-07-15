@@ -43,14 +43,14 @@ export const Preview = ({
   }));
 
   // TODO probably redirecting to the error page makes more sense since the error is not recoverable
-  const formParsed = safeJSONParse(getSchema());
+  const formParsed = safeJSONParse<FormProperties>(getSchema());
   if (!formParsed) {
     toast.error(<ErrorSaving errorCode={FormServerErrorCodes.JSON_PARSE} />, "wide");
   }
 
   const formRecord: PublicFormRecord = {
     id: id || "test0form00000id000asdf11",
-    form: formParsed as FormProperties,
+    form: formParsed
     isPublished: getIsPublished(),
     securityAttribute: getSecurityAttribute(),
   };
