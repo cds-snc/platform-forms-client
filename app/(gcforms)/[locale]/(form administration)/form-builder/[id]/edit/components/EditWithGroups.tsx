@@ -23,7 +23,10 @@ import { PrivacyDescriptionBody } from "./PrivacyDescriptionBody";
 import { ConfirmationTitle } from "./ConfirmationTitle";
 import { SkipLinkReusable } from "@clientComponents/globals/SkipLinkReusable";
 
-export const EditWithGroups = () => {
+import { AddPageButton } from "./AddPageButton";
+import { AddBranchingButton } from "./AddBranchingButton";
+
+export const EditWithGroups = ({ id, locale }: { id: string; locale: string }) => {
   const { t } = useTranslation("form-builder");
   const {
     title,
@@ -218,6 +221,12 @@ export const EditWithGroups = () => {
           className={"rounded-lg"}
         />
       )}
+
+      <div className="my-10 flex max-w-[800px] justify-center">
+        <AddPageButton className="mr-5" />
+        <AddBranchingButton id={id} locale={locale} />
+      </div>
+
       <SkipLinkReusable anchor="#rightPanelTitle">{t("skipLink.questionsSetup")}</SkipLinkReusable>
     </>
   );

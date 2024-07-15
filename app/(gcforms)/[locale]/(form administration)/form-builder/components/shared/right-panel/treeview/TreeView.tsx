@@ -43,6 +43,7 @@ export interface TreeDataProviderProps {
   addItem: (id: string) => void;
   updateItem: (id: string, value: string) => void;
   removeItem: (id: string) => void;
+  addPage: () => void;
 }
 
 const debug = false;
@@ -118,7 +119,7 @@ const ControlledTree: ForwardRefRenderFunction<unknown, TreeDataProviderProps> =
 
   const newSectionText = t("groups.newPage");
 
-  const addSection = () => {
+  const addPage = () => {
     const id = uuid();
     addGroup(id, newSectionText);
     const newGroups = autoFlowGroupNextActions(getGroups() as GroupsType, id);
@@ -144,6 +145,9 @@ const ControlledTree: ForwardRefRenderFunction<unknown, TreeDataProviderProps> =
       const parent = findParentGroup(getTreeData(), id);
       setExpandedItems([parent?.index as TreeItemIndex]);
       setSelectedItems([parent?.index as TreeItemIndex]);
+    },
+    addPage: () => {
+      addPage();
     },
   }));
 
@@ -327,7 +331,7 @@ const ControlledTree: ForwardRefRenderFunction<unknown, TreeDataProviderProps> =
             <Button
               theme="secondary"
               className="p-0 hover:!bg-indigo-500 hover:!fill-white focus:!fill-white"
-              onClick={addSection}
+              onClick={addPage}
             >
               <AddIcon className="hover:fill-white focus:fill-white" title={t("groups.addPage")} />
             </Button>

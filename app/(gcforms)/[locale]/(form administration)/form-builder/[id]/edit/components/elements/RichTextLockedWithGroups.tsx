@@ -76,7 +76,7 @@ export const RichTextLockedWithGroups = ({
 
       <div className="flex">
         {addElement && (
-          <div className="bottom-0 z-10 mx-auto -mb-5">
+          <div className="bottom-0 z-10 mx-auto -mb-7">
             <AddElementButton
               handleAdd={(type?: FormElementTypes) => {
                 // Index is -1 because we want to add the element after the initial locked block and before the first element
