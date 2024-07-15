@@ -864,7 +864,7 @@
     "openPanel": "Configuration du formulaire",
     "closePanel": "Fermer le panneau",
     "questions": "Questions",
-    "logic": "Logique",
+    "logic": "Embranchements",
     "translation": "Traductions",
     "treeView": {
       "addPage": "Nouvelle page"
@@ -872,7 +872,7 @@
     "loadTab": "Éditeur de {{tabPanelLabel}}"
   },
   "logic": {
-    "heading": "Logique",
+    "heading": "Embranchements",
     "description": "Appliquer de la logic d'embranchement entre les pages du formulaire ayant des questions avec des boutons radio, des cases à cocher ou une liste déroulante.",
     "clear": "Enlever",
     "gotoPage": "Aller à la page",
@@ -884,7 +884,7 @@
     "saveNote": "Ajouter des embranchements désactive la fonction de flux linéaire automatique entre les pages du formulaire.",
     "resetRules": "Réinitialisation au flux linéaire",
     "resetRulesHelp": "Aide pour la réinitialisation",
-    "resetRulesDescription": "Cette fonction réinitialisera la progression entre les pages en un flux linéaire simple, remplaçant ainsi tous les embranchements qui s'appliquent.",
+    "resetRulesDescription": "Cette fonction réinitialisera la progression entre les pages en un flux linéaire simple, remplaçant ainsi toute la logique d'embranchement qui s'applique.",
     "toastSuccess": "Flux linéaire appliqué",
     "multiRulesWarning": {
       "text1": "L'ordre et le flux sont définis en fonction des règles appliquées.",
@@ -901,15 +901,15 @@
     },
     "actionsSaved": "Actions enregistrées",
     "legend": {
-      "page": "Appliquer les règles d'embranchement aux pages",
-      "option": "Appliquer les règles d'affichage aux questions ayant des options à sélectionner"
+      "page": "Appliquer de la logique d'embranchement aux pages",
+      "option": "Appliquer des règles d'affichage aux questions ayant des options à sélectionner"
     },
     "exit": {
       "convertText": "Convertir la page",
       "checkboxLabel": "Quitter le formulaire",
       "nodeIconLabel": "Sortie",
       "offboardNodeContent": {
-        "content": "<Content>",
+        "content": "Contenu de la page de sortie",
         "exitButton": "Retourner au départ"
       },
       "exitPanel": {
@@ -997,11 +997,11 @@
   "skipLink": {
     "questions": "Passer à l'éditeur de questions",
     "translate": "Passer à l'éditeur de traductions",
-    "logic": "Passer à l'éditeur de logique",
+    "logic": "Passer à l'éditeur d'embranchements",
     "questionsSetup": "Passer à la configuration des questions",
     "translateSetup": "Passer à la configuration des traductions",
-    "logicSetup": "Passer à la configuration de la logique"
+    "logicSetup": "Passer à la configuration d'embranchements'"
   },
   "goBack": "Retourner",
-  "disabled": "[FR]disabled"
+  "disabled": "désactivé"
 }

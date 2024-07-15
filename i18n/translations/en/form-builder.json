@@ -864,7 +864,7 @@
     "openPanel": "Form set-up",
     "closePanel": "Close panel",
     "questions": "Questions",
-    "logic": "Logic",
+    "logic": "Branching",
     "translation": "Translations",
     "treeView": {
       "addPage": "New page"
@@ -872,7 +872,7 @@
     "loadTab": "Loaded {{tabPanelLabel}} editor"
   },
   "logic": {
-    "heading": "Logic",
+    "heading": "Branching",
     "description": "Apply branching logic between form pages with questions that have radio buttons, checkboxes, or a dropdown.",
     "clear": "Remove",
     "gotoPage": "Go to page",
@@ -884,7 +884,7 @@
     "saveNote": "Adding branching turns off linear autoflow between form pages.",
     "resetRules": "Reset to linear flow",
     "resetRulesHelp": "Reset help",
-    "resetRulesDescription": "This will remove logic and reset the progression between pages to a simple linear flow, overriding any existing branching that were applied.",
+    "resetRulesDescription": "This will remove branching logic and reset the progression between pages to a simple linear flow, overriding any existing rules that were applied.",
     "toastSuccess": "Linear flow applied",
     "multiRulesWarning": {
       "text1": "The order and flow is set based on the rules applied.",
@@ -901,7 +901,7 @@
     },
     "actionsSaved": "Actions saved",
     "legend": {
-      "page": "Apply branching rules to pages",
+      "page": "Apply branching logic to pages",
       "option": "Apply display rules to questions with selectable options"
     },
     "exit": {
@@ -909,7 +909,7 @@
       "checkboxLabel": "Exit the form",
       "nodeIconLabel": "Exit",
       "offboardNodeContent": {
-        "content": "<Content>",
+        "content": "Exit page content",
         "exitButton": "Back to the start"
       },
       "exitPanel": {
@@ -997,10 +997,10 @@
   "skipLink": {
     "questions": "Skip to Questions editor",
     "translate": "Skip to Translations editor",
-    "logic": "Skip to Logic editor",
+    "logic": "Skip to Branching editor",
     "questionsSetup": "Skip to Questions set-up",
     "translateSetup": "Skip to Translations set-up",
-    "logicSetup": "Skip to Logic set-up"
+    "logicSetup": "Skip to Branching set-up"
   },
   "goBack": "Go back",
   "disabled": "disabled"
