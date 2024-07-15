@@ -978,7 +978,7 @@
     },
     "confirmDeleteGroup": {
       "title": "Supprimer cette page?",
-      "description": "<p><strong>Le contenu de la page sera également supprimé</strong><br />Tous les éléments de cette page seront supprimés.</p><p><strong>Vous pouvez déplacer le contenu avant de supprimer</strong><br />Déplacez tous les éléments de formulaire que vous souhaitez conserver vers une autre page.</p>",
+      "description": "<span className='inline-block mb-4'><strong>Le contenu de la page sera également supprimé</strong><br />Tous les éléments de cette page seront supprimés.</span><span className='inline-block mb-4'><strong>Vous pouvez déplacer le contenu avant de supprimer</strong><br />Déplacez tous les éléments de formulaire que vous souhaitez conserver vers une autre page.</span>",
       "cancel": "Annuler",
       "delete": "Supprimer la page et son contenu"
     },
