@@ -977,16 +977,16 @@
       }
     },
     "confirmDeleteGroup": {
-      "title": "Delete this group? [FR]",
-      "description": "<p><strong>Questions will also be deleted</strong><br />Elements within the group will also be deleted.</p><p><strong>Move questions </strong><br />Move all elements that you would like to keep to another group.</p> [FR]",
-      "cancel": "Cancel [FR]",
-      "delete": "Delete group and elements [FR]"
+      "title": "Supprimer cette page?",
+      "description": "<p><strong>Le contenu de la page sera supprimé</strong><br />Tous les éléments de cette page seront également supprimés.</p><p><strong>Vous pouvez déplacer le contenu </strong><br />Déplacez tous les éléments de formulaire que vous souhaitez conserver vers une autre page.</p>",
+      "cancel": "Annuler",
+      "delete": "Supprimer la page et son contenu"
     },
     "confirmMoveGroup": {
-      "title": "Rewrite rules? [FR]",
-      "description": " It seems the item(s) you are moving have one or more custom rules. Would you like to overwrite those rules with autoflow? [FR]",
-      "cancel": "No, move without changing rules [FR]",
-      "confirm": "Yes, autoflow [FR]"
+      "title": "Remplacer les règles",
+      "description": " Il semble que les éléments déplacés comportent des règles conditionnelles. Souhaitez-vous remplacer ces règles par un flux automatique linéaire?",
+      "cancel": "Non, déplacer sans modifier les règles",
+      "confirm": "Oui, appliquer un flux automatique"
     }
   },
   "confirmation": {
