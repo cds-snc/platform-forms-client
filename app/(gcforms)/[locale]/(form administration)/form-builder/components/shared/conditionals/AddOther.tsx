@@ -71,13 +71,9 @@ export const AddOther = ({
 
   return (
     <>
-      <Button
-        className="!m-0 !mt-4 inline group-hover/button:fill-white group-focus/button:fill-white"
-        theme={"secondary"}
-        onClick={addOther}
-      >
+      <Button className="group/button !m-0 !mt-4 inline" theme={"secondary"} onClick={addOther}>
         <>
-          <BoltIcon className="inline pb-[2px] mr-2" />
+          <BoltIcon className="mr-2 inline pb-[2px] group-hover/button:fill-white group-focus/button:fill-white" />
           {t("addConditionalRules.addOther")}
         </>
       </Button>
