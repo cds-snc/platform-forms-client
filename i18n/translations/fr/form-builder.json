@@ -941,8 +941,8 @@
     "newPage": "Nouvelle page",
     "pageNameInput": "Nom de la page",
     "addPage": "Ajouter une page",
-    "addNewPage": "Add a new page [FR]",
-    "addBranch": "Add a branch [FR]",
+    "addNewPage": "Ajouter une nouvelle page",
+    "addBranch": "Ajouter un embranchement",
     "treeAriaLabel": "Pages Formulaires GC",
     "addPagePlaceholder": "Ajouter un nom à la page",
     "addElement": {
