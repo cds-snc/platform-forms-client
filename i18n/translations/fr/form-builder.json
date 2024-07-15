@@ -909,10 +909,10 @@
       "checkboxLabel": "Quitter le formulaire",
       "nodeIconLabel": "Sortie",
       "offboardNodeContent": {
-        "content": "<Content>",
+        "content": "Contenu de la page de sortie",
         "exitButton": "Retourner au départ"
       },
-    "exitPanel": {
+      "exitPanel": {
         "title1": "Page de sortie",
         "title2": "Inadmissible de continuer à remplir le formulaire",
         "description": "Les pages de sortie renvoient les personnes qui remplissent le formulaire au début du formulaire.",

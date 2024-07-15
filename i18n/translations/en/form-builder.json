@@ -909,7 +909,7 @@
       "checkboxLabel": "Exit the form",
       "nodeIconLabel": "Exit",
       "offboardNodeContent": {
-        "content": "<Content>",
+        "content": "Exit page content",
         "exitButton": "Back to the start"
       },
       "exitPanel": {
