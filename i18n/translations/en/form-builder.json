@@ -932,8 +932,8 @@
       "buttonLabel": "Customize the button destination by copy-pasting a more relevant link below:"
     },
     "noPages": {
-      "text1": "Add a <strong>New Page</strong> from the",
-      "text2": "Questions Tab",
+      "text1": "Add a <strong>New page</strong> from the",
+      "text2": "Questions tab",
       "text3": "before adding a branch."
     }
   },
