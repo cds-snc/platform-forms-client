@@ -932,9 +932,9 @@
       "buttonLabel": "Personnalisez la destination du bouton en copiant-collant un lien plus pertinent ci-dessous :"
     },
     "noPages": {
-      "text1": "Add a <strong>New Page</strong> from the [FR]",
-      "text2": "Questions Tab [FR]",
-      "text3": "before adding a branch. [FR]"
+      "text1": "Ajoutez une <strong>Nouvelle page</strong> dans",
+      "text2": "l'onglet Questions",
+      "text3": "avant d'ajouter un embranchement."
     }
   },
   "groups": {
