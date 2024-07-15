@@ -50,7 +50,7 @@ export const Preview = ({
 
   const formRecord: PublicFormRecord = {
     id: id || "test0form00000id000asdf11",
-    form: formParsed
+    form: formParsed,
     isPublished: getIsPublished(),
     securityAttribute: getSecurityAttribute(),
   };
