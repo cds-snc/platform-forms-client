@@ -109,7 +109,7 @@ export const ModalFormRules = ({
           >
             {t("addConditionalRules.addAnotherRule")}
           </Button>
-          <AddOther item={item} OnComplete={updateModalFromBase} />
+          <AddOther item={item} onComplete={updateModalFromBase} />
         </div>
       </div>
     </form>
