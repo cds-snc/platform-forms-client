@@ -975,6 +975,18 @@
         "label": "Keyboard shortcuts",
         "body": "<p className=\"mb-4\">Navigate the questions and pages using the arrow keys.</p><p><strong>Drag and drop:</strong></p>\n<ul><li>control + D to pick up an item</li><li>arrow keys to drag the item</li><li>enter key to drop the item</li></ul>"
       }
+    },
+    "confirmDeleteGroup": {
+      "title": "Delete this group?",
+      "description": "<p><strong>Questions will also be deleted</strong><br />Elements within the group will also be deleted.</p><p><strong>Move questions </strong><br />Move all elements that you would like to keep to another group.</p>",
+      "cancel": "Cancel",
+      "delete": "Delete group and elements"
+    },
+    "confirmMoveGroup": {
+      "title": "Rewrite rules?",
+      "description": " It seems the item(s) you are moving have one or more custom rules. Would you like to overwrite those rules with autoflow?",
+      "cancel": "No, move without changing rules",
+      "confirm": "Yes, autoflow"
     }
   },
   "confirmation": {
