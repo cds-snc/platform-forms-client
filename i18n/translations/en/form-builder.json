@@ -977,16 +977,16 @@
       }
     },
     "confirmDeleteGroup": {
-      "title": "Delete this group?",
-      "description": "<span className='inline-block mb-4'><strong>Questions will also be deleted</strong><br />Elements within the group will also be deleted.</span><span className='inline-block mb-4'><strong>Move questions </strong><br />Move all elements that you would like to keep to another group.</span>",
+      "title": "Delete this page?",
+      "description": "<span className='inline-block mb-4'><strong>Page content will also be deleted</strong><br />All form elements on this page will be deleted.</span><span className='inline-block mb-4'><strong>You can move content before deleting</strong><br />Move all form elements that you would like to keep to another page.</span>",
       "cancel": "Cancel",
-      "delete": "Delete group and elements"
+      "delete": "Delete page and its contents"
     },
     "confirmMoveGroup": {
-      "title": "Rewrite rules?",
-      "description": " It seems the item(s) you are moving have one or more custom rules. Would you like to overwrite those rules with autoflow?",
+      "title": "Overwrite rules?",
+      "description": " It seems the items you are moving may have custom rules applied. Would you like to overwrite those rules and apply linear autoflow?",
       "cancel": "No, move without changing rules",
-      "confirm": "Yes, autoflow"
+      "confirm": "Yes, apply linear autoflow"
     }
   },
   "confirmation": {
