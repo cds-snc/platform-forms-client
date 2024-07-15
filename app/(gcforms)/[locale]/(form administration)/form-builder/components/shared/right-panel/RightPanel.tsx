@@ -12,7 +12,7 @@ import { useActivePathname } from "@lib/hooks/form-builder";
 import { DownloadCSVWithGroups } from "@formBuilder/[id]/edit/translate/components/DownloadCSVWithGroups";
 import { useTreeRef } from "./treeview/provider/TreeRefProvider";
 import { TreeView } from "./treeview/TreeView";
-import { useRehydrate, useTemplateStore } from "@lib/store/useTemplateStore";
+import { useTemplateStore } from "@lib/store/useTemplateStore";
 
 import { SelectNextAction } from "./logic/SelectNextAction";
 import { useGroupStore } from "./treeview/store/useGroupStore";
@@ -74,20 +74,10 @@ export const RightPanel = ({ id, lang }: { id: string; lang: Language }) => {
   const { activePathname } = useActivePathname();
   const { treeView, togglePanel, open } = useTreeRef();
   const getElement = useGroupStore((s) => s.getElement);
-  const hasHydrated = useRehydrate();
 
   const selectedElementId = useGroupStore((s) => s.selectedElementId);
   const setId = useGroupStore((state) => state.setId);
   const item = (selectedElementId && getElement(selectedElementId)) || null;
-
-  useEffect(() => {
-    // Note we only want to toggle the panel open if the tree has hydrated
-    // And only once
-    if (hasHydrated) {
-      togglePanel && togglePanel(true);
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [hasHydrated]);
 
   // Update once logic tab / screen  is implemented
   let selectedIndex = 0;
@@ -218,6 +208,7 @@ export const RightPanel = ({ id, lang }: { id: string; lang: Language }) => {
                             addItem={() => {}}
                             updateItem={() => {}}
                             removeItem={() => {}}
+                            addPage={() => {}}
                           />
                         </div>
                         {/* end tree */}
@@ -239,7 +230,7 @@ export const RightPanel = ({ id, lang }: { id: string; lang: Language }) => {
                         </SkipLinkReusable>
                         <div className="m-0 w-full" aria-live="polite">
                           {activePathname.endsWith("/logic") && (
-                            <SelectNextAction lang={lang} item={item} />
+                            <SelectNextAction id={id} lang={lang} item={item} />
                           )}
                         </div>
                         {/* end logic */}

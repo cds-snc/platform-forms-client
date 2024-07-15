@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useFocusWithin } from "react-aria";
 
 export const useIsWithin = () => {
@@ -12,6 +12,22 @@ export const useIsWithin = () => {
       !dialogExists && setFocusWithin(isFocusWithin);
     },
   });
+
+  // Add event listener for a custom close-all-panel-menus event
+  // This fixes an issue where the panel menu would still be open
+  // after adding and focusing on a new element
+  useEffect(() => {
+    window &&
+      window.addEventListener("close-all-panel-menus", () => {
+        setFocusWithin(false);
+      });
+
+    return () => {
+      window.removeEventListener("close-all-panel-menus", () => {
+        setFocusWithin(false);
+      });
+    };
+  }, []);
 
   const isWithin = isFocusWithin ? true : false;
 

@@ -45,7 +45,7 @@ jobs:
       - name: Login to Amazon ECR
         id: login-ecr
         # v1 as of Jan 28 2021
-        uses: aws-actions/amazon-ecr-login@b6da148601ae961ede9f246e86f3e9953ea21493
+        uses: aws-actions/amazon-ecr-login@8308922cec0e5e898b1f51cf0908258552976578
 
       - name: Download Form Viewer task definition
         id: download-taskdef-form-viewer
@@ -72,7 +72,7 @@ jobs:
       - name: Deploy image for Form Viewer
         timeout-minutes: 10
         # v1.4.11
-        uses: aws-actions/amazon-ecs-deploy-task-definition@4c5bbf2e601249eb52baf3d068c3e1fc30b5d50f
+        uses: aws-actions/amazon-ecs-deploy-task-definition@3e7310352de91b71a906e60c22af629577546002
         with:
           task-definition: ${{ steps.taskdef-form-viewer.outputs.task-definition }}
           service: form-viewer
