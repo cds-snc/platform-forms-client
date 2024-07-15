@@ -67,7 +67,7 @@ export const AddOther = ({
 
     const newRule = { elementId: `${itemId}`, choiceId: `${item.id}.${lastChoice}` };
     onComplete(newRule);
-  }, [add, item, groupId]);
+  }, [add, addLabeledChoice, item, groupId, onComplete]);
 
   return (
     <>
