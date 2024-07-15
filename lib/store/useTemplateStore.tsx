@@ -41,6 +41,7 @@ import { FormElementTypes } from "@lib/types";
 import { defaultField, defaultForm } from "./defaults";
 import { storage } from "./storage";
 import { clearTemplateStorage } from "./utils";
+import { orderGroups } from "@lib/utils/form-builder/orderUsingGroupsLayout";
 
 const createTemplateStore = (initProps?: Partial<InitialTemplateStoreProps>) => {
   const DEFAULT_PROPS: TemplateStoreProps = {
@@ -68,6 +69,8 @@ const createTemplateStore = (initProps?: Partial<InitialTemplateStoreProps>) => 
       ...defaultForm,
       ...initProps?.form,
     };
+
+    initProps.form.groups = orderGroups(initProps.form.groups, initProps.form.groupsLayout);
   }
 
   return createStore<TemplateStoreState>()(
@@ -318,9 +321,8 @@ const createTemplateStore = (initProps?: Partial<InitialTemplateStoreProps>) => 
                 const element = JSON.parse(JSON.stringify(state.form.elements[elIndex]));
                 element.id = id;
                 if (element.type !== "richText") {
-                  element.properties[state.localizeField("title")] = `${
-                    element.properties[state.localizeField("title")]
-                  } copy`;
+                  element.properties[state.localizeField("title")] = `${element.properties[state.localizeField("title")]
+                    } copy`;
                 }
                 state.form.elements.splice(elIndex + 1, 0, element);
                 state.form.layout.splice(elIndex + 1, 0, id);
@@ -350,9 +352,8 @@ const createTemplateStore = (initProps?: Partial<InitialTemplateStoreProps>) => 
                 if (subElements) {
                   const element = JSON.parse(JSON.stringify(subElements[subIndex]));
                   element.id = incrementElementId(subElements);
-                  element.properties[state.localizeField("title")] = `${
-                    element.properties[state.localizeField("title")]
-                  } copy`;
+                  element.properties[state.localizeField("title")] = `${element.properties[state.localizeField("title")]
+                    } copy`;
 
                   state.form.elements[elIndex].properties.subElements?.splice(
                     subIndex + 1,
@@ -362,8 +363,9 @@ const createTemplateStore = (initProps?: Partial<InitialTemplateStoreProps>) => 
                 }
               });
             },
-            getSchema: () =>
-              JSON.stringify(getSchemaFromState(get(), get().allowGroupsFlag), null, 2),
+            getSchema: () => {
+              return JSON.stringify(getSchemaFromState(get(), get().allowGroupsFlag), null, 2);
+            },
             getId: () => get().id,
             getIsPublished: () => get().isPublished,
             setIsPublished: (isPublished) => {
@@ -391,14 +393,16 @@ const createTemplateStore = (initProps?: Partial<InitialTemplateStoreProps>) => 
                 state.lang = language as Language;
                 state.translationLanguagePriority = language as Language;
                 state.form = initializeGroups({ ...defaultForm }, allowGroups);
+                // Ensure order by groups layout
+                state.form.groups = orderGroups(state.form.groups, state.form.groupsLayout);
                 state.isPublished = false;
                 state.name = "";
                 state.deliveryOption = undefined;
                 state.formPurpose = "";
-                (state.publishReason = ""),
-                  (state.publishFormType = ""),
-                  (state.publishDesc = ""),
-                  (state.closingDate = null);
+                state.publishReason = "";
+                state.publishFormType = "";
+                state.publishDesc = "";
+                state.closingDate = null;
               });
             },
             importTemplate: async (jsonConfig) => {
@@ -407,18 +411,25 @@ const createTemplateStore = (initProps?: Partial<InitialTemplateStoreProps>) => 
                 state.id = "";
                 state.lang = "en";
                 state.form = initializeGroups({ ...defaultForm, ...jsonConfig }, allowGroups);
+                // Ensure order by groups layout
+                state.form.groups = orderGroups(state.form.groups, state.form.groupsLayout);
                 state.isPublished = false;
                 state.name = "";
                 state.securityAttribute = "Protected A";
                 state.deliveryOption = undefined;
                 state.formPurpose = "";
-                (state.publishReason = ""),
-                  (state.publishFormType = ""),
-                  (state.publishDesc = ""),
-                  (state.closingDate = null);
+                state.publishReason = "";
+                state.publishFormType = "";
+                state.publishDesc = "";
+                state.closingDate = null;
               });
             },
             getGroupsEnabled: () => get().allowGroupsFlag,
+            setGroupsLayout: (layout) => {
+              set((state) => {
+                state.form.groupsLayout = layout;
+              });
+            },
           }),
           {
             name: "form-storage",

@@ -178,7 +178,7 @@ export const PanelActions = ({
 
   const outerPanelClasses = isSubPanel
     ? ""
-    : `laptop:absolute laptop:invisible laptop:group-[.active]:visible laptop:group-active:visible laptop:group-focus-within:visible laptop:right-0 laptop:top-0 ${
+    : `z-50 laptop:absolute laptop:invisible laptop:group-[.active]:visible laptop:group-active:visible laptop:group-focus-within:visible laptop:right-0 laptop:top-0 ${
         lang === "fr" ? "laptop:-mr-[230px]" : "laptop:-mr-[160px]"
       }`;
 
@@ -214,7 +214,7 @@ export const PanelActions = ({
       </div>
       {!isSubPanel && (
         <div className="flex">
-          <div className="absolute -bottom-5 left-1/2 z-10 -translate-x-1/2">
+          <div className="absolute bottom-[-44px] left-1/2 z-10 -translate-x-1/2 laptop:-bottom-7">
             <AddElementButton
               handleAdd={handleAdd}
               filterElements={filterElements}

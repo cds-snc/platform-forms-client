@@ -737,7 +737,9 @@
       "title": "Raison pour laquelle vous nous contactez"
     },
     "title": "Obtenir du soutien",
-    "useThisForm": "Utilisez ce formulaire pour obtenir du soutien pour tout problème technique avec Formulaires GC.",
+    "experience": "Explorer nos ",
+    "guidanceLink": "guides de références",
+    "useThisForm": " ou obtenez du soutien de notre équipe en remplissant ce formulaire.",
     "errors": {
       "submissionError": "Il y a eu une erreur. Veuillez réessayer plus tard."
     }
@@ -929,12 +931,19 @@
       },
       "buttonDescription": "Un bouton de sortie renvoie les personnes vers le site Web de l'organisation correspondant à l'image de marque du formulaire.",
       "buttonLabel": "Personnalisez la destination du bouton en copiant-collant un lien plus pertinent ci-dessous :"
+    },
+    "noPages": {
+      "text1": "Ajoutez une <strong>Nouvelle page</strong> dans",
+      "text2": "l'onglet Questions",
+      "text3": "avant d'ajouter un embranchement."
     }
   },
   "groups": {
     "newPage": "Nouvelle page",
     "pageNameInput": "Nom de la page",
     "addPage": "Ajouter une page",
+    "addNewPage": "Ajouter une nouvelle page",
+    "addBranch": "Ajouter un embranchement",
     "treeAriaLabel": "Pages Formulaires GC",
     "addPagePlaceholder": "Ajouter un nom à la page",
     "addElement": {
