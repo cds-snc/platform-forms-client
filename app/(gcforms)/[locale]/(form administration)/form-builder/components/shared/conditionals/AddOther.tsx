@@ -14,8 +14,9 @@ import { BoltIcon } from "@serverComponents/icons";
 export const AddOther = ({ item }: { item: FormElementWithIndex }) => {
   const { t } = useTranslation("form-builder");
 
-  const { add } = useTemplateStore((s) => ({
+  const { add, addLabeledChoice } = useTemplateStore((s) => ({
     add: s.add,
+    addLabeledChoice: s.addLabeledChoice,
   }));
 
   const groupId = useGroupStore((state) => state.id);
@@ -24,11 +25,14 @@ export const AddOther = ({ item }: { item: FormElementWithIndex }) => {
     if (!item.properties.choices) return;
 
     // get last choice
-    const lastChoice = item.properties.choices.length - 1;
+    let lastChoice = item.properties.choices.length - 1;
 
     const otherLabel: { en: string; fr: string } = await getTranslatedProperties(
       "addConditionalRules.other"
     );
+
+    addLabeledChoice(item.index, otherLabel);
+    lastChoice = lastChoice + 1;
 
     const data = {
       id: 1,

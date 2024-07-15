@@ -283,6 +283,13 @@ const createTemplateStore = (initProps?: Partial<InitialTemplateStoreProps>) => 
               set((state) => {
                 state.form.elements[elIndex].properties.choices?.push({ en: "", fr: "" });
               }),
+            addLabeledChoice: (elIndex, label) =>
+              set((state) => {
+                state.form.elements[elIndex].properties.choices?.push({
+                  en: label.en,
+                  fr: label.fr,
+                });
+              }),
             addSubChoice: (elIndex, subIndex) =>
               set((state) => {
                 state.form.elements[elIndex].properties.subElements?.[
