@@ -54,7 +54,7 @@ export const AddOther = ({ item }: { item: FormElementWithIndex }) => {
   }, [add, item, groupId]);
 
   return (
-    <Button className="!m-0 !mt-4" theme="link" onClick={addOther}>
+    <Button className="!m-0 !mt-4" theme={"secondary"} onClick={addOther}>
       {t("addConditionalRules.addOther")}
     </Button>
   );
