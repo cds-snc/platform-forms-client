@@ -45,8 +45,8 @@ export const Preview = ({
   const formParsed = safeJSONParse<FormProperties>(getSchema());
   if (!formParsed) {
     toast.error(<ErrorSaving errorCode={FormServerErrorCodes.JSON_PARSE} />, "wide");
-    // TODO: more thought into how hand this unrecoverable error. An error dialog could be shown but
-    // then the below should not be run but that is required for the form builder.
+    // TODO: more thought into how hand this error. An error dialog could be shown but then the
+    // below should not be run but that is required for the form builder.
     throw new Error(FormServerErrorCodes.JSON_PARSE);
   }
 
