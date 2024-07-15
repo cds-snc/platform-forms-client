@@ -737,7 +737,9 @@
       "title": "Reason for reaching out"
     },
     "title": "Get support",
-    "useThisForm": "Use this form if you experience technical issues with GC Forms.",
+    "experience": "Explore our ",
+    "guidanceLink": "guidance articles",
+    "useThisForm": " or get technical help from our team through this form.",
     "errors": {
       "submissionError": "Something went wrong. Please try again later."
     }
@@ -928,12 +930,19 @@
       },
       "buttonDescription": "An exit button takes people to the organization website corresponding to the branding of the form.",
       "buttonLabel": "Customize the button destination by copy-pasting a more relevant link below:"
+    },
+    "noPages": {
+      "text1": "Add a <strong>New page</strong> from the",
+      "text2": "Questions tab",
+      "text3": "before adding a branch."
     }
   },
   "groups": {
     "newPage": "New page",
     "pageNameInput": "Page name",
     "addPage": "Add page",
+    "addNewPage": "Add a new page",
+    "addBranch": "Add a branch",
     "addPagePlaceholder": "Add a page name",
     "treeAriaLabel": "GC Forms pages",
     "addElement": {

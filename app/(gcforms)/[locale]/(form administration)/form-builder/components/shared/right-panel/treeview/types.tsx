@@ -16,6 +16,7 @@ export interface TreeDataProviderProps {
   addGroup: (id: string) => void;
   updateItem: (id: string, value: string) => void;
   removeItem: (id: string) => void;
+  addPage: () => void;
   // openSection?: (id: string) => void;
 }
 
