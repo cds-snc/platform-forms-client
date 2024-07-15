@@ -89,3 +89,4 @@ export { DepartmentsIcon } from "./DepartmentsIcon";
 export { HelpIcon } from "./HelpIcon";
 export { RightPanelOpen } from "./RightPanelOpen";
 export { SortIcon } from "./SortIcon";
+export { BoltIcon } from "./BoltIcon";

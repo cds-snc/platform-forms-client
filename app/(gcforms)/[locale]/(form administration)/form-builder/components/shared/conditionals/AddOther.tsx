@@ -9,6 +9,7 @@ import { FormElementTypes } from "@lib/types";
 import { getTranslatedProperties } from "../../../actions";
 import { useGroupStore } from "@formBuilder/components/shared/right-panel/treeview/store/useGroupStore";
 import { allowGrouping } from "@formBuilder/components/shared/right-panel/treeview/util/allowGrouping";
+import { BoltIcon } from "@serverComponents/icons";
 
 export const AddOther = ({ item }: { item: FormElementWithIndex }) => {
   const { t } = useTranslation("form-builder");
@@ -54,8 +55,13 @@ export const AddOther = ({ item }: { item: FormElementWithIndex }) => {
   }, [add, item, groupId]);
 
   return (
-    <Button className="!m-0 !mt-4" theme={"secondary"} onClick={addOther}>
-      {t("addConditionalRules.addOther")}
-    </Button>
+    <>
+      <Button className="!m-0 !mt-4 inline" theme={"secondary"} onClick={addOther}>
+        <>
+          <BoltIcon className="inline pb-[2px] mr-2" />
+          {t("addConditionalRules.addOther")}
+        </>
+      </Button>
+    </>
   );
 };
