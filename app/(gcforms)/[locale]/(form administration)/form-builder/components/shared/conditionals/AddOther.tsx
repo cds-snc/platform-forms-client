@@ -14,10 +14,10 @@ import { ChoiceRule } from "@lib/formContext";
 
 export const AddOther = ({
   item,
-  OnComplete,
+  onComplete,
 }: {
   item: FormElementWithIndex;
-  OnComplete: (newRule: ChoiceRule) => void;
+  onComplete: (newRule: ChoiceRule) => void;
 }) => {
   const { t } = useTranslation("form-builder");
 
@@ -66,7 +66,7 @@ export const AddOther = ({
     }
 
     const newRule = { elementId: `${itemId}`, choiceId: `${item.id}.${lastChoice}` };
-    OnComplete(newRule);
+    onComplete(newRule);
   }, [add, item, groupId]);
 
   return (
