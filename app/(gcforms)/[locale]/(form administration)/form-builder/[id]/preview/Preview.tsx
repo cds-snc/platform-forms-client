@@ -42,10 +42,12 @@ export const Preview = ({
     getSecurityAttribute: s.getSecurityAttribute,
   }));
 
-  // TODO probably redirecting to the error page makes more sense since the error is not recoverable
   const formParsed = safeJSONParse<FormProperties>(getSchema());
   if (!formParsed) {
     toast.error(<ErrorSaving errorCode={FormServerErrorCodes.JSON_PARSE} />, "wide");
+    // TODO: more thought into how hand this unrecoverable error. An error dialog could be shown but
+    // then the below should not be run but that is required for the form builder.
+    throw new Error(FormServerErrorCodes.JSON_PARSE);
   }
 
   const formRecord: PublicFormRecord = {
