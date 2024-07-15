@@ -978,7 +978,7 @@
     },
     "confirmDeleteGroup": {
       "title": "Delete this group?",
-      "description": "<p><strong>Questions will also be deleted</strong><br />Elements within the group will also be deleted.</p><p><strong>Move questions </strong><br />Move all elements that you would like to keep to another group.</p>",
+      "description": "<span className='inline-block mb-4'><strong>Questions will also be deleted</strong><br />Elements within the group will also be deleted.</span><span className='inline-block mb-4'><strong>Move questions </strong><br />Move all elements that you would like to keep to another group.</span>",
       "cancel": "Cancel",
       "delete": "Delete group and elements"
     },
