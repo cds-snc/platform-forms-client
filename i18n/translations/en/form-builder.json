@@ -975,6 +975,18 @@
         "label": "Keyboard shortcuts",
         "body": "<p className=\"mb-4\">Navigate the questions and pages using the arrow keys.</p><p><strong>Drag and drop:</strong></p>\n<ul><li>control + D to pick up an item</li><li>arrow keys to drag the item</li><li>enter key to drop the item</li></ul>"
       }
+    },
+    "confirmDeleteGroup": {
+      "title": "Delete this page?",
+      "description": "<span className='inline-block mb-4'><strong>Page content will also be deleted</strong><br />All form elements on this page will be deleted.</span><span className='inline-block mb-4'><strong>You can move content before deleting</strong><br />Move all form elements that you would like to keep to another page.</span>",
+      "cancel": "Cancel",
+      "delete": "Delete page and its contents"
+    },
+    "confirmMoveGroup": {
+      "title": "Overwrite rules?",
+      "description": " It seems the items you are moving have conditional rules applied. Would you like to overwrite those rules and apply linear autoflow?",
+      "cancel": "No, move without changing rules",
+      "confirm": "Yes, apply linear autoflow"
     }
   },
   "confirmation": {
