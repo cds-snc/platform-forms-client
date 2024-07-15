@@ -975,6 +975,18 @@
         "label": "Raccourcis clavier",
         "body": "<p className=\"mb-4\">Naviguer les questions et les pages à l'aide des touches fléchées.</p><p><strong>Glisser-déposer :</strong></p>\n<ul><li>Contrôle + D pour prendre un élément</li><li>touches fléchées pour faire glisser l'élément</li><li>Appuyer Entrée pour déposer l'élément</li></ul>"
       }
+    },
+    "confirmDeleteGroup": {
+      "title": "Delete this group? [FR]",
+      "description": "<p><strong>Questions will also be deleted</strong><br />Elements within the group will also be deleted.</p><p><strong>Move questions </strong><br />Move all elements that you would like to keep to another group.</p> [FR]",
+      "cancel": "Cancel [FR]",
+      "delete": "Delete group and elements [FR]"
+    },
+    "confirmMoveGroup": {
+      "title": "Rewrite rules? [FR]",
+      "description": " It seems the item(s) you are moving have one or more custom rules. Would you like to overwrite those rules with autoflow? [FR]",
+      "cancel": "No, move without changing rules [FR]",
+      "confirm": "Yes, autoflow [FR]"
     }
   },
   "confirmation": {
