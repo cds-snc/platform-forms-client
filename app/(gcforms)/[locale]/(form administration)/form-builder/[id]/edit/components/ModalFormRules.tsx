@@ -67,6 +67,13 @@ export const ModalFormRules = ({
     updateModalProperties(item.id, { ...properties, conditionalRules: rules });
   };
 
+  const updateModalFromBase = (newRule: ChoiceRule) => {
+    const rules = [...choiceRules];
+    rules.push(newRule);
+    setChoiceRules(rules);
+    updateModalProperties(item.id, { ...properties, conditionalRules: rules });
+  };
+
   return (
     <form
       onSubmit={(e: React.FormEvent<HTMLFormElement>) => e.preventDefault()}
@@ -102,7 +109,7 @@ export const ModalFormRules = ({
           >
             {t("addConditionalRules.addAnotherRule")}
           </Button>
-          <AddOther item={item} />
+          <AddOther item={item} OnComplete={updateModalFromBase} />
         </div>
       </div>
     </form>

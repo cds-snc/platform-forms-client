@@ -10,8 +10,15 @@ import { getTranslatedProperties } from "../../../actions";
 import { useGroupStore } from "@formBuilder/components/shared/right-panel/treeview/store/useGroupStore";
 import { allowGrouping } from "@formBuilder/components/shared/right-panel/treeview/util/allowGrouping";
 import { BoltIcon } from "@serverComponents/icons";
+import { ChoiceRule } from "@lib/formContext";
 
-export const AddOther = ({ item }: { item: FormElementWithIndex }) => {
+export const AddOther = ({
+  item,
+  OnComplete,
+}: {
+  item: FormElementWithIndex;
+  OnComplete: (newRule: ChoiceRule) => void;
+}) => {
   const { t } = useTranslation("form-builder");
 
   const { add, addLabeledChoice } = useTemplateStore((s) => ({
@@ -51,11 +58,15 @@ export const AddOther = ({ item }: { item: FormElementWithIndex }) => {
     };
 
     const allowGroups = await allowGrouping();
+    let itemId = 0;
     if (allowGroups) {
-      add(item.index, FormElementTypes.textField, data, groupId);
+      itemId = await add(item.index, FormElementTypes.textField, data, groupId);
     } else {
-      add(item.index, FormElementTypes.textField, data);
+      itemId = await add(item.index, FormElementTypes.textField, data);
     }
+
+    const newRule = { elementId: `${itemId}`, choiceId: `${item.id}.${lastChoice}` };
+    OnComplete(newRule);
   }, [add, item, groupId]);
 
   return (
