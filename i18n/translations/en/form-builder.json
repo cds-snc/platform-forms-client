@@ -984,7 +984,7 @@
     },
     "confirmMoveGroup": {
       "title": "Overwrite rules?",
-      "description": " It seems the items you are moving may have custom rules applied. Would you like to overwrite those rules and apply linear autoflow?",
+      "description": " It seems the items you are moving have conditional rules applied. Would you like to overwrite those rules and apply linear autoflow?",
       "cancel": "No, move without changing rules",
       "confirm": "Yes, apply linear autoflow"
     }
