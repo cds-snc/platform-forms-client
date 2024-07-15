@@ -978,13 +978,13 @@
     },
     "confirmDeleteGroup": {
       "title": "Supprimer cette page?",
-      "description": "<p><strong>Le contenu de la page sera supprimé</strong><br />Tous les éléments de cette page seront également supprimés.</p><p><strong>Vous pouvez déplacer le contenu </strong><br />Déplacez tous les éléments de formulaire que vous souhaitez conserver vers une autre page.</p>",
+      "description": "<p><strong>Le contenu de la page sera également supprimé</strong><br />Tous les éléments de cette page seront supprimés.</p><p><strong>Vous pouvez déplacer le contenu avant de supprimer</strong><br />Déplacez tous les éléments de formulaire que vous souhaitez conserver vers une autre page.</p>",
       "cancel": "Annuler",
       "delete": "Supprimer la page et son contenu"
     },
     "confirmMoveGroup": {
-      "title": "Remplacer les règles",
-      "description": " Il semble que les éléments déplacés comportent des règles conditionnelles. Souhaitez-vous remplacer ces règles par un flux automatique linéaire?",
+      "title": "Remplacer les règles?",
+      "description": " Il semble que des éléments déplacés comportent des règles conditionnelles. Souhaitez-vous remplacer ces règles par un flux automatique linéaire?",
       "cancel": "Non, déplacer sans modifier les règles",
       "confirm": "Oui, appliquer un flux automatique"
     }
