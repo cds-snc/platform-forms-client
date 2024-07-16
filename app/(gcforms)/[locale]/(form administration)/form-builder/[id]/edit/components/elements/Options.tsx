@@ -100,11 +100,13 @@ export const Options = ({
           index={index}
           initialValue={initialValue}
           onFocus={() => {
+            // Set focus state to show the link to open the modal
             timeout.current && clearTimeout(timeout.current);
             setFocusedOption(`${item.id}.${index}`);
           }}
           onBlur={
-            // Set a timeout to allow the click event to fire before the focus is set
+            // Set a timeout to allow the click event to fire
+            // Once the focus is removed the link will be hidden
             () => {
               timeout.current = window.setTimeout(() => {
                 setFocusedOption(null);
