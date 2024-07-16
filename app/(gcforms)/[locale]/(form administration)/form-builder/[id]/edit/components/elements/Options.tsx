@@ -75,6 +75,8 @@ export const Options = ({
   const [focusedOption, setFocusedOption] = React.useState<string | null>(null);
   const modalContainer = useRef<HTMLDivElement>(null);
 
+  const timeout = React.useRef<number | null>(null); // add interval to add timeout to be cleared
+
   if (!element?.properties) {
     return null;
   }
@@ -98,11 +100,16 @@ export const Options = ({
           index={index}
           initialValue={initialValue}
           onFocus={() => {
+            timeout.current && clearTimeout(timeout.current);
             setFocusedOption(`${item.id}.${index}`);
           }}
           onBlur={
             // Set a timeout to allow the click event to fire before the focus is set
-            () => setTimeout(() => setFocusedOption(null), 2000)
+            () => {
+              timeout.current = window.setTimeout(() => {
+                setFocusedOption(null);
+              }, 10000);
+            }
           }
         />
         <ConditionalIndicatorOption

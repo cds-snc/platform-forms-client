@@ -86,7 +86,6 @@ export const ConditionalIndicatorOption = ({
               >
                 {text}
               </Button>
-
               {" • "}
               <Button
                 theme="link"
