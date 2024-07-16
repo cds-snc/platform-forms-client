@@ -378,8 +378,11 @@ export async function updateLastDownloadedBy(
   formID: string,
   email: string
 ) {
+  // Delay function to throttle the requests by 100ms
+  const delay = () => new Promise((resolve) => setTimeout(resolve, 100));
+
   // TransactWriteItem can only update 100 items at a time
-  const asyncUpdateRequests = chunkArray(responses, 100).map((chunkedResponses) => {
+  const asyncUpdateRequests = chunkArray(responses, 20).map((chunkedResponses) => {
     const request = new TransactWriteCommand({
       TransactItems: chunkedResponses.map((response) => {
         const isNewResponse = response.status === VaultStatus.NEW;
@@ -408,7 +411,7 @@ export async function updateLastDownloadedBy(
       }),
     });
 
-    return () => dynamoDBDocumentClient.send(request);
+    return () => delay().then(() => dynamoDBDocumentClient.send(request));
   });
 
   // @todo - handle errors that can result from failing TransactWriteCommand operations
