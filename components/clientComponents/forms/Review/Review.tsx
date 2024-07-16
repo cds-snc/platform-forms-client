@@ -92,25 +92,29 @@ export const Review = ({ language }: { language: Language }): React.ReactElement
   // TODO: look into wrapper like Vanilla Ice oh I mean ConditionalWrapper.tsx
   // TODO: consider using a list of exclusion vs. inclusion for hidden elements
 
-  const elementsHiddenRemoved = formRecord.form.elements.filter((element) => {
-    const elementWithConditionalRules =
-      element.properties.conditionalRules && element.properties.conditionalRules.length > 0;
-    if (!elementWithConditionalRules) {
-      return true;
-    }
+  const elementsHiddenRemoved = useMemo(
+    () =>
+      formRecord.form.elements.filter((element) => {
+        const elementWithConditionalRules =
+          element.properties.conditionalRules && element.properties.conditionalRules.length > 0;
+        if (!elementWithConditionalRules) {
+          return true;
+        }
 
-    const elementValueIncludedInShowHide = validConditionalRules(element, matchedIds);
-    const elementValueIncludedInShowHideForReal = checkRelatedRulesAsBoolean(
-      formRecord.form.elements,
-      element.properties.conditionalRules,
-      matchedIds
-    );
-    if (elementValueIncludedInShowHide && elementValueIncludedInShowHideForReal) {
-      return true;
-    }
+        const elementHasConditionalRules = validConditionalRules(element, matchedIds);
+        const elementValueIncludedInShowHide = checkRelatedRulesAsBoolean(
+          formRecord.form.elements,
+          element.properties.conditionalRules,
+          matchedIds
+        );
+        if (elementHasConditionalRules && elementValueIncludedInShowHide) {
+          return true;
+        }
 
-    return false;
-  });
+        return false;
+      }),
+    [formRecord.form.elements, matchedIds]
+  );
 
   const questionsAndAnswers: ReviewGroup[] = useMemo(() => {
     function formatElementValue(elementName: string | null) {
@@ -121,31 +125,37 @@ export const Review = ({ language }: { language: Language }): React.ReactElement
       return value || "-";
     }
 
+    function structureElements(elements: string[]) {
+      return elements
+        .filter((element) => elementsHiddenRemoved.find((el) => el.id === Number(element)))
+        .map((element) => {
+          const elementName = element as keyof typeof formValues;
+          return {
+            [element]: formatElementValue(elementName),
+          };
+        });
+    }
+
+    function removeHiddenElements(elements: string[]) {
+      return elements.filter((element) =>
+        elementsHiddenRemoved.find((el) => el.id === Number(element))
+      );
+    }
+
     const formValues = getValues();
     const reviewGroups = { ...groups };
     const groupHistory = getGroupHistory();
-
     return groupHistory
       .filter((key) => key !== "review") // Removed to avoid showing as a group
       .map((key) => {
-        const elements = reviewGroups[key].elements
-          .filter((element) => {
-            return elementsHiddenRemoved.find((el) => el.id === Number(element));
-          })
-          .map((element) => {
-            const elementName = element as keyof typeof formValues;
-            return {
-              [element]: formatElementValue(elementName),
-            };
-          });
         return {
           id: key,
           name: reviewGroups[key].name,
           title: getGroupTitle(key, language),
-          elements,
+          elements: structureElements(removeHiddenElements(reviewGroups[key].elements)),
         };
       });
-  }, [groups, getValues, getGroupHistory, getGroupTitle, language]);
+  }, [groups, getValues, getGroupHistory, getGroupTitle, language, elementsHiddenRemoved]);
 
   return (
     <>
