@@ -62,15 +62,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@auth/core@npm:0.32.0":
-  version: 0.32.0
-  resolution: "@auth/core@npm:0.32.0"
+"@auth/core@npm:0.31.0":
+  version: 0.31.0
+  resolution: "@auth/core@npm:0.31.0"
   dependencies:
     "@panva/hkdf": "npm:^1.1.1"
     "@types/cookie": "npm:0.6.0"
     cookie: "npm:0.6.0"
     jose: "npm:^5.1.3"
-    oauth4webapi: "npm:^2.9.0"
+    oauth4webapi: "npm:^2.4.0"
     preact: "npm:10.11.3"
     preact-render-to-string: "npm:5.2.3"
   peerDependencies:
@@ -84,7 +84,7 @@ __metadata:
       optional: true
     nodemailer:
       optional: true
-  checksum: 10c0/8e48d6938feca1ce4af76983cbe070684c1b10cf1f3f6799492376d4ef81559c2f841f46da07ed9e9f59d2356abe649937deeefa36fa5f94ff5c43ab5466963e
+  checksum: 10c0/bc2c47e19f76f637924ba59015a69b81014bb0c163a7f68ba946e126e2bde9367c359feafd622928d23d32e84361acb72fe7b1becaa81c7bb2de1204a36d0975
   languageName: node
   linkType: hard
 
@@ -11904,7 +11904,7 @@ __metadata:
     lodash.unset: "npm:4.5.2"
     markdown-to-jsx: "npm:7.3.2"
     next: "npm:14.2.4"
-    next-auth: "npm:^5.0.0-beta.18"
+    next-auth: "npm:5.0.0-beta.18"
     node-fetch: "npm:^3.3.2"
     pino: "npm:9.1.0"
     pino-pretty: "npm:^11.0.0"
@@ -14615,17 +14615,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"next-auth@npm:^5.0.0-beta.18":
-  version: 5.0.0-beta.19
-  resolution: "next-auth@npm:5.0.0-beta.19"
+"next-auth@npm:5.0.0-beta.18":
+  version: 5.0.0-beta.18
+  resolution: "next-auth@npm:5.0.0-beta.18"
   dependencies:
-    "@auth/core": "npm:0.32.0"
+    "@auth/core": "npm:0.31.0"
   peerDependencies:
     "@simplewebauthn/browser": ^9.0.1
     "@simplewebauthn/server": ^9.0.2
-    next: ^14 || ^15.0.0-0
+    next: ^14
     nodemailer: ^6.6.5
-    react: ^18.2.0 || ^19.0.0-0
+    react: ^18.2.0
   peerDependenciesMeta:
     "@simplewebauthn/browser":
       optional: true
@@ -14633,7 +14633,7 @@ __metadata:
       optional: true
     nodemailer:
       optional: true
-  checksum: 10c0/30804eae158b9e57cdeeeef81d4aee10aabff8c415403b34cab673eb5eeadfe2232d77d782a7b1ad862bb3dc60faacf51794a23e52679243d156531609b7875f
+  checksum: 10c0/d6f40de4c8018427b33da683f7c6d28d88dbe00c2fb2de9a13cdbaa55ff4724e8dc79a2dc45a3a6f0a2fb7ca95d689532db5fc3c5f6a4e8f2338e18f2f8ca5aa
   languageName: node
   linkType: hard
 
@@ -14830,13 +14830,6 @@ __metadata:
   version: 2.10.3
   resolution: "oauth4webapi@npm:2.10.3"
   checksum: 10c0/a0b3bf177c2a1d98d1907cd6f5804be827e433dfff9951f1e2f3dabbcc178975ca2e55f6a0e0dc0b4b8fd2a881b1dd4d0aa86646f11db0e00f7c85af0c288c02
-  languageName: node
-  linkType: hard
-
-"oauth4webapi@npm:^2.9.0":
-  version: 2.11.1
-  resolution: "oauth4webapi@npm:2.11.1"
-  checksum: 10c0/69446298b68ac18179a4e8c818e2ad5610e39271405b8af7df1288e8180d6b9ca4051bd7563d9be1e94aa558453290051fdc7a441ed91a3ac238028908660a79
   languageName: node
   linkType: hard
 
