@@ -34,14 +34,16 @@ export const Modal = ({
   defaultOpen = false,
   handleClose = () => null,
   modalRef,
+  noOpenButton,
 }: {
   title: string;
   children: React.ReactNode;
-  openButton?: React.ReactElement;
+  openButton?: React.ReactElement | undefined;
   saveButton?: React.ReactElement | string | undefined;
   defaultOpen?: boolean;
   handleClose?: () => void;
   modalRef?: React.RefObject<HTMLDivElement> | undefined;
+  noOpenButton?: boolean;
 }) => {
   const { updateIsOpen } = useModalStore();
   const [isOpen, setIsOpen] = React.useState<boolean>(defaultOpen);
@@ -59,7 +61,7 @@ export const Modal = ({
       {openButton ? (
         <ModalButton isOpenButton={true}>{openButton}</ModalButton>
       ) : (
-        <ModalButton isOpenButton={true} />
+        !noOpenButton && <ModalButton isOpenButton={true} />
       )}
 
       <ModalContainer
