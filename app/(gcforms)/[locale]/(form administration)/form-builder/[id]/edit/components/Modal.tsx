@@ -181,7 +181,7 @@ export const ModalContainer = ({
 
     document.addEventListener("focusin", handleFocusIn);
     return () => document.removeEventListener("focusin", handleFocusIn);
-  }, [modalRef]);
+  }, []);
 
   // Close modal if "ESC" key is pressed
   useEffect(() => {
