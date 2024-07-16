@@ -1,5 +1,11 @@
-"use client";
-import React, { useEffect, useRef, createContext, useContext, useCallback } from "react";
+import React, {
+  useEffect,
+  createContext,
+  useContext,
+  useCallback,
+  useImperativeHandle,
+  useRef,
+} from "react";
 import { useTranslation } from "@i18n/client";
 import PropTypes from "prop-types";
 
@@ -27,6 +33,7 @@ export const Modal = ({
   saveButton,
   defaultOpen = false,
   handleClose = () => null,
+  modalRef,
 }: {
   title: string;
   children: React.ReactNode;
@@ -34,13 +41,18 @@ export const Modal = ({
   saveButton?: React.ReactElement | string | undefined;
   defaultOpen?: boolean;
   handleClose?: () => void;
+  modalRef?: React.RefObject<HTMLDivElement> | undefined;
 }) => {
   const { updateIsOpen } = useModalStore();
   const [isOpen, setIsOpen] = React.useState<boolean>(defaultOpen);
-  const changeOpen = (open: boolean) => {
-    setIsOpen(open);
-    updateIsOpen(open);
-  };
+
+  const changeOpen = useCallback(
+    (open: boolean) => {
+      setIsOpen(open);
+      updateIsOpen(open);
+    },
+    [updateIsOpen, setIsOpen]
+  );
 
   return (
     <ModalContext.Provider value={{ isOpen, changeOpen }}>
@@ -50,7 +62,12 @@ export const Modal = ({
         <ModalButton isOpenButton={true} />
       )}
 
-      <ModalContainer title={title} saveButton={saveButton} handleClose={handleClose}>
+      <ModalContainer
+        modalRef={modalRef}
+        title={title}
+        saveButton={saveButton}
+        handleClose={handleClose}
+      >
         {children}
       </ModalContainer>
     </ModalContext.Provider>
@@ -110,26 +127,40 @@ export const ModalContainer = ({
   children,
   saveButton,
   handleClose = () => null,
+  modalRef,
 }: {
   title: string;
   children: React.ReactNode;
   saveButton?: React.ReactElement | string | undefined;
   handleClose?: () => void;
+  modalRef?: React.RefObject<HTMLDivElement> | undefined;
 }) => {
   const { t } = useTranslation("form-builder");
   const { isOpen, changeOpen } = useContext(ModalContext);
-
   const modalContainer = useRef<CDSHTMLDialogElement>(null);
+  useImperativeHandle(
+    modalRef,
+    () =>
+      ({
+        close: () => {
+          changeOpen(false);
+        },
+        showModal: () => {
+          changeOpen(true);
+        },
+      } as unknown as HTMLDivElement),
+    [changeOpen]
+  );
 
   const close = useCallback(() => {
-    modalContainer.current?.close();
+    modalContainer && modalContainer.current?.close();
     changeOpen(false);
     handleClose && handleClose();
-  }, [changeOpen, handleClose]);
+  }, [changeOpen, handleClose, modalContainer]);
 
   // focus modal when opened
   useEffect(() => {
-    if (isOpen && modalContainer.current) {
+    if (isOpen && modalContainer && modalContainer.current) {
       modalContainer.current.showModal();
       modalContainer.current.focus();
     }
@@ -139,14 +170,18 @@ export const ModalContainer = ({
   // Trap focus in the modal
   useEffect(() => {
     const handleFocusIn = ({ target }: FocusEvent) => {
-      if (modalContainer.current && !modalContainer.current.contains(target as Node)) {
+      if (
+        modalContainer &&
+        modalContainer.current &&
+        !modalContainer.current.contains(target as Node)
+      ) {
         modalContainer.current.focus();
       }
     };
 
     document.addEventListener("focusin", handleFocusIn);
     return () => document.removeEventListener("focusin", handleFocusIn);
-  }, []);
+  }, [modalRef]);
 
   // Close modal if "ESC" key is pressed
   useEffect(() => {
@@ -162,47 +197,49 @@ export const ModalContainer = ({
   }, [close]);
 
   if (!isOpen) {
-    return null;
+    return <div ref={modalRef}></div>;
   }
 
   /* eslint-disable */
   return (
-    <dialog
-      data-testid="modal"
-      className="p-0 bg-clip-padding w-full h-full bg-transparent"
-      tabIndex={-1}
-      role="dialog"
-      onClick={close}
-      ref={modalContainer}
-    >
-      <div
-        data-testid="modal-content"
-        className="relative mx-8 p-4 laptop:max-w-[800px] h-5/6 overflow-scroll laptop:mx-auto mt-10 bg-white border-2 border-black rounded-xl"
-        onClick={(e) => e.stopPropagation()}
+    <div ref={modalRef}>
+      <dialog
+        data-testid="modal"
+        className="p-0 bg-clip-padding w-full h-full bg-transparent"
+        tabIndex={-1}
+        role="dialog"
+        onClick={close}
+        ref={modalContainer}
       >
-        <h2>{title}</h2>
-        <div>{children}</div>
-        <div>
-          {saveButton}
-          <Button theme="secondary" onClick={close}>
-            {t("cancel")}
-          </Button>
+        <div
+          data-testid="modal-content"
+          className="relative mx-8 p-4 laptop:max-w-[800px] h-5/6 overflow-scroll laptop:mx-auto mt-10 bg-white border-2 border-black rounded-xl"
+          onClick={(e) => e.stopPropagation()}
+        >
+          <h2>{title}</h2>
+          <div>{children}</div>
+          <div>
+            {saveButton}
+            <Button theme="secondary" onClick={close}>
+              {t("cancel")}
+            </Button>
+          </div>
+          <ModalButton isOpenButton={false}>
+            <Button
+              theme="link"
+              className="group absolute top-0 right-0 mt-4 mr-4 block pl-2 pr-2"
+              aria-label={t("close")}
+              onClick={close}
+            >
+              <span className="block w-30 mr-2">
+                <Close className="group-focus:fill-white-default inline-block mr-2" />
+                {t("close")}
+              </span>
+            </Button>
+          </ModalButton>
         </div>
-        <ModalButton isOpenButton={false}>
-          <Button
-            theme="link"
-            className="group absolute top-0 right-0 mt-4 mr-4 block pl-2 pr-2"
-            aria-label={t("close")}
-            onClick={close}
-          >
-            <span className="block w-30 mr-2">
-              <Close className="group-focus:fill-white-default inline-block mr-2" />
-              {t("close")}
-            </span>
-          </Button>
-        </ModalButton>
-      </div>
-    </dialog>
+      </dialog>
+    </div>
   );
   /* eslint-enable */
 };

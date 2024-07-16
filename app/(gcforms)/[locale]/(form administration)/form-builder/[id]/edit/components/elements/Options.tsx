@@ -1,5 +1,5 @@
 "use client";
-import React, { ReactElement } from "react";
+import React, { ReactElement, useRef } from "react";
 import PropTypes from "prop-types";
 import { useTranslation } from "@i18n/client";
 
@@ -73,6 +73,7 @@ export const Options = ({
   const element = elements.find((element) => element.id === item.id);
 
   const [focusedOption, setFocusedOption] = React.useState<string | null>(null);
+  const modalContainer = useRef<HTMLDivElement>(null);
 
   if (!element?.properties) {
     return null;
@@ -96,10 +97,19 @@ export const Options = ({
           id={item.id}
           index={index}
           initialValue={initialValue}
-          onFocus={() => setFocusedOption(`${item.id}.${index}`)}
-          onBlur={() => setFocusedOption(null)}
+          onFocus={() => {
+            setFocusedOption(`${item.id}.${index}`);
+          }}
+          onBlur={
+            // Set a timeout to allow the click event to fire before the focus is set
+            () => setTimeout(() => setFocusedOption(null), 2000)
+          }
         />
         <ConditionalIndicatorOption
+          handleOpen={() => {
+            // @ts-expect-error -- div is using imperative handle
+            modalContainer.current?.showModal();
+          }}
           isFocused={focusedOption === `${item.id}.${index}`}
           id={`${item.id}.${index}`}
           elements={elements}
@@ -118,7 +128,7 @@ export const Options = ({
         <AddOther item={item} />
       </div>
       <div>
-        <ModalRules item={item} />
+        <ModalRules modalRef={modalContainer} item={item} />
       </div>
     </div>
   );

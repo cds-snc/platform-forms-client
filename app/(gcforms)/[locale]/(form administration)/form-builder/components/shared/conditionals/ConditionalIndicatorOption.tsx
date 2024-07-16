@@ -13,10 +13,12 @@ export const ConditionalIndicatorOption = ({
   id,
   elements,
   isFocused,
+  handleOpen,
 }: {
   id: string;
   elements: FormElement[];
   isFocused: boolean;
+  handleOpen: () => void;
 }) => {
   const { t } = useTranslation("form-builder");
   const questions = getElementsUsingChoiceId({
@@ -42,7 +44,15 @@ export const ConditionalIndicatorOption = ({
         {isFocused && (
           <div>
             <ConditionalIcon className="mr-2  inline-block" />
-            <span id={rulesTitleId}>{t("addConditionalRules.addCustomRules")}</span>
+            <span
+              className="cursor-pointer underline"
+              id={rulesTitleId}
+              onClick={() => {
+                handleOpen && handleOpen();
+              }}
+            >
+              {t("addConditionalRules.addCustomRules")}
+            </span>
           </div>
         )}
       </div>
@@ -76,6 +86,7 @@ export const ConditionalIndicatorOption = ({
               >
                 {text}
               </Button>
+              {/*
               {" • "}
               <Button
                 theme="link"
@@ -85,6 +96,7 @@ export const ConditionalIndicatorOption = ({
               >
                 {t("addConditionalRules.editCustomRules")}
               </Button>
+              */}
             </li>
           );
         })}

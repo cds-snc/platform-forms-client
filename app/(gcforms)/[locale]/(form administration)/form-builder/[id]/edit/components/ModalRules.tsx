@@ -16,7 +16,13 @@ import { useRefsContext } from "./RefsContext";
 import { useTemplateStore } from "@lib/store/useTemplateStore";
 import useModalRulesStore from "@lib/store/useModalRulesStore";
 
-export const ModalRules = ({ item }: { item: FormElementWithIndex }) => {
+export const ModalRules = ({
+  item,
+  modalRef,
+}: {
+  item: FormElementWithIndex;
+  modalRef?: React.RefObject<HTMLDivElement> | undefined;
+}) => {
   const { elements, updateField } = useTemplateStore((s) => ({
     updateField: s.updateField,
     elements: s.form.elements,
@@ -101,6 +107,7 @@ export const ModalRules = ({ item }: { item: FormElementWithIndex }) => {
 
   return (
     <Modal
+      modalRef={modalRef}
       title={
         hasRules ? t("addConditionalRules.modalTitleEdit") : t("addConditionalRules.modalTitle")
       }
