@@ -44,7 +44,8 @@ export const ConditionalIndicatorOption = ({
         {isFocused && (
           <div>
             <ConditionalIcon className="mr-2  inline-block" />
-            <span
+            <Button
+              theme="link"
               className="cursor-pointer underline"
               id={rulesTitleId}
               onClick={() => {
@@ -52,7 +53,7 @@ export const ConditionalIndicatorOption = ({
               }}
             >
               {t("addConditionalRules.addCustomRules")}
-            </span>
+            </Button>
           </div>
         )}
       </div>
