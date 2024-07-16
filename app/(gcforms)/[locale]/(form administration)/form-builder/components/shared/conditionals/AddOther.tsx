@@ -31,15 +31,11 @@ export const AddOther = ({
   const addOther = useCallback(async () => {
     if (!item.properties.choices) return;
 
-    // get last choice
-    let lastChoice = item.properties.choices.length - 1;
-
     const otherLabel: { en: string; fr: string } = await getTranslatedProperties(
       "addConditionalRules.other"
     );
 
-    addLabeledChoice(item.index, otherLabel);
-    lastChoice = lastChoice + 1;
+    const lastChoice = (await addLabeledChoice(item.index, otherLabel)) - 1;
 
     const data = {
       id: 1,

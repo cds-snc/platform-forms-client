@@ -47,7 +47,7 @@ export interface TemplateStoreState extends TemplateStoreProps {
   remove: (id: number, groupId?: string) => void;
   removeSubItem: (elIndex: number, id: number) => void;
   addChoice: (elIndex: number) => void;
-  addLabeledChoice: (elIndex: number, label: { en: string; fr: string }) => void;
+  addLabeledChoice: (elIndex: number, label: { en: string; fr: string }) => Promise<number>;
   addSubChoice: (elIndex: number, subIndex: number) => void;
   removeChoice: (elIndex: number, choiceIndex: number) => void;
   removeSubChoice: (elIndex: number, subIndex: number, choiceIndex: number) => void;
