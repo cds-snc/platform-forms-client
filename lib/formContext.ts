@@ -389,6 +389,34 @@ export const checkRelatedRulesAsBoolean = (
   return getRelatedIdsPassingRules(elements, rules, matchedIds).length > 0;
 };
 
+export const getElementsHiddenRemoved = (elements: FormElement[], matchedIds: string[]) => {
+  return elements.filter((element) => {
+    const elementWithConditionalRules =
+      element.properties.conditionalRules && element.properties.conditionalRules.length > 0;
+    if (!elementWithConditionalRules) {
+      return true;
+    }
+
+    const elementHasConditionalRules = validConditionalRules(element, matchedIds);
+    const elementValueIncludedInShowHide = checkRelatedRulesAsBoolean(
+      elements,
+      element.properties.conditionalRules,
+      matchedIds
+    );
+    if (elementHasConditionalRules && elementValueIncludedInShowHide) {
+      return true;
+    }
+
+    return false;
+  });
+};
+
+export const removeHiddenElements = (elements: string[], elementsHiddenRemoved: FormElement[]) => {
+  return elements.filter((element) =>
+    elementsHiddenRemoved.find((el) => el.id === Number(element))
+  );
+};
+
 // const nextBasedOnValues = (nextActions: Group["nextAction"], values: FormValues) => {
 //   let nextAction = "";
 
