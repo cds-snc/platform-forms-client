@@ -24,6 +24,7 @@ import {
   removeCustomFormValues,
   getInputHistoryValues,
 } from "@lib/utils/form-builder/groupsHistory";
+import { getElementsHiddenRemoved } from "@lib/formContext";
 
 interface SubmitButtonProps {
   numberOfRequiredQuestions: number;
@@ -311,6 +312,7 @@ interface FormProps {
   t: TFunction;
   allowGrouping?: boolean | undefined;
   groupHistory?: string[];
+  matchedIds?: string[];
 }
 
 /**
@@ -334,13 +336,44 @@ export const Form = withFormik<FormProps, Responses>({
     formikBag.setStatus("submitting");
     try {
       const isGroupsCheck = formikBag.props.allowGrouping;
+
+      const inputHistoryValues = getInputHistoryValues(
+        values,
+        values.groupHistory as string[],
+        formikBag.props.formRecord.form.groups
+      );
+
+      // TODO use original vals if no matchedIds - vs lose all vals
+      const matchedIds = values.matchedIds as string[];
+      const elementsHiddenRemoved = getElementsHiddenRemoved(
+        formikBag.props.formRecord.form.elements,
+        matchedIds
+      );
+
+      const inputHistoryValuesVisible: { [key: string]: string } = {};
+      Object.keys(inputHistoryValues).forEach((key) => {
+        if (elementsHiddenRemoved.find((el) => el.id === Number(key))) {
+          inputHistoryValuesVisible[key] = String(inputHistoryValues[key]);
+        } else {
+          inputHistoryValuesVisible[key] = "";
+        }
+      });
+
+      // TEMP could also
+      // Object.keys(inputHistoryValues).forEach((key) => {
+      //   if (elementsHiddenRemoved.find((el) => el.id !== Number(key))) {
+      //     delete inputHistoryValues[key];
+      //   }
+      // });
+
       const formValues = isGroupsCheck
-        ? getInputHistoryValues(
-            values,
-            values.groupHistory as string[],
-            formikBag.props.formRecord.form.groups
-          )
-        : removeCustomFormValues(values);
+        ? inputHistoryValuesVisible
+        : // getInputHistoryValues(
+          //   values,
+          //   values.groupHistory as string[],
+          //   formikBag.props.formRecord.form.groups
+          // )
+          removeCustomFormValues(values);
 
       const result = await submitForm(
         formValues,

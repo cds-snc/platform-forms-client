@@ -9,11 +9,11 @@ import { useGCFormsContext } from "./useGCFormContext";
  * 1. in this file set the value below using setFieldValue
  * 2. in FormBuilder.tsx getFormInitialValues() add the new value
  * 3. in Form.tsx add the new value to the FormProps interface
- * 4. in Form.tsx this new value will now be available in the formik form values (props to Tim :)
+ * 4. in Form.tsx this new value will now be available in the formik form values.* (props to Tim :)
  */
 export const useFormValuesChanged = () => {
   const { values, setFieldValue } = useFormikContext();
-  const { updateValues, currentGroup, getGroupHistory } = useGCFormsContext();
+  const { updateValues, currentGroup, getGroupHistory, matchedIds } = useGCFormsContext();
   const groupHistory = getGroupHistory();
 
   useEffect(() => {
@@ -27,5 +27,6 @@ export const useFormValuesChanged = () => {
     // This is where you assign (set) the values that are added to formik form values in Form.tsx
     setFieldValue("currentGroup", currentGroup);
     setFieldValue("groupHistory", groupHistory);
-  }, [updateValues, values, setFieldValue, currentGroup, groupHistory]);
+    setFieldValue("matchedIds", matchedIds);
+  }, [updateValues, values, setFieldValue, currentGroup, groupHistory, matchedIds]);
 };
