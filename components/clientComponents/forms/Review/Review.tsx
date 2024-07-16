@@ -7,6 +7,7 @@ import { useGCFormsContext } from "@lib/hooks/useGCFormContext";
 import { FormRecord, TypeOmit } from "@lib/types";
 import { Language } from "@lib/types/form-builder-types";
 import { getLocalizedProperty } from "@lib/utils";
+import { checkRelatedRulesAsBoolean, validConditionalRules } from "@lib/formContext";
 
 type ReviewGroup = {
   id: string;
@@ -82,10 +83,34 @@ const EditButton = ({
 
 export const Review = ({ language }: { language: Language }): React.ReactElement => {
   const { t } = useTranslation(["review", "common"]);
-  const { groups, getValues, formRecord, getGroupHistory, getGroupTitle } = useGCFormsContext();
+  const { groups, getValues, formRecord, getGroupHistory, getGroupTitle, matchedIds } =
+    useGCFormsContext();
   const headingRef = useRef(null);
 
   useFocusIt({ elRef: headingRef });
+
+  // TODO: look into wrapper like Vanilla Ice oh I mean ConditionalWrapper.tsx
+  // TODO: consider using a list of exclusion vs. inclusion for hidden elements
+
+  const elementsHiddenRemoved = formRecord.form.elements.filter((element) => {
+    const elementWithConditionalRules =
+      element.properties.conditionalRules && element.properties.conditionalRules.length > 0;
+    if (!elementWithConditionalRules) {
+      return true;
+    }
+
+    const elementValueIncludedInShowHide = validConditionalRules(element, matchedIds);
+    const elementValueIncludedInShowHideForReal = checkRelatedRulesAsBoolean(
+      formRecord.form.elements,
+      element.properties.conditionalRules,
+      matchedIds
+    );
+    if (elementValueIncludedInShowHide && elementValueIncludedInShowHideForReal) {
+      return true;
+    }
+
+    return false;
+  });
 
   const questionsAndAnswers: ReviewGroup[] = useMemo(() => {
     function formatElementValue(elementName: string | null) {
@@ -95,18 +120,24 @@ export const Review = ({ language }: { language: Language }): React.ReactElement
       }
       return value || "-";
     }
+
     const formValues = getValues();
     const reviewGroups = { ...groups };
     const groupHistory = getGroupHistory();
+
     return groupHistory
       .filter((key) => key !== "review") // Removed to avoid showing as a group
       .map((key) => {
-        const elements = reviewGroups[key].elements.map((element) => {
-          const elementName = element as keyof typeof formValues;
-          return {
-            [element]: formatElementValue(elementName),
-          };
-        });
+        const elements = reviewGroups[key].elements
+          .filter((element) => {
+            return elementsHiddenRemoved.find((el) => el.id === Number(element));
+          })
+          .map((element) => {
+            const elementName = element as keyof typeof formValues;
+            return {
+              [element]: formatElementValue(elementName),
+            };
+          });
         return {
           id: key,
           name: reviewGroups[key].name,
