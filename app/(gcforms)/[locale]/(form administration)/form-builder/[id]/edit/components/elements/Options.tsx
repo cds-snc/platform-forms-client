@@ -1,5 +1,5 @@
 "use client";
-import React, { ReactElement } from "react";
+import React, { ReactElement, useRef } from "react";
 import PropTypes from "prop-types";
 import { useTranslation } from "@i18n/client";
 
@@ -71,6 +71,11 @@ export const Options = ({
   const parentIndex = elements.findIndex((element) => element.id === item.id);
   const element = elements.find((element) => element.id === item.id);
 
+  const [focusedOption, setFocusedOption] = React.useState<string | null>(null);
+  const modalContainer = useRef<HTMLDivElement>(null);
+
+  const timeout = React.useRef<number | null>(null); // add interval to add timeout to be cleared
+
   if (!element?.properties) {
     return null;
   }
@@ -93,8 +98,30 @@ export const Options = ({
           id={item.id}
           index={index}
           initialValue={initialValue}
+          onFocus={() => {
+            // Set focus state to show the link to open the modal
+            timeout.current && clearTimeout(timeout.current);
+            setFocusedOption(`${item.id}.${index}`);
+          }}
+          onBlur={
+            // Set a timeout to allow the click event to fire
+            // Once the focus is removed the link will be hidden
+            () => {
+              timeout.current = window.setTimeout(() => {
+                setFocusedOption(null);
+              }, 10000);
+            }
+          }
         />
-        <ConditionalIndicatorOption id={`${item.id}.${index}`} elements={elements} />
+        <ConditionalIndicatorOption
+          handleOpen={() => {
+            // @ts-expect-error -- div is using imperative handle
+            modalContainer.current?.showModal();
+          }}
+          isFocused={focusedOption === `${item.id}.${index}`}
+          id={`${item.id}.${index}`}
+          elements={elements}
+        />
       </fieldset>
     );
   });
@@ -108,7 +135,7 @@ export const Options = ({
         </div>
       </div>
       <div>
-        <ModalRules item={item} />
+        <ModalRules modalRef={modalContainer} item={item} />
       </div>
     </div>
   );

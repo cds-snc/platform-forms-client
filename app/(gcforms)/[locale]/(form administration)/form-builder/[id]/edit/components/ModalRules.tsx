@@ -16,7 +16,13 @@ import { useRefsContext } from "./RefsContext";
 import { useTemplateStore } from "@lib/store/useTemplateStore";
 import useModalRulesStore from "@lib/store/useModalRulesStore";
 
-export const ModalRules = ({ item }: { item: FormElementWithIndex }) => {
+export const ModalRules = ({
+  item,
+  modalRef,
+}: {
+  item: FormElementWithIndex;
+  modalRef?: React.RefObject<HTMLDivElement> | undefined;
+}) => {
   const { elements, updateField } = useTemplateStore((s) => ({
     updateField: s.updateField,
     elements: s.form.elements,
@@ -101,16 +107,11 @@ export const ModalRules = ({ item }: { item: FormElementWithIndex }) => {
 
   return (
     <Modal
+      modalRef={modalRef}
       title={
         hasRules ? t("addConditionalRules.modalTitleEdit") : t("addConditionalRules.modalTitle")
       }
-      openButton={
-        <Button className="!m-0 !mt-4" theme="link">
-          {hasRules
-            ? t("addConditionalRules.editCustomRules")
-            : t("addConditionalRules.addCustomRules")}
-        </Button>
-      }
+      noOpenButton={true}
       saveButton={renderSaveButton()}
       handleClose={() => {
         refs && refs.current && refs.current[item.id] && refs.current[item.id].focus();
