@@ -65,7 +65,7 @@ export const AddOther = ({
       itemId = await add(item.index, FormElementTypes.textField, data);
     }
 
-    const newRule = { elementId: `${itemId}`, choiceId: `${item.index}.${lastChoice}` };
+    const newRule = { elementId: `${itemId}`, choiceId: `${item.id}.${lastChoice}` };
     onComplete(newRule);
   }, [add, addLabeledChoice, item, groupId, onComplete]);
 
