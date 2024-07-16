@@ -286,6 +286,19 @@ const createTemplateStore = (initProps?: Partial<InitialTemplateStoreProps>) => 
               set((state) => {
                 state.form.elements[elIndex].properties.choices?.push({ en: "", fr: "" });
               }),
+            addLabeledChoice: async (elIndex, label) => {
+              return new Promise((resolve) => {
+                set((state) => {
+                  state.form.elements[elIndex].properties.choices?.push({
+                    en: label.en,
+                    fr: label.fr,
+                  });
+
+                  const lastChoice = state.form.elements[elIndex].properties.choices?.length ?? 0;
+                  resolve(lastChoice);
+                });
+              });
+            },
             addSubChoice: (elIndex, subIndex) =>
               set((state) => {
                 state.form.elements[elIndex].properties.subElements?.[
@@ -314,8 +327,9 @@ const createTemplateStore = (initProps?: Partial<InitialTemplateStoreProps>) => 
                 const element = JSON.parse(JSON.stringify(state.form.elements[elIndex]));
                 element.id = id;
                 if (element.type !== "richText") {
-                  element.properties[state.localizeField("title")] = `${element.properties[state.localizeField("title")]
-                    } copy`;
+                  element.properties[state.localizeField("title")] = `${
+                    element.properties[state.localizeField("title")]
+                  } copy`;
                 }
                 state.form.elements.splice(elIndex + 1, 0, element);
                 state.form.layout.splice(elIndex + 1, 0, id);
@@ -345,8 +359,9 @@ const createTemplateStore = (initProps?: Partial<InitialTemplateStoreProps>) => 
                 if (subElements) {
                   const element = JSON.parse(JSON.stringify(subElements[subIndex]));
                   element.id = incrementElementId(subElements);
-                  element.properties[state.localizeField("title")] = `${element.properties[state.localizeField("title")]
-                    } copy`;
+                  element.properties[state.localizeField("title")] = `${
+                    element.properties[state.localizeField("title")]
+                  } copy`;
 
                   state.form.elements[elIndex].properties.subElements?.splice(
                     subIndex + 1,
