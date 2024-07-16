@@ -72,6 +72,8 @@ export const Options = ({
   const parentIndex = elements.findIndex((element) => element.id === item.id);
   const element = elements.find((element) => element.id === item.id);
 
+  const [focusedOption, setFocusedOption] = React.useState<string | null>(null);
+
   if (!element?.properties) {
     return null;
   }
@@ -94,8 +96,14 @@ export const Options = ({
           id={item.id}
           index={index}
           initialValue={initialValue}
+          onFocus={() => setFocusedOption(`${item.id}.${index}`)}
+          onBlur={() => setFocusedOption(null)}
         />
-        <ConditionalIndicatorOption id={`${item.id}.${index}`} elements={elements} />
+        <ConditionalIndicatorOption
+          isFocused={focusedOption === `${item.id}.${index}`}
+          id={`${item.id}.${index}`}
+          elements={elements}
+        />
       </fieldset>
     );
   });

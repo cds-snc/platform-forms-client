@@ -12,9 +12,11 @@ import { LocalizedFormProperties } from "@lib/types/form-builder-types";
 export const ConditionalIndicatorOption = ({
   id,
   elements,
+  isFocused,
 }: {
   id: string;
   elements: FormElement[];
+  isFocused: boolean;
 }) => {
   const { t } = useTranslation("form-builder");
   const questions = getElementsUsingChoiceId({
@@ -35,7 +37,16 @@ export const ConditionalIndicatorOption = ({
   const titleKey = localizeField(LocalizedFormProperties.TITLE, language);
 
   if (!questions.length) {
-    return null;
+    return (
+      <div className="ml-2 mt-2">
+        {isFocused && (
+          <div>
+            <ConditionalIcon className="mr-2  inline-block" />
+            <span id={rulesTitleId}>{t("addConditionalRules.addCustomRules")}</span>
+          </div>
+        )}
+      </div>
+    );
   }
 
   return (
@@ -64,6 +75,15 @@ export const ConditionalIndicatorOption = ({
                 }}
               >
                 {text}
+              </Button>
+              {" • "}
+              <Button
+                theme="link"
+                onClick={() => {
+                  //
+                }}
+              >
+                {t("addConditionalRules.editCustomRules")}
               </Button>
             </li>
           );
