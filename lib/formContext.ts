@@ -1,4 +1,4 @@
-import { FormElement } from "@lib/types";
+import { FormElement, Responses } from "@lib/types";
 import { PublicFormRecord, ConditionalRule } from "@lib/types";
 
 export type Group = {
@@ -411,13 +411,20 @@ export const filterShownElements = (elements: FormElement[], matchedIds: string[
   });
 };
 
-export const filterValuesForShownElements = (
-  elements: string[],
-  elementsHiddenRemoved: FormElement[]
-) => {
-  return elements.filter((element) =>
-    elementsHiddenRemoved.find((el) => el.id === Number(element))
-  );
+export const filterValuesForShownElements = (elements: string[], elementsShown: FormElement[]) => {
+  return elements.filter((element) => elementsShown.find((el) => el.id === Number(element)));
+};
+
+export const rebuildValuesFromShownElements = (values: Responses, elementsShown: FormElement[]) => {
+  const rebuiltValues: { [key: string]: string } = {};
+  Object.keys(values).forEach((key) => {
+    if (elementsShown.find((el) => el.id === Number(key))) {
+      rebuiltValues[key] = String(values[key]);
+    } else {
+      rebuiltValues[key] = "";
+    }
+  });
+  return rebuiltValues;
 };
 
 // const nextBasedOnValues = (nextActions: Group["nextAction"], values: FormValues) => {

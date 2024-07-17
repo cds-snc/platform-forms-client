@@ -24,7 +24,7 @@ import {
   removeCustomFormValues,
   getInputHistoryValues,
 } from "@lib/utils/form-builder/groupsHistory";
-import { filterShownElements } from "@lib/formContext";
+import { filterShownElements, rebuildValuesFromShownElements } from "@lib/formContext";
 
 interface SubmitButtonProps {
   numberOfRequiredQuestions: number;
@@ -333,36 +333,24 @@ export const Form = withFormik<FormProps, Responses>({
 
   handleSubmit: async (values, formikBag) => {
     const getValuesForConditionalLogic = () => {
-      const matchedIds = values.matchedIds as string[];
-      const elementsHiddenRemoved = filterShownElements(
-        formikBag.props.formRecord.form.elements,
-        matchedIds
-      );
-
       const inputHistoryValues = getInputHistoryValues(
         values,
         values.groupHistory as string[],
         formikBag.props.formRecord.form.groups
       );
-
-      // TODO: move to a function and UNIT TEST
-      const inputHistoryAndRulesValuesVisible: { [key: string]: string } = {};
-      Object.keys(inputHistoryValues).forEach((key) => {
-        if (elementsHiddenRemoved.find((el) => el.id === Number(key))) {
-          inputHistoryAndRulesValuesVisible[key] = String(inputHistoryValues[key]);
-        } else {
-          inputHistoryAndRulesValuesVisible[key] = "";
-        }
-      });
-
-      return inputHistoryAndRulesValuesVisible;
+      const matchedIds = values.matchedIds as string[];
+      const shownElements = filterShownElements(
+        formikBag.props.formRecord.form.elements,
+        matchedIds
+      );
+      return rebuildValuesFromShownElements(inputHistoryValues, shownElements);
     };
 
     // Needed so the Loader is displayed
     formikBag.setStatus("submitting");
     try {
       const isGroupsCheck = formikBag.props.allowGrouping;
-      const isShowHideRules = (values.matchedIds as Array<string>)?.length > 0;
+      const isShowHideRules = (values.matchedIds as string[])?.length > 0;
 
       const formValues =
         isGroupsCheck && isShowHideRules
