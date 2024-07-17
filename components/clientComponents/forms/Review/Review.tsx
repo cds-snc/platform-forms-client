@@ -7,7 +7,7 @@ import { useGCFormsContext } from "@lib/hooks/useGCFormContext";
 import { FormRecord, TypeOmit } from "@lib/types";
 import { Language } from "@lib/types/form-builder-types";
 import { getLocalizedProperty } from "@lib/utils";
-import { getElementsHiddenRemoved, removeHiddenElements } from "@lib/formContext";
+import { getRulesElementsHiddenRemoved, removeRulesHiddenElements } from "@lib/formContext";
 
 type ReviewGroup = {
   id: string;
@@ -89,10 +89,6 @@ export const Review = ({ language }: { language: Language }): React.ReactElement
 
   useFocusIt({ elRef: headingRef });
 
-  // TODO: unit tests
-  // TODO: look into wrapper like Vanilla Ice oh I mean ConditionalWrapper.tsx
-  // TODO: consider using a list of exclusion vs. inclusion for hidden elements
-
   const questionsAndAnswers: ReviewGroup[] = useMemo(() => {
     function formatElementValue(elementName: string | null) {
       const value = formValues[elementName as keyof typeof formValues];
@@ -114,7 +110,10 @@ export const Review = ({ language }: { language: Language }): React.ReactElement
     const formValues = getValues();
     const reviewGroups = { ...groups };
     const groupHistory = getGroupHistory();
-    const elementsHiddenRemoved = getElementsHiddenRemoved(formRecord.form.elements, matchedIds);
+    const elementsHiddenRemoved = getRulesElementsHiddenRemoved(
+      formRecord.form.elements,
+      matchedIds
+    );
     return groupHistory
       .filter((key) => key !== "review") // Removed to avoid showing as a group
       .map((key) => {
@@ -123,7 +122,7 @@ export const Review = ({ language }: { language: Language }): React.ReactElement
           name: reviewGroups[key].name,
           title: getGroupTitle(key, language),
           elements: structureElements(
-            removeHiddenElements(reviewGroups[key].elements, elementsHiddenRemoved)
+            removeRulesHiddenElements(reviewGroups[key].elements, elementsHiddenRemoved)
           ),
         };
       });

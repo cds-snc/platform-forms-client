@@ -24,7 +24,7 @@ import {
   removeCustomFormValues,
   getInputHistoryValues,
 } from "@lib/utils/form-builder/groupsHistory";
-import { getElementsHiddenRemoved } from "@lib/formContext";
+import { getRulesElementsHiddenRemoved } from "@lib/formContext";
 
 interface SubmitButtonProps {
   numberOfRequiredQuestions: number;
@@ -332,20 +332,15 @@ export const Form = withFormik<FormProps, Responses>({
   validate: (values, props) => validateOnSubmit(values, props),
 
   handleSubmit: async (values, formikBag) => {
-    // Needed so the Loader is displayed
-    formikBag.setStatus("submitting");
-    try {
-      const isGroupsCheck = formikBag.props.allowGrouping;
-
+    const getValuesForConditionalLogic = () => {
       const inputHistoryValues = getInputHistoryValues(
         values,
         values.groupHistory as string[],
         formikBag.props.formRecord.form.groups
       );
 
-      // TODO use original vals if no matchedIds - vs lose all vals
       const matchedIds = values.matchedIds as string[];
-      const elementsHiddenRemoved = getElementsHiddenRemoved(
+      const elementsHiddenRemoved = getRulesElementsHiddenRemoved(
         formikBag.props.formRecord.form.elements,
         matchedIds
       );
@@ -359,21 +354,19 @@ export const Form = withFormik<FormProps, Responses>({
         }
       });
 
-      // TEMP could also
-      // Object.keys(inputHistoryValues).forEach((key) => {
-      //   if (elementsHiddenRemoved.find((el) => el.id !== Number(key))) {
-      //     delete inputHistoryValues[key];
-      //   }
-      // });
+      return inputHistoryValuesVisible;
+    };
 
-      const formValues = isGroupsCheck
-        ? inputHistoryValuesVisible
-        : // getInputHistoryValues(
-          //   values,
-          //   values.groupHistory as string[],
-          //   formikBag.props.formRecord.form.groups
-          // )
-          removeCustomFormValues(values);
+    // Needed so the Loader is displayed
+    formikBag.setStatus("submitting");
+    try {
+      const isGroupsCheck = formikBag.props.allowGrouping;
+      const isShowHideRules = values.matchedIds;
+
+      const formValues =
+        isGroupsCheck && isShowHideRules
+          ? getValuesForConditionalLogic()
+          : removeCustomFormValues(values);
 
       const result = await submitForm(
         formValues,
