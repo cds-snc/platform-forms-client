@@ -390,6 +390,9 @@ export const checkRelatedRulesAsBoolean = (
 };
 
 export const filterShownElements = (elements: FormElement[], matchedIds: string[]) => {
+  if (!Array.isArray(elements) || !Array.isArray(matchedIds)) {
+    return elements;
+  }
   return elements.filter((element) => {
     const elementWithConditionalRules =
       element.properties.conditionalRules && element.properties.conditionalRules.length > 0;
@@ -412,10 +415,16 @@ export const filterShownElements = (elements: FormElement[], matchedIds: string[
 };
 
 export const filterValuesForShownElements = (elements: string[], elementsShown: FormElement[]) => {
+  if (!Array.isArray(elements) || !Array.isArray(elementsShown)) {
+    return elements;
+  }
   return elements.filter((element) => elementsShown.find((el) => el.id === Number(element)));
 };
 
 export const rebuildValuesFromShownElements = (values: Responses, elementsShown: FormElement[]) => {
+  if (!values || !Array.isArray(elementsShown)) {
+    return values;
+  }
   const rebuiltValues: { [key: string]: string } = {};
   Object.keys(values).forEach((key) => {
     if (elementsShown.find((el) => el.id === Number(key))) {
