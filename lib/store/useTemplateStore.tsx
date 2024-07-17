@@ -50,7 +50,7 @@ const createTemplateStore = (initProps?: Partial<InitialTemplateStoreProps>) => 
     translationLanguagePriority: (initProps?.locale as Language) || "en",
     focusInput: false,
     hasHydrated: false,
-    form: initializeGroups(defaultForm, initProps?.allowGroupsFlag || false),
+    form: defaultForm,
     isPublished: false,
     name: "",
     securityAttribute: "Protected A",
