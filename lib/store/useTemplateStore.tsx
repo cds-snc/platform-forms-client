@@ -70,6 +70,8 @@ const createTemplateStore = (initProps?: Partial<InitialTemplateStoreProps>) => 
       ...initProps?.form,
     };
 
+    initProps.form = initializeGroups(initProps.form, initProps?.allowGroupsFlag || false);
+
     // Ensure order by groups layout
     if (!initProps.form.groupsLayout) {
       /* No need to order as the groups layout does not exist */
