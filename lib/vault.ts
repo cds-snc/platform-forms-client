@@ -18,7 +18,7 @@ import { AccessControlError, checkPrivileges } from "./privileges";
 import { chunkArray } from "@lib/utils";
 import { TemplateAlreadyPublishedError } from "@lib/templates";
 import { getAppSetting } from "./appSettings";
-import { runPromisesSynchronously } from "./client/clientHelpers";
+import { delay, getExponentialBackoffTimeInMS } from "./utils/retryability";
 
 /**
  * Returns the users associated with a Template
@@ -275,12 +275,14 @@ export async function retrieveSubmissions(
       return { FormID: formID, NAME_OR_CONF: `NAME#${id.trim()}` };
     }) as Record<string, string>[];
 
-    const chunkedKeys = chunkArray(keys, 100);
-
     // DynamoDB BatchGetItem can only retrieve 100 items at a time
+    // Reducing to 50 in order to add some throttling
+    const chunkedKeys = chunkArray(keys, 50);
+
     // Create function that will run the batch in parallel
     const dbQuery = async (keys: Record<string, string>[]) => {
       let accumulatedResponses: VaultSubmission[] = [];
+      let attempt = 1;
       while (keys && keys.length > 0) {
         const queryCommand = new BatchGetCommand({
           RequestItems: {
@@ -321,7 +323,13 @@ export async function retrieveSubmissions(
         }
 
         // If there are unprocessed keys, we need to make another request
-        keys = response.UnprocessedKeys?.Vault?.Keys || [];
+        if (response.UnprocessedKeys?.Vault?.Keys) {
+          keys = response.UnprocessedKeys.Vault.Keys;
+          ++attempt;
+          const backOffTime = getExponentialBackoffTimeInMS(100, attempt, 2000, true);
+          // eslint-disable-next-line no-await-in-loop
+          await delay(backOffTime);
+        }
       }
       return accumulatedResponses;
     };
@@ -378,13 +386,12 @@ export async function updateLastDownloadedBy(
   formID: string,
   email: string
 ) {
-  // Delay function to throttle the requests by 100ms
-  const delay = () => new Promise((resolve) => setTimeout(resolve, 100));
+  const chunkedResponses = chunkArray(responses, 20);
+  let index = 0;
 
-  // TransactWriteItem can only update 100 items at a time
-  const asyncUpdateRequests = chunkArray(responses, 20).map((chunkedResponses) => {
+  for await (const chunk of chunkedResponses) {
     const request = new TransactWriteCommand({
-      TransactItems: chunkedResponses.map((response) => {
+      TransactItems: chunk.map((response) => {
         const isNewResponse = response.status === VaultStatus.NEW;
         return {
           Update: {
@@ -411,11 +418,14 @@ export async function updateLastDownloadedBy(
       }),
     });
 
-    return () => delay().then(() => dynamoDBDocumentClient.send(request));
-  });
+    if (index > 0) {
+      await delay(200);
+    }
 
-  // @todo - handle errors that can result from failing TransactWriteCommand operations
-  return runPromisesSynchronously(asyncUpdateRequests);
+    index++;
+
+    return dynamoDBDocumentClient.send(request);
+  }
 }
 
 /**
@@ -514,25 +524,30 @@ export async function deleteDraftFormResponses(ability: UserAbility, formID: str
     // Batch delete all entries
     // The `BatchWriteCommand` can only take up to 25 `DeleteRequest` at a time.
 
-    const asyncDeleteRequests = chunkArray(accumulatedResponses, 25).map((request) => {
-      return () =>
-        dynamoDBDocumentClient.send(
-          new BatchWriteCommand({
-            RequestItems: {
-              Vault: request.map((entryName) => ({
-                DeleteRequest: {
-                  Key: {
-                    FormID: formID,
-                    NAME_OR_CONF: entryName,
-                  },
-                },
-              })),
-            },
-          })
-        );
-    });
+    const chunkRequests = chunkArray(accumulatedResponses, 25);
+    let index = 0;
+    for await (const chunk of chunkRequests) {
+      if (index > 0) {
+        await delay(200);
+      }
 
-    await runPromisesSynchronously(asyncDeleteRequests);
+      index++;
+
+      return dynamoDBDocumentClient.send(
+        new BatchWriteCommand({
+          RequestItems: {
+            Vault: chunk.map((entryName) => ({
+              DeleteRequest: {
+                Key: {
+                  FormID: formID,
+                  NAME_OR_CONF: entryName,
+                },
+              },
+            })),
+          },
+        })
+      );
+    }
 
     logEvent(
       ability.userID,
