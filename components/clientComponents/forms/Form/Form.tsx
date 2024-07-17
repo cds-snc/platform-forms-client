@@ -333,28 +333,28 @@ export const Form = withFormik<FormProps, Responses>({
 
   handleSubmit: async (values, formikBag) => {
     const getValuesForConditionalLogic = () => {
-      const inputHistoryValues = getInputHistoryValues(
-        values,
-        values.groupHistory as string[],
-        formikBag.props.formRecord.form.groups
-      );
-
       const matchedIds = values.matchedIds as string[];
       const elementsHiddenRemoved = getRulesElementsHiddenRemoved(
         formikBag.props.formRecord.form.elements,
         matchedIds
       );
 
-      const inputHistoryValuesVisible: { [key: string]: string } = {};
+      const inputHistoryValues = getInputHistoryValues(
+        values,
+        values.groupHistory as string[],
+        formikBag.props.formRecord.form.groups
+      );
+
+      const inputHistoryAndRulesValuesVisible: { [key: string]: string } = {};
       Object.keys(inputHistoryValues).forEach((key) => {
         if (elementsHiddenRemoved.find((el) => el.id === Number(key))) {
-          inputHistoryValuesVisible[key] = String(inputHistoryValues[key]);
+          inputHistoryAndRulesValuesVisible[key] = String(inputHistoryValues[key]);
         } else {
-          inputHistoryValuesVisible[key] = "";
+          inputHistoryAndRulesValuesVisible[key] = "";
         }
       });
 
-      return inputHistoryValuesVisible;
+      return inputHistoryAndRulesValuesVisible;
     };
 
     // Needed so the Loader is displayed
@@ -362,7 +362,6 @@ export const Form = withFormik<FormProps, Responses>({
     try {
       const isGroupsCheck = formikBag.props.allowGrouping;
       const isShowHideRules = values.matchedIds;
-
       const formValues =
         isGroupsCheck && isShowHideRules
           ? getValuesForConditionalLogic()
