@@ -22,7 +22,9 @@ describe("Conditional History", () => {
       "12": "",
       "13": [],
       "14": "",
-      "15": ""
+      "15": "",
+      "currentGroup": "",
+      "groupHistory": "",
     };
     const formOnlyValues = getInputHistoryValues(values, groupHistory, groups);
     expect(formOnlyValues).toEqual(expectedOutput);
@@ -45,6 +47,8 @@ describe("Conditional History", () => {
         "13": [ "1", "2", "3"],
         "14": "1",
         "15": "Ottawa",
+        "currentGroup": "",
+        "groupHistory": "",
     };
     const formOnlyValues = getInputHistoryValues(valuesEntered, groupHistoryEntered, groupsEntered);
     expect(formOnlyValues).toEqual(expectedOutput);
@@ -99,7 +103,9 @@ describe("Conditional History", () => {
       "64": "",
       "65": "",
       "66": "",
-      "67": ""
+      "67": "",
+      "currentGroup": "",
+      "groupHistory": "",
     };
     const formOnlyValues = getInputHistoryValues(valuesComplex, groupHistoryComplex, groupsComplex);
     expect(formOnlyValues).toEqual(expectedOutput);

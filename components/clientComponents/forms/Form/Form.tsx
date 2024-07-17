@@ -364,7 +364,7 @@ export const Form = withFormik<FormProps, Responses>({
       const isShowHideRules = values.matchedIds;
       const formValues =
         isGroupsCheck && isShowHideRules
-          ? getValuesForConditionalLogic()
+          ? removeCustomFormValues(getValuesForConditionalLogic())
           : removeCustomFormValues(values);
 
       const result = await submitForm(

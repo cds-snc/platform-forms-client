@@ -66,6 +66,7 @@ export const removeCustomFormValues = (values: Responses) => {
   const formValues = { ...values };
   delete formValues["currentGroup"];
   delete formValues["groupHistory"];
+  delete formValues["matchedIds"];
   return formValues;
 };
 
@@ -78,5 +79,5 @@ export const getInputHistoryValues = (
     values,
     getRelevantValues(values, groups, groupHistory as string[])
   );
-  return removeCustomFormValues(formValues);
+  return formValues;
 };
