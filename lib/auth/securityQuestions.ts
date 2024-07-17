@@ -23,11 +23,36 @@ export type ValidateSecurityAnswersCommand = {
   questionsWithAssociatedAnswers: { questionId: SecurityQuestionId; answer: string }[];
 };
 
-export class AlreadyHasSecurityAnswers extends Error {}
-export class DuplicatedQuestionsNotAllowed extends Error {}
-export class SecurityAnswersNotFound extends Error {}
-export class SecurityQuestionNotFound extends Error {}
-export class InvalidSecurityQuestionId extends Error {}
+export class AlreadyHasSecurityAnswers extends Error {
+  constructor(message?: string) {
+    super(message ?? "AlreadyHasSecurityAnswers");
+    Object.setPrototypeOf(this, AlreadyHasSecurityAnswers.prototype);
+  }
+}
+export class DuplicatedQuestionsNotAllowed extends Error {
+  constructor(message?: string) {
+    super(message ?? "DuplicatedQuestionsNotAllowed");
+    Object.setPrototypeOf(this, DuplicatedQuestionsNotAllowed.prototype);
+  }
+}
+export class SecurityAnswersNotFound extends Error {
+  constructor(message?: string) {
+    super(message ?? "SecurityAnswersNotFound");
+    Object.setPrototypeOf(this, SecurityAnswersNotFound.prototype);
+  }
+}
+export class SecurityQuestionNotFound extends Error {
+  constructor(message?: string) {
+    super(message ?? "SecurityQuestionNotFound");
+    Object.setPrototypeOf(this, SecurityQuestionNotFound.prototype);
+  }
+}
+export class InvalidSecurityQuestionId extends Error {
+  constructor(message?: string) {
+    super(message ?? "InvalidSecurityQuestionId");
+    Object.setPrototypeOf(this, InvalidSecurityQuestionId.prototype);
+  }
+}
 
 type SecurityAnswerId = string;
 
@@ -37,7 +62,12 @@ type SecurityAnswer = {
   hashedAnswer: string;
 };
 
-class SecurityQuestionDatabaseOperationFailed extends Error {}
+class SecurityQuestionDatabaseOperationFailed extends Error {
+  constructor(message?: string) {
+    super(message ?? "SecurityQuestionDatabaseOperationFailed");
+    Object.setPrototypeOf(this, SecurityQuestionDatabaseOperationFailed.prototype);
+  }
+}
 
 export async function retrievePoolOfSecurityQuestions(): Promise<SecurityQuestion[]> {
   const securityQuestions = await prisma.securityQuestion
