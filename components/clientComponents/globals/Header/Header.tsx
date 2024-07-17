@@ -27,22 +27,26 @@ export const Header = ({ context = "default", className }: HeaderParams) => {
   } = useTranslation(["common", "form-builder", "admin-login"]);
 
   const isBannerEnabled = t("campaignBanner.enabled");
+  const paddingTop = isBannerEnabled ? "py-0" : "py-2";
 
   return (
     <>
-      {isBannerEnabled && (
-        <div className="bg-slate-800 text-white px-4 py-4">
-          <div className="inline-block border-2 border-gray-500 px-1 py-1 mr-4">
-            {t("campaignBanner.type")}
-          </div>
-          <div className="inline-block">
-            <Markdown options={{ forceBlock: true }}>{t("campaignBanner.message")}</Markdown>
-          </div>
-        </div>
-      )}
       <header
-        className={cn("mb-5 border-b-1 border-gray-500 bg-white px-0 py-2 relative", className)}
+        className={cn(
+          "mb-5 border-b-1 border-gray-500 bg-white px-0 " + paddingTop + " relative",
+          className
+        )}
       >
+        {isBannerEnabled && (
+          <div className="bg-slate-800 text-white px-4 py-4">
+            <div className="inline-block border-2 border-gray-500 px-1 py-1 mr-4">
+              {t("campaignBanner.type")}
+            </div>
+            <div className="inline-block">
+              <Markdown options={{ forceBlock: true }}>{t("campaignBanner.message")}</Markdown>
+            </div>
+          </div>
+        )}
         <div className="grid w-full grid-flow-col">
           <div className="flex">
             <Link
