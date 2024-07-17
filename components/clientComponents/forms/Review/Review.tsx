@@ -7,7 +7,7 @@ import { useGCFormsContext } from "@lib/hooks/useGCFormContext";
 import { FormRecord, TypeOmit } from "@lib/types";
 import { Language } from "@lib/types/form-builder-types";
 import { getLocalizedProperty } from "@lib/utils";
-import { getRulesElementsHiddenRemoved, removeRulesHiddenElements } from "@lib/formContext";
+import { filterShownElements, filterValuesForShownElements } from "@lib/formContext";
 
 type ReviewGroup = {
   id: string;
@@ -110,10 +110,6 @@ export const Review = ({ language }: { language: Language }): React.ReactElement
     const formValues = getValues();
     const reviewGroups = { ...groups };
     const groupHistory = getGroupHistory();
-    const elementsHiddenRemoved = getRulesElementsHiddenRemoved(
-      formRecord.form.elements,
-      matchedIds
-    );
     return groupHistory
       .filter((key) => key !== "review") // Removed to avoid showing as a group
       .map((key) => {
@@ -122,7 +118,10 @@ export const Review = ({ language }: { language: Language }): React.ReactElement
           name: reviewGroups[key].name,
           title: getGroupTitle(key, language),
           elements: structureElements(
-            removeRulesHiddenElements(reviewGroups[key].elements, elementsHiddenRemoved)
+            filterValuesForShownElements(
+              reviewGroups[key].elements,
+              filterShownElements(formRecord.form.elements, matchedIds)
+            )
           ),
         };
       });

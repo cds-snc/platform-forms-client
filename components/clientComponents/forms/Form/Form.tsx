@@ -24,7 +24,7 @@ import {
   removeCustomFormValues,
   getInputHistoryValues,
 } from "@lib/utils/form-builder/groupsHistory";
-import { getRulesElementsHiddenRemoved } from "@lib/formContext";
+import { filterShownElements } from "@lib/formContext";
 
 interface SubmitButtonProps {
   numberOfRequiredQuestions: number;
@@ -334,7 +334,7 @@ export const Form = withFormik<FormProps, Responses>({
   handleSubmit: async (values, formikBag) => {
     const getValuesForConditionalLogic = () => {
       const matchedIds = values.matchedIds as string[];
-      const elementsHiddenRemoved = getRulesElementsHiddenRemoved(
+      const elementsHiddenRemoved = filterShownElements(
         formikBag.props.formRecord.form.elements,
         matchedIds
       );
@@ -345,6 +345,7 @@ export const Form = withFormik<FormProps, Responses>({
         formikBag.props.formRecord.form.groups
       );
 
+      // TODO: move to a function and UNIT TEST
       const inputHistoryAndRulesValuesVisible: { [key: string]: string } = {};
       Object.keys(inputHistoryValues).forEach((key) => {
         if (elementsHiddenRemoved.find((el) => el.id === Number(key))) {
@@ -361,7 +362,8 @@ export const Form = withFormik<FormProps, Responses>({
     formikBag.setStatus("submitting");
     try {
       const isGroupsCheck = formikBag.props.allowGrouping;
-      const isShowHideRules = values.matchedIds;
+      const isShowHideRules = (values.matchedIds as Array<string>)?.length > 0;
+
       const formValues =
         isGroupsCheck && isShowHideRules
           ? removeCustomFormValues(getValuesForConditionalLogic())

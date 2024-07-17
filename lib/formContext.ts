@@ -389,7 +389,7 @@ export const checkRelatedRulesAsBoolean = (
   return getRelatedIdsPassingRules(elements, rules, matchedIds).length > 0;
 };
 
-export const getRulesElementsHiddenRemoved = (elements: FormElement[], matchedIds: string[]) => {
+export const filterShownElements = (elements: FormElement[], matchedIds: string[]) => {
   return elements.filter((element) => {
     const elementWithConditionalRules =
       element.properties.conditionalRules && element.properties.conditionalRules.length > 0;
@@ -411,7 +411,7 @@ export const getRulesElementsHiddenRemoved = (elements: FormElement[], matchedId
   });
 };
 
-export const removeRulesHiddenElements = (
+export const filterValuesForShownElements = (
   elements: string[],
   elementsHiddenRemoved: FormElement[]
 ) => {
