@@ -70,7 +70,13 @@ const createTemplateStore = (initProps?: Partial<InitialTemplateStoreProps>) => 
       ...initProps?.form,
     };
 
-    initProps.form.groups = orderGroups(initProps.form.groups, initProps.form.groupsLayout);
+    // Ensure order by groups layout
+    if (!initProps.form.groupsLayout) {
+      /* No need to order as the groups layout does not exist */
+      initProps.form.groupsLayout = [];
+    } else {
+      initProps.form.groups = orderGroups(initProps.form.groups, initProps.form.groupsLayout);
+    }
   }
 
   return createStore<TemplateStoreState>()(
@@ -401,8 +407,15 @@ const createTemplateStore = (initProps?: Partial<InitialTemplateStoreProps>) => 
                 state.lang = language as Language;
                 state.translationLanguagePriority = language as Language;
                 state.form = initializeGroups({ ...defaultForm }, allowGroups);
+
                 // Ensure order by groups layout
-                state.form.groups = orderGroups(state.form.groups, state.form.groupsLayout);
+                if (!state.form.groupsLayout) {
+                  /* No need to order as the groups layout does not exist */
+                  state.form.groupsLayout = [];
+                } else {
+                  state.form.groups = orderGroups(state.form.groups, state.form.groupsLayout);
+                }
+
                 state.isPublished = false;
                 state.name = "";
                 state.deliveryOption = undefined;
@@ -419,8 +432,15 @@ const createTemplateStore = (initProps?: Partial<InitialTemplateStoreProps>) => 
                 state.id = "";
                 state.lang = "en";
                 state.form = initializeGroups({ ...defaultForm, ...jsonConfig }, allowGroups);
+
                 // Ensure order by groups layout
-                state.form.groups = orderGroups(state.form.groups, state.form.groupsLayout);
+                if (!state.form.groupsLayout) {
+                  /* No need to order as the groups layout does not exist */
+                  state.form.groupsLayout = [];
+                } else {
+                  state.form.groups = orderGroups(state.form.groups, state.form.groupsLayout);
+                }
+
                 state.isPublished = false;
                 state.name = "";
                 state.securityAttribute = "Protected A";
