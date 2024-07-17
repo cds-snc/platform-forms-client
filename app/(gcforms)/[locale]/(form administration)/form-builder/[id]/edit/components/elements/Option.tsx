@@ -18,12 +18,16 @@ export const Option = ({
   id,
   renderIcon,
   initialValue,
+  onFocus,
+  onBlur,
 }: {
   parentIndex: number;
   index: number;
   id: number;
   renderIcon?: RenderIcon;
   initialValue: string;
+  onFocus?: () => void;
+  onBlur?: () => void;
 }) => {
   const input = useRef<HTMLInputElement>(null);
 
@@ -116,6 +120,8 @@ export const Option = ({
         onKeyDown={handleKeyDown}
         className="!my-0 ml-5 max-h-9 w-full"
         {...getLocalizationAttribute()}
+        onFocus={onFocus}
+        onBlur={onBlur}
       />
       <Button
         theme="icon"

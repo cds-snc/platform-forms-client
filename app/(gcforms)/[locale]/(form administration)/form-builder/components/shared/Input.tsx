@@ -18,6 +18,7 @@ interface Props {
   isInvalid?: boolean;
   lang?: string;
   onBlur?: FocusEventHandler;
+  onFocus?: FocusEventHandler;
 }
 
 type Ref = HTMLInputElement;
@@ -39,6 +40,7 @@ const Input = React.forwardRef<Ref, Props>((props, ref) => {
     isInvalid = false,
     lang,
     onBlur,
+    onFocus,
   } = props;
   const themes = {
     default:
@@ -64,6 +66,7 @@ const Input = React.forwardRef<Ref, Props>((props, ref) => {
       onChange={onChange}
       onKeyDown={onKeyDown}
       onBlur={onBlur && onBlur}
+      onFocus={onFocus && onFocus}
       ref={ref}
       {...(lang && { lang: lang })}
       autoComplete="off"

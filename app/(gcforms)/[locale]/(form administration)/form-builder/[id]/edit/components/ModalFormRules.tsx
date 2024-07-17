@@ -10,6 +10,7 @@ import { FormElementWithIndex } from "@lib/types/form-builder-types";
 import { ChoiceRule } from "@lib/formContext";
 import { ConditionalSelector } from "@formBuilder/components/shared/conditionals/ConditionalSelector";
 import { sortByGroups, sortByLayout } from "@lib/utils/form-builder";
+import { AddOther } from "@formBuilder/components/shared/conditionals/AddOther";
 
 export const ModalFormRules = ({
   item,
@@ -66,6 +67,13 @@ export const ModalFormRules = ({
     updateModalProperties(item.id, { ...properties, conditionalRules: rules });
   };
 
+  const updateModalFromBase = (newRule: ChoiceRule) => {
+    const rules = [...choiceRules];
+    rules.push(newRule);
+    setChoiceRules(rules);
+    updateModalProperties(item.id, { ...properties, conditionalRules: rules });
+  };
+
   return (
     <form
       onSubmit={(e: React.FormEvent<HTMLFormElement>) => e.preventDefault()}
@@ -90,15 +98,19 @@ export const ModalFormRules = ({
         })}
       </div>
       <div className="mb-6">
-        <Button
-          onClick={() => {
-            setChoiceRules([...choiceRules, { elementId: "", choiceId: String(item.id) }]);
-          }}
-          theme={"secondary"}
-          aria-controls={formId}
-        >
-          {t("addConditionalRules.addAnotherRule")}
-        </Button>
+        <div>
+          <Button
+            className="mr-4"
+            onClick={() => {
+              setChoiceRules([...choiceRules, { elementId: "", choiceId: String(item.id) }]);
+            }}
+            theme={"secondary"}
+            aria-controls={formId}
+          >
+            {t("addConditionalRules.addAnotherRule")}
+          </Button>
+          <AddOther item={item} onComplete={updateModalFromBase} />
+        </div>
       </div>
     </form>
   );

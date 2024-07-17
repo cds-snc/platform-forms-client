@@ -70,7 +70,15 @@ const createTemplateStore = (initProps?: Partial<InitialTemplateStoreProps>) => 
       ...initProps?.form,
     };
 
-    initProps.form.groups = orderGroups(initProps.form.groups, initProps.form.groupsLayout);
+    initProps.form = initializeGroups(initProps.form, initProps?.allowGroupsFlag || false);
+
+    // Ensure order by groups layout
+    if (!initProps.form.groupsLayout) {
+      /* No need to order as the groups layout does not exist */
+      initProps.form.groupsLayout = [];
+    } else {
+      initProps.form.groups = orderGroups(initProps.form.groups, initProps.form.groupsLayout);
+    }
   }
 
   return createStore<TemplateStoreState>()(
@@ -286,6 +294,19 @@ const createTemplateStore = (initProps?: Partial<InitialTemplateStoreProps>) => 
               set((state) => {
                 state.form.elements[elIndex].properties.choices?.push({ en: "", fr: "" });
               }),
+            addLabeledChoice: async (elIndex, label) => {
+              return new Promise((resolve) => {
+                set((state) => {
+                  state.form.elements[elIndex].properties.choices?.push({
+                    en: label.en,
+                    fr: label.fr,
+                  });
+
+                  const lastChoice = state.form.elements[elIndex].properties.choices?.length ?? 0;
+                  resolve(lastChoice);
+                });
+              });
+            },
             addSubChoice: (elIndex, subIndex) =>
               set((state) => {
                 state.form.elements[elIndex].properties.subElements?.[
@@ -314,8 +335,9 @@ const createTemplateStore = (initProps?: Partial<InitialTemplateStoreProps>) => 
                 const element = JSON.parse(JSON.stringify(state.form.elements[elIndex]));
                 element.id = id;
                 if (element.type !== "richText") {
-                  element.properties[state.localizeField("title")] = `${element.properties[state.localizeField("title")]
-                    } copy`;
+                  element.properties[state.localizeField("title")] = `${
+                    element.properties[state.localizeField("title")]
+                  } copy`;
                 }
                 state.form.elements.splice(elIndex + 1, 0, element);
                 state.form.layout.splice(elIndex + 1, 0, id);
@@ -345,8 +367,9 @@ const createTemplateStore = (initProps?: Partial<InitialTemplateStoreProps>) => 
                 if (subElements) {
                   const element = JSON.parse(JSON.stringify(subElements[subIndex]));
                   element.id = incrementElementId(subElements);
-                  element.properties[state.localizeField("title")] = `${element.properties[state.localizeField("title")]
-                    } copy`;
+                  element.properties[state.localizeField("title")] = `${
+                    element.properties[state.localizeField("title")]
+                  } copy`;
 
                   state.form.elements[elIndex].properties.subElements?.splice(
                     subIndex + 1,
@@ -386,8 +409,15 @@ const createTemplateStore = (initProps?: Partial<InitialTemplateStoreProps>) => 
                 state.lang = language as Language;
                 state.translationLanguagePriority = language as Language;
                 state.form = initializeGroups({ ...defaultForm }, allowGroups);
+
                 // Ensure order by groups layout
-                state.form.groups = orderGroups(state.form.groups, state.form.groupsLayout);
+                if (!state.form.groupsLayout) {
+                  /* No need to order as the groups layout does not exist */
+                  state.form.groupsLayout = [];
+                } else {
+                  state.form.groups = orderGroups(state.form.groups, state.form.groupsLayout);
+                }
+
                 state.isPublished = false;
                 state.name = "";
                 state.deliveryOption = undefined;
@@ -404,8 +434,15 @@ const createTemplateStore = (initProps?: Partial<InitialTemplateStoreProps>) => 
                 state.id = "";
                 state.lang = "en";
                 state.form = initializeGroups({ ...defaultForm, ...jsonConfig }, allowGroups);
+
                 // Ensure order by groups layout
-                state.form.groups = orderGroups(state.form.groups, state.form.groupsLayout);
+                if (!state.form.groupsLayout) {
+                  /* No need to order as the groups layout does not exist */
+                  state.form.groupsLayout = [];
+                } else {
+                  state.form.groups = orderGroups(state.form.groups, state.form.groupsLayout);
+                }
+
                 state.isPublished = false;
                 state.name = "";
                 state.securityAttribute = "Protected A";
