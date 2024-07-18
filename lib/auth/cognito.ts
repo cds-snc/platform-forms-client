@@ -40,7 +40,12 @@ export type Validate2FAVerificationCodeResult = {
   decodedCognitoToken?: DecodedCognitoToken;
 };
 
-export class Missing2FASession extends Error {}
+export class Missing2FASession extends Error {
+  constructor(message?: string) {
+    super(message ?? "Missing2FASession");
+    Object.setPrototypeOf(this, Missing2FASession.prototype);
+  }
+}
 
 export const initiateSignIn = async ({
   username,
