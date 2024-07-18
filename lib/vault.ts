@@ -327,6 +327,9 @@ export async function retrieveSubmissions(
           keys = response.UnprocessedKeys.Vault.Keys;
           ++attempt;
           const backOffTime = getExponentialBackoffTimeInMS(100, attempt, 2000, true);
+          logMessage.info(
+            `Retrying retrieveResponses for form ${formID} attempt ${attempt} in ${backOffTime}ms`
+          );
           // eslint-disable-next-line no-await-in-loop
           await delay(backOffTime);
         }
