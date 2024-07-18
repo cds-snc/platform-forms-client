@@ -1,9 +1,9 @@
-import { removeCustomFormValues } from "@lib/utils/form-builder/groupsHistory";
+import { removeFormContextValues } from "@lib/utils/form-builder/groupsHistory";
 import {values} from "../../__fixtures__/conditionalInputHistoryEmptySimple.json";
 
 describe("removeCustomFormValues function", () => {
   it("Removes any values not related to user input form values", () => {
-    const formValues = removeCustomFormValues(values);
+    const formValues = removeFormContextValues(values);
     const expectedValues = {
       "1": "A",
       "2": [],
@@ -26,7 +26,7 @@ describe("removeCustomFormValues function", () => {
 
   it("Handles empty inputs", () => {
     // @ts-expect-error - testing invalid input
-    const formValues = removeCustomFormValues();
+    const formValues = removeFormContextValues();
     const expectedValues = {};
     expect(formValues).toEqual(expectedValues);
   });
