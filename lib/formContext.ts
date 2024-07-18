@@ -6,7 +6,7 @@ export type Group = {
   titleEn: string;
   titleFr: string;
   nextAction?: string | NextActionRule[];
-  elements: string[];
+  elements: string[]; // NOTE: these are elementIds
   autoFlow?: boolean;
   exitUrlEn?: string; // Used when a nextAction is set to "exit"
   exitUrlFr?: string; // Used when a nextAction is set to "exit"
@@ -414,11 +414,21 @@ export const filterShownElements = (elements: FormElement[], matchedIds: string[
   });
 };
 
+/**
+ *
+ * @param elements Group type elements that are string[]
+ * @param elementsShown
+ * @returns
+ */
 export const filterValuesForShownElements = (elements: string[], elementsShown: FormElement[]) => {
   if (!Array.isArray(elements) || !Array.isArray(elementsShown)) {
     return elements;
   }
-  return elements.filter((element) => elementsShown.find((el) => el.id === Number(element)));
+  return elements.filter((elementId) => elementsShown.find((el) => el.id === Number(elementId)));
+};
+
+export const getElementIdsAsNumber = (elements: string[]) => {
+  return elements.map((element) => Number(element));
 };
 
 export const rebuildValuesFromShownElements = (values: Responses, elementsShown: FormElement[]) => {
