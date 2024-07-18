@@ -902,8 +902,8 @@
     },
     "actionsSaved": "Actions enregistrées",
     "legend": {
-      "page": "Appliquer de la logique d'embranchement aux pages",
-      "option": "Appliquer des règles d'affichage aux questions ayant des options à sélectionner"
+      "page": "Modifier la façon dont les pages sont ordonnées et connectées",
+      "option": "Appliquer des règles d'embranchement basé sur des questions ayant des options à sélectionner"
     },
     "exit": {
       "convertText": "Convertir la page",

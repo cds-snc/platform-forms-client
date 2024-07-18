@@ -902,8 +902,8 @@
     },
     "actionsSaved": "Actions saved",
     "legend": {
-      "page": "Apply branching logic to pages",
-      "option": "Apply display rules to questions with selectable options"
+      "page": "Change how pages are ordered and connected",
+      "option": "Apply branching based on questions with selectable options"
     },
     "exit": {
       "convertText": "Convert page",

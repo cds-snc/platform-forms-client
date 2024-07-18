@@ -28,7 +28,11 @@ export default async function Page({
 
   if (
     checkPrivilegesAsBoolean(ability, [
-      { action: "update", subject: "FormRecord", field: "isPublished" },
+      {
+        action: "update",
+        subject: { type: "FormRecord", object: { users: [{ id: session.user.id }] } },
+        field: "isPublished",
+      },
     ])
   ) {
     redirect(`/${locale}/forms`, RedirectType.replace);
