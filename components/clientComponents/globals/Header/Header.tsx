@@ -39,7 +39,7 @@ export const Header = ({ context = "default", className }: HeaderParams) => {
       >
         {isBannerEnabled && (
           <div className="bg-slate-800 text-white px-4 py-4">
-            <div className="inline-block border-2 border-gray-500 px-1 py-1 mr-4">
+            <div className="inline-block border-2 border-gray-500 px-2 py-1 mr-4">
               {t("campaignBanner.type")}
             </div>
             <div className="inline-block">
@@ -47,7 +47,7 @@ export const Header = ({ context = "default", className }: HeaderParams) => {
             </div>
           </div>
         )}
-        <div className="grid w-full grid-flow-col">
+        <div className="grid w-full grid-flow-col px-2 py-2">
           <div className="flex">
             <Link
               href={`/${language}/form-builder`}
