@@ -30,7 +30,12 @@ import { AccessControlError, createAbility } from "@lib/privileges";
 import { logMessage } from "@lib/logger";
 import { authCheckAndThrow } from "@lib/actions";
 
-class MalformedAPIRequest extends Error {}
+class MalformedAPIRequest extends Error {
+  constructor(message?: string) {
+    super(message ?? "MalformedAPIRequest");
+    Object.setPrototypeOf(this, MalformedAPIRequest.prototype);
+  }
+}
 
 const runValidationCondition = async (body: Record<string, unknown>) => {
   return body.formConfig !== undefined;
