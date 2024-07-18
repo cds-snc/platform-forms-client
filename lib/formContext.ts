@@ -414,12 +414,6 @@ export const filterShownElements = (elements: FormElement[], matchedIds: string[
   });
 };
 
-/**
- *
- * @param elements Group type elements that are string[]
- * @param elementsShown
- * @returns
- */
 export const filterValuesForShownElements = (elements: string[], elementsShown: FormElement[]) => {
   if (!Array.isArray(elements) || !Array.isArray(elementsShown)) {
     return elements;
@@ -434,19 +428,19 @@ export const getElementIdsAsNumber = (elements: string[]) => {
   return elements.map((element) => Number(element));
 };
 
-export const rebuildValuesFromShownElements = (values: Responses, elementsShown: FormElement[]) => {
+export const filterValuesByShownElements = (values: Responses, elementsShown: FormElement[]) => {
   if (!values || !Array.isArray(elementsShown)) {
     return values;
   }
-  const rebuiltValues: { [key: string]: string } = {};
+  const filteredValues: { [key: string]: string } = {};
   Object.keys(values).forEach((key) => {
     if (elementsShown.find((el) => el.id === Number(key))) {
-      rebuiltValues[key] = String(values[key]);
+      filteredValues[key] = String(values[key]);
     } else {
-      rebuiltValues[key] = "";
+      filteredValues[key] = "";
     }
   });
-  return rebuiltValues;
+  return filteredValues;
 };
 
 // const nextBasedOnValues = (nextActions: Group["nextAction"], values: FormValues) => {

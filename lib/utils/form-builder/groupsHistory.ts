@@ -73,7 +73,7 @@ export const removeFormContext = (allValues: Responses, valuesInHistory: Respons
   return { ...allValuesEmtpy, ...valuesInHistory };
 };
 
-export const removeCustomFormValues = (values: Responses) => {
+export const removeFormContextValues = (values: Responses) => {
   const formValues = { ...values };
   delete formValues["currentGroup"];
   delete formValues["groupHistory"];
