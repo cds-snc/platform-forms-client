@@ -34,7 +34,17 @@ export const getPreviousIdFromCurrentId = (currentId: string, history: string[])
   return null;
 };
 
-export const getRelevantValues = (
+/**
+ * Removes any values that are not on the branching path a user followed.
+ *
+ * e.g. If a user went down a conditional path B filled in some vaules but then went back and
+ * chose conditional path A. The previous no longer relevant values from path B would be removed.
+ * @param allFormValues
+ * @param allGroups
+ * @param answeredGroups
+ * @returns
+ */
+export const filterValuesByVisitedGroup = (
   allFormValues: Responses,
   allGroups: GroupsType | undefined,
   answeredGroups: string[]
@@ -43,6 +53,7 @@ export const getRelevantValues = (
   const relevantValues: Responses = {};
   answeredGroups.forEach((answeredGroupId) => {
     if (!allGroups[answeredGroupId] || !Array.isArray(allGroups[answeredGroupId].elements)) return;
+    // Filters in any values that are on the path the user took
     const groupValueIntersection = allGroups[answeredGroupId].elements;
     groupValueIntersection.forEach((relevantElement: string) => {
       const key = relevantElement as keyof typeof Response;
@@ -53,7 +64,7 @@ export const getRelevantValues = (
   return relevantValues;
 };
 
-export const filterNonRelevantValues = (allValues: Responses, valuesInHistory: Responses) => {
+export const removeFormContext = (allValues: Responses, valuesInHistory: Responses) => {
   if (!allValues || !valuesInHistory) return {} as Responses;
   const allValuesEmtpy = {} as Responses;
   for (const key in allValues) {
@@ -75,9 +86,9 @@ export const getInputHistoryValues = (
   groupHistory: string[],
   groups: GroupsType | undefined
 ) => {
-  const formValues = filterNonRelevantValues(
+  const formValues = removeFormContext(
     values,
-    getRelevantValues(values, groups, groupHistory as string[])
+    filterValuesByVisitedGroup(values, groups, groupHistory as string[])
   );
   return formValues;
 };
