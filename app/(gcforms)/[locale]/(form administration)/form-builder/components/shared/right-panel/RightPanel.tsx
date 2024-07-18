@@ -61,7 +61,7 @@ const TabButton = ({
 
 export const RightPanel = ({ id, lang }: { id: string; lang: Language }) => {
   const router = useRouter();
-  const { t, i18n } = useTranslation("form-builder");
+  const { t, i18n } = useTranslation(["form-builder", "common"]);
 
   const { id: storeId } = useTemplateStore((s) => ({
     id: s.id,
@@ -91,6 +91,16 @@ export const RightPanel = ({ id, lang }: { id: string; lang: Language }) => {
   }
 
   const [isIntersecting, setIsIntersecting] = useState(false);
+  const isBannerEnabled = t("campaignBanner.enabled");
+
+  //If Intersecting fixed-20 else fixed-0, but if BannerEnabled fixed-40 else fixed-20
+  const fixedRange = isBannerEnabled
+    ? isIntersecting
+      ? "top-30"
+      : "top-10"
+    : isIntersecting
+    ? "top-20"
+    : "top-0";
 
   // Observe if the header is offscreen
   // Used to determine the position of the right panel button "toggle" button
@@ -123,7 +133,7 @@ export const RightPanel = ({ id, lang }: { id: string; lang: Language }) => {
 
   return (
     <section className="relative" aria-labelledby="rightPanelTitle">
-      <div className={cn("fixed right-0", isIntersecting ? "top-20" : "top-0", open && "hidden")}>
+      <div className={cn("fixed right-0", fixedRange, open && "hidden")}>
         <Button
           theme="link"
           className="mr-8 mt-5 whitespace-nowrap [&_svg]:focus:fill-white"
