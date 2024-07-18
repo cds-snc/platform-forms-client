@@ -55,14 +55,15 @@ const DebugNamedGroupLayout = () => {
   if (!groups) {
     return null;
   }
-  const groupLayoutNames = groupsLayout
-    ? groupsLayout
-        .map((id: string) => groups[id]?.name)
-        .filter(Boolean)
-        .map((name, i) => {
-          return <div key={i}>{name}</div>;
-        })
-    : [];
+  const groupLayoutNames =
+    groupsLayout && groupsLayout.length >= 1
+      ? groupsLayout
+          .map((id: string) => groups[id]?.name)
+          .filter(Boolean)
+          .map((name, i) => {
+            return <div key={i}>{name}</div>;
+          })
+      : [];
 
   return groupLayoutNames;
 };

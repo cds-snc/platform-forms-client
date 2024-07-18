@@ -5,6 +5,25 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.15.2](https://github.com/cds-snc/platform-forms-client/compare/v3.15.1...v3.15.2) (2024-07-18)
+
+
+### Bug Fixes
+
+* Profile page showing incorrect status for publishing permission ([#4032](https://github.com/cds-snc/platform-forms-client/issues/4032)) ([be0c171](https://github.com/cds-snc/platform-forms-client/commit/be0c1714c99922a48f283c04df9dd7190fe6c810))
+* update start page name for logic view ([#4029](https://github.com/cds-snc/platform-forms-client/issues/4029)) ([109f350](https://github.com/cds-snc/platform-forms-client/commit/109f3504b29cf24ef5610f8faca4a4898ba58bbb))
+
+## [3.15.1](https://github.com/cds-snc/platform-forms-client/compare/v3.15.0...v3.15.1) (2024-07-18)
+
+
+### Bug Fixes
+
+* action panel z-index ([#3981](https://github.com/cds-snc/platform-forms-client/issues/3981)) ([01e8e4f](https://github.com/cds-snc/platform-forms-client/commit/01e8e4fb9b166d80ebf936ff1fbcaee35985c4da))
+* add toggle right panel from logic view nodes ([#3984](https://github.com/cds-snc/platform-forms-client/issues/3984)) ([0c748bf](https://github.com/cds-snc/platform-forms-client/commit/0c748bf6305eb4988261ad432344a6ec1e1c8a49))
+* Import with groups ([#4008](https://github.com/cds-snc/platform-forms-client/issues/4008)) ([59cfd8b](https://github.com/cds-snc/platform-forms-client/commit/59cfd8bf86d9379d8b040ca7b866d2ccdbe6185c))
+* overlapping element menus ([#3993](https://github.com/cds-snc/platform-forms-client/issues/3993)) ([1975c77](https://github.com/cds-snc/platform-forms-client/commit/1975c77cbe8afb28c421b7d9f1398d9f17121ef6))
+* remove initial initialize for groups ([#4010](https://github.com/cds-snc/platform-forms-client/issues/4010)) ([c6fd62e](https://github.com/cds-snc/platform-forms-client/commit/c6fd62e0cbf818c74c35077f7d0f6a03fcc42c30))
+
 ## [3.15.0](https://github.com/cds-snc/platform-forms-client/compare/v3.14.1...v3.15.0) (2024-07-10)
 
 

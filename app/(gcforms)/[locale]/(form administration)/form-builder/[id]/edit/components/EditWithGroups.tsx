@@ -221,8 +221,7 @@ export const EditWithGroups = ({ id, locale }: { id: string; locale: string }) =
           className={"rounded-lg"}
         />
       )}
-
-      <div className="my-10 flex max-w-[800px] justify-center">
+      <div className="my-12 flex max-w-[800px] justify-center laptop:my-10">
         <AddPageButton className="mr-5" />
         <AddBranchingButton id={id} locale={locale} />
       </div>

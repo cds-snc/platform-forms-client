@@ -162,5 +162,10 @@
     "confirmation": "Confirmation message",
     "privacy": "Privacy statement"
   },
-  "exit": "Exit"
+  "exit": "Exit",
+  "campaignBanner": {
+    "enabled": true,
+    "type": "COMING SOON",
+    "message": "<strong>In August</strong>: Build multi-page forms with branching logic. <a href='/en/contact' className='text-white hover:text-white'>Subscribe for updates</a>"
+  }
 }
