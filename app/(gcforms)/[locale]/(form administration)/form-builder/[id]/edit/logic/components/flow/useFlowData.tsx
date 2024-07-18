@@ -160,7 +160,6 @@ export const useFlowData = (lang: Language = "en") => {
 
       if (key === LockedSections.START) {
         // Ensure start label is displayed in the correct language
-        // The "name" gets set when the template is created
         label = getStartLabels()[lang];
       }
 
