@@ -20,7 +20,11 @@ export default async function Page({ params: { locale } }: { params: { locale: s
   const { session, ability } = await authCheckAndRedirect();
 
   const hasPublishPrivilege = checkPrivilegesAsBoolean(ability, [
-    { action: "update", subject: "FormRecord", field: "isPublished" },
+    {
+      action: "update",
+      subject: { type: "FormRecord", object: { users: [{ id: session.user.id }] } },
+      field: "isPublished",
+    },
   ]);
 
   const [userQuestions, allQuestions] = await Promise.all([
