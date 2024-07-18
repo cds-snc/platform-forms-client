@@ -428,6 +428,9 @@ export const filterValuesForShownElements = (elements: string[], elementsShown: 
 };
 
 export const getElementIdsAsNumber = (elements: string[]) => {
+  if (!Array.isArray(elements)) {
+    return [];
+  }
   return elements.map((element) => Number(element));
 };
 
