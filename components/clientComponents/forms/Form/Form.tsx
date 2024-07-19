@@ -25,6 +25,7 @@ import {
   getInputHistoryValues,
 } from "@lib/utils/form-builder/groupsHistory";
 import { filterShownElements, filterValuesByShownElements } from "@lib/formContext";
+import { formHasGroups } from "@lib/utils/form-builder/formHasGroups";
 
 interface SubmitButtonProps {
   numberOfRequiredQuestions: number;
@@ -348,11 +349,11 @@ export const Form = withFormik<FormProps, Responses>({
     // Needed so the Loader is displayed
     formikBag.setStatus("submitting");
     try {
-      const isGroupsCheck = formikBag.props.allowGrouping;
-      const isShowHideRules = (values.matchedIds as string[])?.length > 0;
-
+      const hasGroups =
+        formHasGroups(formikBag.props.formRecord.form) && formikBag.props.allowGrouping;
+      const hasShowHideRules = (values.matchedIds as string[])?.length > 0;
       const formValues =
-        isGroupsCheck && isShowHideRules
+        hasGroups && hasShowHideRules
           ? removeFormContextValues(getValuesForConditionalLogic())
           : removeFormContextValues(values);
 
