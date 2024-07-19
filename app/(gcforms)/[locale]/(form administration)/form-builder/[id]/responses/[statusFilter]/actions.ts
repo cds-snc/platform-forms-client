@@ -18,7 +18,12 @@ import {
 import { getFullTemplateByID } from "@lib/templates";
 import { FormElementTypes, VaultStatus } from "@lib/types";
 import { isResponseId } from "@lib/validation/validation";
-import { listAllSubmissions, retrieveSubmissions, updateLastDownloadedBy } from "@lib/vault";
+import {
+  confirmResponses,
+  listAllSubmissions,
+  retrieveSubmissions,
+  updateLastDownloadedBy,
+} from "@lib/vault";
 import { transform as csvTransform } from "@lib/responseDownloadFormats/csv";
 import { transform as htmlAggregatedTransform } from "@lib/responseDownloadFormats/html-aggregated";
 import { transform as htmlTransform } from "@lib/responseDownloadFormats/html";
@@ -26,7 +31,7 @@ import { transform as zipTransform } from "@lib/responseDownloadFormats/html-zip
 import { transform as jsonTransform } from "@lib/responseDownloadFormats/json";
 import { logMessage } from "@lib/logger";
 import { revalidatePath } from "next/cache";
-import { authCheckAndThrow } from "@lib/actions";
+import { authCheckAndRedirect, authCheckAndThrow } from "@lib/actions";
 import { FormBuilderError } from "./exceptions";
 import { FormProperties } from "@lib/types";
 import { getLayoutFromGroups } from "@lib/utils/form-builder/groupedFormHelpers";
@@ -306,5 +311,15 @@ export const getSubmissionsByFormat = async ({
     } else {
       return { error: "There was an error. Please try again later." } as ServerActionError;
     }
+  }
+};
+
+export const confirmSubmissionCodes = async (confirmationCodes: string[], formId: string) => {
+  try {
+    const { ability } = await authCheckAndRedirect();
+
+    return confirmResponses(ability, confirmationCodes, formId);
+  } catch (e) {
+    throw new Error("There was an error. Please try again later.");
   }
 };
