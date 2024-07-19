@@ -316,7 +316,13 @@ const ControlledTree: ForwardRefRenderFunction<unknown, TreeDataProviderProps> =
 
           setId(item.isFolder ? String(item.index) : String(parent?.index));
         }}
-        onExpandItem={(item) => setExpandedItems([...expandedItems, item.index])}
+        onExpandItem={(item) => {
+          if (item.index !== groupId) {
+            setId(String(item.index));
+          }
+
+          setExpandedItems([...expandedItems, item.index]);
+        }}
         onCollapseItem={(item) =>
           setExpandedItems(
             expandedItems.filter((expandedItemIndex) => expandedItemIndex !== item.index)

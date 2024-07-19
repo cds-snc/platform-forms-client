@@ -1,0 +1,257 @@
+{
+  "values": {
+    "3": "I am applying for myself",
+    "4": "Yes",
+    "5": "11/11/1977",
+    "8": "1",
+    "10": "1",
+    "11": "1111111",
+    "12": "Single",
+    "14": "1",
+    "15": "1",
+    "17": "1",
+    "18": "1",
+    "19": "1",
+    "20": "1",
+    "22": "",
+    "23": "",
+    "24": "",
+    "25": "",
+    "26": "Canada",
+    "27": "Yes",
+    "29": "English",
+    "30": "Email",
+    "31": "1@1.com",
+    "32": "1@1.com",
+    "35": "",
+    "36": "",
+    "38": "Yes",
+    "40": "Yes, I have federal benefits",
+    "41": "Yes, I have provincial or territorial benefits",
+    "43": "Non-Insured Health Benefits Program by Indigenous Services Canada",
+    "44": "Alberta",
+    "45": "Alberta Child Health Benefits",
+    "46": "",
+    "47": "",
+    "48": "",
+    "49": "",
+    "50": "",
+    "51": "",
+    "52": "",
+    "53": "",
+    "54": "",
+    "55": "",
+    "56": "",
+    "57": "",
+    "62": "",
+    "64": "",
+    "65": "",
+    "66": "",
+    "67": [],
+    "currentGroup": "review",
+    "groupHistory": [
+      "start",
+      "6e0a9eb6-4f2b-4e3b-b461-2ffc27cf15ae",
+      "058df0aa-b89c-431c-bbe1-15bcd657ef35",
+      "d0482786-8aa6-4143-9309-0b659b27d9bc",
+      "d745959f-d9b3-4ca7-8eca-a1f5443864ea",
+      "50ee6ed1-e664-4577-bf21-f69cb9c234b6",
+      "63f6417e-40e0-42e8-b432-6cd090115b71",
+      "80650382-44f8-4a1f-9d75-f987d67d0d9d",
+      "586a8562-1528-4f0c-bdf9-52f3cf0c264b",
+      "review"
+    ]
+  },
+  "groups": {
+    "start": {
+      "name": "Start",
+      "titleEn": "Start",
+      "titleFr": "Début",
+      "elements": ["1", "2"],
+      "nextAction": "6e0a9eb6-4f2b-4e3b-b461-2ffc27cf15ae",
+      "autoFlow": true
+    },
+    "6e0a9eb6-4f2b-4e3b-b461-2ffc27cf15ae": {
+      "name": "Type of Application",
+      "elements": ["3"],
+      "titleEn": "Type of Application",
+      "titleFr": "Type de demande",
+      "nextAction": [
+        {
+          "groupId": "058df0aa-b89c-431c-bbe1-15bcd657ef35",
+          "choiceId": "3.0"
+        },
+        {
+          "groupId": "9dc6671e-0207-478b-8c2c-609c15ba0acd",
+          "choiceId": "3.1"
+        }
+      ],
+      "autoFlow": false
+    },
+    "9dc6671e-0207-478b-8c2c-609c15ba0acd": {
+      "name": "Apply for someone else",
+      "elements": ["58"],
+      "titleEn": "Applying on behalf of someone cannot be completed online at this time\n",
+      "titleFr": "La demande au nom d'une autre personne ne peut pas être effectuée en ligne pour le moment.\n",
+      "nextAction": "review",
+      "autoFlow": false
+    },
+    "058df0aa-b89c-431c-bbe1-15bcd657ef35": {
+      "name": "Tax filing",
+      "elements": ["4"],
+      "titleEn": "Tax filing",
+      "titleFr": "Déclaration d'impôts",
+      "nextAction": [
+        {
+          "groupId": "d0482786-8aa6-4143-9309-0b659b27d9bc",
+          "choiceId": "4.0"
+        },
+        {
+          "groupId": "7e92f4d7-a6fb-4055-8c57-fb6fcbe2ed60",
+          "choiceId": "4.1"
+        }
+      ],
+      "autoFlow": false
+    },
+    "7e92f4d7-a6fb-4055-8c57-fb6fcbe2ed60": {
+      "name": "File your taxes",
+      "elements": ["59"],
+      "titleEn": "File your taxes\n",
+      "titleFr": "Produire votre déclaration de revenus",
+      "nextAction": "review",
+      "autoFlow": false
+    },
+    "d0482786-8aa6-4143-9309-0b659b27d9bc": {
+      "name": "Date of Birth",
+      "elements": ["6", "5"],
+      "titleEn": "Date of Birth",
+      "titleFr": "Date de naissance",
+      "nextAction": "d745959f-d9b3-4ca7-8eca-a1f5443864ea",
+      "autoFlow": true
+    },
+    "d745959f-d9b3-4ca7-8eca-a1f5443864ea": {
+      "name": "Applicant Information",
+      "elements": ["7", "8", "10", "11", "12"],
+      "titleEn": "Applicant Information",
+      "titleFr": "Informations sur le demandeur",
+      "nextAction": [
+        {
+          "groupId": "a3b46349-66cc-4153-95ee-7d3a17373bd4",
+          "choiceId": "12.2"
+        },
+        {
+          "groupId": "a3b46349-66cc-4153-95ee-7d3a17373bd4",
+          "choiceId": "12.1"
+        },
+        {
+          "groupId": "50ee6ed1-e664-4577-bf21-f69cb9c234b6",
+          "choiceId": "12.catch-all"
+        }
+      ],
+      "autoFlow": false
+    },
+    "a3b46349-66cc-4153-95ee-7d3a17373bd4": {
+      "name": "Spouse or Common-law partner information",
+      "elements": ["60", "62", "64", "65", "66", "67"],
+      "titleEn": "Spouse or Common-law partner information\n",
+      "titleFr": "Renseignements sur l'époux/épouse ou le conjoint/conjointe de fait\n",
+      "nextAction": "50ee6ed1-e664-4577-bf21-f69cb9c234b6",
+      "autoFlow": true
+    },
+    "50ee6ed1-e664-4577-bf21-f69cb9c234b6": {
+      "name": "Personal Information",
+      "elements": [
+        "13",
+        "14",
+        "15",
+        "16",
+        "17",
+        "18",
+        "19",
+        "26",
+        "20",
+        "27",
+        "21",
+        "22",
+        "23",
+        "24",
+        "25"
+      ],
+      "titleEn": "Personal Information",
+      "titleFr": "Renseignements personnels",
+      "nextAction": "63f6417e-40e0-42e8-b432-6cd090115b71",
+      "autoFlow": true
+    },
+    "63f6417e-40e0-42e8-b432-6cd090115b71": {
+      "name": "Communication",
+      "elements": ["28", "29", "30", "34", "31", "32", "33", "36", "35"],
+      "titleEn": "Communication",
+      "titleFr": "Communication",
+      "nextAction": "80650382-44f8-4a1f-9d75-f987d67d0d9d",
+      "autoFlow": true
+    },
+    "80650382-44f8-4a1f-9d75-f987d67d0d9d": {
+      "name": "Access to other dental insurance",
+      "elements": ["37", "38"],
+      "titleEn": "Access to other dental insurance",
+      "titleFr": "Accès à d'autres assurances dentaires",
+      "nextAction": "586a8562-1528-4f0c-bdf9-52f3cf0c264b",
+      "autoFlow": true
+    },
+    "586a8562-1528-4f0c-bdf9-52f3cf0c264b": {
+      "name": "Access to other federal, provincial or territorial dental benefits",
+      "elements": [
+        "39",
+        "40",
+        "43",
+        "42",
+        "41",
+        "44",
+        "45",
+        "46",
+        "47",
+        "48",
+        "49",
+        "57",
+        "50",
+        "51",
+        "52",
+        "53",
+        "54",
+        "55",
+        "56"
+      ],
+      "titleEn": "Access to other federal, provincial or territorial dental benefits\n",
+      "titleFr": "Accès à d'autres prestations dentaires fédérales, provinciales ou territoriales\n",
+      "nextAction": "review",
+      "autoFlow": true
+    },
+    "review": {
+      "name": "Review",
+      "titleEn": "",
+      "titleFr": "",
+      "elements": [],
+      "nextAction": "end",
+      "autoFlow": true
+    },
+    "end": {
+      "name": "End",
+      "titleEn": "",
+      "titleFr": "",
+      "elements": [],
+      "autoFlow": true
+    }
+  },
+  "groupHistory": [
+    "start",
+    "6e0a9eb6-4f2b-4e3b-b461-2ffc27cf15ae",
+    "058df0aa-b89c-431c-bbe1-15bcd657ef35",
+    "d0482786-8aa6-4143-9309-0b659b27d9bc",
+    "d745959f-d9b3-4ca7-8eca-a1f5443864ea",
+    "50ee6ed1-e664-4577-bf21-f69cb9c234b6",
+    "63f6417e-40e0-42e8-b432-6cd090115b71",
+    "80650382-44f8-4a1f-9d75-f987d67d0d9d",
+    "586a8562-1528-4f0c-bdf9-52f3cf0c264b",
+    "review"
+  ]
+}
