@@ -539,7 +539,8 @@ export async function deleteDraftFormResponses(ability: UserAbility, formID: str
 
       index++;
 
-      return dynamoDBDocumentClient.send(
+      // eslint-disable-next-line no-await-in-loop
+      await dynamoDBDocumentClient.send(
         new BatchWriteCommand({
           RequestItems: {
             Vault: chunk.map((entryName) => ({
