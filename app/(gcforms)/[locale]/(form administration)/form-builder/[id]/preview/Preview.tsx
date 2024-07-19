@@ -25,6 +25,7 @@ import { BackButton } from "./BackButton";
 import { safeJSONParse } from "@lib/utils";
 import { ErrorSaving } from "@formBuilder/components/shared/ErrorSaving";
 import { toast } from "@formBuilder/components/shared";
+import { defaultForm } from "@lib/store/defaults";
 
 export const Preview = ({
   disableSubmit = true,
@@ -45,14 +46,14 @@ export const Preview = ({
   const formParsed = safeJSONParse<FormProperties>(getSchema());
   if (!formParsed) {
     toast.error(<ErrorSaving errorCode={FormServerErrorCodes.JSON_PARSE} />, "wide");
-    // TODO: more thought into how hand this error. An error dialog could be shown but then the
-    // below should not be run but that is required for the form builder.
-    throw new Error(FormServerErrorCodes.JSON_PARSE);
   }
 
   const formRecord: PublicFormRecord = {
     id: id || "test0form00000id000asdf11",
-    form: formParsed,
+    // For the case of an error and formParsed is undefined, a defaultForm object is used so an
+    // error can be displayed and keep the user in the form-builder -vs- either crashing the app or
+    // redirecting the user to the error page and leaving the user without much error info.
+    form: formParsed || defaultForm,
     isPublished: getIsPublished(),
     securityAttribute: getSecurityAttribute(),
   };

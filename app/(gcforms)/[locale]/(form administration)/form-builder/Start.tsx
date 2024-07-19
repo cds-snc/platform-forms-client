@@ -8,7 +8,7 @@ import Link from "next/link";
 import { useTemplateStore } from "@lib/store/useTemplateStore";
 import { clearTemplateStore } from "@lib/store/utils";
 import { safeJSONParse } from "@lib/utils";
-import { FormRecord } from "@lib/types";
+import { FormProperties } from "@lib/types";
 
 export const Start = () => {
   const {
@@ -42,7 +42,7 @@ export const Start = () => {
       fileReader.readAsText(e.target.files[0], "UTF-8");
       fileReader.onload = (e) => {
         if (!e.target || !e.target.result || typeof e.target.result !== "string") return;
-        const data = safeJSONParse<FormRecord>(e.target.result, cleaner);
+        const data = safeJSONParse<FormProperties>(e.target.result, cleaner);
         if (!data) {
           setErrors([{ message: t("startErrorParse") }]);
           target.value = "";
@@ -57,7 +57,7 @@ export const Start = () => {
           return;
         }
 
-        importTemplate(data.form);
+        importTemplate(data);
 
         window.dataLayer = window.dataLayer || [];
         window.dataLayer.push({
