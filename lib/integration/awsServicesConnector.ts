@@ -27,10 +27,8 @@ export const dynamoDBDocumentClient = DynamoDBDocumentClient.from(
   new DynamoDBClient({
     ...globalConfig,
     ...localstackConfig,
-    // For non Batch operations, we will retry 10 times
-    // Batch operations are retried manually
     // SDK retries use exponential backoff with jitter by default
-    maxAttempts: 10,
+    maxAttempts: 15,
   })
 );
 
