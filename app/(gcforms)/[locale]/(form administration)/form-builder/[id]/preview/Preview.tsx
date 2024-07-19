@@ -50,7 +50,10 @@ export const Preview = ({
 
   const formRecord: PublicFormRecord = {
     id: id || "test0form00000id000asdf11",
-    form: formParsed || defaultForm, // defaultForm to stop a redirect to the app error page
+    // TODO: refactor code to handle invalid JSON and show a helpful error message. Above will
+    // show a toast to download the JSON file. But it's the default template so it will be valid
+    // JSON and hide the invalid JSON that failed to parse.
+    form: formParsed || defaultForm,
     isPublished: getIsPublished(),
     securityAttribute: getSecurityAttribute(),
   };
