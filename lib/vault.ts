@@ -279,8 +279,9 @@ export async function retrieveSubmissions(
     // Reducing to 50 in order to add some throttling
     const chunkedKeys = chunkArray(keys, 50);
 
-    // Create function that will run the batch in parallel
-    const dbQuery = async (keys: Record<string, string>[]) => {
+    const submissions = [];
+
+    for await (let keys of chunkedKeys) {
       let accumulatedResponses: VaultSubmission[] = [];
       let attempt = 1;
       while (keys && keys.length > 0) {
@@ -332,25 +333,25 @@ export async function retrieveSubmissions(
           );
           // eslint-disable-next-line no-await-in-loop
           await delay(backOffTime);
+        } else {
+          keys = [];
         }
       }
-      return accumulatedResponses;
-    };
+      submissions.push(...accumulatedResponses);
 
-    // Run the batch in parallel
-    const submissions = (await Promise.all(chunkedKeys.map((keys) => dbQuery(keys)))).flat();
-    // Log each response retrieved
-    submissions.forEach((item) => {
-      logEvent(
-        ability.userID,
-        {
-          type: "Response",
-          id: item.submissionID,
-        },
-        "RetrieveResponses",
-        `Retrieve selected responses for form ${formID} with ID ${item.submissionID}`
-      );
-    });
+      // Log each response retrieved
+      accumulatedResponses.forEach((item) => {
+        logEvent(
+          ability.userID,
+          {
+            type: "Response",
+            id: item.submissionID,
+          },
+          "RetrieveResponses",
+          `Retrieve selected responses for form ${formID} with ID ${item.submissionID}`
+        );
+      });
+    }
 
     logMessage.info("HealthCheck: retrieve submissions success");
 
@@ -570,3 +571,218 @@ export async function deleteDraftFormResponses(ability: UserAbility, formID: str
     throw error;
   }
 }
+
+async function getSubmissionsFromConfirmationCodes(
+  ability: UserAbility,
+  formId: string,
+  confirmationCodes: string[]
+): Promise<{
+  submissionsToConfirm: { name: string; confirmationCode: string }[];
+  confirmationCodesAlreadyUsed: string[];
+  confirmationCodesNotFound: string[];
+}> {
+  await checkAbilityToAccessSubmissions(ability, formId).catch((error) => {
+    if (error instanceof AccessControlError) {
+      logEvent(
+        ability.userID,
+        { type: "Form", id: formId },
+        "AccessDenied",
+        `Attempted to delete all responses for form ${formId}`
+      );
+    }
+    throw error;
+  });
+
+  const accumulatedSubmissions: {
+    [confCode: string]: { name: string; removalDate?: number };
+  } = {};
+
+  let requestedKeys = confirmationCodes.map((code) => {
+    return { FormID: formId, NAME_OR_CONF: `CONF#${code}` };
+  });
+
+  while (requestedKeys.length > 0) {
+    const request = new BatchGetCommand({
+      RequestItems: {
+        Vault: {
+          Keys: requestedKeys,
+          ProjectionExpression: "#name,ConfirmationCode,RemovalDate",
+          ExpressionAttributeNames: {
+            "#name": "Name",
+          },
+        },
+      },
+    });
+
+    // eslint-disable-next-line no-await-in-loop
+    const response = await dynamoDBDocumentClient.send(request);
+
+    if (response.Responses?.Vault) {
+      response.Responses.Vault.forEach((record) => {
+        accumulatedSubmissions[record["ConfirmationCode"]] = {
+          name: record["Name"],
+          removalDate: record["RemovalDate"],
+        };
+      });
+    }
+
+    if (response.UnprocessedKeys?.Vault?.Keys) {
+      requestedKeys = response.UnprocessedKeys.Vault.Keys as {
+        FormID: string;
+        NAME_OR_CONF: string;
+      }[];
+    } else {
+      requestedKeys = [];
+    }
+  }
+
+  return confirmationCodes.reduce(
+    (acc, currentConfirmationCode) => {
+      const submission = accumulatedSubmissions[currentConfirmationCode];
+
+      if (!submission) {
+        acc.confirmationCodesNotFound.push(currentConfirmationCode);
+      } else if (submission.removalDate) {
+        acc.confirmationCodesAlreadyUsed.push(currentConfirmationCode);
+      } else {
+        acc.submissionsToConfirm.push({
+          name: submission.name,
+          confirmationCode: currentConfirmationCode,
+        });
+      }
+      return acc;
+    },
+    {
+      submissionsToConfirm: Array<{ name: string; confirmationCode: string }>(),
+      confirmationCodesAlreadyUsed: Array<string>(),
+      confirmationCodesNotFound: Array<string>(),
+    }
+  );
+}
+
+export const confirmResponses = async (
+  ability: UserAbility,
+  confirmationCodes: string[],
+  formId: string
+) => {
+  await checkAbilityToAccessSubmissions(ability, formId).catch((error) => {
+    if (error instanceof AccessControlError) {
+      logEvent(
+        ability.userID,
+        { type: "Form", id: formId },
+        "AccessDenied",
+        `Attempted to delete all responses for form ${formId}`
+      );
+    }
+    throw error;
+  });
+
+  const chunkedCodes = chunkArray(confirmationCodes, 50);
+  const accumulatedResults = [];
+
+  for await (const codes of chunkedCodes) {
+    accumulatedResults.push(await getSubmissionsFromConfirmationCodes(ability, formId, codes));
+  }
+
+  const submissionsFromConfirmationCodes = accumulatedResults.reduce(
+    (accumulated, result) => {
+      accumulated.submissionsToConfirm.push(...result.submissionsToConfirm);
+      accumulated.confirmationCodesAlreadyUsed.push(...result.confirmationCodesAlreadyUsed);
+      accumulated.confirmationCodesNotFound.push(...result.confirmationCodesNotFound);
+      return accumulated;
+    },
+    {
+      submissionsToConfirm: [],
+      confirmationCodesAlreadyUsed: [],
+      confirmationCodesNotFound: [],
+    }
+  );
+
+  const unprocessed = [];
+  if (submissionsFromConfirmationCodes.submissionsToConfirm.length > 0) {
+    // max 50 submissions per request
+    const confirmationTimestamp = Date.now();
+    const removalDate = confirmationTimestamp + 2592000000; // 2592000000 milliseconds = 30 days
+
+    // Chunked to batches of 25 to spread out the write unit capacity usage
+    const chunkedSubmissions = chunkArray(
+      submissionsFromConfirmationCodes.submissionsToConfirm,
+      25
+    );
+
+    for await (const submissions of chunkedSubmissions) {
+      try {
+        const request = new TransactWriteCommand({
+          TransactItems: submissions.flatMap((submission) => {
+            return [
+              {
+                Update: {
+                  TableName: "Vault",
+                  Key: {
+                    FormID: formId,
+                    NAME_OR_CONF: `NAME#${submission.name}`,
+                  },
+                  UpdateExpression:
+                    "SET #status = :status, ConfirmTimestamp = :confirmTimestamp, RemovalDate = :removalDate",
+                  ExpressionAttributeNames: {
+                    "#status": "Status",
+                  },
+                  ExpressionAttributeValues: {
+                    ":status": "Confirmed",
+                    ":confirmTimestamp": confirmationTimestamp,
+                    ":removalDate": removalDate,
+                  },
+                },
+              },
+              {
+                Update: {
+                  TableName: "Vault",
+                  Key: {
+                    FormID: formId,
+                    NAME_OR_CONF: `CONF#${submission.confirmationCode}`,
+                  },
+                  UpdateExpression: "SET RemovalDate = :removalDate",
+                  ExpressionAttributeValues: {
+                    ":removalDate": removalDate,
+                  },
+                },
+              },
+            ];
+          }),
+        });
+
+        await dynamoDBDocumentClient.send(request);
+        // Done asychronously to not block response back to client
+        submissions.forEach((confirmation) =>
+          logEvent(
+            ability.userID,
+            { type: "Response", id: confirmation.name },
+            "ConfirmResponse",
+            `Confirmed response for form ${formId}`
+          )
+        );
+      } catch (e) {
+        unprocessed.push(...submissions.map((submission) => submission.name));
+      }
+    }
+  }
+
+  logMessage.info("HealthCheck: confirm submissions success");
+
+  return {
+    ...(submissionsFromConfirmationCodes.submissionsToConfirm.length > 0 && {
+      confirmedSubmissions: submissionsFromConfirmationCodes.submissionsToConfirm.map(
+        (submission) => submission.confirmationCode
+      ),
+    }),
+    ...(submissionsFromConfirmationCodes.confirmationCodesAlreadyUsed.length > 0 && {
+      confirmationCodesAlreadyUsed: submissionsFromConfirmationCodes.confirmationCodesAlreadyUsed,
+    }),
+    ...(submissionsFromConfirmationCodes.confirmationCodesNotFound.length > 0 && {
+      invalidConfirmationCodes: submissionsFromConfirmationCodes.confirmationCodesNotFound,
+    }),
+    ...(unprocessed.length > 0 && {
+      unprocessedConfirmationCodes: unprocessed,
+    }),
+  };
+};
