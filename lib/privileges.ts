@@ -39,7 +39,12 @@ export const createAbility = (session: Session): UserAbility => {
 };
 
 // Creates a new custom Error Class
-export class AccessControlError extends Error {}
+export class AccessControlError extends Error {
+  constructor(message?: string) {
+    super(message ?? "AccessControlError");
+    Object.setPrototypeOf(this, AccessControlError.prototype);
+  }
+}
 
 export function interpolatePermissionCondition(
   condition: MongoQuery<AnyObject>,

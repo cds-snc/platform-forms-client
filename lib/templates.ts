@@ -198,9 +198,18 @@ export type UpdateTemplateCommand = {
   publishDesc?: string;
 };
 
-export class TemplateAlreadyPublishedError extends Error {}
-
-export class TemplateHasUnprocessedSubmissions extends Error {}
+export class TemplateAlreadyPublishedError extends Error {
+  constructor(message?: string) {
+    super(message ?? "TemplateAlreadyPublishedError");
+    Object.setPrototypeOf(this, TemplateAlreadyPublishedError.prototype);
+  }
+}
+export class TemplateHasUnprocessedSubmissions extends Error {
+  constructor(message?: string) {
+    super(message ?? "TemplateHasUnprocessedSubmissions");
+    Object.setPrototypeOf(this, TemplateHasUnprocessedSubmissions.prototype);
+  }
+}
 
 /**
  * Creates a Form Template record

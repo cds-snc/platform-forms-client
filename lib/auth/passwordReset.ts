@@ -5,8 +5,18 @@ import { sendEmail } from "@lib/integration/notifyConnector";
 import { userHasSecurityQuestions } from "@lib/auth/securityQuestions";
 import { getOrigin } from "@lib/origin";
 
-export class PasswordResetInvalidLink extends Error {}
-export class PasswordResetExpiredLink extends Error {}
+export class PasswordResetInvalidLink extends Error {
+  constructor(message?: string) {
+    super(message ?? "PasswordResetInvalidLink");
+    Object.setPrototypeOf(this, PasswordResetInvalidLink.prototype);
+  }
+}
+export class PasswordResetExpiredLink extends Error {
+  constructor(message?: string) {
+    super(message ?? "PasswordResetExpiredLink");
+    Object.setPrototypeOf(this, PasswordResetExpiredLink.prototype);
+  }
+}
 
 export const deleteMagicLinkEntry = async (identifier: string) => {
   await prisma.magicLink.deleteMany({
