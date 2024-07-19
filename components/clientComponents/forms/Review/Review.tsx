@@ -1,92 +1,131 @@
-"use client";
+import { useMemo, useRef } from "react";
+import { useTranslation } from "@i18n/client";
 import { Button } from "@clientComponents/globals";
 import { Theme } from "@clientComponents/globals/Buttons/themes";
-import { useTranslation } from "@i18n/client";
 import { useFocusIt } from "@lib/hooks/useFocusIt";
 import { useGCFormsContext } from "@lib/hooks/useGCFormContext";
-import { FormRecord, TypeOmit } from "@lib/types";
+import { FormElement } from "@lib/types";
 import { Language } from "@lib/types/form-builder-types";
 import { getLocalizedProperty } from "@lib/utils";
-import { useMemo, useRef } from "react";
+import {
+  filterShownElements,
+  filterValuesForShownElements,
+  FormValues,
+  getElementIdsAsNumber,
+  Group,
+} from "@lib/formContext";
 
-type ReviewGroup = {
+type ReviewItem = {
   id: string;
   name: string;
   title: string;
   elements: {
-    [x: string]: string;
+    elementId: number;
+    title: string;
+    values: string;
   }[];
 };
 
-type QuestionAnswer = {
-  [x: string]: string;
-};
+function getFormElementValues(elementName: number | null, formValues: void | FormValues) {
+  const value = formValues[elementName as keyof typeof formValues];
+  if (Array.isArray(value)) {
+    return (value as Array<string>).join(", ") || "-";
+  }
+  return value || "-";
+}
+
+function getFormElementTitle(formElementId: number, formElements: FormElement[], lang: string) {
+  const formElement = formElements.find((item) => item.id === formElementId);
+  return formElement
+    ? (formElement.properties?.[getLocalizedProperty("title", lang)] as string)
+    : "-";
+}
+
+function getReviewItemElements(
+  groupElements: string[],
+  formElements: FormElement[],
+  matchedIds: string[],
+  formValues: FormValues,
+  lang: string
+) {
+  const shownFormElements = filterShownElements(formElements, matchedIds);
+  const shownElementIds = getElementIdsAsNumber(
+    filterValuesForShownElements(groupElements, shownFormElements)
+  );
+  const result = shownElementIds.map((elementId) => {
+    return {
+      elementId,
+      title: getFormElementTitle(elementId, formElements, lang),
+      values: getFormElementValues(elementId, formValues),
+    };
+  });
+  return result;
+}
 
 export const Review = ({ language }: { language: Language }): React.ReactElement => {
   const { t } = useTranslation(["review", "common"]);
-  const { groups, getValues, formRecord, getGroupHistory, getGroupTitle } = useGCFormsContext();
-  const headingRef = useRef(null);
+  const { groups, getValues, formRecord, getGroupHistory, getGroupTitle, matchedIds } =
+    useGCFormsContext();
 
+  const headingRef = useRef(null);
   useFocusIt({ elRef: headingRef });
 
-  const questionsAndAnswers: ReviewGroup[] = useMemo(() => {
-    function formatElementValue(elementName: string | null) {
-      const value = formValues[elementName as keyof typeof formValues];
-      if (Array.isArray(value)) {
-        return (value as Array<string>).join(", ");
-      }
-      return value || "-";
-    }
-    const formValues = getValues();
-    const reviewGroups = { ...groups };
+  const reviewItems: ReviewItem[] = useMemo(() => {
+    const formValues: void | FormValues = getValues();
+    if (!formValues || !groups) return [];
+
     const groupHistory = getGroupHistory();
     return groupHistory
       .filter((key) => key !== "review") // Removed to avoid showing as a group
-      .map((key) => {
-        const elements = reviewGroups[key].elements.map((element) => {
-          const elementName = element as keyof typeof formValues;
-          return {
-            [element]: formatElementValue(elementName),
-          };
-        });
+      .map((groupId) => {
+        const group: Group = groups[groupId as keyof typeof groups];
         return {
-          id: key,
-          name: reviewGroups[key].name,
-          title: getGroupTitle(key, language),
-          elements,
+          id: groupId,
+          name: group.name,
+          title: getGroupTitle(groupId, language),
+          elements: getReviewItemElements(
+            group.elements,
+            formRecord.form.elements,
+            matchedIds,
+            formValues,
+            language
+          ),
         };
       });
-  }, [groups, getValues, getGroupHistory, getGroupTitle, language]);
+  }, [
+    groups,
+    getValues,
+    getGroupHistory,
+    getGroupTitle,
+    language,
+    formRecord.form.elements,
+    matchedIds,
+  ]);
 
   return (
     <>
       <h2 ref={headingRef}>{t("reviewForm", { lng: language })}</h2>
       <div className="my-16">
-        {Array.isArray(questionsAndAnswers) &&
-          questionsAndAnswers.map((group) => {
-            const title = group.title ? group.title : t("start", { ns: "common", lng: language }); // group.name as fallback for groups like Start
+        {Array.isArray(reviewItems) &&
+          reviewItems.map((reviewItem) => {
+            const title = reviewItem.title
+              ? reviewItem.title
+              : t("start", { ns: "common", lng: language });
             return (
-              <div key={group.id} className="mb-10 rounded-lg border-2 border-slate-400 px-6 py-4">
+              <div
+                key={reviewItem.id}
+                className="mb-10 rounded-lg border-2 border-slate-400 px-6 py-4"
+              >
                 <h3 className="text-slate-700">
-                  <EditButton group={group} theme="link">
-                    <>{title}</>
+                  <EditButton reviewItem={reviewItem} theme="link">
+                    {title}
                   </EditButton>
                 </h3>
                 <div className="mb-10 ml-1">
-                  <dl className="my-10">
-                    {Array.isArray(group.elements) &&
-                      group.elements.map((element) => (
-                        <QuestionsAnswers
-                          key={Object.keys(element)[0]}
-                          element={element}
-                          formRecord={formRecord}
-                          lang={language}
-                        />
-                      ))}
-                  </dl>
+                  <QuestionsAnswersList reviewItem={reviewItem} />
                 </div>
-                <EditButton group={group} theme="secondary">
-                  <>{t("edit", { lng: language })}</>
+                <EditButton reviewItem={reviewItem} theme="secondary">
+                  {t("edit", { lng: language })}
                 </EditButton>
               </div>
             );
@@ -96,38 +135,30 @@ export const Review = ({ language }: { language: Language }): React.ReactElement
   );
 };
 
-const QuestionsAnswers = ({
-  element,
-  formRecord,
-  lang,
-}: {
-  element: QuestionAnswer;
-  formRecord: TypeOmit<FormRecord, "name" | "deliveryOption">;
-  lang: string;
-}): React.ReactElement => {
-  const { t } = useTranslation("review");
-  function getElementNameById(id: string | number) {
-    const element = formRecord.form.elements.find((item) => String(item.id) === String(id));
-    return element ? element.properties?.[getLocalizedProperty("title", lang)] : t("unknown");
-  }
-  const question = getElementNameById(Object.keys(element)[0]) as string;
-  const answer = Object.values(element)[0] as string;
+const QuestionsAnswersList = ({ reviewItem }: { reviewItem: ReviewItem }): React.ReactElement => {
   return (
-    <div className="mb-8">
-      <dt className="font-bold mb-2">{question}</dt>
-      <dd>{answer}</dd>
-    </div>
+    <dl className="my-10">
+      {Array.isArray(reviewItem.elements) &&
+        reviewItem.elements.map((reviewElement) => {
+          return (
+            <div key={reviewElement.elementId} className="mb-8">
+              <dt className="font-bold mb-2">{reviewElement.title}</dt>
+              <dd>{reviewElement.values}</dd>
+            </div>
+          );
+        })}
+    </dl>
   );
 };
 
 const EditButton = ({
-  group,
+  reviewItem,
   theme,
   children,
 }: {
-  group: ReviewGroup;
+  reviewItem: ReviewItem;
   theme: Theme;
-  children: React.ReactElement;
+  children: React.ReactElement | string;
 }): React.ReactElement => {
   const { setGroup, clearHistoryAfterId } = useGCFormsContext();
   return (
@@ -135,8 +166,8 @@ const EditButton = ({
       type="button"
       theme={theme}
       onClick={() => {
-        setGroup(group.id);
-        clearHistoryAfterId(group.id);
+        setGroup(reviewItem.id);
+        clearHistoryAfterId(reviewItem.id);
       }}
     >
       {children}
