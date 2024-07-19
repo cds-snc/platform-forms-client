@@ -50,10 +50,7 @@ export const Preview = ({
 
   const formRecord: PublicFormRecord = {
     id: id || "test0form00000id000asdf11",
-    // For the case of an error and formParsed is undefined, a defaultForm object is used so an
-    // error can be displayed and keep the user in the form-builder -vs- either crashing the app or
-    // redirecting the user to the error page and leaving the user without much error info.
-    form: formParsed || defaultForm,
+    form: formParsed || defaultForm, // defaultForm to stop a redirect to the app error page
     isPublished: getIsPublished(),
     securityAttribute: getSecurityAttribute(),
   };
