@@ -1,4 +1,4 @@
-import { FormElement } from "@lib/types";
+import { FormElement, Responses } from "@lib/types";
 import { PublicFormRecord, ConditionalRule } from "@lib/types";
 
 export type Group = {
@@ -6,7 +6,7 @@ export type Group = {
   titleEn: string;
   titleFr: string;
   nextAction?: string | NextActionRule[];
-  elements: string[];
+  elements: string[]; // NOTE: these are elementIds
   autoFlow?: boolean;
   exitUrlEn?: string; // Used when a nextAction is set to "exit"
   exitUrlFr?: string; // Used when a nextAction is set to "exit"
@@ -387,6 +387,60 @@ export const checkRelatedRulesAsBoolean = (
   matchedIds: string[]
 ) => {
   return getRelatedIdsPassingRules(elements, rules, matchedIds).length > 0;
+};
+
+export const filterShownElements = (elements: FormElement[], matchedIds: string[]) => {
+  if (!Array.isArray(elements) || !Array.isArray(matchedIds)) {
+    return elements;
+  }
+  return elements.filter((element) => {
+    const elementWithConditionalRules =
+      element.properties.conditionalRules && element.properties.conditionalRules.length > 0;
+    if (!elementWithConditionalRules) {
+      return true;
+    }
+
+    const elementHasConditionalRules = validConditionalRules(element, matchedIds);
+    const elementValueIncludedInShowHide = checkRelatedRulesAsBoolean(
+      elements,
+      element.properties.conditionalRules,
+      matchedIds
+    );
+    if (elementHasConditionalRules && elementValueIncludedInShowHide) {
+      return true;
+    }
+
+    return false;
+  });
+};
+
+export const filterValuesForShownElements = (elements: string[], elementsShown: FormElement[]) => {
+  if (!Array.isArray(elements) || !Array.isArray(elementsShown)) {
+    return elements;
+  }
+  return elements.filter((elementId) => elementsShown.find((el) => el.id === Number(elementId)));
+};
+
+export const getElementIdsAsNumber = (elements: string[]) => {
+  if (!Array.isArray(elements)) {
+    return [];
+  }
+  return elements.map((element) => Number(element));
+};
+
+export const filterValuesByShownElements = (values: Responses, elementsShown: FormElement[]) => {
+  if (!values || !Array.isArray(elementsShown)) {
+    return values;
+  }
+  const filteredValues: { [key: string]: string } = {};
+  Object.keys(values).forEach((key) => {
+    if (elementsShown.find((el) => el.id === Number(key))) {
+      filteredValues[key] = String(values[key]);
+    } else {
+      filteredValues[key] = "";
+    }
+  });
+  return filteredValues;
 };
 
 // const nextBasedOnValues = (nextActions: Group["nextAction"], values: FormValues) => {

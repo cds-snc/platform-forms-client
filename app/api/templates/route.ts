@@ -21,7 +21,12 @@ import {
 } from "@lib/middleware/jsonIDValidator";
 import { logMessage } from "@lib/logger";
 
-class MalformedAPIRequest extends Error {}
+class MalformedAPIRequest extends Error {
+  constructor(message?: string) {
+    super(message ?? "MalformedAPIRequest");
+    Object.setPrototypeOf(this, MalformedAPIRequest.prototype);
+  }
+}
 
 const runValidationCondition = async (body: Record<string, unknown>) => {
   return body.formConfig !== undefined;

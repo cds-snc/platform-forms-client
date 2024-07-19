@@ -37,8 +37,8 @@ describe("Create Security Questions", () => {
     const userUpdate = (prismaMock.user.update as jest.MockedFunction<any>).mockResolvedValue({});
 
     await createSecurityAnswers(ability, [{ questionId: "10", answer: "answer" }]);
-    expect(userUpdate).toBeCalledTimes(1);
-    expect(userUpdate).toBeCalledWith({
+    expect(userUpdate).toHaveBeenCalledTimes(1);
+    expect(userUpdate).toHaveBeenCalledWith({
       where: { id: "1" },
       data: {
         securityAnswers: {
@@ -70,7 +70,7 @@ describe("Create Security Questions", () => {
     });
     await expect(async () => {
       await createSecurityAnswers(ability, [{ questionId: "10", answer: "answer" }]);
-    }).rejects.toThrowError(new AlreadyHasSecurityAnswers());
+    }).rejects.toThrow(new AlreadyHasSecurityAnswers());
   });
   it("Throws an error if the user tries to create security questions with invalid question ids", async () => {
     const fakeSession = {
@@ -91,9 +91,9 @@ describe("Create Security Questions", () => {
     const userUpdate = (prismaMock.user.update as jest.MockedFunction<any>).mockResolvedValue({});
     await expect(async () => {
       await createSecurityAnswers(ability, [{ questionId: "10", answer: "answer" }]);
-    }).rejects.toThrowError(new InvalidSecurityQuestionId());
+    }).rejects.toThrow(new InvalidSecurityQuestionId());
 
-    expect(userUpdate).toBeCalledTimes(0);
+    expect(userUpdate).toHaveBeenCalledTimes(0);
   });
   it("Throws and error if the user tries to create security questions with duplicated question ids", async () => {
     const fakeSession = {
@@ -117,8 +117,8 @@ describe("Create Security Questions", () => {
         { questionId: "10", answer: "answer" },
         { questionId: "10", answer: "answer" },
       ]);
-    }).rejects.toThrowError(new DuplicatedQuestionsNotAllowed());
-    expect(userUpdate).toBeCalledTimes(0);
+    }).rejects.toThrow(new DuplicatedQuestionsNotAllowed());
+    expect(userUpdate).toHaveBeenCalledTimes(0);
   });
 });
 describe("Update Security Questions", () => {
@@ -153,8 +153,8 @@ describe("Update Security Questions", () => {
       newQuestionId: "10",
       newAnswer: "answer",
     });
-    expect(securityAnswerUpdate).toBeCalledTimes(1);
-    expect(securityAnswerUpdate).toBeCalledWith({
+    expect(securityAnswerUpdate).toHaveBeenCalledTimes(1);
+    expect(securityAnswerUpdate).toHaveBeenCalledWith({
       where: { id: "1" },
       data: {
         question: { connect: { id: "10" } },
@@ -194,8 +194,8 @@ describe("Update Security Questions", () => {
       newQuestionId: "9",
       newAnswer: "answer",
     });
-    expect(securityAnswerUpdate).toBeCalledTimes(1);
-    expect(securityAnswerUpdate).toBeCalledWith({
+    expect(securityAnswerUpdate).toHaveBeenCalledTimes(1);
+    expect(securityAnswerUpdate).toHaveBeenCalledWith({
       where: { id: "1" },
       data: {
         question: { connect: { id: "9" } },
@@ -229,8 +229,8 @@ describe("Update Security Questions", () => {
         newQuestionId: "10",
         newAnswer: "answer",
       });
-    }).rejects.toThrowError(new SecurityAnswersNotFound());
-    expect(userUpdate).toBeCalledTimes(0);
+    }).rejects.toThrow(new SecurityAnswersNotFound());
+    expect(userUpdate).toHaveBeenCalledTimes(0);
   });
   it("Throws an error if the user tries to update security questions with invalid question ids", async () => {
     const fakeSession = {
@@ -261,7 +261,7 @@ describe("Update Security Questions", () => {
         newQuestionId: "6",
         newAnswer: "answer",
       });
-    }).rejects.toThrowError(new InvalidSecurityQuestionId());
+    }).rejects.toThrow(new InvalidSecurityQuestionId());
   });
   it("Throws an error if the user tries to create security questions with duplicated question ids", async () => {
     const fakeSession = {
@@ -275,6 +275,11 @@ describe("Update Security Questions", () => {
         {
           id: "1",
           answer: "answer",
+          question: { id: "9", questionEn: "question", questionFr: "question", deprecated: false },
+        },
+        {
+          id: "2",
+          answer: "answer",
           question: { id: "10", questionEn: "question", questionFr: "question", deprecated: false },
         },
       ],
@@ -282,8 +287,8 @@ describe("Update Security Questions", () => {
 
     // retrivePoolOfSecurityQuestions
     (prismaMock.securityQuestion.findMany as jest.MockedFunction<any>).mockResolvedValue([
-      { id: "10", questionEn: "question", questionFr: "question", deprecated: false },
       { id: "9", questionEn: "question", questionFr: "question", deprecated: false },
+      { id: "10", questionEn: "question", questionFr: "question", deprecated: false },
     ]);
 
     const userUpdate = (prismaMock.user.update as jest.MockedFunction<any>).mockResolvedValue({});
@@ -293,7 +298,7 @@ describe("Update Security Questions", () => {
         newQuestionId: "10",
         newAnswer: "answer",
       });
-    }).rejects.toThrowError(new DuplicatedQuestionsNotAllowed());
-    expect(userUpdate).toBeCalledTimes(0);
+    }).rejects.toThrow(new DuplicatedQuestionsNotAllowed());
+    expect(userUpdate).toHaveBeenCalledTimes(0);
   });
 });

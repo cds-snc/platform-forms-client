@@ -6,5 +6,6 @@ export class FormBuilderError extends Error {
   constructor(message?: string, errorCode?: FormServerErrorCodes) {
     super(message);
     this.code = errorCode;
+    Object.setPrototypeOf(this, FormBuilderError.prototype);
   }
 }
