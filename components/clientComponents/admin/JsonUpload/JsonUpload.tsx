@@ -33,7 +33,7 @@ export const JSONUpload = (props: JSONUploadProps): React.ReactElement => {
     setSubmitStatus("");
     // Test if the json config is valid
     const jsonTestParse = safeJSONParse(jsonConfig);
-    if (jsonTestParse?.error) {
+    if (!jsonTestParse) {
       setSubmitting(false);
       setErrorState({ message: "JSON Formatting error" });
       return;
@@ -81,7 +81,7 @@ export const JSONUpload = (props: JSONUploadProps): React.ReactElement => {
     const url = formID ? `/api/templates/${formID}` : "/api/templates";
 
     const formConfig = safeJSONParse(jsonConfig);
-    if (formConfig?.error) {
+    if (!formConfig) {
       toast.error(t("startErrorParse", { ns: "form-builder" }), "wide");
       return;
     }
