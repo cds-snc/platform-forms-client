@@ -43,7 +43,7 @@ export default async function Page({
     })
   );
 
-  const canManageUsers = ability.can("update", "User");
+  const canManageUsers = checkPrivilegesAsBoolean(ability, [{ action: "update", subject: "User" }]);
   const userPrivileges = allPrivileges.filter(
     (privilege) => privilege.name === "Base" || privilege.name === "PublishForms"
   );

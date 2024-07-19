@@ -1,8 +1,6 @@
 "use server";
 
-import { updatePrivilegesForUser } from "@lib/privileges";
-
-import { getPrivilege } from "@lib/privileges";
+import { checkPrivilegesAsBoolean, updatePrivilegesForUser, getPrivilege } from "@lib/privileges";
 import { revalidatePath } from "next/cache";
 import { getUsers, updateActiveStatus } from "@lib/users";
 import { authCheckAndThrow } from "@lib/actions";
@@ -13,7 +11,7 @@ export const updatePublishing = async (
   action: "add" | "remove"
 ) => {
   const { ability } = await authCheckAndThrow();
-  if (ability.can("update", "User")) {
+  if (checkPrivilegesAsBoolean(ability, [{ action: "update", subject: "User" }])) {
     await updatePrivilegesForUser(ability, userID, [{ id: publishFormsId, action }]);
     revalidatePath("(gcforms)/[locale]/(app administration)/admin/(with nav)/accounts", "page");
   }
@@ -22,7 +20,7 @@ export const updatePublishing = async (
 export const updateActive = async (userID: string, active: boolean) => {
   const { ability } = await authCheckAndThrow();
 
-  if (ability.can("update", "User")) {
+  if (checkPrivilegesAsBoolean(ability, [{ action: "update", subject: "User" }])) {
     await updateActiveStatus(ability, userID, active);
     revalidatePath("(gcforms)/[locale]/(app administration)/admin/(with nav)/accounts", "page");
   }
