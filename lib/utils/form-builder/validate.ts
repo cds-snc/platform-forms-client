@@ -1,6 +1,6 @@
 import { ValidationError, Validator, ValidatorResult } from "jsonschema";
 import templatesSchema from "@lib/middleware/schemas/templates.schema.json";
-import { FormRecord } from "@lib/types";
+import { FormProperties } from "@lib/types";
 import { cleanAngleBrackets } from "@lib/client/jsonFormatting";
 
 export type errorMessage = { property?: string; message: string };
@@ -22,7 +22,7 @@ const getErrorMessageTranslationString = (error: ValidationError) => {
   };
 };
 
-export const validateTemplate = (data: FormRecord) => {
+export const validateTemplate = (data: FormProperties) => {
   const validator = new Validator();
   const validatorResult: ValidatorResult = validator.validate(data, templatesSchema, {
     preValidateProperty: cleanAngleBrackets,

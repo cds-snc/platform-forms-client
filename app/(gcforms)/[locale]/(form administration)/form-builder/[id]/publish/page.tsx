@@ -1,7 +1,7 @@
 import { serverTranslation } from "@i18n";
 import { Metadata } from "next";
 import { Publish } from "./Publish";
-
+import { checkPrivilegesAsBoolean } from "@lib/privileges";
 import { authCheckAndThrow } from "@lib/actions";
 
 import Markdown from "markdown-to-jsx";
@@ -38,7 +38,13 @@ export default async function Page({
     return <LoggedOutTab tabName={LoggedOutTabName.PUBLISH} />;
   }
 
-  const userCanPublish = ability?.can("update", "FormRecord", "isPublished");
+  const userCanPublish = checkPrivilegesAsBoolean(ability, [
+    {
+      action: "update",
+      subject: { type: "FormRecord", object: { users: [{ id: session.user.id }] } },
+      field: "isPublished",
+    },
+  ]);
 
   return (
     <ClientContainer>

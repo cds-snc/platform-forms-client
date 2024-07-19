@@ -18,6 +18,7 @@ import { FormServerErrorCodes } from "@lib/types/form-builder-types";
 import { safeJSONParse } from "@lib/utils";
 
 import { useTemplateContext } from "@lib/hooks/form-builder/useTemplateContext";
+import { FormProperties } from "@lib/types";
 
 enum DeliveryOption {
   vault = "vault",
@@ -72,8 +73,8 @@ export const SettingsPanel = () => {
         return;
       }
 
-      const formConfig = safeJSONParse(getSchema());
-      if (formConfig.error) {
+      const formConfig = safeJSONParse<FormProperties>(getSchema());
+      if (!formConfig) {
         toast.error(<ErrorSaving errorCode={FormServerErrorCodes.JSON_PARSE} />, "wide");
         return;
       }
@@ -112,8 +113,8 @@ export const SettingsPanel = () => {
 
   const updateBrand = useCallback(
     async (type: string) => {
-      const formConfig = safeJSONParse(getSchema());
-      if (formConfig.error) {
+      const formConfig = safeJSONParse<FormProperties>(getSchema());
+      if (!formConfig) {
         toast.error(<ErrorSaving errorCode={FormServerErrorCodes.JSON_PARSE} />, "wide");
         return;
       }
