@@ -281,7 +281,7 @@ export async function retrieveSubmissions(
 
     const submissions = [];
 
-    for await (let keys of chunkedKeys) {
+    for (let keys of chunkedKeys) {
       let accumulatedResponses: VaultSubmission[] = [];
       let attempt = 1;
       while (keys && keys.length > 0) {
@@ -393,7 +393,7 @@ export async function updateLastDownloadedBy(
   const chunkedResponses = chunkArray(responses, 20);
   let index = 0;
 
-  for await (const chunk of chunkedResponses) {
+  for (const chunk of chunkedResponses) {
     const request = new TransactWriteCommand({
       TransactItems: chunk.map((response) => {
         const isNewResponse = response.status === VaultStatus.NEW;
@@ -423,6 +423,7 @@ export async function updateLastDownloadedBy(
     });
 
     if (index > 0) {
+      // eslint-disable-next-line no-await-in-loop
       await delay(200);
     }
 
@@ -530,8 +531,9 @@ export async function deleteDraftFormResponses(ability: UserAbility, formID: str
 
     const chunkRequests = chunkArray(accumulatedResponses, 25);
     let index = 0;
-    for await (const chunk of chunkRequests) {
+    for (const chunk of chunkRequests) {
       if (index > 0) {
+        // eslint-disable-next-line no-await-in-loop
         await delay(200);
       }
 
@@ -680,7 +682,8 @@ export const confirmResponses = async (
   const chunkedCodes = chunkArray(confirmationCodes, 50);
   const accumulatedResults = [];
 
-  for await (const codes of chunkedCodes) {
+  for (const codes of chunkedCodes) {
+    // eslint-disable-next-line no-await-in-loop
     accumulatedResults.push(await getSubmissionsFromConfirmationCodes(ability, formId, codes));
   }
 
@@ -710,7 +713,7 @@ export const confirmResponses = async (
       25
     );
 
-    for await (const submissions of chunkedSubmissions) {
+    for (const submissions of chunkedSubmissions) {
       try {
         const request = new TransactWriteCommand({
           TransactItems: submissions.flatMap((submission) => {
@@ -751,6 +754,7 @@ export const confirmResponses = async (
           }),
         });
 
+        // eslint-disable-next-line no-await-in-loop
         await dynamoDBDocumentClient.send(request);
         // Done asychronously to not block response back to client
         submissions.forEach((confirmation) =>
