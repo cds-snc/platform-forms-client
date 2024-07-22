@@ -12,6 +12,8 @@ import { ConditionalSelector } from "@formBuilder/components/shared/conditionals
 import { sortByGroups, sortByLayout } from "@lib/utils/form-builder";
 import { AddOther } from "@formBuilder/components/shared/conditionals/AddOther";
 
+import Markdown from "markdown-to-jsx";
+
 export const ModalFormRules = ({
   item,
   properties,
@@ -76,6 +78,13 @@ export const ModalFormRules = ({
     updateModalProperties(item.id, { ...properties, conditionalRules: rules });
   };
 
+  const learnMoreAboutLogicView = () => {
+    const viewLogicDetails = document.getElementById("viewLogicDetails");
+    if (viewLogicDetails) {
+      viewLogicDetails.classList.toggle("hidden");
+    }
+  };
+
   return (
     <form
       onSubmit={(e: React.FormEvent<HTMLFormElement>) => e.preventDefault()}
@@ -114,9 +123,17 @@ export const ModalFormRules = ({
           <AddOther item={item} onComplete={updateModalFromBase} />
         </div>
         <div>
-          <Button theme={"link"} onClick={tryLogicView}>
-            {t("logic.tryitout")}
+          <Button theme={"link"} onClick={learnMoreAboutLogicView}>
+            {t("logic.tryitout.button")}
           </Button>
+          <div id="viewLogicDetails" className="hidden border-x-4 border-dark-gray px-5">
+            <div className="mb-4 mt-4">
+              <Markdown options={{ forceBlock: true }}>{t("logic.tryitout.text")}</Markdown>
+            </div>
+            <Button theme={"primary"} onClick={tryLogicView}>
+              {t("logic.tryitout.open")}
+            </Button>
+          </div>
         </div>
       </div>
     </form>
