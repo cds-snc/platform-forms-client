@@ -920,6 +920,7 @@
         "buttonLabel": "Remove"
       }
     },
+    "tryitout": "Have a complex form? Try branching instead +",
     "exitBadge": "Exit",
     "exitButtonElement": {
       "description": "Help people exiting your form have a path forward.",

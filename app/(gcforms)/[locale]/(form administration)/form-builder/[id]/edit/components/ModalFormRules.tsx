@@ -18,12 +18,14 @@ export const ModalFormRules = ({
   initialChoiceRules,
   updateModalProperties,
   descriptionId,
+  tryLogicView,
 }: {
   item: FormElementWithIndex;
   properties: ModalProperties;
   initialChoiceRules: ChoiceRule[];
   updateModalProperties: (id: number, properties: ModalProperties) => void;
   descriptionId?: string;
+  tryLogicView: () => void;
 }) => {
   const { t } = useTranslation("form-builder");
   const formId = `form-${Date.now()}`;
@@ -98,7 +100,7 @@ export const ModalFormRules = ({
         })}
       </div>
       <div className="mb-6">
-        <div>
+        <div className="mb-4">
           <Button
             className="mr-4"
             onClick={() => {
@@ -110,6 +112,11 @@ export const ModalFormRules = ({
             {t("addConditionalRules.addAnotherRule")}
           </Button>
           <AddOther item={item} onComplete={updateModalFromBase} />
+        </div>
+        <div>
+          <Button theme={"link"} onClick={tryLogicView}>
+            {t("logic.tryitout")}
+          </Button>
         </div>
       </div>
     </form>

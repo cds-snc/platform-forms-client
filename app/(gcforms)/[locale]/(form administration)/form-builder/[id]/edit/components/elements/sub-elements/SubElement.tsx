@@ -18,7 +18,16 @@ import { Input, LockedBadge } from "@formBuilder/components/shared";
 import { getQuestionNumber } from "@lib/utils/form-builder";
 import { useHandleAdd } from "@lib/hooks/form-builder/useHandleAdd";
 
-export const SubElement = ({ item, elIndex, ...props }: { item: FormElement; elIndex: number }) => {
+export const SubElement = ({
+  item,
+  elIndex,
+  formId,
+  ...props
+}: {
+  item: FormElement;
+  elIndex: number;
+  formId: string;
+}) => {
   const { t } = useTranslation("form-builder");
 
   const {
@@ -135,6 +144,7 @@ export const SubElement = ({ item, elIndex, ...props }: { item: FormElement; elI
                 item={item}
                 onQuestionChange={onQuestionChange}
                 onRequiredChange={onRequiredChange}
+                formId={formId}
               />
             </PanelHightLight>
           </div>

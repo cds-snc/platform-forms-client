@@ -920,6 +920,7 @@
         "buttonLabel": "Supprimer"
       }
     },
+    "tryitout": "Vous créez un formulaire complexe? Ajoutez des embranchements +",
     "exitBadge": "Sortie",
     "exitButtonElement": {
       "description": "Aidez les personnes qui quittent votre formulaires à avoir un moyen d'aller de l'avant.",
