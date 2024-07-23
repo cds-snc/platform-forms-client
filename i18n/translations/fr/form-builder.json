@@ -886,6 +886,12 @@
     "resetRules": "Réinitialisation au flux linéaire",
     "resetRulesHelp": "Aide pour la réinitialisation",
     "resetRulesDescription": "Cette fonction réinitialisera la progression entre les pages en un flux linéaire simple, remplaçant ainsi toute la logique d'embranchement qui s'applique.",
+    "resetRulesDialog": {
+      "title": "Réinitialisation au flux linéaire",
+      "areYouSure": "Êtes-vous sûr de vouloir réinitialiser le flux du formulaire? ",
+      "text": "Cela supprimera tous les embranchements qui ont été appliqués et ramènera le formulaire à une trajectoire linéaire simple. <strong>Cette action est irréversible.</strong>",
+      "reset": "Réinitialiser"
+    },
     "toastSuccess": "Flux linéaire appliqué",
     "multiRulesWarning": {
       "text1": "L'ordre et le flux sont définis en fonction des règles appliquées.",
