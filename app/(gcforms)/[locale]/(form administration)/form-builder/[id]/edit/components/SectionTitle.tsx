@@ -12,8 +12,8 @@ export const SectionTitle = ({ groupTitle, groupId }: { groupTitle: string; grou
     getLocalizationAttribute: s.getLocalizationAttribute,
     translationLanguagePriority: s.translationLanguagePriority,
   }));
-  // Defaulting to form language (vs "en") to handle case of getLocalizationAttribute returning
-  // undefined and defaulting to English. Want French when French page + French form. See #4040
+  // Defaulting to form language to handle case of getLocalizationAttribute returning undefined and
+  // defaulting to English. Instead we want e.g. French when French page + French form. See #4040
   const language = (getLocalizationAttribute()?.lang as Language) || translationLanguagePriority;
 
   const { t } = useTranslation("form-builder");
