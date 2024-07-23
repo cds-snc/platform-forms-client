@@ -912,11 +912,11 @@
       "option": "Apply branching based on questions with selectable options"
     },
     "exit": {
-      "convertText": "Convert page",
-      "checkboxLabel": "Exit the form",
+      "convertText": "Convert to:",
+      "checkboxLabel": "Exit page",
       "nodeIconLabel": "Exit",
       "offboardNodeContent": {
-        "content": "Exit page content",
+        "content": "Exits the form",
         "exitButton": "Back to the start"
       },
       "exitPanel": {

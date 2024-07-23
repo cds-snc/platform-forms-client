@@ -158,7 +158,7 @@
   "logic": {
     "start": "Page de départ",
     "end": "Page de confirmation",
-    "review": "Page de révision",
+    "review": "Page récapitulative",
     "introduction": "Introduction du formulaire",
     "confirmation": "Message de confirmation",
     "privacy": "Avis de confidentialité"
