@@ -886,6 +886,12 @@
     "resetRules": "Reset to linear flow",
     "resetRulesHelp": "Reset help",
     "resetRulesDescription": "This will remove branching logic and reset the progression between pages to a simple linear flow, overriding any existing rules that were applied.",
+    "resetRulesDialog": {
+      "title": "Reset to linear flow",
+      "areYouSure": "Are you sure you want to reset the form flow?",
+      "text": "This will remove all branching logic that was applied and reset the flow to a simple linear path. <strong>This action cannot be undone.</strong>",
+      "reset": "Reset"
+    },
     "toastSuccess": "Linear flow applied",
     "multiRulesWarning": {
       "text1": "The order and flow is set based on the rules applied.",
