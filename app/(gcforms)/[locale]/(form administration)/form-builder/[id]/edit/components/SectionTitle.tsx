@@ -8,10 +8,13 @@ import { useTranslation } from "@i18n/client";
 import { useTreeRef } from "@formBuilder/components/shared/right-panel/treeview/provider/TreeRefProvider";
 
 export const SectionTitle = ({ groupTitle, groupId }: { groupTitle: string; groupId: string }) => {
-  const { getLocalizationAttribute } = useTemplateStore((s) => ({
+  const { getLocalizationAttribute, translationLanguagePriority } = useTemplateStore((s) => ({
     getLocalizationAttribute: s.getLocalizationAttribute,
+    translationLanguagePriority: s.translationLanguagePriority,
   }));
-  const language = getLocalizationAttribute()?.lang as Language;
+  // Because undefined is returned for matching page vs form language, do not default to "en".
+  // Instead use the form language as the default or a French page + French form will get English.
+  const language = (getLocalizationAttribute()?.lang as Language) || translationLanguagePriority;
 
   const { t } = useTranslation("form-builder");
   const { tree } = useTreeRef();
@@ -28,7 +31,7 @@ export const SectionTitle = ({ groupTitle, groupId }: { groupTitle: string; grou
   };
 
   const saveGroupTitle = (groupTitle: string) => {
-    updateGroupTitle({ id: groupId, locale: language || "en", title: groupTitle });
+    updateGroupTitle({ id: groupId, locale: language, title: groupTitle });
 
     const sectionTitleKey = `section-title-${groupId}`;
     tree?.current?.renameItem(sectionTitleKey, groupTitle);
