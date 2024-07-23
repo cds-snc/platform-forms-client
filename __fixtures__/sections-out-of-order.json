@@ -305,7 +305,7 @@
     "review": {
       "name": "Review",
       "titleEn": "Review page",
-      "titleFr": "Page de révision",
+      "titleFr": "Page récapitulative",
       "autoFlow": true,
       "elements": [],
       "nextAction": "9a8c1cf4-001f-4cd2-91df-e3804e45c53a"
