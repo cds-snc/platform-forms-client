@@ -417,7 +417,7 @@
   "gcFormsSettings": "Paramètres",
   "gcFormsStart": "Créer",
   "gcFormsTest": "Tester",
-  "gcFormsTranslate": "Traductions",
+  "gcFormsTranslate": "Traduction",
   "ifYouAreExperiencingProblems": "Si vous rencontrez des problèmes avec votre formulaire publié, <a href=\"/fr/support\" target=\"_blank\">veuillez contacter l’équipe de soutien.</a>.",
   "incomplete": "Incomplet",
   "inputDescription": "Texte explicatif",
@@ -761,9 +761,9 @@
       "body": "<p>Formulaires GC utilise une <a href=\"https://github.com/cds-snc/gc-organisations\" target=\"_blank\">liste de ministères et d’organismes</a> tenue à jour par le Service numérique canadien. Votre formulaire sera automatiquement mis à jour avec cette liste.</p>"
     }
   },
-  "translate": "Traductions",
+  "translate": "Traduction",
   "translateDescription": "Traduisez le contenu de votre formulaire côte à côte pour offrir une expérience bilingue aux personnes qui remplissent votre formulaire. ",
-  "translateTitle": "Traductions",
+  "translateTitle": "Traduction",
   "unlockPublishing": "Déverrouiller la publication",
   "unlockPublishingDescription": "Pour déverrouiller la publication, fournissez les coordonnées de la personne de qui vous relevez. ",
   "unnamedForm": "Fichier sans nom",
@@ -864,9 +864,9 @@
     "title": "Panneau de droite",
     "openPanel": "Configuration du formulaire",
     "closePanel": "Fermer le panneau",
-    "questions": "Questions",
+    "pages": "Pages",
     "logic": "Embranchements",
-    "translation": "Traductions",
+    "translation": "Traduction",
     "treeView": {
       "addPage": "Nouvelle page"
     },
@@ -1002,10 +1002,10 @@
   },
   "next": "Continuer",
   "skipLink": {
-    "questions": "Passer à l'éditeur de questions",
-    "translate": "Passer à l'éditeur de traductions",
+    "questions": "Passer à l'éditeur de pages",
+    "translate": "Passer à l'éditeur de traduction",
     "logic": "Passer à l'éditeur d'embranchements",
-    "questionsSetup": "Passer à la configuration des questions",
+    "questionsSetup": "Passer à la configuration des pages",
     "translateSetup": "Passer à la configuration des traductions",
     "logicSetup": "Passer à la configuration d'embranchements'"
   },

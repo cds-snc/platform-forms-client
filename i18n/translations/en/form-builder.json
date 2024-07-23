@@ -418,7 +418,7 @@
   "gcFormsSettings": "Settings",
   "gcFormsStart": "Create new",
   "gcFormsTest": "Test",
-  "gcFormsTranslate": "Translations",
+  "gcFormsTranslate": "Translation",
   "ifYouAreExperiencingProblems": "If you are experiencing any problems with your published form, please <a href=\"/en/support\" target=\"_blank\">contact support</a>.",
   "incomplete": "Incomplete",
   "inputDescription": "Hint text",
@@ -761,9 +761,9 @@
       "body": "<p>GC Forms uses a <a href=\"https://github.com/cds-snc/gc-organisations\" target=\"_blank\">list of departments and agencies</a> maintained by the Canadian Digital Service. Your form will automatically update with this list.</p>"
     }
   },
-  "translate": "Translations",
+  "translate": "Translation",
   "translateDescription": "Translate your form content side by side to provide a bilingual experience to those filling out your form.",
-  "translateTitle": "Translations",
+  "translateTitle": "Translation",
   "unlockPublishing": "Unlock publishing",
   "unlockPublishingDescription": "To unlock publishing, provide the contact information of the person you report to.",
   "unnamedForm": "Unnamed form file",
@@ -864,9 +864,9 @@
     "title": "Right panel",
     "openPanel": "Form set-up",
     "closePanel": "Close panel",
-    "questions": "Questions",
+    "pages": "Pages",
     "logic": "Branching",
-    "translation": "Translations",
+    "translation": "Translation",
     "treeView": {
       "addPage": "New page"
     },
@@ -948,9 +948,9 @@
     "newPage": "New page",
     "pageNameInput": "Page name",
     "addPage": "Add page",
-    "addNewPage": "Add a new page",
-    "addBranch": "Add a branch",
-    "addPagePlaceholder": "Add a page name",
+    "addNewPage": "Add new page",
+    "addBranch": "Add branch",
+    "addPagePlaceholder": "Add page name",
     "treeAriaLabel": "GC Forms pages",
     "addElement": {
       "empty": {
@@ -1002,11 +1002,11 @@
   },
   "next": "Continue",
   "skipLink": {
-    "questions": "Skip to Questions editor",
-    "translate": "Skip to Translations editor",
+    "questions": "Skip to Page editor",
+    "translate": "Skip to Translation editor",
     "logic": "Skip to Branching editor",
-    "questionsSetup": "Skip to Questions set-up",
-    "translateSetup": "Skip to Translations set-up",
+    "questionsSetup": "Skip to Page set-up",
+    "translateSetup": "Skip to Translation set-up",
     "logicSetup": "Skip to Branching set-up"
   },
   "goBack": "Go back",
