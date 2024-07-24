@@ -1002,7 +1002,7 @@
   },
   "next": "Continue",
   "skipLink": {
-    "questions": "Skip to Page editor",
+    "questions": "Skip to edit Page",
     "translate": "Skip to Translation editor",
     "logic": "Skip to Branching editor",
     "questionsSetup": "Skip to Page set-up",
