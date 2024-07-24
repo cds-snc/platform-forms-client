@@ -1004,7 +1004,7 @@
   "skipLink": {
     "questions": "Passer à modifier la page",
     "translate": "Passer à modifier les traductions",
-    "logic": "Passer à l'éditeur d'embranchements",
+    "logic": "Passer à modifier les embranchements",
     "pageSetup": "Passer à la configuration des pages",
     "translateSetup": "Passer à la configuration des traductions",
     "logicSetup": "Passer à la configuration des embranchements'"
