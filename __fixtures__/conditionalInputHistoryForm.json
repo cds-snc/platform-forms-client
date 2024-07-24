@@ -1,0 +1,360 @@
+{
+  "titleEn": "show-hide-groups-test",
+  "titleFr": "",
+  "introduction": {
+    "descriptionEn": "",
+    "descriptionFr": ""
+  },
+  "privacyPolicy": {
+    "descriptionEn": "",
+    "descriptionFr": ""
+  },
+  "confirmation": {
+    "descriptionEn": "",
+    "descriptionFr": "",
+    "referrerUrlEn": "",
+    "referrerUrlFr": ""
+  },
+  "layout": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+  "elements": [
+    {
+      "id": 8,
+      "type": "radio",
+      "properties": {
+        "choices": [
+          {
+            "en": "A",
+            "fr": ""
+          },
+          {
+            "en": "B",
+            "fr": ""
+          }
+        ],
+        "titleEn": "P3-Q1",
+        "titleFr": "",
+        "validation": {
+          "required": false
+        },
+        "subElements": [],
+        "descriptionEn": "",
+        "descriptionFr": "",
+        "placeholderEn": "",
+        "placeholderFr": "",
+        "conditionalRules": []
+      }
+    },
+    {
+      "id": 9,
+      "type": "textField",
+      "properties": {
+        "choices": [
+          {
+            "en": "",
+            "fr": ""
+          }
+        ],
+        "titleEn": "P3-Q1-A",
+        "titleFr": "",
+        "validation": {
+          "required": false
+        },
+        "subElements": [],
+        "descriptionEn": "",
+        "descriptionFr": "",
+        "placeholderEn": "",
+        "placeholderFr": "",
+        "conditionalRules": [
+          {
+            "choiceId": "8.0"
+          }
+        ]
+      }
+    },
+    {
+      "id": 10,
+      "type": "textField",
+      "properties": {
+        "choices": [
+          {
+            "en": "",
+            "fr": ""
+          }
+        ],
+        "titleEn": "P3-Q1-B",
+        "titleFr": "",
+        "validation": {
+          "required": false
+        },
+        "subElements": [],
+        "descriptionEn": "",
+        "descriptionFr": "",
+        "placeholderEn": "",
+        "placeholderFr": "",
+        "conditionalRules": [
+          {
+            "choiceId": "8.1"
+          }
+        ]
+      }
+    },
+    {
+      "id": 5,
+      "type": "radio",
+      "properties": {
+        "choices": [
+          {
+            "en": "A",
+            "fr": ""
+          },
+          {
+            "en": "B",
+            "fr": ""
+          }
+        ],
+        "titleEn": "P2-Q1",
+        "titleFr": "",
+        "validation": {
+          "required": false
+        },
+        "subElements": [],
+        "descriptionEn": "",
+        "descriptionFr": "",
+        "placeholderEn": "",
+        "placeholderFr": "",
+        "conditionalRules": []
+      }
+    },
+    {
+      "id": 6,
+      "type": "textField",
+      "properties": {
+        "choices": [
+          {
+            "en": "",
+            "fr": ""
+          }
+        ],
+        "titleEn": "P2-Q1-A",
+        "titleFr": "",
+        "validation": {
+          "required": false
+        },
+        "subElements": [],
+        "descriptionEn": "",
+        "descriptionFr": "",
+        "placeholderEn": "",
+        "placeholderFr": "",
+        "conditionalRules": [
+          {
+            "choiceId": "5.0"
+          }
+        ]
+      }
+    },
+    {
+      "id": 7,
+      "type": "textField",
+      "properties": {
+        "choices": [
+          {
+            "en": "",
+            "fr": ""
+          }
+        ],
+        "titleEn": "P2-Q1-B",
+        "titleFr": "",
+        "validation": {
+          "required": false
+        },
+        "subElements": [],
+        "descriptionEn": "",
+        "descriptionFr": "",
+        "placeholderEn": "",
+        "placeholderFr": "",
+        "conditionalRules": [
+          {
+            "choiceId": "5.1"
+          }
+        ]
+      }
+    },
+    {
+      "id": 2,
+      "type": "radio",
+      "properties": {
+        "choices": [
+          {
+            "en": "A",
+            "fr": ""
+          },
+          {
+            "en": "B",
+            "fr": ""
+          }
+        ],
+        "titleEn": "P1-Q1",
+        "titleFr": "",
+        "validation": {
+          "required": false
+        },
+        "subElements": [],
+        "descriptionEn": "",
+        "descriptionFr": "",
+        "placeholderEn": "",
+        "placeholderFr": "",
+        "conditionalRules": []
+      }
+    },
+    {
+      "id": 3,
+      "type": "textField",
+      "properties": {
+        "choices": [
+          {
+            "en": "",
+            "fr": ""
+          }
+        ],
+        "titleEn": "P1-Q1-A",
+        "titleFr": "",
+        "validation": {
+          "required": false
+        },
+        "subElements": [],
+        "descriptionEn": "",
+        "descriptionFr": "",
+        "placeholderEn": "",
+        "placeholderFr": "",
+        "conditionalRules": [
+          {
+            "choiceId": "2.0"
+          }
+        ]
+      }
+    },
+    {
+      "id": 4,
+      "type": "textField",
+      "properties": {
+        "choices": [
+          {
+            "en": "",
+            "fr": ""
+          }
+        ],
+        "titleEn": "P1-Q1-B",
+        "titleFr": "",
+        "validation": {
+          "required": false
+        },
+        "subElements": [],
+        "descriptionEn": "",
+        "descriptionFr": "",
+        "placeholderEn": "",
+        "placeholderFr": "",
+        "conditionalRules": [
+          {
+            "choiceId": "2.1"
+          }
+        ]
+      }
+    },
+    {
+      "id": 1,
+      "type": "radio",
+      "properties": {
+        "choices": [
+          {
+            "en": "A",
+            "fr": ""
+          },
+          {
+            "en": "B",
+            "fr": ""
+          },
+          {
+            "en": "C",
+            "fr": ""
+          }
+        ],
+        "titleEn": "Q1",
+        "titleFr": "",
+        "validation": {
+          "required": false
+        },
+        "subElements": [],
+        "descriptionEn": "",
+        "descriptionFr": "",
+        "placeholderEn": "",
+        "placeholderFr": "",
+        "conditionalRules": []
+      }
+    }
+  ],
+  "groups": {
+    "start": {
+      "name": "Start",
+      "titleEn": "Beginning",
+      "titleFr": "Beginning",
+      "autoFlow": false,
+      "elements": ["1"],
+      "nextAction": [
+        {
+          "groupId": "84b36e7b-2c6c-40be-ad22-1abd24c38019",
+          "choiceId": "1.0"
+        },
+        {
+          "groupId": "6365ee9b-1caa-4a08-b53d-ecfc2a9dd08f",
+          "choiceId": "1.1"
+        },
+        {
+          "groupId": "1231e20c-080e-4119-9774-33d829f290da",
+          "choiceId": "1.2"
+        }
+      ]
+    },
+    "84b36e7b-2c6c-40be-ad22-1abd24c38019": {
+      "name": "P1",
+      "titleEn": "P1",
+      "titleFr": "",
+      "autoFlow": false,
+      "elements": ["2", "3", "4"],
+      "nextAction": "review"
+    },
+    "6365ee9b-1caa-4a08-b53d-ecfc2a9dd08f": {
+      "name": "P2",
+      "titleEn": "P2",
+      "titleFr": "",
+      "autoFlow": false,
+      "elements": ["5", "6", "7"],
+      "nextAction": "review"
+    },
+    "1231e20c-080e-4119-9774-33d829f290da": {
+      "name": "P3",
+      "titleEn": "P3",
+      "titleFr": "",
+      "autoFlow": true,
+      "elements": ["8", "9", "10"],
+      "nextAction": "review"
+    },
+    "review": {
+      "name": "Review",
+      "titleEn": "Review",
+      "titleFr": "Review",
+      "elements": [],
+      "nextAction": "end"
+    },
+    "end": {
+      "name": "End",
+      "titleEn": "End",
+      "titleFr": "End",
+      "elements": []
+    }
+  },
+  "groupsLayout": [
+    "84b36e7b-2c6c-40be-ad22-1abd24c38019",
+    "6365ee9b-1caa-4a08-b53d-ecfc2a9dd08f",
+    "1231e20c-080e-4119-9774-33d829f290da"
+  ]
+}
