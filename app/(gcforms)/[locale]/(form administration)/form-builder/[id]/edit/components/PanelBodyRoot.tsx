@@ -12,9 +12,11 @@ import { useTemplateStore } from "@lib/store/useTemplateStore";
 export const PanelBodyRoot = ({
   item,
   onChangeMade,
+  formId,
 }: {
   item: FormElementWithIndex;
   onChangeMade: () => void;
+  formId: string;
 }) => {
   const { updateField, propertyPath } = useTemplateStore((s) => ({
     propertyPath: s.propertyPath,
@@ -44,6 +46,7 @@ export const PanelBodyRoot = ({
         item={item}
         onQuestionChange={onQuestionChange}
         onRequiredChange={onRequiredChange}
+        formId={formId}
       />
     </div>
   );

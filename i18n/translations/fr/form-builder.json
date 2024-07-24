@@ -930,6 +930,11 @@
         "buttonLabel": "Supprimer"
       }
     },
+    "tryitout": {
+      "button": "Vous créez un formulaire complexe? Ajoutez des embranchements +",
+      "text": "<p class='mb-4'>Utilisez la logique d’embranchements pour diriger les personnes qui remplissent le formulaire vers différentes pages en fonction de leurs réponses. Cela permet de créer une expérience où les gens ne voient que ce qui les concerne.</p> <p>Avec cette fonctionnalité, vous pouvez visualiser le flux du formulaire et configurer les embranchements dans le panneau de configuration du formulaire situé à droite, dans l’onglet Embranchements.</p>",
+      "open": "Ouvrir l’onglet pour la configuration des embranchements"
+    },
     "exitBadge": "Sortie",
     "exitButtonElement": {
       "description": "Aidez les personnes qui quittent votre formulaires à avoir un moyen d'aller de l'avant.",

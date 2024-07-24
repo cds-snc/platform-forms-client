@@ -147,7 +147,9 @@ export const Edit = ({ formId }: { formId: string }) => {
             if (element) {
               const questionNumber = getQuestionNumber(element, elementTypes);
               const item = { ...element, index, questionNumber };
-              return <ElementPanel elements={sortedElements} item={item} key={item.id} />;
+              return (
+                <ElementPanel elements={sortedElements} item={item} key={item.id} formId={formId} />
+              );
             }
           })}
       </div>
