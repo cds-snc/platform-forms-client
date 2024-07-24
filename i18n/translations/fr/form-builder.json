@@ -482,6 +482,10 @@
     "emailOption": "Réponses envoyées par courriel — ",
     "change": "Modifier ces paramètres"
   },
+  "logicPublishWarning": {
+    "header": "Testez minutieusement votre formulaire avant de le publier",
+    "text": "Vérifiez que tous les chemins possibles à travers le formulaire fonctionnent comme prévu, en évitant les impasses et les boucles infinies."
+  },
   "prePublishFormDialog": {
     "title": "Publier le formulaire",
     "text1": "Pourquoi souhaitez-vous publier le formulaire?",
