@@ -5,8 +5,10 @@ import { useRouter } from "next/navigation";
 import { DesignIcon, ExternalLinkIcon, WarningIcon } from "@serverComponents/icons";
 import { errorMessage, validateTemplate } from "@lib/utils/form-builder/validate";
 import Link from "next/link";
-import { clearTemplateStore, useTemplateStore } from "@lib/store/useTemplateStore";
+import { useTemplateStore } from "@lib/store/useTemplateStore";
+import { clearTemplateStore } from "@lib/store/utils";
 import { safeJSONParse } from "@lib/utils";
+import { FormProperties } from "@lib/types";
 
 export const Start = () => {
   const {
@@ -40,8 +42,8 @@ export const Start = () => {
       fileReader.readAsText(e.target.files[0], "UTF-8");
       fileReader.onload = (e) => {
         if (!e.target || !e.target.result || typeof e.target.result !== "string") return;
-        const data = safeJSONParse(e.target.result, cleaner);
-        if (data?.error) {
+        const data = safeJSONParse<FormProperties>(e.target.result, cleaner);
+        if (!data) {
           setErrors([{ message: t("startErrorParse") }]);
           target.value = "";
           return;

@@ -18,12 +18,16 @@ export const Option = ({
   id,
   renderIcon,
   initialValue,
+  onFocus,
+  onBlur,
 }: {
   parentIndex: number;
   index: number;
   id: number;
   renderIcon?: RenderIcon;
   initialValue: string;
+  onFocus?: () => void;
+  onBlur?: () => void;
 }) => {
   const input = useRef<HTMLInputElement>(null);
 
@@ -100,19 +104,24 @@ export const Option = ({
 
   return (
     <div className="mt-3 flex">
-      <div className="mt-2 flex w-5 justify-end">{icon}</div>
+      <div className="mt-2 flex w-5 justify-end" role="presentation">
+        {icon}
+      </div>
       <Input
         id={`option--${id}--${index + 1}`}
         ref={input}
         type="text"
         value={value}
         placeholder={`${t("option")} ${index + 1}`}
+        ariaLabel={`${t("option")} ${index + 1}`}
         onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
           updateValue(parentIndex, e.target.value)
         }
         onKeyDown={handleKeyDown}
         className="!my-0 ml-5 max-h-9 w-full"
         {...getLocalizationAttribute()}
+        onFocus={onFocus}
+        onBlur={onBlur}
       />
       <Button
         theme="icon"

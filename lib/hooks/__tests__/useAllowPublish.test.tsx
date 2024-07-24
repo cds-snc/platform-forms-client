@@ -1,6 +1,7 @@
 "use client";
 import React from "react";
-import { TemplateStoreProvider, TemplateStoreProps } from "../../store/useTemplateStore";
+import { TemplateStoreProvider } from "../../store/useTemplateStore";
+import { TemplateStoreProps } from "../../store/types";
 import { useAllowPublish } from "../form-builder/useAllowPublish";
 import { renderHook, act } from "@testing-library/react";
 import {
@@ -11,7 +12,6 @@ import {
   MissingTranslation,
 } from "../form-builder/useAllowPublish";
 import { FormElementTypes } from "@lib/types";
-
 const promise = Promise.resolve();
 
 const createTemplateStore = ({
@@ -143,6 +143,7 @@ describe("useAllowPublish", () => {
           },
         ],
       },
+      formPurpose: "",
       isPublished: true,
       deliveryOption: {
         emailAddress: "test@example.com",
@@ -151,20 +152,19 @@ describe("useAllowPublish", () => {
       },
     };
     const {
-      current: { isPublishable },
+      current: { isPublishable, data },
     } = createTemplateStore({
       form: store.form,
       isPublished: store.isPublished,
       deliveryOption: store.deliveryOption,
     });
 
-    expect(isPublishable()).toBe(true);
-
-    // see: https://kentcdodds.com/blog/fix-the-not-wrapped-in-act-warning#an-alternative-waiting-for-the-mocked-promise
-    // > especially if there's no visual indication of the async task completing.
-    await act(async () => {
-      await promise;
+    // For test purposes, set purpose to true
+    // In the UI this happens under the settings page
+    act(() => {
+      data.purpose = true
     });
+    expect(isPublishable()).toBe(true);
   });
 
   describe("Translation helper methods", () => {

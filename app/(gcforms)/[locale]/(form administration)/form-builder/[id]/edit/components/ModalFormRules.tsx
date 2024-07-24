@@ -9,6 +9,8 @@ import { ModalProperties } from "@lib/store/useModalRulesStore";
 import { FormElementWithIndex } from "@lib/types/form-builder-types";
 import { ChoiceRule } from "@lib/formContext";
 import { ConditionalSelector } from "@formBuilder/components/shared/conditionals/ConditionalSelector";
+import { sortByGroups, sortByLayout } from "@lib/utils/form-builder";
+import { AddOther } from "@formBuilder/components/shared/conditionals/AddOther";
 
 export const ModalFormRules = ({
   item,
@@ -26,9 +28,17 @@ export const ModalFormRules = ({
   const { t } = useTranslation("form-builder");
   const formId = `form-${Date.now()}`;
 
-  const { elements } = useTemplateStore((s) => ({
+  const { elements, form, groupsEnabled } = useTemplateStore((s) => ({
     elements: s.form.elements,
+    form: s.form,
+    groupsEnabled: s.getGroupsEnabled(),
   }));
+
+  let sortedElements = sortByLayout({ layout: form.layout, elements: elements });
+
+  if (groupsEnabled) {
+    sortedElements = sortByGroups({ form: form, elements: elements });
+  }
 
   if (initialChoiceRules.length == 0) {
     initialChoiceRules.push({ elementId: "", choiceId: `${item.id}.0` });
@@ -57,6 +67,13 @@ export const ModalFormRules = ({
     updateModalProperties(item.id, { ...properties, conditionalRules: rules });
   };
 
+  const updateModalFromBase = (newRule: ChoiceRule) => {
+    const rules = [...choiceRules];
+    rules.push(newRule);
+    setChoiceRules(rules);
+    updateModalProperties(item.id, { ...properties, conditionalRules: rules });
+  };
+
   return (
     <form
       onSubmit={(e: React.FormEvent<HTMLFormElement>) => e.preventDefault()}
@@ -70,7 +87,7 @@ export const ModalFormRules = ({
               itemId={item.id}
               index={index}
               key={`${rule.choiceId}-${index}`}
-              elements={elements}
+              elements={sortedElements}
               elementId={rule.elementId}
               choiceId={rule.choiceId}
               updateElementId={updateElementId}
@@ -81,15 +98,19 @@ export const ModalFormRules = ({
         })}
       </div>
       <div className="mb-6">
-        <Button
-          onClick={() => {
-            setChoiceRules([...choiceRules, { elementId: "", choiceId: String(item.id) }]);
-          }}
-          theme={"secondary"}
-          aria-controls={formId}
-        >
-          {t("addConditionalRules.addAnotherRule")}
-        </Button>
+        <div>
+          <Button
+            className="mr-4"
+            onClick={() => {
+              setChoiceRules([...choiceRules, { elementId: "", choiceId: String(item.id) }]);
+            }}
+            theme={"secondary"}
+            aria-controls={formId}
+          >
+            {t("addConditionalRules.addAnotherRule")}
+          </Button>
+          <AddOther item={item} onComplete={updateModalFromBase} />
+        </div>
       </div>
     </form>
   );

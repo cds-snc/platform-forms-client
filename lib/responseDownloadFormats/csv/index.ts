@@ -33,6 +33,9 @@ export const transform = (formResponseSubmissions: FormResponseSubmissions) => {
                   if (specialChars.some((char) => answerText.startsWith(char))) {
                     answerText = `'${answerText}`;
                   }
+                  if (answerText == "") {
+                    answerText = "-";
+                  }
                   return answerText;
                 })
                 .join("")
@@ -42,6 +45,9 @@ export const transform = (formResponseSubmissions: FormResponseSubmissions) => {
         let answerText = item.answer;
         if (specialChars.some((char) => answerText.startsWith(char))) {
           answerText = `'${answerText}`;
+        }
+        if (answerText == "") {
+          answerText = "-";
         }
         return answerText;
       }),

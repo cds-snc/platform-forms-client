@@ -1,17 +1,18 @@
 "use client";
-import React, { ReactElement, useRef, useState } from "react";
+import React, { ReactElement, useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useTranslation } from "@i18n/client";
 import { Button } from "@clientComponents/globals";
 import { LinkButton } from "@serverComponents/globals/Buttons/LinkButton";
 import { getErrorText, resendVerificationCode } from "../../../actions";
 
-import { hasError } from "@lib/hasError";
 import { Alert } from "../../../../../components/client/forms/Alert";
 import { ErrorStatus } from "@clientComponents/forms/Alert/Alert";
 import Link from "next/link";
 
 import { useFocusIt } from "@lib/hooks/useFocusIt";
+import { safeJSONParse } from "@lib/utils";
+import { logMessage } from "@lib/logger";
 
 export const ReVerify = (): ReactElement => {
   const router = useRouter();
@@ -26,32 +27,48 @@ export const ReVerify = (): ReactElement => {
   const [authErrorState, setAuthErrorState] = useState<Record<string, string | undefined>>({});
   const [resending, setResending] = useState(false);
 
-  // If there is no existing flow redirect to login
-  const { email, authenticationFlowToken }: { email?: string; authenticationFlowToken?: string } =
-    JSON.parse(sessionStorage.getItem("authFlowToken") || "{}");
-  if (!email || !authenticationFlowToken) {
-    router.push(`/${language}/auth/login`);
-  }
+  // Makes sure NextJS will not try to render sessionStorage on the server
+  const existingFlow = useRef<{
+    email?: string;
+    authenticationFlowToken?: string;
+    error?: boolean;
+  }>({});
+  useEffect(() => {
+    async function handleError() {
+      logMessage.error("Failed to parse authFlowToken JSON.");
+      const errorText = await getErrorText(language, "InternalServiceException");
+      setAuthErrorState(errorText);
+    }
+
+    existingFlow.current = safeJSONParse(sessionStorage.getItem("authFlowToken") as string) || {
+      error: true,
+    };
+    if (existingFlow.current.error) {
+      handleError();
+    }
+
+    if (!existingFlow.current.email || !existingFlow.current.authenticationFlowToken) {
+      router.push(`/${language}/auth/login`);
+    }
+  }, [language, router]);
 
   const handleReVerify = async () => {
-    try {
-      setResending(true);
-      if (!email || !authenticationFlowToken) {
-        router.push(`/${language}/auth/login`);
-        return;
-      }
-      await resendVerificationCode(language, email, authenticationFlowToken);
-    } catch (err) {
-      if (hasError(["Missing 2FA session"], err)) {
-        // Missing 2FA session so have the user try signing in again
-        router.push(`/${language}/auth/login`);
-        router.refresh();
-      } else {
-        // Internal Error
-        const errorText = await getErrorText(language, "InternalServiceException");
-        setAuthErrorState(errorText);
-        setResending(false);
-      }
+    setResending(true);
+    if (!existingFlow.current.email || !existingFlow.current.authenticationFlowToken) {
+      router.push(`/${language}/auth/login`);
+      return;
+    }
+    const result = await resendVerificationCode(
+      language,
+      existingFlow.current.email,
+      existingFlow.current.authenticationFlowToken
+    );
+
+    if (result?.error) {
+      // Internal Error
+      const errorText = await getErrorText(language, "InternalServiceException");
+      setAuthErrorState(errorText);
+      setResending(false);
     }
   };
 

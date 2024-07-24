@@ -1,49 +1,31 @@
 import { useCallback } from "react";
-import { Edge, MarkerType } from "reactflow";
+import { MarkerType } from "reactflow";
 import { TreeItem, TreeItemIndex } from "react-complex-tree";
 
 import { useGroupStore } from "@formBuilder/components/shared/right-panel/treeview/store/useGroupStore";
 import { useTemplateStore } from "@lib/store/useTemplateStore";
-import { Group, NextActionRule } from "@lib/formContext";
+import { Group, GroupsType, NextActionRule } from "@lib/formContext";
+import { Language } from "@lib/types/form-builder-types";
+import { getReviewNode, getStartElements, getEndNode } from "@lib/utils/form-builder/i18nHelpers";
+import { getStartLabels } from "@lib/utils/form-builder/i18nHelpers";
+import { LockedSections } from "@formBuilder/components/shared/right-panel/treeview/types";
 
-const startElements = [
-  {
-    data: "Introduction",
-    index: "introduction",
-  },
-  {
-    data: "Privacy Policy",
-    index: "privacy",
-  },
-];
-
-const endNode = {
-  id: "end",
-  data: {
-    label: "End",
-    children: [
-      {
-        data: "Confirmation",
-        index: "confirmation",
-      },
-    ],
-  },
-  type: "groupNode",
-};
-
-const reviewNode = {
-  id: "review",
-  data: {
-    label: "Review",
-    children: [
-      {
-        data: "Review",
-        index: "review",
-      },
-    ],
-  },
-  type: "groupNode",
-};
+interface CustomEdge {
+  id: string;
+  source: string;
+  target: string;
+  style: {
+    strokeWidth: number;
+    stroke: string;
+  };
+  markerEnd: {
+    type: string | MarkerType;
+    width?: number | undefined;
+    height?: number | undefined;
+    color?: string | undefined;
+  };
+  ariaLabel: string;
+}
 
 const defaultEdges = {
   start: "start",
@@ -56,15 +38,19 @@ const lineStyle = {
 };
 
 const arrowStyle = {
-  type: MarkerType.ArrowClosed,
-  width: 18,
-  height: 18,
-  color: "#6366F1",
+  type: "1__type=gc-arrow-closed",
 };
 
-const getEdges = (nodeId: string, prevNodeId: string, group: Group | undefined): Edge[] => {
+const getEdges = (
+  nodeId: string,
+  prevNodeId: string,
+  group: Group | undefined,
+  groups: GroupsType | undefined
+): CustomEdge[] => {
   // Connect to end node as we don't have a next action
   if (prevNodeId && group && typeof group.nextAction === "undefined") {
+    const fromGroup = group?.[nodeId as keyof typeof group];
+    const fromName = fromGroup?.["name" as keyof typeof fromGroup];
     return [
       {
         id: `e-${nodeId}-end`,
@@ -76,6 +62,7 @@ const getEdges = (nodeId: string, prevNodeId: string, group: Group | undefined):
         markerEnd: {
           ...arrowStyle,
         },
+        ariaLabel: `From ${fromName} to Confirmation`,
       },
     ];
   }
@@ -83,8 +70,6 @@ const getEdges = (nodeId: string, prevNodeId: string, group: Group | undefined):
   // Add edge from this node to next action
   if (prevNodeId && group && typeof group.nextAction === "string") {
     const nextAction = group.nextAction;
-
-    // @todo update this to use nextAction name
     return [
       {
         id: `e-${nodeId}-${nextAction}`,
@@ -96,6 +81,7 @@ const getEdges = (nodeId: string, prevNodeId: string, group: Group | undefined):
         markerEnd: {
           ...arrowStyle,
         },
+        ariaLabel: `From ${group.name} to ${groups?.[nextAction]?.name}`,
       },
     ];
   }
@@ -114,6 +100,7 @@ const getEdges = (nodeId: string, prevNodeId: string, group: Group | undefined):
         markerEnd: {
           ...arrowStyle,
         },
+        ariaLabel: `From ${group.name} to ${groups?.[action.groupId]?.name}`,
       };
     });
 
@@ -123,29 +110,34 @@ const getEdges = (nodeId: string, prevNodeId: string, group: Group | undefined):
   return [];
 };
 
-export const useFlowData = () => {
+export const useFlowData = (lang: Language = "en") => {
   const getTreeData = useGroupStore((s) => s.getTreeData);
   const treeItems = getTreeData();
   const formGroups = useTemplateStore((s) => s.form.groups);
+  const startElements = getStartElements(lang);
+  const reviewNode = getReviewNode(lang);
+  const endNode = getEndNode(lang);
 
   const getData = useCallback(() => {
-    const edges: Edge[] = [];
+    const edges: CustomEdge[] = [];
     const treeIndexes = treeItems.root.children;
 
     const x_pos = 0;
     const y_pos = 0;
-    let prevNodeId: string = "start";
+    let prevNodeId: string = LockedSections.START;
 
     if (!treeIndexes) {
       return { edges, nodes: [] };
     }
 
-    const nodes = treeIndexes.map((key: TreeItemIndex) => {
+    const nodes = [];
+
+    treeIndexes.forEach((key: TreeItemIndex) => {
       const treeItem: TreeItem = treeItems[key];
       const group: Group | undefined = formGroups && formGroups[key] ? formGroups[key] : undefined;
       let elements: TreeItem[] = [];
 
-      if (key === "start") {
+      if (key === LockedSections.START) {
         // Add "default" start elements
         // introduction, privacy
         elements = startElements;
@@ -158,29 +150,48 @@ export const useFlowData = () => {
         elements = [...elements, ...children];
       }
 
-      const newEdges = getEdges(key as string, prevNodeId, group);
+      const newEdges = getEdges(key as string, prevNodeId, group, formGroups);
+
+      const titleKey = "name" as keyof typeof treeItem.data;
+
+      const isOffBoardSection = treeItem.data.nextAction === "exit";
+
+      let label = treeItem.data[titleKey];
+
+      if (key === LockedSections.START) {
+        // Ensure start label is displayed in the correct language
+        label = getStartLabels()[lang];
+      }
 
       const flowNode = {
         id: key as string,
         position: { x: x_pos, y: y_pos },
-        data: { label: treeItem.data, children: elements },
-        type: "groupNode",
+        data: {
+          label,
+          children: elements,
+          nextAction: treeItem.data.nextAction,
+        },
+        type: isOffBoardSection ? "offboardNode" : "groupNode",
       };
 
-      edges.push(...(newEdges as Edge[]));
+      edges.push(...(newEdges as CustomEdge[]));
       prevNodeId = key as string;
-      return flowNode;
+
+      if (key === LockedSections.REVIEW || key === LockedSections.END) {
+        return;
+      }
+      nodes.push(flowNode);
     });
 
     // Add review node
-    nodes.push({ ...reviewNode, position: { x: x_pos, y: y_pos } });
+    nodes.push({ ...reviewNode });
 
     // Push "end" node to the end
     // And add confirmation element
-    nodes.push({ ...endNode, position: { x: x_pos, y: y_pos } });
+    nodes.push({ ...endNode });
 
     return { edges, nodes };
-  }, [treeItems, formGroups]);
+  }, [treeItems, reviewNode, endNode, formGroups, startElements, lang]);
 
   const { edges, nodes } = getData();
 

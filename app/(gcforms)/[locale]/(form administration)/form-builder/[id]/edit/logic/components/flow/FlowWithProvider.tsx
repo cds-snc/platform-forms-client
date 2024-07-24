@@ -7,6 +7,7 @@ import React, {
   ForwardRefRenderFunction,
   useEffect,
   useState,
+  useRef,
 } from "react";
 
 import ReactFlow, {
@@ -16,6 +17,7 @@ import ReactFlow, {
   useNodesState,
   useEdgesState,
   useReactFlow,
+  Background,
   ReactFlowInstance,
 } from "reactflow";
 
@@ -23,24 +25,38 @@ import "reactflow/dist/style.css";
 import useAutoLayout from "./useAutoLayout";
 import { useFlowData } from "./useFlowData";
 import { GroupNode } from "./GroupNode";
+import { OffboardNode } from "./OffboardNode";
 import { layoutOptions } from "./options";
 import { edgeOptions } from "./options";
 
 import { useFlowRef } from "./provider/FlowRefProvider";
 import { useRehydrate } from "@lib/store/useTemplateStore";
+import { Language } from "@lib/types/form-builder-types";
 
-const nodeTypes = { groupNode: GroupNode };
+const nodeTypes = { groupNode: GroupNode, offboardNode: OffboardNode };
+import { Edge } from "reactflow";
+
+import { Loader } from "@clientComponents/globals/Loader";
+
+const Loading = () => (
+  <div className="flex h-full items-center justify-center ">
+    <Loader />
+  </div>
+);
 
 export interface FlowProps {
+  lang: Language;
   children?: ReactElement;
-  updateEdges?: () => void;
+  redraw?: () => void;
 }
 
-const Flow: ForwardRefRenderFunction<unknown, FlowProps> = ({ children }, ref) => {
-  const { nodes: flowNodes, edges: flowEdges, getData } = useFlowData();
-  const [nodes, , onNodesChange] = useNodesState(flowNodes);
-  const [, setEdges, onEdgesChange] = useEdgesState(flowEdges);
+const Flow: ForwardRefRenderFunction<unknown, FlowProps> = ({ children, lang }, ref) => {
+  const { nodes: flowNodes, edges: flowEdges, getData } = useFlowData(lang);
+  const [nodes, setNodes, onNodesChange] = useNodesState(flowNodes);
+  const [, setEdges, onEdgesChange] = useEdgesState(flowEdges as Edge[]);
   const { fitView } = useReactFlow();
+  const reset = useRef(false);
+  const [redrawing, setRedrawing] = useState(false);
   const [rfInstance, setRfInstance] = useState<ReactFlowInstance | null>();
 
   // temp fix see: https://github.com/xyflow/xyflow/issues/3243
@@ -55,7 +71,7 @@ const Flow: ForwardRefRenderFunction<unknown, FlowProps> = ({ children }, ref) =
 
   useEffect(() => {
     let flowZoom = 0.5;
-    if (rfInstance) {
+    if (rfInstance && reset.current === false) {
       const obj = rfInstance.toObject();
       if (obj.viewport.zoom) {
         flowZoom = obj.viewport.zoom;
@@ -76,20 +92,46 @@ const Flow: ForwardRefRenderFunction<unknown, FlowProps> = ({ children }, ref) =
   useImperativeHandle(ref, () => ({
     updateEdges: () => {
       const { edges } = getData();
-      setEdges(edges);
-      runLayout();
+      setEdges(edges as Edge[]);
+    },
+    redraw: () => {
+      reset.current = true;
+      const { edges, nodes } = getData();
+      setEdges(edges as Edge[]);
+      setNodes(nodes);
+      setRedrawing(true);
+      const reLayout = async () => {
+        await runLayout();
+        setRedrawing(false);
+      };
+
+      // Add a small delay to visually indicate the redraw
+      setTimeout(() => {
+        reLayout();
+      }, 200);
+
+      setTimeout(() => {
+        reset.current = false;
+      }, 2000);
     },
   }));
+
+  if (redrawing) {
+    return <Loading />;
+  }
 
   return (
     <>
       <ReactFlow
+        disableKeyboardA11y={true}
+        nodesFocusable={false}
+        edgesFocusable={false}
         proOptions={{ hideAttribution: true }}
         nodesDraggable={false}
         nodes={nodes}
         nodeTypes={nodeTypes}
         onNodesChange={onNodesChange}
-        edges={flowEdges}
+        edges={flowEdges as Edge[]}
         onEdgesChange={onEdgesChange}
         defaultEdgeOptions={edgeOptions}
         onInit={(instance) => {
@@ -97,14 +139,15 @@ const Flow: ForwardRefRenderFunction<unknown, FlowProps> = ({ children }, ref) =
           setRfInstance(instance);
         }}
       >
-        <Controls />
+        <Controls showInteractive={false} showZoom={true} showFitView={false} />
+        <Background />
         {children}
       </ReactFlow>
     </>
   );
 };
 
-export const FlowWithProvider = () => {
+export const FlowWithProvider = ({ lang }: { lang: Language }) => {
   const { flow } = useFlowRef();
 
   const hasHydrated = useRehydrate();
@@ -116,7 +159,7 @@ export const FlowWithProvider = () => {
 
   return (
     <ReactFlowProvider>
-      <FlowWithRef ref={flow} />
+      <FlowWithRef key={`flow-lang-${lang}`} ref={flow} lang={lang} />
     </ReactFlowProvider>
   );
 };

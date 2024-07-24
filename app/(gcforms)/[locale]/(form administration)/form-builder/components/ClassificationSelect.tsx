@@ -5,7 +5,7 @@ import { ProtectedIcon } from "@serverComponents/icons";
 
 export const classificationOptions = [
   { value: "Unclassified", en: "UNCLASSIFIED", fr: "NON CLASSIFIÉ" },
-  { value: "Protected A", en: "PROTECTED A (default)", fr: "PROTÉGÉ A (par défaut)" },
+  { value: "Protected A", en: "PROTECTED A", fr: "PROTÉGÉ A" },
   { value: "Protected B", en: "PROTECTED B", fr: "PROTÉGÉ B" },
 ] as const;
 

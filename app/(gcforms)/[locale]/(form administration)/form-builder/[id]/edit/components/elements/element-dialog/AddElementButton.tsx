@@ -6,7 +6,7 @@ import { FormElementTypes } from "@lib/types";
 import { Button } from "@clientComponents/globals";
 import { ElementDialog } from "./ElementDialog";
 import { ElementOptionsFilter } from "@lib/types/form-builder-types";
-import { AddIcon } from "@serverComponents/icons";
+import { LargeAddIcon } from "@serverComponents/icons/LargeAddIcon";
 
 export const AddElementButton = ({
   filterElements,
@@ -22,7 +22,6 @@ export const AddElementButton = ({
   const { t } = useTranslation("form-builder");
 
   const [elementDialog, showElementDialog] = useState(false);
-
   const handleOpenDialog = useCallback(() => {
     showElementDialog(true);
   }, []);
@@ -36,11 +35,11 @@ export const AddElementButton = ({
       <Button
         onClick={handleOpenDialog}
         theme={theme}
-        className="!border-1.5 !py-2 !px-4 leading-6 text-sm bg-violet-50 group/button"
+        className="group/button mb-2 !border-1.5 border-slate-500 bg-gray-soft !px-4 !py-2 text-sm leading-6 text-indigo-700 hover:bg-gray-200 hover:text-indigo-800"
         dataTestId="add-element"
       >
         <>
-          <AddIcon className="rounded-full border-1 border-black group-focus/button:border-white group-hover/button:border-white fill-black group-hover/button:fill-white group-focus/button:fill-white mr-2" />
+          <LargeAddIcon className="mr-2 fill-indigo-500  hover:stroke-slate-200 group-hover/button:fill-indigo-600 group-focus/button:fill-white" />
           {text ? text : t("addElement")}
         </>
       </Button>

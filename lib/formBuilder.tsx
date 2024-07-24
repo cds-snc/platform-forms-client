@@ -241,6 +241,7 @@ function _buildForm(element: FormElement, lang: string): ReactElement {
             name={`${id}`}
             ariaDescribedBy={description ? `desc-${id}` : undefined}
             choices={choices}
+            key={`${id}-${lang}`}
           />
         </div>
       );
@@ -322,6 +323,13 @@ export const getFormInitialValues = (formRecord: PublicFormRecord, language: str
 
   // Used to track the current group dynamically
   initialValues.currentGroup = "";
+
+  // Used to track the group history dynamically
+  initialValues.groupHistory = [];
+
+  // Used to track the Ids of elements from show/hide that should be included (visible) dynamically
+  initialValues.matchedIds = [];
+
   return initialValues;
 };
 

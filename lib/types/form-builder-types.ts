@@ -24,6 +24,10 @@ export interface Title {
   titleFr: string;
 }
 
+export enum LocalizedGroupProperties {
+  TITLE = "title",
+}
+
 export enum LocalizedFormProperties {
   TITLE = "title",
   REFERRER = "referrerUrl",
@@ -119,6 +123,7 @@ export const FormServerErrorCodes = {
   BRANDING: "550",
   CLASSIFICATION: "551",
   DELIVERY_OPTION: "552",
+  FORM_PURPOSE: "553",
   RESPONSES: "RS01",
   RESPONSES_RETRIEVAL: "RS02",
   FORM_NOT_FOUND: "RS03",

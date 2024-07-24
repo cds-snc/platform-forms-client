@@ -95,6 +95,7 @@ export const QuestionInput = ({
       }}
       onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => updateValue(id, e.target.value)}
       {...getLocalizationAttribute()}
+      ariaLabel={t("question")}
     />
   );
 };

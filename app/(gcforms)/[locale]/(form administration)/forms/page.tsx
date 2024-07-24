@@ -1,14 +1,13 @@
 import { serverTranslation } from "@i18n";
 import { Metadata } from "next";
 import { authCheckAndRedirect } from "@lib/actions";
-import { checkPrivilegesAsBoolean } from "@lib/privileges";
 import { AccessControlError } from "@lib/privileges";
 import { redirect } from "next/navigation";
 import { Navigation } from "./components/server/Navigation";
 import { Cards } from "./components/server/Cards";
 import { NewFormButton } from "./components/server/NewFormButton";
 import { ResumeEditingForm } from "./components/ResumeEditingForm";
-import { getAllTemplates } from "@lib/templates";
+import { getAllTemplatesForUser, TemplateOptions } from "@lib/templates";
 import { DeliveryOption } from "@lib/types";
 
 export type FormsTemplate = {
@@ -44,17 +43,16 @@ export default async function Page({
   try {
     const { ability } = await authCheckAndRedirect();
 
-    checkPrivilegesAsBoolean(ability, [{ action: "view", subject: "FormRecord" }], {
-      redirect: true,
-    });
-
     const { t } = await serverTranslation("my-forms", { lang: locale });
 
     // Moved from Cards to Page to avoid component being cached when navigating back to this page
-    const where = {
-      isPublished: status === "published" ? true : status === "draft" ? false : undefined,
+    const options: TemplateOptions = {
+      requestedWhere: {
+        isPublished: status === "published" ? true : status === "draft" ? false : undefined,
+      },
+      sortByDateUpdated: "desc",
     };
-    const templates = (await getAllTemplates(ability, where, "desc")).map((template) => {
+    const templates = (await getAllTemplatesForUser(ability, options)).map((template) => {
       const {
         id,
         form: { titleEn = "", titleFr = "" },

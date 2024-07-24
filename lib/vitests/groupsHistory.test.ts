@@ -1,5 +1,5 @@
 import { LockedSections } from "@formBuilder/components/shared/right-panel/treeview/types";
-import { getGroupHistory, pushIdToHistory, clearHistoryAfterId } from "@lib/utils/form-builder/groupsHistory";
+import { getGroupHistory, pushIdToHistory, clearHistoryAfterId, getPreviousIdFromCurrentId } from "@lib/utils/form-builder/groupsHistory";
 
 const defaultHistory:string[] = [
   LockedSections.START,
@@ -62,5 +62,25 @@ describe("removeGroupHistory tests", () => {
   it("removes/sets history at the end", () => {
     history = clearHistoryAfterId("group3", history);
     expect(history.length).toEqual(4);
+  });
+});
+
+describe("getPreviousIdFromCurrentId tests", () => {
+  const history:string[] = [...defaultHistory];
+
+  it("handles an invalid id", () => {
+    expect(getPreviousIdFromCurrentId("INVALID", history)).toEqual(null);
+  });
+
+  it("returns nothing at start of history", () => {
+    expect(getPreviousIdFromCurrentId(LockedSections.START, history)).toEqual(null);
+  });
+
+  it("returns previous Id around middle of history", () => {
+    expect(getPreviousIdFromCurrentId("group3", history)).toEqual("group2");
+  });
+
+  it("returns previous Id at end of history", () => {
+    expect(getPreviousIdFromCurrentId("group5", history)).toEqual("group4");
   });
 });

@@ -3,9 +3,16 @@ import React, { useEffect, useRef } from "react";
 import Link from "next/link";
 import { useTranslation } from "@i18n/client";
 import Skeleton from "react-loading-skeleton";
-import { clearTemplateStore } from "@lib/store/useTemplateStore";
+import { clearTemplateStore } from "@lib/store/utils";
 import { safeJSONParse } from "@lib/utils";
 import { FormServerErrorCodes } from "@lib/types/form-builder-types";
+
+type FormStateType = {
+  state: {
+    id: string;
+    form: { titleEn: string; titleFr: string };
+  };
+};
 
 export const ResumeEditingForm = () => {
   const [hasSession, setHasSession] = React.useState(false);
@@ -13,7 +20,7 @@ export const ResumeEditingForm = () => {
 
   const { t, i18n } = useTranslation("my-forms");
 
-  const formIdRef = useRef();
+  const formIdRef = useRef("");
 
   useEffect(() => {
     if (typeof sessionStorage === "undefined") {
@@ -24,8 +31,8 @@ export const ResumeEditingForm = () => {
     try {
       // check if there is a valid form session
       const data = sessionStorage.getItem("form-storage");
-      const parsedData = data && safeJSONParse(data);
-      if (parsedData.error) {
+      const parsedData = data && safeJSONParse<FormStateType>(data);
+      if (!parsedData) {
         throw new Error(FormServerErrorCodes.JSON_PARSE);
       }
 

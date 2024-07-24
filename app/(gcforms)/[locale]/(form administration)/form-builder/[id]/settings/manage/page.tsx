@@ -29,19 +29,11 @@ const getCanManageOwnership = (formId: string, ability: UserAbility | null) => {
   return checkPrivilegesAsBoolean(ability, [
     {
       action: "view",
-      subject: {
-        type: "User",
-        // Empty object to force the ability to check for any user
-        object: {},
-      },
+      subject: "User",
     },
     {
       action: "view",
-      subject: {
-        type: "FormRecord",
-        // We want to make sure the user has the permission to view all templates
-        object: {},
-      },
+      subject: "FormRecord",
     },
   ]);
 };

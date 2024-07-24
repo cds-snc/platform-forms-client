@@ -16,7 +16,7 @@ export const customTranslate = (translationFile: "my-forms" | "common") => {
       supportedLngs: ["en", "fr"],
       preload: ["en", "fr"],
       debug: true,
-      ns: ["my-forms", "common"],
+      ns: ["my-forms", "common", "form-builder"],
       resources: {
         en: {
           "my-forms": myFormsEn,

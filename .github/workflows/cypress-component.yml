@@ -9,9 +9,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@0ad4b8fadaa221de15dcec353f45205ec38ea70b # v1.2.0
+        uses: actions/checkout@50fbc622fc4ef5163becd7fab6573eac35f8462e # v1.2.0
       - name: Node.JS Setup
-        uses: actions/setup-node@60edb5dd545a775178f52524783378180af0d1f8 # v4.0.2
+        uses: actions/setup-node@1e60f620b9541d16bece96c5465dc8ee9832be0b # v4.0.3
         with:
           node-version-file: .nvmrc
 
@@ -34,14 +34,14 @@ jobs:
         run: yarn workspaces focus gcforms flag_initialization
 
       - name: Cypress Component Tests
-        uses: cypress-io/github-action@1b70233146622b69e789ccdd4f9452adc638d25a # v6.6.1
+        uses: cypress-io/github-action@8d3918616d8ac34caa2b49afc8b408b6a872a6f5 # v6.7.1
         with:
           # we have already installed all dependencies above
           install: false
           browser: chrome
           component: true
           headed: false
-      - uses: actions/upload-artifact@65462800fd760344b1a7b4382951275a0abb4808 # tag=v4.3.3
+      - uses: actions/upload-artifact@0b2256b8c012f0828dc542b3febcab082c67f72b # v4.3.4
         if: failure()
         with:
           name: cypress-screenshots

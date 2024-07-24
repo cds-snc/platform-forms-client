@@ -1,4 +1,4 @@
-import { FormElement } from "@lib/types";
+import { FormElement, Responses } from "@lib/types";
 import { PublicFormRecord, ConditionalRule } from "@lib/types";
 
 export type Group = {
@@ -6,8 +6,10 @@ export type Group = {
   titleEn: string;
   titleFr: string;
   nextAction?: string | NextActionRule[];
-  elements: string[];
+  elements: string[]; // NOTE: these are elementIds
   autoFlow?: boolean;
+  exitUrlEn?: string; // Used when a nextAction is set to "exit"
+  exitUrlFr?: string; // Used when a nextAction is set to "exit"
 };
 export type GroupsType = Record<string, Group>;
 export type FormValues = Record<string, string | string[]>;
@@ -387,6 +389,60 @@ export const checkRelatedRulesAsBoolean = (
   return getRelatedIdsPassingRules(elements, rules, matchedIds).length > 0;
 };
 
+export const filterShownElements = (elements: FormElement[], matchedIds: string[]) => {
+  if (!Array.isArray(elements) || !Array.isArray(matchedIds)) {
+    return elements;
+  }
+  return elements.filter((element) => {
+    const elementWithConditionalRules =
+      element.properties.conditionalRules && element.properties.conditionalRules.length > 0;
+    if (!elementWithConditionalRules) {
+      return true;
+    }
+
+    const elementHasConditionalRules = validConditionalRules(element, matchedIds);
+    const elementValueIncludedInShowHide = checkRelatedRulesAsBoolean(
+      elements,
+      element.properties.conditionalRules,
+      matchedIds
+    );
+    if (elementHasConditionalRules && elementValueIncludedInShowHide) {
+      return true;
+    }
+
+    return false;
+  });
+};
+
+export const filterValuesForShownElements = (elements: string[], elementsShown: FormElement[]) => {
+  if (!Array.isArray(elements) || !Array.isArray(elementsShown)) {
+    return elements;
+  }
+  return elements.filter((elementId) => elementsShown.find((el) => el.id === Number(elementId)));
+};
+
+export const getElementIdsAsNumber = (elements: string[]) => {
+  if (!Array.isArray(elements)) {
+    return [];
+  }
+  return elements.map((element) => Number(element));
+};
+
+export const filterValuesByShownElements = (values: Responses, elementsShown: FormElement[]) => {
+  if (!values || !Array.isArray(elementsShown)) {
+    return values;
+  }
+  const filteredValues: { [key: string]: string } = {};
+  Object.keys(values).forEach((key) => {
+    if (elementsShown.find((el) => el.id === Number(key))) {
+      filteredValues[key] = String(values[key]);
+    } else {
+      filteredValues[key] = "";
+    }
+  });
+  return filteredValues;
+};
+
 // const nextBasedOnValues = (nextActions: Group["nextAction"], values: FormValues) => {
 //   let nextAction = "";
 
@@ -450,4 +506,41 @@ export const getNextAction = (
   }
 
   return nextAction; // nextBasedOnValues(groups[currentGroup].nextAction, values);
+};
+
+/**
+ * Util function to ensure locked groups are in the correct order
+ * @param groups
+ * @returns groups Reset the locked sections to their default state
+ * see: https://github.com/cds-snc/platform-forms-client/issues/3933
+ */
+export const resetLockedSections = (groups: GroupsType) => {
+  if (!groups) return groups;
+
+  const { start, review, end, ...rest } = groups;
+
+  if (start === undefined || review === undefined || end === undefined) return groups;
+
+  // Get the key for the first group in ...rest
+  const firstGroupKey = Object.keys(rest)[0];
+
+  // Reset the start group to point to the first group in ...rest
+  const resetStart = { ...start, autoFlow: true, nextAction: firstGroupKey };
+
+  const resetReview = { ...review, autoFlow: true, nextAction: "end" };
+
+  const resetEnd = end;
+
+  const resetGroups = {
+    start: resetStart,
+    ...rest,
+    review: resetReview,
+    end: {
+      name: resetEnd.name,
+      titleEn: resetEnd.titleEn,
+      titleFr: resetEnd.titleFr,
+      elements: resetEnd.elements,
+    },
+  };
+  return resetGroups;
 };

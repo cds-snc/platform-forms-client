@@ -1,24 +1,14 @@
 "use client";
 
-import { useFormStatus, useFormState } from "react-dom";
+import { useFormState } from "react-dom";
 import { Alert, ErrorListItem, Label, TextInput } from "../../../../components/client/forms";
-import { Button } from "@clientComponents/globals";
 import { useTranslation } from "@i18n/client";
 import { login, ErrorStates } from "../../actions";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 
 import { ErrorStatus } from "@clientComponents/forms/Alert/Alert";
-
-const SubmitButton = () => {
-  const { t } = useTranslation("login");
-  const { pending } = useFormStatus();
-  return (
-    <Button theme="primary" type="submit" disabled={pending} aria-disabled={pending}>
-      {t("continueButton")}
-    </Button>
-  );
-};
+import { SubmitButtonAction } from "@clientComponents/globals/Buttons/SubmitButton";
 
 export const LoginForm = () => {
   const {
@@ -122,7 +112,7 @@ export const LoginForm = () => {
             {t("resetPasswordText")}
           </Link>
         </p>
-        <SubmitButton />
+        <SubmitButtonAction>{t("continueButton")}</SubmitButtonAction>
       </form>
     </>
   );

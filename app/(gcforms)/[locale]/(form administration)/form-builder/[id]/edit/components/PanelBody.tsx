@@ -98,7 +98,11 @@ export const PanelBody = ({
                   </Tooltip.Info>
                 </div>
               )}
-              <ElementRequired onRequiredChange={onRequiredChange} item={item} />
+              <ElementRequired
+                onRequiredChange={onRequiredChange}
+                item={item}
+                key={"element-required-" + item.id}
+              />
             </div>
           </div>
         </>

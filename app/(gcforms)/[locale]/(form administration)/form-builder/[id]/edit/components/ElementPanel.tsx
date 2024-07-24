@@ -58,13 +58,17 @@ export const ElementPanel = ({
   const { focusWithinProps, isWithin } = useIsWithin();
   const { refs } = useRefsContext();
 
+  const forceRefresh = () => {
+    setChangeKey(String(new Date().getTime())); //Force a re-render
+  };
+
   const moreButton =
     item.type !== "richText"
       ? {
           moreButtonRenderer: (
             moreButton: JSX.Element | undefined
           ): React.ReactElement | string | undefined => (
-            <MoreModal item={item} moreButton={moreButton} />
+            <MoreModal item={item} moreButton={moreButton} onClose={forceRefresh} />
           ),
         }
       : {};
@@ -103,7 +107,7 @@ export const ElementPanel = ({
         }
       }}
     >
-      <PanelBodyRoot item={item} />
+      <PanelBodyRoot item={item} onChangeMade={forceRefresh} />
       <PanelActions
         isFirstItem={item.index === 0}
         isLastItem={item.index === elements.length - 1}
@@ -138,7 +142,7 @@ export const ElementPanel = ({
           refs && refs.current && refs.current[previousElement.id].focus();
         }}
         handleMoveUp={() => {
-          moveUp(item.index);
+          moveUp(item.index, groupId);
           if (item.type === "richText") {
             (
               document
@@ -151,7 +155,7 @@ export const ElementPanel = ({
           refs && refs.current && refs.current[item.id].focus();
         }}
         handleMoveDown={() => {
-          moveDown(item.index);
+          moveDown(item.index, groupId);
           if (item.type === "richText") {
             (
               document
@@ -164,7 +168,7 @@ export const ElementPanel = ({
         }}
         handleDuplicate={() => {
           setFocusInput(true);
-          duplicateElement(item.id);
+          duplicateElement(item.id, groupId);
         }}
         {...moreButton}
       />

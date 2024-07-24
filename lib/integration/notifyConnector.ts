@@ -30,7 +30,11 @@ export const sendEmail = async (
       template_id: templateId,
       personalisation,
     });
+
+    logMessage.info("HealthCheck: send email success");
   } catch (error) {
+    logMessage.info("HealthCheck: send email failure");
+
     let errorMessage = "";
     if (axios.isAxiosError(error)) {
       if (error.response) {

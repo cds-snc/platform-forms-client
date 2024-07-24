@@ -3,11 +3,13 @@
 import { useTranslation } from "@i18n/client";
 import { useRouter } from "next/navigation";
 
-import { Button } from "@clientComponents/globals";
+import { useState } from "react";
 import { useSession } from "next-auth/react";
+import { SubmitButton } from "@clientComponents/globals/Buttons/SubmitButton";
 
 export const AcceptButton = () => {
   const router = useRouter();
+  const [isLoading, setIsLoading] = useState(false);
 
   const {
     t,
@@ -15,9 +17,13 @@ export const AcceptButton = () => {
   } = useTranslation("common");
   const defaultRoute = `/${language}/forms`;
 
-  const { status, update } = useSession();
+  const { /*status,*/ update } = useSession();
 
   const agree = async () => {
+    // status from useSession will jump back and forth between authenticated and loading,
+    // using state instead for reliability. TODO see if "fixed" in future versions of next-auth?
+    setIsLoading(true);
+
     // Update the session to reflect the user has accepted the terms of use.
     const session = await update({
       user: { acceptableUse: true },
@@ -31,8 +37,8 @@ export const AcceptButton = () => {
   };
 
   return (
-    <Button id="acceptableUse" onClick={agree} disabled={status !== "authenticated"}>
+    <SubmitButton id="acceptableUse" type="button" loading={isLoading} onClick={agree}>
       {t("acceptableUsePage.agree")}
-    </Button>
+    </SubmitButton>
   );
 };

@@ -14,6 +14,7 @@ import {
   getGroupHistory as _getGroupHistory,
   pushIdToHistory as _pushIdToHistory,
   clearHistoryAfterId as _clearHistoryAfterId,
+  getPreviousIdFromCurrentId,
 } from "@lib/utils/form-builder/groupsHistory";
 import { getLocalizedProperty } from "@lib/utils";
 import { Language } from "@lib/types/form-builder-types";
@@ -27,7 +28,9 @@ interface GCFormsContextValueType {
   previousGroup: string | null;
   setGroup: (group: string | null) => void;
   handleNextAction: () => void;
+  handlePreviousAction: () => void;
   hasNextAction: (group: string) => boolean;
+  isOffBoardSection: (group: string) => boolean;
   formRecord: PublicFormRecord;
   groupsCheck: (groupsFlag: boolean | undefined) => boolean;
   getGroupHistory: () => string[];
@@ -57,6 +60,21 @@ export const GCFormsProvider = ({
     return groups[group]?.nextAction ? true : false;
   };
 
+  /**
+   * Handle check if the group is an off-board section
+   * In which case we don't want to navigate to the next group or submit
+   * @param group
+   * @returns boolean
+   */
+  const isOffBoardSection = (group: string) => {
+    const next = groups[group]?.nextAction;
+    if (next === "exit") {
+      return true;
+    }
+
+    return false;
+  };
+
   const handleNextAction = () => {
     if (!currentGroup) return;
 
@@ -70,6 +88,15 @@ export const GCFormsProvider = ({
         setCurrentGroup(nextAction);
         pushIdToHistory(nextAction);
       }
+    }
+  };
+
+  const handlePreviousAction = () => {
+    if (!currentGroup) return;
+    const previousGroupId = getPreviousIdFromCurrentId(currentGroup, history.current);
+    if (previousGroupId) {
+      setGroup(previousGroupId);
+      clearHistoryAfterId(previousGroupId);
     }
   };
 
@@ -127,7 +154,9 @@ export const GCFormsProvider = ({
         previousGroup,
         setGroup,
         handleNextAction,
+        handlePreviousAction,
         hasNextAction,
+        isOffBoardSection,
         groupsCheck,
         getGroupHistory,
         pushIdToHistory,
@@ -157,7 +186,9 @@ export const useGCFormsContext = () => {
       previousGroup: "",
       setGroup: () => void 0,
       hasNextAction: () => void 0,
+      isOffBoardSection: () => false,
       handleNextAction: () => void 0,
+      handlePreviousAction: () => void 0,
       formRecord: {} as PublicFormRecord,
       groupsCheck: () => false,
       getGroupHistory: () => [],

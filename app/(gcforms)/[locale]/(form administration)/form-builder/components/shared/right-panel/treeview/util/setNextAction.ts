@@ -28,6 +28,15 @@ export const autoFlowAllNextActions = (formGroups: GroupsType, force: boolean = 
 };
 
 /**
+ * Check if any of the groups have custom rules set.
+ * @param items
+ * @returns boolean
+ */
+export const groupsHaveCustomRules = (items: Group[]) => {
+  return items.some((item) => Object.hasOwn(item, "autoFlow") && !item.autoFlow);
+};
+
+/**
  * Autoflow: set the nextAction for both the provided groupId and the previous group
  * in the object to maintain a linear flow.
  *

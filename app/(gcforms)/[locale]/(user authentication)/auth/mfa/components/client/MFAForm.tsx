@@ -8,7 +8,7 @@ import { Expired2faSession } from "./Expired2faSession";
 import { Locked2fa } from "./Locked2fa";
 import Link from "next/link";
 import { ErrorStatus } from "@clientComponents/forms/Alert/Alert";
-import { Button } from "@clientComponents/globals";
+import { SubmitButton } from "@clientComponents/globals/Buttons/SubmitButton";
 import { ToastContainer } from "@formBuilder/components/shared/Toast";
 import { useFocusIt } from "@lib/hooks/useFocusIt";
 import { Loader } from "@clientComponents/globals/Loader";
@@ -179,14 +179,11 @@ export const MFAForm = () => {
               }
             />
           </div>
-          <Button
-            theme="primary"
-            type="submit"
-            dataTestId="verify-submit"
-            disabled={isSubmittingStep1}
-          >
+
+          <SubmitButton loading={isSubmittingStep1} dataTestId="verify-submit">
             {t("verify.confirmButton")}
-          </Button>
+          </SubmitButton>
+
           <div className="mt-12 flex">
             <Link className="mr-8" href={`/${language}/auth/mfa/resend`}>
               {t("verify.resendConfirmationCodeButton")}

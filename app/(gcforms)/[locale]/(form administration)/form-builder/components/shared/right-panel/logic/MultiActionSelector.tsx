@@ -19,6 +19,8 @@ import { ensureChoiceId } from "@lib/formContext";
 import { LocalizedElementProperties } from "@lib/types/form-builder-types";
 import { SaveNote } from "./SaveNote";
 import { toast } from "@formBuilder/components/shared/Toast";
+import { SectionName } from "./SectionName";
+import { Language } from "@lib/types/form-builder-types";
 
 export const GroupAndChoiceSelect = ({
   groupId,
@@ -130,16 +132,21 @@ export const GroupAndChoiceSelect = ({
 
 export const MultiActionSelector = ({
   item,
+  sectionName,
   descriptionId,
   initialNextActionRules,
+  lang,
 }: {
   item: FormElement;
+  sectionName: string | null;
   descriptionId?: string;
   initialNextActionRules: NextActionRule[];
+  lang: Language;
 }) => {
   const [nextActions, setNextActions] = useState(initialNextActionRules);
   const findParentGroup = useGroupStore((state) => state.findParentGroup);
   const setGroupNextAction = useGroupStore((state) => state.setGroupNextAction);
+  const setChangeKey = useTemplateStore((s) => s.setChangeKey);
 
   const { localizeField, language } = useTemplateStore((s) => ({
     localizeField: s.localizeField,
@@ -197,26 +204,29 @@ export const MultiActionSelector = ({
 
   return (
     <>
-      <div className="p-4">
-        <h3 className="block text-sm font-normal">
-          <strong>{t("logic.questionTitle")}</strong> {title}
-        </h3>
+      <div className="flex justify-between border-b-2 border-black bg-gray-50 p-3 align-middle">
+        <div>
+          <SectionName lang={lang} sectionName={sectionName} />
+          <h3 className="mb-6 ml-2 mt-2 block text-sm font-normal">
+            {t("logic.questionTitle")} <strong> {title}</strong>
+          </h3>
+
+          <label className="flex items-center hover:fill-white hover:underline">
+            <span className="mr-2 pl-3 text-sm">{t("logic.addRule")}</span>
+            <Button
+              theme="secondary"
+              className="p-0 hover:!bg-indigo-500 hover:!fill-white focus:!fill-white"
+              disabled={disableAdd}
+              onClick={() => {
+                setNextActions([...nextActions, { groupId: "", choiceId: String(item.id) }]);
+              }}
+            >
+              <AddIcon className="hover:fill-white focus:fill-white" title={t("logic.addRule")} />
+            </Button>
+          </label>
+        </div>
       </div>
 
-      <div className="flex items-center border-b-2 border-black bg-slate-50 p-3">
-        <span className="mr-2 inline-block pl-3">{t("logic.addRule")}</span>
-        <Button
-          disabled={disableAdd}
-          onClick={() => {
-            setNextActions([...nextActions, { groupId: "", choiceId: String(item.id) }]);
-          }}
-          theme={"secondary"}
-          className="p-1 focus:fill-white"
-          aria-controls={formId}
-        >
-          <AddIcon className=" active:fill-white " title={t("logic.addRule")} />
-        </Button>
-      </div>
       <form
         onSubmit={(e: React.FormEvent<HTMLFormElement>) => e.preventDefault()}
         id={formId}
@@ -234,7 +244,8 @@ export const MultiActionSelector = ({
               const group = findParentGroup(String(item.id));
               const parent = group?.index;
               parent && setGroupNextAction(parent as string, nextActions);
-              flow.current?.updateEdges();
+              setChangeKey(String(new Date().getTime()));
+              flow.current?.redraw();
               toast.success(t("logic.actionsSaved"));
             }}
           >

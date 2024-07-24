@@ -120,8 +120,10 @@ export interface FormProperties {
   closedMessage?: Record<string, string>;
   layout: number[];
   groups?: GroupsType;
+  groupsLayout?: string[];
   elements: FormElement[];
   brand?: BrandProperties;
+  formPurpose?: string;
   [key: string]:
     | string
     | number
@@ -142,6 +144,7 @@ export interface DeliveryOption {
 }
 
 export type SecurityAttribute = "Unclassified" | "Protected A" | "Protected B";
+export type FormPurpose = "" | "admin" | "nonAdmin";
 
 // defines the fields for the form record that is available in authenticated spaces and backend processes
 export type FormRecord = {

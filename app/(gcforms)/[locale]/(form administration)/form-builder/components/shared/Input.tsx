@@ -7,6 +7,7 @@ interface Props {
   type?: string;
   placeholder?: string;
   describedBy?: string;
+  ariaLabel?: string;
   value: string | number;
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   onKeyDown?: (e: React.KeyboardEvent<HTMLInputElement>) => void;
@@ -17,6 +18,7 @@ interface Props {
   isInvalid?: boolean;
   lang?: string;
   onBlur?: FocusEventHandler;
+  onFocus?: FocusEventHandler;
 }
 
 type Ref = HTMLInputElement;
@@ -26,6 +28,7 @@ const Input = React.forwardRef<Ref, Props>((props, ref) => {
     id,
     name,
     describedBy,
+    ariaLabel, // Use a real <label> instead when possible
     value,
     onChange,
     onKeyDown,
@@ -37,6 +40,7 @@ const Input = React.forwardRef<Ref, Props>((props, ref) => {
     isInvalid = false,
     lang,
     onBlur,
+    onFocus,
   } = props;
   const themes = {
     default:
@@ -58,9 +62,11 @@ const Input = React.forwardRef<Ref, Props>((props, ref) => {
       className={`${className} ${themes[theme]}`}
       value={value}
       placeholder={placeholder}
+      {...(ariaLabel && { "aria-label": ariaLabel })}
       onChange={onChange}
       onKeyDown={onKeyDown}
       onBlur={onBlur && onBlur}
+      onFocus={onFocus && onFocus}
       ref={ref}
       {...(lang && { lang: lang })}
       autoComplete="off"

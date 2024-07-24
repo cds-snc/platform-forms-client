@@ -16,7 +16,6 @@ import { useGroupStore } from "./store/useGroupStore";
 import { useTreeRef } from "./provider/TreeRefProvider";
 import { v4 as uuid } from "uuid";
 import { findParentGroup } from "./util/findParentGroup";
-import "react-complex-tree/lib/style-modern.css";
 import { GroupsType } from "@lib/formContext";
 import { Item } from "./Item";
 import { autoFlowGroupNextActions } from "./util/setNextAction";
@@ -28,25 +27,53 @@ import { ConfirmMoveSectionDialog } from "../../confirm/ConfirmMoveSectionDialog
 import { useConfirmState as useConfirmMoveDialogState } from "../../confirm/useConfirmState";
 import { useConfirmState as useConfirmDeleteDialogState } from "../../confirm/useConfirmState";
 import { ConfirmDeleteSectionDialog } from "../../confirm/ConfirmDeleteSectionDialog";
-import { useTemplateStore } from "@lib/store/useTemplateStore";
 import { toast } from "@formBuilder/components/shared";
 import { useTranslation } from "@i18n/client";
+import { cn } from "@lib/utils";
+import { KeyboardNavTip } from "./KeyboardNavTip";
+import { Button } from "@clientComponents/globals";
+import { Language } from "@lib/types/form-builder-types";
+import { isTitleElementType } from "./util/itemType";
+import { useAutoFlowIfNoCustomRules } from "@lib/hooks/useAutoFlowAll";
+import { useTemplateStore } from "@lib/store/useTemplateStore";
+import { useUpdateGroupLayout } from "./util/useUpdateGroupLayout";
 
 export interface TreeDataProviderProps {
   children?: ReactElement;
   addItem: (id: string) => void;
-  // addGroup: (id: string) => void;
   updateItem: (id: string, value: string) => void;
   removeItem: (id: string) => void;
-  // openSection?: (id: string) => void;
+  addPage: () => void;
 }
+
+const debug = false;
+
+const DebugNamedGroupLayout = () => {
+  const groupsLayout = useTemplateStore((s) => s.form.groupsLayout);
+  const groups = useTemplateStore((s) => s.form.groups);
+
+  if (!groups) {
+    return null;
+  }
+  const groupLayoutNames =
+    groupsLayout && groupsLayout.length >= 1
+      ? groupsLayout
+          .map((id: string) => groups[id]?.name)
+          .filter(Boolean)
+          .map((name, i) => {
+            return <div key={i}>{name}</div>;
+          })
+      : [];
+
+  return groupLayoutNames;
+};
 
 const ControlledTree: ForwardRefRenderFunction<unknown, TreeDataProviderProps> = (
   { children },
   ref
 ) => {
-  // export const TreeView = () => {
   const {
+    groupId,
     getTreeData,
     getGroups,
     addGroup,
@@ -57,6 +84,7 @@ const ControlledTree: ForwardRefRenderFunction<unknown, TreeDataProviderProps> =
     deleteGroup,
   } = useGroupStore((s) => {
     return {
+      groupId: s.id,
       getTreeData: s.getTreeData,
       getGroups: s.getGroups,
       replaceGroups: s.replaceGroups,
@@ -67,6 +95,12 @@ const ControlledTree: ForwardRefRenderFunction<unknown, TreeDataProviderProps> =
       deleteGroup: s.deleteGroup,
     };
   });
+
+  const updateGroupTitle = useGroupStore((state) => state.updateGroupTitle);
+  const { getLocalizationAttribute } = useTemplateStore((s) => ({
+    getLocalizationAttribute: s.getLocalizationAttribute,
+  }));
+  const language = getLocalizationAttribute()?.lang as Language;
 
   const { remove: removeItem } = useTemplateStore((s) => {
     return {
@@ -81,15 +115,20 @@ const ControlledTree: ForwardRefRenderFunction<unknown, TreeDataProviderProps> =
   const [selectedItems, setSelectedItems] = useState<TreeItemIndex[]>([]);
 
   const { getTitle } = useElementTitle();
+  const { autoFlowAll } = useAutoFlowIfNoCustomRules();
+  const { updateGroupsLayout } = useUpdateGroupLayout();
 
-  const addSection = () => {
+  const newSectionText = t("groups.newPage");
+
+  const addPage = () => {
     const id = uuid();
-    addGroup(id, "New section");
+    addGroup(id, newSectionText);
     const newGroups = autoFlowGroupNextActions(getGroups() as GroupsType, id);
     replaceGroups(newGroups);
     setSelectedItems([id]);
     setExpandedItems([id]);
     setId(id);
+    tree?.current?.startRenamingItem(id);
   };
 
   useImperativeHandle(ref, () => ({
@@ -108,6 +147,9 @@ const ControlledTree: ForwardRefRenderFunction<unknown, TreeDataProviderProps> =
       setExpandedItems([parent?.index as TreeItemIndex]);
       setSelectedItems([parent?.index as TreeItemIndex]);
     },
+    addPage: () => {
+      addPage();
+    },
   }));
 
   const {
@@ -123,17 +165,34 @@ const ControlledTree: ForwardRefRenderFunction<unknown, TreeDataProviderProps> =
     setOpenDialog: setOpenConfirmDeleteDialog,
   } = useConfirmDeleteDialogState();
 
+  const items = getTreeData({
+    addIntroElement: true,
+    addPolicyElement: true,
+    addConfirmationElement: true,
+    addSectionTitleElements: false,
+    reviewGroup: false,
+  });
+
+  if (!items) {
+    return null;
+  }
+
   return (
-    <>
+    <div
+      onFocus={() => {
+        updateGroupsLayout();
+      }}
+      onBlur={() => {
+        updateGroupsLayout();
+      }}
+    >
+      {/* @todo remove this once the groupsLayout has been tested further */}
+      {debug && <DebugNamedGroupLayout />}
+
       <ControlledTreeEnvironment
         ref={environment}
-        items={getTreeData({
-          addIntroElement: true,
-          addPolicyElement: true,
-          addConfirmationElement: true,
-          reviewGroup: false,
-        })}
-        getItemTitle={(item) => getTitle(item.data as ElementProperties)}
+        items={items}
+        getItemTitle={(item) => getTitle(item?.data as ElementProperties)}
         renderItem={({ item, title, arrow, context, children }) => {
           return (
             <Item
@@ -158,6 +217,7 @@ const ControlledTree: ForwardRefRenderFunction<unknown, TreeDataProviderProps> =
                       <p>{t("groups.groupSuccessfullyDeleted", { group: item.data.name })}</p>
                     </>
                   );
+
                   return;
                 }
                 setOpenConfirmDeleteDialog(false);
@@ -170,6 +230,21 @@ const ControlledTree: ForwardRefRenderFunction<unknown, TreeDataProviderProps> =
         renderItemTitle={({ title }) => <Item.Title title={title} />}
         renderItemArrow={({ item, context }) => <Item.Arrow item={item} context={context} />}
         renderLiveDescriptorContainer={() => null}
+        renderDragBetweenLine={({ lineProps }) => {
+          return (
+            <div {...lineProps}>
+              <div className="absolute left-0 -ml-2 -mt-2 size-0 border-y-8 border-l-8 border-y-transparent border-l-blue-focus" />
+              <div className={cn("w-full border-b-1 border-blue-focus")} />
+            </div>
+          );
+        }}
+        renderItemsContainer={({ children, containerProps }) => {
+          return (
+            <ul className="m-0 p-0" {...containerProps}>
+              {children}
+            </ul>
+          );
+        }}
         viewState={{
           ["default"]: {
             focusedItem,
@@ -187,9 +262,18 @@ const ControlledTree: ForwardRefRenderFunction<unknown, TreeDataProviderProps> =
           });
         }}
         canDropAt={(items, target) => handleCanDropAt(items, target, getGroups)}
+        canDropBelowOpenFolders={true}
+        canDropOnFolder={true}
         onRenameItem={(item, name) => {
-          item.isFolder && updateGroupName({ id: String(item.index), name });
+          if (!item) return;
+          const isTitleElement = isTitleElementType(item);
+          if (isTitleElement) {
+            updateGroupTitle({ id: groupId, locale: language || "en", title: name });
+            setSelectedItems([item.index]);
+            return;
+          }
 
+          item.isFolder && updateGroupName({ id: String(item.index), name });
           // Rename the element
           !item.isFolder &&
             updateElementTitle({
@@ -199,18 +283,23 @@ const ControlledTree: ForwardRefRenderFunction<unknown, TreeDataProviderProps> =
 
           setSelectedItems([item.index]);
         }}
-        onDrop={async (items: TreeItem[], target: DraggingPosition) =>
-          handleOnDrop(
+        onDrop={async (items: TreeItem[], target: DraggingPosition) => {
+          await handleOnDrop(
             items,
             target,
             getGroups,
             replaceGroups,
             setSelectedItems,
+            setExpandedItems,
+            expandedItems,
             getTreeData,
             getConfirmMovePromise,
-            setOpenConfirmMoveDialog
-          )
-        }
+            setOpenConfirmMoveDialog,
+            autoFlowAll
+          );
+
+          updateGroupsLayout();
+        }}
         onFocusItem={(item) => {
           setFocusedItem(item.index);
           const parent = findParentGroup(getTreeData(), String(item.index));
@@ -227,7 +316,13 @@ const ControlledTree: ForwardRefRenderFunction<unknown, TreeDataProviderProps> =
 
           setId(item.isFolder ? String(item.index) : String(parent?.index));
         }}
-        onExpandItem={(item) => setExpandedItems([...expandedItems, item.index])}
+        onExpandItem={(item) => {
+          if (item.index !== groupId) {
+            setId(String(item.index));
+          }
+
+          setExpandedItems([...expandedItems, item.index]);
+        }}
         onCollapseItem={(item) =>
           setExpandedItems(
             expandedItems.filter((expandedItemIndex) => expandedItemIndex !== item.index)
@@ -237,20 +332,21 @@ const ControlledTree: ForwardRefRenderFunction<unknown, TreeDataProviderProps> =
           setSelectedItems(items);
         }}
       >
-        <div className="mb-4 flex justify-between align-middle">
-          <label>
-            New section
-            <button
-              className="ml-2 mt-2 rounded-md border border-slate-500 p-1"
-              onClick={addSection}
+        <div className="flex justify-between border-b-2 border-black bg-gray-50 p-3 align-middle">
+          <label className="flex items-center hover:fill-white hover:underline">
+            <span className="mr-2 pl-3 text-sm">{newSectionText}</span>
+            <Button
+              theme="secondary"
+              className="p-0 hover:!bg-indigo-500 hover:!fill-white focus:!fill-white"
+              onClick={addPage}
             >
-              <AddIcon title="Add section" />
-            </button>
+              <AddIcon className="hover:fill-white focus:fill-white" title={t("groups.addPage")} />
+            </Button>
           </label>
+          <KeyboardNavTip />
         </div>
-
-        <div className="border-1 border-slate-200">
-          <Tree treeId="default" rootItem="root" treeLabel="GC Forms sections" ref={tree} />
+        <div id="tree-container">
+          <Tree treeId="default" rootItem="root" treeLabel={t("groups.treeAriaLabel")} ref={tree} />
         </div>
         <>{children}</>
       </ControlledTreeEnvironment>
@@ -274,7 +370,7 @@ const ControlledTree: ForwardRefRenderFunction<unknown, TreeDataProviderProps> =
           }
         }}
       />
-    </>
+    </div>
   );
 };
 

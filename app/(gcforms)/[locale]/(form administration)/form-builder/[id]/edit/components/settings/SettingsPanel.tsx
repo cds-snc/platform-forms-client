@@ -11,12 +11,14 @@ import { Logos, options } from "../../../settings/branding/components";
 import { useTemplateStore } from "@lib/store/useTemplateStore";
 import { SettingsModal } from "./SettingsDialog";
 import { Tooltip } from "@formBuilder/components/shared/Tooltip";
-import { updateTemplate, updateTemplateSecurityAttribute } from "@formBuilder/actions";
 
 import { toast } from "@formBuilder/components/shared/Toast";
 import { ErrorSaving } from "@formBuilder/components/shared/ErrorSaving";
 import { FormServerErrorCodes } from "@lib/types/form-builder-types";
 import { safeJSONParse } from "@lib/utils";
+
+import { useTemplateContext } from "@lib/hooks/form-builder/useTemplateContext";
+import { FormProperties } from "@lib/types";
 
 enum DeliveryOption {
   vault = "vault",
@@ -30,6 +32,7 @@ export const SettingsPanel = () => {
 
   const {
     id,
+    getId,
     email,
     securityAttribute,
     updateSecurityAttribute,
@@ -40,6 +43,7 @@ export const SettingsPanel = () => {
     getSchema,
   } = useTemplateStore((s) => ({
     id: s.id,
+    getId: s.getId,
     email: s.deliveryOption?.emailAddress,
     updateSecurityAttribute: s.updateSecurityAttribute,
     securityAttribute: s.securityAttribute,
@@ -49,6 +53,8 @@ export const SettingsPanel = () => {
     updateField: s.updateField,
     getSchema: s.getSchema,
   }));
+
+  const { createOrUpdateTemplate } = useTemplateContext();
 
   const initialDeliveryOption = !email ? DeliveryOption.vault : DeliveryOption.email;
   const [, setDeliveryOption] = useState(initialDeliveryOption);
@@ -63,20 +69,30 @@ export const SettingsPanel = () => {
         setDeliveryOption(DeliveryOption.vault);
       }
 
-      // Call sever action
-      const result = await updateTemplateSecurityAttribute({
-        id,
+      if (!createOrUpdateTemplate) {
+        return;
+      }
+
+      const formConfig = safeJSONParse<FormProperties>(getSchema());
+      if (!formConfig) {
+        toast.error(<ErrorSaving errorCode={FormServerErrorCodes.JSON_PARSE} />, "wide");
+        return;
+      }
+
+      const { error } = await createOrUpdateTemplate({
+        id: getId(),
+        formConfig,
         securityAttribute: value,
       });
 
-      if (!result.error) {
+      if (!error) {
         updateSecurityAttribute(value);
         return;
       }
 
       toast.error(<ErrorSaving errorCode={FormServerErrorCodes.BRANDING} />, "wide");
     },
-    [updateSecurityAttribute, id]
+    [updateSecurityAttribute, getId, getSchema, createOrUpdateTemplate]
   );
 
   // Branding options
@@ -97,31 +113,32 @@ export const SettingsPanel = () => {
 
   const updateBrand = useCallback(
     async (type: string) => {
-      const formConfig = safeJSONParse(getSchema());
-      if (formConfig.error) {
+      const formConfig = safeJSONParse<FormProperties>(getSchema());
+      if (!formConfig) {
         toast.error(<ErrorSaving errorCode={FormServerErrorCodes.JSON_PARSE} />, "wide");
         return;
       }
 
+      if (!createOrUpdateTemplate) {
+        return;
+      }
+
       if (type === "") {
-        const result = await updateTemplate({
-          id,
+        const { error } = await createOrUpdateTemplate({
+          id: getId(),
           formConfig,
         });
 
-        if (!result.error) {
+        if (!error) {
           unsetField("form.brand");
           return;
         }
       }
 
       if (type !== brandName) {
-        const result = await updateTemplate({
-          id,
-          formConfig,
-        });
+        const { error } = await createOrUpdateTemplate({ id: getId(), formConfig });
 
-        if (!result.error) {
+        if (!error) {
           updateField("form.brand", options.filter((o) => o.name === type)[0]);
           return;
         }
@@ -129,7 +146,7 @@ export const SettingsPanel = () => {
         toast.error(<ErrorSaving errorCode={FormServerErrorCodes.CLASSIFICATION} />, "wide");
       }
     },
-    [brandName, unsetField, updateField, id, getSchema]
+    [getSchema, brandName, getId, unsetField, createOrUpdateTemplate, updateField]
   );
 
   // More ...
@@ -141,7 +158,7 @@ export const SettingsPanel = () => {
 
   return (
     <>
-      <div className="mb-4 flex w-[800px] justify-between rounded-lg border-1 border-indigo-500 bg-violet-50">
+      <div className="mb-4 flex w-[800px] justify-between rounded-lg border-1 border-indigo-700 bg-violet-50">
         <div className="flex w-full justify-between">
           <div className="ml-4 inline-block">
             <div className="my-[6px] border-[.5px] border-violet-50 p-1 px-2 hover:border-[.5px] hover:border-slate-800">
@@ -173,7 +190,8 @@ export const SettingsPanel = () => {
               onClick={() => {
                 setShowShowSettings(true);
               }}
-              className="flex h-full rounded-r-md bg-indigo-500 p-1 pt-2 text-white"
+              className="flex h-full rounded-r-md bg-indigo-700 p-1 pt-2 font-bold text-white"
+              aria-label={t("more")}
             >
               {"..."}
             </button>

@@ -21,6 +21,7 @@ Vous avez pour responsabilité :
 - d’élaborer et de publier un avis de confidentialité pour votre formulaire conformément à l’article 4.2.10 de la [_directive sur les pratiques relatives à la protection de la vie privée_](https://www.tbs-sct.canada.ca/pol/doc-fra.aspx?id=18309). Nous affichons également les [conditions d’utilisation](/fr/terms-and-conditions) au bas de chaque formulaire afin de répondre aux exigences des politiques liées à l’hébergement du formulaire en votre nom. Nous communiquons des renseignements sur notre conservation et notre élimination des réponses aux formulaires dans nos bases de données, ainsi que sur les fonctionnalités permettant de protéger la sécurité des sites Web du gouvernement du Canada.
 - de déterminer le niveau de confidentialité des renseignements collectés dans vos formulaires. Formulaires GC prend en charge la collecte de données classées jusqu’à PROTÉGÉ B. Apprenez-en davantage sur la détermination du niveau de confidentialité en consultant la [norme sur la catégorisation de sécurité](https://www.tbs-sct.canada.ca/pol/doc-fra.aspx?id=32614).
 - de respecter la [_Loi sur la protection des renseignements personnels_](https://laws-lois.justice.gc.ca/fra/lois/p-21/) et la [_Loi sur l’accès à l’information_](https://laws-lois.justice.gc.ca/fra/lois/a-1/) concernant les renseignements personnels et sensibles contenus dans les réponses soumises dans vos formulaires en cas de demande, d’incident ou d’atteinte à la sécurité des données.
+- de récupérer les réponses directement à partir de la base de données lors du traitement d’informations plus sensibles de type Protégé B. La réception de réponses par courriel n’est possible que pour les informations de type Protégé A.
 
 ### Réponses envoyées par courriel (jusqu’à PROTÉGÉ A)
 
@@ -36,14 +37,15 @@ Vous avez pour responsabilité :
 Vous avez pour responsabilité :
 
 - d’adhérer aux directives ministérielles concernant la bonne utilisation des appareils et des réseaux.
-- d’accuser réception des réponses au formulaire et d’en enregistrer une copie dans les 45 jours suivant la réception d’une réponse.
+- d’accuser réception des réponses au formulaire et d’en enregistrer une copie dans les 45 jours suivant la réception d’une réponse. Formulaires GC ne sert qu’à stocker temporairement des données. Si les réponses ne sont pas sauvegardées et confirmées dans les 45 jours, nous prendrons les mesures nécessaires pour qu’elles soient récupérées par le programme ou le service responsable.
 - de signaler tout problème lié aux réponses enregistrées.
 - de traiter, d'ouvrir et d’enregistrer les réponses aux formulaires conformément à votre calendrier de conservation et d’élimination.
 
 ## Pratique de sécurité en continu
 
-- Utilisez une adresse courriel gouvernementale pour créer votre compte et pour l’authentification à deux facteurs.
+- Utilisez une adresse courriel gouvernementale individuelle pour créer votre compte et pour l’authentification à deux facteurs.
 - Ne communiquez pas votre mot de passe à personne et ne le conservez pas dans un endroit où d’autres personnes pourraient le trouver. Si quelqu’un d’autre a besoin d’accéder à un formulaire, [contactez-nous](/fr/support).
+- Assurer la confidentialité et la sécurité des renseignements protégées lors du téléchargement des réponses aux formulaires de Formulaires GC.
 - Signalez toute faille de sécurité et vulnérabilité en utilisant les étapes détaillées dans l’[avis de sécurité](https://numerique.canada.ca/avis-de-securite/).
 
 ## Publication du formulaire dans les deux langues officielles
@@ -59,6 +61,8 @@ Formulaires GC vous permet de créer et de publier des formulaires numériques. 
 Vous avez pour responsabilité :
 
 - d’intégrer votre formulaire dans l’architecture d’information de votre ministère ou organisme. L’URL doit donc être incorporée au formulaire afin d’en permettre l’accès par les personnes ou organismes.
+- de maintenir des liens fonctionnels vers votre formulaire. L'URL de votre formulaire doit donc être remplacé en cas de modification, ou l'URL doit être supprimé lorsque votre formulaire est fermé ou supprimé.
+- de répondre aux questions ou aux demandes des utilisateur·rice·s qui rencontrent des problèmes avec votre formulaire et qui ne résultent pas d'un problème au niveau du système.
 - de rédiger un brouillon du contenu du formulaire à l’aide du [guide de rédaction du contenu du site Canada.ca](https://www.canada.ca/fr/secretariat-conseil-tresor/services/communications-gouvernementales/guide-redaction-contenu-canada.html).
 - de respecter la [norme graphique du Programme fédéral de l’image de marque](https://www.canada.ca/fr/secretariat-conseil-tresor/services/communications-gouvernementales/norme-graphique.html). Votre formulaire apparaîtra par défaut avec :
   - la signature du gouvernement du Canada dans le coin supérieur gauche de l’en-tête.
@@ -66,6 +70,8 @@ Vous avez pour responsabilité :
 
 Vous pouvez remplacer la signature du gouvernement du Canada par la signature de votre ministère ou organisme. Si vous ne connaissez pas la signature de votre ministère ou organisme, veuillez contacter [le coordonnateur ou la coordonnatrice du Programme fédéral de l’image de marque](https://www.tbs-sct.canada.ca/ap/fip-pcim/coord-fra.asp).
 
+Nous vous demandons de ne pas intervenir sur le format des fichiers JSON, car toute mise à jour peut compromettre à la fois l’accessibilité du formulaire et les normes de conception intégrées pour le programme de coordination de l’image de marque. Nous ne pourrons pas offrir de soutien pour les formulaires dont le fichier JSON a été manipulé.
+
 Pour toute question en lien avec les présentes conditions d’utilisation, veuillez [nous contacter](/fr/contact).
 
-**Dernière mise à jour :** 14 décembre 2023
+**Dernière mise à jour :** 2 juillet 2024

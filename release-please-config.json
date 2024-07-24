@@ -15,7 +15,7 @@
     { "type": "feature", "section": "Features" },
     { "type": "fix", "section": "Bug Fixes" },
     { "type": "perf", "section": "Performance Improvements" },
-    { "type": "revert", "section": "Reverts", "hidden": true },
+    { "type": "revert", "section": "Reverts" },
     { "type": "docs", "section": "Documentation" },
     { "type": "style", "section": "Styles" },
     { "type": "chore", "section": "Miscellaneous Chores" },

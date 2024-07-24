@@ -16,13 +16,17 @@ export async function generateMetadata({
   };
 }
 
-export default async function Page({ params: { id } }: { params: { id: string } }) {
+export default async function Page({
+  params: { id, locale },
+}: {
+  params: { id: string; locale: string };
+}) {
   const conditionalLogic = await allowGrouping();
 
   return (
     <>
       {conditionalLogic ? (
-        <EditWithGroups />
+        <EditWithGroups id={id} locale={locale} />
       ) : (
         <>
           <EditNavigation id={id} />

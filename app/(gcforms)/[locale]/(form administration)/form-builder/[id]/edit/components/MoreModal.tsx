@@ -13,9 +13,11 @@ import useModalStore from "@lib/store/useModalStore";
 export const MoreModal = ({
   item,
   moreButton,
+  onClose,
 }: {
   item: FormElementWithIndex;
   moreButton: JSX.Element | undefined;
+  onClose: () => void;
 }) => {
   const { elements, updateField } = useTemplateStore((s) => ({
     lang: s.lang,
@@ -43,6 +45,7 @@ export const MoreModal = ({
       e.preventDefault();
       // replace all of "properties" with the new properties set in the ModalForm
       updateField(getPathString(item.id, elements), properties);
+      onClose(); // Let the PanelBody know that the modal is closed so it can refresh.
     };
   };
 

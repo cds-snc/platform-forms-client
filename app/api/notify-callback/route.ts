@@ -130,6 +130,7 @@ export const POST = middleware([validAuthorizationHeader()], async (req, props) 
   }
 
   if (deliveryStatus === "delivered") {
+    logMessage.info("HealthCheck Notify Callback: email delivered, no reprocessing required");
     return NextResponse.json({
       status: "submission will not be reprocessed because the email was delivered",
     });
@@ -137,7 +138,7 @@ export const POST = middleware([validAuthorizationHeader()], async (req, props) 
 
   if (deliveryStatus === "permanent-failure") {
     logMessage.warn(
-      `Form submission ${submissionID} will never be delivered because of a permanent failure (GC Notify)`
+      `HealthCheck Notify Callback: Form submission ${submissionID} will never be delivered because of a permanent failure (GC Notify)`
     );
     await removeProcessedMark(submissionID);
     return NextResponse.json({
@@ -147,7 +148,7 @@ export const POST = middleware([validAuthorizationHeader()], async (req, props) 
 
   try {
     logMessage.info(
-      `Notify Callback: Reprocessing submission id ${submissionID} due to notify status of: ${deliveryStatus}`
+      `HealthCheck Notify Callback: Reprocessing submission id ${submissionID} due to notify status of: ${deliveryStatus}`
     );
 
     // Remove previous process completion identifier

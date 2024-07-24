@@ -48,13 +48,13 @@ function useAutoLayout(options: LayoutOptions) {
       // Mutating the nodes and edges directly here is fine because we expect our
       // layouting algorithms to return a new array of nodes/edges.
       for (const node of nextNodes) {
-        node.style = { ...node.style, opacity: 1 };
+        node.style = { ...node.style, opacity: 1, marginLeft: "10px" };
         node.sourcePosition = getSourceHandlePosition(options.direction);
         node.targetPosition = getTargetHandlePosition(options.direction);
       }
 
       for (const edge of edges) {
-        edge.style = { ...edge.style, opacity: 1 };
+        edge.style = { ...edge.style, opacity: 1, zIndex: 200 };
       }
 
       setNodes(nextNodes);

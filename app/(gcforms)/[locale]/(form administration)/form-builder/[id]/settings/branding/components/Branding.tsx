@@ -14,6 +14,7 @@ import { updateTemplate } from "@formBuilder/actions";
 import { FormServerErrorCodes } from "@lib/types/form-builder-types";
 import { safeJSONParse } from "@lib/utils";
 import { ErrorSaving } from "@formBuilder/components/shared/ErrorSaving";
+import { FormProperties } from "@lib/types";
 
 const Label = ({ htmlFor, children }: { htmlFor: string; children?: JSX.Element | string }) => {
   return (
@@ -56,8 +57,8 @@ export const Branding = ({ hasBrandingRequestForm }: { hasBrandingRequestForm: b
   const savedErrorMessage = t("settingsResponseDelivery.savedErrorMessage");
 
   const handleSave = useCallback(async () => {
-    const formConfig = safeJSONParse(getSchema());
-    if (formConfig?.error) {
+    const formConfig = safeJSONParse<FormProperties>(getSchema());
+    if (!formConfig) {
       toast.error(<ErrorSaving errorCode={FormServerErrorCodes.JSON_PARSE} />, "wide");
       return;
     }
@@ -102,9 +103,6 @@ export const Branding = ({ hasBrandingRequestForm }: { hasBrandingRequestForm: b
   return (
     <div>
       <h2 className="mb-6">{t("branding.heading")}</h2>
-      <p className="mb-5 inline-block bg-purple-200 p-3 text-sm font-bold">
-        {t("settingsResponseDelivery.beforePublishMessage")}
-      </p>
       <p className="block text-sm">{t("branding.text1")}</p>
       {/* Logo select */}
       <div>

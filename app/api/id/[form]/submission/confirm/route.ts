@@ -150,7 +150,9 @@ async function sendWithExponentialBackoff(
         retryCount < maxRetries
       ) {
         const delay = Math.pow(2, retryCount) * baseDelay;
-        logMessage.warn(`Submission Confirmation Throttle Exception, Retrying after ${delay} milliseconds...`);
+        logMessage.warn(
+          `Submission Confirmation Throttle Exception, Retrying after ${delay} milliseconds...`
+        );
         await new Promise((resolve) => setTimeout(resolve, delay));
         retryCount++;
         return execute();
@@ -226,6 +228,9 @@ export const PUT = middleware(
           )
         );
       }
+
+      logMessage.info("HealthCheck: confirm submissions success");
+
       return NextResponse.json({
         ...(submissionsFromConfirmationCodes.submissionsToConfirm.length > 0 && {
           confirmedSubmissions: submissionsFromConfirmationCodes.submissionsToConfirm.map(
@@ -241,6 +246,7 @@ export const PUT = middleware(
         }),
       });
     } catch (error) {
+      logMessage.info("HealthCheck: confirm submissions failure");
       logMessage.error(error as Error);
       return NextResponse.json({ error: "Error on server side" }, { status: 500 });
     }

@@ -1,5 +1,5 @@
 "use client";
-import React, { useCallback, useState, useMemo } from "react";
+import React, { useCallback, useState, useMemo, useEffect } from "react";
 import { useTranslation } from "@i18n/client";
 import { useSession } from "next-auth/react";
 import { Button } from "@clientComponents/globals";
@@ -27,7 +27,9 @@ import {
 
 import { toast } from "@formBuilder/components/shared/Toast";
 import { ErrorSaving } from "@formBuilder/components/shared/ErrorSaving";
+import { useTemplateContext } from "@lib/hooks/form-builder/useTemplateContext";
 import { safeJSONParse } from "@lib/utils";
+import { FormProperties } from "@lib/types";
 
 enum DeliveryOption {
   vault = "vault",
@@ -51,11 +53,15 @@ export const SettingsDialog = ({
   const { t, i18n } = useTranslation("form-builder");
   const { status, data } = useSession();
 
+  const { createOrUpdateTemplate } = useTemplateContext();
+
   /*--------------------------------------------*
    * Current store values
    *--------------------------------------------*/
   const {
     id,
+    getId,
+    setId,
     email,
     subjectEn: initialSubjectEn,
     subjectFr: initialSubjectFr,
@@ -72,6 +78,8 @@ export const SettingsDialog = ({
     updateField,
   } = useTemplateStore((s) => ({
     id: s.id,
+    getId: s.getId,
+    setId: s.setId,
     email: s.deliveryOption?.emailAddress,
     subjectEn: s.deliveryOption?.emailSubjectEn,
     subjectFr: s.deliveryOption?.emailSubjectFr,
@@ -133,6 +141,32 @@ export const SettingsDialog = ({
   const brand = useMemo(() => {
     return getBrand(brandName, options);
   }, [brandName]);
+
+  useEffect(() => {
+    // Auto save the template when the settings dialog
+    // is opened if no id exists
+    const autoSave = async () => {
+      if (!createOrUpdateTemplate) {
+        return;
+      }
+
+      const id = getId();
+      if (id) {
+        return;
+      }
+
+      const formConfig = safeJSONParse<FormProperties>(getSchema());
+      if (!formConfig) {
+        toast.error(<ErrorSaving />, "wide");
+        return;
+      }
+
+      const { formRecord: template } = await createOrUpdateTemplate({ id, formConfig });
+      template && setId(template.id);
+    };
+    autoSave();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   /*--------------------------------------------*
    * Delivery options state and handlers
@@ -295,8 +329,8 @@ export const SettingsDialog = ({
 
     updateSecurityAttribute(classificationValue);
 
-    const formConfig = safeJSONParse(getSchema());
-    if (formConfig.error) {
+    const formConfig = safeJSONParse<FormProperties>(getSchema());
+    if (!formConfig) {
       handleClose();
       toast.error(<ErrorSaving errorCode={FormServerErrorCodes.JSON_PARSE} />, "wide");
       return;

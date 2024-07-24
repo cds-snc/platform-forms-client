@@ -3,11 +3,12 @@ import React, { useState } from "react";
 import { useTranslation } from "@i18n/client";
 import { useSession } from "next-auth/react";
 import Markdown from "markdown-to-jsx";
-
 import { PreviewNavigation } from "./PreviewNavigation";
 import { getRenderedForm } from "@lib/formBuilder";
-import { PublicFormRecord } from "@lib/types";
-import { Button, RichText, ClosedPage, NextButton } from "@clientComponents/forms";
+import { FormProperties, PublicFormRecord } from "@lib/types";
+import { Button, RichText, ClosedPage } from "@clientComponents/forms";
+import { NextButton } from "@clientComponents/forms/NextButton/NextButton";
+
 import {
   FormServerErrorCodes,
   LocalizedElementProperties,
@@ -24,6 +25,7 @@ import { BackButton } from "./BackButton";
 import { safeJSONParse } from "@lib/utils";
 import { ErrorSaving } from "@formBuilder/components/shared/ErrorSaving";
 import { toast } from "@formBuilder/components/shared";
+import { defaultForm } from "@lib/store/defaults";
 
 export const Preview = ({
   disableSubmit = true,
@@ -41,15 +43,17 @@ export const Preview = ({
     getSecurityAttribute: s.getSecurityAttribute,
   }));
 
-  // TODO probably redirecting to the error page makes more sense since the error is not recoverable
-  const formParsed = safeJSONParse(getSchema());
-  if (formParsed?.error) {
+  const formParsed = safeJSONParse<FormProperties>(getSchema());
+  if (!formParsed) {
     toast.error(<ErrorSaving errorCode={FormServerErrorCodes.JSON_PARSE} />, "wide");
   }
 
   const formRecord: PublicFormRecord = {
     id: id || "test0form00000id000asdf11",
-    form: formParsed,
+    // TODO: refactor code to handle invalid JSON and show a helpful error message. Above will
+    // show a toast to download the JSON file. But it's the default template so it will be valid
+    // JSON and hide the invalid JSON that failed to parse.
+    form: formParsed || defaultForm,
     isPublished: getIsPublished(),
     securityAttribute: getSecurityAttribute(),
   };
@@ -166,7 +170,7 @@ export const Preview = ({
 
         {sent ? (
           <div className="gc-formview">
-            <h1 tabIndex={-1}>{t("title", { ns: "confirmation" })}</h1>
+            <h1 tabIndex={-1}>{t("title", { ns: "confirmation", lng: language })}</h1>
             <RichText {...getLocalizationAttribute()}>
               {formRecord.form.confirmation
                 ? formRecord.form.confirmation[
@@ -195,11 +199,13 @@ export const Preview = ({
                       <div id="PreviewSubmitButton">
                         <span {...getLocalizationAttribute()}>
                           <NextButton
+                            formRecord={formRecord}
+                            language={language}
                             validateForm={validateForm}
                             fallBack={() => {
                               return (
                                 <>
-                                  {allowGrouping && <BackButton />}
+                                  {allowGrouping && <BackButton language={language} />}
                                   <Button
                                     type="submit"
                                     id="SubmitButton"
@@ -248,7 +254,7 @@ export const Preview = ({
           <div className="mb-8 border-3 border-dashed border-blue-focus bg-white p-4">
             <div className="gc-formview">
               <h1 className="mt-10" tabIndex={-1}>
-                {t("title", { ns: "confirmation" })}
+                {t("title", { ns: "confirmation", lng: language })}
               </h1>
               <RichText {...getLocalizationAttribute()}>
                 {formRecord.form.confirmation
