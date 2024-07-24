@@ -1003,7 +1003,7 @@
   "next": "Continue",
   "skipLink": {
     "questions": "Skip to edit Page",
-    "translate": "Skip to Translation editor",
+    "translate": "Skip to edit Translations",
     "logic": "Skip to Branching editor",
     "questionsSetup": "Skip to Page set-up",
     "translateSetup": "Skip to Translation set-up",
