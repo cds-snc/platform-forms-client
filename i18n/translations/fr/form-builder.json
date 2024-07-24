@@ -912,11 +912,11 @@
       "option": "Appliquer des règles d'embranchement basé sur des questions ayant des options à sélectionner"
     },
     "exit": {
-      "convertText": "Convertir la page",
-      "checkboxLabel": "Quitter le formulaire",
+      "convertText": "Convertir en :",
+      "checkboxLabel": "Page de sortie",
       "nodeIconLabel": "Sortie",
       "offboardNodeContent": {
-        "content": "Contenu de la page de sortie",
+        "content": "Quitte le formulaire",
         "exitButton": "Retourner au départ"
       },
       "exitPanel": {
