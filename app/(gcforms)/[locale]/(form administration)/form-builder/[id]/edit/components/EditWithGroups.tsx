@@ -195,7 +195,7 @@ export const EditWithGroups = ({ id, locale }: { id: string; locale: string }) =
           sortedElements.map((element, index) => {
             const questionNumber = 0;
             const item = { ...element, index, questionNumber };
-            return <ElementPanel elements={sortedElements} item={item} key={item.id} />;
+            return <ElementPanel elements={sortedElements} item={item} key={item.id} formId={id} />;
           })}
       </div>
       {/* Confirmation*/}
