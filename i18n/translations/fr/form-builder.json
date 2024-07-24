@@ -761,7 +761,7 @@
       "body": "<p>Formulaires GC utilise une <a href=\"https://github.com/cds-snc/gc-organisations\" target=\"_blank\">liste de ministères et d’organismes</a> tenue à jour par le Service numérique canadien. Votre formulaire sera automatiquement mis à jour avec cette liste.</p>"
     }
   },
-  "translate": "Traduction",
+  "translate": "Traductions",
   "translateDescription": "Traduisez le contenu de votre formulaire côte à côte pour offrir une expérience bilingue aux personnes qui remplissent votre formulaire. ",
   "translateTitle": "Traductions",
   "unlockPublishing": "Déverrouiller la publication",
