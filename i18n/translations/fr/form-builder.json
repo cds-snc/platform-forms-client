@@ -482,6 +482,10 @@
     "emailOption": "Réponses envoyées par courriel — ",
     "change": "Modifier ces paramètres"
   },
+  "logicPublishWarning": {
+    "header": "Testez minutieusement votre formulaire avant de le publier",
+    "text": "Vérifiez que tous les chemins possibles à travers le formulaire fonctionnent comme prévu, en évitant les impasses et les boucles infinies."
+  },
   "prePublishFormDialog": {
     "title": "Publier le formulaire",
     "text1": "Pourquoi souhaitez-vous publier le formulaire?",
@@ -886,6 +890,12 @@
     "resetRules": "Réinitialisation au flux linéaire",
     "resetRulesHelp": "Aide pour la réinitialisation",
     "resetRulesDescription": "Cette fonction réinitialisera la progression entre les pages en un flux linéaire simple, remplaçant ainsi toute la logique d'embranchement qui s'applique.",
+    "resetRulesDialog": {
+      "title": "Réinitialisation au flux linéaire",
+      "areYouSure": "Êtes-vous sûr de vouloir réinitialiser le flux du formulaire? ",
+      "text": "Cela supprimera tous les embranchements qui ont été appliqués et ramènera le formulaire à une trajectoire linéaire simple. <strong>Cette action est irréversible.</strong>",
+      "reset": "Réinitialiser"
+    },
     "toastSuccess": "Flux linéaire appliqué",
     "multiRulesWarning": {
       "text1": "L'ordre et le flux sont définis en fonction des règles appliquées.",
@@ -906,11 +916,11 @@
       "option": "Appliquer des règles d'embranchement basé sur des questions ayant des options à sélectionner"
     },
     "exit": {
-      "convertText": "Convertir la page",
-      "checkboxLabel": "Quitter le formulaire",
+      "convertText": "Convertir en :",
+      "checkboxLabel": "Page de sortie",
       "nodeIconLabel": "Sortie",
       "offboardNodeContent": {
-        "content": "Contenu de la page de sortie",
+        "content": "Quitte le formulaire",
         "exitButton": "Retourner au départ"
       },
       "exitPanel": {
@@ -919,6 +929,11 @@
         "description": "Les pages de sortie renvoient les personnes qui remplissent le formulaire au début du formulaire.",
         "buttonLabel": "Supprimer"
       }
+    },
+    "tryitout": {
+      "button": "Vous créez un formulaire complexe? Ajoutez des embranchements +",
+      "text": "<p class='mb-4'>Utilisez la logique d’embranchements pour diriger les personnes qui remplissent le formulaire vers différentes pages en fonction de leurs réponses. Cela permet de créer une expérience où les gens ne voient que ce qui les concerne.</p> <p>Avec cette fonctionnalité, vous pouvez visualiser le flux du formulaire et configurer les embranchements dans le panneau de configuration du formulaire situé à droite, dans l’onglet Embranchements.</p>",
+      "open": "Ouvrir l’onglet pour la configuration des embranchements"
     },
     "exitBadge": "Sortie",
     "exitButtonElement": {

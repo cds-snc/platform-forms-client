@@ -59,9 +59,11 @@ type RenderIcon = (index: number) => ReactElement | string | undefined;
 export const Options = ({
   item,
   renderIcon,
+  formId,
 }: {
   item: FormElementWithIndex;
   renderIcon?: RenderIcon;
+  formId: string;
 }) => {
   const { elements, translationLanguagePriority } = useTemplateStore((s) => ({
     elements: s.form.elements,
@@ -135,7 +137,7 @@ export const Options = ({
         </div>
       </div>
       <div>
-        <ModalRules modalRef={modalContainer} item={item} />
+        <ModalRules modalRef={modalContainer} item={item} formId={formId} />
       </div>
     </div>
   );
