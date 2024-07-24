@@ -848,8 +848,8 @@
     "failedLink": "Saving failed - Contact support"
   },
   "addConditionalRules": {
-    "modalTitle": "Add a rule",
-    "modalTitleEdit": "Edit rules",
+    "modalTitle": "Add a display rule",
+    "modalTitleEdit": "Edit display rules",
     "modalDescription": "Allow an option in your question to show an additional short or long answer input field when selected. Only drop downs, single choice, and multi-select blocks can apply a rule.",
     "warning": "Options and questions must exist before adding a conditional rule.",
     "optionTitle": "If option selected is:",
