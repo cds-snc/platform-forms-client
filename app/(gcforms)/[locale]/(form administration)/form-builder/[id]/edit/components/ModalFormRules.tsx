@@ -31,6 +31,7 @@ export const ModalFormRules = ({
 }) => {
   const { t } = useTranslation("form-builder");
   const formId = `form-${Date.now()}`;
+  const [showLogicDetails, setShowLogicDetails] = useState(false);
 
   const { elements, form, groupsEnabled } = useTemplateStore((s) => ({
     elements: s.form.elements,
@@ -79,10 +80,7 @@ export const ModalFormRules = ({
   };
 
   const learnMoreAboutLogicView = () => {
-    const viewLogicDetails = document.getElementById("viewLogicDetails");
-    if (viewLogicDetails) {
-      viewLogicDetails.classList.toggle("hidden");
-    }
+    setShowLogicDetails(showLogicDetails ? false : true);
   };
 
   return (
@@ -126,7 +124,10 @@ export const ModalFormRules = ({
           <Button theme={"link"} onClick={learnMoreAboutLogicView}>
             {t("logic.tryitout.button")}
           </Button>
-          <div id="viewLogicDetails" className="hidden border-x-4 border-dark-gray px-5">
+          <div
+            id="viewLogicDetails"
+            className={`border-x-4 border-dark-gray px-5 ${showLogicDetails ? "" : "hidden"}`}
+          >
             <div className="mb-4 mt-4">
               <Markdown options={{ forceBlock: true }}>{t("logic.tryitout.text")}</Markdown>
             </div>
