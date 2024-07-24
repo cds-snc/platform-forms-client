@@ -483,6 +483,10 @@
     "emailOption": "Responses delivered by email — ",
     "change": "Change settings"
   },
+  "logicPublishWarning": {
+    "header": "Test your form thoroughly before publishing",
+    "text": "Check that all possible paths through the form work as expected avoiding dead ends and infinite loops."
+  },
   "prePublishFormDialog": {
     "title": "Publish form",
     "text1": "What is your reason for publishing?",
