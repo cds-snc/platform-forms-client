@@ -761,7 +761,7 @@
       "body": "<p>GC Forms uses a <a href=\"https://github.com/cds-snc/gc-organisations\" target=\"_blank\">list of departments and agencies</a> maintained by the Canadian Digital Service. Your form will automatically update with this list.</p>"
     }
   },
-  "translate": "Translation",
+  "translate": "Translations",
   "translateDescription": "Translate your form content side by side to provide a bilingual experience to those filling out your form.",
   "translateTitle": "Translations",
   "unlockPublishing": "Unlock publishing",
