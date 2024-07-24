@@ -210,7 +210,7 @@ export const RightPanel = ({ id, lang }: { id: string; lang: Language }) => {
                       <Tab.Panel>
                         {/* Tree */}
                         <SkipLinkReusable anchor="#questionsTitle">
-                          {t("skipLink.questions")}
+                          {t("skipLink.pages")}
                         </SkipLinkReusable>
                         <div className="m-0 w-full" aria-live="polite">
                           <TreeView

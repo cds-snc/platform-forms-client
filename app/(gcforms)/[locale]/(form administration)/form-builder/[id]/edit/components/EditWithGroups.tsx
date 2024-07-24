@@ -226,7 +226,7 @@ export const EditWithGroups = ({ id, locale }: { id: string; locale: string }) =
         <AddBranchingButton id={id} locale={locale} />
       </div>
 
-      <SkipLinkReusable anchor="#rightPanelTitle">{t("skipLink.questionsSetup")}</SkipLinkReusable>
+      <SkipLinkReusable anchor="#rightPanelTitle">{t("skipLink.pageSetup")}</SkipLinkReusable>
     </>
   );
 };
