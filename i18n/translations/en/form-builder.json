@@ -1004,7 +1004,7 @@
   "skipLink": {
     "questions": "Skip to edit Page",
     "translate": "Skip to edit Translations",
-    "logic": "Skip to Branching editor",
+    "logic": "Skip to edit Branching",
     "questionsSetup": "Skip to Page set-up",
     "translateSetup": "Skip to Translation set-up",
     "logicSetup": "Skip to Branching set-up"
