@@ -91,6 +91,7 @@ export const NextButton = ({
           }
         }}
         type="button"
+        data-testid="nextButton"
       >
         <>
           {t("next", { lng: language })} <ArrowRightNav className="ml-4" />

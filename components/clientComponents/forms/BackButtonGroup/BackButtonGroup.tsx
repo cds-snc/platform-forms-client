@@ -32,6 +32,7 @@ export const BackButtonGroup = ({ language }: { language: Language }) => {
         type="button"
         className="mr-4"
         theme="secondary"
+        data-testid="backButton"
       >
         {t("goBack", { lng: language })}
       </Button>
