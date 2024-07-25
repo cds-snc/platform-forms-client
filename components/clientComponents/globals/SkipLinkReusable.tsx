@@ -7,7 +7,7 @@
     <span className="bg-blue">{t("linkTitle")}</span>
   </SkipLinkReusable>
  */
-export const SkipLinkReusable = ({
+export const Reusable = ({
   children,
   anchor,
 }: {

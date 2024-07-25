@@ -189,7 +189,6 @@ export const RightPanel = ({ id, lang }: { id: string; lang: Language }) => {
                         onClick={() => {
                           router.push(`/${i18n.language}/form-builder/${id}/edit`);
                         }}
-                        className="justify-start px-6"
                       />
                       <TabButton
                         text={t("rightPanel.translation")}
