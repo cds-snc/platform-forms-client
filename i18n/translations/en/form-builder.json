@@ -1013,7 +1013,7 @@
   },
   "next": "Continue",
   "skipLink": {
-    "questions": "Skip to edit Pages",
+    "pages": "Skip to edit Pages",
     "translate": "Skip to edit Translations",
     "logic": "Skip to edit Branching",
     "pagesSetup": "Skip to Pages set-up",
