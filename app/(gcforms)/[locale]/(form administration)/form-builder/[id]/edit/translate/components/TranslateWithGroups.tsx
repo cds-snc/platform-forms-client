@@ -380,14 +380,6 @@ export const TranslateWithGroups = () => {
         {/* END PRIVACY */}
 
         <div key={"start"}>
-          {groups && (
-            <GroupSection
-              group={groups["start"]}
-              groupId={"start"}
-              primaryLanguage={primaryLanguage}
-              secondaryLanguage={secondaryLanguage}
-            />
-          )}
           {groups &&
             sortGroup({ form, group: groups["start"] }).map((element, index) => {
               return (
