@@ -119,7 +119,7 @@ export const EditWithGroups = ({ id, locale }: { id: string; locale: string }) =
       <h1 className="sr-only">{t("edit")}</h1>
       <div className="flex w-[800px]">
         <h2 id="editPagesHeading" tabIndex={-1}>
-          {t("editPagesHeading")}
+          {t("groups.editPagesHeading")}
         </h2>
         <div className="ml-5 mt-2">
           <SaveButton />
