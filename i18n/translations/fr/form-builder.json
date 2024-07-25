@@ -970,8 +970,8 @@
     "pageTitle": "Titre de la page",
     "groupDeleted": "Page supprimée",
     "groupSuccessfullyDeleted": "{{group}} a été supprimé",
-    "editPages": "Modifier la page",
-    "editTranslations": "Modifier les traductions",
+    "editPagesHeading": "Modifier la page",
+    "editTranslationsHeading": "Modifier les traductions",
     "editPage": "Modifier la page {{name}}",
     "editRules": "Modifier les embranchements de la page {{name}}",
     "privacy": {

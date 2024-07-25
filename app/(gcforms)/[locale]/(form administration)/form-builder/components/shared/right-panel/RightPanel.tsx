@@ -224,7 +224,7 @@ export const RightPanel = ({ id, lang }: { id: string; lang: Language }) => {
                       </Tab.Panel>
                       <Tab.Panel>
                         {/* Translate */}
-                        <SkipLinkReusable anchor="#editTranslations">
+                        <SkipLinkReusable anchor="#editTranslationsHeading">
                           {t("skipLink.translate")}
                         </SkipLinkReusable>
                         <div className="m-0 mt-1 w-full p-4" aria-live="polite">
