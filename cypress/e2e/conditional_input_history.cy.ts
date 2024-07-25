@@ -11,10 +11,11 @@ describe("Conditional Input History functionality", () => {
     cy.visitForm(formID);
   });
 
-  // it("Renders properly", () => {
-  //   cy.get("h1").contains("show-hide-groups-test");
-  // });
+  it("Renders properly", () => {
+    cy.get("h1").contains("show-hide-groups-test");
+  });
 
+  // Requires Flag for "Conditional Logic" to be On
   it("Fill in data on branch A, B, C and verify Review page has correct data", () => {
     // Why CSS.escape? Without it, the Id's start with a number will throw an error in the browers.
     // The HTML spec allows a CSS selector to start with a number but browsers said "NO" I guess..
