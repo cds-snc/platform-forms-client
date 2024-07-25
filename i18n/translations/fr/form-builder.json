@@ -57,7 +57,7 @@
       "other": "Autre"
     },
     "checkbox": {
-      "description": "Un ensemble d’option en vue de sélection multiple.",
+      "description": "Un ensemble d’options en vue de sélection unique ou multiple.",
       "title": "Cases à cocher",
       "chooseItems": "Question",
       "selectAllThatApply": "Sélectionnez toutes les options pertinentes."
@@ -163,7 +163,7 @@
     },
     "questionElement": "Éléments",
     "radio": {
-      "description": "Un petit ensemble d’option en vue de sélection unique.",
+      "description": "Un petit ensemble d’options en vue d'une sélection unique.",
       "title": "Boutons radio",
       "chooseAnOption": "Question",
       "selectOnlyOne": "Sélectionnez une option."
@@ -850,7 +850,7 @@
   "addConditionalRules": {
     "modalTitle": "Ajouter une règle d'affichage",
     "modalTitleEdit": "Modifier les règles d'affichage",
-    "modalDescription": "Permet à une option de votre question d'afficher un champ de saisie supplémentaire pour la réponse courte ou longue lorsqu'elle est sélectionnée. Seuls les boutons radios, les cases à cocher et les listes déroulantes permettent d'appliquer une règle.",
+    "modalDescription": "Permet de faire afficher une nouvelle question en réaction à une réponse précédemment choisie. Seules les questions à choix de réponses peuvent se faire appliquer une règle.",
     "warning": "Des options et des questions doivent exister avant d'ajouter une règle d'affichage.",
     "optionTitle": "Si l'option sélectionnée est :",
     "questionTitle": "Afficher la question :",
@@ -884,12 +884,12 @@
     "questionTitle": "Question :",
     "pageTitle": "Page :",
     "translateTitle": "Titre de la page",
-    "addRule": "Ajouter une régle",
+    "addRule": "Ajouter une règle",
     "saveRule": "Enregistrer",
-    "saveNote": "Les embranchements désactivent l'enchaînement linéaire automatique entre les pages.",
+    "saveNote": "L'ajout d'embranchements désactive l'enchaînement linéaire des pages du formulaire.",
     "resetRules": "Réinitialiser l'enchaînement linéaire",
     "resetRulesHelp": "Aide pour la réinitialisation",
-    "resetRulesDescription": "Cette fonction réinitialisera la progression entre les pages en un flux linéaire simple, remplaçant ainsi toute la logique d'embranchement qui s'applique.",
+    "resetRulesDescription": "Cette fonction réinitialisera la progression entre les pages en une séquence linéaire simple, remplaçant ainsi toute la logique d'embranchement qui s'applique.",
     "resetRulesDialog": {
       "title": "Réinitialiser l'enchaînement linéaire?",
       "areYouSure": "Êtes-vous sûr de vouloir réinitialiser le flux du formulaire? ",
@@ -912,8 +912,8 @@
     },
     "actionsSaved": "Actions enregistrées",
     "legend": {
-      "page": "Modifier la façon dont les pages sont ordonnées et connectées",
-      "option": "Appliquer des règles d'embranchement basé sur des questions ayant des options à sélectionner"
+      "page": "Pour modifier la façon dont les pages sont ordonnées et connectées",
+      "option": "Pour faire emprunter un chemin précis en fonction d'une réponse choisie."
     },
     "exit": {
       "convertText": "Convertir en :",
@@ -978,7 +978,7 @@
       "beforeText": "<p>C’est votre responsabilité de bien connaître les exigences de votre ministère ou organisme en matière de renseignements personnels. Si vous ne savez pas comment procéder, nous vous recommandons de contacter votre <a href=\"https://www.tbs-sct.canada.ca/ap/atip-aiprp/coord-fra.asp\" target=\"_blank\">coordinateur·rice de l'accès à l'information et de la protection de la vie privée</a>.</p>",
       "body": "<p className=\"mb-4\">Aidez les personnes qui remplissent le formulaire à comprendre comment vous traitez leurs renseignements personnels, comme énoncé à la section 4.2.10 de la <a href=\"https://www.tbs-sct.canada.ca/pol/doc-fra.aspx?id=18309\" target=\"_blank\">Directive sur les pratiques relatives à la protection de la vie privée</a>.</p><p><strong>Ce qu'il faut préciser dans un avis de confidentialité</strong></p><ul><li>Les renseignements personnels qui sont recueillis et les fins de la collecte.</li><li>Les autorisations légales ou de programmes dont vous disposez.</li><li>Les façons dont les reseignements seront utilisés, partagés, stockés et conservés.</li><li>Les droits d’accès ou de correction des renseignements personnels et les droits de déposer une plainte.</li></ul>",
       "description": "Ce qu'il faut préciser dans une déclaration de confidentialité :",
-      "summary": "Ajouter un avis de confidentialité pour expliquer comment vous traitez les renseignmenets personnels"
+      "summary": "Ajouter un avis de confidentialité pour expliquer comment vous traitez les renseignements personnels"
     },
     "confirmation": {
       "beforeText": "Le message de confirmation s’affichera sur une nouvelle page une fois le formulaire soumis.",

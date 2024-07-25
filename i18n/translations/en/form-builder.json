@@ -57,7 +57,7 @@
       "other": "Other"
     },
     "checkbox": {
-      "description": "A set of options for multiple selections.",
+      "description": "A set of options for a single or multiple selections.",
       "title": "Checkboxes",
       "chooseItems": "Question",
       "selectAllThatApply": "Select all that apply."
@@ -850,7 +850,7 @@
   "addConditionalRules": {
     "modalTitle": "Add a display rule",
     "modalTitleEdit": "Edit display rules",
-    "modalDescription": "Allow an option in your question to show an additional short or long answer input field when selected. Only radio buttons, checkboxes, and dropdowns can apply a rule.",
+    "modalDescription": "Displays a new question in response to a previously selected answer. Only questions with a choice of answers can have a rule applied.",
     "warning": "Options and questions must exist before adding a display rule.",
     "optionTitle": "If option selected is:",
     "questionTitle": "Show question:",
@@ -886,7 +886,7 @@
     "translateTitle": "Page title",
     "addRule": "Add rule",
     "saveRule": "Save",
-    "saveNote": "Branching turns off linear autoflow between pages.",
+    "saveNote": "Adding branches deactivates the linear flow that links form pages.",
     "resetRules": "Reset to linear flow",
     "resetRulesHelp": "Reset help",
     "resetRulesDescription": "This will remove branching logic and reset the progression between pages to a simple linear flow, overriding any existing rules that were applied.",
@@ -912,46 +912,46 @@
     },
     "actionsSaved": "Actions saved",
     "legend": {
-      "page": "Change how pages are ordered and connected",
-      "option": "Apply branching based on questions with selectable options"
-    },
-    "exit": {
-      "convertText": "Convert to:",
-      "checkboxLabel": "Exit page",
-      "nodeIconLabel": "Exit",
-      "offboardNodeContent": {
-        "content": "Exits the form",
-        "exitButton": "Back to the start"
-      },
-      "exitPanel": {
-        "title1": "Exit page",
-        "title2": "Ineligible to continue filling out the form",
-        "description": "Exit pages link people filling out the form back to the start of the form.",
-        "buttonLabel": "Remove"
-      }
-    },
-    "tryitout": {
-      "button": "Have a complex form? Try branching instead +",
-      "text": "<p class='mb-4'>Use branching logic to route people filling out the form toward different pages based on their answers. This helps create an experience where people only see what’s relevant to them.</p> <p> With this feature, visualize the form flow and configure branches in the form set-up panel located on the right, within the Branching tab.</p>",
-      "open": "Open the branching set-up tab"
-    },
-    "exitBadge": "Exit",
-    "exitButtonElement": {
-      "description": "Help people exiting your form have a path forward.",
-      "list": {
-        "title": "What to include in an exit page",
-        "item1": "Links to other relevant forms or web pages",
-        "item2": "Next steps in the process or guidance on form requirements",
-        "item3": "Contact information to follow up or learn more about the form"
-      },
-      "buttonDescription": "An exit button takes people to the organization website corresponding to the branding of the form.",
-      "buttonLabel": "Customize the button destination by copy-pasting a more relevant link below:"
-    },
-    "noPages": {
-      "text1": "Add a <strong>New page</strong> from the",
-      "text2": "Pages tab",
-      "text3": "before adding a branch."
+      "page": "To change how pages are ordered and connected",
+      "option": "To take a specific path depending on a selected option"
     }
+  },
+  "exit": {
+    "convertText": "Convert to:",
+    "checkboxLabel": "Exit page",
+    "nodeIconLabel": "Exit",
+    "offboardNodeContent": {
+      "content": "Exits the form",
+      "exitButton": "Back to the start"
+    },
+    "exitPanel": {
+      "title1": "Exit page",
+      "title2": "Ineligible to continue filling out the form",
+      "description": "Exit pages link people filling out the form back to the start of the form.",
+      "buttonLabel": "Remove"
+    }
+  },
+  "tryitout": {
+    "button": "Have a complex form? Try branching instead +",
+    "text": "<p class='mb-4'>Use branching logic to route people filling out the form toward different pages based on their answers. This helps create an experience where people only see what’s relevant to them.</p> <p> With this feature, visualize the form flow and configure branches in the form set-up panel located on the right, within the Branching tab.</p>",
+    "open": "Open the branching set-up tab"
+  },
+  "exitBadge": "Exit",
+  "exitButtonElement": {
+    "description": "Help people exiting your form have a path forward.",
+    "list": {
+      "title": "What to include in an exit page",
+      "item1": "Links to other relevant forms or web pages",
+      "item2": "Next steps in the process or guidance on form requirements",
+      "item3": "Contact information to follow up or learn more about the form"
+    },
+    "buttonDescription": "An exit button takes people to the organization website corresponding to the branding of the form.",
+    "buttonLabel": "Customize the button destination by copy-pasting a more relevant link below:"
+  },
+  "noPages": {
+    "text1": "Add a <strong>New page</strong> from the",
+    "text2": "Pages tab",
+    "text3": "before adding a branch."
   },
   "groups": {
     "newPage": "New page",
