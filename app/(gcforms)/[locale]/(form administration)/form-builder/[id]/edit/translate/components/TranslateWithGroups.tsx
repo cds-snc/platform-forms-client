@@ -198,7 +198,7 @@ export const TranslateWithGroups = () => {
       <h1 className="sr-only">{t("edit")}</h1>
       <div className="mr-10">
         <div className="flex w-[800px]">
-          <h2 id="translateTitle" tabIndex={-1}>
+          <h2 id="editTranslations" tabIndex={-1}>
             {t("editTranslations")}
           </h2>
           <div className="ml-5 mt-2">
