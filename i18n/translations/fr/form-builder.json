@@ -1013,7 +1013,7 @@
   },
   "next": "Continuer",
   "skipLink": {
-    "questions": "Passer à modifier la page",
+    "pages": "Passer à modifier la page",
     "translate": "Passer à modifier les traductions",
     "logic": "Passer à modifier les embranchements",
     "pagesSetup": "Passer à la configuration des pages",
