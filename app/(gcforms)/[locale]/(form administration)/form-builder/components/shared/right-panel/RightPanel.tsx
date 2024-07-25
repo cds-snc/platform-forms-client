@@ -160,7 +160,12 @@ export const RightPanel = ({ id, lang }: { id: string; lang: Language }) => {
             >
               <div className="pointer-events-auto w-screen max-w-md">
                 {/* <-- Panel Header */}
-                <div className="flex h-full flex-col border-l border-slate-200 bg-white">
+                <div
+                  className={cn(
+                    "static right-0 flex h-full flex-col border-l border-slate-200 bg-white overflow-scroll pb-[100px]",
+                    isIntersecting ? "" : "fixed top-0 w-1/4"
+                  )}
+                >
                   <div className="p-6">
                     <div className="flex justify-between">
                       <div>
