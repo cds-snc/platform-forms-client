@@ -114,10 +114,10 @@ export const groupsToTreeData = (
     canMove: false,
     children: [],
     data: {
-      titleEn: "Form introduction",
-      titleFr: "Introduction au formulaire",
-      descriptionEn: "",
-      descriptionFr: "",
+      titleEn: "Form title",
+      titleFr: "Titre du formulaire",
+      descriptionEn: "Description",
+      descriptionFr: "Description",
     },
   };
 
@@ -160,10 +160,10 @@ export const groupsToTreeData = (
     canMove: false,
     children: [],
     data: {
-      titleEn: "Confirmation message",
-      titleFr: "Message de confirmation",
-      descriptionEn: "",
-      descriptionFr: "",
+      titleEn: "Your form has been submitted",
+      titleFr: "Votre formulaire a été soumis",
+      descriptionEn: "Confirmation message",
+      descriptionFr: "Message de confirmation",
     },
   };
 
