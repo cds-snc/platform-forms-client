@@ -61,5 +61,54 @@ describe("Conditional Input History functionality", () => {
     cy.get("[data-testid='P2']").should("not.contain", "P1-Q1-A");
     cy.get("[data-testid='P2']").should("not.contain", "P1-Q1-B");
     cy.get("[data-testid='P2']").should("not.contain", "P2-Q1-B");
+
+    // Go back to Start and Fill in data for Branch C
+    cy.get("[data-testid='Beginning'] button").eq(1).click();
+    cy.get(`[for='${CSS.escape("1.2")}']`).click(); // Select C
+    cy.get("[data-testid='nextButton']").click();
+    cy.get("h2").contains("P3");
+    cy.get(`[for='${CSS.escape("8.0")}']`).click(); // Select P3-Q1, A
+    cy.typeInField(`[for='${CSS.escape("9")}']`, "P3-Q1-A");
+    cy.get(`[for='${CSS.escape("8.1")}']`).click(); // Select P3-Q1, B
+    cy.typeInField(`[for='${CSS.escape("10")}']`, "P3-Q1-B");
+    cy.get(`[for='${CSS.escape("8.0")}']`).click(); // Select P3-Q1, A
+    cy.get("[data-testid='nextButton']").click();
+
+    // Verify Review Page Shows only "P3-Q1, A" data and not "P1-Q1, A or B"
+    // and not "P2-Q1, A or B" data
+    cy.get("h2").contains("Review your answers before submitting the form.");
+    cy.get("[data-testid='Beginning']").contains("Q1");
+    cy.get("[data-testid='Beginning']").contains("C");
+    cy.get("[data-testid='P3']").contains("P3");
+    cy.get("[data-testid='P3']").contains("P3-Q1");
+    cy.get("[data-testid='P3']").contains("P3-Q1-A");
+    cy.get("[data-testid='P3']").should("not.contain", "P1-Q1-A");
+    cy.get("[data-testid='P3']").should("not.contain", "P1-Q1-B");
+    cy.get("[data-testid='P3']").should("not.contain", "P2-Q1-A");
+    cy.get("[data-testid='P3']").should("not.contain", "P2-Q1-B");
+    cy.get("[data-testid='P3']").should("not.contain", "P3-Q1-B");
+
+    // Go back to Start and select Branch A, use existing data
+    cy.get("[data-testid='Beginning'] h3 button").click();
+    cy.get(`[for='${CSS.escape("1.0")}']`).click(); // Select C
+    cy.get("[data-testid='nextButton']").click();
+    cy.get(`[for='${CSS.escape("2.0")}']`).click(); // Select P1-Q1, A
+    cy.get("[data-testid='nextButton']").click();
+
+    // Verify Review Page Shows only "P1-Q1, A" data and not "P1-Q1, B" and not "P2-Q1, A or B"
+    // and not "P3-Q1, A or B" data
+    cy.get("h2").contains("Review your answers before submitting the form.");
+    cy.get("[data-testid='Beginning']").contains("Q1");
+    cy.get("[data-testid='Beginning']").contains("A");
+    cy.get("[data-testid='P1']").contains("P1");
+    cy.get("[data-testid='P1']").contains("P1-Q1");
+    cy.get("[data-testid='P1']").contains("P1-Q1-A");
+    cy.get("[data-testid='P1']").should("not.contain", "P1-Q1-B");
+    cy.get("[data-testid='P1']").should("not.contain", "P2-Q1-A");
+    cy.get("[data-testid='P1']").should("not.contain", "P2-Q1-B");
+    cy.get("[data-testid='P1']").should("not.contain", "P3-Q1-A");
+    cy.get("[data-testid='P1']").should("not.contain", "P3-Q1-B");
   });
+
+  // cy.get("[data-testid='Beginning'] button").eq(1).click();
 });
