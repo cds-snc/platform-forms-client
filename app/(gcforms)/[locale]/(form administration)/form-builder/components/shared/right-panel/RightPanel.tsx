@@ -185,11 +185,10 @@ export const RightPanel = ({ id, lang }: { id: string; lang: Language }) => {
                   <Tab.Group selectedIndex={selectedIndex}>
                     <Tab.List className={"flex justify-between border-b border-gray-200"}>
                       <TabButton
-                        text={t("rightPanel.questions")}
+                        text={t("rightPanel.pages")}
                         onClick={() => {
                           router.push(`/${i18n.language}/form-builder/${id}/edit`);
                         }}
-                        className="justify-start px-6"
                       />
                       <TabButton
                         text={t("rightPanel.translation")}
@@ -209,8 +208,8 @@ export const RightPanel = ({ id, lang }: { id: string; lang: Language }) => {
                     <Tab.Panels>
                       <Tab.Panel>
                         {/* Tree */}
-                        <SkipLinkReusable anchor="#questionsTitle">
-                          {t("skipLink.questions")}
+                        <SkipLinkReusable anchor="#pagesTitle">
+                          {t("skipLink.pages")}
                         </SkipLinkReusable>
                         <div className="m-0 w-full" aria-live="polite">
                           <TreeView
@@ -225,7 +224,7 @@ export const RightPanel = ({ id, lang }: { id: string; lang: Language }) => {
                       </Tab.Panel>
                       <Tab.Panel>
                         {/* Translate */}
-                        <SkipLinkReusable anchor="#translateTitle">
+                        <SkipLinkReusable anchor="#editTranslationsHeading">
                           {t("skipLink.translate")}
                         </SkipLinkReusable>
                         <div className="m-0 mt-1 w-full p-4" aria-live="polite">
