@@ -115,6 +115,7 @@ export const Review = ({ language }: { language: Language }): React.ReactElement
               <div
                 key={reviewItem.id}
                 className="mb-10 rounded-lg border-2 border-slate-400 px-6 py-4"
+                data-testid={title}
               >
                 <h3 className="text-slate-700">
                   <EditButton reviewItem={reviewItem} theme="link">
