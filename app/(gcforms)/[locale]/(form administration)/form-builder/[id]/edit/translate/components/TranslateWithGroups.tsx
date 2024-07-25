@@ -199,7 +199,7 @@ export const TranslateWithGroups = () => {
       <div className="mr-10">
         <div className="flex w-[800px]">
           <h2 id="translateTitle" tabIndex={-1}>
-            {t("translateTitle")}
+            {t("editTranslations")}
           </h2>
           <div className="ml-5 mt-2">
             <SaveButton />

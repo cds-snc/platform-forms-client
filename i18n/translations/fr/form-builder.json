@@ -222,7 +222,7 @@
   },
   "autocompleteWhenNotToUse": {
     "text1": "Les attributs de remplissage automatique pourraient ne pas fonctionner correctement pour les informations que les personnes qui ne saisissent pas régulièrement. Des informations historiques ou commerciales risquent d'être erronées.",
-    "text2": "Les tests d'utilisabilité sont un bon moyen de comprendre si les règles que vous fixez posent des problèmes pour les personnes qui remplissent le formulaire.",
+    "text2": "Les tests d'utilisabilité sont un bon moyen de comprendre si les paramètres que vous fixez aux questions posent des problèmes pour les personnes qui remplissent le formulaire.",
     "title": "Quand ne pas utiliser le remplissage automatique"
   },
   "backToForm": "Retourner au formulaire",
@@ -848,10 +848,10 @@
     "failedLink": "L'enregistrement a échoué - Contacter l'équipe de soutien"
   },
   "addConditionalRules": {
-    "modalTitle": "Ajouter une règle à une question",
-    "modalTitleEdit": "Modifier les règles conditionnelles",
-    "modalDescription": "Permet à une option de votre question d'afficher un champ de saisie supplémentaire pour la réponse courte ou longue lorsqu'elle est sélectionnée. Seuls les menus déroulants, les blocs à choix unique et les blocs à sélection multiple peuvent appliquer une règle.",
-    "warning": "Des options et des questions doivent exister avant d'ajouter une règle conditionnelle.",
+    "modalTitle": "Ajouter une règle d'affichage",
+    "modalTitleEdit": "Modifier les règles d'affichage",
+    "modalDescription": "Permet à une option de votre question d'afficher un champ de saisie supplémentaire pour la réponse courte ou longue lorsqu'elle est sélectionnée. Seuls les boutons radios, les cases à cocher et les listes déroulantes permettent d'appliquer une règle.",
+    "warning": "Des options et des questions doivent exister avant d'ajouter une règle d'affichage.",
     "optionTitle": "Si l'option sélectionnée est :",
     "questionTitle": "Afficher la question :",
     "addCustomRules": "Ajouter une règle",
@@ -865,10 +865,10 @@
   "saved": "Enregistré",
   "opensInNewTab": "ouvre un nouvel onglet",
   "rightPanel": {
-    "title": "Panneau de droite",
+    "title": "Panneau de configuration du formulaire",
     "openPanel": "Configuration du formulaire",
     "closePanel": "Fermer le panneau",
-    "questions": "Questions",
+    "pages": "Pages",
     "logic": "Embranchements",
     "translation": "Traductions",
     "treeView": {
@@ -877,8 +877,8 @@
     "loadTab": "Éditeur de {{tabPanelLabel}}"
   },
   "logic": {
-    "heading": "Embranchements",
-    "description": "Appliquer de la logic d'embranchement entre les pages du formulaire ayant des questions avec des boutons radio, des cases à cocher ou une liste déroulante.",
+    "heading": "Modifier les embranchements",
+    "description": "Ajouter de la logic aux pages du formulaire ayant des questions avec des boutons radio, des cases à cocher ou une liste déroulante.",
     "clear": "Enlever",
     "gotoPage": "Aller à la page",
     "questionTitle": "Question :",
@@ -886,19 +886,19 @@
     "translateTitle": "Titre de la page",
     "addRule": "Ajouter une régle",
     "saveRule": "Enregistrer",
-    "saveNote": "Ajouter des embranchements désactive la fonction de flux linéaire automatique entre les pages du formulaire.",
-    "resetRules": "Réinitialisation au flux linéaire",
+    "saveNote": "Les embranchements désactivent l'enchaînement linéaire automatique entre les pages.",
+    "resetRules": "Réinitialiser l'enchaînement linéaire",
     "resetRulesHelp": "Aide pour la réinitialisation",
     "resetRulesDescription": "Cette fonction réinitialisera la progression entre les pages en un flux linéaire simple, remplaçant ainsi toute la logique d'embranchement qui s'applique.",
     "resetRulesDialog": {
-      "title": "Réinitialisation au flux linéaire",
+      "title": "Réinitialiser l'enchaînement linéaire?",
       "areYouSure": "Êtes-vous sûr de vouloir réinitialiser le flux du formulaire? ",
       "text": "Cela supprimera tous les embranchements qui ont été appliqués et ramènera le formulaire à une trajectoire linéaire simple. <strong>Cette action est irréversible.</strong>",
       "reset": "Réinitialiser"
     },
-    "toastSuccess": "Flux linéaire appliqué",
+    "toastSuccess": "Enchaînement linéaire appliqué",
     "multiRulesWarning": {
-      "text1": "L'ordre et le flux sont définis en fonction des règles appliquées.",
+      "text1": "L'ordre et le l'enchaînement sont définis en fonction des règles appliquées.",
       "text2": "Relier les pages :",
       "text3": "Pour relier ces pages, vous devez enlever les règles appliquées aux éléments du formulaire."
     },
@@ -932,7 +932,7 @@
     },
     "tryitout": {
       "button": "Vous créez un formulaire complexe? Ajoutez des embranchements +",
-      "text": "<p class='mb-4'>Utilisez la logique d’embranchements pour diriger les personnes qui remplissent le formulaire vers différentes pages en fonction de leurs réponses. Cela permet de créer une expérience où les gens ne voient que ce qui les concerne.</p> <p>Avec cette fonctionnalité, vous pouvez visualiser le flux du formulaire et configurer les embranchements dans le panneau de configuration du formulaire situé à droite, dans l’onglet Embranchements.</p>",
+      "text": "<p class='mb-4'>Utilisez la logique d’embranchement pour diriger les personnes qui remplissent le formulaire vers différentes pages en fonction de leurs réponses. Cela permet de créer une expérience où les gens ne voient que ce qui les concerne.</p> <p>Avec cette fonctionnalité, vous pouvez visualiser l'enchaînement du formulaire et configurer les embranchements dans le panneau de configuration du formulaire situé à droite, dans l’onglet Embranchements.</p>",
       "open": "Ouvrir l’onglet pour la configuration des embranchements"
     },
     "exitBadge": "Sortie",
@@ -970,8 +970,10 @@
     "pageTitle": "Titre de la page",
     "groupDeleted": "Page supprimée",
     "groupSuccessfullyDeleted": "{{group}} a été supprimé",
+    "editPages": "Modifier la page",
+    "editTranslations": "Modifier les traductions",
     "editPage": "Modifier la page {{name}}",
-    "editRules": "Modifier les règles de la page {{name}}",
+    "editRules": "Modifier les embranchements de la page {{name}}",
     "privacy": {
       "beforeText": "<p>C’est votre responsabilité de bien connaître les exigences de votre ministère ou organisme en matière de renseignements personnels. Si vous ne savez pas comment procéder, nous vous recommandons de contacter votre <a href=\"https://www.tbs-sct.canada.ca/ap/atip-aiprp/coord-fra.asp\" target=\"_blank\">coordinateur·rice de l'accès à l'information et de la protection de la vie privée</a>.</p>",
       "body": "<p className=\"mb-4\">Aidez les personnes qui remplissent le formulaire à comprendre comment vous traitez leurs renseignements personnels, comme énoncé à la section 4.2.10 de la <a href=\"https://www.tbs-sct.canada.ca/pol/doc-fra.aspx?id=18309\" target=\"_blank\">Directive sur les pratiques relatives à la protection de la vie privée</a>.</p><p><strong>Ce qu'il faut préciser dans un avis de confidentialité</strong></p><ul><li>Les renseignements personnels qui sont recueillis et les fins de la collecte.</li><li>Les autorisations légales ou de programmes dont vous disposez.</li><li>Les façons dont les reseignements seront utilisés, partagés, stockés et conservés.</li><li>Les droits d’accès ou de correction des renseignements personnels et les droits de déposer une plainte.</li></ul>",
@@ -1000,7 +1002,7 @@
     },
     "confirmMoveGroup": {
       "title": "Remplacer les règles?",
-      "description": " Il semble que des éléments déplacés comportent des règles conditionnelles. Souhaitez-vous remplacer ces règles par un flux automatique linéaire?",
+      "description": " Il semble que des éléments déplacés comportent des règles conditionnelles. Souhaitez-vous remplacer ces règles par un enchaînement linéaire automatique?",
       "cancel": "Non, déplacer sans modifier les règles",
       "confirm": "Oui, appliquer un flux automatique"
     }
@@ -1011,10 +1013,10 @@
   },
   "next": "Continuer",
   "skipLink": {
-    "questions": "Passer à l'éditeur de questions",
-    "translate": "Passer à l'éditeur de traductions",
-    "logic": "Passer à l'éditeur d'embranchements",
-    "questionsSetup": "Passer à la configuration des questions",
+    "questions": "Passer à modifier la page",
+    "translate": "Passer à modifier les traductions",
+    "logic": "Passer à modifier les embranchements",
+    "pagesSetup": "Passer à la configuration des pages",
     "translateSetup": "Passer à la configuration des traductions",
     "logicSetup": "Passer à la configuration d'embranchements'"
   },

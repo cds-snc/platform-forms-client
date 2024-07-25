@@ -120,13 +120,13 @@ export const EditWithGroups = ({ id, locale }: { id: string; locale: string }) =
       <h1 className="sr-only">{t("edit")}</h1>
       <div className="flex w-[800px]">
         <h2 id="questionsTitle" tabIndex={-1}>
-          {t("questions")}
+          {t("editPages")}
         </h2>
         <div className="ml-5 mt-2">
           <SaveButton />
         </div>
       </div>
-      <SkipLinkReusable anchor="#rightPanelTitle">{t("skipLink.questionsSetup")}</SkipLinkReusable>
+      <SkipLinkReusable anchor="#rightPanelTitle">{t("skipLink.pagesSetup")}</SkipLinkReusable>
       <div className="flex max-w-[800px] justify-between">
         <SectionNameInput value={groupName} groupId={groupId} updateGroupName={updateGroupName} />
         <LangSwitcher descriptionLangKey="editingIn" />
@@ -226,7 +226,7 @@ export const EditWithGroups = ({ id, locale }: { id: string; locale: string }) =
         <AddBranchingButton id={id} locale={locale} />
       </div>
 
-      <SkipLinkReusable anchor="#rightPanelTitle">{t("skipLink.questionsSetup")}</SkipLinkReusable>
+      <SkipLinkReusable anchor="#rightPanelTitle">{t("skipLink.pagesSetup")}</SkipLinkReusable>
     </>
   );
 };

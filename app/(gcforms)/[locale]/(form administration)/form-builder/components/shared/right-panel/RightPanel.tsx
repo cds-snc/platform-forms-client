@@ -185,7 +185,7 @@ export const RightPanel = ({ id, lang }: { id: string; lang: Language }) => {
                   <Tab.Group selectedIndex={selectedIndex}>
                     <Tab.List className={"flex justify-between border-b border-gray-200"}>
                       <TabButton
-                        text={t("rightPanel.questions")}
+                        text={t("rightPanel.pages")}
                         onClick={() => {
                           router.push(`/${i18n.language}/form-builder/${id}/edit`);
                         }}
