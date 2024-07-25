@@ -891,7 +891,7 @@
     "resetRulesHelp": "Reset help",
     "resetRulesDescription": "This will remove branching logic and reset the progression between pages to a simple linear flow, overriding any existing rules that were applied.",
     "resetRulesDialog": {
-      "title": "Reset to linear flow",
+      "title": "Reset to linear flow?",
       "areYouSure": "Are you sure you want to reset the form flow?",
       "text": "This will remove all branching logic that was applied and reset the flow to a simple linear path. <strong>This action cannot be undone.</strong>",
       "reset": "Reset"
@@ -969,8 +969,8 @@
     },
     "pageTitle": "Page title",
     "groupDeleted": "Page deleted",
-    "editPages": "Edit page",
-    "editTranslations": "Edit translations",
+    "editPagesHeading": "Edit page",
+    "editTranslationsHeading": "Edit translations",
     "editPage": "Edit page {{name}}",
     "editRules": "Edit branching for page {{name}}",
     "groupSuccessfullyDeleted": "{{group}} successfully deleted",
