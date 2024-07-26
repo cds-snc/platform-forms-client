@@ -1,5 +1,9 @@
 // TODO: Look into using language keys -vs- strings. Easier to maintain that way.
 
+// TODO: Add tests for
+// - Navigation between pages
+// - Possible to test with Conditional Logic feature off and on?
+
 describe("Conditional Input History functionality", () => {
   let formID: string;
   before(() => {
@@ -63,8 +67,6 @@ describe("Conditional Input History functionality", () => {
     cy.get("[data-testid='P2']").should("not.contain", "P1-Q1-B");
     cy.get("[data-testid='P2']").should("not.contain", "P2-Q1-B");
 
-    /*
-
     // Go back to Start and Fill in data for Branch C
     cy.get("[data-testid='Beginning'] button").eq(1).click();
     cy.get(`[for='${CSS.escape("1.2")}']`).click(); // Select C
@@ -111,9 +113,5 @@ describe("Conditional Input History functionality", () => {
     cy.get("[data-testid='P1']").should("not.contain", "P2-Q1-B");
     cy.get("[data-testid='P1']").should("not.contain", "P3-Q1-A");
     cy.get("[data-testid='P1']").should("not.contain", "P3-Q1-B");
-
-    */
   });
-
-  // cy.get("[data-testid='Beginning'] button").eq(1).click();
 });
