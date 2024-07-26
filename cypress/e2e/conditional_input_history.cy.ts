@@ -13,7 +13,7 @@ describe("Conditional Input History functionality", () => {
     cy.get<string>("@formID").then((createdID) => (formID = createdID));
   });
   beforeEach(() => {
-    cy.userSession({ admin: true });
+    cy.userSession({ admin: true }); // visitForm() requies a session
     cy.visitForm(formID);
   });
 
