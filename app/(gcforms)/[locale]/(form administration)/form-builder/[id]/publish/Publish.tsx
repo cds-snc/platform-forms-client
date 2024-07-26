@@ -213,7 +213,7 @@ export const Publish = ({ id }: { id: string }) => {
       )}
 
       {userCanPublish && (
-        <Alert.Warning className="my-5">
+        <Alert.Warning className="my-5 max-w-4xl">
           <Alert.Title headingTag="h2">{t("logicPublishWarning.header")}</Alert.Title>
           <p className="mb-5">{t("logicPublishWarning.text")}</p>
         </Alert.Warning>
