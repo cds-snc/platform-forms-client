@@ -855,7 +855,7 @@
     "optionTitle": "Si l'option sélectionnée est :",
     "questionTitle": "Afficher la question :",
     "addCustomRules": "Ajouter une règle",
-    "editCustomRules": "Modifier les règles",
+    "editCustomRules": "Modifier la règle",
     "addAnotherRule": "Ajouter une autre règle",
     "removeRule": "Supprimer",
     "addOther": "Ajouter l'option « Autre »",
@@ -892,13 +892,13 @@
     "resetRulesDescription": "Cette fonction réinitialisera la progression entre les pages en une séquence linéaire simple, remplaçant ainsi toute la logique d'embranchement qui s'applique.",
     "resetRulesDialog": {
       "title": "Réinitialiser l'enchaînement linéaire?",
-      "areYouSure": "Êtes-vous sûr de vouloir réinitialiser le flux du formulaire? ",
+      "areYouSure": "Êtes-vous sûr de vouloir réinitialiser la séquence du formulaire? ",
       "text": "Cela supprimera tous les embranchements qui ont été appliqués et ramènera le formulaire à une trajectoire linéaire simple. <strong>Cette action est irréversible.</strong>",
       "reset": "Réinitialiser"
     },
     "toastSuccess": "Enchaînement linéaire appliqué",
     "multiRulesWarning": {
-      "text1": "L'ordre et le l'enchaînement sont définis en fonction des règles appliquées.",
+      "text1": "L'ordre et le l'enchaînement de page sont définis en fonction des règles appliquées.",
       "text2": "Relier les pages :",
       "text3": "Pour relier ces pages, vous devez enlever les règles appliquées aux éléments du formulaire."
     },
@@ -932,8 +932,8 @@
     },
     "tryitout": {
       "button": "Vous créez un formulaire complexe? Ajoutez des embranchements +",
-      "text": "<p class='mb-4'>Utilisez la logique d’embranchement pour diriger les personnes qui remplissent le formulaire vers différentes pages en fonction de leurs réponses. Cela permet de créer une expérience où les gens ne voient que ce qui les concerne.</p> <p>Avec cette fonctionnalité, vous pouvez visualiser l'enchaînement du formulaire et configurer les embranchements dans le panneau de configuration du formulaire situé à droite, dans l’onglet Embranchements.</p>",
-      "open": "Ouvrir l’onglet pour la configuration des embranchements"
+      "text": "<p class='mb-4'>Utilisez les embranchements pour diriger les personnes qui remplissent le formulaire vers différentes pages en fonction de leurs réponses.</p> <p>Visualisez et configurez l'enchaînement du formulaire dans l’onglet Embranchements du panneau de configuration du formulaire.</p>",
+      "open": "Allez à Embranchements"
     },
     "exitBadge": "Sortie",
     "exitButtonElement": {

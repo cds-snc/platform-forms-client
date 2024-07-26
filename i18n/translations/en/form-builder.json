@@ -854,8 +854,8 @@
     "warning": "Options and questions must exist before adding a display rule.",
     "optionTitle": "If option selected is:",
     "questionTitle": "Show question:",
-    "addCustomRules": "Add a rule",
-    "editCustomRules": "Edit rules",
+    "addCustomRules": "Add rule",
+    "editCustomRules": "Edit rule",
     "addAnotherRule": "Add another rule",
     "removeRule": "Remove",
     "addOther": "Add \"Other\" option",
@@ -933,8 +933,8 @@
   },
   "tryitout": {
     "button": "Have a complex form? Try branching instead +",
-    "text": "<p class='mb-4'>Use branching logic to route people filling out the form toward different pages based on their answers. This helps create an experience where people only see what’s relevant to them.</p> <p> With this feature, visualize the form flow and configure branches in the form set-up panel located on the right, within the Branching tab.</p>",
-    "open": "Open the branching set-up tab"
+    "text": "<p class='mb-4'>Use branching to route people filling out the form toward different pages based on their answers.</p> <p> Visualize the form flow and configure branches in the Branching tab of the form set-up panel.</p>",
+    "open": "Go to Branching"
   },
   "exitBadge": "Exit",
   "exitButtonElement": {
