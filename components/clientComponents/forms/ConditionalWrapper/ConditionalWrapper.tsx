@@ -14,6 +14,12 @@ export const ConditionalWrapper = ({
   rules: ConditionalRule[] | null;
 }) => {
   const { matchedIds, currentGroup, groups, formRecord } = useGCFormsContext();
+
+  // Check if the element is a child of a dynamic element
+  if (element.subId) {
+    return children;
+  }
+
   // Check if we're using groups and if the current element is in a group
   if (
     currentGroup &&
