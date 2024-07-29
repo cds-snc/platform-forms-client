@@ -1,11 +1,16 @@
+/**
+ * @deprecated
+ * This function is deprecated and will be removed in future versions.
+ * @TODO: Revisit for sub elements. Note that the following will break if we have more than 99 sub elements
+ */
 export const parseRootId = (id: number) => {
-  // @TODO: Revisit for sub elements. Note that the following will break if we have more than 99 sub elements
   // split 3 or 4 digit id into first 1 or 2 digits
-  const idStr = id.toString();
-  const sliceAt = idStr.length == 3 ? 1 : 2;
-  const idArr = idStr.split("");
-  const first = idArr.slice(0, sliceAt).join("");
-  return Number(first);
+  // const idStr = id.toString();
+  // const sliceAt = idStr.length == 3 ? 1 : 2;
+  // const idArr = idStr.split("");
+  // const first = idArr.slice(0, sliceAt).join("");
+  // return Number(first);
+  return Number(id);
 };
 
 export const parseParentId = (id: number, elements: Element[]) => {
@@ -40,9 +45,7 @@ interface Element {
 type Indexes = [] | [elIndex: number | null, subIndex: number | null];
 
 export const getElementIndexes = <T extends Element>(id: number, elements: T[]): Indexes => {
-  const elId = parseRootId(id);
-
-  // console.log(elId, parseParentId(id, elements));
+  const elId = parseParentId(id, elements);
 
   const elIndex = elements.findIndex((el: T) => el.id === elId);
 
