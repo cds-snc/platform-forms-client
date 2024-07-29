@@ -212,6 +212,13 @@ export const Publish = ({ id }: { id: string }) => {
         </Alert.Info>
       )}
 
+      {userCanPublish && (
+        <Alert.Warning className="my-5 max-w-4xl">
+          <Alert.Title headingTag="h2">{t("logicPublishWarning.header")}</Alert.Title>
+          <p className="mb-5">{t("logicPublishWarning.text")}</p>
+        </Alert.Warning>
+      )}
+
       <ul className="list-none p-0">
         <li className="my-4">
           {hasHydrated ? <Icon checked={title} /> : IconLoading}

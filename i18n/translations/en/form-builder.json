@@ -57,7 +57,7 @@
       "other": "Other"
     },
     "checkbox": {
-      "description": "A set of options for multiple selections.",
+      "description": "A set of options for a single or multiple selections.",
       "title": "Checkboxes",
       "chooseItems": "Question",
       "selectAllThatApply": "Select all that apply."
@@ -221,8 +221,8 @@
     "url": "Website address"
   },
   "autocompleteWhenNotToUse": {
-    "text1": "Auto complete attributes may not work well for information the form filler does not enter regularly. Things like historical or business information may not fill in correctly.",
-    "text2": "Usability testing is a good way to understand if the rules you set cause problems with filling in forms.",
+    "text1": "Autocomplete attributes may not work well for information the form filler does not enter regularly. Things like historical or business information may not fill in correctly.",
+    "text2": "Usability testing is a good way to understand if the parameters you set for questions cause problems while filling out forms.",
     "title": "When not to use autocomplete"
   },
   "backToForm": "Back to form",
@@ -482,6 +482,10 @@
     "vaultOption": "Responses to be downloaded",
     "emailOption": "Responses delivered by email — ",
     "change": "Change settings"
+  },
+  "logicPublishWarning": {
+    "header": "Test your form thoroughly before publishing",
+    "text": "Check that all possible paths through the form work as expected avoiding dead ends and infinite loops."
   },
   "prePublishFormDialog": {
     "title": "Publish form",
@@ -844,14 +848,14 @@
     "failedLink": "Saving failed - Contact support"
   },
   "addConditionalRules": {
-    "modalTitle": "Add a rule to a question",
-    "modalTitleEdit": "Edit conditional rules",
-    "modalDescription": "Allow an option in your question to show an additional short or long answer input field when selected. Only drop downs, single choice, and multi-select blocks can apply a rule.",
-    "warning": "Options and questions must exist before adding a conditional rule.",
+    "modalTitle": "Add a display rule",
+    "modalTitleEdit": "Edit display rules",
+    "modalDescription": "Displays a new question in response to a previously selected answer. Only questions with a choice of answers can have a rule applied.",
+    "warning": "Options and questions must exist before adding a display rule.",
     "optionTitle": "If option selected is:",
     "questionTitle": "Show question:",
-    "addCustomRules": "Add a rule",
-    "editCustomRules": "Edit rules",
+    "addCustomRules": "Add rule",
+    "editCustomRules": "Edit rule",
     "addAnotherRule": "Add another rule",
     "removeRule": "Remove",
     "addOther": "Add \"Other\" option",
@@ -861,10 +865,10 @@
   "saved": "Saved",
   "opensInNewTab": "opens in a new tab",
   "rightPanel": {
-    "title": "Right panel",
+    "title": "Form set-up panel",
     "openPanel": "Form set-up",
     "closePanel": "Close panel",
-    "questions": "Questions",
+    "pages": "Pages",
     "logic": "Branching",
     "translation": "Translations",
     "treeView": {
@@ -873,8 +877,8 @@
     "loadTab": "Loaded {{tabPanelLabel}} editor"
   },
   "logic": {
-    "heading": "Branching",
-    "description": "Apply branching logic between form pages with questions that have radio buttons, checkboxes, or a dropdown.",
+    "heading": "Edit branching",
+    "description": "Add logic to form pages with questions that have radio buttons, checkboxes, or a dropdown.",
     "clear": "Remove",
     "gotoPage": "Go to page",
     "questionTitle": "Question:",
@@ -882,10 +886,16 @@
     "translateTitle": "Page title",
     "addRule": "Add rule",
     "saveRule": "Save",
-    "saveNote": "Adding branching turns off linear autoflow between form pages.",
+    "saveNote": "Adding branches deactivates the linear flow that links form pages.",
     "resetRules": "Reset to linear flow",
     "resetRulesHelp": "Reset help",
     "resetRulesDescription": "This will remove branching logic and reset the progression between pages to a simple linear flow, overriding any existing rules that were applied.",
+    "resetRulesDialog": {
+      "title": "Reset to linear flow?",
+      "areYouSure": "Are you sure you want to reset the form flow?",
+      "text": "This will remove all branching logic that was applied and reset the flow to a simple linear path. <strong>This action cannot be undone.</strong>",
+      "reset": "Reset"
+    },
     "toastSuccess": "Linear flow applied",
     "multiRulesWarning": {
       "text1": "The order and flow is set based on the rules applied.",
@@ -902,49 +912,54 @@
     },
     "actionsSaved": "Actions saved",
     "legend": {
-      "page": "Change how pages are ordered and connected",
-      "option": "Apply branching based on questions with selectable options"
-    },
-    "exit": {
-      "convertText": "Convert page",
-      "checkboxLabel": "Exit the form",
-      "nodeIconLabel": "Exit",
-      "offboardNodeContent": {
-        "content": "Exit page content",
-        "exitButton": "Back to the start"
-      },
-      "exitPanel": {
-        "title1": "Exit page",
-        "title2": "Ineligible to continue filling out the form",
-        "description": "Exit pages link people filling out the form back to the start of the form.",
-        "buttonLabel": "Remove"
-      }
-    },
-    "exitBadge": "Exit",
-    "exitButtonElement": {
-      "description": "Help people exiting your form have a path forward.",
-      "list": {
-        "title": "What to include in an exit page",
-        "item1": "Links to other relevant forms or web pages",
-        "item2": "Next steps in the process or guidance on form requirements",
-        "item3": "Contact information to follow up or learn more about the form"
-      },
-      "buttonDescription": "An exit button takes people to the organization website corresponding to the branding of the form.",
-      "buttonLabel": "Customize the button destination by copy-pasting a more relevant link below:"
-    },
-    "noPages": {
-      "text1": "Add a <strong>New page</strong> from the",
-      "text2": "Questions tab",
-      "text3": "before adding a branch."
+      "page": "To change how pages are ordered and connected",
+      "option": "To take a specific path depending on a selected option"
     }
+  },
+  "exit": {
+    "convertText": "Convert to:",
+    "checkboxLabel": "Exit page",
+    "nodeIconLabel": "Exit",
+    "offboardNodeContent": {
+      "content": "Exits the form",
+      "exitButton": "Back to the start"
+    },
+    "exitPanel": {
+      "title1": "Exit page",
+      "title2": "Ineligible to continue filling out the form",
+      "description": "Exit pages link people filling out the form back to the start of the form.",
+      "buttonLabel": "Remove"
+    }
+  },
+  "tryitout": {
+    "button": "Have a complex form? Try branching instead +",
+    "text": "<p class='mb-4'>Use branching to route people filling out the form toward different pages based on their answers.</p> <p> Visualize the form flow and configure branches in the Branching tab of the form set-up panel.</p>",
+    "open": "Go to Branching"
+  },
+  "exitBadge": "Exit",
+  "exitButtonElement": {
+    "description": "Help people exiting your form have a path forward.",
+    "list": {
+      "title": "What to include in an exit page",
+      "item1": "Links to other relevant forms or web pages",
+      "item2": "Next steps in the process or guidance on form requirements",
+      "item3": "Contact information to follow up or learn more about the form"
+    },
+    "buttonDescription": "An exit button takes people to the organization website corresponding to the branding of the form.",
+    "buttonLabel": "Customize the button destination by copy-pasting a more relevant link below:"
+  },
+  "noPages": {
+    "text1": "Add a <strong>New page</strong> from the",
+    "text2": "Pages tab",
+    "text3": "before adding a branch."
   },
   "groups": {
     "newPage": "New page",
     "pageNameInput": "Page name",
     "addPage": "Add page",
-    "addNewPage": "Add a new page",
-    "addBranch": "Add a branch",
-    "addPagePlaceholder": "Add a page name",
+    "addNewPage": "Add new page",
+    "addBranch": "Add branch",
+    "addPagePlaceholder": "Add page name",
     "treeAriaLabel": "GC Forms pages",
     "addElement": {
       "empty": {
@@ -954,8 +969,10 @@
     },
     "pageTitle": "Page title",
     "groupDeleted": "Page deleted",
+    "editPagesHeading": "Edit page",
+    "editTranslationsHeading": "Edit translations",
     "editPage": "Edit page {{name}}",
-    "editRules": "Edit rules for page {{name}}",
+    "editRules": "Edit branching for page {{name}}",
     "groupSuccessfullyDeleted": "{{group}} successfully deleted",
     "privacy": {
       "beforeText": "<p>You’re responsible for understanding your department or agency's responsibilities related to personal information. If you’re unsure how to proceed, we recommend contacting your <a href=\"https://www.tbs-sct.canada.ca/ap/atip-aiprp/coord-eng.asp\" target=\"_blank\">access to information and privacy coordinator.</a></p>",
@@ -996,10 +1013,10 @@
   },
   "next": "Continue",
   "skipLink": {
-    "questions": "Skip to Questions editor",
-    "translate": "Skip to Translations editor",
-    "logic": "Skip to Branching editor",
-    "questionsSetup": "Skip to Questions set-up",
+    "pages": "Skip to edit Pages",
+    "translate": "Skip to edit Translations",
+    "logic": "Skip to edit Branching",
+    "pagesSetup": "Skip to Pages set-up",
     "translateSetup": "Skip to Translations set-up",
     "logicSetup": "Skip to Branching set-up"
   },

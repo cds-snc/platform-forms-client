@@ -19,11 +19,13 @@ export const PanelBody = ({
   elIndex = -1,
   onQuestionChange,
   onRequiredChange,
+  formId,
 }: {
   item: FormElementWithIndex;
   elIndex?: number;
   onQuestionChange: (itemId: number, val: string, lang: Language) => void;
   onRequiredChange: (itemId: number, checked: boolean) => void;
+  formId: string;
 }) => {
   const { t } = useTranslation("form-builder");
   const isRichText = item.type === "richText";
@@ -46,7 +48,7 @@ export const PanelBody = ({
       {isRichText || isDynamicRow ? (
         <div className="my-4">
           <Question item={item} onQuestionChange={onQuestionChange} />
-          <SelectedElement item={item} elIndex={elIndex} />
+          <SelectedElement item={item} elIndex={elIndex} formId={formId} />
         </div>
       ) : (
         <>
@@ -62,7 +64,7 @@ export const PanelBody = ({
           <div className="mb-4 flex gap-4 text-sm">
             <div className="w-1/2">
               <QuestionDescription item={item} describedById={describedById} />
-              <SelectedElement item={item} elIndex={elIndex} />
+              <SelectedElement item={item} elIndex={elIndex} formId={formId} />
               {maxLength && (
                 <div className="disabled">
                   {t("maxCharacterLength")}
