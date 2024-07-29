@@ -190,6 +190,20 @@ export const Publish = ({ id }: { id: string }) => {
     router.push(`/${i18n.language}/form-builder/${id}/edit#privacy-text`);
   };
 
+  const routeToFormTitle = () => {
+    if (getGroupsEnabled()) {
+      setGroupId("start");
+    }
+    router.push(`/${i18n.language}/form-builder/${id}/edit#formTitle`);
+  };
+
+  const routeToConfirmation = () => {
+    if (getGroupsEnabled()) {
+      setGroupId("end");
+    }
+    router.push(`/${i18n.language}/form-builder/${id}/edit#confirmation-text`);
+  };
+
   return (
     <div>
       {!userCanPublish && error && hasHydrated && (
@@ -234,7 +248,9 @@ export const Publish = ({ id }: { id: string }) => {
       <ul className="list-none p-0">
         <li className="my-4">
           {hasHydrated ? <Icon checked={title} /> : IconLoading}
-          <Link href={`/${i18n.language}/form-builder/${id}/edit#formTitle`}>{t("formTitle")}</Link>
+          <Button theme={"link"} onClick={routeToFormTitle}>
+            {t("formTitle")}
+          </Button>
         </li>
         <li className="my-4">
           {hasHydrated ? <Icon checked={questions} /> : IconLoading}
@@ -248,9 +264,9 @@ export const Publish = ({ id }: { id: string }) => {
         </li>
         <li className="my-4">
           {hasHydrated ? <Icon checked={confirmationMessage !== undefined} /> : IconLoading}
-          <Link href={`/${i18n.language}/form-builder/${id}/edit#confirmation-text`}>
+          <Button theme={"link"} onClick={routeToConfirmation}>
             {t("formConfirmationMessage")}
-          </Link>
+          </Button>
         </li>
         <li className="my-4">
           {hasHydrated ? <Icon checked={translate} /> : IconLoading}
