@@ -19,6 +19,7 @@ import { ErrorSaving } from "@formBuilder/components/shared/ErrorSaving";
 import { FormServerErrorCodes } from "@lib/types/form-builder-types";
 import { PrePublishDialog } from "./PrePublishDialog";
 import { FormProperties } from "@lib/types";
+import { useGroupStore } from "@formBuilder/components/shared/right-panel/treeview/store/useGroupStore";
 
 export const Publish = ({ id }: { id: string }) => {
   const { t, i18n } = useTranslation("form-builder");
@@ -42,6 +43,7 @@ export const Publish = ({ id }: { id: string }) => {
     formPurpose,
     getDeliveryOption,
     securityAttribute,
+    getGroupsEnabled,
   } = useTemplateStore((s) => ({
     id: s.id,
     setId: s.setId,
@@ -51,11 +53,14 @@ export const Publish = ({ id }: { id: string }) => {
     formPurpose: s.formPurpose,
     getDeliveryOption: s.getDeliveryOption,
     securityAttribute: s.securityAttribute,
+    getGroupsEnabled: s.getGroupsEnabled,
   }));
 
   if (storeId && storeId !== id) {
     id = storeId;
   }
+
+  const setGroupId = useGroupStore((state) => state.setId);
 
   const securityOption: ClassificationOption | undefined = classificationOptions.find(
     (item) => item.value === securityAttribute
@@ -178,6 +183,13 @@ export const Publish = ({ id }: { id: string }) => {
     />
   );
 
+  const routeToPrivacy = () => {
+    if (getGroupsEnabled()) {
+      setGroupId("start");
+    }
+    router.push(`/${i18n.language}/form-builder/${id}/edit#privacy-text`);
+  };
+
   return (
     <div>
       {!userCanPublish && error && hasHydrated && (
@@ -230,9 +242,9 @@ export const Publish = ({ id }: { id: string }) => {
         </li>
         <li className="my-4">
           {hasHydrated ? <Icon checked={privacyPolicy} /> : IconLoading}
-          <Link href={`/${i18n.language}/form-builder/${id}/edit#privacy-text`}>
+          <Button theme={"link"} onClick={routeToPrivacy}>
             {t("privacyStatement")}
-          </Link>
+          </Button>
         </li>
         <li className="my-4">
           {hasHydrated ? <Icon checked={confirmationMessage !== undefined} /> : IconLoading}
