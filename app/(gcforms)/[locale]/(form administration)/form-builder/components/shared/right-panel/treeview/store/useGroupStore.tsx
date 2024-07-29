@@ -118,7 +118,7 @@ const createGroupStore = (initProps?: Partial<GroupStoreProps>) => {
         const hasGroups = formHasGroups(form);
 
         if (!hasGroups) {
-          formGroups = initializeGroups(form, true).groups;
+          formGroups = initializeGroups({ ...form }, true).groups;
         }
 
         if (!formGroups) return {};
