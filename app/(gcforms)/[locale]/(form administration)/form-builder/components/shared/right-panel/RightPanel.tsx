@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { Transition, Tab } from "@headlessui/react";
 import { useTranslation } from "@i18n/client";
 import { Button } from "@clientComponents/globals";
+import { debounce } from "lodash";
 
 import { RightPanelOpen, RoundCloseIcon } from "@serverComponents/icons";
 import { cn } from "@lib/utils";
@@ -105,17 +106,17 @@ export const RightPanel = ({ id, lang }: { id: string; lang: Language }) => {
   // Observe if the header is offscreen
   // Used to determine the position of the right panel button "toggle" button
   const observer = useRef<IntersectionObserver>();
+
   useEffect(() => {
-    observer.current = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setIsIntersecting(true);
-        } else {
-          setIsIntersecting(false);
-        }
-      },
-      { threshold: 0 }
-    );
+    const handleIntersection = debounce(([entry]) => {
+      if (entry.isIntersecting) {
+        setIsIntersecting(true);
+      } else {
+        setIsIntersecting(false);
+      }
+    }, 100); // Adjust debounce delay as needed
+
+    observer.current = new IntersectionObserver(handleIntersection, { threshold: 0.75 });
     observer.current.observe(document.querySelector("header") as Element);
     return () => {
       observer.current?.disconnect();
@@ -133,7 +134,13 @@ export const RightPanel = ({ id, lang }: { id: string; lang: Language }) => {
 
   return (
     <section className="relative" aria-labelledby="rightPanelTitle">
-      <div className={cn("fixed right-0", fixedRange, open && "hidden")}>
+      <div
+        className={cn(
+          "fixed right-0 transition-all ease-in-out delay-150",
+          fixedRange,
+          open && "hidden"
+        )}
+      >
         <Button
           theme="link"
           className="mr-8 mt-5 whitespace-nowrap [&_svg]:focus:fill-white"
