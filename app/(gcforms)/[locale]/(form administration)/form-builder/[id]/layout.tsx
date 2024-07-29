@@ -76,7 +76,10 @@ export default async function Layout({
                     </div>
                   </div>
                   <GroupStoreProvider>
-                    <main id="content" className="form-builder my-7 w-full">
+                    <main
+                      id="content"
+                      className="form-builder my-7 w-full h-screen overflow-scroll"
+                    >
                       {children}
                     </main>
                     {allowGroupsFlag && <RightPanel id={id} lang={locale as Language} />}
