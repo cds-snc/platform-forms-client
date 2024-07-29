@@ -1,6 +1,6 @@
 "use server";
 import { updatePrivilegesForUser } from "@lib/privileges";
-
+import { checkPrivilegesAsBoolean } from "@lib/privileges";
 import { revalidatePath } from "next/cache";
 import { authCheckAndThrow } from "@lib/actions";
 
@@ -10,7 +10,7 @@ export const updatePrivileges = async (
   action: "add" | "remove"
 ) => {
   const { ability } = await authCheckAndThrow();
-  if (ability.can("update", "User")) {
+  if (checkPrivilegesAsBoolean(ability, [{ action: "update", subject: "User" }])) {
     try {
       const result = await updatePrivilegesForUser(ability, userID, [{ id: privilegeID, action }]);
       revalidatePath(

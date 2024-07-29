@@ -198,8 +198,8 @@ export const TranslateWithGroups = () => {
       <h1 className="sr-only">{t("edit")}</h1>
       <div className="mr-10">
         <div className="flex w-[800px]">
-          <h2 id="translateTitle" tabIndex={-1}>
-            {t("translateTitle")}
+          <h2 id="editTranslationsHeading" className="whitespace-nowrap" tabIndex={-1}>
+            {t("groups.editTranslationsHeading")}
           </h2>
           <div className="ml-5 mt-2">
             <SaveButton />
@@ -380,14 +380,6 @@ export const TranslateWithGroups = () => {
         {/* END PRIVACY */}
 
         <div key={"start"}>
-          {groups && (
-            <GroupSection
-              group={groups["start"]}
-              groupId={"start"}
-              primaryLanguage={primaryLanguage}
-              secondaryLanguage={secondaryLanguage}
-            />
-          )}
           {groups &&
             sortGroup({ form, group: groups["start"] }).map((element, index) => {
               return (

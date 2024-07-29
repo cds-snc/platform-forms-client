@@ -74,9 +74,6 @@ function _rehydrateDynamicRowResponses(responses: [string, Response][]) {
 }
 
 function _rehydrateCheckBoxResponse(response: Response) {
-  const responseParsed = safeJSONParse(response as string);
-  if (responseParsed?.error || !responseParsed?.value) {
-    return [];
-  }
-  return responseParsed.value;
+const responseParsed = safeJSONParse<{ value: string[] }>(response as string);
+  return responseParsed?.value || [];
 }

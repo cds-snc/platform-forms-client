@@ -29,6 +29,7 @@ import { toast } from "@formBuilder/components/shared/Toast";
 import { ErrorSaving } from "@formBuilder/components/shared/ErrorSaving";
 import { useTemplateContext } from "@lib/hooks/form-builder/useTemplateContext";
 import { safeJSONParse } from "@lib/utils";
+import { FormProperties } from "@lib/types";
 
 enum DeliveryOption {
   vault = "vault",
@@ -154,14 +155,13 @@ export const SettingsDialog = ({
         return;
       }
 
-      const formConfig = safeJSONParse(getSchema());
-      const { formRecord: template, error } = await createOrUpdateTemplate({ id, formConfig });
-
-      if (error) {
+      const formConfig = safeJSONParse<FormProperties>(getSchema());
+      if (!formConfig) {
         toast.error(<ErrorSaving />, "wide");
         return;
       }
 
+      const { formRecord: template } = await createOrUpdateTemplate({ id, formConfig });
       template && setId(template.id);
     };
     autoSave();
@@ -329,8 +329,8 @@ export const SettingsDialog = ({
 
     updateSecurityAttribute(classificationValue);
 
-    const formConfig = safeJSONParse(getSchema());
-    if (formConfig.error) {
+    const formConfig = safeJSONParse<FormProperties>(getSchema());
+    if (!formConfig) {
       handleClose();
       toast.error(<ErrorSaving errorCode={FormServerErrorCodes.JSON_PARSE} />, "wide");
       return;

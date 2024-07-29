@@ -18,6 +18,7 @@ import { safeJSONParse } from "@lib/utils";
 import { ErrorSaving } from "@formBuilder/components/shared/ErrorSaving";
 import { FormServerErrorCodes } from "@lib/types/form-builder-types";
 import { PrePublishDialog } from "./PrePublishDialog";
+import { FormProperties } from "@lib/types";
 
 export const Publish = ({ id }: { id: string }) => {
   const { t, i18n } = useTranslation("form-builder");
@@ -143,8 +144,8 @@ export const Publish = ({ id }: { id: string }) => {
     setError(false);
     setErrorCode(null);
 
-    const formConfig = safeJSONParse(getSchema());
-    if (formConfig.error) {
+    const formConfig = safeJSONParse<FormProperties>(getSchema());
+    if (!formConfig) {
       toast.error(<ErrorSaving errorCode={FormServerErrorCodes.JSON_PARSE} />, "wide");
       return;
     }
@@ -209,6 +210,13 @@ export const Publish = ({ id }: { id: string }) => {
             </Button>
           </p>
         </Alert.Info>
+      )}
+
+      {userCanPublish && (
+        <Alert.Warning className="my-5 max-w-4xl">
+          <Alert.Title headingTag="h2">{t("logicPublishWarning.header")}</Alert.Title>
+          <p className="mb-5">{t("logicPublishWarning.text")}</p>
+        </Alert.Warning>
       )}
 
       <ul className="list-none p-0">
