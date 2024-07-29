@@ -6,7 +6,20 @@ export const parseRootId = (id: number) => {
   const idArr = idStr.split("");
   const first = idArr.slice(0, sliceAt).join("");
   return Number(first);
-  // return Number(id);
+};
+
+export const parseParentId = (id: number, elements: Element[]) => {
+  elements.forEach((el) => {
+    if (el.properties?.subElements) {
+      el.properties.subElements.forEach((subEl) => {
+        if (subEl.id === id) {
+          id = el.id;
+        }
+      });
+    }
+  });
+
+  return id;
 };
 
 interface Form {
@@ -28,6 +41,9 @@ type Indexes = [] | [elIndex: number | null, subIndex: number | null];
 
 export const getElementIndexes = <T extends Element>(id: number, elements: T[]): Indexes => {
   const elId = parseRootId(id);
+
+  // console.log(elId, parseParentId(id, elements));
+
   const elIndex = elements.findIndex((el: T) => el.id === elId);
 
   if (elIndex === -1) return [null, null];
