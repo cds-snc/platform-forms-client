@@ -234,15 +234,19 @@ const createTemplateStore = (initProps?: Partial<InitialTemplateStoreProps>) => 
                 });
               });
             },
-            removeChoiceFromRules: (elIndex: number, choiceIndex: number) => {
-              set((state) => {
-                const choiceId = `${elIndex}.${choiceIndex}`;
-                const rules = removeChoiceFromRules(state.form.elements, choiceId);
-                state.form.elements.forEach((element) => {
-                  // If element id is in the rules array, update the conditionalRules property
-                  if (rules[element.id]) {
-                    element.properties.conditionalRules = rules[element.id];
-                  }
+            removeChoiceFromRules: async (elIndex: number, choiceIndex: number) => {
+              return new Promise((resolve) => {
+                set((state) => {
+                  const choiceId = `${elIndex}.${choiceIndex}`;
+                  const rules = removeChoiceFromRules(state.form.elements, choiceId);
+                  state.form.elements.forEach((element) => {
+                    // If element id is in the rules array, update the conditionalRules property
+                    if (rules[element.id]) {
+                      element.properties.conditionalRules = rules[element.id];
+                    }
+                  });
+
+                  resolve(choiceId);
                 });
               });
             },

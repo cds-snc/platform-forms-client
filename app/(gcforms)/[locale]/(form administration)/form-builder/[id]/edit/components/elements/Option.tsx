@@ -96,8 +96,8 @@ export const Option = ({
   );
 
   const cleanUpRules = useCallback(
-    (parentIndex: number, index: number) => {
-      removeChoiceFromRules(parentIndex, index);
+    async (parentIndex: number, index: number) => {
+      await removeChoiceFromRules(parentIndex, index);
     },
     [removeChoiceFromRules]
   );
@@ -129,8 +129,8 @@ export const Option = ({
         id={`remove--${id}--${index + 1}`}
         icon={<Close className="group-focus:fill-white-default" />}
         aria-label={`${t("removeOption")} ${value}`}
-        onClick={() => {
-          cleanUpRules(parentIndex, index);
+        onClick={async () => {
+          await cleanUpRules(parentIndex, index);
           removeChoice(parentIndex, index);
         }}
       ></Button>
