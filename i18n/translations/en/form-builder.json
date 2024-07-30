@@ -931,7 +931,7 @@
       }
     },
     "tryitout": {
-      "button": "Have a complex form? Try branching instead +",
+      "button": "Complex form? Try branching instead +",
       "text": "<p class='mb-4'>Use branching to route people filling out the form toward different pages based on their answers.</p> <p> Visualize the form flow and configure branches in the Branching tab of the form set-up panel.</p>",
       "open": "Go to Branching"
     },

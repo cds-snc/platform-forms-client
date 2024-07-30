@@ -931,7 +931,7 @@
       }
     },
     "tryitout": {
-      "button": "Vous créez un formulaire complexe? Ajoutez des embranchements +",
+      "button": "Formulaire complexe? Considérez des embranchements +",
       "text": "<p class='mb-4'>Utilisez les embranchements pour diriger les personnes qui remplissent le formulaire vers différentes pages en fonction de leurs réponses.</p> <p>Visualisez et configurez l'enchaînement du formulaire dans l’onglet Embranchements du panneau de configuration du formulaire.</p>",
       "open": "Allez à Embranchements"
     },
