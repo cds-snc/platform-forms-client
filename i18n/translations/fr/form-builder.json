@@ -1002,9 +1002,9 @@
     },
     "confirmMoveGroup": {
       "title": "Remplacer les règles?",
-      "description": " Il semble que des éléments déplacés comportent des règles conditionnelles. Souhaitez-vous remplacer ces règles par un enchaînement linéaire automatique?",
+      "description": " Il semble que des éléments déplacés comportent des règles d'affichage. Souhaitez-vous remplacer ces règles par un enchaînement linéaire automatique?",
       "cancel": "Non, déplacer sans modifier les règles",
-      "confirm": "Oui, appliquer un flux automatique"
+      "confirm": "Oui, appliquer un enchaînement linéaire"
     }
   },
   "confirmation": {
