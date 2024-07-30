@@ -1,5 +1,5 @@
 "use server";
-import { enableFlag, disableFlag, checkAll, checkOne } from "@lib/cache/flags";
+import { enableFlag, disableFlag, checkAll, checkOne, saveCampaign } from "@lib/cache/flags";
 import { revalidatePath } from "next/cache";
 import { authCheckAndThrow } from "@lib/actions";
 
@@ -26,4 +26,14 @@ export async function checkFlag(id: string) {
   await authCheckAndThrow();
 
   return checkOne(id);
+}
+
+export async function saveCampaignText(
+  enAlert: string,
+  frAlert: string,
+  enText: string,
+  frText: string
+) {
+  const { ability } = await authCheckAndThrow();
+  await saveCampaign(ability, enAlert, frAlert, enText, frText);
 }

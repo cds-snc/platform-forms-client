@@ -25,6 +25,15 @@
     "conditionalLogic": {
       "title": "Logique conditionnelle",
       "description": "Activer la logique conditionnelle et le panneau de droite"
+    },
+    "campaign": {
+      "title": "Campagne",
+      "description": "Activer la fonction de campagne",
+      "englishCampaign": "Texte de la campagne en anglais",
+      "frenchCampaign": "Texte de la campagne en français",
+      "englishAlert": "Texte d'alerte en anglais",
+      "frenchAlert": "Texte d'alerte en français",
+      "save": "Enregistrer le texte de la campagne"
     }
   }
 }

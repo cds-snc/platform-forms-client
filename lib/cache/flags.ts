@@ -1,5 +1,6 @@
 import { getRedisInstance } from "@lib/integration/redisConnector";
 import flagInitialSettings from "../../flag_initialization/default_flag_settings.json";
+import specialInitialSettings from "../../flag_initialization/default_specialflag_settings.json";
 import { AccessControlError, checkPrivileges } from "@lib/privileges";
 import { logEvent } from "@lib/auditLogs";
 import { UserAbility } from "@lib/types";
@@ -55,6 +56,54 @@ export const disableFlag = async (ability: UserAbility, key: string): Promise<vo
 const getKeys = async () => {
   const redis = await getRedisInstance();
   return redis.smembers("flags");
+};
+
+/**
+ * Checks a special Application Setitng Flag
+ * @param key Application setting flag key
+ * @returns Boolean value of Flag key
+ */
+export const checkSpecial = async (key: string): Promise<string> => {
+  // If REDIS is not configured return the default values for the flags
+  if (!process.env.REDIS_URL) {
+    return (specialInitialSettings as Record<string, string>)[key];
+  }
+  const redis = await getRedisInstance();
+  const value = await redis.get(`flag:${key}`);
+  return value ?? "";
+};
+
+export const checkCampaign = async (): Promise<{ [k: string]: string }> => {
+  const enText = await checkSpecial("campaignStringEn");
+  const frText = await checkSpecial("campaignStringFr");
+  const enAlert = await checkSpecial("campaignAlertEn");
+  const frAlert = await checkSpecial("campaignAlertFr");
+
+  return { enAlert: enAlert ?? "", frAlert: frAlert ?? "", en: enText ?? "", fr: frText ?? "" };
+};
+
+export const saveCampaign = async (
+  ability: UserAbility,
+  enAlert: string,
+  frAlert: string,
+  enText: string,
+  frText: string
+): Promise<void> => {
+  try {
+    checkPrivileges(ability, [{ action: "update", subject: "Flag" }]);
+    const redis = await getRedisInstance();
+    await redis.set("flag:campaignAlertEn", enAlert);
+    await redis.set("flag:campaignAlertFr", frAlert);
+
+    await redis.set("flag:campaignStringEn", enText);
+    await redis.set("flag:campaignStringFr", frText);
+    logEvent(ability.userID, { type: "Flag" }, "SaveCampaign");
+  } catch (e) {
+    if (e instanceof AccessControlError) {
+      logEvent(ability.userID, { type: "Flag" }, "AccessDenied", "Attempted to save campaign text");
+    }
+    throw e;
+  }
 };
 
 /**

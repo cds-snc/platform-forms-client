@@ -35,6 +35,7 @@ export enum AuditLogEvent {
   // Application events
   EnableFlag = "EnableFlag",
   DisableFlag = "DisableFlag",
+  SaveCampaign = "SaveCampaign",
   ListAllFlags = "ListAllFlags",
   ListAllSettings = "ListAllSettings",
   ListSetting = "ListSetting",

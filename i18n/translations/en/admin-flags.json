@@ -21,6 +21,15 @@
     "conditionalLogic": {
       "title": "Conditional logic",
       "description": "Enable conditional logic and the right panel"
+    },
+    "campaign": {
+      "title": "Campaign",
+      "description": "Enable campaign feature",
+      "englishCampaign": "English Campaign Text",
+      "frenchCampaign": "French Campaign Text",
+      "englishAlert": "English Alert Text",
+      "frenchAlert": "French Alert Text",
+      "save": "Save Campaign Text"
     }
   }
 }
