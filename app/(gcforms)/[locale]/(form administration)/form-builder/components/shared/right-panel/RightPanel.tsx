@@ -132,7 +132,7 @@ export const RightPanel = ({ id, lang }: { id: string; lang: Language }) => {
   }
 
   return (
-    <section className="relative" aria-labelledby="rightPanelTitle">
+    <section className="z-10 border-l border-slate-200 bg-white" aria-labelledby="rightPanelTitle">
       <div className={cn("fixed right-0", fixedRange, open && "hidden")}>
         <Button
           theme="link"
@@ -147,8 +147,8 @@ export const RightPanel = ({ id, lang }: { id: string; lang: Language }) => {
         </Button>
       </div>
       <Transition.Root show={open} as={Fragment}>
-        <div className="h-full">
-          <div className="flex h-full">
+        <div className="sticky top-0">
+          <div className="flex">
             <Transition.Child
               as={Fragment}
               enter="transform transition ease-in-out duration-500"
@@ -211,7 +211,7 @@ export const RightPanel = ({ id, lang }: { id: string; lang: Language }) => {
                         <SkipLinkReusable anchor="#pagesTitle">
                           {t("skipLink.pages")}
                         </SkipLinkReusable>
-                        <div className="m-0 w-full" aria-live="polite">
+                        <div className="m-0 h-[400px] w-full overflow-scroll" aria-live="polite">
                           <TreeView
                             ref={treeView}
                             addItem={() => {}}
