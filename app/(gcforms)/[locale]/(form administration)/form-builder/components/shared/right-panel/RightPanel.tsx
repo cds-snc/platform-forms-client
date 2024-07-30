@@ -211,7 +211,10 @@ export const RightPanel = ({ id, lang }: { id: string; lang: Language }) => {
                         <SkipLinkReusable anchor="#pagesTitle">
                           {t("skipLink.pages")}
                         </SkipLinkReusable>
-                        <div className="m-0 h-[400px] w-full overflow-scroll" aria-live="polite">
+                        <div
+                          className="m-0 h-[calc(100vh-150px)] w-full overflow-scroll pb-10 bg-slate-50"
+                          aria-live="polite"
+                        >
                           <TreeView
                             ref={treeView}
                             addItem={() => {}}
