@@ -23,7 +23,7 @@ import {
 
 import { serverTranslation } from "@i18n";
 import { revalidatePath } from "next/cache";
-import { checkOne } from "@lib/cache/flags";
+import { checkOne, checkCampaign } from "@lib/cache/flags";
 
 export type CreateOrUpdateTemplateType = {
   id?: string;
@@ -399,4 +399,8 @@ export const getTranslatedProperties = async (type: string) => {
 
 export async function checkFlag(id: string) {
   return checkOne(id);
+}
+
+export async function getCampaignData() {
+  return checkCampaign();
 }

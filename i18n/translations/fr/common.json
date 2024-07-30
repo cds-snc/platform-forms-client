@@ -163,10 +163,5 @@
     "confirmation": "Message de confirmation",
     "privacy": "Avis de confidentialité"
   },
-  "exit": "Sortie",
-  "campaignBanner": {
-    "enabled": true,
-    "type": "À VENIR",
-    "message": "<strong>En août</strong> : Créez des formulaires multipages avec une logique d’embranchement. <a href='/fr/contact' className='text-white hover:text-white'>S’abonner aux mises à jour</a>"
-  }
+  "exit": "Sortie"
 }
