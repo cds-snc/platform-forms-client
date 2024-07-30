@@ -49,7 +49,7 @@ export const ShareDropdown = () => {
           <DropdownMenuPrimitive.Content
             align="end"
             sideOffset={5}
-            className={`${menuWidth} rounded-lg border-1 border-black bg-white px-1.5 py-1 shadow-md`}
+            className={`${menuWidth} rounded-lg border-1 border-black bg-white px-1.5 py-1 shadow-md z-[1000]`}
           >
             {!name && (
               <DropdownMenuPrimitive.Item
