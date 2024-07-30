@@ -78,7 +78,7 @@ export default async function Layout({
                   <GroupStoreProvider>
                     <main
                       id="content"
-                      className="form-builder my-7 w-full h-screen overflow-scroll"
+                      className="form-builder mt-7 pb-7 w-full h-screen overflow-scroll"
                     >
                       {children}
                     </main>

@@ -162,7 +162,7 @@ export const RightPanel = ({ id, lang }: { id: string; lang: Language }) => {
                 {/* <-- Panel Header */}
                 <div
                   className={cn(
-                    "static right-0 flex h-full flex-col border-l border-slate-200 bg-white overflow-scroll pb-[100px]",
+                    "static right-0 flex h-screen flex-col border-l border-slate-200 bg-white overflow-scroll pb-[130px]",
                     isIntersecting ? "" : "fixed top-0 w-1/4"
                   )}
                 >
