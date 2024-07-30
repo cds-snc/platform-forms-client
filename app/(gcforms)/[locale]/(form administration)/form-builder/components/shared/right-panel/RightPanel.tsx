@@ -212,7 +212,7 @@ export const RightPanel = ({ id, lang }: { id: string; lang: Language }) => {
                           {t("skipLink.pages")}
                         </SkipLinkReusable>
                         <div
-                          className="m-0 h-[calc(100vh-150px)] w-full overflow-scroll pb-10 bg-slate-50"
+                          className="m-0 h-[calc(100vh-150px)] w-full overflow-scroll bg-slate-50"
                           aria-live="polite"
                         >
                           <TreeView
