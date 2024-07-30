@@ -61,9 +61,9 @@ export default async function Layout({
     <TemplateStoreProvider {...{ ...initialForm, locale, allowGroupsFlag }}>
       <SaveTemplateProvider>
         <RefStoreProvider>
-          <div>
+          <div className="min-h-[calc(100vh-100px)]">
             {/* @TODO: Backlink?? */}
-            <div className="flex h-full flex-col">
+            <div className="flex flex-col">
               <SkipLink />
               <Header context="formBuilder" className="mb-0" />
               <div className="shrink-0 grow basis-auto bg-gray-soft">
