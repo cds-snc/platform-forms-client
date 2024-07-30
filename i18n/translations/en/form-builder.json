@@ -912,8 +912,8 @@
     },
     "actionsSaved": "Actions saved",
     "legend": {
-      "page": "To change how pages are ordered and connected",
-      "option": "To take a specific path depending on a selected option"
+      "page": "To change how pages are ordered and connected.",
+      "option": "To take a specific path depending on a selected option."
     },
     "exit": {
       "convertText": "Convert to:",
