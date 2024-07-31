@@ -80,7 +80,6 @@ export const SelectNextAction = ({
         {selectedGroupNextActions === "exit" && (
           <div className="bg-gray-50 p-3">
             <SingleActionSelect
-              lang={lang}
               key={`single-action-select-${selectedGroupId}`}
               nextAction={selectedGroupNextActions || "end"}
             />
@@ -93,7 +92,6 @@ export const SelectNextAction = ({
               <SectionName lang={lang} sectionName={sectionName} />
             </div>
             <SingleActionSelect
-              lang={lang}
               key={`single-action-select-${selectedGroupId}`}
               nextAction={selectedGroupNextActions || "end"}
             />
