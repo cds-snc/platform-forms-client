@@ -326,6 +326,255 @@ export const removeChoiceFromRules = (elements: FormElement[], choiceId: string)
 };
 
 /**
+ * Searches for form elements that have a rule for a specified choice parent.
+ * i.e. for a choiceId of "1.0", return all elements that have a rule for "1.x"
+ *
+ * @param {Array} formElements - The form elements to search.
+ * @param {string | number} choiceId - The id of the choice to search for.
+ * @returns {Array} - Returns an array of elements that have a rule for the specified choice.
+ */
+export const getElementsUsingChoiceIdParent = ({
+  formElements,
+  choiceId,
+}: {
+  formElements: FormElement[];
+  choiceId: string;
+}) => {
+  const elements: ChoiceRule[] = [];
+
+  formElements.forEach((element) => {
+    // Look for conditional rules
+    if (element.properties.conditionalRules) {
+      element.properties.conditionalRules.forEach((rule) => {
+        const parentId = choiceId.split(".")[0];
+        const ruleParentId = rule.choiceId.split(".")[0];
+
+        if (ruleParentId === parentId) {
+          // add the element to the group
+          elements.push({
+            elementId: element.id.toString(),
+            choiceId: ensureChoiceId(rule.choiceId),
+          });
+        }
+      });
+    }
+  });
+
+  return elements;
+};
+
+/**
+ * Utility function to get all elementIds that have a rule with a parent of the choiceId
+ * uses getElementsUsingChoiceIdParent to find the elements
+ * @param elements - The form elements to search
+ * @param choiceId - The choiceId to search for
+ * @returns {Array} - Returns an array of elementIds that have a rule that contains the choiceId
+ */
+export const getElementIdsWithChoiceIdParent = ({
+  formElements,
+  choiceId,
+}: {
+  formElements: FormElement[];
+  choiceId: string;
+}) => {
+  const rules = getElementsUsingChoiceIdParent({ formElements, choiceId });
+  const elementIds = rules.map((rule) => rule.elementId);
+  // Return a unique list of elementIds
+  return Array.from(new Set(elementIds));
+};
+
+/**
+ * Get all rules that are outside the parent choiceId
+ * @param rules - The rules to filter
+ * @param choiceId - The choiceId to filter by
+ * @returns {Array} - Returns an array of rules that are outside the parent choiceId
+ */
+export const excludeRulesOutsideParent = (rules: ConditionalRule[], choiceId: string) => {
+  return rules.filter((rule) => {
+    const choiceParentId = choiceId.split(".")[0];
+    const ruleChoiceParentId = rule.choiceId.split(".")[0];
+    if (choiceParentId !== ruleChoiceParentId) {
+      return true;
+    }
+    return false;
+  });
+};
+
+/**
+ * Get all rules that are within the parent choiceId
+ * @param rules - The rules to filter
+ * @param choiceId - The choiceId to filter by
+ * @returns {Array} - Returns an array of rules that are within the parent choiceId
+ */
+export const filterRulesWithChoiceIdParent = (rules: ConditionalRule[], choiceId: string) => {
+  return rules.filter((rule) => {
+    const choiceParentId = choiceId.split(".")[0];
+    const ruleChoiceParentId = rule.choiceId.split(".")[0];
+
+    if (choiceParentId === ruleChoiceParentId) {
+      return true;
+    }
+    return false;
+  });
+};
+
+/**
+ * Decrement the index of the choiceId
+ * @param rules - The rules to adjust
+ * @returns {Array} - Returns an array of rules with the choiceId index decremented
+ */
+const decrementChoiceIdIndexes = (rules: ConditionalRule[]) => {
+  // Subtract 1 from the index of the choiceId
+  const adjustedRules = rules
+    .map((rule) => {
+      const choiceParts = rule.choiceId.split(".");
+      const choiceIndex = Number(choiceParts[1]);
+      const newIndex = Number(choiceIndex) - 1;
+      const newChoiceId = `${choiceParts[0]}.${newIndex}`;
+
+      if (newIndex >= 0) {
+        return { choiceId: newChoiceId };
+      }
+
+      return { choiceId: "" };
+    })
+    .filter((rule) => rule?.choiceId !== "");
+
+  return adjustedRules;
+};
+
+/**
+ * Filter out rules that are below the choiceId index
+ * @param rules - The rules to filter
+ * @param choiceId - The choiceId to filter by
+ * @returns {Array} - Returns an array of rules that are above the choiceId index
+ * i.e. if the choiceId is "1.3" and the rule is "1.0", "1.1" or  "1.2" etc...
+ * we want to leave "1.0", "1.1" and "1.2" out of the array we're going to adjust
+ */
+export const filterOutRulesBelowChoiceId = (rules: ConditionalRule[], choiceId: string) => {
+  return rules.filter((rule) => {
+    const choiceIndex = Number(choiceId.split(".")[1]);
+    const ruleIndex = Number(rule.choiceId.split(".")[1]);
+    if (ruleIndex > choiceIndex) {
+      return true;
+    }
+    return false;
+  });
+};
+
+/**
+ * Convert an array of rules to an array of choiceIds
+ * @param rules - The rules to convert
+ * @returns {Array} - Returns an array of choiceIds
+ * i.e. [{ choiceId: "1.0" }, { choiceId: "1.1" }] becomes ["1.0", "1.1"]
+ */
+const toChoiceValues = (rules: ConditionalRule[]) => {
+  return rules.map((rule) => rule.choiceId);
+};
+
+/**
+ * Find the difference between two arrays
+ * @param insideRange - The array to compare
+ * @param aboveRange - The array to compare
+ * @returns {Array} - Returns an array of the difference between the two arrays
+ */
+const diffAboveRange = (insideRange: ConditionalRule[], aboveRange: ConditionalRule[]) => {
+  const insideRangeSet = new Set(toChoiceValues(insideRange));
+  const aboveRangeSet = new Set(toChoiceValues(aboveRange));
+  const rangeDifference = new Set([...insideRangeSet].filter((x) => !aboveRangeSet.has(x)));
+
+  return Array.from(rangeDifference).map((choiceId) => {
+    return { choiceId: choiceId };
+  });
+};
+
+/**
+ * Remove duplicate choiceIds
+ * @param rules - The rules to filter
+ * @returns {Array} - Returns an array of rules with duplicate choiceIds removed
+ */
+const removeDuplicateChoiceIds = (rules: ConditionalRule[]) => {
+  const choiceIds = toChoiceValues(rules);
+  const choiceIdsSet = new Set(choiceIds);
+
+  return Array.from(choiceIdsSet)
+    .map((choiceId) => {
+      return { choiceId: choiceId };
+    })
+    .filter((rule) => rule?.choiceId);
+};
+
+/**
+ * Decrement the index of the choiceId for all elements that have a rule that contains the choiceId
+ * @param elements - The form elements to search
+ * @param choiceId - The choiceId to search for
+ * @returns {Object} - Returns an object with updated rules for each element
+ */
+export const decrementChoiceIds = ({
+  formElements,
+  choiceId,
+}: {
+  formElements: FormElement[];
+  choiceId: string;
+}) => {
+  // Create an object to store the updated rules
+  const updatedRules: Record<string, ConditionalRule[]> = {};
+
+  const elementIds = getElementIdsWithChoiceIdParent({ formElements, choiceId });
+
+  elementIds.forEach((elementId) => {
+    // Find the form element that matches the elementId
+    const element = formElements.filter((element) => String(element.id) === elementId)[0];
+
+    // Get the conditional rules for the element
+    const elementRules = element.properties.conditionalRules;
+
+    if (!elementRules) return;
+
+    // Store existing rules are outside the choice range
+    // i.e. if the choiceId is "1.0" and the rule is "2.0", "2.1", "3.1" etc...
+    // we want leave 2.0 out of the array we're going to adjust
+    const outsideRange = excludeRulesOutsideParent(elementRules, choiceId);
+
+    // Store existing rules that are in the choice parent range
+    let insideParentRangeChoiceIds = filterRulesWithChoiceIdParent(elementRules, choiceId);
+
+    if (insideParentRangeChoiceIds.length < 1) {
+      updatedRules[elementId] = elementRules;
+      return;
+    }
+
+    // Remove the choiceId from the rules before we adjust them
+    insideParentRangeChoiceIds = removeChoiceIdFromRules(choiceId, insideParentRangeChoiceIds);
+
+    const aboveRangeChoiceIds = filterOutRulesBelowChoiceId(insideParentRangeChoiceIds, choiceId);
+
+    // Store choiceIds that are in the range but below the choiceId
+    const insideBelowRangeChoiceIds = diffAboveRange(
+      insideParentRangeChoiceIds,
+      aboveRangeChoiceIds
+    );
+
+    const adjustedRules = decrementChoiceIdIndexes(aboveRangeChoiceIds);
+
+    // Merge the untouched rules with the adjusted rules
+    let mergedRules = [...insideBelowRangeChoiceIds, ...adjustedRules, ...outsideRange];
+
+    // Remove duplicate rules
+    mergedRules = removeDuplicateChoiceIds(mergedRules);
+
+    if (mergedRules.length > 0) {
+      updatedRules[elementId] = mergedRules;
+    } else {
+      updatedRules[elementId] = [];
+    }
+  });
+
+  // We should now have updated and re-indexed rules for each element
+  return updatedRules;
+};
+
+/**
  * @param elements - The form elements to search.
  * @param rules - The rules to search
  * @returns {Array} - Returns an array of parentIds from the rules
