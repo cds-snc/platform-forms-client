@@ -42,7 +42,7 @@ export const Header = ({ context = "default", className }: HeaderParams) => {
       }
     }
     fetchBannerData();
-  }, []);
+  }, [language]);
 
   const paddingTop = isBannerEnabled ? "py-0" : "py-2";
 
