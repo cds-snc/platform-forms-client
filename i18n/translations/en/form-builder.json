@@ -884,9 +884,9 @@
     "questionTitle": "Question:",
     "pageTitle": "Page:",
     "translateTitle": "Page title",
-    "addRule": "Add rule",
+    "addRule": "Add branching rule",
     "saveRule": "Save",
-    "saveNote": "Adding branches deactivates the linear flow that links form pages.",
+    "saveNote": "Branches deactivate the automatic linear flow that would link form pages.",
     "resetRules": "Reset to linear flow",
     "resetRulesHelp": "Reset help",
     "resetRulesDescription": "This will remove branching logic and reset the progression between pages to a simple linear flow, overriding any existing rules that were applied.",
@@ -912,8 +912,8 @@
     },
     "actionsSaved": "Actions saved",
     "legend": {
-      "page": "To change how pages are ordered and connected",
-      "option": "To take a specific path depending on a selected option"
+      "page": "To change how pages are ordered and connected.",
+      "option": "To take a specific path depending on a selected option."
     },
     "exit": {
       "convertText": "Convert to:",
@@ -931,7 +931,7 @@
       }
     },
     "tryitout": {
-      "button": "Have a complex form? Try branching instead +",
+      "button": "Complex form? Try branching instead +",
       "text": "<p class='mb-4'>Use branching to route people filling out the form toward different pages based on their answers.</p> <p> Visualize the form flow and configure branches in the Branching tab of the form set-up panel.</p>",
       "open": "Go to Branching"
     },
@@ -991,7 +991,7 @@
       "emptyFormElement": "Empty form question element",
       "keyboardNav": {
         "label": "Keyboard shortcuts",
-        "body": "<p className=\"mb-4\">Navigate the questions and pages using the arrow keys.</p><p><strong>Drag and drop:</strong></p>\n<ul><li>control + D to pick up an item</li><li>arrow keys to drag the item</li><li>enter key to drop the item</li></ul>"
+        "body": "<p className=\"mb-4\">Navigate the questions and pages using the arrow keys.</p><p><strong>Drag and drop:</strong></p>\n<ul><li>control + D to pick up an item</li><li>Arrow keys to drag the item</li><li>Enter key to drop the item</li></ul>"
       }
     },
     "confirmDeleteGroup": {
