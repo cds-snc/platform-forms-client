@@ -1,6 +1,4 @@
-# Accord sur les niveaux de service
-
-Version 2
+# Accord sur les niveaux de services
 
 Formulaires GC est un service infonuagique créé et exploité par le Service numérique canadien (SNC) au sein d'[Emploi et Développement social Canada (EDSC)](https://www.canada.ca/fr/emploi-developpement-social.html). Ce service permet aux ministères et organismes du gouvernement fédéral canadien de créer et de publier des formulaires hébergés par le SNC.
 
