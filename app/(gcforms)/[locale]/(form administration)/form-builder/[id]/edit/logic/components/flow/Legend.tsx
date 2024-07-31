@@ -13,7 +13,7 @@ export const Legend = async ({ lang }: { lang: Language }) => {
         </span>
         <span className="inline-block">{t("logic.legend.option")}</span>
       </div>
-      <div className="text-base italic">
+      <div className="flex text-base italic">
         <span className="inline-block pr-4">
           <LogicSectionArrowIcon />
         </span>
