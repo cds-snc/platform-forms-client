@@ -884,7 +884,7 @@
     "questionTitle": "Question:",
     "pageTitle": "Page:",
     "translateTitle": "Page title",
-    "addRule": "Add branching rule",
+    "addRule": "Add branch",
     "saveRule": "Save",
     "saveNote": "Branches deactivate the automatic linear flow that would link form pages.",
     "resetRules": "Reset to linear flow",
@@ -1001,8 +1001,8 @@
       "delete": "Delete page and its contents"
     },
     "confirmMoveGroup": {
-      "title": "Overwrite rules?",
-      "description": " It seems the items you are moving have conditional rules applied. Would you like to overwrite those rules and apply linear autoflow?",
+      "title": "Overwrite branching rules?",
+      "description": " It seems the items you are moving have display or branching rules applied. Would you like to overwrite those rules and apply a linear autoflow?",
       "cancel": "No, move without changing rules",
       "confirm": "Yes, apply linear autoflow"
     }

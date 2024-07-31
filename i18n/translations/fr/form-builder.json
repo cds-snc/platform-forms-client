@@ -884,7 +884,7 @@
     "questionTitle": "Question :",
     "pageTitle": "Page :",
     "translateTitle": "Titre de la page",
-    "addRule": "Ajouter une règle d'embranchement",
+    "addRule": "Ajouter un embranchement",
     "saveRule": "Enregistrer",
     "saveNote": "Les embranchements désactivent l'enchaînement linéaire automatique entre les pages du formulaire.",
     "resetRules": "Réinitialiser l'enchaînement linéaire",
@@ -1001,8 +1001,8 @@
       "delete": "Supprimer la page et son contenu"
     },
     "confirmMoveGroup": {
-      "title": "Remplacer les règles?",
-      "description": " Il semble que des éléments déplacés comportent des règles d'affichage. Souhaitez-vous remplacer ces règles par un enchaînement linéaire automatique?",
+      "title": "Remplacer la logique d'embranchement?",
+      "description": " Il semble que des éléments déplacés comportent des règles d'affichage ou d'embranchement. Souhaitez-vous remplacer ces règles par un enchaînement linéaire automatique?",
       "cancel": "Non, déplacer sans modifier les règles",
       "confirm": "Oui, appliquer un enchaînement linéaire"
     }
