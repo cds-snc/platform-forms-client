@@ -11,7 +11,7 @@ export const getStartLabels = () => {
 };
 
 export const getEndLabels = () => {
-  const { t } = customTranslate("my-forms");
+  const { t } = customTranslate("common");
   return {
     en: t("logic.end", { lng: "en" }),
     fr: t("logic.end", { lng: "fr" }),
@@ -19,7 +19,7 @@ export const getEndLabels = () => {
 };
 
 export const getReviewLabels = () => {
-  const { t } = customTranslate("my-forms");
+  const { t } = customTranslate("common");
   return {
     en: t("logic.review", { lng: "en" }),
     fr: t("logic.review", { lng: "fr" }),
@@ -28,7 +28,7 @@ export const getReviewLabels = () => {
 
 // i18n
 export const getStartElements = (lang: Language = "en") => {
-  const { t } = customTranslate("my-forms");
+  const { t } = customTranslate("common");
   return [
     {
       data: t("logic.introduction", { lng: lang }),
@@ -43,7 +43,7 @@ export const getStartElements = (lang: Language = "en") => {
 
 // i18n
 export const getEndNode = (lang: Language = "en") => {
-  const { t } = customTranslate("my-forms");
+  const { t } = customTranslate("common");
   return {
     id: "end",
     data: {
@@ -62,7 +62,7 @@ export const getEndNode = (lang: Language = "en") => {
 
 // i18n
 export const getReviewNode = (lang: Language = "en") => {
-  const { t } = customTranslate("my-forms");
+  const { t } = customTranslate("common");
   return {
     id: "review",
     data: {
