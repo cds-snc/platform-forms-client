@@ -26,6 +26,7 @@ import { safeJSONParse } from "@lib/utils";
 import { ErrorSaving } from "@formBuilder/components/shared/ErrorSaving";
 import { toast } from "@formBuilder/components/shared";
 import { defaultForm } from "@lib/store/defaults";
+import { showReviewPage } from "@lib/utils/form-builder/showReviewPage";
 
 export const Preview = ({
   disableSubmit = true,
@@ -93,6 +94,8 @@ export const Preview = ({
   const isPastClosingDate = useIsFormClosed();
 
   const hasHydrated = useRehydrate();
+
+  const isShowReviewPage = showReviewPage(formRecord.form);
 
   if (isPastClosingDate) {
     return (
@@ -205,7 +208,9 @@ export const Preview = ({
                             fallBack={() => {
                               return (
                                 <>
-                                  {allowGrouping && <BackButton language={language} />}
+                                  {allowGrouping && isShowReviewPage && (
+                                    <BackButton language={language} />
+                                  )}
                                   <Button
                                     type="submit"
                                     id="SubmitButton"
