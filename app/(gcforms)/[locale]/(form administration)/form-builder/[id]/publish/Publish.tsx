@@ -19,6 +19,7 @@ import { ErrorSaving } from "@formBuilder/components/shared/ErrorSaving";
 import { FormServerErrorCodes } from "@lib/types/form-builder-types";
 import { PrePublishDialog } from "./PrePublishDialog";
 import { FormProperties } from "@lib/types";
+import { useGroupStore } from "@formBuilder/components/shared/right-panel/treeview/store/useGroupStore";
 
 export const Publish = ({ id }: { id: string }) => {
   const { t, i18n } = useTranslation("form-builder");
@@ -42,6 +43,7 @@ export const Publish = ({ id }: { id: string }) => {
     formPurpose,
     getDeliveryOption,
     securityAttribute,
+    getGroupsEnabled,
   } = useTemplateStore((s) => ({
     id: s.id,
     setId: s.setId,
@@ -51,11 +53,14 @@ export const Publish = ({ id }: { id: string }) => {
     formPurpose: s.formPurpose,
     getDeliveryOption: s.getDeliveryOption,
     securityAttribute: s.securityAttribute,
+    getGroupsEnabled: s.getGroupsEnabled,
   }));
 
   if (storeId && storeId !== id) {
     id = storeId;
   }
+
+  const setGroupId = useGroupStore((state) => state.setId);
 
   const securityOption: ClassificationOption | undefined = classificationOptions.find(
     (item) => item.value === securityAttribute
@@ -178,6 +183,27 @@ export const Publish = ({ id }: { id: string }) => {
     />
   );
 
+  const routeToPrivacy = () => {
+    if (getGroupsEnabled()) {
+      setGroupId("start");
+    }
+    router.push(`/${i18n.language}/form-builder/${id}/edit#privacy-text`);
+  };
+
+  const routeToFormTitle = () => {
+    if (getGroupsEnabled()) {
+      setGroupId("start");
+    }
+    router.push(`/${i18n.language}/form-builder/${id}/edit#formTitle`);
+  };
+
+  const routeToConfirmation = () => {
+    if (getGroupsEnabled()) {
+      setGroupId("end");
+    }
+    router.push(`/${i18n.language}/form-builder/${id}/edit#confirmation-text`);
+  };
+
   return (
     <div>
       {!userCanPublish && error && hasHydrated && (
@@ -213,7 +239,7 @@ export const Publish = ({ id }: { id: string }) => {
       )}
 
       {userCanPublish && (
-        <Alert.Warning className="my-5">
+        <Alert.Warning className="my-5 max-w-4xl">
           <Alert.Title headingTag="h2">{t("logicPublishWarning.header")}</Alert.Title>
           <p className="mb-5">{t("logicPublishWarning.text")}</p>
         </Alert.Warning>
@@ -222,7 +248,9 @@ export const Publish = ({ id }: { id: string }) => {
       <ul className="list-none p-0">
         <li className="my-4">
           {hasHydrated ? <Icon checked={title} /> : IconLoading}
-          <Link href={`/${i18n.language}/form-builder/${id}/edit#formTitle`}>{t("formTitle")}</Link>
+          <Button theme={"link"} onClick={routeToFormTitle}>
+            {t("formTitle")}
+          </Button>
         </li>
         <li className="my-4">
           {hasHydrated ? <Icon checked={questions} /> : IconLoading}
@@ -230,15 +258,15 @@ export const Publish = ({ id }: { id: string }) => {
         </li>
         <li className="my-4">
           {hasHydrated ? <Icon checked={privacyPolicy} /> : IconLoading}
-          <Link href={`/${i18n.language}/form-builder/${id}/edit#privacy-text`}>
+          <Button theme={"link"} onClick={routeToPrivacy}>
             {t("privacyStatement")}
-          </Link>
+          </Button>
         </li>
         <li className="my-4">
           {hasHydrated ? <Icon checked={confirmationMessage !== undefined} /> : IconLoading}
-          <Link href={`/${i18n.language}/form-builder/${id}/edit#confirmation-text`}>
+          <Button theme={"link"} onClick={routeToConfirmation}>
             {t("formConfirmationMessage")}
-          </Link>
+          </Button>
         </li>
         <li className="my-4">
           {hasHydrated ? <Icon checked={translate} /> : IconLoading}
