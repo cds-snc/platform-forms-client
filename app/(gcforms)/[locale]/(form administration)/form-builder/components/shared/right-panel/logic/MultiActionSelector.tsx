@@ -42,7 +42,7 @@ export const GroupAndChoiceSelect = ({
   removeSelector: (index: number) => void;
   nextActions: NextActionRule[];
 }) => {
-  const { t } = useTranslation("form-builder");
+  const { t } = useTranslation(["form-builder", "common"]);
   const { language } = useTemplateStore((s) => ({
     language: s.translationLanguagePriority,
   }));
@@ -61,7 +61,7 @@ export const GroupAndChoiceSelect = ({
     const item = formGroups[key];
     if (Object.values(LockedSections).includes(key as LockedSections)) {
       return {
-        label: t(`form-builder:logic.${key}`),
+        label: t(`logic.${key}`),
         value: key,
       };
     }

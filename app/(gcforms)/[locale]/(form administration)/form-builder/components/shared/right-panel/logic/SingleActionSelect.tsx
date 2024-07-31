@@ -34,7 +34,7 @@ export const SingleActionSelect = ({
   const id = useGroupStore((state) => state.id);
   const findParentGroup = useGroupStore((state) => state.findParentGroup);
   const setGroupNextAction = useGroupStore((state) => state.setGroupNextAction);
-  const { t } = useTranslation("form-builder");
+  const { t } = useTranslation(["form-builder", "common"]);
   const currentGroup = id;
   const [nextActionId, setNextActionId] = useState(nextAction);
 
@@ -43,7 +43,7 @@ export const SingleActionSelect = ({
     const item = formGroups[key];
     if (Object.values(LockedSections).includes(key as LockedSections)) {
       return {
-        label: t(`form-builder:logic.${key}`),
+        label: t(`logic.${key}`),
         value: key,
       };
     }
