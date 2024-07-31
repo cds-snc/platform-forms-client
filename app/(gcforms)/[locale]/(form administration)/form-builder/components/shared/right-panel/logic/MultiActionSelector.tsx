@@ -204,7 +204,7 @@ export const MultiActionSelector = ({
 
   return (
     <>
-      <div className="flex justify-between border-b-2 border-black bg-gray-50 p-3 align-middle">
+      <div className="sticky top-0 flex justify-between border-b-2 border-black bg-gray-50 p-3 align-middle">
         <div>
           <SectionName lang={lang} sectionName={sectionName} />
           <h3 className="mb-6 ml-2 mt-2 block text-sm font-normal">

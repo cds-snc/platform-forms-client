@@ -213,6 +213,14 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
             </RichText>
           )}
 
+          {/* Policy shows before form elements when groups are on */}
+          {isGroupsCheck && showIntro && (
+            <RichText>
+              {form.privacyPolicy &&
+                form.privacyPolicy[props.language == "en" ? "descriptionEn" : "descriptionFr"]}
+            </RichText>
+          )}
+
           <form
             id="form"
             data-testid="form"
@@ -242,7 +250,8 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
 
             {children}
 
-            {showIntro && (
+            {/* Policy shows after form elements when groups off */}
+            {!isGroupsCheck && showIntro && (
               <RichText>
                 {form.privacyPolicy &&
                   form.privacyPolicy[props.language == "en" ? "descriptionEn" : "descriptionFr"]}
