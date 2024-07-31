@@ -126,9 +126,9 @@ export const ModalFormRules = ({
           </Button>
           <div
             id="viewLogicDetails"
-            className={`border-x-4 border-dark-gray px-5 ${showLogicDetails ? "" : "hidden"}`}
+            className={`border-x-4 border-gray-800 px-5 ${showLogicDetails ? "" : "hidden"}`}
           >
-            <div className="mb-4 mt-4">
+            <div className="my-4">
               <Markdown options={{ forceBlock: true }}>{t("logic.tryitout.text")}</Markdown>
             </div>
             <Button theme={"primary"} onClick={tryLogicView}>
