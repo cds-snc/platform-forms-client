@@ -19,6 +19,7 @@ import { useGroupStore } from "./treeview/store/useGroupStore";
 import { SkipLinkReusable } from "@clientComponents/globals/SkipLinkReusable";
 import { Language } from "@lib/types/form-builder-types";
 import { useLiveMessage } from "@lib/hooks/useLiveMessage";
+import { checkFlag } from "@formBuilder/actions";
 
 const TabButton = ({
   text,
@@ -91,7 +92,15 @@ export const RightPanel = ({ id, lang }: { id: string; lang: Language }) => {
   }
 
   const [isIntersecting, setIsIntersecting] = useState(false);
-  const isBannerEnabled = t("campaignBanner.enabled");
+  const [isBannerEnabled, setBannerData] = useState(false);
+
+  useEffect(() => {
+    async function fetchBannerData() {
+      const isEnabled = await checkFlag("campaign");
+      setBannerData(isEnabled);
+    }
+    fetchBannerData();
+  }, []);
 
   //If Intersecting fixed-20 else fixed-0, but if BannerEnabled fixed-40 else fixed-20
   const fixedRange = isBannerEnabled
