@@ -428,6 +428,7 @@ export const getElementIdsAsNumber = (elements: string[]) => {
   return elements.map((element) => Number(element));
 };
 
+// TODO: rename to filterResponsesByShownElements
 export const filterValuesByShownElements = (values: Responses, elementsShown: FormElement[]) => {
   if (!values || !Array.isArray(elementsShown)) {
     return values;
