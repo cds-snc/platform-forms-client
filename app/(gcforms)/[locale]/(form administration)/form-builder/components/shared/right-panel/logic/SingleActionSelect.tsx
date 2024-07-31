@@ -10,8 +10,7 @@ import { useTranslation } from "@i18n/client";
 import { SaveNote } from "./SaveNote";
 import { toast } from "@formBuilder/components/shared/Toast";
 import { Checkbox } from "@formBuilder/components/shared";
-import { getReviewLabels } from "@lib/utils/form-builder/i18nHelpers";
-import { Language } from "@lib/types/form-builder-types";
+import { LockedSections } from "../treeview/types";
 
 const ExitIcon = () => {
   return (
@@ -26,11 +25,9 @@ const ExitIcon = () => {
 
 export const SingleActionSelect = ({
   item,
-  lang,
   nextAction = "review",
 }: {
   item?: FormElement | null;
-  lang: Language;
   nextAction: string | undefined;
 }) => {
   const { flow } = useFlowRef();
@@ -44,13 +41,14 @@ export const SingleActionSelect = ({
   const formGroups: GroupsType = useTemplateStore((s) => s.form.groups) || {};
   let groupItems = Object.keys(formGroups).map((key) => {
     const item = formGroups[key];
-    let label = item.name;
-
-    if (key === "review") {
-      label = getReviewLabels()[lang];
+    if (Object.values(LockedSections).includes(key as LockedSections)) {
+      return {
+        label: t(`form-builder:logic.${key}`),
+        value: key,
+      };
     }
 
-    return { label, value: key };
+    return { label: item.name, value: key };
   });
 
   // Filter out the current group
