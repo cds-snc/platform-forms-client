@@ -210,6 +210,7 @@ const ControlledTree: ForwardRefRenderFunction<unknown, TreeDataProviderProps> =
                     });
 
                   deleteGroup(String(item.index));
+                  autoFlowAll();
                   setOpenConfirmDeleteDialog(false);
                   toast.success(
                     <>
