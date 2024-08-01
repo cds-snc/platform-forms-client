@@ -53,7 +53,7 @@ const DebugNamedGroupLayout = () => {
   const groups = useTemplateStore((s) => s.form.groups);
 
   if (!groups) {
-    return null;
+    return "no groups";
   }
   const groupLayoutNames =
     groupsLayout && groupsLayout.length >= 1
@@ -210,6 +210,7 @@ const ControlledTree: ForwardRefRenderFunction<unknown, TreeDataProviderProps> =
                     });
 
                   deleteGroup(String(item.index));
+                  autoFlowAll();
                   setOpenConfirmDeleteDialog(false);
                   toast.success(
                     <>
