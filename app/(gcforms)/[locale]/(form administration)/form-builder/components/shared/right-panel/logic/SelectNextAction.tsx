@@ -43,7 +43,7 @@ export const SelectNextAction = ({
   if (!hasPages) {
     return (
       <>
-        <div className="flex justify-between border-b-2 border-black bg-gray-50 p-3 align-middle">
+        <div className="sticky top-0 z-10 flex justify-between border-b-2 border-black bg-gray-50 p-3 align-middle">
           <SectionName lang={lang} sectionName={sectionName} />
         </div>
         <div className="p-4">
@@ -80,7 +80,6 @@ export const SelectNextAction = ({
         {selectedGroupNextActions === "exit" && (
           <div className="bg-gray-50 p-3">
             <SingleActionSelect
-              lang={lang}
               key={`single-action-select-${selectedGroupId}`}
               nextAction={selectedGroupNextActions || "end"}
             />
@@ -93,7 +92,6 @@ export const SelectNextAction = ({
               <SectionName lang={lang} sectionName={sectionName} />
             </div>
             <SingleActionSelect
-              lang={lang}
               key={`single-action-select-${selectedGroupId}`}
               nextAction={selectedGroupNextActions || "end"}
             />
@@ -115,7 +113,7 @@ export const SelectNextAction = ({
 
   // If we have an item a question is selected
   return (
-    <div>
+    <div className="m-0 h-[calc(100vh-150px)] w-full overflow-scroll">
       {typesWithOptions.includes(item.type) ? (
         /* 
           If the item (form element) has options 

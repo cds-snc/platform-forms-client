@@ -1,4 +1,4 @@
-import { FormElement, Responses } from "@lib/types";
+import { FormElement, Response, Responses } from "@lib/types";
 import { PublicFormRecord, ConditionalRule } from "@lib/types";
 
 export type Group = {
@@ -428,14 +428,16 @@ export const getElementIdsAsNumber = (elements: string[]) => {
   return elements.map((element) => Number(element));
 };
 
+// TODO: rename to filterResponsesByShownElements
 export const filterValuesByShownElements = (values: Responses, elementsShown: FormElement[]) => {
   if (!values || !Array.isArray(elementsShown)) {
     return values;
   }
-  const filteredValues: { [key: string]: string } = {};
+  const filteredValues: { [key: string]: Response } = {};
   Object.keys(values).forEach((key) => {
     if (elementsShown.find((el) => el.id === Number(key))) {
-      filteredValues[key] = String(values[key]);
+      // Note: want to keep original value type (e.g. Checkbox=Array) or Formik may get confused
+      filteredValues[key] = values[key];
     } else {
       filteredValues[key] = "";
     }

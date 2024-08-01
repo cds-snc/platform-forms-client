@@ -20,6 +20,13 @@ import { LockedSections } from "@formBuilder/components/shared/right-panel/treev
 import { BackButton } from "@formBuilder/[id]/preview/BackButton";
 import { Language } from "@lib/types/form-builder-types";
 import { BackButtonGroup } from "../BackButtonGroup/BackButtonGroup";
+import {
+  removeFormContextValues,
+  getInputHistoryValues,
+} from "@lib/utils/form-builder/groupsHistory";
+import { filterShownElements, filterValuesByShownElements } from "@lib/formContext";
+import { formHasGroups } from "@lib/utils/form-builder/formHasGroups";
+import { showReviewPage } from "@lib/utils/form-builder/showReviewPage";
 
 interface SubmitButtonProps {
   numberOfRequiredQuestions: number;
@@ -149,10 +156,12 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
 
   const { currentGroup, groupsCheck, getGroupTitle } = useGCFormsContext();
   const isGroupsCheck = groupsCheck(props.allowGrouping);
+  const isShowReviewPage = showReviewPage(form);
   const showIntro = isGroupsCheck ? currentGroup === LockedSections.START : true;
 
   const { t } = useTranslation();
 
+  // Used to set any values we'd like added for use in the below withFormik handleSubmit().
   useFormValuesChanged();
 
   const errorList = props.errors ? getErrorList(props) : null;
@@ -213,6 +222,14 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
             </RichText>
           )}
 
+          {/* Policy shows before form elements when groups are on */}
+          {isGroupsCheck && showIntro && (
+            <RichText>
+              {form.privacyPolicy &&
+                form.privacyPolicy[props.language == "en" ? "descriptionEn" : "descriptionFr"]}
+            </RichText>
+          )}
+
           <form
             id="form"
             data-testid="form"
@@ -225,7 +242,7 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
             onSubmit={(e) => {
               e.preventDefault();
               // For groups enabled forms only allow submitting on the Review page
-              if (isGroupsCheck && currentGroup !== LockedSections.REVIEW) {
+              if (isGroupsCheck && isShowReviewPage && currentGroup !== LockedSections.REVIEW) {
                 return;
               }
               handleSubmit(e);
@@ -235,6 +252,7 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
             aria-live="polite"
           >
             {isGroupsCheck &&
+              isShowReviewPage &&
               currentGroup !== LockedSections.REVIEW &&
               currentGroup !== LockedSections.START && (
                 <h2 className="pb-8">{getGroupTitle(currentGroup, language as Language)}</h2>
@@ -242,28 +260,33 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
 
             {children}
 
-            {showIntro && (
+            {/* Policy shows after form elements when groups off */}
+            {!isGroupsCheck && showIntro && (
               <RichText>
                 {form.privacyPolicy &&
                   form.privacyPolicy[props.language == "en" ? "descriptionEn" : "descriptionFr"]}
               </RichText>
             )}
 
-            {isGroupsCheck && currentGroup === LockedSections.REVIEW && (
+            {isGroupsCheck && isShowReviewPage && currentGroup === LockedSections.REVIEW && (
               <Review language={language as Language} />
             )}
 
             <div className="flex">
-              {isGroupsCheck && <BackButtonGroup language={language as Language} />}
+              {isGroupsCheck && isShowReviewPage && (
+                <BackButtonGroup language={language as Language} />
+              )}
               {props.renderSubmit ? (
                 props.renderSubmit({
                   validateForm: props.validateForm,
                   fallBack: () => {
                     return (
                       <div>
-                        {isGroupsCheck && currentGroup === LockedSections.REVIEW && (
-                          <BackButton language={language as Language} />
-                        )}
+                        {isGroupsCheck &&
+                          isShowReviewPage &&
+                          currentGroup === LockedSections.REVIEW && (
+                            <BackButton language={language as Language} />
+                          )}
                         <div className="inline-block">
                           <SubmitButton
                             numberOfRequiredQuestions={numberOfRequiredQuestions}
@@ -305,6 +328,8 @@ interface FormProps {
   children?: (JSX.Element | undefined)[] | null;
   t: TFunction;
   allowGrouping?: boolean | undefined;
+  groupHistory?: string[];
+  matchedIds?: string[];
 }
 
 /**
@@ -324,10 +349,35 @@ export const Form = withFormik<FormProps, Responses>({
   validate: (values, props) => validateOnSubmit(values, props),
 
   handleSubmit: async (values, formikBag) => {
+    const getValuesForConditionalLogic = () => {
+      const inputHistoryValues = getInputHistoryValues(
+        values,
+        values.groupHistory as string[],
+        formikBag.props.formRecord.form.groups
+      );
+      const shownElements = filterShownElements(
+        formikBag.props.formRecord.form.elements,
+        values.matchedIds as string[]
+      );
+      return filterValuesByShownElements(inputHistoryValues, shownElements);
+    };
+
     // Needed so the Loader is displayed
     formikBag.setStatus("submitting");
     try {
-      const result = await submitForm(values, formikBag.props.language, formikBag.props.formRecord);
+      const hasGroups =
+        formHasGroups(formikBag.props.formRecord.form) && formikBag.props.allowGrouping;
+      const hasShowHideRules = (values.matchedIds as string[])?.length > 0;
+      const formValues =
+        hasGroups && hasShowHideRules
+          ? removeFormContextValues(getValuesForConditionalLogic())
+          : removeFormContextValues(values);
+
+      const result = await submitForm(
+        formValues,
+        formikBag.props.language,
+        formikBag.props.formRecord
+      );
       if (result.error) {
         formikBag.setStatus("Error");
       } else {

@@ -21,6 +21,7 @@ import { SaveNote } from "./SaveNote";
 import { toast } from "@formBuilder/components/shared/Toast";
 import { SectionName } from "./SectionName";
 import { Language } from "@lib/types/form-builder-types";
+import { LockedSections } from "../treeview/types";
 
 export const GroupAndChoiceSelect = ({
   groupId,
@@ -41,7 +42,7 @@ export const GroupAndChoiceSelect = ({
   removeSelector: (index: number) => void;
   nextActions: NextActionRule[];
 }) => {
-  const { t } = useTranslation("form-builder");
+  const { t } = useTranslation(["form-builder", "common"]);
   const { language } = useTemplateStore((s) => ({
     language: s.translationLanguagePriority,
   }));
@@ -56,9 +57,14 @@ export const GroupAndChoiceSelect = ({
 
   // Get the element associated with the parent question
   const choiceElement = getElement(Number(choiceParentQuestion));
-
   let groupItems = Object.keys(formGroups).map((key) => {
     const item = formGroups[key];
+    if (Object.values(LockedSections).includes(key as LockedSections)) {
+      return {
+        label: t(`logic.${key}`),
+        value: key,
+      };
+    }
     return { label: item.name, value: key };
   });
 
@@ -204,7 +210,7 @@ export const MultiActionSelector = ({
 
   return (
     <>
-      <div className="flex justify-between border-b-2 border-black bg-gray-50 p-3 align-middle">
+      <div className="sticky top-0 flex justify-between border-b-2 border-black bg-gray-50 p-3 align-middle">
         <div>
           <SectionName lang={lang} sectionName={sectionName} />
           <h3 className="mb-6 ml-2 mt-2 block text-sm font-normal">

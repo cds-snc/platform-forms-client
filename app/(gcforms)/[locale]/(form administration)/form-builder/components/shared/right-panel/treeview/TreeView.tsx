@@ -210,6 +210,7 @@ const ControlledTree: ForwardRefRenderFunction<unknown, TreeDataProviderProps> =
                     });
 
                   deleteGroup(String(item.index));
+                  autoFlowAll();
                   setOpenConfirmDeleteDialog(false);
                   toast.success(
                     <>
@@ -332,7 +333,7 @@ const ControlledTree: ForwardRefRenderFunction<unknown, TreeDataProviderProps> =
           setSelectedItems(items);
         }}
       >
-        <div className="flex justify-between border-b-2 border-black bg-gray-50 p-3 align-middle">
+        <div className="sticky top-0 z-10 flex justify-between border-b-2 border-black bg-gray-50 p-3 align-middle">
           <label className="flex items-center hover:fill-white hover:underline">
             <span className="mr-2 pl-3 text-sm">{newSectionText}</span>
             <Button
