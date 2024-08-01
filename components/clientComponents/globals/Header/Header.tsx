@@ -14,8 +14,6 @@ import { LiveMessage } from "@lib/hooks/useLiveMessage";
 import Markdown from "markdown-to-jsx";
 import { checkFlag, getCampaignData } from "@formBuilder/actions";
 
-import { checkFlag } from "@formBuilder/actions";
-
 type HeaderParams = {
   context?: "admin" | "formBuilder" | "default";
   className?: string;
@@ -45,7 +43,6 @@ export const Header = ({ context = "default", className }: HeaderParams) => {
     }
     fetchBannerData();
   }, [language]);
-
 
   const paddingTop = isBannerEnabled ? "py-0" : "py-2";
 
