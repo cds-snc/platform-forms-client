@@ -53,7 +53,7 @@ const DebugNamedGroupLayout = () => {
   const groups = useTemplateStore((s) => s.form.groups);
 
   if (!groups) {
-    return "no groups";
+    return null;
   }
   const groupLayoutNames =
     groupsLayout && groupsLayout.length >= 1
