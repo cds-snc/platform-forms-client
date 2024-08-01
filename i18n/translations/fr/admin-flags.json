@@ -25,6 +25,10 @@
     "conditionalLogic": {
       "title": "Logique conditionnelle",
       "description": "Activer la logique conditionnelle et le panneau de droite"
+    },
+    "zitadelAuth": {
+      "title": "AuthenticationZitadel",
+      "description": "Authentification Zitadel pour API"
     }
   }
 }
