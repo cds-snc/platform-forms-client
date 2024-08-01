@@ -210,6 +210,18 @@ const ControlledTree: ForwardRefRenderFunction<unknown, TreeDataProviderProps> =
                     });
 
                   deleteGroup(String(item.index));
+
+                  // When deleting a group, we need to select the previous group
+                  const pages = Object.keys(items);
+                  const itemIndex = pages.indexOf(String(item.index));
+                  const previousItem = itemIndex > 0 ? pages[itemIndex - 1] : "start";
+                  setSelectedItems([previousItem]);
+                  setExpandedItems([previousItem]);
+                  setId(previousItem);
+
+                  // And update the groups layout
+                  await updateGroupsLayout();
+
                   autoFlowAll();
                   setOpenConfirmDeleteDialog(false);
                   toast.success(
