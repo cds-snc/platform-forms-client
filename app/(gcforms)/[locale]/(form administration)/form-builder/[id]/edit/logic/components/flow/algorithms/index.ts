@@ -14,6 +14,7 @@ export type Direction = "TB" | "LR" | "RL" | "BT";
 export type LayoutAlgorithmOptions = {
   direction: Direction;
   spacing: [number, number];
+  showReview: boolean;
 };
 
 export type LayoutAlgorithm = (
