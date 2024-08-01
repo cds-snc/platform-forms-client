@@ -20,6 +20,7 @@ import { LockedSections } from "@formBuilder/components/shared/right-panel/treev
 import { BackButton } from "@formBuilder/[id]/preview/BackButton";
 import { Language } from "@lib/types/form-builder-types";
 import { BackButtonGroup } from "../BackButtonGroup/BackButtonGroup";
+import { showReviewPage } from "@lib/utils/form-builder/showReviewPage";
 
 interface SubmitButtonProps {
   numberOfRequiredQuestions: number;
@@ -149,6 +150,7 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
 
   const { currentGroup, groupsCheck, getGroupTitle } = useGCFormsContext();
   const isGroupsCheck = groupsCheck(props.allowGrouping);
+  const isShowReviewPage = showReviewPage(form);
   const showIntro = isGroupsCheck ? currentGroup === LockedSections.START : true;
 
   const { t } = useTranslation();
@@ -213,6 +215,14 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
             </RichText>
           )}
 
+          {/* Policy shows before form elements when groups are on */}
+          {isGroupsCheck && showIntro && (
+            <RichText>
+              {form.privacyPolicy &&
+                form.privacyPolicy[props.language == "en" ? "descriptionEn" : "descriptionFr"]}
+            </RichText>
+          )}
+
           <form
             id="form"
             data-testid="form"
@@ -225,7 +235,7 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
             onSubmit={(e) => {
               e.preventDefault();
               // For groups enabled forms only allow submitting on the Review page
-              if (isGroupsCheck && currentGroup !== LockedSections.REVIEW) {
+              if (isGroupsCheck && isShowReviewPage && currentGroup !== LockedSections.REVIEW) {
                 return;
               }
               handleSubmit(e);
@@ -235,6 +245,7 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
             aria-live="polite"
           >
             {isGroupsCheck &&
+              isShowReviewPage &&
               currentGroup !== LockedSections.REVIEW &&
               currentGroup !== LockedSections.START && (
                 <h2 className="pb-8">{getGroupTitle(currentGroup, language as Language)}</h2>
@@ -242,28 +253,33 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
 
             {children}
 
-            {showIntro && (
+            {/* Policy shows after form elements when groups off */}
+            {!isGroupsCheck && showIntro && (
               <RichText>
                 {form.privacyPolicy &&
                   form.privacyPolicy[props.language == "en" ? "descriptionEn" : "descriptionFr"]}
               </RichText>
             )}
 
-            {isGroupsCheck && currentGroup === LockedSections.REVIEW && (
+            {isGroupsCheck && isShowReviewPage && currentGroup === LockedSections.REVIEW && (
               <Review language={language as Language} />
             )}
 
             <div className="flex">
-              {isGroupsCheck && <BackButtonGroup language={language as Language} />}
+              {isGroupsCheck && isShowReviewPage && (
+                <BackButtonGroup language={language as Language} />
+              )}
               {props.renderSubmit ? (
                 props.renderSubmit({
                   validateForm: props.validateForm,
                   fallBack: () => {
                     return (
                       <div>
-                        {isGroupsCheck && currentGroup === LockedSections.REVIEW && (
-                          <BackButton language={language as Language} />
-                        )}
+                        {isGroupsCheck &&
+                          isShowReviewPage &&
+                          currentGroup === LockedSections.REVIEW && (
+                            <BackButton language={language as Language} />
+                          )}
                         <div className="inline-block">
                           <SubmitButton
                             numberOfRequiredQuestions={numberOfRequiredQuestions}

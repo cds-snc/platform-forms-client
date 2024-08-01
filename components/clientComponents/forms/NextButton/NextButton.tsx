@@ -12,6 +12,7 @@ import { ArrowRightNav } from "@serverComponents/icons/ArrowRightNav";
 import { Language } from "@lib/types/form-builder-types";
 
 import { getLocalizedProperty } from "@lib/utils";
+import { showReviewPage } from "@lib/utils/form-builder/showReviewPage";
 
 export const NextButton = ({
   validateForm,
@@ -40,7 +41,8 @@ export const NextButton = ({
     !currentGroup ||
     currentGroup === LockedSections.REVIEW ||
     currentGroup === LockedSections.END ||
-    !hasNextAction(currentGroup)
+    !hasNextAction(currentGroup) ||
+    !showReviewPage(formRecord.form)
   ) {
     return fallBack ? fallBack() : <></>;
   }
