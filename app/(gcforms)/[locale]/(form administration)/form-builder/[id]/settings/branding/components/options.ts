@@ -161,4 +161,13 @@ export const options = [
     logoTitleEn: "Library and Archives Canada",
     logoTitleFr: "Bibliothèque et Archives Canada",
   },
+  {
+    name: "vac",
+    urlEn: "https://www.veterans.gc.ca/en",
+    urlFr: "https://www.veterans.gc.ca/fr",
+    logoEn: "/img/branding/vac-sig-en.svg",
+    logoFr: "/img/branding/vac-sig-fr.svg",
+    logoTitleEn: "Veterans Affairs Canada",
+    logoTitleFr: "Anciens Combattants Canada",
+  },
 ];

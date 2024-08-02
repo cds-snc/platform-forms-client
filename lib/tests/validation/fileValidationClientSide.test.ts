@@ -18,6 +18,7 @@ describe("File extension validator", () => {
     ["mp3", false],
     ["tar", false],
     ["zip", false],
+    ["xml", true],
   ])(`Should return true if file extension is valid (testing "%s")`, async (extension, isValid) => {
     expect(isFileExtensionValid(`file.${extension}`)).toBe(isValid);
   });

@@ -11,7 +11,7 @@ export const useUpdateGroupLayout = () => {
 
   const updateGroupsLayout = async () => {
     // Add a delay to ensure the tree from previous actions updates before this is called
-    sleep(3000);
+    await sleep(2);
 
     const rootItems = environment?.current?.items.root.children as string[];
 
