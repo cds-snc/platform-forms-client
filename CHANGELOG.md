@@ -5,6 +5,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.17.0](https://github.com/cds-snc/platform-forms-client/compare/v3.16.1...v3.17.0) (2024-08-02)
+
+
+### Features
+
+* add new file type to support SVG logo ([#4158](https://github.com/cds-snc/platform-forms-client/issues/4158)) ([f273961](https://github.com/cds-snc/platform-forms-client/commit/f27396110da41dc9b73cae55e5bcbde0f77f4a65))
+
 ## [3.16.1](https://github.com/cds-snc/platform-forms-client/compare/v3.16.0...v3.16.1) (2024-08-02)
 
 
