@@ -100,6 +100,7 @@ export const createTicket = async ({
       Authorization: "Basic " + btoa(username + ":" + password),
     },
     body: JSON.stringify(data),
+    signal: AbortSignal.timeout(5000), // 5 seconds timeout to make sure this operation is not blocking
   });
 
   if (response?.ok === false) {
