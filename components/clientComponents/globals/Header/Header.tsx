@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { useSession } from "next-auth/react";
 import Link from "next/link";
 import { useTranslation } from "@i18n/client";
@@ -12,6 +12,8 @@ import LanguageToggle from "./LanguageToggle";
 import { YourAccountDropdown } from "./YourAccountDropdown";
 import { LiveMessage } from "@lib/hooks/useLiveMessage";
 import Markdown from "markdown-to-jsx";
+
+import { checkFlag } from "@formBuilder/actions";
 
 type HeaderParams = {
   context?: "admin" | "formBuilder" | "default";
@@ -26,7 +28,27 @@ export const Header = ({ context = "default", className }: HeaderParams) => {
     i18n: { language },
   } = useTranslation(["common", "form-builder", "admin-login"]);
 
-  const isBannerEnabled = t("campaignBanner.enabled");
+  const [isBannerEnabled, setBannerData] = useState(false);
+  const [bannerType, setBannerType] = useState("");
+  const [bannerMessage, setBannerMessage] = useState("");
+
+  useEffect(() => {
+    async function fetchBannerData() {
+      const isEnabled = t("campaignBanner.enabled") === "true";
+      setBannerData(isEnabled);
+
+      const isLogicEnabled = await checkFlag("conditionalLogic");
+      if (isLogicEnabled) {
+        setBannerMessage(t("campaignBanner.message2"));
+        setBannerType(t("campaignBanner.type2"));
+      } else {
+        setBannerMessage(t("campaignBanner.message"));
+        setBannerType(t("campaignBanner.type"));
+      }
+    }
+    fetchBannerData();
+  }, [t]);
+
   const paddingTop = isBannerEnabled ? "py-0" : "py-2";
 
   return (
@@ -40,10 +62,10 @@ export const Header = ({ context = "default", className }: HeaderParams) => {
         {isBannerEnabled && (
           <div className="bg-slate-800 text-white px-4 py-4">
             <div className="inline-block border-2 border-white-500 px-2 py-1 mr-4">
-              {t("campaignBanner.type")}
+              {bannerType}
             </div>
             <div className="inline-block">
-              <Markdown options={{ forceBlock: true }}>{t("campaignBanner.message")}</Markdown>
+              <Markdown options={{ forceBlock: true }}>{bannerMessage}</Markdown>
             </div>
           </div>
         )}
