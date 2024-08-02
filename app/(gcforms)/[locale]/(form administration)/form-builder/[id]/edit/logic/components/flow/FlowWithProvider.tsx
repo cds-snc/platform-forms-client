@@ -32,6 +32,8 @@ import { edgeOptions } from "./options";
 import { useFlowRef } from "./provider/FlowRefProvider";
 import { useRehydrate } from "@lib/store/useTemplateStore";
 import { Language } from "@lib/types/form-builder-types";
+import { useTemplateStore } from "@lib/store/useTemplateStore";
+import { showReviewPage } from "@lib/utils/form-builder/showReviewPage";
 
 const nodeTypes = { groupNode: GroupNode, offboardNode: OffboardNode };
 import { Edge } from "reactflow";
@@ -51,7 +53,9 @@ export interface FlowProps {
 }
 
 const Flow: ForwardRefRenderFunction<unknown, FlowProps> = ({ children, lang }, ref) => {
-  const { nodes: flowNodes, edges: flowEdges, getData } = useFlowData(lang);
+  const form = useTemplateStore((state) => state.form);
+  const showReview = showReviewPage(form);
+  const { nodes: flowNodes, edges: flowEdges, getData } = useFlowData(lang, showReview);
   const [nodes, setNodes, onNodesChange] = useNodesState(flowNodes);
   const [, setEdges, onEdgesChange] = useEdgesState(flowEdges as Edge[]);
   const { fitView } = useReactFlow();
@@ -87,7 +91,10 @@ const Flow: ForwardRefRenderFunction<unknown, FlowProps> = ({ children, lang }, 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [fitView, nodes]);
 
-  const { runLayout } = useAutoLayout(layoutOptions);
+  const { runLayout } = useAutoLayout({
+    ...layoutOptions,
+    showReview,
+  });
 
   useImperativeHandle(ref, () => ({
     updateEdges: () => {
