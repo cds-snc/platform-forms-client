@@ -856,7 +856,7 @@
     "questionTitle": "Show question:",
     "addCustomRules": "Add rule",
     "editCustomRules": "Edit rule",
-    "addAnotherRule": "Add another rule",
+    "addAnotherRule": "Add a rule",
     "removeRule": "Remove",
     "addOther": "Add \"Other\" option",
     "other": "Other ",
@@ -884,9 +884,9 @@
     "questionTitle": "Question:",
     "pageTitle": "Page:",
     "translateTitle": "Page title",
-    "addRule": "Add rule",
+    "addRule": "Add branch",
     "saveRule": "Save",
-    "saveNote": "Adding branches deactivates the linear flow that links form pages.",
+    "saveNote": "Branches deactivate the automatic linear flow that would link form pages.",
     "resetRules": "Reset to linear flow",
     "resetRulesHelp": "Reset help",
     "resetRulesDescription": "This will remove branching logic and reset the progression between pages to a simple linear flow, overriding any existing rules that were applied.",
@@ -912,46 +912,46 @@
     },
     "actionsSaved": "Actions saved",
     "legend": {
-      "page": "To change how pages are ordered and connected",
-      "option": "To take a specific path depending on a selected option"
-    }
-  },
-  "exit": {
-    "convertText": "Convert to:",
-    "checkboxLabel": "Exit page",
-    "nodeIconLabel": "Exit",
-    "offboardNodeContent": {
-      "content": "Exits the form",
-      "exitButton": "Back to the start"
+      "page": "To change how pages are ordered and connected.",
+      "option": "To take a specific path depending on a selected option."
     },
-    "exitPanel": {
-      "title1": "Exit page",
-      "title2": "Ineligible to continue filling out the form",
-      "description": "Exit pages link people filling out the form back to the start of the form.",
-      "buttonLabel": "Remove"
-    }
-  },
-  "tryitout": {
-    "button": "Have a complex form? Try branching instead +",
-    "text": "<p class='mb-4'>Use branching to route people filling out the form toward different pages based on their answers.</p> <p> Visualize the form flow and configure branches in the Branching tab of the form set-up panel.</p>",
-    "open": "Go to Branching"
-  },
-  "exitBadge": "Exit",
-  "exitButtonElement": {
-    "description": "Help people exiting your form have a path forward.",
-    "list": {
-      "title": "What to include in an exit page",
-      "item1": "Links to other relevant forms or web pages",
-      "item2": "Next steps in the process or guidance on form requirements",
-      "item3": "Contact information to follow up or learn more about the form"
+    "exit": {
+      "convertText": "Convert to:",
+      "checkboxLabel": "Exit page",
+      "nodeIconLabel": "Exit",
+      "offboardNodeContent": {
+        "content": "Exits the form",
+        "exitButton": "Back to the start"
+      },
+      "exitPanel": {
+        "title1": "Exit page",
+        "title2": "Ineligible to continue filling out the form",
+        "description": "Exit pages link people filling out the form back to the start of the form.",
+        "buttonLabel": "Remove"
+      }
     },
-    "buttonDescription": "An exit button takes people to the organization website corresponding to the branding of the form.",
-    "buttonLabel": "Customize the button destination by copy-pasting a more relevant link below:"
-  },
-  "noPages": {
-    "text1": "Add a <strong>New page</strong> from the",
-    "text2": "Pages tab",
-    "text3": "before adding a branch."
+    "tryitout": {
+      "button": "Complex form? Try branching instead +",
+      "text": "<p class='mb-4'>Use branching to route people filling out the form toward different pages based on their answers.</p> <p> Visualize the form flow and configure branches in the Branching tab of the form set-up panel.</p>",
+      "open": "Go to Branching"
+    },
+    "exitBadge": "Exit",
+    "exitButtonElement": {
+      "description": "Help people exiting your form have a path forward.",
+      "list": {
+        "title": "What to include in an exit page",
+        "item1": "Links to other relevant forms or web pages",
+        "item2": "Next steps in the process or guidance on form requirements",
+        "item3": "Contact information to follow up or learn more about the form"
+      },
+      "buttonDescription": "An exit button takes people to the organization website corresponding to the branding of the form.",
+      "buttonLabel": "Customize the button destination by copy-pasting a more relevant link below:"
+    },
+    "noPages": {
+      "text1": "Add a <strong>New page</strong> from the",
+      "text2": "Pages tab",
+      "text3": "before adding a branch."
+    }
   },
   "groups": {
     "newPage": "New page",
@@ -991,7 +991,7 @@
       "emptyFormElement": "Empty form question element",
       "keyboardNav": {
         "label": "Keyboard shortcuts",
-        "body": "<p className=\"mb-4\">Navigate the questions and pages using the arrow keys.</p><p><strong>Drag and drop:</strong></p>\n<ul><li>control + D to pick up an item</li><li>arrow keys to drag the item</li><li>enter key to drop the item</li></ul>"
+        "body": "<p className=\"mb-4\">Navigate the questions and pages using the arrow keys.</p><p><strong>Drag and drop:</strong></p>\n<ul><li>control + D to pick up an item</li><li>Arrow keys to drag the item</li><li>Enter key to drop the item</li></ul>"
       }
     },
     "confirmDeleteGroup": {
@@ -1001,8 +1001,8 @@
       "delete": "Delete page and its contents"
     },
     "confirmMoveGroup": {
-      "title": "Overwrite rules?",
-      "description": " It seems the items you are moving have conditional rules applied. Would you like to overwrite those rules and apply linear autoflow?",
+      "title": "Overwrite branching rules?",
+      "description": " It seems the items you are moving have display or branching rules applied. Would you like to overwrite those rules and apply a linear autoflow?",
       "cancel": "No, move without changing rules",
       "confirm": "Yes, apply linear autoflow"
     }

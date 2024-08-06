@@ -16,6 +16,7 @@ import {
 import { useRefsContext } from "./RefsContext";
 import { useTemplateStore } from "@lib/store/useTemplateStore";
 import useModalRulesStore from "@lib/store/useModalRulesStore";
+import { useTreeRef } from "@formBuilder/components/shared/right-panel/treeview/provider/TreeRefProvider";
 
 export const ModalRules = ({
   item,
@@ -41,6 +42,7 @@ export const ModalRules = ({
   }
 
   const router = useRouter();
+  const { togglePanel } = useTreeRef();
 
   const { refs } = useRefsContext();
   const { t, i18n } = useTranslation("form-builder");
@@ -120,6 +122,8 @@ export const ModalRules = ({
   };
 
   const handletryLogicView = () => {
+    // Toggle the panel open as it may be closed.
+    togglePanel && togglePanel(true);
     router.push(`/${i18n.language}/form-builder/${formId}/edit/logic`);
   };
 

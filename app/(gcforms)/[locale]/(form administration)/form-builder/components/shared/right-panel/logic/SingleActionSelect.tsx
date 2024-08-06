@@ -10,6 +10,7 @@ import { useTranslation } from "@i18n/client";
 import { SaveNote } from "./SaveNote";
 import { toast } from "@formBuilder/components/shared/Toast";
 import { Checkbox } from "@formBuilder/components/shared";
+import { LockedSections } from "../treeview/types";
 
 const ExitIcon = () => {
   return (
@@ -33,13 +34,20 @@ export const SingleActionSelect = ({
   const id = useGroupStore((state) => state.id);
   const findParentGroup = useGroupStore((state) => state.findParentGroup);
   const setGroupNextAction = useGroupStore((state) => state.setGroupNextAction);
-  const { t } = useTranslation("form-builder");
+  const { t } = useTranslation(["form-builder", "common"]);
   const currentGroup = id;
   const [nextActionId, setNextActionId] = useState(nextAction);
 
   const formGroups: GroupsType = useTemplateStore((s) => s.form.groups) || {};
   let groupItems = Object.keys(formGroups).map((key) => {
     const item = formGroups[key];
+    if (Object.values(LockedSections).includes(key as LockedSections)) {
+      return {
+        label: t(`logic.${key}`),
+        value: key,
+      };
+    }
+
     return { label: item.name, value: key };
   });
 
