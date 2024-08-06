@@ -14,17 +14,19 @@ export const parseRootId = (id: number) => {
 };
 
 export const parseParentId = (id: number, elements: Element[]) => {
+  let parentId = null;
+
   elements.forEach((el) => {
     if (el.properties?.subElements) {
       el.properties.subElements.forEach((subEl) => {
         if (subEl.id === id) {
-          id = el.id;
+          parentId = el.id;
         }
       });
     }
   });
 
-  return id;
+  return parentId;
 };
 
 interface Form {
