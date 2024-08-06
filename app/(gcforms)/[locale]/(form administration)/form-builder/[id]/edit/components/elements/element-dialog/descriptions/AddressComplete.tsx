@@ -9,6 +9,7 @@ export const AddressComplete = () => {
 
   return (
     <div>
+      <img src="/img/address-complete.png" width="179" className="mb-4 mt-4" />
       <h3 className="mb-4">{t("addElementDialog.addressComplete.title")}</h3>
       <p>{t("addElementDialog.addressComplete.description")}</p>
 
