@@ -63,7 +63,8 @@ export const useElementOptions = (filterElements?: ElementOptionsFilter | undefi
   // default to off unless the user is an admin
   const allowFileInput = useIsAdminUser();
 
-  const { status: experimentalBlocks } = { status: false };
+  // @todo use experimental flag for this
+  const { status: experimentalBlocks } = { status: useIsAdminUser() };
 
   const fileInputOption: ElementOption = {
     id: "fileInput",

@@ -56,12 +56,20 @@ export const SubElement = ({
 
   const { handleAddSubElement } = useHandleAdd();
 
+  const [buttonText, setButtonText] = React.useState<string>(
+    item.properties[
+      localizeField(LocalizedElementProperties.PLACEHOLDER, translationLanguagePriority)
+    ] || ""
+  );
+
   const handlePlaceHolderText = useCallback(
     (elIndex: number, e: React.ChangeEvent<HTMLInputElement>) => {
       const placeHolder = localizeField(
         LocalizedElementProperties.PLACEHOLDER,
         translationLanguagePriority
       );
+
+      setButtonText(e.target.value);
       updateField(`form.elements[${elIndex}].properties.${placeHolder}`, e.target.value);
     },
     [updateField, localizeField, translationLanguagePriority]
@@ -97,7 +105,7 @@ export const SubElement = ({
   const subElementTypes = subElements.map((element) => ({ id: element.id, type: element.type }));
 
   return (
-    <div {...props} className="mb-3 mt-3">
+    <div {...props} className="my-3">
       {subElements.map((element, subIndex: number) => {
         const questionNumber = getQuestionNumber(element, subElementTypes, true);
         const item = { ...element, index: subIndex, questionNumber };
@@ -152,7 +160,10 @@ export const SubElement = ({
       })}
 
       {item.type === "dynamicRow" && (
-        <div className="mt-4 h-auto max-w-[800px] border-1 border-gray-300 first-of-type:rounded-t-md last-of-type:rounded-b-md">
+        <div
+          className="mt-4 h-auto max-w-[800px] border-1 border-gray-300 first-of-type:rounded-t-md last-of-type:rounded-b-md"
+          key={`repeatable-button-${elIndex}-${translationLanguagePriority}`}
+        >
           <LockedBadge className="laptop:absolute laptop:right-7 laptop:top-[15px]" />
           <div className="mx-7 mb-7 mt-5">
             <h2 className="pb-3 text-2xl">{t("questionSet.addAnother.title")}</h2>
@@ -160,12 +171,7 @@ export const SubElement = ({
             <Input
               id={`repeatable-button-${elIndex}`}
               {...getLocalizationAttribute()}
-              key={`repeatable-button-${elIndex}-${translationLanguagePriority}`}
-              value={
-                item.properties[
-                  localizeField(LocalizedElementProperties.PLACEHOLDER, translationLanguagePriority)
-                ] || ""
-              }
+              value={buttonText}
               className="w-full"
               placeholder={t("questionSet.addAnother.placeholder")}
               onChange={(e) => {
