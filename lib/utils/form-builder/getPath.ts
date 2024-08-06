@@ -14,7 +14,7 @@ export const parseRootId = (id: number) => {
 };
 
 export const parseParentId = (id: number, elements: Element[]) => {
-  let parentId = null;
+  let parentId = 0;
 
   elements.forEach((el) => {
     if (el.properties?.subElements) {
