@@ -23,6 +23,7 @@
       "name": "Ajouter un nom complet",
       "firstMiddleLastName": "Ajouter des noms individuels",
       "address": "Ajouter une adresse",
+      "adressComplete": "Ajouter une adresse (auto-remplissage)",
       "contact": "Ajouter des coordonnées",
       "dynamicRow": "Ajouter un ensemble de réponses",
       "richText": "Ajouter du texte de page",
@@ -42,6 +43,20 @@
         "label": "Adresse municipale"
       },
       "title": "Adresse"
+    },
+    "addressComplete": {
+      "whatIsYourAddress": "Quelle est votre adresse?",
+      "city": "Ville ou communauté",
+      "country": "Pays",
+      "description": "Remplir automatiquement les adresses à l'aide de l'API \"Compléter l'adresse\" de Postes Canada. Cela permettra aux remplisseurs de formulaires de remplir les champs d'adresse avec une précision de 95 %. ",
+      "label": "Adresse (auto-remplissage)",
+      "postal": "Code postal",
+      "province": "Province ou territoire",
+      "street": {
+        "description": "Indiquez le nom de rue et le numéro d'unité.",
+        "label": "Adresse municipale"
+      },
+      "title": "Adresse (auto-remplissage)"
     },
     "allRequired": "toutes obligatoires",
     "answer": "Réponse...",

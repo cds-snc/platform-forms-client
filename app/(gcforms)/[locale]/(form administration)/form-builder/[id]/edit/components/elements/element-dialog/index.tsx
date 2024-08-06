@@ -12,6 +12,7 @@ export { TextField } from "./descriptions/TextField";
 export { QuestionSet } from "./descriptions/QuestionSet";
 export { Attestation } from "./descriptions/Attestation";
 export { Address } from "./descriptions/Address";
+export { AddressComplete } from "./descriptions/AddressComplete";
 export { Contact } from "./descriptions/Contact";
 export { FirstMiddleLastName } from "./descriptions/FirstMiddleLastName";
 export { Name } from "./descriptions/Name";
