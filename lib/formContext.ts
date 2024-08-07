@@ -575,6 +575,77 @@ export const decrementChoiceIds = ({
 };
 
 /**
+ * Decrement the index of the choiceId for all elements that have a rule that contains the choiceId
+ * @param nextAction i.e. { "groupId": "81b342c8-cd2f-47b0-ac76-268d3173d6a0","choiceId": "1.0" }
+ * @param choiceId i.e. "1.0"
+ */
+export const decrementNextAction = (nextAction: NextActionRule, choiceId: string) => {
+  // Create an object to store the updated rules
+  const updatedNextActions: NextActionRule = { ...nextAction };
+
+  // Get choiceId parts
+  const choiceParts = choiceId.split(".");
+  const choiceParentId = Number(choiceParts[0]);
+  const choiceIndex = Number(choiceParts[1]);
+
+  // Get nextAction choiceId parts
+  const nextChoiceParts = nextAction.choiceId.split(".");
+  const nextChoiceParentId = Number(nextChoiceParts[0]);
+  const nextChoiceIndex = Number(nextChoiceParts[1]);
+
+  // Parents don't match so we don't need to adjust the choiceId
+  if (choiceParentId !== nextChoiceParentId) {
+    return updatedNextActions;
+  }
+
+  // Check if the nextChoiceIndex is below the choiceIndex
+  if (nextChoiceIndex < choiceIndex) {
+    // No need to adjust the choiceId
+    return updatedNextActions;
+  }
+
+  // If the nextChoiceIndex matches the choiceIndex return the nextAction
+  if (nextChoiceIndex === choiceIndex) {
+    // No need to adjust the choiceId
+    return updatedNextActions;
+  }
+
+  // Subtract 1 from the index of the choiceId
+  const newIndex = nextChoiceIndex - 1;
+  const newChoiceId = `${nextChoiceParentId}.${newIndex}`;
+  updatedNextActions.choiceId = newChoiceId;
+
+  return updatedNextActions;
+};
+
+export const decrementNextActionChoiceIds = (groups: GroupsType, choiceId: string) => {
+  // Create an object to store the updated rules
+  const updatedGroups: GroupsType = { ...groups };
+
+  Object.keys(groups).forEach((groupId) => {
+    const group = groups[groupId];
+    const nextAction = group.nextAction;
+
+    // We only need to adjust choiceIds if the next action is an array
+    if (Array.isArray(nextAction)) {
+      let updatedNextActions = nextAction.map((action) => {
+        return decrementNextAction(action, choiceId);
+      });
+
+      // Filter out the actions that match the choiceId
+      updatedNextActions = updatedNextActions.filter((action) => action.choiceId !== choiceId);
+
+      updatedGroups[groupId] = {
+        ...group,
+        nextAction: updatedNextActions,
+      };
+    }
+  });
+
+  return updatedGroups;
+};
+
+/**
  * @param elements - The form elements to search.
  * @param rules - The rules to search
  * @returns {Array} - Returns an array of parentIds from the rules
