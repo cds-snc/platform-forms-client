@@ -210,11 +210,9 @@ export const validateOnSubmit = (
 ): Responses => {
   const errors: Responses = {};
 
-  const attachedFiles: FileInputResponse[] = [];
+  checkFileSizeMaximumAllFiles(values, errors);
 
   for (const item in values) {
-    checkFileSizeMaximumAllFiles(values, item, attachedFiles, errors);
-
     const formElement = props.formRecord.form.elements.find(
       (element) => element.id == parseInt(item)
     );

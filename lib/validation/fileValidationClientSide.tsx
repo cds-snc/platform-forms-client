@@ -56,31 +56,30 @@ export function isFileSizeValid(sizeInBytes: number): boolean {
  * @param files
  * @param errors
  */
-export function checkFileSizeMaximumAllFiles(
-  values: Responses,
-  item: string,
-  files: FileInputResponse[],
-  errors: Responses
-) {
-  const element = values[item] as FileInputResponse;
-  if (Array.isArray(element)) {
-    element.forEach((el) => {
-      if (el[0] && el[0].size) {
-        files.push(el[0]);
+export function checkFileSizeMaximumAllFiles(values: Responses, errors: Responses) {
+  const files: FileInputResponse[] = [];
+
+  for (const item in values) {
+    const element = values[item] as FileInputResponse;
+    if (Array.isArray(element)) {
+      element.forEach((el) => {
+        if (el[0] && el[0].size) {
+          files.push(el[0]);
+        }
+      });
+    } else {
+      if (element && element.size) {
+        files.push(element);
       }
-    });
-  } else {
-    if (element && element.size) {
-      files.push(element);
     }
-  }
 
-  if (files) {
-    // 35% increase in file size due to base64 encoding
-    const totalSize = files.reduce((sum, file) => Number(sum) + Number(file.size) * 1.35, 0);
+    if (files) {
+      // 35% increase in file size due to base64 encoding
+      const totalSize = files.reduce((sum, file) => Number(sum) + Number(file.size) * 1.35, 0);
 
-    if (totalSize > MAXIMUM_FILE_SIZE_IN_BYTES) {
-      errors[item] = "Total file size exeeds limit";
+      if (totalSize > MAXIMUM_FILE_SIZE_IN_BYTES) {
+        errors[item] = "Total file size exeeds limit";
+      }
     }
   }
 }
