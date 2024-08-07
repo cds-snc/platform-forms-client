@@ -3,8 +3,6 @@ import {
   decrementNextActionChoiceIds
 } from "@lib/formContext";
 
-
-
 describe("decrementNextAction tests", () => {
   it("Handles decrementing a next action", () => {
 

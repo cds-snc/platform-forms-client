@@ -72,6 +72,7 @@ export interface TemplateStoreState extends TemplateStoreProps {
   setClosingDate: (closingDate: string | null) => void;
   initialize: (language?: string) => void;
   removeChoiceFromRules: (elId: string, choiceIndex: number) => void;
+  removeChoiceFromNextActions: (elId: string, choiceIndex: number) => void;
   setChangeKey: (key: string) => void;
   getGroupsEnabled: () => boolean;
   setGroupsLayout: (layout: string[]) => void;
