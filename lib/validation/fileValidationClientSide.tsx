@@ -1,3 +1,5 @@
+import { FileInputResponse, Responses } from "@lib/types";
+
 export const ALLOWED_FILE_TYPES = [
   { mime: "application/pdf", extensions: ["pdf"] },
   { mime: "text/plain", extensions: ["txt"] },
@@ -19,7 +21,7 @@ export const ALLOWED_FILE_TYPES = [
   { mime: "application/xml", extensions: ["xml"] },
 ];
 
-const MAXIMUM_FILE_SIZE_IN_BYTES = 8000000; // 8 MB
+const MAXIMUM_FILE_SIZE_IN_BYTES = 8 * 1024 * 1024 + 500; // 8.5MB
 
 // See https://developer.mozilla.org/en-US/docs/Web/HTML/Attributes/accept
 export const htmlInputAccept = ALLOWED_FILE_TYPES.map((t) =>
@@ -40,4 +42,45 @@ export function isFileExtensionValid(fileName: string): boolean {
 
 export function isFileSizeValid(sizeInBytes: number): boolean {
   return sizeInBytes <= MAXIMUM_FILE_SIZE_IN_BYTES;
+}
+
+/**
+ * There is a 8.5MB bodySizeLimit that applies to all files combined,
+ * configured in next.config.mjs
+ *
+ * Since uploaded files are serialized to base64, there is a 35% increase in file size,
+ * making the limit for all files approximately 6MB.
+ *
+ * @param values
+ * @param item
+ * @param files
+ * @param errors
+ */
+export function checkFileSizeMaximumAllFiles(
+  values: Responses,
+  item: string,
+  files: FileInputResponse[],
+  errors: Responses
+) {
+  const element = values[item] as FileInputResponse;
+  if (Array.isArray(element)) {
+    element.forEach((el) => {
+      if (el[0] && el[0].size) {
+        files.push(el[0]);
+      }
+    });
+  } else {
+    if (element && element.size) {
+      files.push(element);
+    }
+  }
+
+  if (files) {
+    // 35% increase in file size due to base64 encoding
+    const totalSize = files.reduce((sum, file) => Number(sum) + Number(file.size) * 1.35, 0);
+
+    if (totalSize > MAXIMUM_FILE_SIZE_IN_BYTES) {
+      errors[item] = "Total file size exeeds limit";
+    }
+  }
 }

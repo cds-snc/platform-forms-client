@@ -15,7 +15,11 @@ import uuidArraySchema from "@lib/middleware/schemas/uuid-array.schema.json";
 import formNameArraySchema from "@lib/middleware/schemas/submission-name-array.schema.json";
 import { matchRule, FormValues, GroupsType } from "@lib/formContext";
 import { inGroup } from "@lib/formContext";
-import { isFileExtensionValid, isFileSizeValid } from "./fileValidationClientSide";
+import {
+  checkFileSizeMaximumAllFiles,
+  isFileExtensionValid,
+  isFileSizeValid,
+} from "./fileValidationClientSide";
 
 /**
  * getRegexByType [private] defines a mapping between the types of fields that need to be validated
@@ -206,7 +210,11 @@ export const validateOnSubmit = (
 ): Responses => {
   const errors: Responses = {};
 
+  const attachedFiles: FileInputResponse[] = [];
+
   for (const item in values) {
+    checkFileSizeMaximumAllFiles(values, item, attachedFiles, errors);
+
     const formElement = props.formRecord.form.elements.find(
       (element) => element.id == parseInt(item)
     );
@@ -250,6 +258,7 @@ export const validateOnSubmit = (
       }
     }
   }
+
   return errors;
 };
 /**
