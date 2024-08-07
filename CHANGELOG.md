@@ -5,6 +5,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.18.0](https://github.com/cds-snc/platform-forms-client/compare/v3.17.0...v3.18.0) (2024-08-06)
+
+
+### Features
+
+* Dynamic Rows ([#4085](https://github.com/cds-snc/platform-forms-client/issues/4085)) ([9b9e8f3](https://github.com/cds-snc/platform-forms-client/commit/9b9e8f335b7985a5627d79df514e7f9200e55e51))
+
 ## [3.17.0](https://github.com/cds-snc/platform-forms-client/compare/v3.16.1...v3.17.0) (2024-08-02)
 
 

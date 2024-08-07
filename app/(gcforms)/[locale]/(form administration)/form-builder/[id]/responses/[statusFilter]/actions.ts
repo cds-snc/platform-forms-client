@@ -31,6 +31,7 @@ import { FormBuilderError } from "./exceptions";
 import { FormProperties } from "@lib/types";
 import { getLayoutFromGroups } from "@lib/utils/form-builder/groupedFormHelpers";
 import { allowGrouping } from "@formBuilder/components/shared/right-panel/treeview/util/allowGrouping";
+import { orderGroups } from "@lib/utils/form-builder/orderUsingGroupsLayout";
 
 export const fetchSubmissions = async ({
   formId,
@@ -95,7 +96,7 @@ const sortByLayout = ({ layout, elements }: { layout: number[]; elements: Answer
 };
 
 const sortByGroups = ({ form, elements }: { form: FormProperties; elements: Answer[] }) => {
-  const groups = form.groups || {};
+  const groups = orderGroups(form.groups, form.groupsLayout) ?? {};
   const layout = getLayoutFromGroups(form, groups);
   return sortByLayout({ layout, elements });
 };

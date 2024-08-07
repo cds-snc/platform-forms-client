@@ -1,5 +1,5 @@
 "use client";
-import React, { useCallback } from "react";
+import React, { useCallback, useState } from "react";
 import { useTranslation } from "@i18n/client";
 
 import { useTemplateStore } from "@lib/store/useTemplateStore";
@@ -22,11 +22,13 @@ export const SubElement = ({
   item,
   elIndex,
   formId,
+  lang,
   ...props
 }: {
   item: FormElement;
   elIndex: number;
   formId: string;
+  lang: Language;
 }) => {
   const { t } = useTranslation("form-builder");
 
@@ -38,7 +40,6 @@ export const SubElement = ({
     removeSubItem,
     subElements,
     localizeField,
-    translationLanguagePriority,
     getLocalizationAttribute,
     propertyPath,
   } = useTemplateStore((s) => ({
@@ -49,22 +50,24 @@ export const SubElement = ({
     removeSubItem: s.removeSubItem,
     subElements: s.form.elements[elIndex].properties.subElements,
     localizeField: s.localizeField,
-    translationLanguagePriority: s.translationLanguagePriority,
     getLocalizationAttribute: s.getLocalizationAttribute,
     propertyPath: s.propertyPath,
   }));
 
   const { handleAddSubElement } = useHandleAdd();
 
+  const [buttonText, setButtonText] = useState<string>(
+    item.properties[localizeField(LocalizedElementProperties.PLACEHOLDER, lang)] || ""
+  );
+
   const handlePlaceHolderText = useCallback(
     (elIndex: number, e: React.ChangeEvent<HTMLInputElement>) => {
-      const placeHolder = localizeField(
-        LocalizedElementProperties.PLACEHOLDER,
-        translationLanguagePriority
-      );
+      const placeHolder = localizeField(LocalizedElementProperties.PLACEHOLDER, lang);
+
+      setButtonText(e.target.value);
       updateField(`form.elements[${elIndex}].properties.${placeHolder}`, e.target.value);
     },
-    [updateField, localizeField, translationLanguagePriority]
+    [updateField, localizeField, lang]
   );
 
   const onQuestionChange = (itemId: number, val: string, lang: Language) => {
@@ -97,7 +100,7 @@ export const SubElement = ({
   const subElementTypes = subElements.map((element) => ({ id: element.id, type: element.type }));
 
   return (
-    <div {...props} className="mb-3 mt-3">
+    <div {...props} className="my-3">
       {subElements.map((element, subIndex: number) => {
         const questionNumber = getQuestionNumber(element, subElementTypes, true);
         const item = { ...element, index: subIndex, questionNumber };
@@ -160,12 +163,7 @@ export const SubElement = ({
             <Input
               id={`repeatable-button-${elIndex}`}
               {...getLocalizationAttribute()}
-              key={`repeatable-button-${elIndex}-${translationLanguagePriority}`}
-              value={
-                item.properties[
-                  localizeField(LocalizedElementProperties.PLACEHOLDER, translationLanguagePriority)
-                ] || ""
-              }
+              value={buttonText}
               className="w-full"
               placeholder={t("questionSet.addAnother.placeholder")}
               onChange={(e) => {
