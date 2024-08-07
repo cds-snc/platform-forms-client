@@ -628,12 +628,13 @@ export const decrementNextActionChoiceIds = (groups: GroupsType, choiceId: strin
 
     // We only need to adjust choiceIds if the next action is an array
     if (Array.isArray(nextAction)) {
-      let updatedNextActions = nextAction.map((action) => {
+      // Filter out the actions that match the choiceId
+      // to clear out the option that is to be removed
+      const filteredActions = nextAction.filter((action) => action.choiceId !== choiceId);
+
+      const updatedNextActions = filteredActions.map((action) => {
         return decrementNextAction(action, choiceId);
       });
-
-      // Filter out the actions that match the choiceId
-      updatedNextActions = updatedNextActions.filter((action) => action.choiceId !== choiceId);
 
       updatedGroups[groupId] = {
         ...group,
