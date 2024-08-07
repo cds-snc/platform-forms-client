@@ -29,7 +29,7 @@ type ReviewItem = {
 function getFormElementValues(elementName: number | null, formValues: void | FormValues) {
   const value = formValues[elementName as keyof typeof formValues];
   if (Array.isArray(value)) {
-    return (value as Array<string>).join(", ") || "-";
+    return "Huzzah"; // return (value as Array<string>).join(", ") || "-";
   }
   return value || "-";
 }
