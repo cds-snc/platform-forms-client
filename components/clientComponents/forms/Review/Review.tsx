@@ -22,7 +22,7 @@ type ReviewItem = {
   elements: {
     elementId: number;
     title: string;
-    values: string;
+    values: string | { based64EncodedFile: string; name: string; size: number };
   }[];
 };
 
@@ -143,7 +143,11 @@ const QuestionsAnswersList = ({ reviewItem }: { reviewItem: ReviewItem }): React
           return (
             <div key={reviewElement.elementId} className="mb-8">
               <dt className="font-bold mb-2">{reviewElement.title}</dt>
-              <dd>{reviewElement.values}</dd>
+              <dd>
+                {reviewElement.values.based64EncodedFile
+                  ? reviewElement.values.name
+                  : reviewElement.values}
+              </dd>
             </div>
           );
         })}
