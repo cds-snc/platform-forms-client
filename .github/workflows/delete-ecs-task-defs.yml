@@ -36,6 +36,7 @@ jobs:
       # Retrieves all ACTIVE task definitions except for the 5 most recent
       - name: Get ACTIVE ECS task definitions
         env:
+          TASK_NAME: form-viewer
           TASK_STATUS: ACTIVE
           TASKS_TO_KEEP: 6 # 1 greater than number to keep
         run: |
@@ -44,7 +45,7 @@ jobs:
               --status ${{ env.TASK_STATUS }} \
               --region ${{ env.AWS_REGION }} \
               --no-cli-pager \
-              | jq -r '(.taskDefinitionArns[:length-${{ env.TASKS_TO_KEEP }}])[]' > task-def-active-arns.txt
+              | jq -r '(.taskDefinitionArns | map(select(contains("${{ env.TASK_NAME }}")))[:length-${{ env.TASKS_TO_KEEP }}])[]' > task-def-active-arns.txt
 
       - name: Set ECS tasks to INACTIVE
         run: |
@@ -53,6 +54,7 @@ jobs:
       # Retrieves all INACTIVE task definitions except for the 100 most recent
       - name: Get INACTIVE ECS task definitions
         env:
+          TASK_NAME: form-viewer
           TASK_STATUS: INACTIVE
           TASKS_TO_KEEP: 101 # 1 greater than number to keep
         run: |
@@ -61,7 +63,7 @@ jobs:
               --status ${{ env.TASK_STATUS }} \
               --region ${{ env.AWS_REGION }} \
               --no-cli-pager \
-              | jq -r '(.taskDefinitionArns[:length-${{ env.TASKS_TO_KEEP }}])[]' > task-def-inactive-arns.txt
+              | jq -r '(.taskDefinitionArns | map(select(contains("${{ env.TASK_NAME }}")))[:length-${{ env.TASKS_TO_KEEP }}])[]' > task-def-inactive-arns.txt
 
       - name: Delete INACTIVE ECS task definitions
         run: |
