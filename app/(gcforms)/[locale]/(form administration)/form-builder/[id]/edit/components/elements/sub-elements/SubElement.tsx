@@ -1,5 +1,5 @@
 "use client";
-import React, { useCallback } from "react";
+import React, { useCallback, useState } from "react";
 import { useTranslation } from "@i18n/client";
 
 import { useTemplateStore } from "@lib/store/useTemplateStore";
@@ -22,11 +22,13 @@ export const SubElement = ({
   item,
   elIndex,
   formId,
+  lang,
   ...props
 }: {
   item: FormElement;
   elIndex: number;
   formId: string;
+  lang: Language;
 }) => {
   const { t } = useTranslation("form-builder");
 
@@ -38,7 +40,6 @@ export const SubElement = ({
     removeSubItem,
     subElements,
     localizeField,
-    translationLanguagePriority,
     getLocalizationAttribute,
     propertyPath,
   } = useTemplateStore((s) => ({
@@ -49,30 +50,24 @@ export const SubElement = ({
     removeSubItem: s.removeSubItem,
     subElements: s.form.elements[elIndex].properties.subElements,
     localizeField: s.localizeField,
-    translationLanguagePriority: s.translationLanguagePriority,
     getLocalizationAttribute: s.getLocalizationAttribute,
     propertyPath: s.propertyPath,
   }));
 
   const { handleAddSubElement } = useHandleAdd();
 
-  const [buttonText, setButtonText] = React.useState<string>(
-    item.properties[
-      localizeField(LocalizedElementProperties.PLACEHOLDER, translationLanguagePriority)
-    ] || ""
+  const [buttonText, setButtonText] = useState<string>(
+    item.properties[localizeField(LocalizedElementProperties.PLACEHOLDER, lang)] || ""
   );
 
   const handlePlaceHolderText = useCallback(
     (elIndex: number, e: React.ChangeEvent<HTMLInputElement>) => {
-      const placeHolder = localizeField(
-        LocalizedElementProperties.PLACEHOLDER,
-        translationLanguagePriority
-      );
+      const placeHolder = localizeField(LocalizedElementProperties.PLACEHOLDER, lang);
 
       setButtonText(e.target.value);
       updateField(`form.elements[${elIndex}].properties.${placeHolder}`, e.target.value);
     },
-    [updateField, localizeField, translationLanguagePriority]
+    [updateField, localizeField, lang]
   );
 
   const onQuestionChange = (itemId: number, val: string, lang: Language) => {
@@ -160,10 +155,7 @@ export const SubElement = ({
       })}
 
       {item.type === "dynamicRow" && (
-        <div
-          className="mt-4 h-auto max-w-[800px] border-1 border-gray-300 first-of-type:rounded-t-md last-of-type:rounded-b-md"
-          key={`repeatable-button-${elIndex}-${translationLanguagePriority}`}
-        >
+        <div className="mt-4 h-auto max-w-[800px] border-1 border-gray-300 first-of-type:rounded-t-md last-of-type:rounded-b-md">
           <LockedBadge className="laptop:absolute laptop:right-7 laptop:top-[15px]" />
           <div className="mx-7 mb-7 mt-5">
             <h2 className="pb-3 text-2xl">{t("questionSet.addAnother.title")}</h2>
