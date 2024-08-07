@@ -15,6 +15,7 @@ import {
   Group,
 } from "@lib/formContext";
 import { parseRootId } from "@lib/utils/form-builder/getPath";
+import { value } from "valibot";
 
 type ReviewItem = {
   id: string;
@@ -187,7 +188,16 @@ const QuestionsAnswersList = ({ reviewItem }: { reviewItem: ReviewItem }): React
               <dt className="font-bold mb-2">{reviewElement.title}</dt>
               <dd>{Array.isArray(reviewElement.values) ? 
                 // if array do another loop
-                JSON.stringify(reviewElement.values) : 
+                reviewElement.values.map((subElement) => {
+                  return subElement.values.map((element, index) => {
+                    return (
+                      <div key={subElement.elementId + index} className="mb-2">
+                        <dt className="font-bold mb-2">{element[index].title}</dt>
+                        <dd>{element[index].value}</dd>
+                      </div>
+                    )
+                  })
+                }):
                 
                 reviewElement.values
                 
