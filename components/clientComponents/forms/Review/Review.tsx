@@ -4,7 +4,7 @@ import { Button } from "@clientComponents/globals";
 import { Theme } from "@clientComponents/globals/Buttons/themes";
 import { useFocusIt } from "@lib/hooks/useFocusIt";
 import { useGCFormsContext } from "@lib/hooks/useGCFormContext";
-import { FormElement } from "@lib/types";
+import { FormElement, FormElementTypes } from "@lib/types";
 import { Language } from "@lib/types/form-builder-types";
 import { getLocalizedProperty } from "@lib/utils";
 import {
@@ -14,6 +14,7 @@ import {
   getElementIdsAsNumber,
   Group,
 } from "@lib/formContext";
+import { parseRootId } from "@lib/utils/form-builder/getPath";
 
 type ReviewItem = {
   id: string;
@@ -41,6 +42,33 @@ function getFormElementTitle(formElementId: number, formElements: FormElement[],
     : "-";
 }
 
+function getFormSubElements(elementId: number | null, formValues: void | FormValues, formElements: FormElement[]) {
+  if (!elementId) {
+    return [];
+  }
+
+  const parentId = parseRootId(elementId, formElements);
+  const subElementValues:FormValues = formValues[parentId as keyof typeof formValues];
+  const subElements:FormElement = formElements.find((item) => item.id === parentId)?.properties?.subElements;
+
+  if (!Array.isArray(subElementValues) || !Array.isArray(subElements)) {
+    return [];
+  }
+
+  return subElementValues.map((subElementValue: string) => {
+    // const subElementTitle = subElements[index].properties?.titleEn;
+    return Object.keys(subElementValue).map((keyIndex: string) => {
+      const value = subElementValue[keyIndex as keyof typeof subElementValue];
+      const title = subElements[keyIndex as keyof typeof subElements].properties.titleEn;
+      return {
+        title,
+        value,
+      };
+    });
+  })
+}
+
+
 function getReviewItemElements(
   groupElements: string[],
   formElements: FormElement[],
@@ -53,10 +81,24 @@ function getReviewItemElements(
     filterValuesForShownElements(groupElements, shownFormElements)
   );
   const result = shownElementIds.map((elementId) => {
+    const element = formElements.find((item) => item.id === elementId);
+    let values: string | string[] = getFormElementValues(elementId, formValues);
+    
+    if (element?.type === FormElementTypes.dynamicRow) {
+      values = [];
+      element.properties?.subElements?.forEach(subElement => {
+        values.push( {
+          elementId: subElement.id,
+          title: getFormElementTitle(subElement.id, formElements, lang),
+          values: getFormSubElements(subElement.id, formValues, formElements), //TODO
+        })
+      })
+    }
+
     return {
       elementId,
       title: getFormElementTitle(elementId, formElements, lang),
-      values: getFormElementValues(elementId, formValues),
+      values,
     };
   });
   return result;
@@ -143,7 +185,13 @@ const QuestionsAnswersList = ({ reviewItem }: { reviewItem: ReviewItem }): React
           return (
             <div key={reviewElement.elementId} className="mb-8">
               <dt className="font-bold mb-2">{reviewElement.title}</dt>
-              <dd>{reviewElement.values}</dd>
+              <dd>{Array.isArray(reviewElement.values) ? 
+                // if array do another loop
+                JSON.stringify(reviewElement.values) : 
+                
+                reviewElement.values
+                
+                }</dd>
             </div>
           );
         })}
