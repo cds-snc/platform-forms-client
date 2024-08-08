@@ -5,6 +5,44 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.18.0](https://github.com/cds-snc/platform-forms-client/compare/v3.17.0...v3.18.0) (2024-08-06)
+
+
+### Features
+
+* Dynamic Rows ([#4085](https://github.com/cds-snc/platform-forms-client/issues/4085)) ([9b9e8f3](https://github.com/cds-snc/platform-forms-client/commit/9b9e8f335b7985a5627d79df514e7f9200e55e51))
+
+## [3.17.0](https://github.com/cds-snc/platform-forms-client/compare/v3.16.1...v3.17.0) (2024-08-02)
+
+
+### Features
+
+* add new file type to support SVG logo ([#4158](https://github.com/cds-snc/platform-forms-client/issues/4158)) ([f273961](https://github.com/cds-snc/platform-forms-client/commit/f27396110da41dc9b73cae55e5bcbde0f77f4a65))
+
+## [3.16.1](https://github.com/cds-snc/platform-forms-client/compare/v3.16.0...v3.16.1) (2024-08-02)
+
+
+### Bug Fixes
+
+* Update groupsLayout when deleting a group ([3cc69ba](https://github.com/cds-snc/platform-forms-client/commit/3cc69badec08771373a3129a140704fc214bdf2d))
+
+## [3.16.0](https://github.com/cds-snc/platform-forms-client/compare/v3.15.2...v3.16.0) (2024-08-01)
+
+
+### Features
+
+* Conditional Input History - Form Builder ([#3859](https://github.com/cds-snc/platform-forms-client/issues/3859)) ([5b6c525](https://github.com/cds-snc/platform-forms-client/commit/5b6c5250470706fed1e08959583aa201bd584f06))
+* Conditional Input History - Forms-form ([#4036](https://github.com/cds-snc/platform-forms-client/issues/4036)) ([6cb4d1f](https://github.com/cds-snc/platform-forms-client/commit/6cb4d1f341c8cdc9ba61df7ba3249e20f1201ce8))
+
+
+### Bug Fixes
+
+* adds additional check / set for active group  ([#4037](https://github.com/cds-snc/platform-forms-client/issues/4037)) ([a783644](https://github.com/cds-snc/platform-forms-client/commit/a78364425c6b4d6dd8bafa5d6c9b9b34cf7de5e1))
+* shows Review page and related for multi-group forms ([#4091](https://github.com/cds-snc/platform-forms-client/issues/4091)) ([b6298c8](https://github.com/cds-snc/platform-forms-client/commit/b6298c81acf01d3f25b03049c672d7f70e9d4462))
+* Updates next action to not include rules on hidden elements ([#4110](https://github.com/cds-snc/platform-forms-client/issues/4110)) ([6f61f1c](https://github.com/cds-snc/platform-forms-client/commit/6f61f1c526671ceea5baca871fdcf6d63086e187))
+* Updates sectionTitle to use form lang as default vs English ([#4050](https://github.com/cds-snc/platform-forms-client/issues/4050)) ([fb7165f](https://github.com/cds-snc/platform-forms-client/commit/fb7165f86686e6222d7a44c9a0236abd2f39ab1e))
+* Use language property for review page label  ([#4088](https://github.com/cds-snc/platform-forms-client/issues/4088)) ([cbfa572](https://github.com/cds-snc/platform-forms-client/commit/cbfa5729939d24bc03ea397d76eabd7056036725))
+
 ## [3.15.2](https://github.com/cds-snc/platform-forms-client/compare/v3.15.1...v3.15.2) (2024-07-18)
 
 

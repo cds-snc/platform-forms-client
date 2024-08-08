@@ -20,6 +20,12 @@ import { LockedSections } from "@formBuilder/components/shared/right-panel/treev
 import { BackButton } from "@formBuilder/[id]/preview/BackButton";
 import { Language } from "@lib/types/form-builder-types";
 import { BackButtonGroup } from "../BackButtonGroup/BackButtonGroup";
+import {
+  removeFormContextValues,
+  getInputHistoryValues,
+} from "@lib/utils/form-builder/groupsHistory";
+import { filterShownElements, filterValuesByShownElements } from "@lib/formContext";
+import { formHasGroups } from "@lib/utils/form-builder/formHasGroups";
 import { showReviewPage } from "@lib/utils/form-builder/showReviewPage";
 
 interface SubmitButtonProps {
@@ -155,6 +161,7 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
 
   const { t } = useTranslation();
 
+  // Used to set any values we'd like added for use in the below withFormik handleSubmit().
   useFormValuesChanged();
 
   const errorList = props.errors ? getErrorList(props) : null;
@@ -321,6 +328,8 @@ interface FormProps {
   children?: (JSX.Element | undefined)[] | null;
   t: TFunction;
   allowGrouping?: boolean | undefined;
+  groupHistory?: string[];
+  matchedIds?: string[];
 }
 
 /**
@@ -340,10 +349,35 @@ export const Form = withFormik<FormProps, Responses>({
   validate: (values, props) => validateOnSubmit(values, props),
 
   handleSubmit: async (values, formikBag) => {
+    const getValuesForConditionalLogic = () => {
+      const inputHistoryValues = getInputHistoryValues(
+        values,
+        values.groupHistory as string[],
+        formikBag.props.formRecord.form.groups
+      );
+      const shownElements = filterShownElements(
+        formikBag.props.formRecord.form.elements,
+        values.matchedIds as string[]
+      );
+      return filterValuesByShownElements(inputHistoryValues, shownElements);
+    };
+
     // Needed so the Loader is displayed
     formikBag.setStatus("submitting");
     try {
-      const result = await submitForm(values, formikBag.props.language, formikBag.props.formRecord);
+      const hasGroups =
+        formHasGroups(formikBag.props.formRecord.form) && formikBag.props.allowGrouping;
+      const hasShowHideRules = (values.matchedIds as string[])?.length > 0;
+      const formValues =
+        hasGroups && hasShowHideRules
+          ? removeFormContextValues(getValuesForConditionalLogic())
+          : removeFormContextValues(values);
+
+      const result = await submitForm(
+        formValues,
+        formikBag.props.language,
+        formikBag.props.formRecord
+      );
       if (result.error) {
         formikBag.setStatus("Error");
       } else {
