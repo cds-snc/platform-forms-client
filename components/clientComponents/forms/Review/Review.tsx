@@ -83,23 +83,48 @@ function getReviewItemElements(
   );
   return shownElementIds.map((elementId) => {
     const element = formElements.find((item) => item.id === elementId);
-    let values: string | Element[] = getFormElementValues(elementId, formValues);
+    let resultValues: string | Element[] = getFormElementValues(elementId, formValues);
     
     if (element?.type === FormElementTypes.dynamicRow) {
-      values = [];
-      element.properties?.subElements?.forEach(subElement => {
-        (values as Element[]).push( {
-          elementId: subElement.id,
-          title: getFormElementTitle(subElement.id, formElements, lang),
-          values: getFormSubElements(subElement.id, formValues, formElements, lang),
-        })
-      })
+      resultValues = [];
+
+      // element.properties?.subElements?.forEach(subElement => {
+      //   (values as Element[]).push( {
+      //     elementId: subElement.id,
+      //     title: getFormElementTitle(subElement.id, formElements, lang),
+      //     values: getFormSubElements(subElement.id, formValues, formElements, lang),
+      //   })
+      // })
+
+      const parentId = element.id;
+      const parentTitle = element.properties?.[getLocalizedProperty("title", lang)];
+      const subElements = element.properties?.subElements;
+      const result = formValues[parentId].map((valueRows, valueRowsIndex) => {
+        const subElementsTitle = `${parentTitle} - ${valueRowsIndex + 1}`;
+        const valueRowsAsArray = Object.keys(valueRows).map(key => valueRows[key]);
+        const titleValues = valueRowsAsArray.map((value, valueRowIndex) => {
+          return {
+            title: subElements[valueRowIndex].properties?.[getLocalizedProperty("title", lang)],
+            value: value
+          }
+        });
+        const result = {
+          title: subElementsTitle,
+          values: titleValues
+        }
+        return result;
+      });
+
+      resultValues.push({
+        title: parentTitle,
+        values: result
+      });
     }
 
     return {
       elementId,
       title: getFormElementTitle(elementId, formElements, lang),
-      values,
+      values: resultValues,
     };
   });
 }
@@ -189,10 +214,30 @@ const QuestionsAnswersList = ({ reviewItem }: { reviewItem: ReviewItem }): React
                   // Handle arrays (sub elements)
                   reviewElement.values.map((subElement) => {
                     return subElement.values.map((element:Element[], index:number) => {
+                      if (Array.isArray(element.values)) {
+                        return element.values.map((titleValues) => {
+                          const title = titleValues.title;
+                          const values = titleValues.value;
+                          return (
+                            <div key={title + values} className="mb-2">
+                              <dt className="font-bold mb-2">{title}</dt>
+                              <dd>{values || "-"}</dd>
+                            </div>
+                          )
+                        })
+                      }
+
+                      {/* {JSON.stringify(element)} */}
+                      // return (
+                      //   <div key={subElement.elementId + index} className="mb-2">
+                      //     <dt className="font-bold mb-2">{element[index].title}</dt>
+                      //     <dd>{element[index].values || "-"}</dd>
+                      //   </div>
+                      // )
                       return (
                         <div key={subElement.elementId + index} className="mb-2">
-                          <dt className="font-bold mb-2">{element[index].title}</dt>
-                          <dd>{element[index].values || "-"}</dd>
+                          <dt className="font-bold mb-2">{element.title}</dt>
+                          <dd>{element.values || "-"}</dd>
                         </div>
                       )
                     })
