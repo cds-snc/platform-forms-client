@@ -2,7 +2,7 @@
 import { serverTranslation } from "@i18n";
 import { createTicket } from "@lib/integration/freshdesk";
 import { logMessage } from "@lib/logger";
-import { redirect } from "next/navigation";
+
 import { email, minLength, object, safeParse, string, toLowerCase, toTrimmed } from "valibot";
 
 export interface ErrorStates {
@@ -97,6 +97,5 @@ ${description}<br/>
     logMessage.error(`Failed to send support request: ${(error as Error).message}`);
     return { error: "Internal Service Error: Failed to send request", validationErrors: [] };
   }
-  // The redirect must be outside of the try/catch block to avoid the NEXT_REDIRECT being caught by the error boundary
-  redirect(`/${language}/support?success`);
+  return { error: "", validationErrors: [] };
 }
