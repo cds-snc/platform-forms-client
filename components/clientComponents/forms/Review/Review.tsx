@@ -15,18 +15,19 @@ import {
   Group,
 } from "@lib/formContext";
 import { parseRootId } from "@lib/utils/form-builder/getPath";
-import { value } from "valibot";
 
 type ReviewItem = {
   id: string;
   name: string;
   title: string;
-  elements: {
-    elementId: number;
-    title: string;
-    values: string;
-  }[];
+  elements: Element[];
 };
+
+type Element = {
+  elementId: number;
+  title: string;
+  values: string;
+}
 
 function getFormElementValues(elementName: number | null, formValues: void | FormValues) {
   const value = formValues[elementName as keyof typeof formValues];
@@ -43,55 +44,54 @@ function getFormElementTitle(formElementId: number, formElements: FormElement[],
     : "-";
 }
 
-function getFormSubElements(elementId: number | null, formValues: void | FormValues, formElements: FormElement[]) {
+
+// Handles sub elements (repeating sets) where the values may themselves be form elements
+function getFormSubElements(elementId: number | null, formValues: void | FormValues, formElements: FormElement[], lang:string) {
   if (!elementId) {
     return [];
   }
-
   const parentId = parseRootId(elementId, formElements);
   const subElementValues:FormValues = formValues[parentId as keyof typeof formValues];
-  const subElements:FormElement = formElements.find((item) => item.id === parentId)?.properties?.subElements;
-
+  const subElements = formElements.find((item) => item.id === parentId)?.properties?.subElements;
   if (!Array.isArray(subElementValues) || !Array.isArray(subElements)) {
     return [];
   }
-
-  return subElementValues.map((subElementValue: string) => {
-    // const subElementTitle = subElements[index].properties?.titleEn;
+  // TODO: explain what's going on here
+  const temp =  subElementValues.map((subElementValue: string) => {
     return Object.keys(subElementValue).map((keyIndex: string) => {
-      const value = subElementValue[keyIndex as keyof typeof subElementValue];
-      const title = subElements[keyIndex as keyof typeof subElements].properties.titleEn;
       return {
-        title,
-        value,
+        elementId: `${elementId} ${keyIndex}`,  // TODO
+        title: (subElements[keyIndex as keyof typeof subElements] as FormElement).properties?.[getLocalizedProperty("title", lang)],
+        values: subElementValue[keyIndex as keyof typeof subElementValue],
       };
     });
   })
+  return temp;  //TODO TYPES
 }
 
-
+// Handles non-repeating sets (sub elements) form elements
 function getReviewItemElements(
   groupElements: string[],
   formElements: FormElement[],
   matchedIds: string[],
   formValues: FormValues,
   lang: string
-) {
+){
   const shownFormElements = filterShownElements(formElements, matchedIds);
   const shownElementIds = getElementIdsAsNumber(
     filterValuesForShownElements(groupElements, shownFormElements)
   );
-  const result = shownElementIds.map((elementId) => {
+  return shownElementIds.map((elementId) => {
     const element = formElements.find((item) => item.id === elementId);
-    let values: string | string[] = getFormElementValues(elementId, formValues);
+    let values: string | Element[] = getFormElementValues(elementId, formValues);
     
     if (element?.type === FormElementTypes.dynamicRow) {
       values = [];
       element.properties?.subElements?.forEach(subElement => {
-        values.push( {
+        (values as Element[]).push( {
           elementId: subElement.id,
           title: getFormElementTitle(subElement.id, formElements, lang),
-          values: getFormSubElements(subElement.id, formValues, formElements), //TODO
+          values: getFormSubElements(subElement.id, formValues, formElements, lang),
         })
       })
     }
@@ -102,7 +102,6 @@ function getReviewItemElements(
       values,
     };
   });
-  return result;
 }
 
 export const Review = ({ language }: { language: Language }): React.ReactElement => {
@@ -187,20 +186,18 @@ const QuestionsAnswersList = ({ reviewItem }: { reviewItem: ReviewItem }): React
             <div key={reviewElement.elementId} className="mb-8">
               <dt className="font-bold mb-2">{reviewElement.title}</dt>
               <dd>{Array.isArray(reviewElement.values) ? 
-                // if array do another loop
-                reviewElement.values.map((subElement) => {
-                  return subElement.values.map((element, index) => {
-                    return (
-                      <div key={subElement.elementId + index} className="mb-2">
-                        <dt className="font-bold mb-2">{element[index].title}</dt>
-                        <dd>{element[index].value}</dd>
-                      </div>
-                    )
-                  })
-                }):
-                
-                reviewElement.values
-                
+                  // Handle arrays (sub elements)
+                  reviewElement.values.map((subElement) => {
+                    return subElement.values.map((element:Element[], index:number) => {
+                      return (
+                        <div key={subElement.elementId + index} className="mb-2">
+                          <dt className="font-bold mb-2">{element[index].title}</dt>
+                          <dd>{element[index].values || "-"}</dd>
+                        </div>
+                      )
+                    })
+                  }) :
+                  reviewElement.values
                 }</dd>
             </div>
           );
