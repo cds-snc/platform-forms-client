@@ -179,8 +179,6 @@ export const options = [
     logoTitleEn: "National Defence",
     logoTitleFr: "Défense nationale",
   },
-  // Add in a future release
-  /*
   {
     name: "psc",
     urlEn: "https://www.canada.ca/en/public-service-commission.html",
@@ -190,5 +188,4 @@ export const options = [
     logoTitleEn: "Public Service Commission of Canada",
     logoTitleFr: "Commission de la fonction publique du Canada",
   },
-  */
 ];
