@@ -40,6 +40,7 @@ export const Option = ({
     translationLanguagePriority,
     getLocalizationAttribute,
     removeChoiceFromRules,
+    removeChoiceFromNextActions,
   } = useTemplateStore((s) => ({
     addChoice: s.addChoice,
     removeChoice: s.removeChoice,
@@ -49,6 +50,7 @@ export const Option = ({
     translationLanguagePriority: s.translationLanguagePriority,
     getLocalizationAttribute: s.getLocalizationAttribute,
     removeChoiceFromRules: s.removeChoiceFromRules,
+    removeChoiceFromNextActions: s.removeChoiceFromNextActions,
   }));
 
   const icon = renderIcon && renderIcon(index);
@@ -98,8 +100,9 @@ export const Option = ({
   const cleanUpRules = useCallback(
     (parentId: string, index: number) => {
       removeChoiceFromRules(parentId, index);
+      removeChoiceFromNextActions(parentId, index);
     },
-    [removeChoiceFromRules]
+    [removeChoiceFromRules, removeChoiceFromNextActions]
   );
 
   return (

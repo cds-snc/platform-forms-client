@@ -35,7 +35,7 @@ import {
   removeGroupElement,
 } from "../utils/form-builder";
 import { logMessage } from "@lib/logger";
-import { decrementChoiceIds } from "@lib/formContext";
+import { decrementChoiceIds, decrementNextActionChoiceIds } from "@lib/formContext";
 import { Language } from "../types/form-builder-types";
 import { FormElementTypes } from "@lib/types";
 import { defaultField, defaultForm } from "./defaults";
@@ -244,6 +244,13 @@ const createTemplateStore = (initProps?: Partial<InitialTemplateStoreProps>) => 
                     element.properties.conditionalRules = rules[element.id];
                   }
                 });
+              });
+            },
+            removeChoiceFromNextActions: (elId: string, choiceIndex: number) => {
+              set((state) => {
+                const choiceId = `${elId}.${choiceIndex}`;
+                const groups = decrementNextActionChoiceIds({ ...state.form.groups }, choiceId);
+                state.form.groups = groups;
               });
             },
             addSubItem: (elIndex, subIndex = 0, type = FormElementTypes.radio, data) =>
