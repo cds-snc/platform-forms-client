@@ -14,7 +14,6 @@ import {
   getElementIdsAsNumber,
   Group,
 } from "@lib/formContext";
-import { parseRootId } from "@lib/utils/form-builder/getPath";
 
 type ReviewItem = {
   id: string;
@@ -44,31 +43,6 @@ function getFormElementTitle(formElementId: number, formElements: FormElement[],
     : "-";
 }
 
-
-// Handles sub elements (repeating sets) where the values may themselves be form elements
-function getFormSubElements(elementId: number | null, formValues: void | FormValues, formElements: FormElement[], lang:string) {
-  if (!elementId) {
-    return [];
-  }
-  const parentId = parseRootId(elementId, formElements);
-  const subElementValues:FormValues = formValues[parentId as keyof typeof formValues];
-  const subElements = formElements.find((item) => item.id === parentId)?.properties?.subElements;
-  if (!Array.isArray(subElementValues) || !Array.isArray(subElements)) {
-    return [];
-  }
-  // TODO: explain what's going on here
-  const temp =  subElementValues.map((subElementValue: string) => {
-    return Object.keys(subElementValue).map((keyIndex: string) => {
-      return {
-        elementId: `${elementId} ${keyIndex}`,  // TODO
-        title: (subElements[keyIndex as keyof typeof subElements] as FormElement).properties?.[getLocalizedProperty("title", lang)],
-        values: subElementValue[keyIndex as keyof typeof subElementValue],
-      };
-    });
-  })
-  return temp;  //TODO TYPES
-}
-
 // Handles non-repeating sets (sub elements) form elements
 function getReviewItemElements(
   groupElements: string[],
@@ -87,14 +61,6 @@ function getReviewItemElements(
     
     if (element?.type === FormElementTypes.dynamicRow) {
       resultValues = [];
-
-      // element.properties?.subElements?.forEach(subElement => {
-      //   (values as Element[]).push( {
-      //     elementId: subElement.id,
-      //     title: getFormElementTitle(subElement.id, formElements, lang),
-      //     values: getFormSubElements(subElement.id, formValues, formElements, lang),
-      //   })
-      // })
 
       const parentId = element.id;
       const parentTitle = element.properties?.[getLocalizedProperty("title", lang)];
@@ -211,29 +177,12 @@ const QuestionsAnswersList = ({ reviewItem }: { reviewItem: ReviewItem }): React
             <div key={reviewElement.elementId} className="mb-8">
               <dt className="font-bold mb-2">{reviewElement.title}</dt>
               <dd>{Array.isArray(reviewElement.values) ? 
-                  // Handle arrays (sub elements)
+                  // Hand Sub Elements
                   reviewElement.values.map((subElement) => {
                     return subElement.values.map((element:Element[], index:number) => {
                       if (Array.isArray(element.values)) {
-                        return element.values.map((titleValues) => {
-                          const title = titleValues.title;
-                          const values = titleValues.value;
-                          return (
-                            <div key={title + values} className="mb-2">
-                              <dt className="font-bold mb-2">{title}</dt>
-                              <dd>{values || "-"}</dd>
-                            </div>
-                          )
-                        })
+                        return <SubElement key={subElement.elementId + index} element={element} />
                       }
-
-                      {/* {JSON.stringify(element)} */}
-                      // return (
-                      //   <div key={subElement.elementId + index} className="mb-2">
-                      //     <dt className="font-bold mb-2">{element[index].title}</dt>
-                      //     <dd>{element[index].values || "-"}</dd>
-                      //   </div>
-                      // )
                       return (
                         <div key={subElement.elementId + index} className="mb-2">
                           <dt className="font-bold mb-2">{element.title}</dt>
@@ -242,6 +191,7 @@ const QuestionsAnswersList = ({ reviewItem }: { reviewItem: ReviewItem }): React
                       )
                     })
                   }) :
+                  // Regular Element
                   reviewElement.values
                 }</dd>
             </div>
@@ -250,6 +200,31 @@ const QuestionsAnswersList = ({ reviewItem }: { reviewItem: ReviewItem }): React
     </dl>
   );
 };
+
+const SubElement = ({element}) => {
+  if (Array.isArray(element.values)) {
+    <div>
+      {element.title}
+      "-"
+    </div>
+  }
+  const listItems = element.values.map((titleValues) => {
+    const title = titleValues.title;
+    const values = titleValues.value;
+    return (
+      <div key={title + values} className="mb-2">
+        <dt className="font-bold mb-2">{title}</dt>
+        <dd>{values || "-"}</dd>
+      </div>
+    )
+  });
+  return (
+    <div>
+      {element.title}
+      {listItems}
+    </div>
+  )
+}
 
 const EditButton = ({
   reviewItem,
