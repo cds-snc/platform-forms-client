@@ -15,6 +15,7 @@ import { TextInput } from "../../../components/client/TextInput";
 import { MultipleChoiceGroup } from "../../../components/client/MultipleChoiceGroup";
 import { TextArea } from "../../../components/client/TextArea";
 import { SubmitButton } from "../../../components/client/SubmitButton";
+import { redirect } from "next/navigation";
 
 export const ContactForm = () => {
   const {
@@ -27,6 +28,11 @@ export const ContactForm = () => {
   const getError = (fieldKey: string) => {
     return state.validationErrors.find((e) => e.fieldKey === fieldKey)?.fieldValue || "";
   };
+
+  if (state.error === "") {
+    //Route through the client.
+    redirect(`/${language}/contact?success`);
+  }
 
   return (
     <>
