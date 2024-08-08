@@ -48,7 +48,13 @@ export const PanelBody = ({
       {isRichText || isDynamicRow ? (
         <div className="my-4">
           <Question item={item} onQuestionChange={onQuestionChange} />
-          <SelectedElement item={item} elIndex={elIndex} formId={formId} />
+          <SelectedElement
+            key={`item-${item.id}-${translationLanguagePriority}`}
+            lang={translationLanguagePriority}
+            item={item}
+            elIndex={elIndex}
+            formId={formId}
+          />
         </div>
       ) : (
         <>
@@ -64,7 +70,12 @@ export const PanelBody = ({
           <div className="mb-4 flex gap-4 text-sm">
             <div className="w-1/2">
               <QuestionDescription item={item} describedById={describedById} />
-              <SelectedElement item={item} elIndex={elIndex} formId={formId} />
+              <SelectedElement
+                lang={translationLanguagePriority}
+                item={item}
+                elIndex={elIndex}
+                formId={formId}
+              />
               {maxLength && (
                 <div className="disabled">
                   {t("maxCharacterLength")}

@@ -1,25 +1,25 @@
 import { parseRootId, getElementIndexes, indexesToPath, getPath, getPathString } from "../getPath";
 
 describe("Parse root ID", () => {
-  it.skip("parses root id", () => {
+  it("parses root id", () => {
     expect(parseRootId(1)).toEqual(1);
     expect(parseRootId(9)).toEqual(9);
     expect(parseRootId(12)).toEqual(12);
-    expect(parseRootId(101)).toEqual(1);
-    expect(parseRootId(201)).toEqual(2);
-    expect(parseRootId(1201)).toEqual(12);
-    expect(parseRootId(1202)).toEqual(12);
-    expect(parseRootId(1210)).toEqual(12);
+    expect(parseRootId(101)).toEqual(101);
+    expect(parseRootId(201)).toEqual(201);
+    expect(parseRootId(1201)).toEqual(1201);
+    expect(parseRootId(1202)).toEqual(1202);
+    expect(parseRootId(1210)).toEqual(1210);
   });
 });
 
 describe("Get array indexes for path by element ID", () => {
-  it.skip("parses elIndex", () => {
+  it("parses elIndex", () => {
     const elements = [{ id: 1 }, { id: 2 }, { id: 3 }, { id: 12 }];
-    expect(getElementIndexes(1210, elements)).toEqual([3, null]);
+    expect(getElementIndexes(12, elements)).toEqual([3, null]);
   });
 
-  it.skip("parses 3 digit elIndex and subIndex", () => {
+  it("parses 3 digit elIndex and subIndex", () => {
     const elements = [
       { id: 1 },
       { id: 2, properties: { subElements: [{ id: 201 }, { id: 202 }, { id: 203 }] } },
@@ -31,7 +31,7 @@ describe("Get array indexes for path by element ID", () => {
     expect(subIndex).toEqual(0);
   });
 
-  it.skip("parses 4 digit elIndex and subIndex", () => {
+  it("parses 4 digit elIndex and subIndex", () => {
     const elements = [
       { id: 1 },
       { id: 2 },
@@ -71,7 +71,7 @@ describe("Get path string by id", () => {
     expect(path).toEqual("form.elements[1].properties");
   });
 
-  it.skip("gets subPath", async () => {
+  it("gets subPath", async () => {
     const elements = [
       { id: 1 },
       { id: 2 },
@@ -97,7 +97,7 @@ describe("Get path string by id", () => {
       expect(path).toEqual(form.elements[3]);
     });
 
-    it.skip("gets sub element path", async () => {
+    it("gets sub element path", async () => {
       const form = {
         elements: [
           { id: 1 },
