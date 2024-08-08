@@ -96,8 +96,8 @@ export const Option = ({
   );
 
   const cleanUpRules = useCallback(
-    (parentIndex: number, index: number) => {
-      removeChoiceFromRules(parentIndex, index);
+    (parentId: string, index: number) => {
+      removeChoiceFromRules(parentId, index);
     },
     [removeChoiceFromRules]
   );
@@ -130,7 +130,7 @@ export const Option = ({
         icon={<Close className="group-focus:fill-white-default" />}
         aria-label={`${t("removeOption")} ${value}`}
         onClick={() => {
-          cleanUpRules(parentIndex, index);
+          cleanUpRules(String(id), index);
           removeChoice(parentIndex, index);
         }}
       ></Button>
