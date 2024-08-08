@@ -32,6 +32,7 @@ import { FormProperties } from "@lib/types";
 import { getLayoutFromGroups } from "@lib/utils/form-builder/groupedFormHelpers";
 import { allowGrouping } from "@formBuilder/components/shared/right-panel/treeview/util/allowGrouping";
 import { orderGroups } from "@lib/utils/form-builder/orderUsingGroupsLayout";
+import { formHasGroups } from "@lib/utils/form-builder/formHasGroups";
 
 export const fetchSubmissions = async ({
   formId,
@@ -219,7 +220,7 @@ export const getSubmissionsByFormat = async ({
         }
       );
       let sorted: Answer[];
-      if (allowGroupsFlag) {
+      if (allowGroupsFlag && formHasGroups(fullFormTemplate.form)) {
         sorted = sortByGroups({ form: fullFormTemplate.form, elements: submission });
       } else {
         sorted = sortByLayout({ layout: fullFormTemplate.form.layout, elements: submission });
