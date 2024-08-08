@@ -219,7 +219,8 @@ export const getSubmissionsByFormat = async ({
         }
       );
       let sorted: Answer[];
-      if (allowGroupsFlag) {
+      const formGroups = fullFormTemplate.form.groups ?? [];
+      if (allowGroupsFlag && formGroups.length !== 0) {
         sorted = sortByGroups({ form: fullFormTemplate.form, elements: submission });
       } else {
         sorted = sortByLayout({ layout: fullFormTemplate.form.layout, elements: submission });
