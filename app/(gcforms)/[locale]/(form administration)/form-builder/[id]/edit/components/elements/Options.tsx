@@ -137,7 +137,12 @@ export const Options = ({
         </div>
       </div>
       <div>
-        <ModalRules modalRef={modalContainer} item={item} formId={formId} />
+        <ModalRules
+          focusedOption={focusedOption}
+          modalRef={modalContainer}
+          item={item}
+          formId={formId}
+        />
       </div>
     </div>
   );
