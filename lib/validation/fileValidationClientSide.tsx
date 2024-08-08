@@ -45,10 +45,10 @@ export function isFileSizeValid(sizeInBytes: number): boolean {
 }
 
 /**
- * There is a 8.5MB bodySizeLimit that applies to all files combined,
- * configured in next.config.mjs
+ * There is a 8.5MB bodySizeLimit that applies to then entire POST payload, including
+ * all uploaded files, configured in next.config.mjs
  *
- * Since uploaded files are serialized to base64, there is a 35% increase in file size,
+ * Since uploaded files are serialized to base64, there is a ~35% overhead in file size,
  * making the limit for all files approximately 6MB.
  *
  * @param values
@@ -57,24 +57,34 @@ export function isFileSizeValid(sizeInBytes: number): boolean {
  * @param errors
  */
 export function checkFileSizeMaximumAllFiles(values: Responses, errors: Responses) {
-  const files: FileInputResponse[] = [];
+  const files: {
+    item: string | null;
+    name: string | null;
+    size: number | null;
+    based64EncodedFile: string | null;
+  }[] = [];
 
   for (const item in values) {
-    const element = values[item] as FileInputResponse;
+    const element = values[item];
+    // We're in a repeating set
     if (Array.isArray(element)) {
       element.forEach((el) => {
-        if (el[0] && el[0].size) {
-          files.push(el[0]);
+        // File inputs are an array of files
+        if (Array.isArray(el) && el[0] && el[0].size) {
+          files.push({ item, ...el[0] });
         }
       });
     } else {
-      if (element && element.size) {
-        files.push(element);
+      // Not repeating set
+      if (typeof element === "object" && element.size) {
+        files.push({ item, ...(element as FileInputResponse) });
       }
     }
 
     if (files) {
-      // 35% increase in file size due to base64 encoding
+      // file.size is the size reported by the browser which is the original file size.
+      // Since we are base64 encoding the file prior to transfer, there is a ~35% overhead
+      // in file size so we multiply by 1.35.
       const totalSize = files.reduce((sum, file) => Number(sum) + Number(file.size) * 1.35, 0);
 
       if (totalSize > MAXIMUM_FILE_SIZE_IN_BYTES) {
