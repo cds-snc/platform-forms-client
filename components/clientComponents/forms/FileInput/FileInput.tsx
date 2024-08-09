@@ -31,6 +31,7 @@ export const FileInput = (props: FileInputProps): React.ReactElement => {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const { value } = field;
   const [fileName, setFileName] = useState(value.name);
+  const [fileSize, setFileSize] = useState(value.size);
 
   const classes = classNames(
     "gc-file-input",
@@ -58,6 +59,7 @@ export const FileInput = (props: FileInputProps): React.ReactElement => {
         reader.onloadend = () => {
           if (newFile.name !== fileName) {
             setFileName(newFile.name);
+            setFileSize(newFile.size);
             setValue({
               name: newFile.name,
               size: newFile.size,
@@ -116,7 +118,9 @@ export const FileInput = (props: FileInputProps): React.ReactElement => {
               <span className="sr-only">{`${t(
                 "file-upload-sr-only-file-selected"
               )}: ${fileName}`}</span>
-              <span aria-hidden={true}>{fileName}</span>
+              <span aria-hidden={true}>
+                {fileName} ({(fileSize / 1024 / 1024).toFixed(2)} {t("input-validation.MB")})
+              </span>
             </>
           ) : (
             t("file-upload-no-file-selected")
