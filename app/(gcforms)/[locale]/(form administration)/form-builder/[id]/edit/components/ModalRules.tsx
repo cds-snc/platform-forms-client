@@ -23,11 +23,13 @@ export const ModalRules = ({
   modalRef,
   formId,
   focusedOption,
+  mode,
 }: {
   item: FormElementWithIndex;
   modalRef?: React.RefObject<HTMLDivElement> | undefined;
   formId: string;
   focusedOption: string | null;
+  mode: "add" | "edit";
 }) => {
   const {
     elements,
@@ -57,8 +59,8 @@ export const ModalRules = ({
     itemId: item.id,
   });
 
-  // Add a new rule if a choice is focused
-  if (focusedOption) {
+  // Add a new rule for the focused option
+  if (mode === "add" && focusedOption) {
     initialChoiceRules.push({ elementId: String(item.id), choiceId: focusedOption });
   }
 
