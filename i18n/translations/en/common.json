@@ -171,5 +171,6 @@
     "message": "<strong>In August</strong>: Build multi-page forms with branching logic. <a href='/en/contact' className='text-white hover:text-white'>Subscribe for updates</a>",
     "type2": "NEW",
     "message2": "Build complex multi-page forms with display logic and branching. <a href='https://articles.alpha.canada.ca/forms-formulaires/setting-up-form-logic/' className='text-white hover:text-white'>Learn more</a>"
-  }
+  },
+  "cancel": "Cancel"
 }
