@@ -57,7 +57,7 @@ function getReviewItemElements(
       const parentTitle = element.properties?.[getLocalizedProperty("title", lang)];
       const subElements = element.properties?.subElements;
       // Use FormValues as the source of truth and for each FormValue value, map the related
-      // subElement title to the value
+      // subElement title to the FormValue value
       const subElementValues = (formValues[parentId] as string[]).map(
         (valueRows, valueRowsIndex) => {
           const subElementsTitle = `${parentTitle} - ${valueRowsIndex + 1}`;
@@ -168,11 +168,7 @@ const QuestionsAnswersList = ({ reviewItem }: { reviewItem: ReviewItem }): React
       {Array.isArray(reviewItem.elements) &&
         reviewItem.elements.map((reviewElement) => {
           if (Array.isArray(reviewElement.values)) {
-            return (
-              <div key={randomId()}>
-                <SubElements elements={reviewElement.values as Element[]} />
-              </div>
-            );
+            return <SubElements key={randomId()} elements={reviewElement.values as Element[]} />;
           }
           return (
             <div key={randomId()} className="mb-8">
@@ -190,10 +186,13 @@ const SubElements = ({ elements }: { elements: Element[] }) => {
   return elements?.map((subElementItem) => {
     return (subElementItem.values as Element[])?.map((element) => {
       if (Array.isArray(element.values)) {
+        const dlId = randomId();
         // Create a nested DL for each Sub Element list
         return (
-          <dl key={randomId()}>
-            {element.title}
+          <dl key={dlId} aria-labelledby={dlId} className="my-10">
+            <h4 className="italic" id={dlId}>
+              {element.title}
+            </h4>
             {(element.values as Element[]).map((titleValues) => {
               return (
                 <div key={randomId()} className="mb-2">
