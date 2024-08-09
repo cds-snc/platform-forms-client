@@ -6,6 +6,7 @@ import { useTranslation } from "@i18n/client";
 import { ErrorMessage } from "@clientComponents/forms";
 import { InputFieldProps } from "@lib/types";
 import { htmlInputAccept } from "@lib/validation/fileValidationClientSide";
+import { CancelIcon } from "@serverComponents/icons";
 
 interface FileInputProps extends InputFieldProps {
   error?: boolean;
@@ -33,6 +34,11 @@ export const FileInput = (props: FileInputProps): React.ReactElement => {
   const [fileName, setFileName] = useState(value.name);
   const [fileSize, setFileSize] = useState(value.size);
 
+  const resetInput = () => {
+    setFileName("");
+    setFileSize(0);
+    setValue({});
+  };
   const classes = classNames(
     "gc-file-input",
     disabled ? "is-disabled" : "",
@@ -119,7 +125,10 @@ export const FileInput = (props: FileInputProps): React.ReactElement => {
                 "file-upload-sr-only-file-selected"
               )}: ${fileName}`}</span>
               <span aria-hidden={true}>
-                {fileName} ({(fileSize / 1024 / 1024).toFixed(2)} {t("input-validation.MB")})
+                {fileName} ({(fileSize / 1024 / 1024).toFixed(2)} {t("input-validation.MB")}){" "}
+                <span className="cursor-pointer" onClick={() => resetInput()}>
+                  <CancelIcon className="inline-block" /> cancel
+                </span>
               </span>
             </>
           ) : (
