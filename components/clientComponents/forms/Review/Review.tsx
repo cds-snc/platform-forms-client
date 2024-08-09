@@ -14,6 +14,7 @@ import {
   getElementIdsAsNumber,
   Group,
 } from "@lib/formContext";
+import { randomId } from "@lib/client/clientHelpers";
 
 type ReviewItem = {
   id: string;
@@ -27,22 +28,13 @@ type Element = {
   values: string | Element[];
 };
 
-function getFormElementValues(elementName: number | null, formValues: void | FormValues) {
-  const value = formValues[elementName as keyof typeof formValues];
+function formatElementValue(value: string | string[] | undefined) {
   if (Array.isArray(value)) {
-    return (value as Array<string>).join(", ") || "-";
+    return value.join(", ") || "-";
   }
   return value || "-";
 }
 
-function getFormElementTitle(formElementId: number, formElements: FormElement[], lang: string) {
-  const formElement = formElements.find((item) => item.id === formElementId);
-  return formElement
-    ? (formElement.properties?.[getLocalizedProperty("title", lang)] as string)
-    : "-";
-}
-
-// Handles non-repeating sets (sub elements) form elements
 function getReviewItemElements(
   groupElements: string[],
   formElements: FormElement[],
@@ -56,20 +48,21 @@ function getReviewItemElements(
   );
   return shownElementIds.map((elementId) => {
     const element = formElements.find((item) => item.id === elementId);
-    let resultValues: string | Element[] = getFormElementValues(elementId, formValues);
-
+    let resultValues: string | Element[] = formatElementValue(
+      formValues[elementId as unknown as keyof typeof formValues]
+    );
     if (element?.type === FormElementTypes.dynamicRow) {
       resultValues = [];
       const parentId = element.id;
       const parentTitle = element.properties?.[getLocalizedProperty("title", lang)];
       const subElements = element.properties?.subElements;
-
       const subElementValues = (formValues[parentId] as string[]).map(
         (valueRows, valueRowsIndex) => {
           const subElementsTitle = `${parentTitle} - ${valueRowsIndex + 1}`;
           const valueRowsAsArray = Object.keys(valueRows).map(
             (key) => valueRows[key as keyof typeof valueRows]
           );
+          // Map the FormValue index to the subElement index to get the Element title
           const titlesMappedToValues = valueRowsAsArray.map((value, valueRowIndex) => {
             return {
               title: subElements?.[valueRowIndex].properties?.[getLocalizedProperty("title", lang)],
@@ -82,15 +75,13 @@ function getReviewItemElements(
           } as Element;
         }
       );
-
       resultValues.push({
         title: parentTitle as string,
         values: subElementValues,
       });
     }
-
     return {
-      title: getFormElementTitle(elementId, formElements, lang),
+      title: (element?.properties?.[getLocalizedProperty("title", lang)] as string) || "-",
       values: resultValues,
     } as Element;
   });
@@ -110,7 +101,7 @@ export const Review = ({ language }: { language: Language }): React.ReactElement
 
     const groupHistory = getGroupHistory();
     return groupHistory
-      .filter((key) => key !== "review") // Removed to avoid showing as a group
+      .filter((key) => key !== "review") // Removed to avoid showing as a group - TODO use remove function
       .map((groupId) => {
         const group: Group = groups[groupId as keyof typeof groups] || {};
         return {
@@ -173,18 +164,20 @@ const QuestionsAnswersList = ({ reviewItem }: { reviewItem: ReviewItem }): React
   return (
     <dl className="my-10">
       {Array.isArray(reviewItem.elements) &&
-        reviewItem.elements.map((reviewElement, index) => {
+        reviewItem.elements.map((reviewElement) => {
+          if (Array.isArray(reviewElement.values)) {
+            // TODO: look into whether there is a "correct" way to  nest DL's
+            return (
+              <dl key={randomId()}>
+                <SubElements elements={reviewElement.values as Element[]} />
+              </dl>
+            );
+          }
+
           return (
-            <div key={reviewElement.title + index} className="mb-8">
+            <div key={randomId()} className="mb-8">
               <dt className="font-bold mb-2">{reviewElement.title}</dt>
-              <dd>
-                {Array.isArray(reviewElement.values) ? (
-                  <SubElements elements={reviewElement.values as Element[]} />
-                ) : (
-                  // Regular Element
-                  reviewElement.values
-                )}
-              </dd>
+              <dd>{reviewElement.values}</dd>
             </div>
           );
         })}
@@ -192,45 +185,33 @@ const QuestionsAnswersList = ({ reviewItem }: { reviewItem: ReviewItem }): React
   );
 };
 
-// Handles formatting Sub Elements (a.k.k repeating set/dynamic row)
+// Handles formatting Sub Elements (a.k.a. Repeating Sets, Dynamic Rows)
 const SubElements = ({ elements }: { elements: Element[] }) => {
   return elements?.map((subElementItem) => {
-    return (subElementItem.values as Element[])?.map((element, index) => {
-      // Handle a Sub Element
+    return (subElementItem.values as Element[])?.map((element) => {
       if (Array.isArray(element.values)) {
-        return <SubElement key={subElementItem.title + index} element={element} />;
+        return (
+          <dl key={randomId()}>
+            {element.title}
+            {(element.values as Element[]).map((titleValues) => {
+              return (
+                <div key={randomId()} className="mb-2">
+                  <dt className="font-bold mb-2">{titleValues.title}</dt>
+                  <dd>{formatElementValue(titleValues.values as string)}</dd>
+                </div>
+              );
+            })}
+          </dl>
+        );
       }
-      // Nope is just a regular element
       return (
-        <div key={subElementItem.title + index} className="mb-2">
+        <div key={randomId()} className="mb-2">
           <dt className="font-bold mb-2">{element.title}</dt>
-          <dd>{String(element.values) || "-"}</dd>
+          <dd>{formatElementValue(element.values)}</dd>
         </div>
       );
     });
   });
-};
-
-const SubElement = ({ element }: { element: Element }) => {
-  if (Array.isArray(element.values)) {
-    <div>{element.title}-</div>;
-  }
-  const listItems = (element.values as Element[]).map((titleValues) => {
-    const title = titleValues.title;
-    const values = titleValues.values;
-    return (
-      <div key={title + values} className="mb-2">
-        <dt className="font-bold mb-2">{title}</dt>
-        <dd>{String(values) || "-"}</dd>
-      </div>
-    );
-  });
-  return (
-    <div>
-      {element.title}
-      {listItems}
-    </div>
-  );
 };
 
 const EditButton = ({
