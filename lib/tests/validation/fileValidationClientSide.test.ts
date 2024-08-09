@@ -1,4 +1,7 @@
-import { isFileExtensionValid, isFileSizeValid } from "@lib/validation/fileValidationClientSide";
+import {
+  isFileExtensionValid,
+  isAllFilesSizeValid,
+} from "@lib/validation/fileValidationClientSide";
 
 describe("File extension validator", () => {
   it.each([
@@ -31,6 +34,6 @@ describe("File size validator", () => {
     [8000001, false],
     [10000000, false],
   ])(`Should return true if file size is valid (testing "%s")`, async (fileSize, isValid) => {
-    expect(isFileSizeValid(fileSize)).toBe(isValid);
+    expect(isAllFilesSizeValid(fileSize)).toBe(isValid);
   });
 });

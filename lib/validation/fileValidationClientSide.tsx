@@ -40,6 +40,10 @@ export function isFileExtensionValid(fileName: string): boolean {
     .includes(extension);
 }
 
+export function isIndividualFileSizeValid(sizeInBytes: number): boolean {
+  return sizeInBytes <= MAXIMUM_FILE_SIZE_IN_BYTES;
+}
+
 /**
  * There is a 8.5MB bodySizeLimit that applies to the entire POST payload, including
  * all uploaded files, configured in next.config.mjs
@@ -52,7 +56,7 @@ export function isFileExtensionValid(fileName: string): boolean {
  * @param files
  * @param errors
  */
-export function isFileSizeValid(values: Responses): boolean {
+export function isAllFilesSizeValid(values: Responses): boolean {
   const files: FileInputResponse[] = [];
   for (const item in values) {
     const element = values[item];
