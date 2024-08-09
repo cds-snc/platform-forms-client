@@ -5,6 +5,35 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.18.2](https://github.com/cds-snc/platform-forms-client/compare/v3.18.1...v3.18.2) (2024-08-08)
+
+
+### Bug Fixes
+
+* Adjust next action choice rules when option removed  ([#4180](https://github.com/cds-snc/platform-forms-client/issues/4180)) ([da5f70f](https://github.com/cds-snc/platform-forms-client/commit/da5f70fb03d91ff6a28dcc014fdfca2d55ba847f))
+* Move redirects from server to client on Contact and Support ([1c79684](https://github.com/cds-snc/platform-forms-client/commit/1c79684d6ff17f11a25053679d274df1bd2d3c8b))
+* Move redirects from server to client on Contact and Support ([3b53550](https://github.com/cds-snc/platform-forms-client/commit/3b53550710731476df021cd9740bd475ed318712))
+
+
+### Miscellaneous Chores
+
+* Add National Defence & Public Service Commission of Canada branding ([#4174](https://github.com/cds-snc/platform-forms-client/issues/4174)) ([8e16820](https://github.com/cds-snc/platform-forms-client/commit/8e16820ca0c4c4f5a5e9810652715655d789b4b0))
+
+## [3.18.1](https://github.com/cds-snc/platform-forms-client/compare/v3.18.0...v3.18.1) (2024-08-08)
+
+
+### Bug Fixes
+
+* Adjust ChoiceId indexes when an option is removed. ([#4153](https://github.com/cds-snc/platform-forms-client/issues/4153)) ([6844053](https://github.com/cds-snc/platform-forms-client/commit/6844053779485b5084c8f72e905665928db85f71))
+* only delete form viewer task definitions ([#4168](https://github.com/cds-snc/platform-forms-client/issues/4168)) ([382ad49](https://github.com/cds-snc/platform-forms-client/commit/382ad491988746abd0314a8b641c6f5d94bc4687))
+* release-please configuration in v4 ([#4162](https://github.com/cds-snc/platform-forms-client/issues/4162)) ([6245c27](https://github.com/cds-snc/platform-forms-client/commit/6245c270857b52b1b0a7a3f2c88fb41ef1b23860))
+* small typo in terms of use ([#4176](https://github.com/cds-snc/platform-forms-client/issues/4176)) ([e4170bb](https://github.com/cds-snc/platform-forms-client/commit/e4170bbb196776be35a91a58f9d9cb93ec7e9ca2))
+
+
+### Miscellaneous Chores
+
+* upgrade to Next-Auth 5.0.0 beta 20. Goal is to fix the error log we get when someone enters a wrong 2FA code ([#4161](https://github.com/cds-snc/platform-forms-client/issues/4161)) ([eb18e7d](https://github.com/cds-snc/platform-forms-client/commit/eb18e7d93fb75b10594897452cb7ed8785dc1862))
+
 ## [3.18.0](https://github.com/cds-snc/platform-forms-client/compare/v3.17.0...v3.18.0) (2024-08-06)
 
 

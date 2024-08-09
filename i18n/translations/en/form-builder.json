@@ -412,6 +412,7 @@
   "formTitle": "Form title",
   "french": "French",
   "gcForms": "GC Forms",
+  "gcFormsApi": "API",
   "gcFormsEdit": "Edit",
   "gcFormsPublish": "Publish",
   "gcFormsPublished": "Published",
@@ -554,7 +555,14 @@
   "selectElement": "Select an element type",
   "send": "Send",
   "settings": {
-    "formManagement": "Form management"
+    "formManagement": "Form management",
+    "api": {
+      "title": "API Access",
+      "generateKey": "Generate Key",
+      "refreshKey": "Refresh Key",
+      "deleteKey": "Delete Key",
+      "keyExists": "API Key Exists"
+    }
   },
   "settingsDeleteButton": "Delete",
   "settingsDeleteHint": "Once you delete a form, there is no way to retrieve it back again. Please save a copy before deleting your form.",
