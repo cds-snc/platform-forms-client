@@ -412,6 +412,7 @@
   "french": "français",
   "gcForms": "Formulaires GC",
   "gcFormsEdit": "Modifier",
+  "gcFormsApi": "API",
   "gcFormsPublish": "Publier",
   "gcFormsPublished": "Publié",
   "gcFormsSettings": "Paramètres",
@@ -553,7 +554,14 @@
   "selectElement": "Sélectionnez un type d'élément",
   "send": "Envoyer",
   "settings": {
-    "formManagement": "Gestion du formulaire"
+    "formManagement": "Gestion du formulaire",
+    "api": {
+      "title": "Accès API",
+      "generateKey": "Générer une clé",
+      "refreshKey": "Rafraîchir la clé",
+      "deleteKey": "Supprimer la clé",
+      "keyExists": "Clé existante"
+    }
   },
   "settingsDeleteButton": "Supprimer le formulaire",
   "settingsDeleteHint": "Une fois le formulaire supprimé, vous ne pourrez pas le récupérer. Veuillez enregistrer une copie du formulaire avant de le supprimer.",
