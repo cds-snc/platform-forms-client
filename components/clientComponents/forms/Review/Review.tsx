@@ -23,9 +23,8 @@ type ReviewItem = {
 };
 
 type Element = {
-  elementId: number;
   title: string;
-  values: string;
+  values: string | Element[];
 }
 
 function getFormElementValues(elementName: number | null, formValues: void | FormValues) {
@@ -65,12 +64,12 @@ function getReviewItemElements(
       const parentId = element.id;
       const parentTitle = element.properties?.[getLocalizedProperty("title", lang)];
       const subElements = element.properties?.subElements;
-      const result = formValues[parentId].map((valueRows, valueRowsIndex) => {
+      const result = (formValues[parentId] as string[]).map((valueRows, valueRowsIndex) => {
         const subElementsTitle = `${parentTitle} - ${valueRowsIndex + 1}`;
-        const valueRowsAsArray = Object.keys(valueRows).map(key => valueRows[key]);
+        const valueRowsAsArray = Object.keys(valueRows).map(key => valueRows[key as keyof typeof valueRows]);
         const titleValues = valueRowsAsArray.map((value, valueRowIndex) => {
           return {
-            title: subElements[valueRowIndex].properties?.[getLocalizedProperty("title", lang)],
+            title: subElements?.[valueRowIndex].properties?.[getLocalizedProperty("title", lang)],
             value: value
           }
         });
@@ -82,7 +81,7 @@ function getReviewItemElements(
       });
 
       resultValues.push({
-        title: parentTitle,
+        title: parentTitle as string,
         values: result
       });
     }
@@ -111,7 +110,7 @@ export const Review = ({ language }: { language: Language }): React.ReactElement
     return groupHistory
       .filter((key) => key !== "review") // Removed to avoid showing as a group
       .map((groupId) => {
-        const group: Group = groups[groupId as keyof typeof groups];
+        const group: Group = groups[groupId as keyof typeof groups] || {};
         return {
           id: groupId,
           name: group.name,
@@ -172,21 +171,23 @@ const QuestionsAnswersList = ({ reviewItem }: { reviewItem: ReviewItem }): React
   return (
     <dl className="my-10">
       {Array.isArray(reviewItem.elements) &&
-        reviewItem.elements.map((reviewElement) => {
+        reviewItem.elements.map((reviewElement, index) => {
           return (
-            <div key={reviewElement.elementId} className="mb-8">
+            <div key={reviewElement.title + index} className="mb-8">
               <dt className="font-bold mb-2">{reviewElement.title}</dt>
               <dd>{Array.isArray(reviewElement.values) ? 
-                  // Hand Sub Elements
+                  // Handle Sub Elements
                   reviewElement.values.map((subElement) => {
-                    return subElement.values.map((element:Element[], index:number) => {
+                    return (subElement.values as Element[]).map((element, index) => {
+                      // Dynamic Row
                       if (Array.isArray(element.values)) {
-                        return <SubElement key={subElement.elementId + index} element={element} />
+                        return <SubElement key={subElement.title + index} element={element} />
                       }
+                      // Regular Element
                       return (
-                        <div key={subElement.elementId + index} className="mb-2">
+                        <div key={subElement.title + index} className="mb-2">
                           <dt className="font-bold mb-2">{element.title}</dt>
-                          <dd>{element.values || "-"}</dd>
+                          <dd>{String(element.values) || "-"}</dd>
                         </div>
                       )
                     })
@@ -201,16 +202,16 @@ const QuestionsAnswersList = ({ reviewItem }: { reviewItem: ReviewItem }): React
   );
 };
 
-const SubElement = ({element}) => {
+const SubElement = ({element}:{element:Element}) => {
   if (Array.isArray(element.values)) {
     <div>
       {element.title}
       "-"
     </div>
   }
-  const listItems = element.values.map((titleValues) => {
+  const listItems = (element.values as Element[]).map((titleValues) => {
     const title = titleValues.title;
-    const values = titleValues.value;
+    const values = titleValues.value; // TODO: Do I mean values?
     return (
       <div key={title + values} className="mb-2">
         <dt className="font-bold mb-2">{title}</dt>
