@@ -60,37 +60,35 @@ function getReviewItemElements(
     
     if (element?.type === FormElementTypes.dynamicRow) {
       resultValues = [];
-
       const parentId = element.id;
       const parentTitle = element.properties?.[getLocalizedProperty("title", lang)];
       const subElements = element.properties?.subElements;
-      const result = (formValues[parentId] as string[]).map((valueRows, valueRowsIndex) => {
+      
+      const subElementValues = (formValues[parentId] as string[]).map((valueRows, valueRowsIndex) => {
         const subElementsTitle = `${parentTitle} - ${valueRowsIndex + 1}`;
         const valueRowsAsArray = Object.keys(valueRows).map(key => valueRows[key as keyof typeof valueRows]);
-        const titleValues = valueRowsAsArray.map((value, valueRowIndex) => {
+        const titlesMappedToValues = valueRowsAsArray.map((value, valueRowIndex) => {
           return {
             title: subElements?.[valueRowIndex].properties?.[getLocalizedProperty("title", lang)],
-            value: value
-          }
+            values: value
+          } as Element;
         });
-        const result = {
+        return {
           title: subElementsTitle,
-          values: titleValues
-        }
-        return result;
+          values: titlesMappedToValues
+        } as Element;
       });
 
       resultValues.push({
         title: parentTitle as string,
-        values: result
+        values: subElementValues
       });
     }
 
     return {
-      elementId,
       title: getFormElementTitle(elementId, formElements, lang),
       values: resultValues,
-    };
+    } as Element;
   });
 }
 
@@ -179,11 +177,11 @@ const QuestionsAnswersList = ({ reviewItem }: { reviewItem: ReviewItem }): React
                   // Handle Sub Elements
                   reviewElement.values.map((subElement) => {
                     return (subElement.values as Element[]).map((element, index) => {
-                      // Dynamic Row
+                      // TODO comment
                       if (Array.isArray(element.values)) {
                         return <SubElement key={subElement.title + index} element={element} />
                       }
-                      // Regular Element
+                      // TODO comment
                       return (
                         <div key={subElement.title + index} className="mb-2">
                           <dt className="font-bold mb-2">{element.title}</dt>
@@ -211,11 +209,11 @@ const SubElement = ({element}:{element:Element}) => {
   }
   const listItems = (element.values as Element[]).map((titleValues) => {
     const title = titleValues.title;
-    const values = titleValues.value; // TODO: Do I mean values?
+    const values = titleValues.values;
     return (
       <div key={title + values} className="mb-2">
         <dt className="font-bold mb-2">{title}</dt>
-        <dd>{values || "-"}</dd>
+        <dd>{String(values) || "-"}</dd>
       </div>
     )
   });
