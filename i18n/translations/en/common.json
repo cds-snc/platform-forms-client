@@ -41,7 +41,7 @@
     "phone": "Enter a valid telephone number.",
     "regex": "Enter the correct format.",
     "file-size-too-large": "Select a smaller file.",
-    "file-size-too-large-all-files": "Files added to the form exceed the total size limit. Upload smaller files for a maximum of 6 MB.",
+    "file-size-too-large-all-files": "Files exceed the 6 MB maximum. Upload smaller files.",
     "file-type-invalid": "Select a different file type.",
     "too-many-characters": "Shorten the response.",
     "all-checkboxes-required": "Read and check all boxes to confirm the items in this section.",
