@@ -40,12 +40,8 @@ export function isFileExtensionValid(fileName: string): boolean {
     .includes(extension);
 }
 
-export function isFileSizeValid(sizeInBytes: number): boolean {
-  return sizeInBytes <= MAXIMUM_FILE_SIZE_IN_BYTES;
-}
-
 /**
- * There is a 8.5MB bodySizeLimit that applies to then entire POST payload, including
+ * There is a 8.5MB bodySizeLimit that applies to the entire POST payload, including
  * all uploaded files, configured in next.config.mjs
  *
  * Since uploaded files are serialized to base64, there is a ~35% overhead in file size,
@@ -56,40 +52,35 @@ export function isFileSizeValid(sizeInBytes: number): boolean {
  * @param files
  * @param errors
  */
-export function checkFileSizeMaximumAllFiles(values: Responses, errors: Responses) {
-  const files: {
-    item: string | null;
-    name: string | null;
-    size: number | null;
-    based64EncodedFile: string | null;
-  }[] = [];
-
+export function isFileSizeValid(values: Responses): boolean {
+  const files: FileInputResponse[] = [];
   for (const item in values) {
     const element = values[item];
     // We're in a repeating set
     if (Array.isArray(element)) {
       element.forEach((el) => {
-        // File inputs are an array of files
-        if (Array.isArray(el) && el[0] && el[0].size) {
-          files.push({ item, ...el[0] });
+        // @ts-expect-error - we know that el[0] is a FileInputResponse
+        const nestedElement = el[0] as FileInputResponse;
+        if (nestedElement.size) {
+          files.push(nestedElement);
         }
       });
     } else {
       // Not repeating set
       if (typeof element === "object" && element.size) {
-        files.push({ item, ...(element as FileInputResponse) });
+        files.push(element as FileInputResponse);
       }
     }
-
     if (files) {
       // file.size is the size reported by the browser which is the original file size.
       // Since we are base64 encoding the file prior to transfer, there is a ~35% overhead
       // in file size so we multiply by 1.35.
       const totalSize = files.reduce((sum, file) => Number(sum) + Number(file.size) * 1.35, 0);
-
       if (totalSize > MAXIMUM_FILE_SIZE_IN_BYTES) {
-        errors[item] = "Total file size exeeds limit";
+        return false;
       }
     }
   }
+
+  return true;
 }

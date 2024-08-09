@@ -15,11 +15,7 @@ import uuidArraySchema from "@lib/middleware/schemas/uuid-array.schema.json";
 import formNameArraySchema from "@lib/middleware/schemas/submission-name-array.schema.json";
 import { matchRule, FormValues, GroupsType } from "@lib/formContext";
 import { inGroup } from "@lib/formContext";
-import {
-  checkFileSizeMaximumAllFiles,
-  isFileExtensionValid,
-  isFileSizeValid,
-} from "./fileValidationClientSide";
+import { isFileExtensionValid, isFileSizeValid } from "./fileValidationClientSide";
 
 /**
  * getRegexByType [private] defines a mapping between the types of fields that need to be validated
@@ -74,6 +70,7 @@ const getRegexByType = (type: string | undefined, t: TFunction, value?: string) 
 
 const isFieldResponseValid = (
   value: unknown,
+  values: Responses,
   componentType: string,
   formElement: FormElement,
   validator: ValidationProperties,
@@ -138,8 +135,9 @@ const isFieldResponseValid = (
       )
         return t("input-validation.required");
 
-      if (fileInputResponse.size && !isFileSizeValid(fileInputResponse.size))
-        return t("input-validation.file-size-too-large");
+      if (fileInputResponse.size && !isFileSizeValid(values)) {
+        return t("input-validation.file-size-too-large-all-files");
+      }
 
       if (fileInputResponse.name && !isFileExtensionValid(fileInputResponse.name))
         return t("input-validation.file-type-invalid");
@@ -166,6 +164,7 @@ const isFieldResponseValid = (
             if (subElement?.properties?.validation) {
               const validationError = isFieldResponseValid(
                 responseValue,
+                values,
                 subElement.type,
                 subElement,
                 subElement.properties.validation,
@@ -210,13 +209,11 @@ export const validateOnSubmit = (
 ): Responses => {
   const errors: Responses = {};
 
-  checkFileSizeMaximumAllFiles(values, errors);
-
   for (const item in values) {
     const formElement = props.formRecord.form.elements.find(
       (element) => element.id == parseInt(item)
     );
-    if (!formElement) return errors;
+    if (!formElement) continue;
 
     const currentGroup = values.currentGroup as string;
     const groups = props.formRecord.form.groups as GroupsType;
@@ -245,6 +242,7 @@ export const validateOnSubmit = (
     if (formElement.properties.validation) {
       const result = isFieldResponseValid(
         values[item],
+        values,
         formElement.type,
         formElement,
         formElement.properties.validation,
@@ -256,7 +254,7 @@ export const validateOnSubmit = (
       }
     }
   }
-
+  // console.log(errors);
   return errors;
 };
 /**
