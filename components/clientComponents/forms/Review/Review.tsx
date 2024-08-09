@@ -22,14 +22,14 @@ type ReviewItem = {
   elements: {
     elementId: number;
     title: string;
-    values: string | { based64EncodedFile: string; name: string; size: number };
+    values: string;
   }[];
 };
 
 function getFormElementValues(elementName: number | null, formValues: void | FormValues) {
   const value = formValues[elementName as keyof typeof formValues];
   if (Array.isArray(value)) {
-    return "Huzzah"; // return (value as Array<string>).join(", ") || "-";
+    return (value as Array<string>).join(", ") || "-";
   }
   return value || "-";
 }
@@ -143,11 +143,7 @@ const QuestionsAnswersList = ({ reviewItem }: { reviewItem: ReviewItem }): React
           return (
             <div key={reviewElement.elementId} className="mb-8">
               <dt className="mb-2 font-bold">{reviewElement.title}</dt>
-              <dd>
-                {typeof reviewElement.values === "object"
-                  ? reviewElement.values.name
-                  : reviewElement.values}
-              </dd>
+              <dd>{reviewElement.values}</dd>
             </div>
           );
         })}
