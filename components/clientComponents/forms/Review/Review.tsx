@@ -28,7 +28,7 @@ type Element = {
   values: string | Element[];
 };
 
-function formatElementValue(value: string | string[] | undefined) {
+function formatElementValues(value: string | string[] | undefined) {
   if (Array.isArray(value)) {
     return value.join(", ") || "-";
   }
@@ -48,7 +48,7 @@ function getReviewItemElements(
   );
   return shownElementIds.map((elementId) => {
     const element = formElements.find((item) => item.id === elementId);
-    let resultValues: string | Element[] = formatElementValue(
+    let resultValues: string | Element[] = formatElementValues(
       formValues[elementId as unknown as keyof typeof formValues]
     );
     if (element?.type === FormElementTypes.dynamicRow) {
@@ -56,6 +56,8 @@ function getReviewItemElements(
       const parentId = element.id;
       const parentTitle = element.properties?.[getLocalizedProperty("title", lang)];
       const subElements = element.properties?.subElements;
+      // Use FormValues as the source of truth and for each FormValue value, map the related
+      // subElement title to the value
       const subElementValues = (formValues[parentId] as string[]).map(
         (valueRows, valueRowsIndex) => {
           const subElementsTitle = `${parentTitle} - ${valueRowsIndex + 1}`;
@@ -166,14 +168,12 @@ const QuestionsAnswersList = ({ reviewItem }: { reviewItem: ReviewItem }): React
       {Array.isArray(reviewItem.elements) &&
         reviewItem.elements.map((reviewElement) => {
           if (Array.isArray(reviewElement.values)) {
-            // TODO: look into whether there is a "correct" way to  nest DL's
             return (
-              <dl key={randomId()}>
+              <div key={randomId()}>
                 <SubElements elements={reviewElement.values as Element[]} />
-              </dl>
+              </div>
             );
           }
-
           return (
             <div key={randomId()} className="mb-8">
               <dt className="font-bold mb-2">{reviewElement.title}</dt>
@@ -190,6 +190,7 @@ const SubElements = ({ elements }: { elements: Element[] }) => {
   return elements?.map((subElementItem) => {
     return (subElementItem.values as Element[])?.map((element) => {
       if (Array.isArray(element.values)) {
+        // Create a nested DL for each Sub Element list
         return (
           <dl key={randomId()}>
             {element.title}
@@ -197,7 +198,7 @@ const SubElements = ({ elements }: { elements: Element[] }) => {
               return (
                 <div key={randomId()} className="mb-2">
                   <dt className="font-bold mb-2">{titleValues.title}</dt>
-                  <dd>{formatElementValue(titleValues.values as string)}</dd>
+                  <dd>{formatElementValues(titleValues.values as string)}</dd>
                 </div>
               );
             })}
@@ -207,7 +208,7 @@ const SubElements = ({ elements }: { elements: Element[] }) => {
       return (
         <div key={randomId()} className="mb-2">
           <dt className="font-bold mb-2">{element.title}</dt>
-          <dd>{formatElementValue(element.values)}</dd>
+          <dd>{formatElementValues(element.values)}</dd>
         </div>
       );
     });
