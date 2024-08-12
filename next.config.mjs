@@ -92,6 +92,9 @@ const nextConfig = {
     // PPR is only supported in Next.js Canary branches
     // ppr: true,
     serverComponentsExternalPackages: ["@aws-sdk/lib-dynamodb", "pino"],
+    serverActions: {
+      bodySizeLimit: "8.5mb",
+    },
     turbo: {
       rules: {
         "*.md": ["raw-loader"],
