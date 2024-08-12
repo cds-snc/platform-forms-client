@@ -392,7 +392,7 @@ export async function updateLastDownloadedBy(
 ) {
   const chunkedResponses = chunkArray(responses, 20);
 
-  for (const chunk of chunkedResponses) {
+  for (const [index, chunk] of chunkedResponses.entries()) {
     const request = new TransactWriteCommand({
       TransactItems: chunk.map((response) => {
         const isNewResponse = response.status === VaultStatus.NEW;
@@ -421,13 +421,13 @@ export async function updateLastDownloadedBy(
       }),
     });
 
-    // eslint-disable-next-line no-await-in-loop
-    await dynamoDBDocumentClient.send(request);
-
-    if (chunkedResponses.length > 0) {
+    if (index > 0) {
       // eslint-disable-next-line no-await-in-loop
       await delay(200);
     }
+
+    // eslint-disable-next-line no-await-in-loop
+    await dynamoDBDocumentClient.send(request);
   }
 }
 
@@ -528,7 +528,11 @@ export async function deleteDraftFormResponses(ability: UserAbility, formID: str
     // The `BatchWriteCommand` can only take up to 25 `DeleteRequest` at a time.
 
     const chunkRequests = chunkArray(accumulatedResponses, 25);
-    for (const chunk of chunkRequests) {
+    for (const [index, chunk] of chunkRequests.entries()) {
+      if (index > 0) {
+        // eslint-disable-next-line no-await-in-loop
+        await delay(200);
+      }
       // eslint-disable-next-line no-await-in-loop
       await dynamoDBDocumentClient.send(
         new BatchWriteCommand({
@@ -544,11 +548,6 @@ export async function deleteDraftFormResponses(ability: UserAbility, formID: str
           },
         })
       );
-
-      if (chunkRequests.length > 0) {
-        // eslint-disable-next-line no-await-in-loop
-        await delay(200);
-      }
     }
 
     logEvent(
