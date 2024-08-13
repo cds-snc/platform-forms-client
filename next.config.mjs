@@ -93,7 +93,7 @@ const nextConfig = {
     // ppr: true,
     serverComponentsExternalPackages: ["@aws-sdk/lib-dynamodb", "pino"],
     serverActions: {
-      bodySizeLimit: "8.5mb",
+      bodySizeLimit: "5mb",
     },
     turbo: {
       rules: {
