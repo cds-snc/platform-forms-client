@@ -322,6 +322,10 @@ export const confirmSubmissionCodes = async (confirmationCodes: string[], formId
 
     return confirmResponses(ability, confirmationCodes, formId);
   } catch (e) {
+    logMessage.warn(
+      `Error confirming submission codes for formId ${formId}: ${(e as Error).message}`
+    );
+    // Throw sanitized error back to client
     throw new Error("There was an error. Please try again later.");
   }
 };
