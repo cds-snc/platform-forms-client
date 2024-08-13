@@ -41,6 +41,12 @@ function _handleDynamicRowTypeIfNeeded(
     const responses = value as Responses[];
     const subElements = element.properties.subElements;
 
+    // Handle the case of the addition of Pages (Groups) which can be empty (response value of "")
+    // depending on the path a user chose. Check subElements just for safety.
+    if (!Array.isArray(responses) || !Array.isArray(subElements)) {
+      return [];
+    }
+
     /**
      * We are creating a new data structure (to be passed to the submit API) from the multiple responses that could have been entered
      * for the dynamic row component we are currently processing. */

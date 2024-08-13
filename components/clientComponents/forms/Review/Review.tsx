@@ -64,7 +64,7 @@ function getReviewItemElements(
           const valueRowsAsArray = Object.keys(valueRows).map(
             (key) => valueRows[key as keyof typeof valueRows]
           );
-          // Map the FormValue index to the subElement index to get the Element title
+          // Match the FormValue index to the subElement index to get the Element title
           const titlesMappedToValues = valueRowsAsArray.map((value, valueRowIndex) => {
             return {
               title: subElements?.[valueRowIndex].properties?.[getLocalizedProperty("title", lang)],
