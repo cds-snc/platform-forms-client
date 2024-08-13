@@ -30,7 +30,7 @@ describe("File extension validator", () => {
 describe("File size validator", () => {
   it.each([
     [1000, true],
-    [8000000, true],
+    [5000000, true],
     [8389121, false],
     [10000000, false],
   ])(`Should return true if file size is valid (testing "%s")`, async (fileSize, isValid) => {

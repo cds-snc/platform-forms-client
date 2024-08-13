@@ -296,7 +296,8 @@
     "email": "Par exemple : nom@exemple.com",
     "number": "Saisissez un chiffre",
     "phone": "Par exemple : 111-222-3333",
-    "combobox": "Commencez à taper pour réduire la liste."
+    "combobox": "Commencez à taper pour réduire la liste.",
+    "fileInput": "Les fichiers ne doivent pas dépasser 3.5 Mo au total."
   },
   "description": "Description",
   "descriptionDescription": "Le texte explicatif apparaît sous l'étiquette et avant le champ. Il est utilisé pour ajouter un contexte et des instructions pour le champ. C'est un endroit idéal pour préciser les exigences de mise en forme ou donner un exemple.",

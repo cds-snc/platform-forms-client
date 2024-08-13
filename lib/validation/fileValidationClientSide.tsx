@@ -21,7 +21,7 @@ export const ALLOWED_FILE_TYPES = [
   { mime: "application/xml", extensions: ["xml"] },
 ];
 
-const MAXIMUM_FILE_SIZE_IN_BYTES = 8 * 1024 * 1024 + 512; // 8.5MB
+const MAXIMUM_FILE_SIZE_IN_BYTES = 5 * 1024 * 1024; // 5MB
 
 // See https://developer.mozilla.org/en-US/docs/Web/HTML/Attributes/accept
 export const htmlInputAccept = ALLOWED_FILE_TYPES.map((t) =>
