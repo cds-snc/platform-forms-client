@@ -31,11 +31,9 @@ export const QuestionInput = ({
 
   const { refs } = useRefsContext();
   const getRef = (element: HTMLTextAreaElement) => {
-    if (!refs || !refs.current || !element || !id) {
-      return;
+    if (refs?.current && element && id) {
+      refs.current[id] = element;
     }
-
-    return (refs.current[id] = element);
   };
 
   const { getFocusInput, setFocusInput, translationLanguagePriority, getLocalizationAttribute } =
