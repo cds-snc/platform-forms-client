@@ -27,6 +27,8 @@ export const dynamoDBDocumentClient = DynamoDBDocumentClient.from(
   new DynamoDBClient({
     ...globalConfig,
     ...localstackConfig,
+    // SDK retries use exponential backoff with jitter by default
+    maxAttempts: 15,
   })
 );
 
