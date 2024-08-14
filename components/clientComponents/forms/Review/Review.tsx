@@ -191,7 +191,7 @@ const QuestionsAnswersList = ({ reviewItem }: { reviewItem: ReviewItem }): React
           return (
             <div key={randomId()} className="mb-8">
               <dt className="font-bold mb-2">{reviewElement.title}</dt>
-              <dd>{formatElementValues(reviewElement.values) as string}</dd>
+              <dd>{formatElementValues(reviewElement.values)}</dd>
             </div>
           );
         })}
@@ -199,7 +199,7 @@ const QuestionsAnswersList = ({ reviewItem }: { reviewItem: ReviewItem }): React
   );
 };
 
-// Handles formatting Sub Elements (a.k.a. Repeating Sets, Dynamic Rows)
+// Handle formatting Sub Elements. Note Sub Elements = Dynamic Rows = Repeating Sets.
 const SubElements = ({ elements }: { elements: Element[] }) => {
   return elements?.map((subElementItem) => {
     return (subElementItem.values as Element[])?.map((element) => {
