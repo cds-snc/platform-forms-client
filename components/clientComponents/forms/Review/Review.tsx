@@ -16,6 +16,9 @@ import {
 } from "@lib/formContext";
 import { randomId } from "@lib/client/clientHelpers";
 
+// IMPORTANT: A Form that has File uploads, can only receive submissions by the email method. If a
+// Form has File uploads and the method is not email, any new submission will be silently ignored.
+
 type ReviewItem = {
   id: string;
   name: string;
@@ -65,8 +68,8 @@ function getReviewItemElements(
     let resultValues: string | Element[] = formatElementValues(
       formValues[elementId as unknown as keyof typeof formValues] as Element["values"]
     );
+    // Handle any Sub Elements. Note Sub Elements = Dynamic Rows = Repeating Sets
     if (element?.type === FormElementTypes.dynamicRow) {
-      // Dynamic Row = Sub Elements
       resultValues = [];
       const parentId = element.id;
       const parentTitle = element.properties?.[getLocalizedProperty("title", lang)];
