@@ -14,9 +14,10 @@ export enum DatePart {
 
 interface FormattedDateProps extends InputFieldProps {
   dateParts?: DatePart[];
+  dateFormat?: string;
   monthSelector?: "numeric" | "select";
   defaultDate?: string | null;
-  autocomplete?: "bday" | false;
+  autocomplete?: string;
 }
 
 export const FormattedDate = (props: FormattedDateProps): React.ReactElement => {

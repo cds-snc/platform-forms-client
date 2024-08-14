@@ -13,6 +13,7 @@ import {
   TextInput,
   ConditionalWrapper,
   Combobox,
+  FormattedDate,
 } from "@clientComponents/forms";
 import {
   FormElement,
@@ -246,6 +247,21 @@ function _buildForm(element: FormElement, lang: string): ReactElement {
         </div>
       );
     }
+    case FormElementTypes.formattedDate: {
+      return (
+        <div className="focus-group">
+          {labelComponent}
+          {description && <Description id={`${id}`}>{description}</Description>}
+          <FormattedDate
+            id={`${id}`}
+            name={`${id}`}
+            ariaDescribedBy={description ? `desc-${id}` : undefined}
+            dateFormat={element.properties.dateFormat}
+            autocomplete={element.properties.autoComplete}
+          />
+        </div>
+      );
+    }
     default:
       return <></>;
   }
@@ -279,6 +295,7 @@ const _getElementInitialValue = (element: FormElement, language: string): Respon
     case FormElementTypes.radio:
     case FormElementTypes.dropdown:
     case FormElementTypes.combobox:
+    case FormElementTypes.formattedDate:
     case FormElementTypes.textField:
     case FormElementTypes.textArea:
       return "";
