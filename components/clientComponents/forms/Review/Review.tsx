@@ -29,24 +29,24 @@ type Element = {
 };
 
 type File = {
-  based64EncodedFile: string; 
-  name: string; 
-  size: number
-}
-
+  based64EncodedFile: string;
+  name: string;
+  size: number;
+};
 
 function formatElementValues(values: Element["values"]) {
   if (!values) {
     return "-";
   }
-  if (values.based64EncodedFile) {
-    return `${values.name} (${(values.size / 1024 / 1024).toFixed(2)} bytes)`;
+  if ((values as File).based64EncodedFile) {
+    const fileSizeInMB = ((values as File).size / 1024 / 1024).toFixed(2);
+    return `${(values as File).name} (${fileSizeInMB} bytes)`;
   }
   // Case of an array like element e.g. checkbox
   if (Array.isArray(values)) {
     return values.join(", ") || "-";
   }
-  return values;
+  return String(values);
 }
 
 function getReviewItemElements(
@@ -63,7 +63,7 @@ function getReviewItemElements(
   return shownElementIds.map((elementId) => {
     const element = formElements.find((item) => item.id === elementId);
     let resultValues: string | Element[] = formatElementValues(
-      formValues[elementId as unknown as keyof typeof formValues]
+      formValues[elementId as unknown as keyof typeof formValues] as Element["values"]
     );
     if (element?.type === FormElementTypes.dynamicRow) {
       resultValues = [];
@@ -79,10 +79,10 @@ function getReviewItemElements(
             (key) => valueRows[key as keyof typeof valueRows]
           );
           // Match the FormValue index to the subElement index to assign the Element title
-          const titlesMappedToValues = valueRowsAsArray.map((value, valueRowIndex) => {
+          const titlesMappedToValues = valueRowsAsArray.map((formValue, valueRowIndex) => {
             return {
               title: subElements?.[valueRowIndex].properties?.[getLocalizedProperty("title", lang)],
-              values: value,
+              values: formValue,
             } as Element;
           });
           return {
