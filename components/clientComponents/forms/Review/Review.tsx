@@ -4,7 +4,7 @@ import { Button } from "@clientComponents/globals";
 import { Theme } from "@clientComponents/globals/Buttons/themes";
 import { useFocusIt } from "@lib/hooks/useFocusIt";
 import { useGCFormsContext } from "@lib/hooks/useGCFormContext";
-import { FormElement, FormElementTypes } from "@lib/types";
+import { FileInputResponse, FormElement, FormElementTypes } from "@lib/types";
 import { Language } from "@lib/types/form-builder-types";
 import { getLocalizedProperty } from "@lib/utils";
 import {
@@ -25,27 +25,27 @@ type ReviewItem = {
 
 type Element = {
   title: string;
-  values: string | File | Element[];
-};
-
-type File = {
-  based64EncodedFile: string;
-  name: string;
-  size: number;
+  values: string | FileInputResponse | Element[];
 };
 
 function formatElementValues(values: Element["values"]) {
   if (!values) {
     return "-";
   }
-  if ((values as File).based64EncodedFile) {
-    const fileSizeInMB = ((values as File).size / 1024 / 1024).toFixed(2);
-    return `${(values as File).name} (${fileSizeInMB} bytes)`;
+  // Case of a File upload
+  if ((values as FileInputResponse).based64EncodedFile !== undefined) {
+    const file = values as FileInputResponse;
+    if (!file.name || !file.size || file.size < 0) {
+      return "-";
+    }
+    const fileSizeInMB = (file.size / 1024 / 1024).toFixed(2);
+    return `${file.name} (${fileSizeInMB} MB)`;
   }
   // Case of an array like element e.g. checkbox
   if (Array.isArray(values)) {
     return values.join(", ") || "-";
   }
+  // Case of an input/textarea element
   return String(values);
 }
 
@@ -83,7 +83,7 @@ function getReviewItemElements(
             return {
               title: subElements?.[valueRowIndex].properties?.[getLocalizedProperty("title", lang)],
               values: formValue,
-            } as Element;
+            };
           });
           return {
             title: subElementsTitle,
@@ -99,7 +99,7 @@ function getReviewItemElements(
     return {
       title: (element?.properties?.[getLocalizedProperty("title", lang)] as string) || "-",
       values: resultValues,
-    } as Element;
+    };
   });
 }
 
@@ -117,7 +117,7 @@ export const Review = ({ language }: { language: Language }): React.ReactElement
 
     const groupHistory = getGroupHistory();
     return groupHistory
-      .filter((key) => key !== "review") // Removed to avoid showing as a group - TODO use remove function
+      .filter((key) => key !== "review") // Removed to avoid showing as a group
       .map((groupId) => {
         const group: Group = groups[groupId as keyof typeof groups] || {};
         return {
@@ -207,11 +207,11 @@ const SubElements = ({ elements }: { elements: Element[] }) => {
             <h4 className="italic" id={dlId}>
               {element.title}
             </h4>
-            {(element.values as Element[]).map((titleValues) => {
+            {(element.values as Element[]).map((elementValues) => {
               return (
                 <div key={randomId()} className="mb-2">
-                  <dt className="font-bold mb-2">{titleValues.title}</dt>
-                  <dd>{formatElementValues(titleValues.values as string)}</dd>
+                  <dt className="font-bold mb-2">{elementValues.title}</dt>
+                  <dd>{formatElementValues(elementValues.values)}</dd>
                 </div>
               );
             })}
