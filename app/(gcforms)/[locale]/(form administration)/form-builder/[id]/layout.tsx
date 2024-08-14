@@ -61,9 +61,9 @@ export default async function Layout({
     <TemplateStoreProvider {...{ ...initialForm, locale, allowGroupsFlag }}>
       <SaveTemplateProvider>
         <RefStoreProvider>
-          <div className={`flex h-full flex-col`}>
+          <div>
             {/* @TODO: Backlink?? */}
-            <div className="flex h-full flex-col">
+            <div className="flex flex-col">
               <SkipLink />
               <Header context="formBuilder" className="mb-0" />
               <div className="shrink-0 grow basis-auto bg-gray-soft">
@@ -76,16 +76,18 @@ export default async function Layout({
                     </div>
                   </div>
                   <GroupStoreProvider>
-                    <main id="content" className="form-builder my-7 w-full">
+                    <main
+                      id="content"
+                      className="form-builder my-7 w-full min-h-[calc(100vh-300px)]"
+                    >
                       {children}
                     </main>
                     {allowGroupsFlag && <RightPanel id={id} lang={locale as Language} />}
                   </GroupStoreProvider>
                 </div>
               </div>
-
-              <Footer displayFormBuilderFooter className="mt-0 lg:mt-0" />
             </div>
+            <Footer displayFormBuilderFooter className="mt-0 lg:mt-0" />
           </div>
         </RefStoreProvider>
       </SaveTemplateProvider>

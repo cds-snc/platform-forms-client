@@ -58,7 +58,7 @@
       "other": "Other"
     },
     "checkbox": {
-      "description": "A set of options for multiple selections.",
+      "description": "A set of options for a single or multiple selections.",
       "title": "Checkboxes",
       "chooseItems": "Question",
       "selectAllThatApply": "Select all that apply."
@@ -230,8 +230,8 @@
     "url": "Website address"
   },
   "autocompleteWhenNotToUse": {
-    "text1": "Auto complete attributes may not work well for information the form filler does not enter regularly. Things like historical or business information may not fill in correctly.",
-    "text2": "Usability testing is a good way to understand if the rules you set cause problems with filling in forms.",
+    "text1": "Autocomplete attributes may not work well for information the form filler does not enter regularly. Things like historical or business information may not fill in correctly.",
+    "text2": "Usability testing is a good way to understand if the parameters you set for questions cause problems while filling out forms.",
     "title": "When not to use autocomplete"
   },
   "backToForm": "Back to form",
@@ -306,7 +306,8 @@
     "email": "For example: name@example.com",
     "number": "Enter a number",
     "phone": "For example: 111-222-3333",
-    "combobox": "Start typing to narrow down the list."
+    "combobox": "Start typing to narrow down the list.",
+    "fileInput": "Files must not exceed 3.5 MB in total."
   },
   "description": "Description",
   "descriptionDescription": "The hint text appears below the label and before the field. It’s used to add context and instructions for the field. It’s a great place to specify formatting requirements or give an example.",
@@ -422,6 +423,7 @@
   "formTitle": "Form title",
   "french": "French",
   "gcForms": "GC Forms",
+  "gcFormsApi": "API",
   "gcFormsEdit": "Edit",
   "gcFormsPublish": "Publish",
   "gcFormsPublished": "Published",
@@ -493,6 +495,10 @@
     "emailOption": "Responses delivered by email — ",
     "change": "Change settings"
   },
+  "logicPublishWarning": {
+    "header": "Test your form thoroughly before publishing",
+    "text": "Check that all possible paths through the form work as expected avoiding dead ends and infinite loops."
+  },
   "prePublishFormDialog": {
     "title": "Publish form",
     "text1": "What is your reason for publishing?",
@@ -560,7 +566,14 @@
   "selectElement": "Select an element type",
   "send": "Send",
   "settings": {
-    "formManagement": "Form management"
+    "formManagement": "Form management",
+    "api": {
+      "title": "API Access",
+      "generateKey": "Generate Key",
+      "refreshKey": "Refresh Key",
+      "deleteKey": "Delete Key",
+      "keyExists": "API Key Exists"
+    }
   },
   "settingsDeleteButton": "Delete",
   "settingsDeleteHint": "Once you delete a form, there is no way to retrieve it back again. Please save a copy before deleting your form.",
@@ -854,15 +867,15 @@
     "failedLink": "Saving failed - Contact support"
   },
   "addConditionalRules": {
-    "modalTitle": "Add a rule to a question",
-    "modalTitleEdit": "Edit conditional rules",
-    "modalDescription": "Allow an option in your question to show an additional short or long answer input field when selected. Only drop downs, single choice, and multi-select blocks can apply a rule.",
-    "warning": "Options and questions must exist before adding a conditional rule.",
+    "modalTitle": "Add a display rule",
+    "modalTitleEdit": "Edit display rules",
+    "modalDescription": "Displays a new question in response to a previously selected answer. Only questions with a choice of answers can have a rule applied.",
+    "warning": "Options and questions must exist before adding a display rule.",
     "optionTitle": "If option selected is:",
     "questionTitle": "Show question:",
-    "addCustomRules": "Add a rule",
-    "editCustomRules": "Edit rules",
-    "addAnotherRule": "Add another rule",
+    "addCustomRules": "Add rule",
+    "editCustomRules": "Edit rule",
+    "addAnotherRule": "Add a rule",
     "removeRule": "Remove",
     "addOther": "Add \"Other\" option",
     "other": "Other ",
@@ -871,10 +884,10 @@
   "saved": "Saved",
   "opensInNewTab": "opens in a new tab",
   "rightPanel": {
-    "title": "Right panel",
+    "title": "Form set-up panel",
     "openPanel": "Form set-up",
     "closePanel": "Close panel",
-    "questions": "Questions",
+    "pages": "Pages",
     "logic": "Branching",
     "translation": "Translations",
     "treeView": {
@@ -883,21 +896,21 @@
     "loadTab": "Loaded {{tabPanelLabel}} editor"
   },
   "logic": {
-    "heading": "Branching",
-    "description": "Apply branching logic between form pages with questions that have radio buttons, checkboxes, or a dropdown.",
+    "heading": "Edit branching",
+    "description": "Add logic to form pages with questions that have radio buttons, checkboxes, or a dropdown.",
     "clear": "Remove",
     "gotoPage": "Go to page",
     "questionTitle": "Question:",
     "pageTitle": "Page:",
     "translateTitle": "Page title",
-    "addRule": "Add rule",
+    "addRule": "Add branch",
     "saveRule": "Save",
-    "saveNote": "Adding branching turns off linear autoflow between form pages.",
+    "saveNote": "Branches deactivate the automatic linear flow that would link form pages.",
     "resetRules": "Reset to linear flow",
     "resetRulesHelp": "Reset help",
     "resetRulesDescription": "This will remove branching logic and reset the progression between pages to a simple linear flow, overriding any existing rules that were applied.",
     "resetRulesDialog": {
-      "title": "Reset to linear flow",
+      "title": "Reset to linear flow?",
       "areYouSure": "Are you sure you want to reset the form flow?",
       "text": "This will remove all branching logic that was applied and reset the flow to a simple linear path. <strong>This action cannot be undone.</strong>",
       "reset": "Reset"
@@ -918,8 +931,8 @@
     },
     "actionsSaved": "Actions saved",
     "legend": {
-      "page": "Change how pages are ordered and connected",
-      "option": "Apply branching based on questions with selectable options"
+      "page": "To change how pages are ordered and connected.",
+      "option": "To take a specific path depending on a selected option."
     },
     "exit": {
       "convertText": "Convert to:",
@@ -936,6 +949,11 @@
         "buttonLabel": "Remove"
       }
     },
+    "tryitout": {
+      "button": "Complex form? Try branching instead +",
+      "text": "<p class='mb-4'>Use branching to route people filling out the form toward different pages based on their answers.</p> <p> Visualize the form flow and configure branches in the Branching tab of the form set-up panel.</p>",
+      "open": "Go to Branching"
+    },
     "exitBadge": "Exit",
     "exitButtonElement": {
       "description": "Help people exiting your form have a path forward.",
@@ -950,7 +968,7 @@
     },
     "noPages": {
       "text1": "Add a <strong>New page</strong> from the",
-      "text2": "Questions tab",
+      "text2": "Pages tab",
       "text3": "before adding a branch."
     }
   },
@@ -958,9 +976,9 @@
     "newPage": "New page",
     "pageNameInput": "Page name",
     "addPage": "Add page",
-    "addNewPage": "Add a new page",
-    "addBranch": "Add a branch",
-    "addPagePlaceholder": "Add a page name",
+    "addNewPage": "Add new page",
+    "addBranch": "Add branch",
+    "addPagePlaceholder": "Add page name",
     "treeAriaLabel": "GC Forms pages",
     "addElement": {
       "empty": {
@@ -970,8 +988,10 @@
     },
     "pageTitle": "Page title",
     "groupDeleted": "Page deleted",
+    "editPagesHeading": "Edit page",
+    "editTranslationsHeading": "Edit translations",
     "editPage": "Edit page {{name}}",
-    "editRules": "Edit rules for page {{name}}",
+    "editRules": "Edit branching for page {{name}}",
     "groupSuccessfullyDeleted": "{{group}} successfully deleted",
     "privacy": {
       "beforeText": "<p>You’re responsible for understanding your department or agency's responsibilities related to personal information. If you’re unsure how to proceed, we recommend contacting your <a href=\"https://www.tbs-sct.canada.ca/ap/atip-aiprp/coord-eng.asp\" target=\"_blank\">access to information and privacy coordinator.</a></p>",
@@ -990,7 +1010,7 @@
       "emptyFormElement": "Empty form question element",
       "keyboardNav": {
         "label": "Keyboard shortcuts",
-        "body": "<p className=\"mb-4\">Navigate the questions and pages using the arrow keys.</p><p><strong>Drag and drop:</strong></p>\n<ul><li>control + D to pick up an item</li><li>arrow keys to drag the item</li><li>enter key to drop the item</li></ul>"
+        "body": "<p className=\"mb-4\">Navigate the questions and pages using the arrow keys.</p><p><strong>Drag and drop:</strong></p>\n<ul><li>control + D to pick up an item</li><li>Arrow keys to drag the item</li><li>Enter key to drop the item</li></ul>"
       }
     },
     "confirmDeleteGroup": {
@@ -1000,8 +1020,8 @@
       "delete": "Delete page and its contents"
     },
     "confirmMoveGroup": {
-      "title": "Overwrite rules?",
-      "description": " It seems the items you are moving have conditional rules applied. Would you like to overwrite those rules and apply linear autoflow?",
+      "title": "Overwrite branching rules?",
+      "description": " It seems the items you are moving have display or branching rules applied. Would you like to overwrite those rules and apply a linear autoflow?",
       "cancel": "No, move without changing rules",
       "confirm": "Yes, apply linear autoflow"
     }
@@ -1012,10 +1032,10 @@
   },
   "next": "Continue",
   "skipLink": {
-    "questions": "Skip to Questions editor",
-    "translate": "Skip to Translations editor",
-    "logic": "Skip to Branching editor",
-    "questionsSetup": "Skip to Questions set-up",
+    "pages": "Skip to edit Pages",
+    "translate": "Skip to edit Translations",
+    "logic": "Skip to edit Branching",
+    "pagesSetup": "Skip to Pages set-up",
     "translateSetup": "Skip to Translations set-up",
     "logicSetup": "Skip to Branching set-up"
   },

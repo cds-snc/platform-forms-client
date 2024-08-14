@@ -45,7 +45,8 @@ const getEdges = (
   nodeId: string,
   prevNodeId: string,
   group: Group | undefined,
-  groups: GroupsType | undefined
+  groups: GroupsType | undefined,
+  showReview: boolean
 ): CustomEdge[] => {
   // Connect to end node as we don't have a next action
   if (prevNodeId && group && typeof group.nextAction === "undefined") {
@@ -69,7 +70,12 @@ const getEdges = (
 
   // Add edge from this node to next action
   if (prevNodeId && group && typeof group.nextAction === "string") {
-    const nextAction = group.nextAction;
+    let nextAction = group.nextAction;
+
+    if (!showReview && nextAction === LockedSections.REVIEW) {
+      nextAction = LockedSections.END;
+    }
+
     return [
       {
         id: `e-${nodeId}-${nextAction}`,
@@ -90,10 +96,16 @@ const getEdges = (
   if (prevNodeId && group && Array.isArray(group.nextAction)) {
     const nextActions = group.nextAction;
     const edges = nextActions.map((action: NextActionRule) => {
+      let nextAction = action.groupId;
+
+      if (!showReview && action.groupId === LockedSections.REVIEW) {
+        nextAction = LockedSections.END;
+      }
+
       return {
-        id: `e-${nodeId}-${action.choiceId}-${action.groupId}`,
+        id: `e-${nodeId}-${action.choiceId}-${nextAction}`,
         source: nodeId,
-        target: action.groupId,
+        target: nextAction,
         style: {
           ...lineStyle,
         },
@@ -110,7 +122,7 @@ const getEdges = (
   return [];
 };
 
-export const useFlowData = (lang: Language = "en") => {
+export const useFlowData = (lang: Language = "en", showReview: boolean) => {
   const getTreeData = useGroupStore((s) => s.getTreeData);
   const treeItems = getTreeData();
   const formGroups = useTemplateStore((s) => s.form.groups);
@@ -150,7 +162,7 @@ export const useFlowData = (lang: Language = "en") => {
         elements = [...elements, ...children];
       }
 
-      const newEdges = getEdges(key as string, prevNodeId, group, formGroups);
+      const newEdges = getEdges(key as string, prevNodeId, group, formGroups, showReview);
 
       const titleKey = "name" as keyof typeof treeItem.data;
 
@@ -184,14 +196,16 @@ export const useFlowData = (lang: Language = "en") => {
     });
 
     // Add review node
-    nodes.push({ ...reviewNode });
+    if (showReview) {
+      nodes.push({ ...reviewNode });
+    }
 
     // Push "end" node to the end
     // And add confirmation element
     nodes.push({ ...endNode });
 
     return { edges, nodes };
-  }, [treeItems, reviewNode, endNode, formGroups, startElements, lang]);
+  }, [treeItems, reviewNode, endNode, formGroups, startElements, lang, showReview]);
 
   const { edges, nodes } = getData();
 

@@ -42,11 +42,16 @@ export enum AuditLogEvent {
   CreateSetting = "CreateSetting",
   DeleteSetting = "DeleteSetting",
   AccessDenied = "AccessDenied",
+  // API Management
+  CreateAPIKey = "CreateAPIKey",
+  RefreshAPIKey = "RefreshAPIKey",
+  DeleteAPIKey = "DeleteAPIKey",
 }
 export type AuditLogEventStrings = keyof typeof AuditLogEvent;
 
 export enum AuditSubjectType {
   User = "User",
+  ServiceAccount = "ServiceAccount",
   Form = "Form",
   Response = "Response",
   DeliveryOption = "DeliveryOption",

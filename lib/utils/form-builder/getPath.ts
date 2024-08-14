@@ -1,11 +1,19 @@
-export const parseRootId = (id: number) => {
-  // @TODO: Revisit for sub elements. Note that the following will break if we have more than 99 sub elements
-  // split 3 or 4 digit id into first 1 or 2 digits
-  // const idStr = id.toString();
-  // const sliceAt = idStr.length == 3 ? 1 : 2;
-  // const idArr = idStr.split("");
-  // const first = idArr.slice(0, sliceAt).join("");
-  return Number(id);
+export const parseRootId = (id: number, elements?: Element[]) => {
+  if (!elements) return id;
+
+  let rootId = id;
+
+  elements.forEach((el) => {
+    if (el.properties?.subElements) {
+      el.properties.subElements.forEach((subEl) => {
+        if (subEl.id === id) {
+          rootId = el.id;
+        }
+      });
+    }
+  });
+
+  return rootId;
 };
 
 interface Form {
@@ -26,7 +34,8 @@ interface Element {
 type Indexes = [] | [elIndex: number | null, subIndex: number | null];
 
 export const getElementIndexes = <T extends Element>(id: number, elements: T[]): Indexes => {
-  const elId = parseRootId(id);
+  const elId = parseRootId(id, elements);
+
   const elIndex = elements.findIndex((el: T) => el.id === elId);
 
   if (elIndex === -1) return [null, null];

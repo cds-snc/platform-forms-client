@@ -8,7 +8,6 @@ export const QuestionSet = ({ title, description }: { title: string; description
       <h3 className="mb-0">{title}</h3>
       <p className="mb-2">{description}</p>
       <Image
-        layout="responsive"
         width={"558"}
         height={"313"}
         alt=""

@@ -132,7 +132,7 @@ export const RightPanel = ({ id, lang }: { id: string; lang: Language }) => {
   }
 
   return (
-    <section className="relative" aria-labelledby="rightPanelTitle">
+    <section className="z-10 border-l border-slate-200 bg-white" aria-labelledby="rightPanelTitle">
       <div className={cn("fixed right-0", fixedRange, open && "hidden")}>
         <Button
           theme="link"
@@ -147,8 +147,8 @@ export const RightPanel = ({ id, lang }: { id: string; lang: Language }) => {
         </Button>
       </div>
       <Transition.Root show={open} as={Fragment}>
-        <div className="h-full">
-          <div className="flex h-full">
+        <div className="sticky top-0">
+          <div className="flex">
             <Transition.Child
               as={Fragment}
               enter="transform transition ease-in-out duration-500"
@@ -185,11 +185,10 @@ export const RightPanel = ({ id, lang }: { id: string; lang: Language }) => {
                   <Tab.Group selectedIndex={selectedIndex}>
                     <Tab.List className={"flex justify-between border-b border-gray-200"}>
                       <TabButton
-                        text={t("rightPanel.questions")}
+                        text={t("rightPanel.pages")}
                         onClick={() => {
                           router.push(`/${i18n.language}/form-builder/${id}/edit`);
                         }}
-                        className="justify-start px-6"
                       />
                       <TabButton
                         text={t("rightPanel.translation")}
@@ -209,10 +208,13 @@ export const RightPanel = ({ id, lang }: { id: string; lang: Language }) => {
                     <Tab.Panels>
                       <Tab.Panel>
                         {/* Tree */}
-                        <SkipLinkReusable anchor="#questionsTitle">
-                          {t("skipLink.questions")}
+                        <SkipLinkReusable anchor="#pagesTitle">
+                          {t("skipLink.pages")}
                         </SkipLinkReusable>
-                        <div className="m-0 w-full" aria-live="polite">
+                        <div
+                          className="m-0 h-[calc(100vh-150px)] w-full overflow-scroll bg-slate-50"
+                          aria-live="polite"
+                        >
                           <TreeView
                             ref={treeView}
                             addItem={() => {}}
@@ -225,7 +227,7 @@ export const RightPanel = ({ id, lang }: { id: string; lang: Language }) => {
                       </Tab.Panel>
                       <Tab.Panel>
                         {/* Translate */}
-                        <SkipLinkReusable anchor="#translateTitle">
+                        <SkipLinkReusable anchor="#editTranslationsHeading">
                           {t("skipLink.translate")}
                         </SkipLinkReusable>
                         <div className="m-0 mt-1 w-full p-4" aria-live="polite">
