@@ -8,6 +8,7 @@ import { ShortAnswer, Options, SubOptions, RichText, SubElement } from "./elemen
 import { ElementOption, FormElementWithIndex, Language } from "@lib/types/form-builder-types";
 import { useElementOptions } from "@lib/hooks/form-builder";
 import { ConditionalIndicator } from "@formBuilder/components/shared/conditionals/ConditionalIndicator";
+import { DateElement } from "./elements/DateElement";
 
 const filterSelected = (
   item: FormElementWithIndex,
@@ -167,6 +168,9 @@ export const SelectedElement = ({
       break;
     case "date":
       element = <ShortAnswer data-testid="date">mm/dd/yyyy</ShortAnswer>;
+      break;
+    case "formattedDate":
+      element = <DateElement />;
       break;
     case "number":
       element = <ShortAnswer data-testid="number">0123456789</ShortAnswer>;
