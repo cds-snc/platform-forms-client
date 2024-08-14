@@ -99,17 +99,31 @@ export const ModalForm = ({
 
           <Radio
             className="mt-2"
-            name="dateType"
-            id="dateType-general"
+            name="autoComplete"
+            id="autoComplete-general"
             label="General date"
             value=""
+            checked={!properties.autoComplete}
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+              updateModalProperties(item.id, {
+                ...properties,
+                ...{ autoComplete: e.target.value },
+              });
+            }}
           />
           <Radio
             className="mt-2"
-            name="dateType"
-            id="dateType-bday"
+            name="autoComplete"
+            id="autoComplete-bday"
             label="Birthdate"
             value="bday"
+            checked={properties.autoComplete === "bday"}
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+              updateModalProperties(item.id, {
+                ...properties,
+                ...{ autoComplete: e.target.value },
+              });
+            }}
           />
 
           <p className="mt-4 font-semibold">Select a format for the date</p>
@@ -119,6 +133,13 @@ export const ModalForm = ({
             id="dateFormat-iso"
             label="YYYY-MM-DD (Government of Canada standard)"
             value="YYYY-MM-DD"
+            checked={properties.dateFormat === "YYYY-MM-DD"}
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+              updateModalProperties(item.id, {
+                ...properties,
+                ...{ dateFormat: e.target.value },
+              });
+            }}
           />
           <Radio
             className="mt-2"
@@ -126,6 +147,13 @@ export const ModalForm = ({
             id="dateFormat-ddmmyyyy"
             label="DD-MM-YYYY"
             value="DD-MM-YYYY"
+            checked={properties.dateFormat === "DD-MM-YYYY"}
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+              updateModalProperties(item.id, {
+                ...properties,
+                ...{ dateFormat: e.target.value },
+              });
+            }}
           />
           <Radio
             className="mt-2"
@@ -133,6 +161,13 @@ export const ModalForm = ({
             id="dateFormat-mmddyyyy"
             label="MM-DD-YYYY"
             value="MM-DD-YYYY"
+            checked={properties.dateFormat === "MM-DD-YYYY"}
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+              updateModalProperties(item.id, {
+                ...properties,
+                ...{ dateFormat: e.target.value },
+              });
+            }}
           />
 
           <InfoDetails summary="Which date format should you use?" className="my-4">
