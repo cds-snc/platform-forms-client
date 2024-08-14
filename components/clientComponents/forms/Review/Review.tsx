@@ -45,7 +45,7 @@ function formatElementValues(values: Element["values"]) {
   if (Array.isArray(values)) {
     return values.join(", ") || "-";
   }
-  // Case of an input/textarea element
+  // Case of a single value element e.g. input
   return String(values);
 }
 
@@ -66,6 +66,7 @@ function getReviewItemElements(
       formValues[elementId as unknown as keyof typeof formValues] as Element["values"]
     );
     if (element?.type === FormElementTypes.dynamicRow) {
+      // Dynamic Row = Sub Elements
       resultValues = [];
       const parentId = element.id;
       const parentTitle = element.properties?.[getLocalizedProperty("title", lang)];
