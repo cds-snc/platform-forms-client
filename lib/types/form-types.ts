@@ -51,6 +51,7 @@ export interface ElementProperties {
   isSectional?: boolean;
   maxNumberOfRows?: number;
   autoComplete?: string;
+  dateFormat?: string;
   conditionalRules?: ConditionalRule[];
   [key: string]:
     | string
