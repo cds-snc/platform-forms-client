@@ -3,7 +3,6 @@ import { LeftNavigation } from "./components/LeftNavigation";
 import { ToastContainer } from "@formBuilder/components/shared/Toast";
 import { SkipLink, Footer } from "@clientComponents/globals";
 import { Header } from "@clientComponents/globals/Header/Header";
-import { FormRecord } from "@lib/types";
 import { AccessControlError } from "@lib/privileges";
 import { getFullTemplateByID } from "@lib/templates";
 import { redirect } from "next/navigation";
@@ -22,10 +21,6 @@ export default async function Layout({
   children: React.ReactNode;
   params: { locale: string; id: string };
 }) {
-  const FormbuilderParams: { locale: string; initialForm: null | FormRecord } = {
-    initialForm: null,
-    locale,
-  };
   let initialForm;
 
   const { session, ability } = await authCheckAndThrow().catch(() => ({
@@ -48,8 +43,6 @@ export default async function Layout({
       if (initialForm.isPublished) {
         redirect(`/${locale}/form-builder/${formID}/settings`);
       }
-
-      FormbuilderParams.initialForm = initialForm;
     } catch (e) {
       if (e instanceof AccessControlError) {
         redirect(`/${locale}/admin/unauthorized`);
