@@ -62,12 +62,16 @@ export function isAllFilesSizeValid(values: Responses): boolean {
     const element = values[item];
     // We're in a repeating set
     if (Array.isArray(element)) {
-      element.forEach((el) => {
-        // @ts-expect-error - we know that el[0] is a FileInputResponse
-        const nestedElement = el[0] as FileInputResponse;
-        if (nestedElement.size) {
-          files.push(nestedElement);
-        }
+      element.forEach((el: string | FileInputResponse | Record<string, unknown>) => {
+        // Loop over answers in the repeating set
+        const answersIndexes = Object.keys(el);
+        answersIndexes.forEach((answerIndex) => {
+          // @ts-expect-error - Help typescript out a bit
+          if (el[answerIndex] && el[answerIndex].size) {
+            // @ts-expect-error - Help typescript out a bit
+            files.push(el[answerIndex]);
+          }
+        });
       });
     } else {
       // Not repeating set
