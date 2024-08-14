@@ -25,14 +25,28 @@ type ReviewItem = {
 
 type Element = {
   title: string;
-  values: string | Element[];
+  values: string | File | Element[];
 };
 
-function formatElementValues(value: string | string[] | undefined) {
-  if (Array.isArray(value)) {
-    return value.join(", ") || "-";
+type File = {
+  based64EncodedFile: string; 
+  name: string; 
+  size: number
+}
+
+
+function formatElementValues(values: Element["values"]) {
+  if (!values) {
+    return "-";
   }
-  return value || "-";
+  if (values.based64EncodedFile) {
+    return `${values.name} (${(values.size / 1024 / 1024).toFixed(2)} bytes)`;
+  }
+  // Case of an array like element e.g. checkbox
+  if (Array.isArray(values)) {
+    return values.join(", ") || "-";
+  }
+  return values;
 }
 
 function getReviewItemElements(
@@ -173,7 +187,7 @@ const QuestionsAnswersList = ({ reviewItem }: { reviewItem: ReviewItem }): React
           return (
             <div key={randomId()} className="mb-8">
               <dt className="font-bold mb-2">{reviewElement.title}</dt>
-              <dd>{reviewElement.values}</dd>
+              <dd>{formatElementValues(reviewElement.values) as string}</dd>
             </div>
           );
         })}
