@@ -5,7 +5,7 @@ import { useTranslation } from "@i18n/client";
 import { FormElementTypes, ElementProperties } from "@lib/types";
 
 import { FormElementWithIndex, LocalizedElementProperties } from "@lib/types/form-builder-types";
-import { Checkbox, Input, TextArea, InfoDetails } from "@formBuilder/components/shared";
+import { Checkbox, Input, TextArea, InfoDetails, Radio } from "@formBuilder/components/shared";
 import { useTemplateStore } from "@lib/store/useTemplateStore";
 import { AutocompleteDropdown } from "./AutocompleteDropdown";
 
@@ -92,6 +92,64 @@ export const ModalForm = ({
           }
         />
       </div>
+      {item.type === FormElementTypes.formattedDate && (
+        <div className="mb-4">
+          <h3>Date options</h3>
+          <p className="mt-4 font-semibold">What type of date is collected?</p>
+
+          <Radio
+            className="mt-2"
+            name="dateType"
+            id="dateType-general"
+            label="General date"
+            value=""
+          />
+          <Radio
+            className="mt-2"
+            name="dateType"
+            id="dateType-bday"
+            label="Birthdate"
+            value="bday"
+          />
+
+          <p className="mt-4 font-semibold">Select a format for the date</p>
+          <Radio
+            className="mt-2"
+            name="dateFormat"
+            id="dateFormat-iso"
+            label="YYYY-MM-DD (Government of Canada standard)"
+            value="YYYY-MM-DD"
+          />
+          <Radio
+            className="mt-2"
+            name="dateFormat"
+            id="dateFormat-ddmmyyyy"
+            label="DD-MM-YYYY"
+            value="DD-MM-YYYY"
+          />
+          <Radio
+            className="mt-2"
+            name="dateFormat"
+            id="dateFormat-mmddyyyy"
+            label="MM-DD-YYYY"
+            value="MM-DD-YYYY"
+          />
+
+          <InfoDetails summary="Which date format should you use?" className="my-4">
+            <div className="ml-2 border-l-2 border-gray-500 pl-4">
+              <p className="my-4">
+                Canada’s date standard format is YYYY-MM-DD and should be your first choice unless
+                there is a reason to choose a different format.
+              </p>
+              <p className="my-4">
+                For example, when asking for a date exactly as it’s shown on a passport, card or
+                other document, make the fields match the format of the original. This makes it
+                easier for users to copy the date across accurately.
+              </p>
+            </div>
+          </InfoDetails>
+        </div>
+      )}
       <div className="mb-2">
         <h3>{t("addRules")}</h3>
       </div>
