@@ -5,6 +5,25 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.19.0](https://github.com/cds-snc/platform-forms-client/compare/v3.18.2...v3.19.0) (2024-08-14)
+
+
+### Features
+
+* Enable Zitadel Integration for API Authentication ([#4147](https://github.com/cds-snc/platform-forms-client/issues/4147)) ([200ab05](https://github.com/cds-snc/platform-forms-client/commit/200ab05b1199bdf5a1f8acf8a6d4fe0067fc9fde))
+
+
+### Bug Fixes
+
+* FileInput max upload size for all files ([#4173](https://github.com/cds-snc/platform-forms-client/issues/4173)) ([ba5d89e](https://github.com/cds-snc/platform-forms-client/commit/ba5d89e36664279524675142b622b798c580848d))
+* Handle repeatingSets that include more than just fileInputs ([#4193](https://github.com/cds-snc/platform-forms-client/issues/4193)) ([8612909](https://github.com/cds-snc/platform-forms-client/commit/861290910e40d9577e5f8626680a59a939223946))
+* Multiple fileInputs in a repeatingSet ([#4188](https://github.com/cds-snc/platform-forms-client/issues/4188)) ([2d665f8](https://github.com/cds-snc/platform-forms-client/commit/2d665f8151103525956964556f7534573f0c27a9))
+
+
+### Code Refactoring
+
+* update confirm api to a server action ([#4042](https://github.com/cds-snc/platform-forms-client/issues/4042)) ([23052aa](https://github.com/cds-snc/platform-forms-client/commit/23052aa0817e2045c308955dbfb469c0e7d912f7))
+
 ## [3.18.2](https://github.com/cds-snc/platform-forms-client/compare/v3.18.1...v3.18.2) (2024-08-08)
 
 
