@@ -13,10 +13,10 @@ export enum DatePart {
 }
 
 interface FormattedDateProps extends InputFieldProps {
-  dateParts: DatePart[];
-  monthSelector: "numeric" | "select";
-  defaultDate: string; // ??
-  autocomplete: "bday" | false;
+  dateParts?: DatePart[];
+  monthSelector?: "numeric" | "select";
+  defaultDate?: string | null;
+  autocomplete?: "bday" | false;
 }
 
 export const FormattedDate = (props: FormattedDateProps): React.ReactElement => {
@@ -26,6 +26,8 @@ export const FormattedDate = (props: FormattedDateProps): React.ReactElement => 
     required,
     ariaDescribedBy,
     dateParts = [DatePart.YYYY, DatePart.MM, DatePart.DD],
+    monthSelector = "numeric",
+    autocomplete = false,
   } = props;
 
   const { t } = useTranslation("common");
@@ -64,7 +66,7 @@ export const FormattedDate = (props: FormattedDateProps): React.ReactElement => 
       )}
       <div className="flex gap-2">
         {dateParts.map((part) => {
-          return part === DatePart.MM && props.monthSelector === "select" ? (
+          return part === DatePart.MM && monthSelector === "select" ? (
             <div key={part}>
               <label>{t(`formattedDate.${part}`)}</label>
               <select
@@ -88,6 +90,7 @@ export const FormattedDate = (props: FormattedDateProps): React.ReactElement => 
                 type="number"
                 min={1}
                 max={12}
+                autoComplete={autocomplete ? "bday-month" : undefined}
                 className={classnames("gc-input-text", "w-16")}
                 onChange={(e) => setSelectedMonth(Number(e.target.value))}
                 required={required}
@@ -100,6 +103,7 @@ export const FormattedDate = (props: FormattedDateProps): React.ReactElement => 
                 name={`${name}-${part}`}
                 type="number"
                 min={1900}
+                autoComplete={autocomplete ? "bday-year" : undefined}
                 className={classnames("gc-input-text", "w-28")}
                 onChange={(e) => setSelectedYear(Number(e.target.value))}
                 required={required}
@@ -113,6 +117,7 @@ export const FormattedDate = (props: FormattedDateProps): React.ReactElement => 
                 type="number"
                 min={1}
                 max={getMaxDay(selectedMonth, selectedYear)}
+                autoComplete={autocomplete ? "bday-day" : undefined}
                 className={classnames("gc-input-text", "w-16")}
                 required={required}
               />
