@@ -45,7 +45,7 @@ You are responsible for:
 
 - Use a valid individual government email to create your account and for two-factor authentication (2FA).
 - Do not share your password with anyone or store it where others could find it. If someone else needs access to a form, [contact us](/en/support).
-- Ensure the privacy and security of protected information upon downloading form responses from GC Forms. If Responses are not saved and confirmed within 45 days, we will take necessary steps to ensure they are retrieved by the responsible program or service. 
+- Ensure the privacy and security of protected information upon downloading form responses from GC Forms. If Responses are not saved and confirmed within 45 days, we will take necessary steps to ensure they are retrieved by the responsible program or service.
 - Report any security breach or vulnerability using the steps outlined in our [Security notice](https://digital.canada.ca/security-notice/).
 
 ## Publish in both Official Languages
@@ -61,7 +61,7 @@ GC Forms allows you to create and publish digital forms. You must ensure that th
 You are responsible for:
 
 - Integrating your form into your department or agency’s information architecture. This means embedding the URL to your form so that people or organizations can find it.
-- Maintaining working links to your form. THis includes replacing all instances of the form URL when it is modified, or removing the URL when the form is closed or deleted.
+- Maintaining working links to your form. This includes replacing all instances of the form URL when it is modified, or removing the URL when the form is closed or deleted.
 - Addressing any inquiring or requests from users experiencing issues with your form, that are not a result of a system-wide issue.
 - Drafting form content based on the [Canada.ca Content Style guide](https://www.canada.ca/en/treasury-board-secretariat/services/government-communications/canada-content-style-guide.html).
 - Following the [Design Standard for the Federal Identity Program](https://www.canada.ca/en/treasury-board-secretariat/services/government-communications/design-standard.html). By default your form will appear with:

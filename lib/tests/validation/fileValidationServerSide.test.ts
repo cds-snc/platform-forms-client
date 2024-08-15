@@ -25,19 +25,19 @@ describe("Regarless of the MIME type detection, it", () => {
   it("should return a SIZE_IS_TOO_LARGE result if the given size is too large", async () => {
     const sut = await validateFileToUpload(
       "fileName.txt",
-      8000001,
+      8389121,
       Buffer.from("dGhpcyBpcyBhIG1lc3NhZ2U=")
     );
 
     expect(sut.result).toEqual(FileValidationResult.SIZE_IS_TOO_LARGE);
-    expect(sut.detectedValue).toEqual("8000001 (fileSize) / 24 (sizeOfBuffer)");
+    expect(sut.detectedValue).toEqual("8389121 (fileSize) / 24 (sizeOfBuffer)");
   });
 
   it("should return a SIZE_IS_TOO_LARGE result if the buffer size is too large", async () => {
-    const sut = await validateFileToUpload("fileName.txt", 100, Buffer.alloc(8000001));
+    const sut = await validateFileToUpload("fileName.txt", 100, Buffer.alloc(8389121));
 
     expect(sut.result).toEqual(FileValidationResult.SIZE_IS_TOO_LARGE);
-    expect(sut.detectedValue).toEqual("100 (fileSize) / 8000001 (sizeOfBuffer)");
+    expect(sut.detectedValue).toEqual("100 (fileSize) / 8389121 (sizeOfBuffer)");
   });
 
   it("should return an INVALID_EXTENSION result if the given fileName has an invalid extension", async () => {

@@ -142,7 +142,7 @@ const QuestionsAnswersList = ({ reviewItem }: { reviewItem: ReviewItem }): React
         reviewItem.elements.map((reviewElement) => {
           return (
             <div key={reviewElement.elementId} className="mb-8">
-              <dt className="font-bold mb-2">{reviewElement.title}</dt>
+              <dt className="mb-2 font-bold">{reviewElement.title}</dt>
               <dd>{reviewElement.values}</dd>
             </div>
           );

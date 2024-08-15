@@ -41,12 +41,14 @@
     "phone": "Entrer un numéro de téléphone valide.",
     "regex": "Veuillez utiliser le bon format.",
     "file-size-too-large": "Sélectionner un fichier plus petit.",
+    "file-size-too-large-all-files": "Les fichiers dépassent le maximum de 3.5 Mo. Téléversez des fichiers plus petits.",
     "file-type-invalid": "Sélectionner un autre type de fichier.",
     "too-many-characters": "Raccourcir la réponse.",
     "all-checkboxes-required": "Lisez et cochez toutes les cases pour confirmer les éléments de cette section.",
     "validGovEmail": "Entrer une adresse courriel valide du gouvernement.",
     "notSameAsUserEmail": "Il ne peut s'agir de votre propre adresse courriel. Entrez le courriel de la personne responsable de votre équipe. S'il s'agit de vous, ajoutez un·e collègue.",
-    "min-length-4-characters": "Doit comporter au moins 4 caractères."
+    "min-length-4-characters": "Doit comporter au moins 4 caractères.",
+    "MB": "Mo"
   },
   "required": "obligatoire",
   "all-required": "toutes les cases à cocher sont obligatoires",
@@ -170,5 +172,6 @@
     "message": "<strong>En août</strong> : Créez des formulaires multipages avec une logique d’embranchement. <a href='/fr/contact' className='text-white hover:text-white'>S’abonner aux mises à jour</a>",
     "type2": "NOUVEAUTÉ",
     "message2": "Créez des formulaires complexes de plusieurs pages avec logique d’affichage et d’embranchement. <a href='https://articles.alpha.canada.ca/forms-formulaires/fr/configurer-formulaire-avec-logique/' className='text-white hover:text-white'>En savoir plus</a>"
-  }
+  },
+  "cancel": "Annuler"
 }
