@@ -6,13 +6,22 @@ const autoCompleteUrl =
 const retriveAddressUrl =
   "https://ws1.postescanada-canadapost.ca/AddressComplete/Interactive/RetrieveById/v1.00/json3.ws";
 
-// AutoComplete API returns an object like:
+// AutoComplete API returns 1 or more objects like:
 export interface AddressCompleteChoice {
   Id: string;
   Text: string;
   Highlight: string;
   Description: string;
   IsRetrievable: boolean;
+}
+
+// Address Lookup API returns an array of objects like:
+export interface AddressCompleteResult {
+  FieldGroup: string;
+  FieldName: string;
+  FormattedValue: string;
+  FieldType: string;
+  FieldSequence: number;
 }
 
 // Function returns address complete list of choices.
@@ -52,5 +61,5 @@ export const getSelectedAddress = async (value: string) => {
   });
 
   const responseData = await response.json(); //Todo - Error Handling
-  return responseData.Items;
+  return responseData.Items as AddressCompleteResult[];
 };
