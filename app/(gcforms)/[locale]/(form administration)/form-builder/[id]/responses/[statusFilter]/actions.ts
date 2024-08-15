@@ -58,7 +58,7 @@ export const fetchSubmissions = async ({
       throw new Error("User is not authenticated");
     }
 
-    if (formId === "0000") {
+    if (!formId) {
       return {
         submissions: [],
         lastEvaluatedKey: null,
