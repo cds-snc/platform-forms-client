@@ -30,6 +30,10 @@
       "englishAlert": "English Alert Text",
       "frenchAlert": "French Alert Text",
       "save": "Save Campaign Text"
+    },
+    "zitadelAuth": {
+      "title": "Zitadel Auth",
+      "description": "Enable API authentication with Zitadel"
     }
   }
 }

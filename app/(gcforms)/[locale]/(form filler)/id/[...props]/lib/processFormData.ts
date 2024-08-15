@@ -54,6 +54,9 @@ export const processFormData = async (
             const splitKey = _key.split("-");
             if (splitKey.length > 1) {
               const currentValue = fields[splitKey[0]] as Record<string, unknown>[];
+              if (!currentValue[Number(splitKey[1])]) {
+                currentValue[Number(splitKey[1])] = {};
+              }
               currentValue[Number(splitKey[1])][splitKey[2]] = key;
             } else {
               fields[_key] = key;
@@ -72,6 +75,9 @@ export const processFormData = async (
               const splitKey = _key.split("-");
               if (splitKey.length > 1) {
                 const currentValue = fields[splitKey[0]] as Record<string, unknown>[];
+                if (!currentValue[Number(splitKey[1])]) {
+                  currentValue[Number(splitKey[1])] = {};
+                }
                 currentValue[Number(splitKey[1])][`${splitKey[2]}-${index}`] = key;
               } else {
                 fields[`${_key}-${index}`] = key;

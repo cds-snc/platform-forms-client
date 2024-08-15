@@ -297,7 +297,8 @@
     "email": "For example: name@example.com",
     "number": "Enter a number",
     "phone": "For example: 111-222-3333",
-    "combobox": "Start typing to narrow down the list."
+    "combobox": "Start typing to narrow down the list.",
+    "fileInput": "Files must not exceed 3.5 MB in total."
   },
   "description": "Description",
   "descriptionDescription": "The hint text appears below the label and before the field. It’s used to add context and instructions for the field. It’s a great place to specify formatting requirements or give an example.",
@@ -412,6 +413,7 @@
   "formTitle": "Form title",
   "french": "French",
   "gcForms": "GC Forms",
+  "gcFormsApi": "API",
   "gcFormsEdit": "Edit",
   "gcFormsPublish": "Publish",
   "gcFormsPublished": "Published",
@@ -554,7 +556,14 @@
   "selectElement": "Select an element type",
   "send": "Send",
   "settings": {
-    "formManagement": "Form management"
+    "formManagement": "Form management",
+    "api": {
+      "title": "API Access",
+      "generateKey": "Generate Key",
+      "refreshKey": "Refresh Key",
+      "deleteKey": "Delete Key",
+      "keyExists": "API Key Exists"
+    }
   },
   "settingsDeleteButton": "Delete",
   "settingsDeleteHint": "Once you delete a form, there is no way to retrieve it back again. Please save a copy before deleting your form.",

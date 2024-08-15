@@ -26,6 +26,7 @@
       "title": "Logique conditionnelle",
       "description": "Activer la logique conditionnelle et le panneau de droite"
     },
+
     "campaign": {
       "title": "Campagne",
       "description": "Activer la fonction de campagne",
@@ -34,6 +35,10 @@
       "englishAlert": "Texte d'alerte en anglais",
       "frenchAlert": "Texte d'alerte en français",
       "save": "Enregistrer le texte de la campagne"
+    },
+    "zitadelAuth": {
+      "title": "AuthenticationZitadel",
+      "description": "Authentification Zitadel pour API"
     }
   }
 }

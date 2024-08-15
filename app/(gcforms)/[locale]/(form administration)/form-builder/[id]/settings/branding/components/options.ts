@@ -170,4 +170,22 @@ export const options = [
     logoTitleEn: "Veterans Affairs Canada",
     logoTitleFr: "Anciens Combattants Canada",
   },
+  {
+    name: "dnd",
+    urlEn: "https://www.canada.ca/en/department-national-defence.html",
+    urlFr: "https://www.canada.ca/fr/ministere-defense-nationale.html",
+    logoEn: "/img/branding/dnd-en.svg",
+    logoFr: "/img/branding/dnd-fr.svg",
+    logoTitleEn: "National Defence",
+    logoTitleFr: "Défense nationale",
+  },
+  {
+    name: "psc",
+    urlEn: "https://www.canada.ca/en/public-service-commission.html",
+    urlFr: "https://www.canada.ca/fr/commission-fonction-publique.html",
+    logoEn: "/img/branding/psc-en.svg",
+    logoFr: "/img/branding/psc-fr.svg",
+    logoTitleEn: "Public Service Commission of Canada",
+    logoTitleFr: "Commission de la fonction publique du Canada",
+  },
 ];

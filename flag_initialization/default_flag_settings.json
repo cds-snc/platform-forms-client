@@ -1,5 +1,6 @@
 {
   "experimentalBlocks": false,
   "conditionalLogic": false,
-  "campaign": false
+  "campaign": false,
+  "zitadelAuth": false
 }

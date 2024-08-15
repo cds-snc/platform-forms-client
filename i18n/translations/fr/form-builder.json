@@ -296,7 +296,8 @@
     "email": "Par exemple : nom@exemple.com",
     "number": "Saisissez un chiffre",
     "phone": "Par exemple : 111-222-3333",
-    "combobox": "Commencez à taper pour réduire la liste."
+    "combobox": "Commencez à taper pour réduire la liste.",
+    "fileInput": "Les fichiers ne doivent pas dépasser 3.5 Mo au total."
   },
   "description": "Description",
   "descriptionDescription": "Le texte explicatif apparaît sous l'étiquette et avant le champ. Il est utilisé pour ajouter un contexte et des instructions pour le champ. C'est un endroit idéal pour préciser les exigences de mise en forme ou donner un exemple.",
@@ -412,6 +413,7 @@
   "french": "français",
   "gcForms": "Formulaires GC",
   "gcFormsEdit": "Modifier",
+  "gcFormsApi": "API",
   "gcFormsPublish": "Publier",
   "gcFormsPublished": "Publié",
   "gcFormsSettings": "Paramètres",
@@ -553,7 +555,14 @@
   "selectElement": "Sélectionnez un type d'élément",
   "send": "Envoyer",
   "settings": {
-    "formManagement": "Gestion du formulaire"
+    "formManagement": "Gestion du formulaire",
+    "api": {
+      "title": "Accès API",
+      "generateKey": "Générer une clé",
+      "refreshKey": "Rafraîchir la clé",
+      "deleteKey": "Supprimer la clé",
+      "keyExists": "Clé existante"
+    }
   },
   "settingsDeleteButton": "Supprimer le formulaire",
   "settingsDeleteHint": "Une fois le formulaire supprimé, vous ne pourrez pas le récupérer. Veuillez enregistrer une copie du formulaire avant de le supprimer.",

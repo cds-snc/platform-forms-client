@@ -6,6 +6,7 @@ import { useTranslation } from "@i18n/client";
 import { ErrorMessage } from "@clientComponents/forms";
 import { InputFieldProps } from "@lib/types";
 import { htmlInputAccept } from "@lib/validation/fileValidationClientSide";
+import { CancelIcon } from "@serverComponents/icons";
 
 interface FileInputProps extends InputFieldProps {
   error?: boolean;
@@ -31,7 +32,13 @@ export const FileInput = (props: FileInputProps): React.ReactElement => {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const { value } = field;
   const [fileName, setFileName] = useState(value.name);
+  const [fileSize, setFileSize] = useState(value.size);
 
+  const resetInput = () => {
+    setFileName("");
+    setFileSize(0);
+    setValue({});
+  };
   const classes = classNames(
     "gc-file-input",
     disabled ? "is-disabled" : "",
@@ -58,6 +65,7 @@ export const FileInput = (props: FileInputProps): React.ReactElement => {
         reader.onloadend = () => {
           if (newFile.name !== fileName) {
             setFileName(newFile.name);
+            setFileSize(newFile.size);
             setValue({
               name: newFile.name,
               size: newFile.size,
@@ -116,7 +124,12 @@ export const FileInput = (props: FileInputProps): React.ReactElement => {
               <span className="sr-only">{`${t(
                 "file-upload-sr-only-file-selected"
               )}: ${fileName}`}</span>
-              <span aria-hidden={true}>{fileName}</span>
+              <span aria-hidden={true}>
+                {fileName} ({(fileSize / 1024 / 1024).toFixed(2)} {t("input-validation.MB")}){" "}
+                <span className="ml-3 cursor-pointer" onClick={() => resetInput()}>
+                  <CancelIcon className="inline-block" /> {t("cancel")}
+                </span>
+              </span>
             </>
           ) : (
             t("file-upload-no-file-selected")

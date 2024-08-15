@@ -2,7 +2,7 @@ import { fileTypeFromBuffer } from "file-type";
 import {
   ALLOWED_FILE_TYPES,
   isFileExtensionValid,
-  isFileSizeValid,
+  isIndividualFileSizeValid,
 } from "./fileValidationClientSide";
 
 export enum FileValidationResult {
@@ -19,7 +19,7 @@ export async function validateFileToUpload(
 ): Promise<{ result: FileValidationResult; detectedValue?: string }> {
   const sizeOfBufferInBytes = Buffer.byteLength(fileAsBuffer);
 
-  if (!isFileSizeValid(fileSize) || !isFileSizeValid(sizeOfBufferInBytes)) {
+  if (!isIndividualFileSizeValid(fileSize) || !isIndividualFileSizeValid(sizeOfBufferInBytes)) {
     return {
       result: FileValidationResult.SIZE_IS_TOO_LARGE,
       detectedValue: `${fileSize} (fileSize) / ${sizeOfBufferInBytes.toString()} (sizeOfBuffer)`,
