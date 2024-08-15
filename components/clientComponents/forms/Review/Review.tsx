@@ -16,9 +16,6 @@ import {
 } from "@lib/formContext";
 import { randomId } from "@lib/client/clientHelpers";
 
-// NOTE: A Form that has File uploads can only receive submissions by the email method. If a Form
-// has File uploads and the method is not email, any new submission will be silently ignored.
-
 type ReviewItem = {
   id: string;
   name: string;
