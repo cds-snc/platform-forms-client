@@ -13,6 +13,8 @@ import { allowGrouping } from "@formBuilder/components/shared/right-panel/treevi
 import { GroupStoreProvider } from "@formBuilder/components/shared/right-panel/treeview/store/useGroupStore";
 import { TemplateStoreProvider } from "@lib/store/useTemplateStore";
 import { Language } from "@lib/types/form-builder-types";
+import { FormRecord } from "@lib/types";
+import { logMessage } from "@lib/logger";
 
 export default async function Layout({
   children,
@@ -21,7 +23,7 @@ export default async function Layout({
   children: React.ReactNode;
   params: { locale: string; id: string };
 }) {
-  let initialForm;
+  let initialForm: FormRecord | null = null;
 
   const { session, ability } = await authCheckAndThrow().catch(() => ({
     session: null,
@@ -32,21 +34,21 @@ export default async function Layout({
 
   const allowGroupsFlag = await allowGrouping();
 
-  if (session && formID) {
-    try {
-      initialForm = await getFullTemplateByID(ability, formID);
-
-      if (initialForm === null) {
-        redirect(`/${locale}/404`);
-      }
-
-      if (initialForm.isPublished) {
-        redirect(`/${locale}/form-builder/${formID}/settings`);
-      }
-    } catch (e) {
+  if (session && formID && formID !== "0000") {
+    initialForm = await getFullTemplateByID(ability, formID).catch((e) => {
       if (e instanceof AccessControlError) {
         redirect(`/${locale}/admin/unauthorized`);
       }
+      logMessage.warn(`Error fetching Form Record for form-builder/[id] Layout: ${e.message}`);
+      return null;
+    });
+
+    if (initialForm === null) {
+      redirect(`/${locale}/404`);
+    }
+
+    if (initialForm.isPublished) {
+      redirect(`/${locale}/form-builder/${formID}/settings`);
     }
   }
 
