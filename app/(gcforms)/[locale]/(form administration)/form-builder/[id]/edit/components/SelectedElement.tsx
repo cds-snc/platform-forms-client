@@ -170,7 +170,7 @@ export const SelectedElement = ({
       element = <ShortAnswer data-testid="date">mm/dd/yyyy</ShortAnswer>;
       break;
     case "formattedDate":
-      element = <DateElement />;
+      element = <DateElement data-testid="formattedDate" dateFormat={item.properties.dateFormat} />;
       break;
     case "number":
       element = <ShortAnswer data-testid="number">0123456789</ShortAnswer>;
