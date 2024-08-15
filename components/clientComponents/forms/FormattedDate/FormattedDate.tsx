@@ -13,8 +13,7 @@ export enum DatePart {
 }
 
 interface FormattedDateProps extends InputFieldProps {
-  dateParts?: DatePart[];
-  dateFormat?: string;
+  dateFormat?: "YYYY-MM-DD" | "DD-MM-YYYY" | "MM-DD-YYYY";
   monthSelector?: "numeric" | "select";
   defaultDate?: string | null;
   autocomplete?: string;
@@ -26,10 +25,23 @@ export const FormattedDate = (props: FormattedDateProps): React.ReactElement => 
     name,
     required,
     ariaDescribedBy,
-    dateParts = [DatePart.YYYY, DatePart.MM, DatePart.DD],
+    dateFormat = "YYYY-MM-DD",
     monthSelector = "numeric",
     autocomplete = false,
   } = props;
+
+  const dateParts = dateFormat.split("-").map((part) => {
+    switch (part) {
+      case "YYYY":
+        return DatePart.YYYY;
+      case "MM":
+        return DatePart.MM;
+      case "DD":
+        return DatePart.DD;
+      default:
+        throw new Error(`Unknown date part: ${part}`);
+    }
+  });
 
   const { t } = useTranslation("common");
 
