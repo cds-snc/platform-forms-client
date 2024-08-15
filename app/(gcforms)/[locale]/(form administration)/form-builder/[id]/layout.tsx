@@ -46,10 +46,6 @@ export default async function Layout({
     if (initialForm === null) {
       redirect(`/${locale}/404`);
     }
-
-    if (initialForm.isPublished) {
-      redirect(`/${locale}/form-builder/${formID}/settings`);
-    }
   }
 
   return (
