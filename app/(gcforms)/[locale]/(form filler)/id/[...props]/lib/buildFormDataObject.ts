@@ -33,19 +33,12 @@ export function buildFormDataObject(formRecord: PublicFormRecord, values: Respon
 
 function _handleDynamicRowTypeIfNeeded(
   element: FormElement,
-  value: Response
+  value: Response | Responses[]
 ): [string, string | FileInputResponse][] {
-  if (element.type === FormElementTypes.dynamicRow) {
+  if (element.type === FormElementTypes.dynamicRow && Array.isArray(value)) {
     if (element.properties.subElements === undefined) return [];
-
     const responses = value as Responses[];
     const subElements = element.properties.subElements;
-
-    // Handle Pages (Groups) which can be empty (response value of "") depending on the path a user
-    // chose. Also check subElements just for safety.
-    if (!Array.isArray(responses) || !Array.isArray(subElements)) {
-      return [];
-    }
 
     /**
      * We are creating a new data structure (to be passed to the submit API) from the multiple responses that could have been entered
@@ -72,15 +65,15 @@ function _handleDynamicRowTypeIfNeeded(
         // `flat` function is needed because we use a `map` in a `map`.
         .flat()
     );
-  } else {
-    const result = _handleFormDataType(element, value);
-    return result ? [result] : [];
   }
+
+  const result = _handleFormDataType(element, value);
+  return result ? [result] : [];
 }
 
 function _handleFormDataType(
   element: FormElement,
-  value: Response
+  value: Response | Responses[]
 ): [string, string | FileInputResponse] | undefined {
   switch (element.type) {
     case FormElementTypes.textField:
