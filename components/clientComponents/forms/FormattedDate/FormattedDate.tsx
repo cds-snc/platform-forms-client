@@ -2,9 +2,15 @@
 import { InputFieldProps } from "@lib/types";
 import classnames from "classnames";
 import { useField } from "formik";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Description } from "../Description/Description";
 import { useTranslation } from "@i18n/client";
+
+export interface DateObject {
+  YYYY: number;
+  MM: number;
+  DD: number;
+}
 
 export enum DatePart {
   DD = "day",
@@ -12,12 +18,35 @@ export enum DatePart {
   YYYY = "year",
 }
 
+export type DateFormat = "YYYY-MM-DD" | "DD-MM-YYYY" | "MM-DD-YYYY";
+
 interface FormattedDateProps extends InputFieldProps {
-  dateFormat?: "YYYY-MM-DD" | "DD-MM-YYYY" | "MM-DD-YYYY";
+  dateFormat?: DateFormat;
   monthSelector?: "numeric" | "select";
   defaultDate?: string | null;
   autocomplete?: string;
 }
+
+/**
+ * Utility function to use when rendering a formatted date string
+ *
+ * @param dateFormat
+ * @param dateObject
+ * @returns
+ */
+export const getFormattedDateFromObject = (
+  dateFormat: DateFormat,
+  dateObject: DateObject
+): string => {
+  const { YYYY, MM, DD } = dateObject;
+
+  const formattedDate = dateFormat
+    .replace("YYYY", YYYY.toString())
+    .replace("MM", MM.toString().padStart(2, "0"))
+    .replace("DD", DD.toString().padStart(2, "0"));
+
+  return formattedDate;
+};
 
 export const FormattedDate = (props: FormattedDateProps): React.ReactElement => {
   const {
@@ -50,6 +79,20 @@ export const FormattedDate = (props: FormattedDateProps): React.ReactElement => 
 
   const [selectedMonth, setSelectedMonth] = useState(1);
   const [selectedYear, setSelectedYear] = useState(new Date().getFullYear());
+  const [selectedDay, setSelectedDay] = useState(1);
+
+  const getDateObject = (year: number, month: number, day: number): DateObject => {
+    return {
+      YYYY: year,
+      MM: month,
+      DD: day,
+    } as DateObject;
+  };
+
+  useEffect(() => {
+    helpers.setValue(getDateObject(selectedYear, selectedMonth, selectedDay));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [selectedYear, selectedMonth, selectedDay]);
 
   const isLeapYear = (year: number) => {
     return year % 400 === 0 || (year % 100 !== 0 && year % 4 === 0);
@@ -78,6 +121,11 @@ export const FormattedDate = (props: FormattedDateProps): React.ReactElement => 
         </Description>
       )}
       <div className="flex gap-2">
+        <input
+          type="hidden"
+          {...field}
+          value={JSON.stringify(getDateObject(selectedYear, selectedMonth, selectedDay))}
+        />
         {dateParts.map((part) => {
           return part === DatePart.MM && monthSelector === "select" ? (
             <div key={part}>
@@ -132,6 +180,7 @@ export const FormattedDate = (props: FormattedDateProps): React.ReactElement => 
                 max={getMaxDay(selectedMonth, selectedYear)}
                 autoComplete={autocomplete ? "bday-day" : undefined}
                 className={classnames("gc-input-text", "w-16")}
+                onChange={(e) => setSelectedDay(Number(e.target.value))}
                 required={required}
               />
             </div>
