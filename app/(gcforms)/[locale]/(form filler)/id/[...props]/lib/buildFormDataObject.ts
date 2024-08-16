@@ -96,6 +96,8 @@ function _handleFormDataType(
       return _handleFormDataFileInput(element.id.toString(), value as FileInputResponse);
     case FormElementTypes.richText:
       return undefined;
+    case FormElementTypes.formattedDate:
+      return _handlFormDataObject(element.id.toString(), value);
   }
 }
 
@@ -114,4 +116,8 @@ function _handleFormDataText(key: string, value: string): [string, string] {
 
 function _handleFormDataArray(key: string, value: Array<string>): [string, string] {
   return [key, JSON.stringify({ value: value })];
+}
+
+function _handlFormDataObject(key: string, value: Response): [string, string] {
+  return [key, JSON.stringify(value)];
 }
