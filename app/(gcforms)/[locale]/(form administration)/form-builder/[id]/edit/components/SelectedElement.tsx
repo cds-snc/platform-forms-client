@@ -9,6 +9,7 @@ import { ElementOption, FormElementWithIndex, Language } from "@lib/types/form-b
 import { useElementOptions } from "@lib/hooks/form-builder";
 import { ConditionalIndicator } from "@formBuilder/components/shared/conditionals/ConditionalIndicator";
 import { DateElement } from "./elements/DateElement";
+import { DateFormat } from "@clientComponents/forms/FormattedDate/FormattedDate";
 
 const filterSelected = (
   item: FormElementWithIndex,
@@ -170,7 +171,14 @@ export const SelectedElement = ({
       element = <ShortAnswer data-testid="date">mm/dd/yyyy</ShortAnswer>;
       break;
     case "formattedDate":
-      element = <DateElement data-testid="formattedDate" dateFormat={item.properties.dateFormat} />;
+      element = (
+        <DateElement
+          data-testid="formattedDate"
+          dateFormat={
+            item.properties.dateFormat ? (item.properties.dateFormat as DateFormat) : undefined
+          }
+        />
+      );
       break;
     case "number":
       element = <ShortAnswer data-testid="number">0123456789</ShortAnswer>;

@@ -1,10 +1,14 @@
 "use client";
-import { DatePart } from "@clientComponents/forms/FormattedDate/FormattedDate";
+import { DateFormat, DatePart } from "@clientComponents/forms/FormattedDate/FormattedDate";
 import { useTranslation } from "@i18n/client";
 import { cn } from "@lib/utils";
 import React from "react";
 
-export const DateElement = ({ dateFormat = "YYYY-MM-DD" }: { dateFormat: string }) => {
+export const DateElement = ({
+  dateFormat = "YYYY-MM-DD",
+}: {
+  dateFormat: DateFormat | undefined;
+}) => {
   const { t } = useTranslation("common");
 
   const dateParts = dateFormat.split("-").map((part: string) => {
