@@ -288,6 +288,9 @@ describe("<ElementDialog />", () => {
     cy.get('[data-testid="address"]').should("have.attr", "aria-selected", "true");
 
     cy.get("body").type("{downarrow}");
+    cy.get('[data-testid="addressComplete"]').should("have.attr", "aria-selected", "true");
+
+    cy.get("body").type("{downarrow}");
     cy.get('[data-testid="departments"]').should("have.attr", "aria-selected", "true");
 
     cy.get("body").type("{downarrow}");
