@@ -144,6 +144,15 @@ const isFieldResponseValid = (
 
       break;
     }
+    case FormElementTypes.formattedDate: {
+      if (validator.required && !value) {
+        return t("input-validation.required");
+      }
+
+      // Validate date object and parts?
+
+      break;
+    }
     case FormElementTypes.dynamicRow: {
       //set up object to store results
       // loop over rows of values
