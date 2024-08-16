@@ -16,6 +16,7 @@ import formNameArraySchema from "@lib/middleware/schemas/submission-name-array.s
 import { matchRule, FormValues, GroupsType } from "@lib/formContext";
 import { inGroup } from "@lib/formContext";
 import { isFileExtensionValid, isAllFilesSizeValid } from "./fileValidationClientSide";
+import { DateObject, isValidDate } from "@clientComponents/forms/FormattedDate/FormattedDate";
 
 /**
  * getRegexByType [private] defines a mapping between the types of fields that need to be validated
@@ -149,7 +150,9 @@ const isFieldResponseValid = (
         return t("input-validation.required");
       }
 
-      // Validate date object and parts?
+      if (!isValidDate(value as DateObject)) {
+        return t("input-validation.date");
+      }
 
       break;
     }

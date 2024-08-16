@@ -38,6 +38,7 @@
     "number": "Enter a number.",
     "email": "Enter a valid email address.",
     "date": "Enter a valid date in mm/dd/yyyy format.",
+    "date-invalid": "Enter a valid date.",
     "phone": "Enter a valid telephone number.",
     "regex": "Enter the correct format.",
     "file-size-too-large": "Select a smaller file.",

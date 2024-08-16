@@ -48,6 +48,17 @@ export const getFormattedDateFromObject = (
   return formattedDate;
 };
 
+/**
+ * This should probably live somewhere else
+ * @param dateObject
+ * @returns
+ */
+export const isValidDate = (dateObject: DateObject): boolean => {
+  const { YYYY, MM, DD } = dateObject;
+  const date = new Date(`${YYYY}-${MM}-${DD}`);
+  return date.getFullYear() === YYYY && date.getMonth() + 1 === MM && date.getDate() === DD;
+};
+
 export const FormattedDate = (props: FormattedDateProps): React.ReactElement => {
   const {
     id,
