@@ -259,6 +259,9 @@ describe("<ElementDialog />", () => {
     cy.get('[data-testid="combobox"]').should("have.attr", "aria-selected", "true");
 
     cy.get("body").type("{downarrow}");
+    cy.get('[data-testid="formattedDate"]').should("have.attr", "aria-selected", "true");
+
+    cy.get("body").type("{downarrow}");
     cy.get('[data-testid="attestation"]').should("have.attr", "aria-selected", "true");
 
     cy.get("body").type("{downarrow}");
@@ -325,13 +328,13 @@ describe("<ElementDialog />", () => {
     cy.get("body").type("{rightarrow}");
     cy.focused().should("have.attr", "data-testid", "basic-filter");
     cy.get('[data-testid="basic-filter').click();
-    cy.get('[data-testid="listbox"] li[role="option"]').should("have.length", 7);
+    cy.get('[data-testid="listbox"] li[role="option"]').should("have.length", 8);
     cy.get('[data-testid="preset-filter').click();
     cy.get('[data-testid="listbox"] li[role="option"]').should("have.length", 7);
     cy.get('[data-testid="other-filter').click();
     cy.get('[data-testid="listbox"] li[role="option"]').should("have.length", 1);
 
     cy.get('[data-testid="all-filter').click();
-    cy.get('[data-testid="listbox"] li[role="option"]').should("have.length", 15);
+    cy.get('[data-testid="listbox"] li[role="option"]').should("have.length", 16);
   });
 });
