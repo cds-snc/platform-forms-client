@@ -75,6 +75,7 @@ export enum FormElementTypes {
   dynamicRow = "dynamicRow",
   attestation = "attestation",
   address = "address",
+  addressComplete = "addressComplete",
   name = "name",
   firstMiddleLastName = "firstMiddleLastName",
   departments = "departments",

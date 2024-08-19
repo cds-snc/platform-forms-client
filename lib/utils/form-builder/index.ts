@@ -283,6 +283,7 @@ export const getQuestionNumber = (item: FormElement, elements: ElementType[], al
 export const allowedTemplates = [
   FormElementTypes.attestation,
   FormElementTypes.address,
+  FormElementTypes.addressComplete,
   FormElementTypes.name,
   FormElementTypes.firstMiddleLastName,
   FormElementTypes.contact,
