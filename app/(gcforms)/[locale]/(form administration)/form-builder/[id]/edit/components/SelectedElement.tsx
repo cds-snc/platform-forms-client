@@ -9,7 +9,7 @@ import { ElementOption, FormElementWithIndex, Language } from "@lib/types/form-b
 import { useElementOptions } from "@lib/hooks/form-builder";
 import { ConditionalIndicator } from "@formBuilder/components/shared/conditionals/ConditionalIndicator";
 import { DateElement } from "./elements/DateElement";
-import { DateFormat } from "@clientComponents/forms/FormattedDate/FormattedDate";
+import { DateFormat } from "@clientComponents/forms/FormattedDate/types";
 
 const filterSelected = (
   item: FormElementWithIndex,

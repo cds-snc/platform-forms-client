@@ -1,5 +1,5 @@
 "use client";
-import { DateFormat, DatePart } from "@clientComponents/forms/FormattedDate/FormattedDate";
+import { DateFormat, DatePart } from "@clientComponents/forms/FormattedDate/types";
 import { useTranslation } from "@i18n/client";
 import { cn } from "@lib/utils";
 import React from "react";
