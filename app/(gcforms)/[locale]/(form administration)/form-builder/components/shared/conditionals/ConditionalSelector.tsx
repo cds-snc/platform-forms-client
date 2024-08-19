@@ -153,10 +153,10 @@ export const ConditionalSelector = ({
         return result;
       });
 
-    // Prepend empty option
-    items.unshift({ label: "", value: "" });
+    // Prepend empty option with default text
+    items.unshift({ label: t("addConditionalRules.selectQuestion"), value: "" });
     return items;
-  }, [elements, itemId, language, localizeField]);
+  }, [elements, itemId, language, localizeField, t]);
 
   const choiceParentQuestion = choiceId?.split(".")[0] || null;
 
