@@ -15,7 +15,8 @@ import {
   Group,
 } from "@lib/formContext";
 import { randomId } from "@lib/client/clientHelpers";
-import { DateFormat, DateObject, getFormattedDateFromObject } from "../FormattedDate/FormattedDate";
+import { DateFormat, DateObject } from "../FormattedDate/FormattedDate";
+import { getFormattedDateFromObject } from "../FormattedDate/utils";
 
 type ReviewItem = {
   id: string;
