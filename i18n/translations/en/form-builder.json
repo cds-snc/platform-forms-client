@@ -917,9 +917,9 @@
     },
     "toastSuccess": "Linear flow applied",
     "multiRulesWarning": {
-      "text1": "The order and flow is set based on the rules applied.",
-      "text2": "Connecting pages:",
-      "text3": "To connect these pages, you must remove the rules applied to form elements."
+      "text1": "This page has branching applied.",
+      "text2": "Remove branching logic",
+      "text3": "To connect these pages, remove branches."
     },
     "choiceSelect": {
       "selectOption": "Select an option",

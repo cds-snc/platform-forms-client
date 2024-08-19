@@ -289,41 +289,26 @@ export const updateActiveStatus = async (ability: UserAbility, userID: string, a
 
 type Overdue = { [key: string]: NagwareResult };
 
-type Templates = Array<{
-  id: string;
-  titleEn: string;
-  titleFr: string;
-  isPublished: boolean;
-  createdAt: number | Date;
-  [key: string]: string | boolean | number | Date;
-}>;
-
-export const getUnprocessedSubmissionsForUser = async (
-  ability: UserAbility,
-  userId: string,
-  templates: Templates | false = false
-) => {
+export const getUnprocessedSubmissionsForUser = async (ability: UserAbility, userId: string) => {
   const overdue: Overdue = {};
 
   try {
-    if (!templates) {
-      templates = (await getAllTemplatesForUser(ability)).map((template) => {
-        const {
-          id,
-          form: { titleEn, titleFr },
-          isPublished,
-          createdAt,
-        } = template;
+    const templates = (await getAllTemplatesForUser(ability)).map((template) => {
+      const {
+        id,
+        form: { titleEn, titleFr },
+        isPublished,
+        createdAt,
+      } = template;
 
-        return {
-          id,
-          titleEn,
-          titleFr,
-          isPublished,
-          createdAt: Number(createdAt),
-        };
-      });
-    }
+      return {
+        id,
+        titleEn,
+        titleFr,
+        isPublished,
+        createdAt: Number(createdAt),
+      };
+    });
 
     await Promise.all(
       templates.map(async (template) => {
