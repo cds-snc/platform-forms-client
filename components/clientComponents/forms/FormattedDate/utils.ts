@@ -9,7 +9,7 @@ import { DateFormat, DateObject } from "./types";
  */
 export const getFormattedDateFromObject = (
   dateFormat: DateFormat = "YYYY-MM-DD",
-  dateObject: DateObject = { YYYY: 0, MM: 0, DD: 0 }
+  dateObject: DateObject
 ): string => {
   const { YYYY, MM, DD } = dateObject;
 
