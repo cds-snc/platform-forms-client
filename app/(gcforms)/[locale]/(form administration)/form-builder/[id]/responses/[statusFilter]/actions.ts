@@ -38,7 +38,7 @@ import { getLayoutFromGroups } from "@lib/utils/form-builder/groupedFormHelpers"
 import { allowGrouping } from "@formBuilder/components/shared/right-panel/treeview/util/allowGrouping";
 import { orderGroups } from "@lib/utils/form-builder/orderUsingGroupsLayout";
 import { formHasGroups } from "@lib/utils/form-builder/formHasGroups";
-import { DateFormat, DateObject } from "@clientComponents/forms/FormattedDate/FormattedDate";
+import { DateFormat, DateObject } from "@clientComponents/forms/FormattedDate/types";
 import { getFormattedDateFromObject } from "@clientComponents/forms/FormattedDate/utils";
 
 export const fetchSubmissions = async ({

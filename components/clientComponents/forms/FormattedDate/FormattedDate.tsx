@@ -5,20 +5,7 @@ import { useField } from "formik";
 import React, { useEffect, useState } from "react";
 import { Description } from "../Description/Description";
 import { useTranslation } from "@i18n/client";
-
-export interface DateObject {
-  YYYY: number;
-  MM: number;
-  DD: number;
-}
-
-export enum DatePart {
-  DD = "day",
-  MM = "month",
-  YYYY = "year",
-}
-
-export type DateFormat = "YYYY-MM-DD" | "DD-MM-YYYY" | "MM-DD-YYYY";
+import { DateFormat, DateObject, DatePart } from "./types";
 
 interface FormattedDateProps extends InputFieldProps {
   dateFormat?: DateFormat;
@@ -26,17 +13,6 @@ interface FormattedDateProps extends InputFieldProps {
   defaultDate?: string | null;
   autocomplete?: string;
 }
-
-/**
- * This should probably live somewhere else
- * @param dateObject
- * @returns
- */
-export const isValidDate = (dateObject: DateObject): boolean => {
-  const { YYYY, MM, DD } = dateObject;
-  const date = new Date(`${YYYY}-${MM}-${DD}`);
-  return date.getFullYear() === YYYY && date.getMonth() + 1 === MM && date.getDate() === DD;
-};
 
 export const FormattedDate = (props: FormattedDateProps): React.ReactElement => {
   const {

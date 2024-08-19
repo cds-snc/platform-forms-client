@@ -16,7 +16,8 @@ import formNameArraySchema from "@lib/middleware/schemas/submission-name-array.s
 import { matchRule, FormValues, GroupsType } from "@lib/formContext";
 import { inGroup } from "@lib/formContext";
 import { isFileExtensionValid, isAllFilesSizeValid } from "./fileValidationClientSide";
-import { DateObject, isValidDate } from "@clientComponents/forms/FormattedDate/FormattedDate";
+import { DateObject } from "@clientComponents/forms/FormattedDate/FormattedDate";
+import { isValidDate } from "@clientComponents/forms/FormattedDate/utils";
 
 /**
  * getRegexByType [private] defines a mapping between the types of fields that need to be validated
