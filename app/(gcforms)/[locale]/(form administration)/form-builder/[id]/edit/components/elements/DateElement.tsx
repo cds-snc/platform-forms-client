@@ -4,11 +4,7 @@ import { useTranslation } from "@i18n/client";
 import { cn } from "@lib/utils";
 import React from "react";
 
-export const DateElement = ({
-  dateFormat = "YYYY-MM-DD",
-}: {
-  dateFormat: DateFormat | undefined;
-}) => {
+export const DateElement = ({ dateFormat = "YYYY-MM-DD" }: { dateFormat?: DateFormat }) => {
   const { t } = useTranslation("common");
 
   const dateParts = dateFormat.split("-").map((part: string) => {
