@@ -25,6 +25,7 @@ import {
 } from "@lib/types";
 import { getLocalizedProperty } from "@lib/utils";
 import { managedData } from "@lib/managedData";
+import { DateFormat } from "@clientComponents/forms/FormattedDate/types";
 
 // This function is used for select/radio/checkbox i18n change of form labels
 function getLocaleChoices(choices: Array<PropertyChoices> | undefined, lang: string) {
@@ -256,7 +257,11 @@ function _buildForm(element: FormElement, lang: string): ReactElement {
             id={`${id}`}
             name={`${id}`}
             ariaDescribedBy={description ? `desc-${id}` : undefined}
-            dateFormat={element.properties.dateFormat}
+            dateFormat={
+              element.properties.dateFormat
+                ? (element.properties.dateFormat as DateFormat)
+                : undefined
+            }
             autocomplete={element.properties.autoComplete}
           />
         </div>
