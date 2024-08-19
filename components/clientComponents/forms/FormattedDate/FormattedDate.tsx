@@ -35,8 +35,8 @@ interface FormattedDateProps extends InputFieldProps {
  * @returns
  */
 export const getFormattedDateFromObject = (
-  dateFormat: DateFormat,
-  dateObject: DateObject
+  dateFormat: DateFormat = "YYYY-MM-DD", // @TODO no defaults?
+  dateObject: DateObject = { YYYY: 0, MM: 0, DD: 0 }
 ): string => {
   const { YYYY, MM, DD } = dateObject;
 
