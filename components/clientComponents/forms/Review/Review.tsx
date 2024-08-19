@@ -4,7 +4,7 @@ import { Button } from "@clientComponents/globals";
 import { Theme } from "@clientComponents/globals/Buttons/themes";
 import { useFocusIt } from "@lib/hooks/useFocusIt";
 import { useGCFormsContext } from "@lib/hooks/useGCFormContext";
-import { FormElement } from "@lib/types";
+import { FileInputResponse, FormElement, FormElementTypes } from "@lib/types";
 import { Language } from "@lib/types/form-builder-types";
 import { getLocalizedProperty } from "@lib/utils";
 import {
@@ -14,31 +14,39 @@ import {
   getElementIdsAsNumber,
   Group,
 } from "@lib/formContext";
+import { randomId } from "@lib/client/clientHelpers";
 
 type ReviewItem = {
   id: string;
   name: string;
   title: string;
-  elements: {
-    elementId: number;
-    title: string;
-    values: string;
-  }[];
+  elements: Element[];
 };
 
-function getFormElementValues(elementName: number | null, formValues: void | FormValues) {
-  const value = formValues[elementName as keyof typeof formValues];
-  if (Array.isArray(value)) {
-    return (value as Array<string>).join(", ") || "-";
-  }
-  return value || "-";
-}
+type Element = {
+  title: string;
+  values: string | FileInputResponse | Element[];
+};
 
-function getFormElementTitle(formElementId: number, formElements: FormElement[], lang: string) {
-  const formElement = formElements.find((item) => item.id === formElementId);
-  return formElement
-    ? (formElement.properties?.[getLocalizedProperty("title", lang)] as string)
-    : "-";
+function formatElementValues(values: Element["values"]) {
+  if (!values) {
+    return "-";
+  }
+  // Case of a File upload
+  if ((values as FileInputResponse).based64EncodedFile !== undefined) {
+    const file = values as FileInputResponse;
+    if (!file.name || !file.size || file.size < 0) {
+      return "-";
+    }
+    const fileSizeInMB = (file.size / 1024 / 1024).toFixed(2);
+    return `${file.name} (${fileSizeInMB} MB)`;
+  }
+  // Case of an array like element e.g. checkbox
+  if (Array.isArray(values)) {
+    return values.join(", ") || "-";
+  }
+  // Case of a single value element e.g. input
+  return String(values);
 }
 
 function getReviewItemElements(
@@ -52,14 +60,48 @@ function getReviewItemElements(
   const shownElementIds = getElementIdsAsNumber(
     filterValuesForShownElements(groupElements, shownFormElements)
   );
-  const result = shownElementIds.map((elementId) => {
+  return shownElementIds.map((elementId) => {
+    const element = formElements.find((item) => item.id === elementId);
+    let resultValues: string | Element[] = formatElementValues(
+      formValues[elementId as unknown as keyof typeof formValues] as Element["values"]
+    );
+    // Handle any Sub Elements. Note Sub Elements = Dynamic Rows = Repeating Sets
+    if (element?.type === FormElementTypes.dynamicRow) {
+      resultValues = [];
+      const parentId = element.id;
+      const parentTitle = element.properties?.[getLocalizedProperty("title", lang)];
+      const subElements = element.properties?.subElements;
+      // Use FormValues as the source of truth and for each FormValue value, map the related
+      // subElement title to the FormValue value
+      const subElementValues = (formValues[parentId] as string[]).map(
+        (valueRows, valueRowsIndex) => {
+          const subElementsTitle = `${parentTitle} - ${valueRowsIndex + 1}`;
+          const valueRowsAsArray = Object.keys(valueRows).map(
+            (key) => valueRows[key as keyof typeof valueRows]
+          );
+          // Match the FormValue index to the subElement index to assign the Element title
+          const titlesMappedToValues = valueRowsAsArray.map((formValue, valueRowIndex) => {
+            return {
+              title: subElements?.[valueRowIndex].properties?.[getLocalizedProperty("title", lang)],
+              values: formValue,
+            };
+          });
+          return {
+            title: subElementsTitle,
+            values: titlesMappedToValues,
+          } as Element;
+        }
+      );
+      resultValues.push({
+        title: parentTitle as string,
+        values: subElementValues,
+      });
+    }
     return {
-      elementId,
-      title: getFormElementTitle(elementId, formElements, lang),
-      values: getFormElementValues(elementId, formValues),
+      title: (element?.properties?.[getLocalizedProperty("title", lang)] as string) || "-",
+      values: resultValues,
     };
   });
-  return result;
 }
 
 export const Review = ({ language }: { language: Language }): React.ReactElement => {
@@ -78,7 +120,7 @@ export const Review = ({ language }: { language: Language }): React.ReactElement
     return groupHistory
       .filter((key) => key !== "review") // Removed to avoid showing as a group
       .map((groupId) => {
-        const group: Group = groups[groupId as keyof typeof groups];
+        const group: Group = groups[groupId as keyof typeof groups] || {};
         return {
           id: groupId,
           name: group.name,
@@ -140,15 +182,51 @@ const QuestionsAnswersList = ({ reviewItem }: { reviewItem: ReviewItem }): React
     <dl className="my-10">
       {Array.isArray(reviewItem.elements) &&
         reviewItem.elements.map((reviewElement) => {
+          if (Array.isArray(reviewElement.values)) {
+            return <SubElements key={randomId()} elements={reviewElement.values as Element[]} />;
+          }
           return (
-            <div key={reviewElement.elementId} className="mb-8">
+            <div key={randomId()} className="mb-8">
               <dt className="font-bold mb-2">{reviewElement.title}</dt>
-              <dd>{reviewElement.values}</dd>
+              <dd>{formatElementValues(reviewElement.values)}</dd>
             </div>
           );
         })}
     </dl>
   );
+};
+
+// Handle formatting Sub Elements. Note Sub Elements = Dynamic Rows = Repeating Sets.
+const SubElements = ({ elements }: { elements: Element[] }) => {
+  return elements?.map((subElementItem) => {
+    return (subElementItem.values as Element[])?.map((element) => {
+      if (Array.isArray(element.values)) {
+        const dlId = randomId();
+        // Create a nested DL for each Sub Element list
+        return (
+          <dl key={dlId} aria-labelledby={dlId} className="my-10">
+            <h4 className="italic" id={dlId}>
+              {element.title}
+            </h4>
+            {(element.values as Element[]).map((elementValues) => {
+              return (
+                <div key={randomId()} className="mb-2">
+                  <dt className="font-bold mb-2">{elementValues.title}</dt>
+                  <dd>{formatElementValues(elementValues.values)}</dd>
+                </div>
+              );
+            })}
+          </dl>
+        );
+      }
+      return (
+        <div key={randomId()} className="mb-2">
+          <dt className="font-bold mb-2">{element.title}</dt>
+          <dd>{formatElementValues(element.values)}</dd>
+        </div>
+      );
+    });
+  });
 };
 
 const EditButton = ({
