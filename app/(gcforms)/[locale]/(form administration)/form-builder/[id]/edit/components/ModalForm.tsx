@@ -44,56 +44,60 @@ export const ModalForm = ({
 
   return (
     <form onSubmit={(e: React.FormEvent<HTMLFormElement>) => e.preventDefault()}>
-      <div className="mb-2">
-        <ModalLabel htmlFor={`titleEn--modal--${item.index}`}>{t("question")}</ModalLabel>
-        <Input
-          id={`title--modal--${item.index}`}
-          name={`item${item.index}`}
-          placeholder={t("question")}
-          value={
-            properties[localizeField(LocalizedElementProperties.TITLE, translationLanguagePriority)]
-          }
-          className="w-11/12"
-          onChange={(e) =>
-            updateModalProperties(item.id, {
-              ...properties,
-              ...{
-                [localizeField(LocalizedElementProperties.TITLE, translationLanguagePriority)]:
-                  e.target.value,
-              },
-            })
-          }
-        />
-      </div>
-      <div className="mb-2">
-        <ModalLabel>{t("inputDescription")}</ModalLabel>
-        <Hint>{t("descriptionDescription")}</Hint>
-        <TextArea
-          id={`description--modal--${item.index}`}
-          placeholder={t("inputDescription")}
-          testId="description-input"
-          className="w-11/12"
-          onChange={(e) => {
-            const description = e.target.value.replace(/[\r\n]/gm, "");
-            updateModalProperties(item.id, {
-              ...properties,
-              ...{
-                [localizeField(
-                  LocalizedElementProperties.DESCRIPTION,
-                  translationLanguagePriority
-                )]: description,
-              },
-            });
-          }}
-          value={
-            properties[
-              localizeField(LocalizedElementProperties.DESCRIPTION, translationLanguagePriority)
-            ]
-          }
-        />
-      </div>
+      <section>
+        <div className="mb-2">
+          <ModalLabel htmlFor={`titleEn--modal--${item.index}`}>{t("question")}</ModalLabel>
+          <Input
+            id={`title--modal--${item.index}`}
+            name={`item${item.index}`}
+            placeholder={t("question")}
+            value={
+              properties[
+                localizeField(LocalizedElementProperties.TITLE, translationLanguagePriority)
+              ]
+            }
+            className="w-11/12"
+            onChange={(e) =>
+              updateModalProperties(item.id, {
+                ...properties,
+                ...{
+                  [localizeField(LocalizedElementProperties.TITLE, translationLanguagePriority)]:
+                    e.target.value,
+                },
+              })
+            }
+          />
+        </div>
+        <div className="mb-2">
+          <ModalLabel>{t("inputDescription")}</ModalLabel>
+          <Hint>{t("descriptionDescription")}</Hint>
+          <TextArea
+            id={`description--modal--${item.index}`}
+            placeholder={t("inputDescription")}
+            testId="description-input"
+            className="w-11/12"
+            onChange={(e) => {
+              const description = e.target.value.replace(/[\r\n]/gm, "");
+              updateModalProperties(item.id, {
+                ...properties,
+                ...{
+                  [localizeField(
+                    LocalizedElementProperties.DESCRIPTION,
+                    translationLanguagePriority
+                  )]: description,
+                },
+              });
+            }}
+            value={
+              properties[
+                localizeField(LocalizedElementProperties.DESCRIPTION, translationLanguagePriority)
+              ]
+            }
+          />
+        </div>
+      </section>
       {item.type === FormElementTypes.formattedDate && (
-        <div className="mb-4">
+        <section className="mb-4">
           <h3>Date options</h3>
           <p className="mt-4 font-semibold">What type of date is collected?</p>
 
@@ -183,32 +187,34 @@ export const ModalForm = ({
               </p>
             </div>
           </InfoDetails>
-        </div>
+        </section>
       )}
-      <div className="mb-2">
-        <h3>{t("addRules")}</h3>
-      </div>
-      <div className="mb-2">
-        <Checkbox
-          id={`required-${item.index}-id-modal`}
-          value={`required-${item.index}-value-modal-` + checked}
-          key={`required-${item.index}-modal-` + checked}
-          defaultChecked={checked}
-          onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-            // clone the existing properties so that we don't overwrite other keys in "validation"
-            const validation = Object.assign({}, properties.validation, {
-              required: e.target.checked,
-            });
-            updateModalProperties(item.id, {
-              ...properties,
-              ...{ validation },
-            });
-          }}
-          label={t("required")}
-        ></Checkbox>
-      </div>
-      {item.type === FormElementTypes.dynamicRow && (
+      <section className="mb-4">
         <div className="mb-2">
+          <h3>{t("addRules")}</h3>
+        </div>
+        <div>
+          <Checkbox
+            id={`required-${item.index}-id-modal`}
+            value={`required-${item.index}-value-modal-` + checked}
+            key={`required-${item.index}-modal-` + checked}
+            defaultChecked={checked}
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+              // clone the existing properties so that we don't overwrite other keys in "validation"
+              const validation = Object.assign({}, properties.validation, {
+                required: e.target.checked,
+              });
+              updateModalProperties(item.id, {
+                ...properties,
+                ...{ validation },
+              });
+            }}
+            label={t("required")}
+          ></Checkbox>
+        </div>
+      </section>
+      {item.type === FormElementTypes.dynamicRow && (
+        <section className="mb-4">
           <ModalLabel htmlFor={`maxNumberOfRows--modal--${item.index}`}>
             {t("maxNumberOfRows.label")}
           </ModalLabel>
@@ -240,11 +246,11 @@ export const ModalForm = ({
               }
             }}
           />
-        </div>
+        </section>
       )}
 
       {item.type === FormElementTypes.textField && (
-        <div className="mb-2 mt-8">
+        <section className="mb-4 mt-8">
           <ModalLabel htmlFor="">{t("selectAutocomplete")}</ModalLabel>
           <Hint>{t("selectAutocompleteHint")}</Hint>
           <div>
@@ -265,12 +271,12 @@ export const ModalForm = ({
               </div>
             </InfoDetails>
           </div>
-        </div>
+        </section>
       )}
       {item.type === FormElementTypes.textField ||
-        (FormElementTypes.textArea &&
+        (item.type === FormElementTypes.textArea &&
           (!item.properties.validation?.type || item.properties.validation?.type === "text") && (
-            <>
+            <section className="mb-4">
               <div className="mb-2">
                 <ModalLabel htmlFor={`characterLength--modal--${item.index}`}>
                   {t("maximumCharacterLength")}
@@ -308,14 +314,14 @@ export const ModalForm = ({
                   }}
                 />
               </div>
-              <InfoDetails className="mb-4" summary={t("characterLimitWhenToUse.title")}>
+              <InfoDetails summary={t("characterLimitWhenToUse.title")}>
                 <div className="mb-8 mt-4 border-l-3 border-gray-500 pl-8">
                   <p className="mb-4 text-sm">{t("characterLimitWhenToUse.text1")}</p>
                   <p className="mb-4 text-sm">{t("characterLimitWhenToUse.text2")}</p>
                   <p className="text-sm">{t("characterLimitWhenToUse.text3")}</p>
                 </div>
               </InfoDetails>
-            </>
+            </section>
           ))}
     </form>
   );
