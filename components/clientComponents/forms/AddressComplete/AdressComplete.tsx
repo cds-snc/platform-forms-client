@@ -1,17 +1,9 @@
 "use client";
-import { InputFieldProps } from "@lib/types";
-import { AddressCompleteChoice, AddressCompleteResult } from "./types";
+import { AddressCompleteChoice, AddressCompleteResult, AddressCompleteProps } from "./types";
 import { getAddressCompleteChoices, getSelectedAddress } from "./utils";
 import { Description, Label, TextInput, Combobox } from "@clientComponents/forms";
 import { useState } from "react";
 import { useTranslation } from "@i18n/client";
-
-interface AddressCompleteProps extends InputFieldProps {
-  showCity?: boolean;
-  showProvince?: boolean;
-  showPostal?: boolean;
-  showCountry?: boolean;
-}
 
 export const AddressComplete = (props: AddressCompleteProps): React.ReactElement => {
   const { id, name, required, ariaDescribedBy } = props;

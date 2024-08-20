@@ -1,4 +1,6 @@
 "use client";
+import { InputFieldProps } from "@lib/types";
+
 // AutoComplete API returns 1 or more objects like:
 export interface AddressCompleteChoice {
   Id: string;
@@ -15,4 +17,11 @@ export interface AddressCompleteResult {
   FormattedValue: string;
   FieldType: string;
   FieldSequence: number;
+}
+
+export interface AddressCompleteProps extends InputFieldProps {
+  showCity?: boolean;
+  showProvince?: boolean;
+  showPostal?: boolean;
+  showCountry?: boolean;
 }
