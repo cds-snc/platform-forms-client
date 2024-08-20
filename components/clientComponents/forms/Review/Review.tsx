@@ -14,7 +14,7 @@ import {
   getElementIdsAsNumber,
   Group,
 } from "@lib/formContext";
-import { randomId } from "@lib/client/clientHelpers";
+import { randomId, scrollToElement } from "@lib/client/clientHelpers";
 
 type ReviewItem = {
   id: string;
@@ -246,6 +246,7 @@ const EditButton = ({
       onClick={() => {
         setGroup(reviewItem.id);
         clearHistoryAfterId(reviewItem.id);
+        scrollToElement();
       }}
     >
       {children}

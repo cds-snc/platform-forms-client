@@ -43,6 +43,7 @@ export const Preview = ({
     getIsPublished: s.getIsPublished,
     getSecurityAttribute: s.getSecurityAttribute,
   }));
+  const headingRef = React.useRef<HTMLHeadingElement>(null);
 
   const formParsed = safeJSONParse<FormProperties>(getSchema());
   if (!formParsed) {
@@ -184,7 +185,7 @@ export const Preview = ({
           </div>
         ) : (
           <div className="gc-formview">
-            <h1 className="mt-4">
+            <h1 className="mt-4" ref={headingRef}>
               {formRecord.form[localizeField(LocalizedFormProperties.TITLE, language)] ||
                 t("gcFormsTest", { ns: "form-builder" })}
             </h1>
@@ -209,7 +210,12 @@ export const Preview = ({
                               return (
                                 <>
                                   {allowGrouping && isShowReviewPage && (
-                                    <BackButton language={language} />
+                                    <BackButton
+                                      language={language}
+                                      callback={() => {
+                                        headingRef.current?.scrollIntoView();
+                                      }}
+                                    />
                                   )}
                                   <Button
                                     type="submit"

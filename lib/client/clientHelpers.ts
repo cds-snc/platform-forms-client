@@ -21,6 +21,18 @@ export const scrollToBottom = (containerEl: HTMLElement) => {
 };
 
 /**
+ * Allows scrolling to an element without having access to the element (ref) itself when called.
+ * @param elementName element name to scroll to. Defaults to H1
+ * @returns undefined
+ */
+export const scrollToElement = (elementName = "H1") => {
+  const NEXT_TICK = 0;
+  setTimeout(() => {
+    document.getElementsByTagName(elementName)?.[0].scrollIntoView();
+  }, NEXT_TICK);
+};
+
+/**
  * Like a UUID but smaller and not as unique. So best to append this to the element name.
  * e.g. id = `myElementName-${randomId()}`
  *

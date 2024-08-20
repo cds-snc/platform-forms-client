@@ -4,7 +4,13 @@ import { Button } from "@clientComponents/globals";
 import { LockedSections } from "@formBuilder/components/shared/right-panel/treeview/types";
 import { Language } from "@lib/types/form-builder-types";
 
-export const BackButtonGroup = ({ language }: { language: Language }) => {
+export const BackButtonGroup = ({
+  language,
+  callback,
+}: {
+  language: Language;
+  callback?: () => void;
+}) => {
   const { currentGroup, getGroupHistory, handlePreviousAction } = useGCFormsContext();
   const { t } = useTranslation("form-builder");
 
@@ -28,6 +34,7 @@ export const BackButtonGroup = ({ language }: { language: Language }) => {
         onClick={async (e) => {
           e.preventDefault();
           handlePreviousAction();
+          callback && callback();
         }}
         type="button"
         className="mr-4"

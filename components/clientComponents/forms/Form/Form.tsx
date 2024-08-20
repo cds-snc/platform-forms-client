@@ -27,6 +27,7 @@ import {
 import { filterShownElements, filterValuesByShownElements } from "@lib/formContext";
 import { formHasGroups } from "@lib/utils/form-builder/formHasGroups";
 import { showReviewPage } from "@lib/utils/form-builder/showReviewPage";
+import { scrollToElement } from "@lib/client/clientHelpers";
 
 interface SubmitButtonProps {
   numberOfRequiredQuestions: number;
@@ -274,7 +275,7 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
 
             <div className="flex">
               {isGroupsCheck && isShowReviewPage && (
-                <BackButtonGroup language={language as Language} />
+                <BackButtonGroup language={language as Language} callback={scrollToElement} />
               )}
               {props.renderSubmit ? (
                 props.renderSubmit({
@@ -285,7 +286,10 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
                         {isGroupsCheck &&
                           isShowReviewPage &&
                           currentGroup === LockedSections.REVIEW && (
-                            <BackButton language={language as Language} />
+                            <BackButton
+                              language={language as Language}
+                              callback={scrollToElement}
+                            />
                           )}
                         <div className="inline-block">
                           <SubmitButton
