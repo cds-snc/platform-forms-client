@@ -18,6 +18,7 @@ export const FormattedDate = (props: FormattedDateProps): React.ReactElement => 
   const {
     id,
     name,
+    label,
     required,
     ariaDescribedBy,
     dateFormat = "YYYY-MM-DD",
@@ -81,6 +82,7 @@ export const FormattedDate = (props: FormattedDateProps): React.ReactElement => 
 
   return (
     <fieldset aria-describedby={id} data-testid="formattedDate">
+      <legend className="gc-label">{label}</legend>
       {ariaDescribedBy && (
         <Description id={id} className="gc-form-group-context">
           {ariaDescribedBy}
