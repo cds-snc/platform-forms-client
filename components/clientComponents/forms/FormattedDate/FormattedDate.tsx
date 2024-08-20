@@ -88,7 +88,7 @@ export const FormattedDate = (props: FormattedDateProps): React.ReactElement => 
       data-testid="formattedDate"
     >
       <legend className="gc-label">{label}</legend>
-      {description && <Description id={`desc-${id}`}>{description}</Description>}
+      {description && <Description id={id}>{description}</Description>}
 
       <div className="flex gap-2">
         <input
