@@ -922,9 +922,9 @@
     },
     "toastSuccess": "Enchaînement linéaire appliqué",
     "multiRulesWarning": {
-      "text1": "L'ordre et le l'enchaînement de page sont définis en fonction des règles appliquées.",
-      "text2": "Relier les pages :",
-      "text3": "Pour relier ces pages, vous devez enlever les règles appliquées aux éléments du formulaire."
+      "text1": "Cette page a des embranchements appliqués.",
+      "text2": "Enlever la logique d'embranchement",
+      "text3": "Pour relier ces pages, vous devez supprimer les branches."
     },
     "choiceSelect": {
       "selectOption": "Sélectionner une option",
