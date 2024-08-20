@@ -251,12 +251,11 @@ function _buildForm(element: FormElement, lang: string): ReactElement {
     case FormElementTypes.formattedDate: {
       return (
         <div className="focus-group">
-          {description && <Description id={`${id}`}>{description}</Description>}
           <FormattedDate
             label={labelText}
+            description={description}
             id={`${id}`}
             name={`${id}`}
-            ariaDescribedBy={description ? `desc-${id}` : undefined}
             dateFormat={
               element.properties.dateFormat
                 ? (element.properties.dateFormat as DateFormat)

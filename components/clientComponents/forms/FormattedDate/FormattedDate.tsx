@@ -12,6 +12,7 @@ interface FormattedDateProps extends InputFieldProps {
   monthSelector?: "numeric" | "select";
   defaultDate?: string | null;
   autocomplete?: string;
+  description?: string;
 }
 
 export const FormattedDate = (props: FormattedDateProps): React.ReactElement => {
@@ -19,8 +20,8 @@ export const FormattedDate = (props: FormattedDateProps): React.ReactElement => 
     id,
     name,
     label,
+    description,
     required,
-    ariaDescribedBy,
     dateFormat = "YYYY-MM-DD",
     monthSelector = "numeric",
     autocomplete = false,
@@ -81,13 +82,14 @@ export const FormattedDate = (props: FormattedDateProps): React.ReactElement => 
   };
 
   return (
-    <fieldset aria-describedby={id} data-testid="formattedDate">
+    <fieldset
+      role="group"
+      aria-describedby={description ? `desc-${id}` : undefined}
+      data-testid="formattedDate"
+    >
       <legend className="gc-label">{label}</legend>
-      {ariaDescribedBy && (
-        <Description id={id} className="gc-form-group-context">
-          {ariaDescribedBy}
-        </Description>
-      )}
+      {description && <Description id={`desc-${id}`}>{description}</Description>}
+
       <div className="flex gap-2">
         <input
           type="hidden"
