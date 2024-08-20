@@ -221,7 +221,8 @@
             "dynamicRow",
             "richText",
             "attestation",
-            "combobox"
+            "combobox",
+            "addressComplete"
           ]
         },
         "properties": {

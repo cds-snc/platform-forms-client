@@ -8,6 +8,9 @@ import { useTranslation } from "@i18n/client";
 
 interface AddressCompleteProps extends InputFieldProps {
   showCity?: boolean;
+  showProvince?: boolean;
+  showPostal?: boolean;
+  showCountry?: boolean;
 }
 
 export const AddressComplete = (props: AddressCompleteProps): React.ReactElement => {
