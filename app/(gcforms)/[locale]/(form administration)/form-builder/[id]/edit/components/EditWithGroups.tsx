@@ -22,8 +22,10 @@ import { PrivacyDescriptionBefore } from "./PrivacyDescriptionBefore";
 import { PrivacyDescriptionBody } from "./PrivacyDescriptionBody";
 import { ConfirmationTitle } from "./ConfirmationTitle";
 import { SkipLinkReusable } from "@clientComponents/globals/SkipLinkReusable";
+import { AddPageButton } from "./AddPageButton";
+import { AddBranchingButton } from "./AddBranchingButton";
 
-export const EditWithGroups = () => {
+export const EditWithGroups = ({ id, locale }: { id: string; locale: string }) => {
   const { t } = useTranslation("form-builder");
   const {
     title,
@@ -116,14 +118,14 @@ export const EditWithGroups = () => {
     <>
       <h1 className="sr-only">{t("edit")}</h1>
       <div className="flex w-[800px]">
-        <h2 id="questionsTitle" tabIndex={-1}>
-          {t("questions")}
+        <h2 id="editPagesHeading" className="whitespace-nowrap" tabIndex={-1}>
+          {t("groups.editPagesHeading")}
         </h2>
         <div className="ml-5 mt-2">
           <SaveButton />
         </div>
       </div>
-      <SkipLinkReusable anchor="#rightPanelTitle">{t("skipLink.questionsSetup")}</SkipLinkReusable>
+      <SkipLinkReusable anchor="#rightPanelTitle">{t("skipLink.pagesSetup")}</SkipLinkReusable>
       <div className="flex max-w-[800px] justify-between">
         <SectionNameInput value={groupName} groupId={groupId} updateGroupName={updateGroupName} />
         <LangSwitcher descriptionLangKey="editingIn" />
@@ -192,7 +194,7 @@ export const EditWithGroups = () => {
           sortedElements.map((element, index) => {
             const questionNumber = 0;
             const item = { ...element, index, questionNumber };
-            return <ElementPanel elements={sortedElements} item={item} key={item.id} />;
+            return <ElementPanel elements={sortedElements} item={item} key={item.id} formId={id} />;
           })}
       </div>
       {/* Confirmation*/}
@@ -218,7 +220,12 @@ export const EditWithGroups = () => {
           className={"rounded-lg"}
         />
       )}
-      <SkipLinkReusable anchor="#rightPanelTitle">{t("skipLink.questionsSetup")}</SkipLinkReusable>
+      <div className="my-12 flex max-w-[800px] justify-center laptop:my-10">
+        <AddPageButton className="mr-5" />
+        <AddBranchingButton id={id} locale={locale} />
+      </div>
+
+      <SkipLinkReusable anchor="#rightPanelTitle">{t("skipLink.pagesSetup")}</SkipLinkReusable>
     </>
   );
 };

@@ -7,6 +7,8 @@ import { useTemplateStore } from "@lib/store/useTemplateStore";
 import { Group, GroupsType, NextActionRule } from "@lib/formContext";
 import { Language } from "@lib/types/form-builder-types";
 import { getReviewNode, getStartElements, getEndNode } from "@lib/utils/form-builder/i18nHelpers";
+import { getStartLabels } from "@lib/utils/form-builder/i18nHelpers";
+import { LockedSections } from "@formBuilder/components/shared/right-panel/treeview/types";
 
 interface CustomEdge {
   id: string;
@@ -35,15 +37,6 @@ const lineStyle = {
   stroke: "#6366F1",
 };
 
-/*
-const arrowStyle = {
-  type: MarkerType.ArrowClosed,
-  width: 18,
-  height: 18,
-  color: "#6366F1",
-};
-*/
-
 const arrowStyle = {
   type: "1__type=gc-arrow-closed",
 };
@@ -52,7 +45,8 @@ const getEdges = (
   nodeId: string,
   prevNodeId: string,
   group: Group | undefined,
-  groups: GroupsType | undefined
+  groups: GroupsType | undefined,
+  showReview: boolean
 ): CustomEdge[] => {
   // Connect to end node as we don't have a next action
   if (prevNodeId && group && typeof group.nextAction === "undefined") {
@@ -76,7 +70,12 @@ const getEdges = (
 
   // Add edge from this node to next action
   if (prevNodeId && group && typeof group.nextAction === "string") {
-    const nextAction = group.nextAction;
+    let nextAction = group.nextAction;
+
+    if (!showReview && nextAction === LockedSections.REVIEW) {
+      nextAction = LockedSections.END;
+    }
+
     return [
       {
         id: `e-${nodeId}-${nextAction}`,
@@ -97,10 +96,16 @@ const getEdges = (
   if (prevNodeId && group && Array.isArray(group.nextAction)) {
     const nextActions = group.nextAction;
     const edges = nextActions.map((action: NextActionRule) => {
+      let nextAction = action.groupId;
+
+      if (!showReview && action.groupId === LockedSections.REVIEW) {
+        nextAction = LockedSections.END;
+      }
+
       return {
-        id: `e-${nodeId}-${action.choiceId}-${action.groupId}`,
+        id: `e-${nodeId}-${action.choiceId}-${nextAction}`,
         source: nodeId,
-        target: action.groupId,
+        target: nextAction,
         style: {
           ...lineStyle,
         },
@@ -117,7 +122,7 @@ const getEdges = (
   return [];
 };
 
-export const useFlowData = (lang: Language = "en") => {
+export const useFlowData = (lang: Language = "en", showReview: boolean) => {
   const getTreeData = useGroupStore((s) => s.getTreeData);
   const treeItems = getTreeData();
   const formGroups = useTemplateStore((s) => s.form.groups);
@@ -131,7 +136,7 @@ export const useFlowData = (lang: Language = "en") => {
 
     const x_pos = 0;
     const y_pos = 0;
-    let prevNodeId: string = "start";
+    let prevNodeId: string = LockedSections.START;
 
     if (!treeIndexes) {
       return { edges, nodes: [] };
@@ -144,7 +149,7 @@ export const useFlowData = (lang: Language = "en") => {
       const group: Group | undefined = formGroups && formGroups[key] ? formGroups[key] : undefined;
       let elements: TreeItem[] = [];
 
-      if (key === "start") {
+      if (key === LockedSections.START) {
         // Add "default" start elements
         // introduction, privacy
         elements = startElements;
@@ -157,17 +162,24 @@ export const useFlowData = (lang: Language = "en") => {
         elements = [...elements, ...children];
       }
 
-      const newEdges = getEdges(key as string, prevNodeId, group, formGroups);
+      const newEdges = getEdges(key as string, prevNodeId, group, formGroups, showReview);
 
-      const titleKey = lang === "en" ? "titleEn" : "titleFr";
+      const titleKey = "name" as keyof typeof treeItem.data;
 
       const isOffBoardSection = treeItem.data.nextAction === "exit";
+
+      let label = treeItem.data[titleKey];
+
+      if (key === LockedSections.START) {
+        // Ensure start label is displayed in the correct language
+        label = getStartLabels()[lang];
+      }
 
       const flowNode = {
         id: key as string,
         position: { x: x_pos, y: y_pos },
         data: {
-          label: treeItem.data[titleKey],
+          label,
           children: elements,
           nextAction: treeItem.data.nextAction,
         },
@@ -177,21 +189,23 @@ export const useFlowData = (lang: Language = "en") => {
       edges.push(...(newEdges as CustomEdge[]));
       prevNodeId = key as string;
 
-      if (key === "review" || key === "end") {
+      if (key === LockedSections.REVIEW || key === LockedSections.END) {
         return;
       }
       nodes.push(flowNode);
     });
 
     // Add review node
-    nodes.push({ ...reviewNode });
+    if (showReview) {
+      nodes.push({ ...reviewNode });
+    }
 
     // Push "end" node to the end
     // And add confirmation element
     nodes.push({ ...endNode });
 
     return { edges, nodes };
-  }, [treeItems, reviewNode, endNode, formGroups, lang, startElements]);
+  }, [treeItems, reviewNode, endNode, formGroups, startElements, lang, showReview]);
 
   const { edges, nodes } = getData();
 

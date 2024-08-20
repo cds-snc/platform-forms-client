@@ -1,7 +1,5 @@
 # Service-level agreement
 
-Version 2
-
 GC Forms is a cloud-based service that is owned and operated by the Canadian Digital Service (CDS) at [Employment and Social Development Canada (ESDC)](https://www.canada.ca/en/employment-social-development.html). This service enables Canadian federal departments and agencies to create and publish forms, which are hosted by CDS.
 
 ## Responsibilities
@@ -71,7 +69,7 @@ All support requests should be directed to [Get support](/en/support). CDS will 
 
 ### Planned maintenance period
 
-A “planned maintenance period” shall be defined as a complete or partial loss of service availability scheduled by GC Forms to allow GC Forms to perform normal maintenance work. CDS shall notify the client of any planned maintenance period no fewer than 2 business days prior to the commencement of the applicable planned maintenance period. Planned maintenance periods shall be scheduled for non-peak periods of activity.
+A “planned maintenance period” shall be defined as a complete or partial loss of service availability scheduled by GC Forms to allow GC Forms to perform normal maintenance work. CDS shall notify the client of any planned maintenance period no fewer than 3 business days prior to the commencement of the applicable planned maintenance period. Planned maintenance periods shall be scheduled for non-peak periods of activity.
 
 A loss of service availability during a planned maintenance period shall not be considered a service outage. A loss of service availability, which occurs outside of a planned maintenance period but is caused by work performed during the planned maintenance period, shall be considered to be a service outage for the purpose of calculating GC Forms’s compliance with the provisions of service availability. Information regarding planned maintenance periods shall be shared by email.
 
@@ -83,4 +81,4 @@ In the event that CDS needs to decommission the service, GC Forms will work with
 
 GC Forms is open source and available for others to stand up their own version based on the code found in [GitHub](https://github.com/cds-snc/platform-forms-client).
 
-**Last update:** June 25, 2024
+**Last update:** July 2, 2024

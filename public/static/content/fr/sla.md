@@ -1,6 +1,4 @@
-# Accord sur les niveaux de service
-
-Version 2
+# Accord sur les niveaux de services
 
 Formulaires GC est un service infonuagique créé et exploité par le Service numérique canadien (SNC) au sein d'[Emploi et Développement social Canada (EDSC)](https://www.canada.ca/fr/emploi-developpement-social.html). Ce service permet aux ministères et organismes du gouvernement fédéral canadien de créer et de publier des formulaires hébergés par le SNC.
 
@@ -71,7 +69,7 @@ Toutes les demandes d’assistance doivent être soumises sur notre page de [sou
 
 ### Période de maintenance planifiée
 
-Une « période de maintenance planifiée » se définit comme une perte complète ou partielle de disponibilité du service que le fournisseur prévoit pour réaliser des travaux de maintenance. Le SNC notifiera la clientèle de toute période de maintenance planifiée au moins 2 jours ouvrables avant le début de la période en question. Les périodes de maintenance planifiées seront programmées pour survenir en dehors des périodes d’activité élevée.
+Une « période de maintenance planifiée » se définit comme une perte complète ou partielle de disponibilité du service que le fournisseur prévoit pour réaliser des travaux de maintenance. Le SNC notifiera la clientèle de toute période de maintenance planifiée au moins 3 jours ouvrables avant le début de la période en question. Les périodes de maintenance planifiées seront programmées pour survenir en dehors des périodes d’activité élevée.
 
 Une perte de disponibilité du service durant une période de maintenance planifiée n’est pas considérée comme une interruption de service. Une perte de disponibilité du service survenant en dehors d’une période de maintenance planifiée, mais causée par des travaux réalisés durant la période de maintenance planifiée est considérée comme une interruption de service aux fins de la détermination de la conformité de Formulaires GC aux termes relatifs à la disponibilité du service. Les renseignements liés aux périodes de maintenance planifiée sont communiqués par courriel.
 
@@ -83,4 +81,4 @@ Si le SNC doit mettre hors service Formulaires GC, il collaborera avec la client
 
 Formulaires GC est un produit à code source ouvert permettant à des tiers de créer leur propre version à l’aide du code disponible sur [GitHub](https://github.com/cds-snc/platform-forms-client).
 
-**Dernière mise à jour :** 25 juin 2024
+**Dernière mise à jour :** 2 juillet 2024

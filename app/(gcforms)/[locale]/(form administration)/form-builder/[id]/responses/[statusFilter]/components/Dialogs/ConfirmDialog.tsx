@@ -1,24 +1,22 @@
-"use client";
 import React, { useState } from "react";
 import { useTranslation } from "@i18n/client";
 import { Trans } from "react-i18next";
 import { useDialogRef, Dialog } from "@formBuilder/components/shared";
 import { LineItemEntries } from "./line-item-entries";
 import { Button, Alert } from "@clientComponents/globals";
-import { randomId, runPromisesSynchronously } from "@lib/client/clientHelpers";
-import axios from "axios";
+import { randomId } from "@lib/client/clientHelpers";
 import Link from "next/link";
 import { isUUID } from "@lib/validation/validation";
 import { DialogStates } from "./DialogStates";
-import { chunkArray } from "@lib/utils";
+import { confirmSubmissionCodes } from "../../actions";
 
 export const ConfirmDialog = ({
-  apiUrl,
+  formId,
   inputRegex = isUUID,
   maxEntries = 20,
   onSuccessfulConfirm,
 }: {
-  apiUrl: string;
+  formId: string;
   inputRegex?: (field: string) => boolean;
   maxEntries?: number;
   onSuccessfulConfirm: () => void;
@@ -55,54 +53,34 @@ export const ConfirmDialog = ({
       setStatus(DialogStates.MIN_ERROR);
       return;
     }
-    // API endpoint only accepts 50 entries at a time
-    const batchedEntries = chunkArray(entries, 50);
+    try {
+      const result = await confirmSubmissionCodes(entries, formId);
 
-    const batchQueries = batchedEntries.map((batch) => {
-      return () =>
-        axios({
-          url: apiUrl,
-          method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          timeout: process.env.NODE_ENV === "production" ? 60000 : 0,
-          data: batch,
-        });
-    });
+      const invalidEntries: string[] = [
+        ...(result.invalidConfirmationCodes ?? []),
+        ...(result.unprocessedConfirmationCodes ?? []),
+      ];
 
-    const batchResults = await runPromisesSynchronously(batchQueries);
-
-    // Check batched results for errors
-
-    const invalidEntries: string[] = [];
-    let criticalFailure = false;
-
-    batchResults.forEach((result, index) => {
-      if (result.status !== 200) {
-        criticalFailure = true;
-        // Report all entries as invalid for that batch
-        invalidEntries.push(...batchedEntries[index]);
+      // If there are invalid entries, show them in the dialog
+      if (invalidEntries.length > 0) {
+        setStatus(
+          result.unprocessedConfirmationCodes && result.unprocessedConfirmationCodes.length > 0
+            ? DialogStates.UNKNOWN_ERROR
+            : DialogStates.FAILED_ERROR
+        );
+        setEntries(invalidEntries);
+        setErrorEntriesList(invalidEntries);
         return;
       }
-      const data = result.data;
-      if (data.invalidConfirmationCodes?.length > 0) {
-        invalidEntries.push(...data.invalidConfirmationCodes);
-      }
-    });
 
-    // If there are invalid entries, show them in the dialog
-    if (invalidEntries.length > 0) {
-      setStatus(criticalFailure ? DialogStates.UNKNOWN_ERROR : DialogStates.FAILED_ERROR);
-      setEntries(invalidEntries);
-      setErrorEntriesList(invalidEntries);
+      // Success, close the dialog
+      setStatus(DialogStates.SENT);
+      onSuccessfulConfirm();
+      handleClose();
+    } catch (e) {
+      setStatus(DialogStates.UNKNOWN_ERROR);
       return;
     }
-
-    // Success, close the dialog
-    setStatus(DialogStates.SENT);
-    onSuccessfulConfirm();
-    handleClose();
   };
 
   return (

@@ -21,6 +21,7 @@ You are responsible for:
 - Drafting and publishing a privacy notice for your form following the [Directive on Privacy Practices](https://www.tbs-sct.canada.ca/pol/doc-eng.aspx?id=18309) Section 4.2.10. We also include [Terms and conditions](/en/terms-and-conditions) in the footer of every form to meet policy requirements related to hosting the form on your behalf. We share information about our retention and disposition of form responses in our databases as well as features to protect the security of Government of Canada websites.
 - Identifying the confidentiality of the information collected through your forms. GC Forms supports the collection of data classified as up to PROTECTED B. Learn more about identifying confidentiality through the [Standard on Security Categorization](https://www.tbs-sct.canada.ca/pol/doc-eng.aspx?id=32614).
 - Complying with the [Privacy Act](https://laws-lois.justice.gc.ca/eng/acts/p-21/) and [Access to Information Act](https://laws-lois.justice.gc.ca/eng/acts/a-1/) related to the personal and sensitive information in responses submitted through your forms, if there is a request, incident, or data breach.
+- Retrieving responses directly from our database when handling more sensitive Protected B information. Receiving responses via email is only available for up to Protected A information.
 
 ### Responses delivered by email (up to PROTECTED A)
 
@@ -42,8 +43,9 @@ You are responsible for:
 
 ## Practice continuous security
 
-- Use a valid government email to create your account and for two-factor authentication (2FA).
+- Use a valid individual government email to create your account and for two-factor authentication (2FA).
 - Do not share your password with anyone or store it where others could find it. If someone else needs access to a form, [contact us](/en/support).
+- Ensure the privacy and security of protected information upon downloading form responses from GC Forms. If Responses are not saved and confirmed within 45 days, we will take necessary steps to ensure they are retrieved by the responsible program or service.
 - Report any security breach or vulnerability using the steps outlined in our [Security notice](https://digital.canada.ca/security-notice/).
 
 ## Publish in both Official Languages
@@ -59,7 +61,7 @@ GC Forms allows you to create and publish digital forms. You must ensure that th
 You are responsible for:
 
 - Integrating your form into your department or agency’s information architecture. This means embedding the URL to your form so that people or organizations can find it.
-- Maintaining working links to your form. THis includes replacing all instances of the form URL when it is modified, or removing the URL when the form is closed or deleted.
+- Maintaining working links to your form. This includes replacing all instances of the form URL when it is modified, or removing the URL when the form is closed or deleted.
 - Addressing any inquiring or requests from users experiencing issues with your form, that are not a result of a system-wide issue.
 - Drafting form content based on the [Canada.ca Content Style guide](https://www.canada.ca/en/treasury-board-secretariat/services/government-communications/canada-content-style-guide.html).
 - Following the [Design Standard for the Federal Identity Program](https://www.canada.ca/en/treasury-board-secretariat/services/government-communications/design-standard.html). By default your form will appear with:
@@ -68,6 +70,8 @@ You are responsible for:
 
 You may replace the Government of Canada signature with your department or agency’s signature. If you are unsure about your department or agency’s signature, contact your [Federal Identity Program coordinator](https://www.tbs-sct.canada.ca/ap/fip-pcim/coord-eng.asp).
 
+We ask that clients not interfere with the format of JSON files, as any updates can compromise both the accessibility of the form as well as embedded design standards for the federal identity program. We will not be providing support for forms where the JSON file has been manipulated.
+
 For questions related to these terms of use, [contact us](/en/contact).
 
-**Last update:** June 25, 2024
+**Last update:** July 2, 2024

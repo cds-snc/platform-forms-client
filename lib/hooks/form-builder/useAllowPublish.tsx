@@ -6,7 +6,12 @@ import { Description, publishRequiredFields, Title } from "../../types/form-buil
 import { useTemplateStore } from "../../store/useTemplateStore";
 import { useAccessControl } from "../useAccessControl";
 
-export class MissingTranslation extends Error {}
+export class MissingTranslation extends Error {
+  constructor(message?: string) {
+    super(message ?? "MissingTranslation");
+    Object.setPrototypeOf(this, MissingTranslation.prototype);
+  }
+}
 
 export const isTitleTranslated = (element: Title) => {
   if (!element.titleEn || !element.titleFr) {

@@ -15,9 +15,11 @@ import { useHandleAdd } from "@lib/hooks/form-builder/useHandleAdd";
 export const ElementPanel = ({
   item,
   elements,
+  formId,
 }: {
   item: FormElementWithIndex;
   elements: FormElement[];
+  formId: string;
 }) => {
   const { getFocusInput, setChangeKey, setFocusInput, remove, moveUp, moveDown, duplicateElement } =
     useTemplateStore((s) => ({
@@ -107,7 +109,7 @@ export const ElementPanel = ({
         }
       }}
     >
-      <PanelBodyRoot item={item} onChangeMade={forceRefresh} />
+      <PanelBodyRoot item={item} onChangeMade={forceRefresh} formId={formId} />
       <PanelActions
         isFirstItem={item.index === 0}
         isLastItem={item.index === elements.length - 1}

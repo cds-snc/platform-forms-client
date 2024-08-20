@@ -1,6 +1,7 @@
 "use client";
 import React, { useEffect } from "react";
 import { useTranslation } from "@i18n/client";
+import { useRouter } from "next/navigation";
 
 import { Modal, ModalButton, ModalFormRules } from "./index";
 import { FormElementWithIndex } from "@lib/types/form-builder-types";
@@ -15,15 +16,36 @@ import {
 import { useRefsContext } from "./RefsContext";
 import { useTemplateStore } from "@lib/store/useTemplateStore";
 import useModalRulesStore from "@lib/store/useModalRulesStore";
+import { useTreeRef } from "@formBuilder/components/shared/right-panel/treeview/provider/TreeRefProvider";
 
-export const ModalRules = ({ item }: { item: FormElementWithIndex }) => {
-  const { elements, updateField } = useTemplateStore((s) => ({
+export const ModalRules = ({
+  item,
+  modalRef,
+  formId,
+}: {
+  item: FormElementWithIndex;
+  modalRef?: React.RefObject<HTMLDivElement> | undefined;
+  formId: string;
+}) => {
+  const {
+    elements,
+    updateField,
+    formId: storeId,
+  } = useTemplateStore((s) => ({
     updateField: s.updateField,
     elements: s.form.elements,
+    formId: s.id,
   }));
 
+  if (storeId && storeId !== formId) {
+    formId = storeId;
+  }
+
+  const router = useRouter();
+  const { togglePanel } = useTreeRef();
+
   const { refs } = useRefsContext();
-  const { t } = useTranslation("form-builder");
+  const { t, i18n } = useTranslation("form-builder");
   const isRichText = item.type == "richText";
   const { modals, updateModalProperties } = useModalRulesStore();
   const descriptionId = `descriptionId-${Date.now()}`;
@@ -99,18 +121,19 @@ export const ModalRules = ({ item }: { item: FormElementWithIndex }) => {
     );
   };
 
+  const handletryLogicView = () => {
+    // Toggle the panel open as it may be closed.
+    togglePanel && togglePanel(true);
+    router.push(`/${i18n.language}/form-builder/${formId}/edit/logic`);
+  };
+
   return (
     <Modal
+      modalRef={modalRef}
       title={
         hasRules ? t("addConditionalRules.modalTitleEdit") : t("addConditionalRules.modalTitle")
       }
-      openButton={
-        <Button className="!m-0 !mt-4" theme="link">
-          {hasRules
-            ? t("addConditionalRules.editCustomRules")
-            : t("addConditionalRules.addCustomRules")}
-        </Button>
-      }
+      noOpenButton={true}
       saveButton={renderSaveButton()}
       handleClose={() => {
         refs && refs.current && refs.current[item.id] && refs.current[item.id].focus();
@@ -121,12 +144,16 @@ export const ModalRules = ({ item }: { item: FormElementWithIndex }) => {
           <p className="mb-4" id={descriptionId}>
             {t("addConditionalRules.modalDescription")}
           </p>
+          <p className="mb-4">
+            <strong>{t("addConditionalRules.warning")}</strong>
+          </p>
           <ModalFormRules
             initialChoiceRules={initialChoiceRules}
             item={item}
             properties={modals[item.id]}
             updateModalProperties={updateModalProperties}
             descriptionId={descriptionId}
+            tryLogicView={handletryLogicView}
           />
         </>
       )}

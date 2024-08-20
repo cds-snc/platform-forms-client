@@ -15,6 +15,7 @@ import { TextInput } from "../../../components/client/TextInput";
 import { MultipleChoiceGroup } from "../../../components/client/MultipleChoiceGroup";
 import { TextArea } from "../../../components/client/TextArea";
 import { SubmitButton } from "../../../components/client/SubmitButton";
+import { redirect } from "next/navigation";
 
 export const SupportForm = () => {
   const {
@@ -27,6 +28,11 @@ export const SupportForm = () => {
   const getError = (fieldKey: string) => {
     return state.validationErrors.find((e) => e.fieldKey === fieldKey)?.fieldValue || "";
   };
+
+  if (state.error === "") {
+    //Route through the client.
+    redirect(`/${language}/support?success`);
+  }
 
   return (
     <>
@@ -54,7 +60,13 @@ export const SupportForm = () => {
       )}
 
       <h1>{t("support.title")}</h1>
-      <p className="mb-6 mt-[-2rem] text-[1.6rem]">{t("support.useThisForm")}</p>
+      <p className="mb-6 mt-[-2rem] text-[1.6rem]">
+        {t("support.experience")}
+        <Link href={`https://articles.alpha.canada.ca/forms-formulaires/${language}/guidance`}>
+          {t("support.guidanceLink")}
+        </Link>
+        {t("support.useThisForm")}
+      </p>
       <p className="mb-14">
         {t("support.gcFormsTeamPart1")}{" "}
         <Link href={`https://www.canada.ca/${language}/contact.html`}>

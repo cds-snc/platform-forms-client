@@ -60,7 +60,7 @@ export const YourAccountDropdown = ({ isAuthenticated }: YourAccountDropdownProp
               <DropdownMenu.Content
                 data-testid="yourAccountDropdownContent"
                 align="end"
-                className={`mt-1.5 min-w-[230px] rounded-lg border-1 border-slate-500 bg-white px-1.5 py-1 shadow-md`}
+                className={`mt-1.5 min-w-[230px] rounded-lg border-1 border-slate-500 bg-white px-1.5 py-1 shadow-md z-[1000]`}
               >
                 <DropdownMenuItem href={`/${i18n.language}/profile`} text={t("adminNav.profile")} />
 

@@ -18,7 +18,12 @@ import {
 import { getFullTemplateByID } from "@lib/templates";
 import { FormElementTypes, VaultStatus } from "@lib/types";
 import { isResponseId } from "@lib/validation/validation";
-import { listAllSubmissions, retrieveSubmissions, updateLastDownloadedBy } from "@lib/vault";
+import {
+  confirmResponses,
+  listAllSubmissions,
+  retrieveSubmissions,
+  updateLastDownloadedBy,
+} from "@lib/vault";
 import { transform as csvTransform } from "@lib/responseDownloadFormats/csv";
 import { transform as htmlAggregatedTransform } from "@lib/responseDownloadFormats/html-aggregated";
 import { transform as htmlTransform } from "@lib/responseDownloadFormats/html";
@@ -26,11 +31,13 @@ import { transform as zipTransform } from "@lib/responseDownloadFormats/html-zip
 import { transform as jsonTransform } from "@lib/responseDownloadFormats/json";
 import { logMessage } from "@lib/logger";
 import { revalidatePath } from "next/cache";
-import { authCheckAndThrow } from "@lib/actions";
+import { authCheckAndRedirect, authCheckAndThrow } from "@lib/actions";
 import { FormBuilderError } from "./exceptions";
 import { FormProperties } from "@lib/types";
 import { getLayoutFromGroups } from "@lib/utils/form-builder/groupedFormHelpers";
 import { allowGrouping } from "@formBuilder/components/shared/right-panel/treeview/util/allowGrouping";
+import { orderGroups } from "@lib/utils/form-builder/orderUsingGroupsLayout";
+import { formHasGroups } from "@lib/utils/form-builder/formHasGroups";
 
 export const fetchSubmissions = async ({
   formId,
@@ -51,7 +58,7 @@ export const fetchSubmissions = async ({
       throw new Error("User is not authenticated");
     }
 
-    if (formId === "0000") {
+    if (!formId) {
       return {
         submissions: [],
         lastEvaluatedKey: null,
@@ -95,7 +102,7 @@ const sortByLayout = ({ layout, elements }: { layout: number[]; elements: Answer
 };
 
 const sortByGroups = ({ form, elements }: { form: FormProperties; elements: Answer[] }) => {
-  const groups = form.groups || {};
+  const groups = orderGroups(form.groups, form.groupsLayout) ?? {};
   const layout = getLayoutFromGroups(form, groups);
   return sortByLayout({ layout, elements });
 };
@@ -218,7 +225,7 @@ export const getSubmissionsByFormat = async ({
         }
       );
       let sorted: Answer[];
-      if (allowGroupsFlag) {
+      if (allowGroupsFlag && formHasGroups(fullFormTemplate.form)) {
         sorted = sortByGroups({ form: fullFormTemplate.form, elements: submission });
       } else {
         sorted = sortByLayout({ layout: fullFormTemplate.form.layout, elements: submission });
@@ -306,5 +313,19 @@ export const getSubmissionsByFormat = async ({
     } else {
       return { error: "There was an error. Please try again later." } as ServerActionError;
     }
+  }
+};
+
+export const confirmSubmissionCodes = async (confirmationCodes: string[], formId: string) => {
+  try {
+    const { ability } = await authCheckAndRedirect();
+
+    return confirmResponses(ability, confirmationCodes, formId);
+  } catch (e) {
+    logMessage.warn(
+      `Error confirming submission codes for formId ${formId}: ${(e as Error).message}`
+    );
+    // Throw sanitized error back to client
+    throw new Error("There was an error. Please try again later.");
   }
 };

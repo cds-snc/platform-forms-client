@@ -5,19 +5,13 @@ export const LogicOptionArrowIcon = ({
   className?: string;
   title?: string;
 }) => (
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    height="16"
-    width="16"
-    className={className}
-    focusable="false"
-    aria-hidden={title ? false : true}
-    role={title ? "img" : "presentation"}
-  >
+  <svg xmlns="http://www.w3.org/2000/svg" width={34} height={34} fill="none" className={className}>
     {title && <title>{title}</title>}
+    <rect width={33} height={33} x={0.5} y={0.5} fill="#ECFDF5" rx={16.5} />
+    <rect width={33} height={33} x={0.5} y={0.5} stroke="#047857" rx={16.5} />
     <path
-      fill="#047857"
-      d="M0 0v10.286A2.2 2.2 0 0 0 .671 11.9c.448.448.986.671 1.615.671h9.371L9.83 14.4l1.6 1.6L16 11.429l-4.571-4.572-1.6 1.6 1.828 1.829H2.286V0H0Z"
+      fill="#1E293B"
+      d="M10 10v9c0 .55.196 1.02.588 1.413.391.391.862.587 1.412.587h8.2l-1.6 1.6L20 24l4-4-4-4-1.4 1.4 1.6 1.6H12v-9h-2Z"
     />
   </svg>
 );

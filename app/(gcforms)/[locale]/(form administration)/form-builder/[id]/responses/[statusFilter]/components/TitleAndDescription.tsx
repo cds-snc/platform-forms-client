@@ -70,7 +70,7 @@ export const TitleAndDescription = ({
       )}
       {[VaultStatus.PROBLEM, VaultStatus.DOWNLOADED].includes(statusFilter as VaultStatus) && (
         <ConfirmDialog
-          apiUrl={`/api/id/${formId}/submission/confirm`}
+          formId={formId}
           maxEntries={responseDownloadLimit}
           onSuccessfulConfirm={() => {
             router.refresh();

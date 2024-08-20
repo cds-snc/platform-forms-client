@@ -21,6 +21,10 @@
     "conditionalLogic": {
       "title": "Conditional logic",
       "description": "Enable conditional logic and the right panel"
+    },
+    "zitadelAuth": {
+      "title": "Zitadel Auth",
+      "description": "Enable API authentication with Zitadel"
     }
   }
 }

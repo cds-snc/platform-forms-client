@@ -7,6 +7,8 @@ import {
   idArraysMatch,
   GroupsType,
   getNextAction,
+  filterShownElements,
+  filterValuesByShownElements,
 } from "@lib/formContext";
 import { LockedSections } from "@formBuilder/components/shared/right-panel/treeview/types";
 import { formHasGroups } from "@lib/utils/form-builder/formHasGroups";
@@ -15,6 +17,7 @@ import {
   pushIdToHistory as _pushIdToHistory,
   clearHistoryAfterId as _clearHistoryAfterId,
   getPreviousIdFromCurrentId,
+  getInputHistoryValues,
 } from "@lib/utils/form-builder/groupsHistory";
 import { getLocalizedProperty } from "@lib/utils";
 import { Language } from "@lib/types/form-builder-types";
@@ -23,6 +26,7 @@ interface GCFormsContextValueType {
   updateValues: ({ formValues }: { formValues: FormValues }) => void;
   getValues: () => FormValues;
   matchedIds: string[];
+  filteredMatchedIds: string[];
   groups?: GroupsType;
   currentGroup: string | null;
   previousGroup: string | null;
@@ -56,6 +60,20 @@ export const GCFormsProvider = ({
   const [currentGroup, setCurrentGroup] = React.useState<string | null>(initialGroup);
   const [previousGroup, setPreviousGroup] = React.useState<string | null>(initialGroup);
 
+  const inputHistoryValues = getInputHistoryValues(
+    (values.current || []) as FormValues,
+    (history.current || []) as string[],
+    groups
+  );
+  const shownElements = filterShownElements(formRecord.form.elements, matchedIds as string[]);
+  const filteredResponses = filterValuesByShownElements(inputHistoryValues, shownElements);
+  const filteredMatchedIds = matchedIds.filter((id) => {
+    const parentId = id.split(".")[0];
+    if (filteredResponses[parentId]) {
+      return id;
+    }
+  });
+
   const hasNextAction = (group: string) => {
     return groups[group]?.nextAction ? true : false;
   };
@@ -79,7 +97,7 @@ export const GCFormsProvider = ({
     if (!currentGroup) return;
 
     if (hasNextAction(currentGroup)) {
-      const nextAction = getNextAction(groups, currentGroup, matchedIds);
+      const nextAction = getNextAction(groups, currentGroup, filteredMatchedIds);
 
       // Helpful for navigating to the last group
       setPreviousGroup(currentGroup);
@@ -149,6 +167,7 @@ export const GCFormsProvider = ({
         updateValues,
         getValues,
         matchedIds,
+        filteredMatchedIds,
         groups,
         currentGroup,
         previousGroup,
@@ -181,6 +200,7 @@ export const useGCFormsContext = () => {
         return;
       },
       matchedIds: [""],
+      filteredMatchedIds: [""],
       groups: {},
       currentGroup: "",
       previousGroup: "",

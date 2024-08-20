@@ -1,92 +1,173 @@
-"use client";
+import { useMemo, useRef } from "react";
+import { useTranslation } from "@i18n/client";
 import { Button } from "@clientComponents/globals";
 import { Theme } from "@clientComponents/globals/Buttons/themes";
-import { useTranslation } from "@i18n/client";
 import { useFocusIt } from "@lib/hooks/useFocusIt";
 import { useGCFormsContext } from "@lib/hooks/useGCFormContext";
-import { FormRecord, TypeOmit } from "@lib/types";
+import { FileInputResponse, FormElement, FormElementTypes } from "@lib/types";
 import { Language } from "@lib/types/form-builder-types";
 import { getLocalizedProperty } from "@lib/utils";
-import { useMemo, useRef } from "react";
+import {
+  filterShownElements,
+  filterValuesForShownElements,
+  FormValues,
+  getElementIdsAsNumber,
+  Group,
+} from "@lib/formContext";
+import { randomId } from "@lib/client/clientHelpers";
 
-type ReviewGroup = {
+type ReviewItem = {
   id: string;
   name: string;
   title: string;
-  elements: {
-    [x: string]: string;
-  }[];
+  elements: Element[];
 };
 
-type QuestionAnswer = {
-  [x: string]: string;
+type Element = {
+  title: string;
+  values: string | FileInputResponse | Element[];
 };
+
+function formatElementValues(values: Element["values"]) {
+  if (!values) {
+    return "-";
+  }
+  // Case of a File upload
+  if ((values as FileInputResponse).based64EncodedFile !== undefined) {
+    const file = values as FileInputResponse;
+    if (!file.name || !file.size || file.size < 0) {
+      return "-";
+    }
+    const fileSizeInMB = (file.size / 1024 / 1024).toFixed(2);
+    return `${file.name} (${fileSizeInMB} MB)`;
+  }
+  // Case of an array like element e.g. checkbox
+  if (Array.isArray(values)) {
+    return values.join(", ") || "-";
+  }
+  // Case of a single value element e.g. input
+  return String(values);
+}
+
+function getReviewItemElements(
+  groupElements: string[],
+  formElements: FormElement[],
+  matchedIds: string[],
+  formValues: FormValues,
+  lang: string
+) {
+  const shownFormElements = filterShownElements(formElements, matchedIds);
+  const shownElementIds = getElementIdsAsNumber(
+    filterValuesForShownElements(groupElements, shownFormElements)
+  );
+  return shownElementIds.map((elementId) => {
+    const element = formElements.find((item) => item.id === elementId);
+    let resultValues: string | Element[] = formatElementValues(
+      formValues[elementId as unknown as keyof typeof formValues] as Element["values"]
+    );
+    // Handle any Sub Elements. Note Sub Elements = Dynamic Rows = Repeating Sets
+    if (element?.type === FormElementTypes.dynamicRow) {
+      resultValues = [];
+      const parentId = element.id;
+      const parentTitle = element.properties?.[getLocalizedProperty("title", lang)];
+      const subElements = element.properties?.subElements;
+      // Use FormValues as the source of truth and for each FormValue value, map the related
+      // subElement title to the FormValue value
+      const subElementValues = (formValues[parentId] as string[]).map(
+        (valueRows, valueRowsIndex) => {
+          const subElementsTitle = `${parentTitle} - ${valueRowsIndex + 1}`;
+          const valueRowsAsArray = Object.keys(valueRows).map(
+            (key) => valueRows[key as keyof typeof valueRows]
+          );
+          // Match the FormValue index to the subElement index to assign the Element title
+          const titlesMappedToValues = valueRowsAsArray.map((formValue, valueRowIndex) => {
+            return {
+              title: subElements?.[valueRowIndex].properties?.[getLocalizedProperty("title", lang)],
+              values: formValue,
+            };
+          });
+          return {
+            title: subElementsTitle,
+            values: titlesMappedToValues,
+          } as Element;
+        }
+      );
+      resultValues.push({
+        title: parentTitle as string,
+        values: subElementValues,
+      });
+    }
+    return {
+      title: (element?.properties?.[getLocalizedProperty("title", lang)] as string) || "-",
+      values: resultValues,
+    };
+  });
+}
 
 export const Review = ({ language }: { language: Language }): React.ReactElement => {
   const { t } = useTranslation(["review", "common"]);
-  const { groups, getValues, formRecord, getGroupHistory, getGroupTitle } = useGCFormsContext();
-  const headingRef = useRef(null);
+  const { groups, getValues, formRecord, getGroupHistory, getGroupTitle, matchedIds } =
+    useGCFormsContext();
 
+  const headingRef = useRef(null);
   useFocusIt({ elRef: headingRef });
 
-  const questionsAndAnswers: ReviewGroup[] = useMemo(() => {
-    function formatElementValue(elementName: string | null) {
-      const value = formValues[elementName as keyof typeof formValues];
-      if (Array.isArray(value)) {
-        return (value as Array<string>).join(", ");
-      }
-      return value || "-";
-    }
-    const formValues = getValues();
-    const reviewGroups = { ...groups };
+  const reviewItems: ReviewItem[] = useMemo(() => {
+    const formValues: void | FormValues = getValues();
+    if (!formValues || !groups) return [];
+
     const groupHistory = getGroupHistory();
     return groupHistory
       .filter((key) => key !== "review") // Removed to avoid showing as a group
-      .map((key) => {
-        const elements = reviewGroups[key].elements.map((element) => {
-          const elementName = element as keyof typeof formValues;
-          return {
-            [element]: formatElementValue(elementName),
-          };
-        });
+      .map((groupId) => {
+        const group: Group = groups[groupId as keyof typeof groups] || {};
         return {
-          id: key,
-          name: reviewGroups[key].name,
-          title: getGroupTitle(key, language),
-          elements,
+          id: groupId,
+          name: group.name,
+          title: getGroupTitle(groupId, language),
+          elements: getReviewItemElements(
+            group.elements,
+            formRecord.form.elements,
+            matchedIds,
+            formValues,
+            language
+          ),
         };
       });
-  }, [groups, getValues, getGroupHistory, getGroupTitle, language]);
+  }, [
+    groups,
+    getValues,
+    getGroupHistory,
+    getGroupTitle,
+    language,
+    formRecord.form.elements,
+    matchedIds,
+  ]);
 
   return (
     <>
       <h2 ref={headingRef}>{t("reviewForm", { lng: language })}</h2>
       <div className="my-16">
-        {Array.isArray(questionsAndAnswers) &&
-          questionsAndAnswers.map((group) => {
-            const title = group.title ? group.title : t("start", { ns: "common", lng: language }); // group.name as fallback for groups like Start
+        {Array.isArray(reviewItems) &&
+          reviewItems.map((reviewItem) => {
+            const title = reviewItem.title
+              ? reviewItem.title
+              : t("start", { ns: "common", lng: language });
             return (
-              <div key={group.id} className="mb-10 rounded-lg border-2 border-slate-400 px-6 py-4">
+              <div
+                key={reviewItem.id}
+                className="mb-10 rounded-lg border-2 border-slate-400 px-6 py-4"
+              >
                 <h3 className="text-slate-700">
-                  <EditButton group={group} theme="link">
-                    <>{title}</>
+                  <EditButton reviewItem={reviewItem} theme="link">
+                    {title}
                   </EditButton>
                 </h3>
                 <div className="mb-10 ml-1">
-                  <dl className="my-10">
-                    {Array.isArray(group.elements) &&
-                      group.elements.map((element) => (
-                        <QuestionsAnswers
-                          key={Object.keys(element)[0]}
-                          element={element}
-                          formRecord={formRecord}
-                          lang={language}
-                        />
-                      ))}
-                  </dl>
+                  <QuestionsAnswersList reviewItem={reviewItem} />
                 </div>
-                <EditButton group={group} theme="secondary">
-                  <>{t("edit", { lng: language })}</>
+                <EditButton reviewItem={reviewItem} theme="secondary">
+                  {t("edit", { lng: language })}
                 </EditButton>
               </div>
             );
@@ -96,38 +177,66 @@ export const Review = ({ language }: { language: Language }): React.ReactElement
   );
 };
 
-const QuestionsAnswers = ({
-  element,
-  formRecord,
-  lang,
-}: {
-  element: QuestionAnswer;
-  formRecord: TypeOmit<FormRecord, "name" | "deliveryOption">;
-  lang: string;
-}): React.ReactElement => {
-  const { t } = useTranslation("review");
-  function getElementNameById(id: string | number) {
-    const element = formRecord.form.elements.find((item) => String(item.id) === String(id));
-    return element ? element.properties?.[getLocalizedProperty("title", lang)] : t("unknown");
-  }
-  const question = getElementNameById(Object.keys(element)[0]) as string;
-  const answer = Object.values(element)[0] as string;
+const QuestionsAnswersList = ({ reviewItem }: { reviewItem: ReviewItem }): React.ReactElement => {
   return (
-    <div className="mb-8">
-      <dt className="font-bold mb-2">{question}</dt>
-      <dd>{answer}</dd>
-    </div>
+    <dl className="my-10">
+      {Array.isArray(reviewItem.elements) &&
+        reviewItem.elements.map((reviewElement) => {
+          if (Array.isArray(reviewElement.values)) {
+            return <SubElements key={randomId()} elements={reviewElement.values as Element[]} />;
+          }
+          return (
+            <div key={randomId()} className="mb-8">
+              <dt className="font-bold mb-2">{reviewElement.title}</dt>
+              <dd>{formatElementValues(reviewElement.values)}</dd>
+            </div>
+          );
+        })}
+    </dl>
   );
 };
 
+// Handle formatting Sub Elements. Note Sub Elements = Dynamic Rows = Repeating Sets.
+const SubElements = ({ elements }: { elements: Element[] }) => {
+  return elements?.map((subElementItem) => {
+    return (subElementItem.values as Element[])?.map((element) => {
+      if (Array.isArray(element.values)) {
+        const dlId = randomId();
+        // Create a nested DL for each Sub Element list
+        return (
+          <dl key={dlId} aria-labelledby={dlId} className="my-10">
+            <h4 className="italic" id={dlId}>
+              {element.title}
+            </h4>
+            {(element.values as Element[]).map((elementValues) => {
+              return (
+                <div key={randomId()} className="mb-2">
+                  <dt className="font-bold mb-2">{elementValues.title}</dt>
+                  <dd>{formatElementValues(elementValues.values)}</dd>
+                </div>
+              );
+            })}
+          </dl>
+        );
+      }
+      return (
+        <div key={randomId()} className="mb-2">
+          <dt className="font-bold mb-2">{element.title}</dt>
+          <dd>{formatElementValues(element.values)}</dd>
+        </div>
+      );
+    });
+  });
+};
+
 const EditButton = ({
-  group,
+  reviewItem,
   theme,
   children,
 }: {
-  group: ReviewGroup;
+  reviewItem: ReviewItem;
   theme: Theme;
-  children: React.ReactElement;
+  children: React.ReactElement | string;
 }): React.ReactElement => {
   const { setGroup, clearHistoryAfterId } = useGCFormsContext();
   return (
@@ -135,8 +244,8 @@ const EditButton = ({
       type="button"
       theme={theme}
       onClick={() => {
-        setGroup(group.id);
-        clearHistoryAfterId(group.id);
+        setGroup(reviewItem.id);
+        clearHistoryAfterId(reviewItem.id);
       }}
     >
       {children}

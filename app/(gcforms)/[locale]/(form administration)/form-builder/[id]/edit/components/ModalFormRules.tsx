@@ -10,6 +10,9 @@ import { FormElementWithIndex } from "@lib/types/form-builder-types";
 import { ChoiceRule } from "@lib/formContext";
 import { ConditionalSelector } from "@formBuilder/components/shared/conditionals/ConditionalSelector";
 import { sortByGroups, sortByLayout } from "@lib/utils/form-builder";
+import { AddOther } from "@formBuilder/components/shared/conditionals/AddOther";
+
+import Markdown from "markdown-to-jsx";
 
 export const ModalFormRules = ({
   item,
@@ -17,15 +20,18 @@ export const ModalFormRules = ({
   initialChoiceRules,
   updateModalProperties,
   descriptionId,
+  tryLogicView,
 }: {
   item: FormElementWithIndex;
   properties: ModalProperties;
   initialChoiceRules: ChoiceRule[];
   updateModalProperties: (id: number, properties: ModalProperties) => void;
   descriptionId?: string;
+  tryLogicView: () => void;
 }) => {
   const { t } = useTranslation("form-builder");
   const formId = `form-${Date.now()}`;
+  const [showLogicDetails, setShowLogicDetails] = useState(false);
 
   const { elements, form, groupsEnabled } = useTemplateStore((s) => ({
     elements: s.form.elements,
@@ -66,6 +72,17 @@ export const ModalFormRules = ({
     updateModalProperties(item.id, { ...properties, conditionalRules: rules });
   };
 
+  const updateModalFromBase = (newRule: ChoiceRule) => {
+    const rules = [...choiceRules];
+    rules.push(newRule);
+    setChoiceRules(rules);
+    updateModalProperties(item.id, { ...properties, conditionalRules: rules });
+  };
+
+  const learnMoreAboutLogicView = () => {
+    setShowLogicDetails(showLogicDetails ? false : true);
+  };
+
   return (
     <form
       onSubmit={(e: React.FormEvent<HTMLFormElement>) => e.preventDefault()}
@@ -90,15 +107,35 @@ export const ModalFormRules = ({
         })}
       </div>
       <div className="mb-6">
-        <Button
-          onClick={() => {
-            setChoiceRules([...choiceRules, { elementId: "", choiceId: String(item.id) }]);
-          }}
-          theme={"secondary"}
-          aria-controls={formId}
-        >
-          {t("addConditionalRules.addAnotherRule")}
-        </Button>
+        <div className="mb-4">
+          <Button
+            className="mr-4"
+            onClick={() => {
+              setChoiceRules([...choiceRules, { elementId: "", choiceId: String(item.id) }]);
+            }}
+            theme={"secondary"}
+            aria-controls={formId}
+          >
+            {t("addConditionalRules.addAnotherRule")}
+          </Button>
+          <AddOther item={item} onComplete={updateModalFromBase} />
+        </div>
+        <div>
+          <Button theme={"link"} onClick={learnMoreAboutLogicView}>
+            {t("logic.tryitout.button")}
+          </Button>
+          <div
+            id="viewLogicDetails"
+            className={`border-x-4 border-gray-800 px-5 ${showLogicDetails ? "" : "hidden"}`}
+          >
+            <div className="my-4">
+              <Markdown options={{ forceBlock: true }}>{t("logic.tryitout.text")}</Markdown>
+            </div>
+            <Button theme={"primary"} onClick={tryLogicView}>
+              {t("logic.tryitout.open")}
+            </Button>
+          </div>
+        </div>
       </div>
     </form>
   );

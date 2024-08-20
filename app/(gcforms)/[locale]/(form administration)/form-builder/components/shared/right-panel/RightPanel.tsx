@@ -12,7 +12,7 @@ import { useActivePathname } from "@lib/hooks/form-builder";
 import { DownloadCSVWithGroups } from "@formBuilder/[id]/edit/translate/components/DownloadCSVWithGroups";
 import { useTreeRef } from "./treeview/provider/TreeRefProvider";
 import { TreeView } from "./treeview/TreeView";
-import { useRehydrate, useTemplateStore } from "@lib/store/useTemplateStore";
+import { useTemplateStore } from "@lib/store/useTemplateStore";
 
 import { SelectNextAction } from "./logic/SelectNextAction";
 import { useGroupStore } from "./treeview/store/useGroupStore";
@@ -61,7 +61,7 @@ const TabButton = ({
 
 export const RightPanel = ({ id, lang }: { id: string; lang: Language }) => {
   const router = useRouter();
-  const { t, i18n } = useTranslation("form-builder");
+  const { t, i18n } = useTranslation(["form-builder", "common"]);
 
   const { id: storeId } = useTemplateStore((s) => ({
     id: s.id,
@@ -74,20 +74,10 @@ export const RightPanel = ({ id, lang }: { id: string; lang: Language }) => {
   const { activePathname } = useActivePathname();
   const { treeView, togglePanel, open } = useTreeRef();
   const getElement = useGroupStore((s) => s.getElement);
-  const hasHydrated = useRehydrate();
 
   const selectedElementId = useGroupStore((s) => s.selectedElementId);
   const setId = useGroupStore((state) => state.setId);
   const item = (selectedElementId && getElement(selectedElementId)) || null;
-
-  useEffect(() => {
-    // Note we only want to toggle the panel open if the tree has hydrated
-    // And only once
-    if (hasHydrated) {
-      togglePanel && togglePanel(true);
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [hasHydrated]);
 
   // Update once logic tab / screen  is implemented
   let selectedIndex = 0;
@@ -101,6 +91,16 @@ export const RightPanel = ({ id, lang }: { id: string; lang: Language }) => {
   }
 
   const [isIntersecting, setIsIntersecting] = useState(false);
+  const isBannerEnabled = t("campaignBanner.enabled");
+
+  //If Intersecting fixed-20 else fixed-0, but if BannerEnabled fixed-40 else fixed-20
+  const fixedRange = isBannerEnabled
+    ? isIntersecting
+      ? "top-30"
+      : "top-10"
+    : isIntersecting
+    ? "top-20"
+    : "top-0";
 
   // Observe if the header is offscreen
   // Used to determine the position of the right panel button "toggle" button
@@ -132,8 +132,8 @@ export const RightPanel = ({ id, lang }: { id: string; lang: Language }) => {
   }
 
   return (
-    <section className="relative" aria-labelledby="rightPanelTitle">
-      <div className={cn("fixed right-0", isIntersecting ? "top-20" : "top-0", open && "hidden")}>
+    <section className="z-10 border-l border-slate-200 bg-white" aria-labelledby="rightPanelTitle">
+      <div className={cn("fixed right-0", fixedRange, open && "hidden")}>
         <Button
           theme="link"
           className="mr-8 mt-5 whitespace-nowrap [&_svg]:focus:fill-white"
@@ -147,8 +147,8 @@ export const RightPanel = ({ id, lang }: { id: string; lang: Language }) => {
         </Button>
       </div>
       <Transition.Root show={open} as={Fragment}>
-        <div className="h-full">
-          <div className="flex h-full">
+        <div className="sticky top-0">
+          <div className="flex">
             <Transition.Child
               as={Fragment}
               enter="transform transition ease-in-out duration-500"
@@ -185,11 +185,10 @@ export const RightPanel = ({ id, lang }: { id: string; lang: Language }) => {
                   <Tab.Group selectedIndex={selectedIndex}>
                     <Tab.List className={"flex justify-between border-b border-gray-200"}>
                       <TabButton
-                        text={t("rightPanel.questions")}
+                        text={t("rightPanel.pages")}
                         onClick={() => {
                           router.push(`/${i18n.language}/form-builder/${id}/edit`);
                         }}
-                        className="justify-start px-6"
                       />
                       <TabButton
                         text={t("rightPanel.translation")}
@@ -209,22 +208,26 @@ export const RightPanel = ({ id, lang }: { id: string; lang: Language }) => {
                     <Tab.Panels>
                       <Tab.Panel>
                         {/* Tree */}
-                        <SkipLinkReusable anchor="#questionsTitle">
-                          {t("skipLink.questions")}
+                        <SkipLinkReusable anchor="#pagesTitle">
+                          {t("skipLink.pages")}
                         </SkipLinkReusable>
-                        <div className="m-0 w-full" aria-live="polite">
+                        <div
+                          className="m-0 h-[calc(100vh-150px)] w-full overflow-scroll bg-slate-50"
+                          aria-live="polite"
+                        >
                           <TreeView
                             ref={treeView}
                             addItem={() => {}}
                             updateItem={() => {}}
                             removeItem={() => {}}
+                            addPage={() => {}}
                           />
                         </div>
                         {/* end tree */}
                       </Tab.Panel>
                       <Tab.Panel>
                         {/* Translate */}
-                        <SkipLinkReusable anchor="#translateTitle">
+                        <SkipLinkReusable anchor="#editTranslationsHeading">
                           {t("skipLink.translate")}
                         </SkipLinkReusable>
                         <div className="m-0 mt-1 w-full p-4" aria-live="polite">
@@ -239,7 +242,7 @@ export const RightPanel = ({ id, lang }: { id: string; lang: Language }) => {
                         </SkipLinkReusable>
                         <div className="m-0 w-full" aria-live="polite">
                           {activePathname.endsWith("/logic") && (
-                            <SelectNextAction lang={lang} item={item} />
+                            <SelectNextAction id={id} lang={lang} item={item} />
                           )}
                         </div>
                         {/* end logic */}

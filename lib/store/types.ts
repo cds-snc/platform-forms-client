@@ -47,6 +47,7 @@ export interface TemplateStoreState extends TemplateStoreProps {
   remove: (id: number, groupId?: string) => void;
   removeSubItem: (elIndex: number, id: number) => void;
   addChoice: (elIndex: number) => void;
+  addLabeledChoice: (elIndex: number, label: { en: string; fr: string }) => Promise<number>;
   addSubChoice: (elIndex: number, subIndex: number) => void;
   removeChoice: (elIndex: number, choiceIndex: number) => void;
   removeSubChoice: (elIndex: number, subIndex: number, choiceIndex: number) => void;
@@ -70,9 +71,11 @@ export interface TemplateStoreState extends TemplateStoreProps {
   getSecurityAttribute: () => SecurityAttribute;
   setClosingDate: (closingDate: string | null) => void;
   initialize: (language?: string) => void;
-  removeChoiceFromRules: (elIndex: number, choiceIndex: number) => void;
+  removeChoiceFromRules: (elId: string, choiceIndex: number) => void;
+  removeChoiceFromNextActions: (elId: string, choiceIndex: number) => void;
   setChangeKey: (key: string) => void;
   getGroupsEnabled: () => boolean;
+  setGroupsLayout: (layout: string[]) => void;
 }
 
 export interface InitialTemplateStoreProps extends TemplateStoreProps {

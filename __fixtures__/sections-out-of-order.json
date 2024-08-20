@@ -281,8 +281,8 @@
   "groups": {
     "start": {
       "name": "Start",
-      "titleEn": "Beginning",
-      "titleFr": "Début",
+      "titleEn": "Start page",
+      "titleFr": "Page de départ",
       "autoFlow": true,
       "elements": [],
       "nextAction": "3a426f36-bd26-4b82-9556-6a9c26513bb1"
@@ -304,16 +304,16 @@
     },
     "review": {
       "name": "Review",
-      "titleEn": "Review",
-      "titleFr": "Révision",
+      "titleEn": "Review page",
+      "titleFr": "Page récapitulative",
       "autoFlow": true,
       "elements": [],
       "nextAction": "9a8c1cf4-001f-4cd2-91df-e3804e45c53a"
     },
     "end": {
-      "name": "End",
-      "titleEn": "End",
-      "titleFr": "Fin",
+      "name": "Confirmation",
+      "titleEn": "Confirmation page",
+      "titleFr": "Page de confirmation",
       "autoFlow": true,
       "elements": [],
       "nextAction": "start"

@@ -9,6 +9,8 @@ import { Language, LocalizedElementProperties } from "@lib/types/form-builder-ty
 import { groupsToTreeData, TreeDataOptions } from "../util/groupsToTreeData";
 import { findParentGroup } from "../util/findParentGroup";
 import { GroupStoreProps, GroupStoreState } from "./types";
+import { formHasGroups } from "@lib/utils/form-builder/formHasGroups";
+import { initializeGroups } from "../util/initializeGroups";
 
 import { findNextGroup } from "../util/findNextGroup";
 import { findPreviousGroup } from "../util/findPreviousGroup";
@@ -110,9 +112,19 @@ const createGroupStore = (initProps?: Partial<GroupStoreProps>) => {
       },
       getGroups: () => get().templateStore.getState().form.groups,
       getTreeData: (options: TreeDataOptions = {}) => {
-        const formGroups = get().templateStore.getState().form.groups;
-        const elements = get().templateStore.getState().form.elements;
+        const form = get().templateStore.getState().form;
+        let formGroups = form.groups;
+
+        const hasGroups = formHasGroups(form);
+
+        if (!hasGroups) {
+          formGroups = initializeGroups({ ...form }, true).groups;
+        }
+
         if (!formGroups) return {};
+
+        const elements = get().templateStore.getState().form.elements;
+
         return groupsToTreeData(formGroups, elements, options);
       },
       getElementsGroupById: (id: string) => {

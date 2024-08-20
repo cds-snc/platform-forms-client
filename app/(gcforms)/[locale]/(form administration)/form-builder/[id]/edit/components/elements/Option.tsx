@@ -18,12 +18,16 @@ export const Option = ({
   id,
   renderIcon,
   initialValue,
+  onFocus,
+  onBlur,
 }: {
   parentIndex: number;
   index: number;
   id: number;
   renderIcon?: RenderIcon;
   initialValue: string;
+  onFocus?: () => void;
+  onBlur?: () => void;
 }) => {
   const input = useRef<HTMLInputElement>(null);
 
@@ -36,6 +40,7 @@ export const Option = ({
     translationLanguagePriority,
     getLocalizationAttribute,
     removeChoiceFromRules,
+    removeChoiceFromNextActions,
   } = useTemplateStore((s) => ({
     addChoice: s.addChoice,
     removeChoice: s.removeChoice,
@@ -45,6 +50,7 @@ export const Option = ({
     translationLanguagePriority: s.translationLanguagePriority,
     getLocalizationAttribute: s.getLocalizationAttribute,
     removeChoiceFromRules: s.removeChoiceFromRules,
+    removeChoiceFromNextActions: s.removeChoiceFromNextActions,
   }));
 
   const icon = renderIcon && renderIcon(index);
@@ -92,10 +98,11 @@ export const Option = ({
   );
 
   const cleanUpRules = useCallback(
-    (parentIndex: number, index: number) => {
-      removeChoiceFromRules(parentIndex, index);
+    (parentId: string, index: number) => {
+      removeChoiceFromRules(parentId, index);
+      removeChoiceFromNextActions(parentId, index);
     },
-    [removeChoiceFromRules]
+    [removeChoiceFromRules, removeChoiceFromNextActions]
   );
 
   return (
@@ -116,6 +123,8 @@ export const Option = ({
         onKeyDown={handleKeyDown}
         className="!my-0 ml-5 max-h-9 w-full"
         {...getLocalizationAttribute()}
+        onFocus={onFocus}
+        onBlur={onBlur}
       />
       <Button
         theme="icon"
@@ -124,7 +133,7 @@ export const Option = ({
         icon={<Close className="group-focus:fill-white-default" />}
         aria-label={`${t("removeOption")} ${value}`}
         onClick={() => {
-          cleanUpRules(parentIndex, index);
+          cleanUpRules(String(id), index);
           removeChoice(parentIndex, index);
         }}
       ></Button>
