@@ -80,7 +80,7 @@ export const FormattedDate = (props: FormattedDateProps): React.ReactElement => 
   };
 
   return (
-    <fieldset aria-describedby={id}>
+    <fieldset aria-describedby={id} data-testid="formattedDate">
       {ariaDescribedBy && (
         <Description id={id} className="gc-form-group-context">
           {ariaDescribedBy}
@@ -95,12 +95,14 @@ export const FormattedDate = (props: FormattedDateProps): React.ReactElement => 
         {dateParts.map((part) => {
           return part === DatePart.MM && monthSelector === "select" ? (
             <div key={part}>
-              <label>{t(`formattedDate.${part}`)}</label>
+              <label htmlFor={`${name}-${part}`}>{t(`formattedDate.${part}`)}</label>
               <select
                 name={`${name}-${part}`}
+                id={`${name}-${part}`}
                 className="gc-dropdown w-36"
                 onChange={(e) => setSelectedMonth(Number(e.target.value))}
                 required={required}
+                data-testid="month-select"
               >
                 {Array.from({ length: 12 }, (_, i) => i + 1).map((month) => (
                   <option key={month} value={month}>
@@ -111,9 +113,10 @@ export const FormattedDate = (props: FormattedDateProps): React.ReactElement => 
             </div>
           ) : part === DatePart.MM ? (
             <div key={part} className="flex flex-col">
-              <label>{t(`formattedDate.${part}`)}</label>
+              <label htmlFor={`${name}-${part}`}>{t(`formattedDate.${part}`)}</label>
               <input
                 name={`${name}-${part}`}
+                id={`${name}-${part}`}
                 type="number"
                 min={1}
                 max={12}
@@ -121,26 +124,30 @@ export const FormattedDate = (props: FormattedDateProps): React.ReactElement => 
                 className={classnames("gc-input-text", "w-16")}
                 onChange={(e) => setSelectedMonth(Number(e.target.value))}
                 required={required}
+                data-testid="month-number"
               />
             </div>
           ) : part === DatePart.YYYY ? (
             <div key={part} className="flex flex-col">
-              <label>{t(`formattedDate.${part}`)}</label>
+              <label htmlFor={`${name}-${part}`}>{t(`formattedDate.${part}`)}</label>
               <input
                 name={`${name}-${part}`}
+                id={`${name}-${part}`}
                 type="number"
                 min={1900}
                 autoComplete={autocomplete ? "bday-year" : undefined}
                 className={classnames("gc-input-text", "w-28")}
                 onChange={(e) => setSelectedYear(Number(e.target.value))}
                 required={required}
+                data-testid="year-number"
               />
             </div>
           ) : (
             <div key={part} className="flex flex-col">
-              <label>{t(`formattedDate.${part}`)}</label>
+              <label htmlFor={`${name}-${part}`}>{t(`formattedDate.${part}`)}</label>
               <input
                 name={`${name}-${part}`}
+                id={`${name}-${part}`}
                 type="number"
                 min={1}
                 max={getMaxDay(selectedMonth, selectedYear)}
@@ -148,6 +155,7 @@ export const FormattedDate = (props: FormattedDateProps): React.ReactElement => 
                 className={classnames("gc-input-text", "w-16")}
                 onChange={(e) => setSelectedDay(Number(e.target.value))}
                 required={required}
+                data-testid="day-number"
               />
             </div>
           );
