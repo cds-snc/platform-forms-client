@@ -2,7 +2,6 @@
 import React from "react";
 import { useTranslation } from "@i18n/client";
 import { ExampleWrapper } from "./ExampleWrapper";
-import { Description, Label } from "@clientComponents/forms";
 import { AddressComplete as AddressCompleteComponent } from "@clientComponents/forms/AddressComplete/AdressComplete";
 import Image from "next/image";
 
@@ -24,10 +23,6 @@ export const AddressComplete = () => {
       <ExampleWrapper className="mt-4">
         <h4 className="mb-4">{t("addElementDialog.addressComplete.whatIsYourAddress")}</h4>
         <div className="mb-6">
-          <Label htmlFor="street" className="gc-label">
-            {t("addElementDialog.addressComplete.street.label")}
-          </Label>
-          <Description>{t("addElementDialog.addressComplete.street.description")}</Description>
           <AddressCompleteComponent name={"addressComplete"} />
         </div>
       </ExampleWrapper>

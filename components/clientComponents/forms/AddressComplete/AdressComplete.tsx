@@ -88,6 +88,10 @@ export const AddressComplete = (props: AddressCompleteProps): React.ReactElement
           </Description>
         )}
         <div className="mb-6">
+          <Label htmlFor="street" className="gc-label">
+            {t("addElementDialog.addressComplete.street.label")}
+          </Label>
+          <Description>{t("addElementDialog.addressComplete.street.description")}</Description>
           <Combobox
             choices={choices}
             id="street"
