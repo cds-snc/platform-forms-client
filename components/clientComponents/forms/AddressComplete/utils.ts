@@ -1,5 +1,4 @@
 "use client";
-import { getAddressCompleteApiKey } from "@serverComponents/globals/AddressComplete";
 import { AddressCompleteChoice, AddressCompleteResult } from "./types";
 
 const autoCompleteUrl =
@@ -10,7 +9,7 @@ const retriveAddressUrl =
 // Function returns address complete list of choices.
 export const getAddressCompleteChoices = async (query: string) => {
   // The server returns a promise, so we need to await it, Lint thinks it isn't one for some reason.
-  const addressCompleteKey = await getAddressCompleteApiKey(); // eslint-disable-line
+  const addressCompleteKey = process.env.NEXT_PUBLIC_ADDRESSCOMPLETE_API_KEY ?? ""; // eslint-disable-line
 
   let params = "?";
   params += "Key=" + encodeURIComponent(addressCompleteKey);
@@ -30,7 +29,7 @@ export const getAddressCompleteChoices = async (query: string) => {
 // Functions returns the selected address.
 export const getSelectedAddress = async (value: string) => {
   // The server returns a promise, so we need to await it, Lint thinks it isn't one for some reason.
-  const addressCompleteKey = await getAddressCompleteApiKey(); // eslint-disable-line
+  const addressCompleteKey = process.env.NEXT_PUBLIC_ADDRESSCOMPLETE_API_KEY ?? ""; // eslint-disable-line
 
   const selectedResult = value;
   let params = "?";
