@@ -152,7 +152,7 @@ const isFieldResponseValid = (
       }
 
       if (!isValidDate(value as DateObject)) {
-        return t("input-validation.date");
+        return t("input-validation.date-invalid");
       }
 
       break;
