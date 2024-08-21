@@ -14,7 +14,6 @@ const brandingRequestFormSetting: Setting = {
   descriptionEn: null,
   descriptionFr: null,
   value: null,
-  encrypted: false,
 };
 
 const nagwarePhaseEncouraged: Setting = {
@@ -26,7 +25,6 @@ const nagwarePhaseEncouraged: Setting = {
   descriptionFr:
     "Au bout de combien de jours l'utilisateur doit-il être encouragé à utiliser le téléchargement ou à confirmer les réponses ?",
   value: "15",
-  encrypted: false,
 };
 const nagwarePhasePrompted: Setting = {
   internalId: "nagwarePhasePrompted",
@@ -37,7 +35,6 @@ const nagwarePhasePrompted: Setting = {
   descriptionFr:
     "Au bout de combien de jours l'utilisateur doit-il recevoir une notification lui demandant de télécharger ou de confirmer les réponses ?",
   value: "21",
-  encrypted: false,
 };
 const nagwarePhaseWarned: Setting = {
   internalId: "nagwarePhaseWarned",
@@ -48,7 +45,6 @@ const nagwarePhaseWarned: Setting = {
   descriptionFr:
     "Au bout de combien de jours l'utilisateur doit-il être averti avec une notification pour télécharger ou confirmer les réponses ?",
   value: "35",
-  encrypted: false,
 };
 
 const nagwarePhaseEscalated: Setting = {
@@ -59,7 +55,6 @@ const nagwarePhaseEscalated: Setting = {
   descriptionFr:
     "Au bout de combien de jours l'équipe Forms doit-elle être notifiée et un incident enregistré ?",
   value: "46",
-  encrypted: false,
 };
 
 const responseDownloadLimit: Setting = {
@@ -69,7 +64,6 @@ const responseDownloadLimit: Setting = {
   descriptionEn: null,
   descriptionFr: null,
   value: "20",
-  encrypted: false,
 };
 
 const zitadelAdministrationKey: Setting = {
@@ -79,7 +73,6 @@ const zitadelAdministrationKey: Setting = {
   descriptionEn: "Paste in Zitadel Administration Key here.",
   descriptionFr: "Insérer la clé d'administration de Zitadel ici.",
   value: null,
-  encrypted: true,
 };
 
 const zitadelProvider: Setting = {
@@ -89,7 +82,6 @@ const zitadelProvider: Setting = {
   descriptionEn: "URL to Zitadel provider",
   descriptionFr: "URL vers le fournisseur Zitadel",
   value: null,
-  encrypted: false,
 };
 
 const allSettings = [

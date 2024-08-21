@@ -4,7 +4,6 @@ import { DeleteSettingsButton } from "../client/DeleteSettingsButton";
 import { authCheckAndRedirect } from "@lib/actions";
 import { getAllAppSettings } from "@lib/appSettings";
 import { serverTranslation } from "@i18n";
-import { LockIcon } from "@serverComponents/icons";
 
 export const Settings = async () => {
   const {
@@ -30,10 +29,7 @@ export const Settings = async () => {
             className="border-2 hover:border-blue-hover rounded-md p-2 m-2 flex flex-row"
           >
             <div className="grow basis-2/3 m-auto">
-              <p>
-                {language === "fr" ? setting.nameFr : setting.nameEn}
-                {setting.encrypted && <LockIcon className="float-right mr-4" />}
-              </p>
+              <p>{language === "fr" ? setting.nameFr : setting.nameEn}</p>
               <p className="italic">
                 {language === "fr" ? setting.descriptionFr : setting.descriptionEn}
               </p>
