@@ -24,6 +24,7 @@ import { ConfirmationTitle } from "./ConfirmationTitle";
 import { SkipLinkReusable } from "@clientComponents/globals/SkipLinkReusable";
 import { AddPageButton } from "./AddPageButton";
 import { AddBranchingButton } from "./AddBranchingButton";
+import { MoreDialog } from "./MoreDialog";
 
 export const EditWithGroups = ({ id, locale }: { id: string; locale: string }) => {
   const { t } = useTranslation("form-builder");
@@ -224,8 +225,8 @@ export const EditWithGroups = ({ id, locale }: { id: string; locale: string }) =
         <AddPageButton className="mr-5" />
         <AddBranchingButton id={id} locale={locale} />
       </div>
-
       <SkipLinkReusable anchor="#rightPanelTitle">{t("skipLink.pagesSetup")}</SkipLinkReusable>
+      <MoreDialog />
     </>
   );
 };
