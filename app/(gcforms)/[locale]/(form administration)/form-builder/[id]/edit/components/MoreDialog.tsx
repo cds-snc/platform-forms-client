@@ -11,8 +11,9 @@ import {
   TextArea,
   useDialogRef,
 } from "@formBuilder/components/shared";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { ModalForm } from "./ModalForm";
+import { getPathString, getElementIndexes } from "@lib/utils/form-builder/getPath";
 import { FormElementWithIndex, LocalizedElementProperties } from "@lib/types/form-builder-types";
 import { useTemplateStore } from "@lib/store/useTemplateStore";
 import { FormElementTypes } from "@lib/types";
@@ -38,9 +39,31 @@ export const MoreDialog = ({ className }: { className?: string }) => {
     translationLanguagePriority: s.translationLanguagePriority,
   }));
 
+  const { elements, updateField, setChangeKey } = useTemplateStore((s) => ({
+    lang: s.lang,
+    updateField: s.updateField,
+    elements: s.form.elements,
+    getFocusInput: s.getFocusInput,
+    setChangeKey: s.setChangeKey,
+  }));
+
   const dialogRef = useDialogRef();
   const [isOpen, setIsOpen] = useState(false);
   const [item, setItem] = useState<FormElementWithIndex | undefined>(undefined);
+
+  const forceRefresh = () => {
+    setChangeKey(String(new Date().getTime())); //Force a re-render
+  };
+
+  const handleSubmit = ({ item, properties }: { item: FormElementWithIndex; properties: any }) => {
+    return (e: React.MouseEvent<HTMLElement>) => {
+      e.preventDefault();
+      // replace all of "properties" with the new properties set in the ModalForm
+      updateField(getPathString(item.id, elements), properties);
+      forceRefresh();
+      handleClose();
+    };
+  };
 
   const handleClose = () => {
     setIsOpen(false);
@@ -50,22 +73,35 @@ export const MoreDialog = ({ className }: { className?: string }) => {
     return "detail" in event;
   }
 
-  useEffect(() => {
-    window &&
-      window.addEventListener("open-more-dialog", (e: Event) => {
-        if (isCustomEvent(e)) {
-          setItem(e.detail.item);
-          setIsOpen(true);
-        }
-      });
+  const documentRef = useRef<Document | null>(null);
+
+  if (typeof window !== "undefined") {
+    documentRef.current = window.document;
+  }
+
+  const handleOpenDialog = useCallback((e: Event) => {
+    if (isCustomEvent(e)) {
+      setItem(e.detail.item);
+      setIsOpen(true);
+    }
   }, []);
+
+  useEffect(() => {
+    documentRef.current &&
+      documentRef.current.addEventListener("open-more-dialog", handleOpenDialog);
+
+    return () => {
+      documentRef.current &&
+        documentRef.current.removeEventListener("open-more-dialog", handleOpenDialog);
+    };
+  }, [handleOpenDialog]);
 
   const autocompleteSelectedValue = (item && item.properties.autoComplete) || "";
   const checked = item && item.properties.validation?.required;
 
   return (
     <>
-      {isOpen && (
+      {item && isOpen && (
         <Dialog
           title={t("downloadResponsesModals.downloadDialog.title")}
           dialogRef={dialogRef}
@@ -92,6 +128,18 @@ export const MoreDialog = ({ className }: { className?: string }) => {
                         ]
                       }
                       className="w-11/12"
+                      onChange={(e) => {
+                        setItem({
+                          ...item,
+                          properties: {
+                            ...item.properties,
+                            [localizeField(
+                              LocalizedElementProperties.TITLE,
+                              translationLanguagePriority
+                            )]: e.target.value,
+                          },
+                        });
+                      }}
                       // onChange={(e) =>
                       //   updateModalProperties(item.id, {
                       //     ...properties,
@@ -114,17 +162,29 @@ export const MoreDialog = ({ className }: { className?: string }) => {
                       testId="description-input"
                       className="w-11/12"
                       onChange={(e) => {
-                        const description = e.target.value.replace(/[\r\n]/gm, "");
-                        // updateModalProperties(item.id, {
-                        //   ...properties,
-                        //   ...{
-                        //     [localizeField(
-                        //       LocalizedElementProperties.DESCRIPTION,
-                        //       translationLanguagePriority
-                        //     )]: description,
-                        //   },
-                        // });
+                        setItem({
+                          ...item,
+                          properties: {
+                            ...item.properties,
+                            [localizeField(
+                              LocalizedElementProperties.DESCRIPTION,
+                              translationLanguagePriority
+                            )]: e.target.value,
+                          },
+                        });
                       }}
+                      // onChange={(e) => {
+                      //   const description = e.target.value.replace(/[\r\n]/gm, "");
+                      //   // updateModalProperties(item.id, {
+                      //   //   ...properties,
+                      //   //   ...{
+                      //   //     [localizeField(
+                      //   //       LocalizedElementProperties.DESCRIPTION,
+                      //   //       translationLanguagePriority
+                      //   //     )]: description,
+                      //   //   },
+                      //   // });
+                      // }}
                       value={
                         item.properties[
                           localizeField(
@@ -148,6 +208,15 @@ export const MoreDialog = ({ className }: { className?: string }) => {
                       label="General date"
                       value=""
                       checked={!item.properties.autoComplete}
+                      onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                        setItem({
+                          ...item,
+                          properties: {
+                            ...item.properties,
+                            autoComplete: e.target.value,
+                          },
+                        });
+                      }}
                       // onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                       //   updateModalProperties(item.id, {
                       //     ...properties,
@@ -162,6 +231,15 @@ export const MoreDialog = ({ className }: { className?: string }) => {
                       label="Birthdate"
                       value="bday"
                       checked={item.properties.autoComplete === "bday"}
+                      onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                        setItem({
+                          ...item,
+                          properties: {
+                            ...item.properties,
+                            autoComplete: e.target.value,
+                          },
+                        });
+                      }}
                       // onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                       //   updateModalProperties(item.id, {
                       //     ...properties,
@@ -178,6 +256,15 @@ export const MoreDialog = ({ className }: { className?: string }) => {
                       label="YYYY-MM-DD (Government of Canada standard)"
                       value="YYYY-MM-DD"
                       checked={item.properties.dateFormat === "YYYY-MM-DD"}
+                      onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                        setItem({
+                          ...item,
+                          properties: {
+                            ...item.properties,
+                            dateFormat: e.target.value,
+                          },
+                        });
+                      }}
                       // onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                       //   updateModalProperties(item.id, {
                       //     ...properties,
@@ -192,6 +279,15 @@ export const MoreDialog = ({ className }: { className?: string }) => {
                       label="DD-MM-YYYY"
                       value="DD-MM-YYYY"
                       checked={item.properties.dateFormat === "DD-MM-YYYY"}
+                      onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                        setItem({
+                          ...item,
+                          properties: {
+                            ...item.properties,
+                            dateFormat: e.target.value,
+                          },
+                        });
+                      }}
                       // onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                       //   updateModalProperties(item.id, {
                       //     ...properties,
@@ -206,6 +302,15 @@ export const MoreDialog = ({ className }: { className?: string }) => {
                       label="MM-DD-YYYY"
                       value="MM-DD-YYYY"
                       checked={item.properties.dateFormat === "MM-DD-YYYY"}
+                      onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                        setItem({
+                          ...item,
+                          properties: {
+                            ...item.properties,
+                            dateFormat: e.target.value,
+                          },
+                        });
+                      }}
                       // onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                       //   updateModalProperties(item.id, {
                       //     ...properties,
@@ -240,15 +345,27 @@ export const MoreDialog = ({ className }: { className?: string }) => {
                       key={`required-${item.index}-modal-` + checked}
                       defaultChecked={checked}
                       onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                        // clone the existing properties so that we don't overwrite other keys in "validation"
-                        const validation = Object.assign({}, item.properties.validation, {
-                          required: e.target.checked,
+                        setItem({
+                          ...item,
+                          properties: {
+                            ...item.properties,
+                            validation: {
+                              ...item.properties.validation,
+                              required: e.target.checked, // @TODO: confirm with below
+                            },
+                          },
                         });
-                        // updateModalProperties(item.id, {
-                        //   ...properties,
-                        //   ...{ validation },
-                        // });
                       }}
+                      // onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                      //   // clone the existing properties so that we don't overwrite other keys in "validation"
+                      //   const validation = Object.assign({}, item.properties.validation, {
+                      //     required: e.target.checked,
+                      //   });
+                      //   // updateModalProperties(item.id, {
+                      //   //   ...properties,
+                      //   //   ...{ validation },
+                      //   // });
+                      // }}
                       label={t("required")}
                     ></Checkbox>
                   </div>
@@ -270,20 +387,29 @@ export const MoreDialog = ({ className }: { className?: string }) => {
                           e.preventDefault();
                         }
                       }}
-                      onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                        // if value is "", unset the field
-                        // if (e.target.value === "") {
-                        //   unsetModalField(`modals[${item.id}].properties.maxNumberOfRows`);
-                        //   return;
-                        // }
-                        // const value = parseInt(e.target.value);
-                        // if (!isNaN(value) && value >= 1) {
-                        //   updateModalProperties(item.id, {
-                        //     ...properties,
-                        //     maxNumberOfRows: value,
-                        //   });
-                        // }
+                      onChange={(e) => {
+                        setItem({
+                          ...item,
+                          properties: {
+                            ...item.properties,
+                            maxNumberOfRows: parseInt(e.target.value), // @TODO: check with below (unset)
+                          },
+                        });
                       }}
+                      // onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                      //   // if value is "", unset the field
+                      //   // if (e.target.value === "") {
+                      //   //   unsetModalField(`modals[${item.id}].properties.maxNumberOfRows`);
+                      //   //   return;
+                      //   // }
+                      //   // const value = parseInt(e.target.value);
+                      //   // if (!isNaN(value) && value >= 1) {
+                      //   //   updateModalProperties(item.id, {
+                      //   //     ...properties,
+                      //   //     maxNumberOfRows: value,
+                      //   //   });
+                      //   // }
+                      // }}
                     />
                   </section>
                 )}
@@ -294,14 +420,23 @@ export const MoreDialog = ({ className }: { className?: string }) => {
                     <Hint>{t("selectAutocompleteHint")}</Hint>
                     <div>
                       <AutocompleteDropdown
-                        handleChange={(e) => {
-                          const autoComplete = e.target.value;
-                          // updateModalProperties(item.id, {
-                          //   ...properties,
-                          //   ...{ autoComplete },
-                          // });
-                        }}
                         selectedValue={autocompleteSelectedValue as string}
+                        handleChange={(e) => {
+                          setItem({
+                            ...item,
+                            properties: {
+                              ...item.properties,
+                              autoComplete: e.target.value, // @TODO: check with below
+                            },
+                          });
+                        }}
+                        // handleChange={(e) => {
+                        //   const autoComplete = e.target.value;
+                        //   // updateModalProperties(item.id, {
+                        //   //   ...properties,
+                        //   //   ...{ autoComplete },
+                        //   // });
+                        // }}
                       />{" "}
                       <InfoDetails summary={t("autocompleteWhenNotToUse.title")}>
                         <div className="mb-8 mt-4 border-l-3 border-gray-500 pl-8">
@@ -333,24 +468,37 @@ export const MoreDialog = ({ className }: { className?: string }) => {
                                 e.preventDefault();
                               }
                             }}
-                            onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                              // if value is "", unset the field
-                              // if (e.target.value === "") {
-                              //   unsetModalField(`modals[${item.id}].validation.maxLength`);
-                              //   return;
-                              // }
-                              // const value = parseInt(e.target.value);
-                              // if (!isNaN(value) && value >= 1) {
-                              //   // clone the existing properties so that we don't overwrite other keys in "validation"
-                              //   const validation = Object.assign({}, properties.validation, {
-                              //     maxLength: value,
-                              //   });
-                              //   updateModalProperties(item.id, {
-                              //     ...properties,
-                              //     ...{ validation },
-                              //   });
-                              // }
+                            onChange={(e) => {
+                              setItem({
+                                ...item,
+                                properties: {
+                                  ...item.properties,
+                                  validation: {
+                                    // @TODO ??
+                                    ...item.properties.validation,
+                                    maxLength: parseInt(e.target.value),
+                                  },
+                                },
+                              });
                             }}
+                            // onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                            // if value is "", unset the field
+                            // if (e.target.value === "") {
+                            //   unsetModalField(`modals[${item.id}].validation.maxLength`);
+                            //   return;
+                            // }
+                            // const value = parseInt(e.target.value);
+                            // if (!isNaN(value) && value >= 1) {
+                            //   // clone the existing properties so that we don't overwrite other keys in "validation"
+                            //   const validation = Object.assign({}, properties.validation, {
+                            //     maxLength: value,
+                            //   });
+                            //   updateModalProperties(item.id, {
+                            //     ...properties,
+                            //     ...{ validation },
+                            //   });
+                            // }
+                            // }}
                           />
                         </div>
                         <InfoDetails summary={t("characterLimitWhenToUse.title")}>
@@ -364,6 +512,13 @@ export const MoreDialog = ({ className }: { className?: string }) => {
                     ))}
               </form>
             )}
+            <Button
+              data-testid="more-modal-save-button"
+              className="mr-4"
+              onClick={handleSubmit({ item, properties: item.properties })}
+            >
+              {t("save")}
+            </Button>
           </div>
         </Dialog>
       )}

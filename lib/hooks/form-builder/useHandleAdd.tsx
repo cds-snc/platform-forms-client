@@ -1,5 +1,5 @@
 "use client";
-import { useCallback } from "react";
+import { useCallback, useRef } from "react";
 import { FormElementTypes } from "@lib/types";
 import { useTemplateStore } from "@lib/store/useTemplateStore";
 import { blockLoader, LoaderType } from "../../utils/form-builder/blockLoader";
@@ -33,6 +33,12 @@ export const useHandleAdd = () => {
     return item;
   }, []);
 
+  const documentRef = useRef<Document | null>(null);
+
+  if (typeof window !== "undefined") {
+    documentRef.current = window.document;
+  }
+
   /* Note this callback is also in ElementPanel */
   const handleAddElement = useCallback(
     async (index: number, type?: FormElementTypes) => {
@@ -52,6 +58,8 @@ export const useHandleAdd = () => {
 
       const el = document.getElementById(`item-${id}`);
 
+      item.id = id;
+
       console.log({ id, index, item });
 
       const openMoreModal = new CustomEvent("open-more-dialog", {
@@ -64,7 +72,7 @@ export const useHandleAdd = () => {
         },
       });
 
-      window && window.dispatchEvent(openMoreModal);
+      documentRef.current.dispatchEvent(openMoreModal);
 
       if (!el) return;
 
