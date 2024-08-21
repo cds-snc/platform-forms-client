@@ -1,6 +1,4 @@
-import { cn } from "@lib/utils";
 import { Button } from "@clientComponents/globals";
-import { Close } from "@serverComponents/icons/Close";
 import { useTranslation } from "@i18n/client";
 import {
   Checkbox,
@@ -12,11 +10,10 @@ import {
   useDialogRef,
 } from "@formBuilder/components/shared";
 import { useCallback, useEffect, useRef, useState } from "react";
-import { ModalForm } from "./ModalForm";
-import { getPathString, getElementIndexes } from "@lib/utils/form-builder/getPath";
+import { getPathString } from "@lib/utils/form-builder/getPath";
 import { FormElementWithIndex, LocalizedElementProperties } from "@lib/types/form-builder-types";
 import { useTemplateStore } from "@lib/store/useTemplateStore";
-import { FormElementTypes } from "@lib/types";
+import { ElementProperties, FormElementTypes } from "@lib/types";
 import { AutocompleteDropdown } from "./AutocompleteDropdown";
 
 const ModalLabel = ({ children, ...props }: React.LabelHTMLAttributes<HTMLLabelElement>) => (
@@ -31,7 +28,7 @@ const Hint = ({ children, ...props }: React.HTMLAttributes<HTMLParagraphElement>
   </p>
 );
 
-export const MoreDialog = ({ className }: { className?: string }) => {
+export const MoreDialog = () => {
   const { t } = useTranslation("form-builder");
 
   const { localizeField, translationLanguagePriority } = useTemplateStore((s) => ({
@@ -55,10 +52,15 @@ export const MoreDialog = ({ className }: { className?: string }) => {
     setChangeKey(String(new Date().getTime())); //Force a re-render
   };
 
-  const handleSubmit = ({ item, properties }: { item: FormElementWithIndex; properties: any }) => {
+  const handleSubmit = ({
+    item,
+    properties,
+  }: {
+    item: FormElementWithIndex;
+    properties: ElementProperties; // @TODO: confirm type was `any` in MoreModal
+  }) => {
     return (e: React.MouseEvent<HTMLElement>) => {
       e.preventDefault();
-      // replace all of "properties" with the new properties set in the ModalForm
       updateField(getPathString(item.id, elements), properties);
       forceRefresh();
       handleClose();

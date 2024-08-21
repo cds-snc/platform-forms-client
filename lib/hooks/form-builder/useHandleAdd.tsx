@@ -60,8 +60,6 @@ export const useHandleAdd = () => {
 
       item.id = id;
 
-      console.log({ id, index, item });
-
       const openMoreModal = new CustomEvent("open-more-dialog", {
         detail: {
           item: {
@@ -72,7 +70,7 @@ export const useHandleAdd = () => {
         },
       });
 
-      documentRef.current.dispatchEvent(openMoreModal);
+      documentRef.current?.dispatchEvent(openMoreModal);
 
       if (!el) return;
 
