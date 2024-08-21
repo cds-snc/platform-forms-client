@@ -3,29 +3,22 @@ import {
   createServiceAccountInterceptor,
   ManagementServiceClient,
 } from "@zitadel/node/api";
-import { decryptSetting, getAppSetting } from "@lib/appSettings";
+
 import { checkOne } from "@lib/cache/flags";
 import { ServiceAccount } from "@zitadel/node/credentials";
 
 let zitadelClient: ManagementServiceClient | null = null;
 
 const getZitadelSettings = async () => {
-  const [encryptedAdministrationKey, zitadelProvider] = await Promise.all([
-    getAppSetting("zitadelAdministrationKey"),
-    getAppSetting("zitadelProvider"),
-  ]);
+  if (!process.env.ZITADEL_PROVIDER) throw new Error("No value set for Zitadel Provider");
 
-  if (!zitadelProvider) throw new Error("No value set for Zitadel Provider Setting");
+  if (!process.env.ZITADEL_ADMINISTRATION_KEY)
+    throw new Error("Zitadel Adminstration Key is not set");
 
-  if (!encryptedAdministrationKey)
-    throw new Error("No value set for Zitadel Administration Setting");
-
-  const zitadelAdministrationKey = decryptSetting(encryptedAdministrationKey);
-
-  if (!zitadelAdministrationKey)
-    throw new Error("Zitadel Adminstration Setting is not a valid JSON String");
-
-  return { zitadelAdministrationKey, zitadelProvider };
+  return {
+    zitadelAdministrationKey: process.env.ZITADEL_ADMINISTRATION_KEY,
+    zitadelProvider: process.env.ZITADEL_PROVIDER,
+  };
 };
 
 const createZitadelClient = async () => {
