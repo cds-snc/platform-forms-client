@@ -152,7 +152,7 @@
     },
     "formattedDate": {
       "title": "Date",
-      "description": "Un champ pour recueillir une date dans un format numérique personnablisable.
+      "description": "Un champ pour recueillir une date dans un format numérique personnablisable.",
       "label": "Entrer la date",
       "year": "Année",
       "month": "Mois",
