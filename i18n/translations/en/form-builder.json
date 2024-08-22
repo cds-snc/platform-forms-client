@@ -152,7 +152,7 @@
     },
     "formattedDate": {
       "title": "Date",
-      "description": "A date with formatting",
+      "description": "A field to collect the date in a customizable numeric format.",
       "label": "Enter the date",
       "year": "Year",
       "month": "Month",
