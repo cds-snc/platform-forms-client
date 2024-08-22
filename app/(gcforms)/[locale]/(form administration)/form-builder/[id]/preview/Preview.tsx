@@ -27,6 +27,7 @@ import { ErrorSaving } from "@formBuilder/components/shared/ErrorSaving";
 import { toast } from "@formBuilder/components/shared";
 import { defaultForm } from "@lib/store/defaults";
 import { showReviewPage } from "@lib/utils/form-builder/showReviewPage";
+import { focusHeading } from "@lib/client/clientHelpers";
 
 export const Preview = ({
   disableSubmit = true,
@@ -43,7 +44,6 @@ export const Preview = ({
     getIsPublished: s.getIsPublished,
     getSecurityAttribute: s.getSecurityAttribute,
   }));
-  const headingRef = React.useRef<HTMLHeadingElement>(null);
 
   const formParsed = safeJSONParse<FormProperties>(getSchema());
   if (!formParsed) {
@@ -185,7 +185,7 @@ export const Preview = ({
           </div>
         ) : (
           <div className="gc-formview">
-            <h1 className="mt-4" ref={headingRef}>
+            <h1 className="mt-4">
               {formRecord.form[localizeField(LocalizedFormProperties.TITLE, language)] ||
                 t("gcFormsTest", { ns: "form-builder" })}
             </h1>
@@ -212,9 +212,7 @@ export const Preview = ({
                                   {allowGrouping && isShowReviewPage && (
                                     <BackButton
                                       language={language}
-                                      callback={() => {
-                                        headingRef.current?.scrollIntoView();
-                                      }}
+                                      callback={() => focusHeading("h2")}
                                     />
                                   )}
                                   <Button

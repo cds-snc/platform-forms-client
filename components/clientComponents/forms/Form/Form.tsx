@@ -27,7 +27,6 @@ import {
 import { filterShownElements, filterValuesByShownElements } from "@lib/formContext";
 import { formHasGroups } from "@lib/utils/form-builder/formHasGroups";
 import { showReviewPage } from "@lib/utils/form-builder/showReviewPage";
-import { scrollToElement } from "@lib/client/clientHelpers";
 
 interface SubmitButtonProps {
   numberOfRequiredQuestions: number;
@@ -159,6 +158,7 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
   const isGroupsCheck = groupsCheck(props.allowGrouping);
   const isShowReviewPage = showReviewPage(form);
   const showIntro = isGroupsCheck ? currentGroup === LockedSections.START : true;
+  const groupsHeadingRef = useRef<HTMLHeadingElement>(null);
 
   const { t } = useTranslation();
 
@@ -256,7 +256,9 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
               isShowReviewPage &&
               currentGroup !== LockedSections.REVIEW &&
               currentGroup !== LockedSections.START && (
-                <h2 className="pb-8">{getGroupTitle(currentGroup, language as Language)}</h2>
+                <h2 className="pb-8" tabIndex={-1} ref={groupsHeadingRef}>
+                  {getGroupTitle(currentGroup, language as Language)}
+                </h2>
               )}
 
             {children}
@@ -275,7 +277,10 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
 
             <div className="flex">
               {isGroupsCheck && isShowReviewPage && (
-                <BackButtonGroup language={language as Language} callback={scrollToElement} />
+                <BackButtonGroup
+                  language={language as Language}
+                  callback={() => groupsHeadingRef.current?.focus()}
+                />
               )}
               {props.renderSubmit ? (
                 props.renderSubmit({
@@ -288,7 +293,7 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
                           currentGroup === LockedSections.REVIEW && (
                             <BackButton
                               language={language as Language}
-                              callback={scrollToElement}
+                              callback={() => groupsHeadingRef.current?.focus()}
                             />
                           )}
                         <div className="inline-block">
