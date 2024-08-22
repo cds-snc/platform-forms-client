@@ -8,7 +8,7 @@ import { authCheckAndThrow } from "@lib/actions";
 import { checkUserHasTemplateOwnership } from "@lib/templates";
 import { getZitadelClient } from "@lib/integration/zitadelConnector";
 
-const createUser = async (templateId: string): Promise<string> => {
+const createMachineUser = async (templateId: string) => {
   const zitadel = await getZitadelClient();
   const { userId } = await zitadel
     .addMachineUser({
@@ -27,6 +27,36 @@ const createUser = async (templateId: string): Promise<string> => {
   return userId;
 };
 
+const getMachineUser = async (templateId: string) => {
+  const zitadel = await getZitadelClient();
+  const { user } = await zitadel
+    .getUserByLoginNameGlobal({
+      loginName: templateId,
+    })
+    .catch(() => {
+      // getUserByLoginNameGlobal throws if it cannot find the user
+      return { user: undefined };
+    });
+  // If the service account does not exist for the template then create it.
+  if (!user) {
+    return createMachineUser(templateId);
+  }
+  return user.id;
+};
+
+const deleteMachineUser = async (userId: string) => {
+  const zitadel = await getZitadelClient();
+  await zitadel
+    .removeUser({
+      id: userId,
+    })
+    .catch((err) => {
+      logMessage.error(err);
+      throw new Error("Could not delete User on Identity Provider");
+    });
+  logMessage.debug(`Deleted Service User: ${userId}`);
+};
+
 const uploadKey = async (publicKey: string, userId: string): Promise<string> => {
   const zitadel = await getZitadelClient();
   const { keyId } = await zitadel
@@ -42,7 +72,7 @@ const uploadKey = async (publicKey: string, userId: string): Promise<string> => 
       throw new Error("Failed to create key");
     });
 
-  logMessage.debug(`Key ID: ${keyId}`);
+  logMessage.debug(`Service User Key ID: ${keyId}`);
   return keyId;
 };
 
@@ -78,6 +108,8 @@ export const deleteKey = async (templateId: string) => {
       templateId: templateId,
     },
   });
+
+  await deleteMachineUser(serviceAccountId);
 
   logEvent(
     ability.userID,
@@ -179,7 +211,7 @@ export const createKey = async (templateId: string) => {
   const { ability } = await authCheckAndThrow();
   await checkUserHasTemplateOwnership(ability, templateId);
 
-  const serviceAccountId = await createUser(templateId);
+  const serviceAccountId = await getMachineUser(templateId);
 
   const { privateKey, publicKey } = generateKeys();
 
