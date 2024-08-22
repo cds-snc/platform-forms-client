@@ -457,7 +457,7 @@
       "selectFormat": "Select a format for the date",
       "generalDateLabel": "General date",
       "birthDateLabel": "Birthdate",
-      "IsoFormatLabel": "YYYY-MM-DD (Government of Canada standard)",
+      "isoFormatLabel": "YYYY-MM-DD (Government of Canada standard)",
       "ddmmyyyyFormatLabel": "DD-MM-YYYY",
       "mmddyyyyFormatLabel": "MM-DD-YYYY",
       "infoLine1": "Canada’s date standard format is YYYY-MM-DD and should be your first choice unless there is a reason to choose a different format.",
