@@ -1,8 +1,5 @@
 import { fileTypeFromBuffer } from "file-type";
-import {
-  FileValidationResult,
-  validateFileToUpload,
-} from "@lib/validation/fileValidationServerSide";
+import { validateFileToUpload } from "@lib/validation/fileValidationServerSide";
 
 jest.mock("file-type");
 const mockFileTypeFromBuffer = jest.mocked(fileTypeFromBuffer, { shallow: true });
@@ -19,7 +16,7 @@ describe("Regarless of the MIME type detection, it", () => {
       Buffer.from("dGhpcyBpcyBhIG1lc3NhZ2U=")
     );
 
-    expect(sut.result).toEqual(FileValidationResult.VALID);
+    expect(sut).toStrictEqual({ status: "valid" });
   });
 
   it("should return a SIZE_IS_TOO_LARGE result if the given size is too large", async () => {
@@ -29,26 +26,34 @@ describe("Regarless of the MIME type detection, it", () => {
       Buffer.from("dGhpcyBpcyBhIG1lc3NhZ2U=")
     );
 
-    expect(sut.result).toEqual(FileValidationResult.SIZE_IS_TOO_LARGE);
-    expect(sut.detectedValue).toEqual("8389121 (fileSize) / 24 (sizeOfBuffer)");
+    expect(sut).toStrictEqual({
+      status: "size-is-too-large",
+      fileSizeInBytes: 8389121,
+      sizeOfProcessedFileDataBuffer: 24,
+    });
   });
 
   it("should return a SIZE_IS_TOO_LARGE result if the buffer size is too large", async () => {
     const sut = await validateFileToUpload("fileName.txt", 100, Buffer.alloc(8389121));
 
-    expect(sut.result).toEqual(FileValidationResult.SIZE_IS_TOO_LARGE);
-    expect(sut.detectedValue).toEqual("100 (fileSize) / 8389121 (sizeOfBuffer)");
+    expect(sut).toStrictEqual({
+      status: "size-is-too-large",
+      fileSizeInBytes: 100,
+      sizeOfProcessedFileDataBuffer: 8389121,
+    });
   });
 
-  it("should return an INVALID_EXTENSION result if the given fileName has an invalid extension", async () => {
+  it("should return an INVALID_GIVEN_EXTENSION result if the given fileName has an invalid extension", async () => {
     const sut = await validateFileToUpload(
       "fileName.zip",
       100,
       Buffer.from("dGhpcyBpcyBhIG1lc3NhZ2U=")
     );
 
-    expect(sut.result).toEqual(FileValidationResult.INVALID_EXTENSION);
-    expect(sut.detectedValue).toEqual("fileName.zip");
+    expect(sut).toStrictEqual({
+      status: "invalid-given-extension",
+      fileName: "fileName.zip",
+    });
   });
 });
 
@@ -62,10 +67,10 @@ describe("When given file has detectable MIME type", () => {
       Buffer.from("dGhpcyBpcyBhIG1lc3NhZ2U=")
     );
 
-    expect(sut.result).toEqual(FileValidationResult.VALID);
+    expect(sut).toStrictEqual({ status: "valid" });
   });
 
-  it("should return an INVALID_EXTENSION result if the detected extension is invalid", async () => {
+  it("should return an INVALID_MIME_ASSOCIATED_EXTENSION result if the detected extension is invalid", async () => {
     mockFileTypeFromBuffer.mockResolvedValueOnce({ ext: "zip", mime: "application/pdf" });
 
     const sut = await validateFileToUpload(
@@ -74,8 +79,11 @@ describe("When given file has detectable MIME type", () => {
       Buffer.from("dGhpcyBpcyBhIG1lc3NhZ2U=")
     );
 
-    expect(sut.result).toEqual(FileValidationResult.INVALID_EXTENSION);
-    expect(sut.detectedValue).toEqual("zip");
+    expect(sut).toStrictEqual({
+      status: "invalid-mime-associated-extension",
+      mimeType: "application/pdf",
+      associatedExtension: "zip",
+    });
   });
 
   it("should return an INVALID_MIME_TYPE result if the detected MIME type is invalid", async () => {
@@ -87,7 +95,9 @@ describe("When given file has detectable MIME type", () => {
       Buffer.from("dGhpcyBpcyBhIG1lc3NhZ2U=")
     );
 
-    expect(sut.result).toEqual(FileValidationResult.INVALID_MIME_TYPE);
-    expect(sut.detectedValue).toEqual("application/zip");
+    expect(sut).toStrictEqual({
+      status: "invalid-mime-type",
+      mimeType: "application/zip",
+    });
   });
 });
