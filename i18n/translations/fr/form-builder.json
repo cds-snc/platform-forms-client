@@ -27,7 +27,8 @@
       "dynamicRow": "Ajouter un ensemble de réponses",
       "richText": "Ajouter du texte de page",
       "departments": "Ajouter un ministère",
-      "combobox": "Ajouter une liste avec recherche"
+      "combobox": "Ajouter une liste avec recherche",
+      "formattedDate": "Ajouter une date"
     },
     "address": {
       "whatIsYourAddress": "Quelle est votre adresse?",
@@ -148,6 +149,15 @@
         "label": "Deuxième prénom"
       },
       "title": "Noms individuels"
+    },
+    "formattedDate": {
+      "title": "Date",
+      "description": "A date with formatting",
+      "label": "Enter the date",
+      "year": "Year",
+      "month": "Month",
+      "day": "Day",
+      "customizeDate": "Customize date"
     },
     "listItem": "Élément de liste ",
     "name": {

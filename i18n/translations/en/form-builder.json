@@ -156,7 +156,8 @@
       "label": "Enter the date",
       "year": "Year",
       "month": "Month",
-      "day": "Day"
+      "day": "Day",
+      "customizeDate": "Customize date"
     },
     "listItem": "List item ",
     "name": {
