@@ -30,8 +30,11 @@ export const AddressComplete = (props: AddressCompleteProps): React.ReactElement
       setAddressResultCache(newCache);
     }
 
+    const filteredCache = addressResultCache.filter((item: AddressCompleteChoice) => {
+      if (item.Text) return;
+    });
     setChoices(
-      addressResultCache.map((item: AddressCompleteChoice) => {
+      filteredCache.map((item: AddressCompleteChoice) => {
         return item.Text;
       })
     );
