@@ -130,7 +130,7 @@ export const ModalForm = ({
             }}
           />
 
-          <p className="mt-4 font-semibold">{t("moreDialog.selectFormat")}</p>
+          <p className="mt-4 font-semibold">{t("moreDialog.date.selectFormat")}</p>
           <Radio
             className="mt-2"
             name="dateFormat"
@@ -174,7 +174,7 @@ export const ModalForm = ({
             }}
           />
 
-          <InfoDetails summary="Which date format should you use?" className="my-4">
+          <InfoDetails summary={t("moreDialog.date.infoBox")} className="my-4">
             <div className="ml-2 border-l-2 border-gray-500 pl-4">
               <p className="my-4">{t("moreDialog.date.infoLine1")}</p>
               <p className="my-4">{t("moreDialog.date.infoLine2")}</p>
