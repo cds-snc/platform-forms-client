@@ -1,5 +1,5 @@
 "use client";
-import React, { ReactElement, useRef } from "react";
+import React, { ReactElement, useRef, useState } from "react";
 import PropTypes from "prop-types";
 import { useTranslation } from "@i18n/client";
 
@@ -73,10 +73,11 @@ export const Options = ({
   const parentIndex = elements.findIndex((element) => element.id === item.id);
   const element = elements.find((element) => element.id === item.id);
 
-  const [focusedOption, setFocusedOption] = React.useState<string | null>(null);
   const modalContainer = useRef<HTMLDivElement>(null);
-
-  const timeout = React.useRef<number | null>(null); // add interval to add timeout to be cleared
+  const [focusedOption, setFocusedOption] = useState<string | null>(null);
+  // Track the mode of the modal for adding or editing rules
+  const [modalMode, setModalMode] = useState<"add" | "edit">("add");
+  const timeout = useRef<number | null>(null); // add interval to add timeout to be cleared
 
   if (!element?.properties) {
     return null;
@@ -116,7 +117,8 @@ export const Options = ({
           }
         />
         <ConditionalIndicatorOption
-          handleOpen={() => {
+          handleOpen={(mode) => {
+            setModalMode(mode);
             // @ts-expect-error -- div is using imperative handle
             modalContainer.current?.showModal();
           }}
@@ -137,7 +139,13 @@ export const Options = ({
         </div>
       </div>
       <div>
-        <ModalRules modalRef={modalContainer} item={item} formId={formId} />
+        <ModalRules
+          mode={modalMode}
+          focusedOption={focusedOption}
+          modalRef={modalContainer}
+          item={item}
+          formId={formId}
+        />
       </div>
     </div>
   );

@@ -5,31 +5,51 @@ import {
   isIndividualFileSizeValid,
 } from "./fileValidationClientSide";
 
-export enum FileValidationResult {
-  VALID,
-  SIZE_IS_TOO_LARGE,
-  INVALID_EXTENSION,
-  INVALID_MIME_TYPE,
-}
+export type FileValidationResult =
+  | {
+      status: "valid";
+    }
+  | {
+      status: "size-is-too-large";
+      fileSizeInBytes: number;
+      sizeOfProcessedFileDataBuffer: number;
+    }
+  | {
+      status: "invalid-given-extension";
+      fileName: string;
+    }
+  | {
+      status: "invalid-mime-associated-extension";
+      mimeType: string;
+      associatedExtension: string;
+    }
+  | {
+      status: "invalid-mime-type";
+      mimeType: string;
+    };
 
 export async function validateFileToUpload(
   fileName: string,
-  fileSize: number,
+  fileSizeInBytes: number,
   fileAsBuffer: Buffer
-): Promise<{ result: FileValidationResult; detectedValue?: string }> {
+): Promise<FileValidationResult> {
   const sizeOfBufferInBytes = Buffer.byteLength(fileAsBuffer);
 
-  if (!isIndividualFileSizeValid(fileSize) || !isIndividualFileSizeValid(sizeOfBufferInBytes)) {
+  if (
+    !isIndividualFileSizeValid(fileSizeInBytes) ||
+    !isIndividualFileSizeValid(sizeOfBufferInBytes)
+  ) {
     return {
-      result: FileValidationResult.SIZE_IS_TOO_LARGE,
-      detectedValue: `${fileSize} (fileSize) / ${sizeOfBufferInBytes.toString()} (sizeOfBuffer)`,
+      status: "size-is-too-large",
+      fileSizeInBytes,
+      sizeOfProcessedFileDataBuffer: sizeOfBufferInBytes,
     };
   }
 
   if (!isFileExtensionValid(fileName)) {
     return {
-      result: FileValidationResult.INVALID_EXTENSION,
-      detectedValue: fileName,
+      status: "invalid-given-extension",
+      fileName,
     };
   }
 
@@ -39,15 +59,16 @@ export async function validateFileToUpload(
     // isFileExtensionValid expect a complete filename but the file-type API only gives us the extension
     if (!isFileExtensionValid(`test.${fileTypeResult.ext}`)) {
       return {
-        result: FileValidationResult.INVALID_EXTENSION,
-        detectedValue: fileTypeResult.ext,
+        status: "invalid-mime-associated-extension",
+        mimeType: fileTypeResult.mime,
+        associatedExtension: fileTypeResult.ext,
       };
     }
 
     if (!isFileMimeTypeValid(fileTypeResult.mime)) {
       return {
-        result: FileValidationResult.INVALID_MIME_TYPE,
-        detectedValue: fileTypeResult.mime,
+        status: "invalid-mime-type",
+        mimeType: fileTypeResult.mime,
       };
     }
   } else {
@@ -58,7 +79,7 @@ export async function validateFileToUpload(
      */
   }
 
-  return { result: FileValidationResult.VALID };
+  return { status: "valid" };
 }
 
 function isFileMimeTypeValid(mimeType: string): boolean {
