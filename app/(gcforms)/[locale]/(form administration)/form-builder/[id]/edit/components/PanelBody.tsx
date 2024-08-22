@@ -52,7 +52,7 @@ export const PanelBody = ({
 
   const moreButton = (
     <Button theme="secondary" onClick={() => {}}>
-      Customize date
+      {t("addElementDialog.formattedDate.customizeDate")}
     </Button>
   );
 
