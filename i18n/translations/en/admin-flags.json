@@ -10,10 +10,6 @@
   "featureStatus": "Status",
   "featureSwitch": "On/Off",
   "features": {
-    "zitadelAuth": {
-      "title": "Zitadel Auth",
-      "description": "Integrate with Zitadel Auth instead of Cognito"
-    },
     "experimentalBlocks": {
       "title": "Experimental blocks",
       "description": "Enable experimental blocks"

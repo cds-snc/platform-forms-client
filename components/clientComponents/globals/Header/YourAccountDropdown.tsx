@@ -18,7 +18,7 @@ export const YourAccountDropdown = ({ isAuthenticated }: YourAccountDropdownProp
 
   const handleLogout = () => {
     clearTemplateStore();
-    signOut({ redirect: true, callbackUrl: `/${i18n.language}/auth/logout` });
+    signOut({ callbackUrl: `/${i18n.language}/auth/logout` });
   };
 
   const DropdownMenuItem = ({

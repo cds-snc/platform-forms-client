@@ -12,11 +12,3 @@ export const isServer = (): boolean => {
 export function filterUndef<T>(ts: (T | undefined)[]): T[] {
   return ts.filter((t: T | undefined): t is T => !!t);
 }
-
-export function safeJSONParseM<T>(args: Parameters<typeof JSON.parse>): T | undefined {
-  try {
-    return JSON.parse(...args);
-  } catch (e) {
-    return undefined;
-  }
-}

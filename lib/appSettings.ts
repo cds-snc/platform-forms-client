@@ -115,7 +115,6 @@ export const updateAppSetting = async (
       `Updated setting with ${JSON.stringify(settingData)}`
     );
     if (settingData.value) {
-      // Add the setting to the Settings cache
       settingPut(internalId, settingData.value);
     }
     return updatedSetting;

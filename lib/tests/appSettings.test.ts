@@ -42,7 +42,6 @@ describe("Application Settings", () => {
       descriptionEn: null,
       descriptionFr: null,
       value: "123",
-      encrypted: false,
     });
     const setting = await getAppSetting("testSetting");
 
@@ -69,7 +68,6 @@ describe("Application Settings", () => {
           descriptionEn: null,
           descriptionFr: null,
           value: "123",
-          encrypted: false,
         },
         {
           internalId: "testSetting 2",
@@ -78,7 +76,6 @@ describe("Application Settings", () => {
           descriptionEn: null,
           descriptionFr: null,
           value: "456",
-          encrypted: false,
         },
       ]);
       const settings = await getAllAppSettings(ability);
@@ -118,7 +115,6 @@ describe("Application Settings", () => {
         nameEn: "Test Setting",
         nameFr: "[FR] Test Setting",
         value: "123",
-        encrypted: false,
       };
 
       prismaMock.setting.create.mockResolvedValue({
@@ -135,7 +131,7 @@ describe("Application Settings", () => {
         "1",
         { id: "testSetting", type: "Setting" },
         "CreateSetting",
-        'Created setting with {"internalId":"testSetting","nameEn":"Test Setting","nameFr":"[FR] Test Setting","value":"123","encrypted":false}'
+        'Created setting with {"internalId":"testSetting","nameEn":"Test Setting","nameFr":"[FR] Test Setting","value":"123"}'
       );
       expect(newSetting).toMatchObject({
         internalId: "testSetting",
@@ -191,13 +187,7 @@ describe("Application Settings", () => {
         nameEn: "Test Setting",
         nameFr: "[FR] Test Setting",
         value: "123",
-        encrypted: false,
       };
-      prismaMock.setting.findUniqueOrThrow.mockResolvedValue({
-        ...data,
-        descriptionEn: null,
-        descriptionFr: null,
-      });
 
       prismaMock.setting.update.mockResolvedValue({
         ...data,
@@ -213,7 +203,7 @@ describe("Application Settings", () => {
         "1",
         { id: "testSetting", type: "Setting" },
         "ChangeSetting",
-        'Updated setting with {"internalId":"testSetting","nameEn":"Test Setting","nameFr":"[FR] Test Setting","value":"123","encrypted":false}'
+        'Updated setting with {"internalId":"testSetting","nameEn":"Test Setting","nameFr":"[FR] Test Setting","value":"123"}'
       );
       expect(newSetting).toMatchObject({
         internalId: "testSetting",
@@ -273,7 +263,6 @@ describe("Application Settings", () => {
         descriptionEn: null,
         descriptionFr: null,
         value: "123",
-        encrypted: false,
       });
 
       await deleteAppSetting(ability, "testSetting");
@@ -284,7 +273,7 @@ describe("Application Settings", () => {
         "1",
         { id: "testSetting", type: "Setting" },
         "DeleteSetting",
-        'Deleted setting with {"internalId":"testSetting","nameEn":"Test Setting","nameFr":"[FR] Test Setting","descriptionEn":null,"descriptionFr":null,"value":"123","encrypted":false}'
+        'Deleted setting with {"internalId":"testSetting","nameEn":"Test Setting","nameFr":"[FR] Test Setting","descriptionEn":null,"descriptionFr":null,"value":"123"}'
       );
     });
     test("Only users with correct privileges can delete app settings", async () => {

@@ -3,7 +3,6 @@ import {
   createServiceAccountInterceptor,
   ManagementServiceClient,
 } from "@zitadel/node/api";
-
 import { checkOne } from "@lib/cache/flags";
 import { ServiceAccount } from "@zitadel/node/credentials";
 
