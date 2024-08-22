@@ -98,14 +98,14 @@ export const ModalForm = ({
       </section>
       {item.type === FormElementTypes.formattedDate && (
         <section className="mb-4">
-          <h3>Date options</h3>
-          <p className="mt-4 font-semibold">What type of date is collected?</p>
+          <h3>{t("moreDialog.date.dateOptions")}</h3>
+          <p className="mt-4 font-semibold">{t("moreDialog.date.typeOfDate")}</p>
 
           <Radio
             className="mt-2"
             name="autoComplete"
             id="autoComplete-general"
-            label="General date"
+            label={t("moreDialog.date.generalDateLabel")}
             value=""
             checked={!properties.autoComplete}
             onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
@@ -119,7 +119,7 @@ export const ModalForm = ({
             className="mt-2"
             name="autoComplete"
             id="autoComplete-bday"
-            label="Birthdate"
+            label={t("moreDialog.date.birthDateLabel")}
             value="bday"
             checked={properties.autoComplete === "bday"}
             onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
@@ -130,12 +130,12 @@ export const ModalForm = ({
             }}
           />
 
-          <p className="mt-4 font-semibold">Select a format for the date</p>
+          <p className="mt-4 font-semibold">{t("moreDialog.selectFormat")}</p>
           <Radio
             className="mt-2"
             name="dateFormat"
             id="dateFormat-iso"
-            label="YYYY-MM-DD (Government of Canada standard)"
+            label={t("moreDialog.date.isoFormatLabel")}
             value="YYYY-MM-DD"
             checked={properties.dateFormat === "YYYY-MM-DD"}
             onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
@@ -149,7 +149,7 @@ export const ModalForm = ({
             className="mt-2"
             name="dateFormat"
             id="dateFormat-ddmmyyyy"
-            label="DD-MM-YYYY"
+            label={t("moreDialog.date.ddmmyyyyFormatLabel")}
             value="DD-MM-YYYY"
             checked={properties.dateFormat === "DD-MM-YYYY"}
             onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
@@ -163,7 +163,7 @@ export const ModalForm = ({
             className="mt-2"
             name="dateFormat"
             id="dateFormat-mmddyyyy"
-            label="MM-DD-YYYY"
+            label={t("moreDialog.date.mmddyyyyFormatLabel")}
             value="MM-DD-YYYY"
             checked={properties.dateFormat === "MM-DD-YYYY"}
             onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
@@ -176,15 +176,8 @@ export const ModalForm = ({
 
           <InfoDetails summary="Which date format should you use?" className="my-4">
             <div className="ml-2 border-l-2 border-gray-500 pl-4">
-              <p className="my-4">
-                Canada’s date standard format is YYYY-MM-DD and should be your first choice unless
-                there is a reason to choose a different format.
-              </p>
-              <p className="my-4">
-                For example, when asking for a date exactly as it’s shown on a passport, card or
-                other document, make the fields match the format of the original. This makes it
-                easier for users to copy the date across accurately.
-              </p>
+              <p className="my-4">{t("moreDialog.date.infoLine1")}</p>
+              <p className="my-4">{t("moreDialog.date.infoLine2")}</p>
             </div>
           </InfoDetails>
         </section>

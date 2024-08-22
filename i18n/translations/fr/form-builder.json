@@ -450,6 +450,20 @@
     "label": "Nombre maximum de réponses"
   },
   "more": "Plus",
+  "moreDialog": {
+    "date": {
+      "dateOptions": "Date options",
+      "typeOfDate": "What type of date is collected?",
+      "selectFormat": "Select a format for the date",
+      "generalDateLabel": "General date",
+      "birthDateLabel": "Birthdate",
+      "IsoFormatLabel": "YYYY-MM-DD (Government of Canada standard)",
+      "ddmmyyyyFormatLabel": "DD-MM-YYYY",
+      "mmddyyyyFormatLabel": "MM-DD-YYYY",
+      "infoLine1": "Canada’s date standard format is YYYY-MM-DD and should be your first choice unless there is a reason to choose a different format.",
+      "infoLine2": "For example, when asking for a date exactly as it’s shown on a passport, card or other document, make the fields match the format of the original. This makes it easier for users to copy the date across accurately."
+    }
+  },
   "moreOptions": "Plus d'options  ",
   "moveDown": "Déplacer vers le bas ",
   "moveUp": "Déplacer vers le haut ",
