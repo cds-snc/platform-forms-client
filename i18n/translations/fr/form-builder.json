@@ -152,12 +152,12 @@
     },
     "formattedDate": {
       "title": "Date",
-      "description": "A date with formatting",
-      "label": "Enter the date",
-      "year": "Year",
-      "month": "Month",
-      "day": "Day",
-      "customizeDate": "Customize date"
+      "description": "Un champ pour recueillir une date dans un format numérique personnablisable.
+      "label": "Entrer la date",
+      "year": "Année",
+      "month": "Mois",
+      "day": "Jour",
+      "customizeDate": "Adapter le format de la date"
     },
     "listItem": "Élément de liste ",
     "name": {
@@ -452,16 +452,16 @@
   "more": "Plus",
   "moreDialog": {
     "date": {
-      "dateOptions": "Date options",
-      "typeOfDate": "What type of date is collected?",
-      "selectFormat": "Select a format for the date",
-      "generalDateLabel": "General date",
-      "birthDateLabel": "Birthdate",
-      "isoFormatLabel": "YYYY-MM-DD (Government of Canada standard)",
-      "ddmmyyyyFormatLabel": "DD-MM-YYYY",
-      "mmddyyyyFormatLabel": "MM-DD-YYYY",
-      "infoLine1": "Canada’s date standard format is YYYY-MM-DD and should be your first choice unless there is a reason to choose a different format.",
-      "infoLine2": "For example, when asking for a date exactly as it’s shown on a passport, card or other document, make the fields match the format of the original. This makes it easier for users to copy the date across accurately."
+      "dateOptions": "Options de date",
+      "typeOfDate": "Quel type de date recueillez-vous?",
+      "selectFormat": "Sélectionnez un format pour la date",
+      "generalDateLabel": "Date générale",
+      "birthDateLabel": "Date de naissance",
+      "isoFormatLabel": "AAAA-MM-JJ (Standard du Gouvernement du Canada)",
+      "ddmmyyyyFormatLabel": "JJ-MM-AAAA",
+      "mmddyyyyFormatLabel": "MM-JJ-AAAA",
+      "infoLine1": "Le format standard de la date au Canada est AAAA-MM-JJ et devrait être votre premier choix, à moins qu'il n'y ait une raison de choisir un format différent.",
+      "infoLine2": "Par exemple, lorsque vous demandez la date exacte d'un passeport, d'une carte ou d'un autre document, faites en sorte que les champs correspondent au format de l'original. Il est ainsi plus facile pour les utilisateurs de recopier la date avec précision."
     }
   },
   "moreOptions": "Plus d'options  ",
