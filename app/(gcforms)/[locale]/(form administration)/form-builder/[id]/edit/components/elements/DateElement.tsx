@@ -21,7 +21,7 @@ export const DateElement = ({ dateFormat = "YYYY-MM-DD" }: { dateFormat?: DateFo
   });
 
   return (
-    <div className="my-4 flex flex-row gap-2 text-lg opacity-65">
+    <div className="my-4 flex flex-row gap-2 text-lg opacity-65" data-testid="example-date-element">
       {dateParts.map((part) => {
         return (
           <div key={part}>

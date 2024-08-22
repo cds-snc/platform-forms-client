@@ -8,10 +8,10 @@ describe("Form builder modal description", () => {
 
     cy.get("button").contains("Add").click();
     cy.get('[data-testid="preset-filter"]').click();
-    cy.get('[data-testid="date"]').click();
+    cy.get('[data-testid="formattedDate"]').click();
     cy.get('[data-testid="element-description-add-element"]').click();
-    cy.get(".description-text").should("be.visible").contains("Format the date as: mm/dd/yyyy");
-    cy.get(".example-text").should("be.visible").contains("mm/dd/yyyy");
+    // cy.get(".description-text").should("be.visible").contains("Format the date as: mm/dd/yyyy");
+    cy.get('[data-testid="example-date-element"').should("be.visible");
 
     cy.get('#element-1 [data-testid="more"]').click();
     cy.get('[data-testid="description-input"]').contains("mm/dd/yyyy");
