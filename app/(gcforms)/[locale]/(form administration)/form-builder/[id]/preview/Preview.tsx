@@ -27,7 +27,7 @@ import { ErrorSaving } from "@formBuilder/components/shared/ErrorSaving";
 import { toast } from "@formBuilder/components/shared";
 import { defaultForm } from "@lib/store/defaults";
 import { showReviewPage } from "@lib/utils/form-builder/showReviewPage";
-import { focusHeading } from "@lib/client/clientHelpers";
+import { focusElement } from "@lib/client/clientHelpers";
 
 export const Preview = ({
   disableSubmit = true,
@@ -212,7 +212,7 @@ export const Preview = ({
                                   {allowGrouping && isShowReviewPage && (
                                     <BackButton
                                       language={language}
-                                      callback={() => focusHeading("h2")}
+                                      callback={() => focusElement("h2")}
                                     />
                                   )}
                                   <Button

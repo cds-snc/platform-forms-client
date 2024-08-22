@@ -21,17 +21,18 @@ export const scrollToBottom = (containerEl: HTMLElement) => {
 };
 
 /**
- * Focusses and announces to AT a element. Use this when there is no access to a element (ref)
- * from the caller. For example see NextButton.tsx in the Form wrapper that has no access to the
- * Form groups heading.
- * Use as a last resort. Prefer using a react ref over this when possible.
- * @param elementName element name to scroll to. Defaults to H1 (element must have a tabIndex)
+ * When a function does not have access to an element (ref), use the DOM to get an element and
+ * after the next tick (after the current event loop), focus the element. This moves the page to
+ * the element location and announces the text in the element to AT. Use a react ref over this to
+ * get and focus an element when possible.
+ * @param elementSelector selector to get the DOM element (first one found). Defaults to H1. Must
+ * have a tabIndex.
  * @returns undefined
  */
-export const focusHeading = (elementName = "H1") => {
+export const focusElement = (elementSelector = "H1") => {
   const NEXT_TICK = 0;
   setTimeout(() => {
-    (document.getElementsByTagName(elementName)?.[0] as HTMLElement)?.focus();
+    (document.querySelector(elementSelector) as HTMLElement)?.focus();
   }, NEXT_TICK);
 };
 
