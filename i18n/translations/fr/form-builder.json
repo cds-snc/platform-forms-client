@@ -183,16 +183,16 @@
       "example": "Texte de paragraphe qui peut être mis en forme avec du <strong>gras</strong> ou de l'<i>italique</i>, ou avec des <a tab-index=\"-1\" href=\"#\">hyperliens</a>.",
       "title": "Texte de page"
     },
-    "textArea": {
-      "title": "Réponse longue",
-      "description": "Une zone de texte pour une réponse libre de plusieurs lignes.",
-      "enterAnswer": "Question",
-      "forExample": "Texte explicatif ou exemple"
-    },
     "textField": {
       "description": "Un champ de texte pour une réponse d’une seule ligne.",
       "title": "Réponse courte",
       "enterAnswer": "Étiquette",
+      "forExample": "Texte explicatif ou exemple"
+    },
+    "textArea": {
+      "title": "Réponse longue",
+      "description": "Une zone de texte pour une réponse libre de plusieurs lignes.",
+      "enterAnswer": "Question",
       "forExample": "Texte explicatif ou exemple"
     }
   },
@@ -370,6 +370,7 @@
   "formatH3": "Mettre en en-tête niveau 3",
   "formatItalic": "Mettre en italique",
   "formatNumberedList": "Mettre en liste numérotée",
+  "formattedDate": "Date",
   "formConfirmationMessage": "Message de confirmation",
   "formDeleteResponses": {
     "title": "Approuvez la suppression des réponses avant de supprimer le formulaire",
@@ -583,7 +584,6 @@
   "settingsNavHome": "Livraison des réponses",
   "settingsResponseEmailTitle": "Adresse courriel",
   "settingsResponseHint1": "Les réponses seront envoyées par courriel à cette boîte de réception. Il peut s'agir d'une boîte de réception partagée.",
-  "settingsResponseTitle": "Destination de livraison des réponses.",
   "settingsPurposeAndUse": {
     "title": "Usage prévu",
     "description": "Nous utiliserons cette information pour déterminer comment traiter les réponses qui sont dans Formulaires GC depuis plus de 45 jours.",
@@ -819,9 +819,9 @@
       "title": "Le téléchargement est limité aux réponses en retard jusqu'à ce qu'elles soient téléchargées et approuvées pour suppression",
       "body1": "Il y a",
       "body2": "réponses téléchargées avec 35 jours de retard ou plus. Approuvez la suppression de toute réponse téléchargée en retard avant d'en enregistrer de nouvelles."
-    },
-    "loading": "Chargement..."
+    }
   },
+  "loading": "Chargement...",
   "formSettingsModal": {
     "title": "Configurer le formulaire",
     "okay": "Enregistrer",

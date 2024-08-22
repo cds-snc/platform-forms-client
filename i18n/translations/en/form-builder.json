@@ -283,7 +283,6 @@
     "gcFormsTeamPart2": "page to find the department or agency that can help.",
     "ifYouExperience": "To get technical support, use the ",
     "followUp": "Provide your contact information so we can follow up with you.",
-
     "needSupport": "Need help using GC Forms?",
     "request": {
       "option1": "Join the mailing list",
@@ -424,8 +423,8 @@
   "formTitle": "Form title",
   "french": "French",
   "gcForms": "GC Forms",
-  "gcFormsApi": "API",
   "gcFormsEdit": "Edit",
+  "gcFormsApi": "API",
   "gcFormsPublish": "Publish",
   "gcFormsPublished": "Published",
   "gcFormsSettings": "Settings",
@@ -770,8 +769,8 @@
   },
   "test": "Test",
   "textFormatting": "Text formatting",
-  "thereWasAnErrorPublishing": "There was an error publishing the form",
   "title": "Title",
+  "thereWasAnErrorPublishing": "There was an error publishing the form",
   "tooltipFormatBold": "Bold (⌘B)",
   "tooltipFormatBulletList": "Bulleted list",
   "tooltipFormatH2": "Heading 2",
