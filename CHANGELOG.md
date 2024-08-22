@@ -917,7 +917,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - [BREAKING]: Modified the Prisma schema for the "User" table; removing the `admin` column, and adding the `role` column. After migrating, at least one user role will need to manually be set to `administrator` in order to login the Admin portion of the site. [#906](https://github.com/cds-snc/platform-forms-client/pull/906)
 - Added file attachments to retrieval API [#909](https://github.com/cds-snc/platform-forms-client/pull/909)
 - New login lockout mechanism plugged on existing temporary token API [#872](https://github.com/cds-snc/platform-forms-client/issues/872)
-- Logout Page [#847] (https://github.com/cds-snc/platform-forms-client/issues/870)
+- Logout Page [#847] (<https://github.com/cds-snc/platform-forms-client/issues/870>)
 - Admin feature to assign users to template [#1203](https://github.com/cds-snc/platform-forms-client/issues/1203)
 - New API path to request publishing permission [#1226](https://github.com/cds-snc/platform-forms-client/issues/1226)
 - Dynamic footer with SLA and Support links on admin and form builder related pages [#1080](https://github.com/cds-snc/platform-forms-client/issues/1080)
@@ -985,7 +985,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - [BREAKING]: Modified the Prisma schema for the "User" table; removing the `admin` column, and adding the `role` column. After migrating, at least one user role will need to manually be set to `administrator` in order to login the Admin portion of the site. [#906](https://github.com/cds-snc/platform-forms-client/pull/906)
 - Added file attachments to retrieval API [#909](https://github.com/cds-snc/platform-forms-client/pull/909)
 - New login lockout mechanism plugged on existing temporary token API [#872](https://github.com/cds-snc/platform-forms-client/issues/872)
-- Logout Page [#847] (https://github.com/cds-snc/platform-forms-client/issues/870)
+- Logout Page [#847] (<https://github.com/cds-snc/platform-forms-client/issues/870>)
 - Admin feature to assign users to template [#1203](https://github.com/cds-snc/platform-forms-client/issues/1203)
 - New API path to request publishing permission [#1226](https://github.com/cds-snc/platform-forms-client/issues/1226)
 - Dynamic footer with SLA and Support links on admin and form builder related pages [#1080](https://github.com/cds-snc/platform-forms-client/issues/1080)
@@ -1033,14 +1033,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - Logging admin activity in database [#700](https://github.com/cds-snc/platform-forms-client/issues/700)
-- Add Cross-Site Request Forgery (CSRF) [#716] (https://github.com/cds-snc/platform-forms-client/issues/716)
+- Add Cross-Site Request Forgery (CSRF) [#716] (<https://github.com/cds-snc/platform-forms-client/issues/716>)
 - Data classification attributes. [#701](https://github.com/cds-snc/platform-forms-client/issues/701)
 
 ### Fixed
 
 - Fixed retrieval API not returning all existing responses
 - Removed the security attribute from the viewport.
-- Added CSRF token requirement to `api/log` endpoint [#835]((https://github.com/cds-snc/platform-forms-client/pull/835)
+- Added CSRF token requirement to `api/log` endpoint [#835]((<https://github.com/cds-snc/platform-forms-client/pull/835>)
 
 ### Changed
 
