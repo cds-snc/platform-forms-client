@@ -879,7 +879,8 @@
     "removeRule": "Remove",
     "addOther": "Add \"Other\" option",
     "other": "Other ",
-    "show": "Show:"
+    "show": "Show:",
+    "selectQuestion": "Select a question"
   },
   "saved": "Saved",
   "opensInNewTab": "opens in a new tab",
