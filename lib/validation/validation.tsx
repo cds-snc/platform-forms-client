@@ -151,7 +151,7 @@ const isFieldResponseValid = (
         return t("input-validation.required");
       }
 
-      if (!isValidDate(value as DateObject)) {
+      if (value && !isValidDate(JSON.parse(value as string) as DateObject)) {
         return t("input-validation.date-invalid");
       }
 
