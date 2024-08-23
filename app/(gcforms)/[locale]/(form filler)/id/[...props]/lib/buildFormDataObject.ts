@@ -78,6 +78,7 @@ function _handleFormDataType(
   switch (element.type) {
     case FormElementTypes.textField:
     case FormElementTypes.textArea:
+    case FormElementTypes.formattedDate: // formattedDate is stored as serialized JSON (string)
       // string
       return _handleFormDataText(element.id.toString(), value as string);
     case FormElementTypes.dropdown:
@@ -95,8 +96,6 @@ function _handleFormDataType(
       return _handleFormDataFileInput(element.id.toString(), value as FileInputResponse);
     case FormElementTypes.richText:
       return undefined;
-    case FormElementTypes.formattedDate:
-      return _handlFormDataObject(element.id.toString(), value);
   }
 }
 
@@ -115,8 +114,4 @@ function _handleFormDataText(key: string, value: string): [string, string] {
 
 function _handleFormDataArray(key: string, value: Array<string>): [string, string] {
   return [key, JSON.stringify({ value: value })];
-}
-
-function _handlFormDataObject(key: string, value: Response): [string, string] {
-  return [key, JSON.stringify(value)];
 }

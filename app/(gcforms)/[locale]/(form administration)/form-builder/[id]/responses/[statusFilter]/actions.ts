@@ -115,6 +115,10 @@ const getAnswerAsString = (question: FormElement | undefined, answer: unknown): 
   }
 
   if (question && question.type === "formattedDate") {
+    // Could be empty if the date was not required
+    if (!answer) {
+      return "";
+    }
     const dateFormat = (question.properties.dateFormat || "YYYY-MM-DD") as DateFormat;
     const dateObject = JSON.parse(answer as string) as DateObject;
 
