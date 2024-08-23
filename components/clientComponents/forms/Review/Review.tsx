@@ -46,10 +46,10 @@ function formatElementValues(element: ReviewElement) {
   }
 
   // Case of a Formatted date
-  if ((element.values as DateObject).YYYY !== undefined) {
+  if (element.element?.type === FormElementTypes.formattedDate) {
     return getFormattedDateFromObject(
       element.element?.properties.dateFormat as DateFormat,
-      element.values as DateObject
+      JSON.parse(element.values as string) as DateObject
     );
   }
 
