@@ -2,11 +2,7 @@
 import React from "react";
 import { useTranslation } from "@i18n/client";
 import { ExampleWrapper } from "./ExampleWrapper";
-import {
-  FormattedDate as FormattedDateComponent,
-  Description,
-  Label,
-} from "@clientComponents/forms";
+import { FormattedDate as FormattedDateComponent, Label } from "@clientComponents/forms";
 
 export const FormattedDate = () => {
   const { t } = useTranslation("form-builder");
