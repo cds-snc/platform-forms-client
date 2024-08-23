@@ -211,7 +211,7 @@ const QuestionsAnswersList = ({ reviewItem }: { reviewItem: ReviewItem }): React
           return (
             <div key={randomId()} className="mb-8">
               <dt className="mb-2 font-bold">{reviewElement.title}</dt>
-              <dd>{formatElementValues(reviewElement)}</dd>
+              <dd>{reviewElement.values as string}</dd>
             </div>
           );
         })}
