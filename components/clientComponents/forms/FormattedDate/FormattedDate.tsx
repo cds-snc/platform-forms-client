@@ -45,22 +45,55 @@ export const FormattedDate = (props: FormattedDateProps): React.ReactElement => 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [field, meta, helpers] = useField(props);
 
-  const [selectedMonth, setSelectedMonth] = useState(1);
-  const [selectedYear, setSelectedYear] = useState(new Date().getFullYear());
-  const [selectedDay, setSelectedDay] = useState(1);
-
-  const getDateObject = (year: number, month: number, day: number): DateObject => {
-    return {
-      YYYY: year,
-      MM: month,
-      DD: day,
-    } as DateObject;
-  };
+  const [dateObject, setDateObject] = useState<DateObject | null>(
+    field.value ? JSON.parse(field.value) : null
+  );
 
   useEffect(() => {
-    helpers.setValue(getDateObject(selectedYear, selectedMonth, selectedDay));
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [selectedYear, selectedMonth, selectedDay]);
+    if (field.value) {
+      const parsedValue = JSON.parse(field.value);
+      setDateObject(parsedValue);
+    }
+  }, [field.value]);
+
+  useEffect(() => {
+    if (dateObject) {
+      helpers.setValue(JSON.stringify(dateObject));
+    } else {
+      helpers.setValue("");
+    }
+  }, [dateObject, helpers]);
+
+  const setSelectedYear = (year: string) =>
+    setDateObject((prev) => {
+      const newObj = { ...prev };
+      if (year === "") {
+        delete newObj.YYYY;
+      } else {
+        newObj.YYYY = Number(year);
+      }
+      return newObj as DateObject;
+    });
+  const setSelectedMonth = (month: string) =>
+    setDateObject((prev) => {
+      const newObj = { ...prev };
+      if (month === "") {
+        delete newObj.MM;
+      } else {
+        newObj.MM = Number(month);
+      }
+      return newObj as DateObject;
+    });
+  const setSelectedDay = (day: string) =>
+    setDateObject((prev) => {
+      const newObj = { ...prev };
+      if (day === "") {
+        delete newObj.DD;
+      } else {
+        newObj.DD = Number(day);
+      }
+      return newObj as DateObject;
+    });
 
   const isLeapYear = (year: number) => {
     return year % 400 === 0 || (year % 100 !== 0 && year % 4 === 0);
@@ -91,11 +124,7 @@ export const FormattedDate = (props: FormattedDateProps): React.ReactElement => 
       {description && <Description id={id}>{description}</Description>}
 
       <div className="flex gap-2">
-        <input
-          type="hidden"
-          {...field}
-          value={JSON.stringify(getDateObject(selectedYear, selectedMonth, selectedDay))}
-        />
+        <input type="hidden" {...field} />
         {dateParts.map((part) => {
           return part === DatePart.MM && monthSelector === "select" ? (
             <div key={part}>
@@ -104,7 +133,7 @@ export const FormattedDate = (props: FormattedDateProps): React.ReactElement => 
                 name={`${name}-${part}`}
                 id={`${name}-${part}`}
                 className="gc-dropdown w-36"
-                onChange={(e) => setSelectedMonth(Number(e.target.value))}
+                onChange={(e) => setSelectedMonth(e.target.value)}
                 required={required}
                 data-testid="month-select"
               >
@@ -126,7 +155,8 @@ export const FormattedDate = (props: FormattedDateProps): React.ReactElement => 
                 max={12}
                 autoComplete={autocomplete ? "bday-month" : undefined}
                 className={classnames("gc-input-text", "w-16")}
-                onChange={(e) => setSelectedMonth(Number(e.target.value))}
+                value={dateObject?.MM || ""}
+                onChange={(e) => setSelectedMonth(e.target.value)}
                 required={required}
                 data-testid="month-number"
               />
@@ -141,7 +171,8 @@ export const FormattedDate = (props: FormattedDateProps): React.ReactElement => 
                 min={1900}
                 autoComplete={autocomplete ? "bday-year" : undefined}
                 className={classnames("gc-input-text", "w-28")}
-                onChange={(e) => setSelectedYear(Number(e.target.value))}
+                value={dateObject?.YYYY || ""}
+                onChange={(e) => setSelectedYear(e.target.value)}
                 required={required}
                 data-testid="year-number"
               />
@@ -154,10 +185,15 @@ export const FormattedDate = (props: FormattedDateProps): React.ReactElement => 
                 id={`${name}-${part}`}
                 type="number"
                 min={1}
-                max={getMaxDay(selectedMonth, selectedYear)}
+                max={
+                  dateObject?.MM && dateObject?.YYYY
+                    ? getMaxDay(dateObject.MM, dateObject.YYYY)
+                    : 31
+                }
                 autoComplete={autocomplete ? "bday-day" : undefined}
                 className={classnames("gc-input-text", "w-16")}
-                onChange={(e) => setSelectedDay(Number(e.target.value))}
+                value={dateObject?.DD || ""}
+                onChange={(e) => setSelectedDay(e.target.value)}
                 required={required}
                 data-testid="day-number"
               />
