@@ -162,7 +162,7 @@ describe("<FormattedDate />", () => {
           throw new Error("Function not implemented.");
         }}
       >
-        <FormattedDate />
+        <FormattedDate name="formattedDate" />
       </Formik>
     );
 
