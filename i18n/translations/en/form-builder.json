@@ -453,10 +453,10 @@
   "moreDialog": {
     "date": {
       "dateOptions": "Date options",
-      "typeOfDate": "What type of date is collected?",
+      "typeOfDate": "What type of date is being collected?",
       "selectFormat": "Select a format for the date",
       "generalDateLabel": "General date",
-      "birthDateLabel": "Birthdate",
+      "birthDateLabel": "Date of birth",
       "isoFormatLabel": "YYYY-MM-DD (Government of Canada standard)",
       "ddmmyyyyFormatLabel": "DD-MM-YYYY",
       "mmddyyyyFormatLabel": "MM-DD-YYYY",
