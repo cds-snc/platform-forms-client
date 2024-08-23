@@ -6,6 +6,7 @@ import React, { useEffect, useState } from "react";
 import { Description } from "../Description/Description";
 import { useTranslation } from "@i18n/client";
 import { DateFormat, DateObject, DatePart } from "./types";
+import { getMaxMonthDay } from "./utils";
 
 interface FormattedDateProps extends InputFieldProps {
   dateFormat?: DateFormat;
@@ -27,6 +28,11 @@ export const FormattedDate = (props: FormattedDateProps): React.ReactElement => 
     autocomplete = false,
   } = props;
 
+  const [dateObject, setDateObject] = useState<DateObject | null>(null);
+  const [field, , helpers] = useField(props);
+  const { t } = useTranslation("common");
+
+  // Create an array of date parts in the order they should be displayed
   const dateParts = dateFormat.split("-").map((part) => {
     switch (part) {
       case "YYYY":
@@ -40,13 +46,7 @@ export const FormattedDate = (props: FormattedDateProps): React.ReactElement => 
     }
   });
 
-  const { t } = useTranslation("common");
-
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [field, meta, helpers] = useField(props);
-
-  const [dateObject, setDateObject] = useState<DateObject | null>(null);
-
+  // Update the date object when the field value changes
   useEffect(() => {
     if (field.value) {
       try {
@@ -58,6 +58,7 @@ export const FormattedDate = (props: FormattedDateProps): React.ReactElement => 
     }
   }, [field.value]);
 
+  // Update the field value when the date object changes
   useEffect(() => {
     if (dateObject) {
       helpers.setValue(JSON.stringify(dateObject));
@@ -97,25 +98,6 @@ export const FormattedDate = (props: FormattedDateProps): React.ReactElement => 
       return newObj as DateObject;
     });
 
-  const isLeapYear = (year: number) => {
-    return year % 400 === 0 || (year % 100 !== 0 && year % 4 === 0);
-  };
-
-  const getMaxDay = (month: number, year: number) => {
-    // Months are 1-indexed
-    switch (month) {
-      case 2:
-        return isLeapYear(year) ? 29 : 28;
-      case 4:
-      case 6:
-      case 9:
-      case 11:
-        return 30;
-      default:
-        return 31;
-    }
-  };
-
   return (
     <fieldset
       role="group"
@@ -128,6 +110,7 @@ export const FormattedDate = (props: FormattedDateProps): React.ReactElement => 
       <div className="flex gap-2">
         <input type="hidden" {...field} />
         {dateParts.map((part) => {
+          // Not currently an option, for future use
           return part === DatePart.MM && monthSelector === "select" ? (
             <div key={part}>
               <label htmlFor={`${name}-${part}`}>{t(`formattedDate.${part}`)}</label>
@@ -189,7 +172,7 @@ export const FormattedDate = (props: FormattedDateProps): React.ReactElement => 
                 min={1}
                 max={
                   dateObject?.MM && dateObject?.YYYY
-                    ? getMaxDay(dateObject.MM, dateObject.YYYY)
+                    ? getMaxMonthDay(dateObject.MM, dateObject.YYYY)
                     : 31
                 }
                 autoComplete={autocomplete ? "bday-day" : undefined}
