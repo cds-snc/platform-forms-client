@@ -45,14 +45,16 @@ export const FormattedDate = (props: FormattedDateProps): React.ReactElement => 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [field, meta, helpers] = useField(props);
 
-  const [dateObject, setDateObject] = useState<DateObject | null>(
-    field.value ? JSON.parse(field.value) : null
-  );
+  const [dateObject, setDateObject] = useState<DateObject | null>(null);
 
   useEffect(() => {
     if (field.value) {
-      const parsedValue = JSON.parse(field.value);
-      setDateObject(parsedValue);
+      try {
+        const parsedValue = JSON.parse(field.value);
+        setDateObject(parsedValue);
+      } catch (e) {
+        setDateObject(null);
+      }
     }
   }, [field.value]);
 
