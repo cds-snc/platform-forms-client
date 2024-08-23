@@ -14,6 +14,7 @@ import { logEvent } from "./auditLogs";
 import { logMessage } from "@lib/logger";
 import { unprocessedSubmissions, deleteDraftFormResponses } from "./vault";
 import { addOwnershipEmail, transferOwnershipEmail } from "./ownership";
+import { deleteKey } from "./serviceAccount";
 
 // ******************************************
 // Internal Module Functions
@@ -1171,6 +1172,9 @@ export async function deleteTemplate(
     if (templateMarkedAsDeleted === null) return templateMarkedAsDeleted;
 
     logEvent(ability.userID, { type: "Form", id: formID }, "DeleteForm");
+
+    // Check and delete any API keys from IDP
+    await deleteKey(formID);
 
     if (formCache.cacheAvailable) formCache.formID.invalidate(formID);
 
