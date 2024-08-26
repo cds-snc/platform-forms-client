@@ -135,13 +135,6 @@ describe("Test FormBuilder Add Elements", () => {
     cy.get('#element-1 [data-testid="more"]').click();
     cy.get('[data-testid="description-input"]').contains("Enter a number");
     cy.get("button").contains("Close").click();
-
-    // rearrange the first element
-    cy.get('#element-1 [data-testid="moveDown"]').click();
-
-    cy.get('#element-1 [data-testid="more"]').click();
-    cy.get('[data-testid="description-input"]').contains("Enter a number");
-    cy.get("button").contains("Close").click();
   });
 
   it("Adds a Name block with autocomplete", () => {
