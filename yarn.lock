@@ -14637,13 +14637,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"jose@npm:^5.4.0":
-  version: 5.7.0
-  resolution: "jose@npm:5.7.0"
-  checksum: 10c0/9dd2bfa61a839d857d4c4d842ba367a48552dbc93d315cd1c775b7d7855b0b3f589d72294f348cd3161eb559d20f2708549611ea4f1a46a83d49b891749593d9
-  languageName: node
-  linkType: hard
-
 "joycon@npm:^3.1.1":
   version: 3.1.1
   resolution: "joycon@npm:3.1.1"
@@ -17836,20 +17829,6 @@ __metadata:
     axios: "npm:^1.6.3"
     cheerio: "npm:^1.0.0-rc.12"
     dotenv: "npm:^16.3.1"
-    tslib: "npm:^2.6.2"
-    tsx: "npm:^4.7.0"
-    typescript: "npm:^5.3.3"
-  languageName: unknown
-  linkType: soft
-
-"response_retriever@workspace:utils/responseRetriever":
-  version: 0.0.0-use.local
-  resolution: "response_retriever@workspace:utils/responseRetriever"
-  dependencies:
-    "@types/node": "npm:^20.10.5"
-    axios: "npm:^1.6.3"
-    dotenv: "npm:^16.3.1"
-    jose: "npm:^5.4.0"
     tslib: "npm:^2.6.2"
     tsx: "npm:^4.7.0"
     typescript: "npm:^5.3.3"
