@@ -11,7 +11,7 @@ export const getRedisInstance = async (): Promise<Redis> => {
   if (!redisConnection) {
     const redis = await createRedisInstance();
     redisConnection = redis;
-    return redisConnection;
+    return redis;
   } else {
     return redisConnection;
   }

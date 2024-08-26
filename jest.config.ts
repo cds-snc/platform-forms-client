@@ -38,6 +38,7 @@ const customJestConfig: Config = {
   setupFiles: [
     "<rootDir>/__utils__/jestShim.ts",
     "<rootDir>/__utils__/mocks/server-actions/index.ts",
+    "<rootDir>/__utils__/mocks/redis/index.ts",
   ],
   setupFilesAfterEnv: [
     "<rootDir>/__utils__/setupTests.ts",
