@@ -1,12 +1,13 @@
 "use client";
 import { InputFieldProps } from "@lib/types";
-import classnames from "classnames";
 import { useField } from "formik";
 import React, { useEffect, useState } from "react";
 import { Description } from "../Description/Description";
 import { useTranslation } from "@i18n/client";
 import { DateFormat, DateObject, DatePart } from "./types";
 import { getMaxMonthDay } from "./utils";
+import { ErrorMessage } from "@clientComponents/forms";
+import { cn } from "@lib/utils";
 
 interface FormattedDateProps extends InputFieldProps {
   dateFormat?: DateFormat;
@@ -29,7 +30,7 @@ export const FormattedDate = (props: FormattedDateProps): React.ReactElement => 
   } = props;
 
   const [dateObject, setDateObject] = useState<DateObject | null>(null);
-  const [field, , helpers] = useField(props);
+  const [field, meta, helpers] = useField(props);
   const { t } = useTranslation("common");
 
   // Create an array of date parts in the order they should be displayed
@@ -103,10 +104,19 @@ export const FormattedDate = (props: FormattedDateProps): React.ReactElement => 
       role="group"
       aria-describedby={description ? `desc-${id}` : undefined}
       data-testid="formattedDate"
+      id={id}
     >
-      <legend className="gc-label">{label}</legend>
+      <legend className={cn("gc-label", required && "required")}>
+        {label}
+        {required && (
+          <span data-testid="required" aria-hidden>
+            {" "}
+            ({t("required")})
+          </span>
+        )}
+      </legend>
       {description && <Description id={id}>{description}</Description>}
-
+      {meta.error && <ErrorMessage id={"errorMessage" + id}>{meta.error}</ErrorMessage>}
       <div className="flex gap-2">
         <input type="hidden" {...field} />
         {dateParts.map((part) => {
@@ -117,7 +127,7 @@ export const FormattedDate = (props: FormattedDateProps): React.ReactElement => 
               <select
                 name={`${name}-${part}`}
                 id={`${name}-${part}`}
-                className="gc-dropdown w-36"
+                className={cn("gc-dropdown", "w-36", meta.error && "gc-error-input")}
                 onChange={(e) => setSelectedMonth(e.target.value)}
                 required={required}
                 data-testid="month-select"
@@ -139,7 +149,7 @@ export const FormattedDate = (props: FormattedDateProps): React.ReactElement => 
                 min={1}
                 max={12}
                 autoComplete={autocomplete ? "bday-month" : undefined}
-                className={classnames("gc-input-text", "w-16")}
+                className={cn("gc-input-text", "w-16", meta.error && "gc-error-input")}
                 value={dateObject?.MM || ""}
                 onChange={(e) => setSelectedMonth(e.target.value)}
                 required={required}
@@ -155,7 +165,7 @@ export const FormattedDate = (props: FormattedDateProps): React.ReactElement => 
                 type="number"
                 min={1900}
                 autoComplete={autocomplete ? "bday-year" : undefined}
-                className={classnames("gc-input-text", "w-28")}
+                className={cn("gc-input-text", "w-28", meta.error && "gc-error-input")}
                 value={dateObject?.YYYY || ""}
                 onChange={(e) => setSelectedYear(e.target.value)}
                 required={required}
@@ -176,7 +186,7 @@ export const FormattedDate = (props: FormattedDateProps): React.ReactElement => 
                     : 31
                 }
                 autoComplete={autocomplete ? "bday-day" : undefined}
-                className={classnames("gc-input-text", "w-16")}
+                className={cn("gc-input-text", "w-16", meta.error && "gc-error-input")}
                 value={dateObject?.DD || ""}
                 onChange={(e) => setSelectedDay(e.target.value)}
                 required={required}

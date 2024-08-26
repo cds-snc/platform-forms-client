@@ -20,6 +20,10 @@
   @apply border-red-700;
 }
 
+.gc-error-input {
+  @apply border-red-700 !important;
+}
+
 .gc-alert {
   @apply py-8 px-12 mb-14 w-5/6 xl:w-full;
   &.gc-alert--validation,

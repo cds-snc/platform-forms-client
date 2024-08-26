@@ -256,6 +256,7 @@ function _buildForm(element: FormElement, lang: string): ReactElement {
             description={description}
             id={`${id}`}
             name={`${id}`}
+            required={isRequired}
             dateFormat={
               element.properties.dateFormat
                 ? (element.properties.dateFormat as DateFormat)
