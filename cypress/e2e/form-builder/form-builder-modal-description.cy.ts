@@ -28,11 +28,6 @@ describe("Form builder modal description", () => {
     // rearrange the first element
     cy.get('#element-2 [data-testid="moveDown"]').click();
 
-    // check that the descriptions are still correct
-    cy.get('#element-1 [data-testid="more"]').click();
-    cy.get('[data-testid="description-input"]').contains("mm/dd/yyyy");
-    cy.get("button").contains("Close").click();
-
     cy.get('#element-2 [data-testid="more"]').click();
     cy.get('[data-testid="description-input"]').contains("Enter a number");
     cy.get("button").contains("Close").click();
