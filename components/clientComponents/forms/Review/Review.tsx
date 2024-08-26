@@ -130,8 +130,9 @@ export const Review = ({ language }: { language: Language }): React.ReactElement
   const { groups, getValues, formRecord, getGroupHistory, getGroupTitle, matchedIds } =
     useGCFormsContext();
 
-  const headingRef = useRef(null);
-  useFocusIt({ elRef: headingRef });
+  const groupsHeadingRef = useRef<HTMLHeadingElement>(null);
+  // Focus heading on load
+  useFocusIt({ elRef: groupsHeadingRef });
 
   const reviewItems: ReviewItem[] = useMemo(() => {
     const formValues: void | FormValues = getValues();
@@ -167,7 +168,9 @@ export const Review = ({ language }: { language: Language }): React.ReactElement
 
   return (
     <>
-      <h2 ref={headingRef}>{t("reviewForm", { lng: language })}</h2>
+      <h2 ref={groupsHeadingRef} tabIndex={-1}>
+        {t("reviewForm", { lng: language })}
+      </h2>
       <div className="my-16">
         {Array.isArray(reviewItems) &&
           reviewItems.map((reviewItem) => {
@@ -180,14 +183,26 @@ export const Review = ({ language }: { language: Language }): React.ReactElement
                 className="mb-10 rounded-lg border-2 border-slate-400 px-6 py-4"
               >
                 <h3 className="text-slate-700">
-                  <EditButton reviewItem={reviewItem} theme="link">
+                  <EditButton
+                    reviewItem={reviewItem}
+                    theme="link"
+                    onClick={() => {
+                      groupsHeadingRef.current?.focus();
+                    }}
+                  >
                     {title}
                   </EditButton>
                 </h3>
                 <div className="mb-10 ml-1">
                   <QuestionsAnswersList reviewItem={reviewItem} />
                 </div>
-                <EditButton reviewItem={reviewItem} theme="secondary">
+                <EditButton
+                  reviewItem={reviewItem}
+                  theme="secondary"
+                  onClick={() => {
+                    groupsHeadingRef.current?.focus();
+                  }}
+                >
                   {t("edit", { lng: language })}
                 </EditButton>
               </div>
@@ -257,10 +272,12 @@ const EditButton = ({
   reviewItem,
   theme,
   children,
+  onClick,
 }: {
   reviewItem: ReviewItem;
   theme: Theme;
   children: React.ReactElement | string;
+  onClick?: () => void;
 }): React.ReactElement => {
   const { setGroup, clearHistoryAfterId } = useGCFormsContext();
   return (
@@ -270,6 +287,8 @@ const EditButton = ({
       onClick={() => {
         setGroup(reviewItem.id);
         clearHistoryAfterId(reviewItem.id);
+        // Focus groups heading on navigation
+        onClick && onClick();
       }}
     >
       {children}
