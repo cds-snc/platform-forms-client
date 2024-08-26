@@ -21,6 +21,22 @@ export const scrollToBottom = (containerEl: HTMLElement) => {
 };
 
 /**
+ * When a function does not have access to an element (ref), use the DOM to get an element and
+ * after the next tick (after the current event loop), focus the element. This moves the page to
+ * the element location and announces the text in the element to AT. Use a react ref over this to
+ * get and focus an element when possible.
+ * @param elementSelector selector to get the DOM element (first one found). Defaults to H1. Must
+ * have a tabIndex.
+ * @returns undefined
+ */
+export const focusElement = (elementSelector = "H1") => {
+  const NEXT_TICK = 0;
+  setTimeout(() => {
+    (document.querySelector(elementSelector) as HTMLElement)?.focus();
+  }, NEXT_TICK);
+};
+
+/**
  * Like a UUID but smaller and not as unique. So best to append this to the element name.
  * e.g. id = `myElementName-${randomId()}`
  *
