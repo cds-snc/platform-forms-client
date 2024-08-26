@@ -32,7 +32,7 @@ const mockedCheckUserHasTemplateOwnership = jest.mocked(checkUserHasTemplateOwne
 });
 
 describe("Service Account functions", () => {
-  beforeAll(() => {
+  beforeEach(() => {
     const fakeSession = {
       user: {
         id: "1",
@@ -43,7 +43,9 @@ describe("Service Account functions", () => {
     const ability = createAbility(fakeSession);
 
     mockedAuthCheckAndThrow.mockResolvedValue({ ability, session: fakeSession });
+    mockedCheckUserHasTemplateOwnership.mockResolvedValue();
   });
+
   describe("checkMachineUserExists", () => {
     it("should return user ID if user exists", async () => {
       const userId = "testUser";
@@ -68,11 +70,11 @@ describe("Service Account functions", () => {
       expect(result).toBe(undefined);
     });
     it("should throw and error is user is not authentiated to perform the action", async () => {
-      mockedAuthCheckAndThrow.mockRejectedValue(new AccessControlError());
+      mockedAuthCheckAndThrow.mockRejectedValueOnce(new AccessControlError());
       expect(checkMachineUserExists("blah")).rejects.toThrow(AccessControlError);
     });
     it("should throw and error is user is not authorized to perform the action", async () => {
-      mockedCheckUserHasTemplateOwnership.mockRejectedValue(new AccessControlError());
+      mockedCheckUserHasTemplateOwnership.mockRejectedValueOnce(new AccessControlError());
       expect(checkMachineUserExists("blah")).rejects.toThrow(AccessControlError);
     });
   });
@@ -122,11 +124,11 @@ describe("Service Account functions", () => {
       expect(result).toBe(false);
     });
     it("should throw and error is user is not authentiated to perform the action", async () => {
-      mockedAuthCheckAndThrow.mockRejectedValue(new AccessControlError());
+      mockedAuthCheckAndThrow.mockRejectedValueOnce(new AccessControlError());
       expect(checkKeyExists("blah")).rejects.toThrow(AccessControlError);
     });
     it("should throw and error is user is not authorized to perform the action", async () => {
-      mockedCheckUserHasTemplateOwnership.mockRejectedValue(new AccessControlError());
+      mockedCheckUserHasTemplateOwnership.mockRejectedValueOnce(new AccessControlError());
       expect(checkKeyExists("blah")).rejects.toThrow(AccessControlError);
     });
   });
@@ -171,11 +173,11 @@ describe("Service Account functions", () => {
       );
     });
     it("should throw and error is user is not authentiated to perform the action", async () => {
-      mockedAuthCheckAndThrow.mockRejectedValue(new AccessControlError());
+      mockedAuthCheckAndThrow.mockRejectedValueOnce(new AccessControlError());
       expect(createKey("templateId")).rejects.toThrow(AccessControlError);
     });
     it("should throw and error is user is not authorized to perform the action", async () => {
-      mockedCheckUserHasTemplateOwnership.mockRejectedValue(new AccessControlError());
+      mockedCheckUserHasTemplateOwnership.mockRejectedValueOnce(new AccessControlError());
       expect(createKey("templateId")).rejects.toThrow(AccessControlError);
     });
   });
