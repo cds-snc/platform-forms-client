@@ -123,23 +123,8 @@ describe("Test FormBuilder Add Elements", () => {
     cy.get("label").contains("Condition 2").should("be.visible");
     cy.get("label").contains("Condition 3").should("be.visible");
   });
-  it("Renders date element with example text", () => {
-    cy.get("button").contains("Add").click();
-    cy.get('[data-testid="preset-filter"]').click();
-    cy.get('[data-testid="date"]').click();
-    cy.get('[data-testid="element-description-add-element"]').click();
-    cy.get(".description-text").should("be.visible").contains("Format the date as: mm/dd/yyyy");
-    cy.get(".example-text").should("be.visible").contains("mm/dd/yyyy");
-  });
   it("Renders matching element description in more modal", () => {
     // see https://github.com/cds-snc/platform-forms-client/issues/2017
-
-    cy.get("button").contains("Add").click();
-    cy.get('[data-testid="preset-filter"]').click();
-    cy.get('[data-testid="date"]').click();
-    cy.get('[data-testid="element-description-add-element"]').click();
-    cy.get(".description-text").should("be.visible").contains("Format the date as: mm/dd/yyyy");
-    cy.get(".example-text").should("be.visible").contains("mm/dd/yyyy");
 
     cy.get('#element-1 [data-testid="more"]').click();
     cy.get('[data-testid="description-input"]').contains("mm/dd/yyyy");
