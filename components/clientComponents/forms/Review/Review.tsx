@@ -165,7 +165,7 @@ export const Review = ({ language }: { language: Language }): React.ReactElement
                   <EditButton
                     reviewItem={reviewItem}
                     theme="link"
-                    callback={() => {
+                    onClick={() => {
                       groupsHeadingRef.current?.focus();
                     }}
                   >
@@ -178,7 +178,7 @@ export const Review = ({ language }: { language: Language }): React.ReactElement
                 <EditButton
                   reviewItem={reviewItem}
                   theme="secondary"
-                  callback={() => {
+                  onClick={() => {
                     groupsHeadingRef.current?.focus();
                   }}
                 >
@@ -248,12 +248,12 @@ const EditButton = ({
   reviewItem,
   theme,
   children,
-  callback,
+  onClick,
 }: {
   reviewItem: ReviewItem;
   theme: Theme;
   children: React.ReactElement | string;
-  callback?: () => void;
+  onClick?: () => void;
 }): React.ReactElement => {
   const { setGroup, clearHistoryAfterId } = useGCFormsContext();
   return (
@@ -264,7 +264,7 @@ const EditButton = ({
         setGroup(reviewItem.id);
         clearHistoryAfterId(reviewItem.id);
         // Focus groups heading on navigation
-        callback && callback();
+        onClick && onClick();
       }}
     >
       {children}
