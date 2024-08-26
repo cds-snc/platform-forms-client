@@ -5,18 +5,39 @@ import {
 } from "@zitadel/node/api";
 import { checkOne } from "@lib/cache/flags";
 import { ServiceAccount } from "@zitadel/node/credentials";
+import { getEncryptedAppSetting, getAppSetting } from "@lib/appSettings";
+import { logMessage } from "@lib/logger";
 
 let zitadelClient: ManagementServiceClient | null = null;
 
 const getZitadelSettings = async () => {
-  if (!process.env.ZITADEL_PROVIDER) throw new Error("No value set for Zitadel Provider");
+  const startTime = Date.now();
+  // if (!process.env.ZITADEL_PROVIDER) throw new Error("No value set for Zitadel Provider");
 
-  if (!process.env.ZITADEL_ADMINISTRATION_KEY)
-    throw new Error("Zitadel Adminstration Key is not set");
+  // if (!process.env.ZITADEL_ADMINISTRATION_KEY)
+  //   throw new Error("Zitadel Adminstration Key is not set");
 
+  // return {
+  //   zitadelAdministrationKey: process.env.ZITADEL_ADMINISTRATION_KEY,
+  //   zitadelProvider: process.env.ZITADEL_PROVIDER,
+  // };
+
+  const getZitadelAdministrationKey = getEncryptedAppSetting("zitadelAdministrationKey");
+  const getZitadelProvider = getAppSetting("zitadelProvider");
+
+  const [zitadelAdministrationKey, zitadelProvider] = await Promise.all([
+    getZitadelAdministrationKey,
+    getZitadelProvider,
+  ]);
+
+  if (!zitadelAdministrationKey || !zitadelProvider) {
+    throw new Error("Zitadel settings are not properly configured");
+  }
+  const endTime = Date.now();
+  logMessage.info(`Latency in retrieving Zitadel settings: ${endTime - startTime}`);
   return {
-    zitadelAdministrationKey: process.env.ZITADEL_ADMINISTRATION_KEY,
-    zitadelProvider: process.env.ZITADEL_PROVIDER,
+    zitadelAdministrationKey,
+    zitadelProvider,
   };
 };
 

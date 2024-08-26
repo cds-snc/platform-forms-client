@@ -4,7 +4,17 @@ import { logEvent } from "./auditLogs";
 import { logMessage } from "@lib/logger";
 import { UserAbility } from "./types";
 import { settingCheck, settingPut, settingDelete } from "@lib/cache/settingCache";
-import crypto from "crypto";
+import crypto from "node:crypto";
+import { secretClient } from "./integration/awsServicesConnector";
+import { GetSecretValueCommand } from "@aws-sdk/client-secrets-manager";
+const getEncryptionSecret = async () => {
+  const token_secret = await secretClient.send(
+    new GetSecretValueCommand({
+      SecretId: "token_secret",
+    })
+  );
+  return token_secret.SecretString;
+};
 
 export const getAllAppSettings = async (ability: UserAbility) => {
   try {
@@ -35,9 +45,10 @@ export const getAllAppSettings = async (ability: UserAbility) => {
 };
 
 export const getAppSetting = async (internalId: string) => {
+  const startTime = Date.now();
   const cachedSetting = await settingCheck(internalId);
+  logMessage.info(`Setting is not cached for ${internalId}`);
   if (cachedSetting) return cachedSetting;
-
   const uncachedSetting = await prisma.setting
     .findUnique({
       where: {
@@ -52,7 +63,24 @@ export const getAppSetting = async (internalId: string) => {
   if (uncachedSetting?.value) {
     settingPut(internalId, uncachedSetting.value);
   }
+  const endTime = Date.now();
+  logMessage.info(
+    `Latency time for 'getAppSetting' ${internalId} secret retrieval: ${endTime - startTime}`
+  );
   return uncachedSetting?.value ?? null;
+};
+
+export const getEncryptedAppSetting = async (internalId: string) => {
+  const startTime = Date.now();
+  const encryptedSetting = await getAppSetting(internalId);
+  if (!encryptedSetting) return null;
+  const endTime = Date.now();
+  logMessage.info(
+    `Latency time for 'getEncryptedAppSetting' ${internalId} secret retrieval: ${
+      endTime - startTime
+    }`
+  );
+  return decryptSetting(encryptedSetting);
 };
 
 export const getFullAppSetting = async (ability: UserAbility, internalId: string) => {
@@ -117,7 +145,7 @@ export const updateAppSetting = async (
     });
 
     if (encrypted && settingData.value) {
-      settingData.value = encryptSetting(settingData.value);
+      settingData.value = await encryptSetting(settingData.value);
     }
 
     const updatedSetting = await prisma.setting.update({
@@ -226,8 +254,8 @@ export const deleteAppSetting = async (ability: UserAbility, internalId: string)
   }
 };
 
-const encryptSetting = (value: string) => {
-  const secret = process.env.TOKEN_SECRET;
+const encryptSetting = async (value: string) => {
+  const secret = await getEncryptionSecret();
   if (!secret) throw new Error("No Secret Available to Encrypt Settings");
 
   const iv = crypto.randomBytes(16);
@@ -239,8 +267,8 @@ const encryptSetting = (value: string) => {
   return result.toString("base64");
 };
 
-export const decryptSetting = (value: string) => {
-  const secret = process.env.TOKEN_SECRET;
+export const decryptSetting = async (value: string) => {
+  const secret = await getEncryptionSecret();
   if (!secret) throw new Error("No Secret Available to Decrypt Settings");
 
   const encryptedValue = Buffer.from(value, "base64");

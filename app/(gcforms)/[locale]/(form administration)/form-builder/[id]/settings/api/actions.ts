@@ -61,7 +61,6 @@ export const deleteKey = async (templateId: string) => {
   if (!serviceAccountId || !publicKeyId) {
     throw new Error("No Key Exists in GCForms DB");
   }
-
   const zitadel = await getZitadelClient();
   await zitadel
     .removeMachineKey({
@@ -106,7 +105,6 @@ export const checkKeyExists = async (templateId: string) => {
   if (!userId || !publicKeyId) {
     return false;
   }
-
   const zitadel = await getZitadelClient();
   const remoteKey = await zitadel
     .getMachineKeyByIDs({
@@ -140,7 +138,6 @@ export const refreshKey = async (templateId: string) => {
   if (!serviceAccountId || !publicKeyId) {
     throw new Error("No Key Exists in GCForms DB");
   }
-
   const zitadel = await getZitadelClient();
   await zitadel
     .removeMachineKey({

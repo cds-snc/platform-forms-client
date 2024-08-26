@@ -4,6 +4,7 @@ import { DynamoDBDocumentClient } from "@aws-sdk/lib-dynamodb";
 import { LambdaClient } from "@aws-sdk/client-lambda";
 import { SQSClient } from "@aws-sdk/client-sqs";
 import { S3Client } from "@aws-sdk/client-s3";
+import { SecretsManagerClient } from "@aws-sdk/client-secrets-manager";
 
 const globalConfig = {
   region: process.env.AWS_REGION ?? "ca-central-1",
@@ -47,4 +48,9 @@ export const s3Client = new S3Client({
   ...globalConfig,
   ...localstackConfig,
   ...(process.env.LOCAL_AWS_ENDPOINT && { forcePathStyle: true }),
+});
+
+export const secretClient = new SecretsManagerClient({
+  ...globalConfig,
+  ...localstackConfig,
 });
