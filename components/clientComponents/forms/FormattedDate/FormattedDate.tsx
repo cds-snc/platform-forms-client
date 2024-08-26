@@ -78,6 +78,7 @@ export const FormattedDate = (props: FormattedDateProps): React.ReactElement => 
       }
       return newObj as DateObject;
     });
+
   const setSelectedMonth = (month: string) =>
     setDateObject((prev) => {
       const newObj = { ...prev };
@@ -88,6 +89,7 @@ export const FormattedDate = (props: FormattedDateProps): React.ReactElement => 
       }
       return newObj as DateObject;
     });
+
   const setSelectedDay = (day: string) =>
     setDateObject((prev) => {
       const newObj = { ...prev };
@@ -115,8 +117,10 @@ export const FormattedDate = (props: FormattedDateProps): React.ReactElement => 
           </span>
         )}
       </legend>
+
       {description && <Description id={id}>{description}</Description>}
       {meta.error && <ErrorMessage id={"errorMessage" + id}>{meta.error}</ErrorMessage>}
+
       <div className="flex gap-2">
         <input type="hidden" {...field} />
         {dateParts.map((part) => {
