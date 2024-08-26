@@ -6,10 +6,10 @@ import { Language } from "@lib/types/form-builder-types";
 
 export const BackButtonGroup = ({
   language,
-  callback,
+  onClick,
 }: {
   language: Language;
-  callback?: () => void;
+  onClick?: () => void;
 }) => {
   const { currentGroup, getGroupHistory, handlePreviousAction } = useGCFormsContext();
   const { t } = useTranslation("form-builder");
@@ -34,7 +34,7 @@ export const BackButtonGroup = ({
         onClick={async (e) => {
           e.preventDefault();
           handlePreviousAction();
-          callback && callback();
+          onClick && onClick();
         }}
         type="button"
         className="mr-4"

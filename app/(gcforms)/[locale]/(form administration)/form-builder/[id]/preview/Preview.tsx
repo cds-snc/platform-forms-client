@@ -212,7 +212,7 @@ export const Preview = ({
                                   {allowGrouping && isShowReviewPage && (
                                     <BackButton
                                       language={language}
-                                      callback={() => focusElement("h2")}
+                                      onClick={() => focusElement("h2")}
                                     />
                                   )}
                                   <Button

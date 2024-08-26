@@ -279,7 +279,7 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
               {isGroupsCheck && isShowReviewPage && (
                 <BackButtonGroup
                   language={language as Language}
-                  callback={() => groupsHeadingRef.current?.focus()}
+                  onClick={() => groupsHeadingRef.current?.focus()}
                 />
               )}
               {props.renderSubmit ? (
@@ -293,7 +293,7 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
                           currentGroup === LockedSections.REVIEW && (
                             <BackButton
                               language={language as Language}
-                              callback={() => groupsHeadingRef.current?.focus()}
+                              onClick={() => groupsHeadingRef.current?.focus()}
                             />
                           )}
                         <div className="inline-block">

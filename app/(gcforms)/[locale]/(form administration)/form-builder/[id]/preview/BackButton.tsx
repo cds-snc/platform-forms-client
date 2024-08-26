@@ -4,13 +4,7 @@ import { Button } from "@clientComponents/forms";
 import { Language } from "@lib/types/form-builder-types";
 
 // Must be placed withing context of the GCFormsContext.Provider
-export const BackButton = ({
-  language,
-  callback,
-}: {
-  language: Language;
-  callback?: () => void;
-}) => {
+export const BackButton = ({ language, onClick }: { language: Language; onClick?: () => void }) => {
   const { t } = useTranslation("review");
   const { setGroup, previousGroup } = useGCFormsContext();
   return (
@@ -19,7 +13,7 @@ export const BackButton = ({
       secondary={true}
       onClick={() => {
         setGroup(previousGroup);
-        callback && callback();
+        onClick && onClick();
       }}
     >
       {t("goBack", { lng: language })}
