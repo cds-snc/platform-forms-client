@@ -96,6 +96,7 @@ export const ModalForm = ({
           />
         </div>
       </section>
+      {/* @TODO: Come back and refactor to separate components */}
       {item.type === FormElementTypes.formattedDate && (
         <section className="mb-4">
           <h3>{t("moreDialog.date.dateOptions")}</h3>
@@ -206,6 +207,8 @@ export const ModalForm = ({
           ></Checkbox>
         </div>
       </section>
+
+      {/* @TODO: Come back and refactor to separate components */}
       {item.type === FormElementTypes.dynamicRow && (
         <section className="mb-4">
           <ModalLabel htmlFor={`maxNumberOfRows--modal--${item.index}`}>
@@ -242,6 +245,7 @@ export const ModalForm = ({
         </section>
       )}
 
+      {/* @TODO: Come back and refactor to separate components */}
       {item.type === FormElementTypes.textField && (
         <section className="mb-4 mt-8">
           <ModalLabel htmlFor="">{t("selectAutocomplete")}</ModalLabel>
@@ -266,56 +270,57 @@ export const ModalForm = ({
           </div>
         </section>
       )}
-      {item.type === FormElementTypes.textField ||
-        (item.type === FormElementTypes.textArea &&
-          (!item.properties.validation?.type || item.properties.validation?.type === "text") && (
-            <section className="mb-4">
-              <div className="mb-2">
-                <ModalLabel htmlFor={`characterLength--modal--${item.index}`}>
-                  {t("maximumCharacterLength")}
-                </ModalLabel>
-                <Hint>{t("characterLimitDescription")}</Hint>
-                <Input
-                  id={`characterLength--modal--${item.index}`}
-                  type="number"
-                  min="1"
-                  className="w-1/4"
-                  value={properties.validation?.maxLength || ""}
-                  onKeyDown={(e) => {
-                    if (["-", "+", ".", "e"].includes(e.key)) {
-                      e.preventDefault();
-                    }
-                  }}
-                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                    // if value is "", unset the field
-                    if (e.target.value === "") {
-                      unsetModalField(`modals[${item.id}].validation.maxLength`);
-                      return;
-                    }
 
-                    const value = parseInt(e.target.value);
-                    if (!isNaN(value) && value >= 1) {
-                      // clone the existing properties so that we don't overwrite other keys in "validation"
-                      const validation = Object.assign({}, properties.validation, {
-                        maxLength: value,
-                      });
-                      updateModalProperties(item.id, {
-                        ...properties,
-                        ...{ validation },
-                      });
-                    }
-                  }}
-                />
+      {/* @TODO: Come back and refactor to separate components */}
+      {[FormElementTypes.textField, FormElementTypes.textArea].includes(item.type) &&
+        (!item.properties.validation?.type || item.properties.validation?.type === "text") && (
+          <section className="mb-4">
+            <div className="mb-2">
+              <ModalLabel htmlFor={`characterLength--modal--${item.index}`}>
+                {t("maximumCharacterLength")}
+              </ModalLabel>
+              <Hint>{t("characterLimitDescription")}</Hint>
+              <Input
+                id={`characterLength--modal--${item.index}`}
+                type="number"
+                min="1"
+                className="w-1/4"
+                value={properties.validation?.maxLength || ""}
+                onKeyDown={(e) => {
+                  if (["-", "+", ".", "e"].includes(e.key)) {
+                    e.preventDefault();
+                  }
+                }}
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                  // if value is "", unset the field
+                  if (e.target.value === "") {
+                    unsetModalField(`modals[${item.id}].validation.maxLength`);
+                    return;
+                  }
+
+                  const value = parseInt(e.target.value);
+                  if (!isNaN(value) && value >= 1) {
+                    // clone the existing properties so that we don't overwrite other keys in "validation"
+                    const validation = Object.assign({}, properties.validation, {
+                      maxLength: value,
+                    });
+                    updateModalProperties(item.id, {
+                      ...properties,
+                      ...{ validation },
+                    });
+                  }
+                }}
+              />
+            </div>
+            <InfoDetails summary={t("characterLimitWhenToUse.title")}>
+              <div className="mb-8 mt-4 border-l-3 border-gray-500 pl-8">
+                <p className="mb-4 text-sm">{t("characterLimitWhenToUse.text1")}</p>
+                <p className="mb-4 text-sm">{t("characterLimitWhenToUse.text2")}</p>
+                <p className="text-sm">{t("characterLimitWhenToUse.text3")}</p>
               </div>
-              <InfoDetails summary={t("characterLimitWhenToUse.title")}>
-                <div className="mb-8 mt-4 border-l-3 border-gray-500 pl-8">
-                  <p className="mb-4 text-sm">{t("characterLimitWhenToUse.text1")}</p>
-                  <p className="mb-4 text-sm">{t("characterLimitWhenToUse.text2")}</p>
-                  <p className="text-sm">{t("characterLimitWhenToUse.text3")}</p>
-                </div>
-              </InfoDetails>
-            </section>
-          ))}
+            </InfoDetails>
+          </section>
+        )}
     </form>
   );
 };
