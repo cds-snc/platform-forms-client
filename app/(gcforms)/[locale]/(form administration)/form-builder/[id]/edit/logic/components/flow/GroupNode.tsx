@@ -174,7 +174,7 @@ export const GroupNode = (node: NodeProps) => {
                   </span>
                 )}
               </div>
-              <div className="absolute right-[10px] top-[6px] cursor-pointer hover:scale-125">
+              <div className="absolute right-10px top-[6px] cursor-pointer hover:scale-125">
                 <OptionRuleSvg title={t("groups.editRules", { name: node.data.label.name })} />
               </div>
             </button>

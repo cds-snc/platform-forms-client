@@ -925,6 +925,14 @@
       "page": "To change how pages are ordered and connected.",
       "option": "To take a specific path depending on a selected option."
     },
+    "endNode": {
+      "label": "End",
+      "confirmContent": "Confirmation message"
+    },
+    "endNodeWithReview": {
+      "label": "End (Review and confirm)",
+      "reviewContent": "Review"
+    },
     "exit": {
       "convertText": "Convert to:",
       "checkboxLabel": "Exit page",

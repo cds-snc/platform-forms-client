@@ -925,6 +925,14 @@
       "page": "Pour modifier la façon dont les pages sont ordonnées et connectées.",
       "option": "Pour faire emprunter un chemin précis en fonction d'une réponse choisie."
     },
+    "endNode": {
+      "label": "End",
+      "confirmContent": "Confirmation message"
+    },
+    "endNodeWithReview": {
+      "label": "End (Review and confirm)",
+      "reviewContent": "Review"
+    },
     "exit": {
       "convertText": "Convertir en :",
       "checkboxLabel": "Page de sortie",
