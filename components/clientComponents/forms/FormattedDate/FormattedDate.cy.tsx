@@ -13,7 +13,7 @@ describe("<FormattedDate />", () => {
           throw new Error("Function not implemented.");
         }}
       >
-        <FormattedDate />
+        <FormattedDate name="formattedDate" />
       </Formik>
     );
 
@@ -40,7 +40,7 @@ describe("<FormattedDate />", () => {
           throw new Error("Function not implemented.");
         }}
       >
-        <FormattedDate dateFormat="DD-MM-YYYY" />
+        <FormattedDate name="formattedDate" dateFormat="DD-MM-YYYY" />
       </Formik>
     );
 
@@ -62,7 +62,7 @@ describe("<FormattedDate />", () => {
           throw new Error("Function not implemented.");
         }}
       >
-        <FormattedDate dateFormat="MM-DD-YYYY" />
+        <FormattedDate name="formattedDate" dateFormat="MM-DD-YYYY" />
       </Formik>
     );
 
@@ -84,7 +84,7 @@ describe("<FormattedDate />", () => {
           throw new Error("Function not implemented.");
         }}
       >
-        <FormattedDate dateFormat="YYYY-MM-DD" />
+        <FormattedDate name="formattedDate" dateFormat="YYYY-MM-DD" />
       </Formik>
     );
 
@@ -106,7 +106,7 @@ describe("<FormattedDate />", () => {
           throw new Error("Function not implemented.");
         }}
       >
-        <FormattedDate label="Enter a date" />
+        <FormattedDate name="formattedDate" label="Enter a date" />
       </Formik>
     );
 
@@ -124,7 +124,7 @@ describe("<FormattedDate />", () => {
           throw new Error("Function not implemented.");
         }}
       >
-        <FormattedDate autocomplete="bday" />
+        <FormattedDate name="formattedDate" autocomplete="bday" />
       </Formik>
     );
 
@@ -143,7 +143,11 @@ describe("<FormattedDate />", () => {
           throw new Error("Function not implemented.");
         }}
       >
-        <FormattedDate label="Enter a date" description="This is a description" />
+        <FormattedDate
+          name="formattedDate"
+          label="Enter a date"
+          description="This is a description"
+        />
       </Formik>
     );
 
