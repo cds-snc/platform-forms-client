@@ -36,7 +36,6 @@ import {
 import { Session } from "next-auth";
 import { logEvent } from "@lib/auditLogs";
 import { unprocessedSubmissions } from "@lib/vault";
-import { authCheckAndThrow } from "@lib/actions";
 
 jest.mock("@lib/auditLogs");
 jest.mock("@lib/actions/auth");
