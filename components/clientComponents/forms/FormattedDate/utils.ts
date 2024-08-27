@@ -6,7 +6,7 @@ import { DateFormat, DateObject } from "./types";
  *
  * @param dateFormat
  * @param dateObject
- * @returns
+ * @returns string
  */
 export const getFormattedDateFromObject = (
   dateFormat: DateFormat = "YYYY-MM-DD",
@@ -37,7 +37,7 @@ export const getFormattedDateFromObject = (
  * Check that a DateObject is a valid date
  *
  * @param dateObject
- * @returns
+ * @returns boolean
  */
 export const isValidDate = (dateObject: DateObject): boolean => {
   if (!isValidDateObject(dateObject)) {
@@ -50,10 +50,22 @@ export const isValidDate = (dateObject: DateObject): boolean => {
   return date.getFullYear() === YYYY && date.getMonth() + 1 === MM && date.getDate() === DD;
 };
 
+/**
+ * Check that a date format is valid
+ *
+ * @param dateFormat
+ * @returns boolean
+ */
 export const isValidDateFormat = (dateFormat: DateFormat): boolean => {
   return ["YYYY-MM-DD", "DD-MM-YYYY", "MM-DD-YYYY"].includes(dateFormat);
 };
 
+/**
+ * Check that a date object is valid
+ *
+ * @param obj
+ * @returns boolean
+ */
 export const isValidDateObject = (obj: unknown): obj is DateObject => {
   return (
     typeof obj === "object" &&
@@ -67,10 +79,23 @@ export const isValidDateObject = (obj: unknown): obj is DateObject => {
   );
 };
 
+/**
+ * Check if a year is a leap year
+ *
+ * @param year
+ * @returns boolean
+ */
 export const isLeapYear = (year: number) => {
   return year % 400 === 0 || (year % 100 !== 0 && year % 4 === 0);
 };
 
+/**
+ * Get the maximum number of days in a month
+ *
+ * @param month
+ * @param year
+ * @returns number
+ */
 export const getMaxMonthDay = (month: number, year: number) => {
   // Months are 1-indexed
   switch (month) {
