@@ -1,3 +1,4 @@
+import { logMessage } from "@lib/logger";
 import { DateFormat, DateObject } from "./types";
 
 /**
@@ -11,6 +12,17 @@ export const getFormattedDateFromObject = (
   dateFormat: DateFormat = "YYYY-MM-DD",
   dateObject: DateObject
 ): string => {
+  // If an invalid date format is provided, use the default format
+  if (!["YYYY-MM-DD", "DD-MM-YYYY", "MM-DD-YYYY"].includes(dateFormat)) {
+    dateFormat = "YYYY-MM-DD";
+  }
+
+  // If the date object is invalid, return a dash
+  if (!isValidDateObject(dateObject)) {
+    logMessage.info("Invalid date object", { dateObject });
+    return "-";
+  }
+
   const { YYYY, MM, DD } = dateObject;
 
   const formattedDate = dateFormat
@@ -28,9 +40,27 @@ export const getFormattedDateFromObject = (
  * @returns
  */
 export const isValidDate = (dateObject: DateObject): boolean => {
+  if (!isValidDateObject(dateObject)) {
+    logMessage.info("Invalid date object", { dateObject });
+    return false;
+  }
+
   const { YYYY, MM, DD } = dateObject;
   const date = new Date(`${YYYY}-${MM}-${DD}`);
   return date.getFullYear() === YYYY && date.getMonth() + 1 === MM && date.getDate() === DD;
+};
+
+export const isValidDateObject = (obj: unknown): obj is DateObject => {
+  return (
+    typeof obj === "object" &&
+    obj !== null &&
+    "YYYY" in obj &&
+    "MM" in obj &&
+    "DD" in obj &&
+    typeof obj.YYYY === "number" &&
+    typeof obj.MM === "number" &&
+    typeof obj.DD === "number"
+  );
 };
 
 export const isLeapYear = (year: number) => {
