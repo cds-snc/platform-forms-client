@@ -8,6 +8,7 @@ import { FormElementWithIndex, LocalizedElementProperties } from "@lib/types/for
 import { Checkbox, Input, TextArea, InfoDetails } from "@formBuilder/components/shared";
 import { useTemplateStore } from "@lib/store/useTemplateStore";
 import { AutocompleteDropdown } from "./AutocompleteDropdown";
+import { AddressCompleteOptions } from "@clientComponents/forms/AddressComplete/AddressCompleteOptions";
 
 const ModalLabel = ({ children, ...props }: React.LabelHTMLAttributes<HTMLLabelElement>) => (
   <label {...props} className="mb-2 block font-[700]">
@@ -114,6 +115,15 @@ export const ModalForm = ({
           label={t("required")}
         ></Checkbox>
       </div>
+      {item.type === FormElementTypes.addressComplete && (
+        <>
+          <AddressCompleteOptions
+            properties={properties}
+            updateModalProperties={updateModalProperties}
+            item={item}
+          />
+        </>
+      )}
       {item.type === FormElementTypes.dynamicRow && (
         <div className="mb-2">
           <ModalLabel htmlFor={`maxNumberOfRows--modal--${item.index}`}>

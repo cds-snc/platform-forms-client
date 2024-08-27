@@ -34,6 +34,16 @@ export type ConditionalRule = {
   choiceId: string;
 };
 
+export type AddressComponents = {
+  unitNumber?: boolean;
+  civicNumber?: boolean;
+  streetName?: boolean;
+  city?: boolean;
+  province?: boolean;
+  postalCode?: boolean;
+  country?: boolean;
+};
+
 // used to define attributes for the properties of an element in the form
 export interface ElementProperties {
   titleEn: string;
@@ -52,6 +62,8 @@ export interface ElementProperties {
   maxNumberOfRows?: number;
   autoComplete?: string;
   conditionalRules?: ConditionalRule[];
+  full?: boolean;
+  addressComponents?: AddressComponents | undefined;
   [key: string]:
     | string
     | number
@@ -60,6 +72,7 @@ export interface ElementProperties {
     | Array<FormElement>
     | ValidationProperties
     | Array<ConditionalRule>
+    | AddressComponents
     | undefined;
 }
 
