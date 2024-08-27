@@ -9,6 +9,7 @@ import { NewFormButton } from "./components/server/NewFormButton";
 import { ResumeEditingForm } from "./components/ResumeEditingForm";
 import { getAllTemplatesForUser, TemplateOptions } from "@lib/templates";
 import { DeliveryOption } from "@lib/types";
+import { getOverdueTemplateIds } from "@lib/overdue";
 
 export type FormsTemplate = {
   id: string;
@@ -74,6 +75,10 @@ export default async function Page({
       };
     });
 
+    const overdueTemplateIds = await getOverdueTemplateIds(
+      templates.map((template) => template.id)
+    );
+
     return (
       <div className="center mx-auto w-[980px] bg-gray-soft">
         <h1 className="mb-8 border-b-0">{t("title")}</h1>
@@ -81,10 +86,8 @@ export default async function Page({
           <Navigation filter={status} />
           <NewFormButton />
         </div>
-
         <ResumeEditingForm />
-
-        <Cards templates={templates} />
+        <Cards templates={templates} overdueTemplateIds={overdueTemplateIds} />
       </div>
     );
   } catch (e) {

@@ -8,6 +8,7 @@ import { Metadata } from "next";
 import { getAllTemplates } from "@lib/templates";
 import { FormCard } from "./components/server/FormCard";
 import { Loader } from "@clientComponents/globals/Loader";
+import { getOverdueTemplateIds } from "@lib/overdue";
 
 export async function generateMetadata({
   params: { locale },
@@ -68,6 +69,8 @@ export default async function Page({
     };
   });
 
+  const overdueTemplateIds = await getOverdueTemplateIds(templates.map((template) => template.id));
+
   const { t } = await serverTranslation(["admin-forms", "admin-users"], { lang: locale });
 
   return (
@@ -90,17 +93,21 @@ export default async function Page({
       ) : null}
 
       <ul className="m-0 list-none p-0">
-        {templates.map(({ id, titleEn, titleFr, isPublished }) => (
-          <Suspense key={id} fallback={<Loader />}>
-            <FormCard
-              key={id}
-              id={id}
-              titleEn={titleEn}
-              titleFr={titleFr}
-              isPublished={isPublished}
-            />
-          </Suspense>
-        ))}
+        {templates.map(({ id, titleEn, titleFr, isPublished }) => {
+          const overdue = overdueTemplateIds.includes(id);
+          return (
+            <Suspense key={id} fallback={<Loader />}>
+              <FormCard
+                key={id}
+                id={id}
+                titleEn={titleEn}
+                titleFr={titleFr}
+                isPublished={isPublished}
+                overdue={overdue}
+              />
+            </Suspense>
+          );
+        })}
       </ul>
     </>
   );
