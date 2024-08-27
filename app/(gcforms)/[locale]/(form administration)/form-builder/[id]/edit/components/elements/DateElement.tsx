@@ -1,6 +1,7 @@
 "use client";
 import { DateFormat, DatePart } from "@clientComponents/forms/FormattedDate/types";
 import { useTranslation } from "@i18n/client";
+import { logMessage } from "@lib/logger";
 import { cn } from "@lib/utils";
 import React from "react";
 
@@ -16,7 +17,8 @@ export const DateElement = ({ dateFormat = "YYYY-MM-DD" }: { dateFormat?: DateFo
       case "DD":
         return DatePart.DD;
       default:
-        throw new Error(`Unknown date part: ${part}`);
+        logMessage.info("Unknown date part", { part });
+        return;
     }
   });
 
