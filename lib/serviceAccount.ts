@@ -100,7 +100,9 @@ export const deleteKey = async (templateId: string) => {
     ability.userID,
     { type: "ServiceAccount" },
     "DeleteAPIKey",
-    `User :${ability.userID} deleted service account ${serviceAccountID} `
+    `User :${ability.userID} deleted service account ${
+      serviceAccountID ? `${serviceAccountID}` : `for template ${templateId}`
+    }`
   );
 };
 
@@ -169,7 +171,7 @@ export const refreshKey = async (templateId: string) => {
     })) ?? {};
 
   if (!serviceAccountId || !publicKeyId) {
-    throw new Error("No Key Exists in GCForms DB");
+    throw new Error(`No Key Exists in GCForms DB for template ${templateId}`);
   }
 
   if (serviceAccountId !== remoteServiceAccountId) {
@@ -188,7 +190,7 @@ export const refreshKey = async (templateId: string) => {
     })
     .catch((err) => {
       logMessage.error(err);
-      throw new Error("Failed to delete key");
+      throw new Error(`Failed to delete key in Zitadel for template ${templateId}`);
     });
 
   const { privateKey, publicKey } = generateKeys();
@@ -208,7 +210,7 @@ export const refreshKey = async (templateId: string) => {
     ability.userID,
     { type: "ServiceAccount" },
     "RefreshAPIKey",
-    `User :${ability.userID} refreshed API key for service account ${serviceAccountId} `
+    `User :${ability.userID} refreshed API key for service account ${serviceAccountId}`
   );
 
   return { type: "serviceAccount", keyId, key: privateKey, userId: serviceAccountId };
@@ -243,7 +245,7 @@ export const createKey = async (templateId: string) => {
     ability.userID,
     { type: "ServiceAccount" },
     "CreateAPIKey",
-    `User :${ability.userID} created API key for service account ${serviceAccountId} `
+    `User :${ability.userID} created API key for service account ${serviceAccountId}`
   );
 
   return { type: "serviceAccount", keyId, key: privateKey, userId: serviceAccountId };

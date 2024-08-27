@@ -12,6 +12,7 @@ import {
 import { Base, mockUserPrivileges } from "__utils__/permissions";
 import { AccessControlError, createAbility } from "@lib/privileges";
 import { prismaMock } from "@jestUtils";
+import { Prisma } from "@prisma/client";
 import { authCheckAndThrow } from "@lib/actions";
 import { logEvent } from "@lib/auditLogs";
 import type { Session } from "next-auth";
@@ -68,11 +69,11 @@ describe("Service Account functions", () => {
     });
     it("should throw and error is user is not authentiated to perform the action", async () => {
       mockedAuthCheckAndThrow.mockRejectedValueOnce(new AccessControlError());
-      expect(checkMachineUserExists("blah")).rejects.toThrow(AccessControlError);
+      await expect(checkMachineUserExists("blah")).rejects.toThrow(AccessControlError);
     });
     it("should throw and error is user is not authorized to perform the action", async () => {
       mockedCheckUserHasTemplateOwnership.mockRejectedValueOnce(new AccessControlError());
-      expect(checkMachineUserExists("blah")).rejects.toThrow(AccessControlError);
+      await expect(checkMachineUserExists("blah")).rejects.toThrow(AccessControlError);
     });
   });
   describe("checkKeyExists", () => {
@@ -122,11 +123,11 @@ describe("Service Account functions", () => {
     });
     it("should throw and error is user is not authentiated to perform the action", async () => {
       mockedAuthCheckAndThrow.mockRejectedValueOnce(new AccessControlError());
-      expect(checkKeyExists("blah")).rejects.toThrow(AccessControlError);
+      await expect(checkKeyExists("blah")).rejects.toThrow(AccessControlError);
     });
     it("should throw and error is user is not authorized to perform the action", async () => {
       mockedCheckUserHasTemplateOwnership.mockRejectedValueOnce(new AccessControlError());
-      expect(checkKeyExists("blah")).rejects.toThrow(AccessControlError);
+      await expect(checkKeyExists("blah")).rejects.toThrow(AccessControlError);
     });
   });
   describe("createKey", () => {
@@ -147,7 +148,7 @@ describe("Service Account functions", () => {
         "1",
         { type: "ServiceAccount" },
         "CreateAPIKey",
-        "User :1 created API key for service account serviceAccountUser "
+        "User :1 created API key for service account serviceAccountUser"
       );
     });
     it("should create a key if an existing user exists", async () => {
@@ -166,16 +167,163 @@ describe("Service Account functions", () => {
         "1",
         { type: "ServiceAccount" },
         "CreateAPIKey",
-        "User :1 created API key for service account templateId "
+        "User :1 created API key for service account templateId"
       );
     });
     it("should throw and error is user is not authentiated to perform the action", async () => {
       mockedAuthCheckAndThrow.mockRejectedValueOnce(new AccessControlError());
-      expect(createKey("templateId")).rejects.toThrow(AccessControlError);
+      await expect(createKey("templateId")).rejects.toThrow(AccessControlError);
     });
     it("should throw and error is user is not authorized to perform the action", async () => {
       mockedCheckUserHasTemplateOwnership.mockRejectedValueOnce(new AccessControlError());
-      expect(createKey("templateId")).rejects.toThrow(AccessControlError);
+      await expect(createKey("templateId")).rejects.toThrow(AccessControlError);
+    });
+  });
+  describe("refreshKey", () => {
+    it("should refresh a key", async () => {
+      const serviceAccountID = "123412341234";
+
+      mockedZitadel.mockResolvedValue({
+        getUserByLoginNameGlobal: jest.fn().mockResolvedValue({ user: { id: serviceAccountID } }),
+        addMachineKey: jest.fn().mockResolvedValue({ keyId: "keyId" }),
+        removeMachineKey: jest.fn().mockResolvedValue({}),
+      });
+      (prismaMock.apiServiceAccount.findUnique as jest.MockedFunction<any>).mockResolvedValue({
+        id: serviceAccountID,
+        publicKeyId: "1234",
+      });
+      const result = await refreshKey("templateId");
+      expect(result).toMatchObject({
+        keyId: "keyId",
+        type: "serviceAccount",
+        userId: "123412341234",
+      });
+      expect(mockedLogEvent).toHaveBeenCalledWith(
+        "1",
+        { type: "ServiceAccount" },
+        "RefreshAPIKey",
+        "User :1 refreshed API key for service account 123412341234"
+      );
+    });
+    it("should throw if the service account does not exist on the IDP", async () => {
+      mockedZitadel.mockResolvedValue({
+        getUserByLoginNameGlobal: jest.fn().mockResolvedValue({ user: undefined }),
+      });
+
+      await expect(refreshKey("templateId")).rejects.toThrow(
+        "Service Account User for template templateId does not exist when trying to refresh API Key"
+      );
+    });
+    it("should throw if the service account does not exist in the database", async () => {
+      const serviceAccountID = "123412341234";
+      mockedZitadel.mockResolvedValue({
+        getUserByLoginNameGlobal: jest.fn().mockResolvedValue({ user: { id: serviceAccountID } }),
+      });
+      (prismaMock.apiServiceAccount.findUnique as jest.MockedFunction<any>).mockResolvedValue(null);
+      await expect(refreshKey("templateId")).rejects.toThrow(
+        "No Key Exists in GCForms DB for template templateId"
+      );
+    });
+    it("should throw if the service account id's in the Database and IDP do not match", async () => {
+      const serviceAccountID = "123412341234";
+      mockedZitadel.mockResolvedValue({
+        getUserByLoginNameGlobal: jest.fn().mockResolvedValue({ user: { id: serviceAccountID } }),
+      });
+      (prismaMock.apiServiceAccount.findUnique as jest.MockedFunction<any>).mockResolvedValue({
+        id: "aDifferentID",
+        publicKeyId: "1234",
+      });
+      await expect(refreshKey("templateId")).rejects.toThrow(
+        "Service Account User ID for template templateId is out of sync between GCForms and Zitadel"
+      );
+    });
+    it("should throw if it could not remove the old key", async () => {
+      const serviceAccountID = "123412341234";
+
+      mockedZitadel.mockResolvedValue({
+        getUserByLoginNameGlobal: jest.fn().mockResolvedValue({ user: { id: serviceAccountID } }),
+        removeMachineKey: jest.fn().mockRejectedValue(new Error("Zitadel Error Message")),
+      });
+      (prismaMock.apiServiceAccount.findUnique as jest.MockedFunction<any>).mockResolvedValue({
+        id: serviceAccountID,
+        publicKeyId: "1234",
+      });
+      await expect(refreshKey("templateId")).rejects.toThrow(
+        "Failed to delete key in Zitadel for template templateId"
+      );
+    });
+    it("should throw and error is user is not authentiated to perform the action", async () => {
+      mockedAuthCheckAndThrow.mockRejectedValueOnce(new AccessControlError());
+      await expect(refreshKey("templateId")).rejects.toThrow(AccessControlError);
+    });
+    it("should throw and error is user is not authorized to perform the action", async () => {
+      mockedCheckUserHasTemplateOwnership.mockRejectedValueOnce(new AccessControlError());
+      await expect(refreshKey("templateId")).rejects.toThrow(AccessControlError);
+    });
+  });
+  describe("deleteKey", () => {
+    it("should delete a key if there is an existing user in the IDP", async () => {
+      const serviceAccountID = "123412341234";
+
+      mockedZitadel.mockResolvedValue({
+        getUserByLoginNameGlobal: jest.fn().mockResolvedValue({ user: { id: serviceAccountID } }),
+        removeUser: jest.fn().mockResolvedValue({}),
+      });
+      (prismaMock.apiServiceAccount.delete as jest.MockedFunction<any>).mockResolvedValue();
+      await deleteKey("templateId");
+
+      expect(mockedLogEvent).toHaveBeenCalledWith(
+        "1",
+        { type: "ServiceAccount" },
+        "DeleteAPIKey",
+        "User :1 deleted service account 123412341234"
+      );
+    });
+    it("should delete a key if there is not an existing user in the IDP", async () => {
+      mockedZitadel.mockResolvedValue({
+        getUserByLoginNameGlobal: jest.fn().mockResolvedValue({ user: undefined }),
+        removeUser: jest.fn().mockResolvedValue({}),
+      });
+      (prismaMock.apiServiceAccount.delete as jest.MockedFunction<any>).mockResolvedValue();
+      await deleteKey("templateId");
+
+      expect(mockedLogEvent).toHaveBeenCalledWith(
+        "1",
+        { type: "ServiceAccount" },
+        "DeleteAPIKey",
+        "User :1 deleted service account for template templateId"
+      );
+    });
+    it("should not throw an Error if the key does not exist in the database", async () => {
+      const serviceAccountID = "123412341234";
+
+      mockedZitadel.mockResolvedValue({
+        getUserByLoginNameGlobal: jest.fn().mockResolvedValue({ user: { id: serviceAccountID } }),
+        removeUser: jest.fn().mockResolvedValue({}),
+      });
+      (prismaMock.apiServiceAccount.delete as jest.MockedFunction<any>).mockRejectedValue(
+        new Prisma.PrismaClientKnownRequestError("I'm a Prisma Error", {
+          code: "P2025",
+          clientVersion: "5",
+        })
+      );
+      await deleteKey("templateId");
+
+      expect(mockedLogEvent).toHaveBeenCalledWith(
+        "1",
+        { type: "ServiceAccount" },
+        "DeleteAPIKey",
+        "User :1 deleted service account 123412341234"
+      );
+    });
+
+    it("should throw and error is user is not authentiated to perform the action", async () => {
+      mockedAuthCheckAndThrow.mockRejectedValueOnce(new AccessControlError());
+      await expect(deleteKey("templateId")).rejects.toThrow(AccessControlError);
+    });
+    it("should throw and error is user is not authorized to perform the action", async () => {
+      mockedCheckUserHasTemplateOwnership.mockRejectedValueOnce(new AccessControlError());
+      await expect(deleteKey("templateId")).rejects.toThrow(AccessControlError);
     });
   });
 });
