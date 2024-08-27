@@ -13,6 +13,7 @@ import { Language } from "@lib/types/form-builder-types";
 
 import { getLocalizedProperty } from "@lib/utils";
 import { showReviewPage } from "@lib/utils/form-builder/showReviewPage";
+import { focusElement } from "@lib/client/clientHelpers";
 
 export const NextButton = ({
   validateForm,
@@ -90,6 +91,7 @@ export const NextButton = ({
           e.preventDefault();
           if (await handleValidation()) {
             handleNextAction();
+            focusElement("h2");
           }
         }}
         type="button"

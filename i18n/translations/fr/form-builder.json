@@ -901,7 +901,8 @@
     "removeRule": "Supprimer",
     "addOther": "Ajouter l'option « Autre »",
     "other": "Autre ",
-    "show": "Afficher :"
+    "show": "Afficher :",
+    "selectQuestion": "Sélectionner une question"
   },
   "saved": "Enregistré",
   "opensInNewTab": "ouvre un nouvel onglet",

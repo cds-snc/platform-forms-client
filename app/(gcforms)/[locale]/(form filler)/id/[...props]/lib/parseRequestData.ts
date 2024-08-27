@@ -1,10 +1,7 @@
 import { FileInputResponse, SubmissionRequestBody } from "@lib/types";
 import { ProcessedFile, SubmissionParsedRequest } from "@lib/types/submission-types";
 import { FileObjectInvalid, FileSizeError, FileTypeError } from "./exceptions";
-import {
-  FileValidationResult,
-  validateFileToUpload,
-} from "@lib/validation/fileValidationServerSide";
+import { validateFileToUpload } from "@lib/validation/fileValidationServerSide";
 
 /**
  * This function takes raw request JSON and parses the fields and files.
@@ -100,20 +97,24 @@ const processFileInputResponse = async (
     fileAsBuffer
   );
 
-  switch (fileValidationResult.result) {
-    case FileValidationResult.SIZE_IS_TOO_LARGE:
+  switch (fileValidationResult.status) {
+    case "size-is-too-large":
       throw new FileSizeError(
-        `FileValidationResult: file is too large to be processed. Detected size: ${fileValidationResult.detectedValue} bytes.`
+        `FileValidationResult: file is too large to be processed. File size: ${fileValidationResult.fileSizeInBytes} bytes / Processed file data: ${fileValidationResult.sizeOfProcessedFileDataBuffer} bytes.`
       );
-    case FileValidationResult.INVALID_EXTENSION:
+    case "invalid-given-extension":
       throw new FileTypeError(
-        `FileValidationResult: file extension is not allowed. Detected extension: ${fileValidationResult.detectedValue}.`
+        `FileValidationResult: given file extension is not allowed. File name: ${fileValidationResult.fileName}.`
       );
-    case FileValidationResult.INVALID_MIME_TYPE:
+    case "invalid-mime-associated-extension":
       throw new FileTypeError(
-        `FileValidationResult: file MIME type is not allowed. Detected MIME type: ${fileValidationResult.detectedValue}.`
+        `FileValidationResult: MIME associated file extension is not allowed. MIME type: ${fileValidationResult.mimeType} / Extension: ${fileValidationResult.associatedExtension}.`
       );
-    case FileValidationResult.VALID:
+    case "invalid-mime-type":
+      throw new FileTypeError(
+        `FileValidationResult: file MIME type is not allowed. MIME type: ${fileValidationResult.mimeType}.`
+      );
+    case "valid":
       return {
         name: fileInputResponse.name,
         buffer: fileAsBuffer,
