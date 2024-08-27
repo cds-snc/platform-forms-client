@@ -1,3 +1,6 @@
+/**
+ * @jest-environment jsdom
+ */
 import React from "react";
 import { cleanup, render, screen, waitFor, fireEvent } from "@testing-library/react";
 import { Form } from "@clientComponents/forms/Form/Form";

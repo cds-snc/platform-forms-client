@@ -1,4 +1,6 @@
-"use client";
+/**
+ * @jest-environment jsdom
+ */
 import React from "react";
 import { render, screen } from "@testing-library/react";
 import { ErrorListItem } from "@clientComponents/forms";

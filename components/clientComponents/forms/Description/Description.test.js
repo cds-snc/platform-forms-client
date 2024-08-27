@@ -1,4 +1,6 @@
-import React from "react";
+/**
+ * @jest-environment jsdom
+ */ import React from "react";
 import { render, screen } from "@testing-library/react";
 
 import { Description } from "@clientComponents/forms";

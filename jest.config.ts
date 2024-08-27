@@ -40,8 +40,11 @@ const customJestConfig: Config = {
     "<rootDir>/__utils__/mocks/server-actions/index.ts",
     "<rootDir>/__utils__/mocks/redis/index.ts",
   ],
-  setupFilesAfterEnv: ["<rootDir>/__utils__/setupTests.ts"],
-  testEnvironment: "jsdom",
+  setupFilesAfterEnv: [
+    "<rootDir>/__utils__/setupTests.ts",
+    "<rootDir>/__utils__/prismaConnector.ts",
+  ],
+  testEnvironment: "node",
   preset: "ts-jest",
 };
 

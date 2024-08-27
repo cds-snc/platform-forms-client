@@ -1,6 +1,3 @@
-/**
- * @jest-environment node
- */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import Redis from "ioredis-mock";
 import { mockClient } from "aws-sdk-client-mock";
