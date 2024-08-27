@@ -104,45 +104,110 @@ export const AddressComplete = (props: AddressCompleteProps): React.ReactElement
             required={required}
           />
         </div>
-        <div className="mb-6">
-          <Label htmlFor="city" className="gc-label">
-            {t("addElementDialog.addressComplete.city")}
-          </Label>
-          <TextInput
-            type="text"
-            id="city"
-            name={`${name}-city`}
-            autoComplete="address-level2"
-            disabled
-            required={required}
-          />
-        </div>
-        <div className="mb-6">
-          <Label htmlFor="province" className="gc-label">
-            {t("addElementDialog.addressComplete.province")}
-          </Label>
-          <TextInput
-            type="text"
-            id="province"
-            name={`${name}-province`}
-            autoComplete="address-level1"
-            disabled
-            required={required}
-          />
-        </div>
-        <div className="mb-6">
-          <Label htmlFor="postal" className="gc-label">
-            {t("addElementDialog.addressComplete.postal")}
-          </Label>
-          <TextInput
-            id="postal"
-            type="text"
-            name={`${name}-postal`}
-            autoComplete="postal-code"
-            disabled
-            required={required}
-          />
-        </div>
+        {props.unitNumber && (
+          <div className="mb-6">
+            <Label htmlFor="unit" className="gc-label">
+              {t("addElementDialog.addressComplete.components.unitNumber")}
+            </Label>
+            <TextInput
+              type="text"
+              id="unit"
+              name={`${name}-unit`}
+              autoComplete="address-line2"
+              required={required}
+            />
+          </div>
+        )}
+        {props.civicNumber && (
+          <div className="mb-6">
+            <Label htmlFor="civic" className="gc-label">
+              {t("addElementDialog.addressComplete.components.civicNumber")}
+            </Label>
+            <TextInput
+              type="text"
+              id="civic"
+              name={`${name}-civic`}
+              autoComplete="address-line2"
+              disabled
+              required={required}
+            />
+          </div>
+        )}
+        {props.streetName && (
+          <div className="mb-6">
+            <Label htmlFor="street" className="gc-label">
+              {t("addElementDialog.addressComplete.components.streetName")}
+            </Label>
+            <TextInput
+              type="text"
+              id="street"
+              name={`${name}-street`}
+              autoComplete="address-line1"
+              disabled
+              required={required}
+            />
+          </div>
+        )}
+        {props.city && (
+          <div className="mb-6">
+            <Label htmlFor="city" className="gc-label">
+              {t("addElementDialog.addressComplete.city")}
+            </Label>
+            <TextInput
+              type="text"
+              id="city"
+              name={`${name}-city`}
+              autoComplete="address-level2"
+              disabled
+              required={required}
+            />
+          </div>
+        )}
+        {props.province && (
+          <div className="mb-6">
+            <Label htmlFor="province" className="gc-label">
+              {t("addElementDialog.addressComplete.province")}
+            </Label>
+            <TextInput
+              type="text"
+              id="province"
+              name={`${name}-province`}
+              autoComplete="address-level1"
+              disabled
+              required={required}
+            />
+          </div>
+        )}
+        {props.postalCode && (
+          <div className="mb-6">
+            <Label htmlFor="postal" className="gc-label">
+              {t("addElementDialog.addressComplete.postal")}
+            </Label>
+            <TextInput
+              id="postal"
+              type="text"
+              name={`${name}-postal`}
+              autoComplete="postal-code"
+              disabled
+              required={required}
+            />
+          </div>
+        )}
+        {props.country && (
+          <div className="mb-6">
+            <Label htmlFor="country" className="gc-label">
+              {t("addElementDialog.addressComplete.country")}
+            </Label>
+            <TextInput
+              type="text"
+              id="country"
+              name={`${name}-country`}
+              autoComplete="country"
+              disabled
+              required={required}
+            />
+          </div>
+        )}
       </fieldset>
     </>
   );

@@ -20,8 +20,11 @@ export interface AddressCompleteResult {
 }
 
 export interface AddressCompleteProps extends InputFieldProps {
-  showCity?: boolean;
-  showProvince?: boolean;
-  showPostal?: boolean;
-  showCountry?: boolean;
+  unitNumber?: boolean;
+  civicNumber?: boolean;
+  streetName?: boolean;
+  city?: boolean;
+  province?: boolean;
+  postalCode?: boolean;
+  country?: boolean;
 }
