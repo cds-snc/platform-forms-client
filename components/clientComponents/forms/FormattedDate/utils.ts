@@ -13,7 +13,7 @@ export const getFormattedDateFromObject = (
   dateObject: DateObject
 ): string => {
   // If an invalid date format is provided, use the default format
-  if (!["YYYY-MM-DD", "DD-MM-YYYY", "MM-DD-YYYY"].includes(dateFormat)) {
+  if (!isValidDateFormat(dateFormat)) {
     dateFormat = "YYYY-MM-DD";
   }
 
@@ -48,6 +48,10 @@ export const isValidDate = (dateObject: DateObject): boolean => {
   const { YYYY, MM, DD } = dateObject;
   const date = new Date(`${YYYY}-${MM}-${DD}`);
   return date.getFullYear() === YYYY && date.getMonth() + 1 === MM && date.getDate() === DD;
+};
+
+export const isValidDateFormat = (dateFormat: DateFormat): boolean => {
+  return ["YYYY-MM-DD", "DD-MM-YYYY", "MM-DD-YYYY"].includes(dateFormat);
 };
 
 export const isValidDateObject = (obj: unknown): obj is DateObject => {

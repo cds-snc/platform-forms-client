@@ -5,9 +5,10 @@ import React, { useEffect, useState } from "react";
 import { Description } from "../Description/Description";
 import { useTranslation } from "@i18n/client";
 import { DateFormat, DateObject, DatePart } from "./types";
-import { getMaxMonthDay } from "./utils";
+import { getMaxMonthDay, isValidDateFormat } from "./utils";
 import { ErrorMessage } from "@clientComponents/forms";
 import { cn } from "@lib/utils";
+import { logMessage } from "@lib/logger";
 
 interface FormattedDateProps extends InputFieldProps {
   dateFormat?: DateFormat;
@@ -24,7 +25,7 @@ export const FormattedDate = (props: FormattedDateProps): React.ReactElement => 
     label,
     description,
     required,
-    dateFormat = "YYYY-MM-DD",
+    dateFormat: initialDateFormat = "YYYY-MM-DD",
     monthSelector = "numeric",
     autocomplete = false,
   } = props;
@@ -32,6 +33,13 @@ export const FormattedDate = (props: FormattedDateProps): React.ReactElement => 
   const [dateObject, setDateObject] = useState<DateObject | null>(null);
   const [field, meta, helpers] = useField(props);
   const { t } = useTranslation("common");
+
+  let dateFormat = initialDateFormat;
+
+  if (!isValidDateFormat(dateFormat)) {
+    logMessage.info("Invalid date format", { dateFormat });
+    dateFormat = "YYYY-MM-DD";
+  }
 
   // Create an array of date parts in the order they should be displayed
   const dateParts = dateFormat.split("-").map((part) => {
@@ -43,7 +51,7 @@ export const FormattedDate = (props: FormattedDateProps): React.ReactElement => 
       case "DD":
         return DatePart.DD;
       default:
-        throw new Error(`Unknown date part: ${part}`);
+        return;
     }
   });
 

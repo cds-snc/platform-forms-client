@@ -96,6 +96,28 @@ describe("<FormattedDate />", () => {
     });
   });
 
+  it("defaults to YYYY-MM-DD when dateFormat is invalid", () => {
+    cy.viewport(800, 400);
+
+    cy.mount(
+      <Formik
+        initialValues={{}}
+        onSubmit={() => {
+          throw new Error("Function not implemented.");
+        }}
+      >
+        <FormattedDate name="formattedDate" dateFormat="XXXX-XX-XX" />
+      </Formik>
+    );
+
+    cy.get("[data-testid=formattedDate]").should("exist");
+    cy.get("[data-testid=formattedDate]").within(() => {
+      cy.get("[data-testid]").eq(0).should("have.attr", "data-testid", "year-number");
+      cy.get("[data-testid]").eq(1).should("have.attr", "data-testid", "month-number");
+      cy.get("[data-testid]").eq(2).should("have.attr", "data-testid", "day-number");
+    });
+  });
+
   it("renders a legend for the fieldset", () => {
     cy.viewport(800, 400);
 
