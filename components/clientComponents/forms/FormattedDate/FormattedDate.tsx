@@ -115,6 +115,7 @@ export const FormattedDate = (props: FormattedDateProps): React.ReactElement => 
       aria-describedby={description ? `desc-${id}` : undefined}
       data-testid="formattedDate"
       id={id}
+      tabIndex={0}
     >
       <legend className={cn("gc-label", required && "required")} id={`label-${id}`}>
         {label}
