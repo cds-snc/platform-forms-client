@@ -40,7 +40,6 @@ import { authCheckAndThrow } from "@lib/actions";
 
 jest.mock("@lib/auditLogs");
 jest.mock("@lib/actions/auth");
-const mockedAuthCheckAndThrow = jest.mocked(authCheckAndThrow, { shallow: true });
 
 const structuredClone = <T>(obj: T): T => {
   return v8.deserialize(v8.serialize(obj));
@@ -925,7 +924,6 @@ describe("Template CRUD functions", () => {
     } as Session;
     const ability = createAbility(fakeSession);
 
-    mockedAuthCheckAndThrow.mockResolvedValue({ ability, session: fakeSession });
     (prismaMock.template.findUnique as jest.MockedFunction<any>).mockResolvedValue({
       ...buildPrismaResponse("formtestID", formConfiguration),
       users: [{ id: "1" }],
