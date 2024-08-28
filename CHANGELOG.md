@@ -5,6 +5,26 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.20.0](https://github.com/cds-snc/platform-forms-client/compare/v3.19.0...v3.20.0) (2024-08-26)
+
+
+### Features
+
+* Updates Repeating Sets, Pages and Rules to work together on the Review page and form output ([#4186](https://github.com/cds-snc/platform-forms-client/issues/4186)) ([5422d6c](https://github.com/cds-snc/platform-forms-client/commit/5422d6c1800a5ff961270e1effc224718558926a))
+
+
+### Bug Fixes
+
+* Adds focus heading behavior for forms with pages (groups) ([#4201](https://github.com/cds-snc/platform-forms-client/issues/4201)) ([cb31f6e](https://github.com/cds-snc/platform-forms-client/commit/cb31f6ed1d296c2e9a498c2b771f39ef0011995f))
+* content - clarify limitations with reordering pages if branching is applied ([#4199](https://github.com/cds-snc/platform-forms-client/issues/4199)) ([69bf388](https://github.com/cds-snc/platform-forms-client/commit/69bf388afe2990c677fe891eeb9483b699d31c21))
+* ensure modal for conditional rules starts with option selected ([#4178](https://github.com/cds-snc/platform-forms-client/issues/4178)) ([afcee50](https://github.com/cds-snc/platform-forms-client/commit/afcee509ae6d0da34a35b54f5d652b269d952218))
+* no owners on template error when loading unsaved draft form ([#4195](https://github.com/cds-snc/platform-forms-client/issues/4195)) ([9806cbe](https://github.com/cds-snc/platform-forms-client/commit/9806cbe2a93aa31bc581173c0caef1c1a6b55568))
+
+
+### Code Refactoring
+
+* rework file validation error types ([#4203](https://github.com/cds-snc/platform-forms-client/issues/4203)) ([6849198](https://github.com/cds-snc/platform-forms-client/commit/68491986a073953a277e36fbd7c139884d3be40e))
+
 ## [3.19.0](https://github.com/cds-snc/platform-forms-client/compare/v3.18.2...v3.19.0) (2024-08-14)
 
 
