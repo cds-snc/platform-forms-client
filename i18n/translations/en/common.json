@@ -159,7 +159,7 @@
   "logic": {
     "start": "Start page",
     "end": "Confirmation page",
-    "review": "End (Review and confirm)",
+    "review": "End (Review page and Confirmation)",
     "introduction": "Form introduction",
     "confirmation": "Confirmation message",
     "privacy": "Privacy statement"
