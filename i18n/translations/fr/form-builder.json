@@ -63,6 +63,8 @@
       "fieldsDesc": "Ceci détermine la manière dont la date est saisie et dont les données existent.",
       "fullAddress": "Adresse complète",
       "splitAddress": "Adresse fractionnée",
+      "customize": "Adapter le format de l’adresse",
+      "startTyping": "Commencez à taper l'adresse à rechercher",
       "components": {
         "header": "Parties de l’adresse à inclure",
         "desc": "Essayez de minimiser ce qui est demandé pour ne recueillir que ce qui est nécessaire.",
