@@ -29,7 +29,7 @@ interface CardLinksProps {
   url: string;
   isPublished: boolean;
   deliveryOption?: { emailAddress?: string } | null;
-  overdue: number;
+  overdue: boolean;
 }
 
 const CardLinks = async ({ isPublished, url, id, deliveryOption, overdue }: CardLinksProps) => {
@@ -121,7 +121,7 @@ export interface CardI {
   isPublished: boolean;
   date: string;
   url: string;
-  overdue: number;
+  overdue: boolean;
 }
 
 export const Card = async ({ card }: { card: CardI }) => {

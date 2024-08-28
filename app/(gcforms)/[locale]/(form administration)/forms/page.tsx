@@ -20,7 +20,7 @@ export type FormsTemplate = {
   isPublished: boolean;
   date: string;
   url: string;
-  overdue: number;
+  overdue: boolean;
 };
 
 export async function generateMetadata({
@@ -71,7 +71,7 @@ export default async function Page({
         isPublished,
         date: updatedAt ?? Date.now().toString(),
         url: `/${locale}/id/${id}`,
-        overdue: 0,
+        overdue: false,
       };
     });
 
