@@ -28,7 +28,7 @@ export const Cards = async ({
             {templates.map((card) => {
               // Check if the form has an overdue submission
               if (overdueTemplateIds.includes(card.id)) {
-                card.overdue = 1;
+                card.overdue = true;
               }
 
               return (

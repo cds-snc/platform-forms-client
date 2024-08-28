@@ -27,9 +27,10 @@ export const getOverdueTemplateIds = async (templateIds: string[]): Promise<stri
 
     return filterOverdueTemplateIds(templateIds, overdueData.formIds);
   } catch (e) {
-    logMessage.info(`OVERDUE error: ${e.message}`);
-    return [];
+    const error = e as Error;
+    logMessage.info(`OVERDUE error: ${error.message}`);
   }
+  return [];
 };
 
 function filterOverdueTemplateIds(templateIds: string[], overdueFormIds: string[]): string[] {
@@ -82,7 +83,7 @@ async function retrieveNewOrDownloadedFormResponsesOver28DaysOld() {
     return formResponses;
   } catch (error) {
     throw new Error(
-      `Failed to retrieve new or downloaded form responses. Reason: ${(error as Error).message}.`
+      `Failed to retrieve new or downloaded form responses.Reason: ${(error as Error).message}.`
     );
   }
 }
