@@ -34,8 +34,8 @@ async function getUsersForForm(formID: string) {
       select: {
         users: {
           select: {
-            id: true,
-            name: true,
+            userId: true,
+            user: true,
           },
         },
       },

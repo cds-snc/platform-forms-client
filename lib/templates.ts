@@ -149,9 +149,13 @@ async function _unprotectedGetTemplateWithAssociatedUsers(formID: string): Promi
         ttl: true,
         users: {
           select: {
-            id: true,
-            name: true,
-            email: true,
+            user: {
+              select: {
+                id: true,
+                name: true,
+                email: true,
+              },
+            },
           },
         },
       },
@@ -363,7 +367,7 @@ export async function getAllTemplatesForUser(
           ttl: null,
           users: {
             some: {
-              id: ability.userID,
+              userId: ability.userID,
             },
           },
         },
