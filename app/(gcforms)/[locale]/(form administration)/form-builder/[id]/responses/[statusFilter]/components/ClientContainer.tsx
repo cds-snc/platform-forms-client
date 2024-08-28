@@ -5,6 +5,7 @@ import { DeliveryOptionEmail } from "./DeliveryOptionEmail";
 import { NavigationTabs } from "./NavigationTabs";
 import { ResponsesFooter } from "./ResponsesFooter";
 import { Responses } from "./Responses";
+import { ManageFormAccessDialog } from "./Dialogs/ManageFormAccessDialog";
 
 export const ClientContainer = ({
   responseDownloadLimit,
@@ -39,10 +40,13 @@ export const ClientContainer = ({
   }
 
   return (
-    <div className="mr-10">
-      <NavigationTabs formId={id} />
-      <Responses responseDownloadLimit={responseDownloadLimit} overdueAfter={overdueAfter} />
-      <ResponsesFooter formId={id} />
-    </div>
+    <>
+      <div className="mr-10">
+        <NavigationTabs formId={id} />
+        <Responses responseDownloadLimit={responseDownloadLimit} overdueAfter={overdueAfter} />
+        <ResponsesFooter formId={id} />
+      </div>
+      <ManageFormAccessDialog />
+    </>
   );
 };
