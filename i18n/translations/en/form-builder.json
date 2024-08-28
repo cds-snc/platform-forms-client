@@ -927,11 +927,11 @@
     },
     "endNode": {
       "label": "End",
-      "confirmContent": "Confirmation message"
+      "confirmContent": "Confirmation page"
     },
     "endNodeWithReview": {
-      "label": "End (Review and confirm)",
-      "reviewContent": "Review"
+      "label": "End (Review and Confirmation)",
+      "reviewContent": "Review page"
     },
     "exit": {
       "convertText": "Convert to:",
