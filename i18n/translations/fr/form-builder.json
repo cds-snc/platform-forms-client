@@ -460,7 +460,7 @@
       "isoFormatLabel": "AAAA-MM-JJ (Standard du Gouvernement du Canada)",
       "ddmmyyyyFormatLabel": "JJ-MM-AAAA",
       "mmddyyyyFormatLabel": "MM-JJ-AAAA",
-      "infoBox": "[FR] Which date format should you use?",
+      "infoBox": "Quel format de date utiliser?",
       "infoLine1": "Le format standard de la date au Canada est AAAA-MM-JJ et devrait être votre premier choix, à moins qu'il n'y ait une raison de choisir un format différent.",
       "infoLine2": "Par exemple, lorsque vous demandez la date exacte d'un passeport, d'une carte ou d'un autre document, faites en sorte que les champs correspondent au format de l'original. Il est ainsi plus facile pour les utilisateurs de recopier la date avec précision."
     }
