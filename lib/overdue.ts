@@ -1,25 +1,33 @@
 import { ScanCommand, ScanCommandOutput } from "@aws-sdk/lib-dynamodb";
 import { DynamoDBClient } from "@aws-sdk/client-dynamodb";
 import { getRedisInstance } from "@lib/integration/redisConnector";
+import { logMessage } from "@lib/logger";
 
 export const getOverdueTemplateIds = async (templateIds: string[]): Promise<string[]> => {
   const EXPIRE = 10 * 60; // 10 min -- for testing
   const KEY = "overdue:responses:formIds";
-  const redis = await getRedisInstance();
 
   try {
+    const redis = await getRedisInstance();
     const overdue = await redis.get(KEY);
+
+    logMessage.info("OVERDUE overdue");
 
     if (overdue) {
       const overdueData = JSON.parse(overdue);
+      logMessage.info(`OVERDUE cached overdueData: ${overdue}`);
       return filterOverdueTemplateIds(templateIds, overdueData.formIds);
     }
 
     const overdueData = await fetchOverdueFormIds();
+
+    logMessage.info(`OVERDUE fetched overdueData: ${JSON.stringify(overdueData)}`);
+
     await redis.setex(KEY, EXPIRE, JSON.stringify(overdueData));
 
     return filterOverdueTemplateIds(templateIds, overdueData.formIds);
   } catch (e) {
+    logMessage.info(`OVERDUE error: ${e.message}`);
     return [];
   }
 };
