@@ -926,12 +926,12 @@
       "option": "Pour faire emprunter un chemin précis en fonction d'une réponse choisie."
     },
     "endNode": {
-      "label": "End",
-      "confirmContent": "Confirmation message"
+      "label": "Fin",
+      "confirmContent": "Page de confirmation"
     },
     "endNodeWithReview": {
-      "label": "End (Review and confirm)",
-      "reviewContent": "Review"
+      "label": "Fin (Page récapitulative et confirmation)",
+      "reviewContent": "Page récapitulative"
     },
     "exit": {
       "convertText": "Convertir en :",
