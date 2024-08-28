@@ -58,6 +58,10 @@ describe("isValidDate", () => {
     expect(isValidDate({ YYYY: 2023, MM: 2, DD: 30 })).toBe(false);
     expect(isValidDate({ YYYY: 2023, MM: 13, DD: 1 })).toBe(false);
   });
+
+  it("returns true for December 31", () => {
+    expect(isValidDate({ YYYY: 2023, MM: 12, DD: 31 })).toBe(true);
+  });
 });
 
 describe("isLeapYear", () => {

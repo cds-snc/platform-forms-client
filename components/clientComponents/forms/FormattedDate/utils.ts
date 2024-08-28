@@ -46,7 +46,8 @@ export const isValidDate = (dateObject: DateObject): boolean => {
   }
 
   const { YYYY, MM, DD } = dateObject;
-  const date = new Date(`${YYYY}-${MM}-${DD}`);
+  const date = new Date(YYYY, MM - 1, DD);
+
   return date.getFullYear() === YYYY && date.getMonth() + 1 === MM && date.getDate() === DD;
 };
 
