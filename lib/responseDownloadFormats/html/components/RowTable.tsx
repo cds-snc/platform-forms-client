@@ -21,7 +21,6 @@ const QuestionRows = ({
           {item.type === FormElementTypes.formattedDate && item.dateFormat ? (
             <>
               <br />
-              {t(`formattedDate.${item.dateFormat}`, { lng: "en" })}
               {orderLanguageStrings({
                 stringEn: t(`formattedDate.${item.dateFormat}`, { lng: "en" }),
                 stringFr: t(`formattedDate.${item.dateFormat}`, { lng: "fr" }),
