@@ -230,6 +230,9 @@ export const getSubmissionsByFormat = async ({
                       questionEn: subQuestion.properties.titleEn,
                       questionFr: subQuestion.properties.titleFr,
                       answer: getAnswerAsString(subQuestion, value),
+                      ...(subQuestion.type === "formattedDate" && {
+                        dateFormat: subQuestion.properties.dateFormat,
+                      }),
                     };
                   }
                 });
@@ -243,6 +246,9 @@ export const getSubmissionsByFormat = async ({
             questionEn: question?.properties.titleEn,
             questionFr: question?.properties.titleFr,
             answer: getAnswerAsString(question, answer),
+            ...(question?.type === "formattedDate" && {
+              dateFormat: question.properties.dateFormat,
+            }),
           } as Answer;
         }
       );

@@ -4,6 +4,7 @@ import { customTranslate, orderLangugeStrings } from "../../../i18nHelpers";
 import { Answer, Submission } from "../../types";
 import { TableProps } from "../types";
 import { formatDateTimeUTC } from "@lib/utils/form-builder";
+import { FormElementTypes } from "@lib/types";
 
 const QuestionColumns = ({
   submission,
@@ -17,6 +18,13 @@ const QuestionColumns = ({
       <div className="flex w-full flex-row border-b border-gray py-4">
         <dt key="" className="w-120 py-4 font-bold">
           {orderLangugeStrings({ stringEn: item.questionEn, stringFr: item.questionFr, lang })}
+          {item.type === FormElementTypes.formattedDate && item.dateFormat ? (
+            <>
+              <br /> {item.dateFormat}
+            </>
+          ) : (
+            ""
+          )}
         </dt>
         <dd className={`py-4 pl-8`}>{String(item.answer) || "-"}</dd>
       </div>

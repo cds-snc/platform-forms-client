@@ -1,11 +1,14 @@
 import { createArrayCsvStringifier as createCsvStringifier } from "csv-writer";
 import { FormResponseSubmissions } from "../types";
+import { FormElementTypes } from "@lib/types";
 
 const specialChars = ["=", "+", "-", "@"];
 
 export const transform = (formResponseSubmissions: FormResponseSubmissions) => {
   const header = formResponseSubmissions.submissions[0].answers.map((item) => {
-    return `${item.questionEn}\n${item.questionFr}`;
+    return `${item.questionEn}\n${item.questionFr}${
+      item.type === FormElementTypes.formattedDate && item.dateFormat ? "\n" + item.dateFormat : ""
+    }`;
   });
 
   header.unshift(

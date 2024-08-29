@@ -3,6 +3,7 @@ import { capitalize } from "./ResponseSection";
 import { customTranslate, getProperty } from "@lib/i18nHelpers";
 import { Answer, Submission } from "../../types";
 import { TableProps } from "../types";
+import { FormElementTypes } from "@lib/types";
 
 const QuestionRows = ({
   submission,
@@ -16,6 +17,13 @@ const QuestionRows = ({
       <div className={`flex ${subItem ? "flex-row" : "flex-col"} border-b border-gray`}>
         <dt className="whitespace-nowrap border-b-2 border-gray p-4 font-bold">
           {String(item[getProperty("question", lang)])}
+          {item.type === FormElementTypes.formattedDate && item.dateFormat ? (
+            <>
+              <br /> {item.dateFormat}
+            </>
+          ) : (
+            ""
+          )}
         </dt>
         <dd className="p-4">
           <p>{String(item.answer) || "-"}</p>
