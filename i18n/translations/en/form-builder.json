@@ -950,6 +950,14 @@
       "page": "To change how pages are ordered and connected.",
       "option": "To take a specific path depending on a selected option."
     },
+    "endNode": {
+      "label": "End of form",
+      "confirmContent": "Confirmation page"
+    },
+    "endNodeWithReview": {
+      "label": "End (Review and Confirmation)",
+      "reviewContent": "Review page"
+    },
     "exit": {
       "convertText": "Convert to:",
       "checkboxLabel": "Exit page",
@@ -986,6 +994,9 @@
       "text1": "Add a <strong>New page</strong> from the",
       "text2": "Pages tab",
       "text3": "before adding a branch."
+    },
+    "endPage": {
+      "description": "Select another page. You cannot add rules to the end of the form."
     }
   },
   "groups": {
