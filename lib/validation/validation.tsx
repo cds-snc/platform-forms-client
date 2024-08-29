@@ -16,6 +16,8 @@ import formNameArraySchema from "@lib/middleware/schemas/submission-name-array.s
 import { matchRule, FormValues, GroupsType } from "@lib/formContext";
 import { inGroup } from "@lib/formContext";
 import { isFileExtensionValid, isAllFilesSizeValid } from "./fileValidationClientSide";
+import { DateObject } from "@clientComponents/forms/FormattedDate/types";
+import { isValidDate } from "@clientComponents/forms/FormattedDate/utils";
 
 /**
  * getRegexByType [private] defines a mapping between the types of fields that need to be validated
@@ -147,6 +149,17 @@ const isFieldResponseValid = (
 
       if (fileInputResponse.name && !isFileExtensionValid(fileInputResponse.name))
         return t("input-validation.file-type-invalid");
+
+      break;
+    }
+    case FormElementTypes.formattedDate: {
+      if (validator.required && !value) {
+        return t("input-validation.required");
+      }
+
+      if (value && !isValidDate(JSON.parse(value as string) as DateObject)) {
+        return t("input-validation.date-invalid");
+      }
 
       break;
     }

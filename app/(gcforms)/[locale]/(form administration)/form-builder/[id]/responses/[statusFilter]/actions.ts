@@ -16,7 +16,7 @@ import {
   JSONResponse,
 } from "@lib/responseDownloadFormats/types";
 import { getFullTemplateByID } from "@lib/templates";
-import { FormElementTypes, VaultStatus } from "@lib/types";
+import { FormElement, FormElementTypes, VaultStatus } from "@lib/types";
 import { isResponseId } from "@lib/validation/validation";
 import {
   confirmResponses,
@@ -38,6 +38,8 @@ import { getLayoutFromGroups } from "@lib/utils/form-builder/groupedFormHelpers"
 import { allowGrouping } from "@formBuilder/components/shared/right-panel/treeview/util/allowGrouping";
 import { orderGroups } from "@lib/utils/form-builder/orderUsingGroupsLayout";
 import { formHasGroups } from "@lib/utils/form-builder/formHasGroups";
+import { DateFormat, DateObject } from "@clientComponents/forms/FormattedDate/types";
+import { getFormattedDateFromObject } from "@clientComponents/forms/FormattedDate/utils";
 
 export const fetchSubmissions = async ({
   formId,
@@ -105,6 +107,25 @@ const sortByGroups = ({ form, elements }: { form: FormProperties; elements: Answ
   const groups = orderGroups(form.groups, form.groupsLayout) ?? {};
   const layout = getLayoutFromGroups(form, groups);
   return sortByLayout({ layout, elements });
+};
+
+const getAnswerAsString = (question: FormElement | undefined, answer: unknown): string => {
+  if (question && question.type === "checkbox") {
+    return Array(answer).join(", ");
+  }
+
+  if (question && question.type === "formattedDate") {
+    // Could be empty if the date was not required
+    if (!answer) {
+      return "";
+    }
+    const dateFormat = (question.properties.dateFormat || "YYYY-MM-DD") as DateFormat;
+    const dateObject = JSON.parse(answer as string) as DateObject;
+
+    return getFormattedDateFromObject(dateFormat, dateObject);
+  }
+
+  return answer as string;
 };
 
 const logDownload = async (
@@ -202,12 +223,16 @@ export const getSubmissionsByFormat = async ({
               answer: answer.map((item) => {
                 return Object.values(item).map((value, index) => {
                   if (question?.properties.subElements) {
+                    const subQuestion = question?.properties.subElements[index];
                     return {
                       questionId: question?.id,
-                      type: question?.properties.subElements[index].type,
-                      questionEn: question?.properties.subElements[index].properties.titleEn,
-                      questionFr: question?.properties.subElements[index].properties.titleFr,
-                      answer: value,
+                      type: subQuestion.type,
+                      questionEn: subQuestion.properties.titleEn,
+                      questionFr: subQuestion.properties.titleFr,
+                      answer: getAnswerAsString(subQuestion, value),
+                      ...(subQuestion.type === "formattedDate" && {
+                        dateFormat: subQuestion.properties.dateFormat,
+                      }),
                     };
                   }
                 });
@@ -220,7 +245,10 @@ export const getSubmissionsByFormat = async ({
             type: question?.type,
             questionEn: question?.properties.titleEn,
             questionFr: question?.properties.titleFr,
-            answer: question?.type === "checkbox" ? Array(answer).join(", ") : answer,
+            answer: getAnswerAsString(question, answer),
+            ...(question?.type === "formattedDate" && {
+              dateFormat: question.properties.dateFormat,
+            }),
           } as Answer;
         }
       );
