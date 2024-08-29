@@ -5,7 +5,7 @@ import { css } from "../../html/css/compiled";
 import { ColumnTable } from "../../html/components/ColumnTable";
 import { AggregatedTable } from "./AggregatedTable";
 import { FormResponseSubmissions, Submission } from "@lib/responseDownloadFormats/types";
-import { customTranslate, getProperty, orderLangugeStrings } from "@lib/i18nHelpers";
+import { customTranslate, getProperty, orderLanguageStrings } from "@lib/i18nHelpers";
 import { copyCodeToClipboardScript } from "../scripts";
 import { TableHeader } from "./AggregatedTable";
 import { CopyCodes } from "./CopyCodes";
@@ -35,7 +35,7 @@ export const ResponseHtmlAggregated = ({
 
   const headersForTable = [
     {
-      title: orderLangugeStrings({
+      title: orderLanguageStrings({
         stringEn: t("responseTemplate.responseNumber", { lng: "en" }),
         stringFr: t("responseTemplate.responseNumber", { lng: "fr" }),
         lang,
@@ -43,7 +43,7 @@ export const ResponseHtmlAggregated = ({
       type: "formData",
     },
     {
-      title: orderLangugeStrings({
+      title: orderLanguageStrings({
         stringEn: t("responseTemplate.submissionDate", { lng: "en" }),
         stringFr: t("responseTemplate.submissionDate", { lng: "fr" }),
         lang,
@@ -52,7 +52,7 @@ export const ResponseHtmlAggregated = ({
     },
     ...formResponseSubmissions.submissions[0].answers.map((answer) => {
       return {
-        title: orderLangugeStrings({
+        title: orderLanguageStrings({
           stringEn: answer.questionEn,
           stringFr: answer.questionFr,
           lang,

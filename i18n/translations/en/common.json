@@ -172,7 +172,10 @@
       "10": "October",
       "11": "November",
       "12": "December"
-    }
+    },
+    "YYYY-MM-DD": "YYYY-MM-DD",
+    "DD-MM-YYYY": "DD-MM-YYYY",
+    "MM-DD-YYYY": "MM-DD-YYYY"
   },
   "start": "Start",
   "loadingResult": "Loading...",

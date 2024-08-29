@@ -1,13 +1,21 @@
 import { createArrayCsvStringifier as createCsvStringifier } from "csv-writer";
 import { FormResponseSubmissions } from "../types";
 import { FormElementTypes } from "@lib/types";
+import { customTranslate } from "@lib/i18nHelpers";
 
 const specialChars = ["=", "+", "-", "@"];
 
 export const transform = (formResponseSubmissions: FormResponseSubmissions) => {
+  const { t } = customTranslate("common");
+
   const header = formResponseSubmissions.submissions[0].answers.map((item) => {
     return `${item.questionEn}\n${item.questionFr}${
-      item.type === FormElementTypes.formattedDate && item.dateFormat ? "\n" + item.dateFormat : ""
+      item.type === FormElementTypes.formattedDate && item.dateFormat
+        ? "\n" +
+          t(`formattedDate.${item.dateFormat}`, { lng: "en" }) +
+          "/" +
+          t(`formattedDate.${item.dateFormat}`, { lng: "fr" })
+        : ""
     }`;
   });
 

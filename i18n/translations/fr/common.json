@@ -172,7 +172,10 @@
       "10": "octobre",
       "11": "novembre",
       "12": "décembre"
-    }
+    },
+    "YYYY-MM-DD": "AAAA-MM-JJ",
+    "DD-MM-YYYY": "JJ-MM-AAAA",
+    "MM-DD-YYYY": "MM-JJ-AAAA"
   },
   "start": "Départ",
   "loadingResult": "Chargement en cours...",
