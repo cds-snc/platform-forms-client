@@ -1,5 +1,5 @@
 "use client";
-import { useCallback } from "react";
+import { useCallback, useRef } from "react";
 import { FormElementTypes } from "@lib/types";
 import { useTemplateStore } from "@lib/store/useTemplateStore";
 import { blockLoader, LoaderType } from "../../utils/form-builder/blockLoader";
@@ -8,6 +8,7 @@ import { defaultField, createElement, setDescription } from "@lib/utils/form-bui
 import { useGroupStore } from "@formBuilder/components/shared/right-panel/treeview/store/useGroupStore";
 import { getTranslatedElementProperties } from "@formBuilder/actions";
 import { useTreeRef } from "@formBuilder/components/shared/right-panel/treeview/provider/TreeRefProvider";
+import { FormElementWithIndex } from "@lib/types/form-builder-types";
 
 export const useHandleAdd = () => {
   const { add, addSubItem } = useTemplateStore((s) => ({
@@ -32,23 +33,44 @@ export const useHandleAdd = () => {
     return item;
   }, []);
 
+  const documentRef = useRef<Document | null>(null);
+
+  if (typeof window !== "undefined") {
+    documentRef.current = window.document;
+  }
+
   /* Note this callback is also in ElementPanel */
   const handleAddElement = useCallback(
     async (index: number, type?: FormElementTypes) => {
+      let id;
       if (allowedTemplates.includes(type as LoaderType)) {
         blockLoader(type as LoaderType, index, async (data, position) => {
           // Note add() returns the element id -- we're not using it yet
-          await add(position, data.type, data, groupId);
+          id = await add(position, data.type, data, groupId);
         });
         return;
       }
 
       const item = await create(type as FormElementTypes);
       // Note add() returns the element id -- we're not using it yet
-      const id = await add(index, item.type, item, groupId);
+      id = await add(index, item.type, item, groupId);
       treeView?.current?.addItem(String(id));
 
       const el = document.getElementById(`item-${id}`);
+
+      item.id = id;
+
+      const openMoreModal = new CustomEvent("open-more-dialog", {
+        detail: {
+          item: {
+            ...item,
+            index,
+            questionNumber: index,
+          } as FormElementWithIndex,
+        },
+      });
+
+      documentRef.current?.dispatchEvent(openMoreModal);
 
       if (!el) return;
 
