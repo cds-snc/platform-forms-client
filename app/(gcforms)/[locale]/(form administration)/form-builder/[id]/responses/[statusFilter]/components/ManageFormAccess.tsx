@@ -1,17 +1,11 @@
 import { Button } from "@clientComponents/globals";
-import { useRef } from "react";
+import { useEvent } from "@lib/hooks/useEvent";
 
-export const ManageFormAccess = () => {
-  const documentRef = useRef<Document | null>(null);
-
-  if (typeof window !== "undefined") {
-    documentRef.current = window.document;
-  }
+export const ManageFormAccessButton = () => {
+  const { Event } = useEvent();
 
   const openManageFormAccessDialog = () => {
-    const openDialog = new CustomEvent("open-form-access-dialog");
-
-    documentRef.current?.dispatchEvent(openDialog);
+    Event.fire("open-form-access-dialog");
   };
 
   return (

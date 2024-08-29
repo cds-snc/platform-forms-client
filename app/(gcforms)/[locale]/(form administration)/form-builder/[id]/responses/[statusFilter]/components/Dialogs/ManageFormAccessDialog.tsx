@@ -1,16 +1,11 @@
 import { Button } from "@clientComponents/globals";
 import { Dialog, useDialogRef } from "@formBuilder/components/shared";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useEvent } from "@lib/hooks/useEvent";
+import { useEffect, useState } from "react";
 
 export const ManageFormAccessDialog = () => {
   const dialogRef = useDialogRef();
-
-  // @TODO: maybe move the follwoing to Dialog ala useDialogRef()
-  const documentRef = useRef<Document | null>(null);
-
-  if (typeof window !== "undefined") {
-    documentRef.current = window.document;
-  }
+  const { Event } = useEvent();
 
   const [isOpen, setIsOpen] = useState(false);
 
@@ -18,24 +13,17 @@ export const ManageFormAccessDialog = () => {
     setIsOpen(false);
   };
 
-  function isCustomEvent(event: Event): event is CustomEvent {
-    return "detail" in event;
-  }
-
-  const handleOpenDialog = useCallback((e: Event) => {
-    if (isCustomEvent(e)) {
-      setIsOpen(true);
-    }
-  }, []);
+  const handleOpenDialog = () => {
+    setIsOpen(true);
+  };
 
   useEffect(() => {
-    documentRef.current &&
-      documentRef.current.addEventListener("open-form-access-dialog", handleOpenDialog);
+    Event.on("open-form-access-dialog", handleOpenDialog);
 
     return () => {
-      documentRef.current &&
-        documentRef.current.removeEventListener("open-form-access-dialog", handleOpenDialog);
+      Event.on("open-form-access-dialog", handleOpenDialog);
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [handleOpenDialog]);
 
   const dialogActions = (

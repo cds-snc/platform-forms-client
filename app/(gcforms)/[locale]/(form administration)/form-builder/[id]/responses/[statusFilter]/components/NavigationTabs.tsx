@@ -4,7 +4,7 @@ import { DeleteIcon, FolderIcon, InboxIcon } from "@serverComponents/icons";
 import { TabNavLink } from "@clientComponents/globals/TabNavLink";
 import { usePathname } from "next/navigation";
 import { useTranslation } from "@i18n/client";
-import { ManageFormAccess } from "./ManageFormAccess";
+import { ManageFormAccessButton } from "./ManageFormAccess";
 
 export const NavigationTabs = ({ formId }: { formId: string }) => {
   const {
@@ -48,7 +48,7 @@ export const NavigationTabs = ({ formId }: { formId: string }) => {
       </TabNavLink>
       {/* @TODO: control access by role (owner) */}
       <div className="absolute right-0">
-        <ManageFormAccess />
+        <ManageFormAccessButton />
       </div>
     </nav>
   );
