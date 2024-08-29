@@ -138,7 +138,7 @@ export const ModalForm = ({
             id="dateFormat-iso"
             label={t("moreDialog.date.isoFormatLabel")}
             value="YYYY-MM-DD"
-            checked={properties.dateFormat === "YYYY-MM-DD"}
+            checked={!properties.dateFormat || properties.dateFormat === "YYYY-MM-DD"}
             onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
               updateModalProperties(item.id, {
                 ...properties,
