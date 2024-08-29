@@ -969,6 +969,9 @@
       "text1": "Ajoutez une <strong>Nouvelle page</strong> dans",
       "text2": "l'onglet Pages",
       "text3": "avant d'ajouter un embranchement."
+    },
+    "endPage": {
+      "description": "Select another node to add rules, you cannot add rules to the End"
     }
   },
   "groups": {

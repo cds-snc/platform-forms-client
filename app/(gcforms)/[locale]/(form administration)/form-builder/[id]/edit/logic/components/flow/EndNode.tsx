@@ -19,10 +19,7 @@ export const EndNode = (node: NodeProps) => {
   return (
     <div className="mt-10">
       <div>
-        <label
-          htmlFor={node.id}
-          className="inline-block w-5/6 max-w-[200px] truncate text-sm text-slate-600"
-        >
+        <label htmlFor={node.id} className="inline-block text-sm text-slate-600">
           {t("logic.endNode.label")}
         </label>
       </div>

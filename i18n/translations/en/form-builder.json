@@ -969,6 +969,9 @@
       "text1": "Add a <strong>New page</strong> from the",
       "text2": "Pages tab",
       "text3": "before adding a branch."
+    },
+    "endPage": {
+      "description": "Select another node to add rules, you cannot add rules to the End"
     }
   },
   "groups": {
