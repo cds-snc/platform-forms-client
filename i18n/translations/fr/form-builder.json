@@ -971,7 +971,7 @@
       "text3": "avant d'ajouter un embranchement."
     },
     "endPage": {
-      "description": "Select another node to add rules, you cannot add rules to the End"
+      "description": "Sélectionnez une autre page. Vous ne pouvez pas ajouter de règles à fin du formulaire."
     }
   },
   "groups": {
