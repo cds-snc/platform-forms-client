@@ -27,7 +27,8 @@
       "dynamicRow": "Ajouter un ensemble de réponses",
       "richText": "Ajouter du texte de page",
       "departments": "Ajouter un ministère",
-      "combobox": "Ajouter une liste avec recherche"
+      "combobox": "Ajouter une liste avec recherche",
+      "formattedDate": "Ajouter une date"
     },
     "address": {
       "whatIsYourAddress": "Quelle est votre adresse?",
@@ -149,6 +150,15 @@
       },
       "title": "Noms individuels"
     },
+    "formattedDate": {
+      "title": "Date",
+      "description": "Un champ pour recueillir une date dans un format numérique personnablisable.",
+      "label": "Entrer la date",
+      "year": "Année",
+      "month": "Mois",
+      "day": "Jour",
+      "customizeDate": "Adapter le format"
+    },
     "listItem": "Élément de liste ",
     "name": {
       "description": "Un champ unique pour le nom. Il peut s’agir d’une manière plus inclusive et plus sensible de recueillir ces informations.",
@@ -173,16 +183,16 @@
       "example": "Texte de paragraphe qui peut être mis en forme avec du <strong>gras</strong> ou de l'<i>italique</i>, ou avec des <a tab-index=\"-1\" href=\"#\">hyperliens</a>.",
       "title": "Texte de page"
     },
-    "textArea": {
-      "title": "Réponse longue",
-      "description": "Une zone de texte pour une réponse libre de plusieurs lignes.",
-      "enterAnswer": "Question",
-      "forExample": "Texte explicatif ou exemple"
-    },
     "textField": {
       "description": "Un champ de texte pour une réponse d’une seule ligne.",
       "title": "Réponse courte",
       "enterAnswer": "Étiquette",
+      "forExample": "Texte explicatif ou exemple"
+    },
+    "textArea": {
+      "title": "Réponse longue",
+      "description": "Une zone de texte pour une réponse libre de plusieurs lignes.",
+      "enterAnswer": "Question",
       "forExample": "Texte explicatif ou exemple"
     }
   },
@@ -360,6 +370,7 @@
   "formatH3": "Mettre en en-tête niveau 3",
   "formatItalic": "Mettre en italique",
   "formatNumberedList": "Mettre en liste numérotée",
+  "formattedDate": "Date",
   "formConfirmationMessage": "Message de confirmation",
   "formDeleteResponses": {
     "title": "Approuvez la suppression des réponses avant de supprimer le formulaire",
@@ -439,6 +450,21 @@
     "label": "Nombre maximum de réponses"
   },
   "more": "Plus",
+  "moreDialog": {
+    "date": {
+      "dateOptions": "Options de date",
+      "typeOfDate": "Quel type de date recueillez-vous?",
+      "selectFormat": "Sélectionnez un format pour la date",
+      "generalDateLabel": "Date générale",
+      "birthDateLabel": "Date de naissance",
+      "isoFormatLabel": "AAAA-MM-JJ (Standard du Gouvernement du Canada)",
+      "ddmmyyyyFormatLabel": "JJ-MM-AAAA",
+      "mmddyyyyFormatLabel": "MM-JJ-AAAA",
+      "infoBox": "Quel format de date utiliser?",
+      "infoLine1": "Le format standard de la date au Canada est AAAA-MM-JJ et devrait être votre premier choix, à moins qu'il n'y ait une raison de choisir un format différent.",
+      "infoLine2": "Par exemple, lorsque vous demandez la date exacte d'un passeport, d'une carte ou d'un autre document, faites en sorte que les champs correspondent au format de l'original. Il est ainsi plus facile pour les utilisateurs de recopier la date avec précision."
+    }
+  },
   "moreOptions": "Plus d'options  ",
   "moveDown": "Déplacer vers le bas ",
   "moveUp": "Déplacer vers le haut ",
@@ -573,7 +599,6 @@
   "settingsNavHome": "Livraison des réponses",
   "settingsResponseEmailTitle": "Adresse courriel",
   "settingsResponseHint1": "Les réponses seront envoyées par courriel à cette boîte de réception. Il peut s'agir d'une boîte de réception partagée.",
-  "settingsResponseTitle": "Destination de livraison des réponses.",
   "settingsPurposeAndUse": {
     "title": "Usage prévu",
     "description": "Nous utiliserons cette information pour déterminer comment traiter les réponses qui sont dans Formulaires GC depuis plus de 45 jours.",
@@ -809,9 +834,9 @@
       "title": "Le téléchargement est limité aux réponses en retard jusqu'à ce qu'elles soient téléchargées et approuvées pour suppression",
       "body1": "Il y a",
       "body2": "réponses téléchargées avec 35 jours de retard ou plus. Approuvez la suppression de toute réponse téléchargée en retard avant d'en enregistrer de nouvelles."
-    },
-    "loading": "Chargement..."
+    }
   },
+  "loading": "Chargement...",
   "formSettingsModal": {
     "title": "Configurer le formulaire",
     "okay": "Enregistrer",

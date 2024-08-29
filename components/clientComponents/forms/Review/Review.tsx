@@ -15,38 +15,50 @@ import {
   Group,
 } from "@lib/formContext";
 import { randomId } from "@lib/client/clientHelpers";
+import { DateFormat, DateObject } from "../FormattedDate/types";
+import { getFormattedDateFromObject } from "../FormattedDate/utils";
 
 type ReviewItem = {
   id: string;
   name: string;
   title: string;
-  elements: Element[];
+  elements: ReviewElement[];
 };
 
-type Element = {
+type ReviewElement = {
   title: string;
-  values: string | FileInputResponse | Element[];
+  values: string | FileInputResponse | DateObject | ReviewElement[];
+  element: FormElement | undefined;
 };
 
-function formatElementValues(values: Element["values"]) {
-  if (!values) {
+function formatElementValues(element: ReviewElement) {
+  if (!element.values) {
     return "-";
   }
   // Case of a File upload
-  if ((values as FileInputResponse).based64EncodedFile !== undefined) {
-    const file = values as FileInputResponse;
+  if ((element.values as FileInputResponse).based64EncodedFile !== undefined) {
+    const file = element.values as FileInputResponse;
     if (!file.name || !file.size || file.size < 0) {
       return "-";
     }
     const fileSizeInMB = (file.size / 1024 / 1024).toFixed(2);
     return `${file.name} (${fileSizeInMB} MB)`;
   }
+
+  // Case of a Formatted date
+  if (element.element?.type === FormElementTypes.formattedDate) {
+    return getFormattedDateFromObject(
+      element.element?.properties.dateFormat as DateFormat,
+      JSON.parse(element.values as string) as DateObject
+    );
+  }
+
   // Case of an array like element e.g. checkbox
-  if (Array.isArray(values)) {
-    return values.join(", ") || "-";
+  if (Array.isArray(element.values)) {
+    return element.values.join(", ") || "-";
   }
   // Case of a single value element e.g. input
-  return String(values);
+  return String(element.values);
 }
 
 function getReviewItemElements(
@@ -62,9 +74,14 @@ function getReviewItemElements(
   );
   return shownElementIds.map((elementId) => {
     const element = formElements.find((item) => item.id === elementId);
-    let resultValues: string | Element[] = formatElementValues(
-      formValues[elementId as unknown as keyof typeof formValues] as Element["values"]
-    );
+    const reviewElement: ReviewElement = {
+      title: element?.properties?.[getLocalizedProperty("title", lang)] as string,
+      values: formValues[elementId as unknown as keyof typeof formValues] as string,
+      element,
+    };
+
+    let resultValues: string | ReviewElement[] = formatElementValues(reviewElement);
+
     // Handle any Sub Elements. Note Sub Elements = Dynamic Rows = Repeating Sets
     if (element?.type === FormElementTypes.dynamicRow) {
       resultValues = [];
@@ -84,22 +101,26 @@ function getReviewItemElements(
             return {
               title: subElements?.[valueRowIndex].properties?.[getLocalizedProperty("title", lang)],
               values: formValue,
+              element: element,
             };
           });
           return {
             title: subElementsTitle,
             values: titlesMappedToValues,
-          } as Element;
+            element,
+          } as ReviewElement;
         }
       );
       resultValues.push({
         title: parentTitle as string,
         values: subElementValues,
+        element,
       });
     }
     return {
       title: (element?.properties?.[getLocalizedProperty("title", lang)] as string) || "-",
       values: resultValues,
+      element,
     };
   });
 }
@@ -198,12 +219,14 @@ const QuestionsAnswersList = ({ reviewItem }: { reviewItem: ReviewItem }): React
       {Array.isArray(reviewItem.elements) &&
         reviewItem.elements.map((reviewElement) => {
           if (Array.isArray(reviewElement.values)) {
-            return <SubElements key={randomId()} elements={reviewElement.values as Element[]} />;
+            return (
+              <SubElements key={randomId()} elements={reviewElement.values as ReviewElement[]} />
+            );
           }
           return (
             <div key={randomId()} className="mb-8">
-              <dt className="font-bold mb-2">{reviewElement.title}</dt>
-              <dd>{formatElementValues(reviewElement.values)}</dd>
+              <dt className="mb-2 font-bold">{reviewElement.title}</dt>
+              <dd>{reviewElement.values as string}</dd>
             </div>
           );
         })}
@@ -212,9 +235,9 @@ const QuestionsAnswersList = ({ reviewItem }: { reviewItem: ReviewItem }): React
 };
 
 // Handle formatting Sub Elements. Note Sub Elements = Dynamic Rows = Repeating Sets.
-const SubElements = ({ elements }: { elements: Element[] }) => {
+const SubElements = ({ elements }: { elements: ReviewElement[] }) => {
   return elements?.map((subElementItem) => {
-    return (subElementItem.values as Element[])?.map((element) => {
+    return (subElementItem.values as ReviewElement[])?.map((element) => {
       if (Array.isArray(element.values)) {
         const dlId = randomId();
         // Create a nested DL for each Sub Element list
@@ -223,11 +246,12 @@ const SubElements = ({ elements }: { elements: Element[] }) => {
             <h4 className="italic" id={dlId}>
               {element.title}
             </h4>
-            {(element.values as Element[]).map((elementValues) => {
+            {(element.values as ReviewElement[]).map((elementValues) => {
               return (
                 <div key={randomId()} className="mb-2">
-                  <dt className="font-bold mb-2">{elementValues.title}</dt>
-                  <dd>{formatElementValues(elementValues.values)}</dd>
+                  <dt className="mb-2 font-bold">{elementValues.title}</dt>
+
+                  <dd>{formatElementValues(elementValues)}</dd>
                 </div>
               );
             })}
@@ -236,8 +260,8 @@ const SubElements = ({ elements }: { elements: Element[] }) => {
       }
       return (
         <div key={randomId()} className="mb-2">
-          <dt className="font-bold mb-2">{element.title}</dt>
-          <dd>{formatElementValues(element.values)}</dd>
+          <dt className="mb-2 font-bold">{element.title}</dt>
+          <dd>{formatElementValues(element)}</dd>
         </div>
       );
     });

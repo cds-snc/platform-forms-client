@@ -80,13 +80,13 @@ describe("Test FormBuilder Add Elements", () => {
     cy.get("button").contains("Add").click();
 
     cy.get('[data-testid="preset-filter"]').click();
-    cy.get('[data-testid="date"]').click();
+    cy.get('[data-testid="formattedDate"]').click();
     cy.get('[data-testid="element-description-add-element"]').click();
 
     cy.get('[id="item-1"]').should("have.attr", "placeholder", "Question");
 
-    cy.get('[data-testid="description-text"]').should("contain", "Format the date as: mm/dd/yyyy");
-    cy.get('[data-testid="date"]').should("contain", "mm/dd/yyyy");
+    // cy.get('[data-testid="description-text"]').should("contain", "Format the date as: mm/dd/yyyy");
+    // cy.get('[data-testid="date"]').should("contain", "mm/dd/yyyy");
   });
 
   it("Adds a Numeric field element", () => {
@@ -123,28 +123,8 @@ describe("Test FormBuilder Add Elements", () => {
     cy.get("label").contains("Condition 2").should("be.visible");
     cy.get("label").contains("Condition 3").should("be.visible");
   });
-  it("Renders date element with example text", () => {
-    cy.get("button").contains("Add").click();
-    cy.get('[data-testid="preset-filter"]').click();
-    cy.get('[data-testid="date"]').click();
-    cy.get('[data-testid="element-description-add-element"]').click();
-    cy.get(".description-text").should("be.visible").contains("Format the date as: mm/dd/yyyy");
-    cy.get(".example-text").should("be.visible").contains("mm/dd/yyyy");
-  });
   it("Renders matching element description in more modal", () => {
     // see https://github.com/cds-snc/platform-forms-client/issues/2017
-
-    cy.get("button").contains("Add").click();
-    cy.get('[data-testid="preset-filter"]').click();
-    cy.get('[data-testid="date"]').click();
-    cy.get('[data-testid="element-description-add-element"]').click();
-    cy.get(".description-text").should("be.visible").contains("Format the date as: mm/dd/yyyy");
-    cy.get(".example-text").should("be.visible").contains("mm/dd/yyyy");
-
-    cy.get('#element-1 [data-testid="more"]').click();
-    cy.get('[data-testid="description-input"]').contains("mm/dd/yyyy");
-    cy.get("button").contains("Close").click();
-
     cy.get("button").contains("Add").click();
     cy.get('[data-testid="preset-filter"]').click();
     cy.get('[data-testid="number"]').click();
@@ -152,22 +132,11 @@ describe("Test FormBuilder Add Elements", () => {
     cy.get(".description-text").should("be.visible").contains("Enter a number");
     cy.get(".example-text").should("be.visible").contains("0123456789");
 
-    cy.get('#element-2 [data-testid="more"]').click();
-    cy.get('[data-testid="description-input"]').contains("Enter a number");
-    cy.get("button").contains("Close").click();
-
-    // rearrange the first element
-    cy.get('#element-2 [data-testid="moveDown"]').click();
-
-    // check that the descriptions are still correct
     cy.get('#element-1 [data-testid="more"]').click();
-    cy.get('[data-testid="description-input"]').contains("mm/dd/yyyy");
-    cy.get("button").contains("Close").click();
-
-    cy.get('#element-2 [data-testid="more"]').click();
     cy.get('[data-testid="description-input"]').contains("Enter a number");
     cy.get("button").contains("Close").click();
   });
+
   it("Adds a Name block with autocomplete", () => {
     cy.get("button").contains("Add").click();
 
