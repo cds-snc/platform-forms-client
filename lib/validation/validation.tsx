@@ -76,6 +76,12 @@ const isFieldResponseValid = (
   validator: ValidationProperties,
   t: TFunction
 ): string | null | Record<string, unknown>[] => {
+  // Note that this will ignore a file upload since the value is an object. We could check the
+  // file's file name length but this is probably not necessary since OS's have a filename limit.
+  if (isInputTooLong(value as string)) {
+    return t("input-validation.too-many-characters");
+  }
+
   switch (componentType) {
     case FormElementTypes.textField: {
       const typedValue = value as string;
@@ -411,4 +417,16 @@ export const isResponseId = (field: string): boolean => {
     return false;
   }
   return true;
+};
+
+/**
+ * Used to limit a form input fields' character length. Limiting the length stops potential attack
+ * vectors and is a first step to help prevent hitting the Notify max character limit.
+ * @param inputField form input field. e.g. input, textarea, checkbox, radio, etc.
+ * @param maxCharacters charcter limit. Default is 10,000.
+ * @returns true if the input field is too long, false otherwise. False is also returned if the
+ * value type is not a string. e.g. file input value is an object.
+ */
+const isInputTooLong = (inputField: string, maxCharacters = 10000): boolean => {
+  return inputField?.length > maxCharacters;
 };
