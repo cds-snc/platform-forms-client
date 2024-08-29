@@ -926,7 +926,7 @@
       "option": "To take a specific path depending on a selected option."
     },
     "endNode": {
-      "label": "End",
+      "label": "End of form",
       "confirmContent": "Confirmation page"
     },
     "endNodeWithReview": {
