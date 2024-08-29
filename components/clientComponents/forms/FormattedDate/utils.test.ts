@@ -57,6 +57,7 @@ describe("isValidDate", () => {
   it("returns false for invalid dates", () => {
     expect(isValidDate({ YYYY: 2023, MM: 2, DD: 30 })).toBe(false);
     expect(isValidDate({ YYYY: 2023, MM: 13, DD: 1 })).toBe(false);
+    expect(isValidDate({ YYYY: 123, MM: 5, DD: 0 })).toBe(false);
   });
 
   it("returns true for December 31", () => {

@@ -45,6 +45,10 @@ export const isValidDate = (dateObject: DateObject): boolean => {
     return false;
   }
 
+  if (dateObject.YYYY < 1900) {
+    return false;
+  }
+
   const { YYYY, MM, DD } = dateObject;
   const date = new Date(YYYY, MM - 1, DD);
 
