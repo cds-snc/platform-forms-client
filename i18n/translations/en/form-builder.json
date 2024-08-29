@@ -971,7 +971,7 @@
       "text3": "before adding a branch."
     },
     "endPage": {
-      "description": "Select another node to add rules, you cannot add rules to the End"
+      "description": "Select another page. You cannot add rules to the end of the form."
     }
   },
   "groups": {
