@@ -925,6 +925,14 @@
       "page": "Pour modifier la façon dont les pages sont ordonnées et connectées.",
       "option": "Pour faire emprunter un chemin précis en fonction d'une réponse choisie."
     },
+    "endNode": {
+      "label": "Fin du formulaire",
+      "confirmContent": "Page de confirmation"
+    },
+    "endNodeWithReview": {
+      "label": "Fin (Page récapitulative et confirmation)",
+      "reviewContent": "Page récapitulative"
+    },
     "exit": {
       "convertText": "Convertir en :",
       "checkboxLabel": "Page de sortie",
@@ -961,6 +969,9 @@
       "text1": "Ajoutez une <strong>Nouvelle page</strong> dans",
       "text2": "l'onglet Pages",
       "text3": "avant d'ajouter un embranchement."
+    },
+    "endPage": {
+      "description": "Sélectionnez une autre page. Vous ne pouvez pas ajouter de règles à fin du formulaire."
     }
   },
   "groups": {
