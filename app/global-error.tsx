@@ -1,9 +1,11 @@
 "use client";
 
+import * as Sentry from "@sentry/nextjs";
+import Error from "next/error";
+
 import "../styles/app.scss";
 import "react-app-polyfill/stable";
 import { Noto_Sans, Lato } from "next/font/google";
-import { logMessage } from "@lib/logger";
 import { useEffect } from "react";
 
 const notoSans = Noto_Sans({
@@ -28,10 +30,8 @@ export default function GlobalError({
   reset: () => void;
 }) {
   useEffect(() => {
-    logMessage.error(`Global Error Handler Reached: ${(error as Error).message}`);
+    Sentry.captureException(error);
   }, [error]);
-
-  // TODO: localization, design and testing
 
   return (
     <html lang="en" dir="ltr" className={`${notoSans.variable} ${lato.variable}`}>
