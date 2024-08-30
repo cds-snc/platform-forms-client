@@ -31,7 +31,10 @@ export const PanelBody = ({
   const { t } = useTranslation("form-builder");
   const isRichText = item.type === "richText";
   const isDynamicRow = item.type === "dynamicRow";
+
   const isAddressComplete = item.type === "addressComplete";
+  const isFormattedDate = item.type === "formattedDate";
+
   const properties = item.properties;
   const maxLength = properties?.validation?.maxLength;
 
@@ -53,6 +56,11 @@ export const PanelBody = ({
   const addressCustomizeButton = (
     <Button theme="secondary" onClick={() => {}}>
       {t("addElementDialog.addressComplete.customize")}
+    </Button>
+  );
+  const moreButton = (
+    <Button theme="secondary" onClick={() => {}}>
+      {t("addElementDialog.formattedDate.customizeDate")}
     </Button>
   );
 
@@ -80,6 +88,7 @@ export const PanelBody = ({
               />
             </div>
           </div>
+
           <div>
             {isAddressComplete && (
               <div className="text-sm flex">
@@ -99,15 +108,24 @@ export const PanelBody = ({
             )}
           </div>
 
-          <div className="mb-4 flex gap-4 text-sm">
-            <div className="w-1/2">
+          <div className="mb-4 flex gap-4 text-sm ">
+            <div className="grow">
               <QuestionDescription item={item} describedById={describedById} />
-              <SelectedElement
-                lang={translationLanguagePriority}
-                item={item}
-                elIndex={elIndex}
-                formId={formId}
-              />
+              <div className="flex">
+                <div>
+                  <SelectedElement
+                    lang={translationLanguagePriority}
+                    item={item}
+                    elIndex={elIndex}
+                    formId={formId}
+                  />
+                </div>
+                {isFormattedDate && (
+                  <div className="mb-4 ml-4 self-end">
+                    <MoreModal item={item} moreButton={moreButton} onClose={forceRefresh} />
+                  </div>
+                )}
+              </div>
               {maxLength && (
                 <div className="disabled">
                   {t("maxCharacterLength")}
@@ -115,7 +133,7 @@ export const PanelBody = ({
                 </div>
               )}
             </div>
-            <div className="w-1/2">
+            <div className="w-64">
               {item.properties.autoComplete && (
                 <div data-testid={`autocomplete-${item.id}`} className="mt-5 text-sm">
                   <strong>{t("autocompleteIsSetTo")}</strong>{" "}

@@ -38,6 +38,7 @@
     "number": "Enter a number.",
     "email": "Enter a valid email address.",
     "date": "Enter a valid date in mm/dd/yyyy format.",
+    "date-invalid": "Enter a valid date.",
     "phone": "Enter a valid telephone number.",
     "regex": "Enter the correct format.",
     "file-size-too-large": "Select a smaller file.",
@@ -154,12 +155,34 @@
   "mainNavAriaLabel": "Main",
   "yourAccount": "Your account",
   "dateModified": "Date modified",
+  "formattedDate": {
+    "year": "Year",
+    "month": "Month",
+    "day": "Day",
+    "months": {
+      "1": "January",
+      "2": "February",
+      "3": "March",
+      "4": "April",
+      "5": "May",
+      "6": "June",
+      "7": "July",
+      "8": "August",
+      "9": "September",
+      "10": "October",
+      "11": "November",
+      "12": "December"
+    },
+    "YYYY-MM-DD": "YYYY-MM-DD",
+    "DD-MM-YYYY": "DD-MM-YYYY",
+    "MM-DD-YYYY": "MM-DD-YYYY"
+  },
   "start": "Start",
   "loadingResult": "Loading...",
   "logic": {
     "start": "Start page",
     "end": "Confirmation page",
-    "review": "Review page",
+    "review": "End (Review page and Confirmation)",
     "introduction": "Form introduction",
     "confirmation": "Confirmation message",
     "privacy": "Privacy statement"

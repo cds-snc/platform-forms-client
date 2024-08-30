@@ -61,6 +61,7 @@ export interface ElementProperties {
   isSectional?: boolean;
   maxNumberOfRows?: number;
   autoComplete?: string;
+  dateFormat?: string;
   conditionalRules?: ConditionalRule[];
   full?: boolean;
   addressComponents?: AddressComponents | undefined;
@@ -94,6 +95,7 @@ export enum FormElementTypes {
   departments = "departments",
   contact = "contact",
   combobox = "combobox",
+  formattedDate = "formattedDate",
 }
 // used to define attributes for a form element or field
 export interface FormElement {

@@ -22,3 +22,4 @@ export { ConditionalWrapper } from "./ConditionalWrapper/ConditionalWrapper";
 export { NextButton } from "./NextButton/NextButton";
 export { Combobox } from "./Combobox/Combobox";
 export { AddressComplete } from "./AddressComplete/AdressComplete";
+export { FormattedDate } from "./FormattedDate/FormattedDate";

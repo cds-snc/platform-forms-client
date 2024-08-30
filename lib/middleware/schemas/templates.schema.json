@@ -222,7 +222,8 @@
             "richText",
             "attestation",
             "combobox",
-            "addressComplete"
+            "addressComplete",
+            "formattedDate"
           ]
         },
         "properties": {

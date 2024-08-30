@@ -24,7 +24,6 @@ import {
   DropDown,
   TextField,
   TextArea,
-  Date,
   Number,
   QuestionSet,
   Attestation,
@@ -36,6 +35,7 @@ import {
   FileInput,
   Departments,
   Combobox,
+  FormattedDate,
 } from "@formBuilder/[id]/edit/components/elements/element-dialog";
 import { useIsAdminUser } from "./useIsAdminUser";
 import { ElementOptionsFilter, ElementOption } from "../../types/form-builder-types";
@@ -139,7 +139,7 @@ export const useElementOptions = (filterElements?: ElementOptionsFilter | undefi
       value: t("combobox"),
       icon: SelectMenuIcon,
       description: Combobox,
-      className: "separator",
+      className: "",
       group: groups.basic,
     },
     ...(allowFileInput ? [{ ...(fileInputOption as ElementOption) }] : []),
@@ -164,6 +164,13 @@ export const useElementOptions = (filterElements?: ElementOptionsFilter | undefi
       icon: NameIcon,
       description: FirstMiddleLastName,
       className: "",
+      group: groups.preset,
+    },
+    {
+      id: "formattedDate",
+      value: t("formattedDate"),
+      icon: CalendarIcon,
+      description: FormattedDate,
       group: groups.preset,
     },
     {
@@ -194,14 +201,6 @@ export const useElementOptions = (filterElements?: ElementOptionsFilter | undefi
       value: t("addElementDialog.departments.title"),
       icon: DepartmentsIcon,
       description: Departments,
-      className: "",
-      group: groups.preset,
-    },
-    {
-      id: "date",
-      value: t("date"),
-      icon: CalendarIcon,
-      description: Date,
       className: "",
       group: groups.preset,
     },

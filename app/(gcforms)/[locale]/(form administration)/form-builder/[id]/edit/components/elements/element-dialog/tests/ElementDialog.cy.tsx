@@ -94,9 +94,9 @@ describe("<ElementDialog />", () => {
 
     cy.mount(<ElementDialog handleClose={handleCloseSpy} handleAddType={handleAddTypeSpy} />);
 
-    cy.get('[data-testid="date"]').click();
+    cy.get('[data-testid="formattedDate"]').click();
     cy.get("body").type("{enter}");
-    cy.get("@handleAddTypeSpy").should("have.been.calledWith", "date");
+    cy.get("@handleAddTypeSpy").should("have.been.calledWith", "formattedDate");
     cy.get("@handleCloseSpy").should("have.been.calledOnce");
   });
 
@@ -282,6 +282,9 @@ describe("<ElementDialog />", () => {
     cy.get('[data-testid="firstMiddleLastName"]').should("have.attr", "aria-selected", "true");
 
     cy.get("body").type("{downarrow}");
+    cy.get('[data-testid="formattedDate"]').should("have.attr", "aria-selected", "true");
+
+    cy.get("body").type("{downarrow}");
     cy.get('[data-testid="contact"]').should("have.attr", "aria-selected", "true");
 
     cy.get("body").type("{downarrow}");
@@ -292,9 +295,6 @@ describe("<ElementDialog />", () => {
 
     cy.get("body").type("{downarrow}");
     cy.get('[data-testid="departments"]').should("have.attr", "aria-selected", "true");
-
-    cy.get("body").type("{downarrow}");
-    cy.get('[data-testid="date"]').should("have.attr", "aria-selected", "true");
 
     cy.get("body").type("{downarrow}");
     cy.get('[data-testid="number"]').should("have.attr", "aria-selected", "true");

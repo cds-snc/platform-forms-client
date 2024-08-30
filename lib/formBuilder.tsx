@@ -13,6 +13,7 @@ import {
   TextInput,
   ConditionalWrapper,
   Combobox,
+  FormattedDate,
 } from "@clientComponents/forms";
 import {
   FormElement,
@@ -25,6 +26,7 @@ import {
 import { getLocalizedProperty } from "@lib/utils";
 import { managedData } from "@lib/managedData";
 import { AddressComplete } from "@clientComponents/forms/AddressComplete/AdressComplete";
+import { DateFormat } from "@clientComponents/forms/FormattedDate/types";
 
 // This function is used for select/radio/checkbox i18n change of form labels
 function getLocaleChoices(choices: Array<PropertyChoices> | undefined, lang: string) {
@@ -269,6 +271,25 @@ function _buildForm(element: FormElement, lang: string): ReactElement {
         </div>
       );
     }
+    case FormElementTypes.formattedDate: {
+      return (
+        <div className="focus-group">
+          <FormattedDate
+            label={labelText}
+            description={description}
+            id={`${id}`}
+            name={`${id}`}
+            required={isRequired}
+            dateFormat={
+              element.properties.dateFormat
+                ? (element.properties.dateFormat as DateFormat)
+                : undefined
+            }
+            autocomplete={element.properties.autoComplete}
+          />
+        </div>
+      );
+    }
     default:
       return <></>;
   }
@@ -302,6 +323,7 @@ const _getElementInitialValue = (element: FormElement, language: string): Respon
     case FormElementTypes.radio:
     case FormElementTypes.dropdown:
     case FormElementTypes.combobox:
+    case FormElementTypes.formattedDate:
     case FormElementTypes.textField:
     case FormElementTypes.textArea:
     case FormElementTypes.addressComplete:

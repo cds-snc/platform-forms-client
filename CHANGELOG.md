@@ -5,53 +5,63 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [3.19.0](https://github.com/cds-snc/platform-forms-client/compare/v3.18.2...v3.19.0) (2024-08-14)
-
+## [3.20.0](https://github.com/cds-snc/platform-forms-client/compare/v3.19.0...v3.20.0) (2024-08-26)
 
 ### Features
 
-* Enable Zitadel Integration for API Authentication ([#4147](https://github.com/cds-snc/platform-forms-client/issues/4147)) ([200ab05](https://github.com/cds-snc/platform-forms-client/commit/200ab05b1199bdf5a1f8acf8a6d4fe0067fc9fde))
-
+- Updates Repeating Sets, Pages and Rules to work together on the Review page and form output ([#4186](https://github.com/cds-snc/platform-forms-client/issues/4186)) ([5422d6c](https://github.com/cds-snc/platform-forms-client/commit/5422d6c1800a5ff961270e1effc224718558926a))
 
 ### Bug Fixes
 
-* FileInput max upload size for all files ([#4173](https://github.com/cds-snc/platform-forms-client/issues/4173)) ([ba5d89e](https://github.com/cds-snc/platform-forms-client/commit/ba5d89e36664279524675142b622b798c580848d))
-* Handle repeatingSets that include more than just fileInputs ([#4193](https://github.com/cds-snc/platform-forms-client/issues/4193)) ([8612909](https://github.com/cds-snc/platform-forms-client/commit/861290910e40d9577e5f8626680a59a939223946))
-* Multiple fileInputs in a repeatingSet ([#4188](https://github.com/cds-snc/platform-forms-client/issues/4188)) ([2d665f8](https://github.com/cds-snc/platform-forms-client/commit/2d665f8151103525956964556f7534573f0c27a9))
-
+- Adds focus heading behavior for forms with pages (groups) ([#4201](https://github.com/cds-snc/platform-forms-client/issues/4201)) ([cb31f6e](https://github.com/cds-snc/platform-forms-client/commit/cb31f6ed1d296c2e9a498c2b771f39ef0011995f))
+- content - clarify limitations with reordering pages if branching is applied ([#4199](https://github.com/cds-snc/platform-forms-client/issues/4199)) ([69bf388](https://github.com/cds-snc/platform-forms-client/commit/69bf388afe2990c677fe891eeb9483b699d31c21))
+- ensure modal for conditional rules starts with option selected ([#4178](https://github.com/cds-snc/platform-forms-client/issues/4178)) ([afcee50](https://github.com/cds-snc/platform-forms-client/commit/afcee509ae6d0da34a35b54f5d652b269d952218))
+- no owners on template error when loading unsaved draft form ([#4195](https://github.com/cds-snc/platform-forms-client/issues/4195)) ([9806cbe](https://github.com/cds-snc/platform-forms-client/commit/9806cbe2a93aa31bc581173c0caef1c1a6b55568))
 
 ### Code Refactoring
 
-* update confirm api to a server action ([#4042](https://github.com/cds-snc/platform-forms-client/issues/4042)) ([23052aa](https://github.com/cds-snc/platform-forms-client/commit/23052aa0817e2045c308955dbfb469c0e7d912f7))
+- rework file validation error types ([#4203](https://github.com/cds-snc/platform-forms-client/issues/4203)) ([6849198](https://github.com/cds-snc/platform-forms-client/commit/68491986a073953a277e36fbd7c139884d3be40e))
+
+## [3.19.0](https://github.com/cds-snc/platform-forms-client/compare/v3.18.2...v3.19.0) (2024-08-14)
+
+### Features
+
+- Enable Zitadel Integration for API Authentication ([#4147](https://github.com/cds-snc/platform-forms-client/issues/4147)) ([200ab05](https://github.com/cds-snc/platform-forms-client/commit/200ab05b1199bdf5a1f8acf8a6d4fe0067fc9fde))
+
+### Bug Fixes
+
+- FileInput max upload size for all files ([#4173](https://github.com/cds-snc/platform-forms-client/issues/4173)) ([ba5d89e](https://github.com/cds-snc/platform-forms-client/commit/ba5d89e36664279524675142b622b798c580848d))
+- Handle repeatingSets that include more than just fileInputs ([#4193](https://github.com/cds-snc/platform-forms-client/issues/4193)) ([8612909](https://github.com/cds-snc/platform-forms-client/commit/861290910e40d9577e5f8626680a59a939223946))
+- Multiple fileInputs in a repeatingSet ([#4188](https://github.com/cds-snc/platform-forms-client/issues/4188)) ([2d665f8](https://github.com/cds-snc/platform-forms-client/commit/2d665f8151103525956964556f7534573f0c27a9))
+
+### Code Refactoring
+
+- update confirm api to a server action ([#4042](https://github.com/cds-snc/platform-forms-client/issues/4042)) ([23052aa](https://github.com/cds-snc/platform-forms-client/commit/23052aa0817e2045c308955dbfb469c0e7d912f7))
 
 ## [3.18.2](https://github.com/cds-snc/platform-forms-client/compare/v3.18.1...v3.18.2) (2024-08-08)
 
-
 ### Bug Fixes
 
-* Adjust next action choice rules when option removed  ([#4180](https://github.com/cds-snc/platform-forms-client/issues/4180)) ([da5f70f](https://github.com/cds-snc/platform-forms-client/commit/da5f70fb03d91ff6a28dcc014fdfca2d55ba847f))
-* Move redirects from server to client on Contact and Support ([1c79684](https://github.com/cds-snc/platform-forms-client/commit/1c79684d6ff17f11a25053679d274df1bd2d3c8b))
-* Move redirects from server to client on Contact and Support ([3b53550](https://github.com/cds-snc/platform-forms-client/commit/3b53550710731476df021cd9740bd475ed318712))
-
+- Adjust next action choice rules when option removed ([#4180](https://github.com/cds-snc/platform-forms-client/issues/4180)) ([da5f70f](https://github.com/cds-snc/platform-forms-client/commit/da5f70fb03d91ff6a28dcc014fdfca2d55ba847f))
+- Move redirects from server to client on Contact and Support ([1c79684](https://github.com/cds-snc/platform-forms-client/commit/1c79684d6ff17f11a25053679d274df1bd2d3c8b))
+- Move redirects from server to client on Contact and Support ([3b53550](https://github.com/cds-snc/platform-forms-client/commit/3b53550710731476df021cd9740bd475ed318712))
 
 ### Miscellaneous Chores
 
-* Add National Defence & Public Service Commission of Canada branding ([#4174](https://github.com/cds-snc/platform-forms-client/issues/4174)) ([8e16820](https://github.com/cds-snc/platform-forms-client/commit/8e16820ca0c4c4f5a5e9810652715655d789b4b0))
+- Add National Defence & Public Service Commission of Canada branding ([#4174](https://github.com/cds-snc/platform-forms-client/issues/4174)) ([8e16820](https://github.com/cds-snc/platform-forms-client/commit/8e16820ca0c4c4f5a5e9810652715655d789b4b0))
 
 ## [3.18.1](https://github.com/cds-snc/platform-forms-client/compare/v3.18.0...v3.18.1) (2024-08-08)
 
-
 ### Bug Fixes
 
-* Adjust ChoiceId indexes when an option is removed. ([#4153](https://github.com/cds-snc/platform-forms-client/issues/4153)) ([6844053](https://github.com/cds-snc/platform-forms-client/commit/6844053779485b5084c8f72e905665928db85f71))
-* only delete form viewer task definitions ([#4168](https://github.com/cds-snc/platform-forms-client/issues/4168)) ([382ad49](https://github.com/cds-snc/platform-forms-client/commit/382ad491988746abd0314a8b641c6f5d94bc4687))
-* release-please configuration in v4 ([#4162](https://github.com/cds-snc/platform-forms-client/issues/4162)) ([6245c27](https://github.com/cds-snc/platform-forms-client/commit/6245c270857b52b1b0a7a3f2c88fb41ef1b23860))
-* small typo in terms of use ([#4176](https://github.com/cds-snc/platform-forms-client/issues/4176)) ([e4170bb](https://github.com/cds-snc/platform-forms-client/commit/e4170bbb196776be35a91a58f9d9cb93ec7e9ca2))
-
+- Adjust ChoiceId indexes when an option is removed. ([#4153](https://github.com/cds-snc/platform-forms-client/issues/4153)) ([6844053](https://github.com/cds-snc/platform-forms-client/commit/6844053779485b5084c8f72e905665928db85f71))
+- only delete form viewer task definitions ([#4168](https://github.com/cds-snc/platform-forms-client/issues/4168)) ([382ad49](https://github.com/cds-snc/platform-forms-client/commit/382ad491988746abd0314a8b641c6f5d94bc4687))
+- release-please configuration in v4 ([#4162](https://github.com/cds-snc/platform-forms-client/issues/4162)) ([6245c27](https://github.com/cds-snc/platform-forms-client/commit/6245c270857b52b1b0a7a3f2c88fb41ef1b23860))
+- small typo in terms of use ([#4176](https://github.com/cds-snc/platform-forms-client/issues/4176)) ([e4170bb](https://github.com/cds-snc/platform-forms-client/commit/e4170bbb196776be35a91a58f9d9cb93ec7e9ca2))
 
 ### Miscellaneous Chores
 
-* upgrade to Next-Auth 5.0.0 beta 20. Goal is to fix the error log we get when someone enters a wrong 2FA code ([#4161](https://github.com/cds-snc/platform-forms-client/issues/4161)) ([eb18e7d](https://github.com/cds-snc/platform-forms-client/commit/eb18e7d93fb75b10594897452cb7ed8785dc1862))
+- upgrade to Next-Auth 5.0.0 beta 20. Goal is to fix the error log we get when someone enters a wrong 2FA code ([#4161](https://github.com/cds-snc/platform-forms-client/issues/4161)) ([eb18e7d](https://github.com/cds-snc/platform-forms-client/commit/eb18e7d93fb75b10594897452cb7ed8785dc1862))
 
 ## [3.18.0](https://github.com/cds-snc/platform-forms-client/compare/v3.17.0...v3.18.0) (2024-08-06)
 

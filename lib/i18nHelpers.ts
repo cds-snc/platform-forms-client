@@ -43,7 +43,7 @@ export const getProperty = (field: string, lang: string): string => {
 
 // For bilingual content.
 // Note: i18n t() was left out to keep this more portable
-export function orderLangugeStrings({
+export function orderLanguageStrings({
   stringEn,
   stringFr,
   lang,
