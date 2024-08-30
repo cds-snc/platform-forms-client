@@ -1,11 +1,16 @@
 import { Button } from "@clientComponents/globals";
 import { Dialog, useDialogRef } from "@formBuilder/components/shared";
 import { useCustomEvent } from "@lib/hooks/useCustomEvent";
+import { logMessage } from "@lib/logger";
+import { isValidGovEmail } from "@lib/validation/validation";
+import { useSession } from "next-auth/react";
 import { useCallback, useEffect, useState } from "react";
 
 export const ManageFormAccessDialog = () => {
   const dialogRef = useDialogRef();
   const { Event } = useCustomEvent();
+  const [userEmailDomain, setUserEmailDomain] = useState("");
+  const [selectedEmail, setSelectedEmail] = useState("");
 
   const [isOpen, setIsOpen] = useState(false);
 
@@ -16,6 +21,33 @@ export const ManageFormAccessDialog = () => {
   const handleOpenDialog = useCallback(() => {
     setIsOpen(true);
   }, []);
+
+  const { data: session } = useSession();
+
+  useEffect(() => {
+    if (session) {
+      setUserEmailDomain(session.user.email.split("@")[1]);
+    }
+  }, [session]);
+
+  const validate = () => {
+    const isValidEmail = isValidGovEmail(selectedEmail);
+    const selectedEmailDomain = selectedEmail.split("@")[1];
+    const isDomainMatch = selectedEmailDomain === userEmailDomain;
+
+    /**
+     * @TODO: Add validation messages/states
+     */
+    if (!isValidEmail) {
+      logMessage.info("Invalid email address");
+      return;
+    }
+
+    if (!isDomainMatch) {
+      logMessage.info("Email domain does not match");
+      return;
+    }
+  };
 
   useEffect(() => {
     Event.on("open-form-access-dialog", handleOpenDialog);
@@ -29,7 +61,14 @@ export const ManageFormAccessDialog = () => {
   const dialogActions = (
     <div className="flex flex-row gap-4">
       <Button theme="secondary">Cancel</Button>
-      <Button theme="primary">Next</Button>
+      <Button
+        theme="primary"
+        onClick={() => {
+          validate();
+        }}
+      >
+        Next
+      </Button>
     </div>
   );
 
@@ -44,11 +83,19 @@ export const ManageFormAccessDialog = () => {
         >
           <div className="p-4">
             <section>
-              <label htmlFor="emailSearch">Add people to share access</label>
+              <label htmlFor="email">Add people to share access</label>
               <p>
                 They must already have an account - <a href="">Invite to create an account</a>
               </p>
-              <input id="emailSearch" type="text" className="gc-input-text" />
+
+              <input
+                id="email"
+                type="text"
+                className="gc-input-text"
+                onChange={(e) => {
+                  setSelectedEmail(e.target.value);
+                }}
+              />
             </section>
 
             <section className="mt-4">
