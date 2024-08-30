@@ -1,11 +1,11 @@
 import { Button } from "@clientComponents/globals";
-import { useEvent } from "@lib/hooks/useEvent";
+import { useCustomEvent } from "@lib/hooks/useCustomEvent";
 
 export const ManageFormAccessButton = () => {
-  const { Event } = useEvent();
+  const { Event } = useCustomEvent();
 
   const openManageFormAccessDialog = () => {
-    Event.fire("open-form-access-dialog");
+    Event.fire("open-form-access-dialog", { message: "Huzzah" });
   };
 
   return (

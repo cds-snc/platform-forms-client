@@ -1,11 +1,11 @@
 import { Button } from "@clientComponents/globals";
 import { Dialog, useDialogRef } from "@formBuilder/components/shared";
-import { useEvent } from "@lib/hooks/useEvent";
-import { useEffect, useState } from "react";
+import { useCustomEvent } from "@lib/hooks/useCustomEvent";
+import { useCallback, useEffect, useState } from "react";
 
 export const ManageFormAccessDialog = () => {
   const dialogRef = useDialogRef();
-  const { Event } = useEvent();
+  const { Event } = useCustomEvent();
 
   const [isOpen, setIsOpen] = useState(false);
 
@@ -13,15 +13,15 @@ export const ManageFormAccessDialog = () => {
     setIsOpen(false);
   };
 
-  const handleOpenDialog = () => {
+  const handleOpenDialog = useCallback(() => {
     setIsOpen(true);
-  };
+  }, []);
 
   useEffect(() => {
     Event.on("open-form-access-dialog", handleOpenDialog);
 
     return () => {
-      Event.on("open-form-access-dialog", handleOpenDialog);
+      Event.off("open-form-access-dialog", handleOpenDialog);
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [handleOpenDialog]);
