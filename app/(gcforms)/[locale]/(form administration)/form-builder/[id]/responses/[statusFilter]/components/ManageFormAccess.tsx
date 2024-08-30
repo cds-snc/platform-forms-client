@@ -5,7 +5,7 @@ export const ManageFormAccessButton = () => {
   const { Event } = useCustomEvent();
 
   const openManageFormAccessDialog = () => {
-    Event.fire("open-form-access-dialog", { message: "Huzzah" });
+    Event.fire("open-form-access-dialog");
   };
 
   return (
