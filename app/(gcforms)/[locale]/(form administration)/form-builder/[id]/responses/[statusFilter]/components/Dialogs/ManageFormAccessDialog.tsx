@@ -14,6 +14,12 @@ export const ManageFormAccessDialog = () => {
 
   const [isOpen, setIsOpen] = useState(false);
 
+  const isDomainMatch = userEmailDomain === selectedEmail.split("@")[1];
+
+  const isValidEmail = () => {
+    return isValidGovEmail(selectedEmail) && isDomainMatch;
+  };
+
   const handleClose = () => {
     setIsOpen(false);
   };
@@ -30,15 +36,11 @@ export const ManageFormAccessDialog = () => {
     }
   }, [session]);
 
+  /**
+   * @TODO: Add validation messages/states
+   */
   const validate = () => {
-    const isValidEmail = isValidGovEmail(selectedEmail);
-    const selectedEmailDomain = selectedEmail.split("@")[1];
-    const isDomainMatch = selectedEmailDomain === userEmailDomain;
-
-    /**
-     * @TODO: Add validation messages/states
-     */
-    if (!isValidEmail) {
+    if (!isValidGovEmail(selectedEmail)) {
       logMessage.info("Invalid email address");
       return;
     }
@@ -66,6 +68,7 @@ export const ManageFormAccessDialog = () => {
         onClick={() => {
           validate();
         }}
+        disabled={!isValidEmail()}
       >
         Next
       </Button>
@@ -83,9 +86,12 @@ export const ManageFormAccessDialog = () => {
         >
           <div className="p-4">
             <section>
-              <label htmlFor="email">Add people to share access</label>
+              <label htmlFor="email" className="font-bold">
+                Add people to share access
+              </label>
               <p>
-                They must already have an account - <a href="">Invite to create an account</a>
+                You can only enter email addresses with your same domain. If they do not have an
+                account, they will be invited to create one.
               </p>
 
               <input
