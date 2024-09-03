@@ -41,7 +41,7 @@ Adresse email du responsable: ${managerEmail} .<br/>
       throw new Error("User name or email not found");
     }
 
-    const result = await createTicket({
+    await createTicket({
       type: "publishing",
       name: session.user.name,
       email: session.user.email,
@@ -49,11 +49,6 @@ Adresse email du responsable: ${managerEmail} .<br/>
       language: language,
     });
 
-    if (result?.status >= 400) {
-      throw new Error(
-        `Freshdesk error: ${JSON.stringify(result)} - ${session.user.email} - ${description}`
-      );
-    }
     return NextResponse.json({});
   } catch (error) {
     logMessage.error(error);
