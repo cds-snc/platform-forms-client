@@ -1,4 +1,4 @@
-import fetch from "node-fetch";
+import axios from "axios";
 import { logMessage } from "@lib/logger";
 import { getOrigin } from "@lib/origin";
 
@@ -93,22 +93,30 @@ export const createTicket = async ({
 
   if (!username) throw new Error("Freshdesk API key not found");
 
-  const response = await fetch("https://cds-snc.freshdesk.com/api/v2/tickets", {
+  const response = await axios({
+    url: "https://cds-snc.freshdesk.com/api/v2/tickets",
     method: "POST",
     headers: {
       "Content-Type": "application/json",
       Authorization: "Basic " + btoa(username + ":" + password),
     },
-    body: JSON.stringify(data),
-    signal: AbortSignal.timeout(5000), // 5 seconds timeout to make sure this operation is not blocking
+
+    data: JSON.stringify(data),
+    timeout: process.env.NODE_ENV === "production" ? 5000 : 0,
+  }).catch((error) => {
+    if (error.response) {
+      // The remote server responded with an error mesasge
+      logMessage.error(
+        `Bad http response from FreshDesk: ${error.response.status} - ${JSON.stringify(
+          error.response.data
+        )} - ${email} - ${JSON.stringify(data)}`
+      );
+    }
+    // No response was received from FreshDesk
+    logMessage.error(`Call to FreshDesk timed out.  Could not submit: ${JSON.stringify(data)}`);
+    // Error back to client.
+    throw new Error("Could not connect to Freshdesk");
   });
-
-  if (response?.ok === false) {
-    logMessage.error(`Bad http response: ${response.status} - ${email} - ${JSON.stringify(data)}`);
-
-    const errorDetail = await response.text();
-    throw new Error(`Freshdesk error with response: ${errorDetail}`);
-  }
 
   return response;
 };

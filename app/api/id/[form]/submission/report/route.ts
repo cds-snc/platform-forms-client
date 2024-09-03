@@ -155,19 +155,13 @@ async function notifySupport(
   ${userDescription}<br/>
   `;
 
-  const result = await createTicket({
+  await createTicket({
     type: "problem",
     name: userEmailAddress,
     email: userEmailAddress,
     description,
     language,
   });
-
-  if (result?.status >= 400) {
-    throw new Error(
-      `Freshdesk error: ${JSON.stringify(result)} - ${userEmailAddress} - ${description}`
-    );
-  }
 }
 
 interface APIProps {
