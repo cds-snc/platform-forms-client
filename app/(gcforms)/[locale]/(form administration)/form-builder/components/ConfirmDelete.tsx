@@ -13,7 +13,7 @@ const handleDelete = async (formID?: string): Promise<AxiosResponse | { error: A
       headers: {
         "Content-Type": "application/json",
       },
-      timeout: process.env.NODE_ENV === "production" ? 60000 : 0,
+      timeout: 5000,
     });
     return result as AxiosResponse;
   } catch (err) {
