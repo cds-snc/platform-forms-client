@@ -154,10 +154,11 @@ export const DownloadDialog = ({
         }
 
         downloadFormatEvent(formId, selectedFormat, ids.length);
+        const universalBOMForUTF8 = "\uFEFF";
 
         if (zipAllFiles) {
           const file = new JSZip();
-          const universalBOMForUTF8 = "\uFEFF";
+
           file.file("receipt-recu.html", response.receipt);
           file.file("responses-reponses.csv", universalBOMForUTF8 + response.responses);
           file.generateAsync({ type: "nodebuffer", streamFiles: true }).then((buffer) => {
@@ -169,7 +170,7 @@ export const DownloadDialog = ({
         } else {
           downloadFileFromBlob(new Blob([response.receipt]), `${filePrefix}receipt-recu.html`);
           downloadFileFromBlob(
-            new Blob([response.responses]),
+            new Blob([universalBOMForUTF8 + response.responses]),
             `${filePrefix}responses-reponses.csv`
           );
 
