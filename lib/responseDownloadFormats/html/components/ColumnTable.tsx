@@ -1,9 +1,10 @@
 import React from "react";
 import { capitalize } from "./ResponseSection";
-import { customTranslate, orderLangugeStrings } from "../../../i18nHelpers";
+import { customTranslate, orderLanguageStrings } from "../../../i18nHelpers";
 import { Answer, Submission } from "../../types";
 import { TableProps } from "../types";
 import { formatDateTimeUTC } from "@lib/utils/form-builder";
+import { FormElementTypes } from "@lib/types";
 
 const QuestionColumns = ({
   submission,
@@ -12,11 +13,25 @@ const QuestionColumns = ({
   submission: Submission;
   lang: string;
 }): JSX.Element => {
+  const { t } = customTranslate("common");
+
   const renderRow = (index: number, lang: string, item: Answer) => {
     return (
       <div className="flex w-full flex-row border-b border-gray py-4">
         <dt key="" className="w-120 py-4 font-bold">
-          {orderLangugeStrings({ stringEn: item.questionEn, stringFr: item.questionFr, lang })}
+          {orderLanguageStrings({ stringEn: item.questionEn, stringFr: item.questionFr, lang })}
+          {item.type === FormElementTypes.formattedDate && item.dateFormat ? (
+            <>
+              <br />{" "}
+              {orderLanguageStrings({
+                stringEn: t(`formattedDate.${item.dateFormat}`, { lng: "en" }),
+                stringFr: t(`formattedDate.${item.dateFormat}`, { lng: "fr" }),
+                lang,
+              })}
+            </>
+          ) : (
+            ""
+          )}
         </dt>
         <dd className={`py-4 pl-8`}>{String(item.answer) || "-"}</dd>
       </div>
@@ -30,7 +45,7 @@ const QuestionColumns = ({
       return (
         <div key={`col-${index}-${lang}`}>
           <dt className="w-full py-4 font-bold">
-            {orderLangugeStrings({ stringEn: item.questionEn, stringFr: item.questionFr, lang })}
+            {orderLanguageStrings({ stringEn: item.questionEn, stringFr: item.questionFr, lang })}
           </dt>
           <dd className="w-full py-4 pl-16">
             <dl className="ml-8">
@@ -60,7 +75,7 @@ export const ColumnTable = (props: TableProps): React.ReactElement => {
     <dl id={`responseTableCol${capitalize(lang)}`} className="border-y-2 border-gray">
       <div className="flex border-b border-gray py-4">
         <dt className="w-120 py-4 font-bold">
-          {orderLangugeStrings({
+          {orderLanguageStrings({
             stringEn: t("responseTemplate.responseNumber", { lng: "en" }),
             stringFr: t("responseTemplate.responseNumber", { lng: "fr" }),
             lang,
@@ -70,7 +85,7 @@ export const ColumnTable = (props: TableProps): React.ReactElement => {
       </div>
       <div className="flex border-b border-gray py-4">
         <dt className="w-120 py-4 font-bold">
-          {orderLangugeStrings({
+          {orderLanguageStrings({
             stringEn: t("responseTemplate.submissionDate", { lng: "en" }),
             stringFr: t("responseTemplate.submissionDate", { lng: "fr" }),
             lang,

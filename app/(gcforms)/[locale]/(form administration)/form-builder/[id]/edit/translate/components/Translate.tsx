@@ -78,7 +78,7 @@ const Element = ({
         </>
       )}
 
-      {["textField", "textArea"].includes(element.type) && (
+      {["textField", "textArea", "formattedDate"].includes(element.type) && (
         <>
           <Title primaryLanguage={primaryLanguage} element={element} />
           {(element.properties.descriptionEn || element.properties.descriptionFr) && (
