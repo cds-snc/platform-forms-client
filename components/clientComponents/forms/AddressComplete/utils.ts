@@ -1,5 +1,5 @@
 "use client";
-import { AddressCompleteChoice, AddressCompleteResult } from "./types";
+import { AddressCompleteChoice, AddressCompleteResult, AddressElements } from "./types";
 
 const autoCompleteUrl =
   "https://ws1.postescanada-canadapost.ca/AddressComplete/Interactive/AutoComplete/v1.00/json3.ws";
@@ -43,5 +43,46 @@ export const getSelectedAddress = async (value: string) => {
   });
 
   const responseData = await response.json(); //Todo - Error Handling
-  return responseData.Items as AddressCompleteResult[];
+  const addressData = responseData.Items as AddressCompleteResult[];
+  const addressComponents = await getAddressComponents(addressData);
+  return addressComponents;
+};
+
+// Helper function combines API component results into single address object.
+export const getAddressComponents = async (addressCompleteResult: AddressCompleteResult[]) => {
+  const civicNumberData = addressCompleteResult.find((obj: AddressCompleteResult) => {
+    return obj.FieldGroup === "Country" && obj.FieldName === "StreetNumber";
+  });
+
+  const unitNumberData = addressCompleteResult.find((obj: AddressCompleteResult) => {
+    return obj.FieldGroup === "Common" && obj.FieldName === "SubBuilding";
+  });
+
+  const streetNameData = addressCompleteResult.find((obj: AddressCompleteResult) => {
+    return obj.FieldGroup === "Country" && obj.FieldName === "StreetName";
+  });
+
+  const cityData = addressCompleteResult.find((obj: AddressCompleteResult) => {
+    return obj.FieldGroup === "Common" && obj.FieldName === "City";
+  });
+
+  const provinceData = addressCompleteResult.find((obj: AddressCompleteResult) => {
+    return obj.FieldGroup === "Common" && obj.FieldName === "ProvinceCode";
+  });
+
+  const postalData = addressCompleteResult.find((obj: AddressCompleteResult) => {
+    return obj.FieldGroup === "Common" && obj.FieldName === "PostalCode";
+  });
+
+  const address = {
+    unitNumber: unitNumberData?.FormattedValue,
+    civicNumber: civicNumberData?.FormattedValue,
+    streetName: streetNameData?.FormattedValue,
+    city: cityData?.FormattedValue,
+    province: provinceData?.FormattedValue,
+    postalCode: postalData?.FormattedValue,
+    country: "Canada",
+  };
+
+  return address as AddressElements;
 };

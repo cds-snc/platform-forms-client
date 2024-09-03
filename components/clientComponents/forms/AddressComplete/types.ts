@@ -19,6 +19,7 @@ export interface AddressCompleteResult {
   FieldSequence: number;
 }
 
+// Props for the AddressComplete component
 export interface AddressCompleteProps extends InputFieldProps {
   unitNumber?: boolean;
   civicNumber?: boolean;
@@ -27,4 +28,15 @@ export interface AddressCompleteProps extends InputFieldProps {
   province?: boolean;
   postalCode?: boolean;
   country?: boolean;
+}
+
+// Address Elements for the AddressComplete component
+export interface AddressElements {
+  unitNumber: string;
+  civicNumber: string;
+  streetName: string;
+  city: string;
+  province: string;
+  postalCode: string;
+  country: string;
 }

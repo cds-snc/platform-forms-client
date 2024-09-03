@@ -1,18 +1,62 @@
 "use client";
-import { AddressCompleteChoice, AddressCompleteResult, AddressCompleteProps } from "./types";
+import { AddressCompleteChoice, AddressCompleteProps, AddressElements } from "./types";
 import { getAddressCompleteChoices, getSelectedAddress } from "./utils";
-import { Description, Label, TextInput, Combobox } from "@clientComponents/forms";
-import { useState } from "react";
+import { Description, Label, Combobox } from "@clientComponents/forms";
+import { useState, useEffect } from "react";
 import { useTranslation } from "@i18n/client";
+import { useField } from "formik";
+import { cn } from "@lib/utils";
 
 export const AddressComplete = (props: AddressCompleteProps): React.ReactElement => {
   const { id, name, required, ariaDescribedBy } = props;
 
+  const [field, meta, helpers] = useField(props);
+
   const { t } = useTranslation("form-builder");
 
+  //Address Complete elements
   const [choices, setChoices] = useState([""]);
   const [addressResultCache, setAddressResultCache] = useState<AddressCompleteChoice[]>([]); // Cache the results from the address search.
-  const [addressCompleteData, setAddressCompleteData] = useState(""); // The full result as JSON.
+
+  //Form fillers address elements
+  const [addressObject, setAddressObject] = useState<AddressElements>({
+    unitNumber: "",
+    civicNumber: "",
+    streetName: "",
+    city: "",
+    province: "",
+    postalCode: "",
+    country: "",
+  });
+
+  // Update the date object when the field value changes
+  useEffect(() => {
+    if (field.value) {
+      try {
+        const parsedValue = JSON.parse(field.value);
+        setAddressObject(parsedValue);
+      } catch (e) {
+        setAddressObject({
+          unitNumber: "",
+          civicNumber: "",
+          streetName: "",
+          city: "",
+          province: "",
+          postalCode: "",
+          country: "",
+        });
+      }
+    }
+  }, [field.value]);
+
+  // Update the field value when the date object changes
+  useEffect(() => {
+    if (addressObject) {
+      helpers.setValue(JSON.stringify(addressObject));
+    } else {
+      helpers.setValue("");
+    }
+  }, [addressObject, helpers]);
 
   const onAddressSearch = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const query = e.target.value;
@@ -48,29 +92,7 @@ export const AddressComplete = (props: AddressCompleteProps): React.ReactElement
       const responseData = await getSelectedAddress(selectedResult.Id);
       if (responseData) {
         const results = responseData;
-        const line1 = results.find((obj: AddressCompleteResult) => {
-          return obj.FieldGroup === "Common" && obj.FieldName === "Line1";
-        });
-
-        const city = results.find((obj: AddressCompleteResult) => {
-          return obj.FieldGroup === "Common" && obj.FieldName === "City";
-        });
-
-        const province = results.find((obj: AddressCompleteResult) => {
-          return obj.FieldGroup === "Common" && obj.FieldName === "ProvinceCode";
-        });
-
-        const postal = results.find((obj: AddressCompleteResult) => {
-          return obj.FieldGroup === "Common" && obj.FieldName === "PostalCode";
-        });
-
-        const address = {
-          line1: line1?.FormattedValue,
-          city: city?.FormattedValue,
-          province: province?.FormattedValue,
-          postal: postal?.FormattedValue,
-        };
-        setAddressCompleteData(JSON.stringify(address));
+        setAddressObject(results);
       }
     }
   };
@@ -90,30 +112,29 @@ export const AddressComplete = (props: AddressCompleteProps): React.ReactElement
           <Description>{t("addElementDialog.addressComplete.street.description")}</Description>
           <Combobox
             choices={choices}
-            id="street"
-            name={`${name}-street`}
+            id={`${name}-streetInput`}
+            name={`${name}-streetInput`}
             onChange={onAddressSearch}
             onSetValue={onAddressSet}
             required={required}
           />
-          <input
-            type="hidden"
-            id="addressCompleteData"
-            name={`${name}-addressCompleteData`}
-            value={addressCompleteData}
-            required={required}
-          />
+          <input type="hidden" {...field} />
         </div>
         {props.unitNumber && (
           <div className="mb-6">
             <Label htmlFor="unit" className="gc-label">
               {t("addElementDialog.addressComplete.components.unitNumber")}
             </Label>
-            <TextInput
+            <input
               type="text"
-              id="unit"
+              id={`${name}-unit`}
               name={`${name}-unit`}
-              autoComplete="address-line2"
+              key={`${name}-unit-${addressObject.unitNumber}`}
+              onChange={(e) =>
+                setAddressObject((prev) => ({ ...prev, unitNumber: e.target.value }))
+              }
+              className={cn("gc-input-text", meta.error && "gc-error-input")}
+              value={addressObject.unitNumber}
               required={required}
             />
           </div>
@@ -123,12 +144,16 @@ export const AddressComplete = (props: AddressCompleteProps): React.ReactElement
             <Label htmlFor="civic" className="gc-label">
               {t("addElementDialog.addressComplete.components.civicNumber")}
             </Label>
-            <TextInput
+            <input
               type="text"
-              id="civic"
+              id={`${name}-civic`}
               name={`${name}-civic`}
-              autoComplete="address-line2"
-              disabled
+              key={`${name}-civic-${addressObject.civicNumber}`}
+              onChange={(e) =>
+                setAddressObject((prev) => ({ ...prev, civicNumber: e.target.value }))
+              }
+              className={cn("gc-input-text", meta.error && "gc-error-input")}
+              value={addressObject.civicNumber}
               required={required}
             />
           </div>
@@ -138,12 +163,16 @@ export const AddressComplete = (props: AddressCompleteProps): React.ReactElement
             <Label htmlFor="street" className="gc-label">
               {t("addElementDialog.addressComplete.components.streetName")}
             </Label>
-            <TextInput
+            <input
               type="text"
-              id="street"
+              id={`${name}-street`}
               name={`${name}-street`}
-              autoComplete="address-line1"
-              disabled
+              key={`${name}-street-${addressObject.streetName}`}
+              onChange={(e) =>
+                setAddressObject((prev) => ({ ...prev, streetName: e.target.value }))
+              }
+              className={cn("gc-input-text", meta.error && "gc-error-input")}
+              value={addressObject.streetName}
               required={required}
             />
           </div>
@@ -153,12 +182,13 @@ export const AddressComplete = (props: AddressCompleteProps): React.ReactElement
             <Label htmlFor="city" className="gc-label">
               {t("addElementDialog.addressComplete.city")}
             </Label>
-            <TextInput
+            <input
               type="text"
-              id="city"
+              id={`${name}-city`}
               name={`${name}-city`}
-              autoComplete="address-level2"
-              disabled
+              value={addressObject.city}
+              onChange={(e) => setAddressObject((prev) => ({ ...prev, city: e.target.value }))}
+              className={cn("gc-input-text", meta.error && "gc-error-input")}
               required={required}
             />
           </div>
@@ -168,12 +198,13 @@ export const AddressComplete = (props: AddressCompleteProps): React.ReactElement
             <Label htmlFor="province" className="gc-label">
               {t("addElementDialog.addressComplete.province")}
             </Label>
-            <TextInput
+            <input
               type="text"
-              id="province"
+              id={`${name}-province`}
               name={`${name}-province`}
-              autoComplete="address-level1"
-              disabled
+              value={addressObject.province}
+              onChange={(e) => setAddressObject((prev) => ({ ...prev, province: e.target.value }))}
+              className={cn("gc-input-text", meta.error && "gc-error-input")}
               required={required}
             />
           </div>
@@ -183,12 +214,15 @@ export const AddressComplete = (props: AddressCompleteProps): React.ReactElement
             <Label htmlFor="postal" className="gc-label">
               {t("addElementDialog.addressComplete.postal")}
             </Label>
-            <TextInput
-              id="postal"
+            <input
+              id={`${name}-postal`}
               type="text"
               name={`${name}-postal`}
-              autoComplete="postal-code"
-              disabled
+              value={addressObject.postalCode}
+              onChange={(e) =>
+                setAddressObject((prev) => ({ ...prev, postalCode: e.target.value }))
+              }
+              className={cn("gc-input-text", meta.error && "gc-error-input")}
               required={required}
             />
           </div>
@@ -198,12 +232,13 @@ export const AddressComplete = (props: AddressCompleteProps): React.ReactElement
             <Label htmlFor="country" className="gc-label">
               {t("addElementDialog.addressComplete.country")}
             </Label>
-            <TextInput
+            <input
               type="text"
-              id="country"
+              id={`${name}-country`}
               name={`${name}-country`}
-              autoComplete="country"
-              disabled
+              value={addressObject.country}
+              onChange={(e) => setAddressObject((prev) => ({ ...prev, country: e.target.value }))}
+              className={cn("gc-input-text", meta.error && "gc-error-input")}
               required={required}
             />
           </div>
