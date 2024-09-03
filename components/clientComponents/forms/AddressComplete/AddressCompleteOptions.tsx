@@ -17,7 +17,7 @@ export const AddressCompleteOptions = ({
 
   const updateAddressComponents = (props: AddressComponents) => {
     // check if the addresscomponent exists, if it doesn't make it.
-    if (properties.addressComponent == undefined) {
+    if (properties.addressComponents == undefined) {
       const baseAddress = {} as AddressComponents;
       const addressComponent = Object.assign({}, baseAddress, props);
       updateModalProperties(item.id, { ...properties, addressComponents: addressComponent });
