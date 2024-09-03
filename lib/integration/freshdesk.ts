@@ -102,7 +102,7 @@ export const createTicket = async ({
     },
 
     data: JSON.stringify(data),
-    timeout: process.env.NODE_ENV === "production" ? 5000 : 0,
+    timeout: 5000,
   }).catch((error) => {
     if (error.response) {
       // The remote server responded with an error mesasge

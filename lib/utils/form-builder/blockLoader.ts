@@ -19,7 +19,7 @@ export const blockLoader = async (
     data: {
       elementType: type,
     },
-    timeout: process.env.NODE_ENV === "production" ? 5000 : 0,
+    timeout: 5000,
   });
 
   result.data.forEach((data: FormElement, index: number) => {

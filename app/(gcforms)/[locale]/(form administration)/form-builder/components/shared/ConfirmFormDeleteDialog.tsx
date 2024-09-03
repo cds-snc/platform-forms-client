@@ -16,7 +16,7 @@ const fetcher = async (url: string) => {
       url,
       method: "GET",
       responseType: "json",
-      timeout: process.env.NODE_ENV === "production" ? 5000 : 0,
+      timeout: 5000,
     });
 
     if (res.data?.numberOfUnprocessedSubmissions > 0) {
@@ -36,7 +36,7 @@ async function downloadForm(lang: string, id: string) {
     url,
     method: "GET",
     responseType: "json",
-    timeout: process.env.NODE_ENV === "production" ? 5000 : 0,
+    timeout: 5000,
   });
 
   const fileName = lang === "fr" ? response.data.form.titleFr : response.data.form.titleEn;
