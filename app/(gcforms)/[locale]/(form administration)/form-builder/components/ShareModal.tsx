@@ -53,7 +53,7 @@ export const ShareModal = ({
           "Content-Type": "application/json",
         },
         data: { name, form: getSchema(), emails: emails, filename },
-        timeout: process.env.NODE_ENV === "production" ? 60000 : 0,
+        timeout: process.env.NODE_ENV === "production" ? 5000 : 0,
       });
 
       setStatus("sent");

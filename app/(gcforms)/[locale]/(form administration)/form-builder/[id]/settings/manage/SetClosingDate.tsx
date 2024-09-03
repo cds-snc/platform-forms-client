@@ -35,7 +35,7 @@ export const SetClosingDate = ({ formID }: { formID: string }) => {
       data: {
         closingDate: closeDate,
       },
-      timeout: process.env.NODE_ENV === "production" ? 60000 : 0,
+      timeout: process.env.NODE_ENV === "production" ? 5000 : 0,
     });
 
     // update the local store

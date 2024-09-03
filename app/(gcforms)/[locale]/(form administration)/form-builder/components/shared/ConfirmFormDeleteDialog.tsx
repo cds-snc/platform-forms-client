@@ -32,7 +32,7 @@ async function downloadForm(lang: string, id: string) {
     url,
     method: "GET",
     responseType: "json",
-    timeout: process.env.NODE_ENV === "production" ? 60000 : 0,
+    timeout: process.env.NODE_ENV === "production" ? 5000 : 0,
   });
 
   const fileName = lang === "fr" ? response.data.form.titleFr : response.data.form.titleEn;
