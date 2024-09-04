@@ -4,7 +4,7 @@ import { Button } from "@clientComponents/globals";
 import { Theme } from "@clientComponents/globals/Buttons/themes";
 import { useFocusIt } from "@lib/hooks/useFocusIt";
 import { useGCFormsContext } from "@lib/hooks/useGCFormContext";
-import { FileInputResponse, FormElement, FormElementTypes } from "@lib/types";
+import { AddressComponents, FileInputResponse, FormElement, FormElementTypes } from "@lib/types";
 import { Language } from "@lib/types/form-builder-types";
 import { getLocalizedProperty } from "@lib/utils";
 import {
@@ -18,7 +18,7 @@ import { randomId } from "@lib/client/clientHelpers";
 import { DateFormat, DateObject } from "../FormattedDate/types";
 import { getFormattedDateFromObject } from "../FormattedDate/utils";
 import { AddressElements } from "../AddressComplete/types";
-import { getAddressAsString } from "../AddressComplete/utils";
+import { getAddressAsReviewElements, getAddressAsString } from "../AddressComplete/utils";
 
 type ReviewItem = {
   id: string;
@@ -32,6 +32,8 @@ type ReviewElement = {
   values: string | FileInputResponse | DateObject | ReviewElement[];
   element: FormElement | undefined;
 };
+
+const addressCompleteStrings = {} as AddressElements;
 
 function formatElementValues(element: ReviewElement) {
   if (!element.values) {
@@ -57,7 +59,11 @@ function formatElementValues(element: ReviewElement) {
 
   // Case of Address Complete
   if (element.element?.type === FormElementTypes.addressComplete) {
-    return getAddressAsString(JSON.parse(element.values as string) as AddressElements);
+    if (element.element.properties?.full === false) {
+      return element.values as string; // We're a split address, broken into components.
+    } else {
+      return getAddressAsString(JSON.parse(element.values as string) as AddressElements);
+    }
   }
 
   // Case of an array like element e.g. checkbox
@@ -124,6 +130,45 @@ function getReviewItemElements(
         element,
       });
     }
+
+    // Handle Address Complete if broken into sub-components.
+    if (element?.type === FormElementTypes.addressComplete) {
+      if (element.properties?.full === false) {
+        // We're a split address, broken into components.
+
+        const parentTitle = element.properties?.[getLocalizedProperty("title", lang)];
+
+        const addressFormValue = formValues[elementId] as string;
+        const addressValues = JSON.parse(addressFormValue) as AddressElements;
+        const addressComponents = element.properties?.addressComponents as AddressComponents;
+
+        const titleSet = {
+          unitNumber: parentTitle + " - " + addressCompleteStrings.unitNumber,
+          civicNumber: parentTitle + " - " + addressCompleteStrings.civicNumber,
+          streetName: parentTitle + " - " + addressCompleteStrings.streetName,
+          city: parentTitle + " - " + addressCompleteStrings.city,
+          province: parentTitle + " - " + addressCompleteStrings.province,
+          postalCode: parentTitle + " - " + addressCompleteStrings.postalCode,
+          country: parentTitle + " - " + addressCompleteStrings.country,
+        } as AddressElements;
+
+        const subAddressValues = getAddressAsReviewElements(
+          addressValues,
+          addressComponents,
+          element,
+          titleSet
+        ) as ReviewElement[];
+
+        resultValues = [];
+
+        resultValues.push({
+          title: parentTitle as string,
+          values: subAddressValues,
+          element,
+        });
+      }
+    }
+
     return {
       title: (element?.properties?.[getLocalizedProperty("title", lang)] as string) || "-",
       values: resultValues,
@@ -140,6 +185,16 @@ export const Review = ({ language }: { language: Language }): React.ReactElement
   const groupsHeadingRef = useRef<HTMLHeadingElement>(null);
   // Focus heading on load
   useFocusIt({ elRef: groupsHeadingRef });
+
+  //Prior to useMemo, we grab the necessary translations for AddressComplete
+  addressCompleteStrings.unitNumber = t("addressComponents.unitNumber", { lng: language });
+  addressCompleteStrings.civicNumber = t("addressComponents.civicNumber", { lng: language });
+  addressCompleteStrings.streetName = t("addressComponents.streetName", { lng: language });
+  addressCompleteStrings.city = t("addressComponents.city", { lng: language });
+  addressCompleteStrings.province = t("addressComponents.province", { lng: language });
+  addressCompleteStrings.postalCode = t("addressComponents.postalCode", { lng: language });
+  addressCompleteStrings.country = t("addressComponents.country", { lng: language });
+  //This is done here, as useTranslation is inacessible inside useMemo.
 
   const reviewItems: ReviewItem[] = useMemo(() => {
     const formValues: void | FormValues = getValues();

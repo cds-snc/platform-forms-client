@@ -1,4 +1,5 @@
 "use client";
+import { AddressComponents, FormElement } from "@lib/types";
 import { AddressCompleteChoice, AddressCompleteResult, AddressElements } from "./types";
 
 const autoCompleteUrl =
@@ -91,4 +92,24 @@ export const getAddressAsString = (address: AddressElements) => {
   return `${address.unitNumber ? address.unitNumber + "-" : ""}${address.civicNumber} ${
     address.streetName
   }, ${address.city}, ${address.province} ${address.postalCode}`;
+};
+
+export const getAddressAsReviewElements = (
+  address: AddressElements,
+  addressComponents: AddressComponents,
+  element: FormElement,
+  titleSet: AddressElements
+) => {
+  const returnArray = [];
+
+  for (const key in addressComponents) {
+    if (addressComponents[key as keyof AddressComponents]) {
+      returnArray.push({
+        title: titleSet[key as keyof AddressElements],
+        values: address[key as keyof AddressElements],
+        element: element,
+      });
+    }
+  }
+  return returnArray;
 };
