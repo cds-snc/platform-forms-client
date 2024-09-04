@@ -75,9 +75,12 @@ export default async function Page({
       };
     });
 
-    const overdueTemplateIds = await getOverdueTemplateIds(
-      templates.map((template) => template.id)
-    );
+    // @todo - remove this when overdue redis cache is implemented
+    const checkForOverdue = false;
+
+    const overdueTemplateIds = checkForOverdue
+      ? await getOverdueTemplateIds(templates.map((template) => template.id))
+      : [];
 
     return (
       <div className="center mx-auto w-[980px] bg-gray-soft">

@@ -8,6 +8,7 @@ import { Metadata } from "next";
 import { getAllTemplates } from "@lib/templates";
 import { FormCard } from "./components/server/FormCard";
 import { Loader } from "@clientComponents/globals/Loader";
+
 import { getOverdueTemplateIds } from "@lib/overdue";
 
 export async function generateMetadata({
@@ -69,7 +70,11 @@ export default async function Page({
     };
   });
 
-  const overdueTemplateIds = await getOverdueTemplateIds(templates.map((template) => template.id));
+  // @todo - remove this when overdue redis cache is implemented
+  const checkForOverdue = false;
+  const overdueTemplateIds = checkForOverdue
+    ? await getOverdueTemplateIds(templates.map((template) => template.id))
+    : [];
 
   const { t } = await serverTranslation(["admin-forms", "admin-users"], { lang: locale });
 
