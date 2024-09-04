@@ -1,8 +1,6 @@
 "use server";
 import { cache } from "react";
 
-import { listAllSubmissions } from "@lib/vault";
-import { detectOldUnprocessedSubmissions } from "@lib/nagware";
 import { deleteTemplate } from "@lib/templates";
 import { TemplateHasUnprocessedSubmissions } from "@lib/templates";
 import { getAppSetting } from "@lib/appSettings";
@@ -15,22 +13,6 @@ export const overdueSettings = cache(async () => {
   const responseDownloadLimit = await getAppSetting("responseDownloadLimit");
   return { promptPhaseDays, warnPhaseDays, responseDownloadLimit };
 });
-
-export const getUnprocessedSubmissionsForTemplate = async (templateId: string) => {
-  const { ability } = await authCheckAndThrow();
-  const { promptPhaseDays, warnPhaseDays, responseDownloadLimit } = await overdueSettings();
-  const allSubmissions = await listAllSubmissions(
-    ability,
-    templateId,
-    undefined,
-    Number(responseDownloadLimit)
-  );
-  return detectOldUnprocessedSubmissions(
-    allSubmissions.submissions,
-    promptPhaseDays,
-    warnPhaseDays
-  );
-};
 
 export const deleteForm = async (id: string) => {
   const { ability } = await authCheckAndThrow();
