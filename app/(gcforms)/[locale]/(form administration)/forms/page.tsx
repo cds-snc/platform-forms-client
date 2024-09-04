@@ -9,6 +9,7 @@ import { NewFormButton } from "./components/server/NewFormButton";
 import { ResumeEditingForm } from "./components/ResumeEditingForm";
 import { getAllTemplatesForUser, TemplateOptions } from "@lib/templates";
 import { DeliveryOption } from "@lib/types";
+import { getOverdueTemplateIds } from "@lib/overdue";
 
 export type FormsTemplate = {
   id: string;
@@ -19,7 +20,7 @@ export type FormsTemplate = {
   isPublished: boolean;
   date: string;
   url: string;
-  overdue: number;
+  overdue: boolean;
 };
 
 export async function generateMetadata({
@@ -70,9 +71,16 @@ export default async function Page({
         isPublished,
         date: updatedAt ?? Date.now().toString(),
         url: `/${locale}/id/${id}`,
-        overdue: 0,
+        overdue: false,
       };
     });
+
+    // @todo - remove this when overdue redis cache is implemented
+    const checkForOverdue = false;
+
+    const overdueTemplateIds = checkForOverdue
+      ? await getOverdueTemplateIds(templates.map((template) => template.id))
+      : [];
 
     return (
       <div className="center mx-auto w-[980px] bg-gray-soft">
@@ -81,10 +89,8 @@ export default async function Page({
           <Navigation filter={status} />
           <NewFormButton />
         </div>
-
         <ResumeEditingForm />
-
-        <Cards templates={templates} />
+        <Cards templates={templates} overdueTemplateIds={overdueTemplateIds} />
       </div>
     );
   } catch (e) {
