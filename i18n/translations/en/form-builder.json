@@ -27,7 +27,8 @@
       "dynamicRow": "Add repeating set",
       "richText": "Add page text",
       "departments": "Add department",
-      "combobox": "Add searchable list"
+      "combobox": "Add searchable list",
+      "formattedDate": "Add date"
     },
     "address": {
       "whatIsYourAddress": "What is your address?",
@@ -148,6 +149,15 @@
         "label": "Middle name"
       },
       "title": "Individual names"
+    },
+    "formattedDate": {
+      "title": "Date",
+      "description": "A field to collect the date in a customizable numeric format.",
+      "label": "Enter the date",
+      "year": "Year",
+      "month": "Month",
+      "day": "Day",
+      "customizeDate": "Customize format"
     },
     "listItem": "List item ",
     "name": {
@@ -273,7 +283,6 @@
     "gcFormsTeamPart2": "page to find the department or agency that can help.",
     "ifYouExperience": "To get technical support, use the ",
     "followUp": "Provide your contact information so we can follow up with you.",
-
     "needSupport": "Need help using GC Forms?",
     "request": {
       "option1": "Join the mailing list",
@@ -361,6 +370,7 @@
   "formatH3": "Format Heading 3",
   "formatItalic": "Format italic",
   "formatNumberedList": "Format numbered list",
+  "formattedDate": "Date",
   "formConfirmationMessage": "Confirmation message",
   "formDeleteResponses": {
     "title": "Sign off on the removal of responses before deleting form",
@@ -413,8 +423,8 @@
   "formTitle": "Form title",
   "french": "French",
   "gcForms": "GC Forms",
-  "gcFormsApi": "API",
   "gcFormsEdit": "Edit",
+  "gcFormsApi": "API",
   "gcFormsPublish": "Publish",
   "gcFormsPublished": "Published",
   "gcFormsSettings": "Settings",
@@ -440,6 +450,21 @@
     "label": "Maximum number of answers"
   },
   "more": "More",
+  "moreDialog": {
+    "date": {
+      "dateOptions": "Date options",
+      "typeOfDate": "What type of date is being collected?",
+      "selectFormat": "Select a format for the date",
+      "generalDateLabel": "General date",
+      "birthDateLabel": "Date of birth",
+      "isoFormatLabel": "YYYY-MM-DD (Government of Canada standard)",
+      "ddmmyyyyFormatLabel": "DD-MM-YYYY",
+      "mmddyyyyFormatLabel": "MM-DD-YYYY",
+      "infoBox": "Which date format should you use?",
+      "infoLine1": "Canada’s date standard format is YYYY-MM-DD and should be your first choice unless there is a reason to choose a different format.",
+      "infoLine2": "For example, when asking for a date exactly as it’s shown on a passport, card or other document, make the fields match the format of the original. This makes it easier for users to copy the date across accurately."
+    }
+  },
   "moreOptions": "More options",
   "moveDown": "Move down",
   "moveUp": "Move up",
@@ -759,8 +784,8 @@
   },
   "test": "Test",
   "textFormatting": "Text formatting",
-  "thereWasAnErrorPublishing": "There was an error publishing the form",
   "title": "Title",
+  "thereWasAnErrorPublishing": "There was an error publishing the form",
   "tooltipFormatBold": "Bold (⌘B)",
   "tooltipFormatBulletList": "Bulleted list",
   "tooltipFormatH2": "Heading 2",
