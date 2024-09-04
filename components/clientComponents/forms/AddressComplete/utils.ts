@@ -86,3 +86,9 @@ export const getAddressComponents = async (addressCompleteResult: AddressComplet
 
   return address as AddressElements;
 };
+
+export const getAddressAsString = (address: AddressElements) => {
+  return `${address.unitNumber ? address.unitNumber + "-" : ""}${address.civicNumber} ${
+    address.streetName
+  }, ${address.city}, ${address.province} ${address.postalCode}`;
+};

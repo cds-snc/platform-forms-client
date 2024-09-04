@@ -17,6 +17,8 @@ import {
 import { randomId } from "@lib/client/clientHelpers";
 import { DateFormat, DateObject } from "../FormattedDate/types";
 import { getFormattedDateFromObject } from "../FormattedDate/utils";
+import { AddressElements } from "../AddressComplete/types";
+import { getAddressAsString } from "../AddressComplete/utils";
 
 type ReviewItem = {
   id: string;
@@ -51,6 +53,11 @@ function formatElementValues(element: ReviewElement) {
       element.element?.properties.dateFormat as DateFormat,
       JSON.parse(element.values as string) as DateObject
     );
+  }
+
+  // Case of Address Complete
+  if (element.element?.type === FormElementTypes.addressComplete) {
+    return getAddressAsString(JSON.parse(element.values as string) as AddressElements);
   }
 
   // Case of an array like element e.g. checkbox
