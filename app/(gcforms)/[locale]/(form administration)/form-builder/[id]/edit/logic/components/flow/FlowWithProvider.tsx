@@ -26,16 +26,24 @@ import useAutoLayout from "./useAutoLayout";
 import { useFlowData } from "./useFlowData";
 import { GroupNode } from "./GroupNode";
 import { OffboardNode } from "./OffboardNode";
+import { EndNode } from "./EndNode";
+import { EndNodeWithReview } from "./EndNodeWithReview";
 import { layoutOptions } from "./options";
 import { edgeOptions } from "./options";
 
 import { useFlowRef } from "./provider/FlowRefProvider";
 import { useRehydrate } from "@lib/store/useTemplateStore";
 import { Language } from "@lib/types/form-builder-types";
-import { useTemplateStore } from "@lib/store/useTemplateStore";
-import { showReviewPage } from "@lib/utils/form-builder/showReviewPage";
 
-const nodeTypes = { groupNode: GroupNode, offboardNode: OffboardNode };
+import { useTemplateStore } from "@lib/store/useTemplateStore";
+import { showReviewPage as hasReviewPage } from "@lib/utils/form-builder/showReviewPage";
+
+const nodeTypes = {
+  groupNode: GroupNode,
+  offboardNode: OffboardNode,
+  endNode: EndNode,
+  endNodeWithReview: EndNodeWithReview,
+};
 import { Edge } from "reactflow";
 
 import { Loader } from "@clientComponents/globals/Loader";
@@ -54,8 +62,15 @@ export interface FlowProps {
 
 const Flow: ForwardRefRenderFunction<unknown, FlowProps> = ({ children, lang }, ref) => {
   const form = useTemplateStore((state) => state.form);
-  const showReview = showReviewPage(form);
-  const { nodes: flowNodes, edges: flowEdges, getData } = useFlowData(lang, showReview);
+
+  const showReviewNode = false;
+  const hasReview = hasReviewPage(form);
+
+  const {
+    nodes: flowNodes,
+    edges: flowEdges,
+    getData,
+  } = useFlowData(lang, showReviewNode, hasReview);
   const [nodes, setNodes, onNodesChange] = useNodesState(flowNodes);
   const [, setEdges, onEdgesChange] = useEdgesState(flowEdges as Edge[]);
   const { fitView } = useReactFlow();
@@ -93,7 +108,7 @@ const Flow: ForwardRefRenderFunction<unknown, FlowProps> = ({ children, lang }, 
 
   const { runLayout } = useAutoLayout({
     ...layoutOptions,
-    showReview,
+    showReviewNode,
   });
 
   useImperativeHandle(ref, () => ({

@@ -127,9 +127,6 @@ ${description}<br/>
       language,
     });
 
-    if (result?.status >= 400) {
-      throw new Error(`Freshdesk error: ${JSON.stringify(result)} - ${email} - ${emailBody}`);
-    }
     return NextResponse.json(result);
   } catch (error) {
     logMessage.error(error);

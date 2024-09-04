@@ -46,7 +46,7 @@ const getEdges = (
   prevNodeId: string,
   group: Group | undefined,
   groups: GroupsType | undefined,
-  showReview: boolean
+  showReviewNode: boolean
 ): CustomEdge[] => {
   // Connect to end node as we don't have a next action
   if (prevNodeId && group && typeof group.nextAction === "undefined") {
@@ -72,7 +72,7 @@ const getEdges = (
   if (prevNodeId && group && typeof group.nextAction === "string") {
     let nextAction = group.nextAction;
 
-    if (!showReview && nextAction === LockedSections.REVIEW) {
+    if (!showReviewNode && nextAction === LockedSections.REVIEW) {
       nextAction = LockedSections.END;
     }
 
@@ -98,7 +98,7 @@ const getEdges = (
     const edges = nextActions.map((action: NextActionRule) => {
       let nextAction = action.groupId;
 
-      if (!showReview && action.groupId === LockedSections.REVIEW) {
+      if (!showReviewNode && action.groupId === LockedSections.REVIEW) {
         nextAction = LockedSections.END;
       }
 
@@ -122,13 +122,21 @@ const getEdges = (
   return [];
 };
 
-export const useFlowData = (lang: Language = "en", showReview: boolean) => {
+export const useFlowData = (
+  lang: Language = "en",
+  showReviewNode: boolean,
+  hasReviewPage: boolean
+) => {
   const getTreeData = useGroupStore((s) => s.getTreeData);
   const treeItems = getTreeData();
   const formGroups = useTemplateStore((s) => s.form.groups);
   const startElements = getStartElements(lang);
   const reviewNode = getReviewNode(lang);
   const endNode = getEndNode(lang);
+
+  if (hasReviewPage) {
+    endNode.type = "endNodeWithReview";
+  }
 
   const getData = useCallback(() => {
     const edges: CustomEdge[] = [];
@@ -162,7 +170,7 @@ export const useFlowData = (lang: Language = "en", showReview: boolean) => {
         elements = [...elements, ...children];
       }
 
-      const newEdges = getEdges(key as string, prevNodeId, group, formGroups, showReview);
+      const newEdges = getEdges(key as string, prevNodeId, group, formGroups, showReviewNode);
 
       const titleKey = "name" as keyof typeof treeItem.data;
 
@@ -196,7 +204,7 @@ export const useFlowData = (lang: Language = "en", showReview: boolean) => {
     });
 
     // Add review node
-    if (showReview) {
+    if (showReviewNode) {
       nodes.push({ ...reviewNode });
     }
 
@@ -205,7 +213,7 @@ export const useFlowData = (lang: Language = "en", showReview: boolean) => {
     nodes.push({ ...endNode });
 
     return { edges, nodes };
-  }, [treeItems, reviewNode, endNode, formGroups, startElements, lang, showReview]);
+  }, [treeItems, reviewNode, endNode, formGroups, startElements, lang, showReviewNode]);
 
   const { edges, nodes } = getData();
 
