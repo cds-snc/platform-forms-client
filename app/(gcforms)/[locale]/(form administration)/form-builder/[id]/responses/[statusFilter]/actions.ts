@@ -40,6 +40,8 @@ import { orderGroups } from "@lib/utils/form-builder/orderUsingGroupsLayout";
 import { formHasGroups } from "@lib/utils/form-builder/formHasGroups";
 import { DateFormat, DateObject } from "@clientComponents/forms/FormattedDate/types";
 import { getFormattedDateFromObject } from "@clientComponents/forms/FormattedDate/utils";
+import { AddressElements } from "@clientComponents/forms/AddressComplete/types";
+import { getAddressAsString } from "@clientComponents/forms/AddressComplete/utils";
 
 export const fetchSubmissions = async ({
   formId,
@@ -123,6 +125,19 @@ const getAnswerAsString = (question: FormElement | undefined, answer: unknown): 
     const dateObject = JSON.parse(answer as string) as DateObject;
 
     return getFormattedDateFromObject(dateFormat, dateObject);
+  }
+
+  if (question && question.type === "addressComplete") {
+    if (!answer) {
+      return "";
+    }
+
+    if (question.properties.full === false) {
+      return answer as string;
+    } else {
+      const addressObject = JSON.parse(answer as string) as AddressElements;
+      return getAddressAsString(addressObject);
+    }
   }
 
   return answer as string;

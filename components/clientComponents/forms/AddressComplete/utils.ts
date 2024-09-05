@@ -1,4 +1,3 @@
-"use client";
 import { AddressComponents, FormElement } from "@lib/types";
 import { AddressCompleteChoice, AddressCompleteResult, AddressElements } from "./types";
 
