@@ -81,6 +81,8 @@ export const ElementPanel = ({
   const hasRules =
     (item.properties?.conditionalRules && item.properties?.conditionalRules?.length > 0) ?? false;
 
+  const hasSubPanel = item.properties?.subElements && item.properties?.subElements.length > 0;
+
   return (
     <div
       id={`element-${item.id}`}
@@ -90,8 +92,11 @@ export const ElementPanel = ({
         className,
         "group",
         isWithin && "active",
-        "relative h-auto max-w-[800px] border-1 border-t-0 border-slate-500 focus-within:bg-violet-50 hover:bg-violet-50 bg-white",
-        hasRules && "border-dashed border-1 border-slate-500"
+        "relative h-auto max-w-[800px] border-1 border-t-0 border-slate-500  bg-white",
+        !hasSubPanel && isWithin && "focus-within:bg-violet-50 hover:bg-violet-50",
+        hasRules && "border-dashed border-1 border-slate-500",
+        hasSubPanel &&
+          "border-1 border-t-0 border-slate-500 hover:border-2 focus-within:border-2  hover:border-indigo-700 focus-within:border-indigo-700"
       )}
       onClick={(e) => {
         const el = e.target as HTMLElement;

@@ -5,7 +5,7 @@ import { useTranslation } from "@i18n/client";
 import { useTemplateStore } from "@lib/store/useTemplateStore";
 import { PanelBodySub } from "../../PanelBodySub";
 import { FormElement, FormElementTypes } from "@lib/types";
-import { AddElementButton } from "../element-dialog/AddElementButton";
+import { AddToSetButton } from "../AddToSetButton";
 import {
   LocalizedElementProperties,
   Language,
@@ -17,6 +17,7 @@ import { PanelActions } from "../../PanelActions";
 import { Input, LockedBadge } from "@formBuilder/components/shared";
 import { getQuestionNumber } from "@lib/utils/form-builder";
 import { useHandleAdd } from "@lib/hooks/form-builder/useHandleAdd";
+import { cn } from "@lib/utils";
 
 export const SubElement = ({
   item,
@@ -86,8 +87,7 @@ export const SubElement = ({
   if (!subElements || subElements.length < 1)
     return (
       <div className="mt-10">
-        <AddElementButton
-          text={t("addToSet")}
+        <AddToSetButton
           handleAdd={(type?: FormElementTypes) => {
             handleAddSubElement(elIndex, 0, type);
           }}
@@ -100,12 +100,15 @@ export const SubElement = ({
   const subElementTypes = subElements.map((element) => ({ id: element.id, type: element.type }));
 
   return (
-    <div {...props} className="my-3">
+    <div {...props} className="">
       {subElements.map((element, subIndex: number) => {
         const questionNumber = getQuestionNumber(element, subElementTypes, true);
         const item = { ...element, index: subIndex, questionNumber };
         return (
-          <div key={`sub-element-${item.id}-${subIndex}`}>
+          <div
+            className={cn("mb-5", subIndex === 0 ? "pt-5" : "")}
+            key={`sub-element-${item.id}-${subIndex}`}
+          >
             <PanelHightLight
               conditionalChildren={
                 <PanelActions
@@ -142,18 +145,31 @@ export const SubElement = ({
                 />
               }
             >
-              <PanelBodySub
-                elIndex={elIndex}
-                item={item}
-                onQuestionChange={onQuestionChange}
-                onRequiredChange={onRequiredChange}
-                formId={formId}
-              />
+              {/* Add paading top only for the first sub panel  */}
+              <div className={subIndex === 1 ? "" : "pt-5"}>
+                <PanelBodySub
+                  elIndex={elIndex}
+                  item={item}
+                  onQuestionChange={onQuestionChange}
+                  onRequiredChange={onRequiredChange}
+                  formId={formId}
+                />
+              </div>
             </PanelHightLight>
           </div>
         );
       })}
 
+      {subElements.length >= 1 && (
+        <div>
+          <AddToSetButton
+            handleAdd={(type?: FormElementTypes) => {
+              handleAddSubElement(elIndex, subElements.length, type);
+            }}
+            filterElements={elementFilter}
+          />
+        </div>
+      )}
       {item.type === "dynamicRow" && (
         <div className="mt-4 h-auto max-w-[800px] border-1 border-gray-300 first-of-type:rounded-t-md last-of-type:rounded-b-md">
           <LockedBadge className="laptop:absolute laptop:right-7 laptop:top-[15px]" />
