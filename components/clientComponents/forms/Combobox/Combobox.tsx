@@ -11,6 +11,7 @@ interface ComboboxProps extends InputFieldProps {
   choices?: string[];
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
   onSetValue?: (value: string) => void;
+  activeRefresh?: boolean;
 }
 
 export const Combobox = (props: ComboboxProps): React.ReactElement => {
@@ -22,27 +23,37 @@ export const Combobox = (props: ComboboxProps): React.ReactElement => {
   const { setValue } = helpers;
 
   const [items, setItems] = React.useState(choices);
-  const { isOpen, getMenuProps, getInputProps, highlightedIndex, getItemProps, selectedItem } =
-    useCombobox({
-      onInputValueChange({ inputValue }) {
-        if (props.onChange) {
-          props.onChange({ target: { value: inputValue } } as React.ChangeEvent<HTMLInputElement>);
-        }
-        setItems(
-          choices.filter((choice) => {
-            return inputValue ? choice.toLowerCase().includes(inputValue.toLowerCase()) : true;
-          })
-        );
-      },
-      items,
-      onSelectedItemChange({ selectedItem }) {
-        setValue(selectedItem);
+  const {
+    isOpen,
+    getMenuProps,
+    getInputProps,
+    highlightedIndex,
+    getItemProps,
+    selectedItem,
+    openMenu,
+  } = useCombobox({
+    onInputValueChange({ inputValue }) {
+      if (props.onChange) {
+        props.onChange({ target: { value: inputValue } } as React.ChangeEvent<HTMLInputElement>);
+      }
+      setItems(
+        choices.filter((choice) => {
+          return inputValue ? choice.toLowerCase().includes(inputValue.toLowerCase()) : true;
+        })
+      );
+      if (props.activeRefresh) {
+        openMenu();
+      }
+    },
+    items,
+    onSelectedItemChange({ selectedItem }) {
+      setValue(selectedItem);
 
-        if (props.onSetValue) {
-          props.onSetValue(selectedItem ?? "");
-        }
-      },
-    });
+      if (props.onSetValue) {
+        props.onSetValue(selectedItem ?? "");
+      }
+    },
+  });
 
   return (
     <>

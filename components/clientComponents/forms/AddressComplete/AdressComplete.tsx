@@ -117,6 +117,7 @@ export const AddressComplete = (props: AddressCompleteProps): React.ReactElement
             onChange={onAddressSearch}
             onSetValue={onAddressSet}
             required={required}
+            activeRefresh={true}
           />
           <input type="hidden" {...field} />
         </div>
