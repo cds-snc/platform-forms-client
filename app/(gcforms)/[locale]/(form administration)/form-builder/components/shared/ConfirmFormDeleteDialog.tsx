@@ -11,19 +11,23 @@ import { Button, Alert } from "@clientComponents/globals";
 import { useDialogRef, Dialog } from "./Dialog";
 
 const fetcher = async (url: string) => {
-  const res = await fetch(url);
+  try {
+    const res = await axios({
+      url,
+      method: "GET",
+      responseType: "json",
+      timeout: 5000,
+    });
 
-  if (res.status === 200) {
-    const data = { ...(await res.json()) };
-
-    if (data?.numberOfUnprocessedSubmissions > 0) {
+    if (res.data?.numberOfUnprocessedSubmissions > 0) {
       return { error: "unprocessed" };
     } else {
-      return data;
+      return res.data;
     }
+  } catch (e) {
+    // handle using swr error
+    throw new Error("Something went wrong");
   }
-  // handle using swr error
-  throw new Error("Something went wrong");
 };
 
 async function downloadForm(lang: string, id: string) {
@@ -32,7 +36,7 @@ async function downloadForm(lang: string, id: string) {
     url,
     method: "GET",
     responseType: "json",
-    timeout: process.env.NODE_ENV === "production" ? 60000 : 0,
+    timeout: 5000,
   });
 
   const fileName = lang === "fr" ? response.data.form.titleFr : response.data.form.titleEn;

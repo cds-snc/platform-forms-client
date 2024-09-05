@@ -6,11 +6,7 @@ import {
   getFullTemplateByID,
 } from "@lib/templates";
 import { revalidatePath } from "next/cache";
-import { listAllSubmissions } from "@lib/vault";
-import { detectOldUnprocessedSubmissions } from "@lib/nagware";
-import { cache } from "react";
-import { getAppSetting } from "@lib/appSettings";
-import { FormRecord, NagwareResult } from "@lib/types";
+import { FormRecord } from "@lib/types";
 import { authCheckAndThrow } from "@lib/actions";
 
 export async function getForm(
@@ -46,36 +42,5 @@ export const deleteForm = async (id: string): Promise<void | { error?: string }>
     revalidatePath("(gcforms)/[locale]/(form administration)/forms", "page");
   } catch (e) {
     return { error: (e as Error).message };
-  }
-};
-
-const overdueSettings = cache(async () => {
-  const promptPhaseDays = await getAppSetting("nagwarePhasePrompted");
-  const warnPhaseDays = await getAppSetting("nagwarePhaseWarned");
-  const responseDownloadLimit = await getAppSetting("responseDownloadLimit");
-  return { promptPhaseDays, warnPhaseDays, responseDownloadLimit };
-});
-
-// Note: copied from manage-forms actions
-export const getUnprocessedSubmissionsForTemplate = async (
-  templateId: string
-): Promise<{ result: NagwareResult | null; error?: string }> => {
-  try {
-    const { ability } = await authCheckAndThrow();
-    const { promptPhaseDays, warnPhaseDays, responseDownloadLimit } = await overdueSettings();
-    const allSubmissions = await listAllSubmissions(
-      ability,
-      templateId,
-      undefined,
-      Number(responseDownloadLimit)
-    );
-    const result = await detectOldUnprocessedSubmissions(
-      allSubmissions.submissions,
-      promptPhaseDays,
-      warnPhaseDays
-    );
-    return { result };
-  } catch (e) {
-    return { result: null, error: (e as Error).message };
   }
 };

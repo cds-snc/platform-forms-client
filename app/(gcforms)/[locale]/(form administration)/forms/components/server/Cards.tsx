@@ -6,9 +6,11 @@ import { FormsTemplate } from "../../page";
 export const Cards = async ({
   filter,
   templates,
+  overdueTemplateIds,
 }: {
   filter?: string;
   templates: FormsTemplate[];
+  overdueTemplateIds: string[];
 }) => {
   const { t } = await serverTranslation("my-forms");
 
@@ -22,8 +24,13 @@ export const Cards = async ({
         className={`pt-8`}
       >
         {templates.length > 0 ? (
-          <ol className="grid gap-4 grid-cols-2 p-0">
+          <ol className="grid grid-cols-2 gap-4 p-0">
             {templates.map((card) => {
+              // Check if the form has an overdue submission
+              if (overdueTemplateIds.includes(card.id)) {
+                card.overdue = true;
+              }
+
               return (
                 <li className="flex flex-col" key={card.id}>
                   <Card card={card} />
