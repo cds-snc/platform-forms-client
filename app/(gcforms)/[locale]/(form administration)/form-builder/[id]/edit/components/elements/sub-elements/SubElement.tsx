@@ -1,10 +1,9 @@
 "use client";
-import React, { useCallback, useState } from "react";
-import { useTranslation } from "@i18n/client";
+import React from "react";
 
 import { useTemplateStore } from "@lib/store/useTemplateStore";
 import { PanelBodySub } from "../../PanelBodySub";
-import { FormElement, FormElementTypes } from "@lib/types";
+import { FormElementTypes } from "@lib/types";
 import { AddToSetButton } from "../AddToSetButton";
 import {
   LocalizedElementProperties,
@@ -14,25 +13,11 @@ import {
 import { SubElementModal } from "./SubElementModal";
 import { PanelHightLight } from "./PanelHightlight";
 import { PanelActions } from "../../PanelActions";
-import { Input, LockedBadge } from "@formBuilder/components/shared";
 import { getQuestionNumber } from "@lib/utils/form-builder";
 import { useHandleAdd } from "@lib/hooks/form-builder/useHandleAdd";
 import { cn } from "@lib/utils";
 
-export const SubElement = ({
-  item,
-  elIndex,
-  formId,
-  lang,
-  ...props
-}: {
-  item: FormElement;
-  elIndex: number;
-  formId: string;
-  lang: Language;
-}) => {
-  const { t } = useTranslation("form-builder");
-
+export const SubElement = ({ elIndex, formId, ...props }: { elIndex: number; formId: string }) => {
   const {
     updateField,
     subMoveUp,
@@ -40,8 +25,6 @@ export const SubElement = ({
     subDuplicateElement,
     removeSubItem,
     subElements,
-    localizeField,
-    getLocalizationAttribute,
     propertyPath,
   } = useTemplateStore((s) => ({
     updateField: s.updateField,
@@ -50,26 +33,11 @@ export const SubElement = ({
     subDuplicateElement: s.subDuplicateElement,
     removeSubItem: s.removeSubItem,
     subElements: s.form.elements[elIndex].properties.subElements,
-    localizeField: s.localizeField,
     getLocalizationAttribute: s.getLocalizationAttribute,
     propertyPath: s.propertyPath,
   }));
 
   const { handleAddSubElement } = useHandleAdd();
-
-  const [buttonText, setButtonText] = useState<string>(
-    item.properties[localizeField(LocalizedElementProperties.PLACEHOLDER, lang)] || ""
-  );
-
-  const handlePlaceHolderText = useCallback(
-    (elIndex: number, e: React.ChangeEvent<HTMLInputElement>) => {
-      const placeHolder = localizeField(LocalizedElementProperties.PLACEHOLDER, lang);
-
-      setButtonText(e.target.value);
-      updateField(`form.elements[${elIndex}].properties.${placeHolder}`, e.target.value);
-    },
-    [updateField, localizeField, lang]
-  );
 
   const onQuestionChange = (itemId: number, val: string, lang: Language) => {
     updateField(propertyPath(itemId, LocalizedElementProperties.TITLE, lang), val);
@@ -106,7 +74,7 @@ export const SubElement = ({
         const item = { ...element, index: subIndex, questionNumber };
         return (
           <div
-            className={cn("mb-5", subIndex === 0 ? "pt-5" : "")}
+            className={cn("mb-5", subIndex === 0 ? "mt-5" : "")}
             key={`sub-element-${item.id}-${subIndex}`}
           >
             <PanelHightLight
@@ -145,16 +113,13 @@ export const SubElement = ({
                 />
               }
             >
-              {/* Add paading top only for the first sub panel  */}
-              <div className={subIndex === 1 ? "" : "pt-5"}>
-                <PanelBodySub
-                  elIndex={elIndex}
-                  item={item}
-                  onQuestionChange={onQuestionChange}
-                  onRequiredChange={onRequiredChange}
-                  formId={formId}
-                />
-              </div>
+              <PanelBodySub
+                elIndex={elIndex}
+                item={item}
+                onQuestionChange={onQuestionChange}
+                onRequiredChange={onRequiredChange}
+                formId={formId}
+              />
             </PanelHightLight>
           </div>
         );
@@ -168,25 +133,6 @@ export const SubElement = ({
             }}
             filterElements={elementFilter}
           />
-        </div>
-      )}
-      {item.type === "dynamicRow" && (
-        <div className="mt-4 h-auto max-w-[800px] border-1 border-gray-300 first-of-type:rounded-t-md last-of-type:rounded-b-md">
-          <LockedBadge className="laptop:absolute laptop:right-7 laptop:top-[15px]" />
-          <div className="mx-7 mb-7 mt-5">
-            <h2 className="pb-3 text-2xl">{t("questionSet.addAnother.title")}</h2>
-            <p className="mb-8 pt-5 text-[1rem]">{t("questionSet.addAnother.description")}</p>
-            <Input
-              id={`repeatable-button-${elIndex}`}
-              {...getLocalizationAttribute()}
-              value={buttonText}
-              className="w-full"
-              placeholder={t("questionSet.addAnother.placeholder")}
-              onChange={(e) => {
-                handlePlaceHolderText(elIndex, e);
-              }}
-            />
-          </div>
         </div>
       )}
     </div>

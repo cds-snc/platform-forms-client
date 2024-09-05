@@ -63,7 +63,6 @@ export const PanelBody = ({
           <Question item={item} onQuestionChange={onQuestionChange} />
           <SelectedElement
             key={`item-${item.id}-${translationLanguagePriority}`}
-            lang={translationLanguagePriority}
             item={item}
             elIndex={elIndex}
             formId={formId}
@@ -85,12 +84,7 @@ export const PanelBody = ({
               <QuestionDescription item={item} describedById={describedById} />
               <div className="flex">
                 <div>
-                  <SelectedElement
-                    lang={translationLanguagePriority}
-                    item={item}
-                    elIndex={elIndex}
-                    formId={formId}
-                  />
+                  <SelectedElement item={item} elIndex={elIndex} formId={formId} />
                 </div>
                 {isFormattedDate && (
                   <div className="mb-4 ml-4 self-end">

@@ -110,7 +110,9 @@ export const ElementPanel = ({
             return;
           }
 
-          refs?.current?.[item.id]?.focus();
+          if (!hasSubPanel) {
+            refs?.current?.[item.id]?.focus();
+          }
         }
       }}
     >
