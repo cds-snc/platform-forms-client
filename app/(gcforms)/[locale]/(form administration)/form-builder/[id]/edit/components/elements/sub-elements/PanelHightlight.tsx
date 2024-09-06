@@ -12,18 +12,20 @@ export const PanelHightLight = ({
   conditionalChildren: React.ReactNode;
 }) => {
   const { focusWithinProps, isWithin } = useIsWithin();
-  const highlight = isWithin ? "bg-violet-100" : "border-b-1 border-slate-500";
-  const transitionClasses = "transition-all duration-800"; // Add transition classes
+  const highlight = isWithin
+    ? "bg-violet-100 border-b-1 border-violet-100"
+    : "border-b-1 border-slate-500";
+  const transitionClasses = "transition-all duration-800";
+
+  const actionPanelClasses = cn(
+    "block laptop:hidden",
+    isWithin ? "laptop:!block" : "laptop:!hidden"
+  );
 
   return (
-    <div
-      {...focusWithinProps}
-      className={cn(highlight, "px-5", transitionClasses, isWithin && "pt-5")}
-    >
+    <div {...focusWithinProps} className={cn(highlight, "px-5 panel-actions", transitionClasses)}>
       {children}
-      <div className={cn("block laptop:hidden", isWithin ? "laptop:!block" : "laptop:!hidden")}>
-        {conditionalChildren}
-      </div>
+      <div className={actionPanelClasses}>{conditionalChildren}</div>
     </div>
   );
 };

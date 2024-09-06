@@ -13,9 +13,7 @@ import {
 import { SubElementModal } from "./SubElementModal";
 import { PanelHightLight } from "./PanelHightlight";
 import { PanelActions } from "../../PanelActions";
-import { getQuestionNumber } from "@lib/utils/form-builder";
 import { useHandleAdd } from "@lib/hooks/form-builder/useHandleAdd";
-import { cn } from "@lib/utils";
 
 export const SubElement = ({ elIndex, formId, ...props }: { elIndex: number; formId: string }) => {
   const {
@@ -64,19 +62,12 @@ export const SubElement = ({ elIndex, formId, ...props }: { elIndex: number; for
       </div>
     );
 
-  // grab only the data we need to render the question number
-  const subElementTypes = subElements.map((element) => ({ id: element.id, type: element.type }));
-
   return (
     <div {...props} className="">
       {subElements.map((element, subIndex: number) => {
-        const questionNumber = getQuestionNumber(element, subElementTypes, true);
-        const item = { ...element, index: subIndex, questionNumber };
+        const item = { ...element, index: subIndex };
         return (
-          <div
-            className={cn("mb-5", subIndex === 0 ? "mt-5" : "")}
-            key={`sub-element-${item.id}-${subIndex}`}
-          >
+          <div className="my-4" key={`sub-element-${item.id}-${subIndex}`}>
             <PanelHightLight
               conditionalChildren={
                 <PanelActions
@@ -113,13 +104,15 @@ export const SubElement = ({ elIndex, formId, ...props }: { elIndex: number; for
                 />
               }
             >
-              <PanelBodySub
-                elIndex={elIndex}
-                item={item}
-                onQuestionChange={onQuestionChange}
-                onRequiredChange={onRequiredChange}
-                formId={formId}
-              />
+              <div className="pt-4">
+                <PanelBodySub
+                  elIndex={elIndex}
+                  item={item}
+                  onQuestionChange={onQuestionChange}
+                  onRequiredChange={onRequiredChange}
+                  formId={formId}
+                />
+              </div>
             </PanelHightLight>
           </div>
         );
