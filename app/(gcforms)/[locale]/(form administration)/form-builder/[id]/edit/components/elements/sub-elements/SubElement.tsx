@@ -52,7 +52,7 @@ export const SubElement = ({ elIndex, formId, ...props }: { elIndex: number; for
 
   if (!subElements || subElements.length < 1)
     return (
-      <div className="mt-10">
+      <div className="ml-4 mt-10">
         <AddToSetButton
           handleAdd={(type?: FormElementTypes) => {
             handleAddSubElement(elIndex, 0, type);
@@ -119,7 +119,7 @@ export const SubElement = ({ elIndex, formId, ...props }: { elIndex: number; for
       })}
 
       {subElements.length >= 1 && (
-        <div className="my-4">
+        <div className="m-4">
           <AddToSetButton
             handleAdd={(type?: FormElementTypes) => {
               handleAddSubElement(elIndex, subElements.length, type);

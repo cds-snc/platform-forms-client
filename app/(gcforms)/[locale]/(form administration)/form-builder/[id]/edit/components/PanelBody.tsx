@@ -61,7 +61,7 @@ export const PanelBody = ({
     <>
       {isRichText || isDynamicRow ? (
         <div className="my-4">
-          <div className={cn(isDynamicRow && "px-4 mb-2")}>
+          <div className={cn(isDynamicRow && "px-4 mb-2 mt-8")}>
             <Question item={item} onQuestionChange={onQuestionChange} />
           </div>
           <SelectedElement

@@ -12,7 +12,6 @@ export const PanelHightLight = ({
   conditionalChildren: React.ReactNode;
 }) => {
   const { focusWithinProps, isWithin } = useIsWithin();
-
   return (
     <div
       {...focusWithinProps}

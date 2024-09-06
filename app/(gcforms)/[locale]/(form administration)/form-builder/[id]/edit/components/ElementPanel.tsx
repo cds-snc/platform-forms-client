@@ -81,7 +81,7 @@ export const ElementPanel = ({
   const hasRules =
     (item.properties?.conditionalRules && item.properties?.conditionalRules?.length > 0) ?? false;
 
-  const hasSubPanel = item.properties?.subElements && item.properties?.subElements.length > 0;
+  const hasSubPanel = item.type === "dynamicRow";
 
   return (
     <div
