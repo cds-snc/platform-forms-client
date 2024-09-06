@@ -24,7 +24,7 @@ export const PanelHightLight = ({
 
   return (
     <div {...focusWithinProps} className={cn(highlight, "px-5 panel-actions", transitionClasses)}>
-      {children}
+      <div className="mx-4">{children}</div>
       <div className={actionPanelClasses}>{conditionalChildren}</div>
     </div>
   );

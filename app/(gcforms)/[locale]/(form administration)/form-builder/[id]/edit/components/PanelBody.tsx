@@ -14,6 +14,7 @@ import { useTemplateStore } from "@lib/store/useTemplateStore";
 import { Trans } from "react-i18next";
 import { Tooltip } from "@formBuilder/components/shared/Tooltip";
 import { Button } from "@clientComponents/globals";
+import { cn } from "@lib/utils";
 
 export const PanelBody = ({
   item,
@@ -60,7 +61,9 @@ export const PanelBody = ({
     <>
       {isRichText || isDynamicRow ? (
         <div className="my-4">
-          <Question item={item} onQuestionChange={onQuestionChange} />
+          <div className={cn(isDynamicRow && "px-4 mb-2")}>
+            <Question item={item} onQuestionChange={onQuestionChange} />
+          </div>
           <SelectedElement
             key={`item-${item.id}-${translationLanguagePriority}`}
             item={item}

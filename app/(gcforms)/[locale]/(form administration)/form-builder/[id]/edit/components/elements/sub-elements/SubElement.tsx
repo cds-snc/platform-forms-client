@@ -63,11 +63,11 @@ export const SubElement = ({ elIndex, formId, ...props }: { elIndex: number; for
     );
 
   return (
-    <div {...props} className="">
+    <div {...props}>
       {subElements.map((element, subIndex: number) => {
         const item = { ...element, index: subIndex };
         return (
-          <div className="my-4" key={`sub-element-${item.id}-${subIndex}`}>
+          <div key={`sub-element-${item.id}-${subIndex}`}>
             <PanelHightLight
               conditionalChildren={
                 <PanelActions
@@ -119,7 +119,7 @@ export const SubElement = ({ elIndex, formId, ...props }: { elIndex: number; for
       })}
 
       {subElements.length >= 1 && (
-        <div>
+        <div className="my-4">
           <AddToSetButton
             handleAdd={(type?: FormElementTypes) => {
               handleAddSubElement(elIndex, subElements.length, type);
