@@ -6,12 +6,16 @@ import { isValidGovEmail } from "@lib/validation/validation";
 import { useSession } from "next-auth/react";
 import { useCallback, useEffect, useState } from "react";
 
-export const ManageFormAccessDialog = () => {
+export const ManageFormAccessDialog = ({
+  templateUsers,
+}: {
+  templateUsers: { id: string; name: string | null; email: string }[] | undefined;
+}) => {
   const dialogRef = useDialogRef();
   const { Event } = useCustomEvent();
+  const [usersWithAccess, setUsersWithAccess] = useState<{ email: string }[]>([]);
   const [userEmailDomain, setUserEmailDomain] = useState("");
   const [selectedEmail, setSelectedEmail] = useState("");
-
   const [isOpen, setIsOpen] = useState(false);
 
   const isDomainMatch = userEmailDomain === selectedEmail.split("@")[1];
@@ -34,7 +38,10 @@ export const ManageFormAccessDialog = () => {
     if (session) {
       setUserEmailDomain(session.user.email.split("@")[1]);
     }
-  }, [session]);
+    if (templateUsers) {
+      setUsersWithAccess(templateUsers);
+    }
+  }, [session, templateUsers]);
 
   /**
    * @TODO: Add validation messages/states
@@ -47,6 +54,11 @@ export const ManageFormAccessDialog = () => {
 
     if (!isDomainMatch) {
       logMessage.info("Email domain does not match");
+      return;
+    }
+
+    if (usersWithAccess.find((user) => user.email === selectedEmail)) {
+      logMessage.info("User already has access");
       return;
     }
   };
@@ -62,7 +74,9 @@ export const ManageFormAccessDialog = () => {
 
   const dialogActions = (
     <div className="flex flex-row gap-4">
-      <Button theme="secondary">Cancel</Button>
+      <Button theme="secondary" onClick={handleClose}>
+        Cancel
+      </Button>
       <Button
         theme="primary"
         onClick={() => {
@@ -107,16 +121,14 @@ export const ManageFormAccessDialog = () => {
             <section className="mt-4">
               <h3>People with access</h3>
               <div className="border-1 border-black p-4">
-                <div className="flex flex-row py-2">
-                  <div className="grow">dave.samojlenko@cds-snc.ca</div>
-                  <div className="">Owner</div>
-                </div>
-                <div className="flex flex-row py-2">
-                  <div className="grow">tim.arney@cds-snc.ca</div>
-                  <div>
-                    <button>X</button>
+                {usersWithAccess.map((user) => (
+                  <div className="flex flex-row py-2" key={user.email}>
+                    <div className="grow">{user.email}</div>
+                    <div>
+                      {session?.user.email === user.email ? <span></span> : <button>X</button>}
+                    </div>
                   </div>
-                </div>
+                ))}
               </div>
             </section>
           </div>

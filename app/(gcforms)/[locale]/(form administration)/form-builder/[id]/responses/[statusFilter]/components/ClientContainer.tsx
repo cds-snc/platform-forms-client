@@ -10,9 +10,11 @@ import { ManageFormAccessDialog } from "./Dialogs/ManageFormAccessDialog";
 export const ClientContainer = ({
   responseDownloadLimit,
   overdueAfter,
+  templateUsers,
 }: {
   responseDownloadLimit: number;
   overdueAfter: number;
+  templateUsers: { id: string; name: string | null; email: string }[] | undefined;
 }) => {
   const { isPublished, id, deliveryOption } = useTemplateStore((s) => ({
     isPublished: s.isPublished,
@@ -46,7 +48,7 @@ export const ClientContainer = ({
         <Responses responseDownloadLimit={responseDownloadLimit} overdueAfter={overdueAfter} />
         <ResponsesFooter formId={id} />
       </div>
-      <ManageFormAccessDialog />
+      <ManageFormAccessDialog templateUsers={templateUsers} />
     </>
   );
 };
