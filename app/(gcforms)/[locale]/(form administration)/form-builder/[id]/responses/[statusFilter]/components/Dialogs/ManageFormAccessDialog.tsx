@@ -25,6 +25,7 @@ export const ManageFormAccessDialog = ({
   };
 
   const handleClose = () => {
+    setSelectedEmail("");
     setIsOpen(false);
   };
 
