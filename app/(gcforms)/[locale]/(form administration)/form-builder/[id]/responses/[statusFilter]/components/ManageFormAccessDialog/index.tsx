@@ -18,10 +18,12 @@ export const ManageFormAccessDialog = ({
 }) => {
   const dialogRef = useDialogRef();
   const { Event } = useCustomEvent();
-  const [usersWithAccess, setUsersWithAccess] = useState<TemplateUser[]>([]);
-  const [userEmailDomain, setUserEmailDomain] = useState("");
-  const [selectedEmail, setSelectedEmail] = useState("");
+  const { data: session } = useSession();
+
   const [isOpen, setIsOpen] = useState(false);
+  const [selectedEmail, setSelectedEmail] = useState("");
+  const [userEmailDomain, setUserEmailDomain] = useState("");
+  const [usersWithAccess, setUsersWithAccess] = useState<TemplateUser[]>([]);
 
   const isDomainMatch = userEmailDomain === selectedEmail.split("@")[1];
 
@@ -37,17 +39,6 @@ export const ManageFormAccessDialog = ({
   const handleOpenDialog = useCallback(() => {
     setIsOpen(true);
   }, []);
-
-  const { data: session } = useSession();
-
-  useEffect(() => {
-    if (session) {
-      setUserEmailDomain(session.user.email.split("@")[1]);
-    }
-    if (templateUsers) {
-      setUsersWithAccess(templateUsers);
-    }
-  }, [session, templateUsers]);
 
   /**
    * @TODO: Add validation messages/states
@@ -70,6 +61,15 @@ export const ManageFormAccessDialog = ({
 
     return true;
   };
+
+  useEffect(() => {
+    if (session) {
+      setUserEmailDomain(session.user.email.split("@")[1]);
+    }
+    if (templateUsers) {
+      setUsersWithAccess(templateUsers);
+    }
+  }, [session, templateUsers]);
 
   useEffect(() => {
     Event.on("open-form-access-dialog", handleOpenDialog);
