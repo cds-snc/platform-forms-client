@@ -11,7 +11,7 @@ export const getOverdueTemplateIds = async (templateIds: string[]): Promise<stri
     if (overdue) {
       const overdueData = JSON.parse(overdue);
       logMessage.info(`OVERDUE cached overdueData: ${overdue}`);
-      return templateIds.filter((id) => overdueData.formIds.includes(id));
+      return templateIds.filter((id) => overdueData.includes(id));
     }
   } catch (e) {
     const error = e as Error;

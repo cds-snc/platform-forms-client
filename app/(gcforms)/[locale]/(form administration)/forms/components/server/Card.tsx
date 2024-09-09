@@ -1,6 +1,5 @@
 import React, { Suspense } from "react";
 import { MessageIcon, EnvelopeIcon, PreviewIcon, DesignIcon } from "@serverComponents/icons";
-import Markdown from "markdown-to-jsx";
 import { Menu } from "../client/Menu";
 import { serverTranslation } from "@i18n";
 import Link from "next/link";
@@ -71,10 +70,8 @@ const CardLinks = async ({ isPublished, url, id, deliveryOption, overdue }: Card
           {overdue ? (
             <span className="mt-4 block text-sm text-red">
               <MessageIcon className="mr-2 inline-block" />
-              <Markdown options={{ forceBlock: false }}>
-                {t("card.actionRequired.description") +
-                  t("card.actionRequired.link", responsesLink)}
-              </Markdown>
+              {t("card.actionRequired.description")} {""}
+              <a href={responsesLink}>{t("card.actionRequired.linkText")}</a>
             </span>
           ) : (
             <Link
