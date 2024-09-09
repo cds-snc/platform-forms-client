@@ -64,12 +64,15 @@ export const PanelBody = ({
           <div className={cn(isDynamicRow && "px-4 mb-2 mt-8")}>
             <Question item={item} onQuestionChange={onQuestionChange} />
           </div>
-          <SelectedElement
-            key={`item-${item.id}-${translationLanguagePriority}`}
-            item={item}
-            elIndex={elIndex}
-            formId={formId}
-          />
+
+          <div className={cn(isDynamicRow && "pl-8 mb-2")}>
+            <SelectedElement
+              key={`item-${item.id}-${translationLanguagePriority}`}
+              item={item}
+              elIndex={elIndex}
+              formId={formId}
+            />
+          </div>
         </div>
       ) : (
         <>
