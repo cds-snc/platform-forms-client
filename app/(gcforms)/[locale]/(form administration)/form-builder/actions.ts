@@ -388,6 +388,20 @@ export const getTranslatedElementProperties = async (type: string) => {
   };
 };
 
+export const getTranslatedDynamicRowProperties = async () => {
+  const { t: en } = await serverTranslation("common", { lang: "en" });
+  const { t: fr } = await serverTranslation("common", { lang: "fr" });
+
+  return {
+    rowTitleEn: en("dynamicRow.rowTitle"),
+    rowTitleFr: fr("dynamicRow.rowTitle"),
+    addButtonTextEn: en("dynamicRow.addButtonText"),
+    removeButtonTextEn: en("dynamicRow.removeButtonText"),
+    addButtonTextFr: fr("dynamicRow.addButtonText"),
+    removeButtonTextFr: fr("dynamicRow.removeButtonText"),
+  };
+};
+
 export const getTranslatedProperties = async (type: string) => {
   const { t: en } = await serverTranslation("form-builder", { lang: "en" });
   const { t: fr } = await serverTranslation("form-builder", { lang: "fr" });

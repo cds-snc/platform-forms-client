@@ -268,6 +268,14 @@
                 }
               }
             },
+            "dyanamicRow": {
+              "rowTitleEn": "string",
+              "rowTitleFr": "string",
+              "addButtonTextEn": "string",
+              "removeButtonTextEn": "string",
+              "addButtonTextFr": "string",
+              "removeButtonTextFr": "string"
+            },
             "managedChoices": {
               "type": "string",
               "description": "The name of the data file containing the choices for this element."

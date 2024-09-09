@@ -98,7 +98,10 @@
   },
   "dynamicRow": {
     "add": "Add",
-    "delete": "Delete"
+    "delete": "Delete",
+    "rowTitle": "Row",
+    "addButtonTextEn": "Add another row",
+    "deleteButtonTextEn": "Delete this row"
   },
   "acceptableUsePage": {
     "agree": "Agree",
