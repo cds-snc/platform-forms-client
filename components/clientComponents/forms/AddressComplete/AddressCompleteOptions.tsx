@@ -44,7 +44,7 @@ export const AddressCompleteOptions = ({
         id="addressType-full"
         label={t("addElementDialog.addressComplete.fullAddress")}
         value=""
-        checked={!properties.full}
+        checked={properties.full || properties.full === undefined}
         onChange={() => {
           updateModalProperties(item.id, {
             ...properties,
