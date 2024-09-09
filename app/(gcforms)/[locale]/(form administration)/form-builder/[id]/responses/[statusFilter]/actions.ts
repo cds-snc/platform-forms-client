@@ -16,7 +16,7 @@ import {
   JSONResponse,
 } from "@lib/responseDownloadFormats/types";
 import { getFullTemplateByID } from "@lib/templates";
-import { FormElement, FormElementTypes, VaultStatus } from "@lib/types";
+import { AddressComponents, FormElement, FormElementTypes, VaultStatus } from "@lib/types";
 import { isResponseId } from "@lib/validation/validation";
 import {
   confirmResponses,
@@ -41,7 +41,10 @@ import { formHasGroups } from "@lib/utils/form-builder/formHasGroups";
 import { DateFormat, DateObject } from "@clientComponents/forms/FormattedDate/types";
 import { getFormattedDateFromObject } from "@clientComponents/forms/FormattedDate/utils";
 import { AddressElements } from "@clientComponents/forms/AddressComplete/types";
-import { getAddressAsString } from "@clientComponents/forms/AddressComplete/utils";
+import {
+  getAddressAsAnswerElements,
+  getAddressAsString,
+} from "@clientComponents/forms/AddressComplete/utils";
 
 export const fetchSubmissions = async ({
   formId,
@@ -229,6 +232,7 @@ export const getSubmissionsByFormat = async ({
             (element) => element.id === Number(questionId)
           );
 
+          // Handle Dynamic Rows
           if (question?.type === FormElementTypes.dynamicRow && answer instanceof Array) {
             return {
               questionId: question.id,
@@ -255,6 +259,32 @@ export const getSubmissionsByFormat = async ({
             } as Answer;
           }
 
+          // Handle "Split" AddressComplete in a similiar manner to dynamic fields.
+          if (
+            question?.type === FormElementTypes.addressComplete &&
+            question.properties.full === false
+          ) {
+            const addressObject = JSON.parse(answer as string) as AddressElements;
+
+            const questionComponents = question.properties.addressComponents as AddressComponents;
+
+            const reviewElements = getAddressAsAnswerElements(
+              question,
+              addressObject,
+              questionComponents
+            );
+            const addressElements = [reviewElements];
+
+            return {
+              questionId: question.id,
+              type: FormElementTypes.address,
+              questionEn: question?.properties.titleEn,
+              questionFr: question?.properties.titleFr,
+              answer: addressElements,
+            } as Answer;
+          }
+
+          // return the final answer object
           return {
             questionId: question?.id,
             type: question?.type,

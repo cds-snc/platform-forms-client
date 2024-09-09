@@ -1,5 +1,6 @@
 import { AddressComponents, FormElement } from "@lib/types";
 import { AddressCompleteChoice, AddressCompleteResult, AddressElements } from "./types";
+import { Answer } from "@lib/responseDownloadFormats/types";
 
 const autoCompleteUrl =
   "https://ws1.postescanada-canadapost.ca/AddressComplete/Interactive/AutoComplete/v1.00/json3.ws";
@@ -111,4 +112,48 @@ export const getAddressAsReviewElements = (
     }
   }
   return returnArray;
+};
+
+export const getAddressAsAnswerElements = (
+  question: FormElement,
+  address: AddressElements,
+  addressComponents: AddressComponents
+): Answer[] => {
+  const answerArray = [];
+
+  // I can't find a way to make the i18n interface available to the Download Object, so the translations are hardcoded here.
+  const translationsEn = {
+    unitNumber: "Unit Number",
+    civicNumber: "Civic Number",
+    streetName: "Street Name",
+    city: "City",
+    province: "Province",
+    postalCode: "Postal Code",
+    country: "Country",
+  };
+
+  const translationsFr = {
+    unitNumber: "Numéro d'unité",
+    civicNumber: "Numéro civique",
+    streetName: "Nom de la rue",
+    city: "Ville",
+    province: "Province",
+    postalCode: "Code postal",
+    country: "Pays",
+  };
+
+  for (const key in addressComponents) {
+    if (address[key as keyof AddressComponents]) {
+      const answerObj: Answer = {
+        questionId: question.id,
+        questionEn: translationsEn[key as keyof AddressElements],
+        questionFr: translationsFr[key as keyof AddressElements],
+        answer: address[key as keyof AddressElements],
+      };
+
+      answerArray.push(answerObj);
+    }
+  }
+
+  return answerArray;
 };
