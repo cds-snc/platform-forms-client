@@ -1,3 +1,5 @@
+"use client";
+
 import { Button } from "@clientComponents/globals";
 import { Dialog, useDialogRef } from "@formBuilder/components/shared";
 import { useCustomEvent } from "@lib/hooks/useCustomEvent";
@@ -5,15 +7,18 @@ import { logMessage } from "@lib/logger";
 import { isValidGovEmail } from "@lib/validation/validation";
 import { useSession } from "next-auth/react";
 import { useCallback, useEffect, useState } from "react";
+import { checkEmailExists } from "./actions";
+import { TemplateUser } from "./types";
+import { SelectUser } from "./SelectUser";
 
 export const ManageFormAccessDialog = ({
   templateUsers,
 }: {
-  templateUsers: { id: string; name: string | null; email: string }[] | undefined;
+  templateUsers: TemplateUser[] | undefined;
 }) => {
   const dialogRef = useDialogRef();
   const { Event } = useCustomEvent();
-  const [usersWithAccess, setUsersWithAccess] = useState<{ email: string }[]>([]);
+  const [usersWithAccess, setUsersWithAccess] = useState<TemplateUser[]>([]);
   const [userEmailDomain, setUserEmailDomain] = useState("");
   const [selectedEmail, setSelectedEmail] = useState("");
   const [isOpen, setIsOpen] = useState(false);
@@ -66,12 +71,6 @@ export const ManageFormAccessDialog = ({
     return true;
   };
 
-  const submit = () => {
-    if (validate()) {
-      // valid
-    }
-  };
-
   useEffect(() => {
     Event.on("open-form-access-dialog", handleOpenDialog);
 
@@ -88,8 +87,15 @@ export const ManageFormAccessDialog = ({
       </Button>
       <Button
         theme="primary"
-        onClick={() => {
-          submit();
+        onClick={async () => {
+          if (validate()) {
+            const result = await checkEmailExists(selectedEmail);
+            if (result) {
+              // User exists, display add owner form
+            } else {
+              // User does not exists, display invite form
+            }
+          }
         }}
         disabled={!isValidEmail()}
       >
@@ -108,38 +114,12 @@ export const ManageFormAccessDialog = ({
           actions={dialogActions}
         >
           <div className="p-4">
-            <section>
-              <label htmlFor="email" className="font-bold">
-                Add people to share access
-              </label>
-              <p>
-                You can only enter email addresses with your same domain. If they do not have an
-                account, they will be invited to create one.
-              </p>
-
-              <input
-                id="email"
-                type="text"
-                className="gc-input-text"
-                onChange={(e) => {
-                  setSelectedEmail(e.target.value);
-                }}
-              />
-            </section>
-
-            <section className="mt-4">
-              <h3>People with access</h3>
-              <div className="border-1 border-black p-4">
-                {usersWithAccess.map((user) => (
-                  <div className="flex flex-row py-2" key={user.email}>
-                    <div className="grow">{user.email}</div>
-                    <div>
-                      {session?.user.email === user.email ? <span></span> : <button>X</button>}
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </section>
+            <SelectUser
+              selectedEmail={selectedEmail}
+              setSelectedEmail={setSelectedEmail}
+              usersWithAccess={usersWithAccess}
+              loggedInUserEmail={session?.user.email || ""}
+            />
           </div>
         </Dialog>
       )}

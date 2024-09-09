@@ -5,7 +5,8 @@ import { DeliveryOptionEmail } from "./DeliveryOptionEmail";
 import { NavigationTabs } from "./NavigationTabs";
 import { ResponsesFooter } from "./ResponsesFooter";
 import { Responses } from "./Responses";
-import { ManageFormAccessDialog } from "./Dialogs/ManageFormAccessDialog";
+import { ManageFormAccessDialog } from "./ManageFormAccessDialog";
+import { TemplateUser } from "./ManageFormAccessDialog/types";
 
 export const ClientContainer = ({
   responseDownloadLimit,
@@ -14,7 +15,7 @@ export const ClientContainer = ({
 }: {
   responseDownloadLimit: number;
   overdueAfter: number;
-  templateUsers: { id: string; name: string | null; email: string }[] | undefined;
+  templateUsers: TemplateUser[] | undefined;
 }) => {
   const { isPublished, id, deliveryOption } = useTemplateStore((s) => ({
     isPublished: s.isPublished,
