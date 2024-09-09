@@ -164,6 +164,7 @@ export const PanelActions = ({
         tabIndex={getTabIndex(button.txt)}
         buttonRef={setRef(`button-${loopIndex}`)}
         dataTestId={button.txt}
+        isSubPanel={isSubPanel}
       >
         <span className="text-sm">{t(button.txt)}</span>
       </PanelActionsButton>
@@ -183,7 +184,7 @@ export const PanelActions = ({
       }`;
 
   const innerPanelClasses = isSubPanel
-    ? `flex flex-wrap flex-row justify-between  -mx-12 laptop:mx-0`
+    ? `flex flex-wrap flex-row justify-between laptop:mx-0 mb-2`
     : `flex flex-wrap flex-row justify-between bg-slate-800 px-4 pb-6 pt-4 py-2`;
 
   const innerPanelResponsiveClasses = isSubPanel
