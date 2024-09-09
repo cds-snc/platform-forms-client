@@ -41,7 +41,7 @@ export const PanelActionsButton = ({
 
   const iconClasses = !isSubPanel
     ? "fill-white transition duration-100 group-hover/button:fill-white group-focus/button:!fill-slate-800 group-active/button:fill-slate-800 group-disabled/button:!fill-gray-500 disabled:cursor-not-allowed"
-    : "fill-black group-focus/sub-button:fill-black group-active/sub-button:fill-black group-disabled/sub-button:!fill-gray-500";
+    : "fill-blue group-focus/sub-button:fill-blue group-active/sub-button:fill-blue group-disabled/sub-button:!fill-gray-500";
 
   const responsiveIconClasses =
     "laptop:mr-2 laptop:fill-slate-800 laptop:group-hover/button:fill-black laptop:group-focus/button:!fill-white laptop:group-active/button:!fill-white";
@@ -49,7 +49,7 @@ export const PanelActionsButton = ({
   const classes = !isSubPanel
     ? cn(baseButtonClasses, buttonClasses, responsiveButtonClasses, tabletButtonClasses, className)
     : cn(
-        "group/sub-button flex transition duration-100 rounded-lg px-2 py-1 hover:underline focus:outline focus:outline-[3px] focus:outline-offset-2 focus:outline-blue-focus disabled:cursor-not-allowed disabled:!bg-transparent disabled:!text-gray-500 disabled:hover:no-underline",
+        "group/sub-button flex transition duration-100 text-blue rounded-lg px-2 py-1 hover:underline focus:outline focus:outline-[3px] focus:outline-offset-2 focus:outline-blue-focus disabled:cursor-not-allowed disabled:!bg-transparent disabled:!text-gray-500 disabled:hover:no-underline",
         className
       );
 

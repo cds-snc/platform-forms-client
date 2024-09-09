@@ -17,7 +17,7 @@ export const PanelHightLight = ({
       {...focusWithinProps}
       className={cn(
         isWithin && "bg-violet-100",
-        "px-5 panel-actions border-b-1 border-slate-500 transition-all duration-800"
+        "pl-8 panel-actions border-b-1 border-slate-500 transition-all duration-800"
       )}
     >
       <div className="mx-4">{children}</div>
