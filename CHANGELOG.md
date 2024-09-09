@@ -5,6 +5,37 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.21.1](https://github.com/cds-snc/platform-forms-client/compare/v3.21.0...v3.21.1) (2024-09-04)
+
+
+### Miscellaneous Chores
+
+* Update overdue card status ([#4221](https://github.com/cds-snc/platform-forms-client/issues/4221)) ([9b1923b](https://github.com/cds-snc/platform-forms-client/commit/9b1923b09f08b795a74dcb850d8871dc2ea22703))
+
+## [3.21.0](https://github.com/cds-snc/platform-forms-client/compare/v3.20.0...v3.21.0) (2024-09-03)
+
+
+### Features
+
+* Formatted Date component ([901b38c](https://github.com/cds-snc/platform-forms-client/commit/901b38ccdfaada530f44f06b8ee5a46811e8a8e7))
+
+
+### Bug Fixes
+
+* force UTF-8 encoding using BOM for unzipped CSV files ([a5cc3d4](https://github.com/cds-snc/platform-forms-client/commit/a5cc3d4ca960a40341c2ad8c717d9900ba268c75))
+
+
+### Miscellaneous Chores
+
+* Adds text field length character limit ([6c8cf93](https://github.com/cds-snc/platform-forms-client/commit/6c8cf93341e1c247ea13f8dd37aef18442abc8e2))
+* Combine review and end nodes ([#4220](https://github.com/cds-snc/platform-forms-client/issues/4220)) ([5d86113](https://github.com/cds-snc/platform-forms-client/commit/5d86113f4c109c8b418646ec59986203891eb707))
+* replace fetch with axios ([#4242](https://github.com/cds-snc/platform-forms-client/issues/4242)) ([8334792](https://github.com/cds-snc/platform-forms-client/commit/83347929e9ee3c2e6de2ecf53e5c415042befc1e))
+
+
+### Code Refactoring
+
+* reword error log for when a GC Notify request times out ([#4236](https://github.com/cds-snc/platform-forms-client/issues/4236)) ([78d8078](https://github.com/cds-snc/platform-forms-client/commit/78d807851eaf71d4414ed7d8881ccd8cda6cd95c))
+
 ## [3.20.0](https://github.com/cds-snc/platform-forms-client/compare/v3.19.0...v3.20.0) (2024-08-26)
 
 

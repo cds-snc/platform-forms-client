@@ -95,7 +95,7 @@ export const JSONUpload = (props: JSONUploadProps): React.ReactElement => {
       data: {
         formConfig,
       },
-      timeout: process.env.NODE_ENV === "production" ? 60000 : 0,
+      timeout: 5000,
     });
   };
 

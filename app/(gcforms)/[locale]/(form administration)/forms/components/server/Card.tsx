@@ -4,7 +4,6 @@ import Markdown from "markdown-to-jsx";
 import { Menu } from "../client/Menu";
 import { serverTranslation } from "@i18n";
 import Link from "next/link";
-import { getUnprocessedSubmissionsForTemplate } from "../../actions";
 import { DeliveryOption } from "@lib/types";
 import Skeleton from "react-loading-skeleton";
 
@@ -30,24 +29,16 @@ interface CardLinksProps {
   url: string;
   isPublished: boolean;
   deliveryOption?: { emailAddress?: string } | null;
+  overdue: boolean;
 }
 
-const CardLinks = async ({ isPublished, url, id, deliveryOption }: CardLinksProps) => {
+const CardLinks = async ({ isPublished, url, id, deliveryOption, overdue }: CardLinksProps) => {
   const {
     t,
     i18n: { language },
   } = await serverTranslation("my-forms");
+
   const responsesLink = `/${language}/form-builder/${id}/responses/new`;
-  const { result: nagwareResult } = await getUnprocessedSubmissionsForTemplate(id);
-
-  // Fail silently as it is not critcal to the page rendering.
-  const overdue = nagwareResult?.numberOfSubmissions ?? 0;
-
-  const textData = {
-    responses: overdue,
-    link: responsesLink,
-    interpolation: { escapeValue: false },
-  };
 
   return (
     <div className="mb-4 px-3">
@@ -77,14 +68,12 @@ const CardLinks = async ({ isPublished, url, id, deliveryOption }: CardLinksProp
       {/* Vault delivery */}
       {deliveryOption && !deliveryOption.emailAddress && (
         <>
-          {overdue > 0 ? (
+          {overdue ? (
             <span className="mt-4 block text-sm text-red">
               <MessageIcon className="mr-2 inline-block" />
               <Markdown options={{ forceBlock: false }}>
                 {t("card.actionRequired.description") +
-                  (overdue > 1
-                    ? t("card.actionRequired.linkPlural", textData)
-                    : t("card.actionRequired.linkSingular", textData))}
+                  t("card.actionRequired.link", responsesLink)}
               </Markdown>
             </span>
           ) : (
@@ -93,7 +82,7 @@ const CardLinks = async ({ isPublished, url, id, deliveryOption }: CardLinksProp
               href={responsesLink}
               prefetch={false}
             >
-              <MessageIcon className="ml-[1px] mr-2 inline-block" />
+              <MessageIcon className="ml-px mr-2 inline-block" />
               {t("card.deliveryOption.vault", { ns: "my-forms" })}{" "}
             </Link>
           )}
@@ -132,7 +121,7 @@ export interface CardI {
   isPublished: boolean;
   date: string;
   url: string;
-  overdue?: number;
+  overdue: boolean;
 }
 
 export const Card = async ({ card }: { card: CardI }) => {
@@ -155,6 +144,7 @@ export const Card = async ({ card }: { card: CardI }) => {
             url={card.url}
             id={card.id}
             deliveryOption={card.deliveryOption}
+            overdue={card.overdue}
           />
         </Suspense>
       </div>

@@ -14,5 +14,5 @@ export const layoutOptions: LayoutOptions = {
   algorithm: "d3-hierarchy",
   direction: "LR",
   spacing: [25, 25],
-  showReview: false,
+  showReviewNode: false,
 };

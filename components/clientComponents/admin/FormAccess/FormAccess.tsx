@@ -35,7 +35,7 @@ const FormAccess = (props: FormAccessProps): React.ReactElement => {
       const serverResponse = await axios({
         url: ownersApiUrl,
         method: "GET",
-        timeout: process.env.NODE_ENV === "production" ? 60000 : 0,
+        timeout: 5000,
       });
       setFormOwners(serverResponse.data as unknown as FormOwner[]);
     } catch (err) {
@@ -53,7 +53,7 @@ const FormAccess = (props: FormAccessProps): React.ReactElement => {
       await axios({
         url: ownersApiUrl,
         method: "POST",
-        timeout: process.env.NODE_ENV === "production" ? 60000 : 0,
+        timeout: 5000,
         data: {
           email: email,
         },
@@ -75,7 +75,7 @@ const FormAccess = (props: FormAccessProps): React.ReactElement => {
       const serverResponse = await axios({
         url: ownersApiUrl,
         method: "PUT",
-        timeout: process.env.NODE_ENV === "production" ? 60000 : 0,
+        timeout: 5000,
         data: {
           email: email,
           active: active,

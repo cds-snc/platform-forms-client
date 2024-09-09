@@ -16,6 +16,6 @@ export async function fetchWithCsrfToken(url: string, data: Record<string, any>)
       "X-CSRF-Token": token,
     },
     data,
-    timeout: process.env.NODE_ENV === "production" ? 60000 : 0,
+    timeout: 5000,
   });
 }
