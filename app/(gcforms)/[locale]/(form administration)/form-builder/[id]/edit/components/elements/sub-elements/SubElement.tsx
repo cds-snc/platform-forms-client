@@ -14,6 +14,10 @@ import { SubElementModal } from "./SubElementModal";
 import { PanelHightLight } from "./PanelHightlight";
 import { PanelActions } from "../../PanelActions";
 import { useHandleAdd } from "@lib/hooks/form-builder/useHandleAdd";
+import { DynamicRowDialog } from "@formBuilder/components/shared/DynamicRowDialog";
+import { Button } from "@clientComponents/globals";
+import { useTranslation } from "@i18n/client";
+import { MoreIcon } from "@serverComponents/icons/MoreIcon";
 
 export const SubElement = ({ elIndex, formId, ...props }: { elIndex: number; formId: string }) => {
   const {
@@ -34,6 +38,10 @@ export const SubElement = ({ elIndex, formId, ...props }: { elIndex: number; for
     getLocalizationAttribute: s.getLocalizationAttribute,
     propertyPath: s.propertyPath,
   }));
+
+  const { t } = useTranslation("form-builder");
+
+  const [showCustomizeSetDialog, setShowCustomizeSetDialog] = React.useState(false);
 
   const { handleAddSubElement } = useHandleAdd();
 
@@ -119,7 +127,7 @@ export const SubElement = ({ elIndex, formId, ...props }: { elIndex: number; for
       })}
 
       {subElements.length >= 1 && (
-        <div className="m-4">
+        <div className="mb-2 ml-4 mt-4">
           <AddToSetButton
             handleAdd={(type?: FormElementTypes) => {
               handleAddSubElement(elIndex, subElements.length, type);
@@ -127,6 +135,28 @@ export const SubElement = ({ elIndex, formId, ...props }: { elIndex: number; for
             filterElements={elementFilter}
           />
         </div>
+      )}
+
+      <div className="mb-4 ml-4">
+        <Button
+          onClick={() => {
+            setShowCustomizeSetDialog(true);
+          }}
+          theme="link"
+          className="group/button mb-2 !px-4 !py-2 text-sm leading-6"
+          dataTestId="add-element"
+        >
+          <>
+            <MoreIcon className="mr-2 size-[24px] rounded-sm border-1 border-black group-focus/button:border-white group-focus/button:fill-white" />
+            {t("dynamicRow.dialog.customizeElement")}
+          </>
+        </Button>
+      </div>
+      {showCustomizeSetDialog && (
+        <DynamicRowDialog
+          handleClose={() => setShowCustomizeSetDialog(false)}
+          handleConfirm={() => {}}
+        />
       )}
     </div>
   );
