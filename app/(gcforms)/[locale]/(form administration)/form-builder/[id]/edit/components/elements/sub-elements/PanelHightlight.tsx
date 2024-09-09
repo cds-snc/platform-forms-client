@@ -23,8 +23,8 @@ export const PanelHightLight = ({
       <div className="mx-4">{children}</div>
       <div
         className={cn(
-          "block laptop:opacity-0 laptop:transition-opacity laptop:duration-300",
-          isWithin ? "laptop:opacity-100" : "laptop:opacity-0"
+          "block opacity-0 transition-opacity duration-300",
+          isWithin ? "opacity-100" : "opacity-0"
         )}
       >
         {conditionalChildren}
