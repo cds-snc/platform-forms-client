@@ -57,7 +57,6 @@ export default async function Page({
       responseDownloadLimit={Number(await getAppSetting("responseDownloadLimit"))}
       overdueAfter={Number(await getAppSetting("nagwarePhaseEncouraged"))}
       templateUsers={template?.users}
-      loggedInUser={session?.user}
     />
   );
 }
