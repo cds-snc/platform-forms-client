@@ -14,6 +14,7 @@ import { useTemplateStore } from "@lib/store/useTemplateStore";
 import { Trans } from "react-i18next";
 import { Tooltip } from "@formBuilder/components/shared/Tooltip";
 import { Button } from "@clientComponents/globals";
+import { cn } from "@lib/utils";
 
 export const PanelBody = ({
   item,
@@ -60,14 +61,18 @@ export const PanelBody = ({
     <>
       {isRichText || isDynamicRow ? (
         <div className="my-4">
-          <Question item={item} onQuestionChange={onQuestionChange} />
-          <SelectedElement
-            key={`item-${item.id}-${translationLanguagePriority}`}
-            lang={translationLanguagePriority}
-            item={item}
-            elIndex={elIndex}
-            formId={formId}
-          />
+          <div className={cn(isDynamicRow && "px-4 mb-2 mt-8")}>
+            <Question item={item} onQuestionChange={onQuestionChange} />
+          </div>
+
+          <div className={cn(isDynamicRow && "pl-8 mb-2")}>
+            <SelectedElement
+              key={`item-${item.id}-${translationLanguagePriority}`}
+              item={item}
+              elIndex={elIndex}
+              formId={formId}
+            />
+          </div>
         </div>
       ) : (
         <>
@@ -85,12 +90,7 @@ export const PanelBody = ({
               <QuestionDescription item={item} describedById={describedById} />
               <div className="flex">
                 <div>
-                  <SelectedElement
-                    lang={translationLanguagePriority}
-                    item={item}
-                    elIndex={elIndex}
-                    formId={formId}
-                  />
+                  <SelectedElement item={item} elIndex={elIndex} formId={formId} />
                 </div>
                 {isFormattedDate && (
                   <div className="mb-4 ml-4 self-end">
