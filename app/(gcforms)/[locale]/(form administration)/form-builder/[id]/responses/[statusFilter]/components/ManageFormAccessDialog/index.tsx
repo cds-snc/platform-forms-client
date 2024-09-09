@@ -91,9 +91,9 @@ export const ManageFormAccessDialog = ({
           if (validate()) {
             const result = await checkEmailExists(selectedEmail);
             if (result) {
-              // User exists, display add owner form
+              logMessage.info("User exists, display add owner form");
             } else {
-              // User does not exists, display invite form
+              logMessage.info("User does not exists, display invite form");
             }
           }
         }}

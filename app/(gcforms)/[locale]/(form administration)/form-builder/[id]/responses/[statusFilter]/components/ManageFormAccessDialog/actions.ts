@@ -1,15 +1,10 @@
 "use server";
 
-import { auth } from "@lib/auth";
-import { createAbility } from "@lib/privileges";
-import { getUsers } from "@lib/users";
+import { prisma, prismaErrors } from "@lib/integration/prismaConnector";
 
 export const checkEmailExists = async (email: string) => {
-  const session = await auth();
-  const ability = session && createAbility(session);
-
-  const users = ability && (await getUsers(ability, { email }));
-
-  return users && users.length > 0;
-  // return "huzzah";
+  const user = await prisma.user
+    .findUnique({ where: { email } })
+    .catch((e) => prismaErrors(e, null));
+  return !!user;
 };
