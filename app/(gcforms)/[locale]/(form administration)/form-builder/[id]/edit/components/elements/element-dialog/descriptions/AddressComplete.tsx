@@ -17,6 +17,7 @@ export const AddressComplete = () => {
     province: true,
     postalCode: true,
     country: true,
+    name: "test-address",
   } as AddressCompleteProps;
 
   return (
@@ -34,7 +35,7 @@ export const AddressComplete = () => {
       <ExampleWrapper className="mt-4">
         <h4 className="mb-4">{t("addElementDialog.addressComplete.whatIsYourAddress")}</h4>
         <div className="mb-6">
-          <AddressCompleteComponent {...props} />
+          <AddressCompleteComponent id="test-address" {...props} />
         </div>
       </ExampleWrapper>
     </div>
