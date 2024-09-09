@@ -62,6 +62,14 @@ export const ManageFormAccessDialog = ({
       logMessage.info("User already has access");
       return;
     }
+
+    return true;
+  };
+
+  const submit = () => {
+    if (validate()) {
+      // valid
+    }
   };
 
   useEffect(() => {
@@ -81,7 +89,7 @@ export const ManageFormAccessDialog = ({
       <Button
         theme="primary"
         onClick={() => {
-          validate();
+          submit();
         }}
         disabled={!isValidEmail()}
       >
