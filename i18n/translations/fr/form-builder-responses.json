@@ -271,5 +271,16 @@
     "sending": "Envoi en cours...",
     "cancel": "Annuler"
   },
-  "loading": "Chargement..."
+  "loading": "Chargement...",
+  "addressComponents": {
+    "header": "Parties de l’adresse à inclure",
+    "desc": "Essayez de minimiser ce qui est demandé pour ne recueillir que ce qui est nécessaire.",
+    "unitNumber": "Numéro de l’unité",
+    "civicNumber": "Numéro civique",
+    "streetName": "Nom de la rue",
+    "city": "Ville ou communauté",
+    "province": "Province, territoire ou état",
+    "postalCode": "Code postal ou zip",
+    "country": "Pays"
+  }
 }

@@ -117,37 +117,16 @@ export const getAddressAsReviewElements = (
 export const getAddressAsAnswerElements = (
   question: FormElement,
   address: AddressElements,
-  addressComponents: AddressComponents
+  addressComponents: AddressComponents,
+  extraTranslations: { [key: string]: { en: string; fr: string } }
 ): Answer[] => {
   const answerArray = [];
-
-  // I can't find a way to make the i18n interface available to the Download Object, so the translations are hardcoded here.
-  const translationsEn = {
-    unitNumber: "Unit Number",
-    civicNumber: "Civic Number",
-    streetName: "Street Name",
-    city: "City",
-    province: "Province",
-    postalCode: "Postal Code",
-    country: "Country",
-  };
-
-  const translationsFr = {
-    unitNumber: "Numéro d'unité",
-    civicNumber: "Numéro civique",
-    streetName: "Nom de la rue",
-    city: "Ville",
-    province: "Province",
-    postalCode: "Code postal",
-    country: "Pays",
-  };
-
   for (const key in addressComponents) {
     if (address[key as keyof AddressComponents]) {
       const answerObj: Answer = {
         questionId: question.id,
-        questionEn: translationsEn[key as keyof AddressElements],
-        questionFr: translationsFr[key as keyof AddressElements],
+        questionEn: extraTranslations[key as keyof AddressElements].en,
+        questionFr: extraTranslations[key as keyof AddressElements].fr,
         answer: address[key as keyof AddressElements],
       };
 

@@ -167,12 +167,14 @@ export const getSubmissionsByFormat = async ({
   format = DownloadFormat.HTML,
   lang,
   revalidate = false,
+  extraTranslations = {},
 }: {
   formID: string;
   ids: string[];
   format: DownloadFormat;
   lang: Language;
   revalidate?: boolean;
+  extraTranslations?: { [key: string]: { en: string; fr: string } };
 }): Promise<
   | HtmlResponse
   | HtmlZippedResponse
@@ -271,7 +273,8 @@ export const getSubmissionsByFormat = async ({
             const reviewElements = getAddressAsAnswerElements(
               question,
               addressObject,
-              questionComponents
+              questionComponents,
+              extraTranslations
             );
             const addressElements = [reviewElements];
 
