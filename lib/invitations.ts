@@ -61,18 +61,19 @@ export const inviteUserByEmail = async (
     invitation = previousInvitation;
     // if invitation is expired, delete and recreate
     if (previousInvitation.expires < new Date()) {
-      await _deleteInvitation(previousInvitation.id);
+      // check js dates vs prisma dates (see 2fa)
+      _deleteInvitation(previousInvitation.id);
       invitation = await _createInvitation(email, formId, role);
     }
 
     // send invitation email
-    await _sendInvitationEmail(invitation, message);
+    _sendInvitationEmail(invitation, message);
     return invitation;
   }
 
   // No previous invitation, create one
   invitation = await _createInvitation(email, formId, role);
-  await _sendInvitationEmail(invitation, message);
+  _sendInvitationEmail(invitation, message);
 
   return invitation;
 };
@@ -81,7 +82,7 @@ export const inviteUserByEmail = async (
  * Accept an invitation.
  * User has created their account or logged into their existing account.
  *
- * @param ability
+ * @param ability (logged in user)
  * @param invitationId
  * @returns
  */
@@ -99,22 +100,26 @@ export const acceptInvitation = async (ability: UserAbility, invitationId: strin
   }
 
   // Check if the invitation has expired
-  const now = new Date();
+  const now = new Date(); // check these dates
   if (invitation.expires < now) {
     throw new InvitationIsExpiredError();
   }
 
-  // const user = await _findUserByEmail(invitation.email);
-  const user = await getUser(ability, ability.userID);
+  try {
+    const user = await getUser(ability, ability.userID); // double check ability to retrieve self
 
-  if (user) {
-    // assign user to form
-    await _assignUserToTemplate(user.id, invitation.templateId);
-    await _deleteInvitation(invitationId);
-    return true;
+    if (user) {
+      // assign user to form
+      await _assignUserToTemplate(user.id, invitation.templateId);
+      _deleteInvitation(invitationId);
+      _notifyOwnersOfNewOwnership();
+      return true;
+    }
+  } catch (e) {
+    //
   }
 
-  return false;
+  throw new Error("User not found");
 };
 
 /**
@@ -225,4 +230,11 @@ const _sendInvitationEmail = async (invitation: Invitation, message: string) => 
   logMessage.info(
     `Sending invitation email to ${email} for form ${templateId} with token ${token} and message ${message}`
   );
+};
+
+/**
+ * Notify all owners when ownership changes
+ */
+const _notifyOwnersOfNewOwnership = async () => {
+  //
 };
