@@ -4,24 +4,145 @@ import { AccessControlError } from "./privileges";
 import { getTemplateWithAssociatedUsers } from "./templates";
 import { UserAbility } from "./types";
 import { v4 as uuid } from "uuid";
-import { getOrCreateUser } from "./users";
+import { logMessage } from "./logger";
+import { getUser } from "./users";
 
-export const Roles = {
+const Roles = {
   OWNER: "owner",
   COLLABORATOR: "collaborator",
 } as const;
 
-type UserRoles = (typeof Roles)[keyof typeof Roles];
+export type UserRole = (typeof Roles)[keyof typeof Roles];
 
-// const _retrieveInvitationsForForm = async (formId: string) => {
-//   const invitations = await prisma.invitation.findMany({
-//     where: {
-//       templateId: formId,
-//     },
-//   });
+class TemplateNotFoundError extends Error {}
+class UserAlreadyHasAccessError extends Error {}
+class InvitationNotFoundError extends Error {}
+class InvitationIsExpiredError extends Error {}
 
-//   return invitations;
-// };
+/**
+ * Invite someone to the form by email
+ *
+ * @param ability
+ * @param email
+ * @param role
+ * @param formId
+ */
+export const inviteUserByEmail = async (
+  ability: UserAbility,
+  email: string,
+  role: UserRole = "owner",
+  formId: string,
+  message: string
+) => {
+  let template;
+  let invitation;
+
+  // Retrieve the template, fail if you don't have permissions
+  try {
+    template = await getTemplateWithAssociatedUsers(ability, formId);
+  } catch (e) {
+    if (e instanceof AccessControlError) {
+      throw e;
+    }
+  }
+
+  if (!template) {
+    throw new TemplateNotFoundError();
+  }
+
+  // check if user is already associated with the form
+  if (template.users.some((user) => user.email === email)) {
+    throw new UserAlreadyHasAccessError();
+  }
+
+  // check if user is already invited to the form
+  const previousInvitation = await _retrieveFormInvitationByEmail(email, formId);
+  if (previousInvitation) {
+    invitation = previousInvitation;
+    // if invitation is expired, delete and recreate
+    if (previousInvitation.expires < new Date()) {
+      await _deleteInvitation(previousInvitation.id);
+      invitation = await _createInvitation(email, formId, role);
+    }
+
+    // send invitation email
+    await _sendInvitationEmail(invitation, message);
+    return invitation;
+  }
+
+  // No previous invitation, create one
+  invitation = await _createInvitation(email, formId, role);
+  await _sendInvitationEmail(invitation, message);
+
+  return invitation;
+};
+
+/**
+ * Accept an invitation.
+ * User has created their account or logged into their existing account.
+ *
+ * @param ability
+ * @param invitationId
+ * @returns
+ */
+export const acceptInvitation = async (ability: UserAbility, invitationId: string) => {
+  // Retrieve the invitation
+  const invitation = await prisma.invitation.findUnique({
+    where: {
+      id: invitationId,
+    },
+  });
+
+  // If no invitation found, return an error
+  if (!invitation) {
+    throw new InvitationNotFoundError();
+  }
+
+  // Check if the invitation has expired
+  const now = new Date();
+  if (invitation.expires < now) {
+    throw new InvitationIsExpiredError();
+  }
+
+  // const user = await _findUserByEmail(invitation.email);
+  const user = await getUser(ability, ability.userID);
+
+  if (user) {
+    // assign user to form
+    await _assignUserToTemplate(user.id, invitation.templateId);
+    await _deleteInvitation(invitationId);
+    return true;
+  }
+
+  return false;
+};
+
+export const declineInvitation = async (ability: UserAbility, invitationId: string) => {
+  const user = await getUser(ability, ability.userID);
+  const invitation = await _retrieveFormInvitationByEmail(user.email, invitationId);
+
+  if (invitation && user.email === invitation.email) {
+    await _deleteInvitation(invitationId);
+    return true;
+  }
+
+  throw new InvitationNotFoundError();
+};
+
+const _assignUserToTemplate = async (userId: string, formId: string) => {
+  await prisma.template.update({
+    where: {
+      id: formId,
+    },
+    data: {
+      users: {
+        connect: {
+          id: userId,
+        },
+      },
+    },
+  });
+};
 
 /**
  * Retrieve existing invitation for a form by email
@@ -30,7 +151,7 @@ type UserRoles = (typeof Roles)[keyof typeof Roles];
  * @param formId string
  * @returns Invitation
  */
-const _retrieveInvitationByEmail = async (email: string, formId: string) => {
+const _retrieveFormInvitationByEmail = async (email: string, formId: string) => {
   const invitation = await prisma.invitation.findFirst({
     where: {
       email,
@@ -41,6 +162,11 @@ const _retrieveInvitationByEmail = async (email: string, formId: string) => {
   return invitation;
 };
 
+/**
+ * Delete an invitation
+ *
+ * @param id
+ */
 const _deleteInvitation = async (id: string) => {
   await prisma.invitation.delete({
     where: {
@@ -49,7 +175,15 @@ const _deleteInvitation = async (id: string) => {
   });
 };
 
-const _createInvitation = async (email: string, formId: string, role: UserRoles) => {
+/**
+ * Create an invitation that expires in 7 days
+ *
+ * @param email
+ * @param formId
+ * @param role
+ * @returns
+ */
+const _createInvitation = async (email: string, formId: string, role: UserRole) => {
   const expires = new Date();
   expires.setDate(expires.getDate() + 7);
 
@@ -66,110 +200,16 @@ const _createInvitation = async (email: string, formId: string, role: UserRoles)
   return invitation;
 };
 
-const _sendInvitationEmail = async (invitation: Invitation, message: string) => {
-  // const token = invitation.token;
-  // const email = invitation.email;
-  // const formId = invitation.templateId;
-};
-
 /**
+ * Send an invitation email
  *
- * @param ability
- * @param email
- * @param role // for future use
- * @param formId
+ * @param invitation
+ * @param message
  */
-export const inviteUserByEmail = async (
-  ability: UserAbility,
-  email: string,
-  role: UserRoles = "owner",
-  formId: string,
-  message: string
-) => {
-  let template;
-  let invitation;
+const _sendInvitationEmail = async (invitation: Invitation, message: string) => {
+  const { token, email, templateId } = invitation;
 
-  try {
-    template = await getTemplateWithAssociatedUsers(ability, formId);
-  } catch (e) {
-    if (e instanceof AccessControlError) {
-      // user cannot invite users to this form
-    }
-  }
-
-  if (!template) {
-    // template not found error
-  }
-
-  // check if user is already associated with the form
-  if (template?.users.some((user) => user.email === email)) {
-    // user is already associated with this form error
-  }
-
-  // check if user is already invited to the form
-  const previousInvitation = await _retrieveInvitationByEmail(email, formId);
-
-  if (previousInvitation) {
-    // if invitation is expired, delete and recreate
-    if (previousInvitation.expires < new Date()) {
-      await _deleteInvitation(previousInvitation.id);
-      invitation = await _createInvitation(email, formId, role);
-    } else {
-      invitation = previousInvitation;
-    }
-
-    // send invitation email
-    await _sendInvitationEmail(invitation, message);
-    return;
-  }
-
-  invitation = await _createInvitation(email, formId, role);
-  await _sendInvitationEmail(invitation, message);
-  return;
-};
-
-export const acceptInvitation = async (invitationId: string, name: string) => {
-  // Retrieve the invitation
-  const invitation = await prisma.invitation.findUnique({
-    where: {
-      id: invitationId,
-    },
-  });
-
-  // If no invitation found, return an error
-  if (!invitation) {
-    throw new Error("Invitation not found");
-  }
-
-  // Check if the invitation has expired
-  const now = new Date();
-  if (invitation.expires < now) {
-    throw new Error("Invitation has expired");
-  }
-
-  const user = await getOrCreateUser({
-    email: invitation.email,
-    name,
-  });
-
-  if (user) {
-    // assign user to form
-    await _assignUserToForm(user.id, invitation.templateId, invitation.role as UserRoles);
-    await _deleteInvitation(invitationId);
-  }
-};
-
-const _assignUserToForm = async (userId: string, formId: string, role: UserRoles) => {
-  await prisma.template.update({
-    where: {
-      id: formId,
-    },
-    data: {
-      users: {
-        connect: {
-          id: userId,
-        },
-      },
-    },
-  });
+  logMessage.info(
+    `Sending invitation email to ${email} for form ${templateId} with token ${token} and message ${message}`
+  );
 };
