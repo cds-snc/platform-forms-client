@@ -1102,5 +1102,30 @@
     "logicSetup": "Skip to Branching set-up"
   },
   "goBack": "Go back",
-  "disabled": "disabled"
+  "disabled": "disabled",
+  "dynamicRow": {
+    "addButtonText": "Add",
+    "addButtonTextA11yEn": "Add button Text (english)",
+    "addButtonTextA11yFr": "Add button Text (french)",
+    "removeButtonText": "Remove",
+    "removeButtonTextA11yEn": "Remove button text (english)",
+    "removeButtonTextA11yFr": "Remove button text (french)",
+    "dialog": {
+      "customizeElement": "Customize element",
+      "title": "Customize set",
+      "english": "English",
+      "french": "French",
+      "cancel": "Cancel",
+      "save": "Save",
+      "addButton": {
+        "title": "Button to add to the set",
+        "description": "Create a descriptive button title to allow those filling out your form to add another set. Example: “Add another address” "
+      },
+      "removeButton": {
+        "title": "Button to remove from the set",
+        "label": "Add a dynamic row",
+        "description": "Create a descriptive button title to allow those filling out your form to remove a set. Example: “Remove address” "
+      }
+    }
+  }
 }

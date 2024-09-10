@@ -44,6 +44,13 @@ export type AddressComponents = {
   country?: boolean;
 };
 
+export type dynamicRowType = {
+  addButtonTextEn: string;
+  removeButtonTextEn: string;
+  addButtonTextFr: string;
+  removeButtonTextFr: string;
+};
+
 // used to define attributes for the properties of an element in the form
 export interface ElementProperties {
   titleEn: string;
@@ -65,6 +72,7 @@ export interface ElementProperties {
   conditionalRules?: ConditionalRule[];
   full?: boolean;
   addressComponents?: AddressComponents | undefined;
+  dynamicRow?: dynamicRowType;
   [key: string]:
     | string
     | number
@@ -74,6 +82,7 @@ export interface ElementProperties {
     | ValidationProperties
     | Array<ConditionalRule>
     | AddressComponents
+    | dynamicRowType
     | undefined;
 }
 
