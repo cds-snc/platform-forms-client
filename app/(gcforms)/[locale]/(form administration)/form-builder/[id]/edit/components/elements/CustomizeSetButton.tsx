@@ -23,7 +23,6 @@ export const CustomizeSetButton = ({
           }}
           theme="link"
           className="group/button mb-2 !px-4 !py-2 text-sm leading-6"
-          dataTestId="add-element"
         >
           <>
             <MoreIcon className="mr-2 size-[24px] rounded-sm border-1 border-black group-focus/button:border-white group-focus/button:fill-white" />
