@@ -8,10 +8,7 @@ const retriveAddressUrl =
   "https://ws1.postescanada-canadapost.ca/AddressComplete/Interactive/RetrieveById/v1.00/json3.ws";
 
 // Function returns address complete list of choices.
-export const getAddressCompleteChoices = async (query: string) => {
-  // The server returns a promise, so we need to await it, Lint thinks it isn't one for some reason.
-  const addressCompleteKey = process.env.NEXT_PUBLIC_ADDRESSCOMPLETE_API_KEY ?? ""; // eslint-disable-line
-
+export const getAddressCompleteChoices = async (addressCompleteKey: string, query: string) => {
   let params = "?";
   params += "Key=" + encodeURIComponent(addressCompleteKey);
   params += "&SearchTerm=" + encodeURIComponent(query);
@@ -28,10 +25,7 @@ export const getAddressCompleteChoices = async (query: string) => {
 };
 
 // Functions returns the selected address.
-export const getSelectedAddress = async (value: string) => {
-  // The server returns a promise, so we need to await it, Lint thinks it isn't one for some reason.
-  const addressCompleteKey = process.env.NEXT_PUBLIC_ADDRESSCOMPLETE_API_KEY ?? ""; // eslint-disable-line
-
+export const getSelectedAddress = async (addressCompleteKey: string, value: string) => {
   const selectedResult = value;
   let params = "?";
   params += "Key=" + encodeURIComponent(addressCompleteKey);

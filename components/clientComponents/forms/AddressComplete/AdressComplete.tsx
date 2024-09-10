@@ -18,6 +18,23 @@ export const AddressComplete = (props: AddressCompleteProps): React.ReactElement
   const [choices, setChoices] = useState([""]);
   const [addressResultCache, setAddressResultCache] = useState<AddressCompleteChoice[]>([]); // Cache the results from the address search.
 
+  // Cache and Allow values
+  const [allow, setAllow] = useState(false);
+  const [apiKey, setApiKey] = useState("");
+  //const [cache, setCache] = useState<{ [key: string]: AddressElements }>({});
+
+  // Check if addressComplete is allowed.
+  useEffect(() => {
+    const checkAllowed = async () => {
+      const response = await fetch("/api/components", { method: "POST" });
+      const jsonData = await response.json();
+      setAllow(jsonData.allowed);
+      setApiKey(jsonData.key);
+    };
+
+    checkAllowed();
+  }, []);
+
   //Form fillers address elements
   const [addressObject, setAddressObject] = useState<AddressElements>({
     unitNumber: "",
@@ -59,8 +76,12 @@ export const AddressComplete = (props: AddressCompleteProps): React.ReactElement
   }, [addressObject, helpers]);
 
   const onAddressSearch = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (!allow) {
+      return;
+    } // Abandon if addressComplete is disabled.
+
     const query = e.target.value;
-    const responseData = await getAddressCompleteChoices(query);
+    const responseData = await getAddressCompleteChoices(apiKey, query);
 
     //loop through the responseData and add it to the addressResultsCache
     for (let i = 0; i < responseData.length; i++) {
@@ -83,13 +104,17 @@ export const AddressComplete = (props: AddressCompleteProps): React.ReactElement
   };
 
   const onAddressSet = async (value: string) => {
+    if (!allow) {
+      return;
+    } // Abandon if addressComplete is disabled.
+
     const selectedResult = addressResultCache.find(
       (item: AddressCompleteChoice) => item.Text === value
     );
     if (selectedResult === undefined) {
       return; // Do nothing, this is not found in the AddressComplete API.
     } else {
-      const responseData = await getSelectedAddress(selectedResult.Id);
+      const responseData = await getSelectedAddress(apiKey, selectedResult.Id);
       if (responseData) {
         const results = responseData;
         setAddressObject(results);
