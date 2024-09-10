@@ -182,7 +182,7 @@ export const SelectedElement = ({
       element = <ShortAnswer data-testid="number">0123456789</ShortAnswer>;
       break;
     case "dynamicRow":
-      element = <SubElement elIndex={item.index} formId={formId} />;
+      element = <SubElement item={item} elIndex={item.index} formId={formId} />;
       break;
     case "attestation":
       element = <Options item={item} renderIcon={() => <CheckBoxEmptyIcon />} formId={formId} />;

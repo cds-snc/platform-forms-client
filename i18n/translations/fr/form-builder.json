@@ -1068,5 +1068,30 @@
     "logicSetup": "Passer à la configuration d'embranchements'"
   },
   "goBack": "Retourner",
-  "disabled": "désactivé"
+  "disabled": "désactivé",
+  "dynamicRow": {
+    "addButtonText": "Add [FR]",
+    "addButtonTextA11yEn": "Add button text (english) [FR]",
+    "addButtonTextA11yFr": "Add button text (french) [FR]",
+    "removeButtonText": "Remove [FR]",
+    "removeButtonTextA11yEn": "Remove button text (english) [FR] ",
+    "removeButtonTextA11yFr": "Remove button text (french) [FR] ",
+    "dialog": {
+      "customizeElement": "Customize element [FR]",
+      "title": "Customize set [FR]",
+      "english": "English [FR]",
+      "french": "French [FR]",
+      "cancel": "Cancel [FR]",
+      "save": "Save [FR]",
+      "addButton": {
+        "title": "Button to add to the set [FR]",
+        "description": "Create a descriptive button title to allow those filling out your form to add another set. Example: “Add another address” [FR]"
+      },
+      "removeButton": {
+        "title": "Button to remove from the set [FR]",
+        "label": "Add a dynamic row [FR]",
+        "description": "Create a descriptive button title to allow those filling out your form to remove a set. Example: “Remove address” [FR]"
+      }
+    }
+  }
 }

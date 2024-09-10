@@ -4,7 +4,6 @@ import React from "react";
 import { useTemplateStore } from "@lib/store/useTemplateStore";
 import { PanelBodySub } from "../../PanelBodySub";
 import { FormElementTypes } from "@lib/types";
-import { AddToSetButton } from "../AddToSetButton";
 import {
   LocalizedElementProperties,
   Language,
@@ -14,8 +13,20 @@ import { SubElementModal } from "./SubElementModal";
 import { PanelHightLight } from "./PanelHightlight";
 import { PanelActions } from "../../PanelActions";
 import { useHandleAdd } from "@lib/hooks/form-builder/useHandleAdd";
+import { CustomizeSetButton } from "../CustomizeSetButton";
+import { AddToSetButton } from "../AddToSetButton";
+import { FormElementWithIndex } from "@lib/types/form-builder-types";
 
-export const SubElement = ({ elIndex, formId, ...props }: { elIndex: number; formId: string }) => {
+export const SubElement = ({
+  item,
+  elIndex,
+  formId,
+  ...props
+}: {
+  item: FormElementWithIndex;
+  elIndex: number;
+  formId: string;
+}) => {
   const {
     updateField,
     subMoveUp,
@@ -59,6 +70,7 @@ export const SubElement = ({ elIndex, formId, ...props }: { elIndex: number; for
           }}
           filterElements={elementFilter}
         />
+        <CustomizeSetButton itemId={item.id} itemIndex={item.index} />
       </div>
     );
 
@@ -119,13 +131,14 @@ export const SubElement = ({ elIndex, formId, ...props }: { elIndex: number; for
       })}
 
       {subElements.length >= 1 && (
-        <div className="m-4">
+        <div className="mb-2 ml-4 mt-4">
           <AddToSetButton
             handleAdd={(type?: FormElementTypes) => {
               handleAddSubElement(elIndex, subElements.length, type);
             }}
             filterElements={elementFilter}
           />
+          <CustomizeSetButton itemId={item.id} itemIndex={item.index} />
         </div>
       )}
     </div>
