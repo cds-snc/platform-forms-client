@@ -1071,7 +1071,11 @@
   "disabled": "désactivé",
   "dynamicRow": {
     "addButtonText": "Add [FR]",
+    "addButtonTextA11yEn": "Add button text (english) [FR]",
+    "addButtonTextA11yFr": "Add button text (french) [FR]",
     "removeButtonText": "Remove [FR]",
+    "removeButtonTextA11yEn": "Remove button text (english) [FR] ",
+    "removeButtonTextA11yFr": "Remove button text (french) [FR] ",
     "dialog": {
       "customizeElement": "Customize element [FR]",
       "title": "Customize set [FR]",

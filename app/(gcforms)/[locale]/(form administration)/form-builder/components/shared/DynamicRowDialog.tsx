@@ -48,6 +48,12 @@ export const DynamicRowDialog = ({
     rowProps?.removeButtonTextFr || ""
   );
 
+  const addButtonTextA11yEn = t("dynamicRow.addButtonTextA11yEn");
+  const addButtonTextA11yFr = t("dynamicRow.addButtonTextA11yFr");
+
+  const removeButtonTextA11yEn = t("dynamicRow.removeButtonTextA11yEn");
+  const removeButtonTextA11yFr = t("dynamicRow.removeButtonTextA11yFr");
+
   const actions = (
     <>
       <Button
@@ -99,10 +105,18 @@ export const DynamicRowDialog = ({
           <h4 className="mb-4 block font-bold">{t("dynamicRow.dialog.addButton.title")}</h4>
           <p className="mb-4 text-sm">{t("dynamicRow.dialog.addButton.description")}</p>
           <TextInput label={t("dynamicRow.dialog.english")}>
-            <input value={addButtonValueEn} onChange={(e) => setAddButtonValueEn(e.target.value)} />
+            <input
+              aria-label={addButtonTextA11yEn}
+              value={addButtonValueEn}
+              onChange={(e) => setAddButtonValueEn(e.target.value)}
+            />
           </TextInput>
           <TextInput label={t("dynamicRow.dialog.french")}>
-            <input value={addButtonValueFr} onChange={(e) => setAddButtonValueFr(e.target.value)} />
+            <input
+              aria-label={addButtonTextA11yFr}
+              value={addButtonValueFr}
+              onChange={(e) => setAddButtonValueFr(e.target.value)}
+            />
           </TextInput>
         </div>
 
@@ -114,12 +128,14 @@ export const DynamicRowDialog = ({
           <p className="mb-4 text-sm">{t("dynamicRow.dialog.removeButton.description")}</p>
           <TextInput label={t("dynamicRow.dialog.english")}>
             <input
+              aria-label={removeButtonTextA11yEn}
               value={removeButtonValueEn}
               onChange={(e) => setRemoveButtonValueEn(e.target.value)}
             />
           </TextInput>
           <TextInput label={t("dynamicRow.dialog.french")}>
             <input
+              aria-label={removeButtonTextA11yFr}
               value={removeButtonValueFr}
               onChange={(e) => setRemoveButtonValueFr(e.target.value)}
             />
