@@ -402,10 +402,12 @@ export const getTranslatedDynamicRowProperties = async () => {
   const { t: fr } = await serverTranslation("form-builder", { lang: "fr" });
 
   return {
-    addButtonTextEn: en("dynamicRow.addButtonText"),
-    removeButtonTextEn: en("dynamicRow.removeButtonText"),
-    addButtonTextFr: fr("dynamicRow.addButtonText"),
-    removeButtonTextFr: fr("dynamicRow.removeButtonText"),
+    rowTitleEn: en("dynamicRow.defaultRowTitle"),
+    rowTitleFr: fr("dynamicRow.defaultRowTitle"),
+    addButtonTextEn: en("dynamicRow.defaultAddButtonText"),
+    removeButtonTextEn: en("dynamicRow.defaultRemoveButtonText"),
+    addButtonTextFr: fr("dynamicRow.defaultAddButtonText"),
+    removeButtonTextFr: fr("dynamicRow.defaultRemoveButtonText"),
   };
 };
 

@@ -1070,10 +1070,13 @@
   "goBack": "Retourner",
   "disabled": "désactivé",
   "dynamicRow": {
-    "addButtonText": "Add [FR]",
+    "defaultRowTitle": "Row [FR]",
+    "rowTitleTextA11yEn": "Row title (english) [FR]",
+    "rowTitleTextA11yFr": "Row title (french) [FR]",
+    "defaultAddButtonText": "Add [FR]",
     "addButtonTextA11yEn": "Add button text (english) [FR]",
     "addButtonTextA11yFr": "Add button text (french) [FR]",
-    "removeButtonText": "Remove [FR]",
+    "defaultRemoveButtonText": "Remove [FR]",
     "removeButtonTextA11yEn": "Remove button text (english) [FR] ",
     "removeButtonTextA11yFr": "Remove button text (french) [FR] ",
     "dialog": {
@@ -1083,6 +1086,10 @@
       "french": "French [FR]",
       "cancel": "Cancel [FR]",
       "save": "Save [FR]",
+      "rowTitle": {
+        "title": "Title of the set [FR]",
+        "description": "Create a descriptive title for each set. These sets will be numbered in chronological order. Example: “Address - 1” [FR]"
+      },
       "addButton": {
         "title": "Button to add to the set [FR]",
         "description": "Create a descriptive button title to allow those filling out your form to add another set. Example: “Add another address” [FR]"

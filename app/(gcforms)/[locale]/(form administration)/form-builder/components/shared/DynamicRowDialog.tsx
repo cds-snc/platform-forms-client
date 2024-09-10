@@ -38,7 +38,11 @@ export const DynamicRowDialog = ({
   const item = elements.find((el) => el.id === itemId);
   const rowProps = item?.properties?.dynamicRow;
 
+  const [rowTitleValueEn, setRowTitleValueEn] = useState(rowProps?.rowTitleEn || "");
+  const [rowTitleValueFr, setRowTitleValueFr] = useState(rowProps?.rowTitleFr || "");
+
   const [addButtonValueEn, setAddButtonValueEn] = useState(rowProps?.addButtonTextEn || "");
+
   const [addButtonValueFr, setAddButtonValueFr] = useState(rowProps?.addButtonTextFr || "");
 
   const [removeButtonValueEn, setRemoveButtonValueEn] = useState(
@@ -47,6 +51,9 @@ export const DynamicRowDialog = ({
   const [removeButtonValueFr, setRemoveButtonValueFr] = useState(
     rowProps?.removeButtonTextFr || ""
   );
+
+  const rowTitleTextA11yEn = t("dynamicRow.rowTitleTextA11yEn");
+  const rowTitleTextA11yFr = t("dynamicRow.rowTitleTextA11yFr");
 
   const addButtonTextA11yEn = t("dynamicRow.addButtonTextA11yEn");
   const addButtonTextA11yFr = t("dynamicRow.addButtonTextA11yFr");
@@ -76,6 +83,8 @@ export const DynamicRowDialog = ({
           const properties = {
             ...item.properties,
             dynamicRow: {
+              rowTitleEn: rowTitleValueEn,
+              rowTitleFr: rowTitleValueFr,
               addButtonTextEn: addButtonValueEn,
               addButtonTextFr: addButtonValueFr,
               removeButtonTextEn: removeButtonValueEn,
@@ -100,7 +109,27 @@ export const DynamicRowDialog = ({
       title={t("dynamicRow.dialog.title")}
     >
       <div className="p-5">
-        {/* Add button */}
+        {/* Title input */}
+        <div className="mb-8">
+          <h4 className="mb-4 block font-bold">{t("dynamicRow.dialog.rowTitle.title")}</h4>
+          <p className="mb-4 text-sm">{t("dynamicRow.dialog.rowTitle.description")}</p>
+          <TextInput label={t("dynamicRow.dialog.english")}>
+            <input
+              aria-label={rowTitleTextA11yEn}
+              value={rowTitleValueEn}
+              onChange={(e) => setRowTitleValueEn(e.target.value)}
+            />
+          </TextInput>
+          <TextInput label={t("dynamicRow.dialog.french")}>
+            <input
+              aria-label={rowTitleTextA11yFr}
+              value={rowTitleValueFr}
+              onChange={(e) => setRowTitleValueFr(e.target.value)}
+            />
+          </TextInput>
+        </div>
+
+        {/* Add button input */}
         <div className="mb-8">
           <h4 className="mb-4 block font-bold">{t("dynamicRow.dialog.addButton.title")}</h4>
           <p className="mb-4 text-sm">{t("dynamicRow.dialog.addButton.description")}</p>
@@ -120,7 +149,7 @@ export const DynamicRowDialog = ({
           </TextInput>
         </div>
 
-        {/* Remove button */}
+        {/* Remove button input */}
         <div>
           <label className="mb-4 block font-bold">
             {t("dynamicRow.dialog.removeButton.title")}

@@ -12,6 +12,8 @@ interface DynamicGroupProps {
   title?: string;
   description?: string;
   rowLabel?: string;
+  addButtonText?: string;
+  removeButtonText?: string;
   rowElements: Array<FormElement>;
   lang: string;
 
@@ -46,7 +48,8 @@ export const DynamicGroup = (props: DynamicGroupProps): React.ReactElement => {
     error,
     rowElements,
     lang,
-
+    addButtonText,
+    removeButtonText,
     maxNumberOfRows,
   } = props;
   const [field, meta, helpers] = useField(props);
@@ -107,6 +110,9 @@ export const DynamicGroup = (props: DynamicGroupProps): React.ReactElement => {
 
   const classes = classnames("gc-form-group", { "gc-form-group--error": error }, className);
 
+  const addButtonLabel = addButtonText || t("dynamicRow.add") + " " + rowLabel;
+  const deleteButtonLabel = removeButtonText || t("dynamicRow.delete") + rowLabel;
+
   return (
     // eslint-disable-next-line jsx-a11y/no-noninteractive-tabindex
     <div id={field.name} data-testid={`formGroup-${field.name}`} className={classes} tabIndex={0}>
@@ -139,7 +145,7 @@ export const DynamicGroup = (props: DynamicGroupProps): React.ReactElement => {
                   onClick={addRow}
                   testid={`add-row-button-${field.name}`}
                 >
-                  {`${t("dynamicRow.add")} ${rowLabel}`}
+                  {`${addButtonLabel}`}
                 </Button>
               )}
               {rows.length > 1 && (
@@ -149,7 +155,7 @@ export const DynamicGroup = (props: DynamicGroupProps): React.ReactElement => {
                   onClick={() => deleteRow(index)}
                   testid={`delete-row-button-${field.name}.${index}`}
                 >
-                  {`${t("dynamicRow.delete")} ${rowLabel} ${index + 1}`}
+                  {`${deleteButtonLabel} ${index + 1}`}
                 </Button>
               )}
             </div>
