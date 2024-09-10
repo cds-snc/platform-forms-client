@@ -6,7 +6,6 @@ import { useState, useEffect } from "react";
 import { useTranslation } from "@i18n/client";
 import { useField } from "formik";
 import { cn } from "@lib/utils";
-import { allowAddressComplete } from "./feature";
 
 export const AddressComplete = (props: AddressCompleteProps): React.ReactElement => {
   const { id, name, required, ariaDescribedBy } = props;
@@ -61,12 +60,6 @@ export const AddressComplete = (props: AddressCompleteProps): React.ReactElement
 
   const onAddressSearch = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const query = e.target.value;
-
-    const allow = await allowAddressComplete();
-    if (!allow) {
-      return;
-    }
-
     const responseData = await getAddressCompleteChoices(query);
 
     //loop through the responseData and add it to the addressResultsCache
@@ -90,11 +83,6 @@ export const AddressComplete = (props: AddressCompleteProps): React.ReactElement
   };
 
   const onAddressSet = async (value: string) => {
-    const allow = await allowAddressComplete();
-    if (!allow) {
-      return;
-    }
-
     const selectedResult = addressResultCache.find(
       (item: AddressCompleteChoice) => item.Text === value
     );
