@@ -1,29 +1,52 @@
 "use client";
-import React from "react";
+import React, { useState } from "react";
 import { useTranslation } from "@i18n/client";
 import { Button } from "@clientComponents/globals";
 import { useDialogRef, Dialog } from "./Dialog";
+import { useTemplateStore } from "@lib/store/useTemplateStore";
 
-export const TextInput = ({ label }: { label: string }) => {
+export const TextInput = ({ label, children }: { label: string; children: React.ReactElement }) => {
   return (
     <div className="mb-4 flex rounded-md border-1 border-black">
       <label className="block rounded-l-md border-r-1 border-black bg-slate-50 p-4 text-sm">
         {label}
       </label>
-      <input className="block w-full rounded-r-md p-2 outline-offset-[-5px]"></input>
+      {React.cloneElement(children, {
+        className: "block w-full rounded-r-md p-2 outline-offset-[-5px]",
+      })}
     </div>
   );
 };
 
 export const DynamicRowDialog = ({
-  handleConfirm,
+  itemId,
+  itemIndex,
   handleClose,
 }: {
+  itemId: number;
+  itemIndex: number;
   handleClose: () => void;
-  handleConfirm: () => void;
 }) => {
   const dialog = useDialogRef();
   const { t } = useTranslation("form-builder");
+
+  const { updateField, elements } = useTemplateStore((s) => ({
+    elements: s.form.elements,
+    updateField: s.updateField,
+  }));
+
+  const item = elements.find((el) => el.id === itemId);
+  const rowProps = item?.properties?.dynamicRow;
+
+  const [addButtonValueEn, setAddButtonValueEn] = useState(rowProps?.addButtonTextEn || "");
+  const [addButtonValueFr, setAddButtonValueFr] = useState(rowProps?.addButtonTextFr || "");
+
+  const [removeButtonValueEn, setRemoveButtonValueEn] = useState(
+    rowProps?.removeButtonTextEn || ""
+  );
+  const [removeButtonValueFr, setRemoveButtonValueFr] = useState(
+    rowProps?.removeButtonTextFr || ""
+  );
 
   const actions = (
     <>
@@ -41,8 +64,20 @@ export const DynamicRowDialog = ({
         theme="primary"
         onClick={() => {
           dialog.current?.close();
+
+          if (!item || !item.properties) return;
+
+          const properties = {
+            ...item.properties,
+            dynamicRow: {
+              addButtonTextEn: addButtonValueEn,
+              addButtonTextFr: addButtonValueFr,
+              removeButtonTextEn: removeButtonValueEn,
+              removeButtonTextFr: removeButtonValueFr,
+            },
+          };
+          updateField(`form.elements[${itemIndex}].properties`, properties);
           handleClose && handleClose();
-          handleConfirm();
         }}
         dataTestId="confirm-delete"
       >
@@ -63,8 +98,12 @@ export const DynamicRowDialog = ({
         <div className="mb-8">
           <h4 className="mb-4 block font-bold">{t("dynamicRow.dialog.addButton.title")}</h4>
           <p className="mb-4 text-sm">{t("dynamicRow.dialog.addButton.description")}</p>
-          <TextInput label={t("dynamicRow.dialog.english")} />
-          <TextInput label={t("dynamicRow.dialog.french")} />
+          <TextInput label={t("dynamicRow.dialog.english")}>
+            <input value={addButtonValueEn} onChange={(e) => setAddButtonValueEn(e.target.value)} />
+          </TextInput>
+          <TextInput label={t("dynamicRow.dialog.french")}>
+            <input value={addButtonValueFr} onChange={(e) => setAddButtonValueFr(e.target.value)} />
+          </TextInput>
         </div>
 
         {/* Remove button */}
@@ -73,8 +112,18 @@ export const DynamicRowDialog = ({
             {t("dynamicRow.dialog.removeButton.title")}
           </label>
           <p className="mb-4 text-sm">{t("dynamicRow.dialog.removeButton.description")}</p>
-          <TextInput label={t("dynamicRow.dialog.english")} />
-          <TextInput label={t("dynamicRow.dialog.french")} />
+          <TextInput label={t("dynamicRow.dialog.english")}>
+            <input
+              value={removeButtonValueEn}
+              onChange={(e) => setRemoveButtonValueEn(e.target.value)}
+            />
+          </TextInput>
+          <TextInput label={t("dynamicRow.dialog.french")}>
+            <input
+              value={removeButtonValueFr}
+              onChange={(e) => setRemoveButtonValueFr(e.target.value)}
+            />
+          </TextInput>
         </div>
       </div>
     </Dialog>

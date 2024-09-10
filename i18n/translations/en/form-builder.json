@@ -1070,6 +1070,8 @@
   "goBack": "Go back",
   "disabled": "disabled",
   "dynamicRow": {
+    "addButtonText": "Add",
+    "removeButtonText": "Remove",
     "dialog": {
       "customizeElement": "Customize element",
       "title": "Customize set",
