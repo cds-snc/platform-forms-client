@@ -1,5 +1,6 @@
 {
   "experimentalBlocks": false,
   "conditionalLogic": false,
-  "zitadelAuth": false
+  "zitadelAuth": false,
+  "addressComplete": true
 }
