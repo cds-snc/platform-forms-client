@@ -117,6 +117,13 @@ export const acceptInvitation = async (ability: UserAbility, invitationId: strin
   return false;
 };
 
+/**
+ * Decline an invitation
+ *
+ * @param ability
+ * @param invitationId
+ * @returns
+ */
 export const declineInvitation = async (ability: UserAbility, invitationId: string) => {
   const user = await getUser(ability, ability.userID);
   const invitation = await _retrieveFormInvitationByEmail(user.email, invitationId);
@@ -129,6 +136,12 @@ export const declineInvitation = async (ability: UserAbility, invitationId: stri
   throw new InvitationNotFoundError();
 };
 
+/**
+ * Assign user to template
+ *
+ * @param userId
+ * @param formId
+ */
 const _assignUserToTemplate = async (userId: string, formId: string) => {
   await prisma.template.update({
     where: {
