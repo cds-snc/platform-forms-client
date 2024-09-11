@@ -22,6 +22,7 @@ import { SkipLinkReusable } from "@clientComponents/globals/SkipLinkReusable";
 import { alphabet } from "@lib/utils/form-builder";
 import { sortGroup } from "@lib/utils/form-builder/groupedFormHelpers";
 import { Group } from "@lib/formContext";
+import { TranslateCustomizeSet } from "./TranslateCustomizeSet";
 
 const GroupSection = ({
   groupId,
@@ -99,11 +100,13 @@ const Element = ({
   element,
   index,
   primaryLanguage,
+  secondaryLanguage,
   questionNumber,
 }: {
   element: FormElement;
   index: number;
   primaryLanguage: Language;
+  secondaryLanguage: Language;
   questionNumber?: string;
 }) => {
   let subElements;
@@ -126,6 +129,7 @@ const Element = ({
           index={subElement.id}
           questionNumber={questionNumber}
           primaryLanguage={primaryLanguage}
+          secondaryLanguage={secondaryLanguage}
         />
       );
     });
@@ -169,6 +173,16 @@ const Element = ({
             <Description primaryLanguage={primaryLanguage} element={element} />
           )}
           {subElements}
+        </>
+      )}
+      {element.type === "dynamicRow" && (
+        <>
+          <TranslateCustomizeSet
+            element={element}
+            primaryLanguage={primaryLanguage}
+            secondaryLanguage={secondaryLanguage}
+          />
+          <div>here</div>
         </>
       )}
     </>
@@ -384,7 +398,12 @@ export const TranslateWithGroups = () => {
             sortGroup({ form, group: groups["start"] }).map((element, index) => {
               return (
                 <div className="section" id={`section-${index}`} key={element.id}>
-                  <Element index={index} element={element} primaryLanguage={primaryLanguage} />
+                  <Element
+                    index={index}
+                    element={element}
+                    primaryLanguage={primaryLanguage}
+                    secondaryLanguage={secondaryLanguage}
+                  />
                 </div>
               );
             })}
@@ -418,6 +437,7 @@ export const TranslateWithGroups = () => {
                           index={index}
                           element={element}
                           primaryLanguage={primaryLanguage}
+                          secondaryLanguage={secondaryLanguage}
                         />
                       </div>
                     );
