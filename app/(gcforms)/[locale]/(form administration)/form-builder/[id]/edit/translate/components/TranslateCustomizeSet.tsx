@@ -28,7 +28,7 @@ export const TranslateCustomizeSet = ({
     return null;
   }
 
-  // row tirle
+  // row title
   const rowTitle = "rowTitle";
 
   const rowTitlePropEn = localizeField(rowTitle, primaryLanguage);
