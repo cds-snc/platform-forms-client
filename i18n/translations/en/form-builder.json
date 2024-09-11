@@ -1080,6 +1080,7 @@
     "removeButtonTextA11yEn": "Remove button text (english)",
     "removeButtonTextA11yFr": "Remove button text (french)",
     "translate": {
+      "rowTitleText": "Row label [FR]",
       "repeatingSet": "Repeating set",
       "addButtonText": "Button label - Add to set",
       "removeButtonText": "Button label - Remove from set"
