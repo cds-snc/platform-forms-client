@@ -2269,6 +2269,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@babel/runtime@npm:^7.17.9":
+  version: 7.25.6
+  resolution: "@babel/runtime@npm:7.25.6"
+  dependencies:
+    regenerator-runtime: "npm:^0.14.0"
+  checksum: 10c0/d6143adf5aa1ce79ed374e33fdfd74fa975055a80bc6e479672ab1eadc4e4bfd7484444e17dd063a1d180e051f3ec62b357c7a2b817e7657687b47313158c3d2
+  languageName: node
+  linkType: hard
+
 "@babel/template@npm:7, @babel/template@npm:^7.25.0, @babel/template@npm:^7.3.3":
   version: 7.25.0
   resolution: "@babel/template@npm:7.25.0"
@@ -3124,6 +3133,33 @@ __metadata:
   bin:
     proto-loader-gen-types: build/bin/proto-loader-gen-types.js
   checksum: 10c0/dc8ed7aa1454c15e224707cc53d84a166b98d76f33606a9f334c7a6fb1aedd3e3614dcd2c2b02a6ffaf140587d19494f93b3a56346c6c2e26bc564f6deddbbf3
+  languageName: node
+  linkType: hard
+
+"@hcaptcha/loader@npm:^1.2.1":
+  version: 1.2.4
+  resolution: "@hcaptcha/loader@npm:1.2.4"
+  checksum: 10c0/1c9d26dc159f0c5b518c74082439122d3ff97ca304dfeb9a6443f6ca88496827c28080e58e0420ee1e9800af8e798bd0f94a8e373c89643aba6aede1f97b88b3
+  languageName: node
+  linkType: hard
+
+"@hcaptcha/react-hcaptcha@npm:^1.11.0":
+  version: 1.11.0
+  resolution: "@hcaptcha/react-hcaptcha@npm:1.11.0"
+  dependencies:
+    "@babel/runtime": "npm:^7.17.9"
+    "@hcaptcha/loader": "npm:^1.2.1"
+  peerDependencies:
+    react: ">= 16.3.0"
+    react-dom: ">= 16.3.0"
+  checksum: 10c0/f2b2212331b9f60093588e84c8b8d9ad3cd32453606bd89aefadfa7bf17e6aecf1314f9845010d054076a8d3193826ee4dabce12659039f098a245553c136884
+  languageName: node
+  linkType: hard
+
+"@hcaptcha/types@npm:^1.0.4":
+  version: 1.0.4
+  resolution: "@hcaptcha/types@npm:1.0.4"
+  checksum: 10c0/b28f990e5c46a7e9c2e14728820135b3877bddb898fa17e0c2bf1b272c202926a76afec9d1adcf9351f7ae684d34c53b987d53a7a3af6b1fc2b8ea891a99e418
   languageName: node
   linkType: hard
 
@@ -12730,6 +12766,8 @@ __metadata:
     "@babel/core": "npm:^7.23.6"
     "@babel/preset-typescript": "npm:^7.24.7"
     "@casl/ability": "npm:6.5.0"
+    "@hcaptcha/react-hcaptcha": "npm:^1.11.0"
+    "@hcaptcha/types": "npm:^1.0.4"
     "@headlessui/react": "npm:^1.7.18"
     "@jest/globals": "npm:^29.7.0"
     "@lexical/react": "npm:^0.12.6"
