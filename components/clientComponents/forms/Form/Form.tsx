@@ -11,7 +11,10 @@ import Loader from "../../globals/Loader";
 import classNames from "classnames";
 import { Responses, PublicFormRecord, Validate } from "@lib/types";
 import { ErrorStatus } from "../Alert/Alert";
-import { submitForm } from "app/(gcforms)/[locale]/(form filler)/id/[...props]/actions";
+import {
+  checkHCaptchaToken,
+  submitForm,
+} from "app/(gcforms)/[locale]/(form filler)/id/[...props]/actions";
 import useFormTimer from "@lib/hooks/useFormTimer";
 import { useFormValuesChanged } from "@lib/hooks/useValueChanged";
 import { useGCFormsContext } from "@lib/hooks/useGCFormContext";
@@ -28,45 +31,11 @@ import { filterShownElements, filterValuesByShownElements } from "@lib/formConte
 import { formHasGroups } from "@lib/utils/form-builder/formHasGroups";
 import { showReviewPage } from "@lib/utils/form-builder/showReviewPage";
 import HCaptcha from "@hcaptcha/react-hcaptcha";
-import { safeJSONParse } from "@lib/utils";
-import axios from "axios";
 
 // TODO -double check hcaptcha urls added to CSP header (see Docs)
 
 // TEMP move later
 const HCAPTCHA_DEMO_SITE_KEY = "20000000-ffff-ffff-ffff-000000000002"; // process.env.HCAPTCHA_SITE_KEY - public I think
-const HCAPTCHA_DEMO_KEY = "0x0000000000000000000000000000000000000000"; //TODO process.env.HCAPTCHA_SECRET_KEY;
-
-// TODO this should be done on the server NOT the client
-//
-// Request flow, demo keys etc. see https://docs.hcaptcha.com/#verify-the-user-response-server-side)
-// React lib see https://github.com/hCaptcha/react-hcaptcha
-export const checkHCaptchaToken = async (token: string, clientIp: string) => {
-  // const clientIp = await getClientIP();
-  logMessage.info(`Verify token clientIp: ${clientIp}, token: ${token}`);
-
-  const result = await axios({
-    url: "https://api.hcaptcha.com/siteverify",
-    method: "POST",
-    data: {
-      secret: HCAPTCHA_DEMO_KEY,
-      response: token,
-      remoteip: clientIp,
-    },
-    timeout: process.env.NODE_ENV === "production" ? 60000 : 0,
-  });
-
-  const resultJson = safeJSONParse<{ success?: boolean; "error-codes"?: string[] }>(result.data);
-  if (resultJson && resultJson["error-codes"]) {
-    logMessage.error(`Captcha error: ${JSON.stringify(resultJson["error-codes"])}`);
-    return false;
-  }
-
-  alert(`Captcha success: ${resultJson?.success}, errors: ${resultJson?.["error-codes"]}`);
-
-  // Getting error {"success":false,"error-codes":["missing-input-response","missing-input-secret"]}
-  return resultJson?.success === true;
-};
 
 interface SubmitButtonProps {
   numberOfRequiredQuestions: number;
@@ -350,7 +319,7 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
                           sitekey={HCAPTCHA_DEMO_SITE_KEY}
                           onVerify={async (token) => {
                             logMessage.info(`Client received a captcha token ${token}`);
-                            const success = await checkHCaptchaToken(token, props.clientIp);
+                            const success = await checkHCaptchaToken(token);
                             if (!success) {
                               alert("Captcha failed");
                               return;
@@ -382,7 +351,8 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
                     sitekey={HCAPTCHA_DEMO_SITE_KEY}
                     onVerify={async (token) => {
                       logMessage.info(`Client received a captcha token ${token}`);
-                      const success = await checkHCaptchaToken(token, props.clientIp);
+                      // TODO may want to try-catch this and show an error message
+                      const success = await checkHCaptchaToken(token);
 
                       if (!success) {
                         alert("Captcha failed");
@@ -430,7 +400,6 @@ interface FormProps {
   allowGrouping?: boolean | undefined;
   groupHistory?: string[];
   matchedIds?: string[];
-  clientIp: string;
 }
 
 /**

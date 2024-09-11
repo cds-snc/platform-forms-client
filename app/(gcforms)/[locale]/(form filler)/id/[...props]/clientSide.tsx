@@ -10,12 +10,10 @@ export const FormWrapper = ({
   formRecord,
   currentForm,
   allowGrouping,
-  clientIp,
 }: {
   formRecord: TypeOmit<FormRecord, "name" | "deliveryOption">;
   currentForm: JSX.Element[];
   allowGrouping?: boolean | undefined;
-  clientIp: string;
 }) => {
   // TODO cast language as "en" | "fr" in TS below
   const {
@@ -43,7 +41,6 @@ export const FormWrapper = ({
         );
       }}
       allowGrouping={allowGrouping}
-      clientIp={clientIp}
     >
       {currentForm}
     </Form>

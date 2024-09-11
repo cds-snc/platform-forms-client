@@ -11,7 +11,6 @@ import { GCFormsProvider } from "@lib/hooks/useGCFormContext";
 import { FormWrapper } from "./clientSide";
 import { allowGrouping } from "@formBuilder/components/shared/right-panel/treeview/util/allowGrouping";
 import { serverTranslation } from "@i18n";
-import { getClientIP } from "@lib/ip";
 
 export async function generateMetadata({
   params: { locale, props },
@@ -60,8 +59,6 @@ export default async function Page({
   const formTitle = formRecord.form[getLocalizedProperty("title", language)] as string;
   const isAllowGrouping = await allowGrouping();
 
-  const clientIp = await getClientIP();
-
   let isPastClosingDate = false;
 
   if (formRecord.closingDate) {
@@ -96,7 +93,6 @@ export default async function Page({
             formRecord={formRecord}
             currentForm={currentForm}
             allowGrouping={isAllowGrouping}
-            clientIp={clientIp}
           />
         </GCFormsProvider>
       </div>

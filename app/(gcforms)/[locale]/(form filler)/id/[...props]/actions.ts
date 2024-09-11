@@ -5,6 +5,8 @@ import { parseRequestData } from "./lib/parseRequestData";
 import { processFormData } from "./lib/processFormData";
 import { MissingFormDataError, MissingFormIdError } from "./lib/exceptions";
 import { logMessage } from "@lib/logger";
+import axios from "axios";
+import { getClientIP } from "@lib/ip";
 
 export async function submitForm(
   values: Responses,
@@ -35,3 +37,50 @@ export async function submitForm(
     return { id: formRecord.id, error: { name: (e as Error).name, message: (e as Error).message } };
   }
 }
+
+const HCAPTCHA_DEMO_KEY = "0x0000000000000000000000000000000000000000"; //TODO process.env.HCAPTCHA_SECRET_KEY;
+
+/**
+ * Test the Client Captcha token is valid using the hCaptcha API
+ *
+ * For more info:
+ * -Request flow https://docs.hcaptcha.com/#verify-the-user-response-server-side
+ * -Client React lib https://github.com/hCaptcha/react-hcaptcha
+ *
+ * @param token Client captcha token to verify
+ * @returns boolean true if the token is valid, false otherwise
+ */
+export const checkHCaptchaToken = async (token: string) => {
+  const clientIp = await getClientIP();
+  const result = await axios({
+    url: "https://api.hcaptcha.com/siteverify",
+    method: "POST",
+    data: {
+      secret: HCAPTCHA_DEMO_KEY,
+      response: token,
+      remoteip: clientIp,
+    },
+    timeout: process.env.NODE_ENV === "production" ? 60000 : 0, // TODO: Daaang that's a long delay?
+  })
+    // TODO - Should the error be sanitized for any private info before throwing/logging?
+    .catch((error) => {
+      logMessage.error(error);
+      throw error;
+    });
+
+  const captchaData: { success?: boolean; "error-codes"?: string[] } = result.data;
+  if (captchaData && captchaData["error-codes"]) {
+    logMessage.error(`Captcha error: ${JSON.stringify(captchaData["error-codes"])}`);
+    return false;
+  }
+
+  // TODO:TEMP
+  logMessage.info(`
+    ========================================
+    ClientIp: ${clientIp}, token: ${token}
+    Captcha result: ${JSON.stringify(captchaData)}
+    ========================================
+  `);
+
+  return captchaData?.success === true;
+};
