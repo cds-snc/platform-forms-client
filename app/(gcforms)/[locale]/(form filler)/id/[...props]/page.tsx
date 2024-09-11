@@ -11,6 +11,7 @@ import { GCFormsProvider } from "@lib/hooks/useGCFormContext";
 import { FormWrapper } from "./clientSide";
 import { allowGrouping } from "@formBuilder/components/shared/right-panel/treeview/util/allowGrouping";
 import { serverTranslation } from "@i18n";
+import { getAppSetting } from "@lib/appSettings";
 
 export async function generateMetadata({
   params: { locale, props },
@@ -58,6 +59,7 @@ export default async function Page({
   const currentForm = getRenderedForm(formRecord, language);
   const formTitle = formRecord.form[getLocalizedProperty("title", language)] as string;
   const isAllowGrouping = await allowGrouping();
+  const hCaptchaSiteKey = (await getAppSetting("hCaptchaSiteKey")) || "";
 
   let isPastClosingDate = false;
 
@@ -93,6 +95,7 @@ export default async function Page({
             formRecord={formRecord}
             currentForm={currentForm}
             allowGrouping={isAllowGrouping}
+            hCaptchaSiteKey={hCaptchaSiteKey}
           />
         </GCFormsProvider>
       </div>

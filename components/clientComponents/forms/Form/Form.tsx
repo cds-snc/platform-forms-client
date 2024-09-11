@@ -32,11 +32,6 @@ import { formHasGroups } from "@lib/utils/form-builder/formHasGroups";
 import { showReviewPage } from "@lib/utils/form-builder/showReviewPage";
 import HCaptcha from "@hcaptcha/react-hcaptcha";
 
-// TODO -double check hcaptcha urls added to CSP header (see Docs)
-
-// TEMP move later
-const HCAPTCHA_DEMO_SITE_KEY = "20000000-ffff-ffff-ffff-000000000002"; // process.env.HCAPTCHA_SITE_KEY - public I think
-
 interface SubmitButtonProps {
   numberOfRequiredQuestions: number;
   formID: string;
@@ -316,7 +311,7 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
                           )}
 
                         <HCaptcha
-                          sitekey={HCAPTCHA_DEMO_SITE_KEY}
+                          sitekey={props.hCaptchaSiteKey}
                           onVerify={async (token) => {
                             logMessage.info(`Client received a captcha token ${token}`);
                             const success = await checkHCaptchaToken(token);
@@ -348,7 +343,7 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
               ) : (
                 <>
                   <HCaptcha
-                    sitekey={HCAPTCHA_DEMO_SITE_KEY}
+                    sitekey={props.hCaptchaSiteKey}
                     onVerify={async (token) => {
                       logMessage.info(`Client received a captcha token ${token}`);
                       // TODO may want to try-catch this and show an error message
@@ -400,6 +395,7 @@ interface FormProps {
   allowGrouping?: boolean | undefined;
   groupHistory?: string[];
   matchedIds?: string[];
+  hCaptchaSiteKey: string;
 }
 
 /**
