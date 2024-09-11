@@ -41,7 +41,7 @@
     },
     "actionRequired": {
       "description": "Action requise : ",
-      "link": "<a href=\"{{link}}\">Approuver la suppression de réponses</a>"
+      "linkText": "Approuver la suppression de réponses"
     },
     "unnamedForm": "Fichier sans nom"
   },

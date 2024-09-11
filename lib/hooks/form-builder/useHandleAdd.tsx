@@ -6,7 +6,10 @@ import { blockLoader, LoaderType } from "../../utils/form-builder/blockLoader";
 import { allowedTemplates } from "@lib/utils/form-builder";
 import { defaultField, createElement, setDescription } from "@lib/utils/form-builder/itemHelper";
 import { useGroupStore } from "@formBuilder/components/shared/right-panel/treeview/store/useGroupStore";
-import { getTranslatedElementProperties } from "@formBuilder/actions";
+import {
+  getTranslatedElementProperties,
+  getTranslatedDynamicRowProperties,
+} from "@formBuilder/actions";
 import { useTreeRef } from "@formBuilder/components/shared/right-panel/treeview/provider/TreeRefProvider";
 
 export const useHandleAdd = () => {
@@ -44,7 +47,9 @@ export const useHandleAdd = () => {
       }
 
       const item = await create(type as FormElementTypes);
-      // Note add() returns the element id -- we're not using it yet
+      if (item.type === "dynamicRow") {
+        item.properties.dynamicRow = await getTranslatedDynamicRowProperties();
+      }
       const id = await add(index, item.type, item, groupId);
       treeView?.current?.addItem(String(id));
 
