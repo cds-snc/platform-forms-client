@@ -111,7 +111,7 @@ export const DynamicGroup = (props: DynamicGroupProps): React.ReactElement => {
   const classes = classnames("gc-form-group", { "gc-form-group--error": error }, className);
 
   const addButtonLabel = addButtonText || t("dynamicRow.add") + " " + rowLabel;
-  const deleteButtonLabel = removeButtonText || t("dynamicRow.delete") + rowLabel;
+  const deleteButtonLabel = removeButtonText || t("dynamicRow.delete") + " " + rowLabel;
 
   return (
     // eslint-disable-next-line jsx-a11y/no-noninteractive-tabindex
