@@ -28,21 +28,51 @@ import { filterShownElements, filterValuesByShownElements } from "@lib/formConte
 import { formHasGroups } from "@lib/utils/form-builder/formHasGroups";
 import { showReviewPage } from "@lib/utils/form-builder/showReviewPage";
 import HCaptcha from "@hcaptcha/react-hcaptcha";
+import { safeJSONParse } from "@lib/utils";
+import axios from "axios";
 
-// TEMP
+// TODO -double check hcaptcha urls added to CSP header (see Docs)
+
+// TEMP move later
 const HCAPTCHA_DEMO_SITE_KEY = "20000000-ffff-ffff-ffff-000000000002"; // process.env.HCAPTCHA_SITE_KEY - public I think
+const HCAPTCHA_DEMO_KEY = "0x0000000000000000000000000000000000000000"; //TODO process.env.HCAPTCHA_SECRET_KEY;
+
+// Request flow, demo keys etc. see https://docs.hcaptcha.com/#verify-the-user-response-server-side)
+// React lib see https://github.com/hCaptcha/react-hcaptcha
+export const checkHCaptchaToken = async (token: string, clientIp: string) => {
+  // const clientIp = await getClientIP();
+  logMessage.info(`Verify token clientIp: ${clientIp}, token: ${token}`);
+
+  const result = await axios({
+    url: "https://api.hcaptcha.com/siteverify",
+    method: "POST",
+    data: {
+      secret: HCAPTCHA_DEMO_KEY,
+      response: token,
+      remoteip: clientIp,
+    },
+    timeout: process.env.NODE_ENV === "production" ? 60000 : 0,
+  });
+
+  const resultJson = safeJSONParse<{ success?: boolean; "error-codes"?: string[] }>(result.data);
+  if (resultJson && resultJson["error-codes"]) {
+    logMessage.error(`Captcha error: ${JSON.stringify(resultJson["error-codes"])}`);
+    return false;
+  }
+
+  // Getting error {"success":false,"error-codes":["missing-input-response","missing-input-secret"]}
+  return resultJson?.success === true;
+};
 
 interface SubmitButtonProps {
   numberOfRequiredQuestions: number;
   formID: string;
   formTitle: string;
-  language: Language;
 }
 const SubmitButton: React.FC<SubmitButtonProps> = ({
   numberOfRequiredQuestions,
   formID,
   formTitle,
-  language,
 }) => {
   const { t } = useTranslation();
   const [formTimerState, { startTimer, checkTimer, disableTimer }] = useFormTimer();
@@ -55,8 +85,6 @@ const SubmitButton: React.FC<SubmitButtonProps> = ({
   const submitDelaySeconds = secondsBaseDelay + numberOfRequiredQuestions * secondsPerFormElement;
 
   const formTimerEnabled = process.env.NEXT_PUBLIC_APP_ENV !== "test";
-
-  const hCaptchaRef = createRef<HCaptcha>(); // TODO probably move
 
   // If the timer hasn't started yet, start the timer
   if (!formTimerState.timerDelay && formTimerEnabled) startTimer(submitDelaySeconds);
@@ -115,35 +143,6 @@ const SubmitButton: React.FC<SubmitButtonProps> = ({
             </div>
           ))}
       </div>
-      <HCaptcha
-        sitekey={HCAPTCHA_DEMO_SITE_KEY}
-        onVerify={() => {
-          alert("Verified Client - need to verify token via server");
-
-          // TODO
-          // -double check hcaptcha urls added to CSP header (see Docs)
-
-          // -Request flow, demo keys etc. see https://docs.hcaptcha.com/#verify-the-user-response-server-side)
-          // -React lib see https://github.com/hCaptcha/react-hcaptcha
-
-          // -Submit button would call something like this
-          // const executeData = {}; // For enterprise features e.g. rqdata from props
-          // hCaptchaRef.current?.execute(executeData);
-
-          // -This verify function would verify the token via the server and
-          // -set some state on whether to proceed with the form submission
-          // const success = await checkHCaptchaToken(siteKey, verifyToken);
-          // if (!success) // Do something with the error
-          // setToken(verifyToken);
-        }}
-        onError={() => alert("Error")}
-        onExpire={() => alert("Expired")}
-        ref={hCaptchaRef}
-        languageOverride={language}
-        // size="invisible" run invisible
-      />
-      <br />
-
       <Button
         id="form-submit-button"
         type="submit"
@@ -206,6 +205,9 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
   const errorId = "gc-form-errors";
   const serverErrorId = `${errorId}-server`;
   const formStatusError = props.status === "Error" ? t("server-error") : null;
+
+  const captchaEnabled = true; // TODO implement it
+  const hCaptchaRef = createRef<HCaptcha>();
 
   //  If there are errors on the page, set focus the first error field
   useEffect(() => {
@@ -283,6 +285,12 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
               if (isGroupsCheck && isShowReviewPage && currentGroup !== LockedSections.REVIEW) {
                 return;
               }
+
+              if (captchaEnabled) {
+                hCaptchaRef.current?.execute();
+                return;
+              }
+
               handleSubmit(e);
             }}
             noValidate
@@ -333,12 +341,31 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
                               onClick={() => groupsHeadingRef.current?.focus()}
                             />
                           )}
+
+                        <HCaptcha
+                          sitekey={HCAPTCHA_DEMO_SITE_KEY}
+                          onVerify={async (token) => {
+                            logMessage.info(`Client received a captcha token ${token}`);
+                            const success = await checkHCaptchaToken(token, props.clientIp);
+                            if (!success) {
+                              alert("Captcha failed");
+                              return;
+                            }
+                            handleSubmit();
+                          }}
+                          onError={() => alert("Error")}
+                          onExpire={() => alert("Expired")}
+                          ref={hCaptchaRef}
+                          languageOverride={language}
+                          // size="invisible" - TODO run invisible
+                        />
+                        <br />
+
                         <div className="inline-block">
                           <SubmitButton
                             numberOfRequiredQuestions={numberOfRequiredQuestions}
                             formID={formID}
                             formTitle={form.titleEn}
-                            language={language as Language}
                           />
                         </div>
                       </div>
@@ -346,12 +373,33 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
                   },
                 })
               ) : (
-                <SubmitButton
-                  numberOfRequiredQuestions={numberOfRequiredQuestions}
-                  formID={formID}
-                  formTitle={form.titleEn}
-                  language={language as Language}
-                />
+                <>
+                  <HCaptcha
+                    sitekey={HCAPTCHA_DEMO_SITE_KEY}
+                    onVerify={async (token) => {
+                      logMessage.info(`Client received a captcha token ${token}`);
+                      const success = await checkHCaptchaToken(token, props.clientIp);
+
+                      if (!success) {
+                        alert("Captcha failed");
+                        return;
+                      }
+                      handleSubmit();
+                    }}
+                    onError={() => alert("Error")}
+                    onExpire={() => alert("Expired")}
+                    ref={hCaptchaRef}
+                    languageOverride={language}
+                    // size="invisible" - TODO run invisible
+                  />
+                  <br />
+
+                  <SubmitButton
+                    numberOfRequiredQuestions={numberOfRequiredQuestions}
+                    formID={formID}
+                    formTitle={form.titleEn}
+                  />
+                </>
               )}
             </div>
           </form>
@@ -378,6 +426,7 @@ interface FormProps {
   allowGrouping?: boolean | undefined;
   groupHistory?: string[];
   matchedIds?: string[];
+  clientIp: string;
 }
 
 /**

@@ -38,7 +38,7 @@ export const generateCSP = (): { csp: string; nonce: string } => {
     form-action 'self';
     frame-src www.googletagmanager.com *.hcaptcha.com;
     frame-ancestors 'none';
-    connect-src 'self' www.googletagmanager.com www.google-analytics.com *.hcaptcha.com;
+    connect-src 'self' www.googletagmanager.com www.google-analytics.com api.hcaptcha.com;
     block-all-mixed-content;
     upgrade-insecure-requests;
 `;
