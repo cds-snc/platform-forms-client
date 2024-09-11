@@ -37,6 +37,8 @@ import axios from "axios";
 const HCAPTCHA_DEMO_SITE_KEY = "20000000-ffff-ffff-ffff-000000000002"; // process.env.HCAPTCHA_SITE_KEY - public I think
 const HCAPTCHA_DEMO_KEY = "0x0000000000000000000000000000000000000000"; //TODO process.env.HCAPTCHA_SECRET_KEY;
 
+// TODO this should be done on the server NOT the client
+//
 // Request flow, demo keys etc. see https://docs.hcaptcha.com/#verify-the-user-response-server-side)
 // React lib see https://github.com/hCaptcha/react-hcaptcha
 export const checkHCaptchaToken = async (token: string, clientIp: string) => {
@@ -59,6 +61,8 @@ export const checkHCaptchaToken = async (token: string, clientIp: string) => {
     logMessage.error(`Captcha error: ${JSON.stringify(resultJson["error-codes"])}`);
     return false;
   }
+
+  alert(`Captcha success: ${resultJson?.success}, errors: ${resultJson?.["error-codes"]}`);
 
   // Getting error {"success":false,"error-codes":["missing-input-response","missing-input-secret"]}
   return resultJson?.success === true;
