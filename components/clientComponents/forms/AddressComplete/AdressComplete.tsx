@@ -32,7 +32,10 @@ export const AddressComplete = (props: AddressCompleteProps): React.ReactElement
       setApiKey(jsonData.key);
     };
 
-    checkAllowed();
+    if (apiKey === "") {
+      // Don't recheck.
+      checkAllowed();
+    }
   }, []);
 
   //Form fillers address elements
