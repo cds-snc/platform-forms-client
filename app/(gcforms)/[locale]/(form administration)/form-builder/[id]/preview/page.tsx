@@ -6,8 +6,6 @@ import { Preview } from "./Preview";
 import { allowGrouping } from "@formBuilder/components/shared/right-panel/treeview/util/allowGrouping";
 import { ClientContainer } from "./ClientContainer";
 
-const HCAPTCHA_DEMO_SITE_KEY = "20000000-ffff-ffff-ffff-000000000002"; // process.env.HCAPTCHA_SITE_KEY - public I think
-
 export async function generateMetadata({
   params: { locale },
 }: {
@@ -36,11 +34,7 @@ export default async function Page({ params: { id } }: { params: { id: string } 
 
   return (
     <ClientContainer>
-      <Preview
-        disableSubmit={disableSubmit}
-        allowGrouping={isAllowGrouping}
-        hCaptchaSiteKey={HCAPTCHA_DEMO_SITE_KEY}
-      />
+      <Preview disableSubmit={disableSubmit} allowGrouping={isAllowGrouping} />
     </ClientContainer>
   );
 }

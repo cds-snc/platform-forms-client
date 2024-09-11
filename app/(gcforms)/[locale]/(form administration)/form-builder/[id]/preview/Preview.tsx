@@ -1,5 +1,5 @@
 "use client";
-import React, { createRef, useState } from "react";
+import React, { useState } from "react";
 import { useTranslation } from "@i18n/client";
 import { useSession } from "next-auth/react";
 import Markdown from "markdown-to-jsx";
@@ -28,16 +28,13 @@ import { toast } from "@formBuilder/components/shared";
 import { defaultForm } from "@lib/store/defaults";
 import { showReviewPage } from "@lib/utils/form-builder/showReviewPage";
 import { focusElement } from "@lib/client/clientHelpers";
-import HCaptcha from "@hcaptcha/react-hcaptcha";
 
 export const Preview = ({
   disableSubmit = true,
   allowGrouping = false,
-  hCaptchaSiteKey = "",
 }: {
   disableSubmit?: boolean;
   allowGrouping?: boolean;
-  hCaptchaSiteKey?: string;
 }) => {
   const { status } = useSession();
   const { i18n } = useTranslation(["common", "confirmation"]);
@@ -122,8 +119,6 @@ export const Preview = ({
       </div>
     );
   }
-
-  const hCaptchaRef = createRef<HCaptcha>();
 
   return (
     <div className="max-w-4xl">
@@ -220,49 +215,18 @@ export const Preview = ({
                                       onClick={() => focusElement("h2")}
                                     />
                                   )}
-                                  <>
-                                    <HCaptcha
-                                      sitekey={hCaptchaSiteKey}
-                                      onVerify={() => {
-                                        alert("Verified Client - need to verify token via server");
-
-                                        // TODO
-                                        // -add hcaptcha urls to CSP header (see Docs)
-
-                                        // -Request flow, demo keys etc. see https://docs.hcaptcha.com/#verify-the-user-response-server-side)
-                                        // -React lib see https://github.com/hCaptcha/react-hcaptcha
-
-                                        // -Submit button would call something like this
-                                        // const executeData = {}; // For enterprise features e.g. rqdata from props
-                                        // hCaptchaRef.current?.execute(executeData);
-
-                                        // -This verify function would verify the token via the server and
-                                        // -set some state on whether to proceed with the form submission
-                                        // const success = await checkHCaptchaToken(siteKey, verifyToken);
-                                        // if (!success) // Do something with the error
-                                        // setToken(verifyToken);
-                                      }}
-                                      onError={() => alert("Error")}
-                                      onExpire={() => alert("Expired")}
-                                      ref={hCaptchaRef}
-                                      languageOverride={language}
-                                      // size="invisible" run invisible
-                                    />
-                                    <br />
-
-                                    <Button
-                                      type="submit"
-                                      id="SubmitButton"
-                                      className="mb-4"
-                                      onClick={(e) => {
-                                        if (disableSubmit) {
-                                          return preventSubmit(e);
-                                        }
-                                      }}
-                                    >
-                                      {t("submitButton", { ns: "common", lng: language })}
-                                    </Button>
-                                  </>
+                                  <Button
+                                    type="submit"
+                                    id="SubmitButton"
+                                    className="mb-4"
+                                    onClick={(e) => {
+                                      if (disableSubmit) {
+                                        return preventSubmit(e);
+                                      }
+                                    }}
+                                  >
+                                    {t("submitButton", { ns: "common", lng: language })}
+                                  </Button>
                                 </>
                               );
                             }}

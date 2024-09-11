@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState, useRef, createRef } from "react";
 import { FormikProps, withFormik } from "formik";
 import { getFormInitialValues } from "@lib/formBuilder";
 import { getErrorList, setFocusOnErrorMessage, validateOnSubmit } from "@lib/validation/validation";
@@ -27,16 +27,22 @@ import {
 import { filterShownElements, filterValuesByShownElements } from "@lib/formContext";
 import { formHasGroups } from "@lib/utils/form-builder/formHasGroups";
 import { showReviewPage } from "@lib/utils/form-builder/showReviewPage";
+import HCaptcha from "@hcaptcha/react-hcaptcha";
+
+// TEMP
+const HCAPTCHA_DEMO_SITE_KEY = "20000000-ffff-ffff-ffff-000000000002"; // process.env.HCAPTCHA_SITE_KEY - public I think
 
 interface SubmitButtonProps {
   numberOfRequiredQuestions: number;
   formID: string;
   formTitle: string;
+  language: Language;
 }
 const SubmitButton: React.FC<SubmitButtonProps> = ({
   numberOfRequiredQuestions,
   formID,
   formTitle,
+  language,
 }) => {
   const { t } = useTranslation();
   const [formTimerState, { startTimer, checkTimer, disableTimer }] = useFormTimer();
@@ -49,6 +55,8 @@ const SubmitButton: React.FC<SubmitButtonProps> = ({
   const submitDelaySeconds = secondsBaseDelay + numberOfRequiredQuestions * secondsPerFormElement;
 
   const formTimerEnabled = process.env.NEXT_PUBLIC_APP_ENV !== "test";
+
+  const hCaptchaRef = createRef<HCaptcha>(); // TODO probably move
 
   // If the timer hasn't started yet, start the timer
   if (!formTimerState.timerDelay && formTimerEnabled) startTimer(submitDelaySeconds);
@@ -107,6 +115,35 @@ const SubmitButton: React.FC<SubmitButtonProps> = ({
             </div>
           ))}
       </div>
+      <HCaptcha
+        sitekey={HCAPTCHA_DEMO_SITE_KEY}
+        onVerify={() => {
+          alert("Verified Client - need to verify token via server");
+
+          // TODO
+          // -double check hcaptcha urls added to CSP header (see Docs)
+
+          // -Request flow, demo keys etc. see https://docs.hcaptcha.com/#verify-the-user-response-server-side)
+          // -React lib see https://github.com/hCaptcha/react-hcaptcha
+
+          // -Submit button would call something like this
+          // const executeData = {}; // For enterprise features e.g. rqdata from props
+          // hCaptchaRef.current?.execute(executeData);
+
+          // -This verify function would verify the token via the server and
+          // -set some state on whether to proceed with the form submission
+          // const success = await checkHCaptchaToken(siteKey, verifyToken);
+          // if (!success) // Do something with the error
+          // setToken(verifyToken);
+        }}
+        onError={() => alert("Error")}
+        onExpire={() => alert("Expired")}
+        ref={hCaptchaRef}
+        languageOverride={language}
+        // size="invisible" run invisible
+      />
+      <br />
+
       <Button
         id="form-submit-button"
         type="submit"
@@ -301,6 +338,7 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
                             numberOfRequiredQuestions={numberOfRequiredQuestions}
                             formID={formID}
                             formTitle={form.titleEn}
+                            language={language as Language}
                           />
                         </div>
                       </div>
@@ -312,6 +350,7 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
                   numberOfRequiredQuestions={numberOfRequiredQuestions}
                   formID={formID}
                   formTitle={form.titleEn}
+                  language={language as Language}
                 />
               )}
             </div>
