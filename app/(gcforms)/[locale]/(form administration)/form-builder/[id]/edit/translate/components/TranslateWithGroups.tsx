@@ -182,7 +182,6 @@ const Element = ({
             primaryLanguage={primaryLanguage}
             secondaryLanguage={secondaryLanguage}
           />
-          <div>here</div>
         </>
       )}
     </>

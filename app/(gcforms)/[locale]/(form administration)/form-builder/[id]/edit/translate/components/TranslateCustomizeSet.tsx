@@ -53,14 +53,17 @@ export const TranslateCustomizeSet = ({
         </FieldsetLegend>
         {/* English */}
         <div className="mb-10 flex gap-px divide-x-2 border border-gray-300" key={primaryLanguage}>
+          <label htmlFor={`add-button-text-english-${element.id}`} className="sr-only">
+            <>{primaryLanguage}</>
+          </label>
           <div className="relative w-1/2 flex-1">
-            <LanguageLabel id="add-button-text-english" lang={primaryLanguage}>
+            <LanguageLabel id={`add-button-text-english-desc-${element.id}`} lang={primaryLanguage}>
               <>{primaryLanguage}</>
             </LanguageLabel>
             <textarea
               className="size-full p-4 focus:outline-blue-focus"
-              id="add-button-text-english-input"
-              aria-describedby="add-button-text-english"
+              id={`add-button-text-english-${element.id}`}
+              aria-describedby={`add-button-text-english-desc-${element.id}`}
               value={addButtonEnValue}
               onChange={(e) => {
                 updateField(
