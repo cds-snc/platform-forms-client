@@ -31,7 +31,6 @@ export default async function Page({ params: { id } }: { params: { id: string } 
   if (!session?.user && formID !== "0000") {
     return notFound();
   }
-
   return (
     <ClientContainer>
       <Preview disableSubmit={disableSubmit} allowGrouping={isAllowGrouping} />
