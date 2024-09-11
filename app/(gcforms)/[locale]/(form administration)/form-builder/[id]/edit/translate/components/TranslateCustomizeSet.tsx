@@ -121,7 +121,7 @@ export const TranslateCustomizeSet = ({
             <textarea
               className="size-full p-4 focus:outline-blue-focus"
               id={`remove-button-text-french-${element.id}`}
-              aria-describedby={`remove-button-text-english-${element.id}`}
+              aria-describedby={`remove-button-text-english-desc-${element.id}`}
               value={removeButtonEnValue}
               onChange={(e) => {
                 updateField(
@@ -144,7 +144,7 @@ export const TranslateCustomizeSet = ({
             <textarea
               className="size-full p-4 focus:outline-blue-focus"
               id={`remove-button-text-french-${element.id}`}
-              aria-describedby={`remove-button-text-french-${element.id}`}
+              aria-describedby={`remove-button-text-french-desc-${element.id}`}
               value={removeButtonFrValue}
               onChange={(e) => {
                 updateField(
