@@ -8,7 +8,6 @@ import { isValidGovEmail } from "@lib/validation/validation";
 import { useSession } from "next-auth/react";
 import { useCallback, useEffect, useState } from "react";
 import { TemplateUser } from "./types";
-import { ManageUsers } from "./ManageUsers";
 import { InviteUser } from "./InviteUser";
 import { sendInvitation } from "./actions";
 
@@ -24,20 +23,35 @@ export const ManageFormAccessDialog = ({ templateUsers, formId }: ManageFormAcce
 
   const [isOpen, setIsOpen] = useState(false);
   const [selectedEmail, setSelectedEmail] = useState("");
+  const [emailList, setEmailList] = useState<string[]>([]);
   const [message, setMessage] = useState("");
-  const [userEmailDomain, setUserEmailDomain] = useState("");
   const [usersWithAccess, setUsersWithAccess] = useState<TemplateUser[]>([]);
   const [isInvitationScreen, setIsInvitationScreen] = useState(false);
   const isManagementScreen = !isInvitationScreen;
+  const loggedInUserEmail = session?.user.email || "";
 
-  const isDomainMatch = userEmailDomain === selectedEmail.split("@")[1];
+  const handleAddEmail = (emails: string) => {
+    const emailArray = emails.split(",").map((email) => email.trim());
+    console.log({ emailArray });
+    const validEmails = emailArray.filter(
+      (email: string) => isValidEmail(email) && !emailList.includes(email)
+    );
+    console.log({ validEmails });
+    setEmailList([...emailList, ...validEmails]);
+    setSelectedEmail("");
+  };
 
-  const isValidEmail = () => {
-    return isValidGovEmail(selectedEmail) && isDomainMatch;
+  const handleRemoveEmail = (email: string) => {
+    setEmailList(emailList.filter((e) => e !== email));
+  };
+
+  const isValidEmail = (email: string) => {
+    return isValidGovEmail(email);
   };
 
   const handleClose = () => {
     setSelectedEmail("");
+    setEmailList([]);
     setIsOpen(false);
     setIsInvitationScreen(false);
   };
@@ -50,28 +64,24 @@ export const ManageFormAccessDialog = ({ templateUsers, formId }: ManageFormAcce
    * @TODO: Add validation messages/states
    */
   const validate = () => {
-    if (!isValidGovEmail(selectedEmail)) {
-      logMessage.info("Invalid email address");
-      return;
-    }
+    let valid = true;
+    emailList.forEach((email) => {
+      if (!isValidGovEmail(email)) {
+        logMessage.info("Invalid email address");
+        valid = false;
+      }
 
-    if (!isDomainMatch) {
-      logMessage.info("Email domain does not match");
-      return;
-    }
+      // @TODO: maybe check this on entry?
+      if (usersWithAccess.find((user) => user.email === email)) {
+        logMessage.info("User already has access");
+        valid = false;
+      }
+    });
 
-    if (usersWithAccess.find((user) => user.email === selectedEmail)) {
-      logMessage.info("User already has access");
-      return;
-    }
-
-    return true;
+    return valid;
   };
 
   useEffect(() => {
-    if (session) {
-      setUserEmailDomain(session.user.email.split("@")[1]);
-    }
     if (templateUsers) {
       setUsersWithAccess(templateUsers);
     }
@@ -99,7 +109,7 @@ export const ManageFormAccessDialog = ({ templateUsers, formId }: ManageFormAcce
               setIsInvitationScreen(true);
             }
           }}
-          disabled={!isValidEmail()}
+          // disabled={!isValidEmail()} @TODO: fix this?
         >
           Next
         </Button>
@@ -129,12 +139,67 @@ export const ManageFormAccessDialog = ({ templateUsers, formId }: ManageFormAcce
         >
           <div className="p-4">
             {isManagementScreen && (
-              <ManageUsers
-                selectedEmail={selectedEmail}
-                setSelectedEmail={setSelectedEmail}
-                usersWithAccess={usersWithAccess}
-                loggedInUserEmail={session?.user.email || ""}
-              />
+              <>
+                <section>
+                  <label htmlFor="email" className="font-bold">
+                    Add people to share access
+                  </label>
+                  <p>
+                    You can only enter email addresses with your same domain. If they do not have an
+                    account, they will be invited to create one.
+                  </p>
+
+                  <div className="border-2 border-black flex-wrap flex gap-2 p-2">
+                    {emailList.map((email) => {
+                      return (
+                        <div key={email} className="bg-violet-50 px-2 py-1 rounded-md inline-block">
+                          {email}{" "}
+                          <button className="" onClick={() => handleRemoveEmail(email)}>
+                            x
+                          </button>
+                        </div>
+                      );
+                    })}
+
+                    <input
+                      id="email"
+                      type="text"
+                      className="inline-block grow border-none outline-none px-2 py-1"
+                      onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                        setSelectedEmail(e.target.value);
+                      }}
+                      onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>) => {
+                        if (e.key === "Enter") {
+                          handleAddEmail(e.currentTarget.value);
+                        }
+                      }}
+                      value={selectedEmail}
+                    />
+                  </div>
+                </section>
+
+                <section className="mt-4">
+                  <h3>People with access</h3>
+                  <div className="border-1 border-black p-4">
+                    {usersWithAccess.map((user) => (
+                      <div className="flex flex-row py-2" key={user.email}>
+                        <div className="grow">{user.email}</div>
+                        <div>
+                          {loggedInUserEmail === user.email ? <span></span> : <button>X</button>}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </section>
+              </>
+              // <ManageUsers
+              //   selectedEmail={selectedEmail}
+              //   setSelectedEmail={setSelectedEmail}
+              //   usersWithAccess={usersWithAccess}
+              //   loggedInUserEmail={session?.user.email || ""}
+              //   handleAddEmail={handleAddEmail}
+              //   emailList={emailList}
+              // />
             )}
             {isInvitationScreen && (
               <InviteUser selectedEmail={selectedEmail} setMessage={setMessage} />
