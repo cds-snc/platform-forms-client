@@ -1,17 +1,17 @@
 import { TemplateUser } from "./types";
 
-type SelectUserProps = {
+type ManageUsersProps = {
   selectedEmail: string;
   setSelectedEmail: (email: string) => void;
   usersWithAccess: TemplateUser[];
   loggedInUserEmail: string;
 };
 
-export const SelectUser = ({
+export const ManageUsers = ({
   setSelectedEmail,
   usersWithAccess,
   loggedInUserEmail,
-}: SelectUserProps) => {
+}: ManageUsersProps) => {
   return (
     <>
       <section>

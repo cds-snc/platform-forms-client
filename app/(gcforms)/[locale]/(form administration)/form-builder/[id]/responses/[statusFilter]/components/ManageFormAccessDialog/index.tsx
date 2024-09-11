@@ -7,23 +7,28 @@ import { logMessage } from "@lib/logger";
 import { isValidGovEmail } from "@lib/validation/validation";
 import { useSession } from "next-auth/react";
 import { useCallback, useEffect, useState } from "react";
-import { checkEmailExists } from "./actions";
 import { TemplateUser } from "./types";
-import { SelectUser } from "./SelectUser";
+import { ManageUsers } from "./ManageUsers";
+import { InviteUser } from "./InviteUser";
+import { sendInvitation } from "./actions";
 
-export const ManageFormAccessDialog = ({
-  templateUsers,
-}: {
+type ManageFormAccessDialogProps = {
   templateUsers: TemplateUser[] | undefined;
-}) => {
+  formId: string;
+};
+
+export const ManageFormAccessDialog = ({ templateUsers, formId }: ManageFormAccessDialogProps) => {
   const dialogRef = useDialogRef();
   const { Event } = useCustomEvent();
   const { data: session } = useSession();
 
   const [isOpen, setIsOpen] = useState(false);
   const [selectedEmail, setSelectedEmail] = useState("");
+  const [message, setMessage] = useState("");
   const [userEmailDomain, setUserEmailDomain] = useState("");
   const [usersWithAccess, setUsersWithAccess] = useState<TemplateUser[]>([]);
+  const [isInvitationScreen, setIsInvitationScreen] = useState(false);
+  const isManagementScreen = !isInvitationScreen;
 
   const isDomainMatch = userEmailDomain === selectedEmail.split("@")[1];
 
@@ -34,6 +39,7 @@ export const ManageFormAccessDialog = ({
   const handleClose = () => {
     setSelectedEmail("");
     setIsOpen(false);
+    setIsInvitationScreen(false);
   };
 
   const handleOpenDialog = useCallback(() => {
@@ -85,22 +91,30 @@ export const ManageFormAccessDialog = ({
       <Button theme="secondary" onClick={handleClose}>
         Cancel
       </Button>
-      <Button
-        theme="primary"
-        onClick={async () => {
-          if (validate()) {
-            const result = await checkEmailExists(selectedEmail);
-            if (result) {
-              logMessage.info("User exists, display add owner form");
-            } else {
-              logMessage.info("User does not exists, display invite form");
+      {isManagementScreen && (
+        <Button
+          theme="primary"
+          onClick={async () => {
+            if (validate()) {
+              setIsInvitationScreen(true);
             }
-          }
-        }}
-        disabled={!isValidEmail()}
-      >
-        Next
-      </Button>
+          }}
+          disabled={!isValidEmail()}
+        >
+          Next
+        </Button>
+      )}
+      {isInvitationScreen && (
+        <Button
+          theme="primary"
+          onClick={async () => {
+            sendInvitation(selectedEmail, formId, message);
+            handleClose();
+          }}
+        >
+          Invite
+        </Button>
+      )}
     </div>
   );
 
@@ -114,12 +128,17 @@ export const ManageFormAccessDialog = ({
           actions={dialogActions}
         >
           <div className="p-4">
-            <SelectUser
-              selectedEmail={selectedEmail}
-              setSelectedEmail={setSelectedEmail}
-              usersWithAccess={usersWithAccess}
-              loggedInUserEmail={session?.user.email || ""}
-            />
+            {isManagementScreen && (
+              <ManageUsers
+                selectedEmail={selectedEmail}
+                setSelectedEmail={setSelectedEmail}
+                usersWithAccess={usersWithAccess}
+                loggedInUserEmail={session?.user.email || ""}
+              />
+            )}
+            {isInvitationScreen && (
+              <InviteUser selectedEmail={selectedEmail} setMessage={setMessage} />
+            )}
           </div>
         </Dialog>
       )}

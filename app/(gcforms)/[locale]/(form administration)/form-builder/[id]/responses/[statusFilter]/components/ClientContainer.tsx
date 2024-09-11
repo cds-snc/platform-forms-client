@@ -49,7 +49,7 @@ export const ClientContainer = ({
         <Responses responseDownloadLimit={responseDownloadLimit} overdueAfter={overdueAfter} />
         <ResponsesFooter formId={id} />
       </div>
-      <ManageFormAccessDialog templateUsers={templateUsers} />
+      <ManageFormAccessDialog formId={id} templateUsers={templateUsers} />
     </>
   );
 };
