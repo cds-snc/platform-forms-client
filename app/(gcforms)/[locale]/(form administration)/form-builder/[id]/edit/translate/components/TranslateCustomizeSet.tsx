@@ -75,13 +75,19 @@ export const TranslateCustomizeSet = ({
           </div>
           {/* French */}
           <div className="relative w-1/2 flex-1">
-            <LanguageLabel id="add-button-text-french" lang={secondaryLanguage}>
+            <label htmlFor={`add-button-text-french-${element.id}`} className="sr-only">
+              <>{secondaryLanguage}</>
+            </label>
+            <LanguageLabel
+              id={`add-button-text-french-desc-${element.id}`}
+              lang={secondaryLanguage}
+            >
               <>{secondaryLanguage}</>
             </LanguageLabel>
             <textarea
               className="size-full p-4 focus:outline-blue-focus"
-              id="add-button-text-french-input"
-              aria-describedby="add-button-text-french"
+              id={`add-button-text-french-${element.id}`}
+              aria-describedby={`add-button-text-french-desc-${element.id}`}
               value={addButtonFrValue}
               onChange={(e) => {
                 updateField(
@@ -103,13 +109,19 @@ export const TranslateCustomizeSet = ({
         </FieldsetLegend>
         <div className="mb-10 flex gap-px divide-x-2 border border-gray-300" key={primaryLanguage}>
           <div className="relative w-1/2 flex-1">
-            <LanguageLabel id="remove-button-text-english" lang={primaryLanguage}>
+            <label htmlFor={`remove-button-text-english-${element.id}`} className="sr-only">
+              <>{primaryLanguage}</>
+            </label>
+            <LanguageLabel
+              id={`remove-button-text-english-desc-${element.id}`}
+              lang={primaryLanguage}
+            >
               <>{primaryLanguage}</>
             </LanguageLabel>
             <textarea
               className="size-full p-4 focus:outline-blue-focus"
-              id="remove-button-text-french-input"
-              aria-describedby="remove-button-text-english"
+              id={`remove-button-text-french-${element.id}`}
+              aria-describedby={`remove-button-text-english-${element.id}`}
               value={removeButtonEnValue}
               onChange={(e) => {
                 updateField(
@@ -120,13 +132,19 @@ export const TranslateCustomizeSet = ({
             />
           </div>
           <div className="relative w-1/2 flex-1">
-            <LanguageLabel id="remove-button-text-french" lang={secondaryLanguage}>
+            <label htmlFor={`remove-button-text-french-${element.id}`} className="sr-only">
+              <>{secondaryLanguage}</>
+            </label>
+            <LanguageLabel
+              id={`remove-button-text-french-desc-${element.id}`}
+              lang={secondaryLanguage}
+            >
               <>{secondaryLanguage}</>
             </LanguageLabel>
             <textarea
               className="size-full p-4 focus:outline-blue-focus"
-              id="remove-button-text-french-input"
-              aria-describedby="remove-button-text-french"
+              id={`remove-button-text-french-${element.id}`}
+              aria-describedby={`remove-button-text-french-${element.id}`}
               value={removeButtonFrValue}
               onChange={(e) => {
                 updateField(
