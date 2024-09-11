@@ -397,6 +397,18 @@ export const getTranslatedProperties = async (type: string) => {
   };
 };
 
+export const getTranslatedDynamicRowProperties = async () => {
+  const { t: en } = await serverTranslation("form-builder", { lang: "en" });
+  const { t: fr } = await serverTranslation("form-builder", { lang: "fr" });
+
+  return {
+    addButtonTextEn: en("dynamicRow.addButtonText"),
+    removeButtonTextEn: en("dynamicRow.removeButtonText"),
+    addButtonTextFr: fr("dynamicRow.addButtonText"),
+    removeButtonTextFr: fr("dynamicRow.removeButtonText"),
+  };
+};
+
 export async function checkFlag(id: string) {
   return checkOne(id);
 }

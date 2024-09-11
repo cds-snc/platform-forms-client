@@ -34,6 +34,13 @@ export type ConditionalRule = {
   choiceId: string;
 };
 
+export type dynamicRowType = {
+  addButtonTextEn: string;
+  removeButtonTextEn: string;
+  addButtonTextFr: string;
+  removeButtonTextFr: string;
+};
+
 // used to define attributes for the properties of an element in the form
 export interface ElementProperties {
   titleEn: string;
@@ -53,6 +60,7 @@ export interface ElementProperties {
   autoComplete?: string;
   dateFormat?: string;
   conditionalRules?: ConditionalRule[];
+  dynamicRow?: dynamicRowType;
   [key: string]:
     | string
     | number
@@ -61,6 +69,7 @@ export interface ElementProperties {
     | Array<FormElement>
     | ValidationProperties
     | Array<ConditionalRule>
+    | dynamicRowType
     | undefined;
 }
 

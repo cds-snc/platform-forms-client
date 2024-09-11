@@ -7,9 +7,18 @@ export const useIsWithin = () => {
 
   const { focusWithinProps } = useFocusWithin({
     onFocusWithinChange: (isFocusWithin) => {
-      // ensure that the dialog is not open
+      // Ensure that the dialog is not open
       const dialogExists = document.querySelector("dialog");
-      !dialogExists && setFocusWithin(isFocusWithin);
+
+      if (!isFocusWithin) {
+        // Add a small delay to allow other events to finish
+        // i.e. clicking allow click events to finish before setting focusWithin
+        setTimeout(() => {
+          !dialogExists && setFocusWithin(isFocusWithin);
+        }, 100);
+      } else {
+        setFocusWithin(isFocusWithin);
+      }
     },
   });
 
