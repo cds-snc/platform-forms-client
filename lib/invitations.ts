@@ -3,7 +3,6 @@ import { prisma } from "./integration/prismaConnector";
 import { AccessControlError } from "./privileges";
 import { getTemplateWithAssociatedUsers } from "./templates";
 import { UserAbility } from "./types";
-import { v4 as uuid } from "uuid";
 import { logMessage } from "./logger";
 import { getUser } from "./users";
 
@@ -211,7 +210,6 @@ const _createInvitation = async (email: string, formId: string, role: UserRole) 
       templateId: formId,
       expires,
       role,
-      token: uuid(),
     },
   });
 
@@ -225,10 +223,10 @@ const _createInvitation = async (email: string, formId: string, role: UserRole) 
  * @param message
  */
 const _sendInvitationEmail = async (invitation: Invitation, message: string) => {
-  const { token, email, templateId } = invitation;
+  const { email, templateId } = invitation;
 
   logMessage.info(
-    `Sending invitation email to ${email} for form ${templateId} with token ${token} and message ${message}`
+    `Sending invitation email to ${email} for form ${templateId} with message ${message}`
   );
 };
 
