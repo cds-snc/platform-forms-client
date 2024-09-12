@@ -150,7 +150,6 @@ model MagicLink {
 model Invitation {
   id           String   @id @default(cuid())
   email        String
-  token        String   @unique
   expires      DateTime
   role         String   // future use
   templateId   String
