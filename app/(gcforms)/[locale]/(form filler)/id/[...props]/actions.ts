@@ -41,51 +41,40 @@ export async function submitForm(
 
 /**
  * Test the Client Captcha token is valid using the hCaptcha API
- *
- * For more info:
- * -Request flow https://docs.hcaptcha.com/#verify-the-user-response-server-side
- *
+ * For more info see  https://docs.hcaptcha.com/#verify-the-user-response-server-side
  * @param token Client captcha token to verify
  * @returns boolean true if the token is valid, false otherwise
  */
 export const verifyHCaptchaToken = async (token: string) => {
   // TODO any case(s) where a user should be authorized?
-
   // TODO move action out of Forms to be more reusable e.g. contact form, support form, etc.
-
   // TODO: double check hcaptcha urls correctly added to CSP header
 
   const result = await axios({
     url: "https://api.hcaptcha.com/siteverify",
     method: "POST",
     data: {
-      secret: await getAppSetting("hCaptchaSecretKey"), // TODO move from a setting to a secret, cache it?
+      secret: await getAppSetting("hCaptchaSecretKey"), // TODO cache?
       response: token,
       remoteip: await getClientIP(),
     },
-    timeout: process.env.NODE_ENV === "production" ? 60000 : 0, // TODO: Daaang that's a long delay?
-  })
-    // TODO - Should the error be sanitized for any private info before throwing/logging?
-    .catch((error) => {
-      logMessage.error(error);
-      throw error.message;
-    });
-
-  // TODO:TEMP
-  logMessage.info(`
-    ========================================
-    ClientIp: ${await getClientIP()}, token: ${token}
-    Captcha result: ${JSON.stringify(result.data)}
-    ========================================
-  `);
+    timeout: process.env.NODE_ENV === "production" ? 60000 : 0, // TODO right delay?
+  }).catch((error) => {
+    logMessage.error(error);
+    throw error.message; // TODO sanitize?
+  });
 
   const captchaData: { success?: boolean; "error-codes"?: string[] } = result.data;
   if (captchaData && captchaData["error-codes"]) {
-    logMessage.error(`Captcha error: ${JSON.stringify(captchaData["error-codes"])}`);
+    logMessage.error(`Captcha error: ${JSON.stringify(captchaData["error-codes"])}`); // TODO remove
     // return false;
-    return `Captcha error: ${JSON.stringify(captchaData)}`;
+    return `Captcha error: ${JSON.stringify(
+      captchaData["error-codes"]
+    )}, ClientIp: ${await getClientIP()}, token: ${token}`; // TODO remove
   }
 
   // return captchaData?.success === true;
-  return `Captcha success: ${JSON.stringify(captchaData)}`;
+  return `Captcha success: ${JSON.stringify(
+    captchaData
+  )}, ClientIp: ${await getClientIP()}, token: ${token}`; // TODO remove
 };

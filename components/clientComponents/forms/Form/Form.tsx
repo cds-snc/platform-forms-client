@@ -294,17 +294,17 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
             <HCaptcha
               sitekey={props.hCaptchaSiteKey || ""}
               onVerify={async (token) => {
-                logMessage.info(`Client received a captcha token = ${token}`);
+                logMessage.info(`Captcha token = ${token}`); // TODO remove
                 const success = await verifyHCaptchaToken(token);
+                logMessage.info(`Verify token result = ${success}`); // TODO remove
                 // if (!success) {
-                //   alert("Captcha failed");
+                //   logMessage.info("Captcha totken verification failed")}
                 //   return;
                 // }
-                logMessage.info(`Trying to verify captcha token result = ${success}`);
                 // handleSubmit();
               }}
-              onError={() => alert("Error")}
-              onExpire={() => alert("Expired")}
+              onError={() => logMessage.info("Captcha Error")} // TODO
+              onExpire={() => logMessage.info("Captcha Expired")} // TODO
               ref={hCaptchaRef}
               languageOverride={language}
               // size="invisible" - TODO run invisible
