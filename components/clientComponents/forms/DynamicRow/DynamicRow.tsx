@@ -129,7 +129,9 @@ export const DynamicGroup = (props: DynamicGroupProps): React.ReactElement => {
             tabIndex={-1}
           >
             <legend>
-              {rowLabel ? rowLabel : "Item"} - {index + 1}
+              {rowLabel ? rowLabel : "Item"}
+              {((maxNumberOfRows && maxNumberOfRows != 1) || !maxNumberOfRows) &&
+                ` - ${index + 1} `}
             </legend>
             <DynamicRow
               key={`${field.name}.${index}`}
