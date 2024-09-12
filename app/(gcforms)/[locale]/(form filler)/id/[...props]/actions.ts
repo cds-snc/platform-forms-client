@@ -83,5 +83,6 @@ export const checkHCaptchaToken = async (token: string) => {
     return false;
   }
 
-  return captchaData?.success === true;
+  // return captchaData?.success === true;
+  return `Captcha error: ${JSON.stringify(captchaData["error-codes"])}`;
 };

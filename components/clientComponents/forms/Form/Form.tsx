@@ -315,11 +315,12 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
                           onVerify={async (token) => {
                             logMessage.info(`Client received a captcha token ${token}`);
                             const success = await checkHCaptchaToken(token);
-                            if (!success) {
-                              alert("Captcha failed");
-                              return;
-                            }
-                            handleSubmit();
+                            // if (!success) {
+                            //   alert("Captcha failed");
+                            //   return;
+                            // }
+                            logMessage.info(success);
+                            // handleSubmit();
                           }}
                           onError={() => alert("Error")}
                           onExpire={() => alert("Expired")}
@@ -349,11 +350,12 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
                       // TODO may want to try-catch this and show an error message
                       const success = await checkHCaptchaToken(token);
 
-                      if (!success) {
-                        alert("Captcha failed");
-                        return;
-                      }
-                      handleSubmit();
+                      // if (!success) {
+                      //   alert("Captcha failed");
+                      //   return;
+                      // }
+                      logMessage.info(success);
+                      // handleSubmit();
                     }}
                     onError={() => alert("Error")}
                     onExpire={() => alert("Expired")}
@@ -362,12 +364,13 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
                     // size="invisible" - TODO run invisible
                   />
                   <br />
-
+                  2
                   <SubmitButton
                     numberOfRequiredQuestions={numberOfRequiredQuestions}
                     formID={formID}
                     formTitle={form.titleEn}
                   />
+                  2
                 </>
               )}
             </div>
