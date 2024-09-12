@@ -140,9 +140,16 @@ export const ManageFormAccessDialog = ({ templateUsers, formId }: ManageFormAcce
 
   const dialogActions = (
     <div className="flex flex-row gap-4">
-      <Button theme="secondary" onClick={handleClose}>
-        Cancel
-      </Button>
+      {isManagementScreen && (
+        <Button theme="secondary" onClick={handleClose}>
+          Cancel
+        </Button>
+      )}
+      {isInvitationScreen && (
+        <Button theme="secondary" onClick={() => setIsInvitationScreen(false)}>
+          Back
+        </Button>
+      )}
       {isManagementScreen && (
         <Button
           theme="primary"
@@ -176,7 +183,7 @@ export const ManageFormAccessDialog = ({ templateUsers, formId }: ManageFormAcce
         <Dialog
           dialogRef={dialogRef}
           handleClose={handleClose}
-          title={"Manage form access"}
+          title={isManagementScreen ? "Manage form access" : "Invite to form"}
           actions={dialogActions}
         >
           <div className="p-4">
