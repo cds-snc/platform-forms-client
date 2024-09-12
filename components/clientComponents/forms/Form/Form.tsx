@@ -12,7 +12,7 @@ import classNames from "classnames";
 import { Responses, PublicFormRecord, Validate } from "@lib/types";
 import { ErrorStatus } from "../Alert/Alert";
 import {
-  checkHCaptchaToken,
+  verifyHCaptchaToken,
   submitForm,
 } from "app/(gcforms)/[locale]/(form filler)/id/[...props]/actions";
 import useFormTimer from "@lib/hooks/useFormTimer";
@@ -288,6 +288,27 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
               <Review language={language as Language} />
             )}
 
+            {/* TODO move into groups/* flow */}
+            <HCaptcha
+              sitekey={props.hCaptchaSiteKey}
+              onVerify={async (token) => {
+                logMessage.info(`Client received a captcha token ${token}`);
+                const success = await verifyHCaptchaToken(token);
+                // if (!success) {
+                //   alert("Captcha failed");
+                //   return;
+                // }
+                logMessage.info(success);
+                // handleSubmit();
+              }}
+              onError={() => alert("Error")}
+              onExpire={() => alert("Expired")}
+              ref={hCaptchaRef}
+              languageOverride={language}
+              // size="invisible" - TODO run invisible
+            />
+            <br />
+
             <div className="flex">
               {isGroupsCheck && isShowReviewPage && (
                 <BackButtonGroup
@@ -309,27 +330,6 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
                               onClick={() => groupsHeadingRef.current?.focus()}
                             />
                           )}
-
-                        <HCaptcha
-                          sitekey={props.hCaptchaSiteKey}
-                          onVerify={async (token) => {
-                            logMessage.info(`Client received a captcha token ${token}`);
-                            const success = await checkHCaptchaToken(token);
-                            // if (!success) {
-                            //   alert("Captcha failed");
-                            //   return;
-                            // }
-                            logMessage.info(success);
-                            // handleSubmit();
-                          }}
-                          onError={() => alert("Error")}
-                          onExpire={() => alert("Expired")}
-                          ref={hCaptchaRef}
-                          languageOverride={language}
-                          // size="invisible" - TODO run invisible
-                        />
-                        <br />
-
                         <div className="inline-block">
                           <SubmitButton
                             numberOfRequiredQuestions={numberOfRequiredQuestions}
@@ -342,36 +342,11 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
                   },
                 })
               ) : (
-                <>
-                  <HCaptcha
-                    sitekey={props.hCaptchaSiteKey}
-                    onVerify={async (token) => {
-                      logMessage.info(`Client received a captcha token ${token}`);
-                      // TODO may want to try-catch this and show an error message
-                      const success = await checkHCaptchaToken(token);
-
-                      // if (!success) {
-                      //   alert("Captcha failed");
-                      //   return;
-                      // }
-                      logMessage.info(success);
-                      // handleSubmit();
-                    }}
-                    onError={() => alert("Error")}
-                    onExpire={() => alert("Expired")}
-                    ref={hCaptchaRef}
-                    languageOverride={language}
-                    // size="invisible" - TODO run invisible
-                  />
-                  <br />
-                  2
-                  <SubmitButton
-                    numberOfRequiredQuestions={numberOfRequiredQuestions}
-                    formID={formID}
-                    formTitle={form.titleEn}
-                  />
-                  2
-                </>
+                <SubmitButton
+                  numberOfRequiredQuestions={numberOfRequiredQuestions}
+                  formID={formID}
+                  formTitle={form.titleEn}
+                />
               )}
             </div>
           </form>

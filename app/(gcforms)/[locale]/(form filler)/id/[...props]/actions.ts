@@ -52,7 +52,7 @@ export async function submitForm(
  * @param token Client captcha token to verify
  * @returns boolean true if the token is valid, false otherwise
  */
-export const checkHCaptchaToken = async (token: string) => {
+export const verifyHCaptchaToken = async (token: string) => {
   const result = await axios({
     url: "https://api.hcaptcha.com/siteverify",
     method: "POST",
