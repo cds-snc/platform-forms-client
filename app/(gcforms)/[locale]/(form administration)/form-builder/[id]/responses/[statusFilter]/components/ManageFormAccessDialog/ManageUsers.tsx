@@ -73,6 +73,10 @@ export const ManageUsers = ({
                 e.preventDefault();
                 handleAddEmail(e.currentTarget.value);
               }
+              if (e.key === "Tab" && e.currentTarget.value !== "") {
+                e.preventDefault();
+                handleAddEmail(e.currentTarget.value);
+              }
             }}
             value={selectedEmail}
           />
