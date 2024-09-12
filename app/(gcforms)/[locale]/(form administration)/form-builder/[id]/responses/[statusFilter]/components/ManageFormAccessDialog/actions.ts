@@ -22,3 +22,24 @@ export const removeUserFromForm = async (userId: string, formId: string) => {
   // remove user from form using lib/templates.ts
   logMessage.info(`Removing user ${userId} from form ${formId}`);
 };
+
+export const getTemplateUsers = async (formId: string) => {
+  const template = await prisma.template
+    .findUnique({
+      where: {
+        id: formId,
+      },
+      select: {
+        users: {
+          select: {
+            id: true,
+            name: true,
+            email: true,
+          },
+        },
+      },
+    })
+    .catch((e) => prismaErrors(e, null));
+
+  return template?.users;
+};

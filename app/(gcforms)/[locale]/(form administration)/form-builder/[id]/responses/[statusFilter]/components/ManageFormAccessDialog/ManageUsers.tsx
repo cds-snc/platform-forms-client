@@ -1,7 +1,8 @@
 import { CancelIcon } from "@serverComponents/icons";
 import { TemplateUser } from "./types";
 import { DeleteConfirm } from "./DeleteConfirm";
-import { removeUserFromForm } from "./actions";
+import { getTemplateUsers, removeUserFromForm } from "./actions";
+import { useEffect, useState } from "react";
 
 type ManageUsersProps = {
   formId: string;
@@ -28,6 +29,22 @@ export const ManageUsers = ({
   emailList,
   errors,
 }: ManageUsersProps) => {
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchUsersWithAccess = async () => {
+      const users = await getTemplateUsers(formId);
+      setUsersWithAccess(users || []);
+      setLoading(false);
+    };
+
+    fetchUsersWithAccess();
+  }, [formId, setUsersWithAccess]);
+
+  if (loading) {
+    return <div>Loading...</div>;
+  }
+
   const handleRemoveUser = (userId: string) => {
     removeUserFromForm(userId, formId);
     setUsersWithAccess(usersWithAccess.filter((user) => user.id !== userId));

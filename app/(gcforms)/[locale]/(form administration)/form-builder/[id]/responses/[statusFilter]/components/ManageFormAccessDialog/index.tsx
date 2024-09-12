@@ -12,15 +12,13 @@ import { sendInvitation } from "./actions";
 import { ManageUsers } from "./ManageUsers";
 
 type ManageFormAccessDialogProps = {
-  templateUsers: TemplateUser[] | undefined;
   formId: string;
 };
 
-export const ManageFormAccessDialog = ({ templateUsers, formId }: ManageFormAccessDialogProps) => {
+export const ManageFormAccessDialog = ({ formId }: ManageFormAccessDialogProps) => {
   const dialogRef = useDialogRef();
   const { Event } = useCustomEvent();
   const { data: session } = useSession();
-
   const [isOpen, setIsOpen] = useState(false);
   const [selectedEmail, setSelectedEmail] = useState("");
   const [emailList, setEmailList] = useState<string[]>([]);
@@ -122,12 +120,6 @@ export const ManageFormAccessDialog = ({ templateUsers, formId }: ManageFormAcce
   const validate = () => {
     return emailList.every((email) => isValidGovEmail(email));
   };
-
-  useEffect(() => {
-    if (templateUsers) {
-      setUsersWithAccess(templateUsers);
-    }
-  }, [session, templateUsers]);
 
   useEffect(() => {
     Event.on("open-form-access-dialog", handleOpenDialog);
