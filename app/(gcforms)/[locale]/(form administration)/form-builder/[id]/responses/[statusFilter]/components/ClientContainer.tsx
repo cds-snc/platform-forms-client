@@ -6,16 +6,13 @@ import { NavigationTabs } from "./NavigationTabs";
 import { ResponsesFooter } from "./ResponsesFooter";
 import { Responses } from "./Responses";
 import { ManageFormAccessDialog } from "./ManageFormAccessDialog";
-import { TemplateUser } from "./ManageFormAccessDialog/types";
 
 export const ClientContainer = ({
   responseDownloadLimit,
   overdueAfter,
-  templateUsers,
 }: {
   responseDownloadLimit: number;
   overdueAfter: number;
-  templateUsers: TemplateUser[] | undefined;
 }) => {
   const { isPublished, id, deliveryOption } = useTemplateStore((s) => ({
     isPublished: s.isPublished,
@@ -49,7 +46,7 @@ export const ClientContainer = ({
         <Responses responseDownloadLimit={responseDownloadLimit} overdueAfter={overdueAfter} />
         <ResponsesFooter formId={id} />
       </div>
-      <ManageFormAccessDialog formId={id} templateUsers={templateUsers} />
+      <ManageFormAccessDialog formId={id} />
     </>
   );
 };

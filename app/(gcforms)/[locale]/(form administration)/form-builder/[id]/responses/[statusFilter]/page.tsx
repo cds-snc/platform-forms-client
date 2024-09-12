@@ -6,7 +6,6 @@ import { authCheckAndThrow } from "@lib/actions";
 import { LoggedOutTab, LoggedOutTabName } from "@serverComponents/form-builder/LoggedOutTab";
 import { VaultStatus } from "@lib/types";
 import { redirect } from "next/navigation";
-import { getTemplateWithAssociatedUsers } from "@lib/templates";
 
 export async function generateMetadata({
   params: { locale },
@@ -26,14 +25,11 @@ export default async function Page({
 }: {
   params: { locale: string; id: string; statusFilter: string };
 }) {
-  const { session, ability } = await authCheckAndThrow().catch(() => ({
+  const { session } = await authCheckAndThrow().catch(() => ({
     session: null,
-    ability: null,
   }));
 
   const isAuthenticated = session !== null;
-
-  const template = ability && (await getTemplateWithAssociatedUsers(ability, id));
 
   if (!isAuthenticated) {
     return (
@@ -56,7 +52,6 @@ export default async function Page({
     <ClientContainer
       responseDownloadLimit={Number(await getAppSetting("responseDownloadLimit"))}
       overdueAfter={Number(await getAppSetting("nagwarePhaseEncouraged"))}
-      templateUsers={template?.users}
     />
   );
 }
