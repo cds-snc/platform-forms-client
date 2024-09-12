@@ -1,3 +1,4 @@
+import { CancelIcon } from "@serverComponents/icons";
 import { TemplateUser } from "./types";
 
 type ManageUsersProps = {
@@ -30,13 +31,16 @@ export const ManageUsers = ({
           they will be invited to create one.
         </p>
 
-        <div className="border-2 border-black flex-wrap flex gap-2 p-2">
+        <div className="border border-black flex-wrap flex gap-2 p-2">
           {emailList.map((email) => {
             return (
-              <div key={email} className="bg-violet-50 px-2 py-1 rounded-md inline-block">
-                {email}{" "}
+              <div
+                key={email}
+                className="bg-violet-50 border border-violet-700 flex items-center gap-1 px-2 rounded-md"
+              >
+                <div className="">{email}</div>
                 <button className="" onClick={() => handleRemoveEmail(email)}>
-                  x
+                  <CancelIcon className="size-5" />
                 </button>
               </div>
             );
@@ -50,7 +54,11 @@ export const ManageUsers = ({
               setSelectedEmail(e.target.value);
             }}
             onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>) => {
-              if (e.key === "Enter") {
+              if (e.key === "Backspace" && e.currentTarget.value === "") {
+                handleRemoveEmail(emailList[emailList.length - 1]);
+              }
+              if (e.key === "," || e.key === " " || e.key === ";" || e.key === "Enter") {
+                e.preventDefault();
                 handleAddEmail(e.currentTarget.value);
               }
             }}

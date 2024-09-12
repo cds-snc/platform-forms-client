@@ -29,25 +29,17 @@ export const ManageFormAccessDialog = ({ templateUsers, formId }: ManageFormAcce
   const [usersWithAccess, setUsersWithAccess] = useState<TemplateUser[]>([]);
   const [isInvitationScreen, setIsInvitationScreen] = useState(false);
   const isManagementScreen = !isInvitationScreen;
-  const loggedInUserEmail = session?.user.email || "";
 
-  const handleAddEmail = (emails: string) => {
-    const emailArray = emails.split(",").map((email) => email.trim());
-    const validEmails = emailArray.filter(
-      (email: string) => isValidEmail(email) && !emailList.includes(email)
-    );
-    setEmailList([...emailList, ...validEmails]);
-    setSelectedEmail("");
-  };
+  /**
+   * Open the dialog
+   */
+  const handleOpenDialog = useCallback(() => {
+    setIsOpen(true);
+  }, []);
 
-  const handleRemoveEmail = (email: string) => {
-    setEmailList(emailList.filter((e) => e !== email));
-  };
-
-  const isValidEmail = (email: string) => {
-    return isValidGovEmail(email);
-  };
-
+  /**
+   * Close the dialog and reset the data
+   */
   const handleClose = () => {
     setSelectedEmail("");
     setEmailList([]);
@@ -55,12 +47,57 @@ export const ManageFormAccessDialog = ({ templateUsers, formId }: ManageFormAcce
     setIsInvitationScreen(false);
   };
 
-  const handleOpenDialog = useCallback(() => {
-    setIsOpen(true);
-  }, []);
+  /**
+   * Handle adding one or more emails to the list
+   *
+   * @param emails
+   */
+  const handleAddEmail = (emails: string) => {
+    const emailArray = emails.split(",").map((email) => email.trim());
+    const validEmails = emailArray.filter((email: string) => isValidEmail(email));
+
+    // @TODO: Add a message to the user if one or more emails are invalid
+
+    setEmailList([...emailList, ...validEmails]);
+    setSelectedEmail("");
+  };
 
   /**
-   * @TODO: Add validation messages/states
+   * Remove an email from the list
+   * @param email
+   */
+  const handleRemoveEmail = (email: string) => {
+    setEmailList(emailList.filter((e) => e !== email));
+  };
+
+  /**
+   * Validate an email address
+   *
+   * @param email
+   * @returns
+   */
+  const isValidEmail = (email: string) => {
+    let valid = true;
+    // User already has access
+    if (usersWithAccess.find((user) => user.email === email)) {
+      valid = false;
+    }
+
+    // Not a valid government email
+    if (!isValidGovEmail(email)) {
+      valid = false;
+    }
+
+    // Email already in the list
+    if (emailList.includes(email)) {
+      valid = false;
+    }
+
+    return valid;
+  };
+
+  /**
+   * @TODO: We're doing this on entry, do we need to do it again?
    */
   const validate = () => {
     let valid = true;
@@ -70,7 +107,6 @@ export const ManageFormAccessDialog = ({ templateUsers, formId }: ManageFormAcce
         valid = false;
       }
 
-      // @TODO: maybe check this on entry?
       if (usersWithAccess.find((user) => user.email === email)) {
         logMessage.info("User already has access");
         valid = false;
@@ -108,7 +144,7 @@ export const ManageFormAccessDialog = ({ templateUsers, formId }: ManageFormAcce
               setIsInvitationScreen(true);
             }
           }}
-          // disabled={!isValidEmail()} @TODO: fix this?
+          disabled={emailList.length === 0}
         >
           Next
         </Button>
@@ -148,9 +184,7 @@ export const ManageFormAccessDialog = ({ templateUsers, formId }: ManageFormAcce
                 handleRemoveEmail={handleRemoveEmail}
               />
             )}
-            {isInvitationScreen && (
-              <InviteUser selectedEmail={selectedEmail} setMessage={setMessage} />
-            )}
+            {isInvitationScreen && <InviteUser emailList={emailList} setMessage={setMessage} />}
           </div>
         </Dialog>
       )}

@@ -1,14 +1,23 @@
 type InviteUserProps = {
-  selectedEmail: string;
+  emailList: string[];
   setMessage: (message: string) => void;
 };
 
-export const InviteUser = ({ selectedEmail, setMessage }: InviteUserProps) => {
+export const InviteUser = ({ emailList, setMessage }: InviteUserProps) => {
   return (
     <>
       <section>
-        <div className="inline-block rounded-md border-1 border-violet-700 bg-violet-50 px-3 py-1">
-          {selectedEmail}
+        <div className="flex-wrap flex gap-2">
+          {emailList.map((email) => {
+            return (
+              <div
+                key={email}
+                className="bg-violet-50 border border-violet-700 flex items-center gap-1 px-3 rounded-md"
+              >
+                <div>{email}</div>
+              </div>
+            );
+          })}
         </div>
       </section>
 
