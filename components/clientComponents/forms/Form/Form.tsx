@@ -174,7 +174,7 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
   const serverErrorId = `${errorId}-server`;
   const formStatusError = props.status === "Error" ? t("server-error") : null;
 
-  const captchaEnabled = true; // TODO implement it
+  // const captchaEnabled = true; // TODO implement it
   const hCaptchaRef = createRef<HCaptcha>();
 
   //  If there are errors on the page, set focus the first error field
@@ -254,10 +254,11 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
                 return;
               }
 
-              if (captchaEnabled) {
-                hCaptchaRef.current?.execute();
-                return;
-              }
+              // TODO: enable when ready
+              // if (captchaEnabled) {
+              //   hCaptchaRef.current?.execute();
+              //   return;
+              // }
 
               handleSubmit(e);
             }}
