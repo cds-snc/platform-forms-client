@@ -32,10 +32,10 @@ export const ManageUsers = ({
 
         {errors.length > 0 && (
           <div className="flex-wrap flex gap-2 my-2">
-            {errors.map((error) => (
+            {errors.map((error, index) => (
               <div
                 className="bg-red-100 border border-red-700 px-2 rounded-md text-red-700"
-                key={error}
+                key={`error-${index}`}
               >
                 {error}
               </div>
