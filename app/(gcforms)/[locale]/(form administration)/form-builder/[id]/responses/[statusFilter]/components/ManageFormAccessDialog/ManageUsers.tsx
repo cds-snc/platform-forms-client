@@ -9,6 +9,7 @@ type ManageUsersProps = {
   handleAddEmail: (email: string) => void;
   handleRemoveEmail: (email: string) => void;
   emailList: string[];
+  errors: string[];
 };
 
 export const ManageUsers = ({
@@ -19,6 +20,7 @@ export const ManageUsers = ({
   handleAddEmail,
   handleRemoveEmail,
   emailList,
+  errors,
 }: ManageUsersProps) => {
   return (
     <>
@@ -26,10 +28,20 @@ export const ManageUsers = ({
         <label htmlFor="email" className="font-bold">
           Add people to share access
         </label>
-        <p>
-          You can only enter email addresses with your same domain. If they do not have an account,
-          they will be invited to create one.
-        </p>
+        <p className="pb-3">Must be a government email address</p>
+
+        {errors.length > 0 && (
+          <div className="flex-wrap flex gap-2 my-2">
+            {errors.map((error) => (
+              <div
+                className="bg-red-100 border border-red-700 px-2 rounded-md text-red-700"
+                key={error}
+              >
+                {error}
+              </div>
+            ))}
+          </div>
+        )}
 
         <div className="border border-black flex-wrap flex gap-2 p-2">
           {emailList.map((email) => {

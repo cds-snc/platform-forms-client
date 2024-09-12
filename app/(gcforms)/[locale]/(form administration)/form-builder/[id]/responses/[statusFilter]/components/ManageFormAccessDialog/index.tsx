@@ -29,6 +29,7 @@ export const ManageFormAccessDialog = ({ templateUsers, formId }: ManageFormAcce
   const [usersWithAccess, setUsersWithAccess] = useState<TemplateUser[]>([]);
   const [isInvitationScreen, setIsInvitationScreen] = useState(false);
   const isManagementScreen = !isInvitationScreen;
+  const [errors, setErrors] = useState<string[]>([]);
 
   /**
    * Open the dialog
@@ -53,6 +54,7 @@ export const ManageFormAccessDialog = ({ templateUsers, formId }: ManageFormAcce
    * @param emails
    */
   const handleAddEmail = (emails: string) => {
+    setErrors([]);
     const emailArray = emails.split(",").map((email) => email.trim());
     const validEmails = emailArray.filter((email: string) => isValidEmail(email));
 
@@ -70,6 +72,10 @@ export const ManageFormAccessDialog = ({ templateUsers, formId }: ManageFormAcce
     setEmailList(emailList.filter((e) => e !== email));
   };
 
+  const handleAddError = (error: string) => {
+    setErrors([...errors, error]);
+  };
+
   /**
    * Validate an email address
    *
@@ -80,16 +86,19 @@ export const ManageFormAccessDialog = ({ templateUsers, formId }: ManageFormAcce
     let valid = true;
     // User already has access
     if (usersWithAccess.find((user) => user.email === email)) {
+      handleAddError("User already has access");
       valid = false;
     }
 
     // Not a valid government email
     if (!isValidGovEmail(email)) {
+      handleAddError("Invalid email address");
       valid = false;
     }
 
     // Email already in the list
     if (emailList.includes(email)) {
+      handleAddError("Email already in the list");
       valid = false;
     }
 
@@ -182,6 +191,7 @@ export const ManageFormAccessDialog = ({ templateUsers, formId }: ManageFormAcce
                 handleAddEmail={handleAddEmail}
                 emailList={emailList}
                 handleRemoveEmail={handleRemoveEmail}
+                errors={errors}
               />
             )}
             {isInvitationScreen && <InviteUser emailList={emailList} setMessage={setMessage} />}
