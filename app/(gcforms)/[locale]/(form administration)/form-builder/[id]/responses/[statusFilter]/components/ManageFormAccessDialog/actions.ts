@@ -17,3 +17,8 @@ export const sendInvitation = async (email: string, templateId: string, message:
     `Sending invitation email to ${email} for form ${templateId} with message ${message}`
   );
 };
+
+export const removeUserFromForm = async (userId: string, formId: string) => {
+  // remove user from form using lib/templates.ts
+  logMessage.info(`Removing user ${userId} from form ${formId}`);
+};

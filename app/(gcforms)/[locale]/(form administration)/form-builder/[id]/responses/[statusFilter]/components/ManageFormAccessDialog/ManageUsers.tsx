@@ -1,10 +1,14 @@
 import { CancelIcon } from "@serverComponents/icons";
 import { TemplateUser } from "./types";
+import { DeleteConfirm } from "./DeleteConfirm";
+import { removeUserFromForm } from "./actions";
 
 type ManageUsersProps = {
+  formId: string;
   selectedEmail: string;
   setSelectedEmail: (email: string) => void;
   usersWithAccess: TemplateUser[];
+  setUsersWithAccess: (users: TemplateUser[]) => void;
   loggedInUserEmail: string;
   handleAddEmail: (email: string) => void;
   handleRemoveEmail: (email: string) => void;
@@ -13,15 +17,22 @@ type ManageUsersProps = {
 };
 
 export const ManageUsers = ({
+  formId,
   selectedEmail,
   setSelectedEmail,
   usersWithAccess,
+  setUsersWithAccess,
   loggedInUserEmail,
   handleAddEmail,
   handleRemoveEmail,
   emailList,
   errors,
 }: ManageUsersProps) => {
+  const handleRemoveUser = (userId: string) => {
+    removeUserFromForm(userId, formId);
+    setUsersWithAccess(usersWithAccess.filter((user) => user.id !== userId));
+  };
+
   return (
     <>
       <section>
@@ -89,7 +100,13 @@ export const ManageUsers = ({
           {usersWithAccess.map((user) => (
             <div className="flex flex-row py-2" key={user.email}>
               <div className="grow">{user.email}</div>
-              <div>{loggedInUserEmail === user.email ? <span></span> : <button>X</button>}</div>
+              <div>
+                {loggedInUserEmail === user.email ? (
+                  <span></span>
+                ) : (
+                  <DeleteConfirm callback={() => handleRemoveUser(user.id)} />
+                )}
+              </div>
             </div>
           ))}
         </div>

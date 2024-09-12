@@ -49,7 +49,7 @@ export const ManageFormAccessDialog = ({ templateUsers, formId }: ManageFormAcce
   };
 
   /**
-   * Handle adding one or more emails to the list.
+   * Handle adding one or more emails addresses to the list.
    * Multiple emails can be delimited by comma or space.
    * Emails are validated before being added to the list.
    *
@@ -189,9 +189,11 @@ export const ManageFormAccessDialog = ({ templateUsers, formId }: ManageFormAcce
           <div className="p-4">
             {isManagementScreen && (
               <ManageUsers
+                formId={formId}
                 selectedEmail={selectedEmail}
                 setSelectedEmail={setSelectedEmail}
                 usersWithAccess={usersWithAccess}
+                setUsersWithAccess={setUsersWithAccess}
                 loggedInUserEmail={session?.user.email || ""}
                 handleAddEmail={handleAddEmail}
                 emailList={emailList}
