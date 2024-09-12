@@ -74,14 +74,14 @@ export const Item = ({
     "w-full relative",
     !context.isExpanded && "border-b-1 border-slate-200"
   );
-  const interactiveFormElementClasses = cn("inline-block w-full relative outline-none py-1.5");
+  const interactiveFormElementClasses = cn("inline-block w-full relative outline-none");
   const interactiveGhostElementClasses = "inline-block w-full relative";
   const interactiveTitleElementClasses = cn("text-gray-500 italic");
 
   const sectionElementClasses = cn("w-[100%] h-[60px]", context.isExpanded && "font-bold");
 
   const formElementClasses = cn(
-    "rounded-md px-3 w-5/6 border-1 bg-white min-h-[50px]",
+    "rounded-md px-3 w-5/6 border-1 bg-white min-h-[50px] py-1.5",
     context.isFocused && "border-indigo-700 border-2 font-bold bg-gray-50 text-indigo-700",
     context.isSelected && "border-2 border-slate-950 bg-white",
     !context.isSelected &&
@@ -89,7 +89,7 @@ export const Item = ({
   );
 
   const formSubElementClasses = cn(
-    "px-3 w-5/6 border-l-2 border-indigo-700 bg-none min-h-[50px] cursor-default",
+    "px-3 w-5/6 border-l-2 border-indigo-700 bg-none min-h-[60px] cursor-default py-0",
     context.isFocused && "",
     context.isSelected && "",
     !context.isSelected && ""
