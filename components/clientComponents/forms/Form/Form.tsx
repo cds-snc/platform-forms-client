@@ -12,7 +12,7 @@ import classNames from "classnames";
 import { Responses, PublicFormRecord, Validate } from "@lib/types";
 import { ErrorStatus } from "../Alert/Alert";
 import {
-  verifyHCaptchaToken,
+  // verifyHCaptchaToken,
   submitForm,
   verifyHCaptchaToken2,
 } from "app/(gcforms)/[locale]/(form filler)/id/[...props]/actions";
@@ -292,7 +292,7 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
 
             {/* TODO move into groups/* flow */}
             {/* For more info on the React lib https://github.com/hCaptcha/react-hcaptcha */}
-            <HCaptcha
+            {/* <HCaptcha
               sitekey={props.hCaptchaSiteKey || ""}
               onVerify={async (token) => {
                 logMessage.info(`Captcha token = ${token}`); // TODO remove
@@ -310,7 +310,7 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
               languageOverride={language}
               // size="invisible" - TODO run invisible
             />
-            <br />
+            <br /> */}
 
             {/* Test fetch */}
             <HCaptcha
