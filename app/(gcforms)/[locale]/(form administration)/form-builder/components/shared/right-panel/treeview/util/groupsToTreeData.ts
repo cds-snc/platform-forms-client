@@ -72,7 +72,7 @@ export const groupsToTreeData = (
       index: key,
       isFolder: true,
       canRename: true,
-      canMove: false,
+      canMove: true,
       data: {
         name: formGroups[key].name,
         titleEn: formGroups[key].titleEn,
@@ -127,7 +127,7 @@ export const groupsToTreeData = (
 
       const childItem = {
         index: childId,
-        isFolder: false,
+        isFolder: itemChildren.length > 0 ? true : false,
         canRename: true, // Turn off renaming for now
         canMove: true, // Turn off moving for now
         children: itemChildren, // Add sub elements to the item
