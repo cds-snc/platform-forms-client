@@ -14,6 +14,7 @@ import { ErrorStatus } from "../Alert/Alert";
 import {
   verifyHCaptchaToken,
   submitForm,
+  verifyHCaptchaToken2,
 } from "app/(gcforms)/[locale]/(form filler)/id/[...props]/actions";
 import useFormTimer from "@lib/hooks/useFormTimer";
 import { useFormValuesChanged } from "@lib/hooks/useValueChanged";
@@ -296,6 +297,27 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
               onVerify={async (token) => {
                 logMessage.info(`Captcha token = ${token}`); // TODO remove
                 const success = await verifyHCaptchaToken(token);
+                logMessage.info(`Verify token result = ${success}`); // TODO remove
+                // if (!success) {
+                //   logMessage.info("Captcha totken verification failed")}
+                //   return;
+                // }
+                // handleSubmit();
+              }}
+              onError={() => logMessage.info("Captcha Error")} // TODO
+              onExpire={() => logMessage.info("Captcha Expired")} // TODO
+              ref={hCaptchaRef}
+              languageOverride={language}
+              // size="invisible" - TODO run invisible
+            />
+            <br />
+
+            {/* Test fetch */}
+            <HCaptcha
+              sitekey={props.hCaptchaSiteKey || ""}
+              onVerify={async (token) => {
+                logMessage.info(`Captcha token = ${token}`); // TODO remove
+                const success = await verifyHCaptchaToken2(token);
                 logMessage.info(`Verify token result = ${success}`); // TODO remove
                 // if (!success) {
                 //   logMessage.info("Captcha totken verification failed")}

@@ -50,19 +50,30 @@ export const verifyHCaptchaToken = async (token: string) => {
   // TODO move action out of Forms to be more reusable e.g. contact form, support form, etc.
   // TODO: double check hcaptcha urls correctly added to CSP header
 
-  const result = await axios({
-    url: "https://api.hcaptcha.com/siteverify",
-    method: "POST",
-    data: {
+  // const result = await axios({
+  //   url: "https://api.hcaptcha.com/siteverify",
+  //   method: "POST",
+  //   data: {
+  //     secret: await getAppSetting("hCaptchaSecretKey"), // TODO cache?
+  //     response: token,
+  //     remoteip: await getClientIP(),
+  //   },
+  //   timeout: process.env.NODE_ENV === "production" ? 60000 : 0, // TODO right delay?
+  // }).catch((error) => {
+  //   logMessage.error(error);
+  //   throw error.message; // TODO sanitize?
+  // });
+
+  const result = await axios
+    .post("https://api.hcaptcha.com/siteverify/", {
       secret: await getAppSetting("hCaptchaSecretKey"), // TODO cache?
       response: token,
       remoteip: await getClientIP(),
-    },
-    timeout: process.env.NODE_ENV === "production" ? 60000 : 0, // TODO right delay?
-  }).catch((error) => {
-    logMessage.error(error);
-    throw error.message; // TODO sanitize?
-  });
+    })
+    .catch((error) => {
+      logMessage.error(error);
+      throw error.message; // TODO sanitize?
+    });
 
   const captchaData: { success?: boolean; "error-codes"?: string[] } = result.data;
   if (captchaData && captchaData["error-codes"]) {
@@ -77,4 +88,41 @@ export const verifyHCaptchaToken = async (token: string) => {
   return `Captcha success: ${JSON.stringify(
     captchaData
   )}, ClientIp: ${await getClientIP()}, token: ${token}`; // TODO remove
+};
+
+//TEMP
+export const verifyHCaptchaToken2 = async (token: string) => {
+  // TODO any case(s) where a user should be authorized?
+  // TODO move action out of Forms to be more reusable e.g. contact form, support form, etc.
+  // TODO: double check hcaptcha urls correctly added to CSP header
+
+  // const result = await axios({
+  //   url: "https://api.hcaptcha.com/siteverify",
+  //   method: "POST",
+  //   data: {
+  //     secret: await getAppSetting("hCaptchaSecretKey"), // TODO cache?
+  //     response: token,
+  //     remoteip: await getClientIP(),
+  //   },
+  //   timeout: process.env.NODE_ENV === "production" ? 60000 : 0, // TODO right delay?
+  // }).catch((error) => {
+  //   logMessage.error(error);
+  //   throw error.message; // TODO sanitize?
+  // });
+
+  const formData = new FormData();
+  formData.append("secret", String(await getAppSetting("hCaptchaSecretKey")));
+  formData.append("response", String(token));
+  formData.append("remoteip", String(await getClientIP()));
+
+  const result = await fetch("https://api.hcaptcha.com/siteverify/", {
+    method: "POST",
+    body: formData,
+  }).catch((error) => {
+    logMessage.error(error);
+    throw error.message; // TODO sanitize?
+  });
+
+  const captchaData = result.json();
+  logMessage.error(`Captcha error: ${JSON.stringify(captchaData)}`); // TODO remove
 };
