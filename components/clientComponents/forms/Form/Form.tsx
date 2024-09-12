@@ -291,7 +291,7 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
 
             {/* TODO move into groups/* flow */}
             <HCaptcha
-              sitekey={props.hCaptchaSiteKey}
+              sitekey={props.hCaptchaSiteKey || ""}
               onVerify={async (token) => {
                 logMessage.info(`Client received a captcha token ${token}`);
                 const success = await verifyHCaptchaToken(token);
@@ -374,7 +374,7 @@ interface FormProps {
   allowGrouping?: boolean | undefined;
   groupHistory?: string[];
   matchedIds?: string[];
-  hCaptchaSiteKey: string;
+  hCaptchaSiteKey?: string;
 }
 
 /**
