@@ -275,9 +275,7 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
                   {getGroupTitle(currentGroup, language as Language)}
                 </h2>
               )}
-
             {children}
-
             {/* Policy shows after form elements when groups off */}
             {!isGroupsCheck && showIntro && (
               <RichText>
@@ -285,11 +283,9 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
                   form.privacyPolicy[props.language == "en" ? "descriptionEn" : "descriptionFr"]}
               </RichText>
             )}
-
             {isGroupsCheck && isShowReviewPage && currentGroup === LockedSections.REVIEW && (
               <Review language={language as Language} />
             )}
-
             {/* TODO move into groups/* flow */}
             {/* For more info on the React lib https://github.com/hCaptcha/react-hcaptcha */}
             {/* <HCaptcha
@@ -311,8 +307,8 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
               // size="invisible" - TODO run invisible
             />
             <br /> */}
-
             {/* Test fetch */}
+            12
             <HCaptcha
               sitekey={props.hCaptchaSiteKey || ""}
               onVerify={async (token) => {
@@ -332,7 +328,6 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
               // size="invisible" - TODO run invisible
             />
             <br />
-
             <div className="flex">
               {isGroupsCheck && isShowReviewPage && (
                 <BackButtonGroup

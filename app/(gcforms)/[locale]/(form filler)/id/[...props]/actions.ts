@@ -123,6 +123,6 @@ export const verifyHCaptchaToken2 = async (token: string) => {
     throw error.message; // TODO sanitize?
   });
 
-  const captchaData = result.json();
+  const captchaData = await result.json();
   logMessage.error(`Captcha error: ${JSON.stringify(captchaData)}`); // TODO remove
 };
