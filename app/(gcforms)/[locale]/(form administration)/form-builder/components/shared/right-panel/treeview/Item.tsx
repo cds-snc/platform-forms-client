@@ -59,6 +59,8 @@ export const Item = ({
   const isTitleElement = item ? isTitleElementType(item) : false;
   const fieldType = item ? item?.data.type : "";
 
+  const isSubElement = item?.data.isSubElement;
+
   // Text
   const titleText = item ? (isSectionElement ? item?.data.name : item?.data[localizedTitle]) : "";
   const descriptionText = isFormElement && item ? item?.data[localizedDescription] : "";
@@ -84,6 +86,13 @@ export const Item = ({
     context.isSelected && "border-2 border-slate-950 bg-white",
     !context.isSelected &&
       "border-slate-500 hover:border-indigo-700 hover:border-1 hover:bg-indigo-50"
+  );
+
+  const formSubElementClasses = cn(
+    "px-3 w-5/6 border-l-2 border-indigo-700 bg-none min-h-[50px] cursor-default",
+    context.isFocused && "",
+    context.isSelected && "",
+    !context.isSelected && ""
   );
 
   return (
@@ -127,7 +136,7 @@ export const Item = ({
         >
           {arrow}
           {isRenaming ? (
-            <div className="relative flex h-[60px] w-[100%] items-center overflow-hidden text-sm">
+            <div className="relative flex h-[60px] w-full items-center overflow-hidden text-sm">
               <EditableInput isSection={isSectionElement} title={titleText} context={context} />
             </div>
           ) : (
@@ -135,7 +144,8 @@ export const Item = ({
               className={cn(
                 "ml-12 flex items-center overflow-hidden relative text-sm",
                 isSectionElement && sectionElementClasses,
-                isFormElement && formElementClasses
+                isFormElement && !isSubElement && formElementClasses,
+                isSubElement && formSubElementClasses
               )}
               {...(allowRename && {
                 onDoubleClick: () => {
@@ -165,7 +175,7 @@ export const Item = ({
               )}
               {/* End placeholders */}
 
-              {titleText !== "" && (
+              {titleText !== "" && !isSubElement && (
                 <ItemActions
                   context={context}
                   arrow={arrow}
@@ -173,7 +183,7 @@ export const Item = ({
                   lockClassName={cn(isFormElement && "absolute right-0", "mr-2 ")}
                 />
               )}
-              {titleText !== "" && title && title}
+              {titleText !== "" && title && <Title title={titleText} isSubElement={isSubElement} />}
               {titleText === "" &&
                 isFormElement &&
                 fieldType === "richText" &&
@@ -187,7 +197,7 @@ export const Item = ({
   );
 };
 
-const Title = ({ title }: { title: string }) => {
+const Title = ({ title, isSubElement }: { title: string; isSubElement?: boolean }) => {
   const { t } = useTranslation("form-builder");
   if (title === "Start") {
     title = t("logic.start");
@@ -197,7 +207,16 @@ const Title = ({ title }: { title: string }) => {
     title = t("logic.end");
   }
 
-  return <div className="w-5/6 truncate">{title}</div>;
+  return (
+    <div
+      className={cn(
+        "w-5/6 truncate",
+        isSubElement && "ml-4 bg-white border-1 py-3 px-3 rounded-md w-full"
+      )}
+    >
+      {title}
+    </div>
+  );
 };
 
 const Arrow = ({ item, context }: { item: TreeItem; context: TreeItemRenderContext }) => {
