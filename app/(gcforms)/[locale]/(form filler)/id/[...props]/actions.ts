@@ -42,17 +42,19 @@ export async function submitForm(
 /**
  * Test the Client Captcha token is valid using the hCaptcha API
  *
- * TODO:
- * -double check hcaptcha urls correctly added to CSP header
- *
  * For more info:
  * -Request flow https://docs.hcaptcha.com/#verify-the-user-response-server-side
- * -Client React lib https://github.com/hCaptcha/react-hcaptcha
  *
  * @param token Client captcha token to verify
  * @returns boolean true if the token is valid, false otherwise
  */
 export const verifyHCaptchaToken = async (token: string) => {
+  // TODO any case(s) where a user should be authorized?
+
+  // TODO move action out of Forms to be more reusable e.g. contact form, support form, etc.
+
+  // TODO: double check hcaptcha urls correctly added to CSP header
+
   const result = await axios({
     url: "https://api.hcaptcha.com/siteverify",
     method: "POST",
@@ -80,9 +82,10 @@ export const verifyHCaptchaToken = async (token: string) => {
   const captchaData: { success?: boolean; "error-codes"?: string[] } = result.data;
   if (captchaData && captchaData["error-codes"]) {
     logMessage.error(`Captcha error: ${JSON.stringify(captchaData["error-codes"])}`);
-    return false;
+    // return false;
+    return `Captcha error: ${JSON.stringify(captchaData)}`;
   }
 
   // return captchaData?.success === true;
-  return `Captcha error: ${JSON.stringify(captchaData["error-codes"])}`;
+  return `Captcha success: ${JSON.stringify(captchaData)}`;
 };

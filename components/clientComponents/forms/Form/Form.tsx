@@ -290,16 +290,17 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
             )}
 
             {/* TODO move into groups/* flow */}
+            {/* For more info on the React lib https://github.com/hCaptcha/react-hcaptcha */}
             <HCaptcha
               sitekey={props.hCaptchaSiteKey || ""}
               onVerify={async (token) => {
-                logMessage.info(`Client received a captcha token ${token}`);
+                logMessage.info(`Client received a captcha token = ${token}`);
                 const success = await verifyHCaptchaToken(token);
                 // if (!success) {
                 //   alert("Captcha failed");
                 //   return;
                 // }
-                logMessage.info(success);
+                logMessage.info(`Trying to verify captcha token result = ${success}`);
                 // handleSubmit();
               }}
               onError={() => alert("Error")}
