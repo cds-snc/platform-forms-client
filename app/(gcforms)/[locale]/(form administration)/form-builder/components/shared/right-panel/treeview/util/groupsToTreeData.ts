@@ -11,7 +11,7 @@ export type TreeDataOptions = {
   reviewGroup?: boolean;
 };
 
-export const subElementsToTreeData = (subElements: FormElement[]) => {
+export const subElementsToTreeData = (parentId: number, subElements: FormElement[]) => {
   const items = [];
 
   for (const element of subElements) {
@@ -28,6 +28,7 @@ export const subElementsToTreeData = (subElements: FormElement[]) => {
         descriptionEn: element.properties.descriptionEn,
         descriptionFr: element.properties.descriptionFr,
         isSubElement: true,
+        parentId: parentId,
       },
     };
 
@@ -118,7 +119,7 @@ export const groupsToTreeData = (
       const itemChildren: string[] = [];
 
       if (element.properties.subElements && element.properties.subElements.length > 0) {
-        const treeItems = subElementsToTreeData(element.properties.subElements);
+        const treeItems = subElementsToTreeData(element.id, element.properties.subElements);
 
         for (const treeItem of treeItems) {
           items[treeItem.index] = treeItem;

@@ -61,7 +61,7 @@ export const handleCanDropAt = (
     }
 
     // @todo check for is sub-element and only allow drop on other sub-elements
-    // with the same parent
+    // we can check the parentId of the item being dragged and the target item
 
     return true;
   }
