@@ -96,33 +96,40 @@ export const verifyHCaptchaToken2 = async (token: string) => {
   // TODO move action out of Forms to be more reusable e.g. contact form, support form, etc.
   // TODO: double check hcaptcha urls correctly added to CSP header
 
-  // const result = await axios({
-  //   url: "https://api.hcaptcha.com/siteverify",
-  //   method: "POST",
-  //   data: {
-  //     secret: await getAppSetting("hCaptchaSecretKey"), // TODO cache?
-  //     response: token,
-  //     remoteip: await getClientIP(),
-  //   },
-  //   timeout: process.env.NODE_ENV === "production" ? 60000 : 0, // TODO right delay?
-  // }).catch((error) => {
-  //   logMessage.error(error);
-  //   throw error.message; // TODO sanitize?
-  // });
-
+  // API expects sent in body as form data
   const formData = new FormData();
   formData.append("secret", String(await getAppSetting("hCaptchaSecretKey")));
   formData.append("response", String(token));
   formData.append("remoteip", String(await getClientIP()));
 
-  const result = await fetch("https://api.hcaptcha.com/siteverify/", {
+  const result = await axios({
+    url: "https://api.hcaptcha.com/siteverify",
     method: "POST",
-    body: formData,
+    // data: {
+    //   secret: await getAppSetting("hCaptchaSecretKey"), // TODO cache?
+    //   response: token,
+    //   remoteip: await getClientIP(),
+    // },
+    data: formData,
+    headers: {
+      "Content-Type": "application/x-www-form-urlencoded",
+    },
+    timeout: process.env.NODE_ENV === "production" ? 60000 : 0, // TODO right delay?
   }).catch((error) => {
     logMessage.error(error);
     throw error.message; // TODO sanitize?
   });
 
-  const captchaData = await result.json();
-  logMessage.error(`Captcha error: ${JSON.stringify(captchaData)}`); // TODO remove
+  logMessage.error(`Captcha error: ${JSON.stringify(result.data)}`);
+  return `Captcha error: ${JSON.stringify(result.data)}`;
+
+  // const result = await fetch("https://api.hcaptcha.com/siteverify/", {
+  //   method: "POST",
+  //   body: formData,
+  // }).catch((error) => {
+  //   logMessage.error(error);
+  //   throw error.message; // TODO sanitize?  // });
+
+  // const captchaData = await result.json();
+  // logMessage.error(`Captcha error: ${JSON.stringify(captchaData)}`); // TODO remove
 };
