@@ -50,7 +50,7 @@ export const verifyHCaptchaToken = async (token: string): Promise<boolean> => {
   // TODO move action out of Forms to be more reusable e.g. contact form, support form, etc.
   // TODO double check hcaptcha urls correctly added to CSP header
 
-  // API expects sent in body as form data
+  // API expects data to be sent in the request body (not default axios of params)
   const data = new FormData();
   data.append("secret", String(await getAppSetting("hCaptchaSecretKey")));
   data.append("response", String(token));

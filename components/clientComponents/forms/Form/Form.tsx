@@ -174,7 +174,7 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
   const serverErrorId = `${errorId}-server`;
   const formStatusError = props.status === "Error" ? t("server-error") : null;
 
-  // const captchaEnabled = true; // TODO implement it
+  const captchaEnabled = true; // TODO implement it
   const hCaptchaRef = createRef<HCaptcha>();
 
   //  If there are errors on the page, set focus the first error field
@@ -253,14 +253,11 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
               if (isGroupsCheck && isShowReviewPage && currentGroup !== LockedSections.REVIEW) {
                 return;
               }
-
-              // TODO: enable when ready
-              // if (captchaEnabled) {
-              //   hCaptchaRef.current?.execute();
-              //   return;
-              // }
-
-              handleSubmit(e);
+              if (captchaEnabled) {
+                hCaptchaRef.current?.execute();
+              } else {
+                handleSubmit();
+              }
             }}
             noValidate
             // TODO move this to each child container but that I think will take some thought.
@@ -285,7 +282,7 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
             {isGroupsCheck && isShowReviewPage && currentGroup === LockedSections.REVIEW && (
               <Review language={language as Language} />
             )}
-            14
+            15 {/** TEMP REMOVE */}
             {/* For more info on the React lib https://github.com/hCaptcha/react-hcaptcha */}
             <HCaptcha
               sitekey={props.hCaptchaSiteKey || ""}
@@ -296,7 +293,7 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
                   alert("Captcha token verification failed");
                 } else {
                   alert("Captcha token verification succeeded!");
-                  // handleSubmit();
+                  handleSubmit();
                 }
               }}
               onError={() => logMessage.info("Captcha Error")} // TODO
