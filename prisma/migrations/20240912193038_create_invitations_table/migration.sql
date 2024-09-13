@@ -3,7 +3,6 @@ CREATE TABLE "Invitation" (
     "id" TEXT NOT NULL,
     "email" TEXT NOT NULL,
     "expires" TIMESTAMP(3) NOT NULL,
-    "role" TEXT NOT NULL,
     "templateId" TEXT NOT NULL,
 
     CONSTRAINT "Invitation_pkey" PRIMARY KEY ("id")
