@@ -203,7 +203,7 @@ const createGroupStore = (initProps?: Partial<GroupStoreProps>) => {
         // Write the updated subElements array back to the parent element
         get().templateStore.setState((s) => {
           if (s.form.elements) {
-            s.form.elements[parentElementIndex].properties.subElements = updatedElements;
+            s.form.elements[parentElementIndex].properties.subElements = [...updatedElements];
           }
         });
       },

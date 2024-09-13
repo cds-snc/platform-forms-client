@@ -1,7 +1,11 @@
 export function updateArrayOrder<T>(arr: T[], position: number, nextPosition: number): T[] {
+  // Create a copy of the array
+  const newArr = [...arr];
+
   // Swap array positions
-  const temp = arr[position];
-  arr[position] = arr[nextPosition];
-  arr[nextPosition] = temp;
-  return arr;
+  const temp = newArr[position];
+  newArr[position] = newArr[nextPosition];
+  newArr[nextPosition] = temp;
+
+  return newArr;
 }

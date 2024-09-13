@@ -196,7 +196,7 @@ const ControlledTree: ForwardRefRenderFunction<unknown, TreeDataProviderProps> =
           reorderSubElements(0, 2, 1);
         }}
       >
-        test
+        test swap order
       </button>
 
       <ControlledTreeEnvironment
