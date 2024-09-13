@@ -26,7 +26,7 @@ const updateUsersToTemplateAssignations = async (formID: string, users: { id: st
       data: {
         users,
       },
-      timeout: process.env.NODE_ENV === "production" ? 60000 : 0,
+      timeout: 5000,
     });
   } catch (e) {
     logMessage.error(e);

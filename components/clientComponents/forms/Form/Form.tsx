@@ -158,6 +158,7 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
   const isGroupsCheck = groupsCheck(props.allowGrouping);
   const isShowReviewPage = showReviewPage(form);
   const showIntro = isGroupsCheck ? currentGroup === LockedSections.START : true;
+  const groupsHeadingRef = useRef<HTMLHeadingElement>(null);
 
   const { t } = useTranslation();
 
@@ -255,7 +256,9 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
               isShowReviewPage &&
               currentGroup !== LockedSections.REVIEW &&
               currentGroup !== LockedSections.START && (
-                <h2 className="pb-8">{getGroupTitle(currentGroup, language as Language)}</h2>
+                <h2 className="pb-8" tabIndex={-1} ref={groupsHeadingRef}>
+                  {getGroupTitle(currentGroup, language as Language)}
+                </h2>
               )}
 
             {children}
@@ -274,7 +277,10 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
 
             <div className="flex">
               {isGroupsCheck && isShowReviewPage && (
-                <BackButtonGroup language={language as Language} />
+                <BackButtonGroup
+                  language={language as Language}
+                  onClick={() => groupsHeadingRef.current?.focus()}
+                />
               )}
               {props.renderSubmit ? (
                 props.renderSubmit({
@@ -285,7 +291,10 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
                         {isGroupsCheck &&
                           isShowReviewPage &&
                           currentGroup === LockedSections.REVIEW && (
-                            <BackButton language={language as Language} />
+                            <BackButton
+                              language={language as Language}
+                              onClick={() => groupsHeadingRef.current?.focus()}
+                            />
                           )}
                         <div className="inline-block">
                           <SubmitButton

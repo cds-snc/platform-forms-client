@@ -5,9 +5,11 @@ import { useTranslation } from "@i18n/client";
 
 import { CheckBoxEmptyIcon, CheckIcon, RadioEmptyIcon } from "@serverComponents/icons";
 import { ShortAnswer, Options, SubOptions, RichText, SubElement } from "./elements";
-import { ElementOption, FormElementWithIndex, Language } from "@lib/types/form-builder-types";
+import { ElementOption, FormElementWithIndex } from "@lib/types/form-builder-types";
 import { useElementOptions } from "@lib/hooks/form-builder";
 import { ConditionalIndicator } from "@formBuilder/components/shared/conditionals/ConditionalIndicator";
+import { DateElement } from "./elements/DateElement";
+import { DateFormat } from "@clientComponents/forms/FormattedDate/types";
 
 const filterSelected = (
   item: FormElementWithIndex,
@@ -68,12 +70,10 @@ export const SelectedElement = ({
   item,
   elIndex = -1,
   formId,
-  lang,
 }: {
   item: FormElementWithIndex;
   elIndex: number;
   formId: string;
-  lang?: Language;
 }) => {
   const { t } = useTranslation("form-builder");
 
@@ -168,13 +168,21 @@ export const SelectedElement = ({
     case "date":
       element = <ShortAnswer data-testid="date">mm/dd/yyyy</ShortAnswer>;
       break;
+    case "formattedDate":
+      element = (
+        <DateElement
+          data-testid="formattedDate"
+          dateFormat={
+            item.properties.dateFormat ? (item.properties.dateFormat as DateFormat) : undefined
+          }
+        />
+      );
+      break;
     case "number":
       element = <ShortAnswer data-testid="number">0123456789</ShortAnswer>;
       break;
     case "dynamicRow":
-      element = (
-        <SubElement item={item} elIndex={item.index} formId={formId} lang={lang as Language} />
-      );
+      element = <SubElement item={item} elIndex={item.index} formId={formId} />;
       break;
     case "attestation":
       element = <Options item={item} renderIcon={() => <CheckBoxEmptyIcon />} formId={formId} />;

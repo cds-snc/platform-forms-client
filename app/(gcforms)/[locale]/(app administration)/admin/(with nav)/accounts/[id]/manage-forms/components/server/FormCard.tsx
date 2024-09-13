@@ -1,7 +1,6 @@
 import { serverTranslation } from "@i18n";
-import { getUnprocessedSubmissionsForTemplate } from "../../actions";
 import { authCheckAndThrow } from "@lib/actions";
-import { OverdueStatus } from "./OverdueStatus";
+import { Overdue } from "./Overdue";
 import { LinkButton } from "@serverComponents/globals/Buttons/LinkButton";
 import { MoreMenu } from "../client/MoreMenu";
 
@@ -10,11 +9,13 @@ export const FormCard = async ({
   titleEn,
   titleFr,
   isPublished,
+  overdue,
 }: {
   id: string;
   titleEn: string;
   titleFr: string;
   isPublished: boolean;
+  overdue: boolean;
 }) => {
   const backgroundColor = isPublished ? "#95CCA2" : "#FEE39F";
   const borderColor = isPublished ? "#95CCA2" : "#FFD875";
@@ -23,7 +24,6 @@ export const FormCard = async ({
     i18n: { language },
   } = await serverTranslation("admin-forms");
   const { ability } = await authCheckAndThrow();
-  const overdue = await getUnprocessedSubmissionsForTemplate(id);
   return (
     <li className="mb-4 max-w-2xl rounded-md border-2 border-black p-4" key={id} id={`form-${id}`}>
       <div className="flex flex-row items-start justify-between">
@@ -49,8 +49,7 @@ export const FormCard = async ({
           {isPublished ? t("published") : t("draft")}
         </span>
       </div>
-
-      {overdue && <OverdueStatus level={overdue.level} />}
+      {overdue && <Overdue />}
       {/* linking to existing page for now */}
       <div className="mt-10 flex flex-row items-end justify-between">
         <div>

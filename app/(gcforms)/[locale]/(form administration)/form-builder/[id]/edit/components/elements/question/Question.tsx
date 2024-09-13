@@ -35,7 +35,9 @@ export const Question = ({
 
   return isRichText ? null : (
     <>
-      {!groupsEnabled && <QuestionNumber index={itemIndex} questionNumber={item.questionNumber} />}
+      {!groupsEnabled && (
+        <QuestionNumber index={itemIndex} questionNumber={item.questionNumber || ""} />
+      )}
       <QuestionInput
         initialValue={title}
         index={itemIndex}

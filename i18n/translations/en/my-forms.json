@@ -41,8 +41,7 @@
     },
     "actionRequired": {
       "description": "Action required: ",
-      "linkSingular": "<a href=\"{{link}}\">Sign off on {{responses}} response</a>",
-      "linkPlural": "<a href=\"{{link}}\">Sign off on {{responses}} responses</a>"
+      "linkText": "Sign off on responses"
     },
     "unnamedForm": "Unnamed form file"
   },

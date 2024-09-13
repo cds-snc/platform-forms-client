@@ -55,7 +55,7 @@ export const getEndNode = (lang: Language = "en") => {
         },
       ],
     },
-    type: "groupNode",
+    type: "endNode",
     position: { x: 0, y: 0 },
   };
 };
