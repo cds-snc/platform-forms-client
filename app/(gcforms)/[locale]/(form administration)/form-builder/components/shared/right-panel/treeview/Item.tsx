@@ -68,7 +68,7 @@ export const Item = ({
   // States
   const isRenaming = context && context?.isRenaming ? true : false;
   const isLocked = !context.canDrag;
-  const allowRename = !isLocked || isTitleElement;
+  const allowRename = !isLocked || isTitleElement || isSubElement;
 
   const interactiveSectionElementClasses = cn(
     "w-full relative",
