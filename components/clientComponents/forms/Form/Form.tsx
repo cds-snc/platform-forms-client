@@ -12,9 +12,8 @@ import classNames from "classnames";
 import { Responses, PublicFormRecord, Validate } from "@lib/types";
 import { ErrorStatus } from "../Alert/Alert";
 import {
-  // verifyHCaptchaToken,
+  verifyHCaptchaToken,
   submitForm,
-  verifyHCaptchaToken2,
 } from "app/(gcforms)/[locale]/(form filler)/id/[...props]/actions";
 import useFormTimer from "@lib/hooks/useFormTimer";
 import { useFormValuesChanged } from "@lib/hooks/useValueChanged";
@@ -286,40 +285,19 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
             {isGroupsCheck && isShowReviewPage && currentGroup === LockedSections.REVIEW && (
               <Review language={language as Language} />
             )}
-            {/* TODO move into groups/* flow */}
+            14
             {/* For more info on the React lib https://github.com/hCaptcha/react-hcaptcha */}
-            {/* <HCaptcha
-              sitekey={props.hCaptchaSiteKey || ""}
-              onVerify={async (token) => {
-                logMessage.info(`Captcha token = ${token}`); // TODO remove
-                const success = await verifyHCaptchaToken(token);
-                logMessage.info(`Verify token result = ${success}`); // TODO remove
-                // if (!success) {
-                //   logMessage.info("Captcha totken verification failed")}
-                //   return;
-                // }
-                // handleSubmit();
-              }}
-              onError={() => logMessage.info("Captcha Error")} // TODO
-              onExpire={() => logMessage.info("Captcha Expired")} // TODO
-              ref={hCaptchaRef}
-              languageOverride={language}
-              // size="invisible" - TODO run invisible
-            />
-            <br /> */}
-            {/* Test fetch */}
-            13
             <HCaptcha
               sitekey={props.hCaptchaSiteKey || ""}
               onVerify={async (token) => {
                 logMessage.info(`Captcha token = ${token}`); // TODO remove
-                const success = await verifyHCaptchaToken2(token);
-                logMessage.info(`Verify token result = ${success}`); // TODO remove
-                // if (!success) {
-                //   logMessage.info("Captcha totken verification failed")}
-                //   return;
-                // }
-                // handleSubmit();
+                const success = await verifyHCaptchaToken(token);
+                if (!success) {
+                  alert("Captcha token verification failed");
+                } else {
+                  alert("Captcha token verification succeeded!");
+                  // handleSubmit();
+                }
               }}
               onError={() => logMessage.info("Captcha Error")} // TODO
               onExpire={() => logMessage.info("Captcha Expired")} // TODO
