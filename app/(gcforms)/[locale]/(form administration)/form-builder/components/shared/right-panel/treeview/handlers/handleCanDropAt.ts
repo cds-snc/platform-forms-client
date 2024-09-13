@@ -60,6 +60,9 @@ export const handleCanDropAt = (
       }
     }
 
+    // @todo check for is sub-element and only allow drop on other sub-elements
+    // with the same parent
+
     return true;
   }
 

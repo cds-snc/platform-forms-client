@@ -19,7 +19,7 @@ export const subElementsToTreeData = (subElements: FormElement[]) => {
       index: element.id.toString(),
       isFolder: false,
       canRename: true,
-      canMove: false,
+      canMove: true,
       children: [],
       data: {
         type: element.type,
