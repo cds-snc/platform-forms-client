@@ -7,8 +7,22 @@ import { checkOne } from "@lib/cache/flags";
 import { ServiceAccount } from "@zitadel/node/credentials";
 import { getEncryptedAppSetting, getAppSetting } from "@lib/appSettings";
 import { logMessage } from "@lib/logger";
+import { settingChangeNotifier } from "@lib/appSettings";
 
 let zitadelClient: ManagementServiceClient | null = null;
+
+const recreateZitadelClient = async () => {
+  logMessage.info("Recreating Zitadel client");
+  zitadelClient = await createZitadelClient();
+};
+
+settingChangeNotifier.on("zitadelAdministrationKey", async () => {
+  await recreateZitadelClient();
+});
+
+settingChangeNotifier.on("zitadelProvider", async () => {
+  await recreateZitadelClient();
+});
 
 const getZitadelSettings = async () => {
   const startTime = Date.now();

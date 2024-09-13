@@ -7,6 +7,10 @@ import { settingCheck, settingPut, settingDelete } from "@lib/cache/settingCache
 import crypto from "node:crypto";
 import { secretClient } from "./integration/awsServicesConnector";
 import { GetSecretValueCommand } from "@aws-sdk/client-secrets-manager";
+import { EventEmitter } from "events";
+
+export const settingChangeNotifier = new EventEmitter();
+
 const getEncryptionSecret = async () => {
   const token_secret = await secretClient.send(
     new GetSecretValueCommand({
@@ -164,6 +168,7 @@ export const updateAppSetting = async (
       // Add the setting to the Settings cache
       settingPut(internalId, settingData.value);
     }
+    settingChangeNotifier.emit(internalId);
     return updatedSetting;
   } catch (e) {
     if (e instanceof AccessControlError) {
