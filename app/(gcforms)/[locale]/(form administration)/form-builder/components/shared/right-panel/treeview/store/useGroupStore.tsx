@@ -20,7 +20,7 @@ import { TreeItemIndex } from "react-complex-tree";
 import { autoFlowAllNextActions } from "../util/setNextAction";
 import { setGroupNextAction } from "../util/setNextAction";
 import { localizeField } from "@lib/utils/form-builder/itemHelper";
-import { updateElementOrder } from "../util/updateElementOrder";
+import { updateArrayOrder } from "../util/updateArrayOrder";
 
 const createGroupStore = (initProps?: Partial<GroupStoreProps>) => {
   const DEFAULT_PROPS: GroupStoreProps = {
@@ -198,7 +198,7 @@ const createGroupStore = (initProps?: Partial<GroupStoreProps>) => {
         if (!subElements) return;
 
         // Update the subElements array order
-        const updatedElements = updateElementOrder(subElements, currentIndex, newIndex);
+        const updatedElements = updateArrayOrder(subElements, currentIndex, newIndex);
 
         // Write the updated subElements array back to the parent element
         get().templateStore.setState((s) => {
