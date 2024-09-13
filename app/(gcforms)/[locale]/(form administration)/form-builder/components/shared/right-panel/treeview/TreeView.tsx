@@ -82,7 +82,6 @@ const ControlledTree: ForwardRefRenderFunction<unknown, TreeDataProviderProps> =
     replaceGroups,
     updateElementTitle,
     deleteGroup,
-    reorderSubElements,
   } = useGroupStore((s) => {
     return {
       groupId: s.id,
@@ -94,7 +93,6 @@ const ControlledTree: ForwardRefRenderFunction<unknown, TreeDataProviderProps> =
       updateGroupName: s.updateGroupName,
       updateElementTitle: s.updateElementTitle,
       deleteGroup: s.deleteGroup,
-      reorderSubElements: s.reorderSubElements,
     };
   });
 
@@ -191,14 +189,6 @@ const ControlledTree: ForwardRefRenderFunction<unknown, TreeDataProviderProps> =
     >
       {/* @todo remove this once the groupsLayout has been tested further */}
       {debug && <DebugNamedGroupLayout />}
-      <button
-        onClick={() => {
-          reorderSubElements(0, 2, 1);
-        }}
-      >
-        test swap order
-      </button>
-
       <ControlledTreeEnvironment
         ref={environment}
         items={items}
@@ -285,7 +275,7 @@ const ControlledTree: ForwardRefRenderFunction<unknown, TreeDataProviderProps> =
             );
           });
         }}
-        canDropAt={(items, target) => handleCanDropAt(items, target, getGroups)}
+        canDropAt={(treeItems, target) => handleCanDropAt(treeItems, target, getGroups)}
         canDropBelowOpenFolders={true}
         canDropOnFolder={true}
         onRenameItem={(item, name) => {
@@ -308,6 +298,8 @@ const ControlledTree: ForwardRefRenderFunction<unknown, TreeDataProviderProps> =
           setSelectedItems([item.index]);
         }}
         onDrop={async (items: TreeItem[], target: DraggingPosition) => {
+          return;
+
           await handleOnDrop(
             items,
             target,
