@@ -2,5 +2,5 @@
   "experimentalBlocks": false,
   "conditionalLogic": false,
   "zitadelAuth": false,
-  "addressComplete": true
+  "addressComplete": false
 }
