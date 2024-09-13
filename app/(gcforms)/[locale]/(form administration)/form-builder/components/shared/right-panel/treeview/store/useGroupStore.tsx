@@ -20,6 +20,7 @@ import { TreeItemIndex } from "react-complex-tree";
 import { autoFlowAllNextActions } from "../util/setNextAction";
 import { setGroupNextAction } from "../util/setNextAction";
 import { localizeField } from "@lib/utils/form-builder/itemHelper";
+import { updateElementOrder } from "../util/updateElementOrder";
 
 const createGroupStore = (initProps?: Partial<GroupStoreProps>) => {
   const DEFAULT_PROPS: GroupStoreProps = {
@@ -181,6 +182,30 @@ const createGroupStore = (initProps?: Partial<GroupStoreProps>) => {
           });
           setChangeKey(String(new Date().getTime()));
         }
+      },
+      reorderSubElements: (currentIndex: number, newIndex: number, parentId: number) => {
+        // Get the elements array
+        const elements = get().templateStore.getState().form.elements;
+
+        // Find the parent element
+        const parentElementIndex = get()
+          .templateStore.getState()
+          .form.elements.findIndex((el) => el.id === parentId);
+
+        // Get the subElements array of the parent element
+        const subElements = elements[parentElementIndex].properties.subElements;
+
+        if (!subElements) return;
+
+        // Update the subElements array order
+        const updatedElements = updateElementOrder(subElements, currentIndex, newIndex);
+
+        // Write the updated subElements array back to the parent element
+        get().templateStore.setState((s) => {
+          if (s.form.elements) {
+            s.form.elements[parentElementIndex].properties.subElements = updatedElements;
+          }
+        });
       },
       setExitButtonUrl: ({ id, locale, url }: { id: string; locale: Language; url: string }) => {
         const key = localizeField("exitUrl", locale);

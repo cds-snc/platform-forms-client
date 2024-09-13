@@ -82,6 +82,7 @@ const ControlledTree: ForwardRefRenderFunction<unknown, TreeDataProviderProps> =
     replaceGroups,
     updateElementTitle,
     deleteGroup,
+    reorderSubElements,
   } = useGroupStore((s) => {
     return {
       groupId: s.id,
@@ -93,6 +94,7 @@ const ControlledTree: ForwardRefRenderFunction<unknown, TreeDataProviderProps> =
       updateGroupName: s.updateGroupName,
       updateElementTitle: s.updateElementTitle,
       deleteGroup: s.deleteGroup,
+      reorderSubElements: s.reorderSubElements,
     };
   });
 
@@ -100,6 +102,7 @@ const ControlledTree: ForwardRefRenderFunction<unknown, TreeDataProviderProps> =
   const { getLocalizationAttribute } = useTemplateStore((s) => ({
     getLocalizationAttribute: s.getLocalizationAttribute,
   }));
+
   const language = getLocalizationAttribute()?.lang as Language;
 
   const { remove: removeItem } = useTemplateStore((s) => {
@@ -188,6 +191,13 @@ const ControlledTree: ForwardRefRenderFunction<unknown, TreeDataProviderProps> =
     >
       {/* @todo remove this once the groupsLayout has been tested further */}
       {debug && <DebugNamedGroupLayout />}
+      <button
+        onClick={() => {
+          reorderSubElements(0, 2, 1);
+        }}
+      >
+        test
+      </button>
 
       <ControlledTreeEnvironment
         ref={environment}
