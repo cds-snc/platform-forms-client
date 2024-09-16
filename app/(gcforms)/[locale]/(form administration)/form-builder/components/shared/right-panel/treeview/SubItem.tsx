@@ -5,17 +5,12 @@ import { ReactElement, ReactNode } from "react";
 import { TreeItem, TreeItemRenderContext } from "react-complex-tree";
 import { Hamburger } from "./icons/Hamburger";
 import { EditableInput } from "./EditableInput";
-import { ItemActions } from "./ItemActions";
+import { DragHandle } from "./icons/DragHandle";
 import { useTemplateStore } from "@lib/store/useTemplateStore";
 import { LocalizedElementProperties } from "@lib/types/form-builder-types";
 import { useTranslation } from "@i18n/client";
 import { useRefsContext } from "@formBuilder/[id]/edit/components/RefsContext";
-import {
-  getItemFromElement,
-  isTitleElementType,
-  isSectionElementType,
-  isFormElementType,
-} from "./util/itemType";
+import { getItemFromElement, isTitleElementType, isFormElementType } from "./util/itemType";
 
 export const SubItem = ({
   title,
@@ -50,14 +45,13 @@ export const SubItem = ({
 
   // Types
   const isFormElement = item ? isFormElementType(item) : false;
-  const isSectionElement = item ? isSectionElementType(item) : false;
   const isTitleElement = item ? isTitleElementType(item) : false;
   const fieldType = item ? item?.data.type : "";
 
   const isSubElement = item?.data.isSubElement;
 
   // Text
-  const titleText = item ? (isSectionElement ? item?.data.name : item?.data[localizedTitle]) : "";
+  const titleText = item?.data[localizedTitle] || "";
   const descriptionText = isFormElement && item ? item?.data[localizedDescription] : "";
 
   // States
@@ -65,17 +59,11 @@ export const SubItem = ({
   const isLocked = !context.canDrag;
   const allowRename = !isLocked || isTitleElement || isSubElement;
 
-  const interactiveSectionElementClasses = cn(
-    "w-full relative",
-    !context.isExpanded && "border-b-1 border-slate-200"
-  );
   const interactiveFormElementClasses = cn("inline-block w-full relative outline-none");
   const interactiveTitleElementClasses = cn("text-gray-500 italic");
 
-  const sectionElementClasses = cn("w-[100%] h-[60px]", context.isExpanded && "font-bold");
-
   const formSubElementClasses = cn(
-    "px-3 w-5/6 border-l-2 border-indigo-700 bg-none min-h-[60px] cursor-default py-0",
+    "pl-3 w-5/6 border-l-2 border-indigo-700 bg-none min-h-[60px] cursor-default py-0",
     context.isFocused && "",
     context.isSelected && "",
     !context.isSelected && ""
@@ -114,7 +102,6 @@ export const SubItem = ({
           }}
           className={cn(
             "text-left group relative w-full overflow-hidden truncate cursor-pointer h-[60px]",
-            isSectionElement && interactiveSectionElementClasses,
             isFormElement && interactiveFormElementClasses,
             isTitleElement && interactiveTitleElementClasses
           )}
@@ -122,13 +109,12 @@ export const SubItem = ({
           {arrow}
           {isRenaming ? (
             <div className="relative flex h-[60px] w-full items-center overflow-hidden text-sm">
-              <EditableInput isSection={isSectionElement} title={titleText} context={context} />
+              <EditableInput isSection={false} title={titleText} context={context} />
             </div>
           ) : (
             <div
               className={cn(
                 "ml-12 flex items-center overflow-hidden relative text-sm",
-                isSectionElement && sectionElementClasses,
                 isFormElement && formSubElementClasses
               )}
               {...(allowRename && {
@@ -154,16 +140,11 @@ export const SubItem = ({
                 <span className="text-gray-500">{t("groups.treeView.emptyFormElement")}</span>
               )}
 
-              {isSectionElement && titleText === "" && (
-                <span className="text-gray-500">{t("groups.newSection")}</span>
-              )}
               {/* End placeholders */}
 
               {titleText !== "" && (
-                <ItemActions
-                  context={context}
-                  arrow={arrow}
-                  lockClassName={cn(isFormElement && "absolute right-0", "mr-2 ")}
+                <DragHandle
+                  className={cn("absolute right-3 mr-4 hidden cursor-pointer group-hover:block")}
                 />
               )}
               {titleText !== "" && title && (
