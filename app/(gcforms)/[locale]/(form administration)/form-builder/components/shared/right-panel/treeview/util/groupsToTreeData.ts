@@ -127,16 +127,13 @@ export const groupsToTreeData = (
         }
       }
 
-      // We don't want the "child item" to be a folder i.e. take on the properties of the "group"
-      // so add sub element as a child of the "group" not the "child item" itself
-      items[key].children?.push(...itemChildren);
-
       const childItem = {
         index: childId,
-        isFolder: false, //per above comment don't make this a folder with children
-        canRename: true, // Turn off renaming for now
-        canMove: true, // Turn off moving for now
-        children: [], // itemChildren are childen of this item but ... for the tree structure display we don't want to show them as folder / children
+
+        isFolder: itemChildren.length > 0,
+        canRename: true,
+        canMove: true,
+        children: itemChildren,
         data: {
           type: element.type,
           titleEn: element.properties.titleEn,

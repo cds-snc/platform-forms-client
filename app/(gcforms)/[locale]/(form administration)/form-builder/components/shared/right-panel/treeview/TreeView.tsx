@@ -18,6 +18,7 @@ import { v4 as uuid } from "uuid";
 import { findParentGroup } from "./util/findParentGroup";
 import { GroupsType } from "@lib/formContext";
 import { Item } from "./Item";
+import { SubItem } from "./SubItem";
 import { autoFlowGroupNextActions } from "./util/setNextAction";
 import { AddIcon } from "@serverComponents/icons";
 import { handleCanDropAt } from "./handlers/handleCanDropAt";
@@ -45,28 +46,6 @@ export interface TreeDataProviderProps {
   removeItem: (id: string) => void;
   addPage: () => void;
 }
-
-const debug = false;
-
-const DebugNamedGroupLayout = () => {
-  const groupsLayout = useTemplateStore((s) => s.form.groupsLayout);
-  const groups = useTemplateStore((s) => s.form.groups);
-
-  if (!groups) {
-    return null;
-  }
-  const groupLayoutNames =
-    groupsLayout && groupsLayout.length >= 1
-      ? groupsLayout
-          .map((id: string) => groups[id]?.name)
-          .filter(Boolean)
-          .map((name, i) => {
-            return <div key={i}>{name}</div>;
-          })
-      : [];
-
-  return groupLayoutNames;
-};
 
 const ControlledTree: ForwardRefRenderFunction<unknown, TreeDataProviderProps> = (
   { children },
@@ -187,13 +166,27 @@ const ControlledTree: ForwardRefRenderFunction<unknown, TreeDataProviderProps> =
         updateGroupsLayout();
       }}
     >
-      {/* @todo remove this once the groupsLayout has been tested further */}
-      {debug && <DebugNamedGroupLayout />}
       <ControlledTreeEnvironment
         ref={environment}
         items={items}
         getItemTitle={(item) => getTitle(item?.data as ElementProperties)}
         renderItem={({ item, title, arrow, context, children }) => {
+          if (item.data.isSubElement) {
+            return (
+              <SubItem
+                title={title}
+                arrow={arrow}
+                context={context}
+                handleDelete={async () => {
+                  // @todo handle delete for sub elements
+                  return;
+                }}
+              >
+                {children}
+              </SubItem>
+            );
+          }
+
           return (
             <Item
               title={title}
@@ -242,7 +235,13 @@ const ControlledTree: ForwardRefRenderFunction<unknown, TreeDataProviderProps> =
           );
         }}
         renderItemTitle={({ title }) => <Item.Title title={title} />}
-        renderItemArrow={({ item, context }) => <Item.Arrow item={item} context={context} />}
+        renderItemArrow={({ item, context }) => {
+          if (item.data.type === "dynamicRow") {
+            return <SubItem.Arrow item={item} context={context} />;
+          }
+
+          return <Item.Arrow item={item} context={context} />;
+        }}
         renderLiveDescriptorContainer={() => null}
         renderDragBetweenLine={({ lineProps }) => {
           return (
@@ -298,8 +297,6 @@ const ControlledTree: ForwardRefRenderFunction<unknown, TreeDataProviderProps> =
           setSelectedItems([item.index]);
         }}
         onDrop={async (items: TreeItem[], target: DraggingPosition) => {
-          return;
-
           await handleOnDrop(
             items,
             target,
@@ -317,8 +314,17 @@ const ControlledTree: ForwardRefRenderFunction<unknown, TreeDataProviderProps> =
           updateGroupsLayout();
         }}
         onFocusItem={(item) => {
-          setFocusedItem(item.index);
           const parent = findParentGroup(getTreeData(), String(item.index));
+          setFocusedItem(item.index);
+
+          if (item.data.type === "dynamicRow") {
+            setFocusedItem(item.index);
+            return;
+          }
+
+          if (item.data.isSubElement) {
+            return;
+          }
 
           if (item.index === "intro" || item.index === "policy") {
             setId("start");
@@ -333,7 +339,7 @@ const ControlledTree: ForwardRefRenderFunction<unknown, TreeDataProviderProps> =
           setId(item.isFolder ? String(item.index) : String(parent?.index));
         }}
         onExpandItem={(item) => {
-          if (item.index !== groupId) {
+          if (item.index !== groupId && item.data.type !== "dynamicRow") {
             setId(String(item.index));
           }
 
