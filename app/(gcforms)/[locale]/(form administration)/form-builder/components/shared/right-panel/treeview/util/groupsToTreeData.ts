@@ -14,6 +14,8 @@ export type TreeDataOptions = {
 export const subElementsToTreeData = (parentId: number, subElements: FormElement[]) => {
   const items = [];
 
+  let subIndex = 0;
+
   for (const element of subElements) {
     const item = {
       index: element.id.toString(),
@@ -29,10 +31,12 @@ export const subElementsToTreeData = (parentId: number, subElements: FormElement
         descriptionFr: element.properties.descriptionFr,
         isSubElement: true,
         parentId: parentId,
+        subIndex: subIndex,
       },
     };
 
     items.push(item);
+    subIndex++;
   }
 
   return items;
@@ -129,7 +133,6 @@ export const groupsToTreeData = (
 
       const childItem = {
         index: childId,
-
         isFolder: itemChildren.length > 0,
         canRename: true,
         canMove: true,

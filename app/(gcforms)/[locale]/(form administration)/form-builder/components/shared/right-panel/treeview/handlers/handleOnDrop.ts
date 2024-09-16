@@ -109,6 +109,7 @@ export const handleOnDrop = async (
   target: DraggingPosition,
   getGroups: () => GroupsType | undefined,
   replaceGroups: (groups: GroupsType) => void,
+  reorderSubElements: (currentIndex: number, newIndex: number, parentId: number) => void,
   setSelectedItems: (items: TreeItemIndex[]) => void,
   setExpandedItems: (items: TreeItemIndex[]) => void,
   expandedItems: TreeItemIndex[],
@@ -130,6 +131,19 @@ export const handleOnDrop = async (
     // Target parent and index
     targetParent = (<DraggingPositionBetweenItems>target).parentItem;
     targetIndex = (<DraggingPositionBetweenItems>target).childIndex;
+  }
+
+  const hasSubElements = items.some((item) => {
+    return item.data.isSubElement;
+  });
+
+  if (hasSubElements) {
+    items.forEach((item) => {
+      const currentIndex = item.data.subIndex;
+      console.log("current index", currentIndex, "target index", targetIndex, "parent id", Number(targetParent));
+      //reorderSubElements(currentIndex, targetIndex, Number(targetParent));
+    });
+    return;
   }
 
   let newGroups: GroupsType;

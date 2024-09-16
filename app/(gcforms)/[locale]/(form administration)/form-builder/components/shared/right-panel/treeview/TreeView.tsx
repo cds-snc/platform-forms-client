@@ -61,6 +61,7 @@ const ControlledTree: ForwardRefRenderFunction<unknown, TreeDataProviderProps> =
     replaceGroups,
     updateElementTitle,
     deleteGroup,
+    reorderSubElements,
   } = useGroupStore((s) => {
     return {
       groupId: s.id,
@@ -72,6 +73,7 @@ const ControlledTree: ForwardRefRenderFunction<unknown, TreeDataProviderProps> =
       updateGroupName: s.updateGroupName,
       updateElementTitle: s.updateElementTitle,
       deleteGroup: s.deleteGroup,
+      reorderSubElements: s.reorderSubElements,
     };
   });
 
@@ -305,13 +307,14 @@ const ControlledTree: ForwardRefRenderFunction<unknown, TreeDataProviderProps> =
             target,
             getGroups,
             replaceGroups,
+            reorderSubElements,
             setSelectedItems,
             setExpandedItems,
             expandedItems,
             getTreeData,
             getConfirmMovePromise,
             setOpenConfirmMoveDialog,
-            autoFlowAll
+            autoFlowAll, 
           );
 
           updateGroupsLayout();
