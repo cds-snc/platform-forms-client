@@ -286,9 +286,12 @@ const ControlledTree: ForwardRefRenderFunction<unknown, TreeDataProviderProps> =
             return;
           }
 
-          item.isFolder && updateGroupName({ id: String(item.index), name });
+          item.isFolder &&
+            item.data.type !== "dynamicRow" &&
+            updateGroupName({ id: String(item.index), name });
+
           // Rename the element
-          !item.isFolder &&
+          (item.data.type === "dynamicRow" || !item.isFolder) &&
             updateElementTitle({
               id: Number(item.index),
               text: name,
