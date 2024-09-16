@@ -319,10 +319,13 @@ const ControlledTree: ForwardRefRenderFunction<unknown, TreeDataProviderProps> =
 
           if (item.data.type === "dynamicRow") {
             setFocusedItem(item.index);
+            setId(String(parent?.index));
             return;
           }
 
           if (item.data.isSubElement) {
+            const subParent = findParentGroup(getTreeData(), String(item.data.parentId));
+            setId(String(subParent?.index));
             return;
           }
 
