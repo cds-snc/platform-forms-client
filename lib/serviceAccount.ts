@@ -19,10 +19,8 @@ const createMachineUser = async (templateId: string) => {
     })
     .catch((err) => {
       logMessage.error(err);
-      throw new Error("Could not create User on Identity Provider");
+      throw new Error(`Could not create User ${templateId} on Identity Provider`);
     });
-
-  logMessage.debug(`Service User ID: ${userId} `);
   return userId;
 };
 
@@ -47,9 +45,8 @@ const deleteMachineUser = async (userId: string) => {
     })
     .catch((err) => {
       logMessage.error(err);
-      throw new Error("Could not delete User on Identity Provider");
+      throw new Error(`Could not delete User ${userId} on Identity Provider`);
     });
-  logMessage.debug(`Deleted Service User: ${userId}`);
 };
 
 const uploadKey = async (publicKey: string, userId: string): Promise<string> => {
@@ -64,10 +61,8 @@ const uploadKey = async (publicKey: string, userId: string): Promise<string> => 
     })
     .catch((err) => {
       logMessage.error(err);
-      throw new Error("Failed to create key");
+      throw new Error(`Failed to create key for form ${userId}`);
     });
-
-  logMessage.debug(`Service User Key ID: ${keyId}`);
   return keyId;
 };
 
