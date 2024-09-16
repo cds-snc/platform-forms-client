@@ -59,7 +59,7 @@ model Template {
   bearerToken       String?
   ttl               DateTime?
   users             User[]
-  closingDate       DateTime?       @db.Timestamptz(6)
+  closingDate       DateTime?       @db.Timestamptz(6)    
 }
 
 model DeliveryOption {
