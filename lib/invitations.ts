@@ -6,13 +6,6 @@ import { UserAbility } from "./types";
 import { logMessage } from "./logger";
 import { getUser } from "./users";
 
-const Roles = {
-  OWNER: "owner",
-  COLLABORATOR: "collaborator",
-} as const;
-
-export type UserRole = (typeof Roles)[keyof typeof Roles];
-
 class TemplateNotFoundError extends Error {}
 class UserAlreadyHasAccessError extends Error {}
 class InvitationNotFoundError extends Error {}
@@ -23,13 +16,11 @@ class InvitationIsExpiredError extends Error {}
  *
  * @param ability
  * @param email
- * @param role
  * @param formId
  */
 export const inviteUserByEmail = async (
   ability: UserAbility,
   email: string,
-  role: UserRole = "owner",
   formId: string,
   message: string
 ) => {
@@ -62,7 +53,7 @@ export const inviteUserByEmail = async (
     if (previousInvitation.expires < new Date()) {
       // check js dates vs prisma dates (see 2fa)
       _deleteInvitation(previousInvitation.id);
-      invitation = await _createInvitation(email, formId, role);
+      invitation = await _createInvitation(email, formId);
     }
 
     // send invitation email
@@ -71,7 +62,7 @@ export const inviteUserByEmail = async (
   }
 
   // No previous invitation, create one
-  invitation = await _createInvitation(email, formId, role);
+  invitation = await _createInvitation(email, formId);
   _sendInvitationEmail(invitation, message);
 
   return invitation;
@@ -197,10 +188,9 @@ const _deleteInvitation = async (id: string) => {
  *
  * @param email
  * @param formId
- * @param role
  * @returns
  */
-const _createInvitation = async (email: string, formId: string, role: UserRole) => {
+const _createInvitation = async (email: string, formId: string) => {
   const expires = new Date();
   expires.setDate(expires.getDate() + 7);
 
@@ -209,7 +199,6 @@ const _createInvitation = async (email: string, formId: string, role: UserRole) 
       email,
       templateId: formId,
       expires,
-      role,
     },
   });
 
