@@ -154,6 +154,7 @@ export const handleOnDrop = async (
     updatedSubElements = updatedSubElements.filter((element) => element !== undefined);
 
     updateSubElements(updatedSubElements, Number(targetParent));
+    setSelectedItems([]);
     // console.log("updatedSubElements", updatedSubElements);
     return;
   }
