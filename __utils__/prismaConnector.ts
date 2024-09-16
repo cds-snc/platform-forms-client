@@ -10,16 +10,23 @@ export const {
 } = Prisma;
 
 jest.mock("@lib/integration/prismaConnector", () => {
-  const originalModule = jest.requireActual("@lib/integration/prismaConnector");
-  return {
-    __esModule: true,
-    ...originalModule,
-    prisma: mockDeep<PrismaClient>(),
-  };
+  // Only mock prisma when were running in the Node jest environment
+  if (typeof window === "undefined") {
+    const originalModule = jest.requireActual("@lib/integration/prismaConnector");
+    return {
+      __esModule: true,
+      ...originalModule,
+      prisma: mockDeep<PrismaClient>(),
+    };
+  } else {
+    return {};
+  }
 });
-
-beforeEach(() => {
-  mockReset(prismaMock);
-});
+// Only mock prisma when were running in the Node jest environment
+if (typeof window === "undefined") {
+  beforeEach(() => {
+    mockReset(prismaMock);
+  });
+}
 
 export const prismaMock = prisma as unknown as DeepMockProxy<PrismaClient>;

@@ -1,3 +1,6 @@
+/**
+ * @jest-environment jsdom
+ */
 import React from "react";
 import { cleanup, render, act, waitFor } from "@testing-library/react";
 import { Question } from "../question/Question";

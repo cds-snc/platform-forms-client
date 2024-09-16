@@ -1,7 +1,3 @@
-/**
- * @jest-environment node
- */
-
 jest.mock("node-fetch", () => jest.fn());
 jest.mock("@lib/origin", () => ({
   getOrigin: jest.fn().mockReturnValue("http://localhost:3000"),
