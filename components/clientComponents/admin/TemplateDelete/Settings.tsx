@@ -24,7 +24,7 @@ const handleDelete = async (formID: string) => {
     headers: {
       "Content-Type": "application/json",
     },
-    timeout: process.env.NODE_ENV === "production" ? 60000 : 0,
+    timeout: 5000,
   })
     .then((serverResponse) => {
       //success - redirect to view-templates page

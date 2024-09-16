@@ -8,6 +8,7 @@ import {
   LocalizedElementProperties,
 } from "@lib/types/form-builder-types";
 import { useTemplateStore } from "@lib/store/useTemplateStore";
+import { cn } from "@lib/utils";
 
 export const PanelBodyRoot = ({
   item,
@@ -40,8 +41,10 @@ export const PanelBodyRoot = ({
     onChangeMade();
   };
 
+  const isRepeatingSet = item.type === "dynamicRow";
+
   return (
-    <div className="mx-7 py-7">
+    <div className={cn(!isRepeatingSet && "mx-7 py-7")}>
       <PanelBody
         item={item}
         onQuestionChange={onQuestionChange}

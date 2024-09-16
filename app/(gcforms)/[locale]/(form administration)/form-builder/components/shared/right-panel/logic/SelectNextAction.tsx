@@ -14,6 +14,7 @@ import { Language } from "@lib/types/form-builder-types";
 import { t } from "i18next";
 import Link from "next/link";
 import { Trans } from "react-i18next";
+import { showReviewPage as hasReviewPage } from "@lib/utils/form-builder/showReviewPage";
 
 export const SelectNextAction = ({
   item,
@@ -27,6 +28,9 @@ export const SelectNextAction = ({
   const typesWithOptions = ["radio", "checkbox", "select", "dropdown"];
   const getGroupNextAction = useGroupStore((state) => state.getGroupNextAction);
   const formGroups: GroupsType = useTemplateStore((s) => s.form.groups) || {};
+
+  const form = useTemplateStore((s) => s.form) || {};
+  const hasReview = hasReviewPage(form);
 
   const selectedGroupId = useGroupStore((state) => state.id);
   const selectedGroupNextActions = getGroupNextAction(selectedGroupId);
@@ -62,8 +66,18 @@ export const SelectNextAction = ({
 
   if (selectedGroupId === "end" || selectedGroupId === "review") {
     return (
-      <div className="flex justify-between border-b-2 border-black bg-gray-50 p-3 align-middle">
-        <SectionName lang={lang} sectionName={sectionName} />
+      <div>
+        <div className="flex justify-between border-b-2 border-black bg-gray-50 p-3 align-middle">
+          <SectionName lang={lang} sectionName={sectionName} hasReview={hasReview} />
+        </div>
+        <div className="p-4">
+          <Trans
+            ns="form-builder"
+            i18nKey="logic.endPage.description"
+            defaults="<strong></strong>" // indicate to translator: text with strong HTML element
+            components={{ strong: <strong /> }}
+          ></Trans>
+        </div>
       </div>
     );
   }

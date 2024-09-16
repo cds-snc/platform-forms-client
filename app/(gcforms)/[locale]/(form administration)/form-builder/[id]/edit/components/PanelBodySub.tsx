@@ -18,14 +18,12 @@ export const PanelBodySub = ({
   formId: string;
 }) => {
   return (
-    <div className="py-5">
-      <PanelBody
-        elIndex={elIndex}
-        item={item}
-        onQuestionChange={onQuestionChange}
-        onRequiredChange={onRequiredChange}
-        formId={formId}
-      />
-    </div>
+    <PanelBody
+      elIndex={elIndex}
+      item={item}
+      onQuestionChange={onQuestionChange}
+      onRequiredChange={onRequiredChange}
+      formId={formId}
+    />
   );
 };

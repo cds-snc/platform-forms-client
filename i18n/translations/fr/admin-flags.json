@@ -21,6 +21,10 @@
     "zitadelAuth": {
       "title": "AuthenticationZitadel",
       "description": "Authentification Zitadel pour API"
+    },
+    "addressComplete": {
+      "title": "Adresse complète",
+      "description": "Activer la complétion d'adresse CanadaPost pour les formulaires"
     }
   }
 }

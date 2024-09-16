@@ -102,7 +102,7 @@ const d3HierarchyLayout: LayoutAlgorithm = async (nodes, edges, options) => {
       y: position.y - (node.height ?? 0) / 2,
     };
 
-    if (options.showReview) {
+    if (options.showReviewNode) {
       if (node.id === "end" || node.id === "review") {
         return { ...node };
       }
@@ -114,7 +114,7 @@ const d3HierarchyLayout: LayoutAlgorithm = async (nodes, edges, options) => {
   // Get the last node's position without the review and end nodes
   const gap = 40;
 
-  if (options.showReview) {
+  if (options.showReviewNode) {
     const lastNode = nextNodes[nextNodes.length - 3];
     const lastNodeWidth = lastNode?.width ?? 0;
 

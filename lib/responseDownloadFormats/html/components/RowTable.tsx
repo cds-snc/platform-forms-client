@@ -1,8 +1,9 @@
 import React from "react";
 import { capitalize } from "./ResponseSection";
-import { customTranslate, getProperty } from "@lib/i18nHelpers";
+import { customTranslate, getProperty, orderLanguageStrings } from "@lib/i18nHelpers";
 import { Answer, Submission } from "../../types";
 import { TableProps } from "../types";
+import { FormElementTypes } from "@lib/types";
 
 const QuestionRows = ({
   submission,
@@ -11,11 +12,24 @@ const QuestionRows = ({
   submission: Submission;
   lang: string;
 }): JSX.Element => {
+  const { t } = customTranslate("common");
   const renderColumn = (index: number, lang: string, item: Answer, subItem = false) => {
     return (
       <div className={`flex ${subItem ? "flex-row" : "flex-col"} border-b border-gray`}>
         <dt className="whitespace-nowrap border-b-2 border-gray p-4 font-bold">
           {String(item[getProperty("question", lang)])}
+          {item.type === FormElementTypes.formattedDate && item.dateFormat ? (
+            <>
+              <br />
+              {orderLanguageStrings({
+                stringEn: t(`formattedDate.${item.dateFormat}`, { lng: "en" }),
+                stringFr: t(`formattedDate.${item.dateFormat}`, { lng: "fr" }),
+                lang,
+              })}
+            </>
+          ) : (
+            ""
+          )}
         </dt>
         <dd className="p-4">
           <p>{String(item.answer) || "-"}</p>

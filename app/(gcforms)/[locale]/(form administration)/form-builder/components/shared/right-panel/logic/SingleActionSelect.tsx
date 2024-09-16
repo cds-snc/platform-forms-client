@@ -41,9 +41,12 @@ export const SingleActionSelect = ({
   const formGroups: GroupsType = useTemplateStore((s) => s.form.groups) || {};
   let groupItems = Object.keys(formGroups).map((key) => {
     const item = formGroups[key];
+
+    const label = t(`logic.${key}`);
+
     if (Object.values(LockedSections).includes(key as LockedSections)) {
       return {
-        label: t(`logic.${key}`),
+        label,
         value: key,
       };
     }
