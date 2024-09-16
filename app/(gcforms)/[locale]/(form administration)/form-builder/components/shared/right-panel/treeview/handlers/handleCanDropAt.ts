@@ -28,25 +28,23 @@ export const handleCanDropAt = (
   const nonGroupItemsCount = items.filter((item) => !item.isFolder).length;
   const targetDraggingPositionType = getTargetDraggingPositionType(target);
 
-  // Can't drop sub-elements outside of elements own sub-elements
-  // items.some((item) => { item.data.parentId !== target?.parentItem });
-  let parentItem = undefined;
+  let targetParentItem = undefined;
   if (Object.prototype.hasOwnProperty.call(target, "parentItem")) {
     const t = target as DraggingPositionItem | DraggingPositionBetweenItems;
-    parentItem = t.parentItem;
+    targetParentItem = t.parentItem;
   }
 
   const hasSubElements = items.some((item) => {
     return item.data.isSubElement;
   });
 
-  const foundDiffParent =
+  // All dragged items must be of the same parent, and target the same parent
+  if (
     hasSubElements &&
     items.some((item) => {
-      return Number(item.data.parentId) !== Number(parentItem);
-    });
-
-  if (foundDiffParent) {
+      return Number(item.data.parentId) !== Number(targetParentItem);
+    })
+  ) {
     return false;
   }
 
