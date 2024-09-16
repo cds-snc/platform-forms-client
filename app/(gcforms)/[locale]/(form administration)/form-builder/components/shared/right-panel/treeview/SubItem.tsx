@@ -197,7 +197,9 @@ const Title = ({ title, isSubElement }: { title: string; isSubElement?: boolean 
     <div
       className={cn(
         "w-5/6 truncate",
-        isSubElement && "ml-4 bg-white border-1 border-slate-500 py-3 px-3 rounded-md w-full"
+        isSubElement && "ml-4 bg-white border-1 border-slate-500 py-3 px-3 rounded-md w-full",
+        "hover:border-indigo-700",
+        "border-slate-500 hover:border-indigo-700 hover:border-1 hover:bg-indigo-50"
       )}
     >
       {title}
