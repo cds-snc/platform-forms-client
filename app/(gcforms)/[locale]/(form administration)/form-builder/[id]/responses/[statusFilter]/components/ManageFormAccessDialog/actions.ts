@@ -1,7 +1,9 @@
 "use server";
 
+import { authCheckAndThrow } from "@lib/actions";
 import { prisma, prismaErrors } from "@lib/integration/prismaConnector";
 import { logMessage } from "@lib/logger";
+import { removeAssignedUserForTemplate } from "@lib/templates";
 
 export const sendInvitation = async (email: string, templateId: string, message: string) => {
   // @TODO: create invitation and send email using lib/invitations.ts
@@ -11,8 +13,8 @@ export const sendInvitation = async (email: string, templateId: string, message:
 };
 
 export const removeUserFromForm = async (userId: string, formId: string) => {
-  // @TODO: remove user from form using lib/templates.ts
-  logMessage.info(`Removing user ${userId} from form ${formId}`);
+  const { ability } = await authCheckAndThrow();
+  return removeAssignedUserForTemplate(ability, formId, userId);
 };
 
 // @TODO: check privileges?

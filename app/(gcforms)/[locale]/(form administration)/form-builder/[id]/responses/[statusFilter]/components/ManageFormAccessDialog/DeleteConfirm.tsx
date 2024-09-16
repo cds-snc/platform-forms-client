@@ -3,19 +3,30 @@ import { CancelIcon } from "@serverComponents/icons";
 import { useState } from "react";
 
 type DeleteConfirmProps = {
-  callback: () => void;
+  callback: () => Promise<boolean>;
 };
 
 export const DeleteConfirm = ({ callback }: DeleteConfirmProps) => {
   const [confirm, setConfirm] = useState(false);
-  const handleOnClick = () => {
+  const [error, setError] = useState("");
+
+  const handleOnClick = async () => {
+    setError("");
     setConfirm(false);
-    callback();
+    if (!(await callback())) {
+      setError("Could not remove user");
+    }
   };
   return (
     <>
+      {error && <span className="text-red-700 px-2">{error}</span>}
       {!confirm && (
-        <button onClick={() => setConfirm(true)}>
+        <button
+          onClick={() => {
+            setConfirm(true);
+            setError("");
+          }}
+        >
           <CancelIcon />
         </button>
       )}
