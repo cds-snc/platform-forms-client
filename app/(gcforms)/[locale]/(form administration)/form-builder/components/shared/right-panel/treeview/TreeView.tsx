@@ -177,15 +177,7 @@ const ControlledTree: ForwardRefRenderFunction<unknown, TreeDataProviderProps> =
         renderItem={({ item, title, arrow, context, children }) => {
           if (item.data.isSubElement) {
             return (
-              <SubItem
-                title={title}
-                arrow={arrow}
-                context={context}
-                handleDelete={async () => {
-                  // @todo handle delete for sub elements
-                  return;
-                }}
-              >
+              <SubItem title={title} arrow={arrow} context={context}>
                 {children}
               </SubItem>
             );
@@ -196,43 +188,47 @@ const ControlledTree: ForwardRefRenderFunction<unknown, TreeDataProviderProps> =
               title={title}
               arrow={arrow}
               context={context}
-              handleDelete={async (e) => {
-                e.stopPropagation();
-                setOpenConfirmDeleteDialog(true);
-                const confirm = await getConfirmDeletePromise();
-                if (confirm) {
-                  item.children &&
-                    item.children.map((child) => {
-                      removeItem(Number(child));
-                    });
+              handleDelete={
+                item.data.type === "dynamicRow"
+                  ? undefined
+                  : async (e) => {
+                      e.stopPropagation();
+                      setOpenConfirmDeleteDialog(true);
+                      const confirm = await getConfirmDeletePromise();
+                      if (confirm) {
+                        item.children &&
+                          item.children.map((child) => {
+                            removeItem(Number(child));
+                          });
 
-                  deleteGroup(String(item.index));
+                        deleteGroup(String(item.index));
 
-                  // When deleting a group, we need to select the previous group
-                  const itemsArray = Object.keys(items);
-                  const deletedItemIndex = itemsArray.indexOf(String(item.index));
-                  const previousItemId =
-                    deletedItemIndex > 0 ? itemsArray[deletedItemIndex - 1] : "start";
-                  setSelectedItems([previousItemId]);
-                  setExpandedItems([previousItemId]);
-                  setId(previousItemId);
+                        // When deleting a group, we need to select the previous group
+                        const itemsArray = Object.keys(items);
+                        const deletedItemIndex = itemsArray.indexOf(String(item.index));
+                        const previousItemId =
+                          deletedItemIndex > 0 ? itemsArray[deletedItemIndex - 1] : "start";
+                        setSelectedItems([previousItemId]);
+                        setExpandedItems([previousItemId]);
+                        setId(previousItemId);
 
-                  // And update the groups layout
-                  await updateGroupsLayout();
+                        // And update the groups layout
+                        await updateGroupsLayout();
 
-                  autoFlowAll();
-                  setOpenConfirmDeleteDialog(false);
-                  toast.success(
-                    <>
-                      <h3>{t("groups.groupDeleted")}</h3>
-                      <p>{t("groups.groupSuccessfullyDeleted", { group: item.data.name })}</p>
-                    </>
-                  );
+                        autoFlowAll();
+                        setOpenConfirmDeleteDialog(false);
+                        toast.success(
+                          <>
+                            <h3>{t("groups.groupDeleted")}</h3>
+                            <p>{t("groups.groupSuccessfullyDeleted", { group: item.data.name })}</p>
+                          </>
+                        );
 
-                  return;
-                }
-                setOpenConfirmDeleteDialog(false);
-              }}
+                        return;
+                      }
+                      setOpenConfirmDeleteDialog(false);
+                    }
+              }
             >
               {children}
             </Item>

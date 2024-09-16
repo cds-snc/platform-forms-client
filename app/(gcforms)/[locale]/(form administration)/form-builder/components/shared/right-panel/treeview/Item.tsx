@@ -30,7 +30,7 @@ export const Item = ({
   arrow: ReactNode;
   context: TreeItemRenderContext;
   children: ReactNode | ReactElement;
-  handleDelete: (e: React.MouseEvent<HTMLButtonElement>) => Promise<void>;
+  handleDelete?: (e: React.MouseEvent<HTMLButtonElement>) => Promise<void>;
 }) => {
   const { t } = useTranslation("form-builder");
   const { refs } = useRefsContext();

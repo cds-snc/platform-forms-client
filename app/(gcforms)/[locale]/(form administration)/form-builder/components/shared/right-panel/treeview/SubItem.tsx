@@ -22,13 +22,11 @@ export const SubItem = ({
   arrow,
   context,
   children,
-  handleDelete,
 }: {
   title: ReactNode;
   arrow: ReactNode;
   context: TreeItemRenderContext;
   children: ReactNode | ReactElement;
-  handleDelete: (e: React.MouseEvent<HTMLButtonElement>) => Promise<void>;
 }) => {
   const { t } = useTranslation("form-builder");
   const { refs } = useRefsContext();
@@ -165,7 +163,6 @@ export const SubItem = ({
                 <ItemActions
                   context={context}
                   arrow={arrow}
-                  handleDelete={handleDelete}
                   lockClassName={cn(isFormElement && "absolute right-0", "mr-2 ")}
                 />
               )}
