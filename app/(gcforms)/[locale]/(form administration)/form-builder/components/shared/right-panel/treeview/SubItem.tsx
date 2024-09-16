@@ -169,7 +169,9 @@ export const SubItem = ({
                   lockClassName={cn(isFormElement && "absolute right-0", "mr-2 ")}
                 />
               )}
-              {titleText !== "" && title && <Title title={titleText} isSubElement={isSubElement} />}
+              {titleText !== "" && title && (
+                <Title title={titleText} isSubElement={isSubElement} context={context} />
+              )}
               {titleText === "" &&
                 isFormElement &&
                 fieldType === "richText" &&
@@ -183,7 +185,15 @@ export const SubItem = ({
   );
 };
 
-const Title = ({ title, isSubElement }: { title: string; isSubElement?: boolean }) => {
+const Title = ({
+  title,
+  isSubElement,
+  context,
+}: {
+  title: string;
+  isSubElement?: boolean;
+  context?: TreeItemRenderContext;
+}) => {
   const { t } = useTranslation("form-builder");
   if (title === "Start") {
     title = t("logic.start");
@@ -198,8 +208,13 @@ const Title = ({ title, isSubElement }: { title: string; isSubElement?: boolean 
       className={cn(
         "w-5/6 truncate",
         isSubElement && "ml-4 bg-white border-1 border-slate-500 py-3 px-3 rounded-md w-full",
-        "hover:border-indigo-700",
-        "border-slate-500 hover:border-indigo-700 hover:border-1 hover:bg-indigo-50"
+        context &&
+          context.isFocused &&
+          "border-indigo-700 border-2 font-bold bg-gray-50 text-indigo-700",
+        context && context.isSelected && "border-2 border-slate-950 bg-white",
+        context &&
+          !context.isSelected &&
+          "border-slate-500 hover:border-indigo-700 hover:border-1 hover:bg-indigo-50"
       )}
     >
       {title}
