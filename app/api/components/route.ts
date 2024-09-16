@@ -9,6 +9,6 @@ export const allowAddressComplete = async () => {
 // This route is used to allow Cypress Testing of components, and provide the API key for AddressComplete.
 export const POST = async () => {
   const allowed = await allowAddressComplete();
-  const key = allowed ? process.env.NEXT_PUBLIC_ADDRESSCOMPLETE_API_KEY : "";
+  const key = allowed ? process.env.ADDRESSCOMPLETE_API_KEY : "";
   return NextResponse.json({ allowed: allowed, key: key });
 };
