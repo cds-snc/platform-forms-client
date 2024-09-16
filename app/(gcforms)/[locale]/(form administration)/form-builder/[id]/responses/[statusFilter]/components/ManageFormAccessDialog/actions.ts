@@ -3,6 +3,7 @@
 import { authCheckAndThrow } from "@lib/actions";
 import { prisma, prismaErrors } from "@lib/integration/prismaConnector";
 import { logMessage } from "@lib/logger";
+import { checkPrivileges } from "@lib/privileges";
 import { removeAssignedUserForTemplate } from "@lib/templates";
 
 export const sendInvitation = async (email: string, templateId: string, message: string) => {
@@ -17,9 +18,30 @@ export const removeUserFromForm = async (userId: string, formId: string) => {
   return removeAssignedUserForTemplate(ability, formId, userId);
 };
 
-// @TODO: check privileges?
 export const getTemplateUsers = async (formId: string) => {
-  const template = await prisma.template
+  const { ability } = await authCheckAndThrow();
+
+  const template = await prisma.template.findFirst({
+    where: {
+      id: formId,
+    },
+    include: {
+      users: true,
+    },
+  });
+
+  if (!template) {
+    return;
+  }
+
+  // User should be an existing owner of the form
+  // @TODO: is this correct? same as removeAssignedUserForTemplate/updateAssignedUsersForTemplate
+  checkPrivileges(ability, [
+    { action: "update", subject: { type: "FormRecord", object: { users: template.users } } },
+    { action: "update", subject: { type: "User", object: { id: ability.userID } } },
+  ]);
+
+  const templateWithUsers = await prisma.template
     .findUnique({
       where: {
         id: formId,
@@ -36,5 +58,5 @@ export const getTemplateUsers = async (formId: string) => {
     })
     .catch((e) => prismaErrors(e, null));
 
-  return template?.users;
+  return templateWithUsers?.users;
 };
