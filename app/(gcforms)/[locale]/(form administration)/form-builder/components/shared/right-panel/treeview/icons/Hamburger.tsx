@@ -11,8 +11,8 @@ export const Hamburger = ({ className, title }: { className?: string; title?: st
     role={title ? "img" : "presentation"}
   >
     {title && <title>{title}</title>}
-    <path d="M1 0.824463H14" stroke="black" stroke-linecap="round" />
-    <path d="M1 4.82446H14" stroke="black" stroke-linecap="round" />
-    <path d="M1 8.82446H14" stroke="black" stroke-linecap="round" />
+    <path d="M1 0.824463H14" stroke="black" strokeLinecap="round" />
+    <path d="M1 4.82446H14" stroke="black" strokeLinecap="round" />
+    <path d="M1 8.82446H14" stroke="black" strokeLinecap="round" />
   </svg>
 );
