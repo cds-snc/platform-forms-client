@@ -1175,7 +1175,7 @@ export async function deleteTemplate(
     logEvent(ability.userID, { type: "Form", id: formID }, "DeleteForm");
 
     // Check and delete any API keys from IDP
-    if (await checkOne("Zitadel")) {
+    if (await checkOne("zitadelAuth")) {
       await deleteKey(formID);
     }
 
