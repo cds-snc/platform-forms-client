@@ -104,7 +104,7 @@ export const Item = ({
               context.interactiveElementProps.onDragStart(e);
 
             // Customize dragging image for form elements
-            if (isFormElement) {
+            if (isFormElement && item.data.type !== "dynamicRow") {
               // Get the box inside the element being dragged
               const el = e.currentTarget.children[0];
 
