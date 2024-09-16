@@ -9,6 +9,9 @@ import {
 import { findParentGroup } from "../util/findParentGroup";
 import { TreeItems } from "../types";
 import { autoFlowGroupNextActions } from "../util/setNextAction";
+import { FormElement } from "@lib/types";
+import { updateArrayOrder } from "../util/updateArrayOrder";
+
 
 const findItemIndex = (items: string[], itemIndex: string | number) =>
   items.indexOf(String(itemIndex));
@@ -109,6 +112,7 @@ export const handleOnDrop = async (
   target: DraggingPosition,
   getGroups: () => GroupsType | undefined,
   replaceGroups: (groups: GroupsType) => void,
+  getSubElements: (parentId: number) => FormElement[] | undefined,
   reorderSubElements: (currentIndex: number, newIndex: number, parentId: number) => void,
   setSelectedItems: (items: TreeItemIndex[]) => void,
   setExpandedItems: (items: TreeItemIndex[]) => void,
@@ -138,11 +142,18 @@ export const handleOnDrop = async (
   });
 
   if (hasSubElements) {
+    const subElements = getSubElements(Number(targetParent));
+    if (!subElements) return;
+    let updatedSubElements = [...subElements];
     items.forEach((item) => {
       const currentIndex = item.data.subIndex;
-      console.log("current index", currentIndex, "target index", targetIndex, "parent id", Number(targetParent));
-      //reorderSubElements(currentIndex, targetIndex, Number(targetParent));
+      // console.log("current index", currentIndex, "target index", targetIndex, "parent id", Number(targetParent));
+
+      updatedSubElements = updateArrayOrder(updatedSubElements, currentIndex, targetIndex);
+      // reorderSubElements(currentIndex, targetIndex, Number(targetParent));
     });
+
+    console.log("updatedSubElements", updatedSubElements);
     return;
   }
 

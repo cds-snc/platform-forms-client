@@ -183,6 +183,11 @@ const createGroupStore = (initProps?: Partial<GroupStoreProps>) => {
           setChangeKey(String(new Date().getTime()));
         }
       },
+      getSubElements: (parentId: number) => {
+        const elements = get().templateStore.getState().form.elements;
+        const parentElement = elements.find((el) => el.id === parentId);
+        return parentElement?.properties.subElements;
+      },
       reorderSubElements: (currentIndex: number, newIndex: number, parentId: number) => {
         // Get the elements array
         const elements = get().templateStore.getState().form.elements;

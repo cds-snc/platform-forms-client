@@ -34,6 +34,7 @@ export interface GroupStoreState extends GroupStoreProps {
   getGroupNextAction: (groupId: string) => Group["nextAction"];
   setGroupNextAction: (groupId: string, nextAction: Group["nextAction"]) => void;
   autoSetNextActions: () => void;
+  getSubElements: (parentId: number) => FormElement[] | undefined;
   reorderSubElements: (currentIndex: number, newIndex: number, parentId: number) => void;
   updateGroupTitle: ({
     id,
