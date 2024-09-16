@@ -7,7 +7,7 @@ import { isValidGovEmail } from "@lib/validation/validation";
 import { useSession } from "next-auth/react";
 import { useCallback, useEffect, useState } from "react";
 import { TemplateUser } from "./types";
-import { InviteUser } from "./InviteUser";
+import { InviteUsers } from "./InviteUsers";
 import { sendInvitation } from "./actions";
 import { ManageUsers } from "./ManageUsers";
 
@@ -193,7 +193,7 @@ export const ManageFormAccessDialog = ({ formId }: ManageFormAccessDialogProps) 
                 errors={errors}
               />
             )}
-            {isInvitationScreen && <InviteUser emailList={emailList} setMessage={setMessage} />}
+            {isInvitationScreen && <InviteUsers emailList={emailList} setMessage={setMessage} />}
           </div>
         </Dialog>
       )}

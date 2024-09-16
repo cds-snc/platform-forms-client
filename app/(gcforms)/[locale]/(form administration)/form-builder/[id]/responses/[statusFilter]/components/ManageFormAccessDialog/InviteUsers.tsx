@@ -3,7 +3,7 @@ type InviteUserProps = {
   setMessage: (message: string) => void;
 };
 
-export const InviteUser = ({ emailList, setMessage }: InviteUserProps) => {
+export const InviteUsers = ({ emailList, setMessage }: InviteUserProps) => {
   return (
     <>
       <section>
