@@ -3,7 +3,7 @@ import { CancelIcon } from "@serverComponents/icons";
 import { useState } from "react";
 
 type DeleteConfirmProps = {
-  callback: () => Promise<boolean>;
+  callback: () => Promise<void> | Promise<false>;
 };
 
 export const DeleteConfirm = ({ callback }: DeleteConfirmProps) => {
@@ -14,7 +14,7 @@ export const DeleteConfirm = ({ callback }: DeleteConfirmProps) => {
     setError("");
     setConfirm(false);
     if (!(await callback())) {
-      setError("Could not remove user");
+      setError("There was an error");
     }
   };
   return (

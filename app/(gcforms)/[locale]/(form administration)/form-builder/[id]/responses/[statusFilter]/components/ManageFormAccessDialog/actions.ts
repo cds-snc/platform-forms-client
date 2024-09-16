@@ -17,7 +17,8 @@ const canManageUsersForForm = async (formId: string) => {
   });
 
   if (!template) {
-    throw new Error("Template not found");
+    // @TODO: custom exception or?
+    throw new Error(`Template ${formId} not found`);
   }
 
   checkPrivileges(ability, [
@@ -27,6 +28,8 @@ const canManageUsersForForm = async (formId: string) => {
 };
 
 export const sendInvitation = async (email: string, templateId: string, message: string) => {
+  await canManageUsersForForm(templateId);
+
   // @TODO:
   // - create invitation
   // - send email
@@ -36,22 +39,28 @@ export const sendInvitation = async (email: string, templateId: string, message:
 };
 
 export const removeUserFromForm = async (userId: string, formId: string) => {
-  await canManageUsersForForm(formId);
+  try {
+    await canManageUsersForForm(formId);
 
-  await prisma.template
-    .update({
-      where: {
-        id: formId,
-      },
-      data: {
-        users: {
-          disconnect: {
-            id: userId,
+    await prisma.template
+      .update({
+        where: {
+          id: formId,
+        },
+        data: {
+          users: {
+            disconnect: {
+              id: userId,
+            },
           },
         },
-      },
-    })
-    .catch((e) => prismaErrors(e, null));
+      })
+      .catch((e) => prismaErrors(e, null));
+
+    return true;
+  } catch (e) {
+    return false;
+  }
 };
 
 export const getTemplateUsers = async (formId: string) => {
