@@ -144,7 +144,7 @@ export const SubItem = ({
 
               {titleText !== "" && (
                 <DragHandle
-                  className={cn("absolute right-3 mr-4 hidden cursor-pointer group-hover:block")}
+                  className={cn("absolute right-1 mr-4 hidden cursor-pointer group-hover:block")}
                 />
               )}
               {titleText !== "" && title && (
