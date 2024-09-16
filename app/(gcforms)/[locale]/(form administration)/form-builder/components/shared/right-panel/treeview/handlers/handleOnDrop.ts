@@ -123,7 +123,7 @@ export const handleOnDrop = async (
 ) => {
   // Current state of the tree in Groups format
   let currentGroups = getGroups() as GroupsType;
-
+  const selectedItems: string[] = [];
   let targetParent: TreeItemIndex;
   let targetIndex: number;
 
@@ -146,21 +146,28 @@ export const handleOnDrop = async (
     let updatedSubElements = [...subElements];
     items.forEach((item) => {
       const currentIndex = item.data.subIndex;
-      // console.log("current index", currentIndex, "target index", targetIndex, "parent id", Number(targetParent));
+      // console.log(
+      //   "current index",
+      //   currentIndex,
+      //   "target index",
+      //   targetIndex,
+      //   "parent id",
+      //   Number(targetParent)
+      // );
       updatedSubElements = updateArrayOrder(updatedSubElements, currentIndex, targetIndex);
+      selectedItems.push(String(item.index));
     });
 
     // Filter out any undefined elements
     updatedSubElements = updatedSubElements.filter((element) => element !== undefined);
 
     updateSubElements(updatedSubElements, Number(targetParent));
-    setSelectedItems([]);
+    setSelectedItems(selectedItems);
     // console.log("updatedSubElements", updatedSubElements);
     return;
   }
 
   let newGroups: GroupsType;
-  const selectedItems: string[] = [];
 
   // Dragging/dropping root-level items
   if (targetParent === "root") {
