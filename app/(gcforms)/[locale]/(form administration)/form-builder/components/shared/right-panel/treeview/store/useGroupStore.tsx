@@ -20,7 +20,7 @@ import { TreeItemIndex } from "react-complex-tree";
 import { autoFlowAllNextActions } from "../util/setNextAction";
 import { setGroupNextAction } from "../util/setNextAction";
 import { localizeField } from "@lib/utils/form-builder/itemHelper";
-import { updateArrayOrder } from "../util/updateArrayOrder";
+import { FormElement } from "@lib/types";
 
 const createGroupStore = (initProps?: Partial<GroupStoreProps>) => {
   const DEFAULT_PROPS: GroupStoreProps = {
@@ -188,27 +188,16 @@ const createGroupStore = (initProps?: Partial<GroupStoreProps>) => {
         const parentElement = elements.find((el) => el.id === parentId);
         return parentElement?.properties.subElements;
       },
-      reorderSubElements: (currentIndex: number, newIndex: number, parentId: number) => {
-        // Get the elements array
-        const elements = get().templateStore.getState().form.elements;
-
+      updateSubElements: (elements: FormElement[], parentId: number) => {
         // Find the parent element
         const parentElementIndex = get()
           .templateStore.getState()
           .form.elements.findIndex((el) => el.id === parentId);
 
-        // Get the subElements array of the parent element
-        const subElements = elements[parentElementIndex].properties.subElements;
-
-        if (!subElements) return;
-
-        // Update the subElements array order
-        const updatedElements = updateArrayOrder(subElements, currentIndex, newIndex);
-
         // Write the updated subElements array back to the parent element
         get().templateStore.setState((s) => {
           if (s.form.elements) {
-            s.form.elements[parentElementIndex].properties.subElements = [...updatedElements];
+            s.form.elements[parentElementIndex].properties.subElements = [...elements];
           }
         });
       },

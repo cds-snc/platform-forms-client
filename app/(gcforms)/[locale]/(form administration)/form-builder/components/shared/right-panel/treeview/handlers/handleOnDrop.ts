@@ -12,7 +12,6 @@ import { autoFlowGroupNextActions } from "../util/setNextAction";
 import { FormElement } from "@lib/types";
 import { updateArrayOrder } from "../util/updateArrayOrder";
 
-
 const findItemIndex = (items: string[], itemIndex: string | number) =>
   items.indexOf(String(itemIndex));
 
@@ -113,7 +112,7 @@ export const handleOnDrop = async (
   getGroups: () => GroupsType | undefined,
   replaceGroups: (groups: GroupsType) => void,
   getSubElements: (parentId: number) => FormElement[] | undefined,
-  reorderSubElements: (currentIndex: number, newIndex: number, parentId: number) => void,
+  updateSubElements: (elements: FormElement[], parentId: number) => void,
   setSelectedItems: (items: TreeItemIndex[]) => void,
   setExpandedItems: (items: TreeItemIndex[]) => void,
   expandedItems: TreeItemIndex[],
@@ -148,12 +147,14 @@ export const handleOnDrop = async (
     items.forEach((item) => {
       const currentIndex = item.data.subIndex;
       // console.log("current index", currentIndex, "target index", targetIndex, "parent id", Number(targetParent));
-
       updatedSubElements = updateArrayOrder(updatedSubElements, currentIndex, targetIndex);
-      // reorderSubElements(currentIndex, targetIndex, Number(targetParent));
     });
 
-    console.log("updatedSubElements", updatedSubElements);
+    // Filter out any undefined elements
+    updatedSubElements = updatedSubElements.filter((element) => element !== undefined);
+
+    updateSubElements(updatedSubElements, Number(targetParent));
+    // console.log("updatedSubElements", updatedSubElements);
     return;
   }
 
