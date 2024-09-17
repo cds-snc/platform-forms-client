@@ -1,6 +1,3 @@
-/**
- * @jest-environment node
- */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import Redis from "ioredis-mock";
 import { mockClient } from "aws-sdk-client-mock";
@@ -14,6 +11,7 @@ import formConfiguration from "@jestFixtures/cdsIntakeTestForm.json";
 import { DeliveryOption } from "@lib/types";
 import { TemplateAlreadyPublishedError } from "@lib/templates";
 import { getAppSetting } from "@lib/appSettings";
+import { getRedisInstance } from "@lib/integration/redisConnector";
 
 jest.mock("@lib/appSettings");
 
@@ -21,16 +19,18 @@ const mockedGetAppSetting = jest.mocked(getAppSetting, { shallow: true });
 
 const ddbMock = mockClient(DynamoDBDocumentClient);
 
-const redis = new Redis();
-
-jest.mock("@lib/integration/redisConnector", () => ({
-  getRedisInstance: jest.fn(() => redis),
-}));
+jest.mock("@lib/integration/redisConnector", () => {
+  const redis = new Redis();
+  return {
+    getRedisInstance: jest.fn(async () => redis),
+  };
+});
 
 describe("Vault `numberOfUnprocessedSubmissions` function", () => {
-  beforeEach(() => {
+  beforeEach(async () => {
     ddbMock.reset();
-    redis.flushall();
+    const mockRedis = await getRedisInstance();
+    mockRedis.flushall();
   });
 
   it("Should return 0 if no response are available", async () => {
@@ -201,9 +201,10 @@ const buildPrismaResponse = (
   };
 };
 describe("Deleting test responses (submissions)", () => {
-  beforeEach(() => {
+  beforeEach(async () => {
     ddbMock.reset();
-    redis.flushall();
+    const mockRedis = await getRedisInstance();
+    mockRedis.flushall();
   });
   it("Should be able to delete draft responses if the user is owner of the form", async () => {
     const fakeSession = {

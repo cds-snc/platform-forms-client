@@ -111,11 +111,6 @@ jest.mock("@i18n", () => {
   };
 });
 
-jest.mock("@lib/integration/redisConnector", () => ({
-  __esModule: true,
-  getRedisInstance: () => jest.fn(),
-}));
-
 jest.mock("@lib/auditLogs", () => ({
   __esModule: true,
   logEvent: jest.fn(jest.fn(async () => undefined)),

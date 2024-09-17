@@ -10,10 +10,6 @@
   "featureStatus": "Status",
   "featureSwitch": "On/Off",
   "features": {
-    "formTimer": {
-      "title": "Form timer",
-      "description": "Wait a specific amount of time before being allowed to submit the form"
-    },
     "experimentalBlocks": {
       "title": "Experimental blocks",
       "description": "Enable experimental blocks"
@@ -25,6 +21,10 @@
     "zitadelAuth": {
       "title": "Zitadel Auth",
       "description": "Enable API authentication with Zitadel"
+    },
+    "addressComplete": {
+      "title": "Address Complete",
+      "description": "Enable CanadaPost address completion for forms"
     }
   }
 }

@@ -1,6 +1,3 @@
-/**
- * @jest-environment node
- */
 import { createMocks, RequestMethod } from "node-mocks-http";
 import settings from "old_pages/api/settings/[settingId]";
 import settingsRoot from "old_pages/api/settings/index";

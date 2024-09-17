@@ -1,7 +1,3 @@
-/**
- * @jest-environment node
- */
-
 import { generateVerificationCode } from "@lib/auth/2fa";
 
 describe("Test 2FA library", () => {

@@ -9,6 +9,7 @@ import { getPrivilegeRulesForUser } from "@lib/privileges";
 import { logEvent } from "@lib/auditLogs";
 import { activeStatusCheck, activeStatusUpdate } from "@lib/cache/userActiveStatus";
 import { JWT } from "next-auth/jwt";
+// import ZitadelProvider from "next-auth/providers/zitadel";
 
 /**
  * Checks the active status of a user using a cache strategy
@@ -46,6 +47,23 @@ export const {
   signOut,
 } = NextAuth({
   providers: [
+    // Keep this commented out for now, as we are not using Zitadel for authentication within the app
+    // ZitadelProvider({
+    //   issuer: process.env.ZITADEL_ISSUER,
+    //   clientId: process.env.ZITADEL_CLIENT_ID,
+    //   checks: ["pkce"],
+    //   client: {
+    //     token_endpoint_auth_method: "none",
+    //   },
+    //   allowDangerousEmailAccountLinking: true,
+    //   async profile(profile) {
+    //     return {
+    //       id: profile.sub,
+    //       name: profile.name,
+    //       email: profile.email,
+    //     };
+    //   },
+    // }),
     CredentialsProvider({
       id: "mfa",
       name: "MultiFactorAuth",
@@ -105,6 +123,7 @@ export const {
       },
     }),
   ],
+
   // When building the app use a random UUID as the token secret
   secret: process.env.TOKEN_SECRET ?? crypto.randomUUID(),
   session: {
@@ -219,6 +238,7 @@ export const {
         );
         token.deactivated = true;
       }
+
       return token;
     },
     async session(params) {
