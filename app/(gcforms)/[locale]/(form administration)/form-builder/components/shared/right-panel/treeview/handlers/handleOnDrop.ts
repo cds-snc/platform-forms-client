@@ -204,6 +204,13 @@ export const handleOnDrop = async (
       originGroupElements = (originParent?.children || []) as string[];
       const originIndex = originGroupElements.indexOf(String(item.index));
 
+      const groupKey = String(originParent?.index);
+
+      if (groupKey === "start") {
+        // Adjust the index to account for "ghost" items
+        targetIndex = targetIndex - 2;
+      }
+
       // Adjust index if dragging down
       itemsPriorToInsertion += isOldItemPriorToNewItem(targetGroupElements, item.index, targetIndex)
         ? 1
