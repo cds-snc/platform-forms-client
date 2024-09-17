@@ -1,3 +1,6 @@
+/**
+ * @jest-environment jsdom
+ */
 import React from "react";
 import { cleanup, render, screen } from "@testing-library/react";
 import { GenerateElement } from "@lib/formBuilder";

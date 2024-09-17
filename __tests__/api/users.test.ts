@@ -1,7 +1,3 @@
-/**
- * @jest-environment node
- */
-
 /* eslint-disable  @typescript-eslint/no-explicit-any */
 import { createMocks } from "node-mocks-http";
 import Redis from "ioredis-mock";
