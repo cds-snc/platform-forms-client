@@ -10,6 +10,7 @@ import { TemplateUser } from "./types";
 export const ManageUsers = () => {
   const { data: session } = useSession();
   const loggedInUserEmail = session?.user.email || "";
+  const [errors, setErrors] = useState<string[]>([]);
   const [selectedEmail, setSelectedEmail] = useState("");
   const [usersWithAccess, setUsersWithAccess] = useState<TemplateUser[]>([]);
 
@@ -19,7 +20,7 @@ export const ManageUsers = () => {
     throw new Error("ManageFormAccessDialog must be used within a ManageFormAccessDialogProvider");
   }
 
-  const { formId, emailList, setEmailList, errors, setErrors } = manageFormAccessDialogContext;
+  const { formId, emailList, setEmailList } = manageFormAccessDialogContext;
 
   /**
    * Validate an email address

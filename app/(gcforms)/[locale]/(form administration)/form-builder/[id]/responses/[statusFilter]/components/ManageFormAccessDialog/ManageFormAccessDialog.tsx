@@ -5,7 +5,6 @@ import { Dialog, useDialogRef } from "@formBuilder/components/shared";
 import { useCustomEvent } from "@lib/hooks/useCustomEvent";
 import { useCallback, useContext, useEffect, useState } from "react";
 import { InviteUsers } from "./InviteUsers";
-import { sendInvitation } from "./actions";
 import { ManageUsers } from "./ManageUsers";
 import { ManageFormAccessDialogContext } from "./ManageFormAccessDialogContext";
 import { isValidGovEmail } from "@lib/validation/validation";
@@ -21,8 +20,7 @@ export const ManageFormAccessDialog = ({ formId }: ManageFormAccessDialogProps) 
     throw new Error("ManageFormAccessDialog must be used within a ManageFormAccessDialogProvider");
   }
 
-  const { isOpen, setIsOpen, setFormId, emailList, setEmailList, message, setErrors } =
-    manageFormAccessDialogContext;
+  const { isOpen, setIsOpen, setFormId, emailList, setEmailList } = manageFormAccessDialogContext;
 
   const dialogRef = useDialogRef();
   const { Event } = useCustomEvent();
@@ -33,17 +31,16 @@ export const ManageFormAccessDialog = ({ formId }: ManageFormAccessDialogProps) 
    * Open the dialog
    */
   const handleOpenDialog = useCallback(() => {
+    setEmailList([]);
     setIsOpen(true);
-  }, [setIsOpen]);
+  }, [setEmailList, setIsOpen]);
 
   /**
    * Close the dialog and reset the data
    */
   const handleCloseDialog = () => {
-    setEmailList([]);
     setIsOpen(false);
     setIsInvitationScreen(false);
-    setErrors([]);
   };
 
   useEffect(() => {
@@ -97,10 +94,11 @@ export const ManageFormAccessDialog = ({ formId }: ManageFormAccessDialogProps) 
 
           <Button
             theme="primary"
-            onClick={async () => {
-              sendInvitation(emailList, formId, message);
-              handleCloseDialog();
-            }}
+            type="submit"
+            // onClick={async () => {
+            //   // sendInvitation(emailList, formId, message); @TODO
+            //   handleCloseDialog();
+            // }}
           >
             Invite
           </Button>

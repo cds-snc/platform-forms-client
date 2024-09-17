@@ -1,4 +1,4 @@
-import React, { createContext, useState, ReactNode, SetStateAction } from "react";
+import React, { createContext, useState, ReactNode } from "react";
 
 interface ManageFormAccessDialogContextProps {
   isOpen: boolean;
@@ -7,10 +7,6 @@ interface ManageFormAccessDialogContextProps {
   setFormId: (formId: string) => void;
   emailList: string[];
   setEmailList: (emailList: string[]) => void;
-  message: string;
-  setMessage: (message: string) => void;
-  errors: string[];
-  setErrors: (value: SetStateAction<string[]>) => void;
 }
 
 export const ManageFormAccessDialogContext = createContext<
@@ -21,8 +17,6 @@ export const ManageFormAccessDialogProvider = ({ children }: { children: ReactNo
   const [isOpen, setIsOpen] = useState(false);
   const [formId, setFormId] = useState("");
   const [emailList, setEmailList] = useState<string[]>([]);
-  const [message, setMessage] = useState("");
-  const [errors, setErrors] = useState<string[]>([]);
 
   return (
     <ManageFormAccessDialogContext.Provider
@@ -33,10 +27,6 @@ export const ManageFormAccessDialogProvider = ({ children }: { children: ReactNo
         setFormId,
         emailList,
         setEmailList,
-        message,
-        setMessage,
-        errors,
-        setErrors,
       }}
     >
       {children}
