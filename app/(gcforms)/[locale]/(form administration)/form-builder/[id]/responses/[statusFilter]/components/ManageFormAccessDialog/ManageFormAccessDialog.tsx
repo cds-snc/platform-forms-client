@@ -31,6 +31,7 @@ export const ManageFormAccessDialog = ({ formId }: ManageFormAccessDialogProps) 
    * Open the dialog
    */
   const handleOpenDialog = useCallback(() => {
+    setIsInvitationScreen(false);
     setEmailList([]);
     setIsOpen(true);
   }, [setEmailList, setIsOpen]);
@@ -83,24 +84,6 @@ export const ManageFormAccessDialog = ({ formId }: ManageFormAccessDialogProps) 
             disabled={emailList.length === 0}
           >
             Next
-          </Button>
-        </>
-      )}
-      {isInvitationScreen && (
-        <>
-          <Button theme="secondary" onClick={() => setIsInvitationScreen(false)}>
-            Back
-          </Button>
-
-          <Button
-            theme="primary"
-            type="submit"
-            // onClick={async () => {
-            //   // sendInvitation(emailList, formId, message); @TODO
-            //   handleCloseDialog();
-            // }}
-          >
-            Invite
           </Button>
         </>
       )}
