@@ -10,6 +10,8 @@ import { clearTemplateStore } from "@lib/store/utils";
 import { safeJSONParse } from "@lib/utils";
 import { FormProperties } from "@lib/types";
 
+import { GcdsHeader } from "@cdssnc/gcds-components-react-ssr";
+
 export const Start = () => {
   const {
     t,
@@ -80,6 +82,7 @@ export const Start = () => {
   return (
     <>
       <h1 className="visually-hidden">{t("start")}</h1>
+      <GcdsHeader lang="en" langHref="#" skipToHref="#"></GcdsHeader>
       <div role="alert">
         {errors && (
           <div className="m-auto mb-8 flex w-5/12 bg-red-100 p-6">

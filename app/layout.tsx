@@ -37,6 +37,9 @@ const NoIndexMetaTag =
     </>
   );
 
+import "@cdssnc/gcds-components-react-ssr/server";
+import "@cdssnc/gcds-components-react-ssr/gcds.css";
+
 export default async function Layout({ children }: { children: React.ReactNode }) {
   const locale = cookies().get("i18next")?.value ?? languages[0];
   const nonce = headers().get("x-nonce") ?? "";

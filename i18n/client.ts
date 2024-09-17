@@ -3,7 +3,7 @@ import { useEffect } from "react";
 import i18next from "i18next";
 import { initReactI18next, useTranslation as reactUseTranslation } from "react-i18next";
 import resourcesToBackend from "i18next-resources-to-backend";
-import LanguageDetector from "i18next-browser-languagedetector";
+// import LanguageDetector from "i18next-browser-languagedetector";
 import { getOptions, languages } from "./settings";
 
 import { useParams } from "next/navigation";
@@ -11,11 +11,11 @@ import { useParams } from "next/navigation";
 const runsOnServerSide = typeof window === "undefined";
 const pathname = runsOnServerSide ? "" : window.location.pathname;
 
-const languageDetector = new LanguageDetector();
+// const languageDetector = new LanguageDetector();
 
 i18next
   .use(initReactI18next)
-  .use(languageDetector)
+  // .use(languageDetector)
   .use(
     resourcesToBackend(
       (language: string, namespace: string) =>

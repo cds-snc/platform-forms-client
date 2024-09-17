@@ -49,6 +49,9 @@ const nextConfig = {
       type: "asset/source",
     });
 
+    // Fixes dependency issues with `canvas` and `perf_hooks` of linkedom
+    config.resolve.fallback = { canvas: false, perf_hooks: false };
+
     return config;
   },
 
