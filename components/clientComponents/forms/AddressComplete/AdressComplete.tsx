@@ -105,7 +105,7 @@ export const AddressComplete = (props: AddressCompleteProps): React.ReactElement
     // Filter the results to avoid duplicate "text" entry
     const uniqueResults = addressResultCache.filter(
       (item: AddressCompleteChoice, index: number, self: AddressCompleteChoice[]) =>
-        index === self.findIndex((t) => t.Text === item.Text && item.Text !== "")
+        index === self.findIndex((t) => t.Text === item.Text && item.Text !== undefined)
     );
 
     setChoices(
