@@ -165,6 +165,7 @@ export const AddressComplete = (props: AddressCompleteProps): React.ReactElement
               className={cn("gc-input-text", meta.error && "gc-error-input")}
               value={addressObject.unitNumber}
               required={required}
+              data-testid="addresscomplete-input-unitNumber"
             />
           </div>
         )}
@@ -184,6 +185,7 @@ export const AddressComplete = (props: AddressCompleteProps): React.ReactElement
               className={cn("gc-input-text", meta.error && "gc-error-input")}
               value={addressObject.civicNumber}
               required={required}
+              data-testid="addresscomplete-input-civicNumber"
             />
           </div>
         )}
@@ -203,6 +205,7 @@ export const AddressComplete = (props: AddressCompleteProps): React.ReactElement
               className={cn("gc-input-text", meta.error && "gc-error-input")}
               value={addressObject.streetName}
               required={required}
+              data-testid="addresscomplete-input-streetName"
             />
           </div>
         )}
@@ -219,6 +222,7 @@ export const AddressComplete = (props: AddressCompleteProps): React.ReactElement
               onChange={(e) => setAddressObject((prev) => ({ ...prev, city: e.target.value }))}
               className={cn("gc-input-text", meta.error && "gc-error-input")}
               required={required}
+              data-testid="addresscomplete-input-city"
             />
           </div>
         )}
@@ -235,6 +239,7 @@ export const AddressComplete = (props: AddressCompleteProps): React.ReactElement
               onChange={(e) => setAddressObject((prev) => ({ ...prev, province: e.target.value }))}
               className={cn("gc-input-text", meta.error && "gc-error-input")}
               required={required}
+              data-testid="addresscomplete-input-province"
             />
           </div>
         )}
@@ -253,6 +258,7 @@ export const AddressComplete = (props: AddressCompleteProps): React.ReactElement
               }
               className={cn("gc-input-text", meta.error && "gc-error-input")}
               required={required}
+              data-testid="addresscomplete-input-postalCode"
             />
           </div>
         )}
@@ -269,6 +275,7 @@ export const AddressComplete = (props: AddressCompleteProps): React.ReactElement
               onChange={(e) => setAddressObject((prev) => ({ ...prev, country: e.target.value }))}
               className={cn("gc-input-text", meta.error && "gc-error-input")}
               required={required}
+              data-testid="addresscomplete-input-country"
             />
           </div>
         )}
