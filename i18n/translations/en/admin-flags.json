@@ -10,10 +10,6 @@
   "featureStatus": "Status",
   "featureSwitch": "On/Off",
   "features": {
-    "formTimer": {
-      "title": "Form timer",
-      "description": "Wait a specific amount of time before being allowed to submit the form"
-    },
     "experimentalBlocks": {
       "title": "Experimental blocks",
       "description": "Enable experimental blocks"

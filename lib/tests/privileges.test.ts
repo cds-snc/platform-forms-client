@@ -1,7 +1,3 @@
-/**
- * @jest-environment node
- */
-
 import { interpolatePermissionCondition } from "@lib/privileges";
 
 describe("Provided values can be interpolated in permission condition", () => {

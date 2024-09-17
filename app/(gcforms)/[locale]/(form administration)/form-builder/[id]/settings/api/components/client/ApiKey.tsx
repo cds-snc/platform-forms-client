@@ -2,17 +2,21 @@
 import { Button } from "@clientComponents/globals";
 import { useTranslation } from "@i18n/client";
 import { CircleCheckIcon } from "@serverComponents/icons";
-import { deleteKey, createKey, refreshKey } from "../../actions";
+import {
+  createServiceAccountKey,
+  refreshServiceAccountKey,
+  deleteServiceAccountKey,
+} from "../../actions";
 import { useParams } from "next/navigation";
 
 const _createKey = async (templateId: string) => {
   // In the future this could be done in the browser but we'll need to verify that they key meets the requirements
-  const key = await createKey(templateId);
+  const key = await createServiceAccountKey(templateId);
   downloadKey(JSON.stringify(key), templateId);
 };
 
 const _refreshKey = async (templateId: string) => {
-  const key = await refreshKey(templateId);
+  const key = await refreshServiceAccountKey(templateId);
   downloadKey(JSON.stringify(key), templateId);
 };
 
@@ -48,7 +52,7 @@ export const ApiKey = ({ keyExists }: { keyExists?: boolean }) => {
               <CircleCheckIcon className="mr-2 inline-block w-9 fill-green-700" />
               {t("settings.api.keyExists")}
             </div>
-            <Button theme="primary" className="mr-4" onClick={() => deleteKey(id)}>
+            <Button theme="primary" className="mr-4" onClick={() => deleteServiceAccountKey(id)}>
               {t("settings.api.deleteKey")}
             </Button>
             <Button theme="primary" onClick={() => _refreshKey(id)}>

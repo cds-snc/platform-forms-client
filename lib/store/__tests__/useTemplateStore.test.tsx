@@ -1,4 +1,6 @@
-"use client";
+/**
+ * @jest-environment jsdom
+ */
 import React from "react";
 import { useTemplateStore, TemplateStoreProvider } from "../useTemplateStore";
 import { renderHook, act } from "@testing-library/react";
