@@ -32,14 +32,16 @@ const canManageUsersForForm = async (formId: string) => {
   return false;
 };
 
-export const sendInvitation = async (email: string, templateId: string, message: string) => {
+export const sendInvitation = async (emails: string[], templateId: string, message: string) => {
   await canManageUsersForForm(templateId);
 
   // @TODO:
   // - create invitation
   // - send email
   logMessage.info(
-    `Sending invitation email to ${email} for form ${templateId} with message ${message}`
+    `Sending invitation email to ${JSON.stringify(
+      emails
+    )} for form ${templateId} with message ${message}`
   );
 };
 

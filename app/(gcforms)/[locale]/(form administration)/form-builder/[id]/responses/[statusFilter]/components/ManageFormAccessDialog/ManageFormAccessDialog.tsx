@@ -40,7 +40,6 @@ export const ManageFormAccessDialog = ({ formId }: ManageFormAccessDialogProps) 
    * Close the dialog and reset the data
    */
   const handleCloseDialog = () => {
-    setSelectedEmail("");
     setEmailList([]);
     setIsOpen(false);
     setIsInvitationScreen(false);
@@ -99,7 +98,7 @@ export const ManageFormAccessDialog = ({ formId }: ManageFormAccessDialogProps) 
           <Button
             theme="primary"
             onClick={async () => {
-              sendInvitation(selectedEmail, formId, message);
+              sendInvitation(emailList, formId, message);
               handleCloseDialog();
             }}
           >
