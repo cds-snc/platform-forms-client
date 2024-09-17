@@ -87,20 +87,29 @@ export const AddressComplete = (props: AddressCompleteProps): React.ReactElement
     const responseData = await getAddressCompleteChoices(apiKey, query);
 
     //loop through the responseData and add it to the addressResultsCache
+    const newElements: AddressCompleteChoice[] = [];
+
     for (let i = 0; i < responseData.length; i++) {
-      //Check key doesn't already exist.
+      // Check key doesn't already exist.
       if (
-        addressResultCache.find((item: AddressCompleteChoice) => item.Text === responseData[i].Text)
+        !addressResultCache.find((item: AddressCompleteChoice) => item.Id === responseData[i].Id)
       ) {
-        continue;
+        newElements.push(responseData[i]);
       }
-      const newCache = [...addressResultCache, responseData[i]];
-      setAddressResultCache(newCache);
     }
 
-    const filteredCache = addressResultCache.filter((item: AddressCompleteChoice) => item.Text);
+    if (newElements.length > 0) {
+      setAddressResultCache((prevCache) => [...prevCache, ...newElements]);
+    }
+
+    // Filter the results to avoid duplicate "text" entry
+    const uniqueResults = addressResultCache.filter(
+      (item: AddressCompleteChoice, index: number, self: AddressCompleteChoice[]) =>
+        index === self.findIndex((t) => t.Text === item.Text && item.Text !== "")
+    );
+
     setChoices(
-      filteredCache.map((item: AddressCompleteChoice) => {
+      uniqueResults.map((item: AddressCompleteChoice) => {
         return item.Text;
       })
     );
