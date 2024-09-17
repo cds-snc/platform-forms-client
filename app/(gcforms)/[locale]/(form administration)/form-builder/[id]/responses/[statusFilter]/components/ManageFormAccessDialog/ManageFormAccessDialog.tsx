@@ -33,13 +33,8 @@ export const ManageFormAccessDialog = ({ formId }: ManageFormAccessDialogProps) 
     setErrors,
   } = dialogContext;
 
-  useEffect(() => {
-    setFormId(formId);
-  }, [formId, setFormId]);
-
   const dialogRef = useDialogRef();
   const { Event } = useCustomEvent();
-
   const [isInvitationScreen, setIsInvitationScreen] = useState(false);
   const isManagementScreen = !isInvitationScreen;
 
@@ -48,12 +43,12 @@ export const ManageFormAccessDialog = ({ formId }: ManageFormAccessDialogProps) 
    */
   const handleOpenDialog = useCallback(() => {
     setIsOpen(true);
-  }, []);
+  }, [setIsOpen]);
 
   /**
    * Close the dialog and reset the data
    */
-  const handleClose = () => {
+  const handleCloseDialog = () => {
     setSelectedEmail("");
     setEmailList([]);
     setIsOpen(false);
@@ -61,15 +56,9 @@ export const ManageFormAccessDialog = ({ formId }: ManageFormAccessDialogProps) 
     setErrors([]);
   };
 
-  /**
-   * Validate all emails in the list before submit.
-   * @TODO: we do this on entry, maybe we don't need to do it again?
-   *
-   * @returns boolean
-   */
-  const validate = () => {
-    return emailList.every((email) => isValidGovEmail(email));
-  };
+  useEffect(() => {
+    setFormId(formId);
+  }, [formId, setFormId]);
 
   useEffect(() => {
     Event.on("open-form-access-dialog", handleOpenDialog);
@@ -80,11 +69,20 @@ export const ManageFormAccessDialog = ({ formId }: ManageFormAccessDialogProps) 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [handleOpenDialog]);
 
+  /**
+   * Validate all emails in the list before submit.
+   *
+   * @returns boolean
+   */
+  const validate = () => {
+    return emailList.every((email) => isValidGovEmail(email));
+  };
+
   const dialogActions = (
     <div className="flex flex-row gap-4">
       {isManagementScreen && (
         <>
-          <Button theme="secondary" onClick={handleClose}>
+          <Button theme="secondary" onClick={handleCloseDialog}>
             Cancel
           </Button>
 
@@ -111,7 +109,7 @@ export const ManageFormAccessDialog = ({ formId }: ManageFormAccessDialogProps) 
             theme="primary"
             onClick={async () => {
               sendInvitation(selectedEmail, formId, message);
-              handleClose();
+              handleCloseDialog();
             }}
           >
             Invite
@@ -126,7 +124,7 @@ export const ManageFormAccessDialog = ({ formId }: ManageFormAccessDialogProps) 
       {isOpen && (
         <Dialog
           dialogRef={dialogRef}
-          handleClose={handleClose}
+          handleClose={handleCloseDialog}
           title={isManagementScreen ? "Manage form access" : "Invite to form"}
           actions={dialogActions}
         >
