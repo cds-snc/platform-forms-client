@@ -221,7 +221,13 @@ export const handleOnDrop = async (
 
   // Dragging/dropping other non-root level items
   const targetParentGroup = currentGroups[targetParent];
-  let targetGroupElements = [...targetParentGroup.elements];
+
+  let targetGroupElements: string[] = []; // NOTE: "elements" are elementIds
+
+  // Ensure the target parent group exists and has elements
+  if (targetParentGroup && targetParentGroup.elements) {
+    targetGroupElements = [...targetParentGroup.elements];
+  }
 
   let itemsPriorToInsertion = 0;
 

@@ -24,8 +24,12 @@ export const handleCanDropAt = (
   target: DraggingPosition,
   getGroups: () => GroupsType | undefined
 ) => {
-  const groupItemsCount = items.filter((item) => item.isFolder).length;
-  const nonGroupItemsCount = items.filter((item) => !item.isFolder).length;
+  const groupItemsCount = items.filter(
+    (item) => item.isFolder && item.data.type !== "dynamicRow"
+  ).length;
+  const nonGroupItemsCount = items.filter(
+    (item) => !item.isFolder || item.data.type === "dynamicRow"
+  ).length;
   const targetDraggingPositionType = getTargetDraggingPositionType(target);
 
   let targetParentItem = undefined;
