@@ -29,16 +29,16 @@ export const generateCSP = (): { csp: string; nonce: string } => {
 
   const cspHeader = `
     default-src 'self';
-    script-src 'self' 'nonce-${nonce}' 'strict-dynamic' *.hcaptcha.com;
-    style-src 'self' 'nonce-${nonce}' *.hcaptcha.com;
+    script-src 'self' 'nonce-${nonce}' 'strict-dynamic' https://hcaptcha.com https://*.hcaptcha.com;
+    style-src 'self' 'nonce-${nonce}' https://hcaptcha.com https://*.hcaptcha.com;
     img-src 'self' blob: data:;
     font-src 'self';
     object-src 'none';
     base-uri 'self';
     form-action 'self';
-    frame-src www.googletagmanager.com *.hcaptcha.com;
+    frame-src www.googletagmanager.com https://hcaptcha.com https://*.hcaptcha.com;
     frame-ancestors 'none';
-    connect-src 'self' www.googletagmanager.com www.google-analytics.com api.hcaptcha.com;
+    connect-src 'self' www.googletagmanager.com www.google-analytics.com https://hcaptcha.com https://*.hcaptcha.com;
     block-all-mixed-content;
     upgrade-insecure-requests;
 `;

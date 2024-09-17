@@ -282,7 +282,7 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
             {isGroupsCheck && isShowReviewPage && currentGroup === LockedSections.REVIEW && (
               <Review language={language as Language} />
             )}
-            15 {/** TEMP REMOVE */}
+            16 {/** TEMP REMOVE */}
             {/* For more info on the React lib https://github.com/hCaptcha/react-hcaptcha */}
             <HCaptcha
               sitekey={props.hCaptchaSiteKey || ""}
