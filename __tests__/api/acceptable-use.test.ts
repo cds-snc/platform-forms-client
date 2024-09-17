@@ -1,7 +1,3 @@
-/**
- * @jest-environment node
- */
-
 import { createMocks } from "node-mocks-http";
 import acceptableUse from "old_pages/api/acceptableuse";
 import { setAcceptableUse } from "@lib/cache/acceptableUseCache";

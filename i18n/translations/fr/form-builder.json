@@ -1076,6 +1076,11 @@
     "removeButtonText": "Remove [FR]",
     "removeButtonTextA11yEn": "Remove button text (english) [FR] ",
     "removeButtonTextA11yFr": "Remove button text (french) [FR] ",
+    "translate": {
+      "repeatingSet": "Repeating set [FR]",
+      "addButtonText": "Button label - Add to set [FR]",
+      "removeButtonText": "Button label - Remove from set [FR]"
+    },
     "dialog": {
       "customizeElement": "Customize element [FR]",
       "title": "Customize set [FR]",

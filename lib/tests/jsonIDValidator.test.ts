@@ -1,6 +1,3 @@
-/**
- * @jest-environment node
- */
 import { NextRequest } from "next/server";
 import { MiddlewareReturn } from "@lib/types";
 import {

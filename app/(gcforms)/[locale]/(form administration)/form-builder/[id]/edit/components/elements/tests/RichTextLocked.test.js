@@ -1,3 +1,6 @@
+/**
+ * @jest-environment jsdom
+ */
 import React from "react";
 import { cleanup } from "@testing-library/react";
 import { RichTextLocked } from "../RichTextLocked";

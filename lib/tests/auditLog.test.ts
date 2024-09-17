@@ -1,6 +1,3 @@
-/**
- * @jest-environment node
- */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
 import { jest } from "@jest/globals";
@@ -100,7 +97,7 @@ describe("Audit Log Tests", () => {
       expect(mockedSQSClient.prototype.send).toBeCalledTimes(1);
       expect(mockedSendMessageCommand).toBeCalledWith({
         MessageBody: JSON.stringify({
-          userID: "1",
+          userId: "1",
           event: "UserSignIn",
           timestamp: currentTimeStamp,
           subject: { type: "User", id: "1" },
