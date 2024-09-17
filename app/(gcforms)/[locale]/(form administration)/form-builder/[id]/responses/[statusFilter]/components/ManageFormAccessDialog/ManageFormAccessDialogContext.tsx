@@ -1,4 +1,4 @@
-import React, { createContext, useState, ReactNode } from "react";
+import React, { createContext, useState, ReactNode, SetStateAction } from "react";
 import { TemplateUser } from "./types";
 
 interface ManageFormAccessDialogContextProps {
@@ -15,7 +15,7 @@ interface ManageFormAccessDialogContextProps {
   usersWithAccess: TemplateUser[];
   setUsersWithAccess: (usersWithAccess: TemplateUser[]) => void;
   errors: string[];
-  setErrors: (errors: string[]) => void;
+  setErrors: (value: SetStateAction<string[]>) => void;
   // loggedInUserId: string;
 }
 
