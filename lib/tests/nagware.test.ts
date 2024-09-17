@@ -1,7 +1,3 @@
-/**
- * @jest-environment node
- */
-
 import { NagLevel, NagwareSubmission, VaultStatus } from "@lib/types";
 import { detectOldUnprocessedSubmissions } from "@lib/nagware";
 import { getAppSetting } from "@lib/appSettings";

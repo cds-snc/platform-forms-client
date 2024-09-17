@@ -2,7 +2,7 @@ import { serverTranslation } from "@i18n";
 import { Metadata } from "next";
 import { ApiKey } from "./components/client/ApiKey";
 import { authCheckAndRedirect } from "@lib/actions";
-import { checkKeyExists } from "./actions";
+import { checkKeyExists } from "@lib/serviceAccount";
 import { checkOne } from "@lib/cache/flags";
 import { redirect } from "next/navigation";
 

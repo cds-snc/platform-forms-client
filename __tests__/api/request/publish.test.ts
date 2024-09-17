@@ -1,6 +1,3 @@
-/**
- * @jest-environment node
- */
 /* eslint-disable  @typescript-eslint/no-explicit-any */
 import { createMocks, RequestMethod } from "node-mocks-http";
 import publish from "old_pages/api/request/publish";

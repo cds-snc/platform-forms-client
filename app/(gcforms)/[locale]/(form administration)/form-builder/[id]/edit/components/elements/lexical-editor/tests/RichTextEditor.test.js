@@ -1,3 +1,6 @@
+/**
+ * @jest-environment jsdom
+ */
 import React from "react";
 import { cleanup, screen, render, act, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";

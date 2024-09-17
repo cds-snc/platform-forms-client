@@ -1,3 +1,6 @@
+/**
+ * @jest-environment jsdom
+ */
 import React, { useState } from "react";
 import { render, cleanup } from "@testing-library/react";
 import { LineItemEntries } from "../LineItemEntries";

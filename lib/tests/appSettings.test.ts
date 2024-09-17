@@ -1,7 +1,3 @@
-/**
- * @jest-environment node
- */
-
 import { prismaMock } from "@jestUtils";
 import {
   getAppSetting,
