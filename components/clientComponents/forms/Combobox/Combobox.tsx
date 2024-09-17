@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useState } from "react";
 import { InputFieldProps } from "@lib/types";
 import classnames from "classnames";
 import { useField } from "formik";
@@ -22,38 +22,39 @@ export const Combobox = (props: ComboboxProps): React.ReactElement => {
   const [field, meta, helpers] = useField(props);
   const { setValue } = helpers;
 
-  const [items, setItems] = React.useState(choices);
-  const {
-    isOpen,
-    getMenuProps,
-    getInputProps,
-    highlightedIndex,
-    getItemProps,
-    selectedItem,
-    openMenu,
-  } = useCombobox({
-    onInputValueChange({ inputValue }) {
-      if (props.onChange) {
-        props.onChange({ target: { value: inputValue } } as React.ChangeEvent<HTMLInputElement>);
-      }
-      setItems(
-        choices.filter((choice) => {
-          return inputValue ? choice.toLowerCase().includes(inputValue.toLowerCase()) : true;
-        })
-      );
-      if (props.activeRefresh) {
-        openMenu();
-      }
-    },
-    items,
-    onSelectedItemChange({ selectedItem }) {
-      setValue(selectedItem);
+  const [isOpen, setIsOpen] = useState(false); // State to control isOpen
 
-      if (props.onSetValue) {
-        props.onSetValue(selectedItem ?? "");
-      }
-    },
-  });
+  const [items, setItems] = React.useState(choices);
+  const { getMenuProps, getInputProps, highlightedIndex, getItemProps, selectedItem, openMenu } =
+    useCombobox({
+      onInputValueChange({ inputValue }) {
+        if (props.onChange) {
+          props.onChange({ target: { value: inputValue } } as React.ChangeEvent<HTMLInputElement>);
+        }
+        setItems(
+          choices.filter((choice) => {
+            return inputValue ? choice.toLowerCase().includes(inputValue.toLowerCase()) : true;
+          })
+        );
+        if (props.activeRefresh) {
+          openMenu();
+          setIsOpen(true);
+        }
+      },
+      items,
+      onSelectedItemChange({ selectedItem }) {
+        setValue(selectedItem);
+
+        if (props.onSetValue) {
+          props.onSetValue(selectedItem ?? "");
+        }
+
+        setIsOpen(false);
+      },
+      onIsOpenChange: ({ isOpen }) => {
+        setIsOpen(isOpen ?? false);
+      },
+    });
 
   return (
     <>
