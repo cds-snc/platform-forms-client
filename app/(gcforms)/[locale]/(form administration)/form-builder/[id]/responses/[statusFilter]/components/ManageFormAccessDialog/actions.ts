@@ -33,16 +33,33 @@ const canManageUsersForForm = async (formId: string) => {
 };
 
 export const sendInvitation = async (emails: string[], templateId: string, message: string) => {
-  await canManageUsersForForm(templateId);
+  if (await canManageUsersForForm(templateId)) {
+    logMessage.info(
+      `Sending invitation email to ${JSON.stringify(
+        emails
+      )} for form ${templateId} with message ${message}`
+    );
 
-  // @TODO:
-  // - create invitation
-  // - send email
-  logMessage.info(
-    `Sending invitation email to ${JSON.stringify(
-      emails
-    )} for form ${templateId} with message ${message}`
-  );
+    emails.forEach(async (email) => {
+      try {
+        await prisma.invitation.create({
+          data: {
+            email,
+            expires: new Date(Date.now() + 1000 * 60 * 60 * 24 * 7),
+            template: {
+              connect: {
+                id: templateId,
+              },
+            },
+          },
+        });
+
+        // send email
+      } catch (e) {
+        // handle
+      }
+    });
+  }
 };
 
 export const removeUserFromForm = async (userId: string, formId: string) => {
