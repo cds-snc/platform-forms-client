@@ -2,13 +2,13 @@ import { useContext } from "react";
 import { ManageFormAccessDialogContext } from "./ManageFormAccessDialogContext";
 
 export const InviteUsers = () => {
-  const dialogContext = useContext(ManageFormAccessDialogContext);
+  const manageFormAccessDialogContext = useContext(ManageFormAccessDialogContext);
 
-  if (!dialogContext) {
+  if (!manageFormAccessDialogContext) {
     throw new Error("ManageFormAccessDialog must be used within a ManageFormAccessDialogProvider");
   }
 
-  const { emailList, setMessage } = dialogContext;
+  const { emailList, setMessage } = manageFormAccessDialogContext;
 
   return (
     <>

@@ -15,23 +15,14 @@ type ManageFormAccessDialogProps = {
 };
 
 export const ManageFormAccessDialog = ({ formId }: ManageFormAccessDialogProps) => {
-  const dialogContext = useContext(ManageFormAccessDialogContext);
+  const manageFormAccessDialogContext = useContext(ManageFormAccessDialogContext);
 
-  if (!dialogContext) {
+  if (!manageFormAccessDialogContext) {
     throw new Error("ManageFormAccessDialog must be used within a ManageFormAccessDialogProvider");
   }
 
-  const {
-    isOpen,
-    setIsOpen,
-    selectedEmail,
-    setSelectedEmail,
-    setFormId,
-    emailList,
-    setEmailList,
-    message,
-    setErrors,
-  } = dialogContext;
+  const { isOpen, setIsOpen, setFormId, emailList, setEmailList, message, setErrors } =
+    manageFormAccessDialogContext;
 
   const dialogRef = useDialogRef();
   const { Event } = useCustomEvent();

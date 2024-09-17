@@ -5,28 +5,21 @@ import { useContext, useEffect, useState } from "react";
 import { ManageFormAccessDialogContext } from "./ManageFormAccessDialogContext";
 import { isValidGovEmail } from "@lib/validation/validation";
 import { useSession } from "next-auth/react";
+import { TemplateUser } from "./types";
 
 export const ManageUsers = () => {
   const { data: session } = useSession();
   const loggedInUserEmail = session?.user.email || "";
+  const [selectedEmail, setSelectedEmail] = useState("");
+  const [usersWithAccess, setUsersWithAccess] = useState<TemplateUser[]>([]);
 
-  const dialogContext = useContext(ManageFormAccessDialogContext);
+  const manageFormAccessDialogContext = useContext(ManageFormAccessDialogContext);
 
-  if (!dialogContext) {
+  if (!manageFormAccessDialogContext) {
     throw new Error("ManageFormAccessDialog must be used within a ManageFormAccessDialogProvider");
   }
 
-  const {
-    selectedEmail,
-    setSelectedEmail,
-    formId,
-    emailList,
-    setEmailList,
-    usersWithAccess,
-    setUsersWithAccess,
-    errors,
-    setErrors,
-  } = dialogContext;
+  const { formId, emailList, setEmailList, errors, setErrors } = manageFormAccessDialogContext;
 
   /**
    * Validate an email address
