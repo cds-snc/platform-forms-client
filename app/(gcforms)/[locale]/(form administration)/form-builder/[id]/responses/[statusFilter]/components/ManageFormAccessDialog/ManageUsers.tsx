@@ -6,6 +6,7 @@ import { ManageFormAccessDialogContext } from "./ManageFormAccessDialogContext";
 import { isValidGovEmail } from "@lib/validation/validation";
 import { useSession } from "next-auth/react";
 import { TemplateUser } from "./types";
+import { hasOwnProperty } from "@lib/tsUtils";
 
 export const ManageUsers = () => {
   const { data: session } = useSession();
@@ -176,14 +177,18 @@ export const ManageUsers = () => {
           {usersWithAccess.map((user) => (
             <div className="flex flex-row py-2" key={user.email}>
               <div className="grow">{user.email}</div>
-              <div>
-                {/* Disable delete for current user or only remaining user */}
-                {loggedInUserEmail === user.email || usersWithAccess.length <= 1 ? (
-                  <span></span>
-                ) : (
-                  <DeleteConfirm callback={() => handleRemoveUser(user.id)} />
-                )}
-              </div>
+              {hasOwnProperty(user, "expired") ? (
+                <div>{user.expired ? "expired" : "invited"}</div>
+              ) : (
+                <div>
+                  {/* Disable delete for current user or only remaining user */}
+                  {loggedInUserEmail === user.email || usersWithAccess.length <= 1 ? (
+                    <span></span>
+                  ) : (
+                    <DeleteConfirm callback={() => handleRemoveUser(user.id)} />
+                  )}
+                </div>
+              )}
             </div>
           ))}
         </div>

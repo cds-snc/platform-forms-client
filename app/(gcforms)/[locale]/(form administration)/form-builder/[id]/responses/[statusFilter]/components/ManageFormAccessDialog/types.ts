@@ -1,1 +1,5 @@
-export type TemplateUser = { id: string; name: string | null; email: string };
+export type TemplateUser = {
+  id: string;
+  email: string;
+  expired?: boolean;
+};

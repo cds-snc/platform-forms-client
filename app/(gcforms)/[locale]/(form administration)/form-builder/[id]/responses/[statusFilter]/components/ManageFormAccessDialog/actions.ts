@@ -3,6 +3,7 @@
 import { authCheckAndThrow } from "@lib/actions";
 import { prisma, prismaErrors } from "@lib/integration/prismaConnector";
 import { logMessage } from "@lib/logger";
+import { TemplateUser } from "./types";
 
 const canManageUsersForForm = async (formId: string) => {
   const { ability } = await authCheckAndThrow();
@@ -105,7 +106,6 @@ export const getTemplateUsers = async (formId: string) => {
         users: {
           select: {
             id: true,
-            name: true,
             email: true,
           },
         },
@@ -113,5 +113,25 @@ export const getTemplateUsers = async (formId: string) => {
     })
     .catch((e) => prismaErrors(e, null));
 
-  return templateWithUsers?.users;
+  const invitations = await prisma.invitation.findMany({
+    where: {
+      templateId: formId,
+    },
+    select: {
+      id: true,
+      email: true,
+      expires: true,
+    },
+  });
+
+  const combinedUsers = [
+    ...(templateWithUsers?.users.map((user) => ({ ...user })) || []),
+    ...invitations.map((invitation) => ({
+      id: invitation.id,
+      email: invitation.email,
+      expired: new Date(invitation.expires) < new Date(),
+    })),
+  ];
+
+  return combinedUsers as TemplateUser[];
 };
