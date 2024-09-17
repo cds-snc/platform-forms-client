@@ -58,7 +58,6 @@ export const ManageUsers = () => {
    * @param error
    */
   const handleAddError = (error: string) => {
-    // @TODO: typescript error?
     setErrors((prevErrors: string[]) => [...prevErrors, error]);
   };
 
