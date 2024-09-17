@@ -5,7 +5,7 @@ import { DeliveryOptionEmail } from "./DeliveryOptionEmail";
 import { NavigationTabs } from "./NavigationTabs";
 import { ResponsesFooter } from "./ResponsesFooter";
 import { Responses } from "./Responses";
-import { ManageFormAccessDialog } from "./ManageFormAccessDialog";
+import { ManageFormAccessDialogContainer } from "./ManageFormAccessDialog";
 
 export const ClientContainer = ({
   responseDownloadLimit,
@@ -46,7 +46,7 @@ export const ClientContainer = ({
         <Responses responseDownloadLimit={responseDownloadLimit} overdueAfter={overdueAfter} />
         <ResponsesFooter formId={id} />
       </div>
-      <ManageFormAccessDialog formId={id} />
+      <ManageFormAccessDialogContainer formId={id} />
     </>
   );
 };

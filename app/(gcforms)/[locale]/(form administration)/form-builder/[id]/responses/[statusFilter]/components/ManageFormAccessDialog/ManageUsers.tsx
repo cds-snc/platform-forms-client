@@ -1,34 +1,99 @@
 import { CancelIcon } from "@serverComponents/icons";
-import { TemplateUser } from "./types";
 import { DeleteConfirm } from "./DeleteConfirm";
 import { getTemplateUsers, removeUserFromForm } from "./actions";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
+import { ManageFormAccessDialogContext } from "./ManageFormAccessDialogContext";
+import { isValidGovEmail } from "@lib/validation/validation";
+import { useSession } from "next-auth/react";
 
-type ManageUsersProps = {
-  formId: string;
-  selectedEmail: string;
-  setSelectedEmail: (email: string) => void;
-  usersWithAccess: TemplateUser[];
-  setUsersWithAccess: (users: TemplateUser[]) => void;
-  loggedInUserEmail: string;
-  handleAddEmail: (email: string) => void;
-  handleRemoveEmail: (email: string) => void;
-  emailList: string[];
-  errors: string[];
-};
+export const ManageUsers = () => {
+  const { data: session } = useSession();
+  const loggedInUserEmail = session?.user.email || "";
 
-export const ManageUsers = ({
-  formId,
-  selectedEmail,
-  setSelectedEmail,
-  usersWithAccess,
-  setUsersWithAccess,
-  loggedInUserEmail,
-  handleAddEmail,
-  handleRemoveEmail,
-  emailList,
-  errors,
-}: ManageUsersProps) => {
+  const dialogContext = useContext(ManageFormAccessDialogContext);
+
+  if (!dialogContext) {
+    throw new Error("ManageFormAccessDialog must be used within a ManageFormAccessDialogProvider");
+  }
+
+  const {
+    selectedEmail,
+    setSelectedEmail,
+    formId,
+    emailList,
+    setEmailList,
+    usersWithAccess,
+    setUsersWithAccess,
+    errors,
+    setErrors,
+  } = dialogContext;
+
+  /**
+   * Validate an email address
+   * Add an error for display if the email is invalid
+   *
+   * @param email
+   * @returns
+   */
+  const isValidEmail = (email: string) => {
+    let valid = true;
+
+    // User already has access
+    if (usersWithAccess.find((user) => user.email === email)) {
+      handleAddError(`${email} already has access`);
+      valid = false;
+    }
+
+    // Not a valid government email
+    if (!isValidGovEmail(email)) {
+      handleAddError(`${email} is an invalid email address`);
+      valid = false;
+    }
+
+    // Email already in the list
+    if (emailList.includes(email)) {
+      handleAddError(`${email} is already in the list`);
+      valid = false;
+    }
+
+    return valid;
+  };
+
+  /**
+   * Add an error to the list
+   * @param error
+   */
+  const handleAddError = (error: string) => {
+    // @TODO: typescript error?
+    setErrors((prevErrors: string[]) => [...prevErrors, error]);
+  };
+
+  /**
+   * Handle adding one or more emails addresses to the list.
+   * Multiple emails can be delimited by comma or space.
+   * Emails are validated before being added to the list.
+   *
+   * @param emails
+   */
+  const handleAddEmail = (emails: string) => {
+    if (!emails) return;
+    setErrors([]);
+
+    const emailArray = emails.split(/[\s,]+/).map((email) => email.trim());
+    const validEmails = emailArray.filter((email: string) => isValidEmail(email));
+
+    setEmailList([...emailList, ...validEmails]);
+    setSelectedEmail("");
+  };
+
+  /**
+   * Remove an email from the list
+   * @param email
+   */
+  const handleRemoveEmail = (email: string) => {
+    setEmailList(emailList.filter((e) => e !== email));
+  };
+
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -119,7 +184,8 @@ export const ManageUsers = ({
             <div className="flex flex-row py-2" key={user.email}>
               <div className="grow">{user.email}</div>
               <div>
-                {loggedInUserEmail === user.email ? (
+                {/* Disable delete for current user or only remaining user */}
+                {loggedInUserEmail === user.email || usersWithAccess.length <= 1 ? (
                   <span></span>
                 ) : (
                   <DeleteConfirm callback={() => handleRemoveUser(user.id)} />

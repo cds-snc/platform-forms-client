@@ -1,9 +1,15 @@
-type InviteUserProps = {
-  emailList: string[];
-  setMessage: (message: string) => void;
-};
+import { useContext } from "react";
+import { ManageFormAccessDialogContext } from "./ManageFormAccessDialogContext";
 
-export const InviteUsers = ({ emailList, setMessage }: InviteUserProps) => {
+export const InviteUsers = () => {
+  const dialogContext = useContext(ManageFormAccessDialogContext);
+
+  if (!dialogContext) {
+    throw new Error("ManageFormAccessDialog must be used within a ManageFormAccessDialogProvider");
+  }
+
+  const { emailList, setMessage } = dialogContext;
+
   return (
     <>
       <section>

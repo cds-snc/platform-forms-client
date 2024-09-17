@@ -3,7 +3,6 @@
 import { authCheckAndThrow } from "@lib/actions";
 import { prisma, prismaErrors } from "@lib/integration/prismaConnector";
 import { logMessage } from "@lib/logger";
-import { checkPrivileges } from "@lib/privileges";
 
 const canManageUsersForForm = async (formId: string) => {
   const { ability } = await authCheckAndThrow();
@@ -17,14 +16,20 @@ const canManageUsersForForm = async (formId: string) => {
   });
 
   if (!template) {
-    // @TODO: custom exception or?
-    throw new Error(`Template ${formId} not found`);
+    return false;
   }
 
-  checkPrivileges(ability, [
-    { action: "update", subject: { type: "FormRecord", object: { users: template.users } } },
-    { action: "update", subject: { type: "User", object: { id: ability.userID } } },
-  ]);
+  // not sure?
+  // checkPrivileges(ability, [
+  //   { action: "update", subject: { type: "FormRecord", object: { users: template.users } } },
+  //   { action: "update", subject: { type: "User", object: { id: ability.userID } } },
+  // ]);
+
+  if (template.users.some((user) => user.id === ability.userID)) {
+    return true;
+  }
+
+  return false;
 };
 
 export const sendInvitation = async (email: string, templateId: string, message: string) => {
@@ -40,26 +45,32 @@ export const sendInvitation = async (email: string, templateId: string, message:
 
 export const removeUserFromForm = async (userId: string, formId: string) => {
   try {
-    await canManageUsersForForm(formId);
-
-    await prisma.template
-      .update({
-        where: {
-          id: formId,
-        },
-        data: {
-          users: {
-            disconnect: {
-              id: userId,
+    if (await canManageUsersForForm(formId)) {
+      await prisma.template
+        .update({
+          where: {
+            id: formId,
+          },
+          data: {
+            users: {
+              disconnect: {
+                id: userId,
+              },
             },
           },
-        },
-      })
-      .catch((e) => prismaErrors(e, null));
+        })
+        .catch((e) => prismaErrors(e, null));
 
-    return true;
+      return {
+        success: true,
+        message: "User removed",
+      };
+    }
   } catch (e) {
-    return false;
+    return {
+      success: false,
+      message: "Failed to remove user",
+    };
   }
 };
 
