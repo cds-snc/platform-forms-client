@@ -19,7 +19,7 @@ export const DeleteConfirm = ({ callback }: DeleteConfirmProps) => {
   };
   return (
     <>
-      {error && <span className="text-red-700 px-2">{error}</span>}
+      {error && <span className="px-2 text-red-700">{error}</span>}
       {!confirm && (
         <button
           onClick={() => {
@@ -33,7 +33,7 @@ export const DeleteConfirm = ({ callback }: DeleteConfirmProps) => {
       {confirm && (
         <>
           <span>Are you sure?</span>
-          <Button theme="destructive" className="px-2 py-0 ml-2" onClick={handleOnClick}>
+          <Button theme="destructive" className="ml-2 px-2 py-0" onClick={handleOnClick}>
             Remove
           </Button>
         </>

@@ -125,10 +125,10 @@ export const ManageUsers = () => {
         <p className="pb-3">Must be a government email address</p>
 
         {errors.length > 0 && (
-          <div className="flex-wrap flex gap-2 my-2">
+          <div className="my-2 flex flex-wrap gap-2">
             {errors.map((error, index) => (
               <div
-                className="bg-red-100 border border-red-700 px-2 rounded-md text-red-700"
+                className="rounded-md border border-red-700 bg-red-100 px-2 text-red-700"
                 key={`error-${index}`}
               >
                 {error}
@@ -137,12 +137,12 @@ export const ManageUsers = () => {
           </div>
         )}
 
-        <div className="border border-black flex-wrap flex gap-2 p-2">
+        <div className="flex flex-wrap gap-2 border border-black p-2">
           {emailList.map((email) => {
             return (
               <div
                 key={email}
-                className="bg-violet-50 border border-violet-700 flex items-center gap-1 px-2 rounded-md"
+                className="flex items-center gap-1 rounded-md border border-violet-700 bg-violet-50 px-2"
               >
                 <div className="">{email}</div>
                 <button className="" onClick={() => handleRemoveEmail(email)}>
@@ -155,7 +155,7 @@ export const ManageUsers = () => {
           <input
             id="email"
             type="text"
-            className="inline-block grow border-none outline-none px-2 py-1"
+            className="inline-block grow border-none px-2 py-1 outline-none"
             onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
               setSelectedEmail(e.target.value);
             }}

@@ -13,12 +13,12 @@ export const InviteUsers = () => {
   return (
     <>
       <section>
-        <div className="flex-wrap flex gap-2">
+        <div className="flex flex-wrap gap-2">
           {emailList.map((email) => {
             return (
               <div
                 key={email}
-                className="bg-violet-50 border border-violet-700 flex items-center gap-1 px-3 rounded-md"
+                className="flex items-center gap-1 rounded-md border border-violet-700 bg-violet-50 px-3"
               >
                 <div>{email}</div>
               </div>
