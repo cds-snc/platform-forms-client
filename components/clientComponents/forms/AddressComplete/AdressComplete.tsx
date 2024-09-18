@@ -1,7 +1,7 @@
 "use client";
 import { AddressCompleteChoice, AddressCompleteProps, AddressElements } from "./types";
 import { getAddressCompleteChoices, getSelectedAddress } from "./utils";
-import { Description, Label, Combobox } from "@clientComponents/forms";
+import { Description, Label, ManagedCombobox } from "@clientComponents/forms";
 import { useState, useEffect } from "react";
 import { useTranslation } from "@i18n/client";
 import { useField } from "formik";
@@ -147,7 +147,7 @@ export const AddressComplete = (props: AddressCompleteProps): React.ReactElement
             {t("addElementDialog.addressComplete.street.label")}
           </Label>
           <Description>{t("addElementDialog.addressComplete.street.description")}</Description>
-          <Combobox
+          <ManagedCombobox
             choices={choices}
             id={`${name}-streetInput`}
             name={`${name}-streetInput`}
