@@ -282,7 +282,7 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
             {isGroupsCheck && isShowReviewPage && currentGroup === LockedSections.REVIEW && (
               <Review language={language as Language} />
             )}
-            16 {/** TEMP REMOVE */}
+
             {/* For more info on the React lib https://github.com/hCaptcha/react-hcaptcha */}
             <HCaptcha
               sitekey={props.hCaptchaSiteKey || ""}
@@ -290,9 +290,9 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
                 logMessage.info(`Captcha token = ${token}`); // TODO remove
                 const success = await verifyHCaptchaToken(token);
                 if (!success) {
-                  alert("Captcha token verification failed");
+                  logMessage.info("Captcha token verification failed");
                 } else {
-                  alert("Captcha token verification succeeded!");
+                  logMessage.info("Captcha token verification succeeded"); // TODO remove
                   handleSubmit();
                 }
               }}
@@ -302,7 +302,7 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
               languageOverride={language}
               size="invisible"
             />
-            <br />
+
             <div className="flex">
               {isGroupsCheck && isShowReviewPage && (
                 <BackButtonGroup
