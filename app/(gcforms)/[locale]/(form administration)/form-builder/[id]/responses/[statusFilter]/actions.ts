@@ -137,10 +137,10 @@ const getAnswerAsString = (question: FormElement | undefined, answer: unknown): 
 
     if (question.properties.full === false) {
       return answer as string;
-    } else {
-      const addressObject = JSON.parse(answer as string) as AddressElements;
-      return getAddressAsString(addressObject);
     }
+
+    const addressObject = JSON.parse(answer as string) as AddressElements;
+    return getAddressAsString(addressObject);
   }
 
   return answer as string;
