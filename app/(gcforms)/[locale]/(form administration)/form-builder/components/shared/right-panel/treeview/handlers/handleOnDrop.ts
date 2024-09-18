@@ -253,6 +253,13 @@ export const handleOnDrop = async (
     originGroupElements = (originParent?.children || []) as string[];
     const originIndex = originGroupElements.indexOf(String(item.index));
 
+    // Between groups
+    const groupKey = String(targetParentGroup.name).toLowerCase();
+
+    if (groupKey === "start") {
+      itemsPriorToInsertion += 1;
+    }
+
     // Adjust index if dragging down
     itemsPriorToInsertion += isOldItemPriorToNewItem(targetGroupElements, item.index, targetIndex)
       ? 1
@@ -274,11 +281,8 @@ export const handleOnDrop = async (
     currentGroups = newGroups;
 
     // Insert at new position
-    targetGroupElements = insertItemAtIndex(
-      targetGroupElements,
-      String(item.index),
-      targetIndex + index
-    );
+    const newIndex = targetIndex - itemsPriorToInsertion + index;
+    targetGroupElements = insertItemAtIndex(targetGroupElements, String(item.index), newIndex);
 
     newGroups = { ...currentGroups };
     newGroups[targetParent] = {
