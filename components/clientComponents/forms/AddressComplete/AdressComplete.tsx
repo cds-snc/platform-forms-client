@@ -6,6 +6,7 @@ import { useState, useEffect } from "react";
 import { useTranslation } from "@i18n/client";
 import { useField } from "formik";
 import { cn } from "@lib/utils";
+import { SpinnerIcon } from "@serverComponents/icons/SpinnerIcon";
 
 export const AddressComplete = (props: AddressCompleteProps): React.ReactElement => {
   const { id, name, required, ariaDescribedBy } = props;
@@ -19,6 +20,7 @@ export const AddressComplete = (props: AddressCompleteProps): React.ReactElement
   const [addressResultCache, setAddressResultCache] = useState<AddressCompleteChoice[]>([]); // Cache the results from the address search.
 
   // Cache and Allow values
+  const [isReady, setIsReady] = useState(false);
   const [allow, setAllow] = useState(false);
   const [apiKey, setApiKey] = useState("");
   //const [cache, setCache] = useState<{ [key: string]: AddressElements }>({});
@@ -30,6 +32,7 @@ export const AddressComplete = (props: AddressCompleteProps): React.ReactElement
       const jsonData = await response.json();
       setAllow(jsonData.allowed);
       setApiKey(jsonData.key);
+      setIsReady(true);
     };
 
     if (apiKey === "") {
@@ -147,15 +150,23 @@ export const AddressComplete = (props: AddressCompleteProps): React.ReactElement
             {t("addElementDialog.addressComplete.street.label")}
           </Label>
           <Description>{t("addElementDialog.addressComplete.street.description")}</Description>
-          <ManagedCombobox
-            choices={choices}
-            id={`${name}-streetInput`}
-            name={`${name}-streetInput`}
-            onChange={onAddressSearch}
-            onSetValue={onAddressSet}
-            required={required}
-            activeRefresh={true}
-          />
+          {isReady && (
+            <ManagedCombobox
+              choices={choices}
+              id={`${name}-streetInput`}
+              name={`${name}-streetInput`}
+              onChange={onAddressSearch}
+              onSetValue={onAddressSet}
+              required={required}
+              activeRefresh={true}
+            />
+          )}
+          {!isReady && (
+            <div role="status" className="mt-2">
+              <SpinnerIcon className="h-8 w-8 animate-spin fill-blue-600 text-gray-200 dark:text-gray-600" />
+              <span className="sr-only">{t("loading")}</span>
+            </div>
+          )}
           <input type="hidden" {...field} />
         </div>
         {props.unitNumber && (
