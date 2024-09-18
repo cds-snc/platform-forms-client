@@ -1,10 +1,10 @@
 import { Invitation } from "@prisma/client";
 import { prisma } from "./integration/prismaConnector";
-import { AccessControlError } from "./privileges";
-import { getTemplateWithAssociatedUsers } from "./templates";
+import { AccessControlError, checkPrivileges } from "./privileges";
 import { UserAbility } from "./types";
 import { logMessage } from "./logger";
 import { getUser } from "./users";
+import { sendEmail } from "./integration/notifyConnector";
 
 class TemplateNotFoundError extends Error {}
 class UserAlreadyHasAccessError extends Error {}
@@ -29,7 +29,7 @@ export const inviteUserByEmail = async (
 
   // Retrieve the template, fail if you don't have permissions
   try {
-    template = await getTemplateWithAssociatedUsers(ability, formId);
+    template = await _getTemplateWithAssociatedUsers(ability, formId);
   } catch (e) {
     if (e instanceof AccessControlError) {
       throw e;
@@ -217,6 +217,12 @@ const _sendInvitationEmail = async (invitation: Invitation, message: string) => 
   logMessage.info(
     `Sending invitation email to ${email} for form ${templateId} with message ${message}`
   );
+
+  // @TODO: add email template
+  await sendEmail(email, {
+    subject: "Invitation to collaborate on a form | Invitation à collaborer sur un formulaire",
+    formResponse: message,
+  });
 };
 
 /**
@@ -224,4 +230,26 @@ const _sendInvitationEmail = async (invitation: Invitation, message: string) => 
  */
 const _notifyOwnersOfNewOwnership = async () => {
   //
+};
+
+const _getTemplateWithAssociatedUsers = async (ability: UserAbility, formId: string) => {
+  const template = await prisma.template.findFirst({
+    where: {
+      id: formId,
+    },
+    include: {
+      users: true,
+    },
+  });
+
+  if (!template) {
+    throw new Error("Template not found");
+  }
+
+  checkPrivileges(ability, [
+    { action: "update", subject: { type: "FormRecord", object: { users: template.users } } },
+    { action: "update", subject: { type: "User", object: { id: ability.userID } } },
+  ]);
+
+  return template;
 };

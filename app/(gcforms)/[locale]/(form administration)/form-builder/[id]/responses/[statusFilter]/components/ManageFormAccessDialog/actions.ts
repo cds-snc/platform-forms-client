@@ -4,8 +4,10 @@ import { authCheckAndThrow } from "@lib/actions";
 import { prisma, prismaErrors } from "@lib/integration/prismaConnector";
 import { logMessage } from "@lib/logger";
 import { TemplateUser } from "./types";
+import { inviteUserByEmail } from "@lib/invitations";
+import { checkPrivilegesAsBoolean } from "@lib/privileges";
 
-const canManageUsersForForm = async (formId: string) => {
+const _canManageUsersForForm = async (formId: string) => {
   const { ability } = await authCheckAndThrow();
   const template = await prisma.template.findFirst({
     where: {
@@ -20,52 +22,40 @@ const canManageUsersForForm = async (formId: string) => {
     return false;
   }
 
-  // not sure?
-  // checkPrivileges(ability, [
-  //   { action: "update", subject: { type: "FormRecord", object: { users: template.users } } },
-  //   { action: "update", subject: { type: "User", object: { id: ability.userID } } },
-  // ]);
-
-  if (template.users.some((user) => user.id === ability.userID)) {
+  // @TODO: check?
+  if (
+    checkPrivilegesAsBoolean(ability, [
+      { action: "update", subject: { type: "FormRecord", object: { users: template.users } } },
+      { action: "update", subject: { type: "User", object: { id: ability.userID } } },
+    ])
+  ) {
     return true;
   }
+
+  // if (template.users.some((user) => user.id === ability.userID)) {
+  //   return true;
+  // }
 
   return false;
 };
 
 export const sendInvitation = async (emails: string[], templateId: string, message: string) => {
-  if (await canManageUsersForForm(templateId)) {
-    logMessage.info(
-      `Sending invitation email to ${JSON.stringify(
-        emails
-      )} for form ${templateId} with message ${message}`
-    );
+  const { ability } = await authCheckAndThrow();
+  logMessage.info(
+    `Sending invitation email to ${JSON.stringify(
+      emails
+    )} for form ${templateId} with message ${message}`
+  );
 
-    emails.forEach(async (email) => {
-      try {
-        await prisma.invitation.create({
-          data: {
-            email,
-            expires: new Date(Date.now() + 1000 * 60 * 60 * 24 * 7),
-            template: {
-              connect: {
-                id: templateId,
-              },
-            },
-          },
-        });
-
-        // send email
-      } catch (e) {
-        // handle
-      }
-    });
-  }
+  emails.forEach(async (email) => {
+    // @TODO: error handling
+    inviteUserByEmail(ability, email, templateId, message);
+  });
 };
 
 export const removeUserFromForm = async (userId: string, formId: string) => {
   try {
-    if (await canManageUsersForForm(formId)) {
+    if (await _canManageUsersForForm(formId)) {
       await prisma.template
         .update({
           where: {
@@ -95,7 +85,7 @@ export const removeUserFromForm = async (userId: string, formId: string) => {
 };
 
 export const getTemplateUsers = async (formId: string) => {
-  await canManageUsersForForm(formId);
+  await _canManageUsersForForm(formId);
 
   const templateWithUsers = await prisma.template
     .findUnique({
