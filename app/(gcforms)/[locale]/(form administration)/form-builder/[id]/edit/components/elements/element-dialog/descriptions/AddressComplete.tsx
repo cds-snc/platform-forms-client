@@ -4,21 +4,9 @@ import { useTranslation } from "@i18n/client";
 import { ExampleWrapper } from "./ExampleWrapper";
 import { AddressComplete as AddressCompleteComponent } from "@clientComponents/forms/AddressComplete/AdressComplete";
 import Image from "next/image";
-import { AddressCompleteProps } from "@clientComponents/forms/AddressComplete/types";
 
 export const AddressComplete = () => {
   const { t } = useTranslation("form-builder");
-
-  const props = {
-    unitNumber: true,
-    civicNumber: true,
-    streetName: true,
-    city: true,
-    province: true,
-    postalCode: true,
-    country: true,
-    name: "test-address",
-  } as AddressCompleteProps;
 
   return (
     <div>
@@ -35,7 +23,17 @@ export const AddressComplete = () => {
       <ExampleWrapper className="mt-4">
         <h4 className="mb-4">{t("addElementDialog.addressComplete.whatIsYourAddress")}</h4>
         <div className="mb-6">
-          <AddressCompleteComponent id="test-address" {...props} />
+          <AddressCompleteComponent
+            id="test-address"
+            name="test-address"
+            civicNumber={true}
+            unitNumber={true}
+            streetName={true}
+            postalCode={true}
+            city={true}
+            province={true}
+            country={true}
+          />
         </div>
       </ExampleWrapper>
     </div>
