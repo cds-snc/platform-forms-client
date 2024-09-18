@@ -300,7 +300,7 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
               onExpire={() => logMessage.info("Captcha Expired")} // TODO
               ref={hCaptchaRef}
               languageOverride={language}
-              // size="invisible" - TODO run invisible
+              size="invisible"
             />
             <br />
             <div className="flex">
