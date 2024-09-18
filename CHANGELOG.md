@@ -5,6 +5,23 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.21.2](https://github.com/cds-snc/platform-forms-client/compare/v3.21.1...v3.21.2) (2024-09-18)
+
+
+### Bug Fixes
+
+* Remove Service Account from Zitadel when API key is deleted. ([#3908](https://github.com/cds-snc/platform-forms-client/issues/3908)) ([13e6671](https://github.com/cds-snc/platform-forms-client/commit/13e6671c058f2ad01b6892cfb778764d9613bd0b))
+
+
+### Miscellaneous Chores
+
+* Add Canada Energy Regulator branding ([#4286](https://github.com/cds-snc/platform-forms-client/issues/4286)) ([701da69](https://github.com/cds-snc/platform-forms-client/commit/701da69e51416350058c76297a6897c64d318651))
+* Add dynamic row dialog ([#4261](https://github.com/cds-snc/platform-forms-client/issues/4261)) ([bdb9821](https://github.com/cds-snc/platform-forms-client/commit/bdb9821af974002e028e46e1de8ed832c3e9c81e))
+* Add Invitation model and migration ([#4269](https://github.com/cds-snc/platform-forms-client/issues/4269)) ([3c4bf72](https://github.com/cds-snc/platform-forms-client/commit/3c4bf729676e80c75bf8b45f3800af329b91ab48))
+* call to check for overdue ids ([#4250](https://github.com/cds-snc/platform-forms-client/issues/4250)) ([8cb3609](https://github.com/cds-snc/platform-forms-client/commit/8cb360943926056264753aec6b464a9343c323da))
+* Style repeating sets ([#4248](https://github.com/cds-snc/platform-forms-client/issues/4248)) ([6dddcd3](https://github.com/cds-snc/platform-forms-client/commit/6dddcd3061e42d2b7439325842a2eceb72c58edb))
+* Translate dynamic row props ([#4266](https://github.com/cds-snc/platform-forms-client/issues/4266)) ([3070872](https://github.com/cds-snc/platform-forms-client/commit/307087250f2c3dbc05f6a735fcdca78f0280582a))
+
 ## [3.21.1](https://github.com/cds-snc/platform-forms-client/compare/v3.21.0...v3.21.1) (2024-09-04)
 
 ### Miscellaneous Chores
