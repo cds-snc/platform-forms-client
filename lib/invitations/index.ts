@@ -1,15 +1,19 @@
 import { Invitation } from "@prisma/client";
-import { prisma } from "./integration/prismaConnector";
-import { AccessControlError, checkPrivileges } from "./privileges";
-import { UserAbility } from "./types";
-import { logMessage } from "./logger";
-import { getUser } from "./users";
-import { sendEmail } from "./integration/notifyConnector";
-
-class TemplateNotFoundError extends Error {}
-class UserAlreadyHasAccessError extends Error {}
-class InvitationNotFoundError extends Error {}
-class InvitationIsExpiredError extends Error {}
+import { prisma } from "../integration/prismaConnector";
+import { AccessControlError, checkPrivileges } from "../privileges";
+import { UserAbility } from "../types";
+import { logMessage } from "../logger";
+import { getUser } from "../users";
+import { sendEmail } from "../integration/notifyConnector";
+import { getOrigin } from "../origin";
+import { AppUser } from "../types/user-types";
+import { inviteToCollaborateTemplate } from "./templates/inviteToCollaborateTemplate";
+import {
+  InvitationIsExpiredError,
+  InvitationNotFoundError,
+  TemplateNotFoundError,
+  UserAlreadyHasAccessError,
+} from "./exceptions";
 
 /**
  * Invite someone to the form by email
@@ -26,6 +30,8 @@ export const inviteUserByEmail = async (
 ) => {
   let template;
   let invitation;
+
+  const sender = await getUser(ability, ability.userID);
 
   // Retrieve the template, fail if you don't have permissions
   try {
@@ -57,13 +63,13 @@ export const inviteUserByEmail = async (
     }
 
     // send invitation email
-    _sendInvitationEmail(invitation, message);
+    _sendInvitationEmail(sender, invitation, message, template.name);
     return invitation;
   }
 
   // No previous invitation, create one
   invitation = await _createInvitation(email, formId);
-  _sendInvitationEmail(invitation, message);
+  _sendInvitationEmail(sender, invitation, message, template.name);
 
   return invitation;
 };
@@ -211,17 +217,34 @@ const _createInvitation = async (email: string, formId: string) => {
  * @param invitation
  * @param message
  */
-const _sendInvitationEmail = async (invitation: Invitation, message: string) => {
+const _sendInvitationEmail = async (
+  sender: AppUser,
+  invitation: Invitation,
+  message: string,
+  templateName: string
+) => {
   const { email, templateId } = invitation;
 
   logMessage.info(
     `Sending invitation email to ${email} for form ${templateId} with message ${message}`
   );
 
-  // @TODO: add email template
+  const HOST = getOrigin();
+
+  const formUrlEn = `${HOST}/en/form-builder/${invitation.templateId}/responses`;
+  const formUrlFr = `${HOST}/fr/form-builder/${invitation.templateId}/responses`;
+
+  const emailContent = inviteToCollaborateTemplate(
+    sender.name || "",
+    message,
+    templateName,
+    formUrlEn,
+    formUrlFr
+  );
+
   await sendEmail(email, {
     subject: "Invitation to collaborate on a form | Invitation à collaborer sur un formulaire",
-    formResponse: message,
+    formResponse: emailContent,
   });
 };
 
@@ -237,7 +260,9 @@ const _getTemplateWithAssociatedUsers = async (ability: UserAbility, formId: str
     where: {
       id: formId,
     },
-    include: {
+    select: {
+      id: true,
+      name: true,
       users: true,
     },
   });
