@@ -194,22 +194,19 @@ export const handleOnDrop = async (
   let originParentGroup;
   let originGroupElements: string[] = [];
 
+  if (targetParent === "start") {
+    targetIndex = targetIndex - 2;
+  }
+
   items.forEach((item, index) => {
     // Remove item from original location
     const originParent = findParentGroup(getTreeData(), String(item.index));
     originParentGroup = currentGroups[originParent?.index as string];
 
     // Dragging/dropping item within same group
-    if (originParentGroup == targetParentGroup) {
+    if (originParentGroup.name == targetParentGroup.name) {
       originGroupElements = (originParent?.children || []) as string[];
       const originIndex = originGroupElements.indexOf(String(item.index));
-
-      const groupKey = String(originParent?.index);
-
-      if (groupKey === "start") {
-        // Adjust the index to account for "ghost" items
-        targetIndex = targetIndex - 2;
-      }
 
       // Adjust index if dragging down
       itemsPriorToInsertion += isOldItemPriorToNewItem(targetGroupElements, item.index, targetIndex)
@@ -256,10 +253,6 @@ export const handleOnDrop = async (
     // Between groups
     const groupKey = String(targetParentGroup.name).toLowerCase();
 
-    if (groupKey === "start") {
-      itemsPriorToInsertion += 1;
-    }
-
     // Adjust index if dragging down
     itemsPriorToInsertion += isOldItemPriorToNewItem(targetGroupElements, item.index, targetIndex)
       ? 1
@@ -281,7 +274,7 @@ export const handleOnDrop = async (
     currentGroups = newGroups;
 
     // Insert at new position
-    const newIndex = targetIndex - itemsPriorToInsertion + index;
+    const newIndex = targetIndex + index - (groupKey === "start" ? 2 : 0);
     targetGroupElements = insertItemAtIndex(targetGroupElements, String(item.index), newIndex);
 
     newGroups = { ...currentGroups };

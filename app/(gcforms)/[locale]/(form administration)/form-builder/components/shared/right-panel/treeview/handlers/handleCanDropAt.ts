@@ -28,13 +28,13 @@ export const handleCanDropAt = (
   const nonGroupItemsCount = items.filter((item) => !item.isFolder).length;
   const targetDraggingPositionType = getTargetDraggingPositionType(target);
 
-  if (target.parentItem === "start") {
-    if (target.linearIndex === 1 || target.linearIndex === 2) {
+  if ((<DraggingPositionBetweenItems>target).parentItem === "start") {
+    if ((<DraggingPositionBetweenItems>target).childIndex < 2) {
       return false;
     }
   }
 
-  if (target.parentItem === "root") {
+  if ((<DraggingPositionBetweenItems>target).parentItem === "root") {
     return false;
   }
 
