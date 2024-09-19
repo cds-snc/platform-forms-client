@@ -54,7 +54,7 @@
       "postal": "Code postal",
       "province": "Province, territoire ou état",
       "street": {
-        "description": "Indiquez le nom de rue et le numéro d'unité.",
+        "description": "Indiquez le nom et le numéro de rue.",
         "label": "Adresse municipale"
       },
       "title": "Adresse validée",
