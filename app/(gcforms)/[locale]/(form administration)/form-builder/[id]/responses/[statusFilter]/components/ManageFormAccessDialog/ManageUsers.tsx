@@ -173,7 +173,7 @@ export const ManageUsers = () => {
 
       <section className="mt-4">
         <h3>People with access</h3>
-        <div className="border-1 border-black p-4">
+        <div className="max-h-96 overflow-scroll border-1 border-black p-4">
           {usersWithAccess.map((user) => (
             <div className="flex flex-row py-2" key={user.email}>
               <div className="grow">{user.email}</div>
