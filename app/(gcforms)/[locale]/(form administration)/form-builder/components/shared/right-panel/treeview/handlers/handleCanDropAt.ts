@@ -28,6 +28,16 @@ export const handleCanDropAt = (
   const nonGroupItemsCount = items.filter((item) => !item.isFolder).length;
   const targetDraggingPositionType = getTargetDraggingPositionType(target);
 
+  if ((<DraggingPositionBetweenItems>target).parentItem === "start") {
+    if ((<DraggingPositionBetweenItems>target).childIndex < 2) {
+      return false;
+    }
+  }
+
+  if ((<DraggingPositionBetweenItems>target).parentItem === "root") {
+    return false;
+  }
+
   // Can't drag Groups + Items together
   if (groupItemsCount > 0 && nonGroupItemsCount > 0) {
     return false;
