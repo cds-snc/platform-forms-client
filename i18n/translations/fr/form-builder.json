@@ -57,7 +57,7 @@
         "description": "Indiquez le nom de rue et le numéro d'unité.",
         "label": "Adresse municipale"
       },
-      "title": "Adresse (auto-remplissage)",
+      "title": "Adresse validée",
       "select": "Sélectionner les éléments de l'adresse à inclure.",
       "options": "Options de format d’adresse",
       "fields": "Champs d’adresse",
