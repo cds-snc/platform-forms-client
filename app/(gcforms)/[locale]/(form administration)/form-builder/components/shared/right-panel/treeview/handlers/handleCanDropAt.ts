@@ -30,7 +30,18 @@ export const handleCanDropAt = (
   const nonGroupItemsCount = items.filter(
     (item) => !item.isFolder || item.data.type === "dynamicRow"
   ).length;
+
   const targetDraggingPositionType = getTargetDraggingPositionType(target);
+
+  if ((<DraggingPositionBetweenItems>target).parentItem === "start") {
+    if ((<DraggingPositionBetweenItems>target).childIndex < 2) {
+      return false;
+    }
+  }
+
+  if ((<DraggingPositionBetweenItems>target).parentItem === "root") {
+    return false;
+  }
 
   let targetParentItem = undefined;
   if (Object.prototype.hasOwnProperty.call(target, "parentItem")) {
@@ -83,6 +94,7 @@ export const handleCanDropAt = (
         return false;
       }
     }
+
     return true;
   }
 
