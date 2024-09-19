@@ -1,4 +1,6 @@
 import { logMessage } from "@lib/logger";
+import { notifyCatcher } from "@lib/notifyCatcher";
+
 import axios from "axios";
 
 const NotifyClient = axios.create({
@@ -17,6 +19,21 @@ export const sendEmail = async (
   try {
     if (process.env.APP_ENV === "test") {
       logMessage.info("Mock Notify email sent.");
+      return;
+    }
+
+    if (process.env.APP_ENV === "local") {
+      try {
+        notifyCatcher(email, personalisation);
+      } catch (e) {
+        logMessage.error("NotifyCatcher failed to catch the email", e);
+
+        // just log it out
+        logMessage.info("Development Notify email sending:", "", { email, personalisation });
+        logMessage.info("To: " + email);
+        logMessage.info("Subject: " + personalisation.subject);
+        logMessage.info("Body: " + personalisation.formResponse);
+      }
       return;
     }
 
