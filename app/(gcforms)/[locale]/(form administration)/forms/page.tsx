@@ -10,6 +10,7 @@ import { ResumeEditingForm } from "./components/ResumeEditingForm";
 import { getAllTemplatesForUser, TemplateOptions } from "@lib/templates";
 import { DeliveryOption } from "@lib/types";
 import { getOverdueTemplateIds } from "@lib/overdue";
+import { Invitations } from "./components/server/Invitations";
 
 export type FormsTemplate = {
   id: string;
@@ -82,6 +83,7 @@ export default async function Page({
     return (
       <div className="center mx-auto w-[980px] bg-gray-soft">
         <h1 className="mb-8 border-b-0">{t("title")}</h1>
+        <Invitations />
         <div className="flex w-full justify-between">
           <Navigation filter={status} />
           <NewFormButton />
