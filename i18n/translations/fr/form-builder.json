@@ -61,7 +61,7 @@
       "select": "Sélectionner les éléments de l'adresse à inclure.",
       "options": "Options de format d’adresse",
       "fields": "Champs d’adresse",
-      "fieldsDesc": "Ceci détermine la manière dont la date est saisie et dont les données existent.",
+      "fieldsDesc": "Ceci détermine la manière dont les données d'adresse sont stockées.",
       "fullAddress": "Adresse complète",
       "splitAddress": "Adresse fractionnée",
       "customize": "Adapter le format",
