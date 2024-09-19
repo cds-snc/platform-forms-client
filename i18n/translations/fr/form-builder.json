@@ -23,7 +23,7 @@
       "name": "Ajouter un nom complet",
       "firstMiddleLastName": "Ajouter des noms individuels",
       "address": "Ajouter une adresse",
-      "adressComplete": "Ajouter une adresse (auto-remplissage)",
+      "adressComplete": "Ajouter une adresse validée",
       "contact": "Ajouter des coordonnées",
       "dynamicRow": "Ajouter un ensemble de réponses",
       "richText": "Ajouter du texte de page",
