@@ -1,10 +1,9 @@
-import {
-  createManagementClient,
-  createServiceAccountInterceptor,
-  ManagementServiceClient,
-} from "@zitadel/node/api";
+import { createManagementClient, ManagementServiceClient } from "@zitadel/node/api";
 import { checkOne } from "@lib/cache/flags";
 import { ServiceAccount } from "@zitadel/node/credentials";
+import { AuthenticationOptions } from "@zitadel/node/dist/commonjs/credentials/service-account";
+import type { CallOptions, ClientMiddleware, ClientMiddlewareCall } from "nice-grpc";
+import { Metadata } from "nice-grpc-common";
 
 let zitadelClient: ManagementServiceClient | null = null;
 
@@ -17,6 +16,32 @@ const getZitadelSettings = async () => {
   return {
     zitadelAdministrationKey: process.env.ZITADEL_ADMINISTRATION_KEY,
     zitadelProvider: process.env.ZITADEL_PROVIDER,
+  };
+};
+
+const createServiceAccountInterceptor = (
+  audience: string,
+  serviceAccount: ServiceAccount,
+  authOptions?: AuthenticationOptions
+): ClientMiddleware => {
+  let token: string | undefined;
+  // Setting to 0 so the token will always be defined as being in the past and is fetched on the first call
+  const expiryDate = new Date(0);
+
+  return async function* <Request, Response>(
+    call: ClientMiddlewareCall<Request, Response>,
+    options: CallOptions
+  ) {
+    options.metadata ??= new Metadata();
+    if (!options.metadata.has("authorization")) {
+      // If the token is not set or the expiry date is in the past, fetch a new token
+      if (expiryDate < new Date()) {
+        token = await serviceAccount.authenticate(audience, authOptions);
+        expiryDate.setTime(new Date().getTime() + 25 * 60 * 1000);
+      }
+      options.metadata.set("authorization", `Bearer ${token}`);
+    }
+    return yield* call.next(call.request, options);
   };
 };
 
