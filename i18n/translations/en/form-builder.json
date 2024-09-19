@@ -23,7 +23,7 @@
       "name": "Add full name",
       "firstMiddleLastName": "Add individual names",
       "address": "Add address",
-      "addressComplete": "Add address (Auto-fill)",
+      "addressComplete": "Add verified address",
       "contact": "Add contact",
       "dynamicRow": "Add repeating set",
       "richText": "Add page text",
