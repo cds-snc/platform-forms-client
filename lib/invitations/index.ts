@@ -14,6 +14,7 @@ import {
   TemplateNotFoundError,
   UserAlreadyHasAccessError,
 } from "./exceptions";
+import { inviteToFormsTemplate } from "./templates/inviteToFormsTemplate";
 
 /**
  * Invite someone to the form by email
@@ -62,7 +63,7 @@ export const inviteUserByEmail = async (
       invitation = await _createInvitation(email, formId);
     }
 
-    // send invitation email
+    // send or resend invitation email
     _sendInvitationEmail(sender, invitation, message, template.name);
     return invitation;
   }
@@ -231,19 +232,47 @@ const _sendInvitationEmail = async (
 
   const HOST = getOrigin();
 
-  const formUrlEn = `${HOST}/en/form-builder/${invitation.templateId}/responses`;
-  const formUrlFr = `${HOST}/fr/form-builder/${invitation.templateId}/responses`;
+  // Determine whether to send an invitation to register or an invitation to the form
+  const user = await prisma.user.findFirst({
+    where: {
+      email,
+    },
+  });
 
-  const emailContent = inviteToCollaborateTemplate(
+  // User exists, send invitation to form
+  if (user) {
+    const formUrlEn = `${HOST}/en/form-builder/${invitation.templateId}/responses`;
+    const formUrlFr = `${HOST}/fr/form-builder/${invitation.templateId}/responses`;
+
+    const emailContent = inviteToCollaborateTemplate(
+      sender.name || "",
+      message,
+      templateName,
+      formUrlEn,
+      formUrlFr
+    );
+
+    await sendEmail(email, {
+      subject: "Invitation to collaborate on a form | Invitation à collaborer sur un formulaire",
+      formResponse: emailContent,
+    });
+
+    return;
+  }
+
+  // User does not exist, send invitation to register
+  const registerUrlEn = `${HOST}/en/auth/register`;
+  const registerUrlFr = `${HOST}/fr/auth/register`;
+
+  const emailContent = inviteToFormsTemplate(
     sender.name || "",
     message,
-    templateName,
-    formUrlEn,
-    formUrlFr
+    registerUrlEn,
+    registerUrlFr
   );
 
   await sendEmail(email, {
-    subject: "Invitation to collaborate on a form | Invitation à collaborer sur un formulaire",
+    subject: "Invitation to create a GC Forms account | Invitation à créer un compte GC Forms",
     formResponse: emailContent,
   });
 };

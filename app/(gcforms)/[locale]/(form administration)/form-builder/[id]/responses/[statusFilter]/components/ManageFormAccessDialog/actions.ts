@@ -5,7 +5,8 @@ import { prisma, prismaErrors } from "@lib/integration/prismaConnector";
 import { logMessage } from "@lib/logger";
 import { TemplateUser } from "./types";
 import { inviteUserByEmail } from "@lib/invitations";
-import { checkPrivilegesAsBoolean } from "@lib/privileges";
+import { AccessControlError, checkPrivilegesAsBoolean } from "@lib/privileges";
+import { TemplateNotFoundError, UserAlreadyHasAccessError } from "@lib/invitations/exceptions";
 
 const _canManageUsersForForm = async (formId: string) => {
   const { ability } = await authCheckAndThrow();
@@ -48,8 +49,19 @@ export const sendInvitation = async (emails: string[], templateId: string, messa
   );
 
   emails.forEach(async (email) => {
-    // @TODO: error handling
-    inviteUserByEmail(ability, email, templateId, message);
+    try {
+      inviteUserByEmail(ability, email, templateId, message);
+    } catch (e) {
+      if (e instanceof UserAlreadyHasAccessError) {
+        // @TODO
+      }
+      if (e instanceof TemplateNotFoundError) {
+        // @TODO
+      }
+      if (e instanceof AccessControlError) {
+        // @TODO
+      }
+    }
   });
 };
 
