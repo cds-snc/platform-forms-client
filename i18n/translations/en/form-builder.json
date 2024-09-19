@@ -64,7 +64,7 @@
       "fieldsDesc": "This will determine how the date is entered and how data is kept.",
       "fullAddress": "Full address",
       "splitAddress": "Split address",
-      "customize": "Customize address format",
+      "customize": "Customize format",
       "startTyping": "Start typing an address to search",
       "components": {
         "header": "Parts of the address to be included",
