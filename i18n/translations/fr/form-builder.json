@@ -63,7 +63,9 @@
       "fields": "Champs d’adresse",
       "fieldsDesc": "Ceci détermine la manière dont les données d'adresse sont stockées.",
       "fullAddress": "Adresse complète",
+      "fullAddressDesc": "Recueillir l'adresse avec un seul champ, comme une seule donnée.",
       "splitAddress": "Adresse fractionnée",
+      "splitAddressDesc": "Recueillir l'adresse avec plusieurs champs, comme données distinctes.",
       "customize": "Adapter le format",
       "startTyping": "Commencez à taper l'adresse à rechercher",
       "components": {

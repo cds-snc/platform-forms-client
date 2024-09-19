@@ -35,37 +35,6 @@ export const AddressCompleteOptions = ({
   return (
     <section className="mb-4">
       <h3>{t("addElementDialog.addressComplete.options")}</h3>
-      <h4>{t("addElementDialog.addressComplete.fields")}</h4>
-      <p className="mt-4 mb-4">{t("addElementDialog.addressComplete.fieldsDesc")}</p>
-
-      <Radio
-        className="mt-2"
-        name="addressType"
-        id="addressType-full"
-        label={t("addElementDialog.addressComplete.fullAddress")}
-        value=""
-        checked={properties.full || properties.full === undefined}
-        onChange={() => {
-          updateModalProperties(item.id, {
-            ...properties,
-            ...{ full: true },
-          });
-        }}
-      />
-      <Radio
-        className="mt-2"
-        name="addressType"
-        id="addressType-split"
-        label={t("addElementDialog.addressComplete.splitAddress")}
-        value="bday"
-        checked={properties.full === false}
-        onChange={() => {
-          updateModalProperties(item.id, {
-            ...properties,
-            ...{ full: false },
-          });
-        }}
-      />
 
       <h4>{t("addElementDialog.addressComplete.components.header")}</h4>
       <p className="mt-4 mb-4">{t("addElementDialog.addressComplete.components.desc")}</p>
@@ -170,6 +139,44 @@ export const AddressCompleteOptions = ({
         }}
         label={t("addElementDialog.addressComplete.components.country")}
       ></Checkbox>
+
+      <h4 className="mt-4">{t("addElementDialog.addressComplete.fields")}</h4>
+      <p className="mt-2 mb-4">{t("addElementDialog.addressComplete.fieldsDesc")}</p>
+
+      <Radio
+        className="mt-2"
+        name="addressType"
+        id="addressType-full"
+        label={t("addElementDialog.addressComplete.fullAddress")}
+        value=""
+        checked={properties.full || properties.full === undefined}
+        onChange={() => {
+          updateModalProperties(item.id, {
+            ...properties,
+            ...{ full: true },
+          });
+        }}
+      />
+      <div className="text-sm ml-12 mb-4">
+        {t("addElementDialog.addressComplete.fullAddressDesc")}
+      </div>
+      <Radio
+        className="mt-2"
+        name="addressType"
+        id="addressType-split"
+        label={t("addElementDialog.addressComplete.splitAddress")}
+        value="bday"
+        checked={properties.full === false}
+        onChange={() => {
+          updateModalProperties(item.id, {
+            ...properties,
+            ...{ full: false },
+          });
+        }}
+      />
+      <div className="text-sm ml-12 mb-4">
+        {t("addElementDialog.addressComplete.splitAddressDesc")}
+      </div>
     </section>
   );
 };

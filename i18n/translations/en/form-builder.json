@@ -63,7 +63,9 @@
       "fields": "Address fields",
       "fieldsDesc": "This will determine how address data is stored.",
       "fullAddress": "Full address",
+      "fullAddressDesc": "Collect the address in one field, as one data point.",
       "splitAddress": "Split address",
+      "splitAddressDesc": "Collect the address in multiple fields, as separate data points.",
       "customize": "Customize format",
       "startTyping": "Start typing an address to search",
       "components": {
