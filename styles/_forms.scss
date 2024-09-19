@@ -134,6 +134,13 @@
 
   ul,
   ol {
+    p {
+      @apply mb-1;
+    }
+  }
+
+  ul,
+  ol {
     ul,
     ol {
       @apply mb-0;
