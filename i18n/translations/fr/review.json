@@ -4,7 +4,7 @@
   "edit": "Modifier",
   "goBack": "Retourner",
   "submit": "Soumettre",
-  "unknown": "Réponse inconnue",
+  "unknown": "Adresse introuvable",
   "addressComponents": {
     "header": "Parties de l’adresse à inclure",
     "desc": "Essayez de minimiser ce qui est demandé pour ne recueillir que ce qui est nécessaire.",
