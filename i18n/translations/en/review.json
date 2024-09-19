@@ -4,7 +4,7 @@
   "edit": "Edit",
   "goBack": "Go back",
   "submit": "Submit",
-  "unknown": "Unknown answer",
+  "unknown": "Address not found",
   "addressComponents": {
     "header": "Parts of the address to be included",
     "desc": "Consider minimizing what is asked to only collect what is necessary.",
@@ -12,8 +12,8 @@
     "civicNumber": "Civic number",
     "streetName": "Street name",
     "city": "City or town",
-    "province": "Province, territory or state",
-    "postalCode": "Postal or Zip code",
+    "province": "Province, territory, or state",
+    "postalCode": "Postal or zip code",
     "country": "Country"
   }
 }

@@ -50,7 +50,7 @@
       "city": "Ville ou communauté",
       "country": "Pays",
       "description": "Le champ d'adresse validée est développé par Postes Canada et utilise l'API AdresseComplète pour vérifier les adresses au fur et à mesure qu'elles sont saisies. Utilisez-le pour une une adresse validée et précise.",
-      "label": "Adresse (auto-remplissage)",
+      "label": "Adresse validée",
       "postal": "Code postal",
       "province": "Province, territoire ou état",
       "street": {

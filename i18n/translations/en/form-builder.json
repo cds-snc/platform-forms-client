@@ -46,22 +46,22 @@
       "title": "Address"
     },
     "addressComplete": {
-      "whatIsYourAddress": "What is your address?",
+      "whatIsYourAddress": "Mailing address",
       "city": "City, town, or community",
       "country": "Country",
-      "description": "Auto-fill addresses using Canada Posts Address Complete API. This will allow form fillers to complete address fields with 95% accuracy.",
-      "label": "Address (Auto-fill)",
+      "description": "Verified address is a component developed by Canada Post using the AddressComplete API to look up addresses as they are entered. Use this element for a more accurate and verified address.",
+      "label": "Verified address",
       "postal": "Postal code",
-      "province": "Province or territory",
+      "province": "Province, territory, or state",
       "street": {
         "description": "Include street name and number.",
         "label": "Street address"
       },
-      "title": "Address (Auto-fill)",
+      "title": "Verified address",
       "select": "Select which component parts of the address to include.",
       "options": "Address format options",
       "fields": "Address fields",
-      "fieldsDesc": "This will determine how the date is entered and how data is kept.",
+      "fieldsDesc": "This will determine how address data is stored.",
       "fullAddress": "Full address",
       "splitAddress": "Split address",
       "customize": "Customize format",
@@ -73,8 +73,8 @@
         "civicNumber": "Civic number",
         "streetName": "Street name",
         "city": "City or town",
-        "province": "Province, territory or state",
-        "postalCode": "Postal or Zip code",
+        "province": "Province, territory, or state",
+        "postalCode": "Postal or zip code",
         "country": "Country"
       }
     },
