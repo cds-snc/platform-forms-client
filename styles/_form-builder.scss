@@ -191,6 +191,10 @@
     }
   }
 
+  .editor-list-ul li {
+    margin-bottom: 2.5rem;
+  }
+
   .gc-toolbar-container {
     &:focus-within {
       margin: -2px;
