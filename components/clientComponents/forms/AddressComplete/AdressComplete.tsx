@@ -163,10 +163,6 @@ export const AddressComplete = (props: AddressCompleteProps): React.ReactElement
           )}
           {!isReady && (
             <>
-              <Label htmlFor="street" className="gc-label">
-                {t("addElementDialog.addressComplete.street.label")}
-              </Label>
-              <Description>{t("addElementDialog.addressComplete.street.description")}</Description>
               <div role="status" className="mt-2">
                 <SpinnerIcon className="h-8 w-8 animate-spin fill-blue-600 text-gray-200 dark:text-gray-600" />
                 <span className="sr-only">{t("loading")}</span>
