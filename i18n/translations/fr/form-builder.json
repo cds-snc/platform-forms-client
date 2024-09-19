@@ -52,7 +52,7 @@
       "description": "Remplir automatiquement les adresses à l'aide de l'API \"Compléter l'adresse\" de Postes Canada. Cela permettra aux remplisseurs de formulaires de remplir les champs d'adresse avec une précision de 95 %. ",
       "label": "Adresse (auto-remplissage)",
       "postal": "Code postal",
-      "province": "Province ou territoire",
+      "province": "Province, territoire ou état",
       "street": {
         "description": "Indiquez le nom de rue et le numéro d'unité.",
         "label": "Adresse municipale"
