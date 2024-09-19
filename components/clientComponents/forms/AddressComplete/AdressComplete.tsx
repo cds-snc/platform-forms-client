@@ -97,7 +97,7 @@ export const AddressComplete = (props: AddressCompleteProps): React.ReactElement
 
     setChoices(
       uniqueResults.map((item: AddressCompleteChoice) => {
-        return item.Text;
+        return item.Text + " - " + item.Description;
       })
     );
   };
@@ -108,7 +108,7 @@ export const AddressComplete = (props: AddressCompleteProps): React.ReactElement
     } // Abandon if addressComplete is disabled.
 
     const selectedResult = addressResultCache.find(
-      (item: AddressCompleteChoice) => item.Text === value
+      (item: AddressCompleteChoice) => item.Text + " - " + item.Description === value
     );
     if (selectedResult === undefined) {
       return; // Do nothing, this is not found in the AddressComplete API.
