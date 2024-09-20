@@ -1102,7 +1102,6 @@
       },
       "removeButton": {
         "title": "Button to remove from the set",
-        "label": "Add a dynamic row",
         "description": "Create a descriptive button title to allow those filling out your form to remove a set. Example: “Remove address” "
       }
     }

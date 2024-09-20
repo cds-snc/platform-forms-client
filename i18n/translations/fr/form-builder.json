@@ -1102,7 +1102,6 @@
       },
       "removeButton": {
         "title": "Bouton pour supprimer de l'ensemble",
-        "label": "Add a dynamic row [fr]",
         "description": "Ajoutez une action pertinente spécifique pour aider les personnes à remplir le formulaire. Par exemple : « Supprimer l'adresse »"
       }
     }
