@@ -48,7 +48,7 @@
     "answer": "Answer...",
     "attest": "I agree to:",
     "attestation": {
-      "description": "A series of conditions that must be confirmed. For example, to ensure a legal responsibility is understood.",
+      "description": "A series of conditions that must all be confirmed. For example, to ensure a legal responsibility is understood.",
       "title": "Attestation"
     },
     "categories": {
