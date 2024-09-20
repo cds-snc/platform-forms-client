@@ -48,7 +48,7 @@
     "answer": "Réponse...",
     "attest": "J'accepte :",
     "attestation": {
-      "description": "Une collection de conditions qui doivent être confirmées. Par exemple, pour s'assurer qu'une responsabilité légale est comprise.",
+      "description": "Une série de conditions qui doivent toutes être confirmées. Par exemple, pour s'assurer qu'une responsabilité légale est comprise.",
       "title": "Attestation"
     },
     "categories": {
