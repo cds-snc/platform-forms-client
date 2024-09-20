@@ -1095,6 +1095,7 @@
       "rowTitle": {
         "title": "Titre de l'ensemble de questions",
         "description": "Créez un titre descriptif pour l'ensemble. Les ensembles seront ensuite énumérotés. Par exemple : Adresse -1, Adresse -2"
+      },
       "addButton": {
         "title": "Button to add to the set [FR]",
         "description": "Create a descriptive button title to allow those filling out your form to add another set. Example: “Add another address” [FR]"
