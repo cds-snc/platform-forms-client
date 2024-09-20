@@ -1093,8 +1093,8 @@
       "cancel": "Cancel",
       "save": "Save",
       "error": {
-        "title": "Error",
-        "message": "Please fill out all fields."
+        "title": "The repeating set cannot work without text.",
+        "message": "Make sure to fill out all fields."
       },
       "rowTitle": {
         "title": "Name of question set",
