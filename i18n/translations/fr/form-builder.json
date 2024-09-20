@@ -1092,6 +1092,10 @@
       "french": "Français",
       "cancel": "Annuler",
       "save": "Enregistrer",
+      "error": {
+        "title": "Error [fr]",
+        "message": "Please fill out all fields. [fr]"
+      },
       "rowTitle": {
         "title": "Nom de l'ensemble de questions",
         "description": "Créez un titre pour le groupe de questions récurrentes. Ces ensembles seront numérotés. Par exemple : « Adresse -1, Adresse 2 »"

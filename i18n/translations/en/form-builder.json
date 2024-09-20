@@ -1092,6 +1092,10 @@
       "french": "French",
       "cancel": "Cancel",
       "save": "Save",
+      "error": {
+        "title": "Error",
+        "message": "Please fill out all fields."
+      },
       "rowTitle": {
         "title": "Name of question set",
         "description": "Create a title for the group of repeating questions. These will be numbered for each instance. For example, “Address - 1, Address - 2”."

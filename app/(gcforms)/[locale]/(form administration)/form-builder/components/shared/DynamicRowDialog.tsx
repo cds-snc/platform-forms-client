@@ -1,7 +1,7 @@
 "use client";
 import React, { useState } from "react";
 import { useTranslation } from "@i18n/client";
-import { Button } from "@clientComponents/globals";
+import { Button, Alert } from "@clientComponents/globals";
 import { useDialogRef, Dialog } from "./Dialog";
 import { useTemplateStore } from "@lib/store/useTemplateStore";
 
@@ -29,6 +29,8 @@ export const DynamicRowDialog = ({
 }) => {
   const dialog = useDialogRef();
   const { t } = useTranslation("form-builder");
+
+  const [error, setError] = useState<boolean | null>(null);
 
   const { updateField, elements } = useTemplateStore((s) => ({
     elements: s.form.elements,
@@ -76,6 +78,19 @@ export const DynamicRowDialog = ({
         className="ml-5"
         theme="primary"
         onClick={() => {
+          setError(null);
+          if (
+            rowTitleValueEn === "" ||
+            rowTitleValueFr === "" ||
+            addButtonValueEn === "" ||
+            addButtonValueFr === "" ||
+            removeButtonValueEn === "" ||
+            removeButtonValueFr === ""
+          ) {
+            setError(true);
+            return;
+          }
+
           dialog.current?.close();
 
           if (!item || !item.properties) return;
@@ -109,6 +124,13 @@ export const DynamicRowDialog = ({
       title={t("dynamicRow.dialog.title")}
     >
       <div className="p-5">
+        {error && (
+          <Alert.Danger className="mb-2" focussable>
+            <Alert.Title headingTag="h3">{t("dynamicRow.dialog.error.title")}</Alert.Title>
+            <p>{t("dynamicRow.dialog.error.message")}</p>
+          </Alert.Danger>
+        )}
+
         {/* Title input */}
         <div className="mb-8">
           <h4 className="mb-4 block font-bold">{t("dynamicRow.dialog.rowTitle.title")}</h4>
