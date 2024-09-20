@@ -1086,9 +1086,9 @@
       "removeButtonText": "Étiquette pour le bouton qui permet la suppression de l'ensemble"
     },
     "dialog": {
-      "customizeElement": "Customize element [FR]",
-      "title": "Customize set [FR]",
-      "english": "English [FR]",
+      "customizeElement": "Customize element [fr]",
+      "title": "Customize set [fr]",
+      "english": "English [fr]",
       "french": "Français",
       "cancel": "Annuler",
       "save": "Enregistrer",
@@ -1097,13 +1097,13 @@
         "description": "Créez un titre descriptif pour l'ensemble. Les ensembles seront ensuite énumérotés. Par exemple : Adresse -1, Adresse -2"
       },
       "addButton": {
-        "title": "Button to add to the set [FR]",
-        "description": "Create a descriptive button title to allow those filling out your form to add another set. Example: “Add another address” [FR]"
+        "title": "Button to add to the set [fr]",
+        "description": "Create a descriptive button title to allow those filling out your form to add another set. Example: “Add another address” [fr]"
       },
       "removeButton": {
-        "title": "Button to remove from the set [FR]",
-        "label": "Add a dynamic row [FR]",
-        "description": "Create a descriptive button title to allow those filling out your form to remove a set. Example: “Remove address” [FR]"
+        "title": "Button to remove from the set [fr]",
+        "label": "Add a dynamic row [fr]",
+        "description": "Create a descriptive button title to allow those filling out your form to remove a set. Example: “Remove address” [fr]"
       }
     }
   }
