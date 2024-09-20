@@ -63,6 +63,7 @@ const ControlledTree: ForwardRefRenderFunction<unknown, TreeDataProviderProps> =
     replaceGroups,
     updateElementTitle,
     deleteGroup,
+    getElement,
   } = useGroupStore((s) => {
     return {
       groupId: s.id,
@@ -76,6 +77,7 @@ const ControlledTree: ForwardRefRenderFunction<unknown, TreeDataProviderProps> =
       updateGroupName: s.updateGroupName,
       updateElementTitle: s.updateElementTitle,
       deleteGroup: s.deleteGroup,
+      getElement: s.getElement,
     };
   });
 
@@ -274,7 +276,7 @@ const ControlledTree: ForwardRefRenderFunction<unknown, TreeDataProviderProps> =
             );
           });
         }}
-        canDropAt={(treeItems, target) => handleCanDropAt(treeItems, target, getGroups)}
+        canDropAt={(treeItems, target) => handleCanDropAt(treeItems, target, getGroups, getElement)}
         canDropBelowOpenFolders={true}
         canDropOnFolder={true}
         onRenameItem={(item, name) => {

@@ -6,6 +6,8 @@ import {
   TreeItem,
 } from "react-complex-tree";
 
+import { FormElement } from "@lib/types";
+
 const getReviewIndex = (currentGroups: GroupsType) => {
   const elements = Object.keys(currentGroups);
   return elements.indexOf("review");
@@ -22,7 +24,8 @@ const getTargetDraggingPositionType = (target: DraggingPosition) => {
 export const handleCanDropAt = (
   items: TreeItem[],
   target: DraggingPosition,
-  getGroups: () => GroupsType | undefined
+  getGroups: () => GroupsType | undefined,
+  getElement: (id: number) => FormElement | undefined
 ) => {
   const groupItemsCount = items.filter(
     (item) => item.isFolder && item.data.type !== "dynamicRow"
@@ -41,6 +44,15 @@ export const handleCanDropAt = (
 
   if ((<DraggingPositionBetweenItems>target).parentItem === "root") {
     return false;
+  }
+
+  // Can't drop elements inside a dynamicRow
+  if (Object.prototype.hasOwnProperty.call(target, "targetItem")) {
+    const targetElement = getElement(Number((<DraggingPositionItem>target).targetItem));
+
+    if (targetElement && targetElement.type === "dynamicRow") {
+      return false;
+    }
   }
 
   let targetParentItem = undefined;
