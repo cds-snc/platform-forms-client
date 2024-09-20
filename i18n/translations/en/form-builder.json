@@ -124,7 +124,7 @@
       "choices": "Option 1,Option 2,Option 3,Option 4,Option 5,Option 6,Option 7,Option 8,Option 9,Option 10"
     },
     "dynamicRow": {
-      "description": "The option to add a series of related answers to a question and repeat the set multiple times.",
+      "description": "The option to group multiple form elements together into a set that can be repeated to add multiple instances of the same questions.",
       "title": "Repeating set"
     },
     "fileInput": {
@@ -1086,8 +1086,8 @@
       "removeButtonText": "Button label - Remove from set"
     },
     "dialog": {
-      "customizeElement": "Customize element",
-      "title": "Customize set",
+      "customizeElement": "Customize repeating set",
+      "title": "Customize repeating set",
       "english": "English",
       "french": "French",
       "cancel": "Cancel",
