@@ -3,7 +3,6 @@ import { Metadata } from "next";
 import { authCheckAndThrow } from "@lib/actions";
 import { notFound } from "next/navigation";
 import { Preview } from "./Preview";
-import { allowGrouping } from "@formBuilder/components/shared/right-panel/treeview/util/allowGrouping";
 import { ClientContainer } from "./ClientContainer";
 
 export async function generateMetadata({
@@ -24,8 +23,6 @@ export default async function Page({ params: { id } }: { params: { id: string } 
   }));
   const disableSubmit = id === "0000" || !session?.user;
 
-  const isAllowGrouping = await allowGrouping();
-
   const formID = id;
 
   if (!session?.user && formID !== "0000") {
@@ -33,7 +30,7 @@ export default async function Page({ params: { id } }: { params: { id: string } 
   }
   return (
     <ClientContainer>
-      <Preview disableSubmit={disableSubmit} allowGrouping={isAllowGrouping} />
+      <Preview disableSubmit={disableSubmit} />
     </ClientContainer>
   );
 }

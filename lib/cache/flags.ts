@@ -108,3 +108,13 @@ const checkMulti = async (keys: string[]): Promise<{ [k: string]: boolean }> => 
 
   return Object.fromEntries(mapped);
 };
+
+export type Flags = {
+  [k: string]: boolean;
+};
+
+// NOTE: Is there any security risk in accessing all our feature flags?
+// Alternatively this could become a static "safe list" of public feature flags that is updated manually.
+export async function getAllFlags(): Promise<Flags> {
+  return checkMulti(await getKeys());
+}
