@@ -113,9 +113,6 @@ export type Flags = {
   [k: string]: boolean;
 };
 
-// NOTE: Feature flag names and status are not really sensitive information, so the complete list
-// can be exposed to the client. If this changes, we should consider a different approach, like
-// receiving an array of flag names.
 export async function getAllFlags(): Promise<Flags> {
   return checkMulti(await getKeys());
 }
