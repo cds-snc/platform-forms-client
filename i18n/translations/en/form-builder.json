@@ -1093,8 +1093,8 @@
       "cancel": "Cancel",
       "save": "Save",
       "rowTitle": {
-        "title": "Title of the set",
-        "description": "Create a descriptive title for each set. These sets will be numbered in chronological order. Example: “Address - 1”"
+        "title": "Name of question set",
+        "description": "Create a title for the group or category of questions that will repeat. These will then be numbered for each instance. For example, “Address - 1, Address 2”."
       },
       "addButton": {
         "title": "Button to add to the set",
