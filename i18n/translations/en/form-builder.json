@@ -1070,17 +1070,17 @@
   "goBack": "Go back",
   "disabled": "disabled",
   "dynamicRow": {
-    "defaultRowTitle": "Row",
-    "rowTitleTextA11yEn": "Row title (english)",
-    "rowTitleTextA11yFr": "Row title (french)",
+    "defaultRowTitle": "Instance",
+    "rowTitleTextA11yEn": "Instance",
+    "rowTitleTextA11yFr": "Instance",
     "defaultAddButtonText": "Add",
-    "addButtonTextA11yEn": "Add button Text (english)",
-    "addButtonTextA11yFr": "Add button Text (french)",
+    "addButtonTextA11yEn": "Add to set button text in English",
+    "addButtonTextA11yFr": "Add to set button text in French",
     "defaultRemoveButtonText": "Remove",
-    "removeButtonTextA11yEn": "Remove button text (english)",
-    "removeButtonTextA11yFr": "Remove button text (french)",
+    "removeButtonTextA11yEn": "Remove from set button text in English",
+    "removeButtonTextA11yFr": "Remove from set button text in French",
     "translate": {
-      "rowTitleText": "Row label",
+      "rowTitleText": "Instance label",
       "repeatingSet": "Repeating set",
       "addButtonText": "Button label - Add to set",
       "removeButtonText": "Button label - Remove from set"
@@ -1094,7 +1094,7 @@
       "save": "Save",
       "rowTitle": {
         "title": "Name of question set",
-        "description": "Create a title for the group or category of questions that will repeat. These will then be numbered for each instance. For example, “Address - 1, Address 2”."
+        "description": "Create a title for the group of repeating questions. These will be numbered for each instance. For example, “Address - 1, Address - 2”."
       },
       "addButton": {
         "title": "Button to add to the set",
