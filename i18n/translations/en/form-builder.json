@@ -48,7 +48,7 @@
     "answer": "Answer...",
     "attest": "I agree to:",
     "attestation": {
-      "description": "A set of conditions that must be confirmed. For example, to ensure a legal responsibility is understood.",
+      "description": "A series of conditions that must be confirmed. For example, to ensure a legal responsibility is understood.",
       "title": "Attestation"
     },
     "categories": {
@@ -58,7 +58,7 @@
       "other": "Other"
     },
     "checkbox": {
-      "description": "A set of options for a single or multiple selections.",
+      "description": "A list of options for a single or multiple selections.",
       "title": "Checkboxes",
       "chooseItems": "Question",
       "selectAllThatApply": "Select all that apply."
@@ -173,7 +173,7 @@
     },
     "questionElement": "Elements",
     "radio": {
-      "description": "A small set of options for single selection.",
+      "description": "A small list of options for single selection.",
       "title": "Radio buttons",
       "chooseAnOption": "Question",
       "selectOnlyOne": "Select one option."
@@ -200,7 +200,7 @@
   "addOption": "Add option",
   "addOptions": "Add options",
   "addRules": "Add rules",
-  "addQuestionToSet": "Add question to set",
+  "addQuestionToSet": "Add form element to set",
   "addToSet": "Add to set",
   "allRequired": "All required",
   "at": "at",
