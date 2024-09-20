@@ -3,7 +3,7 @@ import { LoggedOutTab, LoggedOutTabName } from "@serverComponents/form-builder/L
 import { authCheckAndThrow } from "@lib/actions";
 import { SettingsNavigation } from "./components/SettingsNavigation";
 import { FeatureFlagsProvider } from "@lib/hooks/useFeatureFlags";
-import { getAllFlags } from "@lib/cache/flags";
+import { getSomeFlags } from "@lib/cache/flags";
 
 export default async function Layout({
   children,
@@ -20,8 +20,15 @@ export default async function Layout({
     return <LoggedOutTab tabName={LoggedOutTabName.SETTINGS} />;
   }
 
+  const featureFlags = await getSomeFlags([
+    "experimentalBlocks",
+    "zitadelAuth",
+    "conditionalLogic",
+    "addressComplete",
+  ]);
+
   return (
-    <FeatureFlagsProvider featureFlags={await getAllFlags()}>
+    <FeatureFlagsProvider featureFlags={featureFlags}>
       <h1>{t("gcFormsSettings")}</h1>
       <SettingsNavigation id={id} />
       <p className="mb-10 inline-block bg-purple-200 p-3 text-sm font-bold">

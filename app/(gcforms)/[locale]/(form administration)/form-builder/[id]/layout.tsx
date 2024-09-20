@@ -16,7 +16,7 @@ import { Language } from "@lib/types/form-builder-types";
 import { FormRecord } from "@lib/types";
 import { logMessage } from "@lib/logger";
 import { FeatureFlagsProvider } from "@lib/hooks/useFeatureFlags";
-import { getAllFlags } from "@lib/cache/flags";
+import { getSomeFlags } from "@lib/cache/flags";
 
 export default async function Layout({
   children,
@@ -50,8 +50,15 @@ export default async function Layout({
     }
   }
 
+  const featureFlags = await getSomeFlags([
+    "experimentalBlocks",
+    "zitadelAuth",
+    "conditionalLogic",
+    "addressComplete",
+  ]);
+
   return (
-    <FeatureFlagsProvider featureFlags={await getAllFlags()}>
+    <FeatureFlagsProvider featureFlags={featureFlags}>
       <TemplateStoreProvider {...{ ...initialForm, locale, allowGroupsFlag }}>
         <SaveTemplateProvider>
           <RefStoreProvider>

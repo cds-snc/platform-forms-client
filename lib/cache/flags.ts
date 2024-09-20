@@ -113,6 +113,7 @@ export type Flags = {
   [k: string]: boolean;
 };
 
-export async function getAllFlags(): Promise<Flags> {
-  return checkMulti(await getKeys());
+export async function getSomeFlags(flags: string[]): Promise<Flags> {
+  if (!Array.isArray(flags) || flags.length === 0) return {};
+  return checkMulti(flags);
 }
