@@ -1098,7 +1098,7 @@
       },
       "addButton": {
         "title": "Button to add to the set",
-        "description": "Add a relevant action that is specific for the people filling out the form. For example "Add another address""
+        "description": "Add a relevant action that is specific for the people filling out the form. For example “Add another address”"
       },
       "removeButton": {
         "title": "Button to remove from the set",
