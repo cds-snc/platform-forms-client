@@ -24,7 +24,7 @@
       "firstMiddleLastName": "Ajouter des noms individuels",
       "address": "Ajouter une adresse",
       "contact": "Ajouter des coordonnées",
-      "dynamicRow": "Ajouter un ensemble de réponses",
+      "dynamicRow": "Ajouter un ensemble récurrent",
       "richText": "Ajouter du texte de page",
       "departments": "Ajouter un ministère",
       "combobox": "Ajouter une liste avec recherche",
@@ -48,7 +48,7 @@
     "answer": "Réponse...",
     "attest": "J'accepte :",
     "attestation": {
-      "description": "Un ensemble de conditions qui doivent être confirmées. Par exemple, pour s'assurer qu'une responsabilité légale est comprise.",
+      "description": "Une collection de conditions qui doivent être confirmées. Par exemple, pour s'assurer qu'une responsabilité légale est comprise.",
       "title": "Attestation"
     },
     "categories": {
@@ -58,7 +58,7 @@
       "other": "Autre"
     },
     "checkbox": {
-      "description": "Un ensemble d’options en vue de sélection unique ou multiple.",
+      "description": "Une liste d’options en vue de sélection unique ou multiple.",
       "title": "Cases à cocher",
       "chooseItems": "Question",
       "selectAllThatApply": "Sélectionnez toutes les options pertinentes."
@@ -124,8 +124,8 @@
       "choices": "Option 1,Option 2,Option 3,Option 4,Option 5,Option 6,Option 7,Option 8,Option 9,Option 10"
     },
     "dynamicRow": {
-      "description": "La possibilité d’ajouter une série de réponses connexes à une question et de répéter la série plusieurs fois.",
-      "title": "Ensemble de réponses"
+      "description": "La possibilité de regrouper plusieurs éléments de formulaire dans un ensemble qui permet la récurrence pour ajouter plusieurs instances des mêmes questions.",
+      "title": "Ensemble récurrent"
     },
     "fileInput": {
       "description": "Un moyen d'ajouter des documents à l'appui.",
@@ -356,7 +356,7 @@
   },
   "dropdown": "Liste déroulante",
   "duplicate": "Dupliquer",
-  "dyanamicRow": "Ensemble de réponses",
+  "dyanamicRow": "Ensemble récurrent",
   "edit": "Modifier",
   "editingIn": "Modifier en :",
   "editLink": "Modifier un lien  ",
@@ -1081,14 +1081,14 @@
     "removeButtonTextA11yFr": "Texte du bouton pour supprimer de l'ensemble en français",
     "translate": {
       "rowTitleText": "Étiquette pour l'instance",
-      "repeatingSet": "Ensemble récurrant",
+      "repeatingSet": "Ensemble récurrent",
       "addButtonText": "Étiquette pour le bouton qui permet l'ajout à l'ensemble",
       "removeButtonText": "Étiquette pour le bouton qui permet la suppression de l'ensemble"
     },
     "dialog": {
-      "customizeElement": "Customize element [fr]",
-      "title": "Customize set [fr]",
-      "english": "English [fr]",
+      "customizeElement": "Adapter l'ensemble récurrent",
+      "title": "Adapter l'ensemble récurrent",
+      "english": "Anglais",
       "french": "Français",
       "cancel": "Annuler",
       "save": "Enregistrer",
