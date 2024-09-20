@@ -1077,8 +1077,8 @@
     "addButtonTextA11yEn": "Texte du bouton pour ajouter à l'ensemble en anglais",
     "addButtonTextA11yFr": "Texte du bouton pour ajouter à l'ensemble en français",
     "defaultRemoveButtonText": "Supprimer",
-    "removeButtonTextA11yEn": "Remove button text (english) [FR] ",
-    "removeButtonTextA11yFr": "Remove button text (french) [FR] ",
+    "removeButtonTextA11yEn": "Texte du bouton pour supprimer de l'ensemble en anglais",
+    "removeButtonTextA11yFr": "Texte du bouton pour supprimer de l'ensemble en français",
     "translate": {
       "rowTitleText": "Étiquette pour l'instance",
       "repeatingSet": "Ensemble récurrant",
