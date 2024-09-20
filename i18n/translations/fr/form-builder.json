@@ -1089,9 +1089,9 @@
       "customizeElement": "Customize element [FR]",
       "title": "Customize set [FR]",
       "english": "English [FR]",
-      "french": "French [FR]",
-      "cancel": "Cancel [FR]",
-      "save": "Save [FR]",
+      "french": "Français",
+      "cancel": "Annuler",
+      "save": "Enregistrer",
       "rowTitle": {
         "title": "Title of the set [FR]",
         "description": "Create a descriptive title for each set. These sets will be numbered in chronological order. Example: “Address - 1” [FR]"
