@@ -1093,17 +1093,17 @@
       "cancel": "Annuler",
       "save": "Enregistrer",
       "rowTitle": {
-        "title": "Titre de l'ensemble de questions",
-        "description": "Créez un titre descriptif pour l'ensemble. Les ensembles seront ensuite énumérotés. Par exemple : Adresse -1, Adresse -2"
+        "title": "Nom de l'ensemble de questions",
+        "description": "Créez un titre pour le groupe de questions récurrentes. Ces ensembles seront numérotés. Par exemple : « Adresse -1, Adresse 2 »"
       },
       "addButton": {
-        "title": "Button to add to the set [fr]",
-        "description": "Create a descriptive button title to allow those filling out your form to add another set. Example: “Add another address” [fr]"
+        "title": "Bouton pour ajouter à l'ensemble",
+        "description": "Ajoutez une action pertinente spécifique pour aider les personnes à remplir le formulaire. Par exemple : « Ajouter une autre adresse »"
       },
       "removeButton": {
-        "title": "Button to remove from the set [fr]",
+        "title": "Bouton pour supprimer de l'ensemble",
         "label": "Add a dynamic row [fr]",
-        "description": "Create a descriptive button title to allow those filling out your form to remove a set. Example: “Remove address” [fr]"
+        "description": "Ajoutez une action pertinente spécifique pour aider les personnes à remplir le formulaire. Par exemple : « Supprimer l'adresse »"
       }
     }
   }
