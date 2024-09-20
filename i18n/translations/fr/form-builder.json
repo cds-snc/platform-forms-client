@@ -173,7 +173,7 @@
     },
     "questionElement": "Éléments",
     "radio": {
-      "description": "Un petit ensemble d’options en vue d'une sélection unique.",
+      "description": "Une petite liste d’options en vue d'une sélection unique.",
       "title": "Boutons radio",
       "chooseAnOption": "Question",
       "selectOnlyOne": "Sélectionnez une option."
@@ -200,8 +200,8 @@
   "addOption": "Ajouter une option",
   "addOptions": "Ajouter des options",
   "addRules": "Ajouter des règles",
-  "addQuestionToSet": "Add question to set [fr]",
-  "addToSet": "Ajouter à la série",
+  "addQuestionToSet": "Ajouter un élément à l'ensemble",
+  "addToSet": "Ajouter à l'ensemble",
   "allRequired": "Toutes obligatoires",
   "at": "à",
   "attestation": "Attestation",
