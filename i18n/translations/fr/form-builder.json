@@ -1076,7 +1076,7 @@
     "defaultAddButtonText": "Ajouter",
     "addButtonTextA11yEn": "Texte du bouton pour ajouter à l'ensemble en anglais",
     "addButtonTextA11yFr": "Texte du bouton pour ajouter à l'ensemble en français",
-    "defaultRemoveButtonText": "Remove [FR]",
+    "defaultRemoveButtonText": "Supprimer",
     "removeButtonTextA11yEn": "Remove button text (english) [FR] ",
     "removeButtonTextA11yFr": "Remove button text (french) [FR] ",
     "translate": {
