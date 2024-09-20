@@ -55,6 +55,7 @@ export const handleCanDropAt = (
     }
   }
 
+  // All dragged items must be of the same parent, and target the same parent
   let targetParentItem = undefined;
   if (Object.prototype.hasOwnProperty.call(target, "parentItem")) {
     const t = target as DraggingPositionItem | DraggingPositionBetweenItems;
@@ -65,7 +66,6 @@ export const handleCanDropAt = (
     return item.data.isSubElement;
   });
 
-  // All dragged items must be of the same parent, and target the same parent
   if (
     hasSubElements &&
     items.some((item) => {
@@ -73,6 +73,19 @@ export const handleCanDropAt = (
     })
   ) {
     return false;
+  }
+
+  // Can't drop elements on a subElement of a dynamicRow
+  // but ... allow dragging between subElements
+  const targetParentItemElement = getElement(Number(targetParentItem));
+  if (targetParentItemElement && targetParentItemElement.type === "dynamicRow") {
+    const hasDifferentParent = items.some((item) => {
+      return Number(item.data.parentId) !== Number(targetParentItem);
+    });
+
+    if (hasDifferentParent) {
+      return false;
+    }
   }
 
   // Can't drag Groups + Items together
