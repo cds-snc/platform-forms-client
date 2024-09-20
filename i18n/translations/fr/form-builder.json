@@ -1070,9 +1070,9 @@
   "goBack": "Retourner",
   "disabled": "désactivé",
   "dynamicRow": {
-    "defaultRowTitle": "Row [FR]",
-    "rowTitleTextA11yEn": "Row title (english) [FR]",
-    "rowTitleTextA11yFr": "Row title (french) [FR]",
+    "defaultRowTitle": "Instance",
+    "rowTitleTextA11yEn": "Instance",
+    "rowTitleTextA11yFr": "Instance",
     "defaultAddButtonText": "Ajouter",
     "addButtonTextA11yEn": "Texte du bouton pour ajouter à l'ensemble en anglais",
     "addButtonTextA11yFr": "Texte du bouton pour ajouter à l'ensemble en français",
