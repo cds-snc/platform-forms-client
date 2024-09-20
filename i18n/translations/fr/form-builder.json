@@ -1093,8 +1093,8 @@
       "cancel": "Annuler",
       "save": "Enregistrer",
       "error": {
-        "title": "Error [fr]",
-        "message": "Please fill out all fields. [fr]"
+        "title": "L'ensemble récurrent ne fonctionnera pas sans texte.",
+        "message": "Assurez-vous de remplir tous les champs."
       },
       "rowTitle": {
         "title": "Nom de l'ensemble de questions",
