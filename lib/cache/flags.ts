@@ -113,8 +113,9 @@ export type Flags = {
   [k: string]: boolean;
 };
 
-// NOTE: Is there any security risk in accessing all our feature flags?
-// Alternatively this could become a static "safe list" of public feature flags that is updated manually.
+// NOTE: Feature flag names and status are not really sensitive information, so the complete list
+// can be exposed to the client. If this changes, we should consider a different approach, like
+// receiving an array of flag names.
 export async function getAllFlags(): Promise<Flags> {
   return checkMulti(await getKeys());
 }

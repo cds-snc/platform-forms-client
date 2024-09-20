@@ -3,7 +3,7 @@
 import { Flags } from "@lib/cache/flags";
 import { createContext, useContext, useState } from "react";
 
-const featureFlagsContext = createContext({
+const FeatureFlagsContext = createContext({
   flags: {} as Flags,
   getFlag: () => {},
 });
@@ -17,14 +17,14 @@ export const FeatureFlagsProvider = ({
 }) => {
   const [flags] = useState(featureFlags);
   return (
-    <featureFlagsContext.Provider value={{ flags, getFlag: () => {} }}>
+    <FeatureFlagsContext.Provider value={{ flags, getFlag: () => {} }}>
       {children}
-    </featureFlagsContext.Provider>
+    </FeatureFlagsContext.Provider>
   );
 };
 
 export const useFeatureFlags = () => {
-  const { flags } = useContext(featureFlagsContext);
+  const { flags } = useContext(FeatureFlagsContext);
   return {
     getFlag: (key: string) => {
       return flags[key as keyof typeof flags];

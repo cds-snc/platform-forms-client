@@ -2,6 +2,8 @@ import { serverTranslation } from "@i18n";
 import { LoggedOutTab, LoggedOutTabName } from "@serverComponents/form-builder/LoggedOutTab";
 import { authCheckAndThrow } from "@lib/actions";
 import { SettingsNavigation } from "./components/SettingsNavigation";
+import { FeatureFlagsProvider } from "@lib/hooks/useFeatureFlags";
+import { getAllFlags } from "@lib/cache/flags";
 
 export default async function Layout({
   children,
@@ -19,13 +21,13 @@ export default async function Layout({
   }
 
   return (
-    <>
+    <FeatureFlagsProvider featureFlags={await getAllFlags()}>
       <h1>{t("gcFormsSettings")}</h1>
       <SettingsNavigation id={id} />
       <p className="mb-10 inline-block bg-purple-200 p-3 text-sm font-bold">
         {t("settingsResponseDelivery.beforePublishMessage")}
       </p>
       {children}
-    </>
+    </FeatureFlagsProvider>
   );
 }
