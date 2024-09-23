@@ -48,7 +48,6 @@ export const NavigationTabs = ({ formId }: { formId: string }) => {
           <DeleteIcon className="inline-block size-7" /> {t("responses.status.deleted")}
         </span>
       </TabNavLink>
-      {/* @TODO: is this right? */}
       {ability?.can("update", "FormRecord", formId) && (
         <div className="absolute right-0">
           <ManageFormAccessButton />
