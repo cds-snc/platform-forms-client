@@ -717,6 +717,70 @@ export async function updateIsPublishedForTemplate(
   }
 }
 
+export async function removeAssignedUserFromTemplate(
+  ability: UserAbility,
+  formID: string,
+  userId: string
+) {
+  try {
+    const template = await prisma.template.findFirst({
+      where: {
+        id: formID,
+      },
+      include: {
+        users: true,
+      },
+    });
+
+    if (template === null) {
+      logMessage.warn(
+        `Can not remove assigned user ${userId} on template ${formID}.  Template does not exist`
+      );
+      return null;
+    }
+
+    checkPrivileges(ability, [
+      { action: "update", subject: { type: "FormRecord", object: { users: template.users } } },
+      { action: "update", subject: { type: "User", object: { id: ability.userID } } },
+    ]);
+
+    await prisma.template
+      .update({
+        where: {
+          id: formID,
+        },
+        data: {
+          users: {
+            disconnect: {
+              id: userId,
+            },
+          },
+        },
+      })
+      .catch((e) => prismaErrors(e, null));
+
+    // @TODO: Send email
+
+    logEvent(
+      ability.userID,
+      { type: "Form", id: formID },
+      "RevokeFormAccess",
+      `Access revoked for ${userId}`
+    );
+
+    if (formCache.cacheAvailable) formCache.formID.invalidate(formID);
+  } catch (e) {
+    if (e instanceof AccessControlError)
+      logEvent(
+        ability.userID,
+        { type: "Form", id: formID },
+        "AccessDenied",
+        "Attempted to remove assigned user for form"
+      );
+    throw e;
+  }
+}
+
 export async function updateAssignedUsersForTemplate(
   ability: UserAbility,
   formID: string,

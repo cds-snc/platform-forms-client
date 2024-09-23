@@ -7,6 +7,7 @@ import { TemplateUser } from "./types";
 import { inviteUserByEmail } from "@lib/invitations";
 import { AccessControlError, checkPrivilegesAsBoolean } from "@lib/privileges";
 import { TemplateNotFoundError, UserAlreadyHasAccessError } from "@lib/invitations/exceptions";
+import { removeAssignedUserFromTemplate } from "@lib/templates";
 
 const _canManageUsersForForm = async (formId: string) => {
   const { ability } = await authCheckAndThrow();
@@ -66,28 +67,13 @@ export const sendInvitation = async (emails: string[], templateId: string, messa
 };
 
 export const removeUserFromForm = async (userId: string, formId: string) => {
+  const { ability } = await authCheckAndThrow();
   try {
-    if (await _canManageUsersForForm(formId)) {
-      await prisma.template
-        .update({
-          where: {
-            id: formId,
-          },
-          data: {
-            users: {
-              disconnect: {
-                id: userId,
-              },
-            },
-          },
-        })
-        .catch((e) => prismaErrors(e, null));
-
-      return {
-        success: true,
-        message: "User removed",
-      };
-    }
+    await removeAssignedUserFromTemplate(ability, userId, formId);
+    return {
+      success: true,
+      message: "User removed",
+    };
   } catch (e) {
     return {
       success: false,
