@@ -69,7 +69,7 @@ export const sendInvitation = async (emails: string[], templateId: string, messa
 export const removeUserFromForm = async (userId: string, formId: string) => {
   const { ability } = await authCheckAndThrow();
   try {
-    await removeAssignedUserFromTemplate(ability, userId, formId);
+    await removeAssignedUserFromTemplate(ability, formId, userId);
     return {
       success: true,
       message: "User removed",

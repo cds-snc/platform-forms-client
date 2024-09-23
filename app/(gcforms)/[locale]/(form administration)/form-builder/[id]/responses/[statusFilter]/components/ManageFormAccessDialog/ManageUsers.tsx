@@ -105,9 +105,12 @@ export const ManageUsers = () => {
   }
 
   const handleRemoveUser = async (userId: string) => {
-    if (await removeUserFromForm(userId, formId)) {
+    const result = await removeUserFromForm(userId, formId);
+    if (result.success) {
       setUsersWithAccess(usersWithAccess.filter((user) => user.id !== userId));
+      return true;
     }
+    return false;
   };
 
   return (

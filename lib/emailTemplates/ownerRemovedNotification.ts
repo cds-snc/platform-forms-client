@@ -1,29 +1,22 @@
 /**
- * Send an invitation to register for GC Forms
+ * Notify owners that an owner has been added to a form.
  *
- * @param senderName
- * @param message
- * @param registerUrlEn
- * @param registerUrlFr
+ * @param formTitle
+ * @param formOwner
  * @returns
  */
-export const inviteToFormsTemplate = (
-  senderName: string,
-  message: string,
-  registerUrlEn: string,
-  registerUrlFr: string
-): string => `
+export const ownerRemovedNotification = (formTitle: string, formOwner: string): string => `
 (la version française suit)
 
-${senderName} has invited you to create a GC Forms account.
+Hello ${formOwner},
 
-${message}
+You have been removed from the form ${formTitle}:
 
-[Create account](${registerUrlEn})
+Thanks,
+The GC Forms team
 
-===
+======
 
-French version
+french version
 
-[Create account](${registerUrlFr})
 `;

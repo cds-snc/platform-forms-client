@@ -3,7 +3,7 @@ import { CancelIcon } from "@serverComponents/icons";
 import { useState } from "react";
 
 type DeleteConfirmProps = {
-  callback: () => Promise<void> | Promise<false>;
+  callback: () => Promise<boolean>;
 };
 
 export const DeleteConfirm = ({ callback }: DeleteConfirmProps) => {

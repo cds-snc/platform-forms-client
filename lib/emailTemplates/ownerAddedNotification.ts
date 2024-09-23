@@ -1,16 +1,15 @@
 /**
- * Send an invitation to register for GC Forms
+ * Notify owners that an owner has been added to a form.
  *
- * @param senderName
- * @param message
- * @param registerUrlEn
- * @param registerUrlFr
+ * @param formTitle
+ * @param formUrlEn
+ * @param formUrlFr
+ * @param formOwner
  * @returns
  */
 export const ownerAddedNotification = (
-  formTitleEn: string,
+  formTitle: string,
   formUrlEn: string,
-  formTitleFr: string,
   formUrlFr: string,
   formOwner: string
 ): string => `
@@ -18,7 +17,7 @@ export const ownerAddedNotification = (
 
 Hello,
 
-The published form, ${formTitleEn}, and its submitted responses on [GC Forms](${formUrlEn}), are now accessible to:
+The published form, ${formTitle}, and its submitted responses on [GC Forms](${formUrlEn}), are now accessible to:
 
 ${formOwner}
 
@@ -28,7 +27,7 @@ The GC Forms team
 
 Bonjour,
 
-Le formulaire publié, ${formTitleFr}, et les réponses qu’il contient dans [Formulaires GC](${formUrlFr}), est maintenant accessible à :
+Le formulaire publié, ${formTitle}, et les réponses qu’il contient dans [Formulaires GC](${formUrlFr}), est maintenant accessible à :
 
 ${formOwner}
 

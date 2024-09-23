@@ -16,6 +16,8 @@ import { unprocessedSubmissions, deleteDraftFormResponses } from "./vault";
 import { addOwnershipEmail, transferOwnershipEmail } from "./ownership";
 import { deleteKey } from "./serviceAccount";
 import { checkOne } from "./cache/flags";
+import { ownerRemovedNotification } from "./emailTemplates/ownerRemovedNotification";
+import { sendEmail } from "./integration/notifyConnector";
 
 // ******************************************
 // Internal Module Functions
@@ -727,7 +729,8 @@ export async function removeAssignedUserFromTemplate(
       where: {
         id: formID,
       },
-      include: {
+      select: {
+        name: true,
         users: true,
       },
     });
@@ -735,6 +738,23 @@ export async function removeAssignedUserFromTemplate(
     if (template === null) {
       logMessage.warn(
         `Can not remove assigned user ${userId} on template ${formID}.  Template does not exist`
+      );
+      return null;
+    }
+
+    const user = await prisma.user.findUnique({
+      where: {
+        id: userId,
+      },
+      select: {
+        name: true,
+        email: true,
+      },
+    });
+
+    if (user === null) {
+      logMessage.warn(
+        `Can not remove assigned user ${userId} on template ${formID}.  User does not exist`
       );
       return null;
     }
@@ -759,7 +779,14 @@ export async function removeAssignedUserFromTemplate(
       })
       .catch((e) => prismaErrors(e, null));
 
-    // @TODO: Send email
+    // @TODO: don't send email if there was no user to remove? (what does the above return?)
+    const emailContent = ownerRemovedNotification(template.name, user.name || "");
+
+    // @TODO: confirm who should receive this email? The removed user, or remaining owners, or both?
+    await sendEmail(user.email, {
+      subject: "You have been removed as an owner from a form",
+      formResponse: emailContent,
+    });
 
     logEvent(
       ability.userID,
