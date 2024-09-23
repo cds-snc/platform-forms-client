@@ -148,12 +148,17 @@ export const SubItem = ({
                 />
               )}
               {titleText !== "" && title && (
-                <Title title={titleText} isSubElement={isSubElement} context={context} />
+                <Title
+                  id={item.index}
+                  title={titleText}
+                  isSubElement={isSubElement}
+                  context={context}
+                />
               )}
               {titleText === "" &&
                 isFormElement &&
                 fieldType === "richText" &&
-                descriptionText !== "" && <Title title={descriptionText} />}
+                descriptionText !== "" && <Title id={item.index} title={descriptionText} />}
             </div>
           )}
         </div>
@@ -165,10 +170,12 @@ export const SubItem = ({
 
 const Title = ({
   title,
+  id,
   isSubElement,
   context,
 }: {
   title: string;
+  id: string;
   isSubElement?: boolean;
   context?: TreeItemRenderContext;
 }) => {
@@ -195,7 +202,7 @@ const Title = ({
           "border-slate-500 hover:border-indigo-700 hover:border-1 hover:bg-indigo-50"
       )}
     >
-      {title}
+      {title} <span className="hidden">{id}</span>
     </div>
   );
 };

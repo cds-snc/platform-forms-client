@@ -1,18 +1,28 @@
-import { updateArrayOrder } from "../updateArrayOrder";
+import { reorderElements } from "../updateArrayOrder";
 
 describe("updateArrayOrder", () => {
-  it("Swaps array order", () => {
+  it("reorders elements by id", () => {
 
-    // Move "A" to the first position
-    const result1 = updateArrayOrder([{ d: "D" }, { a: "A" }, { c: "C" }, { b: "B" }], 0, 1);
-    expect(result1).toEqual([{ a: "A" }, { d: "D" }, { c: "C" }, { b: "B" }]);
+    const result = reorderElements(["101", "104", "106"], [{
+      id: 106,
+      name: "name3"
+    }, {
+      id: 104,
+      name: "name2"
+    }, {
+      id: 101,
+      name: "name1"
+    }]);
 
-    // Move "C" to the second position
-    const result2 = updateArrayOrder(result1, 1, 3);
-    expect(result2).toEqual([{ a: "A" }, { c: "C" }, { b: "B" }, { d: "D" }]);
-
-    // Move "B" to the second position
-    const result3 = updateArrayOrder(result2, 2, 1);
-    expect(result3).toEqual([{ a: "A" }, { b: "B" }, { c: "C" }, { d: "D" }]);
+    expect(result).toEqual([{
+      id: 101,
+      name: "name1"
+    }, {
+      id: 104,
+      name: "name2"
+    }, {
+      id: 106,
+      name: "name3"
+    }]);
   });
 });

@@ -10,7 +10,7 @@ import { findParentGroup } from "../util/findParentGroup";
 import { TreeItems } from "../types";
 import { autoFlowGroupNextActions } from "../util/setNextAction";
 import { FormElement } from "@lib/types";
-import { updateArrayOrder } from "../util/updateArrayOrder";
+import { reorderElements as reorderSubElements } from "../util/updateArrayOrder";
 
 const findItemIndex = (items: string[], itemIndex: string | number) =>
   items.indexOf(String(itemIndex));
@@ -143,32 +143,32 @@ export const handleOnDrop = async (
   if (hasSubElements) {
     const subElements = getSubElements(Number(targetParent));
     if (!subElements) return;
-    let updatedSubElements = [...subElements];
-    items.forEach((item) => {
-      const currentIndex = item.data.subIndex;
 
-      /*
-      console.log(
-        "current index",
-        currentIndex,
-        "target index",
-        targetIndex,
-        "parent id",
-        Number(targetParent)
+    let elements = subElements.map((element) => String(element.id));
+
+    let itemsPriorToInsertion = 0;
+
+    items.forEach((item, index) => {
+      const originIndex = findItemIndex(elements, item.index);
+
+      // Adjust index if dragging down
+      itemsPriorToInsertion += isOldItemPriorToNewItem(elements, item.index, targetIndex) ? 1 : 0;
+
+      // Remove from old position
+      elements = removeItemAtIndex(elements, originIndex);
+
+      // Insert at new position
+      elements = insertItemAtIndex(
+        elements,
+        String(item.index),
+        targetIndex - itemsPriorToInsertion + index
       );
-      */
-      updatedSubElements = updateArrayOrder(updatedSubElements, currentIndex, targetIndex - 1);
-      // Filter out any undefined elements
-      updatedSubElements = updatedSubElements.filter((element) => element !== undefined);
-
-      // console.log("updatedSubElements:", updatedSubElements);
 
       selectedItems.push(String(item.index));
     });
 
-    updateSubElements(updatedSubElements, Number(targetParent));
+    updateSubElements(reorderSubElements(elements, subElements), Number(targetParent));
     setSelectedItems(selectedItems);
-    // console.log("updatedSubElements", updatedSubElements);
     return;
   }
 

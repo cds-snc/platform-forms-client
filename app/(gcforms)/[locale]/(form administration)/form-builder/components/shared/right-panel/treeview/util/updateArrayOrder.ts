@@ -1,9 +1,18 @@
-export function updateArrayOrder<T>(arr: T[], position: number, nextPosition: number): T[] {
-  // Create a copy of the array
-  const newArr = [...arr];
-  // Move the element to the new position
-  const [removed] = newArr.splice(position, 1);
-  newArr.splice(nextPosition, 0, removed);
+interface Element {
+  id: string | number;
+}
 
-  return newArr;
+export function reorderElements<T extends Element>(elementOrder: string[], elements: T[]): T[] {
+  let arr = elementOrder.map((id) => {
+    const item = elements.find((element) => element.id === Number(id));
+    if (item) {
+      return {
+        ...item,
+      };
+    }
+  });
+
+  // filter out undefined items
+  arr = arr.filter((item) => item);
+  return arr as T[];
 }
