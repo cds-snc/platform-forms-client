@@ -8,7 +8,7 @@
  * @param formUrlFr
  * @returns
  */
-export const inviteToCollaborateTemplate = (
+export const inviteToCollaborate = (
   senderName: string,
   message: string,
   templateName: string,

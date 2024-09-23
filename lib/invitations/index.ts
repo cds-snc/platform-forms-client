@@ -7,14 +7,14 @@ import { getUser } from "../users";
 import { sendEmail } from "../integration/notifyConnector";
 import { getOrigin } from "../origin";
 import { AppUser } from "../types/user-types";
-import { inviteToCollaborateTemplate } from "./templates/inviteToCollaborateTemplate";
+import { inviteToCollaborate } from "../emailTemplates/inviteToCollaborate";
 import {
   InvitationIsExpiredError,
   InvitationNotFoundError,
   TemplateNotFoundError,
   UserAlreadyHasAccessError,
 } from "./exceptions";
-import { inviteToFormsTemplate } from "./templates/inviteToFormsTemplate";
+import { inviteToForms } from "../emailTemplates/inviteToForms";
 
 /**
  * Invite someone to the form by email
@@ -252,7 +252,7 @@ const _sendInvitationEmail = async (
     const formUrlEn = `${HOST}/en/form-builder/${invitation.templateId}/responses`;
     const formUrlFr = `${HOST}/fr/form-builder/${invitation.templateId}/responses`;
 
-    const emailContent = inviteToCollaborateTemplate(
+    const emailContent = inviteToCollaborate(
       sender.name || "",
       message,
       templateName,
@@ -272,12 +272,7 @@ const _sendInvitationEmail = async (
   const registerUrlEn = `${HOST}/en/auth/register`;
   const registerUrlFr = `${HOST}/fr/auth/register`;
 
-  const emailContent = inviteToFormsTemplate(
-    sender.name || "",
-    message,
-    registerUrlEn,
-    registerUrlFr
-  );
+  const emailContent = inviteToForms(sender.name || "", message, registerUrlEn, registerUrlFr);
 
   await sendEmail(email, {
     subject: "Invitation to create a GC Forms account | Invitation à créer un compte GC Forms",
