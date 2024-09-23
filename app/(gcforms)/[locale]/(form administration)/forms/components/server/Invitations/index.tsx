@@ -32,13 +32,13 @@ export const Invitations = () => {
           <div key={invitation.id} className="rounded-md bg-violet-50 p-4">
             <StarIcon className="mr-1 inline-block size-8" />
             You have been invited to access a form -{" "}
-            <a href="#" onClick={() => handleAcceptInvitation(invitation.id)}>
+            <button className="underline" onClick={() => handleAcceptInvitation(invitation.id)}>
               accept
-            </a>{" "}
+            </button>{" "}
             or{" "}
-            <a href="#" onClick={() => handleDeclineInvitation(invitation.id)}>
+            <button className="underline" onClick={() => handleDeclineInvitation(invitation.id)}>
               decline
-            </a>{" "}
+            </button>{" "}
             invitation.
           </div>
         );
