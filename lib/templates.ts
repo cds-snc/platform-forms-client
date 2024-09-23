@@ -474,22 +474,24 @@ export async function getTemplateWithAssociatedUsers(
   users: { id: string; name: string | null; email: string }[];
 } | null> {
   try {
+    const templateWithAssociatedUsers = await _unprotectedGetTemplateWithAssociatedUsers(formID);
+
+    if (!templateWithAssociatedUsers) return null;
+
     checkPrivileges(ability, [
       {
         action: "view",
-        subject: "FormRecord",
+        subject: { type: "FormRecord", object: { users: templateWithAssociatedUsers.users } },
       },
-      { action: "view", subject: "User" },
     ]);
 
-    const users = await _unprotectedGetTemplateWithAssociatedUsers(formID);
     logEvent(
       ability.userID,
       { type: "Form", id: formID },
       "ReadForm",
       "Retrieved users associated with Form"
     );
-    return users;
+    return templateWithAssociatedUsers;
   } catch (e) {
     if (e instanceof AccessControlError)
       logEvent(
