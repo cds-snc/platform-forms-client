@@ -3,10 +3,8 @@ import { prisma } from "../integration/prismaConnector";
 import { AccessControlError, checkPrivileges } from "../privileges";
 import { UserAbility } from "../types";
 import { logMessage } from "../logger";
-import { getUser } from "../users";
 import { sendEmail } from "../integration/notifyConnector";
 import { getOrigin } from "../origin";
-import { AppUser } from "../types/user-types";
 import { inviteToCollaborate } from "../emailTemplates/inviteToCollaborate";
 import {
   InvitationIsExpiredError,
@@ -15,6 +13,7 @@ import {
   UserAlreadyHasAccessError,
 } from "./exceptions";
 import { inviteToForms } from "../emailTemplates/inviteToForms";
+import { getUser } from "@lib/users";
 
 /**
  * Invite someone to the form by email
@@ -33,6 +32,10 @@ export const inviteUserByEmail = async (
   let invitation;
 
   const sender = await getUser(ability, ability.userID);
+
+  if (!sender) {
+    throw new Error("User not found");
+  }
 
   // Retrieve the template, fail if you don't have permissions
   try {
@@ -135,15 +138,30 @@ export const acceptInvitation = async (ability: UserAbility, invitationId: strin
  * @returns
  */
 export const declineInvitation = async (ability: UserAbility, invitationId: string) => {
-  const user = await getUser(ability, ability.userID);
-  const invitation = await _retrieveFormInvitationByEmail(user.email, invitationId);
+  const invitation = await prisma.invitation.findUnique({
+    where: {
+      id: invitationId,
+    },
+  });
 
-  if (invitation && user.email === invitation.email) {
+  if (!invitation) {
+    throw new InvitationNotFoundError();
+  }
+
+  const user = await getUser(ability, ability.userID);
+
+  if (!user) {
+    throw new Error("User not found");
+  }
+
+  // Check if the user is the same as the one who received
+  // the invitation. If so, delete the invitation
+  if (user.email === invitation.email) {
     await _deleteInvitation(invitationId);
     return true;
   }
 
-  throw new InvitationNotFoundError();
+  throw new Error("Not your invitation");
 };
 
 /**
@@ -227,7 +245,7 @@ const _createInvitation = async (email: string, formId: string) => {
  * @param message
  */
 const _sendInvitationEmail = async (
-  sender: AppUser,
+  sender: { name: string | null; email: string },
   invitation: Invitation,
   message: string,
   templateName: string
@@ -305,7 +323,6 @@ const _getTemplateWithAssociatedUsers = async (ability: UserAbility, formId: str
 
   checkPrivileges(ability, [
     { action: "update", subject: { type: "FormRecord", object: { users: template.users } } },
-    { action: "update", subject: { type: "User", object: { id: ability.userID } } },
   ]);
 
   return template;
