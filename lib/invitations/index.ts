@@ -103,7 +103,15 @@ export const acceptInvitation = async (ability: UserAbility, invitationId: strin
   }
 
   try {
-    const user = await getUser(ability, ability.userID); // double check ability to retrieve self
+    // const user = await getUser(ability, ability.userID); // double check ability to retrieve self
+    const user = await prisma.user.findFirst({
+      where: {
+        email: invitation.email,
+      },
+      select: {
+        id: true,
+      },
+    });
 
     if (user) {
       // assign user to form
