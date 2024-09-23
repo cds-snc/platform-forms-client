@@ -27,24 +27,18 @@ export const SubElement = ({
   elIndex: number;
   formId: string;
 }) => {
-  const {
-    updateField,
-    subMoveUp,
-    subMoveDown,
-    subDuplicateElement,
-    removeSubItem,
-    subElements,
-    propertyPath,
-  } = useTemplateStore((s) => ({
-    updateField: s.updateField,
-    subMoveUp: s.subMoveUp,
-    subMoveDown: s.subMoveDown,
-    subDuplicateElement: s.subDuplicateElement,
-    removeSubItem: s.removeSubItem,
-    subElements: s.form.elements[elIndex].properties.subElements,
-    getLocalizationAttribute: s.getLocalizationAttribute,
-    propertyPath: s.propertyPath,
-  }));
+  const { updateField, subMoveUp, subMoveDown, subDuplicateElement, removeSubItem, propertyPath } =
+    useTemplateStore((s) => ({
+      updateField: s.updateField,
+      subMoveUp: s.subMoveUp,
+      subMoveDown: s.subMoveDown,
+      subDuplicateElement: s.subDuplicateElement,
+      removeSubItem: s.removeSubItem,
+      getLocalizationAttribute: s.getLocalizationAttribute,
+      propertyPath: s.propertyPath,
+    }));
+
+  const subElements = item.properties.subElements;
 
   const { handleAddSubElement } = useHandleAdd();
 
