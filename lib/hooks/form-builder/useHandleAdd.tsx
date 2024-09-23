@@ -13,9 +13,10 @@ import {
 import { useTreeRef } from "@formBuilder/components/shared/right-panel/treeview/provider/TreeRefProvider";
 
 export const useHandleAdd = () => {
-  const { add, addSubItem } = useTemplateStore((s) => ({
+  const { add, addSubItem, setChangeKey } = useTemplateStore((s) => ({
     add: s.add,
     addSubItem: s.addSubItem,
+    setChangeKey: s.setChangeKey,
   }));
 
   const { treeView } = useTreeRef();
@@ -77,8 +78,10 @@ export const useHandleAdd = () => {
 
       const item = await create(type as FormElementTypes);
       addSubItem(elIndex, subIndex, item.type, item);
+
+      setChangeKey(String(new Date().getTime())); //Force a re-render
     },
-    [addSubItem, create]
+    [addSubItem, create, setChangeKey]
   );
 
   return { handleAddElement, handleAddSubElement, create };

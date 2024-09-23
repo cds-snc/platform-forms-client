@@ -27,16 +27,24 @@ export const SubElement = ({
   elIndex: number;
   formId: string;
 }) => {
-  const { updateField, subMoveUp, subMoveDown, subDuplicateElement, removeSubItem, propertyPath } =
-    useTemplateStore((s) => ({
-      updateField: s.updateField,
-      subMoveUp: s.subMoveUp,
-      subMoveDown: s.subMoveDown,
-      subDuplicateElement: s.subDuplicateElement,
-      removeSubItem: s.removeSubItem,
-      getLocalizationAttribute: s.getLocalizationAttribute,
-      propertyPath: s.propertyPath,
-    }));
+  const {
+    updateField,
+    subMoveUp,
+    subMoveDown,
+    subDuplicateElement,
+    removeSubItem,
+    propertyPath,
+    setChangeKey,
+  } = useTemplateStore((s) => ({
+    updateField: s.updateField,
+    subMoveUp: s.subMoveUp,
+    subMoveDown: s.subMoveDown,
+    subDuplicateElement: s.subDuplicateElement,
+    removeSubItem: s.removeSubItem,
+    getLocalizationAttribute: s.getLocalizationAttribute,
+    propertyPath: s.propertyPath,
+    setChangeKey: s.setChangeKey,
+  }));
 
   const subElements = item.properties.subElements;
 
@@ -53,6 +61,10 @@ export const SubElement = ({
   const elementFilter: ElementOptionsFilter = (elements) => {
     const notAllowed = ["dynamicRow", "attestation"];
     return elements.filter((element) => !notAllowed.includes(element.id));
+  };
+
+  const forceRefresh = () => {
+    setChangeKey(String(new Date().getTime())); //Force a re-render
   };
 
   if (!subElements || subElements.length < 1)
@@ -83,18 +95,23 @@ export const SubElement = ({
                   totalItems={subElements.length}
                   handleAdd={(type?: FormElementTypes) => {
                     handleAddSubElement(elIndex, subIndex, type);
+                    forceRefresh();
                   }}
                   handleRemove={() => {
                     removeSubItem(elIndex, item.id);
+                    forceRefresh();
                   }}
                   handleMoveUp={() => {
                     subMoveUp(elIndex, subIndex);
+                    forceRefresh();
                   }}
                   handleMoveDown={() => {
                     subMoveDown(elIndex, subIndex);
+                    forceRefresh();
                   }}
                   handleDuplicate={() => {
                     subDuplicateElement(elIndex, subIndex);
+                    forceRefresh();
                   }}
                   moreButtonRenderer={(moreButton) => {
                     return (
