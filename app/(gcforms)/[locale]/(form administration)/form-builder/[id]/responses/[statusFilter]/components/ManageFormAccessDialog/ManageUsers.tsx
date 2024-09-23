@@ -88,15 +88,18 @@ export const ManageUsers = () => {
     setEmailList(emailList.filter((e) => e !== email));
   };
 
+  /**
+   * Fetch users with access to the form
+   */
+  const fetchUsersWithAccess = async () => {
+    const users = await getTemplateUsers(formId);
+    setUsersWithAccess(users || []);
+    setLoading(false);
+  };
+
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const fetchUsersWithAccess = async () => {
-      const users = await getTemplateUsers(formId);
-      setUsersWithAccess(users || []);
-      setLoading(false);
-    };
-
     fetchUsersWithAccess();
   }, [formId, setUsersWithAccess]);
 
