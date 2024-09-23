@@ -11,7 +11,6 @@ interface ManagedComboboxProps extends InputFieldProps {
   choices?: string[];
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
   onSetValue?: (value: string) => void;
-  activeRefresh?: boolean;
 }
 
 export const ManagedCombobox = (props: ManagedComboboxProps): React.ReactElement => {
@@ -36,10 +35,10 @@ export const ManagedCombobox = (props: ManagedComboboxProps): React.ReactElement
             return true; // API pre-filtered choices.
           })
         );
-        if (props.activeRefresh) {
-          openMenu();
-          setIsOpen(true);
-        }
+
+        // Active refresh for all managed combobox.
+        openMenu();
+        setIsOpen(true);
       },
       items,
       onSelectedItemChange({ selectedItem }) {

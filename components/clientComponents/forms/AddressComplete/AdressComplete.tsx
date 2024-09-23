@@ -174,7 +174,6 @@ export const AddressComplete = (props: AddressCompleteProps): React.ReactElement
               onChange={onAddressSearch}
               onSetValue={onAddressSet}
               required={required}
-              activeRefresh={true}
             />
           )}
           {!isReady && (
