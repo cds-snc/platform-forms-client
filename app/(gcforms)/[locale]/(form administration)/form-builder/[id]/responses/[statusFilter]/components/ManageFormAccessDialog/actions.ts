@@ -1,45 +1,13 @@
 "use server";
 
 import { authCheckAndThrow } from "@lib/actions";
-import { prisma, prismaErrors } from "@lib/integration/prismaConnector";
+import { prisma } from "@lib/integration/prismaConnector";
 import { logMessage } from "@lib/logger";
 import { TemplateUser } from "./types";
 import { inviteUserByEmail } from "@lib/invitations";
-import { AccessControlError, checkPrivilegesAsBoolean } from "@lib/privileges";
+import { AccessControlError } from "@lib/privileges";
 import { TemplateNotFoundError, UserAlreadyHasAccessError } from "@lib/invitations/exceptions";
-import { removeAssignedUserFromTemplate } from "@lib/templates";
-
-const _canManageUsersForForm = async (formId: string) => {
-  const { ability } = await authCheckAndThrow();
-  const template = await prisma.template.findFirst({
-    where: {
-      id: formId,
-    },
-    include: {
-      users: true,
-    },
-  });
-
-  if (!template) {
-    return false;
-  }
-
-  // @TODO: check?
-  if (
-    checkPrivilegesAsBoolean(ability, [
-      { action: "update", subject: { type: "FormRecord", object: { users: template.users } } },
-      { action: "update", subject: { type: "User", object: { id: ability.userID } } },
-    ])
-  ) {
-    return true;
-  }
-
-  // if (template.users.some((user) => user.id === ability.userID)) {
-  //   return true;
-  // }
-
-  return false;
-};
+import { getTemplateWithAssociatedUsers, removeAssignedUserFromTemplate } from "@lib/templates";
 
 export const sendInvitation = async (emails: string[], templateId: string, message: string) => {
   const { ability } = await authCheckAndThrow();
@@ -83,23 +51,13 @@ export const removeUserFromForm = async (userId: string, formId: string) => {
 };
 
 export const getTemplateUsers = async (formId: string) => {
-  await _canManageUsersForForm(formId);
+  const { ability } = await authCheckAndThrow();
 
-  const templateWithUsers = await prisma.template
-    .findUnique({
-      where: {
-        id: formId,
-      },
-      select: {
-        users: {
-          select: {
-            id: true,
-            email: true,
-          },
-        },
-      },
-    })
-    .catch((e) => prismaErrors(e, null));
+  const template = await getTemplateWithAssociatedUsers(ability, formId);
+
+  if (!template) {
+    throw new TemplateNotFoundError();
+  }
 
   const invitations = await prisma.invitation.findMany({
     where: {
@@ -113,7 +71,7 @@ export const getTemplateUsers = async (formId: string) => {
   });
 
   const combinedUsers = [
-    ...(templateWithUsers?.users.map((user) => ({ ...user })) || []),
+    ...(template?.users.map((user) => ({ ...user })) || []),
     ...invitations.map((invitation) => ({
       id: invitation.id,
       email: invitation.email,
