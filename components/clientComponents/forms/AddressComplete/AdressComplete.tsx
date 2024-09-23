@@ -25,6 +25,10 @@ export const AddressComplete = (props: AddressCompleteProps): React.ReactElement
   const [apiKey, setApiKey] = useState("");
   //const [cache, setCache] = useState<{ [key: string]: AddressElements }>({});
 
+  const toFullAddress = (address: AddressCompleteChoice): string => {
+    return address.Text + ", " + address.Description;
+  };
+
   // Check if addressComplete is allowed.
   useEffect(() => {
     const checkAllowed = async () => {
@@ -89,15 +93,16 @@ export const AddressComplete = (props: AddressCompleteProps): React.ReactElement
       setAddressResultCache((prevCache) => [...prevCache, ...newElements]);
     }
 
-    // Filter the results to avoid duplicate "text" entry
-    const uniqueResults = addressResultCache.filter(
+    // Filter the results to avoid duplicate entry
+    const uniqueResults = responseData.filter(
       (item: AddressCompleteChoice, index: number, self: AddressCompleteChoice[]) =>
-        index === self.findIndex((t) => t.Text === item.Text && item.Text !== undefined)
+        index ===
+        self.findIndex((t) => toFullAddress(t) === toFullAddress(item) && item.Text !== undefined)
     );
 
     setChoices(
       uniqueResults.map((item: AddressCompleteChoice) => {
-        return item.Text + ", " + item.Description;
+        return toFullAddress(item);
       })
     );
   };
@@ -108,7 +113,7 @@ export const AddressComplete = (props: AddressCompleteProps): React.ReactElement
     } // Abandon if addressComplete is disabled.
 
     const selectedResult = addressResultCache.find(
-      (item: AddressCompleteChoice) => item.Text + ", " + item.Description === value
+      (item: AddressCompleteChoice) => toFullAddress(item) === value
     );
     if (selectedResult === undefined) {
       return; // Do nothing, this is not found in the AddressComplete API.

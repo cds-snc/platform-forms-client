@@ -32,8 +32,8 @@ export const ManagedCombobox = (props: ManagedComboboxProps): React.ReactElement
           props.onChange({ target: { value: inputValue } } as React.ChangeEvent<HTMLInputElement>);
         }
         setItems(
-          choices.filter((choice) => {
-            return inputValue ? choice.toLowerCase().includes(inputValue.toLowerCase()) : true;
+          choices.filter(() => {
+            return true; // API pre-filtered choices.
           })
         );
         if (props.activeRefresh) {
