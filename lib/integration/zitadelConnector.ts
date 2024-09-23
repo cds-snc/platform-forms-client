@@ -1,5 +1,4 @@
 import { createManagementClient, ManagementServiceClient } from "@zitadel/node/api";
-import { checkOne } from "@lib/cache/flags";
 import { ServiceAccount } from "@zitadel/node/credentials";
 import { AuthenticationOptions } from "@zitadel/node/dist/commonjs/credentials/service-account";
 import type { CallOptions, ClientMiddleware, ClientMiddlewareCall } from "nice-grpc";
@@ -47,10 +46,6 @@ const createServiceAccountInterceptor = (
 };
 
 const createZitadelClient = async () => {
-  const zitadelActive = await checkOne("zitadelAuth");
-  if (!zitadelActive) {
-    throw new Error("Zitadel is not currently enabled as a feature flag");
-  }
   const { zitadelAdministrationKey, zitadelProvider } = await getZitadelSettings();
   const serviceAccount = ServiceAccount.fromJsonString(zitadelAdministrationKey);
   zitadelClient = createManagementClient(
