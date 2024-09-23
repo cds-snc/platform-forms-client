@@ -88,9 +88,10 @@ const ControlledTree: ForwardRefRenderFunction<unknown, TreeDataProviderProps> =
 
   const language = getLocalizationAttribute()?.lang as Language;
 
-  const { remove: removeItem } = useTemplateStore((s) => {
+  const { remove: removeItem, setChangeKey } = useTemplateStore((s) => {
     return {
       remove: s.remove,
+      setChangeKey: s.setChangeKey,
     };
   });
 
@@ -115,6 +116,10 @@ const ControlledTree: ForwardRefRenderFunction<unknown, TreeDataProviderProps> =
     setExpandedItems([id]);
     setId(id);
     tree?.current?.startRenamingItem(id);
+  };
+
+  const forceRefresh = () => {
+    setChangeKey(String(new Date().getTime())); //Force a re-render
   };
 
   useImperativeHandle(ref, () => ({
@@ -319,6 +324,7 @@ const ControlledTree: ForwardRefRenderFunction<unknown, TreeDataProviderProps> =
           );
 
           updateGroupsLayout();
+          forceRefresh();
         }}
         onFocusItem={(item) => {
           const parent = findParentGroup(getTreeData(), String(item.index));
