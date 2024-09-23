@@ -44,9 +44,11 @@ export const InviteUsers = () => {
 
       <section className="mt-4">
         <label>Message</label>
-        <textarea className="gc-textarea" onChange={(e) => setMessage(e.target.value)}>
-          {message}
-        </textarea>
+        <textarea
+          className="gc-textarea"
+          onChange={(e) => setMessage(e.target.value)}
+          defaultValue={message}
+        />
       </section>
 
       <section className="-mb-4 mt-4 flex gap-2">
