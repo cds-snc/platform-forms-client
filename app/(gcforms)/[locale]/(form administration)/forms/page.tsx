@@ -11,6 +11,7 @@ import { getAllTemplatesForUser, TemplateOptions } from "@lib/templates";
 import { DeliveryOption } from "@lib/types";
 import { getOverdueTemplateIds } from "@lib/overdue";
 import { Invitations } from "./components/server/Invitations";
+import { retrieveInvitations } from "./components/server/Invitations/actions";
 
 export type FormsTemplate = {
   id: string;
@@ -80,10 +81,12 @@ export default async function Page({
       templates.map((template) => template.id)
     );
 
+    const invitations = await retrieveInvitations();
+
     return (
       <div className="center mx-auto w-[980px] bg-gray-soft">
         <h1 className="mb-8 border-b-0">{t("title")}</h1>
-        <Invitations />
+        <Invitations invitations={invitations} />
         <div className="flex w-full justify-between">
           <Navigation filter={status} />
           <NewFormButton />
