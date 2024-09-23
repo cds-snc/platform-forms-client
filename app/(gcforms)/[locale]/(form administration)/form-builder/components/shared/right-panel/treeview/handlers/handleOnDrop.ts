@@ -146,20 +146,25 @@ export const handleOnDrop = async (
     let updatedSubElements = [...subElements];
     items.forEach((item) => {
       const currentIndex = item.data.subIndex;
-      // console.log(
-      //   "current index",
-      //   currentIndex,
-      //   "target index",
-      //   targetIndex,
-      //   "parent id",
-      //   Number(targetParent)
-      // );
-      updatedSubElements = updateArrayOrder(updatedSubElements, currentIndex, targetIndex);
+
+      /*
+      console.log(
+        "current index",
+        currentIndex,
+        "target index",
+        targetIndex,
+        "parent id",
+        Number(targetParent)
+      );
+      */
+      updatedSubElements = updateArrayOrder(updatedSubElements, currentIndex, targetIndex - 1);
+      // Filter out any undefined elements
+      updatedSubElements = updatedSubElements.filter((element) => element !== undefined);
+
+      // console.log("updatedSubElements:", updatedSubElements);
+
       selectedItems.push(String(item.index));
     });
-
-    // Filter out any undefined elements
-    updatedSubElements = updatedSubElements.filter((element) => element !== undefined);
 
     updateSubElements(updatedSubElements, Number(targetParent));
     setSelectedItems(selectedItems);
