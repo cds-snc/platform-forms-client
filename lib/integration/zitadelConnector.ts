@@ -5,7 +5,8 @@ import { AuthenticationOptions } from "@zitadel/node/dist/commonjs/credentials/s
 import type { CallOptions, ClientMiddleware, ClientMiddlewareCall } from "nice-grpc";
 import { Metadata } from "nice-grpc-common";
 
-let zitadelClient: ManagementServiceClient | null = null;
+let zitadelClient: ManagementServiceClient;
+let initializtionPromise: Promise<void> | null = null;
 
 const getZitadelSettings = async () => {
   if (!process.env.ZITADEL_PROVIDER) throw new Error("No value set for Zitadel Provider");
@@ -52,23 +53,16 @@ const createZitadelClient = async () => {
   }
   const { zitadelAdministrationKey, zitadelProvider } = await getZitadelSettings();
   const serviceAccount = ServiceAccount.fromJsonString(zitadelAdministrationKey);
-  return createManagementClient(
+  zitadelClient = createManagementClient(
     zitadelProvider,
     createServiceAccountInterceptor(zitadelProvider, serviceAccount, { apiAccess: true })
   );
 };
 
 export const getZitadelClient = async () => {
-  if (!zitadelClient) {
-    zitadelClient = await createZitadelClient();
+  if (!initializtionPromise) {
+    initializtionPromise = createZitadelClient();
   }
+  await initializtionPromise;
   return zitadelClient;
 };
-
-// If zitadelAuth is enabled, create the client before any function is called
-checkOne("zitadelAuth").then(async (zitadelActive) => {
-  if (zitadelActive) {
-    // No need to set the client to the variable, as it is already set in the function
-    await getZitadelClient();
-  }
-});
