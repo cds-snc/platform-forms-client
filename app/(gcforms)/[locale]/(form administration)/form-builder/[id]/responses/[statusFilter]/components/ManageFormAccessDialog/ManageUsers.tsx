@@ -1,12 +1,13 @@
 import { CancelIcon } from "@serverComponents/icons";
 import { ConfirmAction } from "./ConfirmAction";
-import { getTemplateUsers, removeUserFromForm } from "./actions";
-import { useContext, useEffect, useState } from "react";
+import { cancelInvitation, getTemplateUsers, removeUserFromForm } from "./actions";
+import { useCallback, useContext, useEffect, useState } from "react";
 import { ManageFormAccessDialogContext } from "./ManageFormAccessDialogContext";
 import { isValidGovEmail } from "@lib/validation/validation";
 import { useSession } from "next-auth/react";
 import { TemplateUser } from "./types";
 import { hasOwnProperty } from "@lib/tsUtils";
+import { RefreshIcon } from "@serverComponents/icons/RefreshIcon";
 
 export const ManageUsers = () => {
   const { data: session } = useSession();
@@ -34,7 +35,7 @@ export const ManageUsers = () => {
     let valid = true;
 
     // User already has access
-    if (usersWithAccess.find((user) => user.email === email)) {
+    if (usersWithAccess.find((user) => user.email === email && !hasOwnProperty(user, "expired"))) {
       handleAddError(`${email} already has access`);
       valid = false;
     }
@@ -90,18 +91,18 @@ export const ManageUsers = () => {
 
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    /**
-     * Fetch users with access to the form
-     */
-    const fetchUsersWithAccess = async () => {
-      const users = await getTemplateUsers(formId);
-      setUsersWithAccess(users || []);
-      setLoading(false);
-    };
+  /**
+   * Fetch users with access to the form
+   */
+  const fetchUsersWithAccess = useCallback(async () => {
+    const users = await getTemplateUsers(formId);
+    setUsersWithAccess(users || []);
+    setLoading(false);
+  }, [formId]);
 
+  useEffect(() => {
     fetchUsersWithAccess();
-  }, [formId, setUsersWithAccess]);
+  }, [fetchUsersWithAccess, formId, setUsersWithAccess]);
 
   if (loading) {
     return <div>Loading...</div>;
@@ -116,8 +117,13 @@ export const ManageUsers = () => {
     return false;
   };
 
-  const handleResendInvitation = async (email: string): Promise<boolean> => {
-    console.log(email);
+  const handleResendInvitation = async (email: string) => {
+    handleAddEmail(email);
+  };
+
+  const handleCancelInvitation = async (id: string): Promise<boolean> => {
+    cancelInvitation(id);
+    setUsersWithAccess(usersWithAccess.filter((user) => user.id !== id));
     return true;
   };
 
@@ -186,39 +192,38 @@ export const ManageUsers = () => {
         <h3>People with access</h3>
         <div className="max-h-96 overflow-scroll border-1 border-black p-4">
           {usersWithAccess.map((user) => (
-            <div className="flex flex-row py-2" key={user.email}>
+            <div className="flex flex-row items-start py-2" key={user.email}>
               <div className="grow">{user.email}</div>
               {hasOwnProperty(user, "expired") ? (
                 <div>
                   {user.expired ? (
-                    <>
-                      Expired •{" "}
+                    <div className="flex align-middle">
+                      <div>Expired</div>
+                      <button onClick={() => handleResendInvitation(user.email)}>
+                        <RefreshIcon title="resend" />
+                      </button>
                       <ConfirmAction
-                        buttonLabel="Resend"
-                        confirmString="Expired"
-                        buttonTheme="link"
-                        callback={() => handleResendInvitation(user.email)}
+                        buttonLabel="Delete"
+                        confirmString=""
+                        buttonTheme="destructive"
+                        icon={<CancelIcon title="delete" />}
+                        callback={() => handleCancelInvitation(user.id)}
                       />
-                    </>
+                    </div>
                   ) : (
-                    <>
-                      Invited •{" "}
+                    <div className="flex gap-1 align-baseline">
+                      <div>Invited</div>
+                      <button onClick={() => handleResendInvitation(user.email)}>
+                        <RefreshIcon title="resend" />
+                      </button>
                       <ConfirmAction
-                        buttonLabel="Resend"
-                        confirmString="Invited"
-                        buttonTheme="link"
-                        callback={() => handleResendInvitation(user.email)}
-                      >
-                        Resend
-                      </ConfirmAction>
-                      <ConfirmAction
-                        buttonLabel="Cancel"
-                        confirmString="Invited"
-                        buttonTheme="link"
-                        icon={<CancelIcon />}
-                        callback={() => handleResendInvitation(user.email)}
+                        buttonLabel="Delete"
+                        confirmString=""
+                        buttonTheme="destructive"
+                        icon={<CancelIcon title="delete" />}
+                        callback={() => handleCancelInvitation(user.id)}
                       />
-                    </>
+                    </div>
                   )}
                 </div>
               ) : (

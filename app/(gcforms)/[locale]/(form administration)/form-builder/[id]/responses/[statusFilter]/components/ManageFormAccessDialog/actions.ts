@@ -4,7 +4,7 @@ import { authCheckAndThrow } from "@lib/actions";
 import { prisma } from "@lib/integration/prismaConnector";
 import { logMessage } from "@lib/logger";
 import { TemplateUser } from "./types";
-import { inviteUserByEmail } from "@lib/invitations";
+import { cancelInvitation as cancelInvitationAction, inviteUserByEmail } from "@lib/invitations";
 import { AccessControlError } from "@lib/privileges";
 import { TemplateNotFoundError, UserAlreadyHasAccessError } from "@lib/invitations/exceptions";
 import { getTemplateWithAssociatedUsers, removeAssignedUserFromTemplate } from "@lib/templates";
@@ -80,4 +80,9 @@ export const getTemplateUsers = async (formId: string) => {
   ];
 
   return combinedUsers as TemplateUser[];
+};
+
+export const cancelInvitation = async (id: string) => {
+  const { ability } = await authCheckAndThrow();
+  cancelInvitationAction(ability, id);
 };

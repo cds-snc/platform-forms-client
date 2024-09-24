@@ -11,6 +11,7 @@ import {
   InvitationNotFoundError,
   TemplateNotFoundError,
   UserAlreadyHasAccessError,
+  UserNotFoundError,
 } from "./exceptions";
 import { inviteToForms } from "../emailTemplates/inviteToForms";
 import { getUser } from "@lib/users";
@@ -34,7 +35,7 @@ export const inviteUserByEmail = async (
   const sender = await getUser(ability, ability.userID);
 
   if (!sender) {
-    throw new Error("User not found");
+    throw new UserNotFoundError();
   }
 
   // Retrieve the template, fail if you don't have permissions
@@ -106,7 +107,10 @@ export const acceptInvitation = async (ability: UserAbility, invitationId: strin
   }
 
   try {
-    // const user = await getUser(ability, ability.userID); // double check ability to retrieve self
+    checkPrivileges(ability, [
+      { action: "view", subject: { type: "User", object: { id: ability.userID } } },
+    ]);
+
     const user = await prisma.user.findFirst({
       where: {
         email: invitation.email,
@@ -124,7 +128,7 @@ export const acceptInvitation = async (ability: UserAbility, invitationId: strin
       return true;
     }
   } catch (e) {
-    //
+    // @TODO
   }
 
   throw new Error("User not found");
@@ -162,6 +166,41 @@ export const declineInvitation = async (ability: UserAbility, invitationId: stri
   }
 
   throw new Error("Not your invitation");
+};
+
+/**
+ * Cancel an invitation
+ *
+ * @param ability
+ * @param invitationId
+ */
+export const cancelInvitation = async (ability: UserAbility, invitationId: string) => {
+  // Retrieve the invitation
+  const invitation = await prisma.invitation.findUnique({
+    where: {
+      id: invitationId,
+    },
+    select: {
+      email: true,
+      templateId: true,
+    },
+  });
+
+  if (!invitation) {
+    throw new InvitationNotFoundError();
+  }
+
+  checkPrivileges(ability, [
+    { action: "update", subject: { type: "FormRecord", object: { id: invitation.templateId } } },
+  ]);
+
+  // If no invitation found, return an error
+  if (!invitation) {
+    throw new InvitationNotFoundError();
+  }
+
+  // Delete the invitation
+  await _deleteInvitation(invitationId);
 };
 
 /**

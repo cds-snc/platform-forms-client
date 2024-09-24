@@ -1,6 +1,6 @@
 import { Button } from "@clientComponents/globals";
 import { CancelIcon } from "@serverComponents/icons";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 type ConfirmActionProps = {
   callback: () => Promise<boolean>;
@@ -21,6 +21,7 @@ export const ConfirmAction = ({
 }: ConfirmActionProps) => {
   const [confirm, setConfirm] = useState(false);
   const [error, setError] = useState("");
+  const ref = useRef<HTMLDivElement>(null);
 
   const handleOnClick = async () => {
     setError("");
@@ -29,8 +30,22 @@ export const ConfirmAction = ({
       setError("There was an error");
     }
   };
+
+  const handleClickOutside = (event: MouseEvent) => {
+    if (ref.current && !ref.current.contains(event.target as Node)) {
+      setConfirm(false);
+    }
+  };
+
+  useEffect(() => {
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+
   return (
-    <>
+    <div className="inline-block" ref={ref}>
       {error && <span className="px-2 text-red-700">{error}</span>}
       {!confirm && (
         <Button
@@ -47,11 +62,11 @@ export const ConfirmAction = ({
       {confirm && (
         <>
           <span>{confirmString}</span>
-          <Button theme={buttonTheme} className="ml-2 px-2 py-0" onClick={handleOnClick}>
+          <Button theme={buttonTheme} className="px-2 py-0" onClick={handleOnClick}>
             {buttonLabel}
           </Button>
         </>
       )}
-    </>
+    </div>
   );
 };
