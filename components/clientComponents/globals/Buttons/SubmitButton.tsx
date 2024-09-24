@@ -96,7 +96,7 @@ export const SubmitButton = ({
       {icon && <div className={cn(theme !== "icon" && "-ml-2 mr-2 w-8")}>{icon}</div>}
       {children}
       {loading && (
-        <SpinnerIcon className="ml-2 h-7 w-7 animate-spin fill-blue-600 text-white dark:text-white" />
+        <SpinnerIcon className="ml-2 size-7 animate-spin fill-blue-600 text-white dark:text-white" />
       )}
       <div aria-live="polite" className="sr-only">
         {loading && `${describeLoading ? describeLoading : t("loadingResult")}`}
