@@ -49,6 +49,7 @@ export const ConfirmAction = ({
       {error && <span className="px-2 text-red-700">{error}</span>}
       {!confirm && (
         <Button
+          dataTestId="button"
           className="bg-none"
           {...(children ? { theme: "link" } : { icon: icon, theme: "icon" })}
           onClick={() => {
@@ -62,7 +63,12 @@ export const ConfirmAction = ({
       {confirm && (
         <>
           <span>{confirmString}</span>
-          <Button theme={buttonTheme} className="px-2 py-0" onClick={handleOnClick}>
+          <Button
+            dataTestId="confirm"
+            theme={buttonTheme}
+            className="px-2 py-0"
+            onClick={handleOnClick}
+          >
             {buttonLabel}
           </Button>
         </>
