@@ -2,11 +2,23 @@ import { Button } from "@clientComponents/globals";
 import { CancelIcon } from "@serverComponents/icons";
 import { useState } from "react";
 
-type DeleteConfirmProps = {
+type ConfirmActionProps = {
   callback: () => Promise<boolean>;
+  icon?: React.ReactElement;
+  confirmString?: string;
+  buttonLabel?: string;
+  buttonTheme?: "primary" | "secondary" | "destructive" | "link";
+  children?: JSX.Element | string;
 };
 
-export const DeleteConfirm = ({ callback }: DeleteConfirmProps) => {
+export const ConfirmAction = ({
+  callback,
+  icon = <CancelIcon />,
+  confirmString = "Are you sure?",
+  buttonLabel = "Remove",
+  buttonTheme = "destructive",
+  children,
+}: ConfirmActionProps) => {
   const [confirm, setConfirm] = useState(false);
   const [error, setError] = useState("");
 
@@ -21,20 +33,22 @@ export const DeleteConfirm = ({ callback }: DeleteConfirmProps) => {
     <>
       {error && <span className="px-2 text-red-700">{error}</span>}
       {!confirm && (
-        <button
+        <Button
+          className="bg-none"
+          {...(children ? { theme: "link" } : { icon: icon, theme: "icon" })}
           onClick={() => {
             setConfirm(true);
             setError("");
           }}
         >
-          <CancelIcon />
-        </button>
+          <>{children}</>
+        </Button>
       )}
       {confirm && (
         <>
-          <span>Are you sure?</span>
-          <Button theme="destructive" className="ml-2 px-2 py-0" onClick={handleOnClick}>
-            Remove
+          <span>{confirmString}</span>
+          <Button theme={buttonTheme} className="ml-2 px-2 py-0" onClick={handleOnClick}>
+            {buttonLabel}
           </Button>
         </>
       )}

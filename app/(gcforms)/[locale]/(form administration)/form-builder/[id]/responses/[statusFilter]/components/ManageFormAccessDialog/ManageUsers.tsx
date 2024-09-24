@@ -1,5 +1,5 @@
 import { CancelIcon } from "@serverComponents/icons";
-import { DeleteConfirm } from "./DeleteConfirm";
+import { ConfirmAction } from "./ConfirmAction";
 import { getTemplateUsers, removeUserFromForm } from "./actions";
 import { useContext, useEffect, useState } from "react";
 import { ManageFormAccessDialogContext } from "./ManageFormAccessDialogContext";
@@ -88,18 +88,18 @@ export const ManageUsers = () => {
     setEmailList(emailList.filter((e) => e !== email));
   };
 
-  /**
-   * Fetch users with access to the form
-   */
-  const fetchUsersWithAccess = async () => {
-    const users = await getTemplateUsers(formId);
-    setUsersWithAccess(users || []);
-    setLoading(false);
-  };
-
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    /**
+     * Fetch users with access to the form
+     */
+    const fetchUsersWithAccess = async () => {
+      const users = await getTemplateUsers(formId);
+      setUsersWithAccess(users || []);
+      setLoading(false);
+    };
+
     fetchUsersWithAccess();
   }, [formId, setUsersWithAccess]);
 
@@ -114,6 +114,11 @@ export const ManageUsers = () => {
       return true;
     }
     return false;
+  };
+
+  const handleResendInvitation = async (email: string): Promise<boolean> => {
+    console.log(email);
+    return true;
   };
 
   return (
@@ -184,14 +189,45 @@ export const ManageUsers = () => {
             <div className="flex flex-row py-2" key={user.email}>
               <div className="grow">{user.email}</div>
               {hasOwnProperty(user, "expired") ? (
-                <div>{user.expired ? "expired" : "invited"}</div>
+                <div>
+                  {user.expired ? (
+                    <>
+                      Expired •{" "}
+                      <ConfirmAction
+                        buttonLabel="Resend"
+                        confirmString="Expired"
+                        buttonTheme="link"
+                        callback={() => handleResendInvitation(user.email)}
+                      />
+                    </>
+                  ) : (
+                    <>
+                      Invited •{" "}
+                      <ConfirmAction
+                        buttonLabel="Resend"
+                        confirmString="Invited"
+                        buttonTheme="link"
+                        callback={() => handleResendInvitation(user.email)}
+                      >
+                        Resend
+                      </ConfirmAction>
+                      <ConfirmAction
+                        buttonLabel="Cancel"
+                        confirmString="Invited"
+                        buttonTheme="link"
+                        icon={<CancelIcon />}
+                        callback={() => handleResendInvitation(user.email)}
+                      />
+                    </>
+                  )}
+                </div>
               ) : (
                 <div>
                   {/* Disable delete for current user or only remaining user */}
                   {loggedInUserEmail === user.email || usersWithAccess.length <= 1 ? (
                     <span></span>
                   ) : (
-                    <DeleteConfirm callback={() => handleRemoveUser(user.id)} />
+                    <ConfirmAction callback={() => handleRemoveUser(user.id)} />
                   )}
                 </div>
               )}
