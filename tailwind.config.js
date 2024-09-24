@@ -130,6 +130,12 @@ module.exports = {
           DEFAULT: "#000",
           form: "#0b0c0c",
         },
+        gcds: {
+          secondary: {
+            txt: "#2b4380",
+            bkd: "#d7e5f5",
+          },
+        },
         transparent: "transparent",
       },
       fontSize: {

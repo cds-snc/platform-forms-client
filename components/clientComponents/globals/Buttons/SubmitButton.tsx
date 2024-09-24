@@ -67,40 +67,42 @@ export const SubmitButton = ({
   `;
 
   return (
-    <button
-      // "type" because a "submit" button may no longer be in a form element with the new server action patterns
-      type={type}
-      // Note: no need to add onKeyDown also, keying enter also triggers onClick. More info see
-      // https://html.spec.whatwg.org/#implicit-submission
-      onClick={(e) => {
-        if (!loading && onClick) {
-          onClick(e);
-        } else if (loading) {
-          // Prevent form submit while loading in the case of a user keying a submit in a form.
-          // This is needed since the onClick is also called for a form submit.
-          e.preventDefault();
+    <div className="text-gcds-secondary-txt">
+      <button
+        // "type" because a "submit" button may no longer be in a form element with the new server action patterns
+        type={type}
+        // Note: no need to add onKeyDown also, keying enter also triggers onClick. More info see
+        // https://html.spec.whatwg.org/#implicit-submission
+        onClick={(e) => {
+          if (!loading && onClick) {
+            onClick(e);
+          } else if (loading) {
+            // Prevent form submit while loading in the case of a user keying a submit in a form.
+            // This is needed since the onClick is also called for a form submit.
+            e.preventDefault();
+          }
+        }}
+        className={
+          loading
+            ? cn(themes["base"], themes.disabled, disabledClass, className)
+            : cn(themes["base"], themes[theme], className)
         }
-      }}
-      className={
-        loading
-          ? cn(themes["base"], themes.disabled, disabledClass, className)
-          : cn(themes["base"], themes[theme], className)
-      }
-      ref={buttonRef}
-      data-testid={dataTestId}
-      // TODO do more testing on aria-disabled, doesn't seem to do much with AT... worth even
-      // using with a submit button?
-      aria-disabled={loading}
-      {...rest}
-    >
-      {icon && <div className={cn(theme !== "icon" && "-ml-2 mr-2 w-8")}>{icon}</div>}
-      {children}
-      {loading && (
-        <SpinnerIcon className="ml-2 size-7 animate-spin fill-blue-600 text-white dark:text-white" />
-      )}
-      <div aria-live="polite" className="sr-only">
-        {loading && `${describeLoading ? describeLoading : t("loadingResult")}`}
-      </div>
-    </button>
+        ref={buttonRef}
+        data-testid={dataTestId}
+        // TODO do more testing on aria-disabled, doesn't seem to do much with AT... worth even
+        // using with a submit button?
+        aria-disabled={loading}
+        {...rest}
+      >
+        {icon && <div className={cn(theme !== "icon" && "-ml-2 mr-2 w-8")}>{icon}</div>}
+        {children}
+        {loading && (
+          <SpinnerIcon className="ml-2 size-7 animate-spin fill-blue-600 text-white dark:text-white" />
+        )}
+        <div aria-live="polite" className="sr-only">
+          {loading && `${describeLoading ? describeLoading : t("loadingResult")}`}
+        </div>
+      </button>
+    </div>
   );
 };
