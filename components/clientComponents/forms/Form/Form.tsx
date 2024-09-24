@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState, useRef, createRef } from "react";
 import { FormikProps, withFormik } from "formik";
 import { getFormInitialValues } from "@lib/formBuilder";
 import { getErrorList, setFocusOnErrorMessage, validateOnSubmit } from "@lib/validation/validation";
@@ -11,7 +11,10 @@ import Loader from "../../globals/Loader";
 import classNames from "classnames";
 import { Responses, PublicFormRecord, Validate } from "@lib/types";
 import { ErrorStatus } from "../Alert/Alert";
-import { submitForm } from "app/(gcforms)/[locale]/(form filler)/id/[...props]/actions";
+import {
+  verifyHCaptchaToken,
+  submitForm,
+} from "app/(gcforms)/[locale]/(form filler)/id/[...props]/actions";
 import useFormTimer from "@lib/hooks/useFormTimer";
 import { useFormValuesChanged } from "@lib/hooks/useValueChanged";
 import { useGCFormsContext } from "@lib/hooks/useGCFormContext";
@@ -27,6 +30,7 @@ import {
 import { filterShownElements, filterValuesByShownElements } from "@lib/formContext";
 import { formHasGroups } from "@lib/utils/form-builder/formHasGroups";
 import { showReviewPage } from "@lib/utils/form-builder/showReviewPage";
+import HCaptcha from "@hcaptcha/react-hcaptcha";
 
 interface SubmitButtonProps {
   numberOfRequiredQuestions: number;
@@ -170,6 +174,9 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
   const serverErrorId = `${errorId}-server`;
   const formStatusError = props.status === "Error" ? t("server-error") : null;
 
+  const captchaEnabled = true; // TODO implement it
+  const hCaptchaRef = createRef<HCaptcha>();
+
   //  If there are errors on the page, set focus the first error field
   useEffect(() => {
     if (formStatusError) {
@@ -246,7 +253,11 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
               if (isGroupsCheck && isShowReviewPage && currentGroup !== LockedSections.REVIEW) {
                 return;
               }
-              handleSubmit(e);
+              if (captchaEnabled) {
+                hCaptchaRef.current?.execute();
+              } else {
+                handleSubmit();
+              }
             }}
             noValidate
             // TODO move this to each child container but that I think will take some thought.
@@ -260,9 +271,7 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
                   {getGroupTitle(currentGroup, language as Language)}
                 </h2>
               )}
-
             {children}
-
             {/* Policy shows after form elements when groups off */}
             {!isGroupsCheck && showIntro && (
               <RichText>
@@ -270,10 +279,29 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
                   form.privacyPolicy[props.language == "en" ? "descriptionEn" : "descriptionFr"]}
               </RichText>
             )}
-
             {isGroupsCheck && isShowReviewPage && currentGroup === LockedSections.REVIEW && (
               <Review language={language as Language} />
             )}
+
+            {/* For more info on the React lib https://github.com/hCaptcha/react-hcaptcha */}
+            <HCaptcha
+              sitekey={props.hCaptchaSiteKey || ""}
+              onVerify={async (token) => {
+                logMessage.info(`Captcha token = ${token}`); // TODO remove
+                const success = await verifyHCaptchaToken(token);
+                if (!success) {
+                  logMessage.info("Captcha token verification failed");
+                } else {
+                  logMessage.info("Captcha token verification succeeded"); // TODO remove
+                  handleSubmit();
+                }
+              }}
+              onError={() => logMessage.info("Captcha Error")} // TODO
+              onExpire={() => logMessage.info("Captcha Expired")} // TODO
+              ref={hCaptchaRef}
+              languageOverride={language}
+              size="invisible"
+            />
 
             <div className="flex">
               {isGroupsCheck && isShowReviewPage && (
@@ -339,6 +367,7 @@ interface FormProps {
   allowGrouping?: boolean | undefined;
   groupHistory?: string[];
   matchedIds?: string[];
+  hCaptchaSiteKey?: string;
 }
 
 /**
