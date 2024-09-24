@@ -84,7 +84,7 @@ export const FileNameInput = () => {
   const widthStyle = width ? { width: `${width}px` } : {};
 
   return (
-    <div className="flex py-2">
+    <div className="border-gcds-blue-800">
       <span className={`invisible absolute px-2`} ref={span}>
         {content}
       </span>

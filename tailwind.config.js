@@ -130,10 +130,21 @@ module.exports = {
           DEFAULT: "#000",
           form: "#0b0c0c",
         },
+        // see: https://design-system.alpha.canada.ca/en/styles/colour/
         gcds: {
-          secondary: {
-            txt: "#2b4380",
-            bkd: "#d7e5f5",
+          blue: {
+            100: "#D7E5F5",
+            500: "#6584A6",
+            700: "#33465C",
+            800: "#2B4380",
+            850: "#0535D2",
+            900: "#26374A",
+          },
+          red: {
+            100: "#FBDDDA",
+            500: "#D3080C",
+            700: "#A62A1E",
+            900: "#822117",
           },
         },
         transparent: "transparent",
