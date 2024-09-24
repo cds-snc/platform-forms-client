@@ -110,6 +110,7 @@ const checkMulti = async <T extends FeatureFlagKeys[]>(keys: T): Promise<PickFla
   return Object.fromEntries(mapped) as PickFlags<T>;
 };
 
+// TODO: in the future these could pulled in from default_flag_settings.json
 export const FeatureFlags = {
   experimentalBlocks: "experimentalBlocks",
   zitadelAuth: "zitadelAuth",
