@@ -3,13 +3,13 @@ import { Button } from "@clientComponents/globals";
 export default async function Page() {
   return (
     <>
-      <Button theme="primary">Button Preview</Button>
-
-      <Button theme="secondary">Button Preview</Button>
-
-      <Button theme="destructive">Button Preview</Button>
-
-      <Button theme="disabled">Button Preview</Button>
+      <h3 className="mb-4">Button component preview</h3>
+      <div className="flex space-x-4">
+        <Button theme="primary">Submit</Button>
+        <Button theme="secondary">Cancel</Button>
+        <Button theme="destructive">Delete</Button>
+        <Button theme="disabled">Disabled</Button>
+      </div>
     </>
   );
 }
