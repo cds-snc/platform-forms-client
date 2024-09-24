@@ -17,6 +17,7 @@ import { FormRecord } from "@lib/types";
 import { logMessage } from "@lib/logger";
 import { FeatureFlagsProvider } from "@lib/hooks/useFeatureFlags";
 import { getSomeFlags } from "@lib/cache/flags";
+import { FeatureFlags } from "@lib/cache/flags";
 
 export default async function Layout({
   children,
@@ -51,10 +52,10 @@ export default async function Layout({
   }
 
   const featureFlags = await getSomeFlags([
-    "experimentalBlocks",
-    "zitadelAuth",
-    "conditionalLogic",
-    "addressComplete",
+    FeatureFlags.experimentalBlocks,
+    FeatureFlags.zitadelAuth,
+    FeatureFlags.conditionalLogic,
+    FeatureFlags.addressComplete,
   ]);
 
   return (
