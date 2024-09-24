@@ -12836,7 +12836,7 @@ __metadata:
     react: "npm:^18.2.0"
     react-app-polyfill: "npm:3.0.0"
     react-aria: "npm:3.31.0"
-    react-complex-tree: "npm:^2.4.2"
+    react-complex-tree: "npm:^2.4.5"
     react-dom: "npm:^18.2.0"
     react-i18next: "npm:^14.0.5"
     react-loading-skeleton: "npm:^3.4.0"
@@ -17318,7 +17318,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-complex-tree@npm:^2.4.2":
+"react-complex-tree@npm:^2.4.5":
   version: 2.4.5
   resolution: "react-complex-tree@npm:2.4.5"
   peerDependencies:
