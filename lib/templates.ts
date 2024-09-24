@@ -15,7 +15,6 @@ import { logMessage } from "@lib/logger";
 import { unprocessedSubmissions, deleteDraftFormResponses } from "./vault";
 import { addOwnershipEmail, transferOwnershipEmail } from "./ownership";
 import { deleteKey } from "./serviceAccount";
-import { checkOne } from "./cache/flags";
 
 // ******************************************
 // Internal Module Functions
@@ -1175,9 +1174,7 @@ export async function deleteTemplate(
     logEvent(ability.userID, { type: "Form", id: formID }, "DeleteForm");
 
     // Check and delete any API keys from IDP
-    if (await checkOne("zitadelAuth")) {
-      await deleteKey(formID);
-    }
+    await deleteKey(formID);
 
     if (formCache.cacheAvailable) formCache.formID.invalidate(formID);
 
