@@ -42,10 +42,6 @@ export const handleCanDropAt = (
     }
   }
 
-  if ((<DraggingPositionBetweenItems>target).parentItem === "root") {
-    // return false;
-  }
-
   // Can't drop elements inside a dynamicRow
   if (Object.prototype.hasOwnProperty.call(target, "targetItem")) {
     const targetElement = getElement(Number((<DraggingPositionItem>target).targetItem));
