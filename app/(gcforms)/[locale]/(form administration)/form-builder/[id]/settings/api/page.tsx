@@ -3,8 +3,8 @@ import { Metadata } from "next";
 import { ApiKey } from "./components/client/ApiKey";
 import { authCheckAndRedirect } from "@lib/actions";
 import { checkKeyExists } from "@lib/serviceAccount";
-import { checkOne } from "@lib/cache/flags";
 import { redirect } from "next/navigation";
+import { checkPrivileges } from "@lib/privileges";
 
 export async function generateMetadata({
   params: { locale },
@@ -22,9 +22,16 @@ export default async function Page({
 }: {
   params: { id: string; locale: string };
 }) {
-  await authCheckAndRedirect();
-  const flag = await checkOne("zitadelAuth");
-  if (!flag) {
+  const { ability } = await authCheckAndRedirect();
+  try {
+    checkPrivileges(ability, [
+      {
+        action: "view",
+        subject: "FormRecord",
+      },
+    ]);
+  } catch (e) {
+    // User does not have Manage All Forms permission
     redirect(`/${locale}/form-builder/${id}/settings`);
   }
 
