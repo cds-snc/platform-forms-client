@@ -28,9 +28,14 @@ import { toast } from "@formBuilder/components/shared";
 import { defaultForm } from "@lib/store/defaults";
 import { showReviewPage } from "@lib/utils/form-builder/showReviewPage";
 import { focusElement } from "@lib/client/clientHelpers";
-import { useFeatureFlags } from "@lib/hooks/useFeatureFlags";
 
-export const Preview = ({ disableSubmit = true }: { disableSubmit?: boolean }) => {
+export const Preview = ({
+  disableSubmit = true,
+  allowGrouping = false,
+}: {
+  disableSubmit?: boolean;
+  allowGrouping?: boolean;
+}) => {
   const { status } = useSession();
   const { i18n } = useTranslation(["common", "confirmation"]);
   const { id, getSchema, getIsPublished, getSecurityAttribute } = useTemplateStore((s) => ({
@@ -39,9 +44,6 @@ export const Preview = ({ disableSubmit = true }: { disableSubmit?: boolean }) =
     getIsPublished: s.getIsPublished,
     getSecurityAttribute: s.getSecurityAttribute,
   }));
-
-  const { getFlag } = useFeatureFlags();
-  const allowGrouping = getFlag("conditionalLogic");
 
   const formParsed = safeJSONParse<FormProperties>(getSchema());
   if (!formParsed) {
