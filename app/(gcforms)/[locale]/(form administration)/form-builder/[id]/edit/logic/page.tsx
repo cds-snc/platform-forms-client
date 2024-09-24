@@ -26,7 +26,7 @@ export default async function Page({
 }: {
   params: { id: string; locale: string };
 }) {
-  const allowGroups = await allowGrouping();
+  const allowGroups = allowGrouping();
 
   if (!allowGroups) {
     return null;
