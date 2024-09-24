@@ -1,9 +1,8 @@
 "use client";
-import React from "react";
 import { useTranslation } from "@i18n/client";
 import { SubNavLink } from "@clientComponents/globals/SubNavLink";
 import { EmailIcon, BrandIcon, GearIcon, ProtectedIcon } from "@serverComponents/icons";
-import { useFeatureFlags } from "@lib/hooks/useFeatureFlags";
+import { useIsAdminUser } from "@lib/hooks/form-builder";
 
 export const SettingsNavigation = ({ id }: { id: string }) => {
   const {
@@ -11,8 +10,7 @@ export const SettingsNavigation = ({ id }: { id: string }) => {
     i18n: { language },
   } = useTranslation("form-builder");
 
-  const { getFlag } = useFeatureFlags();
-  const isAPIEnalbed = getFlag("zitadelAuth");
+  const isAdmin = useIsAdminUser();
 
   return (
     <div className="relative flex">
@@ -36,7 +34,7 @@ export const SettingsNavigation = ({ id }: { id: string }) => {
               {t("settings.formManagement")}
             </span>
           </SubNavLink>
-          {isAPIEnalbed && (
+          {isAdmin && (
             <SubNavLink href={`/${language}/form-builder/${id}/settings/api`}>
               <span className="text-sm laptop:text-base">
                 <ProtectedIcon className="mr-2 inline-block laptop:mt-[-2px]" />
