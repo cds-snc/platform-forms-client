@@ -10,13 +10,9 @@
   "featureStatus": "Statut",
   "featureSwitch": "Activé/Déactivé",
   "features": {
-    "experimentalBlocks": {
-      "title": "Blocs expérimentaux",
-      "description": "Activer les blocs expérimentaux"
-    },
     "repeatingSets": {
-      "title": "Repeating sets",
-      "description": "Enable repeating sets"
+      "title": "Ensemble récurrent",
+      "description": "Activer les ensembles récurrents"
     },
     "zitadelAuth": {
       "title": "AuthenticationZitadel",

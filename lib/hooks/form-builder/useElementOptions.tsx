@@ -39,6 +39,7 @@ import {
 import { useIsAdminUser } from "./useIsAdminUser";
 import { ElementOptionsFilter, ElementOption } from "../../types/form-builder-types";
 import { useFeatureFlags } from "../useFeatureFlags";
+import { FeatureFlags } from "@lib/cache/flags";
 
 export enum Groups {
   BASIC = "basic",
@@ -65,7 +66,7 @@ export const useElementOptions = (filterElements?: ElementOptionsFilter | undefi
   const allowFileInput = useIsAdminUser();
 
   const { getFlag } = useFeatureFlags();
-  const allowRepeatingSets = getFlag("experimentalBlocks");
+  const allowRepeatingSets = getFlag(FeatureFlags.repeatingSets);
 
   const fileInputOption: ElementOption = {
     id: "fileInput",
