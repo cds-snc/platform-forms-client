@@ -11,8 +11,8 @@
   "featureSwitch": "Activé/Déactivé",
   "features": {
     "repeatingSets": {
-      "title": "Ensemble récurrent",
-      "description": "Activer les ensembles récurrents"
+      "title": "Repeating sets",
+      "description": "Enable repeating sets"
     },
     "zitadelAuth": {
       "title": "AuthenticationZitadel",
