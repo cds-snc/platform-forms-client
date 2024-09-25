@@ -66,7 +66,7 @@ export const useElementOptions = (filterElements?: ElementOptionsFilter | undefi
   const allowFileInput = useIsAdminUser();
 
   const { getFlag } = useFeatureFlags();
-  const experimentalBlocks = getFlag("experimentalBlocks");
+  const experimentalBlocks = getFlag("repeatingSets");
 
   const fileInputOption: ElementOption = {
     id: "fileInput",

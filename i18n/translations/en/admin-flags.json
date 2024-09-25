@@ -10,9 +10,9 @@
   "featureStatus": "Status",
   "featureSwitch": "On/Off",
   "features": {
-    "experimentalBlocks": {
-      "title": "Experimental blocks",
-      "description": "Enable experimental blocks"
+    "repeatingSets": {
+      "title": "Repeating sets",
+      "description": "Enable repeating sets"
     },
     "zitadelAuth": {
       "title": "Zitadel Auth",
