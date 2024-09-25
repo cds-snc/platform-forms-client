@@ -2,7 +2,6 @@ import { prisma } from "@lib/integration/prismaConnector";
 import { UserAbility } from "@lib/types";
 import { InvitationIsExpiredError, InvitationNotFoundError } from "./exceptions";
 import { checkPrivileges } from "@lib/privileges";
-import { getOrigin } from "@lib/origin";
 import { ownerAddedNotification } from "@lib/emailTemplates/ownerAddedNotification";
 import { sendEmail } from "@lib/integration/notifyConnector";
 
@@ -115,16 +114,7 @@ const _notifyOwnersOfNewOwnership = async (userId: string, formId: string) => {
     throw new Error("Template not found");
   }
 
-  const HOST = getOrigin();
-  const formUrlEn = `${HOST}/en/form-builder/${formId}`;
-  const formUrlFr = `${HOST}/fr/form-builder/${formId}`;
-
-  const emailContent = ownerAddedNotification(
-    template?.name,
-    formUrlEn,
-    formUrlFr,
-    user.name || user.email
-  );
+  const emailContent = ownerAddedNotification(template?.name, user.name || user.email);
 
   template.users.forEach((owner) => {
     sendEmail(owner.email, {
