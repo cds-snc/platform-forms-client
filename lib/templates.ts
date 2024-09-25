@@ -17,6 +17,8 @@ import { addOwnershipEmail, transferOwnershipEmail } from "./ownership";
 import { deleteKey } from "./serviceAccount";
 import { ownerRemovedNotification } from "./emailTemplates/ownerRemovedNotification";
 import { sendEmail } from "./integration/notifyConnector";
+import { getUser } from "./users";
+import { youHaveBeenRemovedNotification } from "./emailTemplates/youHaveBeenRemovedNotification";
 
 // ******************************************
 // Internal Module Functions
@@ -720,6 +722,14 @@ export async function updateIsPublishedForTemplate(
   }
 }
 
+/**
+ * Remove a user from a form
+ *
+ * @param ability
+ * @param formID Form ID
+ * @param userId User to be removed ID
+ * @returns
+ */
 export async function removeAssignedUserFromTemplate(
   ability: UserAbility,
   formID: string,
@@ -743,7 +753,13 @@ export async function removeAssignedUserFromTemplate(
       return null;
     }
 
-    const user = await prisma.user.findUnique({
+    // Make sure this user has permissions to manage users on the form
+    checkPrivileges(ability, [
+      { action: "update", subject: { type: "FormRecord", object: { users: template.users } } },
+      { action: "update", subject: { type: "User", object: { id: ability.userID } } },
+    ]);
+
+    const userToRemove = await prisma.user.findUnique({
       where: {
         id: userId,
       },
@@ -753,48 +769,67 @@ export async function removeAssignedUserFromTemplate(
       },
     });
 
-    if (user === null) {
+    if (userToRemove === null) {
       logMessage.warn(
         `Can not remove assigned user ${userId} on template ${formID}.  User does not exist`
       );
       return null;
     }
 
-    checkPrivileges(ability, [
-      { action: "update", subject: { type: "FormRecord", object: { users: template.users } } },
-      { action: "update", subject: { type: "User", object: { id: ability.userID } } },
-    ]);
+    const requester = await getUser(ability, ability.userID);
 
-    await prisma.template
-      .update({
-        where: {
-          id: formID,
-        },
-        data: {
-          users: {
-            disconnect: {
-              id: userId,
+    try {
+      const updatedTemplate = await prisma.template
+        .update({
+          where: {
+            id: formID,
+          },
+          include: {
+            users: true,
+          },
+          data: {
+            users: {
+              disconnect: {
+                id: userId,
+              },
             },
           },
-        },
-      })
-      .catch((e) => prismaErrors(e, null));
+        })
+        .catch((e) => prismaErrors(e, null));
 
-    // @TODO: don't send email if there was no user to remove? (what does the above return?)
-    const emailContent = ownerRemovedNotification(template.name, user.name || "");
+      logEvent(
+        ability.userID,
+        { type: "Form", id: formID },
+        "RevokeFormAccess",
+        `Access revoked for ${userId}`
+      );
 
-    // @TODO: confirm who should receive this email? The removed user, or remaining owners, or both?
-    await sendEmail(user.email, {
-      subject: "You have been removed as an owner from a form",
-      formResponse: emailContent,
-    });
+      // Send email to person who was removed
+      const youHaveBeenRemovedEmailContent = youHaveBeenRemovedNotification(
+        template.name,
+        requester.name || "An owner"
+      );
 
-    logEvent(
-      ability.userID,
-      { type: "Form", id: formID },
-      "RevokeFormAccess",
-      `Access revoked for ${userId}`
-    );
+      sendEmail(userToRemove.email, {
+        subject: "You have been removed as an owner from a form",
+        formResponse: youHaveBeenRemovedEmailContent,
+      });
+
+      // Send email to remaining owners
+      updatedTemplate?.users.forEach((owner) => {
+        const ownerRemovedEmailContent = ownerRemovedNotification(
+          template.name,
+          userToRemove.name || "An owner"
+        );
+
+        sendEmail(owner.email, {
+          subject: "An owner has been removed from a form",
+          formResponse: ownerRemovedEmailContent,
+        });
+      });
+    } catch (e) {
+      logMessage.error(`Failed to remove user ${userId} from template ${formID}`);
+    }
 
     if (formCache.cacheAvailable) formCache.formID.invalidate(formID);
   } catch (e) {

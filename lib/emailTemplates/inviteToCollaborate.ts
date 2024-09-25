@@ -1,11 +1,11 @@
 /**
  * Send an invitation to collaborate on a form
  *
- * @param senderName
- * @param message
- * @param templateName
- * @param formUrlEn
- * @param formUrlFr
+ * @param senderName Sender's name
+ * @param message Message
+ * @param templateName Form name
+ * @param formUrlEn Form URL
+ * @param formUrlFr Form URL
  * @returns
  */
 export const inviteToCollaborate = (
@@ -17,7 +17,7 @@ export const inviteToCollaborate = (
 ): string => `
 (la version française suit)
 
-${senderName} invited you to collaborate on a form.
+${senderName} shared form ${templateName} with you.
 
 ${message}
 
@@ -25,7 +25,9 @@ ${message}
 
 ===
 
-French version
+${senderName} shared form ${templateName} with you.
+
+${message}
 
 [Open ${templateName}](${formUrlFr})
 `;
