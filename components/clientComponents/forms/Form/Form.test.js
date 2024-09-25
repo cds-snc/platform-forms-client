@@ -27,10 +27,6 @@ let mockFormTimerState = {
   timeLock: 0,
 };
 
-jest.mock("@lib/hooks/useFlag", () => ({
-  useFlag: jest.fn(),
-}));
-
 jest.mock("@lib/hooks/useFormTimer", () => ({
   __esModule: true,
   default: jest.fn(() => [
