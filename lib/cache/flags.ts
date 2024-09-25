@@ -3,6 +3,7 @@ import flagInitialSettings from "../../flag_initialization/default_flag_settings
 import { AccessControlError, checkPrivileges } from "@lib/privileges";
 import { logEvent } from "@lib/auditLogs";
 import { UserAbility } from "@lib/types";
+import { FeatureFlagKeys, FeatureFlags, PickFlags } from "./types";
 
 /**
  * Enables an Application Setting Flag
@@ -108,23 +109,6 @@ const checkMulti = async <T extends FeatureFlagKeys[]>(keys: T): Promise<PickFla
   }, new Map<string, boolean>());
 
   return Object.fromEntries(mapped) as PickFlags<T>;
-};
-
-// TODO: in the future these could pulled in from default_flag_settings.json
-export const FeatureFlags = {
-  addressComplete: "addressComplete",
-  repeatingSets: "repeatingSets",
-} as const;
-
-export type FeatureFlagKeys = keyof typeof FeatureFlags;
-
-export type Flags = {
-  [K in FeatureFlagKeys]: boolean;
-};
-
-// Utility type to pick only the keys provided in the flags array
-export type PickFlags<T extends FeatureFlagKeys[]> = {
-  [K in T[number]]: boolean;
 };
 
 export async function getSomeFlags<T extends FeatureFlagKeys[]>(flags: T): Promise<PickFlags<T>> {
