@@ -8,8 +8,10 @@ import { useSession } from "next-auth/react";
 import { TemplateUser } from "./types";
 import { hasOwnProperty } from "@lib/tsUtils";
 import { RefreshIcon } from "@serverComponents/icons/RefreshIcon";
+import { useTranslation } from "@i18n/client";
 
 export const ManageUsers = () => {
+  const { t } = useTranslation("manage-form-access");
   const { data: session } = useSession();
   const loggedInUserEmail = session?.user.email || "";
   const [errors, setErrors] = useState<string[]>([]);
@@ -36,19 +38,19 @@ export const ManageUsers = () => {
 
     // User already has access
     if (usersWithAccess.find((user) => user.email === email && !hasOwnProperty(user, "expired"))) {
-      handleAddError(`${email} already has access`);
+      handleAddError(t("userAlreadyHasAccess", { email }));
       valid = false;
     }
 
     // Not a valid government email
     if (!isValidGovEmail(email)) {
-      handleAddError(`${email} is an invalid email address`);
+      handleAddError(t("invalidEmail", { email }));
       valid = false;
     }
 
     // Email already in the list
     if (emailList.includes(email)) {
-      handleAddError(`${email} is already in the list`);
+      handleAddError(t("emailAlreadyInList", { email }));
       valid = false;
     }
 
@@ -104,10 +106,6 @@ export const ManageUsers = () => {
     fetchUsersWithAccess();
   }, [fetchUsersWithAccess, formId, setUsersWithAccess]);
 
-  if (loading) {
-    return <div>Loading...</div>;
-  }
-
   const handleRemoveUser = async (userId: string) => {
     const result = await removeUserFromForm(userId, formId);
     if (result.success) {
@@ -131,9 +129,9 @@ export const ManageUsers = () => {
     <>
       <section>
         <label htmlFor="email" className="font-bold">
-          Add people to share access
+          {t("addPeopleToShareAccess")}
         </label>
-        <p className="pb-3">Must be a government email address</p>
+        <p className="pb-3">{t("mustBeAGovernmentAddress")}</p>
 
         {errors.length > 0 && (
           <div className="my-2 flex flex-wrap gap-2">
@@ -189,55 +187,48 @@ export const ManageUsers = () => {
       </section>
 
       <section className="mt-4">
-        <h3>People with access</h3>
+        <h3>{t("peopleWithAccess")}</h3>
         <div className="max-h-96 overflow-scroll border-1 border-black p-4">
-          {usersWithAccess.map((user) => (
-            <div className="flex flex-row items-start py-2" key={user.email}>
-              <div className="grow">{user.email}</div>
-              {hasOwnProperty(user, "expired") ? (
-                <div>
-                  {user.expired ? (
-                    <div className="flex align-middle">
-                      <div>Expired</div>
-                      <button onClick={() => handleResendInvitation(user.email)}>
-                        <RefreshIcon title="resend" />
-                      </button>
-                      <ConfirmAction
-                        buttonLabel="Delete"
-                        confirmString=""
-                        buttonTheme="destructive"
-                        icon={<CancelIcon title="delete" />}
-                        callback={() => handleCancelInvitation(user.id)}
-                      />
+          {loading && <div className="py-10">{t("loading")}</div>}
+          {!loading && (
+            <>
+              {usersWithAccess.map((user) => (
+                <div className="flex flex-row items-start py-2" key={user.email}>
+                  <div className="grow">{user.email}</div>
+                  {hasOwnProperty(user, "expired") ? (
+                    <div>
+                      <div className="flex gap-1 align-baseline">
+                        <div>{t("invited")}</div>
+                        <button onClick={() => handleResendInvitation(user.email)}>
+                          <RefreshIcon title={t("resend")} />
+                        </button>
+                        <ConfirmAction
+                          buttonLabel={t("delete")}
+                          confirmString=""
+                          buttonTheme="destructive"
+                          icon={<CancelIcon title={t("deleteInvitation")} />}
+                          callback={() => handleCancelInvitation(user.id)}
+                        />
+                      </div>
                     </div>
                   ) : (
-                    <div className="flex gap-1 align-baseline">
-                      <div>Invited</div>
-                      <button onClick={() => handleResendInvitation(user.email)}>
-                        <RefreshIcon title="resend" />
-                      </button>
-                      <ConfirmAction
-                        buttonLabel="Delete"
-                        confirmString=""
-                        buttonTheme="destructive"
-                        icon={<CancelIcon title="delete" />}
-                        callback={() => handleCancelInvitation(user.id)}
-                      />
+                    <div>
+                      {/* Disable delete for current user or only remaining user */}
+                      {loggedInUserEmail === user.email || usersWithAccess.length <= 1 ? (
+                        <span></span>
+                      ) : (
+                        <ConfirmAction
+                          callback={() => handleRemoveUser(user.id)}
+                          confirmString={t("areYouSure")}
+                          buttonLabel={t("remove")}
+                        />
+                      )}
                     </div>
                   )}
                 </div>
-              ) : (
-                <div>
-                  {/* Disable delete for current user or only remaining user */}
-                  {loggedInUserEmail === user.email || usersWithAccess.length <= 1 ? (
-                    <span></span>
-                  ) : (
-                    <ConfirmAction callback={() => handleRemoveUser(user.id)} />
-                  )}
-                </div>
-              )}
-            </div>
-          ))}
+              ))}
+            </>
+          )}
         </div>
       </section>
     </>

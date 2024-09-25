@@ -2,7 +2,6 @@
 
 import { authCheckAndThrow } from "@lib/actions";
 import { prisma } from "@lib/integration/prismaConnector";
-import { logMessage } from "@lib/logger";
 import { TemplateUser } from "./types";
 import { cancelInvitation as cancelInvitationAction, inviteUserByEmail } from "@lib/invitations";
 import { AccessControlError } from "@lib/privileges";
@@ -11,11 +10,6 @@ import { getTemplateWithAssociatedUsers, removeAssignedUserFromTemplate } from "
 
 export const sendInvitation = async (emails: string[], templateId: string, message: string) => {
   const { ability } = await authCheckAndThrow();
-  logMessage.info(
-    `Sending invitation email to ${JSON.stringify(
-      emails
-    )} for form ${templateId} with message ${message}`
-  );
 
   emails.forEach(async (email) => {
     try {

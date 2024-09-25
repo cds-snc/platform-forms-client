@@ -1,12 +1,13 @@
 import { Button } from "@clientComponents/globals";
+import { useTranslation } from "@i18n/client";
 import { CancelIcon } from "@serverComponents/icons";
 import { useEffect, useRef, useState } from "react";
 
 type ConfirmActionProps = {
   callback: () => Promise<boolean>;
   icon?: React.ReactElement;
-  confirmString?: string;
-  buttonLabel?: string;
+  confirmString: string;
+  buttonLabel: string;
   buttonTheme?: "primary" | "secondary" | "destructive" | "link";
   children?: JSX.Element | string;
 };
@@ -14,11 +15,12 @@ type ConfirmActionProps = {
 export const ConfirmAction = ({
   callback,
   icon = <CancelIcon />,
-  confirmString = "Are you sure?",
-  buttonLabel = "Remove",
+  confirmString,
+  buttonLabel,
   buttonTheme = "destructive",
   children,
 }: ConfirmActionProps) => {
+  const { t } = useTranslation("manage-form-access");
   const [confirm, setConfirm] = useState(false);
   const [error, setError] = useState("");
   const ref = useRef<HTMLDivElement>(null);
@@ -27,7 +29,7 @@ export const ConfirmAction = ({
     setError("");
     setConfirm(false);
     if (!(await callback())) {
-      setError("There was an error");
+      setError(t("confirmError"));
     }
   };
 

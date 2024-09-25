@@ -8,12 +8,15 @@ import { InviteUsers } from "./InviteUsers";
 import { ManageUsers } from "./ManageUsers";
 import { ManageFormAccessDialogContext } from "./ManageFormAccessDialogContext";
 import { isValidGovEmail } from "@lib/validation/validation";
+import { useTranslation } from "@i18n/client";
 
 type ManageFormAccessDialogProps = {
   formId: string;
 };
 
 export const ManageFormAccessDialog = ({ formId }: ManageFormAccessDialogProps) => {
+  const { t } = useTranslation("manage-form-access");
+
   const manageFormAccessDialogContext = useContext(ManageFormAccessDialogContext);
 
   if (!manageFormAccessDialogContext) {
@@ -71,7 +74,7 @@ export const ManageFormAccessDialog = ({ formId }: ManageFormAccessDialogProps) 
       {isManagementScreen && (
         <>
           <Button theme="secondary" onClick={handleCloseDialog}>
-            Cancel
+            {t("cancel")}
           </Button>
 
           <Button
@@ -83,7 +86,7 @@ export const ManageFormAccessDialog = ({ formId }: ManageFormAccessDialogProps) 
             }}
             disabled={emailList.length === 0}
           >
-            Next
+            {t("next")}
           </Button>
         </>
       )}
@@ -96,7 +99,7 @@ export const ManageFormAccessDialog = ({ formId }: ManageFormAccessDialogProps) 
         <Dialog
           dialogRef={dialogRef}
           handleClose={handleCloseDialog}
-          title={isManagementScreen ? "Manage form access" : "Invite to form"}
+          title={isManagementScreen ? t("manageFormAccess") : t("inviteToForm")}
           actions={dialogActions}
         >
           <div className="p-4">

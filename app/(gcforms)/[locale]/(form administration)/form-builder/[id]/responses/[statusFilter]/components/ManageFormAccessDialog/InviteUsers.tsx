@@ -3,11 +3,11 @@ import { ManageFormAccessDialogContext } from "./ManageFormAccessDialogContext";
 // import { useFormState } from "react-dom";
 import { sendInvitation } from "./actions";
 import { Button } from "@clientComponents/globals";
+import { useTranslation } from "@i18n/client";
 
 export const InviteUsers = () => {
+  const { t } = useTranslation("manage-form-access");
   const [message, setMessage] = useState("");
-
-  // emails: string[], templateId: string, message: string
 
   const manageFormAccessDialogContext = useContext(ManageFormAccessDialogContext);
 
@@ -43,7 +43,7 @@ export const InviteUsers = () => {
       </section>
 
       <section className="mt-4">
-        <label>Message</label>
+        <label>{t("optionalMessage")}</label>
         <textarea
           className="gc-textarea"
           onChange={(e) => setMessage(e.target.value)}
@@ -53,11 +53,11 @@ export const InviteUsers = () => {
 
       <section className="-mb-4 mt-4 flex gap-2">
         <Button theme="secondary" onClick={() => setIsOpen(false)}>
-          Back
+          {t("back")}
         </Button>
 
         <Button theme="primary" type="submit">
-          Invite
+          {t("invite")}
         </Button>
       </section>
     </form>
