@@ -73,6 +73,7 @@ export const SubElement = ({
         <AddToSetButton
           handleAdd={(type?: FormElementTypes) => {
             handleAddSubElement(elIndex, 0, type);
+            forceRefresh();
           }}
           filterElements={elementFilter}
         />
