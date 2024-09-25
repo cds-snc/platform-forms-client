@@ -17,7 +17,7 @@ export async function generateMetadata({
 }
 
 export default async function Page({ params: { id } }: { params: { id: string } }) {
-  const conditionalLogic = await allowGrouping();
+  const conditionalLogic = allowGrouping();
 
   return (
     <>

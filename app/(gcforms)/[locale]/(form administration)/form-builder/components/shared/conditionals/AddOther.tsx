@@ -53,7 +53,7 @@ export const AddOther = ({
       },
     };
 
-    const allowGroups = await allowGrouping();
+    const allowGroups = allowGrouping();
     let itemId = 0;
     if (allowGroups) {
       itemId = await add(item.index, FormElementTypes.textField, data, groupId);
