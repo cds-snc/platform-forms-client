@@ -114,6 +114,7 @@ const checkMulti = async <T extends FeatureFlagKeys[]>(keys: T): Promise<PickFla
 export const FeatureFlags = {
   experimentalBlocks: "experimentalBlocks",
   addressComplete: "addressComplete",
+  repeatingSets: "repeatingSets",
 } as const;
 
 export type FeatureFlagKeys = keyof typeof FeatureFlags;
