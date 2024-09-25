@@ -7,7 +7,7 @@ import {
   UserNotFoundError,
 } from "./exceptions";
 import { checkPrivileges } from "@lib/privileges";
-import { ownerAddedNotification } from "@lib/emailTemplates/ownerAddedNotification";
+import { ownerAddedNotification } from "@lib/invitations/emailTemplates/ownerAddedNotification";
 import { sendEmail } from "@lib/integration/notifyConnector";
 
 /**

@@ -15,10 +15,10 @@ import { logMessage } from "@lib/logger";
 import { unprocessedSubmissions, deleteDraftFormResponses } from "./vault";
 import { addOwnershipEmail, transferOwnershipEmail } from "./ownership";
 import { deleteKey } from "./serviceAccount";
-import { ownerRemovedNotification } from "./emailTemplates/ownerRemovedNotification";
+import { ownerRemovedNotification } from "./invitations/emailTemplates/ownerRemovedNotification";
 import { sendEmail } from "./integration/notifyConnector";
 import { getUser } from "./users";
-import { youHaveBeenRemovedNotification } from "./emailTemplates/youHaveBeenRemovedNotification";
+import { youHaveBeenRemovedNotification } from "./invitations/emailTemplates/youHaveBeenRemovedNotification";
 
 // ******************************************
 // Internal Module Functions
