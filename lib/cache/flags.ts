@@ -112,7 +112,6 @@ const checkMulti = async <T extends FeatureFlagKeys[]>(keys: T): Promise<PickFla
 
 // TODO: in the future these could pulled in from default_flag_settings.json
 export const FeatureFlags = {
-  experimentalBlocks: "experimentalBlocks",
   addressComplete: "addressComplete",
   repeatingSets: "repeatingSets",
 } as const;
