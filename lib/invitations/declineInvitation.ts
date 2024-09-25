@@ -1,6 +1,6 @@
 import { prisma } from "@lib/integration/prismaConnector";
 import { UserAbility } from "@lib/types";
-import { InvitationNotFoundError } from "./exceptions";
+import { InvitationNotFoundError, UserNotFoundError } from "./exceptions";
 import { getUser } from "@lib/users";
 
 /**
@@ -24,7 +24,7 @@ export const declineInvitation = async (ability: UserAbility, invitationId: stri
   const user = await getUser(ability, ability.userID);
 
   if (!user) {
-    throw new Error("User not found");
+    throw new UserNotFoundError();
   }
 
   // Check if the user is the same as the one who received
@@ -33,8 +33,6 @@ export const declineInvitation = async (ability: UserAbility, invitationId: stri
     await _deleteInvitation(invitationId);
     return true;
   }
-
-  throw new Error("Not your invitation");
 };
 
 /**

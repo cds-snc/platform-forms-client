@@ -1,6 +1,11 @@
 import { prisma } from "@lib/integration/prismaConnector";
 import { UserAbility } from "@lib/types";
-import { InvitationIsExpiredError, InvitationNotFoundError } from "./exceptions";
+import {
+  InvitationIsExpiredError,
+  InvitationNotFoundError,
+  TemplateNotFoundError,
+  UserNotFoundError,
+} from "./exceptions";
 import { checkPrivileges } from "@lib/privileges";
 import { ownerAddedNotification } from "@lib/emailTemplates/ownerAddedNotification";
 import { sendEmail } from "@lib/integration/notifyConnector";
@@ -57,7 +62,7 @@ export const acceptInvitation = async (ability: UserAbility, invitationId: strin
     // @TODO
   }
 
-  throw new Error("User not found");
+  throw new UserNotFoundError();
 };
 
 /**
@@ -96,7 +101,7 @@ const _notifyOwnersOfNewOwnership = async (userId: string, formId: string) => {
   });
 
   if (!user) {
-    throw new Error("User not found");
+    throw new UserNotFoundError();
   }
 
   const template = await prisma.template.findFirst({
@@ -111,7 +116,7 @@ const _notifyOwnersOfNewOwnership = async (userId: string, formId: string) => {
   });
 
   if (!template) {
-    throw new Error("Template not found");
+    throw new TemplateNotFoundError();
   }
 
   const emailContent = ownerAddedNotification(template?.name, user.name || user.email);
