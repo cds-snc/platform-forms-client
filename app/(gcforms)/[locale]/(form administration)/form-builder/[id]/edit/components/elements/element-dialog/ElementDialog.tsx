@@ -8,18 +8,27 @@ import { Groups } from "@lib/hooks/form-builder/useElementOptions";
 import { ElementFilters } from "./ElementFilters";
 import { Dialog, useDialogRef } from "@formBuilder/components/shared/Dialog";
 import { ListBox } from "@formBuilder/components/shared/ListBox";
+import { useFeatureFlags } from "@lib/hooks/useFeatureFlags";
 
 export type SelectedGroupState = {
   group: Groups | "all";
   ref: React.RefObject<HTMLElement>;
 };
 
-const filterElementsByGroup = (elements: ElementOption[], selectedGroup: Groups | "all") => {
+const filterElementsByGroup = (
+  elements: ElementOption[],
+  selectedGroup: Groups | "all",
+  featureFlags: { [key: string]: boolean }
+) => {
+  const excludeId = featureFlags["addressComplete"] ? "address" : "addressComplete";
+
   if (selectedGroup === "all") {
-    return elements;
+    return elements.filter((element) => element.id !== excludeId);
   }
 
-  return elements.filter((element) => selectedGroup === element.group.id);
+  return elements.filter(
+    (element) => selectedGroup === (element.group.id as Groups) && element.id !== excludeId
+  );
 };
 
 const Header = ({ children }: { children: React.ReactNode }) => {
@@ -60,6 +69,11 @@ export const ElementDialog = ({
     ref: React.createRef<HTMLElement>(),
   });
 
+  const { getFlag } = useFeatureFlags();
+  const featureFlags = {
+    addressComplete: getFlag("addressComplete"),
+  };
+
   // Retrieve elements applying any initial filters
   const filteredElements = useElementOptions(filterElements);
 
@@ -69,7 +83,7 @@ export const ElementDialog = ({
   ) as Groups[];
 
   // Now filter by selected group
-  const elementOptions = filterElementsByGroup(filteredElements, selectedGroup.group);
+  const elementOptions = filterElementsByGroup(filteredElements, selectedGroup.group, featureFlags);
 
   const handleChange = useCallback(
     (val: number) => {
