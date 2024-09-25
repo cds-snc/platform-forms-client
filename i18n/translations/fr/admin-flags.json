@@ -10,6 +10,10 @@
   "featureStatus": "Statut",
   "featureSwitch": "Activé/Déactivé",
   "features": {
+    "experimentalBlocks": {
+      "title": "Blocs expérimentaux",
+      "description": "Activer les blocs expérimentaux"
+    },
     "repeatingSets": {
       "title": "Ensemble récurrent",
       "description": "Activer les ensembles récurrents"
