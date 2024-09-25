@@ -1,7 +1,18 @@
 "use client";
 
-import { Flags } from "@lib/cache/flags";
+// import { Flags } from "@lib/cache/flags";
 import { createContext, useContext, useState } from "react";
+
+export const FeatureFlags = {
+  addressComplete: "addressComplete",
+  repeatingSets: "repeatingSets",
+} as const;
+
+export type FeatureFlagKeys = keyof typeof FeatureFlags;
+
+type Flags = {
+  [K in FeatureFlagKeys]: boolean;
+};
 
 const FeatureFlagsContext = createContext({
   flags: {} as Flags,
