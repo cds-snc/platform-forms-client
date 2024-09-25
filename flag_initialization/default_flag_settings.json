@@ -1,5 +1,5 @@
 {
   "experimentalBlocks": false,
-  "conditionalLogic": false,
+  "repeatingSets": false,
   "addressComplete": false
 }

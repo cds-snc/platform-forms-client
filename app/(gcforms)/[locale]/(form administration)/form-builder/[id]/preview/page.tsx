@@ -24,7 +24,7 @@ export default async function Page({ params: { id } }: { params: { id: string } 
   }));
   const disableSubmit = id === "0000" || !session?.user;
 
-  const isAllowGrouping = await allowGrouping();
+  const isAllowGrouping = allowGrouping();
 
   const formID = id;
 

@@ -1,6 +1,5 @@
 import "@testing-library/jest-dom";
 import { jest } from "@jest/globals";
-import initialSettings from "../flag_initialization/default_flag_settings.json";
 import "@i18n/client";
 
 global.jest = jest;
@@ -127,11 +126,6 @@ jest.mock("@lib/logger", () => {
     },
   };
 });
-
-jest.mock("@lib/hooks/useFlag", () => ({
-  __esModule: true,
-  useFlag: jest.fn((flag: string) => (initialSettings as Record<string, boolean>)[flag]),
-}));
 
 // Common secrets needed for functionality
 // Overwrite incase accidently injected
