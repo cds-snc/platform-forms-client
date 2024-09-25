@@ -14,6 +14,10 @@
       "title": "Experimental blocks",
       "description": "Enable experimental blocks"
     },
+    "repeatingSets": {
+      "title": "Repeating sets",
+      "description": "Enable repeating sets"
+    },
     "zitadelAuth": {
       "title": "Zitadel Auth",
       "description": "Enable API authentication with Zitadel"
