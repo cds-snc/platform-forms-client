@@ -10,6 +10,7 @@ import FormDisplayLayout from "@clientComponents/globals/layouts/FormDisplayLayo
 import { GCFormsProvider } from "@lib/hooks/useGCFormContext";
 import { FormWrapper } from "./clientSide";
 import { serverTranslation } from "@i18n";
+import { allowGrouping } from "@formBuilder/components/shared/right-panel/treeview/util/allowGrouping";
 
 export async function generateMetadata({
   params: { locale, props },
@@ -56,7 +57,6 @@ export default async function Page({
   const classes = classnames("gc-form-wrapper");
   const currentForm = getRenderedForm(formRecord, language);
   const formTitle = formRecord.form[getLocalizedProperty("title", language)] as string;
-  
   const isAllowGrouping = allowGrouping();
 
   let isPastClosingDate = false;
@@ -89,7 +89,11 @@ export default async function Page({
       <div className={classes}>
         <h1>{formTitle}</h1>
         <GCFormsProvider formRecord={formRecord}>
-          <FormWrapper formRecord={formRecord} currentForm={currentForm} />
+          <FormWrapper
+            formRecord={formRecord}
+            currentForm={currentForm}
+            allowGrouping={isAllowGrouping}
+          />
         </GCFormsProvider>
       </div>
     </FormDisplayLayout>
