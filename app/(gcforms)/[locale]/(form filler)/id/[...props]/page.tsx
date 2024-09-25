@@ -10,8 +10,6 @@ import FormDisplayLayout from "@clientComponents/globals/layouts/FormDisplayLayo
 import { GCFormsProvider } from "@lib/hooks/useGCFormContext";
 import { FormWrapper } from "./clientSide";
 import { serverTranslation } from "@i18n";
-import { FeatureFlagsProvider } from "@lib/hooks/useFeatureFlags";
-import { FeatureFlags, getSomeFlags } from "@lib/cache/flags";
 
 export async function generateMetadata({
   params: { locale, props },
@@ -84,23 +82,14 @@ export default async function Page({
     );
   }
 
-  const featureFlags = await getSomeFlags([
-    FeatureFlags.experimentalBlocks,
-    FeatureFlags.zitadelAuth,
-    FeatureFlags.conditionalLogic,
-    FeatureFlags.addressComplete,
-  ]);
-
   return (
-    <FeatureFlagsProvider featureFlags={featureFlags}>
-      <FormDisplayLayout formRecord={formRecord}>
-        <div className={classes}>
-          <h1>{formTitle}</h1>
-          <GCFormsProvider formRecord={formRecord}>
-            <FormWrapper formRecord={formRecord} currentForm={currentForm} />
-          </GCFormsProvider>
-        </div>
-      </FormDisplayLayout>
-    </FeatureFlagsProvider>
+    <FormDisplayLayout formRecord={formRecord}>
+      <div className={classes}>
+        <h1>{formTitle}</h1>
+        <GCFormsProvider formRecord={formRecord}>
+          <FormWrapper formRecord={formRecord} currentForm={currentForm} />
+        </GCFormsProvider>
+      </div>
+    </FormDisplayLayout>
   );
 }

@@ -5,11 +5,16 @@ import { Session } from "next-auth";
 import { AccessControlProvider } from "@lib/hooks/useAccessControl";
 import { LiveMessagePovider } from "@lib/hooks/useLiveMessage";
 import { RefsProvider } from "@formBuilder/[id]/edit/components/RefsContext";
+import { FeatureFlagsProvider } from "@lib/hooks/useFeatureFlags";
+import { PickFlags } from "@lib/cache/flags";
 
-export const ClientContexts: React.FC<{ session: Session | null; children: React.ReactNode }> = ({
-  session,
-  children,
-}) => {
+export const ClientContexts: React.FC<{
+  session: Session | null;
+  children: React.ReactNode;
+  featureFlags: PickFlags<
+    ("experimentalBlocks" | "zitadelAuth" | "conditionalLogic" | "addressComplete")[]
+  >;
+}> = ({ session, children, featureFlags }) => {
   return (
     <SessionProvider
       // initial session
@@ -21,7 +26,9 @@ export const ClientContexts: React.FC<{ session: Session | null; children: React
     >
       <AccessControlProvider>
         <RefsProvider>
-          <LiveMessagePovider>{children}</LiveMessagePovider>
+          <FeatureFlagsProvider featureFlags={featureFlags}>
+            <LiveMessagePovider>{children}</LiveMessagePovider>
+          </FeatureFlagsProvider>
         </RefsProvider>
       </AccessControlProvider>
     </SessionProvider>
