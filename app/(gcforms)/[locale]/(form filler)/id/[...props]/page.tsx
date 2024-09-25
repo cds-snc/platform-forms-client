@@ -9,8 +9,8 @@ import { Metadata } from "next";
 import FormDisplayLayout from "@clientComponents/globals/layouts/FormDisplayLayout";
 import { GCFormsProvider } from "@lib/hooks/useGCFormContext";
 import { FormWrapper } from "./clientSide";
-import { serverTranslation } from "@i18n";
 import { allowGrouping } from "@formBuilder/components/shared/right-panel/treeview/util/allowGrouping";
+import { serverTranslation } from "@i18n";
 
 export async function generateMetadata({
   params: { locale, props },
