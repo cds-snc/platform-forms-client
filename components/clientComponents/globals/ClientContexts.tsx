@@ -6,7 +6,7 @@ import { AccessControlProvider } from "@lib/hooks/useAccessControl";
 import { LiveMessagePovider } from "@lib/hooks/useLiveMessage";
 import { RefsProvider } from "@formBuilder/[id]/edit/components/RefsContext";
 import { FeatureFlagsProvider } from "@lib/hooks/useFeatureFlags";
-import { Flags } from "@lib/cache/flags";
+import { Flags } from "@lib/cache/types";
 
 export const ClientContexts: React.FC<{
   session: Session | null;
