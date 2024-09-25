@@ -238,7 +238,7 @@ export const handleOnDrop = async (
 
   let originGroupElements: string[] = [];
 
-  if (targetParent === "start") {
+  if (targetParent === "start" && target.targetType !== "item") {
     targetIndex = targetIndex - 2;
   }
 
