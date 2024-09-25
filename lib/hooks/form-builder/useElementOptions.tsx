@@ -38,8 +38,8 @@ import {
 } from "@formBuilder/[id]/edit/components/elements/element-dialog";
 import { useIsAdminUser } from "./useIsAdminUser";
 import { ElementOptionsFilter, ElementOption } from "../../types/form-builder-types";
-// import { useFeatureFlags } from "../useFeatureFlags";
-// import { FeatureFlags } from "@lib/cache/flags";
+import { useFeatureFlags } from "../useFeatureFlags";
+import { FeatureFlags } from "@lib/cache/flags";
 
 export enum Groups {
   BASIC = "basic",
@@ -65,9 +65,8 @@ export const useElementOptions = (filterElements?: ElementOptionsFilter | undefi
   // default to off unless the user is an admin
   const allowFileInput = useIsAdminUser();
 
-  // const { getFlag } = useFeatureFlags();
-  // const allowRepeatingSets = getFlag(FeatureFlags.repeatingSets);
-  const allowRepeatingSets = true;
+  const { getFlag } = useFeatureFlags();
+  const allowRepeatingSets = getFlag("repeatingSets");
 
   const fileInputOption: ElementOption = {
     id: "fileInput",
