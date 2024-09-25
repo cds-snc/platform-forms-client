@@ -16,3 +16,8 @@ export function getOrigin(): string {
 
   return sanitizedUrl;
 }
+
+export function isProductionEnvironment(): boolean {
+  const host = getOrigin();
+  return host.includes("forms-formulaires") && host.includes("canada.ca");
+}
