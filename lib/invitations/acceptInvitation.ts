@@ -9,6 +9,7 @@ import {
 import { checkPrivileges } from "@lib/privileges";
 import { ownerAddedNotification } from "@lib/invitations/emailTemplates/ownerAddedNotification";
 import { sendEmail } from "@lib/integration/notifyConnector";
+import { logEvent } from "@lib/auditLogs";
 
 /**
  * Accept an invitation.
@@ -53,9 +54,17 @@ export const acceptInvitation = async (ability: UserAbility, invitationId: strin
 
     if (user) {
       // assign user to form
-      await _assignUserToTemplate(user.id, invitation.templateId);
+      await _assignUserToTemplate(ability, user.id, invitation.templateId);
       _deleteInvitation(invitationId);
       _notifyOwnersOfNewOwnership(user.id, invitation.templateId);
+
+      logEvent(
+        ability.userID,
+        { type: "Form", id: invitation.templateId },
+        "InvitationAccepted",
+        `${user.id} has accepted an invitation`
+      );
+
       return true;
     }
   } catch (e) {
@@ -71,7 +80,7 @@ export const acceptInvitation = async (ability: UserAbility, invitationId: strin
  * @param userId
  * @param formId
  */
-const _assignUserToTemplate = async (userId: string, formId: string) => {
+const _assignUserToTemplate = async (ability: UserAbility, userId: string, formId: string) => {
   await prisma.template.update({
     where: {
       id: formId,

@@ -2,7 +2,6 @@ import { UserAbility } from "@lib/types";
 import { getUser } from "@lib/users";
 import { TemplateNotFoundError, UserAlreadyHasAccessError, UserNotFoundError } from "./exceptions";
 import { getTemplateWithAssociatedUsers } from "@lib/templates";
-import { AccessControlError } from "@lib/privileges";
 import { prisma } from "@lib/integration/prismaConnector";
 import { sendEmail } from "@lib/integration/notifyConnector";
 import { inviteToCollaborate } from "@lib/invitations/emailTemplates/inviteToCollaborate";
@@ -10,6 +9,7 @@ import { inviteToForms } from "@lib/invitations/emailTemplates/inviteToForms";
 import { getOrigin } from "@lib/origin";
 import { logMessage } from "@lib/logger";
 import { Invitation } from "@prisma/client";
+import { logEvent } from "@lib/auditLogs";
 
 /**
  * Invite someone to the form by email
@@ -24,7 +24,6 @@ export const inviteUserByEmail = async (
   formId: string,
   message: string
 ) => {
-  let template;
   let invitation;
 
   const sender = await getUser(ability, ability.userID);
@@ -33,14 +32,7 @@ export const inviteUserByEmail = async (
     throw new UserNotFoundError();
   }
 
-  // Retrieve the template, fail if you don't have permissions
-  try {
-    template = await getTemplateWithAssociatedUsers(ability, formId);
-  } catch (e) {
-    if (e instanceof AccessControlError) {
-      throw e;
-    }
-  }
+  const template = await getTemplateWithAssociatedUsers(ability, formId);
 
   if (!template) {
     throw new TemplateNotFoundError();
@@ -64,6 +56,14 @@ export const inviteUserByEmail = async (
 
     // send or resend invitation email
     _sendInvitationEmail(sender, invitation, message, template.formRecord.name);
+
+    logEvent(
+      ability.userID,
+      { type: "Form", id: invitation.templateId },
+      "InviteUser",
+      `${sender.id} invited ${invitation.email}`
+    );
+
     return;
   }
 
