@@ -1,5 +1,6 @@
 // Test is not keeping it's values when switching from french to english
 describe("Test FormBuilder language switching", () => {
+  const addElementButtonText = "Add form element";
   it("Can enter English and French text in Description", () => {
     cy.visitPage("/en/form-builder/0000/edit");
     // Lang switcher only appears after page hydration
@@ -7,7 +8,7 @@ describe("Test FormBuilder language switching", () => {
 
     // Setup a form with one question
 
-    cy.get("button").contains("Add").click();
+    cy.get("button").contains(addElementButtonText).click();
     cy.get('[data-testid="richText"]').click();
     cy.get('[data-testid="element-description-add-element"]').click();
 
