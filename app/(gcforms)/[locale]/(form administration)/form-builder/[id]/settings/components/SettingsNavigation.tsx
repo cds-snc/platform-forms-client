@@ -1,8 +1,9 @@
 "use client";
+
 import { useTranslation } from "@i18n/client";
 import { SubNavLink } from "@clientComponents/globals/SubNavLink";
 import { EmailIcon, BrandIcon, GearIcon, ProtectedIcon } from "@serverComponents/icons";
-import { useIsAdminUser } from "@lib/hooks/form-builder";
+import { useIsProduction } from "@lib/hooks/useIsProduction";
 
 export const SettingsNavigation = ({ id }: { id: string }) => {
   const {
@@ -10,7 +11,7 @@ export const SettingsNavigation = ({ id }: { id: string }) => {
     i18n: { language },
   } = useTranslation("form-builder");
 
-  const isAdmin = useIsAdminUser();
+  const { loading, isProduction } = useIsProduction();
 
   return (
     <div className="relative flex">
@@ -34,7 +35,7 @@ export const SettingsNavigation = ({ id }: { id: string }) => {
               {t("settings.formManagement")}
             </span>
           </SubNavLink>
-          {isAdmin && (
+          {!loading && !isProduction && (
             <SubNavLink href={`/${language}/form-builder/${id}/settings/api`}>
               <span className="text-sm laptop:text-base">
                 <ProtectedIcon className="mr-2 inline-block laptop:mt-[-2px]" />

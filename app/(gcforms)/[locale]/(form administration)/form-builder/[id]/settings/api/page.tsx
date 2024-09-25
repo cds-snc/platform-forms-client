@@ -4,7 +4,8 @@ import { ApiKey } from "./components/client/ApiKey";
 import { authCheckAndRedirect } from "@lib/actions";
 import { checkKeyExists } from "@lib/serviceAccount";
 import { redirect } from "next/navigation";
-import { checkPrivileges } from "@lib/privileges";
+import { checkPrivilegesAsBoolean } from "@lib/privileges";
+import { isProductionEnvironment } from "@lib/origin";
 
 export async function generateMetadata({
   params: { locale },
@@ -23,15 +24,17 @@ export default async function Page({
   params: { id: string; locale: string };
 }) {
   const { ability } = await authCheckAndRedirect();
-  try {
-    checkPrivileges(ability, [
+
+  // If this production environment, check to ensure user has Manage All Forms permission
+  if (
+    isProductionEnvironment() &&
+    !checkPrivilegesAsBoolean(ability, [
       {
         action: "view",
         subject: "FormRecord",
       },
-    ]);
-  } catch (e) {
-    // User does not have Manage All Forms permission
+    ])
+  ) {
     redirect(`/${locale}/form-builder/${id}/settings`);
   }
 
