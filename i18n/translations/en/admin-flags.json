@@ -14,9 +14,9 @@
       "title": "Experimental blocks",
       "description": "Enable experimental blocks"
     },
-    "conditionalLogic": {
-      "title": "Conditional logic",
-      "description": "Enable conditional logic and the right panel"
+    "repeatingSets": {
+      "title": "Repeating sets",
+      "description": "Enable repeating sets"
     },
     "zitadelAuth": {
       "title": "Zitadel Auth",

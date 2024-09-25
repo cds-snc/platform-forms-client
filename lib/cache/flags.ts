@@ -52,9 +52,10 @@ export const disableFlag = async (ability: UserAbility, key: string): Promise<vo
   }
 };
 
-const getKeys = async () => {
+const getKeys = async (): Promise<FeatureFlagKeys[]> => {
   const redis = await getRedisInstance();
-  return redis.smembers("flags");
+  const keys = await redis.smembers("flags");
+  return keys.filter((key): key is FeatureFlagKeys => key in FeatureFlags);
 };
 
 /**
@@ -95,9 +96,9 @@ export const checkAll = async (ability: UserAbility): Promise<{ [k: string]: boo
   }
 };
 
-const checkMulti = async (keys: string[]): Promise<{ [k: string]: boolean }> => {
+const checkMulti = async <T extends FeatureFlagKeys[]>(keys: T): Promise<PickFlags<T>> => {
   const redis = await getRedisInstance();
-  if (keys.length === 0) return {};
+  if (keys.length === 0) return {} as PickFlags<T>;
 
   const values = await redis.mget(keys.map((key) => `flag:${key}`));
 
@@ -106,5 +107,28 @@ const checkMulti = async (keys: string[]): Promise<{ [k: string]: boolean }> => 
     return acc;
   }, new Map<string, boolean>());
 
-  return Object.fromEntries(mapped);
+  return Object.fromEntries(mapped) as PickFlags<T>;
 };
+
+// TODO: in the future these could pulled in from default_flag_settings.json
+export const FeatureFlags = {
+  experimentalBlocks: "experimentalBlocks",
+  addressComplete: "addressComplete",
+  repeatingSets: "repeatingSets",
+} as const;
+
+export type FeatureFlagKeys = keyof typeof FeatureFlags;
+
+export type Flags = {
+  [K in FeatureFlagKeys]: boolean;
+};
+
+// Utility type to pick only the keys provided in the flags array
+export type PickFlags<T extends FeatureFlagKeys[]> = {
+  [K in T[number]]: boolean;
+};
+
+export async function getSomeFlags<T extends FeatureFlagKeys[]>(flags: T): Promise<PickFlags<T>> {
+  if (!Array.isArray(flags) || flags.length === 0) return {} as PickFlags<T>;
+  return (await checkMulti(flags)) as PickFlags<T>;
+}
