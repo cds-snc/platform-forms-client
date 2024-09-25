@@ -70,9 +70,10 @@ export const useHandleAdd = () => {
   const handleAddSubElement = useCallback(
     async (elIndex: number, subIndex: number, type?: FormElementTypes) => {
       if (allowedTemplates.includes(type as LoaderType)) {
-        blockLoader(type as LoaderType, subIndex, (data, position) =>
-          addSubItem(elIndex, position, data.type, data)
-        );
+        blockLoader(type as LoaderType, subIndex, (data, position) => {
+          addSubItem(elIndex, position, data.type, data);
+          setChangeKey(String(new Date().getTime())); //Force a re-render
+        });
         return;
       }
 
