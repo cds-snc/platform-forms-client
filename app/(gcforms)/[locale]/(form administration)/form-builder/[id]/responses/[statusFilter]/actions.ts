@@ -225,7 +225,7 @@ export const getSubmissionsByFormat = async ({
       );
     }
 
-    const allowGroupsFlag = await allowGrouping();
+    const allowGroupsFlag = allowGrouping();
     // Get responses into a ResponseSubmission array containing questions and answers that can be easily transformed
     const responses = queryResult.map((item) => {
       const submission = Object.entries(JSON.parse(String(item.formSubmission))).map(

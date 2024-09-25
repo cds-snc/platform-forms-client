@@ -36,9 +36,13 @@ import {
 import { Session } from "next-auth";
 import { logEvent } from "@lib/auditLogs";
 import { unprocessedSubmissions } from "@lib/vault";
+import { deleteKey } from "@lib/serviceAccount";
 
 jest.mock("@lib/auditLogs");
 jest.mock("@lib/actions/auth");
+jest.mock("@lib/serviceAccount");
+
+const mockedDeleteKey = jest.mocked(deleteKey, { shallow: true });
 
 const structuredClone = <T>(obj: T): T => {
   return v8.deserialize(v8.serialize(obj));
@@ -975,6 +979,7 @@ describe("Template CRUD functions", () => {
       { id: "formtestID", type: "Form" },
       "DeleteForm"
     );
+    expect(mockedDeleteKey).toHaveBeenCalledTimes(1);
   });
 
   it.each([[Base], [Base.concat(ManageForms)]])(
