@@ -39,7 +39,7 @@ import {
 import { useIsAdminUser } from "./useIsAdminUser";
 import { ElementOptionsFilter, ElementOption } from "../../types/form-builder-types";
 import { useFeatureFlags } from "../useFeatureFlags";
-import { FeatureFlags } from "@lib/cache/flags";
+import { FeatureFlags } from "@lib/cache/types";
 
 export enum Groups {
   BASIC = "basic",
