@@ -1,6 +1,6 @@
 "use client";
 
-import { Flags } from "@lib/cache/flags";
+import { Flags } from "@lib/cache/types";
 import { createContext, useContext, useState } from "react";
 
 const FeatureFlagsContext = createContext({
