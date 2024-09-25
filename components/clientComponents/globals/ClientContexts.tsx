@@ -6,14 +6,12 @@ import { AccessControlProvider } from "@lib/hooks/useAccessControl";
 import { LiveMessagePovider } from "@lib/hooks/useLiveMessage";
 import { RefsProvider } from "@formBuilder/[id]/edit/components/RefsContext";
 import { FeatureFlagsProvider } from "@lib/hooks/useFeatureFlags";
-import { PickFlags } from "@lib/cache/flags";
+import { Flags } from "@lib/cache/flags";
 
 export const ClientContexts: React.FC<{
   session: Session | null;
   children: React.ReactNode;
-  featureFlags: PickFlags<
-    ("experimentalBlocks" | "zitadelAuth" | "conditionalLogic" | "addressComplete")[]
-  >;
+  featureFlags: Flags;
 }> = ({ session, children, featureFlags }) => {
   return (
     <SessionProvider
