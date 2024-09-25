@@ -35,7 +35,7 @@ export default async function Layout({
 
   const formID = id || null;
 
-  const allowGroupsFlag = await allowGrouping();
+  const allowGroupsFlag = allowGrouping();
 
   if (session && formID && formID !== "0000") {
     initialForm = await getFullTemplateByID(ability, formID).catch((e) => {

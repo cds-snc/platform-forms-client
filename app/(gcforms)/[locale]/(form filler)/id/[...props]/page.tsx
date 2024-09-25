@@ -56,6 +56,8 @@ export default async function Page({
   const classes = classnames("gc-form-wrapper");
   const currentForm = getRenderedForm(formRecord, language);
   const formTitle = formRecord.form[getLocalizedProperty("title", language)] as string;
+  
+  const isAllowGrouping = allowGrouping();
 
   let isPastClosingDate = false;
 
