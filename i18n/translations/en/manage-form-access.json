@@ -1,4 +1,5 @@
 {
+  "accessControlError": "You do not have permissions to manage access to form {{templateId}}",
   "addPeopleToShareAccess": "Add people to share access",
   "areYouSure": "Are you sure?",
   "back": "Back",
@@ -22,5 +23,6 @@
   "peopleWithAccess": "People with access",
   "remove": "Remove",
   "resend": "Resend",
+  "templateNotFound": "Template not found {{templateId}}",
   "userAlreadyHasAccess": "{{email}} already has access"
 }
