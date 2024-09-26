@@ -12,7 +12,7 @@ let initializtionPromise: Promise<void> | null = null;
 
 const recreateZitadelClient = async () => {
   logMessage.info("Recreating Zitadel client");
-  zitadelClient = await createZitadelClient();
+  await createZitadelClient();
 };
 
 settingChangeNotifier.on("zitadelAdministrationKey", async () => {
