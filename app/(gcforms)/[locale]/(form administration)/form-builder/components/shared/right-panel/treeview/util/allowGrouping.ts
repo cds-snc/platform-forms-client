@@ -1,5 +1,5 @@
-import { checkFlag } from "@formBuilder/actions";
-
-export const allowGrouping = async () => {
-  return checkFlag("conditionalLogic");
+export const allowGrouping = () => {
+  // The feature should be enabled by default now
+  // @todo - re-factor to remove this function
+  return true;
 };
