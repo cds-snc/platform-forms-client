@@ -11,6 +11,7 @@
   "emailAlreadyInList": "{{email}} is already in the list",
   "error": "There has been an error.",
   "invalidEmail": "{{email}} is an invalid email address",
+  "invitationSent": "Invitation sent",
   "invite": "Invite",
   "invited": "Invited",
   "inviteToForm": "Invite to form",

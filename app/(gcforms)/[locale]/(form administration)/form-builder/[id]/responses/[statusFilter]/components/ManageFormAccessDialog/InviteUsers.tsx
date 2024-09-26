@@ -9,6 +9,7 @@ import { toast } from "@formBuilder/components/shared";
 export const InviteUsers = () => {
   const { t } = useTranslation("manage-form-access");
   const [message, setMessage] = useState("");
+  const [errors, setErrors] = useState<string[]>([]);
 
   const manageFormAccessDialogContext = useContext(ManageFormAccessDialogContext);
 
@@ -26,11 +27,26 @@ export const InviteUsers = () => {
       setIsOpen(false);
     }
 
-    // @TODO: handle errors
+    if (result.errors) {
+      setErrors(result.errors);
+    }
   };
 
   return (
     <>
+      {errors.length > 0 && (
+        <div className="my-2 flex flex-wrap gap-2">
+          {errors.map((error, index) => (
+            <div
+              className="rounded-md border border-red-700 bg-red-100 px-2 text-red-700"
+              key={`error-${index}`}
+            >
+              {error}
+            </div>
+          ))}
+        </div>
+      )}
+
       <section>
         <div className="flex flex-wrap gap-2">
           {emailList.map((email) => {
