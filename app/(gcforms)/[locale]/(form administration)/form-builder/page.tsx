@@ -23,7 +23,7 @@ export async function generateMetadata({
 }
 
 export default async function StartPage({ params: { locale } }: { params: { locale: string } }) {
-  const allowGroupsFlag = await allowGrouping();
+  const allowGroupsFlag = allowGrouping();
   return (
     <TemplateStoreProvider {...{ locale, allowGroupsFlag }}>
       <SaveTemplateProvider>

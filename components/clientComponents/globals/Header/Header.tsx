@@ -13,7 +13,7 @@ import { YourAccountDropdown } from "./YourAccountDropdown";
 import { LiveMessage } from "@lib/hooks/useLiveMessage";
 import Markdown from "markdown-to-jsx";
 
-import { checkFlag } from "@formBuilder/actions";
+import { allowGrouping } from "@formBuilder/components/shared/right-panel/treeview/util/allowGrouping";
 
 type HeaderParams = {
   context?: "admin" | "formBuilder" | "default";
@@ -37,7 +37,7 @@ export const Header = ({ context = "default", className }: HeaderParams) => {
       const isEnabled = t("campaignBanner.enabled") === "true";
       setBannerData(isEnabled);
 
-      const isLogicEnabled = await checkFlag("conditionalLogic");
+      const isLogicEnabled = allowGrouping();
       if (isLogicEnabled) {
         setBannerMessage(t("campaignBanner.message2"));
         setBannerType(t("campaignBanner.type2"));
