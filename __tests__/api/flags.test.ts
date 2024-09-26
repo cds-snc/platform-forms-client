@@ -1,6 +1,3 @@
-/**
- * @jest-environment node
- */
 import { createMocks } from "node-mocks-http";
 import { getServerSession } from "next-auth/next";
 import enable from "old_pages/api/flags/[key]/enable";

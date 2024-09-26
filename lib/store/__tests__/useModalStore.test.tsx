@@ -1,4 +1,6 @@
-"use client";
+/**
+ * @jest-environment jsdom
+ */
 import useModalStore, { defaultProperties } from "../useModalStore";
 import { renderHook } from "@testing-library/react";
 import { act } from "react-dom/test-utils";

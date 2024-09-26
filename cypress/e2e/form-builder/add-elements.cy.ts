@@ -1,19 +1,20 @@
 describe("Test FormBuilder Add Elements", () => {
+  const addElementButtonText = "Add form element";
   beforeEach(() => {
+    cy.viewport("macbook-15");
     cy.visitPage("/en/form-builder/0000/edit");
   });
 
   it("Adds a Page Text element", () => {
-    cy.get("button").contains("Add").click();
+    cy.get("button").contains(addElementButtonText).click();
 
     cy.get('[data-testid="richText"]').click();
     cy.get('[data-testid="element-description-add-element"]').click();
-
     cy.get('[data-testid="richText"]').should("be.visible");
   });
 
   it("Adds a Short Answer element", () => {
-    cy.get("button").contains("Add").click();
+    cy.get("button").contains(addElementButtonText).click();
 
     cy.get('[data-testid="textField"]').click();
     cy.get('[data-testid="element-description-add-element"]').click();
@@ -24,7 +25,7 @@ describe("Test FormBuilder Add Elements", () => {
   });
 
   it("Adds a Long Answer element", () => {
-    cy.get("button").contains("Add").click();
+    cy.get("button").contains(addElementButtonText).click();
 
     cy.get('[data-testid="textArea"]').click();
     cy.get('[data-testid="element-description-add-element"]').click();
@@ -35,7 +36,7 @@ describe("Test FormBuilder Add Elements", () => {
   });
 
   it("Adds a Single choice element", () => {
-    cy.get("button").contains("Add").click();
+    cy.get("button").contains(addElementButtonText).click();
 
     cy.get('[data-testid="radio"]').click();
     cy.get('[data-testid="element-description-add-element"]').click();
@@ -50,7 +51,7 @@ describe("Test FormBuilder Add Elements", () => {
   });
 
   it("Adds a Multiple choice element", () => {
-    cy.get("button").contains("Add").click();
+    cy.get("button").contains(addElementButtonText).click();
 
     cy.get('[data-testid="checkbox"]').click();
     cy.get('[data-testid="element-description-add-element"]').click();
@@ -63,7 +64,7 @@ describe("Test FormBuilder Add Elements", () => {
   });
 
   it("Adds a Dropdown list element", () => {
-    cy.get("button").contains("Add").click();
+    cy.get("button").contains(addElementButtonText).click();
 
     cy.get('[data-testid="basic-filter"]').click();
     cy.get('[data-testid="dropdown"]').click();
@@ -77,20 +78,17 @@ describe("Test FormBuilder Add Elements", () => {
   });
 
   it("Adds a Date element", () => {
-    cy.get("button").contains("Add").click();
+    cy.get("button").contains(addElementButtonText).click();
 
     cy.get('[data-testid="preset-filter"]').click();
     cy.get('[data-testid="formattedDate"]').click();
     cy.get('[data-testid="element-description-add-element"]').click();
 
     cy.get('[id="item-1"]').should("have.attr", "placeholder", "Question");
-
-    // cy.get('[data-testid="description-text"]').should("contain", "Format the date as: mm/dd/yyyy");
-    // cy.get('[data-testid="date"]').should("contain", "mm/dd/yyyy");
   });
 
   it("Adds a Numeric field element", () => {
-    cy.get("button").contains("Add").click();
+    cy.get("button").contains(addElementButtonText).click();
 
     cy.get('[data-testid="preset-filter"]').click();
     cy.get('[data-testid="number"]').click();
@@ -104,8 +102,10 @@ describe("Test FormBuilder Add Elements", () => {
     cy.visitPage("/en/form-builder/0000/preview");
     cy.get('[data-testid="textInput"]').should("have.attr", "type", "number");
   });
+
   it("Renders attestation block", () => {
-    cy.get("button").contains("Add").click();
+    cy.get("button").contains(addElementButtonText).click();
+
     cy.get('[data-testid="basic-filter"]').click();
     cy.get('[data-testid="attestation"]').click();
     cy.get('[data-testid="element-description-add-element"]').click();
@@ -123,9 +123,11 @@ describe("Test FormBuilder Add Elements", () => {
     cy.get("label").contains("Condition 2").should("be.visible");
     cy.get("label").contains("Condition 3").should("be.visible");
   });
+
   it("Renders matching element description in more modal", () => {
     // see https://github.com/cds-snc/platform-forms-client/issues/2017
-    cy.get("button").contains("Add").click();
+    cy.get("button").contains(addElementButtonText).click();
+
     cy.get('[data-testid="preset-filter"]').click();
     cy.get('[data-testid="number"]').click();
     cy.get('[data-testid="element-description-add-element"]').click();
@@ -138,7 +140,7 @@ describe("Test FormBuilder Add Elements", () => {
   });
 
   it("Adds a Name block with autocomplete", () => {
-    cy.get("button").contains("Add").click();
+    cy.get("button").contains(addElementButtonText).click();
 
     cy.get('[data-testid="name"]').click();
     cy.get('[data-testid="element-description-add-element"]').click();
@@ -150,7 +152,7 @@ describe("Test FormBuilder Add Elements", () => {
   });
 
   it("Adds a Name (3 fields) block with autocomplete", () => {
-    cy.get("button").contains("Add").click();
+    cy.get("button").contains(addElementButtonText).click();
 
     cy.get('[data-testid="firstMiddleLastName"]').click();
     cy.get('[data-testid="element-description-add-element"]').click();
@@ -160,6 +162,7 @@ describe("Test FormBuilder Add Elements", () => {
     cy.get('[data-testid="autocomplete-4"]').should("contain", "Last name");
 
     cy.visitPage("/en/form-builder/0000/preview");
+
     cy.get('[data-testid="textInput"]').each(($el, index) => {
       if (index === 0) {
         cy.wrap($el).should("have.attr", "autocomplete", "given-name");
@@ -172,7 +175,7 @@ describe("Test FormBuilder Add Elements", () => {
   });
 
   it("Adds a Address block with autocomplete", () => {
-    cy.get("button").contains("Add").click();
+    cy.get("button").contains(addElementButtonText).click();
 
     cy.get('[data-testid="address"]').click();
     cy.get('[data-testid="element-description-add-element"]').click();
@@ -197,7 +200,7 @@ describe("Test FormBuilder Add Elements", () => {
   });
 
   it("Adds a Contact block with autocomplete", () => {
-    cy.get("button").contains("Add").click();
+    cy.get("button").contains(addElementButtonText).click();
 
     cy.get('[data-testid="contact"]').click();
     cy.get('[data-testid="element-description-add-element"]').click();
@@ -214,7 +217,9 @@ describe("Test FormBuilder Add Elements", () => {
       }
     });
   });
+
   describe("Test FormBuilder autocomplete props", () => {
+    const addElementButtonText = "Add form element";
     const autocompleteOptions = [
       ["additional-name", "Middle name"],
       ["address-level1", "Province, State"],
@@ -242,7 +247,8 @@ describe("Test FormBuilder Add Elements", () => {
     ];
 
     it("Checks the autocomplete list", () => {
-      cy.get("button").contains("Add").click();
+      cy.get("button").contains(addElementButtonText).click();
+
       cy.get('[data-testid="dialog"]').should("be.visible");
       cy.get('[data-testid="textField"]').click();
       cy.get('[data-testid="element-description-add-element"]').click();
@@ -256,7 +262,8 @@ describe("Test FormBuilder Add Elements", () => {
 
     autocompleteOptions.forEach((option) => {
       it(`Adds a TextAreaInput with ${option[0]} autocomplete`, () => {
-        cy.get("button").contains("Add").click();
+        cy.get("button").contains(addElementButtonText).click();
+
         cy.get('[data-testid="dialog"]').should("be.visible");
 
         cy.get('[data-testid="textField"]').should("be.visible").click();

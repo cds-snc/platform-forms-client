@@ -3,6 +3,7 @@ import flagInitialSettings from "../../flag_initialization/default_flag_settings
 import { AccessControlError, checkPrivileges } from "@lib/privileges";
 import { logEvent } from "@lib/auditLogs";
 import { UserAbility } from "@lib/types";
+import { FeatureFlagKeys, FeatureFlags, PickFlags } from "./types";
 
 /**
  * Enables an Application Setting Flag
@@ -52,9 +53,10 @@ export const disableFlag = async (ability: UserAbility, key: string): Promise<vo
   }
 };
 
-const getKeys = async () => {
+const getKeys = async (): Promise<FeatureFlagKeys[]> => {
   const redis = await getRedisInstance();
-  return redis.smembers("flags");
+  const keys = await redis.smembers("flags");
+  return keys.filter((key): key is FeatureFlagKeys => key in FeatureFlags);
 };
 
 /**
@@ -95,9 +97,9 @@ export const checkAll = async (ability: UserAbility): Promise<{ [k: string]: boo
   }
 };
 
-const checkMulti = async (keys: string[]): Promise<{ [k: string]: boolean }> => {
+const checkMulti = async <T extends FeatureFlagKeys[]>(keys: T): Promise<PickFlags<T>> => {
   const redis = await getRedisInstance();
-  if (keys.length === 0) return {};
+  if (keys.length === 0) return {} as PickFlags<T>;
 
   const values = await redis.mget(keys.map((key) => `flag:${key}`));
 
@@ -106,5 +108,10 @@ const checkMulti = async (keys: string[]): Promise<{ [k: string]: boolean }> => 
     return acc;
   }, new Map<string, boolean>());
 
-  return Object.fromEntries(mapped);
+  return Object.fromEntries(mapped) as PickFlags<T>;
 };
+
+export async function getSomeFlags<T extends FeatureFlagKeys[]>(flags: T): Promise<PickFlags<T>> {
+  if (!Array.isArray(flags) || flags.length === 0) return {} as PickFlags<T>;
+  return (await checkMulti(flags)) as PickFlags<T>;
+}

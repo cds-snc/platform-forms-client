@@ -1,3 +1,6 @@
+/**
+ * @jest-environment jsdom
+ */
 import React from "react";
 import { cleanup, render, fireEvent } from "@testing-library/react";
 import { ElementDialog } from "../ElementDialog";

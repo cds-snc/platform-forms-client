@@ -1,7 +1,3 @@
-/**
- * @jest-environment node
- */
-
 // import { requireAuthentication } from "@lib/auth/auth";
 import { Base, mockUserPrivileges } from "__utils__/permissions";
 

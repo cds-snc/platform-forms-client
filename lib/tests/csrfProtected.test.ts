@@ -1,7 +1,3 @@
-/**
- * @jest-environment node
- */
-
 import { NextRequest } from "next/server";
 import { csrfProtected } from "@lib/middleware/csrfProtected";
 import { MiddlewareReturn } from "@lib/types";
