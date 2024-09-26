@@ -1,6 +1,5 @@
 import { useContext, useState } from "react";
 import { ManageFormAccessDialogContext } from "./ManageFormAccessDialogContext";
-// import { useFormState } from "react-dom";
 import { sendInvitation } from "./actions";
 import { Button } from "@clientComponents/globals";
 import { useTranslation } from "@i18n/client";
