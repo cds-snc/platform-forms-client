@@ -1,5 +1,5 @@
 {
-  "accessControlError": "You do not have permissions to manage access to form {{templateId}}",
+  "accessControlError": "You do not have permissions to manage access to this form",
   "addPeopleToShareAccess": "Add people to share access",
   "areYouSure": "Are you sure?",
   "back": "Back",
@@ -11,6 +11,7 @@
   "emailAlreadyInList": "{{email}} is already in the list",
   "error": "There has been an error.",
   "invalidEmail": "{{email}} is an invalid email address",
+  "invitationFailed": "Unable to send invitation to {{email}}",
   "invitationSent": "Invitation sent",
   "invite": "Invite",
   "invited": "Invited",

@@ -8,6 +8,7 @@ import { AccessControlError } from "@lib/privileges";
 import { TemplateNotFoundError, UserAlreadyHasAccessError } from "@lib/invitations/exceptions";
 import { getTemplateWithAssociatedUsers, removeAssignedUserFromTemplate } from "@lib/templates";
 import { serverTranslation } from "@i18n";
+import { logMessage } from "@lib/logger";
 
 export const sendInvitation = async (emails: string[], templateId: string, message: string) => {
   const { ability } = await authCheckAndThrow();
@@ -15,23 +16,34 @@ export const sendInvitation = async (emails: string[], templateId: string, messa
 
   const errors: string[] = [];
 
-  await Promise.all(
-    emails.map(async (email) => {
-      try {
-        await inviteUserByEmail(ability, email, templateId, message);
-      } catch (e) {
-        if (e instanceof UserAlreadyHasAccessError) {
-          errors.push(t("userAlreadyHasAccess", { email }));
-        }
-        if (e instanceof TemplateNotFoundError) {
-          errors.push(t("templateNotFound", { templateId }));
-        }
-        if (e instanceof AccessControlError) {
-          errors.push(t("accessControlError", { templateId }));
-        }
+  const invites = emails.map(async (email) => {
+    try {
+      await inviteUserByEmail(ability, email, templateId, message);
+    } catch (e) {
+      if (e instanceof UserAlreadyHasAccessError) {
+        errors.push(t("userAlreadyHasAccess", { email }));
       }
-    })
-  );
+      if (e instanceof TemplateNotFoundError) {
+        errors.push(t("templateNotFound", { templateId }));
+        throw e; // stop processing other emails
+      }
+      if (e instanceof AccessControlError) {
+        errors.push(t("accessControlError"));
+        throw e; // stop processing other emails
+      }
+      logMessage.error("Invitation failed", e);
+      errors.push(t("invitationFailed", { email }));
+    }
+  });
+
+  try {
+    await Promise.all(invites);
+  } catch (e) {
+    return {
+      success: false,
+      errors,
+    };
+  }
 
   if (errors.length) {
     return {
