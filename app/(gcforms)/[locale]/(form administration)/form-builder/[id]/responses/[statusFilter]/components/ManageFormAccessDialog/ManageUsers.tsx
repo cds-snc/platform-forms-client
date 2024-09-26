@@ -9,6 +9,7 @@ import { TemplateUser } from "./types";
 import { hasOwnProperty } from "@lib/tsUtils";
 import { RefreshIcon } from "@serverComponents/icons/RefreshIcon";
 import { useTranslation } from "@i18n/client";
+import { cn } from "@lib/utils";
 
 export const ManageUsers = () => {
   const { t } = useTranslation("manage-form-access");
@@ -196,12 +197,19 @@ export const ManageUsers = () => {
 
       <section className="mt-4">
         <h3>{t("peopleWithAccess")}</h3>
-        <div className="max-h-96 overflow-scroll border-1 border-black p-4">
+        <div className="max-h-96 overflow-scroll border-1 border-black">
           {loading && <div className="py-10">{t("loading")}</div>}
           {!loading && (
             <>
               {usersWithAccess.map((user) => (
-                <div className="flex flex-row items-start py-2" key={user.email}>
+                <div
+                  className={cn(
+                    "flex flex-row items-start px-4 py-2",
+                    (loggedInUserEmail === user.email || usersWithAccess.length <= 1) &&
+                      "bg-slate-100 py-4"
+                  )}
+                  key={user.email}
+                >
                   <div className="grow">{user.email}</div>
                   {hasOwnProperty(user, "expired") ? (
                     <div>
