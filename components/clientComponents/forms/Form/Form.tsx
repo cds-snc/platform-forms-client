@@ -43,6 +43,7 @@ const SubmitButton: React.FC<SubmitButtonProps> = ({
   const [submitTooEarly, setSubmitTooEarly] = useState(false);
   const screenReaderRemainingTime = useRef(formTimerState.remainingTime);
 
+  // TODO: may want to consider a maximum delay
   // calculate initial delay for submit timer
   const secondsBaseDelay = 2;
   const secondsPerFormElement = 2;
@@ -154,7 +155,7 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
   const [canFocusOnError, setCanFocusOnError] = useState(false);
   const [lastSubmitCount, setLastSubmitCount] = useState(-1);
 
-  const { currentGroup, groupsCheck, getGroupTitle } = useGCFormsContext();
+  const { currentGroup, groupsCheck, getGroupTitle, matchedIds } = useGCFormsContext();
   const isGroupsCheck = groupsCheck(props.allowGrouping);
   const isShowReviewPage = showReviewPage(form);
   const showIntro = isGroupsCheck ? currentGroup === LockedSections.START : true;
@@ -188,7 +189,11 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [formStatusError, errorList, lastSubmitCount, canFocusOnError]);
 
-  const numberOfRequiredQuestions = form.elements.filter(
+  const hasGroups = formHasGroups(form) && props.allowGrouping;
+  const groupElements = filterShownElements(form.elements, matchedIds as string[]);
+
+  const filterByTheseElements = hasGroups ? groupElements : form.elements;
+  const numberOfRequiredQuestions = filterByTheseElements.filter(
     (element) => element.properties.validation?.required === true
   ).length;
 
