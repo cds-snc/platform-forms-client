@@ -1,12 +1,14 @@
 describe("Form builder modal description", () => {
+  const addElementButtonText = "Add form element";
   beforeEach(() => {
+    cy.viewport("macbook-15");
     cy.visitPage("/en/form-builder/0000/edit");
   });
 
   it("Renders matching element description in more modal", () => {
     // see https://github.com/cds-snc/platform-forms-client/issues/2017
 
-    cy.get("button").contains("Add").click();
+    cy.get("button").contains(addElementButtonText).click();
     cy.get('[data-testid="preset-filter"]').click();
     cy.get('[data-testid="formattedDate"]').click();
     cy.get('[data-testid="element-description-add-element"]').click();
@@ -15,7 +17,7 @@ describe("Form builder modal description", () => {
     cy.get('#element-1 [data-testid="more"]').click();
     cy.get("button").contains("Close").click();
 
-    cy.get("button").contains("Add").click();
+    cy.get("button").contains(addElementButtonText).click();
     cy.get('[data-testid="preset-filter"]').click();
     cy.get('[data-testid="number"]').click();
     cy.get('[data-testid="element-description-add-element"]').click();

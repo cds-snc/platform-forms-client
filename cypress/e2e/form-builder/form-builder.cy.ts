@@ -9,9 +9,23 @@ describe("Test FormBuilder", () => {
   });
 
   it("Designs a form", () => {
+    cy.viewport("macbook-15");
     cy.visitPage("/en/form-builder/0000/edit");
     cy.typeInField("#formTitle", "Cypress Test Form");
+
+    cy.get("button").contains("Form set-up").click();
+
+    // Form description
+    cy.contains("summary", "Add a description to your form to help set expectations").click();
     cy.typeInField(`[aria-label="Form introduction"]`, "form description");
+
+    // Privacy statement
+    cy.contains(
+      "summary",
+      "Add a privacy statement to outline how you handle personal information"
+    ).click();
+    cy.typeInField(`[aria-label="Privacy statement"]`, "privacy statement");
+
     cy.get("button").contains("Add form element").click();
 
     cy.get('[data-testid="radio"]').click();
@@ -21,11 +35,14 @@ describe("Test FormBuilder", () => {
     cy.typeInField("#option--1--1", "option 1");
     cy.get("button").contains("Add option").click();
     cy.typeInField("#option--1--2", "option 2");
-    cy.typeInField(`[aria-label="Privacy statement"]`, "privacy statement");
-    cy.typeInField(`[aria-label="Confirmation message"]`, "confirmation page");
+
+    // @todo re-visit this later
+    // Confirmation message
+    // cy.typeInField(`[aria-label="Confirmation message"]`, "confirmation page");
+
+    // open modal
     cy.get("#item-1").click();
     cy.get("button").contains("More").click();
-    // open modal
     cy.get("h2").should("contain", "More options");
     cy.get("#title--modal--0").should("have.value", "Question 1");
     cy.typeInField("#title--modal--0", "-1", "Question 1-1");

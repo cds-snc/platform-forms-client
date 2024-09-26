@@ -10,13 +10,9 @@
   "featureStatus": "Statut",
   "featureSwitch": "Activé/Déactivé",
   "features": {
-    "experimentalBlocks": {
-      "title": "Blocs expérimentaux",
-      "description": "Activer les blocs expérimentaux"
-    },
-    "conditionalLogic": {
-      "title": "Logique conditionnelle",
-      "description": "Activer la logique conditionnelle et le panneau de droite"
+    "repeatingSets": {
+      "title": "Repeating sets",
+      "description": "Enable repeating sets"
     },
     "zitadelAuth": {
       "title": "AuthenticationZitadel",
