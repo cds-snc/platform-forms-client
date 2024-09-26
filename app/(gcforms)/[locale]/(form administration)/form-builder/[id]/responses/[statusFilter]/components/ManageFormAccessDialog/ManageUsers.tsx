@@ -213,11 +213,13 @@ export const ManageUsers = () => {
                   <div className="grow">{user.email}</div>
                   {hasOwnProperty(user, "expired") ? (
                     <div>
-                      <div className="flex gap-1 align-baseline">
-                        <div>{t("invited")}</div>
-                        <button onClick={() => handleResendInvitation(user.email)}>
-                          <RefreshIcon title={t("resend")} />
-                        </button>
+                      <div className="flex flex-row gap-1">
+                        <span>{t("invited")}</span>
+                        <div className="inline-block">
+                          <button onClick={() => handleResendInvitation(user.email)}>
+                            <RefreshIcon title={t("resend")} />
+                          </button>
+                        </div>
                         <ConfirmAction
                           buttonLabel={t("delete")}
                           confirmString=""

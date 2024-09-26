@@ -50,21 +50,19 @@ export const ConfirmAction = ({
     <div className="inline-block" ref={ref}>
       {error && <span className="px-2 text-red-700">{error}</span>}
       {!confirm && (
-        <Button
-          dataTestId="button"
-          className="bg-none"
-          {...(children ? { theme: "link" } : { icon: icon, theme: "icon" })}
+        <button
+          data-testid="button"
           onClick={() => {
             setConfirm(true);
             setError("");
           }}
         >
-          <>{children}</>
-        </Button>
+          <>{children || icon}</>
+        </button>
       )}
       {confirm && (
         <>
-          <span>{confirmString}</span>
+          {confirmString && <span className="pr-2">{confirmString}</span>}
           <Button
             dataTestId="confirm"
             theme={buttonTheme}
