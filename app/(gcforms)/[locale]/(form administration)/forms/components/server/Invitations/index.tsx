@@ -3,9 +3,11 @@ import { StarIcon } from "@serverComponents/icons/StarIcon";
 import { accept, decline, retrieveInvitations } from "./actions";
 import { Invitation } from "@prisma/client";
 import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 
 export const Invitations = () => {
   const [invitations, setInvitations] = useState<Invitation[]>([]);
+  const router = useRouter();
 
   const fetchInvitations = async () => {
     const invitations = await retrieveInvitations();
@@ -18,6 +20,7 @@ export const Invitations = () => {
 
   const handleAcceptInvitation = async (id: string) => {
     await accept(id);
+    router.refresh();
     fetchInvitations();
   };
   const handleDeclineInvitation = async (id: string) => {
