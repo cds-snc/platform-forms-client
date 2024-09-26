@@ -49,7 +49,6 @@ export const getAllAppSettings = async (ability: UserAbility) => {
 };
 
 export const getAppSetting = async (internalId: string) => {
-  const startTime = Date.now();
   const cachedSetting = await settingCheck(internalId);
   logMessage.info(`Setting is not cached for ${internalId}`);
   if (cachedSetting) return cachedSetting;
@@ -67,23 +66,14 @@ export const getAppSetting = async (internalId: string) => {
   if (uncachedSetting?.value) {
     settingPut(internalId, uncachedSetting.value);
   }
-  const endTime = Date.now();
-  logMessage.info(
-    `Latency time for 'getAppSetting' ${internalId} secret retrieval: ${endTime - startTime}`
-  );
+
   return uncachedSetting?.value ?? null;
 };
 
 export const getEncryptedAppSetting = async (internalId: string) => {
-  const startTime = Date.now();
   const encryptedSetting = await getAppSetting(internalId);
   if (!encryptedSetting) return null;
-  const endTime = Date.now();
-  logMessage.info(
-    `Latency time for 'getEncryptedAppSetting' ${internalId} secret retrieval: ${
-      endTime - startTime
-    }`
-  );
+
   return decryptSetting(encryptedSetting);
 };
 

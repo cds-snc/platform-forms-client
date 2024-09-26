@@ -24,17 +24,6 @@ settingChangeNotifier.on("zitadelProvider", async () => {
 });
 
 const getZitadelSettings = async () => {
-  const startTime = Date.now();
-  // if (!process.env.ZITADEL_PROVIDER) throw new Error("No value set for Zitadel Provider");
-
-  // if (!process.env.ZITADEL_ADMINISTRATION_KEY)
-  //   throw new Error("Zitadel Adminstration Key is not set");
-
-  // return {
-  //   zitadelAdministrationKey: process.env.ZITADEL_ADMINISTRATION_KEY,
-  //   zitadelProvider: process.env.ZITADEL_PROVIDER,
-  // };
-
   const getZitadelAdministrationKey = getEncryptedAppSetting("zitadelAdministrationKey");
   const getZitadelProvider = getAppSetting("zitadelProvider");
 
@@ -46,8 +35,7 @@ const getZitadelSettings = async () => {
   if (!zitadelAdministrationKey || !zitadelProvider) {
     throw new Error("Zitadel settings are not properly configured");
   }
-  const endTime = Date.now();
-  logMessage.info(`Latency in retrieving Zitadel settings: ${endTime - startTime}`);
+
   return {
     zitadelAdministrationKey,
     zitadelProvider,
