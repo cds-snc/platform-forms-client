@@ -98,7 +98,15 @@ export const ManageUsers = () => {
    */
   const fetchUsersWithAccess = useCallback(async () => {
     const users = await getTemplateUsers(formId);
-    setUsersWithAccess(users || []);
+
+    // Make sure the logged-in user is at the top of the list
+    const sorted = [...users].sort((a, b) => {
+      if (a.email === loggedInUserEmail) return -1;
+      if (b.email === loggedInUserEmail) return 1;
+      return 0;
+    });
+
+    setUsersWithAccess(sorted || []);
     setLoading(false);
   }, [formId]);
 
