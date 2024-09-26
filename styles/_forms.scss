@@ -5,6 +5,32 @@
   }
 }
 
+:root {
+  --gcds-checkbox-check-border-width: 0.3125rem;
+  --gcds-checkbox-check-height: 1.5rem;
+  --gcds-checkbox-check-left: 1rem;
+  --gcds-checkbox-check-top: 0.5625rem;
+  --gcds-checkbox-check-width: 0.9375rem;
+  --gcds-checkbox-danger-border: #d3080c;
+  --gcds-checkbox-default-text: #333;
+  --gcds-checkbox-disabled-background: #d6d9dd;
+  --gcds-checkbox-disabled-border: #545961;
+  --gcds-checkbox-disabled-text: #545961;
+  --gcds-checkbox-error-padding: 0 0 0 3.75rem;
+  --gcds-checkbox-focus-background: #fff;
+  --gcds-checkbox-focus-box-shadow: 0 0 0 0.125rem #fff;
+  --gcds-checkbox-focus-text: #0535d2;
+  --gcds-checkbox-focus-outline-width: 0.1875rem;
+  --gcds-checkbox-font: 400 1.25rem/120% "Noto Sans", sans-serif;
+  --gcds-checkbox-input-border-radius: 0.1875rem;
+  --gcds-checkbox-input-border-width: 0.125rem;
+  --gcds-checkbox-input-height-and-width: 3rem;
+  --gcds-checkbox-label-padding: 0 0 0 3.75rem;
+  --gcds-checkbox-margin: 0 0 1.125rem;
+  --gcds-checkbox-max-width: 46.5rem;
+  --gcds-checkbox-padding: 0.75rem;
+}
+
 .gc-fieldset ul {
   @apply mb-14;
 }
@@ -283,7 +309,6 @@
   @apply block;
 
   .gc-input-checkbox__input {
-    background-repeat: round;
     @apply md:mr-4 mr-6 absolute w-10 h-10 bg-white-default border-2 border-transparent;
     & + .gc-checkbox-label {
       @apply relative cursor-pointer p-0;
@@ -306,19 +331,32 @@
     // Box.
     & + .gc-checkbox-label:before {
       content: "";
-      @apply md:mr-4 mr-6 inline-block w-10 h-10 bg-white-default border-2 border-black-form;
+      @apply md:mr-4 mr-6 inline-block bg-white-default ;
+      width: 44px;
+      height: 44px;
+      border: var(--gcds-checkbox-input-border-width) solid currentcolor;
+      border-radius: var(--gcds-checkbox-input-border-radius);
+      transition: border-color ease-in-out 0.15s, box-shadow ease-in-out 0.15s,
+      outline ease-in-out 0.15s;
     }
 
-    // Checkmark. Could be replaced with an image
     &:checked + .gc-checkbox-label:after {
-      background-repeat: no-repeat;
       content: "";
-      background-image: url("../public/img/checkmark.svg");
-      @apply absolute w-6 h-6 left-2;
+      position: absolute;
+      border: var(--gcds-checkbox-check-border-width) solid currentcolor;
+      border-inline-start: 0 !important;
+      border-block-start: 0 !important;
+      height: var(--gcds-checkbox-check-height);
+      width: var(--gcds-checkbox-check-width);
+      left: var(--gcds-checkbox-check-left);
+      opacity: 1;
+      top: var(--gcds-checkbox-check-top);
+      transform: rotate(40deg);
+      transition: opacity 0.2s ease-in-out;
     }
 
     &:focus + .gc-checkbox-label:after {
-      background-image: url("../public/img/blue-checkmark.svg");
+      color: var(--gcds-checkbox-focus-text);
     }
 
     &:disabled + .gc-checkbox-label {
