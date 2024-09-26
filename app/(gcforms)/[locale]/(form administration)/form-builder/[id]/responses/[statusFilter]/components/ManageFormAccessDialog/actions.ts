@@ -7,25 +7,40 @@ import { cancelInvitation as cancelInvitationAction, inviteUserByEmail } from "@
 import { AccessControlError } from "@lib/privileges";
 import { TemplateNotFoundError, UserAlreadyHasAccessError } from "@lib/invitations/exceptions";
 import { getTemplateWithAssociatedUsers, removeAssignedUserFromTemplate } from "@lib/templates";
+import { useTranslation } from "@i18n/client";
 
 export const sendInvitation = async (emails: string[], templateId: string, message: string) => {
   const { ability } = await authCheckAndThrow();
+  const { t } = useTranslation("manage-form-access");
+
+  const errors: string[] = [];
 
   emails.forEach(async (email) => {
     try {
       inviteUserByEmail(ability, email, templateId, message);
     } catch (e) {
       if (e instanceof UserAlreadyHasAccessError) {
-        // @TODO
+        errors.push(t("userAlreadyHasAccess", { email }));
       }
       if (e instanceof TemplateNotFoundError) {
-        // @TODO
+        errors.push(t("templateNotFound", { templateId }));
       }
       if (e instanceof AccessControlError) {
-        // @TODO
+        errors.push(t("accessControlError", { templateId }));
       }
     }
   });
+
+  if (errors.length) {
+    return {
+      success: false,
+      errors,
+    };
+  }
+
+  return {
+    success: true,
+  };
 };
 
 export const removeUserFromForm = async (userId: string, formId: string) => {
