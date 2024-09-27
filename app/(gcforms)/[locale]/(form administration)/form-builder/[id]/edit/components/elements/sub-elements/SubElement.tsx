@@ -33,18 +33,20 @@ export const SubElement = ({
     subMoveDown,
     subDuplicateElement,
     removeSubItem,
-    subElements,
     propertyPath,
+    setChangeKey,
   } = useTemplateStore((s) => ({
     updateField: s.updateField,
     subMoveUp: s.subMoveUp,
     subMoveDown: s.subMoveDown,
     subDuplicateElement: s.subDuplicateElement,
     removeSubItem: s.removeSubItem,
-    subElements: s.form.elements[elIndex].properties.subElements,
     getLocalizationAttribute: s.getLocalizationAttribute,
     propertyPath: s.propertyPath,
+    setChangeKey: s.setChangeKey,
   }));
+
+  const subElements = item.properties.subElements;
 
   const { handleAddSubElement } = useHandleAdd();
 
@@ -61,12 +63,17 @@ export const SubElement = ({
     return elements.filter((element) => !notAllowed.includes(element.id));
   };
 
+  const forceRefresh = () => {
+    setChangeKey(String(new Date().getTime())); //Force a re-render
+  };
+
   if (!subElements || subElements.length < 1)
     return (
       <div className="ml-4 mt-10">
         <AddToSetButton
           handleAdd={(type?: FormElementTypes) => {
             handleAddSubElement(elIndex, 0, type);
+            forceRefresh();
           }}
           filterElements={elementFilter}
         />
@@ -89,18 +96,23 @@ export const SubElement = ({
                   totalItems={subElements.length}
                   handleAdd={(type?: FormElementTypes) => {
                     handleAddSubElement(elIndex, subIndex, type);
+                    forceRefresh();
                   }}
                   handleRemove={() => {
                     removeSubItem(elIndex, item.id);
+                    forceRefresh();
                   }}
                   handleMoveUp={() => {
                     subMoveUp(elIndex, subIndex);
+                    forceRefresh();
                   }}
                   handleMoveDown={() => {
                     subMoveDown(elIndex, subIndex);
+                    forceRefresh();
                   }}
                   handleDuplicate={() => {
                     subDuplicateElement(elIndex, subIndex);
+                    forceRefresh();
                   }}
                   moreButtonRenderer={(moreButton) => {
                     return (
