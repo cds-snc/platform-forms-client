@@ -1,4 +1,4 @@
-// Load from file so we have a static list of flag names (vs. from Redis state would be important)
+// Load from file so we have a static list of flag names (vs. from Redis where state would be important)
 import flagInitialSettings from "flag_initialization/default_flag_settings.json";
 
 export const FeatureFlags = {} as Record<string, string>;
