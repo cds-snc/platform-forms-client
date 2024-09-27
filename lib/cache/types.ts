@@ -1,8 +1,10 @@
-// TODO: in the future these could pulled in from default_flag_settings.json
-export const FeatureFlags = {
-  addressComplete: "addressComplete",
-  repeatingSets: "repeatingSets",
-} as const;
+// Load from file so we have a static list of flag names (vs. from Redis state would be important)
+import flagInitialSettings from "flag_initialization/default_flag_settings.json";
+
+export const FeatureFlags = {} as Record<string, string>;
+for (const key in flagInitialSettings) {
+  FeatureFlags[key] = key;
+}
 
 export type FeatureFlagKeys = keyof typeof FeatureFlags;
 
