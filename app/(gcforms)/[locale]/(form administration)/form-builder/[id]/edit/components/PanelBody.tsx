@@ -73,7 +73,7 @@ export const PanelBody = ({
             <Question item={item} onQuestionChange={onQuestionChange} />
           </div>
 
-          <div className={cn(isDynamicRow && "pl-8 mb-2")}>
+          <div className={cn(isDynamicRow && "mb-2")}>
             <SelectedElement
               key={`item-${item.id}-${translationLanguagePriority}`}
               item={item}

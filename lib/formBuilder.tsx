@@ -222,12 +222,37 @@ function _buildForm(element: FormElement, lang: string): ReactElement {
         </div>
       );
     case FormElementTypes.dynamicRow: {
+      let rowTitle: string | undefined = undefined;
+      let addButtonText: string | undefined = undefined;
+      let removeButtonText: string | undefined = undefined;
+
+      // Noting "legacy" form elements do not have the dynamicRow property
+      // The "placeHolder" is used as the row label
+      const props = element.properties.dynamicRow;
+
+      if (typeof props !== "undefined") {
+        const rowTitleProp = getLocalizedProperty("rowTitle", lang) as "rowTitleEn" | "rowTitleFr";
+
+        const addButtonProp = getLocalizedProperty("addButtonText", lang) as
+          | "addButtonTextEn"
+          | "addButtonTextFr";
+        const removeButtonProp = getLocalizedProperty("removeButtonText", lang) as
+          | "removeButtonTextEn"
+          | "removeButtonTextFr";
+
+        rowTitle = props[rowTitleProp];
+        addButtonText = props[addButtonProp];
+        removeButtonText = props[removeButtonProp];
+      }
+
       return (
         <DynamicGroup
           name={`${id}`}
           title={labelText}
           description={description}
-          rowLabel={placeHolder}
+          rowLabel={rowTitle ? rowTitle : placeHolder}
+          addButtonText={addButtonText}
+          removeButtonText={removeButtonText}
           rowElements={subElements}
           lang={lang}
           maxNumberOfRows={element.properties.maxNumberOfRows}

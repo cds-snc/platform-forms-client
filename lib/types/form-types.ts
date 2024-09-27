@@ -45,6 +45,8 @@ export type AddressComponents = {
 };
 
 export type dynamicRowType = {
+  rowTitleEn: string;
+  rowTitleFr: string;
   addButtonTextEn: string;
   removeButtonTextEn: string;
   addButtonTextFr: string;

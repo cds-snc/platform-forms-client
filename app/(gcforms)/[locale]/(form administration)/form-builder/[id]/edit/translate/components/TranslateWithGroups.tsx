@@ -19,7 +19,6 @@ import { SaveButton } from "@formBuilder/components/shared/SaveButton";
 
 import { FormElement } from "@lib/types";
 import { SkipLinkReusable } from "@clientComponents/globals/SkipLinkReusable";
-import { alphabet } from "@lib/utils/form-builder";
 import { sortGroup } from "@lib/utils/form-builder/groupedFormHelpers";
 import { Group } from "@lib/formContext";
 import { TranslateCustomizeSet } from "./TranslateCustomizeSet";
@@ -114,20 +113,12 @@ const Element = ({
   const { t } = useTranslation("form-builder");
 
   if (element.type === "dynamicRow") {
-    let subElementIndex = -1;
     subElements = element.properties.subElements?.map((subElement) => {
-      let questionNumber = t("pageText");
-      if (subElement.type !== "richText") {
-        subElementIndex++;
-        questionNumber = alphabet[subElementIndex];
-      }
-
       return (
         <Element
           key={subElement.id}
           element={subElement}
           index={subElement.id}
-          questionNumber={questionNumber}
           primaryLanguage={primaryLanguage}
           secondaryLanguage={secondaryLanguage}
         />

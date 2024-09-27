@@ -256,6 +256,14 @@
             "dynamicRow": {
               "type": "object",
               "properties": {
+                "rowTitleEn": {
+                  "type": "string",
+                  "description": "The title of the row in English"
+                },
+                "rowTitleFr": {
+                  "type": "string",
+                  "description": "The title of the row in French"
+                },
                 "addButtonTextEn": {
                   "type": "string",
                   "description": "Text for the add button in English"

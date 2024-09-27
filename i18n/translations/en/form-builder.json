@@ -84,7 +84,7 @@
     "answer": "Answer...",
     "attest": "I agree to:",
     "attestation": {
-      "description": "A set of conditions that must be confirmed. For example, to ensure a legal responsibility is understood.",
+      "description": "A series of conditions that must all be confirmed. For example, to ensure a legal responsibility is understood.",
       "title": "Attestation"
     },
     "categories": {
@@ -94,7 +94,7 @@
       "other": "Other"
     },
     "checkbox": {
-      "description": "A set of options for a single or multiple selections.",
+      "description": "A list of options for a single or multiple selections.",
       "title": "Checkboxes",
       "chooseItems": "Question",
       "selectAllThatApply": "Select all that apply."
@@ -160,7 +160,7 @@
       "choices": "Option 1,Option 2,Option 3,Option 4,Option 5,Option 6,Option 7,Option 8,Option 9,Option 10"
     },
     "dynamicRow": {
-      "description": "The option to add a series of related answers to a question and repeat the set multiple times.",
+      "description": "The option to group multiple form elements together into a set that can be repeated to add multiple instances of the same questions.",
       "title": "Repeating set"
     },
     "fileInput": {
@@ -209,7 +209,7 @@
     },
     "questionElement": "Elements",
     "radio": {
-      "description": "A small set of options for single selection.",
+      "description": "A small list of options for single selection.",
       "title": "Radio buttons",
       "chooseAnOption": "Question",
       "selectOnlyOne": "Select one option."
@@ -236,7 +236,7 @@
   "addOption": "Add option",
   "addOptions": "Add options",
   "addRules": "Add rules",
-  "addQuestionToSet": "Add question to set",
+  "addQuestionToSet": "Add form element to set",
   "addToSet": "Add to set",
   "allRequired": "All required",
   "at": "at",
@@ -1106,32 +1106,43 @@
   "goBack": "Go back",
   "disabled": "disabled",
   "dynamicRow": {
-    "addButtonText": "Add",
-    "addButtonTextA11yEn": "Add button Text (english)",
-    "addButtonTextA11yFr": "Add button Text (french)",
-    "removeButtonText": "Remove",
-    "removeButtonTextA11yEn": "Remove button text (english)",
-    "removeButtonTextA11yFr": "Remove button text (french)",
+    "defaultRowTitle": "Instance",
+    "rowTitleTextA11yEn": "Instance",
+    "rowTitleTextA11yFr": "Instance",
+    "defaultAddButtonText": "Add",
+    "addButtonTextA11yEn": "Add to set button text in English",
+    "addButtonTextA11yFr": "Add to set button text in French",
+    "defaultRemoveButtonText": "Remove",
+    "removeButtonTextA11yEn": "Remove from set button text in English",
+    "removeButtonTextA11yFr": "Remove from set button text in French",
     "translate": {
+      "rowTitleText": "Instance label",
       "repeatingSet": "Repeating set",
       "addButtonText": "Button label - Add to set",
       "removeButtonText": "Button label - Remove from set"
     },
     "dialog": {
-      "customizeElement": "Customize element",
-      "title": "Customize set",
+      "customizeElement": "Customize repeating set",
+      "title": "Customize repeating set",
       "english": "English",
       "french": "French",
       "cancel": "Cancel",
       "save": "Save",
+      "error": {
+        "title": "The repeating set cannot work without text.",
+        "message": "Make sure to fill out all fields."
+      },
+      "rowTitle": {
+        "title": "Name of question set",
+        "description": "Create a title for the group of repeating questions. These will be numbered for each instance. For example, “Address - 1, Address - 2”."
+      },
       "addButton": {
         "title": "Button to add to the set",
-        "description": "Create a descriptive button title to allow those filling out your form to add another set. Example: “Add another address” "
+        "description": "Add a relevant action that is specific for the people filling out the form. For example “Add another address”"
       },
       "removeButton": {
         "title": "Button to remove from the set",
-        "label": "Add a dynamic row",
-        "description": "Create a descriptive button title to allow those filling out your form to remove a set. Example: “Remove address” "
+        "description": "Add a relevant action that is specific for the people filling out the form. For example, “Remove address”"
       }
     }
   }
