@@ -305,6 +305,9 @@
   }
 }
 
+/*  
+See: https://design-system.alpha.canada.ca/en/components/checkbox/ 
+*/
 .gc-input-checkbox {
   @apply block;
 
@@ -324,17 +327,22 @@
       }
     }
 
-    &:focus + .gc-checkbox-label:before {
-      @apply outline-none border-4 border-blue-focus;
-    }
-
+    
     // Box.
+    &:focus + .gc-checkbox-label:before {
+      outline: var(--gcds-checkbox-focus-outline-width) solid theme('colors.gcds.blue.850');
+      outline-offset: var(--gcds-checkbox-input-border-width);
+      box-shadow: var(--gcds-checkbox-focus-box-shadow);
+      background: var(--gcds-checkbox-focus-background);
+      border-color: theme('colors.gcds.blue.850');
+    }
+    
     & + .gc-checkbox-label:before {
       content: "";
       @apply md:mr-4 mr-6 inline-block bg-white-default ;
       width: 44px;
       height: 44px;
-      border: var(--gcds-checkbox-input-border-width) solid currentcolor;
+      border: var(--gcds-checkbox-input-border-width) solid theme('colors.gcds.blue.850');
       border-radius: var(--gcds-checkbox-input-border-radius);
       transition: border-color ease-in-out 0.15s, box-shadow ease-in-out 0.15s,
       outline ease-in-out 0.15s;

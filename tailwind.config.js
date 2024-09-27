@@ -131,6 +131,37 @@ module.exports = {
           form: "#0b0c0c",
         },
         transparent: "transparent",
+        // see: https://design-system.alpha.canada.ca/en/styles/colour/
+        gcds: {
+          gray: {
+            50: "#F1F2F3",
+            100: "#D6D9DD",
+            300: "#A8ADB4",
+            500: "#7D828B",
+            700: "#545961",
+            800: "#43474E",
+            1000: "#000",
+          },
+          blue: {
+            100: "#D7E5F5",
+            500: "#6584A6",
+            700: "#33465C",
+            800: "#2B4380",
+            850: "#0535D2",
+            900: "#26374A",
+          },
+          green: {
+            100: "#E6F6EC",
+            500: "#289F58",
+            700: "#03662A",
+          },
+          red: {
+            100: "#FBDDDA",
+            500: "#D3080C",
+            700: "#A62A1E",
+            900: "#822117",
+          },
+        },
       },
       fontSize: {
         sm: ["16px", "22px"],
