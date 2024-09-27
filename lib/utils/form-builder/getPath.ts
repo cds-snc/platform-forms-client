@@ -50,6 +50,18 @@ export const getElementIndexes = <T extends Element>(id: number, elements: T[]):
   return [elIndex, null];
 };
 
+export const getParentIndex = (id: number, elements: Element[]) => {
+  const parentIndexes = getElementIndexes(id, elements);
+
+  if (!parentIndexes || parentIndexes[0] === null) {
+    return;
+  }
+
+  const parentIndex = parentIndexes[0];
+
+  return parentIndex;
+};
+
 export const indexesToPath = <T extends Form>(indexes: Indexes, form: T) => {
   const [elIndex, subIndex] = indexes;
 
