@@ -6,6 +6,8 @@ import {
   TreeItem,
 } from "react-complex-tree";
 
+import { FormElement } from "@lib/types";
+
 const getReviewIndex = (currentGroups: GroupsType) => {
   const elements = Object.keys(currentGroups);
   return elements.indexOf("review");
@@ -22,10 +24,16 @@ const getTargetDraggingPositionType = (target: DraggingPosition) => {
 export const handleCanDropAt = (
   items: TreeItem[],
   target: DraggingPosition,
-  getGroups: () => GroupsType | undefined
+  getGroups: () => GroupsType | undefined,
+  getElement: (id: number) => FormElement | undefined
 ) => {
-  const groupItemsCount = items.filter((item) => item.isFolder).length;
-  const nonGroupItemsCount = items.filter((item) => !item.isFolder).length;
+  const groupItemsCount = items.filter(
+    (item) => item.isFolder && item.data.type !== "dynamicRow"
+  ).length;
+  const nonGroupItemsCount = items.filter(
+    (item) => !item.isFolder || item.data.type === "dynamicRow"
+  ).length;
+
   const targetDraggingPositionType = getTargetDraggingPositionType(target);
 
   if ((<DraggingPositionBetweenItems>target).parentItem === "start") {
@@ -34,8 +42,46 @@ export const handleCanDropAt = (
     }
   }
 
-  if ((<DraggingPositionBetweenItems>target).parentItem === "root") {
+  // Can't drop elements inside a dynamicRow
+  if (Object.prototype.hasOwnProperty.call(target, "targetItem")) {
+    const targetElement = getElement(Number((<DraggingPositionItem>target).targetItem));
+
+    if (targetElement && targetElement.type === "dynamicRow") {
+      return false;
+    }
+  }
+
+  // All dragged items must be of the same parent, and target the same parent
+  let targetParentItem = undefined;
+  if (Object.prototype.hasOwnProperty.call(target, "parentItem")) {
+    const t = target as DraggingPositionItem | DraggingPositionBetweenItems;
+    targetParentItem = t.parentItem;
+  }
+
+  const hasSubElements = items.some((item) => {
+    return item.data.isSubElement;
+  });
+
+  if (
+    hasSubElements &&
+    items.some((item) => {
+      return Number(item.data.parentId) !== Number(targetParentItem);
+    })
+  ) {
     return false;
+  }
+
+  // Can't drop elements on a subElement of a dynamicRow
+  // but ... allow dragging between subElements
+  const targetParentItemElement = getElement(Number(targetParentItem));
+  if (targetParentItemElement && targetParentItemElement.type === "dynamicRow") {
+    const hasDifferentParent = items.some((item) => {
+      return Number(item.data.parentId) !== Number(targetParentItem);
+    });
+
+    if (hasDifferentParent) {
+      return false;
+    }
   }
 
   // Can't drag Groups + Items together

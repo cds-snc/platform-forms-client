@@ -35,6 +35,8 @@ export type ConditionalRule = {
 };
 
 export type dynamicRowType = {
+  rowTitleEn: string;
+  rowTitleFr: string;
   addButtonTextEn: string;
   removeButtonTextEn: string;
   addButtonTextFr: string;
