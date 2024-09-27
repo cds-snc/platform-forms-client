@@ -308,46 +308,51 @@
 /*  
 See: https://design-system.alpha.canada.ca/en/components/checkbox/ 
 */
+
+
+
 .gc-input-checkbox {
-  @apply block;
+  
+  &:focus-within {
+    color: theme("colors.gcds.blue.850");
+    .gc-checkbox-label:before {
+      outline: var(--gcds-checkbox-focus-outline-width) solid theme("colors.gcds.blue.850");
+      outline-offset: var(--gcds-checkbox-input-border-width);
+      box-shadow: var(--gcds-checkbox-focus-box-shadow);
+      background: var(--gcds-checkbox-focus-background);
+      border-color: theme("colors.gcds.blue.850");
+      transition: border-color ease-in-out 0.15s, box-shadow ease-in-out 0.15s, outline ease-in-out 0.15s;
+    }
+  }
 
   .gc-input-checkbox__input {
-    @apply md:mr-4 mr-6 absolute w-10 h-10 bg-white-default border-2 border-transparent;
+    @apply md:mr-4 mr-6 absolute w-10 h-10 bg-white-default border-transparent;
+    border-width: var(--gcds-checkbox-input-border-width);
+
     & + .gc-checkbox-label {
       @apply relative cursor-pointer p-0;
     }
 
-    &:focus {
-      @apply outline-none;
+    &:disabled + .gc-checkbox-label {
+      pointer-events: none;
+      opacity: 0.5;
     }
 
-    &:focus + .gc-checkbox-label {
-      span {
-        @apply text-blue-focus;
-      }
-    }
-
-    
-    // Box.
-    &:focus + .gc-checkbox-label:before {
-      outline: var(--gcds-checkbox-focus-outline-width) solid theme('colors.gcds.blue.850');
-      outline-offset: var(--gcds-checkbox-input-border-width);
-      box-shadow: var(--gcds-checkbox-focus-box-shadow);
-      background: var(--gcds-checkbox-focus-background);
-      border-color: theme('colors.gcds.blue.850');
-    }
-    
+    // Box outline.
     & + .gc-checkbox-label:before {
       content: "";
-      @apply md:mr-4 mr-6 inline-block bg-white-default ;
+      @apply md:mr-4 mr-6 inline-block bg-white-default;
       width: 44px;
       height: 44px;
-      border: var(--gcds-checkbox-input-border-width) solid theme('colors.gcds.blue.850');
+      border: var(--gcds-checkbox-input-border-width) solid theme("colors.black.default");
       border-radius: var(--gcds-checkbox-input-border-radius);
-      transition: border-color ease-in-out 0.15s, box-shadow ease-in-out 0.15s,
-      outline ease-in-out 0.15s;
     }
 
+    &:focus + .gc-checkbox-label:before {
+      border: var(--gcds-checkbox-input-border-width) solid theme("colors.gcds.blue.850");
+    }
+
+    // Checkmark icon.
     &:checked + .gc-checkbox-label:after {
       content: "";
       position: absolute;
@@ -361,15 +366,6 @@ See: https://design-system.alpha.canada.ca/en/components/checkbox/
       top: var(--gcds-checkbox-check-top);
       transform: rotate(40deg);
       transition: opacity 0.2s ease-in-out;
-    }
-
-    &:focus + .gc-checkbox-label:after {
-      color: var(--gcds-checkbox-focus-text);
-    }
-
-    &:disabled + .gc-checkbox-label {
-      pointer-events: none;
-      opacity: 0.5;
     }
   }
 }
