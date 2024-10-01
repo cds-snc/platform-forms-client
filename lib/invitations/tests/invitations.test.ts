@@ -5,6 +5,7 @@ import { prismaMock } from "@jestUtils";
 import { getUser } from "@lib/users";
 import { getTemplateWithAssociatedUsers } from "@lib/templates";
 import { sendEmail } from "@lib/integration/notifyConnector";
+import { TemplateNotFoundError, UserAlreadyHasAccessError } from "../exceptions";
 
 jest.mock("@lib/integration/prismaConnector");
 jest.mock("@lib/privileges");
@@ -50,22 +51,39 @@ describe("Invitations", () => {
       expect(sendEmail).toHaveBeenCalled();
     });
 
-    // it("should throw UserAlreadyHasAccessError if user already has access", async () => {
-    //   prisma.user.findFirst.mockResolvedValue({ id: "user-id", email: "test@example.com" });
-    //   prisma.template.findFirst.mockResolvedValue({ users: [{ email: "test@example.com" }] });
+    it("should throw UserAlreadyHasAccessError if user already has access", async () => {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      (getUser as jest.MockedFunction<any>).mockResolvedValue({
+        id: "1",
+        email: "test@cds-snc.ca",
+      });
 
-    //   await expect(
-    //     inviteUserByEmail(mockAbility, "test@example.com", "form-id", "message")
-    //   ).rejects.toThrow(UserAlreadyHasAccessError);
-    // });
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      (getTemplateWithAssociatedUsers as jest.MockedFunction<any>).mockResolvedValue({
+        formRecord: {
+          id: "form-id",
+          name: "form-name",
+        },
+        users: [
+          {
+            email: "test@cds-snc.ca",
+          },
+        ],
+      });
 
-    // it("should throw TemplateNotFoundError if template is not found", async () => {
-    //   prisma.template.findFirst.mockResolvedValue(null);
+      await expect(
+        inviteUserByEmail(mockAbility, "test@cds-snc.ca", "form-id", "message")
+      ).rejects.toThrow(UserAlreadyHasAccessError);
+    });
 
-    //   await expect(
-    //     inviteUserByEmail(mockAbility, "test@example.com", "form-id", "message")
-    //   ).rejects.toThrow(TemplateNotFoundError);
-    // });
+    it("should throw TemplateNotFoundError if template is not found", async () => {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      (getTemplateWithAssociatedUsers as jest.MockedFunction<any>).mockResolvedValue(null);
+
+      await expect(
+        inviteUserByEmail(mockAbility, "test@example.com", "form-id", "message")
+      ).rejects.toThrow(TemplateNotFoundError);
+    });
   });
 
   //   describe("acceptInvitation", () => {
