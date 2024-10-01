@@ -24,9 +24,14 @@ export const SubElementModal = ({
   const { t } = useTranslation("form-builder");
   const { modals, updateModalProperties, unsetModalField } = useModalStore();
 
-  const { updateField } = useTemplateStore((s) => ({
+  const { updateField, setChangeKey } = useTemplateStore((s) => ({
     updateField: s.updateField,
+    setChangeKey: s.setChangeKey,
   }));
+
+  const forceRefresh = () => {
+    setChangeKey(String(new Date().getTime())); //Force a re-render
+  };
 
   useEffect(() => {
     if (item.type != "richText") {
@@ -45,11 +50,14 @@ export const SubElementModal = ({
   }) => {
     return (e: React.MouseEvent<HTMLElement>) => {
       e.preventDefault();
+
       // replace all of "properties" with the new properties set in the ModalForm
       updateField(
         `form.elements[${elIndex}].properties.subElements[${subIndex}].properties`,
         properties
       );
+
+      forceRefresh();
     };
   };
 
