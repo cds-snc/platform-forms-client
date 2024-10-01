@@ -28,6 +28,14 @@ export const TranslateCustomizeSet = ({
     return null;
   }
 
+  // row title
+  const rowTitle = "rowTitle";
+
+  const rowTitlePropEn = localizeField(rowTitle, primaryLanguage);
+  const rowTitleEnValue = dynamicRowProps[rowTitlePropEn];
+  const rowTitlePropFr = localizeField(rowTitle, secondaryLanguage);
+  const rowTitleFrValue = dynamicRowProps[rowTitlePropFr];
+
   // Add button
   const addButtonText = "addButtonText";
 
@@ -46,6 +54,56 @@ export const TranslateCustomizeSet = ({
 
   return (
     <>
+      {/* Start row title inputs */}
+      <fieldset>
+        <FieldsetLegend>
+          {t("dynamicRow.translate.repeatingSet")} {":"} {t("dynamicRow.translate.rowTitleText")}
+        </FieldsetLegend>
+        <div className="mb-10 flex gap-px divide-x-2 border border-gray-300" key={primaryLanguage}>
+          <div className="relative w-1/2 flex-1">
+            <label htmlFor={`row-title-text-english-${element.id}`} className="sr-only">
+              <>{primaryLanguage}</>
+            </label>
+            <LanguageLabel id={`row-title-text-english-desc-${element.id}`} lang={primaryLanguage}>
+              <>{primaryLanguage}</>
+            </LanguageLabel>
+            <textarea
+              className="size-full p-4 focus:outline-blue-focus"
+              id={`row-title-text-french-${element.id}`}
+              aria-describedby={`row-title-text-english-desc-${element.id}`}
+              value={rowTitleEnValue}
+              onChange={(e) => {
+                updateField(
+                  propertyPath(element.id, `dynamicRow.${rowTitle}`, primaryLanguage),
+                  e.target.value
+                );
+              }}
+            />
+          </div>
+          <div className="relative w-1/2 flex-1">
+            <label htmlFor={`row-title-text-french-${element.id}`} className="sr-only">
+              <>{secondaryLanguage}</>
+            </label>
+            <LanguageLabel id={`row-title-text-french-desc-${element.id}`} lang={secondaryLanguage}>
+              <>{secondaryLanguage}</>
+            </LanguageLabel>
+            <textarea
+              className="size-full p-4 focus:outline-blue-focus"
+              id={`row-title-text-french-${element.id}`}
+              aria-describedby={`row-title-text-french-desc-${element.id}`}
+              value={rowTitleFrValue}
+              onChange={(e) => {
+                updateField(
+                  propertyPath(element.id, `dynamicRow.${rowTitle}`, secondaryLanguage),
+                  e.target.value
+                );
+              }}
+            />
+          </div>
+        </div>
+      </fieldset>
+      {/* End row title inputs */}
+
       {/* Start add button inputs */}
       <fieldset>
         <FieldsetLegend>
