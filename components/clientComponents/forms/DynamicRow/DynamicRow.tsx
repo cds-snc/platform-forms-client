@@ -4,7 +4,8 @@ import classnames from "classnames";
 import { useField } from "formik";
 import { GenerateElement } from "@lib/formBuilder";
 import { FormElement } from "@lib/types";
-import { Button, Description } from "@clientComponents/forms";
+import { Description } from "@clientComponents/forms";
+import { Button } from "@clientComponents/globals";
 import { useTranslation } from "@i18n/client";
 
 interface DynamicGroupProps {
@@ -143,9 +144,9 @@ export const DynamicGroup = (props: DynamicGroupProps): React.ReactElement => {
               {!hasReachedMaxNumberOfRows && index === rows.length - 1 && (
                 <Button
                   type="button"
-                  secondary={true}
+                  theme="secondary"
                   onClick={addRow}
-                  testid={`add-row-button-${field.name}`}
+                  dataTestId={`add-row-button-${field.name}`}
                 >
                   {`${addButtonLabel}`}
                 </Button>
@@ -153,9 +154,9 @@ export const DynamicGroup = (props: DynamicGroupProps): React.ReactElement => {
               {rows.length > 1 && (
                 <Button
                   type="button"
-                  destructive={true}
+                  theme="destructive"
                   onClick={() => deleteRow(index)}
-                  testid={`delete-row-button-${field.name}.${index}`}
+                  dataTestId={`delete-row-button-${field.name}.${index}`}
                 >
                   {`${deleteButtonLabel} ${index + 1}`}
                 </Button>
