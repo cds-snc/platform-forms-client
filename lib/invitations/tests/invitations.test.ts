@@ -24,11 +24,13 @@ describe("Invitations", () => {
 
   describe("inviteUserByEmail", () => {
     it("should invite a user by email", async () => {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       (getUser as jest.MockedFunction<any>).mockResolvedValue({
         id: "1",
         email: "test@cds-snc.ca",
       });
 
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       (getTemplateWithAssociatedUsers as jest.MockedFunction<any>).mockResolvedValue({
         formRecord: {
           id: "form-id",
@@ -37,6 +39,7 @@ describe("Invitations", () => {
         users: [],
       });
 
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       (prismaMock.invitation.create as jest.MockedFunction<any>).mockResolvedValue({
         id: "invitation-id",
       });
