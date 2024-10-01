@@ -1,6 +1,6 @@
 import { useTranslation } from "react-i18next";
 import { useGCFormsContext } from "@lib/hooks/useGCFormContext";
-import { Button } from "@clientComponents/forms";
+import { Button } from "@clientComponents/globals";
 import { Language } from "@lib/types/form-builder-types";
 
 // Must be placed withing context of the GCFormsContext.Provider
@@ -10,7 +10,7 @@ export const BackButton = ({ language, onClick }: { language: Language; onClick?
   return (
     <Button
       type="button"
-      secondary={true}
+      theme="secondary"
       onClick={() => {
         setGroup(previousGroup);
         onClick && onClick();
