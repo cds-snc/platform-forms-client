@@ -8,13 +8,13 @@ type ItemActionProps = {
   context: TreeItemRenderContext;
   arrow: ReactNode;
   lockClassName: string;
-  handleDelete: (e: React.MouseEvent<HTMLButtonElement>) => Promise<void>;
+  handleDelete?: (e: React.MouseEvent<HTMLButtonElement>) => Promise<void>;
 };
 
 export const ItemActions = ({ context, arrow, lockClassName, handleDelete }: ItemActionProps) => {
   return context.canDrag ? (
     <>
-      {context.isExpanded && (
+      {context.isExpanded && handleDelete && (
         <button className="cursor-pointer" onClick={handleDelete}>
           <DeleteIcon title="Delete group" className="absolute right-5 top-0 mr-10 scale-50" />
         </button>

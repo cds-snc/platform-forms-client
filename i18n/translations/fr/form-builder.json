@@ -24,7 +24,7 @@
       "firstMiddleLastName": "Ajouter des noms individuels",
       "address": "Ajouter une adresse",
       "contact": "Ajouter des coordonnées",
-      "dynamicRow": "Ajouter un ensemble de réponses",
+      "dynamicRow": "Ajouter un ensemble récurrent",
       "richText": "Ajouter du texte de page",
       "departments": "Ajouter un ministère",
       "combobox": "Ajouter une liste avec recherche",
@@ -48,7 +48,7 @@
     "answer": "Réponse...",
     "attest": "J'accepte :",
     "attestation": {
-      "description": "Un ensemble de conditions qui doivent être confirmées. Par exemple, pour s'assurer qu'une responsabilité légale est comprise.",
+      "description": "Une série de conditions qui doivent toutes être confirmées. Par exemple, pour s'assurer qu'une responsabilité légale est comprise.",
       "title": "Attestation"
     },
     "categories": {
@@ -58,7 +58,7 @@
       "other": "Autre"
     },
     "checkbox": {
-      "description": "Un ensemble d’options en vue de sélection unique ou multiple.",
+      "description": "Une liste d’options en vue de sélection unique ou multiple.",
       "title": "Cases à cocher",
       "chooseItems": "Question",
       "selectAllThatApply": "Sélectionnez toutes les options pertinentes."
@@ -124,8 +124,8 @@
       "choices": "Option 1,Option 2,Option 3,Option 4,Option 5,Option 6,Option 7,Option 8,Option 9,Option 10"
     },
     "dynamicRow": {
-      "description": "La possibilité d’ajouter une série de réponses connexes à une question et de répéter la série plusieurs fois.",
-      "title": "Ensemble de réponses"
+      "description": "La possibilité de regrouper plusieurs éléments de formulaire dans un ensemble qui permet la récurrence pour ajouter plusieurs instances des mêmes questions.",
+      "title": "Ensemble récurrent"
     },
     "fileInput": {
       "description": "Un moyen d'ajouter des documents à l'appui.",
@@ -173,7 +173,7 @@
     },
     "questionElement": "Éléments",
     "radio": {
-      "description": "Un petit ensemble d’options en vue d'une sélection unique.",
+      "description": "Une petite liste d’options en vue d'une sélection unique.",
       "title": "Boutons radio",
       "chooseAnOption": "Question",
       "selectOnlyOne": "Sélectionnez une option."
@@ -200,8 +200,8 @@
   "addOption": "Ajouter une option",
   "addOptions": "Ajouter des options",
   "addRules": "Ajouter des règles",
-  "addQuestionToSet": "Add question to set [fr]",
-  "addToSet": "Ajouter à la série",
+  "addQuestionToSet": "Ajouter un élément à l'ensemble",
+  "addToSet": "Ajouter à l'ensemble",
   "allRequired": "Toutes obligatoires",
   "at": "à",
   "attestation": "Attestation",
@@ -356,7 +356,7 @@
   },
   "dropdown": "Liste déroulante",
   "duplicate": "Dupliquer",
-  "dyanamicRow": "Ensemble de réponses",
+  "dyanamicRow": "Ensemble récurrent",
   "edit": "Modifier",
   "editingIn": "Modifier en :",
   "editLink": "Modifier un lien  ",
@@ -1070,32 +1070,43 @@
   "goBack": "Retourner",
   "disabled": "désactivé",
   "dynamicRow": {
-    "addButtonText": "Add [FR]",
-    "addButtonTextA11yEn": "Add button text (english) [FR]",
-    "addButtonTextA11yFr": "Add button text (french) [FR]",
-    "removeButtonText": "Remove [FR]",
-    "removeButtonTextA11yEn": "Remove button text (english) [FR] ",
-    "removeButtonTextA11yFr": "Remove button text (french) [FR] ",
+    "defaultRowTitle": "Instance",
+    "rowTitleTextA11yEn": "Instance",
+    "rowTitleTextA11yFr": "Instance",
+    "defaultAddButtonText": "Ajouter",
+    "addButtonTextA11yEn": "Texte du bouton pour ajouter à l'ensemble en anglais",
+    "addButtonTextA11yFr": "Texte du bouton pour ajouter à l'ensemble en français",
+    "defaultRemoveButtonText": "Supprimer",
+    "removeButtonTextA11yEn": "Texte du bouton pour supprimer de l'ensemble en anglais",
+    "removeButtonTextA11yFr": "Texte du bouton pour supprimer de l'ensemble en français",
     "translate": {
-      "repeatingSet": "Repeating set [FR]",
-      "addButtonText": "Button label - Add to set [FR]",
-      "removeButtonText": "Button label - Remove from set [FR]"
+      "rowTitleText": "Étiquette pour l'instance",
+      "repeatingSet": "Ensemble récurrent",
+      "addButtonText": "Étiquette pour le bouton qui permet l'ajout à l'ensemble",
+      "removeButtonText": "Étiquette pour le bouton qui permet la suppression de l'ensemble"
     },
     "dialog": {
-      "customizeElement": "Customize element [FR]",
-      "title": "Customize set [FR]",
-      "english": "English [FR]",
-      "french": "French [FR]",
-      "cancel": "Cancel [FR]",
-      "save": "Save [FR]",
+      "customizeElement": "Adapter l'ensemble récurrent",
+      "title": "Adapter l'ensemble récurrent",
+      "english": "Anglais",
+      "french": "Français",
+      "cancel": "Annuler",
+      "save": "Enregistrer",
+      "error": {
+        "title": "L'ensemble récurrent ne fonctionnera pas sans texte.",
+        "message": "Assurez-vous de remplir tous les champs."
+      },
+      "rowTitle": {
+        "title": "Nom de l'ensemble de questions",
+        "description": "Créez un titre pour le groupe de questions récurrentes. Ces ensembles seront numérotés. Par exemple : « Adresse -1, Adresse 2 »"
+      },
       "addButton": {
-        "title": "Button to add to the set [FR]",
-        "description": "Create a descriptive button title to allow those filling out your form to add another set. Example: “Add another address” [FR]"
+        "title": "Bouton pour ajouter à l'ensemble",
+        "description": "Ajoutez une action pertinente spécifique pour aider les personnes à remplir le formulaire. Par exemple : « Ajouter une autre adresse »"
       },
       "removeButton": {
-        "title": "Button to remove from the set [FR]",
-        "label": "Add a dynamic row [FR]",
-        "description": "Create a descriptive button title to allow those filling out your form to remove a set. Example: “Remove address” [FR]"
+        "title": "Bouton pour supprimer de l'ensemble",
+        "description": "Ajoutez une action pertinente spécifique pour aider les personnes à remplir le formulaire. Par exemple : « Supprimer l'adresse »"
       }
     }
   }

@@ -3,6 +3,7 @@ import { Form, Submission } from "../../types";
 import { ColumnTable } from "./ColumnTable";
 import { RowTable } from "./RowTable";
 import { customTranslate, getProperty } from "@lib/i18nHelpers";
+import { Button } from "@clientComponents/globals";
 
 export interface ResponseSectionProps {
   confirmReceiptCode: string;
@@ -135,15 +136,13 @@ export const ResponseSection = ({
       </h3>
       <p className="mt-8">{t("responseTemplate.rowTableInfo", { lng: lang })}</p>
       <div className="mb-8 mt-4">
-        <button
+        <Button
           id={`copyResponseButton${capitalizedLang}`}
           aria-labelledby={`copyResponseLabel${capitalizedLang}`}
-          className="gc-button--blue"
-          type="button"
           data-clipboard-text=""
         >
           {t("responseTemplate.copyResponse", { lng: lang })}
-        </button>
+        </Button>
         <span
           id={`copyResponseOutput${capitalizedLang}`}
           aria-live="polite"
@@ -168,15 +167,13 @@ export const ResponseSection = ({
         {confirmReceiptCode}
       </div>
       <div className="mb-32 mt-4">
-        <button
+        <Button
           id={`copyCodeButton${capitalizedLang}`}
-          className="gc-button--blue"
-          type="button"
           aria-labelledby={`confirmReceiptInfo${capitalizedLang}`}
           data-clipboard-text={confirmReceiptCode}
         >
           {t("responseTemplate.copyCode", { lng: lang })}
-        </button>
+        </Button>
         <span
           id={`copyCodeOutput${capitalizedLang}`}
           aria-live="polite"

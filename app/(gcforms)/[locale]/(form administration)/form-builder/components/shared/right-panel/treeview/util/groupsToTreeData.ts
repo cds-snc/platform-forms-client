@@ -11,6 +11,37 @@ export type TreeDataOptions = {
   reviewGroup?: boolean;
 };
 
+export const subElementsToTreeData = (parentId: number, subElements: FormElement[]) => {
+  const items = [];
+
+  let subIndex = 0;
+
+  for (const element of subElements) {
+    const item = {
+      index: element.id.toString(),
+      isFolder: false,
+      canRename: true,
+      canMove: true,
+      children: [],
+      data: {
+        type: element.type,
+        titleEn: element.properties.titleEn,
+        titleFr: element.properties.titleFr,
+        descriptionEn: element.properties.descriptionEn,
+        descriptionFr: element.properties.descriptionFr,
+        isSubElement: true,
+        parentId: parentId,
+        subIndex: subIndex,
+      },
+    };
+
+    items.push(item);
+    subIndex++;
+  }
+
+  return items;
+};
+
 export const groupsToTreeData = (
   formGroups: GroupsType,
   elements: FormElement[],
@@ -30,6 +61,9 @@ export const groupsToTreeData = (
 
   // Reset locked sections to ensure they are in the correct order
   formGroups = formGroups && resetLockedSections(formGroups);
+
+  const startChildren = [];
+  const endChildren = [];
 
   for (const [key, value] of Object.entries(formGroups)) {
     const children =
@@ -85,12 +119,24 @@ export const groupsToTreeData = (
       const element = elements.find((el) => el.id === Number(childId));
       if (!element) return;
 
+      // Build tree data for sub elements if they exist
+      const itemChildren: string[] = [];
+
+      if (element.properties.subElements && element.properties.subElements.length > 0) {
+        const treeItems = subElementsToTreeData(element.id, element.properties.subElements);
+
+        for (const treeItem of treeItems) {
+          items[treeItem.index] = treeItem;
+          itemChildren.push(treeItem.index);
+        }
+      }
+
       const childItem = {
         index: childId,
-        isFolder: false,
+        isFolder: itemChildren.length > 0,
         canRename: true,
         canMove: true,
-        children: [],
+        children: itemChildren,
         data: {
           type: element.type,
           titleEn: element.properties.titleEn,
@@ -99,13 +145,9 @@ export const groupsToTreeData = (
           descriptionFr: element.properties.descriptionFr,
         },
       };
-
       items[childId] = childItem;
     });
   }
-
-  const startChildren = [];
-  const endChildren = [];
 
   const introItem = {
     index: "intro",

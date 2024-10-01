@@ -12,6 +12,7 @@ import { shallow } from "zustand/shallow";
 import { persist, createJSONStorage, subscribeWithSelector } from "zustand/middleware";
 import update from "lodash.set";
 import unset from "lodash.unset";
+import { getParentIndex } from "@lib/utils/form-builder/getPath";
 
 /**
  * Internal dependencies
@@ -165,11 +166,16 @@ const createTemplateStore = (initProps?: Partial<InitialTemplateStoreProps>) => 
                   }
                 }
               }),
-            subMoveUp: (elIndex, subIndex = 0) =>
+            subMoveUp: (elId, subIndex) =>
               set((state) => {
-                const elements = state.form.elements[elIndex].properties.subElements;
+                const parentIndex = getParentIndex(elId, state.form.elements);
+
+                if (parentIndex === undefined) return;
+
+                const elements = state.form.elements[parentIndex].properties.subElements;
+
                 if (elements) {
-                  state.form.elements[elIndex].properties.subElements = moveElementUp(
+                  state.form.elements[parentIndex].properties.subElements = moveElementUp(
                     elements,
                     subIndex
                   );
@@ -189,16 +195,22 @@ const createTemplateStore = (initProps?: Partial<InitialTemplateStoreProps>) => 
                   }
                 }
               }),
-            subMoveDown: (elIndex, subIndex = 0) =>
+            subMoveDown: (elId, subIndex = 0) => {
               set((state) => {
-                const elements = state.form.elements[elIndex].properties.subElements;
+                const parentIndex = getParentIndex(elId, state.form.elements);
+
+                if (parentIndex === undefined) return;
+
+                const elements = state.form.elements[parentIndex].properties.subElements;
+
                 if (elements) {
-                  state.form.elements[elIndex].properties.subElements = moveElementDown(
+                  state.form.elements[parentIndex].properties.subElements = moveElementDown(
                     elements,
                     subIndex
                   );
                 }
-              }),
+              });
+            },
             add: async (elIndex = 0, type = FormElementTypes.radio, data, groupId) => {
               return new Promise((resolve) => {
                 set((state) => {
@@ -253,24 +265,37 @@ const createTemplateStore = (initProps?: Partial<InitialTemplateStoreProps>) => 
                 state.form.groups = groups;
               });
             },
-            addSubItem: (elIndex, subIndex = 0, type = FormElementTypes.radio, data) =>
-              set((state) => {
-                // remove subElements array property given we're adding a sub item
-                const subDefaultField = { ...defaultField };
-                // eslint-disable-next-line  @typescript-eslint/no-unused-vars
-                const { subElements, ...rest } = subDefaultField.properties;
-                subDefaultField.properties = rest;
+            addSubItem: (elId, subIndex = 0, type = FormElementTypes.radio, data) => {
+              return new Promise((resolve) => {
+                set((state) => {
+                  let parentIndex = getParentIndex(elId, state.form.elements);
 
-                state.form.elements[elIndex].properties.subElements?.splice(subIndex + 1, 0, {
-                  ...subDefaultField,
-                  ...data,
-                  id: incrementSubElementId(
-                    state.form.elements[elIndex].properties.subElements || [],
-                    state.form.elements[elIndex].id
-                  ),
-                  type,
+                  if (parentIndex === undefined) {
+                    parentIndex = 0;
+                  }
+
+                  // remove subElements array property given we're adding a sub item
+                  const subDefaultField = { ...defaultField };
+                  // eslint-disable-next-line  @typescript-eslint/no-unused-vars
+                  const { subElements, ...rest } = subDefaultField.properties;
+                  subDefaultField.properties = rest;
+
+                  const id = incrementSubElementId(
+                    state.form.elements[parentIndex].properties.subElements || [],
+                    state.form.elements[parentIndex].id
+                  );
+
+                  state.form.elements[parentIndex].properties.subElements?.splice(subIndex + 1, 0, {
+                    ...subDefaultField,
+                    ...data,
+                    id,
+                    type,
+                  });
+
+                  resolve(id);
                 });
-              }),
+              });
+            },
             remove: async (elementId, groupId = "") => {
               set((state) => {
                 const allowGroups = state.allowGroupsFlag;
@@ -287,11 +312,15 @@ const createTemplateStore = (initProps?: Partial<InitialTemplateStoreProps>) => 
                 }
               });
             },
-            removeSubItem: (elIndex, elementId) =>
+            removeSubItem: (elId, elementId) =>
               set((state) => {
-                const subElements = state.form.elements[elIndex].properties?.subElements;
+                const parentIndex = getParentIndex(elId, state.form.elements);
+
+                if (parentIndex === undefined) return;
+
+                const subElements = state.form.elements[parentIndex].properties?.subElements;
                 if (subElements) {
-                  state.form.elements[elIndex].properties.subElements = removeElementById(
+                  state.form.elements[parentIndex].properties.subElements = removeElementById(
                     subElements,
                     elementId
                   );
@@ -365,25 +394,6 @@ const createTemplateStore = (initProps?: Partial<InitialTemplateStoreProps>) => 
                     state.form.groups[groupId].elements.splice(elIndex + 1, 0, String(id));
                 }
                 // end groups
-              });
-            },
-            subDuplicateElement: (elIndex, subIndex) => {
-              set((state) => {
-                // deep copy the element
-                const subElements = state.form.elements[elIndex].properties.subElements;
-                if (subElements) {
-                  const element = JSON.parse(JSON.stringify(subElements[subIndex]));
-                  element.id = incrementElementId(subElements);
-                  element.properties[state.localizeField("title")] = `${
-                    element.properties[state.localizeField("title")]
-                  } copy`;
-
-                  state.form.elements[elIndex].properties.subElements?.splice(
-                    subIndex + 1,
-                    0,
-                    element
-                  );
-                }
               });
             },
             getSchema: () => {
