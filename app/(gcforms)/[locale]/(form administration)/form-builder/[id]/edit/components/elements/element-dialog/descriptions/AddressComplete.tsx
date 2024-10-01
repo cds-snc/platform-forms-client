@@ -2,7 +2,7 @@
 import React from "react";
 import { useTranslation } from "@i18n/client";
 import { ExampleWrapper } from "./ExampleWrapper";
-import { AddressComplete as AddressCompleteComponent } from "@clientComponents/forms/AddressComplete/AdressComplete";
+import { AddressComplete as AddressCompleteComponent } from "@clientComponents/forms/AddressComplete/AddressComplete";
 import Image from "next/image";
 
 export const AddressComplete = () => {
