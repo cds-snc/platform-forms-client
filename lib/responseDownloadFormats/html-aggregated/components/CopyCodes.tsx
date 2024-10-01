@@ -1,6 +1,7 @@
 import React from "react";
 import { customTranslate } from "../../../i18nHelpers";
 import { getOrigin } from "@lib/origin";
+import { Button } from "@clientComponents/globals";
 
 export const CopyCodes = ({
   confirmationCodes,
@@ -17,15 +18,13 @@ export const CopyCodes = ({
 
   return (
     <div className="flex flex-row gap-4">
-      <button
+      <Button
         id={`copyCodeButton${capitalizedLang}`}
-        className="gc-button--blue"
-        type="button"
         aria-labelledby={`confirmReceiptInfo${capitalizedLang}`}
         data-clipboard-text={confirmationCodes}
       >
         {t("responseAggregatedTemplate.copyCodes.copyButton", { lng: lang })}
-      </button>
+      </Button>
       <br />
       <div
         id={`copyCodeOutput${capitalizedLang}`}
