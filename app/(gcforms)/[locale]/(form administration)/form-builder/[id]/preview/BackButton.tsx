@@ -9,8 +9,8 @@ export const BackButton = ({ language, onClick }: { language: Language; onClick?
   const { setGroup, previousGroup } = useGCFormsContext();
   return (
     <Button
-      type="button"
       theme="secondary"
+      className="mr-4"
       onClick={() => {
         setGroup(previousGroup);
         onClick && onClick();

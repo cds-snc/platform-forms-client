@@ -140,11 +140,11 @@ export const DynamicGroup = (props: DynamicGroupProps): React.ReactElement => {
               name={`${field.name}.${index}`}
               lang={lang}
             />
-            <div>
+            <div className="mb-4">
               {!hasReachedMaxNumberOfRows && index === rows.length - 1 && (
                 <Button
-                  type="button"
                   theme="secondary"
+                  className="mr-4"
                   onClick={addRow}
                   dataTestId={`add-row-button-${field.name}`}
                 >
@@ -153,7 +153,6 @@ export const DynamicGroup = (props: DynamicGroupProps): React.ReactElement => {
               )}
               {rows.length > 1 && (
                 <Button
-                  type="button"
                   theme="destructive"
                   onClick={() => deleteRow(index)}
                   dataTestId={`delete-row-button-${field.name}.${index}`}
