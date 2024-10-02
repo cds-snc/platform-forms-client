@@ -1,4 +1,4 @@
-import { acceptInvitation, inviteUserByEmail } from "../index";
+import { inviteUserByEmail } from "../index";
 import { prisma } from "@lib/integration/prismaConnector";
 import { UserAbility } from "@lib/types";
 import { prismaMock } from "@jestUtils";
