@@ -69,6 +69,7 @@ jobs:
           dockerfile_path: "Dockerfile"
           sbom_name: "forms-client"
           token: "${{ secrets.GITHUB_TOKEN }}"
+        continue-on-error: true # TODO: remove once Trivy ECR has been setup
 
       - name: Logout of Staging Amazon ECR
         if: always()
