@@ -8,6 +8,10 @@ import { sendEmail } from "@lib/integration/notifyConnector";
 import { TemplateNotFoundError, UserAlreadyHasAccessError } from "../exceptions";
 import { inviteToForms } from "../emailTemplates/inviteToForms";
 import { inviteToCollaborate } from "../emailTemplates/inviteToCollaborate";
+import { mockAppUser } from "./fixtures/AppUser";
+import { mockTemplateWithUsers } from "./fixtures/TemplateWithUsers";
+import { mockInvitation } from "./fixtures/Invitation";
+import { mockUser } from "./fixtures/User";
 // import { ownerAddedNotification } from "@lib/invitations/emailTemplates/ownerAddedNotification";
 
 jest.mock("@lib/integration/prismaConnector");
@@ -31,38 +35,11 @@ describe("Invitations", () => {
 
   describe("inviteUserByEmail", () => {
     it("should throw UserAlreadyHasAccessError if user already has access", async () => {
-      (getUser as jest.MockedFunction<typeof getUser>).mockResolvedValue({
-        id: "1",
-        email: "test@cds-snc.ca",
-        name: "test",
-        privileges: [],
-        active: true,
-      });
+      (getUser as jest.MockedFunction<typeof getUser>).mockResolvedValue(mockAppUser());
 
       (
         getTemplateWithAssociatedUsers as jest.MockedFunction<typeof getTemplateWithAssociatedUsers>
-      ).mockResolvedValue({
-        formRecord: {
-          id: "form-id",
-          name: "form-name",
-          form: {
-            titleEn: "form-name",
-            titleFr: "form-name",
-            id: "form-id",
-            layout: [],
-            elements: [],
-          },
-          isPublished: false,
-          securityAttribute: "Unclassified",
-        },
-        users: [
-          {
-            id: "1",
-            name: "test",
-            email: "test@cds-snc.ca",
-          },
-        ],
-      });
+      ).mockResolvedValue(mockTemplateWithUsers());
 
       await expect(
         inviteUserByEmail(mockAbility, "test@cds-snc.ca", "form-id", "message")
@@ -80,35 +57,27 @@ describe("Invitations", () => {
     });
 
     it("should invite a user who doesn't have a Forms account", async () => {
-      (getUser as jest.MockedFunction<typeof getUser>).mockResolvedValueOnce({
-        id: "1",
-        email: "sender@cds-snc.ca",
-        name: "sender",
-        privileges: [],
-        active: true,
-      }); // sender
+      (getUser as jest.MockedFunction<typeof getUser>).mockResolvedValueOnce(
+        mockAppUser({
+          email: "sender@cds-snc.ca",
+          name: "sender",
+        })
+      ); // sender
 
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      (getTemplateWithAssociatedUsers as jest.MockedFunction<any>).mockResolvedValueOnce({
-        formRecord: {
-          id: "form-id",
-          name: "form-name",
-        },
-        users: [],
-      });
+      (
+        getTemplateWithAssociatedUsers as jest.MockedFunction<typeof getTemplateWithAssociatedUsers>
+      ).mockResolvedValueOnce(mockTemplateWithUsers());
 
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      (prismaMock.invitation.create as jest.MockedFunction<any>).mockResolvedValueOnce({
-        id: "invitation-id",
-        email: "invited@cds-snc.ca",
-      });
+      (prismaMock.invitation.create as jest.Mock).mockResolvedValueOnce(
+        mockInvitation({
+          email: "invited@cds-snc.ca",
+        })
+      );
 
       // invitee does not have an account
-      prisma.user.findFirst.mockResolvedValueOnce(null);
+      (prisma.user.findFirst as jest.Mock).mockResolvedValueOnce(null);
 
-      (inviteToForms as jest.MockedFunction<typeof inviteToForms>).mockReturnValue(
-        "email contents"
-      );
+      (inviteToForms as jest.Mock).mockReturnValue("email contents");
 
       await inviteUserByEmail(mockAbility, "invited@cds-snc.ca", "form-id", "message");
 
@@ -132,46 +101,27 @@ describe("Invitations", () => {
       );
     });
 
-    it("should invite a user who already has an account by email", async () => {
-      (getUser as jest.MockedFunction<typeof getUser>).mockResolvedValueOnce({
-        id: "1",
-        email: "sender@cds-snc.ca",
-        name: "sender",
-        privileges: [],
-        active: true,
-      }); // sender
+    it("should invite a user who already has an account", async () => {
+      (getUser as jest.MockedFunction<typeof getUser>).mockResolvedValueOnce(
+        mockAppUser({
+          email: "sender@cds-snc.ca",
+          name: "sender",
+        })
+      ); // sender
 
       (
         getTemplateWithAssociatedUsers as jest.MockedFunction<typeof getTemplateWithAssociatedUsers>
-      ).mockResolvedValueOnce({
-        formRecord: {
-          id: "form-id",
-          name: "form-name",
-          isPublished: false,
-          securityAttribute: "Unclassified",
-          form: {
-            titleEn: "form-name",
-            titleFr: "form-name",
-            id: "form-id",
-            layout: [],
-            elements: [],
-          },
-        },
-        users: [],
-      });
+      ).mockResolvedValueOnce(mockTemplateWithUsers());
 
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      (prismaMock.invitation.create as jest.MockedFunction<any>).mockResolvedValueOnce({
-        id: "invitation-id",
-        email: "invited@cds-snc.ca",
-      });
+      (prismaMock.invitation.create as jest.MockedFunction<any>).mockResolvedValueOnce(
+        mockInvitation({
+          email: "invited@cds-snc.ca",
+        })
+      );
 
       // invitee does not have an account
-      prisma.user.findFirst.mockResolvedValueOnce({
-        id: "2",
-        email: "invited@cds-snc.ca",
-        name: "invited",
-      });
+      prismaMock.user.findFirst.mockResolvedValueOnce(mockUser());
 
       (inviteToCollaborate as jest.MockedFunction<typeof inviteToCollaborate>).mockReturnValue(
         "email contents"
@@ -191,6 +141,62 @@ describe("Invitations", () => {
       expect(sendEmail).toHaveBeenCalledTimes(1);
       expect(sendEmail).toHaveBeenCalledWith("invited@cds-snc.ca", expect.any(Object));
     });
+
+    // it("should reinvite a user whose invitation has expired", async () => {
+    //   (getUser as jest.MockedFunction<typeof getUser>).mockResolvedValueOnce({
+    //     id: "1",
+    //     email: "sender@cds-snc.ca",
+    //     name: "sender",
+    //     privileges: [],
+    //     active: true,
+    //   }); // sender
+
+    //   (
+    //     getTemplateWithAssociatedUsers as jest.MockedFunction<typeof getTemplateWithAssociatedUsers>
+    //   ).mockResolvedValueOnce({
+    //     formRecord: {
+    //       id: "form-id",
+    //       name: "form-name",
+    //       isPublished: false,
+    //       securityAttribute: "Unclassified",
+    //       form: {
+    //         titleEn: "form-name",
+    //         titleFr: "form-name",
+    //         id: "form-id",
+    //         layout: [],
+    //         elements: [],
+    //       },
+    //     },
+    //     users: [],
+    //   });
+
+    //   // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    //   (prismaMock.invitation.create as jest.MockedFunction<any>).mockResolvedValueOnce({
+    //     id: "invitation-id",
+    //     email: "invited@cds-snc.ca",
+    //   });
+
+    //   // invitee does not have an account
+    //   prismaMock.user.findFirst.mockResolvedValueOnce(null);
+
+    //   (inviteToCollaborate as jest.MockedFunction<typeof inviteToCollaborate>).mockReturnValue(
+    //     "email contents"
+    //   );
+
+    //   await inviteUserByEmail(mockAbility, "invited@cds-snc.ca", "form-id", "message");
+
+    //   expect(prisma.invitation.create).toHaveBeenCalledTimes(1);
+    //   expect(inviteToCollaborate).toHaveBeenCalledTimes(1);
+    //   expect(inviteToCollaborate).toHaveBeenCalledWith(
+    //     "sender",
+    //     "message",
+    //     "form-name",
+    //     expect.stringContaining("forms"),
+    //     expect.stringContaining("forms")
+    //   );
+    //   expect(sendEmail).toHaveBeenCalledTimes(1);
+    //   expect(sendEmail).toHaveBeenCalledWith("invited@cds-snc.ca", expect.any(Object));
+    // });
   });
 
   describe("acceptInvitation", () => {
