@@ -5,32 +5,9 @@
   }
 }
 
-:root {
-  --gcds-label-font-desktop: 600 1.25rem / 120% "Noto Sans", sans-serif;
-  --gcds-checkbox-check-border-width: 0.3125rem;
-  --gcds-checkbox-check-height: 1.5rem;
-  --gcds-checkbox-check-left: 1rem;
-  --gcds-checkbox-check-top: 0.5625rem;
-  --gcds-checkbox-check-width: 0.9375rem;
-  --gcds-checkbox-danger-border: #d3080c;
-  --gcds-checkbox-default-text: #333;
-  --gcds-checkbox-disabled-background: #d6d9dd;
-  --gcds-checkbox-disabled-border: #545961;
-  --gcds-checkbox-disabled-text: #545961;
-  --gcds-checkbox-error-padding: 0 0 0 3.75rem;
-  --gcds-checkbox-focus-background: #fff;
-  --gcds-checkbox-focus-box-shadow: 0 0 0 0.125rem #fff;
-  --gcds-checkbox-focus-text: #0535d2;
-  --gcds-checkbox-focus-outline-width: 0.1875rem;
-  --gcds-checkbox-font: 400 1.25rem/120% "Noto Sans", sans-serif;
-  --gcds-checkbox-input-border-radius: 0.1875rem;
-  --gcds-checkbox-input-border-width: 0.125rem;
-  --gcds-checkbox-input-height-and-width: 3rem;
-  --gcds-checkbox-label-padding: 0 0 0 3.75rem;
-  --gcds-checkbox-margin: 0 0 1.125rem;
-  --gcds-checkbox-max-width: 46.5rem;
-  --gcds-checkbox-padding: 0.75rem;
-}
+// Import CSS variables from gcds-tokens
+@import '../node_modules/@cdssnc/gcds-tokens/build/web/css/components/label.css';
+@import '../node_modules/@cdssnc/gcds-tokens/build/web/css/components/checkbox.css';
 
 .gc-fieldset ul {
   @apply mb-14;
@@ -390,7 +367,10 @@ See: https://design-system.alpha.canada.ca/en/components/checkbox/
 
   .checkbox-label-text {
     width: auto !important;
-    font-weight: 600;
+    font: var(--gcds-label-font-desktop);
+    @apply font-noto-sans;
+    -webkit-font-smoothing: antialiased;
+    text-rendering:optimizeLegibility;
   }
 }
 

@@ -2322,6 +2322,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@cdssnc/gcds-tokens@npm:^1.19.1":
+  version: 1.19.1
+  resolution: "@cdssnc/gcds-tokens@npm:1.19.1"
+  checksum: 10c0/1f680bb89ee87df7c92617ce995ad2bfa064eff72d625df51d1bce6436021334561b3de6ddfd47b1a77bb578ae39bbf003a2a5ac7ca92406674ffbd2f3061f22
+  languageName: node
+  linkType: hard
+
 "@colors/colors@npm:1.5.0":
   version: 1.5.0
   resolution: "@colors/colors@npm:1.5.0"
@@ -12730,6 +12737,7 @@ __metadata:
     "@babel/core": "npm:^7.23.6"
     "@babel/preset-typescript": "npm:^7.24.7"
     "@casl/ability": "npm:6.5.0"
+    "@cdssnc/gcds-tokens": "npm:^1.19.1"
     "@headlessui/react": "npm:^1.7.18"
     "@jest/globals": "npm:^29.7.0"
     "@lexical/react": "npm:^0.12.6"
