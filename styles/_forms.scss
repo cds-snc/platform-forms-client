@@ -140,6 +140,10 @@
   @apply md:text-xs text-gray-text mb-3 text-sm w-3/4 xl:w-full;
 }
 
+.gc-formview .gc-richText p:has(+ ul, + ol) {
+  @apply mb-10; // Reset the margin for .gc-formview
+}
+
 .gc-richText {
   p {
     @extend .gc-p;
@@ -153,6 +157,13 @@
   ul,
   ol {
     @apply mb-10;
+  }
+
+  ul,
+  ol {
+    p {
+      @apply mb-1;
+    }
   }
 
   ul,
