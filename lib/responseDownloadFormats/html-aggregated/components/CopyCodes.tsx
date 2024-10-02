@@ -1,7 +1,7 @@
 import React from "react";
 import { customTranslate } from "../../../i18nHelpers";
 import { getOrigin } from "@lib/origin";
-import { Button } from "@clientComponents/globals";
+import { themes } from "@clientComponents/globals/Buttons/themes";
 
 export const CopyCodes = ({
   confirmationCodes,
@@ -18,13 +18,14 @@ export const CopyCodes = ({
 
   return (
     <div className="flex flex-row gap-4">
-      <Button
+      <button
+        className={`${themes.base} ${themes.primary}`}
         id={`copyCodeButton${capitalizedLang}`}
         aria-labelledby={`confirmReceiptInfo${capitalizedLang}`}
         data-clipboard-text={confirmationCodes}
       >
         {t("responseAggregatedTemplate.copyCodes.copyButton", { lng: lang })}
-      </Button>
+      </button>
       <br />
       <div
         id={`copyCodeOutput${capitalizedLang}`}

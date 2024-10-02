@@ -3,7 +3,7 @@ import { Form, Submission } from "../../types";
 import { ColumnTable } from "./ColumnTable";
 import { RowTable } from "./RowTable";
 import { customTranslate, getProperty } from "@lib/i18nHelpers";
-import { Button } from "@clientComponents/globals";
+import { themes } from "@clientComponents/globals/Buttons/themes";
 
 export interface ResponseSectionProps {
   confirmReceiptCode: string;
@@ -136,13 +136,14 @@ export const ResponseSection = ({
       </h3>
       <p className="mt-8">{t("responseTemplate.rowTableInfo", { lng: lang })}</p>
       <div className="mb-8 mt-4">
-        <Button
+        <button
+          className={`${themes.base} ${themes.primary}`}
           id={`copyResponseButton${capitalizedLang}`}
           aria-labelledby={`copyResponseLabel${capitalizedLang}`}
           data-clipboard-text=""
         >
           {t("responseTemplate.copyResponse", { lng: lang })}
-        </Button>
+        </button>
         <span
           id={`copyResponseOutput${capitalizedLang}`}
           aria-live="polite"
@@ -167,13 +168,14 @@ export const ResponseSection = ({
         {confirmReceiptCode}
       </div>
       <div className="mb-32 mt-4">
-        <Button
+        <button
+          className={`${themes.base} ${themes.primary}`}
           id={`copyCodeButton${capitalizedLang}`}
           aria-labelledby={`confirmReceiptInfo${capitalizedLang}`}
           data-clipboard-text={confirmReceiptCode}
         >
           {t("responseTemplate.copyCode", { lng: lang })}
-        </Button>
+        </button>
         <span
           id={`copyCodeOutput${capitalizedLang}`}
           aria-live="polite"
