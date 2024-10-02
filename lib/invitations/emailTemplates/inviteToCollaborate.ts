@@ -21,7 +21,7 @@ ${senderName} shared form ${templateName} with you.
 
 ${message}
 
-[Open ${templateName}](${formUrlEn})
+[Accept invitation](${formUrlEn})
 
 ===
 
@@ -29,5 +29,5 @@ ${senderName} shared form ${templateName} with you.
 
 ${message}
 
-[Open ${templateName}](${formUrlFr})
+[Accept invitation](${formUrlFr})
 `;

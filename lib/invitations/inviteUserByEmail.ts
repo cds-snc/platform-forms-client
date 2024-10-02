@@ -143,8 +143,8 @@ const _sendInvitationEmail = async (
 
   // User exists, send invitation to form
   if (user) {
-    const formUrlEn = `${HOST}/en/form-builder/${invitation.templateId}`;
-    const formUrlFr = `${HOST}/fr/form-builder/${invitation.templateId}`;
+    const formUrlEn = `${HOST}/en/forms`;
+    const formUrlFr = `${HOST}/fr/forms`;
 
     const emailContent = inviteToCollaborate(
       sender.name || "",
