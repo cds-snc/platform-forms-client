@@ -30,12 +30,62 @@ describe("Invitations", () => {
   });
 
   describe("inviteUserByEmail", () => {
+    it("should throw UserAlreadyHasAccessError if user already has access", async () => {
+      (getUser as jest.MockedFunction<typeof getUser>).mockResolvedValue({
+        id: "1",
+        email: "test@cds-snc.ca",
+        name: "test",
+        privileges: [],
+        active: true,
+      });
+
+      (
+        getTemplateWithAssociatedUsers as jest.MockedFunction<typeof getTemplateWithAssociatedUsers>
+      ).mockResolvedValue({
+        formRecord: {
+          id: "form-id",
+          name: "form-name",
+          form: {
+            titleEn: "form-name",
+            titleFr: "form-name",
+            id: "form-id",
+            layout: [],
+            elements: [],
+          },
+          isPublished: false,
+          securityAttribute: "Unclassified",
+        },
+        users: [
+          {
+            id: "1",
+            name: "test",
+            email: "test@cds-snc.ca",
+          },
+        ],
+      });
+
+      await expect(
+        inviteUserByEmail(mockAbility, "test@cds-snc.ca", "form-id", "message")
+      ).rejects.toThrow(UserAlreadyHasAccessError);
+    });
+
+    it("should throw TemplateNotFoundError if template is not found", async () => {
+      (
+        getTemplateWithAssociatedUsers as jest.MockedFunction<typeof getTemplateWithAssociatedUsers>
+      ).mockResolvedValue(null);
+
+      await expect(
+        inviteUserByEmail(mockAbility, "test@example.com", "form-id", "message")
+      ).rejects.toThrow(TemplateNotFoundError);
+    });
+
     it("should invite a user who doesn't have a Forms account", async () => {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      (getUser as jest.MockedFunction<any>).mockResolvedValueOnce({
+      (getUser as jest.MockedFunction<typeof getUser>).mockResolvedValueOnce({
         id: "1",
         email: "sender@cds-snc.ca",
         name: "sender",
+        privileges: [],
+        active: true,
       }); // sender
 
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -83,18 +133,29 @@ describe("Invitations", () => {
     });
 
     it("should invite a user who already has an account by email", async () => {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      (getUser as jest.MockedFunction<any>).mockResolvedValueOnce({
+      (getUser as jest.MockedFunction<typeof getUser>).mockResolvedValueOnce({
         id: "1",
         email: "sender@cds-snc.ca",
         name: "sender",
+        privileges: [],
+        active: true,
       }); // sender
 
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      (getTemplateWithAssociatedUsers as jest.MockedFunction<any>).mockResolvedValueOnce({
+      (
+        getTemplateWithAssociatedUsers as jest.MockedFunction<typeof getTemplateWithAssociatedUsers>
+      ).mockResolvedValueOnce({
         formRecord: {
           id: "form-id",
           name: "form-name",
+          isPublished: false,
+          securityAttribute: "Unclassified",
+          form: {
+            titleEn: "form-name",
+            titleFr: "form-name",
+            id: "form-id",
+            layout: [],
+            elements: [],
+          },
         },
         users: [],
       });
@@ -129,40 +190,6 @@ describe("Invitations", () => {
       );
       expect(sendEmail).toHaveBeenCalledTimes(1);
       expect(sendEmail).toHaveBeenCalledWith("invited@cds-snc.ca", expect.any(Object));
-    });
-
-    it("should throw UserAlreadyHasAccessError if user already has access", async () => {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      (getUser as jest.MockedFunction<any>).mockResolvedValue({
-        id: "1",
-        email: "test@cds-snc.ca",
-      });
-
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      (getTemplateWithAssociatedUsers as jest.MockedFunction<any>).mockResolvedValue({
-        formRecord: {
-          id: "form-id",
-          name: "form-name",
-        },
-        users: [
-          {
-            email: "test@cds-snc.ca",
-          },
-        ],
-      });
-
-      await expect(
-        inviteUserByEmail(mockAbility, "test@cds-snc.ca", "form-id", "message")
-      ).rejects.toThrow(UserAlreadyHasAccessError);
-    });
-
-    it("should throw TemplateNotFoundError if template is not found", async () => {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      (getTemplateWithAssociatedUsers as jest.MockedFunction<any>).mockResolvedValue(null);
-
-      await expect(
-        inviteUserByEmail(mockAbility, "test@example.com", "form-id", "message")
-      ).rejects.toThrow(TemplateNotFoundError);
     });
   });
 
