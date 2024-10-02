@@ -136,9 +136,9 @@ export const POST = middleware([validAuthorizationHeader()], async (req, props) 
     });
   }
 
-  if (deliveryStatus === "permanent-failure") {
+  if (deliveryStatus === "technical-failure" || deliveryStatus === "permanent-failure") {
     logMessage.warn(
-      `HealthCheck Notify Callback: Form submission ${submissionID} will never be delivered because of a permanent failure (GC Notify)`
+      `HealthCheck Notify Callback: Form submission ${submissionID} will never be delivered because of a ${deliveryStatus} (GC Notify)`
     );
     await removeProcessedMark(submissionID);
     return NextResponse.json({
