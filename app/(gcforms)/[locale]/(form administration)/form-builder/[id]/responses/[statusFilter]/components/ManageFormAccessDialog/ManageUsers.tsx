@@ -214,7 +214,7 @@ export const ManageUsers = () => {
                   {hasOwnProperty(user, "expired") ? (
                     <div>
                       <div className="flex flex-row gap-1">
-                        <span>{t("invited")}</span>
+                        <span>{user.expired ? t("expired") : t("invited")}</span>
                         <div className="inline-block">
                           <button onClick={() => handleResendInvitation(user.email)}>
                             <RefreshIcon title={t("resend")} />
@@ -232,6 +232,7 @@ export const ManageUsers = () => {
                   ) : (
                     <div>
                       {/* Disable delete for current user or only remaining user */}
+                      {/* @TODO: fix this it counts invited same as owners */}
                       {loggedInUserEmail === user.email || usersWithAccess.length <= 1 ? (
                         <span></span>
                       ) : (

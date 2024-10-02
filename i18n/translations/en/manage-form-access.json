@@ -10,6 +10,7 @@
   "downloadForm": "Download form",
   "emailAlreadyInList": "{{email}} is already in the list",
   "error": "There has been an error.",
+  "expired": "Expired",
   "invalidEmail": "{{email}} is an invalid email address",
   "invitationFailed": "Unable to send invitation to {{email}}",
   "invitationSent": "Invitation sent",
