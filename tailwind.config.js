@@ -51,7 +51,7 @@ module.exports = {
         red: {
           DEFAULT: "#b10e1e",
           default: "#b10e1e",
-          100: tokens.T,
+          100: "#f3e9e8",
           destructive: "#BC3331",
           required: "#D3080C", // DTO requirement for required labels
           hover: "#892406",
