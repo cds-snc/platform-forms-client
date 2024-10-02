@@ -1,6 +1,10 @@
 /** @type {import('tailwindcss').Config} */
 const colors = require("tailwindcss/colors");
 
+import tokens from "@cdssnc/gcds-tokens/build/figma/figma.tokens.json";
+
+const { red, green, blue, grayscale } = tokens.Tokens.color;
+
 module.exports = {
   theme: {
     extend: {
@@ -47,7 +51,7 @@ module.exports = {
         red: {
           DEFAULT: "#b10e1e",
           default: "#b10e1e",
-          100: "#f3e9e8",
+          100: tokens.T,
           destructive: "#BC3331",
           required: "#D3080C", // DTO requirement for required labels
           hover: "#892406",
@@ -134,32 +138,32 @@ module.exports = {
         // see: https://design-system.alpha.canada.ca/en/styles/colour/
         gcds: {
           gray: {
-            50: "#F1F2F3",
-            100: "#D6D9DD",
-            300: "#A8ADB4",
-            500: "#7D828B",
-            700: "#545961",
-            800: "#43474E",
-            1000: "#000",
+            50: grayscale[50].value,
+            100: grayscale[100].value,
+            300: grayscale[300].value,
+            500: grayscale[500].value,
+            700: grayscale[700].value,
+            800: grayscale[800].value,
+            1000: grayscale[1000].value,
           },
           blue: {
-            100: "#D7E5F5",
-            500: "#6584A6",
-            700: "#33465C",
-            800: "#2B4380",
-            850: "#0535D2",
-            900: "#26374A",
+            100: blue[100].value,
+            500: blue[500].value,
+            700: blue[700].value,
+            800: blue[800].value,
+            850: blue[850].value,
+            900: blue[900].value,
           },
           green: {
-            100: "#E6F6EC",
-            500: "#289F58",
-            700: "#03662A",
+            100: green[100].value,
+            500: green[500].value,
+            700: green[700].value,
           },
           red: {
-            100: "#FBDDDA",
-            500: "#D3080C",
-            700: "#A62A1E",
-            900: "#822117",
+            100: red[100].value,
+            500: red[500].value,
+            700: red[700].value,
+            900: red[900].value,
           },
         },
       },
