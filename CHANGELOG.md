@@ -5,6 +5,37 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.22.0](https://github.com/cds-snc/platform-forms-client/compare/v3.21.2...v3.22.0) (2024-10-03)
+
+
+### Features
+
+* client feature flags ([#4302](https://github.com/cds-snc/platform-forms-client/issues/4302)) ([c8ee651](https://github.com/cds-snc/platform-forms-client/commit/c8ee6514850acc1ae6407d74dcccbb796ef925f9))
+* GC Forms adminstrators can access API settings ([#4306](https://github.com/cds-snc/platform-forms-client/issues/4306)) ([b22ac40](https://github.com/cds-snc/platform-forms-client/commit/b22ac403fc8d87845b92ebfc1ba1e3b22fec1f32))
+* Repeating sets ([#4263](https://github.com/cds-snc/platform-forms-client/issues/4263)) ([0f9431a](https://github.com/cds-snc/platform-forms-client/commit/0f9431a01ecec891e0c11fc7d49120bb28d8f75e))
+* treat technical-failure as permanent when receiving callback from GCNotify ([#4336](https://github.com/cds-snc/platform-forms-client/issues/4336)) ([bfd702f](https://github.com/cds-snc/platform-forms-client/commit/bfd702f0c3895b98fe15003ab0c2e7af948105ef))
+
+
+### Bug Fixes
+
+* allow generate SBOM step to fail ([#4348](https://github.com/cds-snc/platform-forms-client/issues/4348)) ([53e258d](https://github.com/cds-snc/platform-forms-client/commit/53e258d58f3eadafe46d4cc4cf2c3fdcd6a486f5))
+* drag and drop for elements for start group ([#4284](https://github.com/cds-snc/platform-forms-client/issues/4284)) ([ae00c5a](https://github.com/cds-snc/platform-forms-client/commit/ae00c5aa5d4f763bbcf60d0cd8cdd3c554112350))
+* Only restrict API Settings in Production ([#4330](https://github.com/cds-snc/platform-forms-client/issues/4330)) ([e8904f0](https://github.com/cds-snc/platform-forms-client/commit/e8904f07e7b216e1e922fb91bce12333ad0bf408))
+* Repeating set sub element panel actions ([#4346](https://github.com/cds-snc/platform-forms-client/issues/4346)) ([f670316](https://github.com/cds-snc/platform-forms-client/commit/f67031614a7e58c014b4b06ac1185623ec8febc8))
+* sub element modal ([#4347](https://github.com/cds-snc/platform-forms-client/issues/4347)) ([5894b7f](https://github.com/cds-snc/platform-forms-client/commit/5894b7f9f98ea105fdc415fd4958e42e93d78fc3))
+* Zitadel Access Token expiring too soon ([#4290](https://github.com/cds-snc/platform-forms-client/issues/4290)) ([bd1531a](https://github.com/cds-snc/platform-forms-client/commit/bd1531a5916a5ddca0607222511ed530bfdd7829))
+
+
+### Miscellaneous Chores
+
+* Add flag for repeating sets ([#4329](https://github.com/cds-snc/platform-forms-client/issues/4329)) ([2402521](https://github.com/cds-snc/platform-forms-client/commit/24025211c7fbaa0a24f84265ad44f0567540f5b1))
+* Add GCDS Tokens ([#4349](https://github.com/cds-snc/platform-forms-client/issues/4349)) ([abd965d](https://github.com/cds-snc/platform-forms-client/commit/abd965d8a50bc4b9c2bbba89a07e2f1e38d2a11b))
+* Hard code conditional logic feature to on ([#4321](https://github.com/cds-snc/platform-forms-client/issues/4321)) ([8739ff2](https://github.com/cds-snc/platform-forms-client/commit/8739ff283b7b5470f43bef3b5d9fd43f72a96be3))
+* Move types for flags ([#4332](https://github.com/cds-snc/platform-forms-client/issues/4332)) ([6a168ab](https://github.com/cds-snc/platform-forms-client/commit/6a168abb8982468f5eb6408cced4f9653d1ccb9b))
+* package update for react complex tree ([#4295](https://github.com/cds-snc/platform-forms-client/issues/4295)) ([fc2d462](https://github.com/cds-snc/platform-forms-client/commit/fc2d4624695c8621e094cf490c9c9f5d663d327d))
+* remove flag for experimental blocks ([#4331](https://github.com/cds-snc/platform-forms-client/issues/4331)) ([48955ec](https://github.com/cds-snc/platform-forms-client/commit/48955ec51359d15a344c34e9a6969adab762e64e))
+* update editor margins and form output for lists ([#4292](https://github.com/cds-snc/platform-forms-client/issues/4292)) ([54130ac](https://github.com/cds-snc/platform-forms-client/commit/54130ac0c658d59f611285f8363e3914f9c973ae))
+
 ## [3.21.2](https://github.com/cds-snc/platform-forms-client/compare/v3.21.1...v3.21.2) (2024-09-18)
 
 
