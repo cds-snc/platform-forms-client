@@ -12,6 +12,7 @@ import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
 import "react-tabs/style/react-tabs.css";
 import FormAccess from "@clientComponents/admin/FormAccess/FormAccess";
 import { getLocalizedProperty } from "@lib/utils";
+import { redirect } from "next/navigation";
 
 interface FormSettingsProps {
   form: FormRecord;
@@ -75,9 +76,7 @@ const FormSettings = (props: FormSettingsProps): React.ReactElement => {
               theme="destructive"
               onClick={() => {
                 handleDelete(formRecord.id);
-                // @todo handle redirect to view-templates page
-
-                // /admin/view-templates
+                redirect("/admin/view-templates");
               }}
             />
           </div>
