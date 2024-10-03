@@ -1,7 +1,7 @@
+import tokens from "@cdssnc/gcds-tokens/build/figma/figma.tokens.json";
+
 /** @type {import('tailwindcss').Config} */
 const colors = require("tailwindcss/colors");
-
-import tokens from "@cdssnc/gcds-tokens/build/figma/figma.tokens.json";
 
 const { red, green, blue, grayscale } = tokens.Tokens.color;
 
