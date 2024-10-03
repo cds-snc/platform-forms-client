@@ -17,7 +17,7 @@ See: https://design-system.alpha.canada.ca/en/components/checkbox/
       outline-offset: var(--gcds-checkbox-input-border-width);
       box-shadow: var(--gcds-checkbox-focus-box-shadow);
       background: var(--gcds-checkbox-focus-background);
-      border-color: theme("colors.gcds.blue.850");
+      border-color: theme("colors.gcds.blue.850") !important;
       transition: border-color ease-in-out 0.15s, box-shadow ease-in-out 0.15s,
         outline ease-in-out 0.15s;
     }
