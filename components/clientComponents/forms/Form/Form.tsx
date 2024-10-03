@@ -15,7 +15,7 @@ import { submitForm } from "app/(gcforms)/[locale]/(form filler)/id/[...props]/a
 import useFormTimer from "@lib/hooks/useFormTimer";
 import { useFormValuesChanged } from "@lib/hooks/useValueChanged";
 import { useGCFormsContext } from "@lib/hooks/useGCFormContext";
-import { Review } from "../Review/Review";
+import { getReviewItemElements, Review } from "../Review/Review";
 import { LockedSections } from "@formBuilder/components/shared/right-panel/treeview/types";
 import { BackButton } from "@formBuilder/[id]/preview/BackButton";
 import { Language } from "@lib/types/form-builder-types";
@@ -24,7 +24,7 @@ import {
   removeFormContextValues,
   getInputHistoryValues,
 } from "@lib/utils/form-builder/groupsHistory";
-import { filterShownElements, filterValuesByShownElements } from "@lib/formContext";
+import { filterShownElements, filterValuesByShownElements, Group } from "@lib/formContext";
 import { formHasGroups } from "@lib/utils/form-builder/formHasGroups";
 import { showReviewPage } from "@lib/utils/form-builder/showReviewPage";
 
@@ -155,7 +155,15 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
   const [canFocusOnError, setCanFocusOnError] = useState(false);
   const [lastSubmitCount, setLastSubmitCount] = useState(-1);
 
-  const { currentGroup, groupsCheck, getGroupTitle, matchedIds } = useGCFormsContext();
+  const {
+    currentGroup,
+    groupsCheck,
+    getGroupTitle,
+    matchedIds,
+    getGroupHistory,
+    getValues,
+    groups,
+  } = useGCFormsContext();
   const isGroupsCheck = groupsCheck(props.allowGrouping);
   const isShowReviewPage = showReviewPage(form);
   const showIntro = isGroupsCheck ? currentGroup === LockedSections.START : true;
@@ -190,11 +198,31 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
   }, [formStatusError, errorList, lastSubmitCount, canFocusOnError]);
 
   const hasGroups = formHasGroups(form) && props.allowGrouping;
-  const groupElements = filterShownElements(form.elements, matchedIds as string[]);
 
-  const filterByTheseElements = hasGroups ? groupElements : form.elements;
+  const formValues = getValues() || {};
+  const groupHistory = getGroupHistory();
+  // Potential future performance optimization. A useMemo is pointless because formValues changes
+  // on each input change (keypress etc.). Ideally only calculate when submit is active.
+  //
+  // TODO: move into SubmitButton component?
+  const groupHistoryElements = groupHistory
+    .map((groupId) => {
+      if (!groups) return [];
+      const group: Group = groups[groupId as keyof typeof groups] || {};
+      const reviewElements = getReviewItemElements(
+        group.elements,
+        form.elements,
+        matchedIds,
+        formValues,
+        language
+      );
+      return reviewElements.map((reviewElement) => reviewElement.element);
+    })
+    .flat();
+
+  const filterByTheseElements = hasGroups ? groupHistoryElements : form.elements;
   const numberOfRequiredQuestions = filterByTheseElements.filter(
-    (element) => element.properties.validation?.required === true
+    (element) => element?.properties.validation?.required === true
   ).length;
 
   return status === "submitting" ? (

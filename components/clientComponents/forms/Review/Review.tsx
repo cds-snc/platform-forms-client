@@ -61,7 +61,8 @@ function formatElementValues(element: ReviewElement) {
   return String(element.values);
 }
 
-function getReviewItemElements(
+// TODO: move into a helper file?
+export function getReviewItemElements(
   groupElements: string[],
   formElements: FormElement[],
   matchedIds: string[],
