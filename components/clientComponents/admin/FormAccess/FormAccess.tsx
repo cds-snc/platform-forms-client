@@ -1,5 +1,5 @@
 "use client";
-import { Button } from "@clientComponents/forms";
+import { Button } from "@clientComponents/globals";
 import { logMessage } from "@lib/logger";
 import Loader from "@clientComponents/globals/Loader";
 import axios from "axios";
@@ -155,7 +155,7 @@ const FormAccess = (props: FormAccessProps): React.ReactElement => {
               defaultValue={newEmail}
               aria-label={t("settings.formAccess.addEmailAriaLabel")}
             />
-            <Button type="submit" disabled={newEmail === ""} testid="add-email">
+            <Button type="submit" disabled={newEmail === ""} dataTestId="add-email">
               {t("settings.formAccess.addEmailButton")}
             </Button>
           </form>

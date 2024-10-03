@@ -1,6 +1,7 @@
 import React from "react";
 import { customTranslate } from "../../../i18nHelpers";
 import { getOrigin } from "@lib/origin";
+import { themes } from "@clientComponents/globals/Buttons/themes";
 
 export const CopyCodes = ({
   confirmationCodes,
@@ -18,9 +19,8 @@ export const CopyCodes = ({
   return (
     <div className="flex flex-row gap-4">
       <button
+        className={`${themes.base} ${themes.primary}`}
         id={`copyCodeButton${capitalizedLang}`}
-        className="gc-button--blue"
-        type="button"
         aria-labelledby={`confirmReceiptInfo${capitalizedLang}`}
         data-clipboard-text={confirmationCodes}
       >

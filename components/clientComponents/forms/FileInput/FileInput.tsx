@@ -7,6 +7,8 @@ import { ErrorMessage } from "@clientComponents/forms";
 import { InputFieldProps } from "@lib/types";
 import { htmlInputAccept } from "@lib/validation/fileValidationClientSide";
 import { CancelIcon } from "@serverComponents/icons";
+import { themes } from "@clientComponents/globals/Buttons/themes";
+import { cn } from "@lib/utils";
 
 interface FileInputProps extends InputFieldProps {
   error?: boolean;
@@ -93,7 +95,7 @@ export const FileInput = (props: FileInputProps): React.ReactElement => {
               e.preventDefault();
             }
           }}
-          className="gc-button gc-button--secondary gc-file-input-upload-button"
+          className={cn(themes.base, themes.secondary, "mr-4")}
           aria-disabled={disabled}
           aria-labelledby="file-input-button-text"
           aria-describedby={`${name}_file_selected ${ariaDescribedBy} ${
