@@ -109,7 +109,7 @@ export const ManageUsers = () => {
 
     setUsersWithAccess(sorted || []);
     setLoading(false);
-  }, [formId]);
+  }, [formId, loggedInUserEmail]);
 
   useEffect(() => {
     fetchUsersWithAccess();
@@ -197,15 +197,18 @@ export const ManageUsers = () => {
 
       <section className="mt-4">
         <h3>{t("peopleWithAccess")}</h3>
-        <div className="max-h-96 overflow-scroll border-1 border-black">
+        <div className="max-h-96 overflow-y-scroll border-1 border-black">
           {loading && <div className="py-10">{t("loading")}</div>}
           {!loading && (
             <>
-              {usersWithAccess.map((user) => (
+              {usersWithAccess.map((user, index) => (
                 <div
                   className={cn(
                     "flex flex-row items-start px-4 py-2",
-                    (loggedInUserEmail === user.email || usersWithAccess.length <= 1) &&
+                    (loggedInUserEmail === user.email ||
+                      (index === 0 &&
+                        usersWithAccess.filter((u) => !hasOwnProperty(u, "expired")).length <=
+                          1)) &&
                       "bg-slate-100 py-4"
                   )}
                   key={user.email}
@@ -232,8 +235,10 @@ export const ManageUsers = () => {
                   ) : (
                     <div>
                       {/* Disable delete for current user or only remaining user */}
-                      {/* @TODO: fix this it counts invited same as owners */}
-                      {loggedInUserEmail === user.email || usersWithAccess.length <= 1 ? (
+                      {loggedInUserEmail === user.email ||
+                      (index === 0 &&
+                        usersWithAccess.filter((u) => !hasOwnProperty(u, "expired")).length <=
+                          1) ? (
                         <span></span>
                       ) : (
                         <ConfirmAction
