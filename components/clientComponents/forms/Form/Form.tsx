@@ -29,12 +29,12 @@ import { formHasGroups } from "@lib/utils/form-builder/formHasGroups";
 import { showReviewPage } from "@lib/utils/form-builder/showReviewPage";
 
 interface SubmitButtonProps {
-  numberOfRequiredQuestions: number;
+  getNumberOfRequiredQuestions: () => number;
   formID: string;
   formTitle: string;
 }
 const SubmitButton: React.FC<SubmitButtonProps> = ({
-  numberOfRequiredQuestions,
+  getNumberOfRequiredQuestions,
   formID,
   formTitle,
 }) => {
@@ -44,15 +44,20 @@ const SubmitButton: React.FC<SubmitButtonProps> = ({
   const screenReaderRemainingTime = useRef(formTimerState.remainingTime);
 
   // TODO: may want to consider a maximum delay
+
   // calculate initial delay for submit timer
   const secondsBaseDelay = 2;
   const secondsPerFormElement = 2;
-  const submitDelaySeconds = secondsBaseDelay + numberOfRequiredQuestions * secondsPerFormElement;
 
   const formTimerEnabled = process.env.NEXT_PUBLIC_APP_ENV !== "test";
 
   // If the timer hasn't started yet, start the timer
-  if (!formTimerState.timerDelay && formTimerEnabled) startTimer(submitDelaySeconds);
+  if (!formTimerState.timerDelay && formTimerEnabled) {
+    // Calculated here to avoid being called on each checkTimer interval
+    const submitDelaySeconds =
+      secondsBaseDelay + getNumberOfRequiredQuestions() * secondsPerFormElement;
+    startTimer(submitDelaySeconds);
+  }
 
   useEffect(() => {
     if (!formTimerEnabled && !formTimerState.canSubmit) {
@@ -197,34 +202,32 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [formStatusError, errorList, lastSubmitCount, canFocusOnError]);
 
-  const hasGroups = formHasGroups(form) && props.allowGrouping;
+  // Calculation done in a callback to allow more opportune calling (performance). An alternative
+  // is to useMemo it but that would be called on every input change making it pointless.
+  const getNumberOfRequriedQuestions = () => {
+    const hasGroups = formHasGroups(form) && props.allowGrouping;
+    const formValues = getValues() || {};
+    const groupHistory = getGroupHistory();
+    const groupHistoryElements = groupHistory
+      .map((groupId) => {
+        if (!groups) return [];
+        const group: Group = groups[groupId as keyof typeof groups] || {};
+        const reviewElements = getReviewItemElements(
+          group.elements,
+          form.elements,
+          matchedIds,
+          formValues,
+          language
+        );
+        return reviewElements.map((reviewElement) => reviewElement.element);
+      })
+      .flat();
 
-  const formValues = getValues() || {};
-  const groupHistory = getGroupHistory();
-  // TODO: Potential for future performance optimization. The challenge is a useMemo is pointless
-  // because formValues changes on each input change. Also moving this calculation into the
-  // SubmitButton would then be called on each checkTimer (every second).
-  // Perhaps this could be passed as a callback into the SubmitButton and only calculated right
-  // before the startTimer is called?
-  const groupHistoryElements = groupHistory
-    .map((groupId) => {
-      if (!groups) return [];
-      const group: Group = groups[groupId as keyof typeof groups] || {};
-      const reviewElements = getReviewItemElements(
-        group.elements,
-        form.elements,
-        matchedIds,
-        formValues,
-        language
-      );
-      return reviewElements.map((reviewElement) => reviewElement.element);
-    })
-    .flat();
-
-  const filterByTheseElements = hasGroups ? groupHistoryElements : form.elements;
-  const numberOfRequiredQuestions = filterByTheseElements.filter(
-    (element) => element?.properties.validation?.required === true
-  ).length;
+    const filterByTheseElements = hasGroups ? groupHistoryElements : form.elements;
+    return filterByTheseElements.filter(
+      (element) => element?.properties.validation?.required === true
+    ).length;
+  };
 
   return status === "submitting" ? (
     <>
@@ -332,7 +335,7 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
                           )}
                         <div className="inline-block">
                           <SubmitButton
-                            numberOfRequiredQuestions={numberOfRequiredQuestions}
+                            getNumberOfRequiredQuestions={getNumberOfRequriedQuestions}
                             formID={formID}
                             formTitle={form.titleEn}
                           />
@@ -343,7 +346,7 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
                 })
               ) : (
                 <SubmitButton
-                  numberOfRequiredQuestions={numberOfRequiredQuestions}
+                  getNumberOfRequiredQuestions={getNumberOfRequriedQuestions}
                   formID={formID}
                   formTitle={form.titleEn}
                 />
