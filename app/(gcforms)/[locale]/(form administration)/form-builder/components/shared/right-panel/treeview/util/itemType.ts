@@ -14,10 +14,11 @@ export const isTitleElementType = (item: TreeItem) => {
 };
 
 export const isSectionElementType = (item: TreeItem) => {
-  return item?.isFolder ? true : false;
+  return item?.isFolder && item.data.type !== "dynamicRow" ? true : false;
 };
 
 export const isFormElementType = (item: TreeItem) => {
+  if (item.data.type === "dynamicRow") return true;
   return item?.isFolder && !isTitleElementType(item) ? false : true;
 };
 

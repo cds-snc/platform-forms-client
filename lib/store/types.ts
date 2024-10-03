@@ -15,9 +15,9 @@ export interface TemplateStoreState extends TemplateStoreProps {
   setHasHydrated: () => void;
   getFocusInput: () => boolean;
   moveUp: (index: number, groupId?: string) => void;
-  subMoveUp: (elIndex: number, subIndex?: number) => void;
+  subMoveUp: (id: number, subIndex: number) => void;
   moveDown: (index: number, groupId?: string) => void;
-  subMoveDown: (elIndex: number, subIndex?: number) => void;
+  subMoveDown: (id: number, subIndex?: number) => void;
   localizeField: {
     <LocalizedProperty extends string>(
       arg: LocalizedProperty,
@@ -39,18 +39,18 @@ export interface TemplateStoreState extends TemplateStoreProps {
     groupId?: string
   ) => Promise<number>;
   addSubItem: (
-    elIndex: number,
+    elId: number,
     subIndex?: number,
     type?: FormElementTypes,
     data?: FormElement
-  ) => void;
+  ) => Promise<number>;
   remove: (id: number, groupId?: string) => void;
   removeSubItem: (elIndex: number, id: number) => void;
   addChoice: (elIndex: number) => void;
   addLabeledChoice: (elIndex: number, label: { en: string; fr: string }) => Promise<number>;
   addSubChoice: (elIndex: number, subIndex: number) => void;
   removeChoice: (elIndex: number, choiceIndex: number) => void;
-  removeSubChoice: (elIndex: number, subIndex: number, choiceIndex: number) => void;
+  removeSubChoice: (elId: number, subIndex: number, choiceIndex: number) => void;
   getChoice: (elIndex: number, choiceIndex: number) => { en: string; fr: string } | undefined;
   updateField: (
     path: string,
@@ -60,7 +60,6 @@ export interface TemplateStoreState extends TemplateStoreProps {
   propertyPath: (id: number, field: string, lang?: Language) => string;
   unsetField: (path: string) => void;
   duplicateElement: (id: number, groupId?: string) => void;
-  subDuplicateElement: (elIndex: number, subIndex: number) => void;
   importTemplate: (jsonConfig: FormProperties) => void;
   getSchema: () => string;
   getIsPublished: () => boolean;

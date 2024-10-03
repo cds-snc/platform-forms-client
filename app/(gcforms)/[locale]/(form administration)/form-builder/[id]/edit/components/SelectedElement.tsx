@@ -146,7 +146,12 @@ export const SelectedElement = ({
     case "combobox":
       if (elIndex !== -1) {
         element = (
-          <SubOptions elIndex={elIndex} item={item} renderIcon={(index) => `${index + 1}.`} />
+          <>
+            <ShortAnswer>{t("addElementDialog.combobox.title")}</ShortAnswer>
+            {!item.properties.managedChoices && (
+              <SubOptions elIndex={elIndex} item={item} renderIcon={(index) => `${index + 1}.`} />
+            )}
+          </>
         );
       } else {
         element = (
