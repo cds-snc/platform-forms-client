@@ -1,0 +1,82 @@
+/* 
+Based on GC Design System Checkbox 
+See: https://design-system.alpha.canada.ca/en/components/checkbox/ 
+*/
+
+@import '../node_modules/@cdssnc/gcds-tokens/build/web/css/components/checkbox.css';
+
+.gc-input-checkbox {
+  position: relative;
+  transition: color ease-in-out 0.15s;
+
+  &:focus-within {
+    color: theme("colors.gcds.blue.850");
+    // Input Box outline focused.
+    .gc-checkbox-label:before {
+      outline: var(--gcds-checkbox-focus-outline-width) solid theme("colors.gcds.blue.850");
+      outline-offset: var(--gcds-checkbox-input-border-width);
+      box-shadow: var(--gcds-checkbox-focus-box-shadow);
+      background: var(--gcds-checkbox-focus-background);
+      border-color: theme("colors.gcds.blue.850");
+      transition: border-color ease-in-out 0.15s, box-shadow ease-in-out 0.15s,
+        outline ease-in-out 0.15s;
+    }
+  }
+
+  /* Html Input  */
+  .gc-input-checkbox__input {
+    @apply md:mr-4 mr-6 absolute bg-white-default border-transparent;
+
+    border-width: var(--gcds-checkbox-input-border-width);
+    width: var(--gcds-checkbox-input-height-and-width);
+    height: var(--gcds-checkbox-input-height-and-width);
+
+    & + .gc-checkbox-label {
+      @apply relative cursor-pointer p-0;
+      display: inline-flex;
+    }
+
+    &:disabled + .gc-checkbox-label {
+      pointer-events: none;
+      opacity: 0.5;
+    }
+
+    // Input Box outline default.
+    & + .gc-checkbox-label:before {
+      content: "";
+      @apply md:mr-4 mr-6 inline-block bg-white-default;
+      width: var(--gcds-checkbox-input-height-and-width);
+      height: var(--gcds-checkbox-input-height-and-width);
+      border: var(--gcds-checkbox-input-border-width) solid theme("colors.black.default");
+      border-radius: var(--gcds-checkbox-input-border-radius);
+    }
+
+    &:focus + .gc-checkbox-label:before {
+      border: var(--gcds-checkbox-input-border-width) solid theme("colors.gcds.blue.850");
+    }
+
+    // Checkmark icon.
+    &:checked + .gc-checkbox-label:after {
+      content: "";
+      position: absolute;
+      border: var(--gcds-checkbox-check-border-width) solid currentcolor;
+      border-inline-start: 0 !important;
+      border-block-start: 0 !important;
+      height: var(--gcds-checkbox-check-height);
+      width: var(--gcds-checkbox-check-width);
+      left: var(--gcds-checkbox-check-left);
+      opacity: 1;
+      top: var(--gcds-checkbox-check-top);
+      transform: rotate(40deg);
+      transition: opacity 0.2s ease-in-out;
+    }
+  }
+
+  .checkbox-label-text {
+    width: auto !important;
+    font: var(--gcds-label-font-desktop);
+    @apply font-noto-sans;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+}
