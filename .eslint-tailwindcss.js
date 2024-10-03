@@ -16,6 +16,7 @@ module.exports = {
     tailwindcss: {
       whitelist: [
         "(gc\\-).*",
+        "(gcds\\-).*",
         "form-builder",
         "form-builder-editor",
         "page-container",
