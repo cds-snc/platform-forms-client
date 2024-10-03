@@ -7,10 +7,10 @@
 
 // Import CSS variables from gcds-tokens
 @import '../node_modules/@cdssnc/gcds-tokens/build/web/css/components/label.css';
-@import "./checkbox";
-
 @import "./_input";
 @import "./_textarea";
+@import "./checkbox";
+@import "./radio";
 
 .gc-fieldset ul {
   @apply mb-14;
@@ -318,43 +318,7 @@
   }
 }
 
-.gc-radio__input {
-  @apply md:mr-4 mr-6 absolute w-10 h-10 bg-white-default border-transparent;
-  & + .gc-radio-label {
-    @apply relative cursor-pointer p-0;
-  }
 
-  &:focus {
-    @apply outline-none;
-  }
-
-  &:focus + .gc-radio-label {
-    span {
-      @apply text-blue-focus;
-    }
-  }
-
-  &:focus + .gc-radio-label:before {
-    @apply outline-none border-4 border-blue-focus;
-  }
-
-  // Circle.
-  & + .gc-radio-label:before {
-    content: "";
-    @apply md:mr-4 mr-6 inline-block w-10 h-10 bg-white-default border-2 border-black-form rounded-full;
-  }
-
-  // Radio. Could be replaced with an image
-  &:checked + .gc-radio-label:after {
-    content: "";
-    background-image: url("../public/img/black-circle.svg");
-    @apply absolute w-5 h-5 left-10px;
-  }
-
-  &:focus + .gc-radio-label:after {
-    background-image: url("../public/img/blue-circle.svg");
-  }
-}
 
 .gc-file-input {
   @apply w-full md:text-sm text-base text-gray-700 py-3 pr-2 mt-2 mb-14;
