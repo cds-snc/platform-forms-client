@@ -201,10 +201,11 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
 
   const formValues = getValues() || {};
   const groupHistory = getGroupHistory();
-  // Potential future performance optimization. A useMemo is pointless because formValues changes
-  // on each input change (keypress etc.). Ideally only calculate when submit is active.
-  //
-  // TODO: move into SubmitButton component?
+  // TODO: Potential for future performance optimization. The challenge is a useMemo is pointless
+  // because formValues changes on each input change. Also moving this calculation into the
+  // SubmitButton would then be called on each checkTimer (every second).
+  // Perhaps this could be passed as a callback into the SubmitButton and only calculated right
+  // before the startTimer is called?
   const groupHistoryElements = groupHistory
     .map((groupId) => {
       if (!groups) return [];
