@@ -23,7 +23,8 @@ export const Checkbox = (
         required={required}
         name={name}
       />
-      <label className="gc-checkbox-label" htmlFor={id}>
+      {/* Set tabIndex to -1 see https://stackoverflow.com/questions/49662769/focus-within-styles-flash-when-clicking-an-input-label  */}
+      <label tabIndex={-1} className="gc-checkbox-label" htmlFor={id}>
         <span className="checkbox-label-text">{label}</span>
       </label>
     </div>

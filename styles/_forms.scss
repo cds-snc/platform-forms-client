@@ -5,6 +5,10 @@
   }
 }
 
+// Import CSS variables from gcds-tokens
+@import '../node_modules/@cdssnc/gcds-tokens/build/web/css/components/label.css';
+@import "./checkbox";
+
 .gc-fieldset ul {
   @apply mb-14;
 }
@@ -290,54 +294,7 @@
   }
 }
 
-.gc-input-checkbox {
-  @apply block;
 
-  .gc-input-checkbox__input {
-    background-repeat: round;
-    @apply md:mr-4 mr-6 absolute w-10 h-10 bg-white-default border-2 border-transparent;
-    & + .gc-checkbox-label {
-      @apply relative cursor-pointer p-0;
-    }
-
-    &:focus {
-      @apply outline-none;
-    }
-
-    &:focus + .gc-checkbox-label {
-      span {
-        @apply text-blue-focus;
-      }
-    }
-
-    &:focus + .gc-checkbox-label:before {
-      @apply outline-none border-4 border-blue-focus;
-    }
-
-    // Box.
-    & + .gc-checkbox-label:before {
-      content: "";
-      @apply md:mr-4 mr-6 inline-block w-10 h-10 bg-white-default border-2 border-black-form;
-    }
-
-    // Checkmark. Could be replaced with an image
-    &:checked + .gc-checkbox-label:after {
-      background-repeat: no-repeat;
-      content: "";
-      background-image: url("../public/img/checkmark.svg");
-      @apply absolute w-6 h-6 left-2;
-    }
-
-    &:focus + .gc-checkbox-label:after {
-      background-image: url("../public/img/blue-checkmark.svg");
-    }
-
-    &:disabled + .gc-checkbox-label {
-      pointer-events: none;
-      opacity: 0.5;
-    }
-  }
-}
 
 .gc-input-radio,
 .gc-input-checkbox {
@@ -348,9 +305,13 @@
 .gc-checkbox-label {
   @apply md:text-sm font-normal text-base flex items-center;
 
+  .radio-label-text {
+    @apply md:mt-10px mt-2;
+  }
+
   .checkbox-label-text,
   .radio-label-text {
-    @apply xxs:w-cr-label-fold xs:w-cr-label-5s sm:w-cr-label-6s md:w-cr-label-duo md:mt-10px lg:w-cr-label-ipad xl:w-cr-label-1025 w-cr-label-desktop mt-2;
+    @apply xxs:w-cr-label-fold xs:w-cr-label-5s sm:w-cr-label-6s md:w-cr-label-duo lg:w-cr-label-ipad xl:w-cr-label-1025 w-cr-label-desktop;
   }
 }
 
