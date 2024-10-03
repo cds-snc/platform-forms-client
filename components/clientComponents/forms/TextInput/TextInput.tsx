@@ -1,10 +1,10 @@
 "use client";
 import React, { useState } from "react";
-import classnames from "classnames";
 import { useField } from "formik";
 import { ErrorMessage } from "@clientComponents/forms";
 import { InputFieldProps, HTMLTextInputTypeAttribute } from "@lib/types";
 import { useTranslation } from "@i18n/client";
+import { cn } from "@lib/utils";
 
 export interface TextInputProps extends InputFieldProps {
   type: HTMLTextInputTypeAttribute;
@@ -17,7 +17,6 @@ export const TextInput = (
   const { id, type, className, required, ariaDescribedBy, placeholder, autoComplete, maxLength } =
     props;
   const [field, meta, helpers] = useField(props);
-  const classes = classnames("gc-input-text", className);
   const { t } = useTranslation("common");
 
   const [remainingCharacters, setRemainingCharacters] = useState(maxLength ?? 0);
@@ -54,6 +53,8 @@ export const TextInput = (
     if (ariaDescribedBy) returnValue.push(ariaDescribedBy);
     return returnValue.length > 0 ? { "aria-describedby": returnValue.join(" ") } : {};
   };
+
+  const classes = cn("gcds-input-text", className, meta.error && "gcds-error");
 
   return (
     <>
