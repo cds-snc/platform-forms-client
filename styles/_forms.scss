@@ -9,6 +9,9 @@
 @import '../node_modules/@cdssnc/gcds-tokens/build/web/css/components/label.css';
 @import '../node_modules/@cdssnc/gcds-tokens/build/web/css/components/checkbox.css';
 
+@import "./_input";
+@import "./_textarea";
+
 .gc-fieldset ul {
   @apply mb-14;
 }
