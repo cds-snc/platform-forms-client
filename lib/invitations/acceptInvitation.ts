@@ -1,5 +1,5 @@
 import { prisma } from "@lib/integration/prismaConnector";
-import { UserAbility } from "@lib/types";
+import { FormOwner, UserAbility } from "@lib/types";
 import {
   InvitationIsExpiredError,
   InvitationNotFoundError,
@@ -49,6 +49,9 @@ export const acceptInvitation = async (ability: UserAbility, invitationId: strin
       },
       select: {
         id: true,
+        name: true,
+        email: true,
+        active: true,
       },
     });
 
@@ -56,7 +59,7 @@ export const acceptInvitation = async (ability: UserAbility, invitationId: strin
       // assign user to form
       await _assignUserToTemplate(ability, user.id, invitation.templateId);
       _deleteInvitation(invitationId);
-      _notifyOwnersOfNewOwnership(user.id, invitation.templateId);
+      _notifyOwnersOfNewOwnership(user, invitation.templateId);
 
       logEvent(
         ability.userID,
@@ -97,22 +100,11 @@ const _assignUserToTemplate = async (ability: UserAbility, userId: string, formI
 
 /**
  * Notify all owners when ownership changes
+ *
+ * @param user New owner
+ * @param formId
  */
-const _notifyOwnersOfNewOwnership = async (userId: string, formId: string) => {
-  const user = await prisma.user.findFirst({
-    where: {
-      id: userId,
-    },
-    select: {
-      name: true,
-      email: true,
-    },
-  });
-
-  if (!user) {
-    throw new UserNotFoundError();
-  }
-
+const _notifyOwnersOfNewOwnership = async (user: FormOwner, formId: string) => {
   const template = await prisma.template.findFirst({
     where: {
       id: formId,

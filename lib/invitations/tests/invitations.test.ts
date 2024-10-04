@@ -1,4 +1,4 @@
-import { inviteUserByEmail } from "../index";
+import { acceptInvitation, inviteUserByEmail } from "../index";
 import { prisma } from "@lib/integration/prismaConnector";
 import { UserAbility } from "@lib/types";
 import { prismaMock } from "@jestUtils";
@@ -12,7 +12,8 @@ import { mockAppUser } from "./fixtures/AppUser";
 import { mockTemplateWithUsers } from "./fixtures/TemplateWithUsers";
 import { mockInvitation } from "./fixtures/Invitation";
 import { mockUser } from "./fixtures/User";
-// import { ownerAddedNotification } from "@lib/invitations/emailTemplates/ownerAddedNotification";
+import { mockTemplate } from "./fixtures/Template";
+import { ownerAddedNotification } from "../emailTemplates/ownerAddedNotification";
 
 jest.mock("@lib/integration/prismaConnector");
 jest.mock("@lib/privileges");
@@ -24,7 +25,7 @@ jest.mock("@lib/templates");
 jest.mock("@lib/origin");
 jest.mock("@lib/invitations/emailTemplates/inviteToForms");
 jest.mock("@lib/invitations/emailTemplates/inviteToCollaborate");
-// jest.mock("@lib/invitations/emailTemplates/ownerAddedNotification");
+jest.mock("@lib/invitations/emailTemplates/ownerAddedNotification");
 
 describe("Invitations", () => {
   const mockAbility: UserAbility = { userID: "1" };
@@ -207,28 +208,61 @@ describe("Invitations", () => {
   });
 
   describe("acceptInvitation", () => {
-    // it("should accept an invitation", async () => {
-    //   prisma.invitation.findUnique.mockResolvedValue({
-    //     id: "invitation-id",
-    //     email: "test@example.com",
-    //     name: "Test user",
-    //     expires: new Date(Date.now() + 10000),
-    //   });
-    //   prisma.user.findFirst.mockResolvedValue({
-    //     id: "user-id",
-    //     name: "test user",
-    //     email: "test@cds-snc.ca",
-    //   });
-    //   prisma.template.findFirst.mockResolvedValue({
-    //     id: "template-id",
-    //     users: [{ id: "user-id", email: "test@cds-snc.ca", name: "test user" }],
-    //   });
-    //   await acceptInvitation(mockAbility, "invitation-id");
-    //   expect(prisma.template.update).toHaveBeenCalled();
-    //   expect(prisma.invitation.delete).toHaveBeenCalled();
-    //   // expect(ownerAddedNotification).toHaveBeenCalled();
-    //   expect(sendEmail).toHaveBeenCalled();
-    // });
+    it("should accept an invitation", async () => {
+      prismaMock.invitation.findUnique.mockResolvedValueOnce(
+        mockInvitation({
+          id: "invitation-id",
+          email: "invited@cds-snc.ca",
+          expires: new Date(Date.now() + 10000),
+        })
+      ); // invitation not expired
+
+      prismaMock.user.findFirst.mockResolvedValueOnce(
+        mockUser({
+          id: "invited-user-id",
+          name: "test user",
+          email: "invited@cds-snc.ca",
+        })
+      ); // user exists
+
+      prismaMock.template.findFirst.mockResolvedValueOnce(
+        mockTemplate({
+          id: "template-id",
+          name: "template-name",
+          users: [
+            { id: "user-id-1", email: "owner1@cds-snc.ca", name: "owner 1" },
+            { id: "user-id-2", email: "owner2@cds-snc.ca", name: "owner 2" },
+          ],
+        })
+      );
+
+      (
+        ownerAddedNotification as jest.MockedFunction<typeof ownerAddedNotification>
+      ).mockReturnValue("email contents");
+
+      await acceptInvitation(mockAbility, "invitation-id");
+
+      // Retrieve the template with owners
+      expect(prisma.template.update).toHaveBeenCalledWith({
+        where: { id: "template-id" },
+        data: {
+          users: {
+            connect: { id: "invited-user-id" },
+          },
+        },
+      });
+
+      // Delete the invitation
+      expect(prisma.invitation.delete).toHaveBeenCalledWith({
+        where: { id: "invitation-id" },
+      });
+
+      // Notify existing owners
+      expect(ownerAddedNotification).toHaveBeenCalled();
+      expect(sendEmail).toHaveBeenCalledTimes(2);
+      expect(sendEmail).toHaveBeenCalledWith("owner1@cds-snc.ca", expect.any(Object));
+      expect(sendEmail).toHaveBeenCalledWith("owner2@cds-snc.ca", expect.any(Object));
+    });
     // it("should throw InvitationNotFoundError if invitation is not found", async () => {
     //   prisma.invitation.findUnique.mockResolvedValue(null);
     //   await expect(acceptInvitation(mockAbility, "invitation-id")).rejects.toThrow(
