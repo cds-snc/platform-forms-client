@@ -25,7 +25,7 @@ See: https://design-system.alpha.canada.ca/en/components/checkbox/
 
   /* Html Input  */
   .gc-input-checkbox__input {
-    @apply md:mr-4 mr-6 absolute bg-white-default border-transparent;
+    @apply mr-4 absolute bg-white-default border-transparent;
 
     border-width: var(--gcds-checkbox-input-border-width);
     width: var(--gcds-checkbox-input-height-and-width);
@@ -44,7 +44,7 @@ See: https://design-system.alpha.canada.ca/en/components/checkbox/
     // Input Box outline default.
     & + .gc-checkbox-label:before {
       content: "";
-      @apply md:mr-4 mr-6 inline-block bg-white-default;
+      @apply mr-4 inline-block bg-white-default;
       width: var(--gcds-checkbox-input-height-and-width);
       height: var(--gcds-checkbox-input-height-and-width);
       border: var(--gcds-checkbox-input-border-width) solid theme("colors.black.default");

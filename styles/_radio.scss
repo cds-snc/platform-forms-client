@@ -1,37 +1,89 @@
-.gc-radio__input {
-  @apply md:mr-4 mr-6 absolute w-10 h-10 bg-white-default border-transparent;
-  & + .gc-radio-label {
-    @apply relative cursor-pointer p-0;
-  }
+@import "../node_modules/@cdssnc/gcds-tokens/build/web/css/components/radio.css";
 
-  &:focus {
-    @apply outline-none;
-  }
+.gc-input-radio {
+  position: relative;
+  transition: color ease-in-out 0.15s;
+  
+  margin: var(--gcds-radio-margin) !important;
 
-  &:focus + .gc-radio-label {
-    span {
-      @apply text-blue-focus;
+  max-width: var(--gcds-radio-max-width);
+  min-height: calc(var(--gcds-radio-input-height-and-width) - var(--gcds-radio-padding));
+  padding: var(--gcds-radio-padding) 0 0 !important;
+
+  &:focus-within {
+    color: theme("colors.gcds.blue.850");
+    // Input Box outline focused.
+    .gc-radio-label:before {
+      outline: var(--gcds-radio-focus-outline-width) solid theme("colors.gcds.blue.850");
+      outline-offset: var(--gcds-radio-input-border-width);
+      box-shadow: var(--gcds-radio-focus-box-shadow);
+      background: var(--gcds-radio-focus-background);
+      border-color: theme("colors.gcds.blue.850") !important;
+      transition: border-color ease-in-out 0.15s, box-shadow ease-in-out 0.15s,
+        outline ease-in-out 0.15s;
+    }
+
+    .gc-radio-label:after {
+      background-color: theme("colors.gcds.blue.850") !important;
     }
   }
 
-  &:focus + .gc-radio-label:before {
-    @apply outline-none border-4 border-blue-focus;
+  /* Html Input  */
+  .gc-radio__input {
+    opacity: 0;
+    @apply bg-white-default border-transparent;
+    position: absolute;
+    left: 0;
+    top: var(--gcds-radio-padding);
+    height: var(--gcds-radio-input-height-and-width);
+    width: var(--gcds-radio-input-height-and-width);
+
+    & + .gc-radio-label {
+      @apply relative cursor-pointer;
+      min-height: calc(var(--gcds-radio-input-height-and-width) - var(--gcds-radio-padding));
+    }
+
+    &:disabled + .gc-radio-label {
+      pointer-events: none;
+      opacity: 0;
+    }
+
+    // Input Box outline default.
+    & + .gc-radio-label:before {
+      content: "";
+      top: 0;
+      left: 0;
+      height: var(--gcds-radio-input-height-and-width);
+      width: var(--gcds-radio-input-height-and-width);
+      position: absolute;
+      border-radius: var(--gcds-radio-border-radius);
+      border: var(--gcds-radio-input-border-width) solid theme("colors.black.default");
+      transition: border-color ease-in-out 0.15s, box-shadow ease-in-out 0.15s,
+        outline ease-in-out 0.15s;
+    }
+
+    // Radio circle.
+    &:checked + .gc-radio-label:after {
+      content: "";
+      opacity: 1;
+      position: absolute;
+      left: var(--gcds-radio-check-left);
+      top: var(--gcds-radio-check-top);
+      border-radius: var(--gcds-radio-border-radius);
+      height: var(--gcds-radio-check-height-and-width);
+      width: var(--gcds-radio-check-height-and-width);
+      background-color: black;
+      transition: opacity 0.2s ease-in-out;
+    }
   }
 
-  // Circle.
-  & + .gc-radio-label:before {
-    content: "";
-    @apply md:mr-4 mr-6 inline-block w-10 h-10 bg-white-default border-2 border-black-form rounded-full;
-  }
-
-  // Radio. Could be replaced with an image
-  &:checked + .gc-radio-label:after {
-    content: "";
-    background-image: url("../public/img/black-circle.svg");
-    @apply absolute w-5 h-5 left-10px;
-  }
-
-  &:focus + .gc-radio-label:after {
-    background-image: url("../public/img/blue-circle.svg");
+  .radio-label-text {
+    width: auto !important;
+    display: inline-block;
+    font: var(--gcds-label-font-desktop);
+    @apply font-noto-sans;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+    padding: var(--gcds-radio-label-padding) !important;
   }
 }
