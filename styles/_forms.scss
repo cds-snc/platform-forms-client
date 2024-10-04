@@ -12,6 +12,8 @@
 @import "./_input";
 @import "./_textarea";
 
+@import "./_dropdown";
+
 .gc-fieldset ul {
   @apply mb-14;
 }
@@ -83,15 +85,6 @@
       box-shadow: 4px 0 0 0 #1b2736, -4px 0 0 0 #1b2736;
       @apply underline bg-blue-active text-white-default;
     }
-  }
-}
-
-.gc-dropdown {
-  background-image: url("../public/img/arrow-down.svg");
-  @apply md:w-full w-1/2 md:text-sm text-base text-gray-700 block border-2 border-black-form py-3 pl-5 pr-10 mt-2 mb-14 appearance-none bg-no-repeat bg-center-right-15px;
-
-  &:focus {
-    @apply outline-none border-blue-focus shadow-input;
   }
 }
 

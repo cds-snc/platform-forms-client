@@ -1,10 +1,10 @@
 "use client";
 import React from "react";
-import classnames from "classnames";
 import { useField } from "formik";
 import { useTranslation } from "@i18n/client";
 import { ErrorMessage } from "@clientComponents/forms";
 import { InputFieldProps } from "@lib/types";
+import { cn } from "@lib/utils";
 
 interface DropdownProps extends InputFieldProps {
   children?: React.ReactElement;
@@ -28,7 +28,6 @@ const DropdownOption = (props: DropdownOptionProps): React.ReactElement => {
 export const Dropdown = (props: DropdownProps): React.ReactElement => {
   const { children, id, name, className, choices = [], required, ariaDescribedBy } = props;
   const { t } = useTranslation("common");
-  const classes = classnames("gc-dropdown", className);
   const [field, meta] = useField(props);
 
   const initialDropdownOption = <option value="">{t("dropdown-initial-option-text")}</option>;
@@ -38,10 +37,11 @@ export const Dropdown = (props: DropdownProps): React.ReactElement => {
     return <DropdownOption id={innerId} key={`key-${innerId}`} value={choice} name={choice} />;
   });
 
-  return (
-    <>
-      {meta.error && <ErrorMessage>{meta.error}</ErrorMessage>}
+  const classes = cn("gc-dropdown", className, meta.error && "gcds-error");
 
+  return (
+    <div className="gcds-select-wrapper">
+      {meta.error && <ErrorMessage>{meta.error}</ErrorMessage>}
       <select
         data-testid="dropdown"
         className={classes}
@@ -60,6 +60,6 @@ export const Dropdown = (props: DropdownProps): React.ReactElement => {
           </>
         )}
       </select>
-    </>
+    </div>
   );
 };
