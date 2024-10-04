@@ -7,6 +7,6 @@ describe("ManageFormAccessButton Component", () => {
     cy.mount(<ManageFormAccessButton />);
 
     // Assert the button is rendered with correct text
-    cy.contains("Manage form access").should("exist");
+    cy.contains("Manage access").should("exist");
   });
 });
