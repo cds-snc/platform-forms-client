@@ -33,45 +33,42 @@ export const acceptInvitation = async (ability: UserAbility, invitationId: strin
   }
 
   // Check if the invitation has expired
-  const now = new Date(); // check these dates
+  const now = new Date();
   if (invitation.expires < now) {
     throw new InvitationIsExpiredError();
   }
 
-  try {
+  const user = await prisma.user.findFirst({
+    where: {
+      email: invitation.email,
+    },
+    select: {
+      id: true,
+      name: true,
+      email: true,
+      active: true,
+    },
+  });
+
+  if (user) {
+    // Ensures the logged in user is the user that was invited
     checkPrivileges(ability, [
-      { action: "view", subject: { type: "User", object: { id: ability.userID } } },
+      { action: "view", subject: { type: "User", object: { id: user.id } } },
     ]);
 
-    const user = await prisma.user.findFirst({
-      where: {
-        email: invitation.email,
-      },
-      select: {
-        id: true,
-        name: true,
-        email: true,
-        active: true,
-      },
-    });
+    // assign user to form
+    await _assignUserToTemplate(user.id, invitation.templateId);
+    _deleteInvitation(invitationId);
+    _notifyOwnersOfNewOwnership(user, invitation.templateId);
 
-    if (user) {
-      // assign user to form
-      await _assignUserToTemplate(ability, user.id, invitation.templateId);
-      _deleteInvitation(invitationId);
-      _notifyOwnersOfNewOwnership(user, invitation.templateId);
+    logEvent(
+      ability.userID,
+      { type: "Form", id: invitation.templateId },
+      "InvitationAccepted",
+      `${user.id} has accepted an invitation`
+    );
 
-      logEvent(
-        ability.userID,
-        { type: "Form", id: invitation.templateId },
-        "InvitationAccepted",
-        `${user.id} has accepted an invitation`
-      );
-
-      return true;
-    }
-  } catch (e) {
-    // @TODO
+    return true;
   }
 
   throw new UserNotFoundError();
@@ -83,7 +80,7 @@ export const acceptInvitation = async (ability: UserAbility, invitationId: strin
  * @param userId
  * @param formId
  */
-const _assignUserToTemplate = async (ability: UserAbility, userId: string, formId: string) => {
+const _assignUserToTemplate = async (userId: string, formId: string) => {
   await prisma.template.update({
     where: {
       id: formId,
