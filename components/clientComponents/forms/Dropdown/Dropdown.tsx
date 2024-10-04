@@ -40,7 +40,7 @@ export const Dropdown = (props: DropdownProps): React.ReactElement => {
   const classes = cn("gc-dropdown", className, meta.error && "gcds-error");
 
   return (
-    <div className="gcds-select-wrapper">
+    <div className={cn("gcds-select-wrapper", meta.error && "gcds-error")}>
       {meta.error && <ErrorMessage>{meta.error}</ErrorMessage>}
       <select
         data-testid="dropdown"
