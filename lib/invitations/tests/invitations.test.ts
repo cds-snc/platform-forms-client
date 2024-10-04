@@ -142,61 +142,68 @@ describe("Invitations", () => {
       expect(sendEmail).toHaveBeenCalledWith("invited@cds-snc.ca", expect.any(Object));
     });
 
-    // it("should reinvite a user whose invitation has expired", async () => {
-    //   (getUser as jest.MockedFunction<typeof getUser>).mockResolvedValueOnce({
-    //     id: "1",
-    //     email: "sender@cds-snc.ca",
-    //     name: "sender",
-    //     privileges: [],
-    //     active: true,
-    //   }); // sender
+    it("should reinvite a user whose invitation has expired", async () => {
+      (getUser as jest.MockedFunction<typeof getUser>).mockResolvedValueOnce({
+        id: "1",
+        email: "sender@cds-snc.ca",
+        name: "sender",
+        privileges: [],
+        active: true,
+      }); // sender
 
-    //   (
-    //     getTemplateWithAssociatedUsers as jest.MockedFunction<typeof getTemplateWithAssociatedUsers>
-    //   ).mockResolvedValueOnce({
-    //     formRecord: {
-    //       id: "form-id",
-    //       name: "form-name",
-    //       isPublished: false,
-    //       securityAttribute: "Unclassified",
-    //       form: {
-    //         titleEn: "form-name",
-    //         titleFr: "form-name",
-    //         id: "form-id",
-    //         layout: [],
-    //         elements: [],
-    //       },
-    //     },
-    //     users: [],
-    //   });
+      (
+        getTemplateWithAssociatedUsers as jest.MockedFunction<typeof getTemplateWithAssociatedUsers>
+      ).mockResolvedValueOnce({
+        formRecord: {
+          id: "form-id",
+          name: "form-name",
+          isPublished: false,
+          securityAttribute: "Unclassified",
+          form: {
+            titleEn: "form-name",
+            titleFr: "form-name",
+            id: "form-id",
+            layout: [],
+            elements: [],
+          },
+        },
+        users: [],
+      });
 
-    //   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    //   (prismaMock.invitation.create as jest.MockedFunction<any>).mockResolvedValueOnce({
-    //     id: "invitation-id",
-    //     email: "invited@cds-snc.ca",
-    //   });
+      const expires = new Date();
+      expires.setDate(expires.getDate() - 7);
+      prismaMock.invitation.findFirst.mockResolvedValueOnce(mockInvitation({ expires })); // expired invitation
 
-    //   // invitee does not have an account
-    //   prismaMock.user.findFirst.mockResolvedValueOnce(null);
+      prismaMock.invitation.create.mockResolvedValueOnce(
+        mockInvitation({
+          id: "new-invitation-id",
+          email: "invited2@cds-snc.ca",
+        })
+      );
 
-    //   (inviteToCollaborate as jest.MockedFunction<typeof inviteToCollaborate>).mockReturnValue(
-    //     "email contents"
-    //   );
+      // invitee does not have an account
+      prismaMock.user.findFirst.mockResolvedValueOnce(null);
 
-    //   await inviteUserByEmail(mockAbility, "invited@cds-snc.ca", "form-id", "message");
+      (inviteToForms as jest.MockedFunction<typeof inviteToForms>).mockReturnValue(
+        "email contents"
+      );
 
-    //   expect(prisma.invitation.create).toHaveBeenCalledTimes(1);
-    //   expect(inviteToCollaborate).toHaveBeenCalledTimes(1);
-    //   expect(inviteToCollaborate).toHaveBeenCalledWith(
-    //     "sender",
-    //     "message",
-    //     "form-name",
-    //     expect.stringContaining("forms"),
-    //     expect.stringContaining("forms")
-    //   );
-    //   expect(sendEmail).toHaveBeenCalledTimes(1);
-    //   expect(sendEmail).toHaveBeenCalledWith("invited@cds-snc.ca", expect.any(Object));
-    // });
+      await inviteUserByEmail(mockAbility, "invited2@cds-snc.ca", "form-id", "message");
+
+      expect(prisma.invitation.delete).toHaveBeenCalledTimes(1); // delete expired
+      expect(prisma.invitation.delete).toHaveBeenCalledWith({ where: { id: "invitation-id" } });
+
+      expect(prisma.invitation.create).toHaveBeenCalledTimes(1); // create new
+      expect(inviteToForms).toHaveBeenCalledTimes(1);
+      expect(inviteToForms).toHaveBeenCalledWith(
+        "sender",
+        "message",
+        expect.stringContaining("register"),
+        expect.stringContaining("register")
+      );
+      expect(sendEmail).toHaveBeenCalledTimes(1);
+      expect(sendEmail).toHaveBeenCalledWith("invited2@cds-snc.ca", expect.any(Object));
+    });
   });
 
   describe("acceptInvitation", () => {
