@@ -198,7 +198,7 @@ export const ManageUsers = () => {
       <section className="mt-4">
         <h3>{t("peopleWithAccess")}</h3>
         <div className="max-h-96 overflow-y-scroll border-1 border-black">
-          {loading && <div className="py-10">{t("loading")}</div>}
+          {loading && <div className="p-10">{t("loading")}</div>}
           {!loading && (
             <>
               {usersWithAccess.map((user, index) => (
