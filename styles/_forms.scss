@@ -6,11 +6,14 @@
 }
 
 // Import CSS variables from gcds-tokens
+@import "../node_modules/@cdssnc/gcds-tokens/build/web/css/components/heading.css";
 @import '../node_modules/@cdssnc/gcds-tokens/build/web/css/components/label.css';
-@import "./checkbox";
-
 @import "./_input";
 @import "./_textarea";
+@import "./checkbox";
+@import "./radio";
+@import "./_dropdown";
+@import "./_alert";
 
 .gc-fieldset ul {
   @apply mb-14;
@@ -31,68 +34,8 @@
   @apply border-red-700 !important;
 }
 
-.gc-alert {
-  @apply py-8 px-12 mb-14 w-5/6 xl:w-full;
-  &.gc-alert--validation,
-  &.gc-alert--error {
-    @apply border-2 border-red-default;
-
-    &:focus {
-      box-shadow: inset 0 0 0 2px #b10e1e;
-      @apply outline-none;
-    }
-
-    &:focus-within {
-      box-shadow: inset 0 0 0 2px #b10e1e;
-      @apply outline-none;
-    }
-  }
-
-  &.gc-alert--success {
-    @apply bg-emerald-50 text-emerald-700 rounded-sm laptop:rounded-md;
-  }
-
-  .gc-alert__body {
-    @apply text-black-default;
-    h3 {
-      @apply mb-5 text-red-default;
-    }
-
-    ol {
-      @apply list-inside;
-
-      li {
-        @apply mb-2;
-      }
-    }
-  }
-}
-
 .gc-ordered-list {
   @apply ml-0 font-normal;
-
-  .gc-error-link {
-    @apply ml-2 text-blue-900;
-
-    &:focus {
-      box-shadow: 4px 0 0 0 #303fc3, -4px 0 0 0 #303fc3;
-      @apply bg-blue-focus text-white-default;
-    }
-
-    &:active {
-      box-shadow: 4px 0 0 0 #1b2736, -4px 0 0 0 #1b2736;
-      @apply underline bg-blue-active text-white-default;
-    }
-  }
-}
-
-.gc-dropdown {
-  background-image: url("../public/img/arrow-down.svg");
-  @apply md:w-full w-1/2 md:text-sm text-base text-gray-700 block border-2 border-black-form py-3 pl-5 pr-10 mt-2 mb-14 appearance-none bg-no-repeat bg-center-right-15px;
-
-  &:focus {
-    @apply outline-none border-blue-focus shadow-input;
-  }
 }
 
 .gc-combobox {
@@ -255,43 +198,7 @@
   }
 }
 
-.gc-radio__input {
-  @apply md:mr-4 mr-6 absolute w-10 h-10 bg-white-default border-transparent;
-  & + .gc-radio-label {
-    @apply relative cursor-pointer p-0;
-  }
 
-  &:focus {
-    @apply outline-none;
-  }
-
-  &:focus + .gc-radio-label {
-    span {
-      @apply text-blue-focus;
-    }
-  }
-
-  &:focus + .gc-radio-label:before {
-    @apply outline-none border-4 border-blue-focus;
-  }
-
-  // Circle.
-  & + .gc-radio-label:before {
-    content: "";
-    @apply md:mr-4 mr-6 inline-block w-10 h-10 bg-white-default border-2 border-black-form rounded-full;
-  }
-
-  // Radio. Could be replaced with an image
-  &:checked + .gc-radio-label:after {
-    content: "";
-    background-image: url("../public/img/black-circle.svg");
-    @apply absolute w-5 h-5 left-10px;
-  }
-
-  &:focus + .gc-radio-label:after {
-    background-image: url("../public/img/blue-circle.svg");
-  }
-}
 
 .gc-file-input {
   @apply w-full md:text-sm text-base text-gray-700 py-3 pr-2 mt-2 mb-14;
