@@ -5,7 +5,12 @@ import { prismaMock } from "@jestUtils";
 import { getUser } from "@lib/users";
 import { getTemplateWithAssociatedUsers } from "@lib/templates";
 import { sendEmail } from "@lib/integration/notifyConnector";
-import { TemplateNotFoundError, UserAlreadyHasAccessError } from "../exceptions";
+import {
+  InvitationIsExpiredError,
+  InvitationNotFoundError,
+  TemplateNotFoundError,
+  UserAlreadyHasAccessError,
+} from "../exceptions";
 import { inviteToForms } from "../emailTemplates/inviteToForms";
 import { inviteToCollaborate } from "../emailTemplates/inviteToCollaborate";
 import { mockAppUser } from "./fixtures/AppUser";
@@ -208,6 +213,26 @@ describe("Invitations", () => {
   });
 
   describe("acceptInvitation", () => {
+    it("should throw InvitationNotFoundError if invitation is not found", async () => {
+      prismaMock.invitation.findUnique.mockResolvedValue(null);
+      await expect(acceptInvitation(mockAbility, "invitation-id")).rejects.toThrow(
+        InvitationNotFoundError
+      );
+    });
+
+    it("should throw InvitationIsExpiredError if invitation is expired", async () => {
+      prismaMock.invitation.findUnique.mockResolvedValue(
+        mockInvitation({
+          id: "invitation-id",
+          email: "test@example.com",
+          expires: new Date(Date.now() - 10000),
+        })
+      );
+      await expect(acceptInvitation(mockAbility, "invitation-id")).rejects.toThrow(
+        InvitationIsExpiredError
+      );
+    });
+
     it("should accept an invitation", async () => {
       prismaMock.invitation.findUnique.mockResolvedValueOnce(
         mockInvitation({
@@ -263,22 +288,6 @@ describe("Invitations", () => {
       expect(sendEmail).toHaveBeenCalledWith("owner1@cds-snc.ca", expect.any(Object));
       expect(sendEmail).toHaveBeenCalledWith("owner2@cds-snc.ca", expect.any(Object));
     });
-    // it("should throw InvitationNotFoundError if invitation is not found", async () => {
-    //   prisma.invitation.findUnique.mockResolvedValue(null);
-    //   await expect(acceptInvitation(mockAbility, "invitation-id")).rejects.toThrow(
-    //     InvitationNotFoundError
-    //   );
-    // });
-    // it("should throw InvitationIsExpiredError if invitation is expired", async () => {
-    //   prisma.invitation.findUnique.mockResolvedValue({
-    //     id: "invitation-id",
-    //     email: "test@example.com",
-    //     expires: new Date(Date.now() - 10000),
-    //   });
-    //   await expect(acceptInvitation(mockAbility, "invitation-id")).rejects.toThrow(
-    //     InvitationIsExpiredError
-    //   );
-    // });
   });
 
   //   describe("cancelInvitation", () => {
