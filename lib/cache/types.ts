@@ -1,12 +1,13 @@
 // Load from file so we have a static list of flag names (vs. from Redis where state would be important)
 import flagInitialSettings from "flag_initialization/default_flag_settings.json";
 
-export const FeatureFlags = {} as Record<string, string>;
-for (const key in flagInitialSettings) {
-  FeatureFlags[key] = key;
-}
+const flagKeys = Object.keys(flagInitialSettings);
+export type FeatureFlagKeys = (typeof flagKeys)[number];
 
-export type FeatureFlagKeys = keyof typeof FeatureFlags;
+export const FeatureFlags = {} as Record<FeatureFlagKeys, FeatureFlagKeys>;
+flagKeys.forEach((key) => {
+  FeatureFlags[key] = key as FeatureFlagKeys;
+});
 
 export type Flags = {
   [K in FeatureFlagKeys]: boolean;
