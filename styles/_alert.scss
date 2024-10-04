@@ -1,0 +1,58 @@
+@import "../node_modules/@cdssnc/gcds-tokens/build/web/css/components/link.css";
+@import "../node_modules/@cdssnc/gcds-tokens/build/web/css/components/error-summary.css";
+
+.gc-alert {
+  @apply py-8 px-12 mb-14 w-5/6 xl:w-full;
+  &.gc-alert--validation,
+  &.gc-alert--error {
+    border-width: var(--gcds-error-summary-border-width);
+    border-color: var(--gcds-error-summary-border-color);
+    padding: var(--gcds-error-summary-padding);
+    margin: var(--gcds-error-summary-margin);
+    color: var(--gcds-error-summary-text);
+
+    h2 {
+      color: var(--gcds-heading-default-text) !important;
+    }
+
+    a {
+      color: var(--gcds-error-summary-link-color);
+    }
+  }
+
+  &.gc-alert--success {
+    @apply bg-emerald-50 text-emerald-700 rounded-sm laptop:rounded-md;
+  }
+
+  .gc-alert__body {
+    @apply text-black-default;
+    h3 {
+      @apply mb-5 text-red-default;
+    }
+
+    ol {
+      @apply list-inside;
+      padding-left: 0;
+
+      li {
+        @apply mb-2;
+      }
+
+      .gc-error-link {
+        @apply ml-2;
+        color: var(--gcds-error-summary-link-color);
+        transition: all 0.35s;
+
+        &:focus {
+          border-radius: var(--gcds-link-focus-border-radius);
+          background-color: var(--gcds-link-focus-background);
+          color: var(--gcds-link-focus-text);
+          box-shadow: var(--gcds-link-focus-box-shadow);
+          outline: var(--gcds-link-focus-outline-width) solid var(--gcds-link-focus-background);
+          outline-offset: var(--gcds-link-focus-outline-offset);
+          text-decoration: none;
+        }
+      }
+    }
+  }
+}
