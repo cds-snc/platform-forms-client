@@ -1,4 +1,4 @@
-import { acceptInvitation, inviteUserByEmail } from "../index";
+import { acceptInvitation, cancelInvitation, declineInvitation, inviteUserByEmail } from "../index";
 import { prisma } from "@lib/integration/prismaConnector";
 import { UserAbility } from "@lib/types";
 import { prismaMock } from "@jestUtils";
@@ -10,6 +10,7 @@ import {
   InvitationNotFoundError,
   TemplateNotFoundError,
   UserAlreadyHasAccessError,
+  UserNotFoundError,
 } from "../exceptions";
 import { inviteToForms } from "../emailTemplates/inviteToForms";
 import { inviteToCollaborate } from "../emailTemplates/inviteToCollaborate";
@@ -290,59 +291,70 @@ describe("Invitations", () => {
     });
   });
 
-  //   describe("cancelInvitation", () => {
-  //     it("should cancel an invitation", async () => {
-  //       prisma.invitation.findUnique.mockResolvedValue({
-  //         id: "invitation-id",
-  //         email: "test@example.com",
-  //         templateId: "template-id",
-  //       });
+  describe("cancelInvitation", () => {
+    it("should cancel an invitation", async () => {
+      prismaMock.invitation.findUnique.mockResolvedValue(
+        mockInvitation({
+          id: "invitation-id",
+          email: "test@example.com",
+          templateId: "template-id",
+        })
+      );
 
-  //       await cancelInvitation(mockAbility, "invitation-id");
+      await cancelInvitation(mockAbility, "invitation-id");
 
-  //       expect(prisma.invitation.delete).toHaveBeenCalled();
-  //     });
+      expect(prismaMock.invitation.delete).toHaveBeenCalledWith({
+        where: { id: "invitation-id" },
+      });
+    });
 
-  //     it("should throw InvitationNotFoundError if invitation is not found", async () => {
-  //       prisma.invitation.findUnique.mockResolvedValue(null);
+    it("should throw InvitationNotFoundError if invitation is not found", async () => {
+      prismaMock.invitation.findUnique.mockResolvedValue(null);
 
-  //       await expect(cancelInvitation(mockAbility, "invitation-id")).rejects.toThrow(
-  //         InvitationNotFoundError
-  //       );
-  //     });
-  //   });
+      await expect(cancelInvitation(mockAbility, "invitation-id")).rejects.toThrow(
+        InvitationNotFoundError
+      );
+    });
+  });
 
-  //   describe("declineInvitation", () => {
-  //     it("should decline an invitation", async () => {
-  //       prisma.invitation.findUnique.mockResolvedValue({
-  //         id: "invitation-id",
-  //         email: "test@example.com",
-  //       });
-  //       prisma.user.findFirst.mockResolvedValue({ id: "user-id", email: "test@example.com" });
+  describe("declineInvitation", () => {
+    it("should decline an invitation", async () => {
+      prismaMock.invitation.findUnique.mockResolvedValue(
+        mockInvitation({
+          id: "invitation-id",
+          email: "test@cds-snc.ca",
+        })
+      );
+      prismaMock.user.findFirst.mockResolvedValueOnce(
+        mockUser({ id: "user-id", email: "test@cds-snc.ca" })
+      );
 
-  //       await declineInvitation(mockAbility, "invitation-id");
+      await declineInvitation(mockAbility, "invitation-id");
 
-  //       expect(prisma.invitation.delete).toHaveBeenCalled();
-  //     });
+      expect(prismaMock.invitation.delete).toHaveBeenCalled();
+    });
 
-  //     it("should throw InvitationNotFoundError if invitation is not found", async () => {
-  //       prisma.invitation.findUnique.mockResolvedValue(null);
+    it("should throw InvitationNotFoundError if invitation is not found", async () => {
+      prismaMock.invitation.findUnique.mockResolvedValueOnce(null);
 
-  //       await expect(declineInvitation(mockAbility, "invitation-id")).rejects.toThrow(
-  //         InvitationNotFoundError
-  //       );
-  //     });
+      await expect(declineInvitation(mockAbility, "invitation-id")).rejects.toThrow(
+        InvitationNotFoundError
+      );
+    });
 
-  //     it("should throw UserNotFoundError if user is not found", async () => {
-  //       prisma.invitation.findUnique.mockResolvedValue({
-  //         id: "invitation-id",
-  //         email: "test@example.com",
-  //       });
-  //       prisma.user.findFirst.mockResolvedValue(null);
+    it("should throw UserNotFoundError if user is not found", async () => {
+      prismaMock.invitation.findUnique.mockResolvedValueOnce(
+        mockInvitation({
+          id: "invitation-id",
+          email: "test@example.com",
+        })
+      );
 
-  //       await expect(declineInvitation(mockAbility, "invitation-id")).rejects.toThrow(
-  //         UserNotFoundError
-  //       );
-  //     });
-  //   });
+      (getUser as jest.Mock).mockResolvedValue(null);
+
+      await expect(declineInvitation(mockAbility, "invitation-id")).rejects.toThrow(
+        UserNotFoundError
+      );
+    });
+  });
 });
