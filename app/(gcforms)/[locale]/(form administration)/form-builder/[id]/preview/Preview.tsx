@@ -6,7 +6,8 @@ import Markdown from "markdown-to-jsx";
 import { PreviewNavigation } from "./PreviewNavigation";
 import { getRenderedForm } from "@lib/formBuilder";
 import { FormProperties, PublicFormRecord } from "@lib/types";
-import { Button, RichText, ClosedPage } from "@clientComponents/forms";
+import { RichText, ClosedPage } from "@clientComponents/forms";
+import { Button } from "@clientComponents/globals";
 import { NextButton } from "@clientComponents/forms/NextButton/NextButton";
 
 import {
@@ -80,11 +81,6 @@ export const Preview = ({
 
   const clearSent = () => {
     setSent(null);
-  };
-
-  const preventSubmit = async (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
-    e.preventDefault();
-    return false;
   };
 
   const responsesLink = `/${i18n.language}/form-builder/${id}/responses/new`;
@@ -221,7 +217,7 @@ export const Preview = ({
                                     className="mb-4"
                                     onClick={(e) => {
                                       if (disableSubmit) {
-                                        return preventSubmit(e);
+                                        e.preventDefault();
                                       }
                                     }}
                                   >

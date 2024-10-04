@@ -8,7 +8,6 @@ import { Validate, PublicFormRecord } from "@lib/types";
 import { useGCFormsContext } from "@lib/hooks/useGCFormContext";
 import { Button } from "@clientComponents/globals/Buttons/Button";
 import { LockedSections } from "@formBuilder/components/shared/right-panel/treeview/types";
-import { ArrowRightNav } from "@serverComponents/icons/ArrowRightNav";
 import { Language } from "@lib/types/form-builder-types";
 
 import { getLocalizedProperty } from "@lib/utils";
@@ -94,11 +93,8 @@ export const NextButton = ({
             focusElement("h2");
           }
         }}
-        type="button"
       >
-        <>
-          {t("next", { lng: language })} <ArrowRightNav className="ml-4" />
-        </>
+        {t("next", { lng: language })}
       </Button>
     </>
   );

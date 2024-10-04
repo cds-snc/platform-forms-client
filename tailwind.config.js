@@ -1,5 +1,9 @@
+import tokens from "@cdssnc/gcds-tokens/build/figma/figma.tokens.json";
+
 /** @type {import('tailwindcss').Config} */
 const colors = require("tailwindcss/colors");
+
+const { red, green, blue, grayscale } = tokens.Tokens.color;
 
 module.exports = {
   theme: {
@@ -131,6 +135,37 @@ module.exports = {
           form: "#0b0c0c",
         },
         transparent: "transparent",
+        // see: https://design-system.alpha.canada.ca/en/styles/colour/
+        gcds: {
+          gray: {
+            50: grayscale[50].value,
+            100: grayscale[100].value,
+            300: grayscale[300].value,
+            500: grayscale[500].value,
+            700: grayscale[700].value,
+            800: grayscale[800].value,
+            1000: grayscale[1000].value,
+          },
+          blue: {
+            100: blue[100].value,
+            500: blue[500].value,
+            700: blue[700].value,
+            800: blue[800].value,
+            850: blue[850].value,
+            900: blue[900].value, // primary
+          },
+          green: {
+            100: green[100].value,
+            500: green[500].value,
+            700: green[700].value,
+          },
+          red: {
+            100: red[100].value,
+            500: red[500].value,
+            700: red[700].value,
+            900: red[900].value,
+          },
+        },
       },
       fontSize: {
         sm: ["16px", "22px"],
