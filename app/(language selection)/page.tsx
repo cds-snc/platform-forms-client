@@ -47,7 +47,7 @@ const Home = () => {
         <Fip className="my-0 py-6" />
       </header>
       <ReactHydrationCheck />
-      <div className="flex flex-col h-full">
+      <div className="flex h-full flex-col">
         <div id="page-container">
           <main id="content">
             <div className="mt-10 flex items-center justify-center">

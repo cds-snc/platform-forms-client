@@ -73,7 +73,7 @@ export const InitiateResetForm = ({
         )}
       <h1 className="mb-12 mt-6 border-b-0">{t("provideUsername.title")}</h1>
       <form id="provideUsername" action={formAction} noValidate>
-        <div className="focus-group">
+        <div className="gcds-input-wrapper">
           <Label id="label-username" htmlFor="username" className="required" required>
             {t("provideUsername.fields.username.label")}
           </Label>
