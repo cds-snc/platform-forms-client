@@ -1,19 +1,21 @@
 "use client";
 import { AddressCompleteChoice, AddressCompleteProps, AddressElements } from "./types";
 import { getAddressCompleteChoices, getSelectedAddress } from "./utils";
-import { Description, Label, ManagedCombobox } from "@clientComponents/forms";
+import { Combobox, Description, Label, ManagedCombobox } from "@clientComponents/forms";
 import { useState, useEffect } from "react";
 import { useTranslation } from "@i18n/client";
 import { useField } from "formik";
 import { cn } from "@lib/utils";
 import { SpinnerIcon } from "@serverComponents/icons/SpinnerIcon";
+import { Language } from "@lib/types/form-builder-types";
+import { countries } from "@lib/managedData/countries";
 
 export const AddressComplete = (props: AddressCompleteProps): React.ReactElement => {
   const { id, name, required, ariaDescribedBy } = props;
 
   const [field, meta, helpers] = useField(props);
 
-  const { t } = useTranslation("form-builder");
+  const { t, i18n } = useTranslation("form-builder");
 
   //Address Complete elements
   const [choices, setChoices] = useState([""]);
@@ -147,6 +149,21 @@ export const AddressComplete = (props: AddressCompleteProps): React.ReactElement
     }
   };
 
+  const countryChoices = countries.all?.map((country) => {
+    return country[i18n.language as Language];
+  });
+
+  const setCountry = (countryText: string) => {
+    // Get the country from the countries.all object.
+    const country = countries.all.find(
+      (country) => country[i18n.language as Language] === countryText
+    );
+    if (country) {
+      // set the country in the address object to the ID of the country.
+      setAddressData("country", country.Id);
+    }
+  };
+
   return (
     <>
       <fieldset
@@ -172,13 +189,12 @@ export const AddressComplete = (props: AddressCompleteProps): React.ReactElement
             <Label htmlFor="country" className="gc-label">
               {t("addElementDialog.addressComplete.country")}
             </Label>
-            <input
-              type="text"
+            <Combobox
               id={`${name}-country`}
               name={`${name}-country`}
-              value={addressObject?.country}
-              onChange={(e) => setAddressData("country", e.target.value)}
-              className={cn("gc-input-text", meta.error && "gc-error-input")}
+              choices={countryChoices}
+              onSetValue={(val) => setCountry(val)}
+              className={cn(meta.error && "gc-error-input")}
               required={required}
               data-testid="addresscomplete-input-country"
             />

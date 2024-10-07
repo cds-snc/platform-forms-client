@@ -9,6 +9,7 @@ import { cn } from "@lib/utils";
 
 interface ComboboxProps extends InputFieldProps {
   choices?: string[];
+  onSetValue?: (value: string) => void;
 }
 
 export const Combobox = (props: ComboboxProps): React.ReactElement => {
@@ -32,6 +33,9 @@ export const Combobox = (props: ComboboxProps): React.ReactElement => {
       items,
       onSelectedItemChange({ selectedItem }) {
         setValue(selectedItem);
+        if (props.onSetValue) {
+          props.onSetValue(selectedItem ?? "");
+        }
       },
     });
 
