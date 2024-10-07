@@ -8,11 +8,15 @@ const retriveAddressUrl =
   "https://ws1.postescanada-canadapost.ca/AddressComplete/Interactive/RetrieveById/v1.00/json3.ws";
 
 // Function returns address complete list of choices.
-export const getAddressCompleteChoices = async (addressCompleteKey: string, query: string) => {
+export const getAddressCompleteChoices = async (
+  addressCompleteKey: string,
+  query: string,
+  countryCode: string
+) => {
   let params = "?";
   params += "Key=" + encodeURIComponent(addressCompleteKey);
   params += "&SearchTerm=" + encodeURIComponent(query);
-  params += "&Country=" + encodeURIComponent("CAN");
+  params += "&Country=" + encodeURIComponent(countryCode);
 
   const response = await fetch(autoCompleteUrl + params, {
     headers: { "content-Type": "application/x-www-form-urlencoded" },
@@ -25,12 +29,16 @@ export const getAddressCompleteChoices = async (addressCompleteKey: string, quer
 };
 
 // Functions returns the selected address.
-export const getSelectedAddress = async (addressCompleteKey: string, value: string) => {
+export const getSelectedAddress = async (
+  addressCompleteKey: string,
+  value: string,
+  countryCode: string
+) => {
   const selectedResult = value;
   let params = "?";
   params += "Key=" + encodeURIComponent(addressCompleteKey);
   params += "&Id=" + encodeURIComponent(selectedResult);
-  params += "&Country=" + encodeURIComponent("CAN");
+  params += "&Country=" + encodeURIComponent(countryCode);
 
   const response = await fetch(retriveAddressUrl + params, {
     headers: { "content-Type": "application/x-www-form-urlencoded" },

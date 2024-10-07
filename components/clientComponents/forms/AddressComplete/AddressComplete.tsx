@@ -77,7 +77,11 @@ export const AddressComplete = (props: AddressCompleteProps): React.ReactElement
     } // Abandon if addressComplete is disabled.
 
     const query = e.target.value;
-    const responseData = await getAddressCompleteChoices(apiKey, query);
+    const responseData = await getAddressCompleteChoices(
+      apiKey,
+      query,
+      addressObject?.country || "CAN"
+    );
 
     //loop through the responseData and add it to the addressResultsCache
     const newElements: AddressCompleteChoice[] = [];
@@ -120,7 +124,11 @@ export const AddressComplete = (props: AddressCompleteProps): React.ReactElement
     if (selectedResult === undefined) {
       return; // Do nothing, this is not found in the AddressComplete API.
     } else {
-      const responseData = await getSelectedAddress(apiKey, selectedResult.Id);
+      const responseData = await getSelectedAddress(
+        apiKey,
+        selectedResult.Id,
+        addressObject?.country || "CAN"
+      );
       if (responseData) {
         const results = responseData;
         setAddressObject(results);
@@ -160,7 +168,7 @@ export const AddressComplete = (props: AddressCompleteProps): React.ReactElement
     );
     if (country) {
       // set the country in the address object to the ID of the country.
-      setAddressData("country", country.Id);
+      setAddressData("country", country.id);
     }
   };
 
