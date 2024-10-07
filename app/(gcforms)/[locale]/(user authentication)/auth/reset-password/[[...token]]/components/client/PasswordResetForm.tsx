@@ -76,7 +76,7 @@ export const PasswordResetForm = ({ email }: { email: string }) => {
         )}
       <h1 className="mb-12 mt-6 border-b-0">{t("resetPassword.title")}</h1>
       <form id="resetPassword" action={formAction} noValidate>
-        <div className="focus-group">
+        <div className="gcds-input-wrapper">
           <Label
             id="label-confirmationCode"
             htmlFor="confirmationCode"
@@ -86,7 +86,7 @@ export const PasswordResetForm = ({ email }: { email: string }) => {
             {t("resetPassword.fields.confirmationCode.label")}
           </Label>
           <TextInput
-            className="h-10 w-36 rounded"
+            className="!w-36"
             type="text"
             id="confirmationCode"
             name="confirmationCode"
@@ -96,7 +96,7 @@ export const PasswordResetForm = ({ email }: { email: string }) => {
             }
           />
         </div>
-        <div className="focus-group">
+        <div className="gcds-input-wrapper">
           <Label id="label-password" htmlFor="password" className="required" required>
             {t("account.fields.password.label", { ns: "common" })}
           </Label>
@@ -104,7 +104,6 @@ export const PasswordResetForm = ({ email }: { email: string }) => {
             {t("account.fields.password.hint", { ns: "common" })}
           </Description>
           <TextInput
-            className="h-10 w-full max-w-lg rounded"
             type="password"
             id="password"
             name="password"
@@ -114,7 +113,7 @@ export const PasswordResetForm = ({ email }: { email: string }) => {
             }
           />
         </div>
-        <div className="focus-group">
+        <div className="gcds-input-wrapper">
           <Label
             id="label-passwordConfirmation"
             htmlFor="passwordConfirmation"
@@ -124,7 +123,6 @@ export const PasswordResetForm = ({ email }: { email: string }) => {
             {t("account.fields.passwordConfirmation.label", { ns: "common" })}
           </Label>
           <TextInput
-            className="h-10 w-full max-w-lg rounded"
             type="password"
             id="passwordConfirmation"
             name="passwordConfirmation"

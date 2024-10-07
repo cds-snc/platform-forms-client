@@ -60,7 +60,7 @@ export const ContactForm = () => {
       )}
 
       <h1>{t("contactus.title")}</h1>
-      <p className="mb-6 mt-[-2rem] text-[1.6rem]">{t("contactus.useThisForm")}</p>
+      <p className="-mt-8 mb-6 text-[1.6rem]">{t("contactus.useThisForm")}</p>
       <p className="mb-14">
         {t("contactus.gcFormsTeamPart1")}{" "}
         <Link href={`https://www.canada.ca/${language}/contact.html`}>
@@ -119,7 +119,7 @@ export const ContactForm = () => {
             error={getError("request")}
           />
         </fieldset>
-        <div className="focus-group">
+        <div className="gcds-textarea-wrapper">
           <Label id={"label-description"} htmlFor={"description"} className="required" required>
             {t("contactus.description.title")}
           </Label>
@@ -134,8 +134,8 @@ export const ContactForm = () => {
             error={getError("description")}
           />
         </div>
-        <p className="mt-14 text-[1.6rem]">{t("contactus.followUp")}</p>
-        <div className="focus-group mt-14">
+        <h3>{t("contactus.followUp")}</h3>
+        <div className="gcds-input-wrapper">
           <Label id={"label-name"} htmlFor={"name"} className="required" required>
             {t("contactus.name")}
           </Label>
@@ -147,7 +147,7 @@ export const ContactForm = () => {
             error={getError("name")}
           />
         </div>
-        <div className="focus-group">
+        <div className="gcds-input-wrapper">
           <Label id={"label-email"} htmlFor={"email"} className="required" required>
             {t("contactus.email")}
           </Label>
@@ -160,7 +160,7 @@ export const ContactForm = () => {
             error={getError("email")}
           />
         </div>
-        <div className="focus-group mt-14">
+        <div className="gcds-input-wrapper">
           <Label id="label-department" htmlFor="department" className="required" required>
             {t("contactus.department")}
           </Label>
@@ -172,7 +172,7 @@ export const ContactForm = () => {
             error={getError("department")}
           />
         </div>
-        <div className="focus-group mt-14">
+        <div className="gcds-input-wrapper">
           <Label id={"label-branch"} htmlFor={"branch"}>
             {t("contactus.branch")}
           </Label>
@@ -184,7 +184,7 @@ export const ContactForm = () => {
             error={getError("branch")}
           />
         </div>
-        <div className="focus-group mt-14">
+        <div className="gcds-input-wrapper">
           <Label id={"label-jobTitle"} htmlFor={"jobTitle"}>
             {t("contactus.jobTitle")}
           </Label>
