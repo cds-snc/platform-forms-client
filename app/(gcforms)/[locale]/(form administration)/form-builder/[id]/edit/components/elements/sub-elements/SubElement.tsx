@@ -75,7 +75,7 @@ export const SubElement = ({
       <div className="ml-4 mt-10">
         <AddToSetButton
           handleAdd={async (type?: FormElementTypes) => {
-            const id = await handleAddSubElement(elIndex, 0, type);
+            const id = await handleAddSubElement(item.id, 0, type);
             forceRefresh(id);
           }}
           filterElements={elementFilter}
@@ -98,7 +98,7 @@ export const SubElement = ({
                   isLastItem={subIndex === subElements.length - 1}
                   totalItems={subElements.length}
                   handleAdd={async (type?: FormElementTypes) => {
-                    const id = await handleAddSubElement(elIndex, subIndex, type);
+                    const id = await handleAddSubElement(item.id, subIndex, type);
                     forceRefresh(id);
                   }}
                   handleRemove={() => {
@@ -146,7 +146,7 @@ export const SubElement = ({
         <div className="mb-2 ml-4 mt-4">
           <AddToSetButton
             handleAdd={async (type?: FormElementTypes) => {
-              const id = await handleAddSubElement(elIndex, subElements.length, type);
+              const id = await handleAddSubElement(item.id, subElements.length, type);
               forceRefresh(id);
             }}
             filterElements={elementFilter}

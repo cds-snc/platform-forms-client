@@ -70,7 +70,7 @@ export const useHandleAdd = () => {
   );
 
   const handleAddSubElement = useCallback(
-    async (elIndex: number, subIndex: number, type?: FormElementTypes) => {
+    async (elId: number, subIndex: number, type?: FormElementTypes) => {
       let id;
 
       // Close all panel menus before focussing on the new element
@@ -79,15 +79,14 @@ export const useHandleAdd = () => {
 
       if (allowedTemplates.includes(type as LoaderType)) {
         blockLoader(type as LoaderType, subIndex, (data, position) => {
-          id = addSubItem(elIndex, position, data.type, data);
+          id = addSubItem(elId, position, data.type, data);
           setChangeKey(String(new Date().getTime())); //Force a re-render
         });
         return id;
       }
 
       const item = await create(type as FormElementTypes);
-      id = addSubItem(elIndex, subIndex, item.type, item);
-
+      id = await addSubItem(elId, subIndex, item.type, item);
       setChangeKey(String(new Date().getTime())); //Force a re-render
 
       return id;
