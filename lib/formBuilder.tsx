@@ -100,7 +100,7 @@ function _buildForm(element: FormElement, lang: string): ReactElement {
   switch (element.type) {
     case FormElementTypes.textField:
       return (
-        <div className="focus-group">
+        <div className="focus-group gcds-input-wrapper">
           {labelComponent}
           {description && <Description id={`${id}`}>{description}</Description>}
           <TextInput
@@ -117,7 +117,7 @@ function _buildForm(element: FormElement, lang: string): ReactElement {
       );
     case FormElementTypes.textArea:
       return (
-        <div className="focus-group">
+        <div className="focus-group gcds-textarea-wrapper">
           {labelComponent}
           {description && <Description id={`${id}`}>{description}</Description>}
           <TextArea

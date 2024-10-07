@@ -70,6 +70,11 @@ export default async function Page({ params: { locale } }: { params: { locale: s
               </Link>
             </li>
             <li>
+              <Link href={`/${locale}/admin/buttons`} legacyBehavior>
+                <a href={`/${locale}/admin/buttons`}>{t("buttons")}</a>
+              </Link>
+            </li>
+            <li>
               <Link href={`/${locale}/admin/upload`} legacyBehavior>
                 <a href={`/${locale}/admin/upload`}>{t("upload")}</a>
               </Link>

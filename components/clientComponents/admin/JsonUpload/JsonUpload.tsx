@@ -9,6 +9,7 @@ import { logMessage } from "@lib/logger";
 import { useRefresh } from "@lib/hooks/useRefresh";
 import { safeJSONParse } from "@lib/utils";
 import { toast } from "@formBuilder/components/shared";
+import { Button } from "@clientComponents/globals";
 
 interface JSONUploadProps {
   form?: FormRecord;
@@ -125,9 +126,9 @@ export const JSONUpload = (props: JSONUploadProps): React.ReactElement => {
                 aria-label={t("upload.jsonConfigAriaLabel")}
               />
               <div>
-                <button type="submit" className="gc-button mt-10" data-testid="upload">
+                <Button type="submit" className="mt-10" data-testid="upload">
                   {t("upload.submit")}
-                </button>
+                </Button>
                 {submitStatus && (
                   <span id="submitStatus" data-testid="submitStatus">
                     {submitStatus}

@@ -1,0 +1,70 @@
+
+@import '../node_modules/@cdssnc/gcds-tokens/build/web/css/components/select.css';
+
+.gcds-select-wrapper {
+  display: block;
+  margin: 0;
+  padding: 0;
+  border: 0;
+
+  select {
+    box-sizing: border-box;
+  }
+}
+
+.gcds-select-wrapper {
+  max-width: 75ch;
+  font: var(--gcds-select-font);
+  color: var(--gcds-select-default-text);
+  transition: color ease-in-out 0.15s;
+
+  select {
+    display: block;
+    min-width: var(--gcds-select-min-width-and-height);
+    max-width: 100%;
+    height: auto;
+    min-height: var(--gcds-select-min-width-and-height);
+    font: inherit;
+    margin: var(--gcds-select-margin) !important;
+    padding: var(--gcds-select-padding) !important;
+    background-color: var(--gcds-select-default-background);
+    color: var(--gcds-select-default-text);
+    border: var(--gcds-select-border-width) solid currentColor;
+    border-radius: var(--gcds-select-border-radius);
+    box-sizing: border-box;
+    transition: all ease-in-out 0.15s;
+
+    /* Select arrow */
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    background-image: url("data:image/svg+xml;utf8,<svg width='16' height='10' viewBox='0 0 16 10' fill='none' xmlns='http://www.w3.org/2000/svg'><path d='M0.799988 0.900024L7.79999 7.90003L14.8 0.900024' stroke='currentColor' stroke-width='2'/></svg>");
+    background-repeat: no-repeat;
+    background-position-x: var(--gcds-select-arrow-position-x);
+    background-position-y: 50%;
+  }
+}
+
+.gcds-select-wrapper.gcds-disabled {
+  color: var(--gcds-select-disabled-text);
+
+  select:disabled {
+    cursor: not-allowed;
+    background-color: var(--gcds-select-disabled-background);
+    border-color: var(--gcds-select-disabled-text);
+  }
+}
+
+.gcds-select-wrapper.gcds-error:not(:focus-within) select {
+  border-color: var(--gcds-select-danger-border);
+}
+
+.gcds-select-wrapper:focus-within {
+  color: var(--gcds-select-focus-text);
+
+  select:focus {
+    border-color: var(--gcds-select-focus-text);
+    outline: var(--gcds-select-outline-width) solid var(--gcds-select-focus-text);
+    outline-offset: var(--gcds-select-border-width);
+    box-shadow: var(--gcds-select-focus-box-shadow);
+  }
+}
