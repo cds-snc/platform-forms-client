@@ -7,7 +7,7 @@
 
 // Import CSS variables from gcds-tokens
 @import "../node_modules/@cdssnc/gcds-tokens/build/web/css/components/heading.css";
-@import '../node_modules/@cdssnc/gcds-tokens/build/web/css/components/label.css';
+@import "../node_modules/@cdssnc/gcds-tokens/build/web/css/components/label.css";
 @import "./_input";
 @import "./_textarea";
 @import "./checkbox";
@@ -177,28 +177,20 @@
   }
 }
 
-
-
 .gc-input-radio,
 .gc-input-checkbox {
-  @apply flex pt-3 pb-1 px-0 items-center;
+  @apply flex pt-3 pb-1 px-0;
 }
 
 .gc-radio-label,
 .gc-checkbox-label {
-  @apply md:text-sm font-normal text-base flex items-center;
-
-  .radio-label-text {
-    @apply md:mt-10px mt-2;
-  }
+  @apply md:text-sm font-normal text-base flex;
 
   .checkbox-label-text,
   .radio-label-text {
-    @apply xxs:w-cr-label-fold xs:w-cr-label-5s sm:w-cr-label-6s md:w-cr-label-duo lg:w-cr-label-ipad xl:w-cr-label-1025 w-cr-label-desktop;
+    @apply xxs:w-cr-label-fold xs:w-cr-label-5s sm:w-cr-label-6s md:w-cr-label-duo lg:w-cr-label-ipad xl:w-cr-label-1025 w-cr-label-desktop md:mt-10px mt-2;
   }
 }
-
-
 
 .gc-file-input {
   @apply w-full md:text-sm text-base text-gray-700 py-3 pr-2 mt-2 mb-14;
