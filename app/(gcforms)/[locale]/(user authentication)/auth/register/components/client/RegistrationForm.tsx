@@ -101,7 +101,7 @@ export const RegistrationForm = () => {
         </Link>
       </p>
       <form id="registration" action={formAction} noValidate>
-        <div className="focus-group">
+        <div className="gcds-input-wrapper">
           <Label id={"label-name"} htmlFor={"name"} className="required" required>
             {t("signUpRegistration.fields.name.label")}
           </Label>
@@ -113,7 +113,7 @@ export const RegistrationForm = () => {
             validationError={state.validationErrors?.find((e) => e.fieldKey === "name")?.fieldValue}
           />
         </div>
-        <div className="focus-group">
+        <div className="gcds-input-wrapper">
           <Label id={"label-username"} htmlFor={"username"} className="required" required>
             {t("signUpRegistration.fields.username.label")}
           </Label>
@@ -131,13 +131,13 @@ export const RegistrationForm = () => {
             }
           />
         </div>
-        <div className="focus-group">
+        <div className="gcds-input-wrapper">
           <Label id={"label-password"} htmlFor={"password"} className="required" required>
             {t("signUpRegistration.fields.password.label")}
           </Label>
           <div className="mb-2 text-sm text-black" id={"password-hint"}>
             {t("signUpRegistration.fields.password.hintList.title")}
-            <ul className="mt-2">
+            <ul className="mb-4 mt-2">
               <li>{t("signUpRegistration.fields.password.hintList.characters")}</li>
               <li>{t("signUpRegistration.fields.password.hintList.number")}</li>
               <li>{t("signUpRegistration.fields.password.hintList.capital")}</li>
@@ -155,7 +155,7 @@ export const RegistrationForm = () => {
             }
           />
         </div>
-        <div className="focus-group">
+        <div className="gcds-input-wrapper">
           <Label
             id={"label-passwordConfirmation"}
             htmlFor={"passwordConfirmation"}

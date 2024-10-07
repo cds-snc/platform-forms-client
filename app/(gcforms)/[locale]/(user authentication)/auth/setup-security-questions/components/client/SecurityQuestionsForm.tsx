@@ -87,131 +87,142 @@ export const SecurityQuestionsForm = ({ questions = [] }: { questions: Question[
             <li>{t("requirements2")}</li>
           </ul>
         </div>
-
-        <fieldset className="focus-group">
+        <fieldset className="mb-4">
           <legend className="sr-only">{t("firstQuestion")}</legend>
-          <Label id={"label-question1"} htmlFor={"question1"} className="required" required>
-            {t("question")} 1
-          </Label>
-          <Dropdown
-            id="question1"
-            name="question1"
-            className="mb-0 w-full rounded"
-            onChange={onSelect}
-            validationError={
-              state.validationErrors?.find((e) => e.fieldKey === "question1")?.fieldValue
-            }
-          >
-            <>
-              <option key={"default"} value="">
-                {t("questionPlaceholder")}
-              </option>
-              {questions
-                .filter((q) => !selectedQuestions.toSpliced(0, 1).includes(q.id))
-                .map(({ id, question }) => (
-                  <option key={id} value={id}>
-                    {question}
-                  </option>
-                ))}
-            </>
-          </Dropdown>
-          <Label id={"label-answer1"} htmlFor={"answer1"} className="required mt-6" required>
-            {t("answer")}
-          </Label>
-          <TextInput
-            className="gc-input-text w-full rounded"
-            type={"text"}
-            id={"answer1"}
-            name={"answer1"}
-            required
-            validationError={
-              state.validationErrors?.find((e) => e.fieldKey === "answer1")?.fieldValue
-            }
-          />
+          <div className="gcds-select-wrapper">
+            <Label id={"label-question1"} htmlFor={"question1"} className="required" required>
+              {t("question")} 1
+            </Label>
+            <Dropdown
+              id="question1"
+              name="question1"
+              className="mb-0 w-full rounded"
+              onChange={onSelect}
+              validationError={
+                state.validationErrors?.find((e) => e.fieldKey === "question1")?.fieldValue
+              }
+            >
+              <>
+                <option key={"default"} value="">
+                  {t("questionPlaceholder")}
+                </option>
+                {questions
+                  .filter((q) => !selectedQuestions.toSpliced(0, 1).includes(q.id))
+                  .map(({ id, question }) => (
+                    <option key={id} value={id}>
+                      {question}
+                    </option>
+                  ))}
+              </>
+            </Dropdown>
+          </div>
+          <div className="gcds-input-wrapper">
+            <Label id={"label-answer1"} htmlFor={"answer1"} className="required mt-6" required>
+              {t("answer")}
+            </Label>
+            <TextInput
+              className="gc-input-text w-full rounded"
+              type={"text"}
+              id={"answer1"}
+              name={"answer1"}
+              required
+              validationError={
+                state.validationErrors?.find((e) => e.fieldKey === "answer1")?.fieldValue
+              }
+            />
+          </div>
         </fieldset>
 
-        <fieldset className="focus-group">
+        <fieldset className="mb-4">
           <legend className="sr-only">{t("secondQuestion")}</legend>
-          <Label id={"label-question2"} htmlFor={"question2"} className="required" required>
-            {t("question")} 2
-          </Label>
-          <Dropdown
-            id="question2"
-            name="question2"
-            className="mb-0 w-full rounded"
-            onChange={onSelect}
-            validationError={
-              state.validationErrors?.find((e) => e.fieldKey === "question2")?.fieldValue
-            }
-          >
-            <>
-              <option key={"default"} value="">
-                {t("questionPlaceholder")}
-              </option>
-              {questions
-                .filter((q) => !selectedQuestions.toSpliced(1, 1).includes(q.id))
-                .map(({ id, question }) => (
-                  <option key={id} value={id}>
-                    {question}
-                  </option>
-                ))}
-            </>
-          </Dropdown>
-          <Label id={"label-answer2"} htmlFor={"answer2"} className="required mt-6" required>
-            {t("answer")}
-          </Label>
-          <TextInput
-            className="gc-input-text w-full rounded"
-            type={"text"}
-            id={"answer2"}
-            name={"answer2"}
-            required
-            validationError={
-              state.validationErrors?.find((e) => e.fieldKey === "answer2")?.fieldValue
-            }
-          />
+          <div className="gcds-select-wrapper">
+            <Label id={"label-question2"} htmlFor={"question2"} className="required" required>
+              {t("question")} 2
+            </Label>
+            <Dropdown
+              id="question2"
+              name="question2"
+              className="mb-0 w-full rounded"
+              onChange={onSelect}
+              validationError={
+                state.validationErrors?.find((e) => e.fieldKey === "question2")?.fieldValue
+              }
+            >
+              <>
+                <option key={"default"} value="">
+                  {t("questionPlaceholder")}
+                </option>
+                {questions
+                  .filter((q) => !selectedQuestions.toSpliced(1, 1).includes(q.id))
+                  .map(({ id, question }) => (
+                    <option key={id} value={id}>
+                      {question}
+                    </option>
+                  ))}
+              </>
+            </Dropdown>
+          </div>
+          <div className="gcds-input-wrapper">
+            <Label id={"label-answer2"} htmlFor={"answer2"} className="required mt-6" required>
+              {t("answer")}
+            </Label>
+            <TextInput
+              className="gc-input-text w-full rounded"
+              type={"text"}
+              id={"answer2"}
+              name={"answer2"}
+              required
+              validationError={
+                state.validationErrors?.find((e) => e.fieldKey === "answer2")?.fieldValue
+              }
+            />
+          </div>
         </fieldset>
 
-        <fieldset className="focus-group">
+        <fieldset className="mb-4">
           <legend className="sr-only">{t("thirdQuestion")}</legend>
-          <Label id={"label-question3"} htmlFor={"question3"} className="required" required>
-            {t("question")} 3
-          </Label>
-          <Dropdown
-            id="question3"
-            name="question3"
-            className="mb-0 w-full rounded"
-            onChange={onSelect}
-            validationError={
-              state.validationErrors?.find((e) => e.fieldKey === "question3")?.fieldValue
-            }
-          >
-            <>
-              <option key={"default"} value="">
-                {t("questionPlaceholder")}
-              </option>
-              {questions
-                .filter((q) => !selectedQuestions.toSpliced(2, 1).includes(q.id))
-                .map(({ id, question }) => (
-                  <option key={id} value={id}>
-                    {question}
-                  </option>
-                ))}
-            </>
-          </Dropdown>
-          <Label id={"label-answer3"} htmlFor={"answer3"} className="required mt-6" required>
-            {t("answer")}
-          </Label>
-          <TextInput
-            className="gc-input-text w-full rounded"
-            type={"text"}
-            id={"answer3"}
-            name={"answer3"}
-            required
-            validationError={
-              state.validationErrors?.find((e) => e.fieldKey === "answer3")?.fieldValue
-            }
-          />
+          <div className="gcds-select-wrapper">
+            <Label id={"label-question3"} htmlFor={"question3"} className="required" required>
+              {t("question")} 3
+            </Label>
+            <Dropdown
+              id="question3"
+              name="question3"
+              className="mb-0 w-full rounded"
+              onChange={onSelect}
+              validationError={
+                state.validationErrors?.find((e) => e.fieldKey === "question3")?.fieldValue
+              }
+            >
+              <>
+                <option key={"default"} value="">
+                  {t("questionPlaceholder")}
+                </option>
+                {questions
+                  .filter((q) => !selectedQuestions.toSpliced(2, 1).includes(q.id))
+                  .map(({ id, question }) => (
+                    <option key={id} value={id}>
+                      {question}
+                    </option>
+                  ))}
+              </>
+            </Dropdown>
+          </div>
+          <div className="gcds-input-wrapper">
+            <Label id={"label-answer3"} htmlFor={"answer3"} className="required mt-6" required>
+              {t("answer")}
+            </Label>
+            <TextInput
+              className="gc-input-text w-full rounded"
+              type={"text"}
+              id={"answer3"}
+              name={"answer3"}
+              required
+              validationError={
+                state.validationErrors?.find((e) => e.fieldKey === "answer3")?.fieldValue
+              }
+            />
+          </div>
         </fieldset>
 
         <SubmitButton />

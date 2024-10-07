@@ -155,7 +155,7 @@ export const MFAForm = () => {
         </div>
       ) : (
         <form id="verificationCodeForm" action={formAction} noValidate>
-          <div className="focus-group">
+          <div className="gcds-input-wrapper">
             <Label
               id={"label-verificationCode"}
               htmlFor="verificationCode"
@@ -168,7 +168,7 @@ export const MFAForm = () => {
               {t("verify.fields.confirmationCode.description")}
             </div>
             <TextInput
-              className="h-10 w-36 rounded"
+              className="!w-36"
               type="text"
               id="verificationCode"
               name="verificationCode"
