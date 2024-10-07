@@ -36,108 +36,21 @@ export const AddressCompleteOptions = ({
     <section className="mb-4">
       <h3>{t("addElementDialog.addressComplete.options")}</h3>
 
-      <h4>{t("addElementDialog.addressComplete.components.header")}</h4>
-      <p className="mt-4 mb-4">{t("addElementDialog.addressComplete.components.desc")}</p>
-
       <Checkbox
-        id={`addressComponent-${item.index}-id-unitNumber`}
+        id={`addressComponent-${item.index}-id-canadianOnly`}
         value={
-          `addressComponent-${item.index}-value-unitNumber-` +
-          properties.addressComponents?.unitNumber
+          `addressComponent-${item.index}-value-canadianOnly-` +
+          properties.addressComponents?.canadianOnly
         }
         key={
-          `addressComponent-${item.index}-unitNumber-` + properties.addressComponents?.unitNumber
+          `addressComponent-${item.index}-canadianOnly-` +
+          properties.addressComponents?.canadianOnly
         }
-        defaultChecked={properties.addressComponents?.unitNumber}
+        defaultChecked={properties.addressComponents?.canadianOnly}
         onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-          updateAddressComponents({ unitNumber: e.target.checked });
+          updateAddressComponents({ canadianOnly: e.target.checked });
         }}
-        label={t("addElementDialog.addressComplete.components.unitNumber")}
-      ></Checkbox>
-
-      <Checkbox
-        id={`addressComponent-${item.index}-id-civicNumber`}
-        value={
-          `addressComponent-${item.index}-value-civicNumber-` +
-          properties.addressComponents?.civicNumber
-        }
-        key={
-          `addressComponent-${item.index}-civicNumber-` + properties.addressComponents?.civicNumber
-        }
-        defaultChecked={properties.addressComponents?.civicNumber}
-        onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-          updateAddressComponents({ civicNumber: e.target.checked });
-        }}
-        label={t("addElementDialog.addressComplete.components.civicNumber")}
-      ></Checkbox>
-
-      <Checkbox
-        id={`addressComponent-${item.index}-id-streetName`}
-        value={
-          `addressComponent-${item.index}-value-streetName-` +
-          properties.addressComponents?.streetName
-        }
-        key={
-          `addressComponent-${item.index}-streetName-` + properties.addressComponents?.streetName
-        }
-        defaultChecked={properties.addressComponents?.streetName}
-        onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-          updateAddressComponents({ streetName: e.target.checked });
-        }}
-        label={t("addElementDialog.addressComplete.components.streetName")}
-      ></Checkbox>
-
-      <Checkbox
-        id={`addressComponent-${item.index}-id-city`}
-        value={`addressComponent-${item.index}-value-city-` + properties.addressComponents?.city}
-        key={`addressComponent-${item.index}-city-` + properties.addressComponents?.city}
-        defaultChecked={properties.addressComponents?.city}
-        onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-          updateAddressComponents({ city: e.target.checked });
-        }}
-        label={t("addElementDialog.addressComplete.components.city")}
-      ></Checkbox>
-
-      <Checkbox
-        id={`addressComponent-${item.index}-id-province`}
-        value={
-          `addressComponent-${item.index}-value-province-` + properties.addressComponents?.province
-        }
-        key={`addressComponent-${item.index}-province-` + properties.addressComponents?.province}
-        defaultChecked={properties.addressComponents?.province}
-        onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-          updateAddressComponents({ province: e.target.checked });
-        }}
-        label={t("addElementDialog.addressComplete.components.province")}
-      ></Checkbox>
-
-      <Checkbox
-        id={`addressComponent-${item.index}-id-postalCode`}
-        value={
-          `addressComponent-${item.index}-value-postalCode-` +
-          properties.addressComponents?.postalCode
-        }
-        key={
-          `addressComponent-${item.index}-postalCode-` + properties.addressComponents?.postalCode
-        }
-        defaultChecked={properties.addressComponents?.postalCode}
-        onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-          updateAddressComponents({ postalCode: e.target.checked });
-        }}
-        label={t("addElementDialog.addressComplete.components.postalCode")}
-      ></Checkbox>
-
-      <Checkbox
-        id={`addressComponent-${item.index}-id-country`}
-        value={
-          `addressComponent-${item.index}-value-country-` + properties.addressComponents?.country
-        }
-        key={`addressComponent-${item.index}-country-` + properties.addressComponents?.country}
-        defaultChecked={properties.addressComponents?.country}
-        onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-          updateAddressComponents({ country: e.target.checked });
-        }}
-        label={t("addElementDialog.addressComplete.components.country")}
+        label={t("addElementDialog.addressComplete.canadianOnly")}
       ></Checkbox>
 
       <h4 className="mt-4">{t("addElementDialog.addressComplete.fields")}</h4>
@@ -148,13 +61,13 @@ export const AddressCompleteOptions = ({
         name="addressType"
         id="addressType-full"
         label={t("addElementDialog.addressComplete.fullAddress")}
-        value=""
-        checked={properties.full || properties.full === undefined}
-        onChange={() => {
-          updateModalProperties(item.id, {
-            ...properties,
-            ...{ full: true },
-          });
+        value="addressType-full"
+        checked={
+          properties.addressComponents?.splitAddress === false ||
+          properties.addressComponents?.splitAddress === undefined
+        }
+        onChange={() => (e: React.ChangeEvent<HTMLInputElement>) => {
+          updateAddressComponents({ splitAddress: e.target.checked });
         }}
       />
       <div className="text-sm ml-12 mb-4">
@@ -165,13 +78,10 @@ export const AddressCompleteOptions = ({
         name="addressType"
         id="addressType-split"
         label={t("addElementDialog.addressComplete.splitAddress")}
-        value="bday"
-        checked={properties.full === false}
-        onChange={() => {
-          updateModalProperties(item.id, {
-            ...properties,
-            ...{ full: false },
-          });
+        value="addressType-split"
+        checked={properties.addressComponents?.splitAddress === true}
+        onChange={() => (e: React.ChangeEvent<HTMLInputElement>) => {
+          updateAddressComponents({ splitAddress: e.target.checked });
         }}
       />
       <div className="text-sm ml-12 mb-4">

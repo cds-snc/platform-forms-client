@@ -285,13 +285,8 @@ function _buildForm(element: FormElement, lang: string): ReactElement {
             name={`${id}`}
             ariaDescribedBy={description ? `desc-${id}` : undefined}
             key={`${id}-${lang}`}
-            unitNumber={addressComponents?.unitNumber}
-            civicNumber={addressComponents?.civicNumber}
-            streetName={addressComponents?.streetName}
-            city={addressComponents?.city}
-            province={addressComponents?.province}
-            postalCode={addressComponents?.postalCode}
-            country={addressComponents?.country}
+            splitAddress={addressComponents?.splitAddress}
+            canadianOnly={addressComponents?.canadianOnly}
           />
         </div>
       );

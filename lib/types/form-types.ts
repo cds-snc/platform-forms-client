@@ -35,13 +35,8 @@ export type ConditionalRule = {
 };
 
 export type AddressComponents = {
-  unitNumber?: boolean;
-  civicNumber?: boolean;
-  streetName?: boolean;
-  city?: boolean;
-  province?: boolean;
-  postalCode?: boolean;
-  country?: boolean;
+  canadianOnly?: boolean;
+  splitAddress?: boolean;
 };
 
 export type dynamicRowType = {

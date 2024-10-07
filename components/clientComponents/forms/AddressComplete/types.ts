@@ -21,13 +21,8 @@ export interface AddressCompleteResult {
 
 // Props for the AddressComplete component
 export interface AddressCompleteProps extends InputFieldProps {
-  unitNumber?: boolean;
-  civicNumber?: boolean;
-  streetName?: boolean;
-  city?: boolean;
-  province?: boolean;
-  postalCode?: boolean;
-  country?: boolean;
+  canadianOnly?: boolean;
+  splitAddress?: boolean;
 }
 
 // Address Elements for the AddressComplete component

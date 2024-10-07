@@ -1,4 +1,4 @@
-import { AddressComponents, FormElement } from "@lib/types";
+import { FormElement } from "@lib/types";
 import { AddressCompleteChoice, AddressCompleteResult, AddressElements } from "./types";
 import { Answer } from "@lib/responseDownloadFormats/types";
 
@@ -90,20 +90,17 @@ export const getAddressAsString = (address: AddressElements) => {
 
 export const getAddressAsReviewElements = (
   address: AddressElements,
-  addressComponents: AddressComponents,
   element: FormElement,
   titleSet: AddressElements
 ) => {
   const returnArray = [];
 
-  for (const key in addressComponents) {
-    if (addressComponents[key as keyof AddressComponents]) {
-      returnArray.push({
-        title: titleSet[key as keyof AddressElements],
-        values: address[key as keyof AddressElements],
-        element: element,
-      });
-    }
+  for (const key in address) {
+    returnArray.push({
+      title: titleSet[key as keyof AddressElements],
+      values: address[key as keyof AddressElements],
+      element: element,
+    });
   }
   return returnArray;
 };
@@ -111,21 +108,18 @@ export const getAddressAsReviewElements = (
 export const getAddressAsAnswerElements = (
   question: FormElement,
   address: AddressElements,
-  addressComponents: AddressComponents,
   extraTranslations: { [key: string]: { en: string; fr: string } }
 ): Answer[] => {
   const answerArray = [];
-  for (const key in addressComponents) {
-    if (address[key as keyof AddressComponents]) {
-      const answerObj: Answer = {
-        questionId: question.id,
-        questionEn: extraTranslations[key as keyof AddressElements].en,
-        questionFr: extraTranslations[key as keyof AddressElements].fr,
-        answer: address[key as keyof AddressElements],
-      };
+  for (const key in address) {
+    const answerObj: Answer = {
+      questionId: question.id,
+      questionEn: extraTranslations[key as keyof AddressElements].en,
+      questionFr: extraTranslations[key as keyof AddressElements].fr,
+      answer: address[key as keyof AddressElements],
+    };
 
-      answerArray.push(answerObj);
-    }
+    answerArray.push(answerObj);
   }
 
   return answerArray;

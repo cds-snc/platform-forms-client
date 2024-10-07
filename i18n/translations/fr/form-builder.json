@@ -68,9 +68,8 @@
       "splitAddressDesc": "Données divisées en plusieurs entités.",
       "customize": "Adapter le format",
       "startTyping": "Commencez à taper l'adresse à rechercher",
+      "canadianOnly": "Adresses canadiennes seulement",
       "components": {
-        "header": "Parties de l’adresse à inclure",
-        "desc": "Essayez de minimiser ce qui est demandé pour ne recueillir que ce qui est nécessaire.",
         "unitNumber": "Numéro de l’unité",
         "civicNumber": "Numéro civique",
         "streetName": "Nom de la rue",

@@ -161,6 +161,30 @@ export const AddressComplete = (props: AddressCompleteProps): React.ReactElement
             {ariaDescribedBy}
           </Description>
         )}
+
+        {!props.canadianOnly && (
+          <div>
+            <input type="hidden" id={`${name}-country`} name={`${name}-country`} value={"CAN"} />
+          </div>
+        )}
+        {!props.canadianOnly && (
+          <div className="mb-6">
+            <Label htmlFor="country" className="gc-label">
+              {t("addElementDialog.addressComplete.country")}
+            </Label>
+            <input
+              type="text"
+              id={`${name}-country`}
+              name={`${name}-country`}
+              value={addressObject?.country}
+              onChange={(e) => setAddressData("country", e.target.value)}
+              className={cn("gc-input-text", meta.error && "gc-error-input")}
+              required={required}
+              data-testid="addresscomplete-input-country"
+            />
+          </div>
+        )}
+
         <div className="mb-6">
           <Label htmlFor="street" className="gc-label">
             {t("addElementDialog.addressComplete.street.label")}
@@ -186,128 +210,105 @@ export const AddressComplete = (props: AddressCompleteProps): React.ReactElement
           )}
           <input type="hidden" {...field} />
         </div>
-        {props.unitNumber && (
-          <div className="mb-6">
-            <Label htmlFor="unit" className="gc-label">
-              {t("addElementDialog.addressComplete.components.unitNumber")}
-            </Label>
-            <input
-              type="text"
-              id={`${name}-unit`}
-              name={`${name}-unit`}
-              key={`${name}-unit-${addressObject?.unitNumber}`}
-              onChange={(e) => setAddressData("unitNumber", e.target.value)}
-              className={cn("gc-input-text", meta.error && "gc-error-input")}
-              value={addressObject?.unitNumber}
-              required={required}
-              data-testid="addresscomplete-input-unitNumber"
-            />
-          </div>
-        )}
-        {props.civicNumber && (
-          <div className="mb-6">
-            <Label htmlFor="civic" className="gc-label">
-              {t("addElementDialog.addressComplete.components.civicNumber")}
-            </Label>
-            <input
-              type="text"
-              id={`${name}-civic`}
-              name={`${name}-civic`}
-              key={`${name}-civic-${addressObject?.civicNumber}`}
-              onChange={(e) => setAddressData("civicNumber", e.target.value)}
-              className={cn("gc-input-text", meta.error && "gc-error-input")}
-              value={addressObject?.civicNumber}
-              required={required}
-              data-testid="addresscomplete-input-civicNumber"
-            />
-          </div>
-        )}
-        {props.streetName && (
-          <div className="mb-6">
-            <Label htmlFor="street" className="gc-label">
-              {t("addElementDialog.addressComplete.components.streetName")}
-            </Label>
-            <input
-              type="text"
-              id={`${name}-street`}
-              name={`${name}-street`}
-              key={`${name}-street-${addressObject?.streetName}`}
-              onChange={(e) => setAddressData("streetName", e.target.value)}
-              className={cn("gc-input-text", meta.error && "gc-error-input")}
-              value={addressObject?.streetName}
-              required={required}
-              data-testid="addresscomplete-input-streetName"
-            />
-          </div>
-        )}
-        {props.city && (
-          <div className="mb-6">
-            <Label htmlFor="city" className="gc-label">
-              {t("addElementDialog.addressComplete.city")}
-            </Label>
-            <input
-              type="text"
-              id={`${name}-city`}
-              name={`${name}-city`}
-              value={addressObject?.city}
-              onChange={(e) => setAddressData("city", e.target.value)}
-              className={cn("gc-input-text", meta.error && "gc-error-input")}
-              required={required}
-              data-testid="addresscomplete-input-city"
-            />
-          </div>
-        )}
-        {props.province && (
-          <div className="mb-6">
-            <Label htmlFor="province" className="gc-label">
-              {t("addElementDialog.addressComplete.province")}
-            </Label>
-            <input
-              type="text"
-              id={`${name}-province`}
-              name={`${name}-province`}
-              value={addressObject?.province}
-              onChange={(e) => setAddressData("province", e.target.value)}
-              className={cn("gc-input-text", meta.error && "gc-error-input")}
-              required={required}
-              data-testid="addresscomplete-input-province"
-            />
-          </div>
-        )}
-        {props.postalCode && (
-          <div className="mb-6">
-            <Label htmlFor="postal" className="gc-label">
-              {t("addElementDialog.addressComplete.postal")}
-            </Label>
-            <input
-              id={`${name}-postal`}
-              type="text"
-              name={`${name}-postal`}
-              value={addressObject?.postalCode}
-              onChange={(e) => setAddressData("postalCode", e.target.value)}
-              className={cn("gc-input-text", meta.error && "gc-error-input")}
-              required={required}
-              data-testid="addresscomplete-input-postalCode"
-            />
-          </div>
-        )}
-        {props.country && (
-          <div className="mb-6">
-            <Label htmlFor="country" className="gc-label">
-              {t("addElementDialog.addressComplete.country")}
-            </Label>
-            <input
-              type="text"
-              id={`${name}-country`}
-              name={`${name}-country`}
-              value={addressObject?.country}
-              onChange={(e) => setAddressData("country", e.target.value)}
-              className={cn("gc-input-text", meta.error && "gc-error-input")}
-              required={required}
-              data-testid="addresscomplete-input-country"
-            />
-          </div>
-        )}
+
+        <div className="mb-6">
+          <Label htmlFor="unit" className="gc-label">
+            {t("addElementDialog.addressComplete.components.unitNumber")}
+          </Label>
+          <input
+            type="text"
+            id={`${name}-unit`}
+            name={`${name}-unit`}
+            key={`${name}-unit-${addressObject?.unitNumber}`}
+            onChange={(e) => setAddressData("unitNumber", e.target.value)}
+            className={cn("gc-input-text", meta.error && "gc-error-input")}
+            value={addressObject?.unitNumber}
+            required={required}
+            data-testid="addresscomplete-input-unitNumber"
+          />
+        </div>
+
+        <div className="mb-6">
+          <Label htmlFor="civic" className="gc-label">
+            {t("addElementDialog.addressComplete.components.civicNumber")}
+          </Label>
+          <input
+            type="text"
+            id={`${name}-civic`}
+            name={`${name}-civic`}
+            key={`${name}-civic-${addressObject?.civicNumber}`}
+            onChange={(e) => setAddressData("civicNumber", e.target.value)}
+            className={cn("gc-input-text", meta.error && "gc-error-input")}
+            value={addressObject?.civicNumber}
+            required={required}
+            data-testid="addresscomplete-input-civicNumber"
+          />
+        </div>
+
+        <div className="mb-6">
+          <Label htmlFor="street" className="gc-label">
+            {t("addElementDialog.addressComplete.components.streetName")}
+          </Label>
+          <input
+            type="text"
+            id={`${name}-street`}
+            name={`${name}-street`}
+            key={`${name}-street-${addressObject?.streetName}`}
+            onChange={(e) => setAddressData("streetName", e.target.value)}
+            className={cn("gc-input-text", meta.error && "gc-error-input")}
+            value={addressObject?.streetName}
+            required={required}
+            data-testid="addresscomplete-input-streetName"
+          />
+        </div>
+
+        <div className="mb-6">
+          <Label htmlFor="city" className="gc-label">
+            {t("addElementDialog.addressComplete.city")}
+          </Label>
+          <input
+            type="text"
+            id={`${name}-city`}
+            name={`${name}-city`}
+            value={addressObject?.city}
+            onChange={(e) => setAddressData("city", e.target.value)}
+            className={cn("gc-input-text", meta.error && "gc-error-input")}
+            required={required}
+            data-testid="addresscomplete-input-city"
+          />
+        </div>
+
+        <div className="mb-6">
+          <Label htmlFor="province" className="gc-label">
+            {t("addElementDialog.addressComplete.province")}
+          </Label>
+          <input
+            type="text"
+            id={`${name}-province`}
+            name={`${name}-province`}
+            value={addressObject?.province}
+            onChange={(e) => setAddressData("province", e.target.value)}
+            className={cn("gc-input-text", meta.error && "gc-error-input")}
+            required={required}
+            data-testid="addresscomplete-input-province"
+          />
+        </div>
+
+        <div className="mb-6">
+          <Label htmlFor="postal" className="gc-label">
+            {t("addElementDialog.addressComplete.postal")}
+          </Label>
+          <input
+            id={`${name}-postal`}
+            type="text"
+            name={`${name}-postal`}
+            value={addressObject?.postalCode}
+            onChange={(e) => setAddressData("postalCode", e.target.value)}
+            className={cn("gc-input-text", meta.error && "gc-error-input")}
+            required={required}
+            data-testid="addresscomplete-input-postalCode"
+          />
+        </div>
       </fieldset>
     </>
   );

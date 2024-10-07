@@ -68,9 +68,8 @@
       "splitAddressDesc": "Data separated in multiple entities or lines.",
       "customize": "Customize format",
       "startTyping": "Start typing an address to search",
+      "canadianOnly": "Canadian addresses only",
       "components": {
-        "header": "Parts of the address to be included",
-        "desc": "Consider minimizing what is asked to only collect what is necessary.",
         "unitNumber": "Unit number",
         "civicNumber": "Civic number",
         "streetName": "Street name",

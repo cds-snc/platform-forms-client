@@ -23,17 +23,7 @@ export const AddressComplete = () => {
       <ExampleWrapper className="mt-4">
         <h4 className="mb-4">{t("addElementDialog.addressComplete.whatIsYourAddress")}</h4>
         <div className="mb-6">
-          <AddressCompleteComponent
-            id="test-address"
-            name="test-address"
-            civicNumber={true}
-            unitNumber={true}
-            streetName={true}
-            postalCode={true}
-            city={true}
-            province={true}
-            country={true}
-          />
+          <AddressCompleteComponent id="test-address" name="test-address" canadianOnly={true} />
         </div>
       </ExampleWrapper>
     </div>

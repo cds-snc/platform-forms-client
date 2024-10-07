@@ -269,11 +269,13 @@ export const getSubmissionsByFormat = async ({
             const addressObject = JSON.parse(answer as string) as AddressElements;
 
             const questionComponents = question.properties.addressComponents as AddressComponents;
+            if (questionComponents.canadianOnly) {
+              addressObject.country = "CAN";
+            }
 
             const reviewElements = getAddressAsAnswerElements(
               question,
               addressObject,
-              questionComponents,
               extraTranslations
             );
             const addressElements = [reviewElements];

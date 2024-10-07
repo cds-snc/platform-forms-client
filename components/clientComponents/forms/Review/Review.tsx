@@ -59,7 +59,7 @@ function formatElementValues(element: ReviewElement) {
 
   // Case of Address Complete
   if (element.element?.type === FormElementTypes.addressComplete) {
-    if (element.element.properties?.full === false) {
+    if (element.element.properties?.addressComponents?.splitAddress === true) {
       return element.values as string; // We're a split address, broken into components.
     } else {
       return getAddressAsString(JSON.parse(element.values as string) as AddressElements);
@@ -133,14 +133,14 @@ function getReviewItemElements(
 
     // Handle Address Complete if broken into sub-components.
     if (element?.type === FormElementTypes.addressComplete) {
-      if (element.properties?.full === false) {
-        // We're a split address, broken into components.
+      const addressComponents = element.properties?.addressComponents as AddressComponents;
 
+      if (addressComponents.splitAddress === true) {
+        // We're a split address, broken into components.
         const parentTitle = element.properties?.[getLocalizedProperty("title", lang)];
 
         const addressFormValue = formValues[elementId] as string;
         const addressValues = JSON.parse(addressFormValue) as AddressElements;
-        const addressComponents = element.properties?.addressComponents as AddressComponents;
 
         const titleSet = {
           unitNumber: parentTitle + " - " + addressCompleteStrings.unitNumber,
@@ -154,7 +154,6 @@ function getReviewItemElements(
 
         const subAddressValues = getAddressAsReviewElements(
           addressValues,
-          addressComponents,
           element,
           titleSet
         ) as ReviewElement[];
