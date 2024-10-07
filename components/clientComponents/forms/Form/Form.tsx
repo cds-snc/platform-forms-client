@@ -53,9 +53,16 @@ const SubmitButton: React.FC<SubmitButtonProps> = ({
 
   // If the timer hasn't started yet, start the timer
   if (!formTimerState.timerDelay && formTimerEnabled) {
-    // Calculated here to avoid being called on each checkTimer interval
+    // Calculated here to avoid being called on each checkTimer interval (every second)
     const submitDelaySeconds =
       secondsBaseDelay + getNumberOfRequiredQuestions() * secondsPerFormElement;
+
+    // TEMP START: For easier testing, to be removed before merge
+    logMessage.info(
+      `Submit delay, Number of Required Questions=${getNumberOfRequiredQuestions()}. Total delay=${submitDelaySeconds} seconds`
+    );
+    // TEMP END: For easier testing, to be removed before merge
+
     startTimer(submitDelaySeconds);
   }
 
@@ -202,31 +209,38 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [formStatusError, errorList, lastSubmitCount, canFocusOnError]);
 
-  // Calculation done in a callback to allow more opportune calling (performance). An alternative
-  // is to useMemo it but that would be called on every input change making it pointless.
+  // Done in a callback to allow calling when the submit button is clicked. Otherwise the block
+  // below would be called very time the form values change. Similar reason why useMemo is not used.
   const getNumberOfRequriedQuestions = () => {
-    const hasGroups = formHasGroups(form) && props.allowGrouping;
-    const formValues = getValues() || {};
-    const groupHistory = getGroupHistory();
-    const groupHistoryElements = groupHistory
-      .map((groupId) => {
-        if (!groups) return [];
-        const group: Group = groups[groupId as keyof typeof groups] || {};
-        const reviewElements = getReviewItemElements(
-          group.elements,
-          form.elements,
-          matchedIds,
-          formValues,
-          language
-        );
-        return reviewElements.map((reviewElement) => reviewElement.element);
-      })
-      .flat();
+    const FALLBACK_QUESTIONS_COUNT = 4;
+    try {
+      const hasGroups = formHasGroups(form) && props.allowGrouping;
+      const formValues = getValues() || {};
+      const groupHistory = getGroupHistory();
+      const groupHistoryElements = groupHistory
+        .map((groupId) => {
+          if (!groups) return [];
+          const group: Group = groups[groupId as keyof typeof groups] || {};
+          const reviewElements = getReviewItemElements(
+            group.elements,
+            form.elements,
+            matchedIds,
+            formValues,
+            language
+          );
+          return reviewElements.map((reviewElement) => reviewElement.element);
+        })
+        .flat();
 
-    const filterByTheseElements = hasGroups ? groupHistoryElements : form.elements;
-    return filterByTheseElements.filter(
-      (element) => element?.properties.validation?.required === true
-    ).length;
+      const filterByTheseElements = hasGroups ? groupHistoryElements : form.elements;
+      return (
+        filterByTheseElements.filter((element) => element?.properties.validation?.required === true)
+          .length || FALLBACK_QUESTIONS_COUNT
+      );
+    } catch (err) {
+      // This should never happen
+      return FALLBACK_QUESTIONS_COUNT;
+    }
   };
 
   return status === "submitting" ? (
