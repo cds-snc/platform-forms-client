@@ -87,7 +87,7 @@ export const QuestionChallengeForm = ({
       <h1 className="mb-12 mt-6 border-b-0">{t("securityQuestions.title")}</h1>
       <p className="mb-6 max-w-lg">{t("securityQuestions.description")}</p>
       <form id="resetPassword" action={formAction} noValidate>
-        <div className="focus-group">
+        <div className="gcds-input-wrapper">
           <Label
             id="label-question1"
             htmlFor="question1"
@@ -97,7 +97,6 @@ export const QuestionChallengeForm = ({
             {userSecurityQuestions[0][langKey]}
           </Label>
           <TextInput
-            className="h-10 w-[75%] rounded"
             type="text"
             id="question1"
             name="question1"
@@ -108,7 +107,7 @@ export const QuestionChallengeForm = ({
           />
         </div>
 
-        <div className="focus-group">
+        <div className="gcds-input-wrapper">
           <Label
             id="label-question2"
             htmlFor="question2"
@@ -118,7 +117,6 @@ export const QuestionChallengeForm = ({
             {userSecurityQuestions[1][langKey]}
           </Label>
           <TextInput
-            className="h-10 w-[75%] rounded"
             type="text"
             id="question2"
             name="question2"
@@ -129,7 +127,7 @@ export const QuestionChallengeForm = ({
           />
         </div>
 
-        <div className="focus-group">
+        <div className="gcds-input-wrapper">
           <Label
             id="label-question3"
             htmlFor="question3"
@@ -139,7 +137,6 @@ export const QuestionChallengeForm = ({
             {userSecurityQuestions[2][langKey]}
           </Label>
           <TextInput
-            className="h-10 w-[75%] rounded"
             type="text"
             id="question3"
             name="question3"

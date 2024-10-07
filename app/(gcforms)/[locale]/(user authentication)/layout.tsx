@@ -7,6 +7,7 @@ import { SiteLogo } from "@serverComponents/icons";
 import { ToastContainer } from "@formBuilder/components/shared/Toast";
 import { headers } from "next/headers";
 import { Info as AlertInfo } from "@clientComponents/globals/Alert/Alert";
+import { Alert } from "@clientComponents/globals";
 import { SkipLink } from "@serverComponents/globals/SkipLink";
 import { Footer } from "@serverComponents/globals/Footer";
 
@@ -14,7 +15,10 @@ const Info = async ({ locale }: { locale: string }) => {
   const { t } = await serverTranslation(["setup-security-questions"], { lang: locale });
   return (
     <div className="mx-auto mt-10 w-[850px]">
-      <AlertInfo title={t("banner.title")} body={t("banner.body")} />
+      <AlertInfo>
+        <Alert.Title headingTag="h3">{t("banner.title")}</Alert.Title>
+        <p className="mb-2">{t("banner.body")} </p>
+      </AlertInfo>
     </div>
   );
 };
@@ -34,7 +38,7 @@ export default async function Layout({
     <div className="flex min-h-full flex-col bg-gray-soft">
       <SkipLink />
 
-      <header className="mb-4 bg-white px-[4rem] py-6 laptop:px-32">
+      <header className="mb-4 bg-white px-16 py-6 laptop:px-32">
         <div className="flex justify-between">
           <div className="canada-flag">
             <Link href={t("fip.link")} aria-label={t("fip.text")}>
