@@ -73,7 +73,7 @@ export const LoginForm = () => {
         <Link href={`/${language}/auth/register`}>{t("signUpLink")}</Link>
       </p>
       <form id="login" action={formAction} noValidate>
-        <div className="focus-group">
+        <div className="gcds-input-wrapper">
           <Label id={"label-username"} htmlFor={"username"} className="required" required>
             {t("fields.username.label")}
           </Label>
@@ -92,7 +92,7 @@ export const LoginForm = () => {
             }
           />
         </div>
-        <div className="focus-group">
+        <div className="gcds-input-wrapper">
           <Label id={"label-password"} htmlFor={"password"} className="required" required>
             {t("fields.password.label")}
           </Label>
@@ -107,7 +107,7 @@ export const LoginForm = () => {
             }
           />
         </div>
-        <p className="-mt-6 mb-10">
+        <p className="mb-10">
           <Link href={`/${language}/auth/reset-password`} className="-mt-8 mb-10">
             {t("resetPasswordText")}
           </Link>
