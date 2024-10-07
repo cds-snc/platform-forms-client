@@ -73,7 +73,8 @@ See: https://design-system.alpha.canada.ca/en/components/checkbox/
   }
 
   .checkbox-label-text {
-    /* width: auto !important; */
+    // @todo look at applying making the width auto here
+    // so the user only clicks on the text not white space. 
     font: var(--gcds-label-font-desktop);
     @apply font-noto-sans;
     -webkit-font-smoothing: antialiased;
