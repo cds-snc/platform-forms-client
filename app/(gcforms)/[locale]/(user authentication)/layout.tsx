@@ -61,7 +61,7 @@ export default async function Layout({
       <div id="page-container" className="gc-authpages">
         {/* Until a better solution is found this adds the banner before the content on the setup security questions page */}
         {currentPath?.startsWith("/auth/setup-security-questions") && <Info locale={locale} />}
-        <div className="account-wrapper mt-10 flex items-center justify-center w-[950px]">
+        <div className="account-wrapper mt-10 flex items-center justify-center">
           <div
             className={`rounded-2xl border-1 border-[#D1D5DB] bg-white p-10 tablet:w-[768px] has-[#auth-panel]:tablet:w-[658px] laptop:w-[850px]`}
           >
