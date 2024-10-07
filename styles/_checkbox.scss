@@ -73,7 +73,7 @@ See: https://design-system.alpha.canada.ca/en/components/checkbox/
   }
 
   .checkbox-label-text {
-    width: auto !important;
+    /* width: auto !important; */
     font: var(--gcds-label-font-desktop);
     @apply font-noto-sans;
     -webkit-font-smoothing: antialiased;
