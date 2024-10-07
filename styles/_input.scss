@@ -1,0 +1,74 @@
+@import "../node_modules/@cdssnc/gcds-tokens/build/web/css/components/input.css";
+
+.gcds-input-wrapper {
+  display: block;
+  margin: 0;
+  padding: 0;
+  border: 0;
+
+  input {
+    box-sizing: border-box;
+  }
+}
+
+.gcds-input-wrapper {
+  max-width: 75ch;
+  width: 100%;
+  font: var(--gcds-input-font);
+  color: var(--gcds-input-default-text);
+  transition: color ease-in-out 0.15s;
+
+  input {
+    display: block;
+    min-width: var(--gcds-input-min-width-and-height);
+    width: 100%;
+    max-width: 100%;
+    height: auto;
+    min-height: var(--gcds-input-min-width-and-height);
+    font: inherit !important;
+    margin: var(--gcds-input-margin) !important;
+    padding: var(--gcds-input-padding) !important;
+    background-color: var(--gcds-input-default-background);
+    background-image: none;
+    color: var(--gcds-input-default-text);
+    border: var(--gcds-input-border-width) solid #000;
+    border-radius: var(--gcds-input-border-radius);
+    transition: border-color ease-in-out 0.15s, box-shadow ease-in-out 0.15s,
+      outline ease-in-out 0.15s;
+
+    /* Hide number arrows */
+    &[type="number"] {
+      -moz-appearance: textfield;
+
+      &::-webkit-outer-spin-button,
+      &::-webkit-inner-spin-button {
+        -webkit-appearance: none;
+      }
+    }
+  }
+}
+
+.gcds-input-wrapper.gcds-disabled {
+  color: var(--gcds-input-disabled-text);
+
+  input:disabled {
+    cursor: not-allowed;
+    background-color: var(--gcds-input-disabled-background);
+    border-color: var(--gcds-input-disabled-text);
+  }
+}
+
+.gcds-input-wrapper input.gcds-error:not(:focus) {
+  border-color: var(--gcds-input-danger-border);
+}
+
+.gcds-input-wrapper:focus-within {
+  color: var(--gcds-input-focus-text);
+
+  input:focus {
+    border-color: var(--gcds-input-focus-text);
+    outline: var(--gcds-input-outline-width) solid var(--gcds-input-focus-text);
+    outline-offset: var(--gcds-input-border-width);
+    box-shadow: var(--gcds-input-focus-box-shadow);
+  }
+}
