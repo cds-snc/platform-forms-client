@@ -239,7 +239,7 @@ export const DownloadDialog = ({
               {t("downloadResponsesModals.downloadDialog.downloadFormatContext3")}
             </p>
             <div className="mt-4 flex flex-col gap-6">
-              <div>
+              <div className="gc-input-radio">
                 <input
                   type="radio"
                   name="downloadFormat"
@@ -249,17 +249,19 @@ export const DownloadDialog = ({
                   className="gc-radio__input"
                   onChange={(e) => setSelectedFormat(e.target.value as DownloadFormat)}
                 />
-                <label htmlFor="zip" className="gc-checkbox-label ml-14 inline-block">
-                  <span className="block font-semibold">
-                    {t("downloadResponsesModals.downloadDialog.html")}
-                  </span>
-                  <span className="">
-                    {t("downloadResponsesModals.downloadDialog.htmlDescription")}
+                <label htmlFor="zip" className="gc-radio-label">
+                  <span className="radio-label-text">
+                    <span className="block font-semibold">
+                      {t("downloadResponsesModals.downloadDialog.html")}
+                    </span>
+                    <span className="font-normal">
+                      {t("downloadResponsesModals.downloadDialog.htmlDescription")}
+                    </span>
                   </span>
                 </label>
               </div>
 
-              <div>
+              <div className="gc-input-radio">
                 <input
                   type="radio"
                   name="downloadFormat"
@@ -269,17 +271,19 @@ export const DownloadDialog = ({
                   className="gc-radio__input"
                   onChange={(e) => setSelectedFormat(e.target.value as DownloadFormat)}
                 />
-                <label htmlFor="combined" className="gc-checkbox-label ml-14 inline-block">
-                  <span className="block font-semibold">
-                    {t("downloadResponsesModals.downloadDialog.csv")}
-                  </span>
-                  <span className="">
-                    {t("downloadResponsesModals.downloadDialog.csvDescription")}
+                <label htmlFor="combined" className="gc-radio-label">
+                  <span className="radio-label-text">
+                    <span className="block font-semibold">
+                      {t("downloadResponsesModals.downloadDialog.csv")}
+                    </span>
+                    <span className="font-normal">
+                      {t("downloadResponsesModals.downloadDialog.csvDescription")}
+                    </span>
                   </span>
                 </label>
               </div>
 
-              <div>
+              <div className="gc-input-radio">
                 <input
                   type="radio"
                   name="downloadFormat"
@@ -289,12 +293,14 @@ export const DownloadDialog = ({
                   className="gc-radio__input"
                   onChange={(e) => setSelectedFormat(e.target.value as DownloadFormat)}
                 />
-                <label htmlFor="json" className="gc-checkbox-label ml-14 inline-block">
-                  <span className="block font-semibold">
-                    {t("downloadResponsesModals.downloadDialog.json")}
-                  </span>
-                  <span className="">
-                    {t("downloadResponsesModals.downloadDialog.jsonDescription")}
+                <label htmlFor="json" className="gc-radio-label">
+                  <span className="radio-label-text">
+                    <span className="block font-semibold">
+                      {t("downloadResponsesModals.downloadDialog.json")}
+                    </span>
+                    <span className="font-normal">
+                      {t("downloadResponsesModals.downloadDialog.jsonDescription")}
+                    </span>
                   </span>
                 </label>
               </div>
