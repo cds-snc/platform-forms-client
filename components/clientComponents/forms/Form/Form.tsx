@@ -28,6 +28,7 @@ import {
 import { filterShownElements, filterValuesByShownElements } from "@lib/formContext";
 import { formHasGroups } from "@lib/utils/form-builder/formHasGroups";
 import { showReviewPage } from "@lib/utils/form-builder/showReviewPage";
+import { t } from "i18next";
 
 interface SubmitButtonProps {
   numberOfRequiredQuestions: number;
@@ -169,7 +170,7 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
   const errorList = props.errors ? getErrorList(props) : null;
   const errorId = "gc-form-errors";
   const serverErrorId = `${errorId}-server`;
-  const formStatusError = props.status === "Error" ? t("server-error") : null;
+  const formStatusError = props.status === "Error" ? props.errors.form || t("server-error") : null;
 
   //  If there are errors on the page, set focus the first error field
   useEffect(() => {
@@ -388,8 +389,14 @@ export const Form = withFormik<FormProps, Responses>({
         formikBag.props.language,
         formikBag.props.formRecord
       );
+
       if (result.error) {
         formikBag.setStatus("Error");
+        if (result.error.message.includes("FileValidationResult")) {
+          formikBag.setErrors({
+            form: t("input-validation.file-submission"),
+          });
+        }
       } else {
         formikBag.props.onSuccess(result.id);
       }
