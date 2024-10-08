@@ -197,4 +197,13 @@ export const options = [
     logoTitleEn: "Canada Energy Regulator",
     logoTitleFr: "Régie de l’énergie du Canada",
   },
+  {
+    name: "grain",
+    urlEn: "https://www.grainscanada.gc.ca/en/",
+    urlFr: "https://www.grainscanada.gc.ca/fr/",
+    logoEn: "/img/branding/grain-en.svg",
+    logoFr: "/img/branding/grain-fr.svg",
+    logoTitleEn: "Canadian Grain Commission",
+    logoTitleFr: "Commission canadienne des grains",
+  },
 ];
