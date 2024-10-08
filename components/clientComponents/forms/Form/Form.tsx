@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState, useRef, useCallback } from "react";
 import { FormikProps, withFormik } from "formik";
 import { getFormInitialValues } from "@lib/formBuilder";
 import { getErrorList, setFocusOnErrorMessage, validateOnSubmit } from "@lib/validation/validation";
@@ -39,18 +39,11 @@ import { showReviewPage } from "@lib/utils/form-builder/showReviewPage";
 const calculateSubmitDelay = (numberOfRequiredQuestions: number) => {
   const secondsBaseDelay = 2;
   const secondsPerFormElement = 2;
-  const temp = secondsBaseDelay + numberOfRequiredQuestions * secondsPerFormElement;
-  // TEMP START: For easier testing, to be removed before merge
-  logMessage.info(
-    `Submit delay, Number of Required Questions=${numberOfRequiredQuestions}. Total delay=${temp} seconds`
-  );
-  // TEMP END: For easier testing, to be removed before merge
-  return temp;
+  return secondsBaseDelay + numberOfRequiredQuestions * secondsPerFormElement;
 };
 
-const getNumberOfRequriedQuestions = ({
+const getFormElementsGroups = ({
   form,
-  allowGrouping,
   getValues,
   getGroupHistory,
   groups,
@@ -58,42 +51,28 @@ const getNumberOfRequriedQuestions = ({
   language, // TODO: will be refactored out in the future
 }: {
   form: FormProperties;
-  allowGrouping: boolean | undefined;
   getValues: () => void | FormValues;
   getGroupHistory: () => string[];
   groups: GroupsType | object | undefined;
   matchedIds: string[];
   language: string;
 }) => {
-  const FALLBACK_QUESTIONS_COUNT = 4;
-  try {
-    const hasGroups = formHasGroups(form) && allowGrouping;
-    const formValues = getValues() || {};
-    const groupHistory = getGroupHistory();
-    const groupHistoryElements = groupHistory
-      .map((groupId) => {
-        if (!groups) return [];
-        const group: Group = groups[groupId as keyof typeof groups] || {};
-        const groupElements = getReviewItemElements(
-          group.elements,
-          form.elements,
-          matchedIds,
-          formValues,
-          language
-        );
-        return groupElements.map((groupElement) => groupElement.element);
-      })
-      .flat();
-
-    const filterByTheseElements = hasGroups ? groupHistoryElements : form.elements;
-    return (
-      filterByTheseElements.filter((element) => element?.properties.validation?.required === true)
-        .length || FALLBACK_QUESTIONS_COUNT
-    );
-  } catch (err) {
-    // This should never happen
-    return FALLBACK_QUESTIONS_COUNT;
-  }
+  const formValues = getValues() || {};
+  const groupHistory = getGroupHistory();
+  return groupHistory
+    .map((groupId) => {
+      if (!groups) return [];
+      const group: Group = groups[groupId as keyof typeof groups] || {};
+      const groupElements = getReviewItemElements(
+        group.elements,
+        form.elements,
+        matchedIds,
+        formValues,
+        language
+      );
+      return groupElements.map((groupElement) => groupElement.element);
+    })
+    .flat();
 };
 
 interface SubmitButtonProps {
@@ -256,51 +235,36 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [formStatusError, errorList, lastSubmitCount, canFocusOnError]);
 
-  // Done in a callback to allow calling when the submit button is clicked. Otherwise the block
-  // below would be called very time the form values change. Similar reason why useMemo is not used.
-  const submitDelayCallback = () =>
-    calculateSubmitDelay(
-      getNumberOfRequriedQuestions({
-        form,
-        allowGrouping: props.allowGrouping,
-        getValues,
-        getGroupHistory,
-        groups,
-        matchedIds,
-        language,
-      })
-    );
+  const submitDelayCallback = useCallback(() => {
+    try {
+      const hasGroups = formHasGroups(form) && props.allowGrouping;
+      const filterByTheseElements = hasGroups
+        ? getFormElementsGroups({
+            form,
+            getValues,
+            getGroupHistory,
+            groups,
+            matchedIds,
+            language,
+          })
+        : form.elements;
+      const numberOfRequiredQuestions = filterByTheseElements.filter(
+        (element) => element?.properties.validation?.required === true
+      ).length;
+      const submitDelay = calculateSubmitDelay(numberOfRequiredQuestions);
 
-  // const getNumberOfRequriedQuestions = () => {
-  //   const FALLBACK_QUESTIONS_COUNT = 4;
-  //   try {
-  //     const hasGroups = formHasGroups(form) && props.allowGrouping;
-  //     const formValues = getValues() || {};
-  //     const groupHistory = getGroupHistory();
-  //     const groupHistoryElements = groupHistory
-  //       .map((groupId) => {
-  //         if (!groups) return [];
-  //         const group: Group = groups[groupId as keyof typeof groups] || {};
-  //         const reviewElements = getReviewItemElements(
-  //           group.elements,
-  //           form.elements,
-  //           matchedIds,
-  //           formValues,
-  //           language
-  //         );
-  //         return reviewElements.map((reviewElement) => reviewElement.element);
-  //       })
-  //       .flat();
-  //     const filterByTheseElements = hasGroups ? groupHistoryElements : form.elements;
-  //     return (
-  //       filterByTheseElements.filter((element) => element?.properties.validation?.required === true)
-  //         .length || FALLBACK_QUESTIONS_COUNT
-  //     );
-  //   } catch (err) {
-  //     // This should never happen
-  //     return FALLBACK_QUESTIONS_COUNT;
-  //   }
-  // };
+      // TEMP START: For easier testing, to be removed before merge
+      logMessage.info(
+        `Submit delay, Number of Required Questions=${numberOfRequiredQuestions}. Total delay=${submitDelay} seconds`
+      );
+      // TEMP END: For easier testing, to be removed before merge
+
+      return submitDelay;
+    } catch (err) {
+      logMessage.error(err as Error);
+      return 0;
+    }
+  }, [form, getGroupHistory, getValues, groups, language, matchedIds, props.allowGrouping]);
 
   return status === "submitting" ? (
     <>
