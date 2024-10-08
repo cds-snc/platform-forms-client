@@ -36,13 +36,13 @@ import { formHasGroups } from "@lib/utils/form-builder/formHasGroups";
 import { showReviewPage } from "@lib/utils/form-builder/showReviewPage";
 
 // TODO: may want to consider a maximum delay
-const calculateSubmitDelay = (getNumberOfRequiredQuestions: () => number) => {
+const calculateSubmitDelay = (numberOfRequiredQuestions: number) => {
   const secondsBaseDelay = 2;
   const secondsPerFormElement = 2;
-  const temp = secondsBaseDelay + getNumberOfRequiredQuestions() * secondsPerFormElement;
+  const temp = secondsBaseDelay + numberOfRequiredQuestions * secondsPerFormElement;
   // TEMP START: For easier testing, to be removed before merge
   logMessage.info(
-    `Submit delay, Number of Required Questions=${getNumberOfRequiredQuestions()}. Total delay=${temp} seconds`
+    `Submit delay, Number of Required Questions=${numberOfRequiredQuestions}. Total delay=${temp} seconds`
   );
   // TEMP END: For easier testing, to be removed before merge
   return temp;
@@ -55,7 +55,7 @@ const getNumberOfRequriedQuestions = ({
   getGroupHistory,
   groups,
   matchedIds,
-  language,
+  language, // TODO: will be refactored out in the future
 }: {
   form: FormProperties;
   allowGrouping: boolean | undefined;
@@ -258,9 +258,8 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
 
   // Done in a callback to allow calling when the submit button is clicked. Otherwise the block
   // below would be called very time the form values change. Similar reason why useMemo is not used.
-  // PS: I heard you like callbacks so I put a callback in your callback.. (TODO:TEMP :)
   const submitDelayCallback = () =>
-    calculateSubmitDelay(() =>
+    calculateSubmitDelay(
       getNumberOfRequriedQuestions({
         form,
         allowGrouping: props.allowGrouping,
@@ -292,7 +291,6 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
   //         return reviewElements.map((reviewElement) => reviewElement.element);
   //       })
   //       .flat();
-
   //     const filterByTheseElements = hasGroups ? groupHistoryElements : form.elements;
   //     return (
   //       filterByTheseElements.filter((element) => element?.properties.validation?.required === true)
