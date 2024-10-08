@@ -3,7 +3,8 @@
  *
  * @param senderName Sender's name
  * @param message Message
- * @param templateName Form name
+ * @param formTitleEn Template name
+ * @param formTitleFr Template name
  * @param formUrlEn Form URL
  * @param formUrlFr Form URL
  * @returns
@@ -11,23 +12,24 @@
 export const inviteToCollaborate = (
   senderName: string,
   message: string,
-  templateName: string,
+  formTitleEn: string,
+  formTitleFr: string,
   formUrlEn: string,
   formUrlFr: string
 ): string => `
 (la version française suit)
 
-${senderName} shared form ${templateName} with you.
+You’ve been invited to access form responses in GC Forms by ${senderName}.
 
 ${message}
 
-[Accept invitation](${formUrlEn})
+[Open ${formTitleEn || formTitleFr}](${formUrlEn})
 
 ===
 
-${senderName} shared form ${templateName} with you.
+Vous avez été invité à accéder aux réponses de formulaire dans Formulaires GC par ${senderName}.
 
 ${message}
 
-[Accept invitation](${formUrlFr})
+[Ouvrir ${formTitleFr || formTitleEn}](${formUrlFr})
 `;

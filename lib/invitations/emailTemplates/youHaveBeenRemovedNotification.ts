@@ -1,23 +1,20 @@
 /**
  * Notify a previous owner that they have been removed from a form.
  *
- * @param formTitle Form title
- * @param formOwner Remover's name
+ * @param formTitleEn Form title
+ * @param formTitleFr Form title
  * @returns
  */
-export const youHaveBeenRemovedNotification = (formTitle: string, formOwner: string): string => `
+export const youHaveBeenRemovedNotification = (
+  formTitleEn: string,
+  formTitleFr: string
+): string => `
 (la version française suit)
 
-${formOwner} has removed you from ${formTitle}:
-
-Thanks,
-The GC Forms team
+Your access was removed for the form: ${formTitleEn || formTitleFr}.
 
 ======
 
-${formOwner} has removed you from ${formTitle}:
-
-Thanks,
-The GC Forms team
+Vous n’avez plus accès au formulaire : ${formTitleFr || formTitleEn}
 
 `;

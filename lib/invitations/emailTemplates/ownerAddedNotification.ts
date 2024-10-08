@@ -1,22 +1,22 @@
 /**
  * Notify owners that an owner has been added to a form.
  *
- * @param formTitle
+ * @param formTitleEn
+ * @param formTitleFr
  * @param formOwner
  * @returns
  */
-export const ownerAddedNotification = (formTitle: string, formOwner: string): string => `
+export const ownerAddedNotification = (
+  formTitleEn: string,
+  formTitleFr: string,
+  formOwner: string
+): string => `
 (la version française suit)
 
-${formOwner} been added to the form ${formTitle}:
-
-Thanks,
-The GC Forms team
+${formOwner} has been added to the form ${formTitleEn || formTitleFr}:
 
 ======
 
-${formOwner} been added to the form ${formTitle}:
+${formOwner} a été ajouté au formulaire ${formTitleFr || formTitleEn}:
 
-Thanks,
-The GC Forms team
 `;

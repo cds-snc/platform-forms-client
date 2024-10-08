@@ -1,4 +1,4 @@
-import { UserAbility } from "@lib/types";
+import { FormRecord, UserAbility } from "@lib/types";
 import { getUser } from "@lib/users";
 import { TemplateNotFoundError, UserAlreadyHasAccessError, UserNotFoundError } from "./exceptions";
 import { getTemplateWithAssociatedUsers } from "@lib/templates";
@@ -55,7 +55,7 @@ export const inviteUserByEmail = async (
     }
 
     // send or resend invitation email
-    _sendInvitationEmail(sender, invitation, message, template.formRecord.name);
+    _sendInvitationEmail(sender, invitation, message, template.formRecord);
 
     logEvent(
       ability.userID,
@@ -69,7 +69,7 @@ export const inviteUserByEmail = async (
 
   // No previous invitation, create one
   invitation = await _createInvitation(email, formId);
-  _sendInvitationEmail(sender, invitation, message, template.formRecord.name);
+  _sendInvitationEmail(sender, invitation, message, template.formRecord);
 
   return;
 };
@@ -124,7 +124,7 @@ const _sendInvitationEmail = async (
   sender: { name: string | null; email: string },
   invitation: Invitation,
   message: string,
-  templateName: string
+  formRecord: FormRecord
 ) => {
   const { email, templateId } = invitation;
 
@@ -149,13 +149,14 @@ const _sendInvitationEmail = async (
     const emailContent = inviteToCollaborate(
       sender.name || "",
       message,
-      templateName,
+      formRecord.form.titleEn,
+      formRecord.form.titleFr,
       formUrlEn,
       formUrlFr
     );
 
     await sendEmail(email, {
-      subject: "Invitation to collaborate on a form | Invitation à collaborer sur un formulaire",
+      subject: "Invitation to access form | Invitation pour accéder au formulaire",
       formResponse: emailContent,
     });
 
@@ -169,7 +170,7 @@ const _sendInvitationEmail = async (
   const emailContent = inviteToForms(sender.name || "", message, registerUrlEn, registerUrlFr);
 
   await sendEmail(email, {
-    subject: "Invitation to create a GC Forms account | Invitation à créer un compte GC Forms",
+    subject: "Invitation to access form | Invitation pour accéder au formulaire",
     formResponse: emailContent,
   });
 };

@@ -15,17 +15,17 @@ export const inviteToForms = (
 ): string => `
 (la version française suit)
 
-${senderName} has invited you to create a GC Forms account.
+${senderName} has invited you to collaborate in GC Forms. 
 
 ${message}
 
-[Create account](${registerUrlEn})
+[Create an account](${registerUrlEn})
 
 ===
 
-${senderName} has invited you to create a GC Forms account.
+${senderName} vous a invité à collaborer dans Formulaires GC.
 
 ${message}
 
-[Create account](${registerUrlFr})
+[Créer un compte](${registerUrlFr})
 `;

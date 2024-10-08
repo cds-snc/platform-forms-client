@@ -142,6 +142,7 @@ describe("Invitations", () => {
         "sender",
         "message",
         "form-name",
+        "form-name",
         expect.stringContaining("forms"),
         expect.stringContaining("forms")
       );

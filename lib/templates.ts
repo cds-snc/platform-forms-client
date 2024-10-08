@@ -17,7 +17,6 @@ import { addOwnershipEmail, transferOwnershipEmail } from "./ownership";
 import { deleteKey } from "./serviceAccount";
 import { ownerRemovedNotification } from "./invitations/emailTemplates/ownerRemovedNotification";
 import { sendEmail } from "./integration/notifyConnector";
-import { getUser } from "./users";
 import { youHaveBeenRemovedNotification } from "./invitations/emailTemplates/youHaveBeenRemovedNotification";
 
 // ******************************************
@@ -736,15 +735,7 @@ export async function removeAssignedUserFromTemplate(
   userId: string
 ) {
   try {
-    const template = await prisma.template.findFirst({
-      where: {
-        id: formID,
-      },
-      select: {
-        name: true,
-        users: true,
-      },
-    });
+    const template = await getTemplateWithAssociatedUsers(ability, formID);
 
     if (template === null) {
       logMessage.warn(
@@ -752,12 +743,6 @@ export async function removeAssignedUserFromTemplate(
       );
       return null;
     }
-
-    // Make sure this user has permissions to manage users on the form
-    checkPrivileges(ability, [
-      { action: "update", subject: { type: "FormRecord", object: { users: template.users } } },
-      { action: "update", subject: { type: "User", object: { id: ability.userID } } },
-    ]);
 
     const userToRemove = await prisma.user.findUnique({
       where: {
@@ -775,8 +760,6 @@ export async function removeAssignedUserFromTemplate(
       );
       return null;
     }
-
-    const requester = await getUser(ability, ability.userID);
 
     try {
       const updatedTemplate = await prisma.template
@@ -806,24 +789,25 @@ export async function removeAssignedUserFromTemplate(
 
       // Send email to person who was removed
       const youHaveBeenRemovedEmailContent = youHaveBeenRemovedNotification(
-        template.name,
-        requester.name || "An owner"
+        template.formRecord.form.titleEn,
+        template.formRecord.form.titleFr
       );
 
       sendEmail(userToRemove.email, {
-        subject: "You have been removed as an owner from a form",
+        subject: "Form access removed | Accès au formulaire supprimé",
         formResponse: youHaveBeenRemovedEmailContent,
       });
 
       // Send email to remaining owners
       updatedTemplate?.users.forEach((owner) => {
         const ownerRemovedEmailContent = ownerRemovedNotification(
-          template.name,
+          template.formRecord.form.titleEn,
+          template.formRecord.form.titleFr,
           userToRemove.name || "An owner"
         );
 
         sendEmail(owner.email, {
-          subject: "An owner has been removed from a form",
+          subject: "Form access removed | Accès au formulaire supprimé",
           formResponse: ownerRemovedEmailContent,
         });
       });
