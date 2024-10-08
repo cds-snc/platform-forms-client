@@ -3,7 +3,7 @@ Based on GC Design System Checkbox
 See: https://design-system.alpha.canada.ca/en/components/checkbox/ 
 */
 
-@import '../node_modules/@cdssnc/gcds-tokens/build/web/css/components/checkbox.css';
+@import "../node_modules/@cdssnc/gcds-tokens/build/web/css/components/checkbox.css";
 
 .gc-input-checkbox {
   position: relative;
@@ -73,7 +73,8 @@ See: https://design-system.alpha.canada.ca/en/components/checkbox/
   }
 
   .checkbox-label-text {
-    width: auto !important;
+    // @todo look at applying making the width auto here
+    // so the user only clicks on the text not white space. 
     font: var(--gcds-label-font-desktop);
     @apply font-noto-sans;
     -webkit-font-smoothing: antialiased;
