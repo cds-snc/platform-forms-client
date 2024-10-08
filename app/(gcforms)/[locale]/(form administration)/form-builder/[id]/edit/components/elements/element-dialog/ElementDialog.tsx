@@ -20,14 +20,15 @@ const filterElementsByGroup = (
   selectedGroup: Groups | "all",
   featureFlags: { [key: string]: boolean }
 ) => {
-  const excludeId = featureFlags["addressComplete"] ? "address" : "addressComplete";
+  const excludeAddressComplete = featureFlags["addressComplete"] ? "address" : "addressComplete";
 
   if (selectedGroup === "all") {
-    return elements.filter((element) => element.id !== excludeId);
+    return elements.filter((element) => element.id !== excludeAddressComplete);
   }
 
   return elements.filter(
-    (element) => selectedGroup === (element.group.id as Groups) && element.id !== excludeId
+    (element) =>
+      selectedGroup === (element.group.id as Groups) && element.id !== excludeAddressComplete
   );
 };
 
