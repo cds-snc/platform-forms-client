@@ -197,4 +197,13 @@ export const options = [
     logoTitleEn: "Canada Energy Regulator",
     logoTitleFr: "Régie de l’énergie du Canada",
   },
+  {
+    name: "acoa",
+    urlEn: "https://www.canada.ca/en/atlantic-canada-opportunities.html",
+    urlFr: "https://www.canada.ca/fr/promotion-economique-canada-atlantique.html",
+    logoEn: "/img/branding/acoa-en.svg",
+    logoFr: "/img/branding/acoa-fr.svg",
+    logoTitleEn: "Atlantic Canada Opportunities Agency",
+    logoTitleFr: "Agence de promotion économique du Canada atlantique",
+  },
 ];
