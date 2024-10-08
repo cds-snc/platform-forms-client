@@ -25,7 +25,6 @@ export const AddressComplete = (props: AddressCompleteProps): React.ReactElement
   const [isReady, setIsReady] = useState(false);
   const [allow, setAllow] = useState(false);
   const [apiKey, setApiKey] = useState("");
-  //const [cache, setCache] = useState<{ [key: string]: AddressElements }>({});
 
   const toFullAddress = (address: AddressCompleteChoice): string => {
     return address.Text + ", " + address.Description;
