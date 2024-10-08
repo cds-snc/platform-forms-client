@@ -54,21 +54,22 @@ export const AddressComplete = (props: AddressCompleteProps): React.ReactElement
     if (field.value) {
       try {
         const parsedValue = JSON.parse(field.value);
-        setAddressObject(parsedValue);
+        if (JSON.stringify(parsedValue) !== JSON.stringify(addressObject)) {
+          setAddressObject(parsedValue);
+        }
       } catch (e) {
         setAddressObject(null);
       }
     }
-  }, [field.value]);
+  }, [field.value, addressObject]);
 
   // Update the field value when the address object changes
   useEffect(() => {
-    if (addressObject) {
-      helpers.setValue(JSON.stringify(addressObject));
-    } else {
-      helpers.setValue("");
+    const newValue = addressObject ? JSON.stringify(addressObject) : "";
+    if (newValue !== field.value) {
+      helpers.setValue(newValue);
     }
-  }, [addressObject, helpers]);
+  }, [addressObject, helpers, field.value]);
 
   const onAddressSearch = async (e: React.ChangeEvent<HTMLInputElement>) => {
     if (!allow) {
@@ -246,7 +247,6 @@ export const AddressComplete = (props: AddressCompleteProps): React.ReactElement
             type="text"
             id={`${name}-unit`}
             name={`${name}-unit`}
-            key={`${name}-unit-${addressObject?.unitNumber}`}
             onChange={(e) => setAddressData("unitNumber", e.target.value)}
             className={cn("gc-input-text", meta.error && "gc-error-input")}
             value={addressObject?.unitNumber}
@@ -263,7 +263,6 @@ export const AddressComplete = (props: AddressCompleteProps): React.ReactElement
             type="text"
             id={`${name}-civic`}
             name={`${name}-civic`}
-            key={`${name}-civic-${addressObject?.civicNumber}`}
             onChange={(e) => setAddressData("civicNumber", e.target.value)}
             className={cn("gc-input-text", meta.error && "gc-error-input")}
             value={addressObject?.civicNumber}
@@ -280,7 +279,6 @@ export const AddressComplete = (props: AddressCompleteProps): React.ReactElement
             type="text"
             id={`${name}-street`}
             name={`${name}-street`}
-            key={`${name}-street-${addressObject?.streetName}`}
             onChange={(e) => setAddressData("streetName", e.target.value)}
             className={cn("gc-input-text", meta.error && "gc-error-input")}
             value={addressObject?.streetName}
