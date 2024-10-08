@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useState, useRef, useCallback } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { FormikProps, withFormik } from "formik";
 import { getFormInitialValues } from "@lib/formBuilder";
 import { getErrorList, setFocusOnErrorMessage, validateOnSubmit } from "@lib/validation/validation";
@@ -35,7 +35,6 @@ import {
 import { formHasGroups } from "@lib/utils/form-builder/formHasGroups";
 import { showReviewPage } from "@lib/utils/form-builder/showReviewPage";
 
-// TODO: may want to consider a maximum delay
 const calculateSubmitDelay = (numberOfRequiredQuestions: number) => {
   const secondsBaseDelay = 2;
   const secondsPerFormElement = 2;
@@ -235,7 +234,7 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [formStatusError, errorList, lastSubmitCount, canFocusOnError]);
 
-  const submitDelayCallback = useCallback(() => {
+  const submitDelayCallback = () => {
     try {
       const hasGroups = formHasGroups(form) && props.allowGrouping;
       const filterByTheseElements = hasGroups
@@ -254,17 +253,17 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
       const submitDelay = calculateSubmitDelay(numberOfRequiredQuestions);
 
       // TEMP START: For easier testing, to be removed before merge
-      logMessage.info(
-        `Submit delay, Number of Required Questions=${numberOfRequiredQuestions}. Total delay=${submitDelay} seconds`
-      );
-      // TEMP END: For easier testing, to be removed before merge
+      setDelay({ numberOfRequiredQuestions, submitDelay });
 
       return submitDelay;
     } catch (err) {
       logMessage.error(err as Error);
-      return 0;
+      return 0; // If there is an error, just submit immediately to avoid blocking the user submitting
     }
-  }, [form, getGroupHistory, getValues, groups, language, matchedIds, props.allowGrouping]);
+  };
+
+  // TEMP START: For easier testing, to be removed before merge
+  const [delay, setDelay] = useState({ numberOfRequiredQuestions: 0, submitDelay: 0 });
 
   return status === "submitting" ? (
     <>
@@ -371,6 +370,14 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
                             />
                           )}
                         <div className="inline-block">
+                          <div>
+                            TESTING (remove before merge)
+                            <br />
+                            Number of Required Questions: {delay.numberOfRequiredQuestions}
+                            <br />
+                            Total delay: {delay.submitDelay} seconds
+                            <br />
+                          </div>
                           <SubmitButton
                             submitDelaySeconds={submitDelayCallback}
                             formID={formID}
@@ -382,11 +389,21 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
                   },
                 })
               ) : (
-                <SubmitButton
-                  submitDelaySeconds={submitDelayCallback}
-                  formID={formID}
-                  formTitle={form.titleEn}
-                />
+                <>
+                  <div>
+                    TESTING (remove before merge)
+                    <br />
+                    Number of Required Questions: {delay.numberOfRequiredQuestions}
+                    <br />
+                    Total delay: {delay.submitDelay} seconds
+                    <br />
+                  </div>
+                  <SubmitButton
+                    submitDelaySeconds={submitDelayCallback}
+                    formID={formID}
+                    formTitle={form.titleEn}
+                  />
+                </>
               )}
             </div>
           </form>
