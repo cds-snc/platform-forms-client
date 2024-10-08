@@ -50,7 +50,7 @@ export const AddressComplete = (props: AddressCompleteProps): React.ReactElement
   //Form fillers address elements
   const [addressObject, setAddressObject] = useState<AddressElements | null>(null);
 
-  // Update the date object when the field value changes
+  // Update the address object when the field value changes
   useEffect(() => {
     if (field.value) {
       try {
@@ -62,7 +62,7 @@ export const AddressComplete = (props: AddressCompleteProps): React.ReactElement
     }
   }, [field.value]);
 
-  // Update the field value when the date object changes
+  // Update the field value when the address object changes
   useEffect(() => {
     if (addressObject) {
       helpers.setValue(JSON.stringify(addressObject));
@@ -137,8 +137,10 @@ export const AddressComplete = (props: AddressCompleteProps): React.ReactElement
   };
 
   const setAddressData = (key: string, value: string) => {
-    if (addressObject == null) {
-      setAddressObject({
+    let baseAddressObject = {};
+
+    if (addressObject === null) {
+      baseAddressObject = {
         unitNumber: "",
         civicNumber: "",
         streetName: "",
@@ -146,13 +148,15 @@ export const AddressComplete = (props: AddressCompleteProps): React.ReactElement
         province: "",
         postalCode: "",
         country: "",
-      });
+      };
+    } else {
+      baseAddressObject = addressObject;
     }
 
-    for (const internalKey in addressObject) {
+    for (const internalKey in baseAddressObject) {
       if (key === internalKey) {
-        const newAddressObject = { ...addressObject, [key]: value };
-        setAddressObject(newAddressObject);
+        const newAddressObject = { ...baseAddressObject, [key]: value };
+        setAddressObject(newAddressObject as AddressElements);
       }
     }
   };
