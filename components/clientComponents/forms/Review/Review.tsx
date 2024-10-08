@@ -135,7 +135,7 @@ function getReviewItemElements(
     if (element?.type === FormElementTypes.addressComplete) {
       const addressComponents = element.properties?.addressComponents as AddressComponents;
 
-      if (addressComponents.splitAddress === true) {
+      if (addressComponents && addressComponents.splitAddress === true) {
         // We're a split address, broken into components.
         const parentTitle = element.properties?.[getLocalizedProperty("title", lang)];
 
