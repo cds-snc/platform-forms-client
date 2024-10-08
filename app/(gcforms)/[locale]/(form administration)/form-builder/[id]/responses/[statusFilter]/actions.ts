@@ -135,8 +135,8 @@ const getAnswerAsString = (question: FormElement | undefined, answer: unknown): 
       return "";
     }
 
-    if (question.properties.full === false) {
-      return answer as string;
+    if (question.properties.addressComponents?.splitAddress === true) {
+      return answer as string; //Address was split, return as is.
     }
 
     const addressObject = JSON.parse(answer as string) as AddressElements;
@@ -264,7 +264,7 @@ export const getSubmissionsByFormat = async ({
           // Handle "Split" AddressComplete in a similiar manner to dynamic fields.
           if (
             question?.type === FormElementTypes.addressComplete &&
-            question.properties.full === false
+            question.properties.addressComponents?.splitAddress === true
           ) {
             const addressObject = JSON.parse(answer as string) as AddressElements;
 
