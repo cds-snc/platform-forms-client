@@ -66,8 +66,8 @@ export const AddressCompleteOptions = ({
           properties.addressComponents?.splitAddress === false ||
           properties.addressComponents?.splitAddress === undefined
         }
-        onChange={() => (e: React.ChangeEvent<HTMLInputElement>) => {
-          updateAddressComponents({ splitAddress: e.target.checked });
+        onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+          updateAddressComponents({ splitAddress: !e.target.checked });
         }}
       />
       <div className="text-sm ml-12 mb-4">
@@ -80,7 +80,7 @@ export const AddressCompleteOptions = ({
         label={t("addElementDialog.addressComplete.splitAddress")}
         value="addressType-split"
         checked={properties.addressComponents?.splitAddress === true}
-        onChange={() => (e: React.ChangeEvent<HTMLInputElement>) => {
+        onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
           updateAddressComponents({ splitAddress: e.target.checked });
         }}
       />
