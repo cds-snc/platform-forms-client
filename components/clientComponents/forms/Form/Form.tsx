@@ -10,7 +10,7 @@ import { useTranslation } from "@i18n/client";
 import { TFunction } from "i18next";
 import Loader from "../../globals/Loader";
 import classNames from "classnames";
-import { Responses, PublicFormRecord, Validate } from "@lib/types";
+import { Responses, PublicFormRecord, Validate, FormProperties } from "@lib/types";
 import { ErrorStatus } from "../Alert/Alert";
 import { submitForm } from "app/(gcforms)/[locale]/(form filler)/id/[...props]/actions";
 import useFormTimer from "@lib/hooks/useFormTimer";
@@ -25,46 +25,92 @@ import {
   removeFormContextValues,
   getInputHistoryValues,
 } from "@lib/utils/form-builder/groupsHistory";
-import { filterShownElements, filterValuesByShownElements, Group } from "@lib/formContext";
+import {
+  filterShownElements,
+  filterValuesByShownElements,
+  FormValues,
+  Group,
+  GroupsType,
+} from "@lib/formContext";
 import { formHasGroups } from "@lib/utils/form-builder/formHasGroups";
 import { showReviewPage } from "@lib/utils/form-builder/showReviewPage";
 
+// TODO: may want to consider a maximum delay
+const calculateSubmitDelay = (getNumberOfRequiredQuestions: () => number) => {
+  const secondsBaseDelay = 2;
+  const secondsPerFormElement = 2;
+  const temp = secondsBaseDelay + getNumberOfRequiredQuestions() * secondsPerFormElement;
+  // TEMP START: For easier testing, to be removed before merge
+  logMessage.info(
+    `Submit delay, Number of Required Questions=${getNumberOfRequiredQuestions()}. Total delay=${temp} seconds`
+  );
+  // TEMP END: For easier testing, to be removed before merge
+  return temp;
+};
+
+const getNumberOfRequriedQuestions = ({
+  form,
+  allowGrouping,
+  getValues,
+  getGroupHistory,
+  groups,
+  matchedIds,
+  language,
+}: {
+  form: FormProperties;
+  allowGrouping: boolean | undefined;
+  getValues: () => void | FormValues;
+  getGroupHistory: () => string[];
+  groups: GroupsType | object | undefined;
+  matchedIds: string[];
+  language: string;
+}) => {
+  const FALLBACK_QUESTIONS_COUNT = 4;
+  try {
+    const hasGroups = formHasGroups(form) && allowGrouping;
+    const formValues = getValues() || {};
+    const groupHistory = getGroupHistory();
+    const groupHistoryElements = groupHistory
+      .map((groupId) => {
+        if (!groups) return [];
+        const group: Group = groups[groupId as keyof typeof groups] || {};
+        const groupElements = getReviewItemElements(
+          group.elements,
+          form.elements,
+          matchedIds,
+          formValues,
+          language
+        );
+        return groupElements.map((groupElement) => groupElement.element);
+      })
+      .flat();
+
+    const filterByTheseElements = hasGroups ? groupHistoryElements : form.elements;
+    return (
+      filterByTheseElements.filter((element) => element?.properties.validation?.required === true)
+        .length || FALLBACK_QUESTIONS_COUNT
+    );
+  } catch (err) {
+    // This should never happen
+    return FALLBACK_QUESTIONS_COUNT;
+  }
+};
+
 interface SubmitButtonProps {
-  getNumberOfRequiredQuestions: () => number;
+  submitDelaySeconds: () => number;
   formID: string;
   formTitle: string;
 }
-const SubmitButton: React.FC<SubmitButtonProps> = ({
-  getNumberOfRequiredQuestions,
-  formID,
-  formTitle,
-}) => {
+const SubmitButton: React.FC<SubmitButtonProps> = ({ submitDelaySeconds, formID, formTitle }) => {
   const { t } = useTranslation();
   const [formTimerState, { startTimer, checkTimer, disableTimer }] = useFormTimer();
   const [submitTooEarly, setSubmitTooEarly] = useState(false);
   const screenReaderRemainingTime = useRef(formTimerState.remainingTime);
-
-  // TODO: may want to consider a maximum delay
-
-  // calculate initial delay for submit timer
-  const secondsBaseDelay = 2;
-  const secondsPerFormElement = 2;
-
   const formTimerEnabled = process.env.NEXT_PUBLIC_APP_ENV !== "test";
 
   // If the timer hasn't started yet, start the timer
   if (!formTimerState.timerDelay && formTimerEnabled) {
-    // Calculated here to avoid being called on each checkTimer interval (every second)
-    const submitDelaySeconds =
-      secondsBaseDelay + getNumberOfRequiredQuestions() * secondsPerFormElement;
-
-    // TEMP START: For easier testing, to be removed before merge
-    logMessage.info(
-      `Submit delay, Number of Required Questions=${getNumberOfRequiredQuestions()}. Total delay=${submitDelaySeconds} seconds`
-    );
-    // TEMP END: For easier testing, to be removed before merge
-
-    startTimer(submitDelaySeconds);
+    startTimer(submitDelaySeconds());
   }
 
   useEffect(() => {
@@ -212,37 +258,51 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
 
   // Done in a callback to allow calling when the submit button is clicked. Otherwise the block
   // below would be called very time the form values change. Similar reason why useMemo is not used.
-  const getNumberOfRequriedQuestions = () => {
-    const FALLBACK_QUESTIONS_COUNT = 4;
-    try {
-      const hasGroups = formHasGroups(form) && props.allowGrouping;
-      const formValues = getValues() || {};
-      const groupHistory = getGroupHistory();
-      const groupHistoryElements = groupHistory
-        .map((groupId) => {
-          if (!groups) return [];
-          const group: Group = groups[groupId as keyof typeof groups] || {};
-          const reviewElements = getReviewItemElements(
-            group.elements,
-            form.elements,
-            matchedIds,
-            formValues,
-            language
-          );
-          return reviewElements.map((reviewElement) => reviewElement.element);
-        })
-        .flat();
+  // PS: I heard you like callbacks so I put a callback in your callback.. (TODO:TEMP :)
+  const submitDelayCallback = () =>
+    calculateSubmitDelay(() =>
+      getNumberOfRequriedQuestions({
+        form,
+        allowGrouping: props.allowGrouping,
+        getValues,
+        getGroupHistory,
+        groups,
+        matchedIds,
+        language,
+      })
+    );
 
-      const filterByTheseElements = hasGroups ? groupHistoryElements : form.elements;
-      return (
-        filterByTheseElements.filter((element) => element?.properties.validation?.required === true)
-          .length || FALLBACK_QUESTIONS_COUNT
-      );
-    } catch (err) {
-      // This should never happen
-      return FALLBACK_QUESTIONS_COUNT;
-    }
-  };
+  // const getNumberOfRequriedQuestions = () => {
+  //   const FALLBACK_QUESTIONS_COUNT = 4;
+  //   try {
+  //     const hasGroups = formHasGroups(form) && props.allowGrouping;
+  //     const formValues = getValues() || {};
+  //     const groupHistory = getGroupHistory();
+  //     const groupHistoryElements = groupHistory
+  //       .map((groupId) => {
+  //         if (!groups) return [];
+  //         const group: Group = groups[groupId as keyof typeof groups] || {};
+  //         const reviewElements = getReviewItemElements(
+  //           group.elements,
+  //           form.elements,
+  //           matchedIds,
+  //           formValues,
+  //           language
+  //         );
+  //         return reviewElements.map((reviewElement) => reviewElement.element);
+  //       })
+  //       .flat();
+
+  //     const filterByTheseElements = hasGroups ? groupHistoryElements : form.elements;
+  //     return (
+  //       filterByTheseElements.filter((element) => element?.properties.validation?.required === true)
+  //         .length || FALLBACK_QUESTIONS_COUNT
+  //     );
+  //   } catch (err) {
+  //     // This should never happen
+  //     return FALLBACK_QUESTIONS_COUNT;
+  //   }
+  // };
 
   return status === "submitting" ? (
     <>
@@ -350,7 +410,7 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
                           )}
                         <div className="inline-block">
                           <SubmitButton
-                            getNumberOfRequiredQuestions={getNumberOfRequriedQuestions}
+                            submitDelaySeconds={submitDelayCallback}
                             formID={formID}
                             formTitle={form.titleEn}
                           />
@@ -361,7 +421,7 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
                 })
               ) : (
                 <SubmitButton
-                  getNumberOfRequiredQuestions={getNumberOfRequriedQuestions}
+                  submitDelaySeconds={submitDelayCallback}
                   formID={formID}
                   formTitle={form.titleEn}
                 />
