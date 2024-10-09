@@ -1,8 +1,14 @@
 import { useRef } from "react";
 
 /**
- *  @TODO: Define unique payload types for each CustomEvent and add
+ * @TODO: Define unique payload types for each CustomEvent and add
  *         to CustomEventDetails instead of using generic object
+ *
+ * Example: a MoreDialog listener might accept a payload like:
+ *
+ * type MoreDialogEventDetails = {
+ *   item: FormElementWithIndex;
+ * }
  */
 export type CustomEventDetails = object | undefined;
 
@@ -21,17 +27,17 @@ export const useCustomEvent = () => {
      * @param eventName string
      * @param data CustomEventDetails
      */
-    fire: (eventName: string, data: CustomEventDetails = undefined) => {
-      const event = new CustomEvent(eventName, { detail: data });
+    fire: (eventName: string, detail: CustomEventDetails = undefined) => {
+      const event = new CustomEvent(eventName, { detail });
       documentRef.current && documentRef.current.dispatchEvent(event);
     },
 
     /**
      * Register an event listener
      * @param eventName string
-     * @param callback (data: CustomEventDetails) => void
+     * @param callback (detail: CustomEventDetails) => void
      */
-    on: (eventName: string, callback: (data: CustomEventDetails) => void) => {
+    on: (eventName: string, callback: (detail: CustomEventDetails) => void) => {
       documentRef.current &&
         documentRef.current.addEventListener(eventName, (event: Event) => {
           callback((event as CustomEvent).detail);
@@ -41,9 +47,9 @@ export const useCustomEvent = () => {
     /**
      * Remove an event listener
      * @param eventName string
-     * @param callback (data: CustomEventDetails) => void
+     * @param callback (detail: CustomEventDetails) => void
      */
-    off: (eventName: string, callback: (data: CustomEventDetails) => void) => {
+    off: (eventName: string, callback: (detail: CustomEventDetails) => void) => {
       documentRef.current &&
         documentRef.current.removeEventListener(eventName, (event: Event) => {
           callback((event as CustomEvent).detail);
