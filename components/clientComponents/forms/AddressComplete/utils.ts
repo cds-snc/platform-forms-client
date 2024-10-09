@@ -32,7 +32,8 @@ export const getAddressCompleteChoices = async (
 export const getSelectedAddress = async (
   addressCompleteKey: string,
   value: string,
-  countryCode: string
+  countryCode: string,
+  language: string
 ) => {
   const selectedResult = value;
   let params = "?";
@@ -47,28 +48,33 @@ export const getSelectedAddress = async (
 
   const responseData = await response.json(); //Todo - Error Handling
   const addressData = responseData.Items as AddressCompleteResult[];
-  const addressComponents = await getAddressComponents(addressData);
+  const addressComponents = await getAddressComponents(addressData, language);
   return addressComponents;
 };
 
 // Helper function combines API component results into single address object.
-export const getAddressComponents = async (addressCompleteResult: AddressCompleteResult[]) => {
+export const getAddressComponents = async (
+  addressCompleteResult: AddressCompleteResult[],
+  language: string
+) => {
   const englishResult = addressCompleteResult.find((result) => result.Language === "ENG");
-  //const frenchResult = addressCompleteResult.find((result) => result.Language === "FRE");
-  //todo - update to swap between languages based on client.
+  const frenchResult = addressCompleteResult.find((result) => result.Language === "FRE");
+
+  // Pick ENG or FRE based on language. (en vs fr)
+  const resultData = language === "en" ? englishResult : frenchResult;
 
   const streetAddress =
-    (englishResult?.SubBuilding ? englishResult?.SubBuilding + "-" : "") +
-    englishResult?.BuildingNumber +
+    (resultData?.SubBuilding ? resultData?.SubBuilding + "-" : "") +
+    resultData?.BuildingNumber +
     " " +
-    englishResult?.Street;
+    resultData?.Street;
 
   const address = {
     streetAddress: streetAddress,
-    city: englishResult?.City,
-    province: englishResult?.Province,
-    postalCode: englishResult?.PostalCode,
-    country: "Canada",
+    city: resultData?.City,
+    province: resultData?.Province,
+    postalCode: resultData?.PostalCode,
+    country: resultData?.CountryName,
   };
 
   return address as AddressElements;

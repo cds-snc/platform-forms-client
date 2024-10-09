@@ -137,7 +137,8 @@ export const AddressComplete = (props: AddressCompleteProps): React.ReactElement
       const responseData = await getSelectedAddress(
         apiKey,
         selectedResult.Id,
-        addressObject?.country || "CAN"
+        addressObject?.country || "CAN",
+        i18n.language as Language
       );
       if (responseData) {
         const results = responseData;
