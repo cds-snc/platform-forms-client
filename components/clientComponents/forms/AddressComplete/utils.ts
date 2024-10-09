@@ -77,10 +77,13 @@ export const getAddressComponents = async (addressCompleteResult: AddressComplet
     return obj.FieldGroup === "Common" && obj.FieldName === "PostalCode";
   });
 
+  const streetAddress =
+    (unitNumberData?.FormattedValue ? unitNumberData?.FormattedValue + "-" : "") +
+    civicNumberData?.FormattedValue +
+    " " +
+    streetNameData?.FormattedValue;
   const address = {
-    unitNumber: unitNumberData?.FormattedValue,
-    civicNumber: civicNumberData?.FormattedValue,
-    streetName: streetNameData?.FormattedValue,
+    streetAddress: streetAddress,
     city: cityData?.FormattedValue,
     province: provinceData?.FormattedValue,
     postalCode: postalData?.FormattedValue,
@@ -91,9 +94,7 @@ export const getAddressComponents = async (addressCompleteResult: AddressComplet
 };
 
 export const getAddressAsString = (address: AddressElements) => {
-  return `${address.unitNumber ? address.unitNumber + "-" : ""}${address.civicNumber} ${
-    address.streetName
-  }, ${address.city}, ${address.province} ${address.postalCode} ${address.country}`;
+  return `${address.streetAddress}, ${address.city}, ${address.province} ${address.postalCode} ${address.country}`;
 };
 
 export const getAddressAsReviewElements = (

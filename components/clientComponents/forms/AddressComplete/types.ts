@@ -27,9 +27,7 @@ export interface AddressCompleteProps extends InputFieldProps {
 
 // Address Elements for the AddressComplete component
 export interface AddressElements {
-  unitNumber: string;
-  civicNumber: string;
-  streetName: string;
+  streetAddress: string;
   city: string;
   province: string;
   postalCode: string;
