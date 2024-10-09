@@ -9,7 +9,7 @@
   "deleteInvitation": "Delete invitation",
   "downloadForm": "Download form",
   "emailAlreadyInList": "{{email}} was already added",
-  "emailDomainMismatch": "{{email}} Email domain mismatch",
+  "emailDomainMismatch": "{{email}} does not appear to be from your organization. You can only add collaborators with the same email domain.",
   "error": "There was an error.",
   "expired": "Expired",
   "invalidEmail": "{{email}} is not a valid email address",
