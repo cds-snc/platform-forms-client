@@ -3,9 +3,9 @@ import { AddressCompleteChoice, AddressCompleteResult, AddressElements } from ".
 import { Answer } from "@lib/responseDownloadFormats/types";
 
 const autoCompleteUrl =
-  "https://ws1.postescanada-canadapost.ca/AddressComplete/Interactive/AutoComplete/v1.00/json3.ws";
+  "https://ws1.postescanada-canadapost.ca/AddressComplete/Interactive/Find/v2.10/json3.ws";
 const retriveAddressUrl =
-  "https://ws1.postescanada-canadapost.ca/AddressComplete/Interactive/RetrieveById/v1.00/json3.ws";
+  "https://ws1.postescanada-canadapost.ca/AddressComplete/Interactive/Retrieve/v2.11/json3.ws";
 
 // Function returns address complete list of choices.
 export const getAddressCompleteChoices = async (
@@ -53,46 +53,21 @@ export const getSelectedAddress = async (
 
 // Helper function combines API component results into single address object.
 export const getAddressComponents = async (addressCompleteResult: AddressCompleteResult[]) => {
-  const civicNumberData = addressCompleteResult.find((obj: AddressCompleteResult) => {
-    return obj.FieldGroup === "Country" && obj.FieldName === "StreetNumber";
-  });
-
-  const unitNumberData = addressCompleteResult.find((obj: AddressCompleteResult) => {
-    return obj.FieldGroup === "Common" && obj.FieldName === "SubBuilding";
-  });
-
-  const streetNameData = addressCompleteResult.find((obj: AddressCompleteResult) => {
-    return obj.FieldGroup === "Country" && obj.FieldName === "StreetName";
-  });
-
-  const streetTypeData = addressCompleteResult.find((obj: AddressCompleteResult) => {
-    return obj.FieldGroup === "Country" && obj.FieldName === "StreetType";
-  });
-
-  const cityData = addressCompleteResult.find((obj: AddressCompleteResult) => {
-    return obj.FieldGroup === "Common" && obj.FieldName === "City";
-  });
-
-  const provinceData = addressCompleteResult.find((obj: AddressCompleteResult) => {
-    return obj.FieldGroup === "Common" && obj.FieldName === "ProvinceCode";
-  });
-
-  const postalData = addressCompleteResult.find((obj: AddressCompleteResult) => {
-    return obj.FieldGroup === "Common" && obj.FieldName === "PostalCode";
-  });
+  const englishResult = addressCompleteResult.find((result) => result.Language === "ENG");
+  //const frenchResult = addressCompleteResult.find((result) => result.Language === "FRE");
+  //todo - update to swap between languages based on client.
 
   const streetAddress =
-    (unitNumberData?.FormattedValue ? unitNumberData?.FormattedValue + "-" : "") +
-    civicNumberData?.FormattedValue +
+    (englishResult?.SubBuilding ? englishResult?.SubBuilding + "-" : "") +
+    englishResult?.BuildingNumber +
     " " +
-    streetNameData?.FormattedValue +
-    " " +
-    streetTypeData?.FormattedValue;
+    englishResult?.Street;
+
   const address = {
     streetAddress: streetAddress,
-    city: cityData?.FormattedValue,
-    province: provinceData?.FormattedValue,
-    postalCode: postalData?.FormattedValue,
+    city: englishResult?.City,
+    province: englishResult?.Province,
+    postalCode: englishResult?.PostalCode,
     country: "Canada",
   };
 
