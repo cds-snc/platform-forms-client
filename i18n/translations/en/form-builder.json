@@ -49,7 +49,7 @@
       "whatIsYourAddress": "Mailing address",
       "city": "City, town, or community",
       "country": "Country",
-      "description": "Verified address is a component developed by Canada Post using the AddressComplete API to look up addresses as they are entered. Use this element for a more accurate and verified address.",
+      "description": "Verified address is a component that uses the Canada Post AddressComplete API to look up addresses as they are entered. Use this element to collect a more accurate address.",
       "label": "Verified address",
       "postal": "Postal code",
       "province": "Province, territory, or state",

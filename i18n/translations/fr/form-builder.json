@@ -49,7 +49,7 @@
       "whatIsYourAddress": "Adresse postale",
       "city": "Ville ou communauté",
       "country": "Pays",
-      "description": "Le champ d'adresse validée est développé par Postes Canada et utilise l'API AdresseComplète pour vérifier les adresses au fur et à mesure qu'elles sont saisies. Utilisez-le pour une une adresse validée et précise.",
+      "description": "Le champ d'adresse validée utilise l'API AdresseComplète de Postes Canada pour vérifier les adresses au fur et à mesure qu'elles sont saisies. Utilisez-le pour recueillir une une adresse plus précise.",
       "label": "Adresse validée",
       "postal": "Code postal",
       "province": "Province, territoire ou état",
