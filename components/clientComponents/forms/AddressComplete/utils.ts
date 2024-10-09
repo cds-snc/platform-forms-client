@@ -65,6 +65,10 @@ export const getAddressComponents = async (addressCompleteResult: AddressComplet
     return obj.FieldGroup === "Country" && obj.FieldName === "StreetName";
   });
 
+  const streetTypeData = addressCompleteResult.find((obj: AddressCompleteResult) => {
+    return obj.FieldGroup === "Country" && obj.FieldName === "StreetType";
+  });
+
   const cityData = addressCompleteResult.find((obj: AddressCompleteResult) => {
     return obj.FieldGroup === "Common" && obj.FieldName === "City";
   });
@@ -81,7 +85,9 @@ export const getAddressComponents = async (addressCompleteResult: AddressComplet
     (unitNumberData?.FormattedValue ? unitNumberData?.FormattedValue + "-" : "") +
     civicNumberData?.FormattedValue +
     " " +
-    streetNameData?.FormattedValue;
+    streetNameData?.FormattedValue +
+    " " +
+    streetTypeData?.FormattedValue;
   const address = {
     streetAddress: streetAddress,
     city: cityData?.FormattedValue,
