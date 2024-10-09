@@ -1,5 +1,6 @@
-import { FormElement, Response, Responses } from "@lib/types";
+import { FormElement, FormProperties, Response, Responses } from "@lib/types";
 import { PublicFormRecord, ConditionalRule } from "@lib/types";
+import { getReviewItemElements } from "@clientComponents/forms/Review/Review";
 
 export type Group = {
   name: string;
@@ -867,3 +868,39 @@ export const decrementNextActionChoiceIds = (groups: GroupsType, choiceId: strin
 
   return updatedGroups;
 };
+
+export const getFormElementsFromGroups = ({
+  form,
+  values,
+  groupHistory,
+  groups,
+  matchedIds,
+  language, // TODO: will be refactored out in the future
+}: {
+  form: FormProperties;
+  values: FormValues;
+  groupHistory: string[];
+  groups: GroupsType | object | undefined;
+  matchedIds: string[];
+  language: string;
+}) => {
+  return groupHistory
+    .map((groupId) => {
+      if (!groups) return [];
+      const group: Group = groups[groupId as keyof typeof groups] || {};
+      const groupElements = getReviewItemElements(
+        group.elements,
+        form.elements,
+        matchedIds,
+        values,
+        language
+      );
+      return groupElements.map((groupElement) => groupElement.element);
+    })
+    .flat();
+};
+
+// TODO? move logic here?
+// export const getSubmitDelay = () => {
+//   // return submitDelay in seconds
+// }

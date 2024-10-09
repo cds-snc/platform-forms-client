@@ -10,13 +10,13 @@ import { useTranslation } from "@i18n/client";
 import { TFunction } from "i18next";
 import Loader from "../../globals/Loader";
 import classNames from "classnames";
-import { Responses, PublicFormRecord, Validate, FormProperties } from "@lib/types";
+import { Responses, PublicFormRecord, Validate } from "@lib/types";
 import { ErrorStatus } from "../Alert/Alert";
 import { submitForm } from "app/(gcforms)/[locale]/(form filler)/id/[...props]/actions";
 import useFormTimer from "@lib/hooks/useFormTimer";
 import { useFormValuesChanged } from "@lib/hooks/useValueChanged";
 import { useGCFormsContext } from "@lib/hooks/useGCFormContext";
-import { getReviewItemElements, Review } from "../Review/Review";
+import { Review } from "../Review/Review";
 import { LockedSections } from "@formBuilder/components/shared/right-panel/treeview/types";
 import { BackButton } from "@formBuilder/[id]/preview/BackButton";
 import { Language } from "@lib/types/form-builder-types";
@@ -25,54 +25,9 @@ import {
   removeFormContextValues,
   getInputHistoryValues,
 } from "@lib/utils/form-builder/groupsHistory";
-import {
-  filterShownElements,
-  filterValuesByShownElements,
-  FormValues,
-  Group,
-  GroupsType,
-} from "@lib/formContext";
+import { filterShownElements, filterValuesByShownElements } from "@lib/formContext";
 import { formHasGroups } from "@lib/utils/form-builder/formHasGroups";
 import { showReviewPage } from "@lib/utils/form-builder/showReviewPage";
-
-const calculateSubmitDelay = (numberOfRequiredQuestions: number) => {
-  const secondsBaseDelay = 2;
-  const secondsPerFormElement = 2;
-  return secondsBaseDelay + numberOfRequiredQuestions * secondsPerFormElement;
-};
-
-const getFormElementsGroups = ({
-  form,
-  getValues,
-  getGroupHistory,
-  groups,
-  matchedIds,
-  language, // TODO: will be refactored out in the future
-}: {
-  form: FormProperties;
-  getValues: () => void | FormValues;
-  getGroupHistory: () => string[];
-  groups: GroupsType | object | undefined;
-  matchedIds: string[];
-  language: string;
-}) => {
-  const formValues = getValues() || {};
-  const groupHistory = getGroupHistory();
-  return groupHistory
-    .map((groupId) => {
-      if (!groups) return [];
-      const group: Group = groups[groupId as keyof typeof groups] || {};
-      const groupElements = getReviewItemElements(
-        group.elements,
-        form.elements,
-        matchedIds,
-        formValues,
-        language
-      );
-      return groupElements.map((groupElement) => groupElement.element);
-    })
-    .flat();
-};
 
 interface SubmitButtonProps {
   submitDelaySeconds: () => number;
@@ -196,10 +151,10 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
     currentGroup,
     groupsCheck,
     getGroupTitle,
-    matchedIds,
-    getGroupHistory,
-    getValues,
-    groups,
+    setInitialFormViewTime,
+    getInitialFormViewTime,
+    getFormElementsFromGroups,
+    getSubmitDelay,
   } = useGCFormsContext();
   const isGroupsCheck = groupsCheck(props.allowGrouping);
   const isShowReviewPage = showReviewPage(form);
@@ -239,36 +194,14 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [formStatusError, errorList, lastSubmitCount, canFocusOnError]);
 
-  const submitDelayCallback = () => {
-    try {
-      const hasGroups = formHasGroups(form) && props.allowGrouping;
-      const filterByTheseElements = hasGroups
-        ? getFormElementsGroups({
-            form,
-            getValues,
-            getGroupHistory,
-            groups,
-            matchedIds,
-            language,
-          })
-        : form.elements;
-      const numberOfRequiredQuestions = filterByTheseElements.filter(
-        (element) => element?.properties.validation?.required === true
-      ).length;
-      const submitDelay = calculateSubmitDelay(numberOfRequiredQuestions);
+  useEffect(() => {
+    // TODO could also call on first interaction vs. on load
+    setInitialFormViewTime();
+  }, [setInitialFormViewTime]);
 
-      // TEMP START: For easier testing, to be removed before merge
-      setDelay({ numberOfRequiredQuestions, submitDelay });
-
-      return submitDelay;
-    } catch (err) {
-      logMessage.error(err as Error);
-      return 0; // If there is an error, just submit immediately to avoid blocking the user submitting
-    }
-  };
-
-  // TEMP START: For easier testing, to be removed before merge
-  const [delay, setDelay] = useState({ numberOfRequiredQuestions: 0, submitDelay: 0 });
+  // TEMP: For debugging
+  const [tempElementsFromGroups, setTempElementsFromGroups] = useState(getFormElementsFromGroups());
+  const [totalDelay, setTotalDelay] = useState(0);
 
   return status === "submitting" ? (
     <>
@@ -375,16 +308,10 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
                             />
                           )}
                         <div className="inline-block">
-                          <div>
-                            TESTING (remove before merge)
-                            <br />
-                            Number of Required Questions: {delay.numberOfRequiredQuestions}
-                            <br />
-                            Total delay: {delay.submitDelay} seconds
-                            <br />
-                          </div>
                           <SubmitButton
-                            submitDelaySeconds={submitDelayCallback}
+                            submitDelaySeconds={() =>
+                              getSubmitDelay({ allowGrouping: props.allowGrouping })
+                            }
                             formID={formID}
                             formTitle={form.titleEn}
                           />
@@ -394,23 +321,33 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
                   },
                 })
               ) : (
-                <>
-                  <div>
-                    TESTING (remove before merge)
-                    <br />
-                    Number of Required Questions: {delay.numberOfRequiredQuestions}
-                    <br />
-                    Total delay: {delay.submitDelay} seconds
-                    <br />
-                  </div>
-                  <SubmitButton
-                    submitDelaySeconds={submitDelayCallback}
-                    formID={formID}
-                    formTitle={form.titleEn}
-                  />
-                </>
+                <SubmitButton
+                  submitDelaySeconds={() => getSubmitDelay({ allowGrouping: props.allowGrouping })}
+                  formID={formID}
+                  formTitle={form.titleEn}
+                />
               )}
             </div>
+            {/* START: Temp for debugging */}
+            <div className="border-dashed border-2 border-sky-500 mt-10 p-4 bg-rose-300">
+              <strong>TEMP debugging</strong>
+              <br />
+              Initial Form View: {getInitialFormViewTime()} <br />
+              Count of Elements in Groups: {tempElementsFromGroups.length}{" "}
+              <Button onClick={() => setTempElementsFromGroups(getFormElementsFromGroups())}>
+                update
+              </Button>
+              <br />
+              Submit Delay: {totalDelay}{" "}
+              <Button
+                onClick={() =>
+                  setTotalDelay(getSubmitDelay({ allowGrouping: props.allowGrouping }))
+                }
+              >
+                update
+              </Button>
+            </div>
+            {/* END: Temp for debugging */}
           </form>
         </>
       }
