@@ -184,9 +184,7 @@ export const Review = ({ language }: { language: Language }): React.ReactElement
   useFocusIt({ elRef: groupsHeadingRef });
 
   //Prior to useMemo, we grab the necessary translations for AddressComplete
-  addressCompleteStrings.unitNumber = t("addressComponents.unitNumber", { lng: language });
-  addressCompleteStrings.civicNumber = t("addressComponents.civicNumber", { lng: language });
-  addressCompleteStrings.streetName = t("addressComponents.streetName", { lng: language });
+  addressCompleteStrings.streetAddress = t("addressComponents.streetName", { lng: language });
   addressCompleteStrings.city = t("addressComponents.city", { lng: language });
   addressCompleteStrings.province = t("addressComponents.province", { lng: language });
   addressCompleteStrings.postalCode = t("addressComponents.postalCode", { lng: language });
