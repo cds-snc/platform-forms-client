@@ -10,10 +10,11 @@ import { cn } from "@lib/utils";
 interface ComboboxProps extends InputFieldProps {
   choices?: string[];
   onSetValue?: (value: string) => void;
+  defaultValue?: string;
 }
 
 export const Combobox = (props: ComboboxProps): React.ReactElement => {
-  const { id, name, className, choices = [], required, ariaDescribedBy } = props;
+  const { id, name, className, choices = [], required, ariaDescribedBy, defaultValue } = props;
   const classes = classnames("gc-combobox", className);
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -21,9 +22,13 @@ export const Combobox = (props: ComboboxProps): React.ReactElement => {
   const { setValue } = helpers;
 
   const [items, setItems] = React.useState(choices);
+  const [inputValue, setInputValue] = React.useState(defaultValue || "");
+
   const { isOpen, getMenuProps, getInputProps, highlightedIndex, getItemProps, selectedItem } =
     useCombobox({
+      inputValue,
       onInputValueChange({ inputValue }) {
+        setInputValue(inputValue || "");
         setItems(
           choices.filter((choice) => {
             return inputValue ? choice.toLowerCase().includes(inputValue.toLowerCase()) : true;
@@ -32,9 +37,11 @@ export const Combobox = (props: ComboboxProps): React.ReactElement => {
       },
       items,
       onSelectedItemChange({ selectedItem }) {
-        setValue(selectedItem);
-        if (props.onSetValue) {
-          props.onSetValue(selectedItem ?? "");
+        if (selectedItem) {
+          setValue(selectedItem);
+          if (props.onSetValue) {
+            props.onSetValue(selectedItem ?? "");
+          }
         }
       },
     });

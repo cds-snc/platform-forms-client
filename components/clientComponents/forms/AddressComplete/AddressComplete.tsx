@@ -208,6 +208,7 @@ export const AddressComplete = (props: AddressCompleteProps): React.ReactElement
               onSetValue={(val) => setCountry(val)}
               className={cn(meta.error && "gc-error-input")}
               required={required}
+              defaultValue="Canada"
               data-testid="addresscomplete-input-country"
             />
           </div>
