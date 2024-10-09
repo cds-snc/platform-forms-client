@@ -9,6 +9,7 @@
   "deleteInvitation": "Supprimer l'invitation",
   "downloadForm": "Télécharger le formulaire",
   "emailAlreadyInList": "{{email}} a déjà été ajouté",
+  "emailDomainMismatch": "{{email}} Email domain mismatch",
   "error": "Il y a eu une erreur.",
   "expired": "Expiré",
   "invalidEmail": "{{email}} n'est pas une adresse courriel valide",

@@ -55,6 +55,14 @@ export const ManageUsers = () => {
       valid = false;
     }
 
+    // Email domain must match the logged-in user's email domain
+    const loggedInUserDomain = loggedInUserEmail.split("@")[1];
+    const emailDomain = email.split("@")[1];
+    if (emailDomain !== loggedInUserDomain) {
+      handleAddError(t("emailDomainMismatch", { email }));
+      valid = false;
+    }
+
     return valid;
   };
 
