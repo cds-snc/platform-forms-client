@@ -15,6 +15,10 @@ export enum AuditLogEvent {
   ChangeSecurityAttribute = "ChangeSecurityAttribute",
   GrantFormAccess = "GrantFormAccess",
   RevokeFormAccess = "RevokeFormAccess",
+  // Invitations
+  InviteUser = "InviteUser",
+  InvitationAccepted = "InvitationAccepted",
+  InvitationDeclined = "InvitationDeclined",
   // Form Response Events
   DownloadResponse = "DownloadResponse",
   ConfirmResponse = "ConfirmResponse",
