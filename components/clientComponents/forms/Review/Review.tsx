@@ -143,9 +143,7 @@ function getReviewItemElements(
         const addressValues = JSON.parse(addressFormValue) as AddressElements;
 
         const titleSet = {
-          unitNumber: parentTitle + " - " + addressCompleteStrings.unitNumber,
-          civicNumber: parentTitle + " - " + addressCompleteStrings.civicNumber,
-          streetName: parentTitle + " - " + addressCompleteStrings.streetName,
+          streetAddress: parentTitle + " - " + addressCompleteStrings.streetAddress,
           city: parentTitle + " - " + addressCompleteStrings.city,
           province: parentTitle + " - " + addressCompleteStrings.province,
           postalCode: parentTitle + " - " + addressCompleteStrings.postalCode,
