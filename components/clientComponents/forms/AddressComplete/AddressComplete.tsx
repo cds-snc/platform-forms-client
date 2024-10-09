@@ -191,7 +191,7 @@ export const AddressComplete = (props: AddressCompleteProps): React.ReactElement
           </Description>
         )}
 
-        {!props.canadianOnly && (
+        {props.canadianOnly && (
           <div>
             <input type="hidden" id={`${name}-country`} name={`${name}-country`} value={"CAN"} />
           </div>
