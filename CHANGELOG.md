@@ -5,6 +5,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.22.2](https://github.com/cds-snc/platform-forms-client/compare/v3.22.1...v3.22.2) (2024-10-09)
+
+
+### Bug Fixes
+
+* Adds improved server-side error handling for files. ([89a1039](https://github.com/cds-snc/platform-forms-client/commit/89a1039a20c7f9c254c3b7d7cfe7dde8a97aedc5))
+
 ## [3.22.1](https://github.com/cds-snc/platform-forms-client/compare/v3.22.0...v3.22.1) (2024-10-08)
 
 
