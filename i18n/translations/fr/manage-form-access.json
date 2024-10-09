@@ -14,6 +14,7 @@
   "invalidEmail": "{{email}} n'est pas une adresse courriel valide",
   "invitationFailed": "Impossible d'envoyer une invitation à {{email}}",
   "invitationSent": "Invitation envoyée",
+  "invitationToAccessForm": "You have been invited to access a form - <accept>accept</accept> or <decline>decline</decline> invitation.",
   "invite": "Inviter",
   "invited": "Invité",
   "inviteToForm": "Inviter à gérer les réponses",
