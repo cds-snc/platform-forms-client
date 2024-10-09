@@ -186,7 +186,7 @@ export const AddressComplete = (props: AddressCompleteProps): React.ReactElement
         tabIndex={0}
       >
         {ariaDescribedBy && (
-          <Description id={id} className="gc-form-group-context">
+          <Description id={`desc-${id}`} className="gc-form-group-context">
             {ariaDescribedBy}
           </Description>
         )}
@@ -198,7 +198,7 @@ export const AddressComplete = (props: AddressCompleteProps): React.ReactElement
         )}
         {!props.canadianOnly && (
           <div className="mb-6">
-            <Label htmlFor="country" className="gc-label">
+            <Label htmlFor={`${name}-country`} className="gc-label">
               {t("addElementDialog.addressComplete.country")}
             </Label>
             <Combobox
@@ -214,10 +214,12 @@ export const AddressComplete = (props: AddressCompleteProps): React.ReactElement
         )}
 
         <div className="mb-6">
-          <Label htmlFor="street" className="gc-label">
+          <Label htmlFor={`${name}-streetInput`} className="gc-label">
             {t("addElementDialog.addressComplete.street.label")}
           </Label>
-          <Description>{t("addElementDialog.addressComplete.street.description")}</Description>
+          <Description id={`${name}-streetDesc`}>
+            {t("addElementDialog.addressComplete.street.description")}
+          </Description>
           {isReady && (
             <ManagedCombobox
               choices={choices}
@@ -226,6 +228,7 @@ export const AddressComplete = (props: AddressCompleteProps): React.ReactElement
               onChange={onAddressSearch}
               onSetValue={onAddressSet}
               required={required}
+              ariaDescribedBy={`${name}-streetDesc`}
             />
           )}
           {!isReady && (
@@ -240,7 +243,7 @@ export const AddressComplete = (props: AddressCompleteProps): React.ReactElement
         </div>
 
         <div className="mb-6">
-          <Label htmlFor="unit" className="gc-label">
+          <Label htmlFor={`${name}-unit`} className="gc-label">
             {t("addElementDialog.addressComplete.components.unitNumber")}
           </Label>
           <input
@@ -256,7 +259,7 @@ export const AddressComplete = (props: AddressCompleteProps): React.ReactElement
         </div>
 
         <div className="mb-6">
-          <Label htmlFor="civic" className="gc-label">
+          <Label htmlFor={`${name}-civic`} className="gc-label">
             {t("addElementDialog.addressComplete.components.civicNumber")}
           </Label>
           <input
@@ -272,7 +275,7 @@ export const AddressComplete = (props: AddressCompleteProps): React.ReactElement
         </div>
 
         <div className="mb-6">
-          <Label htmlFor="street" className="gc-label">
+          <Label htmlFor={`${name}-street`} className="gc-label">
             {t("addElementDialog.addressComplete.components.streetName")}
           </Label>
           <input
@@ -288,7 +291,7 @@ export const AddressComplete = (props: AddressCompleteProps): React.ReactElement
         </div>
 
         <div className="mb-6">
-          <Label htmlFor="city" className="gc-label">
+          <Label htmlFor={`${name}-city`} className="gc-label">
             {t("addElementDialog.addressComplete.city")}
           </Label>
           <input
@@ -304,7 +307,7 @@ export const AddressComplete = (props: AddressCompleteProps): React.ReactElement
         </div>
 
         <div className="mb-6">
-          <Label htmlFor="province" className="gc-label">
+          <Label htmlFor={`${name}-province`} className="gc-label">
             {t("addElementDialog.addressComplete.province")}
           </Label>
           <input
@@ -320,7 +323,7 @@ export const AddressComplete = (props: AddressCompleteProps): React.ReactElement
         </div>
 
         <div className="mb-6">
-          <Label htmlFor="postal" className="gc-label">
+          <Label htmlFor={`${name}-postal`} className="gc-label">
             {t("addElementDialog.addressComplete.postal")}
           </Label>
           <input
