@@ -8,7 +8,7 @@ export const themes = {
   destructive:
     "border-gcds-red-700 bg-gcds-red-700 text-white-default hover:border-gcds-red-900 hover:bg-gcds-red-900 active:border-black",
   link: "!border-none bg-transparent !p-0 text-gcds-blue-800 underline hover:no-underline focus:!text-white-default",
-  icon: "ml-1.5 max-h-9 !rounded-full !border-none bg-gray-selected !p-1.5 hover:bg-gray-600",
+  icon: "ml-1.5 max-h-9 !rounded-full !border-none !p-1.5",
   disabled: "cursor-not-allowed border-none bg-gcds-gray-100 text-gcds-gray-800",
 } as const;
 
