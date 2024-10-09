@@ -60,22 +60,26 @@ export const AddressComplete = (props: AddressCompleteProps): React.ReactElement
     if (field.value) {
       try {
         const parsedValue = JSON.parse(field.value);
+        // Only update if parsedValue is different from addressObject
         if (JSON.stringify(parsedValue) !== JSON.stringify(addressObject)) {
           setAddressObject(parsedValue);
         }
       } catch (e) {
-        setAddressObject(null);
+        if (addressObject !== null) {
+          setAddressObject(null);
+        }
       }
     }
-  }, [field.value, addressObject]);
+  }, [field.value]);
 
   // Update the field value when the address object changes
   useEffect(() => {
     const newValue = addressObject ? JSON.stringify(addressObject) : "";
+    // Only update if newValue is different from field.value
     if (newValue !== field.value) {
       helpers.setValue(newValue);
     }
-  }, [addressObject, helpers, field.value]);
+  }, [addressObject, helpers]);
 
   const onAddressSearch = async (e: React.ChangeEvent<HTMLInputElement>) => {
     if (!allow) {
