@@ -51,7 +51,7 @@
       "country": "Country",
       "description": "Verified address is a component that uses the Canada Post AddressComplete API to look up addresses as they are entered. Use this element to collect a more accurate address.",
       "label": "Verified address",
-      "postal": "Postal code",
+      "postal": "Postal or zip code",
       "province": "Province, territory, or state",
       "street": {
         "description": "Include street name and number.",

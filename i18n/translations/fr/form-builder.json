@@ -51,7 +51,7 @@
       "country": "Pays",
       "description": "Le champ d'adresse validée utilise l'API AdresseComplète de Postes Canada pour vérifier les adresses au fur et à mesure qu'elles sont saisies. Utilisez-le pour recueillir une une adresse plus précise.",
       "label": "Adresse validée",
-      "postal": "Code postal",
+      "postal": "Code postal ou zip",
       "province": "Province, territoire ou état",
       "street": {
         "description": "Indiquez le nom et le numéro de rue.",
