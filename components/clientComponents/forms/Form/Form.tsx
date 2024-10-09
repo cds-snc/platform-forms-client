@@ -214,7 +214,12 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
   const errorList = props.errors ? getErrorList(props) : null;
   const errorId = "gc-form-errors";
   const serverErrorId = `${errorId}-server`;
-  const formStatusError = props.status === "Error" ? t("server-error") : null;
+  const formStatusError =
+    props.status === "FileError"
+      ? t("input-validation.file-submission")
+      : props.status === "Error"
+      ? t("server-error")
+      : null;
 
   //  If there are errors on the page, set focus the first error field
   useEffect(() => {
@@ -478,8 +483,9 @@ export const Form = withFormik<FormProps, Responses>({
         formikBag.props.language,
         formikBag.props.formRecord
       );
+
       if (result.error) {
-        formikBag.setStatus("Error");
+        formikBag.setStatus("FileError");
       } else {
         formikBag.props.onSuccess(result.id);
       }
