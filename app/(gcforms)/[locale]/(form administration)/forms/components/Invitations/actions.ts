@@ -32,7 +32,6 @@ export const accept = async (id: string) => {
 
   try {
     await acceptInvitation(ability, id);
-    // @TODO: refresh forms?
   } catch (e) {
     if (e instanceof InvitationNotFoundError) {
       logMessage.error("Invitation not found");
