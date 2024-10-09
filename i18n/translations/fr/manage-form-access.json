@@ -9,7 +9,7 @@
   "deleteInvitation": "Supprimer l'invitation",
   "downloadForm": "Télécharger le formulaire",
   "emailAlreadyInList": "{{email}} a déjà été ajouté",
-  "emailDomainMismatch": "{{email}} Email domain mismatch",
+  "emailDomainMismatch": "{{email}} ne semble pas appartenir à votre organisation. Vous ne pouvez ajouter des collaborateurs qu'avec le même domaine d'adresse courriel.",
   "error": "Il y a eu une erreur.",
   "expired": "Expiré",
   "invalidEmail": "{{email}} n'est pas une adresse courriel valide",
