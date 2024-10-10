@@ -1,5 +1,5 @@
 import React from "react";
-import { SetClosingDate } from "../SetClosingDate";
+import { SetClosingDate } from "../close/SetClosingDate";
 import { TemplateStoreProvider } from "@lib/store/useTemplateStore";
 
 describe("<DownloadForm />", () => {

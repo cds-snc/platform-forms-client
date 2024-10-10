@@ -7,6 +7,9 @@ import axios from "axios";
 
 import { Button } from "@clientComponents/globals";
 import { ClosingDateToggle } from "./ClosingDateToggle";
+import { ClosedMessage } from "./ClosedMessage";
+import { ClosedDetails } from "@lib/types";
+
 export const SetClosingDate = ({ formID }: { formID: string }) => {
   const { t } = useTranslation("form-builder");
 
@@ -14,6 +17,11 @@ export const SetClosingDate = ({ formID }: { formID: string }) => {
     closingDate: s.closingDate,
     setClosingDate: s.setClosingDate,
   }));
+
+  const [closedDetails, setClosedDetails] = useState<ClosedDetails>({
+    messageEn: "aha",
+    messageFr: "aha fr",
+  });
 
   const [status, setStatus] = useState(closingDate ? "closed" : "open");
 
@@ -34,10 +42,7 @@ export const SetClosingDate = ({ formID }: { formID: string }) => {
       method: "PUT",
       data: {
         closingDate: closeDate,
-        closedDetails: {
-          messageEn: "hello en",
-          messageFr: "hello fr",
-        },
+        closedDetails,
       },
       timeout: 5000,
     });
@@ -67,6 +72,9 @@ export const SetClosingDate = ({ formID }: { formID: string }) => {
           offLabel={t("closingDate.open")}
           description={t("closingDate.status")}
         />
+      </div>
+      <div className="mb-4 w-3/5">
+        <ClosedMessage closedDetails={closedDetails} setClosedDetails={setClosedDetails} />
       </div>
       <Button theme="secondary" onClick={saveFormStatus}>
         {t("closingDate.saveButton")}

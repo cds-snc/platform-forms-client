@@ -873,7 +873,11 @@
     "closed": "Closed",
     "saveButton": "Save changes",
     "savedSuccessMessage": "Your changes have been saved.",
-    "savedErrorMessage": "There was an error saving your changes. Try again later or contact Support."
+    "savedErrorMessage": "There was an error saving your changes. Try again later or contact Support.",
+    "message": {
+      "title": "Create a descriptive closing message",
+      "text1": "After your form is closed, you can create bilingual message that provides users information on the status of the form and where to go next."
+    }
   },
   "errorSavingForm": {
     "title": "There was an error saving the form",

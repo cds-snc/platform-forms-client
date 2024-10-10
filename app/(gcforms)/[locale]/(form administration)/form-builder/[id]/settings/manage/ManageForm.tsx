@@ -2,7 +2,7 @@
 
 import { FormRecord } from "@lib/types";
 import { DownloadForm } from "./DownloadForm";
-import { SetClosingDate } from "./SetClosingDate";
+import { SetClosingDate } from "./close/SetClosingDate";
 import { FormOwnership } from "./FormOwnership";
 import { ErrorPanel } from "@clientComponents/globals/ErrorPanel";
 
