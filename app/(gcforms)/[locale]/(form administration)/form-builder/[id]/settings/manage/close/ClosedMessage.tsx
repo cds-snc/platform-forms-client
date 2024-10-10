@@ -14,7 +14,7 @@ export const ClosedMessage = ({ closedDetails, setClosedDetails }: ClosedMessage
       <p className="mb-2 font-bold">{t("closingDate.message.title")}</p>
       <p className="mb-4">{t("closingDate.message.text1")}</p>
       <div className="flex gap-2 ">
-        <div className="w-1/2">
+        <div className="w-1/2 border-1 border-gray-300">
           <Editor
             lang="en"
             content={closedDetails && closedDetails.messageEn ? closedDetails.messageEn : ""}
@@ -23,7 +23,8 @@ export const ClosedMessage = ({ closedDetails, setClosedDetails }: ClosedMessage
             }}
           />
         </div>
-        <div className="w-1/2">
+        {/* @todo add en / fr tag to editor */}
+        <div className="w-1/2 border-1 border-gray-300">
           <Editor
             lang="fr"
             content={closedDetails && closedDetails.messageFr ? closedDetails.messageFr : ""}
