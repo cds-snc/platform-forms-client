@@ -15,6 +15,9 @@ import { logMessage } from "@lib/logger";
 import { unprocessedSubmissions, deleteDraftFormResponses } from "./vault";
 import { addOwnershipEmail, transferOwnershipEmail } from "./ownership";
 import { deleteKey } from "./serviceAccount";
+import { ownerRemovedNotification } from "./invitations/emailTemplates/ownerRemovedNotification";
+import { sendEmail } from "./integration/notifyConnector";
+import { youHaveBeenRemovedNotification } from "./invitations/emailTemplates/youHaveBeenRemovedNotification";
 
 // ******************************************
 // Internal Module Functions
@@ -471,22 +474,24 @@ export async function getTemplateWithAssociatedUsers(
   users: { id: string; name: string | null; email: string }[];
 } | null> {
   try {
+    const templateWithAssociatedUsers = await _unprotectedGetTemplateWithAssociatedUsers(formID);
+
+    if (!templateWithAssociatedUsers) return null;
+
     checkPrivileges(ability, [
       {
         action: "view",
-        subject: "FormRecord",
+        subject: { type: "FormRecord", object: { users: templateWithAssociatedUsers.users } },
       },
-      { action: "view", subject: "User" },
     ]);
 
-    const users = await _unprotectedGetTemplateWithAssociatedUsers(formID);
     logEvent(
       ability.userID,
       { type: "Form", id: formID },
       "ReadForm",
       "Retrieved users associated with Form"
     );
-    return users;
+    return templateWithAssociatedUsers;
   } catch (e) {
     if (e instanceof AccessControlError)
       logEvent(
@@ -711,6 +716,113 @@ export async function updateIsPublishedForTemplate(
         { type: "Form", id: formID },
         "AccessDenied",
         "Attempted to publish form"
+      );
+    throw e;
+  }
+}
+
+/**
+ * Remove a user from a form
+ *
+ * @param ability
+ * @param formID Form ID
+ * @param userId User to be removed ID
+ * @returns
+ */
+export async function removeAssignedUserFromTemplate(
+  ability: UserAbility,
+  formID: string,
+  userId: string
+) {
+  try {
+    const template = await getTemplateWithAssociatedUsers(ability, formID);
+
+    if (template === null) {
+      logMessage.warn(
+        `Can not remove assigned user ${userId} on template ${formID}.  Template does not exist`
+      );
+      return null;
+    }
+
+    const userToRemove = await prisma.user.findUnique({
+      where: {
+        id: userId,
+      },
+      select: {
+        name: true,
+        email: true,
+      },
+    });
+
+    if (userToRemove === null) {
+      logMessage.warn(
+        `Can not remove assigned user ${userId} on template ${formID}.  User does not exist`
+      );
+      return null;
+    }
+
+    try {
+      const updatedTemplate = await prisma.template
+        .update({
+          where: {
+            id: formID,
+          },
+          include: {
+            users: true,
+          },
+          data: {
+            users: {
+              disconnect: {
+                id: userId,
+              },
+            },
+          },
+        })
+        .catch((e) => prismaErrors(e, null));
+
+      logEvent(
+        ability.userID,
+        { type: "Form", id: formID },
+        "RevokeFormAccess",
+        `Access revoked for ${userId}`
+      );
+
+      // Send email to person who was removed
+      const youHaveBeenRemovedEmailContent = youHaveBeenRemovedNotification(
+        template.formRecord.form.titleEn,
+        template.formRecord.form.titleFr
+      );
+
+      sendEmail(userToRemove.email, {
+        subject: "Form access removed | Accès au formulaire supprimé",
+        formResponse: youHaveBeenRemovedEmailContent,
+      });
+
+      // Send email to remaining owners
+      updatedTemplate?.users.forEach((owner) => {
+        const ownerRemovedEmailContent = ownerRemovedNotification(
+          template.formRecord.form.titleEn,
+          template.formRecord.form.titleFr,
+          userToRemove.name || "An owner"
+        );
+
+        sendEmail(owner.email, {
+          subject: "Form access removed | Accès au formulaire supprimé",
+          formResponse: ownerRemovedEmailContent,
+        });
+      });
+    } catch (e) {
+      logMessage.error(`Failed to remove user ${userId} from template ${formID}`);
+    }
+
+    if (formCache.cacheAvailable) formCache.formID.invalidate(formID);
+  } catch (e) {
+    if (e instanceof AccessControlError)
+      logEvent(
+        ability.userID,
+        { type: "Form", id: formID },
+        "AccessDenied",
+        "Attempted to remove assigned user for form"
       );
     throw e;
   }
