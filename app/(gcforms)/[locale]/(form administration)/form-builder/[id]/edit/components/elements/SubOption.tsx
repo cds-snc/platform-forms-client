@@ -113,7 +113,9 @@ export const SubOption = ({
         theme="icon"
         className="group"
         id={`remove--${id}--${index + 1}`}
-        icon={<Close className="group-focus:fill-white-default" />}
+        icon={
+          <Close className="group-focus:fill-white-default bg-gray-selected hover:bg-gray-600" />
+        }
         aria-label={`${t("removeOption")} ${value}`}
         onClick={() => {
           removeSubChoice(elIndex, subIndex, index);
