@@ -12,7 +12,7 @@ import {
   createTemplate as createDbTemplate,
   removeDeliveryOption,
   updateAssignedUsersForTemplate,
-  updateClosingDateForTemplate,
+  updateClosed,
   updateTemplate as updateDbTemplate,
   updateIsPublishedForTemplate,
   deleteTemplate as deleteDbTemplate,
@@ -259,7 +259,7 @@ export const updateTemplateClosingDate = async ({
   try {
     const { ability } = await authCheckAndThrow();
 
-    const response = await updateClosingDateForTemplate(ability, formID, closingDate);
+    const response = await updateClosed(ability, formID, closingDate);
     if (!response) {
       throw new Error(
         `Template API response was null. Request information: { ${formID}, ${closingDate} }`

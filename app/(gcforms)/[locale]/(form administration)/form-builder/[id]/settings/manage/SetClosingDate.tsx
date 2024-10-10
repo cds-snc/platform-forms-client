@@ -34,6 +34,10 @@ export const SetClosingDate = ({ formID }: { formID: string }) => {
       method: "PUT",
       data: {
         closingDate: closeDate,
+        closedDetails: {
+          messageEn: "hello en",
+          messageFr: "hello fr",
+        },
       },
       timeout: 5000,
     });

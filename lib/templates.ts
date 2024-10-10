@@ -7,6 +7,7 @@ import {
   DeliveryOption,
   UserAbility,
   SecurityAttribute,
+  ClosedDetails,
 } from "@lib/types";
 import { Prisma } from "@prisma/client";
 import { AccessControlError, checkPrivileges } from "./privileges";
@@ -1243,15 +1244,25 @@ export const onlyIncludePublicProperties = (template: FormRecord): PublicFormRec
   };
 };
 
-export const updateClosingDateForTemplate = async (
+export const updateClosed = async (
   ability: UserAbility,
   formID: string,
-  closingDate: string
+  closingDate: string,
+  details?: ClosedDetails
 ) => {
   let d = null;
 
   if (closingDate !== "open") {
     d = closingDate;
+  }
+
+  let detailsData: ClosedDetails | null = null;
+
+  // Add the closed details if they exist
+  if (details && details.messageEn && details.messageFr) {
+    detailsData = {};
+    detailsData.messageEn = details.messageEn;
+    detailsData.messageFr = details.messageFr;
   }
 
   try {
@@ -1262,6 +1273,8 @@ export const updateClosingDateForTemplate = async (
         },
         data: {
           closingDate: d,
+          closedDetails:
+            detailsData !== null ? (detailsData as Prisma.JsonObject) : Prisma.JsonNull,
         },
         select: {
           id: true,
