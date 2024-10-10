@@ -61,7 +61,12 @@ export const SubElement = ({
   const focusSubElement = (id: number) => {
     // Add delay to wait for the new element to be rendered
     setTimeout(() => {
-      refs && refs.current && refs.current[id].focus();
+      try {
+        // @todo --- this currently isn't working for rich text elements
+        refs && refs.current && refs.current[id]?.focus();
+      } catch (e) {
+        // no-op
+      }
     }, 200);
   };
 
@@ -115,6 +120,10 @@ export const SubElement = ({
                     forceRefresh(item.id);
                   }}
                   moreButtonRenderer={(moreButton) => {
+                    if (item.type === "richText") {
+                      return <div />;
+                    }
+
                     return (
                       <SubElementModal
                         elIndex={elIndex}
