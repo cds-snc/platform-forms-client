@@ -1,5 +1,6 @@
 import { useTranslation } from "@i18n/client";
 import { ClosedDetails } from "@lib/types";
+import { Editor } from "@formBuilder/[id]/edit/components/elements/lexical-editor/Editor";
 
 type ClosedMessageProps = {
   closedDetails: ClosedDetails | null;
@@ -12,18 +13,23 @@ export const ClosedMessage = ({ closedDetails, setClosedDetails }: ClosedMessage
     <>
       <p className="mb-2 font-bold">{t("closingDate.message.title")}</p>
       <p className="mb-4">{t("closingDate.message.text1")}</p>
-
-      <div>
-        <textarea
-          className="mr-10 border-1"
-          value={closedDetails && closedDetails.messageEn ? closedDetails.messageEn : ""}
-          onChange={(e) => setClosedDetails({ ...closedDetails, messageEn: e.target.value })}
-        />
-        <textarea
-          className="border-1"
-          value={closedDetails && closedDetails.messageFr ? closedDetails.messageFr : ""}
-          onChange={(e) => setClosedDetails({ ...closedDetails, messageFr: e.target.value })}
-        />
+      <div className="flex gap-2 ">
+        <div className="w-1/2">
+          <Editor
+            lang="en"
+            content={closedDetails && closedDetails.messageEn ? closedDetails.messageEn : ""}
+            onChange={(value: string) => {
+              setClosedDetails({ ...closedDetails, messageEn: value });
+            }}
+          />
+        </div>
+        <div className="w-1/2">
+          <Editor
+            lang="fr"
+            content={closedDetails && closedDetails.messageFr ? closedDetails.messageFr : ""}
+            onChange={(value: string) => setClosedDetails({ ...closedDetails, messageFr: value })}
+          />
+        </div>
       </div>
     </>
   );
