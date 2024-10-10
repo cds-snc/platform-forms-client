@@ -5,6 +5,8 @@ import { notFound } from "next/navigation";
 import { Preview } from "./Preview";
 import { allowGrouping } from "@formBuilder/components/shared/right-panel/treeview/util/allowGrouping";
 import { ClientContainer } from "./ClientContainer";
+import { getClosedDetails } from "../settings/manage/close/actions";
+import { ClosedDetails } from "@lib/types";
 
 export async function generateMetadata({
   params: { locale },
@@ -26,6 +28,8 @@ export default async function Page({ params: { id } }: { params: { id: string } 
 
   const isAllowGrouping = allowGrouping();
 
+  const closedDetails: ClosedDetails | null = await getClosedDetails(id);
+
   const formID = id;
 
   if (!session?.user && formID !== "0000") {
@@ -33,7 +37,11 @@ export default async function Page({ params: { id } }: { params: { id: string } 
   }
   return (
     <ClientContainer>
-      <Preview disableSubmit={disableSubmit} allowGrouping={isAllowGrouping} />
+      <Preview
+        disableSubmit={disableSubmit}
+        allowGrouping={isAllowGrouping}
+        closedDetails={closedDetails}
+      />
     </ClientContainer>
   );
 }

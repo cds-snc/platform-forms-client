@@ -5,7 +5,7 @@ import { useSession } from "next-auth/react";
 import Markdown from "markdown-to-jsx";
 import { PreviewNavigation } from "./PreviewNavigation";
 import { getRenderedForm } from "@lib/formBuilder";
-import { FormProperties, PublicFormRecord } from "@lib/types";
+import { ClosedDetails, FormProperties, PublicFormRecord } from "@lib/types";
 import { RichText, ClosedPage } from "@clientComponents/forms";
 import { Button } from "@clientComponents/globals";
 import { NextButton } from "@clientComponents/forms/NextButton/NextButton";
@@ -33,9 +33,11 @@ import { focusElement } from "@lib/client/clientHelpers";
 export const Preview = ({
   disableSubmit = true,
   allowGrouping = false,
+  closedDetails,
 }: {
   disableSubmit?: boolean;
   allowGrouping?: boolean;
+  closedDetails: ClosedDetails | null;
 }) => {
   const { status } = useSession();
   const { i18n } = useTranslation(["common", "confirmation"]);
@@ -60,6 +62,10 @@ export const Preview = ({
     isPublished: getIsPublished(),
     securityAttribute: getSecurityAttribute(),
   };
+
+  if (closedDetails) {
+    formRecord.closedDetails = closedDetails;
+  }
 
   const { localizeField, translationLanguagePriority, getLocalizationAttribute, email } =
     useTemplateStore((s) => ({

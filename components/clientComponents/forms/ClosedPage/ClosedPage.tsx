@@ -57,6 +57,7 @@ export const ClosedPage = (props: TextPageProps): React.ReactElement => {
   const {
     formRecord: {
       form: { titleEn, titleFr, closedMessage, brand },
+      closedDetails,
     },
     language,
   } = props;
@@ -67,9 +68,14 @@ export const ClosedPage = (props: TextPageProps): React.ReactElement => {
     homeHref = language === "en" ? brand.urlEn : brand.urlFr;
   }
 
-  const pageText = closedMessage
+  let pageText = closedMessage
     ? (closedMessage[getProperty("description", language)] as string)
     : "";
+
+  if (closedDetails && closedDetails[getProperty("message", language)]) {
+    pageText = closedDetails && closedDetails[getProperty("message", language)];
+  }
+
   // autoFocus h1 element of page to ensure its read out
   useEffect(() => {
     document.getElementsByTagName("h1").item(0)?.focus();

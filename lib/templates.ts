@@ -106,6 +106,7 @@ async function _unprotectedGetTemplateByID(formID: string): Promise<FormRecord |
         publishFormType: true,
         publishDesc: true,
         closingDate: true,
+        closedDetails: true,
         ttl: true,
       },
     })
