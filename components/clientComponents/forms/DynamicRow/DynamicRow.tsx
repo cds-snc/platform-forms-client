@@ -65,9 +65,13 @@ export const DynamicGroup = (props: DynamicGroupProps): React.ReactElement => {
 
   useEffect(() => {
     if (focusedRow.current !== null) {
-      rowRefs.current[focusedRow.current].current?.focus();
-      rowRefs.current[focusedRow.current].current?.scrollIntoView();
-      focusedRow.current = null;
+      try {
+        rowRefs.current[focusedRow.current].current?.focus();
+        rowRefs.current[focusedRow.current].current?.scrollIntoView();
+        focusedRow.current = null;
+      } catch (e) {
+        // no-op
+      }
     }
 
     // When rows are added or deleted run the useEffect again to focus on the new row
