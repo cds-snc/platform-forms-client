@@ -6,8 +6,10 @@ import { getUser } from "@lib/users";
 import { getTemplateWithAssociatedUsers } from "@lib/templates";
 import { sendEmail } from "@lib/integration/notifyConnector";
 import {
+  InvalidDomainError,
   InvitationIsExpiredError,
   InvitationNotFoundError,
+  MismatchedEmailDomainError,
   TemplateNotFoundError,
   UserAlreadyHasAccessError,
   UserNotFoundError,
@@ -51,6 +53,34 @@ describe("Invitations", () => {
       await expect(
         inviteUserByEmail(mockAbility, "test@cds-snc.ca", "form-id", "message")
       ).rejects.toThrow(UserAlreadyHasAccessError);
+    });
+
+    it("should throw MismatchedEmailDomainError if email domain does not match sender's domain", async () => {
+      (getUser as jest.MockedFunction<typeof getUser>).mockResolvedValue(
+        mockAppUser({
+          email: "test@cds-snc.ca",
+        })
+      );
+
+      (
+        getTemplateWithAssociatedUsers as jest.MockedFunction<typeof getTemplateWithAssociatedUsers>
+      ).mockResolvedValue(mockTemplateWithUsers());
+
+      await expect(
+        inviteUserByEmail(mockAbility, "test@servicecanada.gc.ca", "form-id", "message")
+      ).rejects.toThrow(MismatchedEmailDomainError);
+    });
+
+    it("should throw invalidDomainError if email is not a valid government email", async () => {
+      (getUser as jest.MockedFunction<typeof getUser>).mockResolvedValue(mockAppUser());
+
+      (
+        getTemplateWithAssociatedUsers as jest.MockedFunction<typeof getTemplateWithAssociatedUsers>
+      ).mockResolvedValue(mockTemplateWithUsers());
+
+      await expect(
+        inviteUserByEmail(mockAbility, "test@notagovdomain", "form-id", "message")
+      ).rejects.toThrow(InvalidDomainError);
     });
 
     it("should throw TemplateNotFoundError if template is not found", async () => {

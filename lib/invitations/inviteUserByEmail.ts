@@ -1,6 +1,12 @@
 import { FormRecord, UserAbility } from "@lib/types";
 import { getUser } from "@lib/users";
-import { TemplateNotFoundError, UserAlreadyHasAccessError, UserNotFoundError } from "./exceptions";
+import {
+  InvalidDomainError,
+  MismatchedEmailDomainError,
+  TemplateNotFoundError,
+  UserAlreadyHasAccessError,
+  UserNotFoundError,
+} from "./exceptions";
 import { getTemplateWithAssociatedUsers } from "@lib/templates";
 import { prisma } from "@lib/integration/prismaConnector";
 import { sendEmail } from "@lib/integration/notifyConnector";
@@ -10,6 +16,7 @@ import { getOrigin } from "@lib/origin";
 import { logMessage } from "@lib/logger";
 import { Invitation } from "@prisma/client";
 import { logEvent } from "@lib/auditLogs";
+import { isValidGovEmail } from "@lib/validation/validation";
 
 /**
  * Invite someone to the form by email
@@ -41,6 +48,18 @@ export const inviteUserByEmail = async (
   // check if user is already associated with the form
   if (template.users.some((user) => user.email === email)) {
     throw new UserAlreadyHasAccessError();
+  }
+
+  if (!isValidGovEmail(email)) {
+    throw new InvalidDomainError();
+  }
+
+  // Check if the email domain matches the sender's email domain
+  const senderDomain = sender.email.split("@")[1];
+  const recipientDomain = email.split("@")[1];
+
+  if (senderDomain !== recipientDomain) {
+    throw new MismatchedEmailDomainError();
   }
 
   // check if user is already invited to the form
