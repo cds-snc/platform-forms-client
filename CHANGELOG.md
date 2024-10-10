@@ -5,6 +5,21 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.22.3](https://github.com/cds-snc/platform-forms-client/compare/v3.22.2...v3.22.3) (2024-10-10)
+
+
+### Bug Fixes
+
+* Remove more menu for Page text element ([#4390](https://github.com/cds-snc/platform-forms-client/issues/4390)) ([62efa95](https://github.com/cds-snc/platform-forms-client/commit/62efa95577c878fbfa6fd89ab0d5ff18a4936740))
+
+
+### Miscellaneous Chores
+
+* Add customEvent hook for pub/sub pattern ([#4385](https://github.com/cds-snc/platform-forms-client/issues/4385)) ([278fea5](https://github.com/cds-snc/platform-forms-client/commit/278fea5dbc18798a2176217283da1e30eca7904e))
+* fix margin for filename input ([#4384](https://github.com/cds-snc/platform-forms-client/issues/4384)) ([03f73cd](https://github.com/cds-snc/platform-forms-client/commit/03f73cd106c758578631d90e5657b8eb526fe40b))
+* Remove gray bg from Button icon theme and only apply selectively ([#4387](https://github.com/cds-snc/platform-forms-client/issues/4387)) ([6888441](https://github.com/cds-snc/platform-forms-client/commit/68884419e6f1e51412b3c820a41d16e14c58092c))
+* style formatted date inputs ([#4381](https://github.com/cds-snc/platform-forms-client/issues/4381)) ([1098b4e](https://github.com/cds-snc/platform-forms-client/commit/1098b4ea517712f1ba9689502a79a41d474cd03f))
+
 ## [3.22.2](https://github.com/cds-snc/platform-forms-client/compare/v3.22.1...v3.22.2) (2024-10-09)
 
 
