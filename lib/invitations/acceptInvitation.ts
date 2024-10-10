@@ -1,5 +1,5 @@
 import { prisma } from "@lib/integration/prismaConnector";
-import { FormOwner, FormProperties, UserAbility } from "@lib/types";
+import { FormProperties, UserAbility } from "@lib/types";
 import {
   InvitationIsExpiredError,
   InvitationNotFoundError,
@@ -59,7 +59,7 @@ export const acceptInvitation = async (ability: UserAbility, invitationId: strin
     // assign user to form
     await _assignUserToTemplate(user.id, invitation.templateId);
     _deleteInvitation(invitationId);
-    _notifyOwnersOfNewOwnership(user, invitation.templateId);
+    _notifyOwnersOfNewOwnership(user.name || user.email, invitation.templateId);
 
     logEvent(
       ability.userID,
@@ -101,7 +101,7 @@ const _assignUserToTemplate = async (userId: string, formId: string) => {
  * @param user New owner
  * @param formId
  */
-const _notifyOwnersOfNewOwnership = async (user: FormOwner, formId: string) => {
+const _notifyOwnersOfNewOwnership = async (userName: string, formId: string) => {
   const template = await prisma.template.findFirst({
     where: {
       id: formId,
@@ -120,7 +120,7 @@ const _notifyOwnersOfNewOwnership = async (user: FormOwner, formId: string) => {
     throw new TemplateNotFoundError();
   }
 
-  const emailContent = ownerAddedNotification(form.titleEn, form.titleFr, user.name || user.email);
+  const emailContent = ownerAddedNotification(form.titleEn, form.titleFr, userName);
 
   template.users.forEach((owner) => {
     sendEmail(owner.email, {
