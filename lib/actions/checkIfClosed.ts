@@ -1,16 +1,12 @@
 "use server";
 
-import { authCheckAndThrow } from "@lib/actions";
 import { prisma, prismaErrors } from "@lib/integration/prismaConnector";
 import { ClosedDetails } from "@lib/types";
+import { dateHasPast } from "@lib/utils";
 
-export const getClosedDetails = async (formId: string) => {
+export const checkIfClosed = async (formId: string) => {
   try {
-    const { ability, session } = await authCheckAndThrow();
-
-    if (!ability || !session || formId === "0000") {
-      throw new Error("Unauthorized");
-    }
+    let isPastClosingDate = false;
 
     const template = await prisma.template
       .findUnique({
@@ -18,6 +14,7 @@ export const getClosedDetails = async (formId: string) => {
           id: formId,
         },
         select: {
+          closingDate: true,
           closedDetails: true,
         },
       })
@@ -27,7 +24,14 @@ export const getClosedDetails = async (formId: string) => {
       throw new Error("Template not found");
     }
 
-    return template.closedDetails as ClosedDetails;
+    if (template.closingDate) {
+      isPastClosingDate = dateHasPast(Date.parse(String(template.closingDate)));
+    }
+
+    return {
+      isPastClosingDate,
+      closedDetails: template.closedDetails as ClosedDetails,
+    };
   } catch (e) {
     return null;
   }
