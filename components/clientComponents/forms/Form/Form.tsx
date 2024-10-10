@@ -147,15 +147,8 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
   const [canFocusOnError, setCanFocusOnError] = useState(false);
   const [lastSubmitCount, setLastSubmitCount] = useState(-1);
 
-  const {
-    currentGroup,
-    groupsCheck,
-    getGroupTitle,
-    setInitialFormViewTime,
-    getInitialFormViewTime,
-    getFormElementsFromGroups,
-    getSubmitDelay,
-  } = useGCFormsContext();
+  const { currentGroup, groupsCheck, getGroupTitle, setInitialFormViewTime, getSubmitDelay } =
+    useGCFormsContext();
   const isGroupsCheck = groupsCheck(props.allowGrouping);
   const isShowReviewPage = showReviewPage(form);
   const showIntro = isGroupsCheck ? currentGroup === LockedSections.START : true;
@@ -198,10 +191,6 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
     // TODO could also call on first interaction vs. on load
     setInitialFormViewTime();
   }, [setInitialFormViewTime]);
-
-  // TEMP: For debugging
-  const [tempElementsFromGroups, setTempElementsFromGroups] = useState(getFormElementsFromGroups());
-  const [totalDelay, setTotalDelay] = useState(0);
 
   return status === "submitting" ? (
     <>
@@ -328,26 +317,6 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
                 />
               )}
             </div>
-            {/* START: Temp for debugging */}
-            <div className="border-dashed border-2 border-sky-500 mt-10 p-4 bg-rose-300">
-              <strong>TEMP debugging</strong>
-              <br />
-              Initial Form View: {getInitialFormViewTime()} <br />
-              Count of Elements in Groups: {tempElementsFromGroups.length}{" "}
-              <Button onClick={() => setTempElementsFromGroups(getFormElementsFromGroups())}>
-                update
-              </Button>
-              <br />
-              Submit Delay: {totalDelay}{" "}
-              <Button
-                onClick={() =>
-                  setTotalDelay(getSubmitDelay({ allowGrouping: props.allowGrouping }))
-                }
-              >
-                update
-              </Button>
-            </div>
-            {/* END: Temp for debugging */}
           </form>
         </>
       }
