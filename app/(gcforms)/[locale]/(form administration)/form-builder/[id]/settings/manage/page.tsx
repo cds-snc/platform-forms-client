@@ -5,9 +5,10 @@ import { checkPrivilegesAsBoolean } from "@lib/privileges";
 import { getUsers } from "@lib/users";
 import { ManageForm } from "./ManageForm";
 import { Metadata } from "next";
-import { UserAbility } from "@lib/types";
+import { ClosedDetails, UserAbility } from "@lib/types";
 import { Session } from "next-auth";
 import { getNonce } from "./actions";
+import { getClosedDetails } from "./close/actions";
 
 export async function generateMetadata({
   params: { locale },
@@ -64,9 +65,16 @@ export default async function Page({ params: { id } }: { params: { id: string } 
     session: null,
     ability: null,
   }));
+
+  let closedDetails: ClosedDetails | null = null;
+
   const canManageOwnership = getCanManageOwnership(id, ability);
   const canSetClosingDate = getCanSetClosingDate(id, ability, session);
   const nonce = await getNonce();
+
+  if (canSetClosingDate) {
+    closedDetails = await getClosedDetails(id);
+  }
 
   if (!canManageOwnership || id === "0000") {
     return (
@@ -75,6 +83,7 @@ export default async function Page({ params: { id } }: { params: { id: string } 
         id={id}
         canManageOwnership={canManageOwnership}
         canSetClosingDate={canSetClosingDate}
+        closedDetails={closedDetails}
       />
     );
   }
@@ -97,6 +106,7 @@ export default async function Page({ params: { id } }: { params: { id: string } 
       formRecord={templateWithAssociatedUsers.formRecord}
       usersAssignedToFormRecord={templateWithAssociatedUsers.users}
       allUsers={allUsers}
+      closedDetails={closedDetails}
     />
   );
 }

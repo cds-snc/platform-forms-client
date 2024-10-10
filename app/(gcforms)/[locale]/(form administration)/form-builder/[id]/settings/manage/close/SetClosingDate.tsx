@@ -10,7 +10,13 @@ import { ClosingDateToggle } from "./ClosingDateToggle";
 import { ClosedMessage } from "./ClosedMessage";
 import { ClosedDetails } from "@lib/types";
 
-export const SetClosingDate = ({ formID }: { formID: string }) => {
+export const SetClosingDate = ({
+  formId,
+  closedDetails,
+}: {
+  formId: string;
+  closedDetails: ClosedDetails | null;
+}) => {
   const { t } = useTranslation("form-builder");
 
   const { closingDate, setClosingDate } = useTemplateStore((s) => ({
@@ -18,10 +24,7 @@ export const SetClosingDate = ({ formID }: { formID: string }) => {
     setClosingDate: s.setClosingDate,
   }));
 
-  const [closedDetails, setClosedDetails] = useState<ClosedDetails>({
-    messageEn: "aha",
-    messageFr: "aha fr",
-  });
+  const [closedMessage, setClosedMessage] = useState<ClosedDetails | null>(closedDetails);
 
   const [status, setStatus] = useState(closingDate ? "closed" : "open");
 
@@ -38,11 +41,11 @@ export const SetClosingDate = ({ formID }: { formID: string }) => {
     }
 
     const result = await axios({
-      url: `/api/templates/${formID}`,
+      url: `/api/templates/${formId}`,
       method: "PUT",
       data: {
         closingDate: closeDate,
-        closedDetails,
+        closedDetails: closedMessage,
       },
       timeout: 5000,
     });
@@ -57,7 +60,7 @@ export const SetClosingDate = ({ formID }: { formID: string }) => {
     }
 
     toast.success(t("closingDate.savedSuccessMessage"));
-  }, [status, formID, setClosingDate, t]);
+  }, [status, formId, setClosingDate, t, closedMessage]);
 
   return (
     <div className="mb-10">
@@ -74,7 +77,7 @@ export const SetClosingDate = ({ formID }: { formID: string }) => {
         />
       </div>
       <div className="mb-4 w-3/5">
-        <ClosedMessage closedDetails={closedDetails} setClosedDetails={setClosedDetails} />
+        <ClosedMessage closedDetails={closedMessage} setClosedDetails={setClosedMessage} />
       </div>
       <Button theme="secondary" onClick={saveFormStatus}>
         {t("closingDate.saveButton")}
