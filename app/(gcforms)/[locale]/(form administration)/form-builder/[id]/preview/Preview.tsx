@@ -28,6 +28,7 @@ import { toast } from "@formBuilder/components/shared";
 import { defaultForm } from "@lib/store/defaults";
 import { showReviewPage } from "@lib/utils/form-builder/showReviewPage";
 import { focusElement } from "@lib/client/clientHelpers";
+import { useIsFormClosed } from "@lib/hooks/useIsFormClosed";
 
 export const Preview = ({
   disableSubmit = true,
@@ -44,6 +45,8 @@ export const Preview = ({
     getIsPublished: s.getIsPublished,
     getSecurityAttribute: s.getSecurityAttribute,
   }));
+
+  const isPastClosingDate = useIsFormClosed();
 
   const formParsed = safeJSONParse<FormProperties>(getSchema());
   if (!formParsed) {
@@ -90,6 +93,11 @@ export const Preview = ({
   const hasHydrated = useRehydrate();
 
   const isShowReviewPage = showReviewPage(formRecord.form);
+
+  if (isPastClosingDate) {
+    // force hard refresh to show the closed page
+    window.location.reload();
+  }
 
   return (
     <div className="max-w-4xl">
