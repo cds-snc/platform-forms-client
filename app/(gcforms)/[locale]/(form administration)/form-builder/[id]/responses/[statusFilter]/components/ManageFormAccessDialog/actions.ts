@@ -5,7 +5,12 @@ import { prisma } from "@lib/integration/prismaConnector";
 import { TemplateUser } from "./types";
 import { cancelInvitation as cancelInvitationAction, inviteUserByEmail } from "@lib/invitations";
 import { AccessControlError } from "@lib/privileges";
-import { TemplateNotFoundError, UserAlreadyHasAccessError } from "@lib/invitations/exceptions";
+import {
+  InvalidDomainError,
+  MismatchedEmailDomainError,
+  TemplateNotFoundError,
+  UserAlreadyHasAccessError,
+} from "@lib/invitations/exceptions";
 import { getTemplateWithAssociatedUsers, removeAssignedUserFromTemplate } from "@lib/templates";
 import { serverTranslation } from "@i18n";
 import { logMessage } from "@lib/logger";
@@ -22,6 +27,12 @@ export const sendInvitation = async (emails: string[], templateId: string, messa
     } catch (e) {
       if (e instanceof UserAlreadyHasAccessError) {
         errors.push(t("userAlreadyHasAccess", { email }));
+      }
+      if (e instanceof MismatchedEmailDomainError) {
+        errors.push(t("emailDomainMismatch", { email }));
+      }
+      if (e instanceof InvalidDomainError) {
+        errors.push(t("invalidEmail", { email }));
       }
       if (e instanceof TemplateNotFoundError) {
         errors.push(t("templateNotFound", { templateId }));
