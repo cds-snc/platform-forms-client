@@ -10,6 +10,7 @@ import {
   filterShownElements,
   filterValuesByShownElements,
   getFormElementsFromGroups as _getFormElementsFromGroups,
+  calculateSubmitDelay,
 } from "@lib/formContext";
 import { LockedSections } from "@formBuilder/components/shared/right-panel/treeview/types";
 import { formHasGroups } from "@lib/utils/form-builder/formHasGroups";
@@ -191,20 +192,10 @@ export const GCFormsProvider = ({
     const filterByTheseElements = hasGroups
       ? getFormElementsFromGroups()
       : formRecord.form.elements;
-
-    // TODO move to filterRequiredElements()?
     const numberOfRequiredQuestions = filterByTheseElements.filter(
       (element) => element?.properties.validation?.required === true
     ).length;
-
-    // TODO subtract from initial form getInitialFormViewTime()
-    // TODO move to calculateSubmitDelay()?
-    const secondsBaseDelay = 2;
-    const secondsPerFormElement = 2;
-    return secondsBaseDelay + numberOfRequiredQuestions * secondsPerFormElement;
-
-    // TODO move to?
-    //return _getSubmitDelay()
+    return calculateSubmitDelay(getInitialFormViewTime(), Date.now(), numberOfRequiredQuestions);
   };
 
   return (

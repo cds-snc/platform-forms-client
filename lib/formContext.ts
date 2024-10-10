@@ -1,6 +1,7 @@
 import { FormElement, FormProperties, Response, Responses } from "@lib/types";
 import { PublicFormRecord, ConditionalRule } from "@lib/types";
 import { getReviewItemElements } from "@clientComponents/forms/Review/Review";
+import { logMessage } from "./logger";
 
 export type Group = {
   name: string;
@@ -900,7 +901,25 @@ export const getFormElementsFromGroups = ({
     .flat();
 };
 
-// TODO? move logic here?
-// export const getSubmitDelay = () => {
-//   // return submitDelay in seconds
-// }
+export const calculateSubmitDelay = (
+  startTime: number,
+  currentTime: number,
+  requiredQuestionsCount: number
+) => {
+  const timeElapsed = Math.floor((currentTime - startTime) / 1000);
+  const potentialDelayFromFormData = requiredQuestionsCount - timeElapsed;
+  const delayFromFormData = potentialDelayFromFormData > 0 ? potentialDelayFromFormData : 1; // TODO: plus below effectively makes the default 5 seconds may want to think about a default but 5 is used elsewhere
+
+  const secondsBaseDelay = 2;
+  const secondsPerFormElement = 2;
+  const submitDelay = secondsBaseDelay + delayFromFormData * secondsPerFormElement;
+
+  logMessage.info(`=====================`);
+  logMessage.info(`requiredQuestionsCount: ${requiredQuestionsCount}`);
+  logMessage.info(`timeElapsed: ${timeElapsed} seconds`);
+  logMessage.info(`delayFromFormData: ${delayFromFormData}`);
+  logMessage.info(`submitDelay: ${submitDelay}`);
+  logMessage.info(`=====================`);
+
+  return submitDelay;
+};
