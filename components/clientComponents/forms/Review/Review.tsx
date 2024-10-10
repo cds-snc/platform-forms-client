@@ -1,3 +1,5 @@
+"use client";
+
 import { useMemo, useRef } from "react";
 import { useTranslation } from "@i18n/client";
 import { Button } from "@clientComponents/globals";
