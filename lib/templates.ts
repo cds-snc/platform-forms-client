@@ -38,6 +38,7 @@ const _parseTemplate = (template: {
   publishFormType: string;
   publishDesc: string;
   closingDate?: Date | null;
+  closedDetails?: Prisma.JsonValue | null;
 }): FormRecord => {
   return {
     id: template.id,
@@ -69,6 +70,7 @@ const _parseTemplate = (template: {
     ...(template.closingDate && {
       closingDate: template.closingDate.toString(),
     }),
+    closedDetails: template.closedDetails as ClosedDetails,
   };
 };
 
@@ -1239,6 +1241,7 @@ export const onlyIncludePublicProperties = (template: FormRecord): PublicFormRec
     id: template.id,
     updatedAt: template.updatedAt,
     closingDate: template.closingDate,
+    closedDetails: template.closedDetails,
     form: template.form,
     isPublished: template.isPublished,
     securityAttribute: template.securityAttribute,

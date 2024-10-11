@@ -169,7 +169,7 @@ export type FormRecord = {
   deliveryOption?: DeliveryOption;
   securityAttribute: SecurityAttribute;
   closingDate?: string;
-  closedDetails?: Record<string, string>;
+  closedDetails?: ClosedDetails;
   [key: string]: string | boolean | FormProperties | DeliveryOption | ClosedDetails | undefined;
 };
 
