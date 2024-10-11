@@ -29,7 +29,6 @@ import { defaultForm } from "@lib/store/defaults";
 import { showReviewPage } from "@lib/utils/form-builder/showReviewPage";
 import { focusElement } from "@lib/client/clientHelpers";
 import { useIsFormClosed } from "@lib/hooks/useIsFormClosed";
-import { useRouter } from "next/router";
 
 export const Preview = ({
   disableSubmit = true,
@@ -46,8 +45,6 @@ export const Preview = ({
     getIsPublished: s.getIsPublished,
     getSecurityAttribute: s.getSecurityAttribute,
   }));
-
-  const router = useRouter();
 
   const isPastClosingDate = useIsFormClosed();
 
@@ -98,8 +95,14 @@ export const Preview = ({
   const isShowReviewPage = showReviewPage(formRecord.form);
 
   if (isPastClosingDate) {
-    // force hard refresh to show the closed page
-    router.reload();
+    // Force a hard refresh to the preview page to show the closed message
+    const refreshContent = `0;url=/${i18n.language}/form-builder/${id}/preview`;
+    return (
+      <>
+        <meta httpEquiv="refresh" content={refreshContent} />
+        <Skeleton count={4} height={40} className="mb-4" />
+      </>
+    );
   }
 
   return (

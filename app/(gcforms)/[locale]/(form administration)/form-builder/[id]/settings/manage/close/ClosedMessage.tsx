@@ -32,7 +32,7 @@ export const ClosedMessage = ({ closedDetails, setClosedDetails }: ClosedMessage
             }}
           />
         </div>
-        <div className="w-1/2 border-1 border-gray-100 relative">
+        <div className="relative w-1/2 border-1 border-gray-100">
           <label className="sr-only" htmlFor={`closed-fr`}>
             {t("french")}
           </label>
