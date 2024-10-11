@@ -8,6 +8,8 @@ export const checkIfClosed = async (formId: string) => {
   try {
     let isPastClosingDate = false;
 
+    // Note these are the only fields we need from the template
+    // They are public fields so no auth check is needed see _unprotectedGetTemplateByID
     const template = await prisma.template
       .findUnique({
         where: {
