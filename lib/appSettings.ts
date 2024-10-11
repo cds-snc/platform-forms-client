@@ -11,6 +11,17 @@ import { EventEmitter } from "events";
 
 export const settingChangeNotifier = new EventEmitter();
 
+export class SettingNotConfiguredError extends Error {
+  constructor(internalIds: string[]) {
+    super(
+      `Setting${internalIds.length > 1 ? "s" : ""} with internalId${
+        internalIds.length > 1 ? "s" : ""
+      }: ${internalIds.join(" ")} ${internalIds.length > 1 ? "have" : "has"} not been configured`
+    );
+    this.name = "SettingNotConfiguredError";
+  }
+}
+
 const getEncryptionSecret = async () => {
   const token_secret = await secretClient.send(
     new GetSecretValueCommand({
