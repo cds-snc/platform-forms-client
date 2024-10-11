@@ -29,6 +29,7 @@ import { filterShownElements, filterValuesByShownElements } from "@lib/formConte
 import { formHasGroups } from "@lib/utils/form-builder/formHasGroups";
 import { showReviewPage } from "@lib/utils/form-builder/showReviewPage";
 
+// TODO: refactor the SubmitButton 1) move to a file, 2) make as "dumb" as possible, ...
 interface SubmitButtonProps {
   submitDelaySeconds: () => number;
   formID: string;

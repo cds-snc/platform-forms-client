@@ -187,8 +187,15 @@ export const GCFormsProvider = ({
     });
   };
 
+  /**
+   * Used by the Submit button to determine the delay before allowing a user to submit a form.
+   * Note the Submit button begins the delay countdown when rendered. e.g. Review page shown.
+   * @param param0
+   * @returns
+   */
   const getSubmitDelay = ({ allowGrouping }: { allowGrouping: boolean | undefined }) => {
     const hasGroups = formHasGroups(formRecord.form) && allowGrouping;
+    // Case of a regular form use the elements but for a Group use the group history to get them
     const filterByTheseElements = hasGroups
       ? getFormElementsFromGroups()
       : formRecord.form.elements;

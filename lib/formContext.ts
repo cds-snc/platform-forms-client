@@ -870,6 +870,8 @@ export const decrementNextActionChoiceIds = (groups: GroupsType, choiceId: strin
   return updatedGroups;
 };
 
+// TODO: move Review.tsx's getReviewItemElements() and refactor to be more generic - unit test it
+// TODO: what the above via the below
 export const getFormElementsFromGroups = ({
   form,
   values,
@@ -901,19 +903,40 @@ export const getFormElementsFromGroups = ({
     .flat();
 };
 
+/**
+ * Calculates a difficult to predict delay in seconds with the purpose of derring spam from bots.
+ * The idea is that a bot would answer the questions quickly and try to submit the form immediately.
+ * By adding a delay the bot is forced to wait and since the delay is difficult to predict, making
+ * it difficult to automate when the submit button will become active.
+ * @param startTime timestamp when a form is initially viewed
+ * @param currentTime timestamp of the current time
+ * @param requiredQuestionsCount number count of the required form elements in a form
+ * @returns submit delay number seconds
+ */
 export const calculateSubmitDelay = (
   startTime: number,
   currentTime: number,
   requiredQuestionsCount: number
 ) => {
+  if (
+    !Number.isInteger(startTime) ||
+    !Number.isInteger(currentTime) ||
+    !Number.isInteger(requiredQuestionsCount)
+  ) {
+    return 4; // Default to 4 seconds
+  }
+
+  // Calculate an amount based on form properties - this is the dynamic part to make it unpredictable
   const timeElapsed = Math.floor((currentTime - startTime) / 1000);
   const potentialDelayFromFormData = requiredQuestionsCount - timeElapsed;
   const delayFromFormData = potentialDelayFromFormData > 0 ? potentialDelayFromFormData : 1; // TODO: plus below effectively makes the default 5 seconds may want to think about a default but 5 is used elsewhere
 
+  // Add in a little math to make it more unpredictable and calculates the final delay
   const secondsBaseDelay = 2;
   const secondsPerFormElement = 2;
   const submitDelay = secondsBaseDelay + delayFromFormData * secondsPerFormElement;
 
+  // TEMP:
   logMessage.info(`=====================`);
   logMessage.info(`requiredQuestionsCount: ${requiredQuestionsCount}`);
   logMessage.info(`timeElapsed: ${timeElapsed} seconds`);
