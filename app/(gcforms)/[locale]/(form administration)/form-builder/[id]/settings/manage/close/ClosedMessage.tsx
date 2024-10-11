@@ -2,6 +2,8 @@ import { useTranslation } from "@i18n/client";
 import { ClosedDetails } from "@lib/types";
 import { Editor } from "@formBuilder/[id]/edit/components/elements/lexical-editor/Editor";
 import { LanguageLabel } from "@formBuilder/components/shared/LanguageLabel";
+import { useRehydrate } from "@lib/store/useTemplateStore";
+import Skeleton from "react-loading-skeleton";
 import React from "react";
 
 type ClosedMessageProps = {
@@ -11,6 +13,19 @@ type ClosedMessageProps = {
 
 export const ClosedMessage = ({ closedDetails, setClosedDetails }: ClosedMessageProps) => {
   const { t } = useTranslation("form-builder");
+  const hasHydrated = useRehydrate();
+
+  if (!hasHydrated) {
+    <div className="flex">
+      <div className="relative w-1/2 border-1 border-r-4 border-gray-100 border-r-black">
+        <Skeleton className="w-full" height={200} />
+      </div>
+      <div className="relative w-1/2 border-1 border-gray-100">
+        <Skeleton className="w-full" height={200} />
+      </div>
+    </div>;
+  }
+
   return (
     <>
       <p className="mb-2 font-bold">{t("closingDate.message.title")}</p>
@@ -32,6 +47,7 @@ export const ClosedMessage = ({ closedDetails, setClosedDetails }: ClosedMessage
             }}
           />
         </div>
+
         <div className="relative w-1/2 border-1 border-gray-100">
           <label className="sr-only" htmlFor={`closed-fr`}>
             {t("french")}
