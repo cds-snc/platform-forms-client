@@ -32,13 +32,13 @@ describe("<ManageForm />", () => {
     cy.contains("There has been an error.");
   });
 
-  it("displays the SetClosingDate, FormOwnership, and DownloadForm components", () => {
+  it("displays the FormOwnership, and DownloadForm components", () => {
     cy.mount(
       <TemplateStoreProvider form="" isPublished={false}>
         <ManageForm
           closedDetails={null}
           nonce={""}
-          canManageOwnership={true}
+          canManageOwnership={false}
           canSetClosingDate={true}
           formRecord={{}}
           usersAssignedToFormRecord={[]}
@@ -47,24 +47,8 @@ describe("<ManageForm />", () => {
         />
       </TemplateStoreProvider>
     );
-    cy.contains("Form status");
     cy.contains("Manage ownership");
     cy.contains("Download form");
-  });
-
-  it("displays the SetClosingDate component if canManageOwnership is false", () => {
-    cy.mount(
-      <TemplateStoreProvider form="" isPublished={false}>
-        <ManageForm
-          closedDetails={null}
-          nonce={""}
-          canManageOwnership={false}
-          canSetClosingDate={true}
-          id={""}
-        />
-      </TemplateStoreProvider>
-    );
-    cy.contains("Form status");
   });
 
   it("displays the DownloadForm component if canManageOwnership is false", () => {
