@@ -9,6 +9,7 @@ import { cn } from "@lib/utils";
 import { SpinnerIcon } from "@serverComponents/icons/SpinnerIcon";
 import { Language } from "@lib/types/form-builder-types";
 import { countries } from "@lib/managedData/countries";
+import { useFeatureFlags } from "@lib/hooks/useFeatureFlags";
 
 interface ManagedComboboxRef {
   changeInputValue: (value: string) => void;
@@ -37,12 +38,19 @@ export const AddressComplete = (props: AddressCompleteProps): React.ReactElement
   const comboboxRef = useRef<ManagedComboboxRef>(null);
 
   // Check if addressComplete is allowed.
+  const { getFlag } = useFeatureFlags();
+  const featureFlags = {
+    addressComplete: getFlag("addressComplete"),
+  };
   useEffect(() => {
     const checkAllowed = async () => {
-      const response = await fetch("/api/components", { method: "POST" });
-      const jsonData = await response.json();
-      setAllow(jsonData.allowed);
-      setApiKey(jsonData.key);
+      if (featureFlags.addressComplete) {
+        setAllow(true);
+        setApiKey(process.env.NEXT_PUBLIC_ADDRESSCOMPLETE_API_KEY || "");
+      } else {
+        setApiKey("");
+      }
+
       setIsReady(true);
     };
 
