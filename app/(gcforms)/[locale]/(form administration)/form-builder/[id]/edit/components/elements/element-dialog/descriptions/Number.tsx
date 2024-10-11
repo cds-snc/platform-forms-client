@@ -12,7 +12,7 @@ export const Number = () => {
       <h3 className="mb-0">{t("addElementDialog.number.title")}</h3>
       <p>{t("addElementDialog.number.description")}</p>
 
-      <ExampleWrapper className="mt-4">
+      <ExampleWrapper className="gcds-input-wrapper mt-4">
         <Label htmlFor="name" className="gc-label">
           {t("addElementDialog.number.amount")}
         </Label>

@@ -16,7 +16,7 @@ export const DropDown = () => {
           {t("addElementDialog.dropdown.selectOption")}
         </Label>
         <Description>{t("addElementDialog.dropdown.selectOne")}</Description>
-        <div className="overflow-hidden">
+        <div className="overflow-hidden p-2">
           <Dropdown
             name="name"
             id="dropdown"
