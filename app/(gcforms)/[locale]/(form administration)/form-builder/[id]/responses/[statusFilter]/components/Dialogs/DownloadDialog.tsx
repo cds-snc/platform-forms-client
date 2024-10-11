@@ -109,17 +109,6 @@ export const DownloadDialog = ({
 
     const filePrefix = slugify(`${formName}-${getDate()}`) + "-";
 
-    const extraTranslations = {
-      streetAddress: {
-        en: t("addressComponents.streetAddress"),
-        fr: t("addressComponents.streetAddress"),
-      },
-      city: { en: t("addressComponents.city"), fr: t("addressComponents.city") },
-      province: { en: t("addressComponents.province"), fr: t("addressComponents.province") },
-      postalCode: { en: t("addressComponents.postalCode"), fr: t("addressComponents.postalCode") },
-      country: { en: t("addressComponents.country"), fr: t("addressComponents.country") },
-    };
-
     try {
       if (selectedFormat === DownloadFormat.HTML_ZIPPED) {
         const response = (await getSubmissionsByFormat({
@@ -128,7 +117,6 @@ export const DownloadDialog = ({
           format: DownloadFormat.HTML_ZIPPED,
           lang: i18n.language as Language,
           revalidate: pathname.includes("new"),
-          extraTranslations: extraTranslations,
         })) as HtmlZippedResponse | ServerActionError;
 
         if ("error" in response) {
@@ -159,7 +147,6 @@ export const DownloadDialog = ({
           format: DownloadFormat.CSV,
           lang: i18n.language as Language,
           revalidate: pathname.includes("new"),
-          extraTranslations: extraTranslations,
         })) as CSVResponse | ServerActionError;
 
         if ("error" in response) {
@@ -198,7 +185,6 @@ export const DownloadDialog = ({
           format: DownloadFormat.JSON,
           lang: i18n.language as Language,
           revalidate: pathname.includes("new"),
-          extraTranslations: extraTranslations,
         })) as JSONResponse | ServerActionError;
 
         if ("error" in response) {

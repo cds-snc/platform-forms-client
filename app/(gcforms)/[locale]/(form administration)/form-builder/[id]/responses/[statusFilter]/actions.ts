@@ -45,6 +45,7 @@ import {
   getAddressAsAnswerElements,
   getAddressAsString,
 } from "@clientComponents/forms/AddressComplete/utils";
+import { serverTranslation } from "@i18n";
 
 export const fetchSubmissions = async ({
   formId,
@@ -167,14 +168,12 @@ export const getSubmissionsByFormat = async ({
   format = DownloadFormat.HTML,
   lang,
   revalidate = false,
-  extraTranslations = {},
 }: {
   formID: string;
   ids: string[];
   format: DownloadFormat;
   lang: Language;
   revalidate?: boolean;
-  extraTranslations?: { [key: string]: { en: string; fr: string } };
 }): Promise<
   | HtmlResponse
   | HtmlZippedResponse
@@ -192,6 +191,8 @@ export const getSubmissionsByFormat = async ({
     if (!session) {
       throw new AccessControlError("User is not authenticated");
     }
+
+    const { t } = await serverTranslation("form-builder-responses");
 
     const responseConfirmLimit = Number(await getAppSetting("responseDownloadLimit"));
 
@@ -272,6 +273,23 @@ export const getSubmissionsByFormat = async ({
             if (questionComponents.canadianOnly) {
               addressObject.country = "CAN";
             }
+
+            const extraTranslations = {
+              streetAddress: {
+                en: t("addressComponents.streetAddress"),
+                fr: t("addressComponents.streetAddress"),
+              },
+              city: { en: t("addressComponents.city"), fr: t("addressComponents.city") },
+              province: {
+                en: t("addressComponents.province"),
+                fr: t("addressComponents.province"),
+              },
+              postalCode: {
+                en: t("addressComponents.postalCode"),
+                fr: t("addressComponents.postalCode"),
+              },
+              country: { en: t("addressComponents.country"), fr: t("addressComponents.country") },
+            };
 
             const reviewElements = getAddressAsAnswerElements(
               question,
