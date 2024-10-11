@@ -10,7 +10,7 @@ describe("<ManageForm />", () => {
           closedDetails={null}
           nonce={""}
           canManageOwnership={false}
-          canSetClosingDate={false}
+          canSetClosingDate={false} // Has server action
           id={""}
         />
       </TemplateStoreProvider>
@@ -24,7 +24,7 @@ describe("<ManageForm />", () => {
           closedDetails={null}
           nonce={""}
           canManageOwnership={true}
-          canSetClosingDate={false}
+          canSetClosingDate={false} // Has server action
           id={""}
         />
       </TemplateStoreProvider>
@@ -39,7 +39,7 @@ describe("<ManageForm />", () => {
           closedDetails={null}
           nonce={""}
           canManageOwnership={false}
-          canSetClosingDate={true}
+          canSetClosingDate={false} // Has server action
           formRecord={{}}
           usersAssignedToFormRecord={[]}
           allUsers={[]}
@@ -58,7 +58,7 @@ describe("<ManageForm />", () => {
           closedDetails={null}
           nonce={""}
           canManageOwnership={false}
-          canSetClosingDate={false}
+          canSetClosingDate={false} // Has server action
           id={""}
         />
       </TemplateStoreProvider>
@@ -73,7 +73,7 @@ describe("<ManageForm />", () => {
           closedDetails={null}
           nonce={""}
           canManageOwnership={true}
-          canSetClosingDate={false}
+          canSetClosingDate={false} // Has server action
           id={""}
           formRecord={{}}
           usersAssignedToFormRecord={[]}
@@ -91,7 +91,7 @@ describe("<ManageForm />", () => {
           closedDetails={null}
           nonce={""}
           canManageOwnership={false}
-          canSetClosingDate={false}
+          canSetClosingDate={false} // Has server action
           id={""}
         />
       </TemplateStoreProvider>
