@@ -20,6 +20,7 @@ import { TreeItemIndex } from "react-complex-tree";
 import { autoFlowAllNextActions } from "../util/setNextAction";
 import { setGroupNextAction } from "../util/setNextAction";
 import { localizeField } from "@lib/utils/form-builder/itemHelper";
+import { FormElement } from "@lib/types";
 
 const createGroupStore = (initProps?: Partial<GroupStoreProps>) => {
   const DEFAULT_PROPS: GroupStoreProps = {
@@ -181,6 +182,24 @@ const createGroupStore = (initProps?: Partial<GroupStoreProps>) => {
           });
           setChangeKey(String(new Date().getTime()));
         }
+      },
+      getSubElements: (parentId: number) => {
+        const elements = get().templateStore.getState().form.elements;
+        const parentElement = elements.find((el) => el.id === parentId);
+        return parentElement?.properties.subElements;
+      },
+      updateSubElements: (elements: FormElement[], parentId: number) => {
+        // Find the parent element
+        const parentElementIndex = get()
+          .templateStore.getState()
+          .form.elements.findIndex((el) => el.id === parentId);
+
+        // Write the updated subElements array back to the parent element
+        get().templateStore.setState((s) => {
+          if (s.form.elements) {
+            s.form.elements[parentElementIndex].properties.subElements = [...elements];
+          }
+        });
       },
       setExitButtonUrl: ({ id, locale, url }: { id: string; locale: Language; url: string }) => {
         const key = localizeField("exitUrl", locale);

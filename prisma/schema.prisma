@@ -60,6 +60,7 @@ model Template {
   ttl               DateTime?
   users             User[]
   closingDate       DateTime?       @db.Timestamptz(6)
+  closedDetails     Json?
   invitations       Invitation[]
 }
 

@@ -4,7 +4,8 @@ import classnames from "classnames";
 import { useField } from "formik";
 import { GenerateElement } from "@lib/formBuilder";
 import { FormElement } from "@lib/types";
-import { Button, Description } from "@clientComponents/forms";
+import { Description } from "@clientComponents/forms";
+import { Button } from "@clientComponents/globals";
 import { useTranslation } from "@i18n/client";
 
 interface DynamicGroupProps {
@@ -12,6 +13,8 @@ interface DynamicGroupProps {
   title?: string;
   description?: string;
   rowLabel?: string;
+  addButtonText?: string;
+  removeButtonText?: string;
   rowElements: Array<FormElement>;
   lang: string;
 
@@ -46,7 +49,8 @@ export const DynamicGroup = (props: DynamicGroupProps): React.ReactElement => {
     error,
     rowElements,
     lang,
-
+    addButtonText,
+    removeButtonText,
     maxNumberOfRows,
   } = props;
   const [field, meta, helpers] = useField(props);
@@ -61,9 +65,13 @@ export const DynamicGroup = (props: DynamicGroupProps): React.ReactElement => {
 
   useEffect(() => {
     if (focusedRow.current !== null) {
-      rowRefs.current[focusedRow.current].current?.focus();
-      rowRefs.current[focusedRow.current].current?.scrollIntoView();
-      focusedRow.current = null;
+      try {
+        rowRefs.current[focusedRow.current].current?.focus();
+        rowRefs.current[focusedRow.current].current?.scrollIntoView();
+        focusedRow.current = null;
+      } catch (e) {
+        // no-op
+      }
     }
 
     // When rows are added or deleted run the useEffect again to focus on the new row
@@ -107,6 +115,9 @@ export const DynamicGroup = (props: DynamicGroupProps): React.ReactElement => {
 
   const classes = classnames("gc-form-group", { "gc-form-group--error": error }, className);
 
+  const addButtonLabel = addButtonText || t("dynamicRow.add") + " " + rowLabel;
+  const deleteButtonLabel = removeButtonText || t("dynamicRow.delete") + " " + rowLabel;
+
   return (
     // eslint-disable-next-line jsx-a11y/no-noninteractive-tabindex
     <div id={field.name} data-testid={`formGroup-${field.name}`} className={classes} tabIndex={0}>
@@ -123,7 +134,9 @@ export const DynamicGroup = (props: DynamicGroupProps): React.ReactElement => {
             tabIndex={-1}
           >
             <legend>
-              {rowLabel ? rowLabel : "Item"} - {index + 1}
+              {rowLabel ? rowLabel : "Item"}
+              {((maxNumberOfRows && maxNumberOfRows != 1) || !maxNumberOfRows) &&
+                ` - ${index + 1} `}
             </legend>
             <DynamicRow
               key={`${field.name}.${index}`}
@@ -131,25 +144,24 @@ export const DynamicGroup = (props: DynamicGroupProps): React.ReactElement => {
               name={`${field.name}.${index}`}
               lang={lang}
             />
-            <div>
+            <div className="mb-4">
               {!hasReachedMaxNumberOfRows && index === rows.length - 1 && (
                 <Button
-                  type="button"
-                  secondary={true}
+                  theme="secondary"
+                  className="mr-4"
                   onClick={addRow}
-                  testid={`add-row-button-${field.name}`}
+                  dataTestId={`add-row-button-${field.name}`}
                 >
-                  {`${t("dynamicRow.add")} ${rowLabel}`}
+                  {`${addButtonLabel}`}
                 </Button>
               )}
               {rows.length > 1 && (
                 <Button
-                  type="button"
-                  destructive={true}
+                  theme="destructive"
                   onClick={() => deleteRow(index)}
-                  testid={`delete-row-button-${field.name}.${index}`}
+                  dataTestId={`delete-row-button-${field.name}.${index}`}
                 >
-                  {`${t("dynamicRow.delete")} ${rowLabel} ${index + 1}`}
+                  {`${deleteButtonLabel} ${index + 1}`}
                 </Button>
               )}
             </div>

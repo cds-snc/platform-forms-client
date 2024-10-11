@@ -25,7 +25,7 @@ export const Radio = (
         value={label} // This needs to be static... the actual label...
         name={name}
       />
-      <label className="gc-radio-label" htmlFor={id}>
+      <label tabIndex={-1} className="gc-radio-label" htmlFor={id}>
         <span className="radio-label-text">{label}</span>
       </label>
     </div>

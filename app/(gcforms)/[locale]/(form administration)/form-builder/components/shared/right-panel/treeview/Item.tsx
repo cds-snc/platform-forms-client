@@ -30,7 +30,7 @@ export const Item = ({
   arrow: ReactNode;
   context: TreeItemRenderContext;
   children: ReactNode | ReactElement;
-  handleDelete: (e: React.MouseEvent<HTMLButtonElement>) => Promise<void>;
+  handleDelete?: (e: React.MouseEvent<HTMLButtonElement>) => Promise<void>;
 }) => {
   const { t } = useTranslation("form-builder");
   const { refs } = useRefsContext();
@@ -104,7 +104,7 @@ export const Item = ({
               context.interactiveElementProps.onDragStart(e);
 
             // Customize dragging image for form elements
-            if (isFormElement) {
+            if (isFormElement && item.data.type !== "dynamicRow") {
               // Get the box inside the element being dragged
               const el = e.currentTarget.children[0];
 
@@ -127,7 +127,7 @@ export const Item = ({
         >
           {arrow}
           {isRenaming ? (
-            <div className="relative flex h-[60px] w-[100%] items-center overflow-hidden text-sm">
+            <div className="relative flex h-[60px] w-full items-center overflow-hidden text-sm">
               <EditableInput isSection={isSectionElement} title={titleText} context={context} />
             </div>
           ) : (
@@ -173,7 +173,7 @@ export const Item = ({
                   lockClassName={cn(isFormElement && "absolute right-0", "mr-2 ")}
                 />
               )}
-              {titleText !== "" && title && title}
+              {titleText !== "" && title}
               {titleText === "" &&
                 isFormElement &&
                 fieldType === "richText" &&
@@ -197,7 +197,7 @@ const Title = ({ title }: { title: string }) => {
     title = t("logic.end");
   }
 
-  return <div className="w-5/6 truncate">{title}</div>;
+  return <div className={cn("w-5/6 truncate")}>{title}</div>;
 };
 
 const Arrow = ({ item, context }: { item: TreeItem; context: TreeItemRenderContext }) => {

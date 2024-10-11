@@ -3,7 +3,8 @@ import React, { useEffect, useState, useRef } from "react";
 import { FormikProps, withFormik } from "formik";
 import { getFormInitialValues } from "@lib/formBuilder";
 import { getErrorList, setFocusOnErrorMessage, validateOnSubmit } from "@lib/validation/validation";
-import { Alert, Button, RichText } from "@clientComponents/forms";
+import { Alert, RichText } from "@clientComponents/forms";
+import { Button } from "@clientComponents/globals";
 import { logMessage } from "@lib/logger";
 import { useTranslation } from "@i18n/client";
 import { TFunction } from "i18next";
@@ -168,7 +169,12 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
   const errorList = props.errors ? getErrorList(props) : null;
   const errorId = "gc-form-errors";
   const serverErrorId = `${errorId}-server`;
-  const formStatusError = props.status === "Error" ? t("server-error") : null;
+  const formStatusError =
+    props.status === "FileError"
+      ? t("input-validation.file-submission")
+      : props.status === "Error"
+      ? t("server-error")
+      : null;
 
   //  If there are errors on the page, set focus the first error field
   useEffect(() => {
@@ -387,8 +393,9 @@ export const Form = withFormik<FormProps, Responses>({
         formikBag.props.language,
         formikBag.props.formRecord
       );
+
       if (result.error) {
-        formikBag.setStatus("Error");
+        formikBag.setStatus("FileError");
       } else {
         formikBag.props.onSuccess(result.id);
       }

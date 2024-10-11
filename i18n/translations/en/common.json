@@ -43,6 +43,7 @@
     "regex": "Enter the correct format.",
     "file-size-too-large": "Select a smaller file.",
     "file-size-too-large-all-files": "Files exceed the 3.5 MB maximum. Upload smaller files.",
+    "file-submission": "There was a problem with the file submitted. Try uploading a different file format, such as PDF.",
     "file-type-invalid": "Select a different file type.",
     "too-many-characters": "Shorten the response.",
     "all-checkboxes-required": "Read and check all boxes to confirm the items in this section.",

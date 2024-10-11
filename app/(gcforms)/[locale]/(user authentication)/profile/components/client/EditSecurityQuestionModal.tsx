@@ -184,52 +184,56 @@ const EditSecurityQuestionModal = ({
         </ul>
 
         <div className="mb-10">
-          <Label id="questionLabel" htmlFor="question" className="required" required>
-            {t("securityQuestionModal.questionLabel")} {questionNumber}
-          </Label>
-          <select
-            name="question"
-            id="questionLabel"
-            className="gc-dropdown mb-0 w-full rounded"
-            defaultValue={questionId}
-            ref={questionRef}
-          >
-            {questions.map((q: Question) => (
-              <option key={q.id} value={q.id}>
-                {q[langKey]}
-              </option>
-            ))}
-          </select>
+          <div className="gcds-select-wrapper">
+            <Label id="questionLabel" htmlFor="question" className="required" required>
+              {t("securityQuestionModal.questionLabel")} {questionNumber}
+            </Label>
+            <select
+              name="question"
+              id="questionLabel"
+              className="gc-dropdown mb-0 w-full rounded"
+              defaultValue={questionId}
+              ref={questionRef}
+            >
+              {questions.map((q: Question) => (
+                <option key={q.id} value={q.id}>
+                  {q[langKey]}
+                </option>
+              ))}
+            </select>
+          </div>
         </div>
 
         <div className="mb-10">
-          <Label
-            id="answerLabel"
-            htmlFor="answer"
-            className={`required ${isAnswerInputError ? "text-red" : ""}`}
-            required
-          >
-            {t("securityQuestionModal.answerLabel")} {questionNumber}
-          </Label>
+          <div className="gcds-input-wrapper">
+            <Label
+              id="answerLabel"
+              htmlFor="answer"
+              className={`required ${isAnswerInputError ? "text-red" : ""}`}
+              required
+            >
+              {t("securityQuestionModal.answerLabel")} {questionNumber}
+            </Label>
 
-          <ValidationMessage show={isAnswerInputError} messageType={MessageType.ERROR}>
-            {t("securityQuestionModal.errors.invalidInput")}
-          </ValidationMessage>
+            <ValidationMessage show={isAnswerInputError} messageType={MessageType.ERROR}>
+              {t("securityQuestionModal.errors.invalidInput")}
+            </ValidationMessage>
 
-          <span id="answerHint" className="visually-hidden">
-            {t("securityQuestionModal.errors.invalidInput")}
-          </span>
+            <span id="answerHint" className="visually-hidden">
+              {t("securityQuestionModal.errors.invalidInput")}
+            </span>
 
-          <input
-            className={`gc-input-text w-full rounded ${isAnswerInputError ? "border-red" : ""}`}
-            id="answer"
-            name="answer"
-            type="text"
-            aria-invalid={isAnswerInputError}
-            aria-describedby="answerHint"
-            ref={answerRef}
-            onChange={_debouncedAnswerCheck}
-          />
+            <input
+              className={`gc-input-text w-full rounded ${isAnswerInputError ? "border-red" : ""}`}
+              id="answer"
+              name="answer"
+              type="text"
+              aria-invalid={isAnswerInputError}
+              aria-describedby="answerHint"
+              ref={answerRef}
+              onChange={_debouncedAnswerCheck}
+            />
+          </div>
         </div>
       </div>
     </Dialog>

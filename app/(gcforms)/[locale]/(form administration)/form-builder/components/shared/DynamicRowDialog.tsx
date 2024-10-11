@@ -1,7 +1,7 @@
 "use client";
 import React, { useState } from "react";
 import { useTranslation } from "@i18n/client";
-import { Button } from "@clientComponents/globals";
+import { Button, Alert } from "@clientComponents/globals";
 import { useDialogRef, Dialog } from "./Dialog";
 import { useTemplateStore } from "@lib/store/useTemplateStore";
 
@@ -30,6 +30,8 @@ export const DynamicRowDialog = ({
   const dialog = useDialogRef();
   const { t } = useTranslation("form-builder");
 
+  const [error, setError] = useState<boolean | null>(null);
+
   const { updateField, elements } = useTemplateStore((s) => ({
     elements: s.form.elements,
     updateField: s.updateField,
@@ -38,7 +40,11 @@ export const DynamicRowDialog = ({
   const item = elements.find((el) => el.id === itemId);
   const rowProps = item?.properties?.dynamicRow;
 
+  const [rowTitleValueEn, setRowTitleValueEn] = useState(rowProps?.rowTitleEn || "");
+  const [rowTitleValueFr, setRowTitleValueFr] = useState(rowProps?.rowTitleFr || "");
+
   const [addButtonValueEn, setAddButtonValueEn] = useState(rowProps?.addButtonTextEn || "");
+
   const [addButtonValueFr, setAddButtonValueFr] = useState(rowProps?.addButtonTextFr || "");
 
   const [removeButtonValueEn, setRemoveButtonValueEn] = useState(
@@ -47,6 +53,9 @@ export const DynamicRowDialog = ({
   const [removeButtonValueFr, setRemoveButtonValueFr] = useState(
     rowProps?.removeButtonTextFr || ""
   );
+
+  const rowTitleTextA11yEn = t("dynamicRow.rowTitleTextA11yEn");
+  const rowTitleTextA11yFr = t("dynamicRow.rowTitleTextA11yFr");
 
   const addButtonTextA11yEn = t("dynamicRow.addButtonTextA11yEn");
   const addButtonTextA11yFr = t("dynamicRow.addButtonTextA11yFr");
@@ -69,6 +78,19 @@ export const DynamicRowDialog = ({
         className="ml-5"
         theme="primary"
         onClick={() => {
+          setError(null);
+          if (
+            rowTitleValueEn === "" ||
+            rowTitleValueFr === "" ||
+            addButtonValueEn === "" ||
+            addButtonValueFr === "" ||
+            removeButtonValueEn === "" ||
+            removeButtonValueFr === ""
+          ) {
+            setError(true);
+            return;
+          }
+
           dialog.current?.close();
 
           if (!item || !item.properties) return;
@@ -76,6 +98,8 @@ export const DynamicRowDialog = ({
           const properties = {
             ...item.properties,
             dynamicRow: {
+              rowTitleEn: rowTitleValueEn,
+              rowTitleFr: rowTitleValueFr,
               addButtonTextEn: addButtonValueEn,
               addButtonTextFr: addButtonValueFr,
               removeButtonTextEn: removeButtonValueEn,
@@ -100,7 +124,34 @@ export const DynamicRowDialog = ({
       title={t("dynamicRow.dialog.title")}
     >
       <div className="p-5">
-        {/* Add button */}
+        {error && (
+          <Alert.Danger className="mb-2" focussable>
+            <Alert.Title headingTag="h3">{t("dynamicRow.dialog.error.title")}</Alert.Title>
+            <p>{t("dynamicRow.dialog.error.message")}</p>
+          </Alert.Danger>
+        )}
+
+        {/* Title input */}
+        <div className="mb-8">
+          <h4 className="mb-4 block font-bold">{t("dynamicRow.dialog.rowTitle.title")}</h4>
+          <p className="mb-4 text-sm">{t("dynamicRow.dialog.rowTitle.description")}</p>
+          <TextInput label={t("dynamicRow.dialog.english")}>
+            <input
+              aria-label={rowTitleTextA11yEn}
+              value={rowTitleValueEn}
+              onChange={(e) => setRowTitleValueEn(e.target.value)}
+            />
+          </TextInput>
+          <TextInput label={t("dynamicRow.dialog.french")}>
+            <input
+              aria-label={rowTitleTextA11yFr}
+              value={rowTitleValueFr}
+              onChange={(e) => setRowTitleValueFr(e.target.value)}
+            />
+          </TextInput>
+        </div>
+
+        {/* Add button input */}
         <div className="mb-8">
           <h4 className="mb-4 block font-bold">{t("dynamicRow.dialog.addButton.title")}</h4>
           <p className="mb-4 text-sm">{t("dynamicRow.dialog.addButton.description")}</p>
@@ -120,7 +171,7 @@ export const DynamicRowDialog = ({
           </TextInput>
         </div>
 
-        {/* Remove button */}
+        {/* Remove button input */}
         <div>
           <label className="mb-4 block font-bold">
             {t("dynamicRow.dialog.removeButton.title")}
