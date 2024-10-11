@@ -4,13 +4,14 @@ import { useTranslation } from "@i18n/client";
 import { useTemplateStore } from "@lib/store/useTemplateStore";
 import { toast } from "@formBuilder/components/shared/Toast";
 
+import { ClosedDetails } from "@lib/types";
 import { Button } from "@clientComponents/globals";
+
 import { ClosingDateToggle } from "./ClosingDateToggle";
 import { ClosedMessage } from "./ClosedMessage";
-import { ClosedDetails } from "@lib/types";
+import { ClosedSuccess } from "./ClosedSuccess";
 
 import { closeForm } from "@formBuilder/actions";
-import { ClosedSuccess } from "./ClosedSuccess";
 
 export const SetClosingDate = ({
   formId,
