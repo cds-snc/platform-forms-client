@@ -71,7 +71,7 @@ export const Preview = ({
       email: s.deliveryOption?.emailAddress,
     }));
 
-  const { t } = useTranslation(["common", "form-builder"]);
+  const { t } = useTranslation(["common", "form-builder", "form-closed"]);
   const language = translationLanguagePriority;
   const currentForm = getRenderedForm(formRecord, language);
 
