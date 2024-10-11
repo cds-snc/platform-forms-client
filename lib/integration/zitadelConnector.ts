@@ -1,8 +1,13 @@
 import { createManagementClient, ManagementServiceClient } from "@zitadel/node/api";
 import { ServiceAccount } from "@zitadel/node/credentials";
-import { getEncryptedAppSetting, getAppSetting } from "@lib/appSettings";
+import {
+  settingChangeNotifier,
+  getEncryptedAppSetting,
+  getAppSetting,
+  SettingNotConfiguredError,
+} from "@lib/appSettings";
 import { logMessage } from "@lib/logger";
-import { settingChangeNotifier } from "@lib/appSettings";
+
 import { AuthenticationOptions } from "@zitadel/node/dist/commonjs/credentials/service-account";
 import type { CallOptions, ClientMiddleware, ClientMiddlewareCall } from "nice-grpc";
 import { Metadata } from "nice-grpc-common";
@@ -33,7 +38,8 @@ const getZitadelSettings = async () => {
   ]);
 
   if (!zitadelAdministrationKey || !zitadelProvider) {
-    throw new Error("Zitadel settings are not properly configured");
+    logMessage.warn("Zitadel Settings are not properly configured");
+    throw new SettingNotConfiguredError(["zitadelAdministrationKey", "zitadelProvider"]);
   }
 
   return {
@@ -81,6 +87,9 @@ export const getZitadelClient = async () => {
   if (!initializtionPromise) {
     initializtionPromise = createZitadelClient();
   }
-  await initializtionPromise;
+  await initializtionPromise.catch((e) => {
+    initializtionPromise = null;
+    throw e;
+  });
   return zitadelClient;
 };
