@@ -24,7 +24,7 @@ export const Departments = () => {
           {t("addElementDialog.departments.selectOption")}
         </Label>
         <Description>{t("addElementDialog.departments.selectOne")}</Description>
-        <div className="overflow-hidden">
+        <div className="overflow-hidden p-2">
           <Combobox name="name" id="dropdown" choices={choices} />
         </div>
       </ExampleWrapper>

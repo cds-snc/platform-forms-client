@@ -12,7 +12,7 @@ interface ComboboxProps extends InputFieldProps {
 
 export const Combobox = (props: ComboboxProps): React.ReactElement => {
   const { id, name, className, choices = [], required, ariaDescribedBy } = props;
-  const classes = cn("gc-combobox gcds-input-wrapper relative", className);
+  const classes = cn("gc-combobox gcds-input-wrapper", className);
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [field, meta, helpers] = useField(props);
