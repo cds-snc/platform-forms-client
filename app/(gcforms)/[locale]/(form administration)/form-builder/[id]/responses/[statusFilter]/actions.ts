@@ -278,6 +278,7 @@ export const getSubmissionsByFormat = async ({
               addressObject,
               extraTranslations
             );
+
             const addressElements = [reviewElements];
 
             return {

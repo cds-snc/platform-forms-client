@@ -275,9 +275,7 @@
   "addressComponents": {
     "header": "Parties de l’adresse à inclure",
     "desc": "Essayez de minimiser ce qui est demandé pour ne recueillir que ce qui est nécessaire.",
-    "unitNumber": "Numéro de l’unité",
-    "civicNumber": "Numéro civique",
-    "streetName": "Nom de la rue",
+    "streetAddress": "Adresse",
     "city": "Ville ou communauté",
     "province": "Province, territoire ou état",
     "postalCode": "Code postal ou zip",

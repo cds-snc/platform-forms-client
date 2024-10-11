@@ -30,17 +30,9 @@ export const DownloadSingleButton = ({
   const handleDownload = async () => {
     try {
       const extraTranslations = {
-        unitNumber: {
-          en: t("addressComponents.unitNumber"),
-          fr: t("addressComponents.unitNumber"),
-        },
-        civicNumber: {
-          en: t("addressComponents.civicNumber"),
-          fr: t("addressComponents.civicNumber"),
-        },
-        streetName: {
-          en: t("addressComponents.streetName"),
-          fr: t("addressComponents.streetName"),
+        streetAddress: {
+          en: t("addressComponents.streetAddress"),
+          fr: t("addressComponents.streetAddress"),
         },
         city: { en: t("addressComponents.city"), fr: t("addressComponents.city") },
         province: { en: t("addressComponents.province"), fr: t("addressComponents.province") },

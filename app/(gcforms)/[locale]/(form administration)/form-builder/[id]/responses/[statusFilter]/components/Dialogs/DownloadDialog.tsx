@@ -110,12 +110,10 @@ export const DownloadDialog = ({
     const filePrefix = slugify(`${formName}-${getDate()}`) + "-";
 
     const extraTranslations = {
-      unitNumber: { en: t("addressComponents.unitNumber"), fr: t("addressComponents.unitNumber") },
-      civicNumber: {
-        en: t("addressComponents.civicNumber"),
-        fr: t("addressComponents.civicNumber"),
+      streetAddress: {
+        en: t("addressComponents.streetAddress"),
+        fr: t("addressComponents.streetAddress"),
       },
-      streetName: { en: t("addressComponents.streetName"), fr: t("addressComponents.streetName") },
       city: { en: t("addressComponents.city"), fr: t("addressComponents.city") },
       province: { en: t("addressComponents.province"), fr: t("addressComponents.province") },
       postalCode: { en: t("addressComponents.postalCode"), fr: t("addressComponents.postalCode") },

@@ -275,9 +275,7 @@
   "addressComponents": {
     "header": "Parts of the address to be included",
     "desc": "Consider minimizing what is asked to only collect what is necessary.",
-    "unitNumber": "Unit number",
-    "civicNumber": "Civic number",
-    "streetName": "Street name",
+    "streetAddress": "Street address",
     "city": "City or town",
     "province": "Province, territory, or state",
     "postalCode": "Postal or zip code",
