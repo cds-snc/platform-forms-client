@@ -58,7 +58,7 @@ export const AddressComplete = (props: AddressCompleteProps): React.ReactElement
       // Don't recheck.
       checkAllowed();
     }
-  }, [apiKey]);
+  }, [apiKey, featureFlags.addressComplete]);
 
   //Form fillers address elements
   const [addressObject, setAddressObject] = useState<AddressElements | null>(
