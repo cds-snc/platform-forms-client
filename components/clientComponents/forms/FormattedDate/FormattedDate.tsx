@@ -30,8 +30,10 @@ export const FormattedDate = (props: FormattedDateProps): React.ReactElement => 
     autocomplete = false,
   } = props;
 
-  const [dateObject, setDateObject] = useState<DateObject | null>(null);
   const [field, meta, helpers] = useField(props);
+  const [dateObject, setDateObject] = useState<DateObject | null>(
+    field.value ? JSON.parse(field.value) : null
+  );
   const { t } = useTranslation("common");
 
   let dateFormat = initialDateFormat;
@@ -54,18 +56,6 @@ export const FormattedDate = (props: FormattedDateProps): React.ReactElement => 
         return;
     }
   });
-
-  // Update the date object when the field value changes
-  useEffect(() => {
-    if (field.value) {
-      try {
-        const parsedValue = JSON.parse(field.value);
-        setDateObject(parsedValue);
-      } catch (e) {
-        setDateObject(null);
-      }
-    }
-  }, [field.value]);
 
   // Update the field value when the date object changes
   useEffect(() => {
