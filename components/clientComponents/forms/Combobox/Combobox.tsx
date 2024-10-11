@@ -1,7 +1,6 @@
 "use client";
 import React from "react";
 import { InputFieldProps } from "@lib/types";
-import classnames from "classnames";
 import { useField } from "formik";
 import { ErrorMessage } from "@clientComponents/forms";
 import { useCombobox } from "downshift";
@@ -13,7 +12,7 @@ interface ComboboxProps extends InputFieldProps {
 
 export const Combobox = (props: ComboboxProps): React.ReactElement => {
   const { id, name, className, choices = [], required, ariaDescribedBy } = props;
-  const classes = classnames("gc-combobox", className);
+  const classes = cn("gc-combobox gcds-input-wrapper relative", className);
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [field, meta, helpers] = useField(props);
@@ -49,26 +48,29 @@ export const Combobox = (props: ComboboxProps): React.ReactElement => {
           data-testid="combobox-input"
         />
 
-        <ul
-          className={`${!(isOpen && items.length) ? "hidden" : ""}`}
-          {...getMenuProps()}
-          data-testid="combobox-listbox"
-          hidden={!isOpen}
-        >
-          {isOpen &&
-            items.map((item, index) => (
-              <li
-                className={cn(
-                  highlightedIndex === index && "bg-slate-300",
-                  selectedItem === item && "font-bold"
-                )}
-                key={item}
-                {...getItemProps({ item, index })}
-              >
-                {item}
-              </li>
-            ))}
-        </ul>
+        {items.length >= 1 && (
+          <ul
+            className={`${!(isOpen && items.length >= 1 && items[0] !== "") ? "hidden" : ""}`}
+            {...getMenuProps()}
+            data-testid="combobox-listbox"
+            hidden={!isOpen}
+          >
+            {isOpen &&
+              items.length >= 1 &&
+              items.map((item, index) => (
+                <li
+                  className={cn(
+                    highlightedIndex === index && "bg-gcds-blue-100",
+                    selectedItem === item && "font-bold"
+                  )}
+                  key={item}
+                  {...getItemProps({ item, index })}
+                >
+                  {item}
+                </li>
+              ))}
+          </ul>
+        )}
       </div>
     </>
   );
