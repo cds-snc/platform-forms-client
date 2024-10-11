@@ -16,14 +16,21 @@ export const ClosedMessage = ({ closedDetails, setClosedDetails }: ClosedMessage
   const hasHydrated = useRehydrate();
 
   if (!hasHydrated) {
-    <div className="flex">
-      <div className="relative w-1/2 border-1 border-r-4 border-gray-100 border-r-black">
-        <Skeleton className="w-full" height={200} />
+    // Don't show the rich text editor until the form has been hydrated
+    return (
+      <div className="flex">
+        <div className="relative w-1/2 border-1 border-r-4 border-gray-100 border-r-black">
+          <div className="p-8">
+            <Skeleton className="w-full" count={3} />
+          </div>
+        </div>
+        <div className="relative w-1/2 border-1 border-gray-100">
+          <div className="p-8">
+            <Skeleton className="w-full" count={3} />
+          </div>
+        </div>
       </div>
-      <div className="relative w-1/2 border-1 border-gray-100">
-        <Skeleton className="w-full" height={200} />
-      </div>
-    </div>;
+    );
   }
 
   return (
