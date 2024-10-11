@@ -4,7 +4,7 @@ import { useTemplateStore } from "@lib/store/useTemplateStore";
 import { Language, LocalizedElementProperties } from "@lib/types/form-builder-types";
 import { useTranslation } from "@i18n/client";
 import { FormElement } from "@lib/types";
-import { LanguageLabel } from "./LanguageLabel";
+import { LanguageLabel } from "@formBuilder/components/shared/LanguageLabel";
 import { FieldsetLegend } from "./FieldsetLegend";
 
 export const Description = ({

@@ -20,7 +20,13 @@ describe("<ManageForm />", () => {
   it("displays an error if canManageOwnership is true and formRecord, usersAssignedToFormRecord, and allUsers are not provided", () => {
     cy.mount(
       <TemplateStoreProvider form="" isPublished={false}>
-        <ManageForm nonce={""} canManageOwnership={true} canSetClosingDate={false} id={""} />
+        <ManageForm
+          closedDetails={null}
+          nonce={""}
+          canManageOwnership={true}
+          canSetClosingDate={false}
+          id={""}
+        />
       </TemplateStoreProvider>
     );
     cy.contains("There has been an error.");

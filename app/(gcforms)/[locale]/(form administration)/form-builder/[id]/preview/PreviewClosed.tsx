@@ -26,9 +26,6 @@ export const PreviewClosed = ({ closedDetails }: { closedDetails: ClosedDetails 
 
   const formRecord: PublicFormRecord = {
     id: id || "test0form00000id000asdf11",
-    // TODO: refactor code to handle invalid JSON and show a helpful error message. Above will
-    // show a toast to download the JSON file. But it's the default template so it will be valid
-    // JSON and hide the invalid JSON that failed to parse.
     form: defaultForm,
     isPublished: getIsPublished(),
     securityAttribute: getSecurityAttribute(),
