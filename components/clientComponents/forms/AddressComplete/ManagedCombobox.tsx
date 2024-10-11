@@ -11,11 +11,12 @@ interface ManagedComboboxProps extends InputFieldProps {
   choices?: string[];
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
   onSetValue?: (value: string) => void;
+  baseValue?: string;
 }
 
 export const ManagedCombobox = React.forwardRef(
   (props: ManagedComboboxProps, ref): React.ReactElement => {
-    const { id, name, className, choices = [], required, ariaDescribedBy } = props;
+    const { id, name, className, choices = [], required, ariaDescribedBy, baseValue } = props;
     const classes = classnames("gc-combobox", className);
 
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -25,7 +26,7 @@ export const ManagedCombobox = React.forwardRef(
     const [isOpen, setIsOpen] = useState(false); // State to control isOpen
 
     const [items, setItems] = React.useState(choices);
-    const [inputValue, setInputValue] = React.useState("");
+    const [inputValue, setInputValue] = React.useState(baseValue || "");
 
     const { getMenuProps, getInputProps, highlightedIndex, getItemProps, selectedItem, openMenu } =
       useCombobox({

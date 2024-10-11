@@ -61,32 +61,14 @@ export const AddressComplete = (props: AddressCompleteProps): React.ReactElement
   }, [apiKey]);
 
   //Form fillers address elements
-  const [addressObject, setAddressObject] = useState<AddressElements | null>(null);
-
-  // Update the address object when the field value changes
-  useEffect(() => {
-    if (field.value) {
-      try {
-        const parsedValue = JSON.parse(field.value);
-        // Only update if parsedValue is different from addressObject
-        if (JSON.stringify(parsedValue) !== JSON.stringify(addressObject)) {
-          setAddressObject(parsedValue);
-        }
-      } catch (e) {
-        if (addressObject !== null) {
-          setAddressObject(null);
-        }
-      }
-    }
-  }, [field.value]);
+  const [addressObject, setAddressObject] = useState<AddressElements | null>(
+    field.value ? JSON.parse(field.value) : null
+  );
 
   // Update the field value when the address object changes
   useEffect(() => {
     const newValue = addressObject ? JSON.stringify(addressObject) : "";
-    // Only update if newValue is different from field.value
-    if (newValue !== field.value) {
-      helpers.setValue(newValue);
-    }
+    helpers.setValue(newValue);
   }, [addressObject, helpers]);
 
   const onAddressSearch = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -249,6 +231,7 @@ export const AddressComplete = (props: AddressCompleteProps): React.ReactElement
               name={`${name}-streetAddress`}
               onChange={onAddressSearch}
               onSetValue={onAddressSet}
+              baseValue={addressObject?.streetAddress}
               required={required}
               ariaDescribedBy={`${name}-streetDesc`}
             />
