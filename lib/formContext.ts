@@ -870,15 +870,17 @@ export const decrementNextActionChoiceIds = (groups: GroupsType, choiceId: strin
   return updatedGroups;
 };
 
-// TODO: move Review.tsx's getReviewItemElements() and refactor to be more generic - unit test it
-// TODO: what the above via the below
+// TODO: in followup PR
+// 1) move Review.tsx's getReviewItemElements() to this file and refactor to be more generic
+// 2) update this function to use the above
+// 3) add unit tests where it makes sense
 export const getFormElementsFromGroups = ({
   form,
   values,
   groupHistory,
   groups,
   matchedIds,
-  language, // TODO: will be refactored out in the future
+  language, // TODO: will be refactored out when the above TODO is done
 }: {
   form: FormProperties;
   values: FormValues;
@@ -933,16 +935,16 @@ export const calculateSubmitDelay = ({
     timeElapsedSeconds = Math.floor((currentTime - startTime) / 1000);
   }
 
-  // Calculate an amount based on form properties - this is the dynamic part to make it unpredictable
+  // Calculate an amount based on form properties. This is the dynamic part to make it unpredictable
   const potentialDelayFromFormData = requiredQuestionsCount - timeElapsedSeconds;
-  const delayFromFormData = potentialDelayFromFormData > 0 ? potentialDelayFromFormData : 1; // TODO: plus below effectively makes the default 5 seconds may want to think about a default but 5 is used elsewhere
+  const delayFromFormData = potentialDelayFromFormData > 0 ? potentialDelayFromFormData : 1;
 
   // Add in a little math to make it more unpredictable and calculates the final delay
   const secondsBaseDelay = 2;
   const secondsPerFormElement = 2;
   const submitDelay = secondsBaseDelay + delayFromFormData * secondsPerFormElement;
 
-  // TEMP:
+  // TEMP: start - do not merge
   logMessage.info(`=====================`);
   logMessage.info(`requiredQuestionsCount: ${requiredQuestionsCount}`);
   if (timeElapsedSeconds > 0) {
@@ -955,6 +957,7 @@ export const calculateSubmitDelay = ({
   );
   logMessage.info(`submitDelay: ${submitDelay}`);
   logMessage.info(`=====================`);
+  // TEMP: end
 
   return submitDelay;
 };
