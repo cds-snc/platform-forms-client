@@ -7,8 +7,12 @@ import { defaultForm } from "@lib/store/defaults";
 import { ClosedPage } from "@clientComponents/forms";
 import { ClosedDetails, PublicFormRecord } from "@lib/types";
 import { useSession } from "next-auth/react";
+import { useTranslation } from "@i18n/client";
+import { useIsFormClosed } from "@lib/hooks/useIsFormClosed";
+import Skeleton from "react-loading-skeleton";
 
 export const PreviewClosed = ({ closedDetails }: { closedDetails: ClosedDetails }) => {
+  const { i18n } = useTranslation(["common", "confirmation"]);
   const { status } = useSession();
   const { id, getIsPublished, getSecurityAttribute } = useTemplateStore((s) => ({
     id: s.id,
@@ -33,6 +37,19 @@ export const PreviewClosed = ({ closedDetails }: { closedDetails: ClosedDetails 
   };
 
   const brand = formRecord?.form ? formRecord.form.brand : null;
+
+  const isPastClosingDate = useIsFormClosed();
+
+  if (!isPastClosingDate) {
+    // Force a hard refresh to the preview page if the form is not closed
+    const refreshContent = `0;url=/${i18n.language}/form-builder/${id}/preview`;
+    return (
+      <>
+        <meta httpEquiv="refresh" content={refreshContent} />
+        <Skeleton count={4} height={40} className="mb-4" />
+      </>
+    );
+  }
 
   return (
     <div className="max-w-4xl">
