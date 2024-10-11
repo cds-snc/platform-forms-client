@@ -31,11 +31,11 @@ import { showReviewPage } from "@lib/utils/form-builder/showReviewPage";
 
 // TODO: refactor the SubmitButton 1) move to a file, 2) make as "dumb" as possible, ...
 interface SubmitButtonProps {
-  submitDelaySeconds: () => number;
+  submitDelay: () => number;
   formID: string;
   formTitle: string;
 }
-const SubmitButton: React.FC<SubmitButtonProps> = ({ submitDelaySeconds, formID, formTitle }) => {
+const SubmitButton: React.FC<SubmitButtonProps> = ({ submitDelay, formID, formTitle }) => {
   const { t } = useTranslation();
   const [formTimerState, { startTimer, checkTimer, disableTimer }] = useFormTimer();
   const [submitTooEarly, setSubmitTooEarly] = useState(false);
@@ -44,7 +44,7 @@ const SubmitButton: React.FC<SubmitButtonProps> = ({ submitDelaySeconds, formID,
 
   // If the timer hasn't started yet, start the timer
   if (!formTimerState.timerDelay && formTimerEnabled) {
-    startTimer(submitDelaySeconds());
+    startTimer(submitDelay());
   }
 
   useEffect(() => {
@@ -188,10 +188,7 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [formStatusError, errorList, lastSubmitCount, canFocusOnError]);
 
-  useEffect(() => {
-    // TODO could also call on first interaction vs. on load
-    setInitialFormViewTime();
-  }, [setInitialFormViewTime]);
+  useEffect(setInitialFormViewTime, [setInitialFormViewTime]);
 
   return status === "submitting" ? (
     <>
@@ -299,9 +296,7 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
                           )}
                         <div className="inline-block">
                           <SubmitButton
-                            submitDelaySeconds={() =>
-                              getSubmitDelay({ allowGrouping: props.allowGrouping })
-                            }
+                            submitDelay={getSubmitDelay}
                             formID={formID}
                             formTitle={form.titleEn}
                           />
@@ -312,7 +307,7 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
                 })
               ) : (
                 <SubmitButton
-                  submitDelaySeconds={() => getSubmitDelay({ allowGrouping: props.allowGrouping })}
+                  submitDelay={getSubmitDelay}
                   formID={formID}
                   formTitle={form.titleEn}
                 />

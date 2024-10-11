@@ -908,27 +908,33 @@ export const getFormElementsFromGroups = ({
  * The idea is that a bot would answer the questions quickly and try to submit the form immediately.
  * By adding a delay the bot is forced to wait and since the delay is difficult to predict, making
  * it difficult to automate when the submit button will become active.
- * @param startTime timestamp when a form is initially viewed
- * @param currentTime timestamp of the current time
+ * @param startTime timestamp when a form is initially viewed (remove for non group forms)
+ * @param currentTime timestamp of the current time(remove for non group forms)
  * @param requiredQuestionsCount number count of the required form elements in a form
  * @returns submit delay number seconds
  */
-export const calculateSubmitDelay = (
-  startTime: number,
-  currentTime: number,
-  requiredQuestionsCount: number
-) => {
-  if (
-    !Number.isInteger(startTime) ||
-    !Number.isInteger(currentTime) ||
-    !Number.isInteger(requiredQuestionsCount)
-  ) {
-    return 4; // Default to 4 seconds
+export const calculateSubmitDelay = ({
+  startTime,
+  currentTime,
+  requiredQuestionsCount,
+}: {
+  startTime?: number;
+  currentTime?: number;
+  requiredQuestionsCount: number;
+}) => {
+  const DEFAULT_DELAY = 4;
+  if (!Number.isInteger(requiredQuestionsCount)) {
+    return DEFAULT_DELAY;
+  }
+
+  // Currently only used in forms with groups
+  let timeElapsedSeconds = 0;
+  if (startTime && currentTime) {
+    timeElapsedSeconds = Math.floor((currentTime - startTime) / 1000);
   }
 
   // Calculate an amount based on form properties - this is the dynamic part to make it unpredictable
-  const timeElapsed = Math.floor((currentTime - startTime) / 1000);
-  const potentialDelayFromFormData = requiredQuestionsCount - timeElapsed;
+  const potentialDelayFromFormData = requiredQuestionsCount - timeElapsedSeconds;
   const delayFromFormData = potentialDelayFromFormData > 0 ? potentialDelayFromFormData : 1; // TODO: plus below effectively makes the default 5 seconds may want to think about a default but 5 is used elsewhere
 
   // Add in a little math to make it more unpredictable and calculates the final delay
@@ -939,8 +945,14 @@ export const calculateSubmitDelay = (
   // TEMP:
   logMessage.info(`=====================`);
   logMessage.info(`requiredQuestionsCount: ${requiredQuestionsCount}`);
-  logMessage.info(`timeElapsed: ${timeElapsed} seconds`);
-  logMessage.info(`delayFromFormData: ${delayFromFormData}`);
+  if (timeElapsedSeconds > 0) {
+    logMessage.info(
+      `timeElapsed: ${timeElapsedSeconds} seconds (start=${startTime}, current=${currentTime})`
+    );
+  }
+  logMessage.info(
+    `delayFromFormData: ${delayFromFormData} (${requiredQuestionsCount} - ${timeElapsedSeconds}, if < 0 then = 1)`
+  );
   logMessage.info(`submitDelay: ${submitDelay}`);
   logMessage.info(`=====================`);
 
