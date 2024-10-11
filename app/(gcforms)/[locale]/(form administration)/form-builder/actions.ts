@@ -7,12 +7,13 @@ import {
   FormRecord,
   SecurityAttribute,
   FormPurpose,
+  ClosedDetails,
 } from "@lib/types";
 import {
   createTemplate as createDbTemplate,
   removeDeliveryOption,
   updateAssignedUsersForTemplate,
-  updateClosed,
+  updateClosedData,
   updateTemplate as updateDbTemplate,
   updateIsPublishedForTemplate,
   deleteTemplate as deleteDbTemplate,
@@ -245,12 +246,14 @@ export const updateTemplateSecurityAttribute = async ({
   }
 };
 
-export const updateTemplateClosingDate = async ({
+export const closeForm = async ({
   id: formID,
   closingDate,
+  closedDetails,
 }: {
   id: string;
   closingDate: string;
+  closedDetails?: ClosedDetails;
 }): Promise<{
   formID: string;
   closingDate: string | null;
@@ -259,7 +262,7 @@ export const updateTemplateClosingDate = async ({
   try {
     const { ability } = await authCheckAndThrow();
 
-    const response = await updateClosed(ability, formID, closingDate);
+    const response = await updateClosedData(ability, formID, closingDate, closedDetails);
     if (!response) {
       throw new Error(
         `Template API response was null. Request information: { ${formID}, ${closingDate} }`

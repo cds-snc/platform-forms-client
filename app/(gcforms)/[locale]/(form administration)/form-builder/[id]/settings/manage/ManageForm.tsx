@@ -20,7 +20,7 @@ interface ManageFormProps {
   usersAssignedToFormRecord?: User[];
   allUsers?: User[];
   id: string;
-  closedDetails: ClosedDetails | null;
+  closedDetails?: ClosedDetails;
 }
 
 export const ManageForm = (props: ManageFormProps) => {

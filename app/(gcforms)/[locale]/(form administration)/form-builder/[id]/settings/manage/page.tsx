@@ -5,7 +5,7 @@ import { checkPrivilegesAsBoolean } from "@lib/privileges";
 import { getUsers } from "@lib/users";
 import { ManageForm } from "./ManageForm";
 import { Metadata } from "next";
-import { ClosedDetails, UserAbility } from "@lib/types";
+import { UserAbility } from "@lib/types";
 import { Session } from "next-auth";
 import { getNonce } from "./actions";
 import { checkIfClosed } from "@lib/actions/checkIfClosed";
@@ -66,7 +66,7 @@ export default async function Page({ params: { id } }: { params: { id: string } 
     ability: null,
   }));
 
-  let closedDetails: ClosedDetails | null = null;
+  let closedDetails;
 
   const canManageOwnership = getCanManageOwnership(id, ability);
   const canSetClosingDate = getCanSetClosingDate(id, ability, session);
@@ -74,7 +74,7 @@ export default async function Page({ params: { id } }: { params: { id: string } 
 
   if (canSetClosingDate) {
     const closedData = await checkIfClosed(id);
-    closedDetails = closedData?.closedDetails || null;
+    closedDetails = closedData?.closedDetails;
   }
 
   if (!canManageOwnership || id === "0000") {

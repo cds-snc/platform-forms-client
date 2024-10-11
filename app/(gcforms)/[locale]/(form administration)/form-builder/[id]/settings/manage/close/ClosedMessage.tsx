@@ -5,7 +5,7 @@ import { LanguageLabel } from "@formBuilder/components/shared/LanguageLabel";
 import React from "react";
 
 type ClosedMessageProps = {
-  closedDetails: ClosedDetails | null;
+  closedDetails?: ClosedDetails;
   setClosedDetails: (details: ClosedDetails) => void;
 };
 
@@ -16,7 +16,7 @@ export const ClosedMessage = ({ closedDetails, setClosedDetails }: ClosedMessage
       <p className="mb-2 font-bold">{t("closingDate.message.title")}</p>
       <p className="mb-4">{t("closingDate.message.text1")}</p>
       <div className="flex">
-        <div className="w-1/2 border-1 border-gray-100 relative border-r-4 border-r-black">
+        <div className="relative w-1/2 border-1 border-r-4 border-gray-100 border-r-black">
           <label className="sr-only" htmlFor={`closed-en`}>
             {t("english")}
           </label>

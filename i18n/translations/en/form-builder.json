@@ -873,6 +873,10 @@
     "closed": "Closed",
     "saveButton": "Save changes",
     "savedSuccessMessage": "Your changes have been saved.",
+    "formClosedSuccessMessage": {
+      "title": "Form is closed",
+      "body": "Form is closed and will not receive responses."
+    },
     "savedErrorMessage": "There was an error saving your changes. Try again later or contact Support.",
     "message": {
       "title": "Create a descriptive closing message",

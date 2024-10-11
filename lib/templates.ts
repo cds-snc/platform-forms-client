@@ -1248,7 +1248,7 @@ export const onlyIncludePublicProperties = (template: FormRecord): PublicFormRec
   };
 };
 
-export const updateClosed = async (
+export const updateClosedData = async (
   ability: UserAbility,
   formID: string,
   closingDate: string,

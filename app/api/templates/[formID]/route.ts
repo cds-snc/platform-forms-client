@@ -7,7 +7,6 @@ import {
   getFullTemplateByID,
   removeDeliveryOption,
   TemplateHasUnprocessedSubmissions,
-  updateClosed,
   getPublicTemplateByID,
 } from "@lib/templates";
 import { NextRequest } from "next/server";
@@ -25,7 +24,6 @@ import {
   DeliveryOption,
   SecurityAttribute,
   WithRequired,
-  ClosedDetails,
 } from "@lib/types";
 import { AccessControlError, createAbility } from "@lib/privileges";
 import { logMessage } from "@lib/logger";
@@ -104,8 +102,6 @@ interface PutApiProps {
   deliveryOption?: DeliveryOption;
   securityAttribute?: SecurityAttribute;
   isPublished?: boolean;
-  closingDate?: string;
-  closedDetails?: ClosedDetails;
   users?: { id: string; action: "add" | "remove" }[];
   sendResponsesToVault?: boolean;
   publishFormType?: string;
@@ -144,8 +140,6 @@ export const PUT = middleware(
         deliveryOption,
         securityAttribute,
         isPublished,
-        closingDate,
-        closedDetails,
         users,
         sendResponsesToVault,
         publishFormType,
@@ -186,15 +180,6 @@ export const PUT = middleware(
           publishFormType || "",
           publishDescription || ""
         );
-        if (!response)
-          throw new Error(
-            `Template API response was null. Request information: method = ${
-              req.method
-            } ; query = ${JSON.stringify(props.params)} ; body = ${JSON.stringify(props.body)}`
-          );
-        return NextResponse.json(response);
-      } else if (closingDate) {
-        const response = await updateClosed(ability, formID, closingDate, closedDetails);
         if (!response)
           throw new Error(
             `Template API response was null. Request information: method = ${
