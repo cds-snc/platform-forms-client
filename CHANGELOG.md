@@ -5,6 +5,21 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.22.4](https://github.com/cds-snc/platform-forms-client/compare/v3.22.3...v3.22.4) (2024-10-11)
+
+
+### Bug Fixes
+
+* ElementDialog example component styles ([#4402](https://github.com/cds-snc/platform-forms-client/issues/4402)) ([ac7e56e](https://github.com/cds-snc/platform-forms-client/commit/ac7e56ea62d43e6e9a16f03f4e9cdcd41297411c))
+* FormattedDate useEffect/initial state bug ([#4383](https://github.com/cds-snc/platform-forms-client/issues/4383)) ([b3e3875](https://github.com/cds-snc/platform-forms-client/commit/b3e387512af0d53c911e1a2da748bb20fb0332c9))
+* use CDS Trivy vulnerability database ([#4391](https://github.com/cds-snc/platform-forms-client/issues/4391)) ([7554555](https://github.com/cds-snc/platform-forms-client/commit/755455541f6957a994314da081977ebbd1965a62))
+
+
+### Miscellaneous Chores
+
+* add migration for custom closed message ([#4394](https://github.com/cds-snc/platform-forms-client/issues/4394)) ([79e3187](https://github.com/cds-snc/platform-forms-client/commit/79e318731a470794b8132fd4b6c59daafb36b88a))
+* update styles for seachable list ([#4403](https://github.com/cds-snc/platform-forms-client/issues/4403)) ([23c93fa](https://github.com/cds-snc/platform-forms-client/commit/23c93fab342b0c8a53e2fdcd4ddf4bf307e91259))
+
 ## [3.22.3](https://github.com/cds-snc/platform-forms-client/compare/v3.22.2...v3.22.3) (2024-10-10)
 
 
