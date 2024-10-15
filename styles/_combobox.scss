@@ -1,0 +1,13 @@
+.gc-combobox {
+  input {
+    background-image: url("../public/img/arrow-down.svg");
+    @apply relative block mt-2 bg-no-repeat bg-center-right-15px !mb-2;
+  }
+  ul {
+    @apply absolute z-10 max-h-80 min-w-80 overflow-y-scroll p-0 bg-white border w-full;
+    border-color: theme("colors.gcds.gray.800");
+    li {
+      @apply px-3 py-2 flex flex-col text-black;
+    }
+  }
+}

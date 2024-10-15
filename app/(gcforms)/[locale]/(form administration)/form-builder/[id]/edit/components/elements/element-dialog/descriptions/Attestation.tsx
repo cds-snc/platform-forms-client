@@ -17,7 +17,7 @@ export const Attestation = () => {
           <span className="text-red-default">({t("addElementDialog.allRequired")})</span>
         </Label>
 
-        <div className="overflow-hidden">
+        <div className="overflow-hidden p-2">
           <Checkbox id="one" label={t("addElementDialog.condition1")} name={"nameOne"} />
           <Checkbox id="two" label={t("addElementDialog.condition2")} name={"nameTwo"} />
           <Checkbox id="three" label={t("addElementDialog.condition3")} name={"nameThree"} />
