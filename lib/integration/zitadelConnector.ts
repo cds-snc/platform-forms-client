@@ -1,5 +1,13 @@
 import { createManagementClient, ManagementServiceClient } from "@zitadel/node/api";
 import { ServiceAccount } from "@zitadel/node/credentials";
+import {
+  settingChangeNotifier,
+  getEncryptedAppSetting,
+  getAppSetting,
+  SettingNotConfiguredError,
+} from "@lib/appSettings";
+import { logMessage } from "@lib/logger";
+
 import { AuthenticationOptions } from "@zitadel/node/dist/commonjs/credentials/service-account";
 import type { CallOptions, ClientMiddleware, ClientMiddlewareCall } from "nice-grpc";
 import { Metadata } from "nice-grpc-common";
@@ -7,15 +15,36 @@ import { Metadata } from "nice-grpc-common";
 let zitadelClient: ManagementServiceClient;
 let initializtionPromise: Promise<void> | null = null;
 
-const getZitadelSettings = async () => {
-  if (!process.env.ZITADEL_PROVIDER) throw new Error("No value set for Zitadel Provider");
+const recreateZitadelClient = async () => {
+  logMessage.info("Recreating Zitadel client");
+  await createZitadelClient();
+};
 
-  if (!process.env.ZITADEL_ADMINISTRATION_KEY)
-    throw new Error("Zitadel Adminstration Key is not set");
+settingChangeNotifier.on("zitadelAdministrationKey", async () => {
+  await recreateZitadelClient();
+});
+
+settingChangeNotifier.on("zitadelProvider", async () => {
+  await recreateZitadelClient();
+});
+
+const getZitadelSettings = async () => {
+  const getZitadelAdministrationKey = getEncryptedAppSetting("zitadelAdministrationKey");
+  const getZitadelProvider = getAppSetting("zitadelProvider");
+
+  const [zitadelAdministrationKey, zitadelProvider] = await Promise.all([
+    getZitadelAdministrationKey,
+    getZitadelProvider,
+  ]);
+
+  if (!zitadelAdministrationKey || !zitadelProvider) {
+    logMessage.warn("Zitadel Settings are not properly configured");
+    throw new SettingNotConfiguredError(["zitadelAdministrationKey", "zitadelProvider"]);
+  }
 
   return {
-    zitadelAdministrationKey: process.env.ZITADEL_ADMINISTRATION_KEY,
-    zitadelProvider: process.env.ZITADEL_PROVIDER,
+    zitadelAdministrationKey,
+    zitadelProvider,
   };
 };
 
@@ -58,6 +87,9 @@ export const getZitadelClient = async () => {
   if (!initializtionPromise) {
     initializtionPromise = createZitadelClient();
   }
-  await initializtionPromise;
+  await initializtionPromise.catch((e) => {
+    initializtionPromise = null;
+    throw e;
+  });
   return zitadelClient;
 };
