@@ -10,7 +10,8 @@ import {
   filterShownElements,
   filterValuesByShownElements,
   getFormElementsFromGroups as _getFormElementsFromGroups,
-  calculateSubmitDelay,
+  getSubmitDelayGroups,
+  getSubmitDelayNonGroups,
 } from "@lib/formContext";
 import { LockedSections } from "@formBuilder/components/shared/right-panel/treeview/types";
 import { formHasGroups } from "@lib/utils/form-builder/formHasGroups";
@@ -191,28 +192,29 @@ export const GCFormsProvider = ({
    * Used by the Submit button to determine the delay before allowing a user to submit a form.
    * Note The countdown begins when the Submit button is rendered. For group forms this is when
    * the Review page is shown. For non-group forms this is when the form is initially shown.
-   * The time spent on a form is only applied to group forms, so the startTime and currentTime
-   * only applies to group forms.
    * @returns delay in seconds
    */
   const getSubmitDelay = () => {
-    const hasGroups = formHasGroups(formRecord.form);
-    const filterByTheseElements = hasGroups
-      ? getFormElementsFromGroups()
-      : formRecord.form.elements;
-    const requiredQuestionsCount = filterByTheseElements.filter(
-      (element) => element?.properties.validation?.required === true
-    ).length;
-    if (hasGroups) {
-      // Group form, start and current time apply
-      return calculateSubmitDelay({
-        startTime: getInitialFormViewTime(),
-        currentTime: Date.now(),
-        requiredQuestionsCount,
-      });
+    try {
+      const hasGroups = formHasGroups(formRecord.form);
+      const filterByTheseElements = hasGroups
+        ? getFormElementsFromGroups()
+        : formRecord.form.elements;
+      const requiredQuestionsCount = filterByTheseElements.filter(
+        (element) => element?.properties.validation?.required === true
+      ).length;
+      if (hasGroups) {
+        return getSubmitDelayGroups({
+          startTime: getInitialFormViewTime(),
+          currentTime: Date.now(),
+          requiredQuestionsCount,
+        });
+      }
+      return getSubmitDelayNonGroups({ requiredQuestionsCount });
+    } catch (error) {
+      const DEFAULT_DELAY = 4;
+      return DEFAULT_DELAY;
     }
-    // Non-group form, start and current time do not apply
-    return calculateSubmitDelay({ requiredQuestionsCount });
   };
 
   return (

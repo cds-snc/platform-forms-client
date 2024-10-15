@@ -905,11 +905,32 @@ export const getFormElementsFromGroups = ({
     .flat();
 };
 
+export const getSubmitDelayGroups = ({
+  startTime,
+  currentTime,
+  requiredQuestionsCount,
+}: {
+  startTime?: number;
+  currentTime?: number;
+  requiredQuestionsCount: number;
+}) => {
+  return calculateSubmitDelay({ startTime, currentTime, requiredQuestionsCount });
+};
+
+export const getSubmitDelayNonGroups = ({
+  requiredQuestionsCount,
+}: {
+  requiredQuestionsCount: number;
+}) => {
+  return calculateSubmitDelay({ requiredQuestionsCount });
+};
+
 /**
  * Calculates a difficult to predict delay in seconds with the purpose of derring spam from bots.
  * The idea is that a bot would answer the questions quickly and try to submit the form immediately.
  * By adding a delay the bot is forced to wait and since the delay is difficult to predict, making
  * it difficult to automate when the submit button will become active.
+ * Note: exported to allow unit testing
  * @param startTime timestamp when a form is initially viewed (remove for non group forms)
  * @param currentTime timestamp of the current time(remove for non group forms)
  * @param requiredQuestionsCount number count of the required form elements in a form
@@ -929,7 +950,7 @@ export const calculateSubmitDelay = ({
     return DEFAULT_DELAY;
   }
 
-  // Currently only used in forms with groups
+  // Only used in forms with groups
   let timeElapsedSeconds = 0;
   if (startTime && currentTime) {
     timeElapsedSeconds = Math.floor((currentTime - startTime) / 1000);
