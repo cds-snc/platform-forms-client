@@ -11,7 +11,7 @@ import {
   filterValuesByShownElements,
   getFormElementsFromGroups as _getFormElementsFromGroups,
   getSubmitDelayGroups,
-  getSubmitDelayNonGroups,
+  getSubmitDelayNoGroups,
 } from "@lib/formContext";
 import { LockedSections } from "@formBuilder/components/shared/right-panel/treeview/types";
 import { formHasGroups } from "@lib/utils/form-builder/formHasGroups";
@@ -210,7 +210,7 @@ export const GCFormsProvider = ({
           requiredQuestionsCount,
         });
       }
-      return getSubmitDelayNonGroups({ requiredQuestionsCount });
+      return getSubmitDelayNoGroups({ requiredQuestionsCount });
     } catch (error) {
       const DEFAULT_DELAY = 4;
       return DEFAULT_DELAY;

@@ -870,7 +870,7 @@ export const decrementNextActionChoiceIds = (groups: GroupsType, choiceId: strin
   return updatedGroups;
 };
 
-// TODO: in followup PR
+// TODO: in followup PR - open an issue and reference ticket
 // 1) move Review.tsx's getReviewItemElements() to this file and refactor to be more generic
 // 2) update this function to use the above
 // 3) add unit tests where it makes sense
@@ -905,6 +905,44 @@ export const getFormElementsFromGroups = ({
     .flat();
 };
 
+// Add in a little math to make it more unpredictable and calculates the final delay
+const calculateSubmitDelay = (delayFromFormData: number) => {
+  const secondsBaseDelay = 2;
+  const secondsPerFormElement = 2;
+  return secondsBaseDelay + delayFromFormData * secondsPerFormElement;
+};
+
+/**
+ * Similar to getSubmitDelayGroups() but does not take the time a form was viewed into account.
+ * @param requiredQuestionsCount number count of the required form elements in a form
+ */
+export const getSubmitDelayNoGroups = ({
+  requiredQuestionsCount,
+}: {
+  requiredQuestionsCount: number;
+}) => {
+  const DEFAULT_DELAY = 4;
+  if (!Number.isInteger(requiredQuestionsCount)) {
+    return DEFAULT_DELAY;
+  }
+
+  const submitDelay = calculateSubmitDelay(requiredQuestionsCount);
+  if (ENABLE_SUBMIT_DELAY_DEBUGGING) {
+    submitDelayLogger({ requiredQuestionsCount, submitDelay });
+  }
+  return submitDelay;
+};
+
+/**
+ * Calculates a difficult to predict delay in seconds with the purpose of detering spam from bots.
+ * The idea is that a bot would answer the questions quickly and try to submit the form immediately.
+ * By adding a delay the bot is forced to wait and since the delay is difficult to predict, making
+ * it difficult to automate when the submit button will become active.
+ * @param startTime timestamp when a form is initially viewed (remove for non group forms)
+ * @param currentTime timestamp of the current time(remove for non group forms)
+ * @param requiredQuestionsCount number count of the required form elements in a form
+ * @returns submit delay number seconds
+ */
 export const getSubmitDelayGroups = ({
   startTime,
   currentTime,
@@ -914,71 +952,59 @@ export const getSubmitDelayGroups = ({
   currentTime?: number;
   requiredQuestionsCount: number;
 }) => {
-  return calculateSubmitDelay({ startTime, currentTime, requiredQuestionsCount });
-};
-
-export const getSubmitDelayNonGroups = ({
-  requiredQuestionsCount,
-}: {
-  requiredQuestionsCount: number;
-}) => {
-  return calculateSubmitDelay({ requiredQuestionsCount });
-};
-
-/**
- * Calculates a difficult to predict delay in seconds with the purpose of derring spam from bots.
- * The idea is that a bot would answer the questions quickly and try to submit the form immediately.
- * By adding a delay the bot is forced to wait and since the delay is difficult to predict, making
- * it difficult to automate when the submit button will become active.
- * Note: exported to allow unit testing
- * @param startTime timestamp when a form is initially viewed (remove for non group forms)
- * @param currentTime timestamp of the current time(remove for non group forms)
- * @param requiredQuestionsCount number count of the required form elements in a form
- * @returns submit delay number seconds
- */
-export const calculateSubmitDelay = ({
-  startTime,
-  currentTime,
-  requiredQuestionsCount,
-}: {
-  startTime?: number;
-  currentTime?: number;
-  requiredQuestionsCount: number;
-}) => {
   const DEFAULT_DELAY = 4;
-  if (!Number.isInteger(requiredQuestionsCount)) {
+  if (!Number.isInteger(requiredQuestionsCount) || !startTime || !currentTime) {
     return DEFAULT_DELAY;
   }
 
-  // Only used in forms with groups
-  let timeElapsedSeconds = 0;
-  if (startTime && currentTime) {
-    timeElapsedSeconds = Math.floor((currentTime - startTime) / 1000);
+  const timeElapsedSeconds = Math.floor((currentTime - startTime) / 1000);
+
+  let delayFromFormData = requiredQuestionsCount - timeElapsedSeconds;
+  if (delayFromFormData < 1) {
+    delayFromFormData = 1;
   }
 
-  // Calculate an amount based on form properties. This is the dynamic part to make it unpredictable
-  const potentialDelayFromFormData = requiredQuestionsCount - timeElapsedSeconds;
-  const delayFromFormData = potentialDelayFromFormData > 0 ? potentialDelayFromFormData : 1;
+  const submitDelay = calculateSubmitDelay(delayFromFormData);
+  if (ENABLE_SUBMIT_DELAY_DEBUGGING) {
+    submitDelayLogger({
+      startTime,
+      currentTime,
+      timeElapsedSeconds,
+      requiredQuestionsCount,
+      delayFromFormData,
+      submitDelay,
+    });
+  }
+  return submitDelay;
+};
 
-  // Add in a little math to make it more unpredictable and calculates the final delay
-  const secondsBaseDelay = 2;
-  const secondsPerFormElement = 2;
-  const submitDelay = secondsBaseDelay + delayFromFormData * secondsPerFormElement;
-
-  // TEMP: start - do not merge
+// To make future debugging easier
+const ENABLE_SUBMIT_DELAY_DEBUGGING = true;
+const submitDelayLogger = ({
+  startTime,
+  currentTime,
+  timeElapsedSeconds,
+  requiredQuestionsCount,
+  delayFromFormData,
+  submitDelay,
+}: {
+  startTime?: number | undefined;
+  currentTime?: number | undefined;
+  timeElapsedSeconds?: number;
+  requiredQuestionsCount: number;
+  delayFromFormData?: number;
+  submitDelay: number;
+}) => {
   logMessage.info(`=====================`);
   logMessage.info(`requiredQuestionsCount: ${requiredQuestionsCount}`);
-  if (timeElapsedSeconds > 0) {
+  if (timeElapsedSeconds && delayFromFormData && timeElapsedSeconds > 0) {
     logMessage.info(
       `timeElapsed: ${timeElapsedSeconds} seconds (start=${startTime}, current=${currentTime})`
     );
+    logMessage.info(
+      `delayFromFormData: ${delayFromFormData} (${requiredQuestionsCount} - ${timeElapsedSeconds}, if < 0 then = 1)`
+    );
   }
-  logMessage.info(
-    `delayFromFormData: ${delayFromFormData} (${requiredQuestionsCount} - ${timeElapsedSeconds}, if < 0 then = 1)`
-  );
   logMessage.info(`submitDelay: ${submitDelay}`);
   logMessage.info(`=====================`);
-  // TEMP: end
-
-  return submitDelay;
 };
