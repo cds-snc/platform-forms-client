@@ -14,7 +14,7 @@ import {
   getSubmitDelayNoGroups,
 } from "@lib/formContext";
 import { LockedSections } from "@formBuilder/components/shared/right-panel/treeview/types";
-import { formHasGroups, formHasGroupsV2 } from "@lib/utils/form-builder/formHasGroups";
+import { formHasGroups } from "@lib/utils/form-builder/formHasGroups";
 import {
   getGroupHistory as _getGroupHistory,
   pushIdToHistory as _pushIdToHistory,
@@ -25,6 +25,7 @@ import {
 import { getLocalizedProperty } from "@lib/utils";
 import { Language } from "@lib/types/form-builder-types";
 import { logMessage } from "@lib/logger";
+import { showReviewPage } from "@lib/utils/form-builder/showReviewPage";
 
 interface GCFormsContextValueType {
   updateValues: ({ formValues }: { formValues: FormValues }) => void;
@@ -148,7 +149,7 @@ export const GCFormsProvider = ({
     return values.current as FormValues;
   };
 
-  // TODO: once groups flag is on, just use formHasGroups - tracked in #4407
+  // TODO: once groups flag is on, just use formHasGroups
   const groupsCheck = (groupsFlag: boolean | undefined) => {
     // Check that the conditional logic flag is on and that this is a groups enabled form
     if (!groupsFlag || !currentGroup) return false;
@@ -197,7 +198,7 @@ export const GCFormsProvider = ({
    */
   const getSubmitDelay = () => {
     try {
-      const hasGroups = formHasGroupsV2(formRecord.form);
+      const hasGroups = showReviewPage(formRecord.form);
       const filterByTheseElements = hasGroups
         ? getFormElementsFromGroups()
         : formRecord.form.elements;

@@ -981,8 +981,8 @@ export const getSubmitDelayGroups = ({
   return submitDelay;
 };
 
-// To make future debugging easier
-const ENABLE_SUBMIT_DELAY_DEBUGGING = true;
+// Turn on for local debugging
+const ENABLE_SUBMIT_DELAY_DEBUGGING = false;
 const submitDelayLogger = ({
   startTime,
   currentTime,
