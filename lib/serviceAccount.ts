@@ -7,6 +7,14 @@ import { authCheckAndThrow } from "@lib/actions";
 import { checkUserHasTemplateOwnership } from "@lib/templates";
 import { getZitadelClient } from "@lib/integration/zitadelConnector";
 
+type ApiPrivateKey = {
+  type: string;
+  keyId: string;
+  key: string;
+  userId: string;
+  formId: string;
+};
+
 const createMachineUser = async (templateId: string) => {
   const zitadel = await getZitadelClient();
   const { userId } = await zitadel
@@ -208,7 +216,7 @@ export const refreshKey = async (templateId: string) => {
     `User :${ability.userID} refreshed API key for service account ${serviceAccountId}`
   );
 
-  return { type: "serviceAccount", keyId, key: privateKey, userId: serviceAccountId };
+  return buildApiPrivateKeyData(keyId, privateKey, serviceAccountId, templateId);
 };
 
 export const createKey = async (templateId: string) => {
@@ -243,7 +251,7 @@ export const createKey = async (templateId: string) => {
     `User :${ability.userID} created API key for service account ${serviceAccountId}`
   );
 
-  return { type: "serviceAccount", keyId, key: privateKey, userId: serviceAccountId };
+  return buildApiPrivateKeyData(keyId, privateKey, serviceAccountId, templateId);
 };
 
 // Look at possibly moving this to the browser so the GCForms System is never in possession
@@ -263,3 +271,18 @@ const generateKeys = () => {
   });
   return { privateKey, publicKey };
 };
+
+function buildApiPrivateKeyData(
+  keyId: string,
+  key: string,
+  userId: string,
+  formId: string
+): ApiPrivateKey {
+  return {
+    type: "serviceAccount",
+    keyId,
+    key,
+    userId,
+    formId,
+  };
+}
