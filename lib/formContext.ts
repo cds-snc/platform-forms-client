@@ -891,16 +891,19 @@ export const getFormElementsFromGroups = ({
 }) => {
   return groupHistory
     .map((groupId) => {
-      if (!groups) return [];
-      const group: Group = groups[groupId as keyof typeof groups] || {};
-      const groupElements = getReviewItemElements(
-        group.elements,
-        form.elements,
-        matchedIds,
-        values,
-        language
+      if (!groups) {
+        return [];
+      }
+
+      const group: Group = groups[groupId as keyof typeof groups];
+
+      if (!group) {
+        return [];
+      }
+
+      return getReviewItemElements(group.elements, form.elements, matchedIds, values, language).map(
+        (groupElement) => groupElement.element
       );
-      return groupElements.map((groupElement) => groupElement.element);
     })
     .flat();
 };
