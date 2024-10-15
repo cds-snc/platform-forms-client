@@ -17,7 +17,7 @@ interface ManagedComboboxProps extends InputFieldProps {
 export const ManagedCombobox = React.forwardRef(
   (props: ManagedComboboxProps, ref): React.ReactElement => {
     const { id, name, className, choices = [], required, ariaDescribedBy, baseValue } = props;
-    const classes = classnames("gc-combobox", className);
+    const classes = classnames("gc-combobox gcds-input-wrapper", className);
 
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const [field, meta, helpers] = useField(props);
