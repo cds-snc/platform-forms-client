@@ -870,7 +870,7 @@ export const decrementNextActionChoiceIds = (groups: GroupsType, choiceId: strin
   return updatedGroups;
 };
 
-// TODO: in followup PR - open an issue and reference ticket
+// TODO: in followup PR - tracked in #4407
 // 1) move Review.tsx's getReviewItemElements() to this file and refactor to be more generic
 // 2) update this function to use the above
 // 3) add unit tests where it makes sense

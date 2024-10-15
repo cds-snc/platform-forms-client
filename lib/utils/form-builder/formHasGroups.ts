@@ -5,7 +5,7 @@ export function formHasGroups(form: FormProperties) {
   return form.groups && Object.keys(form.groups).length > 0;
 }
 
-// TODO: formHasGroups() will include default groups like start, so all forms will be true.  -- add ticket
+// TODO: formHasGroups() will include default groups like start, so all forms will be true. - tracked in #4407
 // - replace formHasGroups with formHasGroupsV2
 // - replace showReviewPage() with formHasGroupsV2 (originally copied from showReviewPage.ts)
 export function formHasGroupsV2(form: FormProperties) {

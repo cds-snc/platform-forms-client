@@ -148,7 +148,7 @@ export const GCFormsProvider = ({
     return values.current as FormValues;
   };
 
-  // TODO: once groups flag is on, just use formHasGroups -- TODO add ticket
+  // TODO: once groups flag is on, just use formHasGroups - tracked in #4407
   const groupsCheck = (groupsFlag: boolean | undefined) => {
     // Check that the conditional logic flag is on and that this is a groups enabled form
     if (!groupsFlag || !currentGroup) return false;
