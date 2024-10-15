@@ -874,8 +874,8 @@
     "saveButton": "Enregistrer les modifications",
     "savedSuccessMessage": "Vos modifications ont été enregistrées.",
     "formClosedSuccessMessage": {
-      "title": "Form is now closed [FR]",
-      "body": "Form will no longer receive responses. [FR]"
+      "title": "Ce formulaire est maintenant fermé",
+      "body": "Il n'accepte plus de soumissions."
     },
     "savedErrorMessage": "Une erreur s'est produite lors de l'enregistrement de vos modifications. Réessayez plus tard ou contacter l’équipe de soutien.",
     "message": {
