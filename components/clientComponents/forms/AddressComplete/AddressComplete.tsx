@@ -1,7 +1,7 @@
 "use client";
 import { AddressCompleteChoice, AddressCompleteProps, AddressElements } from "./types";
 import { getAddressCompleteChoices, getSelectedAddress } from "./utils";
-import { Combobox, Description, Label, ManagedCombobox } from "@clientComponents/forms";
+import { Description, Label, ManagedCombobox } from "@clientComponents/forms";
 import { useState, useEffect, useRef } from "react";
 import { useTranslation } from "@i18n/client";
 import { useField } from "formik";
@@ -203,14 +203,14 @@ export const AddressComplete = (props: AddressCompleteProps): React.ReactElement
             <Label htmlFor={`${name}-country`} className="gc-label">
               {t("addElementDialog.addressComplete.country")}
             </Label>
-            <Combobox
+            <ManagedCombobox
               id={`${name}-country`}
               name={`${name}-country`}
               choices={countryChoices}
               onSetValue={(val) => setCountry(val)}
               className={cn(meta.error && "gc-error-input")}
               required={required}
-              defaultValue="Canada"
+              baseValue="Canada"
               data-testid="addresscomplete-input-country"
             />
           </div>
