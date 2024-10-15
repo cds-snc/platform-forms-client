@@ -874,8 +874,8 @@
     "saveButton": "Save changes",
     "savedSuccessMessage": "Your changes have been saved.",
     "formClosedSuccessMessage": {
-      "title": "Form is now closed",
-      "body": "Form will no longer receive responses."
+      "title": "This form is now closed",
+      "body": "It is no longer receiving responses."
     },
     "savedErrorMessage": "There was an error saving your changes. Try again later or contact Support.",
     "message": {
