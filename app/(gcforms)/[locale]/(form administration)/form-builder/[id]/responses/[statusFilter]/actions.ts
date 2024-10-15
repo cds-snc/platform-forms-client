@@ -285,6 +285,7 @@ export const getSubmissionsByFormat = async ({
       return {
         id: item.name,
         status: item.status,
+        createdAt: item.createdAt,
       };
     });
 
