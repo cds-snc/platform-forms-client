@@ -879,8 +879,8 @@
     },
     "savedErrorMessage": "Une erreur s'est produite lors de l'enregistrement de vos modifications. Réessayez plus tard ou contacter l’équipe de soutien.",
     "message": {
-      "title": "Create a descriptive closing message [FR]",
-      "text1": "After your form is closed, you can create bilingual message that provides users information on the status of the form and where to go next. [FR]"
+      "title": "Customize the closed form message [FR]",
+      "text1": "Tell people trying to access the form when and why it closed and where to go next. [FR]"
     }
   },
   "errorSavingForm": {
