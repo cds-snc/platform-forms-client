@@ -1263,10 +1263,10 @@ export const updateClosedData = async (
   let detailsData: ClosedDetails | null = null;
 
   // Add the closed details if they exist
-  if (details && details.messageEn && details.messageFr) {
+  if (details) {
     detailsData = {};
-    detailsData.messageEn = details.messageEn;
-    detailsData.messageFr = details.messageFr;
+    detailsData.messageEn = details?.messageEn || "";
+    detailsData.messageFr = details?.messageFr || "";
   }
 
   try {
