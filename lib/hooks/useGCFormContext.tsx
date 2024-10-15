@@ -24,6 +24,8 @@ import {
 } from "@lib/utils/form-builder/groupsHistory";
 import { getLocalizedProperty } from "@lib/utils";
 import { Language } from "@lib/types/form-builder-types";
+import { logMessage } from "@lib/logger";
+import { showReviewPage } from "@lib/utils/form-builder/showReviewPage";
 
 interface GCFormsContextValueType {
   updateValues: ({ formValues }: { formValues: FormValues }) => void;
@@ -196,13 +198,15 @@ export const GCFormsProvider = ({
    */
   const getSubmitDelay = () => {
     try {
-      const hasGroups = formHasGroups(formRecord.form);
+      const hasGroups = showReviewPage(formRecord.form);
       const filterByTheseElements = hasGroups
         ? getFormElementsFromGroups()
         : formRecord.form.elements;
+
       const requiredQuestionsCount = filterByTheseElements.filter(
         (element) => element?.properties.validation?.required === true
       ).length;
+
       if (hasGroups) {
         return getSubmitDelayGroups({
           startTime: getInitialFormViewTime(),
@@ -210,8 +214,10 @@ export const GCFormsProvider = ({
           requiredQuestionsCount,
         });
       }
+
       return getSubmitDelayNoGroups({ requiredQuestionsCount });
     } catch (error) {
+      logMessage.info("Error calculating submit delay.");
       const DEFAULT_DELAY = 4;
       return DEFAULT_DELAY;
     }
