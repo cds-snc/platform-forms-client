@@ -880,7 +880,10 @@
     "savedErrorMessage": "There was an error saving your changes. Try again later or contact Support.",
     "message": {
       "title": "Customize the closed form message",
-      "text1": "Tell people trying to access the form when and why it closed and where to go next."
+      "text1": "Tell people trying to access the form when and why it closed and where to go next.",
+      "errors": {
+        "translation": "Provide equivalent content in both official languages."
+      }
     }
   },
   "errorSavingForm": {

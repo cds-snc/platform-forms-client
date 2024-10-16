@@ -29,6 +29,19 @@ export const SetClosingDate = ({
 
   const [closedMessage, setClosedMessage] = useState<ClosedDetails | undefined>(closedDetails);
 
+  const validateClosedMessage = useCallback(() => {
+    const hasClosedMessageEn = closedMessage?.messageEn && closedMessage?.messageEn !== "";
+    const hasClosedMessageFr = closedMessage?.messageFr && closedMessage?.messageFr !== "";
+
+    // Ensure that both languages have a message if one of them has a message
+    if (hasClosedMessageEn || hasClosedMessageFr) {
+      if (!hasClosedMessageEn) return false;
+      if (!hasClosedMessageFr) return false;
+    }
+
+    return true;
+  }, [closedMessage]);
+
   const [status, setStatus] = useState(closingDate ? "closed" : "open");
 
   const handleToggle = (value: boolean) => {
@@ -79,9 +92,13 @@ export const SetClosingDate = ({
         />
       </div>
       <div className="mb-4 w-3/5">
-        <ClosedMessage closedDetails={closedMessage} setClosedDetails={setClosedMessage} />
+        <ClosedMessage
+          closedDetails={closedMessage}
+          setClosedDetails={setClosedMessage}
+          valid={validateClosedMessage()}
+        />
       </div>
-      <Button theme="secondary" onClick={saveFormStatus}>
+      <Button disabled={!validateClosedMessage()} theme="secondary" onClick={saveFormStatus}>
         {t("closingDate.saveButton")}
       </Button>
     </div>
