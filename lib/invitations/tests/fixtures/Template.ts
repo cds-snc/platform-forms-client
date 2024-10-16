@@ -20,6 +20,7 @@ interface Template {
   publishDesc: string;
   bearerToken: string;
   ttl: Date;
+  closedDetails: string;
 }
 
 export const mockTemplate = (overrides: Partial<Template> = {}): Template => {
@@ -39,6 +40,7 @@ export const mockTemplate = (overrides: Partial<Template> = {}): Template => {
     publishDesc: "publish-desc",
     bearerToken: "",
     ttl: new Date(),
+    closedDetails: "",
   };
 
   return { ...defaultTemplate, ...overrides };
