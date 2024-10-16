@@ -3,7 +3,6 @@
 import { authCheckAndThrow } from "@lib/actions";
 import { prisma } from "@lib/integration/prismaConnector";
 import { TemplateUser } from "./types";
-import { cancelInvitation as cancelInvitationAction, inviteUserByEmail } from "@lib/invitations";
 import { AccessControlError } from "@lib/privileges";
 import {
   InvalidDomainError,
@@ -14,6 +13,8 @@ import {
 import { getTemplateWithAssociatedUsers, removeAssignedUserFromTemplate } from "@lib/templates";
 import { serverTranslation } from "@i18n";
 import { logMessage } from "@lib/logger";
+import { inviteUserByEmail } from "@lib/invitations/inviteUserByEmail";
+import { cancelInvitation as cancelInvitationAction } from "@lib/invitations/cancelInvitation";
 
 export const sendInvitation = async (emails: string[], templateId: string, message: string) => {
   const { ability } = await authCheckAndThrow();

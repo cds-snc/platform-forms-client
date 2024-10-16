@@ -1,4 +1,3 @@
-import { acceptInvitation, cancelInvitation, declineInvitation, inviteUserByEmail } from "../index";
 import { prisma } from "@lib/integration/prismaConnector";
 import { UserAbility } from "@lib/types";
 import { prismaMock } from "@jestUtils";
@@ -22,6 +21,10 @@ import { mockInvitation } from "./fixtures/Invitation";
 import { mockUser } from "./fixtures/User";
 import { mockTemplate } from "./fixtures/Template";
 import { ownerAddedNotification } from "../emailTemplates/ownerAddedNotification";
+import { inviteUserByEmail } from "../inviteUserByEmail";
+import { acceptInvitation } from "../acceptInvitation";
+import { cancelInvitation } from "../cancelInvitation";
+import { declineInvitation } from "../declineInvitation";
 
 jest.mock("@lib/integration/prismaConnector");
 jest.mock("@lib/privileges");

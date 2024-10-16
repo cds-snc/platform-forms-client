@@ -2,7 +2,8 @@
 
 import { authCheckAndThrow } from "@lib/actions";
 import { prisma } from "@lib/integration/prismaConnector";
-import { acceptInvitation, declineInvitation } from "@lib/invitations";
+import { acceptInvitation } from "@lib/invitations/acceptInvitation";
+import { declineInvitation } from "@lib/invitations/declineInvitation";
 import { InvitationIsExpiredError, InvitationNotFoundError } from "@lib/invitations/exceptions";
 import { logMessage } from "@lib/logger";
 
