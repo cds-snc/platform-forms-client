@@ -1,7 +1,9 @@
 import { prisma } from "@lib/integration/prismaConnector";
-import { InvitationNotFoundError } from "./exceptions";
+import { InvitationNotFoundError, TemplateNotFoundError } from "./exceptions";
 import { checkPrivileges } from "@lib/privileges";
 import { UserAbility } from "@lib/types";
+import { getTemplateWithAssociatedUsers } from "@lib/templates";
+import { logEvent } from "@lib/auditLogs";
 
 /**
  * Cancel an invitation
@@ -25,8 +27,14 @@ export const cancelInvitation = async (ability: UserAbility, invitationId: strin
     throw new InvitationNotFoundError();
   }
 
+  const template = await getTemplateWithAssociatedUsers(ability, invitation.templateId);
+
+  if (!template) {
+    throw new TemplateNotFoundError();
+  }
+
   checkPrivileges(ability, [
-    { action: "update", subject: { type: "FormRecord", object: { id: invitation.templateId } } },
+    { action: "update", subject: { type: "FormRecord", object: template } },
   ]);
 
   // If no invitation found, return an error
@@ -36,6 +44,13 @@ export const cancelInvitation = async (ability: UserAbility, invitationId: strin
 
   // Delete the invitation
   await _deleteInvitation(invitationId);
+
+  logEvent(
+    ability.userID,
+    { type: "Form", id: invitation.templateId },
+    "InvitationCancelled",
+    `${ability.userID} cancelled invitation for ${invitation.email}`
+  );
 };
 
 /**

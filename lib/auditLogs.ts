@@ -19,6 +19,7 @@ export enum AuditLogEvent {
   InviteUser = "InviteUser",
   InvitationAccepted = "InvitationAccepted",
   InvitationDeclined = "InvitationDeclined",
+  InvitationCancelled = "InvitationCancelled",
   // Form Response Events
   DownloadResponse = "DownloadResponse",
   ConfirmResponse = "ConfirmResponse",
