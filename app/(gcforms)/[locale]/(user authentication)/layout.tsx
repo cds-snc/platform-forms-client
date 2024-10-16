@@ -17,7 +17,7 @@ const Info = async ({ locale }: { locale: string }) => {
     <div className="mx-auto mt-10 w-[850px]">
       <AlertInfo>
         <Alert.Title headingTag="h3">{t("banner.title")}</Alert.Title>
-        <p className="mb-2">{t("prePublishFormDialog.error.message")} </p>
+        <p className="mb-2">{t("banner.body")}</p>
       </AlertInfo>
     </div>
   );
