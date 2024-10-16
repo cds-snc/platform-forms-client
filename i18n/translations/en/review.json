@@ -6,8 +6,6 @@
   "submit": "Submit",
   "unknown": "Address not found",
   "addressComponents": {
-    "header": "Parts of the address to be included",
-    "desc": "Consider minimizing what is asked to only collect what is necessary.",
     "unitNumber": "Unit number",
     "civicNumber": "Civic number",
     "streetName": "Street name",

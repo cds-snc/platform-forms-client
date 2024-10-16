@@ -273,8 +273,6 @@
   },
   "loading": "Chargement...",
   "addressComponents": {
-    "header": "Parties de l’adresse à inclure",
-    "desc": "Essayez de minimiser ce qui est demandé pour ne recueillir que ce qui est nécessaire.",
     "streetAddress": "Adresse municipale",
     "city": "Ville ou communauté",
     "province": "Province, territoire ou état",
