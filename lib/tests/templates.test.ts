@@ -330,6 +330,7 @@ describe("Template CRUD functions", () => {
       select: {
         id: true,
         closingDate: true,
+        closedDetails: true,
         created_at: true,
         updated_at: true,
         name: true,

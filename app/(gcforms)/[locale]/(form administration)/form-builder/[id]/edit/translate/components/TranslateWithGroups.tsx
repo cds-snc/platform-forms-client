@@ -13,7 +13,7 @@ import {
   Language,
 } from "@lib/types/form-builder-types";
 import { RichTextEditor } from "../../components/elements/lexical-editor/RichTextEditor";
-import { LanguageLabel } from "./LanguageLabel";
+import { LanguageLabel } from "@formBuilder/components/shared/LanguageLabel";
 import { FieldsetLegend, SectionTitle } from ".";
 import { SaveButton } from "@formBuilder/components/shared/SaveButton";
 

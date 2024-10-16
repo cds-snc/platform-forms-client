@@ -1,8 +1,8 @@
 "use client";
 
-import { FormRecord } from "@lib/types";
+import { FormRecord, ClosedDetails } from "@lib/types";
 import { DownloadForm } from "./DownloadForm";
-import { SetClosingDate } from "./SetClosingDate";
+import { SetClosingDate } from "./close/SetClosingDate";
 import { FormOwnership } from "./FormOwnership";
 import { ErrorPanel } from "@clientComponents/globals/ErrorPanel";
 
@@ -20,6 +20,7 @@ interface ManageFormProps {
   usersAssignedToFormRecord?: User[];
   allUsers?: User[];
   id: string;
+  closedDetails?: ClosedDetails;
 }
 
 export const ManageForm = (props: ManageFormProps) => {
@@ -31,12 +32,13 @@ export const ManageForm = (props: ManageFormProps) => {
     canManageOwnership,
     canSetClosingDate,
     id,
+    closedDetails,
   } = props;
 
   if (!canManageOwnership) {
     return (
       <>
-        {canSetClosingDate && <SetClosingDate formID={id} />}
+        {canSetClosingDate && <SetClosingDate formId={id} closedDetails={closedDetails} />}
         <DownloadForm />
       </>
     );
@@ -48,7 +50,7 @@ export const ManageForm = (props: ManageFormProps) => {
 
   return (
     <>
-      {canSetClosingDate && <SetClosingDate formID={id} />}
+      {canSetClosingDate && <SetClosingDate formId={id} closedDetails={closedDetails} />}
       <FormOwnership
         nonce={nonce}
         formRecord={formRecord}
