@@ -48,7 +48,9 @@ export const getSelectedAddress = async (
 
   const responseData = await response.json(); //Todo - Error Handling
   const addressData = responseData.Items as AddressCompleteResult[];
+
   const addressComponents = await getAddressComponents(addressData, language);
+
   return addressComponents;
 };
 
@@ -72,7 +74,7 @@ export const getAddressComponents = async (
   const address = {
     streetAddress: streetAddress,
     city: resultData?.City,
-    province: resultData?.Province,
+    province: resultData?.ProvinceName,
     postalCode: resultData?.PostalCode,
     country: resultData?.CountryName,
   };
