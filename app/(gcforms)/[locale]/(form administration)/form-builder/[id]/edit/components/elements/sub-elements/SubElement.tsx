@@ -1,11 +1,9 @@
 "use client";
-import React, { useCallback, useState } from "react";
-import { useTranslation } from "@i18n/client";
+import React from "react";
 
 import { useTemplateStore } from "@lib/store/useTemplateStore";
 import { PanelBodySub } from "../../PanelBodySub";
-import { FormElement, FormElementTypes } from "@lib/types";
-import { AddElementButton } from "../element-dialog/AddElementButton";
+import { FormElementTypes } from "@lib/types";
 import {
   LocalizedElementProperties,
   Language,
@@ -14,61 +12,38 @@ import {
 import { SubElementModal } from "./SubElementModal";
 import { PanelHightLight } from "./PanelHightlight";
 import { PanelActions } from "../../PanelActions";
-import { Input, LockedBadge } from "@formBuilder/components/shared";
-import { getQuestionNumber } from "@lib/utils/form-builder";
 import { useHandleAdd } from "@lib/hooks/form-builder/useHandleAdd";
+import { CustomizeSetButton } from "../CustomizeSetButton";
+import { AddToSetButton } from "../AddToSetButton";
+import { FormElementWithIndex } from "@lib/types/form-builder-types";
+import { useRefsContext } from "../../RefsContext";
 
 export const SubElement = ({
   item,
   elIndex,
   formId,
-  lang,
   ...props
 }: {
-  item: FormElement;
+  item: FormElementWithIndex;
   elIndex: number;
   formId: string;
-  lang: Language;
 }) => {
-  const { t } = useTranslation("form-builder");
+  const { updateField, subMoveUp, subMoveDown, removeSubItem, propertyPath, setChangeKey } =
+    useTemplateStore((s) => ({
+      updateField: s.updateField,
+      subMoveUp: s.subMoveUp,
+      subMoveDown: s.subMoveDown,
+      removeSubItem: s.removeSubItem,
+      getLocalizationAttribute: s.getLocalizationAttribute,
+      propertyPath: s.propertyPath,
+      setChangeKey: s.setChangeKey,
+    }));
 
-  const {
-    updateField,
-    subMoveUp,
-    subMoveDown,
-    subDuplicateElement,
-    removeSubItem,
-    subElements,
-    localizeField,
-    getLocalizationAttribute,
-    propertyPath,
-  } = useTemplateStore((s) => ({
-    updateField: s.updateField,
-    subMoveUp: s.subMoveUp,
-    subMoveDown: s.subMoveDown,
-    subDuplicateElement: s.subDuplicateElement,
-    removeSubItem: s.removeSubItem,
-    subElements: s.form.elements[elIndex].properties.subElements,
-    localizeField: s.localizeField,
-    getLocalizationAttribute: s.getLocalizationAttribute,
-    propertyPath: s.propertyPath,
-  }));
+  const { refs } = useRefsContext();
+
+  const subElements = item.properties.subElements;
 
   const { handleAddSubElement } = useHandleAdd();
-
-  const [buttonText, setButtonText] = useState<string>(
-    item.properties[localizeField(LocalizedElementProperties.PLACEHOLDER, lang)] || ""
-  );
-
-  const handlePlaceHolderText = useCallback(
-    (elIndex: number, e: React.ChangeEvent<HTMLInputElement>) => {
-      const placeHolder = localizeField(LocalizedElementProperties.PLACEHOLDER, lang);
-
-      setButtonText(e.target.value);
-      updateField(`form.elements[${elIndex}].properties.${placeHolder}`, e.target.value);
-    },
-    [updateField, localizeField, lang]
-  );
 
   const onQuestionChange = (itemId: number, val: string, lang: Language) => {
     updateField(propertyPath(itemId, LocalizedElementProperties.TITLE, lang), val);
@@ -83,27 +58,41 @@ export const SubElement = ({
     return elements.filter((element) => !notAllowed.includes(element.id));
   };
 
+  const focusSubElement = (id: number) => {
+    // Add delay to wait for the new element to be rendered
+    setTimeout(() => {
+      try {
+        // @todo --- this currently isn't working for rich text elements
+        refs && refs.current && refs.current[id]?.focus();
+      } catch (e) {
+        // no-op
+      }
+    }, 200);
+  };
+
+  const forceRefresh = (id?: number) => {
+    setChangeKey(String(new Date().getTime())); //Force a re-render
+    id && focusSubElement(id);
+  };
+
   if (!subElements || subElements.length < 1)
     return (
-      <div className="mt-10">
-        <AddElementButton
-          text={t("addToSet")}
-          handleAdd={(type?: FormElementTypes) => {
-            handleAddSubElement(elIndex, 0, type);
+      <div className="ml-4 mt-10">
+        <AddToSetButton
+          handleAdd={async (type?: FormElementTypes) => {
+            const id = await handleAddSubElement(item.id, 0, type);
+            forceRefresh(id);
           }}
           filterElements={elementFilter}
         />
+        <CustomizeSetButton itemId={item.id} itemIndex={item.index} />
       </div>
     );
 
-  // grab only the data we need to render the question number
-  const subElementTypes = subElements.map((element) => ({ id: element.id, type: element.type }));
-
   return (
-    <div {...props} className="my-3">
+    <div {...props}>
       {subElements.map((element, subIndex: number) => {
-        const questionNumber = getQuestionNumber(element, subElementTypes, true);
-        const item = { ...element, index: subIndex, questionNumber };
+        const item = { ...element, index: subIndex };
         return (
           <div key={`sub-element-${item.id}-${subIndex}`}>
             <PanelHightLight
@@ -113,22 +102,28 @@ export const SubElement = ({
                   isFirstItem={subIndex === 0}
                   isLastItem={subIndex === subElements.length - 1}
                   totalItems={subElements.length}
-                  handleAdd={(type?: FormElementTypes) => {
-                    handleAddSubElement(elIndex, subIndex, type);
+                  handleAdd={async (type?: FormElementTypes) => {
+                    const id = await handleAddSubElement(item.id, subIndex, type);
+                    forceRefresh(id);
                   }}
                   handleRemove={() => {
-                    removeSubItem(elIndex, item.id);
+                    removeSubItem(item.id, item.id);
+                    forceRefresh();
                   }}
+                  handleDuplicate={() => {}} // no duplicate for sub elements
                   handleMoveUp={() => {
-                    subMoveUp(elIndex, subIndex);
+                    subMoveUp(item.id, subIndex);
+                    forceRefresh(item.id);
                   }}
                   handleMoveDown={() => {
-                    subMoveDown(elIndex, subIndex);
-                  }}
-                  handleDuplicate={() => {
-                    subDuplicateElement(elIndex, subIndex);
+                    subMoveDown(item.id, subIndex);
+                    forceRefresh(item.id);
                   }}
                   moreButtonRenderer={(moreButton) => {
+                    if (item.type === "richText") {
+                      return <div />;
+                    }
+
                     return (
                       <SubElementModal
                         elIndex={elIndex}
@@ -142,35 +137,30 @@ export const SubElement = ({
                 />
               }
             >
-              <PanelBodySub
-                elIndex={elIndex}
-                item={item}
-                onQuestionChange={onQuestionChange}
-                onRequiredChange={onRequiredChange}
-                formId={formId}
-              />
+              <div className="pt-4">
+                <PanelBodySub
+                  elIndex={elIndex}
+                  item={item}
+                  onQuestionChange={onQuestionChange}
+                  onRequiredChange={onRequiredChange}
+                  formId={formId}
+                />
+              </div>
             </PanelHightLight>
           </div>
         );
       })}
 
-      {item.type === "dynamicRow" && (
-        <div className="mt-4 h-auto max-w-[800px] border-1 border-gray-300 first-of-type:rounded-t-md last-of-type:rounded-b-md">
-          <LockedBadge className="laptop:absolute laptop:right-7 laptop:top-[15px]" />
-          <div className="mx-7 mb-7 mt-5">
-            <h2 className="pb-3 text-2xl">{t("questionSet.addAnother.title")}</h2>
-            <p className="mb-8 pt-5 text-[1rem]">{t("questionSet.addAnother.description")}</p>
-            <Input
-              id={`repeatable-button-${elIndex}`}
-              {...getLocalizationAttribute()}
-              value={buttonText}
-              className="w-full"
-              placeholder={t("questionSet.addAnother.placeholder")}
-              onChange={(e) => {
-                handlePlaceHolderText(elIndex, e);
-              }}
-            />
-          </div>
+      {subElements.length >= 1 && (
+        <div className="mb-2 ml-4 mt-4">
+          <AddToSetButton
+            handleAdd={async (type?: FormElementTypes) => {
+              const id = await handleAddSubElement(item.id, subElements.length, type);
+              forceRefresh(id);
+            }}
+            filterElements={elementFilter}
+          />
+          <CustomizeSetButton itemId={item.id} itemIndex={item.index} />
         </div>
       )}
     </div>

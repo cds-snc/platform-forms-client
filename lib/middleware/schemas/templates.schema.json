@@ -252,6 +252,35 @@
               "description": "Secondary paragraph/text of a question or element that provides additional context beyond the label in French",
               "type": "string"
             },
+            "dynamicRow": {
+              "type": "object",
+              "properties": {
+                "rowTitleEn": {
+                  "type": "string",
+                  "description": "The title of the row in English"
+                },
+                "rowTitleFr": {
+                  "type": "string",
+                  "description": "The title of the row in French"
+                },
+                "addButtonTextEn": {
+                  "type": "string",
+                  "description": "Text for the add button in English"
+                },
+                "removeButtonTextEn": {
+                  "type": "string",
+                  "description": "Text for the remove button in English"
+                },
+                "addButtonTextFr": {
+                  "type": "string",
+                  "description": "Text for the add button in French"
+                },
+                "removeButtonTextFr": {
+                  "type": "string",
+                  "description": "Text for the remove button in French"
+                }
+              }
+            },
             "choices": {
               "type": "array",
               "items": {

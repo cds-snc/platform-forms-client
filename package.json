@@ -1,6 +1,6 @@
 {
   "name": "gcforms",
-  "version": "3.21.1",
+  "version": "3.22.4",
   "private": true,
   "prisma": {
     "seed": "tsx prisma/seeds/seed_cli.ts --environment=development"
@@ -21,7 +21,7 @@
     "dev": "yarn prisma:dev && yarn initialize && next dev",
     "dev:turbo": "yarn prisma:dev && yarn initialize && next dev --turbo",
     "dev:secure": "yarn prisma:dev && yarn initialize && next dev --experimental-https",
-    "build": "DATABASE_URL=postgres://postgres:chummy@localhost:5432/formsDB next build --debug",
+    "build": "DATABASE_URL=postgres://postgres:chummy@localhost:5432/forms next build --debug",
     "start": "yarn prisma:deploy && yarn initialize && NODE_OPTIONS=\"--max-old-space-size=3584\" next start -p ${PORT:-3000}",
     "initialize": "yarn workspace flag_initialization initialize",
     "prisma:deploy": "prisma migrate deploy && tsx prisma/seeds/seed_cli.ts --environment=production",
@@ -56,6 +56,7 @@
     "@aws-sdk/client-sqs": "3.515.0",
     "@aws-sdk/lib-dynamodb": "3.515.0",
     "@casl/ability": "6.5.0",
+    "@cdssnc/gcds-tokens": "^1.20.0",
     "@headlessui/react": "^1.7.18",
     "@lexical/react": "^0.12.6",
     "@neshca/cache-handler": "^1.2.1",
@@ -88,7 +89,7 @@
     "lodash.set": "4.3.2",
     "lodash.unset": "4.5.2",
     "markdown-to-jsx": "7.3.2",
-    "next": "14.2.7",
+    "next": "14.2.15",
     "next-auth": "^5.0.0-beta.20",
     "node-fetch": "^3.3.2",
     "pino": "9.1.0",
@@ -96,7 +97,7 @@
     "react": "^18.2.0",
     "react-app-polyfill": "3.0.0",
     "react-aria": "3.31.0",
-    "react-complex-tree": "^2.4.2",
+    "react-complex-tree": "^2.4.5",
     "react-dom": "^18.2.0",
     "react-i18next": "^14.0.5",
     "react-loading-skeleton": "^3.4.0",
@@ -204,5 +205,5 @@
     "not ie < 11",
     "not op_mini all"
   ],
-  "packageManager": "yarn@4.1.1"
+  "packageManager": "yarn@4.4.1"
 }

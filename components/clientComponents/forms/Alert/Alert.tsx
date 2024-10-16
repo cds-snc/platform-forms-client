@@ -2,6 +2,7 @@
 import React, { useEffect, useRef } from "react";
 import classnames from "classnames";
 import { useTranslation } from "@i18n/client";
+import { Button } from "@clientComponents/globals";
 
 export enum ErrorStatus {
   SUCCESS,
@@ -68,14 +69,15 @@ export const Alert = ({
       role="alert"
     >
       {dismissible ? (
-        <button
+        <Button
           id="dismissButton"
           aria-label={t("alert.dismissAlert")}
-          className="gc-button gc-button--icon gc-button--secondary float-right"
+          theme="icon"
+          className="float-right"
           onClick={onDismiss}
         >
           x
-        </button>
+        </Button>
       ) : null}
       <div className="gc-alert__body">
         {heading && <h2>{heading}</h2>}

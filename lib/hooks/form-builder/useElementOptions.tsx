@@ -38,6 +38,8 @@ import {
 } from "@formBuilder/[id]/edit/components/elements/element-dialog";
 import { useIsAdminUser } from "./useIsAdminUser";
 import { ElementOptionsFilter, ElementOption } from "../../types/form-builder-types";
+import { useFeatureFlags } from "../useFeatureFlags";
+import { FeatureFlags } from "@lib/cache/types";
 
 export enum Groups {
   BASIC = "basic",
@@ -63,9 +65,8 @@ export const useElementOptions = (filterElements?: ElementOptionsFilter | undefi
   // default to off unless the user is an admin
   const allowFileInput = useIsAdminUser();
 
-  // @todo use experimental flag for this
-  const { status: experimentalBlocks } = { status: useIsAdminUser() };
-
+  const { getFlag } = useFeatureFlags();
+  const allowRepeatingSets = getFlag(FeatureFlags.repeatingSets);
   const fileInputOption: ElementOption = {
     id: "fileInput",
     value: t("addElementDialog.fileInput.title"),
@@ -203,7 +204,7 @@ export const useElementOptions = (filterElements?: ElementOptionsFilter | undefi
       className: "separator",
       group: groups.preset,
     },
-    ...(experimentalBlocks ? [{ ...(repeatingSetsOption as ElementOption) }] : []),
+    ...(allowRepeatingSets ? [{ ...(repeatingSetsOption as ElementOption) }] : []),
   ];
 
   return filterElements

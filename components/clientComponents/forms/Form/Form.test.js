@@ -1,3 +1,6 @@
+/**
+ * @jest-environment jsdom
+ */
 import React from "react";
 import { cleanup, render, screen, waitFor, fireEvent } from "@testing-library/react";
 import { Form } from "@clientComponents/forms/Form/Form";
@@ -23,10 +26,6 @@ let mockFormTimerState = {
   timerDelay: 0,
   timeLock: 0,
 };
-
-jest.mock("@lib/hooks/useFlag", () => ({
-  useFlag: jest.fn(),
-}));
 
 jest.mock("@lib/hooks/useFormTimer", () => ({
   __esModule: true,

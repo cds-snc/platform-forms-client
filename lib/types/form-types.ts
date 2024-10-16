@@ -4,7 +4,7 @@
  */
 import { ChangeEvent } from "react";
 import { HTMLTextInputTypeAttribute } from "./utility-types";
-import { TypeOmit } from ".";
+import { ClosedDetails, TypeOmit } from ".";
 import { GroupsType } from "@lib/formContext";
 
 /**
@@ -34,6 +34,15 @@ export type ConditionalRule = {
   choiceId: string;
 };
 
+export type dynamicRowType = {
+  rowTitleEn: string;
+  rowTitleFr: string;
+  addButtonTextEn: string;
+  removeButtonTextEn: string;
+  addButtonTextFr: string;
+  removeButtonTextFr: string;
+};
+
 // used to define attributes for the properties of an element in the form
 export interface ElementProperties {
   titleEn: string;
@@ -53,6 +62,7 @@ export interface ElementProperties {
   autoComplete?: string;
   dateFormat?: string;
   conditionalRules?: ConditionalRule[];
+  dynamicRow?: dynamicRowType;
   [key: string]:
     | string
     | number
@@ -61,6 +71,7 @@ export interface ElementProperties {
     | Array<FormElement>
     | ValidationProperties
     | Array<ConditionalRule>
+    | dynamicRowType
     | undefined;
 }
 
@@ -158,7 +169,8 @@ export type FormRecord = {
   deliveryOption?: DeliveryOption;
   securityAttribute: SecurityAttribute;
   closingDate?: string;
-  [key: string]: string | boolean | FormProperties | DeliveryOption | undefined;
+  closedDetails?: ClosedDetails;
+  [key: string]: string | boolean | FormProperties | DeliveryOption | ClosedDetails | undefined;
 };
 
 // defines the fields for the form record that is available to unauthenticated users

@@ -5,7 +5,7 @@ import { useTranslation } from "@i18n/client";
 
 import { CheckBoxEmptyIcon, CheckIcon, RadioEmptyIcon } from "@serverComponents/icons";
 import { ShortAnswer, Options, SubOptions, RichText, SubElement } from "./elements";
-import { ElementOption, FormElementWithIndex, Language } from "@lib/types/form-builder-types";
+import { ElementOption, FormElementWithIndex } from "@lib/types/form-builder-types";
 import { useElementOptions } from "@lib/hooks/form-builder";
 import { ConditionalIndicator } from "@formBuilder/components/shared/conditionals/ConditionalIndicator";
 import { DateElement } from "./elements/DateElement";
@@ -70,12 +70,10 @@ export const SelectedElement = ({
   item,
   elIndex = -1,
   formId,
-  lang,
 }: {
   item: FormElementWithIndex;
   elIndex: number;
   formId: string;
-  lang?: Language;
 }) => {
   const { t } = useTranslation("form-builder");
 
@@ -148,7 +146,12 @@ export const SelectedElement = ({
     case "combobox":
       if (elIndex !== -1) {
         element = (
-          <SubOptions elIndex={elIndex} item={item} renderIcon={(index) => `${index + 1}.`} />
+          <>
+            <ShortAnswer>{t("addElementDialog.combobox.title")}</ShortAnswer>
+            {!item.properties.managedChoices && (
+              <SubOptions elIndex={elIndex} item={item} renderIcon={(index) => `${index + 1}.`} />
+            )}
+          </>
         );
       } else {
         element = (
@@ -184,9 +187,7 @@ export const SelectedElement = ({
       element = <ShortAnswer data-testid="number">0123456789</ShortAnswer>;
       break;
     case "dynamicRow":
-      element = (
-        <SubElement item={item} elIndex={item.index} formId={formId} lang={lang as Language} />
-      );
+      element = <SubElement item={item} elIndex={item.index} formId={formId} />;
       break;
     case "attestation":
       element = <Options item={item} renderIcon={() => <CheckBoxEmptyIcon />} formId={formId} />;

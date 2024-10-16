@@ -188,4 +188,22 @@ export const options = [
     logoTitleEn: "Public Service Commission of Canada",
     logoTitleFr: "Commission de la fonction publique du Canada",
   },
+  {
+    name: "cer-rec",
+    urlEn: "https://www.cer-rec.gc.ca/en/index.html",
+    urlFr: "https://www.cer-rec.gc.ca/fr/index.html",
+    logoEn: "/img/branding/cer-rec-en.svg",
+    logoFr: "/img/branding/cer-rec-fr.svg",
+    logoTitleEn: "Canada Energy Regulator",
+    logoTitleFr: "Régie de l’énergie du Canada",
+  },
+  {
+    name: "grain",
+    urlEn: "https://www.grainscanada.gc.ca/en/",
+    urlFr: "https://www.grainscanada.gc.ca/fr/",
+    logoEn: "/img/branding/grain-en.svg",
+    logoFr: "/img/branding/grain-fr.svg",
+    logoTitleEn: "Canadian Grain Commission",
+    logoTitleFr: "Commission canadienne des grains",
+  },
 ];

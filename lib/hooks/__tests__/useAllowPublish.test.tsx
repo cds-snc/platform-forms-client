@@ -1,4 +1,6 @@
-"use client";
+/**
+ * @jest-environment jsdom
+ */
 import React from "react";
 import { TemplateStoreProvider } from "../../store/useTemplateStore";
 import { TemplateStoreProps } from "../../store/types";
@@ -162,7 +164,7 @@ describe("useAllowPublish", () => {
     // For test purposes, set purpose to true
     // In the UI this happens under the settings page
     act(() => {
-      data.purpose = true
+      data.purpose = true;
     });
     expect(isPublishable()).toBe(true);
   });

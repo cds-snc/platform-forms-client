@@ -13,15 +13,15 @@ import {
   Language,
 } from "@lib/types/form-builder-types";
 import { RichTextEditor } from "../../components/elements/lexical-editor/RichTextEditor";
-import { LanguageLabel } from "./LanguageLabel";
+import { LanguageLabel } from "@formBuilder/components/shared/LanguageLabel";
 import { FieldsetLegend, SectionTitle } from ".";
 import { SaveButton } from "@formBuilder/components/shared/SaveButton";
 
 import { FormElement } from "@lib/types";
 import { SkipLinkReusable } from "@clientComponents/globals/SkipLinkReusable";
-import { alphabet } from "@lib/utils/form-builder";
 import { sortGroup } from "@lib/utils/form-builder/groupedFormHelpers";
 import { Group } from "@lib/formContext";
+import { TranslateCustomizeSet } from "./TranslateCustomizeSet";
 
 const GroupSection = ({
   groupId,
@@ -99,11 +99,13 @@ const Element = ({
   element,
   index,
   primaryLanguage,
+  secondaryLanguage,
   questionNumber,
 }: {
   element: FormElement;
   index: number;
   primaryLanguage: Language;
+  secondaryLanguage: Language;
   questionNumber?: string;
 }) => {
   let subElements;
@@ -111,21 +113,14 @@ const Element = ({
   const { t } = useTranslation("form-builder");
 
   if (element.type === "dynamicRow") {
-    let subElementIndex = -1;
     subElements = element.properties.subElements?.map((subElement) => {
-      let questionNumber = t("pageText");
-      if (subElement.type !== "richText") {
-        subElementIndex++;
-        questionNumber = alphabet[subElementIndex];
-      }
-
       return (
         <Element
           key={subElement.id}
           element={subElement}
           index={subElement.id}
-          questionNumber={questionNumber}
           primaryLanguage={primaryLanguage}
+          secondaryLanguage={secondaryLanguage}
         />
       );
     });
@@ -169,6 +164,15 @@ const Element = ({
             <Description primaryLanguage={primaryLanguage} element={element} />
           )}
           {subElements}
+        </>
+      )}
+      {element.type === "dynamicRow" && (
+        <>
+          <TranslateCustomizeSet
+            element={element}
+            primaryLanguage={primaryLanguage}
+            secondaryLanguage={secondaryLanguage}
+          />
         </>
       )}
     </>
@@ -384,7 +388,12 @@ export const TranslateWithGroups = () => {
             sortGroup({ form, group: groups["start"] }).map((element, index) => {
               return (
                 <div className="section" id={`section-${index}`} key={element.id}>
-                  <Element index={index} element={element} primaryLanguage={primaryLanguage} />
+                  <Element
+                    index={index}
+                    element={element}
+                    primaryLanguage={primaryLanguage}
+                    secondaryLanguage={secondaryLanguage}
+                  />
                 </div>
               );
             })}
@@ -418,6 +427,7 @@ export const TranslateWithGroups = () => {
                           index={index}
                           element={element}
                           primaryLanguage={primaryLanguage}
+                          secondaryLanguage={secondaryLanguage}
                         />
                       </div>
                     );

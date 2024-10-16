@@ -2,7 +2,8 @@
 import React from "react";
 import JSONUpload from "@clientComponents/admin/JsonUpload/JsonUpload";
 import { useTranslation } from "@i18n/client";
-import { DeleteButton, Label } from "@clientComponents/forms";
+import { Label } from "@clientComponents/forms";
+import { Button } from "@clientComponents/globals";
 import { useSearchParams } from "next/navigation";
 import axios from "axios";
 import { logMessage } from "@lib/logger";
@@ -11,6 +12,7 @@ import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
 import "react-tabs/style/react-tabs.css";
 import FormAccess from "@clientComponents/admin/FormAccess/FormAccess";
 import { getLocalizedProperty } from "@lib/utils";
+import { redirect } from "next/navigation";
 
 interface FormSettingsProps {
   form: FormRecord;
@@ -70,10 +72,12 @@ const FormSettings = (props: FormSettingsProps): React.ReactElement => {
           <JSONUpload form={formRecord} />
           <br />
           <div>
-            <DeleteButton
-              action={handleDelete}
-              data={formRecord.id}
-              redirect={`/admin/view-templates`}
+            <Button
+              theme="destructive"
+              onClick={() => {
+                handleDelete(formRecord.id);
+                redirect("/admin/view-templates");
+              }}
             />
           </div>
         </TabPanel>

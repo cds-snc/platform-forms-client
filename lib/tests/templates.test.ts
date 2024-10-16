@@ -1,8 +1,4 @@
-/**
- * @jest-environment node
- */
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import Redis from "ioredis-mock";
 import { prismaMock } from "@jestUtils";
 import {
   createTemplate,
@@ -40,14 +36,13 @@ import {
 import { Session } from "next-auth";
 import { logEvent } from "@lib/auditLogs";
 import { unprocessedSubmissions } from "@lib/vault";
-
-const redis = new Redis();
-
-jest.mock("@lib/integration/redisConnector", () => ({
-  getRedisInstance: jest.fn(() => redis),
-}));
+import { deleteKey } from "@lib/serviceAccount";
 
 jest.mock("@lib/auditLogs");
+jest.mock("@lib/actions/auth");
+jest.mock("@lib/serviceAccount");
+
+const mockedDeleteKey = jest.mocked(deleteKey, { shallow: true });
 
 const structuredClone = <T>(obj: T): T => {
   return v8.deserialize(v8.serialize(obj));
@@ -335,6 +330,7 @@ describe("Template CRUD functions", () => {
       select: {
         id: true,
         closingDate: true,
+        closedDetails: true,
         created_at: true,
         updated_at: true,
         name: true,
@@ -570,7 +566,14 @@ describe("Template CRUD functions", () => {
       buildPrismaResponse("formtestID", formConfiguration, true)
     );
 
-    const updatedTemplate = await updateIsPublishedForTemplate(ability, "formtestID", true, "", "", "");
+    const updatedTemplate = await updateIsPublishedForTemplate(
+      ability,
+      "formtestID",
+      true,
+      "",
+      "",
+      ""
+    );
 
     expect(prismaMock.template.update).toHaveBeenCalledWith({
       where: {
@@ -918,9 +921,12 @@ describe("Template CRUD functions", () => {
 
   it.each([[Base], [Base.concat(ManageForms)]])("Delete template", async (privileges) => {
     const fakeSession = {
-      user: { id: "1", privileges: mockUserPrivileges(privileges, { user: { id: "1" } }) },
-    };
-    const ability = createAbility(fakeSession as Session);
+      user: {
+        id: "1",
+        privileges: mockUserPrivileges(privileges, { user: { id: "1" } }),
+      },
+    } as Session;
+    const ability = createAbility(fakeSession);
 
     (prismaMock.template.findUnique as jest.MockedFunction<any>).mockResolvedValue({
       ...buildPrismaResponse("formtestID", formConfiguration),
@@ -974,6 +980,7 @@ describe("Template CRUD functions", () => {
       { id: "formtestID", type: "Form" },
       "DeleteForm"
     );
+    expect(mockedDeleteKey).toHaveBeenCalledTimes(1);
   });
 
   it.each([[Base], [Base.concat(ManageForms)]])(

@@ -1,3 +1,6 @@
+/**
+ * @jest-environment jsdom
+ */
 import React from "react";
 import { cleanup, render, act } from "@testing-library/react";
 import { Option } from "../Option";

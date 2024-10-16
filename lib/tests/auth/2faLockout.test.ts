@@ -1,7 +1,3 @@
-/**
- * @jest-environment node
- */
-
 import Redis from "ioredis-mock";
 import { registerFailed2FAAttempt, clear2FALockout } from "@lib/auth/2faLockout";
 

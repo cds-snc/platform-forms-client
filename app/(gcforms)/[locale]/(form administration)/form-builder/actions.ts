@@ -7,12 +7,13 @@ import {
   FormRecord,
   SecurityAttribute,
   FormPurpose,
+  ClosedDetails,
 } from "@lib/types";
 import {
   createTemplate as createDbTemplate,
   removeDeliveryOption,
   updateAssignedUsersForTemplate,
-  updateClosingDateForTemplate,
+  updateClosedData,
   updateTemplate as updateDbTemplate,
   updateIsPublishedForTemplate,
   deleteTemplate as deleteDbTemplate,
@@ -245,12 +246,14 @@ export const updateTemplateSecurityAttribute = async ({
   }
 };
 
-export const updateTemplateClosingDate = async ({
+export const closeForm = async ({
   id: formID,
   closingDate,
+  closedDetails,
 }: {
   id: string;
   closingDate: string;
+  closedDetails?: ClosedDetails;
 }): Promise<{
   formID: string;
   closingDate: string | null;
@@ -259,7 +262,7 @@ export const updateTemplateClosingDate = async ({
   try {
     const { ability } = await authCheckAndThrow();
 
-    const response = await updateClosingDateForTemplate(ability, formID, closingDate);
+    const response = await updateClosedData(ability, formID, closingDate, closedDetails);
     if (!response) {
       throw new Error(
         `Template API response was null. Request information: { ${formID}, ${closingDate} }`
@@ -394,6 +397,20 @@ export const getTranslatedProperties = async (type: string) => {
   return {
     en: en(type),
     fr: fr(type),
+  };
+};
+
+export const getTranslatedDynamicRowProperties = async () => {
+  const { t: en } = await serverTranslation("form-builder", { lang: "en" });
+  const { t: fr } = await serverTranslation("form-builder", { lang: "fr" });
+
+  return {
+    rowTitleEn: en("dynamicRow.defaultRowTitle"),
+    rowTitleFr: fr("dynamicRow.defaultRowTitle"),
+    addButtonTextEn: en("dynamicRow.defaultAddButtonText"),
+    removeButtonTextEn: en("dynamicRow.defaultRemoveButtonText"),
+    addButtonTextFr: fr("dynamicRow.defaultAddButtonText"),
+    removeButtonTextFr: fr("dynamicRow.defaultRemoveButtonText"),
   };
 };
 

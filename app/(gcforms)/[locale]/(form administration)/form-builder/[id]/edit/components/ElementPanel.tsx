@@ -81,6 +81,8 @@ export const ElementPanel = ({
   const hasRules =
     (item.properties?.conditionalRules && item.properties?.conditionalRules?.length > 0) ?? false;
 
+  const hasSubPanel = item.type === "dynamicRow";
+
   return (
     <div
       id={`element-${item.id}`}
@@ -90,8 +92,11 @@ export const ElementPanel = ({
         className,
         "group",
         isWithin && "active",
-        "relative h-auto max-w-[800px] border-1 border-t-0 border-slate-500 focus-within:bg-violet-50 hover:bg-violet-50 bg-white",
-        hasRules && "border-dashed border-1 border-slate-500"
+        "relative h-auto max-w-[800px] border-1 border-t-0 border-slate-500  bg-white",
+        !hasSubPanel && isWithin && "focus-within:bg-violet-50 hover:bg-violet-50",
+        hasRules && "border-dashed border-1 border-slate-500",
+        hasSubPanel &&
+          "border border-slate-500 hover:outline hover:outline-2 hover:outline-indigo-700 hover:outline-offset-[-1px] focus-within:outline focus-within:outline-2 focus-within:outline-indigo-700 focus-within:outline-offset-[-1px]"
       )}
       onClick={(e) => {
         const el = e.target as HTMLElement;
@@ -105,7 +110,9 @@ export const ElementPanel = ({
             return;
           }
 
-          refs?.current?.[item.id]?.focus();
+          if (!hasSubPanel) {
+            refs?.current?.[item.id]?.focus();
+          }
         }
       }}
     >

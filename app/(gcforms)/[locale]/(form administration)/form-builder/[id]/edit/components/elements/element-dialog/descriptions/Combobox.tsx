@@ -16,7 +16,7 @@ export const Combobox = () => {
           {t("addElementDialog.combobox.selectOption")}
         </Label>
         <Description>{t("addElementDialog.combobox.selectOne")}</Description>
-        <div className="overflow-hidden">
+        <div className="overflow-hidden p-2">
           <ComboboxComponent
             name="name"
             id="combobox"

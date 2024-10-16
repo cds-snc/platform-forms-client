@@ -9,6 +9,8 @@ import {
 import { findParentGroup } from "../util/findParentGroup";
 import { TreeItems } from "../types";
 import { autoFlowGroupNextActions } from "../util/setNextAction";
+import { FormElement } from "@lib/types";
+import { reorderElements as reorderSubElements } from "../util/updateArrayOrder";
 
 const findItemIndex = (items: string[], itemIndex: string | number) =>
   items.indexOf(String(itemIndex));
@@ -109,6 +111,8 @@ export const handleOnDrop = async (
   target: DraggingPosition,
   getGroups: () => GroupsType | undefined,
   replaceGroups: (groups: GroupsType) => void,
+  getSubElements: (parentId: number) => FormElement[] | undefined,
+  updateSubElements: (elements: FormElement[], parentId: number) => void,
   setSelectedItems: (items: TreeItemIndex[]) => void,
   setExpandedItems: (items: TreeItemIndex[]) => void,
   expandedItems: TreeItemIndex[],
@@ -119,7 +123,7 @@ export const handleOnDrop = async (
 ) => {
   // Current state of the tree in Groups format
   let currentGroups = getGroups() as GroupsType;
-
+  const selectedItems: string[] = [];
   let targetParent: TreeItemIndex;
   let targetIndex: number;
 
@@ -132,8 +136,43 @@ export const handleOnDrop = async (
     targetIndex = (<DraggingPositionBetweenItems>target).childIndex;
   }
 
+  const hasSubElements = items.some((item) => {
+    return item.data.isSubElement;
+  });
+
+  if (hasSubElements) {
+    const subElements = getSubElements(Number(targetParent));
+    if (!subElements) return;
+
+    let elements = subElements.map((element) => String(element.id));
+
+    let itemsPriorToInsertion = 0;
+
+    items.forEach((item, index) => {
+      const originIndex = findItemIndex(elements, item.index);
+
+      // Adjust index if dragging down
+      itemsPriorToInsertion += isOldItemPriorToNewItem(elements, item.index, targetIndex) ? 1 : 0;
+
+      // Remove from old position
+      elements = removeItemAtIndex(elements, originIndex);
+
+      // Insert at new position
+      elements = insertItemAtIndex(
+        elements,
+        String(item.index),
+        targetIndex - itemsPriorToInsertion + index
+      );
+
+      selectedItems.push(String(item.index));
+    });
+
+    updateSubElements(reorderSubElements(elements, subElements), Number(targetParent));
+    setSelectedItems(selectedItems);
+    return;
+  }
+
   let newGroups: GroupsType;
-  const selectedItems: string[] = [];
 
   // Dragging/dropping root-level items
   if (targetParent === "root") {
@@ -187,20 +226,31 @@ export const handleOnDrop = async (
 
   // Dragging/dropping other non-root level items
   const targetParentGroup = currentGroups[targetParent];
-  let targetGroupElements = [...targetParentGroup.elements];
+
+  let targetGroupElements: string[] = []; // NOTE: "elements" are elementIds
+
+  // Ensure the target parent group exists and has elements
+  if (targetParentGroup && targetParentGroup.elements) {
+    targetGroupElements = [...targetParentGroup.elements];
+  }
 
   let itemsPriorToInsertion = 0;
 
-  let originParentGroup;
   let originGroupElements: string[] = [];
+
+  if (targetParent === "start" && target.targetType !== "item") {
+    targetIndex = targetIndex - 2;
+  }
 
   items.forEach((item, index) => {
     // Remove item from original location
     const originParent = findParentGroup(getTreeData(), String(item.index));
-    originParentGroup = currentGroups[originParent?.index as string];
+    if (!originParent) {
+      return;
+    }
 
     // Dragging/dropping item within same group
-    if (originParentGroup == targetParentGroup) {
+    if (originParent.index == targetParent) {
       originGroupElements = (originParent?.children || []) as string[];
       const originIndex = originGroupElements.indexOf(String(item.index));
 
@@ -267,11 +317,8 @@ export const handleOnDrop = async (
     currentGroups = newGroups;
 
     // Insert at new position
-    targetGroupElements = insertItemAtIndex(
-      targetGroupElements,
-      String(item.index),
-      targetIndex + index
-    );
+    const newIndex = targetIndex + index;
+    targetGroupElements = insertItemAtIndex(targetGroupElements, String(item.index), newIndex);
 
     newGroups = { ...currentGroups };
     newGroups[targetParent] = {
