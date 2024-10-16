@@ -31,7 +31,7 @@ export const inviteUserByEmail = async (
   formId: string,
   message: string
 ) => {
-  let invitation;
+  let invitation: Invitation;
 
   const sender = await getUser(ability, ability.userID).catch(() => {
     throw new UserNotFoundError();
