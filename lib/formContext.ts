@@ -870,10 +870,7 @@ export const decrementNextActionChoiceIds = (groups: GroupsType, choiceId: strin
   return updatedGroups;
 };
 
-// TODO: in followup PR - tracked in #4407
-// 1) move Review.tsx's getReviewItemElements() to this file and refactor to be more generic
-// 2) update this function to use the above
-// 3) add unit tests where it makes sense
+// TODO: update to use the refactored getReviewItemElements() - tracked in #4407
 export const getFormElementsFromGroups = ({
   form,
   values,
@@ -908,10 +905,10 @@ export const getFormElementsFromGroups = ({
     .flat();
 };
 
-// Add in a little math to make it more unpredictable and calculates the final delay
 const calculateSubmitDelay = (delayFromFormData: number) => {
   const secondsBaseDelay = 2;
   const secondsPerFormElement = 2;
+  // Add in a little math to make it more unpredictable and calculates the final delay
   return secondsBaseDelay + delayFromFormData * secondsPerFormElement;
 };
 

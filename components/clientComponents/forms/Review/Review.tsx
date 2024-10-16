@@ -63,6 +63,7 @@ function formatElementValues(element: ReviewElement) {
   return String(element.values);
 }
 
+// TODO: refactor out to a more general util. remember to update formContext - tracked in #4407
 export function getReviewItemElements(
   groupElements: string[],
   formElements: FormElement[],
