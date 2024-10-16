@@ -335,6 +335,10 @@ describe("Invitations", () => {
         })
       );
 
+      (
+        getTemplateWithAssociatedUsers as jest.MockedFunction<typeof getTemplateWithAssociatedUsers>
+      ).mockResolvedValue(mockTemplateWithUsers());
+
       await cancelInvitation(mockAbility, "invitation-id");
 
       expect(prismaMock.invitation.delete).toHaveBeenCalledWith({
