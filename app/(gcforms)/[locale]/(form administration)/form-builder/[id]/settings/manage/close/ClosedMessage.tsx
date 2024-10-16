@@ -6,6 +6,8 @@ import { useRehydrate } from "@lib/store/useTemplateStore";
 import Skeleton from "react-loading-skeleton";
 import React from "react";
 
+import { cn } from "@lib/utils";
+
 import {
   MessageType,
   ValidationMessage,
@@ -44,7 +46,9 @@ export const ClosedMessage = ({ valid, closedDetails, setClosedDetails }: Closed
       <p className="mb-2 font-bold">{t("closingDate.message.title")}</p>
       <p className="mb-4">{t("closingDate.message.text1")}</p>
 
-      <div className="mb-4">
+      <div
+        className={cn("mb-4 transition-opacity duration-500", !valid ? "opacity-100" : "opacity-0")}
+      >
         <ValidationMessage show={!valid} messageType={MessageType.ERROR}>
           {t("closingDate.message.errors.translation")}
         </ValidationMessage>
