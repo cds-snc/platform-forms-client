@@ -72,6 +72,9 @@ export const AddressComplete = (props: AddressCompleteProps): React.ReactElement
   }, [addressObject, helpers]);
 
   const onAddressSearch = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    setAddressData("streetAddress", e.target.value); // Update the street address in the address object
+    // It will be updated again when the address is set to a autocomplete value, or kept if no value is selected.
+
     if (!allow) {
       return;
     } // Abandon if addressComplete is disabled.
