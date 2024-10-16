@@ -19,7 +19,7 @@ describe("ConfirmAction Component", () => {
   it("executes callback on button click", () => {
     const callback = cy.stub().resolves(true);
     cy.mount(<ConfirmAction callback={callback} confirmString={""} buttonLabel={""} />);
-    cy.get("button[data-testid=button]").click(); // @TODO: test this change
+    cy.get("button[data-testid=button]").click();
     cy.get("button[data-testid=confirm]").click();
     cy.wrap(callback).should("have.been.calledOnce");
   });
