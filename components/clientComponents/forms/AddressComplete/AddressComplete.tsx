@@ -212,6 +212,7 @@ export const AddressComplete = (props: AddressCompleteProps): React.ReactElement
               className={cn(meta.error && "gc-error-input")}
               required={required}
               baseValue="Canada"
+              useFilter={true}
               data-testid="addresscomplete-input-country"
             />
           </div>

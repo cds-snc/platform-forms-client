@@ -12,11 +12,21 @@ interface ManagedComboboxProps extends InputFieldProps {
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
   onSetValue?: (value: string) => void;
   baseValue?: string;
+  useFilter?: boolean;
 }
 
 export const ManagedCombobox = React.forwardRef(
   (props: ManagedComboboxProps, ref): React.ReactElement => {
-    const { id, name, className, choices = [], required, ariaDescribedBy, baseValue } = props;
+    const {
+      id,
+      name,
+      className,
+      choices = [],
+      required,
+      ariaDescribedBy,
+      baseValue,
+      useFilter,
+    } = props;
     const classes = classnames("gc-combobox gcds-input-wrapper", className);
 
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -39,8 +49,12 @@ export const ManagedCombobox = React.forwardRef(
             } as React.ChangeEvent<HTMLInputElement>);
           }
           setItems(
-            choices.filter(() => {
-              return true; // API pre-filtered choices.
+            choices.filter((choice) => {
+              if (useFilter) {
+                return inputValue ? choice.toLowerCase().includes(inputValue.toLowerCase()) : true;
+              } else {
+                return true; // API pre-filtered choices.
+              }
             })
           );
 
