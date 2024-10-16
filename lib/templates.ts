@@ -7,6 +7,7 @@ import {
   DeliveryOption,
   UserAbility,
   SecurityAttribute,
+  ClosedDetails,
 } from "@lib/types";
 import { Prisma } from "@prisma/client";
 import { AccessControlError, checkPrivileges } from "./privileges";
@@ -40,6 +41,7 @@ const _parseTemplate = (template: {
   publishFormType: string;
   publishDesc: string;
   closingDate?: Date | null;
+  closedDetails?: Prisma.JsonValue | null;
 }): FormRecord => {
   return {
     id: template.id,
@@ -71,6 +73,7 @@ const _parseTemplate = (template: {
     ...(template.closingDate && {
       closingDate: template.closingDate.toString(),
     }),
+    closedDetails: template.closedDetails as ClosedDetails,
   };
 };
 
@@ -108,6 +111,7 @@ async function _unprotectedGetTemplateByID(formID: string): Promise<FormRecord |
         publishFormType: true,
         publishDesc: true,
         closingDate: true,
+        closedDetails: true,
         ttl: true,
       },
     })
@@ -1349,21 +1353,32 @@ export const onlyIncludePublicProperties = (template: FormRecord): PublicFormRec
     id: template.id,
     updatedAt: template.updatedAt,
     closingDate: template.closingDate,
+    closedDetails: template.closedDetails,
     form: template.form,
     isPublished: template.isPublished,
     securityAttribute: template.securityAttribute,
   };
 };
 
-export const updateClosingDateForTemplate = async (
+export const updateClosedData = async (
   ability: UserAbility,
   formID: string,
-  closingDate: string
+  closingDate: string,
+  details?: ClosedDetails
 ) => {
   let d = null;
 
   if (closingDate !== "open") {
     d = closingDate;
+  }
+
+  let detailsData: ClosedDetails | null = null;
+
+  // Add the closed details if they exist
+  if (details) {
+    detailsData = {};
+    detailsData.messageEn = details?.messageEn || "";
+    detailsData.messageFr = details?.messageFr || "";
   }
 
   try {
@@ -1374,6 +1389,8 @@ export const updateClosingDateForTemplate = async (
         },
         data: {
           closingDate: d,
+          closedDetails:
+            detailsData !== null ? (detailsData as Prisma.JsonObject) : Prisma.JsonNull,
         },
         select: {
           id: true,

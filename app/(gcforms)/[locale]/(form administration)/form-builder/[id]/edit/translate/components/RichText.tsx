@@ -5,7 +5,7 @@ import React from "react";
 import { RichTextEditor } from "../../components/elements/lexical-editor/RichTextEditor";
 import { useTemplateStore } from "@lib/store/useTemplateStore";
 import { Language, LocalizedElementProperties } from "@lib/types/form-builder-types";
-import { LanguageLabel } from "./LanguageLabel";
+import { LanguageLabel } from "@formBuilder/components/shared/LanguageLabel";
 import { FieldsetLegend } from "./FieldsetLegend";
 
 export const RichText = ({

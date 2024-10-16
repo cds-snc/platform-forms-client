@@ -2,7 +2,7 @@ name: "Test Staging Container Build"
 
 on:
   pull_request:
-    branches: [develop]
+    branches: [main]
 
 env:
   COGNITO_APP_CLIENT_ID: ${{secrets.STAGING_COGNITO_APP_CLIENT_ID}}
