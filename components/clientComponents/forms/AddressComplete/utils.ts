@@ -23,7 +23,7 @@ export const getAddressCompleteChoices = async (
     method: "POST",
   });
 
-  const responseData = await response.json(); //Todo - Error Handling
+  const responseData = await response.json(); //Todo #4341  - Error Handling
 
   return responseData.Items as AddressCompleteChoice[];
 };
@@ -46,7 +46,7 @@ export const getSelectedAddress = async (
     method: "POST",
   });
 
-  const responseData = await response.json(); //Todo - Error Handling
+  const responseData = await response.json(); //Todo #4341 - Error Handling
   const addressData = responseData.Items as AddressCompleteResult[];
 
   const addressComponents = await getAddressComponents(addressData, language);
