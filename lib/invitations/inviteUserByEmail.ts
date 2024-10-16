@@ -33,11 +33,9 @@ export const inviteUserByEmail = async (
 ) => {
   let invitation;
 
-  const sender = await getUser(ability, ability.userID);
-
-  if (!sender) {
+  const sender = await getUser(ability, ability.userID).catch(() => {
     throw new UserNotFoundError();
-  }
+  });
 
   const template = await getTemplateWithAssociatedUsers(ability, formId);
 
