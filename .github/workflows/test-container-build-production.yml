@@ -1,8 +1,10 @@
 name: "Test Production Container Build"
 
 on:
-  pull_request:
-    branches: [main]
+  workflow_run:
+    workflows: ["Release Generator"]
+    types:
+      - completed
 
 env:
   COGNITO_APP_CLIENT_ID: ${{secrets.PRODUCTION_COGNITO_APP_CLIENT_ID}}

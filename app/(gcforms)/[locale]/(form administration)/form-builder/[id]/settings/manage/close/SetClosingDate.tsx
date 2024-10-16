@@ -3,17 +3,31 @@ import React, { useCallback, useState } from "react";
 import { useTranslation } from "@i18n/client";
 import { useTemplateStore } from "@lib/store/useTemplateStore";
 import { toast } from "@formBuilder/components/shared/Toast";
-import axios from "axios";
 
+import { ClosedDetails } from "@lib/types";
 import { Button } from "@clientComponents/globals";
+
 import { ClosingDateToggle } from "./ClosingDateToggle";
-export const SetClosingDate = ({ formID }: { formID: string }) => {
+import { ClosedMessage } from "./ClosedMessage";
+import { ClosedSuccess } from "./ClosedSuccess";
+
+import { closeForm } from "@formBuilder/actions";
+
+export const SetClosingDate = ({
+  formId,
+  closedDetails,
+}: {
+  formId: string;
+  closedDetails?: ClosedDetails;
+}) => {
   const { t } = useTranslation("form-builder");
 
   const { closingDate, setClosingDate } = useTemplateStore((s) => ({
     closingDate: s.closingDate,
     setClosingDate: s.setClosingDate,
   }));
+
+  const [closedMessage, setClosedMessage] = useState<ClosedDetails | undefined>(closedDetails);
 
   const [status, setStatus] = useState(closingDate ? "closed" : "open");
 
@@ -29,26 +43,26 @@ export const SetClosingDate = ({ formID }: { formID: string }) => {
       closeDate = now.toISOString();
     }
 
-    const result = await axios({
-      url: `/api/templates/${formID}`,
-      method: "PUT",
-      data: {
-        closingDate: closeDate,
-      },
-      timeout: 5000,
+    const result = await closeForm({
+      id: formId,
+      closingDate: closeDate,
+      closedDetails: closedMessage,
     });
+
+    if (!result || result.error) {
+      toast.error(t("closingDate.savedErrorMessage"));
+      return;
+    }
 
     // update the local store
     setClosingDate(status !== "open" ? closeDate : null);
 
-    if (!result || axios.isAxiosError(result)) {
-      toast.error(t("closingDate.savedErrorMessage"));
-
-      return;
+    if (status === "closed") {
+      toast.success(<ClosedSuccess />, "wide");
+    } else {
+      toast.success(t("closingDate.savedSuccessMessage"));
     }
-
-    toast.success(t("closingDate.savedSuccessMessage"));
-  }, [status, formID, setClosingDate, t]);
+  }, [status, formId, setClosingDate, t, closedMessage]);
 
   return (
     <div className="mb-10">
@@ -63,6 +77,9 @@ export const SetClosingDate = ({ formID }: { formID: string }) => {
           offLabel={t("closingDate.open")}
           description={t("closingDate.status")}
         />
+      </div>
+      <div className="mb-4 w-3/5">
+        <ClosedMessage closedDetails={closedMessage} setClosedDetails={setClosedMessage} />
       </div>
       <Button theme="secondary" onClick={saveFormStatus}>
         {t("closingDate.saveButton")}

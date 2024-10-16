@@ -5,7 +5,7 @@ import React from "react";
 import { useTemplateStore } from "@lib/store/useTemplateStore";
 import { Language } from "@lib/types/form-builder-types";
 import { FieldsetLegend } from "./FieldsetLegend";
-import { LanguageLabel } from "./LanguageLabel";
+import { LanguageLabel } from "@formBuilder/components/shared/LanguageLabel";
 
 export const Options = ({
   element,

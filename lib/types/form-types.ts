@@ -4,7 +4,7 @@
  */
 import { ChangeEvent } from "react";
 import { HTMLTextInputTypeAttribute } from "./utility-types";
-import { TypeOmit } from ".";
+import { ClosedDetails, TypeOmit } from ".";
 import { GroupsType } from "@lib/formContext";
 
 /**
@@ -178,7 +178,8 @@ export type FormRecord = {
   deliveryOption?: DeliveryOption;
   securityAttribute: SecurityAttribute;
   closingDate?: string;
-  [key: string]: string | boolean | FormProperties | DeliveryOption | undefined;
+  closedDetails?: ClosedDetails;
+  [key: string]: string | boolean | FormProperties | DeliveryOption | ClosedDetails | undefined;
 };
 
 // defines the fields for the form record that is available to unauthenticated users
