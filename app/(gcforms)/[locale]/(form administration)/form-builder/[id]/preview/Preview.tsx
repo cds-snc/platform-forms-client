@@ -6,7 +6,7 @@ import Markdown from "markdown-to-jsx";
 import { PreviewNavigation } from "./PreviewNavigation";
 import { getRenderedForm } from "@lib/formBuilder";
 import { FormProperties, PublicFormRecord } from "@lib/types";
-import { RichText, ClosedPage } from "@clientComponents/forms";
+import { RichText } from "@clientComponents/forms";
 import { Button } from "@clientComponents/globals";
 import { NextButton } from "@clientComponents/forms/NextButton/NextButton";
 
@@ -18,7 +18,6 @@ import {
 import { useRehydrate, useTemplateStore } from "@lib/store/useTemplateStore";
 import { BackArrowIcon } from "@serverComponents/icons";
 import Brand from "@clientComponents/globals/Brand";
-import { useIsFormClosed } from "@lib/hooks/useIsFormClosed";
 import { GCFormsProvider } from "@lib/hooks/useGCFormContext";
 import Skeleton from "react-loading-skeleton";
 import { Form } from "@clientComponents/forms/Form/Form";
@@ -29,6 +28,7 @@ import { toast } from "@formBuilder/components/shared";
 import { defaultForm } from "@lib/store/defaults";
 import { showReviewPage } from "@lib/utils/form-builder/showReviewPage";
 import { focusElement } from "@lib/client/clientHelpers";
+import { useIsFormClosed } from "@lib/hooks/useIsFormClosed";
 
 export const Preview = ({
   disableSubmit = true,
@@ -45,6 +45,8 @@ export const Preview = ({
     getIsPublished: s.getIsPublished,
     getSecurityAttribute: s.getSecurityAttribute,
   }));
+
+  const isPastClosingDate = useIsFormClosed();
 
   const formParsed = safeJSONParse<FormProperties>(getSchema());
   if (!formParsed) {
@@ -69,7 +71,7 @@ export const Preview = ({
       email: s.deliveryOption?.emailAddress,
     }));
 
-  const { t } = useTranslation(["common", "form-builder"]);
+  const { t } = useTranslation(["common", "form-builder", "form-closed"]);
   const language = translationLanguagePriority;
   const currentForm = getRenderedForm(formRecord, language);
 
@@ -88,31 +90,18 @@ export const Preview = ({
 
   const brand = formRecord?.form ? formRecord.form.brand : null;
 
-  const isPastClosingDate = useIsFormClosed();
-
   const hasHydrated = useRehydrate();
 
   const isShowReviewPage = showReviewPage(formRecord.form);
 
   if (isPastClosingDate) {
+    // Force a hard refresh to the preview page to show the closed message
+    const refreshContent = `0;url=/${i18n.language}/form-builder/${id}/preview`;
     return (
-      <div className="max-w-4xl">
-        <PreviewNavigation />
-        <div className="h-12"></div>
-        <div
-          className={`mb-8 border-3 border-dashed border-blue-focus bg-white p-4 ${
-            status !== "authenticated" && ""
-          }`}
-          {...getLocalizationAttribute()}
-        >
-          <div className="gc-formview">
-            <div className="mb-20 mt-0 border-b-4 border-blue-dark py-9">
-              <Brand brand={brand} lang={language} className="max-w-[360px]" />
-            </div>
-            <ClosedPage language={language} formRecord={formRecord} />
-          </div>
-        </div>
-      </div>
+      <>
+        <meta httpEquiv="refresh" content={refreshContent} />
+        <Skeleton count={4} height={40} className="mb-4" />
+      </>
     );
   }
 
