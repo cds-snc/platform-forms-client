@@ -11,7 +11,7 @@ export const TextField = () => {
       <h3 className="mb-0">{t("addElementDialog.textField.title")}</h3>
       <p>{t("addElementDialog.textField.description")}</p>
 
-      <ExampleWrapper className="mt-4">
+      <ExampleWrapper className="gcds-input-wrapper mt-4">
         <Label htmlFor="name" className="gc-label">
           {t("addElementDialog.textField.enterAnswer")}
         </Label>
