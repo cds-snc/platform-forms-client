@@ -882,7 +882,7 @@
       "title": "Customize the closed form message",
       "text1": "Tell people trying to access the form when and why it closed and where to go next.",
       "errors": {
-        "translation": "Closed message must be translated in both official languages."
+        "translation": "Provide equivalent content in both official languages."
       }
     }
   },
