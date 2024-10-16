@@ -175,6 +175,7 @@ export const AddressComplete = (props: AddressCompleteProps): React.ReactElement
     if (country) {
       // set the country in the address object to the ID of the country.
       setAddressData("country", country.id);
+      setAddressResultCache([]); // Clear the cache.
     }
   };
 
