@@ -880,7 +880,10 @@
     "savedErrorMessage": "Une erreur s'est produite lors de l'enregistrement de vos modifications. Réessayez plus tard ou contacter l’équipe de soutien.",
     "message": {
       "title": " Personnaliser le message du formulaire fermé",
-      "text1": "Indiquer aux personnes qui tentent d'accéder au formulaire quand et pourquoi il s'est fermé et où aller ensuite."
+      "text1": "Indiquer aux personnes qui tentent d'accéder au formulaire quand et pourquoi il s'est fermé et où aller ensuite.",
+      "errors": {
+        "translation": "Closed message must be translated in both official languages. [FR]"
+      }
     }
   },
   "errorSavingForm": {

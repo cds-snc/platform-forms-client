@@ -6,12 +6,18 @@ import { useRehydrate } from "@lib/store/useTemplateStore";
 import Skeleton from "react-loading-skeleton";
 import React from "react";
 
+import {
+  MessageType,
+  ValidationMessage,
+} from "@clientComponents/globals/ValidationMessage/ValidationMessage";
+
 type ClosedMessageProps = {
+  valid: boolean;
   closedDetails?: ClosedDetails;
   setClosedDetails: (details: ClosedDetails) => void;
 };
 
-export const ClosedMessage = ({ closedDetails, setClosedDetails }: ClosedMessageProps) => {
+export const ClosedMessage = ({ valid, closedDetails, setClosedDetails }: ClosedMessageProps) => {
   const { t } = useTranslation("form-builder");
   const hasHydrated = useRehydrate();
 
@@ -37,6 +43,12 @@ export const ClosedMessage = ({ closedDetails, setClosedDetails }: ClosedMessage
     <>
       <p className="mb-2 font-bold">{t("closingDate.message.title")}</p>
       <p className="mb-4">{t("closingDate.message.text1")}</p>
+
+      <div className="mb-4">
+        <ValidationMessage show={!valid} messageType={MessageType.ERROR}>
+          {t("closingDate.message.errors.translation")}
+        </ValidationMessage>
+      </div>
       <div className="flex">
         <div className="relative w-1/2 border-1 border-r-4 border-gray-100 border-r-black">
           <label className="sr-only" htmlFor={`closed-en`}>
