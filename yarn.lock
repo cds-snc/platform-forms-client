@@ -9345,7 +9345,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"axios@npm:1.7.3, axios@npm:^1.6.3":
+"axios@npm:1.7.3":
   version: 1.7.3
   resolution: "axios@npm:1.7.3"
   dependencies:
@@ -9356,7 +9356,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"axios@npm:1.7.7":
+"axios@npm:1.7.7, axios@npm:^1.6.3":
   version: 1.7.7
   resolution: "axios@npm:1.7.7"
   dependencies:
