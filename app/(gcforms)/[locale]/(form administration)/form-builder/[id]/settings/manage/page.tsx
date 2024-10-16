@@ -8,6 +8,7 @@ import { Metadata } from "next";
 import { UserAbility } from "@lib/types";
 import { Session } from "next-auth";
 import { getNonce } from "./actions";
+import { checkIfClosed } from "@lib/actions/checkIfClosed";
 
 export async function generateMetadata({
   params: { locale },
@@ -64,9 +65,17 @@ export default async function Page({ params: { id } }: { params: { id: string } 
     session: null,
     ability: null,
   }));
+
+  let closedDetails;
+
   const canManageOwnership = getCanManageOwnership(id, ability);
   const canSetClosingDate = getCanSetClosingDate(id, ability, session);
   const nonce = await getNonce();
+
+  if (canSetClosingDate) {
+    const closedData = await checkIfClosed(id);
+    closedDetails = closedData?.closedDetails;
+  }
 
   if (!canManageOwnership || id === "0000") {
     return (
@@ -75,6 +84,7 @@ export default async function Page({ params: { id } }: { params: { id: string } 
         id={id}
         canManageOwnership={canManageOwnership}
         canSetClosingDate={canSetClosingDate}
+        closedDetails={closedDetails}
       />
     );
   }
@@ -97,6 +107,7 @@ export default async function Page({ params: { id } }: { params: { id: string } 
       formRecord={templateWithAssociatedUsers.formRecord}
       usersAssignedToFormRecord={templateWithAssociatedUsers.users}
       allUsers={allUsers}
+      closedDetails={closedDetails}
     />
   );
 }
