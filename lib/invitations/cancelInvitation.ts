@@ -37,11 +37,6 @@ export const cancelInvitation = async (ability: UserAbility, invitationId: strin
     { action: "update", subject: { type: "FormRecord", object: template } },
   ]);
 
-  // If no invitation found, return an error
-  if (!invitation) {
-    throw new InvitationNotFoundError();
-  }
-
   // Delete the invitation
   await _deleteInvitation(invitationId);
 
