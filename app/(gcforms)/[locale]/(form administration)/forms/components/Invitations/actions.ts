@@ -1,11 +1,11 @@
 "use server";
 
+import { serverTranslation } from "@i18n";
 import { authCheckAndThrow } from "@lib/actions";
 import { prisma } from "@lib/integration/prismaConnector";
 import { acceptInvitation } from "@lib/invitations/acceptInvitation";
 import { declineInvitation } from "@lib/invitations/declineInvitation";
 import { InvitationIsExpiredError, InvitationNotFoundError } from "@lib/invitations/exceptions";
-import { logMessage } from "@lib/logger";
 
 export const retrieveInvitations = async () => {
   const { session } = await authCheckAndThrow();
@@ -30,30 +30,30 @@ export const retrieveInvitations = async () => {
 
 export const accept = async (id: string) => {
   const { ability } = await authCheckAndThrow();
+  const { t } = await serverTranslation("manage-form-access");
 
   try {
     await acceptInvitation(ability, id);
+    return true;
   } catch (e) {
     if (e instanceof InvitationNotFoundError) {
-      logMessage.error("Invitation not found");
-      // Handle error
+      return { message: t("invitationNotFound") };
     }
     if (e instanceof InvitationIsExpiredError) {
-      logMessage.error("Invitation is expired");
-      // Handle error
+      return { message: t("invitationExpired") };
     }
   }
 };
 
 export const decline = async (id: string) => {
   const { ability } = await authCheckAndThrow();
+  const { t } = await serverTranslation("manage-form-access");
 
   try {
     await declineInvitation(ability, id);
   } catch (e) {
     if (e instanceof InvitationNotFoundError) {
-      logMessage.error("Invitation not found");
-      // Handle error
+      return { message: t("invitationNotFound") };
     }
   }
 };

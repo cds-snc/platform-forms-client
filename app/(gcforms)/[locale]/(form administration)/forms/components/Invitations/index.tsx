@@ -7,6 +7,7 @@ import { useRouter } from "next/navigation";
 import { useTranslation } from "@i18n/client";
 import { Trans } from "react-i18next";
 import { Button } from "@clientComponents/globals";
+import { toast } from "@formBuilder/components/shared";
 
 export const Invitations = () => {
   const [invitations, setInvitations] = useState<Invitation[]>([]);
@@ -23,7 +24,12 @@ export const Invitations = () => {
   }, []);
 
   const handleAcceptInvitation = async (id: string) => {
-    await accept(id);
+    const result = await accept(id);
+    if (typeof result === "object" && "message" in result) {
+      toast.error(t(result.message));
+      return;
+    }
+
     router.refresh();
     fetchInvitations();
   };
