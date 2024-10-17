@@ -5,6 +5,7 @@ export type {
   ValidationProperties,
   PropertyChoices,
   ElementProperties,
+  AddressComponents,
   FormElement,
   PublicFormRecord,
   DeliveryOption,
@@ -63,3 +64,8 @@ export { NagLevel } from "./nagware-types";
 export interface Validate {
   validateForm: () => Promise<FormikErrors<Responses>>;
 }
+
+export type ClosedDetails = {
+  messageEn?: string;
+  messageFr?: string;
+};

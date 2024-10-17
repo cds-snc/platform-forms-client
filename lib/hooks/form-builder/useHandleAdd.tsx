@@ -39,24 +39,26 @@ export const useHandleAdd = () => {
   /* Note this callback is also in ElementPanel */
   const handleAddElement = useCallback(
     async (index: number, type?: FormElementTypes) => {
+      let id;
+
       if (allowedTemplates.includes(type as LoaderType)) {
         blockLoader(type as LoaderType, index, async (data, position) => {
           // Note add() returns the element id -- we're not using it yet
-          await add(position, data.type, data, groupId);
+          id = await add(position, data.type, data, groupId);
         });
-        return;
+        return id;
       }
 
       const item = await create(type as FormElementTypes);
       if (item.type === "dynamicRow") {
         item.properties.dynamicRow = await getTranslatedDynamicRowProperties();
       }
-      const id = await add(index, item.type, item, groupId);
+      id = await add(index, item.type, item, groupId);
       treeView?.current?.addItem(String(id));
 
       const el = document.getElementById(`item-${id}`);
 
-      if (!el) return;
+      if (!el) return id;
 
       // Close all panel menus before focussing on the new element
       const closeAll = new CustomEvent("close-all-panel-menus");
@@ -68,19 +70,26 @@ export const useHandleAdd = () => {
   );
 
   const handleAddSubElement = useCallback(
-    async (elIndex: number, subIndex: number, type?: FormElementTypes) => {
+    async (elId: number, subIndex: number, type?: FormElementTypes) => {
+      let id;
+
+      // Close all panel menus before focussing on the new element
+      const closeAll = new CustomEvent("close-all-panel-menus");
+      window && window.dispatchEvent(closeAll);
+
       if (allowedTemplates.includes(type as LoaderType)) {
         blockLoader(type as LoaderType, subIndex, (data, position) => {
-          addSubItem(elIndex, position, data.type, data);
+          id = addSubItem(elId, position, data.type, data);
           setChangeKey(String(new Date().getTime())); //Force a re-render
         });
-        return;
+        return id;
       }
 
       const item = await create(type as FormElementTypes);
-      addSubItem(elIndex, subIndex, item.type, item);
-
+      id = await addSubItem(elId, subIndex, item.type, item);
       setChangeKey(String(new Date().getTime())); //Force a re-render
+
+      return id;
     },
     [addSubItem, create, setChangeKey]
   );

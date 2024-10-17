@@ -60,7 +60,7 @@ export const SupportForm = () => {
       )}
 
       <h1>{t("support.title")}</h1>
-      <p className="mb-6 mt-[-2rem] text-[1.6rem]">
+      <p className="-mt-8 mb-6 text-[1.6rem]">
         {t("support.experience")}
         <Link href={`https://articles.alpha.canada.ca/forms-formulaires/${language}/guidance`}>
           {t("support.guidanceLink")}
@@ -87,7 +87,7 @@ export const SupportForm = () => {
           </Alert.Danger>
         )}
 
-        <div className="focus-group mt-14">
+        <div className="gcds-input-wrapper mt-14">
           <Label id={"label-name"} htmlFor={"name"} className="required" required>
             {t("support.name")}
           </Label>
@@ -99,7 +99,7 @@ export const SupportForm = () => {
             error={getError("name")}
           />
         </div>
-        <div className="focus-group">
+        <div className="gcds-input-wrapper">
           <Label id={"label-email"} htmlFor={"email"} className="required" required>
             {t("support.email")}
           </Label>
@@ -146,7 +146,7 @@ export const SupportForm = () => {
             error={getError("request")}
           />
         </fieldset>
-        <div className="focus-group">
+        <div className="gcds-textarea-wrapper">
           <Label id={"label-description"} htmlFor={"description"} className="required" required>
             {t("support.description.title")}
           </Label>
@@ -156,7 +156,7 @@ export const SupportForm = () => {
           <TextArea
             id="description"
             name="description"
-            className="required w-[34rem] mt-4"
+            className="required mt-4 w-[34rem]"
             error={getError("description")}
           />
         </div>

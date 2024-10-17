@@ -4,7 +4,7 @@
  */
 import { ChangeEvent } from "react";
 import { HTMLTextInputTypeAttribute } from "./utility-types";
-import { TypeOmit } from ".";
+import { ClosedDetails, TypeOmit } from ".";
 import { GroupsType } from "@lib/formContext";
 
 /**
@@ -32,6 +32,11 @@ export interface PropertyChoices {
 
 export type ConditionalRule = {
   choiceId: string;
+};
+
+export type AddressComponents = {
+  canadianOnly?: boolean;
+  splitAddress?: boolean;
 };
 
 export type dynamicRowType = {
@@ -62,6 +67,8 @@ export interface ElementProperties {
   autoComplete?: string;
   dateFormat?: string;
   conditionalRules?: ConditionalRule[];
+  full?: boolean;
+  addressComponents?: AddressComponents | undefined;
   dynamicRow?: dynamicRowType;
   [key: string]:
     | string
@@ -71,6 +78,7 @@ export interface ElementProperties {
     | Array<FormElement>
     | ValidationProperties
     | Array<ConditionalRule>
+    | AddressComponents
     | dynamicRowType
     | undefined;
 }
@@ -87,6 +95,7 @@ export enum FormElementTypes {
   dynamicRow = "dynamicRow",
   attestation = "attestation",
   address = "address",
+  addressComplete = "addressComplete",
   name = "name",
   firstMiddleLastName = "firstMiddleLastName",
   departments = "departments",
@@ -169,7 +178,8 @@ export type FormRecord = {
   deliveryOption?: DeliveryOption;
   securityAttribute: SecurityAttribute;
   closingDate?: string;
-  [key: string]: string | boolean | FormProperties | DeliveryOption | undefined;
+  closedDetails?: ClosedDetails;
+  [key: string]: string | boolean | FormProperties | DeliveryOption | ClosedDetails | undefined;
 };
 
 // defines the fields for the form record that is available to unauthenticated users

@@ -16,6 +16,7 @@ import { useHandleAdd } from "@lib/hooks/form-builder/useHandleAdd";
 import { CustomizeSetButton } from "../CustomizeSetButton";
 import { AddToSetButton } from "../AddToSetButton";
 import { FormElementWithIndex } from "@lib/types/form-builder-types";
+import { useRefsContext } from "../../RefsContext";
 
 export const SubElement = ({
   item,
@@ -27,24 +28,18 @@ export const SubElement = ({
   elIndex: number;
   formId: string;
 }) => {
-  const {
-    updateField,
-    subMoveUp,
-    subMoveDown,
-    subDuplicateElement,
-    removeSubItem,
-    propertyPath,
-    setChangeKey,
-  } = useTemplateStore((s) => ({
-    updateField: s.updateField,
-    subMoveUp: s.subMoveUp,
-    subMoveDown: s.subMoveDown,
-    subDuplicateElement: s.subDuplicateElement,
-    removeSubItem: s.removeSubItem,
-    getLocalizationAttribute: s.getLocalizationAttribute,
-    propertyPath: s.propertyPath,
-    setChangeKey: s.setChangeKey,
-  }));
+  const { updateField, subMoveUp, subMoveDown, removeSubItem, propertyPath, setChangeKey } =
+    useTemplateStore((s) => ({
+      updateField: s.updateField,
+      subMoveUp: s.subMoveUp,
+      subMoveDown: s.subMoveDown,
+      removeSubItem: s.removeSubItem,
+      getLocalizationAttribute: s.getLocalizationAttribute,
+      propertyPath: s.propertyPath,
+      setChangeKey: s.setChangeKey,
+    }));
+
+  const { refs } = useRefsContext();
 
   const subElements = item.properties.subElements;
 
@@ -63,17 +58,30 @@ export const SubElement = ({
     return elements.filter((element) => !notAllowed.includes(element.id));
   };
 
-  const forceRefresh = () => {
+  const focusSubElement = (id: number) => {
+    // Add delay to wait for the new element to be rendered
+    setTimeout(() => {
+      try {
+        // @todo --- this currently isn't working for rich text elements
+        refs && refs.current && refs.current[id]?.focus();
+      } catch (e) {
+        // no-op
+      }
+    }, 200);
+  };
+
+  const forceRefresh = (id?: number) => {
     setChangeKey(String(new Date().getTime())); //Force a re-render
+    id && focusSubElement(id);
   };
 
   if (!subElements || subElements.length < 1)
     return (
       <div className="ml-4 mt-10">
         <AddToSetButton
-          handleAdd={(type?: FormElementTypes) => {
-            handleAddSubElement(elIndex, 0, type);
-            forceRefresh();
+          handleAdd={async (type?: FormElementTypes) => {
+            const id = await handleAddSubElement(item.id, 0, type);
+            forceRefresh(id);
           }}
           filterElements={elementFilter}
         />
@@ -94,27 +102,28 @@ export const SubElement = ({
                   isFirstItem={subIndex === 0}
                   isLastItem={subIndex === subElements.length - 1}
                   totalItems={subElements.length}
-                  handleAdd={(type?: FormElementTypes) => {
-                    handleAddSubElement(elIndex, subIndex, type);
-                    forceRefresh();
+                  handleAdd={async (type?: FormElementTypes) => {
+                    const id = await handleAddSubElement(item.id, subIndex, type);
+                    forceRefresh(id);
                   }}
                   handleRemove={() => {
-                    removeSubItem(elIndex, item.id);
+                    removeSubItem(item.id, item.id);
                     forceRefresh();
                   }}
+                  handleDuplicate={() => {}} // no duplicate for sub elements
                   handleMoveUp={() => {
-                    subMoveUp(elIndex, subIndex);
-                    forceRefresh();
+                    subMoveUp(item.id, subIndex);
+                    forceRefresh(item.id);
                   }}
                   handleMoveDown={() => {
-                    subMoveDown(elIndex, subIndex);
-                    forceRefresh();
-                  }}
-                  handleDuplicate={() => {
-                    subDuplicateElement(elIndex, subIndex);
-                    forceRefresh();
+                    subMoveDown(item.id, subIndex);
+                    forceRefresh(item.id);
                   }}
                   moreButtonRenderer={(moreButton) => {
+                    if (item.type === "richText") {
+                      return <div />;
+                    }
+
                     return (
                       <SubElementModal
                         elIndex={elIndex}
@@ -145,8 +154,9 @@ export const SubElement = ({
       {subElements.length >= 1 && (
         <div className="mb-2 ml-4 mt-4">
           <AddToSetButton
-            handleAdd={(type?: FormElementTypes) => {
-              handleAddSubElement(elIndex, subElements.length, type);
+            handleAdd={async (type?: FormElementTypes) => {
+              const id = await handleAddSubElement(item.id, subElements.length, type);
+              forceRefresh(id);
             }}
             filterElements={elementFilter}
           />

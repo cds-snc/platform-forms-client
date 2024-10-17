@@ -1,6 +1,6 @@
 import { Language } from "@lib/types/form-builder-types";
 import { FieldsetLegend } from ".";
-import { LanguageLabel } from "./LanguageLabel";
+import { LanguageLabel } from "@formBuilder/components/shared/LanguageLabel";
 import { useTranslation } from "@i18n/client";
 import { useTemplateStore } from "@lib/store/useTemplateStore";
 import { FormElement } from "@lib/types";

@@ -43,6 +43,7 @@
     "regex": "Enter the correct format.",
     "file-size-too-large": "Select a smaller file.",
     "file-size-too-large-all-files": "Files exceed the 3.5 MB maximum. Upload smaller files.",
+    "file-submission": "There was a problem with the file submitted. Try uploading a different file format, such as PDF.",
     "file-type-invalid": "Select a different file type.",
     "too-many-characters": "Shorten the response.",
     "all-checkboxes-required": "Read and check all boxes to confirm the items in this section.",
@@ -194,6 +195,11 @@
     "message": "<strong>In August</strong>: Build multi-page forms with branching logic. <a href='/en/contact' className='text-white hover:text-white'>Subscribe for updates</a>",
     "type2": "NEW",
     "message2": "Build complex multi-page forms with display logic and branching. <a href='https://articles.alpha.canada.ca/forms-formulaires/setting-up-form-logic/' className='text-white hover:text-white'>Learn more</a>"
+  },
+  "closingNotice": {
+    "title": "Form closing",
+    "text1": "Form accepting submissions until:",
+    "text2": "{{month}} {{day}}, {{year}} at {{hour}}:{{minute}} ET."
   },
   "cancel": "Cancel"
 }

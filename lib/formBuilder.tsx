@@ -25,6 +25,7 @@ import {
 } from "@lib/types";
 import { getLocalizedProperty } from "@lib/utils";
 import { managedData } from "@lib/managedData";
+import { AddressComplete } from "@clientComponents/forms/AddressComplete/AddressComplete";
 import { DateFormat } from "@clientComponents/forms/FormattedDate/types";
 
 // This function is used for select/radio/checkbox i18n change of form labels
@@ -99,7 +100,7 @@ function _buildForm(element: FormElement, lang: string): ReactElement {
   switch (element.type) {
     case FormElementTypes.textField:
       return (
-        <div className="focus-group">
+        <div className="focus-group gcds-input-wrapper">
           {labelComponent}
           {description && <Description id={`${id}`}>{description}</Description>}
           <TextInput
@@ -116,7 +117,7 @@ function _buildForm(element: FormElement, lang: string): ReactElement {
       );
     case FormElementTypes.textArea:
       return (
-        <div className="focus-group">
+        <div className="focus-group gcds-textarea-wrapper">
           {labelComponent}
           {description && <Description id={`${id}`}>{description}</Description>}
           <TextArea
@@ -267,8 +268,26 @@ function _buildForm(element: FormElement, lang: string): ReactElement {
             id={`${id}`}
             name={`${id}`}
             ariaDescribedBy={description ? `desc-${id}` : undefined}
+            className="relative"
             choices={choices}
             key={`${id}-${lang}`}
+          />
+        </div>
+      );
+    }
+    case FormElementTypes.addressComplete: {
+      const addressComponents = element.properties.addressComponents;
+      return (
+        <div className="focus-group">
+          {labelComponent}
+          {description && <Description id={`${id}`}>{description}</Description>}
+          <AddressComplete
+            id={`${id}`}
+            name={`${id}`}
+            ariaDescribedBy={description ? `desc-${id}` : undefined}
+            key={`${id}-${lang}`}
+            splitAddress={addressComponents?.splitAddress}
+            canadianOnly={addressComponents?.canadianOnly}
           />
         </div>
       );
@@ -328,6 +347,7 @@ const _getElementInitialValue = (element: FormElement, language: string): Respon
     case FormElementTypes.formattedDate:
     case FormElementTypes.textField:
     case FormElementTypes.textArea:
+    case FormElementTypes.addressComplete:
       return "";
     case FormElementTypes.checkbox:
       return [];

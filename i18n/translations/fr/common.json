@@ -43,6 +43,7 @@
     "regex": "Veuillez utiliser le bon format.",
     "file-size-too-large": "Sélectionner un fichier plus petit.",
     "file-size-too-large-all-files": "Les fichiers dépassent le maximum de 3.5 Mo. Téléversez des fichiers plus petits.",
+    "file-submission": "Il y a eu un problème avec le fichier soumis. Essayez de téléverser un autre format de fichier, tel que PDF.",
     "file-type-invalid": "Sélectionner un autre type de fichier.",
     "too-many-characters": "Raccourcir la réponse.",
     "all-checkboxes-required": "Lisez et cochez toutes les cases pour confirmer les éléments de cette section.",
@@ -194,6 +195,11 @@
     "message": "<strong>En août</strong> : Créez des formulaires multipages avec une logique d’embranchement. <a href='/fr/contact' className='text-white hover:text-white'>S’abonner aux mises à jour</a>",
     "type2": "NOUVEAUTÉ",
     "message2": "Créez des formulaires complexes de plusieurs pages avec logique d’affichage et d’embranchement. <a href='https://articles.alpha.canada.ca/forms-formulaires/fr/configurer-formulaire-avec-logique/' className='text-white hover:text-white'>En savoir plus</a>"
+  },
+  "closingNotice": {
+    "title": "Fermeture du formulaire",
+    "text1": "Les soumissions sont acceptées jusqu'au :",
+    "text2": "{{day}} {{month}} {{year}} à {{hour}} h {{minute}} HE"
   },
   "cancel": "Annuler"
 }

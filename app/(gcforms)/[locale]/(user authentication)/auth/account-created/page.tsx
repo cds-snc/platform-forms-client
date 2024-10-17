@@ -17,19 +17,19 @@ export default async function Page() {
   const { t, i18n } = await serverTranslation(["signup"]);
 
   return (
-    <div id="auth-panel">
-      <h1 className="border-b-0 mt-6 mb-12">{t("accountCreated.title")}</h1>
-      <h2>{t("accountCreated.yourAccountListDescription")}</h2>
-      <ul>
+    <div>
+      <h1 className="mb-12 mt-6 border-b-0">{t("accountCreated.title")}</h1>
+      <h3 className="!mb-2">{t("accountCreated.yourAccountListDescription")}</h3>
+      <ul className="mb-4">
         <li>{t("accountCreated.yourAccountList.item1")}</li>
         <li>{t("accountCreated.yourAccountList.item2")}</li>
         <li>{t("accountCreated.yourAccountList.item3")}</li>
       </ul>
-      <h2 className="mt-8">{t("accountCreated.notIncluded.title")}</h2>
-      <p>{t("accountCreated.notIncluded.paragraph1")}</p>
-      <h2 className="mt-8">{t("accountCreated.unlockPublishing.title")}</h2>
-      <p>{t("accountCreated.unlockPublishing.paragraph1")}</p>
-      <p className="mt-6">{t("accountCreated.unlockPublishing.paragraph2")}</p>
+      <h3 className="!mb-2">{t("accountCreated.notIncluded.title")}</h3>
+      <p className="mb-8">{t("accountCreated.notIncluded.paragraph1")}</p>
+      <h3 className="!mb-2">{t("accountCreated.unlockPublishing.title")}</h3>
+      <p className="mb-4">{t("accountCreated.unlockPublishing.paragraph1")}</p>
+      <p>{t("accountCreated.unlockPublishing.paragraph2")}</p>
       <div className="mt-20">
         <LinkButton.Primary href={`/${i18n.language}/unlock-publishing/`} className="mr-4">
           {t("accountCreated.unlockPublishingButton")}

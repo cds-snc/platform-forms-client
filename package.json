@@ -1,6 +1,6 @@
 {
   "name": "gcforms",
-  "version": "3.21.2",
+  "version": "3.23.0",
   "private": true,
   "prisma": {
     "seed": "tsx prisma/seeds/seed_cli.ts --environment=development"
@@ -56,6 +56,7 @@
     "@aws-sdk/client-sqs": "3.515.0",
     "@aws-sdk/lib-dynamodb": "3.515.0",
     "@casl/ability": "6.5.0",
+    "@cdssnc/gcds-tokens": "^1.20.0",
     "@headlessui/react": "^1.7.18",
     "@lexical/react": "^0.12.6",
     "@neshca/cache-handler": "^1.2.1",
@@ -86,9 +87,9 @@
     "lodash.isequal": "^4.5.0",
     "lodash.set": "4.3.2",
     "lodash.unset": "4.5.2",
-    "markdown-to-jsx": "7.3.2",
-    "next": "14.2.7",
-    "next-auth": "^5.0.0-beta.20",
+    "markdown-to-jsx": "7.5.0",
+    "next": "14.2.15",
+    "next-auth": "5.0.0-beta.22",
     "node-fetch": "^3.3.2",
     "pino": "9.1.0",
     "prisma": "^5.10.2",

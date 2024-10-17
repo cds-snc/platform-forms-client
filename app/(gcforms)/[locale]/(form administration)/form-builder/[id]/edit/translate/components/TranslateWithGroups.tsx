@@ -13,7 +13,7 @@ import {
   Language,
 } from "@lib/types/form-builder-types";
 import { RichTextEditor } from "../../components/elements/lexical-editor/RichTextEditor";
-import { LanguageLabel } from "./LanguageLabel";
+import { LanguageLabel } from "@formBuilder/components/shared/LanguageLabel";
 import { FieldsetLegend, SectionTitle } from ".";
 import { SaveButton } from "@formBuilder/components/shared/SaveButton";
 
@@ -148,7 +148,7 @@ const Element = ({
         </>
       )}
 
-      {["textField", "textArea", "formattedDate"].includes(element.type) && (
+      {["textField", "textArea", "formattedDate", "addressComplete"].includes(element.type) && (
         <>
           <Title primaryLanguage={primaryLanguage} element={element} />
           {(element.properties.descriptionEn || element.properties.descriptionFr) && (

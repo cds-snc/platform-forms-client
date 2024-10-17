@@ -2,8 +2,6 @@
 export { Alert } from "./Alert/Alert";
 export { ErrorMessage } from "./ErrorMessage/ErrorMessage";
 export { ErrorListItem } from "./ErrorListItem/ErrorListItem";
-export { Button } from "./Button/Button";
-export { DeleteButton } from "./Button/DeleteButton";
 export { Checkbox } from "./Checkbox/Checkbox";
 export { Dropdown } from "./Dropdown/Dropdown";
 export { FormGroup } from "./FormGroup/FormGroup";
@@ -21,4 +19,6 @@ export { MultipleChoiceGroup } from "./MultipleChoiceGroup/MultipleChoiceGroup";
 export { ConditionalWrapper } from "./ConditionalWrapper/ConditionalWrapper";
 export { NextButton } from "./NextButton/NextButton";
 export { Combobox } from "./Combobox/Combobox";
+export { ManagedCombobox } from "./AddressComplete/ManagedCombobox";
+export { AddressComplete } from "./AddressComplete/AddressComplete";
 export { FormattedDate } from "./FormattedDate/FormattedDate";

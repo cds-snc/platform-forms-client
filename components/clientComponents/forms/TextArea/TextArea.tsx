@@ -1,10 +1,10 @@
 "use client";
 import React, { useState } from "react";
-import classnames from "classnames";
 import { useField } from "formik";
 import { ErrorMessage } from "@clientComponents/forms";
 import { InputFieldProps } from "@lib/types";
 import { useTranslation } from "@i18n/client";
+import { cn } from "@lib/utils";
 
 export interface TextAreaProps extends InputFieldProps {
   children?: React.ReactNode;
@@ -15,8 +15,6 @@ export const TextArea = (
   props: TextAreaProps & JSX.IntrinsicElements["textarea"]
 ): React.ReactElement => {
   const { id, className, ariaDescribedBy, required, children, placeholder, maxLength } = props;
-
-  const classes = classnames("gc-textarea", className);
 
   const { t } = useTranslation("common");
 
@@ -56,6 +54,8 @@ export const TextArea = (
     if (ariaDescribedBy) returnValue.push(ariaDescribedBy);
     return returnValue.length > 0 ? { "aria-describedby": returnValue.join(" ") } : {};
   };
+
+  const classes = cn("gcds-textarea", className, meta.error && "gcds-error");
 
   return (
     <>
