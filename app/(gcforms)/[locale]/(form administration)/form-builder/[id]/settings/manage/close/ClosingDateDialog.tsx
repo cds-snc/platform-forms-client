@@ -1,7 +1,8 @@
+import { getMaxMonthDay } from "@clientComponents/forms/FormattedDate/utils";
 import { Button } from "@clientComponents/globals";
 import { Dialog, useDialogRef } from "@formBuilder/components/shared";
 import { useTranslation } from "@i18n/client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 export const ClosingDateDialog = ({
   showDateTimeDialog,
@@ -14,12 +15,23 @@ export const ClosingDateDialog = ({
 }) => {
   const { t } = useTranslation("form-builder");
   const dialogRef = useDialogRef();
-  const [dateTime /*, setDateTime*/] = useState<number | undefined>(undefined);
+  const [dateTime, setDateTime] = useState<number | undefined>(undefined);
+  const [month, setMonth] = useState<number | undefined>(undefined);
+  const [day, setDay] = useState<number | undefined>(undefined);
+  const [year, setYear] = useState<number | undefined>(undefined);
+  const [time, setTime] = useState<number | undefined>(undefined);
 
   const handleClose = () => {
     setShowDateTimeDialog(false);
     dialogRef.current?.close();
   };
+
+  useEffect(() => {
+    if (month && day && year && time) {
+      const date = new Date(year, month - 1, day, time);
+      setDateTime(date.getTime());
+    }
+  }, [month, day, year, time]);
 
   if (!showDateTimeDialog) {
     return null;
@@ -34,9 +46,8 @@ export const ClosingDateDialog = ({
     >
       <div className="p-4">
         <p className="mb-2 font-bold">{t("scheduleClosingPage.dialog.text1")}</p>
-        <p className="mb-2"></p>
         <div>
-          <div className="mb-4 flex gap-10">
+          <div className="mb-4">
             <fieldset role="group" aria-label="Date picker">
               <legend className="mb-4">{t("scheduleClosingPage.dialog.text2")}</legend>
               <div className="inline-flex gap-2">
@@ -51,7 +62,7 @@ export const ClosingDateDialog = ({
                     min={1}
                     max={12}
                     className={"!w-16"}
-                    // onChange={(e) => setSelectedMonth(e.target.value)}
+                    onChange={(e) => setMonth(Number(e.target.value))}
                     required
                     data-testid="date-picker-month"
                   />
@@ -65,13 +76,9 @@ export const ClosingDateDialog = ({
                     id="date-picker-day"
                     type="number"
                     min={1}
-                    // max={
-                    //   dateObject?.MM && dateObject?.YYYY
-                    //     ? getMaxMonthDay(dateObject.MM, dateObject.YYYY)
-                    //     : 31
-                    // }
+                    max={month && year ? getMaxMonthDay(month, year) : 31}
                     className={"!w-16 !mr-2"}
-                    // onChange={(e) => setSelectedDay(e.target.value)}
+                    onChange={(e) => setDay(Number(e.target.value))}
                     required
                     data-testid="date-picker-day"
                   />
@@ -84,9 +91,9 @@ export const ClosingDateDialog = ({
                     name="date-picker-year"
                     id="date-picker-year"
                     type="number"
-                    min={1900}
+                    min={new Date().getFullYear()}
                     className={"!w-28"}
-                    // onChange={(e) => setSelectedYear(e.target.value)}
+                    onChange={(e) => setYear(Number(e.target.value))}
                     required
                     data-testid="date-picker-year"
                   />
@@ -107,6 +114,7 @@ export const ClosingDateDialog = ({
               name="time-picker"
               role="time"
               aria-describedby="time-picker-description"
+              onChange={(e) => setTime(Number(e.target.value))}
               placeholder="00:00"
               required
               className="!w-20"
