@@ -64,6 +64,7 @@ export interface ElementOption {
     | "name"
     | "contact"
     | "address"
+    | "addressComplete"
     | "departments";
   value: string;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any

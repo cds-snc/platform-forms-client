@@ -23,6 +23,7 @@
       "name": "Add full name",
       "firstMiddleLastName": "Add individual names",
       "address": "Add address",
+      "addressComplete": "Add address",
       "contact": "Add contact",
       "dynamicRow": "Add repeating set",
       "richText": "Add page text",
@@ -43,6 +44,40 @@
         "label": "Street address"
       },
       "title": "Address"
+    },
+    "addressComplete": {
+      "whatIsYourAddress": "Mailing address",
+      "city": "City, town, or community",
+      "country": "Country",
+      "description": "Address is a component that uses the Canada Post AddressComplete API to look up verified addresses as they are entered. Use this element to collect more accurate addresses.",
+      "label": "Address",
+      "postal": "Postal or zip code",
+      "province": "Province, territory, or state",
+      "street": {
+        "description": "Include street name and number.",
+        "label": "Street address"
+      },
+      "title": "Address",
+      "select": "Select which component parts of the address to include.",
+      "options": "Address format options",
+      "fields": "Data format",
+      "fieldsDesc": "This determines how the address appears in response data.",
+      "fullAddress": "Entire address combined",
+      "fullAddressDesc": "Data displays as one line.",
+      "splitAddress": "Address split into parts",
+      "splitAddressDesc": "Data separated in multiple lines.",
+      "customize": "Customize format",
+      "startTyping": "Start typing an address to search",
+      "canadianOnly": "Canadian addresses only",
+      "components": {
+        "unitNumber": "Unit number",
+        "civicNumber": "Civic number",
+        "streetName": "Street name",
+        "city": "City or town",
+        "province": "Province, territory, or state",
+        "postalCode": "Postal or zip code",
+        "country": "Country"
+      }
     },
     "allRequired": "all required",
     "answer": "Answer...",
@@ -880,7 +915,13 @@
     "savedErrorMessage": "There was an error saving your changes. Try again later or contact Support.",
     "message": {
       "title": "Customize the closed form message",
-      "text1": "Tell people trying to access the form when and why it closed and where to go next."
+      "text1": "Tell people trying to access the form when and why it closed and where to go next.",
+      "errors": {
+        "translation": "Provide equivalent content in both official languages."
+      }
+    },
+    "banner": {
+      "text": "Form closed on {{month}} {{day}}, {{year}} at {{hour}}:{{minute}} ET"
     }
   },
   "errorSavingForm": {

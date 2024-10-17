@@ -32,7 +32,10 @@ export const PanelBody = ({
   const { t } = useTranslation("form-builder");
   const isRichText = item.type === "richText";
   const isDynamicRow = item.type === "dynamicRow";
+
+  const isAddressComplete = item.type === "addressComplete";
   const isFormattedDate = item.type === "formattedDate";
+
   const properties = item.properties;
   const maxLength = properties?.validation?.maxLength;
 
@@ -51,6 +54,11 @@ export const PanelBody = ({
     setChangeKey(String(new Date().getTime())); //Force a re-render
   };
 
+  const addressCustomizeButton = (
+    <Button theme="secondary" onClick={() => {}}>
+      {t("addElementDialog.addressComplete.customize")}
+    </Button>
+  );
   const moreButton = (
     <Button theme="secondary" onClick={() => {}}>
       {t("addElementDialog.formattedDate.customizeDate")}
@@ -85,6 +93,26 @@ export const PanelBody = ({
               />
             </div>
           </div>
+
+          <div>
+            {isAddressComplete && (
+              <div className="text-sm flex">
+                <div className="w-1/2">
+                  <div className="description-text mt-5 cursor-not-allowed rounded-sm p-2 bg-gray-100 text-slate-600">
+                    {t("addElementDialog.addressComplete.startTyping")}
+                  </div>
+                </div>
+                <div className="mb-4 mt-4 ml-4 self-end w-1/2">
+                  <MoreModal
+                    item={item}
+                    moreButton={addressCustomizeButton}
+                    onClose={forceRefresh}
+                  />
+                </div>
+              </div>
+            )}
+          </div>
+
           <div className="mb-4 flex gap-4 text-sm ">
             <div className="grow">
               <QuestionDescription item={item} describedById={describedById} />
@@ -133,6 +161,7 @@ export const PanelBody = ({
                   </Tooltip.Info>
                 </div>
               )}
+
               <ElementRequired
                 onRequiredChange={onRequiredChange}
                 item={item}

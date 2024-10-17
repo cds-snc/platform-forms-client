@@ -5,6 +5,7 @@ export type {
   ValidationProperties,
   PropertyChoices,
   ElementProperties,
+  AddressComponents,
   FormElement,
   PublicFormRecord,
   DeliveryOption,

@@ -16,7 +16,7 @@ import {
   JSONResponse,
 } from "@lib/responseDownloadFormats/types";
 import { getFullTemplateByID } from "@lib/templates";
-import { FormElement, FormElementTypes, VaultStatus } from "@lib/types";
+import { AddressComponents, FormElement, FormElementTypes, VaultStatus } from "@lib/types";
 import { isResponseId } from "@lib/validation/validation";
 import {
   confirmResponses,
@@ -40,6 +40,12 @@ import { orderGroups } from "@lib/utils/form-builder/orderUsingGroupsLayout";
 import { formHasGroups } from "@lib/utils/form-builder/formHasGroups";
 import { DateFormat, DateObject } from "@clientComponents/forms/FormattedDate/types";
 import { getFormattedDateFromObject } from "@clientComponents/forms/FormattedDate/utils";
+import { AddressElements } from "@clientComponents/forms/AddressComplete/types";
+import {
+  getAddressAsAnswerElements,
+  getAddressAsString,
+} from "@clientComponents/forms/AddressComplete/utils";
+import { serverTranslation } from "@i18n";
 
 export const fetchSubmissions = async ({
   formId,
@@ -125,6 +131,19 @@ const getAnswerAsString = (question: FormElement | undefined, answer: unknown): 
     return getFormattedDateFromObject(dateFormat, dateObject);
   }
 
+  if (question && question.type === "addressComplete") {
+    if (!answer) {
+      return "";
+    }
+
+    if (question.properties.addressComponents?.splitAddress === true) {
+      return answer as string; //Address was split, return as is.
+    }
+
+    const addressObject = JSON.parse(answer as string) as AddressElements;
+    return getAddressAsString(addressObject);
+  }
+
   return answer as string;
 };
 
@@ -173,6 +192,8 @@ export const getSubmissionsByFormat = async ({
       throw new AccessControlError("User is not authenticated");
     }
 
+    const { t } = await serverTranslation("form-builder-responses");
+
     const responseConfirmLimit = Number(await getAppSetting("responseDownloadLimit"));
 
     const userEmail = session.user.email;
@@ -214,6 +235,7 @@ export const getSubmissionsByFormat = async ({
             (element) => element.id === Number(questionId)
           );
 
+          // Handle Dynamic Rows
           if (question?.type === FormElementTypes.dynamicRow && answer instanceof Array) {
             return {
               questionId: question.id,
@@ -240,6 +262,53 @@ export const getSubmissionsByFormat = async ({
             } as Answer;
           }
 
+          // Handle "Split" AddressComplete in a similiar manner to dynamic fields.
+          if (
+            question?.type === FormElementTypes.addressComplete &&
+            question.properties.addressComponents?.splitAddress === true
+          ) {
+            const addressObject = JSON.parse(answer as string) as AddressElements;
+
+            const questionComponents = question.properties.addressComponents as AddressComponents;
+            if (questionComponents.canadianOnly) {
+              addressObject.country = "CAN";
+            }
+
+            const extraTranslations = {
+              streetAddress: {
+                en: t("addressComponents.streetAddress"),
+                fr: t("addressComponents.streetAddress"),
+              },
+              city: { en: t("addressComponents.city"), fr: t("addressComponents.city") },
+              province: {
+                en: t("addressComponents.province"),
+                fr: t("addressComponents.province"),
+              },
+              postalCode: {
+                en: t("addressComponents.postalCode"),
+                fr: t("addressComponents.postalCode"),
+              },
+              country: { en: t("addressComponents.country"), fr: t("addressComponents.country") },
+            };
+
+            const reviewElements = getAddressAsAnswerElements(
+              question,
+              addressObject,
+              extraTranslations
+            );
+
+            const addressElements = [reviewElements];
+
+            return {
+              questionId: question.id,
+              type: FormElementTypes.address,
+              questionEn: question?.properties.titleEn,
+              questionFr: question?.properties.titleFr,
+              answer: addressElements,
+            } as Answer;
+          }
+
+          // return the final answer object
           return {
             questionId: question?.id,
             type: question?.type,

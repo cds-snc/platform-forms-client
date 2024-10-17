@@ -78,6 +78,7 @@ function _handleFormDataType(
   switch (element.type) {
     case FormElementTypes.textField:
     case FormElementTypes.textArea:
+    case FormElementTypes.addressComplete: // addressComplete is stored as serialized JSON (string)
     case FormElementTypes.formattedDate: // formattedDate is stored as serialized JSON (string)
       // string
       return _handleFormDataText(element.id.toString(), value as string);

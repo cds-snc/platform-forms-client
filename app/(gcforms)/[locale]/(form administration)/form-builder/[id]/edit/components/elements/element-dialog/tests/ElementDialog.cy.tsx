@@ -171,6 +171,18 @@ describe("<ElementDialog />", () => {
     cy.get("@handleCloseSpy").should("have.been.calledOnce");
   });
 
+  it("adds an address complete element", () => {
+    //cy.viewport(950, 900);
+    //const handleCloseSpy = cy.spy().as("handleCloseSpy");
+    //const handleAddTypeSpy = cy.spy().as("handleAddTypeSpy");
+    //cy.mount(<ElementDialog handleClose={handleCloseSpy} handleAddType={handleAddTypeSpy} />);
+    // Feature Flag is not active by default, and thus this component will not appear.
+    //cy.get('[data-testid="addressComplete"]').click();
+    //cy.get("body").type("{enter}");
+    //cy.get("@handleAddTypeSpy").should("have.been.calledWith", "addressComplete");
+    //cy.get("@handleCloseSpy").should("have.been.calledOnce");
+  });
+
   it("adds a contact element", () => {
     cy.viewport(950, 900);
 
@@ -275,6 +287,10 @@ describe("<ElementDialog />", () => {
 
     cy.get("body").type("{downarrow}");
     cy.get('[data-testid="address"]').should("have.attr", "aria-selected", "true");
+
+    // Feature Flag is not active by default, and thus this component will not appear.
+    //cy.get("body").type("{downarrow}");
+    //cy.get('[data-testid="addressComplete"]').should("have.attr", "aria-selected", "true");
 
     cy.get("body").type("{downarrow}");
     cy.get('[data-testid="departments"]').should("have.attr", "aria-selected", "true");

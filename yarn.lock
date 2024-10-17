@@ -55,9 +55,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@auth/core@npm:0.34.2":
-  version: 0.34.2
-  resolution: "@auth/core@npm:0.34.2"
+"@auth/core@npm:0.35.3":
+  version: 0.35.3
+  resolution: "@auth/core@npm:0.35.3"
   dependencies:
     "@panva/hkdf": "npm:^1.1.1"
     "@types/cookie": "npm:0.6.0"
@@ -77,7 +77,7 @@ __metadata:
       optional: true
     nodemailer:
       optional: true
-  checksum: 10c0/c4f0899f652200fd8516fc9c715dbc0c704fd7b8f99a4470fe398052c385284896cbc18e52028a8688e4d274a4972cff8acc50b28965268904679bef8ff15707
+  checksum: 10c0/0543d5ec0eea4df14826aabd5e220dd64772d9f8e81920f0d5c3971cf6298cdc1e089ddead18ab3a30de295f35e5227eeaa7631d64f35749a50b73cfea538c4c
   languageName: node
   linkType: hard
 
@@ -12842,7 +12842,7 @@ __metadata:
     lodash.unset: "npm:4.5.2"
     markdown-to-jsx: "npm:7.5.0"
     next: "npm:14.2.15"
-    next-auth: "npm:^5.0.0-beta.20"
+    next-auth: "npm:5.0.0-beta.22"
     node-fetch: "npm:^3.3.2"
     pino: "npm:9.1.0"
     pino-pretty: "npm:^11.0.0"
@@ -15655,11 +15655,11 @@ __metadata:
   languageName: node
   linkType: hard
 
-"next-auth@npm:^5.0.0-beta.20":
-  version: 5.0.0-beta.20
-  resolution: "next-auth@npm:5.0.0-beta.20"
+"next-auth@npm:5.0.0-beta.22":
+  version: 5.0.0-beta.22
+  resolution: "next-auth@npm:5.0.0-beta.22"
   dependencies:
-    "@auth/core": "npm:0.34.2"
+    "@auth/core": "npm:0.35.3"
   peerDependencies:
     "@simplewebauthn/browser": ^9.0.1
     "@simplewebauthn/server": ^9.0.2
@@ -15673,7 +15673,7 @@ __metadata:
       optional: true
     nodemailer:
       optional: true
-  checksum: 10c0/c10430f905822d7b9f8a4d96000f7760d8842a41aeaad9318e72038a6b6556a292772d39e906ea0a26aed988ec97a014cc3c0c04035211f474c7603fe0078979
+  checksum: 10c0/16971d559cc30e195209b90b694516dad313674e947d62bc9c482bcf6814c8c7bc3718c2a052505f38be770efcec35f7241ed44beb3666e9e5c54fa4df54b5a7
   languageName: node
   linkType: hard
 
