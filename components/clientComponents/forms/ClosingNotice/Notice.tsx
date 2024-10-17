@@ -4,7 +4,7 @@ import { isFutureDate } from "lib/utils/date/isFutureDate";
 import { useTranslation } from "@i18n/client";
 import { formClosingDateEst } from "lib/utils/date/utcToEst";
 
-export const Notice = ({ closingDate }: { closingDate?: string }) => {
+export const Notice = ({ closingDate, language }: { closingDate?: string; language: string }) => {
   const { t } = useTranslation("common");
 
   if (!closingDate) {
@@ -15,23 +15,21 @@ export const Notice = ({ closingDate }: { closingDate?: string }) => {
     return null;
   }
 
-  const { month, day, year, hour, minute } = formClosingDateEst(closingDate);
-  const closingText = t("closingNotice.text2", {
-    month,
-    day,
-    year,
-    hour,
-    minute,
-  });
+  const { month, day, year, hour, minute } = formClosingDateEst(closingDate, language);
+
   return (
     <div className="mb-4 w-3/5 border-l-8 border-gcds-blue-750 pl-4">
       <div className="mb-6 font-bold text-gcds-blue-750">{t("closingNotice.title")}</div>
       <p className="pb-2">
         {t("closingNotice.text1")} <br />
         <span className="font-bold">
-          {closingText}
-          <br />
-          {t("closingNotice.text3")}
+          {t("closingNotice.text2", {
+            month,
+            day,
+            year,
+            hour,
+            minute,
+          })}
         </span>
       </p>
     </div>

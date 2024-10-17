@@ -11,7 +11,7 @@ import { GCFormsProvider } from "@lib/hooks/useGCFormContext";
 import { FormWrapper } from "./clientSide";
 import { allowGrouping } from "@formBuilder/components/shared/right-panel/treeview/util/allowGrouping";
 import { serverTranslation } from "@i18n";
-import { Notice } from "@clientComponents/forms/ClosingNotice/Notice";
+import { Notice as ClosingNotice } from "@clientComponents/forms/ClosingNotice/Notice";
 
 export async function generateMetadata({
   params: { locale, props },
@@ -88,7 +88,7 @@ export default async function Page({
   return (
     <FormDisplayLayout formRecord={formRecord}>
       <div className={classes}>
-        <Notice closingDate={formRecord.closingDate} />
+        <ClosingNotice language={language} closingDate={formRecord.closingDate} />
         <h1>{formTitle}</h1>
         <GCFormsProvider formRecord={formRecord}>
           <FormWrapper

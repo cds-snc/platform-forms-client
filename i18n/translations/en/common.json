@@ -199,8 +199,7 @@
   "closingNotice": {
     "title": "Form closing",
     "text1": "Form accepting submissions until:",
-    "text2": "{{month}} {{day}}, {{year}} at {{hour}}:{{minute}} ET.",
-    "text3": "After this date, the form is closed."
+    "text2": "{{month}} {{day}}, {{year}} at {{hour}}:{{minute}} ET."
   },
   "cancel": "Cancel"
 }

@@ -1,4 +1,4 @@
-export const formClosingDateEst = (utcDate: string) => {
+export const formClosingDateEst = (utcDate: string, lang: string = "en") => {
   const date = new Date(utcDate);
 
   const options: Intl.DateTimeFormatOptions = {
@@ -11,8 +11,10 @@ export const formClosingDateEst = (utcDate: string) => {
     hour12: false,
   };
 
+  const locale = lang === "fr" ? "fr-CA" : "en-CA";
+
   // Create a formatter for EST
-  const formatter = new Intl.DateTimeFormat("en-CA", options);
+  const formatter = new Intl.DateTimeFormat(locale, options);
 
   // Format the date in EST
   const parts = formatter.formatToParts(date);
