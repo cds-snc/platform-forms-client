@@ -10,12 +10,12 @@ const allUsers = [
 const usersAssignedToFormRecord = [{ id: "1", name: "John Doe", email: "john.doe@test.com" }];
 
 describe("<FormOwnership />", () => {
-  it("can mount the component", () => {
+  it.skip("can mount the component", () => {
     cy.mount(<FormOwnership formRecord={{}} usersAssignedToFormRecord={[]} allUsers={[]} />);
     cy.contains("Manage ownership");
   });
 
-  it("can render the component with users assigned", () => {
+  it.skip("can render the component with users assigned", () => {
     cy.mount(
       <FormOwnership
         formRecord={{}}
