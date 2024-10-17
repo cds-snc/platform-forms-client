@@ -197,10 +197,10 @@
     "message2": "Créez des formulaires complexes de plusieurs pages avec logique d’affichage et d’embranchement. <a href='https://articles.alpha.canada.ca/forms-formulaires/fr/configurer-formulaire-avec-logique/' className='text-white hover:text-white'>En savoir plus</a>"
   },
   "closingNotice": {
-    "title": "Form Closing [FR]",
-    "text1": "Form will be taking submissions up to [FR",
-    "text2": "{{month}} {{day}}, {{year}} at {{hour}}:{{minute}} EST. [FR",
-    "text3": "After this date, the form is closed. [FR"
+    "title": "Fermeture du formulaire",
+    "text1": "Les soumissions sont acceptées jusqu'au :",
+    "text2": "{{day}} {{month}} {{year}} à {{hour}} h {{minute}} HE",
+    "text3": "Passé cette date, le formulaire est fermé."
   },
   "cancel": "Annuler"
 }
