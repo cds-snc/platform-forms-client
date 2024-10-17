@@ -4,5 +4,14 @@
   "edit": "Modifier",
   "goBack": "Retourner",
   "submit": "Soumettre",
-  "unknown": "Réponse inconnue"
+  "unknown": "Adresse introuvable",
+  "addressComponents": {
+    "unitNumber": "Numéro de l’unité",
+    "civicNumber": "Numéro civique",
+    "streetName": "Nom de la rue",
+    "city": "Ville ou communauté",
+    "province": "Province, territoire ou état",
+    "postalCode": "Code postal ou zip",
+    "country": "Pays"
+  }
 }
