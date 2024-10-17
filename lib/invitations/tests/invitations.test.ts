@@ -25,6 +25,7 @@ import { acceptInvitation } from "../acceptInvitation";
 import { cancelInvitation } from "../cancelInvitation";
 import { declineInvitation } from "../declineInvitation";
 import { logEvent } from "@lib/auditLogs";
+import { mockTemplate } from "./fixtures/Template";
 
 jest.mock("@lib/integration/prismaConnector");
 jest.mock("@lib/integration/notifyConnector");
@@ -285,6 +286,17 @@ describe("Invitations", () => {
         })
       ); // user exists
 
+      prismaMock.template.update.mockResolvedValueOnce(
+        mockTemplate({
+          id: "template-id",
+          name: "template-name",
+          users: [
+            { id: "user-id-1", email: "owner1@cds-snc.ca", name: "owner 1" },
+            { id: "user-id-2", email: "owner2@cds-snc.ca", name: "owner 2" },
+          ],
+        })
+      );
+
       (
         ownerAddedEmailTemplate as jest.MockedFunction<typeof ownerAddedEmailTemplate>
       ).mockReturnValue("email contents");
@@ -292,9 +304,6 @@ describe("Invitations", () => {
       const ability = mockAbility({ userID: "invited-user-id" });
 
       await acceptInvitation(ability, "invitation-id");
-
-      expect(assignUserToTemplate).toHaveBeenCalledTimes(1);
-      expect(assignUserToTemplate).toHaveBeenCalledWith(ability, "template-id", "invited-user-id");
 
       // Delete the invitation
       expect(prisma.invitation.delete).toHaveBeenCalledWith({
