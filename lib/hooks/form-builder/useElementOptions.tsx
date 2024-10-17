@@ -28,6 +28,7 @@ import {
   QuestionSet,
   Attestation,
   Address,
+  AddressComplete,
   Name,
   Contact,
   FirstMiddleLastName,
@@ -66,6 +67,8 @@ export const useElementOptions = (filterElements?: ElementOptionsFilter | undefi
   const allowFileInput = useIsAdminUser();
 
   const { getFlag } = useFeatureFlags();
+
+  //Check feature flags for Repeating Sets
   const allowRepeatingSets = getFlag(FeatureFlags.repeatingSets);
   const fileInputOption: ElementOption = {
     id: "fileInput",
@@ -83,6 +86,27 @@ export const useElementOptions = (filterElements?: ElementOptionsFilter | undefi
     description: QuestionSet,
     className: "",
     group: groups.other,
+  };
+
+  // Check feature flag for Address Complete
+  const allowAddressComplete = getFlag(FeatureFlags.addressComplete);
+
+  const addressCompleteOptions: ElementOption = {
+    id: "addressComplete",
+    value: t("addElementDialog.addressComplete.label"),
+    icon: AddressIcon,
+    description: AddressComplete,
+    className: "",
+    group: groups.preset,
+  };
+
+  const addressOptions: ElementOption = {
+    id: "address",
+    value: t("addElementDialog.address.label"),
+    icon: AddressIcon,
+    description: Address,
+    className: "",
+    group: groups.preset,
   };
 
   const elementOptions: ElementOption[] = [
@@ -180,14 +204,9 @@ export const useElementOptions = (filterElements?: ElementOptionsFilter | undefi
       description: Contact,
       group: groups.preset,
     },
-    {
-      id: "address",
-      value: t("addElementDialog.address.label"),
-      icon: AddressIcon,
-      description: Address,
-      className: "",
-      group: groups.preset,
-    },
+    ...(allowAddressComplete
+      ? [{ ...(addressCompleteOptions as ElementOption) }]
+      : [{ ...(addressOptions as ElementOption) }]),
     {
       id: "departments",
       value: t("addElementDialog.departments.title"),

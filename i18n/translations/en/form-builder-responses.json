@@ -271,5 +271,12 @@
     "sending": "Sending...",
     "cancel": "Cancel"
   },
-  "loading": "Loading..."
+  "loading": "Loading...",
+  "addressComponents": {
+    "streetAddress": "Street address",
+    "city": "City or town",
+    "province": "Province, territory, or state",
+    "postalCode": "Postal or zip code",
+    "country": "Country"
+  }
 }
