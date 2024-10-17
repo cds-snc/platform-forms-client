@@ -33,9 +33,9 @@ jest.mock("@lib/auditLogs");
 jest.mock("@lib/users");
 jest.mock("@lib/templates");
 jest.mock("@lib/origin");
-jest.mock("@lib/invitations/emailTemplates/inviteToForms");
-jest.mock("@lib/invitations/emailTemplates/inviteToCollaborate");
-jest.mock("@lib/invitations/emailTemplates/ownerAddedNotification");
+jest.mock("@lib/invitations/emailTemplates/inviteToFormsEmailTemplate");
+jest.mock("@lib/invitations/emailTemplates/inviteToCollaborateEmailTemplate");
+jest.mock("@lib/invitations/emailTemplates/ownerAddedEmailTemplate");
 
 describe("Invitations", () => {
   beforeEach(() => {
