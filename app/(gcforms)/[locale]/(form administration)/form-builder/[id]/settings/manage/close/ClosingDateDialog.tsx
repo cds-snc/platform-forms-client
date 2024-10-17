@@ -33,10 +33,31 @@ export const ClosingDateDialog = ({
       className="max-w-[800px]"
     >
       <div className="p-4">
-        <p>{t("scheduleClosingPage.dialog.text1")}</p>
-        <p>{t("scheduleClosingPage.dialog.text2")}</p>
+        <p className="mb-2 font-bold">{t("scheduleClosingPage.dialog.text1")}</p>
+        <p className="mb-2">{t("scheduleClosingPage.dialog.text2")}</p>
         <div>
-          <label htmlFor="time-picker">{t("scheduleClosingPage.dialog.timePicker.text1")}</label>
+          <div className="mb-4 flex gap-10">
+            <div>
+              <label htmlFor="date-picker-month" className="mb-2 font-bold">
+                {t("scheduleClosingPage.dialog.datePicker.month")}
+              </label>
+            </div>
+
+            <div>
+              <label htmlFor="date-picker-day" className="mb-2 font-bold">
+                {t("scheduleClosingPage.dialog.datePicker.day")}
+              </label>
+            </div>
+
+            <div>
+              <label htmlFor="date-picker-year" className="mb-2 font-bold">
+                {t("scheduleClosingPage.dialog.datePicker.year")}
+              </label>
+            </div>
+          </div>
+          <label htmlFor="time-picker" className="mb-2 font-bold">
+            {t("scheduleClosingPage.dialog.timePicker.text1")}
+          </label>
           <p id="time-picker-description">{t("scheduleClosingPage.dialog.timePicker.text2")}</p>
           <input
             id="time-picker"
