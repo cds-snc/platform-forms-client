@@ -860,9 +860,7 @@ export async function assignUserToTemplate(
     const template = await getTemplateWithAssociatedUsers(ability, formID);
 
     if (template === null) {
-      logMessage.warn(
-        `Can not remove assigned user ${userID} on template ${formID}.  Template does not exist`
-      );
+      logMessage.warn(`Can not add user ${userID} to template ${formID}.  Template does not exist`);
       throw new TemplateNotFoundError();
     }
 
@@ -877,9 +875,7 @@ export async function assignUserToTemplate(
     });
 
     if (userToAdd === null) {
-      logMessage.warn(
-        `Can not remove assigned user ${userID} on template ${formID}.  User does not exist`
-      );
+      logMessage.warn(`Can not add user ${userID} to template ${formID}.  User does not exist`);
       throw new UserNotFoundError();
     }
 
@@ -889,18 +885,7 @@ export async function assignUserToTemplate(
           id: formID,
         },
         select: {
-          id: true,
-          created_at: true,
-          updated_at: true,
-          name: true,
           jsonConfig: true,
-          isPublished: true,
-          deliveryOption: true,
-          securityAttribute: true,
-          formPurpose: true,
-          publishReason: true,
-          publishFormType: true,
-          publishDesc: true,
           users: true,
         },
         data: {
@@ -913,6 +898,9 @@ export async function assignUserToTemplate(
       })
       .catch((e) => prismaErrors(e, null));
 
+    // No changes
+    if (updatedTemplate === null) return;
+
     logEvent(
       ability.userID,
       { type: "Form", id: formID },
@@ -920,23 +908,11 @@ export async function assignUserToTemplate(
       `Access granted to ${userID}`
     );
 
-    // No changes
-    if (updatedTemplate === null) return;
-
-    const form = updatedTemplate.jsonConfig as FormProperties;
-
-    const emailContent = ownerAddedNotification(
-      form.titleEn,
-      form.titleFr,
-      userToAdd.name || userToAdd.email
+    notifyOwnersOfNewOwnership(
+      userToAdd.name || userToAdd.email,
+      updatedTemplate.jsonConfig as FormProperties,
+      updatedTemplate.users
     );
-
-    updatedTemplate.users.forEach((owner) => {
-      sendEmail(owner.email, {
-        subject: "Ownership change notification | Notification de changement de propriété",
-        formResponse: emailContent,
-      });
-    });
 
     if (formCache.cacheAvailable) formCache.formID.invalidate(formID);
   } catch (e) {
@@ -950,6 +926,27 @@ export async function assignUserToTemplate(
     throw e;
   }
 }
+
+/**
+ * Notify all owners when ownership changes
+ *
+ * @param user New owner
+ * @param formId
+ */
+export const notifyOwnersOfNewOwnership = async (
+  userName: string,
+  form: FormProperties,
+  users: { id: string; email: string }[]
+) => {
+  const emailContent = ownerAddedNotification(form.titleEn, form.titleFr, userName);
+
+  users.forEach((owner) => {
+    sendEmail(owner.email, {
+      subject: "Ownership change notification | Notification de changement de propriété",
+      formResponse: emailContent,
+    });
+  });
+};
 
 /**
  * Add/remove (sync) users to a form

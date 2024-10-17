@@ -1,9 +1,9 @@
 import { prisma } from "@lib/integration/prismaConnector";
-import { UserAbility } from "@lib/types";
+import { FormProperties, UserAbility } from "@lib/types";
 import { InvitationIsExpiredError, InvitationNotFoundError, UserNotFoundError } from "./exceptions";
 import { checkPrivileges } from "@lib/privileges";
 import { logEvent } from "@lib/auditLogs";
-import { assignUserToTemplate } from "@lib/templates";
+import { notifyOwnersOfNewOwnership } from "@lib/templates";
 
 /**
  * Accept an invitation.
@@ -51,8 +51,15 @@ export const acceptInvitation = async (ability: UserAbility, invitationId: strin
     ]);
 
     // assign user to form
-    await assignUserToTemplate(ability, invitation.templateId, user.id);
+    const updatedTemplate = await _assignUserToTemplate(user.id, invitation.templateId);
+
     _deleteInvitation(invitationId);
+
+    notifyOwnersOfNewOwnership(
+      user.name || user.email,
+      updatedTemplate.jsonConfig as FormProperties,
+      updatedTemplate.users
+    );
 
     logEvent(
       ability.userID,
@@ -65,6 +72,31 @@ export const acceptInvitation = async (ability: UserAbility, invitationId: strin
   }
 
   throw new UserNotFoundError();
+};
+
+/**
+ * Assign user to template
+ *
+ * @param userId
+ * @param formId
+ */
+const _assignUserToTemplate = async (userId: string, formId: string) => {
+  return prisma.template.update({
+    where: {
+      id: formId,
+    },
+    data: {
+      users: {
+        connect: {
+          id: userId,
+        },
+      },
+    },
+    select: {
+      jsonConfig: true,
+      users: true,
+    },
+  });
 };
 
 /**
