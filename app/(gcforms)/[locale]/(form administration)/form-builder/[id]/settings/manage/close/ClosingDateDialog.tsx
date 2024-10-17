@@ -55,18 +55,24 @@ export const ClosingDateDialog = ({
               </label>
             </div>
           </div>
-          <label htmlFor="time-picker" className="mb-2 font-bold">
-            {t("scheduleClosingPage.dialog.timePicker.text1")}
-          </label>
-          <p id="time-picker-description">{t("scheduleClosingPage.dialog.timePicker.text2")}</p>
-          <input
-            id="time-picker"
-            name="time-picker"
-            type="input"
-            role="time"
-            aria-describedby=""
-            required
-          />
+
+          <div className="gcds-input-wrapper !mr-2 !flex !flex-col">
+            <label htmlFor="time-picker" className="mb-2 font-bold">
+              {t("scheduleClosingPage.dialog.timePicker.text1")}
+            </label>
+            <p id="time-picker-description" className="mb-4">
+              {t("scheduleClosingPage.dialog.timePicker.text2")}
+            </p>
+            <input
+              id="time-picker"
+              name="time-picker"
+              role="time"
+              aria-describedby="time-picker-description"
+              placeholder="00:00"
+              required
+              className="!w-20"
+            />
+          </div>
         </div>
 
         <div className="mt-8 flex gap-4">
