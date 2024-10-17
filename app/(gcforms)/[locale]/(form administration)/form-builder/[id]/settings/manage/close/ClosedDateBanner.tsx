@@ -1,6 +1,6 @@
-import { formClosingDateEst } from "lib/utils/date/utcToEst";
 import { useTranslation } from "@i18n/client";
 import { Alert } from "@clientComponents/globals";
+import { formClosingDateEst } from "lib/utils/date/utcToEst";
 import { dateHasPast } from "lib/utils";
 
 export const ClosedDateBanner = ({ closingDate }: { closingDate?: string | null }) => {
