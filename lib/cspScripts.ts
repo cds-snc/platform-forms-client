@@ -38,7 +38,7 @@ export const generateCSP = (): { csp: string; nonce: string } => {
     form-action 'self';
     frame-src www.googletagmanager.com;
     frame-ancestors 'none';
-    connect-src 'self' www.googletagmanager.com www.google-analytics.com;
+    connect-src 'self' www.googletagmanager.com www.google-analytics.com ws1.postescanada-canadapost.ca;
     block-all-mixed-content;
     upgrade-insecure-requests;
 `;

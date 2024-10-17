@@ -34,6 +34,11 @@ export type ConditionalRule = {
   choiceId: string;
 };
 
+export type AddressComponents = {
+  canadianOnly?: boolean;
+  splitAddress?: boolean;
+};
+
 export type dynamicRowType = {
   rowTitleEn: string;
   rowTitleFr: string;
@@ -62,6 +67,8 @@ export interface ElementProperties {
   autoComplete?: string;
   dateFormat?: string;
   conditionalRules?: ConditionalRule[];
+  full?: boolean;
+  addressComponents?: AddressComponents | undefined;
   dynamicRow?: dynamicRowType;
   [key: string]:
     | string
@@ -71,6 +78,7 @@ export interface ElementProperties {
     | Array<FormElement>
     | ValidationProperties
     | Array<ConditionalRule>
+    | AddressComponents
     | dynamicRowType
     | undefined;
 }
@@ -87,6 +95,7 @@ export enum FormElementTypes {
   dynamicRow = "dynamicRow",
   attestation = "attestation",
   address = "address",
+  addressComplete = "addressComplete",
   name = "name",
   firstMiddleLastName = "firstMiddleLastName",
   departments = "departments",

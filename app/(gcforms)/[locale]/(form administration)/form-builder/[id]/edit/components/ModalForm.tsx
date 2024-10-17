@@ -8,6 +8,7 @@ import { FormElementWithIndex, LocalizedElementProperties } from "@lib/types/for
 import { Checkbox, Input, TextArea, InfoDetails, Radio } from "@formBuilder/components/shared";
 import { useTemplateStore } from "@lib/store/useTemplateStore";
 import { AutocompleteDropdown } from "./AutocompleteDropdown";
+import { AddressCompleteOptions } from "@clientComponents/forms/AddressComplete/AddressCompleteOptions";
 
 const ModalLabel = ({ children, ...props }: React.LabelHTMLAttributes<HTMLLabelElement>) => (
   <label {...props} className="mb-2 block font-[700]">
@@ -97,6 +98,15 @@ export const ModalForm = ({
         </div>
       </section>
       {/* @TODO: Come back and refactor to separate components */}
+      {item.type === FormElementTypes.addressComplete && (
+        <>
+          <AddressCompleteOptions
+            properties={properties}
+            updateModalProperties={updateModalProperties}
+            item={item}
+          />
+        </>
+      )}
       {item.type === FormElementTypes.formattedDate && (
         <section className="mb-4">
           <h3>{t("moreDialog.date.dateOptions")}</h3>

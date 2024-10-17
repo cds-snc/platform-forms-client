@@ -150,6 +150,7 @@ module.exports = {
             100: blue[100].value,
             500: blue[500].value,
             700: blue[700].value,
+            750: blue[750].value,
             800: blue[800].value,
             850: blue[850].value,
             900: blue[900].value, // primary
