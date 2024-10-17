@@ -98,7 +98,7 @@ export const SetClosingDate = ({
       </div>
       <div className="mb-4">
         <Button theme="link" onClick={() => setShowDateTimeDialog(true)}>
-          {t("scheduleClosingPage")}
+          {t("scheduleClosingPage.linkText")}
         </Button>
       </div>
       <div className="mb-4 w-3/5">
