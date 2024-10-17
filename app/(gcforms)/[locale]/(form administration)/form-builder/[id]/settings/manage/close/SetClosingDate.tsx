@@ -12,6 +12,7 @@ import { ClosedMessage } from "./ClosedMessage";
 import { ClosedSuccess } from "./ClosedSuccess";
 
 import { closeForm } from "@formBuilder/actions";
+import { ClosingDateDialog } from "./ClosingDateDialog";
 
 export const SetClosingDate = ({
   formId,
@@ -43,39 +44,43 @@ export const SetClosingDate = ({
   }, [closedMessage]);
 
   const [status, setStatus] = useState(closingDate ? "closed" : "open");
+  const [showDateTimeDialog, setShowDateTimeDialog] = useState(false);
 
   const handleToggle = (value: boolean) => {
     setStatus(value == true ? "closed" : "open");
   };
 
-  const saveFormStatus = useCallback(async () => {
-    let closeDate = "open";
+  const saveFormStatus = useCallback(
+    async (futureDate?: number) => {
+      let closeDate = "open";
 
-    if (status === "closed") {
-      const now = new Date();
-      closeDate = now.toISOString();
-    }
+      if (status === "closed") {
+        const date = futureDate ? new Date(futureDate) : new Date();
+        closeDate = date.toISOString();
+      }
 
-    const result = await closeForm({
-      id: formId,
-      closingDate: closeDate,
-      closedDetails: closedMessage,
-    });
+      const result = await closeForm({
+        id: formId,
+        closingDate: closeDate,
+        closedDetails: closedMessage,
+      });
 
-    if (!result || result.error) {
-      toast.error(t("closingDate.savedErrorMessage"));
-      return;
-    }
+      if (!result || result.error) {
+        toast.error(t("closingDate.savedErrorMessage"));
+        return;
+      }
 
-    // update the local store
-    setClosingDate(status !== "open" ? closeDate : null);
+      // update the local store
+      setClosingDate(status !== "open" ? closeDate : null);
 
-    if (status === "closed") {
-      toast.success(<ClosedSuccess />, "wide");
-    } else {
-      toast.success(t("closingDate.savedSuccessMessage"));
-    }
-  }, [status, formId, setClosingDate, t, closedMessage]);
+      if (status === "closed") {
+        toast.success(<ClosedSuccess />, "wide");
+      } else {
+        toast.success(t("closingDate.savedSuccessMessage"));
+      }
+    },
+    [status, formId, setClosingDate, t, closedMessage]
+  );
 
   return (
     <div className="mb-10">
@@ -91,6 +96,11 @@ export const SetClosingDate = ({
           description={t("closingDate.status")}
         />
       </div>
+      <div className="mb-4">
+        <Button theme="link" onClick={() => setShowDateTimeDialog(true)}>
+          {t("scheduleClosingPage")}
+        </Button>
+      </div>
       <div className="mb-4 w-3/5">
         <ClosedMessage
           closedDetails={closedMessage}
@@ -98,9 +108,20 @@ export const SetClosingDate = ({
           valid={validateClosedMessage()}
         />
       </div>
-      <Button disabled={!validateClosedMessage()} theme="secondary" onClick={saveFormStatus}>
+      <Button
+        disabled={!validateClosedMessage()}
+        theme="secondary"
+        onClick={() => saveFormStatus()}
+      >
         {t("closingDate.saveButton")}
       </Button>
+      {showDateTimeDialog && (
+        <ClosingDateDialog
+          showDateTimeDialog={showDateTimeDialog}
+          setShowDateTimeDialog={setShowDateTimeDialog}
+          save={saveFormStatus}
+        ></ClosingDateDialog>
+      )}
     </div>
   );
 };
