@@ -1,15 +1,9 @@
 import { prisma } from "@lib/integration/prismaConnector";
-import { FormProperties, UserAbility } from "@lib/types";
-import {
-  InvitationIsExpiredError,
-  InvitationNotFoundError,
-  TemplateNotFoundError,
-  UserNotFoundError,
-} from "./exceptions";
+import { UserAbility } from "@lib/types";
+import { InvitationIsExpiredError, InvitationNotFoundError, UserNotFoundError } from "./exceptions";
 import { checkPrivileges } from "@lib/privileges";
-import { ownerAddedNotification } from "@lib/invitations/emailTemplates/ownerAddedNotification";
-import { sendEmail } from "@lib/integration/notifyConnector";
 import { logEvent } from "@lib/auditLogs";
+import { assignUserToTemplate } from "@lib/templates";
 
 /**
  * Accept an invitation.
@@ -57,9 +51,8 @@ export const acceptInvitation = async (ability: UserAbility, invitationId: strin
     ]);
 
     // assign user to form
-    await _assignUserToTemplate(user.id, invitation.templateId);
+    await assignUserToTemplate(ability, invitation.templateId, user.id);
     _deleteInvitation(invitationId);
-    _notifyOwnersOfNewOwnership(user.name || user.email, invitation.templateId);
 
     logEvent(
       ability.userID,
@@ -72,62 +65,6 @@ export const acceptInvitation = async (ability: UserAbility, invitationId: strin
   }
 
   throw new UserNotFoundError();
-};
-
-/**
- * Assign user to template
- *
- * @param userId
- * @param formId
- */
-const _assignUserToTemplate = async (userId: string, formId: string) => {
-  await prisma.template.update({
-    where: {
-      id: formId,
-    },
-    data: {
-      users: {
-        connect: {
-          id: userId,
-        },
-      },
-    },
-  });
-};
-
-/**
- * Notify all owners when ownership changes
- *
- * @param user New owner
- * @param formId
- */
-const _notifyOwnersOfNewOwnership = async (userName: string, formId: string) => {
-  const template = await prisma.template.findFirst({
-    where: {
-      id: formId,
-    },
-    select: {
-      id: true,
-      name: true,
-      jsonConfig: true,
-      users: true,
-    },
-  });
-
-  const form = template?.jsonConfig as FormProperties;
-
-  if (!template) {
-    throw new TemplateNotFoundError();
-  }
-
-  const emailContent = ownerAddedNotification(form.titleEn, form.titleFr, userName);
-
-  template.users.forEach((owner) => {
-    sendEmail(owner.email, {
-      subject: "Ownership change notification | Notification de changement de propriété",
-      formResponse: emailContent,
-    });
-  });
 };
 
 /**

@@ -14,11 +14,11 @@ import { AccessControlError, checkPrivileges } from "./privileges";
 import { logEvent } from "./auditLogs";
 import { logMessage } from "@lib/logger";
 import { unprocessedSubmissions, deleteDraftFormResponses } from "./vault";
-import { addOwnershipEmail, transferOwnershipEmail } from "./ownership";
 import { deleteKey } from "./serviceAccount";
 import { ownerRemovedNotification } from "./invitations/emailTemplates/ownerRemovedNotification";
 import { sendEmail } from "./integration/notifyConnector";
 import { youHaveBeenRemovedNotification } from "./invitations/emailTemplates/youHaveBeenRemovedNotification";
+import { ownerAddedNotification } from "./invitations/emailTemplates/ownerAddedNotification";
 
 // ******************************************
 // Internal Module Functions
@@ -725,32 +725,34 @@ export async function updateIsPublishedForTemplate(
   }
 }
 
+class TemplateNotFoundError extends Error {}
+class UserNotFoundError extends Error {}
+
 /**
  * Remove a user from a form
  *
  * @param ability
  * @param formID Form ID
- * @param userId User to be removed ID
- * @returns
+ * @param userID User to be removed ID
  */
 export async function removeAssignedUserFromTemplate(
   ability: UserAbility,
   formID: string,
-  userId: string
-) {
+  userID: string
+): Promise<void> {
   try {
     const template = await getTemplateWithAssociatedUsers(ability, formID);
 
     if (template === null) {
       logMessage.warn(
-        `Can not remove assigned user ${userId} on template ${formID}.  Template does not exist`
+        `Can not remove assigned user ${userID} on template ${formID}.  Template does not exist`
       );
-      return null;
+      throw new TemplateNotFoundError();
     }
 
     const userToRemove = await prisma.user.findUnique({
       where: {
-        id: userId,
+        id: userID,
       },
       select: {
         name: true,
@@ -760,64 +762,74 @@ export async function removeAssignedUserFromTemplate(
 
     if (userToRemove === null) {
       logMessage.warn(
-        `Can not remove assigned user ${userId} on template ${formID}.  User does not exist`
+        `Can not remove assigned user ${userID} on template ${formID}.  User does not exist`
       );
-      return null;
+      throw new UserNotFoundError();
     }
 
-    try {
-      const updatedTemplate = await prisma.template
-        .update({
-          where: {
-            id: formID,
-          },
-          include: {
-            users: true,
-          },
-          data: {
-            users: {
-              disconnect: {
-                id: userId,
-              },
+    const updatedTemplate = await prisma.template
+      .update({
+        where: {
+          id: formID,
+        },
+        select: {
+          id: true,
+          created_at: true,
+          updated_at: true,
+          name: true,
+          jsonConfig: true,
+          isPublished: true,
+          deliveryOption: true,
+          securityAttribute: true,
+          formPurpose: true,
+          publishReason: true,
+          publishFormType: true,
+          publishDesc: true,
+          users: true,
+        },
+        data: {
+          users: {
+            disconnect: {
+              id: userID,
             },
           },
-        })
-        .catch((e) => prismaErrors(e, null));
+        },
+      })
+      .catch((e) => prismaErrors(e, null));
 
-      logEvent(
-        ability.userID,
-        { type: "Form", id: formID },
-        "RevokeFormAccess",
-        `Access revoked for ${userId}`
-      );
+    if (updatedTemplate === null) return;
 
-      // Send email to person who was removed
-      const youHaveBeenRemovedEmailContent = youHaveBeenRemovedNotification(
+    logEvent(
+      ability.userID,
+      { type: "Form", id: formID },
+      "RevokeFormAccess",
+      `Access revoked for ${userID}`
+    );
+
+    // Send email to person who was removed
+    const youHaveBeenRemovedEmailContent = youHaveBeenRemovedNotification(
+      template.formRecord.form.titleEn,
+      template.formRecord.form.titleFr
+    );
+
+    sendEmail(userToRemove.email, {
+      subject: "Form access removed | Accès au formulaire supprimé",
+      formResponse: youHaveBeenRemovedEmailContent,
+    });
+
+    // Send email to remaining owners
+    updatedTemplate.users.forEach((owner) => {
+      const ownerRemovedEmailContent = ownerRemovedNotification(
         template.formRecord.form.titleEn,
-        template.formRecord.form.titleFr
+        template.formRecord.form.titleFr,
+        userToRemove.name || "An owner"
       );
 
-      sendEmail(userToRemove.email, {
+      sendEmail(owner.email, {
         subject: "Form access removed | Accès au formulaire supprimé",
-        formResponse: youHaveBeenRemovedEmailContent,
+        formResponse: ownerRemovedEmailContent,
       });
-
-      // Send email to remaining owners
-      updatedTemplate?.users.forEach((owner) => {
-        const ownerRemovedEmailContent = ownerRemovedNotification(
-          template.formRecord.form.titleEn,
-          template.formRecord.form.titleFr,
-          userToRemove.name || "An owner"
-        );
-
-        sendEmail(owner.email, {
-          subject: "Form access removed | Accès au formulaire supprimé",
-          formResponse: ownerRemovedEmailContent,
-        });
-      });
-    } catch (e) {
-      logMessage.error(`Failed to remove user ${userId} from template ${formID}`);
-    }
+    });
 
     if (formCache.cacheAvailable) formCache.formID.invalidate(formID);
   } catch (e) {
@@ -832,11 +844,125 @@ export async function removeAssignedUserFromTemplate(
   }
 }
 
+/**
+ * Assign a user to a form
+ *
+ * @param ability
+ * @param formID
+ * @param userID
+ */
+export async function assignUserToTemplate(
+  ability: UserAbility,
+  formID: string,
+  userID: string
+): Promise<void> {
+  try {
+    const template = await getTemplateWithAssociatedUsers(ability, formID);
+
+    if (template === null) {
+      logMessage.warn(
+        `Can not remove assigned user ${userID} on template ${formID}.  Template does not exist`
+      );
+      throw new TemplateNotFoundError();
+    }
+
+    const userToAdd = await prisma.user.findUnique({
+      where: {
+        id: userID,
+      },
+      select: {
+        name: true,
+        email: true,
+      },
+    });
+
+    if (userToAdd === null) {
+      logMessage.warn(
+        `Can not remove assigned user ${userID} on template ${formID}.  User does not exist`
+      );
+      throw new UserNotFoundError();
+    }
+
+    const updatedTemplate = await prisma.template
+      .update({
+        where: {
+          id: formID,
+        },
+        select: {
+          id: true,
+          created_at: true,
+          updated_at: true,
+          name: true,
+          jsonConfig: true,
+          isPublished: true,
+          deliveryOption: true,
+          securityAttribute: true,
+          formPurpose: true,
+          publishReason: true,
+          publishFormType: true,
+          publishDesc: true,
+          users: true,
+        },
+        data: {
+          users: {
+            connect: {
+              id: userID,
+            },
+          },
+        },
+      })
+      .catch((e) => prismaErrors(e, null));
+
+    logEvent(
+      ability.userID,
+      { type: "Form", id: formID },
+      "GrantFormAccess",
+      `Access granted to ${userID}`
+    );
+
+    // No changes
+    if (updatedTemplate === null) return;
+
+    const form = updatedTemplate.jsonConfig as FormProperties;
+
+    const emailContent = ownerAddedNotification(
+      form.titleEn,
+      form.titleFr,
+      userToAdd.name || userToAdd.email
+    );
+
+    updatedTemplate.users.forEach((owner) => {
+      sendEmail(owner.email, {
+        subject: "Ownership change notification | Notification de changement de propriété",
+        formResponse: emailContent,
+      });
+    });
+
+    if (formCache.cacheAvailable) formCache.formID.invalidate(formID);
+  } catch (e) {
+    if (e instanceof AccessControlError)
+      logEvent(
+        ability.userID,
+        { type: "Form", id: formID },
+        "AccessDenied",
+        "Attempted to remove assigned user for form"
+      );
+    throw e;
+  }
+}
+
+/**
+ * Add/remove (sync) users to a form
+ *
+ * @param ability
+ * @param formID
+ * @param users
+ */
 export async function updateAssignedUsersForTemplate(
   ability: UserAbility,
   formID: string,
   users: { id: string }[]
-): Promise<FormRecord | null> {
+): Promise<boolean> {
   try {
     if (!users.length) throw new Error("No users provided");
 
@@ -855,7 +981,7 @@ export async function updateAssignedUsersForTemplate(
           users
         )} on template ${formID}.  Template does not exist`
       );
-      return null;
+      throw new TemplateNotFoundError();
     }
 
     checkPrivileges(ability, [
@@ -871,101 +997,16 @@ export async function updateAssignedUsersForTemplate(
     const toAdd = users.filter((n) => !previouslyAssigned.some((n2) => n.id == n2.id));
     const toRemove = previouslyAssigned.filter((n) => !users.some((n2) => n.id == n2.id));
 
-    const updatedTemplate = await prisma.template
-      .update({
-        where: {
-          id: formID,
-        },
-        data: {
-          users: {
-            connect: toAdd,
-            disconnect: toRemove,
-          },
-        },
-        select: {
-          id: true,
-          created_at: true,
-          updated_at: true,
-          name: true,
-          jsonConfig: true,
-          isPublished: true,
-          deliveryOption: true,
-          securityAttribute: true,
-          formPurpose: true,
-          publishReason: true,
-          publishFormType: true,
-          publishDesc: true,
-          users: true,
-        },
-      })
-      .catch((e) => prismaErrors(e, null));
-
-    if (updatedTemplate === null) return updatedTemplate;
-
-    const newOwners: (string | null)[] = updatedTemplate.users
-      ? updatedTemplate.users.map((u) => u.name)
-      : [];
-
-    const getUsersFromUserIds = (userIds: string[]) => {
-      return Promise.all(
-        userIds.map((userId) => {
-          return prisma.user.findUniqueOrThrow({
-            where: {
-              id: userId,
-            },
-          });
-        })
-      );
-    };
-
-    const usersToAdd = await getUsersFromUserIds(toAdd.map((u) => u.id));
-
-    usersToAdd.forEach((user) => {
-      if (user.email && user.name) {
-        addOwnershipEmail({
-          emailTo: user.email,
-          formTitleEn: updatedTemplate.name,
-          formTitleFr: updatedTemplate.name,
-          formOwner: user.name,
-          formId: updatedTemplate.id,
-        });
-      }
+    //
+    toAdd.map((user) => {
+      assignUserToTemplate(ability, formID, user.id);
     });
 
-    const usersToRemove = await getUsersFromUserIds(toRemove.map((u) => u.id));
-
-    usersToRemove.forEach((user) => {
-      if (user.email && user.name) {
-        transferOwnershipEmail({
-          emailTo: user.email,
-          formTitleEn: updatedTemplate.name,
-          formTitleFr: updatedTemplate.name,
-          pastOwner: user.name,
-          newOwner: newOwners.join(", "),
-          formId: updatedTemplate.id,
-        });
-      }
+    toRemove.map((user) => {
+      removeAssignedUserFromTemplate(ability, formID, user.id);
     });
 
-    usersToAdd.length > 0 &&
-      logEvent(
-        ability.userID,
-        { type: "Form", id: formID },
-        "GrantFormAccess",
-        `Access granted to ${usersToAdd.map((user) => user.email ?? user.id).toString()}`
-      );
-
-    usersToRemove.length > 0 &&
-      logEvent(
-        ability.userID,
-        { type: "Form", id: formID },
-        "RevokeFormAccess",
-        `Access revoked for ${usersToRemove.map((user) => user.email ?? user.id).toString()}`
-      );
-
-    if (formCache.cacheAvailable) formCache.formID.invalidate(formID);
-
-    return _parseTemplate(updatedTemplate);
+    return true;
   } catch (e) {
     if (e instanceof AccessControlError)
       logEvent(
