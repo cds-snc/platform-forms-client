@@ -271,5 +271,12 @@
     "sending": "Envoi en cours...",
     "cancel": "Annuler"
   },
-  "loading": "Chargement..."
+  "loading": "Chargement...",
+  "addressComponents": {
+    "streetAddress": "Adresse municipale",
+    "city": "Ville ou communauté",
+    "province": "Province, territoire ou état",
+    "postalCode": "Code postal ou zip",
+    "country": "Pays"
+  }
 }
