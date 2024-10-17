@@ -1,7 +1,7 @@
 import { prisma } from "@lib/integration/prismaConnector";
 import { prismaMock } from "@jestUtils";
 import { getUser } from "@lib/users";
-import { assignUserToTemplate, getTemplateWithAssociatedUsers } from "@lib/templates";
+import { getTemplateWithAssociatedUsers } from "@lib/templates";
 import { sendEmail } from "@lib/integration/notifyConnector";
 import {
   InvalidDomainError,
