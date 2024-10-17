@@ -57,7 +57,7 @@
         "description": "Indiquez le nom et le numéro de rue.",
         "label": "Adresse municipale"
       },
-      "title": "Adresse validée",
+      "title": "Adresse",
       "select": "Sélectionner les éléments de l'adresse à inclure.",
       "options": "Options de format d’adresse",
       "fields": "Format des données",

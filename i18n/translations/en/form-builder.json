@@ -57,7 +57,7 @@
         "description": "Include street name and number.",
         "label": "Street address"
       },
-      "title": "Verified address",
+      "title": "Address",
       "select": "Select which component parts of the address to include.",
       "options": "Address format options",
       "fields": "Data format",
