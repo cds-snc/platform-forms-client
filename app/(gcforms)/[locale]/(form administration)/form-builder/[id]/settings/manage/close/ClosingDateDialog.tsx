@@ -32,7 +32,7 @@ export const ClosingDateDialog = ({
       handleClose={handleClose}
       className="max-w-[800px]"
     >
-      <>
+      <div className="p-4">
         <p>{t("scheduleClosingPage.dialog.text1")}</p>
         <p>{t("scheduleClosingPage.dialog.text2")}</p>
         <div>
@@ -56,7 +56,7 @@ export const ClosingDateDialog = ({
             {t("scheduleClosingPage.dialog.save")}
           </Button>
         </div>
-      </>
+      </div>
     </Dialog>
   );
 };
