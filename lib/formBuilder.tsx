@@ -25,6 +25,7 @@ import {
 } from "@lib/types";
 import { getLocalizedProperty } from "@lib/utils";
 import { managedData } from "@lib/managedData";
+import { AddressComplete } from "@clientComponents/forms/AddressComplete/AddressComplete";
 import { DateFormat } from "@clientComponents/forms/FormattedDate/types";
 
 // This function is used for select/radio/checkbox i18n change of form labels
@@ -274,6 +275,23 @@ function _buildForm(element: FormElement, lang: string): ReactElement {
         </div>
       );
     }
+    case FormElementTypes.addressComplete: {
+      const addressComponents = element.properties.addressComponents;
+      return (
+        <div className="focus-group">
+          {labelComponent}
+          {description && <Description id={`${id}`}>{description}</Description>}
+          <AddressComplete
+            id={`${id}`}
+            name={`${id}`}
+            ariaDescribedBy={description ? `desc-${id}` : undefined}
+            key={`${id}-${lang}`}
+            splitAddress={addressComponents?.splitAddress}
+            canadianOnly={addressComponents?.canadianOnly}
+          />
+        </div>
+      );
+    }
     case FormElementTypes.formattedDate: {
       return (
         <div className="focus-group">
@@ -329,6 +347,7 @@ const _getElementInitialValue = (element: FormElement, language: string): Respon
     case FormElementTypes.formattedDate:
     case FormElementTypes.textField:
     case FormElementTypes.textArea:
+    case FormElementTypes.addressComplete:
       return "";
     case FormElementTypes.checkbox:
       return [];

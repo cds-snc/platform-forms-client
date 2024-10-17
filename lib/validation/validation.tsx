@@ -163,6 +163,13 @@ const isFieldResponseValid = (
 
       break;
     }
+    case FormElementTypes.addressComplete: {
+      if (validator.required && !value) {
+        return t("input-validation.required");
+      }
+
+      break;
+    }
     case FormElementTypes.dynamicRow: {
       //set up object to store results
       // loop over rows of values
