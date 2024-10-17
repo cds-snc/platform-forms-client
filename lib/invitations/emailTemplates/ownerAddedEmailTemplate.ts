@@ -6,7 +6,7 @@
  * @param formOwner
  * @returns
  */
-export const ownerAddedNotification = (
+export const ownerAddedEmailTemplate = (
   formTitleEn: string,
   formTitleFr: string,
   formOwner: string

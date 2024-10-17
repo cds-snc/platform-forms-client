@@ -12,14 +12,14 @@ import {
   UserAlreadyHasAccessError,
   UserNotFoundError,
 } from "../exceptions";
-import { inviteToForms } from "../emailTemplates/inviteToForms";
-import { inviteToCollaborate } from "../emailTemplates/inviteToCollaborate";
+import { inviteToFormsEmailTemplate } from "../emailTemplates/inviteToFormsEmailTemplate";
+import { inviteToCollaborateEmailTemplate } from "../emailTemplates/inviteToCollaborateEmailTemplate";
 import { mockAppUser } from "./fixtures/AppUser";
 import { mockAbility } from "./fixtures/Ability";
 import { mockTemplateWithUsers } from "./fixtures/TemplateWithUsers";
 import { mockInvitation } from "./fixtures/Invitation";
 import { mockUser } from "./fixtures/User";
-import { ownerAddedNotification } from "../emailTemplates/ownerAddedNotification";
+import { ownerAddedEmailTemplate } from "../emailTemplates/ownerAddedEmailTemplate";
 import { inviteUserByEmail } from "../inviteUserByEmail";
 import { acceptInvitation } from "../acceptInvitation";
 import { cancelInvitation } from "../cancelInvitation";
@@ -114,14 +114,14 @@ describe("Invitations", () => {
       // invitee does not have an account
       (prisma.user.findFirst as jest.Mock).mockResolvedValueOnce(null);
 
-      (inviteToForms as jest.Mock).mockReturnValue("email contents");
+      (inviteToFormsEmailTemplate as jest.Mock).mockReturnValue("email contents");
 
       await inviteUserByEmail(mockAbility(), "invited@cds-snc.ca", "form-id", "message");
 
       expect(prisma.invitation.create).toHaveBeenCalledTimes(1);
 
-      expect(inviteToForms).toHaveBeenCalledTimes(1);
-      expect(inviteToForms).toHaveBeenCalledWith(
+      expect(inviteToFormsEmailTemplate).toHaveBeenCalledTimes(1);
+      expect(inviteToFormsEmailTemplate).toHaveBeenCalledWith(
         "sender",
         "message",
         expect.stringContaining("register"),
@@ -160,15 +160,17 @@ describe("Invitations", () => {
       // invitee does not have an account
       prismaMock.user.findFirst.mockResolvedValueOnce(mockUser());
 
-      (inviteToCollaborate as jest.MockedFunction<typeof inviteToCollaborate>).mockReturnValue(
-        "email contents"
-      );
+      (
+        inviteToCollaborateEmailTemplate as jest.MockedFunction<
+          typeof inviteToCollaborateEmailTemplate
+        >
+      ).mockReturnValue("email contents");
 
       await inviteUserByEmail(mockAbility(), "invited@cds-snc.ca", "form-id", "message");
 
       expect(prisma.invitation.create).toHaveBeenCalledTimes(1);
-      expect(inviteToCollaborate).toHaveBeenCalledTimes(1);
-      expect(inviteToCollaborate).toHaveBeenCalledWith(
+      expect(inviteToCollaborateEmailTemplate).toHaveBeenCalledTimes(1);
+      expect(inviteToCollaborateEmailTemplate).toHaveBeenCalledWith(
         "sender",
         "message",
         "form-name",
@@ -222,9 +224,9 @@ describe("Invitations", () => {
       // invitee does not have an account
       prismaMock.user.findFirst.mockResolvedValueOnce(null);
 
-      (inviteToForms as jest.MockedFunction<typeof inviteToForms>).mockReturnValue(
-        "email contents"
-      );
+      (
+        inviteToFormsEmailTemplate as jest.MockedFunction<typeof inviteToFormsEmailTemplate>
+      ).mockReturnValue("email contents");
 
       await inviteUserByEmail(mockAbility(), "invited2@cds-snc.ca", "form-id", "message");
 
@@ -232,8 +234,8 @@ describe("Invitations", () => {
       expect(prisma.invitation.delete).toHaveBeenCalledWith({ where: { id: "invitation-id" } });
 
       expect(prisma.invitation.create).toHaveBeenCalledTimes(1); // create new
-      expect(inviteToForms).toHaveBeenCalledTimes(1);
-      expect(inviteToForms).toHaveBeenCalledWith(
+      expect(inviteToFormsEmailTemplate).toHaveBeenCalledTimes(1);
+      expect(inviteToFormsEmailTemplate).toHaveBeenCalledWith(
         "sender",
         "message",
         expect.stringContaining("register"),
@@ -284,7 +286,7 @@ describe("Invitations", () => {
       ); // user exists
 
       (
-        ownerAddedNotification as jest.MockedFunction<typeof ownerAddedNotification>
+        ownerAddedEmailTemplate as jest.MockedFunction<typeof ownerAddedEmailTemplate>
       ).mockReturnValue("email contents");
 
       const ability = mockAbility({ userID: "invited-user-id" });

@@ -6,7 +6,7 @@
  * @param formOwner Removed owner's name
  * @returns
  */
-export const ownerRemovedNotification = (
+export const ownerRemovedEmailTemplate = (
   formTitleEn: string,
   formTitleFr: string,
   formOwner: string

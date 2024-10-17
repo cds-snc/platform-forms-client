@@ -15,10 +15,10 @@ import { logEvent } from "./auditLogs";
 import { logMessage } from "@lib/logger";
 import { unprocessedSubmissions, deleteDraftFormResponses } from "./vault";
 import { deleteKey } from "./serviceAccount";
-import { ownerRemovedNotification } from "./invitations/emailTemplates/ownerRemovedNotification";
+import { ownerRemovedEmailTemplate } from "./invitations/emailTemplates/ownerRemovedEmailTemplate";
 import { sendEmail } from "./integration/notifyConnector";
-import { youHaveBeenRemovedNotification } from "./invitations/emailTemplates/youHaveBeenRemovedNotification";
-import { ownerAddedNotification } from "./invitations/emailTemplates/ownerAddedNotification";
+import { youHaveBeenRemovedEmailTemplate } from "./invitations/emailTemplates/youHaveBeenRemovedEmailTemplate";
+import { ownerAddedEmailTemplate } from "./invitations/emailTemplates/ownerAddedEmailTemplate";
 
 // ******************************************
 // Internal Module Functions
@@ -807,7 +807,7 @@ export async function removeAssignedUserFromTemplate(
     );
 
     // Send email to person who was removed
-    const youHaveBeenRemovedEmailContent = youHaveBeenRemovedNotification(
+    const youHaveBeenRemovedEmailContent = youHaveBeenRemovedEmailTemplate(
       template.formRecord.form.titleEn,
       template.formRecord.form.titleFr
     );
@@ -819,7 +819,7 @@ export async function removeAssignedUserFromTemplate(
 
     // Send email to remaining owners
     updatedTemplate.users.forEach((owner) => {
-      const ownerRemovedEmailContent = ownerRemovedNotification(
+      const ownerRemovedEmailContent = ownerRemovedEmailTemplate(
         template.formRecord.form.titleEn,
         template.formRecord.form.titleFr,
         userToRemove.name || "An owner"
@@ -938,7 +938,7 @@ export const notifyOwnersOfNewOwnership = async (
   form: FormProperties,
   users: { id: string; email: string }[]
 ) => {
-  const emailContent = ownerAddedNotification(form.titleEn, form.titleFr, userName);
+  const emailContent = ownerAddedEmailTemplate(form.titleEn, form.titleFr, userName);
 
   users.forEach((owner) => {
     sendEmail(owner.email, {

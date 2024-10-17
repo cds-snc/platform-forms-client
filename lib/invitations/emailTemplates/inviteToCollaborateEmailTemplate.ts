@@ -9,7 +9,7 @@
  * @param formUrlFr Form URL
  * @returns
  */
-export const inviteToCollaborate = (
+export const inviteToCollaborateEmailTemplate = (
   senderName: string,
   message: string,
   formTitleEn: string,

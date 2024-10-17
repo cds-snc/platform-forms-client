@@ -7,7 +7,7 @@
  * @param registerUrlFr Registration URL
  * @returns
  */
-export const inviteToForms = (
+export const inviteToFormsEmailTemplate = (
   senderName: string,
   message: string,
   registerUrlEn: string,

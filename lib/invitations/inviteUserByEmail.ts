@@ -10,8 +10,8 @@ import {
 import { getTemplateWithAssociatedUsers } from "@lib/templates";
 import { prisma } from "@lib/integration/prismaConnector";
 import { sendEmail } from "@lib/integration/notifyConnector";
-import { inviteToCollaborate } from "@lib/invitations/emailTemplates/inviteToCollaborate";
-import { inviteToForms } from "@lib/invitations/emailTemplates/inviteToForms";
+import { inviteToCollaborateEmailTemplate } from "@lib/invitations/emailTemplates/inviteToCollaborateEmailTemplate";
+import { inviteToFormsEmailTemplate } from "@lib/invitations/emailTemplates/inviteToFormsEmailTemplate";
 import { getOrigin } from "@lib/origin";
 import { logMessage } from "@lib/logger";
 import { Invitation } from "@prisma/client";
@@ -163,7 +163,7 @@ const _sendInvitationEmail = async (
     const formUrlEn = `${HOST}/en/forms`;
     const formUrlFr = `${HOST}/fr/forms`;
 
-    const emailContent = inviteToCollaborate(
+    const emailContent = inviteToCollaborateEmailTemplate(
       sender.name || "",
       message,
       formRecord.form.titleEn,
@@ -184,7 +184,12 @@ const _sendInvitationEmail = async (
   const registerUrlEn = `${HOST}/en/auth/register`;
   const registerUrlFr = `${HOST}/fr/auth/register`;
 
-  const emailContent = inviteToForms(sender.name || "", message, registerUrlEn, registerUrlFr);
+  const emailContent = inviteToFormsEmailTemplate(
+    sender.name || "",
+    message,
+    registerUrlEn,
+    registerUrlFr
+  );
 
   await sendEmail(email, {
     subject: "Invitation to access form | Invitation pour accéder au formulaire",

@@ -5,7 +5,7 @@
  * @param formTitleFr Form title
  * @returns
  */
-export const youHaveBeenRemovedNotification = (
+export const youHaveBeenRemovedEmailTemplate = (
   formTitleEn: string,
   formTitleFr: string
 ): string => `
