@@ -5,6 +5,22 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.23.0](https://github.com/cds-snc/platform-forms-client/compare/v3.22.4...v3.23.0) (2024-10-16)
+
+
+### Features
+
+* Custom closed message ([#4389](https://github.com/cds-snc/platform-forms-client/issues/4389)) ([2670aa8](https://github.com/cds-snc/platform-forms-client/commit/2670aa8d4b7edd46c4a38b043200f20807ece32e))
+
+
+### Miscellaneous Chores
+
+* update husky pre-commit hook ([#4414](https://github.com/cds-snc/platform-forms-client/issues/4414)) ([8450c4a](https://github.com/cds-snc/platform-forms-client/commit/8450c4aafe2f1d362c1c78e7a4047ad08a10c181))
+* Update next auth to latest version ([#4418](https://github.com/cds-snc/platform-forms-client/issues/4418)) ([9ffa61f](https://github.com/cds-snc/platform-forms-client/commit/9ffa61f48ab1e16018aa90138274fc59ffe43fa2))
+* update Next JS to 14.2.15 ([#4413](https://github.com/cds-snc/platform-forms-client/issues/4413)) ([2bd4cdb](https://github.com/cds-snc/platform-forms-client/commit/2bd4cdbe57c447629921faed5b2c2e8b50b3da5e))
+* update package markdown-to-jsx ([#4416](https://github.com/cds-snc/platform-forms-client/issues/4416)) ([5ff513c](https://github.com/cds-snc/platform-forms-client/commit/5ff513c02821637812707ff4326ccba2d6afea87))
+* validate closed message ([#4415](https://github.com/cds-snc/platform-forms-client/issues/4415)) ([a4c5d14](https://github.com/cds-snc/platform-forms-client/commit/a4c5d14c84ad10c00426168a713798e5e5c06575))
+
 ## [3.22.4](https://github.com/cds-snc/platform-forms-client/compare/v3.22.3...v3.22.4) (2024-10-11)
 
 
