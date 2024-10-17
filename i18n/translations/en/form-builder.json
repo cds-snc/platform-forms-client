@@ -886,7 +886,7 @@
       }
     },
     "banner": {
-      "text": "Form closed on {{month}} {{day}}, {{year}} at {{hour}}:{{minute}} EST"
+      "text": "Form closed on {{month}} {{day}}, {{year}} at {{hour}}:{{minute}} ET"
     }
   },
   "errorSavingForm": {
