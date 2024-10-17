@@ -34,26 +34,65 @@ export const ClosingDateDialog = ({
     >
       <div className="p-4">
         <p className="mb-2 font-bold">{t("scheduleClosingPage.dialog.text1")}</p>
-        <p className="mb-2">{t("scheduleClosingPage.dialog.text2")}</p>
+        <p className="mb-2"></p>
         <div>
           <div className="mb-4 flex gap-10">
-            <div>
-              <label htmlFor="date-picker-month" className="mb-2 font-bold">
-                {t("scheduleClosingPage.dialog.datePicker.month")}
-              </label>
-            </div>
-
-            <div>
-              <label htmlFor="date-picker-day" className="mb-2 font-bold">
-                {t("scheduleClosingPage.dialog.datePicker.day")}
-              </label>
-            </div>
-
-            <div>
-              <label htmlFor="date-picker-year" className="mb-2 font-bold">
-                {t("scheduleClosingPage.dialog.datePicker.year")}
-              </label>
-            </div>
+            <fieldset role="group" aria-label="Date picker">
+              <legend className="mb-4">{t("scheduleClosingPage.dialog.text2")}</legend>
+              <div className="inline-flex gap-2">
+                <div className="gcds-input-wrapper !mr-2 flex flex-col">
+                  <label className="mb-2" htmlFor="date-picker-month">
+                    {t("scheduleClosingPage.dialog.datePicker.month")}
+                  </label>
+                  <input
+                    name="date-picker-month"
+                    id="date-picker-month"
+                    type="number"
+                    min={1}
+                    max={12}
+                    className={"!w-16"}
+                    // onChange={(e) => setSelectedMonth(e.target.value)}
+                    required
+                    data-testid="date-picker-month"
+                  />
+                </div>
+                <div className="gcds-input-wrapper !mr-2 flex flex-col">
+                  <label className="!mr-2 mb-2" htmlFor="date-picker-day">
+                    {t("scheduleClosingPage.dialog.datePicker.day")}
+                  </label>
+                  <input
+                    name="date-picker-day"
+                    id="date-picker-day"
+                    type="number"
+                    min={1}
+                    // max={
+                    //   dateObject?.MM && dateObject?.YYYY
+                    //     ? getMaxMonthDay(dateObject.MM, dateObject.YYYY)
+                    //     : 31
+                    // }
+                    className={"!w-16 !mr-2"}
+                    // onChange={(e) => setSelectedDay(e.target.value)}
+                    required
+                    data-testid="date-picker-day"
+                  />
+                </div>
+                <div className="gcds-input-wrapper !mr-2 !flex !flex-col">
+                  <label className="mb-2" htmlFor="date-picker-year">
+                    {t("scheduleClosingPage.dialog.datePicker.year")}
+                  </label>
+                  <input
+                    name="date-picker-year"
+                    id="date-picker-year"
+                    type="number"
+                    min={1900}
+                    className={"!w-28"}
+                    // onChange={(e) => setSelectedYear(e.target.value)}
+                    required
+                    data-testid="date-picker-year"
+                  />
+                </div>
+              </div>
+            </fieldset>
           </div>
 
           <div className="gcds-input-wrapper !mr-2 !flex !flex-col">
