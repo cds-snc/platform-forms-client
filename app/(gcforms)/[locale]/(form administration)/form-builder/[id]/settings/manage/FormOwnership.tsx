@@ -8,16 +8,26 @@ import { FormOwnerSelect, usersToOptions } from "./FormOwnerSelect";
 import { CacheProvider, EmotionCache } from "@emotion/react";
 import createCache from "@emotion/cache";
 import { FormRecord } from "@lib/types";
-import { updateTemplateUsers } from "@formBuilder/actions";
 
 interface AssignUsersToTemplateProps {
   nonce: string | null;
   formRecord: FormRecord;
   usersAssignedToFormRecord: { id: string; name: string | null; email: string }[];
   allUsers: { id: string; name: string | null; email: string }[];
+  updateTemplateUsers: ({ id, users }: { id: string; users: { id: string }[] }) => Promise<{
+    success: boolean;
+    error?: string;
+  }>;
 }
 
-const updateUsersToTemplateAssignations = async (formID: string, users: { id: string }[]) => {
+const updateUsersToTemplateAssignations = async (
+  formID: string,
+  users: { id: string }[],
+  updateTemplateUsers: ({ id, users }: { id: string; users: { id: string }[] }) => Promise<{
+    success: boolean;
+    error?: string;
+  }>
+) => {
   return updateTemplateUsers({ id: formID, users: users });
 };
 
@@ -26,6 +36,7 @@ export const FormOwnership = ({
   formRecord,
   usersAssignedToFormRecord,
   allUsers,
+  updateTemplateUsers,
 }: AssignUsersToTemplateProps) => {
   const { t } = useTranslation(["admin-users", "form-builder"]);
 
@@ -45,7 +56,11 @@ export const FormOwnership = ({
       return { id: user.value };
     });
 
-    const response = await updateUsersToTemplateAssignations(formRecord.id, usersToAssign);
+    const response = await updateUsersToTemplateAssignations(
+      formRecord.id,
+      usersToAssign,
+      updateTemplateUsers
+    );
 
     if (response && response.error) {
       setMessage(

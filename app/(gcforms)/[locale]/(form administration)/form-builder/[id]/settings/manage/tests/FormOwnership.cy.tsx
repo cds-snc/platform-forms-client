@@ -1,29 +1,54 @@
-// import React from "react";
-// import { FormOwnership } from "../FormOwnership";
-// const allUsers = [
-//   { id: "1", name: "John Doe", email: "john.doe@test.com" },
-//   { id: "2", name: "Jane Doe", email: "jane.doe@test.com" },
-//   { id: "3", name: "John Smith", email: "john.smith@test.com" },
-//   { id: "4", name: "Jane Smith", email: "jane.smith@test.com" },
-// ];
+import React from "react";
+import { FormOwnership } from "../FormOwnership";
+const allUsers = [
+  { id: "1", name: "John Doe", email: "john.doe@test.com" },
+  { id: "2", name: "Jane Doe", email: "jane.doe@test.com" },
+  { id: "3", name: "John Smith", email: "john.smith@test.com" },
+  { id: "4", name: "Jane Smith", email: "jane.smith@test.com" },
+];
 
-// const usersAssignedToFormRecord = [{ id: "1", name: "John Doe", email: "john.doe@test.com" }];
+const usersAssignedToFormRecord = [{ id: "1", name: "John Doe", email: "john.doe@test.com" }];
 
 describe("<FormOwnership />", () => {
-  it.skip("can mount the component", () => {
-    // cy.mount(<FormOwnership formRecord={{}} usersAssignedToFormRecord={[]} allUsers={[]} />);
+  it("can mount the component", () => {
+    cy.mount(
+      <FormOwnership
+        formRecord={{}}
+        usersAssignedToFormRecord={[]}
+        allUsers={[]}
+        nonce={null}
+        updateTemplateUsers={function ({
+          id,
+          users,
+        }: {
+          id: string;
+          users: { id: string }[];
+        }): Promise<{ success: boolean; error?: string }> {
+          throw new Error(`Function not implemented. ${id} ${users}`);
+        }}
+      />
+    );
     cy.contains("Manage ownership");
   });
 
-  it.skip("can render the component with users assigned", () => {
-    cy
-      .mount
-      // <FormOwnership
-      //   formRecord={{}}
-      //   usersAssignedToFormRecord={usersAssignedToFormRecord}
-      //   allUsers={allUsers}
-      // />
-      ();
+  it("can render the component with users assigned", () => {
+    cy.mount(
+      <FormOwnership
+        formRecord={{}}
+        usersAssignedToFormRecord={usersAssignedToFormRecord}
+        allUsers={allUsers}
+        nonce={null}
+        updateTemplateUsers={function ({
+          id,
+          users,
+        }: {
+          id: string;
+          users: { id: string }[];
+        }): Promise<{ success: boolean; error?: string }> {
+          throw new Error(`Function not implemented. ${id} ${users}`);
+        }}
+      />
+    );
     cy.contains("Manage ownership");
     cy.contains("john.doe@test.com");
   });
