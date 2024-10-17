@@ -196,5 +196,10 @@
     "type2": "NEW",
     "message2": "Build complex multi-page forms with display logic and branching. <a href='https://articles.alpha.canada.ca/forms-formulaires/setting-up-form-logic/' className='text-white hover:text-white'>Learn more</a>"
   },
+  "closingNotice": {
+    "title": "Form closing",
+    "text1": "Form accepting submissions until:",
+    "text2": "{{month}} {{day}}, {{year}} at {{hour}}:{{minute}} ET."
+  },
   "cancel": "Cancel"
 }
