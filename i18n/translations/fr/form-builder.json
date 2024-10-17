@@ -1155,5 +1155,21 @@
         "description": "Ajoutez une action pertinente spécifique pour aider les personnes à remplir le formulaire. Par exemple : « Supprimer l'adresse »"
       }
     }
+  },
+  "scheduleClosingPage": {
+    "title": "Schedule the closed form message [FR]",
+    "text1": "Schedule a closing date [FR]",
+    "text2": "Set when you’d like to close the form. [FR]",
+    "datePicker": {
+      "month": "Month [FR]",
+      "day": "Day [FR]",
+      "year": "Year [FR]"
+    },
+    "timePicker": {
+      "text1": "Set a time [FR]",
+      "text2": "Provide time in 24 hour clock. The timezone is in Eastern time [FR]"
+    },
+    "save": "Save [FR]",
+    "cancel": "Cancel [FR]"
   }
 }

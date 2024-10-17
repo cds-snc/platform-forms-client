@@ -1155,5 +1155,21 @@
         "description": "Add a relevant action that is specific for the people filling out the form. For example, “Remove address”"
       }
     }
+  },
+  "scheduleClosingPage": {
+    "title": "Schedule the closed form message",
+    "text1": "Schedule a closing date",
+    "text2": "Set when you’d like to close the form.",
+    "datePicker": {
+      "month": "Month",
+      "day": "Day",
+      "year": "Year"
+    },
+    "timePicker": {
+      "text1": "Set a time",
+      "text2": "Provide time in 24 hour clock. The timezone is in Eastern time"
+    },
+    "save": "Save",
+    "cancel": "Cancel"
   }
 }
