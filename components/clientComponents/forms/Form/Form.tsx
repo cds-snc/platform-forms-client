@@ -29,30 +29,23 @@ import { filterShownElements, filterValuesByShownElements } from "@lib/formConte
 import { formHasGroups } from "@lib/utils/form-builder/formHasGroups";
 import { showReviewPage } from "@lib/utils/form-builder/showReviewPage";
 
+// TODO: refactor out to a separate file and see if it can be simplified - tracked in #4407
 interface SubmitButtonProps {
-  numberOfRequiredQuestions: number;
+  submitDelay: () => number;
   formID: string;
   formTitle: string;
 }
-const SubmitButton: React.FC<SubmitButtonProps> = ({
-  numberOfRequiredQuestions,
-  formID,
-  formTitle,
-}) => {
+const SubmitButton: React.FC<SubmitButtonProps> = ({ submitDelay, formID, formTitle }) => {
   const { t } = useTranslation();
   const [formTimerState, { startTimer, checkTimer, disableTimer }] = useFormTimer();
   const [submitTooEarly, setSubmitTooEarly] = useState(false);
   const screenReaderRemainingTime = useRef(formTimerState.remainingTime);
-
-  // calculate initial delay for submit timer
-  const secondsBaseDelay = 2;
-  const secondsPerFormElement = 2;
-  const submitDelaySeconds = secondsBaseDelay + numberOfRequiredQuestions * secondsPerFormElement;
-
   const formTimerEnabled = process.env.NEXT_PUBLIC_APP_ENV !== "test";
 
   // If the timer hasn't started yet, start the timer
-  if (!formTimerState.timerDelay && formTimerEnabled) startTimer(submitDelaySeconds);
+  if (!formTimerState.timerDelay && formTimerEnabled) {
+    startTimer(submitDelay());
+  }
 
   useEffect(() => {
     if (!formTimerEnabled && !formTimerState.canSubmit) {
@@ -155,7 +148,8 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
   const [canFocusOnError, setCanFocusOnError] = useState(false);
   const [lastSubmitCount, setLastSubmitCount] = useState(-1);
 
-  const { currentGroup, groupsCheck, getGroupTitle } = useGCFormsContext();
+  const { currentGroup, groupsCheck, getGroupTitle, setInitialFormViewTime, getSubmitDelay } =
+    useGCFormsContext();
   const isGroupsCheck = groupsCheck(props.allowGrouping);
   const isShowReviewPage = showReviewPage(form);
   const showIntro = isGroupsCheck ? currentGroup === LockedSections.START : true;
@@ -194,9 +188,7 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [formStatusError, errorList, lastSubmitCount, canFocusOnError]);
 
-  const numberOfRequiredQuestions = form.elements.filter(
-    (element) => element.properties.validation?.required === true
-  ).length;
+  useEffect(setInitialFormViewTime, [setInitialFormViewTime]);
 
   return status === "submitting" ? (
     <>
@@ -304,7 +296,7 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
                           )}
                         <div className="inline-block">
                           <SubmitButton
-                            numberOfRequiredQuestions={numberOfRequiredQuestions}
+                            submitDelay={getSubmitDelay}
                             formID={formID}
                             formTitle={form.titleEn}
                           />
@@ -315,7 +307,7 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
                 })
               ) : (
                 <SubmitButton
-                  numberOfRequiredQuestions={numberOfRequiredQuestions}
+                  submitDelay={getSubmitDelay}
                   formID={formID}
                   formTitle={form.titleEn}
                 />

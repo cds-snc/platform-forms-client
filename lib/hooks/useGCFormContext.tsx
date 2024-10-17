@@ -1,6 +1,6 @@
 "use client";
 import React, { createContext, useContext, ReactNode } from "react";
-import { PublicFormRecord } from "@lib/types";
+import { FormElement, PublicFormRecord } from "@lib/types";
 import {
   mapIdsToValues,
   FormValues,
@@ -9,6 +9,9 @@ import {
   getNextAction,
   filterShownElements,
   filterValuesByShownElements,
+  getFormElementsFromGroups as _getFormElementsFromGroups,
+  getSubmitDelayGroups,
+  getSubmitDelayNoGroups,
 } from "@lib/formContext";
 import { LockedSections } from "@formBuilder/components/shared/right-panel/treeview/types";
 import { formHasGroups } from "@lib/utils/form-builder/formHasGroups";
@@ -21,6 +24,8 @@ import {
 } from "@lib/utils/form-builder/groupsHistory";
 import { getLocalizedProperty } from "@lib/utils";
 import { Language } from "@lib/types/form-builder-types";
+import { logMessage } from "@lib/logger";
+import { showReviewPage } from "@lib/utils/form-builder/showReviewPage";
 
 interface GCFormsContextValueType {
   updateValues: ({ formValues }: { formValues: FormValues }) => void;
@@ -41,6 +46,10 @@ interface GCFormsContextValueType {
   pushIdToHistory: (groupId: string) => string[];
   clearHistoryAfterId: (groupId: string) => string[];
   getGroupTitle: (groupId: string | null, language: Language) => string;
+  setInitialFormViewTime: () => void;
+  getInitialFormViewTime: () => number;
+  getFormElementsFromGroups: () => (FormElement | undefined)[];
+  getSubmitDelay: () => number;
 }
 
 const GCFormsContext = createContext<GCFormsContextValueType | undefined>(undefined);
@@ -59,6 +68,7 @@ export const GCFormsProvider = ({
   const [matchedIds, setMatchedIds] = React.useState<string[]>([]);
   const [currentGroup, setCurrentGroup] = React.useState<string | null>(initialGroup);
   const [previousGroup, setPreviousGroup] = React.useState<string | null>(initialGroup);
+  const formStartTimestamp = React.useRef<number>();
 
   const inputHistoryValues = getInputHistoryValues(
     (values.current || []) as FormValues,
@@ -160,6 +170,59 @@ export const GCFormsProvider = ({
     return groups?.[groupId]?.[titleLanguageKey] || "";
   };
 
+  const setInitialFormViewTime = () => {
+    if (!formStartTimestamp.current) formStartTimestamp.current = Date.now();
+  };
+
+  const getInitialFormViewTime = () => formStartTimestamp.current || 0;
+
+  const getFormElementsFromGroups = () => {
+    const groupHistory = getGroupHistory();
+    const values = getValues();
+    const language = "en" as Language; // TODO:TEMP: will be refactored out in the future
+    return _getFormElementsFromGroups({
+      form: formRecord.form,
+      values,
+      groupHistory,
+      groups,
+      matchedIds,
+      language,
+    });
+  };
+
+  /**
+   * Used by the Submit button to determine the delay before allowing a user to submit a form.
+   * Note The countdown begins when the Submit button is rendered. For group forms this is when
+   * the Review page is shown. For non-group forms this is when the form is initially shown.
+   * @returns delay in seconds
+   */
+  const getSubmitDelay = () => {
+    try {
+      const hasGroups = showReviewPage(formRecord.form);
+      const filterByTheseElements = hasGroups
+        ? getFormElementsFromGroups()
+        : formRecord.form.elements;
+
+      const requiredQuestionsCount = filterByTheseElements.filter(
+        (element) => element?.properties.validation?.required === true
+      ).length;
+
+      if (hasGroups) {
+        return getSubmitDelayGroups({
+          startTime: getInitialFormViewTime(),
+          currentTime: Date.now(),
+          requiredQuestionsCount,
+        });
+      }
+
+      return getSubmitDelayNoGroups({ requiredQuestionsCount });
+    } catch (error) {
+      logMessage.info("Error calculating submit delay.");
+      const DEFAULT_DELAY = 4;
+      return DEFAULT_DELAY;
+    }
+  };
+
   return (
     <GCFormsContext.Provider
       value={{
@@ -181,6 +244,10 @@ export const GCFormsProvider = ({
         pushIdToHistory,
         clearHistoryAfterId,
         getGroupTitle,
+        setInitialFormViewTime,
+        getInitialFormViewTime,
+        getFormElementsFromGroups,
+        getSubmitDelay,
       }}
     >
       {children}
@@ -215,6 +282,10 @@ export const useGCFormsContext = () => {
       pushIdToHistory: () => [],
       clearHistoryAfterId: () => [],
       getGroupTitle: () => "",
+      setInitialFormViewTime: () => void 0,
+      getInitialFormViewTime: () => 0,
+      getFormElementsFromGroups: () => [],
+      getSubmitDelay: () => 0,
     };
   }
   return formsContext;

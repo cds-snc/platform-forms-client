@@ -1,5 +1,7 @@
-import { FormElement, Response, Responses } from "@lib/types";
+import { FormElement, FormProperties, Response, Responses } from "@lib/types";
 import { PublicFormRecord, ConditionalRule } from "@lib/types";
+import { getReviewItemElements } from "@clientComponents/forms/Review/Review";
+import { logMessage } from "./logger";
 
 export type Group = {
   name: string;
@@ -866,4 +868,143 @@ export const decrementNextActionChoiceIds = (groups: GroupsType, choiceId: strin
   });
 
   return updatedGroups;
+};
+
+// TODO: update to use the refactored getReviewItemElements() - tracked in #4407
+export const getFormElementsFromGroups = ({
+  form,
+  values,
+  groupHistory,
+  groups,
+  matchedIds,
+  language, // TODO: will be refactored out when the above TODO is done
+}: {
+  form: FormProperties;
+  values: FormValues;
+  groupHistory: string[];
+  groups: GroupsType | object | undefined;
+  matchedIds: string[];
+  language: string;
+}) => {
+  return groupHistory
+    .map((groupId) => {
+      if (!groups) {
+        return [];
+      }
+
+      const group: Group = groups[groupId as keyof typeof groups];
+
+      if (!group) {
+        return [];
+      }
+
+      return getReviewItemElements(group.elements, form.elements, matchedIds, values, language).map(
+        (groupElement) => groupElement.element
+      );
+    })
+    .flat();
+};
+
+const calculateSubmitDelay = (delayFromFormData: number) => {
+  const secondsBaseDelay = 2;
+  const secondsPerFormElement = 2;
+  // Add in a little math to make it more unpredictable and calculates the final delay
+  return secondsBaseDelay + delayFromFormData * secondsPerFormElement;
+};
+
+/**
+ * Similar to getSubmitDelayGroups() but does not take the time a form was viewed into account.
+ * @param requiredQuestionsCount number count of the required form elements in a form
+ */
+export const getSubmitDelayNoGroups = ({
+  requiredQuestionsCount,
+}: {
+  requiredQuestionsCount: number;
+}) => {
+  const DEFAULT_DELAY = 4;
+  if (!Number.isInteger(requiredQuestionsCount)) {
+    return DEFAULT_DELAY;
+  }
+
+  const submitDelay = calculateSubmitDelay(requiredQuestionsCount);
+  if (ENABLE_SUBMIT_DELAY_DEBUGGING) {
+    submitDelayLogger({ requiredQuestionsCount, submitDelay });
+  }
+  return submitDelay;
+};
+
+/**
+ * Calculates a difficult to predict delay in seconds with the purpose of detering spam from bots.
+ * The idea is that a bot would answer the questions quickly and try to submit the form immediately.
+ * By adding a delay the bot is forced to wait and since the delay is difficult to predict, making
+ * it difficult to automate when the submit button will become active.
+ * @param startTime timestamp when a form is initially viewed (remove for non group forms)
+ * @param currentTime timestamp of the current time(remove for non group forms)
+ * @param requiredQuestionsCount number count of the required form elements in a form
+ * @returns submit delay number seconds
+ */
+export const getSubmitDelayGroups = ({
+  startTime,
+  currentTime,
+  requiredQuestionsCount,
+}: {
+  startTime?: number;
+  currentTime?: number;
+  requiredQuestionsCount: number;
+}) => {
+  const DEFAULT_DELAY = 4;
+  if (!Number.isInteger(requiredQuestionsCount) || !startTime || !currentTime) {
+    return DEFAULT_DELAY;
+  }
+
+  const timeElapsedSeconds = Math.floor((currentTime - startTime) / 1000);
+
+  let delayFromFormData = requiredQuestionsCount - timeElapsedSeconds;
+  if (delayFromFormData < 1) {
+    delayFromFormData = 1;
+  }
+
+  const submitDelay = calculateSubmitDelay(delayFromFormData);
+  if (ENABLE_SUBMIT_DELAY_DEBUGGING) {
+    submitDelayLogger({
+      startTime,
+      currentTime,
+      timeElapsedSeconds,
+      requiredQuestionsCount,
+      delayFromFormData,
+      submitDelay,
+    });
+  }
+  return submitDelay;
+};
+
+// Turn on for local debugging
+const ENABLE_SUBMIT_DELAY_DEBUGGING = false;
+const submitDelayLogger = ({
+  startTime,
+  currentTime,
+  timeElapsedSeconds,
+  requiredQuestionsCount,
+  delayFromFormData,
+  submitDelay,
+}: {
+  startTime?: number | undefined;
+  currentTime?: number | undefined;
+  timeElapsedSeconds?: number;
+  requiredQuestionsCount: number;
+  delayFromFormData?: number;
+  submitDelay: number;
+}) => {
+  logMessage.info(`=====================`);
+  logMessage.info(`requiredQuestionsCount: ${requiredQuestionsCount}`);
+  if (timeElapsedSeconds && delayFromFormData && timeElapsedSeconds > 0) {
+    logMessage.info(
+      `timeElapsed: ${timeElapsedSeconds} seconds (start=${startTime}, current=${currentTime})`
+    );
+    logMessage.info(
+      `delayFromFormData: ${delayFromFormData} (${requiredQuestionsCount} - ${timeElapsedSeconds}, if < 0 then = 1)`
+    );
+  }
+  logMessage.info(`submitDelay: ${submitDelay}`);
+  logMessage.info(`=====================`);
 };
