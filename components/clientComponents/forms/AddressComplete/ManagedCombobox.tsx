@@ -27,7 +27,7 @@ export const ManagedCombobox = React.forwardRef(
       baseValue,
       useFilter,
     } = props;
-    const classes = classnames("gc-combobox gcds-input-wrapper", className);
+    const classes = classnames("gc-combobox gcds-input-wrapper relative", className);
 
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const [field, meta, helpers] = useField(props);
@@ -110,7 +110,7 @@ export const ManagedCombobox = React.forwardRef(
               items.map((item, index) => (
                 <li
                   className={cn(
-                    highlightedIndex === index && "bg-slate-300",
+                    highlightedIndex === index && "bg-gcds-blue-100",
                     selectedItem === item && "font-bold"
                   )}
                   key={item}

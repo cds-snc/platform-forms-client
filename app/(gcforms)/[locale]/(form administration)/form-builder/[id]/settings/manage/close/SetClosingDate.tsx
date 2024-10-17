@@ -10,6 +10,7 @@ import { Button } from "@clientComponents/globals";
 import { ClosingDateToggle } from "./ClosingDateToggle";
 import { ClosedMessage } from "./ClosedMessage";
 import { ClosedSuccess } from "./ClosedSuccess";
+import { ClosedDateBanner } from "./ClosedDateBanner";
 
 import { closeForm } from "@formBuilder/actions";
 import { ClosingDateDialog } from "./ClosingDateDialog";
@@ -87,6 +88,9 @@ export const SetClosingDate = ({
       <h2>{t("closingDate.title")}</h2>
       <h3>{t("closingDate.status")}</h3>
       <p className="mb-6">{t("closingDate.description")}</p>
+      <div className="w-3/5">
+        <ClosedDateBanner closingDate={closingDate} />
+      </div>
       <div className="mb-4">
         <ClosingDateToggle
           isChecked={status === "closed" ? false : true}

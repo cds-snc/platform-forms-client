@@ -919,6 +919,9 @@
       "errors": {
         "translation": "Provide equivalent content in both official languages."
       }
+    },
+    "banner": {
+      "text": "Form closed on {{month}} {{day}}, {{year}} at {{hour}}:{{minute}} ET"
     }
   },
   "errorSavingForm": {
