@@ -886,7 +886,7 @@
       }
     },
     "banner": {
-      "text": "Form closed on {{month}} {{day}}, {{year}} at {{hour}}:{{minute}} EST [FR]"
+      "text": "Le formulaire a été fermé le {{day}} {{month}} {{year}} à {{hour}} h {{minute}} HE"
     }
   },
   "errorSavingForm": {
