@@ -884,6 +884,9 @@
       "errors": {
         "translation": "Veuillez fournir du contenu équivalent dans les deux langues officielles."
       }
+    },
+    "banner": {
+      "text": "Form closed on {{month}} {{day}}, {{year}} at {{hour}}:{{minute}} EST [FR]"
     }
   },
   "errorSavingForm": {
