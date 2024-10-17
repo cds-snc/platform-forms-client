@@ -2,6 +2,7 @@ import { getMaxMonthDay } from "@clientComponents/forms/FormattedDate/utils";
 import { Button } from "@clientComponents/globals";
 import { Dialog, useDialogRef } from "@formBuilder/components/shared";
 import { useTranslation } from "@i18n/client";
+import { logMessage } from "@lib/logger";
 import { useEffect, useState } from "react";
 
 export const ClosingDateDialog = ({
@@ -19,17 +20,44 @@ export const ClosingDateDialog = ({
   const [month, setMonth] = useState<number | undefined>(undefined);
   const [day, setDay] = useState<number | undefined>(undefined);
   const [year, setYear] = useState<number | undefined>(undefined);
-  const [time, setTime] = useState<number | undefined>(undefined);
+  const [time, setTime] = useState<string | undefined>(undefined);
 
   const handleClose = () => {
     setShowDateTimeDialog(false);
     dialogRef.current?.close();
   };
 
+  const handleSave = () => {
+    // todo validate date
+    save(dateTime);
+    // if valid then
+    handleClose();
+  };
+
+  const handleSetTime = (time: string) => {
+    if (!isValidTime(time)) {
+      // TODO show an error
+      return;
+    }
+    setTime(time);
+  };
+
+  // TODO Move to lib - sorry can't escpate the regex :)
+  // TODO update to make first digit optional, so no need to prefix with 0
+  function isValidTime(time: string) {
+    return /^(?:[01][0-9]|2[0-3]):[0-5][0-9](?::[0-5][0-9])?$/.test(time);
+  }
+
   useEffect(() => {
     if (month && day && year && time) {
-      const date = new Date(year, month - 1, day, time);
+      const hours = Number(time.split(":")[0]);
+      const minutes = Number(time.split(":")[1]);
+
+      // TODO: Wrong date
+      const date = new Date(year, month - 1, day, hours, minutes);
       setDateTime(date.getTime());
+
+      logMessage.info("TEMP: closing date at " + date.getUTCDate());
     }
   }, [month, day, year, time]);
 
@@ -114,7 +142,9 @@ export const ClosingDateDialog = ({
               name="time-picker"
               role="time"
               aria-describedby="time-picker-description"
-              onChange={(e) => setTime(Number(e.target.value))}
+              minLength={5}
+              maxLength={5}
+              onChange={(e) => handleSetTime(e.target.value)}
               placeholder="00:00"
               required
               className="!w-20"
@@ -126,7 +156,7 @@ export const ClosingDateDialog = ({
           <Button theme="secondary" onClick={handleClose}>
             {t("scheduleClosingPage.dialog.cancel")}
           </Button>
-          <Button theme="primary" onClick={() => save(dateTime)}>
+          <Button theme="primary" onClick={handleSave}>
             {t("scheduleClosingPage.dialog.save")}
           </Button>
         </div>
