@@ -63,7 +63,10 @@ export const getAddressComponents = async (
   const frenchResult = addressCompleteResult.find((result) => result.Language === "FRE");
 
   // Pick ENG or FRE based on language. (en vs fr)
-  const resultData = language === "en" ? englishResult : frenchResult;
+  let resultData = language === "en" ? englishResult : frenchResult;
+  if (resultData === undefined) {
+    resultData = addressCompleteResult[0];
+  }
 
   const streetAddress =
     (resultData?.SubBuilding ? resultData?.SubBuilding + "-" : "") +
