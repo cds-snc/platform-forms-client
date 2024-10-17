@@ -28,10 +28,11 @@ export const ClosingDateDialog = ({
   };
 
   const handleSave = () => {
-    // todo validate date
+    // TODO: validate here, use same validation as in server action (shared lib?)
+    // if valid then save and close
     save(dateTime);
-    // if valid then
     handleClose();
+    // else show an error
   };
 
   const handleSetTime = (time: string) => {
@@ -42,22 +43,22 @@ export const ClosingDateDialog = ({
     setTime(time);
   };
 
-  // TODO Move to lib - sorry can't escpate the regex :)
-  // TODO update to make first digit optional, so no need to prefix with 0
+  // TODO: validate here, use same validation as in server action (shared lib?)
+  // TODO: move to lib
+  // TODO: update to make first digit optional, so no need to prefix with 0
   function isValidTime(time: string) {
     return /^(?:[01][0-9]|2[0-3]):[0-5][0-9](?::[0-5][0-9])?$/.test(time);
   }
 
+  // TODO: double check the dependecies don't cause an infinite loop
   useEffect(() => {
     if (month && day && year && time) {
       const hours = Number(time.split(":")[0]);
       const minutes = Number(time.split(":")[1]);
-
-      // TODO: Wrong date
       const date = new Date(year, month - 1, day, hours, minutes);
       setDateTime(date.getTime());
 
-      logMessage.info("TEMP: closing date at " + date.getUTCDate());
+      logMessage.info("TEMP: closing date at " + date);
     }
   }, [month, day, year, time]);
 
