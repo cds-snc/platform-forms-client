@@ -1,5 +1,5 @@
 "use client";
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { useTranslation } from "@i18n/client";
 import { useTemplateStore } from "@lib/store/useTemplateStore";
 import { toast } from "@formBuilder/components/shared/Toast";
@@ -14,6 +14,8 @@ import { ClosedDateBanner } from "./ClosedDateBanner";
 
 import { closeForm } from "@formBuilder/actions";
 import { ClosingDateDialog } from "./ClosingDateDialog";
+
+import { dateHasPast } from "lib/utils";
 
 export const SetClosingDate = ({
   formId,
@@ -47,6 +49,19 @@ export const SetClosingDate = ({
   const [status, setStatus] = useState(closingDate ? "closed" : "open");
   const [showDateTimeDialog, setShowDateTimeDialog] = useState(false);
 
+  useEffect(() => {
+    // Ensure the toggle displays the correct state if the date changes
+    // i.e. a date is scheduled via the dialog
+    if (!closingDate) {
+      setStatus("open");
+      return;
+    }
+
+    const isPastClosingDate = dateHasPast(Date.parse(closingDate));
+    const status = isPastClosingDate ? "closed" : "open";
+    setStatus(status);
+  }, [closingDate]);
+
   const handleToggle = (value: boolean) => {
     setStatus(value == true ? "closed" : "open");
   };
@@ -71,7 +86,7 @@ export const SetClosingDate = ({
         return;
       }
 
-      // update the local store
+      // update the template store
       setClosingDate(status !== "open" ? closeDate : null);
 
       if (status === "closed") {
