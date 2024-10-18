@@ -40,6 +40,7 @@
     "format:check": "prettier --check .",
     "test": "jest",
     "test:vitest": "vitest run",
+    "test:watch:vitest": "vitest --watch",
     "test:watch": "DEBUG_PRINT_LIMIT=10000  jest --watch",
     "cypress": "cypress open",
     "cypress:run": "CYPRESS_DEBUG=true cypress run --browser chrome",
