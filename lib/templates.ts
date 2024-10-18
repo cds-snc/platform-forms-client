@@ -806,30 +806,11 @@ export async function removeAssignedUserFromTemplate(
       `Access revoked for ${userID}`
     );
 
-    // Send email to person who was removed
-    const youHaveBeenRemovedEmailContent = youHaveBeenRemovedEmailTemplate(
-      template.formRecord.form.titleEn,
-      template.formRecord.form.titleFr
+    notifyOwnersOwnerRemoved(
+      userToRemove,
+      updatedTemplate.jsonConfig as FormProperties,
+      updatedTemplate.users
     );
-
-    sendEmail(userToRemove.email, {
-      subject: "Form access removed | Accès au formulaire supprimé",
-      formResponse: youHaveBeenRemovedEmailContent,
-    });
-
-    // Send email to remaining owners
-    updatedTemplate.users.forEach((owner) => {
-      const ownerRemovedEmailContent = ownerRemovedEmailTemplate(
-        template.formRecord.form.titleEn,
-        template.formRecord.form.titleFr,
-        userToRemove.name || "An owner"
-      );
-
-      sendEmail(owner.email, {
-        subject: "Form access removed | Accès au formulaire supprimé",
-        formResponse: ownerRemovedEmailContent,
-      });
-    });
 
     if (formCache.cacheAvailable) formCache.formID.invalidate(formID);
   } catch (e) {
@@ -908,8 +889,8 @@ export async function assignUserToTemplate(
       `Access granted to ${userID}`
     );
 
-    notifyOwnersOfNewOwnership(
-      userToAdd.name || userToAdd.email,
+    notifyOwnersOwnerAdded(
+      userToAdd,
       updatedTemplate.jsonConfig as FormProperties,
       updatedTemplate.users
     );
@@ -928,22 +909,65 @@ export async function assignUserToTemplate(
 }
 
 /**
- * Notify all owners when ownership changes
+ * Notify all owners when ownership changes (owner added)
  *
  * @param user New owner
- * @param formId
+ * @param form Form properties object
+ * @param users Current owners
  */
-export const notifyOwnersOfNewOwnership = async (
-  userName: string,
+export const notifyOwnersOwnerAdded = async (
+  userToAdd: { name: string | null; email: string },
   form: FormProperties,
   users: { id: string; email: string }[]
 ) => {
-  const emailContent = ownerAddedEmailTemplate(form.titleEn, form.titleFr, userName);
+  const emailContent = ownerAddedEmailTemplate(
+    form.titleEn,
+    form.titleFr,
+    userToAdd.name || userToAdd.email
+  );
 
   users.forEach((owner) => {
     sendEmail(owner.email, {
       subject: "Ownership change notification | Notification de changement de propriété",
       formResponse: emailContent,
+    });
+  });
+};
+
+/**
+ * Notify owners of ownership changes (owner removed)
+ *
+ * @param userToRemove User to be removed
+ * @param form Form properties object
+ * @param users Current owners
+ */
+export const notifyOwnersOwnerRemoved = async (
+  userToRemove: { name: string | null; email: string },
+  form: FormProperties,
+  users: { id: string; email: string }[]
+) => {
+  // Send email to person who was removed
+  const youHaveBeenRemovedEmailContent = youHaveBeenRemovedEmailTemplate(
+    form.titleEn,
+    form.titleFr
+  );
+
+  sendEmail(userToRemove.email, {
+    subject: "Form access removed | Accès au formulaire supprimé",
+    formResponse: youHaveBeenRemovedEmailContent,
+  });
+
+  // Send email to remaining owners
+  users.forEach((owner) => {
+    const ownerRemovedEmailContent = ownerRemovedEmailTemplate(
+      form.titleEn,
+      form.titleFr,
+      userToRemove.name || "An owner"
+    );
+
+    sendEmail(owner.email, {
+      subject: "Form access removed | Accès au formulaire supprimé",
+      formResponse: ownerRemovedEmailContent,
     });
   });
 };
@@ -959,7 +983,7 @@ export async function updateAssignedUsersForTemplate(
   ability: UserAbility,
   formID: string,
   users: { id: string }[]
-): Promise<boolean> {
+): Promise<FormRecord | null> {
   try {
     if (!users.length) throw new Error("No users provided");
 
@@ -978,7 +1002,7 @@ export async function updateAssignedUsersForTemplate(
           users
         )} on template ${formID}.  Template does not exist`
       );
-      throw new TemplateNotFoundError();
+      return null;
     }
 
     checkPrivileges(ability, [
@@ -994,16 +1018,88 @@ export async function updateAssignedUsersForTemplate(
     const toAdd = users.filter((n) => !previouslyAssigned.some((n2) => n.id == n2.id));
     const toRemove = previouslyAssigned.filter((n) => !users.some((n2) => n.id == n2.id));
 
-    //
-    toAdd.map((user) => {
-      assignUserToTemplate(ability, formID, user.id);
+    const updatedTemplate = await prisma.template
+      .update({
+        where: {
+          id: formID,
+        },
+        data: {
+          users: {
+            connect: toAdd,
+            disconnect: toRemove,
+          },
+        },
+        select: {
+          id: true,
+          created_at: true,
+          updated_at: true,
+          name: true,
+          jsonConfig: true,
+          isPublished: true,
+          deliveryOption: true,
+          securityAttribute: true,
+          formPurpose: true,
+          publishReason: true,
+          publishFormType: true,
+          publishDesc: true,
+          users: true,
+        },
+      })
+      .catch((e) => prismaErrors(e, null));
+
+    if (updatedTemplate === null) return updatedTemplate;
+
+    const getUsersFromUserIds = (userIds: string[]) => {
+      return Promise.all(
+        userIds.map((userId) => {
+          return prisma.user.findUniqueOrThrow({
+            where: {
+              id: userId,
+            },
+          });
+        })
+      );
+    };
+
+    const usersToAdd = await getUsersFromUserIds(toAdd.map((u) => u.id));
+
+    usersToAdd.forEach((user) => {
+      notifyOwnersOwnerAdded(
+        user,
+        updatedTemplate.jsonConfig as FormProperties,
+        updatedTemplate.users
+      );
     });
 
-    toRemove.map((user) => {
-      removeAssignedUserFromTemplate(ability, formID, user.id);
+    const usersToRemove = await getUsersFromUserIds(toRemove.map((u) => u.id));
+
+    usersToRemove.forEach((user) => {
+      notifyOwnersOwnerRemoved(
+        user,
+        updatedTemplate.jsonConfig as FormProperties,
+        updatedTemplate.users
+      );
     });
 
-    return true;
+    usersToAdd.length > 0 &&
+      logEvent(
+        ability.userID,
+        { type: "Form", id: formID },
+        "GrantFormAccess",
+        `Access granted to ${usersToAdd.map((user) => user.email ?? user.id).toString()}`
+      );
+
+    usersToRemove.length > 0 &&
+      logEvent(
+        ability.userID,
+        { type: "Form", id: formID },
+        "RevokeFormAccess",
+        `Access revoked for ${usersToRemove.map((user) => user.email ?? user.id).toString()}`
+      );
+
+    if (formCache.cacheAvailable) formCache.formID.invalidate(formID);
+
+    return _parseTemplate(updatedTemplate);
   } catch (e) {
     if (e instanceof AccessControlError)
       logEvent(

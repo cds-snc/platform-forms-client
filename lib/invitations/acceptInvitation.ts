@@ -3,7 +3,7 @@ import { FormProperties, UserAbility } from "@lib/types";
 import { InvitationIsExpiredError, InvitationNotFoundError, UserNotFoundError } from "./exceptions";
 import { checkPrivileges } from "@lib/privileges";
 import { logEvent } from "@lib/auditLogs";
-import { notifyOwnersOfNewOwnership } from "@lib/templates";
+import { notifyOwnersOwnerAdded } from "@lib/templates";
 
 /**
  * Accept an invitation.
@@ -55,8 +55,8 @@ export const acceptInvitation = async (ability: UserAbility, invitationId: strin
 
     _deleteInvitation(invitationId);
 
-    notifyOwnersOfNewOwnership(
-      user.name || user.email,
+    notifyOwnersOwnerAdded(
+      user,
       updatedTemplate.jsonConfig as FormProperties,
       updatedTemplate.users
     );
