@@ -3,8 +3,8 @@ import { ManageFormAccessDialogProvider } from "./ManageFormAccessDialogContext"
 
 export const ManageFormAccessDialogContainer = ({ formId }: { formId: string }) => {
   return (
-    <ManageFormAccessDialogProvider>
-      <ManageFormAccessDialog formId={formId} />
+    <ManageFormAccessDialogProvider formId={formId}>
+      <ManageFormAccessDialog />
     </ManageFormAccessDialogProvider>
   );
 };

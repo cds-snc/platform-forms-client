@@ -10,15 +10,9 @@ import { useManageFormAccessDialog } from "./ManageFormAccessDialogContext";
 import { isValidGovEmail } from "@lib/validation/validation";
 import { useTranslation } from "@i18n/client";
 
-type ManageFormAccessDialogProps = {
-  formId: string;
-};
-
-export const ManageFormAccessDialog = ({ formId }: ManageFormAccessDialogProps) => {
+export const ManageFormAccessDialog = () => {
   const { t } = useTranslation("manage-form-access");
-
-  const { isOpen, setIsOpen, setFormId, emailList, setEmailList } = useManageFormAccessDialog();
-
+  const { isOpen, setIsOpen, emailList, setEmailList } = useManageFormAccessDialog();
   const dialogRef = useDialogRef();
   const { Event } = useCustomEvent();
   const [isInvitationScreen, setIsInvitationScreen] = useState(false);
@@ -40,10 +34,6 @@ export const ManageFormAccessDialog = ({ formId }: ManageFormAccessDialogProps) 
     setIsOpen(false);
     setIsInvitationScreen(false);
   };
-
-  useEffect(() => {
-    setFormId(formId);
-  }, [formId, setFormId]);
 
   useEffect(() => {
     Event.on("open-form-access-dialog", handleOpenDialog);
