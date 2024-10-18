@@ -280,13 +280,13 @@ export const updateTemplateUsers = async ({
   users,
 }: {
   id: string;
-  users: { id: string; action: "add" | "remove" }[];
+  users: { id: string }[];
 }): Promise<{
-  formRecord: FormRecord | null;
+  success: boolean;
   error?: string;
 }> => {
   if (!users.length) {
-    throw new Error("mustHaveAtLeastOneUser");
+    return { success: false, error: "mustHaveAtLeastOneUser" };
   }
 
   try {
@@ -299,9 +299,9 @@ export const updateTemplateUsers = async ({
       );
     }
 
-    return { formRecord: response };
+    return { success: true };
   } catch (error) {
-    return { formRecord: null, error: (error as Error).message };
+    return { success: false, error: (error as Error).message };
   }
 };
 
