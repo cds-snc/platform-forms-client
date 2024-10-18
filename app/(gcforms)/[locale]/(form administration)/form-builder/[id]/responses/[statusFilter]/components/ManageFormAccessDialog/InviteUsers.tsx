@@ -1,5 +1,5 @@
-import { useContext, useState } from "react";
-import { ManageFormAccessDialogContext } from "./ManageFormAccessDialogContext";
+import { useState } from "react";
+import { useManageFormAccessDialog } from "./ManageFormAccessDialogContext";
 import { sendInvitation } from "./actions";
 import { Button } from "@clientComponents/globals";
 import { useTranslation } from "@i18n/client";
@@ -10,13 +10,7 @@ export const InviteUsers = () => {
   const [message, setMessage] = useState("");
   const [errors, setErrors] = useState<string[]>([]);
 
-  const manageFormAccessDialogContext = useContext(ManageFormAccessDialogContext);
-
-  if (!manageFormAccessDialogContext) {
-    throw new Error("ManageFormAccessDialog must be used within a ManageFormAccessDialogProvider");
-  }
-
-  const { emailList, formId, setIsOpen } = manageFormAccessDialogContext;
+  const { emailList, formId, setIsOpen } = useManageFormAccessDialog();
 
   const handleSubmit = async () => {
     const result = await sendInvitation(emailList, formId, message);

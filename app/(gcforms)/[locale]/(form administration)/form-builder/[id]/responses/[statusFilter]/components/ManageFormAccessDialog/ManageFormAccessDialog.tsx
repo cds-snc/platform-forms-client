@@ -3,10 +3,10 @@
 import { Button } from "@clientComponents/globals";
 import { Dialog, useDialogRef } from "@formBuilder/components/shared";
 import { useCustomEvent } from "@lib/hooks/useCustomEvent";
-import { useCallback, useContext, useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { InviteUsers } from "./InviteUsers";
 import { ManageUsers } from "./ManageUsers";
-import { ManageFormAccessDialogContext } from "./ManageFormAccessDialogContext";
+import { useManageFormAccessDialog } from "./ManageFormAccessDialogContext";
 import { isValidGovEmail } from "@lib/validation/validation";
 import { useTranslation } from "@i18n/client";
 
@@ -17,13 +17,7 @@ type ManageFormAccessDialogProps = {
 export const ManageFormAccessDialog = ({ formId }: ManageFormAccessDialogProps) => {
   const { t } = useTranslation("manage-form-access");
 
-  const manageFormAccessDialogContext = useContext(ManageFormAccessDialogContext);
-
-  if (!manageFormAccessDialogContext) {
-    throw new Error("ManageFormAccessDialog must be used within a ManageFormAccessDialogProvider");
-  }
-
-  const { isOpen, setIsOpen, setFormId, emailList, setEmailList } = manageFormAccessDialogContext;
+  const { isOpen, setIsOpen, setFormId, emailList, setEmailList } = useManageFormAccessDialog();
 
   const dialogRef = useDialogRef();
   const { Event } = useCustomEvent();

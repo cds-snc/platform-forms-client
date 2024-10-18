@@ -1,8 +1,8 @@
 import { CancelIcon } from "@serverComponents/icons";
 import { ConfirmAction } from "./ConfirmAction";
 import { cancelInvitation, getTemplateUsers, removeUserFromForm } from "./actions";
-import { useCallback, useContext, useEffect, useState } from "react";
-import { ManageFormAccessDialogContext } from "./ManageFormAccessDialogContext";
+import { useCallback, useEffect, useState } from "react";
+import { useManageFormAccessDialog } from "./ManageFormAccessDialogContext";
 import { isValidGovEmail } from "@lib/validation/validation";
 import { useSession } from "next-auth/react";
 import { TemplateUser } from "./types";
@@ -19,13 +19,7 @@ export const ManageUsers = () => {
   const [selectedEmail, setSelectedEmail] = useState("");
   const [usersWithAccess, setUsersWithAccess] = useState<TemplateUser[]>([]);
 
-  const manageFormAccessDialogContext = useContext(ManageFormAccessDialogContext);
-
-  if (!manageFormAccessDialogContext) {
-    throw new Error("ManageFormAccessDialog must be used within a ManageFormAccessDialogProvider");
-  }
-
-  const { formId, emailList, setEmailList } = manageFormAccessDialogContext;
+  const { formId, emailList, setEmailList } = useManageFormAccessDialog();
 
   /**
    * Validate an email address

@@ -33,3 +33,13 @@ export const ManageFormAccessDialogProvider = ({ children }: { children: ReactNo
     </ManageFormAccessDialogContext.Provider>
   );
 };
+
+export const useManageFormAccessDialog = () => {
+  const context = React.useContext(ManageFormAccessDialogContext);
+  if (context === undefined) {
+    throw new Error(
+      "useManageFormAccessDialog must be used within a ManageFormAccessDialogProvider"
+    );
+  }
+  return context;
+};
