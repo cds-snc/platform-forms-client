@@ -218,8 +218,7 @@ export const GCFormsProvider = ({
       return getSubmitDelayNoGroups({ requiredQuestionsCount });
     } catch (error) {
       logMessage.info("Error calculating submit delay.");
-      const DEFAULT_DELAY = 4;
-      return DEFAULT_DELAY;
+      return 0;
     }
   };
 
