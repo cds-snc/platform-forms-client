@@ -909,7 +909,9 @@ const calculateSubmitDelay = (delayFromFormData: number) => {
   const secondsBaseDelay = 2;
   const secondsPerFormElement = 2;
   // Add in a little math to make it more unpredictable and calculates the final delay
-  return secondsBaseDelay + delayFromFormData * secondsPerFormElement;
+  const submitDelay = secondsBaseDelay + delayFromFormData * secondsPerFormElement;
+  // Return the delay or if enough time has passed vs. required questions, no delay is needed
+  return submitDelay > 0 ? submitDelay : 0;
 };
 
 /**
@@ -921,15 +923,17 @@ export const getSubmitDelayNoGroups = ({
 }: {
   requiredQuestionsCount: number;
 }) => {
-  const DEFAULT_DELAY = 4;
+  // Something went wrong, just enable the submit button
   if (!Number.isInteger(requiredQuestionsCount)) {
-    return DEFAULT_DELAY;
+    return 0;
   }
 
   const submitDelay = calculateSubmitDelay(requiredQuestionsCount);
+
   if (ENABLE_SUBMIT_DELAY_DEBUGGING) {
     submitDelayLogger({ requiredQuestionsCount, submitDelay });
   }
+
   return submitDelay;
 };
 
@@ -952,19 +956,15 @@ export const getSubmitDelayGroups = ({
   currentTime?: number;
   requiredQuestionsCount: number;
 }) => {
-  const DEFAULT_DELAY = 4;
+  // Something went wrong, just enable the submit button
   if (!Number.isInteger(requiredQuestionsCount) || !startTime || !currentTime) {
-    return DEFAULT_DELAY;
+    return 0;
   }
 
   const timeElapsedSeconds = Math.floor((currentTime - startTime) / 1000);
-
-  let delayFromFormData = requiredQuestionsCount - timeElapsedSeconds;
-  if (delayFromFormData < 1) {
-    delayFromFormData = 1;
-  }
-
+  const delayFromFormData = requiredQuestionsCount - timeElapsedSeconds;
   const submitDelay = calculateSubmitDelay(delayFromFormData);
+
   if (ENABLE_SUBMIT_DELAY_DEBUGGING) {
     submitDelayLogger({
       startTime,
@@ -975,6 +975,7 @@ export const getSubmitDelayGroups = ({
       submitDelay,
     });
   }
+
   return submitDelay;
 };
 
@@ -1002,7 +1003,7 @@ const submitDelayLogger = ({
       `timeElapsed: ${timeElapsedSeconds} seconds (start=${startTime}, current=${currentTime})`
     );
     logMessage.info(
-      `delayFromFormData: ${delayFromFormData} (${requiredQuestionsCount} - ${timeElapsedSeconds}, if < 0 then = 1)`
+      `delayFromFormData: ${delayFromFormData} (${requiredQuestionsCount} - ${timeElapsedSeconds}, if <= 0 then = 0)`
     );
   }
   logMessage.info(`submitDelay: ${submitDelay}`);

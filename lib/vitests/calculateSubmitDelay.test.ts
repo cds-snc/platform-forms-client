@@ -20,7 +20,7 @@ describe("getSubmitDelayGroups function - group forms ", () => {
     // delayFromFormData = 10 - 29 = -19
     // delay = 2 + (-19 > 0...=1) * 2 = 4
     const delay = getSubmitDelayGroups({startTime, currentTime, requiredQuestionsCount});
-    expect(delay).toBe(4);
+    expect(delay).toBe(0);
   });
 
   it("Does not explode with invalid data.", () => {
@@ -30,11 +30,11 @@ describe("getSubmitDelayGroups function - group forms ", () => {
     
     // @ts-expect-error - testing invalid input
     const delay1 = getSubmitDelayGroups({startTime, currentTime, requiredQuestionsCount});
-    expect(delay1).toBe(4);
+    expect(delay1).toBe(0);
 
     // @ts-expect-error - testing invalid input
     const delay2 = getSubmitDelayGroups({requiredQuestionsCount, currentTime});
-    expect(delay2).toBe(4);
+    expect(delay2).toBe(0);
   });
 });
 
@@ -53,6 +53,6 @@ describe("getSubmitDelay function - non group forms ", () => {
 
     // @ts-expect-error - testing invalid input
     const delay = getSubmitDelayNoGroups({requiredQuestionsCount});
-    expect(delay).toBe(4);
+    expect(delay).toBe(0);
   });
 });

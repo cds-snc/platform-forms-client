@@ -43,7 +43,10 @@ const SubmitButton: React.FC<SubmitButtonProps> = ({ submitDelay, formID, formTi
   const formTimerEnabled = process.env.NEXT_PUBLIC_APP_ENV !== "test";
 
   // If the timer hasn't started yet, start the timer
-  if (!formTimerState.timerDelay && formTimerEnabled) {
+  if (
+    formTimerState.timerDelay === undefined ||
+    (!Number.isInteger(formTimerState.timerDelay) && formTimerEnabled)
+  ) {
     startTimer(submitDelay());
   }
 
