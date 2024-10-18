@@ -28,7 +28,7 @@ export const ConfirmAction = ({
   const handleOnClick = async () => {
     setError("");
     setConfirm(false);
-    if (!(await callback())) {
+    if (! await callback()) {
       setError(t("confirmError"));
     }
   };
