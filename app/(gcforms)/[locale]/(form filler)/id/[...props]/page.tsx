@@ -11,7 +11,7 @@ import { GCFormsProvider } from "@lib/hooks/useGCFormContext";
 import { FormWrapper } from "./clientSide";
 import { allowGrouping } from "@formBuilder/components/shared/right-panel/treeview/util/allowGrouping";
 import { serverTranslation } from "@i18n";
-import { Notice as ClosingNotice } from "@clientComponents/forms/ClosingNotice/Notice";
+import { ClosingNotice } from "@clientComponents/forms/ClosingNotice/ClosingNotice";
 
 export async function generateMetadata({
   params: { locale, props },
