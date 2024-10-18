@@ -21,6 +21,7 @@ import {
 } from "@lib/utils/form-builder/groupsHistory";
 import { getLocalizedProperty } from "@lib/utils";
 import { Language } from "@lib/types/form-builder-types";
+import { showReviewPage } from "@lib/utils/form-builder/showReviewPage";
 
 interface GCFormsContextValueType {
   updateValues: ({ formValues }: { formValues: FormValues }) => void;
@@ -41,6 +42,8 @@ interface GCFormsContextValueType {
   pushIdToHistory: (groupId: string) => string[];
   clearHistoryAfterId: (groupId: string) => string[];
   getGroupTitle: (groupId: string | null, language: Language) => string;
+  getFormDelay: () => number;
+  setFormDelay: (currentGroup: string) => void;
 }
 
 const GCFormsContext = createContext<GCFormsContextValueType | undefined>(undefined);
@@ -59,6 +62,10 @@ export const GCFormsProvider = ({
   const [matchedIds, setMatchedIds] = React.useState<string[]>([]);
   const [currentGroup, setCurrentGroup] = React.useState<string | null>(initialGroup);
   const [previousGroup, setPreviousGroup] = React.useState<string | null>(initialGroup);
+  const [formTimer, setFormTimer] = React.useState<{
+    startTime: number;
+    requiredQuestions: number;
+  }>({ startTime: 0, requiredQuestions: 0 });
 
   const inputHistoryValues = getInputHistoryValues(
     (values.current || []) as FormValues,
@@ -160,6 +167,55 @@ export const GCFormsProvider = ({
     return groups?.[groupId]?.[titleLanguageKey] || "";
   };
 
+  /**
+   * Gets the for delay for showing the submit button for forms with and without groups.
+   */
+  const getFormDelay = () => {
+    const hasGroups = showReviewPage(formRecord.form);
+    let delayFromFormData = 0;
+    if (hasGroups) {
+      // Calculate the delay based on the required questions and the time spent on the form
+      const elapsedTime = Math.floor((Date.now() - formTimer.startTime) / 1000);
+      delayFromFormData = formTimer.requiredQuestions - elapsedTime;
+    } else {
+      // Calculate the delay based on the required questions only
+      delayFromFormData = formRecord.form.elements.filter(
+        (element) => element.properties.validation?.required === true
+      ).length;
+    }
+
+    const secondsBaseDelay = 2;
+    const secondsPerFormElement = 2;
+    const delay = secondsBaseDelay + delayFromFormData * secondsPerFormElement;
+    return delay;
+  };
+
+  /**
+   * Sets the form delay for showing the submit button currently only for forms with groups.
+   * @param param0
+   */
+  const setFormDelay = (currentGroup: string) => {
+    const timer = { ...formTimer };
+    // We only care about the initial startTime for calculating the delay
+    if (!formTimer.startTime) {
+      timer.startTime = Date.now();
+    }
+
+    let requiredQuestions = 0;
+    const groupIds = formRecord?.form?.groups?.[currentGroup].elements;
+    if (groupIds) {
+      requiredQuestions = formRecord.form.elements
+        .filter((element) => groupIds.find((id) => String(id) === String(element.id)))
+        .filter((element) => element.properties.validation?.required === true).length;
+    }
+
+    // There may be form pages without required questions e.g. start page that sets initial startTime
+    if (requiredQuestions) {
+      timer.requiredQuestions = timer.requiredQuestions + requiredQuestions;
+    }
+    setFormTimer(timer);
+  };
+
   return (
     <GCFormsContext.Provider
       value={{
@@ -181,6 +237,8 @@ export const GCFormsProvider = ({
         pushIdToHistory,
         clearHistoryAfterId,
         getGroupTitle,
+        getFormDelay,
+        setFormDelay,
       }}
     >
       {children}
@@ -215,6 +273,8 @@ export const useGCFormsContext = () => {
       pushIdToHistory: () => [],
       clearHistoryAfterId: () => [],
       getGroupTitle: () => "",
+      getFormDelay: () => 0,
+      setFormDelay: () => void 0,
     };
   }
   return formsContext;
