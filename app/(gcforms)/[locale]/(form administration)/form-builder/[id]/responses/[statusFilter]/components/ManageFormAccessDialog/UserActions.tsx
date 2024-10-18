@@ -5,7 +5,6 @@ import { cancelInvitation, removeUserFromForm } from "./actions";
 import { RefreshIcon } from "@serverComponents/icons/RefreshIcon";
 import { ConfirmAction } from "./ConfirmAction";
 import { CancelIcon } from "@serverComponents/icons";
-import { hasOwnProperty } from "@lib/tsUtils";
 
 export const UserActions = ({
   user,
@@ -14,8 +13,7 @@ export const UserActions = ({
   setUsersWithAccess,
   handleAddEmail,
   formId,
-  loggedInUserEmail,
-  index,
+  disableRow,
 }: {
   user: TemplateUser;
   expired: boolean;
@@ -23,8 +21,7 @@ export const UserActions = ({
   setUsersWithAccess: (value: SetStateAction<TemplateUser[]>) => void;
   handleAddEmail: (email: string) => void;
   formId: string;
-  loggedInUserEmail: string;
-  index: number;
+  disableRow: boolean;
 }) => {
   const { t } = useTranslation("manage-form-access");
 
@@ -70,9 +67,7 @@ export const UserActions = ({
       ) : (
         <div>
           {/* Disable delete for current user or only remaining user */}
-          {loggedInUserEmail === user.email ||
-          (index === 0 &&
-            usersWithAccess.filter((u) => !hasOwnProperty(u, "expired")).length <= 1) ? (
+          {disableRow ? (
             <span></span>
           ) : (
             <ConfirmAction

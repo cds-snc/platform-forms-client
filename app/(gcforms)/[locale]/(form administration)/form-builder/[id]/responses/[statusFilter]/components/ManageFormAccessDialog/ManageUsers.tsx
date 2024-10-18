@@ -183,31 +183,32 @@ export const ManageUsers = () => {
           {loading && <div className="p-10">{t("loading")}</div>}
           {!loading && (
             <>
-              {usersWithAccess.map((user, index) => (
-                <div
-                  className={cn(
-                    "flex flex-row items-start px-4 py-2",
-                    (loggedInUserEmail === user.email ||
-                      (index === 0 &&
-                        usersWithAccess.filter((u) => !hasOwnProperty(u, "expired")).length <=
-                          1)) &&
-                      "bg-slate-100 py-4"
-                  )}
-                  key={user.email}
-                >
-                  <div className="grow">{user.email}</div>
-                  <UserActions
-                    user={user}
-                    expired={hasOwnProperty(user, "expired")}
-                    usersWithAccess={usersWithAccess}
-                    setUsersWithAccess={setUsersWithAccess}
-                    handleAddEmail={handleAddEmail}
-                    formId={formId}
-                    loggedInUserEmail={loggedInUserEmail}
-                    index={index}
-                  />
-                </div>
-              ))}
+              {usersWithAccess.map((user, index) => {
+                const disableRow =
+                  loggedInUserEmail === user.email ||
+                  (index === 0 &&
+                    usersWithAccess.filter((u) => !hasOwnProperty(u, "expired")).length <= 1);
+                return (
+                  <div
+                    className={cn(
+                      "flex flex-row items-start px-4 py-2",
+                      disableRow && "bg-slate-100 py-4"
+                    )}
+                    key={user.email}
+                  >
+                    <div className="grow">{user.email}</div>
+                    <UserActions
+                      user={user}
+                      expired={hasOwnProperty(user, "expired")}
+                      usersWithAccess={usersWithAccess}
+                      setUsersWithAccess={setUsersWithAccess}
+                      handleAddEmail={handleAddEmail}
+                      formId={formId}
+                      disableRow={disableRow}
+                    />
+                  </div>
+                );
+              })}
             </>
           )}
         </div>
