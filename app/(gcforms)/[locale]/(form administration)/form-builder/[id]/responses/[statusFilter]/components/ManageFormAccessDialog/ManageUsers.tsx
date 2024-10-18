@@ -1,15 +1,14 @@
 import { CancelIcon } from "@serverComponents/icons";
-import { ConfirmAction } from "./ConfirmAction";
-import { cancelInvitation, getTemplateUsers, removeUserFromForm } from "./actions";
+import { getTemplateUsers } from "./actions";
 import { useCallback, useEffect, useState } from "react";
 import { useManageFormAccessDialog } from "./ManageFormAccessDialogContext";
 import { isValidGovEmail } from "@lib/validation/validation";
 import { useSession } from "next-auth/react";
 import { TemplateUser } from "./types";
 import { hasOwnProperty } from "@lib/tsUtils";
-import { RefreshIcon } from "@serverComponents/icons/RefreshIcon";
 import { useTranslation } from "@i18n/client";
 import { cn } from "@lib/utils";
+import { UserActions } from "./UserActions";
 
 export const ManageUsers = () => {
   const { t } = useTranslation("manage-form-access");
@@ -117,25 +116,6 @@ export const ManageUsers = () => {
     fetchUsersWithAccess();
   }, [fetchUsersWithAccess, formId, setUsersWithAccess]);
 
-  const handleRemoveUser = async (userId: string) => {
-    const result = await removeUserFromForm(userId, formId);
-    if (result.success) {
-      setUsersWithAccess(usersWithAccess.filter((user) => user.id !== userId));
-      return true;
-    }
-    return false;
-  };
-
-  const handleResendInvitation = async (email: string) => {
-    handleAddEmail(email);
-  };
-
-  const handleCancelInvitation = async (id: string): Promise<boolean> => {
-    cancelInvitation(id);
-    setUsersWithAccess(usersWithAccess.filter((user) => user.id !== id));
-    return true;
-  };
-
   return (
     <>
       <section>
@@ -216,41 +196,16 @@ export const ManageUsers = () => {
                   key={user.email}
                 >
                   <div className="grow">{user.email}</div>
-                  {hasOwnProperty(user, "expired") ? (
-                    <div>
-                      <div className="flex flex-row gap-1">
-                        <span>{user.expired ? t("expired") : t("invited")}</span>
-                        <div className="inline-block">
-                          <button onClick={() => handleResendInvitation(user.email)}>
-                            <RefreshIcon title={t("resend")} />
-                          </button>
-                        </div>
-                        <ConfirmAction
-                          buttonLabel={t("delete")}
-                          confirmString=""
-                          buttonTheme="destructive"
-                          icon={<CancelIcon title={t("deleteInvitation")} />}
-                          callback={() => handleCancelInvitation(user.id)}
-                        />
-                      </div>
-                    </div>
-                  ) : (
-                    <div>
-                      {/* Disable delete for current user or only remaining user */}
-                      {loggedInUserEmail === user.email ||
-                      (index === 0 &&
-                        usersWithAccess.filter((u) => !hasOwnProperty(u, "expired")).length <=
-                          1) ? (
-                        <span></span>
-                      ) : (
-                        <ConfirmAction
-                          callback={() => handleRemoveUser(user.id)}
-                          confirmString={t("areYouSure")}
-                          buttonLabel={t("remove")}
-                        />
-                      )}
-                    </div>
-                  )}
+                  <UserActions
+                    user={user}
+                    expired={hasOwnProperty(user, "expired")}
+                    usersWithAccess={usersWithAccess}
+                    setUsersWithAccess={setUsersWithAccess}
+                    handleAddEmail={handleAddEmail}
+                    formId={formId}
+                    loggedInUserEmail={loggedInUserEmail}
+                    index={index}
+                  />
                 </div>
               ))}
             </>
