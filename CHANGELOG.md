@@ -5,6 +5,15 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.23.1](https://github.com/cds-snc/platform-forms-client/compare/v3.23.0...v3.23.1) (2024-10-18)
+
+
+### Miscellaneous Chores
+
+* Closed date banners ([#4426](https://github.com/cds-snc/platform-forms-client/issues/4426)) ([f025260](https://github.com/cds-snc/platform-forms-client/commit/f02526048ad7ba30061efba2e8fde69baec4e323))
+* synced file(s) with cds-snc/site-reliability-engineering ([#3563](https://github.com/cds-snc/platform-forms-client/issues/3563)) ([cbdac8c](https://github.com/cds-snc/platform-forms-client/commit/cbdac8cd2f3c16544fc82bcf0e0c0326079a7e9a))
+* Update closing notice ([#4434](https://github.com/cds-snc/platform-forms-client/issues/4434)) ([e5b2ff4](https://github.com/cds-snc/platform-forms-client/commit/e5b2ff460364631b627a9e0c13da482a42981d75))
+
 ## [3.23.0](https://github.com/cds-snc/platform-forms-client/compare/v3.22.4...v3.23.0) (2024-10-16)
 
 
