@@ -16,6 +16,7 @@ import { closeForm } from "@formBuilder/actions";
 import { ClosingDateDialog } from "./ClosingDateDialog";
 
 import { dateHasPast } from "lib/utils";
+import { ScheduledClosingDate } from "./ScheduledClosingDate";
 
 export const SetClosingDate = ({
   formId,
@@ -116,6 +117,7 @@ export const SetClosingDate = ({
         />
       </div>
       <div className="mb-4">
+        {closingDate && <ScheduledClosingDate closingDate={closingDate} language="en" />}
         <Button
           data-closing-date={closingDate}
           theme="link"
