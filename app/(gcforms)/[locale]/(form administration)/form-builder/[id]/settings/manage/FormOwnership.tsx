@@ -20,17 +20,6 @@ interface AssignUsersToTemplateProps {
   }>;
 }
 
-const updateUsersToTemplateAssignations = async (
-  formID: string,
-  users: { id: string }[],
-  updateTemplateUsers: ({ id, users }: { id: string; users: { id: string }[] }) => Promise<{
-    success: boolean;
-    error?: string;
-  }>
-) => {
-  return updateTemplateUsers({ id: formID, users: users });
-};
-
 export const FormOwnership = ({
   nonce,
   formRecord,
@@ -56,11 +45,7 @@ export const FormOwnership = ({
       return { id: user.value };
     });
 
-    const response = await updateUsersToTemplateAssignations(
-      formRecord.id,
-      usersToAssign,
-      updateTemplateUsers
-    );
+    const response = await updateTemplateUsers({ id: formRecord.id, users: usersToAssign });
 
     if (response && response.error) {
       setMessage(

@@ -286,7 +286,7 @@ export const updateTemplateUsers = async ({
   error?: string;
 }> => {
   if (!users.length) {
-    throw new Error("mustHaveAtLeastOneUser");
+    return { success: false, error: "mustHaveAtLeastOneUser" };
   }
 
   try {
