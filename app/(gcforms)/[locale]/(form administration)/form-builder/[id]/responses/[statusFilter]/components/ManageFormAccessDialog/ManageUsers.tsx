@@ -158,10 +158,10 @@ export const ManageUsers = () => {
         )}
 
         <div className="flex flex-wrap gap-2 border border-black p-2">
-          {emailList.map((email) => {
+          {emailList.map((email, index) => {
             return (
               <div
-                key={email}
+                key={`${email}-${index}`}
                 className="flex items-center gap-1 rounded-md border border-violet-700 bg-violet-50 px-2"
               >
                 <div className="">{email}</div>
