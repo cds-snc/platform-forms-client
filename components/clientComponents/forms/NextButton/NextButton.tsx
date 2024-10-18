@@ -25,7 +25,8 @@ export const NextButton = ({
   language: Language;
   formRecord: PublicFormRecord;
 }) => {
-  const { currentGroup, hasNextAction, handleNextAction, isOffBoardSection } = useGCFormsContext();
+  const { currentGroup, hasNextAction, handleNextAction, isOffBoardSection, setFormDelay } =
+    useGCFormsContext();
   const { t } = useTranslation("form-builder");
 
   const handleValidation = async () => {
@@ -89,6 +90,7 @@ export const NextButton = ({
         onClick={async (e) => {
           e.preventDefault();
           if (await handleValidation()) {
+            setFormDelay(currentGroup);
             handleNextAction();
             focusElement("h2");
           }

@@ -30,29 +30,21 @@ import { formHasGroups } from "@lib/utils/form-builder/formHasGroups";
 import { showReviewPage } from "@lib/utils/form-builder/showReviewPage";
 
 interface SubmitButtonProps {
-  numberOfRequiredQuestions: number;
   formID: string;
   formTitle: string;
 }
-const SubmitButton: React.FC<SubmitButtonProps> = ({
-  numberOfRequiredQuestions,
-  formID,
-  formTitle,
-}) => {
+const SubmitButton: React.FC<SubmitButtonProps> = ({ formID, formTitle }) => {
   const { t } = useTranslation();
   const [formTimerState, { startTimer, checkTimer, disableTimer }] = useFormTimer();
   const [submitTooEarly, setSubmitTooEarly] = useState(false);
   const screenReaderRemainingTime = useRef(formTimerState.remainingTime);
-
-  // calculate initial delay for submit timer
-  const secondsBaseDelay = 2;
-  const secondsPerFormElement = 2;
-  const submitDelaySeconds = secondsBaseDelay + numberOfRequiredQuestions * secondsPerFormElement;
+  const { getFormDelay } = useGCFormsContext();
 
   const formTimerEnabled = process.env.NEXT_PUBLIC_APP_ENV !== "test";
 
-  // If the timer hasn't started yet, start the timer
-  if (!formTimerState.timerDelay && formTimerEnabled) startTimer(submitDelaySeconds);
+  if (!formTimerState.timerDelay && formTimerEnabled) {
+    startTimer(getFormDelay());
+  }
 
   useEffect(() => {
     if (!formTimerEnabled && !formTimerState.canSubmit) {
@@ -194,10 +186,6 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [formStatusError, errorList, lastSubmitCount, canFocusOnError]);
 
-  const numberOfRequiredQuestions = form.elements.filter(
-    (element) => element.properties.validation?.required === true
-  ).length;
-
   return status === "submitting" ? (
     <>
       <title>{t("loading")}</title>
@@ -303,22 +291,14 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
                             />
                           )}
                         <div className="inline-block">
-                          <SubmitButton
-                            numberOfRequiredQuestions={numberOfRequiredQuestions}
-                            formID={formID}
-                            formTitle={form.titleEn}
-                          />
+                          <SubmitButton formID={formID} formTitle={form.titleEn} />
                         </div>
                       </div>
                     );
                   },
                 })
               ) : (
-                <SubmitButton
-                  numberOfRequiredQuestions={numberOfRequiredQuestions}
-                  formID={formID}
-                  formTitle={form.titleEn}
-                />
+                <SubmitButton formID={formID} formTitle={form.titleEn} />
               )}
             </div>
           </form>
