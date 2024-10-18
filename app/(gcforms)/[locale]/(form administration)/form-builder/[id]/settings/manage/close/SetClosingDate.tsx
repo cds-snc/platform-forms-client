@@ -72,6 +72,7 @@ export const SetClosingDate = ({
         return;
       }
 
+      // Update the local template store
       setClosingDate(closingDate);
 
       toast.success(t("closingDate.savedSuccessMessage"));
