@@ -41,8 +41,7 @@ export const ManageFormAccessDialog = () => {
     return () => {
       Event.off("open-form-access-dialog", handleOpenDialog);
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [handleOpenDialog]);
+  }, [Event, handleOpenDialog]);
 
   /**
    * Validate all emails in the list before submit.
