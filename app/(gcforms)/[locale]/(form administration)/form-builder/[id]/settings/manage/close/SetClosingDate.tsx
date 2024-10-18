@@ -1,5 +1,5 @@
 "use client";
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useState } from "react";
 import { useTranslation } from "@i18n/client";
 import { useTemplateStore } from "@lib/store/useTemplateStore";
 import { toast } from "@formBuilder/components/shared/Toast";
@@ -15,7 +15,6 @@ import { ClosedDateBanner } from "./ClosedDateBanner";
 import { closeForm } from "@formBuilder/actions";
 import { ClosingDateDialog } from "./ClosingDateDialog";
 
-import { dateHasPast } from "lib/utils";
 import { ScheduledClosingDate } from "./ScheduledClosingDate";
 
 export const SetClosingDate = ({
@@ -50,35 +49,21 @@ export const SetClosingDate = ({
   const [status, setStatus] = useState(closingDate ? "closed" : "open");
   const [showDateTimeDialog, setShowDateTimeDialog] = useState(false);
 
-  useEffect(() => {
-    // Ensure the toggle displays the correct state if the date changes
-    // i.e. a date is scheduled via the dialog
-    if (!closingDate) {
-      setStatus("open");
-      return;
-    }
-
-    const isPastClosingDate = dateHasPast(Date.parse(closingDate));
-    const status = isPastClosingDate ? "closed" : "open";
-    setStatus(status);
-  }, [closingDate]);
-
   const handleToggle = (value: boolean) => {
     setStatus(value == true ? "closed" : "open");
   };
 
-  const saveFormStatus = useCallback(
+  const saveFutureDate = useCallback(
     async (futureDate?: number) => {
-      let closeDate = "open";
-
-      if (status === "closed") {
-        const date = futureDate ? new Date(futureDate) : new Date();
-        closeDate = date.toISOString();
+      if (!futureDate) {
+        return;
       }
+
+      const closingDate = new Date(futureDate).toISOString();
 
       const result = await closeForm({
         id: formId,
-        closingDate: closeDate,
+        closingDate,
         closedDetails: closedMessage,
       });
 
@@ -87,17 +72,41 @@ export const SetClosingDate = ({
         return;
       }
 
-      // update the template store
-      setClosingDate(status !== "open" ? closeDate : null);
+      setClosingDate(closingDate);
 
-      if (status === "closed") {
-        toast.success(<ClosedSuccess />, "wide");
-      } else {
-        toast.success(t("closingDate.savedSuccessMessage"));
-      }
+      toast.success(t("closingDate.savedSuccessMessage"));
     },
-    [status, formId, setClosingDate, t, closedMessage]
+    [formId, setClosingDate, t, closedMessage]
   );
+
+  const saveFormStatus = useCallback(async () => {
+    let closeDate = "open"; // this wil reset the closing date to null;
+
+    if (status === "closed") {
+      const now = new Date(); // Set date to now to close the form right away
+      closeDate = now.toISOString();
+    }
+
+    const result = await closeForm({
+      id: formId,
+      closingDate: closeDate,
+      closedDetails: closedMessage,
+    });
+
+    if (!result || result.error) {
+      toast.error(t("closingDate.savedErrorMessage"));
+      return;
+    }
+
+    // update the local template store
+    setClosingDate(status !== "open" ? closeDate : null);
+
+    if (status === "closed") {
+      toast.success(<ClosedSuccess />, "wide");
+    } else {
+      toast.success(t("closingDate.savedSuccessMessage"));
+    }
+  }, [status, formId, setClosingDate, t, closedMessage]);
 
   return (
     <div className="mb-10">
@@ -144,7 +153,7 @@ export const SetClosingDate = ({
         <ClosingDateDialog
           showDateTimeDialog={showDateTimeDialog}
           setShowDateTimeDialog={setShowDateTimeDialog}
-          save={saveFormStatus}
+          save={saveFutureDate}
         ></ClosingDateDialog>
       )}
     </div>
