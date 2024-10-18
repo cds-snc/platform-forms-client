@@ -39,6 +39,10 @@ export const ConfirmAction = ({
     }
   };
 
+  const handleOnBlur = () => {
+    setConfirm(false);
+  };
+
   useEffect(() => {
     document.addEventListener("mousedown", handleClickOutside);
     return () => {
@@ -68,6 +72,7 @@ export const ConfirmAction = ({
             theme={buttonTheme}
             className="px-2 py-0"
             onClick={handleOnClick}
+            onBlur={handleOnBlur}
           >
             {buttonLabel}
           </Button>
