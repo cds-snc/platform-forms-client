@@ -31,5 +31,6 @@
   "remove": "Supprimer",
   "resend": "Renvoyer",
   "templateNotFound": "Gabarit non trouvé {{templateId}}",
-  "userAlreadyHasAccess": "{{email}} a déjà accès"
+  "userAlreadyHasAccess": "{{email}} a déjà accès",
+  "userNotFound": "User not found"
 }

@@ -5,7 +5,11 @@ import { authCheckAndThrow } from "@lib/actions";
 import { prisma } from "@lib/integration/prismaConnector";
 import { acceptInvitation } from "@lib/invitations/acceptInvitation";
 import { declineInvitation } from "@lib/invitations/declineInvitation";
-import { InvitationIsExpiredError, InvitationNotFoundError } from "@lib/invitations/exceptions";
+import {
+  InvitationIsExpiredError,
+  InvitationNotFoundError,
+  UserNotFoundError,
+} from "@lib/invitations/exceptions";
 
 export const retrieveInvitations = async () => {
   const { session } = await authCheckAndThrow();
@@ -41,6 +45,9 @@ export const accept = async (id: string) => {
     }
     if (e instanceof InvitationIsExpiredError) {
       return { message: t("invitationExpired") };
+    }
+    if (e instanceof UserNotFoundError) {
+      return { message: t("userNotFound") };
     }
   }
 };

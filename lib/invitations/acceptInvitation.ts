@@ -44,38 +44,41 @@ export const acceptInvitation = async (ability: UserAbility, invitationId: strin
     },
   });
 
-  if (user) {
-    // Ensures the logged in user is the user that was invited
-    checkPrivileges(ability, [
-      { action: "view", subject: { type: "User", object: { id: user.id } } },
-    ]);
-
-    // assign user to form
-    const updatedTemplate = await _assignUserToTemplate(user.id, invitation.templateId);
-
-    _deleteInvitation(invitationId);
-
-    notifyOwnersOwnerAdded(
-      user,
-      updatedTemplate.jsonConfig as FormProperties,
-      updatedTemplate.users
-    );
-
-    logEvent(
-      ability.userID,
-      { type: "Form", id: invitation.templateId },
-      "InvitationAccepted",
-      `${user.id} has accepted an invitation`
-    );
-
-    return true;
+  if (!user) {
+    throw new UserNotFoundError();
   }
 
-  throw new UserNotFoundError();
+  // Ensures the logged in user is the user that was invited
+  checkPrivileges(ability, [
+    { action: "view", subject: { type: "User", object: { id: user.id } } },
+  ]);
+
+  // assign user to form
+  const updatedTemplate = await _assignUserToTemplate(user.id, invitation.templateId);
+
+  _deleteInvitation(invitationId);
+
+  notifyOwnersOwnerAdded(user, updatedTemplate.jsonConfig as FormProperties, updatedTemplate.users);
+
+  logEvent(
+    ability.userID,
+    { type: "Form", id: invitation.templateId },
+    "InvitationAccepted",
+    `${user.id} has accepted an invitation`
+  );
+
+  logEvent(
+    ability.userID,
+    { type: "Form", id: invitation.templateId },
+    "GrantFormAccess",
+    `Access granted to ${user.id}`
+  );
 };
 
 /**
  * Assign user to template
+ * This private function is used over the common templates.ts/assignUserToTemplate
+ * because that exported function requires a privilege check that won't work here.
  *
  * @param userId
  * @param formId

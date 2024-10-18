@@ -31,5 +31,6 @@
   "remove": "Remove",
   "resend": "Re-send",
   "templateNotFound": "Template not found {{templateId}}",
-  "userAlreadyHasAccess": "{{email}} already has access"
+  "userAlreadyHasAccess": "{{email}} already has access",
+  "userNotFound": "User not found"
 }
