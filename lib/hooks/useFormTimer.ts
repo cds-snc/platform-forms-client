@@ -30,7 +30,9 @@ export const useFormTimer = (): [FormTimerStateType, FormTimerDispatchType] => {
   ): { canSubmit: boolean; remainingTime: number; timerDelay?: number; timeLock?: number } {
     switch (action.type) {
       case "START": {
-        if (!action.timerDelay) throw new Error("Missing timerDelay on start FormTimer action");
+        if (action.timerDelay === undefined || !Number.isInteger(action.timerDelay)) {
+          throw new Error("Missing timerDelay on start FormTimer action");
+        }
         const newTimeLock = Date.now() + action.timerDelay * 1000;
         return {
           canSubmit: false,
