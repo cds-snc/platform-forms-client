@@ -13,6 +13,7 @@ import { Language } from "@lib/types/form-builder-types";
 import { getLocalizedProperty } from "@lib/utils";
 import { showReviewPage } from "@lib/utils/form-builder/showReviewPage";
 import { focusElement } from "@lib/client/clientHelpers";
+import { SpamButton } from "../Form/SpamButton";
 
 export const NextButton = ({
   validateForm,
@@ -81,6 +82,15 @@ export const NextButton = ({
     );
   }
 
+  // TODO cache computed value
+  let requiredQuestions = 0;
+  const groupIds = formRecord?.form?.groups?.[currentGroup].elements;
+  if (groupIds) {
+    requiredQuestions = formRecord.form.elements
+      .filter((element) => groupIds.find((id) => String(id) === String(element.id)))
+      .filter((element) => element.properties.validation?.required === true).length;
+  }
+
   return (
     <>
       {/* For debugging */}
@@ -96,6 +106,21 @@ export const NextButton = ({
       >
         {t("next", { lng: language })}
       </Button>
+      requiredQuestions={requiredQuestions}
+      <SpamButton
+        // numberOfRequiredQuestions={formRecord.form.elements.filter(
+        //   (element) => element.properties.validation?.required === true
+        // ).length}
+        numberOfRequiredQuestions={requiredQuestions}
+        formID={formRecord.id}
+        formTitle={formRecord.form.titleEn}
+        callback={async () => {
+          if (await handleValidation()) {
+            handleNextAction();
+            focusElement("h2");
+          }
+        }}
+      />
     </>
   );
 };
