@@ -1,5 +1,5 @@
-import { FormProperties } from "@lib/types";
-import { showReviewPage } from "@lib/utils/form-builder/showReviewPage";
+import { logMessage } from "@lib/logger";
+import { FormElement, FormProperties } from "@lib/types";
 import { createContext, useContext, useState } from "react";
 
 interface FormDelay {
@@ -38,42 +38,35 @@ export const FormDelayProvider = ({ children }: { children: React.ReactNode }) =
 const calculateSubmitDelay = (delayFromFormData: number) => {
   const secondsBaseDelay = 2;
   const secondsPerFormElement = 2;
-  const submitDelay = secondsBaseDelay + delayFromFormData * secondsPerFormElement;
-  return submitDelay > 0 ? submitDelay : -1;
+  return secondsBaseDelay + delayFromFormData * secondsPerFormElement;
 };
 
-/**
- * Get the required questions on the current page/group. This will be 0 if the page has no required
- * questions. Note that if a user clicks "back" to previous page/group, the required questions will
- * be added to the required questions count again. This adds a little more unpredictability and
- * makes it harder to guess the delay.
- * @param form current form
- * @param currentGroup curent group/page Id
- * @returns count of required questions on the current page/group
- */
-const getNumberOfRequiredQuestionsWithGroups = (form: FormProperties, currentGroup: string) => {
-  const groupIds = form?.groups?.[currentGroup].elements;
-  if (!groupIds) {
+const getNumberOfRequiredQuestionsWithGroups = (
+  formElements: FormElement[],
+  groupIds: string[]
+) => {
+  if (!Array.isArray(formElements) || !Array.isArray(groupIds)) {
     return 0;
   }
-  return form.elements
+  return formElements
     .filter((element) => groupIds.find((id) => String(id) === String(element.id)))
     .filter((element) => element.properties.validation?.required === true).length;
 };
 
-const getNumberOfRequiredQuestionsWithoutGroups = (form: FormProperties) => {
-  return form.elements.filter((element) => element.properties.validation?.required === true).length;
-};
-
-const calculateDelayWithGroups = (form: FormProperties, formDelay: FormDelay) => {
-  const elapsedTime = Math.floor((Date.now() - formDelay.startTime) / 1000);
-  // Uses state to get requried questions (vs. a non group that can use the current form)
-  const delayFromFormData = formDelay.requiredQuestions - elapsedTime;
+const calculateDelayWithGroups = (
+  startTime: number,
+  endTime: number,
+  requiredQuestions: number
+) => {
+  const elapsedTime = Math.floor((endTime - startTime) / 1000);
+  const delayFromFormData = requiredQuestions - elapsedTime;
   return calculateSubmitDelay(delayFromFormData);
 };
 
-const calculateDelayWithoutGroups = (form: FormProperties) => {
-  const delayFromFormData = getNumberOfRequiredQuestionsWithoutGroups(form);
+const calculateDelayWithoutGroups = (formElements: FormElement[]) => {
+  const delayFromFormData = formElements.filter(
+    (element) => element.properties.validation?.required === true
+  ).length;
   return calculateSubmitDelay(delayFromFormData);
 };
 
@@ -87,38 +80,66 @@ export const useFormDelay = () => {
      * @param form current form
      */
     setStartTime: () => {
-      if (formDelay.startTime) {
-        return;
+      if (!formDelay.startTime) {
+        setFormDelay({ ...formDelay, startTime: Date.now() });
       }
-      setFormDelay({ ...formDelay, startTime: Date.now() });
     },
     /**
-     * Set the form delay based on the current group. Used only for forms with groups.
+     * Adds the number of required questions in the current group to the form delay state.
      * @param currentGroup group Id of the current page
      * @param form current form
      */
-    setFormDelayGroups: (form: FormProperties, currentGroup: string) => {
-      const requiredQuestions = getNumberOfRequiredQuestionsWithGroups(form, currentGroup);
-      setFormDelay({
-        ...formDelay,
-        requiredQuestions: requiredQuestions && formDelay.requiredQuestions + requiredQuestions,
-      });
+    addRequiredQuestions: (form: FormProperties, currentGroup: string) => {
+      try {
+        const groupIds = form?.groups?.[currentGroup].elements;
+        if (groupIds) {
+          const newRequiredQuestions = getNumberOfRequiredQuestionsWithGroups(
+            form.elements,
+            groupIds
+          );
+          setFormDelay({
+            ...formDelay,
+            requiredQuestions: formDelay.requiredQuestions + newRequiredQuestions,
+          });
+        }
+      } catch (error) {
+        logMessage.info("Error adding required questions to form delay");
+      }
     },
     /**
      * Gets the form delay based on the form type. For non group forms, the countdown (SubmitButton)
      * starts immediately so the time a user spends on a form minus the required questions will be
-     * small. While a form with groups, the countdown could be massive because branching logic
-     * enables much bigger forms. This is why for a group form the time spent on the form is
-     * subtracted from only the required questions along the pages path a user navigates; reducing
-     * the delay used in the countdown.
+     * small. On the other hand, for a form with groups the countdown could be massive because
+     * branching logic enables much bigger forms. This is why for a group form the time spent on the
+     * form is subtracted from only the required questions along the pages path a user navigates;
+     * reducing the delay used in the countdown.
      * @param form current form
-     * @returns delay in seconds
+     * @returns delay in seconds or in the case of an error -1 to fallback to no delay
      */
-    getFormDelay: (form: FormProperties) => {
-      const hasGroups = showReviewPage(form);
-      return hasGroups
-        ? calculateDelayWithGroups(form, formDelay)
-        : calculateDelayWithoutGroups(form);
+    getFormDelay: (formElements: FormElement[], hasGroups: boolean) => {
+      try {
+        const endTime = Date.now();
+
+        const delay = hasGroups
+          ? calculateDelayWithGroups(formDelay.startTime, endTime, formDelay.requiredQuestions)
+          : calculateDelayWithoutGroups(formElements);
+
+        formDelayLogger(delay, formDelay);
+
+        // Check for 0 because the SubmitButton relies on 0 to disable the button
+        return delay === 0 ? -1 : delay;
+      } catch (error) {
+        logMessage.info("Error calculating form delay.");
+        return -1;
+      }
     },
   };
+};
+
+// Turn on for local testing
+const debug = true;
+const formDelayLogger = (delay: number, formDelay: FormDelay) => {
+  if (debug) {
+    logMessage.info(`Form delay: ${delay}, formDelay state: ${JSON.stringify(formDelay)}`);
+  }
 };

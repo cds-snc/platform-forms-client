@@ -302,7 +302,9 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
                           )}
                         <div className="inline-block">
                           <SubmitButton
-                            getNumberOfRequiredQuestions={() => getFormDelay(form)}
+                            getNumberOfRequiredQuestions={() =>
+                              getFormDelay(form.elements, isShowReviewPage)
+                            }
                             formID={formID}
                             formTitle={form.titleEn}
                           />
@@ -313,7 +315,7 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
                 })
               ) : (
                 <SubmitButton
-                  getNumberOfRequiredQuestions={() => getFormDelay(form)}
+                  getNumberOfRequiredQuestions={() => getFormDelay(form.elements, isShowReviewPage)}
                   formID={formID}
                   formTitle={form.titleEn}
                 />
