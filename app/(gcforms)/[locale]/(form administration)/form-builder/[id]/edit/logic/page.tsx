@@ -1,6 +1,5 @@
 import { serverTranslation } from "@i18n";
 import { Metadata } from "next";
-import { allowGrouping } from "@formBuilder/components/shared/right-panel/treeview/util/allowGrouping";
 import { FlowWithProvider } from "./components/flow/FlowWithProvider";
 import { Suspense } from "react";
 import { Loader } from "@clientComponents/globals/Loader";
@@ -26,12 +25,6 @@ export default async function Page({
 }: {
   params: { id: string; locale: string };
 }) {
-  const allowGroups = allowGrouping();
-
-  if (!allowGroups) {
-    return null;
-  }
-
   const { t } = await serverTranslation("form-builder", { lang: locale });
   const Loading = () => (
     <div className="flex h-full items-center justify-center ">
