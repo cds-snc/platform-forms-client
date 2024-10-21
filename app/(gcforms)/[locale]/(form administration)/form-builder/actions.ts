@@ -252,7 +252,7 @@ export const closeForm = async ({
   closedDetails,
 }: {
   id: string;
-  closingDate: string;
+  closingDate: string | null;
   closedDetails?: ClosedDetails;
 }): Promise<{
   formID: string;

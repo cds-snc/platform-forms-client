@@ -46,7 +46,17 @@ export const SetClosingDate = ({
     return true;
   }, [closedMessage]);
 
-  const [status, setStatus] = useState(closingDate ? "closed" : "open");
+  // TODO: not working, needs more work
+  const isPastDate = useCallback(
+    (closingDate: string | null | undefined) => {
+      const date1 = new Date(closingDate || 0).getTime();
+      const date2 = Date.now();
+      return date1 < date2;
+    },
+    [closingDate]
+  );
+
+  const [status, setStatus] = useState(isPastDate(closingDate) ? "closed" : "open");
   const [showDateTimeDialog, setShowDateTimeDialog] = useState(false);
 
   const handleToggle = (value: boolean) => {
@@ -81,7 +91,7 @@ export const SetClosingDate = ({
   );
 
   const saveFormStatus = useCallback(async () => {
-    let closeDate = "open"; // this wil reset the closing date to null;
+    let closeDate = null;
 
     if (status === "closed") {
       const now = new Date(); // Set date to now to close the form right away
@@ -99,6 +109,7 @@ export const SetClosingDate = ({
       return;
     }
 
+    // TODO: not working, needs more work
     // update the local template store
     setClosingDate(status !== "open" ? closeDate : null);
 
