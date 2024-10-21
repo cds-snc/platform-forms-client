@@ -28,14 +28,15 @@ import {
 import { filterShownElements, filterValuesByShownElements } from "@lib/formContext";
 import { formHasGroups } from "@lib/utils/form-builder/formHasGroups";
 import { showReviewPage } from "@lib/utils/form-builder/showReviewPage";
+import { useFormDelay } from "@lib/hooks/useFormDelayContext";
 
 interface SubmitButtonProps {
-  numberOfRequiredQuestions: number;
+  getNumberOfRequiredQuestions: () => number;
   formID: string;
   formTitle: string;
 }
 const SubmitButton: React.FC<SubmitButtonProps> = ({
-  numberOfRequiredQuestions,
+  getNumberOfRequiredQuestions,
   formID,
   formTitle,
 }) => {
@@ -44,15 +45,13 @@ const SubmitButton: React.FC<SubmitButtonProps> = ({
   const [submitTooEarly, setSubmitTooEarly] = useState(false);
   const screenReaderRemainingTime = useRef(formTimerState.remainingTime);
 
-  // calculate initial delay for submit timer
-  const secondsBaseDelay = 2;
-  const secondsPerFormElement = 2;
-  const submitDelaySeconds = secondsBaseDelay + numberOfRequiredQuestions * secondsPerFormElement;
-
   const formTimerEnabled = process.env.NEXT_PUBLIC_APP_ENV !== "test";
 
   // If the timer hasn't started yet, start the timer
-  if (!formTimerState.timerDelay && formTimerEnabled) startTimer(submitDelaySeconds);
+  if (!formTimerState.timerDelay && formTimerEnabled) {
+    // calculate initial delay for submit timer
+    startTimer(getNumberOfRequiredQuestions());
+  }
 
   useEffect(() => {
     if (!formTimerEnabled && !formTimerState.canSubmit) {
@@ -166,6 +165,9 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
   // Used to set any values we'd like added for use in the below withFormik handleSubmit().
   useFormValuesChanged();
 
+  const { setStartTime, getFormDelay } = useFormDelay();
+  useEffect(setStartTime, [setStartTime]);
+
   const errorList = props.errors ? getErrorList(props) : null;
   const errorId = "gc-form-errors";
   const serverErrorId = `${errorId}-server`;
@@ -193,10 +195,6 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [formStatusError, errorList, lastSubmitCount, canFocusOnError]);
-
-  const numberOfRequiredQuestions = form.elements.filter(
-    (element) => element.properties.validation?.required === true
-  ).length;
 
   return status === "submitting" ? (
     <>
@@ -304,7 +302,9 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
                           )}
                         <div className="inline-block">
                           <SubmitButton
-                            numberOfRequiredQuestions={numberOfRequiredQuestions}
+                            getNumberOfRequiredQuestions={() =>
+                              getFormDelay(form.elements, isShowReviewPage)
+                            }
                             formID={formID}
                             formTitle={form.titleEn}
                           />
@@ -315,7 +315,7 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
                 })
               ) : (
                 <SubmitButton
-                  numberOfRequiredQuestions={numberOfRequiredQuestions}
+                  getNumberOfRequiredQuestions={() => getFormDelay(form.elements, isShowReviewPage)}
                   formID={formID}
                   formTitle={form.titleEn}
                 />
