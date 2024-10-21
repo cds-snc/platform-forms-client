@@ -53,17 +53,23 @@ const getNumberOfRequiredQuestionsWithGroups = (
     .filter((element) => element.properties.validation?.required === true).length;
 };
 
-const calculateDelayWithGroups = (
+export const calculateDelayWithGroups = (
   startTime: number,
   endTime: number,
   requiredQuestions: number
 ) => {
+  if (isNaN(startTime) || isNaN(endTime) || isNaN(requiredQuestions)) {
+    return -1;
+  }
   const elapsedTime = Math.floor((endTime - startTime) / 1000);
   const delayFromFormData = requiredQuestions - elapsedTime;
   return calculateSubmitDelay(delayFromFormData);
 };
 
-const calculateDelayWithoutGroups = (formElements: FormElement[]) => {
+export const calculateDelayWithoutGroups = (formElements: FormElement[]) => {
+  if (!Array.isArray(formElements)) {
+    return -1;
+  }
   const delayFromFormData = formElements.filter(
     (element) => element.properties.validation?.required === true
   ).length;
@@ -107,12 +113,9 @@ export const useFormDelay = () => {
       }
     },
     /**
-     * Gets the form delay based on the form type. For non group forms, the countdown (SubmitButton)
-     * starts immediately so the time a user spends on a form minus the required questions will be
-     * small. On the other hand, for a form with groups the countdown could be massive because
-     * branching logic enables much bigger forms. This is why for a group form the time spent on the
-     * form is subtracted from only the required questions along the pages path a user navigates;
-     * reducing the delay used in the countdown.
+     * Gets the form delay based on the form type. For non-group forms, just send the required
+     * questions on a form. For group forms, subtract the time spent on the form from the tally of
+     * required questions from their group history (pages navigated).
      * @param form current form
      * @returns delay in seconds or in the case of an error -1 to fallback to no delay
      */
@@ -137,9 +140,11 @@ export const useFormDelay = () => {
 };
 
 // Turn on for local testing
-const debug = true;
+const debug = false;
 const formDelayLogger = (delay: number, formDelay: FormDelay) => {
   if (debug) {
-    logMessage.info(`Form delay: ${delay}, formDelay state: ${JSON.stringify(formDelay)}`);
+    logMessage.info(
+      `Form delay: ${delay}, formDelay state (only for group forms): ${JSON.stringify(formDelay)}`
+    );
   }
 };
