@@ -18,7 +18,6 @@ import { useFeatureFlags } from "@lib/hooks/useFeatureFlags";
 
 interface ManagedComboboxRef {
   changeInputValue: (value: string) => void;
-  forceChangeChoices: (choices: string[]) => void;
 }
 
 export const AddressComplete = (props: AddressCompleteProps): React.ReactElement => {
