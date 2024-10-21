@@ -199,7 +199,7 @@ export const ManageUsers = () => {
                     <div className="grow">{user.email}</div>
                     <UserActions
                       user={user}
-                      expired={hasOwnProperty(user, "expired")}
+                      isInvitation={hasOwnProperty(user, "expired")}
                       usersWithAccess={usersWithAccess}
                       setUsersWithAccess={setUsersWithAccess}
                       handleAddEmail={handleAddEmail}

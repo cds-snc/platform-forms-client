@@ -5,10 +5,11 @@ import { cancelInvitation, removeUserFromForm } from "./actions";
 import { RefreshIcon } from "@serverComponents/icons/RefreshIcon";
 import { ConfirmAction } from "./ConfirmAction";
 import { CancelIcon } from "@serverComponents/icons";
+import { Tooltip } from "@formBuilder/components/shared/Tooltip";
 
 export const UserActions = ({
   user,
-  expired,
+  isInvitation,
   usersWithAccess,
   setUsersWithAccess,
   handleAddEmail,
@@ -16,7 +17,7 @@ export const UserActions = ({
   disableRow,
 }: {
   user: TemplateUser;
-  expired: boolean;
+  isInvitation: boolean;
   usersWithAccess: TemplateUser[];
   setUsersWithAccess: (value: SetStateAction<TemplateUser[]>) => void;
   handleAddEmail: (email: string) => void;
@@ -46,22 +47,26 @@ export const UserActions = ({
 
   return (
     <>
-      {expired ? (
+      {isInvitation ? (
         <div>
           <div className="flex flex-row gap-1">
             <span>{user.expired ? t("expired") : t("invited")}</span>
             <div className="inline-block">
-              <button onClick={() => handleResendInvitation(user.email)}>
-                <RefreshIcon title={t("resend")} />
-              </button>
+              <Tooltip.Simple text={t("resend")} side="top">
+                <button onClick={() => handleResendInvitation(user.email)}>
+                  <RefreshIcon title={t("resend")} />
+                </button>
+              </Tooltip.Simple>
             </div>
-            <ConfirmAction
-              buttonLabel={t("delete")}
-              confirmString=""
-              buttonTheme="destructive"
-              icon={<CancelIcon title={t("deleteInvitation")} />}
-              callback={() => handleCancelInvitation(user.id)}
-            />
+            <Tooltip.Simple text={t("deleteInvitation")} side="top">
+              <ConfirmAction
+                buttonLabel={t("delete")}
+                confirmString=""
+                buttonTheme="destructive"
+                icon={<CancelIcon title={t("deleteInvitation")} />}
+                callback={() => handleCancelInvitation(user.id)}
+              />
+            </Tooltip.Simple>
           </div>
         </div>
       ) : (
@@ -70,11 +75,13 @@ export const UserActions = ({
           {disableRow ? (
             <span></span>
           ) : (
-            <ConfirmAction
-              callback={() => handleRemoveUser(user.id)}
-              confirmString={t("areYouSure")}
-              buttonLabel={t("remove")}
-            />
+            <Tooltip.Simple text={t("remove")} side="top">
+              <ConfirmAction
+                callback={() => handleRemoveUser(user.id)}
+                confirmString={t("areYouSure")}
+                buttonLabel={t("remove")}
+              />
+            </Tooltip.Simple>
           )}
         </div>
       )}
