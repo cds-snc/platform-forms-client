@@ -135,7 +135,7 @@ export const useFormDelay = () => {
 };
 
 // Turn on for local testing
-const debug = true;
+const debug = false;
 const formDelayLogger = (delay: number, formDelay: FormDelay) => {
   if (debug) {
     logMessage.info(
