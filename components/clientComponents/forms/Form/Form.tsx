@@ -165,8 +165,7 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
   // Used to set any values we'd like added for use in the below withFormik handleSubmit().
   useFormValuesChanged();
 
-  const { setStartTime, getFormDelay } = useFormDelay();
-  useEffect(setStartTime, [setStartTime]);
+  const { getFormDelay } = useFormDelay();
 
   const errorList = props.errors ? getErrorList(props) : null;
   const errorId = "gc-form-errors";

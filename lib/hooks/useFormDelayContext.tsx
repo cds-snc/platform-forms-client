@@ -78,18 +78,8 @@ export const calculateDelayWithoutGroups = (formElements: FormElement[]) => {
 
 export const useFormDelay = () => {
   const { formDelay, setFormDelay } = useContext(FormDelayContext);
+
   return {
-    /**
-     * Sets an initial start time that is later used to get the time a user has spent on a form.
-     * Used only for forms with groups.
-     * @param currentGroup group Id of the current page
-     * @param form current form
-     */
-    setStartTime: () => {
-      if (!formDelay.startTime) {
-        setFormDelay({ ...formDelay, startTime: Date.now() });
-      }
-    },
     /**
      * Adds the number of required questions in the current group to the form delay state.
      * @param currentGroup group Id of the current page
@@ -97,6 +87,11 @@ export const useFormDelay = () => {
      */
     addRequiredQuestions: (form: FormProperties, currentGroup: string) => {
       try {
+        // Add on initial call
+        if (!formDelay.startTime) {
+          setFormDelay({ ...formDelay, startTime: Date.now() });
+        }
+
         const groupIds = form?.groups?.[currentGroup].elements;
         if (groupIds) {
           const newRequiredQuestions = getNumberOfRequiredQuestionsWithGroups(
@@ -140,7 +135,7 @@ export const useFormDelay = () => {
 };
 
 // Turn on for local testing
-const debug = false;
+const debug = true;
 const formDelayLogger = (delay: number, formDelay: FormDelay) => {
   if (debug) {
     logMessage.info(
