@@ -14,7 +14,9 @@ type ConfirmActionProps = {
 
 export const ConfirmAction = ({
   callback,
-  icon = <CancelIcon />,
+  icon = (
+    <CancelIcon className="rounded-full border-1.5 border-transparent hover:border-blue-focus" />
+  ),
   confirmString,
   buttonLabel,
   buttonTheme = "destructive",
@@ -28,7 +30,7 @@ export const ConfirmAction = ({
   const handleOnClick = async () => {
     setError("");
     setConfirm(false);
-    if (! await callback()) {
+    if (!(await callback())) {
       setError(t("confirmError"));
     }
   };

@@ -54,7 +54,10 @@ export const UserActions = ({
             <div className="inline-block">
               <Tooltip.Simple text={t("resend")} side="top">
                 <button onClick={() => handleResendInvitation(user.email)}>
-                  <RefreshIcon title={t("resend")} />
+                  <RefreshIcon
+                    title={t("resend")}
+                    className="rounded-full border-1.5 border-transparent hover:border-blue-focus"
+                  />
                 </button>
               </Tooltip.Simple>
             </div>
@@ -63,7 +66,12 @@ export const UserActions = ({
                 buttonLabel={t("delete")}
                 confirmString=""
                 buttonTheme="destructive"
-                icon={<CancelIcon title={t("deleteInvitation")} />}
+                icon={
+                  <CancelIcon
+                    title={t("deleteInvitation")}
+                    className="rounded-full border-1.5 border-transparent hover:border-blue-focus"
+                  />
+                }
                 callback={() => handleCancelInvitation(user.id)}
               />
             </Tooltip.Simple>
