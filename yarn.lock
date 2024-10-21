@@ -12872,7 +12872,7 @@ __metadata:
     vitest: "npm:^1.5.2"
     webpack: "npm:^5.89.0"
     yup: "npm:0.32.11"
-    zustand: "npm:4.5.4"
+    zustand: "npm:5.0.0"
   languageName: unknown
   linkType: soft
 
@@ -20310,7 +20310,28 @@ __metadata:
   languageName: node
   linkType: hard
 
-"zustand@npm:4.5.4, zustand@npm:^4.4.1":
+"zustand@npm:5.0.0":
+  version: 5.0.0
+  resolution: "zustand@npm:5.0.0"
+  peerDependencies:
+    "@types/react": ">=18.0.0"
+    immer: ">=9.0.6"
+    react: ">=18.0.0"
+    use-sync-external-store: ">=1.2.0"
+  peerDependenciesMeta:
+    "@types/react":
+      optional: true
+    immer:
+      optional: true
+    react:
+      optional: true
+    use-sync-external-store:
+      optional: true
+  checksum: 10c0/7546df78aa512f1d2271e238c44699c0ac4bc57f12ae46fcfe8ba1e8a97686fc690596e654101acfabcd706099aa5d3519fc3f22d32b3082baa60699bb333e9a
+  languageName: node
+  linkType: hard
+
+"zustand@npm:^4.4.1":
   version: 4.5.4
   resolution: "zustand@npm:4.5.4"
   dependencies:
