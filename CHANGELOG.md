@@ -5,6 +5,21 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.23.1](https://github.com/cds-snc/platform-forms-client/compare/v3.23.0...v3.23.1) (2024-10-21)
+
+
+### Miscellaneous Chores
+
+* Bump React types packages ([#4441](https://github.com/cds-snc/platform-forms-client/issues/4441)) ([b5ba612](https://github.com/cds-snc/platform-forms-client/commit/b5ba612907266302ff57e361dc2abc7055b08d00))
+* Bump React version ([#4438](https://github.com/cds-snc/platform-forms-client/issues/4438)) ([84a0a36](https://github.com/cds-snc/platform-forms-client/commit/84a0a36da15a677e6edc8bbf6fdb56d82fefe437))
+* Bump Zustand 5.0.0 ([#4440](https://github.com/cds-snc/platform-forms-client/issues/4440)) ([f918409](https://github.com/cds-snc/platform-forms-client/commit/f918409eb05476d97e6f2a677aecf485a135d99e))
+* Closed date banners ([#4426](https://github.com/cds-snc/platform-forms-client/issues/4426)) ([f025260](https://github.com/cds-snc/platform-forms-client/commit/f02526048ad7ba30061efba2e8fde69baec4e323))
+* **deps:** update all non-major docker images ([#3997](https://github.com/cds-snc/platform-forms-client/issues/3997)) ([9c044f6](https://github.com/cds-snc/platform-forms-client/commit/9c044f67ac2fa93835e691e68dc4ac5710a05edd))
+* **deps:** update all non-major github action dependencies ([#4044](https://github.com/cds-snc/platform-forms-client/issues/4044)) ([5ce69d1](https://github.com/cds-snc/platform-forms-client/commit/5ce69d1b3b22df06696c90997c15707caa14f550))
+* Remove allowGrouping checks ([#4443](https://github.com/cds-snc/platform-forms-client/issues/4443)) ([87c2157](https://github.com/cds-snc/platform-forms-client/commit/87c215758c1f77aa08f370acb964da0cb03ff4d8))
+* synced file(s) with cds-snc/site-reliability-engineering ([#3563](https://github.com/cds-snc/platform-forms-client/issues/3563)) ([cbdac8c](https://github.com/cds-snc/platform-forms-client/commit/cbdac8cd2f3c16544fc82bcf0e0c0326079a7e9a))
+* Update closing notice ([#4434](https://github.com/cds-snc/platform-forms-client/issues/4434)) ([e5b2ff4](https://github.com/cds-snc/platform-forms-client/commit/e5b2ff460364631b627a9e0c13da482a42981d75))
+
 ## [3.23.0](https://github.com/cds-snc/platform-forms-client/compare/v3.22.4...v3.23.0) (2024-10-16)
 
 
