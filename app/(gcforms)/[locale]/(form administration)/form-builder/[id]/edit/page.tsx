@@ -1,7 +1,7 @@
 import { serverTranslation } from "@i18n";
 import { Metadata } from "next";
 import { EditWithGroups } from "./components/EditWithGroups";
-import { DynamicRowDialog } from "@formBuilder/components/dialogs/DynamicRowDialog";
+import { DynamicRowDialog } from "@formBuilder/components/dialogs/DynamicRowDialog/DynamicRowDialog";
 
 export async function generateMetadata({
   params: { locale },

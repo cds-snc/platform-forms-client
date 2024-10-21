@@ -1,4 +1,4 @@
-import { DynamicRowDialogEventDetails } from "@formBuilder/components/dialogs/DynamicRowDialog";
+import { DynamicRowDialogEventDetails } from "@formBuilder/components/dialogs/DynamicRowDialog/DynamicRowDialog";
 import { useRef } from "react";
 
 /**
