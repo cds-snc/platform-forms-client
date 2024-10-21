@@ -12841,11 +12841,11 @@ __metadata:
     prettier: "npm:^2.8.8"
     prisma: "npm:^5.10.2"
     raw-loader: "npm:^4.0.2"
-    react: "npm:^18.2.0"
+    react: "npm:^18.3.1"
     react-app-polyfill: "npm:3.0.0"
     react-aria: "npm:3.31.0"
     react-complex-tree: "npm:^2.4.5"
-    react-dom: "npm:^18.2.0"
+    react-dom: "npm:^18.3.1"
     react-i18next: "npm:^14.0.5"
     react-loading-skeleton: "npm:^3.4.0"
     react-roving-tabindex: "npm:^3.2.0"
@@ -17335,7 +17335,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-dom@npm:^18.2.0":
+"react-dom@npm:^18.3.1":
   version: 18.3.1
   resolution: "react-dom@npm:18.3.1"
   dependencies:
@@ -17536,7 +17536,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react@npm:^18.2.0":
+"react@npm:^18.3.1":
   version: 18.3.1
   resolution: "react@npm:18.3.1"
   dependencies:
