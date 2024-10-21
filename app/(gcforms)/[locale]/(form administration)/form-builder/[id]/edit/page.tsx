@@ -1,6 +1,7 @@
 import { serverTranslation } from "@i18n";
 import { Metadata } from "next";
 import { EditWithGroups } from "./components/EditWithGroups";
+import { DynamicRowDialog } from "@formBuilder/components/dialogs/DynamicRowDialog";
 
 export async function generateMetadata({
   params: { locale },
@@ -18,5 +19,10 @@ export default async function Page({
 }: {
   params: { id: string; locale: string };
 }) {
-  return <EditWithGroups id={id} locale={locale} />;
+  return (
+    <>
+      <EditWithGroups id={id} locale={locale} />
+      <DynamicRowDialog />
+    </>
+  );
 }

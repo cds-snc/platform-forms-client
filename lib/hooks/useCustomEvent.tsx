@@ -1,3 +1,4 @@
+import { DynamicRowDialogEventDetails } from "@formBuilder/components/dialogs/DynamicRowDialog";
 import { useRef } from "react";
 
 /**
@@ -10,7 +11,8 @@ import { useRef } from "react";
  *   item: FormElementWithIndex;
  * }
  */
-export type CustomEventDetails = object | undefined;
+
+export type CustomEventDetails = DynamicRowDialogEventDetails | undefined;
 
 export const useCustomEvent = () => {
   // Attach listeners to a documentRef instead of document directly
@@ -57,5 +59,9 @@ export const useCustomEvent = () => {
     },
   };
 
-  return { Event };
+  const isCustomEvent = (event: Event) => {
+    return "detail" in event;
+  };
+
+  return { Event, isCustomEvent };
 };
