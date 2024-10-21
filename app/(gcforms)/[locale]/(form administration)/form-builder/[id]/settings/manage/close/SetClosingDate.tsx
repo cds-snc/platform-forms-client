@@ -13,6 +13,9 @@ import { ClosedSuccess } from "./ClosedSuccess";
 import { ClosedDateBanner } from "./ClosedDateBanner";
 
 import { closeForm } from "@formBuilder/actions";
+import { ClosingDateDialog } from "./ClosingDateDialog";
+
+import { ScheduledClosingDate } from "./ScheduledClosingDate";
 
 export const SetClosingDate = ({
   formId,
@@ -44,16 +47,44 @@ export const SetClosingDate = ({
   }, [closedMessage]);
 
   const [status, setStatus] = useState(closingDate ? "closed" : "open");
+  const [showDateTimeDialog, setShowDateTimeDialog] = useState(false);
 
   const handleToggle = (value: boolean) => {
     setStatus(value == true ? "closed" : "open");
   };
 
+  const saveFutureDate = useCallback(
+    async (futureDate?: number) => {
+      if (!futureDate) {
+        return;
+      }
+
+      const closingDate = new Date(futureDate).toISOString();
+
+      const result = await closeForm({
+        id: formId,
+        closingDate,
+        closedDetails: closedMessage,
+      });
+
+      if (!result || result.error) {
+        toast.error(t("closingDate.savedErrorMessage"));
+        return;
+      }
+
+      // Update the local template store
+      setClosingDate(closingDate);
+
+      toast.success(t("closingDate.savedSuccessMessage"));
+    },
+    [formId, setClosingDate, t, closedMessage]
+  );
+
   const saveFormStatus = useCallback(async () => {
-    let closeDate = "open";
+    let closeDate = "open"; // this wil reset the closing date to null;
 
     if (status === "closed") {
-      const now = new Date();
+      const now = new Date(); // Set date to now to close the form right away
       closeDate = now.toISOString();
     }
 
@@ -68,7 +99,7 @@ export const SetClosingDate = ({
       return;
     }
 
-    // update the local store
+    // update the local template store
     setClosingDate(status !== "open" ? closeDate : null);
 
     if (status === "closed") {
@@ -95,6 +126,16 @@ export const SetClosingDate = ({
           description={t("closingDate.status")}
         />
       </div>
+      <div className="mb-4">
+        {closingDate && <ScheduledClosingDate closingDate={closingDate} language="en" />}
+        <Button
+          data-closing-date={closingDate}
+          theme="link"
+          onClick={() => setShowDateTimeDialog(true)}
+        >
+          {t("scheduleClosingPage.linkText")}
+        </Button>
+      </div>
       <div className="mb-4 w-3/5">
         <ClosedMessage
           closedDetails={closedMessage}
@@ -102,9 +143,20 @@ export const SetClosingDate = ({
           valid={validateClosedMessage()}
         />
       </div>
-      <Button disabled={!validateClosedMessage()} theme="secondary" onClick={saveFormStatus}>
+      <Button
+        disabled={!validateClosedMessage()}
+        theme="secondary"
+        onClick={() => saveFormStatus()}
+      >
         {t("closingDate.saveButton")}
       </Button>
+      {showDateTimeDialog && (
+        <ClosingDateDialog
+          showDateTimeDialog={showDateTimeDialog}
+          setShowDateTimeDialog={setShowDateTimeDialog}
+          save={saveFutureDate}
+        ></ClosingDateDialog>
+      )}
     </div>
   );
 };
