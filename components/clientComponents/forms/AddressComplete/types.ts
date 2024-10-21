@@ -6,8 +6,9 @@ export interface AddressCompleteChoice {
   Id: string;
   Text: string;
   Highlight: string;
+  Cursor: number;
   Description: string;
-  IsRetrievable: boolean;
+  Next: string;
 }
 
 // Address Lookup API returns an array of objects like:
