@@ -28,24 +28,29 @@ import {
 import { filterShownElements, filterValuesByShownElements } from "@lib/formContext";
 import { formHasGroups } from "@lib/utils/form-builder/formHasGroups";
 import { showReviewPage } from "@lib/utils/form-builder/showReviewPage";
+import { useFormDelay } from "@lib/hooks/useFormDelayContext";
 
 interface SubmitButtonProps {
+  getNumberOfRequiredQuestions: () => number;
   formID: string;
   formTitle: string;
 }
-const SubmitButton: React.FC<SubmitButtonProps> = ({ formID, formTitle }) => {
+const SubmitButton: React.FC<SubmitButtonProps> = ({
+  getNumberOfRequiredQuestions,
+  formID,
+  formTitle,
+}) => {
   const { t } = useTranslation();
   const [formTimerState, { startTimer, checkTimer, disableTimer }] = useFormTimer();
   const [submitTooEarly, setSubmitTooEarly] = useState(false);
   const screenReaderRemainingTime = useRef(formTimerState.remainingTime);
-  const { getFormDelay } = useGCFormsContext();
 
   const formTimerEnabled = process.env.NEXT_PUBLIC_APP_ENV !== "test";
 
   // If the timer hasn't started yet, start the timer
   if (!formTimerState.timerDelay && formTimerEnabled) {
     // calculate initial delay for submit timer
-    startTimer(getFormDelay());
+    startTimer(getNumberOfRequiredQuestions());
   }
 
   useEffect(() => {
@@ -159,6 +164,9 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
 
   // Used to set any values we'd like added for use in the below withFormik handleSubmit().
   useFormValuesChanged();
+
+  const { setStartTime, getFormDelay } = useFormDelay();
+  useEffect(setStartTime, [setStartTime]);
 
   const errorList = props.errors ? getErrorList(props) : null;
   const errorId = "gc-form-errors";
@@ -293,14 +301,22 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
                             />
                           )}
                         <div className="inline-block">
-                          <SubmitButton formID={formID} formTitle={form.titleEn} />
+                          <SubmitButton
+                            getNumberOfRequiredQuestions={() => getFormDelay(form)}
+                            formID={formID}
+                            formTitle={form.titleEn}
+                          />
                         </div>
                       </div>
                     );
                   },
                 })
               ) : (
-                <SubmitButton formID={formID} formTitle={form.titleEn} />
+                <SubmitButton
+                  getNumberOfRequiredQuestions={() => getFormDelay(form)}
+                  formID={formID}
+                  formTitle={form.titleEn}
+                />
               )}
             </div>
           </form>
