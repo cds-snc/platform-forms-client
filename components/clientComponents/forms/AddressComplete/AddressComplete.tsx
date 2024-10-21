@@ -265,6 +265,7 @@ export const AddressComplete = (props: AddressCompleteProps): React.ReactElement
             <ManagedCombobox
               ref={comboboxRef}
               choices={choices}
+              key={`${name}-streetAddress`}
               id={`${name}-streetAddress`}
               name={`${name}-streetAddress`}
               onChange={onAddressSearch}
