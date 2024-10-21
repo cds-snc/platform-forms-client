@@ -116,7 +116,7 @@
     "uuid": "9.0.1",
     "valibot": "^0.30.0",
     "yup": "0.32.11",
-    "zustand": "4.5.4"
+    "zustand": "5.0.0"
   },
   "devDependencies": {
     "@aws-sdk/types": "^3.515.0",
