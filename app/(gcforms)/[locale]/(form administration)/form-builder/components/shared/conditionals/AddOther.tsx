@@ -8,7 +8,6 @@ import { useTemplateStore } from "@lib/store/useTemplateStore";
 import { FormElementTypes } from "@lib/types";
 import { getTranslatedProperties } from "../../../actions";
 import { useGroupStore } from "@formBuilder/components/shared/right-panel/treeview/store/useGroupStore";
-import { allowGrouping } from "@formBuilder/components/shared/right-panel/treeview/util/allowGrouping";
 import { BoltIcon } from "@serverComponents/icons";
 import { ChoiceRule } from "@lib/formContext";
 
@@ -53,13 +52,8 @@ export const AddOther = ({
       },
     };
 
-    const allowGroups = allowGrouping();
     let itemId = 0;
-    if (allowGroups) {
-      itemId = await add(item.index, FormElementTypes.textField, data, groupId);
-    } else {
-      itemId = await add(item.index, FormElementTypes.textField, data);
-    }
+    itemId = await add(item.index, FormElementTypes.textField, data, groupId);
 
     const newRule = { elementId: `${itemId}`, choiceId: `${item.id}.${lastChoice}` };
     onComplete(newRule);
