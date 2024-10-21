@@ -47,11 +47,33 @@ export const getSelectedAddress = async (
   });
 
   const responseData = await response.json(); //Todo #4341 - Error Handling
+
   const addressData = responseData.Items as AddressCompleteResult[];
 
   const addressComponents = await getAddressComponents(addressData, language);
 
   return addressComponents;
+};
+
+// Function returns the address set from a retreive.
+export const getAddressCompleteRetrieve = async (
+  addressCompleteKey: string,
+  query: string,
+  countryCode: string
+) => {
+  let params = "?";
+  params += "Key=" + encodeURIComponent(addressCompleteKey);
+  params += "&LastId=" + encodeURIComponent(query);
+  params += "&Country=" + encodeURIComponent(countryCode);
+
+  const response = await fetch(autoCompleteUrl + params, {
+    headers: { "content-Type": "application/x-www-form-urlencoded" },
+    method: "POST",
+  });
+
+  const responseData = await response.json(); //Todo #4341  - Error Handling
+
+  return responseData.Items as AddressCompleteChoice[];
 };
 
 // Helper function combines API component results into single address object.
@@ -125,3 +147,9 @@ export const getAddressAsAnswerElements = (
 
   return answerArray;
 };
+
+// Helper function to test if the address has multiple results.
+export function matchesAddressPattern(input: string): boolean {
+  const pattern = /^.+,\s+[A-Z]{2}(?:,\s+[A-Z0-9]+)?\s+-\s+\d+\s+Addresses$/;
+  return pattern.test(input);
+}

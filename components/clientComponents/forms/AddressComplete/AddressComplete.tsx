@@ -1,6 +1,11 @@
 "use client";
 import { AddressCompleteChoice, AddressCompleteProps, AddressElements } from "./types";
-import { getAddressCompleteChoices, getSelectedAddress } from "./utils";
+import {
+  getAddressCompleteChoices,
+  getSelectedAddress,
+  getAddressCompleteRetrieve,
+  matchesAddressPattern,
+} from "./utils";
 import { Description, Label, ManagedCombobox } from "@clientComponents/forms";
 import { useState, useEffect, useRef } from "react";
 import { useTranslation } from "@i18n/client";
@@ -13,6 +18,7 @@ import { useFeatureFlags } from "@lib/hooks/useFeatureFlags";
 
 interface ManagedComboboxRef {
   changeInputValue: (value: string) => void;
+  forceChangeChoices: (choices: string[]) => void;
 }
 
 export const AddressComplete = (props: AddressCompleteProps): React.ReactElement => {
@@ -71,6 +77,35 @@ export const AddressComplete = (props: AddressCompleteProps): React.ReactElement
     helpers.setValue(newValue);
   }, [addressObject, helpers]);
 
+  const handleAddressComplete = async (choices: AddressCompleteChoice[]) => {
+    //loop through the responseData and add it to the addressResultsCache
+    const newElements: AddressCompleteChoice[] = [];
+
+    for (let i = 0; i < choices.length; i++) {
+      // Check key doesn't already exist.
+      if (!addressResultCache.find((item: AddressCompleteChoice) => item.Id === choices[i].Id)) {
+        newElements.push(choices[i]);
+      }
+    }
+
+    if (newElements.length > 0) {
+      setAddressResultCache((prevCache) => [...prevCache, ...newElements]);
+    }
+
+    // Filter the results to avoid duplicate entry
+    const uniqueResults = choices.filter(
+      (item: AddressCompleteChoice, index: number, self: AddressCompleteChoice[]) =>
+        index ===
+        self.findIndex((t) => toFullAddress(t) === toFullAddress(item) && item.Text !== undefined)
+    );
+
+    setChoices(
+      uniqueResults.map((item: AddressCompleteChoice) => {
+        return toFullAddress(item);
+      })
+    );
+  };
+
   const onAddressSearch = async (e: React.ChangeEvent<HTMLInputElement>) => {
     setAddressData("streetAddress", e.target.value); // Update the street address in the address object
     // It will be updated again when the address is set to a autocomplete value, or kept if no value is selected.
@@ -86,34 +121,7 @@ export const AddressComplete = (props: AddressCompleteProps): React.ReactElement
       addressObject?.country || "CAN"
     );
 
-    //loop through the responseData and add it to the addressResultsCache
-    const newElements: AddressCompleteChoice[] = [];
-
-    for (let i = 0; i < responseData.length; i++) {
-      // Check key doesn't already exist.
-      if (
-        !addressResultCache.find((item: AddressCompleteChoice) => item.Id === responseData[i].Id)
-      ) {
-        newElements.push(responseData[i]);
-      }
-    }
-
-    if (newElements.length > 0) {
-      setAddressResultCache((prevCache) => [...prevCache, ...newElements]);
-    }
-
-    // Filter the results to avoid duplicate entry
-    const uniqueResults = responseData.filter(
-      (item: AddressCompleteChoice, index: number, self: AddressCompleteChoice[]) =>
-        index ===
-        self.findIndex((t) => toFullAddress(t) === toFullAddress(item) && item.Text !== undefined)
-    );
-
-    setChoices(
-      uniqueResults.map((item: AddressCompleteChoice) => {
-        return toFullAddress(item);
-      })
-    );
+    handleAddressComplete(responseData);
   };
 
   const onAddressSet = async (value: string) => {
@@ -124,21 +132,47 @@ export const AddressComplete = (props: AddressCompleteProps): React.ReactElement
     const selectedResult = addressResultCache.find(
       (item: AddressCompleteChoice) => toFullAddress(item) === value
     );
+
     if (selectedResult === undefined) {
       return; // Do nothing, this is not found in the AddressComplete API.
     } else {
-      const responseData = await getSelectedAddress(
-        apiKey,
-        selectedResult.Id,
-        addressObject?.country || "CAN",
-        i18n.language as Language
-      );
-      if (responseData) {
-        const results = responseData;
-        setAddressObject(results);
-        if (comboboxRef.current) {
-          comboboxRef.current.changeInputValue(results.streetAddress);
+      // Perform regex test against the selectedResult.Next value.
+      // The API just sometimes gives back a "Retrieve" value for a nested address.
+      // Why? Because Reasons I guess.
+      // eg: Toronto, ON - 15489 Addresses
+      // Swap the value to Find
+      let nextValue = selectedResult.Next;
+      if (matchesAddressPattern(selectedResult.Next)) {
+        nextValue = "Find";
+      }
+
+      // Handle the Next value.
+      if (nextValue == "Retrieve") {
+        const responseData = await getSelectedAddress(
+          apiKey,
+          selectedResult.Id,
+          addressObject?.country || "CAN",
+          i18n.language as Language
+        );
+        if (responseData) {
+          const results = responseData;
+          setAddressObject(results);
+          if (comboboxRef.current) {
+            comboboxRef.current.changeInputValue(results.streetAddress);
+          }
         }
+      } else if (nextValue == "Find") {
+        // Do another lookup for the address.
+        const responseData = await getAddressCompleteRetrieve(
+          apiKey,
+          selectedResult.Id,
+          addressObject?.country || "CAN"
+        );
+
+        // TODO : the new values aren't being set. Why?
+
+        setAddressResultCache([]); // Clear the cache.
+        handleAddressComplete(responseData);
       }
     }
   };
