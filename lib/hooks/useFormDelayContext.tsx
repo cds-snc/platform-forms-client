@@ -72,7 +72,7 @@ const calculateDelayWithoutGroups = (form: FormProperties) => {
 
 const calculateDelayWithGroups = (form: FormProperties, formDelay: FormDelay) => {
   const elapsedTime = Math.floor((Date.now() - formDelay.startTime) / 1000);
-  // Uses state to get requried questions (vs. a non group form that uses the form to get all quriered questions)
+  // Uses state to get requried questions (vs. a non group that can use the current form)
   const delayFromFormData = formDelay.requiredQuestions - elapsedTime;
   return calculateSubmitDelay(delayFromFormData);
 };
@@ -80,6 +80,12 @@ const calculateDelayWithGroups = (form: FormProperties, formDelay: FormDelay) =>
 export const useFormDelay = () => {
   const { formDelay, setFormDelay } = useContext(FormDelayContext);
   return {
+    /**
+     * Used only for forms with groups. This sets an initial start time that is later used to get
+     * the time a user has spent on a form.
+     * @param currentGroup group Id of the current page
+     * @param form current form
+     */
     setStartTime: () => {
       if (formDelay.startTime) {
         return;
@@ -88,7 +94,6 @@ export const useFormDelay = () => {
     },
     /**
      * Used only for forms with groups. This will set the form delay based on the current group.
-     * Note the startTime timestamp once the user click the "next" button on the first page.
      * @param currentGroup group Id of the current page
      * @param form current form
      */
@@ -99,6 +104,15 @@ export const useFormDelay = () => {
         requiredQuestions: requiredQuestions && formDelay.requiredQuestions + requiredQuestions,
       });
     },
+    /**
+     * Gets the form delay based on the form type. For non group forms, the countdown (submit button)
+     * starts immediately so the time a user spends on a form minus the required questions will be
+     * small. While a form with groups, the delay could be massive because branching logic enables
+     * much bigger forms. This is why for a group form the time spent on the form is subtracted from
+     * only the required questions along the pages path a user navigates - reducing the delay.
+     * @param form current form
+     * @returns delay in seconds
+     */
     getFormDelay: (form: FormProperties) => {
       const hasGroups = showReviewPage(form);
       return hasGroups
