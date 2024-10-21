@@ -51,7 +51,7 @@ const calculateSubmitDelay = (delayFromFormData: number) => {
  * @param currentGroup curent group/page Id
  * @returns count of required questions on the current page/group
  */
-const getNumberOfRequireQuestionsGroups = (form: FormProperties, currentGroup: string) => {
+const getNumberOfRequiredQuestionsWithGroups = (form: FormProperties, currentGroup: string) => {
   const groupIds = form?.groups?.[currentGroup].elements;
   if (!groupIds) {
     return 0;
@@ -61,13 +61,8 @@ const getNumberOfRequireQuestionsGroups = (form: FormProperties, currentGroup: s
     .filter((element) => element.properties.validation?.required === true).length;
 };
 
-const getNumberOfRequireQuestionsWithoutGroups = (form: FormProperties) => {
+const getNumberOfRequiredQuestionsWithoutGroups = (form: FormProperties) => {
   return form.elements.filter((element) => element.properties.validation?.required === true).length;
-};
-
-const calculateDelayWithoutGroups = (form: FormProperties) => {
-  const delayFromFormData = getNumberOfRequireQuestionsWithoutGroups(form);
-  return calculateSubmitDelay(delayFromFormData);
 };
 
 const calculateDelayWithGroups = (form: FormProperties, formDelay: FormDelay) => {
@@ -77,12 +72,17 @@ const calculateDelayWithGroups = (form: FormProperties, formDelay: FormDelay) =>
   return calculateSubmitDelay(delayFromFormData);
 };
 
+const calculateDelayWithoutGroups = (form: FormProperties) => {
+  const delayFromFormData = getNumberOfRequiredQuestionsWithoutGroups(form);
+  return calculateSubmitDelay(delayFromFormData);
+};
+
 export const useFormDelay = () => {
   const { formDelay, setFormDelay } = useContext(FormDelayContext);
   return {
     /**
-     * Used only for forms with groups. This sets an initial start time that is later used to get
-     * the time a user has spent on a form.
+     * Sets an initial start time that is later used to get the time a user has spent on a form.
+     * Used only for forms with groups.
      * @param currentGroup group Id of the current page
      * @param form current form
      */
@@ -93,23 +93,24 @@ export const useFormDelay = () => {
       setFormDelay({ ...formDelay, startTime: Date.now() });
     },
     /**
-     * Used only for forms with groups. This will set the form delay based on the current group.
+     * Set the form delay based on the current group. Used only for forms with groups.
      * @param currentGroup group Id of the current page
      * @param form current form
      */
     setFormDelayGroups: (form: FormProperties, currentGroup: string) => {
-      const requiredQuestions = getNumberOfRequireQuestionsGroups(form, currentGroup);
+      const requiredQuestions = getNumberOfRequiredQuestionsWithGroups(form, currentGroup);
       setFormDelay({
         ...formDelay,
         requiredQuestions: requiredQuestions && formDelay.requiredQuestions + requiredQuestions,
       });
     },
     /**
-     * Gets the form delay based on the form type. For non group forms, the countdown (submit button)
+     * Gets the form delay based on the form type. For non group forms, the countdown (SubmitButton)
      * starts immediately so the time a user spends on a form minus the required questions will be
-     * small. While a form with groups, the delay could be massive because branching logic enables
-     * much bigger forms. This is why for a group form the time spent on the form is subtracted from
-     * only the required questions along the pages path a user navigates - reducing the delay.
+     * small. While a form with groups, the countdown could be massive because branching logic
+     * enables much bigger forms. This is why for a group form the time spent on the form is
+     * subtracted from only the required questions along the pages path a user navigates; reducing
+     * the delay used in the countdown.
      * @param form current form
      * @returns delay in seconds
      */
