@@ -5,6 +5,7 @@ import { DownloadForm } from "./DownloadForm";
 import { SetClosingDate } from "./close/SetClosingDate";
 import { FormOwnership } from "./FormOwnership";
 import { ErrorPanel } from "@clientComponents/globals/ErrorPanel";
+import { updateTemplateUsers } from "@formBuilder/actions";
 
 interface User {
   id: string;
@@ -56,6 +57,7 @@ export const ManageForm = (props: ManageFormProps) => {
         formRecord={formRecord}
         usersAssignedToFormRecord={usersAssignedToFormRecord}
         allUsers={allUsers}
+        updateTemplateUsers={updateTemplateUsers}
       />
       <DownloadForm />
     </>

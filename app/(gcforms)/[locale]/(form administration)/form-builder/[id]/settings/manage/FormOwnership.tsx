@@ -2,13 +2,11 @@
 import React, { ReactElement, useState } from "react";
 import { useTranslation } from "@i18n/client";
 import { Alert } from "@clientComponents/globals";
-import { logMessage } from "@lib/logger";
 import { Button } from "@clientComponents/globals";
 import { FormOwnerSelect, usersToOptions } from "./FormOwnerSelect";
 
 import { CacheProvider, EmotionCache } from "@emotion/react";
 import createCache from "@emotion/cache";
-import axios from "axios";
 import { FormRecord } from "@lib/types";
 
 interface AssignUsersToTemplateProps {
@@ -16,28 +14,18 @@ interface AssignUsersToTemplateProps {
   formRecord: FormRecord;
   usersAssignedToFormRecord: { id: string; name: string | null; email: string }[];
   allUsers: { id: string; name: string | null; email: string }[];
+  updateTemplateUsers: ({ id, users }: { id: string; users: { id: string }[] }) => Promise<{
+    success: boolean;
+    error?: string;
+  }>;
 }
-
-const updateUsersToTemplateAssignations = async (formID: string, users: { id: string }[]) => {
-  try {
-    return await axios({
-      url: `/api/templates/${formID}`,
-      method: "PUT",
-      data: {
-        users,
-      },
-      timeout: 5000,
-    });
-  } catch (e) {
-    logMessage.error(e);
-  }
-};
 
 export const FormOwnership = ({
   nonce,
   formRecord,
   usersAssignedToFormRecord,
   allUsers,
+  updateTemplateUsers,
 }: AssignUsersToTemplateProps) => {
   const { t } = useTranslation(["admin-users", "form-builder"]);
 
@@ -57,24 +45,24 @@ export const FormOwnership = ({
       return { id: user.value };
     });
 
-    const response = await updateUsersToTemplateAssignations(formRecord.id, usersToAssign);
+    const response = await updateTemplateUsers({ id: formRecord.id, users: usersToAssign });
 
-    if (response && response.data.error) {
+    if (response && response.error) {
       setMessage(
         <Alert.Danger focussable={true} title={t("responseFail.title")} className="mb-2">
-          <p>{t(response.data.message)}</p>
+          <p>{t(response.error)}</p>
         </Alert.Danger>
       );
       return;
     }
 
-    if (response && response.status === 200) {
+    if (response && response.success === true) {
       setMessage(
         <Alert.Success focussable={true} title={t("responseSuccess.title")} className="mb-2">
           <p>{t("responseSuccess.message")}</p>
         </Alert.Success>
       );
-      return response.data;
+      return response;
     }
 
     setMessage(

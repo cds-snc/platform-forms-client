@@ -25,7 +25,10 @@ export default async function Page({
 }: {
   params: { locale: string; id: string; statusFilter: string };
 }) {
-  const { session } = await authCheckAndThrow().catch(() => ({ session: null }));
+  const { session } = await authCheckAndThrow().catch(() => ({
+    session: null,
+  }));
+
   const isAuthenticated = session !== null;
 
   if (!isAuthenticated) {
