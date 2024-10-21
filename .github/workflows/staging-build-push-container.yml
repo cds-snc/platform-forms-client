@@ -27,7 +27,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4.1.7
+        uses: actions/checkout@eef61447b9ff4aafe5dcd4e0bbf5d482be7e7871 # v4.2.1
 
       - name: Build Form Viewer
         run: |
@@ -44,7 +44,7 @@ jobs:
 
       - name: Login to Staging Amazon ECR
         id: login-ecr-staging
-        uses: aws-actions/amazon-ecr-login@8308922cec0e5e898b1f51cf0908258552976578
+        uses: aws-actions/amazon-ecr-login@6f9c6fad87720db87041e25e3ecf5b609c0368a0
 
       - name: Tag Images for Staging
         env:
