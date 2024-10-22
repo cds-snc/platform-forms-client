@@ -634,7 +634,12 @@
         "text1": "Do not loose your key [FR]",
         "text2": "This is your unique password and it is non-recoverable. If you loose this key, you will have to create a new one. [FR]",
         "cancelButton": "Cancel [FR]",
-        "downloadButton": "Download key [FR]"
+        "downloadButton": "Download key [FR]",
+        "confirm": {
+          "label": "Confirmation [FR]",
+          "required": "(required) [FR]",
+          "description": "Type AGREE in the box below to confirm you understand your responsibilities and agree to the required security procedures while storing and sharing this key."
+        }
       }
     }
   },
