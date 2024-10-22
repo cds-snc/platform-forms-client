@@ -6,6 +6,7 @@ import { useTemplateStore } from "@lib/store/useTemplateStore";
 import { Dialog, useDialogRef } from "@formBuilder/components/shared/Dialog";
 import { CustomEventDetails, useCustomEvent } from "@lib/hooks/useCustomEvent";
 import { FormElementWithIndex } from "@lib/types/form-builder-types";
+import { dynamicRowType } from "@lib/types/form-types";
 
 export const TextInput = ({ label, children }: { label: string; children: React.ReactElement }) => {
   return (
@@ -146,7 +147,7 @@ export const DynamicRowDialog = () => {
                       properties: {
                         ...item.properties,
                         dynamicRow: {
-                          ...item.properties.dynamicRow,
+                          ...(item.properties.dynamicRow as dynamicRowType),
                           rowTitleEn: e.target.value || "",
                         },
                       },
@@ -164,7 +165,7 @@ export const DynamicRowDialog = () => {
                       properties: {
                         ...item.properties,
                         dynamicRow: {
-                          ...item.properties.dynamicRow,
+                          ...(item.properties.dynamicRow as dynamicRowType),
                           rowTitleFr: e.target.value || "",
                         },
                       },
@@ -188,7 +189,7 @@ export const DynamicRowDialog = () => {
                       properties: {
                         ...item.properties,
                         dynamicRow: {
-                          ...item.properties.dynamicRow,
+                          ...(item.properties.dynamicRow as dynamicRowType),
                           addButtonTextEn: e.target.value || "",
                         },
                       },
@@ -206,7 +207,7 @@ export const DynamicRowDialog = () => {
                       properties: {
                         ...item.properties,
                         dynamicRow: {
-                          ...item.properties.dynamicRow,
+                          ...(item.properties.dynamicRow as dynamicRowType),
                           addButtonTextFr: e.target.value || "",
                         },
                       },
@@ -232,7 +233,7 @@ export const DynamicRowDialog = () => {
                       properties: {
                         ...item.properties,
                         dynamicRow: {
-                          ...item.properties.dynamicRow,
+                          ...(item.properties.dynamicRow as dynamicRowType),
                           removeButtonTextEn: e.target.value || "",
                         },
                       },
@@ -250,7 +251,7 @@ export const DynamicRowDialog = () => {
                       properties: {
                         ...item.properties,
                         dynamicRow: {
-                          ...item.properties.dynamicRow,
+                          ...(item.properties.dynamicRow as dynamicRowType),
                           removeButtonTextFr: e.target.value || "",
                         },
                       },
