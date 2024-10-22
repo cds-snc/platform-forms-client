@@ -11,6 +11,7 @@ import { getAllTemplatesForUser, TemplateOptions } from "@lib/templates";
 import { DeliveryOption } from "@lib/types";
 import { getOverdueTemplateIds } from "@lib/overdue";
 import { Invitations } from "./components/Invitations";
+import { prisma } from "@lib/integration/prismaConnector";
 
 export type FormsTemplate = {
   id: string;
@@ -43,7 +44,7 @@ export default async function Page({
   searchParams: { status?: string };
 }) {
   try {
-    const { ability } = await authCheckAndRedirect();
+    const { ability, session } = await authCheckAndRedirect();
 
     const { t } = await serverTranslation("my-forms", { lang: locale });
 
@@ -76,6 +77,21 @@ export default async function Page({
       };
     });
 
+    const invitations = await prisma.invitation.findMany({
+      where: {
+        email: session.user.email,
+        expires: {
+          gt: new Date(),
+        },
+      },
+      select: {
+        id: true,
+        email: true,
+        expires: true,
+        templateId: true,
+      },
+    });
+
     const overdueTemplateIds = await getOverdueTemplateIds(
       templates.map((template) => template.id)
     );
@@ -83,7 +99,7 @@ export default async function Page({
     return (
       <div className="mx-auto w-[980px]">
         <h1 className="mb-8 border-b-0">{t("title")}</h1>
-        <Invitations />
+        <Invitations invitations={invitations} />
         <div className="flex w-full justify-between">
           <Navigation filter={status} />
           <NewFormButton />

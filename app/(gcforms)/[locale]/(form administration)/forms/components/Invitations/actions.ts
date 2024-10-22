@@ -2,7 +2,6 @@
 
 import { serverTranslation } from "@i18n";
 import { authCheckAndThrow } from "@lib/actions";
-import { prisma } from "@lib/integration/prismaConnector";
 import { acceptInvitation } from "@lib/invitations/acceptInvitation";
 import { declineInvitation } from "@lib/invitations/declineInvitation";
 import {
@@ -11,27 +10,6 @@ import {
   UnableToAssignUserToTemplateError,
   UserNotFoundError,
 } from "@lib/invitations/exceptions";
-
-export const retrieveInvitations = async () => {
-  const { session } = await authCheckAndThrow();
-
-  const invitations = await prisma.invitation.findMany({
-    where: {
-      email: session.user.email,
-      expires: {
-        gt: new Date(),
-      },
-    },
-    select: {
-      id: true,
-      email: true,
-      expires: true,
-      templateId: true,
-    },
-  });
-
-  return invitations;
-};
 
 export const accept = async (id: string) => {
   const { ability } = await authCheckAndThrow();
