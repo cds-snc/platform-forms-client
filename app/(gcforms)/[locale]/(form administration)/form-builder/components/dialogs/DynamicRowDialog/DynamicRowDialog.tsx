@@ -21,10 +21,6 @@ export const TextInput = ({ label, children }: { label: string; children: React.
   );
 };
 
-export type DynamicRowDialogEventDetails = {
-  item: FormElementWithIndex;
-};
-
 export const DynamicRowDialog = () => {
   const dialog = useDialogRef();
   const { Event } = useCustomEvent();

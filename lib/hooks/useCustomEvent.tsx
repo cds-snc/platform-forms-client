@@ -1,4 +1,4 @@
-import { DynamicRowDialogEventDetails } from "@formBuilder/components/dialogs/DynamicRowDialog/DynamicRowDialog";
+import { FormElementWithIndex } from "@lib/types/form-builder-types";
 import { useRef } from "react";
 
 /**
@@ -11,6 +11,10 @@ import { useRef } from "react";
  *   item: FormElementWithIndex;
  * }
  */
+
+export type DynamicRowDialogEventDetails = {
+  item: FormElementWithIndex;
+};
 
 export type CustomEventDetails = DynamicRowDialogEventDetails | undefined;
 
