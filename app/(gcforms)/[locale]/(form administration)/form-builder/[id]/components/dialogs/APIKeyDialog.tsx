@@ -10,6 +10,8 @@ import {
   useCustomEvent,
 } from "@lib/hooks/useCustomEvent";
 
+import { Trans } from "react-i18next";
+
 import { cn } from "@lib/utils";
 
 export const TextInput = ({
@@ -28,7 +30,14 @@ export const TextInput = ({
       <label className="mb-2 block font-bold">
         {label} {required && required}
       </label>
-      <p className="mb-4">{description}</p>
+      <p className="mb-4">
+        <Trans
+          ns="form-builder"
+          i18nKey={description}
+          defaults="<strong></strong> <a></a>"
+          components={{ strong: <strong />, a: <a /> }}
+        />
+      </p>
       {children}
     </div>
   );
@@ -49,7 +58,7 @@ const ConfirmationAgreement = ({
         required={
           <span className="text-gcds-red-500">{t("settings.api.dialog.confirm.required")}</span>
         }
-        description={t("settings.api.dialog.confirm.description")}
+        description="settings.api.dialog.confirm.description"
       >
         <div>
           <input
@@ -146,10 +155,38 @@ export const ApiKeyDialog = () => {
             <h4 className="mb-4">{t("settings.api.dialog.heading")}</h4>
             <p className="font-bold">{t("settings.api.dialog.responsibility")}</p>
             <ul className="mb-4">
-              <li>{t("settings.api.dialog.responsibility1")}</li>
-              <li>{t("settings.api.dialog.responsibility2")}</li>
-              <li>{t("settings.api.dialog.responsibility3")}</li>
-              <li>{t("settings.api.dialog.responsibility4")}</li>
+              <li>
+                <Trans
+                  ns="form-builder"
+                  i18nKey="settings.api.dialog.responsibility1"
+                  defaults="<strong></strong> <a></a>"
+                  components={{ strong: <strong />, a: <a /> }}
+                />
+              </li>
+              <li>
+                <Trans
+                  ns="form-builder"
+                  i18nKey="settings.api.dialog.responsibility2"
+                  defaults="<strong></strong> <a></a>"
+                  components={{ strong: <strong />, a: <a /> }}
+                />
+              </li>
+              <li>
+                <Trans
+                  ns="form-builder"
+                  i18nKey="settings.api.dialog.responsibility3"
+                  defaults="<strong></strong> <a></a>"
+                  components={{ strong: <strong />, a: <a /> }}
+                />
+              </li>
+              <li>
+                <Trans
+                  ns="form-builder"
+                  i18nKey="settings.api.dialog.responsibility4"
+                  defaults="<strong></strong> <a></a>"
+                  components={{ strong: <strong />, a: <a /> }}
+                />
+              </li>
             </ul>
 
             <ConfirmationAgreement handleAgreement={hasAgreed} />

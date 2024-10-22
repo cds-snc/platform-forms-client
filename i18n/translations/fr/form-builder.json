@@ -631,14 +631,20 @@
       },
       "dialog": {
         "title": "API key successfully created [FR]",
-        "text1": "Do not loose your key [FR]",
+        "heading": "GC Forms API keys are PROTECTED B. [FR]",
+        "responsibility": "It is your responsibility to: [FR]",
+        "responsibility1": "Save this key in a secure location. [FR]",
+        "responsibility2": "Share the key only with people who need it. [FR]",
+        "responsibility3": "Send the key through secure channels, like encrypted email. [FR]",
+        "responsibility4": "Read and the understand the <a href='canada.ca' target='_blank'>required security procedures.</a> [FR]",
+        "text1": "Do not loose your key",
         "text2": "This is your unique password and it is non-recoverable. If you loose this key, you will have to create a new one. [FR]",
         "cancelButton": "Cancel [FR]",
         "downloadButton": "Download key [FR]",
         "confirm": {
           "label": "Confirmation [FR]",
           "required": "(required) [FR]",
-          "description": "Type AGREE in the box below to confirm you understand your responsibilities and agree to the required security procedures while storing and sharing this key."
+          "description": "Type <strong>AGREE</strong> in the box below to confirm you understand your responsibilities and agree to the <a href='canada.ca' target='_blank'>required security procedures</a> while storing and sharing this key. [FR]"
         }
       }
     }
