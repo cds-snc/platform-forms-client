@@ -77,7 +77,7 @@ export const inviteUserByEmail = async (
     logEvent(
       ability.userID,
       { type: "Form", id: invitation.templateId },
-      "InviteUser",
+      "InvitationCreated",
       `${sender.id} invited ${invitation.email}`
     );
 
