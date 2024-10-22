@@ -5,15 +5,12 @@ import { TabNavLink } from "@clientComponents/globals/TabNavLink";
 import { usePathname } from "next/navigation";
 import { useTranslation } from "@i18n/client";
 import { ManageFormAccessButton } from "./ManageFormAccessDialog/ManageFormAccessButton";
-import { useAccessControl } from "@lib/hooks/useAccessControl";
 
 export const NavigationTabs = ({ formId }: { formId: string }) => {
   const {
     t,
     i18n: { language: locale },
   } = useTranslation("form-builder-responses");
-
-  const { ability } = useAccessControl();
   const pathname = usePathname();
 
   return (
@@ -48,11 +45,10 @@ export const NavigationTabs = ({ formId }: { formId: string }) => {
           <DeleteIcon className="inline-block size-7" /> {t("responses.status.deleted")}
         </span>
       </TabNavLink>
-      {ability?.can("update", "FormRecord", formId) && (
-        <div className="absolute right-0">
-          <ManageFormAccessButton />
-        </div>
-      )}
+
+      <div className="absolute right-0">
+        <ManageFormAccessButton />
+      </div>
     </nav>
   );
 };
