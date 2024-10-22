@@ -114,6 +114,12 @@ export const AddressComplete = (props: AddressCompleteProps): React.ReactElement
     } // Abandon if addressComplete is disabled.
 
     const query = e.target.value;
+
+    if (matchesAddressPattern(query)) {
+      await onAddressSet(query); // Do Search for Nested Address via ID instead of Query.
+      return;
+    } // Abandon, don't search on nested addresses.
+
     const responseData = await getAddressCompleteChoices(
       apiKey,
       query,
@@ -168,9 +174,6 @@ export const AddressComplete = (props: AddressCompleteProps): React.ReactElement
           addressObject?.country || "CAN"
         );
 
-        // TODO : the new values aren't being set. Why?
-
-        setAddressResultCache([]); // Clear the cache.
         handleAddressComplete(responseData);
       }
     }
