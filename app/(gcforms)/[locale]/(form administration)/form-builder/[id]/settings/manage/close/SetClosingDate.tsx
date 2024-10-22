@@ -16,6 +16,7 @@ import { closeForm } from "@formBuilder/actions";
 import { ClosingDateDialog } from "./ClosingDateDialog";
 
 import { ScheduledClosingDate } from "./ScheduledClosingDate";
+import { dateHasPast } from "@lib/utils";
 
 export const SetClosingDate = ({
   formId,
@@ -46,17 +47,9 @@ export const SetClosingDate = ({
     return true;
   }, [closedMessage]);
 
-  // TODO: not working, needs more work
-  const isPastDate = useCallback(
-    (closingDate: string | null | undefined) => {
-      const date1 = new Date(closingDate || 0).getTime();
-      const date2 = Date.now();
-      return date1 < date2;
-    },
-    [closingDate]
+  const [status, setStatus] = useState(
+    dateHasPast(Date.parse(closingDate || "")) ? "closed" : "open"
   );
-
-  const [status, setStatus] = useState(isPastDate(closingDate) ? "closed" : "open");
   const [showDateTimeDialog, setShowDateTimeDialog] = useState(false);
 
   const handleToggle = (value: boolean) => {
@@ -109,8 +102,6 @@ export const SetClosingDate = ({
       return;
     }
 
-    // TODO: not working, needs more work
-    // update the local template store
     setClosingDate(status !== "open" ? closeDate : null);
 
     if (status === "closed") {
