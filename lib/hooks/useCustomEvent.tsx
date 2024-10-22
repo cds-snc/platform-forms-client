@@ -14,6 +14,11 @@ import { useRef } from "react";
 
 export type CustomEventDetails = DynamicRowDialogEventDetails | undefined;
 
+export const EventKeys = {
+  openApiKeyDialog: "open-api-key-dialog",
+  openDynamicRowDialog: "open-dynamic-row-dialog",
+} as const;
+
 export const useCustomEvent = () => {
   // Attach listeners to a documentRef instead of document directly
   // https://www.preciousorigho.com/articles/a-better-way-to-create-event-listeners-in-react

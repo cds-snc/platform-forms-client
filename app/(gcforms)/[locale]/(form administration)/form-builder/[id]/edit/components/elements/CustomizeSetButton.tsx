@@ -3,7 +3,7 @@ import React from "react";
 import { Button } from "@clientComponents/globals";
 import { useTranslation } from "@i18n/client";
 import { MoreIcon } from "@serverComponents/icons/MoreIcon";
-import { useCustomEvent } from "@lib/hooks/useCustomEvent";
+import { EventKeys, useCustomEvent } from "@lib/hooks/useCustomEvent";
 import { FormElementWithIndex } from "@lib/types/form-builder-types";
 
 export const CustomizeSetButton = ({ item }: { item: FormElementWithIndex }) => {
@@ -11,7 +11,7 @@ export const CustomizeSetButton = ({ item }: { item: FormElementWithIndex }) => 
   const { Event } = useCustomEvent();
 
   const openDialog = () => {
-    Event.fire("open-dynamic-row-dialog", {
+    Event.fire(EventKeys.openDynamicRowDialog, {
       item,
     });
   };

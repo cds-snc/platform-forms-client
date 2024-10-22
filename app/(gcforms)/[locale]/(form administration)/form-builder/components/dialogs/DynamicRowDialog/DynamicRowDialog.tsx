@@ -4,7 +4,7 @@ import { useTranslation } from "@i18n/client";
 import { Button, Alert } from "@clientComponents/globals";
 import { useTemplateStore } from "@lib/store/useTemplateStore";
 import { Dialog, useDialogRef } from "@formBuilder/components/shared/Dialog";
-import { CustomEventDetails, useCustomEvent } from "@lib/hooks/useCustomEvent";
+import { CustomEventDetails, EventKeys, useCustomEvent } from "@lib/hooks/useCustomEvent";
 import { FormElementWithIndex } from "@lib/types/form-builder-types";
 import { dynamicRowType } from "@lib/types/form-types";
 
@@ -67,10 +67,10 @@ export const DynamicRowDialog = () => {
   const removeButtonTextA11yFr = t("dynamicRow.removeButtonTextA11yFr");
 
   useEffect(() => {
-    Event.on("open-dynamic-row-dialog", handleOpenDialog);
+    Event.on(EventKeys.openDynamicRowDialog, handleOpenDialog);
 
     return () => {
-      Event.off("open-dynamic-row-dialog", handleOpenDialog);
+      Event.off(EventKeys.openDynamicRowDialog, handleOpenDialog);
     };
   }, [Event, handleOpenDialog]);
 
