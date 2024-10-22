@@ -1,7 +1,6 @@
 "use client";
 import { Button } from "@clientComponents/globals";
 import { useTranslation } from "@i18n/client";
-import { CircleCheckIcon } from "@serverComponents/icons";
 import {
   createServiceAccountKey,
   refreshServiceAccountKey,
@@ -13,10 +12,8 @@ import { EventKeys, useCustomEvent } from "@lib/hooks/useCustomEvent";
 import { ApiKeyType } from "@lib/types/form-builder-types";
 
 const _createKey = async (templateId: string) => {
-  // In the future this could be done in the browser but we'll need to verify that they key meets the requirements
   const key = await createServiceAccountKey(templateId);
   return key;
-  // downloadKey(JSON.stringify(key), templateId);
 };
 
 const _refreshKey = async (templateId: string) => {
@@ -40,7 +37,7 @@ const downloadKey = (key: string, templateId: string) => {
   URL.revokeObjectURL(href);
 };
 
-export const ApiKey = ({ keyExists }: { keyExists?: boolean }) => {
+export const ApiKey = ({ keyId }: { keyId?: string | false }) => {
   const { t } = useTranslation("form-builder");
   const { id } = useParams();
   const { Event } = useCustomEvent();
@@ -51,6 +48,7 @@ export const ApiKey = ({ keyExists }: { keyExists?: boolean }) => {
     Event.fire(EventKeys.openApiKeyDialog, {
       download: () => {
         downloadKey(JSON.stringify(key), id);
+        setKey(null);
       },
     });
   };
@@ -61,11 +59,11 @@ export const ApiKey = ({ keyExists }: { keyExists?: boolean }) => {
         <h2 className="mb-6">{t("settings.api.title")}</h2>
       </div>
       <div className="mb-4">
-        {keyExists ? (
+        {keyId && !key ? (
           <>
             <div className="mb-4">
-              <CircleCheckIcon className="mr-2 inline-block w-9 fill-green-700" />
-              {t("settings.api.keyExists")}
+              <div className="font-bold">{t("settings.api.keyId")}</div>
+              {keyId}
             </div>
             <Button theme="primary" className="mr-4" onClick={() => deleteServiceAccountKey(id)}>
               {t("settings.api.deleteKey")}
@@ -78,8 +76,8 @@ export const ApiKey = ({ keyExists }: { keyExists?: boolean }) => {
           <Button
             theme="primary"
             onClick={async () => {
-              // const key = await _createKey(id);
-              setKey({ type: "", keyId: "", userId: "", key: "" });
+              const key = await _createKey(id);
+              setKey(key);
               openDialog();
             }}
           >

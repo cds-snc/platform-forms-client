@@ -10,12 +10,6 @@ import {
   useCustomEvent,
 } from "@lib/hooks/useCustomEvent";
 
-interface ApiKeyEvents extends CustomEvent {
-  detail: {
-    onDownload: () => void;
-  };
-}
-
 export const ApiKeyDialog = () => {
   const dialog = useDialogRef();
   const { Event } = useCustomEvent();

@@ -39,11 +39,11 @@ export default async function Page({
     redirect(`/${locale}/form-builder/${id}/settings`);
   }
 
-  const keyExists = await checkKeyExists(id);
+  const keyId = await checkKeyExists(id);
 
   return (
     <>
-      <ApiKey keyExists={keyExists} />
+      <ApiKey keyId={keyId} />
       <ApiKeyDialog />
     </>
   );
