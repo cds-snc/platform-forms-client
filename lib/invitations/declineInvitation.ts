@@ -4,6 +4,7 @@ import { InvitationNotFoundError, UserNotFoundError } from "./exceptions";
 import { getUser } from "@lib/users";
 import { logEvent } from "@lib/auditLogs";
 import { checkPrivileges } from "@lib/privileges";
+import { logMessage } from "@lib/logger";
 
 /**
  * Decline an invitation
@@ -32,7 +33,9 @@ export const declineInvitation = async (ability: UserAbility, invitationId: stri
     { action: "view", subject: { type: "User", object: { id: user.id } } },
   ]);
 
-  await _deleteInvitation(invitationId);
+  _deleteInvitation(invitationId).catch((e) => {
+    logMessage.error(`Error deleting invitation: ${e}`);
+  });
 
   logEvent(
     ability.userID,

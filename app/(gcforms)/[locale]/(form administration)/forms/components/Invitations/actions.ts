@@ -8,6 +8,7 @@ import { declineInvitation } from "@lib/invitations/declineInvitation";
 import {
   InvitationIsExpiredError,
   InvitationNotFoundError,
+  UnableToAssignUserToTemplateError,
   UserNotFoundError,
 } from "@lib/invitations/exceptions";
 
@@ -48,6 +49,9 @@ export const accept = async (id: string) => {
     }
     if (e instanceof UserNotFoundError) {
       return { message: t("userNotFound") };
+    }
+    if (e instanceof UnableToAssignUserToTemplateError) {
+      return { message: t("error") };
     }
   }
 };

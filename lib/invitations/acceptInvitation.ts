@@ -1,9 +1,15 @@
 import { prisma } from "@lib/integration/prismaConnector";
 import { FormProperties, UserAbility } from "@lib/types";
-import { InvitationIsExpiredError, InvitationNotFoundError, UserNotFoundError } from "./exceptions";
+import {
+  InvitationIsExpiredError,
+  InvitationNotFoundError,
+  UnableToAssignUserToTemplateError,
+  UserNotFoundError,
+} from "./exceptions";
 import { checkPrivileges } from "@lib/privileges";
 import { logEvent } from "@lib/auditLogs";
 import { notifyOwnersOwnerAdded } from "@lib/templates";
+import { logMessage } from "@lib/logger";
 
 /**
  * Accept an invitation.
@@ -54,11 +60,10 @@ export const acceptInvitation = async (ability: UserAbility, invitationId: strin
   ]);
 
   // assign user to form
-  const updatedTemplate = await _assignUserToTemplate(user.id, invitation.templateId);
-
-  _deleteInvitation(invitationId);
-
-  notifyOwnersOwnerAdded(user, updatedTemplate.jsonConfig as FormProperties, updatedTemplate.users);
+  const updatedTemplate = await _assignUserToTemplate(user.id, invitation.templateId).catch((e) => {
+    logMessage.error(`Error assigning user to form: ${e}`);
+    throw new UnableToAssignUserToTemplateError();
+  });
 
   logEvent(
     ability.userID,
@@ -73,6 +78,12 @@ export const acceptInvitation = async (ability: UserAbility, invitationId: strin
     "GrantFormAccess",
     `Access granted to ${user.id}`
   );
+
+  notifyOwnersOwnerAdded(user, updatedTemplate.jsonConfig as FormProperties, updatedTemplate.users);
+
+  _deleteInvitation(invitationId).catch((e) => {
+    logMessage.error(`Error deleting invitation: ${e}`);
+  });
 };
 
 /**
@@ -108,7 +119,7 @@ const _assignUserToTemplate = async (userId: string, formId: string) => {
  * @param id
  */
 const _deleteInvitation = async (id: string) => {
-  await prisma.invitation.delete({
+  return prisma.invitation.delete({
     where: {
       id,
     },
