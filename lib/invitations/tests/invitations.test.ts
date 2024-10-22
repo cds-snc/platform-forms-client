@@ -409,7 +409,7 @@ describe("Invitations", () => {
         })
       );
 
-      (getUser as jest.Mock).mockResolvedValue(null);
+      (getUser as jest.Mock).mockRejectedValueOnce(new UserNotFoundError());
 
       await expect(declineInvitation(mockAbility(), "invitation-id")).rejects.toThrow(
         UserNotFoundError
