@@ -49,7 +49,7 @@ export const sendInvitation = async (emails: string[], templateId: string, messa
   });
 
   try {
-    await Promise.all(invites);
+    await Promise.allSettled(invites);
   } catch (e) {
     return {
       success: false,
