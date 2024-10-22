@@ -67,12 +67,12 @@ export const useFormDelay = () => {
   return {
     /**
      * Adds the number of required questions in the current group to the form delay state.
-     * @param currentGroup group Id of the current page
-     * @param form current form
+     * @param form the current form
+     * @param currentGroupId group Id of the current page
      */
-    addRequiredQuestions: (form: FormProperties, currentGroup: string) => {
+    addRequiredQuestions: (form: FormProperties, currentGroupId: string) => {
       try {
-        const groupIds = form?.groups?.[currentGroup].elements;
+        const groupIds = form?.groups?.[currentGroupId].elements;
         if (!groupIds) {
           return;
         }
@@ -95,6 +95,7 @@ export const useFormDelay = () => {
      * questions on a form. For group forms, subtract the time spent on the form from the tally of
      * required questions from their group history (pages navigated).
      * @param form current form
+     * @param hasGroups boolean to determine if the form has groups
      * @returns delay in seconds or in the case of an error -1 is used to fallback to no delay
      */
     getFormDelay: (formElements: FormElement[], hasGroups: boolean) => {
