@@ -51,10 +51,10 @@ export const ApiKeyDialog = () => {
           handleClose && handleClose();
         }}
       >
-        {t("dynamicRow.dialog.cancel")}
+        {t("settings.api.dialog.cancelButton")}
       </Button>
       <Button className="ml-5" theme="primary" onClick={handleSave} dataTestId="confirm-delete">
-        {t("dynamicRow.dialog.save")}
+        {t("settings.api.dialog.downloadButton")}
       </Button>
     </>
   );
@@ -66,9 +66,12 @@ export const ApiKeyDialog = () => {
           handleClose={handleClose}
           dialogRef={dialog}
           actions={actions}
-          title={t("dynamicRow.dialog.title")}
+          title={t("settings.api.dialog.title")}
         >
-          <div className="p-5">Body</div>
+          <div className="p-5">
+            <p className="font-bold">{t("settings.api.dialog.text1")}</p>
+            <p>{t("settings.api.dialog.text2")}</p>
+          </div>
         </Dialog>
       )}
     </>

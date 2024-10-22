@@ -621,10 +621,21 @@
     "api": {
       "keyId": "API Key ID",
       "title": "API Access",
-      "generateKey": "Generate Key",
+      "generateKey": "Generate API Key",
       "refreshKey": "Refresh Key",
-      "deleteKey": "Delete Key",
-      "keyExists": "API Key Exists"
+      "deleteKey": "Delete API Key",
+      "keyExists": "API Key Exists",
+      "keyIdToolTip": {
+        "text1": "What is an API key ID?",
+        "text2": "The API key ID is not the API key itself. It provides a safe way to identify a key without sharing protected information."
+      },
+      "dialog": {
+        "title": "API key successfully created",
+        "text1": "Do not loose your key",
+        "text2": "This is your unique password and it is non-recoverable. If you loose this key, you will have to create a new one.",
+        "cancelButton": "Cancel",
+        "downloadButton": "Download key"
+      }
     }
   },
   "settingsDeleteButton": "Delete",

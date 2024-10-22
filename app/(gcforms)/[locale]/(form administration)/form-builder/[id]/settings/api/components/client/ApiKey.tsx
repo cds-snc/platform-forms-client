@@ -10,15 +10,18 @@ import { useParams } from "next/navigation";
 import { useState } from "react";
 import { EventKeys, useCustomEvent } from "@lib/hooks/useCustomEvent";
 import { ApiKeyType } from "@lib/types/form-builder-types";
+import { Tooltip } from "@formBuilder/components/shared/Tooltip";
 
 const _createKey = async (templateId: string) => {
   const key = await createServiceAccountKey(templateId);
   return key;
 };
 
+// For future use
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const _refreshKey = async (templateId: string) => {
   const key = await refreshServiceAccountKey(templateId);
-  downloadKey(JSON.stringify(key), templateId);
+  return key;
 };
 
 const downloadKey = (key: string, templateId: string) => {
@@ -35,6 +38,21 @@ const downloadKey = (key: string, templateId: string) => {
   // clean up "a" element & remove ObjectURL
   document.body.removeChild(link);
   URL.revokeObjectURL(href);
+};
+
+const ApiTooltip = () => {
+  const { t } = useTranslation("form-builder");
+
+  return (
+    <Tooltip.Info
+      side="top"
+      triggerClassName="align-middle ml-1"
+      tooltipClassName="font-normal whitespace-normal"
+    >
+      <strong>{t("settings.api.keyIdToolTip.text1")}</strong>
+      <p>{t("settings.api.keyIdToolTip.text2")}</p>
+    </Tooltip.Info>
+  );
 };
 
 export const ApiKey = ({ keyId }: { keyId?: string | false }) => {
@@ -63,13 +81,15 @@ export const ApiKey = ({ keyId }: { keyId?: string | false }) => {
           <>
             <div className="mb-4">
               <div className="font-bold">{t("settings.api.keyId")}</div>
-              {keyId}
+              {keyId} <ApiTooltip />
             </div>
-            <Button theme="primary" className="mr-4" onClick={() => deleteServiceAccountKey(id)}>
+
+            <Button
+              theme="destructive"
+              className="mr-4"
+              onClick={() => deleteServiceAccountKey(id)}
+            >
               {t("settings.api.deleteKey")}
-            </Button>
-            <Button theme="primary" onClick={() => _refreshKey(id)}>
-              {t("settings.api.refreshKey")}
             </Button>
           </>
         ) : (
