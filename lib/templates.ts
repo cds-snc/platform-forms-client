@@ -811,8 +811,6 @@ export async function removeAssignedUserFromTemplate(
       updatedTemplate.jsonConfig as FormProperties,
       updatedTemplate.users
     );
-
-    if (formCache.cacheAvailable) formCache.formID.invalidate(formID);
   } catch (e) {
     if (e instanceof AccessControlError)
       logEvent(
@@ -894,8 +892,6 @@ export async function assignUserToTemplate(
       updatedTemplate.jsonConfig as FormProperties,
       updatedTemplate.users
     );
-
-    if (formCache.cacheAvailable) formCache.formID.invalidate(formID);
   } catch (e) {
     if (e instanceof AccessControlError)
       logEvent(
