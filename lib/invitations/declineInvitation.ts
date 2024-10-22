@@ -23,11 +23,9 @@ export const declineInvitation = async (ability: UserAbility, invitationId: stri
     throw new InvitationNotFoundError();
   }
 
-  const user = await getUser(ability, ability.userID);
-
-  if (!user) {
+  const user = await getUser(ability, ability.userID).catch(() => {
     throw new UserNotFoundError();
-  }
+  });
 
   // Ensures the logged in user is the user that was invited
   checkPrivileges(ability, [
