@@ -53,6 +53,20 @@ export const DynamicRowDialog = () => {
     }
   }, []);
 
+  const updateDynamicRowProperty = (property: keyof dynamicRowType, value: string) => {
+    if (!item) return;
+    setItem({
+      ...item,
+      properties: {
+        ...item.properties,
+        dynamicRow: {
+          ...(item.properties.dynamicRow as dynamicRowType),
+          [property]: value || "",
+        },
+      },
+    });
+  };
+
   const rowTitleTextA11yEn = t("dynamicRow.rowTitleTextA11yEn");
   const rowTitleTextA11yFr = t("dynamicRow.rowTitleTextA11yFr");
 
@@ -101,7 +115,7 @@ export const DynamicRowDialog = () => {
           if (!item || !item.properties) return;
 
           updateField(`form.elements[${item.index}].properties`, { ...item.properties });
-          // forceRefresh();
+          forceRefresh();
           handleClose();
         }}
         dataTestId="confirm-delete"
@@ -137,16 +151,7 @@ export const DynamicRowDialog = () => {
                   aria-label={rowTitleTextA11yEn}
                   value={item.properties.dynamicRow?.rowTitleEn}
                   onChange={(e) => {
-                    setItem({
-                      ...item,
-                      properties: {
-                        ...item.properties,
-                        dynamicRow: {
-                          ...(item.properties.dynamicRow as dynamicRowType),
-                          rowTitleEn: e.target.value || "",
-                        },
-                      },
-                    });
+                    updateDynamicRowProperty("rowTitleEn", e.target.value);
                   }}
                 />
               </TextInput>
@@ -155,16 +160,7 @@ export const DynamicRowDialog = () => {
                   aria-label={rowTitleTextA11yFr}
                   value={item.properties.dynamicRow?.rowTitleFr}
                   onChange={(e) => {
-                    setItem({
-                      ...item,
-                      properties: {
-                        ...item.properties,
-                        dynamicRow: {
-                          ...(item.properties.dynamicRow as dynamicRowType),
-                          rowTitleFr: e.target.value || "",
-                        },
-                      },
-                    });
+                    updateDynamicRowProperty("rowTitleFr", e.target.value);
                   }}
                 />
               </TextInput>
@@ -179,16 +175,7 @@ export const DynamicRowDialog = () => {
                   aria-label={addButtonTextA11yEn}
                   value={item.properties.dynamicRow?.addButtonTextEn}
                   onChange={(e) => {
-                    setItem({
-                      ...item,
-                      properties: {
-                        ...item.properties,
-                        dynamicRow: {
-                          ...(item.properties.dynamicRow as dynamicRowType),
-                          addButtonTextEn: e.target.value || "",
-                        },
-                      },
-                    });
+                    updateDynamicRowProperty("addButtonTextEn", e.target.value);
                   }}
                 />
               </TextInput>
@@ -197,16 +184,7 @@ export const DynamicRowDialog = () => {
                   aria-label={addButtonTextA11yFr}
                   value={item.properties.dynamicRow?.addButtonTextFr}
                   onChange={(e) => {
-                    setItem({
-                      ...item,
-                      properties: {
-                        ...item.properties,
-                        dynamicRow: {
-                          ...(item.properties.dynamicRow as dynamicRowType),
-                          addButtonTextFr: e.target.value || "",
-                        },
-                      },
-                    });
+                    updateDynamicRowProperty("addButtonTextFr", e.target.value);
                   }}
                 />
               </TextInput>
@@ -223,16 +201,7 @@ export const DynamicRowDialog = () => {
                   aria-label={removeButtonTextA11yEn}
                   value={item.properties.dynamicRow?.removeButtonTextEn}
                   onChange={(e) => {
-                    setItem({
-                      ...item,
-                      properties: {
-                        ...item.properties,
-                        dynamicRow: {
-                          ...(item.properties.dynamicRow as dynamicRowType),
-                          removeButtonTextEn: e.target.value || "",
-                        },
-                      },
-                    });
+                    updateDynamicRowProperty("removeButtonTextEn", e.target.value);
                   }}
                 />
               </TextInput>
@@ -241,16 +210,7 @@ export const DynamicRowDialog = () => {
                   aria-label={removeButtonTextA11yFr}
                   value={item.properties.dynamicRow?.removeButtonTextFr}
                   onChange={(e) => {
-                    setItem({
-                      ...item,
-                      properties: {
-                        ...item.properties,
-                        dynamicRow: {
-                          ...(item.properties.dynamicRow as dynamicRowType),
-                          removeButtonTextFr: e.target.value || "",
-                        },
-                      },
-                    });
+                    updateDynamicRowProperty("removeButtonTextFr", e.target.value);
                   }}
                 />
               </TextInput>
