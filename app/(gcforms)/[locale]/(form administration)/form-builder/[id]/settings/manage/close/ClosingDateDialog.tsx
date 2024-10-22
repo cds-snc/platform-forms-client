@@ -38,11 +38,17 @@ export const ClosingDateDialog = ({
       const minutes = Number(time.split(":")[1]);
       const date = new Date(year, month - 1, day, hours, minutes);
       const timestamp = date.getTime();
+
+      // TODO: add an error message in the UI to handle the case of date in the past
+      if (timestamp < Date.now()) {
+        alert("Please select a future date and time");
+        return;
+      }
+
       save(timestamp);
+      handleClose();
     } catch (error) {
       toast.error(t("closingDate.savedErrorMessage"));
-    } finally {
-      handleClose();
     }
   };
 

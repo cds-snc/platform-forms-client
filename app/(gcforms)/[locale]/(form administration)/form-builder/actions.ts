@@ -26,6 +26,7 @@ import { serverTranslation } from "@i18n";
 import { revalidatePath } from "next/cache";
 import { checkOne } from "@lib/cache/flags";
 import { isValidDateString } from "@lib/utils/date/isValidDateString";
+import { isFutureDate } from "@lib/utils/date/isFutureDate";
 
 export type CreateOrUpdateTemplateType = {
   id?: string;
@@ -263,7 +264,8 @@ export const closeForm = async ({
   try {
     const { ability } = await authCheckAndThrow();
 
-    if (!closingDate || !isValidDateString(closingDate)) {
+    // The client handles invalid dates, if a user wants to bypass.. they will get a generic error
+    if (!closingDate || !isValidDateString(closingDate) || !isFutureDate(closingDate)) {
       throw new Error(`Invalid closing date. Request information: { ${formID}, ${closingDate} }`);
     }
 
