@@ -9,7 +9,7 @@ import {
 } from "../../actions";
 import { useParams } from "next/navigation";
 import { useState } from "react";
-import { useCustomEvent } from "@lib/hooks/useCustomEvent";
+import { EventKeys, useCustomEvent } from "@lib/hooks/useCustomEvent";
 import { ApiKeyType } from "@lib/types/form-builder-types";
 
 const _createKey = async (templateId: string) => {
@@ -48,10 +48,10 @@ export const ApiKey = ({ keyExists }: { keyExists?: boolean }) => {
   if (Array.isArray(id)) return null;
 
   const openDialog = () => {
-    Event.fire("open-api-key-dialog", {
+    Event.fire(EventKeys.openApiKeyDialog, {
       download: () => {
         downloadKey(JSON.stringify(key), id);
-      }
+      },
     });
   };
 
@@ -75,12 +75,14 @@ export const ApiKey = ({ keyExists }: { keyExists?: boolean }) => {
             </Button>
           </>
         ) : (
-          <Button theme="primary" onClick={async () => {
-            const key = await _createKey(id);
-            setKey(key);
-            openDialog();
-          }
-          }>
+          <Button
+            theme="primary"
+            onClick={async () => {
+              // const key = await _createKey(id);
+              setKey({ type: "", keyId: "", userId: "", key: "" });
+              openDialog();
+            }}
+          >
             {t("settings.api.generateKey")}
           </Button>
         )}
