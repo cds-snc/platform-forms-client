@@ -25,6 +25,7 @@ import {
 import { serverTranslation } from "@i18n";
 import { revalidatePath } from "next/cache";
 import { checkOne } from "@lib/cache/flags";
+import { isValidDateString } from "@lib/utils/date/isValidDateString";
 
 export type CreateOrUpdateTemplateType = {
   id?: string;
@@ -261,6 +262,10 @@ export const closeForm = async ({
 }> => {
   try {
     const { ability } = await authCheckAndThrow();
+
+    if (!closingDate || !isValidDateString(closingDate)) {
+      throw new Error(`Invalid closing date. Request information: { ${formID}, ${closingDate} }`);
+    }
 
     const response = await updateClosedData(ability, formID, closingDate, closedDetails);
     if (!response) {
