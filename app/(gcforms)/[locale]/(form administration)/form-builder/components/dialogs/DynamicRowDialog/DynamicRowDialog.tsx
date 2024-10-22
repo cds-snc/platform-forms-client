@@ -86,7 +86,6 @@ export const DynamicRowDialog = () => {
         theme="primary"
         onClick={() => {
           setError(null);
-          // @TODO: validation
           if (
             item?.properties.dynamicRow?.rowTitleEn === "" ||
             item?.properties.dynamicRow?.rowTitleFr === "" ||
@@ -102,7 +101,7 @@ export const DynamicRowDialog = () => {
           if (!item || !item.properties) return;
 
           updateField(`form.elements[${item.index}].properties`, { ...item.properties });
-          forceRefresh();
+          // forceRefresh();
           handleClose();
         }}
         dataTestId="confirm-delete"
