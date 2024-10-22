@@ -8,11 +8,15 @@ import {
   deleteServiceAccountKey,
 } from "../../actions";
 import { useParams } from "next/navigation";
+import { useState } from "react";
+import { useCustomEvent } from "@lib/hooks/useCustomEvent";
+import { ApiKeyType } from "@lib/types/form-builder-types";
 
 const _createKey = async (templateId: string) => {
   // In the future this could be done in the browser but we'll need to verify that they key meets the requirements
   const key = await createServiceAccountKey(templateId);
-  downloadKey(JSON.stringify(key), templateId);
+  return key;
+  // downloadKey(JSON.stringify(key), templateId);
 };
 
 const _refreshKey = async (templateId: string) => {
@@ -39,7 +43,18 @@ const downloadKey = (key: string, templateId: string) => {
 export const ApiKey = ({ keyExists }: { keyExists?: boolean }) => {
   const { t } = useTranslation("form-builder");
   const { id } = useParams();
+  const { Event } = useCustomEvent();
+  const [key, setKey] = useState<ApiKeyType | null>(null);
   if (Array.isArray(id)) return null;
+
+  const openDialog = () => {
+    Event.fire("open-api-key-dialog", {
+      download: () => {
+        downloadKey(JSON.stringify(key), id);
+      }
+    });
+  };
+
   return (
     <div className="mb-10">
       <div className="mb-4">
@@ -60,7 +75,12 @@ export const ApiKey = ({ keyExists }: { keyExists?: boolean }) => {
             </Button>
           </>
         ) : (
-          <Button theme="primary" onClick={() => _createKey(id)}>
+          <Button theme="primary" onClick={async () => {
+            const key = await _createKey(id);
+            setKey(key);
+            openDialog();
+          }
+          }>
             {t("settings.api.generateKey")}
           </Button>
         )}
