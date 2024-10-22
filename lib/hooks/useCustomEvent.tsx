@@ -68,9 +68,5 @@ export const useCustomEvent = () => {
     },
   };
 
-  const isCustomEvent = (event: Event) => {
-    return "detail" in event;
-  };
-
-  return { Event, isCustomEvent };
+  return { Event };
 };
