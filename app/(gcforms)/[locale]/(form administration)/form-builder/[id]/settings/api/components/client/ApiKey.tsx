@@ -68,6 +68,10 @@ export const ApiKey = ({ keyId }: { keyId?: string | false }) => {
         downloadKey(JSON.stringify(key), id);
         setKey(null);
       },
+      cancel: () => {
+        setKey(null);
+        deleteServiceAccountKey(id);
+      },
     });
   };
 

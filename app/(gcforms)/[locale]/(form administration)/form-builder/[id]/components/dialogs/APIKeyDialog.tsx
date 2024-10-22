@@ -20,6 +20,7 @@ export const ApiKeyDialog = () => {
 
   const handleClose = () => {
     dialog.current?.close();
+    handler?.cancel();
     setIsOpen(false);
   };
 

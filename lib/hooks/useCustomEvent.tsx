@@ -17,6 +17,7 @@ export const EventKeys = {
 
 export type APIKeyCustomEventDetails = {
   download: () => void;
+  cancel: () => void;
 };
 
 export type CustomEventDetails = APIKeyCustomEventDetails | undefined;
