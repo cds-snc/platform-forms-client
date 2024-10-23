@@ -623,28 +623,28 @@
       "title": "Accès API",
       "generateKey": "Créer une clé API",
       "refreshKey": "Rafraîchir la clé",
-      "deleteKey": "Delete API Key [FR]",
-      "keyExists": "Clé existante",
+      "deleteKey": "Supprimer la clé API",
+      "keyExists": "La clé existe déjà",
       "keyIdToolTip": {
-        "text1": "What is an API key ID? [FR]",
-        "text2": "The API key ID is not the API key itself. It provides a safe way to identify a key without sharing protected information. [FR]"
+        "text1": "Qu'est-ce que l'identifiant de la clé API?",
+        "text2": "L'identifiant de la clé API n'est pas la clé elle-même. Il s'agit d'un moyen d'identifier une clé sans partager des informations protégées."
       },
       "dialog": {
-        "title": "API key successfully created [FR]",
-        "heading": "GC Forms API keys are PROTECTED B. [FR]",
-        "responsibility": "It is your responsibility to: [FR]",
-        "responsibility1": "Save this key in a secure location. [FR]",
-        "responsibility2": "Share the key only with people who need it. [FR]",
-        "responsibility3": "Send the key through secure channels, like encrypted email. [FR]",
-        "responsibility4": "Read and the understand the <a href='canada.ca' target='_blank'>required security procedures.</a> [FR]",
-        "text1": "Do not loose your key",
-        "text2": "This is your unique password and it is non-recoverable. If you loose this key, you will have to create a new one. [FR]",
-        "cancelButton": "Cancel [FR]",
-        "downloadButton": "Download key [FR]",
+        "title": "Clé API créée avec succès",
+        "heading": "Les clés API de Formulaires GC sont PROTÉGÉES B",
+        "responsibility": "Vous êtes responsable de :",
+        "responsibility1": "L'enregistrement de cette clé dans un endroit sûr.",
+        "responsibility2": "Le partage de cette clé uniquement avec les personnes qui en ont besoin.",
+        "responsibility3": "L'envoi de cette clé par des voies sécurisées, comme un courriel crypté.",
+        "responsibility4": "La compréhension des <a href='canada.ca' target='_blank'>procédures de sécurité requises.</a>",
+        "text1": "Ne perdez pas votre clé ",
+        "text2": "Cette clé n'est fournie qu'une seule fois, car elle permet d'accéder aux données des réponses au formulaire. Si vous perdez cette clé ou si elle est compromise, vous devrez en créer une nouvelle.",
+        "cancelButton": "Annuler",
+        "downloadButton": "Télécharger la clé API",
         "confirm": {
-          "label": "Confirmation [FR]",
-          "required": "(required) [FR]",
-          "description": "Type <strong>AGREE</strong> in the box below to confirm you understand your responsibilities and agree to the <a href='canada.ca' target='_blank'>required security procedures</a> while storing and sharing this key. [FR]"
+          "label": "Confirmation",
+          "required": "(obligatoire)",
+          "description": "Saisissez <strong>ACCEPTE</strong> dans la case ci-dessous pour confirmer que vous comprenez vos responsabilités et que vous acceptez les <a href='canada.ca' target='_blank'>procédures de sécurité requises</a> lors de l'enregistrement et du partage de cette clé."
         }
       }
     }
