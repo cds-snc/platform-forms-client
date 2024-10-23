@@ -11,7 +11,23 @@ const usersAssignedToFormRecord = [{ id: "1", name: "John Doe", email: "john.doe
 
 describe("<FormOwnership />", () => {
   it("can mount the component", () => {
-    cy.mount(<FormOwnership formRecord={{}} usersAssignedToFormRecord={[]} allUsers={[]} />);
+    cy.mount(
+      <FormOwnership
+        formRecord={{}}
+        usersAssignedToFormRecord={[]}
+        allUsers={[]}
+        nonce={null}
+        updateTemplateUsers={function ({
+          id,
+          users,
+        }: {
+          id: string;
+          users: { id: string }[];
+        }): Promise<{ success: boolean; error?: string }> {
+          throw new Error(`Function not implemented. ${id} ${users}`);
+        }}
+      />
+    );
     cy.contains("Manage ownership");
   });
 
@@ -21,6 +37,16 @@ describe("<FormOwnership />", () => {
         formRecord={{}}
         usersAssignedToFormRecord={usersAssignedToFormRecord}
         allUsers={allUsers}
+        nonce={null}
+        updateTemplateUsers={function ({
+          id,
+          users,
+        }: {
+          id: string;
+          users: { id: string }[];
+        }): Promise<{ success: boolean; error?: string }> {
+          throw new Error(`Function not implemented. ${id} ${users}`);
+        }}
       />
     );
     cy.contains("Manage ownership");
