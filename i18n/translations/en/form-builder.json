@@ -1160,7 +1160,7 @@
     }
   },
   "scheduleClosingPage": {
-    "linkText": "Schedule closing page",
+    "linkText": "Schedule form closing",
     "dialog": {
       "title": "Schedule the closed form message",
       "text1": "Schedule a closing date",
