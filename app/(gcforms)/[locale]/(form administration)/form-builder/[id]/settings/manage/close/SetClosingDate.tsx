@@ -1,5 +1,5 @@
 "use client";
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { useTranslation } from "@i18n/client";
 import { useTemplateStore } from "@lib/store/useTemplateStore";
 import { toast } from "@formBuilder/components/shared/Toast";
@@ -50,6 +50,14 @@ export const SetClosingDate = ({
   const [status, setStatus] = useState(
     dateHasPast(Date.parse(closingDate || "")) ? "closed" : "open"
   );
+
+  // TODO: Without this the toggle would not update the status when the closingDate is set to a
+  // future date, even though a log message shows that status was updated.
+  // This is a workaround for now.
+  useEffect(() => {
+    setStatus(dateHasPast(Date.parse(closingDate || "")) ? "closed" : "open");
+  }, [closingDate]);
+
   const [showDateTimeDialog, setShowDateTimeDialog] = useState(false);
 
   const handleToggle = (value: boolean) => {
