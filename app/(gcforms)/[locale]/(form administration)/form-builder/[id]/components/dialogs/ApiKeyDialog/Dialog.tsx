@@ -5,12 +5,7 @@ import { useTranslation } from "@i18n/client";
 import { cn } from "@lib/utils";
 import { Button } from "@clientComponents/globals";
 import { Dialog as BaseDialog, useDialogRef } from "@formBuilder/components/shared/Dialog";
-import {
-  APIKeyCustomEventDetails,
-  CustomEventDetails,
-  EventKeys,
-  useCustomEvent,
-} from "@lib/hooks/useCustomEvent";
+import { APIKeyCustomEventDetails, EventKeys, useCustomEvent } from "@lib/hooks/useCustomEvent";
 
 import { ResponsibilityList } from "./ResponsibilityList";
 import { ConfirmationAgreement } from "./ConfirmationAgreement";
@@ -25,7 +20,7 @@ export const Dialog = () => {
   const [handler, setHandler] = useState<APIKeyCustomEventDetails | null>(null);
   const [isOpen, setIsOpen] = useState(false);
 
-  const handleOpen = useCallback((detail: CustomEventDetails) => {
+  const handleOpen = useCallback((detail: APIKeyCustomEventDetails) => {
     if (detail) {
       setHandler(detail as APIKeyCustomEventDetails);
       setIsOpen(true);
@@ -33,9 +28,9 @@ export const Dialog = () => {
   }, []);
 
   useEffect(() => {
-    Event.on(EventKeys.openApiKeyDialog, handleOpen);
+    Event.on<APIKeyCustomEventDetails>(EventKeys.openApiKeyDialog, handleOpen);
     return () => {
-      Event.off(EventKeys.openApiKeyDialog, handleOpen);
+      Event.off<APIKeyCustomEventDetails>(EventKeys.openApiKeyDialog, handleOpen);
     };
   }, [Event, handleOpen]);
 
