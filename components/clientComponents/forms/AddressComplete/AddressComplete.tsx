@@ -1,5 +1,10 @@
 "use client";
-import { AddressCompleteChoice, AddressCompleteProps, AddressElements } from "./types";
+import {
+  AddressCompleteChoice,
+  AddressCompleteProps,
+  AddressElements,
+  AddressCompleNext,
+} from "./types";
 import {
   getAddressCompleteChoices,
   getSelectedAddress,
@@ -148,11 +153,11 @@ export const AddressComplete = (props: AddressCompleteProps): React.ReactElement
       // Swap the value to Find
       let nextValue = selectedResult.Next;
       if (matchesAddressPattern(selectedResult.Next)) {
-        nextValue = "Find";
+        nextValue = AddressCompleNext.Find;
       }
 
       // Handle the Next value.
-      if (nextValue == "Retrieve") {
+      if (nextValue == AddressCompleNext.Retrieve) {
         const responseData = await getSelectedAddress(
           apiKey,
           selectedResult.Id,
@@ -166,7 +171,7 @@ export const AddressComplete = (props: AddressCompleteProps): React.ReactElement
             comboboxRef.current.changeInputValue(results.streetAddress);
           }
         }
-      } else if (nextValue == "Find") {
+      } else if (nextValue == AddressCompleNext.Find) {
         // Do another lookup for the address.
         const responseData = await getAddressCompleteRetrieve(
           apiKey,

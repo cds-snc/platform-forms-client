@@ -8,7 +8,13 @@ export interface AddressCompleteChoice {
   Highlight: string;
   Cursor: number;
   Description: string;
-  Next: string;
+  Next: AddressCompleNext;
+}
+
+// AutoComplete API returns Find or Retreive as a "next" status.
+export enum AddressCompleNext {
+  Find = "Find",
+  Retrieve = "Retrieve",
 }
 
 // Address Lookup API returns an array of objects like:
