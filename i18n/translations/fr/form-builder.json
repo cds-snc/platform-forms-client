@@ -619,7 +619,7 @@
   "settings": {
     "formManagement": "Gestion du formulaire",
     "api": {
-      "keyId": "API Key ID [FR]",
+      "keyId": "Identifiant de la clé API",
       "title": "Accès API",
       "generateKey": "Créer une clé API",
       "refreshKey": "Rafraîchir la clé",
