@@ -57,7 +57,7 @@ export const ConfirmAction = ({
       {error && <span className="px-2 text-red-700">{error}</span>}
       {!confirm && (
         <button
-          data-testid="button"
+          data-testid="actionButton"
           onClick={() => {
             setConfirm(true);
             setError("");

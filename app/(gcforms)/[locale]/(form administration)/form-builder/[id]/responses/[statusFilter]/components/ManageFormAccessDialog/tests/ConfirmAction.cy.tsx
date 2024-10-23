@@ -19,7 +19,7 @@ describe("ConfirmAction Component", () => {
   it("executes callback on button click", () => {
     const callback = cy.stub().resolves(true);
     cy.mount(<ConfirmAction callback={callback} confirmString={""} buttonLabel={""} />);
-    cy.get("button[data-testid=button]").click();
+    cy.get("button[data-testid=actionButton]").click();
     cy.get("button[data-testid=confirm]").click();
     cy.wrap(callback).should("have.been.calledOnce");
   });
@@ -27,7 +27,7 @@ describe("ConfirmAction Component", () => {
   it("displays confirmString and buttonLabel props", () => {
     const callback = cy.stub().resolves(true);
     cy.mount(<ConfirmAction callback={callback} confirmString="Confirm?" buttonLabel="Delete" />);
-    cy.get("button[data-testid=button]").click();
+    cy.get("button[data-testid=actionButton]").click();
     cy.get("button").contains("Delete").should("exist");
     // cy.get("button").contains("Confirm?").should("exist");
   });
@@ -53,7 +53,7 @@ describe("ConfirmAction Component", () => {
         <div id="outside">Outside</div>
       </div>
     );
-    cy.get("button[data-testid=button]").click();
+    cy.get("button[data-testid=actionButton]").click();
     cy.get("button[data-testid=confirm]").should("exist");
     cy.get("#outside").click();
     cy.get("button[data-testid=confirm]").should("not.exist");
