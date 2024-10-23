@@ -66,11 +66,12 @@ export const useFormDelay = () => {
   const { formDelay, setFormDelay } = useContext(FormDelayContext);
   return {
     /**
-     * Adds the number of required questions in the current group to the form delay state.
+     * Used by group form to track the initial form view (timestamp) and add the number of required
+     * questions on the current group.
      * @param form the current form
      * @param currentGroupId group Id of the current page
      */
-    addRequiredQuestions: (form: FormProperties, currentGroupId: string) => {
+    updateFormDelay: (form: FormProperties, currentGroupId: string) => {
       try {
         const groupIds = form?.groups?.[currentGroupId].elements;
         if (!groupIds) {
