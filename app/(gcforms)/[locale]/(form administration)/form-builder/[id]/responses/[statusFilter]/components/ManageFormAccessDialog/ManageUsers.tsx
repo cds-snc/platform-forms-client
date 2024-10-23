@@ -39,7 +39,7 @@ export const ManageUsers = () => {
     // Not a valid government email
     if (!isValidGovEmail(email)) {
       handleAddError(t("invalidEmail", { email }));
-      valid = false;
+      return false;
     }
 
     // Email already in the list
@@ -49,9 +49,14 @@ export const ManageUsers = () => {
     }
 
     // Email domain must match the logged-in user's email domain
-    const loggedInUserDomain = loggedInUserEmail.split("@")[1];
+    const loggedInUserDomain = loggedInUserEmail.split("@");
+    if (loggedInUserDomain.length < 2) {
+      handleAddError(t("emailDomainMismatch", { email }));
+      valid = false;
+    }
+
     const emailDomain = email.split("@")[1];
-    if (emailDomain !== loggedInUserDomain) {
+    if (emailDomain !== loggedInUserDomain[1]) {
       handleAddError(t("emailDomainMismatch", { email }));
       valid = false;
     }
