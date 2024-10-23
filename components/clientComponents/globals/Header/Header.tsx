@@ -13,8 +13,6 @@ import { YourAccountDropdown } from "./YourAccountDropdown";
 import { LiveMessage } from "@lib/hooks/useLiveMessage";
 import Markdown from "markdown-to-jsx";
 
-import { allowGrouping } from "@formBuilder/components/shared/right-panel/treeview/util/allowGrouping";
-
 type HeaderParams = {
   context?: "admin" | "formBuilder" | "default";
   className?: string;
@@ -36,15 +34,8 @@ export const Header = ({ context = "default", className }: HeaderParams) => {
     async function fetchBannerData() {
       const isEnabled = t("campaignBanner.enabled") === "true";
       setBannerData(isEnabled);
-
-      const isLogicEnabled = allowGrouping();
-      if (isLogicEnabled) {
-        setBannerMessage(t("campaignBanner.message2"));
-        setBannerType(t("campaignBanner.type2"));
-      } else {
-        setBannerMessage(t("campaignBanner.message"));
-        setBannerType(t("campaignBanner.type"));
-      }
+      setBannerMessage(t("campaignBanner.message2"));
+      setBannerType(t("campaignBanner.type2"));
     }
     fetchBannerData();
   }, [t]);

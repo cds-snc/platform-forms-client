@@ -23,6 +23,7 @@
       "name": "Ajouter un nom complet",
       "firstMiddleLastName": "Ajouter des noms individuels",
       "address": "Ajouter une adresse",
+      "addressComplete": "Ajouter une adresse",
       "contact": "Ajouter des coordonnées",
       "dynamicRow": "Ajouter un ensemble récurrent",
       "richText": "Ajouter du texte de page",
@@ -43,6 +44,40 @@
         "label": "Adresse municipale"
       },
       "title": "Adresse"
+    },
+    "addressComplete": {
+      "whatIsYourAddress": "Adresse postale",
+      "city": "Ville ou communauté",
+      "country": "Pays",
+      "description": "Le champ d'adresse utilise l'API AdresseComplète de Postes Canada pour vérifier les adresses au fur et à mesure qu'elles sont saisies. Utilisez-le pour recueillir des adresses plus précises.",
+      "label": "Adresse",
+      "postal": "Code postal ou zip",
+      "province": "Province, territoire ou état",
+      "street": {
+        "description": "Indiquez le nom et le numéro de rue.",
+        "label": "Adresse municipale"
+      },
+      "title": "Adresse",
+      "select": "Sélectionner les éléments de l'adresse à inclure.",
+      "options": "Options de format d’adresse",
+      "fields": "Format des données",
+      "fieldsDesc": "Ceci détermine la manière dont l’adresse apparaît dans les données de réponses.",
+      "fullAddress": "Adresse entière combinée",
+      "fullAddressDesc": "Données affichées en tant qu'une seule ligne.",
+      "splitAddress": "Adresse fractionnée en parties",
+      "splitAddressDesc": "Données divisées en plusieurs lignes.",
+      "customize": "Adapter le format",
+      "startTyping": "Commencez à taper l'adresse à rechercher",
+      "canadianOnly": "Adresses canadiennes seulement",
+      "components": {
+        "unitNumber": "Numéro de l’unité",
+        "civicNumber": "Numéro civique",
+        "streetName": "Nom de la rue",
+        "city": "Ville ou communauté",
+        "province": "Province, territoire ou état",
+        "postalCode": "Code postal ou zip",
+        "country": "Pays"
+      }
     },
     "allRequired": "toutes obligatoires",
     "answer": "Réponse...",
@@ -880,7 +915,13 @@
     "savedErrorMessage": "Une erreur s'est produite lors de l'enregistrement de vos modifications. Réessayez plus tard ou contacter l’équipe de soutien.",
     "message": {
       "title": " Personnaliser le message du formulaire fermé",
-      "text1": "Indiquer aux personnes qui tentent d'accéder au formulaire quand et pourquoi il s'est fermé et où aller ensuite."
+      "text1": "Indiquer aux personnes qui tentent d'accéder au formulaire quand et pourquoi il s'est fermé et où aller ensuite.",
+      "errors": {
+        "translation": "Veuillez fournir du contenu équivalent dans les deux langues officielles."
+      }
+    },
+    "banner": {
+      "text": "Le formulaire a été fermé le {{day}} {{month}} {{year}} à {{hour}} h {{minute}} HE"
     }
   },
   "errorSavingForm": {

@@ -10,6 +10,7 @@ import { Button } from "@clientComponents/globals";
 import { ClosingDateToggle } from "./ClosingDateToggle";
 import { ClosedMessage } from "./ClosedMessage";
 import { ClosedSuccess } from "./ClosedSuccess";
+import { ClosedDateBanner } from "./ClosedDateBanner";
 
 import { closeForm } from "@formBuilder/actions";
 
@@ -28,6 +29,19 @@ export const SetClosingDate = ({
   }));
 
   const [closedMessage, setClosedMessage] = useState<ClosedDetails | undefined>(closedDetails);
+
+  const validateClosedMessage = useCallback(() => {
+    const hasClosedMessageEn = closedMessage?.messageEn && closedMessage?.messageEn !== "";
+    const hasClosedMessageFr = closedMessage?.messageFr && closedMessage?.messageFr !== "";
+
+    // Ensure that both languages have a message if one of them has a message
+    if (hasClosedMessageEn || hasClosedMessageFr) {
+      if (!hasClosedMessageEn) return false;
+      if (!hasClosedMessageFr) return false;
+    }
+
+    return true;
+  }, [closedMessage]);
 
   const [status, setStatus] = useState(closingDate ? "closed" : "open");
 
@@ -69,6 +83,9 @@ export const SetClosingDate = ({
       <h2>{t("closingDate.title")}</h2>
       <h3>{t("closingDate.status")}</h3>
       <p className="mb-6">{t("closingDate.description")}</p>
+      <div className="w-3/5">
+        <ClosedDateBanner closingDate={closingDate} />
+      </div>
       <div className="mb-4">
         <ClosingDateToggle
           isChecked={status === "closed" ? false : true}
@@ -79,9 +96,13 @@ export const SetClosingDate = ({
         />
       </div>
       <div className="mb-4 w-3/5">
-        <ClosedMessage closedDetails={closedMessage} setClosedDetails={setClosedMessage} />
+        <ClosedMessage
+          closedDetails={closedMessage}
+          setClosedDetails={setClosedMessage}
+          valid={validateClosedMessage()}
+        />
       </div>
-      <Button theme="secondary" onClick={saveFormStatus}>
+      <Button disabled={!validateClosedMessage()} theme="secondary" onClick={saveFormStatus}>
         {t("closingDate.saveButton")}
       </Button>
     </div>

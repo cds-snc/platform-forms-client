@@ -1,0 +1,1496 @@
+[
+  {
+    "id": "AFG",
+    "name_eng": "Afghanistan",
+    "name_fra": "Afghanistan",
+    "flag": "🇦🇫"
+  },
+  {
+    "id": "ALA",
+    "name_eng": "Åland",
+    "name_fra": "Åland",
+    "flag": "🇦🇽"
+  },
+  {
+    "id": "ALB",
+    "name_eng": "Albania",
+    "name_fra": "Albanie",
+    "flag": "🇦🇱"
+  },
+  {
+    "id": "DZA",
+    "name_eng": "Algeria",
+    "name_fra": "Algérie",
+    "flag": "🇩🇿"
+  },
+  {
+    "id": "ASM",
+    "name_eng": "American Samoa",
+    "name_fra": "Samoa américaines",
+    "flag": "🇦🇸"
+  },
+  {
+    "id": "AND",
+    "name_eng": "Andorra",
+    "name_fra": "Andorre",
+    "flag": "🇦🇩"
+  },
+  {
+    "id": "AGO",
+    "name_eng": "Angola",
+    "name_fra": "Angola",
+    "flag": "🇦🇴"
+  },
+  {
+    "id": "AIA",
+    "name_eng": "Anguilla",
+    "name_fra": "Anguilla",
+    "flag": "🇦🇮"
+  },
+  {
+    "id": "ATA",
+    "name_eng": "Antarctica",
+    "name_fra": "Antarctique",
+    "flag": "🇦🇶"
+  },
+  {
+    "id": "ATG",
+    "name_eng": "Antigua and Barbuda",
+    "name_fra": "Antigua-et-Barbuda",
+    "flag": "🇦🇬"
+  },
+  {
+    "id": "ARG",
+    "name_eng": "Argentina",
+    "name_fra": "Argentine",
+    "flag": "🇦🇷"
+  },
+  {
+    "id": "ARM",
+    "name_eng": "Armenia",
+    "name_fra": "Arménie",
+    "flag": "🇦🇲"
+  },
+  {
+    "id": "ABW",
+    "name_eng": "Aruba",
+    "name_fra": "Aruba",
+    "flag": "🇦🇼"
+  },
+  {
+    "id": "AUS",
+    "name_eng": "Australia",
+    "name_fra": "Australie",
+    "flag": "🇦🇺"
+  },
+  {
+    "id": "AUT",
+    "name_eng": "Austria",
+    "name_fra": "Autriche",
+    "flag": "🇦🇹"
+  },
+  {
+    "id": "AZE",
+    "name_eng": "Azerbaijan",
+    "name_fra": "Azerbaïdjan",
+    "flag": "🇦🇿"
+  },
+  {
+    "id": "BHS",
+    "name_eng": "Bahamas",
+    "name_fra": "Bahamas",
+    "flag": "🇧🇸"
+  },
+  {
+    "id": "BHR",
+    "name_eng": "Bahrain",
+    "name_fra": "Bahreïn",
+    "flag": "🇧🇭"
+  },
+  {
+    "id": "BGD",
+    "name_eng": "Bangladesh",
+    "name_fra": "Bangladesh",
+    "flag": "🇧🇩"
+  },
+  {
+    "id": "BRB",
+    "name_eng": "Barbados",
+    "name_fra": "Barbade",
+    "flag": "🇧🇧"
+  },
+  {
+    "id": "BLR",
+    "name_eng": "Belarus",
+    "name_fra": "Biélorussie",
+    "flag": "🇧🇾"
+  },
+  {
+    "id": "BEL",
+    "name_eng": "Belgium",
+    "name_fra": "Belgique",
+    "flag": "🇧🇪"
+  },
+  {
+    "id": "BLZ",
+    "name_eng": "Belize",
+    "name_fra": "Belize",
+    "flag": "🇧🇿"
+  },
+  {
+    "id": "BEN",
+    "name_eng": "Benin",
+    "name_fra": "Bénin",
+    "flag": "🇧🇯"
+  },
+  {
+    "id": "BMU",
+    "name_eng": "Bermuda",
+    "name_fra": "Bermudes",
+    "flag": "🇧🇲"
+  },
+  {
+    "id": "BTN",
+    "name_eng": "Bhutan",
+    "name_fra": "Bhoutan",
+    "flag": "🇧🇹"
+  },
+  {
+    "id": "BOL",
+    "name_eng": "Bolivia",
+    "name_fra": "Bolivie",
+    "flag": "🇧🇴"
+  },
+  {
+    "id": "BES",
+    "name_eng": "Bonaire, Sint Eustatius and Saba",
+    "name_fra": "Bonaire, Saint-Eustache et Saba",
+    "flag": "🇧🇶"
+  },
+  {
+    "id": "BIH",
+    "name_eng": "Bosnia and Herzegovina",
+    "name_fra": "Bosnie-Herzégovine",
+    "flag": "🇧🇦"
+  },
+  {
+    "id": "BWA",
+    "name_eng": "Botswana",
+    "name_fra": "Botswana",
+    "flag": "🇧🇼"
+  },
+  {
+    "id": "BVT",
+    "name_eng": "Bouvet Island",
+    "name_fra": "Île Bouvet",
+    "flag": "🇧🇻"
+  },
+  {
+    "id": "BRA",
+    "name_eng": "Brazil",
+    "name_fra": "Brésil",
+    "flag": "🇧🇷"
+  },
+  {
+    "id": "IOT",
+    "name_eng": "British Indian Ocean Territory",
+    "name_fra": "Territoire britannique de l'océan Indien",
+    "flag": "🇮🇴"
+  },
+  {
+    "id": "VGB",
+    "name_eng": "British Virgin Islands",
+    "name_fra": "Îles Vierges britanniques",
+    "flag": "🇻🇬"
+  },
+  {
+    "id": "BRN",
+    "name_eng": "Brunei",
+    "name_fra": "Brunéi",
+    "flag": "🇧🇳"
+  },
+  {
+    "id": "BGR",
+    "name_eng": "Bulgaria",
+    "name_fra": "Bulgarie",
+    "flag": "🇧🇬"
+  },
+  {
+    "id": "BFA",
+    "name_eng": "Burkina Faso",
+    "name_fra": "Burkina Faso",
+    "flag": "🇧🇫"
+  },
+  {
+    "id": "BDI",
+    "name_eng": "Burundi",
+    "name_fra": "Burundi",
+    "flag": "🇧🇮"
+  },
+  {
+    "id": "KHM",
+    "name_eng": "Cambodia",
+    "name_fra": "Cambodge",
+    "flag": "🇰🇭"
+  },
+  {
+    "id": "CMR",
+    "name_eng": "Cameroon",
+    "name_fra": "Cameroun",
+    "flag": "🇨🇲"
+  },
+  {
+    "id": "CAN",
+    "name_eng": "Canada",
+    "name_fra": "Canada",
+    "flag": "🇨🇦"
+  },
+  {
+    "id": "CPV",
+    "name_eng": "Cape Verde",
+    "name_fra": "Cap-Vert",
+    "flag": "🇨🇻"
+  },
+  {
+    "id": "CYM",
+    "name_eng": "Cayman Islands",
+    "name_fra": "Îles Caïmans",
+    "flag": "🇰🇾"
+  },
+  {
+    "id": "CAF",
+    "name_eng": "Central African Republic",
+    "name_fra": "République centrafricaine",
+    "flag": "🇨🇫"
+  },
+  {
+    "id": "TCD",
+    "name_eng": "Chad",
+    "name_fra": "Tchad",
+    "flag": "🇹🇩"
+  },
+  {
+    "id": "CHL",
+    "name_eng": "Chile",
+    "name_fra": "Chili",
+    "flag": "🇨🇱"
+  },
+  {
+    "id": "CHN",
+    "name_eng": "China",
+    "name_fra": "Chine",
+    "flag": "🇨🇳"
+  },
+  {
+    "id": "CXR",
+    "name_eng": "Christmas Island",
+    "name_fra": "Île Christmas",
+    "flag": "🇨🇽"
+  },
+  {
+    "id": "CCK",
+    "name_eng": "Cocos (Keeling) Islands",
+    "name_fra": "Îles Cocos (Keeling)",
+    "flag": "🇨🇨"
+  },
+  {
+    "id": "COL",
+    "name_eng": "Colombia",
+    "name_fra": "Colombie",
+    "flag": "🇨🇴"
+  },
+  {
+    "id": "COM",
+    "name_eng": "Comoros",
+    "name_fra": "Comores",
+    "flag": "🇰🇲"
+  },
+  {
+    "id": "COG",
+    "name_eng": "Congo",
+    "name_fra": "Congo",
+    "flag": "🇨🇬"
+  },
+  {
+    "id": "COD",
+    "name_eng": "Congo (Democratic Republic)",
+    "name_fra": "Congo (République démocratique)",
+    "flag": "🇨🇩"
+  },
+  {
+    "id": "COK",
+    "name_eng": "Cook Islands",
+    "name_fra": "Îles Cook",
+    "flag": "🇨🇰"
+  },
+  {
+    "id": "CRI",
+    "name_eng": "Costa Rica",
+    "name_fra": "Costa Rica",
+    "flag": "🇨🇷"
+  },
+  {
+    "id": "HRV",
+    "name_eng": "Croatia",
+    "name_fra": "Croatie",
+    "flag": "🇭🇷"
+  },
+  {
+    "id": "CUB",
+    "name_eng": "Cuba",
+    "name_fra": "Cuba",
+    "flag": "🇨🇺"
+  },
+  {
+    "id": "CUW",
+    "name_eng": "Curaçao",
+    "name_fra": "Curaçao",
+    "flag": "🇨🇼"
+  },
+  {
+    "id": "CYP",
+    "name_eng": "Cyprus",
+    "name_fra": "Chypre",
+    "flag": "🇨🇾"
+  },
+  {
+    "id": "CZE",
+    "name_eng": "Czechia",
+    "name_fra": "Tchéquie",
+    "flag": "🇨🇿"
+  },
+  {
+    "id": "DNK",
+    "name_eng": "Denmark",
+    "name_fra": "Danemark",
+    "flag": "🇩🇰"
+  },
+  {
+    "id": "DJI",
+    "name_eng": "Djibouti",
+    "name_fra": "Djibouti",
+    "flag": "🇩🇯"
+  },
+  {
+    "id": "DMA",
+    "name_eng": "Dominica",
+    "name_fra": "Dominique",
+    "flag": "🇩🇲"
+  },
+  {
+    "id": "DOM",
+    "name_eng": "Dominican Republic",
+    "name_fra": "République dominicaine",
+    "flag": "🇩🇴"
+  },
+  {
+    "id": "TLS",
+    "name_eng": "East Timor",
+    "name_fra": "Timor oriental",
+    "flag": "🇹🇱"
+  },
+  {
+    "id": "ECU",
+    "name_eng": "Ecuador",
+    "name_fra": "Équateur",
+    "flag": "🇪🇨"
+  },
+  {
+    "id": "EGY",
+    "name_eng": "Egypt",
+    "name_fra": "Égypte",
+    "flag": "🇪🇬"
+  },
+  {
+    "id": "SLV",
+    "name_eng": "El Salvador",
+    "name_fra": "Salvador",
+    "flag": "🇸🇻"
+  },
+  {
+    "id": "GNQ",
+    "name_eng": "Equatorial Guinea",
+    "name_fra": "Guinée équatoriale",
+    "flag": "🇬🇶"
+  },
+  {
+    "id": "ERI",
+    "name_eng": "Eritrea",
+    "name_fra": "Érythrée",
+    "flag": "🇪🇷"
+  },
+  {
+    "id": "EST",
+    "name_eng": "Estonia",
+    "name_fra": "Estonie",
+    "flag": "🇪🇪"
+  },
+  {
+    "id": "SWZ",
+    "name_eng": "Eswatini",
+    "name_fra": "Eswatini",
+    "flag": "🇸🇿"
+  },
+  {
+    "id": "ETH",
+    "name_eng": "Ethiopia",
+    "name_fra": "Éthiopie",
+    "flag": "🇪🇹"
+  },
+  {
+    "id": "FLK",
+    "name_eng": "Falkland Islands",
+    "name_fra": "Îles Malouines",
+    "flag": "🇫🇰"
+  },
+  {
+    "id": "FRO",
+    "name_eng": "Faroe Islands",
+    "name_fra": "Îles Féroé",
+    "flag": "🇫🇴"
+  },
+  {
+    "id": "FJI",
+    "name_eng": "Fiji",
+    "name_fra": "Fidji",
+    "flag": "🇫🇯"
+  },
+  {
+    "id": "FIN",
+    "name_eng": "Finland",
+    "name_fra": "Finlande",
+    "flag": "🇫🇮"
+  },
+  {
+    "id": "FRA",
+    "name_eng": "France",
+    "name_fra": "France",
+    "flag": "🇫🇷"
+  },
+  {
+    "id": "GUF",
+    "name_eng": "French Guiana",
+    "name_fra": "Guyane française",
+    "flag": "🇬🇫"
+  },
+  {
+    "id": "PYF",
+    "name_eng": "French Polynesia",
+    "name_fra": "Polynésie française",
+    "flag": "🇵🇫"
+  },
+  {
+    "id": "ATF",
+    "name_eng": "French Southern Territories",
+    "name_fra": "Terres australes françaises",
+    "flag": "🇹🇫"
+  },
+  {
+    "id": "GAB",
+    "name_eng": "Gabon",
+    "name_fra": "Gabon",
+    "flag": "🇬🇦"
+  },
+  {
+    "id": "GMB",
+    "name_eng": "Gambia",
+    "name_fra": "Gambie",
+    "flag": "🇬🇲"
+  },
+  {
+    "id": "GEO",
+    "name_eng": "Georgia",
+    "name_fra": "Géorgie",
+    "flag": "🇬🇪"
+  },
+  {
+    "id": "DEU",
+    "name_eng": "Germany",
+    "name_fra": "Allemagne",
+    "flag": "🇩🇪"
+  },
+  {
+    "id": "GHA",
+    "name_eng": "Ghana",
+    "name_fra": "Ghana",
+    "flag": "🇬🇭"
+  },
+  {
+    "id": "GIB",
+    "name_eng": "Gibraltar",
+    "name_fra": "Gibraltar",
+    "flag": "🇬🇮"
+  },
+  {
+    "id": "GRC",
+    "name_eng": "Greece",
+    "name_fra": "Grèce",
+    "flag": "🇬🇷"
+  },
+  {
+    "id": "GRL",
+    "name_eng": "Greenland",
+    "name_fra": "Groenland",
+    "flag": "🇬🇱"
+  },
+  {
+    "id": "GRD",
+    "name_eng": "Grenada",
+    "name_fra": "Grenade",
+    "flag": "🇬🇩"
+  },
+  {
+    "id": "GLP",
+    "name_eng": "Guadeloupe",
+    "name_fra": "Guadeloupe",
+    "flag": "🇬🇵"
+  },
+  {
+    "id": "GUM",
+    "name_eng": "Guam",
+    "name_fra": "Guam",
+    "flag": "🇬🇺"
+  },
+  {
+    "id": "GTM",
+    "name_eng": "Guatemala",
+    "name_fra": "Guatemala",
+    "flag": "🇬🇹"
+  },
+  {
+    "id": "GGY",
+    "name_eng": "Guernsey",
+    "name_fra": "Guernesey",
+    "flag": "🇬🇬"
+  },
+  {
+    "id": "GIN",
+    "name_eng": "Guinea",
+    "name_fra": "Guinée",
+    "flag": "🇬🇳"
+  },
+  {
+    "id": "GNB",
+    "name_eng": "Guinea-Bissau",
+    "name_fra": "Guinée-Bissau",
+    "flag": "🇬🇼"
+  },
+  {
+    "id": "GUY",
+    "name_eng": "Guyana",
+    "name_fra": "Guyana",
+    "flag": "🇬🇾"
+  },
+  {
+    "id": "HTI",
+    "name_eng": "Haiti",
+    "name_fra": "Haïti",
+    "flag": "🇭🇹"
+  },
+  {
+    "id": "HMD",
+    "name_eng": "Heard Island and McDonald Islands",
+    "name_fra": "Îles Heard-et-MacDonald",
+    "flag": "🇭🇲"
+  },
+  {
+    "id": "HND",
+    "name_eng": "Honduras",
+    "name_fra": "Honduras",
+    "flag": "🇭🇳"
+  },
+  {
+    "id": "HKG",
+    "name_eng": "Hong Kong",
+    "name_fra": "Hong Kong",
+    "flag": "🇭🇰"
+  },
+  {
+    "id": "HUN",
+    "name_eng": "Hungary",
+    "name_fra": "Hongrie",
+    "flag": "🇭🇺"
+  },
+  {
+    "id": "ISL",
+    "name_eng": "Iceland",
+    "name_fra": "Islande",
+    "flag": "🇮🇸"
+  },
+  {
+    "id": "IND",
+    "name_eng": "India",
+    "name_fra": "Inde",
+    "flag": "🇮🇳"
+  },
+  {
+    "id": "IDN",
+    "name_eng": "Indonesia",
+    "name_fra": "Indonésie",
+    "flag": "🇮🇩"
+  },
+  {
+    "id": "IRN",
+    "name_eng": "Iran",
+    "name_fra": "Iran",
+    "flag": "🇮🇷"
+  },
+  {
+    "id": "IRQ",
+    "name_eng": "Iraq",
+    "name_fra": "Irak",
+    "flag": "🇮🇶"
+  },
+  {
+    "id": "IRL",
+    "name_eng": "Ireland",
+    "name_fra": "Irlande",
+    "flag": "🇮🇪"
+  },
+  {
+    "id": "IMN",
+    "name_eng": "Isle of Man",
+    "name_fra": "Île de Man",
+    "flag": "🇮🇲"
+  },
+  {
+    "id": "ISR",
+    "name_eng": "Israel",
+    "name_fra": "Israël",
+    "flag": "🇮🇱"
+  },
+  {
+    "id": "ITA",
+    "name_eng": "Italy",
+    "name_fra": "Italie",
+    "flag": "🇮🇹"
+  },
+  {
+    "id": "CIV",
+    "name_eng": "Ivory Coast",
+    "name_fra": "Côte d'Ivoire",
+    "flag": "🇨🇮"
+  },
+  {
+    "id": "JAM",
+    "name_eng": "Jamaica",
+    "name_fra": "Jamaïque",
+    "flag": "🇯🇲"
+  },
+  {
+    "id": "JPN",
+    "name_eng": "Japan",
+    "name_fra": "Japon",
+    "flag": "🇯🇵"
+  },
+  {
+    "id": "JEY",
+    "name_eng": "Jersey",
+    "name_fra": "Jersey",
+    "flag": "🇯🇪"
+  },
+  {
+    "id": "JOR",
+    "name_eng": "Jordan",
+    "name_fra": "Jordanie",
+    "flag": "🇯🇴"
+  },
+  {
+    "id": "KAZ",
+    "name_eng": "Kazakhstan",
+    "name_fra": "Kazakhstan",
+    "flag": "🇰🇿"
+  },
+  {
+    "id": "KEN",
+    "name_eng": "Kenya",
+    "name_fra": "Kenya",
+    "flag": "🇰🇪"
+  },
+  {
+    "id": "KIR",
+    "name_eng": "Kiribati",
+    "name_fra": "Kiribati",
+    "flag": "🇰🇮"
+  },
+  {
+    "id": "PRK",
+    "name_eng": "Korea (the Democratic People's Republic of)",
+    "name_fra": "Corée du Nord",
+    "flag": "🇰🇵"
+  },
+  {
+    "id": "KOR",
+    "name_eng": "Korea (the Republic of)",
+    "name_fra": "Corée du Sud",
+    "flag": "🇰🇷"
+  },
+  {
+    "id": "KWT",
+    "name_eng": "Kuwait",
+    "name_fra": "Koweït",
+    "flag": "🇰🇼"
+  },
+  {
+    "id": "KGZ",
+    "name_eng": "Kyrgyzstan",
+    "name_fra": "Kirghizistan",
+    "flag": "🇰🇬"
+  },
+  {
+    "id": "LAO",
+    "name_eng": "Laos",
+    "name_fra": "Laos",
+    "flag": "🇱🇦"
+  },
+  {
+    "id": "LVA",
+    "name_eng": "Latvia",
+    "name_fra": "Lettonie",
+    "flag": "🇱🇻"
+  },
+  {
+    "id": "LBN",
+    "name_eng": "Lebanon",
+    "name_fra": "Liban",
+    "flag": "🇱🇧"
+  },
+  {
+    "id": "LSO",
+    "name_eng": "Lesotho",
+    "name_fra": "Lesotho",
+    "flag": "🇱🇸"
+  },
+  {
+    "id": "LBR",
+    "name_eng": "Liberia",
+    "name_fra": "Libéria",
+    "flag": "🇱🇷"
+  },
+  {
+    "id": "LBY",
+    "name_eng": "Libya",
+    "name_fra": "Libye",
+    "flag": "🇱🇾"
+  },
+  {
+    "id": "LIE",
+    "name_eng": "Liechtenstein",
+    "name_fra": "Liechtenstein",
+    "flag": "🇱🇮"
+  },
+  {
+    "id": "LTU",
+    "name_eng": "Lithuania",
+    "name_fra": "Lituanie",
+    "flag": "🇱🇹"
+  },
+  {
+    "id": "LUX",
+    "name_eng": "Luxembourg",
+    "name_fra": "Luxembourg",
+    "flag": "🇱🇺"
+  },
+  {
+    "id": "MAC",
+    "name_eng": "Macao",
+    "name_fra": "Macao",
+    "flag": "🇲🇴"
+  },
+  {
+    "id": "MDG",
+    "name_eng": "Madagascar",
+    "name_fra": "Madagascar",
+    "flag": "🇲🇬"
+  },
+  {
+    "id": "MWI",
+    "name_eng": "Malawi",
+    "name_fra": "Malawi",
+    "flag": "🇲🇼"
+  },
+  {
+    "id": "MYS",
+    "name_eng": "Malaysia",
+    "name_fra": "Malaisie",
+    "flag": "🇲🇾"
+  },
+  {
+    "id": "MDV",
+    "name_eng": "Maldives",
+    "name_fra": "Maldives",
+    "flag": "🇲🇻"
+  },
+  {
+    "id": "MLI",
+    "name_eng": "Mali",
+    "name_fra": "Mali",
+    "flag": "🇲🇱"
+  },
+  {
+    "id": "MLT",
+    "name_eng": "Malta",
+    "name_fra": "Malte",
+    "flag": "🇲🇹"
+  },
+  {
+    "id": "MHL",
+    "name_eng": "Marshall Islands",
+    "name_fra": "Îles Marshall",
+    "flag": "🇲🇭"
+  },
+  {
+    "id": "MTQ",
+    "name_eng": "Martinique",
+    "name_fra": "Martinique",
+    "flag": "🇲🇶"
+  },
+  {
+    "id": "MRT",
+    "name_eng": "Mauritania",
+    "name_fra": "Mauritanie",
+    "flag": "🇲🇷"
+  },
+  {
+    "id": "MUS",
+    "name_eng": "Mauritius",
+    "name_fra": "Maurice",
+    "flag": "🇲🇺"
+  },
+  {
+    "id": "MYT",
+    "name_eng": "Mayotte",
+    "name_fra": "Mayotte",
+    "flag": "🇾🇹"
+  },
+  {
+    "id": "MEX",
+    "name_eng": "Mexico",
+    "name_fra": "Mexique",
+    "flag": "🇲🇽"
+  },
+  {
+    "id": "FSM",
+    "name_eng": "Micronesia",
+    "name_fra": "Micronésie",
+    "flag": "🇫🇲"
+  },
+  {
+    "id": "MDA",
+    "name_eng": "Moldova",
+    "name_fra": "Moldavie",
+    "flag": "🇲🇩"
+  },
+  {
+    "id": "MCO",
+    "name_eng": "Monaco",
+    "name_fra": "Monaco",
+    "flag": "🇲🇨"
+  },
+  {
+    "id": "MNG",
+    "name_eng": "Mongolia",
+    "name_fra": "Mongolie",
+    "flag": "🇲🇳"
+  },
+  {
+    "id": "MNE",
+    "name_eng": "Montenegro",
+    "name_fra": "Monténégro",
+    "flag": "🇲🇪"
+  },
+  {
+    "id": "MSR",
+    "name_eng": "Montserrat",
+    "name_fra": "Montserrat",
+    "flag": "🇲🇸"
+  },
+  {
+    "id": "MAR",
+    "name_eng": "Morocco",
+    "name_fra": "Maroc",
+    "flag": "🇲🇦"
+  },
+  {
+    "id": "MOZ",
+    "name_eng": "Mozambique",
+    "name_fra": "Mozambique",
+    "flag": "🇲🇿"
+  },
+  {
+    "id": "MMR",
+    "name_eng": "Myanmar",
+    "name_fra": "Myanmar",
+    "flag": "🇲🇲"
+  },
+  {
+    "id": "NAM",
+    "name_eng": "Namibia",
+    "name_fra": "Namibie",
+    "flag": "🇳🇦"
+  },
+  {
+    "id": "NRU",
+    "name_eng": "Nauru",
+    "name_fra": "Nauru",
+    "flag": "🇳🇷"
+  },
+  {
+    "id": "NPL",
+    "name_eng": "Nepal",
+    "name_fra": "Népal",
+    "flag": "🇳🇵"
+  },
+  {
+    "id": "NLD",
+    "name_eng": "Netherlands",
+    "name_fra": "Pays-Bas",
+    "flag": "🇳🇱"
+  },
+  {
+    "id": "NCL",
+    "name_eng": "New Caledonia",
+    "name_fra": "Nouvelle-Calédonie",
+    "flag": "🇳🇨"
+  },
+  {
+    "id": "NZL",
+    "name_eng": "New Zealand",
+    "name_fra": "Nouvelle-Zélande",
+    "flag": "🇳🇿"
+  },
+  {
+    "id": "NIC",
+    "name_eng": "Nicaragua",
+    "name_fra": "Nicaragua",
+    "flag": "🇳🇮"
+  },
+  {
+    "id": "NER",
+    "name_eng": "Niger",
+    "name_fra": "Niger",
+    "flag": "🇳🇪"
+  },
+  {
+    "id": "NGA",
+    "name_eng": "Nigeria",
+    "name_fra": "Nigéria",
+    "flag": "🇳🇬"
+  },
+  {
+    "id": "NIU",
+    "name_eng": "Niue",
+    "name_fra": "Niue",
+    "flag": "🇳🇺"
+  },
+  {
+    "id": "NFK",
+    "name_eng": "Norfolk Island",
+    "name_fra": "Île Norfolk",
+    "flag": "🇳🇫"
+  },
+  {
+    "id": "MKD",
+    "name_eng": "North Macedonia",
+    "name_fra": "Macédoine du Nord",
+    "flag": "🇲🇰"
+  },
+  {
+    "id": "MNP",
+    "name_eng": "Northern Mariana Islands",
+    "name_fra": "Îles Mariannes du Nord",
+    "flag": "🇲🇵"
+  },
+  {
+    "id": "NOR",
+    "name_eng": "Norway",
+    "name_fra": "Norvège",
+    "flag": "🇳🇴"
+  },
+  {
+    "id": "OMN",
+    "name_eng": "Oman",
+    "name_fra": "Oman",
+    "flag": "🇴🇲"
+  },
+  {
+    "id": "PAK",
+    "name_eng": "Pakistan",
+    "name_fra": "Pakistan",
+    "flag": "🇵🇰"
+  },
+  {
+    "id": "PLW",
+    "name_eng": "Palau",
+    "name_fra": "Palaos",
+    "flag": "🇵🇼"
+  },
+  {
+    "id": "PSE",
+    "name_eng": "Palestine",
+    "name_fra": "Palestine",
+    "flag": "🇵🇸"
+  },
+  {
+    "id": "PAN",
+    "name_eng": "Panama",
+    "name_fra": "Panama",
+    "flag": "🇵🇦"
+  },
+  {
+    "id": "PNG",
+    "name_eng": "Papua New Guinea",
+    "name_fra": "Papouasie-Nouvelle-Guinée",
+    "flag": "🇵🇬"
+  },
+  {
+    "id": "PRY",
+    "name_eng": "Paraguay",
+    "name_fra": "Paraguay",
+    "flag": "🇵🇾"
+  },
+  {
+    "id": "PER",
+    "name_eng": "Peru",
+    "name_fra": "Pérou",
+    "flag": "🇵🇪"
+  },
+  {
+    "id": "PHL",
+    "name_eng": "Philippines",
+    "name_fra": "Philippines",
+    "flag": "🇵🇭"
+  },
+  {
+    "id": "PCN",
+    "name_eng": "Pitcairn",
+    "name_fra": "Pitcairn",
+    "flag": "🇵🇳"
+  },
+  {
+    "id": "POL",
+    "name_eng": "Poland",
+    "name_fra": "Pologne",
+    "flag": "🇵🇱"
+  },
+  {
+    "id": "PRT",
+    "name_eng": "Portugal",
+    "name_fra": "Portugal",
+    "flag": "🇵🇹"
+  },
+  {
+    "id": "PRI",
+    "name_eng": "Puerto Rico",
+    "name_fra": "Porto Rico",
+    "flag": "🇵🇷"
+  },
+  {
+    "id": "QAT",
+    "name_eng": "Qatar",
+    "name_fra": "Qatar",
+    "flag": "🇶🇦"
+  },
+  {
+    "id": "REU",
+    "name_eng": "Réunion",
+    "name_fra": "La Réunion",
+    "flag": "🇷🇪"
+  },
+  {
+    "id": "ROU",
+    "name_eng": "Romania",
+    "name_fra": "Roumanie",
+    "flag": "🇷🇴"
+  },
+  {
+    "id": "RUS",
+    "name_eng": "Russia",
+    "name_fra": "Russie",
+    "flag": "🇷🇺"
+  },
+  {
+    "id": "RWA",
+    "name_eng": "Rwanda",
+    "name_fra": "Rwanda",
+    "flag": "🇷🇼"
+  },
+  {
+    "id": "MAF",
+    "name_eng": "Saint Martin (French)",
+    "name_fra": "Saint-Martin (français)",
+    "flag": "🇲🇫"
+  },
+  {
+    "id": "WSM",
+    "name_eng": "Samoa",
+    "name_fra": "Samoa",
+    "flag": "🇼🇸"
+  },
+  {
+    "id": "SMR",
+    "name_eng": "San Marino",
+    "name_fra": "Saint-Marin",
+    "flag": "🇸🇲"
+  },
+  {
+    "id": "STP",
+    "name_eng": "Sao Tome and Principe",
+    "name_fra": "Sao Tomé-et-Principe",
+    "flag": "🇸🇹"
+  },
+  {
+    "id": "SAU",
+    "name_eng": "Saudi Arabia",
+    "name_fra": "Arabie saoudite",
+    "flag": "🇸🇦"
+  },
+  {
+    "id": "SEN",
+    "name_eng": "Senegal",
+    "name_fra": "Sénégal",
+    "flag": "🇸🇳"
+  },
+  {
+    "id": "SRB",
+    "name_eng": "Serbia",
+    "name_fra": "Serbie",
+    "flag": "🇷🇸"
+  },
+  {
+    "id": "SYC",
+    "name_eng": "Seychelles",
+    "name_fra": "Seychelles",
+    "flag": "🇸🇨"
+  },
+  {
+    "id": "SLE",
+    "name_eng": "Sierra Leone",
+    "name_fra": "Sierra Leone",
+    "flag": "🇸🇱"
+  },
+  {
+    "id": "SGP",
+    "name_eng": "Singapore",
+    "name_fra": "Singapour",
+    "flag": "🇸🇬"
+  },
+  {
+    "id": "SXM",
+    "name_eng": "Sint Maarten (Dutch)",
+    "name_fra": "Saint-Martin (néerlandais)",
+    "flag": "🇸🇽"
+  },
+  {
+    "id": "SVK",
+    "name_eng": "Slovakia",
+    "name_fra": "Slovaquie",
+    "flag": "🇸🇰"
+  },
+  {
+    "id": "SVN",
+    "name_eng": "Slovenia",
+    "name_fra": "Slovénie",
+    "flag": "🇸🇮"
+  },
+  {
+    "id": "SLB",
+    "name_eng": "Solomon Islands",
+    "name_fra": "Îles Salomon",
+    "flag": "🇸🇧"
+  },
+  {
+    "id": "SOM",
+    "name_eng": "Somalia",
+    "name_fra": "Somalie",
+    "flag": "🇸🇴"
+  },
+  {
+    "id": "ZAF",
+    "name_eng": "South Africa",
+    "name_fra": "Afrique du Sud",
+    "flag": "🇿🇦"
+  },
+  {
+    "id": "SGS",
+    "name_eng": "South Georgia and the South Sandwich Islands",
+    "name_fra": "Géorgie du Sud-et-les îles Sandwich du Sud",
+    "flag": "🇬🇸"
+  },
+  {
+    "id": "SSD",
+    "name_eng": "South Sudan",
+    "name_fra": "Soudan du Sud",
+    "flag": "🇸🇸"
+  },
+  {
+    "id": "ESP",
+    "name_eng": "Spain",
+    "name_fra": "Espagne",
+    "flag": "🇪🇸"
+  },
+  {
+    "id": "LKA",
+    "name_eng": "Sri Lanka",
+    "name_fra": "Sri Lanka",
+    "flag": "🇱🇰"
+  },
+  {
+    "id": "BLM",
+    "name_eng": "St Barthélemy",
+    "name_fra": "Saint-Barthélemy",
+    "flag": "🇧🇱"
+  },
+  {
+    "id": "SHN",
+    "name_eng": "St Helena, Ascension and Tristan da Cunha",
+    "name_fra": "Sainte-Hélène, Ascension et Tristan da Cunha",
+    "flag": "🇸🇭"
+  },
+  {
+    "id": "KNA",
+    "name_eng": "St Kitts and Nevis",
+    "name_fra": "Saint-Christophe-et-Niévès",
+    "flag": "🇰🇳"
+  },
+  {
+    "id": "LCA",
+    "name_eng": "St Lucia",
+    "name_fra": "Sainte-Lucie",
+    "flag": "🇱🇨"
+  },
+  {
+    "id": "SPM",
+    "name_eng": "St Pierre and Miquelon",
+    "name_fra": "Saint-Pierre-et-Miquelon",
+    "flag": "🇵🇲"
+  },
+  {
+    "id": "VCT",
+    "name_eng": "St Vincent",
+    "name_fra": "Saint-Vincent-et-les Grenadines",
+    "flag": "🇻🇨"
+  },
+  {
+    "id": "SDN",
+    "name_eng": "Sudan",
+    "name_fra": "Soudan",
+    "flag": "🇸🇩"
+  },
+  {
+    "id": "SUR",
+    "name_eng": "Suriname",
+    "name_fra": "Suriname",
+    "flag": "🇸🇷"
+  },
+  {
+    "id": "SJM",
+    "name_eng": "Svalbard and Jan Mayen",
+    "name_fra": "Svalbard et Jan Mayen",
+    "flag": "🇸🇯"
+  },
+  {
+    "id": "SWE",
+    "name_eng": "Sweden",
+    "name_fra": "Suède",
+    "flag": "🇸🇪"
+  },
+  {
+    "id": "CHE",
+    "name_eng": "Switzerland",
+    "name_fra": "Suisse",
+    "flag": "🇨🇭"
+  },
+  {
+    "id": "SYR",
+    "name_eng": "Syria",
+    "name_fra": "Syrie",
+    "flag": "🇸🇾"
+  },
+  {
+    "id": "TWN",
+    "name_eng": "Taiwan",
+    "name_fra": "Taïwan",
+    "flag": "🇹🇼"
+  },
+  {
+    "id": "TJK",
+    "name_eng": "Tajikistan",
+    "name_fra": "Tadjikistan",
+    "flag": "🇹🇯"
+  },
+  {
+    "id": "TZA",
+    "name_eng": "Tanzania",
+    "name_fra": "Tanzanie",
+    "flag": "🇹🇿"
+  },
+  {
+    "id": "THA",
+    "name_eng": "Thailand",
+    "name_fra": "Thaïlande",
+    "flag": "🇹🇭"
+  },
+  {
+    "id": "TGO",
+    "name_eng": "Togo",
+    "name_fra": "Togo",
+    "flag": "🇹🇬"
+  },
+  {
+    "id": "TKL",
+    "name_eng": "Tokelau",
+    "name_fra": "Tokelau",
+    "flag": "🇹🇰"
+  },
+  {
+    "id": "TON",
+    "name_eng": "Tonga",
+    "name_fra": "Tonga",
+    "flag": "🇹🇴"
+  },
+  {
+    "id": "TTO",
+    "name_eng": "Trinidad and Tobago",
+    "name_fra": "Trinité-et-Tobago",
+    "flag": "🇹🇹"
+  },
+  {
+    "id": "TUN",
+    "name_eng": "Tunisia",
+    "name_fra": "Tunisie",
+    "flag": "🇹🇳"
+  },
+  {
+    "id": "TUR",
+    "name_eng": "Turkey",
+    "name_fra": "Turquie",
+    "flag": "🇹🇷"
+  },
+  {
+    "id": "TKM",
+    "name_eng": "Turkmenistan",
+    "name_fra": "Turkménistan",
+    "flag": "🇹🇲"
+  },
+  {
+    "id": "TCA",
+    "name_eng": "Turks and Caicos Islands",
+    "name_fra": "Îles Turques-et-Caïques",
+    "flag": "🇹🇨"
+  },
+  {
+    "id": "TUV",
+    "name_eng": "Tuvalu",
+    "name_fra": "Tuvalu",
+    "flag": "🇹🇻"
+  },
+  {
+    "id": "UGA",
+    "name_eng": "Uganda",
+    "name_fra": "Ouganda",
+    "flag": "🇺🇬"
+  },
+  {
+    "id": "UKR",
+    "name_eng": "Ukraine",
+    "name_fra": "Ukraine",
+    "flag": "🇺🇦"
+  },
+  {
+    "id": "ARE",
+    "name_eng": "United Arab Emirates",
+    "name_fra": "Émirats arabes unis",
+    "flag": "🇦🇪"
+  },
+  {
+    "id": "GBR",
+    "name_eng": "United Kingdom",
+    "name_fra": "Royaume-Uni",
+    "flag": "🇬🇧"
+  },
+  {
+    "id": "USA",
+    "name_eng": "United States",
+    "name_fra": "États-Unis",
+    "flag": "🇺🇸"
+  },
+  {
+    "id": "UMI",
+    "name_eng": "United States Minor Outlying Islands",
+    "name_fra": "Îles mineures éloignées des États-Unis",
+    "flag": "🇺🇲"
+  },
+  {
+    "id": "VIR",
+    "name_eng": "United States Virgin Islands",
+    "name_fra": "Îles Vierges des États-Unis",
+    "flag": "🇻🇮"
+  },
+  {
+    "id": "URY",
+    "name_eng": "Uruguay",
+    "name_fra": "Uruguay",
+    "flag": "🇺🇾"
+  },
+  {
+    "id": "UZB",
+    "name_eng": "Uzbekistan",
+    "name_fra": "Ouzbékistan",
+    "flag": "🇺🇿"
+  },
+  {
+    "id": "VUT",
+    "name_eng": "Vanuatu",
+    "name_fra": "Vanuatu",
+    "flag": "🇻🇺"
+  },
+  {
+    "id": "VAT",
+    "name_eng": "Vatican City",
+    "name_fra": "Vatican",
+    "flag": "🇻🇦"
+  },
+  {
+    "id": "VEN",
+    "name_eng": "Venezuela",
+    "name_fra": "Venezuela",
+    "flag": "🇻🇪"
+  },
+  {
+    "id": "VNM",
+    "name_eng": "Viet Nam",
+    "name_fra": "Viêt Nam",
+    "flag": "🇻🇳"
+  },
+  {
+    "id": "WLF",
+    "name_eng": "Wallis and Futuna",
+    "name_fra": "Wallis-et-Futuna",
+    "flag": "🇼🇫"
+  },
+  {
+    "id": "ESH",
+    "name_eng": "Western Sahara",
+    "name_fra": "Sahara occidental",
+    "flag": "🇪🇭"
+  },
+  {
+    "id": "YEM",
+    "name_eng": "Yemen",
+    "name_fra": "Yémen",
+    "flag": "🇾🇪"
+  },
+  {
+    "id": "ZMB",
+    "name_eng": "Zambia",
+    "name_fra": "Zambie",
+    "flag": "🇿🇲"
+  },
+  {
+    "id": "ZWE",
+    "name_eng": "Zimbabwe",
+    "name_fra": "Zimbabwe",
+    "flag": "🇿🇼"
+  }
+]

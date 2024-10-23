@@ -1,9 +1,7 @@
 import { serverTranslation } from "@i18n";
 import { Metadata } from "next";
-import { Edit } from "./components/Edit";
-import { EditNavigation } from "./components/EditNavigation";
 import { EditWithGroups } from "./components/EditWithGroups";
-import { allowGrouping } from "@formBuilder/components/shared/right-panel/treeview/util/allowGrouping";
+import { DynamicRowDialog } from "@formBuilder/components/dialogs/DynamicRowDialog/DynamicRowDialog";
 
 export async function generateMetadata({
   params: { locale },
@@ -21,18 +19,10 @@ export default async function Page({
 }: {
   params: { id: string; locale: string };
 }) {
-  const conditionalLogic = allowGrouping();
-
   return (
     <>
-      {conditionalLogic ? (
-        <EditWithGroups id={id} locale={locale} />
-      ) : (
-        <>
-          <EditNavigation id={id} />
-          <Edit formId={id} />
-        </>
-      )}
+      <EditWithGroups id={id} locale={locale} />
+      <DynamicRowDialog />
     </>
   );
 }
