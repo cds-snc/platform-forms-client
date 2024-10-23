@@ -2,18 +2,22 @@ import { getMaxMonthDay } from "@clientComponents/forms/FormattedDate/utils";
 import { Button } from "@clientComponents/globals";
 import { Dialog, useDialogRef } from "@formBuilder/components/shared";
 import { useTranslation } from "@i18n/client";
-import { ChangeEvent, useState } from "react";
+import { useEffect, useState } from "react";
 import { toast } from "@formBuilder/components/shared/Toast";
 import { WarningIcon } from "@serverComponents/icons";
+import { formClosingDateEst } from "@lib/utils/date/utcToEst";
+import { logMessage } from "@lib/logger";
 
 export const ClosingDateDialog = ({
   showDateTimeDialog,
   setShowDateTimeDialog,
   save,
+  closingDate,
 }: {
   showDateTimeDialog: boolean;
   setShowDateTimeDialog: React.Dispatch<React.SetStateAction<boolean>>;
   save: (futureDate?: number) => Promise<void>;
+  closingDate: string | null | undefined;
 }) => {
   const {
     t,
@@ -22,10 +26,31 @@ export const ClosingDateDialog = ({
   const dialogRef = useDialogRef();
   const [hasErrors, setHasErrors] = useState(false);
 
-  const [month, setMonth] = useState<number | undefined>(undefined);
-  const [day, setDay] = useState<number | undefined>(undefined);
-  const [year, setYear] = useState<number | undefined>(undefined);
-  const [time, setTime] = useState<string | undefined>(undefined);
+  const [month, setMonth] = useState<number | string>(""); // Need string default since these are controlled inputs
+  const [day, setDay] = useState<number | string>("");
+  const [year, setYear] = useState<number | string>("");
+  const [time, setTime] = useState<string | string>("");
+
+  useEffect(() => {
+    if (!closingDate) {
+      return;
+    }
+
+    try {
+      const { month, day, year, hour, minute } = formClosingDateEst(closingDate, language);
+
+      if (!month || !day || !year || !hour) {
+        throw new Error("Missing required fields");
+      }
+
+      setMonth(Number(month));
+      setDay(Number(day));
+      setYear(Number(year));
+      setTime(`${hour}:${minute}`);
+    } catch (error) {
+      logMessage.debug("Unable to parse closing date", closingDate);
+    }
+  }, [closingDate, language]);
 
   const handleClose = () => {
     setShowDateTimeDialog(false);
@@ -41,7 +66,13 @@ export const ClosingDateDialog = ({
 
       const hours = Number(time.split(":")[0]);
       const minutes = Number(time.split(":")[1]);
-      const date = new Date(year, month - 1, day, hours, minutes);
+      const date = new Date(
+        Number(year),
+        Number(month) - 1,
+        Number(day),
+        Number(hours),
+        Number(minutes)
+      );
       const timestamp = date.getTime();
 
       if (timestamp < Date.now()) {
@@ -94,6 +125,7 @@ export const ClosingDateDialog = ({
                       onChange={(e: React.ChangeEvent<HTMLSelectElement>) =>
                         setMonth(Number(e.target.value))
                       }
+                      month={month}
                     />
                   )}
 
@@ -107,8 +139,9 @@ export const ClosingDateDialog = ({
                       id="date-picker-day"
                       type="number"
                       min={1}
-                      max={month && year ? getMaxMonthDay(month, year) : 31}
+                      max={month && year ? getMaxMonthDay(Number(month), Number(year)) : 31}
                       onChange={(e) => setDay(Number(e.target.value))}
+                      value={day}
                       required
                       data-testid="date-picker-day"
                     />
@@ -133,6 +166,7 @@ export const ClosingDateDialog = ({
                       type="number"
                       min={new Date().getFullYear()}
                       onChange={(e) => setYear(Number(e.target.value))}
+                      value={year}
                       required
                       data-testid="date-picker-year"
                     />
@@ -157,6 +191,7 @@ export const ClosingDateDialog = ({
                 minLength={5}
                 maxLength={5}
                 onChange={(e) => setTime(e.target.value)}
+                value={time}
                 placeholder="00:00"
                 required
                 pattern="^(?:[01][0-9]|2[0-3]):[0-5][0-9]$"
@@ -179,8 +214,10 @@ export const ClosingDateDialog = ({
 };
 
 const MonthDropdown = ({
+  month,
   onChange,
 }: {
+  month?: number | string;
   onChange: (e: React.ChangeEvent<HTMLSelectElement>) => void;
 }) => {
   const { t } = useTranslation("form-builder");
@@ -194,6 +231,7 @@ const MonthDropdown = ({
         id="date-picker-month"
         className={"gc-dropdown"}
         onChange={onChange}
+        value={month ? month : ""}
         required
         data-testid="date-picker-month"
       >

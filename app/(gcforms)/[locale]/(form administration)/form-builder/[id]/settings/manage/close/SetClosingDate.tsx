@@ -172,6 +172,7 @@ export const SetClosingDate = ({
           showDateTimeDialog={showDateTimeDialog}
           setShowDateTimeDialog={setShowDateTimeDialog}
           save={saveFutureDate}
+          closingDate={closingDate}
         ></ClosingDateDialog>
       )}
     </div>
