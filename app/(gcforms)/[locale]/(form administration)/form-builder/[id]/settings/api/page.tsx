@@ -46,7 +46,7 @@ export default async function Page({
     <>
       <div className="mb-10">
         <h2 className="mb-6">{t("settings.api.title")}</h2>
-        <ApiKeyButton keyId={keyId} />
+        <ApiKeyButton showDelete keyId={keyId} />
       </div>
       <ApiKeyDialog />
     </>
