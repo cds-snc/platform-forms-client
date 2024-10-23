@@ -126,12 +126,7 @@ export const getOrCreateUser = async ({
  */
 export const getUser = async (ability: UserAbility, id: string): Promise<AppUser> => {
   try {
-    checkPrivileges(ability, [
-      {
-        action: "view",
-        subject: "User",
-      },
-    ]);
+    checkPrivileges(ability, [{ action: "view", subject: { type: "User", object: { id } } }]);
 
     const user = await prisma.user.findFirstOrThrow({
       where: {
