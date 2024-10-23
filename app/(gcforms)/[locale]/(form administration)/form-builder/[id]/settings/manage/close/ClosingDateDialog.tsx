@@ -2,7 +2,7 @@ import { getMaxMonthDay } from "@clientComponents/forms/FormattedDate/utils";
 import { Button } from "@clientComponents/globals";
 import { Dialog, useDialogRef } from "@formBuilder/components/shared";
 import { useTranslation } from "@i18n/client";
-import { useState } from "react";
+import { ChangeEvent, useState } from "react";
 import { toast } from "@formBuilder/components/shared/Toast";
 import { WarningIcon } from "@serverComponents/icons";
 
@@ -15,7 +15,10 @@ export const ClosingDateDialog = ({
   setShowDateTimeDialog: React.Dispatch<React.SetStateAction<boolean>>;
   save: (futureDate?: number) => Promise<void>;
 }) => {
-  const { t } = useTranslation("form-builder");
+  const {
+    t,
+    i18n: { language },
+  } = useTranslation("form-builder");
   const dialogRef = useDialogRef();
   const [hasErrors, setHasErrors] = useState(false);
 
@@ -49,6 +52,7 @@ export const ClosingDateDialog = ({
       save(timestamp);
       handleClose();
     } catch (error) {
+      handleClose();
       toast.error(t("closingDate.savedErrorMessage"));
     }
   };
@@ -85,25 +89,14 @@ export const ClosingDateDialog = ({
                   )}
                 </div>
                 <div className="inline-flex gap-2">
-                  <div className="gcds-select-wrapper !mr-2 flex flex-col">
-                    <label className="mb-2" htmlFor="date-picker-month">
-                      {t("scheduleClosingPage.dialog.datePicker.month")}
-                    </label>
-                    <select
-                      name="date-picker-month"
-                      id="date-picker-month"
-                      className={"gc-dropdown"}
-                      onChange={(e) => setMonth(Number(e.target.value))}
-                      required
-                      data-testid="date-picker-month"
-                    >
-                      {Array.from({ length: 12 }, (_, i) => i + 1).map((month) => (
-                        <option key={month} value={month}>
-                          {t(`formattedDate.months.${month}`)}
-                        </option>
-                      ))}
-                    </select>
-                  </div>
+                  {language === "en" && (
+                    <MonthDropdown
+                      onChange={(e: React.ChangeEvent<HTMLSelectElement>) =>
+                        setMonth(Number(e.target.value))
+                      }
+                    />
+                  )}
+
                   <div className="gcds-input-wrapper !mr-2 flex flex-col">
                     <label className="!mr-2 mb-2" htmlFor="date-picker-day">
                       {t("scheduleClosingPage.dialog.datePicker.day")}
@@ -120,6 +113,15 @@ export const ClosingDateDialog = ({
                       data-testid="date-picker-day"
                     />
                   </div>
+
+                  {language === "fr" && (
+                    <MonthDropdown
+                      onChange={(e: React.ChangeEvent<HTMLSelectElement>) =>
+                        setMonth(Number(e.target.value))
+                      }
+                    />
+                  )}
+
                   <div className="gcds-input-wrapper !mr-2 !flex !flex-col">
                     <label className="mb-2" htmlFor="date-picker-year">
                       {t("scheduleClosingPage.dialog.datePicker.year")}
@@ -173,5 +175,34 @@ export const ClosingDateDialog = ({
         </div>
       </form>
     </Dialog>
+  );
+};
+
+const MonthDropdown = ({
+  onChange,
+}: {
+  onChange: (e: React.ChangeEvent<HTMLSelectElement>) => void;
+}) => {
+  const { t } = useTranslation("form-builder");
+  return (
+    <div className="gcds-select-wrapper !mr-2 flex flex-col">
+      <label className="mb-2" htmlFor="date-picker-month">
+        {t("scheduleClosingPage.dialog.datePicker.month")}
+      </label>
+      <select
+        name="date-picker-month"
+        id="date-picker-month"
+        className={"gc-dropdown"}
+        onChange={onChange}
+        required
+        data-testid="date-picker-month"
+      >
+        {Array.from({ length: 12 }, (_, i) => i + 1).map((month) => (
+          <option key={month} value={month}>
+            {t(`formattedDate.months.${month}`)}
+          </option>
+        ))}
+      </select>
+    </div>
   );
 };
