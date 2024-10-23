@@ -82,6 +82,12 @@ const buildPrismaResponse = (
     formPurpose,
     isPublished,
     securityAttribute,
+    users: [
+      {
+        id: "1",
+        email: "test@cds-snc.ca",
+      },
+    ],
   };
 };
 

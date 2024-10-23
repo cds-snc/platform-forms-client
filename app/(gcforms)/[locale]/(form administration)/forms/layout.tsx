@@ -26,7 +26,7 @@ export default async function Layout({
             <main id="content" className="mb-10">
               {children}
             </main>
-            <ToastContainer />
+            <ToastContainer containerId="default" />
           </div>
           <Footer displayFormBuilderFooter className="mt-0" />
         </div>
