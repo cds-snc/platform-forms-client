@@ -1,25 +1,27 @@
 "use client";
-import React, { useState } from "react";
-import { DynamicRowDialog } from "@formBuilder/components/shared/DynamicRowDialog";
+import React from "react";
 import { Button } from "@clientComponents/globals";
 import { useTranslation } from "@i18n/client";
 import { MoreIcon } from "@serverComponents/icons/MoreIcon";
+import { EventKeys, useCustomEvent } from "@lib/hooks/useCustomEvent";
+import { FormElementWithIndex } from "@lib/types/form-builder-types";
 
-export const CustomizeSetButton = ({
-  itemId,
-  itemIndex,
-}: {
-  itemId: number;
-  itemIndex: number;
-}) => {
+export const CustomizeSetButton = ({ item }: { item: FormElementWithIndex }) => {
   const { t } = useTranslation("form-builder");
-  const [showCustomizeSetDialog, setShowCustomizeSetDialog] = useState(false);
+  const { Event } = useCustomEvent();
+
+  const openDialog = () => {
+    Event.fire(EventKeys.openDynamicRowDialog, {
+      item,
+    });
+  };
+
   return (
     <>
       <div className="mb-4">
         <Button
           onClick={() => {
-            setShowCustomizeSetDialog(true);
+            openDialog();
           }}
           theme="link"
           className="group/button mb-2 !px-4 !py-2 text-sm leading-6"
@@ -30,13 +32,6 @@ export const CustomizeSetButton = ({
           </>
         </Button>
       </div>
-      {showCustomizeSetDialog && (
-        <DynamicRowDialog
-          itemId={itemId}
-          itemIndex={itemIndex}
-          handleClose={() => setShowCustomizeSetDialog(false)}
-        />
-      )}
     </>
   );
 };
