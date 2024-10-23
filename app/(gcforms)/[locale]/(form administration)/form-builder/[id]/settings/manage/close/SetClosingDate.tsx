@@ -1,5 +1,5 @@
 "use client";
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { useTranslation } from "@i18n/client";
 import { useTemplateStore } from "@lib/store/useTemplateStore";
 import { toast } from "@formBuilder/components/shared/Toast";
@@ -16,6 +16,7 @@ import { closeForm } from "@formBuilder/actions";
 import { ClosingDateDialog } from "./ClosingDateDialog";
 
 import { ScheduledClosingDate } from "./ScheduledClosingDate";
+import { dateHasPast } from "@lib/utils";
 
 export const SetClosingDate = ({
   formId,
@@ -46,7 +47,17 @@ export const SetClosingDate = ({
     return true;
   }, [closedMessage]);
 
-  const [status, setStatus] = useState(closingDate ? "closed" : "open");
+  const [status, setStatus] = useState(
+    dateHasPast(Date.parse(closingDate || "")) ? "closed" : "open"
+  );
+
+  // TODO: Without this the toggle would not update the status when the closingDate is set to a
+  // future date, even though a log message shows that status was updated.
+  // This is a workaround for now.
+  useEffect(() => {
+    setStatus(dateHasPast(Date.parse(closingDate || "")) ? "closed" : "open");
+  }, [closingDate]);
+
   const [showDateTimeDialog, setShowDateTimeDialog] = useState(false);
 
   const handleToggle = (value: boolean) => {
@@ -81,7 +92,7 @@ export const SetClosingDate = ({
   );
 
   const saveFormStatus = useCallback(async () => {
-    let closeDate = "open"; // this wil reset the closing date to null;
+    let closeDate = null;
 
     if (status === "closed") {
       const now = new Date(); // Set date to now to close the form right away
@@ -99,7 +110,6 @@ export const SetClosingDate = ({
       return;
     }
 
-    // update the local template store
     setClosingDate(status !== "open" ? closeDate : null);
 
     if (status === "closed") {

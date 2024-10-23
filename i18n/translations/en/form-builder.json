@@ -1160,7 +1160,7 @@
     }
   },
   "scheduleClosingPage": {
-    "linkText": "Schedule closing page",
+    "linkText": "Schedule form closing",
     "dialog": {
       "title": "Schedule the closed form message",
       "text1": "Schedule a closing date",
@@ -1172,7 +1172,10 @@
       },
       "timePicker": {
         "text1": "Set a time",
-        "text2": "Provide time in 24 hour clock. The timezone is in Eastern time"
+        "text2": "Provide the time using the 24-hour clock with timezone in Eastern Time"
+      },
+      "error": {
+        "notFutureDate": "Date and time must be upcoming, in the future."
       },
       "save": "Save",
       "cancel": "Cancel"
