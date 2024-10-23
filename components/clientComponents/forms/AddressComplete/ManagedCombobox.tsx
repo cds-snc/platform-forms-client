@@ -79,6 +79,7 @@ export const ManagedCombobox = React.forwardRef(
 
     const changeInputValue = (value: string) => {
       setInputValue(value);
+      setIsOpen(false);
     };
 
     // Use useImperativeHandle to expose the method

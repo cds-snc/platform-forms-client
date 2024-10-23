@@ -85,7 +85,7 @@ export const SubElement = ({
           }}
           filterElements={elementFilter}
         />
-        <CustomizeSetButton itemId={item.id} itemIndex={item.index} />
+        <CustomizeSetButton item={item} />
       </div>
     );
 
@@ -160,7 +160,7 @@ export const SubElement = ({
             }}
             filterElements={elementFilter}
           />
-          <CustomizeSetButton itemId={item.id} itemIndex={item.index} />
+          <CustomizeSetButton item={item} />
         </div>
       )}
     </div>
