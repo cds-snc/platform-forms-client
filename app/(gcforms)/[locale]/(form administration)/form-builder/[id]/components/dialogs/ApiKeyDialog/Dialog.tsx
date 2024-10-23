@@ -43,7 +43,7 @@ export const Dialog = () => {
   const [agreed, setAgreed] = useState(false);
 
   const hasAgreed = (value: string) => {
-    if (value === "AGREE") {
+    if (value === "AGREE" || value === "ACCEPTE") {
       setAgreed(true);
     } else {
       setAgreed(false);
