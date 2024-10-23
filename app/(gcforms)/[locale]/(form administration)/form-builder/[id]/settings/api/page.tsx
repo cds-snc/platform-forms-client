@@ -6,7 +6,7 @@ import { checkKeyExists } from "@lib/serviceAccount";
 import { redirect } from "next/navigation";
 import { checkPrivilegesAsBoolean } from "@lib/privileges";
 import { isProductionEnvironment } from "@lib/origin";
-import { ApiKeyDialog } from "../../components/dialogs/APIKeyDialog";
+import { ApiKeyDialog } from "../../components/dialogs/APIKeyDialog/APIKeyDialog";
 
 export async function generateMetadata({
   params: { locale },
