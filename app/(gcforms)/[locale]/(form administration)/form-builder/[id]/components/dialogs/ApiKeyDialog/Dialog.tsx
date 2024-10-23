@@ -60,6 +60,7 @@ export const Dialog = () => {
   const handleSave = () => {
     handler?.download();
     dialog.current?.close();
+    setIsOpen(false);
   };
 
   const actions = (
