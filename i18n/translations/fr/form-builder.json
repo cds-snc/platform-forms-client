@@ -621,7 +621,7 @@
     "api": {
       "keyId": "API Key ID [FR]",
       "title": "Accès API",
-      "generateKey": "Generate API Key [FR]",
+      "generateKey": "Créer une clé API",
       "refreshKey": "Rafraîchir la clé",
       "deleteKey": "Delete API Key [FR]",
       "keyExists": "Clé existante",
