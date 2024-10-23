@@ -17,6 +17,7 @@ import { CustomizeSetButton } from "../CustomizeSetButton";
 import { AddToSetButton } from "../AddToSetButton";
 import { FormElementWithIndex } from "@lib/types/form-builder-types";
 import { useRefsContext } from "../../RefsContext";
+import { Button } from "@clientComponents/globals";
 
 export const SubElement = ({
   item,
@@ -124,14 +125,7 @@ export const SubElement = ({
                       return <div />;
                     }
 
-                    return (
-                      <SubElementModal
-                        elIndex={elIndex}
-                        subIndex={subIndex}
-                        item={{ ...item, index: item.id }}
-                        moreButton={moreButton}
-                      />
-                    );
+                    return <button>More...</button>;
                   }}
                   filterElements={elementFilter}
                 />
