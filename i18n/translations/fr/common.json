@@ -199,7 +199,7 @@
   "closingNotice": {
     "title": "Fermeture du formulaire",
     "text1": "Les soumissions sont acceptées jusqu'au :",
-    "text2": "{{day}} {{month}} {{year}} à {{hour}} h {{minute}} {{dayPeriod}} HE"
+    "text2": "{{day}} {{month}} {{year}} à {{hour}} h {{minute}}{{dayPeriod}} HE"
   },
   "cancel": "Annuler"
 }

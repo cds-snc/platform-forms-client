@@ -921,7 +921,7 @@
       }
     },
     "banner": {
-      "text": "Le formulaire a été fermé le {{day}} {{month}} {{year}} à {{hour}} h {{minute}} {{dayPeriod}} HE"
+      "text": "Le formulaire a été fermé le {{day}} {{month}} {{year}} à {{hour}} h {{minute}}{{dayPeriod}} HE"
     }
   },
   "errorSavingForm": {

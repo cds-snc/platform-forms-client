@@ -85,21 +85,24 @@ export const ClosingDateDialog = ({
                   )}
                 </div>
                 <div className="inline-flex gap-2">
-                  <div className="gcds-input-wrapper !mr-2 flex flex-col">
+                  <div className="gcds-select-wrapper !mr-2 flex flex-col">
                     <label className="mb-2" htmlFor="date-picker-month">
                       {t("scheduleClosingPage.dialog.datePicker.month")}
                     </label>
-                    <input
+                    <select
                       name="date-picker-month"
                       id="date-picker-month"
-                      type="number"
-                      min={1}
-                      max={12}
-                      className={"!w-16"}
+                      className={"gc-dropdown"}
                       onChange={(e) => setMonth(Number(e.target.value))}
                       required
                       data-testid="date-picker-month"
-                    />
+                    >
+                      {Array.from({ length: 12 }, (_, i) => i + 1).map((month) => (
+                        <option key={month} value={month}>
+                          {t(`formattedDate.months.${month}`)}
+                        </option>
+                      ))}
+                    </select>
                   </div>
                   <div className="gcds-input-wrapper !mr-2 flex flex-col">
                     <label className="!mr-2 mb-2" htmlFor="date-picker-day">
