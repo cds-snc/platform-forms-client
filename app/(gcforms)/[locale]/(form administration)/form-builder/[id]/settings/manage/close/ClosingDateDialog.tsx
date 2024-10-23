@@ -4,6 +4,7 @@ import { Dialog, useDialogRef } from "@formBuilder/components/shared";
 import { useTranslation } from "@i18n/client";
 import { useState } from "react";
 import { toast } from "@formBuilder/components/shared/Toast";
+import { WarningIcon } from "@serverComponents/icons";
 
 export const ClosingDateDialog = ({
   showDateTimeDialog,
@@ -16,6 +17,7 @@ export const ClosingDateDialog = ({
 }) => {
   const { t } = useTranslation("form-builder");
   const dialogRef = useDialogRef();
+  const [hasErrors, setHasErrors] = useState(false);
 
   const [month, setMonth] = useState<number | undefined>(undefined);
   const [day, setDay] = useState<number | undefined>(undefined);
@@ -39,9 +41,8 @@ export const ClosingDateDialog = ({
       const date = new Date(year, month - 1, day, hours, minutes);
       const timestamp = date.getTime();
 
-      // TODO: add an error message in the UI to handle the case of date in the past
       if (timestamp < Date.now()) {
-        alert("Please select a future date and time");
+        setHasErrors(true);
         return;
       }
 
@@ -75,6 +76,14 @@ export const ClosingDateDialog = ({
             <div className="mb-4">
               <fieldset role="group" aria-label="Date picker">
                 <legend className="mb-4">{t("scheduleClosingPage.dialog.text2")}</legend>
+                <div role="alert">
+                  {hasErrors && (
+                    <div className="mb-4 text-red-700 flex align-middle">
+                      <WarningIcon className="fill-red-800 mr-2" />
+                      {t("scheduleClosingPage.dialog.error.notFutureDate")}
+                    </div>
+                  )}
+                </div>
                 <div className="inline-flex gap-2">
                   <div className="gcds-input-wrapper !mr-2 flex flex-col">
                     <label className="mb-2" htmlFor="date-picker-month">

@@ -1174,6 +1174,9 @@
         "text1": "Set a time",
         "text2": "Provide the time using the 24-hour clock with timezone in Eastern Time"
       },
+      "error": {
+        "notFutureDate": "Date and time must be upcoming, in the future."
+      },
       "save": "Save",
       "cancel": "Cancel"
     }
