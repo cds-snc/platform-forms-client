@@ -59,9 +59,6 @@ export const calculateDelayWithoutGroups = (formElements: FormElement[]) => {
   return calculateSubmitDelay(delayFromFormData);
 };
 
-// Turn on for local testing
-const debug = false;
-
 export const useFormDelay = () => {
   const { formDelay, setFormDelay } = useContext(FormDelayContext);
   return {
@@ -106,7 +103,7 @@ export const useFormDelay = () => {
           ? calculateDelayWithGroups(formDelay.startTime, endTime, formDelay.requiredQuestions)
           : calculateDelayWithoutGroups(formElements);
 
-        debug && logMessage.info(`Delay: ${delay}, formDelay: ${JSON.stringify(formDelay)}`);
+        logMessage.debug(`Delay: ${delay}, formDelay: ${JSON.stringify(formDelay)}`);
 
         // Avoid 0 because the SubmitButton relies on this to disable itself
         return delay === 0 ? -1 : delay;
