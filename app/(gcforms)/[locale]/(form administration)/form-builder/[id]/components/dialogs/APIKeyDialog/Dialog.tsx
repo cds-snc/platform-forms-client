@@ -4,7 +4,7 @@ import { useTranslation } from "@i18n/client";
 
 import { cn } from "@lib/utils";
 import { Button } from "@clientComponents/globals";
-import { Dialog, useDialogRef } from "@formBuilder/components/shared/Dialog";
+import { Dialog as BaseDialog, useDialogRef } from "@formBuilder/components/shared/Dialog";
 import {
   APIKeyCustomEventDetails,
   CustomEventDetails,
@@ -16,7 +16,7 @@ import { ResponsibilityList } from "./ResponsibilityList";
 import { ConfirmationAgreement } from "./ConfirmationAgreement";
 import { Note } from "./Note";
 
-export const ApiKeyDialog = () => {
+export const Dialog = () => {
   const dialog = useDialogRef();
   const { Event } = useCustomEvent();
   const { t } = useTranslation("form-builder");
@@ -27,7 +27,7 @@ export const ApiKeyDialog = () => {
 
   const handleOpen = useCallback((detail: CustomEventDetails) => {
     if (detail) {
-      setHandler(detail);
+      setHandler(detail as APIKeyCustomEventDetails);
       setIsOpen(true);
     }
   }, []);
@@ -82,7 +82,7 @@ export const ApiKeyDialog = () => {
   return (
     <>
       {isOpen && (
-        <Dialog
+        <BaseDialog
           handleClose={handleCancel}
           dialogRef={dialog}
           actions={actions}
@@ -94,7 +94,7 @@ export const ApiKeyDialog = () => {
             <ConfirmationAgreement handleAgreement={hasAgreed} />
             <Note />
           </div>
-        </Dialog>
+        </BaseDialog>
       )}
     </>
   );
