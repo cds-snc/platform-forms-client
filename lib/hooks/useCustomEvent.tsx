@@ -12,16 +12,22 @@ import { useRef } from "react";
  * }
  */
 
+export type APIKeyCustomEventDetails = {
+  download: () => void;
+  cancel: () => void;
+};
+
 export type DynamicRowDialogEventDetails = {
   item: FormElementWithIndex;
 };
 
-export type CustomEventDetails = DynamicRowDialogEventDetails | undefined;
+export type CustomEventDetails = DynamicRowDialogEventDetails |  APIKeyCustomEventDetails | undefined;
 
 export const EventKeys = {
   openApiKeyDialog: "open-api-key-dialog",
   openDynamicRowDialog: "open-dynamic-row-dialog",
 } as const;
+
 
 export const useCustomEvent = () => {
   // Attach listeners to a documentRef instead of document directly
