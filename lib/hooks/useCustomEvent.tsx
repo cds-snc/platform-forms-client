@@ -1,3 +1,4 @@
+import { FormElementWithIndex } from "@lib/types/form-builder-types";
 import { useRef } from "react";
 
 /**
@@ -10,7 +11,17 @@ import { useRef } from "react";
  *   item: FormElementWithIndex;
  * }
  */
-export type CustomEventDetails = object | undefined;
+
+export type DynamicRowDialogEventDetails = {
+  item: FormElementWithIndex;
+};
+
+export type CustomEventDetails = DynamicRowDialogEventDetails | undefined;
+
+export const EventKeys = {
+  openApiKeyDialog: "open-api-key-dialog",
+  openDynamicRowDialog: "open-dynamic-row-dialog",
+} as const;
 
 export const useCustomEvent = () => {
   // Attach listeners to a documentRef instead of document directly
