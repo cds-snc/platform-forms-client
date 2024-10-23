@@ -22,7 +22,7 @@ export const Dialog = () => {
 
   const handleOpen = useCallback((detail: APIKeyCustomEventDetails) => {
     if (detail) {
-      setHandler(detail as APIKeyCustomEventDetails);
+      setHandler(detail);
       setIsOpen(true);
     }
   }, []);
