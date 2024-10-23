@@ -1172,7 +1172,7 @@
       },
       "timePicker": {
         "text1": "Set a time",
-        "text2": "Provide time in 24 hour clock. The timezone is in Eastern time"
+        "text2": "Provide the time using the 24-hour clock with timezone in Eastern Time"
       },
       "save": "Save",
       "cancel": "Cancel"
