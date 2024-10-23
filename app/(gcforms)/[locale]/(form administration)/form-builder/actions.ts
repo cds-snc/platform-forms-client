@@ -263,8 +263,11 @@ export const closeForm = async ({
   try {
     const { ability } = await authCheckAndThrow();
 
-    // The client handles invalid dates, if a user wants to bypass.. they will get a generic error
-    if (!closingDate || !isValidDateString(closingDate)) {
+    // closingDate: null means the form is open, or will be set to be open
+    // closingDate: (now/past date) means the form is closed
+    // closingDate: (future date) means the form is scheduled to close in the future
+
+    if (closingDate && !isValidDateString(closingDate)) {
       throw new Error(`Invalid closing date. Request information: { ${formID}, ${closingDate} }`);
     }
 
