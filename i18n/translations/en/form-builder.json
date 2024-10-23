@@ -619,7 +619,7 @@
   "settings": {
     "formManagement": "Form management",
     "api": {
-      "keyId": "API Key ID",
+      "keyId": "API key ID",
       "title": "API Access",
       "generateKey": "Generate API Key",
       "refreshKey": "Refresh Key",
