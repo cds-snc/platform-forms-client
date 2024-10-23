@@ -31,15 +31,11 @@ import { showReviewPage } from "@lib/utils/form-builder/showReviewPage";
 import { useFormDelay } from "@lib/hooks/useFormDelayContext";
 
 interface SubmitButtonProps {
-  getNumberOfRequiredQuestions: () => number;
+  getFormDelay: () => number;
   formID: string;
   formTitle: string;
 }
-const SubmitButton: React.FC<SubmitButtonProps> = ({
-  getNumberOfRequiredQuestions,
-  formID,
-  formTitle,
-}) => {
+const SubmitButton: React.FC<SubmitButtonProps> = ({ getFormDelay, formID, formTitle }) => {
   const { t } = useTranslation();
   const [formTimerState, { startTimer, checkTimer, disableTimer }] = useFormTimer();
   const [submitTooEarly, setSubmitTooEarly] = useState(false);
@@ -50,7 +46,7 @@ const SubmitButton: React.FC<SubmitButtonProps> = ({
   // If the timer hasn't started yet, start the timer
   if (!formTimerState.timerDelay && formTimerEnabled) {
     // calculate initial delay for submit timer
-    startTimer(getNumberOfRequiredQuestions());
+    startTimer(getFormDelay());
   }
 
   useEffect(() => {
@@ -301,9 +297,7 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
                           )}
                         <div className="inline-block">
                           <SubmitButton
-                            getNumberOfRequiredQuestions={() =>
-                              getFormDelay(form.elements, isShowReviewPage)
-                            }
+                            getFormDelay={() => getFormDelay(form.elements, isShowReviewPage)}
                             formID={formID}
                             formTitle={form.titleEn}
                           />
@@ -314,7 +308,7 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
                 })
               ) : (
                 <SubmitButton
-                  getNumberOfRequiredQuestions={() => getFormDelay(form.elements, isShowReviewPage)}
+                  getFormDelay={() => getFormDelay(form.elements, isShowReviewPage)}
                   formID={formID}
                   formTitle={form.titleEn}
                 />
