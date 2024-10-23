@@ -150,6 +150,7 @@ export const getAddressAsAnswerElements = (
 
 // Helper function to test if the address has multiple results.
 export function matchesAddressPattern(input: string): boolean {
+  // See issue # 4417  
   const pattern = /^.+,\s+[A-Z]{2}(?:,\s+[A-Z0-9]+)?\s+-\s+\d+\s+Addresses$/;
   return pattern.test(input);
 }
