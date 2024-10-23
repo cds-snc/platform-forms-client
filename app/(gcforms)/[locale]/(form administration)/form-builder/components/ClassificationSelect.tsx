@@ -36,7 +36,7 @@ export const ClassificationSelect = ({
 }: ClassificationSelectProps) => {
   return (
     <div>
-      <ProtectedIcon className="mr-2 inline-block" />
+      <ProtectedIcon className="mr-2 inline-block fill-black" />
       <select
         disabled={isPublished}
         id="classification-select"
