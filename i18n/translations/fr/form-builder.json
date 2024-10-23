@@ -1160,22 +1160,22 @@
     }
   },
   "scheduleClosingPage": {
-    "linkText": "Schedule closing page [FR]",
+    "linkText": "Programmer la fermeture du formulaire",
     "dialog": {
-      "title": "Schedule the closed form message [FR]",
-      "text1": "Schedule a closing date [FR]",
-      "text2": "Set when you’d like to close the form. [FR]",
+      "title": "Programmez le message de fermeture du formulaire",
+      "text1": "Fixez la date de fermeture",
+      "text2": "Décidez la date à laquelle vous souhaitez fermer le formulaire",
       "datePicker": {
-        "month": "Month [FR]",
-        "day": "Day [FR]",
-        "year": "Year [FR]"
+        "month": "Mois",
+        "day": "Jour",
+        "year": "Année"
       },
       "timePicker": {
-        "text1": "Set a time [FR]",
-        "text2": "Provide time in 24 hour clock. The timezone is in Eastern time [FR]"
+        "text1": "Fixez l'heure de fermeture",
+        "text2": "Indiquez l'heure en utilisant l'horloge de 24 heures avec le fuseau horaire de l'heure de l'Est"
       },
-      "save": "Save [FR]",
-      "cancel": "Cancel [FR]"
+      "save": "Enregistrer",
+      "cancel": "Annuler"
     }
   }
 }
