@@ -22,16 +22,16 @@ export const ScheduledClosingDate = ({
     return null;
   }
 
-  let month, day, year, hour, minute;
+  let month, day, year, hour, minute, dayPeriod;
 
   try {
-    ({ month, day, year, hour, minute } = formClosingDateEst(closingDate, language));
+    ({ month, day, year, hour, minute, dayPeriod } = formClosingDateEst(closingDate, language));
   } catch (error) {
     logMessage.info("Unable to parse closing date", closingDate);
     return null;
   }
 
-  if (!month || !day || !year || !hour || !minute) {
+  if (!month || !day || !year || !hour || !minute || !dayPeriod) {
     return null;
   }
 
@@ -44,6 +44,7 @@ export const ScheduledClosingDate = ({
         year,
         hour,
         minute,
+        dayPeriod,
       })}
     </div>
   );

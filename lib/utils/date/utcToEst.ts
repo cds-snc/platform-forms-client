@@ -8,7 +8,8 @@ export const formClosingDateEst = (utcDate: string, lang: string = "en") => {
     day: "2-digit",
     hour: "2-digit",
     minute: "2-digit",
-    hour12: false,
+    hour12: true,
+    hourCycle: "h12",
   };
 
   const locale = lang === "fr" ? "fr-CA" : "en-CA";
@@ -25,6 +26,7 @@ export const formClosingDateEst = (utcDate: string, lang: string = "en") => {
   const year = parts.find((part) => part.type === "year")?.value;
   const hour = parts.find((part) => part.type === "hour")?.value;
   const minute = parts.find((part) => part.type === "minute")?.value;
+  const dayPeriod = parts.find((part) => part.type === "dayPeriod")?.value;
 
   return {
     month,
@@ -32,5 +34,6 @@ export const formClosingDateEst = (utcDate: string, lang: string = "en") => {
     year,
     hour,
     minute,
+    dayPeriod,
   };
 };
