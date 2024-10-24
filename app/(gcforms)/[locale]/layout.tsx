@@ -10,6 +10,7 @@ export default async function Layout({ children }: { children: React.ReactNode }
     FeatureFlags.addressComplete,
     FeatureFlags.repeatingSets,
     FeatureFlags.scheduleClosingDate,
+    FeatureFlags.apiAccess,
   ]);
   return (
     <>

@@ -1,5 +1,6 @@
 {
   "repeatingSets": false,
   "addressComplete": false,
-  "scheduleClosingDate": false
+  "scheduleClosingDate": false,
+  "apiAccess": false
 }
