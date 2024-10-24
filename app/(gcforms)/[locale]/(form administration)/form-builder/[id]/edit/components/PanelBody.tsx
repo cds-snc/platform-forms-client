@@ -104,7 +104,7 @@ export const PanelBody = ({
                     </div>
                   )}
                   <div className="description-text mt-5 cursor-not-allowed rounded-sm p-2 bg-gray-100 text-slate-600">
-                    {t("addElementDialog.addressComplete.startTyping")}
+                    {t("addElementDialog.addressComplete.street.label")}
                   </div>
                   <div className="description-text mt-5 cursor-not-allowed rounded-sm p-2 bg-gray-100 text-slate-600">
                     {t("addElementDialog.addressComplete.city")}
