@@ -10,7 +10,7 @@ import { Button } from "@clientComponents/globals";
 // import { useRefsContext } from "@formBuilder/[id]/edit/components/RefsContext";
 import { ModalForm } from "./ModalForm";
 import { Dialog, useDialogRef } from "@formBuilder/components/shared";
-import { CustomEventDetails, useCustomEvent } from "@lib/hooks/useCustomEvent";
+import { useCustomEvent } from "@lib/hooks/useCustomEvent";
 
 export const MoreDialog = () => {
   // const { elements, updateField } = useTemplateStore((s) => ({
@@ -25,7 +25,11 @@ export const MoreDialog = () => {
   const { Event } = useCustomEvent();
   const dialog = useDialogRef();
 
-  const handleOpenDialog = useCallback((detail: CustomEventDetails) => {
+  type MoreDialogEventDetails = {
+    item: FormElementWithIndex;
+  };
+
+  const handleOpenDialog = useCallback((detail: MoreDialogEventDetails) => {
     if (detail) {
       setItem(detail.item);
       setIsOpen(true);
