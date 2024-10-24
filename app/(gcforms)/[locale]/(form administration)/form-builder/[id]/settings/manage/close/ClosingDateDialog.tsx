@@ -31,24 +31,22 @@ export const ClosingDateDialog = ({
   const [year, setYear] = useState<number | string>("");
   const [time, setTime] = useState<string | string>("");
 
+  // Prepoluate the form with the closing date if it exists
   useEffect(() => {
     if (!closingDate) {
       return;
     }
-
     try {
-      const { month, day, year, hour, minute } = formClosingDateEst(closingDate, language);
-
-      if (!month || !day || !year || !hour) {
-        throw new Error("Missing required fields");
+      const { day, year, hour, minute } = formClosingDateEst(closingDate, language);
+      const month = new Date(closingDate).getMonth() + 1;
+      if (month && day && year && hour) {
+        setMonth(month);
+        setDay(Number(day));
+        setYear(Number(year));
+        setTime(`${hour}:${minute}`);
       }
-
-      setMonth(Number(month));
-      setDay(Number(day));
-      setYear(Number(year));
-      setTime(`${hour}:${minute}`);
     } catch (error) {
-      logMessage.debug("Unable to parse closing date", closingDate);
+      logMessage.debug(`Unable to parse closing date: ${closingDate}`);
     }
   }, [closingDate, language]);
 
@@ -122,10 +120,10 @@ export const ClosingDateDialog = ({
                 <div className="inline-flex gap-2">
                   {language === "en" && (
                     <MonthDropdown
+                      month={month}
                       onChange={(e: React.ChangeEvent<HTMLSelectElement>) =>
                         setMonth(Number(e.target.value))
                       }
-                      month={month}
                     />
                   )}
 
@@ -149,6 +147,7 @@ export const ClosingDateDialog = ({
 
                   {language === "fr" && (
                     <MonthDropdown
+                      month={month}
                       onChange={(e: React.ChangeEvent<HTMLSelectElement>) =>
                         setMonth(Number(e.target.value))
                       }
