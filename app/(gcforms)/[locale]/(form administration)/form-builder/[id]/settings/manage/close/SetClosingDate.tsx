@@ -141,7 +141,9 @@ export const SetClosingDate = ({
         />
       </div>
       <div className="mb-4">
-        {closingDate && <ScheduledClosingDate closingDate={closingDate} language="en" />}
+        {hasScheduleClosingDate && closingDate && (
+          <ScheduledClosingDate closingDate={closingDate} language="en" />
+        )}
 
         {hasScheduleClosingDate && (
           <Button

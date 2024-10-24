@@ -39,7 +39,7 @@ export const ClosingDateDialog = ({
     try {
       const { day, year, hour, minute } = formClosingDateEst(closingDate, language);
       const month = (new Date(closingDate).getMonth() + 1).toString();
-      if (month && day && year && hour) {
+      if (month && day && year && hour && minute) {
         setMonth(month);
         setDay(day);
         setYear(year);
