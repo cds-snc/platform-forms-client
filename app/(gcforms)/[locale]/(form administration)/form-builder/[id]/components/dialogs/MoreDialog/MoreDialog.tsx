@@ -72,6 +72,7 @@ export const MoreDialog = () => {
         {t("cancel")}
       </Button>
       <Button
+        data-testid="more-modal-save-button"
         className="ml-5"
         theme="primary"
         onClick={() => {
