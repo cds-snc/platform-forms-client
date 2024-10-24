@@ -98,8 +98,22 @@ export const PanelBody = ({
             {isAddressComplete && (
               <div className="text-sm flex">
                 <div className="w-1/2">
+                  {!item.properties.addressComponents?.canadianOnly && (
+                    <div className="description-text mt-5 cursor-not-allowed rounded-sm p-2 bg-gray-100 text-slate-600">
+                      {t("addElementDialog.addressComplete.country")}
+                    </div>
+                  )}
                   <div className="description-text mt-5 cursor-not-allowed rounded-sm p-2 bg-gray-100 text-slate-600">
-                    {t("addElementDialog.addressComplete.startTyping")}
+                    {t("addElementDialog.addressComplete.street.label")}
+                  </div>
+                  <div className="description-text mt-5 cursor-not-allowed rounded-sm p-2 bg-gray-100 text-slate-600">
+                    {t("addElementDialog.addressComplete.city")}
+                  </div>
+                  <div className="description-text mt-5 cursor-not-allowed rounded-sm p-2 bg-gray-100 text-slate-600">
+                    {t("addElementDialog.addressComplete.province")}
+                  </div>
+                  <div className="description-text mt-5 cursor-not-allowed rounded-sm p-2 bg-gray-100 text-slate-600">
+                    {t("addElementDialog.addressComplete.postal")}
                   </div>
                 </div>
                 <div className="mb-4 mt-4 ml-4 self-end w-1/2">

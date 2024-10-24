@@ -13,6 +13,7 @@ interface ManagedComboboxProps extends InputFieldProps {
   onSetValue?: (value: string) => void;
   baseValue?: string;
   useFilter?: boolean;
+  placeholderText?: string;
 }
 
 export const ManagedCombobox = React.forwardRef(
@@ -26,6 +27,7 @@ export const ManagedCombobox = React.forwardRef(
       ariaDescribedBy,
       baseValue = "",
       useFilter = true,
+      placeholderText = "",
     } = props;
     const classes = classnames("gc-combobox gcds-input-wrapper relative", className);
 
@@ -94,6 +96,7 @@ export const ManagedCombobox = React.forwardRef(
             onFocus: () => setIsOpen(true),
           })}
           data-testid="combobox-input"
+          placeholder={placeholderText}
         />
 
         <ul
