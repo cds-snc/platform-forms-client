@@ -1,30 +1,25 @@
 "use client";
 import { logMessage } from "@lib/logger";
 import { FormElement, FormProperties } from "@lib/types";
-import { createContext, useContext, useState } from "react";
-
-interface FormDelay {
-  startTime: number;
-  requiredQuestions: number;
-}
-
-const timerDefault: FormDelay = {
-  startTime: Date.now(), // TODO: Can refactor out to static return
-  requiredQuestions: 0,
-};
+import { createContext, useContext, useState, useRef } from "react";
 
 const FormDelayContext = createContext<{
-  formDelay: FormDelay;
-  setFormDelay: React.Dispatch<React.SetStateAction<FormDelay>>;
+  requiredQuestions: number;
+  setRequiredQuestions: React.Dispatch<React.SetStateAction<number>>;
+  startTime: number;
 }>({
-  formDelay: timerDefault,
-  setFormDelay: () => {},
+  requiredQuestions: 0,
+  setRequiredQuestions: () => {},
+  startTime: 0,
 });
 
 export const FormDelayProvider = ({ children }: { children: React.ReactNode }) => {
-  const [formDelay, setFormDelay] = useState(timerDefault);
+  const [requiredQuestions, setRequiredQuestions] = useState(0);
+  const startTime = useRef(Date.now());
   return (
-    <FormDelayContext.Provider value={{ formDelay, setFormDelay }}>
+    <FormDelayContext.Provider
+      value={{ startTime: startTime.current, requiredQuestions, setRequiredQuestions }}
+    >
       {children}
     </FormDelayContext.Provider>
   );
@@ -66,7 +61,7 @@ export const useFormDelay = () => {
   if (context === null) {
     throw new Error("formDelay must be used within a FormDelayContext");
   }
-  const { formDelay, setFormDelay } = context;
+  const { startTime, requiredQuestions, setRequiredQuestions } = context;
 
   return {
     /**
@@ -86,11 +81,7 @@ export const useFormDelay = () => {
         const currentGroupRequiredQuestions = form.elements
           .filter((element) => groupIds.find((id) => String(id) === String(element.id)))
           .filter((element) => element.properties.validation?.required === true).length;
-
-        setFormDelay({
-          ...formDelay,
-          requiredQuestions: formDelay.requiredQuestions + currentGroupRequiredQuestions,
-        });
+        setRequiredQuestions(requiredQuestions + currentGroupRequiredQuestions);
       } catch (error) {
         logMessage.debug("Error adding required questions to form delay");
       }
@@ -104,11 +95,7 @@ export const useFormDelay = () => {
      */
     getFormDelayWithoutGroups: (formElements: FormElement[]) => {
       try {
-        const delay = calculateDelayWithoutGroups(formElements);
-
-        logMessage.debug(`Delay: ${delay}, formDelay: ${JSON.stringify(formDelay)}`);
-
-        return delay;
+        return calculateDelayWithoutGroups(formElements);
       } catch (error) {
         logMessage.info("Error calculating form delay.");
         return 0;
@@ -123,15 +110,7 @@ export const useFormDelay = () => {
     getFormDelayWithGroups: () => {
       try {
         const endTime = Date.now();
-        const delay = calculateDelayWithGroups(
-          formDelay.startTime,
-          endTime,
-          formDelay.requiredQuestions
-        );
-
-        logMessage.debug(`Delay: ${delay}, formDelay: ${JSON.stringify(formDelay)}`);
-
-        return delay;
+        return calculateDelayWithGroups(startTime, endTime, requiredQuestions);
       } catch (error) {
         logMessage.debug("Error calculating form delay.");
         return 0;

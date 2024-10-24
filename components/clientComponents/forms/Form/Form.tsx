@@ -31,25 +31,27 @@ import { showReviewPage } from "@lib/utils/form-builder/showReviewPage";
 import { useFormDelay } from "@lib/hooks/useFormDelayContext";
 
 interface SubmitButtonProps {
-  formDelay: number;
+  getFormDelay: () => number;
   formID: string;
   formTitle: string;
 }
-const SubmitButton: React.FC<SubmitButtonProps> = ({ formDelay, formID, formTitle }) => {
+const SubmitButton: React.FC<SubmitButtonProps> = ({ getFormDelay, formID, formTitle }) => {
   const { t } = useTranslation();
   const [formTimerState, { startTimer, checkTimer, disableTimer }] = useFormTimer();
   const [submitTooEarly, setSubmitTooEarly] = useState(false);
   const screenReaderRemainingTime = useRef(formTimerState.remainingTime);
+  const formDelay = useRef(getFormDelay());
 
   // If the formDelay is less than 0 or the app is in test mode, disable the timer
   // because the user has already spent enough time on the form.
 
-  const formTimerEnabled = process.env.NEXT_PUBLIC_APP_ENV !== "test" && formDelay > 0;
+  const formTimerEnabled = process.env.NEXT_PUBLIC_APP_ENV !== "test" && formDelay.current > 0;
 
   // The empty array of dependencies ensures that this useEffect only runs once on mount
   useEffect(() => {
     if (formTimerEnabled) {
-      startTimer(formDelay);
+      logMessage.debug(`Starting Form Timer with delay: ${formDelay.current}`);
+      startTimer(formDelay.current);
     } else {
       disableTimer();
     }
@@ -163,9 +165,6 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
   useFormValuesChanged();
 
   const { getFormDelayWithGroups, getFormDelayWithoutGroups } = useFormDelay();
-  const formDelay = isShowReviewPage
-    ? getFormDelayWithGroups()
-    : getFormDelayWithoutGroups(form.elements);
 
   const errorList = props.errors ? getErrorList(props) : null;
   const errorId = "gc-form-errors";
@@ -301,7 +300,11 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
                           )}
                         <div className="inline-block">
                           <SubmitButton
-                            formDelay={formDelay}
+                            getFormDelay={() =>
+                              isShowReviewPage
+                                ? getFormDelayWithGroups()
+                                : getFormDelayWithoutGroups(form.elements)
+                            }
                             formID={formID}
                             formTitle={form.titleEn}
                           />
@@ -311,7 +314,15 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
                   },
                 })
               ) : (
-                <SubmitButton formDelay={formDelay} formID={formID} formTitle={form.titleEn} />
+                <SubmitButton
+                  getFormDelay={() =>
+                    isShowReviewPage
+                      ? getFormDelayWithGroups()
+                      : getFormDelayWithoutGroups(form.elements)
+                  }
+                  formID={formID}
+                  formTitle={form.titleEn}
+                />
               )}
             </div>
           </form>
