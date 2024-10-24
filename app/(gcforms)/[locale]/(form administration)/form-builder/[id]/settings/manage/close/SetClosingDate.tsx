@@ -63,6 +63,7 @@ export const SetClosingDate = ({
     setStatus(value == true ? "closed" : "open");
   };
 
+  // Called from the date scheduling modal
   const saveFutureDate = useCallback(
     async (futureDate?: number) => {
       if (!futureDate) {
