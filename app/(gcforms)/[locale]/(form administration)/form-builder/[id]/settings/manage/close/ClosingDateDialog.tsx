@@ -26,10 +26,10 @@ export const ClosingDateDialog = ({
   const dialogRef = useDialogRef();
   const [hasErrors, setHasErrors] = useState(false);
 
-  const [month, setMonth] = useState<number | string>(""); // Need string default since these are controlled inputs
-  const [day, setDay] = useState<number | string>("");
-  const [year, setYear] = useState<number | string>("");
-  const [time, setTime] = useState<string | string>("");
+  const [month, setMonth] = useState<string>("");
+  const [day, setDay] = useState<string>("");
+  const [year, setYear] = useState<string>("");
+  const [time, setTime] = useState<string>("");
 
   // Prepoluate the form with the closing date if it exists
   useEffect(() => {
@@ -38,11 +38,11 @@ export const ClosingDateDialog = ({
     }
     try {
       const { day, year, hour, minute } = formClosingDateEst(closingDate, language);
-      const month = new Date(closingDate).getMonth() + 1;
+      const month = (new Date(closingDate).getMonth() + 1).toString();
       if (month && day && year && hour) {
         setMonth(month);
-        setDay(Number(day));
-        setYear(Number(year));
+        setDay(day);
+        setYear(year);
         setTime(`${hour}:${minute}`);
       }
     } catch (error) {
@@ -122,7 +122,7 @@ export const ClosingDateDialog = ({
                     <MonthDropdown
                       month={month}
                       onChange={(e: React.ChangeEvent<HTMLSelectElement>) =>
-                        setMonth(Number(e.target.value))
+                        setMonth(e.target.value)
                       }
                     />
                   )}
@@ -138,7 +138,7 @@ export const ClosingDateDialog = ({
                       type="number"
                       min={1}
                       max={month && year ? getMaxMonthDay(Number(month), Number(year)) : 31}
-                      onChange={(e) => setDay(Number(e.target.value))}
+                      onChange={(e) => setDay(e.target.value)}
                       value={day}
                       required
                       data-testid="date-picker-day"
@@ -149,7 +149,7 @@ export const ClosingDateDialog = ({
                     <MonthDropdown
                       month={month}
                       onChange={(e: React.ChangeEvent<HTMLSelectElement>) =>
-                        setMonth(Number(e.target.value))
+                        setMonth(e.target.value)
                       }
                     />
                   )}
@@ -164,7 +164,7 @@ export const ClosingDateDialog = ({
                       id="date-picker-year"
                       type="number"
                       min={new Date().getFullYear()}
-                      onChange={(e) => setYear(Number(e.target.value))}
+                      onChange={(e) => setYear(e.target.value)}
                       value={year}
                       required
                       data-testid="date-picker-year"
@@ -216,7 +216,7 @@ const MonthDropdown = ({
   month,
   onChange,
 }: {
-  month?: number | string;
+  month?: string;
   onChange: (e: React.ChangeEvent<HTMLSelectElement>) => void;
 }) => {
   const { t } = useTranslation("form-builder");
