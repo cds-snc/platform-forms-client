@@ -150,7 +150,7 @@ export const getAddressAsAnswerElements = (
 
 // Helper function to test if the address has multiple results.
 export function matchesAddressPattern(input: string): boolean {
-  // Updated regex pattern to match addresses with various postal/zip code formats
-  const pattern = /^.+,\s+[A-Z]{2},\s+[\w\s-]+?\s+-\s+\d+\s+Addresses$/i;
+  // Updated regex pattern to make the comma after the city name optional
+  const pattern = /^.+,\s*[A-Za-z\s]+?\s+[A-Z]{2}\s+[\w\s-]+?\s+-\s+\d+\s+Addresses$/i;
   return pattern.test(input);
 }
