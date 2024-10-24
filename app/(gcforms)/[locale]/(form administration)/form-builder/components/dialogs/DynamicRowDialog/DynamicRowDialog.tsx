@@ -4,14 +4,13 @@ import { useTranslation } from "@i18n/client";
 import { Button, Alert } from "@clientComponents/globals";
 import { useTemplateStore } from "@lib/store/useTemplateStore";
 import { Dialog, useDialogRef } from "@formBuilder/components/shared/Dialog";
-import {
-  CustomEventDetails,
-  DynamicRowDialogEventDetails,
-  EventKeys,
-  useCustomEvent,
-} from "@lib/hooks/useCustomEvent";
+import { EventKeys, useCustomEvent } from "@lib/hooks/useCustomEvent";
 import { FormElementWithIndex } from "@lib/types/form-builder-types";
 import { dynamicRowType } from "@lib/types/form-types";
+
+type DynamicRowDialogEventDetails = {
+  item: FormElementWithIndex;
+};
 
 export const TextInput = ({ label, children }: { label: string; children: React.ReactElement }) => {
   return (
@@ -51,9 +50,9 @@ export const DynamicRowDialog = () => {
     setChangeKey(String(new Date().getTime())); //Force a re-render
   };
 
-  const handleOpenDialog = useCallback((detail: CustomEventDetails) => {
+  const handleOpenDialog = useCallback((detail: DynamicRowDialogEventDetails) => {
     if (detail) {
-      setItem((detail as DynamicRowDialogEventDetails).item);
+      setItem(detail.item);
       setIsOpen(true);
     }
   }, []);
