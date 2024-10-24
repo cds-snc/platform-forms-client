@@ -5,7 +5,7 @@ import { FormElementWithIndex } from "@lib/types/form-builder-types";
 import { Button } from "@clientComponents/globals";
 // import { Modal } from "./index";
 // import { ModalButton, ModalForm } from "./index";
-import { getPathString, getElementIndexes } from "@lib/utils/form-builder/getPath";
+import { getPathString } from "@lib/utils/form-builder/getPath";
 import { useTemplateStore } from "@lib/store/useTemplateStore";
 // import { useRefsContext } from "@formBuilder/[id]/edit/components/RefsContext";
 import { ModalForm } from "./ModalForm";
@@ -90,7 +90,6 @@ export const MoreDialog = () => {
         className="ml-5"
         theme="primary"
         onClick={() => {
-          console.log(item.properties);
           updateField(getPathString(item.id, elements), item.properties);
           setChangeKey(String(new Date().getTime()));
           handleClose();
