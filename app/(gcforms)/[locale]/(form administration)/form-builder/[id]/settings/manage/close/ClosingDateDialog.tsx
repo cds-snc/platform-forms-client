@@ -31,7 +31,7 @@ export const ClosingDateDialog = ({
   const [year, setYear] = useState<string>("");
   const [time, setTime] = useState<string>("");
 
-  // Prepoluate the form with the closing date if it exists
+  // Pre-populate the form with the closing date if it exists
   useEffect(() => {
     if (!closingDate) {
       return;
@@ -57,7 +57,7 @@ export const ClosingDateDialog = ({
 
   const handleSave = () => {
     try {
-      // Note: Basic client validation is done using native HTML Form validation - below unlikely
+      // Client validation is done using native HTML Form validation, the below is unlikely
       if (!month || !day || !year || !time) {
         throw new Error("Missing required fields");
       }

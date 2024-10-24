@@ -52,9 +52,7 @@ export const SetClosingDate = ({
     dateHasPast(Date.parse(closingDate || "")) ? "closed" : "open"
   );
 
-  // TODO: Without this the toggle would not update the status when the closingDate is set to a
-  // future date, even though a log message shows that status was updated.
-  // This is a workaround for now.
+  // Needed to sync the status with the closing date
   useEffect(() => {
     setStatus(dateHasPast(Date.parse(closingDate || "")) ? "closed" : "open");
   }, [closingDate]);
@@ -96,7 +94,8 @@ export const SetClosingDate = ({
     let closeDate = null;
 
     if (status === "closed") {
-      const now = new Date(); // Set date to now to close the form right away
+      // Set date to now to close the form right away
+      const now = new Date();
       closeDate = now.toISOString();
     }
 
