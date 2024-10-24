@@ -6,7 +6,7 @@ import { FormElementTypes } from "@lib/types";
 import { ModalLabel } from "./ModalLabel";
 import { Hint } from "./Hint";
 
-export const TextInputOptions = ({
+export const TextFieldOptions = ({
   item,
   setItem,
 }: {

@@ -13,7 +13,7 @@ import { AddressCompleteOptions } from "./AddressCompleteOptions";
 import { FormattedDateOptions } from "./FormattedDateOptions";
 import { AddRules } from "./AddRules";
 import { DynamicRowOptions } from "./DynamicRowOptions";
-import { TextInputOptions } from "./TextInputOptions";
+import { TextFieldOptions } from "./TextFieldOptions";
 import { CharacterLimitOptions } from "./CharacterLimitOptions";
 import { useRefsContext } from "@formBuilder/[id]/edit/components/RefsContext";
 
@@ -104,7 +104,7 @@ export const MoreDialog = () => {
 
               <DynamicRowOptions item={item} setItem={setItem} />
 
-              <TextInputOptions item={item} setItem={setItem} />
+              <TextFieldOptions item={item} setItem={setItem} />
 
               <CharacterLimitOptions item={item} setItem={setItem} />
             </form>

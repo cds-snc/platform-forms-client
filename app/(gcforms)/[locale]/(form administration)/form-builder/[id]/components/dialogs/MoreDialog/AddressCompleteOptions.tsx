@@ -62,7 +62,7 @@ export const AddressCompleteOptions = ({
       ></Checkbox>
 
       <h4 className="mt-4">{t("addElementDialog.addressComplete.fields")}</h4>
-      <p className="mt-2 mb-4">{t("addElementDialog.addressComplete.fieldsDesc")}</p>
+      <p className="mb-4 mt-2">{t("addElementDialog.addressComplete.fieldsDesc")}</p>
 
       <Radio
         className="mt-2"
@@ -78,7 +78,7 @@ export const AddressCompleteOptions = ({
           updateAddressComponents({ splitAddress: !e.target.checked });
         }}
       />
-      <div className="text-sm ml-12 mb-4">
+      <div className="mb-4 ml-12 text-sm">
         {t("addElementDialog.addressComplete.fullAddressDesc")}
       </div>
       <Radio
@@ -92,7 +92,7 @@ export const AddressCompleteOptions = ({
           updateAddressComponents({ splitAddress: e.target.checked });
         }}
       />
-      <div className="text-sm ml-12 mb-4">
+      <div className="mb-4 ml-12 text-sm">
         {t("addElementDialog.addressComplete.splitAddressDesc")}
       </div>
     </section>
