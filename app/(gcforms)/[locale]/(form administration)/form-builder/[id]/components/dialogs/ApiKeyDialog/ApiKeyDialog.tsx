@@ -4,7 +4,7 @@ import { useTranslation } from "@i18n/client";
 
 import { cn } from "@lib/utils";
 import { Button } from "@clientComponents/globals";
-import { Dialog as BaseDialog, useDialogRef } from "@formBuilder/components/shared/Dialog";
+import { Dialog, useDialogRef } from "@formBuilder/components/shared/Dialog";
 import { EventKeys, useCustomEvent } from "@lib/hooks/useCustomEvent";
 
 import { ResponsibilityList } from "./ResponsibilityList";
@@ -17,7 +17,7 @@ type APIKeyCustomEventDetails = {
   id: string;
 };
 
-export const Dialog = () => {
+export const ApiKeyDialog = () => {
   const dialog = useDialogRef();
   const { Event } = useCustomEvent();
   const { t } = useTranslation("form-builder");
@@ -26,6 +26,7 @@ export const Dialog = () => {
   const [id, setId] = useState<string>("");
   const [isOpen, setIsOpen] = useState(false);
 
+  // Handle loading state for download button
   const [generating, setGenerating] = useState(false);
 
   const handleOpen = useCallback((detail: APIKeyCustomEventDetails) => {
@@ -54,7 +55,7 @@ export const Dialog = () => {
   };
 
   // Actions
-  const handleCancel = () => {
+  const handleClose = () => {
     dialog.current?.close();
     setIsOpen(false);
   };
@@ -70,7 +71,7 @@ export const Dialog = () => {
 
   const actions = (
     <>
-      <Button theme="secondary" onClick={handleCancel}>
+      <Button theme="secondary" onClick={handleClose}>
         {t("settings.api.dialog.cancelButton")}
       </Button>
       <DownloadButton
@@ -89,8 +90,8 @@ export const Dialog = () => {
   return (
     <>
       {isOpen && (
-        <BaseDialog
-          handleClose={handleCancel}
+        <Dialog
+          handleClose={handleClose}
           dialogRef={dialog}
           actions={actions}
           title={t("settings.api.dialog.title")}
@@ -101,7 +102,7 @@ export const Dialog = () => {
             <ConfirmationAgreement handleAgreement={hasAgreed} />
             <Note />
           </div>
-        </BaseDialog>
+        </Dialog>
       )}
     </>
   );
