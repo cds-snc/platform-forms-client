@@ -3,21 +3,20 @@ import React from "react";
 import PropTypes from "prop-types";
 import { useTranslation } from "@i18n/client";
 import { FormElementTypes } from "@lib/types";
-
 import { FormElementWithIndex, LocalizedElementProperties } from "@lib/types/form-builder-types";
 import { Checkbox, Input, TextArea, InfoDetails } from "@formBuilder/components/shared";
 import { useTemplateStore } from "@lib/store/useTemplateStore";
-import { AutocompleteDropdown } from "./AutocompleteDropdown";
 import { AddressCompleteOptions } from "./AddressCompleteOptions";
 import { FormattedDateOptions } from "./FormattedDateOptions";
+import { TextInputOptions } from "./TextInputOptions";
 
-const ModalLabel = ({ children, ...props }: React.LabelHTMLAttributes<HTMLLabelElement>) => (
+export const ModalLabel = ({ children, ...props }: React.LabelHTMLAttributes<HTMLLabelElement>) => (
   <label {...props} className="mb-2 block font-[700]">
     {children}
   </label>
 );
 
-const Hint = ({ children, ...props }: React.HTMLAttributes<HTMLParagraphElement>) => (
+export const Hint = ({ children, ...props }: React.HTMLAttributes<HTMLParagraphElement>) => (
   <p {...props} className="mb-5 leading-snug">
     {children}
   </p>
@@ -37,7 +36,6 @@ export const ModalForm = ({
     translationLanguagePriority: s.translationLanguagePriority,
   }));
 
-  const autocompleteSelectedValue = item.properties.autoComplete || "";
   const checked = item.properties.validation?.required;
 
   return (
@@ -181,32 +179,8 @@ export const ModalForm = ({
         </section>
       )}
 
-      {/* @TODO: Come back and refactor to separate components */}
       {item.type === FormElementTypes.textField && (
-        <section className="mb-4 mt-8">
-          <ModalLabel htmlFor="">{t("selectAutocomplete")}</ModalLabel>
-          <Hint>{t("selectAutocompleteHint")}</Hint>
-          <div>
-            <AutocompleteDropdown
-              handleChange={(e) => {
-                setItem({
-                  ...item,
-                  properties: {
-                    ...item.properties,
-                    ...{ autoComplete: e.target.value },
-                  },
-                });
-              }}
-              selectedValue={autocompleteSelectedValue as string}
-            />{" "}
-            <InfoDetails summary={t("autocompleteWhenNotToUse.title")}>
-              <div className="mb-8 mt-4 border-l-3 border-gray-500 pl-8">
-                <p className="mb-4 text-sm">{t("autocompleteWhenNotToUse.text1")}</p>
-                <p className="text-sm">{t("autocompleteWhenNotToUse.text2")}</p>
-              </div>
-            </InfoDetails>
-          </div>
-        </section>
+        <TextInputOptions item={item} setItem={setItem} />
       )}
 
       {/* @TODO: Come back and refactor to separate components */}
