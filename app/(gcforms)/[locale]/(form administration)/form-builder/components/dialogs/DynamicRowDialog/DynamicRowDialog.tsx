@@ -4,7 +4,12 @@ import { useTranslation } from "@i18n/client";
 import { Button, Alert } from "@clientComponents/globals";
 import { useTemplateStore } from "@lib/store/useTemplateStore";
 import { Dialog, useDialogRef } from "@formBuilder/components/shared/Dialog";
-import { CustomEventDetails, EventKeys, useCustomEvent } from "@lib/hooks/useCustomEvent";
+import {
+  CustomEventDetails,
+  DynamicRowDialogEventDetails,
+  EventKeys,
+  useCustomEvent,
+} from "@lib/hooks/useCustomEvent";
 import { FormElementWithIndex } from "@lib/types/form-builder-types";
 import { dynamicRowType } from "@lib/types/form-types";
 
@@ -48,7 +53,7 @@ export const DynamicRowDialog = () => {
 
   const handleOpenDialog = useCallback((detail: CustomEventDetails) => {
     if (detail) {
-      setItem(detail.item);
+      setItem((detail as DynamicRowDialogEventDetails).item);
       setIsOpen(true);
     }
   }, []);

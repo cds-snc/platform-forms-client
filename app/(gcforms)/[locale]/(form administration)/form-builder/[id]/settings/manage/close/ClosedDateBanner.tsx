@@ -12,7 +12,7 @@ export const ClosedDateBanner = ({ closingDate }: { closingDate?: string | null 
 
   const isPastClosingDate = dateHasPast(Date.parse(closingDate));
 
-  const { month, day, year, hour, minute } = formClosingDateEst(closingDate);
+  const { month, day, year, hour, minute, dayPeriod } = formClosingDateEst(closingDate);
 
   const closedText = t("closingDate.banner.text", {
     month,
@@ -20,6 +20,7 @@ export const ClosedDateBanner = ({ closingDate }: { closingDate?: string | null 
     year,
     hour,
     minute,
+    dayPeriod,
   });
 
   if (!isPastClosingDate) {
