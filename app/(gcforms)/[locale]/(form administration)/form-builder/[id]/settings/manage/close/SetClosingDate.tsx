@@ -91,7 +91,7 @@ export const SetClosingDate = ({
   );
 
   const saveFormStatus = useCallback(async () => {
-    let closeDate = null;
+    let closeDate = closingDate ? closingDate : null;
 
     if (status === "closed") {
       // Set date to now to close the form right away
@@ -110,14 +110,15 @@ export const SetClosingDate = ({
       return;
     }
 
-    setClosingDate(status !== "open" ? closeDate : null);
+    // Setting local store
+    setClosingDate(closeDate);
 
     if (status === "closed") {
       toast.success(<ClosedSuccess />, "wide");
     } else {
       toast.success(t("closingDate.savedSuccessMessage"));
     }
-  }, [status, formId, setClosingDate, t, closedMessage]);
+  }, [status, formId, setClosingDate, t, closedMessage, closingDate]);
 
   const { getFlag } = useFeatureFlags();
   const hasScheduleClosingDate = getFlag("scheduleClosingDate");
