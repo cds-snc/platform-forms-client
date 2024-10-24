@@ -162,11 +162,7 @@ export const SetClosingDate = ({
           valid={validateClosedMessage()}
         />
       </div>
-      <Button
-        disabled={!validateClosedMessage()}
-        theme="secondary"
-        onClick={() => saveFormStatus()}
-      >
+      <Button disabled={!validateClosedMessage()} theme="secondary" onClick={saveFormStatus}>
         {t("closingDate.saveButton")}
       </Button>
       {showDateTimeDialog && (
@@ -175,7 +171,7 @@ export const SetClosingDate = ({
           setShowDateTimeDialog={setShowDateTimeDialog}
           save={saveFutureDate}
           closingDate={closingDate}
-        ></ClosingDateDialog>
+        />
       )}
     </div>
   );
