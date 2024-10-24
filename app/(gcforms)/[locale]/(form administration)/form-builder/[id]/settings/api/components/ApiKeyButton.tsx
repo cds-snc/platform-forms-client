@@ -37,7 +37,7 @@ export const ApiKeyButton = ({
           loading={false}
           theme="primary"
           disabled={Boolean(keyId)}
-          onClick={async () => {
+          onClick={() => {
             openDialog();
           }}
         >
