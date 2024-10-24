@@ -21,6 +21,7 @@ export type CustomEventDetails = DynamicRowDialogEventDetails | undefined;
 export const EventKeys = {
   openApiKeyDialog: "open-api-key-dialog",
   openDynamicRowDialog: "open-dynamic-row-dialog",
+  openMoreDialog: "open-more-dialog",
 } as const;
 
 export const useCustomEvent = () => {

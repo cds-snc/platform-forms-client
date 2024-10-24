@@ -9,7 +9,6 @@ import {
   Language,
   ElementOptionsFilter,
 } from "@lib/types/form-builder-types";
-import { SubElementModal } from "./SubElementModal";
 import { PanelHightLight } from "./PanelHightlight";
 import { PanelActions } from "../../PanelActions";
 import { useHandleAdd } from "@lib/hooks/form-builder/useHandleAdd";
@@ -17,7 +16,6 @@ import { CustomizeSetButton } from "../CustomizeSetButton";
 import { AddToSetButton } from "../AddToSetButton";
 import { FormElementWithIndex } from "@lib/types/form-builder-types";
 import { useRefsContext } from "../../RefsContext";
-import { Button } from "@clientComponents/globals";
 
 export const SubElement = ({
   item,
@@ -99,6 +97,7 @@ export const SubElement = ({
             <PanelHightLight
               conditionalChildren={
                 <PanelActions
+                  item={item}
                   isSubPanel={true}
                   isFirstItem={subIndex === 0}
                   isLastItem={subIndex === subElements.length - 1}
@@ -120,13 +119,13 @@ export const SubElement = ({
                     subMoveDown(item.id, subIndex);
                     forceRefresh(item.id);
                   }}
-                  moreButtonRenderer={(moreButton) => {
-                    if (item.type === "richText") {
-                      return <div />;
-                    }
+                  // moreButtonRenderer={() => {
+                  //   if (item.type === "richText") {
+                  //     return <div />;
+                  //   }
 
-                    return <button>More...</button>;
-                  }}
+                  //   return <button onClick={() => alert("Huzzah")}>More...</button>;
+                  // }}
                   filterElements={elementFilter}
                 />
               }
