@@ -3,11 +3,8 @@ import React, { useCallback, useEffect } from "react";
 import { useTranslation } from "@i18n/client";
 import { FormElementWithIndex } from "@lib/types/form-builder-types";
 import { Button } from "@clientComponents/globals";
-// import { Modal } from "./index";
-// import { ModalButton, ModalForm } from "./index";
 import { getPathString } from "@lib/utils/form-builder/getPath";
 import { useTemplateStore } from "@lib/store/useTemplateStore";
-// import { useRefsContext } from "@formBuilder/[id]/edit/components/RefsContext";
 import { Dialog, useDialogRef } from "@formBuilder/components/shared";
 import { useCustomEvent } from "@lib/hooks/useCustomEvent";
 import { Question } from "./Question";
@@ -18,6 +15,7 @@ import { AddRules } from "./AddRules";
 import { DynamicRowOptions } from "./DynamicRowOptions";
 import { TextInputOptions } from "./TextInputOptions";
 import { CharacterLimitOptions } from "./CharacterLimitOptions";
+import { useRefsContext } from "@formBuilder/[id]/edit/components/RefsContext";
 
 export const MoreDialog = () => {
   const { elements, updateField, setChangeKey } = useTemplateStore((s) => ({
@@ -32,6 +30,8 @@ export const MoreDialog = () => {
   const [isOpen, setIsOpen] = React.useState(false);
   const { Event } = useCustomEvent();
   const dialog = useDialogRef();
+  const { refs } = useRefsContext();
+  const { t } = useTranslation("form-builder");
 
   type MoreDialogEventDetails = {
     item: FormElementWithIndex;
@@ -52,33 +52,11 @@ export const MoreDialog = () => {
     };
   });
 
-  // const { refs } = useRefsContext();
-  const { t } = useTranslation("form-builder");
-
   if (!item) return null;
-
-  //   const { isOpen, modals, updateModalProperties, unsetModalField } = useModalStore();
-
-  //   useEffect(() => {
-  //     if (item.type != "richText") {
-  //       const indexes = getElementIndexes(item.id, elements);
-  //       if (!indexes || indexes[0] === null || indexes[0] === undefined) return;
-  //     //   updateModalProperties(item.id, elements[indexes[0]].properties);
-  //     }
-  //   }, [item, isOpen, isRichText, elements, updateModalProperties]);
-
-  // eslint-disable-next-line  @typescript-eslint/no-explicit-any
-  // const handleSubmit = ({ item, properties }: { item: FormElementWithIndex; properties: any }) => {
-  //   return (e: React.MouseEvent<HTMLElement>) => {
-  //     e.preventDefault();
-  //     // replace all of "properties" with the new properties set in the ModalForm
-  //     updateField(getPathString(item.id, elements), properties);
-  //     onClose(); // Let the PanelBody know that the modal is closed so it can refresh.
-  //   };
-  // };
 
   const handleClose = () => {
     dialog.current?.close();
+    refs && refs.current && refs.current[item.id] && refs.current[item.id].focus();
     setIsOpen(false);
   };
 
@@ -106,32 +84,6 @@ export const MoreDialog = () => {
       </Button>
     </>
   );
-
-  //   const renderSaveButton = () => {
-  //     return (
-  //       <ModalButton isOpenButton={false}>
-  //         {modals[item.id] && (
-  //           <Button
-  //             data-testid="more-modal-save-button"
-  //             className="mr-4"
-  //             onClick={handleSubmit({ item, properties: modals[item.id] })}
-  //           >
-  //             {t("save")}
-  //           </Button>
-  //         )}
-  //       </ModalButton>
-  //     );
-  //   };
-
-  // <Modal
-  //   title={t("moreOptions")}
-  //   openButton={moreButton}
-  //   saveButton={renderSaveButton()}
-  //   handleClose={() => {
-  //     refs && refs.current && refs.current[item.id] && refs.current[item.id].focus();
-  //   }}
-  // >
-  // </Modal>
 
   return (
     <>
