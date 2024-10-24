@@ -12,6 +12,7 @@ import { FormWrapper } from "./clientSide";
 import { allowGrouping } from "@formBuilder/components/shared/right-panel/treeview/util/allowGrouping";
 import { serverTranslation } from "@i18n";
 import { ClosingNotice } from "@clientComponents/forms/ClosingNotice/ClosingNotice";
+import { FormDelayProvider } from "@lib/hooks/useFormDelayContext";
 
 export async function generateMetadata({
   params: { locale, props },
@@ -91,11 +92,13 @@ export default async function Page({
         <ClosingNotice language={language} closingDate={formRecord.closingDate} />
         <h1>{formTitle}</h1>
         <GCFormsProvider formRecord={formRecord}>
-          <FormWrapper
-            formRecord={formRecord}
-            currentForm={currentForm}
-            allowGrouping={isAllowGrouping}
-          />
+          <FormDelayProvider>
+            <FormWrapper
+              formRecord={formRecord}
+              currentForm={currentForm}
+              allowGrouping={isAllowGrouping}
+            />
+          </FormDelayProvider>
         </GCFormsProvider>
       </div>
     </FormDisplayLayout>
