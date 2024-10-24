@@ -18,6 +18,7 @@ export const AddRules = ({
       </div>
       <div>
         <Checkbox
+          data-testid="required"
           id={`required-${item.index}-id-modal`}
           value={`required-${item.index}-value-modal-` + checked}
           key={`required-${item.index}-modal-` + checked}
