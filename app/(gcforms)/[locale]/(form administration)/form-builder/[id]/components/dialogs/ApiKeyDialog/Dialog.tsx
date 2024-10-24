@@ -10,10 +10,11 @@ import { EventKeys, useCustomEvent } from "@lib/hooks/useCustomEvent";
 import { ResponsibilityList } from "./ResponsibilityList";
 import { ConfirmationAgreement } from "./ConfirmationAgreement";
 import { Note } from "./Note";
+import { downloadKey, _createKey } from "@formBuilder/[id]/settings/api/utils";
+import { SubmitButton as DownloadButton } from "@clientComponents/globals/Buttons/SubmitButton";
 
 type APIKeyCustomEventDetails = {
-  download: () => void;
-  cancel: () => void;
+  id: string;
 };
 
 export const Dialog = () => {
@@ -22,12 +23,14 @@ export const Dialog = () => {
   const { t } = useTranslation("form-builder");
 
   // Setup + Open dialog
-  const [handler, setHandler] = useState<APIKeyCustomEventDetails | null>(null);
+  const [id, setId] = useState<string>("");
   const [isOpen, setIsOpen] = useState(false);
+
+  const [generating, setGenerating] = useState(false);
 
   const handleOpen = useCallback((detail: APIKeyCustomEventDetails) => {
     if (detail) {
-      setHandler(detail);
+      detail.id && setId(detail.id);
       setIsOpen(true);
     }
   }, []);
@@ -52,13 +55,15 @@ export const Dialog = () => {
 
   // Actions
   const handleCancel = () => {
-    handler?.cancel();
     dialog.current?.close();
     setIsOpen(false);
   };
 
-  const handleSave = () => {
-    handler?.download();
+  const handleSave = async () => {
+    setGenerating(true);
+    const key = await _createKey(id);
+    downloadKey(JSON.stringify(key), id);
+    setGenerating(false);
     dialog.current?.close();
     setIsOpen(false);
   };
@@ -68,15 +73,16 @@ export const Dialog = () => {
       <Button theme="secondary" onClick={handleCancel}>
         {t("settings.api.dialog.cancelButton")}
       </Button>
-      <Button
+      <DownloadButton
+        loading={generating}
         className={cn("ml-5")}
         theme="primary"
-        disabled={!agreed}
+        disabled={!agreed || generating}
         onClick={handleSave}
         dataTestId="confirm-download"
       >
         {t("settings.api.dialog.downloadButton")}
-      </Button>
+      </DownloadButton>
     </>
   );
 
