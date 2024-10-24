@@ -149,8 +149,23 @@ export const getAddressAsAnswerElements = (
 };
 
 // Helper function to test if the address has multiple results.
+// -- ref: Issue #4464, Issue #4417
+// This helper exists because the AddressComplete API has arbitrary returning of if an Address is Nested or not.
+// This is usually determined by the
+//    Next: AddressCompleNext;
+//    Retrieve for a regular address or Find for a Nested.
+// Eg: Typing in 'King St W, Toro' may return 'Retrieve' for all the auto complete values but it provides nested Addresses.
+// This regex is an attempt to correct that until the API is updated.
+//
+// Breakdown of the regex:
+// ^.+,                  - Matches any street address ending with a comma (e.g., "9021 W 102nd Pl,")
+// \s*[A-Za-z\s]+?       - Matches the city name (allows optional spaces and multiple words, e.g., "Overland Park"). The comma after the city is optional.
+// \s+[A-Z]{2}           - Matches the state or country code consisting of exactly two uppercase letters (e.g., "KS").
+// \s+[\w\s-]+?          - Matches the postal/zip code, allowing alphanumeric characters, spaces, and hyphens (e.g., "66212", "S4A 1K7").
+// \s+-\s+\d+\s+Addresses$ - Matches " - X Addresses" where X is one or more digits.
+// i                     - Case insensitive match to account for different casing in input.
 export function matchesAddressPattern(input: string): boolean {
-  // See issue # 4417  
-  const pattern = /^.+,\s+[A-Z]{2}(?:,\s+[A-Z0-9]+)?\s+-\s+\d+\s+Addresses$/;
+  // Updated regex pattern to make the comma after the city name optional
+  const pattern = /^.+,\s*[A-Za-z\s]+?\s+[A-Z]{2}\s+[\w\s-]+?\s+-\s+\d+\s+Addresses$/i;
   return pattern.test(input);
 }
