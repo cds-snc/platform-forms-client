@@ -152,24 +152,31 @@ export const ModalForm = ({
                 e.preventDefault();
               }
             }}
-            onChange={() => {
-              // @TODO
-            }}
-            // onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-            //   // if value is "", unset the field
-            //   if (e.target.value === "") {
-            //     unsetModalField(`modals[${item.id}].properties.maxNumberOfRows`);
-            //     return;
-            //   }
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+              // @TODO: is this still required / does this work? previous code used unsetModalField
+              // if value is "", unset the field
+              if (e.target.value === "") {
+                setItem({
+                  ...item,
+                  properties: {
+                    ...item.properties,
+                    ...{ maxNumberOfRows: undefined },
+                  },
+                });
+                return;
+              }
 
-            //   const value = parseInt(e.target.value);
-            //   if (!isNaN(value) && value >= 1) {
-            //     updateModalProperties(item.id, {
-            //       ...properties,
-            //       maxNumberOfRows: value,
-            //     });
-            //   }
-            // }}
+              const value = parseInt(e.target.value);
+              if (!isNaN(value) && value >= 1) {
+                setItem({
+                  ...item,
+                  properties: {
+                    ...item.properties,
+                    ...{ maxNumberOfRows: value },
+                  },
+                });
+              }
+            }}
           />
         </section>
       )}
@@ -222,8 +229,38 @@ export const ModalForm = ({
                     e.preventDefault();
                   }
                 }}
-                onChange={() => {
-                  // @TODO
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                  // if value is "", unset the field
+                  if (e.target.value === "") {
+                    setItem({
+                      ...item,
+                      properties: {
+                        ...item.properties,
+                        ...{
+                          validation: {
+                            ...(item.properties.validation ?? { required: false }),
+                            maxLength: undefined,
+                          },
+                        },
+                      },
+                    });
+                    return;
+                  }
+
+                  const value = parseInt(e.target.value);
+                  if (!isNaN(value) && value >= 1) {
+                    // clone the existing properties so that we don't overwrite other keys in "validation"
+                    const validation = Object.assign({}, item.properties.validation, {
+                      maxLength: value,
+                    });
+                    setItem({
+                      ...item,
+                      properties: {
+                        ...item.properties,
+                        ...{ validation },
+                      },
+                    });
+                  }
                 }}
                 // onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                 //   // if value is "", unset the field
