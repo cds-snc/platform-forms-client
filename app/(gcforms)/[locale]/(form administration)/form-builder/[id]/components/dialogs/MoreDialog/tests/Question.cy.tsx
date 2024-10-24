@@ -2,7 +2,7 @@ import React from "react";
 import { Question } from "../Question";
 import { TemplateStoreProvider } from "@lib/store/useTemplateStore";
 
-describe("<AddRules />", () => {
+describe("<Question />", () => {
   const item = {
     id: 1,
     type: "textField",
