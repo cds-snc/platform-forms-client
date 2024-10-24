@@ -53,19 +53,19 @@ export type publishRequiredFields =
 
 export interface ElementOption {
   id:
-    | keyof typeof FormElementTypes
-    | "phone"
-    | "email"
-    | "date"
-    | "number"
-    | "repeatableQuestionSet"
-    | "attestation"
-    | "firstMiddleLastName"
-    | "name"
-    | "contact"
-    | "address"
-    | "addressComplete"
-    | "departments";
+  | keyof typeof FormElementTypes
+  | "phone"
+  | "email"
+  | "date"
+  | "number"
+  | "repeatableQuestionSet"
+  | "attestation"
+  | "firstMiddleLastName"
+  | "name"
+  | "contact"
+  | "address"
+  | "addressComplete"
+  | "departments";
   value: string;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   icon?: JSXElementConstructor<any> | ComponentType | JSX.Element | any;
@@ -148,4 +148,11 @@ export interface ServerActionError {
 export interface FormServerError {
   formRecord: FormRecord | null;
   error?: string;
+}
+
+export interface ApiKeyType {
+  type: string,
+  keyId: string,
+  key: string,
+  userId: string
 }
