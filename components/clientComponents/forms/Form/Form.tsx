@@ -31,46 +31,33 @@ import { showReviewPage } from "@lib/utils/form-builder/showReviewPage";
 import { useFormDelay } from "@lib/hooks/useFormDelayContext";
 
 interface SubmitButtonProps {
-  getFormDelay: () => number;
+  formDelay: number;
   formID: string;
   formTitle: string;
 }
-const SubmitButton: React.FC<SubmitButtonProps> = ({ getFormDelay, formID, formTitle }) => {
+const SubmitButton: React.FC<SubmitButtonProps> = ({ formDelay, formID, formTitle }) => {
   const { t } = useTranslation();
   const [formTimerState, { startTimer, checkTimer, disableTimer }] = useFormTimer();
   const [submitTooEarly, setSubmitTooEarly] = useState(false);
   const screenReaderRemainingTime = useRef(formTimerState.remainingTime);
 
-  const formTimerEnabled = process.env.NEXT_PUBLIC_APP_ENV !== "test";
+  // If the formDelay is less than 0 or the app is in test mode, disable the timer
+  // because the user has already spent enough time on the form.
 
-  // If the timer hasn't started yet, start the timer
-  if (!formTimerState.timerDelay && formTimerEnabled) {
-    // calculate initial delay for submit timer
-    startTimer(getFormDelay());
-  }
+  const formTimerEnabled = process.env.NEXT_PUBLIC_APP_ENV !== "test" && formDelay > 0;
 
-  //  const formDelay = getFormDelay();
-  //   if (formDelay === 0 && formTimerEnabled) {
-  //     disableTimer();
-  //   } else if (formTimerState.timerDelay === 0 && formTimerEnabled){
-  //     startTimer(formDelay);
-  //   }
-
-  // const formDelay = getFormDelay();
-  // if (formTimerState.timerDelay === 0 && formDelay > 0 && formTimerEnabled) {
-  //   startTimer(formDelay);
-  // } else {
-  //   disableTimer();
-  // }
-
-  useEffect(() => {
-    if (!formTimerEnabled && !formTimerState.canSubmit) {
-      disableTimer();
-    }
-  }, [disableTimer, formTimerEnabled, formTimerState.canSubmit]);
-
+  // The empty array of dependencies ensures that this useEffect only runs once on mount
   useEffect(() => {
     if (formTimerEnabled) {
+      startTimer(formDelay);
+    } else {
+      disableTimer();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  useEffect(() => {
+    if (formTimerEnabled && formTimerState.remainingTime > 0) {
       // Initiate a callback to ensure that state of submit button is correctly displayed
 
       // Calling the checkTimer modifies the state of the formTimerState
@@ -81,7 +68,7 @@ const SubmitButton: React.FC<SubmitButtonProps> = ({ getFormDelay, formID, formT
         clearTimeout(timerID);
       };
     }
-  }, [checkTimer, formTimerState.timerDelay, formTimerEnabled]);
+  }, [checkTimer, formTimerState.remainingTime, formTimerEnabled]);
 
   return (
     <>
@@ -176,6 +163,9 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
   useFormValuesChanged();
 
   const { getFormDelayWithGroups, getFormDelayWithoutGroups } = useFormDelay();
+  const formDelay = isShowReviewPage
+    ? getFormDelayWithGroups()
+    : getFormDelayWithoutGroups(form.elements);
 
   const errorList = props.errors ? getErrorList(props) : null;
   const errorId = "gc-form-errors";
@@ -311,11 +301,7 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
                           )}
                         <div className="inline-block">
                           <SubmitButton
-                            getFormDelay={() =>
-                              isShowReviewPage
-                                ? getFormDelayWithGroups()
-                                : getFormDelayWithoutGroups(form.elements)
-                            }
+                            formDelay={formDelay}
                             formID={formID}
                             formTitle={form.titleEn}
                           />
@@ -325,15 +311,7 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
                   },
                 })
               ) : (
-                <SubmitButton
-                  getFormDelay={() =>
-                    isShowReviewPage
-                      ? getFormDelayWithGroups()
-                      : getFormDelayWithoutGroups(form.elements)
-                  }
-                  formID={formID}
-                  formTitle={form.titleEn}
-                />
+                <SubmitButton formDelay={formDelay} formID={formID} formTitle={form.titleEn} />
               )}
             </div>
           </form>

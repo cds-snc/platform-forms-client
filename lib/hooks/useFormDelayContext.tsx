@@ -132,7 +132,6 @@ export const useFormDelay = () => {
         logMessage.debug(`Delay: ${delay}, formDelay: ${JSON.stringify(formDelay)}`);
 
         return delay;
-        // return 0;
       } catch (error) {
         logMessage.debug("Error calculating form delay.");
         return 0;
