@@ -944,7 +944,7 @@
       }
     },
     "banner": {
-      "text": "Form closed on {{month}} {{day}}, {{year}} at {{hour}}:{{minute}} ET"
+      "text": "Form closed on {{month}} {{day}}, {{year}} at {{hour}}:{{minute}} {{dayPeriod}} ET"
     }
   },
   "errorSavingForm": {
@@ -1180,6 +1180,28 @@
         "title": "Button to remove from the set",
         "description": "Add a relevant action that is specific for the people filling out the form. For example, “Remove address”"
       }
+    }
+  },
+  "scheduleClosingPage": {
+    "linkText": "Schedule form closing",
+    "dialog": {
+      "title": "Schedule the closed form message",
+      "text1": "Schedule a closing date",
+      "text2": "Set when you’d like to close the form.",
+      "datePicker": {
+        "month": "Month",
+        "day": "Day",
+        "year": "Year"
+      },
+      "timePicker": {
+        "text1": "Set a time",
+        "text2": "Provide the time using the 24-hour clock with timezone in Eastern Time"
+      },
+      "error": {
+        "notFutureDate": "Date and time must be upcoming, in the future."
+      },
+      "save": "Save",
+      "cancel": "Cancel"
     }
   }
 }

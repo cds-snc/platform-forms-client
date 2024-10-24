@@ -1,5 +1,5 @@
 "use client";
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { useTranslation } from "@i18n/client";
 import { useTemplateStore } from "@lib/store/useTemplateStore";
 import { toast } from "@formBuilder/components/shared/Toast";
@@ -13,6 +13,11 @@ import { ClosedSuccess } from "./ClosedSuccess";
 import { ClosedDateBanner } from "./ClosedDateBanner";
 
 import { closeForm } from "@formBuilder/actions";
+import { ClosingDateDialog } from "./ClosingDateDialog";
+
+import { ScheduledClosingDate } from "./ScheduledClosingDate";
+import { dateHasPast } from "@lib/utils";
+import { useFeatureFlags } from "@lib/hooks/useFeatureFlags";
 
 export const SetClosingDate = ({
   formId,
@@ -43,16 +48,54 @@ export const SetClosingDate = ({
     return true;
   }, [closedMessage]);
 
-  const [status, setStatus] = useState(closingDate ? "closed" : "open");
+  const [status, setStatus] = useState(
+    dateHasPast(Date.parse(closingDate || "")) ? "closed" : "open"
+  );
+
+  // Needed to sync the status with the closing date
+  useEffect(() => {
+    setStatus(dateHasPast(Date.parse(closingDate || "")) ? "closed" : "open");
+  }, [closingDate]);
+
+  const [showDateTimeDialog, setShowDateTimeDialog] = useState(false);
 
   const handleToggle = (value: boolean) => {
     setStatus(value == true ? "closed" : "open");
   };
 
+  // Called from the date scheduling modal
+  const saveFutureDate = useCallback(
+    async (futureDate?: number) => {
+      if (!futureDate) {
+        return;
+      }
+
+      const closingDate = new Date(futureDate).toISOString();
+
+      const result = await closeForm({
+        id: formId,
+        closingDate,
+        closedDetails: closedMessage,
+      });
+
+      if (!result || result.error) {
+        toast.error(t("closingDate.savedErrorMessage"));
+        return;
+      }
+
+      // Update the local template store
+      setClosingDate(closingDate);
+
+      toast.success(t("closingDate.savedSuccessMessage"));
+    },
+    [formId, setClosingDate, t, closedMessage]
+  );
+
   const saveFormStatus = useCallback(async () => {
-    let closeDate = "open";
+    let closeDate = closingDate ? closingDate : null;
 
     if (status === "closed") {
+      // Set date to now to close the form right away
       const now = new Date();
       closeDate = now.toISOString();
     }
@@ -68,15 +111,18 @@ export const SetClosingDate = ({
       return;
     }
 
-    // update the local store
-    setClosingDate(status !== "open" ? closeDate : null);
+    // Setting local store
+    setClosingDate(closeDate);
 
     if (status === "closed") {
       toast.success(<ClosedSuccess />, "wide");
     } else {
       toast.success(t("closingDate.savedSuccessMessage"));
     }
-  }, [status, formId, setClosingDate, t, closedMessage]);
+  }, [status, formId, setClosingDate, t, closedMessage, closingDate]);
+
+  const { getFlag } = useFeatureFlags();
+  const hasScheduleClosingDate = getFlag("scheduleClosingDate");
 
   return (
     <div className="mb-10">
@@ -95,6 +141,21 @@ export const SetClosingDate = ({
           description={t("closingDate.status")}
         />
       </div>
+      <div className="mb-4">
+        {hasScheduleClosingDate && closingDate && (
+          <ScheduledClosingDate closingDate={closingDate} language="en" />
+        )}
+
+        {hasScheduleClosingDate && (
+          <Button
+            data-closing-date={closingDate}
+            theme="link"
+            onClick={() => setShowDateTimeDialog(true)}
+          >
+            {t("scheduleClosingPage.linkText")}
+          </Button>
+        )}
+      </div>
       <div className="mb-4 w-3/5">
         <ClosedMessage
           closedDetails={closedMessage}
@@ -105,6 +166,14 @@ export const SetClosingDate = ({
       <Button disabled={!validateClosedMessage()} theme="secondary" onClick={saveFormStatus}>
         {t("closingDate.saveButton")}
       </Button>
+      {showDateTimeDialog && (
+        <ClosingDateDialog
+          showDateTimeDialog={showDateTimeDialog}
+          setShowDateTimeDialog={setShowDateTimeDialog}
+          save={saveFutureDate}
+          closingDate={closingDate}
+        />
+      )}
     </div>
   );
 };

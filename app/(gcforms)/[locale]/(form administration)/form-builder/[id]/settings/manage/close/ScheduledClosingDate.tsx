@@ -4,9 +4,9 @@ import { isFutureDate } from "lib/utils/date/isFutureDate";
 import { useTranslation } from "@i18n/client";
 import { formClosingDateEst } from "lib/utils/date/utcToEst";
 import { logMessage } from "@lib/logger";
-import { useEffect, useState } from "react";
+import { useRehydrate } from "@lib/store/useTemplateStore";
 
-export const ClosingNotice = ({
+export const ScheduledClosingDate = ({
   closingDate,
   language,
 }: {
@@ -15,11 +15,9 @@ export const ClosingNotice = ({
 }) => {
   const { t } = useTranslation("common");
 
-  const [loading, setLoading] = useState(true);
+  const hasHydrated = useRehydrate();
 
-  useEffect(() => setLoading(false), []);
-
-  if (loading) {
+  if (!hasHydrated) {
     return null;
   }
 
@@ -45,21 +43,16 @@ export const ClosingNotice = ({
   }
 
   return (
-    <div className="mb-6 w-3/5 border-l-8 border-gcds-blue-750 pl-4">
-      <div className="mb-4 font-bold text-gcds-blue-750">{t("closingNotice.title")}</div>
-      <p className="pb-2">
-        {t("closingNotice.text1")} <br />
-        <span className="font-bold">
-          {t("closingNotice.text2", {
-            month,
-            day,
-            year,
-            hour,
-            minute,
-            dayPeriod,
-          })}
-        </span>
-      </p>
+    <div className="mb-4">
+      {t("closingNotice.text1")}{" "}
+      {t("closingNotice.text2", {
+        month,
+        day,
+        year,
+        hour,
+        minute,
+        dayPeriod,
+      })}
     </div>
   );
 };

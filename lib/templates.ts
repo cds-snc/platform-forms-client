@@ -1493,15 +1493,9 @@ export const onlyIncludePublicProperties = (template: FormRecord): PublicFormRec
 export const updateClosedData = async (
   ability: UserAbility,
   formID: string,
-  closingDate: string,
+  closingDate: string | null,
   details?: ClosedDetails
 ) => {
-  let d = null;
-
-  if (closingDate !== "open") {
-    d = closingDate;
-  }
-
   let detailsData: ClosedDetails | null = null;
 
   // Add the closed details if they exist
@@ -1518,7 +1512,7 @@ export const updateClosedData = async (
           id: formID,
         },
         data: {
-          closingDate: d,
+          closingDate,
           closedDetails:
             detailsData !== null ? (detailsData as Prisma.JsonObject) : Prisma.JsonNull,
         },
@@ -1539,7 +1533,7 @@ export const updateClosedData = async (
       );
     throw e;
   }
-  return { formID, closingDate: d };
+  return { formID, closingDate };
 };
 
 export const updateSecurityAttribute = async (
