@@ -21,6 +21,10 @@
     "addressComplete": {
       "title": "Address Complete",
       "description": "Enable CanadaPost address completion for forms"
+    },
+    "scheduleClosingDate": {
+      "title": "Schedule Closing Date",
+      "description": "Enable scheduling a form closing date"
     }
   }
 }

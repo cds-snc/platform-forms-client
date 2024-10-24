@@ -944,7 +944,7 @@
       }
     },
     "banner": {
-      "text": "Le formulaire a été fermé le {{day}} {{month}} {{year}} à {{hour}} h {{minute}} HE"
+      "text": "Le formulaire a été fermé le {{day}} {{month}} {{year}} à {{hour}} h {{minute}} {{dayPeriod}} HE"
     }
   },
   "errorSavingForm": {
@@ -1180,6 +1180,28 @@
         "title": "Bouton pour supprimer de l'ensemble",
         "description": "Ajoutez une action pertinente spécifique pour aider les personnes à remplir le formulaire. Par exemple : « Supprimer l'adresse »"
       }
+    }
+  },
+  "scheduleClosingPage": {
+    "linkText": "Programmer la fermeture du formulaire",
+    "dialog": {
+      "title": "Programmez le message de fermeture du formulaire",
+      "text1": "Fixez la date de fermeture",
+      "text2": "Décidez la date à laquelle vous souhaitez fermer le formulaire",
+      "datePicker": {
+        "month": "Mois",
+        "day": "Jour",
+        "year": "Année"
+      },
+      "timePicker": {
+        "text1": "Fixez l'heure de fermeture",
+        "text2": "Indiquez l'heure en utilisant l'horloge de 24 heures avec le fuseau horaire de l'heure de l'Est"
+      },
+      "error": {
+        "notFutureDate": "[FR]Date and time must be upcoming, in the future."
+      },
+      "save": "Enregistrer",
+      "cancel": "Annuler"
     }
   }
 }
