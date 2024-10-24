@@ -8,9 +8,16 @@ import { Button } from "@clientComponents/globals";
 import { getPathString } from "@lib/utils/form-builder/getPath";
 import { useTemplateStore } from "@lib/store/useTemplateStore";
 // import { useRefsContext } from "@formBuilder/[id]/edit/components/RefsContext";
-import { ModalForm } from "./ModalForm";
 import { Dialog, useDialogRef } from "@formBuilder/components/shared";
 import { useCustomEvent } from "@lib/hooks/useCustomEvent";
+import { Question } from "./Question";
+import { Description } from "./Description";
+import { AddressCompleteOptions } from "./AddressCompleteOptions";
+import { FormattedDateOptions } from "./FormattedDateOptions";
+import { AddRules } from "./AddRules";
+import { DynamicRowOptions } from "./DynamicRowOptions";
+import { TextInputOptions } from "./TextInputOptions";
+import { CharacterLimitOptions } from "./CharacterLimitOptions";
 
 export const MoreDialog = () => {
   const { elements, updateField, setChangeKey } = useTemplateStore((s) => ({
@@ -131,7 +138,24 @@ export const MoreDialog = () => {
       {isOpen && (
         <Dialog dialogRef={dialog} actions={actions} handleClose={handleClose}>
           <div className="p-5">
-            <ModalForm item={item} setItem={setItem} />
+            <form onSubmit={(e: React.FormEvent<HTMLFormElement>) => e.preventDefault()}>
+              <section>
+                <Question item={item} setItem={setItem} />
+                <Description item={item} setItem={setItem} />
+              </section>
+
+              <AddressCompleteOptions item={item} setItem={setItem} />
+
+              <FormattedDateOptions item={item} setItem={setItem} />
+
+              <AddRules item={item} setItem={setItem} />
+
+              <DynamicRowOptions item={item} setItem={setItem} />
+
+              <TextInputOptions item={item} setItem={setItem} />
+
+              <CharacterLimitOptions item={item} setItem={setItem} />
+            </form>
           </div>
         </Dialog>
       )}

@@ -1,8 +1,10 @@
 import { FormElementWithIndex } from "@lib/types/form-builder-types";
-import { Hint, ModalLabel } from "./ModalForm";
 import { useTranslation } from "@i18n/client";
 import { AutocompleteDropdown } from "./AutocompleteDropdown";
 import { InfoDetails } from "@formBuilder/components/shared/InfoDetails";
+import { FormElementTypes } from "@lib/types";
+import { ModalLabel } from "./ModalLabel";
+import { Hint } from "./Hint";
 
 export const TextInputOptions = ({
   item,
@@ -13,6 +15,10 @@ export const TextInputOptions = ({
 }) => {
   const { t } = useTranslation("form-builder");
   const autocompleteSelectedValue = item.properties.autoComplete || "";
+
+  if (item.type !== FormElementTypes.textField) {
+    return null;
+  }
 
   return (
     <section className="mb-4 mt-8">

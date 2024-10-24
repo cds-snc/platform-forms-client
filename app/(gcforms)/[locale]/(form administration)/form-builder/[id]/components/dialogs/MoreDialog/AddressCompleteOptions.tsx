@@ -1,7 +1,7 @@
 "use client";
 import { useTranslation } from "@i18n/client";
 import { Checkbox, Radio } from "@formBuilder/components/shared";
-import { AddressComponents } from "@lib/types";
+import { AddressComponents, FormElementTypes } from "@lib/types";
 import { FormElementWithIndex } from "@lib/types/form-builder-types";
 
 export const AddressCompleteOptions = ({
@@ -12,6 +12,10 @@ export const AddressCompleteOptions = ({
   setItem: (item: FormElementWithIndex) => void;
 }) => {
   const { t } = useTranslation("form-builder");
+
+  if (item.type !== FormElementTypes.addressComplete) {
+    return null;
+  }
 
   const updateAddressComponents = (props: AddressComponents) => {
     // check if the addresscomponent exists, if it doesn't make it.

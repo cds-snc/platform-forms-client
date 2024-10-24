@@ -1,5 +1,6 @@
 import { InfoDetails, Radio } from "@formBuilder/components/shared";
 import { useTranslation } from "@i18n/client";
+import { FormElementTypes } from "@lib/types";
 import { FormElementWithIndex } from "@lib/types/form-builder-types";
 
 export const FormattedDateOptions = ({
@@ -10,6 +11,11 @@ export const FormattedDateOptions = ({
   setItem: (item: FormElementWithIndex) => void;
 }) => {
   const { t } = useTranslation("form-builder");
+
+  if (item.type !== FormElementTypes.formattedDate) {
+    return null;
+  }
+
   return (
     <section className="mb-4">
       <h3>{t("moreDialog.date.dateOptions")}</h3>
