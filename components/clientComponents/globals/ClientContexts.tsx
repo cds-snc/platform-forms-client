@@ -7,7 +7,6 @@ import { LiveMessagePovider } from "@lib/hooks/useLiveMessage";
 import { RefsProvider } from "@formBuilder/[id]/edit/components/RefsContext";
 import { FeatureFlagsProvider } from "@lib/hooks/useFeatureFlags";
 import { Flags } from "@lib/cache/types";
-import { FormDelayProvider } from "@lib/hooks/useFormDelayContext";
 
 export const ClientContexts: React.FC<{
   session: Session | null;
@@ -26,9 +25,7 @@ export const ClientContexts: React.FC<{
       <AccessControlProvider>
         <RefsProvider>
           <FeatureFlagsProvider featureFlags={featureFlags}>
-            <LiveMessagePovider>
-              <FormDelayProvider>{children}</FormDelayProvider>
-            </LiveMessagePovider>
+            <LiveMessagePovider>{children}</LiveMessagePovider>
           </FeatureFlagsProvider>
         </RefsProvider>
       </AccessControlProvider>

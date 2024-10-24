@@ -1,3 +1,4 @@
+"use client";
 import { logMessage } from "@lib/logger";
 import { FormElement, FormProperties } from "@lib/types";
 import { createContext, useContext, useState } from "react";
@@ -8,7 +9,7 @@ interface FormDelay {
 }
 
 const timerDefault: FormDelay = {
-  startTime: 0,
+  startTime: Date.now(), // TODO: Can refactor out to static return
   requiredQuestions: 0,
 };
 
@@ -42,7 +43,7 @@ export const calculateDelayWithGroups = (
   requiredQuestions: number
 ) => {
   if (isNaN(startTime) || isNaN(endTime) || isNaN(requiredQuestions)) {
-    return -1;
+    return 0;
   }
   const elapsedTime = Math.floor((endTime - startTime) / 1000);
   const delayFromFormData = requiredQuestions - elapsedTime;
@@ -51,7 +52,7 @@ export const calculateDelayWithGroups = (
 
 export const calculateDelayWithoutGroups = (formElements: FormElement[]) => {
   if (!Array.isArray(formElements)) {
-    return -1;
+    return 0;
   }
   const delayFromFormData = formElements.filter(
     (element) => element.properties.validation?.required === true
@@ -60,7 +61,13 @@ export const calculateDelayWithoutGroups = (formElements: FormElement[]) => {
 };
 
 export const useFormDelay = () => {
-  const { formDelay, setFormDelay } = useContext(FormDelayContext);
+  const context = useContext(FormDelayContext);
+
+  if (context === null) {
+    throw new Error("formDelay must be used within a FormDelayContext");
+  }
+  const { formDelay, setFormDelay } = context;
+
   return {
     /**
      * Used by group form to track the initial form view (timestamp) and add the number of required
@@ -71,6 +78,7 @@ export const useFormDelay = () => {
     updateFormDelay: (form: FormProperties, currentGroupId: string) => {
       try {
         const groupIds = form?.groups?.[currentGroupId].elements;
+
         if (!groupIds) {
           return;
         }
@@ -80,36 +88,54 @@ export const useFormDelay = () => {
           .filter((element) => element.properties.validation?.required === true).length;
 
         setFormDelay({
+          ...formDelay,
           requiredQuestions: formDelay.requiredQuestions + currentGroupRequiredQuestions,
-          // Set start time timestamp on initial call
-          startTime: formDelay.startTime === 0 ? Date.now() : formDelay.startTime,
         });
       } catch (error) {
-        logMessage.info("Error adding required questions to form delay");
+        logMessage.debug("Error adding required questions to form delay");
       }
     },
+
     /**
-     * Gets the form delay based on the form type. For non-group forms, just send the required
-     * questions on a form. For group forms, subtract the time spent on the form from the tally of
-     * required questions from their group history (pages navigated).
+     * Gets the form delay for forms without groups. This uses the total required questions to
+     * calculate the delay.
      * @param form current form
-     * @param hasGroups boolean to determine if the form has groups
-     * @returns delay in seconds or in the case of an error -1 is used to fallback to no delay
+     * @returns delay in seconds. 0 is used to disable (no delay) the form timer
      */
-    getFormDelay: (formElements: FormElement[], hasGroups: boolean) => {
+    getFormDelayWithoutGroups: (formElements: FormElement[]) => {
       try {
-        const endTime = Date.now();
-        const delay = hasGroups
-          ? calculateDelayWithGroups(formDelay.startTime, endTime, formDelay.requiredQuestions)
-          : calculateDelayWithoutGroups(formElements);
+        const delay = calculateDelayWithoutGroups(formElements);
 
         logMessage.debug(`Delay: ${delay}, formDelay: ${JSON.stringify(formDelay)}`);
 
-        // Avoid 0 because the SubmitButton relies on this to disable itself
-        return delay === 0 ? -1 : delay;
+        return delay;
       } catch (error) {
         logMessage.info("Error calculating form delay.");
-        return -1;
+        return 0;
+      }
+    },
+
+    /**
+     * Gets the form delay for forms with groups. This subtracts the time spent on the form from
+     * the tally of required questions from their group history (pages navigated).
+     * @returns delay in seconds. 0 is used to disable (no delay) the form timer
+     */
+    getFormDelayWithGroups: () => {
+      try {
+        const endTime = Date.now();
+        const delay = calculateDelayWithGroups(
+          formDelay.startTime,
+          endTime,
+          formDelay.requiredQuestions
+        );
+
+        logMessage.debug(`Delay: ${delay}, formDelay: ${JSON.stringify(formDelay)}`);
+
+        return delay;
+        // return 0;
+      } catch (error) {
+        logMessage.debug("Error calculating form delay.");
+        return 0;
       }
     },
   };

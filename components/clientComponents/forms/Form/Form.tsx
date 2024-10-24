@@ -49,6 +49,20 @@ const SubmitButton: React.FC<SubmitButtonProps> = ({ getFormDelay, formID, formT
     startTimer(getFormDelay());
   }
 
+  //  const formDelay = getFormDelay();
+  //   if (formDelay === 0 && formTimerEnabled) {
+  //     disableTimer();
+  //   } else if (formTimerState.timerDelay === 0 && formTimerEnabled){
+  //     startTimer(formDelay);
+  //   }
+
+  // const formDelay = getFormDelay();
+  // if (formTimerState.timerDelay === 0 && formDelay > 0 && formTimerEnabled) {
+  //   startTimer(formDelay);
+  // } else {
+  //   disableTimer();
+  // }
+
   useEffect(() => {
     if (!formTimerEnabled && !formTimerState.canSubmit) {
       disableTimer();
@@ -161,7 +175,7 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
   // Used to set any values we'd like added for use in the below withFormik handleSubmit().
   useFormValuesChanged();
 
-  const { getFormDelay } = useFormDelay();
+  const { getFormDelayWithGroups, getFormDelayWithoutGroups } = useFormDelay();
 
   const errorList = props.errors ? getErrorList(props) : null;
   const errorId = "gc-form-errors";
@@ -297,7 +311,11 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
                           )}
                         <div className="inline-block">
                           <SubmitButton
-                            getFormDelay={() => getFormDelay(form.elements, isShowReviewPage)}
+                            getFormDelay={() =>
+                              isShowReviewPage
+                                ? getFormDelayWithGroups()
+                                : getFormDelayWithoutGroups(form.elements)
+                            }
                             formID={formID}
                             formTitle={form.titleEn}
                           />
@@ -308,7 +326,11 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
                 })
               ) : (
                 <SubmitButton
-                  getFormDelay={() => getFormDelay(form.elements, isShowReviewPage)}
+                  getFormDelay={() =>
+                    isShowReviewPage
+                      ? getFormDelayWithGroups()
+                      : getFormDelayWithoutGroups(form.elements)
+                  }
                   formID={formID}
                   formTitle={form.titleEn}
                 />
