@@ -198,12 +198,21 @@ export const options = [
     logoTitleFr: "Régie de l’énergie du Canada",
   },
   {
+    name: "acoa",
+    urlEn: "https://www.canada.ca/en/atlantic-canada-opportunities.html",
+    urlFr: "https://www.canada.ca/fr/promotion-economique-canada-atlantique.html",
+    logoEn: "/img/branding/acoa-en.svg",
+    logoFr: "/img/branding/acoa-fr.svg",
+    logoTitleEn: "Atlantic Canada Opportunities Agency",
+    logoTitleFr: "Agence de promotion économique du Canada atlantique",
+  },
+  {
     name: "grain",
     urlEn: "https://www.grainscanada.gc.ca/en/",
     urlFr: "https://www.grainscanada.gc.ca/fr/",
     logoEn: "/img/branding/grain-en.svg",
     logoFr: "/img/branding/grain-fr.svg",
     logoTitleEn: "Canadian Grain Commission",
-    logoTitleFr: "Commission canadienne des grains",
+    logoTitleFr: "Commission canadienne des grains"
   },
 ];
