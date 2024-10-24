@@ -944,7 +944,7 @@
       }
     },
     "banner": {
-      "text": "Form closed on {{month}} {{day}}, {{year}} at {{hour}}:{{minute}}{{dayPeriod}} ET"
+      "text": "Form closed on {{month}} {{day}}, {{year}} at {{hour}}:{{minute}} {{dayPeriod}} ET"
     }
   },
   "errorSavingForm": {
