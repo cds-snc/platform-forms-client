@@ -619,11 +619,34 @@
   "settings": {
     "formManagement": "Gestion du formulaire",
     "api": {
+      "keyId": "Identifiant de la clé API",
       "title": "Accès API",
-      "generateKey": "Générer une clé",
+      "generateKey": "Créer une clé API",
       "refreshKey": "Rafraîchir la clé",
-      "deleteKey": "Supprimer la clé",
-      "keyExists": "Clé existante"
+      "deleteKey": "Supprimer la clé API",
+      "keyExists": "La clé existe déjà",
+      "keyIdToolTip": {
+        "text1": "Qu'est-ce que l'identifiant de la clé API?",
+        "text2": "L'identifiant de la clé API n'est pas la clé elle-même. Il s'agit d'un moyen d'identifier une clé sans partager des informations protégées."
+      },
+      "dialog": {
+        "title": "Clé API créée avec succès",
+        "heading": "Les clés API de Formulaires GC sont PROTÉGÉES B",
+        "responsibility": "Vous êtes responsable de :",
+        "responsibility1": "L'enregistrement de cette clé dans un endroit sûr.",
+        "responsibility2": "Le partage de cette clé uniquement avec les personnes qui en ont besoin.",
+        "responsibility3": "L'envoi de cette clé par des voies sécurisées, comme un courriel crypté.",
+        "responsibility4": "La compréhension des <a href='canada.ca' target='_blank'>procédures de sécurité requises.</a>",
+        "text1": "Ne perdez pas votre clé ",
+        "text2": "Cette clé n'est fournie qu'une seule fois, car elle permet d'accéder aux données des réponses au formulaire. Si vous perdez cette clé ou si elle est compromise, vous devrez en créer une nouvelle.",
+        "cancelButton": "Annuler",
+        "downloadButton": "Télécharger la clé API",
+        "confirm": {
+          "label": "Confirmation",
+          "required": "(obligatoire)",
+          "description": "Saisissez <strong>ACCEPTE</strong> dans la case ci-dessous pour confirmer que vous comprenez vos responsabilités et que vous acceptez les <a href='canada.ca' target='_blank'>procédures de sécurité requises</a> lors de l'enregistrement et du partage de cette clé."
+        }
+      }
     }
   },
   "settingsDeleteButton": "Supprimer le formulaire",
