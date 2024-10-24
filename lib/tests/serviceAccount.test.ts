@@ -91,7 +91,7 @@ describe("Service Account functions", () => {
       });
 
       const result = await checkKeyExists(userId);
-      expect(result).toBe(true);
+      expect(result).toBe(keyId);
     });
     it("should return false if key does not exist", async () => {
       const keyId = "test";

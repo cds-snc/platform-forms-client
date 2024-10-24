@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useImperativeHandle } from "react";
+import React, { useState, useImperativeHandle, useEffect } from "react";
 import { InputFieldProps } from "@lib/types";
 import classnames from "classnames";
 import { useField } from "formik";
@@ -13,6 +13,7 @@ interface ManagedComboboxProps extends InputFieldProps {
   onSetValue?: (value: string) => void;
   baseValue?: string;
   useFilter?: boolean;
+  placeholderText?: string;
 }
 
 export const ManagedCombobox = React.forwardRef(
@@ -24,8 +25,9 @@ export const ManagedCombobox = React.forwardRef(
       choices = [],
       required,
       ariaDescribedBy,
-      baseValue,
-      useFilter,
+      baseValue = "",
+      useFilter = true,
+      placeholderText = "",
     } = props;
     const classes = classnames("gc-combobox gcds-input-wrapper relative", className);
 
@@ -33,15 +35,18 @@ export const ManagedCombobox = React.forwardRef(
     const [field, meta, helpers] = useField(props);
     const { setValue } = helpers;
 
-    const [isOpen, setIsOpen] = useState(false); // State to control isOpen
+    const [isOpen, setIsOpen] = useState(false);
+    const [items, setItems] = useState(choices);
+    const [inputValue, setInputValue] = useState(baseValue);
 
-    const [items, setItems] = React.useState(choices);
-    const [inputValue, setInputValue] = React.useState(baseValue || "");
+    useEffect(() => {
+      setItems(choices);
+    }, [choices]);
 
-    const { getMenuProps, getInputProps, highlightedIndex, getItemProps, selectedItem, openMenu } =
+    const { getMenuProps, getInputProps, highlightedIndex, getItemProps, selectedItem } =
       useCombobox({
         inputValue,
-        onInputValueChange({ inputValue }) {
+        onInputValueChange: ({ inputValue }) => {
           setInputValue(inputValue || "");
           if (props.onChange) {
             props.onChange({
@@ -49,27 +54,18 @@ export const ManagedCombobox = React.forwardRef(
             } as React.ChangeEvent<HTMLInputElement>);
           }
           setItems(
-            choices.filter((choice) => {
-              if (useFilter) {
-                return inputValue ? choice.toLowerCase().includes(inputValue.toLowerCase()) : true;
-              } else {
-                return true; // API pre-filtered choices.
-              }
-            })
+            choices.filter((choice) =>
+              useFilter ? choice.toLowerCase().includes(inputValue?.toLowerCase() || "") : true
+            )
           );
-
-          // Active refresh for all managed combobox.
-          openMenu();
           setIsOpen(true);
         },
         items,
-        onSelectedItemChange({ selectedItem }) {
-          setValue(selectedItem);
-
+        onSelectedItemChange: ({ selectedItem }) => {
+          setValue(selectedItem || "");
           if (props.onSetValue) {
-            props.onSetValue(selectedItem ?? "");
+            props.onSetValue(selectedItem || "");
           }
-
           setIsOpen(false);
         },
         onIsOpenChange: ({ isOpen }) => {
@@ -77,52 +73,52 @@ export const ManagedCombobox = React.forwardRef(
         },
       });
 
-    const changeInputValue = (value: string) => {
+    const performChangeInputValue = (value: string) => {
       setInputValue(value);
       setIsOpen(false);
     };
 
     // Use useImperativeHandle to expose the method
     useImperativeHandle(ref, () => ({
-      changeInputValue,
+      changeInputValue: (value: string) => performChangeInputValue(value),
     }));
 
     return (
-      <>
-        <div className={classes} data-testid="combobox">
-          {meta.error && <ErrorMessage>{meta.error}</ErrorMessage>}
+      <div className={classes} data-testid="combobox">
+        {meta.error && <ErrorMessage>{meta.error}</ErrorMessage>}
 
-          <input
-            {...getInputProps()}
-            aria-describedby={ariaDescribedBy}
-            id={id}
-            required={required}
-            {...(name && { name })}
-            data-testid="combobox-input"
-          />
+        <input
+          {...getInputProps({
+            id,
+            name,
+            required,
+            "aria-describedby": ariaDescribedBy,
+            onFocus: () => setIsOpen(true),
+          })}
+          data-testid="combobox-input"
+          placeholder={placeholderText}
+        />
 
-          <ul
-            className={`${!(isOpen && items.length) ? "hidden" : ""}`}
-            {...getMenuProps()}
-            data-testid="combobox-listbox"
-            hidden={!isOpen}
-          >
-            {isOpen &&
-              items.map((item, index) => (
-                <li
-                  className={cn(
-                    highlightedIndex === index && "bg-gcds-blue-100",
-                    selectedItem === item && "font-bold"
-                  )}
-                  key={item}
-                  {...getItemProps({ item, index })}
-                >
-                  {item}
-                </li>
-              ))}
-          </ul>
-        </div>
-      </>
+        <ul
+          className={classnames({ hidden: !isOpen || items.length === 0 })}
+          {...getMenuProps()}
+          data-testid="combobox-listbox"
+        >
+          {isOpen &&
+            items.map((item, index) => (
+              <li
+                className={cn(
+                  highlightedIndex === index && "bg-gcds-blue-100",
+                  selectedItem === item && "font-bold"
+                )}
+                key={item}
+                {...getItemProps({ item, index })}
+              >
+                {item}
+              </li>
+            ))}
+        </ul>
+      </div>
     );
   }
 );

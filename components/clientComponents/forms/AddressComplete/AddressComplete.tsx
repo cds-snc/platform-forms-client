@@ -1,6 +1,16 @@
 "use client";
-import { AddressCompleteChoice, AddressCompleteProps, AddressElements } from "./types";
-import { getAddressCompleteChoices, getSelectedAddress } from "./utils";
+import {
+  AddressCompleteChoice,
+  AddressCompleteProps,
+  AddressElements,
+  AddressCompleNext,
+} from "./types";
+import {
+  getAddressCompleteChoices,
+  getSelectedAddress,
+  getAddressCompleteRetrieve,
+  matchesAddressPattern,
+} from "./utils";
 import { Description, Label, ManagedCombobox } from "@clientComponents/forms";
 import { useState, useEffect, useRef } from "react";
 import { useTranslation } from "@i18n/client";
@@ -71,30 +81,14 @@ export const AddressComplete = (props: AddressCompleteProps): React.ReactElement
     helpers.setValue(newValue);
   }, [addressObject, helpers]);
 
-  const onAddressSearch = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    setAddressData("streetAddress", e.target.value); // Update the street address in the address object
-    // It will be updated again when the address is set to a autocomplete value, or kept if no value is selected.
-
-    if (!allow) {
-      return;
-    } // Abandon if addressComplete is disabled.
-
-    const query = e.target.value;
-    const responseData = await getAddressCompleteChoices(
-      apiKey,
-      query,
-      addressObject?.country || "CAN"
-    );
-
+  const handleAddressComplete = async (choices: AddressCompleteChoice[]) => {
     //loop through the responseData and add it to the addressResultsCache
     const newElements: AddressCompleteChoice[] = [];
 
-    for (let i = 0; i < responseData.length; i++) {
+    for (let i = 0; i < choices.length; i++) {
       // Check key doesn't already exist.
-      if (
-        !addressResultCache.find((item: AddressCompleteChoice) => item.Id === responseData[i].Id)
-      ) {
-        newElements.push(responseData[i]);
+      if (!addressResultCache.find((item: AddressCompleteChoice) => item.Id === choices[i].Id)) {
+        newElements.push(choices[i]);
       }
     }
 
@@ -103,7 +97,7 @@ export const AddressComplete = (props: AddressCompleteProps): React.ReactElement
     }
 
     // Filter the results to avoid duplicate entry
-    const uniqueResults = responseData.filter(
+    const uniqueResults = choices.filter(
       (item: AddressCompleteChoice, index: number, self: AddressCompleteChoice[]) =>
         index ===
         self.findIndex((t) => toFullAddress(t) === toFullAddress(item) && item.Text !== undefined)
@@ -116,6 +110,30 @@ export const AddressComplete = (props: AddressCompleteProps): React.ReactElement
     );
   };
 
+  const onAddressSearch = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    setAddressData("streetAddress", e.target.value); // Update the street address in the address object
+    // It will be updated again when the address is set to a autocomplete value, or kept if no value is selected.
+
+    if (!allow) {
+      return;
+    } // Abandon if addressComplete is disabled.
+
+    const query = e.target.value;
+
+    if (matchesAddressPattern(query)) {
+      await onAddressSet(query); // Do Search for Nested Address via ID instead of Query.
+      return;
+    } // Abandon, don't search on nested addresses.
+
+    const responseData = await getAddressCompleteChoices(
+      apiKey,
+      query,
+      addressObject?.country || "CAN"
+    );
+
+    handleAddressComplete(responseData);
+  };
+
   const onAddressSet = async (value: string) => {
     if (!allow) {
       return;
@@ -124,21 +142,44 @@ export const AddressComplete = (props: AddressCompleteProps): React.ReactElement
     const selectedResult = addressResultCache.find(
       (item: AddressCompleteChoice) => toFullAddress(item) === value
     );
+
     if (selectedResult === undefined) {
       return; // Do nothing, this is not found in the AddressComplete API.
     } else {
-      const responseData = await getSelectedAddress(
-        apiKey,
-        selectedResult.Id,
-        addressObject?.country || "CAN",
-        i18n.language as Language
-      );
-      if (responseData) {
-        const results = responseData;
-        setAddressObject(results);
-        if (comboboxRef.current) {
-          comboboxRef.current.changeInputValue(results.streetAddress);
+      // Perform regex test against the selectedResult.Next value.
+      // The API just sometimes gives back a "Retrieve" value for a nested address.
+      // Why? Because Reasons I guess.
+      // eg: Toronto, ON - 15489 Addresses
+      // Swap the value to Find
+      let nextValue = selectedResult.Next;
+      if (matchesAddressPattern(selectedResult.Next)) {
+        nextValue = AddressCompleNext.Find;
+      }
+
+      // Handle the Next value.
+      if (nextValue == AddressCompleNext.Retrieve) {
+        const responseData = await getSelectedAddress(
+          apiKey,
+          selectedResult.Id,
+          addressObject?.country || "CAN",
+          i18n.language as Language
+        );
+        if (responseData) {
+          const results = responseData;
+          setAddressObject(results);
+          if (comboboxRef.current) {
+            comboboxRef.current.changeInputValue(results.streetAddress);
+          }
         }
+      } else if (nextValue == AddressCompleNext.Find) {
+        // Do another lookup for the address.
+        const responseData = await getAddressCompleteRetrieve(
+          apiKey,
+          selectedResult.Id,
+          addressObject?.country || "CAN"
+        );
+
+        handleAddressComplete(responseData);
       }
     }
   };
@@ -232,12 +273,14 @@ export const AddressComplete = (props: AddressCompleteProps): React.ReactElement
             <ManagedCombobox
               ref={comboboxRef}
               choices={choices}
+              key={`${name}-streetAddress`}
               id={`${name}-streetAddress`}
               name={`${name}-streetAddress`}
               onChange={onAddressSearch}
               onSetValue={onAddressSet}
               baseValue={addressObject?.streetAddress}
               required={required}
+              placeholderText={t("addElementDialog.addressComplete.startTyping")}
               ariaDescribedBy={`${name}-streetDesc`}
             />
           )}

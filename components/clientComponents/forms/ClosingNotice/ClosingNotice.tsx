@@ -4,6 +4,7 @@ import { isFutureDate } from "lib/utils/date/isFutureDate";
 import { useTranslation } from "@i18n/client";
 import { formClosingDateEst } from "lib/utils/date/utcToEst";
 import { logMessage } from "@lib/logger";
+import { useEffect, useState } from "react";
 
 export const ClosingNotice = ({
   closingDate,
@@ -14,6 +15,14 @@ export const ClosingNotice = ({
 }) => {
   const { t } = useTranslation("common");
 
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => setLoading(false), []);
+
+  if (loading) {
+    return null;
+  }
+
   if (!closingDate) {
     return null;
   }
@@ -22,16 +31,16 @@ export const ClosingNotice = ({
     return null;
   }
 
-  let month, day, year, hour, minute;
+  let month, day, year, hour, minute, dayPeriod;
 
   try {
-    ({ month, day, year, hour, minute } = formClosingDateEst(closingDate, language));
+    ({ month, day, year, hour, minute, dayPeriod } = formClosingDateEst(closingDate, language));
   } catch (error) {
     logMessage.info("Unable to parse closing date", closingDate);
     return null;
   }
 
-  if (!month || !day || !year || !hour || !minute) {
+  if (!month || !day || !year || !hour || !minute || !dayPeriod) {
     return null;
   }
 
@@ -47,6 +56,7 @@ export const ClosingNotice = ({
             year,
             hour,
             minute,
+            dayPeriod,
           })}
         </span>
       </p>
