@@ -6,7 +6,7 @@ import { redirect } from "next/navigation";
 import { checkPrivilegesAsBoolean } from "@lib/privileges";
 import { isProductionEnvironment } from "@lib/origin";
 import { ApiKeyButton } from "./components/ApiKeyButton";
-import { Dialog as ApiKeyDialog } from "../../components/dialogs/ApiKeyDialog/Dialog";
+import { ApiKeyDialog } from "../../components/dialogs/ApiKeyDialog/ApiKeyDialog";
 
 export async function generateMetadata({
   params: { locale },
