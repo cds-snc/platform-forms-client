@@ -22,7 +22,7 @@ const Hint = ({ children, ...props }: React.HTMLAttributes<HTMLParagraphElement>
   </p>
 );
 
-export const ModalForm = ({ item }: { item: FormElementWithIndex }) => {
+export const ModalForm = ({ item, setItem }: { item: FormElementWithIndex; setItem: any }) => {
   const { t } = useTranslation("form-builder");
 
   const { localizeField, translationLanguagePriority } = useTemplateStore((s) => ({
@@ -48,18 +48,18 @@ export const ModalForm = ({ item }: { item: FormElementWithIndex }) => {
               ]
             }
             className="w-11/12"
-            onChange={() => {
-              //
+            onChange={(e) => {
+              setItem({
+                ...item,
+                properties: {
+                  ...item.properties,
+                  ...{
+                    [localizeField(LocalizedElementProperties.TITLE, translationLanguagePriority)]:
+                      e.target.value,
+                  },
+                },
+              });
             }}
-            // onChange={(e) =>
-            //   updateModalProperties(item.id, {
-            //     ...properties,
-            //     ...{
-            //       [localizeField(LocalizedElementProperties.TITLE, translationLanguagePriority)]:
-            //         e.target.value,
-            //     },
-            //   })
-            // }
           />
         </div>
         <div className="mb-2">
@@ -70,21 +70,21 @@ export const ModalForm = ({ item }: { item: FormElementWithIndex }) => {
             placeholder={t("inputDescription")}
             testId="description-input"
             className="w-11/12"
-            onChange={() => {
-              //
+            onChange={(e) => {
+              const description = e.target.value.replace(/[\r\n]/gm, "");
+              setItem({
+                ...item,
+                properties: {
+                  ...item.properties,
+                  ...{
+                    [localizeField(
+                      LocalizedElementProperties.DESCRIPTION,
+                      translationLanguagePriority
+                    )]: description,
+                  },
+                },
+              });
             }}
-            // onChange={(e) => {
-            //   const description = e.target.value.replace(/[\r\n]/gm, "");
-            //   updateModalProperties(item.id, {
-            //     ...properties,
-            //     ...{
-            //       [localizeField(
-            //         LocalizedElementProperties.DESCRIPTION,
-            //         translationLanguagePriority
-            //       )]: description,
-            //     },
-            //   });
-            // }}
             value={
               item.properties[
                 localizeField(LocalizedElementProperties.DESCRIPTION, translationLanguagePriority)
@@ -93,7 +93,9 @@ export const ModalForm = ({ item }: { item: FormElementWithIndex }) => {
           />
         </div>
       </section>
-      {item.type === FormElementTypes.addressComplete && <AddressCompleteOptions item={item} />}
+      {item.type === FormElementTypes.addressComplete && (
+        <AddressCompleteOptions item={item} setItem={setItem} />
+      )}
       {item.type === FormElementTypes.formattedDate && (
         <section className="mb-4">
           <h3>{t("moreDialog.date.dateOptions")}</h3>
@@ -106,15 +108,15 @@ export const ModalForm = ({ item }: { item: FormElementWithIndex }) => {
             label={t("moreDialog.date.generalDateLabel")}
             value=""
             checked={!item.properties.autoComplete}
-            onChange={() => {
-              //
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+              setItem({
+                ...item,
+                properties: {
+                  ...item.properties,
+                  ...{ autoComplete: e.target.value },
+                },
+              });
             }}
-            // onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-            //   updateModalProperties(item.id, {
-            //     ...properties,
-            //     ...{ autoComplete: e.target.value },
-            //   });
-            // }}
           />
           <Radio
             className="mt-2"
@@ -123,15 +125,15 @@ export const ModalForm = ({ item }: { item: FormElementWithIndex }) => {
             label={t("moreDialog.date.birthDateLabel")}
             value="bday"
             checked={item.properties.autoComplete === "bday"}
-            onChange={() => {
-              //
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+              setItem({
+                ...item,
+                properties: {
+                  ...item.properties,
+                  ...{ autoComplete: e.target.value },
+                },
+              });
             }}
-            // onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-            //   updateModalProperties(item.id, {
-            //     ...properties,
-            //     ...{ autoComplete: e.target.value },
-            //   });
-            // }}
           />
 
           <p className="mt-4 font-semibold">{t("moreDialog.date.selectFormat")}</p>
@@ -142,15 +144,15 @@ export const ModalForm = ({ item }: { item: FormElementWithIndex }) => {
             label={t("moreDialog.date.isoFormatLabel")}
             value="YYYY-MM-DD"
             checked={!item.properties.dateFormat || item.properties.dateFormat === "YYYY-MM-DD"}
-            onChange={() => {
-              //
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+              setItem({
+                ...item,
+                properties: {
+                  ...item.properties,
+                  ...{ dateFormat: e.target.value },
+                },
+              });
             }}
-            // onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-            //   updateModalProperties(item.id, {
-            //     ...properties,
-            //     ...{ dateFormat: e.target.value },
-            //   });
-            // }}
           />
           <Radio
             className="mt-2"
@@ -159,15 +161,15 @@ export const ModalForm = ({ item }: { item: FormElementWithIndex }) => {
             label={t("moreDialog.date.ddmmyyyyFormatLabel")}
             value="DD-MM-YYYY"
             checked={item.properties.dateFormat === "DD-MM-YYYY"}
-            onChange={() => {
-              //
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+              setItem({
+                ...item,
+                properties: {
+                  ...item.properties,
+                  ...{ dateFormat: e.target.value },
+                },
+              });
             }}
-            // onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-            //   updateModalProperties(item.id, {
-            //     ...properties,
-            //     ...{ dateFormat: e.target.value },
-            //   });
-            // }}
           />
           <Radio
             className="mt-2"
@@ -176,15 +178,15 @@ export const ModalForm = ({ item }: { item: FormElementWithIndex }) => {
             label={t("moreDialog.date.mmddyyyyFormatLabel")}
             value="MM-DD-YYYY"
             checked={item.properties.dateFormat === "MM-DD-YYYY"}
-            onChange={() => {
-              //
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+              setItem({
+                ...item,
+                properties: {
+                  ...item.properties,
+                  ...{ dateFormat: e.target.value },
+                },
+              });
             }}
-            // onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-            //   updateModalProperties(item.id, {
-            //     ...properties,
-            //     ...{ dateFormat: e.target.value },
-            //   });
-            // }}
           />
 
           <InfoDetails summary={t("moreDialog.date.infoBox")} className="my-4">
@@ -205,19 +207,19 @@ export const ModalForm = ({ item }: { item: FormElementWithIndex }) => {
             value={`required-${item.index}-value-modal-` + checked}
             key={`required-${item.index}-modal-` + checked}
             defaultChecked={checked}
-            onChange={() => {
-              //
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+              // clone the existing properties so that we don't overwrite other keys in "validation"
+              const validation = Object.assign({}, item.properties.validation, {
+                required: e.target.checked,
+              });
+              setItem({
+                ...item,
+                properties: {
+                  ...item.properties,
+                  ...{ validation },
+                },
+              });
             }}
-            // onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-            //   // clone the existing properties so that we don't overwrite other keys in "validation"
-            //   const validation = Object.assign({}, properties.validation, {
-            //     required: e.target.checked,
-            //   });
-            //   updateModalProperties(item.id, {
-            //     ...properties,
-            //     ...{ validation },
-            //   });
-            // }}
             label={t("required")}
           ></Checkbox>
         </div>
@@ -242,7 +244,7 @@ export const ModalForm = ({ item }: { item: FormElementWithIndex }) => {
               }
             }}
             onChange={() => {
-              //
+              // @TODO
             }}
             // onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
             //   // if value is "", unset the field
@@ -270,16 +272,15 @@ export const ModalForm = ({ item }: { item: FormElementWithIndex }) => {
           <Hint>{t("selectAutocompleteHint")}</Hint>
           <div>
             <AutocompleteDropdown
-              handleChange={() => {
-                //
+              handleChange={(e) => {
+                setItem({
+                  ...item,
+                  properties: {
+                    ...item.properties,
+                    ...{ autoComplete: e.target.value },
+                  },
+                });
               }}
-              //   handleChange={(e) => {
-              //     const autoComplete = e.target.value;
-              //     updateModalProperties(item.id, {
-              //       ...properties,
-              //       ...{ autoComplete },
-              //     });
-              //   }}
               selectedValue={autocompleteSelectedValue as string}
             />{" "}
             <InfoDetails summary={t("autocompleteWhenNotToUse.title")}>
@@ -313,7 +314,7 @@ export const ModalForm = ({ item }: { item: FormElementWithIndex }) => {
                   }
                 }}
                 onChange={() => {
-                  //
+                  // @TODO
                 }}
                 // onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                 //   // if value is "", unset the field

@@ -1,34 +1,40 @@
 "use client";
 import { useTranslation } from "@i18n/client";
 import { Checkbox, Radio } from "@formBuilder/components/shared";
-// import { ElementProperties, AddressComponents } from "@lib/types";
+import { AddressComponents } from "@lib/types";
 import { FormElementWithIndex } from "@lib/types/form-builder-types";
 
 export const AddressCompleteOptions = ({
   item,
-}: // updateModalProperties,
-{
+  setItem,
+}: {
   item: FormElementWithIndex;
-  // updateModalProperties: (id: number, properties: ElementProperties) => void;
+  setItem: (item: FormElementWithIndex) => void;
 }) => {
   const { t } = useTranslation("form-builder");
 
-  //   const updateAddressComponents = (props: AddressComponents) => {
-  //     // check if the addresscomponent exists, if it doesn't make it.
-  //     if (item.properties.addressComponents == undefined) {
-  //       const baseAddress = {} as AddressComponents;
-  //       const addressComponent = Object.assign({}, baseAddress, props);
-  //       updateModalProperties(item.id, { ...properties, addressComponents: addressComponent });
-  //     } else {
-  //       // clone the existing properties so that we don't overwrite other keys in "validation"
-  //       const addressComponent = Object.assign(
-  //         {},
-  //         item.properties.addressComponents,
-  //         props
-  //       ) as AddressComponents;
-  //       updateModalProperties(item.id, { ...properties, addressComponents: addressComponent });
-  //     }
-  //   };
+  const updateAddressComponents = (props: AddressComponents) => {
+    // check if the addresscomponent exists, if it doesn't make it.
+    if (item.properties.addressComponents == undefined) {
+      const baseAddress = {} as AddressComponents;
+      const addressComponent = Object.assign({}, baseAddress, props);
+      setItem({
+        ...item,
+        properties: { ...item.properties, addressComponents: addressComponent },
+      });
+    } else {
+      // clone the existing properties so that we don't overwrite other keys in "validation"
+      const addressComponent = Object.assign(
+        {},
+        item.properties.addressComponents,
+        props
+      ) as AddressComponents;
+      setItem({
+        ...item,
+        properties: { ...item.properties, addressComponents: addressComponent },
+      });
+    }
+  };
 
   return (
     <section className="mb-4">
@@ -45,9 +51,9 @@ export const AddressCompleteOptions = ({
           item.properties.addressComponents?.canadianOnly
         }
         defaultChecked={item.properties.addressComponents?.canadianOnly}
-        // onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-        //   //   updateAddressComponents({ canadianOnly: e.target.checked });
-        // }}
+        onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+          updateAddressComponents({ canadianOnly: e.target.checked });
+        }}
         label={t("addElementDialog.addressComplete.canadianOnly")}
       ></Checkbox>
 
@@ -64,9 +70,9 @@ export const AddressCompleteOptions = ({
           item.properties.addressComponents?.splitAddress === false ||
           item.properties.addressComponents?.splitAddress === undefined
         }
-        // onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-        //   //   updateAddressComponents({ splitAddress: !e.target.checked });
-        // }}
+        onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+          updateAddressComponents({ splitAddress: !e.target.checked });
+        }}
       />
       <div className="text-sm ml-12 mb-4">
         {t("addElementDialog.addressComplete.fullAddressDesc")}
@@ -78,9 +84,9 @@ export const AddressCompleteOptions = ({
         label={t("addElementDialog.addressComplete.splitAddress")}
         value="addressType-split"
         checked={item.properties.addressComponents?.splitAddress === true}
-        // onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-        //   //   updateAddressComponents({ splitAddress: e.target.checked });
-        // }}
+        onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+          updateAddressComponents({ splitAddress: e.target.checked });
+        }}
       />
       <div className="text-sm ml-12 mb-4">
         {t("addElementDialog.addressComplete.splitAddressDesc")}
