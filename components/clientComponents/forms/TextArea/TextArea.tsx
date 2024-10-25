@@ -18,6 +18,7 @@ export const TextArea = (
 
   const { t } = useTranslation("common");
 
+  // @ts-expect-error fix this
   const [field, meta, helpers] = useField(props);
 
   const [remainingCharacters, setRemainingCharacters] = useState(maxLength ?? 0);

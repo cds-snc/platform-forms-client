@@ -144,8 +144,10 @@ const createTemplateStore = (initProps?: Partial<InitialTemplateStoreProps>) => 
             propertyPath: (id: number, field: string, lang?: Language) => {
               const path = getPathString(id, get().form.elements);
               if (lang) {
+                // @ts-expect-error fix this
                 return `${path}.${get().localizeField(field, lang)}` ?? "";
               }
+              // @ts-expect-error fix this
               return `${path}.${field}` ?? "";
             },
             unsetField: (path) =>
