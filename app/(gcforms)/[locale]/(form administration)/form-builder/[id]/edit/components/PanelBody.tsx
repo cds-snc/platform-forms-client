@@ -43,7 +43,6 @@ export const PanelBody = ({
   const { localizeField, translationLanguagePriority } = useTemplateStore((s) => ({
     localizeField: s.localizeField,
     translationLanguagePriority: s.translationLanguagePriority,
-    setChangeKey: s.setChangeKey,
   }));
 
   const { Event } = useCustomEvent();
@@ -94,7 +93,7 @@ export const PanelBody = ({
                     <Button
                       theme="secondary"
                       onClick={() => {
-                        Event.fire(EventKeys.openMoreDialog, { item });
+                        Event.fire(EventKeys.openMoreDialog, { itemId: item.id });
                       }}
                     >
                       <>{t("addElementDialog.formattedDate.customizeDate")}</>
@@ -178,7 +177,7 @@ export const PanelBody = ({
                   <Button
                     theme="secondary"
                     onClick={() => {
-                      Event.fire(EventKeys.openMoreDialog, { item });
+                      Event.fire(EventKeys.openMoreDialog, { itemId: item.id });
                     }}
                   >
                     {t("addElementDialog.addressComplete.customize")}

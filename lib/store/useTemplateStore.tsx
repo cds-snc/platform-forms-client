@@ -406,6 +406,9 @@ const createTemplateStore = (initProps?: Partial<InitialTemplateStoreProps>) => 
                 state.isPublished = isPublished;
               });
             },
+            getElementById: (id) => {
+              return get().form.elements.find((el) => el.id === id);
+            },
             getName: () => get().name,
             getDeliveryOption: () => get().deliveryOption,
             resetDeliveryOption: () => {

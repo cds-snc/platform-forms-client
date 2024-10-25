@@ -113,7 +113,7 @@ export const PanelActions = ({
               txt: "more",
               icon: ThreeDotsIcon,
               onClick: () => {
-                Event.fire(EventKeys.openMoreDialog, { item: item });
+                Event.fire(EventKeys.openMoreDialog, { itemId: item.id });
               },
               disabled: false,
             },

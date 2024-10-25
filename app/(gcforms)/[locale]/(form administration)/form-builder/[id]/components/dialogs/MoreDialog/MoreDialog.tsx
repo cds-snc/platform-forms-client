@@ -1,7 +1,6 @@
 "use client";
 import React, { useCallback, useEffect } from "react";
 import { useTranslation } from "@i18n/client";
-import { FormElementWithIndex } from "@lib/types/form-builder-types";
 import { Button } from "@clientComponents/globals";
 import { getPathString } from "@lib/utils/form-builder/getPath";
 import { useTemplateStore } from "@lib/store/useTemplateStore";
@@ -16,17 +15,19 @@ import { DynamicRowOptions } from "./DynamicRowOptions";
 import { TextFieldOptions } from "./TextFieldOptions";
 import { CharacterLimitOptions } from "./CharacterLimitOptions";
 import { useRefsContext } from "@formBuilder/[id]/edit/components/RefsContext";
+import { FormElement } from "@lib/types";
 
 export const MoreDialog = () => {
-  const { elements, updateField, setChangeKey } = useTemplateStore((s) => ({
+  const { elements, updateField, setChangeKey, getElementById } = useTemplateStore((s) => ({
     lang: s.lang,
     updateField: s.updateField,
     elements: s.form.elements,
     getFocusInput: s.getFocusInput,
     setChangeKey: s.setChangeKey,
+    getElementById: s.getElementById,
   }));
 
-  const [item, setItem] = React.useState<FormElementWithIndex | null>(null);
+  const [item, setItem] = React.useState<FormElement | undefined>(undefined);
   const [isOpen, setIsOpen] = React.useState(false);
   const { Event } = useCustomEvent();
   const dialog = useDialogRef();
@@ -34,15 +35,19 @@ export const MoreDialog = () => {
   const { t } = useTranslation("form-builder");
 
   type MoreDialogEventDetails = {
-    item: FormElementWithIndex;
+    itemId: number;
   };
 
-  const handleOpenDialog = useCallback((detail: MoreDialogEventDetails) => {
-    if (detail) {
-      setItem(detail.item);
-      setIsOpen(true);
-    }
-  }, []);
+  const handleOpenDialog = useCallback(
+    (detail: MoreDialogEventDetails) => {
+      if (detail) {
+        const freshItem = getElementById(detail.itemId);
+        setItem(freshItem);
+        setIsOpen(true);
+      }
+    },
+    [getElementById]
+  );
 
   useEffect(() => {
     Event.on("open-more-dialog", handleOpenDialog);
