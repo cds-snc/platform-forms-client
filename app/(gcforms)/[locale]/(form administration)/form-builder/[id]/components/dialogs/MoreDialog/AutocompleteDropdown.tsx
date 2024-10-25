@@ -36,14 +36,16 @@ export const AutocompleteDropdown = ({
   });
 
   return (
-    <select
-      data-testid="autocomplete"
-      className="gc-dropdown mb-4 inline-block"
-      onChange={handleChange}
-      value={selectedValue}
-    >
-      <option value="">{t("selectAutocomplete")}</option>
-      {options}
-    </select>
+    <div className="gcds-select-wrapper">
+      <select
+        data-testid="autocomplete"
+        className="gc-dropdown mb-4 inline-block"
+        onChange={handleChange}
+        value={selectedValue}
+      >
+        <option value="">{t("selectAutocomplete")}</option>
+        {options}
+      </select>
+    </div>
   );
 };
