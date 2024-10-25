@@ -79,13 +79,22 @@ const nextConfig = {
       },
     ];
   },
+  webpack: (config) => {
+    // Support reading markdown
+    config.module.rules.push({
+      test: /\.md$/,
+      type: "asset/source",
+    });
 
+    return config;
+  },
   experimental: {
     // PPR is only supported in Next.js Canary branches
     // ppr: true,
     serverActions: {
       bodySizeLimit: "5mb",
     },
+    
     turbo: {
       rules: {
         '*.md': {
