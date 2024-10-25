@@ -1,5 +1,5 @@
-import { useActionState } from "react";
 "use client";
+import { useActionState } from "react";
 import { useTranslation } from "@i18n/client";
 import { contact } from "../../actions";
 import {
@@ -23,7 +23,9 @@ export const ContactForm = () => {
     i18n: { language },
   } = useTranslation(["form-builder", "common"]);
 
-  const [state, formAction] = useActionState(contact.bind(null, language), { validationErrors: [] });
+  const [state, formAction] = useActionState(contact.bind(null, language), {
+    validationErrors: [],
+  });
 
   const getError = (fieldKey: string) => {
     return state.validationErrors.find((e) => e.fieldKey === fieldKey)?.fieldValue || "";
