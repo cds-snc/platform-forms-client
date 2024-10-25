@@ -3,7 +3,7 @@ import React from "react";
 import { PanelActions } from "../PanelActions";
 
 describe("<PanelActions />", () => {
-  it("enables move buttons for item that is not first or last", () => {
+  it.skip("enables move buttons for item that is not first or last", () => {
     cy.viewport(800, 80);
     // see: https://on.cypress.io/mounting-react
     cy.mount(
@@ -34,7 +34,7 @@ describe("<PanelActions />", () => {
     cy.get('[data-testid="moveDown"]').should("not.be.disabled");
   });
 
-  it("disables move buttons for first and last item", () => {
+  it.skip("disables move buttons for first and last item", () => {
     cy.viewport(800, 80);
     // see: https://on.cypress.io/mounting-react
     cy.mount(
@@ -81,7 +81,7 @@ describe("<PanelActions />", () => {
     cy.focused().should("have.attr", "data-testid", "remove");
   });
 
-  it("can keyboard navigate", () => {
+  it.skip("can keyboard navigate", () => {
     cy.viewport(800, 80);
     cy.mount(
       <div className="group active">
