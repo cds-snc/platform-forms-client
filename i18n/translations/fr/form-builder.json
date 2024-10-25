@@ -1185,7 +1185,7 @@
   "scheduleClosingPage": {
     "linkText": "Programmer la fermeture du formulaire",
     "dialog": {
-      "title": "Programmez le message de fermeture du formulaire",
+      "title": "[FR]Schedule closing the form",
       "text1": "Fixez la date de fermeture",
       "text2": "Décidez la date à laquelle vous souhaitez fermer le formulaire",
       "datePicker": {
