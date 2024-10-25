@@ -7,13 +7,12 @@ import {
   Language,
   LocalizedElementProperties,
 } from "@lib/types/form-builder-types";
-import { SelectedElement, ElementRequired, MoreModal } from ".";
+import { SelectedElement, ElementRequired } from ".";
 import { Question } from "./elements";
 import { QuestionDescription } from "./elements/question/QuestionDescription";
 import { useTemplateStore } from "@lib/store/useTemplateStore";
 import { Trans } from "react-i18next";
 import { Tooltip } from "@formBuilder/components/shared/Tooltip";
-import { Button } from "@clientComponents/globals";
 import { cn } from "@lib/utils";
 
 export const PanelBody = ({
@@ -39,31 +38,15 @@ export const PanelBody = ({
   const properties = item.properties;
   const maxLength = properties?.validation?.maxLength;
 
-  const { localizeField, translationLanguagePriority, setChangeKey } = useTemplateStore((s) => ({
+  const { localizeField, translationLanguagePriority } = useTemplateStore((s) => ({
     localizeField: s.localizeField,
     translationLanguagePriority: s.translationLanguagePriority,
-    setChangeKey: s.setChangeKey,
   }));
 
   const description =
     properties[localizeField(LocalizedElementProperties.DESCRIPTION, translationLanguagePriority)];
 
   const describedById = description ? `item${item.id}-describedby` : undefined;
-
-  const forceRefresh = () => {
-    setChangeKey(String(new Date().getTime())); //Force a re-render
-  };
-
-  const addressCustomizeButton = (
-    <Button theme="secondary" onClick={() => {}}>
-      {t("addElementDialog.addressComplete.customize")}
-    </Button>
-  );
-  const moreButton = (
-    <Button theme="secondary" onClick={() => {}}>
-      {t("addElementDialog.formattedDate.customizeDate")}
-    </Button>
-  );
 
   return (
     <>
@@ -103,7 +86,7 @@ export const PanelBody = ({
                 </div>
                 {isFormattedDate && (
                   <div className="mb-4 ml-4 self-end">
-                    <MoreModal item={item} moreButton={moreButton} onClose={forceRefresh} />
+                    <div>todo</div>
                   </div>
                 )}
               </div>
@@ -180,11 +163,7 @@ export const PanelBody = ({
                     item={item}
                     key={"element-required-" + item.id}
                   />
-                  <MoreModal
-                    item={item}
-                    moreButton={addressCustomizeButton}
-                    onClose={forceRefresh}
-                  />
+                  <div>todo</div>
                 </div>
               </div>
             )}
