@@ -82,42 +82,6 @@ export const PanelBody = ({
             </div>
           </div>
 
-          <div>
-            {isAddressComplete && (
-              <div className="flex text-sm">
-                <div className="w-1/2">
-                  {!item.properties.addressComponents?.canadianOnly && (
-                    <div className="description-text mt-5 cursor-not-allowed rounded-sm bg-gray-100 p-2 text-slate-600">
-                      {t("addElementDialog.addressComplete.country")}
-                    </div>
-                  )}
-                  <div className="description-text mt-5 cursor-not-allowed rounded-sm bg-gray-100 p-2 text-slate-600">
-                    {t("addElementDialog.addressComplete.street.label")}
-                  </div>
-                  <div className="description-text mt-5 cursor-not-allowed rounded-sm bg-gray-100 p-2 text-slate-600">
-                    {t("addElementDialog.addressComplete.city")}
-                  </div>
-                  <div className="description-text mt-5 cursor-not-allowed rounded-sm bg-gray-100 p-2 text-slate-600">
-                    {t("addElementDialog.addressComplete.province")}
-                  </div>
-                  <div className="description-text mt-5 cursor-not-allowed rounded-sm bg-gray-100 p-2 text-slate-600">
-                    {t("addElementDialog.addressComplete.postal")}
-                  </div>
-                </div>
-                <div className="mb-4 ml-4 mt-4 w-1/2 self-end">
-                  <Button
-                    theme="secondary"
-                    onClick={() => {
-                      Event.fire(EventKeys.openMoreDialog, { item });
-                    }}
-                  >
-                    {t("addElementDialog.addressComplete.customize")}
-                  </Button>
-                </div>
-              </div>
-            )}
-          </div>
-
           <div className="mb-4 flex gap-4 text-sm ">
             <div className="grow">
               <QuestionDescription item={item} describedById={describedById} />
@@ -174,12 +138,54 @@ export const PanelBody = ({
                 </div>
               )}
 
-              <ElementRequired
-                onRequiredChange={onRequiredChange}
-                item={item}
-                key={"element-required-" + item.id}
-              />
+              {!isAddressComplete && (
+                <ElementRequired
+                  onRequiredChange={onRequiredChange}
+                  item={item}
+                  key={"element-required-" + item.id}
+                />
+              )}
             </div>
+          </div>
+          <div>
+            {isAddressComplete && (
+              <div className="text-sm flex">
+                <div className="w-1/2">
+                  {!item.properties.addressComponents?.canadianOnly && (
+                    <div className="description-text mt-5 cursor-not-allowed rounded-sm p-2 bg-gray-100 text-slate-600">
+                      {t("addElementDialog.addressComplete.country")}
+                    </div>
+                  )}
+                  <div className="description-text mt-5 cursor-not-allowed rounded-sm p-2 bg-gray-100 text-slate-600">
+                    {t("addElementDialog.addressComplete.street.label")}
+                  </div>
+                  <div className="description-text mt-5 cursor-not-allowed rounded-sm p-2 bg-gray-100 text-slate-600">
+                    {t("addElementDialog.addressComplete.city")}
+                  </div>
+                  <div className="description-text mt-5 cursor-not-allowed rounded-sm p-2 bg-gray-100 text-slate-600">
+                    {t("addElementDialog.addressComplete.province")}
+                  </div>
+                  <div className="description-text mt-5 cursor-not-allowed rounded-sm p-2 bg-gray-100 text-slate-600">
+                    {t("addElementDialog.addressComplete.postal")}
+                  </div>
+                </div>
+                <div className="mb-4 mt-4 ml-4 self-end w-1/2">
+                  <ElementRequired
+                    onRequiredChange={onRequiredChange}
+                    item={item}
+                    key={"element-required-" + item.id}
+                  />
+                  <Button
+                    theme="secondary"
+                    onClick={() => {
+                      Event.fire(EventKeys.openMoreDialog, { item });
+                    }}
+                  >
+                    {t("addElementDialog.addressComplete.customize")}
+                  </Button>
+                </div>
+              </div>
+            )}
           </div>
         </>
       )}
