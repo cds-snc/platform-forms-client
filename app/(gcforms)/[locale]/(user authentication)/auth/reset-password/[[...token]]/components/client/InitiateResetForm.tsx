@@ -13,6 +13,7 @@ import { useTranslation } from "@i18n/client";
 import { sendResetLink, ErrorStates } from "../../action";
 import { ErrorStatus } from "@clientComponents/forms/Alert/Alert";
 import { SubmitButton } from "./SubmitButton";
+import { useActionState } from "react";
 
 export const InitiateResetForm = ({
   confirmationPage,
