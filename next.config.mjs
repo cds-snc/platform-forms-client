@@ -44,9 +44,8 @@ const nextConfig = {
   }),
   serverExternalPackages: ["@aws-sdk/lib-dynamodb", "pino"],
   turbo: {
-    resolveExtensions: [".mdx", ".tsx", ".ts", ".jsx", ".js", ".mjs", ".json"],
+    resolveExtensions: [".md", ".tsx", ".ts", ".jsx", ".js", ".mjs", ".json"],
   },
-
   async headers() {
     return [
       {
@@ -81,7 +80,7 @@ const nextConfig = {
       },
     ];
   },
-  
+
   experimental: {
     // PPR is only supported in Next.js Canary branches
     // ppr: true,
