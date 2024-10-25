@@ -24,6 +24,7 @@ import get from "lodash/get";
 import { logMessage } from "./logger";
 import { logEvent } from "./auditLogs";
 import { redirect } from "next/navigation";
+import { checkOne } from "./cache/flags";
 
 /*
 This file contains references to server side only modules.
@@ -376,4 +377,136 @@ export const checkPrivilegesAsBoolean = (
     if (options?.redirect) redirect(`/admin/unauthorized`);
     return false;
   }
+};
+
+const _getSubject = async (subject: { type: Extract<Subject, string>; id?: string }) => {
+  if (!subject.id) {
+    return {};
+  }
+  switch (subject.type) {
+    case "User":
+      return prisma.user.findUniqueOrThrow({
+        where: {
+          id: subject.id,
+        },
+        select: {
+          id: true,
+          name: true,
+          email: true,
+          lastLogin: true,
+          active: true,
+        },
+      });
+    case "FormRecord":
+      return prisma.template.findUniqueOrThrow({
+        where: {
+          id: subject.id,
+        },
+        select: {
+          id: true,
+          created_at: true,
+          updated_at: true,
+          name: true,
+          isPublished: true,
+          users: {
+            select: {
+              id: true,
+              name: true,
+              email: true,
+              active: true,
+            },
+          },
+        },
+      });
+    case "Privilege":
+      return prisma.privilege.findUniqueOrThrow({
+        where: {
+          id: subject.id,
+        },
+      });
+    case "Setting":
+      return prisma.setting.findUniqueOrThrow({
+        where: {
+          internalId: subject.id,
+        },
+      });
+    case "Flag":
+      return { id: subject.id, value: await checkOne(subject.id) };
+    default:
+      throw new Error("Subject type not valid for privilege check");
+  }
+};
+
+export const authorizationCheck = async (
+  ability: UserAbility,
+  rules: {
+    action: Action;
+    subject: { type: Extract<Subject, string>; id?: string };
+    field?: string | string[];
+  }[],
+  logic: "all" | "one" = "all"
+): Promise<void> => {
+  try {
+    // Create a local scoped cache to store the subject objects
+    const cache = new Map();
+
+    const result = await Promise.all(
+      rules.map(async ({ action, subject, field }) => {
+        let ruleResult = false;
+        const subjectToValidate = cache.get(subject) ?? (await _getSubject(subject));
+        cache.set(subject, subjectToValidate);
+        if (Array.isArray(field)) {
+          field.forEach((f) => {
+            ruleResult = ability.can(action, setSubjectType(subject.type, subjectToValidate), f);
+          });
+          return ruleResult;
+        }
+
+        ruleResult = ability.can(action, setSubjectType(subject.type, subjectToValidate), field);
+        logMessage.debug(
+          `Privilege Check ${ruleResult ? "PASS" : "FAIL"}: Can ${action} on ${subject.type} ${
+            field && `for field ${field}`
+          } `
+        );
+
+        return ruleResult;
+      })
+    );
+
+    let accessAllowed = false;
+
+    switch (logic) {
+      case "all":
+        // The initial value needs to be true because of the AND logic
+        accessAllowed = result.reduce((prev, curr) => prev && curr, true);
+        break;
+      case "one":
+        accessAllowed = result.reduce((prev, curr) => prev || curr, false);
+        break;
+    }
+    if (!accessAllowed) {
+      throw new AccessControlError(`Access Control Forbidden Action`);
+    }
+  } catch {
+    // If there is any error in privilege checking default to forbidden
+    // Do not create an audit log as the error is with the system itself
+    throw new AccessControlError(`Access Control Forbidden Action`);
+  }
+};
+
+export const authorizationCheckAsBoolean = async (
+  ability: UserAbility,
+  rules: {
+    action: Action;
+    subject: { type: Extract<Subject, string>; id?: string };
+    field?: string | string[];
+  }[],
+  options?: {
+    logic?: "all" | "one";
+    redirect?: boolean;
+  }
+): Promise<boolean> => {
+  return authorizationCheck(ability, rules, options?.logic ?? "all")
+    .then(() => true)
+    .catch(() => false);
 };
