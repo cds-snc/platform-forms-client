@@ -1,6 +1,5 @@
-"use client";
+"use client";;
 import React from "react";
-import PropTypes from "prop-types";
 import { useTranslation } from "@i18n/client";
 import { FormElementTypes, ElementProperties } from "@lib/types";
 
@@ -22,17 +21,16 @@ const Hint = ({ children, ...props }: React.HTMLAttributes<HTMLParagraphElement>
   </p>
 );
 
+interface ModalFormProps {
+  item?: object;
+}
+
 export const ModalForm = ({
   item,
   properties,
   updateModalProperties,
-  unsetModalField,
-}: {
-  item: FormElementWithIndex;
-  properties: ElementProperties;
-  updateModalProperties: (id: number, properties: ElementProperties) => void;
-  unsetModalField: (path: string) => void;
-}) => {
+  unsetModalField
+}: ModalFormProps) => {
   const { t } = useTranslation("form-builder");
 
   const { localizeField, translationLanguagePriority } = useTemplateStore((s) => ({
@@ -44,7 +42,7 @@ export const ModalForm = ({
   const checked = item.properties.validation?.required;
 
   return (
-    <form onSubmit={(e: React.FormEvent<HTMLFormElement>) => e.preventDefault()}>
+    (<form onSubmit={(e: React.FormEvent<HTMLFormElement>) => e.preventDefault()}>
       <section>
         <div className="mb-2">
           <ModalLabel htmlFor={`titleEn--modal--${item.index}`}>{t("question")}</ModalLabel>
@@ -217,7 +215,6 @@ export const ModalForm = ({
           ></Checkbox>
         </div>
       </section>
-
       {/* @TODO: Come back and refactor to separate components */}
       {item.type === FormElementTypes.dynamicRow && (
         <section className="mb-4">
@@ -254,7 +251,6 @@ export const ModalForm = ({
           />
         </section>
       )}
-
       {/* @TODO: Come back and refactor to separate components */}
       {item.type === FormElementTypes.textField && (
         <section className="mb-4 mt-8">
@@ -280,7 +276,6 @@ export const ModalForm = ({
           </div>
         </section>
       )}
-
       {/* @TODO: Come back and refactor to separate components */}
       {[FormElementTypes.textField, FormElementTypes.textArea].includes(item.type) &&
         (!item.properties.validation?.type || item.properties.validation?.type === "text") && (
@@ -331,10 +326,6 @@ export const ModalForm = ({
             </InfoDetails>
           </section>
         )}
-    </form>
+    </form>)
   );
-};
-
-ModalForm.propTypes = {
-  item: PropTypes.object,
 };

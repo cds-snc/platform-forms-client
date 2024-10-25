@@ -1,6 +1,5 @@
-"use client";
+"use client";;
 import React, { ReactElement, useRef, useState } from "react";
-import PropTypes from "prop-types";
 import { useTranslation } from "@i18n/client";
 
 import { useTemplateStore } from "@lib/store/useTemplateStore";
@@ -10,7 +9,15 @@ import { FormElementWithIndex } from "@lib/types/form-builder-types";
 import { ModalRules } from "../ModalRules";
 import { ConditionalIndicatorOption } from "@formBuilder/components/shared";
 
-const AddButton = ({ index, onClick }: { index: number; onClick: (index: number) => void }) => {
+interface AddButtonProps {
+  index?: number;
+  onClick?(...args: unknown[]): unknown;
+}
+
+const AddButton = ({
+  index,
+  onClick
+}: AddButtonProps) => {
   const { t } = useTranslation("form-builder");
   return (
     <Button
@@ -26,12 +33,13 @@ const AddButton = ({ index, onClick }: { index: number; onClick: (index: number)
   );
 };
 
-AddButton.propTypes = {
-  index: PropTypes.number,
-  onClick: PropTypes.func,
-};
+interface AddOptionsProps {
+  index?: number;
+}
 
-const AddOptions = ({ index }: { index: number }) => {
+const AddOptions = ({
+  index
+}: AddOptionsProps) => {
   const { addChoice, setFocusInput } = useTemplateStore((s) => ({
     addChoice: s.addChoice,
     setFocusInput: s.setFocusInput,
@@ -50,21 +58,18 @@ const AddOptions = ({ index }: { index: number }) => {
   );
 };
 
-AddOptions.propTypes = {
-  index: PropTypes.number,
-};
-
 type RenderIcon = (index: number) => ReactElement | string | undefined;
+
+interface OptionsProps {
+  item?: object;
+  renderIcon?(...args: unknown[]): unknown;
+}
 
 export const Options = ({
   item,
   renderIcon,
-  formId,
-}: {
-  item: FormElementWithIndex;
-  renderIcon?: RenderIcon;
-  formId: string;
-}) => {
+  formId
+}: OptionsProps) => {
   const { elements, translationLanguagePriority } = useTemplateStore((s) => ({
     elements: s.form.elements,
     translationLanguagePriority: s.translationLanguagePriority,
@@ -149,9 +154,4 @@ export const Options = ({
       </div>
     </div>
   );
-};
-
-Options.propTypes = {
-  item: PropTypes.object,
-  renderIcon: PropTypes.func,
 };

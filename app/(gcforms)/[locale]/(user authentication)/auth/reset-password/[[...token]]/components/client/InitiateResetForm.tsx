@@ -1,6 +1,5 @@
 "use client";
 import React, { useState } from "react";
-import { useFormState } from "react-dom";
 
 import {
   TextInput,
@@ -38,7 +37,7 @@ export const InitiateResetForm = ({
     return {};
   };
 
-  const [state, formAction] = useFormState(localFormAction, {});
+  const [state, formAction] = useActionState(localFormAction, {});
 
   if (linkSent) return confirmationPage;
   if (state.authError) return errorPage;

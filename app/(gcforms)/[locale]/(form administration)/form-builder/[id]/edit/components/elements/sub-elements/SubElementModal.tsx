@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect } from "react";
+import React, { useEffect, type JSX } from "react";
 import { useTranslation } from "@i18n/client";
 
 import { ElementProperties } from "@lib/types";

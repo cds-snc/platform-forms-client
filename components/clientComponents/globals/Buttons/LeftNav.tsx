@@ -1,7 +1,9 @@
-"use client";
+"use client";;
 import { cn } from "@lib/utils";
 import { Tooltip } from "@formBuilder/components/shared/Tooltip";
 import Link from "next/link";
+
+import type { JSX } from "react";
 
 type LinkButtonProps = {
   href: string;

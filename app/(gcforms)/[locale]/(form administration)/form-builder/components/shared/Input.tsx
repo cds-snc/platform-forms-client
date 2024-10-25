@@ -13,7 +13,7 @@ interface Props {
   onKeyDown?: (e: React.KeyboardEvent<HTMLInputElement>) => void;
   className?: string;
   min?: string;
-  ref?: React.RefObject<HTMLInputElement>;
+  ref?: React.RefObject<HTMLInputElement | null>;
   theme?: "default" | "title" | "error";
   isInvalid?: boolean;
   lang?: string;

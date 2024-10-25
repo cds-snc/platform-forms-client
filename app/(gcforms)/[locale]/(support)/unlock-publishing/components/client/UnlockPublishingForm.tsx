@@ -1,6 +1,6 @@
+import { useActionState } from "react";
 "use client";
 import { useTranslation } from "@i18n/client";
-import { useFormState } from "react-dom";
 import { unlockPublishing } from "../../actions";
 import {
   Label,
@@ -21,7 +21,7 @@ export const UnlockPublishingForm = ({ userEmail }: { userEmail: string }) => {
     i18n: { language },
   } = useTranslation("unlock-publishing");
 
-  const [state, formAction] = useFormState(unlockPublishing.bind(null, language, userEmail), {
+  const [state, formAction] = useActionState(unlockPublishing.bind(null, language, userEmail), {
     validationErrors: [],
   });
 

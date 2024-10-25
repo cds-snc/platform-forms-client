@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, type JSX } from "react";
 import { useField } from "formik";
 import { ErrorMessage } from "@clientComponents/forms";
 import { InputFieldProps } from "@lib/types";

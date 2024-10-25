@@ -1,6 +1,6 @@
+import { useActionState } from "react";
 "use client";
 import { useTranslation } from "@i18n/client";
-import { useFormState } from "react-dom";
 import { support } from "../../actions";
 import {
   Label,
@@ -23,7 +23,7 @@ export const SupportForm = () => {
     i18n: { language },
   } = useTranslation(["form-builder", "common"]);
 
-  const [state, formAction] = useFormState(support.bind(null, language), { validationErrors: [] });
+  const [state, formAction] = useActionState(support.bind(null, language), { validationErrors: [] });
 
   const getError = (fieldKey: string) => {
     return state.validationErrors.find((e) => e.fieldKey === fieldKey)?.fieldValue || "";

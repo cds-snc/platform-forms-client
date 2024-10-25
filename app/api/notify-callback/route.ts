@@ -5,7 +5,7 @@ import { middleware } from "@lib/middleware";
 import { MiddlewareRequest, MiddlewareReturn } from "@lib/types";
 import { UpdateCommand } from "@aws-sdk/lib-dynamodb";
 import { dynamoDBDocumentClient, sqsClient } from "@lib/integration/awsServicesConnector";
-import { headers } from "next/headers";
+import { headers, type UnsafeUnwrappedHeaders } from "next/headers";
 
 const SQS_REPROCESS_SUBMISSION_QUEUE_NAME = "reprocess_submission_queue.fifo";
 
@@ -58,7 +58,7 @@ async function removeProcessedMark(submissionID: string) {
  * This exception is thrown if the bearer token is not found
  */
 const extractBearerTokenFromReq = () => {
-  const reqHeaders = headers();
+  const reqHeaders = (headers() as unknown as UnsafeUnwrappedHeaders);
   const authHeader = reqHeaders.get("authorization") ?? "";
   if (authHeader.startsWith("Bearer ")) {
     return authHeader.substring(7, authHeader.length);

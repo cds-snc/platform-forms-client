@@ -1,4 +1,3 @@
-import PropTypes from "prop-types";
 import { LeftNavigation } from "@clientComponents/admin/LeftNav/LeftNavigation";
 import { TwoColumnLayout } from "./TwoColumnLayout";
 import { FullWidthLayout } from "./FullWidthLayout";
@@ -11,7 +10,15 @@ interface AdminNavLayoutProps extends React.PropsWithChildren {
   hideLeftNav?: boolean | false;
 }
 
-export const AdminNavLayout = async ({ children, backLink, hideLeftNav }: AdminNavLayoutProps) => {
+interface AdminNavLayoutProps {
+  children: object;
+}
+
+export const AdminNavLayout = async ({
+  children,
+  backLink,
+  hideLeftNav
+}: AdminNavLayoutProps) => {
   await authCheckAndRedirect();
   return (
     <div className={`flex h-full flex-col ${hideLeftNav && "bg-gray-50"}`}>
@@ -32,8 +39,4 @@ export const AdminNavLayout = async ({ children, backLink, hideLeftNav }: AdminN
       )}
     </div>
   );
-};
-
-AdminNavLayout.propTypes = {
-  children: PropTypes.object.isRequired,
 };

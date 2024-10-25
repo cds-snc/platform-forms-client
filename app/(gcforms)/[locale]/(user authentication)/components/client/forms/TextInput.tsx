@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, type JSX } from "react";
 import classnames from "classnames";
 import { ErrorMessage } from "@clientComponents/forms";
 import { InputFieldProps, HTMLTextInputTypeAttribute } from "@lib/types";

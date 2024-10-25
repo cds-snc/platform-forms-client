@@ -1,6 +1,8 @@
 import { cn } from "@lib/utils";
 import Link from "next/link";
 
+import type { JSX } from "react";
+
 export const themes = {
   base: "inline-flex items-center rounded-lg border-2 border-solid px-5 py-2 focus:border-blue-active focus:bg-blue-focus focus:text-white-default focus:outline focus:outline-[3px] focus:outline-offset-2 focus:outline-blue-focus active:top-0.5 active:bg-blue-active active:text-white-default active:outline-[3px] active:outline-offset-2 active:outline-blue-focus disabled:cursor-not-allowed disabled:!border-none disabled:bg-gray-light disabled:text-gray-dark",
   htmlLink: "no-underline visited:text-white-default",

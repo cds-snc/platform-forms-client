@@ -55,7 +55,7 @@ export const DynamicGroup = (props: DynamicGroupProps): React.ReactElement => {
   } = props;
   const [field, meta, helpers] = useField(props);
   const [rows, setRows] = useState(() => Array(field.value.length).fill(rowElements));
-  const rowRefs = useRef<Array<React.RefObject<HTMLFieldSetElement>>>(
+  const rowRefs = useRef<Array<React.RefObject<HTMLFieldSetElement | null>>>(
     Array(field.value.length).fill(createRef<HTMLFieldSetElement>())
   );
   const focusedRow = useRef<number | null>(null);
@@ -120,7 +120,7 @@ export const DynamicGroup = (props: DynamicGroupProps): React.ReactElement => {
 
   return (
     // eslint-disable-next-line jsx-a11y/no-noninteractive-tabindex
-    <div id={field.name} data-testid={`formGroup-${field.name}`} className={classes} tabIndex={0}>
+    (<div id={field.name} data-testid={`formGroup-${field.name}`} className={classes} tabIndex={0}>
       {title && <div className="gc-label">{title}</div>}
       {description && <Description id={`${field.name}-desc`}>{description}</Description>}
       {rows.map((row, index) => {
@@ -168,6 +168,6 @@ export const DynamicGroup = (props: DynamicGroupProps): React.ReactElement => {
           </fieldset>
         );
       })}
-    </div>
+    </div>)
   );
 };

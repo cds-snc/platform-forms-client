@@ -1,4 +1,4 @@
-import { ComponentType, JSXElementConstructor } from "react";
+import { ComponentType, JSXElementConstructor, type JSX } from "react";
 import { FormElement, ElementProperties, FormRecord } from "@lib/types";
 export type Language = "en" | "fr";
 

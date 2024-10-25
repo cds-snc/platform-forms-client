@@ -1,7 +1,20 @@
-"use client";
+"use client";;
 import React from "react";
-import PropTypes from "prop-types";
 import { cn } from "@lib/utils";
+
+interface MultipleChoiceProps {
+  type: string;
+  className?: string;
+  label?: React.ReactElement | string;
+  value: string;
+  name?: string;
+  id?: string;
+  children?: React.ReactElement | string;
+  onBlur?(...args: unknown[]): unknown;
+  onChange?(...args: unknown[]): unknown;
+  onFocus?(...args: unknown[]): unknown;
+  checked?: boolean;
+}
 
 const MultipleChoice = ({
   label,
@@ -18,21 +31,7 @@ const MultipleChoice = ({
   labelClassName,
   checkboxClassName,
   ...props
-}: {
-  label?: JSX.Element | string;
-  value?: string;
-  name?: string;
-  id?: string;
-  children?: JSX.Element | string;
-  className?: string;
-  type: string;
-  onBlur?: () => void;
-  onChange?: () => void;
-  onFocus?: () => void;
-  checked?: boolean;
-  checkboxClassName?: string;
-  labelClassName?: string;
-}) => (
+}: MultipleChoiceProps) => (
   <div className={cn(className, "multiple-choice-wrapper")}>
     <input
       type={type}
@@ -52,20 +51,6 @@ const MultipleChoice = ({
     {children}
   </div>
 );
-
-MultipleChoice.propTypes = {
-  type: PropTypes.string.isRequired,
-  className: PropTypes.string,
-  label: PropTypes.oneOfType([PropTypes.element, PropTypes.string]),
-  value: PropTypes.string.isRequired,
-  name: PropTypes.string,
-  id: PropTypes.string,
-  children: PropTypes.oneOfType([PropTypes.element, PropTypes.string]),
-  onBlur: PropTypes.func,
-  onChange: PropTypes.func,
-  onFocus: PropTypes.func,
-  checked: PropTypes.bool,
-};
 
 const Radio = ({ ...props }) => <MultipleChoice type={"radio"} {...props} />;
 

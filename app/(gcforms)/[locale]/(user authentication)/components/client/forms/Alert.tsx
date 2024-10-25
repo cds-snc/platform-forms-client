@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, type JSX } from "react";
 import classnames from "classnames";
 import { useTranslation } from "@i18n/client";
 import { Button } from "@clientComponents/globals";

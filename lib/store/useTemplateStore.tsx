@@ -504,7 +504,7 @@ export const TemplateStoreProvider = ({
   children,
   ...props
 }: React.PropsWithChildren<Partial<TemplateStoreProps>>) => {
-  const storeRef = useRef<TemplateStore>();
+  const storeRef = useRef<TemplateStore>(undefined);
   if (!storeRef.current) {
     // When there is an incoming form with a different id clear it first
     if (props.id) {

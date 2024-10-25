@@ -1,6 +1,6 @@
 "use client";
 import React, { useRef, useState } from "react";
-import { useFormState, useFormStatus } from "react-dom";
+import { useFormStatus } from "react-dom";
 import { useTranslation } from "@i18n/client";
 import { TextInput, Label, Dropdown } from "../../../../components/client/forms";
 import { Button, Alert } from "@clientComponents/globals";
@@ -54,7 +54,7 @@ export const SecurityQuestionsForm = ({ questions = [] }: { questions: Question[
     return result;
   };
 
-  const [state, formAction] = useFormState(localFormAction, {});
+  const [state, formAction] = useActionState(localFormAction, {});
 
   const onSelect = () => {
     if (formRef.current !== null) {

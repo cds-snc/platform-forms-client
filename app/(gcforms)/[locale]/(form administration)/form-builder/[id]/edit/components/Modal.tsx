@@ -7,7 +7,6 @@ import React, {
   useRef,
 } from "react";
 import { useTranslation } from "@i18n/client";
-import PropTypes from "prop-types";
 
 import { Button } from "@clientComponents/globals";
 import { Close } from "@serverComponents/icons";
@@ -26,6 +25,11 @@ const modalDefaultContext: IModalContext = {
 
 export const ModalContext = createContext<IModalContext>(modalDefaultContext);
 
+interface ModalProps {
+  title?: string;
+  children?: React.ReactElement | string;
+}
+
 export const Modal = ({
   title,
   children,
@@ -34,17 +38,8 @@ export const Modal = ({
   defaultOpen = false,
   handleClose = () => null,
   modalRef,
-  noOpenButton,
-}: {
-  title: string;
-  children: React.ReactNode;
-  openButton?: React.ReactElement | undefined;
-  saveButton?: React.ReactElement | string | undefined;
-  defaultOpen?: boolean;
-  handleClose?: () => void;
-  modalRef?: React.RefObject<HTMLDivElement> | undefined;
-  noOpenButton?: boolean;
-}) => {
+  noOpenButton
+}: ModalProps) => {
   const { updateIsOpen } = useModalStore();
   const [isOpen, setIsOpen] = React.useState<boolean>(defaultOpen);
 
@@ -76,11 +71,6 @@ export const Modal = ({
   );
 };
 
-Modal.propTypes = {
-  title: PropTypes.string,
-  children: PropTypes.oneOfType([PropTypes.element, PropTypes.string]),
-};
-
 // eslint-disable-next-line  @typescript-eslint/no-explicit-any
 type CallBack = (...args: any[]) => void;
 
@@ -91,13 +81,15 @@ const callAll =
   ) =>
     fns.forEach((fn) => typeof fn === "function" && fn(...args));
 
+interface ModalButtonProps {
+  isOpenButton?: boolean;
+  children?: React.ReactElement;
+}
+
 export const ModalButton = ({
   isOpenButton,
-  children,
-}: {
-  isOpenButton: boolean;
-  children?: React.ReactElement;
-}) => {
+  children
+}: ModalButtonProps) => {
   const { t } = useTranslation("form-builder");
   const { changeOpen } = useContext(ModalContext);
 
@@ -119,24 +111,18 @@ export const ModalButton = ({
   });
 };
 
-ModalButton.propTypes = {
-  isOpenButton: PropTypes.bool,
-  children: PropTypes.oneOfType([PropTypes.element]),
-};
+interface ModalContainerProps {
+  title?: string;
+  children?: React.ReactElement | string;
+}
 
 export const ModalContainer = ({
   title,
   children,
   saveButton,
   handleClose = () => null,
-  modalRef,
-}: {
-  title: string;
-  children: React.ReactNode;
-  saveButton?: React.ReactElement | string | undefined;
-  handleClose?: () => void;
-  modalRef?: React.RefObject<HTMLDivElement> | undefined;
-}) => {
+  modalRef
+}: ModalContainerProps) => {
   const { t } = useTranslation("form-builder");
   const { isOpen, changeOpen } = useContext(ModalContext);
   const modalContainer = useRef<CDSHTMLDialogElement>(null);
@@ -244,9 +230,4 @@ export const ModalContainer = ({
     </div>
   );
   /* eslint-enable */
-};
-
-ModalContainer.propTypes = {
-  title: PropTypes.string,
-  children: PropTypes.oneOfType([PropTypes.element, PropTypes.string]),
 };

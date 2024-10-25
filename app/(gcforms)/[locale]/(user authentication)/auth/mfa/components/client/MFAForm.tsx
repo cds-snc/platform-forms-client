@@ -1,6 +1,5 @@
 "use client";
 import React, { useRef, useState, useEffect } from "react";
-import { useFormState } from "react-dom";
 import { TextInput, Label, Alert, ErrorListItem } from "../../../../components/client/forms";
 import { useTranslation } from "@i18n/client";
 import { verify, getRedirectPath, ErrorStates } from "../../actions";
@@ -64,7 +63,7 @@ export const MFAForm = () => {
     return mfaState;
   };
 
-  const [state, formAction] = useFormState(localFormAction, {});
+  const [state, formAction] = useActionState(localFormAction, {});
 
   useEffect(() => {
     switch (state.authError?.id) {

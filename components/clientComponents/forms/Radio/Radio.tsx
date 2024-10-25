@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { type JSX } from "react";
 import { Field } from "formik";
 import { Description } from "@clientComponents/forms";
 import { ChoiceFieldProps } from "@lib/types";

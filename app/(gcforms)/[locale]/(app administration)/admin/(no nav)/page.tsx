@@ -6,11 +6,17 @@ import { ManageAccountsIcon, SettingsApplicationsIcon } from "@serverComponents/
 import { Metadata } from "next";
 import { redirect } from "next/navigation";
 
-export async function generateMetadata({
-  params: { locale },
-}: {
-  params: { locale: string };
-}): Promise<Metadata> {
+export async function generateMetadata(
+  props: {
+    params: Promise<{ locale: string }>;
+  }
+): Promise<Metadata> {
+  const params = await props.params;
+
+  const {
+    locale
+  } = params;
+
   const { t } = await serverTranslation("admin-home", { lang: locale });
   return {
     title: `${t("title")}`,
@@ -18,7 +24,13 @@ export async function generateMetadata({
 }
 
 // keeping this here if we want to add a welcome page
-export default async function Page({ params: { locale } }: { params: { locale: string } }) {
+export default async function Page(props: { params: Promise<{ locale: string }> }) {
+  const params = await props.params;
+
+  const {
+    locale
+  } = params;
+
   const { t } = await serverTranslation(["admin-home", "common"]);
 
   const { ability } = await authCheckAndRedirect();

@@ -1,10 +1,12 @@
-"use client";
+"use client";;
 import { NextButton } from "@clientComponents/forms/NextButton/NextButton";
 import { useRouter } from "next/navigation";
 import { useTranslation } from "@i18n/client";
 import { FormRecord, TypeOmit } from "@lib/types";
 import { Form } from "@clientComponents/forms/Form/Form";
 import { Language } from "@lib/types/form-builder-types";
+
+import type { JSX } from "react";
 
 export const FormWrapper = ({
   formRecord,

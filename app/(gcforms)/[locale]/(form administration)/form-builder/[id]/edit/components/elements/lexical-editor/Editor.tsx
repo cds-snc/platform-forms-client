@@ -1,6 +1,5 @@
-"use client";
+"use client";;
 import React, { useState } from "react";
-import PropTypes from "prop-types";
 import { LexicalComposer } from "@lexical/react/LexicalComposer";
 import { ListPlugin } from "@lexical/react/LexicalListPlugin";
 import { RichTextPlugin } from "@lexical/react/LexicalRichTextPlugin";
@@ -24,19 +23,19 @@ const FloatingLinkEditorPlugin = dynamic(() => import("./plugins/FloatingLinkEdi
 });
 const ListMaxIndentPlugin = dynamic(() => import("./plugins/ListMaxIndentPlugin"), { ssr: false });
 
+interface EditorProps {
+  id?: string;
+  content?: string;
+  onChange?(...args: unknown[]): unknown;
+}
+
 export const Editor = ({
   content,
   onChange,
   ariaLabel,
   ariaDescribedBy,
-  lang,
-}: {
-  content: string;
-  onChange: (value: string) => void;
-  ariaLabel?: string;
-  ariaDescribedBy?: string;
-  lang?: string;
-}) => {
+  lang
+}: EditorProps) => {
   const [floatingAnchorElem, setFloatingAnchorElem] = useState<HTMLDivElement | undefined>(
     undefined
   );
@@ -112,10 +111,4 @@ export const Editor = ({
       </LexicalComposer>
     </div>
   );
-};
-
-Editor.propTypes = {
-  id: PropTypes.string,
-  content: PropTypes.string,
-  onChange: PropTypes.func,
 };
