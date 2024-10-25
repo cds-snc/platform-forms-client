@@ -6,7 +6,6 @@ import { useTemplateStore } from "@lib/store/useTemplateStore";
 import { Option } from "./Option";
 import { Button } from "@clientComponents/globals";
 import { FormElementWithIndex } from "@lib/types/form-builder-types";
-// import { ModalRules } from "../ModalRules";
 import { ConditionalIndicatorOption } from "@formBuilder/components/shared";
 
 interface AddButtonProps {
@@ -137,17 +136,7 @@ export const Options = ({ item, renderIcon }: OptionsProps) => {
           <AddOptions index={parentIndex} />
         </div>
       </div>
-      <div>
-        {/* 
-        <ModalRules
-          mode={modalMode}
-          focusedOption={focusedOption}
-          modalRef={modalContainer}
-          item={item}
-          formId={formId}
-        />
-        */}
-      </div>
+      <div>{/* @todo fix Modal Rules */}</div>
     </div>
   );
 };
