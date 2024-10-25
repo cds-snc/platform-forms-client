@@ -15,7 +15,7 @@ describe("Form builder modal description", () => {
     cy.get('[data-testid="example-date-element"').should("be.visible");
 
     cy.get('#element-1 [data-testid="more"]').click();
-    cy.get("button").contains("Close").click();
+    cy.get('[data-testid="close-dialog"]').click();
 
     cy.get("button").contains(addElementButtonText).click();
     cy.get('[data-testid="preset-filter"]').click();
@@ -26,13 +26,13 @@ describe("Form builder modal description", () => {
 
     cy.get('#element-2 [data-testid="more"]').click();
     cy.get('[data-testid="description-input"]').contains("Enter a number");
-    cy.get("button").contains("Close").click();
+    cy.get('[data-testid="close-dialog"]').click();
+
     // rearrange the first element
     cy.get('#element-2 [data-testid="moveDown"]').click();
 
     cy.get('#element-2 [data-testid="more"]').click();
     cy.get('[data-testid="description-input"]').contains("Enter a number");
-    // cy.get("button").contains("Close").click();
-    cy.type("{esc}");
+    cy.get('[data-testid="close-dialog"]').click();
   });
 });
