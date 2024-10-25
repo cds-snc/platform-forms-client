@@ -1,4 +1,4 @@
-"use client";;
+"use client";
 import React, { useState } from "react";
 import { LexicalComposer } from "@lexical/react/LexicalComposer";
 import { ListPlugin } from "@lexical/react/LexicalListPlugin";
@@ -29,13 +29,7 @@ interface EditorProps {
   onChange?(...args: unknown[]): unknown;
 }
 
-export const Editor = ({
-  content,
-  onChange,
-  ariaLabel,
-  ariaDescribedBy,
-  lang
-}: EditorProps) => {
+export const Editor = ({ content, onChange, ariaLabel, ariaDescribedBy, lang }: EditorProps) => {
   const [floatingAnchorElem, setFloatingAnchorElem] = useState<HTMLDivElement | undefined>(
     undefined
   );

@@ -1,4 +1,4 @@
-"use client";;
+"use client";
 import React from "react";
 import { useTranslation } from "@i18n/client";
 import { FormElementTypes, ElementProperties } from "@lib/types";
@@ -22,14 +22,17 @@ const Hint = ({ children, ...props }: React.HTMLAttributes<HTMLParagraphElement>
 );
 
 interface ModalFormProps {
-  item?: object;
+  item?: FormElementWithIndex;
+  properties: ElementProperties;
+  updateModalProperties(id: number, properties: ElementProperties): void;
+  unsetModalField(field: string): void;
 }
 
 export const ModalForm = ({
   item,
   properties,
   updateModalProperties,
-  unsetModalField
+  unsetModalField,
 }: ModalFormProps) => {
   const { t } = useTranslation("form-builder");
 
@@ -39,10 +42,14 @@ export const ModalForm = ({
   }));
 
   const autocompleteSelectedValue = properties.autoComplete || "";
-  const checked = item.properties.validation?.required;
+  const checked = item?.properties.validation?.required;
+
+  if (!item) {
+    return null;
+  }
 
   return (
-    (<form onSubmit={(e: React.FormEvent<HTMLFormElement>) => e.preventDefault()}>
+    <form onSubmit={(e: React.FormEvent<HTMLFormElement>) => e.preventDefault()}>
       <section>
         <div className="mb-2">
           <ModalLabel htmlFor={`titleEn--modal--${item.index}`}>{t("question")}</ModalLabel>
@@ -326,6 +333,6 @@ export const ModalForm = ({
             </InfoDetails>
           </section>
         )}
-    </form>)
+    </form>
   );
 };

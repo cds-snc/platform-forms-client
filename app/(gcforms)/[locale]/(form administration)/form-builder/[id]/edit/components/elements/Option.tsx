@@ -1,4 +1,4 @@
-"use client";;
+"use client";
 import React, { useRef, useEffect, ReactElement, useCallback, useState } from "react";
 import { useTranslation } from "@i18n/client";
 import debounce from "lodash.debounce";
@@ -12,9 +12,13 @@ import { Language } from "@lib/types/form-builder-types";
 type RenderIcon = (index: number) => ReactElement | string | undefined;
 
 interface OptionProps {
-  parentIndex?: number;
-  index?: number;
-  renderIcon?(...args: unknown[]): unknown;
+  parentIndex: number;
+  index: number;
+  renderIcon?: RenderIcon;
+  initialValue: string;
+  onFocus?: () => void;
+  onBlur?: () => void;
+  id: number;
 }
 
 export const Option = ({
@@ -24,7 +28,7 @@ export const Option = ({
   renderIcon,
   initialValue,
   onFocus,
-  onBlur
+  onBlur,
 }: OptionProps) => {
   const input = useRef<HTMLInputElement>(null);
 

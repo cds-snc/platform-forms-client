@@ -1,4 +1,4 @@
-"use client";;
+"use client";
 import React, { ReactElement, useRef, useState } from "react";
 import { useTranslation } from "@i18n/client";
 
@@ -10,14 +10,11 @@ import { ModalRules } from "../ModalRules";
 import { ConditionalIndicatorOption } from "@formBuilder/components/shared";
 
 interface AddButtonProps {
-  index?: number;
-  onClick?(...args: unknown[]): unknown;
+  index: number;
+  onClick(...args: unknown[]): unknown;
 }
 
-const AddButton = ({
-  index,
-  onClick
-}: AddButtonProps) => {
+const AddButton = ({ index, onClick }: AddButtonProps) => {
   const { t } = useTranslation("form-builder");
   return (
     <Button
@@ -34,12 +31,10 @@ const AddButton = ({
 };
 
 interface AddOptionsProps {
-  index?: number;
+  index: number;
 }
 
-const AddOptions = ({
-  index
-}: AddOptionsProps) => {
+const AddOptions = ({ index }: AddOptionsProps) => {
   const { addChoice, setFocusInput } = useTemplateStore((s) => ({
     addChoice: s.addChoice,
     setFocusInput: s.setFocusInput,
@@ -61,15 +56,12 @@ const AddOptions = ({
 type RenderIcon = (index: number) => ReactElement | string | undefined;
 
 interface OptionsProps {
-  item?: object;
-  renderIcon?(...args: unknown[]): unknown;
+  item: FormElementWithIndex;
+  renderIcon: RenderIcon;
+  formId: string;
 }
 
-export const Options = ({
-  item,
-  renderIcon,
-  formId
-}: OptionsProps) => {
+export const Options = ({ item, renderIcon, formId }: OptionsProps) => {
   const { elements, translationLanguagePriority } = useTemplateStore((s) => ({
     elements: s.form.elements,
     translationLanguagePriority: s.translationLanguagePriority,
@@ -88,6 +80,8 @@ export const Options = ({
     return null;
   }
   const { choices } = element.properties;
+
+  if (!item) return null;
 
   if (!choices) {
     return <AddOptions index={parentIndex} />;
