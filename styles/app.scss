@@ -1,16 +1,14 @@
+@use "sass:meta";
 @tailwind base;
 @tailwind components;
 
-// Custom Variables
-@import "./_mixins";
-
 // Custom base CSS files
-@import "./_base";
-@import "./_typography";
-@import "./_forms";
-@import "./_form-builder";
-@import "./_header";
-@import "./animations";
+@include meta.load-css("_base");
+@include meta.load-css("_typography");
+@include meta.load-css("_forms");
+@include meta.load-css("_form-builder");
+@include meta.load-css("_header");
+@include meta.load-css("animations");
 
 // Tailwind Utilities needs to be loaded last to use inline
 @tailwind utilities;
