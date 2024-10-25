@@ -28,6 +28,12 @@ export const ModalContext = createContext<IModalContext>(modalDefaultContext);
 interface ModalProps {
   title?: string;
   children?: React.ReactElement | string;
+  openButton?: React.ReactElement;
+  saveButton?: React.ReactElement;
+  defaultOpen?: boolean;
+  handleClose?: () => void;
+  modalRef: React.RefObject<HTMLDivElement>;
+  noOpenButton: boolean;
 }
 
 export const Modal = ({
@@ -38,7 +44,7 @@ export const Modal = ({
   defaultOpen = false,
   handleClose = () => null,
   modalRef,
-  noOpenButton
+  noOpenButton,
 }: ModalProps) => {
   const { updateIsOpen } = useModalStore();
   const [isOpen, setIsOpen] = React.useState<boolean>(defaultOpen);
@@ -82,14 +88,11 @@ const callAll =
     fns.forEach((fn) => typeof fn === "function" && fn(...args));
 
 interface ModalButtonProps {
-  isOpenButton?: boolean;
+  isOpenButton: boolean;
   children?: React.ReactElement;
 }
 
-export const ModalButton = ({
-  isOpenButton,
-  children
-}: ModalButtonProps) => {
+export const ModalButton = ({ isOpenButton, children }: ModalButtonProps) => {
   const { t } = useTranslation("form-builder");
   const { changeOpen } = useContext(ModalContext);
 
@@ -107,6 +110,7 @@ export const ModalButton = ({
 
   // Note: This will not work if children is more than 1 element
   return React.cloneElement(children, {
+    // @ts-expect-error -- modal is being reworked
     onClick: callAll(() => changeOpen(isOpenButton), children.props.onClick),
   });
 };
@@ -114,6 +118,9 @@ export const ModalButton = ({
 interface ModalContainerProps {
   title?: string;
   children?: React.ReactElement | string;
+  saveButton?: React.ReactElement;
+  handleClose?: () => void;
+  modalRef: React.RefObject<HTMLDivElement>;
 }
 
 export const ModalContainer = ({
@@ -121,7 +128,7 @@ export const ModalContainer = ({
   children,
   saveButton,
   handleClose = () => null,
-  modalRef
+  modalRef,
 }: ModalContainerProps) => {
   const { t } = useTranslation("form-builder");
   const { isOpen, changeOpen } = useContext(ModalContext);
