@@ -59,7 +59,7 @@
     "@bufbuild/protobuf": "^2.2.0",
     "@casl/ability": "6.5.0",
     "@cdssnc/gcds-tokens": "^1.20.0",
-    "@headlessui/react": "^1.7.18",
+    "@headlessui/react": "^2.2.0",
     "@lexical/react": "^0.12.6",
     "@mdx-js/loader": "^3.1.0",
     "@mdx-js/react": "^3.1.0",
