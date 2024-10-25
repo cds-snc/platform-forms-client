@@ -37,7 +37,7 @@ import {
 } from "../utils/form-builder";
 import { logMessage } from "@lib/logger";
 import { decrementChoiceIds, decrementNextActionChoiceIds } from "@lib/formContext";
-import { Language } from "../types/form-builder-types";
+import { FormElementWithIndex, Language } from "../types/form-builder-types";
 import { FormElementTypes } from "@lib/types";
 import { defaultField, defaultForm } from "./defaults";
 import { storage } from "./storage";
@@ -407,7 +407,12 @@ const createTemplateStore = (initProps?: Partial<InitialTemplateStoreProps>) => 
               });
             },
             getElementById: (id) => {
-              return get().form.elements.find((el) => el.id === id);
+              const elIndex = get().form.elements.findIndex((el) => el.id === id);
+              const element = get().form.elements[elIndex] as FormElementWithIndex;
+              if (element) {
+                return { ...element, index: elIndex };
+              }
+              return element;
             },
             getName: () => get().name,
             getDeliveryOption: () => get().deliveryOption,
