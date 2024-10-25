@@ -2779,6 +2779,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@bufbuild/protobuf@npm:^2.2.0":
+  version: 2.2.0
+  resolution: "@bufbuild/protobuf@npm:2.2.0"
+  checksum: 10c0/00eac1a77d53b5700e0a91c83c9feb0c4014c230d503a1f9b2c4dcc30e7b806ed26e5bebcb4116f74d827373ed98e5f236358a08ee6b64d1b2780ad5a45e63c9
+  languageName: node
+  linkType: hard
+
 "@casl/ability@npm:6.5.0":
   version: 6.5.0
   resolution: "@casl/ability@npm:6.5.0"
@@ -13350,6 +13357,7 @@ __metadata:
     "@aws-sdk/types": "npm:^3.515.0"
     "@babel/core": "npm:^7.23.6"
     "@babel/preset-typescript": "npm:^7.24.7"
+    "@bufbuild/protobuf": "npm:^2.2.0"
     "@casl/ability": "npm:6.5.0"
     "@cdssnc/gcds-tokens": "npm:^1.20.0"
     "@headlessui/react": "npm:^1.7.18"
