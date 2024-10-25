@@ -43,9 +43,8 @@ const nextConfig = {
     cacheMaxMemorySize: 0, // disable default in-memory caching
   }),
   serverExternalPackages: ["@aws-sdk/lib-dynamodb", "pino"],
-  turbo: {
-    resolveExtensions: [".md", ".tsx", ".ts", ".jsx", ".js", ".mjs", ".json"],
-  },
+  
+ 
   async headers() {
     return [
       {
@@ -86,6 +85,14 @@ const nextConfig = {
     // ppr: true,
     serverActions: {
       bodySizeLimit: "5mb",
+    },
+    turbo: {
+      rules: {
+        '*.md': {
+          loaders: ['raw-loader'],
+          as: '*.js',
+        },
+      },
     },
   },
 };
