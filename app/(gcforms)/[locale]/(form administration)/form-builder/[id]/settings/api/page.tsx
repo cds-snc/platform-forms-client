@@ -1,11 +1,12 @@
 import { serverTranslation } from "@i18n";
 import { Metadata } from "next";
-import { ApiKey } from "./components/client/ApiKey";
 import { authCheckAndRedirect } from "@lib/actions";
 import { checkKeyExists } from "@lib/serviceAccount";
 import { redirect } from "next/navigation";
 import { checkPrivilegesAsBoolean } from "@lib/privileges";
 import { isProductionEnvironment } from "@lib/origin";
+import { ApiKeyButton } from "./components/ApiKeyButton";
+import { ApiKeyDialog } from "../../components/dialogs/ApiKeyDialog/ApiKeyDialog";
 
 export async function generateMetadata({
   params: { locale },
@@ -24,6 +25,7 @@ export default async function Page({
   params: { id: string; locale: string };
 }) {
   const { ability } = await authCheckAndRedirect();
+  const { t } = await serverTranslation("form-builder", { lang: locale });
 
   // If this production environment, check to ensure user has Manage All Forms permission
   if (
@@ -38,7 +40,15 @@ export default async function Page({
     redirect(`/${locale}/form-builder/${id}/settings`);
   }
 
-  const keyExists = await checkKeyExists(id);
+  const keyId = await checkKeyExists(id);
 
-  return <ApiKey keyExists={keyExists} />;
+  return (
+    <>
+      <div className="mb-10">
+        <h2 className="mb-6">{t("settings.api.title")}</h2>
+        <ApiKeyButton showDelete keyId={keyId} />
+      </div>
+      <ApiKeyDialog />
+    </>
+  );
 }

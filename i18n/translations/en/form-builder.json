@@ -619,11 +619,34 @@
   "settings": {
     "formManagement": "Form management",
     "api": {
+      "keyId": "API key ID",
       "title": "API Access",
-      "generateKey": "Generate Key",
+      "generateKey": "Create API key",
       "refreshKey": "Refresh Key",
-      "deleteKey": "Delete Key",
-      "keyExists": "API Key Exists"
+      "deleteKey": "Delete API key",
+      "keyExists": "API key exists",
+      "keyIdToolTip": {
+        "text1": "What is an API key ID?",
+        "text2": "The API key ID is not the API key itself. It provides a safe way to identify a key without sharing protected information."
+      },
+      "dialog": {
+        "title": "API key successfully created",
+        "heading": "GC Forms API keys are PROTECTED B",
+        "responsibility": "It is your responsibility to:",
+        "responsibility1": "Save this key in a secure location.",
+        "responsibility2": "Share the key only with people who need it.",
+        "responsibility3": "Send the key through secure channels, like encrypted email.",
+        "responsibility4": "Understand the <a href='canada.ca' target='_blank'>required security procedures.</a>",
+        "text1": "Do not lose your key",
+        "text2": "This key is provided once as it can give access to form response data. If you lose this key, or if it becomes compromised, you will have to create a new one.",
+        "cancelButton": "Cancel",
+        "downloadButton": "Download API key",
+        "confirm": {
+          "label": "Confirmation",
+          "required": "(required)",
+          "description": "Type <strong>AGREE</strong> in the box below to confirm you understand your responsibilities and agree to the <a href='canada.ca' target='_blank'>required security procedures</a> while storing and sharing this key."
+        }
+      }
     }
   },
   "settingsDeleteButton": "Delete",
@@ -921,7 +944,7 @@
       }
     },
     "banner": {
-      "text": "Form closed on {{month}} {{day}}, {{year}} at {{hour}}:{{minute}} ET"
+      "text": "Form closed on {{month}} {{day}}, {{year}} at {{hour}}:{{minute}} {{dayPeriod}} ET"
     }
   },
   "errorSavingForm": {
@@ -1157,6 +1180,28 @@
         "title": "Button to remove from the set",
         "description": "Add a relevant action that is specific for the people filling out the form. For example, “Remove address”"
       }
+    }
+  },
+  "scheduleClosingPage": {
+    "linkText": "Schedule form closing",
+    "dialog": {
+      "title": "Schedule the closed form message",
+      "text1": "Schedule a closing date",
+      "text2": "Set when you’d like to close the form.",
+      "datePicker": {
+        "month": "Month",
+        "day": "Day",
+        "year": "Year"
+      },
+      "timePicker": {
+        "text1": "Set a time",
+        "text2": "Provide the time using the 24-hour clock with timezone in Eastern Time"
+      },
+      "error": {
+        "notFutureDate": "Date and time must be upcoming, in the future."
+      },
+      "save": "Save",
+      "cancel": "Cancel"
     }
   }
 }

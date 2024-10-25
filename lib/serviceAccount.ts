@@ -135,7 +135,7 @@ export const checkKeyExists = async (templateId: string) => {
     });
 
   if (publicKeyId === remoteKey?.key?.id) {
-    return true;
+    return remoteKey?.key?.id;
   }
   // Key are out of sync or user does not exist
   return false;

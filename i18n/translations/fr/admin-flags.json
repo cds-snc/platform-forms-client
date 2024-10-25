@@ -21,6 +21,14 @@
     "addressComplete": {
       "title": "Adresse complète",
       "description": "Activer la complétion d'adresse CanadaPost pour les formulaires"
+    },
+    "scheduleClosingDate": {
+      "title": "Date de clôture du calendrier",
+      "description": "Activer la planification d'une date de clôture de formulaire"
+    },
+    "apiAccess": {
+      "title": "Accès API",
+      "description": "Activer les écrans et fonctionnalités d'accès à l'API"
     }
   }
 }

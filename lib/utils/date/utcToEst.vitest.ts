@@ -12,6 +12,7 @@ describe('utcToEst', () => {
       "minute": "00",
       "month": "October",
       "year": "2023",
+      "dayPeriod": "a.m.",
     });
   });
 
@@ -25,6 +26,7 @@ describe('utcToEst', () => {
       "minute": "00",
       "month": "octobre",
       "year": "2023",
+      "dayPeriod": "a.m.",
     });
   });
 

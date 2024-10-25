@@ -297,6 +297,9 @@ export const ResponseDelivery = () => {
 
   return (
     <>
+      <p className="mb-10 inline-block bg-purple-200 p-3 text-sm font-bold">
+        {t("settingsResponseDelivery.beforePublishMessage")}
+      </p>
       {status === "authenticated" && (
         <div className="mb-10">
           <div className="mb-10">
