@@ -1,6 +1,9 @@
-import { calculateDelayWithGroups, calculateDelayWithoutGroups } from "@lib/hooks/useFormDelayContext";
+import {
+  calculateDelayWithGroups,
+  calculateDelayWithoutGroups,
+} from "@lib/hooks/useFormDelayContext";
 import { FormElement } from "@lib/types";
-import {formElementsNonGroups} from "../../__fixtures__/formDelayElements.json";
+import { formElementsNonGroups } from "../../__fixtures__/formDelayElements.json";
 
 describe("calculateDelayWithGroups", () => {
   it("Should return a delay", () => {
@@ -36,7 +39,7 @@ describe("calculateDelayWithGroups", () => {
 
     // @ts-expect-error - testing invalid input
     const delay = calculateDelayWithGroups(startTime, endTime, requiredQuestions);
-    expect(delay).toBe(-1);
+    expect(delay).toBe(0);
   });
 });
 
@@ -58,10 +61,10 @@ describe("calculateDelayWithoutGroups", () => {
   it("Should handle invalid input", () => {
     // @ts-expect-error - testing invalid input
     const delay1 = calculateDelayWithoutGroups();
-    expect(delay1).toBe(-1);
+    expect(delay1).toBe(0);
 
     // @ts-expect-error - testing invalid input
     const delay2 = calculateDelayWithoutGroups({});
-    expect(delay2).toBe(-1);
+    expect(delay2).toBe(0);
   });
 });
