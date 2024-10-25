@@ -1,8 +1,8 @@
 "use client";
-import React, { useState, useEffect, type JSX } from "react";
+import React, { useState, useEffect } from "react";
 import { FormElementWithIndex } from "@lib/types/form-builder-types";
 import { useTemplateStore } from "@lib/store/useTemplateStore";
-import { PanelActions, PanelBodyRoot, MoreModal } from "./index";
+import { PanelActions, PanelBodyRoot } from "./index";
 import { useIsWithin } from "@lib/hooks/form-builder";
 import { useRefsContext } from "./RefsContext";
 import { FormElementTypes, FormElement } from "@lib/types";
@@ -67,11 +67,7 @@ export const ElementPanel = ({
   const moreButton =
     item.type !== "richText"
       ? {
-          moreButtonRenderer: (
-            moreButton: JSX.Element | undefined
-          ): React.ReactElement | string | undefined => (
-            <MoreModal item={item} moreButton={moreButton} onClose={forceRefresh} />
-          ),
+          moreButtonRenderer: () => <div>todo</div>,
         }
       : {};
 
