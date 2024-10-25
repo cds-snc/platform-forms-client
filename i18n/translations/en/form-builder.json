@@ -944,7 +944,7 @@
       }
     },
     "banner": {
-      "text": "Form closed on {{month}} {{day}}, {{year}} at {{hour}}:{{minute}} {{dayPeriod}} ET"
+      "text": "Form closed on {{month}} {{day}}, {{year}} at {{hour}}:{{minute}} ET"
     }
   },
   "errorSavingForm": {
@@ -1195,7 +1195,8 @@
       },
       "timePicker": {
         "text1": "Set a time",
-        "text2": "Provide the time using the 24-hour clock with timezone in Eastern Time"
+        "text2": "Provide the time using the 24-hour clock with timezone in Eastern Time.",
+        "text3": "For example 21:00"
       },
       "error": {
         "notFutureDate": "Date and time must be upcoming, in the future."
