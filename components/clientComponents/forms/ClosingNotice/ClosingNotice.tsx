@@ -31,16 +31,16 @@ export const ClosingNotice = ({
     return null;
   }
 
-  let month, day, year, hour, minute, dayPeriod;
+  let month, day, year, hour, minute;
 
   try {
-    ({ month, day, year, hour, minute, dayPeriod } = formClosingDateEst(closingDate, language));
+    ({ month, day, year, hour, minute } = formClosingDateEst(closingDate, language));
   } catch (error) {
     logMessage.info("Unable to parse closing date", closingDate);
     return null;
   }
 
-  if (!month || !day || !year || !hour || !minute || !dayPeriod) {
+  if (!month || !day || !year || !hour || !minute) {
     return null;
   }
 
@@ -56,7 +56,6 @@ export const ClosingNotice = ({
             year,
             hour,
             minute,
-            dayPeriod,
           })}
         </span>
       </p>
