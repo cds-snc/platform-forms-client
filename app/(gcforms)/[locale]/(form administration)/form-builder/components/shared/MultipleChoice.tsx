@@ -6,7 +6,7 @@ interface MultipleChoiceProps {
   type: string;
   className?: string;
   label?: React.ReactElement | string;
-  value: string;
+  value?: string;
   name?: string;
   id?: string;
   children?: React.ReactElement | string;
@@ -14,6 +14,9 @@ interface MultipleChoiceProps {
   onChange?(...args: unknown[]): unknown;
   onFocus?(...args: unknown[]): unknown;
   checked?: boolean;
+  labelClassName?: string;
+  checkboxClassName?: string;
+  [key: string]: unknown;
 }
 
 const MultipleChoice = ({
