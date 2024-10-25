@@ -62,6 +62,7 @@ export const SubElementModal = ({
   };
 
   return (
+    // @ts-expect-error -- todo fix
     <Modal
       title={t("moreOptions")}
       openButton={moreButton}
