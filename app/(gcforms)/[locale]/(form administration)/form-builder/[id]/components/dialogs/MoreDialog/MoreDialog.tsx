@@ -89,7 +89,12 @@ export const MoreDialog = () => {
   return (
     <>
       {isOpen && (
-        <Dialog dialogRef={dialog} actions={actions} handleClose={handleClose}>
+        <Dialog
+          dialogRef={dialog}
+          actions={actions}
+          handleClose={handleClose}
+          title={t("moreOptions")}
+        >
           <div className="p-5">
             <form onSubmit={(e: React.FormEvent<HTMLFormElement>) => e.preventDefault()}>
               <section>
