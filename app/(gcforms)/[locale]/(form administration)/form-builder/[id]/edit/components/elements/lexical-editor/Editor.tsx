@@ -27,6 +27,9 @@ interface EditorProps {
   id?: string;
   content?: string;
   onChange?(...args: unknown[]): unknown;
+  ariaLabel?: string;
+  ariaDescribedBy?: string;
+  lang?: string;
 }
 
 export const Editor = ({ content, onChange, ariaLabel, ariaDescribedBy, lang }: EditorProps) => {
@@ -94,7 +97,7 @@ export const Editor = ({ content, onChange, ariaLabel, ariaDescribedBy, lang }: 
                   }
                 }
               });
-              onChange(lines.join("\n"));
+              onChange && onChange(lines.join("\n"));
             });
           }}
         />
