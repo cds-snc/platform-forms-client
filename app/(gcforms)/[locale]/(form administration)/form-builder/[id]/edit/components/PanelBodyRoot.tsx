@@ -19,10 +19,11 @@ export const PanelBodyRoot = ({
   onChangeMade: () => void;
   formId: string;
 }) => {
-  const { updateField, propertyPath } = useTemplateStore((s) => ({
+  const { updateField, propertyPath, setChangeKey } = useTemplateStore((s) => ({
     propertyPath: s.propertyPath,
     localizeField: s.localizeField,
     updateField: s.updateField,
+    setChangeKey: s.setChangeKey,
   }));
 
   // all element state updaters should be setup at this level
@@ -34,10 +35,12 @@ export const PanelBodyRoot = ({
 
   const onQuestionChange = (itemId: number, val: string, lang: Language) => {
     updateField(propertyPath(itemId, LocalizedElementProperties.TITLE, lang), val);
+    setChangeKey(String(new Date().getTime()));
   };
 
   const onRequiredChange = (itemId: number, checked: boolean) => {
     updateField(propertyPath(itemId, "validation.required"), checked);
+    setChangeKey(String(new Date().getTime()));
     onChangeMade();
   };
 
