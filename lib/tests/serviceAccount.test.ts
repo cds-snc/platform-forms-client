@@ -143,6 +143,7 @@ describe("Service Account functions", () => {
         type: "serviceAccount",
         userId: "serviceAccountUser",
         keyId: "keyId",
+        formId: "templateId",
       });
       expect(mockedLogEvent).toHaveBeenCalledWith(
         "1",
@@ -162,6 +163,7 @@ describe("Service Account functions", () => {
         type: "serviceAccount",
         userId: "templateId",
         keyId: "keyId",
+        formId: "templateId",
       });
       expect(mockedLogEvent).toHaveBeenCalledWith(
         "1",
@@ -197,6 +199,7 @@ describe("Service Account functions", () => {
         keyId: "keyId",
         type: "serviceAccount",
         userId: "123412341234",
+        formId: "templateId",
       });
       expect(mockedLogEvent).toHaveBeenCalledWith(
         "1",
