@@ -12,6 +12,8 @@ import { ConfirmationAgreement } from "./ConfirmationAgreement";
 import { Note } from "./Note";
 import { downloadKey, _createKey } from "@formBuilder/[id]/settings/api/utils";
 import { SubmitButton as DownloadButton } from "@clientComponents/globals/Buttons/SubmitButton";
+import * as Alert from "@clientComponents/globals/Alert/Alert";
+import { logMessage } from "@lib/logger";
 
 type APIKeyCustomEventDetails = {
   id: string;
@@ -28,6 +30,8 @@ export const ApiKeyDialog = () => {
 
   // Handle loading state for download button
   const [generating, setGenerating] = useState(false);
+
+  const [hasError, setHasError] = useState(false);
 
   const handleOpen = useCallback((detail: APIKeyCustomEventDetails) => {
     if (detail) {
@@ -57,16 +61,24 @@ export const ApiKeyDialog = () => {
   // Actions
   const handleClose = () => {
     dialog.current?.close();
+    setHasError(false);
     setIsOpen(false);
   };
 
   const handleSave = async () => {
+    setHasError(false);
     setGenerating(true);
-    const key = await _createKey(id);
-    downloadKey(JSON.stringify(key), id);
-    setGenerating(false);
-    dialog.current?.close();
-    setIsOpen(false);
+    try {
+      const key = await _createKey(id);
+      downloadKey(JSON.stringify(key), id);
+      setGenerating(false);
+      dialog.current?.close();
+      setIsOpen(false);
+    } catch (error) {
+      logMessage.error(error);
+      setHasError(true);
+      setGenerating(false);
+    }
   };
 
   const actions = (
@@ -98,6 +110,14 @@ export const ApiKeyDialog = () => {
         >
           <div className="p-5">
             <h4 className="mb-4">{t("settings.api.dialog.heading")}</h4>
+            {hasError && (
+              <Alert.Danger>
+                <Alert.Title headingTag="h3">
+                  {t("settings.api.dialog.error.createFailed.title")}
+                </Alert.Title>
+                <p className="mb-2">{t("settings.api.dialog.error.createFailed.message")} </p>
+              </Alert.Danger>
+            )}
             <ResponsibilityList />
             <ConfirmationAgreement handleAgreement={hasAgreed} />
             <Note />
