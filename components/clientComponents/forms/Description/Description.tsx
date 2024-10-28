@@ -1,6 +1,6 @@
 "use client";
 import React from "react";
-import classnames from "classnames";
+import { cn } from "@lib/utils";
 
 export interface DescriptionProps {
   children: string | undefined;
@@ -11,7 +11,7 @@ export interface DescriptionProps {
 export const Description = (props: DescriptionProps): React.ReactElement => {
   const { children, className, id } = props;
 
-  const classes = classnames("gc-description", className);
+  const classes = cn("gc-description", className);
   return (
     <div id={`desc-${id}`} className={classes} data-testid="description">
       {children &&

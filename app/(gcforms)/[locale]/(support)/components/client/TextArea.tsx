@@ -1,4 +1,4 @@
-import classnames from "classnames";
+import { cn } from "@lib/utils";
 import { ErrorMessage } from "@clientComponents/forms";
 import { InputFieldProps } from "@lib/types";
 
@@ -18,7 +18,7 @@ export const TextArea = ({
   placeholder,
   error,
 }: TextAreaProps & JSX.IntrinsicElements["textarea"]): React.ReactElement => {
-  const classes = classnames("gc-textarea", className);
+  const classes = cn("gc-textarea", className);
   return (
     <>
       {error && <ErrorMessage id={"errorMessage" + id}>{error}</ErrorMessage>}

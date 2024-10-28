@@ -1,5 +1,5 @@
 import { getPublicTemplateByID } from "@lib/templates";
-import classnames from "classnames";
+import { cn } from "@lib/utils";
 import { TextPage, ClosedPage } from "@clientComponents/forms";
 import { getRenderedForm } from "@lib/formBuilder";
 import { dateHasPast } from "@lib/utils";
@@ -56,7 +56,7 @@ export default async function Page({
   }
 
   const language = locale as "en" | "fr";
-  const classes = classnames("gc-form-wrapper");
+  const classes = cn("gc-form-wrapper");
   const currentForm = getRenderedForm(formRecord, language);
   const formTitle = formRecord.form[getLocalizedProperty("title", language)] as string;
   const isAllowGrouping = allowGrouping();
