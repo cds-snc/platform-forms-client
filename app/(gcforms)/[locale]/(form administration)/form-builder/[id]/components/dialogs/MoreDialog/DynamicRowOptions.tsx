@@ -1,7 +1,7 @@
 import { Input } from "@formBuilder/components/shared";
 import { useTranslation } from "@i18n/client";
 import { FormElement, FormElementTypes } from "@lib/types";
-import { ModalLabel } from "./ModalLabel";
+import { Label } from "./Label";
 import { Hint } from "./Hint";
 
 export const DynamicRowOptions = ({
@@ -19,9 +19,7 @@ export const DynamicRowOptions = ({
 
   return (
     <section className="mb-4">
-      <ModalLabel htmlFor={`maxNumberOfRows--modal--${item.id}`}>
-        {t("maxNumberOfRows.label")}
-      </ModalLabel>
+      <Label htmlFor={`maxNumberOfRows--modal--${item.id}`}>{t("maxNumberOfRows.label")}</Label>
       <Hint>{t("maxNumberOfRows.description")}</Hint>
       <Input
         id={`maxNumberOfRows--modal--${item.id}`}

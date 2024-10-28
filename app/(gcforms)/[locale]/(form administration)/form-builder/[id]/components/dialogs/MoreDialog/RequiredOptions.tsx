@@ -2,7 +2,7 @@ import { useTranslation } from "@i18n/client";
 import { Checkbox } from "@formBuilder/components/shared";
 import { FormElement } from "@lib/types";
 
-export const AddRules = ({
+export const RequiredOptions = ({
   item,
   setItem,
 }: {

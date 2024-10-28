@@ -1,8 +1,8 @@
 import { useTranslation } from "@i18n/client";
-import { AutocompleteDropdown } from "./AutocompleteDropdown";
+import { AutocompleteOptions } from "./AutocompleteOptions";
 import { InfoDetails } from "@formBuilder/components/shared/InfoDetails";
 import { FormElement, FormElementTypes } from "@lib/types";
-import { ModalLabel } from "./ModalLabel";
+import { Label } from "./Label";
 import { Hint } from "./Hint";
 
 export const TextFieldOptions = ({
@@ -21,10 +21,10 @@ export const TextFieldOptions = ({
 
   return (
     <section className="mb-4 mt-8">
-      <ModalLabel htmlFor="">{t("selectAutocomplete")}</ModalLabel>
+      <Label htmlFor="">{t("selectAutocomplete")}</Label>
       <Hint>{t("selectAutocompleteHint")}</Hint>
       <div>
-        <AutocompleteDropdown
+        <AutocompleteOptions
           handleChange={(e) => {
             setItem({
               ...item,

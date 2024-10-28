@@ -1,6 +1,6 @@
 import { useTranslation } from "@i18n/client";
 import { LocalizedElementProperties } from "@lib/types/form-builder-types";
-import { ModalLabel } from "./ModalLabel";
+import { Label } from "./Label";
 import { Input } from "@formBuilder/components/shared";
 import { useTemplateStore } from "@lib/store/useTemplateStore";
 import { FormElement } from "@lib/types";
@@ -21,7 +21,7 @@ export const Question = ({
 
   return (
     <div className="mb-2">
-      <ModalLabel htmlFor={`titleEn--modal--${item.id}`}>{t("question")}</ModalLabel>
+      <Label htmlFor={`titleEn--modal--${item.id}`}>{t("question")}</Label>
       <Input
         id={`title--modal--${item.id}`}
         name={`item${item.id}`}

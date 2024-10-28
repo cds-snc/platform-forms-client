@@ -10,7 +10,7 @@ import { Question } from "./Question";
 import { Description } from "./Description";
 import { AddressCompleteOptions } from "./AddressCompleteOptions";
 import { FormattedDateOptions } from "./FormattedDateOptions";
-import { AddRules } from "./AddRules";
+import { RequiredOptions } from "./RequiredOptions";
 import { DynamicRowOptions } from "./DynamicRowOptions";
 import { TextFieldOptions } from "./TextFieldOptions";
 import { CharacterLimitOptions } from "./CharacterLimitOptions";
@@ -111,7 +111,7 @@ export const MoreDialog = () => {
 
               <FormattedDateOptions item={item} setItem={setItem} />
 
-              <AddRules item={item} setItem={setItem} />
+              <RequiredOptions item={item} setItem={setItem} />
 
               <DynamicRowOptions item={item} setItem={setItem} />
 

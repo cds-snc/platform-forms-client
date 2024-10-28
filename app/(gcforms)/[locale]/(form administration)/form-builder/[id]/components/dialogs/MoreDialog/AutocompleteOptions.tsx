@@ -14,7 +14,7 @@ const DropdownOption = (props: DropdownOptionProps): React.ReactElement => {
   return <option value={props.value}>{props.label}</option>;
 };
 
-export const AutocompleteDropdown = ({
+export const AutocompleteOptions = ({
   handleChange,
   selectedValue,
 }: {

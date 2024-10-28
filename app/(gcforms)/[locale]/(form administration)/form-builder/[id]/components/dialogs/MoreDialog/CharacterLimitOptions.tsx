@@ -1,7 +1,7 @@
 import { useTranslation } from "@i18n/client";
 import { InfoDetails, Input } from "@formBuilder/components/shared";
 import { FormElement, FormElementTypes } from "@lib/types";
-import { ModalLabel } from "./ModalLabel";
+import { Label } from "./Label";
 import { Hint } from "./Hint";
 
 export const CharacterLimitOptions = ({
@@ -23,9 +23,7 @@ export const CharacterLimitOptions = ({
   return (
     <section className="mb-4">
       <div className="mb-2">
-        <ModalLabel htmlFor={`characterLength--modal--${item.id}`}>
-          {t("maximumCharacterLength")}
-        </ModalLabel>
+        <Label htmlFor={`characterLength--modal--${item.id}`}>{t("maximumCharacterLength")}</Label>
         <Hint>{t("characterLimitDescription")}</Hint>
         <Input
           id={`characterLength--modal--${item.id}`}

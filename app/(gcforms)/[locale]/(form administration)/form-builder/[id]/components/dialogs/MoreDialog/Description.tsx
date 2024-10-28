@@ -1,6 +1,6 @@
 import { useTranslation } from "@i18n/client";
 import { LocalizedElementProperties } from "@lib/types/form-builder-types";
-import { ModalLabel } from "./ModalLabel";
+import { Label } from "./Label";
 import { Hint } from "./Hint";
 import { TextArea } from "@formBuilder/components/shared";
 import { useTemplateStore } from "@lib/store/useTemplateStore";
@@ -22,7 +22,7 @@ export const Description = ({
 
   return (
     <div className="mb-2">
-      <ModalLabel>{t("inputDescription")}</ModalLabel>
+      <Label>{t("inputDescription")}</Label>
       <Hint>{t("descriptionDescription")}</Hint>
       <TextArea
         id={`description--modal--${item.id}`}
