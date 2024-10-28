@@ -11,6 +11,8 @@ export const AddRules = ({
 }) => {
   const { t } = useTranslation("form-builder");
   const checked = item.properties.validation?.required;
+  const allRequired = item.properties.validation?.all;
+
   return (
     <section className="mb-4">
       <div className="mb-2">
@@ -36,7 +38,8 @@ export const AddRules = ({
               },
             });
           }}
-          label={t("required")}
+          label={allRequired ? t("allRequired") : t("required")}
+          disabled={item.properties.validation?.all}
         ></Checkbox>
       </div>
     </section>
