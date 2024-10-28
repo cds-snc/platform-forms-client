@@ -35,7 +35,6 @@ export const DynamicRowOptions = ({
           }
         }}
         onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-          // @TODO: is this still required / does this work? previous code used unsetModalField
           // if value is "", unset the field
           if (e.target.value === "") {
             setItem({
