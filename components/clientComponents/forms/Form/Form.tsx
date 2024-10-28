@@ -399,7 +399,11 @@ export const Form = withFormik<FormProps, Responses>({
       );
 
       if (result.error) {
-        formikBag.setStatus("FileError");
+        if (result.error.message.includes("FileValidationResult")) {
+          formikBag.setStatus("FileError");
+        } else {
+          formikBag.setStatus("Error");
+        }
       } else {
         formikBag.props.onSuccess(result.id);
       }
