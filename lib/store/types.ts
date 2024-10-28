@@ -64,7 +64,7 @@ export interface TemplateStoreState extends TemplateStoreProps {
   getSchema: () => string;
   getIsPublished: () => boolean;
   setIsPublished: (isPublished: boolean) => void;
-  getElementById: (id: number) => FormElementWithIndex | undefined;
+  getFormElementById: (id: number) => FormElementWithIndex | undefined;
   getName: () => string;
   getDeliveryOption: () => DeliveryOption | undefined;
   resetDeliveryOption: () => void;

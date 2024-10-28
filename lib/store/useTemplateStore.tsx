@@ -406,7 +406,7 @@ const createTemplateStore = (initProps?: Partial<InitialTemplateStoreProps>) => 
                 state.isPublished = isPublished;
               });
             },
-            getElementById: (id) => {
+            getFormElementById: (id) => {
               const elIndex = get().form.elements.findIndex((el) => el.id === id);
               const element = get().form.elements[elIndex] as FormElementWithIndex;
               if (element) {

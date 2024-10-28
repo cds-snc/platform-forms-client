@@ -18,13 +18,13 @@ import { useRefsContext } from "@formBuilder/[id]/edit/components/RefsContext";
 import { FormElementWithIndex } from "@lib/types/form-builder-types";
 
 export const MoreDialog = () => {
-  const { elements, updateField, setChangeKey, getElementById } = useTemplateStore((s) => ({
+  const { elements, updateField, setChangeKey, getFormElementById } = useTemplateStore((s) => ({
     lang: s.lang,
     updateField: s.updateField,
     elements: s.form.elements,
     getFocusInput: s.getFocusInput,
     setChangeKey: s.setChangeKey,
-    getElementById: s.getElementById,
+    getFormElementById: s.getFormElementById,
   }));
 
   const [item, setItem] = React.useState<FormElementWithIndex | undefined>(undefined);
@@ -41,12 +41,12 @@ export const MoreDialog = () => {
   const handleOpenDialog = useCallback(
     (detail: MoreDialogEventDetails) => {
       if (detail) {
-        const freshItem = getElementById(detail.itemId);
+        const freshItem = getFormElementById(detail.itemId);
         setItem(freshItem);
         setIsOpen(true);
       }
     },
-    [getElementById]
+    [getFormElementById]
   );
 
   useEffect(() => {
