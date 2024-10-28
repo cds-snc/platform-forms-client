@@ -13,7 +13,6 @@ export const CharacterLimitOptions = ({
 }) => {
   const { t } = useTranslation("form-builder");
 
-  // @TODO: check?
   if (
     ![FormElementTypes.textField, FormElementTypes.textArea].includes(item.type) ||
     (item.properties.validation?.type && item.properties.validation?.type !== "text")
