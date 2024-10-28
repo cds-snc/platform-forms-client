@@ -3,7 +3,6 @@ import { cn } from "@lib/utils";
 import { ErrorMessage } from "@clientComponents/forms";
 import { InputFieldProps, HTMLTextInputTypeAttribute } from "@lib/types";
 import { useTranslation } from "@i18n/client";
-import type { JSX } from "react";
 
 export interface TextInputProps extends InputFieldProps {
   type: HTMLTextInputTypeAttribute;

@@ -2,7 +2,6 @@ import React, { useEffect, useRef, type JSX } from "react";
 import { cn } from "@lib/utils";
 import { useTranslation } from "@i18n/client";
 import { Button } from "@clientComponents/globals";
-import type { JSX } from "react";
 
 export enum ErrorStatus {
   SUCCESS,
