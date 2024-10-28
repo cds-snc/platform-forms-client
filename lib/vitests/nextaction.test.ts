@@ -1,3 +1,4 @@
+import { expect } from 'vitest'
 import { getNextAction } from "@lib/formContext";
 
 describe("getNextAction function", () => {

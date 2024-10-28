@@ -1,3 +1,4 @@
+import { expect } from 'vitest'
 import { getLayoutFromGroups } from "@lib/utils/form-builder/groupedFormHelpers";
 import { FormProperties } from "@lib/types";
 import validFormTemplate from "../../__fixtures__/testDataWithGroups.json";
