@@ -1,7 +1,6 @@
 "use client";
 import React, { useState, useImperativeHandle, useEffect } from "react";
 import { InputFieldProps } from "@lib/types";
-import { cn } from "@lib/utils";
 import { useField } from "formik";
 import { ErrorMessage } from "@clientComponents/forms";
 import { useCombobox } from "downshift";
