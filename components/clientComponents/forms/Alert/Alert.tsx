@@ -3,6 +3,7 @@ import React, { useEffect, useRef } from "react";
 import classnames from "classnames";
 import { useTranslation } from "@i18n/client";
 import { Button } from "@clientComponents/globals";
+import type { JSX } from "react";
 
 export enum ErrorStatus {
   SUCCESS,
