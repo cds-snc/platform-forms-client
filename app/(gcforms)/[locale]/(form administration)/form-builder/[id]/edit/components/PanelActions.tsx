@@ -26,7 +26,6 @@ export const PanelActions = ({
   isLastItem,
   totalItems,
   isSubPanel,
-  // moreButtonRenderer,
   handleAdd,
   handleRemove,
   handleMoveUp,
@@ -39,7 +38,6 @@ export const PanelActions = ({
   isLastItem: boolean;
   totalItems: number;
   isSubPanel?: boolean;
-  // moreButtonRenderer?: RenderMoreFunc;
   handleAdd: (type?: FormElementTypes) => void;
   handleRemove: () => void;
   handleMoveUp: () => void;
@@ -179,12 +177,6 @@ export const PanelActions = ({
     );
   });
 
-  // let moreButton = undefined;
-
-  // if (hasMoreButton) {
-  //   moreButton = actions.pop();
-  // }
-
   const outerPanelClasses = isSubPanel
     ? ""
     : `z-50 laptop:absolute laptop:invisible laptop:group-[.active]:visible laptop:group-active:visible laptop:group-focus-within:visible laptop:right-0 laptop:top-0 ${
@@ -210,7 +202,6 @@ export const PanelActions = ({
           data-testid="panel-actions"
         >
           {actions}
-          {/* {moreButtonRenderer && moreButtonRenderer(moreButton)} */}
         </div>
 
         {elementDialog && isSubPanel && (
