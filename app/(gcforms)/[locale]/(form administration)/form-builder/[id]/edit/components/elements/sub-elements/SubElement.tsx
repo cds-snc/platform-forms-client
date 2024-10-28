@@ -119,13 +119,6 @@ export const SubElement = ({
                     subMoveDown(item.id, subIndex);
                     forceRefresh(item.id);
                   }}
-                  // moreButtonRenderer={() => {
-                  //   if (item.type === "richText") {
-                  //     return <div />;
-                  //   }
-
-                  //   return <button onClick={() => alert("Huzzah")}>More...</button>;
-                  // }}
                   filterElements={elementFilter}
                 />
               }
