@@ -1,10 +1,11 @@
 import React from "react";
-import { AddRules } from "../AddRules";
+import { RequiredOptions } from "../RequiredOptions";
+import { FormElementTypes } from "@lib/types";
 
 describe("<AddRules />", () => {
   const item = {
     id: 1,
-    type: "textField",
+    type: FormElementTypes.textField,
     properties: {
       subElements: [],
       choices: [
@@ -32,7 +33,7 @@ describe("<AddRules />", () => {
 
     const setItemSpy = cy.spy().as("setItem");
 
-    cy.mount(<AddRules item={item} setItem={setItemSpy} />);
+    cy.mount(<RequiredOptions item={item} setItem={setItemSpy} />);
   });
 
   it("sets Required to true", () => {
@@ -40,7 +41,7 @@ describe("<AddRules />", () => {
 
     const setItemSpy = cy.spy().as("setItem");
 
-    cy.mount(<AddRules item={item} setItem={setItemSpy} />);
+    cy.mount(<RequiredOptions item={item} setItem={setItemSpy} />);
     cy.get('[data-testid="required"]').click();
     cy.get("@setItem").should("have.been.calledWith", {
       ...item,
