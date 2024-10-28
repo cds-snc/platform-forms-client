@@ -15,7 +15,7 @@ import { DynamicRowOptions } from "./DynamicRowOptions";
 import { TextFieldOptions } from "./TextFieldOptions";
 import { CharacterLimitOptions } from "./CharacterLimitOptions";
 import { useRefsContext } from "@formBuilder/[id]/edit/components/RefsContext";
-import { FormElementWithIndex } from "@lib/types/form-builder-types";
+import { FormElement } from "@lib/types";
 
 export const MoreDialog = () => {
   const { elements, updateField, setChangeKey, getFormElementById } = useTemplateStore((s) => ({
@@ -27,7 +27,7 @@ export const MoreDialog = () => {
     getFormElementById: s.getFormElementById,
   }));
 
-  const [item, setItem] = React.useState<FormElementWithIndex | undefined>(undefined);
+  const [item, setItem] = React.useState<FormElement | undefined>(undefined);
   const [isOpen, setIsOpen] = React.useState(false);
   const { Event } = useCustomEvent();
   const dialog = useDialogRef();

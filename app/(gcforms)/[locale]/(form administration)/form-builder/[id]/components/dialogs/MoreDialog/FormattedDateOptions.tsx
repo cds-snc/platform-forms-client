@@ -1,14 +1,13 @@
 import { InfoDetails, Radio } from "@formBuilder/components/shared";
 import { useTranslation } from "@i18n/client";
-import { FormElementTypes } from "@lib/types";
-import { FormElementWithIndex } from "@lib/types/form-builder-types";
+import { FormElement, FormElementTypes } from "@lib/types";
 
 export const FormattedDateOptions = ({
   item,
   setItem,
 }: {
-  item: FormElementWithIndex;
-  setItem: (item: FormElementWithIndex) => void;
+  item: FormElement;
+  setItem: (item: FormElement) => void;
 }) => {
   const { t } = useTranslation("form-builder");
 

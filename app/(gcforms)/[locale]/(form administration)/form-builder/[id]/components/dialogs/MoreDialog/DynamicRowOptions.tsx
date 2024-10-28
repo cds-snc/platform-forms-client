@@ -1,7 +1,6 @@
-import { FormElementWithIndex } from "@lib/types/form-builder-types";
 import { Input } from "@formBuilder/components/shared";
 import { useTranslation } from "@i18n/client";
-import { FormElementTypes } from "@lib/types";
+import { FormElement, FormElementTypes } from "@lib/types";
 import { ModalLabel } from "./ModalLabel";
 import { Hint } from "./Hint";
 
@@ -9,8 +8,8 @@ export const DynamicRowOptions = ({
   item,
   setItem,
 }: {
-  item: FormElementWithIndex;
-  setItem: (item: FormElementWithIndex) => void;
+  item: FormElement;
+  setItem: (item: FormElement) => void;
 }) => {
   const { t } = useTranslation("form-builder");
 
@@ -20,12 +19,12 @@ export const DynamicRowOptions = ({
 
   return (
     <section className="mb-4">
-      <ModalLabel htmlFor={`maxNumberOfRows--modal--${item.index}`}>
+      <ModalLabel htmlFor={`maxNumberOfRows--modal--${item.id}`}>
         {t("maxNumberOfRows.label")}
       </ModalLabel>
       <Hint>{t("maxNumberOfRows.description")}</Hint>
       <Input
-        id={`maxNumberOfRows--modal--${item.index}`}
+        id={`maxNumberOfRows--modal--${item.id}`}
         type="number"
         min="1"
         className="w-1/4"

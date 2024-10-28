@@ -1,15 +1,14 @@
 "use client";
 import { useTranslation } from "@i18n/client";
 import { Checkbox, Radio } from "@formBuilder/components/shared";
-import { AddressComponents, FormElementTypes } from "@lib/types";
-import { FormElementWithIndex } from "@lib/types/form-builder-types";
+import { AddressComponents, FormElement, FormElementTypes } from "@lib/types";
 
 export const AddressCompleteOptions = ({
   item,
   setItem,
 }: {
-  item: FormElementWithIndex;
-  setItem: (item: FormElementWithIndex) => void;
+  item: FormElement;
+  setItem: (item: FormElement) => void;
 }) => {
   const { t } = useTranslation("form-builder");
 
@@ -45,13 +44,13 @@ export const AddressCompleteOptions = ({
       <h3>{t("addElementDialog.addressComplete.options")}</h3>
 
       <Checkbox
-        id={`addressComponent-${item.index}-id-canadianOnly`}
+        id={`addressComponent-${item.id}-id-canadianOnly`}
         value={
-          `addressComponent-${item.index}-value-canadianOnly-` +
+          `addressComponent-${item.id}-value-canadianOnly-` +
           item.properties.addressComponents?.canadianOnly
         }
         key={
-          `addressComponent-${item.index}-canadianOnly-` +
+          `addressComponent-${item.id}-canadianOnly-` +
           item.properties.addressComponents?.canadianOnly
         }
         defaultChecked={item.properties.addressComponents?.canadianOnly}

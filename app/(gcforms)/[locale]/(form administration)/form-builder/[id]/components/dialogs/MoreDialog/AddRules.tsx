@@ -1,13 +1,13 @@
 import { useTranslation } from "@i18n/client";
-import { FormElementWithIndex } from "@lib/types/form-builder-types";
 import { Checkbox } from "@formBuilder/components/shared";
+import { FormElement } from "@lib/types";
 
 export const AddRules = ({
   item,
   setItem,
 }: {
-  item: FormElementWithIndex;
-  setItem: (item: FormElementWithIndex) => void;
+  item: FormElement;
+  setItem: (item: FormElement) => void;
 }) => {
   const { t } = useTranslation("form-builder");
   const checked = item.properties.validation?.required;
@@ -19,9 +19,9 @@ export const AddRules = ({
       <div>
         <Checkbox
           data-testid="required"
-          id={`required-${item.index}-id-modal`}
-          value={`required-${item.index}-value-modal-` + checked}
-          key={`required-${item.index}-modal-` + checked}
+          id={`required-${item.id}-id-modal`}
+          value={`required-${item.id}-value-modal-` + checked}
+          key={`required-${item.id}-modal-` + checked}
           defaultChecked={checked}
           onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
             // clone the existing properties so that we don't overwrite other keys in "validation"

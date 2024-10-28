@@ -1,16 +1,17 @@
 import { useTranslation } from "@i18n/client";
-import { FormElementWithIndex, LocalizedElementProperties } from "@lib/types/form-builder-types";
+import { LocalizedElementProperties } from "@lib/types/form-builder-types";
 import { ModalLabel } from "./ModalLabel";
 import { Hint } from "./Hint";
 import { TextArea } from "@formBuilder/components/shared";
 import { useTemplateStore } from "@lib/store/useTemplateStore";
+import { FormElement } from "@lib/types";
 
 export const Description = ({
   item,
   setItem,
 }: {
-  item: FormElementWithIndex;
-  setItem: (item: FormElementWithIndex) => void;
+  item: FormElement;
+  setItem: (item: FormElement) => void;
 }) => {
   const { t } = useTranslation("form-builder");
 
@@ -24,7 +25,7 @@ export const Description = ({
       <ModalLabel>{t("inputDescription")}</ModalLabel>
       <Hint>{t("descriptionDescription")}</Hint>
       <TextArea
-        id={`description--modal--${item.index}`}
+        id={`description--modal--${item.id}`}
         placeholder={t("inputDescription")}
         testId="description-input"
         className="w-11/12"

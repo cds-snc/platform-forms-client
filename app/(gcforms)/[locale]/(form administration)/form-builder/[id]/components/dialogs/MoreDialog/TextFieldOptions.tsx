@@ -1,8 +1,7 @@
-import { FormElementWithIndex } from "@lib/types/form-builder-types";
 import { useTranslation } from "@i18n/client";
 import { AutocompleteDropdown } from "./AutocompleteDropdown";
 import { InfoDetails } from "@formBuilder/components/shared/InfoDetails";
-import { FormElementTypes } from "@lib/types";
+import { FormElement, FormElementTypes } from "@lib/types";
 import { ModalLabel } from "./ModalLabel";
 import { Hint } from "./Hint";
 
@@ -10,8 +9,8 @@ export const TextFieldOptions = ({
   item,
   setItem,
 }: {
-  item: FormElementWithIndex;
-  setItem: (item: FormElementWithIndex) => void;
+  item: FormElement;
+  setItem: (item: FormElement) => void;
 }) => {
   const { t } = useTranslation("form-builder");
   const autocompleteSelectedValue = item.properties.autoComplete || "";

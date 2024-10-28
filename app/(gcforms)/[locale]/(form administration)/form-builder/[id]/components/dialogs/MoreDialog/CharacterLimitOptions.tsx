@@ -1,7 +1,6 @@
 import { useTranslation } from "@i18n/client";
-import { FormElementWithIndex } from "@lib/types/form-builder-types";
 import { InfoDetails, Input } from "@formBuilder/components/shared";
-import { FormElementTypes } from "@lib/types";
+import { FormElement, FormElementTypes } from "@lib/types";
 import { ModalLabel } from "./ModalLabel";
 import { Hint } from "./Hint";
 
@@ -9,8 +8,8 @@ export const CharacterLimitOptions = ({
   item,
   setItem,
 }: {
-  item: FormElementWithIndex;
-  setItem: (item: FormElementWithIndex) => void;
+  item: FormElement;
+  setItem: (item: FormElement) => void;
 }) => {
   const { t } = useTranslation("form-builder");
 
@@ -25,12 +24,12 @@ export const CharacterLimitOptions = ({
   return (
     <section className="mb-4">
       <div className="mb-2">
-        <ModalLabel htmlFor={`characterLength--modal--${item.index}`}>
+        <ModalLabel htmlFor={`characterLength--modal--${item.id}`}>
           {t("maximumCharacterLength")}
         </ModalLabel>
         <Hint>{t("characterLimitDescription")}</Hint>
         <Input
-          id={`characterLength--modal--${item.index}`}
+          id={`characterLength--modal--${item.id}`}
           type="number"
           min="1"
           className="w-1/4"

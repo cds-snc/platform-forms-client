@@ -1,15 +1,16 @@
 import { useTranslation } from "@i18n/client";
-import { FormElementWithIndex, LocalizedElementProperties } from "@lib/types/form-builder-types";
+import { LocalizedElementProperties } from "@lib/types/form-builder-types";
 import { ModalLabel } from "./ModalLabel";
 import { Input } from "@formBuilder/components/shared";
 import { useTemplateStore } from "@lib/store/useTemplateStore";
+import { FormElement } from "@lib/types";
 
 export const Question = ({
   item,
   setItem,
 }: {
-  item: FormElementWithIndex;
-  setItem: (item: FormElementWithIndex) => void;
+  item: FormElement;
+  setItem: (item: FormElement) => void;
 }) => {
   const { t } = useTranslation("form-builder");
 
@@ -20,10 +21,10 @@ export const Question = ({
 
   return (
     <div className="mb-2">
-      <ModalLabel htmlFor={`titleEn--modal--${item.index}`}>{t("question")}</ModalLabel>
+      <ModalLabel htmlFor={`titleEn--modal--${item.id}`}>{t("question")}</ModalLabel>
       <Input
-        id={`title--modal--${item.index}`}
-        name={`item${item.index}`}
+        id={`title--modal--${item.id}`}
+        name={`item${item.id}`}
         placeholder={t("question")}
         value={
           item.properties[
