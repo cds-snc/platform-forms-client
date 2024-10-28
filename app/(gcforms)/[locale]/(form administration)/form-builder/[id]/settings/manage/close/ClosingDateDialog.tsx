@@ -26,7 +26,8 @@ export const ClosingDateDialog = ({
   const dialogRef = useDialogRef();
   const [hasErrors, setHasErrors] = useState(false);
 
-  const [month, setMonth] = useState<string>("");
+  // Default to January ("1") for the case of no month selection, which would not trigger a change event (not set any value for it)
+  const [month, setMonth] = useState<string>("1");
   const [day, setDay] = useState<string>("");
   const [year, setYear] = useState<string>("");
   const [time, setTime] = useState<string>("");
@@ -103,6 +104,9 @@ export const ClosingDateDialog = ({
           handleSave();
         }}
       >
+        <h1>
+          MONTH={month}, {typeof month}
+        </h1>
         <div className="p-4">
           <p className="mb-2 font-bold">{t("scheduleClosingPage.dialog.text1")}</p>
           <div>
