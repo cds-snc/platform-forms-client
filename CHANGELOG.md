@@ -5,6 +5,45 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.24.0](https://github.com/cds-snc/platform-forms-client/compare/v3.23.0...v3.24.0) (2024-10-28)
+
+
+### Features
+
+* add form identifier to API key data ([#4337](https://github.com/cds-snc/platform-forms-client/issues/4337)) ([342af5f](https://github.com/cds-snc/platform-forms-client/commit/342af5f50572b11d6d2be63fe848a58c735cbf90))
+* schedule form closing date ([#4433](https://github.com/cds-snc/platform-forms-client/issues/4433)) ([cd724b6](https://github.com/cds-snc/platform-forms-client/commit/cd724b69e397aa7eeacf6107393be707784069ef))
+* Self-serve Manage Form Ownership ([#4392](https://github.com/cds-snc/platform-forms-client/issues/4392)) ([748ab23](https://github.com/cds-snc/platform-forms-client/commit/748ab23db0e2c717497b70256969c55fc90c54ef))
+
+
+### Bug Fixes
+
+* update form timer to handle groups ([#4437](https://github.com/cds-snc/platform-forms-client/issues/4437)) ([e843f41](https://github.com/cds-snc/platform-forms-client/commit/e843f4180cb7cfe303c25aaf58bd84ef44d74673))
+* Updates the close form dialog title ([#4474](https://github.com/cds-snc/platform-forms-client/issues/4474)) ([318eb0b](https://github.com/cds-snc/platform-forms-client/commit/318eb0b7d47ea22f1ae3af9b993aa2c6fe0ae13f))
+* Updates the review page start title  ([#4480](https://github.com/cds-snc/platform-forms-client/issues/4480)) ([c5b3824](https://github.com/cds-snc/platform-forms-client/commit/c5b38242195b2040b615f44a2c164f53fb840c57))
+
+
+### Miscellaneous Chores
+
+* add ACOA branding ([#4371](https://github.com/cds-snc/platform-forms-client/issues/4371)) ([5c5ec15](https://github.com/cds-snc/platform-forms-client/commit/5c5ec154759b03b815184c04062585748e84d562))
+* Add api key dialog ([#4448](https://github.com/cds-snc/platform-forms-client/issues/4448)) ([d3599c6](https://github.com/cds-snc/platform-forms-client/commit/d3599c6aefc20654e06bd3265baa4492328a98ff))
+* add feature flag for API ([#4466](https://github.com/cds-snc/platform-forms-client/issues/4466)) ([af12654](https://github.com/cds-snc/platform-forms-client/commit/af1265424d501c1e879b7f49fb97308f79d93978))
+* Bump React types packages ([#4441](https://github.com/cds-snc/platform-forms-client/issues/4441)) ([b5ba612](https://github.com/cds-snc/platform-forms-client/commit/b5ba612907266302ff57e361dc2abc7055b08d00))
+* Bump React version ([#4438](https://github.com/cds-snc/platform-forms-client/issues/4438)) ([84a0a36](https://github.com/cds-snc/platform-forms-client/commit/84a0a36da15a677e6edc8bbf6fdb56d82fefe437))
+* Bump Zustand 5.0.0 ([#4440](https://github.com/cds-snc/platform-forms-client/issues/4440)) ([f918409](https://github.com/cds-snc/platform-forms-client/commit/f918409eb05476d97e6f2a677aecf485a135d99e))
+* Closed date banners ([#4426](https://github.com/cds-snc/platform-forms-client/issues/4426)) ([f025260](https://github.com/cds-snc/platform-forms-client/commit/f02526048ad7ba30061efba2e8fde69baec4e323))
+* **deps:** update all non-major docker images ([#3997](https://github.com/cds-snc/platform-forms-client/issues/3997)) ([9c044f6](https://github.com/cds-snc/platform-forms-client/commit/9c044f67ac2fa93835e691e68dc4ac5710a05edd))
+* **deps:** update all non-major github action dependencies ([#4044](https://github.com/cds-snc/platform-forms-client/issues/4044)) ([5ce69d1](https://github.com/cds-snc/platform-forms-client/commit/5ce69d1b3b22df06696c90997c15707caa14f550))
+* FileValidation error vs Server error ([#4481](https://github.com/cds-snc/platform-forms-client/issues/4481)) ([6cf592d](https://github.com/cds-snc/platform-forms-client/commit/6cf592d8546999d9a970f38861cafec5c22a727f))
+* fix types for custom events to use generics ([#4458](https://github.com/cds-snc/platform-forms-client/issues/4458)) ([983e6b2](https://github.com/cds-snc/platform-forms-client/commit/983e6b2aa0550f744572c22fb693ee29e9161f18))
+* Move key generation to inside modal / download  ([#4465](https://github.com/cds-snc/platform-forms-client/issues/4465)) ([4e2961d](https://github.com/cds-snc/platform-forms-client/commit/4e2961d20d88ba8c80ade51302f60fc36da5e2db))
+* Refactor dynamic row config dialog ([#4446](https://github.com/cds-snc/platform-forms-client/issues/4446)) ([cbd1e44](https://github.com/cds-snc/platform-forms-client/commit/cbd1e443e145a2a51ee81f93119641d5e1c50f6b))
+* Remove allowGrouping checks ([#4443](https://github.com/cds-snc/platform-forms-client/issues/4443)) ([87c2157](https://github.com/cds-snc/platform-forms-client/commit/87c215758c1f77aa08f370acb964da0cb03ff4d8))
+* Removes the yup package ([#4473](https://github.com/cds-snc/platform-forms-client/issues/4473)) ([9f75442](https://github.com/cds-snc/platform-forms-client/commit/9f75442ce77b0bde1ecdd6e9d815582a030209ce))
+* swap out classnames package for cn utility (clsx) ([#4477](https://github.com/cds-snc/platform-forms-client/issues/4477)) ([97eab15](https://github.com/cds-snc/platform-forms-client/commit/97eab1504ec748a17ebc7d405d58ee962e28fedc))
+* synced file(s) with cds-snc/site-reliability-engineering ([#3563](https://github.com/cds-snc/platform-forms-client/issues/3563)) ([cbdac8c](https://github.com/cds-snc/platform-forms-client/commit/cbdac8cd2f3c16544fc82bcf0e0c0326079a7e9a))
+* Update closing notice ([#4434](https://github.com/cds-snc/platform-forms-client/issues/4434)) ([e5b2ff4](https://github.com/cds-snc/platform-forms-client/commit/e5b2ff460364631b627a9e0c13da482a42981d75))
+* Use jsx from React ([#4479](https://github.com/cds-snc/platform-forms-client/issues/4479)) ([7fd389a](https://github.com/cds-snc/platform-forms-client/commit/7fd389a0c77dd52eed6b5666e36c853585a0590b))
+
 ## [3.23.0](https://github.com/cds-snc/platform-forms-client/compare/v3.22.4...v3.23.0) (2024-10-16)
 
 
