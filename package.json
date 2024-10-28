@@ -1,6 +1,6 @@
 {
   "name": "gcforms",
-  "version": "3.23.0",
+  "version": "3.24.0",
   "private": true,
   "prisma": {
     "seed": "tsx prisma/seeds/seed_cli.ts --environment=development"
@@ -67,8 +67,7 @@
     "@radix-ui/react-tooltip": "^1.1.1",
     "@zitadel/node": "^2.0.21",
     "axios": "1.7.7",
-    "classnames": "2.4.0",
-    "clsx": "^2.0.0",
+    "clsx": "^2.1.1",
     "copy-to-clipboard": "3.3.3",
     "csv-writer": "^1.6.0",
     "d3-hierarchy": "^3.1.2",
@@ -116,7 +115,6 @@
     "usehooks-ts": "2.9.1",
     "uuid": "9.0.1",
     "valibot": "^0.30.0",
-    "yup": "0.32.11",
     "zustand": "5.0.0"
   },
   "devDependencies": {
@@ -165,7 +163,6 @@
     "cypress-plugin-tab": "^1.0.5",
     "cypress-terminal-report": "^7.0.4",
     "cypress-wait-until": "^3.0.2",
-    "esbuild": "0.24.0",
     "eslint": "^8.56.0",
     "eslint-config-next": "^14.1.0",
     "eslint-plugin-cypress": "2.15.2",

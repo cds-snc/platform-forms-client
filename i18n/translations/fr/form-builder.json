@@ -944,7 +944,7 @@
       }
     },
     "banner": {
-      "text": "Le formulaire a été fermé le {{day}} {{month}} {{year}} à {{hour}} h {{minute}} {{dayPeriod}} HE"
+      "text": "Le formulaire a été fermé le {{day}} {{month}} {{year}} à {{hour}} h {{minute}} HE"
     }
   },
   "errorSavingForm": {
@@ -1185,7 +1185,7 @@
   "scheduleClosingPage": {
     "linkText": "Programmer la fermeture du formulaire",
     "dialog": {
-      "title": "Programmez le message de fermeture du formulaire",
+      "title": "Programmer la fermeture du formulaire",
       "text1": "Fixez la date de fermeture",
       "text2": "Décidez la date à laquelle vous souhaitez fermer le formulaire",
       "datePicker": {
@@ -1195,7 +1195,8 @@
       },
       "timePicker": {
         "text1": "Fixez l'heure de fermeture",
-        "text2": "Indiquez l'heure en utilisant l'horloge de 24 heures avec le fuseau horaire de l'heure de l'Est"
+        "text2": "Indiquez l'heure en utilisant l'horloge de 24 heures avec le fuseau horaire de l'heure de l'Est.",
+        "text3": "[FR]For example 21:00"
       },
       "error": {
         "notFutureDate": "[FR]Date and time must be upcoming, in the future."

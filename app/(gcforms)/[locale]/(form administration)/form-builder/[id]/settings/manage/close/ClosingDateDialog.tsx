@@ -7,6 +7,7 @@ import { toast } from "@formBuilder/components/shared/Toast";
 import { WarningIcon } from "@serverComponents/icons";
 import { formClosingDateEst } from "@lib/utils/date/utcToEst";
 import { logMessage } from "@lib/logger";
+import { isFutureDate } from "@lib/utils/date/isFutureDate";
 
 export const ClosingDateDialog = ({
   showDateTimeDialog,
@@ -34,6 +35,9 @@ export const ClosingDateDialog = ({
   // Pre-populate the form with the closing date if it exists
   useEffect(() => {
     if (!closingDate) {
+      return;
+    }
+    if (!isFutureDate(closingDate)) {
       return;
     }
     try {
@@ -178,15 +182,18 @@ export const ClosingDateDialog = ({
               <label htmlFor="time-picker" className="mb-2 font-bold">
                 {t("scheduleClosingPage.dialog.timePicker.text1")}
               </label>
-              <p id="time-picker-description" className="mb-4">
+              <p id="time-picker-description" className="mb-2">
                 {t("scheduleClosingPage.dialog.timePicker.text2")}
+              </p>
+              <p id="time-picker-description2" className="mb-4 opacity-65">
+                {t("scheduleClosingPage.dialog.timePicker.text3")}
               </p>
               <input
                 className="!w-20"
                 id="time-picker"
                 name="time-picker"
                 role="time"
-                aria-describedby="time-picker-description"
+                aria-describedby="time-picker-description time-picker-description2"
                 minLength={5}
                 maxLength={5}
                 onChange={(e) => setTime(e.target.value)}
