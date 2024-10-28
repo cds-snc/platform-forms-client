@@ -1,5 +1,5 @@
 import React, { useState, type JSX } from "react";
-import classnames from "classnames";
+import { cn } from "@lib/utils";
 import { ErrorMessage } from "@clientComponents/forms";
 import { InputFieldProps, HTMLTextInputTypeAttribute } from "@lib/types";
 import { useTranslation } from "@i18n/client";
@@ -24,7 +24,7 @@ export const TextInput = (
     maxLength,
     validationError,
   } = props;
-  const classes = classnames("gc-input-text", className);
+  const classes = cn("gc-input-text", className);
   const { t } = useTranslation("common");
 
   const [remainingCharacters, setRemainingCharacters] = useState(maxLength ?? 0);

@@ -1,6 +1,6 @@
 "use client";
 import React, { useState, useEffect, createRef, useRef } from "react";
-import classnames from "classnames";
+import { cn } from "@lib/utils";
 import { useField } from "formik";
 import { GenerateElement } from "@lib/formBuilder";
 import { FormElement } from "@lib/types";
@@ -113,14 +113,14 @@ export const DynamicGroup = (props: DynamicGroupProps): React.ReactElement => {
     focusedRow.current = index > 0 ? index - 1 : 0;
   };
 
-  const classes = classnames("gc-form-group", { "gc-form-group--error": error }, className);
+  const classes = cn("gc-form-group", { "gc-form-group--error": error }, className);
 
   const addButtonLabel = addButtonText || t("dynamicRow.add") + " " + rowLabel;
   const deleteButtonLabel = removeButtonText || t("dynamicRow.delete") + " " + rowLabel;
 
   return (
     // eslint-disable-next-line jsx-a11y/no-noninteractive-tabindex
-    (<div id={field.name} data-testid={`formGroup-${field.name}`} className={classes} tabIndex={0}>
+    <div id={field.name} data-testid={`formGroup-${field.name}`} className={classes} tabIndex={0}>
       {title && <div className="gc-label">{title}</div>}
       {description && <Description id={`${field.name}-desc`}>{description}</Description>}
       {rows.map((row, index) => {
@@ -168,6 +168,6 @@ export const DynamicGroup = (props: DynamicGroupProps): React.ReactElement => {
           </fieldset>
         );
       })}
-    </div>)
+    </div>
   );
 };
