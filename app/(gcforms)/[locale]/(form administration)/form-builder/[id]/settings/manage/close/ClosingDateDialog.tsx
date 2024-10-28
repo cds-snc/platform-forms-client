@@ -104,9 +104,6 @@ export const ClosingDateDialog = ({
           handleSave();
         }}
       >
-        <h1>
-          MONTH={month}, {typeof month}
-        </h1>
         <div className="p-4">
           <p className="mb-2 font-bold">{t("scheduleClosingPage.dialog.text1")}</p>
           <div>
