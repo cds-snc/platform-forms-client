@@ -64,20 +64,6 @@ export const ElementPanel = ({
     setChangeKey(String(new Date().getTime())); //Force a re-render
   };
 
-  // const moreButton =
-  //   item.type !== "richText"
-  //     ? {
-  //         moreButtonRenderer: (
-  //           moreButton: JSX.Element | undefined
-  //         ): React.ReactElement | string | undefined => (
-  //           <MoreModal item={item} moreButton={moreButton} onClose={forceRefresh} />
-  //         ),
-  //       }
-  //     : {};
-
-  /* eslint-disable jsx-a11y/no-static-element-interactions */
-  /* eslint-disable jsx-a11y/click-events-have-key-events */
-
   const hasRules =
     (item.properties?.conditionalRules && item.properties?.conditionalRules?.length > 0) ?? false;
 
