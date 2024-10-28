@@ -5,6 +5,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.24.1](https://github.com/cds-snc/platform-forms-client/compare/v3.24.0...v3.24.1) (2024-10-28)
+
+
+### Bug Fixes
+
+* Fixes an issue with the schedule close dialog ([#4491](https://github.com/cds-snc/platform-forms-client/issues/4491)) ([71bf2a5](https://github.com/cds-snc/platform-forms-client/commit/71bf2a5865253802e778ba8ae2ce4b928027bc3f))
+
 ## [3.24.0](https://github.com/cds-snc/platform-forms-client/compare/v3.23.0...v3.24.0) (2024-10-28)
 
 
