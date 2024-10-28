@@ -1,6 +1,7 @@
 import React from "react";
 import { Description } from "@clientComponents/forms";
 import { ChoiceFieldProps } from "@lib/types";
+import type { JSX } from "react";
 
 export const Radio = ({
   id,

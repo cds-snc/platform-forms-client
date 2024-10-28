@@ -1,6 +1,6 @@
 "use client";
 import React from "react";
-import classnames from "classnames";
+import { cn } from "@lib/utils";
 import { useTranslation } from "@i18n/client";
 import { ValidationProperties } from "@lib/types";
 
@@ -33,7 +33,7 @@ export const Label = (props: LabelProps): React.ReactElement => {
     lang,
   } = props;
 
-  const classes = classnames(
+  const classes = cn(
     {
       "gc-label": !srOnly,
       "gc-sr-only": srOnly,
