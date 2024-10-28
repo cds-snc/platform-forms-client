@@ -3,7 +3,6 @@ import React, { type JSX } from "react";
 import { Field } from "formik";
 import { Description } from "@clientComponents/forms";
 import { ChoiceFieldProps } from "@lib/types";
-import type { JSX } from "react";
 
 export const Checkbox = (
   props: ChoiceFieldProps & JSX.IntrinsicElements["input"]
