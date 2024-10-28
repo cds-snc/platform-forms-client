@@ -184,7 +184,7 @@ export const PanelActions = ({
       }`;
 
   const innerPanelClasses = isSubPanel
-    ? `flex flex-wrap flex-row justify-between laptop:mx-0 mb-2`
+    ? `flex flex-wrap flex-row justify-between laptop:mx-0 mb-2 !-ml-5 !mr-5`
     : `flex flex-wrap flex-row justify-between bg-slate-800 px-4 pb-6 pt-4 py-2`;
 
   const innerPanelResponsiveClasses = isSubPanel
