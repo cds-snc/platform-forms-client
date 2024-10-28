@@ -232,9 +232,9 @@ export const Review = ({ language }: { language: Language }): React.ReactElement
         {Array.isArray(reviewItems) &&
           reviewItems.map((reviewItem) => {
             const title =
-              reviewItem.id !== "start"
-                ? reviewItem.title
-                : t("start", { ns: "common", lng: language });
+              reviewItem.id === "start"
+                ? t("logic.start", { ns: "common", lng: language })
+                : reviewItem.title;
             return (
               <div
                 key={reviewItem.id}
