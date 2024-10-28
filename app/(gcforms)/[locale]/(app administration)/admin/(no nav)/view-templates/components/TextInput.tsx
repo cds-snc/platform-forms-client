@@ -1,4 +1,4 @@
-import classnames from "classnames";
+import { cn } from "@lib/utils";
 import { InputFieldProps, HTMLTextInputTypeAttribute } from "@lib/types";
 import { ErrorMessage } from "@clientComponents/forms";
 
@@ -20,7 +20,7 @@ export const TextInput = ({
   autoComplete,
   error,
 }: TextInputProps): React.ReactElement => {
-  const classes = classnames("gc-input-text", className);
+  const classes = cn("gc-input-text", className);
   return (
     <>
       {error && <ErrorMessage id={"errorMessage" + id}>{error}</ErrorMessage>}

@@ -1185,7 +1185,7 @@
   "scheduleClosingPage": {
     "linkText": "Schedule form closing",
     "dialog": {
-      "title": "Schedule the closed form message",
+      "title": "Schedule closing the form",
       "text1": "Schedule a closing date",
       "text2": "Set when you’d like to close the form.",
       "datePicker": {

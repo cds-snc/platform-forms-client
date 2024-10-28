@@ -1,7 +1,8 @@
 import React, { useEffect, useRef } from "react";
-import classnames from "classnames";
+import { cn } from "@lib/utils";
 import { useTranslation } from "@i18n/client";
 import { Button } from "@clientComponents/globals";
+import type { JSX } from "react";
 
 export enum ErrorStatus {
   SUCCESS,
@@ -35,7 +36,7 @@ export const Alert = ({
 }: AlertProps & JSX.IntrinsicElements["div"]): React.ReactElement => {
   const { t } = useTranslation("common");
   const refFocus = useRef<HTMLDivElement>(null);
-  const classes = classnames(
+  const classes = cn(
     "gc-alert",
     {
       "gc-alert--success": type === ErrorStatus.SUCCESS,

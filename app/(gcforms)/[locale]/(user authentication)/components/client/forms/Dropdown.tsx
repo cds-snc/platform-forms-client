@@ -1,5 +1,5 @@
 import React from "react";
-import classnames from "classnames";
+import { cn } from "@lib/utils";
 import { useTranslation } from "@i18n/client";
 import { ErrorMessage } from "@clientComponents/forms";
 import { InputFieldProps } from "@lib/types";
@@ -38,7 +38,7 @@ export const Dropdown = (props: DropdownProps): React.ReactElement => {
     onChange,
   } = props;
   const { t } = useTranslation("common");
-  const classes = classnames("gc-dropdown", className);
+  const classes = cn("gc-dropdown", className);
 
   const initialDropdownOption = <option value="">{t("dropdown-initial-option-text")}</option>;
 

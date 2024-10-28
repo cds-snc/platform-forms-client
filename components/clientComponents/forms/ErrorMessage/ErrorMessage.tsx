@@ -1,6 +1,6 @@
 "use client";
 import React from "react";
-import classnames from "classnames";
+import { cn } from "@lib/utils";
 
 export interface ErrorMessageProps {
   children: React.ReactNode;
@@ -11,7 +11,7 @@ export interface ErrorMessageProps {
 export const ErrorMessage = (props: ErrorMessageProps): React.ReactElement => {
   const { children, className, id } = props;
 
-  const classes = classnames("gc-error-message", className);
+  const classes = cn("gc-error-message", className);
 
   return (
     <p data-testid="errorMessage" className={classes} id={id} role="alert">
