@@ -1,6 +1,7 @@
 import { cn } from "@lib/utils";
 import { ErrorMessage } from "@clientComponents/forms";
 import { InputFieldProps } from "@lib/types";
+import type { JSX } from "react";
 
 export interface TextAreaProps extends InputFieldProps {
   children?: React.ReactNode;
