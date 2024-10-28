@@ -44,10 +44,10 @@ describe("Test FormBuilder", () => {
     cy.get("#item-1").click();
     cy.get("button").contains("More").click();
     cy.get("h2").should("contain", "More options");
-    cy.get("#title--modal--0").should("have.value", "Question 1");
-    cy.typeInField("#title--modal--0", "-1", "Question 1-1");
-    cy.typeInField("#description--modal--0", "Question 1 description");
-    cy.get("#required-0-id-modal").click();
+    cy.get("#title--modal--1").should("have.value", "Question 1");
+    cy.typeInField("#title--modal--1", "-1", "Question 1-1");
+    cy.typeInField("#description--modal--1", "Question 1 description");
+    cy.get("#required-1-id-modal").click();
     cy.get('[data-testid="more-modal-save-button"]').click({ force: true });
 
     // re-check form editor
