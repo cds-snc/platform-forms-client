@@ -1,14 +1,13 @@
 "use client";
 import React, { useState, useRef } from "react";
 import { useField } from "formik";
-import classNames from "classnames";
+import { cn } from "@lib/utils";
 import { useTranslation } from "@i18n/client";
 import { ErrorMessage } from "@clientComponents/forms";
 import { InputFieldProps } from "@lib/types";
 import { htmlInputAccept } from "@lib/validation/fileValidationClientSide";
 import { CancelIcon } from "@serverComponents/icons";
 import { themes } from "@clientComponents/globals/Buttons/themes";
-import { cn } from "@lib/utils";
 
 interface FileInputProps extends InputFieldProps {
   error?: boolean;
@@ -41,7 +40,7 @@ export const FileInput = (props: FileInputProps): React.ReactElement => {
     setFileSize(0);
     setValue({});
   };
-  const classes = classNames(
+  const classes = cn(
     "gc-file-input",
     disabled ? "is-disabled" : "",
     allowMulti ? "file-up--compact" : ""

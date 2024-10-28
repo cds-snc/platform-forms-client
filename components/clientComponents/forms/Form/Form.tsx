@@ -9,7 +9,7 @@ import { logMessage } from "@lib/logger";
 import { useTranslation } from "@i18n/client";
 import { TFunction } from "i18next";
 import Loader from "../../globals/Loader";
-import classNames from "classnames";
+import { cn } from "@lib/utils";
 import { Responses, PublicFormRecord, Validate } from "@lib/types";
 import { ErrorStatus } from "../Alert/Alert";
 import { submitForm } from "app/(gcforms)/[locale]/(form filler)/id/[...props]/actions";
@@ -77,7 +77,7 @@ const SubmitButton: React.FC<SubmitButtonProps> = ({
   return (
     <>
       <div
-        className={classNames({
+        className={cn({
           "border-l-2": submitTooEarly,
           "border-red-default": submitTooEarly && formTimerState.remainingTime > 0,
           "border-green-default": submitTooEarly && formTimerState.remainingTime === 0,
