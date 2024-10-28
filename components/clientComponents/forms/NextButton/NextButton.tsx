@@ -13,6 +13,7 @@ import { Language } from "@lib/types/form-builder-types";
 import { getLocalizedProperty } from "@lib/utils";
 import { showReviewPage } from "@lib/utils/form-builder/showReviewPage";
 import { focusElement } from "@lib/client/clientHelpers";
+import { useFormDelay } from "@lib/hooks/useFormDelayContext";
 
 export const NextButton = ({
   validateForm,
@@ -26,6 +27,7 @@ export const NextButton = ({
   formRecord: PublicFormRecord;
 }) => {
   const { currentGroup, hasNextAction, handleNextAction, isOffBoardSection } = useGCFormsContext();
+  const { updateFormDelay } = useFormDelay();
   const { t } = useTranslation("form-builder");
 
   const handleValidation = async () => {
@@ -89,6 +91,7 @@ export const NextButton = ({
         onClick={async (e) => {
           e.preventDefault();
           if (await handleValidation()) {
+            updateFormDelay(formRecord.form, currentGroup);
             handleNextAction();
             focusElement("h2");
           }
