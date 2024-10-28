@@ -72,25 +72,6 @@ export const CharacterLimitOptions = ({
               });
             }
           }}
-          // onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-          //   // if value is "", unset the field
-          //   if (e.target.value === "") {
-          //     unsetModalField(`modals[${item.id}].validation.maxLength`);
-          //     return;
-          //   }
-
-          //   const value = parseInt(e.target.value);
-          //   if (!isNaN(value) && value >= 1) {
-          //     // clone the existing properties so that we don't overwrite other keys in "validation"
-          //     const validation = Object.assign({}, properties.validation, {
-          //       maxLength: value,
-          //     });
-          //     updateModalProperties(item.id, {
-          //       ...properties,
-          //       ...{ validation },
-          //     });
-          //   }
-          // }}
         />
       </div>
       <InfoDetails summary={t("characterLimitWhenToUse.title")}>
