@@ -9,7 +9,7 @@ import { logMessage } from "@lib/logger";
 import { useTranslation } from "@i18n/client";
 import { TFunction } from "i18next";
 import Loader from "../../globals/Loader";
-import classNames from "classnames";
+import { cn } from "@lib/utils";
 import { Responses, PublicFormRecord, Validate } from "@lib/types";
 import { ErrorStatus } from "../Alert/Alert";
 import { submitForm } from "app/(gcforms)/[locale]/(form filler)/id/[...props]/actions";
@@ -28,40 +28,38 @@ import {
 import { filterShownElements, filterValuesByShownElements } from "@lib/formContext";
 import { formHasGroups } from "@lib/utils/form-builder/formHasGroups";
 import { showReviewPage } from "@lib/utils/form-builder/showReviewPage";
+import { useFormDelay } from "@lib/hooks/useFormDelayContext";
 
 interface SubmitButtonProps {
-  numberOfRequiredQuestions: number;
+  getFormDelay: () => number;
   formID: string;
   formTitle: string;
 }
-const SubmitButton: React.FC<SubmitButtonProps> = ({
-  numberOfRequiredQuestions,
-  formID,
-  formTitle,
-}) => {
+const SubmitButton: React.FC<SubmitButtonProps> = ({ getFormDelay, formID, formTitle }) => {
   const { t } = useTranslation();
   const [formTimerState, { startTimer, checkTimer, disableTimer }] = useFormTimer();
   const [submitTooEarly, setSubmitTooEarly] = useState(false);
   const screenReaderRemainingTime = useRef(formTimerState.remainingTime);
+  const formDelay = useRef(getFormDelay());
 
-  // calculate initial delay for submit timer
-  const secondsBaseDelay = 2;
-  const secondsPerFormElement = 2;
-  const submitDelaySeconds = secondsBaseDelay + numberOfRequiredQuestions * secondsPerFormElement;
+  // If the formDelay is less than 0 or the app is in test mode, disable the timer
+  // because the user has already spent enough time on the form.
 
-  const formTimerEnabled = process.env.NEXT_PUBLIC_APP_ENV !== "test";
+  const formTimerEnabled = process.env.NEXT_PUBLIC_APP_ENV !== "test" && formDelay.current > 0;
 
-  // If the timer hasn't started yet, start the timer
-  if (!formTimerState.timerDelay && formTimerEnabled) startTimer(submitDelaySeconds);
-
-  useEffect(() => {
-    if (!formTimerEnabled && !formTimerState.canSubmit) {
-      disableTimer();
-    }
-  }, [disableTimer, formTimerEnabled, formTimerState.canSubmit]);
-
+  // The empty array of dependencies ensures that this useEffect only runs once on mount
   useEffect(() => {
     if (formTimerEnabled) {
+      logMessage.debug(`Starting Form Timer with delay: ${formDelay.current}`);
+      startTimer(formDelay.current);
+    } else {
+      disableTimer();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  useEffect(() => {
+    if (formTimerEnabled && formTimerState.remainingTime > 0) {
       // Initiate a callback to ensure that state of submit button is correctly displayed
 
       // Calling the checkTimer modifies the state of the formTimerState
@@ -72,12 +70,12 @@ const SubmitButton: React.FC<SubmitButtonProps> = ({
         clearTimeout(timerID);
       };
     }
-  }, [checkTimer, formTimerState.timerDelay, formTimerEnabled]);
+  }, [checkTimer, formTimerState.remainingTime, formTimerEnabled]);
 
   return (
     <>
       <div
-        className={classNames({
+        className={cn({
           "border-l-2": submitTooEarly,
           "border-red-default": submitTooEarly && formTimerState.remainingTime > 0,
           "border-green-default": submitTooEarly && formTimerState.remainingTime === 0,
@@ -166,6 +164,8 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
   // Used to set any values we'd like added for use in the below withFormik handleSubmit().
   useFormValuesChanged();
 
+  const { getFormDelayWithGroups, getFormDelayWithoutGroups } = useFormDelay();
+
   const errorList = props.errors ? getErrorList(props) : null;
   const errorId = "gc-form-errors";
   const serverErrorId = `${errorId}-server`;
@@ -193,10 +193,6 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [formStatusError, errorList, lastSubmitCount, canFocusOnError]);
-
-  const numberOfRequiredQuestions = form.elements.filter(
-    (element) => element.properties.validation?.required === true
-  ).length;
 
   return status === "submitting" ? (
     <>
@@ -304,7 +300,11 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
                           )}
                         <div className="inline-block">
                           <SubmitButton
-                            numberOfRequiredQuestions={numberOfRequiredQuestions}
+                            getFormDelay={() =>
+                              isShowReviewPage
+                                ? getFormDelayWithGroups()
+                                : getFormDelayWithoutGroups(form.elements)
+                            }
                             formID={formID}
                             formTitle={form.titleEn}
                           />
@@ -315,7 +315,11 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
                 })
               ) : (
                 <SubmitButton
-                  numberOfRequiredQuestions={numberOfRequiredQuestions}
+                  getFormDelay={() =>
+                    isShowReviewPage
+                      ? getFormDelayWithGroups()
+                      : getFormDelayWithoutGroups(form.elements)
+                  }
                   formID={formID}
                   formTitle={form.titleEn}
                 />
@@ -395,7 +399,11 @@ export const Form = withFormik<FormProps, Responses>({
       );
 
       if (result.error) {
-        formikBag.setStatus("FileError");
+        if (result.error.message.includes("FileValidationResult")) {
+          formikBag.setStatus("FileError");
+        } else {
+          formikBag.setStatus("Error");
+        }
       } else {
         formikBag.props.onSuccess(result.id);
       }
