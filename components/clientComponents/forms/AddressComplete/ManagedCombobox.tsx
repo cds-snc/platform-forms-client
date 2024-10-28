@@ -1,7 +1,6 @@
 "use client";
 import React, { useState, useImperativeHandle, useEffect } from "react";
 import { InputFieldProps } from "@lib/types";
-import classnames from "classnames";
 import { useField } from "formik";
 import { ErrorMessage } from "@clientComponents/forms";
 import { useCombobox } from "downshift";
@@ -29,7 +28,7 @@ export const ManagedCombobox = React.forwardRef(
       useFilter = true,
       placeholderText = "",
     } = props;
-    const classes = classnames("gc-combobox gcds-input-wrapper relative", className);
+    const classes = cn("gc-combobox gcds-input-wrapper relative", className);
 
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const [field, meta, helpers] = useField(props);
@@ -100,7 +99,7 @@ export const ManagedCombobox = React.forwardRef(
         />
 
         <ul
-          className={classnames({ hidden: !isOpen || items.length === 0 })}
+          className={cn({ hidden: !isOpen || items.length === 0 })}
           {...getMenuProps()}
           data-testid="combobox-listbox"
         >
