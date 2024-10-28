@@ -7,7 +7,6 @@ import { toast } from "@formBuilder/components/shared/Toast";
 import { WarningIcon } from "@serverComponents/icons";
 import { formClosingDateEst } from "@lib/utils/date/utcToEst";
 import { logMessage } from "@lib/logger";
-import { isFutureDate } from "@lib/utils/date/isFutureDate";
 
 export const ClosingDateDialog = ({
   showDateTimeDialog,
@@ -35,9 +34,6 @@ export const ClosingDateDialog = ({
   // Pre-populate the form with the closing date if it exists
   useEffect(() => {
     if (!closingDate) {
-      return;
-    }
-    if (!isFutureDate(closingDate)) {
       return;
     }
     try {
