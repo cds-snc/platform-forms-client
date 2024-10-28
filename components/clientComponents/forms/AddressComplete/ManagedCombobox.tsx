@@ -57,7 +57,9 @@ export const ManagedCombobox = React.forwardRef(
               useFilter ? choice.toLowerCase().includes(inputValue?.toLowerCase() || "") : true
             )
           );
-          setIsOpen(true);
+          if (!useFilter) {
+            setIsOpen(true);
+          }
         },
         items,
         onSelectedItemChange: ({ selectedItem }) => {
