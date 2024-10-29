@@ -648,6 +648,12 @@
           "label": "Confirmation",
           "required": "(required)",
           "description": "Type <strong>AGREE</strong> in the box below to confirm you understand your responsibilities and agree to the <a href='canada.ca' target='_blank'>required security procedures</a> while storing and sharing this key."
+        },
+        "error": {
+          "createFailed": {
+            "title": "Error creating API key",
+            "message": "There was an error creating the API key. Please try again later."
+          }
         }
       }
     }
