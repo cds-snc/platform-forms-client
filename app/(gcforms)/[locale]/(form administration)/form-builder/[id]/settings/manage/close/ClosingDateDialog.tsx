@@ -31,23 +31,29 @@ export const ClosingDateDialog = ({
   const [year, setYear] = useState<string>("");
   const [time, setTime] = useState<string>("");
 
-  // Pre-populate the form with the closing date if it exists
+  // Use the current date if no closing date is set, or pre-populate the form if one is set
   useEffect(() => {
+    const setDateTime = (date: string) => {
+      try {
+        const { day, year, hour, minute } = formClosingDateEst(date, language);
+        const month = (new Date(date).getMonth() + 1).toString();
+        if (month && day && year && hour && minute) {
+          setMonth(month);
+          setDay(day);
+          setYear(year);
+          setTime(`${hour}:${minute}`);
+        }
+      } catch (error) {
+        logMessage.debug(`Unable to parse date: ${date}`);
+      }
+    };
+
     if (!closingDate) {
+      setDateTime(new Date().toISOString());
       return;
     }
-    try {
-      const { day, year, hour, minute } = formClosingDateEst(closingDate, language);
-      const month = (new Date(closingDate).getMonth() + 1).toString();
-      if (month && day && year && hour && minute) {
-        setMonth(month);
-        setDay(day);
-        setYear(year);
-        setTime(`${hour}:${minute}`);
-      }
-    } catch (error) {
-      logMessage.debug(`Unable to parse closing date: ${closingDate}`);
-    }
+
+    setDateTime(closingDate);
   }, [closingDate, language]);
 
   const handleClose = () => {

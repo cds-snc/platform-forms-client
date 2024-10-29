@@ -345,6 +345,9 @@
     "combobox": "Commencez à taper pour réduire la liste.",
     "fileInput": "Les fichiers ne doivent pas dépasser 3.5 Mo au total."
   },
+  "defaultElementLabel": {
+    "addressComplete": "Adresse"
+  },
   "description": "Description",
   "descriptionDescription": "Le texte explicatif apparaît sous l'étiquette et avant le champ. Il est utilisé pour ajouter un contexte et des instructions pour le champ. C'est un endroit idéal pour préciser les exigences de mise en forme ou donner un exemple.",
   "didYouFindThisToolHelpful": "Avez-vous trouvé Formulaires GC pertinent comme outil? <a href=\"/fr/contact\" target=\"_blank\">Donner votre avis</a>",
@@ -645,6 +648,12 @@
           "label": "Confirmation",
           "required": "(obligatoire)",
           "description": "Saisissez <strong>ACCEPTE</strong> dans la case ci-dessous pour confirmer que vous comprenez vos responsabilités et que vous acceptez les <a href='canada.ca' target='_blank'>procédures de sécurité requises</a> lors de l'enregistrement et du partage de cette clé."
+        },
+        "error": {
+          "createFailed": {
+            "title": "[FR]Error creating API key",
+            "message": "[FR]There was an error creating the API key. Please try again later."
+          }
         }
       }
     }
