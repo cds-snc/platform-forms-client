@@ -52,7 +52,7 @@ export const UserActions = ({
           <div className="flex flex-row gap-1">
             <span>{user.expired ? t("expired") : t("invited")}</span>
             <div className="inline-block">
-              <Tooltip.Simple text={t("resend")} side="top">
+              <Tooltip.Simple text={t("resend", { email: user.email })} side="top">
                 <button onClick={() => handleResendInvitation(user.email)}>
                   <RefreshIcon
                     title={t("resend")}
@@ -61,7 +61,7 @@ export const UserActions = ({
                 </button>
               </Tooltip.Simple>
             </div>
-            <Tooltip.Simple text={t("deleteInvitation")} side="top">
+            <Tooltip.Simple text={t("deleteInvitation", { email: user.email })} side="top">
               <ConfirmAction
                 buttonLabel={t("delete")}
                 confirmString=""
@@ -83,7 +83,7 @@ export const UserActions = ({
           {disableRow ? (
             <span></span>
           ) : (
-            <Tooltip.Simple text={t("remove")} side="top">
+            <Tooltip.Simple text={t("remove", { email: user.email })} side="top">
               <ConfirmAction
                 callback={() => handleRemoveUser(user.id)}
                 confirmString={t("areYouSure")}
