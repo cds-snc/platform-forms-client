@@ -5,6 +5,21 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.24.2](https://github.com/cds-snc/platform-forms-client/compare/v3.24.1...v3.24.2) (2024-10-29)
+
+
+### Bug Fixes
+
+* Adds an error message to the api create dialog ([#4483](https://github.com/cds-snc/platform-forms-client/issues/4483)) ([47fcac8](https://github.com/cds-snc/platform-forms-client/commit/47fcac8f3cef537dbcb05200fd4495c700776dae))
+* fixes an issue with the close date dialog ([#4493](https://github.com/cds-snc/platform-forms-client/issues/4493)) ([4bd8dfc](https://github.com/cds-snc/platform-forms-client/commit/4bd8dfc38ff5f9c470856d2507e0066ccfcb68b3))
+* Save closed message on Form management ([#4511](https://github.com/cds-snc/platform-forms-client/issues/4511)) ([18a2f75](https://github.com/cds-snc/platform-forms-client/commit/18a2f750c22463008fb0c7027011b49636a329e5))
+
+
+### Miscellaneous Chores
+
+* Remove whitespace from ACOA branding ([#4501](https://github.com/cds-snc/platform-forms-client/issues/4501)) ([4fb7dbf](https://github.com/cds-snc/platform-forms-client/commit/4fb7dbf16825d16d6349d939accd8fb2c2d94b3c))
+* update cypress package ([#4496](https://github.com/cds-snc/platform-forms-client/issues/4496)) ([c29f7ab](https://github.com/cds-snc/platform-forms-client/commit/c29f7ab597967882fc5426fbd1e5529f8a652b77))
+
 ## [3.24.1](https://github.com/cds-snc/platform-forms-client/compare/v3.24.0...v3.24.1) (2024-10-28)
 
 ### Bug Fixes

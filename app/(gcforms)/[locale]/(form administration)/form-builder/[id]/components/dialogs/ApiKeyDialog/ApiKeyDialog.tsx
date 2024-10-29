@@ -109,15 +109,15 @@ export const ApiKeyDialog = () => {
           title={t("settings.api.dialog.title")}
         >
           <div className="p-5">
-            <h4 className="mb-4">{t("settings.api.dialog.heading")}</h4>
             {hasError && (
-              <Alert.Danger>
+              <Alert.Danger className="mb-4">
                 <Alert.Title headingTag="h3">
                   {t("settings.api.dialog.error.createFailed.title")}
                 </Alert.Title>
                 <p className="mb-2">{t("settings.api.dialog.error.createFailed.message")} </p>
               </Alert.Danger>
             )}
+            <h4 className="mb-4">{t("settings.api.dialog.heading")}</h4>
             <ResponsibilityList />
             <ConfirmationAgreement handleAgreement={hasAgreed} />
             <Note />
