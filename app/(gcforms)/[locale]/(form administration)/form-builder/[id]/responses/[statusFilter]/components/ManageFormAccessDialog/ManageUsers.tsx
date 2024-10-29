@@ -214,7 +214,6 @@ export const ManageUsers = () => {
                       handleAddEmail={handleAddEmail}
                       formId={formId}
                       disableRow={disableRow}
-                      email={user.email}
                     />
                   </div>
                 );
