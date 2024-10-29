@@ -345,6 +345,9 @@
     "combobox": "Start typing to narrow down the list.",
     "fileInput": "Files must not exceed 3.5 MB in total."
   },
+  "defaultElementLabel": {
+    "addressComplete": "Address"
+  },
   "description": "Description",
   "descriptionDescription": "The hint text appears below the label and before the field. It’s used to add context and instructions for the field. It’s a great place to specify formatting requirements or give an example.",
   "didYouFindThisToolHelpful": "Did you find GC Forms helpful? <a href=\"/en/contact\" target=\"_blank\">Provide feedback</a>",
