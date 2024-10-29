@@ -397,6 +397,10 @@ export const getTranslatedElementProperties = async (type: string) => {
       en: en([`defaultElementDescription.${type}`, ""]),
       fr: fr([`defaultElementDescription.${type}`, ""]),
     },
+    label: {
+      en: en([`defaultElementLabel.${type}`, ""]),
+      fr: fr([`defaultElementLabel.${type}`, ""]),
+    },
   };
 };
 
