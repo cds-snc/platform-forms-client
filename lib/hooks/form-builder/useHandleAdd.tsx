@@ -4,7 +4,12 @@ import { FormElementTypes } from "@lib/types";
 import { useTemplateStore } from "@lib/store/useTemplateStore";
 import { blockLoader, LoaderType } from "../../utils/form-builder/blockLoader";
 import { allowedTemplates } from "@lib/utils/form-builder";
-import { defaultField, createElement, setDescription } from "@lib/utils/form-builder/itemHelper";
+import {
+  defaultField,
+  createElement,
+  setDescription,
+  setTitle,
+} from "@lib/utils/form-builder/itemHelper";
 import { useGroupStore } from "@formBuilder/components/shared/right-panel/treeview/store/useGroupStore";
 import {
   getTranslatedElementProperties,
@@ -33,6 +38,17 @@ export const useHandleAdd = () => {
     let item = createElement(defaults, type as FormElementTypes);
     item = setDescription(item, "en", descriptionEn);
     item = setDescription(item, "fr", descriptionFr);
+
+    // If a default label exists, apply it.
+    const titleEn = labels.label.en;
+    const titleFr = labels.label.fr;
+    if (titleEn) {
+      item = setTitle(item, "en", titleEn);
+    }
+    if (titleFr) {
+      item = setTitle(item, "fr", titleFr);
+    }
+
     return item;
   }, []);
 
