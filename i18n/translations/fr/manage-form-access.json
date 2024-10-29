@@ -28,8 +28,8 @@
   "next": "Continuer",
   "optionalMessage": "Message (optionnel)",
   "peopleWithAccess": "Personnes ayant accès",
-  "remove": "[FR]Remove invitation for {{email}}",
-  "resend": "[FR]Re-send invitation to {{email}}",
+  "remove": "Supprimer l'invitation pour {{email}}",
+  "resend": "Renvoyer l'invitation pour {{email}}",
   "templateNotFound": "Gabarit non trouvé {{templateId}}",
   "userAlreadyHasAccess": "{{email}} a déjà accès",
   "userNotFound": "User not found"
