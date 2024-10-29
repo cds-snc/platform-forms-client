@@ -97,10 +97,6 @@ export const SetClosingDate = ({
   );
 
   const saveFormStatus = useCallback(async () => {
-    if (closingDate === undefined) {
-      return;
-    }
-
     // Check to see if the existing date is in the past when updating the toggle. If the date is in
     // the future we want to keep the existing value.
     let closeDate = isFutureDate(String(closingDate)) ? closingDate : null;
@@ -113,7 +109,7 @@ export const SetClosingDate = ({
 
     const result = await closeForm({
       id: formId,
-      closingDate: closeDate,
+      closingDate: closeDate || null,
       closedDetails: closedMessage,
     });
 
@@ -123,7 +119,7 @@ export const SetClosingDate = ({
     }
 
     // Setting local store
-    setClosingDate(closeDate);
+    setClosingDate(closeDate || null);
 
     if (status === "closed") {
       toast.success(<ClosedSuccess />, "wide");
