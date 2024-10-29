@@ -74,14 +74,18 @@ export const ManagedCombobox = React.forwardRef(
         },
       });
 
-    const performChangeInputValue = (value: string) => {
-      setInputValue(value);
-      setIsOpen(false);
+    const performChangeInputValue = (value: string, keepOpen: boolean) => {
+      if (!keepOpen) {
+        // Don't replace the value if we want to keep the dropdown open
+        setInputValue(value);
+      }
+      setIsOpen(keepOpen);
     };
 
     // Use useImperativeHandle to expose the method
     useImperativeHandle(ref, () => ({
-      changeInputValue: (value: string) => performChangeInputValue(value),
+      changeInputValue: (value: string, keepOpen: boolean) =>
+        performChangeInputValue(value, keepOpen),
     }));
 
     return (
