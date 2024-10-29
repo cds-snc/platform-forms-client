@@ -115,6 +115,7 @@ export const ModalButton = ({
 
   // Note: This will not work if children is more than 1 element
   return React.cloneElement(children, {
+    // @ts-expect-error -- TODO: fix this
     onClick: callAll(() => changeOpen(isOpenButton), children.props.onClick),
   });
 };
