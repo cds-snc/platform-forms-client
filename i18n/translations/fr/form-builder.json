@@ -645,6 +645,12 @@
           "label": "Confirmation",
           "required": "(obligatoire)",
           "description": "Saisissez <strong>ACCEPTE</strong> dans la case ci-dessous pour confirmer que vous comprenez vos responsabilités et que vous acceptez les <a href='canada.ca' target='_blank'>procédures de sécurité requises</a> lors de l'enregistrement et du partage de cette clé."
+        },
+        "error": {
+          "createFailed": {
+            "title": "[FR]Error creating API key",
+            "message": "[FR]There was an error creating the API key. Please try again later."
+          }
         }
       }
     }
