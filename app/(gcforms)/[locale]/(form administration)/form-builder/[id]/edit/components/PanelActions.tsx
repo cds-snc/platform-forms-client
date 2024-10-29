@@ -5,7 +5,7 @@ import { useMediaQuery } from "usehooks-ts";
 
 import { FormElementTypes } from "@lib/types";
 import { AddElementButton } from "./elements/element-dialog/AddElementButton";
-import { ElementOptionsFilter, RenderMoreFunc } from "@lib/types/form-builder-types";
+import { ElementOptionsFilter, FormElementWithIndex } from "@lib/types/form-builder-types";
 import {
   ChevronDown,
   ChevronUp,
@@ -18,13 +18,14 @@ import {
 import { usePanelActions } from "@lib/hooks/form-builder/usePanelActions";
 import { ElementDialog } from "./elements/element-dialog/ElementDialog";
 import { PanelActionsButton } from "./PanelActionsButton";
+import { EventKeys, useCustomEvent } from "@lib/hooks/useCustomEvent";
 
 export const PanelActions = ({
+  item,
   isFirstItem,
   isLastItem,
   totalItems,
   isSubPanel,
-  moreButtonRenderer,
   handleAdd,
   handleRemove,
   handleMoveUp,
@@ -32,11 +33,11 @@ export const PanelActions = ({
   handleDuplicate,
   filterElements,
 }: {
+  item: FormElementWithIndex;
   isFirstItem: boolean;
   isLastItem: boolean;
   totalItems: number;
   isSubPanel?: boolean;
-  moreButtonRenderer?: RenderMoreFunc;
   handleAdd: (type?: FormElementTypes) => void;
   handleRemove: () => void;
   handleMoveUp: () => void;
@@ -46,9 +47,12 @@ export const PanelActions = ({
 }) => {
   const { t, i18n } = useTranslation("form-builder");
 
+  const { Event } = useCustomEvent();
+
   const isInit = useRef(false);
   const lang = i18n.language;
-  const hasMoreButton = moreButtonRenderer ? true : false;
+  const hasMoreButton = item.type !== "richText";
+
   const getPanelButtons = ({ hasMoreButton }: { hasMoreButton: boolean }) => {
     const panelButtons = [
       {
@@ -106,7 +110,9 @@ export const PanelActions = ({
               id: 5,
               txt: "more",
               icon: ThreeDotsIcon,
-              onClick: () => null,
+              onClick: () => {
+                Event.fire(EventKeys.openMoreDialog, { itemId: item.id });
+              },
               disabled: false,
             },
           ]
@@ -171,12 +177,6 @@ export const PanelActions = ({
     );
   });
 
-  let moreButton = undefined;
-
-  if (hasMoreButton) {
-    moreButton = actions.pop();
-  }
-
   const outerPanelClasses = isSubPanel
     ? ""
     : `z-50 laptop:absolute laptop:invisible laptop:group-[.active]:visible laptop:group-active:visible laptop:group-focus-within:visible laptop:right-0 laptop:top-0 ${
@@ -184,7 +184,7 @@ export const PanelActions = ({
       }`;
 
   const innerPanelClasses = isSubPanel
-    ? `flex flex-wrap flex-row justify-between laptop:mx-0 mb-2`
+    ? `flex flex-wrap flex-row justify-between laptop:mx-0 mb-2 !-ml-5 !mr-5`
     : `flex flex-wrap flex-row justify-between bg-slate-800 px-4 pb-6 pt-4 py-2`;
 
   const innerPanelResponsiveClasses = isSubPanel
@@ -202,7 +202,6 @@ export const PanelActions = ({
           data-testid="panel-actions"
         >
           {actions}
-          {moreButtonRenderer && moreButtonRenderer(moreButton)}
         </div>
 
         {elementDialog && isSubPanel && (

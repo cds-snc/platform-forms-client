@@ -345,6 +345,9 @@
     "combobox": "Start typing to narrow down the list.",
     "fileInput": "Files must not exceed 3.5 MB in total."
   },
+  "defaultElementLabel": {
+    "addressComplete": "Address"
+  },
   "description": "Description",
   "descriptionDescription": "The hint text appears below the label and before the field. It’s used to add context and instructions for the field. It’s a great place to specify formatting requirements or give an example.",
   "didYouFindThisToolHelpful": "Did you find GC Forms helpful? <a href=\"/en/contact\" target=\"_blank\">Provide feedback</a>",
@@ -589,6 +592,7 @@
       "title": "Button"
     }
   },
+  "setName": "Set name",
   "questionTitle": "Question",
   "remove": "Remove",
   "removeFromSet": "Remove from set",
@@ -630,7 +634,7 @@
         "text2": "The API key ID is not the API key itself. It provides a safe way to identify a key without sharing protected information."
       },
       "dialog": {
-        "title": "API key successfully created",
+        "title": "Generate API key",
         "heading": "GC Forms API keys are PROTECTED B",
         "responsibility": "It is your responsibility to:",
         "responsibility1": "Save this key in a secure location.",
@@ -645,6 +649,12 @@
           "label": "Confirmation",
           "required": "(required)",
           "description": "Type <strong>AGREE</strong> in the box below to confirm you understand your responsibilities and agree to the <a href='canada.ca' target='_blank'>required security procedures</a> while storing and sharing this key."
+        },
+        "error": {
+          "createFailed": {
+            "title": "Error creating API key",
+            "message": "There was an error creating the API key. Please try again later."
+          }
         }
       }
     }
