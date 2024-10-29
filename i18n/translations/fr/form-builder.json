@@ -592,6 +592,7 @@
       "title": "Bouton"
     }
   },
+  "setName": "Nom de l'ensemble",
   "questionTitle": "Question",
   "remove": "Supprimer",
   "removeFromSet": "Enlever de la série",

@@ -408,6 +408,25 @@ const createTemplateStore = (initProps?: Partial<InitialTemplateStoreProps>) => 
                 state.isPublished = isPublished;
               });
             },
+            getFormElementById: (id) => {
+              const elements = get().form.elements;
+
+              for (const element of elements) {
+                if (element.id === id) {
+                  return element;
+                }
+
+                if (element.properties?.subElements) {
+                  for (const subElement of element.properties.subElements) {
+                    if (subElement.id === id) {
+                      return subElement;
+                    }
+                  }
+                }
+              }
+
+              return undefined;
+            },
             getName: () => get().name,
             getDeliveryOption: () => get().deliveryOption,
             resetDeliveryOption: () => {

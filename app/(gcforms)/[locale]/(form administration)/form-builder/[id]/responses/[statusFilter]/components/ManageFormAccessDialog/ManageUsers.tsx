@@ -129,18 +129,20 @@ export const ManageUsers = () => {
         </label>
         <p className="pb-3">{t("mustBeAGovernmentAddress")}</p>
 
-        {errors.length > 0 && (
-          <div className="my-2 flex flex-wrap gap-2">
-            {errors.map((error, index) => (
-              <div
-                className="rounded-md border border-red-700 bg-red-100 px-2 text-red-700"
-                key={`error-${index}`}
-              >
-                {error}
-              </div>
-            ))}
-          </div>
-        )}
+        <div role="alert">
+          {errors.length > 0 && (
+            <div className="my-2 flex flex-wrap gap-2">
+              {errors.map((error, index) => (
+                <div
+                  className="rounded-md border border-red-700 bg-red-100 px-2 text-red-700"
+                  key={`error-${index}`}
+                >
+                  {error}
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
 
         <div className="flex flex-wrap gap-2 border border-black p-2">
           {emailList.map((email, index) => {
@@ -201,7 +203,9 @@ export const ManageUsers = () => {
                     )}
                     key={user.email}
                   >
-                    <div className="grow">{user.email}</div>
+                    <div className="grow" id={user.email}>
+                      {user.email}
+                    </div>
                     <UserActions
                       user={user}
                       isInvitation={hasOwnProperty(user, "expired")}

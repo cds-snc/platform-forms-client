@@ -49,13 +49,14 @@ export const Dialog = ({
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === "Escape") {
         e.stopPropagation();
+        handleClose && handleClose();
         close();
       }
     };
 
     document.addEventListener("keydown", handleKeyDown);
     return () => document.removeEventListener("keydown", handleKeyDown);
-  }, [close]);
+  }, [close, handleClose]);
 
   return (
     <dialog

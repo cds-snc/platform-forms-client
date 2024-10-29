@@ -116,10 +116,6 @@ export interface CDSHTMLDialogElement extends HTMLElement {
   ): void;
 }
 
-export interface RenderMoreFunc {
-  (moreButton: JSX.Element | undefined): React.ReactElement | string | undefined;
-}
-
 export const FormServerErrorCodes = {
   BRANDING: "550",
   CLASSIFICATION: "551",
