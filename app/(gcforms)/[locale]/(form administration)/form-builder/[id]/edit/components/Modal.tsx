@@ -7,6 +7,7 @@ import React, {
   useRef,
 } from "react";
 import { useTranslation } from "@i18n/client";
+import PropTypes from "prop-types";
 
 import { Button } from "@clientComponents/globals";
 import { Close } from "@serverComponents/icons";
@@ -25,17 +26,6 @@ const modalDefaultContext: IModalContext = {
 
 export const ModalContext = createContext<IModalContext>(modalDefaultContext);
 
-interface ModalProps {
-  title?: string;
-  children?: React.ReactElement | string;
-  openButton?: React.ReactElement;
-  saveButton?: React.ReactElement;
-  defaultOpen?: boolean;
-  handleClose?: () => void;
-  modalRef: React.RefObject<HTMLDivElement>;
-  noOpenButton: boolean;
-}
-
 export const Modal = ({
   title,
   children,
@@ -45,7 +35,16 @@ export const Modal = ({
   handleClose = () => null,
   modalRef,
   noOpenButton,
-}: ModalProps) => {
+}: {
+  title: string;
+  children: React.ReactNode;
+  openButton?: React.ReactElement | undefined;
+  saveButton?: React.ReactElement | string | undefined;
+  defaultOpen?: boolean;
+  handleClose?: () => void;
+  modalRef?: React.RefObject<HTMLDivElement> | undefined;
+  noOpenButton?: boolean;
+}) => {
   const { updateIsOpen } = useModalStore();
   const [isOpen, setIsOpen] = React.useState<boolean>(defaultOpen);
 
@@ -77,6 +76,11 @@ export const Modal = ({
   );
 };
 
+Modal.propTypes = {
+  title: PropTypes.string,
+  children: PropTypes.oneOfType([PropTypes.element, PropTypes.string]),
+};
+
 // eslint-disable-next-line  @typescript-eslint/no-explicit-any
 type CallBack = (...args: any[]) => void;
 
@@ -87,12 +91,13 @@ const callAll =
   ) =>
     fns.forEach((fn) => typeof fn === "function" && fn(...args));
 
-interface ModalButtonProps {
+export const ModalButton = ({
+  isOpenButton,
+  children,
+}: {
   isOpenButton: boolean;
   children?: React.ReactElement;
-}
-
-export const ModalButton = ({ isOpenButton, children }: ModalButtonProps) => {
+}) => {
   const { t } = useTranslation("form-builder");
   const { changeOpen } = useContext(ModalContext);
 
@@ -110,18 +115,14 @@ export const ModalButton = ({ isOpenButton, children }: ModalButtonProps) => {
 
   // Note: This will not work if children is more than 1 element
   return React.cloneElement(children, {
-    // @ts-expect-error -- modal is being reworked
     onClick: callAll(() => changeOpen(isOpenButton), children.props.onClick),
   });
 };
 
-interface ModalContainerProps {
-  title?: string;
-  children?: React.ReactElement | string;
-  saveButton?: React.ReactElement;
-  handleClose?: () => void;
-  modalRef: React.RefObject<HTMLDivElement>;
-}
+ModalButton.propTypes = {
+  isOpenButton: PropTypes.bool,
+  children: PropTypes.oneOfType([PropTypes.element]),
+};
 
 export const ModalContainer = ({
   title,
@@ -129,7 +130,13 @@ export const ModalContainer = ({
   saveButton,
   handleClose = () => null,
   modalRef,
-}: ModalContainerProps) => {
+}: {
+  title: string;
+  children: React.ReactNode;
+  saveButton?: React.ReactElement | string | undefined;
+  handleClose?: () => void;
+  modalRef?: React.RefObject<HTMLDivElement> | undefined;
+}) => {
   const { t } = useTranslation("form-builder");
   const { isOpen, changeOpen } = useContext(ModalContext);
   const modalContainer = useRef<CDSHTMLDialogElement>(null);
@@ -237,4 +244,9 @@ export const ModalContainer = ({
     </div>
   );
   /* eslint-enable */
+};
+
+ModalContainer.propTypes = {
+  title: PropTypes.string,
+  children: PropTypes.oneOfType([PropTypes.element, PropTypes.string]),
 };

@@ -1,5 +1,6 @@
 "use client";
 import React, { useState } from "react";
+import PropTypes from "prop-types";
 import { useTranslation } from "@i18n/client";
 
 import { Button } from "@clientComponents/globals";
@@ -13,15 +14,6 @@ import { AddOther } from "@formBuilder/components/shared/conditionals/AddOther";
 
 import Markdown from "markdown-to-jsx";
 
-interface ModalFormRulesProps {
-  item: FormElementWithIndex;
-  properties: ModalProperties;
-  initialChoiceRules: ChoiceRule[];
-  updateModalProperties: (id: number, properties: ModalProperties) => void;
-  descriptionId?: string;
-  tryLogicView: () => void;
-}
-
 export const ModalFormRules = ({
   item,
   properties,
@@ -29,7 +21,14 @@ export const ModalFormRules = ({
   updateModalProperties,
   descriptionId,
   tryLogicView,
-}: ModalFormRulesProps) => {
+}: {
+  item: FormElementWithIndex;
+  properties: ModalProperties;
+  initialChoiceRules: ChoiceRule[];
+  updateModalProperties: (id: number, properties: ModalProperties) => void;
+  descriptionId?: string;
+  tryLogicView: () => void;
+}) => {
   const { t } = useTranslation("form-builder");
   const formId = `form-${Date.now()}`;
   const [showLogicDetails, setShowLogicDetails] = useState(false);
@@ -140,4 +139,8 @@ export const ModalFormRules = ({
       </div>
     </form>
   );
+};
+
+ModalFormRules.propTypes = {
+  item: PropTypes.object,
 };

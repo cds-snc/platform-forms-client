@@ -13,7 +13,9 @@ import { QuestionDescription } from "./elements/question/QuestionDescription";
 import { useTemplateStore } from "@lib/store/useTemplateStore";
 import { Trans } from "react-i18next";
 import { Tooltip } from "@formBuilder/components/shared/Tooltip";
+import { Button } from "@clientComponents/globals";
 import { cn } from "@lib/utils";
+import { EventKeys, useCustomEvent } from "@lib/hooks/useCustomEvent";
 
 export const PanelBody = ({
   item,
@@ -42,6 +44,8 @@ export const PanelBody = ({
     localizeField: s.localizeField,
     translationLanguagePriority: s.translationLanguagePriority,
   }));
+
+  const { Event } = useCustomEvent();
 
   const description =
     properties[localizeField(LocalizedElementProperties.DESCRIPTION, translationLanguagePriority)];
@@ -86,7 +90,14 @@ export const PanelBody = ({
                 </div>
                 {isFormattedDate && (
                   <div className="mb-4 ml-4 self-end">
-                    <div>todo</div>
+                    <Button
+                      theme="secondary"
+                      onClick={() => {
+                        Event.fire(EventKeys.openMoreDialog, { itemId: item.id });
+                      }}
+                    >
+                      <>{t("addElementDialog.formattedDate.customizeDate")}</>
+                    </Button>
                   </div>
                 )}
               </div>
@@ -163,7 +174,14 @@ export const PanelBody = ({
                     item={item}
                     key={"element-required-" + item.id}
                   />
-                  <div>todo</div>
+                  <Button
+                    theme="secondary"
+                    onClick={() => {
+                      Event.fire(EventKeys.openMoreDialog, { itemId: item.id });
+                    }}
+                  >
+                    {t("addElementDialog.addressComplete.customize")}
+                  </Button>
                 </div>
               </div>
             )}
