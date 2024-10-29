@@ -19,13 +19,15 @@ export const Question = ({
     translationLanguagePriority: s.translationLanguagePriority,
   }));
 
+  const label = item.type === "dynamicRow" ? t("setName") : t("question");
+
   return (
     <div className="mb-2">
-      <Label htmlFor={`titleEn--modal--${item.id}`}>{t("question")}</Label>
+      <Label htmlFor={`titleEn--modal--${item.id}`}>{label}</Label>
       <Input
         id={`title--modal--${item.id}`}
         name={`item${item.id}`}
-        placeholder={t("question")}
+        placeholder={label}
         value={
           item.properties[
             localizeField(LocalizedElementProperties.TITLE, translationLanguagePriority)

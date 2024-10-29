@@ -592,6 +592,7 @@
       "title": "Button"
     }
   },
+  "setName": "Set name",
   "questionTitle": "Question",
   "remove": "Remove",
   "removeFromSet": "Remove from set",
