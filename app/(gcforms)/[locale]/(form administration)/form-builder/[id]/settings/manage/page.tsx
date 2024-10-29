@@ -24,7 +24,7 @@ export async function generateMetadata(
   const { t } = await serverTranslation("form-builder", { lang: locale });
 
   return {
-    title: `${t("branding.heading")} — ${t("gcForms")}`,
+    title: `${t("settings.formManagement")} — ${t("gcForms")}`,
   };
 }
 
