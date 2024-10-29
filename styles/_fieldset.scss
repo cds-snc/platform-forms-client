@@ -1,0 +1,73 @@
+@layer reset, default, disabled, focus;
+:root {
+    --gcds-fieldset-default-text: #333;
+    --gcds-fieldset-disabled-text: #545961;
+    --gcds-fieldset-focus-text: #0535d2;
+    --gcds-fieldset-font-desktop: 600 2.00225830078125rem / 124.85901539399482% "Lato", sans-serif;
+    --gcds-fieldset-font-mobile: 600 1.601806640625rem / 124.85901539399481% "Lato", sans-serif;
+    --gcds-fieldset-legend-margin: 0 0 0.1875rem;
+    --gcds-fieldset-legend-required-font-desktop: 400 1.25rem / 120% "Noto Sans", sans-serif;
+    --gcds-fieldset-legend-required-font-mobile: 400 1rem / 150% "Noto Sans", sans-serif;
+    --gcds-fieldset-legend-required-margin: 0 0 0 0.375rem;
+}
+
+@layer reset {
+  :host {
+    display: block;
+
+    .gcds-fieldset {
+      border: 0;
+      padding: 0;
+    }
+
+    legend {
+      padding: 0;
+    }
+
+    slot {
+      display: block;
+      margin: 0;
+    }
+  }
+}
+
+@layer default {
+  .gcds-fieldset {
+    color: var(--gcds-fieldset-default-text);
+
+    legend {
+      font: var(--gcds-fieldset-font-desktop);
+      margin: var(--gcds-fieldset-legend-margin) !important;
+
+      @media only screen and (width < 48em) {
+        font: var(--gcds-fieldset-font-mobile);
+      }
+
+      .legend__required {
+        margin: var(--gcds-fieldset-legend-required-margin) !important;
+        font: var(--gcds-fieldset-legend-required-font-desktop);
+        vertical-align: middle;
+
+        @media only screen and (width < 48em) {
+          font: var(--gcds-fieldset-legend-required-font-mobile);
+        }
+      }
+    }
+  }
+}
+
+@layer disabled {
+  :host {
+    .gcds-fieldset:disabled {
+      color: var(--gcds-fieldset-disabled-text);
+    }
+  }
+}
+
+@layer focus {
+  :host {
+    .gcds-fieldset:focus-within {
+      color: var(--gcds-fieldset-focus-text);
+    }
+  }
+}

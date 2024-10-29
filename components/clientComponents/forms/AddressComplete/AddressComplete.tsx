@@ -233,7 +233,7 @@ export const AddressComplete = (props: AddressCompleteProps): React.ReactElement
         id={id}
         tabIndex={0}
       >
-        <legend key={`label-${id}`} id={`label-${id}`} className={"legend-fieldset "}>
+        <legend key={`label-${id}`} id={`label-${id}`} className={"legend-fieldset"}>
           {label}
         </legend>
 
@@ -249,7 +249,7 @@ export const AddressComplete = (props: AddressCompleteProps): React.ReactElement
           </div>
         )}
         {!props.canadianOnly && (
-          <div className="mb-6">
+          <div className="mb-6 mt-4">
             <Label htmlFor={`${name}-country`} className="gc-label">
               {t("addElementDialog.addressComplete.country")}
             </Label>
