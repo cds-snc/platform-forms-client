@@ -317,15 +317,12 @@ export const ResponseDelivery = ({ keyId }: ResponseDeliveryProps) => {
   const responsesLink = `/${i18n.language}/form-builder/${id}/responses`;
 
   // Update local state
-  const handleUpdateClassification = useCallback(
-    (value: ClassificationType) => {
-      if (value === "Protected B" && deliveryOptionValue !== DeliveryOption.api) {
-        setDeliveryOptionValue(DeliveryOption.vault);
-      }
-      setClassification(value);
-    },
-    [deliveryOptionValue]
-  );
+  const handleUpdateClassification = useCallback((value: ClassificationType) => {
+    if (value === "Protected B") {
+      setDeliveryOptionValue(DeliveryOption.vault);
+    }
+    setClassification(value);
+  }, []);
 
   return (
     <>
@@ -395,7 +392,7 @@ export const ResponseDelivery = ({ keyId }: ResponseDeliveryProps) => {
 
               {apiAccess && (
                 <Radio
-                  disabled={isPublished || hasApiKey}
+                  disabled={isPublished || hasApiKey || protectedBSelected}
                   id={`delivery-option-${DeliveryOption.api}`}
                   checked={deliveryOptionValue === DeliveryOption.api}
                   name="response-delivery"
@@ -410,21 +407,27 @@ export const ResponseDelivery = ({ keyId }: ResponseDeliveryProps) => {
                   <div className="mb-10 ml-4 border-l-4 pl-8 ">
                     <span className="font-bold">{t("formSettingsModal.apiOption.startNote")}</span>
                   </div>
-                  <ApiKeyButton showDelete keyId={keyId} />
+                  <div className="flex">
+                    <ApiKeyButton showDelete keyId={keyId} />{" "}
+                    <div className="mt-2">
+                      <ResponseDeliveryHelpButton />
+                    </div>
+                  </div>
                   <ApiDocNotes />
                 </div>
               )}
-
-              <Button
-                disabled={
-                  !isValid || isPublished || deliveryOptionValue === DeliveryOption.api || hasApiKey
-                }
-                theme="secondary"
-                onClick={saveDeliveryOptions}
-              >
-                {t("settingsResponseDelivery.saveButton")}
-              </Button>
-              <ResponseDeliveryHelpButton />
+              {deliveryOptionValue !== DeliveryOption.api && !hasApiKey && (
+                <>
+                  <Button
+                    disabled={!isValid || isPublished}
+                    theme="secondary"
+                    onClick={saveDeliveryOptions}
+                  >
+                    {t("settingsResponseDelivery.saveButton")}
+                  </Button>
+                  <ResponseDeliveryHelpButton />
+                </>
+              )}
             </div>
 
             <div className="mb-10">
