@@ -6,6 +6,8 @@ import { FormRecord, TypeOmit } from "@lib/types";
 import { Form } from "@clientComponents/forms/Form/Form";
 import { Language } from "@lib/types/form-builder-types";
 
+import type { JSX } from "react";
+
 export const FormWrapper = ({
   formRecord,
   currentForm,
