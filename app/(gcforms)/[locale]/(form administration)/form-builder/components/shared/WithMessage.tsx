@@ -1,6 +1,5 @@
 "use client";
 import React, { useState } from "react";
-import PropTypes from "prop-types";
 
 export const SuccessAlert = ({
   successMessage,
@@ -38,12 +37,19 @@ interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   theme?: string;
 }
 
+interface ButtonWithMessageProps {
+  onClick?(...args: unknown[]): unknown;
+}
+
 export const withMessage = (
   Button: any, // eslint-disable-line  @typescript-eslint/no-explicit-any
   message?: string,
   onSuccess?: CallBack
 ) => {
-  const ButtonWithMessage: React.FC<ButtonProps> = ({ onClick, ...restProps }) => {
+  const ButtonWithMessage: React.FC<ButtonProps> = ({
+    onClick,
+    ...restProps
+  }: ButtonWithMessageProps) => {
     const [successMessage, setSuccessMessage] = useState("");
     const [showMessage, setShowMessage] = useState(false);
 
@@ -81,8 +87,5 @@ export const withMessage = (
   };
 
   ButtonWithMessage.displayName = "ButtonWithMessage";
-  ButtonWithMessage.propTypes = {
-    onClick: PropTypes.func,
-  };
   return ButtonWithMessage;
 };

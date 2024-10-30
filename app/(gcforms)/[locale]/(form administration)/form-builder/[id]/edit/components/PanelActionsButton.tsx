@@ -1,5 +1,5 @@
 "use client";
-import React, { ComponentType, JSXElementConstructor } from "react";
+import React, { ComponentType, JSXElementConstructor, type JSX } from "react";
 import { cn } from "@lib/utils";
 
 export const PanelActionsButton = ({
