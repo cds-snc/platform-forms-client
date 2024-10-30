@@ -162,10 +162,16 @@ export const PanelBody = ({
                     {t("addElementDialog.addressComplete.city")}
                   </div>
                   <div className="description-text mt-5 cursor-not-allowed rounded-sm p-2 bg-gray-100 text-slate-600">
-                    {t("addElementDialog.addressComplete.province")}
+                    {item.properties.addressComponents?.canadianOnly &&
+                      t("addElementDialog.addressComplete.components.province")}
+                    {!item.properties.addressComponents?.canadianOnly &&
+                      t("addElementDialog.addressComplete.components.provinceOrState")}
                   </div>
                   <div className="description-text mt-5 cursor-not-allowed rounded-sm p-2 bg-gray-100 text-slate-600">
-                    {t("addElementDialog.addressComplete.postal")}
+                    {item.properties.addressComponents?.canadianOnly &&
+                      t("addElementDialog.addressComplete.components.postalCode")}
+                    {!item.properties.addressComponents?.canadianOnly &&
+                      t("addElementDialog.addressComplete.components.postalCodeOrZip")}
                   </div>
                 </div>
                 <div className="mb-4 mt-4 ml-4 self-end w-1/2">

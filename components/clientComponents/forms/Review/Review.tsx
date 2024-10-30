@@ -17,7 +17,7 @@ import {
 import { randomId } from "@lib/client/clientHelpers";
 import { DateFormat, DateObject } from "../FormattedDate/types";
 import { getFormattedDateFromObject } from "../FormattedDate/utils";
-import { AddressElements } from "../AddressComplete/types";
+import { AddressElements, AddressCompleteLabels } from "../AddressComplete/types";
 import { getAddressAsReviewElements, getAddressAsString } from "../AddressComplete/utils";
 
 type ReviewItem = {
@@ -33,7 +33,7 @@ type ReviewElement = {
   element: FormElement | undefined;
 };
 
-const addressCompleteStrings = {} as AddressElements;
+const addressCompleteStrings = {} as AddressCompleteLabels;
 
 function formatElementValues(element: ReviewElement) {
   if (!element.values) {
@@ -141,12 +141,21 @@ function getReviewItemElements(
 
         const addressFormValue = formValues[elementId] as string;
         const addressValues = JSON.parse(addressFormValue) as AddressElements;
+        const canadaOnly = element.properties?.addressComponents?.canadianOnly;
 
         const titleSet = {
           streetAddress: parentTitle + " - " + addressCompleteStrings.streetAddress,
           city: parentTitle + " - " + addressCompleteStrings.city,
-          province: parentTitle + " - " + addressCompleteStrings.province,
-          postalCode: parentTitle + " - " + addressCompleteStrings.postalCode,
+          province:
+            parentTitle +
+            " - " +
+            (canadaOnly ? addressCompleteStrings.province : addressCompleteStrings.provinceOrState),
+          postalCode:
+            parentTitle +
+            " - " +
+            (canadaOnly
+              ? addressCompleteStrings.postalCode
+              : addressCompleteStrings.postalCodeOrZip),
           country: parentTitle + " - " + addressCompleteStrings.country,
         } as AddressElements;
 
@@ -188,6 +197,12 @@ export const Review = ({ language }: { language: Language }): React.ReactElement
   addressCompleteStrings.city = t("addressComponents.city", { lng: language });
   addressCompleteStrings.province = t("addressComponents.province", { lng: language });
   addressCompleteStrings.postalCode = t("addressComponents.postalCode", { lng: language });
+  addressCompleteStrings.provinceOrState = t("addressComponents.provinceOrState", {
+    lng: language,
+  });
+  addressCompleteStrings.postalCodeOrZip = t("addressComponents.postalCodeOrZip", {
+    lng: language,
+  });
   addressCompleteStrings.country = t("addressComponents.country", { lng: language });
   //This is done here, as useTranslation is inacessible inside useMemo.
 
