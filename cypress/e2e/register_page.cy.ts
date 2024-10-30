@@ -34,7 +34,7 @@ describe("Register Page", () => {
     cy.get("[type='submit']").click();
     cy.get("[id='errorMessageusername']").should(
       "contain",
-      "This field must be a valid federal government email"
+      "Enter a valid government email address."
     );
   });
   it("No error on submitting a form with a valid government email", () => {

@@ -38,10 +38,7 @@ const validate = async (
       v.toLowerCase(),
       v.toTrimmed(),
       v.minLength(1, t("input-validation.required", { ns: "common" })),
-      v.custom(
-        (input) => isValidGovEmail(input),
-        t("signUpRegistration.fields.username.error.validGovEmail")
-      ),
+      v.custom((input) => isValidGovEmail(input), t("input-validation.validGovEmail")),
     ]),
     password: v.string([
       v.minLength(1, t("input-validation.required", { ns: "common" })),
