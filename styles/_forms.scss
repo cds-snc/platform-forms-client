@@ -15,6 +15,7 @@
 @import "./_dropdown";
 @import "./_alert";
 @import "./_combobox";
+@import "./_fieldset";
 
 .gc-fieldset ul {
   @apply mb-14;
@@ -144,6 +145,7 @@
 
 .focus-group:focus-within {
   .gc-label,
+  .legend-fieldset,
   .gc-description {
     @apply text-blue-focus;
   }
