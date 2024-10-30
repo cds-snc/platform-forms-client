@@ -592,6 +592,7 @@
       "title": "Button"
     }
   },
+  "setName": "Set name",
   "questionTitle": "Question",
   "remove": "Remove",
   "removeFromSet": "Remove from set",
@@ -633,7 +634,7 @@
         "text2": "The API key ID is not the API key itself. It provides a safe way to identify a key without sharing protected information."
       },
       "dialog": {
-        "title": "API key successfully created",
+        "title": "Generate API key",
         "heading": "GC Forms API keys are PROTECTED B",
         "responsibility": "It is your responsibility to:",
         "responsibility1": "Save this key in a secure location.",

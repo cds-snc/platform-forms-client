@@ -592,6 +592,7 @@
       "title": "Bouton"
     }
   },
+  "setName": "Nom de l'ensemble",
   "questionTitle": "Question",
   "remove": "Supprimer",
   "removeFromSet": "Enlever de la série",
@@ -633,7 +634,7 @@
         "text2": "L'identifiant de la clé API n'est pas la clé elle-même. Il s'agit d'un moyen d'identifier une clé sans partager des informations protégées."
       },
       "dialog": {
-        "title": "Clé API créée avec succès",
+        "title": "[FR]Generate API key",
         "heading": "Les clés API de Formulaires GC sont PROTÉGÉES B",
         "responsibility": "Vous êtes responsable de :",
         "responsibility1": "L'enregistrement de cette clé dans un endroit sûr.",

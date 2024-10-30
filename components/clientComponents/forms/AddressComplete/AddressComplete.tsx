@@ -22,7 +22,7 @@ import { countries } from "@lib/managedData/countries";
 import { useFeatureFlags } from "@lib/hooks/useFeatureFlags";
 
 interface ManagedComboboxRef {
-  changeInputValue: (value: string) => void;
+  changeInputValue: (value: string, keepOpen: boolean) => void;
 }
 
 export const AddressComplete = (props: AddressCompleteProps): React.ReactElement => {
@@ -168,7 +168,7 @@ export const AddressComplete = (props: AddressCompleteProps): React.ReactElement
           const results = responseData;
           setAddressObject(results);
           if (comboboxRef.current) {
-            comboboxRef.current.changeInputValue(results.streetAddress);
+            comboboxRef.current.changeInputValue(results.streetAddress, false);
           }
         }
       } else if (nextValue == AddressCompleNext.Find) {
@@ -178,6 +178,10 @@ export const AddressComplete = (props: AddressCompleteProps): React.ReactElement
           selectedResult.Id,
           addressObject?.country || "CAN"
         );
+
+        if (comboboxRef.current) {
+          comboboxRef.current.changeInputValue("", true);
+        }
 
         handleAddressComplete(responseData);
       }

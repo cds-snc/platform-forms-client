@@ -21,7 +21,6 @@ export const PanelBodyRoot = ({
 }) => {
   const { updateField, propertyPath } = useTemplateStore((s) => ({
     propertyPath: s.propertyPath,
-    localizeField: s.localizeField,
     updateField: s.updateField,
   }));
 
