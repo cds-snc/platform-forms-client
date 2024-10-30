@@ -50,7 +50,14 @@ export enum PurposeOption {
   nonAdmin = "nonAdmin",
 }
 
-export const ResponseDelivery = ({ keyId }: { keyId: string | false }) => {
+type ResponseDeliveryProps = {
+  keyId: string | false;
+  featureFlags: {
+    apiAccess: boolean;
+  };
+};
+
+export const ResponseDelivery = ({ keyId, featureFlags }: ResponseDeliveryProps) => {
   const { t, i18n } = useTranslation("form-builder");
   const { status } = useSession();
   const session = useSession();
@@ -109,7 +116,7 @@ export const ResponseDelivery = ({ keyId }: { keyId: string | false }) => {
   const userEmail = session.data?.user.email ?? "";
   let initialDeliveryOption = !email ? DeliveryOption.vault : DeliveryOption.email;
 
-  const hasApiKey = keyId ? true : false;
+  const hasApiKey = keyId && featureFlags.apiAccess ? true : false;
 
   // Check for API key -- if a key is present, set the initial delivery option to API
   if (hasApiKey) {
@@ -384,17 +391,19 @@ export const ResponseDelivery = ({ keyId }: { keyId: string | false }) => {
               )}
               {deliveryOptionValue !== DeliveryOption.email && <div className="mb-8"></div>}
 
-              <Radio
-                disabled={isPublished || hasApiKey}
-                id={`delivery-option-${DeliveryOption.api}`}
-                checked={deliveryOptionValue === DeliveryOption.api}
-                name="response-delivery"
-                value={DeliveryOption.api}
-                label={apiLabel}
-                onChange={updateDeliveryOption}
-              />
+              {featureFlags.apiAccess && (
+                <Radio
+                  disabled={isPublished || hasApiKey}
+                  id={`delivery-option-${DeliveryOption.api}`}
+                  checked={deliveryOptionValue === DeliveryOption.api}
+                  name="response-delivery"
+                  value={DeliveryOption.api}
+                  label={apiLabel}
+                  onChange={updateDeliveryOption}
+                />
+              )}
 
-              {deliveryOptionValue === DeliveryOption.api && (
+              {featureFlags.apiAccess && deliveryOptionValue === DeliveryOption.api && (
                 <div>
                   <div className="mb-10 ml-4 border-l-4 pl-8 ">
                     <span className="font-bold">{t("formSettingsModal.apiOption.startNote")}</span>
@@ -421,7 +430,7 @@ export const ResponseDelivery = ({ keyId }: { keyId: string | false }) => {
               <p className="mb-2">
                 <strong>{t("settingsPurposeAndUse.helpUs")}</strong>
               </p>
-              <p className="text-sm mb-6">{t("settingsPurposeAndUse.description")}</p>
+              <p className="mb-6 text-sm">{t("settingsPurposeAndUse.description")}</p>
               <Radio
                 id="purposeAndUseAdmin"
                 name="purpose-use"
@@ -431,7 +440,7 @@ export const ResponseDelivery = ({ keyId }: { keyId: string | false }) => {
                 value={PurposeOption.admin}
                 onChange={updatePurposeOption}
               />
-              <div className="text-sm ml-12 mb-4">
+              <div className="mb-4 ml-12 text-sm">
                 <div>
                   <Markdown options={{ forceBlock: true }}>
                     {t("settingsPurposeAndUse.personalInfoDetails")}
@@ -452,7 +461,7 @@ export const ResponseDelivery = ({ keyId }: { keyId: string | false }) => {
                 value={PurposeOption.nonAdmin}
                 onChange={updatePurposeOption}
               />
-              <div className="text-sm ml-12 mb-4">
+              <div className="mb-4 ml-12 text-sm">
                 <div>
                   <Markdown options={{ forceBlock: true }}>
                     {t("settingsPurposeAndUse.nonAdminInfoDetails")}

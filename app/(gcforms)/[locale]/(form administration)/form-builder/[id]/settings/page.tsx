@@ -3,6 +3,8 @@ import { Metadata } from "next";
 import { ResponseDelivery } from "./components/ResponseDelivery";
 import { ApiKeyDialog } from "../components/dialogs/ApiKeyDialog/ApiKeyDialog";
 import { checkKeyExists } from "@lib/serviceAccount";
+import { getSomeFlags } from "@lib/cache/flags";
+import { FeatureFlags } from "@lib/cache/types";
 
 export async function generateMetadata({
   params: { locale },
@@ -15,11 +17,13 @@ export async function generateMetadata({
   };
 }
 
+const featureFlags = await getSomeFlags([FeatureFlags.apiAccess]);
+
 export default async function Page({ params: { id } }: { params: { id: string } }) {
   const keyId = await checkKeyExists(id);
   return (
     <>
-      <ResponseDelivery keyId={keyId} />
+      <ResponseDelivery featureFlags={featureFlags} keyId={keyId} />
       <ApiKeyDialog />
     </>
   );
