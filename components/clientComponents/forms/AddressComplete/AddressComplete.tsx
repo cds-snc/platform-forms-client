@@ -322,7 +322,9 @@ export const AddressComplete = (props: AddressCompleteProps): React.ReactElement
 
         <div className="mb-6">
           <Label htmlFor={`${name}-province`} className="gc-label">
-            {t("addElementDialog.addressComplete.province")}
+            {props.canadianOnly && t("addElementDialog.addressComplete.components.province")}
+            {!props.canadianOnly &&
+              t("addElementDialog.addressComplete.components.provinceOrState")}
           </Label>
           <input
             type="text"
@@ -338,7 +340,9 @@ export const AddressComplete = (props: AddressCompleteProps): React.ReactElement
 
         <div className="mb-6">
           <Label htmlFor={`${name}-postal`} className="gc-label">
-            {t("addElementDialog.addressComplete.postal")}
+            {props.canadianOnly && t("addElementDialog.addressComplete.components.postalCode")}
+            {!props.canadianOnly &&
+              t("addElementDialog.addressComplete.components.postalCodeOrZip")}
           </Label>
           <input
             id={`${name}-postal`}
