@@ -23,6 +23,7 @@ export interface ClassificationSelectProps {
   handleUpdateClassification: (classification: ClassificationType) => void;
   className?: string;
   disableProtectedB?: boolean;
+  disabled?: boolean;
 }
 
 export const ClassificationSelect = ({
@@ -32,13 +33,14 @@ export const ClassificationSelect = ({
   handleUpdateClassification,
   className,
   disableProtectedB,
+  disabled,
   ...rest
 }: ClassificationSelectProps) => {
   return (
     <div>
       <ProtectedIcon className="mr-2 inline-block fill-black" />
       <select
-        disabled={isPublished}
+        disabled={isPublished || disabled}
         id="classification-select"
         value={classification}
         className={cn(

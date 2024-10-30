@@ -734,12 +734,25 @@
         "title": "Email to an inbox",
         "text1": "For up to PROTECTED A forms",
         "text2": "Responses are delivered directly to an inbox in real time",
-        "text3": "One email address can receive response emails. This can be a shared inbox."
+        "text3": "One email address can receive response emails. This can be a shared inbox.",
+        "text4": "One email address set for delivery. This can be a shared inbox.",
+        "text5": "No technical resources required."
       },
       "vault": {
         "title": "Download from GC Forms",
         "text1": "For up to PROTECTED B forms",
-        "text2": "Download responses within 30 days"
+        "text2": "Download responses within 30 days",
+        "text3": "Can be switched to API delivery after publishing",
+        "text4": "Multiple account holders can access responses.",
+        "text5": "No technical resources required."
+      },
+      "api": {
+        "title": "API response retrieval",
+        "text1": "For up to PROTECTED A forms. (PROTECTED B coming soon)",
+        "text2": "API pull requests & download delivery",
+        "text3": "Can be switched to download only delivery after publishing",
+        "text4": "One API key available per form.",
+        "text5": "Technical resources needed to develop the API integration."
       }
     }
   },
@@ -924,6 +937,15 @@
     "saveNote": {
       "text1": "Save changes before closing?",
       "text2": "Save or Cancel"
+    },
+    "apiOption": {
+      "label": "Receive responses through an API endpoint",
+      "note": "Submitted responses will be available for retrieval through an API endpoint and response page.",
+      "startNote": "Start your API integration by generating a private API Key"
+    },
+    "apiDocNotes": {
+      "title": "API documentation & guidance",
+      "text1": "To connect to our endpoint follow instructions and code examples in our <a href='http://canada.ca' target='_blank'>API documentation</a>. Read more about the API development process on our <a href='http://canada.ca' target='_blank'>guidance pages</a>."
     },
     "more": "More"
   },

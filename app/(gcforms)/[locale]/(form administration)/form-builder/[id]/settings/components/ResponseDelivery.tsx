@@ -30,10 +30,13 @@ import Markdown from "markdown-to-jsx";
 
 import { toast } from "@formBuilder/components/shared/Toast";
 import { ErrorSaving } from "@formBuilder/components/shared/ErrorSaving";
+import { ApiKeyButton } from "../api/components/ApiKeyButton";
+import { ApiDocNotes } from "./ApiDocNotes";
 
 enum DeliveryOption {
   vault = "vault",
   email = "email",
+  api = "api",
 }
 
 /*
@@ -47,7 +50,7 @@ export enum PurposeOption {
   nonAdmin = "nonAdmin",
 }
 
-export const ResponseDelivery = () => {
+export const ResponseDelivery = ({ keyId }: { keyId: string | false }) => {
   const { t, i18n } = useTranslation("form-builder");
   const { status } = useSession();
   const session = useSession();
@@ -96,8 +99,22 @@ export const ResponseDelivery = () => {
     t("formSettingsModal.emailOption.label")
   );
 
+  const apiLabel = (
+    <>
+      <span className="block">{t("formSettingsModal.apiOption.label")}</span>
+      <span className="block">{t("formSettingsModal.apiOption.note")}</span>
+    </>
+  );
+
   const userEmail = session.data?.user.email ?? "";
-  const initialDeliveryOption = !email ? DeliveryOption.vault : DeliveryOption.email;
+  let initialDeliveryOption = !email ? DeliveryOption.vault : DeliveryOption.email;
+
+  const hasApiKey = keyId ? true : false;
+
+  // Check for API key -- if a key is present, set the initial delivery option to API
+  if (hasApiKey) {
+    initialDeliveryOption = DeliveryOption.api;
+  }
 
   const [deliveryOptionValue, setDeliveryOptionValue] = useState(initialDeliveryOption);
   const [purposeOption, setPurposeOption] = useState(formPurpose as PurposeOption);
@@ -221,7 +238,10 @@ export const ResponseDelivery = () => {
   const saveDeliveryOptions = useCallback(async () => {
     let result;
 
-    if (email !== "" && deliveryOptionValue === DeliveryOption.vault) {
+    if (
+      (email !== "" && deliveryOptionValue === DeliveryOption.vault) ||
+      deliveryOptionValue === DeliveryOption.api
+    ) {
       // Call local callBack which will call the server action
       result = (await setToDatabaseDelivery()) as FormServerError;
     } else {
@@ -288,12 +308,15 @@ export const ResponseDelivery = () => {
   const responsesLink = `/${i18n.language}/form-builder/${id}/responses`;
 
   // Update local state
-  const handleUpdateClassification = useCallback((value: ClassificationType) => {
-    if (value === "Protected B") {
-      setDeliveryOptionValue(DeliveryOption.vault);
-    }
-    setClassification(value);
-  }, []);
+  const handleUpdateClassification = useCallback(
+    (value: ClassificationType) => {
+      if (value === "Protected B" && deliveryOptionValue !== DeliveryOption.api) {
+        setDeliveryOptionValue(DeliveryOption.vault);
+      }
+      setClassification(value);
+    },
+    [deliveryOptionValue]
+  );
 
   return (
     <>
@@ -310,6 +333,7 @@ export const ResponseDelivery = () => {
                 lang={lang}
                 isPublished={isPublished}
                 classification={classification}
+                disabled={hasApiKey}
                 handleUpdateClassification={handleUpdateClassification}
               />
             </div>
@@ -322,7 +346,7 @@ export const ResponseDelivery = () => {
                 </p>
               ) : null}
               <Radio
-                disabled={isPublished}
+                disabled={isPublished || hasApiKey}
                 id={`delivery-option-${DeliveryOption.vault}`}
                 checked={deliveryOptionValue === DeliveryOption.vault}
                 name="response-delivery"
@@ -337,7 +361,7 @@ export const ResponseDelivery = () => {
                 </span>
               </Radio>
               <Radio
-                disabled={isPublished || protectedBSelected}
+                disabled={isPublished || protectedBSelected || hasApiKey}
                 id={`delivery-option-${DeliveryOption.email}`}
                 checked={deliveryOptionValue === DeliveryOption.email}
                 name="response-delivery"
@@ -360,8 +384,30 @@ export const ResponseDelivery = () => {
               )}
               {deliveryOptionValue !== DeliveryOption.email && <div className="mb-8"></div>}
 
+              <Radio
+                disabled={isPublished || hasApiKey}
+                id={`delivery-option-${DeliveryOption.api}`}
+                checked={deliveryOptionValue === DeliveryOption.api}
+                name="response-delivery"
+                value={DeliveryOption.api}
+                label={apiLabel}
+                onChange={updateDeliveryOption}
+              />
+
+              {deliveryOptionValue === DeliveryOption.api && (
+                <div>
+                  <div className="mb-10 ml-4 border-l-4 pl-8 ">
+                    <span className="font-bold">{t("formSettingsModal.apiOption.startNote")}</span>
+                  </div>
+                  <ApiKeyButton showDelete keyId={keyId} />
+                  <ApiDocNotes />
+                </div>
+              )}
+
               <Button
-                disabled={!isValid || isPublished}
+                disabled={
+                  !isValid || isPublished || deliveryOptionValue === DeliveryOption.api || hasApiKey
+                }
                 theme="secondary"
                 onClick={saveDeliveryOptions}
               >

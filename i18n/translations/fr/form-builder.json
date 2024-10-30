@@ -917,6 +917,15 @@
       "label": "Recevoir les réponses par courriel",
       "note": "Non disponible pour PROTÉGÉ B"
     },
+    "apiOption": {
+      "label": "Receive responses through an API endpoint",
+      "note": "Submitted responses will be available for retrieval through an API endpoint and response page.",
+      "startNote": "Start your API integration by generating a private API Key"
+    },
+    "apiDocNotes": {
+      "title": "API documentation & guidance",
+      "text1": "To connect to our endpoint follow instructions and code examples in our <a href='http://canada.ca' target='_blank'>API documentation</a>. Read more about the API development process on our <a href='http://canada.ca' target='_blank'>guidance pages</a>."
+    },
     "vaultNote": {
       "text1": "Les réponses aux formulaires PROTÉGÉ B doivent être téléchargées de Formulaires GC",
       "text2": "La livraison des réponses n'est pas disponible pour cette classification de données"
