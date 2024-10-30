@@ -31,6 +31,7 @@ const securityHeaders = [
 const nextConfig = {
   sassOptions: {
     includePaths: [path.join(__dirname, "styles")],
+    silenceDeprecations: ['legacy-js-api'], // https://github.com/vercel/next.js/issues/71638
   },
   poweredByHeader: false,
   compiler: {
