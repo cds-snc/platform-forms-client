@@ -250,7 +250,7 @@ export const AddressComplete = (props: AddressCompleteProps): React.ReactElement
         )}
         {!props.canadianOnly && (
           <div className="mb-6 mt-4">
-            <Label htmlFor={`${name}-country`} className="gc-label">
+            <Label htmlFor={`${name}-country`}>
               {t("addElementDialog.addressComplete.country")}
             </Label>
             <ManagedCombobox
