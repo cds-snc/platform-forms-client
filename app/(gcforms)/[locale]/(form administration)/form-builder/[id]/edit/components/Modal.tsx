@@ -42,7 +42,7 @@ export const Modal = ({
   saveButton?: React.ReactElement | string | undefined;
   defaultOpen?: boolean;
   handleClose?: () => void;
-  modalRef?: React.RefObject<HTMLDivElement> | undefined;
+  modalRef?: React.RefObject<HTMLDivElement | null> | undefined;
   noOpenButton?: boolean;
 }) => {
   const { updateIsOpen } = useModalStore();
@@ -136,7 +136,7 @@ export const ModalContainer = ({
   children: React.ReactNode;
   saveButton?: React.ReactElement | string | undefined;
   handleClose?: () => void;
-  modalRef?: React.RefObject<HTMLDivElement> | undefined;
+  modalRef?: React.RefObject<HTMLDivElement | null> | undefined;
 }) => {
   const { t } = useTranslation("form-builder");
   const { isOpen, changeOpen } = useContext(ModalContext);

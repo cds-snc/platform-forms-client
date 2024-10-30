@@ -6,6 +6,7 @@ import { useTemplateStore } from "@lib/store/useTemplateStore";
 import { Option } from "./Option";
 import { Button } from "@clientComponents/globals";
 import { FormElementWithIndex } from "@lib/types/form-builder-types";
+import { ModalRules } from "../ModalRules";
 import { ConditionalIndicatorOption } from "@formBuilder/components/shared";
 
 interface AddButtonProps {
@@ -60,7 +61,7 @@ interface OptionsProps {
   formId: string;
 }
 
-export const Options = ({ item, renderIcon }: OptionsProps) => {
+export const Options = ({ item, renderIcon, formId }: OptionsProps) => {
   const { elements, translationLanguagePriority } = useTemplateStore((s) => ({
     elements: s.form.elements,
     translationLanguagePriority: s.translationLanguagePriority,
@@ -72,7 +73,7 @@ export const Options = ({ item, renderIcon }: OptionsProps) => {
   const modalContainer = useRef<HTMLDivElement>(null);
   const [focusedOption, setFocusedOption] = useState<string | null>(null);
   // Track the mode of the modal for adding or editing rules
-  const [, setModalMode] = useState<"add" | "edit">("add");
+  const [modalMode, setModalMode] = useState<"add" | "edit">("add");
   const timeout = useRef<number | null>(null); // add interval to add timeout to be cleared
 
   if (!element?.properties) {
@@ -136,7 +137,15 @@ export const Options = ({ item, renderIcon }: OptionsProps) => {
           <AddOptions index={parentIndex} />
         </div>
       </div>
-      <div>{/* @todo fix Modal Rules */}</div>
+      <div>
+        <ModalRules
+          mode={modalMode}
+          focusedOption={focusedOption}
+          modalRef={modalContainer}
+          item={item}
+          formId={formId}
+        />
+      </div>
     </div>
   );
 };

@@ -1,5 +1,6 @@
 import { cn } from "@lib/utils";
 import Link from "next/link";
+import type { JSX } from "react";
 
 import type { JSX } from "react";
 
