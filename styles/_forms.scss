@@ -9,6 +9,7 @@
 // Import CSS variables from gcds-tokens
 @import "../node_modules/@cdssnc/gcds-tokens/build/web/css/components/heading.css";
 @import "../node_modules/@cdssnc/gcds-tokens/build/web/css/components/label.css";
+
 @include meta.load-css("_input");
 @include meta.load-css("_textarea");
 @include meta.load-css("checkbox");
@@ -16,6 +17,7 @@
 @include meta.load-css("_dropdown");
 @include meta.load-css("_alert");
 @include meta.load-css("_combobox");
+@include meta.load-css("./_fieldset");
 
 .gc-fieldset ul {
   @apply mb-14;
@@ -145,6 +147,7 @@
 
 .focus-group:focus-within {
   .gc-label,
+  .legend-fieldset,
   .gc-description {
     @apply text-blue-focus;
   }
