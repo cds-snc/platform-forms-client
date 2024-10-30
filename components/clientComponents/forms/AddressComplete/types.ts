@@ -71,3 +71,14 @@ export interface AddressElements {
   postalCode: string;
   country: string;
 }
+
+// AddressComplete String Labels {
+export interface AddressCompleteLabels {
+  streetAddress: string;
+  city: string;
+  province: string;
+  postalCode: string;
+  provinceOrState: string;
+  postalCodeOrZip: string;
+  country: string;
+}
