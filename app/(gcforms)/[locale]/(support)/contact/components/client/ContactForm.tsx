@@ -31,7 +31,7 @@ export const ContactForm = () => {
     return errors.validationErrors.find((e) => e.fieldKey === fieldKey)?.fieldValue || "";
   };
 
-  const validate = async (formData: FormData) => {
+  const submitForm = async (formData: FormData) => {
     const formEntries = Object.fromEntries(formData.entries());
 
     const SupportSchema = object({
@@ -119,7 +119,7 @@ export const ContactForm = () => {
               <Link href={`/${language}/support`}>{t("contactus.supportFormLink")}</Link>.
             </p>
           </Alert.Warning>
-          <form id="contactus" action={validate} noValidate>
+          <form id="contactus" action={submitForm} noValidate>
             {errors.error && (
               <Alert.Danger focussable={true} title={t("error")} className="mb-2 mt-2">
                 <p>{t(errors.error)}</p>
