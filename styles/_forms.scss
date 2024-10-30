@@ -1,3 +1,4 @@
+@use "sass:meta";
 // IE polyfills
 @supports not (display: grid) {
   input {
@@ -8,13 +9,15 @@
 // Import CSS variables from gcds-tokens
 @import "../node_modules/@cdssnc/gcds-tokens/build/web/css/components/heading.css";
 @import "../node_modules/@cdssnc/gcds-tokens/build/web/css/components/label.css";
-@import "./_input";
-@import "./_textarea";
-@import "./checkbox";
-@import "./radio";
-@import "./_dropdown";
-@import "./_alert";
-@import "./_combobox";
+
+@include meta.load-css("_input");
+@include meta.load-css("_textarea");
+@include meta.load-css("checkbox");
+@include meta.load-css("radio");
+@include meta.load-css("_dropdown");
+@include meta.load-css("_alert");
+@include meta.load-css("_combobox");
+@include meta.load-css("./_fieldset");
 
 .gc-fieldset ul {
   @apply mb-14;
@@ -149,7 +152,17 @@
   }
 }
 .gc-form-group-context {
-  @include visuallyHidden();
+  position: absolute !important;
+  width: 1px !important;
+  height: 1px !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  overflow: hidden !important;
+  clip: rect(0 0 0 0) !important;
+  -webkit-clip-path: inset(50%) !important;
+  clip-path: inset(50%) !important;
+  border: 0 !important;
+  white-space: nowrap !important;
 }
 
 .gc-input-text {
