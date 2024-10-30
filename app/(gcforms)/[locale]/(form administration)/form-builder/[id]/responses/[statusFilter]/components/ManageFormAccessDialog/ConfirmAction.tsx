@@ -1,7 +1,7 @@
 import { Button } from "@clientComponents/globals";
 import { useTranslation } from "@i18n/client";
 import { CancelIcon } from "@serverComponents/icons";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, type JSX } from "react";
 
 type ConfirmActionProps = {
   callback: () => Promise<boolean>;
