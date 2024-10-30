@@ -26,6 +26,8 @@ import {
 } from "@formBuilder/actions";
 import { useRefresh } from "@lib/hooks/useRefresh";
 
+import { useFeatureFlags } from "@lib/hooks/useFeatureFlags";
+
 import Markdown from "markdown-to-jsx";
 
 import { toast } from "@formBuilder/components/shared/Toast";
@@ -52,12 +54,9 @@ export enum PurposeOption {
 
 type ResponseDeliveryProps = {
   keyId: string | false;
-  featureFlags: {
-    apiAccess: boolean;
-  };
 };
 
-export const ResponseDelivery = ({ keyId, featureFlags }: ResponseDeliveryProps) => {
+export const ResponseDelivery = ({ keyId }: ResponseDeliveryProps) => {
   const { t, i18n } = useTranslation("form-builder");
   const { status } = useSession();
   const session = useSession();
@@ -96,6 +95,9 @@ export const ResponseDelivery = ({ keyId, featureFlags }: ResponseDeliveryProps)
     securityAttribute ? (securityAttribute as ClassificationType) : "Protected A"
   );
 
+  const { getFlag } = useFeatureFlags();
+  const apiAccess = getFlag("apiAccess");
+
   const protectedBSelected = classification === "Protected B";
   const emailLabel = protectedBSelected ? (
     <>
@@ -116,7 +118,7 @@ export const ResponseDelivery = ({ keyId, featureFlags }: ResponseDeliveryProps)
   const userEmail = session.data?.user.email ?? "";
   let initialDeliveryOption = !email ? DeliveryOption.vault : DeliveryOption.email;
 
-  const hasApiKey = keyId && featureFlags.apiAccess ? true : false;
+  const hasApiKey = keyId && apiAccess ? true : false;
 
   // Check for API key -- if a key is present, set the initial delivery option to API
   if (hasApiKey) {
@@ -391,7 +393,7 @@ export const ResponseDelivery = ({ keyId, featureFlags }: ResponseDeliveryProps)
               )}
               {deliveryOptionValue !== DeliveryOption.email && <div className="mb-8"></div>}
 
-              {featureFlags.apiAccess && (
+              {apiAccess && (
                 <Radio
                   disabled={isPublished || hasApiKey}
                   id={`delivery-option-${DeliveryOption.api}`}
@@ -403,7 +405,7 @@ export const ResponseDelivery = ({ keyId, featureFlags }: ResponseDeliveryProps)
                 />
               )}
 
-              {featureFlags.apiAccess && deliveryOptionValue === DeliveryOption.api && (
+              {apiAccess && deliveryOptionValue === DeliveryOption.api && (
                 <div>
                   <div className="mb-10 ml-4 border-l-4 pl-8 ">
                     <span className="font-bold">{t("formSettingsModal.apiOption.startNote")}</span>
