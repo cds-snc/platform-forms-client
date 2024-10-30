@@ -279,9 +279,9 @@ function _buildForm(element: FormElement, lang: string): ReactElement {
       const addressComponents = element.properties.addressComponents;
       return (
         <div className="focus-group">
-          {labelComponent}
           {description && <Description id={`${id}`}>{description}</Description>}
           <AddressComplete
+            label={labelText}
             id={`${id}`}
             name={`${id}`}
             ariaDescribedBy={description ? `desc-${id}` : undefined}
