@@ -1496,6 +1496,21 @@ export const updateClosedData = async (
   closingDate: string | null,
   details?: ClosedDetails
 ) => {
+  const templateWithAssociatedUsers = await _unprotectedGetTemplateWithAssociatedUsers(formID);
+  if (!templateWithAssociatedUsers) return null;
+
+  checkPrivileges(ability, [
+    {
+      action: "update",
+      subject: {
+        type: "FormRecord",
+        object: {
+          ...templateWithAssociatedUsers.formRecord,
+          users: templateWithAssociatedUsers.users,
+        },
+      },
+    },
+  ]);
   let detailsData: ClosedDetails | null = null;
 
   // Add the closed details if they exist
