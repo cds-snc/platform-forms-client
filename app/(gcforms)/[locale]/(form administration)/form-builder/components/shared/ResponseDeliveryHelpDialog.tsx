@@ -1,6 +1,7 @@
 "use client";
 import React, { useCallback, useState } from "react";
 import { useTranslation } from "@i18n/client";
+import { useFeatureFlags } from "@lib/hooks/useFeatureFlags";
 
 import { Button } from "@clientComponents/globals";
 import { useDialogRef, Dialog } from ".";
@@ -9,6 +10,10 @@ import { InfoIcon } from "@serverComponents/icons";
 const ResponseDeliveryHelpDialog = ({ handleClose }: { handleClose: () => void }) => {
   const { t } = useTranslation("form-builder");
   const dialog = useDialogRef();
+
+  const { getFlag } = useFeatureFlags();
+
+  const apiAccess = getFlag("apiAccess");
 
   const actions = (
     <>
@@ -46,9 +51,11 @@ const ResponseDeliveryHelpDialog = ({ handleClose }: { handleClose: () => void }
                 <th className="whitespace-nowrap p-2 text-left">
                   {t("settingsResponseDelivery.responseDeliveryHelp.vault.title")}
                 </th>
-                <th className="p-2 text-left">
-                  {t("settingsResponseDelivery.responseDeliveryHelp.api.title")}
-                </th>
+                {apiAccess && (
+                  <th className="p-2 text-left">
+                    {t("settingsResponseDelivery.responseDeliveryHelp.api.title")}
+                  </th>
+                )}
               </tr>
             </thead>
             <tbody>
@@ -60,9 +67,11 @@ const ResponseDeliveryHelpDialog = ({ handleClose }: { handleClose: () => void }
                 <td className="border-b-2 border-r-2 p-2 align-top text-sm">
                   {t("settingsResponseDelivery.responseDeliveryHelp.vault.text1")}
                 </td>
-                <td className="border-b-2 p-2 align-top text-sm">
-                  {t("settingsResponseDelivery.responseDeliveryHelp.api.text1")}
-                </td>
+                {apiAccess && (
+                  <td className="border-b-2 p-2 align-top text-sm">
+                    {t("settingsResponseDelivery.responseDeliveryHelp.api.text1")}
+                  </td>
+                )}
               </tr>
               {/* Row 2 */}
               <tr>
@@ -72,9 +81,11 @@ const ResponseDeliveryHelpDialog = ({ handleClose }: { handleClose: () => void }
                 <td className="border-b-2 border-r-2 p-2 align-top text-sm">
                   {t("settingsResponseDelivery.responseDeliveryHelp.vault.text2")}
                 </td>
-                <td className="border-b-2 p-2 align-top text-sm">
-                  {t("settingsResponseDelivery.responseDeliveryHelp.api.text2")}
-                </td>
+                {apiAccess && (
+                  <td className="border-b-2 p-2 align-top text-sm">
+                    {t("settingsResponseDelivery.responseDeliveryHelp.api.text2")}
+                  </td>
+                )}
               </tr>
               {/* Row 3 */}
               <tr>
@@ -84,9 +95,11 @@ const ResponseDeliveryHelpDialog = ({ handleClose }: { handleClose: () => void }
                 <td className="border-b-2 border-r-2 p-2 align-top text-sm">
                   {t("settingsResponseDelivery.responseDeliveryHelp.vault.text3")}
                 </td>
-                <td className="border-b-2 p-2 align-top text-sm">
-                  {t("settingsResponseDelivery.responseDeliveryHelp.api.text3")}
-                </td>
+                {apiAccess && (
+                  <td className="border-b-2 p-2 align-top text-sm">
+                    {t("settingsResponseDelivery.responseDeliveryHelp.api.text3")}
+                  </td>
+                )}
               </tr>
               {/* Row 4 */}
               <tr>
@@ -96,9 +109,11 @@ const ResponseDeliveryHelpDialog = ({ handleClose }: { handleClose: () => void }
                 <td className="border-b-2 border-r-2 p-2 align-top text-sm">
                   {t("settingsResponseDelivery.responseDeliveryHelp.vault.text4")}
                 </td>
-                <td className="border-b-2 p-2 align-top text-sm">
-                  {t("settingsResponseDelivery.responseDeliveryHelp.api.text4")}
-                </td>
+                {apiAccess && (
+                  <td className="border-b-2 p-2 align-top text-sm">
+                    {t("settingsResponseDelivery.responseDeliveryHelp.api.text4")}
+                  </td>
+                )}
               </tr>
               {/* Row 5 */}
               <tr>
@@ -108,9 +123,11 @@ const ResponseDeliveryHelpDialog = ({ handleClose }: { handleClose: () => void }
                 <td className="border-b-2 border-r-2 p-2 align-top text-sm">
                   {t("settingsResponseDelivery.responseDeliveryHelp.vault.text5")}
                 </td>
-                <td className="border-b-2 p-2 align-top text-sm">
-                  {t("settingsResponseDelivery.responseDeliveryHelp.api.text5")}
-                </td>
+                {apiAccess && (
+                  <td className="border-b-2 p-2 align-top text-sm">
+                    {t("settingsResponseDelivery.responseDeliveryHelp.api.text5")}
+                  </td>
+                )}
               </tr>
             </tbody>
           </table>
