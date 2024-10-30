@@ -7,6 +7,7 @@ import React, {
   KeyboardEvent,
   ComponentType,
   JSXElementConstructor,
+  type JSX,
 } from "react";
 
 import { ChevronRight } from "@serverComponents/icons";
@@ -14,7 +15,7 @@ import { Groups } from "@lib/hooks/form-builder/useElementOptions";
 
 type SelectedGroupState = {
   group: Groups | "all";
-  ref: React.RefObject<HTMLElement>;
+  ref: React.RefObject<HTMLElement | null>;
 };
 
 // for specs see:

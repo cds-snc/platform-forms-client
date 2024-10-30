@@ -1,5 +1,5 @@
 "use client";
-import React, { useCallback } from "react";
+import React, { useCallback, type JSX } from "react";
 import { useSession } from "next-auth/react";
 import { useTranslation } from "@i18n/client";
 import Link from "next/link";

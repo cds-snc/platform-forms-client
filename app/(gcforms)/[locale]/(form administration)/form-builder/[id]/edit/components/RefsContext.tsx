@@ -2,7 +2,7 @@
 import React, { createContext, useContext, useRef, RefObject } from "react";
 
 interface RefsContextType {
-  refs?: RefObject<HTMLTextAreaElement[]> | undefined;
+  refs?: RefObject<HTMLTextAreaElement[] | null> | undefined;
 }
 
 const RefsContext = createContext<RefsContextType>({});
