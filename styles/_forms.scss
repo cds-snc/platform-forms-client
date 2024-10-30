@@ -145,6 +145,7 @@
 
 .focus-group:focus-within {
   .gc-label,
+  .legend-fieldset,
   .gc-description {
     @apply text-blue-focus;
   }
