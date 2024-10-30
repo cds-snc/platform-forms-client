@@ -26,7 +26,7 @@ interface ManagedComboboxRef {
 }
 
 export const AddressComplete = (props: AddressCompleteProps): React.ReactElement => {
-  const { id, name, required, ariaDescribedBy } = props;
+  const { id, name, required, ariaDescribedBy, label } = props;
 
   const [field, meta, helpers] = useField(props);
 
@@ -231,11 +231,16 @@ export const AddressComplete = (props: AddressCompleteProps): React.ReactElement
     <>
       <fieldset
         role="group"
+        className="gcds-fieldset"
         aria-describedby={ariaDescribedBy ? `desc-${id}` : undefined}
         data-testid="addressComplete"
         id={id}
         tabIndex={0}
       >
+        <legend key={`label-${id}`} id={`label-${id}`} className={"legend-fieldset"}>
+          {label}
+        </legend>
+
         {ariaDescribedBy && (
           <Description id={`desc-${id}`} className="gc-form-group-context">
             {ariaDescribedBy}
@@ -248,8 +253,8 @@ export const AddressComplete = (props: AddressCompleteProps): React.ReactElement
           </div>
         )}
         {!props.canadianOnly && (
-          <div className="mb-6">
-            <Label htmlFor={`${name}-country`} className="gc-label">
+          <div className="mb-6 mt-4">
+            <Label htmlFor={`${name}-country`}>
               {t("addElementDialog.addressComplete.country")}
             </Label>
             <ManagedCombobox
