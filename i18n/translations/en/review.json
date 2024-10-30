@@ -10,8 +10,10 @@
     "civicNumber": "Civic number",
     "streetName": "Street name",
     "city": "City or town",
-    "province": "Province, territory, or state",
-    "postalCode": "Postal or zip code",
+    "province": "Province or territory",
+    "postalCode": "Postal code",
+    "provinceOrState": "Province, territory, or state",
+    "postalCodeOrZip": "Postal or zip code",
     "country": "Country"
   }
 }
