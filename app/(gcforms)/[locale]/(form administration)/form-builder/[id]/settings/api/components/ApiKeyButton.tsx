@@ -28,6 +28,8 @@ export const ApiKeyButton = ({
 
   if (Array.isArray(id)) return null;
 
+  if (!id) return null;
+
   return (
     <div className="mb-4">
       {showDelete && keyId ? (
