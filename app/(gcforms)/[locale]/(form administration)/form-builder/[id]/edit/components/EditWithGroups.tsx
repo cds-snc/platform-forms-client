@@ -28,11 +28,11 @@ import { AddBranchingButton } from "./AddBranchingButton";
 export const EditWithGroups = ({
   id,
   locale,
-  keyId,
+  keyId = false,
 }: {
   id: string;
   locale: string;
-  keyId: string | false;
+  keyId?: string | false;
 }) => {
   const { t } = useTranslation("form-builder");
   const {

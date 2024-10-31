@@ -26,7 +26,13 @@ export default async function Page(props: { params: Promise<{ id: string; locale
   let keyId: string | false = false;
 
   if (process.env.APP_ENV !== "test") {
-    keyId = await checkKeyExists(id);
+    try {
+      if (id && id !== "0000") {
+        keyId = await checkKeyExists(id);
+      }
+    } catch (e) {
+      // no-op
+    }
   }
 
   return (
