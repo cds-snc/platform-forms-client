@@ -1,4 +1,3 @@
-"use client";
 import { LinkButton } from "@serverComponents/globals/Buttons/LinkButton";
 import { FocusHeader } from "../../../components/client/FocusHeader";
 import { useTranslation } from "@i18n/client";
