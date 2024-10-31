@@ -1,3 +1,4 @@
+import { expect } from 'vitest';
 import { filterValuesByVisitedGroup } from "@lib/utils/form-builder/groupsHistory";
 import {values, groupHistory, groups} from "../../__fixtures__/conditionalInputHistoryEmptySimple.json";
 
