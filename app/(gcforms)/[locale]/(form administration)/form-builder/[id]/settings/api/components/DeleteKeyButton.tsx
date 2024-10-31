@@ -20,7 +20,12 @@ export const DeleteKeyButton = ({ id, keyId }: { id: string; keyId: string }) =>
         className="mr-4"
         onClick={async () => {
           setDeleting(true);
-          await deleteServiceAccountKey(id);
+          const result = await deleteServiceAccountKey(id);
+          if (result.error) {
+            setDeleting(false);
+            return;
+          }
+
           setDeleting(false);
         }}
       >
