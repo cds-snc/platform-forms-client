@@ -66,7 +66,7 @@ export const formatTicketData = ({
 };
 
 export const tagHost = (host: string) => {
-  if (host.includes("staging")) {
+  if (host.includes("staging" || process.env.REVIEW_ENV)) {
     return "Forms_Staging";
   } else if (host.includes("localhost") || host === "") {
     return "Forms_Dev";
