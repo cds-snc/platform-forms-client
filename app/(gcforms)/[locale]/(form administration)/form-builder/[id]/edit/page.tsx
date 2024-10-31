@@ -21,7 +21,12 @@ export default async function Page({
 }: {
   params: { id: string; locale: string };
 }) {
-  const keyId = await checkKeyExists(id);
+  let keyId: string | false = false;
+
+  if (process.env.APP_ENV !== "test") {
+    keyId = await checkKeyExists(id);
+  }
+
   return (
     <>
       <EditWithGroups id={id} locale={locale} keyId={keyId} />
