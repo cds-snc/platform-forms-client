@@ -72,10 +72,11 @@
       "components": {
         "unitNumber": "Unit number",
         "civicNumber": "Civic number",
-        "streetName": "Street name",
-        "city": "City or town",
-        "province": "Province, territory, or state",
-        "postalCode": "Postal or zip code",
+        "city": "City, town, or community",
+        "province": "Province or territory",
+        "provinceOrState": "Province, territory, or state",
+        "postalCode": "Postal code",
+        "postalCodeOrZip": "Postal or zip code",
         "country": "Country"
       }
     },
