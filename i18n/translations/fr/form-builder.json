@@ -1210,7 +1210,7 @@
         "text3": "[FR]For example 21:00"
       },
       "error": {
-        "notFutureDate": "[FR]Date and time must be upcoming, in the future."
+        "notFutureDate": "La date et l'heure doivent être à venir, dans le futur."
       },
       "save": "Enregistrer",
       "cancel": "Annuler"
