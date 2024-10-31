@@ -72,10 +72,11 @@
       "components": {
         "unitNumber": "Numéro de l’unité",
         "civicNumber": "Numéro civique",
-        "streetName": "Nom de la rue",
         "city": "Ville ou communauté",
-        "province": "Province, territoire ou état",
-        "postalCode": "Code postal ou zip",
+        "province": "Province ou territoire",
+        "provinceOrState": "Province, territoire ou état",
+        "postalCode": "Code postal",
+        "postalCodeOrZip": "Code postal ou zip",
         "country": "Pays"
       }
     },
@@ -1206,10 +1207,10 @@
       "timePicker": {
         "text1": "Fixez l'heure de fermeture",
         "text2": "Indiquez l'heure en utilisant l'horloge de 24 heures avec le fuseau horaire de l'heure de l'Est.",
-        "text3": "[FR]For example 21:00"
+        "text3": "Par exemple 21 h 00"
       },
       "error": {
-        "notFutureDate": "[FR]Date and time must be upcoming, in the future."
+        "notFutureDate": "La date et l'heure doivent être à venir, dans le futur."
       },
       "save": "Enregistrer",
       "cancel": "Annuler"
