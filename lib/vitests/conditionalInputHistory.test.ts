@@ -1,3 +1,4 @@
+import { expect } from 'vitest'
 import { getInputHistoryValues } from "@lib/utils/form-builder/groupsHistory";
 
 // Fixtures captured by adding a break point in the form builder and copying the values from the debugger
