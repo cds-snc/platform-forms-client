@@ -22,11 +22,11 @@ import { countries } from "@lib/managedData/countries";
 import { useFeatureFlags } from "@lib/hooks/useFeatureFlags";
 
 interface ManagedComboboxRef {
-  changeInputValue: (value: string) => void;
+  changeInputValue: (value: string, keepOpen: boolean) => void;
 }
 
 export const AddressComplete = (props: AddressCompleteProps): React.ReactElement => {
-  const { id, name, required, ariaDescribedBy } = props;
+  const { id, name, required, ariaDescribedBy, label } = props;
 
   const [field, meta, helpers] = useField(props);
 
@@ -168,7 +168,7 @@ export const AddressComplete = (props: AddressCompleteProps): React.ReactElement
           const results = responseData;
           setAddressObject(results);
           if (comboboxRef.current) {
-            comboboxRef.current.changeInputValue(results.streetAddress);
+            comboboxRef.current.changeInputValue(results.streetAddress, false);
           }
         }
       } else if (nextValue == AddressCompleNext.Find) {
@@ -178,6 +178,10 @@ export const AddressComplete = (props: AddressCompleteProps): React.ReactElement
           selectedResult.Id,
           addressObject?.country || "CAN"
         );
+
+        if (comboboxRef.current) {
+          comboboxRef.current.changeInputValue("", true);
+        }
 
         handleAddressComplete(responseData);
       }
@@ -227,11 +231,16 @@ export const AddressComplete = (props: AddressCompleteProps): React.ReactElement
     <>
       <fieldset
         role="group"
+        className="gcds-fieldset"
         aria-describedby={ariaDescribedBy ? `desc-${id}` : undefined}
         data-testid="addressComplete"
         id={id}
         tabIndex={0}
       >
+        <legend key={`label-${id}`} id={`label-${id}`} className={"legend-fieldset"}>
+          {label}
+        </legend>
+
         {ariaDescribedBy && (
           <Description id={`desc-${id}`} className="gc-form-group-context">
             {ariaDescribedBy}
@@ -244,8 +253,8 @@ export const AddressComplete = (props: AddressCompleteProps): React.ReactElement
           </div>
         )}
         {!props.canadianOnly && (
-          <div className="mb-6">
-            <Label htmlFor={`${name}-country`} className="gc-label">
+          <div className="mb-6 mt-4">
+            <Label htmlFor={`${name}-country`}>
               {t("addElementDialog.addressComplete.country")}
             </Label>
             <ManagedCombobox
@@ -313,7 +322,9 @@ export const AddressComplete = (props: AddressCompleteProps): React.ReactElement
 
         <div className="mb-6">
           <Label htmlFor={`${name}-province`} className="gc-label">
-            {t("addElementDialog.addressComplete.province")}
+            {props.canadianOnly && t("addElementDialog.addressComplete.components.province")}
+            {!props.canadianOnly &&
+              t("addElementDialog.addressComplete.components.provinceOrState")}
           </Label>
           <input
             type="text"
@@ -329,7 +340,9 @@ export const AddressComplete = (props: AddressCompleteProps): React.ReactElement
 
         <div className="mb-6">
           <Label htmlFor={`${name}-postal`} className="gc-label">
-            {t("addElementDialog.addressComplete.postal")}
+            {props.canadianOnly && t("addElementDialog.addressComplete.components.postalCode")}
+            {!props.canadianOnly &&
+              t("addElementDialog.addressComplete.components.postalCodeOrZip")}
           </Label>
           <input
             id={`${name}-postal`}

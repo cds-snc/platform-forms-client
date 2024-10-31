@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { type JSX } from "react";
 import { useTranslation } from "@i18n/client";
 
 import { LinkButton } from "@serverComponents/globals/Buttons/LinkButton";

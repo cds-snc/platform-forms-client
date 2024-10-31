@@ -1,3 +1,4 @@
+import { expect } from 'vitest'
 import { filterShownElements } from "@lib/formContext";
 import { FormElement } from "@lib/types";
 

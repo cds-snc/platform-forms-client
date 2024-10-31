@@ -5,6 +5,10 @@ import { deleteServiceAccountKey } from "../actions";
 
 import { SubmitButton as DeleteApiKeyButton } from "@clientComponents/globals/Buttons/SubmitButton";
 
+import { DeleteKeyFailed } from "./DeleteKeyFailed";
+import { DeleteKeySuccess } from "./DeleteKeySuccess";
+import { toast } from "@formBuilder/components/shared";
+
 export const DeleteKeyButton = ({ id, keyId }: { id: string; keyId: string }) => {
   const { t } = useTranslation("form-builder");
   const [deleting, setDeleting] = useState(false);
@@ -20,7 +24,14 @@ export const DeleteKeyButton = ({ id, keyId }: { id: string; keyId: string }) =>
         className="mr-4"
         onClick={async () => {
           setDeleting(true);
-          await deleteServiceAccountKey(id);
+          const result = await deleteServiceAccountKey(id);
+          if (result.error) {
+            toast.success(<DeleteKeyFailed />, "wide");
+            setDeleting(false);
+            return;
+          }
+
+          toast.success(<DeleteKeySuccess id={id} />, "wide");
           setDeleting(false);
         }}
       >

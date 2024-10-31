@@ -1,3 +1,4 @@
+import { expect } from 'vitest';
 import { safeJSONParse } from "@lib/utils";
 import validFormTemplate from "../../__fixtures__/testDataWithGroups.json";
 

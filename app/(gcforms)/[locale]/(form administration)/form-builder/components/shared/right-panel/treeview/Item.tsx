@@ -91,7 +91,7 @@ export const Item = ({
       {...context.itemContainerWithChildrenProps}
       className={cn(
         "flex flex-col group",
-        children && context.isExpanded && "bg-slate-50",
+        (children as ReactElement) && context.isExpanded && "bg-slate-50",
         context.isDraggingOver && "!border-dashed !border-1 !border-blue-focus"
       )}
     >
