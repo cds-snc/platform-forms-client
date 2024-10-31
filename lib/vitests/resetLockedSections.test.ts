@@ -1,3 +1,4 @@
+import { expect } from 'vitest';
 import { FormProperties } from "@lib/types";
 import { resetLockedSections } from "@lib/formContext";
 import validFormTemplate from "../../__fixtures__/sections-out-of-order.json";
