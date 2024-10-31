@@ -14,6 +14,7 @@ import { downloadKey, _createKey } from "@formBuilder/[id]/settings/api/utils";
 import { SubmitButton as DownloadButton } from "@clientComponents/globals/Buttons/SubmitButton";
 import * as Alert from "@clientComponents/globals/Alert/Alert";
 import { logMessage } from "@lib/logger";
+import { sendResponsesToVault } from "@formBuilder/actions";
 
 type APIKeyCustomEventDetails = {
   id: string;
@@ -69,6 +70,17 @@ export const ApiKeyDialog = () => {
     setHasError(false);
     setGenerating(true);
     try {
+      // First ensure all responses are sent to vault
+      const result = await sendResponsesToVault({
+        id: id,
+      });
+
+      if (result.error) {
+        // Throw the generic key creation error
+        // Handling as generic as we're in the process of creating a key
+        throw new Error(result.error);
+      }
+
       const key = await _createKey(id);
       downloadKey(JSON.stringify(key), id);
       setGenerating(false);
