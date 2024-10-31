@@ -1,11 +1,8 @@
 import { Metadata } from "next";
 import { serverTranslation } from "@i18n";
 import { getAppSetting } from "@lib/appSettings";
-// import { ClientContainer } from "./components/ClientContainer";
 import { authCheckAndThrow } from "@lib/actions";
 import { LoggedOutTab, LoggedOutTabName } from "@serverComponents/form-builder/LoggedOutTab";
-// import { VaultStatus } from "@lib/types";
-// import { redirect } from "next/navigation";
 import { Responses } from "./Responses";
 
 export async function generateMetadata({
@@ -22,11 +19,6 @@ export async function generateMetadata({
 }
 
 export default async function Page() {
-//   {
-//    params: { id, statusFilter, locale },
-// }: {
-//   params: { locale: string; id: string; statusFilter: string };
-// }
   const { session } = await authCheckAndThrow().catch(() => ({
     session: null,
   }));
@@ -42,7 +34,7 @@ export default async function Page() {
   }
 
   // TODO
-  // If not api status, redirect to /responses (new)
+  // If not api status, redirect to /responses/new
 
   return (
     <>

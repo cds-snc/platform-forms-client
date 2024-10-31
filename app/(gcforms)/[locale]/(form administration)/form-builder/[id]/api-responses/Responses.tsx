@@ -1,23 +1,13 @@
 "use client";
 import { useState, useEffect } from "react";
-// import { Nagware } from "@formBuilder/components/Nagware";
 import { ClosedBanner } from "@formBuilder/components/shared/ClosedBanner";
 import { useTranslation } from "@i18n/client";
-// import { ucfirst } from "@lib/client/clientHelpers";
 import { useParams, useSearchParams } from "next/navigation";
-// import { DownloadTable } from "./DownloadTable";
-// import { NoResponses } from "./NoResponses";
 import { useTemplateStore } from "@lib/store/useTemplateStore";
-// import { TitleAndDescription } from "./TitleAndDescription";
-// import { NagLevel, VaultSubmissionList } from "@lib/types";
-// import { RetrievalError } from "./RetrievalError";
-// import { fetchSubmissions } from "../actions";
 import { DownloadTable } from "../responses/[statusFilter]/components/DownloadTable";
-// import { NoResponses } from "../responses/[statusFilter]/components/NoResponses";
 import { NagLevel, VaultSubmissionList } from "@lib/types";
 import { fetchSubmissions } from "./actions";
 import { RetrievalError } from "../responses/[statusFilter]/components/RetrievalError";
-// import { TitleAndDescription } from "../responses/[statusFilter]/components/TitleAndDescription";
 import { Card, HeadingLevel } from "@clientComponents/globals/card/Card";
 import Image from "next/image";
 
@@ -68,6 +58,7 @@ export const Responses = ({ responseDownloadLimit, overdueAfter }: ResponsesProp
 
   const formName = name ? name : language === "fr" ? initialForm.titleFr : initialForm.titleEn;
 
+  // TODO: Probably refactor out - currently dependency for DownloadTable
   // The nagware will be refactored during the database optimiztion work.
   const nagwareResult = { level: NagLevel.None, numberOfSubmissions: 0 };
 
@@ -89,6 +80,7 @@ export const Responses = ({ responseDownloadLimit, overdueAfter }: ResponsesProp
               vaultSubmissions={state.submissions}
               formName={formName}
               formId={formId}
+              // TODO: Probably refactor out - currently dependency for DownloadTable
               nagwareResult={nagwareResult}
               responseDownloadLimit={responseDownloadLimit}
               lastEvaluatedKey={state.lastEvaluatedKey}

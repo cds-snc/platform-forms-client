@@ -8,11 +8,9 @@ import { authCheckAndThrow } from "@lib/actions";
 
 export const fetchSubmissions = async ({
   formId,
-  // status,
   lastKey,
 }: {
   formId: string;
-  // status: string;
   lastKey: string | null;
 }) => {
   try {
@@ -32,18 +30,11 @@ export const fetchSubmissions = async ({
       };
     }
 
-    // get status from url params (default = new) and capitalize/cast to VaultStatus
-    // Protect against invalid status query
-    // const selectedStatus = Object.values(VaultStatus).includes(ucfirst(status) as VaultStatus)
-    //   ? (ucfirst(status) as VaultStatus)
-    //   : VaultStatus.NEW;
-
     let currentLastEvaluatedKey = null;
 
     // build up lastEvaluatedKey from lastKey url param
     if (lastKey && isResponseId(String(lastKey))) {
       currentLastEvaluatedKey = {
-        // Status: selectedStatus,
         Status: VaultStatus.CONFIRMED,
         NAME_OR_CONF: `NAME#${lastKey}`,
         FormID: formId,
@@ -53,7 +44,6 @@ export const fetchSubmissions = async ({
     const { submissions, lastEvaluatedKey } = await listAllSubmissions(
       ability,
       formId,
-      // selectedStatus,
       VaultStatus.CONFIRMED,
       undefined,
       currentLastEvaluatedKey
