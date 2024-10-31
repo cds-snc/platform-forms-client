@@ -190,7 +190,7 @@
   },
   "exit": "Exit",
   "campaignBanner": {
-    "enabled": "true",
+    "enabled": "false",
     "type": "COMING SOON",
     "message": "<strong>In August</strong>: Build multi-page forms with branching logic. <a href='/en/contact' className='text-white hover:text-white'>Subscribe for updates</a>",
     "type2": "NEW",
