@@ -1207,7 +1207,7 @@
       "timePicker": {
         "text1": "Fixez l'heure de fermeture",
         "text2": "Indiquez l'heure en utilisant l'horloge de 24 heures avec le fuseau horaire de l'heure de l'Est.",
-        "text3": "[FR]For example 21:00"
+        "text3": "Par exemple 21 h 00"
       },
       "error": {
         "notFutureDate": "La date et l'heure doivent être à venir, dans le futur."
