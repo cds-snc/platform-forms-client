@@ -26,7 +26,7 @@ enum DeliveryOption {
   email = "email",
 }
 
-export const SettingsPanel = ({ keyId }: { keyId: string | false }) => {
+export const SettingsPanel = ({ keyId = false }: { keyId?: string | false }) => {
   const { t, i18n } = useTranslation("form-builder");
   const lang = i18n.language === "en" ? "en" : "fr";
   const { status } = useSession();
