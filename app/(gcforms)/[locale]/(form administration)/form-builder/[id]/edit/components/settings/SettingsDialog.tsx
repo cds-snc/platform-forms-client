@@ -497,12 +497,12 @@ export const SettingsDialog = ({
 
 export const SettingsModal = ({
   show,
-  keyId,
+  keyId = false,
   handleClose,
 }: {
   show: string | boolean | string[] | undefined;
   id: string;
-  keyId: string | false;
+  keyId?: string | false;
   isPublished: boolean;
   handleClose: (arg: boolean) => void;
 }) => {
