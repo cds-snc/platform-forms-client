@@ -1,7 +1,6 @@
 import { serverTranslation } from "@i18n";
 import { Metadata } from "next";
 import { SupportForm } from "./components/client/SupportForm";
-import { Success } from "../components/server/Success";
 
 export async function generateMetadata({
   params: { locale },
@@ -14,12 +13,6 @@ export async function generateMetadata({
   };
 }
 
-export default async function Page({
-  searchParams: { success },
-  params: { locale },
-}: {
-  searchParams: { success?: string };
-  params: { locale: string };
-}) {
-  return <>{success === undefined ? <SupportForm /> : <Success lang={locale} />}</>;
+export default async function Page() {
+  return <SupportForm />;
 }

@@ -6,6 +6,7 @@ import { redirect } from "next/navigation";
 import { CognitoIdentityProviderServiceException } from "@aws-sdk/client-cognito-identity-provider";
 import { hasError } from "@lib/hasError";
 import { handleErrorById } from "@lib/auth/cognito";
+import { isValidGovEmail } from "@lib/validation/validation";
 
 export interface ErrorStates {
   authError?: {
@@ -37,7 +38,7 @@ const validate = async (
       v.toLowerCase(),
       v.toTrimmed(),
       v.minLength(1, t("input-validation.required", { ns: "common" })),
-      v.email(t("input-validation.email", { ns: "common" })),
+      v.custom((input) => isValidGovEmail(input), t("input-validation.validGovEmail")),
     ]),
     password: v.string([
       v.minLength(1, t("input-validation.required", { ns: "common" })),

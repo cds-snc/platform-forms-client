@@ -1,14 +1,14 @@
-import { serverTranslation } from "@i18n";
 import Link from "next/link";
 import { LinkButton } from "@serverComponents/globals/Buttons/LinkButton";
 import { FocusHeader } from "../client/FocusHeader";
+import { useTranslation } from "@i18n/client";
 
-export const Success = async ({ lang }: { lang: string }) => {
-  const { t } = await serverTranslation("form-builder", { lang });
+export const Success = ({ lang }: { lang: string }) => {
+  const { t } = useTranslation("form-builder");
   return (
     <>
       <FocusHeader>{t("requestSuccess.title")}</FocusHeader>
-      <p className="mb-16 mt-[-2rem] font-bold">{t("requestSuccess.weWillRespond")}</p>
+      <p className="-mt-8 mb-16 font-bold">{t("requestSuccess.weWillRespond")}</p>
       <div className="mb-16">
         <LinkButton.Primary href={`/${lang}/forms`}>
           {t("requestSuccess.backToForms")}

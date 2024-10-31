@@ -37,7 +37,10 @@ describe("Login Page", () => {
       cy.get("button[type='submit']").should("be.visible");
       cy.get("button[type='submit']").click();
       cy.get("[id='errorMessageusername']").should("be.visible");
-      cy.get("[id='errorMessageusername']").should("contain", "Enter a valid email address.");
+      cy.get("[id='errorMessageusername']").should(
+        "contain",
+        "Enter a valid government email address."
+      );
     });
     it("Displays no error message when submitting a valid email", () => {
       cy.typeInField("input[id='username']", "test@cds-snc.ca");
