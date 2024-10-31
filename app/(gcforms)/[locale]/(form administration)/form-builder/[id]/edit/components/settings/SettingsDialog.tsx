@@ -43,11 +43,11 @@ const getBrand = (type: string, options: BrandOption[]): BrandOption => {
 };
 
 export const SettingsDialog = ({
+  keyId,
   handleClose,
 }: {
-  formId: string;
+  keyId: string | false;
   handleClose: () => void;
-  isPublished?: boolean;
 }) => {
   const dialog = useDialogRef();
   const { t, i18n } = useTranslation("form-builder");
@@ -416,6 +416,7 @@ export const SettingsDialog = ({
                 <h3 className="mb-4">{t("formSettingsModal.classification")}</h3>
                 <ClassificationSelect
                   className="max-w-[400px] truncate border-none p-1 pr-10"
+                  disableProtectedB={email || keyId ? true : false}
                   lang={lang}
                   isPublished={isPublished}
                   classification={classificationValue}
@@ -439,47 +440,53 @@ export const SettingsDialog = ({
                   <Brand brand={brand} />
                 </div>
               </div>
-              <h3 className="mb-4">{t("settingsResponseDelivery.title")}</h3>
-              <div>
-                <Radio
-                  disabled={isPublished}
-                  id={`delivery - option - ${DeliveryOption.vault} `}
-                  checked={deliveryOptionValue === DeliveryOption.vault}
-                  name="response-delivery"
-                  value={DeliveryOption.vault}
-                  label={t("settingsResponseDelivery.vaultOption")}
-                  onChange={updateDeliveryOption}
-                >
-                  <span className="mb-1 ml-3 block text-sm">
-                    {t("settingsResponseDelivery.vaultOptionHint.text1")}{" "}
-                    <a href={responsesLink}>
-                      {t("settingsResponseDelivery.vaultOptionHint.text2")}
-                    </a>
-                    .
-                  </span>
-                </Radio>
-                <Radio
-                  disabled={isPublished || protectedBSelected}
-                  id={`delivery - option - ${DeliveryOption.email} `}
-                  checked={deliveryOptionValue === DeliveryOption.email}
-                  name="response-delivery"
-                  value={DeliveryOption.email}
-                  label={emailLabel}
-                  onChange={updateDeliveryOption}
-                />
-              </div>
-              {deliveryOptionValue === DeliveryOption.email && (
-                <ResponseEmail
-                  inputEmail={inputEmailValue}
-                  setInputEmail={setInputEmailValue}
-                  subjectEn={subjectEn}
-                  setSubjectEn={setSubjectEn}
-                  subjectFr={subjectFr}
-                  setSubjectFr={setSubjectFr}
-                  isInvalidEmailError={isInvalidEmailError}
-                  setIsInvalidEmailError={setIsInvalidEmailError}
-                />
+              {/* Response Delivery */}
+              {!keyId && (
+                <div>
+                  <h3 className="mb-4">{t("settingsResponseDelivery.title")}</h3>
+                  <div>
+                    <Radio
+                      disabled={isPublished}
+                      id={`delivery - option - ${DeliveryOption.vault} `}
+                      checked={deliveryOptionValue === DeliveryOption.vault}
+                      name="response-delivery"
+                      value={DeliveryOption.vault}
+                      label={t("settingsResponseDelivery.vaultOption")}
+                      onChange={updateDeliveryOption}
+                    >
+                      <span className="mb-1 ml-3 block text-sm">
+                        {t("settingsResponseDelivery.vaultOptionHint.text1")}{" "}
+                        <a href={responsesLink}>
+                          {t("settingsResponseDelivery.vaultOptionHint.text2")}
+                        </a>
+                        .
+                      </span>
+                    </Radio>
+                    <Radio
+                      disabled={isPublished || protectedBSelected}
+                      id={`delivery - option - ${DeliveryOption.email} `}
+                      checked={deliveryOptionValue === DeliveryOption.email}
+                      name="response-delivery"
+                      value={DeliveryOption.email}
+                      label={emailLabel}
+                      onChange={updateDeliveryOption}
+                    />
+                  </div>
+                  {deliveryOptionValue === DeliveryOption.email && (
+                    <ResponseEmail
+                      inputEmail={inputEmailValue}
+                      setInputEmail={setInputEmailValue}
+                      subjectEn={subjectEn}
+                      setSubjectEn={setSubjectEn}
+                      subjectFr={subjectFr}
+                      setSubjectFr={setSubjectFr}
+                      isInvalidEmailError={isInvalidEmailError}
+                      setIsInvalidEmailError={setIsInvalidEmailError}
+                    />
+                  )}
+                </div>
               )}
+              {/* End Response Delivery */}
             </div>
           )}
         </div>
@@ -490,24 +497,14 @@ export const SettingsDialog = ({
 
 export const SettingsModal = ({
   show,
-  id,
-  isPublished,
+  keyId,
   handleClose,
 }: {
   show: string | boolean | string[] | undefined;
   id: string;
+  keyId: string | false;
   isPublished: boolean;
   handleClose: (arg: boolean) => void;
 }) => {
-  return (
-    <>
-      {show && (
-        <SettingsDialog
-          formId={id}
-          handleClose={() => handleClose(false)}
-          isPublished={isPublished}
-        />
-      )}
-    </>
-  );
+  return <>{show && <SettingsDialog keyId={keyId} handleClose={() => handleClose(false)} />}</>;
 };

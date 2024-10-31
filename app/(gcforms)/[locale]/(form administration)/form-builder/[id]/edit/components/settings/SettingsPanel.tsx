@@ -19,16 +19,21 @@ import { safeJSONParse } from "@lib/utils";
 
 import { useTemplateContext } from "@lib/hooks/form-builder/useTemplateContext";
 import { FormProperties } from "@lib/types";
+import { useFeatureFlags } from "@lib/hooks/useFeatureFlags";
 
 enum DeliveryOption {
   vault = "vault",
   email = "email",
 }
 
-export const SettingsPanel = () => {
+export const SettingsPanel = ({ keyId }: { keyId: string | false }) => {
   const { t, i18n } = useTranslation("form-builder");
   const lang = i18n.language === "en" ? "en" : "fr";
   const { status } = useSession();
+
+  const { getFlag } = useFeatureFlags();
+  const apiAccess = getFlag("apiAccess");
+  const hasApiKey = keyId && apiAccess ? true : false;
 
   const {
     id,
@@ -163,7 +168,7 @@ export const SettingsPanel = () => {
           <div className="ml-4 inline-block">
             <div className="my-[6px] border-[.5px] border-violet-50 p-1 px-2 hover:border-[.5px] hover:border-slate-800">
               <ClassificationSelect
-                disableProtectedB={email ? true : false}
+                disableProtectedB={email || hasApiKey ? true : false}
                 className="w-auto max-w-[400px] truncate border-none bg-violet-50 p-1 text-sm"
                 lang={lang}
                 isPublished={isPublished}
@@ -199,6 +204,7 @@ export const SettingsPanel = () => {
         </div>
       </div>
       <SettingsModal
+        keyId={keyId}
         show={showSettings}
         id={id}
         isPublished={isPublished}
