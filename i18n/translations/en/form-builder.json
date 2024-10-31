@@ -629,13 +629,13 @@
       "refreshKey": "Refresh Key",
       "deleteKey": "Delete API key",
       "deleteKeyFailed": {
-        "title": "API key deleted",
-        "message": "New responses are now available for download on the {{responseLink}} page.",
-        "responseLinkText": "responses"
+        "title": "API key failed to delete",
+        "message": "API key failed to delete"
       },
       "deleteKeySuccess": {
-        "title": "API failed to delete",
-        "message": "Key failed to delete."
+        "title": "API key deleted",
+        "message": "New responses are now available for download on the",
+        "responseLinkText": "responses page"
       },
       "keyExists": "API key exists",
       "keyIdToolTip": {

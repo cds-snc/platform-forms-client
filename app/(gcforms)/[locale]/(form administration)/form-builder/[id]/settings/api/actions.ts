@@ -17,13 +17,12 @@ export const refreshServiceAccountKey = async (templateId: string) => {
 };
 
 export const deleteServiceAccountKey = async (templateId: string) => {
-  revalidatePath(
-    "/app/(gcforms)/[locale]/(form administration)/form-builder/[id]/settings/api",
-    "page"
-  );
-
   try {
-    deleteKey(templateId);
+    await deleteKey(templateId);
+    revalidatePath(
+      "/app/(gcforms)/[locale]/(form administration)/form-builder/[id]/settings/api",
+      "page"
+    );
     return { templateId: templateId };
   } catch (e) {
     return { error: true, templateId: templateId };

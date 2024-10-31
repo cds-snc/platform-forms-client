@@ -629,13 +629,13 @@
       "refreshKey": "Rafraîchir la clé",
       "deleteKey": "Supprimer la clé API",
       "deleteKeyFailed": {
-        "title": "API key deleted [FR]",
-        "message": "New responses are now available for download on the {{responseLink}} page. [FR]",
-        "responseLinkText": "responses [FR]"
+        "title": "API key failed to delete [FR]",
+        "message": "API key failed to delete [FR]"
       },
       "deleteKeySuccess": {
-        "title": "API failed to delete [FR]",
-        "message": "Key failed to delete. [FR]"
+        "title": "API key deleted [FR]",
+        "message": "New responses are now available for download on the [FR]",
+        "responseLinkText": "responses page [FR]"
       },
       "keyExists": "La clé existe déjà",
       "keyIdToolTip": {
