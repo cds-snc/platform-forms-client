@@ -1,3 +1,4 @@
+import { expect } from 'vitest';
 import { LockedSections } from "@formBuilder/components/shared/right-panel/treeview/types";
 import { getGroupHistory, pushIdToHistory, clearHistoryAfterId, getPreviousIdFromCurrentId } from "@lib/utils/form-builder/groupsHistory";
 
