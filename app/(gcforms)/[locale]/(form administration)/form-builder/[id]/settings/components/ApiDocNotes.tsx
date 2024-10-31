@@ -4,7 +4,7 @@ import { useTranslation } from "@i18n/client";
 export const ApiDocNotes = () => {
   const { t } = useTranslation("form-builder");
   return (
-    <div className="mb-8 w-4/6">
+    <div className="mb-12 w-4/6">
       <p className="font-bold">{t("formSettingsModal.apiDocNotes.title")}</p>
       <Trans
         ns="form-builder"

@@ -405,7 +405,7 @@ export const ResponseDelivery = ({ keyId }: ResponseDeliveryProps) => {
 
               {apiAccess && deliveryOptionValue === DeliveryOption.api && (
                 <div>
-                  <div className="mb-10 ml-4 border-l-4 pl-8 ">
+                  <div className="mb-10 ml-4 border-l-4 pl-8">
                     <span className="block py-6 font-bold">
                       {t("formSettingsModal.apiOption.startNote")}
                     </span>
