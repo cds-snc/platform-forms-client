@@ -98,7 +98,7 @@ export const createTicket = async ({
     method: "POST",
     headers: {
       "Content-Type": "application/json",
-      Authorization: "Basic " + btoa(username + ":" + password),
+      Authorization: "Basic " + Buffer.from(username + ":" + password).toString("base64"),
     },
 
     data: JSON.stringify(data),
