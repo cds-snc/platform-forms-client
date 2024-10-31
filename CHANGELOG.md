@@ -5,20 +5,36 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [3.24.2](https://github.com/cds-snc/platform-forms-client/compare/v3.24.1...v3.24.2) (2024-10-29)
-
+## [3.24.3](https://github.com/cds-snc/platform-forms-client/compare/v3.24.2...v3.24.3) (2024-10-31)
 
 ### Bug Fixes
 
-* Adds an error message to the api create dialog ([#4483](https://github.com/cds-snc/platform-forms-client/issues/4483)) ([47fcac8](https://github.com/cds-snc/platform-forms-client/commit/47fcac8f3cef537dbcb05200fd4495c700776dae))
-* fixes an issue with the close date dialog ([#4493](https://github.com/cds-snc/platform-forms-client/issues/4493)) ([4bd8dfc](https://github.com/cds-snc/platform-forms-client/commit/4bd8dfc38ff5f9c470856d2507e0066ccfcb68b3))
-* Save closed message on Form management ([#4511](https://github.com/cds-snc/platform-forms-client/issues/4511)) ([18a2f75](https://github.com/cds-snc/platform-forms-client/commit/18a2f750c22463008fb0c7027011b49636a329e5))
-
+- Add client side validation to public forms ([#4529](https://github.com/cds-snc/platform-forms-client/issues/4529)) ([75b06d5](https://github.com/cds-snc/platform-forms-client/commit/75b06d54ae88ed32df0fbc64a1f6bfa5765b3215))
+- Allow apostrophes in email addresses ([#4522](https://github.com/cds-snc/platform-forms-client/issues/4522)) ([66b45d7](https://github.com/cds-snc/platform-forms-client/commit/66b45d7ba98829bea25ba80e6167fefd421165d3))
+- API key dialog update ([#4509](https://github.com/cds-snc/platform-forms-client/issues/4509)) ([6cb8b2d](https://github.com/cds-snc/platform-forms-client/commit/6cb8b2d5141141a7dca3b1e9cada8adbd4a49ff8))
+- Ensure user is owner on form when setting closing form date and message ([#4528](https://github.com/cds-snc/platform-forms-client/issues/4528)) ([4fd6927](https://github.com/cds-snc/platform-forms-client/commit/4fd6927be4d84b3bd8e5e54b17d4860c3ad58bd8))
+- Manage form access a11y improvements ([#4472](https://github.com/cds-snc/platform-forms-client/issues/4472)) ([df53570](https://github.com/cds-snc/platform-forms-client/commit/df535706dab72e86c739c3c1f7b178d07f030a06))
 
 ### Miscellaneous Chores
 
-* Remove whitespace from ACOA branding ([#4501](https://github.com/cds-snc/platform-forms-client/issues/4501)) ([4fb7dbf](https://github.com/cds-snc/platform-forms-client/commit/4fb7dbf16825d16d6349d939accd8fb2c2d94b3c))
-* update cypress package ([#4496](https://github.com/cds-snc/platform-forms-client/issues/4496)) ([c29f7ab](https://github.com/cds-snc/platform-forms-client/commit/c29f7ab597967882fc5426fbd1e5529f8a652b77))
+- Add Transport Canada branding ([#4536](https://github.com/cds-snc/platform-forms-client/issues/4536)) ([fbfbe92](https://github.com/cds-snc/platform-forms-client/commit/fbfbe92ae3160fb377bc99109635bdf9ba4df8c6))
+- components cleanup ([#4517](https://github.com/cds-snc/platform-forms-client/issues/4517)) ([d1eb456](https://github.com/cds-snc/platform-forms-client/commit/d1eb456e2e30f49f8925cf061ea070d7deb12cae))
+- Refactor MoreModal to Dialog component with Event trigger ([#4467](https://github.com/cds-snc/platform-forms-client/issues/4467)) ([1ad4ccb](https://github.com/cds-snc/platform-forms-client/commit/1ad4ccb93c59b099dde383d30a03ad5399eee86a))
+- Turn off new feature banner ([#4532](https://github.com/cds-snc/platform-forms-client/issues/4532)) ([312f683](https://github.com/cds-snc/platform-forms-client/commit/312f683988817d51bf3e2d5e1b4a355f0b8c7c5a))
+- Update close message error strings ([#4531](https://github.com/cds-snc/platform-forms-client/issues/4531)) ([b8e045d](https://github.com/cds-snc/platform-forms-client/commit/b8e045df08f1be7dc5f8c73ef664b1261dcf1928))
+
+## [3.24.2](https://github.com/cds-snc/platform-forms-client/compare/v3.24.1...v3.24.2) (2024-10-29)
+
+### Bug Fixes
+
+- Adds an error message to the api create dialog ([#4483](https://github.com/cds-snc/platform-forms-client/issues/4483)) ([47fcac8](https://github.com/cds-snc/platform-forms-client/commit/47fcac8f3cef537dbcb05200fd4495c700776dae))
+- fixes an issue with the close date dialog ([#4493](https://github.com/cds-snc/platform-forms-client/issues/4493)) ([4bd8dfc](https://github.com/cds-snc/platform-forms-client/commit/4bd8dfc38ff5f9c470856d2507e0066ccfcb68b3))
+- Save closed message on Form management ([#4511](https://github.com/cds-snc/platform-forms-client/issues/4511)) ([18a2f75](https://github.com/cds-snc/platform-forms-client/commit/18a2f750c22463008fb0c7027011b49636a329e5))
+
+### Miscellaneous Chores
+
+- Remove whitespace from ACOA branding ([#4501](https://github.com/cds-snc/platform-forms-client/issues/4501)) ([4fb7dbf](https://github.com/cds-snc/platform-forms-client/commit/4fb7dbf16825d16d6349d939accd8fb2c2d94b3c))
+- update cypress package ([#4496](https://github.com/cds-snc/platform-forms-client/issues/4496)) ([c29f7ab](https://github.com/cds-snc/platform-forms-client/commit/c29f7ab597967882fc5426fbd1e5529f8a652b77))
 
 ## [3.24.1](https://github.com/cds-snc/platform-forms-client/compare/v3.24.0...v3.24.1) (2024-10-28)
 

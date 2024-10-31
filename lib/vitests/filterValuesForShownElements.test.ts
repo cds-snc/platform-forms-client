@@ -1,16 +1,13 @@
-import { expect } from 'vitest'
+import { expect } from "vitest";
 import { filterValuesForShownElements } from "@lib/formContext";
 import { FormElement } from "@lib/types";
 
 // Fixtures captured by adding a break point in Forms.tsx and copying the values from the debugger
-import {elements, elementsShown} from "../../__fixtures__/filterValuesForShownElements.json";
+import { elements, elementsShown } from "../../__fixtures__/filterValuesForShownElements.json";
 
 describe("formContext filterValuesForShownElements()", () => {
   it("Handles filtering out correct element", () => {
-    const expectedOutput = [
-      "2",
-      "3"
-    ];
+    const expectedOutput = ["2", "3"];
     const result = filterValuesForShownElements(elements, elementsShown as FormElement[]);
     expect(result).toEqual(expectedOutput);
   });

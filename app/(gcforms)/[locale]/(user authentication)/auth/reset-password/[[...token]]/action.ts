@@ -49,7 +49,6 @@ const validateInitialResetForm = async (
       v.toLowerCase(),
       v.toTrimmed(),
       v.minLength(1, t("input-validation.required")),
-      v.email(t("input-validation.email")),
       v.custom((input) => isValidGovEmail(input), t("input-validation.validGovEmail")),
     ]),
   });
@@ -90,7 +89,6 @@ const validateQuestionChallengeForm = async (
       v.toLowerCase(),
       v.toTrimmed(),
       v.minLength(1, t("input-validation.required")),
-      v.email(t("input-validation.email")),
       v.custom((input) => isValidGovEmail(input), t("input-validation.validGovEmail")),
     ]),
   });
@@ -113,7 +111,6 @@ const validatePasswordResetForm = async (
         v.toLowerCase(),
         v.toTrimmed(),
         v.minLength(1, t("input-validation.required")),
-        v.email(t("input-validation.email")),
         v.custom((input) => isValidGovEmail(input), t("input-validation.validGovEmail")),
       ]),
       password: v.string([

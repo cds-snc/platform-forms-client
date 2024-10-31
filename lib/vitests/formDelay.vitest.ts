@@ -1,5 +1,4 @@
-import { expect } from 'vitest'
-
+import { expect } from "vitest";
 import {
   calculateDelayWithGroups,
   calculateDelayWithoutGroups,
