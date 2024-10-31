@@ -25,7 +25,15 @@ import { SkipLinkReusable } from "@clientComponents/globals/SkipLinkReusable";
 import { AddPageButton } from "./AddPageButton";
 import { AddBranchingButton } from "./AddBranchingButton";
 
-export const EditWithGroups = ({ id, locale }: { id: string; locale: string }) => {
+export const EditWithGroups = ({
+  id,
+  locale,
+  keyId,
+}: {
+  id: string;
+  locale: string;
+  keyId: string | false;
+}) => {
   const { t } = useTranslation("form-builder");
   const {
     title,
@@ -131,7 +139,7 @@ export const EditWithGroups = ({ id, locale }: { id: string; locale: string }) =
         <LangSwitcher descriptionLangKey="editingIn" />
       </div>
       {/* Form Intro + Title Panel */}
-      {groupId === "start" && <SettingsPanel />}
+      {groupId === "start" && <SettingsPanel keyId={keyId} />}
       {groupId === "start" && (
         <RichTextLockedWithGroups
           hydrated={hasHydrated}
