@@ -1,9 +1,9 @@
-import { serverTranslation } from "@i18n";
 import { LinkButton } from "@serverComponents/globals/Buttons/LinkButton";
 import { FocusHeader } from "../../../components/client/FocusHeader";
+import { useTranslation } from "@i18n/client";
 
-export const Success = async ({ lang }: { lang: string }) => {
-  const { t } = await serverTranslation(["unlock-publishing", "common"], { lang });
+export const Success = ({ lang }: { lang: string }) => {
+  const { t } = useTranslation(["unlock-publishing", "common"]);
   return (
     <>
       <FocusHeader>{t("unlockPublishingSubmitted.title")}</FocusHeader>
