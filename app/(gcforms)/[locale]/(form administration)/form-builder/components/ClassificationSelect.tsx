@@ -38,14 +38,17 @@ export const ClassificationSelect = ({
 }: ClassificationSelectProps) => {
   return (
     <div>
-      <ProtectedIcon className="mr-2 inline-block fill-black" />
+      <ProtectedIcon
+        className={cn("mr-2 inline-block fill-black", disabled ? "fill-slate-400" : "")}
+      />
       <select
         disabled={isPublished || disabled}
         id="classification-select"
         value={classification}
         className={cn(
           "form-builder-dropdown my-0 inline-block min-w-[200px] text-black-default",
-          className
+          className,
+          disabled ? "cursor-not-allowed opacity-50" : "cursor-pointer"
         )}
         onChange={(evt: React.ChangeEvent<HTMLSelectElement>) => {
           const val = evt.target.value;
