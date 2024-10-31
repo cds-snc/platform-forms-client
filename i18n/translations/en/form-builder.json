@@ -628,6 +628,15 @@
       "generateKey": "Generate API key",
       "refreshKey": "Refresh Key",
       "deleteKey": "Delete API key",
+      "deleteKeyFailed": {
+        "title": "API key deleted",
+        "message": "New responses are now available for download on the {{responseLink}} page.",
+        "responseLinkText": "responses"
+      },
+      "deleteKeySuccess": {
+        "title": "API failed to delete",
+        "message": "Key failed to delete."
+      },
       "keyExists": "API key exists",
       "keyIdToolTip": {
         "text1": "What is an API key ID?",

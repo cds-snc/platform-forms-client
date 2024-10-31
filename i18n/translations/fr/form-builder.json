@@ -628,6 +628,15 @@
       "generateKey": "Créer une clé API",
       "refreshKey": "Rafraîchir la clé",
       "deleteKey": "Supprimer la clé API",
+      "deleteKeyFailed": {
+        "title": "API key deleted [FR]",
+        "message": "New responses are now available for download on the {{responseLink}} page. [FR]",
+        "responseLinkText": "responses [FR]"
+      },
+      "deleteKeySuccess": {
+        "title": "API failed to delete [FR]",
+        "message": "Key failed to delete. [FR]"
+      },
       "keyExists": "La clé existe déjà",
       "keyIdToolTip": {
         "text1": "Qu'est-ce que l'identifiant de la clé API?",
