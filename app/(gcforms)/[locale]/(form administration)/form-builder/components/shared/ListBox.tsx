@@ -79,7 +79,7 @@ export const ListBox = ({
   let listGroup = "";
 
   return (
-    (<div
+    <div
       aria-label={ariaLabel ? ariaLabel : ""}
       data-testid="listbox"
       ref={listBoxRef}
@@ -125,7 +125,7 @@ export const ListBox = ({
 
             return (
               /* eslint-disable jsx-a11y/click-events-have-key-events */
-              (<React.Fragment key={id}>
+              <React.Fragment key={id}>
                 {groupOption}
                 <li
                   data-testid={id}
@@ -157,11 +157,11 @@ export const ListBox = ({
                 {className && className === "separator" ? (
                   <li role="separator" className="mb-2 border-1 border-b border-gray" />
                 ) : null}
-              </React.Fragment>)
+              </React.Fragment>
             );
           }
         )}
       </ul>
-    </div>)
+    </div>
   );
 };

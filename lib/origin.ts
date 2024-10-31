@@ -1,10 +1,10 @@
-import { headers, type UnsafeUnwrappedHeaders } from "next/headers";
+import { headers } from "next/headers";
 
 /**
  * Extract the origin from the request's headers.
  */
-export function getOrigin(): string {
-  const h = headers() as unknown as UnsafeUnwrappedHeaders as unknown as UnsafeUnwrappedHeaders;
+export async function getOrigin(): Promise<string> {
+  const h = await headers();
 
   const detectedHost = h.get("host");
   const detectedProtocol = h.get("x-forwarded-proto") ?? "https";
@@ -17,7 +17,7 @@ export function getOrigin(): string {
   return sanitizedUrl;
 }
 
-export function isProductionEnvironment(): boolean {
-  const host = getOrigin();
+export async function isProductionEnvironment(): Promise<boolean> {
+  const host = await getOrigin();
   return host.includes("forms-formulaires") && host.includes("canada.ca");
 }

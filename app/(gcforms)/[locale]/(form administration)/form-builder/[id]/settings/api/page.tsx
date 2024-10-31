@@ -8,16 +8,12 @@ import { isProductionEnvironment } from "@lib/origin";
 import { ApiKeyButton } from "./components/ApiKeyButton";
 import { ApiKeyDialog } from "../../components/dialogs/ApiKeyDialog/ApiKeyDialog";
 
-export async function generateMetadata(
-  props: {
-    params: Promise<{ locale: string }>;
-  }
-): Promise<Metadata> {
+export async function generateMetadata(props: {
+  params: Promise<{ locale: string }>;
+}): Promise<Metadata> {
   const params = await props.params;
 
-  const {
-    locale
-  } = params;
+  const { locale } = params;
 
   const { t } = await serverTranslation("form-builder", { lang: locale });
   return {
@@ -25,24 +21,17 @@ export async function generateMetadata(
   };
 }
 
-export default async function Page(
-  props: {
-    params: Promise<{ id: string; locale: string }>;
-  }
-) {
+export default async function Page(props: { params: Promise<{ id: string; locale: string }> }) {
   const params = await props.params;
 
-  const {
-    id,
-    locale
-  } = params;
+  const { id, locale } = params;
 
   const { ability } = await authCheckAndRedirect();
   const { t } = await serverTranslation("form-builder", { lang: locale });
 
   // If this production environment, check to ensure user has Manage All Forms permission
   if (
-    isProductionEnvironment() &&
+    (await isProductionEnvironment()) &&
     !checkPrivilegesAsBoolean(ability, [
       {
         action: "view",

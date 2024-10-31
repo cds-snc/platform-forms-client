@@ -2,7 +2,7 @@ import React from "react";
 import { customTranslate } from "../../../i18nHelpers";
 import { getOrigin } from "@lib/origin";
 
-export const CopyCodes = ({
+export const CopyCodes = async ({
   confirmationCodes,
   formId,
   lang,
@@ -13,7 +13,7 @@ export const CopyCodes = ({
 }) => {
   const { t } = customTranslate("my-forms");
   const capitalizedLang = lang === "en" ? "En" : "Fr";
-  const HOST = getOrigin();
+  const HOST = await getOrigin();
 
   return (
     <div className="flex flex-row gap-4">

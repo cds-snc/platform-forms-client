@@ -58,8 +58,7 @@ async function removeProcessedMark(submissionID: string) {
  * This exception is thrown if the bearer token is not found
  */
 const extractBearerTokenFromReq = () => {
-  const reqHeaders =
-    headers() as unknown as UnsafeUnwrappedHeaders as unknown as UnsafeUnwrappedHeaders;
+  const reqHeaders = headers() as unknown as UnsafeUnwrappedHeaders;
   const authHeader = reqHeaders.get("authorization") ?? "";
   if (authHeader.startsWith("Bearer ")) {
     return authHeader.substring(7, authHeader.length);

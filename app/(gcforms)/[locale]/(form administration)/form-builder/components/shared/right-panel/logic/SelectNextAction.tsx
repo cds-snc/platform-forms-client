@@ -127,7 +127,7 @@ export const SelectNextAction = ({
 
   // If we have an item a question is selected
   return (
-    (<div className="m-0 h-[calc(100vh-150px)] w-full overflow-scroll">
+    <div className="m-0 h-[calc(100vh-150px)] w-full overflow-scroll">
       {typesWithOptions.includes(item.type) ? (
         /* 
           If the item (form element) has options 
@@ -137,7 +137,7 @@ export const SelectNextAction = ({
           yes - => section 1
           no - => section 2
         */
-        (<MultiActionSelector
+        <MultiActionSelector
           key={`multi-action-select-${selectedGroupId}`}
           lang={lang}
           sectionName={sectionName}
@@ -145,8 +145,8 @@ export const SelectNextAction = ({
           initialNextActionRules={
             Array.isArray(selectedGroupNextActions) ? selectedGroupNextActions : [] // Default to end
           }
-        />)
+        />
       ) : null}
-    </div>)
+    </div>
   );
 };

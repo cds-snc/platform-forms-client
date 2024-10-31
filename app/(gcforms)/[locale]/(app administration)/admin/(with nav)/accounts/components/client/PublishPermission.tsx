@@ -30,7 +30,7 @@ export const PublishPermission = ({
   return (
     /* Lock / unlock publishing */
 
-    (<Button
+    <Button
       theme={"secondary"}
       onClick={async () => {
         const action = hasPrivilege({
@@ -54,6 +54,6 @@ export const PublishPermission = ({
       ) : (
         t("unlockPublishing")
       )}
-    </Button>)
+    </Button>
   );
 };
