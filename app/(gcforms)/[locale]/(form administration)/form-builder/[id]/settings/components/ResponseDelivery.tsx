@@ -14,6 +14,7 @@ import { Button } from "@clientComponents/globals";
 import { useTemplateStore } from "@lib/store/useTemplateStore";
 import { completeEmailAddressRegex } from "@lib/utils/form-builder";
 import { ResponseDeliveryHelpButton, FormPurposeHelpButton } from "@formBuilder/components/shared";
+import { ResponseDeliveryHelpButtonWithApi } from "@formBuilder/components/shared/ResponseDeliveryHelpDialogApiWithApi";
 import {
   ClassificationType,
   ClassificationSelect,
@@ -412,7 +413,7 @@ export const ResponseDelivery = ({ keyId }: ResponseDeliveryProps) => {
                   <div className="flex">
                     <ApiKeyButton showDelete keyId={keyId} />{" "}
                     <div className="mt-2">
-                      <ResponseDeliveryHelpButton />
+                      <ResponseDeliveryHelpButtonWithApi />
                     </div>
                   </div>
                   <ApiDocNotes />
@@ -427,7 +428,11 @@ export const ResponseDelivery = ({ keyId }: ResponseDeliveryProps) => {
                   >
                     {t("settingsResponseDelivery.saveButton")}
                   </Button>
-                  <ResponseDeliveryHelpButton />
+                  {apiAccess ? (
+                    <ResponseDeliveryHelpButtonWithApi />
+                  ) : (
+                    <ResponseDeliveryHelpButton />
+                  )}
                 </>
               )}
             </div>

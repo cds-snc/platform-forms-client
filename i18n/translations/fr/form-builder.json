@@ -741,6 +741,35 @@
         "text1": "Pour les formulaires avec une classification jusqu’à PROTÉGÉ B",
         "text2": "Téléchargement des réponses de Formulaires GC dans un délai de 30 jours"
       }
+    },
+    "responseDeliveryHelpWithApi": {
+      "cta": "Help choosing an option",
+      "title": "Choosing a response delivery option",
+      "description": "There are two options for getting submitted form responses. Use the chart below to help pick which option best fits your needs.",
+      "inbox": {
+        "title": "Email to an inbox",
+        "text1": "For up to PROTECTED A forms",
+        "text2": "Responses are delivered directly to an inbox in real time",
+        "text3": "One email address can receive response emails. This can be a shared inbox.",
+        "text4": "One email address set for delivery. This can be a shared inbox.",
+        "text5": "No technical resources required."
+      },
+      "vault": {
+        "title": "Download from GC Forms",
+        "text1": "For up to PROTECTED B forms",
+        "text2": "Download responses within 30 days",
+        "text3": "Can be switched to API delivery after publishing",
+        "text4": "Multiple account holders can access responses.",
+        "text5": "No technical resources required."
+      },
+      "api": {
+        "title": "API response retrieval",
+        "text1": "For up to PROTECTED A forms. (PROTECTED B coming soon)",
+        "text2": "API pull requests & download delivery",
+        "text3": "Can be switched to download only delivery after publishing",
+        "text4": "One API key available per form.",
+        "text5": "Technical resources needed to develop the API integration."
+      }
     }
   },
   "loggedOutTab": {

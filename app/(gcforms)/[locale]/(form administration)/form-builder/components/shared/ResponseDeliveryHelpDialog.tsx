@@ -1,7 +1,6 @@
 "use client";
 import React, { useCallback, useState } from "react";
 import { useTranslation } from "@i18n/client";
-import { useFeatureFlags } from "@lib/hooks/useFeatureFlags";
 
 import { Button } from "@clientComponents/globals";
 import { useDialogRef, Dialog } from ".";
@@ -10,10 +9,6 @@ import { InfoIcon } from "@serverComponents/icons";
 const ResponseDeliveryHelpDialog = ({ handleClose }: { handleClose: () => void }) => {
   const { t } = useTranslation("form-builder");
   const dialog = useDialogRef();
-
-  const { getFlag } = useFeatureFlags();
-
-  const apiAccess = getFlag("apiAccess");
 
   const actions = (
     <>
@@ -34,7 +29,6 @@ const ResponseDeliveryHelpDialog = ({ handleClose }: { handleClose: () => void }
       dialogRef={dialog}
       handleClose={handleClose}
       actions={actions}
-      className="max-h-[80%] min-w-[800px] overflow-y-scroll"
       title={t("settingsResponseDelivery.responseDeliveryHelp.title")}
     >
       <div className="p-5">
@@ -42,92 +36,39 @@ const ResponseDeliveryHelpDialog = ({ handleClose }: { handleClose: () => void }
           <p className="mb-4 text-sm">
             {t("settingsResponseDelivery.responseDeliveryHelp.description")}
           </p>
-          <table className="mb-4">
+          <table className="mb-10">
             <thead className="border-b-3">
               <tr>
-                <th className="p-2 text-left">
+                <th className="text-left p-2">
                   {t("settingsResponseDelivery.responseDeliveryHelp.inbox.title")}
                 </th>
-                <th className="whitespace-nowrap p-2 text-left">
+                <th className="text-left p-2">
                   {t("settingsResponseDelivery.responseDeliveryHelp.vault.title")}
                 </th>
-                {apiAccess && (
-                  <th className="p-2 text-left">
-                    {t("settingsResponseDelivery.responseDeliveryHelp.api.title")}
-                  </th>
-                )}
               </tr>
             </thead>
             <tbody>
-              {/* Row 1 */}
               <tr>
-                <td className="border-b-2 border-r-2 p-2 align-top text-sm">
+                <td className="text-sm border-b-2 border-r-2 p-2">
                   {t("settingsResponseDelivery.responseDeliveryHelp.inbox.text1")}
                 </td>
-                <td className="border-b-2 border-r-2 p-2 align-top text-sm">
+                <td className="text-sm border-b-2 p-2">
                   {t("settingsResponseDelivery.responseDeliveryHelp.vault.text1")}
                 </td>
-                {apiAccess && (
-                  <td className="border-b-2 p-2 align-top text-sm">
-                    {t("settingsResponseDelivery.responseDeliveryHelp.api.text1")}
-                  </td>
-                )}
               </tr>
-              {/* Row 2 */}
               <tr>
-                <td className="border-b-2 border-r-2 p-2 align-top text-sm">
+                <td className="text-sm border-b-2 border-r-2 p-2">
                   {t("settingsResponseDelivery.responseDeliveryHelp.inbox.text2")}
                 </td>
-                <td className="border-b-2 border-r-2 p-2 align-top text-sm">
+                <td className="text-sm border-b-2 p-2">
                   {t("settingsResponseDelivery.responseDeliveryHelp.vault.text2")}
                 </td>
-                {apiAccess && (
-                  <td className="border-b-2 p-2 align-top text-sm">
-                    {t("settingsResponseDelivery.responseDeliveryHelp.api.text2")}
-                  </td>
-                )}
               </tr>
-              {/* Row 3 */}
               <tr>
-                <td className="border-b-2 border-r-2 p-2 align-top text-sm">
+                <td className="text-sm border-b-2 border-r-2 p-2">
                   {t("settingsResponseDelivery.responseDeliveryHelp.inbox.text3")}
                 </td>
-                <td className="border-b-2 border-r-2 p-2 align-top text-sm">
-                  {t("settingsResponseDelivery.responseDeliveryHelp.vault.text3")}
-                </td>
-                {apiAccess && (
-                  <td className="border-b-2 p-2 align-top text-sm">
-                    {t("settingsResponseDelivery.responseDeliveryHelp.api.text3")}
-                  </td>
-                )}
-              </tr>
-              {/* Row 4 */}
-              <tr>
-                <td className="border-b-2 border-r-2 p-2 align-top text-sm">
-                  {t("settingsResponseDelivery.responseDeliveryHelp.inbox.text4")}
-                </td>
-                <td className="border-b-2 border-r-2 p-2 align-top text-sm">
-                  {t("settingsResponseDelivery.responseDeliveryHelp.vault.text4")}
-                </td>
-                {apiAccess && (
-                  <td className="border-b-2 p-2 align-top text-sm">
-                    {t("settingsResponseDelivery.responseDeliveryHelp.api.text4")}
-                  </td>
-                )}
-              </tr>
-              {/* Row 5 */}
-              <tr>
-                <td className="border-b-2 border-r-2 p-2 align-top text-sm">
-                  {t("settingsResponseDelivery.responseDeliveryHelp.inbox.text5")}
-                </td>
-                <td className="border-b-2 border-r-2 p-2 align-top text-sm">
-                  {t("settingsResponseDelivery.responseDeliveryHelp.vault.text5")}
-                </td>
-                {apiAccess && (
-                  <td className="border-b-2 p-2 align-top text-sm">
-                    {t("settingsResponseDelivery.responseDeliveryHelp.api.text5")}
-                  </td>
-                )}
+                <td className="text-sm border-b-2 p-2"></td>
               </tr>
             </tbody>
           </table>
