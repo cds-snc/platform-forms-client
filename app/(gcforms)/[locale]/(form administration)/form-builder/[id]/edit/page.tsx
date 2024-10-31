@@ -25,7 +25,9 @@ export default async function Page({
 
   if (process.env.APP_ENV !== "test") {
     try {
-      keyId = await checkKeyExists(id);
+      if (id && id !== "0000") {
+        keyId = await checkKeyExists(id);
+      }
     } catch (e) {
       // no-op
     }
