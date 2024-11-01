@@ -5,6 +5,33 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.25.0](https://github.com/cds-snc/platform-forms-client/compare/v3.24.3...v3.25.0) (2024-11-01)
+
+
+### Features
+
+* Add API key generation to Settings  ([#4523](https://github.com/cds-snc/platform-forms-client/issues/4523)) ([64fd92c](https://github.com/cds-snc/platform-forms-client/commit/64fd92cb58abb2acf84926b9c676e91520fd8cf0))
+
+
+### Bug Fixes
+
+* Updates save date with correct date conversion ([#4560](https://github.com/cds-snc/platform-forms-client/issues/4560)) ([39b21eb](https://github.com/cds-snc/platform-forms-client/commit/39b21eb3708260d33eca2c0a4aa459f84579d09f))
+
+
+### Miscellaneous Chores
+
+* Activate test by renaming it ([#4547](https://github.com/cds-snc/platform-forms-client/issues/4547)) ([afd7acb](https://github.com/cds-snc/platform-forms-client/commit/afd7acb8c99ff2872cb248cc6b8b705dff6c3dca))
+* Add more info logging to FreskDesk Integration ([#4539](https://github.com/cds-snc/platform-forms-client/issues/4539)) ([786e7b4](https://github.com/cds-snc/platform-forms-client/commit/786e7b4e1e959a06140cbf068442ebdfd0a53f1d))
+* Add onBlur handler to email address input on Self-serve ownership ([#4556](https://github.com/cds-snc/platform-forms-client/issues/4556)) ([9b5e36d](https://github.com/cds-snc/platform-forms-client/commit/9b5e36d5a902f5f408235159dc2aae99bf555780))
+* add wrapper around key check ([#4543](https://github.com/cds-snc/platform-forms-client/issues/4543)) ([a40e486](https://github.com/cds-snc/platform-forms-client/commit/a40e48679151cc49e6b7fb51d6ca069e297ef476))
+* import expect from vitest ([#4526](https://github.com/cds-snc/platform-forms-client/issues/4526)) ([f502c1c](https://github.com/cds-snc/platform-forms-client/commit/f502c1c46ff70d7f579a0b3328821b46e04d1cd7))
+* Remove unused component files ([#4544](https://github.com/cds-snc/platform-forms-client/issues/4544)) ([6a4f5aa](https://github.com/cds-snc/platform-forms-client/commit/6a4f5aad2275c1b9a356d4b7043ffdc5ccd7082b))
+* Remove unused hooks ([#4548](https://github.com/cds-snc/platform-forms-client/issues/4548)) ([7e278a8](https://github.com/cds-snc/platform-forms-client/commit/7e278a8e224bb7fffe40409cadffe46e4a032269))
+* Remove unused miscellany ([#4552](https://github.com/cds-snc/platform-forms-client/issues/4552)) ([7500c33](https://github.com/cds-snc/platform-forms-client/commit/7500c3329381d2755a8295ba4dde298d3297d3df))
+* Remove unused tests ([#4550](https://github.com/cds-snc/platform-forms-client/issues/4550)) ([57acda8](https://github.com/cds-snc/platform-forms-client/commit/57acda84dee560dc34729dac4df4da3b3db2d03a))
+* update check for review env ([#4553](https://github.com/cds-snc/platform-forms-client/issues/4553)) ([04910d0](https://github.com/cds-snc/platform-forms-client/commit/04910d0ce1fbbb0c07b15b1ceb62cbf8bac0b02f))
+* update sass includes ([#4524](https://github.com/cds-snc/platform-forms-client/issues/4524)) ([ea56419](https://github.com/cds-snc/platform-forms-client/commit/ea56419c1dcaa6576e3ab6998d0c778fdd48ff03))
+
 ## [3.24.3](https://github.com/cds-snc/platform-forms-client/compare/v3.24.2...v3.24.3) (2024-10-31)
 
 
