@@ -47,8 +47,15 @@ export async function contact(
   _: ErrorStates,
   formData: FormData
 ): Promise<ErrorStates> {
+  logMessage.info("Parsing contact form data");
   const rawData = Object.fromEntries(formData.entries());
-  const result = await validate(language, rawData);
+  logMessage.info("Validating contact form data");
+  const result = await validate(language, rawData).catch((e) => {
+    logMessage.warn(`Failed to validate contact form: ${(e as Error).message}`);
+    logMessage.info(JSON.stringify(rawData));
+
+    return { success: false, issues: [] } as unknown as ReturnType<typeof validate>;
+  });
 
   if (!result.success) {
     return {
@@ -107,7 +114,7 @@ ${requestParsed}<br/>
 Détails supplémentaires:<br/>
 ${description}<br/>
 `;
-
+  logMessage.info(`Creating contact ticket for ${email}`);
   try {
     await createTicket({
       type: "contact",
