@@ -23,7 +23,6 @@ const Pill = ({
 
   const disabled = false;
 
-  // @ts-expect-error -- TODO: fix this
   const [tabIndex, focused, handleKeyDown] = useRovingTabIndex(ref, disabled);
 
   // @ts-expect-error -- TODO: fix this

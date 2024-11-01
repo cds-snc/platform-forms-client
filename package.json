@@ -72,6 +72,7 @@
     "@types/mdx": "^2.0.13",
     "@zitadel/node": "^2.0.21",
     "axios": "1.7.7",
+    "babel-plugin-react-compiler": "19.0.0-beta-6fc168f-20241025",
     "clsx": "^2.1.1",
     "copy-to-clipboard": "3.3.3",
     "csv-writer": "^1.6.0",

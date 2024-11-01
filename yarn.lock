@@ -2772,6 +2772,16 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@babel/types@npm:^7.19.0":
+  version: 7.26.0
+  resolution: "@babel/types@npm:7.26.0"
+  dependencies:
+    "@babel/helper-string-parser": "npm:^7.25.9"
+    "@babel/helper-validator-identifier": "npm:^7.25.9"
+  checksum: 10c0/b694f41ad1597127e16024d766c33a641508aad037abd08d0d1f73af753e1119fa03b4a107d04b5f92cc19c095a594660547ae9bead1db2299212d644b0a5cb8
+  languageName: node
+  linkType: hard
+
 "@bcoe/v8-coverage@npm:^0.2.3":
   version: 0.2.3
   resolution: "@bcoe/v8-coverage@npm:0.2.3"
@@ -10470,6 +10480,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"babel-plugin-react-compiler@npm:19.0.0-beta-6fc168f-20241025":
+  version: 19.0.0-beta-6fc168f-20241025
+  resolution: "babel-plugin-react-compiler@npm:19.0.0-beta-6fc168f-20241025"
+  dependencies:
+    "@babel/types": "npm:^7.19.0"
+  checksum: 10c0/386f25d9937e26f5d999ce574dc4a23c5e903a6f142969a9aea7d68d850e0bbd7b8e99448cde3fa06196d2228385593ce06ddfde600f80de6a083bf203e6cded
+  languageName: node
+  linkType: hard
+
 "babel-plugin-transform-require-context@npm:^0.1.1":
   version: 0.1.1
   resolution: "babel-plugin-transform-require-context@npm:0.1.1"
@@ -13983,6 +14002,7 @@ __metadata:
     axios: "npm:1.7.7"
     babel-loader: "npm:^8.3.0"
     babel-plugin-dynamic-import-node: "npm:^2.3.3"
+    babel-plugin-react-compiler: "npm:19.0.0-beta-6fc168f-20241025"
     babel-plugin-transform-require-context: "npm:^0.1.1"
     clsx: "npm:^2.1.1"
     copy-to-clipboard: "npm:3.3.3"

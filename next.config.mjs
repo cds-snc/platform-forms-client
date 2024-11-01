@@ -31,7 +31,7 @@ const securityHeaders = [
 const nextConfig = {
   sassOptions: {
     includePaths: [path.join(__dirname, "styles")],
-    silenceDeprecations: ['legacy-js-api'], // https://github.com/vercel/next.js/issues/71638
+    silenceDeprecations: ["legacy-js-api"], // https://github.com/vercel/next.js/issues/71638
   },
   poweredByHeader: false,
   compiler: {
@@ -44,8 +44,7 @@ const nextConfig = {
     cacheMaxMemorySize: 0, // disable default in-memory caching
   }),
   serverExternalPackages: ["@aws-sdk/lib-dynamodb", "pino"],
-  
- 
+
   async headers() {
     return [
       {
@@ -95,12 +94,12 @@ const nextConfig = {
     serverActions: {
       bodySizeLimit: "5mb",
     },
-    
+    reactCompiler: true,
     turbo: {
       rules: {
-        '*.md': {
-          loaders: ['raw-loader'],
-          as: '*.js',
+        "*.md": {
+          loaders: ["raw-loader"],
+          as: "*.js",
         },
       },
     },
