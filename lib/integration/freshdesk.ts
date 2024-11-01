@@ -1,6 +1,6 @@
 import axios from "axios";
 import { logMessage } from "@lib/logger";
-import { getOrigin } from "@lib/origin";
+import { getOriginSync } from "@lib/origin";
 
 interface createTicketProps {
   type: "branding" | "publishing" | "contact" | "problem";
@@ -10,14 +10,14 @@ interface createTicketProps {
   language: string;
 }
 
-export const formatTicketData = async ({
+export const formatTicketData = ({
   type,
   name,
   email,
   description,
   language,
 }: createTicketProps) => {
-  const HOST = (await getOrigin()) || "";
+  const HOST = getOriginSync() || "";
   const hostTag = tagHost(HOST);
 
   const ticket = {
@@ -89,7 +89,7 @@ export const createTicket = async ({
 
   const username = process.env.FRESHDESK_API_KEY;
   const password = "X";
-  const data = await formatTicketData({ type, name, email, description, language });
+  const data = formatTicketData({ type, name, email, description, language });
 
   if (!username) throw new Error("Freshdesk API key not found");
 

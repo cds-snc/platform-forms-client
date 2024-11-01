@@ -12,7 +12,7 @@ import { prisma } from "@lib/integration/prismaConnector";
 import { sendEmail } from "@lib/integration/notifyConnector";
 import { inviteToCollaborateEmailTemplate } from "@lib/invitations/emailTemplates/inviteToCollaborateEmailTemplate";
 import { inviteToFormsEmailTemplate } from "@lib/invitations/emailTemplates/inviteToFormsEmailTemplate";
-import { getOrigin } from "@lib/origin";
+import { getOriginSync } from "@lib/origin";
 import { logMessage } from "@lib/logger";
 import { Invitation } from "@prisma/client";
 import { logEvent } from "@lib/auditLogs";
@@ -149,7 +149,7 @@ const _sendInvitationEmail = async (
     `Sending invitation email to ${email} for form ${templateId} with message ${message}`
   );
 
-  const HOST = await getOrigin();
+  const HOST = getOriginSync();
 
   // Determine whether to send an invitation to register or an invitation to the form
   const user = await prisma.user.findFirst({
