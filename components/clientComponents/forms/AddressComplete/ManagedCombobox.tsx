@@ -99,6 +99,12 @@ export const ManagedCombobox = React.forwardRef(
             required,
             "aria-describedby": ariaDescribedBy,
             onFocus: () => setIsOpen(true),
+            onChange: (e) => {
+              setInputValue((e.target as HTMLInputElement).value);
+            },
+            // Prevents a double input refresh from being fired, this is a workaround for a downshift bug
+            // https://github.com/downshift-js/downshift/issues/1108
+            // Downshift won't be updated to fix this issue, so we need to handle it ourselves
           })}
           data-testid="combobox-input"
           placeholder={placeholderText}
