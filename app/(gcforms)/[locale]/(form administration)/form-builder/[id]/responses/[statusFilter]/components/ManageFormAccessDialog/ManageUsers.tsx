@@ -179,6 +179,9 @@ export const ManageUsers = () => {
                 handleAddEmail(e.currentTarget.value);
               }
             }}
+            onBlur={(e: React.FocusEvent<HTMLInputElement>) => {
+              handleAddEmail(e.currentTarget.value);
+            }}
             value={selectedEmail}
           />
         </div>
