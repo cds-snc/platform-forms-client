@@ -20,10 +20,10 @@ export const Responses = ({ responseDownloadLimit, overdueAfter }: ResponsesProp
   const {
     t,
     i18n: { language },
-  } = useTranslation("form-builder-responses");
+  } = useTranslation("form-builder");
   const statusFilter = useParams<{ statusFilter: string }>();
   const searchParams = useSearchParams();
-  const lastKey = searchParams?.get("lastKey");
+  const lastKey = searchParams?.get("lastKey") || "";
 
   const { initialForm, name, formId } = useTemplateStore((s) => ({
     initialForm: s.form,
