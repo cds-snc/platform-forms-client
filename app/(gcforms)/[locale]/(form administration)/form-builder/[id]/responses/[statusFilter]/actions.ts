@@ -276,19 +276,25 @@ export const getSubmissionsByFormat = async ({
 
             const extraTranslations = {
               streetAddress: {
-                en: t("addressComponents.streetAddress"),
-                fr: t("addressComponents.streetAddress"),
+                en: t("addressComponents.streetAddress", { lang: "en" }),
+                fr: t("addressComponents.streetAddress", { lang: "fr" }),
               },
-              city: { en: t("addressComponents.city"), fr: t("addressComponents.city") },
+              city: {
+                en: t("addressComponents.city", { lang: "en" }),
+                fr: t("addressComponents.city", { lang: "fr" }),
+              },
               province: {
-                en: t("addressComponents.province"),
-                fr: t("addressComponents.province"),
+                en: t("addressComponents.province", { lang: "en" }),
+                fr: t("addressComponents.province", { lang: "fr" }),
               },
               postalCode: {
-                en: t("addressComponents.postalCode"),
-                fr: t("addressComponents.postalCode"),
+                en: t("addressComponents.postalCode", { lang: "en" }),
+                fr: t("addressComponents.postalCode", { lang: "fr" }),
               },
-              country: { en: t("addressComponents.country"), fr: t("addressComponents.country") },
+              country: {
+                en: t("addressComponents.country", { lang: "en" }),
+                fr: t("addressComponents.country", { lang: "fr" }),
+              },
             };
 
             const reviewElements = getAddressAsAnswerElements(
