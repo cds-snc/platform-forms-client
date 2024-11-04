@@ -83,6 +83,7 @@ export const ApiKeyDialog = () => {
 
       const key = await _createKey(id);
       await downloadKey(JSON.stringify(key), id);
+
       setGenerating(false);
       dialog.current?.close();
       setIsOpen(false);

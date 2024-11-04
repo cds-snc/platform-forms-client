@@ -8,9 +8,13 @@ import path from "path";
 // Privilege Checks are done at the lib/serviceAccount.ts level
 
 export const getReadmeContent = async () => {
-  const readmePath = path.join(__dirname, "./api/templates/Readme.md");
-  const readmeContent = await fs.readFile(readmePath, "utf-8");
-  return readmeContent;
+  try {
+    const readmePath = path.join(process.cwd(), "./public/static/api/Readme.md");
+    const content = await fs.readFile(readmePath, "utf-8");
+    return { content };
+  } catch (e) {
+    return { error: true };
+  }
 };
 
 export const createServiceAccountKey = async (templateId: string) => {

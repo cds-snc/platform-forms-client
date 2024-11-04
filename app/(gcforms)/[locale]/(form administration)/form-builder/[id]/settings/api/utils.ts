@@ -1,7 +1,7 @@
 import { createServiceAccountKey, refreshServiceAccountKey } from "./actions";
 import JSZip from "jszip";
 
-// import {getReadmeContent} from "./actions";
+import { getReadmeContent } from "./actions";
 
 const downloadFileFromBlob = (data: Blob, fileName: string) => {
   const href = window.URL.createObjectURL(data);
@@ -27,10 +27,14 @@ export const _refreshKey = async (templateId: string) => {
 export const downloadKey = async (key: string, templateId: string) => {
   const zip = new JSZip();
 
-  const content = "await getReadmeContent()";
-
   // Add Readme.md
-  zip.file("Readme.md", content);
+  const result = await getReadmeContent();
+
+  if (result.error) {
+    throw new Error("Error fetching Readme.md");
+  }
+
+  zip.file("Readme.md", result.content || "");
 
   // Add key
   const keyBlob = new Blob([key], { type: "application/json" });
