@@ -42,8 +42,15 @@ export async function support(
   _: ErrorStates,
   formData: FormData
 ): Promise<ErrorStates> {
+  logMessage.info("Parsing support form data");
   const rawData = Object.fromEntries(formData.entries());
-  const validatedData = await validate(language, rawData);
+  logMessage.info("Validating support form data");
+  const validatedData = await validate(language, rawData).catch((e) => {
+    logMessage.warn(`Failed to validate support form: ${(e as Error).message}`);
+    logMessage.info(JSON.stringify(rawData));
+
+    return { success: false, issues: [] } as unknown as ReturnType<typeof validate>;
+  });
 
   if (!validatedData.success) {
     return {
@@ -84,7 +91,7 @@ ${requestParsed}<br/>
 Détails supplémentaires:<br/>
 ${description}<br/>
 `;
-
+  logMessage.info(`Creating support ticket for ${email}`);
   try {
     await createTicket({
       type: "problem",

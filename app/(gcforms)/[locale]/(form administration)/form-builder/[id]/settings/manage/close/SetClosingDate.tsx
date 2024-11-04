@@ -99,7 +99,9 @@ export const SetClosingDate = ({
   const saveFormStatus = useCallback(async () => {
     // Check to see if the existing date is in the past when updating the toggle. If the date is in
     // the future we want to keep the existing value.
-    let closeDate = isFutureDate(String(closingDate)) ? closingDate : null;
+    let closeDate = isFutureDate(String(closingDate))
+      ? new Date(String(closingDate)).toISOString()
+      : null;
 
     if (status === "closed") {
       // Set date to now to close the form right away
