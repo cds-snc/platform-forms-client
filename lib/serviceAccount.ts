@@ -116,6 +116,10 @@ export const checkMachineUserExists = async (templateId: string) => {
 };
 
 export const checkKeyExists = async (templateId: string) => {
+  if (templateId === "0000") {
+    return false;
+  }
+
   const { ability } = await authCheckAndThrow();
   await checkUserHasTemplateOwnership(ability, templateId);
 
