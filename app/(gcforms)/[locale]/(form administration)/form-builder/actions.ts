@@ -26,6 +26,7 @@ import { serverTranslation } from "@i18n";
 import { revalidatePath } from "next/cache";
 import { checkOne } from "@lib/cache/flags";
 import { isValidDateString } from "@lib/utils/date/isValidDateString";
+import { isValidISODate } from "@lib/utils/date/isValidISODate";
 
 export type CreateOrUpdateTemplateType = {
   id?: string;
@@ -264,10 +265,10 @@ export const closeForm = async ({
     const { ability } = await authCheckAndThrow();
 
     // closingDate: null means the form is open, or will be set to be open
-    // closingDate: (now/past date) means the form is closed
-    // closingDate: (future date) means the form is scheduled to close in the future
+    // closingDate: a current or past date means the form is closed
+    // closingDate: afuture date means the form is scheduled to close in the future
 
-    if (closingDate && !isValidDateString(closingDate)) {
+    if (closingDate && (!isValidDateString(closingDate) || !isValidISODate(String(closingDate)))) {
       throw new Error(`Invalid closing date. Request information: { ${formID}, ${closingDate} }`);
     }
 
