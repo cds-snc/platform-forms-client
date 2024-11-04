@@ -33,9 +33,6 @@ export default async function Page() {
     );
   }
 
-  // TODO
-  // If not api status, redirect to /responses/new
-
   return (
     <>
       <h1>Responses</h1>

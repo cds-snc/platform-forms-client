@@ -58,8 +58,6 @@ export const Responses = ({ responseDownloadLimit, overdueAfter }: ResponsesProp
 
   const formName = name ? name : language === "fr" ? initialForm.titleFr : initialForm.titleEn;
 
-  // TODO: Probably refactor out - currently dependency for DownloadTable
-  // The nagware will be refactored during the database optimiztion work.
   const nagwareResult = { level: NagLevel.None, numberOfSubmissions: 0 };
 
   if (state.loading) {
@@ -80,7 +78,6 @@ export const Responses = ({ responseDownloadLimit, overdueAfter }: ResponsesProp
               vaultSubmissions={state.submissions}
               formName={formName}
               formId={formId}
-              // TODO: Probably refactor out - currently dependency for DownloadTable
               nagwareResult={nagwareResult}
               responseDownloadLimit={responseDownloadLimit}
               lastEvaluatedKey={state.lastEvaluatedKey}
