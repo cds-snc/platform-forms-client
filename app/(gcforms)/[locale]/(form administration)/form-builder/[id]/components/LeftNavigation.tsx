@@ -29,7 +29,7 @@ const linkHelper = ({
   };
 };
 
-export const LeftNavigation = ({ id }: { id: string }) => {
+export const LeftNavigation = ({ id, keyId }: { id: string; keyId: string | false }) => {
   const {
     t,
     i18n: { language },
@@ -45,8 +45,7 @@ export const LeftNavigation = ({ id }: { id: string }) => {
 
   const segment = useSelectedLayoutSegment();
 
-  // TODO: Implement API key check
-  const isApiKey = true;
+  const responsesRoute = keyId ? "api-responses" : "responses/new";
 
   return (
     <nav aria-label={t("navLabelFormBuilder")}>
@@ -95,7 +94,7 @@ export const LeftNavigation = ({ id }: { id: string }) => {
           <LeftNav
             testid="responses"
             {...linkHelper({
-              route: isApiKey ? "api-responses" : `responses/new`,
+              route: responsesRoute,
               id,
               segment,
               language,
