@@ -68,6 +68,8 @@ export const Responses = ({ responseDownloadLimit, overdueAfter }: ResponsesProp
 
   return (
     <>
+      <h1>{t("responsesNavLabel")}</h1>
+
       {/* TODO do something about aria-live so high in the tree */}
       <div aria-live="polite">
         <ClosedBanner id={formId} />

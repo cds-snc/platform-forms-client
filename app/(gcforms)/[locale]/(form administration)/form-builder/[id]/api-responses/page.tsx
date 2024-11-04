@@ -35,8 +35,6 @@ export default async function Page() {
 
   return (
     <>
-      <h1>Responses</h1>
-
       <Responses
         responseDownloadLimit={Number(await getAppSetting("responseDownloadLimit"))}
         overdueAfter={Number(await getAppSetting("nagwarePhaseEncouraged"))}
