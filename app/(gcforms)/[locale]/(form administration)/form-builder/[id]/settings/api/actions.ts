@@ -2,7 +2,16 @@
 import { createKey, deleteKey, refreshKey } from "@lib/serviceAccount";
 import { revalidatePath } from "next/cache";
 
+import { promises as fs } from "fs";
+import path from "path";
+
 // Privilege Checks are done at the lib/serviceAccount.ts level
+
+export const getReadmeContent = async () => {
+  const readmePath = path.join(__dirname, "./api/templates/Readme.md");
+  const readmeContent = await fs.readFile(readmePath, "utf-8");
+  return readmeContent;
+};
 
 export const createServiceAccountKey = async (templateId: string) => {
   revalidatePath(
