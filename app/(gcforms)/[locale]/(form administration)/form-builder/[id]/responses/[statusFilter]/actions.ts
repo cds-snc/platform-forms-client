@@ -192,7 +192,8 @@ export const getSubmissionsByFormat = async ({
       throw new AccessControlError("User is not authenticated");
     }
 
-    const { t } = await serverTranslation("form-builder-responses");
+    const { t: tEn } = await serverTranslation("form-builder-responses", { lang: "en" });
+    const { t: tFr } = await serverTranslation("form-builder-responses", { lang: "fr" });
 
     const responseConfirmLimit = Number(await getAppSetting("responseDownloadLimit"));
 
@@ -276,24 +277,24 @@ export const getSubmissionsByFormat = async ({
 
             const extraTranslations = {
               streetAddress: {
-                en: t("addressComponents.streetAddress", { lang: "en" }),
-                fr: t("addressComponents.streetAddress", { lang: "fr" }),
+                en: tEn("addressComponents.streetAddress"),
+                fr: tFr("addressComponents.streetAddress"),
               },
               city: {
-                en: t("addressComponents.city", { lang: "en" }),
-                fr: t("addressComponents.city", { lang: "fr" }),
+                en: tEn("addressComponents.city"),
+                fr: tFr("addressComponents.city"),
               },
               province: {
-                en: t("addressComponents.province", { lang: "en" }),
-                fr: t("addressComponents.province", { lang: "fr" }),
+                en: tEn("addressComponents.province"),
+                fr: tFr("addressComponents.province"),
               },
               postalCode: {
-                en: t("addressComponents.postalCode", { lang: "en" }),
-                fr: t("addressComponents.postalCode", { lang: "fr" }),
+                en: tEn("addressComponents.postalCode"),
+                fr: tFr("addressComponents.postalCode"),
               },
               country: {
-                en: t("addressComponents.country", { lang: "en" }),
-                fr: t("addressComponents.country", { lang: "fr" }),
+                en: tEn("addressComponents.country"),
+                fr: tFr("addressComponents.country"),
               },
             };
 
