@@ -41,7 +41,6 @@ export const Responses = ({ responseDownloadLimit, overdueAfter }: ResponsesProp
     fetchSubmissions({
       formId,
       lastKey,
-      // status: statusFilter,
     })
       .then(({ submissions, lastEvaluatedKey, error }) => {
         setState({
@@ -85,7 +84,6 @@ export const Responses = ({ responseDownloadLimit, overdueAfter }: ResponsesProp
             />
           </>
         ) : (
-          // TODO update strings
           <Card
             icon={<Image src="/img/mailbox.svg" alt="" width="200" height="200" />}
             title={t("downloadResponsesTable.card.noDeletedResponses")}
