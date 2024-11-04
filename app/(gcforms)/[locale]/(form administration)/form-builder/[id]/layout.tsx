@@ -15,6 +15,7 @@ import { TemplateStoreProvider } from "@lib/store/useTemplateStore";
 import { Language } from "@lib/types/form-builder-types";
 import { FormRecord } from "@lib/types";
 import { logMessage } from "@lib/logger";
+import { checkKeyExists } from "@lib/serviceAccount";
 
 export default async function Layout({
   children,
@@ -34,6 +35,8 @@ export default async function Layout({
 
   const allowGroupsFlag = allowGrouping();
 
+  let keyId: string | false = false;
+
   if (session && formID && formID !== "0000") {
     initialForm = await getFullTemplateByID(ability, formID).catch((e) => {
       if (e instanceof AccessControlError) {
@@ -46,14 +49,15 @@ export default async function Layout({
     if (initialForm === null) {
       redirect(`/${locale}/404`);
     }
+
+    keyId = await checkKeyExists(id);
   }
 
   return (
-    <TemplateStoreProvider {...{ ...initialForm, locale, allowGroupsFlag }}>
+    <TemplateStoreProvider {...{ ...initialForm, locale, allowGroupsFlag, keyId }}>
       <SaveTemplateProvider>
         <RefStoreProvider>
           <div>
-            {/* @TODO: Backlink?? */}
             <div className="flex flex-col">
               <SkipLink />
               <Header context="formBuilder" className="mb-0" />
@@ -63,7 +67,7 @@ export default async function Layout({
                 <div className="flex h-full flex-row gap-7">
                   <div id="left-nav" className="z-10 border-r border-slate-200 bg-white">
                     <div className="sticky top-0">
-                      <LeftNavigation id={id} />
+                      <LeftNavigation id={id} keyId={keyId} />
                     </div>
                   </div>
                   <GroupStoreProvider>

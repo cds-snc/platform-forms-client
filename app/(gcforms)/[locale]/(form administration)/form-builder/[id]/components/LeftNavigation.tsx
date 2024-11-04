@@ -29,7 +29,7 @@ const linkHelper = ({
   };
 };
 
-export const LeftNavigation = ({ id }: { id: string }) => {
+export const LeftNavigation = ({ id, keyId }: { id: string; keyId: string | false }) => {
   const {
     t,
     i18n: { language },
@@ -44,6 +44,8 @@ export const LeftNavigation = ({ id }: { id: string }) => {
   }
 
   const segment = useSelectedLayoutSegment();
+
+  const responsesRoute = keyId ? "api-responses" : "responses/new";
 
   return (
     <nav aria-label={t("navLabelFormBuilder")}>
@@ -91,7 +93,7 @@ export const LeftNavigation = ({ id }: { id: string }) => {
         <li>
           <LeftNav
             testid="responses"
-            {...linkHelper({ route: `responses/new`, id, segment, language })}
+            {...linkHelper({ route: responsesRoute, id, segment, language })}
             title={t("responsesNavLabel")}
           >
             <NavResponsesIcon />
