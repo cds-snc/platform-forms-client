@@ -1,6 +1,5 @@
 import crypto from "crypto";
-import { prisma } from "@lib/integration/prismaConnector";
-import { Prisma } from "@prisma/client";
+import { prisma, prismaErrors } from "@lib/integration/prismaConnector";
 import { logMessage } from "@lib/logger";
 import { logEvent } from "@lib/auditLogs";
 import { authCheckAndThrow } from "@lib/actions";
@@ -85,19 +84,12 @@ export const deleteKey = async (templateId: string) => {
   }
 
   await prisma.apiServiceAccount
-    .delete({
+    .deleteMany({
       where: {
         templateId: templateId,
       },
     })
-    .catch((e) => {
-      // Ignore the error if the record does not exist.
-      if (e instanceof Prisma.PrismaClientKnownRequestError && e.code === "P2025") {
-        return;
-      }
-      // continue to throw if it is a different type of error
-      throw e;
-    });
+    .catch((e) => prismaErrors(e, null));
 
   logEvent(
     ability.userID,
@@ -116,6 +108,10 @@ export const checkMachineUserExists = async (templateId: string) => {
 };
 
 export const checkKeyExists = async (templateId: string) => {
+  if (templateId === "0000") {
+    return false;
+  }
+
   const { ability } = await authCheckAndThrow();
   await checkUserHasTemplateOwnership(ability, templateId);
 
