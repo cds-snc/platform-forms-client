@@ -1,17 +1,25 @@
-import React, { useState } from "react";
+import React from "react";
 import { useTranslation } from "@i18n/client";
 import { ApiTooltip } from "./ApiTooltip";
-import { deleteServiceAccountKey } from "../actions";
+// import { deleteServiceAccountKey } from "../actions";
 
 import { SubmitButton as DeleteApiKeyButton } from "@clientComponents/globals/Buttons/SubmitButton";
 
-import { DeleteKeyFailed } from "./DeleteKeyFailed";
-import { DeleteKeySuccess } from "./DeleteKeySuccess";
-import { toast } from "@formBuilder/components/shared";
+// import { DeleteKeyFailed } from "./DeleteKeyFailed";
+// import { DeleteKeySuccess } from "./DeleteKeySuccess";
+// import { toast } from "@formBuilder/components/shared";
+import { EventKeys, useCustomEvent } from "@lib/hooks/useCustomEvent";
 
 export const DeleteKeyButton = ({ id, keyId }: { id: string; keyId: string }) => {
   const { t } = useTranslation("form-builder");
-  const [deleting, setDeleting] = useState(false);
+  // const [deleting, setDeleting] = useState(false);
+
+  const { Event } = useCustomEvent();
+
+  const openDeleteApiDialog = () => {
+    Event.fire(EventKeys.openDeleteApiKeyDialog, { id });
+  };
+
   return (
     <>
       <div className="mb-4">
@@ -19,10 +27,12 @@ export const DeleteKeyButton = ({ id, keyId }: { id: string; keyId: string }) =>
         {keyId} <ApiTooltip />
       </div>
       <DeleteApiKeyButton
-        loading={deleting}
+        loading={false}
         theme="destructive"
         className="mr-4"
         onClick={async () => {
+          openDeleteApiDialog();
+          /*
           setDeleting(true);
           const result = await deleteServiceAccountKey(id);
           if (result.error) {
@@ -33,6 +43,7 @@ export const DeleteKeyButton = ({ id, keyId }: { id: string; keyId: string }) =>
 
           toast.success(<DeleteKeySuccess id={id} />, "wide");
           setDeleting(false);
+          */
         }}
       >
         {t("settings.api.deleteKey")}

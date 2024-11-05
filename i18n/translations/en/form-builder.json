@@ -665,6 +665,20 @@
             "title": "Error creating API key",
             "message": "There was an error creating the API key. Please try again later."
           }
+        },
+        "deleteApiKeyDialog": {
+          "title": "Delete API key",
+          "lastUsed": "This key was last used to access responses on:",
+          "cautionTitle": "Caution:",
+          "cautionText": "Deleting this API key cannot be undone. Deletion will permanently stop the delivery of responses to all integrated systems. You will need to generate a new key and add it to your integration to restart API delivery.",
+          "stopText": "To temporarily stop submissions to this form consider closing the form instead",
+          "deleteKeyButton": "Delete key [FR]",
+          "error": {
+            "deleteFailed": {
+              "title": "Error deleting API key",
+              "message": "There was an error deleting the API key. Please try again later."
+            }
+          }
         }
       }
     }
