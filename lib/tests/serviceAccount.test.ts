@@ -12,7 +12,6 @@ import {
 import { Base, mockUserPrivileges } from "__utils__/permissions";
 import { AccessControlError, createAbility } from "@lib/privileges";
 import { prismaMock } from "@jestUtils";
-import { Prisma } from "@prisma/client";
 import { authCheckAndThrow } from "@lib/actions";
 import { logEvent } from "@lib/auditLogs";
 import type { Session } from "next-auth";
