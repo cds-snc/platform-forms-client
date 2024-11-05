@@ -31,7 +31,12 @@ export const ManageUsers = () => {
     let valid = true;
 
     // User already has access
-    if (usersWithAccess.find((user) => user.email === email && !hasOwnProperty(user, "expired"))) {
+    if (
+      usersWithAccess.find(
+        (user) =>
+          user.email.toLowerCase() === email.toLowerCase() && !hasOwnProperty(user, "expired")
+      )
+    ) {
       handleAddError(t("userAlreadyHasAccess", { email }));
       valid = false;
     }
@@ -43,7 +48,7 @@ export const ManageUsers = () => {
     }
 
     // Email already in the list
-    if (emailList.includes(email)) {
+    if (emailList.some((e) => e.toLowerCase() === email.toLowerCase())) {
       handleAddError(t("emailAlreadyInList", { email }));
       valid = false;
     }
@@ -83,7 +88,7 @@ export const ManageUsers = () => {
     if (!emails) return;
     setErrors([]);
 
-    const emailArray = emails.split(/[\s,]+/).map((email) => email.trim());
+    const emailArray = emails.split(/[\s,]+/).map((email) => email.trim().toLowerCase());
     const validEmails = emailArray.filter((email: string) => isValidEmail(email));
 
     setEmailList([...emailList, ...validEmails]);
