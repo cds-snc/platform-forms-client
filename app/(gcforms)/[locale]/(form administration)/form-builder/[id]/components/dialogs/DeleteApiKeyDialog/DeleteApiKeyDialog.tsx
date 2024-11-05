@@ -3,6 +3,8 @@ import React, { useCallback, useEffect, useState } from "react";
 import { useTranslation } from "@i18n/client";
 import { cn } from "@lib/utils";
 
+import { Trans } from "react-i18next";
+
 import { Button } from "@clientComponents/globals";
 import { Dialog, useDialogRef } from "@formBuilder/components/shared/Dialog";
 import { EventKeys, useCustomEvent } from "@lib/hooks/useCustomEvent";
@@ -15,6 +17,7 @@ import { DeleteKeySuccess } from "./DeleteKeySuccess";
 import { toast } from "@formBuilder/components/shared";
 
 import { deleteServiceAccountKey } from "../../../settings/api/actions";
+import Link from "next/link";
 
 type APIKeyCustomEventDetails = {
   id: string;
@@ -23,7 +26,7 @@ type APIKeyCustomEventDetails = {
 export const DeleteApiKeyDialog = () => {
   const dialog = useDialogRef();
   const { Event } = useCustomEvent();
-  const { t } = useTranslation("form-builder");
+  const { t, i18n } = useTranslation("form-builder");
 
   const [deleting, setDeleting] = useState(false);
 
@@ -112,13 +115,24 @@ export const DeleteApiKeyDialog = () => {
                 </p>
               </Alert.Danger>
             )}
-            <p>{t("settings.api.deleteApiKeyDialog.lastUsed")}</p>
-
-            <p>{t("settings.api.deleteApiKeyDialog.cautionTitle")}</p>
-
-            <p>{t("settings.api.deleteApiKeyDialog.cautionText")}</p>
-
-            <p>{t("settings.api.deleteApiKeyDialog.stopText")}</p>
+            <h3 className="text-lg font-bold">{t("settings.api.deleteApiKeyDialog.lastUsed")}</h3>
+            <h4 className="mb-2 text-2xl font-bold">
+              {t("settings.api.deleteApiKeyDialog.cautionTitle")}
+            </h4>
+            <p className="mb-4">{t("settings.api.deleteApiKeyDialog.cautionText")}</p>
+            <Trans
+              ns="form-builder"
+              i18nKey="settings.api.deleteApiKeyDialog.stopText"
+              defaults="<strong></strong> <a></a>"
+              components={{ strong: <strong />, a: <a /> }}
+            />{" "}
+            <Link
+              className="inline-block"
+              href={`${i18n.language}/form-builder/${id}/settings/manage`}
+            >
+              <span>{t("settings.api.deleteApiKeyDialog.stopText1")}</span>
+            </Link>{" "}
+            <span>{t("settings.api.deleteApiKeyDialog.stopText2")}</span>
           </div>
         </Dialog>
       )}
