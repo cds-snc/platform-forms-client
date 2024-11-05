@@ -42,8 +42,8 @@ export const Responses = ({ responseDownloadLimit, overdueAfter }: ResponsesProp
   //
   // TEMP
   //
-  const {getConfig} = useAppConfig();
-  const isApiKey = getConfig("apiKey");
+  const { getConfig } = useAppConfig();
+  const isApiKey = !!getConfig("apiKey");
   // For an Api user, no matter the responses route, always show the Api view with only confirmed responses
   const filter = isApiKey ? "confirmed" : statusFilter;
   //
@@ -84,23 +84,23 @@ export const Responses = ({ responseDownloadLimit, overdueAfter }: ResponsesProp
   if (isApiKey) {
     return (
       <>
-          <div aria-live="polite">
-            {state.submissions.length > 0 ? (
-              <>
-                <DownloadTable
-                  vaultSubmissions={state.submissions}
-                  formName={formName}
-                  formId={formId}
-                  nagwareResult={nagwareResult}
-                  responseDownloadLimit={responseDownloadLimit}
-                  lastEvaluatedKey={state.lastEvaluatedKey}
-                  overdueAfter={overdueAfter}
-                />
-              </>
-            ) : (
-              <>TODO no confirmed responses card</>
-            )}
-          </div>
+        <div aria-live="polite">
+          {state.submissions.length > 0 ? (
+            <>
+              <DownloadTable
+                vaultSubmissions={state.submissions}
+                formName={formName}
+                formId={formId}
+                nagwareResult={nagwareResult}
+                responseDownloadLimit={responseDownloadLimit}
+                lastEvaluatedKey={state.lastEvaluatedKey}
+                overdueAfter={overdueAfter}
+              />
+            </>
+          ) : (
+            <>TODO no confirmed responses card</>
+          )}
+        </div>
       </>
     );
   }

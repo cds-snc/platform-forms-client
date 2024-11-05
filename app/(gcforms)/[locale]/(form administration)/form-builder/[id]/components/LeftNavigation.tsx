@@ -46,11 +46,11 @@ export const LeftNavigation = ({ id }: { id: string }) => {
 
   const segment = useSelectedLayoutSegment();
 
-  // 
+  //
   // TEMP
   //
-  const {getConfig} = useAppConfig();
-  const isApiKey = getConfig("apiKey");
+  const { getConfig } = useAppConfig();
+  const isApiKey = !!getConfig("apiKey");
   const responsesRoute = isApiKey ? "responses/confirmed" : "responses/new";
 
   return (

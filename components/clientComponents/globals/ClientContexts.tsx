@@ -7,13 +7,13 @@ import { LiveMessagePovider } from "@lib/hooks/useLiveMessage";
 import { RefsProvider } from "@formBuilder/[id]/edit/components/RefsContext";
 import { FeatureFlagsProvider } from "@lib/hooks/useFeatureFlags";
 import { Flags } from "@lib/cache/types";
-import { AppConfigProvider } from "@lib/hooks/useAppConfig";
+import { AppConfig, AppConfigProvider } from "@lib/hooks/useAppConfig";
 
 export const ClientContexts: React.FC<{
   session: Session | null;
   children: React.ReactNode;
   featureFlags: Flags;
-  appConfig: Record<string, any>;
+  appConfig: AppConfig;
 }> = ({ session, children, featureFlags, appConfig }) => {
   return (
     <SessionProvider

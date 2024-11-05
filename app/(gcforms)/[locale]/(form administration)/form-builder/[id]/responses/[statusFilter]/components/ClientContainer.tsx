@@ -6,6 +6,7 @@ import { NavigationTabs } from "./NavigationTabs";
 import { ResponsesFooter } from "./ResponsesFooter";
 import { Responses } from "./Responses";
 import { ManageFormAccessDialogContainer } from "./ManageFormAccessDialog";
+import { useAppConfig } from "@lib/hooks/useAppConfig";
 
 export const ClientContainer = ({
   responseDownloadLimit,
@@ -22,10 +23,11 @@ export const ClientContainer = ({
 
   const isReady = useRehydrate();
 
-  // 
+  //
   // TEMP
   //
-  const isApiKey = true;
+  const { getConfig } = useAppConfig();
+  const isApiKey = !!getConfig("apiKey");
 
   // Wait until the template store is fully hydrated before rendering the content
   if (!isReady) return null;
