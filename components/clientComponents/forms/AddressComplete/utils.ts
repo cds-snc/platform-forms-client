@@ -91,6 +91,7 @@ export const getAddressComponents = async (
   }
 
   const streetAddress =
+    (resultData.POBoxNumber ? resultData.Line1 : "") +
     (resultData?.SubBuilding ? resultData?.SubBuilding + "-" : "") +
     resultData?.BuildingNumber +
     " " +
