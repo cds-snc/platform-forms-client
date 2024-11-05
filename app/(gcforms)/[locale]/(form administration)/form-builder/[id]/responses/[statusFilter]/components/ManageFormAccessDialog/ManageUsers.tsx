@@ -34,7 +34,8 @@ export const ManageUsers = () => {
     if (
       usersWithAccess.find(
         (user) =>
-          user.email.toLowerCase() === email.toLowerCase() && !hasOwnProperty(user, "expired")
+          user.email.toLowerCase() === email.toLowerCase().trim() &&
+          !hasOwnProperty(user, "expired")
       )
     ) {
       handleAddError(t("userAlreadyHasAccess", { email }));
