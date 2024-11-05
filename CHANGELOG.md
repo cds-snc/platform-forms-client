@@ -5,6 +5,19 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.25.1](https://github.com/cds-snc/platform-forms-client/compare/v3.25.0...v3.25.1) (2024-11-05)
+
+
+### Bug Fixes
+
+* Deleting a template without and associated API key ([#4572](https://github.com/cds-snc/platform-forms-client/issues/4572)) ([f87a212](https://github.com/cds-snc/platform-forms-client/commit/f87a212f59538be2888bb545f0ad8273295318f7))
+
+
+### Miscellaneous Chores
+
+* Check for unsaved forms when checking for API key ([#4571](https://github.com/cds-snc/platform-forms-client/issues/4571)) ([44bb8a0](https://github.com/cds-snc/platform-forms-client/commit/44bb8a0fa26e26edd21bef672d35eeefd3d108fe))
+* Create zip file with Readme for API key generation ([#4566](https://github.com/cds-snc/platform-forms-client/issues/4566)) ([52edaa3](https://github.com/cds-snc/platform-forms-client/commit/52edaa39da982c4b0c16906c412bdb24ccf2c10c))
+
 ## [3.25.0](https://github.com/cds-snc/platform-forms-client/compare/v3.24.3...v3.25.0) (2024-11-01)
 
 
