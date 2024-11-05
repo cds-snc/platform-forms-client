@@ -7,6 +7,7 @@ import { checkPrivilegesAsBoolean } from "@lib/privileges";
 import { isProductionEnvironment } from "@lib/origin";
 import { ApiKeyButton } from "./components/ApiKeyButton";
 import { ApiKeyDialog } from "../../components/dialogs/ApiKeyDialog/ApiKeyDialog";
+import { DeleteApiKeyDialog } from "../../components/dialogs/DeleteApiKeyDialog/DeleteApiKeyDialog";
 
 export async function generateMetadata({
   params: { locale },
@@ -49,6 +50,7 @@ export default async function Page({
         <ApiKeyButton showDelete keyId={keyId} />
       </div>
       <ApiKeyDialog />
+      <DeleteApiKeyDialog />
     </>
   );
 }
