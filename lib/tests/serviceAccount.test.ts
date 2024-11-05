@@ -12,7 +12,6 @@ import {
 import { Base, mockUserPrivileges } from "__utils__/permissions";
 import { AccessControlError, createAbility } from "@lib/privileges";
 import { prismaMock } from "@jestUtils";
-import { Prisma } from "@prisma/client";
 import { authCheckAndThrow } from "@lib/actions";
 import { logEvent } from "@lib/auditLogs";
 import type { Session } from "next-auth";
@@ -272,7 +271,9 @@ describe("Service Account functions", () => {
         getUserByLoginNameGlobal: jest.fn().mockResolvedValue({ user: { id: serviceAccountID } }),
         removeUser: jest.fn().mockResolvedValue({}),
       });
-      (prismaMock.apiServiceAccount.delete as jest.MockedFunction<any>).mockResolvedValue();
+      (prismaMock.apiServiceAccount.deleteMany as jest.MockedFunction<any>).mockResolvedValue({
+        count: 1,
+      });
       await deleteKey("templateId");
 
       expect(mockedLogEvent).toHaveBeenCalledWith(
@@ -287,7 +288,9 @@ describe("Service Account functions", () => {
         getUserByLoginNameGlobal: jest.fn().mockResolvedValue({ user: undefined }),
         removeUser: jest.fn().mockResolvedValue({}),
       });
-      (prismaMock.apiServiceAccount.delete as jest.MockedFunction<any>).mockResolvedValue();
+      (prismaMock.apiServiceAccount.deleteMany as jest.MockedFunction<any>).mockResolvedValue({
+        count: 1,
+      });
       await deleteKey("templateId");
 
       expect(mockedLogEvent).toHaveBeenCalledWith(
@@ -304,12 +307,9 @@ describe("Service Account functions", () => {
         getUserByLoginNameGlobal: jest.fn().mockResolvedValue({ user: { id: serviceAccountID } }),
         removeUser: jest.fn().mockResolvedValue({}),
       });
-      (prismaMock.apiServiceAccount.delete as jest.MockedFunction<any>).mockRejectedValue(
-        new Prisma.PrismaClientKnownRequestError("I'm a Prisma Error", {
-          code: "P2025",
-          clientVersion: "5",
-        })
-      );
+      (prismaMock.apiServiceAccount.deleteMany as jest.MockedFunction<any>).mockResolvedValue({
+        count: 0,
+      });
       await deleteKey("templateId");
 
       expect(mockedLogEvent).toHaveBeenCalledWith(
