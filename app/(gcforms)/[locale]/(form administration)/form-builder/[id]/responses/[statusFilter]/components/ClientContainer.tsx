@@ -22,9 +22,27 @@ export const ClientContainer = ({
 
   const isReady = useRehydrate();
 
+  // 
+  // TEMP
+  //
+  const isApiKey = true;
+
   // Wait until the template store is fully hydrated before rendering the content
   if (!isReady) return null;
 
+  // Delivery option is API
+  if (isApiKey) {
+    return (
+      <>
+        <div className="mr-10">
+          <h1>TODO Respones</h1>
+          <Responses responseDownloadLimit={responseDownloadLimit} overdueAfter={overdueAfter} />
+        </div>
+      </>
+    );
+  }
+
+  // Delivery option is Email
   if (deliveryOption && isEmailDelivery(deliveryOption)) {
     return (
       <DeliveryOptionEmail
@@ -39,6 +57,7 @@ export const ClientContainer = ({
     );
   }
 
+  // Delivery option is Download
   return (
     <>
       <div className="mr-10">

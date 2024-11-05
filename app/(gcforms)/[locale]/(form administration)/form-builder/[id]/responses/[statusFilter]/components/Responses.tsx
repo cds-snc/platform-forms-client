@@ -12,6 +12,7 @@ import { TitleAndDescription } from "./TitleAndDescription";
 import { NagLevel, VaultSubmissionList } from "@lib/types";
 import { RetrievalError } from "./RetrievalError";
 import { fetchSubmissions } from "../actions";
+import { useAppConfig } from "@lib/hooks/useAppConfig";
 
 export interface ResponsesProps {
   responseDownloadLimit: number;
@@ -38,11 +39,22 @@ export const Responses = ({ responseDownloadLimit, overdueAfter }: ResponsesProp
     error: boolean;
   }>({ loading: true, submissions: [], lastEvaluatedKey: null, error: false });
 
+  //
+  // TEMP
+  //
+  const {getConfig} = useAppConfig();
+  const isApiKey = getConfig("apiKey");
+  // For an Api user, no matter the responses route, always show the Api view with only confirmed responses
+  const filter = isApiKey ? "confirmed" : statusFilter;
+  //
+  // END: TEMP
+  //
+
   useEffect(() => {
     fetchSubmissions({
       formId,
       lastKey,
-      status: statusFilter,
+      status: filter,
     })
       .then(({ submissions, lastEvaluatedKey, error }) => {
         setState({
@@ -55,7 +67,7 @@ export const Responses = ({ responseDownloadLimit, overdueAfter }: ResponsesProp
       .catch(() =>
         setState({ loading: false, submissions: [], lastEvaluatedKey: null, error: true })
       );
-  }, [formId, lastKey, statusFilter]);
+  }, [formId, lastKey, statusFilter, filter]);
 
   const formName = name ? name : language === "fr" ? initialForm.titleFr : initialForm.titleEn;
 
@@ -67,6 +79,30 @@ export const Responses = ({ responseDownloadLimit, overdueAfter }: ResponsesProp
   }
   if (state.error) {
     return <RetrievalError />;
+  }
+
+  if (isApiKey) {
+    return (
+      <>
+          <div aria-live="polite">
+            {state.submissions.length > 0 ? (
+              <>
+                <DownloadTable
+                  vaultSubmissions={state.submissions}
+                  formName={formName}
+                  formId={formId}
+                  nagwareResult={nagwareResult}
+                  responseDownloadLimit={responseDownloadLimit}
+                  lastEvaluatedKey={state.lastEvaluatedKey}
+                  overdueAfter={overdueAfter}
+                />
+              </>
+            ) : (
+              <>TODO no confirmed responses card</>
+            )}
+          </div>
+      </>
+    );
   }
 
   return (

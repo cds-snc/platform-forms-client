@@ -12,10 +12,18 @@ export default async function Layout({ children }: { children: React.ReactNode }
     FeatureFlags.scheduleClosingDate,
     FeatureFlags.apiAccess,
   ]);
+
+  //
+  // TEMP
+  //
+  const appConfig = {
+    apiKey: "1234"
+  };
+
   return (
     <>
       <ReactHydrationCheck />
-      <ClientContexts session={session} featureFlags={featureFlags}>
+      <ClientContexts session={session} featureFlags={featureFlags} appConfig={appConfig}>
         {children}
       </ClientContexts>
     </>
