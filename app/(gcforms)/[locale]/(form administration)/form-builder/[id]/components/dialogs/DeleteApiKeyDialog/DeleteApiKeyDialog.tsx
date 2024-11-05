@@ -1,6 +1,7 @@
 "use client";
 import React, { useCallback, useEffect, useState } from "react";
 import { useTranslation } from "@i18n/client";
+import { cn } from "@lib/utils";
 
 import { Button } from "@clientComponents/globals";
 import { Dialog, useDialogRef } from "@formBuilder/components/shared/Dialog";
@@ -9,6 +10,11 @@ import { EventKeys, useCustomEvent } from "@lib/hooks/useCustomEvent";
 import { SubmitButton as DeleteButton } from "@clientComponents/globals/Buttons/SubmitButton";
 import * as Alert from "@clientComponents/globals/Alert/Alert";
 import { logMessage } from "@lib/logger";
+import { DeleteKeyFailed } from "./DeleteKeyFailed";
+import { DeleteKeySuccess } from "./DeleteKeySuccess";
+import { toast } from "@formBuilder/components/shared";
+
+import { deleteServiceAccountKey } from "../../../settings/api/actions";
 
 type APIKeyCustomEventDetails = {
   id: string;
@@ -18,6 +24,8 @@ export const DeleteApiKeyDialog = () => {
   const dialog = useDialogRef();
   const { Event } = useCustomEvent();
   const { t } = useTranslation("form-builder");
+
+  const [deleting, setDeleting] = useState(false);
 
   // Setup + Open dialog
   const [id, setId] = useState<string>("");
@@ -48,10 +56,17 @@ export const DeleteApiKeyDialog = () => {
 
   const handleDelete = async () => {
     setHasError(false);
-
-    alert(id);
-
     try {
+      setDeleting(true);
+      const result = await deleteServiceAccountKey(id);
+      if (result.error) {
+        toast.success(<DeleteKeyFailed />, "wide");
+        setDeleting(false);
+        return;
+      }
+
+      toast.success(<DeleteKeySuccess id={id} />, "wide");
+      setDeleting(false);
       dialog.current?.close();
       setIsOpen(false);
     } catch (error) {
@@ -66,8 +81,13 @@ export const DeleteApiKeyDialog = () => {
         {t("settings.api.dialog.cancelButton")}
       </Button>
 
-      <DeleteButton loading={false} theme="destructive" onClick={handleDelete}>
-        {t("settings.api.deleteApiKeyDialog.cancelButton")}
+      <DeleteButton
+        loading={deleting}
+        theme="destructive"
+        onClick={handleDelete}
+        className={cn("ml-5")}
+      >
+        {t("settings.api.deleteApiKeyDialog.deleteKeyButton")}
       </DeleteButton>
     </>
   );
