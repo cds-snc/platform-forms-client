@@ -10,7 +10,6 @@ import { Dialog, useDialogRef } from "@formBuilder/components/shared/Dialog";
 import { EventKeys, useCustomEvent } from "@lib/hooks/useCustomEvent";
 
 import { SubmitButton as DeleteButton } from "@clientComponents/globals/Buttons/SubmitButton";
-import * as Alert from "@clientComponents/globals/Alert/Alert";
 import { logMessage } from "@lib/logger";
 import { DeleteKeyFailed } from "./DeleteKeyFailed";
 import { DeleteKeySuccess } from "./DeleteKeySuccess";
@@ -34,8 +33,6 @@ export const DeleteApiKeyDialog = () => {
   const [id, setId] = useState<string>("");
   const [isOpen, setIsOpen] = useState(false);
 
-  const [hasError, setHasError] = useState(false);
-
   const handleOpen = useCallback((detail: APIKeyCustomEventDetails) => {
     if (detail) {
       detail.id && setId(detail.id);
@@ -53,18 +50,17 @@ export const DeleteApiKeyDialog = () => {
   // Actions
   const handleClose = () => {
     dialog.current?.close();
-    setHasError(false);
     setIsOpen(false);
   };
 
   const handleDelete = async () => {
-    setHasError(false);
     try {
       setDeleting(true);
       const result = await deleteServiceAccountKey(id);
       if (result.error) {
-        toast.success(<DeleteKeyFailed />, "wide");
+        toast.error(<DeleteKeyFailed />, "wide");
         setDeleting(false);
+        setIsOpen(false);
         return;
       }
 
@@ -74,7 +70,7 @@ export const DeleteApiKeyDialog = () => {
       setIsOpen(false);
     } catch (error) {
       logMessage.error(error);
-      setHasError(true);
+      setIsOpen(false);
     }
   };
 
@@ -105,17 +101,6 @@ export const DeleteApiKeyDialog = () => {
           title={t("settings.api.deleteApiKeyDialog.title")}
         >
           <div className="p-5">
-            {hasError && (
-              <Alert.Danger className="mb-4">
-                <Alert.Title headingTag="h3">
-                  {t("settings.api.deleteApiKeyDialog.error.deleteFailed.title")}
-                </Alert.Title>
-                <p className="mb-2">
-                  {t("settings.api.deleteApiKeyDialog.error.deleteFailed.message")}{" "}
-                </p>
-              </Alert.Danger>
-            )}
-            <h3 className="text-lg font-bold">{t("settings.api.deleteApiKeyDialog.lastUsed")}</h3>
             <h4 className="mb-2 text-2xl font-bold">
               {t("settings.api.deleteApiKeyDialog.cautionTitle")}
             </h4>

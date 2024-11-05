@@ -645,7 +645,6 @@
       },
       "deleteApiKeyDialog": {
         "title": "Delete API key [FR]",
-        "lastUsed": "This key was last used to access responses on: [FR]",
         "cautionTitle": "Caution: [FR]",
         "cautionText": "Deleting this API key cannot be undone. Deletion will permanently stop the delivery of responses to all integrated systems. You will need to generate a new key and add it to your integration to restart API delivery. [FR]",
         "stopText": "To temporarily stop submissions to this form consider",
