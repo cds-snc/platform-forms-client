@@ -24,13 +24,7 @@ export default async function Page({
   let keyId: string | false = false;
 
   if (process.env.APP_ENV !== "test") {
-    try {
-      if (id && id !== "0000") {
-        keyId = await checkKeyExists(id);
-      }
-    } catch (e) {
-      // no-op
-    }
+    keyId = await checkKeyExists(id);
   }
 
   return (
