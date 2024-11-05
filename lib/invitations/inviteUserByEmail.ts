@@ -12,7 +12,6 @@ import { prisma } from "@lib/integration/prismaConnector";
 import { sendEmail } from "@lib/integration/notifyConnector";
 import { inviteToCollaborateEmailTemplate } from "@lib/invitations/emailTemplates/inviteToCollaborateEmailTemplate";
 import { inviteToFormsEmailTemplate } from "@lib/invitations/emailTemplates/inviteToFormsEmailTemplate";
-import { getOriginSync } from "@lib/origin";
 import { logMessage } from "@lib/logger";
 import { Invitation } from "@prisma/client";
 import { logEvent } from "@lib/auditLogs";
@@ -29,7 +28,8 @@ export const inviteUserByEmail = async (
   ability: UserAbility,
   email: string,
   formId: string,
-  message: string
+  message: string,
+  baseUrl: string
 ) => {
   let invitation: Invitation;
 
@@ -72,7 +72,7 @@ export const inviteUserByEmail = async (
     }
 
     // send or resend invitation email
-    _sendInvitationEmail(sender, invitation, message, template.formRecord);
+    _sendInvitationEmail(sender, invitation, message, template.formRecord, baseUrl);
 
     logEvent(
       ability.userID,
@@ -86,7 +86,7 @@ export const inviteUserByEmail = async (
 
   // No previous invitation, create one
   invitation = await _createInvitation(email, formId);
-  _sendInvitationEmail(sender, invitation, message, template.formRecord);
+  _sendInvitationEmail(sender, invitation, message, template.formRecord, baseUrl);
 
   return;
 };
@@ -141,15 +141,14 @@ const _sendInvitationEmail = async (
   sender: { name: string | null; email: string },
   invitation: Invitation,
   message: string,
-  formRecord: FormRecord
+  formRecord: FormRecord,
+  baseUrl: string
 ) => {
   const { email, templateId } = invitation;
 
   logMessage.info(
     `Sending invitation email to ${email} for form ${templateId} with message ${message}`
   );
-
-  const HOST = getOriginSync();
 
   // Determine whether to send an invitation to register or an invitation to the form
   const user = await prisma.user.findFirst({
@@ -160,8 +159,8 @@ const _sendInvitationEmail = async (
 
   // User exists, send invitation to form
   if (user) {
-    const formUrlEn = `${HOST}/en/forms`;
-    const formUrlFr = `${HOST}/fr/forms`;
+    const formUrlEn = `${baseUrl}/en/forms`;
+    const formUrlFr = `${baseUrl}/fr/forms`;
 
     const emailContent = inviteToCollaborateEmailTemplate(
       sender.name || "",
@@ -181,8 +180,8 @@ const _sendInvitationEmail = async (
   }
 
   // User does not exist, send invitation to register
-  const registerUrlEn = `${HOST}/en/auth/register`;
-  const registerUrlFr = `${HOST}/fr/auth/register`;
+  const registerUrlEn = `${baseUrl}/en/auth/register`;
+  const registerUrlFr = `${baseUrl}/fr/auth/register`;
 
   const emailContent = inviteToFormsEmailTemplate(
     sender.name || "",
