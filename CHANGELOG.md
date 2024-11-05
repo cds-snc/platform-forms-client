@@ -5,6 +5,18 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.25.2](https://github.com/cds-snc/platform-forms-client/compare/v3.25.1...v3.25.2) (2024-11-05)
+
+
+### Bug Fixes
+
+* Invitation emails should be case insensitive ([#4580](https://github.com/cds-snc/platform-forms-client/issues/4580)) ([b3ef278](https://github.com/cds-snc/platform-forms-client/commit/b3ef278323f264a011b667712f53762712453b37))
+
+
+### Miscellaneous Chores
+
+* Add Delete key dialog ([#4581](https://github.com/cds-snc/platform-forms-client/issues/4581)) ([cb25ed8](https://github.com/cds-snc/platform-forms-client/commit/cb25ed8861cf88c67c6f285bbea8d25b3d24391c))
+
 ## [3.25.1](https://github.com/cds-snc/platform-forms-client/compare/v3.25.0...v3.25.1) (2024-11-05)
 
 ### Bug Fixes
