@@ -10,7 +10,7 @@ import { ResumeEditingForm } from "./components/ResumeEditingForm";
 import { getAllTemplatesForUser, TemplateOptions } from "@lib/templates";
 import { DeliveryOption } from "@lib/types";
 import { getOverdueTemplateIds } from "@lib/overdue";
-import { Invitations } from "./components/Invitations";
+import { Invitations } from "./components/Invitations/Invitations";
 import { prisma } from "@lib/integration/prismaConnector";
 
 export type FormsTemplate = {
@@ -79,7 +79,10 @@ export default async function Page({
 
     const invitations = await prisma.invitation.findMany({
       where: {
-        email: session.user.email,
+        email: {
+          equals: session.user.email,
+          mode: "insensitive",
+        },
         expires: {
           gt: new Date(),
         },

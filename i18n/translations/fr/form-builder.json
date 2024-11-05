@@ -643,6 +643,22 @@
         "text1": "Qu'est-ce que l'identifiant de la clé API?",
         "text2": "L'identifiant de la clé API n'est pas la clé elle-même. Il s'agit d'un moyen d'identifier une clé sans partager des informations protégées."
       },
+      "deleteApiKeyDialog": {
+        "title": "Delete API key [FR]",
+        "cautionTitle": "Caution: [FR]",
+        "cautionText": "Deleting this API key cannot be undone. Deletion will permanently stop the delivery of responses to all integrated systems. You will need to generate a new key and add it to your integration to restart API delivery. [FR]",
+        "stopText": "To temporarily stop submissions to this form consider",
+        "stopText1": "closing the form [FR]",
+        "stopText2": "instead. [FR]",
+        "cancelButton": "Annuler [FR]",
+        "deleteKeyButton": "Delete key [FR]",
+        "error": {
+          "deleteFailed": {
+            "title": "Error deleting API key",
+            "message": "There was an error deleting the API key. Please try again later."
+          }
+        }
+      },
       "dialog": {
         "title": "[FR]Generate API key",
         "heading": "Les clés API de Formulaires GC sont PROTÉGÉES B",

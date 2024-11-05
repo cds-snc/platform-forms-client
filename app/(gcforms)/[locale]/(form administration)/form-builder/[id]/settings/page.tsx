@@ -2,6 +2,7 @@ import { serverTranslation } from "@i18n";
 import { Metadata } from "next";
 import { ResponseDelivery } from "./components/ResponseDelivery";
 import { ApiKeyDialog } from "../components/dialogs/ApiKeyDialog/ApiKeyDialog";
+import { DeleteApiKeyDialog } from "../components/dialogs/DeleteApiKeyDialog/DeleteApiKeyDialog";
 import { checkKeyExists } from "@lib/serviceAccount";
 
 export async function generateMetadata({
@@ -21,6 +22,7 @@ export default async function Page({ params: { id } }: { params: { id: string } 
     <>
       <ResponseDelivery keyId={keyId} />
       <ApiKeyDialog />
+      <DeleteApiKeyDialog />
     </>
   );
 }

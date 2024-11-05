@@ -241,11 +241,7 @@ export const AddressComplete = (props: AddressCompleteProps): React.ReactElement
           {label}
         </legend>
 
-        {ariaDescribedBy && (
-          <Description id={`desc-${id}`} className="gc-form-group-context">
-            {ariaDescribedBy}
-          </Description>
-        )}
+        {ariaDescribedBy && <Description id={`${id}`}>{ariaDescribedBy}</Description>}
 
         {props.canadianOnly && (
           <div>
