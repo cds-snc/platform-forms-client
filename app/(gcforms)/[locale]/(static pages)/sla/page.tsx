@@ -12,18 +12,30 @@ export async function generateStaticParams() {
   }));
 }
 
-export async function generateMetadata({
-  params: { locale },
-}: {
-  params: { locale: string };
-}): Promise<Metadata> {
+export async function generateMetadata(
+  props: {
+    params: Promise<{ locale: string }>;
+  }
+): Promise<Metadata> {
+  const params = await props.params;
+
+  const {
+    locale
+  } = params;
+
   const { t } = await serverTranslation(["sla"], { lang: locale });
   return {
     title: t("title"),
   };
 }
 
-const SLA = async ({ params: { locale } }: { params: { locale: string } }) => {
+const SLA = async (props: { params: Promise<{ locale: string }> }) => {
+  const params = await props.params;
+
+  const {
+    locale
+  } = params;
+
   return (
     <RichText className="w-[100%] tablet:w-[90%] laptop:w-[70%]">
       {locale === "fr" ? frContent : enContent}

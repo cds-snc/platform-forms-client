@@ -265,7 +265,7 @@ export const GroupStoreProvider = ({
   children,
   ...props
 }: React.PropsWithChildren<Partial<GroupStoreProps>>) => {
-  const storeRef = useRef<GroupStore>();
+  const storeRef = useRef<GroupStore>(undefined);
 
   const store = useContext(TemplateStoreContext);
   props.templateStore = store || undefined;

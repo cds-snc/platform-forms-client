@@ -15,16 +15,18 @@ import { serverTranslation } from "@i18n";
 import { logMessage } from "@lib/logger";
 import { inviteUserByEmail } from "@lib/invitations/inviteUserByEmail";
 import { cancelInvitation as cancelInvitationAction } from "@lib/invitations/cancelInvitation";
+import { getOrigin } from "@lib/origin";
 
 export const sendInvitation = async (emails: string[], templateId: string, message: string) => {
   const { ability } = await authCheckAndThrow();
   const { t } = await serverTranslation("manage-form-access");
 
   const errors: string[] = [];
+  const baseUrl = await getOrigin();
 
   const invites = emails.map(async (email) => {
     try {
-      await inviteUserByEmail(ability, email, templateId, message);
+      await inviteUserByEmail(ability, email, templateId, message, baseUrl);
     } catch (e) {
       if (e instanceof UserAlreadyHasAccessError) {
         errors.push(t("userAlreadyHasAccess", { email }));

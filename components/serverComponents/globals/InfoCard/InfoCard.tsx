@@ -1,4 +1,4 @@
-import React from "react";
+import React, { type JSX } from "react";
 
 interface CardProps {
   children?: React.ReactNode;

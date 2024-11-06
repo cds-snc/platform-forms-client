@@ -8,24 +8,41 @@ import { Loader } from "@clientComponents/globals/Loader";
 
 import { UsersList } from "./components/server/UsersList";
 
-export async function generateMetadata({
-  params: { locale },
-}: {
-  params: { locale: string };
-}): Promise<Metadata> {
+export async function generateMetadata(
+  props: {
+    params: Promise<{ locale: string }>;
+  }
+): Promise<Metadata> {
+  const params = await props.params;
+
+  const {
+    locale
+  } = params;
+
   const { t } = await serverTranslation("admin-users", { lang: locale });
   return {
     title: `${t("accounts")}`,
   };
 }
 
-export default async function Page({
-  params: { locale },
-  searchParams: { userState },
-}: {
-  params: { locale: string };
-  searchParams: { userState?: string };
-}) {
+export default async function Page(
+  props: {
+    params: Promise<{ locale: string }>;
+    searchParams: Promise<{ userState?: string }>;
+  }
+) {
+  const searchParams = await props.searchParams;
+
+  const {
+    userState
+  } = searchParams;
+
+  const params = await props.params;
+
+  const {
+    locale
+  } = params;
+
   const { ability } = await authCheckAndRedirect();
 
   // Can the user view this page
