@@ -14,7 +14,7 @@ const BulletPoint = () => {
   return <span className="px-3">&#x2022;</span>;
 };
 
-export const FormBuilderLinks = () => {
+const FormBuilderLinks = () => {
   const { t } = useTranslation("common");
   return (
     <span className="mr-10 inline-block">
