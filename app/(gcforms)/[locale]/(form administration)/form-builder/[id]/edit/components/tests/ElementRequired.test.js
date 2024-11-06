@@ -13,7 +13,6 @@ describe("ElementRequired", () => {
   });
 
   it("should render required checkbox", async () => {
-    const promise = Promise.resolve();
     const user = userEvent.setup();
 
     const item = { id: 1, index: 0, ...store.elements[0] };
@@ -27,10 +26,8 @@ describe("ElementRequired", () => {
 
     expect(checkbox).toHaveAttribute("id", "required-1-id");
 
-    await user.click(checkbox);
-
     await act(async () => {
-      await promise;
+      await user.click(checkbox);
     });
   });
 });

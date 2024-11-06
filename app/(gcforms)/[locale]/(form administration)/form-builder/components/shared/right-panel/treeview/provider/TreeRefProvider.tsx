@@ -3,9 +3,9 @@ import { TreeEnvironmentRef, TreeRef } from "react-complex-tree";
 import { TreeDataProviderProps } from "../types";
 
 export type treeContextType = {
-  treeView: RefObject<TreeDataProviderProps> | null;
-  environment: RefObject<TreeEnvironmentRef> | null;
-  tree: RefObject<TreeRef> | null;
+  treeView: RefObject<TreeDataProviderProps | null> | null;
+  environment: RefObject<TreeEnvironmentRef | null> | null;
+  tree: RefObject<TreeRef | null> | null;
   open: boolean;
   togglePanel?: (state: boolean) => void;
 };

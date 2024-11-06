@@ -8,7 +8,7 @@ import { headers } from "next/headers";
 export const POST = middleware([sessionExists()], async (req, props) => {
   try {
     const { session } = props as WithRequired<MiddlewareProps, "session">;
-    const reqHeaders = headers();
+    const reqHeaders = await headers();
     const host = reqHeaders.get("host");
 
     const { emails, form, filename }: { emails?: string[]; form?: string; filename?: string } =

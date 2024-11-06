@@ -28,6 +28,7 @@ const DropdownOption = (props: DropdownOptionProps): React.ReactElement => {
 export const Dropdown = (props: DropdownProps): React.ReactElement => {
   const { children, id, name, className, choices = [], required, ariaDescribedBy } = props;
   const { t } = useTranslation("common");
+  // @ts-expect-error fix this
   const [field, meta] = useField(props);
 
   const initialDropdownOption = <option value="">{t("dropdown-initial-option-text")}</option>;
