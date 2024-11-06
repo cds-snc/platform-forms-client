@@ -9,7 +9,7 @@ type TagProps = {
   onRemove: (tag: string) => void;
 };
 
-const Tag = ({ tag, onRemove }: TagProps) => {
+export const Tag = ({ tag, onRemove }: TagProps) => {
   const { t } = useTranslation("form-builder");
   const label = `${t("remove")} ${tag}`;
   return (
