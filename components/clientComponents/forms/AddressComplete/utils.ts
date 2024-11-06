@@ -90,12 +90,20 @@ export const getAddressComponents = async (
     resultData = addressCompleteResult[0];
   }
 
-  const streetAddress =
+  let streetAddress =
     (resultData.POBoxNumber ? resultData.Line1 : "") +
     (resultData?.SubBuilding ? resultData?.SubBuilding + "-" : "") +
     resultData?.BuildingNumber +
     " " +
     resultData?.Street;
+
+  if (streetAddress.trim() === "") {
+    streetAddress = resultData.Line1; // If we have no address, try line1. (eg: Rural Route 4)
+  }
+
+  if (streetAddress.trim() === "") {
+    streetAddress = resultData.Line2; // If we still have no address, try line2. (eg: 12 De Octubre in Managua, Nicaragua)
+  }
 
   const address = {
     streetAddress: streetAddress,

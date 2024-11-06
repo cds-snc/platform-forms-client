@@ -1,4 +1,4 @@
-import React, { ReactElement } from "react";
+import React, { ReactElement, type JSX } from "react";
 import { logMessage } from "@lib/logger";
 import {
   Description,
@@ -279,12 +279,11 @@ function _buildForm(element: FormElement, lang: string): ReactElement {
       const addressComponents = element.properties.addressComponents;
       return (
         <div className="focus-group">
-          {description && <Description id={`${id}`}>{description}</Description>}
           <AddressComplete
             label={labelText}
             id={`${id}`}
             name={`${id}`}
-            ariaDescribedBy={description ? `desc-${id}` : undefined}
+            ariaDescribedBy={description}
             key={`${id}-${lang}`}
             splitAddress={addressComponents?.splitAddress}
             canadianOnly={addressComponents?.canadianOnly}
