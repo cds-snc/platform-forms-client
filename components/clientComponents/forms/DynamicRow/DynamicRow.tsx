@@ -55,7 +55,7 @@ export const DynamicGroup = (props: DynamicGroupProps): React.ReactElement => {
   } = props;
   const [field, meta, helpers] = useField(props);
   const [rows, setRows] = useState(() => Array(field.value.length).fill(rowElements));
-  const rowRefs = useRef<Array<React.RefObject<HTMLFieldSetElement>>>(
+  const rowRefs = useRef<Array<React.RefObject<HTMLFieldSetElement | null>>>(
     Array(field.value.length).fill(createRef<HTMLFieldSetElement>())
   );
   const focusedRow = useRef<number | null>(null);

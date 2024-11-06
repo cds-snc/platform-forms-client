@@ -2,8 +2,9 @@ import React from "react";
 import { RichText } from "../../../../../../../../components/clientComponents/forms/RichText/RichText";
 import { AcceptButton } from "../client/AcceptButton";
 import { serverTranslation } from "@i18n";
-import enAcceptableUse from "@content/en/responsibilities.md";
-import frAcceptableUse from "@content/fr/responsibilities.md";
+
+import enAcceptableUse from "../../../../../../../../public/static/content/en/responsibilities.md";
+import frAcceptableUse from "../../../../../../../../public/static/content/fr/responsibilities.md";
 
 export const AcceptableUseTerms = async ({ locale }: { locale: string }) => {
   const { t } = await serverTranslation("common", { lang: locale });

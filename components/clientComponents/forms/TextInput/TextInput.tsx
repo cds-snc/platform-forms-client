@@ -16,6 +16,8 @@ export const TextInput = (
 ): React.ReactElement => {
   const { id, type, className, required, ariaDescribedBy, placeholder, autoComplete, maxLength } =
     props;
+
+  // @ts-expect-error fix this
   const [field, meta, helpers] = useField(props);
   const { t } = useTranslation("common");
 
