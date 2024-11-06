@@ -267,7 +267,7 @@ export const closeForm = async ({
     // closingDate: a current or past date means the form is closed
     // closingDate: a future date means the form is scheduled to close in the future
 
-    if (closingDate && !isValidDateString(String(closingDate))) {
+    if (closingDate && !isValidDateString(closingDate)) {
       throw new Error(`Invalid closing date. Request information: { ${formID}, ${closingDate} }`);
     }
 
