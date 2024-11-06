@@ -35,6 +35,7 @@ import { toast } from "@formBuilder/components/shared/Toast";
 import { ErrorSaving } from "@formBuilder/components/shared/ErrorSaving";
 import { ApiKeyButton } from "../api/components/ApiKeyButton";
 import { ApiDocNotes } from "./ApiDocNotes";
+import { useFormBuilderConfig } from "@lib/hooks/useFormBuilderConfig";
 
 enum DeliveryOption {
   vault = "vault",
@@ -53,16 +54,13 @@ export enum PurposeOption {
   nonAdmin = "nonAdmin",
 }
 
-type ResponseDeliveryProps = {
-  keyId: string | false;
-};
-
-export const ResponseDelivery = ({ keyId }: ResponseDeliveryProps) => {
+export const ResponseDelivery = () => {
   const { t, i18n } = useTranslation("form-builder");
   const { status } = useSession();
   const session = useSession();
   const { refreshData } = useRefresh();
   const lang = i18n.language === "en" ? "en" : "fr";
+  const { apiKey: keyId } = useFormBuilderConfig();
 
   const {
     email,
@@ -411,7 +409,7 @@ export const ResponseDelivery = ({ keyId }: ResponseDeliveryProps) => {
                     </span>
                   </div>
                   <div className="flex">
-                    <ApiKeyButton showDelete keyId={keyId} />{" "}
+                    <ApiKeyButton showDelete />{" "}
                     <div className="mt-2">
                       <ResponseDeliveryHelpButtonWithApi />
                     </div>

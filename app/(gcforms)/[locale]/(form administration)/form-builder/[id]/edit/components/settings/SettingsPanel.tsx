@@ -20,20 +20,22 @@ import { safeJSONParse } from "@lib/utils";
 import { useTemplateContext } from "@lib/hooks/form-builder/useTemplateContext";
 import { FormProperties } from "@lib/types";
 import { useFeatureFlags } from "@lib/hooks/useFeatureFlags";
+import { useFormBuilderConfig } from "@lib/hooks/useFormBuilderConfig";
 
 enum DeliveryOption {
   vault = "vault",
   email = "email",
 }
 
-export const SettingsPanel = ({ keyId = false }: { keyId?: string | false }) => {
+export const SettingsPanel = () => {
   const { t, i18n } = useTranslation("form-builder");
   const lang = i18n.language === "en" ? "en" : "fr";
   const { status } = useSession();
 
   const { getFlag } = useFeatureFlags();
+  const { hasApiKey: hasKey, apiKey } = useFormBuilderConfig();
   const apiAccess = getFlag("apiAccess");
-  const hasApiKey = keyId && apiAccess ? true : false;
+  const hasApiKey = hasKey && apiAccess ? true : false;
 
   const {
     id,
@@ -204,7 +206,7 @@ export const SettingsPanel = ({ keyId = false }: { keyId?: string | false }) => 
         </div>
       </div>
       <SettingsModal
-        keyId={keyId}
+        keyId={apiKey}
         show={showSettings}
         id={id}
         isPublished={isPublished}

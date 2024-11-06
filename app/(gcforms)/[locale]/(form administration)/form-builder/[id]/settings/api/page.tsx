@@ -1,7 +1,6 @@
 import { serverTranslation } from "@i18n";
 import { Metadata } from "next";
 import { authCheckAndRedirect } from "@lib/actions";
-import { checkKeyExists } from "@lib/serviceAccount";
 import { redirect } from "next/navigation";
 import { checkPrivilegesAsBoolean } from "@lib/privileges";
 import { isProductionEnvironment } from "@lib/origin";
@@ -43,13 +42,11 @@ export default async function Page(props: { params: Promise<{ id: string; locale
     redirect(`/${locale}/form-builder/${id}/settings`);
   }
 
-  const keyId = await checkKeyExists(id);
-
   return (
     <>
       <div className="mb-10">
         <h2 className="mb-6">{t("settings.api.title")}</h2>
-        <ApiKeyButton showDelete keyId={keyId} />
+        <ApiKeyButton showDelete />
       </div>
       <ApiKeyDialog />
       <DeleteApiKeyDialog />

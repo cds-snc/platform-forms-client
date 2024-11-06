@@ -3,7 +3,6 @@ import { Metadata } from "next";
 import { ResponseDelivery } from "./components/ResponseDelivery";
 import { ApiKeyDialog } from "../components/dialogs/ApiKeyDialog/ApiKeyDialog";
 import { DeleteApiKeyDialog } from "../components/dialogs/DeleteApiKeyDialog/DeleteApiKeyDialog";
-import { checkKeyExists } from "@lib/serviceAccount";
 
 export async function generateMetadata(props: {
   params: Promise<{ locale: string }>;
@@ -18,14 +17,10 @@ export async function generateMetadata(props: {
   };
 }
 
-export default async function Page(props: { params: Promise<{ id: string }> }) {
-  const params = await props.params;
-  const { id } = params;
-
-  const keyId = await checkKeyExists(id);
+export default async function Page() {
   return (
     <>
-      <ResponseDelivery keyId={keyId} />
+      <ResponseDelivery />
       <ApiKeyDialog />
       <DeleteApiKeyDialog />
     </>

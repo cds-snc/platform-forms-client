@@ -40,6 +40,7 @@ export const useFormBuilderConfig = () => {
   };
 
   return {
+    // TODO: disable anything for testing? if (process.env.APP_ENV !== "test") {...
     apiKey: getConfig("apiKey"),
     hasApiKey: Boolean(getConfig("apiKey")),
     updateApiKey: (value: string) => updateConfig("apiKey", value),
