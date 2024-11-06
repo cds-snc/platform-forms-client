@@ -8009,7 +8009,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@testing-library/jest-dom@npm:^6.2.0":
+"@testing-library/jest-dom@npm:^6.6.3":
   version: 6.6.3
   resolution: "@testing-library/jest-dom@npm:6.6.3"
   dependencies:
@@ -13647,7 +13647,7 @@ __metadata:
     "@radix-ui/react-dropdown-menu": "npm:2.1.1"
     "@radix-ui/react-tooltip": "npm:^1.1.1"
     "@testing-library/dom": "npm:^8.20.1"
-    "@testing-library/jest-dom": "npm:^6.2.0"
+    "@testing-library/jest-dom": "npm:^6.6.3"
     "@testing-library/react": "npm:^14.1.2"
     "@testing-library/user-event": "npm:^14.5.1"
     "@types/d3-hierarchy": "npm:^3"
