@@ -55,7 +55,7 @@ COPY bin/pr-review-entrypoint.sh ./entrypoint.sh
 # Update to latest yarn version
 RUN corepack enable && yarn set version berry
 # Required by the entrypoint.sh to load the SSM ParameterStore environment variables
-RUN apk add --no-cache aws-cli-v2
+RUN apk update && apk add --no-cache aws-cli
 
 # Lambda web adapter: https://github.com/awslabs/aws-lambda-web-adapter
 # The public.ecr.aws/awsguru/aws-lambda-adapter:0.7.0 image reference in the docs has
