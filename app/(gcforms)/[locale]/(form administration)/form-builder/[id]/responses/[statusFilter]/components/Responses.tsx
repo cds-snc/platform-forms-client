@@ -12,7 +12,7 @@ import { TitleAndDescription } from "./TitleAndDescription";
 import { NagLevel, VaultSubmissionList } from "@lib/types";
 import { RetrievalError } from "./RetrievalError";
 import { fetchSubmissions } from "../actions";
-import { useAppConfig } from "@lib/hooks/useAppConfig";
+import { useFormBuilderConfig } from "@lib/hooks/useFormBuilderConfig";
 
 export interface ResponsesProps {
   responseDownloadLimit: number;
@@ -39,16 +39,10 @@ export const Responses = ({ responseDownloadLimit, overdueAfter }: ResponsesProp
     error: boolean;
   }>({ loading: true, submissions: [], lastEvaluatedKey: null, error: false });
 
-  //
-  // TEMP
-  //
-  const { getConfig } = useAppConfig();
-  const isApiKey = !!getConfig("apiKey");
+  const { hasApiKey } = useFormBuilderConfig();
+
   // For an Api user, no matter the responses route, always show the Api view with only confirmed responses
-  const filter = isApiKey ? "confirmed" : statusFilter;
-  //
-  // END: TEMP
-  //
+  const filter = hasApiKey ? "confirmed" : statusFilter;
 
   useEffect(() => {
     fetchSubmissions({
@@ -81,7 +75,7 @@ export const Responses = ({ responseDownloadLimit, overdueAfter }: ResponsesProp
     return <RetrievalError />;
   }
 
-  if (isApiKey) {
+  if (hasApiKey) {
     return (
       <>
         <div aria-live="polite">

@@ -3,7 +3,6 @@ import { ClientContexts } from "@clientComponents/globals/ClientContexts";
 import { ReactHydrationCheck } from "@clientComponents/globals";
 import { getSomeFlags } from "@lib/cache/flags";
 import { FeatureFlags } from "@lib/cache/types";
-import { AppConfig } from "@lib/hooks/useAppConfig";
 
 export default async function Layout({ children }: { children: React.ReactNode }) {
   const { session } = await authCheckAndThrow().catch(() => ({ session: null }));
@@ -14,17 +13,10 @@ export default async function Layout({ children }: { children: React.ReactNode }
     FeatureFlags.apiAccess,
   ]);
 
-  //
-  // TEMP
-  //
-  const appConfig: AppConfig = {
-    apiKey: "1234",
-  };
-
   return (
     <>
       <ReactHydrationCheck />
-      <ClientContexts session={session} featureFlags={featureFlags} appConfig={appConfig}>
+      <ClientContexts session={session} featureFlags={featureFlags}>
         {children}
       </ClientContexts>
     </>

@@ -15,6 +15,7 @@ import { SubmitButton as DownloadButton } from "@clientComponents/globals/Button
 import * as Alert from "@clientComponents/globals/Alert/Alert";
 import { logMessage } from "@lib/logger";
 import { sendResponsesToVault } from "@formBuilder/actions";
+import { useFormBuilderConfig } from "@lib/hooks/useFormBuilderConfig";
 
 type APIKeyCustomEventDetails = {
   id: string;
@@ -28,6 +29,8 @@ export const ApiKeyDialog = () => {
   // Setup + Open dialog
   const [id, setId] = useState<string>("");
   const [isOpen, setIsOpen] = useState(false);
+
+  const { updateApiKey } = useFormBuilderConfig();
 
   // Handle loading state for download button
   const [generating, setGenerating] = useState(false);
@@ -85,6 +88,7 @@ export const ApiKeyDialog = () => {
       await downloadKey(JSON.stringify(key), id);
 
       setGenerating(false);
+      updateApiKey(key.keyId);
       dialog.current?.close();
       setIsOpen(false);
     } catch (error) {

@@ -6,7 +6,7 @@ import { NavigationTabs } from "./NavigationTabs";
 import { ResponsesFooter } from "./ResponsesFooter";
 import { Responses } from "./Responses";
 import { ManageFormAccessDialogContainer } from "./ManageFormAccessDialog";
-import { useAppConfig } from "@lib/hooks/useAppConfig";
+import { useFormBuilderConfig } from "@lib/hooks/useFormBuilderConfig";
 
 export const ClientContainer = ({
   responseDownloadLimit,
@@ -23,17 +23,13 @@ export const ClientContainer = ({
 
   const isReady = useRehydrate();
 
-  //
-  // TEMP
-  //
-  const { getConfig } = useAppConfig();
-  const isApiKey = !!getConfig("apiKey");
+  const { hasApiKey } = useFormBuilderConfig();
 
   // Wait until the template store is fully hydrated before rendering the content
   if (!isReady) return null;
 
   // Delivery option is API
-  if (isApiKey) {
+  if (hasApiKey) {
     return (
       <>
         <div className="mr-10">

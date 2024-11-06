@@ -15,23 +15,18 @@ import { TemplateStoreProvider } from "@lib/store/useTemplateStore";
 import { Language } from "@lib/types/form-builder-types";
 import { FormRecord } from "@lib/types";
 import { logMessage } from "@lib/logger";
+import { checkKeyExists } from "@lib/serviceAccount";
+import { FormBuilderConfigProvider, FormBuilderConfig } from "@lib/hooks/useFormBuilderConfig";
 
-export default async function Layout(
-  props: {
-    children: React.ReactNode;
-    params: Promise<{ locale: string; id: string }>;
-  }
-) {
+export default async function Layout(props: {
+  children: React.ReactNode;
+  params: Promise<{ locale: string; id: string }>;
+}) {
   const params = await props.params;
 
-  const {
-    locale,
-    id
-  } = params;
+  const { locale, id } = params;
 
-  const {
-    children
-  } = props;
+  const { children } = props;
 
   let initialForm: FormRecord | null = null;
 
@@ -43,6 +38,10 @@ export default async function Layout(
   const formID = id || null;
 
   const allowGroupsFlag = allowGrouping();
+
+  const formBuilderConfig: FormBuilderConfig = {
+    apiKey: "",
+  };
 
   if (session && formID && formID !== "0000") {
     initialForm = await getFullTemplateByID(ability, formID).catch((e) => {
@@ -56,42 +55,49 @@ export default async function Layout(
     if (initialForm === null) {
       redirect(`/${locale}/404`);
     }
+
+    formBuilderConfig.apiKey =
+      (await checkKeyExists(formID).catch((e) => {
+        logMessage.warn(`Error fetching API key for form-builder/[id] Layout: ${e.message}`);
+      })) || "";
   }
 
   return (
-    <TemplateStoreProvider {...{ ...initialForm, locale, allowGroupsFlag }}>
-      <SaveTemplateProvider>
-        <RefStoreProvider>
-          <div>
-            {/* @TODO: Backlink?? */}
-            <div className="flex flex-col">
-              <SkipLink />
-              <Header context="formBuilder" className="mb-0" />
-              <div className="shrink-0 grow basis-auto bg-gray-soft">
-                <ToastContainer containerId="default" />
-                <ToastContainer limit={1} containerId="wide" autoClose={false} width="600px" />
-                <div className="flex h-full flex-row gap-7">
-                  <div id="left-nav" className="z-10 border-r border-slate-200 bg-white">
-                    <div className="sticky top-0">
-                      <LeftNavigation id={id} />
+    <FormBuilderConfigProvider formBuilderConfig={formBuilderConfig}>
+      <TemplateStoreProvider {...{ ...initialForm, locale, allowGroupsFlag }}>
+        <SaveTemplateProvider>
+          <RefStoreProvider>
+            <div>
+              {/* @TODO: Backlink?? */}
+              <div className="flex flex-col">
+                <SkipLink />
+                <Header context="formBuilder" className="mb-0" />
+                <div className="shrink-0 grow basis-auto bg-gray-soft">
+                  <ToastContainer containerId="default" />
+                  <ToastContainer limit={1} containerId="wide" autoClose={false} width="600px" />
+                  <div className="flex h-full flex-row gap-7">
+                    <div id="left-nav" className="z-10 border-r border-slate-200 bg-white">
+                      <div className="sticky top-0">
+                        <LeftNavigation id={id} />
+                      </div>
                     </div>
+                    <GroupStoreProvider>
+                      <main
+                        id="content"
+                        className="form-builder my-7 w-full min-h-[calc(100vh-300px)]"
+                      >
+                        {children}
+                      </main>
+                      {allowGroupsFlag && <RightPanel id={id} lang={locale as Language} />}
+                    </GroupStoreProvider>
                   </div>
-                  <GroupStoreProvider>
-                    <main
-                      id="content"
-                      className="form-builder my-7 w-full min-h-[calc(100vh-300px)]"
-                    >
-                      {children}
-                    </main>
-                    {allowGroupsFlag && <RightPanel id={id} lang={locale as Language} />}
-                  </GroupStoreProvider>
                 </div>
               </div>
+              <Footer displayFormBuilderFooter className="mt-0 lg:mt-0" />
             </div>
-            <Footer displayFormBuilderFooter className="mt-0 lg:mt-0" />
-          </div>
-        </RefStoreProvider>
-      </SaveTemplateProvider>
-    </TemplateStoreProvider>
+          </RefStoreProvider>
+        </SaveTemplateProvider>
+      </TemplateStoreProvider>
+    </FormBuilderConfigProvider>
   );
 }

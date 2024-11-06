@@ -11,7 +11,7 @@ import {
 import { useTemplateStore } from "@lib/store/useTemplateStore";
 import { LeftNav } from "@clientComponents/globals/Buttons/LeftNav";
 import { useSelectedLayoutSegment } from "next/navigation";
-import { useAppConfig } from "@lib/hooks/useAppConfig";
+import { useFormBuilderConfig } from "@lib/hooks/useFormBuilderConfig";
 
 const linkHelper = ({
   route,
@@ -46,12 +46,8 @@ export const LeftNavigation = ({ id }: { id: string }) => {
 
   const segment = useSelectedLayoutSegment();
 
-  //
-  // TEMP
-  //
-  const { getConfig } = useAppConfig();
-  const isApiKey = !!getConfig("apiKey");
-  const responsesRoute = isApiKey ? "responses/confirmed" : "responses/new";
+  const { hasApiKey } = useFormBuilderConfig();
+  const responsesRoute = hasApiKey ? "responses/confirmed" : "responses/new";
 
   return (
     <nav aria-label={t("navLabelFormBuilder")}>
