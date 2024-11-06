@@ -1,6 +1,5 @@
 "use client";
 import React, { useState } from "react";
-import { useFormState } from "react-dom";
 
 import {
   TextInput,
@@ -14,6 +13,7 @@ import { useTranslation } from "@i18n/client";
 import { sendResetLink, ErrorStates } from "../../action";
 import { ErrorStatus } from "@clientComponents/forms/Alert/Alert";
 import { SubmitButton } from "./SubmitButton";
+import { useActionState } from "react";
 
 export const InitiateResetForm = ({
   confirmationPage,
@@ -38,7 +38,7 @@ export const InitiateResetForm = ({
     return {};
   };
 
-  const [state, formAction] = useFormState(localFormAction, {});
+  const [state, formAction] = useActionState(localFormAction, {});
 
   if (linkSent) return confirmationPage;
   if (state.authError) return errorPage;

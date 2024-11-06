@@ -12,22 +12,35 @@ import { InitiateResetForm, QuestionChallengeForm } from "./components/client";
 
 export const dynamic = "force-dynamic";
 
-export async function generateMetadata({
-  params: { locale },
-}: {
-  params: { locale: string };
-}): Promise<Metadata> {
+export async function generateMetadata(
+  props: {
+    params: Promise<{ locale: string }>;
+  }
+): Promise<Metadata> {
+  const params = await props.params;
+
+  const {
+    locale
+  } = params;
+
   const { t } = await serverTranslation("reset-password", { lang: locale });
   return {
     title: t("resetPassword.title"),
   };
 }
 
-export default async function Page({
-  params: { locale, token },
-}: {
-  params: { locale: string; token?: string[] };
-}) {
+export default async function Page(
+  props: {
+    params: Promise<{ locale: string; token?: string[] }>;
+  }
+) {
+  const params = await props.params;
+
+  const {
+    locale,
+    token
+  } = params;
+
   if (token && token[0]) {
     try {
       const email = await getPasswordResetAuthenticatedUserEmailAddress(token[0]);

@@ -5,18 +5,30 @@ import { checkPrivilegesAsBoolean } from "@lib/privileges";
 import { Profile } from "./components/server/Profile";
 import { authCheckAndRedirect } from "@lib/actions";
 
-export async function generateMetadata({
-  params: { locale },
-}: {
-  params: { locale: string };
-}): Promise<Metadata> {
+export async function generateMetadata(
+  props: {
+    params: Promise<{ locale: string }>;
+  }
+): Promise<Metadata> {
+  const params = await props.params;
+
+  const {
+    locale
+  } = params;
+
   const { t } = await serverTranslation("profile", { lang: locale });
   return {
     title: t("title"),
   };
 }
 
-export default async function Page({ params: { locale } }: { params: { locale: string } }) {
+export default async function Page(props: { params: Promise<{ locale: string }> }) {
+  const params = await props.params;
+
+  const {
+    locale
+  } = params;
+
   const { session, ability } = await authCheckAndRedirect();
 
   const hasPublishPrivilege = checkPrivilegesAsBoolean(ability, [

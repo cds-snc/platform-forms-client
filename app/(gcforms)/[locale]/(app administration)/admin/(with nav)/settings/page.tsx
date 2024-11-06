@@ -7,11 +7,17 @@ import { Suspense } from "react";
 import Loader from "@clientComponents/globals/Loader";
 import { Messages } from "./components/client/Messages";
 
-export async function generateMetadata({
-  params: { locale },
-}: {
-  params: { locale: string };
-}): Promise<Metadata> {
+export async function generateMetadata(
+  props: {
+    params: Promise<{ locale: string }>;
+  }
+): Promise<Metadata> {
+  const params = await props.params;
+
+  const {
+    locale
+  } = params;
+
   const { t } = await serverTranslation("admin-settings", { lang: locale });
   return {
     title: `${t("title")}`,
@@ -19,12 +25,19 @@ export async function generateMetadata({
 }
 
 // Note: the searchParam is used as the language key to display the success or error message
-export default async function Page({
-  searchParams: { success, error },
-}: {
-  params: { locale: string };
-  searchParams: { success?: string; error?: string };
-}) {
+export default async function Page(
+  props: {
+    params: Promise<{ locale: string }>;
+    searchParams: Promise<{ success?: string; error?: string }>;
+  }
+) {
+  const searchParams = await props.searchParams;
+
+  const {
+    success,
+    error
+  } = searchParams;
+
   const { ability } = await authCheckAndRedirect();
 
   checkPrivilegesAsBoolean(ability, [{ action: "view", subject: "Setting" }], {

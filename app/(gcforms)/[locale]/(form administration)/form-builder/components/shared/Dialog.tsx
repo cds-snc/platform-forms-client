@@ -19,7 +19,7 @@ export const Dialog = ({
   className,
   handleClose,
 }: {
-  dialogRef: React.RefObject<CDSHTMLDialogElement>;
+  dialogRef: React.RefObject<CDSHTMLDialogElement | null>;
   children: React.ReactElement;
   title?: string;
   actions?: React.ReactElement;

@@ -92,7 +92,7 @@ export const getPasswordResetAuthenticatedUserEmailAddress = async (
 
 const sendPasswordResetEmail = async (email: string, token: string) => {
   try {
-    const baseUrl = getOrigin();
+    const baseUrl = await getOrigin();
 
     await sendEmail(email, {
       subject: "Password reset | Réinitialisation de mot de passe",
