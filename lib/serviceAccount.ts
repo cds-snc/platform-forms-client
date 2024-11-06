@@ -143,7 +143,6 @@ export const _getApiUserPublicKeyId = async (templateId: string) => {
  * Returns the keyId if the key exists, otherwise returns false
  * If false the DB and the machine key may be out of sync.
  */
-
 export const checkKeyExists = async (templateId: string) => {
   const { userId, publicKeyId } = await _getApiUserPublicKeyId(templateId);
   if (!userId || !publicKeyId) {
