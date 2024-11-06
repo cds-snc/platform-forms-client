@@ -148,7 +148,9 @@
       "noDeletedResponses": "Aucune réponse à supprimer",
       "noDeletedResponsesMessage": "Une fois que vous aurez téléchargé et approuvé la suppression des réponses, celles-ci seront disponibles ici pendant 30 jours.",
       "noProblemResponses": "Aucune réponse signalée avec problème",
-      "noProblemResponsesMessage": "Les réponses signalées avec problèmes apparaîtront ici jusqu'à ce qu'elles soient approuvées pour leur suppression de Formulaires GC."
+      "noProblemResponsesMessage": "Les réponses signalées avec problèmes apparaîtront ici jusqu'à ce qu'elles soient approuvées pour leur suppression de Formulaires GC.",
+      "noNewResponsesApi": "[TODO][FR]No responses for API retrevieval",
+      "noNewResponsesApiMessage": "[TODO]Submitted form responses will appear here and be available in GC Forms for 45 days."
     },
     "notifications": {
       "downloadComplete": "Réponses déplacées vers l'onglet « Téléchargements »",
@@ -278,5 +280,8 @@
     "province": "Province, territoire ou état",
     "postalCode": "Code postal ou zip",
     "country": "Pays"
+  },
+  "apiDashboard": {
+    "title": "Réponses"
   }
 }

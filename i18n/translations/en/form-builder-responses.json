@@ -148,7 +148,9 @@
       "noDeletedResponses": "No responses for removal",
       "noDeletedResponsesMessage": "Once you’ve downloaded and signed off on the removal of responses, they will be available here for 30 days.",
       "noProblemResponses": "No responses reported with problems",
-      "noProblemResponsesMessage": "Problem responses will appear here until signed off for removal from GC Forms."
+      "noProblemResponsesMessage": "Problem responses will appear here until signed off for removal from GC Forms.",
+      "noNewResponsesApi": "[TODO]No responses for API retrevieval",
+      "noNewResponsesApiMessage": "[TODO]Submitted form responses will appear here and be available in GC Forms for 45 days."
     },
     "notifications": {
       "downloadComplete": "Responses moved to the “Downloaded” tab",
@@ -278,5 +280,8 @@
     "province": "Province, territory, or state",
     "postalCode": "Postal or zip code",
     "country": "Country"
+  },
+  "apiDashboard": {
+    "title": "Responses"
   }
 }

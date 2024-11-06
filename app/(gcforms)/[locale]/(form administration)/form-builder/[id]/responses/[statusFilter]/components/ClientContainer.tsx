@@ -7,6 +7,7 @@ import { ResponsesFooter } from "./ResponsesFooter";
 import { Responses } from "./Responses";
 import { ManageFormAccessDialogContainer } from "./ManageFormAccessDialog";
 import { useFormBuilderConfig } from "@lib/hooks/useFormBuilderConfig";
+import { useTranslation } from "@i18n/client";
 
 export const ClientContainer = ({
   responseDownloadLimit,
@@ -15,6 +16,7 @@ export const ClientContainer = ({
   responseDownloadLimit: number;
   overdueAfter: number;
 }) => {
+  const { t } = useTranslation("form-builder-responses");
   const { isPublished, id, deliveryOption } = useTemplateStore((s) => ({
     isPublished: s.isPublished,
     id: s.id,
@@ -33,7 +35,7 @@ export const ClientContainer = ({
     return (
       <>
         <div className="mr-10">
-          <h1>TODO Respones</h1>
+          <h1>{t("apiDashboard.title")}</h1>
           <Responses responseDownloadLimit={responseDownloadLimit} overdueAfter={overdueAfter} />
         </div>
       </>

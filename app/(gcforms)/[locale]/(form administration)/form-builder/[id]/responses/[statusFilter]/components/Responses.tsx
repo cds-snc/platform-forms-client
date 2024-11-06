@@ -92,7 +92,7 @@ export const Responses = ({ responseDownloadLimit, overdueAfter }: ResponsesProp
               />
             </>
           ) : (
-            <>TODO no confirmed responses card</>
+            <NoResponses statusFilter={ucfirst(statusFilter)} />
           )}
         </div>
       </>

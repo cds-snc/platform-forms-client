@@ -3,10 +3,11 @@ import { Card, HeadingLevel } from "@clientComponents/globals/card/Card";
 import Image from "next/image";
 import { VaultStatus } from "@lib/types";
 import { useTranslation } from "react-i18next";
+import { useFormBuilderConfig } from "@lib/hooks/useFormBuilderConfig";
 
 export const NoResponses = ({ statusFilter }: { statusFilter: string }) => {
   const { t } = useTranslation("form-builder-responses");
-
+  const { hasApiKey } = useFormBuilderConfig();
   return (
     <>
       {statusFilter === VaultStatus.NEW && (
@@ -31,12 +32,23 @@ export const NoResponses = ({ statusFilter }: { statusFilter: string }) => {
           />
         </>
       )}
-      {statusFilter === VaultStatus.CONFIRMED && (
+      {!hasApiKey && statusFilter === VaultStatus.CONFIRMED && (
         <>
           <Card
             icon={<Image src="/img/mailbox.svg" alt="" width="200" height="200" />}
             title={t("downloadResponsesTable.card.noDeletedResponses")}
             content={t("downloadResponsesTable.card.noDeletedResponsesMessage")}
+            headingTag={HeadingLevel.H1}
+            headingStyle="gc-h2 text-[#748094]"
+          />
+        </>
+      )}
+      {hasApiKey && statusFilter === VaultStatus.CONFIRMED && (
+        <>
+          <Card
+            icon={<Image src="/img/mailbox.svg" alt="" width="200" height="200" />}
+            title={t("downloadResponsesTable.card.noNewResponsesApi")}
+            content={t("downloadResponsesTable.card.noNewResponsesApiMessage")}
             headingTag={HeadingLevel.H1}
             headingStyle="gc-h2 text-[#748094]"
           />
