@@ -42,7 +42,7 @@ const getBrand = (type: string, options: BrandOption[]): BrandOption => {
   return options.filter((o: BrandOption) => o.name === type)[0];
 };
 
-export const SettingsDialog = ({
+const SettingsDialog = ({
   keyId,
   handleClose,
 }: {
