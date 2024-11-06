@@ -16,7 +16,7 @@ interface TooltipSimpleProps extends TooltipProps {
   text: string;
 }
 
-export const Simple = ({
+const Simple = ({
   text,
   children,
   tooltipClassName = "",
@@ -49,7 +49,7 @@ interface CustomTooltipProps extends TooltipProps {
   trigger: React.ReactNode | string;
 }
 
-export const CustomTrigger = ({
+const CustomTrigger = ({
   trigger,
   children,
   tooltipClassName = "",
@@ -75,7 +75,7 @@ export const CustomTrigger = ({
   );
 };
 
-export const Info = ({
+const Info = ({
   children,
   tooltipClassName = "",
   triggerClassName = "",

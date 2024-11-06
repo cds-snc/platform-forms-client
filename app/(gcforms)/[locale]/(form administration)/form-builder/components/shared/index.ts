@@ -2,7 +2,6 @@ export { ConfirmFormDeleteDialog } from "./ConfirmFormDeleteDialog";
 export { Dialog, useDialogRef } from "./Dialog";
 export { Input } from "./Input";
 export { ExpandingInput } from "./ExpandingInput";
-export { Output } from "./Output";
 export { TextArea } from "./TextArea";
 export { Radio, Checkbox } from "./MultipleChoice";
 export { DownloadFileButton } from "./DownloadFileButton";

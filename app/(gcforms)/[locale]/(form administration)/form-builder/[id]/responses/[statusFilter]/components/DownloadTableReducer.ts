@@ -48,7 +48,7 @@ export const initialTableItemsState = (
  * Checks whether a form submission is overdue by looking at whether the download or the confirmed
  * user action is overdue. If so, true is returned otherwise false.
  */
-export function isSubmissionOverdue({
+function isSubmissionOverdue({
   status,
   createdAt,
   overdueAfter,
