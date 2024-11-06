@@ -6,6 +6,7 @@ import { cleanup, render, waitFor } from "@testing-library/react";
 import { Options } from "../Options";
 import userEvent from "@testing-library/user-event";
 import { defaultStore as store, Providers } from "@lib/utils/form-builder/test-utils";
+import { act } from "react";
 
 describe("Options", () => {
   afterEach(() => {
@@ -24,7 +25,9 @@ describe("Options", () => {
     const button = rendered.container.querySelector("#add-option-0");
     expect(button).toHaveTextContent("addOption");
 
-    await user.click(button);
+    await act(async () => {
+      await user.click(button);
+    });
 
     const option1 = rendered.getByPlaceholderText("option 1");
     expect(option1).toHaveAttribute("id", "option--1--1");
@@ -37,7 +40,9 @@ describe("Options", () => {
     expect(rendered.container.querySelectorAll("input")).toHaveLength(3);
 
     const remove1 = rendered.container.querySelector("#remove--1--1");
-    await user.click(remove1);
+    await act(async () => {
+      await user.click(remove1);
+    });
     expect(rendered.container.querySelectorAll("input")).toHaveLength(2);
   });
 

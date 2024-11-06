@@ -1,6 +1,6 @@
 import axios, { AxiosResponse } from "axios";
 import { logMessage } from "@lib/logger";
-import { getOrigin } from "@lib/origin";
+import { getOriginSync } from "@lib/origin";
 
 interface createTicketProps {
   type: "branding" | "publishing" | "contact" | "problem";
@@ -17,7 +17,7 @@ export const formatTicketData = ({
   description,
   language,
 }: createTicketProps) => {
-  const HOST = getOrigin() || "";
+  const HOST = getOriginSync() || "";
   const hostTag = tagHost(HOST);
 
   const ticket = {

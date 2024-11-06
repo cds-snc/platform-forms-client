@@ -7,11 +7,17 @@ import { LoggedOutTab, LoggedOutTabName } from "@serverComponents/form-builder/L
 import { VaultStatus } from "@lib/types";
 import { redirect } from "next/navigation";
 
-export async function generateMetadata({
-  params: { locale },
-}: {
-  params: { locale: string };
-}): Promise<Metadata> {
+export async function generateMetadata(
+  props: {
+    params: Promise<{ locale: string }>;
+  }
+): Promise<Metadata> {
+  const params = await props.params;
+
+  const {
+    locale
+  } = params;
+
   const { t } = await serverTranslation(["form-builder-responses", "form-builder"], {
     lang: locale,
   });
@@ -20,11 +26,19 @@ export async function generateMetadata({
   };
 }
 
-export default async function Page({
-  params: { id, statusFilter, locale },
-}: {
-  params: { locale: string; id: string; statusFilter: string };
-}) {
+export default async function Page(
+  props: {
+    params: Promise<{ locale: string; id: string; statusFilter: string }>;
+  }
+) {
+  const params = await props.params;
+
+  const {
+    id,
+    statusFilter,
+    locale
+  } = params;
+
   const { session } = await authCheckAndThrow().catch(() => ({
     session: null,
   }));
