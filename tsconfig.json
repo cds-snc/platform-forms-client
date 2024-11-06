@@ -44,14 +44,5 @@
     "cypress/support/commands/selection-command.js",
     ".next/types/**/*.ts"
   ],
-  "exclude": [
-    "node_modules",
-    "utils",
-    ".next",
-    "cypress",
-    "cypress.config.ts",
-    "**/*.cy.ts",
-    "**/*.cy.tsx",
-    "__tests__"
-  ]
+  "exclude": ["node_modules", "utils", ".next", "cypress", "**/*.cy.ts", "**/*.cy.tsx", "__tests__"]
 }

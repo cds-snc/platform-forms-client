@@ -11,7 +11,7 @@ import { ListBox } from "@formBuilder/components/shared/ListBox";
 
 export type SelectedGroupState = {
   group: Groups | "all";
-  ref: React.RefObject<HTMLElement>;
+  ref: React.RefObject<HTMLElement | null>;
 };
 
 const filterElementsByGroup = (elements: ElementOption[], selectedGroup: Groups | "all") => {

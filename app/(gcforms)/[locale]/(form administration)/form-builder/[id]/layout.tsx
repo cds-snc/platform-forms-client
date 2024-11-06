@@ -16,13 +16,23 @@ import { Language } from "@lib/types/form-builder-types";
 import { FormRecord } from "@lib/types";
 import { logMessage } from "@lib/logger";
 
-export default async function Layout({
-  children,
-  params: { locale, id },
-}: {
-  children: React.ReactNode;
-  params: { locale: string; id: string };
-}) {
+export default async function Layout(
+  props: {
+    children: React.ReactNode;
+    params: Promise<{ locale: string; id: string }>;
+  }
+) {
+  const params = await props.params;
+
+  const {
+    locale,
+    id
+  } = params;
+
+  const {
+    children
+  } = props;
+
   let initialForm: FormRecord | null = null;
 
   const { session, ability } = await authCheckAndThrow().catch(() => ({

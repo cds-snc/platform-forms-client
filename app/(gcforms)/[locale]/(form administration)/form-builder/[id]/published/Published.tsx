@@ -20,7 +20,7 @@ export const Published = async ({
     i18n: { language },
   } = await serverTranslation("form-builder", { lang: locale });
 
-  const baseUrl = getOrigin();
+  const baseUrl = await getOrigin();
 
   const linkEn = `${baseUrl}/en/id/${id}`;
   const linkFr = `${baseUrl}/fr/id/${id}`;
