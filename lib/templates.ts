@@ -1515,7 +1515,7 @@ export const updateClosedData = async (
   let detailsData: ClosedDetails | null = null;
 
   if (!isValidISODate(String(closingDate))) {
-    throw new Error("Invalid ISO Date");
+    throw new Error(`Invalid ISO date ${closingDate}`);
   }
 
   // Add the closed details if they exist
