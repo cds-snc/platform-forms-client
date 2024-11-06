@@ -30,7 +30,6 @@ import { transform as htmlTransform } from "@lib/responseDownloadFormats/html";
 import { transform as zipTransform } from "@lib/responseDownloadFormats/html-zipped";
 import { transform as jsonTransform } from "@lib/responseDownloadFormats/json";
 import { logMessage } from "@lib/logger";
-import { revalidatePath } from "next/cache";
 import { authCheckAndRedirect, authCheckAndThrow } from "@lib/actions";
 import { FormBuilderError } from "./exceptions";
 import { FormProperties } from "@lib/types";
@@ -167,13 +166,11 @@ export const getSubmissionsByFormat = async ({
   ids,
   format = DownloadFormat.HTML,
   lang,
-  revalidate = false,
 }: {
   formID: string;
   ids: string[];
   format: DownloadFormat;
   lang: Language;
-  revalidate?: boolean;
 }): Promise<
   | HtmlResponse
   | HtmlZippedResponse
@@ -367,34 +364,23 @@ export const getSubmissionsByFormat = async ({
     await updateLastDownloadedBy(responseIdStatusArray, formID, userEmail);
     await logDownload(responseIdStatusArray, format, ability);
 
-    const revalidateNewTab = async () => {
-      // delay revalidation so new tab doesn't refresh immediately
-      await new Promise((resolve) => setTimeout(resolve, 5));
-      revalidatePath(`${lang}/form-builder/${formID}/responses/new`, "page");
-    };
-
     switch (format) {
       case DownloadFormat.CSV:
-        revalidate && revalidateNewTab();
         return {
           receipt: await htmlAggregatedTransform(formResponse, lang),
           responses: csvTransform(formResponse),
         };
       case DownloadFormat.HTML_AGGREGATED:
-        revalidate && revalidateNewTab();
         return await htmlAggregatedTransform(formResponse, lang);
 
       case DownloadFormat.HTML:
-        revalidate && revalidateNewTab();
         return await htmlTransform(formResponse);
 
       case DownloadFormat.HTML_ZIPPED: {
-        revalidate && revalidateNewTab();
         return await zipTransform(formResponse, lang);
       }
 
       case DownloadFormat.JSON:
-        revalidate && revalidateNewTab();
         return {
           receipt: await htmlAggregatedTransform(formResponse, lang),
           responses: jsonTransform(formResponse),

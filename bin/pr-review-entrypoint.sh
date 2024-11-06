@@ -32,8 +32,8 @@ load_non_existing_envs() {
     if echo "$line" | grep -Eq "$_isBlank"; then # Ignore blank line
       continue
     fi
-    key=$(echo "$line" | cut -d '=' -f 1)
-    value=$(echo "$line" | cut -d '=' -f 2-)
+    key="${line%%=*}"
+    value="${line#*=}" 
 
     if [ -z "$(var_expand "$key")" ] && [ $key != "NEXTAUTH_URL" ]; then # Check if environment variable doesn't exist
       export "${key}=${value}"
