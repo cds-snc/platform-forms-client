@@ -71,8 +71,16 @@ export const AddressComplete = (props: AddressCompleteProps): React.ReactElement
   }, [apiKey, featureFlags.addressComplete]);
 
   //Form fillers address elements
-  const [addressObject, setAddressObject] = useState<AddressElements | null>(
-    field.value ? JSON.parse(field.value) : null
+  const [addressObject, setAddressObject] = useState<AddressElements>(
+    field.value
+      ? JSON.parse(field.value)
+      : {
+          streetAddress: "",
+          city: "",
+          province: "",
+          postalCode: "",
+          country: "",
+        }
   );
 
   // Update the field value when the address object changes
@@ -283,7 +291,7 @@ export const AddressComplete = (props: AddressCompleteProps): React.ReactElement
               name={`${name}-streetAddress`}
               onChange={onAddressSearch}
               onSetValue={onAddressSet}
-              baseValue={addressObject?.streetAddress}
+              baseValue={addressObject.streetAddress}
               required={required}
               placeholderText={allow ? t("addElementDialog.addressComplete.startTyping") : ""}
               ariaDescribedBy={`${name}-streetDesc`}
@@ -308,7 +316,7 @@ export const AddressComplete = (props: AddressCompleteProps): React.ReactElement
             type="text"
             id={`${name}-city`}
             name={`${name}-city`}
-            value={addressObject?.city}
+            value={addressObject.city}
             onChange={(e) => setAddressData("city", e.target.value)}
             className={cn("gc-input-text", meta.error && "gc-error-input")}
             required={required}
@@ -326,7 +334,7 @@ export const AddressComplete = (props: AddressCompleteProps): React.ReactElement
             type="text"
             id={`${name}-province`}
             name={`${name}-province`}
-            value={addressObject?.province}
+            value={addressObject.province}
             onChange={(e) => setAddressData("province", e.target.value)}
             className={cn("gc-input-text", meta.error && "gc-error-input")}
             required={required}
@@ -344,7 +352,7 @@ export const AddressComplete = (props: AddressCompleteProps): React.ReactElement
             id={`${name}-postal`}
             type="text"
             name={`${name}-postal`}
-            value={addressObject?.postalCode}
+            value={addressObject.postalCode}
             onChange={(e) => setAddressData("postalCode", e.target.value)}
             className={cn("gc-input-text", meta.error && "gc-error-input")}
             required={required}
