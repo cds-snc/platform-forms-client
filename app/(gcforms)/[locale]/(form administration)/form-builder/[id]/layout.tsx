@@ -53,7 +53,8 @@ export default async function Layout(props: {
         redirect(`/${locale}/404`);
       }
 
-      apiKeyId = await checkKeyExists(formID);
+      // No need to fetch in test, it will always not exist
+      apiKeyId = process.env.APP_ENV === "test" ? false : await checkKeyExists(formID);
     }
   } catch (e) {
     if (e instanceof AccessControlError) {
