@@ -23,7 +23,7 @@ import { SectionName } from "./SectionName";
 import { Language } from "@lib/types/form-builder-types";
 import { LockedSections } from "../treeview/types";
 
-export const GroupAndChoiceSelect = ({
+const GroupAndChoiceSelect = ({
   groupId,
   item,
   choiceId,
