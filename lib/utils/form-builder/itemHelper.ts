@@ -50,7 +50,7 @@ export const localizeField = <LocalizedProperty extends string>(
   return `${field}${langUpperCaseFirst}`;
 };
 
-export const setLocalizedProperty = (
+const setLocalizedProperty = (
   element: FormElement = defaultField,
   lang: Language = "en",
   property: LocalizedElementProperties,
@@ -78,7 +78,7 @@ export const setDescription = (
   return setLocalizedProperty(element, lang, LocalizedElementProperties.DESCRIPTION, value);
 };
 
-export const updateTextElement = (element: FormElement, type: ElementType) => {
+const updateTextElement = (element: FormElement, type: ElementType) => {
   const newElement = { ...element };
   if (type === "textArea" || type === "textField") {
     newElement.type = type as FormElementTypes;
