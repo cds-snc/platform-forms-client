@@ -8,7 +8,7 @@ import { Language, LocalizedFormProperties } from "@lib/types/form-builder-types
 import { ElementPanel } from ".";
 import { ConfirmationDescriptionWithGroups } from "./ConfirmationDescriptionWithGroups";
 import { RichTextLockedWithGroups } from "./elements/RichTextLockedWithGroups";
-import { ExpandingInput } from "@formBuilder/components/shared";
+import { ExpandingInput } from "@formBuilder/components/shared/ExpandingInput";
 import { useRehydrate, useTemplateStore } from "@lib/store/useTemplateStore";
 import { SettingsPanel } from "./settings/SettingsPanel";
 import { cleanInput } from "@lib/utils/form-builder";

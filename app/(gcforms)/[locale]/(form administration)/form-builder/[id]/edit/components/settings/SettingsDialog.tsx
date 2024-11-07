@@ -4,7 +4,8 @@ import { useTranslation } from "@i18n/client";
 import { useSession } from "next-auth/react";
 import { Button } from "@clientComponents/globals";
 import { useTemplateStore } from "@lib/store/useTemplateStore";
-import { useDialogRef, Dialog, Radio } from "@formBuilder/components/shared";
+import { useDialogRef, Dialog } from "@formBuilder/components/shared/Dialog";
+import { Radio } from "@formBuilder/components/shared/MultipleChoice";
 import { Logos, options } from "../../../settings/branding/components";
 import Brand from "@clientComponents/globals/Brand";
 import {

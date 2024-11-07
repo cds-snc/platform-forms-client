@@ -1,7 +1,7 @@
 "use client";
 
 import { Button } from "@clientComponents/globals";
-import { Dialog, useDialogRef } from "@formBuilder/components/shared";
+import { Dialog, useDialogRef } from "@formBuilder/components/shared/Dialog";
 import { useCustomEvent } from "@lib/hooks/useCustomEvent";
 import { useCallback, useEffect, useState } from "react";
 import { InviteUsers } from "./InviteUsers";
