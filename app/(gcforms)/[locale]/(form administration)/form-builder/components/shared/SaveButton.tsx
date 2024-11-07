@@ -50,7 +50,7 @@ const SaveDraft = ({
   );
 };
 
-const DateTime = ({ updatedAt }: { updatedAt: number }) => {
+export const DateTime = ({ updatedAt }: { updatedAt: number }) => {
   const { t, i18n } = useTranslation(["common", "form-builder"]);
   const dateTime =
     (updatedAt && formatDateTime(new Date(updatedAt).getTime(), `${i18n.language}-CA`)) || [];
@@ -64,7 +64,7 @@ const DateTime = ({ updatedAt }: { updatedAt: number }) => {
   return <span>{` - ${t("lastSaved", { ns: "form-builder" })} ${time}, ${date}`}</span>;
 };
 
-const ErrorSavingForm = () => {
+export const ErrorSavingForm = () => {
   const { t, i18n } = useTranslation(["common", "form-builder"]);
   const supportHref = `/${i18n.language}/support`;
   return (

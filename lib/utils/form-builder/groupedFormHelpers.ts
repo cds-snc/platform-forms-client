@@ -22,7 +22,7 @@ export const sortGroup = ({ form, group }: { form: FormProperties; group: Group 
 };
 
 // Build a Hash of Form Elements, for quick access.
-const getFormElementCollection = (form: FormProperties) => {
+export const getFormElementCollection = (form: FormProperties) => {
   const elementCollection: IFormElementHash = {};
   if (form.elements === undefined) return elementCollection;
 

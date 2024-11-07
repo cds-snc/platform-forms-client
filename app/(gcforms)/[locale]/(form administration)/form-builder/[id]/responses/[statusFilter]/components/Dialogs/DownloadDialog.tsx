@@ -15,6 +15,7 @@ import { getDate, slugify } from "@lib/client/clientHelpers";
 import { SpinnerIcon } from "@serverComponents/icons/SpinnerIcon";
 import { getSubmissionsByFormat } from "../../actions";
 import { FormServerErrorCodes, Language, ServerActionError } from "@lib/types/form-builder-types";
+import { usePathname } from "next/navigation";
 import { FormBuilderError } from "../../exceptions";
 
 export const DownloadDialog = ({
@@ -38,6 +39,7 @@ export const DownloadDialog = ({
 }) => {
   const dialogRef = useDialogRef();
   const { t, i18n } = useTranslation("form-builder-responses");
+  const pathname = usePathname();
   const defaultSelectedFormat = DownloadFormat.HTML_ZIPPED;
   const [selectedFormat, setSelectedFormat] = React.useState<DownloadFormat>(defaultSelectedFormat);
   const [zipAllFiles, setZipAllFiles] = React.useState<boolean>(true);
@@ -114,6 +116,7 @@ export const DownloadDialog = ({
           ids: ids,
           format: DownloadFormat.HTML_ZIPPED,
           lang: i18n.language as Language,
+          revalidate: pathname.includes("new"),
         })) as HtmlZippedResponse | ServerActionError;
 
         if ("error" in response) {
@@ -143,6 +146,7 @@ export const DownloadDialog = ({
           ids: ids,
           format: DownloadFormat.CSV,
           lang: i18n.language as Language,
+          revalidate: pathname.includes("new"),
         })) as CSVResponse | ServerActionError;
 
         if ("error" in response) {
@@ -180,6 +184,7 @@ export const DownloadDialog = ({
           ids: ids,
           format: DownloadFormat.JSON,
           lang: i18n.language as Language,
+          revalidate: pathname.includes("new"),
         })) as JSONResponse | ServerActionError;
 
         if ("error" in response) {

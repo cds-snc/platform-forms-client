@@ -130,7 +130,6 @@ export const LineItemEntries = ({
 
   return (
     <div
-      key={inputLabelId}
       ref={containerRef}
       className="box-border max-h-60 overflow-y-auto rounded-md border-2 border-black-default"
     >

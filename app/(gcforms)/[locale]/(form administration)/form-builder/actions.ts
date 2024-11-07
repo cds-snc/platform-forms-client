@@ -16,6 +16,7 @@ import {
   updateClosedData,
   updateTemplate as updateDbTemplate,
   updateIsPublishedForTemplate,
+  deleteTemplate as deleteDbTemplate,
   updateSecurityAttribute,
   updateResponseDeliveryOption,
   updateFormPurpose,
@@ -71,7 +72,7 @@ export const createOrUpdateTemplate = async ({
   }
 };
 
-const createTemplate = async ({
+export const createTemplate = async ({
   formConfig,
   name,
   deliveryOption,
@@ -355,6 +356,29 @@ export const sendResponsesToVault = async ({
     const { ability } = await authCheckAndThrow();
 
     const response = await removeDeliveryOption(ability, formID);
+    if (!response) {
+      throw new Error(`Template API response was null. Request information: { ${formID} }`);
+    }
+
+    return { formRecord: response };
+  } catch (error) {
+    return { formRecord: null, error: (error as Error).message };
+  }
+};
+
+export const deleteTemplate = async ({
+  id: formID,
+}: {
+  id: string;
+}): Promise<{
+  formRecord: FormRecord | null;
+  error?: string;
+}> => {
+  try {
+    const { ability } = await authCheckAndThrow();
+
+    const response = await deleteDbTemplate(ability, formID);
+
     if (!response) {
       throw new Error(`Template API response was null. Request information: { ${formID} }`);
     }

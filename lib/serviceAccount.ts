@@ -107,15 +107,9 @@ export const checkMachineUserExists = async (templateId: string) => {
   return getMachineUser(templateId);
 };
 
-/*
- * This function is used to get the public key id of the service account
- * associated with the templateId.
- */
-export const _getApiUserPublicKeyId = async (templateId: string) => {
-  const result = { userId: null, publicKeyId: null };
-
+export const checkKeyExists = async (templateId: string) => {
   if (templateId === "0000") {
-    return result;
+    return false;
   }
 
   const { ability } = await authCheckAndThrow();
@@ -130,41 +124,25 @@ export const _getApiUserPublicKeyId = async (templateId: string) => {
     })) ?? {};
 
   if (!userId || !publicKeyId) {
-    return result;
-  }
-
-  return { userId, publicKeyId };
-};
-
-/*
- * This function is used to check if the key exists in the Zitadel
- * for the service account associated with the templateId.
- *
- * Returns the keyId if the key exists, otherwise returns false
- * If false the DB and the machine key may be out of sync.
- */
-export const checkKeyExists = async (templateId: string) => {
-  const { userId, publicKeyId } = await _getApiUserPublicKeyId(templateId);
-  if (!userId || !publicKeyId) {
     return false;
   }
 
-  try {
-    const zitadel = await getZitadelClient();
-    const remoteKey = await zitadel.getMachineKeyByIDs({
+  const zitadel = await getZitadelClient();
+  const remoteKey = await zitadel
+    .getMachineKeyByIDs({
       userId,
       keyId: publicKeyId,
+    })
+    .catch((err) => {
+      logMessage.error(err);
+      return null;
     });
 
-    if (publicKeyId === remoteKey?.key?.id) {
-      return remoteKey?.key?.id;
-    }
-
-    return false;
-  } catch (e) {
-    logMessage.error(e);
-    return false;
+  if (publicKeyId === remoteKey?.key?.id) {
+    return remoteKey?.key?.id;
   }
+  // Key are out of sync or user does not exist
+  return false;
 };
 
 export const refreshKey = async (templateId: string) => {

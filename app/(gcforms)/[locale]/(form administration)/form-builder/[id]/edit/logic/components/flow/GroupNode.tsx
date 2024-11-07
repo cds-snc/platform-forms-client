@@ -192,3 +192,5 @@ export const GroupNode = (node: NodeProps) => {
     </div>
   );
 };
+
+export default GroupNode;

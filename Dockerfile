@@ -1,4 +1,4 @@
-FROM node:22-alpine as build
+FROM node:20 as build
 ENV NODE_ENV=production
 ENV NEXT_PUBLIC_ADDRESSCOMPLETE_API_KEY=UR78-BU29-RU35-EP49 
 
@@ -16,7 +16,7 @@ RUN yarn workspaces focus gcforms flag_initialization
 RUN yarn build
 RUN yarn workspaces focus gcforms flag_initialization --production
 
-FROM node:20.12.0-alpine as final
+FROM node:20 as final
 LABEL maintainer="-"
 
 ENV NODE_ENV=production

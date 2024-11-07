@@ -6,7 +6,7 @@ import { useTranslation } from "@i18n/client";
 import { CheckBoxEmptyIcon, CheckIcon, RadioEmptyIcon } from "@serverComponents/icons";
 import { ShortAnswer, Options, SubOptions, RichText, SubElement } from "./elements";
 import { ElementOption, FormElementWithIndex } from "@lib/types/form-builder-types";
-import { useElementOptions } from "@lib/hooks/form-builder/useElementOptions";
+import { useElementOptions } from "@lib/hooks/form-builder";
 import { ConditionalIndicator } from "@formBuilder/components/shared/conditionals/ConditionalIndicator";
 import { DateElement } from "./elements/DateElement";
 import { DateFormat } from "@clientComponents/forms/FormattedDate/types";

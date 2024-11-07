@@ -6,35 +6,22 @@ import { BackLink } from "@clientComponents/admin/LeftNav/BackLink";
 import { Metadata } from "next";
 import { PrivilegeList } from "./components/server/PrivilegeList";
 
-export async function generateMetadata(
-  props: {
-    params: Promise<{ locale: string }>;
-  }
-): Promise<Metadata> {
-  const params = await props.params;
-
-  const {
-    locale
-  } = params;
-
+export async function generateMetadata({
+  params: { locale },
+}: {
+  params: { locale: string };
+}): Promise<Metadata> {
   const { t } = await serverTranslation("admin-users", { lang: locale });
   return {
     title: `${t("managePermissions")}`,
   };
 }
 
-export default async function Page(
-  props: {
-    params: Promise<{ id: string; locale: string }>;
-  }
-) {
-  const params = await props.params;
-
-  const {
-    id,
-    locale
-  } = params;
-
+export default async function Page({
+  params: { id, locale },
+}: {
+  params: { id: string; locale: string };
+}) {
   const { ability } = await authCheckAndRedirect();
 
   checkPrivilegesAsBoolean(

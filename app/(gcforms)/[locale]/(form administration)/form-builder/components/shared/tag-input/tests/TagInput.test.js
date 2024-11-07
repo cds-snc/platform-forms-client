@@ -5,7 +5,6 @@ import React, { useState } from "react";
 import { render, cleanup } from "@testing-library/react";
 import { TagInput } from "../TagInput";
 import userEvent from "@testing-library/user-event";
-import { act } from "react";
 
 const validator = (tag) => {
   if (tag === "fail") {
@@ -31,37 +30,23 @@ describe("TagInput", () => {
     const input = await rendered.findByTestId("tag-input");
 
     // Invalid tag fails validation and is not added
-
-    await act(async () => {
-      await userEvent.type(input, "fail{enter}");
-    });
-
+    await userEvent.type(input, "fail{enter}");
     expect(rendered.queryByTestId("tag")).not.toBeInTheDocument();
     expect(input.value).toBe("fail");
-    await act(async () => {
-      await userEvent.clear(input);
-    });
+    await userEvent.clear(input);
 
     // Add and remove a tag
-    await act(async () => {
-      await userEvent.type(input, "one{enter}");
-    });
+    await userEvent.type(input, "one{enter}");
     expect(rendered.getAllByTestId("tag").length).toBe(1);
     expect(rendered.getAllByTestId("tag")[0].textContent).toBe("one");
     const removeButtons = await rendered.findAllByRole("button");
-    await act(async () => {
-      await userEvent.click(removeButtons[0]);
-    });
+    await userEvent.click(removeButtons[0]);
     expect(rendered.queryByTestId("tag")).toBeNull();
-    await act(async () => {
-      await userEvent.clear(input);
-    });
+    await userEvent.clear(input);
 
     // Handles "enter"
-    await act(async () => {
-      await userEvent.type(input, "one{enter}");
-      await userEvent.type(input, "two{enter}");
-    });
+    await userEvent.type(input, "one{enter}");
+    await userEvent.type(input, "two{enter}");
 
     expect(rendered.getByText("one")).toBeInTheDocument();
     expect(rendered.getByText("two")).toBeInTheDocument();
@@ -70,10 +55,8 @@ describe("TagInput", () => {
     // Two tags carry forward
 
     // Handles "comma"
-    await act(async () => {
-      await userEvent.type(input, "three,");
-      await userEvent.type(input, "four,");
-    });
+    await userEvent.type(input, "three,");
+    await userEvent.type(input, "four,");
 
     expect(rendered.getByText("three")).toBeInTheDocument();
     expect(rendered.getByText("four")).toBeInTheDocument();
@@ -82,10 +65,8 @@ describe("TagInput", () => {
     // Four tags carry forward
 
     // Handles "space"
-    await act(async () => {
-      await userEvent.type(input, "five ");
-      await userEvent.type(input, "six ");
-    });
+    await userEvent.type(input, "five ");
+    await userEvent.type(input, "six ");
 
     expect(rendered.getByText("five")).toBeInTheDocument();
     expect(rendered.getByText("six")).toBeInTheDocument();
@@ -94,41 +75,29 @@ describe("TagInput", () => {
     // Six tags carry forward
 
     // Handles "backspace" to untag last tag
-    await act(async () => {
-      await userEvent.type(input, "{backspace}");
-    });
+    await userEvent.type(input, "{backspace}");
     expect(rendered.getAllByTestId("tag").length).toBe(5);
     expect(input.value).toBe("six");
-    await act(async () => {
-      await userEvent.clear(input);
-    });
+    await userEvent.clear(input);
 
     expect(rendered.getAllByTestId("tag").length).toBe(5);
     expect(input.value).toBe("");
 
     // Handles onBlur
-    await act(async () => {
-      await userEvent.type(input, "six");
-      await userEvent.tab();
-    });
+    await userEvent.type(input, "six");
+    await userEvent.tab();
     expect(rendered.getAllByTestId("tag").length).toBe(6);
 
     // Handles "tabbing"
-    await act(async () => {
-      await userEvent.tab({ shift: true });
-    });
+    await userEvent.tab({ shift: true });
     expect(input).toHaveFocus();
 
-    await act(async () => {
-      await userEvent.tab({ shift: true });
-    });
+    await userEvent.tab({ shift: true });
     const removeButtons1 = await rendered.findAllByRole("button");
     expect(removeButtons1[removeButtons1.length - 1]).toHaveFocus();
 
     // Tab to input
-    await act(async () => {
-      await userEvent.tab();
-    });
+    await userEvent.tab();
     expect(input).toHaveFocus();
   });
 });

@@ -4,30 +4,18 @@ import { MFAForm } from "./components/client/MFAForm";
 import { redirect } from "next/navigation";
 import { authCheckAndThrow } from "@lib/actions";
 
-export async function generateMetadata(
-  props: {
-    params: Promise<{ locale: string }>;
-  }
-): Promise<Metadata> {
-  const params = await props.params;
-
-  const {
-    locale
-  } = params;
-
+export async function generateMetadata({
+  params: { locale },
+}: {
+  params: { locale: string };
+}): Promise<Metadata> {
   const { t } = await serverTranslation(["auth-verify"], { lang: locale });
   return {
     title: t("verify.title"),
   };
 }
 
-export default async function Page(props: { params: Promise<{ locale: string }> }) {
-  const params = await props.params;
-
-  const {
-    locale
-  } = params;
-
+export default async function Page({ params: { locale } }: { params: { locale: string } }) {
   const { session } = await authCheckAndThrow().catch(() => ({ session: null }));
 
   if (session) {

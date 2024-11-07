@@ -2,7 +2,7 @@
 import React from "react";
 import { useTranslation } from "@i18n/client";
 import { SubNavLink } from "@clientComponents/globals/SubNavLink";
-import { useActivePathname } from "@lib/hooks/form-builder/useActivePathname";
+import { useActivePathname } from "@lib/hooks/form-builder";
 import { LangSwitcher } from "@formBuilder/components/shared/LangSwitcher";
 import { QuestionsIcon, TranslateIcon } from "@serverComponents/icons";
 import { useTemplateStore } from "@lib/store/useTemplateStore";

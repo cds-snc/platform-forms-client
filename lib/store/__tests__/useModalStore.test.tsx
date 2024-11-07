@@ -3,7 +3,7 @@
  */
 import useModalStore, { defaultProperties } from "../useModalStore";
 import { renderHook } from "@testing-library/react";
-import { act } from "react";
+import { act } from "react-dom/test-utils";
 import { HTMLTextInputTypeAttribute } from "@lib/types";
 
 const createStore = () => {

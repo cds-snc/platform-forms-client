@@ -6,6 +6,7 @@ import { useTranslation } from "@i18n/client";
 import { getSubmissionsByFormat } from "../actions";
 import { DownloadFormat, HtmlResponse } from "@lib/responseDownloadFormats/types";
 import { Language, ServerActionError } from "@lib/types/form-builder-types";
+import { usePathname } from "next/navigation";
 import { FormBuilderError } from "../exceptions";
 
 export const DownloadSingleButton = ({
@@ -24,6 +25,7 @@ export const DownloadSingleButton = ({
   ariaLabelledBy: string;
 }) => {
   const { t, i18n } = useTranslation("form-builder-responses");
+  const pathname = usePathname();
 
   const handleDownload = async () => {
     try {
@@ -32,6 +34,7 @@ export const DownloadSingleButton = ({
         ids: [responseId],
         format: DownloadFormat.HTML,
         lang: i18n.language as Language,
+        revalidate: pathname.includes("new"),
       })) as HtmlResponse | ServerActionError;
 
       if ("error" in response) {
