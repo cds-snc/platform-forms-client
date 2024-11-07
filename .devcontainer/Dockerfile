@@ -1,4 +1,4 @@
-FROM node:20@sha256:93d2e801dabc677ea0b30b47d3d729fab63ecb20be7ac0ab204cc3c65731297a
+FROM node:22-alpine
 
 ARG USERNAME=node
 ARG USER_UID=1000
@@ -10,7 +10,7 @@ COPY .yarnrc.yml /src
 WORKDIR /src
 RUN yarn install
 
-FROM node:20@sha256:93d2e801dabc677ea0b30b47d3d729fab63ecb20be7ac0ab204cc3c65731297a
+FROM node:22-alpine
 
 ARG USERNAME=node
 ARG USER_UID=1000

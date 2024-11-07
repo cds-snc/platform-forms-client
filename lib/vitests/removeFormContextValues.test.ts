@@ -1,5 +1,6 @@
+import { expect } from "vitest";
 import { removeFormContextValues } from "@lib/utils/form-builder/groupsHistory";
-import {values} from "../../__fixtures__/conditionalInputHistoryEmptySimple.json";
+import { values } from "../../__fixtures__/conditionalInputHistoryEmptySimple.json";
 
 describe("removeCustomFormValues function", () => {
   it("Removes any values not related to user input form values", () => {
@@ -19,8 +20,8 @@ describe("removeCustomFormValues function", () => {
       "12": "",
       "13": [],
       "14": "",
-      "15": ""
-    }
+      "15": "",
+    };
     expect(formValues).toEqual(expectedValues);
   });
 

@@ -5,6 +5,15 @@ import { useRouter, useSearchParams, useParams } from "next/navigation";
 import { BackArrowIcon, ForwardArrowIcon, StartIcon } from "@serverComponents/icons";
 import { useTranslation } from "@i18n/client";
 
+const decodeBase64Url = (base64Url: string) => {
+  const pureBase64 = base64Url.replace(/-/g, "+").replace(/_/g, "/");
+  return atob(pureBase64);
+};
+
+const encodeBase64Url = (payload: string) => {
+  return btoa(payload).replace(/\+/g, "-").replace(/\//g, "_").replace(/=/g, "");
+};
+
 export const Pagination = ({
   lastEvaluatedKey,
   formId,
@@ -36,8 +45,8 @@ export const Pagination = ({
       // Get the "page" keys as base64 encoded string from url
       const queryKeys = searchParams.get("keys");
 
-      // Use atob to decode the base64 encoded keys or we're at the "start"
-      return queryKeys ? String(atob(String(queryKeys))).split(",") : ["start"];
+      // Decode the base64url encoded keys or we're at the "start"
+      return queryKeys ? decodeBase64Url(queryKeys).split(",") : ["start"];
     } catch (e) {
       // If the base64 encoded string has been tampered with, redirect to the first page
       router.push(
@@ -62,7 +71,7 @@ export const Pagination = ({
   // If we're going back to the first page, just load the base url in case there are newer responses waiting
   let previousLink = "";
   if (previousLastEvaluatedResponseId !== "start") {
-    previousLink = `?keys=${btoa(
+    previousLink = `?keys=${encodeBase64Url(
       previousKeys.join(",")
     )}&lastKey=${previousLastEvaluatedResponseId}`;
   }
@@ -128,13 +137,13 @@ export const Pagination = ({
         <Link
           href={`/${language}/form-builder/${formId}/responses${
             statusFilter ? `/${statusFilter}` : "/new"
-          }?keys=${btoa(keys.join(","))}&lastKey=${lastEvaluatedResponseId}`}
+          }?keys=${encodeBase64Url(keys.join(","))}&lastKey=${lastEvaluatedResponseId}`}
           legacyBehavior
         >
           <a
             href={`/${language}/form-builder/${formId}/responses${
               statusFilter ? `/${statusFilter}` : "/new"
-            }?keys=${btoa(keys.join(","))}&lastKey=${lastEvaluatedResponseId}`}
+            }?keys=${encodeBase64Url(keys.join(","))}&lastKey=${lastEvaluatedResponseId}`}
             className={`group ml-4 inline-block ${
               isLastPage ? "pointer-events-none opacity-50" : ""
             }`}

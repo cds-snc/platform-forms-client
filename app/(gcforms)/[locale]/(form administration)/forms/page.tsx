@@ -10,6 +10,8 @@ import { ResumeEditingForm } from "./components/ResumeEditingForm";
 import { getAllTemplatesForUser, TemplateOptions } from "@lib/templates";
 import { DeliveryOption } from "@lib/types";
 import { getOverdueTemplateIds } from "@lib/overdue";
+import { Invitations } from "./components/Invitations/Invitations";
+import { prisma } from "@lib/integration/prismaConnector";
 
 export type FormsTemplate = {
   id: string;
@@ -23,26 +25,43 @@ export type FormsTemplate = {
   overdue: boolean;
 };
 
-export async function generateMetadata({
-  params: { locale },
-}: {
-  params: { locale: string };
-}): Promise<Metadata> {
+export async function generateMetadata(
+  props: {
+    params: Promise<{ locale: string }>;
+  }
+): Promise<Metadata> {
+  const params = await props.params;
+
+  const {
+    locale
+  } = params;
+
   const { t } = await serverTranslation("my-forms", { lang: locale });
   return {
     title: t("title"),
   };
 }
 
-export default async function Page({
-  params: { locale },
-  searchParams: { status },
-}: {
-  params: { locale: string };
-  searchParams: { status?: string };
-}) {
+export default async function Page(
+  props: {
+    params: Promise<{ locale: string }>;
+    searchParams: Promise<{ status?: string }>;
+  }
+) {
+  const searchParams = await props.searchParams;
+
+  const {
+    status
+  } = searchParams;
+
+  const params = await props.params;
+
+  const {
+    locale
+  } = params;
+
   try {
-    const { ability } = await authCheckAndRedirect();
+    const { ability, session } = await authCheckAndRedirect();
 
     const { t } = await serverTranslation("my-forms", { lang: locale });
 
@@ -75,13 +94,32 @@ export default async function Page({
       };
     });
 
+    const invitations = await prisma.invitation.findMany({
+      where: {
+        email: {
+          equals: session.user.email,
+          mode: "insensitive",
+        },
+        expires: {
+          gt: new Date(),
+        },
+      },
+      select: {
+        id: true,
+        email: true,
+        expires: true,
+        templateId: true,
+      },
+    });
+
     const overdueTemplateIds = await getOverdueTemplateIds(
       templates.map((template) => template.id)
     );
 
     return (
-      <div className="center mx-auto w-[980px] bg-gray-soft">
+      <div className="mx-auto w-[980px]">
         <h1 className="mb-8 border-b-0">{t("title")}</h1>
+        <Invitations invitations={invitations} />
         <div className="flex w-full justify-between">
           <Navigation filter={status} />
           <NewFormButton />

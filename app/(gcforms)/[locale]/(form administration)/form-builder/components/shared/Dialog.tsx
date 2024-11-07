@@ -19,7 +19,7 @@ export const Dialog = ({
   className,
   handleClose,
 }: {
-  dialogRef: React.RefObject<CDSHTMLDialogElement>;
+  dialogRef: React.RefObject<CDSHTMLDialogElement | null>;
   children: React.ReactElement;
   title?: string;
   actions?: React.ReactElement;
@@ -49,13 +49,14 @@ export const Dialog = ({
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === "Escape") {
         e.stopPropagation();
+        handleClose && handleClose();
         close();
       }
     };
 
     document.addEventListener("keydown", handleKeyDown);
     return () => document.removeEventListener("keydown", handleKeyDown);
-  }, [close]);
+  }, [close, handleClose]);
 
   return (
     <dialog

@@ -38,7 +38,7 @@ export const SettingsNavigation = ({ id }: { id: string }) => {
           {!loading && !isProduction && (
             <SubNavLink href={`/${language}/form-builder/${id}/settings/api`}>
               <span className="text-sm laptop:text-base">
-                <ProtectedIcon className="mr-2 inline-block laptop:mt-[-2px]" />
+                <ProtectedIcon className="mr-2 inline-block fill-black laptop:mt-[-2px]" />
                 {t("settings.api.title")}
               </span>
             </SubNavLink>

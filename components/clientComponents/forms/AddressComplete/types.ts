@@ -6,8 +6,15 @@ export interface AddressCompleteChoice {
   Id: string;
   Text: string;
   Highlight: string;
+  Cursor: number;
   Description: string;
-  IsRetrievable: boolean;
+  Next: AddressCompleNext;
+}
+
+// AutoComplete API returns Find or Retreive as a "next" status.
+export enum AddressCompleNext {
+  Find = "Find",
+  Retrieve = "Retrieve",
 }
 
 // Address Lookup API returns an array of objects like:
@@ -62,5 +69,16 @@ export interface AddressElements {
   city: string;
   province: string;
   postalCode: string;
+  country: string;
+}
+
+// AddressComplete String Labels {
+export interface AddressCompleteLabels {
+  streetAddress: string;
+  city: string;
+  province: string;
+  postalCode: string;
+  provinceOrState: string;
+  postalCodeOrZip: string;
   country: string;
 }

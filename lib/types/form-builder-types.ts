@@ -1,4 +1,4 @@
-import { ComponentType, JSXElementConstructor } from "react";
+import { ComponentType, JSXElementConstructor, type JSX } from "react";
 import { FormElement, ElementProperties, FormRecord } from "@lib/types";
 export type Language = "en" | "fr";
 
@@ -114,10 +114,6 @@ export interface CDSHTMLDialogElement extends HTMLElement {
     listener: EventListenerOrEventListenerObject,
     options?: boolean | EventListenerOptions
   ): void;
-}
-
-export interface RenderMoreFunc {
-  (moreButton: JSX.Element | undefined): React.ReactElement | string | undefined;
 }
 
 export const FormServerErrorCodes = {

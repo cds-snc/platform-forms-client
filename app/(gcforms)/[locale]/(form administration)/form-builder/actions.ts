@@ -16,7 +16,6 @@ import {
   updateClosedData,
   updateTemplate as updateDbTemplate,
   updateIsPublishedForTemplate,
-  deleteTemplate as deleteDbTemplate,
   updateSecurityAttribute,
   updateResponseDeliveryOption,
   updateFormPurpose,
@@ -25,6 +24,7 @@ import {
 import { serverTranslation } from "@i18n";
 import { revalidatePath } from "next/cache";
 import { checkOne } from "@lib/cache/flags";
+import { isValidDateString } from "@lib/utils/date/isValidDateString";
 
 export type CreateOrUpdateTemplateType = {
   id?: string;
@@ -71,7 +71,7 @@ export const createOrUpdateTemplate = async ({
   }
 };
 
-export const createTemplate = async ({
+const createTemplate = async ({
   formConfig,
   name,
   deliveryOption,
@@ -252,7 +252,7 @@ export const closeForm = async ({
   closedDetails,
 }: {
   id: string;
-  closingDate: string;
+  closingDate: string | null;
   closedDetails?: ClosedDetails;
 }): Promise<{
   formID: string;
@@ -261,6 +261,14 @@ export const closeForm = async ({
 }> => {
   try {
     const { ability } = await authCheckAndThrow();
+
+    // closingDate: null means the form is open, or will be set to be open
+    // closingDate: (now/past date) means the form is closed
+    // closingDate: (future date) means the form is scheduled to close in the future
+
+    if (closingDate && !isValidDateString(closingDate)) {
+      throw new Error(`Invalid closing date. Request information: { ${formID}, ${closingDate} }`);
+    }
 
     const response = await updateClosedData(ability, formID, closingDate, closedDetails);
     if (!response) {
@@ -280,13 +288,13 @@ export const updateTemplateUsers = async ({
   users,
 }: {
   id: string;
-  users: { id: string; action: "add" | "remove" }[];
+  users: { id: string }[];
 }): Promise<{
-  formRecord: FormRecord | null;
+  success: boolean;
   error?: string;
 }> => {
   if (!users.length) {
-    throw new Error("mustHaveAtLeastOneUser");
+    return { success: false, error: "mustHaveAtLeastOneUser" };
   }
 
   try {
@@ -299,9 +307,9 @@ export const updateTemplateUsers = async ({
       );
     }
 
-    return { formRecord: response };
+    return { success: true };
   } catch (error) {
-    return { formRecord: null, error: (error as Error).message };
+    return { success: false, error: (error as Error).message };
   }
 };
 
@@ -357,29 +365,6 @@ export const sendResponsesToVault = async ({
   }
 };
 
-export const deleteTemplate = async ({
-  id: formID,
-}: {
-  id: string;
-}): Promise<{
-  formRecord: FormRecord | null;
-  error?: string;
-}> => {
-  try {
-    const { ability } = await authCheckAndThrow();
-
-    const response = await deleteDbTemplate(ability, formID);
-
-    if (!response) {
-      throw new Error(`Template API response was null. Request information: { ${formID} }`);
-    }
-
-    return { formRecord: response };
-  } catch (error) {
-    return { formRecord: null, error: (error as Error).message };
-  }
-};
-
 export const getTranslatedElementProperties = async (type: string) => {
   const { t: en } = await serverTranslation("form-builder", { lang: "en" });
   const { t: fr } = await serverTranslation("form-builder", { lang: "fr" });
@@ -387,6 +372,10 @@ export const getTranslatedElementProperties = async (type: string) => {
     description: {
       en: en([`defaultElementDescription.${type}`, ""]),
       fr: fr([`defaultElementDescription.${type}`, ""]),
+    },
+    label: {
+      en: en([`defaultElementLabel.${type}`, ""]),
+      fr: fr([`defaultElementLabel.${type}`, ""]),
     },
   };
 };

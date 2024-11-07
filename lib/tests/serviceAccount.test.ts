@@ -12,7 +12,6 @@ import {
 import { Base, mockUserPrivileges } from "__utils__/permissions";
 import { AccessControlError, createAbility } from "@lib/privileges";
 import { prismaMock } from "@jestUtils";
-import { Prisma } from "@prisma/client";
 import { authCheckAndThrow } from "@lib/actions";
 import { logEvent } from "@lib/auditLogs";
 import type { Session } from "next-auth";
@@ -91,7 +90,7 @@ describe("Service Account functions", () => {
       });
 
       const result = await checkKeyExists(userId);
-      expect(result).toBe(true);
+      expect(result).toBe(keyId);
     });
     it("should return false if key does not exist", async () => {
       const keyId = "test";
@@ -143,6 +142,7 @@ describe("Service Account functions", () => {
         type: "serviceAccount",
         userId: "serviceAccountUser",
         keyId: "keyId",
+        formId: "templateId",
       });
       expect(mockedLogEvent).toHaveBeenCalledWith(
         "1",
@@ -162,6 +162,7 @@ describe("Service Account functions", () => {
         type: "serviceAccount",
         userId: "templateId",
         keyId: "keyId",
+        formId: "templateId",
       });
       expect(mockedLogEvent).toHaveBeenCalledWith(
         "1",
@@ -197,6 +198,7 @@ describe("Service Account functions", () => {
         keyId: "keyId",
         type: "serviceAccount",
         userId: "123412341234",
+        formId: "templateId",
       });
       expect(mockedLogEvent).toHaveBeenCalledWith(
         "1",
@@ -269,7 +271,9 @@ describe("Service Account functions", () => {
         getUserByLoginNameGlobal: jest.fn().mockResolvedValue({ user: { id: serviceAccountID } }),
         removeUser: jest.fn().mockResolvedValue({}),
       });
-      (prismaMock.apiServiceAccount.delete as jest.MockedFunction<any>).mockResolvedValue();
+      (prismaMock.apiServiceAccount.deleteMany as jest.MockedFunction<any>).mockResolvedValue({
+        count: 1,
+      });
       await deleteKey("templateId");
 
       expect(mockedLogEvent).toHaveBeenCalledWith(
@@ -284,7 +288,9 @@ describe("Service Account functions", () => {
         getUserByLoginNameGlobal: jest.fn().mockResolvedValue({ user: undefined }),
         removeUser: jest.fn().mockResolvedValue({}),
       });
-      (prismaMock.apiServiceAccount.delete as jest.MockedFunction<any>).mockResolvedValue();
+      (prismaMock.apiServiceAccount.deleteMany as jest.MockedFunction<any>).mockResolvedValue({
+        count: 1,
+      });
       await deleteKey("templateId");
 
       expect(mockedLogEvent).toHaveBeenCalledWith(
@@ -301,12 +307,9 @@ describe("Service Account functions", () => {
         getUserByLoginNameGlobal: jest.fn().mockResolvedValue({ user: { id: serviceAccountID } }),
         removeUser: jest.fn().mockResolvedValue({}),
       });
-      (prismaMock.apiServiceAccount.delete as jest.MockedFunction<any>).mockRejectedValue(
-        new Prisma.PrismaClientKnownRequestError("I'm a Prisma Error", {
-          code: "P2025",
-          clientVersion: "5",
-        })
-      );
+      (prismaMock.apiServiceAccount.deleteMany as jest.MockedFunction<any>).mockResolvedValue({
+        count: 0,
+      });
       await deleteKey("templateId");
 
       expect(mockedLogEvent).toHaveBeenCalledWith(

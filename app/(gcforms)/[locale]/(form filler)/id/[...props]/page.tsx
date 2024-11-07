@@ -1,5 +1,5 @@
 import { getPublicTemplateByID } from "@lib/templates";
-import classnames from "classnames";
+import { cn } from "@lib/utils";
 import { TextPage, ClosedPage } from "@clientComponents/forms";
 import { getRenderedForm } from "@lib/formBuilder";
 import { dateHasPast } from "@lib/utils";
@@ -11,13 +11,16 @@ import { GCFormsProvider } from "@lib/hooks/useGCFormContext";
 import { FormWrapper } from "./clientSide";
 import { allowGrouping } from "@formBuilder/components/shared/right-panel/treeview/util/allowGrouping";
 import { serverTranslation } from "@i18n";
-import { Notice as ClosingNotice } from "@clientComponents/forms/ClosingNotice/Notice";
+import { ClosingNotice } from "@clientComponents/forms/ClosingNotice/ClosingNotice";
+import { FormDelayProvider } from "@lib/hooks/useFormDelayContext";
 
-export async function generateMetadata({
-  params: { locale, props },
-}: {
-  params: { locale: string; props: string[] };
+export async function generateMetadata(props0: {
+  params: Promise<{ locale: string; props: string[] }>;
 }): Promise<Metadata> {
+  const params = await props0.params;
+
+  const { locale, props } = params;
+
   const formID = props[0];
   const step = props[1] ?? "";
   const publicForm = await getPublicTemplateByID(formID);
@@ -35,11 +38,13 @@ export async function generateMetadata({
   };
 }
 
-export default async function Page({
-  params: { locale, props },
-}: {
-  params: { locale: string; props: string[] };
+export default async function Page(props0: {
+  params: Promise<{ locale: string; props: string[] }>;
 }) {
+  const params = await props0.params;
+
+  const { locale, props } = params;
+
   const formID = props[0];
   const step = props[1] ?? "";
   const formRecord = await getPublicTemplateByID(formID);
@@ -55,7 +60,7 @@ export default async function Page({
   }
 
   const language = locale as "en" | "fr";
-  const classes = classnames("gc-form-wrapper");
+  const classes = cn("gc-form-wrapper");
   const currentForm = getRenderedForm(formRecord, language);
   const formTitle = formRecord.form[getLocalizedProperty("title", language)] as string;
   const isAllowGrouping = allowGrouping();
@@ -91,11 +96,13 @@ export default async function Page({
         <ClosingNotice language={language} closingDate={formRecord.closingDate} />
         <h1>{formTitle}</h1>
         <GCFormsProvider formRecord={formRecord}>
-          <FormWrapper
-            formRecord={formRecord}
-            currentForm={currentForm}
-            allowGrouping={isAllowGrouping}
-          />
+          <FormDelayProvider>
+            <FormWrapper
+              formRecord={formRecord}
+              currentForm={currentForm}
+              allowGrouping={isAllowGrouping}
+            />
+          </FormDelayProvider>
         </GCFormsProvider>
       </div>
     </FormDisplayLayout>

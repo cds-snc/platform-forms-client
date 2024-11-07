@@ -1,6 +1,16 @@
 "use client";
-import { AddressCompleteChoice, AddressCompleteProps, AddressElements } from "./types";
-import { getAddressCompleteChoices, getSelectedAddress } from "./utils";
+import {
+  AddressCompleteChoice,
+  AddressCompleteProps,
+  AddressElements,
+  AddressCompleNext,
+} from "./types";
+import {
+  getAddressCompleteChoices,
+  getSelectedAddress,
+  getAddressCompleteRetrieve,
+  matchesAddressPattern,
+} from "./utils";
 import { Description, Label, ManagedCombobox } from "@clientComponents/forms";
 import { useState, useEffect, useRef } from "react";
 import { useTranslation } from "@i18n/client";
@@ -12,11 +22,11 @@ import { countries } from "@lib/managedData/countries";
 import { useFeatureFlags } from "@lib/hooks/useFeatureFlags";
 
 interface ManagedComboboxRef {
-  changeInputValue: (value: string) => void;
+  changeInputValue: (value: string, keepOpen: boolean) => void;
 }
 
 export const AddressComplete = (props: AddressCompleteProps): React.ReactElement => {
-  const { id, name, required, ariaDescribedBy } = props;
+  const { id, name, required, ariaDescribedBy, label } = props;
 
   const [field, meta, helpers] = useField(props);
 
@@ -61,8 +71,16 @@ export const AddressComplete = (props: AddressCompleteProps): React.ReactElement
   }, [apiKey, featureFlags.addressComplete]);
 
   //Form fillers address elements
-  const [addressObject, setAddressObject] = useState<AddressElements | null>(
-    field.value ? JSON.parse(field.value) : null
+  const [addressObject, setAddressObject] = useState<AddressElements>(
+    field.value
+      ? JSON.parse(field.value)
+      : {
+          streetAddress: "",
+          city: "",
+          province: "",
+          postalCode: "",
+          country: "",
+        }
   );
 
   // Update the field value when the address object changes
@@ -71,30 +89,14 @@ export const AddressComplete = (props: AddressCompleteProps): React.ReactElement
     helpers.setValue(newValue);
   }, [addressObject, helpers]);
 
-  const onAddressSearch = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    setAddressData("streetAddress", e.target.value); // Update the street address in the address object
-    // It will be updated again when the address is set to a autocomplete value, or kept if no value is selected.
-
-    if (!allow) {
-      return;
-    } // Abandon if addressComplete is disabled.
-
-    const query = e.target.value;
-    const responseData = await getAddressCompleteChoices(
-      apiKey,
-      query,
-      addressObject?.country || "CAN"
-    );
-
+  const handleAddressComplete = async (choices: AddressCompleteChoice[]) => {
     //loop through the responseData and add it to the addressResultsCache
     const newElements: AddressCompleteChoice[] = [];
 
-    for (let i = 0; i < responseData.length; i++) {
+    for (let i = 0; i < choices.length; i++) {
       // Check key doesn't already exist.
-      if (
-        !addressResultCache.find((item: AddressCompleteChoice) => item.Id === responseData[i].Id)
-      ) {
-        newElements.push(responseData[i]);
+      if (!addressResultCache.find((item: AddressCompleteChoice) => item.Id === choices[i].Id)) {
+        newElements.push(choices[i]);
       }
     }
 
@@ -103,7 +105,7 @@ export const AddressComplete = (props: AddressCompleteProps): React.ReactElement
     }
 
     // Filter the results to avoid duplicate entry
-    const uniqueResults = responseData.filter(
+    const uniqueResults = choices.filter(
       (item: AddressCompleteChoice, index: number, self: AddressCompleteChoice[]) =>
         index ===
         self.findIndex((t) => toFullAddress(t) === toFullAddress(item) && item.Text !== undefined)
@@ -116,6 +118,30 @@ export const AddressComplete = (props: AddressCompleteProps): React.ReactElement
     );
   };
 
+  const onAddressSearch = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    setAddressData("streetAddress", e.target.value); // Update the street address in the address object
+    // It will be updated again when the address is set to a autocomplete value, or kept if no value is selected.
+
+    if (!allow) {
+      return;
+    } // Abandon if addressComplete is disabled.
+
+    const query = e.target.value;
+
+    if (matchesAddressPattern(query)) {
+      await onAddressSet(query); // Do Search for Nested Address via ID instead of Query.
+      return;
+    } // Abandon, don't search on nested addresses.
+
+    const responseData = await getAddressCompleteChoices(
+      apiKey,
+      query,
+      addressObject?.country || "CAN"
+    );
+
+    handleAddressComplete(responseData);
+  };
+
   const onAddressSet = async (value: string) => {
     if (!allow) {
       return;
@@ -124,21 +150,48 @@ export const AddressComplete = (props: AddressCompleteProps): React.ReactElement
     const selectedResult = addressResultCache.find(
       (item: AddressCompleteChoice) => toFullAddress(item) === value
     );
+
     if (selectedResult === undefined) {
       return; // Do nothing, this is not found in the AddressComplete API.
     } else {
-      const responseData = await getSelectedAddress(
-        apiKey,
-        selectedResult.Id,
-        addressObject?.country || "CAN",
-        i18n.language as Language
-      );
-      if (responseData) {
-        const results = responseData;
-        setAddressObject(results);
-        if (comboboxRef.current) {
-          comboboxRef.current.changeInputValue(results.streetAddress);
+      // Perform regex test against the selectedResult.Next value.
+      // The API just sometimes gives back a "Retrieve" value for a nested address.
+      // Why? Because Reasons I guess.
+      // eg: Toronto, ON - 15489 Addresses
+      // Swap the value to Find
+      let nextValue = selectedResult.Next;
+      if (matchesAddressPattern(selectedResult.Next)) {
+        nextValue = AddressCompleNext.Find;
+      }
+
+      // Handle the Next value.
+      if (nextValue == AddressCompleNext.Retrieve) {
+        const responseData = await getSelectedAddress(
+          apiKey,
+          selectedResult.Id,
+          addressObject?.country || "CAN",
+          i18n.language as Language
+        );
+        if (responseData) {
+          const results = responseData;
+          setAddressObject(results);
+          if (comboboxRef.current) {
+            comboboxRef.current.changeInputValue(results.streetAddress, false);
+          }
         }
+      } else if (nextValue == AddressCompleNext.Find) {
+        // Do another lookup for the address.
+        const responseData = await getAddressCompleteRetrieve(
+          apiKey,
+          selectedResult.Id,
+          addressObject?.country || "CAN"
+        );
+
+        if (comboboxRef.current) {
+          comboboxRef.current.changeInputValue("", true);
+        }
+
+        handleAddressComplete(responseData);
       }
     }
   };
@@ -186,16 +239,17 @@ export const AddressComplete = (props: AddressCompleteProps): React.ReactElement
     <>
       <fieldset
         role="group"
+        className="gcds-fieldset"
         aria-describedby={ariaDescribedBy ? `desc-${id}` : undefined}
         data-testid="addressComplete"
         id={id}
         tabIndex={0}
       >
-        {ariaDescribedBy && (
-          <Description id={`desc-${id}`} className="gc-form-group-context">
-            {ariaDescribedBy}
-          </Description>
-        )}
+        <legend key={`label-${id}`} id={`label-${id}`} className={"legend-fieldset"}>
+          {label}
+        </legend>
+
+        {ariaDescribedBy && <Description id={`${id}`}>{ariaDescribedBy}</Description>}
 
         {props.canadianOnly && (
           <div>
@@ -203,8 +257,8 @@ export const AddressComplete = (props: AddressCompleteProps): React.ReactElement
           </div>
         )}
         {!props.canadianOnly && (
-          <div className="mb-6">
-            <Label htmlFor={`${name}-country`} className="gc-label">
+          <div className="mb-6 mt-4">
+            <Label htmlFor={`${name}-country`}>
               {t("addElementDialog.addressComplete.country")}
             </Label>
             <ManagedCombobox
@@ -232,12 +286,14 @@ export const AddressComplete = (props: AddressCompleteProps): React.ReactElement
             <ManagedCombobox
               ref={comboboxRef}
               choices={choices}
+              key={`${name}-streetAddress`}
               id={`${name}-streetAddress`}
               name={`${name}-streetAddress`}
               onChange={onAddressSearch}
               onSetValue={onAddressSet}
-              baseValue={addressObject?.streetAddress}
+              baseValue={addressObject.streetAddress}
               required={required}
+              placeholderText={allow ? t("addElementDialog.addressComplete.startTyping") : ""}
               ariaDescribedBy={`${name}-streetDesc`}
             />
           )}
@@ -260,7 +316,7 @@ export const AddressComplete = (props: AddressCompleteProps): React.ReactElement
             type="text"
             id={`${name}-city`}
             name={`${name}-city`}
-            value={addressObject?.city}
+            value={addressObject.city}
             onChange={(e) => setAddressData("city", e.target.value)}
             className={cn("gc-input-text", meta.error && "gc-error-input")}
             required={required}
@@ -270,13 +326,15 @@ export const AddressComplete = (props: AddressCompleteProps): React.ReactElement
 
         <div className="mb-6">
           <Label htmlFor={`${name}-province`} className="gc-label">
-            {t("addElementDialog.addressComplete.province")}
+            {props.canadianOnly && t("addElementDialog.addressComplete.components.province")}
+            {!props.canadianOnly &&
+              t("addElementDialog.addressComplete.components.provinceOrState")}
           </Label>
           <input
             type="text"
             id={`${name}-province`}
             name={`${name}-province`}
-            value={addressObject?.province}
+            value={addressObject.province}
             onChange={(e) => setAddressData("province", e.target.value)}
             className={cn("gc-input-text", meta.error && "gc-error-input")}
             required={required}
@@ -286,13 +344,15 @@ export const AddressComplete = (props: AddressCompleteProps): React.ReactElement
 
         <div className="mb-6">
           <Label htmlFor={`${name}-postal`} className="gc-label">
-            {t("addElementDialog.addressComplete.postal")}
+            {props.canadianOnly && t("addElementDialog.addressComplete.components.postalCode")}
+            {!props.canadianOnly &&
+              t("addElementDialog.addressComplete.components.postalCodeOrZip")}
           </Label>
           <input
             id={`${name}-postal`}
             type="text"
             name={`${name}-postal`}
-            value={addressObject?.postalCode}
+            value={addressObject.postalCode}
             onChange={(e) => setAddressData("postalCode", e.target.value)}
             className={cn("gc-input-text", meta.error && "gc-error-input")}
             required={required}

@@ -8,7 +8,7 @@ import { FileInput } from "@clientComponents/forms";
 import { logMessage } from "@lib/logger";
 
 const inputProps = {
-  key: "pdf",
+  // key: "pdf",
   id: "pdf",
   name: "pdf",
   label: "Upload a PDF",

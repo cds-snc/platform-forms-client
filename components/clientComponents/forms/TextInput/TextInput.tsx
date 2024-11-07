@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, type JSX } from "react";
 import { useField } from "formik";
 import { ErrorMessage } from "@clientComponents/forms";
 import { InputFieldProps, HTMLTextInputTypeAttribute } from "@lib/types";
@@ -16,6 +16,8 @@ export const TextInput = (
 ): React.ReactElement => {
   const { id, type, className, required, ariaDescribedBy, placeholder, autoComplete, maxLength } =
     props;
+
+  // @ts-expect-error fix this
   const [field, meta, helpers] = useField(props);
   const { t } = useTranslation("common");
 

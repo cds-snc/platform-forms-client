@@ -1,38 +1,39 @@
 import { serverTranslation } from "@i18n";
 import { Metadata } from "next";
-import { Edit } from "./components/Edit";
-import { EditNavigation } from "./components/EditNavigation";
+import { checkKeyExists } from "@lib/serviceAccount";
 import { EditWithGroups } from "./components/EditWithGroups";
-import { allowGrouping } from "@formBuilder/components/shared/right-panel/treeview/util/allowGrouping";
+import { DynamicRowDialog } from "@formBuilder/components/dialogs/DynamicRowDialog/DynamicRowDialog";
+import { MoreDialog } from "../components/dialogs/MoreDialog/MoreDialog";
 
-export async function generateMetadata({
-  params: { locale },
-}: {
-  params: { locale: string };
+export async function generateMetadata(props: {
+  params: Promise<{ locale: string }>;
 }): Promise<Metadata> {
+  const params = await props.params;
+
+  const { locale } = params;
+
   const { t } = await serverTranslation("form-builder", { lang: locale });
   return {
     title: `${t("gcFormsEdit")} — ${t("gcForms")}`,
   };
 }
 
-export default async function Page({
-  params: { id, locale },
-}: {
-  params: { id: string; locale: string };
-}) {
-  const conditionalLogic = allowGrouping();
+export default async function Page(props: { params: Promise<{ id: string; locale: string }> }) {
+  const params = await props.params;
+
+  const { id, locale } = params;
+
+  let keyId: string | false = false;
+
+  if (process.env.APP_ENV !== "test") {
+    keyId = await checkKeyExists(id);
+  }
 
   return (
     <>
-      {conditionalLogic ? (
-        <EditWithGroups id={id} locale={locale} />
-      ) : (
-        <>
-          <EditNavigation id={id} />
-          <Edit formId={id} />
-        </>
-      )}
+      <EditWithGroups id={id} locale={locale} keyId={keyId} />
+      <DynamicRowDialog />
+      <MoreDialog />
     </>
   );
 }

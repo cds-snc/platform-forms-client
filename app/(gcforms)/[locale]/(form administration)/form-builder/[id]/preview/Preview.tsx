@@ -9,6 +9,7 @@ import { FormProperties, PublicFormRecord } from "@lib/types";
 import { RichText } from "@clientComponents/forms";
 import { Button } from "@clientComponents/globals";
 import { NextButton } from "@clientComponents/forms/NextButton/NextButton";
+import { ClosingNotice } from "@clientComponents/forms/ClosingNotice/ClosingNotice";
 
 import {
   FormServerErrorCodes,
@@ -39,12 +40,15 @@ export const Preview = ({
 }) => {
   const { status } = useSession();
   const { i18n } = useTranslation(["common", "confirmation"]);
-  const { id, getSchema, getIsPublished, getSecurityAttribute } = useTemplateStore((s) => ({
-    id: s.id,
-    getSchema: s.getSchema,
-    getIsPublished: s.getIsPublished,
-    getSecurityAttribute: s.getSecurityAttribute,
-  }));
+  const { id, getSchema, getIsPublished, getSecurityAttribute, closingDate } = useTemplateStore(
+    (s) => ({
+      id: s.id,
+      getSchema: s.getSchema,
+      getIsPublished: s.getIsPublished,
+      getSecurityAttribute: s.getSecurityAttribute,
+      closingDate: s.closingDate,
+    })
+  );
 
   const isPastClosingDate = useIsFormClosed();
 
@@ -170,6 +174,7 @@ export const Preview = ({
           </div>
         ) : (
           <div className="gc-formview">
+            {closingDate && <ClosingNotice language={language} closingDate={closingDate} />}
             <h1 className="mt-4">
               {formRecord.form[localizeField(LocalizedFormProperties.TITLE, language)] ||
                 t("gcFormsTest", { ns: "form-builder" })}

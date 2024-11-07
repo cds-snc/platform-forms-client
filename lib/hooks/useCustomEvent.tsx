@@ -1,16 +1,25 @@
 import { useRef } from "react";
 
-/**
- * @TODO: Define unique payload types for each CustomEvent and add
- *         to CustomEventDetails instead of using generic object
- *
- * Example: a MoreDialog listener might accept a payload like:
- *
- * type MoreDialogEventDetails = {
- *   item: FormElementWithIndex;
- * }
- */
-export type CustomEventDetails = object | undefined;
+export type CustomEventDetails<T = undefined> = T;
+type OnFunction = <T>(eventName: string, callback: (detail: CustomEventDetails<T>) => void) => void;
+type OffFunction = <T>(
+  eventName: string,
+  callback: (detail: CustomEventDetails<T>) => void
+) => void;
+type FireFunction = <T>(eventName: string, detail?: CustomEventDetails<T>) => void;
+
+type EventType = {
+  on: OnFunction;
+  off: OffFunction;
+  fire: FireFunction;
+};
+
+export const EventKeys = {
+  openApiKeyDialog: "open-api-key-dialog",
+  openDynamicRowDialog: "open-dynamic-row-dialog",
+  openMoreDialog: "open-more-dialog",
+  openDeleteApiKeyDialog: "open-delete-api-key-dialog",
+} as const;
 
 export const useCustomEvent = () => {
   // Attach listeners to a documentRef instead of document directly
@@ -21,13 +30,13 @@ export const useCustomEvent = () => {
     documentRef.current = window.document;
   }
 
-  const Event = {
+  const Event: EventType = {
     /**
      * Fire an event, pass an optional payload
      * @param eventName string
      * @param data CustomEventDetails
      */
-    fire: (eventName: string, detail: CustomEventDetails = undefined) => {
+    fire: (eventName, detail = undefined) => {
       const event = new CustomEvent(eventName, { detail });
       documentRef.current && documentRef.current.dispatchEvent(event);
     },
@@ -37,7 +46,7 @@ export const useCustomEvent = () => {
      * @param eventName string
      * @param callback (detail: CustomEventDetails) => void
      */
-    on: (eventName: string, callback: (detail: CustomEventDetails) => void) => {
+    on: (eventName, callback) => {
       documentRef.current &&
         documentRef.current.addEventListener(eventName, (event: Event) => {
           callback((event as CustomEvent).detail);
@@ -49,7 +58,7 @@ export const useCustomEvent = () => {
      * @param eventName string
      * @param callback (detail: CustomEventDetails) => void
      */
-    off: (eventName: string, callback: (detail: CustomEventDetails) => void) => {
+    off: (eventName, callback) => {
       documentRef.current &&
         documentRef.current.removeEventListener(eventName, (event: Event) => {
           callback((event as CustomEvent).detail);

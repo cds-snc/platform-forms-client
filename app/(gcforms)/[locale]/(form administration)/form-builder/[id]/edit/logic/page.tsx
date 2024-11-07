@@ -1,6 +1,5 @@
 import { serverTranslation } from "@i18n";
 import { Metadata } from "next";
-import { allowGrouping } from "@formBuilder/components/shared/right-panel/treeview/util/allowGrouping";
 import { FlowWithProvider } from "./components/flow/FlowWithProvider";
 import { Suspense } from "react";
 import { Loader } from "@clientComponents/globals/Loader";
@@ -10,27 +9,34 @@ import { Legend } from "./components/flow/Legend";
 import { Language } from "@lib/types/form-builder-types";
 import { EndMarker } from "./components/flow/EndMarker";
 
-export async function generateMetadata({
-  params: { locale },
-}: {
-  params: { locale: string };
-}): Promise<Metadata> {
+export async function generateMetadata(
+  props: {
+    params: Promise<{ locale: string }>;
+  }
+): Promise<Metadata> {
+  const params = await props.params;
+
+  const {
+    locale
+  } = params;
+
   const { t } = await serverTranslation("form-builder", { lang: locale });
   return {
     title: `${t("gcFormsEdit")} — ${t("gcForms")}`,
   };
 }
 
-export default async function Page({
-  params: { id, locale },
-}: {
-  params: { id: string; locale: string };
-}) {
-  const allowGroups = allowGrouping();
-
-  if (!allowGroups) {
-    return null;
+export default async function Page(
+  props: {
+    params: Promise<{ id: string; locale: string }>;
   }
+) {
+  const params = await props.params;
+
+  const {
+    id,
+    locale
+  } = params;
 
   const { t } = await serverTranslation("form-builder", { lang: locale });
   const Loading = () => (

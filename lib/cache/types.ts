@@ -2,6 +2,8 @@
 export const FeatureFlags = {
   addressComplete: "addressComplete",
   repeatingSets: "repeatingSets",
+  scheduleClosingDate: "scheduleClosingDate",
+  apiAccess: "apiAccess",
 } as const;
 
 export type FeatureFlagKeys = keyof typeof FeatureFlags;

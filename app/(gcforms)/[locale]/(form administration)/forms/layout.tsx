@@ -7,13 +7,22 @@ import { TemplateStoreProvider } from "@lib/store/useTemplateStore";
 import { SkipLink } from "@serverComponents/globals/SkipLink";
 import { Footer } from "@serverComponents/globals/Footer";
 
-export default async function Layout({
-  children,
-  params: { locale },
-}: {
-  children: React.ReactNode;
-  params: { locale: string };
-}) {
+export default async function Layout(
+  props: {
+    children: React.ReactNode;
+    params: Promise<{ locale: string }>;
+  }
+) {
+  const params = await props.params;
+
+  const {
+    locale
+  } = params;
+
+  const {
+    children
+  } = props;
+
   await authCheckAndRedirect();
 
   return (
@@ -26,7 +35,7 @@ export default async function Layout({
             <main id="content" className="mb-10">
               {children}
             </main>
-            <ToastContainer />
+            <ToastContainer containerId="default" />
           </div>
           <Footer displayFormBuilderFooter className="mt-0" />
         </div>

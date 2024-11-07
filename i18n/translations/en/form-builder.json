@@ -72,10 +72,11 @@
       "components": {
         "unitNumber": "Unit number",
         "civicNumber": "Civic number",
-        "streetName": "Street name",
-        "city": "City or town",
-        "province": "Province, territory, or state",
-        "postalCode": "Postal or zip code",
+        "city": "City, town, or community",
+        "province": "Province or territory",
+        "provinceOrState": "Province, territory, or state",
+        "postalCode": "Postal code",
+        "postalCodeOrZip": "Postal or zip code",
         "country": "Country"
       }
     },
@@ -345,6 +346,9 @@
     "combobox": "Start typing to narrow down the list.",
     "fileInput": "Files must not exceed 3.5 MB in total."
   },
+  "defaultElementLabel": {
+    "addressComplete": "Address"
+  },
   "description": "Description",
   "descriptionDescription": "The hint text appears below the label and before the field. It’s used to add context and instructions for the field. It’s a great place to specify formatting requirements or give an example.",
   "didYouFindThisToolHelpful": "Did you find GC Forms helpful? <a href=\"/en/contact\" target=\"_blank\">Provide feedback</a>",
@@ -589,6 +593,7 @@
       "title": "Button"
     }
   },
+  "setName": "Set name",
   "questionTitle": "Question",
   "remove": "Remove",
   "removeFromSet": "Remove from set",
@@ -619,11 +624,65 @@
   "settings": {
     "formManagement": "Form management",
     "api": {
+      "keyId": "API key ID",
       "title": "API Access",
-      "generateKey": "Generate Key",
+      "generateKey": "Generate API key",
       "refreshKey": "Refresh Key",
-      "deleteKey": "Delete Key",
-      "keyExists": "API Key Exists"
+      "deleteKey": "Delete API key",
+      "deleteKeyFailed": {
+        "title": "API key failed to delete",
+        "message": "API key failed to delete"
+      },
+      "deleteKeySuccess": {
+        "title": "API key deleted",
+        "message": "New responses are now available for download on the",
+        "responseLinkText": "responses page"
+      },
+      "keyExists": "API key exists",
+      "keyIdToolTip": {
+        "text1": "What is an API key ID?",
+        "text2": "The API key ID is not the API key itself. It provides a safe way to identify a key without sharing protected information."
+      },
+      "deleteApiKeyDialog": {
+        "title": "Delete API key",
+        "cautionTitle": "Caution:",
+        "cautionText": "Deleting this API key cannot be undone. Deletion will permanently stop the delivery of responses to all integrated systems. You will need to generate a new key and add it to your integration to restart API delivery.",
+        "stopText": "<strong>To temporarily stop submissions</strong> to this form consider",
+        "stopText1": "closing the form",
+        "stopText2": "instead.",
+        "cancelButton": "Cancel",
+        "deleteKeyButton": "Delete key",
+        "error": {
+          "deleteFailed": {
+            "title": "Error deleting API key",
+            "message": "There was an error deleting the API key. Please try again later."
+          }
+        }
+      },
+      "dialog": {
+        "title": "Generate API key",
+        "heading": "GC Forms API keys are PROTECTED B",
+        "responsibility": "It is your responsibility to:",
+        "responsibility1": "Save this key in a secure location.",
+        "responsibility2": "Share the key only with people who need it.",
+        "responsibility3": "Send the key through secure channels, like encrypted email.",
+        "responsibility4": "Understand the <a href='canada.ca' target='_blank'>required security procedures.</a>",
+        "text1": "Do not lose your key",
+        "text2": "This key is provided once as it can give access to form response data. If you lose this key, or if it becomes compromised, you will have to create a new one.",
+        "cancelButton": "Cancel",
+        "downloadButton": "Download API key",
+        "confirm": {
+          "label": "Confirmation",
+          "required": "(required)",
+          "description": "Type <strong>AGREE</strong> in the box below to confirm you understand your responsibilities and agree to the <a href='canada.ca' target='_blank'>required security procedures</a> while storing and sharing this key."
+        },
+        "error": {
+          "createFailed": {
+            "title": "Error creating API key",
+            "message": "There was an error creating the API key. Please try again later."
+          }
+        }
+      }
     }
   },
   "settingsDeleteButton": "Delete",
@@ -707,6 +766,35 @@
         "title": "Download from GC Forms",
         "text1": "For up to PROTECTED B forms",
         "text2": "Download responses within 30 days"
+      }
+    },
+    "responseDeliveryHelpWithApi": {
+      "cta": "Help choosing an option",
+      "title": "Choosing a response delivery option",
+      "description": "There are two options for getting submitted form responses. Use the chart below to help pick which option best fits your needs.",
+      "inbox": {
+        "title": "Email to an inbox",
+        "text1": "For up to PROTECTED A forms",
+        "text2": "Responses are delivered directly to an inbox in real time",
+        "text3": "One email address can receive response emails. This can be a shared inbox.",
+        "text4": "One email address set for delivery. This can be a shared inbox.",
+        "text5": "No technical resources required."
+      },
+      "vault": {
+        "title": "Download from GC Forms",
+        "text1": "For up to PROTECTED B forms",
+        "text2": "Download responses within 30 days",
+        "text3": "Can be switched to API delivery after publishing",
+        "text4": "Multiple account holders can access responses.",
+        "text5": "No technical resources required."
+      },
+      "api": {
+        "title": "API response retrieval",
+        "text1": "For up to PROTECTED A forms. (PROTECTED B coming soon)",
+        "text2": "API pull requests & download delivery",
+        "text3": "Can be switched to download only delivery after publishing",
+        "text4": "One API key available per form.",
+        "text5": "Technical resources needed to develop the API integration."
       }
     }
   },
@@ -891,6 +979,15 @@
     "saveNote": {
       "text1": "Save changes before closing?",
       "text2": "Save or Cancel"
+    },
+    "apiOption": {
+      "label": "Receive responses through an API endpoint",
+      "note": "Submitted responses will be available for retrieval through an API endpoint and response page.",
+      "startNote": "Start your API integration by generating a private API Key"
+    },
+    "apiDocNotes": {
+      "title": "API documentation & guidance",
+      "text1": "To connect to our endpoint follow instructions and code examples in our <a href='http://canada.ca' target='_blank'>API documentation</a>. Read more about the API development process on our <a href='http://canada.ca' target='_blank'>guidance pages</a>."
     },
     "more": "More"
   },
@@ -1157,6 +1254,29 @@
         "title": "Button to remove from the set",
         "description": "Add a relevant action that is specific for the people filling out the form. For example, “Remove address”"
       }
+    }
+  },
+  "scheduleClosingPage": {
+    "linkText": "Schedule form closing",
+    "dialog": {
+      "title": "Schedule closing the form",
+      "text1": "Schedule a closing date",
+      "text2": "Set when you’d like to close the form.",
+      "datePicker": {
+        "month": "Month",
+        "day": "Day",
+        "year": "Year"
+      },
+      "timePicker": {
+        "text1": "Set a time",
+        "text2": "Provide the time using the 24-hour clock with timezone in Eastern Time.",
+        "text3": "For example 21:00"
+      },
+      "error": {
+        "notFutureDate": "Date and time must be upcoming, in the future."
+      },
+      "save": "Save",
+      "cancel": "Cancel"
     }
   }
 }

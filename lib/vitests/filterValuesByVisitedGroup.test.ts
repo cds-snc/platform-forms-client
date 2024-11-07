@@ -1,13 +1,14 @@
+import { expect } from "vitest";
 import { filterValuesByVisitedGroup } from "@lib/utils/form-builder/groupsHistory";
-import {values, groupHistory, groups} from "../../__fixtures__/conditionalInputHistoryEmptySimple.json";
+import {
+  values,
+  groupHistory,
+  groups,
+} from "../../__fixtures__/conditionalInputHistoryEmptySimple.json";
 
 describe("getGroupValues function", () => {
   it("Gets correct values (only values related to groups with the questions answered)", () => {
-    const formValues = filterValuesByVisitedGroup(
-      values,
-      groups,
-      groupHistory as string[]
-    );
+    const formValues = filterValuesByVisitedGroup(values, groups, groupHistory as string[]);
     const expectedValues = {
       "1": "A",
       "11": "",
@@ -20,7 +21,7 @@ describe("getGroupValues function", () => {
       "4": "",
       "5": "a1",
       "6": "a2",
-    }
+    };
     expect(formValues).toEqual(expectedValues);
   });
 
@@ -36,13 +37,9 @@ describe("getGroupValues function", () => {
       "start",
       "1739f12e-abbd-46ae-9db6-1b4b2144080d",
       "5205bacd-da93-4325-832e-9ed4be6ab38d-INVALID",
-      "review"
+      "review",
     ];
-    const formValues = filterValuesByVisitedGroup(
-      values,
-      groups,
-      groupHistoryInvalid as string[]
-    );
+    const formValues = filterValuesByVisitedGroup(values, groups, groupHistoryInvalid as string[]);
     const expectedValues = {
       "1": "A",
       "11": "",

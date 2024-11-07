@@ -1,11 +1,18 @@
 import crypto from "crypto";
-import { prisma } from "@lib/integration/prismaConnector";
-import { Prisma } from "@prisma/client";
+import { prisma, prismaErrors } from "@lib/integration/prismaConnector";
 import { logMessage } from "@lib/logger";
 import { logEvent } from "@lib/auditLogs";
 import { authCheckAndThrow } from "@lib/actions";
 import { checkUserHasTemplateOwnership } from "@lib/templates";
 import { getZitadelClient } from "@lib/integration/zitadelConnector";
+
+type ApiPrivateKey = {
+  type: string;
+  keyId: string;
+  key: string;
+  userId: string;
+  formId: string;
+};
 
 const createMachineUser = async (templateId: string) => {
   const zitadel = await getZitadelClient();
@@ -77,19 +84,12 @@ export const deleteKey = async (templateId: string) => {
   }
 
   await prisma.apiServiceAccount
-    .delete({
+    .deleteMany({
       where: {
         templateId: templateId,
       },
     })
-    .catch((e) => {
-      // Ignore the error if the record does not exist.
-      if (e instanceof Prisma.PrismaClientKnownRequestError && e.code === "P2025") {
-        return;
-      }
-      // continue to throw if it is a different type of error
-      throw e;
-    });
+    .catch((e) => prismaErrors(e, null));
 
   logEvent(
     ability.userID,
@@ -107,7 +107,17 @@ export const checkMachineUserExists = async (templateId: string) => {
   return getMachineUser(templateId);
 };
 
-export const checkKeyExists = async (templateId: string) => {
+/*
+ * This function is used to get the public key id of the service account
+ * associated with the templateId.
+ */
+export const _getApiUserPublicKeyId = async (templateId: string) => {
+  const result = { userId: null, publicKeyId: null };
+
+  if (templateId === "0000") {
+    return result;
+  }
+
   const { ability } = await authCheckAndThrow();
   await checkUserHasTemplateOwnership(ability, templateId);
 
@@ -120,25 +130,41 @@ export const checkKeyExists = async (templateId: string) => {
     })) ?? {};
 
   if (!userId || !publicKeyId) {
+    return result;
+  }
+
+  return { userId, publicKeyId };
+};
+
+/*
+ * This function is used to check if the key exists in the Zitadel
+ * for the service account associated with the templateId.
+ *
+ * Returns the keyId if the key exists, otherwise returns false
+ * If false the DB and the machine key may be out of sync.
+ */
+export const checkKeyExists = async (templateId: string) => {
+  const { userId, publicKeyId } = await _getApiUserPublicKeyId(templateId);
+  if (!userId || !publicKeyId) {
     return false;
   }
 
-  const zitadel = await getZitadelClient();
-  const remoteKey = await zitadel
-    .getMachineKeyByIDs({
+  try {
+    const zitadel = await getZitadelClient();
+    const remoteKey = await zitadel.getMachineKeyByIDs({
       userId,
       keyId: publicKeyId,
-    })
-    .catch((err) => {
-      logMessage.error(err);
-      return null;
     });
 
-  if (publicKeyId === remoteKey?.key?.id) {
-    return true;
+    if (publicKeyId === remoteKey?.key?.id) {
+      return remoteKey?.key?.id;
+    }
+
+    return false;
+  } catch (e) {
+    logMessage.error(e);
+    return false;
   }
-  // Key are out of sync or user does not exist
-  return false;
 };
 
 export const refreshKey = async (templateId: string) => {
@@ -208,7 +234,7 @@ export const refreshKey = async (templateId: string) => {
     `User :${ability.userID} refreshed API key for service account ${serviceAccountId}`
   );
 
-  return { type: "serviceAccount", keyId, key: privateKey, userId: serviceAccountId };
+  return buildApiPrivateKeyData(keyId, privateKey, serviceAccountId, templateId);
 };
 
 export const createKey = async (templateId: string) => {
@@ -243,7 +269,7 @@ export const createKey = async (templateId: string) => {
     `User :${ability.userID} created API key for service account ${serviceAccountId}`
   );
 
-  return { type: "serviceAccount", keyId, key: privateKey, userId: serviceAccountId };
+  return buildApiPrivateKeyData(keyId, privateKey, serviceAccountId, templateId);
 };
 
 // Look at possibly moving this to the browser so the GCForms System is never in possession
@@ -263,3 +289,18 @@ const generateKeys = () => {
   });
   return { privateKey, publicKey };
 };
+
+function buildApiPrivateKeyData(
+  keyId: string,
+  key: string,
+  userId: string,
+  formId: string
+): ApiPrivateKey {
+  return {
+    type: "serviceAccount",
+    keyId,
+    key,
+    userId,
+    formId,
+  };
+}

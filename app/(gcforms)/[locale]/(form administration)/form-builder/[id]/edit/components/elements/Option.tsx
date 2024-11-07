@@ -1,6 +1,5 @@
 "use client";
 import React, { useRef, useEffect, ReactElement, useCallback, useState } from "react";
-import PropTypes from "prop-types";
 import { useTranslation } from "@i18n/client";
 import debounce from "lodash.debounce";
 
@@ -12,6 +11,16 @@ import { Language } from "@lib/types/form-builder-types";
 
 type RenderIcon = (index: number) => ReactElement | string | undefined;
 
+interface OptionProps {
+  parentIndex: number;
+  index: number;
+  renderIcon?: RenderIcon;
+  initialValue: string;
+  onFocus?: () => void;
+  onBlur?: () => void;
+  id: number;
+}
+
 export const Option = ({
   parentIndex,
   index,
@@ -20,15 +29,7 @@ export const Option = ({
   initialValue,
   onFocus,
   onBlur,
-}: {
-  parentIndex: number;
-  index: number;
-  id: number;
-  renderIcon?: RenderIcon;
-  initialValue: string;
-  onFocus?: () => void;
-  onBlur?: () => void;
-}) => {
+}: OptionProps) => {
   const input = useRef<HTMLInputElement>(null);
 
   const {
@@ -139,10 +140,4 @@ export const Option = ({
       ></Button>
     </div>
   );
-};
-
-Option.propTypes = {
-  parentIndex: PropTypes.number,
-  index: PropTypes.number,
-  renderIcon: PropTypes.func,
 };

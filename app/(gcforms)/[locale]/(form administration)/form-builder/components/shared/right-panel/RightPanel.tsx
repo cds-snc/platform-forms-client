@@ -8,7 +8,7 @@ import { Button } from "@clientComponents/globals";
 
 import { RightPanelOpen, RoundCloseIcon } from "@serverComponents/icons";
 import { cn } from "@lib/utils";
-import { useActivePathname } from "@lib/hooks/form-builder";
+import { useActivePathname } from "@lib/hooks/form-builder/useActivePathname";
 import { DownloadCSVWithGroups } from "@formBuilder/[id]/edit/translate/components/DownloadCSVWithGroups";
 import { useTreeRef } from "./treeview/provider/TreeRefProvider";
 import { TreeView } from "./treeview/TreeView";
@@ -104,7 +104,7 @@ export const RightPanel = ({ id, lang }: { id: string; lang: Language }) => {
 
   // Observe if the header is offscreen
   // Used to determine the position of the right panel button "toggle" button
-  const observer = useRef<IntersectionObserver>();
+  const observer = useRef<IntersectionObserver>(undefined);
   useEffect(() => {
     observer.current = new IntersectionObserver(
       ([entry]) => {

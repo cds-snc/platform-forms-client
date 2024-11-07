@@ -10,15 +10,21 @@ import { Session } from "next-auth";
 import { getNonce } from "./actions";
 import { checkIfClosed } from "@lib/actions/checkIfClosed";
 
-export async function generateMetadata({
-  params: { locale },
-}: {
-  params: { locale: string };
-}): Promise<Metadata> {
+export async function generateMetadata(
+  props: {
+    params: Promise<{ locale: string }>;
+  }
+): Promise<Metadata> {
+  const params = await props.params;
+
+  const {
+    locale
+  } = params;
+
   const { t } = await serverTranslation("form-builder", { lang: locale });
 
   return {
-    title: `${t("branding.heading")} — ${t("gcForms")}`,
+    title: `${t("settings.formManagement")} — ${t("gcForms")}`,
   };
 }
 
@@ -60,7 +66,13 @@ const getAllUsers = async (ability: UserAbility) => {
   }));
 };
 
-export default async function Page({ params: { id } }: { params: { id: string } }) {
+export default async function Page(props: { params: Promise<{ id: string }> }) {
+  const params = await props.params;
+
+  const {
+    id
+  } = params;
+
   const { session, ability } = await authCheckAndThrow().catch(() => ({
     session: null,
     ability: null,

@@ -144,8 +144,10 @@ const createTemplateStore = (initProps?: Partial<InitialTemplateStoreProps>) => 
             propertyPath: (id: number, field: string, lang?: Language) => {
               const path = getPathString(id, get().form.elements);
               if (lang) {
+                // @ts-expect-error fix this
                 return `${path}.${get().localizeField(field, lang)}` ?? "";
               }
+              // @ts-expect-error fix this
               return `${path}.${field}` ?? "";
             },
             unsetField: (path) =>
@@ -406,6 +408,25 @@ const createTemplateStore = (initProps?: Partial<InitialTemplateStoreProps>) => 
                 state.isPublished = isPublished;
               });
             },
+            getFormElementById: (id) => {
+              const elements = get().form.elements;
+
+              for (const element of elements) {
+                if (element.id === id) {
+                  return element;
+                }
+
+                if (element.properties?.subElements) {
+                  for (const subElement of element.properties.subElements) {
+                    if (subElement.id === id) {
+                      return subElement;
+                    }
+                  }
+                }
+              }
+
+              return undefined;
+            },
             getName: () => get().name,
             getDeliveryOption: () => get().deliveryOption,
             resetDeliveryOption: () => {
@@ -504,7 +525,7 @@ export const TemplateStoreProvider = ({
   children,
   ...props
 }: React.PropsWithChildren<Partial<TemplateStoreProps>>) => {
-  const storeRef = useRef<TemplateStore>();
+  const storeRef = useRef<TemplateStore>(undefined);
   if (!storeRef.current) {
     // When there is an incoming form with a different id clear it first
     if (props.id) {

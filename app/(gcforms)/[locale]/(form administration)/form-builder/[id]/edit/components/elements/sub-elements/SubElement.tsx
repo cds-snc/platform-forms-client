@@ -9,7 +9,6 @@ import {
   Language,
   ElementOptionsFilter,
 } from "@lib/types/form-builder-types";
-import { SubElementModal } from "./SubElementModal";
 import { PanelHightLight } from "./PanelHightlight";
 import { PanelActions } from "../../PanelActions";
 import { useHandleAdd } from "@lib/hooks/form-builder/useHandleAdd";
@@ -85,7 +84,7 @@ export const SubElement = ({
           }}
           filterElements={elementFilter}
         />
-        <CustomizeSetButton itemId={item.id} itemIndex={item.index} />
+        <CustomizeSetButton item={item} />
       </div>
     );
 
@@ -98,6 +97,7 @@ export const SubElement = ({
             <PanelHightLight
               conditionalChildren={
                 <PanelActions
+                  item={item}
                   isSubPanel={true}
                   isFirstItem={subIndex === 0}
                   isLastItem={subIndex === subElements.length - 1}
@@ -118,20 +118,6 @@ export const SubElement = ({
                   handleMoveDown={() => {
                     subMoveDown(item.id, subIndex);
                     forceRefresh(item.id);
-                  }}
-                  moreButtonRenderer={(moreButton) => {
-                    if (item.type === "richText") {
-                      return <div />;
-                    }
-
-                    return (
-                      <SubElementModal
-                        elIndex={elIndex}
-                        subIndex={subIndex}
-                        item={{ ...item, index: item.id }}
-                        moreButton={moreButton}
-                      />
-                    );
                   }}
                   filterElements={elementFilter}
                 />
@@ -160,7 +146,7 @@ export const SubElement = ({
             }}
             filterElements={elementFilter}
           />
-          <CustomizeSetButton itemId={item.id} itemIndex={item.index} />
+          <CustomizeSetButton item={item} />
         </div>
       )}
     </div>

@@ -2,8 +2,8 @@
 import React, { useState, useEffect } from "react";
 import { FormElementWithIndex } from "@lib/types/form-builder-types";
 import { useTemplateStore } from "@lib/store/useTemplateStore";
-import { PanelActions, PanelBodyRoot, MoreModal } from "./index";
-import { useIsWithin } from "@lib/hooks/form-builder";
+import { PanelActions, PanelBodyRoot } from "./index";
+import { useIsWithin } from "@lib/hooks/form-builder/useIsWithin";
 import { useRefsContext } from "./RefsContext";
 import { FormElementTypes, FormElement } from "@lib/types";
 import { useTreeRef } from "@formBuilder/components/shared/right-panel/treeview/provider/TreeRefProvider";
@@ -64,20 +64,6 @@ export const ElementPanel = ({
     setChangeKey(String(new Date().getTime())); //Force a re-render
   };
 
-  const moreButton =
-    item.type !== "richText"
-      ? {
-          moreButtonRenderer: (
-            moreButton: JSX.Element | undefined
-          ): React.ReactElement | string | undefined => (
-            <MoreModal item={item} moreButton={moreButton} onClose={forceRefresh} />
-          ),
-        }
-      : {};
-
-  /* eslint-disable jsx-a11y/no-static-element-interactions */
-  /* eslint-disable jsx-a11y/click-events-have-key-events */
-
   const hasRules =
     (item.properties?.conditionalRules && item.properties?.conditionalRules?.length > 0) ?? false;
 
@@ -118,6 +104,7 @@ export const ElementPanel = ({
     >
       <PanelBodyRoot item={item} onChangeMade={forceRefresh} formId={formId} />
       <PanelActions
+        item={item}
         isFirstItem={item.index === 0}
         isLastItem={item.index === elements.length - 1}
         totalItems={elements.length}
@@ -179,7 +166,6 @@ export const ElementPanel = ({
           setFocusInput(true);
           duplicateElement(item.id, groupId);
         }}
-        {...moreButton}
       />
     </div>
   );

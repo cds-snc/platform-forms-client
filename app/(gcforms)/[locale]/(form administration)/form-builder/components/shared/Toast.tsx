@@ -1,6 +1,6 @@
 "use client";
 import { CircleCheckIcon, InfoIcon, WarningIcon } from "@serverComponents/icons";
-import React from "react";
+import React, { type JSX } from "react";
 import {
   ToastContainer as OriginalContainer,
   toast as originalToast,
