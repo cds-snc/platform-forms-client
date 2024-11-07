@@ -46,8 +46,8 @@ export const LeftNavigation = ({ id }: { id: string }) => {
 
   const segment = useSelectedLayoutSegment();
 
-  const { hasApiKey } = useFormBuilderConfig();
-  const responsesRoute = hasApiKey ? "responses/confirmed" : "responses/new";
+  const { hasApiKeyId } = useFormBuilderConfig();
+  const responsesRoute = hasApiKeyId ? "responses/confirmed" : "responses/new";
 
   return (
     <nav aria-label={t("navLabelFormBuilder")}>

@@ -25,13 +25,13 @@ export const ClientContainer = ({
 
   const isReady = useRehydrate();
 
-  const { hasApiKey } = useFormBuilderConfig();
+  const { hasApiKeyId } = useFormBuilderConfig();
 
   // Wait until the template store is fully hydrated before rendering the content
   if (!isReady) return null;
 
   // Delivery option is API
-  if (hasApiKey) {
+  if (hasApiKeyId) {
     return (
       <>
         <div className="mr-10">

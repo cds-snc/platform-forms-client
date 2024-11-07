@@ -30,7 +30,7 @@ export const DeleteApiKeyDialog = () => {
 
   const [deleting, setDeleting] = useState(false);
 
-  const { updateApiKey } = useFormBuilderConfig();
+  const { updateApiKeyId } = useFormBuilderConfig();
 
   // Setup + Open dialog
   const [id, setId] = useState<string>("");
@@ -68,7 +68,7 @@ export const DeleteApiKeyDialog = () => {
       }
 
       toast.success(<DeleteKeySuccess id={id} />, "wide");
-      updateApiKey("");
+      updateApiKeyId(false);
       setDeleting(false);
       dialog.current?.close();
       setIsOpen(false);

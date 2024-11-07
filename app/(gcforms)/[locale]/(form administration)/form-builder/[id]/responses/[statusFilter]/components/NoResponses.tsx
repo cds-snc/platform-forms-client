@@ -7,7 +7,7 @@ import { useFormBuilderConfig } from "@lib/hooks/useFormBuilderConfig";
 
 export const NoResponses = ({ statusFilter }: { statusFilter: string }) => {
   const { t } = useTranslation("form-builder-responses");
-  const { hasApiKey } = useFormBuilderConfig();
+  const { hasApiKeyId } = useFormBuilderConfig();
   return (
     <>
       {statusFilter === VaultStatus.NEW && (
@@ -32,7 +32,7 @@ export const NoResponses = ({ statusFilter }: { statusFilter: string }) => {
           />
         </>
       )}
-      {!hasApiKey && statusFilter === VaultStatus.CONFIRMED && (
+      {!hasApiKeyId && statusFilter === VaultStatus.CONFIRMED && (
         <>
           <Card
             icon={<Image src="/img/mailbox.svg" alt="" width="200" height="200" />}
@@ -43,7 +43,7 @@ export const NoResponses = ({ statusFilter }: { statusFilter: string }) => {
           />
         </>
       )}
-      {hasApiKey && statusFilter === VaultStatus.CONFIRMED && (
+      {hasApiKeyId && statusFilter === VaultStatus.CONFIRMED && (
         <>
           <Card
             icon={<Image src="/img/mailbox.svg" alt="" width="200" height="200" />}

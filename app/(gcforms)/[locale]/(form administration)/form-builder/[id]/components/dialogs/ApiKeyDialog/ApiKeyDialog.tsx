@@ -30,7 +30,7 @@ export const ApiKeyDialog = () => {
   const [id, setId] = useState<string>("");
   const [isOpen, setIsOpen] = useState(false);
 
-  const { updateApiKey } = useFormBuilderConfig();
+  const { updateApiKeyId } = useFormBuilderConfig();
 
   // Handle loading state for download button
   const [generating, setGenerating] = useState(false);
@@ -88,7 +88,7 @@ export const ApiKeyDialog = () => {
       await downloadKey(JSON.stringify(key), id);
 
       setGenerating(false);
-      updateApiKey(key.keyId);
+      updateApiKeyId(key.keyId);
       dialog.current?.close();
       setIsOpen(false);
     } catch (error) {

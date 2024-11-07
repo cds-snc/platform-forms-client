@@ -33,7 +33,7 @@ export const SettingsPanel = () => {
   const { status } = useSession();
 
   const { getFlag } = useFeatureFlags();
-  const { hasApiKey: hasKey, apiKey } = useFormBuilderConfig();
+  const { hasApiKeyId: hasKey, apiKeyId } = useFormBuilderConfig();
   const apiAccess = getFlag("apiAccess");
   const hasApiKey = hasKey && apiAccess ? true : false;
 
@@ -206,7 +206,7 @@ export const SettingsPanel = () => {
         </div>
       </div>
       <SettingsModal
-        keyId={apiKey}
+        keyId={apiKeyId}
         show={showSettings}
         id={id}
         isPublished={isPublished}

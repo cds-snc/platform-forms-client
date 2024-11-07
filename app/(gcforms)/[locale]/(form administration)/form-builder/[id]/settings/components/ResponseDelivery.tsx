@@ -60,7 +60,7 @@ export const ResponseDelivery = () => {
   const session = useSession();
   const { refreshData } = useRefresh();
   const lang = i18n.language === "en" ? "en" : "fr";
-  const { apiKey: keyId } = useFormBuilderConfig();
+  const { apiKeyId: keyId } = useFormBuilderConfig();
 
   const {
     email,

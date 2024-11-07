@@ -18,7 +18,7 @@ export const ApiKeyButton = ({
 }: ApiKeyButtonProps) => {
   const { t } = useTranslation("form-builder");
   const { id } = useParams();
-  const { apiKey: keyId } = useFormBuilderConfig();
+  const { apiKeyId: keyId } = useFormBuilderConfig();
 
   const { Event } = useCustomEvent();
 

@@ -39,10 +39,10 @@ export const Responses = ({ responseDownloadLimit, overdueAfter }: ResponsesProp
     error: boolean;
   }>({ loading: true, submissions: [], lastEvaluatedKey: null, error: false });
 
-  const { hasApiKey } = useFormBuilderConfig();
+  const { hasApiKeyId } = useFormBuilderConfig();
 
   // For an Api user, no matter the responses route, always show the Api view with only confirmed responses
-  const filter = hasApiKey ? "confirmed" : statusFilter;
+  const filter = hasApiKeyId ? "confirmed" : statusFilter;
 
   useEffect(() => {
     fetchSubmissions({
@@ -75,7 +75,7 @@ export const Responses = ({ responseDownloadLimit, overdueAfter }: ResponsesProp
     return <RetrievalError />;
   }
 
-  if (hasApiKey) {
+  if (hasApiKeyId) {
     return (
       <>
         <div aria-live="polite">

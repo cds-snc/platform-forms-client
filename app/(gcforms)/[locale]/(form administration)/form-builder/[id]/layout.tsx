@@ -43,29 +43,31 @@ export default async function Layout(props: {
 
   const allowGroupsFlag = allowGrouping();
 
-  let apiKey: string | false | void = "";
+  let apiKeyId: string | false | void = "";
 
-  if (session && formID && formID !== "0000") {
-    initialForm = await getFullTemplateByID(ability, formID).catch((e) => {
-      if (e instanceof AccessControlError) {
-        redirect(`/${locale}/admin/unauthorized`);
+  try {
+    if (session && formID && formID !== "0000") {
+      initialForm = await getFullTemplateByID(ability, formID);
+
+      if (initialForm === null) {
+        redirect(`/${locale}/404`);
       }
-      logMessage.warn(`Error fetching Form Record for form-builder/[id] Layout: ${e.message}`);
-      return null;
-    });
 
-    if (initialForm === null) {
-      redirect(`/${locale}/404`);
+      apiKeyId = await checkKeyExists(formID);
     }
-
-    apiKey = await checkKeyExists(formID).catch((e) => {
-      logMessage.warn(`Error fetching API key for form-builder/[id] Layout: ${e.message}`);
-    });
+  } catch (e) {
+    if (e instanceof AccessControlError) {
+      redirect(`/${locale}/admin/unauthorized`);
+    }
+    logMessage.warn(
+      `Error fetching Form Record for form-builder/[id] Layout: ${(e as Error).message}`
+    );
+    return null;
   }
 
   const formBuilderConfig: FormBuilderConfig = {
     ...formBuilderConfigDefault,
-    ...{ apiKey: apiKey || "" },
+    ...{ apiKeyId: apiKeyId || false },
   };
 
   return (

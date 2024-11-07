@@ -2,11 +2,11 @@
 import { createContext, useContext, useState } from "react";
 
 export type FormBuilderConfig = {
-  apiKey?: string;
+  apiKeyId?: string | false;
 };
 
 export const formBuilderConfigDefault: FormBuilderConfig = {
-  apiKey: "",
+  apiKeyId: false,
 };
 
 const FormBuilderConfigContext = createContext({
@@ -36,7 +36,7 @@ export const useFormBuilderConfig = () => {
     return config[key as keyof typeof config];
   };
 
-  const updateConfig = (key: string, value: string) => {
+  const updateConfig = (key: string, value: string | false | null) => {
     setConfig({
       ...config,
       ...{ [key]: value },
@@ -45,8 +45,8 @@ export const useFormBuilderConfig = () => {
 
   return {
     // TODO: disable anything for testing? if (process.env.APP_ENV !== "test") {...
-    apiKey: getConfig("apiKey"),
-    hasApiKey: Boolean(getConfig("apiKey")),
-    updateApiKey: (value: string) => updateConfig("apiKey", value),
+    apiKeyId: getConfig("apiKeyId"),
+    hasApiKeyId: Boolean(getConfig("apiKeyId")),
+    updateApiKeyId: (value: string | false) => updateConfig("apiKeyId", value),
   };
 };
