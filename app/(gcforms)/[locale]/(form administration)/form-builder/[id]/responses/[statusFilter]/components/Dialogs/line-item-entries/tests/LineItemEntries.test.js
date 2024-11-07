@@ -6,12 +6,13 @@ import { render, cleanup } from "@testing-library/react";
 import { LineItemEntries } from "../LineItemEntries";
 import userEvent from "@testing-library/user-event";
 import { DialogStates } from "../../DialogStates";
+import '@testing-library/jest-dom';
 
 jest.mock("@i18n/client", () => ({
-  useTranslation: () => ({ t: (key: string) => key }),
+  useTranslation: () => ({ t: (key) => key }),
 }));
 
-const validator = (input: string) => {
+const validator = (input) => {
   if (input === "fail") {
     return false;
   }
@@ -25,8 +26,8 @@ describe("LineItemEntries", () => {
 
   it("should render and handle keyboard events", async () => {
     const Container = () => {
-      const [inputs, setInputs] = useState<string[]>([]);
-      const [status, setStatus] = useState<DialogStates>(DialogStates.EDITING);
+      const [inputs, setInputs] = useState([]);
+      const [status, setStatus] = useState(DialogStates.EDITING);
 
       return (
         <LineItemEntries
@@ -43,7 +44,7 @@ describe("LineItemEntries", () => {
 
     const rendered = render(<Container />);
 
-    const input = (await rendered.findByTestId("value-input")) as HTMLInputElement;
+    const input = (await rendered.findByTestId("value-input"));
 
     // Invalid LineEntry fails validation and is not added
     await act(async () => {
