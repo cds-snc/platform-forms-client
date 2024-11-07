@@ -285,7 +285,7 @@ export const AddressComplete = (props: AddressCompleteProps): React.ReactElement
               onSetValue={onAddressSet}
               baseValue={addressObject?.streetAddress}
               required={required}
-              placeholderText={t("addElementDialog.addressComplete.startTyping")}
+              placeholderText={allow ? t("addElementDialog.addressComplete.startTyping") : ""}
               ariaDescribedBy={`${name}-streetDesc`}
             />
           )}

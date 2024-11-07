@@ -24,7 +24,7 @@ const modalDefaultContext: IModalContext = {
   changeOpen: () => null,
 };
 
-export const ModalContext = createContext<IModalContext>(modalDefaultContext);
+const ModalContext = createContext<IModalContext>(modalDefaultContext);
 
 export const Modal = ({
   title,
@@ -125,7 +125,7 @@ ModalButton.propTypes = {
   children: PropTypes.oneOfType([PropTypes.element]),
 };
 
-export const ModalContainer = ({
+const ModalContainer = ({
   title,
   children,
   saveButton,
