@@ -15,6 +15,7 @@ export const ExampleWrapper = ({
   const formik = useFormik({
     initialValues: {
       name: "",
+      "test-address": "", // AddressComplete already uses formik, and double activation causes issues.
     },
     onSubmit: () => {
       return;
