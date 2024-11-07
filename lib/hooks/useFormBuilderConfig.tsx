@@ -5,6 +5,10 @@ export type FormBuilderConfig = {
   apiKey?: string;
 };
 
+export const formBuilderConfigDefault: FormBuilderConfig = {
+  apiKey: "",
+};
+
 const FormBuilderConfigContext = createContext({
   config: {},
   setConfig: () => {},

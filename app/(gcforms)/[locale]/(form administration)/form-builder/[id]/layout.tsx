@@ -16,7 +16,11 @@ import { Language } from "@lib/types/form-builder-types";
 import { FormRecord } from "@lib/types";
 import { logMessage } from "@lib/logger";
 import { checkKeyExists } from "@lib/serviceAccount";
-import { FormBuilderConfigProvider, FormBuilderConfig } from "@lib/hooks/useFormBuilderConfig";
+import {
+  FormBuilderConfigProvider,
+  FormBuilderConfig,
+  formBuilderConfigDefault,
+} from "@lib/hooks/useFormBuilderConfig";
 
 export default async function Layout(props: {
   children: React.ReactNode;
@@ -39,9 +43,7 @@ export default async function Layout(props: {
 
   const allowGroupsFlag = allowGrouping();
 
-  const formBuilderConfig: FormBuilderConfig = {
-    apiKey: "",
-  };
+  let apiKey: string | false | void = "";
 
   if (session && formID && formID !== "0000") {
     initialForm = await getFullTemplateByID(ability, formID).catch((e) => {
@@ -56,11 +58,15 @@ export default async function Layout(props: {
       redirect(`/${locale}/404`);
     }
 
-    formBuilderConfig.apiKey =
-      (await checkKeyExists(formID).catch((e) => {
-        logMessage.warn(`Error fetching API key for form-builder/[id] Layout: ${e.message}`);
-      })) || "";
+    apiKey = await checkKeyExists(formID).catch((e) => {
+      logMessage.warn(`Error fetching API key for form-builder/[id] Layout: ${e.message}`);
+    });
   }
+
+  const formBuilderConfig: FormBuilderConfig = {
+    ...formBuilderConfigDefault,
+    ...{ apiKey: apiKey || "" },
+  };
 
   return (
     <FormBuilderConfigProvider formBuilderConfig={formBuilderConfig}>
