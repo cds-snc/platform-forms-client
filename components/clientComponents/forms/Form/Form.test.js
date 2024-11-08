@@ -4,7 +4,7 @@
 import React from "react";
 import { cleanup, render, screen, waitFor, fireEvent } from "@testing-library/react";
 import { Form } from "@clientComponents/forms/Form/Form";
-import { submitForm } from "app/(gcforms)/[locale]/(form filler)/id/[...props]/actions";
+import { submitForm as submitFormAction } from "app/(gcforms)/[locale]/(form filler)/id/[...props]/actions";
 
 jest.mock("@lib/client/clientHelpers", () => {
   const originalModule = jest.requireActual("@lib/client/clientHelpers");
@@ -110,7 +110,9 @@ describe("Form Functionality", () => {
       timerDelay: 5,
       timeLock: 0,
     };
-    render(<Form formRecord={formRecord} language="en" t={(key) => key} />);
+    render(
+      <Form formRecord={formRecord} language="en" t={(key) => key} submitForm={submitFormAction} />
+    );
     const submitButton = screen.getByRole("button", { type: "submit" });
     await waitFor(() => expect(submitButton).toBeInTheDocument());
 
@@ -119,7 +121,7 @@ describe("Form Functionality", () => {
     // "Warning: An update to Formik inside a test was not wrapped in act(...)."
     fireEvent.click(screen.getByRole("button", { type: "submit" }));
 
-    await waitFor(() => expect(submitForm).toHaveBeenCalledTimes(1));
+    await waitFor(() => expect(submitFormAction).toHaveBeenCalledTimes(1));
   });
 
   it("shows the alert after pressing submit if the timer hasn't expired", async () => {

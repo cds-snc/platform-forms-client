@@ -13,6 +13,7 @@ import { allowGrouping } from "@formBuilder/components/shared/right-panel/treevi
 import { serverTranslation } from "@i18n";
 import { ClosingNotice } from "@clientComponents/forms/ClosingNotice/ClosingNotice";
 import { FormDelayProvider } from "@lib/hooks/useFormDelayContext";
+import { submitForm } from "app/(gcforms)/[locale]/(form filler)/id/[...props]/actions";
 
 export async function generateMetadata(props0: {
   params: Promise<{ locale: string; props: string[] }>;
@@ -101,6 +102,7 @@ export default async function Page(props0: {
               formRecord={formRecord}
               currentForm={currentForm}
               allowGrouping={isAllowGrouping}
+              submitForm={submitForm}
             />
           </FormDelayProvider>
         </GCFormsProvider>
