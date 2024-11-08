@@ -5,7 +5,6 @@ import { useTranslation } from "@i18n/client";
 import { FormRecord, TypeOmit } from "@lib/types";
 import { Form } from "@clientComponents/forms/Form/Form";
 import { Language } from "@lib/types/form-builder-types";
-import { submitForm as submitFormAction } from "app/(gcforms)/[locale]/(form filler)/id/[...props]/actions";
 
 import type { JSX } from "react";
 
@@ -13,12 +12,10 @@ export const FormWrapper = ({
   formRecord,
   currentForm,
   allowGrouping,
-  submitForm,
 }: {
   formRecord: TypeOmit<FormRecord, "name" | "deliveryOption">;
   currentForm: JSX.Element[];
   allowGrouping?: boolean | undefined;
-  submitForm: typeof submitFormAction;
 }) => {
   // TODO cast language as "en" | "fr" in TS below
   const {
@@ -46,7 +43,6 @@ export const FormWrapper = ({
         );
       }}
       allowGrouping={allowGrouping}
-      submitForm={submitForm}
     >
       {currentForm}
     </Form>

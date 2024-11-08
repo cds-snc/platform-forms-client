@@ -12,7 +12,7 @@ import Loader from "../../globals/Loader";
 import { cn } from "@lib/utils";
 import { Responses, PublicFormRecord, Validate } from "@lib/types";
 import { ErrorStatus } from "../Alert/Alert";
-import { submitForm as submitFormAction } from "app/(gcforms)/[locale]/(form filler)/id/[...props]/actions";
+import { submitForm } from "app/(gcforms)/[locale]/(form filler)/id/[...props]/actions";
 import useFormTimer from "@lib/hooks/useFormTimer";
 import { useFormValuesChanged } from "@lib/hooks/useValueChanged";
 import { useGCFormsContext } from "@lib/hooks/useGCFormContext";
@@ -349,7 +349,6 @@ interface FormProps {
   allowGrouping?: boolean | undefined;
   groupHistory?: string[];
   matchedIds?: string[];
-  submitForm: typeof submitFormAction;
 }
 
 /**
@@ -393,7 +392,7 @@ export const Form = withFormik<FormProps, Responses>({
           ? removeFormContextValues(getValuesForConditionalLogic())
           : removeFormContextValues(values);
 
-      const result = await formikBag.props.submitForm(
+      const result = await submitForm(
         formValues,
         formikBag.props.language,
         formikBag.props.formRecord

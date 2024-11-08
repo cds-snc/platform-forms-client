@@ -30,16 +30,13 @@ import { defaultForm } from "@lib/store/defaults";
 import { showReviewPage } from "@lib/utils/form-builder/showReviewPage";
 import { focusElement } from "@lib/client/clientHelpers";
 import { useIsFormClosed } from "@lib/hooks/useIsFormClosed";
-import { submitForm as submitFormAction } from "app/(gcforms)/[locale]/(form filler)/id/[...props]/actions";
 
 export const Preview = ({
   disableSubmit = true,
   allowGrouping = false,
-  submitForm,
 }: {
   disableSubmit?: boolean;
   allowGrouping?: boolean;
-  submitForm: typeof submitFormAction;
 }) => {
   const { status } = useSession();
   const { i18n } = useTranslation(["common", "confirmation"]);
@@ -191,7 +188,6 @@ export const Preview = ({
                   language={language}
                   t={t}
                   onSuccess={setSent}
-                  submitForm={submitForm}
                   renderSubmit={({ validateForm }) => {
                     return (
                       <div id="PreviewSubmitButton">
