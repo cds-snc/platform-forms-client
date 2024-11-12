@@ -229,8 +229,17 @@ export const AddressComplete = (props: AddressCompleteProps): React.ReactElement
       (country) => country[i18n.language as Language] === countryText
     );
     if (country) {
-      // set the country in the address object to the ID of the country.
-      setAddressData("country", country.id);
+      // Reset the addressObject
+      setAddressObject({
+        streetAddress: "",
+        city: "",
+        province: "",
+        postalCode: "",
+        country: country.id,
+      });
+      if (comboboxRef.current) {
+        comboboxRef.current.changeInputValue("", false);
+      }
       setAddressResultCache([]); // Clear the cache.
     }
   };
