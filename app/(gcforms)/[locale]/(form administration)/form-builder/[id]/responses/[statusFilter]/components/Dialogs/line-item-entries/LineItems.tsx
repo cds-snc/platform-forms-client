@@ -21,10 +21,10 @@ export const LineItems = ({
 
   return (
     <>
-      {values.map((value, index) => (
+      {values.map((value) => (
         <LineItem
           value={value}
-          key={`${value}-${index}`}
+          key={value}
           onRemove={onRemove}
           isInvalid={
             errorEntriesList.find((valueError) => value === valueError) ||

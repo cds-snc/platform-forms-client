@@ -2,30 +2,18 @@ import { serverTranslation } from "@i18n";
 import { Metadata } from "next";
 import { LinkButton } from "@serverComponents/globals/Buttons/LinkButton";
 
-export async function generateMetadata(
-  props: {
-    params: Promise<{ locale: string }>;
-  }
-): Promise<Metadata> {
-  const params = await props.params;
-
-  const {
-    locale
-  } = params;
-
+export async function generateMetadata({
+  params: { locale },
+}: {
+  params: { locale: string };
+}): Promise<Metadata> {
   const { t } = await serverTranslation(["deactivated"], { lang: locale });
   return {
     title: t("title"),
   };
 }
 
-export default async function Page(props: { params: Promise<{ locale: string }> }) {
-  const params = await props.params;
-
-  const {
-    locale
-  } = params;
-
+export default async function Page({ params: { locale } }: { params: { locale: string } }) {
   const { t } = await serverTranslation(["deactivated"], { lang: locale });
   const supportHref = `/${locale}/support`;
   return (

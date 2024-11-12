@@ -1,11 +1,13 @@
 /**
  * @jest-environment jsdom
  */
-import React, { act } from "react";
-import { cleanup, screen, render, within } from "@testing-library/react";
+import React from "react";
+import { cleanup, screen, render, act, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { defaultStore as store, Providers } from "@lib/utils/form-builder/test-utils";
 import { RichTextEditor } from "../RichTextEditor";
+
+const promise = Promise.resolve();
 
 describe("RichTextEditor", () => {
   afterEach(() => {
@@ -23,6 +25,10 @@ describe("RichTextEditor", () => {
         />
       </Providers>
     );
+
+    await act(async () => {
+      await promise;
+    });
 
     const contentArea = rendered.container.querySelector('[id^="editor-"]');
     const toolbar = screen.getByTestId("toolbar");
@@ -65,6 +71,10 @@ describe("RichTextEditor", () => {
       </Providers>
     );
 
+    await act(async () => {
+      await promise;
+    });
+
     const toolbar = screen.getByTestId("toolbar");
     const [h2, h3, bold, italic, bulletList, numberedList, link] =
       within(toolbar).getAllByRole("button");
@@ -72,64 +82,42 @@ describe("RichTextEditor", () => {
     expect(document.body).toHaveFocus();
 
     // tab into toolbar
-    await act(async () => {
-      await userEvent.tab();
-    });
+    await userEvent.tab();
     expect(h2).toHaveFocus();
 
     // tab back out of toolbar
-    await act(async () => {
-      await userEvent.tab({ shift: true });
-    });
+    await userEvent.tab({ shift: true });
     expect(document.body).toHaveFocus();
 
     // tab back into toolbar
-    await act(async () => {
-      await userEvent.tab();
-      await userEvent.keyboard("{arrowright}");
-    });
+    await userEvent.tab();
+    await userEvent.keyboard("{arrowright}");
     expect(h3).toHaveFocus();
 
-    await act(async () => {
-      await userEvent.keyboard("{arrowright}");
-    });
+    await userEvent.keyboard("{arrowright}");
     expect(bold).toHaveFocus();
 
-    await act(async () => {
-      await userEvent.keyboard("{arrowright}");
-    });
+    await userEvent.keyboard("{arrowright}");
     expect(italic).toHaveFocus();
 
-    await act(async () => {
-      await userEvent.keyboard("{arrowright}");
-    });
+    await userEvent.keyboard("{arrowright}");
     expect(bulletList).toHaveFocus();
 
-    await act(async () => {
-      await userEvent.keyboard("{arrowright}");
-    });
+    await userEvent.keyboard("{arrowright}");
     expect(numberedList).toHaveFocus();
 
-    await act(async () => {
-      await userEvent.keyboard("{arrowright}");
-    });
+    await userEvent.keyboard("{arrowright}");
     expect(link).toHaveFocus();
 
-    await act(async () => {
-      await userEvent.keyboard("{arrowleft}");
-    });
+    await userEvent.keyboard("{arrowleft}");
     expect(numberedList).toHaveFocus();
 
     // tab back out of toolbar
-    await act(async () => {
-      await userEvent.tab({ shift: true });
-    });
+    await userEvent.tab({ shift: true });
     expect(document.body).toHaveFocus();
 
     // tab back into toolbar
-    await act(async () => {
-      await userEvent.tab();
-    });
+    await userEvent.tab();
     expect(numberedList).toHaveFocus();
   });
 });

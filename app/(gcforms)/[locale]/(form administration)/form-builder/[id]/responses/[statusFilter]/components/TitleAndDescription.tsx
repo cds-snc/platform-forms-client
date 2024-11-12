@@ -4,20 +4,20 @@ import { VaultStatus } from "@lib/types";
 import { useTranslation } from "@i18n/client";
 import { ConfirmDialog } from "./Dialogs/ConfirmDialog";
 import { Alert } from "@clientComponents/globals";
-import { useRouter } from "next/navigation";
 
 export const TitleAndDescription = ({
   statusFilter,
   formId,
   responseDownloadLimit,
+  setForceRefresh,
 }: {
   statusFilter: string;
   formId: string;
   responseDownloadLimit: number;
+  setForceRefresh: (refresh: number) => void;
 }) => {
   const { t } = useTranslation("form-builder-responses");
   const [successAlertMessage, setShowSuccessAlert] = useState<false | string>(false);
-  const router = useRouter();
   return (
     <>
       {statusFilter == VaultStatus.NEW && (
@@ -73,7 +73,7 @@ export const TitleAndDescription = ({
           formId={formId}
           maxEntries={responseDownloadLimit}
           onSuccessfulConfirm={() => {
-            router.refresh();
+            setForceRefresh(Date.now());
             setShowSuccessAlert("confirmSuccess");
           }}
         />

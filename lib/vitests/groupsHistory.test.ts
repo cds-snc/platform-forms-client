@@ -1,13 +1,8 @@
-import { expect } from "vitest";
+import { expect } from 'vitest';
 import { LockedSections } from "@formBuilder/components/shared/right-panel/treeview/types";
-import {
-  getGroupHistory,
-  pushIdToHistory,
-  clearHistoryAfterId,
-  getPreviousIdFromCurrentId,
-} from "@lib/utils/form-builder/groupsHistory";
+import { getGroupHistory, pushIdToHistory, clearHistoryAfterId, getPreviousIdFromCurrentId } from "@lib/utils/form-builder/groupsHistory";
 
-const defaultHistory: string[] = [
+const defaultHistory:string[] = [
   LockedSections.START,
   "group1",
   "group2",
@@ -17,7 +12,7 @@ const defaultHistory: string[] = [
 ];
 
 describe("getGroupHistory tests", () => {
-  const history: string[] = [...defaultHistory];
+  const history:string[] = [...defaultHistory];
 
   it("handles invalid input", () => {
     // @ts-expect-error - testing invalid input
@@ -31,8 +26,9 @@ describe("getGroupHistory tests", () => {
   });
 });
 
+
 describe("addGroupHistory tests", () => {
-  let history: string[] = [...defaultHistory];
+  let history:string[] = [...defaultHistory];
 
   it("handles invalid input", () => {
     // @ts-expect-error - testing invalid input
@@ -52,7 +48,7 @@ describe("addGroupHistory tests", () => {
 });
 
 describe("removeGroupHistory tests", () => {
-  let history: string[] = [...defaultHistory];
+  let history:string[] = [...defaultHistory];
 
   it("handles invalid input", () => {
     // @ts-expect-error - testing invalid input
@@ -71,7 +67,7 @@ describe("removeGroupHistory tests", () => {
 });
 
 describe("getPreviousIdFromCurrentId tests", () => {
-  const history: string[] = [...defaultHistory];
+  const history:string[] = [...defaultHistory];
 
   it("handles an invalid id", () => {
     expect(getPreviousIdFromCurrentId("INVALID", history)).toEqual(null);
