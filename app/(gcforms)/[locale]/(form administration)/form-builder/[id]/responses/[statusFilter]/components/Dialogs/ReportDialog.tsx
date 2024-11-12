@@ -1,5 +1,6 @@
 "use client";
-import { Dialog, TextArea, useDialogRef } from "@formBuilder/components/shared";
+import { Dialog, useDialogRef } from "@formBuilder/components/shared/Dialog";
+import { TextArea } from "@formBuilder/components/shared/TextArea";
 import { Alert, Button } from "@clientComponents/globals";
 import {
   MessageType,

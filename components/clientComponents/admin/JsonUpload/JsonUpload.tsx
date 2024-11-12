@@ -8,7 +8,7 @@ import Loader from "../../globals/Loader";
 import { logMessage } from "@lib/logger";
 import { useRefresh } from "@lib/hooks/useRefresh";
 import { safeJSONParse } from "@lib/utils";
-import { toast } from "@formBuilder/components/shared";
+import { toast } from "@formBuilder/components/shared/Toast";
 import { Button } from "@clientComponents/globals";
 
 interface JSONUploadProps {

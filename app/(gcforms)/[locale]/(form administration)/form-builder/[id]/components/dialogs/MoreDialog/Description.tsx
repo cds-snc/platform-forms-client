@@ -2,7 +2,7 @@ import { useTranslation } from "@i18n/client";
 import { LocalizedElementProperties } from "@lib/types/form-builder-types";
 import { Label } from "./Label";
 import { Hint } from "./Hint";
-import { TextArea } from "@formBuilder/components/shared";
+import { TextArea } from "@formBuilder/components/shared/TextArea";
 import { useTemplateStore } from "@lib/store/useTemplateStore";
 import { FormElement } from "@lib/types";
 

@@ -9,7 +9,7 @@ import { FormElement } from "@lib/types";
 import { useTranslation } from "@i18n/client";
 import { SaveNote } from "./SaveNote";
 import { toast } from "@formBuilder/components/shared/Toast";
-import { Checkbox } from "@formBuilder/components/shared";
+import { Checkbox } from "@formBuilder/components/shared/MultipleChoice";
 import { LockedSections } from "../treeview/types";
 
 const ExitIcon = () => {

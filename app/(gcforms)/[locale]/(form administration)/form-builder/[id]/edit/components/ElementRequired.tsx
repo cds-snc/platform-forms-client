@@ -2,7 +2,7 @@
 import React from "react";
 import { useTranslation } from "@i18n/client";
 
-import { Checkbox } from "@formBuilder/components/shared";
+import { Checkbox } from "@formBuilder/components/shared/MultipleChoice";
 import { FormElementWithIndex } from "@lib/types/form-builder-types";
 
 export const ElementRequired = ({

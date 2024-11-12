@@ -4,7 +4,7 @@ import { useTranslation } from "@i18n/client";
 import { Button } from "@clientComponents/globals";
 import { getPathString } from "@lib/utils/form-builder/getPath";
 import { useTemplateStore } from "@lib/store/useTemplateStore";
-import { Dialog, useDialogRef } from "@formBuilder/components/shared";
+import { Dialog, useDialogRef } from "@formBuilder/components/shared/Dialog";
 import { useCustomEvent } from "@lib/hooks/useCustomEvent";
 import { Question } from "./Question";
 import { Description } from "./Description";
