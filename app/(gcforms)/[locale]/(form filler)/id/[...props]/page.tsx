@@ -14,13 +14,11 @@ import { serverTranslation } from "@i18n";
 import { ClosingNotice } from "@clientComponents/forms/ClosingNotice/ClosingNotice";
 import { FormDelayProvider } from "@lib/hooks/useFormDelayContext";
 
-export async function generateMetadata(props0: {
-  params: Promise<{ locale: string; props: string[] }>;
+export async function generateMetadata({
+  params: { locale, props },
+}: {
+  params: { locale: string; props: string[] };
 }): Promise<Metadata> {
-  const params = await props0.params;
-
-  const { locale, props } = params;
-
   const formID = props[0];
   const step = props[1] ?? "";
   const publicForm = await getPublicTemplateByID(formID);
@@ -38,13 +36,11 @@ export async function generateMetadata(props0: {
   };
 }
 
-export default async function Page(props0: {
-  params: Promise<{ locale: string; props: string[] }>;
+export default async function Page({
+  params: { locale, props },
+}: {
+  params: { locale: string; props: string[] };
 }) {
-  const params = await props0.params;
-
-  const { locale, props } = params;
-
   const formID = props[0];
   const step = props[1] ?? "";
   const formRecord = await getPublicTemplateByID(formID);

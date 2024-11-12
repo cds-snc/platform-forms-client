@@ -42,7 +42,7 @@ export const Modal = ({
   saveButton?: React.ReactElement | string | undefined;
   defaultOpen?: boolean;
   handleClose?: () => void;
-  modalRef?: React.RefObject<HTMLDivElement | null> | undefined;
+  modalRef?: React.RefObject<HTMLDivElement> | undefined;
   noOpenButton?: boolean;
 }) => {
   const { updateIsOpen } = useModalStore();
@@ -115,7 +115,6 @@ export const ModalButton = ({
 
   // Note: This will not work if children is more than 1 element
   return React.cloneElement(children, {
-    // @ts-expect-error -- TODO: fix this
     onClick: callAll(() => changeOpen(isOpenButton), children.props.onClick),
   });
 };
@@ -136,7 +135,7 @@ const ModalContainer = ({
   children: React.ReactNode;
   saveButton?: React.ReactElement | string | undefined;
   handleClose?: () => void;
-  modalRef?: React.RefObject<HTMLDivElement | null> | undefined;
+  modalRef?: React.RefObject<HTMLDivElement> | undefined;
 }) => {
   const { t } = useTranslation("form-builder");
   const { isOpen, changeOpen } = useContext(ModalContext);

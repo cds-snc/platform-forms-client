@@ -1,4 +1,4 @@
-import React, { ReactElement, type JSX } from "react";
+import React, { ReactElement } from "react";
 import { logMessage } from "@lib/logger";
 import {
   Description,

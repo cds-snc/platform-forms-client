@@ -5,7 +5,6 @@ import React from "react";
 import { cleanup, render, fireEvent } from "@testing-library/react";
 import { ElementDialog } from "../ElementDialog";
 import userEvent from "@testing-library/user-event";
-import { act } from "react";
 
 describe("Element dialog", () => {
   beforeAll(() => {
@@ -30,24 +29,14 @@ describe("Element dialog", () => {
 
     expect(button).toHaveTextContent("addElement");
 
-    await act(async () => {
-      await user.click(button);
-    });
-
+    await user.click(button);
     expect(mockAddCallback.mock.calls.length).toBe(1);
     expect(mockAddCallback.mock.calls[0][0]).toBe("textField");
 
-    await act(async () => {
-      await userEvent.tab();
-    });
-
+    await userEvent.tab();
     fireEvent.keyDown(listBox, { key: "ArrowDown" });
     fireEvent.keyDown(listBox, { key: "ArrowDown" });
-
-    await act(async () => {
-      await user.click(button);
-    });
-
+    await user.click(button);
     expect(mockAddCallback.mock.calls.length).toBe(2);
     expect(mockAddCallback.mock.calls[1][0]).toBe("radio");
   });
