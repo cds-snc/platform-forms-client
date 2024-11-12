@@ -1,7 +1,7 @@
 /**
  * @jest-environment jsdom
  */
-import React, { useState, act } from "react";
+import React, { useState } from "react";
 import { render, cleanup } from "@testing-library/react";
 import { LineItemEntries } from "../LineItemEntries";
 import userEvent from "@testing-library/user-event";
@@ -46,38 +46,23 @@ describe("LineItemEntries", () => {
     const input = (await rendered.findByTestId("value-input")) as HTMLInputElement;
 
     // Invalid LineEntry fails validation and is not added
-    await act(async () => {
-      await userEvent.type(input, "fail{enter}");
-    });
-
+    await userEvent.type(input, "fail{enter}");
     expect(rendered.queryByTestId("value")).not.toBeInTheDocument();
     expect(input.value).toBe("fail");
-    await act(async () => {
-      await userEvent.clear(input);
-    });
+    await userEvent.clear(input);
 
     // Add and remove a value
-    await act(async () => {
-      await userEvent.type(input, "one{enter}");
-    });
-
+    await userEvent.type(input, "one{enter}");
     expect(rendered.getAllByTestId("value").length).toBe(1);
     expect(rendered.getAllByTestId("value")[0].textContent).toBe("one");
     const removeButtons = await rendered.findAllByRole("button");
-    await act(async () => {
-      await userEvent.click(removeButtons[0]);
-    });
+    await userEvent.click(removeButtons[0]);
     expect(rendered.queryByTestId("value")).toBeNull();
-
-    await act(async () => {
-      await userEvent.clear(input);
-    });
+    await userEvent.clear(input);
 
     // Handles "enter"
-    await act(async () => {
-      await userEvent.type(input, "one{enter}");
-      await userEvent.type(input, "two{enter}");
-    });
+    await userEvent.type(input, "one{enter}");
+    await userEvent.type(input, "two{enter}");
 
     expect(rendered.getByText("one")).toBeInTheDocument();
     expect(rendered.getByText("two")).toBeInTheDocument();
@@ -85,10 +70,8 @@ describe("LineItemEntries", () => {
     expect(rendered.getAllByTestId("value").length).toBe(2);
 
     // Handles "space"
-    await act(async () => {
-      await userEvent.type(input, "four ");
-      await userEvent.type(input, "five ");
-    });
+    await userEvent.type(input, "four ");
+    await userEvent.type(input, "five ");
 
     expect(rendered.getByText("four")).toBeInTheDocument();
     expect(rendered.getByText("five")).toBeInTheDocument();
@@ -97,42 +80,29 @@ describe("LineItemEntries", () => {
     // Six values carry forward
 
     // Handles "backspace" to unvalue last value
-    await act(async () => {
-      await userEvent.type(input, "{backspace}");
-    });
+    await userEvent.type(input, "{backspace}");
     expect(rendered.getAllByTestId("value").length).toBe(3);
     expect(input.value).toBe("five");
-    await act(async () => {
-      await userEvent.clear(input);
-    });
+    await userEvent.clear(input);
 
     expect(rendered.getAllByTestId("value").length).toBe(3);
     expect(input.value).toBe("");
 
     // Handles onBlur
-    await act(async () => {
-      await userEvent.type(input, "five");
-      await userEvent.tab();
-    });
+    await userEvent.type(input, "five");
+    await userEvent.tab();
     expect(rendered.getAllByTestId("value").length).toBe(4);
 
     // Handles "tabbing"
-    await act(async () => {
-      await userEvent.tab({ shift: true });
-    });
-
+    await userEvent.tab({ shift: true });
     expect(input).toHaveFocus();
 
-    await act(async () => {
-      await userEvent.tab({ shift: true });
-    });
+    await userEvent.tab({ shift: true });
     const removeButtons1 = await rendered.findAllByRole("button");
     expect(removeButtons1[removeButtons1.length - 1]).toHaveFocus();
 
     // Tab to input
-    await act(async () => {
-      await userEvent.tab();
-    });
+    await userEvent.tab();
     expect(input).toHaveFocus();
   });
 });

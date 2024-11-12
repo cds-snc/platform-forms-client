@@ -9,30 +9,18 @@ import { checkIfClosed } from "@lib/actions/checkIfClosed";
 import { ClosedDetails } from "@lib/types";
 import { PreviewClosed } from "./PreviewClosed";
 
-export async function generateMetadata(
-  props: {
-    params: Promise<{ locale: string }>;
-  }
-): Promise<Metadata> {
-  const params = await props.params;
-
-  const {
-    locale
-  } = params;
-
+export async function generateMetadata({
+  params: { locale },
+}: {
+  params: { locale: string };
+}): Promise<Metadata> {
   const { t } = await serverTranslation("form-builder", { lang: locale });
   return {
     title: `${t("gcFormsEdit")} — ${t("gcForms")}`,
   };
 }
 
-export default async function Page(props: { params: Promise<{ id: string }> }) {
-  const params = await props.params;
-
-  const {
-    id
-  } = params;
-
+export default async function Page({ params: { id } }: { params: { id: string } }) {
   const { session } = await authCheckAndThrow().catch(() => ({
     session: null,
     ability: null,

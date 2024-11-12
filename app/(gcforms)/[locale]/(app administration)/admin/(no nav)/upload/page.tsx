@@ -4,17 +4,11 @@ import { authCheckAndRedirect } from "@lib/actions";
 import { checkPrivilegesAsBoolean } from "@lib/privileges";
 import { Metadata } from "next";
 
-export async function generateMetadata(
-  props: {
-    params: Promise<{ locale: string }>;
-  }
-): Promise<Metadata> {
-  const params = await props.params;
-
-  const {
-    locale
-  } = params;
-
+export async function generateMetadata({
+  params: { locale },
+}: {
+  params: { locale: string };
+}): Promise<Metadata> {
   const { t } = await serverTranslation("admin-templates", { lang: locale });
   return {
     title: `${t("upload.title")}`,

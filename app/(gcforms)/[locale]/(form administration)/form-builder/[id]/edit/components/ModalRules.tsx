@@ -26,7 +26,7 @@ export const ModalRules = ({
   mode,
 }: {
   item: FormElementWithIndex;
-  modalRef?: React.RefObject<HTMLDivElement | null> | undefined;
+  modalRef?: React.RefObject<HTMLDivElement> | undefined;
   formId: string;
   focusedOption: string | null;
   mode: "add" | "edit";
