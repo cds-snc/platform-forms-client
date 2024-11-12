@@ -31,6 +31,9 @@ export const Responses = ({ responseDownloadLimit, overdueAfter }: ResponsesProp
     name: s.name,
     formId: s.id,
   }));
+
+  const [forceRefresh, setForceRefresh] = useState(Date.now());
+
   const [state, setState] = useState<{
     loading: boolean;
     submissions: VaultSubmissionList[];
@@ -55,7 +58,7 @@ export const Responses = ({ responseDownloadLimit, overdueAfter }: ResponsesProp
       .catch(() =>
         setState({ loading: false, submissions: [], lastEvaluatedKey: null, error: true })
       );
-  }, [formId, lastKey, statusFilter]);
+  }, [formId, lastKey, statusFilter, forceRefresh]);
 
   const formName = name ? name : language === "fr" ? initialForm.titleFr : initialForm.titleEn;
 
@@ -76,6 +79,7 @@ export const Responses = ({ responseDownloadLimit, overdueAfter }: ResponsesProp
           statusFilter={ucfirst(statusFilter)}
           formId={formId}
           responseDownloadLimit={responseDownloadLimit}
+          setForceRefresh={setForceRefresh}
         />
       )}
 
