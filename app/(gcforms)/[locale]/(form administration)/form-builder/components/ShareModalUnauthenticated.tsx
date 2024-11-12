@@ -2,8 +2,9 @@
 import React, { useRef } from "react";
 import { useTranslation } from "@i18n/client";
 import { FormElementTypes } from "@lib/types";
-
-import { useDialogRef, Dialog, InfoDetails, DownloadFileButton } from "./shared";
+import { useDialogRef, Dialog } from "./shared/Dialog";
+import { InfoDetails } from "./shared/InfoDetails";
+import { DownloadFileButton } from "./shared/DownloadFileButton";
 import { Button } from "@clientComponents/globals";
 import Markdown from "markdown-to-jsx";
 

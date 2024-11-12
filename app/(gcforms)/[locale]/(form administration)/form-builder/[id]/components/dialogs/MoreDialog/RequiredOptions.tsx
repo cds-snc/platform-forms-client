@@ -1,5 +1,5 @@
 import { useTranslation } from "@i18n/client";
-import { Checkbox } from "@formBuilder/components/shared";
+import { Checkbox } from "@formBuilder/components/shared/MultipleChoice";
 import { FormElement } from "@lib/types";
 
 export const RequiredOptions = ({
