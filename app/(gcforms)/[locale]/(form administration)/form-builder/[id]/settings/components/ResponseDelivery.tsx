@@ -9,11 +9,12 @@ import { useTranslation } from "@i18n/client";
 import { useSession } from "next-auth/react";
 import { isValidGovEmail } from "@lib/validation/validation";
 import { ResponseEmail } from "@formBuilder/components/ResponseEmail";
-import { Radio } from "@formBuilder/components/shared";
+import { Radio } from "@formBuilder/components/shared/MultipleChoice";
 import { Button } from "@clientComponents/globals";
 import { useTemplateStore } from "@lib/store/useTemplateStore";
 import { completeEmailAddressRegex } from "@lib/utils/form-builder";
-import { ResponseDeliveryHelpButton, FormPurposeHelpButton } from "@formBuilder/components/shared";
+import { ResponseDeliveryHelpButton } from "@formBuilder/components/shared/ResponseDeliveryHelpDialog";
+import { FormPurposeHelpButton } from "@formBuilder/components/shared/FormPurposeHelpButton";
 import { ResponseDeliveryHelpButtonWithApi } from "@formBuilder/components/shared/ResponseDeliveryHelpDialogApiWithApi";
 import {
   ClassificationType,

@@ -1,4 +1,5 @@
-import { InfoDetails, Radio } from "@formBuilder/components/shared";
+import { Radio } from "@formBuilder/components/shared/MultipleChoice";
+import { InfoDetails } from "@formBuilder/components/shared/InfoDetails";
 import { useTranslation } from "@i18n/client";
 import { FormElement, FormElementTypes } from "@lib/types";
 

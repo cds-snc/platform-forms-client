@@ -1,6 +1,8 @@
 import { useTranslation } from "@i18n/client";
 import { Button, Alert } from "@clientComponents/globals";
-import { Dialog, useDialogRef, Radio, TextArea } from "@formBuilder/components/shared";
+import { Dialog, useDialogRef } from "@formBuilder/components/shared/Dialog";
+import { Radio } from "@formBuilder/components/shared/MultipleChoice";
+import { TextArea } from "@formBuilder/components/shared/TextArea";
 import React, { useState } from "react";
 import { cn } from "@lib/utils";
 

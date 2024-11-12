@@ -3,8 +3,8 @@ import React, { useCallback, useState } from "react";
 import { useTranslation } from "@i18n/client";
 
 import { Button } from "@clientComponents/globals";
-import { useDialogRef, Dialog } from ".";
 import { InfoIcon } from "@serverComponents/icons";
+import { Dialog, useDialogRef } from "./Dialog";
 
 const ResponseDeliveryHelpDialog = ({ handleClose }: { handleClose: () => void }) => {
   const { t } = useTranslation("form-builder");

@@ -13,7 +13,7 @@ import { SubmitButton as DeleteButton } from "@clientComponents/globals/Buttons/
 import { logMessage } from "@lib/logger";
 import { DeleteKeyFailed } from "./DeleteKeyFailed";
 import { DeleteKeySuccess } from "./DeleteKeySuccess";
-import { toast } from "@formBuilder/components/shared";
+import { toast } from "@formBuilder/components/shared/Toast";
 
 import { deleteServiceAccountKey } from "../../../settings/api/actions";
 import Link from "next/link";
