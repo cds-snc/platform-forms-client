@@ -4,6 +4,7 @@ import { useTranslation } from "@i18n/client";
 // TODO
 export const ThrottlingRate = () => {
   const { t } = useTranslation();
+
   const updateThrottling = (e: React.FormEvent) => {
     e.preventDefault();
     // console.log("updateThrottling")
