@@ -4,20 +4,20 @@ import { ResponseDelivery } from "./components/ResponseDelivery";
 import { ApiKeyDialog } from "../components/dialogs/ApiKeyDialog/ApiKeyDialog";
 import { DeleteApiKeyDialog } from "../components/dialogs/DeleteApiKeyDialog/DeleteApiKeyDialog";
 
-export async function generateMetadata(props: {
-  params: Promise<{ locale: string }>;
+export async function generateMetadata({
+  params: { locale },
+}: {
+  params: { locale: string };
 }): Promise<Metadata> {
-  const params = await props.params;
-
-  const { locale } = params;
-
   const { t } = await serverTranslation("form-builder", { lang: locale });
   return {
     title: `${t("gcFormsSettings")} — ${t("gcForms")}`,
   };
 }
 
-export default async function Page() {
+export default async function Page({ params: { id } }: { params: { id: string } }) {
+  const keyId = await checkKeyExists(id);
+
   return (
     <>
       <ResponseDelivery />

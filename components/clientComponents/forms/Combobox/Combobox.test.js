@@ -5,7 +5,7 @@ import React from "react";
 import { cleanup, render, screen, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { GenerateElement } from "@lib/formBuilder";
-import { act } from "react";
+import { act } from "react-dom/test-utils";
 
 jest.mock("formik", () => ({
   ...jest.requireActual("formik"),

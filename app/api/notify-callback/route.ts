@@ -57,8 +57,8 @@ async function removeProcessedMark(submissionID: string) {
  * @throws
  * This exception is thrown if the bearer token is not found
  */
-const extractBearerTokenFromReq = async () => {
-  const reqHeaders = await headers();
+const extractBearerTokenFromReq = () => {
+  const reqHeaders = headers();
   const authHeader = reqHeaders.get("authorization") ?? "";
   if (authHeader.startsWith("Bearer ")) {
     return authHeader.substring(7, authHeader.length);
@@ -77,7 +77,7 @@ const extractBearerTokenFromReq = async () => {
 export const validAuthorizationHeader = (): MiddlewareRequest => {
   return async (): Promise<MiddlewareReturn> => {
     try {
-      const bearerToken = await extractBearerTokenFromReq();
+      const bearerToken = extractBearerTokenFromReq();
       if (bearerToken !== process.env.GC_NOTIFY_CALLBACK_BEARER_TOKEN) {
         return {
           next: false,

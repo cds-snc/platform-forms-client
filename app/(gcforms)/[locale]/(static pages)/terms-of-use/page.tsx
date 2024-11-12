@@ -14,34 +14,22 @@ export async function generateStaticParams() {
 }
 
 interface TermsOfUseProps {
-  params: Promise<{
+  params: {
     locale: string;
-  }>;
+  };
 }
-export async function generateMetadata(
-  props: {
-    params: Promise<{ locale: string }>;
-  }
-): Promise<Metadata> {
-  const params = await props.params;
-
-  const {
-    locale
-  } = params;
-
+export async function generateMetadata({
+  params: { locale },
+}: {
+  params: { locale: string };
+}): Promise<Metadata> {
   const { t } = await serverTranslation(["terms"], { lang: locale });
   return {
     title: t("terms-of-use.title"),
   };
 }
 
-const TermsOfUse = async (props: TermsOfUseProps) => {
-  const params = await props.params;
-
-  const {
-    locale
-  } = params;
-
+const TermsOfUse = async ({ params: { locale } }: TermsOfUseProps) => {
   return (
     <RichText className="w-[100%] tablet:w-[90%] laptop:w-[70%]">
       {locale === "fr" ? frContent : enContent}

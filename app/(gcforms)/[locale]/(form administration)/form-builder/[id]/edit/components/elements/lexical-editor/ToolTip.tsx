@@ -8,9 +8,7 @@ export const ToolTip = ({ children, text }: { children: React.ReactElement; text
     <span className="relative">
       {Children.map(children, (child) => {
         return React.cloneElement(child, {
-          // @ts-expect-error  -- TODO: fix this
           ...child.props,
-          // @ts-expect-error  -- TODO: fix this
           className: child.props.className + " peer",
           "aria-labelledby": id,
         });

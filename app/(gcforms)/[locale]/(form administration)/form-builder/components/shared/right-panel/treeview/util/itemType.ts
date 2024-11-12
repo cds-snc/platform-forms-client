@@ -3,7 +3,6 @@ import { TreeItem } from "react-complex-tree";
 
 export const getItemFromElement = (el: ReactNode) => {
   if (el && typeof el === "object" && "props" in el) {
-    // @ts-expect-error -- fix this
     return el.props.item;
   }
 };
