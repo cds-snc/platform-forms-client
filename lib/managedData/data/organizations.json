@@ -553,9 +553,23 @@
     "notify_organisation_id": null
   },
   {
+    "id": "001OO00000Gg4J0YAJ",
+    "name_eng": "National Museum of Science and Technology (Ingenium)",
+    "name_fra": "Musée national des sciences et de la technologie (Ingenium)",
+    "type": "Crown Corp",
+    "notify_organisation_id": null
+  },
+  {
     "id": "001I9000004Vt62IAC",
     "name_eng": "National Research Council Canada",
     "name_fra": "Conseil national de recherches Canada",
+    "type": "GC Department",
+    "notify_organisation_id": null
+  },
+  {
+    "id": "001OO00000GgHJNYA3",
+    "name_eng": "National Security and Intelligence Review Agency",
+    "name_fra": "Office de surveillance des activités en matière de sécurité nationale et de renseignement",
     "type": "GC Department",
     "notify_organisation_id": null
   },
@@ -602,6 +616,20 @@
     "notify_organisation_id": null
   },
   {
+    "id": "001OO00000GgH3GYAV",
+    "name_eng": "Office of the Intelligence Commissioner",
+    "name_fra": "Bureau du commissaire au renseignement",
+    "type": "GC Department",
+    "notify_organisation_id": null
+  },
+  {
+    "id": "001OO00000HzMoJYAV",
+    "name_eng": "Office of the Public Sector Integrity Commissioner of Canada",
+    "name_fra": "Commissariat à l'intégrité du secteur public du Canada",
+    "type": "GC Department",
+    "notify_organisation_id": null
+  },
+  {
     "id": "001OO00000AhiwAYAR",
     "name_eng": "Office of the Secretary to the Governor General",
     "name_fra": "Bureau du secrétaire du gouverneur général",
@@ -613,6 +641,13 @@
     "name_eng": "Office of the Superintendent of Financial Institutions",
     "name_fra": "Bureau du surintendant des institutions financières",
     "type": "GC Department",
+    "notify_organisation_id": null
+  },
+  {
+    "id": "001OO00000Ct4gqYAB",
+    "name_eng": "Office of the Taxpayers' Ombudsperson",
+    "name_fra": "Bureau de l'ombudsman des contribuables",
+    "type": "Other",
     "notify_organisation_id": null
   },
   {
@@ -735,6 +770,13 @@
     "notify_organisation_id": "6022df15-563b-4ceb-b1e2-33ad17136286"
   },
   {
+    "id": "001OO00000Gg8ZWYAZ",
+    "name_eng": "Secretariat of the National Security and Intelligence Committee of Parliamentarians",
+    "name_fra": "Secrétariat du Comité des parlementaires sur la sécurité nationale et le renseignement",
+    "type": "GC Department",
+    "notify_organisation_id": null
+  },
+  {
     "id": "001I90000050aMNIAY",
     "name_eng": "Service Canada",
     "name_fra": "Service Canada",
@@ -775,6 +817,13 @@
     "name_fra": "Statistique Canada",
     "type": "GC Department",
     "notify_organisation_id": "27a987ff-b754-4efc-8dfe-b79d62b622f5"
+  },
+  {
+    "id": "001OO00000HzZtYYAV",
+    "name_eng": "The Correctional Investigator Canada",
+    "name_fra": "L'Enquêteur correctionnel Canada",
+    "type": "GC Department",
+    "notify_organisation_id": null
   },
   {
     "id": "001I9000005X2DjIAK",

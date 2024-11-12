@@ -72,23 +72,21 @@ export default async function Layout(props: {
   };
 
   return (
-    <FormBuilderConfigProvider formBuilderConfig={formBuilderConfig}>
-      <TemplateStoreProvider {...{ ...initialForm, locale, allowGroupsFlag }}>
-        <SaveTemplateProvider>
-          <RefStoreProvider>
-            <div>
-              {/* @TODO: Backlink?? */}
-              <div className="flex flex-col">
-                <SkipLink />
-                <Header context="formBuilder" className="mb-0" />
-                <div className="shrink-0 grow basis-auto bg-gray-soft">
-                  <ToastContainer containerId="default" />
-                  <ToastContainer limit={1} containerId="wide" autoClose={false} width="600px" />
-                  <div className="flex h-full flex-row gap-7">
-                    <div id="left-nav" className="z-10 border-r border-slate-200 bg-white">
-                      <div className="sticky top-0">
-                        <LeftNavigation id={id} />
-                      </div>
+   <FormBuilderConfigProvider formBuilderConfig={formBuilderConfig}>
+    <TemplateStoreProvider {...{ ...initialForm, locale, allowGroupsFlag }}>
+      <SaveTemplateProvider>
+        <RefStoreProvider>
+          <div>
+            <div className="flex flex-col">
+              <SkipLink />
+              <Header context="formBuilder" className="mb-0" />
+              <div className="shrink-0 grow basis-auto bg-gray-soft">
+                <ToastContainer containerId="default" />
+                <ToastContainer limit={1} containerId="wide" autoClose={false} width="600px" />
+                <div className="flex h-full flex-row gap-7">
+                  <div id="left-nav" className="z-10 border-r border-slate-200 bg-white">
+                    <div className="sticky top-0">
+                      <LeftNavigation id={id} />
                     </div>
                     <GroupStoreProvider>
                       <main
