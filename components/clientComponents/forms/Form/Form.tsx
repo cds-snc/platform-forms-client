@@ -216,14 +216,6 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
           tabIndex={0}
         >
           {errorList}
-
-          <button
-            onClick={() => {
-              router.refresh();
-            }}
-          >
-            try refresh
-          </button>
         </Alert>
       )}
 
@@ -336,6 +328,13 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
                 />
               )}
             </div>
+            <button
+              onClick={() => {
+                router.refresh();
+              }}
+            >
+              try refresh
+            </button>
           </form>
         </>
       }
