@@ -149,8 +149,8 @@
       "noDeletedResponsesMessage": "Une fois que vous aurez téléchargé et approuvé la suppression des réponses, celles-ci seront disponibles ici pendant 30 jours.",
       "noProblemResponses": "Aucune réponse signalée avec problème",
       "noProblemResponsesMessage": "Les réponses signalées avec problèmes apparaîtront ici jusqu'à ce qu'elles soient approuvées pour leur suppression de Formulaires GC.",
-      "noNewResponsesApi": "[TODO][FR]No responses for API retrevieval",
-      "noNewResponsesApiMessage": "[TODO]Submitted form responses will appear here and be available in GC Forms for 45 days."
+      "noNewResponsesApi": "Aucune réponse n'est disponible pour être récupérée par l'intermédiaire de l'API",
+      "noNewResponsesApiMessage": "Les réponses soumises au formulaire apparaîtront ici et seront disponible dans Formulaires GC pendant 45 jours."
     },
     "notifications": {
       "downloadComplete": "Réponses déplacées vers l'onglet « Téléchargements »",
