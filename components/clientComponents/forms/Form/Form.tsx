@@ -29,6 +29,7 @@ import { filterShownElements, filterValuesByShownElements } from "@lib/formConte
 import { formHasGroups } from "@lib/utils/form-builder/formHasGroups";
 import { showReviewPage } from "@lib/utils/form-builder/showReviewPage";
 import { useFormDelay } from "@lib/hooks/useFormDelayContext";
+import { useRouter } from "next/navigation";
 
 interface SubmitButtonProps {
   getFormDelay: () => number;
@@ -153,6 +154,8 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
   const [canFocusOnError, setCanFocusOnError] = useState(false);
   const [lastSubmitCount, setLastSubmitCount] = useState(-1);
 
+  const router = useRouter();
+
   const { currentGroup, groupsCheck, getGroupTitle } = useGCFormsContext();
   const isGroupsCheck = groupsCheck(props.allowGrouping);
   const isShowReviewPage = showReviewPage(form);
@@ -213,6 +216,14 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
           tabIndex={0}
         >
           {errorList}
+
+          <button
+            onClick={() => {
+              router.refresh();
+            }}
+          >
+            try refresh
+          </button>
         </Alert>
       )}
 
