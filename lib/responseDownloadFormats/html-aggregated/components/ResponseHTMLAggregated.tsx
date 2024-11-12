@@ -15,13 +15,11 @@ import { formatDateTimeUTC } from "@lib/utils/form-builder";
 interface HTMLDownloadProps {
   lang: string;
   formResponseSubmissions: FormResponseSubmissions;
-  host: string;
 }
 
 export const ResponseHtmlAggregated = ({
   lang = "en",
   formResponseSubmissions,
-  host,
 }: HTMLDownloadProps) => {
   const { t } = customTranslate("my-forms");
   const form = formResponseSubmissions.form;
@@ -81,6 +79,7 @@ export const ResponseHtmlAggregated = ({
         <div id="page-container">
           <main id="content">
             <Fip language="en" showLangLink={false} />
+
             <h1 id="main-header" className="mt-14">{`${form[getProperty("title", lang)]}`}</h1>
 
             <div className="mb-14 border-2 border-dashed border-black bg-slate-50 p-8">
@@ -97,7 +96,6 @@ export const ResponseHtmlAggregated = ({
               <p className="mb-4">{t("responseAggregatedTemplate.needToVerify", { lng: lang })}</p>
               <p className="mb-8">{t("responseAggregatedTemplate.useTheCopy", { lng: lang })}</p>
               <CopyCodes
-                host={host}
                 confirmationCodes={confirmationCodes}
                 formId={formResponseSubmissions.form.id}
                 lang={lang}
@@ -116,7 +114,7 @@ export const ResponseHtmlAggregated = ({
             {submissions &&
               submissions.map((submission) => {
                 return (
-                  <div key={submission.id} className="mt-32 break-before-page">
+                  <div key="" className="mt-32 break-before-page">
                     <h3 id={submission.id} tabIndex={-1}>
                       {t("responseAggregatedTemplate.dataList.formResponse", { lng: lang })}{" "}
                       {submission.id}

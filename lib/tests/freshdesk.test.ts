@@ -1,6 +1,6 @@
 jest.mock("node-fetch", () => jest.fn());
 jest.mock("@lib/origin", () => ({
-  getOriginSync: jest.fn().mockReturnValue("http://localhost:3000"),
+  getOrigin: jest.fn().mockReturnValue("http://localhost:3000"),
 }));
 
 const baseData = {
