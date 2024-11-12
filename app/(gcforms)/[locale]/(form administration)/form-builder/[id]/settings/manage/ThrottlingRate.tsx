@@ -1,13 +1,15 @@
 import { Button } from "@clientComponents/globals";
 import { useTranslation } from "@i18n/client";
+import { logMessage } from "@lib/logger";
 
-// TODO
-export const ThrottlingRate = () => {
+export const ThrottlingRate = ({ formId }: { formId: string }) => {
   const { t } = useTranslation();
+
+  // TODO: use react controlled inputs
 
   const updateThrottling = (e: React.FormEvent) => {
     e.preventDefault();
-    // console.log("updateThrottling")
+    logMessage.info("updateThrottling", formId);
   };
 
   // TODO: Probably drop GCDS for custom control
