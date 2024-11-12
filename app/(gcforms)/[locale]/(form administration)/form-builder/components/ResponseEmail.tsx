@@ -2,7 +2,7 @@
 import React, { useEffect, type JSX } from "react";
 import { useTranslation } from "@i18n/client";
 import { isValidGovEmail } from "@lib/validation/validation";
-import { Input } from "./shared";
+import { Input } from "./shared/Input";
 import { completeEmailAddressRegex } from "@lib/utils/form-builder";
 
 const HintText = ({ id, children }: { id: string; children?: JSX.Element | string }) => {

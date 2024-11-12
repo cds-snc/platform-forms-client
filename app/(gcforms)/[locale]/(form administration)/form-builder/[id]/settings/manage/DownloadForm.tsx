@@ -1,7 +1,7 @@
 "use client";
 import React from "react";
 import { useTranslation } from "@i18n/client";
-import { DownloadFileButton } from "@formBuilder/components/shared";
+import { DownloadFileButton } from "@formBuilder/components/shared/DownloadFileButton";
 
 export const DownloadForm = () => {
   const { t } = useTranslation("form-builder");

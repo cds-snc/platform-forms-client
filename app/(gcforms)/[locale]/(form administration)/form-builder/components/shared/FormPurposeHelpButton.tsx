@@ -3,10 +3,10 @@ import React, { useCallback, useState } from "react";
 import { useTranslation } from "@i18n/client";
 
 import { Button } from "@clientComponents/globals";
-import { useDialogRef, Dialog } from ".";
 import { InfoIcon } from "@serverComponents/icons";
 
 import Markdown from "markdown-to-jsx";
+import { Dialog, useDialogRef } from "./Dialog";
 
 const FormPurposeHelpDialog = ({ handleClose }: { handleClose: () => void }) => {
   const { t } = useTranslation("form-builder");

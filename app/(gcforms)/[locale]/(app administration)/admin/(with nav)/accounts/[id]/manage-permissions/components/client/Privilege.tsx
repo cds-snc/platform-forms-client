@@ -2,7 +2,7 @@
 import { useTranslation } from "@i18n/client";
 import { PermissionToggle } from "./PermissionToggle";
 import { updatePrivileges } from "../../actions";
-import { toast } from "@formBuilder/components/shared";
+import { toast } from "@formBuilder/components/shared/Toast";
 
 export const Privilege = ({
   canManageUsers,

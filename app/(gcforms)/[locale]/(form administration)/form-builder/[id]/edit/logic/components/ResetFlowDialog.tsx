@@ -1,6 +1,6 @@
 import { useTranslation } from "@i18n/client";
 import { Button } from "@clientComponents/globals";
-import { Dialog, useDialogRef } from "@formBuilder/components/shared";
+import { Dialog, useDialogRef } from "@formBuilder/components/shared/Dialog";
 import React from "react";
 import Markdown from "markdown-to-jsx";
 
