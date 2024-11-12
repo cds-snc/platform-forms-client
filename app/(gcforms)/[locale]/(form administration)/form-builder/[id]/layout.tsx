@@ -16,22 +16,15 @@ import { Language } from "@lib/types/form-builder-types";
 import { FormRecord } from "@lib/types";
 import { logMessage } from "@lib/logger";
 
-export default async function Layout(
-  props: {
-    children: React.ReactNode;
-    params: Promise<{ locale: string; id: string }>;
-  }
-) {
+export default async function Layout(props: {
+  children: React.ReactNode;
+  params: Promise<{ locale: string; id: string }>;
+}) {
   const params = await props.params;
 
-  const {
-    locale,
-    id
-  } = params;
+  const { locale, id } = params;
 
-  const {
-    children
-  } = props;
+  const { children } = props;
 
   let initialForm: FormRecord | null = null;
 
@@ -63,7 +56,6 @@ export default async function Layout(
       <SaveTemplateProvider>
         <RefStoreProvider>
           <div>
-            {/* @TODO: Backlink?? */}
             <div className="flex flex-col">
               <SkipLink />
               <Header context="formBuilder" className="mb-0" />

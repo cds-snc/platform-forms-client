@@ -3,7 +3,7 @@ import React, { useState, useEffect } from "react";
 import { FormElementWithIndex } from "@lib/types/form-builder-types";
 import { useTemplateStore } from "@lib/store/useTemplateStore";
 import { PanelActions, PanelBodyRoot } from "./index";
-import { useIsWithin } from "@lib/hooks/form-builder";
+import { useIsWithin } from "@lib/hooks/form-builder/useIsWithin";
 import { useRefsContext } from "./RefsContext";
 import { FormElementTypes, FormElement } from "@lib/types";
 import { useTreeRef } from "@formBuilder/components/shared/right-panel/treeview/provider/TreeRefProvider";

@@ -25,7 +25,7 @@ import { Form } from "@clientComponents/forms/Form/Form";
 import { BackButton } from "./BackButton";
 import { safeJSONParse } from "@lib/utils";
 import { ErrorSaving } from "@formBuilder/components/shared/ErrorSaving";
-import { toast } from "@formBuilder/components/shared";
+import { toast } from "@formBuilder/components/shared/Toast";
 import { defaultForm } from "@lib/store/defaults";
 import { showReviewPage } from "@lib/utils/form-builder/showReviewPage";
 import { focusElement } from "@lib/client/clientHelpers";

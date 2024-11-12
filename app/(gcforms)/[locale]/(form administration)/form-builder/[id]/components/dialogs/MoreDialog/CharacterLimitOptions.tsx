@@ -1,5 +1,6 @@
 import { useTranslation } from "@i18n/client";
-import { InfoDetails, Input } from "@formBuilder/components/shared";
+import { InfoDetails } from "@formBuilder/components/shared/InfoDetails";
+import { Input } from "@formBuilder/components/shared/Input";
 import { FormElement, FormElementTypes } from "@lib/types";
 import { Label } from "./Label";
 import { Hint } from "./Hint";

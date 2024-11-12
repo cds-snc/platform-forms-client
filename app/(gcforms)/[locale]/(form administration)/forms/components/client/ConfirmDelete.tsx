@@ -1,6 +1,6 @@
 import React, { useCallback } from "react";
 import { useTranslation } from "@i18n/client";
-import { ConfirmFormDeleteDialog } from "@formBuilder/components/shared";
+import { ConfirmFormDeleteDialog } from "@formBuilder/components/shared/ConfirmFormDeleteDialog";
 import { toast, ToastContainer } from "@formBuilder/components/shared/Toast";
 import { deleteForm } from "../../actions";
 import { clearTemplateStorage } from "@lib/store/utils";
