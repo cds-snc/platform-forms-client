@@ -330,7 +330,8 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
             </div>
             <a
               href="#"
-              onClick={() => {
+              onClick={(e) => {
+                e.preventDefault();
                 router.refresh();
               }}
             >
