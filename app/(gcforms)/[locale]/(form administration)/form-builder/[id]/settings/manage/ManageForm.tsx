@@ -6,6 +6,7 @@ import { SetClosingDate } from "./close/SetClosingDate";
 import { FormOwnership } from "./FormOwnership";
 import { ErrorPanel } from "@clientComponents/globals/ErrorPanel";
 import { updateTemplateUsers } from "@formBuilder/actions";
+import { ThrottlingRate } from "./ThrottlingRate";
 
 interface User {
   id: string;
@@ -59,6 +60,7 @@ export const ManageForm = (props: ManageFormProps) => {
         allUsers={allUsers}
         updateTemplateUsers={updateTemplateUsers}
       />
+      <ThrottlingRate />
       <DownloadForm />
     </>
   );
