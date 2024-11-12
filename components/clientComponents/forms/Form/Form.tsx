@@ -328,13 +328,14 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
                 />
               )}
             </div>
-            <button
+            <a
+              href="#"
               onClick={() => {
                 router.refresh();
               }}
             >
               try refresh
-            </button>
+            </a>
           </form>
         </>
       }
