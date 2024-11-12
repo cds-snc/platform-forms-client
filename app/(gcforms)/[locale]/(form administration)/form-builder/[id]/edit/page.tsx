@@ -4,6 +4,7 @@ import { checkKeyExists } from "@lib/serviceAccount";
 import { EditWithGroups } from "./components/EditWithGroups";
 import { DynamicRowDialog } from "@formBuilder/components/dialogs/DynamicRowDialog/DynamicRowDialog";
 import { MoreDialog } from "../components/dialogs/MoreDialog/MoreDialog";
+import { RulesDialog } from "../components/dialogs/RulesDialog/RulesDialog";
 
 export async function generateMetadata(props: {
   params: Promise<{ locale: string }>;
@@ -34,6 +35,7 @@ export default async function Page(props: { params: Promise<{ id: string; locale
       <EditWithGroups id={id} locale={locale} keyId={keyId} />
       <DynamicRowDialog />
       <MoreDialog />
+      <RulesDialog />
     </>
   );
 }

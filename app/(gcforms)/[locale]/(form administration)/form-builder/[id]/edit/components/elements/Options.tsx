@@ -116,11 +116,6 @@ export const Options = ({ item, renderIcon, formId }: OptionsProps) => {
           }
         />
         <ConditionalIndicatorOption
-          handleOpen={(mode) => {
-            setModalMode(mode);
-            // @ts-expect-error -- div is using imperative handle
-            modalContainer.current?.showModal();
-          }}
           isFocused={focusedOption === `${item.id}.${index}`}
           id={`${item.id}.${index}`}
           elements={elements}
