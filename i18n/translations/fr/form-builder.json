@@ -625,7 +625,7 @@
     "formManagement": "Gestion du formulaire",
     "api": {
       "keyId": "Identifiant de la clé API",
-      "title": "Accès API",
+      "title": "Accès pour l'API",
       "generateKey": "Créer une clé API",
       "refreshKey": "Rafraîchir la clé",
       "deleteKey": "Supprimer la clé API",
@@ -647,7 +647,7 @@
         "title": "Supprimer la clé API",
         "cautionTitle": "Attention :",
         "cautionText": "La suppression de cette clé API ne peut être annulée. Supprimer la clé interrompt définitivement la livraison de réponses à tous les systèmes intégrés. Vous devrez créer une nouvelle clé et l'ajouter à votre intégration pour relancer la livraison à partir de l'API.",
-        "stopText": "Pour arrêter les soumissions à ce formulaire de façon temporaire, veuillez considérer",
+        "stopText": "<strong>Pour arrêter les soumissions</strong> à ce formulaire de façon temporaire, veuillez considérer",
         "stopText1": "la fermeture du formulaire",
         "stopText2": "à la place.",
         "cancelButton": "Annuler",
@@ -776,8 +776,8 @@
         "title": "Courriel à une boîte de réception",
         "text1": "Pour les formulaires avec une classification jusqu’à PROTÉGÉ A.",
         "text2": "Les réponses sont envoyées directement dans une boîte de réception en temps réel.",
-        "text3": "Une seule adresse courriel peut recevoir les courriel de réponses. Il peut s'agir d'une boîte de réception partagée.",
-        "text4": "Une seule adresse courriel peut recevoir les courriel de réponses. Il peut s'agir d'une boîte de réception partagée.",
+        "text3": "Une seule adresse courriel peut recevoir les courriel de réponses.",
+        "text4": "Il peut s'agir d'une boîte de réception partagée.",
         "text5": "Aucune ressource de développement de logiciel n'est requise."
       },
       "vault": {
