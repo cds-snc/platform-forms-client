@@ -9,7 +9,7 @@ const getWeeksInSeconds = (weeks: number) => {
 
 // Increases the throttling rate for a limited duration by leveraging the Redis built-in expiration
 // feature by setting an expiryDelay
-export const scheduledThrottling = async (formId, weeks) => {
+export const scheduledThrottling = async (formId: string, weeks: number) => {
   const modifyParameter = `rate-limit:${formId}`;
   try {
     const redis = await getRedisInstance();
@@ -24,7 +24,7 @@ export const scheduledThrottling = async (formId, weeks) => {
 };
 
 // Permanently increases the throttling rate (uses high capacity token bucket)
-export const permanentThrottling = async (formId) => {
+export const permanentThrottling = async (formId: string) => {
   const modifyParameter = `rate-limit:${formId}`;
   try {
     const redis = await getRedisInstance();

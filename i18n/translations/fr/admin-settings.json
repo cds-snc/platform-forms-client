@@ -30,5 +30,20 @@
     "descriptionEn": "Description en anglais",
     "descriptionFr": "Description en français",
     "value": "Valeur de ce paramètre"
+  },
+  "throttling": {
+    "title": "[FR]Throttling Rate",
+    "description": "[FR]Increase throttling rate for up to 12 weeks",
+    "weeks": "[FR]Weeks",
+    "permanent": "[FR]Permanently increase throttling rate",
+    "updateRate": "[FR]Update rate",
+    "resetRate": "[FR]Reset rate",
+    "succcessUpdate": {
+      "title": "[FR]Throttling rate increased.",
+      "description": "[FR]Rate will stay in effect until: {{success}}"
+    },
+    "succcessReset": {
+      "title": "[FR]Throttling rate reset."
+    }
   }
 }

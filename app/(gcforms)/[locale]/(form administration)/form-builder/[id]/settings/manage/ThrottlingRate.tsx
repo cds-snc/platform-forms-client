@@ -1,7 +1,7 @@
 "use client";
 import { useState } from "react";
 import { useTranslation } from "@i18n/client";
-import { Button } from "@clientComponents/globals";
+import { Alert, Button } from "@clientComponents/globals";
 import {
   permanentThrottling,
   resetThrottling,
@@ -9,19 +9,18 @@ import {
 } from "@lib/cache/throttlingCache";
 import { Checkbox } from "@formBuilder/components/shared/MultipleChoice";
 import { Input } from "@formBuilder/components/shared/Input";
-import { logMessage } from "@lib/logger";
 
 // TODO only show this if the user has access
 
+// TODO handle error case try-catch
+
 export const ThrottlingRate = ({ formId }: { formId: string }) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation("admin-settings");
   const [weeks, setWeeks] = useState("");
   const [permanent, setPermanent] = useState("");
   const [success, setSuccess] = useState("");
 
-  const formAction = async (/*formData*/) => {
-    logMessage.info(`Client updateThrottling ${formId}, ${weeks}, ${permanent}`);
-
+  const formAction = async () => {
     if (permanent) {
       await permanentThrottling(formId);
       setSuccess("permanent");
@@ -30,12 +29,11 @@ export const ThrottlingRate = ({ formId }: { formId: string }) => {
 
     if (weeks) {
       await scheduledThrottling(formId, Number(weeks));
-      // TODO convert weeks to YYYY-MM-DD
       setSuccess("weeks");
       return;
     }
 
-    // Reset - either blank form or reset clicked
+    // Reset throttling back to default
     await resetThrottling(formId);
     setSuccess("reset");
   };
@@ -43,32 +41,45 @@ export const ThrottlingRate = ({ formId }: { formId: string }) => {
   return (
     <div className="mb-20">
       <form action={formAction}>
-        <h2>{t("TODO-Throttling Rate")}</h2>
+        <h2>{t("throttling.title")}</h2>
         <p>
-          <strong>{t("TODO-Increase throttling rate for up to 12 weeks")}</strong>
+          <strong>{t("throttling.description")}</strong>
         </p>
-        <div>
+        <div className="mb-2">
           <Input
             className="w-16"
             id="throttling-weeks"
             name="throttling-weeks"
             onChange={(e: React.ChangeEvent<HTMLInputElement>) => setWeeks(e.target.value)}
           />
-          <label className="mt-2 ml-2" htmlFor="throttling-weeks">
-            {t("TODO-Weeks")}
+          <label className="ml-4" htmlFor="throttling-weeks">
+            {t("throttling.weeks")}
           </label>
         </div>
         <div role="alert">
           {success && (success === "weeks" || success === "permanent") && (
-            <div>
-              Throttling rate increased.
-              <br />
-              Rate will stay in effect until: {success}
-            </div>
+            <Alert.Success
+              focussable={true}
+              title={t("throttling.succcessUpdate.title")}
+              className="mb-2"
+            >
+              {/* TODO convert weeks to YYYY-MM-DD */}
+              <p>
+                {t("throttling.succcessUpdate.description", {
+                  success: success === "weeks" ? weeks : success,
+                })}
+              </p>
+            </Alert.Success>
           )}
-          {success && success === "reset" && <div>Throttling rate reset.</div>}
+          {success && success === "reset" && (
+            <Alert.Success
+              focussable={true}
+              title={t("throttling.succcessReset.title")}
+              className="mb-2"
+            />
+          )}
         </div>
-        <div className="focus-group mb-4 flex align-middle">
+        <div className="mb-4 flex align-middle">
           <Checkbox
             data-testid="required"
             id="throttling-permanent"
@@ -76,16 +87,14 @@ export const ThrottlingRate = ({ formId }: { formId: string }) => {
             value={permanent}
             onChange={(e: React.ChangeEvent<HTMLInputElement>) => setPermanent(e.target.checked)}
           ></Checkbox>
-          <label className="" htmlFor="throttling-permanent">
-            {t("TODO-Permanently increase throttling rate")}
-          </label>
+          <label htmlFor="throttling-permanent">{t("throttling.permanent")}</label>
         </div>
         <div className="flex">
           <Button dataTestId="increase-throttle" theme="secondary" type="submit">
-            {t("TODO-Update rate")}
+            {t("throttling.updateRate")}
           </Button>
           <Button className="ml-4" dataTestId="reset-throttle" theme="link" type="submit">
-            {t("TODO-Reset throttle")}
+            {t("throttling.resetRate")}
           </Button>
         </div>
       </form>
