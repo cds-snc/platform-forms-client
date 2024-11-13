@@ -31,7 +31,6 @@ import { ErrorSaving } from "@formBuilder/components/shared/ErrorSaving";
 import { useTemplateContext } from "@lib/hooks/form-builder/useTemplateContext";
 import { safeJSONParse } from "@lib/utils";
 import { FormProperties } from "@lib/types";
-import { useFeatureFlags } from "@lib/hooks/useFeatureFlags";
 import { useFormBuilderConfig } from "@lib/hooks/useFormBuilderConfig";
 
 enum DeliveryOption {
@@ -507,11 +506,6 @@ export const SettingsModal = ({
   isPublished: boolean;
   handleClose: (arg: boolean) => void;
 }) => {
-  const { getFlag } = useFeatureFlags();
-  const apiAccess = getFlag("apiAccess");
-
-  const { hasApiKeyId, apiKeyId } = useFormBuilderConfig();
-  const keyId = apiAccess && hasApiKeyId ? String(apiKeyId) : "";
-
-  return <>{show && <SettingsDialog keyId={keyId} handleClose={() => handleClose(false)} />}</>;
+  const { apiKeyId } = useFormBuilderConfig();
+  return <>{show && <SettingsDialog keyId={apiKeyId || false} handleClose={() => handleClose(false)} />}</>;
 };
