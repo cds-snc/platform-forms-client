@@ -10,8 +10,6 @@ import {
 import { Checkbox } from "@formBuilder/components/shared/MultipleChoice";
 import { Input } from "@formBuilder/components/shared/Input";
 
-// TODO only show this if the user has access
-
 // TODO handle error case
 
 export const ThrottlingRate = ({ formId }: { formId: string }) => {

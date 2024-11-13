@@ -60,7 +60,7 @@ export const ManageForm = (props: ManageFormProps) => {
         allUsers={allUsers}
         updateTemplateUsers={updateTemplateUsers}
       />
-      <ThrottlingRate formId={id} />
+      {canManageOwnership && <ThrottlingRate formId={id} />}
       <DownloadForm />
     </>
   );
