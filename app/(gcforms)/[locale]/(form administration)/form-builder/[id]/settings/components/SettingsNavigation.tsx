@@ -2,8 +2,7 @@
 
 import { useTranslation } from "@i18n/client";
 import { SubNavLink } from "@clientComponents/globals/SubNavLink";
-import { EmailIcon, BrandIcon, GearIcon, ProtectedIcon } from "@serverComponents/icons";
-import { useIsProduction } from "@lib/hooks/useIsProduction";
+import { EmailIcon, BrandIcon, GearIcon } from "@serverComponents/icons";
 
 export const SettingsNavigation = ({ id }: { id: string }) => {
   const {
