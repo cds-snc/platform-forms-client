@@ -50,32 +50,3 @@ export const resetThrottling = async (formId: string) => {
     throw new Error("Could not connect to cache");
   }
 };
-
-// export const updateThrottling = async (
-//   formId: string,
-//   weeks?: number,
-//   permanent?: boolean
-// ): Promise<void> => {
-//   const modifyParameter = `rate-limit:${formId}`;
-
-//   try {
-//     const redis = await getRedisInstance();
-
-//     if (weeks) {
-//       const expiresInSeconds = getWeeksInSeconds(weeks);
-//       await redis.setex(modifyParameter, expiresInSeconds, "high");
-//       return ;
-//     }
-
-// if (permanent) {
-//   await redis.set(modifyParameter, "high");
-// }
-
-// await redis.del(modifyParameter);
-
-//     logMessage.debug(`Updating Cached Throttling for ${modifyParameter}`);
-//   } catch (e) {
-//     logMessage.error(e as Error);
-//     throw new Error("Could not connect to cache");
-//   }
-// };

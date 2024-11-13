@@ -12,7 +12,7 @@ import { Input } from "@formBuilder/components/shared/Input";
 
 // TODO only show this if the user has access
 
-// TODO handle error case try-catch
+// TODO handle error case
 
 export const ThrottlingRate = ({ formId }: { formId: string }) => {
   const { t } = useTranslation("admin-settings");
