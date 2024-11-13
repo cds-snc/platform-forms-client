@@ -9,22 +9,13 @@ import { YourAccountDropdown } from "@clientComponents/globals/Header/YourAccoun
 import { authCheckAndRedirect } from "@lib/actions";
 import { SkipLink } from "@serverComponents/globals/SkipLink";
 import { Footer } from "@serverComponents/globals/Footer";
-export default async function Layout(
-  props: {
-    children: React.ReactNode;
-    params: Promise<{ locale: string }>;
-  }
-) {
-  const params = await props.params;
-
-  const {
-    locale
-  } = params;
-
-  const {
-    children
-  } = props;
-
+export default async function Layout({
+  children,
+  params: { locale },
+}: {
+  children: React.ReactNode;
+  params: { locale: string };
+}) {
   await authCheckAndRedirect();
 
   const { t } = await serverTranslation(["common", "admin-login"], { lang: locale });

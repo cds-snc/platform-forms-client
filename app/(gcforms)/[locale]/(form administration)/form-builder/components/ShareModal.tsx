@@ -4,7 +4,9 @@ import { useTranslation } from "@i18n/client";
 import { FormElementTypes } from "@lib/types";
 import axios from "axios";
 
-import { useDialogRef, Dialog, TagInput, InfoDetails } from "./shared";
+import { useDialogRef, Dialog } from "./shared/Dialog";
+import { TagInput } from "./shared/tag-input/TagInput";
+import { InfoDetails } from "./shared/InfoDetails";
 import { Button } from "@clientComponents/globals";
 import { useTemplateStore } from "@lib/store/useTemplateStore";
 import { useSession } from "next-auth/react";

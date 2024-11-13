@@ -1,6 +1,6 @@
 "use client";
-import { useActionState } from "react";
 
+import { useFormState } from "react-dom";
 import {
   TextInput,
   Label,
@@ -32,7 +32,7 @@ export const PasswordResetForm = ({ email }: { email: string }) => {
     return updatePassword;
   };
 
-  const [state, formAction] = useActionState(localFormAction, {});
+  const [state, formAction] = useFormState(localFormAction, {});
   // the form to reset the password with the verification code
   return (
     <>

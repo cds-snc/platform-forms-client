@@ -152,7 +152,7 @@ export const resendVerificationCode = async (
 ): Promise<void | { error: string }> => {
   try {
     const newCode = await requestNew2FAVerificationCode(authenticationFlowToken, email);
-    (await cookies()).set(
+    cookies().set(
       "authenticationFlow",
       JSON.stringify({
         authenticationFlowToken: newCode,

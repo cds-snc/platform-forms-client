@@ -3,7 +3,7 @@ import { useManageFormAccessDialog } from "./ManageFormAccessDialogContext";
 import { sendInvitation } from "./actions";
 import { Button } from "@clientComponents/globals";
 import { useTranslation } from "@i18n/client";
-import { toast } from "@formBuilder/components/shared";
+import { toast } from "@formBuilder/components/shared/Toast";
 
 export const InviteUsers = () => {
   const { t } = useTranslation("manage-form-access");

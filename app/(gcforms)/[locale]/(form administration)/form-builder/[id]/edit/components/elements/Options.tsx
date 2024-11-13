@@ -7,7 +7,7 @@ import { Option } from "./Option";
 import { Button } from "@clientComponents/globals";
 import { FormElementWithIndex } from "@lib/types/form-builder-types";
 import { ModalRules } from "../ModalRules";
-import { ConditionalIndicatorOption } from "@formBuilder/components/shared";
+import { ConditionalIndicatorOption } from "@formBuilder/components/shared/conditionals/ConditionalIndicatorOption";
 
 interface AddButtonProps {
   index: number;

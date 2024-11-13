@@ -28,7 +28,7 @@ import { ConfirmMoveSectionDialog } from "../../confirm/ConfirmMoveSectionDialog
 import { useConfirmState as useConfirmMoveDialogState } from "../../confirm/useConfirmState";
 import { useConfirmState as useConfirmDeleteDialogState } from "../../confirm/useConfirmState";
 import { ConfirmDeleteSectionDialog } from "../../confirm/ConfirmDeleteSectionDialog";
-import { toast } from "@formBuilder/components/shared";
+import { toast } from "@formBuilder/components/shared/Toast";
 import { useTranslation } from "@i18n/client";
 import { cn } from "@lib/utils";
 import { KeyboardNavTip } from "./KeyboardNavTip";

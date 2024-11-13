@@ -1,10 +1,10 @@
 import { sendEmail } from "./integration/notifyConnector";
 import { logMessage } from "@lib/logger";
-import { getOriginSync } from "./origin";
+import { getOrigin } from "./origin";
 
 export const sendDeactivationEmail = async (email: string) => {
   try {
-    const HOST = getOriginSync();
+    const HOST = getOrigin();
 
     await sendEmail(email, {
       subject: "Account deactivated | Compte désactivé",

@@ -343,6 +343,13 @@
     "notify_organisation_id": null
   },
   {
+    "id": "001OO00000II3I2YAL",
+    "name_eng": "Federal Economic Development Agency for Northern Ontario",
+    "name_fra": "Agence fédérale de développement économique pour le Nord de l’Ontario",
+    "type": "GC Department",
+    "notify_organisation_id": null
+  },
+  {
     "id": "001I90000050b0nIAA",
     "name_eng": "Federal Economic Development Agency for Southern Ontario",
     "name_fra": "Agence fédérale de développement économique pour le Sud de l'Ontario",

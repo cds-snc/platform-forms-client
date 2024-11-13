@@ -9,17 +9,11 @@ import { Footer } from "@serverComponents/globals/Footer";
 import { TemplateStoreProvider } from "@lib/store/useTemplateStore";
 import { allowGrouping } from "./components/shared/right-panel/treeview/util/allowGrouping";
 
-export async function generateMetadata(
-  props: {
-    params: Promise<{ locale: string }>;
-  }
-): Promise<Metadata> {
-  const params = await props.params;
-
-  const {
-    locale
-  } = params;
-
+export async function generateMetadata({
+  params: { locale },
+}: {
+  params: { locale: string };
+}): Promise<Metadata> {
   const { t } = await serverTranslation(["common", "form-builder", "form-closed"], {
     lang: locale,
   });
@@ -28,13 +22,7 @@ export async function generateMetadata(
   };
 }
 
-export default async function StartPage(props: { params: Promise<{ locale: string }> }) {
-  const params = await props.params;
-
-  const {
-    locale
-  } = params;
-
+export default async function StartPage({ params: { locale } }: { params: { locale: string } }) {
   const allowGroupsFlag = allowGrouping();
   return (
     <TemplateStoreProvider {...{ locale, allowGroupsFlag }}>
