@@ -17,7 +17,8 @@ import { Input } from "@formBuilder/components/shared/Input";
 export const ThrottlingRate = ({ formId }: { formId: string }) => {
   const { t } = useTranslation("admin-settings");
   const [weeks, setWeeks] = useState("");
-  const [permanent, setPermanent] = useState("");
+  const [weeksDisabled, setWeeksDisabled] = useState(false);
+  const [permanent, setPermanent] = useState(false);
   const [success, setSuccess] = useState("");
 
   const formAction = async () => {
@@ -47,10 +48,12 @@ export const ThrottlingRate = ({ formId }: { formId: string }) => {
         </p>
         <div className="mb-2">
           <Input
-            className="w-16"
+            className={`w-16 ${weeksDisabled && "bg-slate-100"}`}
             id="throttling-weeks"
             name="throttling-weeks"
+            value={weeks}
             onChange={(e: React.ChangeEvent<HTMLInputElement>) => setWeeks(e.target.value)}
+            {...{ disabled: weeksDisabled }}
           />
           <label className="ml-4" htmlFor="throttling-weeks">
             {t("throttling.weeks")}
@@ -84,8 +87,12 @@ export const ThrottlingRate = ({ formId }: { formId: string }) => {
             data-testid="required"
             id="throttling-permanent"
             name="throttling-permanent"
-            value={permanent}
-            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setPermanent(e.target.checked)}
+            checked={permanent}
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+              setWeeks("");
+              setWeeksDisabled(e.target.checked ? true : false);
+              setPermanent(e.target.checked);
+            }}
           ></Checkbox>
           <label htmlFor="throttling-permanent">{t("throttling.permanent")}</label>
         </div>
@@ -93,7 +100,17 @@ export const ThrottlingRate = ({ formId }: { formId: string }) => {
           <Button dataTestId="increase-throttle" theme="secondary" type="submit">
             {t("throttling.updateRate")}
           </Button>
-          <Button className="ml-4" dataTestId="reset-throttle" theme="link" type="submit">
+          <Button
+            className="ml-4"
+            dataTestId="reset-throttle"
+            theme="link"
+            type="submit"
+            onClick={() => {
+              setWeeks("");
+              setPermanent(false);
+              setWeeksDisabled(false);
+            }}
+          >
             {t("throttling.resetRate")}
           </Button>
         </div>
