@@ -1,4 +1,4 @@
-import { Input } from "@formBuilder/components/shared";
+import { Input } from "@formBuilder/components/shared/Input";
 import { useTranslation } from "@i18n/client";
 import { FormElement, FormElementTypes } from "@lib/types";
 import { Label } from "./Label";

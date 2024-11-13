@@ -1,16 +1,15 @@
 "use client";
 import React, { useRef, useState } from "react";
-import { useFormStatus } from "react-dom";
+import { useFormState, useFormStatus } from "react-dom";
 import { useTranslation } from "@i18n/client";
 import { TextInput, Label, Dropdown } from "../../../../components/client/forms";
 import { Button, Alert } from "@clientComponents/globals";
 import { LinkButton } from "@serverComponents/globals/Buttons/LinkButton";
 import { useRouter } from "next/navigation";
-import { toast } from "@formBuilder/components/shared";
+import { toast } from "@formBuilder/components/shared/Toast";
 import { ErrorStates } from "../../actions";
 import { setupQuestions } from "../../actions";
 import { useSession } from "next-auth/react";
-import { useActionState } from "react";
 
 export interface Question {
   id: string;
@@ -55,7 +54,7 @@ export const SecurityQuestionsForm = ({ questions = [] }: { questions: Question[
     return result;
   };
 
-  const [state, formAction] = useActionState(localFormAction, {});
+  const [state, formAction] = useFormState(localFormAction, {});
 
   const onSelect = () => {
     if (formRef.current !== null) {

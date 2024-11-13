@@ -9,7 +9,7 @@ interface Props {
   value: string;
   groupId: string;
   updateGroupName: GroupStoreState["updateGroupName"];
-  ref?: React.RefObject<HTMLInputElement | null>;
+  ref?: React.RefObject<HTMLInputElement>;
 }
 
 type Ref = HTMLInputElement;

@@ -5,9 +5,9 @@ import Image from "next/image";
 
 import { Button } from "@clientComponents/globals";
 import { useTemplateStore } from "@lib/store/useTemplateStore";
-import { useDialogRef, Dialog } from ".";
 import { InfoIcon } from "@serverComponents/icons";
 import { getDate, slugify } from "@lib/client/clientHelpers";
+import { Dialog, useDialogRef } from "./Dialog";
 
 const FormDownloadDialog = ({ handleClose }: { handleClose: () => void }) => {
   const { t } = useTranslation("form-builder");

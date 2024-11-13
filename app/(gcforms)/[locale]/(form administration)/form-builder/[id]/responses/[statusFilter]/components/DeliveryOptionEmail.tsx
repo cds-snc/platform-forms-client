@@ -1,7 +1,7 @@
 "use client";
 import React from "react";
 import Link from "next/link";
-import { EmailResponseSettings } from "@formBuilder/components/shared";
+import { EmailResponseSettings } from "@formBuilder/components/shared/EmailResponseSettings";
 import { ClosedBanner } from "@formBuilder/components/shared/ClosedBanner";
 import { useTranslation } from "@i18n/client";
 

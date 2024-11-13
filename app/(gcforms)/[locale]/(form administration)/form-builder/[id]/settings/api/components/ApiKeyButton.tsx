@@ -5,20 +5,20 @@ import { useTranslation } from "@i18n/client";
 import { EventKeys, useCustomEvent } from "@lib/hooks/useCustomEvent";
 import { DeleteKeyButton } from "./DeleteKeyButton";
 import { SubmitButton as GenerateApiKeyButton } from "@clientComponents/globals/Buttons/SubmitButton";
+import { useFormBuilderConfig } from "@lib/hooks/useFormBuilderConfig";
 
 type ApiKeyButtonProps = {
-  keyId?: string | false;
   showDelete?: boolean;
   i18nKey?: string;
 };
 
 export const ApiKeyButton = ({
-  keyId,
   showDelete = false,
   i18nKey = "settings.api.generateKey",
 }: ApiKeyButtonProps) => {
   const { t } = useTranslation("form-builder");
   const { id } = useParams();
+  const { apiKeyId } = useFormBuilderConfig();
 
   const { Event } = useCustomEvent();
 
@@ -32,13 +32,13 @@ export const ApiKeyButton = ({
 
   return (
     <div className="mb-4">
-      {showDelete && keyId ? (
-        <DeleteKeyButton id={id} keyId={keyId} />
+      {showDelete && apiKeyId ? (
+        <DeleteKeyButton id={id} keyId={apiKeyId} />
       ) : (
         <GenerateApiKeyButton
           loading={false}
           theme="primary"
-          disabled={Boolean(keyId)}
+          disabled={Boolean(apiKeyId)}
           onClick={() => {
             openDialog();
           }}

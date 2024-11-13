@@ -1,5 +1,6 @@
 "use client";
 import React, { useState } from "react";
+import { useFormState } from "react-dom";
 import { TextInput, Label, Alert, ErrorListItem } from "../../../../../components/client/forms";
 import { PasswordResetForm } from "./PasswordResetForm";
 import { LinkButton } from "@serverComponents/globals/Buttons/LinkButton";
@@ -9,7 +10,6 @@ import Link from "next/link";
 import { SecurityQuestion } from "@lib/auth";
 import { SubmitButton } from "./SubmitButton";
 import { ErrorStatus } from "@clientComponents/forms/Alert/Alert";
-import { useActionState } from "react";
 
 export const QuestionChallengeForm = ({
   email,
@@ -40,7 +40,7 @@ export const QuestionChallengeForm = ({
     return checkResult;
   };
 
-  const [state, formAction] = useActionState(localFormAction, {});
+  const [state, formAction] = useFormState(localFormAction, {});
   if (confirmationStage) return <PasswordResetForm email={email} />;
 
   return (

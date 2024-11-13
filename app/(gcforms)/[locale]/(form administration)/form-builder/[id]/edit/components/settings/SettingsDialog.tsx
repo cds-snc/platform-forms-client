@@ -4,7 +4,8 @@ import { useTranslation } from "@i18n/client";
 import { useSession } from "next-auth/react";
 import { Button } from "@clientComponents/globals";
 import { useTemplateStore } from "@lib/store/useTemplateStore";
-import { useDialogRef, Dialog, Radio } from "@formBuilder/components/shared";
+import { useDialogRef, Dialog } from "@formBuilder/components/shared/Dialog";
+import { Radio } from "@formBuilder/components/shared/MultipleChoice";
 import { Logos, options } from "../../../settings/branding/components";
 import Brand from "@clientComponents/globals/Brand";
 import {
@@ -30,6 +31,8 @@ import { ErrorSaving } from "@formBuilder/components/shared/ErrorSaving";
 import { useTemplateContext } from "@lib/hooks/form-builder/useTemplateContext";
 import { safeJSONParse } from "@lib/utils";
 import { FormProperties } from "@lib/types";
+import { useFeatureFlags } from "@lib/hooks/useFeatureFlags";
+import { useFormBuilderConfig } from "@lib/hooks/useFormBuilderConfig";
 
 enum DeliveryOption {
   vault = "vault",
@@ -497,14 +500,18 @@ const SettingsDialog = ({
 
 export const SettingsModal = ({
   show,
-  keyId = false,
   handleClose,
 }: {
   show: string | boolean | string[] | undefined;
   id: string;
-  keyId?: string | false;
   isPublished: boolean;
   handleClose: (arg: boolean) => void;
 }) => {
+  const { getFlag } = useFeatureFlags();
+  const apiAccess = getFlag("apiAccess");
+
+  const { hasApiKeyId, apiKeyId } = useFormBuilderConfig();
+  const keyId = apiAccess && hasApiKeyId ? String(apiKeyId) : "";
+
   return <>{show && <SettingsDialog keyId={keyId} handleClose={() => handleClose(false)} />}</>;
 };

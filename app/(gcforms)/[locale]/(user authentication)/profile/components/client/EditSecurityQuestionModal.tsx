@@ -3,7 +3,7 @@ import React, { useRef, useState, useCallback } from "react";
 import { Label } from "@clientComponents/forms";
 import { Button, Alert } from "@clientComponents/globals";
 import { useTranslation } from "@i18n/client";
-import { Dialog, useDialogRef } from "@formBuilder/components/shared";
+import { Dialog, useDialogRef } from "@formBuilder/components/shared/Dialog";
 import { logMessage } from "@lib/logger";
 import { updateSecurityQuestion } from "../../action";
 import debounce from "lodash.debounce";

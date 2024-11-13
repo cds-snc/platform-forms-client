@@ -8,7 +8,7 @@ import { Language, LocalizedFormProperties } from "@lib/types/form-builder-types
 import { ElementPanel } from ".";
 import { ConfirmationDescriptionWithGroups } from "./ConfirmationDescriptionWithGroups";
 import { RichTextLockedWithGroups } from "./elements/RichTextLockedWithGroups";
-import { ExpandingInput } from "@formBuilder/components/shared";
+import { ExpandingInput } from "@formBuilder/components/shared/ExpandingInput";
 import { useRehydrate, useTemplateStore } from "@lib/store/useTemplateStore";
 import { SettingsPanel } from "./settings/SettingsPanel";
 import { cleanInput } from "@lib/utils/form-builder";
@@ -25,15 +25,7 @@ import { SkipLinkReusable } from "@clientComponents/globals/SkipLinkReusable";
 import { AddPageButton } from "./AddPageButton";
 import { AddBranchingButton } from "./AddBranchingButton";
 
-export const EditWithGroups = ({
-  id,
-  locale,
-  keyId = false,
-}: {
-  id: string;
-  locale: string;
-  keyId?: string | false;
-}) => {
+export const EditWithGroups = ({ id, locale }: { id: string; locale: string }) => {
   const { t } = useTranslation("form-builder");
   const {
     title,
@@ -139,7 +131,7 @@ export const EditWithGroups = ({
         <LangSwitcher descriptionLangKey="editingIn" />
       </div>
       {/* Form Intro + Title Panel */}
-      {groupId === "start" && <SettingsPanel keyId={keyId} />}
+      {groupId === "start" && <SettingsPanel />}
       {groupId === "start" && (
         <RichTextLockedWithGroups
           hydrated={hasHydrated}

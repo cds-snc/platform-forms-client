@@ -1,6 +1,6 @@
 "use client";
 import React from "react";
-import { Dialog, useDialogRef } from "@formBuilder/components/shared";
+import { Dialog, useDialogRef } from "@formBuilder/components/shared/Dialog";
 import { Alert, Button } from "@clientComponents/globals";
 import { useTranslation } from "@i18n/client";
 
