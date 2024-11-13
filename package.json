@@ -1,6 +1,6 @@
 {
   "name": "gcforms",
-  "version": "3.25.2",
+  "version": "3.26.0",
   "private": true,
   "prisma": {
     "seed": "tsx prisma/seeds/seed_cli.ts --environment=development"

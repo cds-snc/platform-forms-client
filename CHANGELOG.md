@@ -5,6 +5,40 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.26.0](https://github.com/cds-snc/platform-forms-client/compare/v3.25.2...v3.26.0) (2024-11-12)
+
+
+### Features
+
+* Upgrade to Next JS 15 + React 19 ([#4468](https://github.com/cds-snc/platform-forms-client/issues/4468)) ([6aad138](https://github.com/cds-snc/platform-forms-client/commit/6aad138e303c3adada23be7a2e89a278f1fa51ca))
+
+
+### Bug Fixes
+
+* PR Review Environment not handling complex secrets ([#4610](https://github.com/cds-snc/platform-forms-client/issues/4610)) ([0ad9b0d](https://github.com/cds-snc/platform-forms-client/commit/0ad9b0d2775d27c62a941931629f0c4a1a370254))
+* Refresh Downloaded tab after confirm ([#4632](https://github.com/cds-snc/platform-forms-client/issues/4632)) ([3d2a6ba](https://github.com/cds-snc/platform-forms-client/commit/3d2a6ba0cf7dd58b3bd870d132ebebe2c6180445))
+
+
+### Miscellaneous Chores
+
+* add translations for API screens ([#4567](https://github.com/cds-snc/platform-forms-client/issues/4567)) ([d97e322](https://github.com/cds-snc/platform-forms-client/commit/d97e322cd9c909e21054affdd0ce3edfcdf555c1))
+* Pass the submitForm server action as a prop ([#4634](https://github.com/cds-snc/platform-forms-client/issues/4634)) ([ddc730e](https://github.com/cds-snc/platform-forms-client/commit/ddc730ea1a544876618c9e6471d2ed59f85c37da))
+* Pass the submitForm server action as a prop ([#4637](https://github.com/cds-snc/platform-forms-client/issues/4637)) ([8ef97f7](https://github.com/cds-snc/platform-forms-client/commit/8ef97f7ffbefc4e87295ba7b07767be4893cfba4))
+* Remove barrel file for form-builder hooks ([#4626](https://github.com/cds-snc/platform-forms-client/issues/4626)) ([8f54a6b](https://github.com/cds-snc/platform-forms-client/commit/8f54a6b6f738ffe0a4661e7d30a420c0e3d31cc4))
+* Remove barrel file from form-builder shared components ([#4627](https://github.com/cds-snc/platform-forms-client/issues/4627)) ([76af04e](https://github.com/cds-snc/platform-forms-client/commit/76af04e5c6dab1c242e1f742a8eeec2dd2b5cd65))
+* Remove comment ([#4638](https://github.com/cds-snc/platform-forms-client/issues/4638)) ([8eae8d2](https://github.com/cds-snc/platform-forms-client/commit/8eae8d2294ee8009ae337927f1e81ae6c7bb6156))
+* Remove revalidate New tab on download ([#4569](https://github.com/cds-snc/platform-forms-client/issues/4569)) ([3dfc33c](https://github.com/cds-snc/platform-forms-client/commit/3dfc33c30a67309074e072edcdfeb49e7f946832))
+* Revert Pass the submitForm server action as a prop ([#4634](https://github.com/cds-snc/platform-forms-client/issues/4634)) ([#4635](https://github.com/cds-snc/platform-forms-client/issues/4635)) ([a005e4b](https://github.com/cds-snc/platform-forms-client/commit/a005e4bf36c2573690af92925f77c51a48927a68))
+* Revert Pass the submitForm server action as a prop ([#4637](https://github.com/cds-snc/platform-forms-client/issues/4637)) ([#4639](https://github.com/cds-snc/platform-forms-client/issues/4639)) ([f096c32](https://github.com/cds-snc/platform-forms-client/commit/f096c327f5ec3e312368d043b154f4531952bf70))
+* Split up key exists function + add error handling ([#4599](https://github.com/cds-snc/platform-forms-client/issues/4599)) ([4d1cb02](https://github.com/cds-snc/platform-forms-client/commit/4d1cb02035369d57259503db0ca5026ff40efc32))
+* try refresh ([#4643](https://github.com/cds-snc/platform-forms-client/issues/4643)) ([86a56b1](https://github.com/cds-snc/platform-forms-client/commit/86a56b18cb527ed81535c50e5f8a9be9673a8292))
+* Unused files, exports, functions ([#4609](https://github.com/cds-snc/platform-forms-client/issues/4609)) ([797a7f6](https://github.com/cds-snc/platform-forms-client/commit/797a7f687e2068238a13452b77875c5eb1164835))
+* Update departments Managed list ([#4623](https://github.com/cds-snc/platform-forms-client/issues/4623)) ([0b66bd0](https://github.com/cds-snc/platform-forms-client/commit/0b66bd02ae7574bf31e562b7cc7950fe66c0031b))
+* Update departments.json ([#4645](https://github.com/cds-snc/platform-forms-client/issues/4645)) ([7bb11d5](https://github.com/cds-snc/platform-forms-client/commit/7bb11d5d86297af029d36e3e76373dac3a55cf6b))
+* Update i18next and react-i18next to latest ([#4613](https://github.com/cds-snc/platform-forms-client/issues/4613)) ([df39968](https://github.com/cds-snc/platform-forms-client/commit/df39968b066fc1a8efd7d68a5ce85a05aaf40c65))
+* update Next JS + React to current latest ([#4618](https://github.com/cds-snc/platform-forms-client/issues/4618)) ([2e596a9](https://github.com/cds-snc/platform-forms-client/commit/2e596a91e343001f612600c6b03b595a9d5af7a7))
+* Update to Node 22 lts ([#4616](https://github.com/cds-snc/platform-forms-client/issues/4616)) ([09125ed](https://github.com/cds-snc/platform-forms-client/commit/09125ed6838f05b5a9b5b677530df7af6f88b407))
+
 ## [3.25.2](https://github.com/cds-snc/platform-forms-client/compare/v3.25.1...v3.25.2) (2024-11-05)
 
 
