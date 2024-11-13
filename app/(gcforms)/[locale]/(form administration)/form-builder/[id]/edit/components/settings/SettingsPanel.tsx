@@ -153,11 +153,11 @@ export const SettingsPanel = () => {
   // More ...
   const [showSettings, setShowShowSettings] = useState<boolean>(false);
 
+  const { hasApiKeyId } = useFormBuilderConfig();
+
   if (status !== "authenticated") {
     return null;
   }
-
-  const { hasApiKeyId } = useFormBuilderConfig();
 
   return (
     <>
