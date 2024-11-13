@@ -1,7 +1,7 @@
-import { createServiceAccountKey, refreshServiceAccountKey } from "./actions";
+import { createServiceAccountKey, refreshServiceAccountKey } from "../actions";
 import JSZip from "jszip";
 
-import { getReadmeContent } from "./actions";
+import { getReadmeContent } from "../actions";
 
 const downloadFileFromBlob = (data: Blob, fileName: string) => {
   const href = window.URL.createObjectURL(data);
