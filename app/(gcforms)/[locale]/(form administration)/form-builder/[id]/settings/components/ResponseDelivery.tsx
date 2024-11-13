@@ -61,7 +61,7 @@ export const ResponseDelivery = () => {
   const session = useSession();
   const { refreshData } = useRefresh();
   const lang = i18n.language === "en" ? "en" : "fr";
-  const { apiKeyId: keyId } = useFormBuilderConfig();
+  const { apiKeyId } = useFormBuilderConfig();
 
   const {
     email,
@@ -118,7 +118,7 @@ export const ResponseDelivery = () => {
   const userEmail = session.data?.user.email ?? "";
   let initialDeliveryOption = !email ? DeliveryOption.vault : DeliveryOption.email;
 
-  const hasApiKey = keyId && apiAccess ? true : false;
+  const hasApiKey = apiKeyId && apiAccess ? true : false;
 
   // Check for API key -- if a key is present, set the initial delivery option to API
   if (hasApiKey) {

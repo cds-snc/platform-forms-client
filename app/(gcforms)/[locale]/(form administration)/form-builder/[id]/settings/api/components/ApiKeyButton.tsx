@@ -18,7 +18,7 @@ export const ApiKeyButton = ({
 }: ApiKeyButtonProps) => {
   const { t } = useTranslation("form-builder");
   const { id } = useParams();
-  const { apiKeyId: keyId } = useFormBuilderConfig();
+  const { apiKeyId } = useFormBuilderConfig();
 
   const { Event } = useCustomEvent();
 
@@ -32,13 +32,13 @@ export const ApiKeyButton = ({
 
   return (
     <div className="mb-4">
-      {showDelete && keyId ? (
-        <DeleteKeyButton id={id} keyId={keyId} />
+      {showDelete && apiKeyId ? (
+        <DeleteKeyButton id={id} keyId={apiKeyId} />
       ) : (
         <GenerateApiKeyButton
           loading={false}
           theme="primary"
-          disabled={Boolean(keyId)}
+          disabled={Boolean(apiKeyId)}
           onClick={() => {
             openDialog();
           }}

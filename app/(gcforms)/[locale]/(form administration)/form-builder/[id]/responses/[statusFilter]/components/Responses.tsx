@@ -45,7 +45,10 @@ export const Responses = ({ responseDownloadLimit, overdueAfter }: ResponsesProp
   const { hasApiKeyId } = useFormBuilderConfig();
 
   // For an Api user, no matter the responses route, always show the Api view with only confirmed responses
-  const filter = hasApiKeyId ? "confirmed" : statusFilter;
+  let filter = statusFilter;
+  if (hasApiKeyId) {
+    filter = "confirmed";
+  }
 
   useEffect(() => {
     fetchSubmissions({

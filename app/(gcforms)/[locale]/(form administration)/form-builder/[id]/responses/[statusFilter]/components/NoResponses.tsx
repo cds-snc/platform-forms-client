@@ -11,48 +11,40 @@ export const NoResponses = ({ statusFilter }: { statusFilter: string }) => {
   return (
     <>
       {statusFilter === VaultStatus.NEW && (
-        <>
-          <Card
-            icon={<Image src="/img/mailbox.svg" alt="" width="200" height="200" />}
-            title={t("downloadResponsesTable.card.noNewResponses")}
-            content={t("downloadResponsesTable.card.noNewResponsesMessage")}
-            headingTag={HeadingLevel.H1}
-            headingStyle="gc-h2 text-[#748094]"
-          />
-        </>
+        <Card
+          icon={<Image src="/img/mailbox.svg" alt="" width="200" height="200" />}
+          title={t("downloadResponsesTable.card.noNewResponses")}
+          content={t("downloadResponsesTable.card.noNewResponsesMessage")}
+          headingTag={HeadingLevel.H1}
+          headingStyle="gc-h2 text-[#748094]"
+        />
       )}
       {statusFilter === VaultStatus.DOWNLOADED && (
-        <>
-          <Card
-            icon={<Image src="/img/mailbox.svg" alt="" width="200" height="200" />}
-            title={t("downloadResponsesTable.card.noDownloadedResponses")}
-            content={t("downloadResponsesTable.card.noDownloadedResponsesMessage")}
-            headingTag={HeadingLevel.H1}
-            headingStyle="gc-h2 text-[#748094]"
-          />
-        </>
+        <Card
+          icon={<Image src="/img/mailbox.svg" alt="" width="200" height="200" />}
+          title={t("downloadResponsesTable.card.noDownloadedResponses")}
+          content={t("downloadResponsesTable.card.noDownloadedResponsesMessage")}
+          headingTag={HeadingLevel.H1}
+          headingStyle="gc-h2 text-[#748094]"
+        />
       )}
       {!hasApiKeyId && statusFilter === VaultStatus.CONFIRMED && (
-        <>
-          <Card
-            icon={<Image src="/img/mailbox.svg" alt="" width="200" height="200" />}
-            title={t("downloadResponsesTable.card.noDeletedResponses")}
-            content={t("downloadResponsesTable.card.noDeletedResponsesMessage")}
-            headingTag={HeadingLevel.H1}
-            headingStyle="gc-h2 text-[#748094]"
-          />
-        </>
+        <Card
+          icon={<Image src="/img/mailbox.svg" alt="" width="200" height="200" />}
+          title={t("downloadResponsesTable.card.noDeletedResponses")}
+          content={t("downloadResponsesTable.card.noDeletedResponsesMessage")}
+          headingTag={HeadingLevel.H1}
+          headingStyle="gc-h2 text-[#748094]"
+        />
       )}
       {hasApiKeyId && statusFilter === VaultStatus.CONFIRMED && (
-        <>
-          <Card
-            icon={<Image src="/img/mailbox.svg" alt="" width="200" height="200" />}
-            title={t("downloadResponsesTable.card.noNewResponsesApi")}
-            content={t("downloadResponsesTable.card.noNewResponsesApiMessage")}
-            headingTag={HeadingLevel.H1}
-            headingStyle="gc-h2 text-[#748094]"
-          />
-        </>
+        <Card
+          icon={<Image src="/img/mailbox.svg" alt="" width="200" height="200" />}
+          title={t("downloadResponsesTable.card.noNewResponsesApi")}
+          content={t("downloadResponsesTable.card.noNewResponsesApiMessage")}
+          headingTag={HeadingLevel.H1}
+          headingStyle="gc-h2 text-[#748094]"
+        />
       )}
       {statusFilter === VaultStatus.PROBLEM && (
         <>
