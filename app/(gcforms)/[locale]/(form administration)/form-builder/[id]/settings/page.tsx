@@ -15,9 +15,7 @@ export async function generateMetadata({
   };
 }
 
-export default async function Page({ params: { id } }: { params: { id: string } }) {
-  const keyId = await checkKeyExists(id);
-
+export default async function Page() {
   return (
     <>
       <ResponseDelivery />
