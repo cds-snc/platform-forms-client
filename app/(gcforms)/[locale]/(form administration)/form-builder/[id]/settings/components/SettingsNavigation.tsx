@@ -11,8 +11,6 @@ export const SettingsNavigation = ({ id }: { id: string }) => {
     i18n: { language },
   } = useTranslation("form-builder");
 
-  const { loading, isProduction } = useIsProduction();
-
   return (
     <div className="relative flex">
       <div className="flex">
