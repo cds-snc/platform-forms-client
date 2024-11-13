@@ -12,6 +12,7 @@ import { TitleAndDescription } from "./TitleAndDescription";
 import { NagLevel, VaultSubmissionList } from "@lib/types";
 import { RetrievalError } from "./RetrievalError";
 import { fetchSubmissions } from "../actions";
+import { useFormBuilderConfig } from "@lib/hooks/useFormBuilderConfig";
 
 export interface ResponsesProps {
   responseDownloadLimit: number;
@@ -41,11 +42,19 @@ export const Responses = ({ responseDownloadLimit, overdueAfter }: ResponsesProp
     error: boolean;
   }>({ loading: true, submissions: [], lastEvaluatedKey: null, error: false });
 
+  const { hasApiKeyId } = useFormBuilderConfig();
+
+  // For an Api user, no matter the responses route, always show the Api view with only confirmed responses
+  let filter = statusFilter;
+  if (hasApiKeyId) {
+    filter = "confirmed";
+  }
+
   useEffect(() => {
     fetchSubmissions({
       formId,
       lastKey,
-      status: statusFilter,
+      status: filter,
     })
       .then(({ submissions, lastEvaluatedKey, error }) => {
         setState({
@@ -58,7 +67,7 @@ export const Responses = ({ responseDownloadLimit, overdueAfter }: ResponsesProp
       .catch(() =>
         setState({ loading: false, submissions: [], lastEvaluatedKey: null, error: true })
       );
-  }, [formId, lastKey, statusFilter, forceRefresh]);
+  }, [formId, lastKey, statusFilter, filter, forceRefresh]);
 
   const formName = name ? name : language === "fr" ? initialForm.titleFr : initialForm.titleEn;
 
@@ -70,6 +79,30 @@ export const Responses = ({ responseDownloadLimit, overdueAfter }: ResponsesProp
   }
   if (state.error) {
     return <RetrievalError />;
+  }
+
+  if (hasApiKeyId) {
+    return (
+      <>
+        <div aria-live="polite">
+          {state.submissions.length > 0 ? (
+            <>
+              <DownloadTable
+                vaultSubmissions={state.submissions}
+                formName={formName}
+                formId={formId}
+                nagwareResult={nagwareResult}
+                responseDownloadLimit={responseDownloadLimit}
+                lastEvaluatedKey={state.lastEvaluatedKey}
+                overdueAfter={overdueAfter}
+              />
+            </>
+          ) : (
+            <NoResponses statusFilter={ucfirst(statusFilter)} />
+          )}
+        </div>
+      </>
+    );
   }
 
   return (

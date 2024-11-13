@@ -12,6 +12,7 @@ export default async function Layout({ children }: { children: React.ReactNode }
     FeatureFlags.scheduleClosingDate,
     FeatureFlags.apiAccess,
   ]);
+
   return (
     <>
       <ReactHydrationCheck />

@@ -3,7 +3,8 @@ import { Metadata } from "next";
 import { ResponseDelivery } from "./components/ResponseDelivery";
 import { ApiKeyDialog } from "../components/dialogs/ApiKeyDialog/ApiKeyDialog";
 import { DeleteApiKeyDialog } from "../components/dialogs/DeleteApiKeyDialog/DeleteApiKeyDialog";
-import { checkKeyExists } from "@lib/serviceAccount";
+import { authCheckAndRedirect } from "@lib/actions";
+import { checkPrivilegesAsBoolean } from "@lib/privileges";
 
 export async function generateMetadata({
   params: { locale },
@@ -16,11 +17,20 @@ export async function generateMetadata({
   };
 }
 
-export default async function Page({ params: { id } }: { params: { id: string } }) {
-  const keyId = await checkKeyExists(id);
+export default async function Page() {
+
+  const { ability } = await authCheckAndRedirect();
+
+  const isFormsAdmin = checkPrivilegesAsBoolean(ability, [
+    {
+      action: "view",
+      subject: "FormRecord",
+    },
+  ]);
+  
   return (
     <>
-      <ResponseDelivery keyId={keyId} />
+      <ResponseDelivery isFormsAdmin={isFormsAdmin} />
       <ApiKeyDialog />
       <DeleteApiKeyDialog />
     </>
