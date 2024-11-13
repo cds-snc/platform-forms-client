@@ -1,21 +1,39 @@
+"use client";
 import { Button } from "@clientComponents/globals";
 import { useTranslation } from "@i18n/client";
 import { logMessage } from "@lib/logger";
+import {
+  permanentThrottling,
+  resetThrottling,
+  scheduledThrottling,
+} from "@lib/cache/throttlingCache";
 
 export const ThrottlingRate = ({ formId }: { formId: string }) => {
   const { t } = useTranslation();
 
-  // TODO: use react controlled inputs
-
-  const updateThrottling = (e: React.FormEvent) => {
-    e.preventDefault();
-    logMessage.info("updateThrottling", formId);
-  };
-
   // TODO: Probably drop GCDS for custom control
   return (
     <div className="mb-20">
-      <form onSubmit={updateThrottling}>
+      <form
+        action={async (formData) => {
+          const weeks = Number(formData.get("throttling-weeks"));
+          const permanent = Boolean(formData.get("throttling-permanent"));
+          logMessage.info(`Client updateThrottling ${formId}, ${weeks}, ${permanent}`);
+
+          if (permanent) {
+            await permanentThrottling(formId);
+            return;
+          }
+
+          if (weeks) {
+            await scheduledThrottling(formId, weeks);
+            return;
+          }
+
+          // How get here?
+          await resetThrottling(formId);
+        }}
+      >
         <h2>{t("TODO-Throttling Rate")}</h2>
         <p>
           <strong>{t("TODO-Increase throttling rate for up to 12 weeks")}</strong>
@@ -27,7 +45,6 @@ export const ThrottlingRate = ({ formId }: { formId: string }) => {
               className="mb-2 gc-input-text mr-2"
               name="throttling-weeks"
               id="throttling-weeks"
-              required
               maxLength={2}
               pattern="\d{1,2}"
             />
