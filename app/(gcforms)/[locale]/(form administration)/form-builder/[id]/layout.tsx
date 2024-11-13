@@ -29,6 +29,7 @@ export default async function Layout({
   children: React.ReactNode;
   params: { locale: string; id: string };
 }) {
+
   let initialForm: FormRecord | null = null;
 
   const { session, ability } = await authCheckAndThrow().catch(() => ({
@@ -40,27 +41,29 @@ export default async function Layout({
 
   const allowGroupsFlag = allowGrouping();
 
+  if (session && formID && formID !== "0000") {
+    initialForm = await getFullTemplateByID(ability, formID).catch((e) => {
+      if (e instanceof AccessControlError) {
+        redirect(`/${locale}/admin/unauthorized`);
+      }
+      logMessage.warn(`Error fetching Form Record for form-builder/[id] Layout: ${e.message}`);
+      return null;
+    });
+
+    if (initialForm === null) {
+      redirect(`/${locale}/404`);
+    }
+  }
+
   let apiKeyId: string | false | void = "";
 
   try {
-    if (session && formID && formID !== "0000") {
-      initialForm = await getFullTemplateByID(ability, formID);
-
-      if (initialForm === null) {
-        redirect(`/${locale}/404`);
-      }
-
-      // No need to fetch in test, it will always not exist
+    // No need to fetch in test, it will always not exist
+    if (formID) {
       apiKeyId = process.env.APP_ENV === "test" ? false : await checkKeyExists(formID);
     }
   } catch (e) {
-    if (e instanceof AccessControlError) {
-      redirect(`/${locale}/admin/unauthorized`);
-    }
-    logMessage.warn(
-      `Error fetching Form Record for form-builder/[id] Layout: ${(e as Error).message}`
-    );
-    return null;
+    // no-op
   }
 
   const formBuilderConfig: FormBuilderConfig = {
