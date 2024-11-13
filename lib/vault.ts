@@ -72,7 +72,11 @@ async function checkAbilityToAccessSubmissions(ability: UserAbility, formID: str
  * @param status - The vault status to verify
  */
 
-const submissionTypeExists = async (ability: UserAbility, formID: string, status: VaultStatus) => {
+export const submissionTypeExists = async (
+  ability: UserAbility,
+  formID: string,
+  status: VaultStatus
+) => {
   await checkAbilityToAccessSubmissions(ability, formID).catch((e) => {
     if (e instanceof AccessControlError)
       logEvent(
@@ -82,7 +86,7 @@ const submissionTypeExists = async (ability: UserAbility, formID: string, status
           id: formID,
         },
         "AccessDenied",
-        `Attempted to list responses for form ${formID}`
+        `Attempted to check response status for form ${formID}`
       );
     throw e;
   });
@@ -101,9 +105,8 @@ const submissionTypeExists = async (ability: UserAbility, formID: string, status
     },
     ExpressionAttributeNames: {
       "#status": "Status",
-      "#name": "Name",
     },
-    ProjectionExpression: "FormID,#status,#name",
+    ProjectionExpression: "FormID",
   };
   const queryCommand = new QueryCommand(getItemsDbParams);
   // eslint-disable-next-line no-await-in-loop
