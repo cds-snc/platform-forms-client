@@ -19,6 +19,7 @@ import { safeJSONParse } from "@lib/utils";
 
 import { useTemplateContext } from "@lib/hooks/form-builder/useTemplateContext";
 import { FormProperties } from "@lib/types";
+import { useFormBuilderConfig } from "@lib/hooks/useFormBuilderConfig";
 
 enum DeliveryOption {
   vault = "vault",
@@ -156,6 +157,8 @@ export const SettingsPanel = () => {
     return null;
   }
 
+  const { hasApiKeyId } = useFormBuilderConfig();
+
   return (
     <>
       <div className="mb-4 flex w-[800px] justify-between rounded-lg border-1 border-indigo-700 bg-violet-50">
@@ -163,6 +166,7 @@ export const SettingsPanel = () => {
           <div className="ml-4 inline-block">
             <div className="my-[6px] border-[.5px] border-violet-50 p-1 px-2 hover:border-[.5px] hover:border-slate-800">
               <ClassificationSelect
+                disableProtectedB={hasApiKeyId}
                 className="w-auto max-w-[400px] truncate border-none bg-violet-50 p-1 text-sm"
                 lang={lang}
                 isPublished={isPublished}
