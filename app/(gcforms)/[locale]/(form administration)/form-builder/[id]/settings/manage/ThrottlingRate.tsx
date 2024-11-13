@@ -9,6 +9,7 @@ import {
 } from "@lib/cache/throttlingCache";
 import { Checkbox } from "@formBuilder/components/shared/MultipleChoice";
 import { Input } from "@formBuilder/components/shared/Input";
+// import { formClosingDateEst } from "@lib/utils/date/utcToEst";
 
 // TODO handle error case
 
@@ -18,6 +19,14 @@ export const ThrottlingRate = ({ formId }: { formId: string }) => {
   const [weeksDisabled, setWeeksDisabled] = useState(false);
   const [permanent, setPermanent] = useState(false);
   const [success, setSuccess] = useState("");
+
+  // TODO - seems to be adding hours vs weeks
+  // const formatDate = (weeks:number) => {
+  //   const weeksInSeconds = weeks * 604800;
+  //   const futureTimeInSeconds = Date.now() + weeksInSeconds;
+  //   const date = new Date(futureTimeInSeconds);
+  //   return `${date.getFullYear()}-${date.getMonth()+1}-${date.getDate()}`
+  // }
 
   const formAction = async () => {
     if (permanent) {
@@ -39,6 +48,8 @@ export const ThrottlingRate = ({ formId }: { formId: string }) => {
 
   return (
     <div className="mb-20">
+      {/* <h1>date {formatDate(10)}</h1> */}
+
       <form action={formAction}>
         <h2>{t("throttling.title")}</h2>
         <p>
@@ -52,6 +63,9 @@ export const ThrottlingRate = ({ formId }: { formId: string }) => {
             value={weeks}
             onChange={(e: React.ChangeEvent<HTMLInputElement>) => setWeeks(e.target.value)}
             {...{ disabled: weeksDisabled }}
+            type="number"
+            min="1"
+            max="12"
           />
           <label className="ml-4" htmlFor="throttling-weeks">
             {t("throttling.weeks")}

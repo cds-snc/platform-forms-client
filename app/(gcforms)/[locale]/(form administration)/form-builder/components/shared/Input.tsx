@@ -13,6 +13,7 @@ interface Props {
   onKeyDown?: (e: React.KeyboardEvent<HTMLInputElement>) => void;
   className?: string;
   min?: string;
+  max?: string;
   ref?: React.RefObject<HTMLInputElement>;
   theme?: "default" | "title" | "error";
   isInvalid?: boolean;
@@ -36,6 +37,7 @@ const Input = React.forwardRef<Ref, Props>((props, ref) => {
     className,
     placeholder,
     min,
+    max,
     type = "text",
     theme = "default",
     isInvalid = false,
@@ -61,6 +63,7 @@ const Input = React.forwardRef<Ref, Props>((props, ref) => {
       aria-invalid={isInvalid ? true : false}
       type={type}
       min={min}
+      {...(max !== undefined && { max })}
       className={`${className} ${themes[theme]}`}
       value={value}
       placeholder={placeholder}
