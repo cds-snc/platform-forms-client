@@ -12,9 +12,11 @@ import { Checkbox } from "@formBuilder/components/shared/MultipleChoice";
 import { Input } from "@formBuilder/components/shared/Input";
 import { toast, ToastContainer } from "@formBuilder/components/shared/Toast";
 import { getSecondsInWeeks, getWeeksInSeconds } from "@lib/utils/date/dateConversions";
+import { SubmitButton } from "@clientComponents/globals/Buttons/SubmitButton";
 
 export const ThrottlingRate = ({ formId }: { formId: string }) => {
   const { t } = useTranslation("admin-settings");
+  const [loading, setLoading] = useState(false);
   const [weeks, setWeeks] = useState("");
   const [weeksDisabled, setWeeksDisabled] = useState(false);
   const [permanent, setPermanent] = useState(false);
@@ -29,6 +31,7 @@ export const ThrottlingRate = ({ formId }: { formId: string }) => {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    setLoading(true);
     try {
       if (permanent) {
         await permanentThrottling(formId);
@@ -47,6 +50,8 @@ export const ThrottlingRate = ({ formId }: { formId: string }) => {
       setSuccess("reset");
     } catch (error) {
       toast.error(t("throttling.error"));
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -129,9 +134,9 @@ export const ThrottlingRate = ({ formId }: { formId: string }) => {
           <label htmlFor="throttling-permanent">{t("throttling.permanent")}</label>
         </div>
         <div className="flex">
-          <Button dataTestId="increase-throttle" theme="secondary" type="submit">
+          <SubmitButton dataTestId="increase-throttle" theme="secondary" loading={loading}>
             {t("throttling.updateRate")}
-          </Button>
+          </SubmitButton>
           <Button
             className="ml-4"
             dataTestId="reset-throttle"
