@@ -150,7 +150,9 @@
       "noProblemResponses": "No responses reported with problems",
       "noProblemResponsesMessage": "Problem responses will appear here until signed off for removal from GC Forms.",
       "noNewResponsesApi": "No responses available for API retrieval",
-      "noNewResponsesApiMessage": "Submitted form responses will appear here and be available in GC Forms for 45 days."
+      "noNewResponsesApiMessage": "Submitted form responses will appear here and be available in GC Forms for 45 days.",
+      "apiResponsesAvailable": "Responses are available",
+      "apiResponsesAvailableMessage": "Please use the API to retrieve responses."
     },
     "notifications": {
       "downloadComplete": "Responses moved to the “Downloaded” tab",
