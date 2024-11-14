@@ -36,13 +36,17 @@ export const ClientContainer = ({
   if (hasApiKeyId) {
     return (
       <>
-        <div className="flex space-x-4">
-          <HealthCheckBox.Success title="Great">icon</HealthCheckBox.Success>
-
-          <HealthCheckBox.Warning title="Oh oh">icon</HealthCheckBox.Warning>
-
-          <HealthCheckBox.Danger title="oh no">icon</HealthCheckBox.Danger>
-        </div>
+        <HealthCheckBox.Container>
+          <HealthCheckBox.Success titleKey="systemHealth.contactSupport.title">
+            <HealthCheckBox.Text i18nKey="systemHealth.contactSupport.description" />
+          </HealthCheckBox.Success>
+          <HealthCheckBox.Warning titleKey="systemHealth.throttling.title">
+            <HealthCheckBox.Text i18nKey="systemHealth.throttling.description" />
+          </HealthCheckBox.Warning>
+          <HealthCheckBox.Danger titleKey="systemHealth.problems.title">
+            <HealthCheckBox.Text i18nKey="systemHealth.problems.description" />
+          </HealthCheckBox.Danger>
+        </HealthCheckBox.Container>
         <div className="mr-10">
           <h1>{t("apiDashboard.title")}</h1>
           <Responses responseDownloadLimit={responseDownloadLimit} overdueAfter={overdueAfter} />
