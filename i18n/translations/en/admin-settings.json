@@ -38,6 +38,7 @@
     "permanent": "Permanently increase throttling rate",
     "updateRate": "Update rate",
     "resetRate": "Reset rate",
+    "tooltip": "Checking this disables scheduling a rate. To schedule a rate, uncheck this and the Weeks input will be enabled to schedule a throttling rate.",
     "succcessUpdate": {
       "title": "Throttling rate increased.",
       "description": "Rate will stay in effect until: {{success}}"
