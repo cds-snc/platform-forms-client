@@ -15,8 +15,9 @@ import { DeleteKeyFailed } from "./DeleteKeyFailed";
 import { DeleteKeySuccess } from "./DeleteKeySuccess";
 import { toast } from "@formBuilder/components/shared/Toast";
 
-import { deleteServiceAccountKey } from "../../../settings/api/actions";
+import { deleteServiceAccountKey } from "../../../settings/actions";
 import Link from "next/link";
+import { useFormBuilderConfig } from "@lib/hooks/useFormBuilderConfig";
 
 type APIKeyCustomEventDetails = {
   id: string;
@@ -28,6 +29,8 @@ export const DeleteApiKeyDialog = () => {
   const { t, i18n } = useTranslation("form-builder");
 
   const [deleting, setDeleting] = useState(false);
+
+  const { updateApiKeyId } = useFormBuilderConfig();
 
   // Setup + Open dialog
   const [id, setId] = useState<string>("");
@@ -65,6 +68,7 @@ export const DeleteApiKeyDialog = () => {
       }
 
       toast.success(<DeleteKeySuccess id={id} />, "wide");
+      updateApiKeyId(false);
       setDeleting(false);
       dialog.current?.close();
       setIsOpen(false);

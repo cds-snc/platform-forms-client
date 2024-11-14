@@ -10,11 +10,12 @@ import { EventKeys, useCustomEvent } from "@lib/hooks/useCustomEvent";
 import { ResponsibilityList } from "./ResponsibilityList";
 import { ConfirmationAgreement } from "./ConfirmationAgreement";
 import { Note } from "./Note";
-import { downloadKey, _createKey } from "@formBuilder/[id]/settings/api/utils";
+import { downloadKey, _createKey } from "@formBuilder/[id]/settings/components/utils";
 import { SubmitButton as DownloadButton } from "@clientComponents/globals/Buttons/SubmitButton";
 import * as Alert from "@clientComponents/globals/Alert/Alert";
 import { logMessage } from "@lib/logger";
 import { sendResponsesToVault } from "@formBuilder/actions";
+import { useFormBuilderConfig } from "@lib/hooks/useFormBuilderConfig";
 
 type APIKeyCustomEventDetails = {
   id: string;
@@ -28,6 +29,8 @@ export const ApiKeyDialog = () => {
   // Setup + Open dialog
   const [id, setId] = useState<string>("");
   const [isOpen, setIsOpen] = useState(false);
+
+  const { updateApiKeyId } = useFormBuilderConfig();
 
   // Handle loading state for download button
   const [generating, setGenerating] = useState(false);
@@ -85,6 +88,7 @@ export const ApiKeyDialog = () => {
       await downloadKey(JSON.stringify(key), id);
 
       setGenerating(false);
+      updateApiKeyId(key.keyId);
       dialog.current?.close();
       setIsOpen(false);
     } catch (error) {

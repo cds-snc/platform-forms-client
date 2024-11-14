@@ -23,6 +23,7 @@ import {
   listAllSubmissions,
   retrieveSubmissions,
   updateLastDownloadedBy,
+  submissionTypeExists,
 } from "@lib/vault";
 import { transform as csvTransform } from "@lib/responseDownloadFormats/csv";
 import { transform as htmlAggregatedTransform } from "@lib/responseDownloadFormats/html-aggregated";
@@ -417,5 +418,15 @@ export const confirmSubmissionCodes = async (confirmationCodes: string[], formId
     );
     // Throw sanitized error back to client
     throw new Error("There was an error. Please try again later.");
+  }
+};
+
+export const newResponsesExist = async (formId: string) => {
+  try {
+    const { ability } = await authCheckAndRedirect();
+    return submissionTypeExists(ability, formId, VaultStatus.NEW);
+  } catch (error) {
+    // Throw sanitized error back to client
+    return { error: "There was an error. Please try again later." } as ServerActionError;
   }
 };

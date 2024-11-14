@@ -31,6 +31,7 @@ import { ErrorSaving } from "@formBuilder/components/shared/ErrorSaving";
 import { useTemplateContext } from "@lib/hooks/form-builder/useTemplateContext";
 import { safeJSONParse } from "@lib/utils";
 import { FormProperties } from "@lib/types";
+import { useFormBuilderConfig } from "@lib/hooks/useFormBuilderConfig";
 
 enum DeliveryOption {
   vault = "vault",
@@ -498,14 +499,13 @@ const SettingsDialog = ({
 
 export const SettingsModal = ({
   show,
-  keyId = false,
   handleClose,
 }: {
   show: string | boolean | string[] | undefined;
   id: string;
-  keyId?: string | false;
   isPublished: boolean;
   handleClose: (arg: boolean) => void;
 }) => {
-  return <>{show && <SettingsDialog keyId={keyId} handleClose={() => handleClose(false)} />}</>;
+  const { apiKeyId } = useFormBuilderConfig();
+  return <>{show && <SettingsDialog keyId={apiKeyId || false} handleClose={() => handleClose(false)} />}</>;
 };
