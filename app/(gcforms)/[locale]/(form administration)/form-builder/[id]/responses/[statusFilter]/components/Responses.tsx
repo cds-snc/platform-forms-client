@@ -98,7 +98,7 @@ export const Responses = ({ responseDownloadLimit, overdueAfter }: ResponsesProp
               />
             </>
           ) : (
-            <NoResponses statusFilter={ucfirst(statusFilter)} />
+            <NoResponses formId={formId} statusFilter={ucfirst(statusFilter)} />
           )}
         </div>
       </>
@@ -132,7 +132,7 @@ export const Responses = ({ responseDownloadLimit, overdueAfter }: ResponsesProp
             />
           </>
         ) : (
-          <NoResponses statusFilter={ucfirst(statusFilter)} />
+          <NoResponses formId={formId} statusFilter={ucfirst(statusFilter)} />
         )}
       </div>
     </>
