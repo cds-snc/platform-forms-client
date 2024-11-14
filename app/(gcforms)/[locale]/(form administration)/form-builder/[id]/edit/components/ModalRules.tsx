@@ -48,7 +48,7 @@ export const ModalRules = ({
   const router = useRouter();
   const { togglePanel } = useTreeRef();
 
-  const { refs } = useRefsContext();
+  const { refs } = useRefsContext(); // @TODO
   const { t, i18n } = useTranslation("form-builder");
   const isRichText = item.type == "richText";
   const { modals, updateModalProperties } = useModalRulesStore();

@@ -6,7 +6,6 @@ import { useTemplateStore } from "@lib/store/useTemplateStore";
 import { Option } from "./Option";
 import { Button } from "@clientComponents/globals";
 import { FormElementWithIndex } from "@lib/types/form-builder-types";
-import { ModalRules } from "../ModalRules";
 import { ConditionalIndicatorOption } from "@formBuilder/components/shared/conditionals/ConditionalIndicatorOption";
 
 interface AddButtonProps {
@@ -61,7 +60,7 @@ interface OptionsProps {
   formId: string;
 }
 
-export const Options = ({ item, renderIcon, formId }: OptionsProps) => {
+export const Options = ({ item, renderIcon }: OptionsProps) => {
   const { elements, translationLanguagePriority } = useTemplateStore((s) => ({
     elements: s.form.elements,
     translationLanguagePriority: s.translationLanguagePriority,
@@ -70,10 +69,8 @@ export const Options = ({ item, renderIcon, formId }: OptionsProps) => {
   const parentIndex = elements.findIndex((element) => element.id === item.id);
   const element = elements.find((element) => element.id === item.id);
 
-  const modalContainer = useRef<HTMLDivElement>(null);
   const [focusedOption, setFocusedOption] = useState<string | null>(null);
   // Track the mode of the modal for adding or editing rules
-  const [modalMode, setModalMode] = useState<"add" | "edit">("add");
   const timeout = useRef<number | null>(null); // add interval to add timeout to be cleared
 
   if (!element?.properties) {
@@ -116,6 +113,7 @@ export const Options = ({ item, renderIcon, formId }: OptionsProps) => {
           }
         />
         <ConditionalIndicatorOption
+          itemId={item.id}
           isFocused={focusedOption === `${item.id}.${index}`}
           id={`${item.id}.${index}`}
           elements={elements}
@@ -131,15 +129,6 @@ export const Options = ({ item, renderIcon, formId }: OptionsProps) => {
         <div className="mr-4 inline-block">
           <AddOptions index={parentIndex} />
         </div>
-      </div>
-      <div>
-        <ModalRules
-          mode={modalMode}
-          focusedOption={focusedOption}
-          modalRef={modalContainer}
-          item={item}
-          formId={formId}
-        />
       </div>
     </div>
   );

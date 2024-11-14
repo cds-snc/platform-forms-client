@@ -11,10 +11,12 @@ import { LocalizedFormProperties } from "@lib/types/form-builder-types";
 import { useCustomEvent, EventKeys } from "@lib/hooks/useCustomEvent";
 
 export const ConditionalIndicatorOption = ({
+  itemId,
   id,
   elements,
   isFocused,
 }: {
+  itemId: number;
   id: string;
   elements: FormElement[];
   isFocused: boolean;
@@ -49,7 +51,11 @@ export const ConditionalIndicatorOption = ({
               className="cursor-pointer underline"
               id={rulesTitleId}
               onClick={() => {
-                Event.fire(EventKeys.openRulesDialog);
+                Event.fire(EventKeys.openRulesDialog, {
+                  mode: "add",
+                  itemId: itemId,
+                  optionId: id,
+                });
               }}
             >
               {t("addConditionalRules.addCustomRules")}
@@ -91,7 +97,11 @@ export const ConditionalIndicatorOption = ({
               <Button
                 theme="link"
                 onClick={() => {
-                  handleOpen("edit");
+                  Event.fire(EventKeys.openRulesDialog, {
+                    mode: "edit",
+                    itemId: itemId,
+                    optionId: id,
+                  });
                 }}
               >
                 {t("addConditionalRules.editCustomRules")}
