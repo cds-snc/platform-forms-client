@@ -16,9 +16,14 @@ import { SubmitButton } from "@clientComponents/globals/Buttons/SubmitButton";
 import { Tooltip } from "@formBuilder/components/shared/Tooltip";
 import { useRehydrate } from "@lib/store/useTemplateStore";
 import Skeleton from "react-loading-skeleton";
+import { formClosingDateEst } from "@lib/utils/date/utcToEst";
+import { logMessage } from "@lib/logger";
 
 export const ThrottlingRate = ({ formId }: { formId: string }) => {
-  const { t } = useTranslation("admin-settings");
+  const {
+    t,
+    i18n: { language },
+  } = useTranslation("admin-settings");
   const hasHydrated = useRehydrate();
   const [loading, setLoading] = useState(false);
 
@@ -27,11 +32,32 @@ export const ThrottlingRate = ({ formId }: { formId: string }) => {
   const [permanent, setPermanent] = useState(false);
   const [success, setSuccess] = useState("");
 
-  const formatDate = (weeks: number) => {
-    const weeksInSeconds = getWeeksInSeconds(weeks);
-    const futureTimeInSeconds = Date.now() + weeksInSeconds;
-    const date = new Date(futureTimeInSeconds);
-    return `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`;
+  const dateFormat: Intl.DateTimeFormatOptions = {
+    timeZone: "America/New_York",
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+    hour: "2-digit",
+    minute: "2-digit",
+    hour12: false,
+  };
+
+  const formatDate = (weeks: number, language: string) => {
+    try {
+      const weeksInSeconds = getWeeksInSeconds(weeks);
+      const futureTimeInSeconds = Date.now() + weeksInSeconds;
+      const dateInUTC = new Date(futureTimeInSeconds).toUTCString();
+      const { month, day, year } = formClosingDateEst(dateInUTC, language, dateFormat);
+
+      if (day && month && year) {
+        return `${year}-${month}-${day}`;
+      }
+
+      throw new Error("Failed to parse out day, month or year.");
+    } catch (error) {
+      logMessage.info("Unable to parse throttling in weeks", weeks);
+      return null;
+    }
   };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -117,7 +143,7 @@ export const ThrottlingRate = ({ formId }: { formId: string }) => {
             >
               <p>
                 {t("throttling.succcessUpdate.description", {
-                  success: success === "weeks" ? formatDate(Number(weeks)) : success,
+                  success: success === "weeks" ? formatDate(Number(weeks), language) : success,
                 })}
               </p>
             </Alert.Success>
