@@ -44,7 +44,7 @@ export interface TemplateStoreState extends TemplateStoreProps {
     type?: FormElementTypes,
     data?: FormElement
   ) => Promise<number>;
-  remove: (id: number, groupId?: string) => void;
+  remove: (id: number, groupId?: string) => Promise<void>;
   removeSubItem: (elIndex: number, id: number) => void;
   addChoice: (elIndex: number) => void;
   addLabeledChoice: (elIndex: number, label: { en: string; fr: string }) => Promise<number>;
