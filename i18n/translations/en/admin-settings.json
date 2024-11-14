@@ -44,6 +44,7 @@
     },
     "succcessReset": {
       "title": "Throttling rate reset."
-    }
+    },
+    "error": "Error updating throttling rate."
   }
 }

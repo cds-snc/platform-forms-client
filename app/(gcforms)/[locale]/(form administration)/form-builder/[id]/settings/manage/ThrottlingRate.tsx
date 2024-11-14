@@ -9,9 +9,10 @@ import {
 } from "@lib/cache/throttlingCache";
 import { Checkbox } from "@formBuilder/components/shared/MultipleChoice";
 import { Input } from "@formBuilder/components/shared/Input";
+import { toast, ToastContainer } from "@formBuilder/components/shared/Toast";
 // import { formClosingDateEst } from "@lib/utils/date/utcToEst";
 
-// TODO handle error case
+// TODO pre-load values
 
 export const ThrottlingRate = ({ formId }: { formId: string }) => {
   const { t } = useTranslation("admin-settings");
@@ -29,21 +30,25 @@ export const ThrottlingRate = ({ formId }: { formId: string }) => {
   // }
 
   const formAction = async () => {
-    if (permanent) {
-      await permanentThrottling(formId);
-      setSuccess("permanent");
-      return;
-    }
+    try {
+      if (permanent) {
+        await permanentThrottling(formId);
+        setSuccess("permanent");
+        return;
+      }
 
-    if (weeks) {
-      await scheduledThrottling(formId, Number(weeks));
-      setSuccess("weeks");
-      return;
-    }
+      if (weeks) {
+        await scheduledThrottling(formId, Number(weeks));
+        setSuccess("weeks");
+        return;
+      }
 
-    // Reset throttling back to default
-    await resetThrottling(formId);
-    setSuccess("reset");
+      // Reset throttling back to default
+      await resetThrottling(formId);
+      setSuccess("reset");
+    } catch (error) {
+      toast.error(t("throttling.error"));
+    }
   };
 
   return (
@@ -127,6 +132,10 @@ export const ThrottlingRate = ({ formId }: { formId: string }) => {
           </Button>
         </div>
       </form>
+
+      <div className="sticky top-0">
+        <ToastContainer autoClose={false} containerId="throttling" />
+      </div>
     </div>
   );
 };
