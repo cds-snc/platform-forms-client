@@ -18,8 +18,8 @@ export const NoResponses = ({ statusFilter, formId }: { statusFilter: string; fo
       const result = await newResponsesExist(formId);
       if (result === true) {
         setHasApiSubmissions(true);
-        setCheckingApiSubmissions(false);
       }
+      setCheckingApiSubmissions(false);
     };
     if (hasApiKeyId) {
       getApiSubmissions();
@@ -70,18 +70,15 @@ export const NoResponses = ({ statusFilter, formId }: { statusFilter: string; fo
       {/* 
           API user has no responses available
         */}
-      {hasApiKeyId &&
-        !checkingApiSubmissions &&
-        !hasApiSubmissions &&
-        statusFilter === VaultStatus.CONFIRMED && (
-          <Card
-            icon={<Image src="/img/mailbox.svg" alt="" width="200" height="200" />}
-            title={t("downloadResponsesTable.card.noNewResponsesApi")}
-            content={t("downloadResponsesTable.card.noNewResponsesApiMessage")}
-            headingTag={HeadingLevel.H1}
-            headingStyle="gc-h2 text-[#748094]"
-          />
-        )}
+      {hasApiKeyId && !checkingApiSubmissions && !hasApiSubmissions && (
+        <Card
+          icon={<Image src="/img/mailbox.svg" alt="" width="200" height="200" />}
+          title={t("downloadResponsesTable.card.noNewResponsesApi")}
+          content={t("downloadResponsesTable.card.noNewResponsesApiMessage")}
+          headingTag={HeadingLevel.H1}
+          headingStyle="gc-h2 text-[#748094]"
+        />
+      )}
 
       {/* 
           No responses are available for this view 
