@@ -7,6 +7,7 @@ type HealthCheckBoxProps = {
   titleKey?: string;
   children?: ReactNode | string;
   className?: string;
+  count?: number;
 };
 
 const Container = ({ children }: { children: HealthCheckBoxProps["children"] }) => {
@@ -18,6 +19,22 @@ const Title = ({ i18nKey }: { i18nKey: string }) => {
     <h4 className="text-lg font-bold">
       <Text i18nKey={i18nKey} />
     </h4>
+  );
+};
+
+const Icon = ({ type }: { type: keyof typeof ErrorStatus }) => {
+  return (
+    <div className="mb-2">
+      <div>{defaultIcons[type]}</div>
+    </div>
+  );
+};
+
+const NumberCount = ({ count }: { count: number }) => {
+  return (
+    <div className="mb-2">
+      <div className="mt-2 flex items-center justify-center text-4xl font-bold">{count}</div>
+    </div>
   );
 };
 
@@ -46,37 +63,43 @@ export const BoxContainer = ({
         className
       )}
     >
-      {children}
+      <div className="grid justify-items-center gap-1">{children}</div>
     </div>
   );
 };
 
-export const Success = ({ children, titleKey }: HealthCheckBoxProps) => {
+export const Success = ({ children, titleKey, count }: HealthCheckBoxProps) => {
   return (
     <BoxContainer className="border-emerald-500 bg-emerald-50 text-emerald-700">
-      <div className="mb-2">{defaultIcons[ErrorStatus.SUCCESS]}</div>
-      {titleKey && <Title i18nKey={titleKey} />}
-      <div className="text-blue-dark">{children}</div>
+      {count ? <NumberCount count={count} /> : <Icon type={ErrorStatus.SUCCESS} />}
+      <div className="flex flex-col items-center justify-center">
+        {titleKey && <Title i18nKey={titleKey} />}
+        <div className="text-blue-dark">{children}</div>
+      </div>
     </BoxContainer>
   );
 };
 
-export const Danger = ({ children, titleKey }: HealthCheckBoxProps) => {
+export const Danger = ({ children, titleKey, count }: HealthCheckBoxProps) => {
   return (
     <BoxContainer className="border-red-500 bg-red-50 text-red-700">
-      <div className="mb-2">{defaultIcons[ErrorStatus.ERROR]}</div>
-      {titleKey && <Title i18nKey={titleKey} />}
-      <div className="text-blue-dark">{children}</div>
+      {count ? <NumberCount count={count} /> : <Icon type={ErrorStatus.ERROR} />}
+      <div className="flex flex-col items-center justify-center">
+        {titleKey && <Title i18nKey={titleKey} />}
+        <div className="text-blue-dark">{children}</div>
+      </div>
     </BoxContainer>
   );
 };
 
-export const Warning = ({ children, titleKey }: HealthCheckBoxProps) => {
+export const Warning = ({ children, titleKey, count }: HealthCheckBoxProps) => {
   return (
     <BoxContainer className="border-yellow-500 bg-yellow-50 text-yellow-700">
-      <div className="mb-2">{defaultIcons[ErrorStatus.WARNING]}</div>
-      {titleKey && <Title i18nKey={titleKey} />}
-      <div className="text-blue-dark">{children}</div>
+      {count ? <NumberCount count={count} /> : <Icon type={ErrorStatus.WARNING} />}
+      <div className="flex flex-col items-center justify-center">
+        {titleKey && <Title i18nKey={titleKey} />}
+        <div className="text-blue-dark">{children}</div>
+      </div>
     </BoxContainer>
   );
 };

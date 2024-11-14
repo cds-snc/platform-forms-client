@@ -43,7 +43,7 @@ export const ClientContainer = ({
           <HealthCheckBox.Warning titleKey="systemHealth.throttling.title">
             <HealthCheckBox.Text i18nKey="systemHealth.throttling.description" />
           </HealthCheckBox.Warning>
-          <HealthCheckBox.Danger titleKey="systemHealth.problems.title">
+          <HealthCheckBox.Danger titleKey="systemHealth.problems.title" count={3}>
             <HealthCheckBox.Text i18nKey="systemHealth.problems.description" />
           </HealthCheckBox.Danger>
         </HealthCheckBox.Container>
