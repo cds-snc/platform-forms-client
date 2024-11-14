@@ -296,7 +296,7 @@ const createTemplateStore = (initProps?: Partial<InitialTemplateStoreProps>) => 
                 });
               });
             },
-            remove: async (elementId, groupId = "") => {
+            remove: (elementId, groupId = "") => {
               set((state) => {
                 const allowGroups = state.allowGroupsFlag;
                 state.form.elements = removeElementById(state.form.elements, elementId);
