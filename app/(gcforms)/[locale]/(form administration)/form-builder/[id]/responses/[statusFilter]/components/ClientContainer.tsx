@@ -9,8 +9,6 @@ import { ManageFormAccessDialogContainer } from "./ManageFormAccessDialog";
 import { useFormBuilderConfig } from "@lib/hooks/useFormBuilderConfig";
 import { useTranslation } from "@i18n/client";
 
-import { HealthCheckBox } from "@clientComponents/globals/HealthCheckBox/HealthCheckBox";
-
 export const ClientContainer = ({
   responseDownloadLimit,
   overdueAfter,
@@ -36,17 +34,6 @@ export const ClientContainer = ({
   if (hasApiKeyId) {
     return (
       <>
-        <HealthCheckBox.Container>
-          <HealthCheckBox.Success titleKey="systemHealth.contactSupport.title">
-            <HealthCheckBox.Text i18nKey="systemHealth.contactSupport.description" />
-          </HealthCheckBox.Success>
-          <HealthCheckBox.Warning titleKey="systemHealth.throttling.title">
-            <HealthCheckBox.Text i18nKey="systemHealth.throttling.description" />
-          </HealthCheckBox.Warning>
-          <HealthCheckBox.Danger titleKey="systemHealth.problems.title" count={3}>
-            <HealthCheckBox.Text i18nKey="systemHealth.problems.description" />
-          </HealthCheckBox.Danger>
-        </HealthCheckBox.Container>
         <div className="mr-10">
           <h1>{t("apiDashboard.title")}</h1>
           <Responses responseDownloadLimit={responseDownloadLimit} overdueAfter={overdueAfter} />
