@@ -19,6 +19,7 @@ import { ownerRemovedEmailTemplate } from "./invitations/emailTemplates/ownerRem
 import { sendEmail } from "./integration/notifyConnector";
 import { youHaveBeenRemovedEmailTemplate } from "./invitations/emailTemplates/youHaveBeenRemovedEmailTemplate";
 import { ownerAddedEmailTemplate } from "./invitations/emailTemplates/ownerAddedEmailTemplate";
+import { isValidISODate } from "./utils/date/isValidISODate";
 
 // ******************************************
 // Internal Module Functions
@@ -1512,6 +1513,10 @@ export const updateClosedData = async (
     },
   ]);
   let detailsData: ClosedDetails | null = null;
+
+  if (closingDate !== null && !isValidISODate(String(closingDate))) {
+    throw new Error(`Invalid ISO date ${closingDate}`);
+  }
 
   // Add the closed details if they exist
   if (details) {
