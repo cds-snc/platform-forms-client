@@ -1278,5 +1278,8 @@
       "save": "Enregistrer",
       "cancel": "Annuler"
     }
+  },
+  "systemHealthCheck": {
+    "title": "System health check [FR]"
   }
 }
