@@ -285,5 +285,8 @@
   },
   "apiDashboard": {
     "title": "Réponses"
+  },
+  "systemHealth": {
+    "contactSupport": "<a href='' target='_blank'>Contact Support</a> [FR]"
   }
 }
