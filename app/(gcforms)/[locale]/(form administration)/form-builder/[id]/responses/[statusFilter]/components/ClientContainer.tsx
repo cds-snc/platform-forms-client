@@ -9,6 +9,8 @@ import { ManageFormAccessDialogContainer } from "./ManageFormAccessDialog";
 import { useFormBuilderConfig } from "@lib/hooks/useFormBuilderConfig";
 import { useTranslation } from "@i18n/client";
 
+import { HealthCheckBox } from "@clientComponents/globals/HealthCheckBox/HealthCheckBox";
+
 export const ClientContainer = ({
   responseDownloadLimit,
   overdueAfter,
@@ -34,6 +36,13 @@ export const ClientContainer = ({
   if (hasApiKeyId) {
     return (
       <>
+        <div className="flex space-x-4">
+          <HealthCheckBox.Success title="Great">icon</HealthCheckBox.Success>
+
+          <HealthCheckBox.Warning title="Oh oh">icon</HealthCheckBox.Warning>
+
+          <HealthCheckBox.Danger title="oh no">icon</HealthCheckBox.Danger>
+        </div>
         <div className="mr-10">
           <h1>{t("apiDashboard.title")}</h1>
           <Responses responseDownloadLimit={responseDownloadLimit} overdueAfter={overdueAfter} />
