@@ -21,13 +21,12 @@ export const ThrottlingRate = ({ formId }: { formId: string }) => {
   const [permanent, setPermanent] = useState(false);
   const [success, setSuccess] = useState("");
 
-  // TODO - seems to be adding hours vs weeks
-  // const formatDate = (weeks:number) => {
-  //   const weeksInSeconds = weeks * 604800;
-  //   const futureTimeInSeconds = Date.now() + weeksInSeconds;
-  //   const date = new Date(futureTimeInSeconds);
-  //   return `${date.getFullYear()}-${date.getMonth()+1}-${date.getDate()}`
-  // }
+  const formatDate = (weeks: number) => {
+    const weeksInSeconds = weeks * (60 * 60 * 24 * 7) * 1000;
+    const futureTimeInSeconds = Date.now() + weeksInSeconds;
+    const date = new Date(futureTimeInSeconds);
+    return `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`;
+  };
 
   const formAction = async () => {
     try {
@@ -53,8 +52,6 @@ export const ThrottlingRate = ({ formId }: { formId: string }) => {
 
   return (
     <div className="mb-20">
-      {/* <h1>date {formatDate(10)}</h1> */}
-
       <form action={formAction}>
         <h2>{t("throttling.title")}</h2>
         <p>
@@ -83,10 +80,9 @@ export const ThrottlingRate = ({ formId }: { formId: string }) => {
               title={t("throttling.succcessUpdate.title")}
               className="mb-2"
             >
-              {/* TODO convert weeks to YYYY-MM-DD */}
               <p>
                 {t("throttling.succcessUpdate.description", {
-                  success: success === "weeks" ? weeks : success,
+                  success: success === "weeks" ? formatDate(Number(weeks)) : success,
                 })}
               </p>
             </Alert.Success>
