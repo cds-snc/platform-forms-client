@@ -285,5 +285,19 @@
   },
   "apiDashboard": {
     "title": "Responses"
+  },
+  "systemHealth": {
+    "contactSupport": {
+      "title": "Contact Support",
+      "description": "<a href='' target='_blank'>Contact Support</a>"
+    },
+    "throttling": {
+      "title": "Throttling",
+      "description": "<a href='' target='_blank'>Learn about throttling</a>"
+    },
+    "problems": {
+      "title": "Problems",
+      "description": "<a href='' target='_blank'>Learn about problems</a>"
+    }
   }
 }
