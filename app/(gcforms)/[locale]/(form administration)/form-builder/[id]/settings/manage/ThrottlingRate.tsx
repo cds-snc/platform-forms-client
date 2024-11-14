@@ -1,8 +1,9 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useTranslation } from "@i18n/client";
 import { Alert, Button } from "@clientComponents/globals";
 import {
+  getThrottling,
   permanentThrottling,
   resetThrottling,
   scheduledThrottling,
@@ -10,9 +11,7 @@ import {
 import { Checkbox } from "@formBuilder/components/shared/MultipleChoice";
 import { Input } from "@formBuilder/components/shared/Input";
 import { toast, ToastContainer } from "@formBuilder/components/shared/Toast";
-// import { formClosingDateEst } from "@lib/utils/date/utcToEst";
-
-// TODO pre-load values
+import { getSecondsInWeeks, getWeeksInSeconds } from "@lib/utils/date/dateConversions";
 
 export const ThrottlingRate = ({ formId }: { formId: string }) => {
   const { t } = useTranslation("admin-settings");
@@ -22,13 +21,14 @@ export const ThrottlingRate = ({ formId }: { formId: string }) => {
   const [success, setSuccess] = useState("");
 
   const formatDate = (weeks: number) => {
-    const weeksInSeconds = weeks * (60 * 60 * 24 * 7) * 1000;
+    const weeksInSeconds = getWeeksInSeconds(weeks);
     const futureTimeInSeconds = Date.now() + weeksInSeconds;
     const date = new Date(futureTimeInSeconds);
     return `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`;
   };
 
-  const formAction = async () => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
     try {
       if (permanent) {
         await permanentThrottling(formId);
@@ -50,9 +50,28 @@ export const ThrottlingRate = ({ formId }: { formId: string }) => {
     }
   };
 
+  useEffect(() => {
+    const getThrottlingSetting = async () => {
+      try {
+        const { rate, expires } = await getThrottling(formId);
+        if (rate && expires < 0) {
+          setWeeksDisabled(true);
+          setPermanent(true);
+        }
+        if (rate && expires > 0) {
+          const secondsAsWeeks = getSecondsInWeeks(expires - Date.now());
+          setWeeks(String(secondsAsWeeks));
+        }
+      } catch (error) {
+        toast.error(t("throttling.error"));
+      }
+    };
+    getThrottlingSetting();
+  }, [formId, t]);
+
   return (
     <div className="mb-20">
-      <form action={formAction}>
+      <form onSubmit={handleSubmit}>
         <h2>{t("throttling.title")}</h2>
         <p>
           <strong>{t("throttling.description")}</strong>
