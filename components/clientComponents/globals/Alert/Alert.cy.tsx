@@ -19,7 +19,7 @@ describe("<Alert />", () => {
       cy.mount(<Alert.Warning title="This is a title" body="This is a body" />);
       cy.get("[data-testid='alert']").should("be.visible");
       cy.get("[data-testid='alert']").should("have.class", "bg-yellow-50");
-      cy.get("[data-testid='alert-icon']").should("have.class", "[&_svg]:fill-slate-950");
+      cy.get("[data-testid='alert-icon']").should("have.class", "[&_svg]:fill-yellow-700");
       cy.get("[data-testid='alert-heading']").should("have.class", "text-slate-950");
     });
 
