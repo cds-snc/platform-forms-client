@@ -1,10 +1,10 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useTranslation } from "@i18n/client";
 
 import { Button } from "@clientComponents/globals";
 import { useTemplateStore } from "@lib/store/useTemplateStore";
-import { ChoiceRule } from "@lib/formContext";
+import { ChoiceRule, getElementsWithRuleForChoice } from "@lib/formContext";
 import { ConditionalSelector } from "@formBuilder/components/shared/conditionals/ConditionalSelector";
 import { sortByGroups, sortByLayout } from "@lib/utils/form-builder";
 import { AddOther } from "@formBuilder/components/shared/conditionals/AddOther";
@@ -14,16 +14,19 @@ import { FormElementWithIndex } from "@lib/types/form-builder-types";
 
 export const Rules = ({
   item,
-  setItem,
-  initialChoiceRules,
   descriptionId,
   tryLogicView,
+  choiceRulesRef,
+  mode,
+  optionId,
 }: {
   item: FormElementWithIndex;
   setItem: (item: FormElementWithIndex) => void;
-  initialChoiceRules: ChoiceRule[];
   descriptionId?: string;
   tryLogicView: () => void;
+  choiceRulesRef: React.MutableRefObject<ChoiceRule[]>;
+  mode: "add" | "edit";
+  optionId: string | null;
 }) => {
   const { t } = useTranslation("form-builder");
   const formId = `form-${Date.now()}`;
@@ -35,72 +38,53 @@ export const Rules = ({
     groupsEnabled: s.getGroupsEnabled(),
   }));
 
+  const initialChoiceRules = getElementsWithRuleForChoice({
+    formElements: elements,
+    itemId: item.id,
+  });
+
+  if (mode === "add" && optionId) {
+    initialChoiceRules.push({ elementId: String(item.id), choiceId: optionId });
+  }
+
+  if (initialChoiceRules.length == 0) {
+    initialChoiceRules.push({ elementId: String(item.id), choiceId: `${item.id}.0` });
+  }
+
+  const [choiceRules, setChoiceRules] = useState<ChoiceRule[]>(initialChoiceRules);
+
+  useEffect(() => {
+    choiceRulesRef.current = choiceRules;
+  }, [choiceRules, choiceRulesRef]);
+
   let sortedElements = sortByLayout({ layout: form.layout, elements: elements });
 
   if (groupsEnabled) {
     sortedElements = sortByGroups({ form: form, elements: elements });
   }
 
-  if (initialChoiceRules.length == 0) {
-    initialChoiceRules.push({ elementId: "", choiceId: `${item.id}.0` });
-  }
-
-  const [choiceRules, setChoiceRules] = useState(initialChoiceRules);
-
   const updateElementId = (index: number, id: string) => {
     const rules = [...choiceRules];
     rules[index] = { elementId: id, choiceId: rules[index]["choiceId"] };
     setChoiceRules(rules);
-    // updateModalProperties(item.id, { ...properties, conditionalRules: rules });
-    setItem({
-      ...item,
-      properties: {
-        ...item.properties,
-        conditionalRules: rules,
-      },
-    });
   };
 
   const updateChoiceId = (index: number, id: string) => {
     const rules = [...choiceRules];
     rules[index] = { elementId: rules[index]["elementId"], choiceId: id };
     setChoiceRules(rules);
-    // updateModalProperties(item.id, { ...properties, conditionalRules: rules });
-    setItem({
-      ...item,
-      properties: {
-        ...item.properties,
-        conditionalRules: rules,
-      },
-    });
   };
 
   const removeSelector = (index: number) => {
     const rules = [...choiceRules];
     rules.splice(index, 1);
     setChoiceRules(rules);
-    // updateModalProperties(item.id, { ...properties, conditionalRules: rules });
-    setItem({
-      ...item,
-      properties: {
-        ...item.properties,
-        conditionalRules: rules,
-      },
-    });
   };
 
   const updateModalFromBase = (newRule: ChoiceRule) => {
     const rules = [...choiceRules];
     rules.push(newRule);
     setChoiceRules(rules);
-    // updateModalProperties(item.id, { ...properties, conditionalRules: rules });
-    setItem({
-      ...item,
-      properties: {
-        ...item.properties,
-        conditionalRules: rules,
-      },
-    });
   };
 
   const learnMoreAboutLogicView = () => {
