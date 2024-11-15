@@ -6,11 +6,13 @@ import { DeleteApiKeyDialog } from "../components/dialogs/DeleteApiKeyDialog/Del
 import { authCheckAndRedirect } from "@lib/actions";
 import { checkPrivilegesAsBoolean } from "@lib/privileges";
 
-export async function generateMetadata({
-  params: { locale },
-}: {
-  params: { locale: string };
+export async function generateMetadata(props: {
+  params: Promise<{ locale: string }>;
 }): Promise<Metadata> {
+  const params = await props.params;
+
+  const { locale } = params;
+
   const { t } = await serverTranslation("form-builder", { lang: locale });
   return {
     title: `${t("gcFormsSettings")} — ${t("gcForms")}`,
@@ -18,7 +20,6 @@ export async function generateMetadata({
 }
 
 export default async function Page() {
-
   const { ability } = await authCheckAndRedirect();
 
   const isFormsAdmin = checkPrivilegesAsBoolean(ability, [
@@ -27,7 +28,7 @@ export default async function Page() {
       subject: "FormRecord",
     },
   ]);
-  
+
   return (
     <>
       <ResponseDelivery isFormsAdmin={isFormsAdmin} />

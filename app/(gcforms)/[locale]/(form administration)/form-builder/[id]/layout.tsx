@@ -22,13 +22,15 @@ import {
   formBuilderConfigDefault,
 } from "@lib/hooks/useFormBuilderConfig";
 
-export default async function Layout({
-  children,
-  params: { locale, id },
-}: {
+export default async function Layout(props: {
   children: React.ReactNode;
-  params: { locale: string; id: string };
+  params: Promise<{ locale: string; id: string }>;
 }) {
+  const params = await props.params;
+
+  const { locale, id } = params;
+
+  const { children } = props;
 
   let initialForm: FormRecord | null = null;
 

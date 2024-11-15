@@ -15,7 +15,7 @@ interface Props {
   value: string | number;
   onChange: (e: React.ChangeEvent<HTMLTextAreaElement>) => void;
   onKeyDown?: (e: React.KeyboardEvent<HTMLTextAreaElement>) => void;
-  ref?: React.RefObject<HTMLTextAreaElement>;
+  ref?: React.RefObject<HTMLTextAreaElement | null>;
   isInvalid?: boolean;
   lang?: string;
   onBlur?: FocusEventHandler;

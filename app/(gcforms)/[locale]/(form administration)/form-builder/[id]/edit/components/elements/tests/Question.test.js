@@ -2,7 +2,7 @@
  * @jest-environment jsdom
  */
 import React from "react";
-import { cleanup, render, act, waitFor } from "@testing-library/react";
+import { cleanup, render, waitFor } from "@testing-library/react";
 import { Question } from "../question/Question";
 import { useTemplateStore } from "@lib/store/useTemplateStore";
 import {
@@ -12,6 +12,7 @@ import {
 } from "@lib/utils/form-builder/test-utils";
 import userEvent from "@testing-library/user-event";
 import { LocalizedElementProperties } from "@lib/types/form-builder-types";
+import { act } from "react";
 
 // Mock sessionStorage
 Object.defineProperty(window, "sessionStorage", {
@@ -95,7 +96,9 @@ describe("Question", () => {
 
     const question = rendered.container.querySelector("#item-1");
 
-    await user.type(question, "!!!");
+    await act(async () => {
+      await user.type(question, "!!!");
+    });
 
     expect(question).toHaveValue("question 1!!!");
 

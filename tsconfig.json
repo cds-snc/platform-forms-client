@@ -49,7 +49,6 @@
     "utils",
     ".next",
     "cypress",
-    "cypress.config.ts",
     "**/*.cy.ts",
     "**/*.cy.tsx",
     "__tests__",

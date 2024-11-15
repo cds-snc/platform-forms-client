@@ -1,15 +1,15 @@
 "use client";
 import React, { createContext, useRef, useContext, useCallback } from "react";
 interface RefStore {
-  getRef: (key: string) => React.RefObject<HTMLElement> | undefined;
-  setRef: (key: string, ref: React.RefObject<HTMLElement>) => void;
+  getRef: (key: string) => React.RefObject<HTMLElement | null> | undefined;
+  setRef: (key: string, ref: React.RefObject<HTMLElement | null>) => void;
   removeRef: (key: string) => void;
 }
 
 const RefStoreContext = createContext<RefStore | undefined>(undefined);
 
 export const RefStoreProvider = ({ children }: { children: React.ReactNode }) => {
-  const refStore = useRef(new Map<string, React.RefObject<HTMLElement>>());
+  const refStore = useRef(new Map<string, React.RefObject<HTMLElement | null>>());
 
   const getRef = useCallback(
     (key: string) => {
@@ -20,7 +20,7 @@ export const RefStoreProvider = ({ children }: { children: React.ReactNode }) =>
   );
 
   const setRef = useCallback(
-    (key: string, ref: React.RefObject<HTMLElement>) => {
+    (key: string, ref: React.RefObject<HTMLElement | null>) => {
       const store = refStore.current;
       store.set(key, ref);
     },

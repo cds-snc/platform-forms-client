@@ -1,7 +1,7 @@
 "use client";
 import { CircleCheckIcon, InfoIcon, WarningIcon } from "@serverComponents/icons";
 import { cn } from "@lib/utils";
-import React, { ReactNode, useEffect, useRef, useState } from "react";
+import React, { ReactNode, useEffect, useRef, useState, type JSX } from "react";
 import { useTranslation } from "@i18n/client";
 
 export enum ErrorStatus {
@@ -177,6 +177,7 @@ const AlertContainer = ({
     if (!React.isValidElement(child)) return;
     if (child.type === Title) {
       alertTitle = React.cloneElement(child, {
+        // @ts-expect-error fix this
         ...child.props,
         status: status,
       });
@@ -184,6 +185,7 @@ const AlertContainer = ({
       alertBody = child;
     } else if (child.type === IconWrapper) {
       alertIcon = React.cloneElement(child, {
+        // @ts-expect-error fix this
         ...child.props,
         status: status,
       });

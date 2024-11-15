@@ -1,6 +1,6 @@
-import { expect } from 'vitest';
+import { expect } from "vitest";
 import { removeFormContext } from "@lib/utils/form-builder/groupsHistory";
-import {values} from "../../__fixtures__/conditionalInputHistoryEmptySimple.json";
+import { values } from "../../__fixtures__/conditionalInputHistoryEmptySimple.json";
 
 describe("onlyRelevantValues function", () => {
   it("Combines group history answers with empty unanswered questions", () => {
@@ -16,7 +16,7 @@ describe("onlyRelevantValues function", () => {
       "4": "",
       "5": "a1",
       "6": "a2",
-    }
+    };
     const expectedOutput = {
       "1": "A",
       "2": [],
@@ -33,8 +33,8 @@ describe("onlyRelevantValues function", () => {
       "13": [],
       "14": "",
       "15": "",
-      "currentGroup": "",
-      "groupHistory": "",
+      currentGroup: "",
+      groupHistory: "",
     };
     const formValues = removeFormContext(values, groupValues);
     expect(formValues).toEqual(expectedOutput);
@@ -53,7 +53,7 @@ describe("onlyRelevantValues function", () => {
       "4": "",
       "5": "a1",
       "6": "a2",
-    }
+    };
     const expectedOutput = {};
     // @ts-expect-error - testing invalid input
     const formValues = removeFormContext(null, groupValues);

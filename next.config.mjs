@@ -31,6 +31,7 @@ const securityHeaders = [
 const nextConfig = {
   sassOptions: {
     includePaths: [path.join(__dirname, "styles")],
+    silenceDeprecations: ['legacy-js-api'], // https://github.com/vercel/next.js/issues/71638
   },
   poweredByHeader: false,
   compiler: {
@@ -42,16 +43,9 @@ const nextConfig = {
     cacheHandler: require.resolve("./nextCacheHandler.mjs"),
     cacheMaxMemorySize: 0, // disable default in-memory caching
   }),
-  webpack: (config) => {
-    // Support reading markdown
-    config.module.rules.push({
-      test: /\.md$/,
-      type: "asset/source",
-    });
-
-    return config;
-  },
-
+  serverExternalPackages: ["@aws-sdk/lib-dynamodb", "pino"],
+  
+ 
   async headers() {
     return [
       {
@@ -86,18 +80,28 @@ const nextConfig = {
       },
     ];
   },
+  webpack: (config) => {
+    // Support reading markdown
+    config.module.rules.push({
+      test: /\.md$/,
+      type: "asset/source",
+    });
 
+    return config;
+  },
   experimental: {
-    instrumentationHook: true,
     // PPR is only supported in Next.js Canary branches
     // ppr: true,
-    serverComponentsExternalPackages: ["@aws-sdk/lib-dynamodb", "pino"],
     serverActions: {
       bodySizeLimit: "5mb",
     },
+    
     turbo: {
       rules: {
-        "*.md": ["raw-loader"],
+        '*.md': {
+          loaders: ['raw-loader'],
+          as: '*.js',
+        },
       },
     },
   },
