@@ -67,7 +67,6 @@ export const RulesDialog = () => {
   );
 
   const handleSubmit = ({ item }: { item: FormElementWithIndex }) => {
-    // return (e: React.MouseEvent<HTMLElement>) => {
     // Handle the case where there are no rules
     if (!choiceRulesRef.current || !choiceRulesRef.current.length) {
       elements.forEach((el) => {
