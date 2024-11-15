@@ -13738,7 +13738,7 @@ __metadata:
     react-app-polyfill: "npm:3.0.0"
     react-aria: "npm:3.31.0"
     react-complex-tree: "npm:^2.4.5"
-    react-dom: "npm:19.0.0-rc-69d4b800-20241021"
+    react-dom: "npm:19.0.0-rc-66855b96-20241106"
     react-i18next: "npm:^15.1.0"
     react-loading-skeleton: "npm:^3.4.0"
     react-roving-tabindex: "npm:^3.2.0"
@@ -18810,14 +18810,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-dom@npm:19.0.0-rc-69d4b800-20241021":
-  version: 19.0.0-rc-69d4b800-20241021
-  resolution: "react-dom@npm:19.0.0-rc-69d4b800-20241021"
+"react-dom@npm:19.0.0-rc-66855b96-20241106":
+  version: 19.0.0-rc-66855b96-20241106
+  resolution: "react-dom@npm:19.0.0-rc-66855b96-20241106"
   dependencies:
-    scheduler: "npm:0.25.0-rc-69d4b800-20241021"
+    scheduler: "npm:0.25.0-rc-66855b96-20241106"
   peerDependencies:
-    react: 19.0.0-rc-69d4b800-20241021
-  checksum: 10c0/ab42f988544003a52660e65f7b2373a312d5e36067af056c0ff3950fbb5ca778726b0c168b95d02254714a19e99659625a9b3ed99fd5d4fe5258aef04ee2b00f
+    react: 19.0.0-rc-66855b96-20241106
+  checksum: 10c0/62298e0bd655f2bcbebccd03f593532a4728bebe119ecb30d7f50503d74882cbda90acacdb96bd54b6c1e29c36e74cc7ccab8132926d80e34002d89c07f6a9ab
   languageName: node
   linkType: hard
 
@@ -19675,10 +19675,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"scheduler@npm:0.25.0-rc-69d4b800-20241021":
-  version: 0.25.0-rc-69d4b800-20241021
-  resolution: "scheduler@npm:0.25.0-rc-69d4b800-20241021"
-  checksum: 10c0/43cf3fb0b0fede0bdd80db288930340d510fb43c963ab1d0a0937de7092983b278f4199d2ecb9ae0101cbc39148a447c5c70229131c291a8fc41204303025e59
+"scheduler@npm:0.25.0-rc-66855b96-20241106":
+  version: 0.25.0-rc-66855b96-20241106
+  resolution: "scheduler@npm:0.25.0-rc-66855b96-20241106"
+  checksum: 10c0/65f1187d4b472ad674b91d98661c54dfc312e0ba850713b57411a05db722b5a9cdc7a46683c776116668c251c90cd4d3973b9f021d3821762fa224f94275c85a
   languageName: node
   linkType: hard
 
