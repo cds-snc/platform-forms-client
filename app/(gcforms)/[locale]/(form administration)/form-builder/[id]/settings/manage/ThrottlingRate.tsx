@@ -25,8 +25,8 @@ export const ThrottlingRate = ({ formId }: { formId: string }) => {
     i18n: { language },
   } = useTranslation("admin-settings");
   const hasHydrated = useRehydrate();
-  const [loading, setLoading] = useState(false);
   const [hasPreLoaded, setHasPreLoaded] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
 
   const [weeks, setWeeks] = useState("");
   const [weeksDisabled, setWeeksDisabled] = useState(false);
@@ -63,7 +63,7 @@ export const ThrottlingRate = ({ formId }: { formId: string }) => {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    setLoading(true);
+    setSubmitting(true);
     try {
       if (permanent) {
         await permanentThrottling(formId);
@@ -83,7 +83,7 @@ export const ThrottlingRate = ({ formId }: { formId: string }) => {
     } catch (error) {
       toast.error(t("throttling.error"));
     } finally {
-      setLoading(false);
+      setSubmitting(false);
     }
   };
 
@@ -178,7 +178,7 @@ export const ThrottlingRate = ({ formId }: { formId: string }) => {
           </Tooltip.Info>
         </div>
         <div className="flex">
-          <SubmitButton dataTestId="increase-throttle" theme="secondary" loading={loading}>
+          <SubmitButton dataTestId="increase-throttle" theme="secondary" loading={submitting}>
             {t("throttling.updateRate")}
           </SubmitButton>
           <Button
