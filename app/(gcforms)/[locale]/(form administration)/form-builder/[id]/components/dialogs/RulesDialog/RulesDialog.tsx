@@ -15,6 +15,7 @@ import {
   cleanChoiceIdsFromRules,
 } from "@lib/formContext";
 import { getPathString } from "@lib/utils/form-builder/getPath";
+import { useRefsContext } from "@formBuilder/[id]/edit/components/RefsContext";
 
 type RulesDialogEventDetails = {
   mode: "add" | "edit";
@@ -29,6 +30,7 @@ export const RulesDialog = () => {
   const dialog = useDialogRef();
   const { togglePanel } = useTreeRef();
   const router = useRouter();
+  const { refs } = useRefsContext();
 
   const [mode, setMode] = React.useState<"add" | "edit">("add");
   const [item, setItem] = React.useState<FormElementWithIndex | undefined>(undefined);
@@ -103,6 +105,7 @@ export const RulesDialog = () => {
   });
 
   const handleClose = () => {
+    item && refs && refs.current && refs.current[item.id] && refs.current[item.id].focus();
     dialog.current?.close();
     setIsOpen(false);
   };
