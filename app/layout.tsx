@@ -10,6 +10,7 @@ import { Noto_Sans, Lato } from "next/font/google";
 import { googleTagManager } from "@lib/cspScripts";
 import { headers } from "next/headers";
 import { authCheckAndThrow } from "@lib/actions";
+import { RegisterServiceWorker } from "@clientComponents/globals/ServiceWorker";
 
 const notoSans = Noto_Sans({
   weight: ["100", "200", "300", "400", "500", "600", "700", "800", "900"],
@@ -91,7 +92,7 @@ export default async function Layout({ children }: { children: React.ReactNode }
           <meta httpEquiv="Refresh" content="0; url='/javascript-disabled.html'" />
         </noscript>
       </head>
-
+      <RegisterServiceWorker />
       <body className={"has-[.bkd-soft]:bg-gray-soft"}>{children}</body>
     </html>
   );

@@ -1,0 +1,12 @@
+{
+  "compilerOptions": {
+    "lib": ["WebWorker", "ESNext"],
+    "outDir": "../public",
+    "baseUrl": ".",
+    "skipLibCheck": true,
+    "declaration": false,
+    "tsBuildInfoFile": ".tsbuildinfo",
+    "incremental": true
+  },
+  "files": ["serviceWorker.ts"]
+}

@@ -6,7 +6,7 @@ module.exports = {
 
       parser: "@typescript-eslint/parser",
       parserOptions: {
-        project: ["./tsconfig.json"],
+        project: ["./tsconfig.json", "./serviceWorker/tsconfig.json", "./cypress/tsconfig.json"],
       },
       plugins: ["@typescript-eslint", "jsx-a11y"],
       rules: {
