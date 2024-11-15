@@ -26,6 +26,7 @@ export const ThrottlingRate = ({ formId }: { formId: string }) => {
   } = useTranslation("admin-settings");
   const hasHydrated = useRehydrate();
   const [loading, setLoading] = useState(false);
+  const [hasPreLoaded, setHasPreLoaded] = useState(false);
 
   const [weeks, setWeeks] = useState("");
   const [weeksDisabled, setWeeksDisabled] = useState(false);
@@ -100,8 +101,11 @@ export const ThrottlingRate = ({ formId }: { formId: string }) => {
         }
       } catch (error) {
         toast.error(t("throttling.error"));
+      } finally {
+        setHasPreLoaded(true);
       }
     };
+    setHasPreLoaded(false);
     getThrottlingSetting();
   }, [formId, t]);
 
@@ -113,7 +117,7 @@ export const ThrottlingRate = ({ formId }: { formId: string }) => {
           <strong>{t("throttling.description")}</strong>
         </p>
         <div className="mb-2">
-          {hasHydrated ? (
+          {hasHydrated && hasPreLoaded ? (
             <>
               <Input
                 className="w-16 disabled:bg-gray-light disabled:!border-none"
