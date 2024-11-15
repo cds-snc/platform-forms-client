@@ -9,6 +9,7 @@ const REDIS_RATE_LIMIT_KEY_PREFIX: string = "rate-limit";
 const THROTTLE_SETTING = {
   high: "high",
 } as const;
+export type ThrottleSetting = keyof typeof THROTTLE_SETTING; // For completeness, even though not currently used
 
 export const getThrottling = async (
   formId: string
