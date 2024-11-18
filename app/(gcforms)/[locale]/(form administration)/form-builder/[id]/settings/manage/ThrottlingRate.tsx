@@ -4,9 +4,9 @@ import { useTranslation } from "@i18n/client";
 import { Alert, Button } from "@clientComponents/globals";
 import {
   getThrottling,
-  permanentThrottling,
+  setPermanentThrottling,
+  setThrottlingExpiry,
   resetThrottling,
-  scheduledThrottling,
 } from "@lib/cache/throttlingCache";
 import { Checkbox } from "@formBuilder/components/shared/MultipleChoice";
 import { Input } from "@formBuilder/components/shared/Input";
@@ -19,19 +19,28 @@ import Skeleton from "react-loading-skeleton";
 import { formClosingDateEst } from "@lib/utils/date/utcToEst";
 import { logMessage } from "@lib/logger";
 
+const THROTTLE_EXPIRY = {
+  weeks: "weeks",
+  permanent: "permanent",
+  default: "default",
+} as const;
+type ObjectValues<T> = T[keyof T];
+export type ThrottleExpiry = ObjectValues<typeof THROTTLE_EXPIRY>;
+
 export const ThrottlingRate = ({ formId }: { formId: string }) => {
   const {
     t,
     i18n: { language },
   } = useTranslation("admin-settings");
   const hasHydrated = useRehydrate();
-  const [hasPreLoaded, setHasPreLoaded] = useState(false);
+  const [loadedSetting, setLoadedSetting] = useState(false);
   const [submitting, setSubmitting] = useState(false);
 
   const [weeks, setWeeks] = useState("");
   const [weeksDisabled, setWeeksDisabled] = useState(false);
   const [permanent, setPermanent] = useState(false);
-  const [success, setSuccess] = useState("");
+
+  const [success, setSuccess] = useState<ThrottleExpiry | "">("");
 
   const dateFormat: Intl.DateTimeFormatOptions = {
     timeZone: "America/New_York",
@@ -66,20 +75,20 @@ export const ThrottlingRate = ({ formId }: { formId: string }) => {
     setSubmitting(true);
     try {
       if (permanent) {
-        await permanentThrottling(formId);
-        setSuccess("permanent");
+        await setPermanentThrottling(formId);
+        setSuccess(THROTTLE_EXPIRY.permanent);
         return;
       }
 
       if (weeks) {
-        await scheduledThrottling(formId, Number(weeks));
-        setSuccess("weeks");
+        await setThrottlingExpiry(formId, Number(weeks));
+        setSuccess(THROTTLE_EXPIRY.weeks);
         return;
       }
 
       // Reset throttling back to default
       await resetThrottling(formId);
-      setSuccess("reset");
+      setSuccess(THROTTLE_EXPIRY.default);
     } catch (error) {
       toast.error(t("throttling.error"));
     } finally {
@@ -102,10 +111,10 @@ export const ThrottlingRate = ({ formId }: { formId: string }) => {
       } catch (error) {
         toast.error(t("throttling.error"));
       } finally {
-        setHasPreLoaded(true);
+        setLoadedSetting(true);
       }
     };
-    setHasPreLoaded(false);
+    setLoadedSetting(false);
     getThrottlingSetting();
   }, [formId, t]);
 
@@ -113,46 +122,25 @@ export const ThrottlingRate = ({ formId }: { formId: string }) => {
     <div className="mb-20">
       <form onSubmit={handleSubmit}>
         <h2>{t("throttling.title")}</h2>
-        <p>
-          <strong>{t("throttling.description")}</strong>
-        </p>
-        <div className="mb-2">
-          {hasHydrated && hasPreLoaded ? (
-            <>
-              <Input
-                className="w-16 disabled:bg-gray-light disabled:!border-none"
-                id="throttling-weeks"
-                name="throttling-weeks"
-                value={weeks}
-                onChange={(e: React.ChangeEvent<HTMLInputElement>) => setWeeks(e.target.value)}
-                {...{ disabled: weeksDisabled }}
-                type="number"
-                min="1"
-                max="12"
-              />
-              <label className="ml-4" htmlFor="throttling-weeks">
-                {t("throttling.weeks")}
-              </label>
-            </>
-          ) : (
-            <Skeleton className="w-16" count={2} />
-          )}
-        </div>
         <div role="alert">
-          {success && (success === "weeks" || success === "permanent") && (
-            <Alert.Success
-              focussable={true}
-              title={t("throttling.succcessUpdate.title")}
-              className="mb-2"
-            >
-              <p>
-                {t("throttling.succcessUpdate.description", {
-                  success: success === "weeks" ? formatDate(Number(weeks), language) : success,
-                })}
-              </p>
-            </Alert.Success>
-          )}
-          {success && success === "reset" && (
+          {success &&
+            (success === THROTTLE_EXPIRY.weeks || success === THROTTLE_EXPIRY.permanent) && (
+              <Alert.Success
+                focussable={true}
+                title={t("throttling.succcessUpdate.title")}
+                className="mb-2"
+              >
+                <p>
+                  {t("throttling.succcessUpdate.description", {
+                    success:
+                      success === THROTTLE_EXPIRY.weeks
+                        ? formatDate(Number(weeks), language)
+                        : success,
+                  })}
+                </p>
+              </Alert.Success>
+            )}
+          {success && success === THROTTLE_EXPIRY.default && (
             <Alert.Success
               focussable={true}
               title={t("throttling.succcessReset.title")}
@@ -160,6 +148,33 @@ export const ThrottlingRate = ({ formId }: { formId: string }) => {
             />
           )}
         </div>
+        <fieldset>
+          <legend>
+            <strong>{t("throttling.description")}</strong>
+          </legend>
+          <div className="mb-2">
+            {hasHydrated && loadedSetting ? (
+              <>
+                <Input
+                  className="w-16 disabled:bg-gray-light disabled:!border-none"
+                  id="throttling-weeks"
+                  name="throttling-weeks"
+                  value={weeks}
+                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => setWeeks(e.target.value)}
+                  {...{ disabled: weeksDisabled }}
+                  type="number"
+                  min="1"
+                  max="12"
+                />
+                <label className="ml-4" htmlFor="throttling-weeks">
+                  {t("throttling.weeks")}
+                </label>
+              </>
+            ) : (
+              <Skeleton className="w-16" count={2} />
+            )}
+          </div>
+        </fieldset>
         <div className="mb-4 flex">
           <Checkbox
             data-testid="required"
@@ -173,7 +188,7 @@ export const ThrottlingRate = ({ formId }: { formId: string }) => {
             }}
             label={t("throttling.permanent")}
           />
-          <Tooltip.Info side="top" triggerClassName="mb-4">
+          <Tooltip.Info side="top" triggerClassName="mb-4" label={t("help")}>
             {t("throttling.tooltip")}
           </Tooltip.Info>
         </div>

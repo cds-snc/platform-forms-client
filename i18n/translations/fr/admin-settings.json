@@ -19,6 +19,7 @@
   "updated": "Paramètre mis à jour",
   "errorUpdating": "Erreur lors de la mise à jour du paramètre",
   "settingNotFound": "Paramètre non trouvé",
+  "help": "[FR]help",
   "error": {
     "save": "Erreur d'enregistrement des données",
     "duplicateId": "Il s'agit d'un double de l'identifiant interne, veuillez en sélectionner un autre."

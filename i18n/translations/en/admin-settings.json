@@ -19,6 +19,7 @@
   "updated": "Setting updated",
   "errorUpdating": "Error updating setting",
   "settingNotFound": "Setting not found",
+  "help": "help",
   "error": {
     "save": "Error saving data",
     "duplicateId": "Duplicate internal ID, please select another"

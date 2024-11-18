@@ -28,7 +28,7 @@ export const getThrottling = async (
 
 // Increases the throttling rate for a limited duration by leveraging the Redis built-in expiration
 // feature by setting an expiryDelay
-export const scheduledThrottling = async (formId: string, weeks: number) => {
+export const setThrottlingExpiry = async (formId: string, weeks: number) => {
   const modifyParameter = `${REDIS_RATE_LIMIT_KEY_PREFIX}:${formId}`;
   try {
     const redis = await getRedisInstance();
@@ -47,7 +47,7 @@ export const scheduledThrottling = async (formId: string, weeks: number) => {
 };
 
 // Permanently increases the throttling rate (uses high capacity token bucket)
-export const permanentThrottling = async (formId: string) => {
+export const setPermanentThrottling = async (formId: string) => {
   const modifyParameter = `${REDIS_RATE_LIMIT_KEY_PREFIX}:${formId}`;
   try {
     const redis = await getRedisInstance();
