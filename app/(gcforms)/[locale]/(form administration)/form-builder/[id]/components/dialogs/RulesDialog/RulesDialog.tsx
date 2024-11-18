@@ -84,9 +84,9 @@ export const RulesDialog = () => {
       return;
     }
 
-    const els = choiceRulesToConditonalRules(elements, choiceRulesRef.current);
+    const updatedRules = choiceRulesToConditonalRules(elements, choiceRulesRef.current);
     // Update the element rules
-    Object.entries(els).forEach(([key, value]) => {
+    Object.entries(updatedRules).forEach(([key, value]) => {
       const element = elements.find((el) => el.id == Number(key));
       if (!element) return;
       const properties = { ...element.properties, conditionalRules: value };
