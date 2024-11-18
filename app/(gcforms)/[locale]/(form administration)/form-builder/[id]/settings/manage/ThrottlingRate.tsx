@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useTranslation } from "@i18n/client";
 import { Alert, Button } from "@clientComponents/globals";
 import {
@@ -37,6 +37,7 @@ export const ThrottlingRate = ({ formId }: { formId: string }) => {
   const [submitting, setSubmitting] = useState(false);
 
   const [weeks, setWeeks] = useState("");
+  const lastValueForWeeks = useRef("");
   const [weeksDisabled, setWeeksDisabled] = useState(false);
   const [permanent, setPermanent] = useState(false);
 
@@ -160,7 +161,11 @@ export const ThrottlingRate = ({ formId }: { formId: string }) => {
                   id="throttling-weeks"
                   name="throttling-weeks"
                   value={weeks}
-                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => setWeeks(e.target.value)}
+                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                    const value = e.target.value;
+                    setWeeks(value);
+                    lastValueForWeeks.current = value;
+                  }}
                   {...{ disabled: weeksDisabled }}
                   type="number"
                   min="1"
@@ -182,9 +187,10 @@ export const ThrottlingRate = ({ formId }: { formId: string }) => {
             name="throttling-permanent"
             checked={permanent}
             onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-              setWeeks("");
-              setWeeksDisabled(e.target.checked ? true : false);
-              setPermanent(e.target.checked);
+              const checked = e.target.checked;
+              setWeeks(checked ? "" : lastValueForWeeks.current);
+              setWeeksDisabled(checked ? true : false);
+              setPermanent(checked);
             }}
             label={t("throttling.permanent")}
           />
