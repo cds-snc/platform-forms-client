@@ -45,11 +45,6 @@ export const RulesDialog = () => {
     updateField: s.updateField,
   }));
 
-  // @TODO: check?
-  // if (storeId && storeId !== formId) {
-  //   formId = storeId;
-  // }
-
   // const isRichText = item?.type == "richText"; // @TODO: check?
   const descriptionId = `descriptionId-${Date.now()}`;
 
