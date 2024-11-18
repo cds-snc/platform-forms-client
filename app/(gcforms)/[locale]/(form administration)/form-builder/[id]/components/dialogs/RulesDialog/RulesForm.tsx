@@ -12,7 +12,7 @@ import { AddOther } from "@formBuilder/components/shared/conditionals/AddOther";
 import Markdown from "markdown-to-jsx";
 import { FormElementWithIndex } from "@lib/types/form-builder-types";
 
-export const Rules = ({
+export const RulesForm = ({
   item,
   descriptionId,
   tryLogicView,

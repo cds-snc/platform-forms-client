@@ -4,7 +4,7 @@ import { useTranslation } from "@i18n/client";
 import { useCustomEvent } from "@lib/hooks/useCustomEvent";
 import { useTemplateStore } from "@lib/store/useTemplateStore";
 import React, { useCallback, useEffect } from "react";
-import { Rules } from "./Rules";
+import { RulesForm } from "./RulesForm";
 import { useTreeRef } from "@formBuilder/components/shared/right-panel/treeview/provider/TreeRefProvider";
 import { useRouter } from "next/navigation";
 import { FormElementWithIndex } from "@lib/types/form-builder-types";
@@ -146,7 +146,7 @@ export const RulesDialog = () => {
             <p className="mb-4">
               <strong>{t("addConditionalRules.warning")}</strong>
             </p>
-            <Rules
+            <RulesForm
               mode={mode}
               optionId={optionId}
               item={item}
