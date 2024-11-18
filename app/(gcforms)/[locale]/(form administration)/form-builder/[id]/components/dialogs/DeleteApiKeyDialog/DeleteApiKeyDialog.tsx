@@ -15,7 +15,7 @@ import { DeleteKeyFailed } from "./DeleteKeyFailed";
 import { DeleteKeySuccess } from "./DeleteKeySuccess";
 import { toast } from "@formBuilder/components/shared/Toast";
 
-import { deleteServiceAccountKey } from "../../../settings/api/actions";
+import { deleteServiceAccountKey } from "../../../settings/actions";
 import Link from "next/link";
 import { useFormBuilderConfig } from "@lib/hooks/useFormBuilderConfig";
 

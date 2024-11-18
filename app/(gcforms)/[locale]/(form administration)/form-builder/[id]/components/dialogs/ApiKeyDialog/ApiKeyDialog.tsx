@@ -10,7 +10,7 @@ import { EventKeys, useCustomEvent } from "@lib/hooks/useCustomEvent";
 import { ResponsibilityList } from "./ResponsibilityList";
 import { ConfirmationAgreement } from "./ConfirmationAgreement";
 import { Note } from "./Note";
-import { downloadKey, _createKey } from "@formBuilder/[id]/settings/api/utils";
+import { downloadKey, _createKey } from "@formBuilder/[id]/settings/components/utils";
 import { SubmitButton as DownloadButton } from "@clientComponents/globals/Buttons/SubmitButton";
 import * as Alert from "@clientComponents/globals/Alert/Alert";
 import { logMessage } from "@lib/logger";

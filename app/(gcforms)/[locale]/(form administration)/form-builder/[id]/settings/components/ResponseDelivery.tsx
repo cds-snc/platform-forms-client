@@ -34,7 +34,7 @@ import Markdown from "markdown-to-jsx";
 
 import { toast } from "@formBuilder/components/shared/Toast";
 import { ErrorSaving } from "@formBuilder/components/shared/ErrorSaving";
-import { ApiKeyButton } from "../api/components/ApiKeyButton";
+import { ApiKeyButton } from "./ApiKeyButton";
 import { ApiDocNotes } from "./ApiDocNotes";
 import { useFormBuilderConfig } from "@lib/hooks/useFormBuilderConfig";
 
@@ -55,7 +55,7 @@ export enum PurposeOption {
   nonAdmin = "nonAdmin",
 }
 
-export const ResponseDelivery = () => {
+export const ResponseDelivery = ({ isFormsAdmin }: { isFormsAdmin: boolean }) => {
   const { t, i18n } = useTranslation("form-builder");
   const { status } = useSession();
   const session = useSession();
@@ -96,7 +96,11 @@ export const ResponseDelivery = () => {
   );
 
   const { getFlag } = useFeatureFlags();
-  const apiAccess = getFlag("apiAccess");
+  let apiAccess = getFlag("apiAccess");
+
+  if (isFormsAdmin) {
+    apiAccess = true;
+  }
 
   const protectedBSelected = classification === "Protected B";
   const emailLabel = protectedBSelected ? (

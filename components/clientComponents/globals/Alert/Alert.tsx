@@ -87,7 +87,7 @@ const defaultClasses = {
   },
   icon: {
     [ErrorStatus.SUCCESS]: "[&_svg]:fill-emerald-700",
-    [ErrorStatus.WARNING]: "[&_svg]:fill-slate-950",
+    [ErrorStatus.WARNING]: "[&_svg]:fill-yellow-700",
     [ErrorStatus.ERROR]: "[&_svg]:fill-red-700",
     [ErrorStatus.INFO]: "[&_svg]:fill-slate-950",
   },
@@ -101,7 +101,7 @@ const defaultClasses = {
 
 const defaultIconClasses = "h-12 w-12";
 
-const defaultIcons = {
+export const defaultIcons = {
   [ErrorStatus.SUCCESS]: (
     <IconWrapper status={ErrorStatus.SUCCESS}>
       <CircleCheckIcon className={defaultIconClasses} />

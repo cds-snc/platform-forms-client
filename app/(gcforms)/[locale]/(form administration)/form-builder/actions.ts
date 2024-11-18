@@ -263,8 +263,8 @@ export const closeForm = async ({
     const { ability } = await authCheckAndThrow();
 
     // closingDate: null means the form is open, or will be set to be open
-    // closingDate: (now/past date) means the form is closed
-    // closingDate: (future date) means the form is scheduled to close in the future
+    // closingDate: a current or past date means the form is closed
+    // closingDate: a future date means the form is scheduled to close in the future
 
     if (closingDate && !isValidDateString(closingDate)) {
       throw new Error(`Invalid closing date. Request information: { ${formID}, ${closingDate} }`);
