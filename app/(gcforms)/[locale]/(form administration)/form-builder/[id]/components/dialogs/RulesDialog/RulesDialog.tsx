@@ -86,11 +86,11 @@ export const RulesDialog = () => {
 
     const updatedRules = choiceRulesToConditonalRules(elements, choiceRulesRef.current);
     // Update the element rules
-    Object.entries(updatedRules).forEach(([key, value]) => {
-      const element = elements.find((el) => el.id == Number(key));
+    Object.entries(updatedRules).forEach(([elementId, rules]) => {
+      const element = elements.find((el) => el.id == Number(elementId));
       if (!element) return;
-      const properties = { ...element.properties, conditionalRules: value };
-      updateField(getPathString(Number(key), elements), properties);
+      const properties = { ...element.properties, conditionalRules: rules };
+      updateField(getPathString(Number(elementId), elements), properties);
     });
     setIsOpen(false);
   };
