@@ -10,6 +10,7 @@ interface TooltipProps {
   children: React.ReactNode | string;
   side?: "left" | "right" | "top" | "bottom";
   iconTitle?: string;
+  label?: string;
 }
 
 interface TooltipSimpleProps extends TooltipProps {
@@ -81,12 +82,15 @@ const Info = ({
   triggerClassName = "",
   side = "left",
   iconTitle,
+  // Works but an html label would be more future proof - otherwise fails WCAG SC, all controls have a label
+  // TODO update all tooltips to use pass a label, then replace aria-labe with an html label
+  label,
 }: TooltipProps) => {
   return (
     <TooltipPrimitive.Provider delayDuration={100}>
       <TooltipPrimitive.Root>
         <TooltipPrimitive.Trigger asChild>
-          <button className={cn("", triggerClassName)}>
+          <button className={cn("", triggerClassName)} aria-label={label}>
             <HelpIcon {...(iconTitle && { title: iconTitle })} />
           </button>
         </TooltipPrimitive.Trigger>

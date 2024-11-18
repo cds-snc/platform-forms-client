@@ -19,6 +19,7 @@
   "updated": "Setting updated",
   "errorUpdating": "Error updating setting",
   "settingNotFound": "Setting not found",
+  "help": "help",
   "error": {
     "save": "Error saving data",
     "duplicateId": "Duplicate internal ID, please select another"
@@ -30,5 +31,22 @@
     "descriptionEn": "English description",
     "descriptionFr": "French description",
     "value": "Value for this setting"
+  },
+  "throttling": {
+    "title": "Throttling Rate",
+    "description": "Increase throttling rate for up to 12 weeks",
+    "weeks": "Weeks",
+    "permanent": "Permanently increase throttling rate",
+    "updateRate": "Update rate",
+    "resetRate": "Reset rate",
+    "tooltip": "Checking this disables scheduling a rate. To schedule a rate, uncheck this and the Weeks input will be enabled to schedule a throttling rate.",
+    "succcessUpdate": {
+      "title": "Throttling rate increased.",
+      "description": "Rate will stay in effect until: {{success}}"
+    },
+    "succcessReset": {
+      "title": "Throttling rate reset."
+    },
+    "error": "Error updating throttling rate."
   }
 }
