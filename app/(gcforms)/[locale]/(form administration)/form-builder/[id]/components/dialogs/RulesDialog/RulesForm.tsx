@@ -18,7 +18,7 @@ export const RulesForm = ({
   tryLogicView,
   choiceRulesRef,
   mode,
-  optionId,
+  selectedOptionId,
 }: {
   item: FormElementWithIndex;
   setItem: (item: FormElementWithIndex) => void;
@@ -26,7 +26,7 @@ export const RulesForm = ({
   tryLogicView: () => void;
   choiceRulesRef: React.MutableRefObject<ChoiceRule[]>;
   mode: "add" | "edit";
-  optionId: string | null;
+  selectedOptionId: string | null;
 }) => {
   const { t } = useTranslation("form-builder");
   const formId = `form-${Date.now()}`;
@@ -43,8 +43,8 @@ export const RulesForm = ({
     itemId: item.id,
   });
 
-  if (mode === "add" && optionId) {
-    initialChoiceRules.push({ elementId: String(item.id), choiceId: optionId });
+  if (mode === "add" && selectedOptionId) {
+    initialChoiceRules.push({ elementId: String(item.id), choiceId: selectedOptionId });
   }
 
   if (initialChoiceRules.length == 0) {

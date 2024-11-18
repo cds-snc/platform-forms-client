@@ -34,7 +34,7 @@ export const RulesDialog = () => {
 
   const [mode, setMode] = React.useState<"add" | "edit">("add");
   const [item, setItem] = React.useState<FormElementWithIndex | undefined>(undefined);
-  const [optionId, setOptionId] = React.useState<string | null>(null);
+  const [selectedOptionId, setSelectedOptionId] = React.useState<string | null>(null);
 
   const choiceRulesRef = React.useRef<ChoiceRule[]>([]);
 
@@ -59,7 +59,7 @@ export const RulesDialog = () => {
         const freshItem = getFormElementWithIndexById(detail.itemId);
         setItem(freshItem);
         setMode(detail.mode);
-        setOptionId(detail.optionId);
+        setSelectedOptionId(detail.optionId);
         setIsOpen(true);
       }
     },
@@ -148,7 +148,7 @@ export const RulesDialog = () => {
             </p>
             <RulesForm
               mode={mode}
-              optionId={optionId}
+              selectedOptionId={selectedOptionId}
               item={item}
               setItem={setItem}
               descriptionId={descriptionId}
