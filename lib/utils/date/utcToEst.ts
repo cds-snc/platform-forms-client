@@ -1,7 +1,11 @@
-export const formClosingDateEst = (utcDate: string, lang: string = "en") => {
+export const formClosingDateEst = (
+  utcDate: string,
+  lang: string = "en",
+  customOptions?: Intl.DateTimeFormatOptions
+) => {
   const date = new Date(utcDate);
 
-  const options: Intl.DateTimeFormatOptions = {
+  const options: Intl.DateTimeFormatOptions = customOptions || {
     timeZone: "America/New_York",
     year: "numeric",
     month: "long",
