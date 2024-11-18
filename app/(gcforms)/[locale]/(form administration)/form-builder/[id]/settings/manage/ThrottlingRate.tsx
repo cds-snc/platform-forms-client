@@ -97,6 +97,7 @@ export const ThrottlingRate = ({ formId }: { formId: string }) => {
     }
   };
 
+  const throttlingErrorString = t("throttling.error");
   useEffect(() => {
     const getThrottlingSetting = async () => {
       try {
@@ -110,14 +111,14 @@ export const ThrottlingRate = ({ formId }: { formId: string }) => {
           setWeeks(String(secondsAsWeeks));
         }
       } catch (error) {
-        toast.error(t("throttling.error"));
+        toast.error(throttlingErrorString);
       } finally {
         setLoadedSetting(true);
       }
     };
     setLoadedSetting(false);
     getThrottlingSetting();
-  }, [formId, t]);
+  }, [formId, throttlingErrorString]);
 
   return (
     <div className="mb-20">
