@@ -45,7 +45,6 @@ export const RulesDialog = () => {
     updateField: s.updateField,
   }));
 
-  // const isRichText = item?.type == "richText"; // @TODO: check?
   const descriptionId = `descriptionId-${Date.now()}`;
 
   const handleOpenDialog = useCallback(
