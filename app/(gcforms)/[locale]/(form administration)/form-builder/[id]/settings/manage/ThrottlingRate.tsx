@@ -107,8 +107,9 @@ export const ThrottlingRate = ({ formId }: { formId: string }) => {
           setPermanent(true);
         }
         if (rate && expires > 0) {
-          const secondsAsWeeks = getSecondsInWeeks(expires - Date.now());
-          setWeeks(String(secondsAsWeeks));
+          const secondsAsWeeks = String(getSecondsInWeeks(expires - Date.now()));
+          setWeeks(secondsAsWeeks);
+          lastValueForWeeks.current = secondsAsWeeks;
         }
       } catch (error) {
         toast.error(throttlingErrorString);
