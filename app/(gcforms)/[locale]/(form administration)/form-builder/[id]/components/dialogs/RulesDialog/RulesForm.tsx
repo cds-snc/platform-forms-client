@@ -32,10 +32,9 @@ export const RulesForm = ({
   const formId = `form-${Date.now()}`;
   const [showLogicDetails, setShowLogicDetails] = useState(false);
 
-  const { elements, form, groupsEnabled } = useTemplateStore((s) => ({
+  const { elements, form } = useTemplateStore((s) => ({
     elements: s.form.elements,
     form: s.form,
-    groupsEnabled: s.getGroupsEnabled(),
   }));
 
   const initialChoiceRules = getElementsWithRuleForChoice({
@@ -59,9 +58,7 @@ export const RulesForm = ({
 
   let sortedElements = sortByLayout({ layout: form.layout, elements: elements });
 
-  if (groupsEnabled) {
-    sortedElements = sortByGroups({ form: form, elements: elements });
-  }
+  sortedElements = sortByGroups({ form: form, elements: elements });
 
   const updateElementId = (index: number, id: string) => {
     const rules = [...choiceRules];
