@@ -1,9 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { HealthCheckBox } from "@clientComponents/globals/HealthCheckBox/HealthCheckBox";
-import { useParams } from "next/navigation";
-
-import { useFormBuilderConfig } from "@lib/hooks/useFormBuilderConfig";
 import { newResponsesExist } from "../actions";
 
 const ResponsesAvailable = () => {
@@ -22,12 +19,8 @@ const ResponsesAvailable = () => {
   );
 };
 
-/* @TODO: get rid of dependency on checking hasApiKeyId as we are now splitting at page level */
 export const SystemStatus = ({ formId }: { formId: string }) => {
   const { t } = useTranslation("form-builder");
-  const { statusFilter } = useParams<{ statusFilter: string }>();
-  const { hasApiKeyId } = useFormBuilderConfig();
-
   const [checkingApiSubmissions, setCheckingApiSubmissions] = useState(true);
   const [hasApiSubmissions, setHasApiSubmissions] = useState(false);
 
@@ -39,14 +32,9 @@ export const SystemStatus = ({ formId }: { formId: string }) => {
       }
       setCheckingApiSubmissions(false);
     };
-    if (hasApiKeyId) {
-      getApiSubmissions();
-    }
-  }, [hasApiKeyId, formId]);
 
-  if (statusFilter !== "confirmed") {
-    return null;
-  }
+    getApiSubmissions();
+  }, [formId]);
 
   return (
     <div>
