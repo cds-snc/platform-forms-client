@@ -37,7 +37,7 @@ export const ClientContainer = ({
       <>
         <div className="mr-10">
           <h1>{t("apiDashboard.title")}</h1>
-          <SystemStatus />
+          <SystemStatus formId={id} />
           <Responses responseDownloadLimit={responseDownloadLimit} overdueAfter={overdueAfter} />
         </div>
       </>

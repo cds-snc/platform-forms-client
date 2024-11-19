@@ -298,6 +298,10 @@
     "problems": {
       "title": "Problems",
       "description": "<a href='' target='_blank'>Learn about problems</a>"
+    },
+    "unconfirmed": {
+      "title": "Delivery status: waiting",
+      "description": "Responses awaiting API delivery"
     }
   }
 }
