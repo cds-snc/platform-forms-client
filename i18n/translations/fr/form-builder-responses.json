@@ -287,6 +287,24 @@
     "title": "Réponses"
   },
   "systemHealth": {
-    "contactSupport": "<a href='' target='_blank'>Contact Support</a> [FR]"
+    "contactSupport": {
+      "title": "Contact Support [FR]",
+      "description": "<a href='' target='_blank'>Contact Support</a> [FR]"
+    },
+    "throttling": {
+      "title": "Throttling [FR]",
+      "description": "<a href='' target='_blank'>Learn about throttling</a> [FR]"
+    },
+    "problems": {
+      "title": "Problems [FR]",
+      "description": "<a href='' target='_blank'>Learn about problems</a> [FR]"
+    },
+    "unconfirmed": {
+      "title": "Delivery status: waiting [FR]",
+      "description": "Responses awaiting API delivery [FR]",
+      "new": "New [FR]",
+      "responses": "responses [FR]",
+      "available": "available [FR]"
+    }
   }
 }

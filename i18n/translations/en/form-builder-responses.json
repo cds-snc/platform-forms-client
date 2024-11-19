@@ -301,7 +301,10 @@
     },
     "unconfirmed": {
       "title": "Delivery status: waiting",
-      "description": "Responses awaiting API delivery"
+      "description": "Responses awaiting API delivery",
+      "new": "New",
+      "responses": "responses",
+      "available": "available"
     }
   }
 }
