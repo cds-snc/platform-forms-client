@@ -19,6 +19,7 @@
   "updated": "Paramètre mis à jour",
   "errorUpdating": "Erreur lors de la mise à jour du paramètre",
   "settingNotFound": "Paramètre non trouvé",
+  "help": "[FR]help",
   "error": {
     "save": "Erreur d'enregistrement des données",
     "duplicateId": "Il s'agit d'un double de l'identifiant interne, veuillez en sélectionner un autre."
@@ -30,5 +31,22 @@
     "descriptionEn": "Description en anglais",
     "descriptionFr": "Description en français",
     "value": "Valeur de ce paramètre"
+  },
+  "throttling": {
+    "title": "[FR]Throttling Rate",
+    "description": "[FR]Increase throttling rate for up to 12 weeks",
+    "weeks": "[FR]Weeks",
+    "permanent": "[FR]Permanently increase throttling rate",
+    "updateRate": "[FR]Update rate",
+    "resetRate": "[FR]Reset rate",
+    "tooltip": "[FR]Checking this disables scheduling a rate. To schedule a rate, uncheck this and the Weeks input will be enabled to schedule a throttling rate.",
+    "succcessUpdate": {
+      "title": "[FR]Throttling rate increased.",
+      "description": "[FR]Rate will stay in effect until: {{success}}"
+    },
+    "succcessReset": {
+      "title": "[FR]Throttling rate reset."
+    },
+    "error": "[FR]Error updating throttling rate."
   }
 }

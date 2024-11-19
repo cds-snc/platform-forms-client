@@ -28,7 +28,7 @@ export const NoResponses = ({ statusFilter, formId }: { statusFilter: string; fo
 
   return (
     <>
-      {statusFilter === VaultStatus.NEW && (
+      {!hasApiKeyId && statusFilter === VaultStatus.NEW && (
         <Card
           icon={<Image src="/img/mailbox.svg" alt="" width="200" height="200" />}
           title={t("downloadResponsesTable.card.noNewResponses")}
@@ -37,7 +37,7 @@ export const NoResponses = ({ statusFilter, formId }: { statusFilter: string; fo
           headingStyle="gc-h2 text-[#748094]"
         />
       )}
-      {statusFilter === VaultStatus.DOWNLOADED && (
+      {!hasApiKeyId && statusFilter === VaultStatus.DOWNLOADED && (
         <Card
           icon={<Image src="/img/mailbox.svg" alt="" width="200" height="200" />}
           title={t("downloadResponsesTable.card.noDownloadedResponses")}
@@ -56,7 +56,7 @@ export const NoResponses = ({ statusFilter, formId }: { statusFilter: string; fo
         />
       )}
 
-      {statusFilter === VaultStatus.PROBLEM && (
+      {!hasApiKeyId && statusFilter === VaultStatus.PROBLEM && (
         <>
           <h1 className="visually-hidden">{t("tabs.problemResponses.title")}</h1>
           <Card
