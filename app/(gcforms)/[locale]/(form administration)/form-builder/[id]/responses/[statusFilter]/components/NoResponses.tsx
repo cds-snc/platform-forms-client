@@ -72,7 +72,7 @@ export const NoResponses = ({ statusFilter, formId }: { statusFilter: string; fo
         */}
       {hasApiKeyId && !checkingApiSubmissions && !hasApiSubmissions && (
         <Card
-          icon={<Image src="/img/mailbox.svg" alt="" width="200" height="200" />}
+          icon={<Image src="/img/butterfly_noresponses.svg" alt="" width="200" height="200" />}
           title={t("downloadResponsesTable.card.noNewResponsesApi")}
           content={t("downloadResponsesTable.card.noNewResponsesApiMessage")}
           headingTag={HeadingLevel.H1}
@@ -87,7 +87,7 @@ export const NoResponses = ({ statusFilter, formId }: { statusFilter: string; fo
 
       {!checkingApiSubmissions && hasApiKeyId && hasApiSubmissions && (
         <Card
-          icon={<Image src="/img/mailbox.svg" alt="" width="200" height="200" />}
+          icon={<Image src="/img/flower_responses.svg" alt="" width="200" height="200" />}
           title={t("downloadResponsesTable.card.apiResponsesAvailable")}
           content={t("downloadResponsesTable.card.apiResponsesAvailableMessage")}
           headingTag={HeadingLevel.H1}
