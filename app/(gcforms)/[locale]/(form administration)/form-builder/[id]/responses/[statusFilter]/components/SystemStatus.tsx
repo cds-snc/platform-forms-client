@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { HealthCheckBox } from "@clientComponents/globals/HealthCheckBox/HealthCheckBox";
+import { useParams } from "next/navigation";
 
 import { useFormBuilderConfig } from "@lib/hooks/useFormBuilderConfig";
 import { newResponsesExist } from "../actions";
@@ -23,6 +24,7 @@ const ResponsesAvailable = () => {
 
 export const SystemStatus = ({ formId }: { formId: string }) => {
   const { t } = useTranslation("form-builder");
+  const { statusFilter } = useParams<{ statusFilter: string }>();
   const { hasApiKeyId } = useFormBuilderConfig();
 
   const [checkingApiSubmissions, setCheckingApiSubmissions] = useState(true);
@@ -40,6 +42,10 @@ export const SystemStatus = ({ formId }: { formId: string }) => {
       getApiSubmissions();
     }
   }, [hasApiKeyId, formId]);
+
+  if (statusFilter !== "confirmed") {
+    return null;
+  }
 
   return (
     <div>
