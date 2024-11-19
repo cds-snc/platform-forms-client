@@ -13,12 +13,14 @@ interface Props {
   onKeyDown?: (e: React.KeyboardEvent<HTMLInputElement>) => void;
   className?: string;
   min?: string;
+  max?: string;
   ref?: React.RefObject<HTMLInputElement>;
   theme?: "default" | "title" | "error";
   isInvalid?: boolean;
   lang?: string;
   onBlur?: FocusEventHandler;
   onFocus?: FocusEventHandler;
+  disabled?: boolean;
 }
 
 type Ref = HTMLInputElement;
@@ -35,12 +37,14 @@ const Input = React.forwardRef<Ref, Props>((props, ref) => {
     className,
     placeholder,
     min,
+    max,
     type = "text",
     theme = "default",
     isInvalid = false,
     lang,
     onBlur,
     onFocus,
+    disabled,
   } = props;
   const themes = {
     default:
@@ -59,6 +63,7 @@ const Input = React.forwardRef<Ref, Props>((props, ref) => {
       aria-invalid={isInvalid ? true : false}
       type={type}
       min={min}
+      {...(max !== undefined && { max })}
       className={`${className} ${themes[theme]}`}
       value={value}
       placeholder={placeholder}
@@ -70,6 +75,7 @@ const Input = React.forwardRef<Ref, Props>((props, ref) => {
       ref={ref}
       {...(lang && { lang: lang })}
       autoComplete="off"
+      {...(disabled !== undefined && { disabled })}
     />
   );
 });
