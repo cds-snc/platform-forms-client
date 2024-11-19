@@ -371,9 +371,12 @@ const createTemplateStore = (initProps?: Partial<InitialTemplateStoreProps>) => 
                 const element = JSON.parse(JSON.stringify(state.form.elements[elIndex]));
                 element.id = id;
                 if (element.type !== "richText") {
-                  element.properties[state.localizeField("title")] = `${
-                    element.properties[state.localizeField("title")]
-                  } copy`;
+                  const regExRemovePastCount = /\s\(\d{1,3}\)$/;
+                  const title = element.properties[state.localizeField("title")].replace(
+                    regExRemovePastCount,
+                    ""
+                  );
+                  element.properties[state.localizeField("title")] = `${title} (${elIndex + 1})`;
                 }
                 state.form.elements.splice(elIndex + 1, 0, element);
                 state.form.layout.splice(elIndex + 1, 0, id);
