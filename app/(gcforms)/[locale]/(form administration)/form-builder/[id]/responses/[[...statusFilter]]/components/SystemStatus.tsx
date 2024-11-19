@@ -22,6 +22,7 @@ const ResponsesAvailable = () => {
   );
 };
 
+/* @TODO: get rid of dependency on checking hasApiKeyId as we are now splitting at page level */
 export const SystemStatus = ({ formId }: { formId: string }) => {
   const { t } = useTranslation("form-builder");
   const { statusFilter } = useParams<{ statusFilter: string }>();

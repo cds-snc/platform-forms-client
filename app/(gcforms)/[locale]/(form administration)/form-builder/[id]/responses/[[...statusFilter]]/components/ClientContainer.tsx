@@ -9,13 +9,16 @@ import { ManageFormAccessDialogContainer } from "./ManageFormAccessDialog";
 import { useFormBuilderConfig } from "@lib/hooks/useFormBuilderConfig";
 import { useTranslation } from "@i18n/client";
 import { SystemStatus } from "./SystemStatus";
+import { StatusFilter } from "../page";
 
 export const ClientContainer = ({
   responseDownloadLimit,
   overdueAfter,
+  statusFilter,
 }: {
   responseDownloadLimit: number;
   overdueAfter: number;
+  statusFilter: StatusFilter;
 }) => {
   const { t } = useTranslation("form-builder-responses");
   const { isPublished, id, deliveryOption } = useTemplateStore((s) => ({
@@ -38,7 +41,11 @@ export const ClientContainer = ({
         <div className="mr-10">
           <h1>{t("apiDashboard.title")}</h1>
           <SystemStatus formId={id} />
-          <Responses responseDownloadLimit={responseDownloadLimit} overdueAfter={overdueAfter} />
+          <Responses
+            statusFilter={statusFilter}
+            responseDownloadLimit={responseDownloadLimit}
+            overdueAfter={overdueAfter}
+          />
         </div>
       </>
     );
@@ -64,7 +71,11 @@ export const ClientContainer = ({
     <>
       <div className="mr-10">
         <NavigationTabs formId={id} />
-        <Responses responseDownloadLimit={responseDownloadLimit} overdueAfter={overdueAfter} />
+        <Responses
+          statusFilter={statusFilter}
+          responseDownloadLimit={responseDownloadLimit}
+          overdueAfter={overdueAfter}
+        />
         <ResponsesFooter formId={id} />
       </div>
       <ManageFormAccessDialogContainer formId={id} />
