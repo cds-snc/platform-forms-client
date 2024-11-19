@@ -972,7 +972,7 @@
       "label": "Receive responses by email",
       "note": "Not available for PROTECTED B"
     },
-        "apiOption": {
+    "apiOption": {
       "label": "Receive responses via API",
       "note": "Submitted responses will be available for retrieval through an API endpoint and the Response page.",
       "startNote": "Start your API integration by creating a private API Key"
@@ -1278,5 +1278,8 @@
       "save": "Save",
       "cancel": "Cancel"
     }
+  },
+  "systemHealthCheck": {
+    "title": "System health check"
   }
 }

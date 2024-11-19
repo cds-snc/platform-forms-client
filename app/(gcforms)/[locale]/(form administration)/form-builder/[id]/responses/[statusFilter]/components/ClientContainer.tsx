@@ -8,6 +8,7 @@ import { Responses } from "./Responses";
 import { ManageFormAccessDialogContainer } from "./ManageFormAccessDialog";
 import { useFormBuilderConfig } from "@lib/hooks/useFormBuilderConfig";
 import { useTranslation } from "@i18n/client";
+import { SystemStatus } from "./SystemStatus";
 
 export const ClientContainer = ({
   responseDownloadLimit,
@@ -36,6 +37,7 @@ export const ClientContainer = ({
       <>
         <div className="mr-10">
           <h1>{t("apiDashboard.title")}</h1>
+          <SystemStatus formId={id} />
           <Responses responseDownloadLimit={responseDownloadLimit} overdueAfter={overdueAfter} />
         </div>
       </>

@@ -28,7 +28,7 @@ export const NoResponses = ({ statusFilter, formId }: { statusFilter: string; fo
 
   return (
     <>
-      {statusFilter === VaultStatus.NEW && (
+      {!hasApiKeyId && statusFilter === VaultStatus.NEW && (
         <Card
           icon={<Image src="/img/mailbox.svg" alt="" width="200" height="200" />}
           title={t("downloadResponsesTable.card.noNewResponses")}
@@ -37,7 +37,7 @@ export const NoResponses = ({ statusFilter, formId }: { statusFilter: string; fo
           headingStyle="gc-h2 text-[#748094]"
         />
       )}
-      {statusFilter === VaultStatus.DOWNLOADED && (
+      {!hasApiKeyId && statusFilter === VaultStatus.DOWNLOADED && (
         <Card
           icon={<Image src="/img/mailbox.svg" alt="" width="200" height="200" />}
           title={t("downloadResponsesTable.card.noDownloadedResponses")}
@@ -56,7 +56,7 @@ export const NoResponses = ({ statusFilter, formId }: { statusFilter: string; fo
         />
       )}
 
-      {statusFilter === VaultStatus.PROBLEM && (
+      {!hasApiKeyId && statusFilter === VaultStatus.PROBLEM && (
         <>
           <h1 className="visually-hidden">{t("tabs.problemResponses.title")}</h1>
           <Card
@@ -72,7 +72,7 @@ export const NoResponses = ({ statusFilter, formId }: { statusFilter: string; fo
         */}
       {hasApiKeyId && !checkingApiSubmissions && !hasApiSubmissions && (
         <Card
-          icon={<Image src="/img/mailbox.svg" alt="" width="200" height="200" />}
+          icon={<Image src="/img/butterfly_noresponses.svg" alt="" width="200" height="200" />}
           title={t("downloadResponsesTable.card.noNewResponsesApi")}
           content={t("downloadResponsesTable.card.noNewResponsesApiMessage")}
           headingTag={HeadingLevel.H1}
@@ -87,7 +87,7 @@ export const NoResponses = ({ statusFilter, formId }: { statusFilter: string; fo
 
       {!checkingApiSubmissions && hasApiKeyId && hasApiSubmissions && (
         <Card
-          icon={<Image src="/img/mailbox.svg" alt="" width="200" height="200" />}
+          icon={<Image src="/img/flower_responses.svg" alt="" width="200" height="200" />}
           title={t("downloadResponsesTable.card.apiResponsesAvailable")}
           content={t("downloadResponsesTable.card.apiResponsesAvailableMessage")}
           headingTag={HeadingLevel.H1}
