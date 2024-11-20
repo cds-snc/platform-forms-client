@@ -206,6 +206,7 @@ export const getSubmissionsByFormat = async ({
     const fullFormTemplate = await getFullTemplateByID(ability, formID);
 
     if (fullFormTemplate === null) {
+      logMessage.warn(`getSubmissionsByFormat form not found: ${formID}`);
       throw new FormBuilderError("Form not found", FormServerErrorCodes.FORM_NOT_FOUND);
     }
 
@@ -394,7 +395,11 @@ export const getSubmissionsByFormat = async ({
         );
     }
   } catch (err) {
-    logMessage.error(`Could not create submissions in format ${format}: ${(err as Error).message}`);
+    logMessage.warn(
+      `Could not create submissions in format ${format} formId: ${formID}: ${
+        (err as Error).message
+      }`
+    );
 
     if (err instanceof FormBuilderError) {
       return {
