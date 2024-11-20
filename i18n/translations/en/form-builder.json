@@ -621,6 +621,7 @@
   "selectAutocompleteHint": "This option is great when the form filler is providing personal information like their address, email or phone number.",
   "selectElement": "Select an element type",
   "send": "Send",
+  "copy": "copy",
   "settings": {
     "formManagement": "Form management",
     "api": {
