@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Card, HeadingLevel } from "@clientComponents/globals/card/Card";
+import { Card, HeadingLevel, Text } from "@clientComponents/globals/card/Card";
 import Image from "next/image";
 import { useTranslation } from "react-i18next";
 import { useFormBuilderConfig } from "@lib/hooks/useFormBuilderConfig";
@@ -77,28 +77,29 @@ export const NoResponses = ({
           API user has no responses available
         */}
       {hasApiKeyId && !checkingApiSubmissions && !hasApiSubmissions && (
-        <Card
-          icon={<Image src="/img/butterfly_noresponses.svg" alt="" width="200" height="200" />}
-          title={t("downloadResponsesTable.card.noNewResponsesApi")}
-          content={t("downloadResponsesTable.card.noNewResponsesApiMessage")}
-          headingTag={HeadingLevel.H1}
-          headingStyle="gc-h2 text-[#748094]"
-        />
+        <Card icon={<Image src="/img/butterfly_noresponses.svg" alt="" width="200" height="200" />}>
+          <div className="max-w-[600px]">
+            <h3 className="mb-4 text-slate-500">
+              <Text i18nKey="downloadResponsesTable.card.noNewResponsesApiTitle" />
+            </h3>
+            <Text i18nKey="downloadResponsesTable.card.noNewResponsesApiMessage" />
+          </div>
+        </Card>
       )}
 
       {/* 
           No responses are available for this view 
           but there are submissions available for API retreival 
         */}
-
       {!checkingApiSubmissions && hasApiKeyId && hasApiSubmissions && (
-        <Card
-          icon={<Image src="/img/flower_responses.svg" alt="" width="200" height="200" />}
-          title={t("downloadResponsesTable.card.apiResponsesAvailable")}
-          content={t("downloadResponsesTable.card.apiResponsesAvailableMessage")}
-          headingTag={HeadingLevel.H1}
-          headingStyle="gc-h2 text-[#748094]"
-        />
+        <Card icon={<Image src="/img/flower_responses.svg" alt="" width="200" height="200" />}>
+          <div className="max-w-[600px]">
+            <h3 className="mb-4 text-slate-500">
+              <Text i18nKey="downloadResponsesTable.card.apiResponsesAvailableTitle" />
+            </h3>
+            <Text i18nKey="downloadResponsesTable.card.apiResponsesAvailableMessage" />
+          </div>
+        </Card>
       )}
     </>
   );

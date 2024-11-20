@@ -149,10 +149,10 @@
       "noDeletedResponsesMessage": "Une fois que vous aurez téléchargé et approuvé la suppression des réponses, celles-ci seront disponibles ici pendant 30 jours.",
       "noProblemResponses": "Aucune réponse signalée avec problème",
       "noProblemResponsesMessage": "Les réponses signalées avec problèmes apparaîtront ici jusqu'à ce qu'elles soient approuvées pour leur suppression de Formulaires GC.",
-      "noNewResponsesApi": "Aucune réponse n'est disponible pour être récupérée par l'intermédiaire de l'API",
-      "noNewResponsesApiMessage": "Les réponses soumises au formulaire apparaîtront ici et seront disponible dans Formulaires GC pendant 45 jours.",
-      "apiResponsesAvailable": "Responses are available [FR]",
-      "apiResponsesAvailableMessage": "Please use the API to retrieve responses. [FR]"
+      "noNewResponsesApiTitle": "No responses waiting for API delivery [FR]",
+      "noNewResponsesApiMessage": "<p className='mb-2'>Once delivered through our API, the delivered responses will appear here and be available in GC Forms for 30 days.</p><p>Read more about <a href='#' target='_blank'>API development</a> in our guidance (opens new tab)</p> [FR]",
+      "apiResponsesAvailableTitle": "Responses waiting for API delivery [FR]",
+      "apiResponsesAvailableMessage": "<p className='mb-2'>Once delivered through our API, the delivered responses will appear here and be available in GC Forms for 30 days.</p><p>Read more about <a href='#' target='_blank'>API development</a> in our guidance (opens new tab)</p> [FR]"
     },
     "notifications": {
       "downloadComplete": "Réponses déplacées vers l'onglet « Téléchargements »",

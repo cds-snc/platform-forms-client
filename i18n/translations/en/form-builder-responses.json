@@ -149,10 +149,10 @@
       "noDeletedResponsesMessage": "Once you’ve downloaded and signed off on the removal of responses, they will be available here for 30 days.",
       "noProblemResponses": "No responses reported with problems",
       "noProblemResponsesMessage": "Problem responses will appear here until signed off for removal from GC Forms.",
-      "noNewResponsesApi": "No responses available for API retrieval",
-      "noNewResponsesApiMessage": "Submitted form responses will appear here and be available in GC Forms for 45 days.",
-      "apiResponsesAvailable": "Responses are available",
-      "apiResponsesAvailableMessage": "Please use the API to retrieve responses."
+      "noNewResponsesApiTitle": "No responses waiting for API delivery",
+      "noNewResponsesApiMessage": "<p className='mb-2'>Once delivered through our API, the delivered responses will appear here and be available in GC Forms for 30 days.</p><p>Read more about <a href='#' target='_blank'>API development</a> in our guidance (opens new tab)</p>",
+      "apiResponsesAvailableTitle": "Responses waiting for API delivery",
+      "apiResponsesAvailableMessage": "<p className='mb-2'>Once delivered through our API, the delivered responses will appear here and be available in GC Forms for 30 days.</p><p>Read more about <a href='#' target='_blank'>API development</a> in our guidance (opens new tab)</p>"
     },
     "notifications": {
       "downloadComplete": "Responses moved to the “Downloaded” tab",
