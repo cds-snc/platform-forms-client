@@ -296,8 +296,8 @@
       "description": "<a href='' target='_blank'>Learn about throttling</a>"
     },
     "problems": {
-      "title": "Problems",
-      "description": "<a href='' target='_blank'>Learn about problems</a>"
+      "title": "Problems reported",
+      "description": "<a href='' target='_blank'>Contact Support</a>"
     },
     "unconfirmed": {
       "title": "Delivery status: waiting",
