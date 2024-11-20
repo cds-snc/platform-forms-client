@@ -37,16 +37,16 @@
     "description": "Increase API rate limit for up to 12 weeks",
     "weeks": "weeks",
     "permanent": "Increase API rate limit indefinitely",
-    "updateRate": "Update API rate",
+    "updateRate": "Modify API rate",
     "resetRate": "Reset API rate",
-    "tooltip": "Checking this will not schedule the API rate for a specific period of time. To schedule an end to customized API throttling, uncheck this and the 'weeks' input will be enabled to schedule an end to the updated throttling rate.",
+    "tooltip": "Checking this will not schedule the API rate for a specific period of time. To schedule an end to the API rate, uncheck this and the 'weeks' input will be enabled.",
     "succcessUpdate": {
       "title": "API rate increased",
-      "description": "Throttling will stay in effect until: {{success}}"
+      "description": "This API rate will stay in effect until: {{success}}"
     },
     "succcessReset": {
       "title": "API rate was reset successfully."
     },
-    "error": "API rate could not be updated. Try again later."
+    "error": "API rate could not be modified. Try again later."
   }
 }
