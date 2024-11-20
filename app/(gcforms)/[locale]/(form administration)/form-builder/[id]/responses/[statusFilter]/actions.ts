@@ -395,7 +395,11 @@ export const getSubmissionsByFormat = async ({
         );
     }
   } catch (err) {
-    logMessage.error(`Could not create submissions in format ${format}: ${(err as Error).message}`);
+    logMessage.error(
+      `Could not create submissions in format ${format} formId: ${formID}: ${
+        (err as Error).message
+      }`
+    );
 
     if (err instanceof FormBuilderError) {
       return {
