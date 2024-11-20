@@ -7,16 +7,21 @@ import { ResponsesFooter } from "./ResponsesFooter";
 import { Responses } from "./Responses";
 import { ManageFormAccessDialogContainer } from "./ManageFormAccessDialog";
 import { StatusFilter } from "../types";
+import { useTranslation } from "@i18n/client";
 
 export const ResponsesContainer = ({
   responseDownloadLimit,
   overdueAfter,
   statusFilter,
+  isApiRetrieval,
 }: {
   responseDownloadLimit: number;
   overdueAfter: number;
   statusFilter: StatusFilter;
+  isApiRetrieval: boolean;
 }) => {
+  const { t } = useTranslation("form-builder-responses");
+
   const { isPublished, id, deliveryOption } = useTemplateStore((s) => ({
     isPublished: s.isPublished,
     id: s.id,
@@ -27,6 +32,22 @@ export const ResponsesContainer = ({
 
   // Wait until the template store is fully hydrated before rendering the content
   if (!isReady) return null;
+
+  if (isApiRetrieval) {
+    return (
+      <>
+        <div className="mr-10">
+          <h1>{t("apiDashboard.title")}</h1>
+          <Responses
+            statusFilter={statusFilter}
+            responseDownloadLimit={responseDownloadLimit}
+            overdueAfter={overdueAfter}
+            isApiRetrieval={true}
+          />
+        </div>
+      </>
+    );
+  }
 
   // Delivery option is Email
   if (deliveryOption && isEmailDelivery(deliveryOption)) {

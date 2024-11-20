@@ -4,7 +4,6 @@ import { getAppSetting } from "@lib/appSettings";
 import { authCheckAndThrow } from "@lib/actions";
 import { LoggedOutTab, LoggedOutTabName } from "@serverComponents/form-builder/LoggedOutTab";
 import { checkKeyExists } from "@lib/serviceAccount";
-import { ResponsesApiContainer } from "./components/ResponsesApiContainer";
 import { ResponsesContainer } from "./components/ResponsesContainer";
 import { redirect } from "next/navigation";
 import { StatusFilter } from "./types";
@@ -120,21 +119,12 @@ export default async function Page({
     isApiRetrieval
   );
 
-  if (isApiRetrieval) {
-    return (
-      <ResponsesApiContainer
-        responseDownloadLimit={Number(await getAppSetting("responseDownloadLimit"))}
-        overdueAfter={Number(await getAppSetting("nagwarePhaseEncouraged"))}
-        statusFilter={StatusFilter.CONFIRMED}
-      />
-    );
-  }
-
   return (
     <ResponsesContainer
       responseDownloadLimit={Number(await getAppSetting("responseDownloadLimit"))}
       overdueAfter={Number(await getAppSetting("nagwarePhaseEncouraged"))}
       statusFilter={statusFilter as StatusFilter}
+      isApiRetrieval={isApiRetrieval}
     />
   );
 }
