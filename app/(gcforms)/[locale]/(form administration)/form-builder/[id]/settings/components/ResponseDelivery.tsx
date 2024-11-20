@@ -413,12 +413,7 @@ export const ResponseDelivery = ({ isFormsAdmin }: { isFormsAdmin: boolean }) =>
                       {t("formSettingsModal.apiOption.startNote")}
                     </span>
                   </div>
-                  <div className="flex">
-                    <ApiKeyButton showDelete />{" "}
-                    <div className="mt-2">
-                      <ResponseDeliveryHelpButtonWithApi />
-                    </div>
-                  </div>
+                  <ApiKeyButton showDelete />
                   <ApiDocNotes />
                 </div>
               )}
