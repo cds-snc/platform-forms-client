@@ -6,7 +6,7 @@ import { NavigationTabs } from "./NavigationTabs";
 import { ResponsesFooter } from "./ResponsesFooter";
 import { Responses } from "./Responses";
 import { ManageFormAccessDialogContainer } from "./ManageFormAccessDialog";
-import { StatusFilter } from "../page";
+import { StatusFilter } from "../types";
 
 export const ResponsesContainer = ({
   responseDownloadLimit,

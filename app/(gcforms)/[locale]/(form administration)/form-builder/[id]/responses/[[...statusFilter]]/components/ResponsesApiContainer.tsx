@@ -2,7 +2,7 @@
 import { useRehydrate } from "@lib/store/useTemplateStore";
 import { Responses } from "./Responses";
 import { useTranslation } from "@i18n/client";
-import { StatusFilter } from "../page";
+import { StatusFilter } from "../types";
 
 export const ResponsesApiContainer = ({
   responseDownloadLimit,

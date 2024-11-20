@@ -10,7 +10,7 @@ import { useTranslation } from "@i18n/client";
 import { SkipLinkReusable } from "@clientComponents/globals/SkipLinkReusable";
 import Link from "next/link";
 import { TableActions, initialTableItemsState, reducerTableItems } from "./DownloadTableReducer";
-import { getDaysPassed, ucfirst } from "@lib/client/clientHelpers";
+import { getDaysPassed } from "@lib/client/clientHelpers";
 import { Alert } from "@clientComponents/globals";
 import { CheckAll } from "./CheckAll";
 import { DownloadButton } from "./DownloadButton";
@@ -24,6 +24,7 @@ import { Pagination } from "./Pagination";
 import { cn } from "@lib/utils";
 import { NextStep } from "./NextStep";
 import { Tooltip } from "@formBuilder/components/shared/Tooltip";
+import { StatusFilter } from "../types";
 
 interface DownloadTableProps {
   vaultSubmissions: VaultSubmissionList[];
@@ -33,7 +34,7 @@ interface DownloadTableProps {
   responseDownloadLimit: number;
   lastEvaluatedKey?: Record<string, string> | null;
   overdueAfter: number;
-  rawStatusFilter: string;
+  statusFilter: StatusFilter;
 }
 
 export const DownloadTable = ({
@@ -44,14 +45,13 @@ export const DownloadTable = ({
   responseDownloadLimit,
   lastEvaluatedKey,
   overdueAfter,
-  rawStatusFilter,
+  statusFilter,
 }: DownloadTableProps) => {
   const {
     t,
     i18n: { language },
   } = useTranslation("form-builder-responses");
 
-  const statusFilter = ucfirst(rawStatusFilter);
   const [downloadError, setDownloadError] = useState<boolean | string>(false);
   const [noSelectedItemsError, setNoSelectedItemsError] = useState(false);
   const [showConfirmNewtDialog, setShowConfirmNewDialog] = useState(false);
@@ -206,7 +206,7 @@ export const DownloadTable = ({
                     "border-y-1 border-slate-300 hover:ring-2 hover:ring-purple-500" +
                       (tableItems.statusItems.get(submission.name) ? " bg-purple-50" : "") +
                       (isBlocked ? " opacity-50" : "") +
-                      (statusFilter === VaultStatus.NEW && removedRows.includes(submission.name)
+                      (statusFilter === StatusFilter.NEW && removedRows.includes(submission.name)
                         ? " transition-opacity opacity-50 ease-in-out duration-500"
                         : "")
                   )}
@@ -238,7 +238,7 @@ export const DownloadTable = ({
                   <td className="whitespace-nowrap px-4">{createdDateTime}</td>
                   <td className="whitespace-nowrap px-4">
                     <NextStep
-                      statusFilter={statusFilter as VaultStatus}
+                      statusFilter={statusFilter as StatusFilter}
                       submission={submission}
                       overdueAfter={overdueAfter ? overdueAfter : undefined}
                       removedRows={removedRows}
@@ -253,7 +253,7 @@ export const DownloadTable = ({
                         setDownloadError(false);
                         setRemovedRows([...removedRows, submission.name]);
                         // router.replace(router.asPath, undefined, { scroll: false });
-                        if (statusFilter === VaultStatus.NEW) {
+                        if (statusFilter === StatusFilter.NEW) {
                           setShowDownloadSuccess("downloadSuccess");
                         }
                       }}
@@ -298,7 +298,7 @@ export const DownloadTable = ({
             setShowDownloadDialog={setShowDownloadDialog}
             onClick={() => setDownloadError(false)}
           />
-          {statusFilter === VaultStatus.NEW && false && (
+          {statusFilter === StatusFilter.NEW && false && (
             <DeleteButton setShowConfirmNewDialog={setShowConfirmNewDialog} />
           )}
         </ActionsPanel>
@@ -318,7 +318,7 @@ export const DownloadTable = ({
         onSuccessfulDownload={() => {
           setRemovedRows([...removedRows, ...tableItems.checkedItems.keys()]);
           // router.replace(router.asPath, undefined, { scroll: false });
-          if (statusFilter === VaultStatus.NEW) {
+          if (statusFilter === StatusFilter.NEW) {
             setShowDownloadSuccess("downloadSuccess");
           }
         }}

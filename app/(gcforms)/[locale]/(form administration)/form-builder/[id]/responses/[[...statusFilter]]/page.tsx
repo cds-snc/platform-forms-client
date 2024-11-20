@@ -6,13 +6,8 @@ import { LoggedOutTab, LoggedOutTabName } from "@serverComponents/form-builder/L
 import { checkKeyExists } from "@lib/serviceAccount";
 import { ResponsesApiContainer } from "./components/ResponsesApiContainer";
 import { ResponsesContainer } from "./components/ResponsesContainer";
-
-export enum StatusFilter {
-  NEW = "new",
-  DOWNLOADED = "downloaded",
-  CONFIRMED = "confirmed",
-  PROBLEM = "problem",
-}
+import { redirect } from "next/navigation";
+import { StatusFilter } from "./types";
 
 export async function generateMetadata({
   params: { locale },
@@ -27,10 +22,80 @@ export async function generateMetadata({
   };
 }
 
+/**
+ * Ensure we have a valid StatusFilter
+ * @param statusFilter
+ * @returns boolean
+ */
+const isValidStatusFilter = (statusFilter: string): statusFilter is StatusFilter => {
+  return Object.values(StatusFilter).includes(statusFilter as StatusFilter);
+};
+
+/**
+ * Validate the StatusFilter and redirect if necessary
+ * Redirects on invalid or multiple statusFilter params
+ *
+ * @param statusFilterParams
+ * @param locale
+ * @param id
+ * @returns StatusFilter
+ */
+const validateStatusFilterOrRedirect = (
+  statusFilterParams: string[],
+  locale: string,
+  id: string,
+  isApiRetrieval: boolean
+): StatusFilter => {
+  const redirectToDefault = () => redirect(`/${locale}/form-builder/${id}/responses`);
+
+  // No statusFilterParams passed, return defaults
+  if (!statusFilterParams) {
+    if (isApiRetrieval) {
+      return StatusFilter.CONFIRMED;
+    }
+
+    return StatusFilter.NEW;
+  }
+
+  // If there are multiple statusFilterParams (ie, /new/something)
+  if (statusFilterParams && statusFilterParams.length > 1) {
+    // We only care about the first
+    const firstStatusFilter = statusFilterParams[0];
+
+    // If the remaining statusFilter is invalid, redirect to default view
+    if (!isValidStatusFilter(firstStatusFilter)) {
+      redirectToDefault();
+    }
+
+    // If isApiRetrieval and statusFilter is not CONFIRMED, redirect to default
+    if (isApiRetrieval && firstStatusFilter !== StatusFilter.CONFIRMED) {
+      redirectToDefault();
+    }
+
+    // Redirect to the valid statusFilter
+    redirect(`/${locale}/form-builder/${id}/responses/${firstStatusFilter}`);
+  }
+
+  // statusFilterParams is an array with one element
+  const statusFilter = statusFilterParams[0] as StatusFilter;
+
+  // if statusFilter is invalid, redirect to default view
+  if (!isValidStatusFilter(statusFilter)) {
+    redirectToDefault();
+  }
+
+  // If isApiRetrieval and statusFilter is not CONFIRMED, redirect to default
+  if (statusFilter && statusFilter !== StatusFilter.CONFIRMED && isApiRetrieval) {
+    redirectToDefault();
+  }
+
+  return statusFilter;
+};
+
 export default async function Page({
-  params: { id, statusFilter },
+  params: { locale, id, statusFilter: statusFilterParams },
 }: {
-  params: { id: string; statusFilter: string };
+  params: { locale: string; id: string; statusFilter: string[] };
 }) {
   const { session } = await authCheckAndThrow().catch(() => ({
     session: null,
@@ -46,23 +111,16 @@ export default async function Page({
     );
   }
 
-  const hasApiKeyId = await checkKeyExists(id);
+  const isApiRetrieval = !!(await checkKeyExists(id));
 
-  // if statusFilter is invalid, default to "new"
-  if (!Object.keys(StatusFilter).includes(statusFilter)) {
-    statusFilter = StatusFilter.NEW;
-  }
+  const statusFilter = validateStatusFilterOrRedirect(
+    statusFilterParams,
+    locale,
+    id,
+    isApiRetrieval
+  );
 
-  // Redirect to 'new' if the statusFilter is not a valid value
-  // if (
-  //   !Object.keys(VaultStatus)
-  //     .map((x) => x.toLocaleLowerCase())
-  //     .includes(statusFilter)
-  // ) {
-  //   redirect(`/${locale}/form-builder/${id}/responses/${VaultStatus.NEW.toLowerCase()}`);
-  // }
-
-  if (hasApiKeyId) {
+  if (isApiRetrieval) {
     return (
       <ResponsesApiContainer
         responseDownloadLimit={Number(await getAppSetting("responseDownloadLimit"))}

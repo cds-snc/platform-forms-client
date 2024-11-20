@@ -12,7 +12,7 @@ import { TitleAndDescription } from "./TitleAndDescription";
 import { NagLevel, VaultSubmissionList } from "@lib/types";
 import { RetrievalError } from "./RetrievalError";
 import { fetchSubmissions } from "../actions";
-import { StatusFilter } from "../page";
+import { StatusFilter } from "../types";
 import { SystemStatus } from "./SystemStatus";
 
 export interface ResponsesProps {
@@ -89,7 +89,7 @@ export const Responses = ({
             <>
               <SystemStatus formId={formId} />
               <DownloadTable
-                rawStatusFilter={statusFilter}
+                statusFilter={statusFilter}
                 vaultSubmissions={state.submissions}
                 formName={formName}
                 formId={formId}
@@ -100,7 +100,7 @@ export const Responses = ({
               />
             </>
           ) : (
-            <NoResponses formId={formId} statusFilter={ucfirst(statusFilter)} />
+            <NoResponses formId={formId} statusFilter={statusFilter} />
           )}
         </div>
       </>
@@ -124,7 +124,7 @@ export const Responses = ({
         {state.submissions.length > 0 ? (
           <>
             <DownloadTable
-              rawStatusFilter={statusFilter}
+              statusFilter={statusFilter}
               vaultSubmissions={state.submissions}
               formName={formName}
               formId={formId}
@@ -135,7 +135,7 @@ export const Responses = ({
             />
           </>
         ) : (
-          <NoResponses formId={formId} statusFilter={ucfirst(statusFilter)} />
+          <NoResponses formId={formId} statusFilter={statusFilter} />
         )}
       </div>
     </>

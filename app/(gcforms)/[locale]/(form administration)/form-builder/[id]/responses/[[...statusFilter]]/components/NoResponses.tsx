@@ -1,12 +1,18 @@
 import React, { useEffect, useState } from "react";
 import { Card, HeadingLevel } from "@clientComponents/globals/card/Card";
 import Image from "next/image";
-import { VaultStatus } from "@lib/types";
 import { useTranslation } from "react-i18next";
 import { useFormBuilderConfig } from "@lib/hooks/useFormBuilderConfig";
 import { newResponsesExist } from "../actions";
+import { StatusFilter } from "../types";
 
-export const NoResponses = ({ statusFilter, formId }: { statusFilter: string; formId: string }) => {
+export const NoResponses = ({
+  statusFilter,
+  formId,
+}: {
+  statusFilter: StatusFilter;
+  formId: string;
+}) => {
   const { t } = useTranslation("form-builder-responses");
   const { hasApiKeyId } = useFormBuilderConfig();
 
@@ -28,7 +34,7 @@ export const NoResponses = ({ statusFilter, formId }: { statusFilter: string; fo
 
   return (
     <>
-      {!hasApiKeyId && statusFilter === VaultStatus.NEW && (
+      {!hasApiKeyId && statusFilter === StatusFilter.NEW && (
         <Card
           icon={<Image src="/img/mailbox.svg" alt="" width="200" height="200" />}
           title={t("downloadResponsesTable.card.noNewResponses")}
@@ -37,7 +43,7 @@ export const NoResponses = ({ statusFilter, formId }: { statusFilter: string; fo
           headingStyle="gc-h2 text-[#748094]"
         />
       )}
-      {!hasApiKeyId && statusFilter === VaultStatus.DOWNLOADED && (
+      {!hasApiKeyId && statusFilter === StatusFilter.DOWNLOADED && (
         <Card
           icon={<Image src="/img/mailbox.svg" alt="" width="200" height="200" />}
           title={t("downloadResponsesTable.card.noDownloadedResponses")}
@@ -46,7 +52,7 @@ export const NoResponses = ({ statusFilter, formId }: { statusFilter: string; fo
           headingStyle="gc-h2 text-[#748094]"
         />
       )}
-      {!hasApiKeyId && statusFilter === VaultStatus.CONFIRMED && (
+      {!hasApiKeyId && statusFilter === StatusFilter.CONFIRMED && (
         <Card
           icon={<Image src="/img/mailbox.svg" alt="" width="200" height="200" />}
           title={t("downloadResponsesTable.card.noDeletedResponses")}
@@ -56,7 +62,7 @@ export const NoResponses = ({ statusFilter, formId }: { statusFilter: string; fo
         />
       )}
 
-      {!hasApiKeyId && statusFilter === VaultStatus.PROBLEM && (
+      {!hasApiKeyId && statusFilter === StatusFilter.PROBLEM && (
         <>
           <h1 className="visually-hidden">{t("tabs.problemResponses.title")}</h1>
           <Card
