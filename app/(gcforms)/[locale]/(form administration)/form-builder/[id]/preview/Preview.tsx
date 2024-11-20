@@ -19,7 +19,7 @@ import {
 import { useRehydrate, useTemplateStore } from "@lib/store/useTemplateStore";
 import { BackArrowIcon } from "@serverComponents/icons";
 import Brand from "@clientComponents/globals/Brand";
-import { GCFormsProvider, useGCFormsContext } from "@lib/hooks/useGCFormContext";
+import { GCFormsProvider } from "@lib/hooks/useGCFormContext";
 import Skeleton from "react-loading-skeleton";
 import { Form } from "@clientComponents/forms/Form/Form";
 import { BackButton } from "./BackButton";
@@ -30,7 +30,6 @@ import { defaultForm } from "@lib/store/defaults";
 import { showReviewPage } from "@lib/utils/form-builder/showReviewPage";
 import { focusElement } from "@lib/client/clientHelpers";
 import { useIsFormClosed } from "@lib/hooks/useIsFormClosed";
-import { LockedSections } from "@formBuilder/components/shared/right-panel/treeview/types";
 
 export const Preview = ({
   disableSubmit = true,
@@ -98,8 +97,6 @@ export const Preview = ({
   const hasHydrated = useRehydrate();
 
   const isShowReviewPage = showReviewPage(formRecord.form);
-
-  const { currentGroup } = useGCFormsContext();
 
   if (isPastClosingDate) {
     // Force a hard refresh to the preview page to show the closed message
@@ -202,14 +199,12 @@ export const Preview = ({
                             fallBack={() => {
                               return (
                                 <>
-                                  {allowGrouping &&
-                                    isShowReviewPage &&
-                                    currentGroup === LockedSections.REVIEW && (
-                                      <BackButton
-                                        language={language}
-                                        onClick={() => focusElement("h2")}
-                                      />
-                                    )}
+                                  {allowGrouping && isShowReviewPage && (
+                                    <BackButton
+                                      language={language}
+                                      onClick={() => focusElement("h2")}
+                                    />
+                                  )}
                                   <Button
                                     type="submit"
                                     id="SubmitButton"
