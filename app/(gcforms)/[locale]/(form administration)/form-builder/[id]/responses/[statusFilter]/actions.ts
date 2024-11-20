@@ -206,6 +206,7 @@ export const getSubmissionsByFormat = async ({
     const fullFormTemplate = await getFullTemplateByID(ability, formID);
 
     if (fullFormTemplate === null) {
+      logMessage.error(`getSubmissionsByFormat form not found: ${formID}`);
       throw new FormBuilderError("Form not found", FormServerErrorCodes.FORM_NOT_FOUND);
     }
 
