@@ -363,7 +363,7 @@ const createTemplateStore = (initProps?: Partial<InitialTemplateStoreProps>) => 
               const elIndex = get().form.elements.findIndex((el) => el.id === elId);
               return get().form.elements[elIndex]?.properties.choices?.[choiceIndex];
             },
-            duplicateElement: (itemId, groupId = "", titleEn = "", titleFr = "") => {
+            duplicateElement: (itemId, groupId = "", copyEn = "", copyFr = "") => {
               const elIndex = get().form.elements.findIndex((el) => el.id === itemId);
               set((state) => {
                 const id = incrementElementId(state.form.elements);
@@ -371,10 +371,10 @@ const createTemplateStore = (initProps?: Partial<InitialTemplateStoreProps>) => 
                 const element = JSON.parse(JSON.stringify(state.form.elements[elIndex]));
                 element.id = id;
                 if (element.type !== "richText" && element.properties["titleEn"]) {
-                  element.properties["titleEn"] = `${element.properties["titleEn"]} ${titleEn}`;
+                  element.properties["titleEn"] = `${element.properties["titleEn"]} ${copyEn}`;
                 }
                 if (element.type !== "richText" && element.properties["titleFr"]) {
-                  element.properties["titleFr"] = `${element.properties["titleFr"]} ${titleFr}`;
+                  element.properties["titleFr"] = `${element.properties["titleFr"]} ${copyFr}`;
                 }
                 state.form.elements.splice(elIndex + 1, 0, element);
                 state.form.layout.splice(elIndex + 1, 0, id);
