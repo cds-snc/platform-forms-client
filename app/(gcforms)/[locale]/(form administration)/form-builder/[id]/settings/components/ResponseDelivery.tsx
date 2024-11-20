@@ -13,9 +13,9 @@ import { Radio } from "@formBuilder/components/shared/MultipleChoice";
 import { Button } from "@clientComponents/globals";
 import { useTemplateStore } from "@lib/store/useTemplateStore";
 import { completeEmailAddressRegex } from "@lib/utils/form-builder";
-import { ResponseDeliveryHelpButton } from "./ResponseDeliveryHelpDialog";
-import { FormPurposeHelpButton } from "./FormPurposeHelpButton";
-import { ResponseDeliveryHelpButtonWithApi } from "./ResponseDeliveryHelpDialogApiWithApi";
+import { ResponseDeliveryHelpButton } from "./dialogs/ResponseDeliveryHelpDialog";
+import { FormPurposeHelpButton } from "./dialogs/FormPurposeHelpButton";
+import { ResponseDeliveryHelpButtonWithApi } from "./dialogs/ResponseDeliveryHelpDialogApiWithApi";
 import {
   ClassificationType,
   ClassificationSelect,
