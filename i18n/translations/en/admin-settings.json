@@ -33,20 +33,20 @@
     "value": "Value for this setting"
   },
   "throttling": {
-    "title": "Throttling Rate",
-    "description": "Increase throttling rate for up to 12 weeks",
-    "weeks": "Weeks",
-    "permanent": "Permanently increase throttling rate",
-    "updateRate": "Update rate",
-    "resetRate": "Reset rate",
-    "tooltip": "Checking this disables scheduling a rate. To schedule a rate, uncheck this and the Weeks input will be enabled to schedule a throttling rate.",
+    "title": "API rate limit",
+    "description": "Increase API rate limit for up to 12 weeks",
+    "weeks": "weeks",
+    "permanent": "Increase API rate limit indefinitely",
+    "updateRate": "Update API rate",
+    "resetRate": "Reset API rate",
+    "tooltip": "Checking this will not schedule the API rate for a specific period of time. To schedule an end to customized API throttling, uncheck this and the 'weeks' input will be enabled to schedule an end to the updated throttling rate.",
     "succcessUpdate": {
-      "title": "Throttling rate increased.",
-      "description": "Rate will stay in effect until: {{success}}"
+      "title": "API rate increased",
+      "description": "Throttling will stay in effect until: {{success}}"
     },
     "succcessReset": {
-      "title": "Throttling rate reset."
+      "title": "API rate was reset successfully."
     },
-    "error": "Error updating throttling rate."
+    "error": "API rate could not be updated. Try again later."
   }
 }
