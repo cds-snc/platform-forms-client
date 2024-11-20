@@ -370,14 +370,12 @@ const createTemplateStore = (initProps?: Partial<InitialTemplateStoreProps>) => 
                 // deep copy the element
                 const element = JSON.parse(JSON.stringify(state.form.elements[elIndex]));
                 element.id = id;
-
                 if (element.type !== "richText" && element.properties["titleEn"]) {
                   element.properties["titleEn"] = `${element.properties["titleEn"]} ${titleEn}`;
                 }
                 if (element.type !== "richText" && element.properties["titleFr"]) {
                   element.properties["titleFr"] = `${element.properties["titleFr"]} ${titleFr}`;
                 }
-
                 state.form.elements.splice(elIndex + 1, 0, element);
                 state.form.layout.splice(elIndex + 1, 0, id);
 
