@@ -18,7 +18,7 @@ export const NavigationTabs = ({ formId }: { formId: string }) => {
       <TabNavLink
         id="new-responses"
         href={`/${locale}/form-builder/${formId}/responses/new`}
-        active={pathname.includes("new")}
+        active={pathname.includes("new") || pathname.endsWith("responses")}
         setAriaCurrent={true}
       >
         <span className="text-sm laptop:text-base">
