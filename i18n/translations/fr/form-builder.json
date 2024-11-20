@@ -621,7 +621,7 @@
   "selectAutocompleteHint": "Cette option est utile lorsque les personnes qui remplissent le formulaire fournissent des informations personnelles telles que leur adresse, courriel ou numéro de téléphone.",
   "selectElement": "Sélectionnez un type d'élément",
   "send": "Envoyer",
-  "copy": "[FR]copy",
+  "copy": "copie",
   "settings": {
     "formManagement": "Gestion du formulaire",
     "api": {
