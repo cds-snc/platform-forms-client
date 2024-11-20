@@ -8,7 +8,6 @@ import {
 } from "@lib/types";
 import { useTranslation } from "@i18n/client";
 import { SkipLinkReusable } from "@clientComponents/globals/SkipLinkReusable";
-import { useParams } from "next/navigation";
 import Link from "next/link";
 import { TableActions, initialTableItemsState, reducerTableItems } from "./DownloadTableReducer";
 import { getDaysPassed, ucfirst } from "@lib/client/clientHelpers";
@@ -34,6 +33,7 @@ interface DownloadTableProps {
   responseDownloadLimit: number;
   lastEvaluatedKey?: Record<string, string> | null;
   overdueAfter: number;
+  rawStatusFilter: string;
 }
 
 export const DownloadTable = ({
@@ -44,13 +44,13 @@ export const DownloadTable = ({
   responseDownloadLimit,
   lastEvaluatedKey,
   overdueAfter,
+  rawStatusFilter,
 }: DownloadTableProps) => {
   const {
     t,
     i18n: { language },
   } = useTranslation("form-builder-responses");
 
-  const { statusFilter: rawStatusFilter } = useParams<{ statusFilter: string }>();
   const statusFilter = ucfirst(rawStatusFilter);
   const [downloadError, setDownloadError] = useState<boolean | string>(false);
   const [noSelectedItemsError, setNoSelectedItemsError] = useState(false);

@@ -1,8 +1,7 @@
 "use client";
-import { useTemplateStore, useRehydrate } from "@lib/store/useTemplateStore";
+import { useRehydrate } from "@lib/store/useTemplateStore";
 import { Responses } from "./Responses";
 import { useTranslation } from "@i18n/client";
-import { SystemStatus } from "./SystemStatus";
 import { StatusFilter } from "../page";
 
 export const ResponsesApiContainer = ({
@@ -15,9 +14,6 @@ export const ResponsesApiContainer = ({
   statusFilter: StatusFilter;
 }) => {
   const { t } = useTranslation("form-builder-responses");
-  const { id } = useTemplateStore((s) => ({
-    id: s.id,
-  }));
 
   const isReady = useRehydrate();
 
@@ -28,7 +24,6 @@ export const ResponsesApiContainer = ({
     <>
       <div className="mr-10">
         <h1>{t("apiDashboard.title")}</h1>
-        <SystemStatus formId={id} />
         <Responses
           statusFilter={statusFilter}
           responseDownloadLimit={responseDownloadLimit}
