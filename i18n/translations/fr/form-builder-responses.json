@@ -287,24 +287,24 @@
     "title": "Réponses"
   },
   "systemHealth": {
-    "contactSupport": {
-      "title": "Contact Support [FR]",
+    "problemsReported": {
+      "title": "Problems reported [FR]",
       "description": "<a href='' target='_blank'>Contact Support</a> [FR]"
     },
-    "throttling": {
-      "title": "Throttling [FR]",
-      "description": "<a href='' target='_blank'>Learn about throttling</a> [FR]"
+    "deliveredAndConfirmed": {
+      "title": "Delivery status: OK [FR]",
+      "description": "All responses delivered successfully [FR]"
     },
-    "problems": {
-      "title": "Problems [FR]",
-      "description": "<a href='' target='_blank'>Learn about problems</a> [FR]"
-    },
-    "unconfirmed": {
+    "awatingDownload": {
       "title": "Delivery status: waiting [FR]",
       "description": "Responses awaiting API delivery [FR]",
       "new": "New [FR]",
       "responses": "responses [FR]",
       "available": "available [FR]"
+    },
+    "awatingConfirm": {
+      "title": "Delivery status: waiting [FR]",
+      "description": "Responses awaiting confirmation of API delivery [FR]."
     }
   }
 }

@@ -8,6 +8,7 @@ import { Responses } from "./Responses";
 import { ManageFormAccessDialogContainer } from "./ManageFormAccessDialog";
 import { StatusFilter } from "../types";
 import { useTranslation } from "@i18n/client";
+import { SystemStatus } from "../../[statusFilter]/components/SystemStatus/SystemStatus";
 
 export const ResponsesContainer = ({
   responseDownloadLimit,
@@ -38,6 +39,7 @@ export const ResponsesContainer = ({
       <>
         <div className="mr-10">
           <h1>{t("apiDashboard.title")}</h1>
+          <SystemStatus formId={id} />
           <Responses
             statusFilter={statusFilter}
             responseDownloadLimit={responseDownloadLimit}
