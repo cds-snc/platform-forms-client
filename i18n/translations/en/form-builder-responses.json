@@ -301,6 +301,10 @@
       "new": "New",
       "responses": "responses",
       "available": "available"
+    },
+    "awatingConfirm": {
+      "title": "Delivery status: waiting",
+      "description": "Responses awaiting confirmation of API delivery"
     }
   }
 }

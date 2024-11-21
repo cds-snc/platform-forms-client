@@ -295,12 +295,16 @@
       "title": "Delivery status: OK [FR]",
       "description": "All responses delivered successfully [FR]"
     },
-    "newResponsesExist": {
+    "awatingDownlad": {
       "title": "Delivery status: waiting [FR]",
       "description": "Responses awaiting API delivery [FR]",
       "new": "New [FR]",
       "responses": "responses [FR]",
       "available": "available [FR]"
+    },
+    "awatingConfirm": {
+      "title": "Delivery status: waiting [FR]",
+      "description": "Responses awaiting confirmation of API delivery [FR]"
     }
   }
 }
