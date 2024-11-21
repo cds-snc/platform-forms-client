@@ -24,6 +24,7 @@ import {
   retrieveSubmissions,
   updateLastDownloadedBy,
   submissionTypeExists,
+  retrieveSubmissionRemovalDate,
 } from "@lib/vault";
 import { transform as csvTransform } from "@lib/responseDownloadFormats/csv";
 import { transform as htmlAggregatedTransform } from "@lib/responseDownloadFormats/html-aggregated";
@@ -441,6 +442,16 @@ export const unConfirmedResponsesExist = async (formId: string) => {
   try {
     const { ability } = await authCheckAndRedirect();
     return submissionTypeExists(ability, formId, VaultStatus.DOWNLOADED);
+  } catch (error) {
+    // Throw sanitized error back to client
+    return { error: "There was an error. Please try again later." } as ServerActionError;
+  }
+};
+
+export const getSubmissionRemovalDate = async (formId: string, submissionName: string) => {
+  try {
+    const { ability } = await authCheckAndRedirect();
+    return retrieveSubmissionRemovalDate(ability, formId, submissionName);
   } catch (error) {
     // Throw sanitized error back to client
     return { error: "There was an error. Please try again later." } as ServerActionError;
