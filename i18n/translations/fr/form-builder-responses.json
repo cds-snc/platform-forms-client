@@ -299,6 +299,10 @@
       "title": "Problems [FR]",
       "description": "<a href='' target='_blank'>Learn about problems</a> [FR]"
     },
+    "okay": {
+      "title": "Delivery status: OK [FR]",
+      "description": "All responses delivered successfully [FR]"
+    },
     "unconfirmed": {
       "title": "Delivery status: waiting [FR]",
       "description": "Responses awaiting API delivery [FR]",

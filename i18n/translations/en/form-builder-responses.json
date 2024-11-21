@@ -299,6 +299,10 @@
       "title": "Problems reported",
       "description": "<a href='' target='_blank'>Contact Support</a>"
     },
+    "okay": {
+      "title": "Delivery status: OK",
+      "description": "All responses delivered successfully"
+    },
     "unconfirmed": {
       "title": "Delivery status: waiting",
       "description": "Responses awaiting API delivery",
