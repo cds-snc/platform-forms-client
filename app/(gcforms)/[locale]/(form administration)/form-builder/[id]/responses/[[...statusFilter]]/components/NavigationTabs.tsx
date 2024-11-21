@@ -17,7 +17,7 @@ export const NavigationTabs = ({ formId }: { formId: string }) => {
     <nav className="relative mb-10 flex border-b border-black" aria-label={t("responses.navLabel")}>
       <TabNavLink
         id="new-responses"
-        href={`/${locale}/form-builder/${formId}/responses/new`}
+        href={`/${locale}/form-builder/${formId}/responses`}
         active={pathname.includes("new") || pathname.endsWith("responses")}
         setAriaCurrent={true}
       >

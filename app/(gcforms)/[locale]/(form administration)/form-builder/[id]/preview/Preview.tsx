@@ -89,7 +89,7 @@ export const Preview = ({
     setSent(null);
   };
 
-  const responsesLink = `/${i18n.language}/form-builder/${id}/responses/new`;
+  const responsesLink = `/${i18n.language}/form-builder/${id}/responses`;
   const settingsLink = `/${i18n.language}/form-builder/${id}/settings`;
 
   const brand = formRecord?.form ? formRecord.form.brand : null;
