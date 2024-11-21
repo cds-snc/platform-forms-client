@@ -4,8 +4,8 @@ import { HealthCheckBox } from "@clientComponents/globals/HealthCheckBox/HealthC
 export const ResponsesOkay = () => {
   const { t } = useTranslation("form-builder-responses");
   return (
-    <HealthCheckBox.Success titleKey="systemHealth.okay.title">
-      {t("systemHealth.okay.description")}
+    <HealthCheckBox.Success titleKey="systemHealth.deliveredAndConfirmed.title">
+      {t("systemHealth.deliveredAndConfirmed.description")}
     </HealthCheckBox.Success>
   );
 };

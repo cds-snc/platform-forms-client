@@ -8,7 +8,7 @@ import {
   NumberCount,
 } from "@clientComponents/globals/HealthCheckBox/HealthCheckBox";
 
-export const ProblemSubmissions = ({ formId }: { formId: string }) => {
+export const ProblemsReported = ({ formId }: { formId: string }) => {
   const [problemSubmissions, setProblemSubmissions] = useState<{
     loading: boolean;
     submissions: VaultSubmissionList[];
@@ -43,10 +43,10 @@ export const ProblemSubmissions = ({ formId }: { formId: string }) => {
   if (problemSubmissions.submissions.length > 0) {
     return (
       <HealthCheckBox.Danger
-        titleKey="systemHealth.problems.title"
+        titleKey="systemHealth.problemsReported.title"
         status={<NumberCount count={problemSubmissions.submissions.length} />}
       >
-        <HealthCheckBox.Text i18nKey="systemHealth.problems.description" />
+        <HealthCheckBox.Text i18nKey="systemHealth.problemsReported.description" />
       </HealthCheckBox.Danger>
     );
   }

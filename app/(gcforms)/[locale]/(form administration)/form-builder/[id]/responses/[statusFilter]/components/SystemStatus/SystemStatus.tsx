@@ -1,7 +1,7 @@
 import React from "react";
 import { useTranslation } from "react-i18next";
 import { ResponsesAvailable } from "./ResponsesAvailable";
-import { ProblemSubmissions } from "./ProblemSubmissions";
+import { ProblemsReported } from "./ProblemsReported";
 
 export const SystemStatus = ({ formId }: { formId: string }) => {
   const { t } = useTranslation("form-builder");
@@ -10,7 +10,7 @@ export const SystemStatus = ({ formId }: { formId: string }) => {
       <h3 className="mb-8">{t("systemHealthCheck.title")}</h3>
       <div className="flex gap-4">
         <ResponsesAvailable formId={formId} />
-        <ProblemSubmissions formId={formId} />
+        <ProblemsReported formId={formId} />
       </div>
     </div>
   );

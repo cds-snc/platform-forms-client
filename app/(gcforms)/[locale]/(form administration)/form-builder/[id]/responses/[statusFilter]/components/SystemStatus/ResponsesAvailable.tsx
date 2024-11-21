@@ -3,9 +3,9 @@ import Skeleton from "react-loading-skeleton";
 
 import { newResponsesExist } from "../../actions";
 
+/* Content boxes */
 import { HealthCheckBox } from "@clientComponents/globals/HealthCheckBox/HealthCheckBox";
-
-import { NewResponsesExistContent } from "./NewResponsesExistContent";
+import { AwatingDownlad } from "./AwatingDownlad";
 import { ResponsesOkay } from "./ResponsesOkay";
 
 export const ResponsesAvailable = ({ formId }: { formId: string }) => {
@@ -29,10 +29,7 @@ export const ResponsesAvailable = ({ formId }: { formId: string }) => {
   }
 
   if (!checkingApiSubmissions && hasApiSubmissions) {
-    <HealthCheckBox.Warning
-      titleKey="systemHealth.unconfirmed.title"
-      status={<NewResponsesExistContent />}
-    >
+    <HealthCheckBox.Warning titleKey="systemHealth.unconfirmed.title" status={<AwatingDownlad />}>
       <HealthCheckBox.Text i18nKey="systemHealth.unconfirmed.description" />
     </HealthCheckBox.Warning>;
   }
