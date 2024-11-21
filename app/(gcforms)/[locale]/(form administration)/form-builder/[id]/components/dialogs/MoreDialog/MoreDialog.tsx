@@ -2,7 +2,7 @@
 import React, { useCallback, useEffect } from "react";
 import { useTranslation } from "@i18n/client";
 import { Button } from "@clientComponents/globals";
-import { getPathString } from "@lib/utils/form-builder/getPath";
+import { getItemPathString } from "@lib/utils/form-builder/getPath";
 import { useTemplateStore } from "@lib/store/useTemplateStore";
 import { Dialog, useDialogRef } from "@formBuilder/components/shared/Dialog";
 import { useCustomEvent } from "@lib/hooks/useCustomEvent";
@@ -16,6 +16,7 @@ import { TextFieldOptions } from "./TextFieldOptions";
 import { CharacterLimitOptions } from "./CharacterLimitOptions";
 import { useRefsContext } from "@formBuilder/[id]/edit/components/RefsContext";
 import { FormElement } from "@lib/types";
+import { QuestionTagOptions } from "./QuestionTagOptions";
 
 export const MoreDialog = () => {
   const { elements, updateField, setChangeKey, getFormElementById } = useTemplateStore((s) => ({
@@ -81,7 +82,7 @@ export const MoreDialog = () => {
         className="ml-5"
         theme="primary"
         onClick={() => {
-          updateField(getPathString(item.id, elements), item.properties);
+          updateField(getItemPathString(item.id, elements), item);
           setChangeKey(String(new Date().getTime()));
           handleClose();
         }}
@@ -118,6 +119,8 @@ export const MoreDialog = () => {
               <TextFieldOptions item={item} setItem={setItem} />
 
               <CharacterLimitOptions item={item} setItem={setItem} />
+
+              <QuestionTagOptions item={item} setItem={setItem} />
             </form>
           </div>
         </Dialog>

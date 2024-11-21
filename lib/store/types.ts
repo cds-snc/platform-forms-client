@@ -54,7 +54,7 @@ export interface TemplateStoreState extends TemplateStoreProps {
   getChoice: (elIndex: number, choiceIndex: number) => { en: string; fr: string } | undefined;
   updateField: (
     path: string,
-    value: string | boolean | ElementProperties | BrandProperties
+    value: string | boolean | ElementProperties | BrandProperties | FormElement
   ) => void;
   updateSecurityAttribute: (value: SecurityAttribute) => void;
   propertyPath: (id: number, field: string, lang?: Language) => string;
