@@ -149,12 +149,12 @@
       "noDeletedResponsesMessage": "Une fois que vous aurez téléchargé et approuvé la suppression des réponses, celles-ci seront disponibles ici pendant 30 jours.",
       "noProblemResponses": "Aucune réponse signalée avec problème",
       "noProblemResponsesMessage": "Les réponses signalées avec problèmes apparaîtront ici jusqu'à ce qu'elles soient approuvées pour leur suppression de Formulaires GC.",
-      "noNewResponsesApiTitle": "No responses waiting for API delivery [FR]",
-      "noNewResponsesApiMessage": "<p className='mb-2'>Once delivered through our API, the delivered responses will appear here and be available in GC Forms for 30 days.</p><p>Read more about <a href='#' target='_blank'>API development</a> in our guidance (opens new tab)</p> [FR]",
+      "noNewResponsesApiTitle": "No responses waiting for API delivery [FR] !",
+      "noNewResponsesApiMessage": "<p className='mb-2'>Once delivered through our API, the delivered responses will appear here and be available in GC Forms for 30 days.</p><p>Read more about <a href='#' target='_blank'>API development</a> in our guidance (opens new tab)</p> [FR] !",
       "apiResponsesAvailableTitle": "Responses waiting for API delivery [FR]",
-      "apiResponsesAvailableMessage": "<p className='mb-2'>Once delivered through our API, the delivered responses will appear here and be available in GC Forms for 30 days.</p><p>Read more about <a href='#' target='_blank'>API development</a> in our guidance (opens new tab)</p> [FR]",
-      "apiResponsesAwaitingConfirmTitle": "Delivery status: waiting [FR]",
-      "apiResponsesAwaitingConfirmMessage": "Responses awaiting confirmation of API delivery. [FR]"
+      "apiResponsesAvailableMessage": "<p className='mb-2'>Once delivered through our API, the delivered responses will appear here and be available in GC Forms for 30 days.</p><p>Read more about <a href='#' target='_blank'>API development</a> in our guidance (opens new tab)</p> [FR] !",
+      "apiResponsesAwaitingConfirmTitle": "Delivery status: waiting [FR] !",
+      "apiResponsesAwaitingConfirmMessage": "Responses awaiting confirmation of API delivery. [FR] !"
     },
     "notifications": {
       "downloadComplete": "Réponses déplacées vers l'onglet « Téléchargements »",
