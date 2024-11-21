@@ -8,7 +8,7 @@ import { Responses } from "./Responses";
 import { ManageFormAccessDialogContainer } from "./ManageFormAccessDialog";
 import { useFormBuilderConfig } from "@lib/hooks/useFormBuilderConfig";
 import { useTranslation } from "@i18n/client";
-import { SystemStatus } from "./SystemStatus";
+import { SystemStatus } from "./SystemStatus/SystemStatus";
 
 export const ClientContainer = ({
   responseDownloadLimit,
