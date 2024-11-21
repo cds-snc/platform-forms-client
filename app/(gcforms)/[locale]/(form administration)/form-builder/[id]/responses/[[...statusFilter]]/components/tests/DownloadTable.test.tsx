@@ -40,7 +40,6 @@ describe("Download Table", () => {
 
     const rendered = render(
       <DownloadTable
-        rawStatusFilter="new"
         vaultSubmissions={vaultSubmissions}
         formId="clg17xha50008efkgfgxa8l4f"
         formName={""}
