@@ -1,3 +1,4 @@
+"use client";
 import React, { type JSX } from "react";
 import { Trans } from "react-i18next";
 
