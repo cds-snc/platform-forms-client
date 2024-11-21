@@ -6,7 +6,7 @@ import { Button } from "@clientComponents/globals";
 import { InfoIcon } from "@serverComponents/icons";
 
 import Markdown from "markdown-to-jsx";
-import { Dialog, useDialogRef } from "./Dialog";
+import { Dialog, useDialogRef } from "../../../../components/shared/Dialog";
 
 const FormPurposeHelpDialog = ({ handleClose }: { handleClose: () => void }) => {
   const { t } = useTranslation("form-builder");
