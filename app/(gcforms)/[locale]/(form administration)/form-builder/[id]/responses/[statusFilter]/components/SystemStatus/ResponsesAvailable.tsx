@@ -1,7 +1,10 @@
 import React, { useEffect, useState } from "react";
 import Skeleton from "react-loading-skeleton";
 
-import { newResponsesExist, unConfirmedResponsesExist } from "../../actions";
+import {
+  newResponsesExist,
+  unConfirmedResponsesExist,
+} from "@formBuilder/[id]/responses/[[...statusFilter]]/actions";
 
 /* Content boxes */
 import { AwatingDownload } from "./AwatingDownload";
@@ -16,13 +19,13 @@ export const ResponsesAvailable = ({ formId }: { formId: string }) => {
   useEffect(() => {
     const getApiSubmissions = async () => {
       const hasNewResponses = await newResponsesExist(formId);
-      const hasUnonfirmedResponses = await unConfirmedResponsesExist(formId);
+      const hasUnconfirmedResponses = await unConfirmedResponsesExist(formId);
 
       if (hasNewResponses === true) {
         setHasNewApiSubmissions(true);
       }
 
-      if (hasUnonfirmedResponses === true) {
+      if (hasUnconfirmedResponses === true) {
         setHasUnconfirmedApiSubmissions(true);
       }
 
@@ -33,7 +36,7 @@ export const ResponsesAvailable = ({ formId }: { formId: string }) => {
   }, [formId]);
 
   if (checkingApiSubmissions) {
-    return <Skeleton count={1} height={160} className="mb-4 w-[280px]" />;
+    return <Skeleton count={1} height={148} className="mb-4 w-[290px]" />;
   }
 
   if (!checkingApiSubmissions && hasNewApiSubmissions) {
