@@ -15,6 +15,7 @@ export const ResponsesAvailable = ({ formId }: { formId: string }) => {
   useEffect(() => {
     const getApiSubmissions = async () => {
       const result = await newResponsesExist(formId);
+
       if (result === true) {
         setHasApiSubmissions(true);
       }
@@ -29,10 +30,17 @@ export const ResponsesAvailable = ({ formId }: { formId: string }) => {
   }
 
   if (!checkingApiSubmissions && hasApiSubmissions) {
-    <HealthCheckBox.Warning titleKey="systemHealth.unconfirmed.title" status={<AwatingDownlad />}>
-      <HealthCheckBox.Text i18nKey="systemHealth.unconfirmed.description" />
-    </HealthCheckBox.Warning>;
+    // New responses exist
+    return (
+      <HealthCheckBox.Warning
+        titleKey="systemHealth.awatingDownlad.title"
+        status={<AwatingDownlad />}
+      >
+        <HealthCheckBox.Text i18nKey="systemHealth.awatingDownlad.description" />
+      </HealthCheckBox.Warning>
+    );
   }
 
+  // All responses are downloaded and confirmed
   return <ResponsesOkay />;
 };
