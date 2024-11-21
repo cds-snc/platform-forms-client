@@ -106,6 +106,7 @@ export enum FormElementTypes {
 // used to define attributes for a form element or field
 export interface FormElement {
   id: number;
+  tag?: string;
   subId?: string;
   type: FormElementTypes;
   properties: ElementProperties;
