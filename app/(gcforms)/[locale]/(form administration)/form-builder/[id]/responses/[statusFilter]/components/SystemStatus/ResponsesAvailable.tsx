@@ -1,7 +1,10 @@
 import React, { useEffect, useState } from "react";
 import Skeleton from "react-loading-skeleton";
 
-import { newResponsesExist, unConfirmedResponsesExist } from "../../actions";
+import {
+  newResponsesExist,
+  unConfirmedResponsesExist,
+} from "@formBuilder/[id]/responses/[[...statusFilter]]/actions";
 
 /* Content boxes */
 import { AwatingDownload } from "./AwatingDownload";

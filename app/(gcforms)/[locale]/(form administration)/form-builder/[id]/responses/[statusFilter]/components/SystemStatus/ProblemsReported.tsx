@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 
-import { fetchSubmissions } from "../../actions";
+import { fetchSubmissions } from "@formBuilder/[id]/responses/[[...statusFilter]]/actions";
 
 import { VaultStatus, VaultSubmissionList } from "@lib/types";
 import {
