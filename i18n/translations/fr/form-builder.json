@@ -639,6 +639,12 @@
         "message": "Les nouvelles réponses peuvent maintenant être téléchargées sur la",
         "responseLinkText": "page Réponses"
       },
+      "generateKeySuccess": {
+        "title": "API key generated",
+        "message": "New responses are now available through the API . Instructions and code examples are available in our",
+        "docsLinkText": "API documentation",
+        "docsLink": "https://cds-snc.github.io/forms-api/home/"
+      },
       "keyExists": "La clé existe déjà",
       "keyIdToolTip": {
         "text1": "Qu'est-ce que l'identifiant de la clé API?",
@@ -732,6 +738,7 @@
   "settingsResponseDelivery": {
     "selectClassification": "Classification des données",
     "beforePublishMessage": "Ces paramètres ne peuvent être modifiés qu’avant la publication.",
+    "deleteApiKeyMessage": "You must delete the API key before you can change the delivery option.[FR]",
     "protectedBMessage": "Les réponses classifiées PROTÉGÉ B doivent être téléchargées de Formulaires GC.",
     "settingsMessage": "Pour modifier ces paramètres, sélectionnez la classification des données de vos réponses au formulaire.",
     "title": "Option de livraison",

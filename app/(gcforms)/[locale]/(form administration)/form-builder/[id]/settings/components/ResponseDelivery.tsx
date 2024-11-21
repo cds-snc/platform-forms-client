@@ -350,6 +350,11 @@ export const ResponseDelivery = ({ isFormsAdmin }: { isFormsAdmin: boolean }) =>
 
             <div className="mb-10">
               <h2 className="mb-6">{t("settingsResponseDelivery.title")}</h2>
+              {hasApiKey && (
+                <p className="mb-10 inline-block bg-purple-200 p-3 text-sm font-bold">
+                  {t("settingsResponseDelivery.deleteApiKeyMessage")}
+                </p>
+              )}
               {protectedBSelected ? (
                 <p className="mb-5 inline-block bg-purple-200 p-3 text-sm font-bold">
                   {t("settingsResponseDelivery.protectedBMessage")}
