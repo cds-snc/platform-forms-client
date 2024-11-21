@@ -738,6 +738,7 @@
   "settingsResponseDelivery": {
     "selectClassification": "Classification des données",
     "beforePublishMessage": "Ces paramètres ne peuvent être modifiés qu’avant la publication.",
+    "deleteApiKeyMessage": "You must delete the API key before you can change the delivery option.[FR]",
     "protectedBMessage": "Les réponses classifiées PROTÉGÉ B doivent être téléchargées de Formulaires GC.",
     "settingsMessage": "Pour modifier ces paramètres, sélectionnez la classification des données de vos réponses au formulaire.",
     "title": "Option de livraison",

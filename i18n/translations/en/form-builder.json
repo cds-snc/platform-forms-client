@@ -634,6 +634,10 @@
         "title": "Something went wrong",
         "message": "API key could not be deleted"
       },
+      "deleteApiKeyToChangeOptions": {
+        "title": "Delete API key to change options",
+        "message": "You must delete the API key before you can change the delivery option."
+      },
       "deleteKeySuccess": {
         "title": "API key deleted",
         "message": "New responses can now be downloaded on the",
@@ -738,6 +742,7 @@
   "settingsResponseDelivery": {
     "selectClassification": "Data classification",
     "beforePublishMessage": "These settings can only be changed before publishing.",
+    "deleteApiKeyMessage": "You must delete the API key before you can change the delivery option.",
     "protectedBMessage": "PROTECTED B responses must be downloaded from GC Forms.",
     "settingsMessage": "To change these settings, select the data classification of your form responses.",
     "title": "Delivery option",
