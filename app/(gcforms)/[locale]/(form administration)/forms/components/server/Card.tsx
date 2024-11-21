@@ -37,7 +37,7 @@ const CardLinks = async ({ isPublished, url, id, deliveryOption, overdue }: Card
     i18n: { language },
   } = await serverTranslation("my-forms");
 
-  const responsesLink = `/${language}/form-builder/${id}/responses/new`;
+  const responsesLink = `/${language}/form-builder/${id}/responses`;
 
   return (
     <div className="mb-4 px-3">

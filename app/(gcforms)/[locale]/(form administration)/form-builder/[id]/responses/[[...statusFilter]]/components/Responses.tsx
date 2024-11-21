@@ -4,7 +4,7 @@ import { Nagware } from "@formBuilder/components/Nagware";
 import { ClosedBanner } from "@formBuilder/components/shared/ClosedBanner";
 import { useTranslation } from "@i18n/client";
 import { ucfirst } from "@lib/client/clientHelpers";
-import { useParams, useSearchParams } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 import { DownloadTable } from "./DownloadTable";
 import { NoResponses } from "./NoResponses";
 import { useTemplateStore } from "@lib/store/useTemplateStore";
@@ -12,18 +12,26 @@ import { TitleAndDescription } from "./TitleAndDescription";
 import { NagLevel, VaultSubmissionList } from "@lib/types";
 import { RetrievalError } from "./RetrievalError";
 import { fetchSubmissions } from "../actions";
-import { useFormBuilderConfig } from "@lib/hooks/useFormBuilderConfig";
+import { StatusFilter } from "../types";
+import { SystemStatus } from "../../[statusFilter]/components/SystemStatus/SystemStatus";
 
 export interface ResponsesProps {
   responseDownloadLimit: number;
   overdueAfter: number;
+  statusFilter: StatusFilter;
+  isApiRetrieval?: boolean;
 }
 
-export const Responses = ({ responseDownloadLimit, overdueAfter }: ResponsesProps) => {
+export const Responses = ({
+  responseDownloadLimit,
+  overdueAfter,
+  statusFilter,
+  isApiRetrieval = false,
+}: ResponsesProps) => {
   const {
     i18n: { language },
   } = useTranslation("form-builder-responses");
-  const { statusFilter } = useParams<{ statusFilter: string }>();
+
   const searchParams = useSearchParams();
   const lastKey = searchParams.get("lastKey");
 
@@ -42,19 +50,11 @@ export const Responses = ({ responseDownloadLimit, overdueAfter }: ResponsesProp
     error: boolean;
   }>({ loading: true, submissions: [], lastEvaluatedKey: null, error: false });
 
-  const { hasApiKeyId } = useFormBuilderConfig();
-
-  // For an Api user, no matter the responses route, always show the Api view with only confirmed responses
-  let filter = statusFilter;
-  if (hasApiKeyId) {
-    filter = "confirmed";
-  }
-
   useEffect(() => {
     fetchSubmissions({
       formId,
       lastKey,
-      status: filter,
+      status: statusFilter,
     })
       .then(({ submissions, lastEvaluatedKey, error }) => {
         setState({
@@ -67,7 +67,7 @@ export const Responses = ({ responseDownloadLimit, overdueAfter }: ResponsesProp
       .catch(() =>
         setState({ loading: false, submissions: [], lastEvaluatedKey: null, error: true })
       );
-  }, [formId, lastKey, statusFilter, filter, forceRefresh]);
+  }, [formId, lastKey, statusFilter, forceRefresh]);
 
   const formName = name ? name : language === "fr" ? initialForm.titleFr : initialForm.titleEn;
 
@@ -81,13 +81,15 @@ export const Responses = ({ responseDownloadLimit, overdueAfter }: ResponsesProp
     return <RetrievalError />;
   }
 
-  if (hasApiKeyId) {
+  if (isApiRetrieval) {
     return (
       <>
         <div aria-live="polite">
           {state.submissions.length > 0 ? (
             <>
+              <SystemStatus formId={formId} />
               <DownloadTable
+                statusFilter={statusFilter}
                 vaultSubmissions={state.submissions}
                 formName={formName}
                 formId={formId}
@@ -98,7 +100,7 @@ export const Responses = ({ responseDownloadLimit, overdueAfter }: ResponsesProp
               />
             </>
           ) : (
-            <NoResponses formId={formId} statusFilter={ucfirst(statusFilter)} />
+            <NoResponses formId={formId} statusFilter={statusFilter} />
           )}
         </div>
       </>
@@ -122,6 +124,7 @@ export const Responses = ({ responseDownloadLimit, overdueAfter }: ResponsesProp
         {state.submissions.length > 0 ? (
           <>
             <DownloadTable
+              statusFilter={statusFilter}
               vaultSubmissions={state.submissions}
               formName={formName}
               formId={formId}
@@ -132,7 +135,7 @@ export const Responses = ({ responseDownloadLimit, overdueAfter }: ResponsesProp
             />
           </>
         ) : (
-          <NoResponses formId={formId} statusFilter={ucfirst(statusFilter)} />
+          <NoResponses formId={formId} statusFilter={statusFilter} />
         )}
       </div>
     </>
