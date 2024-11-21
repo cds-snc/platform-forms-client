@@ -436,3 +436,13 @@ export const newResponsesExist = async (formId: string) => {
     return { error: "There was an error. Please try again later." } as ServerActionError;
   }
 };
+
+export const unConfirmedResponsesExist = async (formId: string) => {
+  try {
+    const { ability } = await authCheckAndRedirect();
+    return submissionTypeExists(ability, formId, VaultStatus.DOWNLOADED);
+  } catch (error) {
+    // Throw sanitized error back to client
+    return { error: "There was an error. Please try again later." } as ServerActionError;
+  }
+};
