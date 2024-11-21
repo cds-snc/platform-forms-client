@@ -198,7 +198,7 @@ describe("TemplateStore", () => {
     expect(result.current.form.elements).toHaveLength(3);
 
     act(() => {
-      result.current.duplicateElement(2);
+      result.current.duplicateElement(2, "", "copy");
     });
 
     expect(result.current.form.elements).toHaveLength(4);
