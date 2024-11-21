@@ -19,13 +19,13 @@ export const ResponsesAvailable = ({ formId }: { formId: string }) => {
   useEffect(() => {
     const getApiSubmissions = async () => {
       const hasNewResponses = await newResponsesExist(formId);
-      const hasUnonfirmedResponses = await unConfirmedResponsesExist(formId);
+      const hasUnconfirmedResponses = await unConfirmedResponsesExist(formId);
 
       if (hasNewResponses === true) {
         setHasNewApiSubmissions(true);
       }
 
-      if (hasUnonfirmedResponses === true) {
+      if (hasUnconfirmedResponses === true) {
         setHasUnconfirmedApiSubmissions(true);
       }
 
