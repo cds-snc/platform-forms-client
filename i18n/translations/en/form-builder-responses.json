@@ -293,18 +293,18 @@
     },
     "deliveredAndConfirmed": {
       "title": "Delivery status: OK",
-      "description": "All responses delivered successfully"
+      "description": "All responses delivered successfully."
     },
-    "awatingDownlad": {
+    "awatingDownload": {
       "title": "Delivery status: waiting",
-      "description": "Responses awaiting API delivery",
+      "description": "Responses awaiting API delivery.",
       "new": "New",
       "responses": "responses",
       "available": "available"
     },
     "awatingConfirm": {
       "title": "Delivery status: waiting",
-      "description": "Responses awaiting confirmation of API delivery"
+      "description": "Responses awaiting confirmation of API delivery."
     }
   }
 }
