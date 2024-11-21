@@ -36,7 +36,7 @@ export const ResponsesAvailable = ({ formId }: { formId: string }) => {
   }, [formId]);
 
   if (checkingApiSubmissions) {
-    return <Skeleton count={1} height={160} className="mb-4 w-[280px]" />;
+    return <Skeleton count={1} height={148} className="mb-4 w-[290px]" />;
   }
 
   if (!checkingApiSubmissions && hasNewApiSubmissions) {

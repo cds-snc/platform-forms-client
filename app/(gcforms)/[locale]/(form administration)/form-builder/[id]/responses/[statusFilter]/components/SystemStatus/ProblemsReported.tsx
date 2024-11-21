@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import Skeleton from "react-loading-skeleton";
 
 import { fetchSubmissions } from "@formBuilder/[id]/responses/[[...statusFilter]]/actions";
 
@@ -39,6 +40,10 @@ export const ProblemsReported = ({ formId }: { formId: string }) => {
         })
       );
   }, [formId]);
+
+  if (problemSubmissions.loading) {
+    return <Skeleton count={1} height={148} className="mb-4 w-[290px]" />;
+  }
 
   if (problemSubmissions.submissions.length > 0) {
     return (
