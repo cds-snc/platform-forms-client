@@ -13,6 +13,7 @@ import { NagLevel, VaultSubmissionList } from "@lib/types";
 import { RetrievalError } from "./RetrievalError";
 import { fetchSubmissions } from "../actions";
 import { StatusFilter } from "../types";
+import { SystemStatus } from "../../[statusFilter]/components/SystemStatus/SystemStatus";
 
 export interface ResponsesProps {
   responseDownloadLimit: number;
@@ -86,6 +87,7 @@ export const Responses = ({
         <div aria-live="polite">
           {state.submissions.length > 0 ? (
             <>
+              <SystemStatus formId={formId} />
               <DownloadTable
                 statusFilter={statusFilter}
                 vaultSubmissions={state.submissions}
