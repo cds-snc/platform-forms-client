@@ -1,6 +1,7 @@
 import { FormElement, FormElementTypes, HTMLTextInputTypeAttribute } from "@lib/types";
 import { Language, LocalizedElementProperties } from "../../types/form-builder-types";
 import { isValidatedTextType, isAutoCompleteField } from "@lib/utils/form-builder";
+import { v4 as uuid } from "uuid";
 
 type ElementType =
   | keyof typeof FormElementTypes
@@ -26,6 +27,7 @@ function isTextField(type: string) {
 
 export const defaultField: FormElement = {
   id: 0,
+  tag: uuid(),
   type: FormElementTypes.textField,
   properties: {
     subElements: [],
