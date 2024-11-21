@@ -639,6 +639,12 @@
         "message": "New responses can now be downloaded on the",
         "responseLinkText": "Responses page"
       },
+      "generateKeySuccess": {
+        "title": "API key generated",
+        "message": "New responses are now available through the API . Instructions and code examples are available in our",
+        "docsLinkText": "API documentation",
+        "docsLink": "https://cds-snc.github.io/forms-api/home/"
+      },
       "keyExists": "API key already exists",
       "keyIdToolTip": {
         "text1": "What is an API key ID?",
