@@ -22,6 +22,13 @@ export function buildFormDataObject(formRecord: PublicFormRecord, values: Respon
     const result = _handleDynamicRowTypeIfNeeded(element, values[element.id]);
     for (const tuple of result) {
       formData[tuple[0]] = tuple[1];
+
+      if (element.properties.tag) {
+        formData[tuple[0]] = JSON.stringify({
+          value: tuple[1],
+          tag: element.properties.tag,
+        });
+      }
     }
   }
 
