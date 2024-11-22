@@ -1,4 +1,4 @@
-import { useMemo, useRef } from "react";
+import { useEffect, useMemo, useRef } from "react";
 import { useTranslation } from "@i18n/client";
 import { useFocusIt } from "@lib/hooks/useFocusIt";
 import { useGCFormsContext } from "@lib/hooks/useGCFormContext";
@@ -7,8 +7,6 @@ import { AddressCompleteLabels } from "../AddressComplete/types";
 import { EditButton } from "./EditButton";
 import { QuestionsAnswersList } from "./QuestionsAnswersList";
 import { getReviewItems, ReviewItem } from "./reviewUtils";
-
-const addressCompleteStrings = {} as AddressCompleteLabels;
 
 export const Review = ({ language }: { language: Language }): React.ReactElement => {
   const { t } = useTranslation(["review", "common"]);
@@ -19,31 +17,35 @@ export const Review = ({ language }: { language: Language }): React.ReactElement
   const groupsHeadingRef = useRef<HTMLHeadingElement>(null);
   useFocusIt({ elRef: groupsHeadingRef });
 
-  //Prior to useMemo, we grab the necessary translations for AddressComplete
-  addressCompleteStrings.streetAddress = t("addressComponents.streetName", { lng: language });
-  addressCompleteStrings.city = t("addressComponents.city", { lng: language });
-  addressCompleteStrings.province = t("addressComponents.province", { lng: language });
-  addressCompleteStrings.postalCode = t("addressComponents.postalCode", { lng: language });
-  addressCompleteStrings.provinceOrState = t("addressComponents.provinceOrState", {
-    lng: language,
-  });
-  addressCompleteStrings.postalCodeOrZip = t("addressComponents.postalCodeOrZip", {
-    lng: language,
-  });
-  addressCompleteStrings.country = t("addressComponents.country", { lng: language });
-  //This is done here, as useTranslation is inacessible inside useMemo.
+  const addressCompleteStrings = useMemo(() => {
+    return {
+      streetAddress: t("addressComponents.streetName", { lng: language }),
+      city: t("addressComponents.city", { lng: language }),
+      province: t("addressComponents.province", { lng: language }),
+      postalCode: t("addressComponents.postalCode", { lng: language }),
+      provinceOrState: t("addressComponents.provinceOrState", { lng: language }),
+      postalCodeOrZip: t("addressComponents.postalCodeOrZip", { lng: language }),
+      country: t("addressComponents.country", { lng: language }),
+    } as AddressCompleteLabels;
+  }, [t, language]);
 
-  const reviewItems: ReviewItem[] = useMemo(() => {
-    return getReviewItems(
-      getValues(),
-      groups,
-      getGroupHistory(),
-      getGroupTitle,
-      language,
-      formRecord.form.elements,
-      matchedIds,
-      addressCompleteStrings
-    );
+  const reviewItemsRef = useRef<ReviewItem[]>([]);
+  useEffect(() => {
+    // TODO move address strings to server lookup in a future async-await call (why async below)
+    // and split out functions to be more generic/reusable
+    const getItems = async () => {
+      reviewItemsRef.current = getReviewItems(
+        getValues(),
+        groups,
+        getGroupHistory(),
+        getGroupTitle,
+        language,
+        formRecord.form.elements,
+        matchedIds,
+        addressCompleteStrings
+      );
+    };
+    getItems();
   }, [
     groups,
     getValues,
@@ -52,6 +54,7 @@ export const Review = ({ language }: { language: Language }): React.ReactElement
     language,
     formRecord.form.elements,
     matchedIds,
+    addressCompleteStrings,
   ]);
 
   return (
@@ -60,8 +63,8 @@ export const Review = ({ language }: { language: Language }): React.ReactElement
         {t("reviewForm", { lng: language })}
       </h2>
       <div className="my-16">
-        {Array.isArray(reviewItems) &&
-          reviewItems.map((reviewItem) => {
+        {Array.isArray(reviewItemsRef.current) &&
+          reviewItemsRef.current.map((reviewItem) => {
             const title =
               reviewItem.id === "start"
                 ? t("logic.start", { ns: "common", lng: language })
