@@ -28,12 +28,15 @@ export const QuestionTagOptions = ({
       <Input
         id={`title--modal--${item.id}`}
         name={`item${item.id}`}
-        value={item.tag || uuid()}
+        value={item.properties.tag || uuid()}
         className="w-11/12"
         onChange={(e) => {
           setItem({
             ...item,
-            tag: e.target.value,
+            properties: {
+              ...item.properties,
+              tag: e.target.value,
+            },
           });
         }}
       />
