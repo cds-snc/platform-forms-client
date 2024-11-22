@@ -290,23 +290,23 @@
   },
   "systemHealth": {
     "problemsReported": {
-      "title": "Problems reported [FR]!",
-      "description": "<a href='' target='_blank'>Contact Support</a> [FR]!"
+      "title": "Problèmes signalés",
+      "description": "<a href='' target='_blank'>Obtenir du soutien</a>"
     },
     "deliveredAndConfirmed": {
-      "title": "Delivery status: OK [FR]!",
-      "description": "All responses delivered successfully [FR]!"
+      "title": "État de livraison : OK",
+      "description": "Toutes les réponses ont été livrées avec succès."
     },
     "awatingDownload": {
-      "title": "Delivery status: waiting [FR]!",
-      "description": "Responses awaiting API delivery [FR]!",
-      "new": "New [FR]!",
-      "responses": "responses [FR]!",
-      "available": "available [FR]!"
+      "title": "État de livraison : En attente",
+      "description": "Réponses en attente de la livraison par API",
+      "new": "Nouvelles",
+      "responses": "réponses",
+      "available": "disponibles"
     },
     "awatingConfirm": {
-      "title": "Delivery status: waiting [FR]!",
-      "description": "Responses awaiting confirmation of API delivery [FR]!."
+      "title": "État de livraison : En attente",
+      "description": "Réponses en attente de la confirmation de la livraison par API"
     }
   }
 }
