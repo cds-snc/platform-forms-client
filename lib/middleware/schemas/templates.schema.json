@@ -126,9 +126,9 @@
       "examples": [
         {
           "id": 1,
-          "tag": "91eac504-d781-4c64-85f2-3233895f907d1",
           "type": "richText",
           "properties": {
+            "tag": "91eac504-d781-4c64-85f2-3233895f907d1",
             "validation": {
               "required": false
             },
@@ -138,9 +138,9 @@
         },
         {
           "id": 2,
-          "tag": "f8c8245a-3fc0-42a4-8686-e036403734e4",
           "type": "radio",
           "properties": {
+            "tag": "f8c8245a-3fc0-42a4-8686-e036403734e4",
             "choices": [
               {
                 "en": "Team nomination",
@@ -211,11 +211,6 @@
           "type": "integer",
           "minimum": 1
         },
-        "tag": {
-          "description": "A configurable tag that can be used to identify the element",
-          "type": "string",
-          "minimum": 0
-        },
         "type": {
           "type": "string",
           "enum": [
@@ -236,6 +231,11 @@
         "properties": {
           "type": "object",
           "properties": {
+            "tag": {
+              "description": "A configurable tag that can be used to identify the element",
+              "type": "string",
+              "minimum": 0
+            },
             "titleEN": {
               "description": "Input label in English",
               "type": "string"

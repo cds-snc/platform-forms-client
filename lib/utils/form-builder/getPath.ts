@@ -97,14 +97,3 @@ export const getPathString = <T extends Element>(id: number, elements: T[]) => {
 
   return `form.elements[${elIndex}].properties.subElements[${subIndex}].properties`;
 };
-
-export const getItemPathString = <T extends Element>(id: number, elements: T[]) => {
-  const indexes = getElementIndexes(id, elements);
-  const [elIndex, subIndex] = indexes;
-
-  if (elIndex === null) return "";
-
-  if (subIndex === null) return `form.elements[${elIndex}]`;
-
-  return `form.elements[${elIndex}].properties.subElements[${subIndex}]`;
-};

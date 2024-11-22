@@ -50,6 +50,7 @@ export type dynamicRowType = {
 
 // used to define attributes for the properties of an element in the form
 export interface ElementProperties {
+  tag?: string;
   titleEn: string;
   titleFr: string;
   placeholderEn?: string;
@@ -106,7 +107,6 @@ export enum FormElementTypes {
 // used to define attributes for a form element or field
 export interface FormElement {
   id: number;
-  tag?: string;
   subId?: string;
   type: FormElementTypes;
   properties: ElementProperties;

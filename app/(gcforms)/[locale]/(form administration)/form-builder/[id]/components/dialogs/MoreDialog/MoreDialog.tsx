@@ -2,7 +2,6 @@
 import React, { useCallback, useEffect } from "react";
 import { useTranslation } from "@i18n/client";
 import { Button } from "@clientComponents/globals";
-import { getItemPathString } from "@lib/utils/form-builder/getPath";
 import { useTemplateStore } from "@lib/store/useTemplateStore";
 import { Dialog, useDialogRef } from "@formBuilder/components/shared/Dialog";
 import { useCustomEvent } from "@lib/hooks/useCustomEvent";
@@ -17,6 +16,7 @@ import { CharacterLimitOptions } from "./CharacterLimitOptions";
 import { useRefsContext } from "@formBuilder/[id]/edit/components/RefsContext";
 import { FormElement } from "@lib/types";
 import { QuestionTagOptions } from "./QuestionTagOptions";
+import { getPathString } from "@lib/utils/form-builder/getPath";
 
 export const MoreDialog = () => {
   const { elements, updateField, setChangeKey, getFormElementById } = useTemplateStore((s) => ({
@@ -82,7 +82,7 @@ export const MoreDialog = () => {
         className="ml-5"
         theme="primary"
         onClick={() => {
-          updateField(getItemPathString(item.id, elements), item);
+          updateField(getPathString(item.id, elements), item.properties);
           setChangeKey(String(new Date().getTime()));
           handleClose();
         }}

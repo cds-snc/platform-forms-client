@@ -27,9 +27,9 @@ function isTextField(type: string) {
 
 export const defaultField: FormElement = {
   id: 0,
-  tag: uuid(),
   type: FormElementTypes.textField,
   properties: {
+    tag: uuid(),
     subElements: [],
     choices: [{ en: "", fr: "" }],
     titleEn: "",
