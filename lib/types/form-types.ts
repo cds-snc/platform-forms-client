@@ -141,6 +141,7 @@ export interface FormProperties {
   closedMessage?: Record<string, string>;
   layout: number[];
   groups?: GroupsType;
+  data?: Record<string, PropertyChoices[]>;
   groupsLayout?: string[];
   elements: FormElement[];
   brand?: BrandProperties;
@@ -152,6 +153,7 @@ export interface FormProperties {
     | Array<string | number | FormElement>
     | Record<string, string>
     | BrandProperties
+    | Record<string, PropertyChoices[]>
     | GroupsType
     | undefined;
 }
