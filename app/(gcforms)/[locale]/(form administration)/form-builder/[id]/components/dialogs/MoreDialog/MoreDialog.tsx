@@ -16,6 +16,7 @@ import { TextFieldOptions } from "./TextFieldOptions";
 import { CharacterLimitOptions } from "./CharacterLimitOptions";
 import { useRefsContext } from "@formBuilder/[id]/edit/components/RefsContext";
 import { FormElement } from "@lib/types";
+import { ManagedChoicesOptions } from "./ManagedChoicesOptions";
 
 export const MoreDialog = () => {
   const { elements, updateField, setChangeKey, getFormElementById } = useTemplateStore((s) => ({
@@ -118,6 +119,8 @@ export const MoreDialog = () => {
               <TextFieldOptions item={item} setItem={setItem} />
 
               <CharacterLimitOptions item={item} setItem={setItem} />
+
+              <ManagedChoicesOptions item={item} setItem={setItem} />
             </form>
           </div>
         </Dialog>

@@ -118,13 +118,19 @@ export const PanelBody = ({
               {item.properties.managedChoices && (
                 <div data-testid={`managedChoices-${item.id}`} className="mt-5 flex text-sm">
                   <strong>{t("managedList.prefix")}</strong>{" "}
-                  <a
-                    href="https://github.com/cds-snc/gc-organisations"
-                    className="ml-2"
-                    target="_blank"
-                  >
-                    {t(`managedList.${item.properties.managedChoices}`)}
-                  </a>
+                  {item.properties.managedChoices.startsWith("local.") ? (
+                    <span className="ml-2">
+                      {item.properties.managedChoices.replace(/^local\./, "")}
+                    </span>
+                  ) : (
+                    <a
+                      href="https://github.com/cds-snc/gc-organisations"
+                      className="ml-2"
+                      target="_blank"
+                    >
+                      {t(`managedList.${item.properties.managedChoices}`)}
+                    </a>
+                  )}
                   <Tooltip.Info side="top" triggerClassName="align-baseline ml-1">
                     <strong>{t("tooltips.departmentElement.title")}</strong>
                     <Trans
