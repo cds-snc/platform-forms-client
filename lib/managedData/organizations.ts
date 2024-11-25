@@ -1,6 +1,10 @@
 import { ManagedDataSet } from ".";
 import organizationsData from "./data/organizations.json";
 
+// NOTE: get the latest organizations.json from https://github.com/cds-snc/gc-organisations
+// or more specifically https://github.com/cds-snc/gc-organisations/blob/main/data/all.json
+// Also to make the diff cleaner, format the updated JSON before committing it.
+
 export type Organization = {
   type: string;
   name_eng: string;
