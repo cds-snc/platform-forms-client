@@ -20265,6 +20265,17 @@ __metadata:
   languageName: node
   linkType: hard
 
+"status_created_at_vault_name_items_migration@workspace:utils/statusCreatedAtMigration":
+  version: 0.0.0-use.local
+  resolution: "status_created_at_vault_name_items_migration@workspace:utils/statusCreatedAtMigration"
+  dependencies:
+    "@aws-sdk/client-dynamodb": "npm:^3.693.0"
+    "@aws-sdk/lib-dynamodb": "npm:^3.693.0"
+    dotenv: "npm:^16.4.5"
+    tsx: "npm:^4.19.2"
+  languageName: unknown
+  linkType: soft
+
 "std-env@npm:^3.5.0":
   version: 3.7.0
   resolution: "std-env@npm:3.7.0"
