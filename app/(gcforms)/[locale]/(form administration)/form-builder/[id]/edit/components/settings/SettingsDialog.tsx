@@ -99,7 +99,7 @@ const SettingsDialog = ({
     updateField: s.updateField,
   }));
 
-  const responsesLink = `/${i18n.language}/form-builder/${id}/responses/new`;
+  const responsesLink = `/${i18n.language}/form-builder/${id}/responses`;
 
   /*--------------------------------------------*
    * Classification state and handlers
@@ -507,5 +507,9 @@ export const SettingsModal = ({
   handleClose: (arg: boolean) => void;
 }) => {
   const { apiKeyId } = useFormBuilderConfig();
-  return <>{show && <SettingsDialog keyId={apiKeyId || false} handleClose={() => handleClose(false)} />}</>;
+  return (
+    <>
+      {show && <SettingsDialog keyId={apiKeyId || false} handleClose={() => handleClose(false)} />}
+    </>
+  );
 };

@@ -1,8 +1,9 @@
 import { useTranslation } from "@i18n/client";
 import { getDaysPassed } from "@lib/client/clientHelpers";
-import { TypeOmit, VaultStatus, VaultSubmission } from "@lib/types";
+import { TypeOmit, VaultSubmission } from "@lib/types";
 import { ExclamationIcon } from "@serverComponents/icons";
 import React from "react";
+import { StatusFilter } from "../types";
 
 const ExclamationText = ({
   text,
@@ -27,7 +28,7 @@ export const NextStep = ({
   overdueAfter,
   removedRows,
 }: {
-  statusFilter: VaultStatus;
+  statusFilter: StatusFilter;
   submission: TypeOmit<VaultSubmission, "formSubmission" | "submissionID" | "confirmationCode">;
   overdueAfter: number | undefined;
   removedRows: string[];
@@ -68,7 +69,7 @@ export const NextStep = ({
 
   return (
     <>
-      {statusFilter === VaultStatus.NEW && (
+      {statusFilter === StatusFilter.NEW && (
         <>
           {removedRows.includes(submission.name) ? (
             <p>
@@ -81,11 +82,13 @@ export const NextStep = ({
           )}
         </>
       )}
-      {statusFilter === VaultStatus.DOWNLOADED && (
+      {statusFilter === StatusFilter.DOWNLOADED && (
         <p>{getSignOffByMessage(daysPassed, overdueAfter)}</p>
       )}
-      {statusFilter === VaultStatus.CONFIRMED && <p>{getRemovalByMessage(submission.removedAt)}</p>}
-      {statusFilter === VaultStatus.PROBLEM && (
+      {statusFilter === StatusFilter.CONFIRMED && (
+        <p>{getRemovalByMessage(submission.removedAt)}</p>
+      )}
+      {statusFilter === StatusFilter.PROBLEM && (
         <p className="text-red">
           <strong>{t("supportWillContact")}</strong>
           <br />

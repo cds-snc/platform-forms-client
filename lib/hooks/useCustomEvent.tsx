@@ -19,6 +19,7 @@ export const EventKeys = {
   openDynamicRowDialog: "open-dynamic-row-dialog",
   openMoreDialog: "open-more-dialog",
   openDeleteApiKeyDialog: "open-delete-api-key-dialog",
+  openRulesDialog: "open-rules-dialog",
 } as const;
 
 export const useCustomEvent = () => {

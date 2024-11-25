@@ -19,7 +19,7 @@
   "updated": "Paramètre mis à jour",
   "errorUpdating": "Erreur lors de la mise à jour du paramètre",
   "settingNotFound": "Paramètre non trouvé",
-  "help": "[FR]help",
+  "help": "aide",
   "error": {
     "save": "Erreur d'enregistrement des données",
     "duplicateId": "Il s'agit d'un double de l'identifiant interne, veuillez en sélectionner un autre."
@@ -33,20 +33,20 @@
     "value": "Valeur de ce paramètre"
   },
   "throttling": {
-    "title": "[FR]Throttling Rate",
-    "description": "[FR]Increase throttling rate for up to 12 weeks",
-    "weeks": "[FR]Weeks",
-    "permanent": "[FR]Permanently increase throttling rate",
-    "updateRate": "[FR]Update rate",
-    "resetRate": "[FR]Reset rate",
-    "tooltip": "[FR]Checking this disables scheduling a rate. To schedule a rate, uncheck this and the Weeks input will be enabled to schedule a throttling rate.",
+    "title": "Limite du débit de l'API",
+    "description": "Augmenter la limite du débit de l'API pour un maximum de 12 semaines",
+    "weeks": "semaines",
+    "permanent": "Augmenter la limite du débit de l'API indéfiniment",
+    "updateRate": "Modifier le débit de l'API",
+    "resetRate": "Réinitialiser le débit de l'API",
+    "tooltip": "Le fait de cocher cette case ne programmera pas le débit de l'API pour une période de temps spécifique. Pour programmer une fin, décochez cette case et l'entrée 'semaines' sera activée.",
     "succcessUpdate": {
-      "title": "[FR]Throttling rate increased.",
-      "description": "[FR]Rate will stay in effect until: {{success}}"
+      "title": "Le débit de l'API a été augmenté",
+      "description": "Ce débit restera en vigueur jusqu'à ce que : {{success}}"
     },
     "succcessReset": {
-      "title": "[FR]Throttling rate reset."
+      "title": "Le débit de l'API a été réinitialisé avec succès."
     },
-    "error": "[FR]Error updating throttling rate."
+    "error": "Le débit de l'API n'a pas pu être modifié. Veuillez réessayer plus tard."
   }
 }

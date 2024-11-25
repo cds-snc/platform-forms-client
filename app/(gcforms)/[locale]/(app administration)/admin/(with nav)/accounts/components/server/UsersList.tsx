@@ -3,7 +3,7 @@ import { getPublishedFormsPrivilegeId, getAllUsers } from "../../actions";
 
 import { authCheckAndThrow } from "@lib/actions";
 import { serverTranslation } from "@i18n";
-import { Card } from "@clientComponents/globals/card/Card";
+import { Card } from "@serverComponents/globals/card/Card";
 import { ScrollHelper } from "../client/ScrollHelper";
 import { checkPrivilegesAsBoolean } from "@lib/privileges";
 

@@ -5,6 +5,28 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.28.0](https://github.com/cds-snc/platform-forms-client/compare/v3.27.0...v3.28.0) (2024-11-22)
+
+
+### Features
+
+* update new Status#CreatedAt field when changing Status in DynamoDB Vault entries ([#4257](https://github.com/cds-snc/platform-forms-client/issues/4257)) ([a7acab7](https://github.com/cds-snc/platform-forms-client/commit/a7acab786cfacbdbe3fea7d559e086ce7ecde86a))
+
+
+### Bug Fixes
+
+* API screen translations - version 2.0 content changes ([#4676](https://github.com/cds-snc/platform-forms-client/issues/4676)) ([4792a62](https://github.com/cds-snc/platform-forms-client/commit/4792a62fe1a452f8673e6a1789e2dca9008359bc))
+* Updates duplicate element to ensure proper translation for "copy" ([#4672](https://github.com/cds-snc/platform-forms-client/issues/4672)) ([605a60a](https://github.com/cds-snc/platform-forms-client/commit/605a60aac50bd8e8def54c5e189acc926414da86))
+
+
+### Miscellaneous Chores
+
+* add migration script to add CreatedAt property to Vault CONF# items ([#4678](https://github.com/cds-snc/platform-forms-client/issues/4678)) ([7870704](https://github.com/cds-snc/platform-forms-client/commit/7870704d9fd5fc175bec7a4dfe2c082f8f55ab46))
+* Move settings help dialogs into settings components folder ([#4682](https://github.com/cds-snc/platform-forms-client/issues/4682)) ([2eb1178](https://github.com/cds-snc/platform-forms-client/commit/2eb1178ab1c3792c5f826eede6396610c794842d))
+* update Notify timeout setting ([#4692](https://github.com/cds-snc/platform-forms-client/issues/4692)) ([6a39db7](https://github.com/cds-snc/platform-forms-client/commit/6a39db712919df2d27e9f2171db0fbcf777ab7be))
+* update system status boxes ([#4686](https://github.com/cds-snc/platform-forms-client/issues/4686)) ([20f5ad0](https://github.com/cds-snc/platform-forms-client/commit/20f5ad041beccf79e2b2057e67971f89d370bc9b))
+* Use optional catch-all segment for statusFilter ([#4671](https://github.com/cds-snc/platform-forms-client/issues/4671)) ([054e3f1](https://github.com/cds-snc/platform-forms-client/commit/054e3f1e8c03f5df6d4a84c829de67be1b308ddf))
+
 ## [3.27.0](https://github.com/cds-snc/platform-forms-client/compare/v3.26.0...v3.27.0) (2024-11-20)
 
 

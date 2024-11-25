@@ -1,4 +1,6 @@
+"use client";
 import React, { type JSX } from "react";
+import { Trans } from "react-i18next";
 
 export enum HeadingLevel {
   H1 = "h1",
@@ -8,6 +10,23 @@ export enum HeadingLevel {
   H5 = "h5",
   H6 = "h6",
 }
+
+export const Text = ({
+  ns = "form-builder-responses",
+  i18nKey,
+}: {
+  ns?: string;
+  i18nKey: string;
+}) => {
+  return (
+    <Trans
+      ns={ns}
+      i18nKey={i18nKey}
+      defaults="<p></p> <strong></strong> <a></a>"
+      components={{ p: <p />, strong: <strong />, a: <a /> }}
+    />
+  );
+};
 
 export const Card = ({
   children,
