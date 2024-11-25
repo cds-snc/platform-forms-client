@@ -640,10 +640,10 @@
         "responseLinkText": "page Réponses"
       },
       "generateKeySuccess": {
-        "title": "API key generated",
-        "message": "New responses are now available through the API . Instructions and code examples are available in our",
-        "docsLinkText": "API documentation",
-        "docsLink": "https://cds-snc.github.io/forms-api/home/"
+        "title": "La clé API a été créée",
+        "message": "Les nouvelles réponses seront disponibles par l'API. Trouvez des instructions et des exemples de code dans la ",
+        "docsLinkText": "documentation technique",
+        "docsLink": "https://cds-snc.github.io/forms-api/accueil/"
       },
       "keyExists": "La clé existe déjà",
       "keyIdToolTip": {
