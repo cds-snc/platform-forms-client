@@ -1,12 +1,11 @@
 "use client";
 import React, { useCallback, useEffect, useState } from "react";
 import { useTranslation } from "@i18n/client";
-
 import { cn } from "@lib/utils";
 import { Button } from "@clientComponents/globals";
 import { Dialog, useDialogRef } from "@formBuilder/components/shared/Dialog";
 import { EventKeys, useCustomEvent } from "@lib/hooks/useCustomEvent";
-
+import { toast } from "@formBuilder/components/shared/Toast";
 import { ResponsibilityList } from "./ResponsibilityList";
 import { ConfirmationAgreement } from "./ConfirmationAgreement";
 import { Note } from "./Note";
@@ -16,6 +15,7 @@ import * as Alert from "@clientComponents/globals/Alert/Alert";
 import { logMessage } from "@lib/logger";
 import { sendResponsesToVault } from "@formBuilder/actions";
 import { useFormBuilderConfig } from "@lib/hooks/useFormBuilderConfig";
+import { GenerateKeySuccess } from "./GenerateKeySuccess";
 
 type APIKeyCustomEventDetails = {
   id: string;
@@ -89,6 +89,7 @@ export const ApiKeyDialog = () => {
 
       setGenerating(false);
       updateApiKeyId(key.keyId);
+      toast.success(<GenerateKeySuccess />, "wide");
       dialog.current?.close();
       setIsOpen(false);
     } catch (error) {

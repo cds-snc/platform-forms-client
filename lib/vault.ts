@@ -389,7 +389,7 @@ export async function retrieveSubmissions(
  * @param email Email address of the user downloading the Submission
  */
 export async function updateLastDownloadedBy(
-  responses: Array<{ id: string; status: string }>,
+  responses: Array<{ id: string; status: string; createdAt: number }>,
   formID: string,
   email: string
 ) {
@@ -407,16 +407,22 @@ export async function updateLastDownloadedBy(
               NAME_OR_CONF: `NAME#${response.id}`,
             },
             UpdateExpression: "SET LastDownloadedBy = :email, DownloadedAt = :downloadedAt".concat(
-              isNewResponse ? ", #status = :statusUpdate" : ""
+              isNewResponse
+                ? ", #status = :statusUpdate, #statusCreatedAtKey = :statusCreatedAtValue"
+                : ""
             ),
             ExpressionAttributeValues: {
               ":email": email,
               ":downloadedAt": Date.now(),
-              ...(isNewResponse && { ":statusUpdate": "Downloaded" }),
+              ...(isNewResponse && {
+                ":statusUpdate": "Downloaded",
+                ":statusCreatedAtValue": `Downloaded#${response.createdAt}`,
+              }),
             },
             ...(isNewResponse && {
               ExpressionAttributeNames: {
                 "#status": "Status",
+                "#statusCreatedAtKey": "Status#CreatedAt",
               },
             }),
           },
@@ -577,7 +583,7 @@ async function getSubmissionsFromConfirmationCodes(
   formId: string,
   confirmationCodes: string[]
 ): Promise<{
-  submissionsToConfirm: { name: string; confirmationCode: string }[];
+  submissionsToConfirm: { name: string; createdAt: number; confirmationCode: string }[];
   confirmationCodesAlreadyUsed: string[];
   confirmationCodesNotFound: string[];
 }> {
@@ -594,7 +600,7 @@ async function getSubmissionsFromConfirmationCodes(
   });
 
   const accumulatedSubmissions: {
-    [confCode: string]: { name: string; removalDate?: number };
+    [confCode: string]: { name: string; createdAt: number; removalDate?: number };
   } = {};
 
   let requestedKeys = confirmationCodes.map((code) => {
@@ -606,7 +612,7 @@ async function getSubmissionsFromConfirmationCodes(
       RequestItems: {
         Vault: {
           Keys: requestedKeys,
-          ProjectionExpression: "#name,ConfirmationCode,RemovalDate",
+          ProjectionExpression: "#name,CreatedAt,ConfirmationCode,RemovalDate",
           ExpressionAttributeNames: {
             "#name": "Name",
           },
@@ -621,6 +627,7 @@ async function getSubmissionsFromConfirmationCodes(
       response.Responses.Vault.forEach((record) => {
         accumulatedSubmissions[record["ConfirmationCode"]] = {
           name: record["Name"],
+          createdAt: record["CreatedAt"],
           removalDate: record["RemovalDate"],
         };
       });
@@ -647,13 +654,14 @@ async function getSubmissionsFromConfirmationCodes(
       } else {
         acc.submissionsToConfirm.push({
           name: submission.name,
+          createdAt: submission.createdAt,
           confirmationCode: currentConfirmationCode,
         });
       }
       return acc;
     },
     {
-      submissionsToConfirm: Array<{ name: string; confirmationCode: string }>(),
+      submissionsToConfirm: Array<{ name: string; createdAt: number; confirmationCode: string }>(),
       confirmationCodesAlreadyUsed: Array<string>(),
       confirmationCodesNotFound: Array<string>(),
     }
@@ -724,12 +732,14 @@ export const confirmResponses = async (
                     NAME_OR_CONF: `NAME#${submission.name}`,
                   },
                   UpdateExpression:
-                    "SET #status = :status, ConfirmTimestamp = :confirmTimestamp, RemovalDate = :removalDate",
+                    "SET #status = :status, #statusCreatedAtKey = :statusCreatedAtValue, ConfirmTimestamp = :confirmTimestamp, RemovalDate = :removalDate",
                   ExpressionAttributeNames: {
                     "#status": "Status",
+                    "#statusCreatedAtKey": "Status#CreatedAt",
                   },
                   ExpressionAttributeValues: {
                     ":status": "Confirmed",
+                    ":statusCreatedAtValue": `Confirmed#${submission.createdAt}`,
                     ":confirmTimestamp": confirmationTimestamp,
                     ":removalDate": removalDate,
                   },

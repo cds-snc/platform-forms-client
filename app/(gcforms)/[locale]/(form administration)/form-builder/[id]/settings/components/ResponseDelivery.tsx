@@ -13,9 +13,9 @@ import { Radio } from "@formBuilder/components/shared/MultipleChoice";
 import { Button } from "@clientComponents/globals";
 import { useTemplateStore } from "@lib/store/useTemplateStore";
 import { completeEmailAddressRegex } from "@lib/utils/form-builder";
-import { ResponseDeliveryHelpButton } from "@formBuilder/components/shared/ResponseDeliveryHelpDialog";
-import { FormPurposeHelpButton } from "@formBuilder/components/shared/FormPurposeHelpButton";
-import { ResponseDeliveryHelpButtonWithApi } from "@formBuilder/components/shared/ResponseDeliveryHelpDialogApiWithApi";
+import { ResponseDeliveryHelpButton } from "./dialogs/ResponseDeliveryHelpDialog";
+import { FormPurposeHelpButton } from "./dialogs/FormPurposeHelpButton";
+import { ResponseDeliveryHelpButtonWithApi } from "./dialogs/ResponseDeliveryHelpDialogApiWithApi";
 import {
   ClassificationType,
   ClassificationSelect,
@@ -350,6 +350,11 @@ export const ResponseDelivery = ({ isFormsAdmin }: { isFormsAdmin: boolean }) =>
 
             <div className="mb-10">
               <h2 className="mb-6">{t("settingsResponseDelivery.title")}</h2>
+              {hasApiKey && (
+                <p className="mb-10 inline-block bg-purple-200 p-3 text-sm font-bold">
+                  {t("settingsResponseDelivery.deleteApiKeyMessage")}
+                </p>
+              )}
               {protectedBSelected ? (
                 <p className="mb-5 inline-block bg-purple-200 p-3 text-sm font-bold">
                   {t("settingsResponseDelivery.protectedBMessage")}
@@ -413,12 +418,7 @@ export const ResponseDelivery = ({ isFormsAdmin }: { isFormsAdmin: boolean }) =>
                       {t("formSettingsModal.apiOption.startNote")}
                     </span>
                   </div>
-                  <div className="flex">
-                    <ApiKeyButton showDelete />{" "}
-                    <div className="mt-2">
-                      <ResponseDeliveryHelpButtonWithApi />
-                    </div>
-                  </div>
+                  <ApiKeyButton showDelete />
                   <ApiDocNotes />
                 </div>
               )}

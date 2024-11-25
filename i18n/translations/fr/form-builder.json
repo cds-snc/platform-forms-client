@@ -621,6 +621,7 @@
   "selectAutocompleteHint": "Cette option est utile lorsque les personnes qui remplissent le formulaire fournissent des informations personnelles telles que leur adresse, courriel ou numéro de téléphone.",
   "selectElement": "Sélectionnez un type d'élément",
   "send": "Envoyer",
+  "copy": "copie",
   "settings": {
     "formManagement": "Gestion du formulaire",
     "api": {
@@ -637,6 +638,12 @@
         "title": "La clé API a été supprimée",
         "message": "Les nouvelles réponses peuvent maintenant être téléchargées sur la",
         "responseLinkText": "page Réponses"
+      },
+      "generateKeySuccess": {
+        "title": "API key generated",
+        "message": "New responses are now available through the API . Instructions and code examples are available in our",
+        "docsLinkText": "API documentation",
+        "docsLink": "https://cds-snc.github.io/forms-api/home/"
       },
       "keyExists": "La clé existe déjà",
       "keyIdToolTip": {
@@ -731,6 +738,7 @@
   "settingsResponseDelivery": {
     "selectClassification": "Classification des données",
     "beforePublishMessage": "Ces paramètres ne peuvent être modifiés qu’avant la publication.",
+    "deleteApiKeyMessage": "Vous devez supprimer la clé API avant de pouvoir modifier l'option de livraison.",
     "protectedBMessage": "Les réponses classifiées PROTÉGÉ B doivent être téléchargées de Formulaires GC.",
     "settingsMessage": "Pour modifier ces paramètres, sélectionnez la classification des données de vos réponses au formulaire.",
     "title": "Option de livraison",
@@ -738,7 +746,7 @@
     "vaultOptionHint": {
       "text1": " Les réponses soumises apparaîtront sur",
       "text2": "la page Réponses",
-      "text3": " Formulaires GC conserve les données temporairement pour 30 hours."
+      "text3": " Formulaires GC conserve les données temporairement pour 30 jours."
     },
     "emailOption": "Recevoir les réponses par courriel",
     "saveButton": "Enregistrer les modifications",
@@ -873,10 +881,10 @@
   "startP2": "Modifiez un formulaire qui a été créé et téléchargé à partir de Formulaires GC.",
   "submit": "Soumettre",
   "submittedResponsesText": "Les réponses soumises seront envoyées à {{email}}.",
-  "submittedResponsesChange": "Modifier où les réponses soumises sont envoyées",
+  "submittedResponsesChange": "Modifier comment les réponses soumises sont livrées",
   "submittedResponsesTextVault": {
-    "text1": "En cliquant sur « Soumettre », la réponse sera transmise à la page",
-    "text2": "Réponses"
+    "text1": "En cliquant sur « Soumettre », la réponse sera disponible pour récupération.",
+    "text2": "Allez à la page Réponses"
   },
   "support": {
     "contactUs": "formulaire de contact",
@@ -1278,5 +1286,8 @@
       "save": "Enregistrer",
       "cancel": "Annuler"
     }
+  },
+  "systemHealthCheck": {
+    "title": "Bilan de santé du système"
   }
 }

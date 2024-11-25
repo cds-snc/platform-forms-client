@@ -6,17 +6,22 @@ import { NavigationTabs } from "./NavigationTabs";
 import { ResponsesFooter } from "./ResponsesFooter";
 import { Responses } from "./Responses";
 import { ManageFormAccessDialogContainer } from "./ManageFormAccessDialog";
-import { useFormBuilderConfig } from "@lib/hooks/useFormBuilderConfig";
+import { StatusFilter } from "../types";
 import { useTranslation } from "@i18n/client";
 
-export const ClientContainer = ({
+export const ResponsesContainer = ({
   responseDownloadLimit,
   overdueAfter,
+  statusFilter,
+  isApiRetrieval,
 }: {
   responseDownloadLimit: number;
   overdueAfter: number;
+  statusFilter: StatusFilter;
+  isApiRetrieval: boolean;
 }) => {
   const { t } = useTranslation("form-builder-responses");
+
   const { isPublished, id, deliveryOption } = useTemplateStore((s) => ({
     isPublished: s.isPublished,
     id: s.id,
@@ -25,18 +30,20 @@ export const ClientContainer = ({
 
   const isReady = useRehydrate();
 
-  const { hasApiKeyId } = useFormBuilderConfig();
-
   // Wait until the template store is fully hydrated before rendering the content
   if (!isReady) return null;
 
-  // Delivery option is API
-  if (hasApiKeyId) {
+  if (isApiRetrieval) {
     return (
       <>
         <div className="mr-10">
           <h1>{t("apiDashboard.title")}</h1>
-          <Responses responseDownloadLimit={responseDownloadLimit} overdueAfter={overdueAfter} />
+          <Responses
+            statusFilter={statusFilter}
+            responseDownloadLimit={responseDownloadLimit}
+            overdueAfter={overdueAfter}
+            isApiRetrieval={true}
+          />
         </div>
       </>
     );
@@ -62,7 +69,11 @@ export const ClientContainer = ({
     <>
       <div className="mr-10">
         <NavigationTabs formId={id} />
-        <Responses responseDownloadLimit={responseDownloadLimit} overdueAfter={overdueAfter} />
+        <Responses
+          statusFilter={statusFilter}
+          responseDownloadLimit={responseDownloadLimit}
+          overdueAfter={overdueAfter}
+        />
         <ResponsesFooter formId={id} />
       </div>
       <ManageFormAccessDialogContainer formId={id} />

@@ -206,6 +206,7 @@ export const getSubmissionsByFormat = async ({
     const fullFormTemplate = await getFullTemplateByID(ability, formID);
 
     if (fullFormTemplate === null) {
+      logMessage.warn(`getSubmissionsByFormat form not found: ${formID}`);
       throw new FormBuilderError("Form not found", FormServerErrorCodes.FORM_NOT_FOUND);
     }
 
@@ -359,6 +360,7 @@ export const getSubmissionsByFormat = async ({
       return {
         id: item.name,
         status: item.status,
+        createdAt: item.createdAt,
       };
     });
 
@@ -394,7 +396,11 @@ export const getSubmissionsByFormat = async ({
         );
     }
   } catch (err) {
-    logMessage.error(`Could not create submissions in format ${format}: ${(err as Error).message}`);
+    logMessage.warn(
+      `Could not create submissions in format ${format} formId: ${formID}: ${
+        (err as Error).message
+      }`
+    );
 
     if (err instanceof FormBuilderError) {
       return {
@@ -425,6 +431,16 @@ export const newResponsesExist = async (formId: string) => {
   try {
     const { ability } = await authCheckAndRedirect();
     return submissionTypeExists(ability, formId, VaultStatus.NEW);
+  } catch (error) {
+    // Throw sanitized error back to client
+    return { error: "There was an error. Please try again later." } as ServerActionError;
+  }
+};
+
+export const unConfirmedResponsesExist = async (formId: string) => {
+  try {
+    const { ability } = await authCheckAndRedirect();
+    return submissionTypeExists(ability, formId, VaultStatus.DOWNLOADED);
   } catch (error) {
     // Throw sanitized error back to client
     return { error: "There was an error. Please try again later." } as ServerActionError;

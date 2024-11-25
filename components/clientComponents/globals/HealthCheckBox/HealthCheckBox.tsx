@@ -7,7 +7,7 @@ type HealthCheckBoxProps = {
   titleKey?: string;
   children?: ReactNode | string;
   className?: string;
-  count?: number;
+  status?: React.JSX.Element | string;
 };
 
 const Container = ({ children }: { children: HealthCheckBoxProps["children"] }) => {
@@ -30,7 +30,7 @@ const Icon = ({ type }: { type: keyof typeof ErrorStatus }) => {
   );
 };
 
-const NumberCount = ({ count }: { count: number }) => {
+export const NumberCount = ({ count }: { count: number }) => {
   return (
     <div className="mb-2">
       <div className="mt-2 flex items-center justify-center text-4xl font-bold">{count}</div>
@@ -47,6 +47,10 @@ const Text = ({ ns = "form-builder-responses", i18nKey }: { ns?: string; i18nKey
       components={{ strong: <strong />, a: <a /> }}
     />
   );
+};
+
+const IconStatus = ({ status }: { status: ErrorStatus }) => {
+  return <Icon type={status} />;
 };
 
 export const BoxContainer = ({
@@ -68,10 +72,10 @@ export const BoxContainer = ({
   );
 };
 
-export const Success = ({ children, titleKey, count }: HealthCheckBoxProps) => {
+export const Success = ({ children, titleKey, status }: HealthCheckBoxProps) => {
   return (
     <BoxContainer className="border-emerald-500 bg-emerald-50 text-emerald-700">
-      {count ? <NumberCount count={count} /> : <Icon type={ErrorStatus.SUCCESS} />}
+      {status ? status : <IconStatus status={ErrorStatus.SUCCESS} />}
       <div className="flex flex-col items-center justify-center">
         {titleKey && <Title i18nKey={titleKey} />}
         <div className="text-blue-dark">{children}</div>
@@ -80,10 +84,10 @@ export const Success = ({ children, titleKey, count }: HealthCheckBoxProps) => {
   );
 };
 
-export const Danger = ({ children, titleKey, count }: HealthCheckBoxProps) => {
+export const Danger = ({ children, titleKey, status }: HealthCheckBoxProps) => {
   return (
     <BoxContainer className="border-red-500 bg-red-50 text-red-700">
-      {count ? <NumberCount count={count} /> : <Icon type={ErrorStatus.ERROR} />}
+      {status ? status : <IconStatus status={ErrorStatus.ERROR} />}
       <div className="flex flex-col items-center justify-center">
         {titleKey && <Title i18nKey={titleKey} />}
         <div className="text-blue-dark">{children}</div>
@@ -92,10 +96,10 @@ export const Danger = ({ children, titleKey, count }: HealthCheckBoxProps) => {
   );
 };
 
-export const Warning = ({ children, titleKey, count }: HealthCheckBoxProps) => {
+export const Warning = ({ children, titleKey, status }: HealthCheckBoxProps) => {
   return (
     <BoxContainer className="border-yellow-500 bg-yellow-50 text-yellow-700">
-      {count ? <NumberCount count={count} /> : <Icon type={ErrorStatus.WARNING} />}
+      {status ? status : <IconStatus status={ErrorStatus.WARNING} />}
       <div className="flex flex-col items-center justify-center">
         {titleKey && <Title i18nKey={titleKey} />}
         <div className="text-blue-dark">{children}</div>

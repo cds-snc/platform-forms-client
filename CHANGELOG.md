@@ -5,6 +5,33 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.27.0](https://github.com/cds-snc/platform-forms-client/compare/v3.26.0...v3.27.0) (2024-11-20)
+
+
+### Features
+
+* adds throttling UI ([#4655](https://github.com/cds-snc/platform-forms-client/issues/4655)) ([55542ad](https://github.com/cds-snc/platform-forms-client/commit/55542adb5b9c761b4b92c909172af59d0df0cdf2))
+* api response dashboard ([#4585](https://github.com/cds-snc/platform-forms-client/issues/4585)) ([a6aa565](https://github.com/cds-snc/platform-forms-client/commit/a6aa565b9e1b22ab8d2f8a4840a508ffdb30d7e9))
+
+
+### Bug Fixes
+
+* Adds date ISO check to closing a form ([#4563](https://github.com/cds-snc/platform-forms-client/issues/4563)) ([edc09bb](https://github.com/cds-snc/platform-forms-client/commit/edc09bb533f5d9b610d2cd662d9524daa31a7127))
+* translations CSV export where some commas were not escaped ([#4666](https://github.com/cds-snc/platform-forms-client/issues/4666)) ([371b2fc](https://github.com/cds-snc/platform-forms-client/commit/371b2fc4fd777998f245e361dadb45e7e66921f7))
+
+
+### Miscellaneous Chores
+
+* add form id to log for form not found ([#4677](https://github.com/cds-snc/platform-forms-client/issues/4677)) ([c5131cf](https://github.com/cds-snc/platform-forms-client/commit/c5131cf5da113ba30e86039bc88a6d02a9cd8a36))
+* add health check box for "awaiting" api delivery ([#4665](https://github.com/cds-snc/platform-forms-client/issues/4665)) ([8c2e0b3](https://github.com/cds-snc/platform-forms-client/commit/8c2e0b356b38eec5a6477cc08a9e4f91a29d16d9))
+* Add report a problem for API mode ([#4675](https://github.com/cds-snc/platform-forms-client/issues/4675)) ([8b5b519](https://github.com/cds-snc/platform-forms-client/commit/8b5b519c64988c2f427120bebd6d7913e4cef1d9))
+* Add view for API submissions available ([#4659](https://github.com/cds-snc/platform-forms-client/issues/4659)) ([1ca5aa1](https://github.com/cds-snc/platform-forms-client/commit/1ca5aa1cf01546da0a75e42ff58f32f85ad164b7))
+* remove api access route ([#4648](https://github.com/cds-snc/platform-forms-client/issues/4648)) ([b0633da](https://github.com/cds-snc/platform-forms-client/commit/b0633da8dbe997af4f73c55eab3de201b7dd5b50))
+* Server Action to check for any new responses ([#4657](https://github.com/cds-snc/platform-forms-client/issues/4657)) ([f42654f](https://github.com/cds-snc/platform-forms-client/commit/f42654fa2bc522bdcb2008e704c1332602d2be4b))
+* System health component ([#4664](https://github.com/cds-snc/platform-forms-client/issues/4664)) ([f346ce2](https://github.com/cds-snc/platform-forms-client/commit/f346ce22f22cca5f35f3852422212e3caa2a1bdb))
+* update api check ([#4653](https://github.com/cds-snc/platform-forms-client/issues/4653)) ([fd00431](https://github.com/cds-snc/platform-forms-client/commit/fd00431a387707bdde1718ecfea9234e3b8701b2))
+* update check for settings panel  ([#4658](https://github.com/cds-snc/platform-forms-client/issues/4658)) ([57c1a60](https://github.com/cds-snc/platform-forms-client/commit/57c1a60748c0d1c6fac46867b4d1661a7baad8ce))
+
 ## [3.26.0](https://github.com/cds-snc/platform-forms-client/compare/v3.25.2...v3.26.0) (2024-11-12)
 
 

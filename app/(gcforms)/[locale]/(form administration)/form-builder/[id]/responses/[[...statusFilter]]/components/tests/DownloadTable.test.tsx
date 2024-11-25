@@ -6,6 +6,7 @@ import { act, render } from "@testing-library/react";
 import { DownloadTable } from "../DownloadTable";
 import { VaultSubmissionList, VaultStatus } from "@lib/types";
 import axios from "axios";
+import { StatusFilter } from "../../types";
 
 jest.mock("next/navigation", () => ({
   useSearchParams: () => jest.fn(),
@@ -40,6 +41,7 @@ describe("Download Table", () => {
 
     const rendered = render(
       <DownloadTable
+        statusFilter={StatusFilter.NEW}
         vaultSubmissions={vaultSubmissions}
         formId="clg17xha50008efkgfgxa8l4f"
         formName={""}

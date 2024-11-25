@@ -621,6 +621,7 @@
   "selectAutocompleteHint": "This option is great when the form filler is providing personal information like their address, email or phone number.",
   "selectElement": "Select an element type",
   "send": "Send",
+  "copy": "copy",
   "settings": {
     "formManagement": "Form management",
     "api": {
@@ -633,10 +634,20 @@
         "title": "Something went wrong",
         "message": "API key could not be deleted"
       },
+      "deleteApiKeyToChangeOptions": {
+        "title": "Delete API key to change options",
+        "message": "You must delete the API key before you can change the delivery option."
+      },
       "deleteKeySuccess": {
         "title": "API key deleted",
         "message": "New responses can now be downloaded on the",
         "responseLinkText": "Responses page"
+      },
+      "generateKeySuccess": {
+        "title": "API key generated",
+        "message": "New responses are now available through the API . Instructions and code examples are available in our",
+        "docsLinkText": "API documentation",
+        "docsLink": "https://cds-snc.github.io/forms-api/home/"
       },
       "keyExists": "API key already exists",
       "keyIdToolTip": {
@@ -731,6 +742,7 @@
   "settingsResponseDelivery": {
     "selectClassification": "Data classification",
     "beforePublishMessage": "These settings can only be changed before publishing.",
+    "deleteApiKeyMessage": "You must delete the API key before you can change the delivery option.",
     "protectedBMessage": "PROTECTED B responses must be downloaded from GC Forms.",
     "settingsMessage": "To change these settings, select the data classification of your form responses.",
     "title": "Delivery option",
@@ -873,10 +885,10 @@
   "startP2": "Edit a form that was created and downloaded from GC Forms.",
   "submit": "Submit",
   "submittedResponsesText": "Submitted responses will be sent to {{email}}.",
-  "submittedResponsesChange": "Change where submitted responses are sent",
+  "submittedResponsesChange": "Change how responses delivered",
   "submittedResponsesTextVault": {
-    "text1": "Clicking submit will send form responses to the",
-    "text2": "Responses page"
+    "text1": "Clicking submit will make responses available for retrieval.",
+    "text2": "Go to Responses page"
   },
   "support": {
     "contactUs": "contact form",
@@ -972,7 +984,7 @@
       "label": "Receive responses by email",
       "note": "Not available for PROTECTED B"
     },
-        "apiOption": {
+    "apiOption": {
       "label": "Receive responses via API",
       "note": "Submitted responses will be available for retrieval through an API endpoint and the Response page.",
       "startNote": "Start your API integration by creating a private API Key"
@@ -1278,5 +1290,8 @@
       "save": "Save",
       "cancel": "Cancel"
     }
+  },
+  "systemHealthCheck": {
+    "title": "System health check"
   }
 }
