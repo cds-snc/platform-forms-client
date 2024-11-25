@@ -38,5 +38,6 @@ export const defaultForm = {
   },
   layout: [],
   elements: [],
+  nextElementId: 1,
   groups: {},
 };

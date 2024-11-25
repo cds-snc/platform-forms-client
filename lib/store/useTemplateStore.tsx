@@ -29,7 +29,6 @@ import {
   moveElementUp,
   removeElementById,
   removeById,
-  incrementElementId,
   getSchemaFromState,
   incrementSubElementId,
   cleanInput,
@@ -79,6 +78,11 @@ const createTemplateStore = (initProps?: Partial<InitialTemplateStoreProps>) => 
       initProps.form.groupsLayout = [];
     } else {
       initProps.form.groups = orderGroups(initProps.form.groups, initProps.form.groupsLayout);
+    }
+
+    // Handle legacy forms to ensure nextElementId is set correctly
+    if (initProps.form.nextElementId === 1 && initProps.form.elements.length == 1) {
+      initProps.form.nextElementId = initProps.form.elements.length + 1;
     }
   }
 
@@ -212,11 +216,13 @@ const createTemplateStore = (initProps?: Partial<InitialTemplateStoreProps>) => 
               });
             },
             add: async (elIndex = 0, type = FormElementTypes.radio, data, groupId) => {
+              const id = get().form.nextElementId;
+              get().incrementNextElementId();
+
               return new Promise((resolve) => {
                 set((state) => {
                   const allowGroups = state.allowGroupsFlag;
 
-                  const id = incrementElementId(state.form.elements);
                   const item = {
                     ...defaultField,
                     ...data,
@@ -365,8 +371,9 @@ const createTemplateStore = (initProps?: Partial<InitialTemplateStoreProps>) => 
             },
             duplicateElement: (itemId, groupId = "", copyEn = "", copyFr = "") => {
               const elIndex = get().form.elements.findIndex((el) => el.id === itemId);
+              const id = get().form.nextElementId;
+              get().incrementNextElementId();
               set((state) => {
-                const id = incrementElementId(state.form.elements);
                 // deep copy the element
                 const element = JSON.parse(JSON.stringify(state.form.elements[elIndex]));
                 element.id = id;
@@ -495,6 +502,13 @@ const createTemplateStore = (initProps?: Partial<InitialTemplateStoreProps>) => 
             setGroupsLayout: (layout) => {
               set((state) => {
                 state.form.groupsLayout = layout;
+              });
+            },
+            incrementNextElementId: () => {
+              set((state) => {
+                // Increment nextElementId
+                const nextElementId = state.form.nextElementId;
+                state.form.nextElementId = nextElementId + 1;
               });
             },
           }),

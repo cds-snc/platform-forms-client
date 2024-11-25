@@ -76,6 +76,7 @@ export interface TemplateStoreState extends TemplateStoreProps {
   setChangeKey: (key: string) => void;
   getGroupsEnabled: () => boolean;
   setGroupsLayout: (layout: string[]) => void;
+  incrementNextElementId: () => void;
 }
 
 export interface InitialTemplateStoreProps extends TemplateStoreProps {
