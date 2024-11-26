@@ -38,7 +38,7 @@ import {
 import { logMessage } from "@lib/logger";
 import { decrementChoiceIds, decrementNextActionChoiceIds } from "@lib/formContext";
 import { Language } from "../types/form-builder-types";
-import { FormElementTypes } from "@lib/types";
+import { FormElementTypes, PropertyChoices } from "@lib/types";
 import { defaultField, defaultForm } from "./defaults";
 import { storage } from "./storage";
 import { clearTemplateStorage } from "./utils";
@@ -451,6 +451,15 @@ const createTemplateStore = (initProps?: Partial<InitialTemplateStoreProps>) => 
               }
 
               return undefined;
+            },
+            getLocalManagedData: () => get().form.data,
+            addLocalManagedData: (key: string, data: PropertyChoices[]) => {
+              set((state) => {
+                state.form.data = {
+                  ...state.form.data,
+                  [key]: data,
+                };
+              });
             },
             getName: () => get().name,
             getDeliveryOption: () => get().deliveryOption,

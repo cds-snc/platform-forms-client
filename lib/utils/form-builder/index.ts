@@ -125,6 +125,7 @@ export const getSchemaFromState = (state: TemplateStoreState, allowGroups = fals
       securityAttribute,
       layout,
       groups,
+      data,
       groupsLayout,
     },
   } = state;
@@ -140,6 +141,7 @@ export const getSchemaFromState = (state: TemplateStoreState, allowGroups = fals
     securityAttribute,
     brand,
     groups,
+    data,
     groupsLayout,
   };
 

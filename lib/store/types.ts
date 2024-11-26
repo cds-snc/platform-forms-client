@@ -8,7 +8,7 @@ import {
   ElementProperties,
   SecurityAttribute,
 } from "@lib/types";
-import { BrandProperties } from "@lib/types/form-types";
+import { BrandProperties, PropertyChoices } from "@lib/types/form-types";
 
 export interface TemplateStoreState extends TemplateStoreProps {
   focusInput: boolean;
@@ -66,6 +66,8 @@ export interface TemplateStoreState extends TemplateStoreProps {
   setIsPublished: (isPublished: boolean) => void;
   getFormElementById: (id: number) => FormElement | undefined;
   getFormElementWithIndexById: (id: number) => FormElementWithIndex | undefined;
+  getLocalManagedData: () => Record<string, PropertyChoices[]> | undefined;
+  addLocalManagedData: (key: string, value: PropertyChoices[]) => void;
   getName: () => string;
   getDeliveryOption: () => DeliveryOption | undefined;
   resetDeliveryOption: () => void;

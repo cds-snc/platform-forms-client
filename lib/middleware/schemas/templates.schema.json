@@ -83,6 +83,9 @@
       "uniqueItems": true,
       "examples": [[2, 3, 4, 6, 9, 5]]
     },
+    "data": {
+      "type": "object"
+    },
     "groups": {
       "type": "object",
       "properties": {

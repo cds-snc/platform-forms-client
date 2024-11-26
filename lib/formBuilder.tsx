@@ -27,6 +27,7 @@ import { getLocalizedProperty } from "@lib/utils";
 import { managedData } from "@lib/managedData";
 import { AddressComplete } from "@clientComponents/forms/AddressComplete/AddressComplete";
 import { DateFormat } from "@clientComponents/forms/FormattedDate/types";
+import { useGCFormsContext } from "./hooks/useGCFormContext";
 
 // This function is used for select/radio/checkbox i18n change of form labels
 function getLocaleChoices(choices: Array<PropertyChoices> | undefined, lang: string) {
@@ -45,7 +46,11 @@ function getLocaleChoices(choices: Array<PropertyChoices> | undefined, lang: str
 }
 
 // This function renders the form elements with passed in properties.
-function _buildForm(element: FormElement, lang: string): ReactElement {
+function _buildForm(
+  element: FormElement,
+  lang: string,
+  formData?: PublicFormRecord["form"]["data"]
+): ReactElement {
   const id = element.subId ?? element.id;
 
   let choices =
@@ -53,11 +58,16 @@ function _buildForm(element: FormElement, lang: string): ReactElement {
       ? getLocaleChoices(element.properties.choices, lang)
       : [];
 
-  // Retrieve managed data from static json file if specified
+  // Is this ManagedData or LocalManagedData?
   if (element.properties.managedChoices) {
-    const dataFile = element.properties.managedChoices;
-    const data = managedData[dataFile];
-    choices = data ? getLocaleChoices(data, lang) : [];
+    if (element.properties.managedChoices.startsWith("local.") && formData) {
+      const data = formData.locations as PropertyChoices[];
+      choices = data ? getLocaleChoices(data, lang) : [];
+    } else {
+      const dataFile = element.properties.managedChoices;
+      const data = managedData[dataFile];
+      choices = data ? getLocaleChoices(data, lang) : [];
+    }
   }
 
   const subElements =
@@ -404,8 +414,9 @@ type GenerateElementProps = {
   language: string;
 };
 export const GenerateElement = (props: GenerateElementProps): React.ReactElement => {
+  const { formRecord } = useGCFormsContext();
   const { element, language } = props;
-  const generatedElement = _buildForm(element, language);
+  const generatedElement = _buildForm(element, language, formRecord.form.data);
   return (
     <ConditionalWrapper element={element} rules={element.properties.conditionalRules || null}>
       {generatedElement}
