@@ -38,6 +38,6 @@ export const defaultForm = {
   },
   layout: [],
   elements: [],
-  nextElementId: 0,
+  lastGeneratedElementId: 0,
   groups: {},
 };

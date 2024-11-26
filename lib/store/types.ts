@@ -77,7 +77,7 @@ export interface TemplateStoreState extends TemplateStoreProps {
   getGroupsEnabled: () => boolean;
   setGroupsLayout: (layout: string[]) => void;
   getHighestElementId: () => number;
-  nextElementId: () => number;
+  generateElementId: () => number;
 }
 
 export interface InitialTemplateStoreProps extends TemplateStoreProps {

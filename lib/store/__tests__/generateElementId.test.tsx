@@ -61,7 +61,7 @@ const defaultElements = [
   },
 ];
 
-describe("incrementNextElementId", () => {
+describe("generateElementId", () => {
   it("existing ids in order", async () => {
     const result = createStore();
 
@@ -77,19 +77,19 @@ describe("incrementNextElementId", () => {
     expect(result.current.form.elements[0].id).toBe(1);
     expect(result.current.form.elements[1].id).toBe(2);
     expect(result.current.form.elements[2].id).toBe(3);
-    expect(result.current.form.nextElementId).toBe(undefined);
+    expect(result.current.form.lastGeneratedElementId).toBe(undefined);
 
     act(() => {
       result.current.add(1);
     });
 
-    expect(result.current.form.nextElementId).toBe(4);
+    expect(result.current.form.lastGeneratedElementId).toBe(4);
 
     act(() => {
       result.current.add(3);
     });
 
-    expect(result.current.form.nextElementId).toBe(5);
+    expect(result.current.form.lastGeneratedElementId).toBe(5);
   });
 
   it("handles ids out of sequence", async () => {
@@ -122,13 +122,13 @@ describe("incrementNextElementId", () => {
       result.current.add(0);
     });
 
-    expect(result.current.form.nextElementId).toBe(20);
+    expect(result.current.form.lastGeneratedElementId).toBe(20);
 
     act(() => {
       result.current.add(0);
     });
 
-    expect(result.current.form.nextElementId).toBe(21);
+    expect(result.current.form.lastGeneratedElementId).toBe(21);
   });
 
   it("handles deleting an element", async () => {
@@ -150,17 +150,17 @@ describe("incrementNextElementId", () => {
       result.current.add(0);
     });
 
-    expect(result.current.form.nextElementId).toBe(4);
+    expect(result.current.form.lastGeneratedElementId).toBe(4);
 
     act(() => {
       // Remove an element
       result.current.remove(1);
-      // Adding annother item should increment the nextElementId by 1
+      // Adding annother item should increment the lastGeneratedElementId by 1
       // and not reuse the ID of the deleted element
       result.current.add(0);
     });
 
-    expect(result.current.form.nextElementId).toBe(5);
+    expect(result.current.form.lastGeneratedElementId).toBe(5);
   });
 
   it("handles starting a form from scratch", async () => {
@@ -181,7 +181,7 @@ describe("incrementNextElementId", () => {
       result.current.add(0);
     });
 
-    expect(result.current.form.nextElementId).toBe(1);
+    expect(result.current.form.lastGeneratedElementId).toBe(1);
 
 
     act(() => {
@@ -190,7 +190,7 @@ describe("incrementNextElementId", () => {
       result.current.add(0);
     });
 
-    expect(result.current.form.nextElementId).toBe(4);
+    expect(result.current.form.lastGeneratedElementId).toBe(4);
 
     act(() => {
       result.current.remove(2);
@@ -198,7 +198,7 @@ describe("incrementNextElementId", () => {
       result.current.add(0);
     });
 
-    expect(result.current.form.nextElementId).toBe(5);
+    expect(result.current.form.lastGeneratedElementId).toBe(5);
 
     // Move items
     act(() => {
@@ -206,8 +206,8 @@ describe("incrementNextElementId", () => {
       result.current.add(0);
     });
 
-    expect(result.current.form.nextElementId).toBe(6);
+    expect(result.current.form.lastGeneratedElementId).toBe(6);
 
   });
-  
+
 });
