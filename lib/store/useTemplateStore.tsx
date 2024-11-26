@@ -531,7 +531,7 @@ const createTemplateStore = (initProps?: Partial<InitialTemplateStoreProps>) => 
               set((state) => {
                 const lastId = state.form.lastGeneratedElementId || 0;
 
-                // Ensure backward compatibility with existing forms
+                // Ensure backwards compatibility with existing forms
                 const highestId = state.getHighestElementId();
 
                 if (lastId < highestId) {
