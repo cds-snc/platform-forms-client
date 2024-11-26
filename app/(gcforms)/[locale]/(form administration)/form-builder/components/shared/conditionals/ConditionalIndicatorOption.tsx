@@ -8,19 +8,21 @@ import { FormElement } from "@lib/types";
 import { useRefsContext } from "@formBuilder/[id]/edit/components/RefsContext";
 import { Button } from "@clientComponents/globals";
 import { LocalizedFormProperties } from "@lib/types/form-builder-types";
+import { useCustomEvent, EventKeys } from "@lib/hooks/useCustomEvent";
 
 export const ConditionalIndicatorOption = ({
+  itemId,
   id,
   elements,
   isFocused,
-  handleOpen,
 }: {
+  itemId: number;
   id: string;
   elements: FormElement[];
   isFocused: boolean;
-  handleOpen: (mode: "add" | "edit") => void;
 }) => {
   const { t } = useTranslation("form-builder");
+  const { Event } = useCustomEvent();
   const questions = getElementsUsingChoiceId({
     formElements: elements,
     choiceId: id,
@@ -49,7 +51,11 @@ export const ConditionalIndicatorOption = ({
               className="cursor-pointer underline"
               id={rulesTitleId}
               onClick={() => {
-                handleOpen && handleOpen("add");
+                Event.fire(EventKeys.openRulesDialog, {
+                  mode: "add",
+                  itemId: itemId,
+                  optionId: id,
+                });
               }}
             >
               {t("addConditionalRules.addCustomRules")}
@@ -91,7 +97,11 @@ export const ConditionalIndicatorOption = ({
               <Button
                 theme="link"
                 onClick={() => {
-                  handleOpen("edit");
+                  Event.fire(EventKeys.openRulesDialog, {
+                    mode: "edit",
+                    itemId: itemId,
+                    optionId: id,
+                  });
                 }}
               >
                 {t("addConditionalRules.editCustomRules")}
