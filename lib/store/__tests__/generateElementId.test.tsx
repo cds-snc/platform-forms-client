@@ -20,8 +20,6 @@ const createStore = () => {
   return result;
 };
 
-// const promise = Promise.resolve();
-
 const defaultElements = [
   {
     id: 1,
