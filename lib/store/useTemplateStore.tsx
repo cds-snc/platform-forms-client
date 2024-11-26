@@ -211,8 +211,7 @@ const createTemplateStore = (initProps?: Partial<InitialTemplateStoreProps>) => 
               });
             },
             add: async (elIndex = 0, type = FormElementTypes.radio, data, groupId) => {
-              const id = get().form.nextElementId;
-              get().incrementNextElementId();
+              const id = get().nextElementId();
 
               return new Promise((resolve) => {
                 set((state) => {
@@ -366,8 +365,7 @@ const createTemplateStore = (initProps?: Partial<InitialTemplateStoreProps>) => 
             },
             duplicateElement: (itemId, groupId = "", copyEn = "", copyFr = "") => {
               const elIndex = get().form.elements.findIndex((el) => el.id === itemId);
-              const id = get().form.nextElementId;
-              get().incrementNextElementId();
+              const id = get().nextElementId();
               set((state) => {
                 // deep copy the element
                 const element = JSON.parse(JSON.stringify(state.form.elements[elIndex]));
@@ -499,23 +497,28 @@ const createTemplateStore = (initProps?: Partial<InitialTemplateStoreProps>) => 
                 state.form.groupsLayout = layout;
               });
             },
-            incrementNextElementId: () => {
+            getHighestElementId: () => {
+              const currentIds = get().form.elements.map((element) => element.id);
+              return currentIds.length > 0 ? Math.max(...currentIds) : 0;
+            },
+            nextElementId: () => {
               set((state) => {
                 // Increment nextElementId
-                const nextElementId = state.form.nextElementId;
+                const nextElementId = state.form.nextElementId || 0;
 
                 // Ensure backward compatibility with existing forms
                 // where the nextElementId is not set or incorrect
-                const currentIds = state.form.elements.map((element) => element.id);
-                const highestId = currentIds.length > 0 ? Math.max(...currentIds) : 0;
+                const highestId = state.getHighestElementId();
 
-                if (nextElementId <= highestId) {
+                if (nextElementId < highestId) {
                   state.form.nextElementId = highestId + 1;
                   return;
                 }
 
                 state.form.nextElementId = nextElementId + 1;
               });
+
+              return get().form.nextElementId || 1;
             },
           }),
           {
