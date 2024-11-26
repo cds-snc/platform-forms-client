@@ -161,6 +161,74 @@ describe("generateElementId", () => {
     expect(result.current.form.lastGeneratedElementId).toBe(5);
   });
 
+  it("handles 3 digit ids", async () => {
+    const result = createStore();
+
+    const element = {
+      id: 201,
+      type: FormElementTypes.textField,
+      properties: {
+        titleEn: "question 201 en",
+        titleFr: "question 201 fr",
+        choices: [],
+        validation: { required: false },
+        descriptionEn: "description en",
+        descriptionFr: "descrption fr",
+      },
+    };
+
+    result.current.form = {
+      titleEn: "Title en",
+      titleFr: "Title fr",
+      elements: [element], layout: []
+    };
+
+    // Ensure we have a default form to work with
+    expect(result.current.form.titleEn).toBe("Title en");
+    expect(result.current.form.titleFr).toBe("Title fr");
+
+    act(() => {
+      result.current.add(0);
+    });
+
+    expect(result.current.form.lastGeneratedElementId).toBe(202);
+
+  });
+
+  it("handles 4 digit ids", async () => {
+    const result = createStore();
+
+    const element = {
+      id: 2022,
+      type: FormElementTypes.textField,
+      properties: {
+        titleEn: "question 2022 en",
+        titleFr: "question 2022 fr",
+        choices: [],
+        validation: { required: false },
+        descriptionEn: "description en",
+        descriptionFr: "descrption fr",
+      },
+    };
+
+    result.current.form = {
+      titleEn: "Title en",
+      titleFr: "Title fr",
+      elements: [element], layout: []
+    };
+
+    // Ensure we have a default form to work with
+    expect(result.current.form.titleEn).toBe("Title en");
+    expect(result.current.form.titleFr).toBe("Title fr");
+
+    act(() => {
+      result.current.add(0);
+    });
+
+    expect(result.current.form.lastGeneratedElementId).toBe(2023);
+
+  });
+
   it("handles starting a form from scratch", async () => {
     const result = createStore();
 
@@ -207,5 +275,4 @@ describe("generateElementId", () => {
     expect(result.current.form.lastGeneratedElementId).toBe(6);
 
   });
-
 });
