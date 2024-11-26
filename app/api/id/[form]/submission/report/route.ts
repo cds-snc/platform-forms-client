@@ -9,6 +9,7 @@ import { dynamoDBDocumentClient } from "@lib/integration/awsServicesConnector";
 import { createAbility, AccessControlError } from "@lib/privileges";
 import { checkUserHasTemplateOwnership } from "@lib/templates";
 import { logEvent } from "@lib/auditLogs";
+import { vaultStatusFromStatusCreatedAt } from "@lib/vault";
 
 const MAXIMUM_SUBMISSION_NAMES_PER_REQUEST = 20;
 
@@ -33,10 +34,10 @@ async function getSubmissionsFromSubmissionNames(
       RequestItems: {
         Vault: {
           Keys: requestedKeys,
-          ProjectionExpression: "#name,#status,ConfirmationCode,CreatedAt",
+          ProjectionExpression: "#name,#statusCreatedAtKey,ConfirmationCode,CreatedAt",
           ExpressionAttributeNames: {
             "#name": "Name",
-            "#status": "Status",
+            "#statusCreatedAtKey": "Status#CreatedAt",
           },
         },
       },
@@ -48,7 +49,7 @@ async function getSubmissionsFromSubmissionNames(
     if (response.Responses?.Vault) {
       response.Responses.Vault.forEach((record) => {
         accumulatedSubmissions[record["Name"]] = {
-          status: record["Status"],
+          status: vaultStatusFromStatusCreatedAt(record["Status#CreatedAt"]),
           createdAt: record["CreatedAt"],
           confirmationCode: record["ConfirmationCode"],
         };
@@ -105,13 +106,11 @@ async function report(
               NAME_OR_CONF: `NAME#${submission.name}`,
             },
             UpdateExpression:
-              "SET #status = :status, #statusCreatedAtKey = :statusCreatedAtValue, ProblemTimestamp = :problemTimestamp REMOVE RemovalDate",
+              "SET #statusCreatedAtKey = :statusCreatedAtValue, ProblemTimestamp = :problemTimestamp REMOVE RemovalDate",
             ExpressionAttributeNames: {
-              "#status": "Status",
               "#statusCreatedAtKey": "Status#CreatedAt",
             },
             ExpressionAttributeValues: {
-              ":status": "Problem",
               ":statusCreatedAtValue": `Problem#${submission.createdAt}`,
               ":problemTimestamp": Date.now(),
             },
