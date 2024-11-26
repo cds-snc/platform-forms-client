@@ -104,3 +104,6 @@ responses.csv
 
 tsconfig.tsbuildinfo
 certificates
+
+# Ignore private api key files
+*private_api_key.json
