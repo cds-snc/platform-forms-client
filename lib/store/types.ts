@@ -1,4 +1,4 @@
-import { Language } from "../types/form-builder-types";
+import { FormElementWithIndex, Language } from "../types/form-builder-types";
 
 import {
   FormElement,
@@ -65,6 +65,7 @@ export interface TemplateStoreState extends TemplateStoreProps {
   getIsPublished: () => boolean;
   setIsPublished: (isPublished: boolean) => void;
   getFormElementById: (id: number) => FormElement | undefined;
+  getFormElementWithIndexById: (id: number) => FormElementWithIndex | undefined;
   getName: () => string;
   getDeliveryOption: () => DeliveryOption | undefined;
   resetDeliveryOption: () => void;

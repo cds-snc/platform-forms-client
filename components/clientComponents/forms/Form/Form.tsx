@@ -251,8 +251,6 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
               handleSubmit(e);
             }}
             noValidate
-            // TODO move this to each child container but that I think will take some thought.
-            aria-live="polite"
           >
             {isGroupsCheck &&
               isShowReviewPage &&
