@@ -1,82 +1,87 @@
 "use client";
-import React, { useState } from "react";
-import PropTypes from "prop-types";
+import React, { useEffect, useState } from "react";
 import { useTranslation } from "@i18n/client";
 
 import { Button } from "@clientComponents/globals";
 import { useTemplateStore } from "@lib/store/useTemplateStore";
-import { ModalProperties } from "@lib/store/useModalRulesStore";
-import { FormElementWithIndex } from "@lib/types/form-builder-types";
-import { ChoiceRule } from "@lib/formContext";
+import { ChoiceRule, getElementsWithRuleForChoice } from "@lib/formContext";
 import { ConditionalSelector } from "@formBuilder/components/shared/conditionals/ConditionalSelector";
 import { sortByGroups, sortByLayout } from "@lib/utils/form-builder";
 import { AddOther } from "@formBuilder/components/shared/conditionals/AddOther";
 
 import Markdown from "markdown-to-jsx";
+import { FormElementWithIndex } from "@lib/types/form-builder-types";
 
-export const ModalFormRules = ({
+export const RulesForm = ({
   item,
-  properties,
-  initialChoiceRules,
-  updateModalProperties,
   descriptionId,
   tryLogicView,
+  choiceRulesRef,
+  mode,
+  selectedOptionId,
 }: {
   item: FormElementWithIndex;
-  properties: ModalProperties;
-  initialChoiceRules: ChoiceRule[];
-  updateModalProperties: (id: number, properties: ModalProperties) => void;
+  setItem: (item: FormElementWithIndex) => void;
   descriptionId?: string;
   tryLogicView: () => void;
+  choiceRulesRef: React.MutableRefObject<ChoiceRule[]>;
+  mode: "add" | "edit";
+  selectedOptionId: string | null;
 }) => {
   const { t } = useTranslation("form-builder");
   const formId = `form-${Date.now()}`;
   const [showLogicDetails, setShowLogicDetails] = useState(false);
 
-  const { elements, form, groupsEnabled } = useTemplateStore((s) => ({
+  const { elements, form } = useTemplateStore((s) => ({
     elements: s.form.elements,
     form: s.form,
-    groupsEnabled: s.getGroupsEnabled(),
   }));
 
-  let sortedElements = sortByLayout({ layout: form.layout, elements: elements });
+  const initialChoiceRules = getElementsWithRuleForChoice({
+    formElements: elements,
+    itemId: item.id,
+  });
 
-  if (groupsEnabled) {
-    sortedElements = sortByGroups({ form: form, elements: elements });
+  if (mode === "add" && selectedOptionId) {
+    initialChoiceRules.push({ elementId: String(item.id), choiceId: selectedOptionId });
   }
 
   if (initialChoiceRules.length == 0) {
-    initialChoiceRules.push({ elementId: "", choiceId: `${item.id}.0` });
+    initialChoiceRules.push({ elementId: String(item.id), choiceId: `${item.id}.0` });
   }
 
-  const [choiceRules, setChoiceRules] = useState(initialChoiceRules);
+  const [choiceRules, setChoiceRules] = useState<ChoiceRule[]>(initialChoiceRules);
+
+  useEffect(() => {
+    choiceRulesRef.current = choiceRules;
+  }, [choiceRules, choiceRulesRef]);
+
+  let sortedElements = sortByLayout({ layout: form.layout, elements: elements });
+
+  sortedElements = sortByGroups({ form: form, elements: elements });
 
   const updateElementId = (index: number, id: string) => {
     const rules = [...choiceRules];
     rules[index] = { elementId: id, choiceId: rules[index]["choiceId"] };
     setChoiceRules(rules);
-    updateModalProperties(item.id, { ...properties, conditionalRules: rules });
   };
 
   const updateChoiceId = (index: number, id: string) => {
     const rules = [...choiceRules];
     rules[index] = { elementId: rules[index]["elementId"], choiceId: id };
     setChoiceRules(rules);
-    updateModalProperties(item.id, { ...properties, conditionalRules: rules });
   };
 
   const removeSelector = (index: number) => {
     const rules = [...choiceRules];
     rules.splice(index, 1);
     setChoiceRules(rules);
-    updateModalProperties(item.id, { ...properties, conditionalRules: rules });
   };
 
   const updateModalFromBase = (newRule: ChoiceRule) => {
     const rules = [...choiceRules];
     rules.push(newRule);
     setChoiceRules(rules);
-    updateModalProperties(item.id, { ...properties, conditionalRules: rules });
   };
 
   const learnMoreAboutLogicView = () => {
@@ -139,8 +144,4 @@ export const ModalFormRules = ({
       </div>
     </form>
   );
-};
-
-ModalFormRules.propTypes = {
-  item: PropTypes.object,
 };

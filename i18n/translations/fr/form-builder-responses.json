@@ -149,10 +149,12 @@
       "noDeletedResponsesMessage": "Une fois que vous aurez téléchargé et approuvé la suppression des réponses, celles-ci seront disponibles ici pendant 30 jours.",
       "noProblemResponses": "Aucune réponse signalée avec problème",
       "noProblemResponsesMessage": "Les réponses signalées avec problèmes apparaîtront ici jusqu'à ce qu'elles soient approuvées pour leur suppression de Formulaires GC.",
-      "noNewResponsesApi": "Aucune réponse n'est disponible pour être récupérée par l'intermédiaire de l'API",
-      "noNewResponsesApiMessage": "Les réponses soumises au formulaire apparaîtront ici et seront disponible dans Formulaires GC pendant 45 jours.",
-      "apiResponsesAvailable": "Responses are available [FR]",
-      "apiResponsesAvailableMessage": "Please use the API to retrieve responses. [FR]"
+      "noNewResponsesApiTitle": "Aucune réponse en attente de livraison par l'API",
+      "noNewResponsesApiMessage": "<p className='mb-2'>Une fois livrées par l'API, les réponses apparaîtront ici et seront disponibles dans Formulaires GC pendant 30 jours.</p><p>Pour en savoir plus sur la récupération de données avec l'API consultez notre <a href='https://cds-snc.github.io/forms-api/accueil' target='_blank'>documentation technique</a> (ouvre un nouvel onglet)</p>",
+      "apiResponsesAvailableTitle": "Réponses en attente de la livraison par l'API",
+      "apiResponsesAvailableMessage": "<p className='mb-2'>Une fois livrées par l'API, les réponses livrées apparaîtront ici et seront disponibles dans Formulaires GC pendant 30 jours.</p><p>Pour en savoir plus sur la récupération de données avec l'API consultez notre <a href='https://cds-snc.github.io/forms-api/accueil' target='_blank'>documentation technique</a> (ouvre un nouvel onglet)</p>",
+      "apiResponsesAwaitingConfirmTitle": "État de livraison : En attente",
+      "apiResponsesAwaitingConfirmMessage": "Réponses en attente de confirmation de la livraison par l'API"
     },
     "notifications": {
       "downloadComplete": "Réponses déplacées vers l'onglet « Téléchargements »",
@@ -287,24 +289,24 @@
     "title": "Réponses"
   },
   "systemHealth": {
-    "contactSupport": {
-      "title": "Contact Support [FR]",
-      "description": "<a href='' target='_blank'>Contact Support</a> [FR]"
+    "problemsReported": {
+      "title": "Problèmes signalés",
+      "description": "<a href='' target='_blank'>Obtenir du soutien</a>"
     },
-    "throttling": {
-      "title": "Throttling [FR]",
-      "description": "<a href='' target='_blank'>Learn about throttling</a> [FR]"
+    "deliveredAndConfirmed": {
+      "title": "État de livraison : OK",
+      "description": "Toutes les réponses ont été livrées avec succès."
     },
-    "problems": {
-      "title": "Problems [FR]",
-      "description": "<a href='' target='_blank'>Learn about problems</a> [FR]"
+    "awatingDownload": {
+      "title": "État de livraison : En attente",
+      "description": "Réponses en attente de la livraison par l'API",
+      "new": "Nouvelles",
+      "responses": "réponses",
+      "available": "disponibles"
     },
-    "unconfirmed": {
-      "title": "Delivery status: waiting [FR]",
-      "description": "Responses awaiting API delivery [FR]",
-      "new": "New [FR]",
-      "responses": "responses [FR]",
-      "available": "available [FR]"
+    "awatingConfirm": {
+      "title": "État de livraison : En attente",
+      "description": "Réponses en attente de la confirmation de la livraison par l'API"
     }
   }
 }

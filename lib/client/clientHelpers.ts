@@ -117,7 +117,7 @@ export const slugify = (str: string) => {
  * @returns string with first letter capitalized
  */
 export const ucfirst = (string: string) => {
-  if (!string) {
+  if (!string || typeof string !== "string") {
     return "";
   }
   return string.charAt(0).toUpperCase() + string.slice(1);
