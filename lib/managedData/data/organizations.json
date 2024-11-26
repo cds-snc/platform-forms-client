@@ -168,6 +168,13 @@
     "notify_organisation_id": "86b7810d-78af-47e3-ab01-d655c43bd449"
   },
   {
+    "id": "001OO00000IclDKYAZ",
+    "name_eng": "Canadian Intergovernmental Conference Secretariat",
+    "name_fra": "Secrétariat des conférences intergouvernementales canadiennes",
+    "type": "GC Department",
+    "notify_organisation_id": null
+  },
+  {
     "id": "001I9000005SgSOIA0",
     "name_eng": "Canadian International Trade Tribunal",
     "name_fra": "Tribunal canadien du commerce extérieur",
