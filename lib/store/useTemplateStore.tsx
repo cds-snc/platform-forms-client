@@ -79,11 +79,6 @@ const createTemplateStore = (initProps?: Partial<InitialTemplateStoreProps>) => 
     } else {
       initProps.form.groups = orderGroups(initProps.form.groups, initProps.form.groupsLayout);
     }
-
-    // Handle legacy forms to ensure nextElementId is set correctly
-    if (initProps.form.nextElementId === 1 && initProps.form.elements.length == 1) {
-      initProps.form.nextElementId = initProps.form.elements.length + 1;
-    }
   }
 
   return createStore<TemplateStoreState>()(
@@ -508,6 +503,17 @@ const createTemplateStore = (initProps?: Partial<InitialTemplateStoreProps>) => 
               set((state) => {
                 // Increment nextElementId
                 const nextElementId = state.form.nextElementId;
+
+                // Ensure backward compatibility with existing forms
+                // where the nextElementId is not set or incorrect
+                const currentIds = state.form.elements.map((element) => element.id);
+                const highestId = currentIds.length > 0 ? Math.max(...currentIds) : 0;
+
+                if (nextElementId <= highestId) {
+                  state.form.nextElementId = highestId + 1;
+                  return;
+                }
+
                 state.form.nextElementId = nextElementId + 1;
               });
             },
