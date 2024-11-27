@@ -360,64 +360,75 @@ export const ResponseDelivery = ({ isFormsAdmin }: { isFormsAdmin: boolean }) =>
                   {t("settingsResponseDelivery.protectedBMessage")}
                 </p>
               ) : null}
-              <Radio
-                disabled={isPublished || hasApiKey}
-                id={`delivery-option-${DeliveryOption.vault}`}
-                checked={deliveryOptionValue === DeliveryOption.vault}
-                name="response-delivery"
-                value={DeliveryOption.vault}
-                label={t("settingsResponseDelivery.vaultOption")}
-                onChange={updateDeliveryOption}
-              >
-                <span className="mb-1 ml-3 block text-sm">
-                  {t("settingsResponseDelivery.vaultOptionHint.text1")}{" "}
-                  <a href={responsesLink}>{t("settingsResponseDelivery.vaultOptionHint.text2")}</a>.
-                  {t("settingsResponseDelivery.vaultOptionHint.text3")}
-                </span>
-              </Radio>
-              <Radio
-                disabled={isPublished || protectedBSelected || hasApiKey}
-                id={`delivery-option-${DeliveryOption.email}`}
-                checked={deliveryOptionValue === DeliveryOption.email}
-                name="response-delivery"
-                value={DeliveryOption.email}
-                label={emailLabel}
-                onChange={updateDeliveryOption}
-              />
 
-              {deliveryOptionValue === DeliveryOption.email && (
-                <ResponseEmail
-                  inputEmail={inputEmailValue}
-                  setInputEmail={setInputEmailValue}
-                  subjectEn={subjectEnValue}
-                  setSubjectEn={setSubjectEnValue}
-                  subjectFr={subjectFrValue}
-                  setSubjectFr={setSubjectFrValue}
-                  isInvalidEmailError={isInvalidEmailError}
-                  setIsInvalidEmailError={setIsInvalidEmailError}
-                />
-              )}
-              {deliveryOptionValue !== DeliveryOption.email && <div className="mb-8"></div>}
+              {!hasApiKey && (
+                <>
+                  <Radio
+                    disabled={isPublished}
+                    id={`delivery-option-${DeliveryOption.vault}`}
+                    checked={deliveryOptionValue === DeliveryOption.vault}
+                    name="response-delivery"
+                    value={DeliveryOption.vault}
+                    label={t("settingsResponseDelivery.vaultOption")}
+                    onChange={updateDeliveryOption}
+                  >
+                    <span className="mb-1 ml-3 block text-sm">
+                      {t("settingsResponseDelivery.vaultOptionHint.text1")}{" "}
+                      <a href={responsesLink}>
+                        {t("settingsResponseDelivery.vaultOptionHint.text2")}
+                      </a>
+                      .{t("settingsResponseDelivery.vaultOptionHint.text3")}
+                    </span>
+                  </Radio>
+                  <Radio
+                    disabled={isPublished || protectedBSelected}
+                    id={`delivery-option-${DeliveryOption.email}`}
+                    checked={deliveryOptionValue === DeliveryOption.email}
+                    name="response-delivery"
+                    value={DeliveryOption.email}
+                    label={emailLabel}
+                    onChange={updateDeliveryOption}
+                  />
 
-              {apiAccess && (
-                <Radio
-                  disabled={isPublished || hasApiKey || protectedBSelected}
-                  id={`delivery-option-${DeliveryOption.api}`}
-                  checked={deliveryOptionValue === DeliveryOption.api}
-                  name="response-delivery"
-                  value={DeliveryOption.api}
-                  label={apiLabel}
-                  onChange={updateDeliveryOption}
-                />
+                  {deliveryOptionValue === DeliveryOption.email && (
+                    <ResponseEmail
+                      inputEmail={inputEmailValue}
+                      setInputEmail={setInputEmailValue}
+                      subjectEn={subjectEnValue}
+                      setSubjectEn={setSubjectEnValue}
+                      subjectFr={subjectFrValue}
+                      setSubjectFr={setSubjectFrValue}
+                      isInvalidEmailError={isInvalidEmailError}
+                      setIsInvalidEmailError={setIsInvalidEmailError}
+                    />
+                  )}
+                  {deliveryOptionValue !== DeliveryOption.email && <div className="mb-8"></div>}
+
+                  {apiAccess && (
+                    <>
+                      <Radio
+                        disabled={isPublished || protectedBSelected}
+                        id={`delivery-option-${DeliveryOption.api}`}
+                        checked={deliveryOptionValue === DeliveryOption.api}
+                        name="response-delivery"
+                        value={DeliveryOption.api}
+                        label={apiLabel}
+                        onChange={updateDeliveryOption}
+                      />
+                      {deliveryOptionValue === DeliveryOption.api && (
+                        <div className="mb-10 ml-4 border-l-4 pl-8">
+                          <span className="block py-6 font-bold">
+                            {t("formSettingsModal.apiOption.startNote")}
+                          </span>
+                        </div>
+                      )}
+                    </>
+                  )}
+                </>
               )}
 
               {apiAccess && deliveryOptionValue === DeliveryOption.api && (
                 <div>
-                  <div className="mb-10 ml-4 border-l-4 pl-8">
-                    <span className="block py-6 font-bold">
-                      {t("formSettingsModal.apiOption.startNote")}
-                    </span>
-                  </div>
                   <ApiKeyButton showDelete />
                   <ApiDocNotes />
                 </div>
