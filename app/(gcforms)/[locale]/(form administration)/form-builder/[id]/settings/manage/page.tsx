@@ -101,6 +101,7 @@ export default async function Page({ params: { id } }: { params: { id: string } 
   const allUsers = await getAllUsers(ability);
 
   const isPublished = templateWithAssociatedUsers.formRecord.isPublished;
+  const isVaultDelivery = !templateWithAssociatedUsers.formRecord.deliveryMethod;
 
   return (
     <>
@@ -115,12 +116,15 @@ export default async function Page({ params: { id } }: { params: { id: string } 
         closedDetails={closedDetails}
       />
       {/* 
-        Only show for live forms --- draft forms
-        should use Response Delivery page
+        - Only show for users with manage all forms privileges
+            - we do an additional check here in case the code above to reach this point changes later
+        - Only show for forms with vault delivery already set
+        - Only show for live forms 
+            - draft forms should use Response Delivery page
       */}
-      {isPublished && manageAllForms && (
+      {isPublished && manageAllForms && isVaultDelivery && (
         <>
-          <ApiKeyDialog isPublished={true} />
+          <ApiKeyDialog isVaultDelivery={true} />
           <DeleteApiKeyDialog />
         </>
       )}

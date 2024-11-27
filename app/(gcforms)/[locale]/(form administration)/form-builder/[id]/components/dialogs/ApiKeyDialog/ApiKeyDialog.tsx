@@ -23,10 +23,10 @@ type APIKeyCustomEventDetails = {
 
 /**
  * API Key Dialog
- * @param isPublished - boolean - Allows skipping the save request when a form is already published
+ * @param isVaultDelivery - boolean - Allows skipping the save request when a form is already published
  * @returns JSX.Element
  */
-export const ApiKeyDialog = ({ isPublished = false }: { isPublished?: boolean }) => {
+export const ApiKeyDialog = ({ isVaultDelivery = false }: { isVaultDelivery?: boolean }) => {
   const dialog = useDialogRef();
   const { Event } = useCustomEvent();
   const { t } = useTranslation("form-builder");
@@ -78,9 +78,12 @@ export const ApiKeyDialog = ({ isPublished = false }: { isPublished?: boolean })
     setHasError(false);
     setGenerating(true);
     try {
-      // Note - checking should be done outside of this dialog
-      // to ensure the form is already using the Vault
-      if (!isPublished) {
+      /*
+        Allows skipping the save request
+        if it's determined that the form being delivered
+        to the vault
+      */
+      if (!isVaultDelivery) {
         const result = await sendResponsesToVault({
           id: id,
         });
