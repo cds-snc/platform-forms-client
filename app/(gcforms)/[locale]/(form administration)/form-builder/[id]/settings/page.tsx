@@ -3,6 +3,8 @@ import { Metadata } from "next";
 import { ResponseDelivery } from "./components/ResponseDelivery";
 import { authCheckAndRedirect } from "@lib/actions";
 import { checkPrivilegesAsBoolean } from "@lib/privileges";
+import { ApiKeyDialog } from "../components/dialogs/ApiKeyDialog/ApiKeyDialog";
+import { DeleteApiKeyDialog } from "../components/dialogs/DeleteApiKeyDialog/DeleteApiKeyDialog";
 
 export async function generateMetadata({
   params: { locale },
@@ -25,5 +27,11 @@ export default async function Page() {
     },
   ]);
 
-  return <ResponseDelivery isFormsAdmin={isFormsAdmin} />;
+  return (
+    <>
+      <ResponseDelivery isFormsAdmin={isFormsAdmin} />
+      <ApiKeyDialog />
+      <DeleteApiKeyDialog />
+    </>
+  );
 }

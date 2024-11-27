@@ -41,7 +41,7 @@ export const ApiKeyButton = ({
       {showDelete && apiKeyId ? (
         <>
           <DeleteKeyButton id={id} keyId={apiKeyId} />
-          <ResponseDeliveryHelpButtonWithApi />
+          {showHelp && <ResponseDeliveryHelpButtonWithApi />}
         </>
       ) : (
         <>

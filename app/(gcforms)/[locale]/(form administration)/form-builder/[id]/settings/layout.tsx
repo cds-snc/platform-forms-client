@@ -2,8 +2,6 @@ import { serverTranslation } from "@i18n";
 import { LoggedOutTab, LoggedOutTabName } from "@serverComponents/form-builder/LoggedOutTab";
 import { authCheckAndThrow } from "@lib/actions";
 import { SettingsNavigation } from "./components/SettingsNavigation";
-import { ApiKeyDialog } from "../components/dialogs/ApiKeyDialog/ApiKeyDialog";
-import { DeleteApiKeyDialog } from "../components/dialogs/DeleteApiKeyDialog/DeleteApiKeyDialog";
 
 export default async function Layout({
   children,
@@ -25,8 +23,6 @@ export default async function Layout({
       <h1>{t("gcFormsSettings")}</h1>
       <SettingsNavigation id={id} />
       {children}
-      <ApiKeyDialog />
-      <DeleteApiKeyDialog />
     </>
   );
 }

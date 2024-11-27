@@ -9,6 +9,8 @@ import { UserAbility } from "@lib/types";
 import { Session } from "next-auth";
 import { getNonce } from "./actions";
 import { checkIfClosed } from "@lib/actions/checkIfClosed";
+import { ApiKeyDialog } from "../../components/dialogs/ApiKeyDialog/ApiKeyDialog";
+import { DeleteApiKeyDialog } from "../../components/dialogs/DeleteApiKeyDialog/DeleteApiKeyDialog";
 
 export async function generateMetadata({
   params: { locale },
@@ -98,6 +100,8 @@ export default async function Page({ params: { id } }: { params: { id: string } 
 
   const allUsers = await getAllUsers(ability);
 
+  const isPublished = templateWithAssociatedUsers.formRecord.isPublished;
+
   return (
     <>
       <ManageForm
@@ -110,6 +114,18 @@ export default async function Page({ params: { id } }: { params: { id: string } 
         allUsers={allUsers}
         closedDetails={closedDetails}
       />
+      {/* 
+        Allow users with manage all forms to 
+        switch to API delivery option for live forms
+      */}
+      {isPublished && canManageOwnership && (
+        <>
+          <ApiKeyDialog
+            ensureSaveToVault={false} // Skip re-saving given this is a live form
+          />
+          <DeleteApiKeyDialog />
+        </>
+      )}
     </>
   );
 }
