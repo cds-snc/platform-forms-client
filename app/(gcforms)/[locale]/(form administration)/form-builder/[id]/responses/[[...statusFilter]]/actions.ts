@@ -115,7 +115,7 @@ const sortByGroups = ({ form, elements }: { form: FormProperties; elements: Answ
   return sortByLayout({ layout, elements });
 };
 
-type TaggedResponse = {
+export type TaggedResponse = {
   tag: string;
   answer: string;
 };
