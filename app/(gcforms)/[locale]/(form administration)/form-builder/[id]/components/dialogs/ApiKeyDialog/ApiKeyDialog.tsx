@@ -80,8 +80,8 @@ export const ApiKeyDialog = ({ isVaultDelivery = false }: { isVaultDelivery?: bo
     try {
       /*
         Allows skipping the save request
-        if it's determined that the form being delivered
-        to the vault
+        if it's determined that the form responses 
+        are already being delivered to the vault
       */
       if (!isVaultDelivery) {
         const result = await sendResponsesToVault({
