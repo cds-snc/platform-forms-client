@@ -7,6 +7,7 @@ import { FormOwnership } from "./FormOwnership";
 import { ErrorPanel } from "@clientComponents/globals/ErrorPanel";
 import { updateTemplateUsers } from "@formBuilder/actions";
 import { ThrottlingRate } from "./ThrottlingRate";
+import { useFormBuilderConfig } from "@lib/hooks/useFormBuilderConfig";
 
 interface User {
   id: string;
@@ -37,6 +38,8 @@ export const ManageForm = (props: ManageFormProps) => {
     closedDetails,
   } = props;
 
+  const { apiKeyId } = useFormBuilderConfig();
+
   if (!canManageOwnership) {
     return (
       <>
@@ -60,7 +63,7 @@ export const ManageForm = (props: ManageFormProps) => {
         allUsers={allUsers}
         updateTemplateUsers={updateTemplateUsers}
       />
-      {canManageOwnership && <ThrottlingRate formId={id} />}
+      {canManageOwnership && apiKeyId && <ThrottlingRate formId={id} />}
       <DownloadForm />
     </>
   );
