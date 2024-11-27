@@ -70,7 +70,7 @@ export default async function Page({ params: { id } }: { params: { id: string } 
 
   let closedDetails;
 
-  const hasCanManageAllForms = canManageAllForms(id, ability);
+  const manageAllForms = canManageAllForms(id, ability);
   const canSetClosingDate = getCanSetClosingDate(id, ability, session);
   const nonce = await getNonce();
 
@@ -79,7 +79,7 @@ export default async function Page({ params: { id } }: { params: { id: string } 
     closedDetails = closedData?.closedDetails;
   }
 
-  if (!hasCanManageAllForms || id === "0000") {
+  if (!manageAllForms || id === "0000") {
     return (
       <ManageForm
         nonce={nonce}
@@ -107,7 +107,7 @@ export default async function Page({ params: { id } }: { params: { id: string } 
       <ManageForm
         nonce={nonce}
         id={id}
-        canManageAllForms={hasCanManageAllForms}
+        canManageAllForms={manageAllForms}
         canSetClosingDate={canSetClosingDate}
         formRecord={templateWithAssociatedUsers.formRecord}
         usersAssignedToFormRecord={templateWithAssociatedUsers.users}
@@ -118,7 +118,7 @@ export default async function Page({ params: { id } }: { params: { id: string } 
         Allow users with manage all forms to 
         switch to API delivery option for live forms
       */}
-      {isPublished && hasCanManageAllForms && (
+      {isPublished && manageAllForms && (
         <>
           <ApiKeyDialog
             ensureSaveToVault={false} // Skip re-saving given this is a live form
