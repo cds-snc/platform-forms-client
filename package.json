@@ -18,7 +18,6 @@
     "singleQuote": false
   },
   "scripts": {
-    "upgrade": "yarn run upgrade --scope @testing-library",
     "dev": "yarn prisma:dev && yarn initialize && next dev",
     "dev:turbo": "yarn prisma:dev && yarn initialize && next dev --turbo",
     "dev:secure": "yarn prisma:dev && yarn initialize && next dev --experimental-https",
