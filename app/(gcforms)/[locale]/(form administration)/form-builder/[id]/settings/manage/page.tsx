@@ -99,15 +99,17 @@ export default async function Page({ params: { id } }: { params: { id: string } 
   const allUsers = await getAllUsers(ability);
 
   return (
-    <ManageForm
-      nonce={nonce}
-      id={id}
-      canManageOwnership={canManageOwnership}
-      canSetClosingDate={canSetClosingDate}
-      formRecord={templateWithAssociatedUsers.formRecord}
-      usersAssignedToFormRecord={templateWithAssociatedUsers.users}
-      allUsers={allUsers}
-      closedDetails={closedDetails}
-    />
+    <>
+      <ManageForm
+        nonce={nonce}
+        id={id}
+        canManageOwnership={canManageOwnership}
+        canSetClosingDate={canSetClosingDate}
+        formRecord={templateWithAssociatedUsers.formRecord}
+        usersAssignedToFormRecord={templateWithAssociatedUsers.users}
+        allUsers={allUsers}
+        closedDetails={closedDetails}
+      />
+    </>
   );
 }
