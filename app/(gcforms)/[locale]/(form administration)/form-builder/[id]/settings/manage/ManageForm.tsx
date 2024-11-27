@@ -62,7 +62,7 @@ export const ManageForm = (props: ManageFormProps) => {
         updateTemplateUsers={updateTemplateUsers}
       />
       {canManageAllForms && <ThrottlingRate formId={id} />}
-      {canManageAllForms && <ManageApiKey />}
+      {canManageAllForms && formRecord.isPublished && <ManageApiKey />}
       <DownloadForm />
     </>
   );
