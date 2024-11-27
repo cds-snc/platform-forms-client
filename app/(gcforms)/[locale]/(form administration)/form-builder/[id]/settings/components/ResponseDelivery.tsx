@@ -364,7 +364,7 @@ export const ResponseDelivery = ({ isFormsAdmin }: { isFormsAdmin: boolean }) =>
               {!hasApiKey && (
                 <>
                   <Radio
-                    disabled={isPublished}
+                    disabled={isPublished || hasApiKey}
                     id={`delivery-option-${DeliveryOption.vault}`}
                     checked={deliveryOptionValue === DeliveryOption.vault}
                     name="response-delivery"
@@ -381,7 +381,7 @@ export const ResponseDelivery = ({ isFormsAdmin }: { isFormsAdmin: boolean }) =>
                     </span>
                   </Radio>
                   <Radio
-                    disabled={isPublished || protectedBSelected}
+                    disabled={isPublished || protectedBSelected || hasApiKey}
                     id={`delivery-option-${DeliveryOption.email}`}
                     checked={deliveryOptionValue === DeliveryOption.email}
                     name="response-delivery"
@@ -407,7 +407,7 @@ export const ResponseDelivery = ({ isFormsAdmin }: { isFormsAdmin: boolean }) =>
                   {apiAccess && (
                     <>
                       <Radio
-                        disabled={isPublished || protectedBSelected}
+                        disabled={isPublished || protectedBSelected || hasApiKey}
                         id={`delivery-option-${DeliveryOption.api}`}
                         checked={deliveryOptionValue === DeliveryOption.api}
                         name="response-delivery"
