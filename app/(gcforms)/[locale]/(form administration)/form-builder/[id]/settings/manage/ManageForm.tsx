@@ -40,7 +40,7 @@ export const ManageForm = (props: ManageFormProps) => {
   } = props;
 
   const { apiKeyId } = useFormBuilderConfig();
-  
+
   if (!canManageAllForms) {
     return (
       <>
@@ -65,7 +65,7 @@ export const ManageForm = (props: ManageFormProps) => {
         updateTemplateUsers={updateTemplateUsers}
       />
       {canManageAllForms && apiKeyId && <ThrottlingRate formId={id} />}
-      {canManageAllForms && formRecord.isPublished && <ManageApiKey />}
+      {canManageAllForms && formRecord.isPublished && apiKeyId && <ManageApiKey />}
       <DownloadForm />
     </>
   );
