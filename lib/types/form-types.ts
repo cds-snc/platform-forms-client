@@ -143,6 +143,7 @@ export interface FormProperties {
   groups?: GroupsType;
   groupsLayout?: string[];
   elements: FormElement[];
+  lastGeneratedElementId?: number;
   brand?: BrandProperties;
   formPurpose?: string;
   [key: string]:
