@@ -455,6 +455,11 @@
     "downloadBtnText": "Télécharger le fichier du formulaire",
     "title": "Télécharger le fichier du formulaire"
   },
+  "switchToApiMode": {
+    "title": "Switch to API delivery [FR]",
+    "description": "New responses will be available through the API endpoint [FR]",
+    "btnText": "Switch to API delivery [FR]"
+  },
   "formIntroduction": "Introduction du formulaire ",
   "formInvalidProperty": "Invalide : {{property}}",
   "formMissingProperty": "Il manque : {{property}}",
