@@ -17,7 +17,7 @@ interface User {
 
 interface ManageFormProps {
   nonce: string | null;
-  canManageOwnership: boolean;
+  canManageAllForms: boolean;
   canSetClosingDate: boolean;
   formRecord?: FormRecord;
   usersAssignedToFormRecord?: User[];
@@ -32,13 +32,13 @@ export const ManageForm = (props: ManageFormProps) => {
     formRecord,
     usersAssignedToFormRecord,
     allUsers,
-    canManageOwnership,
+    canManageAllForms,
     canSetClosingDate,
     id,
     closedDetails,
   } = props;
 
-  if (!canManageOwnership) {
+  if (!canManageAllForms) {
     return (
       <>
         {canSetClosingDate && <SetClosingDate formId={id} closedDetails={closedDetails} />}
@@ -61,8 +61,8 @@ export const ManageForm = (props: ManageFormProps) => {
         allUsers={allUsers}
         updateTemplateUsers={updateTemplateUsers}
       />
-      {canManageOwnership && <ThrottlingRate formId={id} />}
-      {canManageOwnership && <ManageApiKey />}
+      {canManageAllForms && <ThrottlingRate formId={id} />}
+      {canManageAllForms && <ManageApiKey />}
       <DownloadForm />
     </>
   );

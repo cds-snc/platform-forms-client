@@ -24,7 +24,7 @@ export async function generateMetadata({
   };
 }
 
-const getCanManageOwnership = (formId: string, ability: UserAbility | null) => {
+const canManageAllForms = (formId: string, ability: UserAbility | null) => {
   if (!ability || formId === "0000") {
     return false;
   }
@@ -70,7 +70,7 @@ export default async function Page({ params: { id } }: { params: { id: string } 
 
   let closedDetails;
 
-  const canManageOwnership = getCanManageOwnership(id, ability);
+  const hasCanManageAllForms = canManageAllForms(id, ability);
   const canSetClosingDate = getCanSetClosingDate(id, ability, session);
   const nonce = await getNonce();
 
@@ -79,12 +79,12 @@ export default async function Page({ params: { id } }: { params: { id: string } 
     closedDetails = closedData?.closedDetails;
   }
 
-  if (!canManageOwnership || id === "0000") {
+  if (!hasCanManageAllForms || id === "0000") {
     return (
       <ManageForm
         nonce={nonce}
         id={id}
-        canManageOwnership={canManageOwnership}
+        canManageAllForms={false}
         canSetClosingDate={canSetClosingDate}
         closedDetails={closedDetails}
       />
@@ -107,7 +107,7 @@ export default async function Page({ params: { id } }: { params: { id: string } 
       <ManageForm
         nonce={nonce}
         id={id}
-        canManageOwnership={canManageOwnership}
+        canManageAllForms={hasCanManageAllForms}
         canSetClosingDate={canSetClosingDate}
         formRecord={templateWithAssociatedUsers.formRecord}
         usersAssignedToFormRecord={templateWithAssociatedUsers.users}
@@ -118,7 +118,7 @@ export default async function Page({ params: { id } }: { params: { id: string } 
         Allow users with manage all forms to 
         switch to API delivery option for live forms
       */}
-      {isPublished && canManageOwnership && (
+      {isPublished && hasCanManageAllForms && (
         <>
           <ApiKeyDialog
             ensureSaveToVault={false} // Skip re-saving given this is a live form
