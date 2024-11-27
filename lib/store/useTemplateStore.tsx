@@ -524,8 +524,13 @@ const createTemplateStore = (initProps?: Partial<InitialTemplateStoreProps>) => 
               });
             },
             getHighestElementId: () => {
-              const currentIds = get().form.elements.map((element) => element.id);
-              return currentIds.length > 0 ? Math.max(...currentIds) : 0;
+              const validIds = get()
+                .form.elements.filter(
+                  (element) => element && typeof element.id === "number" && !isNaN(element.id)
+                )
+                .map((element) => Number(element.id));
+
+              return validIds.length > 0 ? Math.max(...validIds) : 0;
             },
             generateElementId: () => {
               set((state) => {

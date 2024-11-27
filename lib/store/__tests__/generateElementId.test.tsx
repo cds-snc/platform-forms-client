@@ -275,4 +275,43 @@ describe("generateElementId", () => {
     expect(result.current.form.lastGeneratedElementId).toBe(6);
 
   });
+
+  it("gets highest element id", async () => {
+    const result = createStore();
+
+    const element = {
+      id: 201,
+      type: FormElementTypes.textField,
+      properties: {
+        titleEn: "question 201 en",
+        titleFr: "question 201 fr",
+        choices: [],
+        validation: { required: false },
+        descriptionEn: "description en",
+        descriptionFr: "descrption fr",
+      },
+    };
+
+    result.current.form = {
+      titleEn: "Title en",
+      titleFr: "Title fr",
+      elements: [
+        defaultElements[0],
+        defaultElements[1],
+        element, // <- Out of sequence and high id for testing purposes 
+        defaultElements[2],
+        defaultElements[10] // <-- This is purposely undefined - to test check for element.id
+      ],
+      layout: []
+    };
+
+    // Ensure we have a default form to work with
+    expect(result.current.form.titleEn).toBe("Title en");
+    expect(result.current.form.titleFr).toBe("Title fr");
+
+    // Check that the highest element id is 201
+    expect(result.current.getHighestElementId()).toBe(201);
+
+  });
+
 });
