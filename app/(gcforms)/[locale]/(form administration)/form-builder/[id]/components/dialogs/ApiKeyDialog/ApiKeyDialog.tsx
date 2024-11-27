@@ -21,7 +21,12 @@ type APIKeyCustomEventDetails = {
   id: string;
 };
 
-export const ApiKeyDialog = () => {
+/**
+ * API Key Dialog
+ * @param isVaultDelivery - boolean - Allows skipping the save request when a form is already saving to the vault -- example a live form swapping to API mode
+ * @returns JSX.Element
+ */
+export const ApiKeyDialog = ({ isVaultDelivery = false }: { isVaultDelivery?: boolean }) => {
   const dialog = useDialogRef();
   const { Event } = useCustomEvent();
   const { t } = useTranslation("form-builder");
@@ -73,15 +78,21 @@ export const ApiKeyDialog = () => {
     setHasError(false);
     setGenerating(true);
     try {
-      // First ensure all responses are sent to vault
-      const result = await sendResponsesToVault({
-        id: id,
-      });
+      /*
+        Allows skipping the save request
+        if it's determined that the form responses 
+        are already being delivered to the vault
+      */
+      if (!isVaultDelivery) {
+        const result = await sendResponsesToVault({
+          id: id,
+        });
 
-      if (result.error) {
-        // Throw the generic key creation error
-        // Handling as generic as we're in the process of creating a key
-        throw new Error(result.error);
+        if (result.error) {
+          // Throw the generic key creation error
+          // Handling as generic as we're in the process of creating a key
+          throw new Error(result.error);
+        }
       }
 
       const key = await _createKey(id);
