@@ -22,8 +22,9 @@ export const FormGroup = (props: FormGroupProps): React.ReactElement => {
       data-testid="formGroup"
       className={classes}
       aria-describedby={ariaDescribedBy}
-      // eslint-disable-next-line jsx-a11y/no-noninteractive-tabindex
-      tabIndex={0}
+      // Used to programmatically focus a form group by e.g. a form validation skip ahead link
+      // -1 is used over 0, so the group is not in the natural tab order which is confusing for AT
+      tabIndex={-1}
     >
       {children}
     </fieldset>
