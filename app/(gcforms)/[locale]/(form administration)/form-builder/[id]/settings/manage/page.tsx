@@ -115,14 +115,12 @@ export default async function Page({ params: { id } }: { params: { id: string } 
         closedDetails={closedDetails}
       />
       {/* 
-        Allow users with manage all forms to 
-        switch to API delivery option for live forms
+        Only show for live forms --- draft forms
+        should use Response Delivery page
       */}
       {isPublished && manageAllForms && (
         <>
-          <ApiKeyDialog
-            ensureSaveToVault={false} // Skip re-saving given this is a live form
-          />
+          <ApiKeyDialog isPublished={true} />
           <DeleteApiKeyDialog />
         </>
       )}

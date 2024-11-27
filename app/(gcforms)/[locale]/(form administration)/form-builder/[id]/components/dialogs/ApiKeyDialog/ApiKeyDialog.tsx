@@ -23,10 +23,10 @@ type APIKeyCustomEventDetails = {
 
 /**
  * API Key Dialog
- * @param ensureSaveToVault - boolean - Allows skipping the vault save before generating the key use to generate keys for live forms
+ * @param isPublished - boolean - Allows skipping the save request when a form is already published
  * @returns JSX.Element
  */
-export const ApiKeyDialog = ({ ensureSaveToVault = true }: { ensureSaveToVault?: boolean }) => {
+export const ApiKeyDialog = ({ isPublished = false }: { isPublished?: boolean }) => {
   const dialog = useDialogRef();
   const { Event } = useCustomEvent();
   const { t } = useTranslation("form-builder");
@@ -78,7 +78,9 @@ export const ApiKeyDialog = ({ ensureSaveToVault = true }: { ensureSaveToVault?:
     setHasError(false);
     setGenerating(true);
     try {
-      if (ensureSaveToVault) {
+      // Note - checking should be done outside of this dialog
+      // to ensure the form is already using the Vault
+      if (!isPublished) {
         const result = await sendResponsesToVault({
           id: id,
         });
