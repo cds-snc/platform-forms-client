@@ -23,7 +23,7 @@ type APIKeyCustomEventDetails = {
 
 /**
  * API Key Dialog
- * @param isVaultDelivery - boolean - Allows skipping the save request when a form is already published
+ * @param isVaultDelivery - boolean - Allows skipping the save request when a form is already saving to the vault -- example a live form swapping to API mode
  * @returns JSX.Element
  */
 export const ApiKeyDialog = ({ isVaultDelivery = false }: { isVaultDelivery?: boolean }) => {
