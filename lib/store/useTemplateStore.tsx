@@ -29,7 +29,6 @@ import {
   moveElementUp,
   removeElementById,
   removeById,
-  incrementElementId,
   getSchemaFromState,
   incrementSubElementId,
   cleanInput,
@@ -212,11 +211,12 @@ const createTemplateStore = (initProps?: Partial<InitialTemplateStoreProps>) => 
               });
             },
             add: async (elIndex = 0, type = FormElementTypes.radio, data, groupId) => {
+              const id = get().generateElementId();
+
               return new Promise((resolve) => {
                 set((state) => {
                   const allowGroups = state.allowGroupsFlag;
 
-                  const id = incrementElementId(state.form.elements);
                   const item = {
                     ...defaultField,
                     ...data,
@@ -365,8 +365,8 @@ const createTemplateStore = (initProps?: Partial<InitialTemplateStoreProps>) => 
             },
             duplicateElement: (itemId, groupId = "", copyEn = "", copyFr = "") => {
               const elIndex = get().form.elements.findIndex((el) => el.id === itemId);
+              const id = get().generateElementId();
               set((state) => {
-                const id = incrementElementId(state.form.elements);
                 // deep copy the element
                 const element = JSON.parse(JSON.stringify(state.form.elements[elIndex]));
                 element.id = id;
@@ -522,6 +522,32 @@ const createTemplateStore = (initProps?: Partial<InitialTemplateStoreProps>) => 
               set((state) => {
                 state.form.groupsLayout = layout;
               });
+            },
+            getHighestElementId: () => {
+              const validIds = get()
+                .form.elements.filter(
+                  (element) => element && typeof element.id === "number" && !isNaN(element.id)
+                )
+                .map((element) => Number(element.id));
+
+              return validIds.length > 0 ? Math.max(...validIds) : 0;
+            },
+            generateElementId: () => {
+              set((state) => {
+                const lastId = state.form.lastGeneratedElementId || 0;
+
+                // Ensure backwards compatibility with existing forms
+                const highestId = state.getHighestElementId();
+
+                if (lastId < highestId) {
+                  state.form.lastGeneratedElementId = highestId + 1;
+                  return;
+                }
+
+                state.form.lastGeneratedElementId = lastId + 1;
+              });
+
+              return get().form.lastGeneratedElementId || 1;
             },
           }),
           {
