@@ -1,4 +1,5 @@
 import { rehydrateFormResponses } from "../rehydrateFormResponses";
+import { submission as baseSubmission } from "./fixtures/base";
 import { submission as simpleSubmission, result as simpleResult } from "./fixtures/simple";
 import { submission as checkboxSubmission, result as checkboxResult } from "./fixtures/checkbox";
 import { submission as dateSubmission, result as dateResult } from "./fixtures/date";
@@ -18,6 +19,7 @@ import {
   submission as pagedFormSubmission,
   result as pagedFormSubmissionResult,
 } from "./fixtures/paged";
+import merge from "lodash.merge";
 
 describe("rehydrateFormResponses", () => {
   it("should rehydrate responses", () => {
@@ -46,18 +48,20 @@ describe("rehydrateFormResponses", () => {
         submission: kitchenSinkSubmission,
         result: kitchenSinkSubmissionResult,
       },
-      {
-        submission: pagedFormSubmission,
-        result: pagedFormSubmissionResult,
-      },
     ];
 
     types.forEach((type) => {
-      const payload = type.submission;
+      const payload = merge(baseSubmission, type.submission);
 
       const result = rehydrateFormResponses(payload);
 
       expect(result).toEqual(type.result);
     });
+
+    const payload = merge(pagedFormSubmission);
+
+    const result = rehydrateFormResponses(payload);
+
+    expect(result).toEqual(pagedFormSubmissionResult);
   });
 });

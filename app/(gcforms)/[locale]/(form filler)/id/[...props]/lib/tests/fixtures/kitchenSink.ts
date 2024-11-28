@@ -1,40 +1,6 @@
-import { Submission } from "@lib/types";
-
-/**
- * Most input types have simple text responses so this covers most input types:
- * textField, textArea, radio, dropdown, combobox ... TODO
- */
-export const submission = <Submission>{
+export const submission = {
   form: {
-    id: "cm40dwxmt0002pznalkm7dl9b",
-    updatedAt: "Wed Nov 27 2024 16:23:36 GMT-0500 (Eastern Standard Time)",
-    closedDetails: undefined,
     form: {
-      groups: {
-        end: {
-          name: "End",
-          titleEn: "Confirmation page",
-          titleFr: "Confirmation page",
-          elements: [],
-        },
-        start: {
-          name: "Start",
-          titleEn: "Start page",
-          titleFr: "Start page",
-          elements: ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12"],
-          nextAction: "review",
-        },
-        review: {
-          name: "Review",
-          titleEn: "End (Review page and Confirmation)",
-          titleFr: "End (Review page and Confirmation)",
-          elements: [],
-          nextAction: "end",
-        },
-      },
-      layout: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
-      titleEn: "Kitchen Sink",
-      titleFr: "",
       elements: [
         {
           id: 1,
@@ -321,14 +287,7 @@ export const submission = <Submission>{
           },
         },
       ],
-      confirmation: { descriptionEn: "", descriptionFr: "", referrerUrlEn: "", referrerUrlFr: "" },
-      groupsLayout: [],
-      introduction: { descriptionEn: "", descriptionFr: "" },
-      privacyPolicy: { descriptionEn: "", descriptionFr: "" },
-      lastGeneratedElementId: 12,
     },
-    isPublished: false,
-    securityAttribute: "Protected A",
   },
   responses: {
     "1": "answer",

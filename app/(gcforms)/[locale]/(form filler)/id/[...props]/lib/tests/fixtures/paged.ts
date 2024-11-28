@@ -1,9 +1,5 @@
 import { Submission } from "@lib/types";
 
-/**
- * Most input types have simple text responses so this covers most input types:
- * textField, textArea, radio, dropdown, combobox ... TODO
- */
 export const submission = <Submission>{
   form: {
     id: "cm40ey4m40003pznady0wtty2",
