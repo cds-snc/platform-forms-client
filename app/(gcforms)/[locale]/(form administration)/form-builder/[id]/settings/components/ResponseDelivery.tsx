@@ -350,11 +350,6 @@ export const ResponseDelivery = ({ isFormsAdmin }: { isFormsAdmin: boolean }) =>
 
             <div className="mb-10">
               <h2 className="mb-6">{t("settingsResponseDelivery.title")}</h2>
-              {hasApiKey && (
-                <p className="mb-10 inline-block bg-purple-200 p-3 text-sm font-bold">
-                  {t("settingsResponseDelivery.deleteApiKeyMessage")}
-                </p>
-              )}
               {protectedBSelected ? (
                 <p className="mb-5 inline-block bg-purple-200 p-3 text-sm font-bold">
                   {t("settingsResponseDelivery.protectedBMessage")}
@@ -430,9 +425,22 @@ export const ResponseDelivery = ({ isFormsAdmin }: { isFormsAdmin: boolean }) =>
               {apiAccess && deliveryOptionValue === DeliveryOption.api && (
                 <div>
                   <ApiKeyButton showDelete />
+
+                  {hasApiKey && (
+                    <div className="mb-4 w-4/6 rounded-md bg-indigo-50 p-3">
+                      <h5 className="font-bold">
+                        {t("settings.api.deleteApiKeyToChangeOptions.title")}
+                      </h5>
+                      <p className="text-sm">
+                        {t("settings.api.deleteApiKeyToChangeOptions.message")}
+                      </p>
+                    </div>
+                  )}
+
                   <ApiDocNotes />
                 </div>
               )}
+
               {deliveryOptionValue !== DeliveryOption.api && !hasApiKey && (
                 <>
                   <Button
