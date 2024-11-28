@@ -93,7 +93,6 @@ export const NextButton = ({
           if (await handleValidation()) {
             updateFormDelay(formRecord.form, currentGroup);
             handleNextAction();
-            // focusElement("h2");
             tryFocusOnPageLoad("h2");
           }
         }}
