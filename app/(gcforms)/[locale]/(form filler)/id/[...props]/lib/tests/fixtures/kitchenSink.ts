@@ -95,7 +95,6 @@ export const submission = {
           id: 8,
           type: "formattedDate",
           properties: {
-            choices: [{ en: "", fr: "" }],
             titleEn: "Date",
             titleFr: "",
           },
@@ -106,7 +105,6 @@ export const submission = {
           properties: {
             titleEn: "Department or agency",
             titleFr: "Ministère ou organisme",
-            validation: { required: false },
             descriptionEn: "Start typing to narrow down the list",
             descriptionFr: "Commencez à taper pour réduire la liste",
             managedChoices: "departments",
@@ -116,7 +114,6 @@ export const submission = {
           id: 10,
           type: "textField",
           properties: {
-            choices: [{ en: "", fr: "" }],
             titleEn: "Number",
             titleFr: "",
             validation: { type: "number", required: false },
@@ -128,11 +125,8 @@ export const submission = {
           id: 11,
           type: "fileInput",
           properties: {
-            choices: [{ en: "", fr: "" }],
             titleEn: "File upload",
             titleFr: "",
-            validation: { required: false },
-            subElements: [],
             descriptionEn: "Files must not exceed 3.5 MB in total.",
             descriptionFr: "Les fichiers ne doivent pas dépasser 3.5 Mo au total.",
           },
@@ -141,7 +135,6 @@ export const submission = {
           id: 12,
           type: "dynamicRow",
           properties: {
-            choices: [{ en: "", fr: "" }],
             titleEn: "A repeating set",
             titleFr: "",
             subElements: [
@@ -149,7 +142,6 @@ export const submission = {
                 id: 1201,
                 type: "textField",
                 properties: {
-                  choices: [{ en: "", fr: "" }],
                   titleEn: "Short answer",
                   titleFr: "",
                 },
@@ -184,7 +176,6 @@ export const submission = {
                 id: 1204,
                 type: "formattedDate",
                 properties: {
-                  choices: [{ en: "", fr: "" }],
                   titleEn: "Date",
                   titleFr: "",
                 },

@@ -6,7 +6,6 @@ export const submission = {
           id: 1,
           type: "dynamicRow",
           properties: {
-            choices: [{ en: "", fr: "" }],
             titleEn: "A repeating set",
             titleFr: "",
             subElements: [
@@ -14,7 +13,6 @@ export const submission = {
                 id: 101,
                 type: "textField",
                 properties: {
-                  choices: [{ en: "", fr: "" }],
                   titleEn: "Simple input",
                   titleFr: "",
                 },
@@ -36,7 +34,6 @@ export const submission = {
                 id: 103,
                 type: "formattedDate",
                 properties: {
-                  choices: [{ en: "", fr: "" }],
                   titleEn: "A date",
                   titleFr: "",
                 },

@@ -27,7 +27,6 @@ export const submission = {
           id: 3,
           type: "textField",
           properties: {
-            choices: [{ en: "", fr: "" }],
             titleEn: "Short answer",
             titleFr: "",
           },
@@ -56,7 +55,6 @@ export const submission = {
                 id: 501,
                 type: "textField",
                 properties: {
-                  choices: [{ en: "", fr: "" }],
                   titleEn: "Short answer",
                   titleFr: "",
                 },

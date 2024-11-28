@@ -6,7 +6,6 @@ export const submission = {
           id: 1,
           type: "textField",
           properties: {
-            choices: [{ en: "", fr: "" }],
             titleEn: "Short answer",
             titleFr: "",
           },
