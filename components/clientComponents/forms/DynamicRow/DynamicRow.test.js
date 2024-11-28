@@ -1,7 +1,7 @@
 /**
  * @jest-environment jsdom
  */
-import React, { act } from "react";
+import React from "react";
 import { cleanup, render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { Form } from "@clientComponents/forms/Form/Form";
@@ -122,9 +122,7 @@ describe.each([["en"], ["fr"]])("Generate a dynamic row", (lang) => {
 
       const titleProp = lang === "en" ? "titleEn" : "titleFr";
 
-      await act(async () => {
-        await user.click(screen.getByTestId("add-row-button-1"));
-      });
+      await user.click(screen.getByTestId("add-row-button-1"));
 
       // There is only 1 row on initiation
       expect(screen.queryAllByTestId("dynamic-row", { exact: false })).toHaveLength(2);
@@ -173,15 +171,11 @@ describe.each([["en"], ["fr"]])("Generate a dynamic row", (lang) => {
       window.HTMLElement.prototype.scrollIntoView = jest.fn();
 
       // Add a new row to ensure we have 2 rows
-      await act(async () => {
-        await user.click(screen.getByTestId("add-row-button-1"));
-      });
+      await user.click(screen.getByTestId("add-row-button-1"));
 
       const titleProp = lang === "en" ? "titleEn" : "titleFr";
 
-      await act(async () => {
-        await user.click(screen.getByTestId("delete-row-button-1.1"));
-      });
+      await user.click(screen.getByTestId("delete-row-button-1.1"));
 
       // There is only 1 row on initiation
       expect(screen.queryAllByTestId("dynamic-row", { exact: false })).toHaveLength(1);
@@ -203,7 +197,7 @@ describe.each([["en"], ["fr"]])("Generate a dynamic row", (lang) => {
         })[0]
       );
     });
-    test.skip("Data reorders properly after row deletion", async () => {
+    test("Data reorders properly after row deletion", async () => {
       const user = userEvent.setup();
       render(
         <Form formRecord={formRecord} t={(key) => key} language={lang}>
@@ -214,10 +208,8 @@ describe.each([["en"], ["fr"]])("Generate a dynamic row", (lang) => {
       window.HTMLElement.prototype.scrollIntoView = jest.fn();
 
       // Add 2 new rows to ensure we have 3 rows
-      await act(async () => {
-        await user.click(screen.getByTestId("add-row-button-1"));
-        await user.click(screen.getByTestId("add-row-button-1"));
-      });
+      await user.click(screen.getByTestId("add-row-button-1"));
+      await user.click(screen.getByTestId("add-row-button-1"));
 
       expect(screen.getAllByTestId("dynamic-row", { exact: false })).toHaveLength(3);
 
@@ -228,16 +220,13 @@ describe.each([["en"], ["fr"]])("Generate a dynamic row", (lang) => {
       for (const field of fields) {
         // userEvent.type needs to be run sequentially
         // eslint-disable-next-line no-await-in-loop
-        await act(async () => {
-          await user.type(field, index.toString());
-        });
+        await user.type(field, index.toString());
+
         index++;
       }
 
       // Delete first Row
-      await act(async () => {
-        await user.click(screen.getByTestId("delete-row-button-1.0"));
-      });
+      await user.click(screen.getByTestId("delete-row-button-1.0"));
 
       // check values
       expect(screen.queryAllByTestId("dynamic-row", { exact: false })).toHaveLength(2);
@@ -248,7 +237,7 @@ describe.each([["en"], ["fr"]])("Generate a dynamic row", (lang) => {
       expect(fieldValues).toEqual(["3", "4", "5", "6", "7", "8"]);
     });
 
-    test.skip("Maximum number of rows", async () => {
+    test("Maximum number of rows", async () => {
       const user = userEvent.setup();
       render(
         <Form formRecord={formRecord} t={(key) => key} language={lang}>
@@ -261,23 +250,17 @@ describe.each([["en"], ["fr"]])("Generate a dynamic row", (lang) => {
 
       expect(screen.queryAllByTestId("dynamic-row", { exact: false })).toHaveLength(1);
 
-      await act(async () => {
-        await user.click(screen.getByTestId("add-row-button-1"));
-      });
+      await user.click(screen.getByTestId("add-row-button-1"));
 
       expect(screen.queryAllByTestId("add-row-button-1")).toHaveLength(1);
       expect(screen.queryAllByTestId("dynamic-row", { exact: false })).toHaveLength(2);
 
-      await act(async () => {
-        await user.click(screen.getByTestId("add-row-button-1"));
-      });
+      await user.click(screen.getByTestId("add-row-button-1"));
 
       expect(screen.queryAllByTestId("add-row-button-1")).toHaveLength(0);
       expect(screen.queryAllByTestId("dynamic-row", { exact: false })).toHaveLength(3);
 
-      await act(async () => {
-        await user.click(screen.getByTestId("delete-row-button-1.0"));
-      });
+      await user.click(screen.getByTestId("delete-row-button-1.0"));
 
       expect(screen.queryAllByTestId("add-row-button-1")).toHaveLength(1);
       expect(screen.queryAllByTestId("dynamic-row", { exact: false })).toHaveLength(2);
