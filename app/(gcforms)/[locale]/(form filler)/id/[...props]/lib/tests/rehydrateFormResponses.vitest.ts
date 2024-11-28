@@ -1,32 +1,26 @@
 import { rehydrateFormResponses } from "../rehydrateFormResponses";
-import {
-  submission as simpleSubmission,
-  result as simpleResult,
-} from "./fixtures/submissions/simple";
-import {
-  submission as checkboxSubmission,
-  result as checkboxResult,
-} from "./fixtures/submissions/checkbox";
-import { submission as dateSubmission, result as dateResult } from "./fixtures/submissions/date";
+import { submission as simpleSubmission, result as simpleResult } from "./fixtures/simple";
+import { submission as checkboxSubmission, result as checkboxResult } from "./fixtures/checkbox";
+import { submission as dateSubmission, result as dateResult } from "./fixtures/date";
 import {
   submission as addressSubmission,
   result as addressResult,
-} from "./fixtures/submissions/addressComplete";
+} from "./fixtures/addressComplete";
 import {
   submission as repeatingSetSubmission,
   result as repeatingSetResult,
-} from "./fixtures/submissions/repeatingSet";
+} from "./fixtures/repeatingSet";
 import {
   submission as kitchenSinkSubmission,
   result as kitchenSinkSubmissionResult,
-} from "./fixtures/submissions/kitchenSink";
+} from "./fixtures/kitchenSink";
 import {
   submission as pagedFormSubmission,
   result as pagedFormSubmissionResult,
-} from "./fixtures/submissions/paged";
+} from "./fixtures/paged";
 
 describe("rehydrateFormResponses", () => {
-  it("should rehydrate responses 1", () => {
+  it("should rehydrate responses", () => {
     const types = [
       {
         submission: simpleSubmission,
