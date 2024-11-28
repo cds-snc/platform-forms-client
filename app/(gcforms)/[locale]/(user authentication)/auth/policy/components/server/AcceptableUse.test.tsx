@@ -35,6 +35,8 @@ describe.skip("Acceptable use terms", () => {
 
     render(<AcceptableUseTerms {...props} />);
     expect(screen.getByRole("button", { name: "acceptableUsePage.agree" })).toBeInTheDocument();
+
+
     await user.click(screen.getByRole("button", { name: "acceptableUsePage.agree" }));
     expect(update.mock.calls.length).toBe(1);
   });
