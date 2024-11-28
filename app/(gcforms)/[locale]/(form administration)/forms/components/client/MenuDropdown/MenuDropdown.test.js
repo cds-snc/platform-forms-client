@@ -1,7 +1,7 @@
 /**
  * @jest-environment jsdom
  */
-import React from "react";
+import React, { act } from "react";
 import { render, cleanup, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { MenuDropdown } from "./MenuDropdown";
@@ -60,7 +60,9 @@ describe("Card component", () => {
     );
 
     const user = userEvent.setup();
-    await user.click(screen.getByText(/Menu Title/i));
+    await act(async () => {
+      await user.click(screen.getByText(/Menu Title/i));
+    });
     expect(screen.queryByRole("button", { expanded: "true" }));
   });
 
@@ -72,9 +74,14 @@ describe("Card component", () => {
     );
 
     const user = userEvent.setup();
-    await user.click(screen.getByText(/Menu Title/i));
+    await act(async () => {
+      await user.click(screen.getByText(/Menu Title/i));
+    });
     expect(screen.queryByRole("button", { expanded: "true" }));
-    await user.click(screen.getByText(/Menu Title/i));
+
+    await act(async () => {
+      await user.click(screen.getByText(/Menu Title/i));
+    });
     expect(screen.queryByRole("button", { expanded: "false" }));
   });
 });

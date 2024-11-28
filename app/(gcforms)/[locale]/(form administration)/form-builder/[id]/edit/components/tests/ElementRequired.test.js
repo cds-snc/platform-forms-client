@@ -27,7 +27,9 @@ describe("ElementRequired", () => {
 
     expect(checkbox).toHaveAttribute("id", "required-1-id");
 
-    await user.click(checkbox);
+    await act(async () => {
+      await user.click(checkbox);
+    });
 
     await act(async () => {
       await promise;
