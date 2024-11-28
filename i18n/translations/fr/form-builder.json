@@ -456,9 +456,9 @@
     "title": "Télécharger le fichier du formulaire"
   },
   "switchToApiMode": {
-    "title": "Switch to API delivery [FR]",
-    "description": "New responses will be available through the API endpoint [FR]",
-    "btnText": "Switch to API delivery [FR]"
+    "title": "Passer à la livriason par API",
+    "description": "Les nouvelles soumissions seront disponibles via le point de terminaison de l'API.",
+    "btnText": "Passer à la livraison par API"
   },
   "formIntroduction": "Introduction du formulaire ",
   "formInvalidProperty": "Invalide : {{property}}",
