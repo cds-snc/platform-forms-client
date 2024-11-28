@@ -135,7 +135,7 @@ export const ResponseDeliveryHelpButtonWithApi = () => {
 
   return (
     <>
-      <InfoIcon className="ml-4 inline-block" />
+      <InfoIcon className="ml-4 inline-block size-5" />
       <div className="ml-2 inline-block">
         <Button onClick={handleOpenDialog} theme="link">
           {t("settingsResponseDelivery.responseDeliveryHelpWithApi.cta")}
