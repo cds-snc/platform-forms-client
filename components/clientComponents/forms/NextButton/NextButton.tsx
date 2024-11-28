@@ -12,7 +12,7 @@ import { Language } from "@lib/types/form-builder-types";
 
 import { getLocalizedProperty } from "@lib/utils";
 import { showReviewPage } from "@lib/utils/form-builder/showReviewPage";
-import { focusElement } from "@lib/client/clientHelpers";
+import { tryFocusOnPageLoad } from "@lib/client/clientHelpers";
 import { useFormDelay } from "@lib/hooks/useFormDelayContext";
 
 export const NextButton = ({
@@ -93,7 +93,7 @@ export const NextButton = ({
           if (await handleValidation()) {
             updateFormDelay(formRecord.form, currentGroup);
             handleNextAction();
-            focusElement("h2");
+            tryFocusOnPageLoad("h2");
           }
         }}
       >

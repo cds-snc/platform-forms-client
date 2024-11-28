@@ -60,7 +60,9 @@ describe("Card component", () => {
     );
 
     const user = userEvent.setup();
+
     await user.click(screen.getByText(/Menu Title/i));
+
     expect(screen.queryByRole("button", { expanded: "true" }));
   });
 
@@ -72,8 +74,10 @@ describe("Card component", () => {
     );
 
     const user = userEvent.setup();
+
     await user.click(screen.getByText(/Menu Title/i));
     expect(screen.queryByRole("button", { expanded: "true" }));
+
     await user.click(screen.getByText(/Menu Title/i));
     expect(screen.queryByRole("button", { expanded: "false" }));
   });

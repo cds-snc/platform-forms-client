@@ -28,7 +28,7 @@ import { ErrorSaving } from "@formBuilder/components/shared/ErrorSaving";
 import { toast } from "@formBuilder/components/shared/Toast";
 import { defaultForm } from "@lib/store/defaults";
 import { showReviewPage } from "@lib/utils/form-builder/showReviewPage";
-import { focusElement } from "@lib/client/clientHelpers";
+import { tryFocusOnPageLoad } from "@lib/client/clientHelpers";
 import { useIsFormClosed } from "@lib/hooks/useIsFormClosed";
 
 export const Preview = ({
@@ -202,7 +202,7 @@ export const Preview = ({
                                   {allowGrouping && isShowReviewPage && (
                                     <BackButton
                                       language={language}
-                                      onClick={() => focusElement("h2")}
+                                      onClick={() => tryFocusOnPageLoad("h2")}
                                     />
                                   )}
                                   <Button

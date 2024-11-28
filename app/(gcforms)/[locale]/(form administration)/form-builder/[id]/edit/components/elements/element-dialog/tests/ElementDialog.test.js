@@ -30,13 +30,17 @@ describe("Element dialog", () => {
     expect(button).toHaveTextContent("addElement");
 
     await user.click(button);
+
     expect(mockAddCallback.mock.calls.length).toBe(1);
     expect(mockAddCallback.mock.calls[0][0]).toBe("textField");
 
     await userEvent.tab();
+
     fireEvent.keyDown(listBox, { key: "ArrowDown" });
     fireEvent.keyDown(listBox, { key: "ArrowDown" });
+
     await user.click(button);
+
     expect(mockAddCallback.mock.calls.length).toBe(2);
     expect(mockAddCallback.mock.calls[1][0]).toBe("radio");
   });

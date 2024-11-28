@@ -5,6 +5,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.29.1](https://github.com/cds-snc/platform-forms-client/compare/v3.29.0...v3.29.1) (2024-11-28)
+
+
+### Miscellaneous Chores
+
+* update tests to remove noise ([#4742](https://github.com/cds-snc/platform-forms-client/issues/4742)) ([d1bf5ab](https://github.com/cds-snc/platform-forms-client/commit/d1bf5ab38026011277419501b06683efaf40ef8a))
+
 ## [3.29.0](https://github.com/cds-snc/platform-forms-client/compare/v3.28.0...v3.29.0) (2024-11-28)
 
 
