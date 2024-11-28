@@ -1,7 +1,7 @@
 /**
  * @jest-environment jsdom
  */
-import React, { act } from "react";
+import React from "react";
 import { cleanup, render, waitFor } from "@testing-library/react";
 import { Options } from "../Options";
 import userEvent from "@testing-library/user-event";
@@ -24,9 +24,7 @@ describe("Options", () => {
     const button = rendered.container.querySelector("#add-option-0");
     expect(button).toHaveTextContent("addOption");
 
-    await act(async () => {
-      await user.click(button);
-    });
+    await user.click(button);
 
     const option1 = rendered.getByPlaceholderText("option 1");
     expect(option1).toHaveAttribute("id", "option--1--1");
@@ -39,9 +37,8 @@ describe("Options", () => {
     expect(rendered.container.querySelectorAll("input")).toHaveLength(3);
 
     const remove1 = rendered.container.querySelector("#remove--1--1");
-    await act(async () => {
-      await user.click(remove1);
-    });
+
+    await user.click(remove1);
 
     expect(rendered.container.querySelectorAll("input")).toHaveLength(2);
   });

@@ -1,4 +1,4 @@
-import React, { act } from "react";
+import React from "react";
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 // import AcceptableUseTerms from "./AcceptableUse";
@@ -36,9 +36,8 @@ describe.skip("Acceptable use terms", () => {
     render(<AcceptableUseTerms {...props} />);
     expect(screen.getByRole("button", { name: "acceptableUsePage.agree" })).toBeInTheDocument();
 
-    await act(async () => {
-      await user.click(screen.getByRole("button", { name: "acceptableUsePage.agree" }));
-    });
+
+    await user.click(screen.getByRole("button", { name: "acceptableUsePage.agree" }));
     expect(update.mock.calls.length).toBe(1);
   });
 });

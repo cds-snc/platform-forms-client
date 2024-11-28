@@ -1,7 +1,7 @@
 /**
  * @jest-environment jsdom
  */
-import React, { act } from "react";
+import React from "react";
 import { cleanup, render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { GenerateElement } from "@lib/formBuilder";
@@ -88,9 +88,7 @@ describe("Verfify character count restrictions", () => {
     const user = userEvent.setup();
     const textInput = screen.getByRole("textbox");
 
-    await act(async () => {
-      await user.type(textInput, "This is 21 characters");
-    });
+    await user.type(textInput, "This is 21 characters");
 
     expect(screen.queryByText("characters left.")).not.toBeInTheDocument();
   });
@@ -99,9 +97,7 @@ describe("Verfify character count restrictions", () => {
     const user = userEvent.setup();
     const textInput = screen.getByRole("textbox");
 
-    await act(async () => {
-      await user.type(textInput, "This is 35 characters This is 35 ch");
-    });
+    await user.type(textInput, "This is 35 characters This is 35 ch");
 
     expect(
       screen.getByText(
@@ -114,9 +110,7 @@ describe("Verfify character count restrictions", () => {
     const user = userEvent.setup();
     const textInput = screen.getByRole("textbox");
 
-    await act(async () => {
-      await user.type(textInput, "This is 48 characters This is 48 characters This");
-    });
+    await user.type(textInput, "This is 48 characters This is 48 characters This");
 
     screen.getByText(
       "formElements.characterCount.part1-error" + " 8 " + "formElements.characterCount.part2-error"
@@ -141,9 +135,7 @@ describe("Accessibility tests for the textarea component.", () => {
     const user = userEvent.setup();
     const textInput = screen.getByRole("textbox");
 
-    await act(async () => {
-      await user.type(textInput, "This is 35 characters This is 35 ch");
-    });
+    await user.type(textInput, "This is 35 characters This is 35 ch");
 
     const textbox = screen.getByRole("textbox");
     expect(textbox).toBeRequired();
@@ -157,9 +149,7 @@ describe("Accessibility tests for the textarea component.", () => {
     const user = userEvent.setup();
     const textInput = screen.getByRole("textbox");
 
-    await act(async () => {
-      await user.type(textInput, "This is 48 characters This is 48 characters This");
-    });
+    await user.type(textInput, "This is 48 characters This is 48 characters This");
 
     const textbox = screen.getByRole("textbox");
     expect(textbox).toBeRequired();
