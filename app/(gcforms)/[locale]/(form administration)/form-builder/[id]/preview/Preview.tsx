@@ -208,7 +208,6 @@ export const Preview = ({
                                   <Button
                                     type="submit"
                                     id="SubmitButton"
-                                    className="mb-4"
                                     onClick={(e) => {
                                       if (disableSubmit) {
                                         e.preventDefault();

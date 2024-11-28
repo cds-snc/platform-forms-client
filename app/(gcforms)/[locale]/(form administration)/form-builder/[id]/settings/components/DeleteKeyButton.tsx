@@ -15,8 +15,10 @@ export const DeleteKeyButton = ({ id, keyId }: { id: string; keyId: string }) =>
   return (
     <>
       <div className="mb-4">
-        <div className="font-bold">{t("settings.api.keyId")}</div>
-        {keyId} <ApiTooltip />
+        <div className="font-bold">
+          {t("settings.api.keyId")} <ApiTooltip />
+        </div>
+        {keyId}
       </div>
       <Button theme="destructive" className="mr-4" onClick={openDeleteApiDialog}>
         {t("settings.api.deleteKey")}
