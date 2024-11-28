@@ -50,7 +50,7 @@ export const tryFocusOnPageLoad = (fallbackSelector = "H1") => {
       const visibleElements = Array.from(formControlEls).filter((element) =>
         element.checkVisibility()
       );
-      focusEl = visibleElements.length > 0 ? (focusEl = visibleElements[0]) : null;
+      focusEl = visibleElements.length > 0 ? visibleElements[0] : null;
     }
 
     if (!focusEl) {
