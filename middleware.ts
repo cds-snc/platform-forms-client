@@ -56,7 +56,7 @@ const { auth } = NextAuth({
         privileges: [],
         ...(token.newlyRegistered && { newlyRegistered: token.newlyRegistered }),
         ...(token.deactivated && { deactivated: token.deactivated }),
-        hasSecurityQuestions: token.hasSecurityQuestions ?? false,
+        hasSecurityQuestions: token?.hasSecurityQuestions ?? false,
       };
       return session;
     },
