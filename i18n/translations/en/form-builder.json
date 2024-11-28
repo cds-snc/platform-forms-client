@@ -455,6 +455,11 @@
     "downloadBtnText": "Download form file",
     "title": "Download form file"
   },
+  "switchToApiMode": {
+    "title": "Switch to API delivery",
+    "description": "New responses will be available through the API endpoint",
+    "btnText": "Switch to API delivery"
+  },
   "formIntroduction": "Form introduction",
   "formInvalidProperty": "Invalid: {{property}}",
   "formMissingProperty": "Missing: {{property}}",

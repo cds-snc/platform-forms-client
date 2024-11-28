@@ -251,8 +251,6 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
               handleSubmit(e);
             }}
             noValidate
-            // TODO move this to each child container but that I think will take some thought.
-            aria-live="polite"
           >
             {isGroupsCheck &&
               isShowReviewPage &&
@@ -290,14 +288,12 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
                   fallBack: () => {
                     return (
                       <div>
-                        {isGroupsCheck &&
-                          isShowReviewPage &&
-                          currentGroup === LockedSections.REVIEW && (
-                            <BackButton
-                              language={language as Language}
-                              onClick={() => groupsHeadingRef.current?.focus()}
-                            />
-                          )}
+                        {isGroupsCheck && isShowReviewPage && (
+                          <BackButton
+                            language={language as Language}
+                            onClick={() => groupsHeadingRef.current?.focus()}
+                          />
+                        )}
                         <div className="inline-block">
                           <SubmitButton
                             getFormDelay={() =>
