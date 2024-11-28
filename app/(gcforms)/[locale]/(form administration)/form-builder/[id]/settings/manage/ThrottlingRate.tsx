@@ -122,7 +122,7 @@ export const ThrottlingRate = ({ formId }: { formId: string }) => {
   }, [formId, throttlingErrorString]);
 
   return (
-    <div className="mb-20">
+    <div className="mb-10">
       <form onSubmit={handleSubmit}>
         <h2>{t("throttling.title")}</h2>
         <div role="alert">
