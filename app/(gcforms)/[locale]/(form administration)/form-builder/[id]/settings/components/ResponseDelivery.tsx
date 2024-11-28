@@ -36,6 +36,7 @@ import { toast } from "@formBuilder/components/shared/Toast";
 import { ErrorSaving } from "@formBuilder/components/shared/ErrorSaving";
 import { ApiKeyButton } from "./ApiKeyButton";
 import { ApiDocNotes } from "./ApiDocNotes";
+import { DeleteKeyToChangeOptionsNote } from "./DeleteKeyToChangeOptionsNote";
 import { useFormBuilderConfig } from "@lib/hooks/useFormBuilderConfig";
 
 enum DeliveryOption {
@@ -421,26 +422,13 @@ export const ResponseDelivery = ({ isFormsAdmin }: { isFormsAdmin: boolean }) =>
                   )}
                 </>
               )}
-
               {apiAccess && deliveryOptionValue === DeliveryOption.api && (
                 <div>
                   <ApiKeyButton showDelete />
-
-                  {hasApiKey && (
-                    <div className="mb-4 w-4/6 rounded-md bg-indigo-50 p-3">
-                      <h5 className="font-bold">
-                        {t("settings.api.deleteApiKeyToChangeOptions.title")}
-                      </h5>
-                      <p className="text-sm">
-                        {t("settings.api.deleteApiKeyToChangeOptions.message")}
-                      </p>
-                    </div>
-                  )}
-
+                  <DeleteKeyToChangeOptionsNote hasApiKey={hasApiKey} />
                   <ApiDocNotes />
                 </div>
               )}
-
               {deliveryOptionValue !== DeliveryOption.api && !hasApiKey && (
                 <>
                   <Button
