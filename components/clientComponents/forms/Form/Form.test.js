@@ -141,7 +141,6 @@ describe("Form Functionality", () => {
     // "Warning: An update to Formik inside a test was not wrapped in act(...)."
     fireEvent.click(screen.getByRole("button", { type: "submit" }));
     expect(await screen.findByRole("alert")).toBeInTheDocument();
-    screen.debug();
     // expect(submitToAPI).not.toHaveBeenCalled();
   });
 });

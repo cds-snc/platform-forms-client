@@ -37,7 +37,9 @@ describe("Options", () => {
     expect(rendered.container.querySelectorAll("input")).toHaveLength(3);
 
     const remove1 = rendered.container.querySelector("#remove--1--1");
+
     await user.click(remove1);
+
     expect(rendered.container.querySelectorAll("input")).toHaveLength(2);
   });
 
