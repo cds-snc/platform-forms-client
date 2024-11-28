@@ -12,10 +12,6 @@ export const submission = {
               {
                 id: 101,
                 type: "textField",
-                properties: {
-                  titleEn: "Simple input",
-                  titleFr: "",
-                },
               },
               {
                 id: 102,
@@ -26,17 +22,11 @@ export const submission = {
                     { en: "two", fr: "" },
                     { en: "three", fr: "" },
                   ],
-                  titleEn: "Checkboxes",
-                  titleFr: "",
                 },
               },
               {
                 id: 103,
                 type: "formattedDate",
-                properties: {
-                  titleEn: "A date",
-                  titleFr: "",
-                },
               },
             ],
           },

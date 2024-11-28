@@ -5,10 +5,6 @@ export const submission = {
         {
           id: 1,
           type: "formattedDate",
-          properties: {
-            titleEn: "Enter a date",
-            titleFr: "",
-          },
         },
       ],
     },

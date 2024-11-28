@@ -5,10 +5,6 @@ export const submission = {
         {
           id: 1,
           type: "textField",
-          properties: {
-            titleEn: "Short answer",
-            titleFr: "",
-          },
         },
         {
           id: 2,
@@ -19,17 +15,11 @@ export const submission = {
               { en: "two", fr: "" },
               { en: "three", fr: "" },
             ],
-            titleEn: "Checkboxes",
-            titleFr: "",
           },
         },
         {
           id: 3,
           type: "textField",
-          properties: {
-            titleEn: "Short answer",
-            titleFr: "",
-          },
         },
         {
           id: 4,
@@ -40,24 +30,16 @@ export const submission = {
               { en: "two", fr: "" },
               { en: "three", fr: "" },
             ],
-            titleEn: "Checboxes",
-            titleFr: "",
           },
         },
         {
           id: 5,
           type: "dynamicRow",
           properties: {
-            titleEn: "A repeating set",
-            titleFr: "",
             subElements: [
               {
                 id: 501,
                 type: "textField",
-                properties: {
-                  titleEn: "Short answer",
-                  titleFr: "",
-                },
               },
               {
                 id: 502,
@@ -68,8 +50,6 @@ export const submission = {
                     { en: "two", fr: "" },
                     { en: "three", fr: "" },
                   ],
-                  titleEn: "Checkboxes",
-                  titleFr: "",
                 },
               },
             ],

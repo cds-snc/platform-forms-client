@@ -11,8 +11,6 @@ export const submission = {
               { en: "two", fr: "" },
               { en: "three", fr: "" },
             ],
-            titleEn: "Checkbox",
-            titleFr: "",
           },
         },
       ],

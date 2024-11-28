@@ -5,10 +5,6 @@ export const submission = {
         {
           id: 1,
           type: "textField",
-          properties: {
-            titleEn: "Short answer",
-            titleFr: "",
-          },
         },
       ],
     },

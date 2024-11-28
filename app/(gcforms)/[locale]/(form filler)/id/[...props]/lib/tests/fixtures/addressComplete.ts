@@ -5,10 +5,6 @@ export const submission = {
         {
           id: 1,
           type: "addressComplete",
-          properties: {
-            titleEn: "Enter an address",
-            titleFr: "Adresse",
-          },
         },
       ],
     },

@@ -5,18 +5,10 @@ export const submission = {
         {
           id: 1,
           type: "textField",
-          properties: {
-            titleEn: "Short answer",
-            titleFr: "",
-          },
         },
         {
           id: 2,
           type: "textArea",
-          properties: {
-            titleEn: "Long answer",
-            titleFr: "",
-          },
         },
         {
           id: 3,
@@ -27,8 +19,6 @@ export const submission = {
               { en: "two", fr: "" },
               { en: "three", fr: "" },
             ],
-            titleEn: "Radios",
-            titleFr: "",
           },
         },
         {
@@ -40,8 +30,6 @@ export const submission = {
               { en: "two", fr: "" },
               { en: "three", fr: "" },
             ],
-            titleEn: "Checkboxes",
-            titleFr: "",
           },
         },
         {
@@ -53,8 +41,6 @@ export const submission = {
               { en: "two", fr: "" },
               { en: "three", fr: "" },
             ],
-            titleEn: "Dropdown",
-            titleFr: "",
           },
         },
         {
@@ -73,8 +59,6 @@ export const submission = {
               { en: "nine", fr: "" },
               { en: "ten", fr: "" },
             ],
-            titleEn: "Searchable list",
-            titleFr: "",
           },
         },
         {
@@ -86,50 +70,27 @@ export const submission = {
               { en: "Condition 2", fr: "Condition 2" },
               { en: "Condition 3", fr: "Condition 3" },
             ],
-            titleEn: "I agree to:",
-            titleFr: "J'accepte :",
             validation: { all: true, required: true },
           },
         },
         {
           id: 8,
           type: "formattedDate",
-          properties: {
-            titleEn: "Date",
-            titleFr: "",
-          },
         },
         {
           id: 9,
           type: "combobox",
-          properties: {
-            titleEn: "Department or agency",
-            titleFr: "Ministère ou organisme",
-            descriptionEn: "Start typing to narrow down the list",
-            descriptionFr: "Commencez à taper pour réduire la liste",
-            managedChoices: "departments",
-          },
         },
         {
           id: 10,
           type: "textField",
           properties: {
-            titleEn: "Number",
-            titleFr: "",
             validation: { type: "number", required: false },
-            descriptionEn: "Enter a number",
-            descriptionFr: "Saisissez un chiffre",
           },
         },
         {
           id: 11,
           type: "fileInput",
-          properties: {
-            titleEn: "File upload",
-            titleFr: "",
-            descriptionEn: "Files must not exceed 3.5 MB in total.",
-            descriptionFr: "Les fichiers ne doivent pas dépasser 3.5 Mo au total.",
-          },
         },
         {
           id: 12,
@@ -141,10 +102,6 @@ export const submission = {
               {
                 id: 1201,
                 type: "textField",
-                properties: {
-                  titleEn: "Short answer",
-                  titleFr: "",
-                },
               },
               {
                 id: 1202,
@@ -155,8 +112,6 @@ export const submission = {
                     { en: "two", fr: "" },
                     { en: "three", fr: "" },
                   ],
-                  titleEn: "Radios",
-                  titleFr: "",
                 },
               },
               {
@@ -168,17 +123,11 @@ export const submission = {
                     { en: "two", fr: "" },
                     { en: "three", fr: "" },
                   ],
-                  titleEn: "Checkboxes",
-                  titleFr: "",
                 },
               },
               {
                 id: 1204,
                 type: "formattedDate",
-                properties: {
-                  titleEn: "Date",
-                  titleFr: "",
-                },
               },
             ],
           },
