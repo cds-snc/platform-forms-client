@@ -682,7 +682,7 @@
         "responsibility1": "Save this key in a secure location.",
         "responsibility2": "Share the key only with people who need it.",
         "responsibility3": "Send the key through secure channels, like encrypted email.",
-        "responsibility4": "Understand the <a href='canada.ca' target='_blank'>required security procedures.</a>",
+        "responsibility4": "Understand the <a href='https://forms-formulaires.alpha.canada.ca/en/terms-of-use' target='_blank'>terms of use</a>",
         "text1": "Do not lose your key",
         "text2": "This key is provided once as it can give access to form response data. If you lose this key, or if it becomes compromised, you will have to create a new one.",
         "cancelButton": "Cancel",
@@ -690,7 +690,7 @@
         "confirm": {
           "label": "Confirmation",
           "required": "(required)",
-          "description": "Type <strong>AGREE</strong> in the box below to confirm you understand your responsibilities and agree to the <a href='canada.ca' target='_blank'>required security procedures</a> while storing and sharing this key."
+          "description": "Type <strong>AGREE</strong> in the box below to confirm you understand your responsibilities and agree to the <a href='https://forms-formulaires.alpha.canada.ca/en/terms-of-use' target='_blank'>terms of use</a> while storing and sharing this key."
         },
         "error": {
           "createFailed": {
