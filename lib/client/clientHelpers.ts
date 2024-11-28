@@ -21,18 +21,39 @@ export const scrollToBottom = (containerEl: HTMLElement) => {
 };
 
 /**
- * When a function does not have access to an element (ref), use the DOM to get an element and
- * after the next tick (after the current event loop), focus the element. This moves the page to
- * the element location and announces the text in the element to AT. Use a react ref over this to
- * get and focus an element when possible.
- * @param elementSelector selector to get the DOM element (first one found). Defaults to H1. Must
- * have a tabIndex.
- * @returns undefined
+ * Tries to focus the first input or if that fails a fallback selector. This is part of focus
+ * management to set page load entry point using a focus for an AT user. A form control
+ * is preferred if one exists to avoid confusion. e.g. #4690
+ * Note: the setTimeout is a hack to help sequence the query selector after the DOM loads. Use a
+ * react ref over this method if possible.
  */
-export const focusElement = (elementSelector = "H1") => {
+export const tryFocusOnPageLoad = (fallbackSelector = "H1") => {
   const NEXT_TICK = 0;
   setTimeout(() => {
-    (document.querySelector(elementSelector) as HTMLElement)?.focus();
+    let focusEl = null;
+
+    // Note: checkVisibility() is still fairly new so should check if available, if not, use the
+    // fallback instead.
+    // https://developer.mozilla.org/en-US/docs/Web/API/Element/checkVisibility
+    // https://chromestatus.com/feature/5163102852087808
+    if (window.document.documentElement.checkVisibility !== undefined) {
+      // Get the list of form controls in order, if any and take the first visible one
+      // Note: the CSS selector could be more efficient but e.g. not all form controls are wrapped
+      // in a form element.
+      const formControlEls = document.querySelectorAll(
+        "input, textarea, select"
+      ) as NodeListOf<HTMLElement>;
+      const visibleElements = Array.from(formControlEls).filter((element) =>
+        element.checkVisibility()
+      );
+      focusEl = visibleElements.length > 0 ? (focusEl = visibleElements[0]) : null;
+    }
+
+    if (!focusEl) {
+      focusEl = document.querySelector(fallbackSelector) as HTMLElement;
+    }
+
+    focusEl?.focus();
   }, NEXT_TICK);
 };
 
