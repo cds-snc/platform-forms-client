@@ -48,20 +48,18 @@ describe("rehydrateFormResponses", () => {
         submission: kitchenSinkSubmission,
         result: kitchenSinkSubmissionResult,
       },
+      {
+        submission: pagedFormSubmission,
+        result: pagedFormSubmissionResult,
+      },
     ];
 
     types.forEach((type) => {
-      const payload = merge(baseSubmission, type.submission);
+      const payload = merge({}, baseSubmission, type.submission);
 
       const result = rehydrateFormResponses(payload);
 
       expect(result).toEqual(type.result);
     });
-
-    const payload = merge(pagedFormSubmission);
-
-    const result = rehydrateFormResponses(payload);
-
-    expect(result).toEqual(pagedFormSubmissionResult);
   });
 });

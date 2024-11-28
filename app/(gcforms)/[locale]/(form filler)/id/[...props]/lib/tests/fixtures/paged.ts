@@ -1,46 +1,41 @@
-import { Submission } from "@lib/types";
-
-export const submission = <Submission>{
+export const submission = {
   form: {
-    id: "cm40ey4m40003pznady0wtty2",
-    updatedAt: "Wed Nov 27 2024 16:44:14 GMT-0500 (Eastern Standard Time)",
-    closedDetails: undefined,
     form: {
-      groups: {
-        end: {
-          name: "End",
-          titleEn: "Confirmation page",
-          titleFr: "Confirmation page",
-          elements: [],
-        },
-        start: {
-          name: "Start",
-          titleEn: "Start page",
-          titleFr: "Start page",
-          autoFlow: true,
-          elements: ["1", "2"],
-          nextAction: "55d1206a-398a-4c70-b10d-ed5affc98492",
-        },
-        review: {
-          name: "Review",
-          titleEn: "End (Review page and Confirmation)",
-          titleFr: "End (Review page and Confirmation)",
-          elements: [],
-          nextAction: "end",
-        },
-        "55d1206a-398a-4c70-b10d-ed5affc98492": {
-          name: "Page two",
-          titleEn: "The second page",
-          titleFr: "",
-          autoFlow: true,
-          elements: ["3", "4", "5"],
-          nextAction: "review",
-        },
-      },
-      layout: [1, 2, 3, 4, 5],
-      titleEn: "Paged form",
-      titleFr: "",
       elements: [
+        {
+          id: 1,
+          type: "textField",
+          properties: {
+            choices: [{ en: "", fr: "" }],
+            titleEn: "Short answer",
+            titleFr: "",
+            validation: { required: false },
+            subElements: [],
+            descriptionEn: "",
+            descriptionFr: "",
+            placeholderEn: "",
+            placeholderFr: "",
+          },
+        },
+        {
+          id: 2,
+          type: "checkbox",
+          properties: {
+            choices: [
+              { en: "one", fr: "" },
+              { en: "two", fr: "" },
+              { en: "three", fr: "" },
+            ],
+            titleEn: "Checkboxes",
+            titleFr: "",
+            validation: { required: false },
+            subElements: [],
+            descriptionEn: "",
+            descriptionFr: "",
+            placeholderEn: "",
+            placeholderFr: "",
+          },
+        },
         {
           id: 3,
           type: "textField",
@@ -133,49 +128,8 @@ export const submission = <Submission>{
             placeholderFr: "",
           },
         },
-        {
-          id: 1,
-          type: "textField",
-          properties: {
-            choices: [{ en: "", fr: "" }],
-            titleEn: "Short answer",
-            titleFr: "",
-            validation: { required: false },
-            subElements: [],
-            descriptionEn: "",
-            descriptionFr: "",
-            placeholderEn: "",
-            placeholderFr: "",
-          },
-        },
-        {
-          id: 2,
-          type: "checkbox",
-          properties: {
-            choices: [
-              { en: "one", fr: "" },
-              { en: "two", fr: "" },
-              { en: "three", fr: "" },
-            ],
-            titleEn: "Checkboxes",
-            titleFr: "",
-            validation: { required: false },
-            subElements: [],
-            descriptionEn: "",
-            descriptionFr: "",
-            placeholderEn: "",
-            placeholderFr: "",
-          },
-        },
       ],
-      confirmation: { descriptionEn: "", descriptionFr: "", referrerUrlEn: "", referrerUrlFr: "" },
-      groupsLayout: ["55d1206a-398a-4c70-b10d-ed5affc98492"],
-      introduction: { descriptionEn: "", descriptionFr: "" },
-      privacyPolicy: { descriptionEn: "", descriptionFr: "" },
-      lastGeneratedElementId: 5,
     },
-    isPublished: false,
-    securityAttribute: "Protected A",
   },
   responses: {
     "1": "answer",
