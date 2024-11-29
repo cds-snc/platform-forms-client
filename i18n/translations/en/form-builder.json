@@ -995,8 +995,8 @@
       "startNote": "Start your API integration by creating a private API Key"
     },
     "apiDocNotes": {
-      "title": "API documentation",
-      "text1": "To connect to our endpoint follow instructions and code examples in our <a href='https://cds-snc.github.io/forms-api/home' target='_blank'>Technical documentation</a>."
+      "title": "Set up your API integration",
+      "text1": "To connect to our endpoint follow instructions and code examples in our <a href='https://cds-snc.github.io/forms-api/home' target='_blank'>API documentation</a>."
     },
     "vaultNote": {
       "text1": "PROTECTED B form responses must be downloaded from GC Forms.",
@@ -1062,7 +1062,7 @@
     "selectQuestion": "Select a question"
   },
   "saved": "Saved",
-  "opensInNewTab": "opens in a new tab",
+  "opensInNewTab": "opens in new tab",
   "rightPanel": {
     "title": "Form set-up panel",
     "openPanel": "Form set-up",
