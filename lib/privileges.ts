@@ -379,8 +379,8 @@ export const checkPrivilegesAsBoolean = (
   }
 };
 
-const _getSubject = async (subject: { type: Extract<Subject, string>; id?: string }) => {
-  if (!subject.id) {
+const _getSubject = async (subject: { type: Extract<Subject, string>; id: string }) => {
+  if (subject.id === "all") {
     return {};
   }
   switch (subject.type) {
@@ -437,41 +437,84 @@ const _getSubject = async (subject: { type: Extract<Subject, string>; id?: strin
   }
 };
 
+const _retrieveSubjects = async (
+  cache: Map<string, unknown>,
+  subject: {
+    type: Extract<Subject, string>;
+    scope: "all" | { subjectId: string } | { subjectIds: string[] };
+  }
+) => {
+  if (subject.scope === "all") {
+    return [{}];
+  }
+  if ("subjectId" in subject.scope) {
+    const cachedItem = cache.get(`${subject.type}:${subject.scope.subjectId}`);
+    if (cachedItem) return [cachedItem];
+
+    const item = await _getSubject({ type: subject.type, id: subject.scope.subjectId });
+    cache.set(`${subject.type}:${subject.scope.subjectId}`, item);
+    return [item];
+  }
+  return Promise.all(
+    subject.scope.subjectIds.map(async (id) => {
+      const cachedItem = cache.get(`${subject.type}:${id}`);
+      if (cachedItem) return cachedItem;
+
+      const item = await _getSubject({ type: subject.type, id });
+      cache.set(`${subject.type}:${id}`, item);
+      return item;
+    })
+  );
+};
+
 export const authorizationCheck = async (
   ability: UserAbility,
   rules: {
     action: Action;
-    subject: { type: Extract<Subject, string>; id?: string };
-    field?: string | string[];
+    subject: {
+      type: Extract<Subject, string>;
+      scope: "all" | { subjectId: string } | { subjectIds: string[] };
+    };
+    fields?: string[];
   }[],
   logic: "all" | "one" = "all"
 ): Promise<void> => {
   try {
-    // Create a local scoped cache to store the subject objects
+    // Create a local scoped memory cache to store the subject objects between rules
     const cache = new Map();
 
     const result = await Promise.all(
-      rules.map(async ({ action, subject, field }) => {
-        let ruleResult = false;
-        const subjectToValidate = cache.get(subject) ?? (await _getSubject(subject));
-        cache.set(subject, subjectToValidate);
-        if (Array.isArray(field)) {
-          field.forEach((f) => {
-            ruleResult = ability.can(action, setSubjectType(subject.type, subjectToValidate), f);
-          });
-          return ruleResult;
-        }
+      rules.flatMap(async ({ action, subject, fields }) => {
+        const subjectsToValidate = await _retrieveSubjects(cache, subject);
 
-        ruleResult = ability.can(action, setSubjectType(subject.type, subjectToValidate), field);
-        logMessage.debug(
-          `Privilege Check ${ruleResult ? "PASS" : "FAIL"}: Can ${action} on ${subject.type} ${
-            field && `for field ${field}`
-          } `
-        );
-
-        return ruleResult;
+        return subjectsToValidate.flatMap((subjectToValidate) => {
+          if (fields) {
+            return fields?.map((f) => {
+              const ruleResult = ability.can(
+                action,
+                setSubjectType(subject.type, subjectToValidate),
+                f
+              );
+              logMessage.debug(
+                `Privilege Check ${ruleResult ? "PASS" : "FAIL"}: Can ${action} on ${
+                  subject.type
+                } ${fields && `for field ${fields}`} `
+              );
+              return ruleResult;
+            });
+          } else {
+            // There are no fields to validate
+            const ruleResult = ability.can(action, setSubjectType(subject.type, subjectToValidate));
+            logMessage.debug(
+              `Privilege Check ${ruleResult ? "PASS" : "FAIL"}: Can ${action} on ${subject.type} ${
+                fields && `for field ${fields}`
+              } `
+            );
+            return ruleResult;
+          }
+        });
       })
-    );
+    ).then((results) => results.flat());
 
     let accessAllowed = false;
 

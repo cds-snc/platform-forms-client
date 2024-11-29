@@ -1,4 +1,134 @@
-import { interpolatePermissionCondition } from "@lib/privileges";
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import { interpolatePermissionCondition, authorizationCheck, createAbility } from "@lib/privileges";
+import {
+  Base,
+  mockUserPrivileges,
+  ManageForms,
+  ManageUsers,
+  PublishForms,
+  ViewUserPrivileges,
+} from "__utils__/permissions";
+import { Session } from "next-auth";
+import { prismaMock } from "@jestUtils";
+
+const publishedFormRecord = {
+  id: "111111",
+  created_at: Date.now() - 86400,
+  updated_at: Date.now() - 43200,
+  name: "Test Form",
+  isPublished: true,
+  users: [
+    {
+      id: "0",
+      name: "Test User",
+      email: "test.user@cds-snc.ca",
+      active: true,
+    },
+    {
+      id: "1",
+      name: "Test User 2",
+      email: "test.user2@cds-snc.ca",
+      active: true,
+    },
+  ],
+};
+const unpublishedFormRecord = {
+  id: "222222",
+  created_at: Date.now() - 86400,
+  updated_at: Date.now() - 43200,
+  name: "Test Form",
+  isPublished: true,
+  users: [
+    {
+      id: "0",
+      name: "Test User",
+      email: "test.user@cds-snc.ca",
+      active: true,
+    },
+  ],
+};
+
+const user = {
+  id: "0",
+  name: "Test User",
+  email: "test.user@cds-snc.ca",
+  lastLogin: Date.now() - 3600,
+  active: true,
+};
+
+describe("authorizationCheck", () => {
+  describe("Base permissions", () => {
+    it("Should not throw if the user has permission to create a Form Record", async () => {
+      const fakeSession = {
+        user: { id: "1", privileges: mockUserPrivileges(Base, { user: { id: "0" } }) },
+      };
+      const ability = createAbility(fakeSession as Session);
+
+      await authorizationCheck(ability, [
+        { action: "create", subject: { type: "FormRecord", scope: "all" } },
+      ]);
+    });
+    it("Should not throw if the user has permission to view Form Record", async () => {
+      const fakeSession = {
+        user: { id: "1", privileges: mockUserPrivileges(Base, { user: { id: "0" } }) },
+      };
+      const ability = createAbility(fakeSession as Session);
+
+      (prismaMock.template.findUniqueOrThrow as jest.MockedFunction<any>).mockResolvedValue(
+        publishedFormRecord
+      );
+
+      await authorizationCheck(ability, [
+        { action: "view", subject: { type: "FormRecord", scope: { subjectId: "111111" } } },
+      ]);
+    });
+    it("Should not throw if the user has permission to edit Form Record", async () => {
+      const fakeSession = {
+        user: { id: "1", privileges: mockUserPrivileges(Base, { user: { id: "0" } }) },
+      };
+      const ability = createAbility(fakeSession as Session);
+
+      (prismaMock.template.findUniqueOrThrow as jest.MockedFunction<any>).mockResolvedValue(
+        publishedFormRecord
+      );
+
+      await authorizationCheck(ability, [
+        { action: "update", subject: { type: "FormRecord", scope: { subjectId: "111111" } } },
+      ]);
+    });
+    it("Should not throw if the user has permission to delete Form Record", async () => {
+      const fakeSession = {
+        user: { id: "1", privileges: mockUserPrivileges(Base, { user: { id: "0" } }) },
+      };
+      const ability = createAbility(fakeSession as Session);
+
+      (prismaMock.template.findUniqueOrThrow as jest.MockedFunction<any>).mockResolvedValue(
+        publishedFormRecord
+      );
+
+      await authorizationCheck(ability, [
+        { action: "delete", subject: { type: "FormRecord", scope: { subjectId: "111111" } } },
+      ]);
+    });
+
+    it("Should throw if the user does not has permission", async () => {
+      const fakeSession = {
+        user: { id: "1", privileges: mockUserPrivileges(Base, { user: { id: "bad" } }) },
+      };
+      const ability = createAbility(fakeSession as Session);
+
+      (prismaMock.template.findUniqueOrThrow as jest.MockedFunction<any>).mockResolvedValue(
+        publishedFormRecord
+      );
+
+      expect(async () =>
+        authorizationCheck(ability, [
+          { action: "update", subject: { type: "FormRecord", scope: { subjectId: "111111" } } },
+        ])
+      ).rejects.toThrow("Access Control Forbidden Action");
+    });
+  });
+});
 
 describe("Provided values can be interpolated in permission condition", () => {
   it("Should succeed if condition does not require any interpolation", async () => {

@@ -129,7 +129,7 @@ export class TemplateHasUnprocessedSubmissions extends Error {
 export async function createTemplate(command: CreateTemplateCommand): Promise<FormRecord | null> {
   try {
     await authorizationCheck(command.ability, [
-      { action: "create", subject: { type: "FormRecord" } },
+      { action: "create", subject: { type: "FormRecord", scope: "all" } },
     ]);
 
     const createdTemplate = await prisma.template.create({
@@ -201,7 +201,9 @@ export async function getAllTemplates(
   try {
     const { requestedWhere, sortByDateUpdated } = options ?? {};
     // Can a user view any Template
-    await authorizationCheck(ability, [{ action: "view", subject: { type: "FormRecord" } }]);
+    await authorizationCheck(ability, [
+      { action: "view", subject: { type: "FormRecord", scope: "all" } },
+    ]);
 
     const templates = await prisma.template
       .findMany({
@@ -379,7 +381,9 @@ export async function getFullTemplateByID(
   formID: string
 ): Promise<FormRecord | null> {
   try {
-    authorizationCheck(ability, [{ action: "view", subject: { type: "FormRecord", id: formID } }]);
+    authorizationCheck(ability, [
+      { action: "view", subject: { type: "FormRecord", scope: { subjectId: formID } } },
+    ]);
 
     const template = await prisma.template
       .findUnique({
@@ -420,7 +424,7 @@ export async function getTemplateWithAssociatedUsers(
 } | null> {
   try {
     await authorizationCheck(ability, [
-      { action: "view", subject: { type: "FormRecord", id: formID } },
+      { action: "view", subject: { type: "FormRecord", scope: { subjectId: formID } } },
     ]);
     const templateWithAssociatedUsers = await prisma.template.findUnique({
       where: {
@@ -471,7 +475,7 @@ export async function getTemplateWithAssociatedUsers(
 export async function updateTemplate(command: UpdateTemplateCommand): Promise<FormRecord | null> {
   try {
     authorizationCheck(command.ability, [
-      { action: "update", subject: { type: "FormRecord", id: command.formID } },
+      { action: "update", subject: { type: "FormRecord", scope: { subjectId: command.formID } } },
     ]);
 
     const updatedTemplate = await prisma.template
@@ -570,7 +574,11 @@ export async function updateIsPublishedForTemplate(
 ): Promise<FormRecord | null> {
   try {
     await authorizationCheck(ability, [
-      { action: "update", subject: { type: "FormRecord", id: formID }, field: "isPublished" },
+      {
+        action: "update",
+        subject: { type: "FormRecord", scope: { subjectId: formID } },
+        fields: ["isPublished"],
+      },
     ]);
 
     // We use a where unique input to ensure we are only updating the form if it is not published
@@ -634,7 +642,7 @@ export async function removeAssignedUserFromTemplate(
 ): Promise<void> {
   try {
     await authorizationCheck(ability, [
-      { action: "update", subject: { type: "FormRecord", id: formID } },
+      { action: "update", subject: { type: "FormRecord", scope: { subjectId: formID } } },
     ]);
 
     const template = await prisma.template.findUnique({
@@ -732,7 +740,7 @@ export async function assignUserToTemplate(
 ): Promise<void> {
   try {
     await authorizationCheck(ability, [
-      { action: "update", subject: { type: "FormRecord", id: formID } },
+      { action: "update", subject: { type: "FormRecord", scope: { subjectId: formID } } },
     ]);
 
     const template = await prisma.template.findUnique({
@@ -893,7 +901,7 @@ export async function updateAssignedUsersForTemplate(
     if (!users.length) throw new Error("No users provided");
 
     await authorizationCheck(ability, [
-      { action: "update", subject: { type: "FormRecord", id: formID } },
+      { action: "update", subject: { type: "FormRecord", scope: { subjectId: formID } } },
     ]);
 
     const template = await prisma.template.findFirst({
@@ -1022,7 +1030,7 @@ export async function updateFormPurpose(
 ): Promise<FormRecord | null> {
   try {
     await authorizationCheck(ability, [
-      { action: "update", subject: { type: "FormRecord", id: formID } },
+      { action: "update", subject: { type: "FormRecord", scope: { subjectId: formID } } },
     ]);
 
     const updatedTemplate = await prisma.template
@@ -1087,7 +1095,7 @@ export async function updateResponseDeliveryOption(
 ): Promise<FormRecord | null> {
   try {
     await authorizationCheck(ability, [
-      { action: "update", subject: { type: "FormRecord", id: formID } },
+      { action: "update", subject: { type: "FormRecord", scope: { subjectId: formID } } },
     ]);
 
     const updatedTemplate = await prisma.template
@@ -1169,7 +1177,7 @@ export async function removeDeliveryOption(
 ): Promise<FormRecord | null> {
   try {
     await authorizationCheck(ability, [
-      { action: "update", subject: { type: "FormRecord", id: formID } },
+      { action: "update", subject: { type: "FormRecord", scope: { subjectId: formID } } },
     ]);
 
     const updatedTemplate = await prisma.template
@@ -1243,7 +1251,7 @@ export async function deleteTemplate(
 ): Promise<FormRecord | null> {
   try {
     await authorizationCheck(ability, [
-      { action: "delete", subject: { type: "FormRecord", id: formID } },
+      { action: "delete", subject: { type: "FormRecord", scope: { subjectId: formID } } },
     ]);
 
     // Ignore cache (last boolean parameter) because we want to make sure we did not get new submissions while in the flow of deleting a form
@@ -1302,7 +1310,7 @@ export async function deleteTemplate(
 
 export const checkUserHasTemplateOwnership = async (ability: UserAbility, formID: string) => {
   await authorizationCheck(ability, [
-    { action: "view", subject: { type: "FormRecord", id: formID } },
+    { action: "view", subject: { type: "FormRecord", scope: { subjectId: formID } } },
   ]);
 };
 
@@ -1333,7 +1341,7 @@ export const updateClosedData = async (
   details?: ClosedDetails
 ) => {
   await authorizationCheck(ability, [
-    { action: "update", subject: { type: "FormRecord", id: formID } },
+    { action: "update", subject: { type: "FormRecord", scope: { subjectId: formID } } },
   ]);
 
   let detailsData: ClosedDetails | null = null;
@@ -1387,7 +1395,7 @@ export const updateSecurityAttribute = async (
 ) => {
   try {
     await authorizationCheck(ability, [
-      { action: "update", subject: { type: "FormRecord", id: formID } },
+      { action: "update", subject: { type: "FormRecord", scope: { subjectId: formID } } },
     ]);
 
     const updatedTemplate = await prisma.template
