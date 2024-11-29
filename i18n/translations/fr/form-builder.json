@@ -986,9 +986,9 @@
       "note": "Non disponible pour PROTÉGÉ B"
     },
     "apiOption": {
-      "label": "Recevoir les réponses via l'API.",
-      "note": "Les réponses soumises pourront être récupérées par l'intermédiaire d'un point de terminaison API et de la page de réponses.",
-      "startNote": "Commencez votre intégration API en créant une clé API privée."
+      "label": "Récupérer les réponses avec l'API.",
+      "note": "Les réponses soumises seront disponibles par l'intermédiaire d'un point de terminaison API.",
+      "startNote": "Commencez par créer une clé API."
     },
     "apiDocNotes": {
       "title": "Configurez votre intégration API",

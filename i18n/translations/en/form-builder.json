@@ -990,9 +990,9 @@
       "note": "Not available for PROTECTED B"
     },
     "apiOption": {
-      "label": "Receive responses via API",
-      "note": "Submitted responses will be available for retrieval through an API endpoint and the Response page.",
-      "startNote": "Start your API integration by creating a private API Key"
+      "label": "Retrieve responses via API endpoint",
+      "note": "Submitted responses will be available for retrieval by requesting them from an API endpoint.",
+      "startNote": "Start by creating an API key"
     },
     "apiDocNotes": {
       "title": "Set up your API integration",
