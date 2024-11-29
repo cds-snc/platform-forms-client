@@ -646,8 +646,8 @@
       },
       "generateKeySuccess": {
         "title": "La clé API a été créée",
-        "message": "Les nouvelles réponses seront disponibles par l'API. Trouvez des instructions et des exemples de code dans la ",
-        "docsLinkText": "documentation technique",
+        "message": "Les nouvelles réponses seront disponibles par l'API. Trouvez des instructions pour la configuration de l'intégration dans ",
+        "docsLinkText": "la documentation API",
         "docsLink": "https://cds-snc.github.io/forms-api/accueil/"
       },
       "keyExists": "La clé existe déjà",

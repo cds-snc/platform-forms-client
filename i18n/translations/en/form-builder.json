@@ -650,8 +650,8 @@
       },
       "generateKeySuccess": {
         "title": "API key created",
-        "message": "New responses are available through the API. Find instructions and code examples in the ",
-        "docsLinkText": "technical documentation",
+        "message": "New responses are available through the API. Find out more about integration set-up in ",
+        "docsLinkText": "API documentation",
         "docsLink": "https://cds-snc.github.io/forms-api/home/"
       },
       "keyExists": "API key already exists",

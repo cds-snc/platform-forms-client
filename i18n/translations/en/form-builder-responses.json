@@ -150,9 +150,9 @@
       "noProblemResponses": "No responses reported with problems",
       "noProblemResponsesMessage": "Problem responses will appear here until signed off for removal from GC Forms.",
       "noNewResponsesApiTitle": "No responses awaiting API delivery",
-      "noNewResponsesApiMessage": "<p className='mb-2'>Once delivered through our API, the delivered responses will appear here and be available in GC Forms for 30 days.</p><p>Read more about data retrieval via API in our<a href='https://cds-snc.github.io/forms-api/home/' target='_blank'>technical documentation</a> (opens new tab)</p>",
+      "noNewResponsesApiMessage": "<p className='mb-2'>Once delivered through our API, the delivered responses will appear here and be available in GC Forms for 30 days.</p><p>Read more about data retrieval via API in our <a href='https://cds-snc.github.io/forms-api/home/' target='_blank'>API documentation</a>.</p>",
       "apiResponsesAvailableTitle": "Responses waiting for API delivery",
-      "apiResponsesAvailableMessage": "<p className='mb-2'>Once delivered through our API, the delivered responses will appear here and be available in GC Forms for 30 days.</p><p>Read more about data retrieval via API in our<a href='https://cds-snc.github.io/forms-api/home/' target='_blank'>technical documentation</a> (opens new tab)</p>",
+      "apiResponsesAvailableMessage": "<p className='mb-2'>Once delivered through our API, the delivered responses will appear here and be available in GC Forms for 30 days.</p><p>Read more about data retrieval via API in our <a href='https://cds-snc.github.io/forms-api/home/' target='_blank'>API documentation</a>.</p>",
       "apiResponsesAwaitingConfirmTitle": "Delivery status: Waiting",
       "apiResponsesAwaitingConfirmMessage": "Responses awaiting confirmation of API delivery."
     },
