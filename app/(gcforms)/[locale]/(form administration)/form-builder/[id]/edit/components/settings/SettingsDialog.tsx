@@ -4,7 +4,8 @@ import { useTranslation } from "@i18n/client";
 import { useSession } from "next-auth/react";
 import { Button } from "@clientComponents/globals";
 import { useTemplateStore } from "@lib/store/useTemplateStore";
-import { useDialogRef, Dialog, Radio } from "@formBuilder/components/shared";
+import { useDialogRef, Dialog } from "@formBuilder/components/shared/Dialog";
+import { Radio } from "@formBuilder/components/shared/MultipleChoice";
 import { Logos, options } from "../../../settings/branding/components";
 import Brand from "@clientComponents/globals/Brand";
 import {
@@ -30,6 +31,7 @@ import { ErrorSaving } from "@formBuilder/components/shared/ErrorSaving";
 import { useTemplateContext } from "@lib/hooks/form-builder/useTemplateContext";
 import { safeJSONParse } from "@lib/utils";
 import { FormProperties } from "@lib/types";
+import { useFormBuilderConfig } from "@lib/hooks/useFormBuilderConfig";
 
 enum DeliveryOption {
   vault = "vault",
@@ -42,12 +44,12 @@ const getBrand = (type: string, options: BrandOption[]): BrandOption => {
   return options.filter((o: BrandOption) => o.name === type)[0];
 };
 
-export const SettingsDialog = ({
+const SettingsDialog = ({
+  keyId,
   handleClose,
 }: {
-  formId: string;
+  keyId: string | false;
   handleClose: () => void;
-  isPublished?: boolean;
 }) => {
   const dialog = useDialogRef();
   const { t, i18n } = useTranslation("form-builder");
@@ -97,7 +99,7 @@ export const SettingsDialog = ({
     updateField: s.updateField,
   }));
 
-  const responsesLink = `/${i18n.language}/form-builder/${id}/responses/new`;
+  const responsesLink = `/${i18n.language}/form-builder/${id}/responses`;
 
   /*--------------------------------------------*
    * Classification state and handlers
@@ -416,6 +418,7 @@ export const SettingsDialog = ({
                 <h3 className="mb-4">{t("formSettingsModal.classification")}</h3>
                 <ClassificationSelect
                   className="max-w-[400px] truncate border-none p-1 pr-10"
+                  disableProtectedB={email || keyId ? true : false}
                   lang={lang}
                   isPublished={isPublished}
                   classification={classificationValue}
@@ -439,47 +442,53 @@ export const SettingsDialog = ({
                   <Brand brand={brand} />
                 </div>
               </div>
-              <h3 className="mb-4">{t("settingsResponseDelivery.title")}</h3>
-              <div>
-                <Radio
-                  disabled={isPublished}
-                  id={`delivery - option - ${DeliveryOption.vault} `}
-                  checked={deliveryOptionValue === DeliveryOption.vault}
-                  name="response-delivery"
-                  value={DeliveryOption.vault}
-                  label={t("settingsResponseDelivery.vaultOption")}
-                  onChange={updateDeliveryOption}
-                >
-                  <span className="mb-1 ml-3 block text-sm">
-                    {t("settingsResponseDelivery.vaultOptionHint.text1")}{" "}
-                    <a href={responsesLink}>
-                      {t("settingsResponseDelivery.vaultOptionHint.text2")}
-                    </a>
-                    .
-                  </span>
-                </Radio>
-                <Radio
-                  disabled={isPublished || protectedBSelected}
-                  id={`delivery - option - ${DeliveryOption.email} `}
-                  checked={deliveryOptionValue === DeliveryOption.email}
-                  name="response-delivery"
-                  value={DeliveryOption.email}
-                  label={emailLabel}
-                  onChange={updateDeliveryOption}
-                />
-              </div>
-              {deliveryOptionValue === DeliveryOption.email && (
-                <ResponseEmail
-                  inputEmail={inputEmailValue}
-                  setInputEmail={setInputEmailValue}
-                  subjectEn={subjectEn}
-                  setSubjectEn={setSubjectEn}
-                  subjectFr={subjectFr}
-                  setSubjectFr={setSubjectFr}
-                  isInvalidEmailError={isInvalidEmailError}
-                  setIsInvalidEmailError={setIsInvalidEmailError}
-                />
+              {/* Response Delivery */}
+              {!keyId && (
+                <div>
+                  <h3 className="mb-4">{t("settingsResponseDelivery.title")}</h3>
+                  <div>
+                    <Radio
+                      disabled={isPublished}
+                      id={`delivery - option - ${DeliveryOption.vault} `}
+                      checked={deliveryOptionValue === DeliveryOption.vault}
+                      name="response-delivery"
+                      value={DeliveryOption.vault}
+                      label={t("settingsResponseDelivery.vaultOption")}
+                      onChange={updateDeliveryOption}
+                    >
+                      <span className="mb-1 ml-3 block text-sm">
+                        {t("settingsResponseDelivery.vaultOptionHint.text1")}{" "}
+                        <a href={responsesLink}>
+                          {t("settingsResponseDelivery.vaultOptionHint.text2")}
+                        </a>
+                        .
+                      </span>
+                    </Radio>
+                    <Radio
+                      disabled={isPublished || protectedBSelected}
+                      id={`delivery - option - ${DeliveryOption.email} `}
+                      checked={deliveryOptionValue === DeliveryOption.email}
+                      name="response-delivery"
+                      value={DeliveryOption.email}
+                      label={emailLabel}
+                      onChange={updateDeliveryOption}
+                    />
+                  </div>
+                  {deliveryOptionValue === DeliveryOption.email && (
+                    <ResponseEmail
+                      inputEmail={inputEmailValue}
+                      setInputEmail={setInputEmailValue}
+                      subjectEn={subjectEn}
+                      setSubjectEn={setSubjectEn}
+                      subjectFr={subjectFr}
+                      setSubjectFr={setSubjectFr}
+                      isInvalidEmailError={isInvalidEmailError}
+                      setIsInvalidEmailError={setIsInvalidEmailError}
+                    />
+                  )}
+                </div>
               )}
+              {/* End Response Delivery */}
             </div>
           )}
         </div>
@@ -490,8 +499,6 @@ export const SettingsDialog = ({
 
 export const SettingsModal = ({
   show,
-  id,
-  isPublished,
   handleClose,
 }: {
   show: string | boolean | string[] | undefined;
@@ -499,15 +506,10 @@ export const SettingsModal = ({
   isPublished: boolean;
   handleClose: (arg: boolean) => void;
 }) => {
+  const { apiKeyId } = useFormBuilderConfig();
   return (
     <>
-      {show && (
-        <SettingsDialog
-          formId={id}
-          handleClose={() => handleClose(false)}
-          isPublished={isPublished}
-        />
-      )}
+      {show && <SettingsDialog keyId={apiKeyId || false} handleClose={() => handleClose(false)} />}
     </>
   );
 };

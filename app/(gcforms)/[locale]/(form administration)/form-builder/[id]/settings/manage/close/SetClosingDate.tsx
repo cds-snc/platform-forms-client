@@ -18,6 +18,7 @@ import { ClosingDateDialog } from "./ClosingDateDialog";
 import { ScheduledClosingDate } from "./ScheduledClosingDate";
 import { dateHasPast } from "@lib/utils";
 import { useFeatureFlags } from "@lib/hooks/useFeatureFlags";
+import { isFutureDate } from "@lib/utils/date/isFutureDate";
 
 export const SetClosingDate = ({
   formId,
@@ -72,6 +73,10 @@ export const SetClosingDate = ({
 
       const closingDate = new Date(futureDate).toISOString();
 
+      if (closingDate === undefined) {
+        return;
+      }
+
       const result = await closeForm({
         id: formId,
         closingDate,
@@ -92,7 +97,11 @@ export const SetClosingDate = ({
   );
 
   const saveFormStatus = useCallback(async () => {
-    let closeDate = closingDate ? closingDate : null;
+    // Check to see if the existing date is in the past when updating the toggle. If the date is in
+    // the future we want to keep the existing value.
+    let closeDate = isFutureDate(String(closingDate))
+      ? new Date(String(closingDate)).toISOString()
+      : null;
 
     if (status === "closed") {
       // Set date to now to close the form right away
@@ -102,7 +111,7 @@ export const SetClosingDate = ({
 
     const result = await closeForm({
       id: formId,
-      closingDate: closeDate,
+      closingDate: closeDate || null,
       closedDetails: closedMessage,
     });
 
@@ -112,7 +121,7 @@ export const SetClosingDate = ({
     }
 
     // Setting local store
-    setClosingDate(closeDate);
+    setClosingDate(closeDate || null);
 
     if (status === "closed") {
       toast.success(<ClosedSuccess />, "wide");

@@ -72,10 +72,11 @@
       "components": {
         "unitNumber": "Unit number",
         "civicNumber": "Civic number",
-        "streetName": "Street name",
-        "city": "City or town",
-        "province": "Province, territory, or state",
-        "postalCode": "Postal or zip code",
+        "city": "City, town, or community",
+        "province": "Province or territory",
+        "provinceOrState": "Province, territory, or state",
+        "postalCode": "Postal code",
+        "postalCodeOrZip": "Postal or zip code",
         "country": "Country"
       }
     },
@@ -345,6 +346,9 @@
     "combobox": "Start typing to narrow down the list.",
     "fileInput": "Files must not exceed 3.5 MB in total."
   },
+  "defaultElementLabel": {
+    "addressComplete": "Address"
+  },
   "description": "Description",
   "descriptionDescription": "The hint text appears below the label and before the field. It’s used to add context and instructions for the field. It’s a great place to specify formatting requirements or give an example.",
   "didYouFindThisToolHelpful": "Did you find GC Forms helpful? <a href=\"/en/contact\" target=\"_blank\">Provide feedback</a>",
@@ -450,6 +454,11 @@
     },
     "downloadBtnText": "Download form file",
     "title": "Download form file"
+  },
+  "switchToApiMode": {
+    "title": "Switch to API delivery",
+    "description": "New responses will be available through the API endpoint",
+    "btnText": "Switch to API delivery"
   },
   "formIntroduction": "Form introduction",
   "formInvalidProperty": "Invalid: {{property}}",
@@ -589,6 +598,7 @@
       "title": "Button"
     }
   },
+  "setName": "Set name",
   "questionTitle": "Question",
   "remove": "Remove",
   "removeFromSet": "Remove from set",
@@ -616,21 +626,57 @@
   "selectAutocompleteHint": "This option is great when the form filler is providing personal information like their address, email or phone number.",
   "selectElement": "Select an element type",
   "send": "Send",
+  "copy": "copy",
   "settings": {
     "formManagement": "Form management",
     "api": {
       "keyId": "API key ID",
-      "title": "API Access",
+      "title": "API access",
       "generateKey": "Create API key",
-      "refreshKey": "Refresh Key",
+      "refreshKey": "Refresh key",
       "deleteKey": "Delete API key",
-      "keyExists": "API key exists",
+      "deleteKeyFailed": {
+        "title": "Something went wrong",
+        "message": "API key could not be deleted"
+      },
+      "deleteApiKeyToChangeOptions": {
+        "title": "Delete API key to change options",
+        "message": "You must delete the API key before you can change the delivery option."
+      },
+      "deleteKeySuccess": {
+        "title": "API key deleted",
+        "message": "New responses can now be downloaded on the",
+        "responseLinkText": "Responses page"
+      },
+      "generateKeySuccess": {
+        "title": "API key generated",
+        "message": "New responses are now available through the API . Instructions and code examples are available in our",
+        "docsLinkText": "API documentation",
+        "docsLink": "https://cds-snc.github.io/forms-api/home/"
+      },
+      "keyExists": "API key already exists",
       "keyIdToolTip": {
         "text1": "What is an API key ID?",
         "text2": "The API key ID is not the API key itself. It provides a safe way to identify a key without sharing protected information."
       },
+      "deleteApiKeyDialog": {
+        "title": "Delete API key",
+        "cautionTitle": "Caution:",
+        "cautionText": "Deleting this API key cannot be undone. Deletion will permanently stop the delivery of responses to all integrated systems. You'll need to create a new key and add it to your integration to restart API delivery.",
+        "stopText": "<strong>To temporarily stop submissions</strong> to this form consider",
+        "stopText1": "closing the form",
+        "stopText2": "instead.",
+        "cancelButton": "Cancel",
+        "deleteKeyButton": "Delete key",
+        "error": {
+          "deleteFailed": {
+            "title": "The API key could not be deleted",
+            "message": "There was an error deleting the API key. Please try again later."
+          }
+        }
+      },
       "dialog": {
-        "title": "API key successfully created",
+        "title": "Create API key",
         "heading": "GC Forms API keys are PROTECTED B",
         "responsibility": "It is your responsibility to:",
         "responsibility1": "Save this key in a secure location.",
@@ -645,6 +691,12 @@
           "label": "Confirmation",
           "required": "(required)",
           "description": "Type <strong>AGREE</strong> in the box below to confirm you understand your responsibilities and agree to the <a href='canada.ca' target='_blank'>required security procedures</a> while storing and sharing this key."
+        },
+        "error": {
+          "createFailed": {
+            "title": "The API key could not be created",
+            "message": "There was an error creating the API key. Please try again later."
+          }
         }
       }
     }
@@ -695,6 +747,7 @@
   "settingsResponseDelivery": {
     "selectClassification": "Data classification",
     "beforePublishMessage": "These settings can only be changed before publishing.",
+    "deleteApiKeyMessage": "You must delete the API key before you can change the delivery option.",
     "protectedBMessage": "PROTECTED B responses must be downloaded from GC Forms.",
     "settingsMessage": "To change these settings, select the data classification of your form responses.",
     "title": "Delivery option",
@@ -730,6 +783,35 @@
         "title": "Download from GC Forms",
         "text1": "For up to PROTECTED B forms",
         "text2": "Download responses within 30 days"
+      }
+    },
+    "responseDeliveryHelpWithApi": {
+      "cta": "Help choosing an option",
+      "title": "Choosing a response delivery option",
+      "description": "There are three options for getting submitted form responses. Use the chart below to help pick which option best fits your needs.",
+      "inbox": {
+        "title": "Email to an inbox",
+        "text1": "For up to PROTECTED A forms",
+        "text2": "Responses are delivered directly to an inbox in real time",
+        "text3": "One email address can receive response emails.",
+        "text4": "This can be a shared inbox.",
+        "text5": "No software development resources required."
+      },
+      "vault": {
+        "title": "Download from GC Forms",
+        "text1": "For up to PROTECTED B forms",
+        "text2": "Download responses within 30 days",
+        "text3": "Can be switched to API delivery after publishing",
+        "text4": "Multiple account holders can access responses.",
+        "text5": "No software development resources required."
+      },
+      "api": {
+        "title": "API response retrieval",
+        "text1": "For up to PROTECTED A forms. (PROTECTED B coming soon)",
+        "text2": "API calls to extract (pull) form responses",
+        "text3": "Can be switched to the download delivery method after publishing",
+        "text4": "One API key per form",
+        "text5": "Software development resources needed for the API integration"
       }
     }
   },
@@ -808,10 +890,10 @@
   "startP2": "Edit a form that was created and downloaded from GC Forms.",
   "submit": "Submit",
   "submittedResponsesText": "Submitted responses will be sent to {{email}}.",
-  "submittedResponsesChange": "Change where submitted responses are sent",
+  "submittedResponsesChange": "Change how responses delivered",
   "submittedResponsesTextVault": {
-    "text1": "Clicking submit will send form responses to the",
-    "text2": "Responses page"
+    "text1": "Clicking submit will make responses available for retrieval.",
+    "text2": "Go to Responses page"
   },
   "support": {
     "contactUs": "contact form",
@@ -907,6 +989,15 @@
       "label": "Receive responses by email",
       "note": "Not available for PROTECTED B"
     },
+    "apiOption": {
+      "label": "Receive responses via API",
+      "note": "Submitted responses will be available for retrieval through an API endpoint and the Response page.",
+      "startNote": "Start your API integration by creating a private API Key"
+    },
+    "apiDocNotes": {
+      "title": "API documentation",
+      "text1": "To connect to our endpoint follow instructions and code examples in our <a href='https://cds-snc.github.io/forms-api/home' target='_blank'>Technical documentation</a>."
+    },
     "vaultNote": {
       "text1": "PROTECTED B form responses must be downloaded from GC Forms.",
       "text2": "Email delivery is not available for this data classification"
@@ -944,7 +1035,7 @@
       }
     },
     "banner": {
-      "text": "Form closed on {{month}} {{day}}, {{year}} at {{hour}}:{{minute}} {{dayPeriod}} ET"
+      "text": "Form closed on {{month}} {{day}}, {{year}} at {{hour}}:{{minute}} ET"
     }
   },
   "errorSavingForm": {
@@ -1185,7 +1276,7 @@
   "scheduleClosingPage": {
     "linkText": "Schedule form closing",
     "dialog": {
-      "title": "Schedule the closed form message",
+      "title": "Schedule closing the form",
       "text1": "Schedule a closing date",
       "text2": "Set when you’d like to close the form.",
       "datePicker": {
@@ -1195,7 +1286,8 @@
       },
       "timePicker": {
         "text1": "Set a time",
-        "text2": "Provide the time using the 24-hour clock with timezone in Eastern Time"
+        "text2": "Provide the time using the 24-hour clock with timezone in Eastern Time.",
+        "text3": "For example 21:00"
       },
       "error": {
         "notFutureDate": "Date and time must be upcoming, in the future."
@@ -1203,5 +1295,8 @@
       "save": "Save",
       "cancel": "Cancel"
     }
+  },
+  "systemHealthCheck": {
+    "title": "System health check"
   }
 }

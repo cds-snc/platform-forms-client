@@ -14,6 +14,10 @@ export interface ResponseSectionProps {
 }
 
 export function capitalize(string: string) {
+  if (!string || typeof string !== "string") {
+    return "";
+  }
+
   return string.charAt(0).toUpperCase() + string.slice(1);
 }
 
@@ -51,20 +55,23 @@ export const ResponseSection = ({
                 lng: lang || "en",
               })}";
             });
-
+  
             // Copy Row Response
             var btnCopyResponse = document.getElementById("copyResponseButton${capitalizedLang}");
             var outputCopyResponse = document.getElementById("copyResponseOutput${capitalizedLang}");
-            var responseItems = Array.from(document.querySelectorAll("#responseTableRow${capitalizedLang} dd"));
+  
+            // Select only deepest dd elements without any nested dl elements
+            var responseItems = Array.from(document.querySelectorAll("#responseTableRow${capitalizedLang} dd:not(:has(dl))"));
+            
             // Format with tab separators for Excel copy+paste
             var responseText = responseItems.map(item => {
-              var text = item.textContent;
-              // This is needed for Excell that relies on tabs or multiple spaces to delimit a new cell
-              // and should replace any user content that may accidentally start a new cell.
-              // Replace 1 or more tabs or newlines with nothing, and two or more spaces with nothing.
-              return text.replace(/[\\t|\\n]{1,}|[ ]{2,}/g, "");
+              var text = item.textContent.trim();
+              // Remove unnecessary newlines, tabs, and extra spaces
+              return text.replace(/[\\t|\\n]+/g, "").replace(/[ ]{2,}/g, " ");
             }).join(String.fromCharCode(9));
+            
             btnCopyResponse.dataset.clipboardText = responseText;
+  
             var clipboardResponse = new ClipboardJS("#copyResponseButton${capitalizedLang}");
             clipboardResponse.on('success', function (e) {
               outputCopyResponse.classList.remove("hidden");

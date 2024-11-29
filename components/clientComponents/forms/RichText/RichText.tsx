@@ -1,6 +1,6 @@
 "use client";
 import React from "react";
-import classnames from "classnames";
+import { cn } from "@lib/utils";
 import Markdown from "markdown-to-jsx";
 
 interface RichTextProps {
@@ -62,7 +62,7 @@ export const RichText = (props: RichTextProps): React.ReactElement | null => {
     return null;
   }
 
-  const classes = classnames("gc-richText", className);
+  const classes = cn("gc-richText", className);
   return (
     <div data-testid="richText" className={classes} id={id} {...(lang && { lang: lang })}>
       <Markdown

@@ -16,5 +16,3 @@ export const AcceptableUseTerms = async ({ locale }: { locale: string }) => {
     </>
   );
 };
-
-export default AcceptableUseTerms;

@@ -57,7 +57,11 @@ export const DownloadCSVWithGroups = () => {
     if (element.properties.choices) {
       element.properties.choices.map((choice, choiceIndex) => {
         if (choice.en || choice.fr) {
-          data.push([`${description} - Option ${choiceIndex + 1}`, choice.en, choice.fr]);
+          data.push([
+            `${description} - Option ${choiceIndex + 1}`,
+            formatText(choice.en),
+            formatText(choice.fr),
+          ]);
         }
       });
     }

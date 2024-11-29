@@ -1,6 +1,6 @@
 import { getMaxMonthDay } from "@clientComponents/forms/FormattedDate/utils";
 import { Button } from "@clientComponents/globals";
-import { Dialog, useDialogRef } from "@formBuilder/components/shared";
+import { Dialog, useDialogRef } from "@formBuilder/components/shared/Dialog";
 import { useTranslation } from "@i18n/client";
 import { useEffect, useState } from "react";
 import { toast } from "@formBuilder/components/shared/Toast";
@@ -31,23 +31,29 @@ export const ClosingDateDialog = ({
   const [year, setYear] = useState<string>("");
   const [time, setTime] = useState<string>("");
 
-  // Pre-populate the form with the closing date if it exists
+  // Use the current date if no closing date is set, or pre-populate the form if one is set
   useEffect(() => {
+    const setDateTime = (date: string) => {
+      try {
+        const { day, year, hour, minute } = formClosingDateEst(date, language);
+        const month = (new Date(date).getMonth() + 1).toString();
+        if (month && day && year && hour && minute) {
+          setMonth(month);
+          setDay(day);
+          setYear(year);
+          setTime(`${hour}:${minute}`);
+        }
+      } catch (error) {
+        logMessage.debug(`Unable to parse date: ${date}`);
+      }
+    };
+
     if (!closingDate) {
+      setDateTime(new Date().toISOString());
       return;
     }
-    try {
-      const { day, year, hour, minute } = formClosingDateEst(closingDate, language);
-      const month = (new Date(closingDate).getMonth() + 1).toString();
-      if (month && day && year && hour && minute) {
-        setMonth(month);
-        setDay(day);
-        setYear(year);
-        setTime(`${hour}:${minute}`);
-      }
-    } catch (error) {
-      logMessage.debug(`Unable to parse closing date: ${closingDate}`);
-    }
+
+    setDateTime(closingDate);
   }, [closingDate, language]);
 
   const handleClose = () => {
@@ -178,15 +184,18 @@ export const ClosingDateDialog = ({
               <label htmlFor="time-picker" className="mb-2 font-bold">
                 {t("scheduleClosingPage.dialog.timePicker.text1")}
               </label>
-              <p id="time-picker-description" className="mb-4">
+              <p id="time-picker-description" className="mb-2">
                 {t("scheduleClosingPage.dialog.timePicker.text2")}
+              </p>
+              <p id="time-picker-description2" className="mb-4 opacity-65">
+                {t("scheduleClosingPage.dialog.timePicker.text3")}
               </p>
               <input
                 className="!w-20"
                 id="time-picker"
                 name="time-picker"
                 role="time"
-                aria-describedby="time-picker-description"
+                aria-describedby="time-picker-description time-picker-description2"
                 minLength={5}
                 maxLength={5}
                 onChange={(e) => setTime(e.target.value)}

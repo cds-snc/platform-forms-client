@@ -1,6 +1,6 @@
 "use client";
 import React from "react";
-import classnames from "classnames";
+import { cn } from "@lib/utils";
 
 interface FormGroupProps {
   children: React.ReactNode;
@@ -13,12 +13,7 @@ interface FormGroupProps {
 export const FormGroup = (props: FormGroupProps): React.ReactElement => {
   const { children, name, className, ariaDescribedBy, error } = props;
 
-  const classes = classnames(
-    "gc-form-group",
-    "focus-group",
-    { "gc-form-group--error": error },
-    className
-  );
+  const classes = cn("gc-form-group", "focus-group", { "gc-form-group--error": error }, className);
 
   return (
     <fieldset
@@ -27,8 +22,9 @@ export const FormGroup = (props: FormGroupProps): React.ReactElement => {
       data-testid="formGroup"
       className={classes}
       aria-describedby={ariaDescribedBy}
-      // eslint-disable-next-line jsx-a11y/no-noninteractive-tabindex
-      tabIndex={0}
+      // Used to programmatically focus a form group by e.g. a form validation skip ahead link
+      // -1 is used over 0, so the group is not in the natural tab order which is confusing for AT
+      tabIndex={-1}
     >
       {children}
     </fieldset>

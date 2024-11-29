@@ -3,7 +3,7 @@ import React, { useCallback, useEffect, useState } from "react";
 import { useTranslation } from "@i18n/client";
 import debounce from "lodash.debounce";
 
-import { ExpandingInput } from "@formBuilder/components/shared";
+import { ExpandingInput } from "@formBuilder/components/shared/ExpandingInput";
 import { Language } from "@lib/types/form-builder-types";
 import { useTemplateStore } from "@lib/store/useTemplateStore";
 
@@ -17,12 +17,14 @@ export const QuestionInput = ({
   initialValue,
   onQuestionChange,
   describedById,
+  placeholder = "question",
 }: {
   index: number;
   id: number;
   initialValue: string;
   onQuestionChange: (itemId: number, val: string, lang: Language) => void;
   describedById?: string;
+  placeholder?: string;
 }) => {
   const { t } = useTranslation("form-builder");
   const [value, setValue] = useState(initialValue);
@@ -82,7 +84,7 @@ export const QuestionInput = ({
       type="text"
       id={`item-${id}`}
       name={`item${index}`}
-      placeholder={t("question")}
+      placeholder={t(placeholder)}
       wrapperClassName="w-full font-bold text-base"
       className="font-bold text-slate-800 laptop:text-lg"
       value={value}
@@ -93,7 +95,7 @@ export const QuestionInput = ({
       }}
       onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => updateValue(id, e.target.value)}
       {...getLocalizationAttribute()}
-      ariaLabel={t("question")}
+      ariaLabel={t(placeholder)}
     />
   );
 };

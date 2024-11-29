@@ -6,7 +6,7 @@ import { TextInput, Label, Dropdown } from "../../../../components/client/forms"
 import { Button, Alert } from "@clientComponents/globals";
 import { LinkButton } from "@serverComponents/globals/Buttons/LinkButton";
 import { useRouter } from "next/navigation";
-import { toast } from "@formBuilder/components/shared";
+import { toast } from "@formBuilder/components/shared/Toast";
 import { ErrorStates } from "../../actions";
 import { setupQuestions } from "../../actions";
 import { useSession } from "next-auth/react";

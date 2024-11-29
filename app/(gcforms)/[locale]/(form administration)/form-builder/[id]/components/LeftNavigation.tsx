@@ -91,7 +91,7 @@ export const LeftNavigation = ({ id }: { id: string }) => {
         <li>
           <LeftNav
             testid="responses"
-            {...linkHelper({ route: `responses/new`, id, segment, language })}
+            {...linkHelper({ route: "responses", id, segment, language })}
             title={t("responsesNavLabel")}
           >
             <NavResponsesIcon />

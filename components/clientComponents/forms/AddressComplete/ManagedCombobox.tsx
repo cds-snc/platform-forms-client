@@ -1,7 +1,6 @@
 "use client";
 import React, { useState, useImperativeHandle, useEffect } from "react";
 import { InputFieldProps } from "@lib/types";
-import classnames from "classnames";
 import { useField } from "formik";
 import { ErrorMessage } from "@clientComponents/forms";
 import { useCombobox } from "downshift";
@@ -29,7 +28,7 @@ export const ManagedCombobox = React.forwardRef(
       useFilter = true,
       placeholderText = "",
     } = props;
-    const classes = classnames("gc-combobox gcds-input-wrapper relative", className);
+    const classes = cn("gc-combobox gcds-input-wrapper relative", className);
 
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const [field, meta, helpers] = useField(props);
@@ -58,7 +57,9 @@ export const ManagedCombobox = React.forwardRef(
               useFilter ? choice.toLowerCase().includes(inputValue?.toLowerCase() || "") : true
             )
           );
-          setIsOpen(true);
+          if (!useFilter) {
+            setIsOpen(true);
+          }
         },
         items,
         onSelectedItemChange: ({ selectedItem }) => {
@@ -73,14 +74,18 @@ export const ManagedCombobox = React.forwardRef(
         },
       });
 
-    const performChangeInputValue = (value: string) => {
-      setInputValue(value);
-      setIsOpen(false);
+    const performChangeInputValue = (value: string, keepOpen: boolean) => {
+      if (!keepOpen) {
+        // Don't replace the value if we want to keep the dropdown open
+        setInputValue(value);
+      }
+      setIsOpen(keepOpen);
     };
 
     // Use useImperativeHandle to expose the method
     useImperativeHandle(ref, () => ({
-      changeInputValue: (value: string) => performChangeInputValue(value),
+      changeInputValue: (value: string, keepOpen: boolean) =>
+        performChangeInputValue(value, keepOpen),
     }));
 
     return (
@@ -94,13 +99,19 @@ export const ManagedCombobox = React.forwardRef(
             required,
             "aria-describedby": ariaDescribedBy,
             onFocus: () => setIsOpen(true),
+            onChange: (e) => {
+              setInputValue((e.target as HTMLInputElement).value);
+            },
+            // Prevents a double input refresh from being fired, this is a workaround for a downshift bug
+            // https://github.com/downshift-js/downshift/issues/1108
+            // Downshift won't be updated to fix this issue, so we need to handle it ourselves
           })}
           data-testid="combobox-input"
           placeholder={placeholderText}
         />
 
         <ul
-          className={classnames({ hidden: !isOpen || items.length === 0 })}
+          className={cn({ hidden: !isOpen || items.length === 0 })}
           {...getMenuProps()}
           data-testid="combobox-listbox"
         >

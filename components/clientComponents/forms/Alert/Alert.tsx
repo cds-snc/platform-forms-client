@@ -1,6 +1,6 @@
 "use client";
-import React, { useEffect, useRef } from "react";
-import classnames from "classnames";
+import React, { useEffect, useRef, type JSX } from "react";
+import { cn } from "@lib/utils";
 import { useTranslation } from "@i18n/client";
 import { Button } from "@clientComponents/globals";
 
@@ -36,7 +36,7 @@ export const Alert = ({
 }: AlertProps & JSX.IntrinsicElements["div"]): React.ReactElement => {
   const { t } = useTranslation("common");
   const refFocus = useRef<HTMLDivElement>(null);
-  const classes = classnames(
+  const classes = cn(
     "gc-alert",
     {
       "gc-alert--success": type === ErrorStatus.SUCCESS,

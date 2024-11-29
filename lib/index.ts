@@ -1,1 +1,0 @@
-export { hasError } from "./hasError";

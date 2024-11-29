@@ -3,7 +3,6 @@ import { authCheckAndRedirect } from "@lib/actions";
 import { serverTranslation } from "@i18n";
 import { createTicket } from "@lib/integration/freshdesk";
 import { logMessage } from "@lib/logger";
-import { redirect } from "next/navigation";
 import {
   custom,
   email,
@@ -113,6 +112,6 @@ export async function unlockPublishing(
     logMessage.error(`Failed to unlock publishing: ${(error as Error).message}`);
     return { error: "Failed to send request", validationErrors: [] };
   }
-  // The redirect must be outside of the try/catch block to avoid the NEXT_REDIRECT being caught by the error boundary
-  redirect(`/${language}/unlock-publishing?success`);
+
+  return { error: "", validationErrors: [] };
 }

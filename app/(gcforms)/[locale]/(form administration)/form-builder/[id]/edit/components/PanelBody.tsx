@@ -7,7 +7,7 @@ import {
   Language,
   LocalizedElementProperties,
 } from "@lib/types/form-builder-types";
-import { SelectedElement, ElementRequired, MoreModal } from ".";
+import { SelectedElement, ElementRequired } from ".";
 import { Question } from "./elements";
 import { QuestionDescription } from "./elements/question/QuestionDescription";
 import { useTemplateStore } from "@lib/store/useTemplateStore";
@@ -15,6 +15,7 @@ import { Trans } from "react-i18next";
 import { Tooltip } from "@formBuilder/components/shared/Tooltip";
 import { Button } from "@clientComponents/globals";
 import { cn } from "@lib/utils";
+import { EventKeys, useCustomEvent } from "@lib/hooks/useCustomEvent";
 
 export const PanelBody = ({
   item,
@@ -39,31 +40,17 @@ export const PanelBody = ({
   const properties = item.properties;
   const maxLength = properties?.validation?.maxLength;
 
-  const { localizeField, translationLanguagePriority, setChangeKey } = useTemplateStore((s) => ({
+  const { localizeField, translationLanguagePriority } = useTemplateStore((s) => ({
     localizeField: s.localizeField,
     translationLanguagePriority: s.translationLanguagePriority,
-    setChangeKey: s.setChangeKey,
   }));
+
+  const { Event } = useCustomEvent();
 
   const description =
     properties[localizeField(LocalizedElementProperties.DESCRIPTION, translationLanguagePriority)];
 
   const describedById = description ? `item${item.id}-describedby` : undefined;
-
-  const forceRefresh = () => {
-    setChangeKey(String(new Date().getTime())); //Force a re-render
-  };
-
-  const addressCustomizeButton = (
-    <Button theme="secondary" onClick={() => {}}>
-      {t("addElementDialog.addressComplete.customize")}
-    </Button>
-  );
-  const moreButton = (
-    <Button theme="secondary" onClick={() => {}}>
-      {t("addElementDialog.formattedDate.customizeDate")}
-    </Button>
-  );
 
   return (
     <>
@@ -94,39 +81,6 @@ export const PanelBody = ({
             </div>
           </div>
 
-          <div>
-            {isAddressComplete && (
-              <div className="text-sm flex">
-                <div className="w-1/2">
-                  {!item.properties.addressComponents?.canadianOnly && (
-                    <div className="description-text mt-5 cursor-not-allowed rounded-sm p-2 bg-gray-100 text-slate-600">
-                      {t("addElementDialog.addressComplete.country")}
-                    </div>
-                  )}
-                  <div className="description-text mt-5 cursor-not-allowed rounded-sm p-2 bg-gray-100 text-slate-600">
-                    {t("addElementDialog.addressComplete.street.label")}
-                  </div>
-                  <div className="description-text mt-5 cursor-not-allowed rounded-sm p-2 bg-gray-100 text-slate-600">
-                    {t("addElementDialog.addressComplete.city")}
-                  </div>
-                  <div className="description-text mt-5 cursor-not-allowed rounded-sm p-2 bg-gray-100 text-slate-600">
-                    {t("addElementDialog.addressComplete.province")}
-                  </div>
-                  <div className="description-text mt-5 cursor-not-allowed rounded-sm p-2 bg-gray-100 text-slate-600">
-                    {t("addElementDialog.addressComplete.postal")}
-                  </div>
-                </div>
-                <div className="mb-4 mt-4 ml-4 self-end w-1/2">
-                  <MoreModal
-                    item={item}
-                    moreButton={addressCustomizeButton}
-                    onClose={forceRefresh}
-                  />
-                </div>
-              </div>
-            )}
-          </div>
-
           <div className="mb-4 flex gap-4 text-sm ">
             <div className="grow">
               <QuestionDescription item={item} describedById={describedById} />
@@ -136,7 +90,14 @@ export const PanelBody = ({
                 </div>
                 {isFormattedDate && (
                   <div className="mb-4 ml-4 self-end">
-                    <MoreModal item={item} moreButton={moreButton} onClose={forceRefresh} />
+                    <Button
+                      theme="secondary"
+                      onClick={() => {
+                        Event.fire(EventKeys.openMoreDialog, { itemId: item.id });
+                      }}
+                    >
+                      <>{t("addElementDialog.formattedDate.customizeDate")}</>
+                    </Button>
                   </div>
                 )}
               </div>
@@ -176,12 +137,60 @@ export const PanelBody = ({
                 </div>
               )}
 
-              <ElementRequired
-                onRequiredChange={onRequiredChange}
-                item={item}
-                key={"element-required-" + item.id}
-              />
+              {!isAddressComplete && (
+                <ElementRequired
+                  onRequiredChange={onRequiredChange}
+                  item={item}
+                  key={"element-required-" + item.id}
+                />
+              )}
             </div>
+          </div>
+          <div>
+            {isAddressComplete && (
+              <div className="text-sm flex">
+                <div className="w-1/2">
+                  {!item.properties.addressComponents?.canadianOnly && (
+                    <div className="description-text mt-5 cursor-not-allowed rounded-sm p-2 bg-gray-100 text-slate-600">
+                      {t("addElementDialog.addressComplete.country")}
+                    </div>
+                  )}
+                  <div className="description-text mt-5 cursor-not-allowed rounded-sm p-2 bg-gray-100 text-slate-600">
+                    {t("addElementDialog.addressComplete.street.label")}
+                  </div>
+                  <div className="description-text mt-5 cursor-not-allowed rounded-sm p-2 bg-gray-100 text-slate-600">
+                    {t("addElementDialog.addressComplete.city")}
+                  </div>
+                  <div className="description-text mt-5 cursor-not-allowed rounded-sm p-2 bg-gray-100 text-slate-600">
+                    {item.properties.addressComponents?.canadianOnly &&
+                      t("addElementDialog.addressComplete.components.province")}
+                    {!item.properties.addressComponents?.canadianOnly &&
+                      t("addElementDialog.addressComplete.components.provinceOrState")}
+                  </div>
+                  <div className="description-text mt-5 cursor-not-allowed rounded-sm p-2 bg-gray-100 text-slate-600">
+                    {item.properties.addressComponents?.canadianOnly &&
+                      t("addElementDialog.addressComplete.components.postalCode")}
+                    {!item.properties.addressComponents?.canadianOnly &&
+                      t("addElementDialog.addressComplete.components.postalCodeOrZip")}
+                  </div>
+                </div>
+                <div className="mb-4 mt-4 ml-4 self-end w-1/2">
+                  <ElementRequired
+                    onRequiredChange={onRequiredChange}
+                    item={item}
+                    key={"element-required-" + item.id}
+                  />
+                  <Button
+                    theme="secondary"
+                    onClick={() => {
+                      Event.fire(EventKeys.openMoreDialog, { itemId: item.id });
+                    }}
+                  >
+                    {t("addElementDialog.addressComplete.customize")}
+                  </Button>
+                </div>
+              </div>
+            )}
           </div>
         </>
       )}

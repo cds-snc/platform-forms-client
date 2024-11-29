@@ -213,6 +213,15 @@ export const options = [
     logoEn: "/img/branding/grain-en.svg",
     logoFr: "/img/branding/grain-fr.svg",
     logoTitleEn: "Canadian Grain Commission",
-    logoTitleFr: "Commission canadienne des grains"
+    logoTitleFr: "Commission canadienne des grains",
+  },
+  {
+    name: "transport",
+    urlEn: "https://tc.canada.ca/en",
+    urlFr: "hhttps://tc.canada.ca/fr",
+    logoEn: "/img/branding/tc-en.svg",
+    logoFr: "/img/branding/tc-fr.svg",
+    logoTitleEn: "Transport Canada",
+    logoTitleFr: "Transports Canada",
   },
 ];

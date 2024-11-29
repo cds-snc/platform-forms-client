@@ -1,6 +1,10 @@
 import { serverTranslation } from "@i18n";
 import { Metadata } from "next";
 import { ResponseDelivery } from "./components/ResponseDelivery";
+import { authCheckAndRedirect } from "@lib/actions";
+import { checkPrivilegesAsBoolean } from "@lib/privileges";
+import { ApiKeyDialog } from "../components/dialogs/ApiKeyDialog/ApiKeyDialog";
+import { DeleteApiKeyDialog } from "../components/dialogs/DeleteApiKeyDialog/DeleteApiKeyDialog";
 
 export async function generateMetadata({
   params: { locale },
@@ -14,5 +18,20 @@ export async function generateMetadata({
 }
 
 export default async function Page() {
-  return <ResponseDelivery />;
+  const { ability } = await authCheckAndRedirect();
+
+  const isFormsAdmin = checkPrivilegesAsBoolean(ability, [
+    {
+      action: "view",
+      subject: "FormRecord",
+    },
+  ]);
+
+  return (
+    <>
+      <ResponseDelivery isFormsAdmin={isFormsAdmin} />
+      <ApiKeyDialog />
+      <DeleteApiKeyDialog />
+    </>
+  );
 }

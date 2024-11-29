@@ -148,7 +148,13 @@
       "noDeletedResponses": "No responses for removal",
       "noDeletedResponsesMessage": "Once you’ve downloaded and signed off on the removal of responses, they will be available here for 30 days.",
       "noProblemResponses": "No responses reported with problems",
-      "noProblemResponsesMessage": "Problem responses will appear here until signed off for removal from GC Forms."
+      "noProblemResponsesMessage": "Problem responses will appear here until signed off for removal from GC Forms.",
+      "noNewResponsesApiTitle": "No responses awaiting API delivery",
+      "noNewResponsesApiMessage": "<p className='mb-2'>Once delivered through our API, the delivered responses will appear here and be available in GC Forms for 30 days.</p><p>Read more about data retrieval via API in our<a href='https://cds-snc.github.io/forms-api/home/' target='_blank'>technical documentation</a> (opens new tab)</p>",
+      "apiResponsesAvailableTitle": "Responses waiting for API delivery",
+      "apiResponsesAvailableMessage": "<p className='mb-2'>Once delivered through our API, the delivered responses will appear here and be available in GC Forms for 30 days.</p><p>Read more about data retrieval via API in our<a href='https://cds-snc.github.io/forms-api/home/' target='_blank'>technical documentation</a> (opens new tab)</p>",
+      "apiResponsesAwaitingConfirmTitle": "Delivery status: Waiting",
+      "apiResponsesAwaitingConfirmMessage": "Responses awaiting confirmation of API delivery."
     },
     "notifications": {
       "downloadComplete": "Responses moved to the “Downloaded” tab",
@@ -278,5 +284,29 @@
     "province": "Province, territory, or state",
     "postalCode": "Postal or zip code",
     "country": "Country"
+  },
+  "apiDashboard": {
+    "title": "Responses"
+  },
+  "systemHealth": {
+    "problemsReported": {
+      "title": "Problems reported",
+      "description": "<a href='' target='_blank'>Get support</a>"
+    },
+    "deliveredAndConfirmed": {
+      "title": "Delivery status: OK",
+      "description": "All responses delivered successfully."
+    },
+    "awatingDownload": {
+      "title": "Delivery status: Waiting",
+      "description": "Responses awaiting API delivery.",
+      "new": "New",
+      "responses": "responses",
+      "available": "available"
+    },
+    "awatingConfirm": {
+      "title": "Delivery status: Waiting",
+      "description": "Responses awaiting confirmation of API delivery."
+    }
   }
 }

@@ -1,12 +1,12 @@
 "use client";
-import React, { useCallback } from "react";
+import React, { useCallback, type JSX } from "react";
 import { useSession } from "next-auth/react";
 import { useTranslation } from "@i18n/client";
 import Link from "next/link";
 import { Logos, options } from ".";
 import { useTemplateStore } from "@lib/store/useTemplateStore";
 import { LoggedOutTabName, LoggedOutTab } from "@formBuilder/components/LoggedOutTab";
-import { toast } from "@formBuilder/components/shared";
+import { toast } from "@formBuilder/components/shared/Toast";
 import { Button } from "@clientComponents/globals";
 import Brand from "@clientComponents/globals/Brand";
 import { ExternalLinkIcon } from "@serverComponents/icons";

@@ -91,5 +91,3 @@ export const OffboardNode = (node: NodeProps) => {
     </div>
   );
 };
-
-export default OffboardNode;

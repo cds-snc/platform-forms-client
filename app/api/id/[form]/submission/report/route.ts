@@ -16,12 +16,12 @@ async function getSubmissionsFromSubmissionNames(
   formId: string,
   submissionNames: string[]
 ): Promise<{
-  submissionsToReport: { name: string; confirmationCode: string }[];
+  submissionsToReport: { name: string; createdAt: number; confirmationCode: string }[];
   submissionNamesAlreadyUsed: string[];
   submissionNamesNotFound: string[];
 }> {
   const accumulatedSubmissions: {
-    [name: string]: { status: VaultStatus; confirmationCode: string };
+    [name: string]: { status: VaultStatus; createdAt: number; confirmationCode: string };
   } = {};
 
   let requestedKeys = submissionNames.map((name) => {
@@ -33,7 +33,7 @@ async function getSubmissionsFromSubmissionNames(
       RequestItems: {
         Vault: {
           Keys: requestedKeys,
-          ProjectionExpression: "#name,#status,ConfirmationCode",
+          ProjectionExpression: "#name,#status,ConfirmationCode,CreatedAt",
           ExpressionAttributeNames: {
             "#name": "Name",
             "#status": "Status",
@@ -49,6 +49,7 @@ async function getSubmissionsFromSubmissionNames(
       response.Responses.Vault.forEach((record) => {
         accumulatedSubmissions[record["Name"]] = {
           status: record["Status"],
+          createdAt: record["CreatedAt"],
           confirmationCode: record["ConfirmationCode"],
         };
       });
@@ -75,13 +76,14 @@ async function getSubmissionsFromSubmissionNames(
       } else {
         acc.submissionsToReport.push({
           name: currentSubmissionName,
+          createdAt: submission.createdAt,
           confirmationCode: submission.confirmationCode,
         });
       }
       return acc;
     },
     {
-      submissionsToReport: Array<{ name: string; confirmationCode: string }>(),
+      submissionsToReport: Array<{ name: string; createdAt: number; confirmationCode: string }>(),
       submissionNamesAlreadyUsed: Array<string>(),
       submissionNamesNotFound: Array<string>(),
     }
@@ -90,7 +92,7 @@ async function getSubmissionsFromSubmissionNames(
 
 async function report(
   formId: string,
-  submissionsToReport: { name: string; confirmationCode: string }[]
+  submissionsToReport: { name: string; createdAt: number; confirmationCode: string }[]
 ): Promise<void> {
   const request = new TransactWriteCommand({
     TransactItems: submissionsToReport.flatMap((submission) => {
@@ -103,12 +105,14 @@ async function report(
               NAME_OR_CONF: `NAME#${submission.name}`,
             },
             UpdateExpression:
-              "SET #status = :status, ProblemTimestamp = :problemTimestamp REMOVE RemovalDate",
+              "SET #status = :status, #statusCreatedAtKey = :statusCreatedAtValue, ProblemTimestamp = :problemTimestamp REMOVE RemovalDate",
             ExpressionAttributeNames: {
               "#status": "Status",
+              "#statusCreatedAtKey": "Status#CreatedAt",
             },
             ExpressionAttributeValues: {
               ":status": "Problem",
+              ":statusCreatedAtValue": `Problem#${submission.createdAt}`,
               ":problemTimestamp": Date.now(),
             },
           },

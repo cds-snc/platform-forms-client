@@ -190,7 +190,7 @@
   },
   "exit": "Sortie",
   "campaignBanner": {
-    "enabled": "true",
+    "enabled": "false",
     "type": "À VENIR",
     "message": "<strong>En août</strong> : Créez des formulaires multipages avec une logique d’embranchement. <a href='/fr/contact' className='text-white hover:text-white'>S’abonner aux mises à jour</a>",
     "type2": "NOUVEAUTÉ",
@@ -199,7 +199,7 @@
   "closingNotice": {
     "title": "Fermeture du formulaire",
     "text1": "Les soumissions sont acceptées jusqu'au :",
-    "text2": "{{day}} {{month}} {{year}} à {{hour}} h {{minute}} {{dayPeriod}} HE"
+    "text2": "{{day}} {{month}} {{year}} à {{hour}} h {{minute}} HE"
   },
   "cancel": "Annuler"
 }

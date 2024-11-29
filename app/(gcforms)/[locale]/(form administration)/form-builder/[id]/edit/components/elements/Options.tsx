@@ -1,16 +1,19 @@
 "use client";
 import React, { ReactElement, useRef, useState } from "react";
-import PropTypes from "prop-types";
 import { useTranslation } from "@i18n/client";
 
 import { useTemplateStore } from "@lib/store/useTemplateStore";
 import { Option } from "./Option";
 import { Button } from "@clientComponents/globals";
 import { FormElementWithIndex } from "@lib/types/form-builder-types";
-import { ModalRules } from "../ModalRules";
-import { ConditionalIndicatorOption } from "@formBuilder/components/shared";
+import { ConditionalIndicatorOption } from "@formBuilder/components/shared/conditionals/ConditionalIndicatorOption";
 
-const AddButton = ({ index, onClick }: { index: number; onClick: (index: number) => void }) => {
+interface AddButtonProps {
+  index: number;
+  onClick(...args: unknown[]): unknown;
+}
+
+const AddButton = ({ index, onClick }: AddButtonProps) => {
   const { t } = useTranslation("form-builder");
   return (
     <Button
@@ -26,12 +29,11 @@ const AddButton = ({ index, onClick }: { index: number; onClick: (index: number)
   );
 };
 
-AddButton.propTypes = {
-  index: PropTypes.number,
-  onClick: PropTypes.func,
-};
+interface AddOptionsProps {
+  index: number;
+}
 
-const AddOptions = ({ index }: { index: number }) => {
+const AddOptions = ({ index }: AddOptionsProps) => {
   const { addChoice, setFocusInput } = useTemplateStore((s) => ({
     addChoice: s.addChoice,
     setFocusInput: s.setFocusInput,
@@ -50,21 +52,15 @@ const AddOptions = ({ index }: { index: number }) => {
   );
 };
 
-AddOptions.propTypes = {
-  index: PropTypes.number,
-};
-
 type RenderIcon = (index: number) => ReactElement | string | undefined;
 
-export const Options = ({
-  item,
-  renderIcon,
-  formId,
-}: {
+interface OptionsProps {
   item: FormElementWithIndex;
-  renderIcon?: RenderIcon;
+  renderIcon: RenderIcon;
   formId: string;
-}) => {
+}
+
+export const Options = ({ item, renderIcon }: OptionsProps) => {
   const { elements, translationLanguagePriority } = useTemplateStore((s) => ({
     elements: s.form.elements,
     translationLanguagePriority: s.translationLanguagePriority,
@@ -73,16 +69,16 @@ export const Options = ({
   const parentIndex = elements.findIndex((element) => element.id === item.id);
   const element = elements.find((element) => element.id === item.id);
 
-  const modalContainer = useRef<HTMLDivElement>(null);
   const [focusedOption, setFocusedOption] = useState<string | null>(null);
   // Track the mode of the modal for adding or editing rules
-  const [modalMode, setModalMode] = useState<"add" | "edit">("add");
   const timeout = useRef<number | null>(null); // add interval to add timeout to be cleared
 
   if (!element?.properties) {
     return null;
   }
   const { choices } = element.properties;
+
+  if (!item) return null;
 
   if (!choices) {
     return <AddOptions index={parentIndex} />;
@@ -117,11 +113,7 @@ export const Options = ({
           }
         />
         <ConditionalIndicatorOption
-          handleOpen={(mode) => {
-            setModalMode(mode);
-            // @ts-expect-error -- div is using imperative handle
-            modalContainer.current?.showModal();
-          }}
+          itemId={item.id}
           isFocused={focusedOption === `${item.id}.${index}`}
           id={`${item.id}.${index}`}
           elements={elements}
@@ -138,20 +130,6 @@ export const Options = ({
           <AddOptions index={parentIndex} />
         </div>
       </div>
-      <div>
-        <ModalRules
-          mode={modalMode}
-          focusedOption={focusedOption}
-          modalRef={modalContainer}
-          item={item}
-          formId={formId}
-        />
-      </div>
     </div>
   );
-};
-
-Options.propTypes = {
-  item: PropTypes.object,
-  renderIcon: PropTypes.func,
 };

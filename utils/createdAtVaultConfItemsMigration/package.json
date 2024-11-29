@@ -1,0 +1,18 @@
+{
+  "name": "created_at_vault_conf_items_migration",
+  "version": "0.1.0",
+  "description": "Add `CreatedAt` property (equal to the one that already exists in `NAME#` items) in `CONF#` items.",
+  "main": "main.ts",
+  "scripts": {
+    "migrate": "tsx main.ts"
+  },
+  "keywords": [],
+  "author": "Clément Janin",
+  "dependencies": {
+    "@aws-sdk/client-dynamodb": "^3.693.0",
+    "@aws-sdk/lib-dynamodb": "^3.693.0",
+    "dotenv": "^16.4.5",
+    "tsx": "^4.19.2"
+  },
+  "packageManager": "yarn@4.0.2"
+}

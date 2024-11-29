@@ -1,23 +1,32 @@
 "use client";
 import React, { useCallback, useEffect, useState } from "react";
 import { useTranslation } from "@i18n/client";
-
 import { cn } from "@lib/utils";
 import { Button } from "@clientComponents/globals";
 import { Dialog, useDialogRef } from "@formBuilder/components/shared/Dialog";
 import { EventKeys, useCustomEvent } from "@lib/hooks/useCustomEvent";
-
+import { toast } from "@formBuilder/components/shared/Toast";
 import { ResponsibilityList } from "./ResponsibilityList";
 import { ConfirmationAgreement } from "./ConfirmationAgreement";
 import { Note } from "./Note";
-import { downloadKey, _createKey } from "@formBuilder/[id]/settings/api/utils";
+import { downloadKey, _createKey } from "@formBuilder/[id]/settings/components/utils";
 import { SubmitButton as DownloadButton } from "@clientComponents/globals/Buttons/SubmitButton";
+import * as Alert from "@clientComponents/globals/Alert/Alert";
+import { logMessage } from "@lib/logger";
+import { sendResponsesToVault } from "@formBuilder/actions";
+import { useFormBuilderConfig } from "@lib/hooks/useFormBuilderConfig";
+import { GenerateKeySuccess } from "./GenerateKeySuccess";
 
 type APIKeyCustomEventDetails = {
   id: string;
 };
 
-export const ApiKeyDialog = () => {
+/**
+ * API Key Dialog
+ * @param isVaultDelivery - boolean - Allows skipping the save request when a form is already saving to the vault -- example a live form swapping to API mode
+ * @returns JSX.Element
+ */
+export const ApiKeyDialog = ({ isVaultDelivery = false }: { isVaultDelivery?: boolean }) => {
   const dialog = useDialogRef();
   const { Event } = useCustomEvent();
   const { t } = useTranslation("form-builder");
@@ -26,8 +35,12 @@ export const ApiKeyDialog = () => {
   const [id, setId] = useState<string>("");
   const [isOpen, setIsOpen] = useState(false);
 
+  const { updateApiKeyId } = useFormBuilderConfig();
+
   // Handle loading state for download button
   const [generating, setGenerating] = useState(false);
+
+  const [hasError, setHasError] = useState(false);
 
   const handleOpen = useCallback((detail: APIKeyCustomEventDetails) => {
     if (detail) {
@@ -57,16 +70,44 @@ export const ApiKeyDialog = () => {
   // Actions
   const handleClose = () => {
     dialog.current?.close();
+    setHasError(false);
     setIsOpen(false);
   };
 
   const handleSave = async () => {
+    setHasError(false);
     setGenerating(true);
-    const key = await _createKey(id);
-    downloadKey(JSON.stringify(key), id);
-    setGenerating(false);
-    dialog.current?.close();
-    setIsOpen(false);
+    try {
+      /*
+        Allows skipping the save request
+        if it's determined that the form responses 
+        are already being delivered to the vault
+      */
+      if (!isVaultDelivery) {
+        const result = await sendResponsesToVault({
+          id: id,
+        });
+
+        if (result.error) {
+          // Throw the generic key creation error
+          // Handling as generic as we're in the process of creating a key
+          throw new Error(result.error);
+        }
+      }
+
+      const key = await _createKey(id);
+      await downloadKey(JSON.stringify(key), id);
+
+      setGenerating(false);
+      updateApiKeyId(key.keyId);
+      toast.success(<GenerateKeySuccess />, "wide");
+      dialog.current?.close();
+      setIsOpen(false);
+    } catch (error) {
+      logMessage.error(error);
+      setHasError(true);
+      setGenerating(false);
+    }
   };
 
   const actions = (
@@ -97,6 +138,14 @@ export const ApiKeyDialog = () => {
           title={t("settings.api.dialog.title")}
         >
           <div className="p-5">
+            {hasError && (
+              <Alert.Danger className="mb-4">
+                <Alert.Title headingTag="h3">
+                  {t("settings.api.dialog.error.createFailed.title")}
+                </Alert.Title>
+                <p className="mb-2">{t("settings.api.dialog.error.createFailed.message")} </p>
+              </Alert.Danger>
+            )}
             <h4 className="mb-4">{t("settings.api.dialog.heading")}</h4>
             <ResponsibilityList />
             <ConfirmationAgreement handleAgreement={hasAgreed} />

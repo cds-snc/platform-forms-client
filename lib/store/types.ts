@@ -1,4 +1,4 @@
-import { Language } from "../types/form-builder-types";
+import { FormElementWithIndex, Language } from "../types/form-builder-types";
 
 import {
   FormElement,
@@ -59,11 +59,13 @@ export interface TemplateStoreState extends TemplateStoreProps {
   updateSecurityAttribute: (value: SecurityAttribute) => void;
   propertyPath: (id: number, field: string, lang?: Language) => string;
   unsetField: (path: string) => void;
-  duplicateElement: (id: number, groupId?: string) => void;
+  duplicateElement: (id: number, groupId?: string, copyEn?: string, copyFr?: string) => void;
   importTemplate: (jsonConfig: FormProperties) => void;
   getSchema: () => string;
   getIsPublished: () => boolean;
   setIsPublished: (isPublished: boolean) => void;
+  getFormElementById: (id: number) => FormElement | undefined;
+  getFormElementWithIndexById: (id: number) => FormElementWithIndex | undefined;
   getName: () => string;
   getDeliveryOption: () => DeliveryOption | undefined;
   resetDeliveryOption: () => void;
@@ -75,6 +77,8 @@ export interface TemplateStoreState extends TemplateStoreProps {
   setChangeKey: (key: string) => void;
   getGroupsEnabled: () => boolean;
   setGroupsLayout: (layout: string[]) => void;
+  getHighestElementId: () => number;
+  generateElementId: () => number;
 }
 
 export interface InitialTemplateStoreProps extends TemplateStoreProps {

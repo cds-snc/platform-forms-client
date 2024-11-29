@@ -25,10 +25,10 @@ import { Form } from "@clientComponents/forms/Form/Form";
 import { BackButton } from "./BackButton";
 import { safeJSONParse } from "@lib/utils";
 import { ErrorSaving } from "@formBuilder/components/shared/ErrorSaving";
-import { toast } from "@formBuilder/components/shared";
+import { toast } from "@formBuilder/components/shared/Toast";
 import { defaultForm } from "@lib/store/defaults";
 import { showReviewPage } from "@lib/utils/form-builder/showReviewPage";
-import { focusElement } from "@lib/client/clientHelpers";
+import { tryFocusOnPageLoad } from "@lib/client/clientHelpers";
 import { useIsFormClosed } from "@lib/hooks/useIsFormClosed";
 
 export const Preview = ({
@@ -89,7 +89,7 @@ export const Preview = ({
     setSent(null);
   };
 
-  const responsesLink = `/${i18n.language}/form-builder/${id}/responses/new`;
+  const responsesLink = `/${i18n.language}/form-builder/${id}/responses`;
   const settingsLink = `/${i18n.language}/form-builder/${id}/settings`;
 
   const brand = formRecord?.form ? formRecord.form.brand : null;
@@ -202,13 +202,12 @@ export const Preview = ({
                                   {allowGrouping && isShowReviewPage && (
                                     <BackButton
                                       language={language}
-                                      onClick={() => focusElement("h2")}
+                                      onClick={() => tryFocusOnPageLoad("h2")}
                                     />
                                   )}
                                   <Button
                                     type="submit"
                                     id="SubmitButton"
-                                    className="mb-4"
                                     onClick={(e) => {
                                       if (disableSubmit) {
                                         e.preventDefault();

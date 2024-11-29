@@ -1,3 +1,5 @@
+"use client";
+
 import { useTranslation } from "@i18n/client";
 import { BranchingIcon } from "@serverComponents/icons/BranchingIcon";
 import { Button } from "@clientComponents/globals";

@@ -29,7 +29,6 @@ import {
   moveElementUp,
   removeElementById,
   removeById,
-  incrementElementId,
   getSchemaFromState,
   incrementSubElementId,
   cleanInput,
@@ -212,11 +211,12 @@ const createTemplateStore = (initProps?: Partial<InitialTemplateStoreProps>) => 
               });
             },
             add: async (elIndex = 0, type = FormElementTypes.radio, data, groupId) => {
+              const id = get().generateElementId();
+
               return new Promise((resolve) => {
                 set((state) => {
                   const allowGroups = state.allowGroupsFlag;
 
-                  const id = incrementElementId(state.form.elements);
                   const item = {
                     ...defaultField,
                     ...data,
@@ -296,7 +296,7 @@ const createTemplateStore = (initProps?: Partial<InitialTemplateStoreProps>) => 
                 });
               });
             },
-            remove: async (elementId, groupId = "") => {
+            remove: (elementId, groupId = "") => {
               set((state) => {
                 const allowGroups = state.allowGroupsFlag;
                 state.form.elements = removeElementById(state.form.elements, elementId);
@@ -363,17 +363,18 @@ const createTemplateStore = (initProps?: Partial<InitialTemplateStoreProps>) => 
               const elIndex = get().form.elements.findIndex((el) => el.id === elId);
               return get().form.elements[elIndex]?.properties.choices?.[choiceIndex];
             },
-            duplicateElement: (itemId, groupId = "") => {
+            duplicateElement: (itemId, groupId = "", copyEn = "", copyFr = "") => {
               const elIndex = get().form.elements.findIndex((el) => el.id === itemId);
+              const id = get().generateElementId();
               set((state) => {
-                const id = incrementElementId(state.form.elements);
                 // deep copy the element
                 const element = JSON.parse(JSON.stringify(state.form.elements[elIndex]));
                 element.id = id;
-                if (element.type !== "richText") {
-                  element.properties[state.localizeField("title")] = `${
-                    element.properties[state.localizeField("title")]
-                  } copy`;
+                if (element.type !== "richText" && element.properties["titleEn"]) {
+                  element.properties["titleEn"] = `${element.properties["titleEn"]} ${copyEn}`;
+                }
+                if (element.type !== "richText" && element.properties["titleFr"]) {
+                  element.properties["titleFr"] = `${element.properties["titleFr"]} ${copyFr}`;
                 }
                 state.form.elements.splice(elIndex + 1, 0, element);
                 state.form.layout.splice(elIndex + 1, 0, id);
@@ -405,6 +406,51 @@ const createTemplateStore = (initProps?: Partial<InitialTemplateStoreProps>) => 
               set((state) => {
                 state.isPublished = isPublished;
               });
+            },
+            getFormElementById: (id) => {
+              const elements = get().form.elements;
+
+              for (const element of elements) {
+                if (element.id === id) {
+                  return element;
+                }
+
+                if (element.properties?.subElements) {
+                  for (const subElement of element.properties.subElements) {
+                    if (subElement.id === id) {
+                      return subElement;
+                    }
+                  }
+                }
+              }
+
+              return undefined;
+            },
+            getFormElementWithIndexById: (id) => {
+              const elements = get().form.elements;
+
+              // for (const element of elements) {
+              for (let index = 0; index < elements.length; index++) {
+                const element = elements[index];
+                if (element.id === id) {
+                  return { ...element, index };
+                }
+
+                if (element.properties?.subElements) {
+                  for (
+                    let subIndex = 0;
+                    subIndex < element.properties.subElements.length;
+                    subIndex++
+                  ) {
+                    const subElement = element.properties.subElements[subIndex];
+                    if (subElement.id === id) {
+                      return { ...subElement, index: subIndex };
+                    }
+                  }
+                }
+              }
+
+              return undefined;
             },
             getName: () => get().name,
             getDeliveryOption: () => get().deliveryOption,
@@ -476,6 +522,32 @@ const createTemplateStore = (initProps?: Partial<InitialTemplateStoreProps>) => 
               set((state) => {
                 state.form.groupsLayout = layout;
               });
+            },
+            getHighestElementId: () => {
+              const validIds = get()
+                .form.elements.filter(
+                  (element) => element && typeof element.id === "number" && !isNaN(element.id)
+                )
+                .map((element) => Number(element.id));
+
+              return validIds.length > 0 ? Math.max(...validIds) : 0;
+            },
+            generateElementId: () => {
+              set((state) => {
+                const lastId = state.form.lastGeneratedElementId || 0;
+
+                // Ensure backwards compatibility with existing forms
+                const highestId = state.getHighestElementId();
+
+                if (lastId < highestId) {
+                  state.form.lastGeneratedElementId = highestId + 1;
+                  return;
+                }
+
+                state.form.lastGeneratedElementId = lastId + 1;
+              });
+
+              return get().form.lastGeneratedElementId || 1;
             },
           }),
           {

@@ -148,7 +148,13 @@
       "noDeletedResponses": "Aucune réponse à supprimer",
       "noDeletedResponsesMessage": "Une fois que vous aurez téléchargé et approuvé la suppression des réponses, celles-ci seront disponibles ici pendant 30 jours.",
       "noProblemResponses": "Aucune réponse signalée avec problème",
-      "noProblemResponsesMessage": "Les réponses signalées avec problèmes apparaîtront ici jusqu'à ce qu'elles soient approuvées pour leur suppression de Formulaires GC."
+      "noProblemResponsesMessage": "Les réponses signalées avec problèmes apparaîtront ici jusqu'à ce qu'elles soient approuvées pour leur suppression de Formulaires GC.",
+      "noNewResponsesApiTitle": "Aucune réponse en attente de livraison par l'API",
+      "noNewResponsesApiMessage": "<p className='mb-2'>Une fois livrées par l'API, les réponses apparaîtront ici et seront disponibles dans Formulaires GC pendant 30 jours.</p><p>Pour en savoir plus sur la récupération de données avec l'API consultez notre <a href='https://cds-snc.github.io/forms-api/accueil' target='_blank'>documentation technique</a> (ouvre un nouvel onglet)</p>",
+      "apiResponsesAvailableTitle": "Réponses en attente de la livraison par l'API",
+      "apiResponsesAvailableMessage": "<p className='mb-2'>Une fois livrées par l'API, les réponses livrées apparaîtront ici et seront disponibles dans Formulaires GC pendant 30 jours.</p><p>Pour en savoir plus sur la récupération de données avec l'API consultez notre <a href='https://cds-snc.github.io/forms-api/accueil' target='_blank'>documentation technique</a> (ouvre un nouvel onglet)</p>",
+      "apiResponsesAwaitingConfirmTitle": "État de livraison : En attente",
+      "apiResponsesAwaitingConfirmMessage": "Réponses en attente de confirmation de la livraison par l'API"
     },
     "notifications": {
       "downloadComplete": "Réponses déplacées vers l'onglet « Téléchargements »",
@@ -278,5 +284,29 @@
     "province": "Province, territoire ou état",
     "postalCode": "Code postal ou zip",
     "country": "Pays"
+  },
+  "apiDashboard": {
+    "title": "Réponses"
+  },
+  "systemHealth": {
+    "problemsReported": {
+      "title": "Problèmes signalés",
+      "description": "<a href='' target='_blank'>Obtenir du soutien</a>"
+    },
+    "deliveredAndConfirmed": {
+      "title": "État de livraison : OK",
+      "description": "Toutes les réponses ont été livrées avec succès."
+    },
+    "awatingDownload": {
+      "title": "État de livraison : En attente",
+      "description": "Réponses en attente de la livraison par l'API",
+      "new": "Nouvelles",
+      "responses": "réponses",
+      "available": "disponibles"
+    },
+    "awatingConfirm": {
+      "title": "État de livraison : En attente",
+      "description": "Réponses en attente de la confirmation de la livraison par l'API"
+    }
   }
 }

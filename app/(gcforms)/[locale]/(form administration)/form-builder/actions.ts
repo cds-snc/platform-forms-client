@@ -16,7 +16,6 @@ import {
   updateClosedData,
   updateTemplate as updateDbTemplate,
   updateIsPublishedForTemplate,
-  deleteTemplate as deleteDbTemplate,
   updateSecurityAttribute,
   updateResponseDeliveryOption,
   updateFormPurpose,
@@ -72,7 +71,7 @@ export const createOrUpdateTemplate = async ({
   }
 };
 
-export const createTemplate = async ({
+const createTemplate = async ({
   formConfig,
   name,
   deliveryOption,
@@ -264,8 +263,8 @@ export const closeForm = async ({
     const { ability } = await authCheckAndThrow();
 
     // closingDate: null means the form is open, or will be set to be open
-    // closingDate: (now/past date) means the form is closed
-    // closingDate: (future date) means the form is scheduled to close in the future
+    // closingDate: a current or past date means the form is closed
+    // closingDate: a future date means the form is scheduled to close in the future
 
     if (closingDate && !isValidDateString(closingDate)) {
       throw new Error(`Invalid closing date. Request information: { ${formID}, ${closingDate} }`);
@@ -366,29 +365,6 @@ export const sendResponsesToVault = async ({
   }
 };
 
-export const deleteTemplate = async ({
-  id: formID,
-}: {
-  id: string;
-}): Promise<{
-  formRecord: FormRecord | null;
-  error?: string;
-}> => {
-  try {
-    const { ability } = await authCheckAndThrow();
-
-    const response = await deleteDbTemplate(ability, formID);
-
-    if (!response) {
-      throw new Error(`Template API response was null. Request information: { ${formID} }`);
-    }
-
-    return { formRecord: response };
-  } catch (error) {
-    return { formRecord: null, error: (error as Error).message };
-  }
-};
-
 export const getTranslatedElementProperties = async (type: string) => {
   const { t: en } = await serverTranslation("form-builder", { lang: "en" });
   const { t: fr } = await serverTranslation("form-builder", { lang: "fr" });
@@ -396,6 +372,10 @@ export const getTranslatedElementProperties = async (type: string) => {
     description: {
       en: en([`defaultElementDescription.${type}`, ""]),
       fr: fr([`defaultElementDescription.${type}`, ""]),
+    },
+    label: {
+      en: en([`defaultElementLabel.${type}`, ""]),
+      fr: fr([`defaultElementLabel.${type}`, ""]),
     },
   };
 };
