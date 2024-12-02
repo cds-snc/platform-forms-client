@@ -120,7 +120,7 @@ export const DeleteApiKeyDialog = () => {
               href={`${i18n.language}/form-builder/${id}/settings/manage`}
             >
               <span>{t("settings.api.deleteApiKeyDialog.stopText1")}</span>
-            </Link>{" "}
+            </Link>
             <span>{t("settings.api.deleteApiKeyDialog.stopText2")}</span>
           </div>
         </Dialog>
