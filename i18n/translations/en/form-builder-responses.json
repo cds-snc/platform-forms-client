@@ -295,7 +295,7 @@
     },
     "deliveredAndConfirmed": {
       "title": "Status: OK",
-      "description": "All new submissions were retrieved and confirmed"
+      "description": "All submissions have been retrieved and confirmed"
     },
     "awatingDownload": {
       "title": "Status: Awaiting retrieval",
