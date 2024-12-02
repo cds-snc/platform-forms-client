@@ -644,6 +644,10 @@
         "message": "Les nouvelles réponses peuvent maintenant être téléchargées sur la",
         "responseLinkText": "page Réponses"
       },
+            "deleteApiKeyToChangeOptions": {
+        "title": "Supprimer la clé API pour modifier la méthode de livraison",
+        "message": "Afin de sélectionner une autre option, vous devez d'abord supprimer la clé API."
+      },
       "generateKeySuccess": {
         "title": "La clé API a été créée",
         "message": "Les nouvelles réponses seront disponibles par l'API. Trouvez des instructions pour la configuration de l'intégration dans ",
