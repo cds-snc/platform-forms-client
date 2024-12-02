@@ -291,7 +291,7 @@
   "systemHealth": {
     "problemsReported": {
       "title": "Reported problems with submissions",
-      "description": "<a href='' target='_blank'>Get support</a>"
+      "description": "<a href={`/en/support`} target='_blank'>Get support</a>"
     },
     "deliveredAndConfirmed": {
       "title": "Status: OK",
