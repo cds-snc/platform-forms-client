@@ -290,7 +290,7 @@
   },
   "systemHealth": {
     "problemsReported": {
-      "title": "Reported problems with submissions",
+      "title": "Problems reported about submissions",
       "description": "<a href={`/en/support`} target='_blank'>Get support</a>"
     },
     "deliveredAndConfirmed": {
