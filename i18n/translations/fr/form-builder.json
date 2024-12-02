@@ -553,7 +553,7 @@
     "text2": "",
     "vaultOption": "Réponses à télécharger",
     "emailOption": "Réponses envoyées par courriel — ",
-    "apiOption": "Responses delivered by API — [FR]",
+    "apiOption": "Responses delivered by API [FR]",
     "change": "Modifier ces paramètres"
   },
   "logicPublishWarning": {
