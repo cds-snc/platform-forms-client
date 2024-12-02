@@ -1297,6 +1297,6 @@
     }
   },
   "systemHealthCheck": {
-    "title": "System health check"
+    "title": "System health"
   }
 }

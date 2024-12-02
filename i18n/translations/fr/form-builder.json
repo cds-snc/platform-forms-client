@@ -1013,7 +1013,7 @@
   "closingDate": {
     "title": "Accepter les soumissions de formulaires",
     "description": "Une fois que vous avez publié un formulaire, il est ouvert aux soumissions. Vous pouvez fermer le formulaire pour empêcher les soumissions.",
-    "status": "État du formulaire",
+    "status": "du formulaire",
     "open": "Ouvert",
     "closed": "Fermé",
     "saveButton": "Enregistrer les modifications",
@@ -1293,6 +1293,6 @@
     }
   },
   "systemHealthCheck": {
-    "title": "Bilan de santé du système"
+    "title": "Santé du système"
   }
 }
