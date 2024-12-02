@@ -4,7 +4,7 @@ import { safeJSONParse } from "@lib/utils";
 
 const IGNORED_KEYS = ["formID", "securityAttribute"];
 
-type TransformedResponse = { [key: string]: any };
+type TransformedResponse = { [key: string]: any }; // @TODO: fix this type
 
 /**
  * Cleans up and formats the Response object for storage
