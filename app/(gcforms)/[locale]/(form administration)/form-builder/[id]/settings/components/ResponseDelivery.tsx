@@ -113,13 +113,6 @@ export const ResponseDelivery = ({ isFormsAdmin }: { isFormsAdmin: boolean }) =>
     t("formSettingsModal.emailOption.label")
   );
 
-  const apiLabel = (
-    <>
-      <span className="block">{t("formSettingsModal.apiOption.label")}</span>
-      <span className="block">{t("formSettingsModal.apiOption.note")}</span>
-    </>
-  );
-
   const userEmail = session.data?.user.email ?? "";
   let initialDeliveryOption = !email ? DeliveryOption.vault : DeliveryOption.email;
 
@@ -331,7 +324,7 @@ export const ResponseDelivery = ({ isFormsAdmin }: { isFormsAdmin: boolean }) =>
 
   return (
     <>
-      <p className="mb-10 inline-block bg-purple-200 p-3 text-sm font-bold">
+      <p className="mb-4 w-3/5 rounded-md bg-indigo-50 p-3 font-bold">
         {t("settingsResponseDelivery.beforePublishMessage")}
       </p>
       {status === "authenticated" && (
@@ -357,25 +350,9 @@ export const ResponseDelivery = ({ isFormsAdmin }: { isFormsAdmin: boolean }) =>
                 </p>
               ) : null}
 
+              {/* Email Option */}
               {!hasApiKey && (
-                <>
-                  <Radio
-                    disabled={isPublished || hasApiKey}
-                    id={`delivery-option-${DeliveryOption.vault}`}
-                    checked={deliveryOptionValue === DeliveryOption.vault}
-                    name="response-delivery"
-                    value={DeliveryOption.vault}
-                    label={t("settingsResponseDelivery.vaultOption")}
-                    onChange={updateDeliveryOption}
-                  >
-                    <span className="mb-1 ml-3 block text-sm">
-                      {t("settingsResponseDelivery.vaultOptionHint.text1")}{" "}
-                      <a href={responsesLink}>
-                        {t("settingsResponseDelivery.vaultOptionHint.text2")}
-                      </a>
-                      .{t("settingsResponseDelivery.vaultOptionHint.text3")}
-                    </span>
-                  </Radio>
+                <div className="mb-10">
                   <Radio
                     disabled={isPublished || protectedBSelected || hasApiKey}
                     id={`delivery-option-${DeliveryOption.email}`}
@@ -384,8 +361,8 @@ export const ResponseDelivery = ({ isFormsAdmin }: { isFormsAdmin: boolean }) =>
                     value={DeliveryOption.email}
                     label={emailLabel}
                     onChange={updateDeliveryOption}
+                    className="mb-0"
                   />
-
                   {deliveryOptionValue === DeliveryOption.email && (
                     <ResponseEmail
                       inputEmail={inputEmailValue}
@@ -398,19 +375,57 @@ export const ResponseDelivery = ({ isFormsAdmin }: { isFormsAdmin: boolean }) =>
                       setIsInvalidEmailError={setIsInvalidEmailError}
                     />
                   )}
-                  {deliveryOptionValue !== DeliveryOption.email && <div className="mb-8"></div>}
+                </div>
+              )}
+              {/* End Email Option */}
 
+              {/* Vault Option */}
+              {!hasApiKey && (
+                <>
+                  <div className="mb-10">
+                    <Radio
+                      disabled={isPublished || hasApiKey}
+                      id={`delivery-option-${DeliveryOption.vault}`}
+                      checked={deliveryOptionValue === DeliveryOption.vault}
+                      name="response-delivery"
+                      value={DeliveryOption.vault}
+                      label={t("settingsResponseDelivery.vaultOption")}
+                      onChange={updateDeliveryOption}
+                      className="mb-0"
+                    >
+                      <span className="ml-3 block text-sm">
+                        {t("settingsResponseDelivery.vaultOptionHint.text1")}{" "}
+                        <a href={responsesLink}>
+                          {t("settingsResponseDelivery.vaultOptionHint.text2")}
+                        </a>
+                        .{t("settingsResponseDelivery.vaultOptionHint.text3")}
+                      </span>
+                    </Radio>
+                  </div>
+                  {/* End Vault Option */}
+
+                  {/* API Option */}
                   {apiAccess && (
-                    <>
-                      <Radio
-                        disabled={isPublished || protectedBSelected || hasApiKey}
-                        id={`delivery-option-${DeliveryOption.api}`}
-                        checked={deliveryOptionValue === DeliveryOption.api}
-                        name="response-delivery"
-                        value={DeliveryOption.api}
-                        label={apiLabel}
-                        onChange={updateDeliveryOption}
-                      />
+                    <div className="mb-10">
+                      <div>
+                        <Radio
+                          disabled={isPublished || protectedBSelected || hasApiKey}
+                          id={`delivery-option-${DeliveryOption.api}`}
+                          checked={deliveryOptionValue === DeliveryOption.api}
+                          name="response-delivery"
+                          value={DeliveryOption.api}
+                          label={t("formSettingsModal.apiOption.label")}
+                          onChange={updateDeliveryOption}
+                          className="mb-0"
+                        >
+                          <span className="ml-3 block text-sm">
+                            {t("formSettingsModal.apiOption.note")}
+                          </span>
+                        </Radio>
+                      </div>
+                      {/* End API Option */}
+
+                      {/*  API note */}
                       {deliveryOptionValue === DeliveryOption.api && (
                         <div className="mb-10 ml-4 border-l-4 pl-8">
                           <span className="block py-6 font-bold">
@@ -418,14 +433,16 @@ export const ResponseDelivery = ({ isFormsAdmin }: { isFormsAdmin: boolean }) =>
                           </span>
                         </div>
                       )}
-                    </>
+                      {/*  End API note */}
+                    </div>
                   )}
                 </>
               )}
+
               {apiAccess && deliveryOptionValue === DeliveryOption.api && (
                 <div>
-                  <ApiKeyButton showDelete />
                   <DeleteKeyToChangeOptionsNote hasApiKey={hasApiKey} />
+                  <ApiKeyButton showDelete />
                   <ApiDocNotes />
                 </div>
               )}
@@ -461,6 +478,7 @@ export const ResponseDelivery = ({ isFormsAdmin }: { isFormsAdmin: boolean }) =>
                 checked={purposeOption === PurposeOption.admin}
                 value={PurposeOption.admin}
                 onChange={updatePurposeOption}
+                className="mb-20"
               />
               <div className="mb-4 ml-12 text-sm">
                 <div>

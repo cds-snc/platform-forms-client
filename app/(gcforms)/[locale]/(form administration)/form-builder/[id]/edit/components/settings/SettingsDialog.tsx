@@ -456,7 +456,7 @@ const SettingsDialog = ({
                       label={t("settingsResponseDelivery.vaultOption")}
                       onChange={updateDeliveryOption}
                     >
-                      <span className="mb-1 ml-3 block text-sm">
+                      <span className="ml-3 block text-sm">
                         {t("settingsResponseDelivery.vaultOptionHint.text1")}{" "}
                         <a href={responsesLink}>
                           {t("settingsResponseDelivery.vaultOptionHint.text2")}
