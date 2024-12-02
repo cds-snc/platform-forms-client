@@ -12,7 +12,7 @@ type TransformedResponse = { [key: string]: any };
  * @param payload
  * @returns
  */
-export function rehydrateFormResponses(payload: Submission): TransformedResponse {
+export function transformFormResponses(payload: Submission): TransformedResponse {
   const { responses } = payload;
   const transformed: TransformedResponse = {};
 
