@@ -553,6 +553,7 @@
     "text2": "",
     "vaultOption": "Réponses à télécharger",
     "emailOption": "Réponses envoyées par courriel — ",
+    "apiOption": "Responses delivered by API — [FR]",
     "change": "Modifier ces paramètres"
   },
   "logicPublishWarning": {
@@ -644,7 +645,7 @@
         "message": "Les nouvelles réponses peuvent maintenant être téléchargées sur la",
         "responseLinkText": "page Réponses"
       },
-            "deleteApiKeyToChangeOptions": {
+      "deleteApiKeyToChangeOptions": {
         "title": "Supprimer la clé API pour modifier la méthode de livraison",
         "message": "Afin de sélectionner une autre option, vous devez d'abord supprimer la clé API."
       },
