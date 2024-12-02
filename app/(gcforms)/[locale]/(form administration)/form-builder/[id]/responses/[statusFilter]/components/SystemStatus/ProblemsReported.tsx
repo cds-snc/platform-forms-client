@@ -3,7 +3,7 @@ import Skeleton from "react-loading-skeleton";
 
 import { fetchSubmissions } from "@formBuilder/[id]/responses/[[...statusFilter]]/actions";
 
-import { VaultStatus, VaultSubmissionList } from "@lib/types";
+import { VaultStatus, VaultSubmissionOverview } from "@lib/types";
 import {
   HealthCheckBox,
   NumberCount,
@@ -12,7 +12,7 @@ import {
 export const ProblemsReported = ({ formId }: { formId: string }) => {
   const [problemSubmissions, setProblemSubmissions] = useState<{
     loading: boolean;
-    submissions: VaultSubmissionList[];
+    submissions: VaultSubmissionOverview[];
     lastEvaluatedKey: Record<string, string> | null | undefined;
     error: boolean;
   }>({ loading: true, submissions: [], lastEvaluatedKey: null, error: false });

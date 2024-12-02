@@ -24,6 +24,7 @@ import {
   retrieveSubmissions,
   updateLastDownloadedBy,
   submissionTypeExists,
+  retrieveSubmissionRemovalDate,
 } from "@lib/vault";
 import { transform as csvTransform } from "@lib/responseDownloadFormats/csv";
 import { transform as htmlAggregatedTransform } from "@lib/responseDownloadFormats/html-aggregated";
@@ -228,119 +229,121 @@ export const getSubmissionsByFormat = async ({
 
     const allowGroupsFlag = allowGrouping();
     // Get responses into a ResponseSubmission array containing questions and answers that can be easily transformed
-    const responses = queryResult.map((item) => {
-      const submission = Object.entries(JSON.parse(String(item.formSubmission))).map(
-        ([questionId, answer]) => {
-          const question = fullFormTemplate.form.elements.find(
-            (element) => element.id === Number(questionId)
-          );
+    const responses = queryResult
+      .sort((a, b) => a.createdAt - b.createdAt)
+      .map((item) => {
+        const submission = Object.entries(JSON.parse(String(item.formSubmission))).map(
+          ([questionId, answer]) => {
+            const question = fullFormTemplate.form.elements.find(
+              (element) => element.id === Number(questionId)
+            );
 
-          // Handle Dynamic Rows
-          if (question?.type === FormElementTypes.dynamicRow && answer instanceof Array) {
+            // Handle Dynamic Rows
+            if (question?.type === FormElementTypes.dynamicRow && answer instanceof Array) {
+              return {
+                questionId: question.id,
+                type: question?.type,
+                questionEn: question?.properties.titleEn,
+                questionFr: question?.properties.titleFr,
+                answer: answer.map((item) => {
+                  return Object.values(item).map((value, index) => {
+                    if (question?.properties.subElements) {
+                      const subQuestion = question?.properties.subElements[index];
+                      return {
+                        questionId: question?.id,
+                        type: subQuestion.type,
+                        questionEn: subQuestion.properties.titleEn,
+                        questionFr: subQuestion.properties.titleFr,
+                        answer: getAnswerAsString(subQuestion, value),
+                        ...(subQuestion.type === "formattedDate" && {
+                          dateFormat: subQuestion.properties.dateFormat,
+                        }),
+                      };
+                    }
+                  });
+                }),
+              } as Answer;
+            }
+
+            // Handle "Split" AddressComplete in a similiar manner to dynamic fields.
+            if (
+              question?.type === FormElementTypes.addressComplete &&
+              question.properties.addressComponents?.splitAddress === true
+            ) {
+              const addressObject = JSON.parse(answer as string) as AddressElements;
+
+              const questionComponents = question.properties.addressComponents as AddressComponents;
+              if (questionComponents.canadianOnly) {
+                addressObject.country = "CAN";
+              }
+
+              const extraTranslations = {
+                streetAddress: {
+                  en: tEn("addressComponents.streetAddress"),
+                  fr: tFr("addressComponents.streetAddress"),
+                },
+                city: {
+                  en: tEn("addressComponents.city"),
+                  fr: tFr("addressComponents.city"),
+                },
+                province: {
+                  en: tEn("addressComponents.province"),
+                  fr: tFr("addressComponents.province"),
+                },
+                postalCode: {
+                  en: tEn("addressComponents.postalCode"),
+                  fr: tFr("addressComponents.postalCode"),
+                },
+                country: {
+                  en: tEn("addressComponents.country"),
+                  fr: tFr("addressComponents.country"),
+                },
+              };
+
+              const reviewElements = getAddressAsAnswerElements(
+                question,
+                addressObject,
+                extraTranslations
+              );
+
+              const addressElements = [reviewElements];
+
+              return {
+                questionId: question.id,
+                type: FormElementTypes.address,
+                questionEn: question?.properties.titleEn,
+                questionFr: question?.properties.titleFr,
+                answer: addressElements,
+              } as Answer;
+            }
+
+            // return the final answer object
             return {
-              questionId: question.id,
+              questionId: question?.id,
               type: question?.type,
               questionEn: question?.properties.titleEn,
               questionFr: question?.properties.titleFr,
-              answer: answer.map((item) => {
-                return Object.values(item).map((value, index) => {
-                  if (question?.properties.subElements) {
-                    const subQuestion = question?.properties.subElements[index];
-                    return {
-                      questionId: question?.id,
-                      type: subQuestion.type,
-                      questionEn: subQuestion.properties.titleEn,
-                      questionFr: subQuestion.properties.titleFr,
-                      answer: getAnswerAsString(subQuestion, value),
-                      ...(subQuestion.type === "formattedDate" && {
-                        dateFormat: subQuestion.properties.dateFormat,
-                      }),
-                    };
-                  }
-                });
+              answer: getAnswerAsString(question, answer),
+              ...(question?.type === "formattedDate" && {
+                dateFormat: question.properties.dateFormat,
               }),
             } as Answer;
           }
-
-          // Handle "Split" AddressComplete in a similiar manner to dynamic fields.
-          if (
-            question?.type === FormElementTypes.addressComplete &&
-            question.properties.addressComponents?.splitAddress === true
-          ) {
-            const addressObject = JSON.parse(answer as string) as AddressElements;
-
-            const questionComponents = question.properties.addressComponents as AddressComponents;
-            if (questionComponents.canadianOnly) {
-              addressObject.country = "CAN";
-            }
-
-            const extraTranslations = {
-              streetAddress: {
-                en: tEn("addressComponents.streetAddress"),
-                fr: tFr("addressComponents.streetAddress"),
-              },
-              city: {
-                en: tEn("addressComponents.city"),
-                fr: tFr("addressComponents.city"),
-              },
-              province: {
-                en: tEn("addressComponents.province"),
-                fr: tFr("addressComponents.province"),
-              },
-              postalCode: {
-                en: tEn("addressComponents.postalCode"),
-                fr: tFr("addressComponents.postalCode"),
-              },
-              country: {
-                en: tEn("addressComponents.country"),
-                fr: tFr("addressComponents.country"),
-              },
-            };
-
-            const reviewElements = getAddressAsAnswerElements(
-              question,
-              addressObject,
-              extraTranslations
-            );
-
-            const addressElements = [reviewElements];
-
-            return {
-              questionId: question.id,
-              type: FormElementTypes.address,
-              questionEn: question?.properties.titleEn,
-              questionFr: question?.properties.titleFr,
-              answer: addressElements,
-            } as Answer;
-          }
-
-          // return the final answer object
-          return {
-            questionId: question?.id,
-            type: question?.type,
-            questionEn: question?.properties.titleEn,
-            questionFr: question?.properties.titleFr,
-            answer: getAnswerAsString(question, answer),
-            ...(question?.type === "formattedDate" && {
-              dateFormat: question.properties.dateFormat,
-            }),
-          } as Answer;
+        );
+        let sorted: Answer[];
+        if (allowGroupsFlag && formHasGroups(fullFormTemplate.form)) {
+          sorted = sortByGroups({ form: fullFormTemplate.form, elements: submission });
+        } else {
+          sorted = sortByLayout({ layout: fullFormTemplate.form.layout, elements: submission });
         }
-      );
-      let sorted: Answer[];
-      if (allowGroupsFlag && formHasGroups(fullFormTemplate.form)) {
-        sorted = sortByGroups({ form: fullFormTemplate.form, elements: submission });
-      } else {
-        sorted = sortByLayout({ layout: fullFormTemplate.form.layout, elements: submission });
-      }
 
-      return {
-        id: item.name,
-        createdAt: parseInt(item.createdAt.toString()),
-        confirmationCode: item.confirmationCode,
-        answers: sorted,
-      };
-    }) as FormResponseSubmissions["submissions"];
+        return {
+          id: item.name,
+          createdAt: parseInt(item.createdAt.toString()),
+          confirmationCode: item.confirmationCode,
+          answers: sorted,
+        };
+      }) as FormResponseSubmissions["submissions"];
 
     if (!responses.length) {
       throw new FormBuilderError("No responses found.", FormServerErrorCodes.NO_RESPONSES_FOUND);
@@ -441,6 +444,16 @@ export const unConfirmedResponsesExist = async (formId: string) => {
   try {
     const { ability } = await authCheckAndRedirect();
     return submissionTypeExists(ability, formId, VaultStatus.DOWNLOADED);
+  } catch (error) {
+    // Throw sanitized error back to client
+    return { error: "There was an error. Please try again later." } as ServerActionError;
+  }
+};
+
+export const getSubmissionRemovalDate = async (formId: string, submissionName: string) => {
+  try {
+    const { ability } = await authCheckAndRedirect();
+    return retrieveSubmissionRemovalDate(ability, formId, submissionName);
   } catch (error) {
     // Throw sanitized error back to client
     return { error: "There was an error. Please try again later." } as ServerActionError;
