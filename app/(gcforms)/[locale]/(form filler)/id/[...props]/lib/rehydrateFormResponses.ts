@@ -1,79 +1,63 @@
 import { Submission } from "@lib/types/submission-types";
-import { Response, Responses, FormElement, FormElementTypes } from "@lib/types";
+import { Response } from "@lib/types";
 import { safeJSONParse } from "@lib/utils";
 
-export function rehydrateFormResponses(payload: Submission) {
-  const { form: formRecord, responses } = payload;
+const IGNORED_KEYS = ["formID", "securityAttribute"];
 
-  const rehydratedResponses: Responses = {};
+type TransformedResponse = { [key: string]: any };
 
-  formRecord.form.elements
-    .filter((element) => ![FormElementTypes.richText].includes(element.type))
-    .forEach((question: FormElement) => {
-      switch (question.type) {
-        case FormElementTypes.checkbox: {
-          rehydratedResponses[question.id] = _rehydrateCheckBoxResponse(responses[question.id]);
-          break;
-        }
-        case FormElementTypes.dynamicRow: {
-          const filteredResponses: [string, Response][] = Object.entries(responses)
-            .filter(([key]) => {
-              const splitKey = key.split("-");
-              return splitKey.length > 1 && splitKey[0] === question.id.toString();
-            })
-            // Here is a trick to catch and unpack checkbox type of reponses
-            // We will need some kind of overhaul on how we pass responses from functions to functions
-            .map(([key, value]) => {
-              if ((value as string).startsWith('{"value"')) {
-                return [key, _rehydrateCheckBoxResponse(value)];
-              } else {
-                return [key, value];
-              }
-            });
+const isDynamicRow = (key: string) => key.includes("-");
 
-          const dynamicRowResponses = _rehydrateDynamicRowResponses(filteredResponses);
-          rehydratedResponses[question.id] = dynamicRowResponses;
-          break;
-        }
-        default:
-          rehydratedResponses[question.id] = responses[question.id];
-          break;
-      }
-    });
+const isCheckbox = (key: string) => key.startsWith('{"value"');
 
-  return rehydratedResponses;
+const transformCheckboxResponse = (response: Response) => {
+  return safeJSONParse<{ value: string[] }>(response as string)?.value || [];
+};
+
+/**
+ * Add structure to Dynamic Row responses
+ *
+ * @param key
+ * @param value
+ * @param transformed
+ */
+function transformDynamicRow(key: string, value: Response, transformed: TransformedResponse) {
+  const [parentKey, subKey, subSubKey] = key.split("-");
+  transformed[parentKey] = transformed[parentKey] || [];
+  transformed[parentKey][subKey] = transformed[parentKey][subKey] || {};
+
+  transformed[parentKey][subKey][subSubKey] = isCheckbox(value as string)
+    ? transformCheckboxResponse(value)
+    : value;
 }
 
-function _rehydrateDynamicRowResponses(responses: [string, Response][]) {
-  const rehydratedResponses: Responses[] = [];
+/**
+ * Cleans up and formats the Response object for storage
+ *
+ * @param payload
+ * @returns
+ */
+export function rehydrateFormResponses(payload: Submission): TransformedResponse {
+  const { responses } = payload;
+  const transformed: TransformedResponse = {};
 
-  let currentResponse: Responses = {};
-  let currentResponseIndex: string | undefined = undefined;
+  for (const [key, value] of Object.entries(responses)) {
+    if (IGNORED_KEYS.includes(key)) {
+      continue;
+    }
 
-  for (const [key, value] of responses) {
-    const splitKey = key.split("-");
-    const responseIndex = splitKey[1];
-    const responseSubIndex = splitKey[2];
-
-    if (!currentResponseIndex) {
-      currentResponseIndex = responseIndex;
-      currentResponse[responseSubIndex] = value;
-    } else if (currentResponseIndex === responseIndex) {
-      currentResponse[responseSubIndex] = value;
+    // DynamicRow
+    if (isDynamicRow(key)) {
+      transformDynamicRow(key, value, transformed);
     } else {
-      currentResponseIndex = responseIndex;
-      rehydratedResponses.push(currentResponse);
-      currentResponse = {};
-      currentResponse[responseSubIndex] = value;
+      // Checkboxes need a bit of massaging
+      if (isCheckbox(value as string)) {
+        transformed[key] = transformCheckboxResponse(value);
+      } else {
+        transformed[key] = value;
+      }
     }
   }
 
-  rehydratedResponses.push(currentResponse);
-
-  return rehydratedResponses;
-}
-
-function _rehydrateCheckBoxResponse(response: Response) {
-  const responseParsed = safeJSONParse<{ value: string[] }>(response as string);
-  return responseParsed?.value || [];
+  return transformed;
 }
