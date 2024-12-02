@@ -290,7 +290,7 @@
   },
   "systemHealth": {
     "problemsReported": {
-      "title": "Problèmes avec les soumissions?",
+      "title": "Problèmes signalés avec les soumissions",
       "description": "<a href='{`/fr/support`}' target='_blank'>Obtenir du soutien</a>"
     },
     "deliveredAndConfirmed": {
