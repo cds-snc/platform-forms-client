@@ -1,5 +1,5 @@
 "use client";
-import React, { useCallback, useState, useMemo } from "react";
+import React, { useCallback, useState, useMemo, useEffect } from "react";
 import {
   LocalizedFormProperties,
   FormServerError,
@@ -39,6 +39,8 @@ import { ApiDocNotes } from "./ApiDocNotes";
 import { DeleteKeyToChangeOptionsNote } from "./DeleteKeyToChangeOptionsNote";
 import { useFormBuilderConfig } from "@lib/hooks/useFormBuilderConfig";
 
+import { EventKeys, useCustomEvent } from "@lib/hooks/useCustomEvent";
+
 enum DeliveryOption {
   vault = "vault",
   email = "email",
@@ -63,6 +65,7 @@ export const ResponseDelivery = ({ isFormsAdmin }: { isFormsAdmin: boolean }) =>
   const { refreshData } = useRefresh();
   const lang = i18n.language === "en" ? "en" : "fr";
   const { apiKeyId } = useFormBuilderConfig();
+  const { Event } = useCustomEvent();
 
   const {
     email,
@@ -321,6 +324,22 @@ export const ResponseDelivery = ({ isFormsAdmin }: { isFormsAdmin: boolean }) =>
     }
     setClassification(value);
   }, []);
+
+  const handleDeleteApiKey = useCallback(() => {
+    if (deliveryOptionValue === DeliveryOption.vault) {
+      return;
+    }
+
+    // Set to vault when an API key is deleted
+    setDeliveryOptionValue(DeliveryOption.vault);
+  }, [deliveryOptionValue]);
+
+  useEffect(() => {
+    Event.on(EventKeys.deleteApiKey, handleDeleteApiKey);
+    return () => {
+      Event.off(EventKeys.deleteApiKey, handleDeleteApiKey);
+    };
+  }, [Event, handleDeleteApiKey]);
 
   return (
     <>

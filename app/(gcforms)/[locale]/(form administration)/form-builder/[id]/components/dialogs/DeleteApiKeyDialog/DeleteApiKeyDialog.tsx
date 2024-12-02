@@ -70,6 +70,7 @@ export const DeleteApiKeyDialog = () => {
       toast.success(<DeleteKeySuccess id={id} />, "wide");
       updateApiKeyId(false);
       setDeleting(false);
+      Event.fire(EventKeys.deleteApiKey, { id });
       dialog.current?.close();
       setIsOpen(false);
     } catch (error) {
