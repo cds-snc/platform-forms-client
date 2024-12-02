@@ -456,7 +456,7 @@
     "title": "Télécharger le fichier du formulaire"
   },
   "switchToApiMode": {
-    "title": "Passer à la livriason par API",
+    "title": "Passer à la livraison par API",
     "description": "Les nouvelles soumissions seront disponibles via le point de terminaison de l'API.",
     "btnText": "Passer à la livraison par API"
   },
