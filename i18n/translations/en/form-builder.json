@@ -1088,7 +1088,7 @@
     "saveNote": "Branches deactivate the automatic linear flow that would link form pages.",
     "resetRules": "Reset to linear flow",
     "resetRulesHelp": "Reset help",
-    "resetRulesDescription": "This will remove branching logic and reset the progression between pages to a simple linear flow, overriding any existing rules that were applied.",
+    "resetRulesDescription": "This will remove branching logic and reset the progression between pages to a simple linear flow, overriding any custom page flows that were applied.",
     "resetRulesDialog": {
       "title": "Reset to linear flow?",
       "areYouSure": "Are you sure you want to reset the form flow?",
