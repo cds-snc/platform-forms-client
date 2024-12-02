@@ -59,17 +59,15 @@ export const SubOptions = ({
   elIndex: number;
   renderIcon?: RenderIcon;
 }) => {
-  const { elements, translationLanguagePriority } = useTemplateStore((s) => ({
-    elements: s.form.elements,
+  const { translationLanguagePriority, getFormElementById } = useTemplateStore((s) => ({
     translationLanguagePriority: s.translationLanguagePriority,
+    getFormElementById: s.getFormElementById,
   }));
 
   const subIndex = item.index;
-  // get choices from the parent element
-  const subElements = elements[elIndex].properties.subElements ?? [];
-  const choices = subElements[subIndex]?.properties.choices?.length
-    ? subElements[subIndex]?.properties.choices
-    : [{ en: "", fr: "" }];
+
+  const element = getFormElementById(item.id);
+  const choices = element?.properties.choices || [{ en: "", fr: "" }];
 
   if (!choices) {
     return <AddOptions elIndex={elIndex} subIndex={subIndex} />;

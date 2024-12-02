@@ -70,6 +70,7 @@ export const DeleteApiKeyDialog = () => {
       toast.success(<DeleteKeySuccess id={id} />, "wide");
       updateApiKeyId(false);
       setDeleting(false);
+      Event.fire(EventKeys.deleteApiKey, { id });
       dialog.current?.close();
       setIsOpen(false);
     } catch (error) {
@@ -120,7 +121,7 @@ export const DeleteApiKeyDialog = () => {
               href={`${i18n.language}/form-builder/${id}/settings/manage`}
             >
               <span>{t("settings.api.deleteApiKeyDialog.stopText1")}</span>
-            </Link>{" "}
+            </Link>
             <span>{t("settings.api.deleteApiKeyDialog.stopText2")}</span>
           </div>
         </Dialog>
