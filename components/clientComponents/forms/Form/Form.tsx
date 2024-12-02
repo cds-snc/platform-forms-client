@@ -251,6 +251,8 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
               handleSubmit(e);
             }}
             noValidate
+            // TODO: probably needed for the show-hide feature
+            // aria-live="polite"
           >
             {isGroupsCheck &&
               isShowReviewPage &&
