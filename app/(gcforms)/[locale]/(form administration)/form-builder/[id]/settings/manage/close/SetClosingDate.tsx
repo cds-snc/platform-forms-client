@@ -150,7 +150,7 @@ export const SetClosingDate = ({
           description={t("closingDate.status")}
         />
       </div>
-      <div className="mb-4">
+      <div className="mb-4" id="closing-date">
         {hasScheduleClosingDate && closingDate && (
           <ScheduledClosingDate closingDate={closingDate} language="en" />
         )}

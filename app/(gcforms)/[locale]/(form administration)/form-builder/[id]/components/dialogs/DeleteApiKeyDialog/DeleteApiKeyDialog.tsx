@@ -118,7 +118,7 @@ export const DeleteApiKeyDialog = () => {
             />{" "}
             <Link
               className="inline-block"
-              href={`${i18n.language}/form-builder/${id}/settings/manage`}
+              href={`/${i18n.language}/form-builder/${id}/settings/manage#closing-date`}
             >
               <span>{t("settings.api.deleteApiKeyDialog.stopText1")}</span>
             </Link>
