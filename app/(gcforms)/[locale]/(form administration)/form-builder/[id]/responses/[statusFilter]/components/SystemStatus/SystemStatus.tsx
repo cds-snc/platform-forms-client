@@ -12,7 +12,7 @@ export const SystemStatus = ({ formId, hasOverdue }: { formId: string; hasOverdu
       <div className="flex gap-4">
         <ResponsesAvailable formId={formId} />
         <ProblemsReported formId={formId} />
-        <OverdueResponses formId={formId} hasOverdue={hasOverdue} />
+        <OverdueResponses hasOverdue={hasOverdue} />
       </div>
     </div>
   );
