@@ -251,8 +251,10 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
               handleSubmit(e);
             }}
             noValidate
-            // TODO: probably needed for the show-hide feature
-            // aria-live="polite"
+            // Needed for the show-hide behavior. Not ideal because all child elements will inherit
+            // and could make AT announcing noisy/confusing. Override any noisy elements with a
+            // parent aria-live="off". There are caveats - See: TODO
+            aria-live="polite"
           >
             {isGroupsCheck &&
               isShowReviewPage &&
