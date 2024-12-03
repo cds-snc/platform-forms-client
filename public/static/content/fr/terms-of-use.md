@@ -32,7 +32,17 @@ Vous avez pour responsabilité :
 - de répondre aux conséquences opérationnelles ou aux conséquences sur le service du téléversement par des utilisateurs finaux ou utilisatrices finales de documents en guise de soumission à des fins de pollupostage.
 - d’accepter [les conditions d’utilisation de Notification GC](https://notification.canada.ca/conditions-dutilisation).
 
-### Réponses extraites de la base de données (jusqu’à Protégé B)
+### Réponses récupérées via l'API (jusqu'à Protégé A)
+
+Vous avez pour responsabilité :
+
+de veiller à ce que la clé API associée à votre formulaire soit sécurisée afin de protéger l'accès aux réponses du formulaire. Cela inclut :
+
+- enregistrer la clé API dans un endroit sûr d'une machine du gouvernement du Canada.
+- ne pas partager la clé API par courriel, dans les demandes de soutien ou dans un fichier de texte dans un référentiel source, car cela pourrait compromettre la confidentialité et la sécurité des réponses.
+- utiliser un courriel crypté, s'il est absolument nécessaire de transférer la clé privée de l'API au personnel autorisé, dans le but de configurer l'intégration de l'API.
+
+### Réponses téléchargées à partir de Formulaires GC (jusqu'à Protégé B)
 
 Vous avez pour responsabilité :
 
@@ -45,6 +55,7 @@ Vous avez pour responsabilité :
 
 - Utilisez une adresse courriel gouvernementale individuelle pour créer votre compte et pour l’authentification à deux facteurs.
 - Ne communiquez pas votre mot de passe à personne et ne le conservez pas dans un endroit où d’autres personnes pourraient le trouver. Si quelqu’un d’autre a besoin d’accéder à un formulaire, [contactez-nous](/fr/support).
+- Protégez vos clés API. Si vous pensez qu'une clé API a été compromise, supprimez-la et recréez-en une nouvelle pour sécuriser l'accès aux réponses de formulaire.
 - Assurer la confidentialité et la sécurité des renseignements protégées lors du téléchargement des réponses aux formulaires de Formulaires GC.
 - Signalez toute faille de sécurité et vulnérabilité en utilisant les étapes détaillées dans l’[avis de sécurité](https://numerique.canada.ca/avis-de-securite/).
 
@@ -74,4 +85,4 @@ Nous vous demandons de ne pas intervenir sur le format des fichiers JSON, car to
 
 Pour toute question en lien avec les présentes conditions d’utilisation, veuillez [nous contacter](/fr/contact).
 
-**Dernière mise à jour :** 2 juillet 2024
+**Dernière mise à jour :** 3 décembre 2024

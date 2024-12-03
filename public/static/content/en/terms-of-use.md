@@ -32,7 +32,17 @@ You are responsible for:
 - Addressing service or operational impacts due to end users uploading documents to submissions for the purpose of spamming.
 - Accepting [GC Notify's terms of use](https://notification.canada.ca/terms).
 
-### Responses retrieved from the database (up to PROTECTED B)
+### Responses retrieved via the API (up to Protected A)
+
+You are responsible for:
+
+Ensuring the API key associated with your form is secure to protect access to form response. This includes:
+
+- Storing the API key in a safe place on a Government of Canada machine.
+- Not sharing the API key by email, support requests, or in a plain text file in a source repository as this would compromise the privacy and security of responses.
+- Using encrypted email, if there is an absolute need to transfer the private API key to authorized staff, for the purpose of setting up the API integration.
+
+### Responses downloaded from GC Forms (up to PROTECTED B)
 
 You are responsible for:
 
@@ -45,6 +55,7 @@ You are responsible for:
 
 - Use a valid individual government email to create your account and for two-factor authentication (2FA).
 - Do not share your password with anyone or store it where others could find it. If someone else needs access to a form, [contact us](/en/support).
+- Safeguard your API keys. If you suspect an API key has been compromised, delete and re-create a new API key to secure access to form responses.
 - Ensure the privacy and security of protected information upon downloading form responses from GC Forms. If Responses are not saved and confirmed within 45 days, we will take necessary steps to ensure they are retrieved by the responsible program or service.
 - Report any security breach or vulnerability using the steps outlined in our [Security notice](https://digital.canada.ca/security-notice/).
 
@@ -74,4 +85,4 @@ We ask that clients not interfere with the format of JSON files, as any updates 
 
 For questions related to these terms of use, [contact us](/en/contact).
 
-**Last update:** July 2, 2024
+**Last update:** December 3, 2024
