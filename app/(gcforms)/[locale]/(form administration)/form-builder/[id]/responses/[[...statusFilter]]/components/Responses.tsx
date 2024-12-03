@@ -9,7 +9,7 @@ import { DownloadTable } from "./DownloadTable";
 import { NoResponses } from "./NoResponses";
 import { useTemplateStore } from "@lib/store/useTemplateStore";
 import { TitleAndDescription } from "./TitleAndDescription";
-import { NagLevel, VaultSubmissionList } from "@lib/types";
+import { NagLevel, VaultSubmissionOverview } from "@lib/types";
 import { RetrievalError } from "./RetrievalError";
 import { fetchSubmissions } from "../actions";
 import { StatusFilter } from "../types";
@@ -45,7 +45,7 @@ export const Responses = ({
 
   const [state, setState] = useState<{
     loading: boolean;
-    submissions: VaultSubmissionList[];
+    submissions: VaultSubmissionOverview[];
     lastEvaluatedKey: Record<string, string> | null | undefined;
     error: boolean;
   }>({ loading: true, submissions: [], lastEvaluatedKey: null, error: false });
