@@ -1,6 +1,6 @@
 "use client";
 import { CheckAllIcon, CheckBoxEmptyIcon, CheckIndeterminateIcon } from "@serverComponents/icons";
-import { VaultSubmissionOverview } from "@lib/types";
+import { VaultSubmissionList } from "@lib/types";
 import React from "react";
 import { useTranslation } from "@i18n/client";
 import { ReducerTableItemsActions, TableActions } from "./DownloadTableReducer";
@@ -15,7 +15,7 @@ export const CheckAll = ({
   tableItems: {
     checkedItems: Map<string, boolean>;
     statusItems: Map<string, boolean>;
-    allItems: VaultSubmissionOverview[];
+    allItems: VaultSubmissionList[];
     numberOfOverdueResponses: number;
   };
   tableItemsDispatch: React.Dispatch<ReducerTableItemsActions>;

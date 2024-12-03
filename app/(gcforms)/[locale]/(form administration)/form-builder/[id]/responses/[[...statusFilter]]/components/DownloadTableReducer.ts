@@ -1,5 +1,5 @@
 import { getDaysPassed } from "@lib/client/clientHelpers";
-import { VaultSubmissionOverview, VaultStatus } from "@lib/types";
+import { VaultSubmissionList, VaultStatus } from "@lib/types";
 
 export enum TableActions {
   UPDATE = "UPDATE",
@@ -9,7 +9,7 @@ export enum TableActions {
 interface ReducerTableItemsState {
   statusItems: Map<string, boolean>;
   checkedItems: Map<string, boolean>;
-  allItems: VaultSubmissionOverview[];
+  allItems: VaultSubmissionList[];
   numberOfOverdueResponses: number;
   overdueAfter: number | undefined;
 }
@@ -21,12 +21,12 @@ export interface ReducerTableItemsActions {
       name: string;
       checked: boolean;
     };
-    vaultSubmissions?: VaultSubmissionOverview[];
+    vaultSubmissions?: VaultSubmissionList[];
   };
 }
 
 export const initialTableItemsState = (
-  vaultSubmissions: VaultSubmissionOverview[],
+  vaultSubmissions: VaultSubmissionList[],
   overdueAfter: number | undefined
 ) => {
   return {
