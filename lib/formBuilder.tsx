@@ -100,8 +100,9 @@ function _buildForm(element: FormElement, lang: string): ReactElement {
   switch (element.type) {
     case FormElementTypes.textField:
       return (
-        <div className="focus-group gcds-input-wrapper" aria-live="off">
-          {labelComponent}
+        <div className="focus-group gcds-input-wrapper">
+          {/* live=off is a fix for #4766 */}
+          <div aria-live="off">{labelComponent}</div>
           {description && <Description id={`${id}`}>{description}</Description>}
           <TextInput
             type={textType}
@@ -117,8 +118,9 @@ function _buildForm(element: FormElement, lang: string): ReactElement {
       );
     case FormElementTypes.textArea:
       return (
-        <div className="focus-group gcds-textarea-wrapper" aria-live="off">
-          {labelComponent}
+        <div className="focus-group gcds-textarea-wrapper">
+          {/* live=off is a fix for #4766 */}
+          <div aria-live="off">{labelComponent}</div>
           {description && <Description id={`${id}`}>{description}</Description>}
           <TextArea
             id={`${id}`}
@@ -278,7 +280,7 @@ function _buildForm(element: FormElement, lang: string): ReactElement {
     case FormElementTypes.addressComplete: {
       const addressComponents = element.properties.addressComponents;
       return (
-        <div className="focus-group" aria-live="off">
+        <div className="focus-group">
           <AddressComplete
             label={labelText}
             id={`${id}`}
@@ -293,7 +295,7 @@ function _buildForm(element: FormElement, lang: string): ReactElement {
     }
     case FormElementTypes.formattedDate: {
       return (
-        <div className="focus-group" aria-live="off">
+        <div className="focus-group">
           <FormattedDate
             label={labelText}
             description={description}
