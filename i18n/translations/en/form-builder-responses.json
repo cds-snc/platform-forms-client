@@ -309,8 +309,8 @@
       "description": "Waiting for the API request to confirm retrieved submissions."
     },
     "overdue": {
-      "title": "Status: Overdue",
-      "description": "Some submissions are overdue for retrieval"
+      "title": "Overdue responses",
+      "description": "Retrieve and confirm submissions via the API"
     }
   }
 }
