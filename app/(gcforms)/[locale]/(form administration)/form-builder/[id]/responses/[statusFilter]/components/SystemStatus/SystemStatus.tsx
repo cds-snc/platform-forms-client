@@ -4,7 +4,7 @@ import { ResponsesAvailable } from "./ResponsesAvailable";
 import { ProblemsReported } from "./ProblemsReported";
 import { OverdueResponses } from "./OverdueResponses";
 
-export const SystemStatus = ({ formId }: { formId: string }) => {
+export const SystemStatus = ({ formId, hasOverdue }: { formId: string; hasOverdue: boolean }) => {
   const { t } = useTranslation("form-builder");
   return (
     <div>
@@ -12,7 +12,7 @@ export const SystemStatus = ({ formId }: { formId: string }) => {
       <div className="flex gap-4">
         <ResponsesAvailable formId={formId} />
         <ProblemsReported formId={formId} />
-        <OverdueResponses formId={formId} />
+        <OverdueResponses formId={formId} hasOverdue={hasOverdue} />
       </div>
     </div>
   );
