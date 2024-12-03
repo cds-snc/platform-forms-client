@@ -175,13 +175,15 @@ export async function createTemplate(command: CreateTemplateCommand): Promise<Fo
 
     return _parseTemplate(createdTemplate);
   } catch (e) {
-    if (e instanceof AccessControlError)
+    if (e instanceof AccessControlError) {
       logEvent(
         command.ability.userID,
         { type: "Form" },
         "AccessDenied",
         "Attempted to create a Form"
       );
+      throw e;
+    }
 
     return prismaErrors(e, null);
   }
@@ -381,7 +383,7 @@ export async function getFullTemplateByID(
   formID: string
 ): Promise<FormRecord | null> {
   try {
-    authorizationCheck(ability, [
+    await authorizationCheck(ability, [
       { action: "view", subject: { type: "FormRecord", scope: { subjectId: formID } } },
     ]);
 
@@ -474,7 +476,7 @@ export async function getTemplateWithAssociatedUsers(
  */
 export async function updateTemplate(command: UpdateTemplateCommand): Promise<FormRecord | null> {
   try {
-    authorizationCheck(command.ability, [
+    await authorizationCheck(command.ability, [
       { action: "update", subject: { type: "FormRecord", scope: { subjectId: command.formID } } },
     ]);
 
@@ -514,7 +516,7 @@ export async function updateTemplate(command: UpdateTemplateCommand): Promise<Fo
       })
       .catch((e) => prismaErrors(e, null));
 
-    if (updatedTemplate === null) return updatedTemplate;
+    if (updatedTemplate === null) throw new TemplateAlreadyPublishedError();
 
     if (formCache.cacheAvailable) formCache.invalidate(command.formID);
 
