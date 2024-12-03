@@ -4,10 +4,9 @@ import {
   QueryCommandInput,
   TransactWriteCommand,
   BatchWriteCommand,
-  GetCommand,
 } from "@aws-sdk/lib-dynamodb";
 import { prisma, prismaErrors } from "@lib/integration/prismaConnector";
-import { VaultSubmissionOverview, UserAbility, VaultStatus, VaultSubmission } from "@lib/types";
+import { VaultSubmissionList, UserAbility, VaultStatus, VaultSubmission } from "@lib/types";
 import { logEvent } from "./auditLogs";
 import {
   unprocessedSubmissionsCacheCheck,
@@ -91,38 +90,26 @@ export const submissionTypeExists = async (
       );
     throw e;
   });
-
-  const shouldNavigateThroughStatusCreatedAtIndexInAscendingOrder = (
-    status: VaultStatus
-  ): boolean => {
-    switch (status) {
-      case VaultStatus.CONFIRMED:
-      case VaultStatus.DOWNLOADED:
-        return true;
-      default:
-        return false;
-    }
-  };
-
-  const queryCommand = new QueryCommand({
+  const getItemsDbParams: QueryCommandInput = {
     TableName: "Vault",
-    IndexName: "StatusCreatedAt",
-    // To optimize query since we only need to check whether one type of submission type exists
-    ScanIndexForward: shouldNavigateThroughStatusCreatedAtIndexInAscendingOrder(status),
-    // Limit the amount of responses to 1.
+    IndexName: "Status",
+    // Limit the amount of responses 1.
     // A single record existing is enough to trigger the boolean
     Limit: 1,
-    KeyConditionExpression: "FormID = :formID AND begins_with(#statusCreatedAtKey, :status)",
-    ExpressionAttributeNames: {
-      "#statusCreatedAtKey": "Status#CreatedAt",
-    },
+    KeyConditionExpression: "FormID = :formID AND #status = :status",
+    // Sort by descending order of Status
+    ScanIndexForward: false,
     ExpressionAttributeValues: {
       ":formID": formID,
       ":status": status,
     },
+    ExpressionAttributeNames: {
+      "#status": "Status",
+    },
     ProjectionExpression: "FormID",
-  });
-
+  };
+  const queryCommand = new QueryCommand(getItemsDbParams);
+  // eslint-disable-next-line no-await-in-loop
   const response = await dynamoDBDocumentClient.send(queryCommand);
   return Boolean(response.Items?.length);
 };
@@ -139,7 +126,7 @@ export async function listAllSubmissions(
   responseDownloadLimit?: number,
   lastEvaluatedKey: Record<string, string> | null | undefined = null
 ): Promise<{
-  submissions: VaultSubmissionOverview[];
+  submissions: VaultSubmissionList[];
   submissionsRemaining: boolean;
   lastEvaluatedKey: Record<string, string> | null | undefined;
 }> {
@@ -164,41 +151,58 @@ export async function listAllSubmissions(
     // We're going to request one more than the limit so we can consistently determine if there are more responses
     const responseRetrievalLimit = responseDownloadLimit + 1;
 
-    let accumulatedResponses: VaultSubmissionOverview[] = [];
+    let accumulatedResponses: VaultSubmissionList[] = [];
     let submissionsRemaining = false;
     let paginationLastEvaluatedKey = null;
 
     while (lastEvaluatedKey !== undefined) {
-      const queryCommand: QueryCommand = new QueryCommand({
+      const getItemsDbParams: QueryCommandInput = {
         TableName: "Vault",
-        IndexName: "StatusCreatedAt",
+        IndexName: "Status",
         ExclusiveStartKey: lastEvaluatedKey ?? undefined,
         // Limit the amount of response to responseRetrievalLimit
         Limit: responseRetrievalLimit - accumulatedResponses.length,
-        KeyConditionExpression:
-          "FormID = :formID" + (status ? " AND begins_with(#statusCreatedAtKey, :status)" : ""),
-        ExpressionAttributeNames: {
-          "#statusCreatedAtKey": "Status#CreatedAt",
-          "#name": "Name",
-        },
+        KeyConditionExpression: "FormID = :formID" + (status ? " AND #status = :status" : ""),
+        // Sort by descending order of Status
+        ScanIndexForward: false,
         ExpressionAttributeValues: {
           ":formID": formID,
           ...(status && { ":status": status }),
         },
-        ProjectionExpression: "FormID,#name,CreatedAt",
-      });
-
+        ExpressionAttributeNames: {
+          "#status": "Status",
+          "#name": "Name",
+        },
+        ProjectionExpression:
+          "FormID,#status,SecurityAttribute,#name,CreatedAt,LastDownloadedBy,ConfirmTimestamp,DownloadedAt,RemovalDate",
+      };
+      const queryCommand = new QueryCommand(getItemsDbParams);
       // eslint-disable-next-line no-await-in-loop
       const response = await dynamoDBDocumentClient.send(queryCommand);
 
       if (response.Items?.length) {
         accumulatedResponses = accumulatedResponses.concat(
           response.Items.map(
-            ({ FormID: formID, Status: status, CreatedAt: createdAt, Name: name }) => ({
+            ({
+              FormID: formID,
+              SecurityAttribute: securityAttribute,
+              Status: status,
+              CreatedAt: createdAt,
+              LastDownloadedBy: lastDownloadedBy,
+              Name: name,
+              ConfirmTimestamp: confirmedAt,
+              DownloadedAt: downloadedAt,
+              RemovalDate: removedAt,
+            }) => ({
               formID,
               status,
+              securityAttribute,
               name,
               createdAt,
+              lastDownloadedBy: lastDownloadedBy ?? null,
+              confirmedAt: confirmedAt ?? null,
+              downloadedAt: downloadedAt ?? null,
+              removedAt: removedAt ?? null,
             })
           )
         );
@@ -253,57 +257,6 @@ export async function listAllSubmissions(
       logMessage.error(e);
     }
     return { submissions: [], submissionsRemaining: true, lastEvaluatedKey: undefined };
-  }
-}
-
-/**
- * This method returns the `RemovalDate` for a specific submission.
- * @param formID - The form ID of the response you want to retrieve
- * @param submissionName - The submission name of the response you want to retrieve
- */
-export async function retrieveSubmissionRemovalDate(
-  ability: UserAbility,
-  formID: string,
-  submissionName: string
-): Promise<number | undefined> {
-  // Check access control first
-  try {
-    await checkAbilityToAccessSubmissions(ability, formID).catch((e) => {
-      if (e instanceof AccessControlError)
-        logEvent(
-          ability.userID,
-          {
-            type: "Form",
-            id: formID,
-          },
-          "AccessDenied",
-          `Attempted to retrieve response for form ${formID}`
-        );
-      throw e;
-    });
-
-    const getCommand = new GetCommand({
-      TableName: "Vault",
-      Key: {
-        FormID: formID,
-        NAME_OR_CONF: `NAME#${submissionName}`,
-      },
-      ProjectionExpression: "RemovalDate",
-    });
-
-    const response = await dynamoDBDocumentClient.send(getCommand);
-
-    if (response.Item === undefined || response.Item["RemovalDate"] === undefined) {
-      return undefined;
-    }
-
-    return response.Item["RemovalDate"];
-  } catch (e) {
-    // Expected to error in APP_ENV test mode as dynamodb is not available
-    if (process.env.APP_ENV !== "test") {
-      logMessage.error(e);
-    }
-    return undefined;
   }
 }
 
