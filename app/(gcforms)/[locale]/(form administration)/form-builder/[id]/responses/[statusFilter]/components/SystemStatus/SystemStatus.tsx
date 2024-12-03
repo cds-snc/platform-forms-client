@@ -11,8 +11,8 @@ export const SystemStatus = ({ formId, hasOverdue }: { formId: string; hasOverdu
       <h3 className="mb-8">{t("systemHealthCheck.title")}</h3>
       <div className="flex gap-4">
         <ResponsesAvailable formId={formId} />
-        <ProblemsReported formId={formId} />
         <OverdueResponses hasOverdue={hasOverdue} />
+        <ProblemsReported formId={formId} />
       </div>
     </div>
   );
