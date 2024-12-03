@@ -2,6 +2,7 @@ import React from "react";
 import { useTranslation } from "react-i18next";
 import { ResponsesAvailable } from "./ResponsesAvailable";
 import { ProblemsReported } from "./ProblemsReported";
+import { OverdueResponses } from "./OverdueResponses";
 
 export const SystemStatus = ({ formId }: { formId: string }) => {
   const { t } = useTranslation("form-builder");
@@ -11,6 +12,7 @@ export const SystemStatus = ({ formId }: { formId: string }) => {
       <div className="flex gap-4">
         <ResponsesAvailable formId={formId} />
         <ProblemsReported formId={formId} />
+        <OverdueResponses formId={formId} />
       </div>
     </div>
   );
