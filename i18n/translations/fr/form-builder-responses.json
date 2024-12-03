@@ -309,8 +309,8 @@
       "description": "Les soumissions téléchargées peuvent être confirmées avec une demande API"
     },
     "overdue": {
-      "title": "Status: Overdue [FR]",
-      "description": "Some submissions are overdue for retrieval [FR]"
+      "title": "Réponses en retard",
+      "description": "Récupérez et confirmez les soumissions avec l'API"
     }
   }
 }
