@@ -553,6 +553,7 @@
     "text2": "",
     "vaultOption": "Responses to be downloaded",
     "emailOption": "Responses delivered by email — ",
+    "apiOption": "Responses retrieved by API",
     "change": "Change settings"
   },
   "logicPublishWarning": {
