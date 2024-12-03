@@ -178,7 +178,7 @@ export async function listAllSubmissions(
         KeyConditionExpression:
           "FormID = :formID" + (status ? " AND begins_with(#statusCreatedAtKey, :status)" : ""),
         ExpressionAttributeNames: {
-          "#statusCreatedAtKey": "Status#CreatedAt",
+          ...(status && { "#statusCreatedAtKey": "Status#CreatedAt" }),
           "#name": "Name",
         },
         ExpressionAttributeValues: {
