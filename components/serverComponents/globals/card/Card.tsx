@@ -25,7 +25,7 @@ export const Card = ({
   headingStyle?: string;
 }) => {
   return (
-    <div className="inline-flex justify-between rounded-lg border-2 border-solid border-[#ebf0f4] p-4">
+    <div className="inline-flex justify-between rounded-lg border-2 border-solid border-[#ebf0f4] bg-white p-4">
       {icon && <div>{icon}</div>}
       <div className="mx-8 mt-4 flex flex-col justify-start">
         {children && children}
