@@ -678,9 +678,7 @@ describe("Template CRUD functions", () => {
     });
 
     it("Get multiple Templates", async () => {
-      await expect(async () => {
-        await getAllTemplates(user1Ability);
-      }).rejects.toBeInstanceOf(AccessControlError);
+      await expect(getAllTemplates(user1Ability)).rejects.toBeInstanceOf(AccessControlError);
       expect(mockedLogEvent).toHaveBeenNthCalledWith(
         1,
         user1Ability.userID,
@@ -690,9 +688,9 @@ describe("Template CRUD functions", () => {
       );
     });
     it("Get a template", async () => {
-      await expect(async () => {
-        await getFullTemplateByID(user1Ability, "1");
-      }).rejects.toBeInstanceOf(AccessControlError);
+      await expect(getFullTemplateByID(user1Ability, "1")).rejects.toBeInstanceOf(
+        AccessControlError
+      );
       expect(mockedLogEvent).toHaveBeenNthCalledWith(
         1,
         user1Ability.userID,
@@ -703,13 +701,13 @@ describe("Template CRUD functions", () => {
     });
 
     it("Update a template", async () => {
-      await expect(async () => {
-        await updateTemplate({
+      await expect(
+        updateTemplate({
           ability: user1Ability,
           formID: "test1",
           formConfig: structuredClone(formConfiguration as FormProperties),
-        });
-      }).rejects.toBeInstanceOf(AccessControlError);
+        })
+      ).rejects.toBeInstanceOf(AccessControlError);
       expect(mockedLogEvent).toHaveBeenNthCalledWith(
         1,
         user1Ability.userID,
@@ -719,9 +717,9 @@ describe("Template CRUD functions", () => {
       );
     });
     it("Update `isPublished` on a specific form", async () => {
-      await expect(async () => {
-        await updateIsPublishedForTemplate(user1Ability, "formtestID", true, "", "", "");
-      }).rejects.toBeInstanceOf(AccessControlError);
+      await expect(
+        updateIsPublishedForTemplate(user1Ability, "formtestID", true, "", "", "")
+      ).rejects.toBeInstanceOf(AccessControlError);
       expect(mockedLogEvent).toHaveBeenNthCalledWith(
         1,
         user1Ability.userID,
@@ -732,9 +730,9 @@ describe("Template CRUD functions", () => {
     });
 
     it("Remove DeliveryOption from template", async () => {
-      await expect(async () => {
-        await removeDeliveryOption(user1Ability, "formtestID");
-      }).rejects.toBeInstanceOf(AccessControlError);
+      await expect(removeDeliveryOption(user1Ability, "formtestID")).rejects.toBeInstanceOf(
+        AccessControlError
+      );
       expect(mockedLogEvent).toHaveBeenNthCalledWith(
         1,
         user1Ability.userID,
@@ -745,9 +743,9 @@ describe("Template CRUD functions", () => {
     });
 
     it("Delete template", async () => {
-      await expect(async () => {
-        await deleteTemplate(user1Ability, "formtestID");
-      }).rejects.toBeInstanceOf(AccessControlError);
+      await expect(deleteTemplate(user1Ability, "formtestID")).rejects.toBeInstanceOf(
+        AccessControlError
+      );
       expect(mockedLogEvent).toHaveBeenNthCalledWith(
         1,
         user1Ability.userID,

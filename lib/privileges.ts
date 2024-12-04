@@ -41,8 +41,8 @@ export const createAbility = (session: Session): UserAbility => {
 
 // Creates a new custom Error Class
 export class AccessControlError extends Error {
-  constructor(message?: string) {
-    super(message ?? "AccessControlError");
+  constructor(message: string = "AccessControlError") {
+    super(message);
     Object.setPrototypeOf(this, AccessControlError.prototype);
   }
 }
@@ -479,77 +479,68 @@ export const authorizationCheck = async (
   }[],
   logic: "all" | "one" = "all"
 ): Promise<void> => {
-  try {
-    // Create a local scoped memory cache to store the subject objects between rules
-    const cache = new Map();
+  // Create a local scoped memory cache to store the subject objects between rules
+  const cache = new Map();
 
-    const result = await Promise.all(
-      rules.flatMap(async ({ action, subject, fields }) => {
-        const subjectsToValidate = await _retrieveSubjects(cache, subject);
+  const result = await Promise.all(
+    rules.flatMap(async ({ action, subject, fields }) => {
+      const subjectsToValidate = await _retrieveSubjects(cache, subject);
 
-        return subjectsToValidate.flatMap((subjectToValidate) => {
-          if (fields) {
-            return fields?.map((f) => {
-              const ruleResult = ability.can(
-                action,
-                setSubjectType(subject.type, subjectToValidate),
-                f
-              );
-              logMessage.debug(
-                `Privilege Check ${ruleResult ? "PASS" : "FAIL"}: Can ${action} on ${
-                  subject.type
-                } ${fields && `for field ${fields}`} `
-              );
-              return ruleResult;
-            });
-          } else {
-            // There are no fields to validate
-            const ruleResult = ability.can(action, setSubjectType(subject.type, subjectToValidate));
+      return subjectsToValidate.flatMap((subjectToValidate) => {
+        if (fields) {
+          return fields?.map((f) => {
+            const ruleResult = ability.can(
+              action,
+              setSubjectType(subject.type, subjectToValidate),
+              f
+            );
             logMessage.debug(
               `Privilege Check ${ruleResult ? "PASS" : "FAIL"}: Can ${action} on ${subject.type} ${
                 fields && `for field ${fields}`
               } `
             );
             return ruleResult;
-          }
-        });
-      })
-    ).then((results) => results.flat());
+          });
+        } else {
+          // There are no fields to validate
+          const ruleResult = ability.can(action, setSubjectType(subject.type, subjectToValidate));
+          logMessage.debug(
+            `Privilege Check ${ruleResult ? "PASS" : "FAIL"}: Can ${action} on ${subject.type} ${
+              fields && `for field ${fields}`
+            } `
+          );
+          return ruleResult;
+        }
+      });
+    })
+  )
+    .then((results) => results.flat())
+    .catch((e) => {
+      logMessage.error(`Error in privilege check: ${e}`);
+      //  On any error in the promise chain, default to forbidden
+      throw new Error(`Access Control Forbidden Action`);
+    });
 
-    let accessAllowed = false;
+  let accessAllowed = false;
 
-    switch (logic) {
-      case "all":
-        // The initial value needs to be true because of the AND logic
-        accessAllowed = result.reduce((prev, curr) => prev && curr, true);
-        break;
-      case "one":
-        accessAllowed = result.reduce((prev, curr) => prev || curr, false);
-        break;
-    }
-    if (!accessAllowed) {
-      throw new AccessControlError(`Access Control Forbidden Action`);
-    }
-  } catch {
-    // If there is any error in privilege checking default to forbidden
-    // Do not create an audit log as the error is with the system itself
-    throw new AccessControlError(`Access Control Forbidden Action`);
+  switch (logic) {
+    case "all":
+      // The initial value needs to be true because of the AND logic
+      accessAllowed = result.reduce((prev, curr) => prev && curr, true);
+      break;
+    case "one":
+      accessAllowed = result.reduce((prev, curr) => prev || curr, false);
+      break;
+  }
+  if (!accessAllowed) {
+    throw new Error(`Access Control Forbidden Action`);
   }
 };
 
 export const authorizationCheckAsBoolean = async (
-  ability: UserAbility,
-  rules: {
-    action: Action;
-    subject: { type: Extract<Subject, string>; id?: string };
-    field?: string | string[];
-  }[],
-  options?: {
-    logic?: "all" | "one";
-    redirect?: boolean;
-  }
-): Promise<boolean> => {
-  return authorizationCheck(ability, rules, options?.logic ?? "all")
+  ...args: Parameters<typeof authorizationCheck>
+) => {
+  return authorizationCheck(...args)
     .then(() => true)
     .catch(() => false);
 };

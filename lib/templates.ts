@@ -127,12 +127,20 @@ export class TemplateHasUnprocessedSubmissions extends Error {
  * @returns Form Record or null if creation was not sucessfull.
  */
 export async function createTemplate(command: CreateTemplateCommand): Promise<FormRecord | null> {
-  try {
-    await authorizationCheck(command.ability, [
-      { action: "create", subject: { type: "FormRecord", scope: "all" } },
-    ]);
+  await authorizationCheck(command.ability, [
+    { action: "create", subject: { type: "FormRecord", scope: "all" } },
+  ]).catch((e) => {
+    logEvent(
+      command.ability.userID,
+      { type: "Form" },
+      "AccessDenied",
+      "Attempted to create a Form"
+    );
+    throw e;
+  });
 
-    const createdTemplate = await prisma.template.create({
+  const createdTemplate = await prisma.template
+    .create({
       data: {
         jsonConfig: command.formConfig as Prisma.JsonObject,
         ...(command.name && {
@@ -169,24 +177,14 @@ export async function createTemplate(command: CreateTemplateCommand): Promise<Fo
         publishFormType: true,
         publishDesc: true,
       },
-    });
+    })
+    .catch((e) => prismaErrors(e, null));
 
-    logEvent(command.ability.userID, { type: "Form", id: createdTemplate?.id }, "CreateForm");
+  if (createdTemplate === null) return null;
 
-    return _parseTemplate(createdTemplate);
-  } catch (e) {
-    if (e instanceof AccessControlError) {
-      logEvent(
-        command.ability.userID,
-        { type: "Form" },
-        "AccessDenied",
-        "Attempted to create a Form"
-      );
-      throw e;
-    }
+  logEvent(command.ability.userID, { type: "Form", id: createdTemplate?.id }, "CreateForm");
 
-    return prismaErrors(e, null);
-  }
+  return _parseTemplate(createdTemplate);
 }
 
 /**
