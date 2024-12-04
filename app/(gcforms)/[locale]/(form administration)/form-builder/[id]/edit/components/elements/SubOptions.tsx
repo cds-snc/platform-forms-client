@@ -7,23 +7,8 @@ import { SubOption } from "./SubOption";
 import { Button } from "@clientComponents/globals";
 import { FormElementWithIndex } from "@lib/types/form-builder-types";
 
-const AddButton = ({ elId, onClick }: { elId: number; onClick: (elId: number) => void }) => {
+const AddOption = ({ elId, subIndex }: { elId: number; subIndex: number }) => {
   const { t } = useTranslation("form-builder");
-  return (
-    <Button
-      className="!m-0 !mt-4"
-      theme="link"
-      id={`sub-add-option-${elId}`}
-      onClick={() => {
-        onClick(elId);
-      }}
-    >
-      {t("addOption")}
-    </Button>
-  );
-};
-
-const AddOptions = ({ elId, subIndex }: { elId: number; subIndex: number }) => {
   const { addSubChoice, setFocusInput, setChangeKey } = useTemplateStore((s) => ({
     addSubChoice: s.addSubChoice,
     setFocusInput: s.setFocusInput,
@@ -32,14 +17,18 @@ const AddOptions = ({ elId, subIndex }: { elId: number; subIndex: number }) => {
 
   return (
     <>
-      <AddButton
-        elId={elId}
+      <Button
+        className="!m-0 !mt-4"
+        theme="link"
+        id={`sub-add-option-${elId}`}
         onClick={() => {
           setFocusInput(true);
           addSubChoice(elId, subIndex);
           setChangeKey(String(new Date().getTime()));
         }}
-      />
+      >
+        {t("addOption")}
+      </Button>
     </>
   );
 };
@@ -66,7 +55,7 @@ export const SubOptions = ({
   const choices = element?.properties.choices || [{ en: "", fr: "" }];
 
   if (!choices) {
-    return <AddOptions elId={item.id} subIndex={subIndex} />;
+    return <AddOption elId={item.id} subIndex={subIndex} />;
   }
 
   const options = choices.map((child, choiceIndex) => {
@@ -91,7 +80,7 @@ export const SubOptions = ({
   return (
     <div className="mt-5">
       {options}
-      <AddOptions elId={item.id} subIndex={subIndex} />
+      <AddOption elId={item.id} subIndex={subIndex} />
     </div>
   );
 };
