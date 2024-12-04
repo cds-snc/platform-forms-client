@@ -7,6 +7,7 @@ import { checkKeyExists } from "@lib/serviceAccount";
 import { ResponsesContainer } from "./components/ResponsesContainer";
 import { redirect } from "next/navigation";
 import { StatusFilter } from "./types";
+import { getOverdueTemplateIds } from "@lib/overdue";
 
 export async function generateMetadata({
   params: { locale },
@@ -119,8 +120,12 @@ export default async function Page({
     isApiRetrieval
   );
 
+  const overdueTemplateIds = await getOverdueTemplateIds([id]);
+  const hasOverdue = overdueTemplateIds.length > 0;
+
   return (
     <ResponsesContainer
+      hasOverdue={hasOverdue}
       responseDownloadLimit={Number(await getAppSetting("responseDownloadLimit"))}
       overdueAfter={Number(await getAppSetting("nagwarePhaseEncouraged"))}
       statusFilter={statusFilter as StatusFilter}

@@ -16,6 +16,7 @@ import { StatusFilter } from "../types";
 import { SystemStatus } from "../../[statusFilter]/components/SystemStatus/SystemStatus";
 
 export interface ResponsesProps {
+  hasOverdue: boolean;
   responseDownloadLimit: number;
   overdueAfter: number;
   statusFilter: StatusFilter;
@@ -23,6 +24,7 @@ export interface ResponsesProps {
 }
 
 export const Responses = ({
+  hasOverdue,
   responseDownloadLimit,
   overdueAfter,
   statusFilter,
@@ -87,7 +89,7 @@ export const Responses = ({
         <div aria-live="polite">
           {state.submissions.length > 0 ? (
             <>
-              <SystemStatus formId={formId} />
+              <SystemStatus formId={formId} hasOverdue={hasOverdue} />
               <DownloadTable
                 statusFilter={statusFilter}
                 vaultSubmissions={state.submissions}
