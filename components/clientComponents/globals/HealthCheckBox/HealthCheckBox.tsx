@@ -67,7 +67,7 @@ export const BoxContainer = ({
         className
       )}
     >
-      <div className="grid justify-items-center gap-1">{children}</div>
+      <div className="grid justify-items-center gap-1 text-center">{children}</div>
     </div>
   );
 };
