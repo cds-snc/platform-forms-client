@@ -78,7 +78,7 @@ export const Success = ({ children, titleKey, status }: HealthCheckBoxProps) => 
       {status ? status : <IconStatus status={ErrorStatus.SUCCESS} />}
       <div className="flex flex-col items-center justify-center">
         {titleKey && <Title i18nKey={titleKey} />}
-        <div className="text-blue-dark">{children}</div>
+        <div className="text-sm text-blue-dark">{children}</div>
       </div>
     </BoxContainer>
   );
@@ -90,7 +90,7 @@ export const Danger = ({ children, titleKey, status }: HealthCheckBoxProps) => {
       {status ? status : <IconStatus status={ErrorStatus.ERROR} />}
       <div className="flex flex-col items-center justify-center">
         {titleKey && <Title i18nKey={titleKey} />}
-        <div className="text-blue-dark">{children}</div>
+        <div className="text-sm text-blue-dark">{children}</div>
       </div>
     </BoxContainer>
   );
@@ -102,7 +102,7 @@ export const Warning = ({ children, titleKey, status }: HealthCheckBoxProps) => 
       {status ? status : <IconStatus status={ErrorStatus.WARNING} />}
       <div className="flex flex-col items-center justify-center">
         {titleKey && <Title i18nKey={titleKey} />}
-        <div className="text-blue-dark">{children}</div>
+        <div className="text-sm text-blue-dark">{children}</div>
       </div>
     </BoxContainer>
   );
