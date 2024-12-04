@@ -63,7 +63,7 @@ export const BoxContainer = ({
   return (
     <div
       className={cn(
-        "mb-10 grid justify-items-center  min-w-80 max-w-96 border-1 px-6 py-4",
+        "mb-10 grid justify-items-center min-w-80 max-w-96 border-1 px-4 py-4",
         className
       )}
     >
