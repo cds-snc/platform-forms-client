@@ -50,6 +50,7 @@ export type dynamicRowType = {
 
 // used to define attributes for the properties of an element in the form
 export interface ElementProperties {
+  tag?: string;
   titleEn: string;
   titleFr: string;
   placeholderEn?: string;
