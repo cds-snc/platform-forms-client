@@ -36,6 +36,7 @@ export const SubOption = ({
     setFocusInput,
     translationLanguagePriority,
     getLocalizationAttribute,
+    setChangeKey,
   } = useTemplateStore((s) => ({
     addSubChoice: s.addSubChoice,
     removeSubChoice: s.removeSubChoice,
@@ -44,6 +45,7 @@ export const SubOption = ({
     getFocusInput: s.getFocusInput,
     translationLanguagePriority: s.translationLanguagePriority,
     getLocalizationAttribute: s.getLocalizationAttribute,
+    setChangeKey: s.setChangeKey,
   }));
 
   const icon = renderIcon && renderIcon(index);
@@ -65,7 +67,8 @@ export const SubOption = ({
   const handleKeyDown = (e: React.KeyboardEvent<HTMLElement>) => {
     if (e.key === "Enter") {
       setFocusInput(true);
-      addSubChoice(elIndex, subIndex);
+      addSubChoice(id, subIndex);
+      setChangeKey(String(new Date().getTime()));
     }
   };
 
@@ -94,8 +97,8 @@ export const SubOption = ({
   );
 
   return (
-    <div className="flex mt-3">
-      <div className="flex mt-2 w-5 justify-end">{icon}</div>
+    <div className="mt-3 flex">
+      <div className="mt-2 flex w-5 justify-end">{icon}</div>
       <Input
         id={`option--${id}--${index + 1}`}
         ref={input}
@@ -106,7 +109,7 @@ export const SubOption = ({
           updateValue(elIndex, subIndex, index, e.target.value)
         }
         onKeyDown={handleKeyDown}
-        className="ml-5 w-full max-h-9 !my-0"
+        className="!my-0 ml-5 max-h-9 w-full"
         {...getLocalizationAttribute()}
       />
       <Button
@@ -114,11 +117,12 @@ export const SubOption = ({
         className="group"
         id={`remove--${id}--${index + 1}`}
         icon={
-          <Close className="group-focus:fill-white-default bg-gray-selected hover:bg-gray-600" />
+          <Close className="bg-gray-selected hover:bg-gray-600 group-focus:fill-white-default" />
         }
         aria-label={`${t("removeOption")} ${value}`}
         onClick={() => {
-          removeSubChoice(elIndex, subIndex, index);
+          removeSubChoice(id, subIndex, index);
+          setChangeKey(String(new Date().getTime()));
         }}
       ></Button>
     </div>
