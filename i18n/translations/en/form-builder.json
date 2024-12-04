@@ -1234,9 +1234,9 @@
   "goBack": "Go back",
   "disabled": "disabled",
   "dynamicRow": {
-    "defaultRowTitle": "Instance",
-    "rowTitleTextA11yEn": "Instance",
-    "rowTitleTextA11yFr": "Instance",
+    "defaultRowTitle": "Entry",
+    "rowTitleTextA11yEn": "Entry",
+    "rowTitleTextA11yFr": "Entry",
     "defaultAddButtonText": "Add",
     "addButtonTextA11yEn": "Add to set button text in English",
     "addButtonTextA11yFr": "Add to set button text in French",
@@ -1244,7 +1244,7 @@
     "removeButtonTextA11yEn": "Remove from set button text in English",
     "removeButtonTextA11yFr": "Remove from set button text in French",
     "translate": {
-      "rowTitleText": "Instance label",
+      "rowTitleText": "Entry label",
       "repeatingSet": "Repeating set",
       "addButtonText": "Button label - Add to set",
       "removeButtonText": "Button label - Remove from set"

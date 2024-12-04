@@ -1234,9 +1234,9 @@
   "goBack": "Retourner",
   "disabled": "désactivé",
   "dynamicRow": {
-    "defaultRowTitle": "Instance",
-    "rowTitleTextA11yEn": "Instance",
-    "rowTitleTextA11yFr": "Instance",
+    "defaultRowTitle": "Entrée",
+    "rowTitleTextA11yEn": "Entrée",
+    "rowTitleTextA11yFr": "Entrée",
     "defaultAddButtonText": "Ajouter",
     "addButtonTextA11yEn": "Texte du bouton pour ajouter à l'ensemble en anglais",
     "addButtonTextA11yFr": "Texte du bouton pour ajouter à l'ensemble en français",
@@ -1244,7 +1244,7 @@
     "removeButtonTextA11yEn": "Texte du bouton pour supprimer de l'ensemble en anglais",
     "removeButtonTextA11yFr": "Texte du bouton pour supprimer de l'ensemble en français",
     "translate": {
-      "rowTitleText": "Étiquette pour l'instance",
+      "rowTitleText": "Étiquette pour l'entrée",
       "repeatingSet": "Ensemble récurrent",
       "addButtonText": "Étiquette pour le bouton qui permet l'ajout à l'ensemble",
       "removeButtonText": "Étiquette pour le bouton qui permet la suppression de l'ensemble"
@@ -1261,7 +1261,7 @@
         "message": "Assurez-vous de remplir tous les champs."
       },
       "rowTitle": {
-        "title": "Nom de l'ensemble de questions",
+        "title": "Nom de l'entrée",
         "description": "Créez un titre pour le groupe de questions récurrentes. Ces ensembles seront numérotés. Par exemple : « Adresse -1, Adresse 2 »"
       },
       "addButton": {
