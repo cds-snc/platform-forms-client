@@ -47,7 +47,7 @@ export const Combobox = (props: ComboboxProps): React.ReactElement => {
           data-testid="combobox-input"
           {...(field?.value && { value: field.value || "" })}
           onKeyUp={(e) => {
-            // Clear the form on escape. onKeyDown breaks other key interactions, why using onKeyUp
+            // Clear the input on escape. onKeyDown breaks other key interactions, why using onKeyUp
             if (e.key === "Escape") {
               setValue("");
             }
