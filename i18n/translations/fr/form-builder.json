@@ -456,9 +456,9 @@
     "title": "Télécharger le fichier du formulaire"
   },
   "switchToApiMode": {
-    "title": "Switch to API delivery [FR]",
-    "description": "New responses will be available through the API endpoint [FR]",
-    "btnText": "Switch to API delivery [FR]"
+    "title": "Passer à la livraison par API",
+    "description": "Les nouvelles soumissions seront disponibles via le point de terminaison de l'API.",
+    "btnText": "Passer à la livraison par API"
   },
   "formIntroduction": "Introduction du formulaire ",
   "formInvalidProperty": "Invalide : {{property}}",
@@ -553,6 +553,7 @@
     "text2": "",
     "vaultOption": "Réponses à télécharger",
     "emailOption": "Réponses envoyées par courriel — ",
+    "apiOption": "Réponses récupérées avec l'API",
     "change": "Modifier ces paramètres"
   },
   "logicPublishWarning": {
@@ -644,11 +645,15 @@
         "message": "Les nouvelles réponses peuvent maintenant être téléchargées sur la",
         "responseLinkText": "page Réponses"
       },
+      "deleteApiKeyToChangeOptions": {
+        "title": "Supprimer la clé API pour modifier la méthode de livraison",
+        "message": "Afin de sélectionner une autre option, vous devez d'abord supprimer la clé API."
+      },
       "generateKeySuccess": {
-        "title": "API key generated",
-        "message": "New responses are now available through the API . Instructions and code examples are available in our",
-        "docsLinkText": "API documentation",
-        "docsLink": "https://cds-snc.github.io/forms-api/home/"
+        "title": "La clé API a été créée",
+        "message": "Les nouvelles réponses seront disponibles par l'API. Trouvez des instructions pour la configuration de l'intégration dans ",
+        "docsLinkText": "la documentation API",
+        "docsLink": "https://cds-snc.github.io/forms-api/accueil/"
       },
       "keyExists": "La clé existe déjà",
       "keyIdToolTip": {
@@ -678,7 +683,7 @@
         "responsibility1": "L'enregistrement de cette clé dans un endroit sûr.",
         "responsibility2": "Le partage de cette clé uniquement avec les personnes qui en ont besoin.",
         "responsibility3": "L'envoi de cette clé par des voies sécurisées, comme un courriel crypté.",
-        "responsibility4": "La compréhension des <a href='canada.ca' target='_blank'>procédures de sécurité requises.</a>",
+        "responsibility4": "La compréhension des <a href='https://forms-formulaires.alpha.canada.ca/fr/terms-of-use' target='_blank'>conditions d'utilisation.</a>",
         "text1": "Ne perdez pas votre clé ",
         "text2": "Cette clé n'est fournie qu'une seule fois, car elle permet d'accéder aux données des réponses au formulaire. Si vous perdez cette clé ou si elle est compromise, vous devrez en créer une nouvelle.",
         "cancelButton": "Annuler",
@@ -686,7 +691,7 @@
         "confirm": {
           "label": "Confirmation",
           "required": "(obligatoire)",
-          "description": "Saisissez <strong>ACCEPTE</strong> dans la case ci-dessous pour confirmer que vous comprenez vos responsabilités et que vous acceptez les <a href='canada.ca' target='_blank'>procédures de sécurité requises</a> lors de l'enregistrement et du partage de cette clé."
+          "description": "Saisissez <strong>ACCEPTE</strong> dans la case ci-dessous pour confirmer que vous comprenez vos responsabilités et que vous acceptez les <a href='https://forms-formulaires.alpha.canada.ca/fr/terms-of-use' target='_blank'>conditions d'utilisation</a> lors de l'enregistrement et du partage de cette clé."
         },
         "error": {
           "createFailed": {
@@ -986,13 +991,13 @@
       "note": "Non disponible pour PROTÉGÉ B"
     },
     "apiOption": {
-      "label": "Recevoir les réponses via l'API.",
-      "note": "Les réponses soumises pourront être récupérées par l'intermédiaire d'un point de terminaison API et de la page de réponses.",
-      "startNote": "Commencez votre intégration API en créant une clé API privée."
+      "label": "Récupérer les réponses avec l'API.",
+      "note": "Les réponses soumises seront disponibles par l'intermédiaire d'un point de terminaison API.",
+      "startNote": "Commencez par créer une clé API."
     },
     "apiDocNotes": {
-      "title": "Documentation API",
-      "text1": "Pour vous connecter à notre point de terminaison, suivez les instructions et les exemples de code dans la <a href='https://cds-snc.github.io/forms-api/accueil' target='_blank'>Documentation technique</a>."
+      "title": "Configurez votre intégration API",
+      "text1": "Pour vous connecter à notre point de terminaison, suivez les instructions et les exemples de code dans la <a href='https://cds-snc.github.io/forms-api/accueil' target='_blank'>Documentation API</a>."
     },
     "vaultNote": {
       "text1": "Les réponses aux formulaires PROTÉGÉ B doivent être téléchargées de Formulaires GC",
@@ -1013,7 +1018,7 @@
   "closingDate": {
     "title": "Accepter les soumissions de formulaires",
     "description": "Une fois que vous avez publié un formulaire, il est ouvert aux soumissions. Vous pouvez fermer le formulaire pour empêcher les soumissions.",
-    "status": "État du formulaire",
+    "status": "du formulaire",
     "open": "Ouvert",
     "closed": "Fermé",
     "saveButton": "Enregistrer les modifications",
@@ -1293,6 +1298,6 @@
     }
   },
   "systemHealthCheck": {
-    "title": "Bilan de santé du système"
+    "title": "Santé du système"
   }
 }
