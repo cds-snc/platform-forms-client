@@ -307,6 +307,10 @@
     "awatingConfirm": {
       "title": "Status: Awaiting confirmation",
       "description": "Waiting for the API request to confirm retrieved submissions."
+    },
+    "overdue": {
+      "title": "Overdue responses",
+      "description": "Retrieve and confirm submissions via the API"
     }
   }
 }

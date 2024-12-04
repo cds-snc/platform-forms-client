@@ -307,6 +307,10 @@
     "awatingConfirm": {
       "title": "État : En attente de confirmation",
       "description": "Les soumissions téléchargées peuvent être confirmées avec une demande API"
+    },
+    "overdue": {
+      "title": "Réponses en retard",
+      "description": "Récupérez et confirmez les soumissions avec l'API"
     }
   }
 }
