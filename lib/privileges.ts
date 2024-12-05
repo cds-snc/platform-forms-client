@@ -505,9 +505,7 @@ export const authorizationCheck = async (
           // There are no fields to validate
           const ruleResult = ability.can(action, setSubjectType(subject.type, subjectToValidate));
           logMessage.debug(
-            `Privilege Check ${ruleResult ? "PASS" : "FAIL"}: Can ${action} on ${subject.type} ${
-              fields && `for field ${fields}`
-            } `
+            `Privilege Check ${ruleResult ? "PASS" : "FAIL"}: Can ${action} on ${subject.type}`
           );
           return ruleResult;
         }
@@ -518,7 +516,7 @@ export const authorizationCheck = async (
     .catch((e) => {
       logMessage.error(`Error in privilege check: ${e}`);
       //  On any error in the promise chain, default to forbidden
-      throw new Error(`Access Control Forbidden Action`);
+      throw new AccessControlError(`Access Control Forbidden Action`);
     });
 
   let accessAllowed = false;
@@ -533,7 +531,7 @@ export const authorizationCheck = async (
       break;
   }
   if (!accessAllowed) {
-    throw new Error(`Access Control Forbidden Action`);
+    throw new AccessControlError(`Access Control Forbidden Action`);
   }
 };
 
