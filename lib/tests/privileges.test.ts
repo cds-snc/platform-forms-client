@@ -292,6 +292,26 @@ describe("authorizationCheck", () => {
             ])
           ).rejects.toThrow(AccessControlError);
         });
+        it("modify another user", async () => {
+          const ability = createAbility(user1.session);
+
+          (prismaMock.user.findUniqueOrThrow as jest.MockedFunction<any>).mockResolvedValue(
+            user2.db
+          );
+
+          await expect(
+            authorizationCheck(ability, [
+              {
+                action: "update",
+                subject: {
+                  type: "User",
+                  scope: { subjectId: user2.session.user.id },
+                },
+                fields: ["name"],
+              },
+            ])
+          ).rejects.toThrow(AccessControlError);
+        });
       });
     });
     describe("Setting", () => {
