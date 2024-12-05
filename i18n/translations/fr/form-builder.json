@@ -991,13 +991,13 @@
       "note": "Non disponible pour PROTÉGÉ B"
     },
     "apiOption": {
-      "label": "Récupérer les réponses avec l'API.",
+      "label": "Intégrer avec l'API",
       "note": "Les réponses soumises seront disponibles par l'intermédiaire d'un point de terminaison API.",
       "startNote": "Commencez par créer une clé API."
     },
     "apiDocNotes": {
       "title": "Configurez votre intégration API",
-      "text1": "Pour vous connecter à notre point de terminaison, suivez les instructions et les exemples de code dans la <a href='https://cds-snc.github.io/forms-api/accueil' target='_blank'>Documentation API</a>."
+      "text1": "Pour vous connecter à notre point de terminaison afin de récupérer des réponses, suivez la <a href='https://cds-snc.github.io/forms-api/accueil' target='_blank'>Documentation API</a> pour développeurs."
     },
     "vaultNote": {
       "text1": "Les réponses aux formulaires PROTÉGÉ B doivent être téléchargées de Formulaires GC",
