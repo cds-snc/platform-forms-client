@@ -7,43 +7,28 @@ import { SubOption } from "./SubOption";
 import { Button } from "@clientComponents/globals";
 import { FormElementWithIndex } from "@lib/types/form-builder-types";
 
-const AddButton = ({
-  elIndex,
-  onClick,
-}: {
-  elIndex: number;
-  onClick: (elIndex: number) => void;
-}) => {
+const AddOption = ({ elId, subIndex }: { elId: number; subIndex: number }) => {
   const { t } = useTranslation("form-builder");
-  return (
-    <Button
-      className="!m-0 !mt-4"
-      theme="link"
-      id={`sub-add-option-${elIndex}`}
-      onClick={() => {
-        onClick(elIndex);
-      }}
-    >
-      {t("addOption")}
-    </Button>
-  );
-};
-
-const AddOptions = ({ elIndex, subIndex }: { elIndex: number; subIndex: number }) => {
-  const { addSubChoice, setFocusInput } = useTemplateStore((s) => ({
+  const { addSubChoice, setFocusInput, setChangeKey } = useTemplateStore((s) => ({
     addSubChoice: s.addSubChoice,
     setFocusInput: s.setFocusInput,
+    setChangeKey: s.setChangeKey,
   }));
 
   return (
     <>
-      <AddButton
-        elIndex={elIndex}
+      <Button
+        className="!m-0 !mt-4"
+        theme="link"
+        id={`sub-add-option-${elId}`}
         onClick={() => {
           setFocusInput(true);
-          addSubChoice(elIndex, subIndex);
+          addSubChoice(elId, subIndex);
+          setChangeKey(String(new Date().getTime()));
         }}
-      />
+      >
+        {t("addOption")}
+      </Button>
     </>
   );
 };
@@ -59,20 +44,18 @@ export const SubOptions = ({
   elIndex: number;
   renderIcon?: RenderIcon;
 }) => {
-  const { elements, translationLanguagePriority } = useTemplateStore((s) => ({
-    elements: s.form.elements,
+  const { translationLanguagePriority, getFormElementById } = useTemplateStore((s) => ({
     translationLanguagePriority: s.translationLanguagePriority,
+    getFormElementById: s.getFormElementById,
   }));
 
   const subIndex = item.index;
-  // get choices from the parent element
-  const subElements = elements[elIndex].properties.subElements ?? [];
-  const choices = subElements[subIndex]?.properties.choices?.length
-    ? subElements[subIndex]?.properties.choices
-    : [{ en: "", fr: "" }];
+
+  const element = getFormElementById(item.id);
+  const choices = element?.properties.choices || [{ en: "", fr: "" }];
 
   if (!choices) {
-    return <AddOptions elIndex={elIndex} subIndex={subIndex} />;
+    return <AddOption elId={item.id} subIndex={subIndex} />;
   }
 
   const options = choices.map((child, choiceIndex) => {
@@ -97,7 +80,7 @@ export const SubOptions = ({
   return (
     <div className="mt-5">
       {options}
-      <AddOptions elIndex={elIndex} subIndex={subIndex} />
+      <AddOption elId={item.id} subIndex={subIndex} />
     </div>
   );
 };

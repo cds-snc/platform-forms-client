@@ -553,6 +553,7 @@
     "text2": "",
     "vaultOption": "Responses to be downloaded",
     "emailOption": "Responses delivered by email — ",
+    "apiOption": "Responses retrieved by API",
     "change": "Change settings"
   },
   "logicPublishWarning": {
@@ -649,8 +650,8 @@
         "responseLinkText": "Responses page"
       },
       "generateKeySuccess": {
-        "title": "API key generated",
-        "message": "New responses are now available through the API . Instructions and code examples are available in our",
+        "title": "API key created",
+        "message": "New responses are available through the API. Find out more about integration set-up in ",
         "docsLinkText": "API documentation",
         "docsLink": "https://cds-snc.github.io/forms-api/home/"
       },
@@ -682,7 +683,7 @@
         "responsibility1": "Save this key in a secure location.",
         "responsibility2": "Share the key only with people who need it.",
         "responsibility3": "Send the key through secure channels, like encrypted email.",
-        "responsibility4": "Understand the <a href='canada.ca' target='_blank'>required security procedures.</a>",
+        "responsibility4": "Understand the <a href='https://forms-formulaires.alpha.canada.ca/en/terms-of-use' target='_blank'>terms of use</a>",
         "text1": "Do not lose your key",
         "text2": "This key is provided once as it can give access to form response data. If you lose this key, or if it becomes compromised, you will have to create a new one.",
         "cancelButton": "Cancel",
@@ -690,7 +691,7 @@
         "confirm": {
           "label": "Confirmation",
           "required": "(required)",
-          "description": "Type <strong>AGREE</strong> in the box below to confirm you understand your responsibilities and agree to the <a href='canada.ca' target='_blank'>required security procedures</a> while storing and sharing this key."
+          "description": "Type <strong>AGREE</strong> in the box below to confirm you understand your responsibilities and agree to the <a href='https://forms-formulaires.alpha.canada.ca/en/terms-of-use' target='_blank'>terms of use</a> while storing and sharing this key."
         },
         "error": {
           "createFailed": {
@@ -990,13 +991,13 @@
       "note": "Not available for PROTECTED B"
     },
     "apiOption": {
-      "label": "Receive responses via API",
-      "note": "Submitted responses will be available for retrieval through an API endpoint and the Response page.",
-      "startNote": "Start your API integration by creating a private API Key"
+      "label": "Retrieve responses via API endpoint",
+      "note": "Submitted responses will be available for retrieval by requesting them from an API endpoint.",
+      "startNote": "Start by creating an API key"
     },
     "apiDocNotes": {
-      "title": "API documentation",
-      "text1": "To connect to our endpoint follow instructions and code examples in our <a href='https://cds-snc.github.io/forms-api/home' target='_blank'>Technical documentation</a>."
+      "title": "Set up your API integration",
+      "text1": "To connect to our endpoint follow instructions and code examples in our <a href='https://cds-snc.github.io/forms-api/home' target='_blank'>API documentation</a>."
     },
     "vaultNote": {
       "text1": "PROTECTED B form responses must be downloaded from GC Forms.",
@@ -1062,7 +1063,7 @@
     "selectQuestion": "Select a question"
   },
   "saved": "Saved",
-  "opensInNewTab": "opens in a new tab",
+  "opensInNewTab": "opens in new tab",
   "rightPanel": {
     "title": "Form set-up panel",
     "openPanel": "Form set-up",
@@ -1088,7 +1089,7 @@
     "saveNote": "Branches deactivate the automatic linear flow that would link form pages.",
     "resetRules": "Reset to linear flow",
     "resetRulesHelp": "Reset help",
-    "resetRulesDescription": "This will remove branching logic and reset the progression between pages to a simple linear flow, overriding any existing rules that were applied.",
+    "resetRulesDescription": "This will remove branching logic and reset the progression between pages to a simple linear flow, overriding any custom page flows that were applied.",
     "resetRulesDialog": {
       "title": "Reset to linear flow?",
       "areYouSure": "Are you sure you want to reset the form flow?",
@@ -1297,6 +1298,6 @@
     }
   },
   "systemHealthCheck": {
-    "title": "System health check"
+    "title": "System health"
   }
 }

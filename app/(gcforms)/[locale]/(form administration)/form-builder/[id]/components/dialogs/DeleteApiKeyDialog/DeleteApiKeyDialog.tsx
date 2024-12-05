@@ -70,6 +70,7 @@ export const DeleteApiKeyDialog = () => {
       toast.success(<DeleteKeySuccess id={id} />, "wide");
       updateApiKeyId(false);
       setDeleting(false);
+      Event.fire(EventKeys.deleteApiKey, { id });
       dialog.current?.close();
       setIsOpen(false);
     } catch (error) {
@@ -105,9 +106,9 @@ export const DeleteApiKeyDialog = () => {
           title={t("settings.api.deleteApiKeyDialog.title")}
         >
           <div className="p-5">
-            <h4 className="mb-2 text-2xl font-bold">
+            <h3 className="mb-2 text-2xl font-bold">
               {t("settings.api.deleteApiKeyDialog.cautionTitle")}
-            </h4>
+            </h3>
             <p className="mb-4">{t("settings.api.deleteApiKeyDialog.cautionText")}</p>
             <Trans
               ns="form-builder"
@@ -117,10 +118,10 @@ export const DeleteApiKeyDialog = () => {
             />{" "}
             <Link
               className="inline-block"
-              href={`${i18n.language}/form-builder/${id}/settings/manage`}
+              href={`/${i18n.language}/form-builder/${id}/settings/manage#closing-date`}
             >
               <span>{t("settings.api.deleteApiKeyDialog.stopText1")}</span>
-            </Link>{" "}
+            </Link>
             <span>{t("settings.api.deleteApiKeyDialog.stopText2")}</span>
           </div>
         </Dialog>
