@@ -17,6 +17,7 @@ import {
   isSectionElementType,
   isFormElementType,
   isGhostElementType,
+  removeMarkdown,
 } from "./util/itemType";
 
 export const Item = ({
@@ -177,7 +178,7 @@ export const Item = ({
               {titleText === "" &&
                 isFormElement &&
                 fieldType === "richText" &&
-                descriptionText !== "" && <Title title={descriptionText} />}
+                descriptionText !== "" && <Title fieldType={fieldType} title={descriptionText} />}
             </div>
           )}
         </div>
@@ -187,7 +188,7 @@ export const Item = ({
   );
 };
 
-const Title = ({ title }: { title: string }) => {
+const Title = ({ title, fieldType }: { title: string; fieldType?: string }) => {
   const { t } = useTranslation("form-builder");
   if (title === "Start") {
     title = t("logic.start");
@@ -197,7 +198,11 @@ const Title = ({ title }: { title: string }) => {
     title = t("logic.end");
   }
 
-  return <div className={cn("w-5/6 truncate")}>{title}</div>;
+  if (fieldType && fieldType === "richText") {
+    title = removeMarkdown(title);
+  }
+
+  return <div className={cn("w-5/6 truncate")}>{removeMarkdown(title)}</div>;
 };
 
 const Arrow = ({ item, context }: { item: TreeItem; context: TreeItemRenderContext }) => {

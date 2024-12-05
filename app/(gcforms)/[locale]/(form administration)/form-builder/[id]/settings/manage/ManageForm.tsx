@@ -6,7 +6,9 @@ import { SetClosingDate } from "./close/SetClosingDate";
 import { FormOwnership } from "./FormOwnership";
 import { ErrorPanel } from "@clientComponents/globals/ErrorPanel";
 import { updateTemplateUsers } from "@formBuilder/actions";
+import { ManageApiKey } from "./ManageApiKey";
 import { ThrottlingRate } from "./ThrottlingRate";
+import { useFormBuilderConfig } from "@lib/hooks/useFormBuilderConfig";
 
 interface User {
   id: string;
@@ -16,7 +18,7 @@ interface User {
 
 interface ManageFormProps {
   nonce: string | null;
-  canManageOwnership: boolean;
+  canManageAllForms: boolean;
   canSetClosingDate: boolean;
   formRecord?: FormRecord;
   usersAssignedToFormRecord?: User[];
@@ -31,13 +33,15 @@ export const ManageForm = (props: ManageFormProps) => {
     formRecord,
     usersAssignedToFormRecord,
     allUsers,
-    canManageOwnership,
+    canManageAllForms,
     canSetClosingDate,
     id,
     closedDetails,
   } = props;
 
-  if (!canManageOwnership) {
+  const { apiKeyId } = useFormBuilderConfig();
+
+  if (!canManageAllForms) {
     return (
       <>
         {canSetClosingDate && <SetClosingDate formId={id} closedDetails={closedDetails} />}
@@ -60,7 +64,8 @@ export const ManageForm = (props: ManageFormProps) => {
         allUsers={allUsers}
         updateTemplateUsers={updateTemplateUsers}
       />
-      {canManageOwnership && <ThrottlingRate formId={id} />}
+      {canManageAllForms && apiKeyId && <ThrottlingRate formId={id} />}
+      {canManageAllForms && formRecord.isPublished && <ManageApiKey />}
       <DownloadForm />
     </>
   );
