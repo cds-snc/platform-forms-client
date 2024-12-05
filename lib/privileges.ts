@@ -467,6 +467,12 @@ const _retrieveSubjects = async (
   );
 };
 
+/**
+ * Check if a user has the ability to perform an action on a subject
+ * @param ability The ability instance associated to a User
+ * @param rules An array of rules to verify
+ * @param logic Use an AND or OR logic comparison
+ */
 export const authorizationCheck = async (
   ability: UserAbility,
   rules: {
@@ -534,6 +540,12 @@ export const authorizationCheck = async (
     throw new AccessControlError(`Access Control Forbidden Action`);
   }
 };
+
+/**
+ * Authoriztion check that returns a boolean
+ * @param args same as authorizationCheck
+ * @returns boolean
+ */
 
 export const authorizationCheckAsBoolean = async (
   ...args: Parameters<typeof authorizationCheck>
