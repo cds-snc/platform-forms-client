@@ -911,7 +911,8 @@
     "lookingForADemo": "Looking to learn more about GC Forms?",
     "request": {
       "option1": "Ask a question",
-      "option2": "Get technical support",
+      "option2": "Get help using GC Forms",
+      "apiOption": "Request technical support with the API",
       "option3": "Report a problem with a published form",
       "option4": "Other",
       "title": "Reason for reaching out"
