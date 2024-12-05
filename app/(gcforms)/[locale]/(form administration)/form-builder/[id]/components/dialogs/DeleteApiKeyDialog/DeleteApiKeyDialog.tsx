@@ -106,9 +106,9 @@ export const DeleteApiKeyDialog = () => {
           title={t("settings.api.deleteApiKeyDialog.title")}
         >
           <div className="p-5">
-            <h4 className="mb-2 text-2xl font-bold">
+            <h3 className="mb-2 text-2xl font-bold">
               {t("settings.api.deleteApiKeyDialog.cautionTitle")}
-            </h4>
+            </h3>
             <p className="mb-4">{t("settings.api.deleteApiKeyDialog.cautionText")}</p>
             <Trans
               ns="form-builder"

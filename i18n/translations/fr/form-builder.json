@@ -911,7 +911,8 @@
     "lookingForADemo": "Vous cherchez à en savoir plus sur Formulaires GC?",
     "request": {
       "option1": "Poser une question",
-      "option2": "Obtenir du soutien technique",
+      "option2": "Obtenir de l'aide pour utiliser Formulaires GC",
+      "apiOption": "Demander de l'assistance technique avec l'API",
       "option3": "Signaler un problème avec un formulaire publié",
       "option4": "Autre",
       "title": "Raison pour laquelle vous nous contactez"

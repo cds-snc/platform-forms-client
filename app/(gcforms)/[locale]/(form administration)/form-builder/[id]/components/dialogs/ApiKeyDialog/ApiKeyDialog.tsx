@@ -146,7 +146,7 @@ export const ApiKeyDialog = ({ isVaultDelivery = false }: { isVaultDelivery?: bo
                 <p className="mb-2">{t("settings.api.dialog.error.createFailed.message")} </p>
               </Alert.Danger>
             )}
-            <h4 className="mb-4">{t("settings.api.dialog.heading")}</h4>
+            <h3 className="mb-4">{t("settings.api.dialog.heading")}</h3>
             <ResponsibilityList />
             <ConfirmationAgreement handleAgreement={hasAgreed} />
             <Note />
