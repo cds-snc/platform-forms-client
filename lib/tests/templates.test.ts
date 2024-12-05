@@ -89,569 +89,574 @@ const buildPrismaResponse = (
 const user1Ability = { userID: "1" } as unknown as UserAbility;
 
 describe("Template CRUD functions", () => {
-  it("Create a Template", async () => {
-    (prismaMock.template.create as jest.MockedFunction<any>).mockResolvedValue(
-      buildPrismaResponse("formtestID", formConfiguration)
-    );
-
-    (prismaMock.template.update as jest.MockedFunction<any>).mockResolvedValue(
-      buildPrismaResponse("formtestID", formConfiguration, false)
-    );
-
-    const newTemplate = await createTemplate({
-      ability: user1Ability,
-      userID: "1",
-      formConfig: formConfiguration as FormProperties,
+  describe("User with permission should be able to use CRUD functions", () => {
+    beforeAll(() => {
+      mockedAuthorizationCheck.mockResolvedValue();
     });
+    it("Create a Template", async () => {
+      (prismaMock.template.create as jest.MockedFunction<any>).mockResolvedValue(
+        buildPrismaResponse("formtestID", formConfiguration)
+      );
 
-    expect(prismaMock.template.create).toHaveBeenCalledWith(
-      expect.objectContaining({
-        data: {
-          jsonConfig: formConfiguration,
-          users: {
-            connect: { id: "1" },
-          },
-        },
-      })
-    );
+      (prismaMock.template.update as jest.MockedFunction<any>).mockResolvedValue(
+        buildPrismaResponse("formtestID", formConfiguration, false)
+      );
 
-    expect(newTemplate).toEqual(
-      expect.objectContaining({
-        id: "formtestID",
-        form: formConfiguration,
-        isPublished: false,
-        securityAttribute: "Unclassified",
-      })
-    );
-
-    expect(mockedLogEvent).toHaveBeenCalledWith(
-      user1Ability.userID,
-      { id: "formtestID", type: "Form" },
-      "CreateForm"
-    );
-  });
-
-  it("Get multiple Templates", async () => {
-    (prismaMock.template.findMany as jest.MockedFunction<any>).mockResolvedValue([
-      buildPrismaResponse("formtestID", formConfiguration),
-      buildPrismaResponse("formtestID2", formConfiguration),
-    ]);
-
-    const templates = await getAllTemplates(user1Ability);
-
-    expect(templates).toEqual([
-      expect.objectContaining({
-        id: "formtestID",
-        form: formConfiguration,
-        isPublished: false,
-        securityAttribute: "Unclassified",
-      }),
-      expect.objectContaining({
-        id: "formtestID2",
-        form: formConfiguration,
-        isPublished: false,
-        securityAttribute: "Unclassified",
-      }),
-    ]);
-    expect(mockedLogEvent).toHaveBeenCalledWith(
-      user1Ability.userID,
-      { type: "Form" },
-      "ReadForm",
-      "Accessed Forms: All System Forms"
-    );
-  });
-
-  it("No templates returned", async () => {
-    (prismaMock.template.findMany as jest.MockedFunction<any>).mockResolvedValue([]);
-
-    const template = await getAllTemplates(user1Ability);
-    expect(template).toEqual([]);
-    expect(mockedLogEvent).toHaveBeenCalledTimes(0);
-  });
-
-  it("Get templates linked to the provided user", async () => {
-    (prismaMock.template.findMany as jest.MockedFunction<any>).mockResolvedValue([
-      buildPrismaResponse("formtestID", formConfiguration),
-    ]);
-
-    await getAllTemplatesForUser(user1Ability);
-
-    expect(prismaMock.template.findMany).toHaveBeenCalledWith(
-      expect.objectContaining({
-        where: {
-          ttl: null,
-          users: {
-            some: {
-              id: "1",
-            },
-          },
-        },
-      })
-    );
-    expect(mockedLogEvent).toHaveBeenCalledWith(
-      user1Ability.userID,
-      { type: "Form" },
-      "ReadForm",
-      "Accessed Forms: formtestID"
-    );
-  });
-
-  it("Get a public template", async () => {
-    (prismaMock.template.findUnique as jest.MockedFunction<any>).mockResolvedValue(
-      buildPrismaResponse("formtestID", formConfiguration)
-    );
-
-    const template = await getPublicTemplateByID("formTestID");
-
-    expect(prismaMock.template.findUnique).toHaveBeenCalledWith(
-      expect.objectContaining({
-        where: {
-          id: "formTestID",
-        },
-      })
-    );
-
-    expect(template).toEqual(
-      expect.objectContaining({
-        closingDate: undefined,
-        id: "formtestID",
-        form: formConfiguration,
-        isPublished: false,
-        securityAttribute: "Unclassified",
-      })
-    );
-    expect(mockedLogEvent).toHaveBeenCalledTimes(0);
-  });
-
-  it("Get a full template", async () => {
-    (prismaMock.template.findUnique as jest.MockedFunction<any>).mockResolvedValue(
-      buildPrismaResponse("formtestID", formConfiguration)
-    );
-
-    const template = await getFullTemplateByID(user1Ability, "formTestID");
-
-    expect(prismaMock.template.findUnique).toHaveBeenCalledWith(
-      expect.objectContaining({
-        where: {
-          id: "formTestID",
-        },
-      })
-    );
-
-    expect(template).toEqual(
-      expect.objectContaining({
-        id: "formtestID",
-        form: formConfiguration,
-        isPublished: false,
-        securityAttribute: "Unclassified",
-      })
-    );
-    expect(mockedLogEvent).toHaveBeenCalledWith(
-      user1Ability.userID,
-      { type: "Form", id: "formTestID" },
-      "ReadForm"
-    );
-  });
-
-  it("Null returned when Template does not Exist", async () => {
-    (prismaMock.template.findUnique as jest.MockedFunction<any>).mockResolvedValue(null);
-
-    const template = await getPublicTemplateByID("asdf");
-    expect(template).toBe(null);
-    expect(mockedLogEvent).toHaveBeenCalledTimes(0);
-  });
-
-  test("Get template by id returns null if item is marked as archived", async () => {
-    (prismaMock.template.findUnique as jest.MockedFunction<any>).mockResolvedValue({
-      ...buildPrismaResponse("formtestID", formConfiguration),
-      ttl: new Date(),
-    });
-
-    const template = await getPublicTemplateByID("formtestID");
-
-    expect(template).toBe(null);
-  });
-
-  it("Get templates with associated users", async () => {
-    (prismaMock.template.findUnique as jest.MockedFunction<any>).mockResolvedValue(
-      buildPrismaResponse("formtestID", formConfiguration)
-    );
-
-    await getTemplateWithAssociatedUsers(user1Ability, "formtestID");
-
-    expect(prismaMock.template.findUnique).toHaveBeenCalledWith(
-      expect.objectContaining({
-        where: {
-          id: "formtestID",
-        },
-      })
-    );
-    expect(mockedLogEvent).toHaveBeenCalledWith(
-      user1Ability.userID,
-      { id: "formtestID", type: "Form" },
-      "ReadForm",
-      "Retrieved users associated with Form"
-    );
-  });
-
-  it("Update Template", async () => {
-    const updatedFormConfig = structuredClone(formConfiguration as FormProperties);
-
-    (prismaMock.template.update as jest.MockedFunction<any>).mockResolvedValue(
-      buildPrismaResponse("test1", updatedFormConfig, true)
-    );
-
-    const updatedTemplate = await updateTemplate({
-      ability: user1Ability,
-      formID: "test1",
-      formConfig: updatedFormConfig,
-    });
-
-    expect(prismaMock.template.update).toHaveBeenCalledWith(
-      expect.objectContaining({
-        where: {
-          id: "test1",
-          isPublished: false,
-        },
-        data: {
-          jsonConfig: updatedFormConfig as unknown as Prisma.JsonObject,
-        },
-      })
-    );
-
-    expect(updatedTemplate).toEqual(
-      expect.objectContaining({
-        id: "test1",
-        form: updatedFormConfig,
-        isPublished: true,
-        securityAttribute: "Unclassified",
-      })
-    );
-    expect(mockedLogEvent).toHaveBeenCalledWith(
-      user1Ability.userID,
-      { id: "test1", type: "Form" },
-      "UpdateForm",
-      "Form content updated"
-    );
-  });
-
-  it("Update `isPublished` on a specific form", async () => {
-    (prismaMock.template.findUnique as jest.MockedFunction<any>).mockResolvedValue({
-      ...buildPrismaResponse("formtestID", formConfiguration),
-      users: [{ id: "1" }],
-    });
-
-    (prismaMock.template.update as jest.MockedFunction<any>).mockResolvedValue(
-      buildPrismaResponse("formtestID", formConfiguration, true)
-    );
-
-    const updatedTemplate = await updateIsPublishedForTemplate(
-      user1Ability,
-      "formtestID",
-      true,
-      "",
-      "",
-      ""
-    );
-
-    expect(prismaMock.template.update).toHaveBeenCalledWith(
-      expect.objectContaining({
-        where: {
-          id: "formtestID",
-          isPublished: {
-            not: true,
-          },
-        },
-        data: {
-          isPublished: true,
-          publishReason: "",
-          publishFormType: "",
-          publishDesc: "",
-        },
-      })
-    );
-
-    expect(updatedTemplate).toEqual(
-      expect.objectContaining({
-        id: "formtestID",
-        form: formConfiguration,
-        isPublished: true,
-        securityAttribute: "Unclassified",
-      })
-    );
-    expect(mockedLogEvent).toHaveBeenCalledWith(
-      user1Ability.userID,
-      { id: "formtestID", type: "Form" },
-      "PublishForm"
-    );
-  });
-
-  it("Update assigned users for template", async () => {
-    // Template has one user assigned to it to start
-    (prismaMock.template.findFirst as jest.MockedFunction<any>).mockResolvedValue({
-      ...buildPrismaResponse("formtestID", formConfiguration, true),
-      users: [{ id: "1" }],
-    });
-    (prismaMock.template.update as jest.MockedFunction<any>).mockResolvedValue(
-      buildPrismaResponse("formtestID", formConfiguration, true)
-    );
-    (prismaMock.user.findUniqueOrThrow as jest.MockedFunction<any>).mockResolvedValueOnce({
-      email: "user2@test.ca",
-    });
-
-    // We're just adding an additional user (2)
-    const users: { id: string }[] = [{ id: "1" }, { id: "2" }];
-
-    await updateAssignedUsersForTemplate(user1Ability, "formTestID", users);
-
-    // Should just connect the new user
-    expect(prismaMock.template.update).toHaveBeenCalledWith(
-      expect.objectContaining({
-        where: {
-          id: "formTestID",
-        },
-        data: {
-          users: {
-            connect: [{ id: "2" }],
-            disconnect: [],
-          },
-        },
-      })
-    );
-
-    // should just log the new user
-    expect(mockedLogEvent).toHaveBeenNthCalledWith(
-      1,
-      user1Ability.userID,
-      { id: "formTestID", type: "Form" },
-      "GrantFormAccess",
-      "Access granted to user2@test.ca"
-    );
-
-    // Template has three users assigned to it to start
-    const templateRecord = {
-      ...buildPrismaResponse("formtestID", formConfiguration, true),
-      users: [{ id: "2" }, { id: "3" }, { id: "4" }],
-    };
-
-    (prismaMock.template.findFirst as jest.MockedFunction<any>).mockResolvedValue(templateRecord);
-    (prismaMock.template.update as jest.MockedFunction<any>).mockResolvedValue(
-      buildPrismaResponse("formtestID", formConfiguration, true)
-    );
-    (prismaMock.user.findUniqueOrThrow as jest.MockedFunction<any>)
-      .mockResolvedValueOnce({
-        email: "user1@test.ca",
-      })
-      .mockResolvedValueOnce({
-        email: "user2@test.ca",
-      })
-      .mockResolvedValueOnce({
-        email: "user4@test.ca",
+      const newTemplate = await createTemplate({
+        ability: user1Ability,
+        userID: "1",
+        formConfig: formConfiguration as FormProperties,
       });
 
-    // We're removing two (2,4) and adding one (1)
-    const users2: { id: string }[] = [{ id: "1" }, { id: "3" }];
-
-    await updateAssignedUsersForTemplate(user1Ability, "formTestID", users2);
-
-    // Connect 1, disconnect 2,4
-    expect(prismaMock.template.update).toHaveBeenCalledWith(
-      expect.objectContaining({
-        where: {
-          id: "formTestID",
-        },
-        data: {
-          users: {
-            connect: [{ id: "1" }],
-            disconnect: [{ id: "2" }, { id: "4" }],
+      expect(prismaMock.template.create).toHaveBeenCalledWith(
+        expect.objectContaining({
+          data: {
+            jsonConfig: formConfiguration,
+            users: {
+              connect: { id: "1" },
+            },
           },
-        },
-        select: {
-          id: true,
-          created_at: true,
-          updated_at: true,
-          name: true,
-          jsonConfig: true,
-          isPublished: true,
-          deliveryOption: true,
-          formPurpose: true,
-          publishReason: true,
-          publishFormType: true,
-          publishDesc: true,
-          securityAttribute: true,
-          users: true,
-        },
-      })
-    );
+        })
+      );
 
-    // Log one added
-    expect(mockedLogEvent).toHaveBeenNthCalledWith(
-      2,
-      user1Ability.userID,
-      { id: "formTestID", type: "Form" },
-      "GrantFormAccess",
-      "Access granted to user1@test.ca"
-    );
+      expect(newTemplate).toEqual(
+        expect.objectContaining({
+          id: "formtestID",
+          form: formConfiguration,
+          isPublished: false,
+          securityAttribute: "Unclassified",
+        })
+      );
 
-    // Log two removed
-    expect(mockedLogEvent).toHaveBeenNthCalledWith(
-      3,
-      user1Ability.userID,
-      { id: "formTestID", type: "Form" },
-      "RevokeFormAccess",
-      "Access revoked for user2@test.ca,user4@test.ca"
-    );
-  });
-  it("Updates to published forms are not allowed", async () => {
-    const updatedFormConfig = structuredClone(formConfiguration as FormProperties);
+      expect(mockedLogEvent).toHaveBeenCalledWith(
+        user1Ability.userID,
+        { id: "formtestID", type: "Form" },
+        "CreateForm"
+      );
+    });
 
-    (prismaMock.template.update as jest.MockedFunction<any>).mockResolvedValue(null);
+    it("Get multiple Templates", async () => {
+      (prismaMock.template.findMany as jest.MockedFunction<any>).mockResolvedValue([
+        buildPrismaResponse("formtestID", formConfiguration),
+        buildPrismaResponse("formtestID2", formConfiguration),
+      ]);
 
-    await expect(async () => {
-      await updateTemplate({
+      const templates = await getAllTemplates(user1Ability);
+
+      expect(templates).toEqual([
+        expect.objectContaining({
+          id: "formtestID",
+          form: formConfiguration,
+          isPublished: false,
+          securityAttribute: "Unclassified",
+        }),
+        expect.objectContaining({
+          id: "formtestID2",
+          form: formConfiguration,
+          isPublished: false,
+          securityAttribute: "Unclassified",
+        }),
+      ]);
+      expect(mockedLogEvent).toHaveBeenCalledWith(
+        user1Ability.userID,
+        { type: "Form" },
+        "ReadForm",
+        "Accessed Forms: All System Forms"
+      );
+    });
+
+    it("No templates returned", async () => {
+      (prismaMock.template.findMany as jest.MockedFunction<any>).mockResolvedValue([]);
+
+      const template = await getAllTemplates(user1Ability);
+      expect(template).toEqual([]);
+      expect(mockedLogEvent).toHaveBeenCalledTimes(0);
+    });
+
+    it("Get templates linked to the provided user", async () => {
+      (prismaMock.template.findMany as jest.MockedFunction<any>).mockResolvedValue([
+        buildPrismaResponse("formtestID", formConfiguration),
+      ]);
+
+      await getAllTemplatesForUser(user1Ability);
+
+      expect(prismaMock.template.findMany).toHaveBeenCalledWith(
+        expect.objectContaining({
+          where: {
+            ttl: null,
+            users: {
+              some: {
+                id: "1",
+              },
+            },
+          },
+        })
+      );
+      expect(mockedLogEvent).toHaveBeenCalledWith(
+        user1Ability.userID,
+        { type: "Form" },
+        "ReadForm",
+        "Accessed Forms: formtestID"
+      );
+    });
+
+    it("Get a public template", async () => {
+      (prismaMock.template.findUnique as jest.MockedFunction<any>).mockResolvedValue(
+        buildPrismaResponse("formtestID", formConfiguration)
+      );
+
+      const template = await getPublicTemplateByID("formTestID");
+
+      expect(prismaMock.template.findUnique).toHaveBeenCalledWith(
+        expect.objectContaining({
+          where: {
+            id: "formTestID",
+          },
+        })
+      );
+
+      expect(template).toEqual(
+        expect.objectContaining({
+          closingDate: undefined,
+          id: "formtestID",
+          form: formConfiguration,
+          isPublished: false,
+          securityAttribute: "Unclassified",
+        })
+      );
+      expect(mockedLogEvent).toHaveBeenCalledTimes(0);
+    });
+
+    it("Get a full template", async () => {
+      (prismaMock.template.findUnique as jest.MockedFunction<any>).mockResolvedValue(
+        buildPrismaResponse("formtestID", formConfiguration)
+      );
+
+      const template = await getFullTemplateByID(user1Ability, "formTestID");
+
+      expect(prismaMock.template.findUnique).toHaveBeenCalledWith(
+        expect.objectContaining({
+          where: {
+            id: "formTestID",
+          },
+        })
+      );
+
+      expect(template).toEqual(
+        expect.objectContaining({
+          id: "formtestID",
+          form: formConfiguration,
+          isPublished: false,
+          securityAttribute: "Unclassified",
+        })
+      );
+      expect(mockedLogEvent).toHaveBeenCalledWith(
+        user1Ability.userID,
+        { type: "Form", id: "formTestID" },
+        "ReadForm"
+      );
+    });
+
+    it("Null returned when Template does not Exist", async () => {
+      (prismaMock.template.findUnique as jest.MockedFunction<any>).mockResolvedValue(null);
+
+      const template = await getPublicTemplateByID("asdf");
+      expect(template).toBe(null);
+      expect(mockedLogEvent).toHaveBeenCalledTimes(0);
+    });
+
+    test("Get template by id returns null if item is marked as archived", async () => {
+      (prismaMock.template.findUnique as jest.MockedFunction<any>).mockResolvedValue({
+        ...buildPrismaResponse("formtestID", formConfiguration),
+        ttl: new Date(),
+      });
+
+      const template = await getPublicTemplateByID("formtestID");
+
+      expect(template).toBe(null);
+    });
+
+    it("Get templates with associated users", async () => {
+      (prismaMock.template.findUnique as jest.MockedFunction<any>).mockResolvedValue(
+        buildPrismaResponse("formtestID", formConfiguration)
+      );
+
+      await getTemplateWithAssociatedUsers(user1Ability, "formtestID");
+
+      expect(prismaMock.template.findUnique).toHaveBeenCalledWith(
+        expect.objectContaining({
+          where: {
+            id: "formtestID",
+          },
+        })
+      );
+      expect(mockedLogEvent).toHaveBeenCalledWith(
+        user1Ability.userID,
+        { id: "formtestID", type: "Form" },
+        "ReadForm",
+        "Retrieved users associated with Form"
+      );
+    });
+
+    it("Update Template", async () => {
+      const updatedFormConfig = structuredClone(formConfiguration as FormProperties);
+
+      (prismaMock.template.update as jest.MockedFunction<any>).mockResolvedValue(
+        buildPrismaResponse("test1", updatedFormConfig, true)
+      );
+
+      const updatedTemplate = await updateTemplate({
         ability: user1Ability,
         formID: "test1",
         formConfig: updatedFormConfig,
       });
-    }).rejects.toThrow(TemplateAlreadyPublishedError);
-    expect(mockedLogEvent).toHaveBeenCalledTimes(0);
-  });
 
-  it("Remove DeliveryOption from template", async () => {
-    (prismaMock.template.update as jest.MockedFunction<any>).mockResolvedValue(
-      buildPrismaResponse("formtestID", formConfiguration)
-    );
-
-    const updatedTemplate = await removeDeliveryOption(user1Ability, "formtestID");
-
-    expect(prismaMock.template.update).toHaveBeenCalledWith(
-      expect.objectContaining({
-        where: {
-          id: "formtestID",
-          isPublished: false,
-          deliveryOption: {
-            isNot: null,
+      expect(prismaMock.template.update).toHaveBeenCalledWith(
+        expect.objectContaining({
+          where: {
+            id: "test1",
+            isPublished: false,
           },
-        },
-        data: {
-          deliveryOption: {
-            delete: true,
+          data: {
+            jsonConfig: updatedFormConfig as unknown as Prisma.JsonObject,
           },
-        },
-      })
-    );
+        })
+      );
 
-    expect(updatedTemplate).toEqual(
-      expect.objectContaining({
-        id: "formtestID",
-        form: formConfiguration,
-        isPublished: false,
-        securityAttribute: "Unclassified",
-      })
-    );
-    expect(mockedLogEvent).toHaveBeenCalledWith(
-      user1Ability.userID,
-      { id: "formtestID", type: "Form" },
-      "ChangeDeliveryOption",
-      "Delivery Option set to the Vault"
-    );
-  });
-
-  it("Delete template", async () => {
-    (prismaMock.template.findUnique as jest.MockedFunction<any>).mockResolvedValue({
-      ...buildPrismaResponse("formtestID", formConfiguration),
-      users: [{ id: "1" }],
-    });
-
-    (prismaMock.template.update as jest.MockedFunction<any>).mockResolvedValue(
-      buildPrismaResponse("formtestID", formConfiguration)
-    );
-
-    mockUnprocessedSubmissions.mockResolvedValueOnce(false);
-
-    const deletedTemplate = await deleteTemplate(user1Ability, "formtestID");
-
-    expect(prismaMock.template.update).toHaveBeenCalledWith(
-      expect.objectContaining({
-        where: {
-          id: "formtestID",
-        },
-        data: {
-          ttl: expect.any(Date),
-        },
-        select: {
-          id: true,
-          created_at: true,
-          updated_at: true,
-          name: true,
-          jsonConfig: true,
+      expect(updatedTemplate).toEqual(
+        expect.objectContaining({
+          id: "test1",
+          form: updatedFormConfig,
           isPublished: true,
-          deliveryOption: true,
-          formPurpose: true,
-          publishReason: true,
-          publishFormType: true,
-          publishDesc: true,
-          securityAttribute: true,
-        },
-      })
-    );
-
-    expect(deletedTemplate).toEqual(
-      expect.objectContaining({
-        id: "formtestID",
-        form: formConfiguration,
-        isPublished: false,
-        securityAttribute: "Unclassified",
-      })
-    );
-
-    expect(mockedLogEvent).toHaveBeenCalledWith(
-      user1Ability.userID,
-      { id: "formtestID", type: "Form" },
-      "DeleteForm"
-    );
-    expect(mockedDeleteKey).toHaveBeenCalledTimes(1);
-  });
-
-  it("Template deletion should not be allowed if there are still unprocessed submissions associated to targeted form", async () => {
-    (prismaMock.template.findUnique as jest.MockedFunction<any>).mockResolvedValue({
-      ...buildPrismaResponse("formtestID", formConfiguration),
-      users: [{ id: "1" }],
+          securityAttribute: "Unclassified",
+        })
+      );
+      expect(mockedLogEvent).toHaveBeenCalledWith(
+        user1Ability.userID,
+        { id: "test1", type: "Form" },
+        "UpdateForm",
+        "Form content updated"
+      );
     });
 
-    (prismaMock.template.update as jest.MockedFunction<any>).mockResolvedValue(
-      buildPrismaResponse("formtestID", formConfiguration)
-    );
+    it("Update `isPublished` on a specific form", async () => {
+      (prismaMock.template.findUnique as jest.MockedFunction<any>).mockResolvedValue({
+        ...buildPrismaResponse("formtestID", formConfiguration),
+        users: [{ id: "1" }],
+      });
 
-    mockUnprocessedSubmissions.mockResolvedValueOnce(true);
+      (prismaMock.template.update as jest.MockedFunction<any>).mockResolvedValue(
+        buildPrismaResponse("formtestID", formConfiguration, true)
+      );
 
-    await expect(async () => {
-      await deleteTemplate(user1Ability, "formtestID");
-    }).rejects.toThrow(TemplateHasUnprocessedSubmissions);
-  });
+      const updatedTemplate = await updateIsPublishedForTemplate(
+        user1Ability,
+        "formtestID",
+        true,
+        "",
+        "",
+        ""
+      );
 
-  it("Only include public properties", async () => {
-    const formRecord: FormRecord = {
-      id: "testID",
-      name: "Form Name",
-      form: formConfiguration as FormProperties,
-      isPublished: false,
-      deliveryOption: {
-        emailAddress: "test@email.com",
-        emailSubjectEn: "email subject in English",
-        emailSubjectFr: "email subject in French",
-      },
-      securityAttribute: "Unclassified",
-    };
+      expect(prismaMock.template.update).toHaveBeenCalledWith(
+        expect.objectContaining({
+          where: {
+            id: "formtestID",
+            isPublished: {
+              not: true,
+            },
+          },
+          data: {
+            isPublished: true,
+            publishReason: "",
+            publishFormType: "",
+            publishDesc: "",
+          },
+        })
+      );
 
-    const publicFormRecord = onlyIncludePublicProperties(formRecord);
+      expect(updatedTemplate).toEqual(
+        expect.objectContaining({
+          id: "formtestID",
+          form: formConfiguration,
+          isPublished: true,
+          securityAttribute: "Unclassified",
+        })
+      );
+      expect(mockedLogEvent).toHaveBeenCalledWith(
+        user1Ability.userID,
+        { id: "formtestID", type: "Form" },
+        "PublishForm"
+      );
+    });
 
-    expect(publicFormRecord).toHaveProperty("id");
-    expect(publicFormRecord).toHaveProperty("form");
-    expect(publicFormRecord).toHaveProperty("isPublished");
-    expect(publicFormRecord).toHaveProperty("securityAttribute");
+    it("Update assigned users for template", async () => {
+      // Template has one user assigned to it to start
+      (prismaMock.template.findFirst as jest.MockedFunction<any>).mockResolvedValue({
+        ...buildPrismaResponse("formtestID", formConfiguration, true),
+        users: [{ id: "1" }],
+      });
+      (prismaMock.template.update as jest.MockedFunction<any>).mockResolvedValue(
+        buildPrismaResponse("formtestID", formConfiguration, true)
+      );
+      (prismaMock.user.findUniqueOrThrow as jest.MockedFunction<any>).mockResolvedValueOnce({
+        email: "user2@test.ca",
+      });
 
-    expect(publicFormRecord).not.toHaveProperty("deliveryOption");
+      // We're just adding an additional user (2)
+      const users: { id: string }[] = [{ id: "1" }, { id: "2" }];
+
+      await updateAssignedUsersForTemplate(user1Ability, "formTestID", users);
+
+      // Should just connect the new user
+      expect(prismaMock.template.update).toHaveBeenCalledWith(
+        expect.objectContaining({
+          where: {
+            id: "formTestID",
+          },
+          data: {
+            users: {
+              connect: [{ id: "2" }],
+              disconnect: [],
+            },
+          },
+        })
+      );
+
+      // should just log the new user
+      expect(mockedLogEvent).toHaveBeenNthCalledWith(
+        1,
+        user1Ability.userID,
+        { id: "formTestID", type: "Form" },
+        "GrantFormAccess",
+        "Access granted to user2@test.ca"
+      );
+
+      // Template has three users assigned to it to start
+      const templateRecord = {
+        ...buildPrismaResponse("formtestID", formConfiguration, true),
+        users: [{ id: "2" }, { id: "3" }, { id: "4" }],
+      };
+
+      (prismaMock.template.findFirst as jest.MockedFunction<any>).mockResolvedValue(templateRecord);
+      (prismaMock.template.update as jest.MockedFunction<any>).mockResolvedValue(
+        buildPrismaResponse("formtestID", formConfiguration, true)
+      );
+      (prismaMock.user.findUniqueOrThrow as jest.MockedFunction<any>)
+        .mockResolvedValueOnce({
+          email: "user1@test.ca",
+        })
+        .mockResolvedValueOnce({
+          email: "user2@test.ca",
+        })
+        .mockResolvedValueOnce({
+          email: "user4@test.ca",
+        });
+
+      // We're removing two (2,4) and adding one (1)
+      const users2: { id: string }[] = [{ id: "1" }, { id: "3" }];
+
+      await updateAssignedUsersForTemplate(user1Ability, "formTestID", users2);
+
+      // Connect 1, disconnect 2,4
+      expect(prismaMock.template.update).toHaveBeenCalledWith(
+        expect.objectContaining({
+          where: {
+            id: "formTestID",
+          },
+          data: {
+            users: {
+              connect: [{ id: "1" }],
+              disconnect: [{ id: "2" }, { id: "4" }],
+            },
+          },
+          select: {
+            id: true,
+            created_at: true,
+            updated_at: true,
+            name: true,
+            jsonConfig: true,
+            isPublished: true,
+            deliveryOption: true,
+            formPurpose: true,
+            publishReason: true,
+            publishFormType: true,
+            publishDesc: true,
+            securityAttribute: true,
+            users: true,
+          },
+        })
+      );
+
+      // Log one added
+      expect(mockedLogEvent).toHaveBeenNthCalledWith(
+        2,
+        user1Ability.userID,
+        { id: "formTestID", type: "Form" },
+        "GrantFormAccess",
+        "Access granted to user1@test.ca"
+      );
+
+      // Log two removed
+      expect(mockedLogEvent).toHaveBeenNthCalledWith(
+        3,
+        user1Ability.userID,
+        { id: "formTestID", type: "Form" },
+        "RevokeFormAccess",
+        "Access revoked for user2@test.ca,user4@test.ca"
+      );
+    });
+    it("Updates to published forms are not allowed", async () => {
+      const updatedFormConfig = structuredClone(formConfiguration as FormProperties);
+
+      (prismaMock.template.update as jest.MockedFunction<any>).mockResolvedValue(null);
+
+      await expect(async () => {
+        await updateTemplate({
+          ability: user1Ability,
+          formID: "test1",
+          formConfig: updatedFormConfig,
+        });
+      }).rejects.toThrow(TemplateAlreadyPublishedError);
+      expect(mockedLogEvent).toHaveBeenCalledTimes(0);
+    });
+
+    it("Remove DeliveryOption from template", async () => {
+      (prismaMock.template.update as jest.MockedFunction<any>).mockResolvedValue(
+        buildPrismaResponse("formtestID", formConfiguration)
+      );
+
+      const updatedTemplate = await removeDeliveryOption(user1Ability, "formtestID");
+
+      expect(prismaMock.template.update).toHaveBeenCalledWith(
+        expect.objectContaining({
+          where: {
+            id: "formtestID",
+            isPublished: false,
+            deliveryOption: {
+              isNot: null,
+            },
+          },
+          data: {
+            deliveryOption: {
+              delete: true,
+            },
+          },
+        })
+      );
+
+      expect(updatedTemplate).toEqual(
+        expect.objectContaining({
+          id: "formtestID",
+          form: formConfiguration,
+          isPublished: false,
+          securityAttribute: "Unclassified",
+        })
+      );
+      expect(mockedLogEvent).toHaveBeenCalledWith(
+        user1Ability.userID,
+        { id: "formtestID", type: "Form" },
+        "ChangeDeliveryOption",
+        "Delivery Option set to the Vault"
+      );
+    });
+
+    it("Delete template", async () => {
+      (prismaMock.template.findUnique as jest.MockedFunction<any>).mockResolvedValue({
+        ...buildPrismaResponse("formtestID", formConfiguration),
+        users: [{ id: "1" }],
+      });
+
+      (prismaMock.template.update as jest.MockedFunction<any>).mockResolvedValue(
+        buildPrismaResponse("formtestID", formConfiguration)
+      );
+
+      mockUnprocessedSubmissions.mockResolvedValueOnce(false);
+
+      const deletedTemplate = await deleteTemplate(user1Ability, "formtestID");
+
+      expect(prismaMock.template.update).toHaveBeenCalledWith(
+        expect.objectContaining({
+          where: {
+            id: "formtestID",
+          },
+          data: {
+            ttl: expect.any(Date),
+          },
+          select: {
+            id: true,
+            created_at: true,
+            updated_at: true,
+            name: true,
+            jsonConfig: true,
+            isPublished: true,
+            deliveryOption: true,
+            formPurpose: true,
+            publishReason: true,
+            publishFormType: true,
+            publishDesc: true,
+            securityAttribute: true,
+          },
+        })
+      );
+
+      expect(deletedTemplate).toEqual(
+        expect.objectContaining({
+          id: "formtestID",
+          form: formConfiguration,
+          isPublished: false,
+          securityAttribute: "Unclassified",
+        })
+      );
+
+      expect(mockedLogEvent).toHaveBeenCalledWith(
+        user1Ability.userID,
+        { id: "formtestID", type: "Form" },
+        "DeleteForm"
+      );
+      expect(mockedDeleteKey).toHaveBeenCalledTimes(1);
+    });
+
+    it("Template deletion should not be allowed if there are still unprocessed submissions associated to targeted form", async () => {
+      (prismaMock.template.findUnique as jest.MockedFunction<any>).mockResolvedValue({
+        ...buildPrismaResponse("formtestID", formConfiguration),
+        users: [{ id: "1" }],
+      });
+
+      (prismaMock.template.update as jest.MockedFunction<any>).mockResolvedValue(
+        buildPrismaResponse("formtestID", formConfiguration)
+      );
+
+      mockUnprocessedSubmissions.mockResolvedValueOnce(true);
+
+      await expect(async () => {
+        await deleteTemplate(user1Ability, "formtestID");
+      }).rejects.toThrow(TemplateHasUnprocessedSubmissions);
+    });
+
+    it("Only include public properties", async () => {
+      const formRecord: FormRecord = {
+        id: "testID",
+        name: "Form Name",
+        form: formConfiguration as FormProperties,
+        isPublished: false,
+        deliveryOption: {
+          emailAddress: "test@email.com",
+          emailSubjectEn: "email subject in English",
+          emailSubjectFr: "email subject in French",
+        },
+        securityAttribute: "Unclassified",
+      };
+
+      const publicFormRecord = onlyIncludePublicProperties(formRecord);
+
+      expect(publicFormRecord).toHaveProperty("id");
+      expect(publicFormRecord).toHaveProperty("form");
+      expect(publicFormRecord).toHaveProperty("isPublished");
+      expect(publicFormRecord).toHaveProperty("securityAttribute");
+
+      expect(publicFormRecord).not.toHaveProperty("deliveryOption");
+    });
   });
 
   describe("User with no permission should not be able to use CRUD functions", () => {
