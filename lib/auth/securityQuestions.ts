@@ -90,7 +90,7 @@ export async function createSecurityAnswers(
 ): Promise<void> {
   checkPrivileges(ability, [
     {
-      action: "create",
+      action: "update",
       subject: { type: "User", object: { id: ability.userID } },
       field: "securityAnswers",
     },
