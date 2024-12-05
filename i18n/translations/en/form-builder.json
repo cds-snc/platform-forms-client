@@ -891,10 +891,10 @@
   "startP2": "Edit a form that was created and downloaded from GC Forms.",
   "submit": "Submit",
   "submittedResponsesText": "Submitted responses will be sent to {{email}}.",
-  "submittedResponsesChange": "Change how responses delivered",
+  "submittedResponsesChange": "Change delivery option",
   "submittedResponsesTextVault": {
-    "text1": "Clicking submit will make responses available for retrieval.",
-    "text2": "Go to Responses page"
+    "text1": "Clicking submit will make responses available for retrieval:",
+    "text2": "Go to Responses"
   },
   "support": {
     "contactUs": "contact form",
