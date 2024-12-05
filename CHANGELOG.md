@@ -5,6 +5,37 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.30.0](https://github.com/cds-snc/platform-forms-client/compare/v3.29.2...v3.30.0) (2024-12-05)
+
+
+### Features
+
+* replace old Status index with new StatusCreatedAt one ([#4691](https://github.com/cds-snc/platform-forms-client/issues/4691)) ([9b1caf9](https://github.com/cds-snc/platform-forms-client/commit/9b1caf9b9ffff9f9abc11d49e16b2c7add5e7c32))
+
+
+### Bug Fixes
+
+* API content tweaks ([#4697](https://github.com/cds-snc/platform-forms-client/issues/4697)) ([add0f53](https://github.com/cds-snc/platform-forms-client/commit/add0f53a7340e76984385fe0a18baf25c02e48be))
+* followup to screen reader re-announcing the form label on every input change ([#4766](https://github.com/cds-snc/platform-forms-client/issues/4766)) ([52e5d94](https://github.com/cds-snc/platform-forms-client/commit/52e5d9482f9b28ca4e5e8875d95f6e8b625a18bf))
+* Switch SubOption to retrieve element by id ([#4753](https://github.com/cds-snc/platform-forms-client/issues/4753)) ([deaf01d](https://github.com/cds-snc/platform-forms-client/commit/deaf01df7bd83fa7136465068b4f2ffc63e19f16))
+* Updates Combobox (Searchable list) to pre-populate if a value exists ([#4779](https://github.com/cds-snc/platform-forms-client/issues/4779)) ([4531181](https://github.com/cds-snc/platform-forms-client/commit/4531181b335342f88a234631e2a1c55499197e1d))
+
+
+### Miscellaneous Chores
+
+* Add api option to support form ([#4788](https://github.com/cds-snc/platform-forms-client/issues/4788)) ([3fbdda5](https://github.com/cds-snc/platform-forms-client/commit/3fbdda5a8c2429bd853d1a9a91d01a54b0ea04c9))
+* Add auto-close for "wide" toast container ([#4762](https://github.com/cds-snc/platform-forms-client/issues/4762)) ([09b7b8a](https://github.com/cds-snc/platform-forms-client/commit/09b7b8a0a44d9b07455381b37fc8390bbc105675))
+* Add Overdue status box ([#4767](https://github.com/cds-snc/platform-forms-client/issues/4767)) ([6917714](https://github.com/cds-snc/platform-forms-client/commit/69177143cb145d6bae496c4b94d72826c86a85a7))
+* fix delivery option text for publish page ([#4758](https://github.com/cds-snc/platform-forms-client/issues/4758)) ([a206307](https://github.com/cds-snc/platform-forms-client/commit/a206307ac49b9250bba4180403eba2f9d5140853))
+* fix dialog heading + remove responses skip link for API screens ([#4764](https://github.com/cds-snc/platform-forms-client/issues/4764)) ([edef177](https://github.com/cds-snc/platform-forms-client/commit/edef177da74c8daefa1d81737cc1bc98e791a6c1))
+* fix link to closing date ([#4760](https://github.com/cds-snc/platform-forms-client/issues/4760)) ([3388405](https://github.com/cds-snc/platform-forms-client/commit/33884057f4d5a45a24b62aae1b35ac5e279c783a))
+* remove "quick" settings modal ([#4776](https://github.com/cds-snc/platform-forms-client/issues/4776)) ([cc9ca20](https://github.com/cds-snc/platform-forms-client/commit/cc9ca2067173351ca55a40ca6fcb5cba03a8848a))
+* remove settings panel ([#4791](https://github.com/cds-snc/platform-forms-client/issues/4791)) ([a774acc](https://github.com/cds-snc/platform-forms-client/commit/a774acc6a244f6a0ad11fac479be54fd3101468d))
+* update add / remove sub choices for repeating sets ([#4770](https://github.com/cds-snc/platform-forms-client/issues/4770)) ([5772478](https://github.com/cds-snc/platform-forms-client/commit/5772478a47f35c924eea4c31772146b5aa461f4c))
+* update alignment for text in Status Boxes ([#4781](https://github.com/cds-snc/platform-forms-client/issues/4781)) ([466afb2](https://github.com/cds-snc/platform-forms-client/commit/466afb2413092d429a74b5044c2d99ac1c3882f8))
+* Update card background colour ([#4778](https://github.com/cds-snc/platform-forms-client/issues/4778)) ([e9a7cf7](https://github.com/cds-snc/platform-forms-client/commit/e9a7cf76601b81f54eaf2b6268f70fba3e9164a8))
+* update setting page styling for API  ([#4754](https://github.com/cds-snc/platform-forms-client/issues/4754)) ([a83bff9](https://github.com/cds-snc/platform-forms-client/commit/a83bff94e0091244b9eb26224218370528912ff8))
+
 ## [3.29.2](https://github.com/cds-snc/platform-forms-client/compare/v3.29.1...v3.29.2) (2024-11-28)
 
 
