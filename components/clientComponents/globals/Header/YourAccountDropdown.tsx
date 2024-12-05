@@ -64,7 +64,7 @@ export const YourAccountDropdown = ({ isAuthenticated }: YourAccountDropdownProp
               >
                 <DropdownMenuItem href={`/${i18n.language}/profile`} text={t("adminNav.profile")} />
 
-                {(ability?.can("view", "Flag") || ability?.can("view", "User", "Privilege")) && (
+                {(ability?.can("view", "Flag") || ability?.can("view", "Setting")) && (
                   <DropdownMenuItem
                     href={`/${i18n.language}/admin`}
                     text={t("adminNav.administration")}
