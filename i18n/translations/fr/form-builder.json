@@ -680,10 +680,10 @@
         "title": "Créer la clé API",
         "heading": "Les clés API de Formulaires GC sont PROTÉGÉES B",
         "responsibility": "Vous êtes responsable de :",
-        "responsibility1": "L'enregistrement de cette clé dans un endroit sûr.",
-        "responsibility2": "Le partage de cette clé uniquement avec les personnes qui en ont besoin.",
-        "responsibility3": "L'envoi de cette clé par des voies sécurisées, comme un courriel crypté.",
-        "responsibility4": "La compréhension des <a href='https://forms-formulaires.alpha.canada.ca/fr/terms-of-use' target='_blank'>conditions d'utilisation.</a>",
+        "responsibility1": "L'enregistrement de cette clé dans un endroit sûr d'une machine du gouvernement du Canada.",
+        "responsibility2": "Le partage de cette clé uniquement avec les personnes qui ont les autorisations, s'il y a un besoin.",
+        "responsibility3": "L'envoi de cette clé en utilisant un courriel crypté, s'il est nécessaire pour la configuration de l'intégration.",
+        "responsibility4": "La gestion de la clé, supprimant et recréant celle-ci si l'on soupçonne qu'elle a été compromise.",
         "text1": "Ne perdez pas votre clé ",
         "text2": "Cette clé n'est fournie qu'une seule fois, car elle permet d'accéder aux données des réponses au formulaire. Si vous perdez cette clé ou si elle est compromise, vous devrez en créer une nouvelle.",
         "cancelButton": "Annuler",
@@ -696,7 +696,7 @@
         "error": {
           "createFailed": {
             "title": "La clé API n'a pas pu être créée",
-            "message": "Une erreur s'est produite lors de la création de la clé API. Veuillez réessayer plus tard."
+            "message": "Une erreur s'est produite lors de la création de la clé API. Veuillez enregistrer le formulaire et réessayer plus tard."
           }
         }
       }

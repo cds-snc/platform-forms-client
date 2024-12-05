@@ -680,10 +680,10 @@
         "title": "Create API key",
         "heading": "GC Forms API keys are PROTECTED B",
         "responsibility": "It is your responsibility to:",
-        "responsibility1": "Save this key in a secure location.",
-        "responsibility2": "Share the key only with people who need it.",
-        "responsibility3": "Send the key through secure channels, like encrypted email.",
-        "responsibility4": "Understand the <a href='https://forms-formulaires.alpha.canada.ca/en/terms-of-use' target='_blank'>terms of use</a>",
+        "responsibility1": "Save this key in a secure location on a Government of Canada machine.",
+        "responsibility2": "Share the key only with people who are authorized, if there is a need.",
+        "responsibility3": "Send the key using encrypted email if needed for the purpose of setting up the integration",
+        "responsibility4": "Manage the key, deleting and re-creating it if it's suspected to have been compromised.",
         "text1": "Do not lose your key",
         "text2": "This key is provided once as it can give access to form response data. If you lose this key, or if it becomes compromised, you will have to create a new one.",
         "cancelButton": "Cancel",
@@ -696,7 +696,7 @@
         "error": {
           "createFailed": {
             "title": "The API key could not be created",
-            "message": "There was an error creating the API key. Please try again later."
+            "message": "There was an error creating the API key. Save your form and try again later."
           }
         }
       }
