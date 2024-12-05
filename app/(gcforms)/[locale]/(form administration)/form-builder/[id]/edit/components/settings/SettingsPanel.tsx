@@ -9,8 +9,6 @@ import {
 } from "@formBuilder/components/ClassificationSelect";
 import { Logos, options } from "../../../settings/branding/components";
 import { useTemplateStore } from "@lib/store/useTemplateStore";
-import { SettingsModal } from "./SettingsDialog";
-import { Tooltip } from "@formBuilder/components/shared/Tooltip";
 
 import { toast } from "@formBuilder/components/shared/Toast";
 import { ErrorSaving } from "@formBuilder/components/shared/ErrorSaving";
@@ -32,7 +30,6 @@ export const SettingsPanel = () => {
   const { status } = useSession();
 
   const {
-    id,
     getId,
     email,
     securityAttribute,
@@ -43,7 +40,6 @@ export const SettingsPanel = () => {
     updateField,
     getSchema,
   } = useTemplateStore((s) => ({
-    id: s.id,
     getId: s.getId,
     email: s.deliveryOption?.emailAddress,
     updateSecurityAttribute: s.updateSecurityAttribute,
@@ -150,9 +146,6 @@ export const SettingsPanel = () => {
     [getSchema, brandName, getId, unsetField, createOrUpdateTemplate, updateField]
   );
 
-  // More ...
-  const [showSettings, setShowShowSettings] = useState<boolean>(false);
-
   const { hasApiKeyId } = useFormBuilderConfig();
 
   if (status !== "authenticated") {
@@ -187,26 +180,7 @@ export const SettingsPanel = () => {
             />
           </div>
         </div>
-        <div>
-          <Tooltip.Simple text={t("formSettingsModal.more")}>
-            <button
-              onClick={() => {
-                setShowShowSettings(true);
-              }}
-              className="flex h-full rounded-r-md bg-indigo-700 p-1 pt-2 font-bold text-white"
-              aria-label={t("more")}
-            >
-              {"..."}
-            </button>
-          </Tooltip.Simple>
-        </div>
       </div>
-      <SettingsModal
-        show={showSettings}
-        id={id}
-        isPublished={isPublished}
-        handleClose={setShowShowSettings}
-      />
     </>
   );
 };
