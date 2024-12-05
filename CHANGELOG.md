@@ -5,6 +5,14 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.29.2](https://github.com/cds-snc/platform-forms-client/compare/v3.29.1...v3.29.2) (2024-11-28)
+
+
+### Miscellaneous Chores
+
+* Add tests around rehydrateFormResponses ([#4720](https://github.com/cds-snc/platform-forms-client/issues/4720)) ([a61f74b](https://github.com/cds-snc/platform-forms-client/commit/a61f74b43a9edd79289590c4bc0d85c685bb47bf))
+* updates page load focus management  ([#4740](https://github.com/cds-snc/platform-forms-client/issues/4740)) ([0b9ff2c](https://github.com/cds-snc/platform-forms-client/commit/0b9ff2c7b01a2feab2fe3679676d4c1cc13e7538))
+
 ## [3.29.1](https://github.com/cds-snc/platform-forms-client/compare/v3.29.0...v3.29.1) (2024-11-28)
 
 ### Miscellaneous Chores

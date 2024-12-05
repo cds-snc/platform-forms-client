@@ -343,19 +343,24 @@ const createTemplateStore = (initProps?: Partial<InitialTemplateStoreProps>) => 
                 });
               });
             },
-            addSubChoice: (elIndex, subIndex) =>
+            addSubChoice: (elId, subIndex) => {
               set((state) => {
-                state.form.elements[elIndex].properties.subElements?.[
+                const parentIndex = getParentIndex(elId, state.form.elements);
+                if (parentIndex === undefined) return;
+                state.form.elements[parentIndex].properties.subElements?.[
                   subIndex
                 ].properties.choices?.push({ en: "", fr: "" });
-              }),
+              });
+            },
             removeChoice: (elIndex, choiceIndex) =>
               set((state) => {
                 state.form.elements[elIndex].properties.choices?.splice(choiceIndex, 1);
               }),
-            removeSubChoice: (elIndex, subIndex, choiceIndex) =>
+            removeSubChoice: (elId, subIndex, choiceIndex) =>
               set((state) => {
-                state.form.elements[elIndex].properties.subElements?.[
+                const parentIndex = getParentIndex(elId, state.form.elements);
+                if (parentIndex === undefined) return;
+                state.form.elements[parentIndex].properties.subElements?.[
                   subIndex
                 ].properties.choices?.splice(choiceIndex, 1);
               }),

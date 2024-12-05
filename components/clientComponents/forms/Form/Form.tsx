@@ -251,6 +251,14 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
               handleSubmit(e);
             }}
             noValidate
+            // This is needed so dynamic changes e.g. show-hide elements are announced when shown
+            // on the form. Though the relationship between the controlling and shown/hidden element
+            // is not very clear and can hopefully be improved.
+            // For more info and progress see: #4769
+            // Also, this this is not ideal because all child elements will inherit the live=polit
+            // and any "noisy" child elements should be overridden with aria-live="off" for AT
+            // e.g. labels. For more info and caveats see: #4766
+            aria-live="polite"
           >
             {isGroupsCheck &&
               isShowReviewPage &&

@@ -26,6 +26,8 @@ import { NextStep } from "./NextStep";
 import { Tooltip } from "@formBuilder/components/shared/Tooltip";
 import { StatusFilter } from "../types";
 
+import { useFormBuilderConfig } from "@lib/hooks/useFormBuilderConfig";
+
 interface DownloadTableProps {
   vaultSubmissions: VaultSubmissionList[];
   formName: string;
@@ -59,6 +61,8 @@ export const DownloadTable = ({
   const [showDownloadSuccess, setShowDownloadSuccess] = useState<false | string>(false);
   const [removedRows, setRemovedRows] = useState<string[]>([]);
   const accountEscalated = nagwareResult && nagwareResult.level > 2;
+
+  const { hasApiKeyId } = useFormBuilderConfig();
 
   const [tableItems, tableItemsDispatch] = useReducer(
     reducerTableItems,
@@ -109,9 +113,12 @@ export const DownloadTable = ({
         </Alert.Success>
       )}
       <section>
-        <SkipLinkReusable anchor="#reportProblemButton">
-          {t("downloadResponsesTable.skipLink")}
-        </SkipLinkReusable>
+        {!hasApiKeyId && (
+          <SkipLinkReusable anchor="#reportProblemButton">
+            {t("downloadResponsesTable.skipLink")}
+          </SkipLinkReusable>
+        )}
+
         <div id="notificationsTop">
           {downloadError && (
             <Alert.Danger>
