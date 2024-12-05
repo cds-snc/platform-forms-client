@@ -31,6 +31,7 @@ export const Combobox = (props: ComboboxProps): React.ReactElement => {
       onSelectedItemChange({ selectedItem }) {
         setValue(selectedItem);
       },
+      initialInputValue: field.value || "",
     });
 
   return (
@@ -45,13 +46,6 @@ export const Combobox = (props: ComboboxProps): React.ReactElement => {
           required={required}
           {...(name && { name })}
           data-testid="combobox-input"
-          {...(field?.value && { value: field.value || "" })}
-          onKeyUp={(e) => {
-            // Clear the input on escape. onKeyDown breaks other key interactions, why using onKeyUp
-            if (e.key === "Escape") {
-              setValue("");
-            }
-          }}
         />
 
         {items.length >= 1 && (
