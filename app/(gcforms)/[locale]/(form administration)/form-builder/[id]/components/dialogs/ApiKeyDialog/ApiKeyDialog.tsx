@@ -99,7 +99,7 @@ export const ApiKeyDialog = ({ isVaultDelivery = false }: { isVaultDelivery?: bo
           throw new Error(result.error);
         }
 
-        // Update the template store to reset the delivery option
+        // Sync the template store with the new delivery option
         resetDeliveryOption();
       }
 
