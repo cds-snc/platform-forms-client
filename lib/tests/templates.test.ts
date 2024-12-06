@@ -28,16 +28,15 @@ import { Prisma } from "@prisma/client";
 import { logEvent } from "@lib/auditLogs";
 import { unprocessedSubmissions } from "@lib/vault";
 import { deleteKey } from "@lib/serviceAccount";
-import { AccessControlError, authorizationCheck } from "@lib/privileges";
+import { AccessControlError } from "@lib/privileges";
+import { authorizationPass, authorizationFail } from "__utils__/authorization";
 
 jest.mock("@lib/privileges");
 jest.mock("@lib/auditLogs");
 jest.mock("@lib/actions/auth");
 jest.mock("@lib/serviceAccount");
 
-const mockedDeleteKey = jest.mocked(deleteKey, { shallow: true });
-
-const mockedAuthorizationCheck = jest.mocked(authorizationCheck, { shallow: true });
+const mockedDeleteKey = jest.mocked(deleteKey);
 
 const structuredClone = <T>(obj: T): T => {
   return v8.deserialize(v8.serialize(obj));
@@ -91,8 +90,9 @@ const user1Ability = { userID: "1" } as unknown as UserAbility;
 describe("Template CRUD functions", () => {
   describe("User with permission should be able to use CRUD functions", () => {
     beforeAll(() => {
-      mockedAuthorizationCheck.mockResolvedValue();
+      authorizationPass();
     });
+
     it("Create a Template", async () => {
       (prismaMock.template.create as jest.MockedFunction<any>).mockResolvedValue(
         buildPrismaResponse("formtestID", formConfiguration)
@@ -660,10 +660,8 @@ describe("Template CRUD functions", () => {
   });
 
   describe("User with no permission should not be able to use CRUD functions", () => {
-    beforeEach(() => {
-      mockedAuthorizationCheck.mockRejectedValue(
-        new AccessControlError(`Access Control Forbidden Action`)
-      );
+    beforeAll(() => {
+      authorizationFail();
     });
     it("Create a Template", async () => {
       await expect(

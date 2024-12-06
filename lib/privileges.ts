@@ -473,7 +473,7 @@ const _retrieveSubjects = async (
  * @param rules An array of rules to verify
  * @param logic Use an AND or OR logic comparison
  */
-export const authorizationCheck = async (
+const authorizationCheck = async (
   ability: UserAbility,
   rules: {
     action: Action;
@@ -541,16 +541,171 @@ export const authorizationCheck = async (
   }
 };
 
-/**
- * Authoriztion check that returns a boolean
- * @param args same as authorizationCheck
- * @returns boolean
- */
-
-export const authorizationCheckAsBoolean = async (
-  ...args: Parameters<typeof authorizationCheck>
-) => {
-  return authorizationCheck(...args)
-    .then(() => true)
-    .catch(() => false);
+export const authorization = {
+  check: authorizationCheck,
+  checkAsBoolean: async (...args: Parameters<typeof authorizationCheck>) => {
+    return authorizationCheck(...args)
+      .then(() => true)
+      .catch(() => false);
+  },
+  hasAdministrationPrivileges: async (ability: UserAbility) => {
+    return authorizationCheck(
+      ability,
+      [
+        {
+          action: "update",
+          subject: { type: "FormRecord", scope: "all" },
+        },
+        {
+          action: "view",
+          subject: { type: "Privilege", scope: "all" },
+        },
+        {
+          action: "view",
+          subject: { type: "User", scope: "all" },
+        },
+        {
+          action: "view",
+          subject: { type: "Setting", scope: "all" },
+        },
+        {
+          action: "view",
+          subject: { type: "Flag", scope: "all" },
+        },
+      ],
+      "one"
+    );
+  },
+  canCreateForm: async (ability: UserAbility) => {
+    return authorizationCheck(ability, [
+      {
+        action: "create",
+        subject: { type: "FormRecord", scope: "all" },
+      },
+    ]);
+  },
+  canViewForm: async (ability: UserAbility, formId: string) => {
+    return authorizationCheck(ability, [
+      {
+        action: "view",
+        subject: { type: "FormRecord", scope: { subjectId: formId } },
+      },
+    ]);
+  },
+  canEditForm: async (ability: UserAbility, formId: string) => {
+    return authorizationCheck(ability, [
+      {
+        action: "update",
+        subject: { type: "FormRecord", scope: { subjectId: formId } },
+      },
+    ]);
+  },
+  canDeleteForm: async (ability: UserAbility, formId: string) => {
+    return authorizationCheck(ability, [
+      {
+        action: "delete",
+        subject: { type: "FormRecord", scope: { subjectId: formId } },
+      },
+    ]);
+  },
+  canPublishForm: async (ability: UserAbility, formId: string) => {
+    return authorizationCheck(ability, [
+      {
+        action: "update",
+        subject: { type: "FormRecord", scope: { subjectId: formId } },
+        fields: ["isPublished"],
+      },
+    ]);
+  },
+  canViewAllForms: async (ability: UserAbility) => {
+    return authorization.check(ability, [
+      {
+        action: "view",
+        subject: { type: "FormRecord", scope: "all" },
+      },
+    ]);
+  },
+  canManageAllForms: async (ability: UserAbility) => {
+    return authorizationCheck(ability, [
+      {
+        action: "update",
+        subject: { type: "FormRecord", scope: "all" },
+      },
+    ]);
+  },
+  canManageUser: async (ability: UserAbility, userId: string) => {
+    return authorizationCheck(ability, [
+      {
+        action: "update",
+        subject: { type: "User", scope: { subjectId: userId } },
+        fields: ["active"],
+      },
+    ]);
+  },
+  canUpdateSecurityQuestions: async (ability: UserAbility, userId: string) => {
+    return authorizationCheck(ability, [
+      {
+        action: "update",
+        subject: { type: "User", scope: { subjectId: userId } },
+        fields: ["securityAnswers"],
+      },
+    ]);
+  },
+  canChangeUserName: async (ability: UserAbility, userId: string) => {
+    return authorizationCheck(ability, [
+      {
+        action: "update",
+        subject: { type: "User", scope: { subjectId: userId } },
+        fields: ["name"],
+      },
+    ]);
+  },
+  canManageAllUsers: async (ability: UserAbility) => {
+    return authorizationCheck(ability, [
+      {
+        action: "update",
+        subject: { type: "User", scope: "all" },
+      },
+    ]);
+  },
+  canAccessFlags: async (ability: UserAbility) => {
+    return authorizationCheck(ability, [
+      {
+        action: "view",
+        subject: { type: "Flag", scope: "all" },
+      },
+    ]);
+  },
+  canManageFlags: async (ability: UserAbility) => {
+    return authorizationCheck(ability, [
+      {
+        action: "update",
+        subject: { type: "Flag", scope: "all" },
+      },
+    ]);
+  },
+  canAccessSettings: async (ability: UserAbility) => {
+    return authorizationCheck(ability, [
+      {
+        action: "view",
+        subject: { type: "Setting", scope: "all" },
+      },
+    ]);
+  },
+  canManageSettings: async (ability: UserAbility) => {
+    return authorizationCheck(ability, [
+      {
+        action: "update",
+        subject: { type: "Setting", scope: "all" },
+      },
+    ]);
+  },
+  canAccessPrivileges: async (ability: UserAbility) => {
+    return authorizationCheck(ability, [
+      {
+        action: "view",
+        subject: { type: "Privilege", scope: "all" },
+      },
+    ]);
+  },
 };

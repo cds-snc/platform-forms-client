@@ -10,7 +10,7 @@ import {
   ClosedDetails,
 } from "@lib/types";
 import { Prisma } from "@prisma/client";
-import { AccessControlError, authorizationCheck } from "./privileges";
+import { AccessControlError, authorization } from "./privileges";
 import { logEvent } from "./auditLogs";
 import { logMessage } from "@lib/logger";
 import { unprocessedSubmissions, deleteDraftFormResponses } from "./vault";
@@ -127,9 +127,7 @@ export class TemplateHasUnprocessedSubmissions extends Error {
  * @returns Form Record or null if creation was not sucessfull.
  */
 export async function createTemplate(command: CreateTemplateCommand): Promise<FormRecord | null> {
-  await authorizationCheck(command.ability, [
-    { action: "create", subject: { type: "FormRecord", scope: "all" } },
-  ]).catch((e) => {
+  await authorization.canCreateForm(command.ability).catch((e) => {
     logEvent(
       command.ability.userID,
       { type: "Form" },
@@ -201,9 +199,7 @@ export async function getAllTemplates(
   try {
     const { requestedWhere, sortByDateUpdated } = options ?? {};
     // Can a user view any Template
-    await authorizationCheck(ability, [
-      { action: "view", subject: { type: "FormRecord", scope: "all" } },
-    ]);
+    await authorization.canViewAllForms(ability);
 
     const templates = await prisma.template
       .findMany({
@@ -381,9 +377,7 @@ export async function getFullTemplateByID(
   formID: string
 ): Promise<FormRecord | null> {
   try {
-    await authorizationCheck(ability, [
-      { action: "view", subject: { type: "FormRecord", scope: { subjectId: formID } } },
-    ]);
+    await authorization.canViewForm(ability, formID);
 
     const template = await prisma.template
       .findUnique({
@@ -423,9 +417,8 @@ export async function getTemplateWithAssociatedUsers(
   users: { id: string; name: string | null; email: string }[];
 } | null> {
   try {
-    await authorizationCheck(ability, [
-      { action: "view", subject: { type: "FormRecord", scope: { subjectId: formID } } },
-    ]);
+    await authorization.canViewForm(ability, formID);
+
     const templateWithAssociatedUsers = await prisma.template.findUnique({
       where: {
         id: formID,
@@ -474,9 +467,7 @@ export async function getTemplateWithAssociatedUsers(
  */
 export async function updateTemplate(command: UpdateTemplateCommand): Promise<FormRecord | null> {
   try {
-    await authorizationCheck(command.ability, [
-      { action: "update", subject: { type: "FormRecord", scope: { subjectId: command.formID } } },
-    ]);
+    await authorization.canEditForm(command.ability, command.formID);
 
     const updatedTemplate = await prisma.template
       .update({
@@ -573,13 +564,7 @@ export async function updateIsPublishedForTemplate(
   publishDescription: string
 ): Promise<FormRecord | null> {
   try {
-    await authorizationCheck(ability, [
-      {
-        action: "update",
-        subject: { type: "FormRecord", scope: { subjectId: formID } },
-        fields: ["isPublished"],
-      },
-    ]);
+    await authorization.canPublishForm(ability, formID);
 
     // We use a where unique input to ensure we are only updating the form if it is not published
     const updatedTemplate = await prisma.template
@@ -641,9 +626,7 @@ export async function removeAssignedUserFromTemplate(
   userID: string
 ): Promise<void> {
   try {
-    await authorizationCheck(ability, [
-      { action: "update", subject: { type: "FormRecord", scope: { subjectId: formID } } },
-    ]);
+    await authorization.canEditForm(ability, formID);
 
     const template = await prisma.template.findUnique({
       where: {
@@ -739,9 +722,7 @@ export async function assignUserToTemplate(
   userID: string
 ): Promise<void> {
   try {
-    await authorizationCheck(ability, [
-      { action: "update", subject: { type: "FormRecord", scope: { subjectId: formID } } },
-    ]);
+    await authorization.canEditForm(ability, formID);
 
     const template = await prisma.template.findUnique({
       where: {
@@ -899,10 +880,7 @@ export async function updateAssignedUsersForTemplate(
 ): Promise<FormRecord | null> {
   try {
     if (!users.length) throw new Error("No users provided");
-
-    await authorizationCheck(ability, [
-      { action: "update", subject: { type: "FormRecord", scope: { subjectId: formID } } },
-    ]);
+    await authorization.canEditForm(ability, formID);
 
     const template = await prisma.template.findFirst({
       where: {
@@ -1029,9 +1007,7 @@ export async function updateFormPurpose(
   formPurpose: string
 ): Promise<FormRecord | null> {
   try {
-    await authorizationCheck(ability, [
-      { action: "update", subject: { type: "FormRecord", scope: { subjectId: formID } } },
-    ]);
+    await authorization.canEditForm(ability, formID);
 
     const updatedTemplate = await prisma.template
       .update({
@@ -1094,9 +1070,7 @@ export async function updateResponseDeliveryOption(
   deliveryOption: DeliveryOption
 ): Promise<FormRecord | null> {
   try {
-    await authorizationCheck(ability, [
-      { action: "update", subject: { type: "FormRecord", scope: { subjectId: formID } } },
-    ]);
+    await authorization.canEditForm(ability, formID);
 
     const updatedTemplate = await prisma.template
       .update({
@@ -1176,9 +1150,7 @@ export async function removeDeliveryOption(
   formID: string
 ): Promise<FormRecord | null> {
   try {
-    await authorizationCheck(ability, [
-      { action: "update", subject: { type: "FormRecord", scope: { subjectId: formID } } },
-    ]);
+    await authorization.canEditForm(ability, formID);
 
     const updatedTemplate = await prisma.template
       .update({
@@ -1250,9 +1222,7 @@ export async function deleteTemplate(
   formID: string
 ): Promise<FormRecord | null> {
   try {
-    await authorizationCheck(ability, [
-      { action: "delete", subject: { type: "FormRecord", scope: { subjectId: formID } } },
-    ]);
+    await authorization.canDeleteForm(ability, formID);
 
     // Ignore cache (last boolean parameter) because we want to make sure we did not get new submissions while in the flow of deleting a form
     const numOfUnprocessedSubmissions = await unprocessedSubmissions(ability, formID, true);
@@ -1308,10 +1278,9 @@ export async function deleteTemplate(
   }
 }
 
+// Remove and replace this utility with new authorization object in code
 export const checkUserHasTemplateOwnership = async (ability: UserAbility, formID: string) => {
-  await authorizationCheck(ability, [
-    { action: "view", subject: { type: "FormRecord", scope: { subjectId: formID } } },
-  ]);
+  await authorization.canEditForm(ability, formID);
 };
 
 /*
@@ -1340,9 +1309,7 @@ export const updateClosedData = async (
   closingDate: string | null,
   details?: ClosedDetails
 ) => {
-  await authorizationCheck(ability, [
-    { action: "update", subject: { type: "FormRecord", scope: { subjectId: formID } } },
-  ]);
+  await authorization.canEditForm(ability, formID);
 
   let detailsData: ClosedDetails | null = null;
 
@@ -1394,9 +1361,7 @@ export const updateSecurityAttribute = async (
   securityAttribute: string
 ) => {
   try {
-    await authorizationCheck(ability, [
-      { action: "update", subject: { type: "FormRecord", scope: { subjectId: formID } } },
-    ]);
+    await authorization.canEditForm(ability, formID);
 
     const updatedTemplate = await prisma.template
       .update({
