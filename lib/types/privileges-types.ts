@@ -2,13 +2,12 @@ import { InferSubjects, MongoQuery, MongoAbility } from "@casl/ability";
 import { FormRecord } from "@lib/types";
 import { User, Privilege as PrismaPrivilege, Setting } from "@prisma/client";
 
-interface CASL_FormRecord extends FormRecord {
+interface CASL_FormRecord extends Omit<FormRecord, "form"> {
   kind: "FormRecord";
 }
 
 interface CASL_User extends User {
   kind: "User";
-  [key: string]: string | boolean | null | Date;
 }
 
 interface CASL_Privilege extends Privilege {

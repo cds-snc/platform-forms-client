@@ -24,6 +24,7 @@ import get from "lodash/get";
 import { logMessage } from "./logger";
 import { logEvent } from "./auditLogs";
 import { redirect } from "next/navigation";
+import { checkOne } from "./cache/flags";
 
 /*
 This file contains references to server side only modules.
@@ -40,8 +41,8 @@ export const createAbility = (session: Session): UserAbility => {
 
 // Creates a new custom Error Class
 export class AccessControlError extends Error {
-  constructor(message?: string) {
-    super(message ?? "AccessControlError");
+  constructor(message: string = "AccessControlError") {
+    super(message);
     Object.setPrototypeOf(this, AccessControlError.prototype);
   }
 }
@@ -376,4 +377,335 @@ export const checkPrivilegesAsBoolean = (
     if (options?.redirect) redirect(`/admin/unauthorized`);
     return false;
   }
+};
+
+const _getSubject = async (subject: { type: Extract<Subject, string>; id: string }) => {
+  if (subject.id === "all") {
+    return {};
+  }
+  switch (subject.type) {
+    case "User":
+      return prisma.user.findUniqueOrThrow({
+        where: {
+          id: subject.id,
+        },
+        select: {
+          id: true,
+          name: true,
+          email: true,
+          lastLogin: true,
+          active: true,
+        },
+      });
+    case "FormRecord":
+      return prisma.template.findUniqueOrThrow({
+        where: {
+          id: subject.id,
+        },
+        select: {
+          id: true,
+          created_at: true,
+          updated_at: true,
+          name: true,
+          isPublished: true,
+          users: {
+            select: {
+              id: true,
+              name: true,
+              email: true,
+              active: true,
+            },
+          },
+        },
+      });
+    case "Privilege":
+      return prisma.privilege.findUniqueOrThrow({
+        where: {
+          id: subject.id,
+        },
+      });
+    case "Setting":
+      return prisma.setting.findUniqueOrThrow({
+        where: {
+          internalId: subject.id,
+        },
+      });
+    case "Flag":
+      return { id: subject.id, value: await checkOne(subject.id) };
+    default:
+      throw new Error("Subject type not valid for privilege check");
+  }
+};
+
+const _retrieveSubjects = async (
+  cache: Map<string, unknown>,
+  subject: {
+    type: Extract<Subject, string>;
+    scope: "all" | { subjectId: string } | { subjectIds: string[] };
+  }
+) => {
+  if (subject.scope === "all") {
+    return [{}];
+  }
+  if ("subjectId" in subject.scope) {
+    const cachedItem = cache.get(`${subject.type}:${subject.scope.subjectId}`);
+    if (cachedItem) return [cachedItem];
+
+    const item = await _getSubject({ type: subject.type, id: subject.scope.subjectId });
+    cache.set(`${subject.type}:${subject.scope.subjectId}`, item);
+    return [item];
+  }
+  return Promise.all(
+    subject.scope.subjectIds.map(async (id) => {
+      const cachedItem = cache.get(`${subject.type}:${id}`);
+      if (cachedItem) return cachedItem;
+
+      const item = await _getSubject({ type: subject.type, id });
+      cache.set(`${subject.type}:${id}`, item);
+      return item;
+    })
+  );
+};
+
+/**
+ * Check if a user has the ability to perform an action on a subject
+ * @param ability The ability instance associated to a User
+ * @param rules An array of rules to verify
+ * @param logic Use an AND or OR logic comparison
+ */
+const authorizationCheck = async (
+  ability: UserAbility,
+  rules: {
+    action: Action;
+    subject: {
+      type: Extract<Subject, string>;
+      scope: "all" | { subjectId: string } | { subjectIds: string[] };
+    };
+    fields?: string[];
+  }[],
+  logic: "all" | "one" = "all"
+): Promise<void> => {
+  // Create a local scoped memory cache to store the subject objects between rules
+  const cache = new Map();
+
+  const result = await Promise.all(
+    rules.flatMap(async ({ action, subject, fields }) => {
+      const subjectsToValidate = await _retrieveSubjects(cache, subject);
+
+      return subjectsToValidate.flatMap((subjectToValidate) => {
+        if (fields) {
+          return fields?.map((f) => {
+            const ruleResult = ability.can(
+              action,
+              setSubjectType(subject.type, subjectToValidate),
+              f
+            );
+            logMessage.debug(
+              `Privilege Check ${ruleResult ? "PASS" : "FAIL"}: Can ${action} on ${subject.type} ${
+                fields && `for field ${fields}`
+              } `
+            );
+            return ruleResult;
+          });
+        } else {
+          // There are no fields to validate
+          const ruleResult = ability.can(action, setSubjectType(subject.type, subjectToValidate));
+          logMessage.debug(
+            `Privilege Check ${ruleResult ? "PASS" : "FAIL"}: Can ${action} on ${subject.type}`
+          );
+          return ruleResult;
+        }
+      });
+    })
+  )
+    .then((results) => results.flat())
+    .catch((e) => {
+      logMessage.error(`Error in privilege check: ${e}`);
+      //  On any error in the promise chain, default to forbidden
+      throw new AccessControlError(`Access Control Forbidden Action`);
+    });
+
+  let accessAllowed = false;
+
+  switch (logic) {
+    case "all":
+      // The initial value needs to be true because of the AND logic
+      accessAllowed = result.reduce((prev, curr) => prev && curr, true);
+      break;
+    case "one":
+      accessAllowed = result.reduce((prev, curr) => prev || curr, false);
+      break;
+  }
+  if (!accessAllowed) {
+    throw new AccessControlError(`Access Control Forbidden Action`);
+  }
+};
+
+export const authorization = {
+  check: authorizationCheck,
+  checkAsBoolean: async (...args: Parameters<typeof authorizationCheck>) => {
+    return authorizationCheck(...args)
+      .then(() => true)
+      .catch(() => false);
+  },
+  hasAdministrationPrivileges: async (ability: UserAbility) => {
+    return authorizationCheck(
+      ability,
+      [
+        {
+          action: "update",
+          subject: { type: "FormRecord", scope: "all" },
+        },
+        {
+          action: "view",
+          subject: { type: "Privilege", scope: "all" },
+        },
+        {
+          action: "view",
+          subject: { type: "User", scope: "all" },
+        },
+        {
+          action: "view",
+          subject: { type: "Setting", scope: "all" },
+        },
+        {
+          action: "view",
+          subject: { type: "Flag", scope: "all" },
+        },
+      ],
+      "one"
+    );
+  },
+  canCreateForm: async (ability: UserAbility) => {
+    return authorizationCheck(ability, [
+      {
+        action: "create",
+        subject: { type: "FormRecord", scope: "all" },
+      },
+    ]);
+  },
+  canViewForm: async (ability: UserAbility, formId: string) => {
+    return authorizationCheck(ability, [
+      {
+        action: "view",
+        subject: { type: "FormRecord", scope: { subjectId: formId } },
+      },
+    ]);
+  },
+  canEditForm: async (ability: UserAbility, formId: string) => {
+    return authorizationCheck(ability, [
+      {
+        action: "update",
+        subject: { type: "FormRecord", scope: { subjectId: formId } },
+      },
+    ]);
+  },
+  canDeleteForm: async (ability: UserAbility, formId: string) => {
+    return authorizationCheck(ability, [
+      {
+        action: "delete",
+        subject: { type: "FormRecord", scope: { subjectId: formId } },
+      },
+    ]);
+  },
+  canPublishForm: async (ability: UserAbility, formId: string) => {
+    return authorizationCheck(ability, [
+      {
+        action: "update",
+        subject: { type: "FormRecord", scope: { subjectId: formId } },
+        fields: ["isPublished"],
+      },
+    ]);
+  },
+  canViewAllForms: async (ability: UserAbility) => {
+    return authorization.check(ability, [
+      {
+        action: "view",
+        subject: { type: "FormRecord", scope: "all" },
+      },
+    ]);
+  },
+  canManageAllForms: async (ability: UserAbility) => {
+    return authorizationCheck(ability, [
+      {
+        action: "update",
+        subject: { type: "FormRecord", scope: "all" },
+      },
+    ]);
+  },
+  canManageUser: async (ability: UserAbility, userId: string) => {
+    return authorizationCheck(ability, [
+      {
+        action: "update",
+        subject: { type: "User", scope: { subjectId: userId } },
+        fields: ["active"],
+      },
+    ]);
+  },
+  canUpdateSecurityQuestions: async (ability: UserAbility, userId: string) => {
+    return authorizationCheck(ability, [
+      {
+        action: "update",
+        subject: { type: "User", scope: { subjectId: userId } },
+        fields: ["securityAnswers"],
+      },
+    ]);
+  },
+  canChangeUserName: async (ability: UserAbility, userId: string) => {
+    return authorizationCheck(ability, [
+      {
+        action: "update",
+        subject: { type: "User", scope: { subjectId: userId } },
+        fields: ["name"],
+      },
+    ]);
+  },
+  canManageAllUsers: async (ability: UserAbility) => {
+    return authorizationCheck(ability, [
+      {
+        action: "update",
+        subject: { type: "User", scope: "all" },
+      },
+    ]);
+  },
+  canAccessFlags: async (ability: UserAbility) => {
+    return authorizationCheck(ability, [
+      {
+        action: "view",
+        subject: { type: "Flag", scope: "all" },
+      },
+    ]);
+  },
+  canManageFlags: async (ability: UserAbility) => {
+    return authorizationCheck(ability, [
+      {
+        action: "update",
+        subject: { type: "Flag", scope: "all" },
+      },
+    ]);
+  },
+  canAccessSettings: async (ability: UserAbility) => {
+    return authorizationCheck(ability, [
+      {
+        action: "view",
+        subject: { type: "Setting", scope: "all" },
+      },
+    ]);
+  },
+  canManageSettings: async (ability: UserAbility) => {
+    return authorizationCheck(ability, [
+      {
+        action: "update",
+        subject: { type: "Setting", scope: "all" },
+      },
+    ]);
+  },
+  canAccessPrivileges: async (ability: UserAbility) => {
+    return authorizationCheck(ability, [
+      {
+        action: "view",
+        subject: { type: "Privilege", scope: "all" },
+      },
+    ]);
+  },
 };

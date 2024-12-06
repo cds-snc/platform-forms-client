@@ -16,7 +16,12 @@ export const Base: RawRuleOf<MongoAbility<Abilities>>[] = [
   },
   { action: "update", subject: "FormRecord", fields: ["isPublished"], inverted: true },
   {
-    action: ["create", "view", "update"],
+    action: ["view"],
+    subject: "User",
+    conditions: { id: "${user.id}" },
+  },
+  {
+    action: ["update"],
     subject: "User",
     fields: ["securityAnswers", "name"],
     conditions: { id: "${user.id}" },
@@ -54,8 +59,7 @@ export const ViewApplicationSettings: RawRuleOf<MongoAbility<Abilities>>[] = [
 ];
 
 export const ManageApplicationSettings: RawRuleOf<MongoAbility<Abilities>>[] = [
-  { action: "view", subject: "Flag" },
-  { action: "update", subject: "Flag" },
+  { action: ["view", "update"], subject: "Flag" },
   { action: ["create", "view", "update", "delete"], subject: "Setting" },
 ];
 

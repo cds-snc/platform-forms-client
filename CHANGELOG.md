@@ -53,134 +53,119 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [3.29.1](https://github.com/cds-snc/platform-forms-client/compare/v3.29.0...v3.29.1) (2024-11-28)
 
-
 ### Miscellaneous Chores
 
-* update tests to remove noise ([#4742](https://github.com/cds-snc/platform-forms-client/issues/4742)) ([d1bf5ab](https://github.com/cds-snc/platform-forms-client/commit/d1bf5ab38026011277419501b06683efaf40ef8a))
+- update tests to remove noise ([#4742](https://github.com/cds-snc/platform-forms-client/issues/4742)) ([d1bf5ab](https://github.com/cds-snc/platform-forms-client/commit/d1bf5ab38026011277419501b06683efaf40ef8a))
 
 ## [3.29.0](https://github.com/cds-snc/platform-forms-client/compare/v3.28.0...v3.29.0) (2024-11-28)
 
-
 ### Features
 
-* Add interactive script to download and confirm submissions ([#4702](https://github.com/cds-snc/platform-forms-client/issues/4702)) ([196ae37](https://github.com/cds-snc/platform-forms-client/commit/196ae37a492634f03c303d8a3c6cdf5f9c4c6832))
-
+- Add interactive script to download and confirm submissions ([#4702](https://github.com/cds-snc/platform-forms-client/issues/4702)) ([196ae37](https://github.com/cds-snc/platform-forms-client/commit/196ae37a492634f03c303d8a3c6cdf5f9c4c6832))
 
 ### Bug Fixes
 
-* Fixes Review Page showing the "Go back" button twice ([#4681](https://github.com/cds-snc/platform-forms-client/issues/4681)) ([79d0064](https://github.com/cds-snc/platform-forms-client/commit/79d0064dbb3692bdb035e0899b599f415ac27d33))
-* for Radio button / group unexpected behaviour ([#4708](https://github.com/cds-snc/platform-forms-client/issues/4708)) ([afbf9c7](https://github.com/cds-snc/platform-forms-client/commit/afbf9c7d88b78629c134a6297b9506c658d60464))
-* update to stop Jaws screen reader re-announcing the form label on every input change ([#4704](https://github.com/cds-snc/platform-forms-client/issues/4704)) ([290a78b](https://github.com/cds-snc/platform-forms-client/commit/290a78b77a64d04e276774c401bcc0dec13453e9))
-
+- Fixes Review Page showing the "Go back" button twice ([#4681](https://github.com/cds-snc/platform-forms-client/issues/4681)) ([79d0064](https://github.com/cds-snc/platform-forms-client/commit/79d0064dbb3692bdb035e0899b599f415ac27d33))
+- for Radio button / group unexpected behaviour ([#4708](https://github.com/cds-snc/platform-forms-client/issues/4708)) ([afbf9c7](https://github.com/cds-snc/platform-forms-client/commit/afbf9c7d88b78629c134a6297b9506c658d60464))
+- update to stop Jaws screen reader re-announcing the form label on every input change ([#4704](https://github.com/cds-snc/platform-forms-client/issues/4704)) ([290a78b](https://github.com/cds-snc/platform-forms-client/commit/290a78b77a64d04e276774c401bcc0dec13453e9))
 
 ### Miscellaneous Chores
 
-* Add ability for gc forms admin to switch to api mode for live form ([#4709](https://github.com/cds-snc/platform-forms-client/issues/4709)) ([99f843c](https://github.com/cds-snc/platform-forms-client/commit/99f843c4f53d0ae9ff25cefa40930f9ea58dc8e2))
-* add migration script to add StatusCreatedAt property to Vault NAME# items ([#4679](https://github.com/cds-snc/platform-forms-client/issues/4679)) ([0955ab4](https://github.com/cds-snc/platform-forms-client/commit/0955ab4b32cd2bf36b1ecf3d8b2bf568763a4142))
-* Add tests for remove markdown ([#4730](https://github.com/cds-snc/platform-forms-client/issues/4730)) ([26ab35b](https://github.com/cds-snc/platform-forms-client/commit/26ab35bea3e7de7d42d7acd0951b5d5af6f5ada7))
-* Adds a check that an api key exists before showing throttle ui ([#4719](https://github.com/cds-snc/platform-forms-client/issues/4719)) ([3ec6bca](https://github.com/cds-snc/platform-forms-client/commit/3ec6bcae5bc8b6e29da2d5e26434342acaec9e68))
-* clean markdown from TreeView ([#4705](https://github.com/cds-snc/platform-forms-client/issues/4705)) ([881ff61](https://github.com/cds-snc/platform-forms-client/commit/881ff61c73e1bcd65eb1c2616b5de14c762ad0c1))
-* Hide other delivery options when API key generated ([#4718](https://github.com/cds-snc/platform-forms-client/issues/4718)) ([b407c7f](https://github.com/cds-snc/platform-forms-client/commit/b407c7f1e7d2670880f3334de3a164f49d5d042e))
-* Refactor ModalRules to use Dialog component ([#4642](https://github.com/cds-snc/platform-forms-client/issues/4642)) ([b868142](https://github.com/cds-snc/platform-forms-client/commit/b8681421dda76b569d778eb425f989f134600d65))
-* Remove key check for manage api key ([#4735](https://github.com/cds-snc/platform-forms-client/issues/4735)) ([91fb0c5](https://github.com/cds-snc/platform-forms-client/commit/91fb0c5f8cef96d8b91a33b8e3d74a420fbaabe9))
-* update handling for next element id ([#4695](https://github.com/cds-snc/platform-forms-client/issues/4695)) ([4f481a8](https://github.com/cds-snc/platform-forms-client/commit/4f481a85e01748e8b56864cd0444f8195f8b3f35))
-* update testing library packages ([#4733](https://github.com/cds-snc/platform-forms-client/issues/4733)) ([5414aab](https://github.com/cds-snc/platform-forms-client/commit/5414aab5ad49a82e1a5e81bc0cb801234d4f240a))
-* Updates organizations list ([#4701](https://github.com/cds-snc/platform-forms-client/issues/4701)) ([86eae83](https://github.com/cds-snc/platform-forms-client/commit/86eae83e171736fd2a30b3d01fbb1a67547a75e6))
+- Add ability for gc forms admin to switch to api mode for live form ([#4709](https://github.com/cds-snc/platform-forms-client/issues/4709)) ([99f843c](https://github.com/cds-snc/platform-forms-client/commit/99f843c4f53d0ae9ff25cefa40930f9ea58dc8e2))
+- add migration script to add StatusCreatedAt property to Vault NAME# items ([#4679](https://github.com/cds-snc/platform-forms-client/issues/4679)) ([0955ab4](https://github.com/cds-snc/platform-forms-client/commit/0955ab4b32cd2bf36b1ecf3d8b2bf568763a4142))
+- Add tests for remove markdown ([#4730](https://github.com/cds-snc/platform-forms-client/issues/4730)) ([26ab35b](https://github.com/cds-snc/platform-forms-client/commit/26ab35bea3e7de7d42d7acd0951b5d5af6f5ada7))
+- Adds a check that an api key exists before showing throttle ui ([#4719](https://github.com/cds-snc/platform-forms-client/issues/4719)) ([3ec6bca](https://github.com/cds-snc/platform-forms-client/commit/3ec6bcae5bc8b6e29da2d5e26434342acaec9e68))
+- clean markdown from TreeView ([#4705](https://github.com/cds-snc/platform-forms-client/issues/4705)) ([881ff61](https://github.com/cds-snc/platform-forms-client/commit/881ff61c73e1bcd65eb1c2616b5de14c762ad0c1))
+- Hide other delivery options when API key generated ([#4718](https://github.com/cds-snc/platform-forms-client/issues/4718)) ([b407c7f](https://github.com/cds-snc/platform-forms-client/commit/b407c7f1e7d2670880f3334de3a164f49d5d042e))
+- Refactor ModalRules to use Dialog component ([#4642](https://github.com/cds-snc/platform-forms-client/issues/4642)) ([b868142](https://github.com/cds-snc/platform-forms-client/commit/b8681421dda76b569d778eb425f989f134600d65))
+- Remove key check for manage api key ([#4735](https://github.com/cds-snc/platform-forms-client/issues/4735)) ([91fb0c5](https://github.com/cds-snc/platform-forms-client/commit/91fb0c5f8cef96d8b91a33b8e3d74a420fbaabe9))
+- update handling for next element id ([#4695](https://github.com/cds-snc/platform-forms-client/issues/4695)) ([4f481a8](https://github.com/cds-snc/platform-forms-client/commit/4f481a85e01748e8b56864cd0444f8195f8b3f35))
+- update testing library packages ([#4733](https://github.com/cds-snc/platform-forms-client/issues/4733)) ([5414aab](https://github.com/cds-snc/platform-forms-client/commit/5414aab5ad49a82e1a5e81bc0cb801234d4f240a))
+- Updates organizations list ([#4701](https://github.com/cds-snc/platform-forms-client/issues/4701)) ([86eae83](https://github.com/cds-snc/platform-forms-client/commit/86eae83e171736fd2a30b3d01fbb1a67547a75e6))
 
 ## [3.28.0](https://github.com/cds-snc/platform-forms-client/compare/v3.27.0...v3.28.0) (2024-11-22)
 
-
 ### Features
 
-* update new Status#CreatedAt field when changing Status in DynamoDB Vault entries ([#4257](https://github.com/cds-snc/platform-forms-client/issues/4257)) ([a7acab7](https://github.com/cds-snc/platform-forms-client/commit/a7acab786cfacbdbe3fea7d559e086ce7ecde86a))
-
+- update new Status#CreatedAt field when changing Status in DynamoDB Vault entries ([#4257](https://github.com/cds-snc/platform-forms-client/issues/4257)) ([a7acab7](https://github.com/cds-snc/platform-forms-client/commit/a7acab786cfacbdbe3fea7d559e086ce7ecde86a))
 
 ### Bug Fixes
 
-* API screen translations - version 2.0 content changes ([#4676](https://github.com/cds-snc/platform-forms-client/issues/4676)) ([4792a62](https://github.com/cds-snc/platform-forms-client/commit/4792a62fe1a452f8673e6a1789e2dca9008359bc))
-* Updates duplicate element to ensure proper translation for "copy" ([#4672](https://github.com/cds-snc/platform-forms-client/issues/4672)) ([605a60a](https://github.com/cds-snc/platform-forms-client/commit/605a60aac50bd8e8def54c5e189acc926414da86))
-
+- API screen translations - version 2.0 content changes ([#4676](https://github.com/cds-snc/platform-forms-client/issues/4676)) ([4792a62](https://github.com/cds-snc/platform-forms-client/commit/4792a62fe1a452f8673e6a1789e2dca9008359bc))
+- Updates duplicate element to ensure proper translation for "copy" ([#4672](https://github.com/cds-snc/platform-forms-client/issues/4672)) ([605a60a](https://github.com/cds-snc/platform-forms-client/commit/605a60aac50bd8e8def54c5e189acc926414da86))
 
 ### Miscellaneous Chores
 
-* add migration script to add CreatedAt property to Vault CONF# items ([#4678](https://github.com/cds-snc/platform-forms-client/issues/4678)) ([7870704](https://github.com/cds-snc/platform-forms-client/commit/7870704d9fd5fc175bec7a4dfe2c082f8f55ab46))
-* Move settings help dialogs into settings components folder ([#4682](https://github.com/cds-snc/platform-forms-client/issues/4682)) ([2eb1178](https://github.com/cds-snc/platform-forms-client/commit/2eb1178ab1c3792c5f826eede6396610c794842d))
-* update Notify timeout setting ([#4692](https://github.com/cds-snc/platform-forms-client/issues/4692)) ([6a39db7](https://github.com/cds-snc/platform-forms-client/commit/6a39db712919df2d27e9f2171db0fbcf777ab7be))
-* update system status boxes ([#4686](https://github.com/cds-snc/platform-forms-client/issues/4686)) ([20f5ad0](https://github.com/cds-snc/platform-forms-client/commit/20f5ad041beccf79e2b2057e67971f89d370bc9b))
-* Use optional catch-all segment for statusFilter ([#4671](https://github.com/cds-snc/platform-forms-client/issues/4671)) ([054e3f1](https://github.com/cds-snc/platform-forms-client/commit/054e3f1e8c03f5df6d4a84c829de67be1b308ddf))
+- add migration script to add CreatedAt property to Vault CONF# items ([#4678](https://github.com/cds-snc/platform-forms-client/issues/4678)) ([7870704](https://github.com/cds-snc/platform-forms-client/commit/7870704d9fd5fc175bec7a4dfe2c082f8f55ab46))
+- Move settings help dialogs into settings components folder ([#4682](https://github.com/cds-snc/platform-forms-client/issues/4682)) ([2eb1178](https://github.com/cds-snc/platform-forms-client/commit/2eb1178ab1c3792c5f826eede6396610c794842d))
+- update Notify timeout setting ([#4692](https://github.com/cds-snc/platform-forms-client/issues/4692)) ([6a39db7](https://github.com/cds-snc/platform-forms-client/commit/6a39db712919df2d27e9f2171db0fbcf777ab7be))
+- update system status boxes ([#4686](https://github.com/cds-snc/platform-forms-client/issues/4686)) ([20f5ad0](https://github.com/cds-snc/platform-forms-client/commit/20f5ad041beccf79e2b2057e67971f89d370bc9b))
+- Use optional catch-all segment for statusFilter ([#4671](https://github.com/cds-snc/platform-forms-client/issues/4671)) ([054e3f1](https://github.com/cds-snc/platform-forms-client/commit/054e3f1e8c03f5df6d4a84c829de67be1b308ddf))
 
 ## [3.27.0](https://github.com/cds-snc/platform-forms-client/compare/v3.26.0...v3.27.0) (2024-11-20)
 
-
 ### Features
 
-* adds throttling UI ([#4655](https://github.com/cds-snc/platform-forms-client/issues/4655)) ([55542ad](https://github.com/cds-snc/platform-forms-client/commit/55542adb5b9c761b4b92c909172af59d0df0cdf2))
-* api response dashboard ([#4585](https://github.com/cds-snc/platform-forms-client/issues/4585)) ([a6aa565](https://github.com/cds-snc/platform-forms-client/commit/a6aa565b9e1b22ab8d2f8a4840a508ffdb30d7e9))
-
+- adds throttling UI ([#4655](https://github.com/cds-snc/platform-forms-client/issues/4655)) ([55542ad](https://github.com/cds-snc/platform-forms-client/commit/55542adb5b9c761b4b92c909172af59d0df0cdf2))
+- api response dashboard ([#4585](https://github.com/cds-snc/platform-forms-client/issues/4585)) ([a6aa565](https://github.com/cds-snc/platform-forms-client/commit/a6aa565b9e1b22ab8d2f8a4840a508ffdb30d7e9))
 
 ### Bug Fixes
 
-* Adds date ISO check to closing a form ([#4563](https://github.com/cds-snc/platform-forms-client/issues/4563)) ([edc09bb](https://github.com/cds-snc/platform-forms-client/commit/edc09bb533f5d9b610d2cd662d9524daa31a7127))
-* translations CSV export where some commas were not escaped ([#4666](https://github.com/cds-snc/platform-forms-client/issues/4666)) ([371b2fc](https://github.com/cds-snc/platform-forms-client/commit/371b2fc4fd777998f245e361dadb45e7e66921f7))
-
+- Adds date ISO check to closing a form ([#4563](https://github.com/cds-snc/platform-forms-client/issues/4563)) ([edc09bb](https://github.com/cds-snc/platform-forms-client/commit/edc09bb533f5d9b610d2cd662d9524daa31a7127))
+- translations CSV export where some commas were not escaped ([#4666](https://github.com/cds-snc/platform-forms-client/issues/4666)) ([371b2fc](https://github.com/cds-snc/platform-forms-client/commit/371b2fc4fd777998f245e361dadb45e7e66921f7))
 
 ### Miscellaneous Chores
 
-* add form id to log for form not found ([#4677](https://github.com/cds-snc/platform-forms-client/issues/4677)) ([c5131cf](https://github.com/cds-snc/platform-forms-client/commit/c5131cf5da113ba30e86039bc88a6d02a9cd8a36))
-* add health check box for "awaiting" api delivery ([#4665](https://github.com/cds-snc/platform-forms-client/issues/4665)) ([8c2e0b3](https://github.com/cds-snc/platform-forms-client/commit/8c2e0b356b38eec5a6477cc08a9e4f91a29d16d9))
-* Add report a problem for API mode ([#4675](https://github.com/cds-snc/platform-forms-client/issues/4675)) ([8b5b519](https://github.com/cds-snc/platform-forms-client/commit/8b5b519c64988c2f427120bebd6d7913e4cef1d9))
-* Add view for API submissions available ([#4659](https://github.com/cds-snc/platform-forms-client/issues/4659)) ([1ca5aa1](https://github.com/cds-snc/platform-forms-client/commit/1ca5aa1cf01546da0a75e42ff58f32f85ad164b7))
-* remove api access route ([#4648](https://github.com/cds-snc/platform-forms-client/issues/4648)) ([b0633da](https://github.com/cds-snc/platform-forms-client/commit/b0633da8dbe997af4f73c55eab3de201b7dd5b50))
-* Server Action to check for any new responses ([#4657](https://github.com/cds-snc/platform-forms-client/issues/4657)) ([f42654f](https://github.com/cds-snc/platform-forms-client/commit/f42654fa2bc522bdcb2008e704c1332602d2be4b))
-* System health component ([#4664](https://github.com/cds-snc/platform-forms-client/issues/4664)) ([f346ce2](https://github.com/cds-snc/platform-forms-client/commit/f346ce22f22cca5f35f3852422212e3caa2a1bdb))
-* update api check ([#4653](https://github.com/cds-snc/platform-forms-client/issues/4653)) ([fd00431](https://github.com/cds-snc/platform-forms-client/commit/fd00431a387707bdde1718ecfea9234e3b8701b2))
-* update check for settings panel  ([#4658](https://github.com/cds-snc/platform-forms-client/issues/4658)) ([57c1a60](https://github.com/cds-snc/platform-forms-client/commit/57c1a60748c0d1c6fac46867b4d1661a7baad8ce))
+- add form id to log for form not found ([#4677](https://github.com/cds-snc/platform-forms-client/issues/4677)) ([c5131cf](https://github.com/cds-snc/platform-forms-client/commit/c5131cf5da113ba30e86039bc88a6d02a9cd8a36))
+- add health check box for "awaiting" api delivery ([#4665](https://github.com/cds-snc/platform-forms-client/issues/4665)) ([8c2e0b3](https://github.com/cds-snc/platform-forms-client/commit/8c2e0b356b38eec5a6477cc08a9e4f91a29d16d9))
+- Add report a problem for API mode ([#4675](https://github.com/cds-snc/platform-forms-client/issues/4675)) ([8b5b519](https://github.com/cds-snc/platform-forms-client/commit/8b5b519c64988c2f427120bebd6d7913e4cef1d9))
+- Add view for API submissions available ([#4659](https://github.com/cds-snc/platform-forms-client/issues/4659)) ([1ca5aa1](https://github.com/cds-snc/platform-forms-client/commit/1ca5aa1cf01546da0a75e42ff58f32f85ad164b7))
+- remove api access route ([#4648](https://github.com/cds-snc/platform-forms-client/issues/4648)) ([b0633da](https://github.com/cds-snc/platform-forms-client/commit/b0633da8dbe997af4f73c55eab3de201b7dd5b50))
+- Server Action to check for any new responses ([#4657](https://github.com/cds-snc/platform-forms-client/issues/4657)) ([f42654f](https://github.com/cds-snc/platform-forms-client/commit/f42654fa2bc522bdcb2008e704c1332602d2be4b))
+- System health component ([#4664](https://github.com/cds-snc/platform-forms-client/issues/4664)) ([f346ce2](https://github.com/cds-snc/platform-forms-client/commit/f346ce22f22cca5f35f3852422212e3caa2a1bdb))
+- update api check ([#4653](https://github.com/cds-snc/platform-forms-client/issues/4653)) ([fd00431](https://github.com/cds-snc/platform-forms-client/commit/fd00431a387707bdde1718ecfea9234e3b8701b2))
+- update check for settings panel ([#4658](https://github.com/cds-snc/platform-forms-client/issues/4658)) ([57c1a60](https://github.com/cds-snc/platform-forms-client/commit/57c1a60748c0d1c6fac46867b4d1661a7baad8ce))
 
 ## [3.26.0](https://github.com/cds-snc/platform-forms-client/compare/v3.25.2...v3.26.0) (2024-11-12)
 
-
 ### Features
 
-* Upgrade to Next JS 15 + React 19 ([#4468](https://github.com/cds-snc/platform-forms-client/issues/4468)) ([6aad138](https://github.com/cds-snc/platform-forms-client/commit/6aad138e303c3adada23be7a2e89a278f1fa51ca))
-
+- Upgrade to Next JS 15 + React 19 ([#4468](https://github.com/cds-snc/platform-forms-client/issues/4468)) ([6aad138](https://github.com/cds-snc/platform-forms-client/commit/6aad138e303c3adada23be7a2e89a278f1fa51ca))
 
 ### Bug Fixes
 
-* PR Review Environment not handling complex secrets ([#4610](https://github.com/cds-snc/platform-forms-client/issues/4610)) ([0ad9b0d](https://github.com/cds-snc/platform-forms-client/commit/0ad9b0d2775d27c62a941931629f0c4a1a370254))
-* Refresh Downloaded tab after confirm ([#4632](https://github.com/cds-snc/platform-forms-client/issues/4632)) ([3d2a6ba](https://github.com/cds-snc/platform-forms-client/commit/3d2a6ba0cf7dd58b3bd870d132ebebe2c6180445))
-
+- PR Review Environment not handling complex secrets ([#4610](https://github.com/cds-snc/platform-forms-client/issues/4610)) ([0ad9b0d](https://github.com/cds-snc/platform-forms-client/commit/0ad9b0d2775d27c62a941931629f0c4a1a370254))
+- Refresh Downloaded tab after confirm ([#4632](https://github.com/cds-snc/platform-forms-client/issues/4632)) ([3d2a6ba](https://github.com/cds-snc/platform-forms-client/commit/3d2a6ba0cf7dd58b3bd870d132ebebe2c6180445))
 
 ### Miscellaneous Chores
 
-* add translations for API screens ([#4567](https://github.com/cds-snc/platform-forms-client/issues/4567)) ([d97e322](https://github.com/cds-snc/platform-forms-client/commit/d97e322cd9c909e21054affdd0ce3edfcdf555c1))
-* Pass the submitForm server action as a prop ([#4634](https://github.com/cds-snc/platform-forms-client/issues/4634)) ([ddc730e](https://github.com/cds-snc/platform-forms-client/commit/ddc730ea1a544876618c9e6471d2ed59f85c37da))
-* Pass the submitForm server action as a prop ([#4637](https://github.com/cds-snc/platform-forms-client/issues/4637)) ([8ef97f7](https://github.com/cds-snc/platform-forms-client/commit/8ef97f7ffbefc4e87295ba7b07767be4893cfba4))
-* Remove barrel file for form-builder hooks ([#4626](https://github.com/cds-snc/platform-forms-client/issues/4626)) ([8f54a6b](https://github.com/cds-snc/platform-forms-client/commit/8f54a6b6f738ffe0a4661e7d30a420c0e3d31cc4))
-* Remove barrel file from form-builder shared components ([#4627](https://github.com/cds-snc/platform-forms-client/issues/4627)) ([76af04e](https://github.com/cds-snc/platform-forms-client/commit/76af04e5c6dab1c242e1f742a8eeec2dd2b5cd65))
-* Remove comment ([#4638](https://github.com/cds-snc/platform-forms-client/issues/4638)) ([8eae8d2](https://github.com/cds-snc/platform-forms-client/commit/8eae8d2294ee8009ae337927f1e81ae6c7bb6156))
-* Remove revalidate New tab on download ([#4569](https://github.com/cds-snc/platform-forms-client/issues/4569)) ([3dfc33c](https://github.com/cds-snc/platform-forms-client/commit/3dfc33c30a67309074e072edcdfeb49e7f946832))
-* Revert Pass the submitForm server action as a prop ([#4634](https://github.com/cds-snc/platform-forms-client/issues/4634)) ([#4635](https://github.com/cds-snc/platform-forms-client/issues/4635)) ([a005e4b](https://github.com/cds-snc/platform-forms-client/commit/a005e4bf36c2573690af92925f77c51a48927a68))
-* Revert Pass the submitForm server action as a prop ([#4637](https://github.com/cds-snc/platform-forms-client/issues/4637)) ([#4639](https://github.com/cds-snc/platform-forms-client/issues/4639)) ([f096c32](https://github.com/cds-snc/platform-forms-client/commit/f096c327f5ec3e312368d043b154f4531952bf70))
-* Split up key exists function + add error handling ([#4599](https://github.com/cds-snc/platform-forms-client/issues/4599)) ([4d1cb02](https://github.com/cds-snc/platform-forms-client/commit/4d1cb02035369d57259503db0ca5026ff40efc32))
-* try refresh ([#4643](https://github.com/cds-snc/platform-forms-client/issues/4643)) ([86a56b1](https://github.com/cds-snc/platform-forms-client/commit/86a56b18cb527ed81535c50e5f8a9be9673a8292))
-* Unused files, exports, functions ([#4609](https://github.com/cds-snc/platform-forms-client/issues/4609)) ([797a7f6](https://github.com/cds-snc/platform-forms-client/commit/797a7f687e2068238a13452b77875c5eb1164835))
-* Update departments Managed list ([#4623](https://github.com/cds-snc/platform-forms-client/issues/4623)) ([0b66bd0](https://github.com/cds-snc/platform-forms-client/commit/0b66bd02ae7574bf31e562b7cc7950fe66c0031b))
-* Update departments.json ([#4645](https://github.com/cds-snc/platform-forms-client/issues/4645)) ([7bb11d5](https://github.com/cds-snc/platform-forms-client/commit/7bb11d5d86297af029d36e3e76373dac3a55cf6b))
-* Update i18next and react-i18next to latest ([#4613](https://github.com/cds-snc/platform-forms-client/issues/4613)) ([df39968](https://github.com/cds-snc/platform-forms-client/commit/df39968b066fc1a8efd7d68a5ce85a05aaf40c65))
-* update Next JS + React to current latest ([#4618](https://github.com/cds-snc/platform-forms-client/issues/4618)) ([2e596a9](https://github.com/cds-snc/platform-forms-client/commit/2e596a91e343001f612600c6b03b595a9d5af7a7))
-* Update to Node 22 lts ([#4616](https://github.com/cds-snc/platform-forms-client/issues/4616)) ([09125ed](https://github.com/cds-snc/platform-forms-client/commit/09125ed6838f05b5a9b5b677530df7af6f88b407))
+- add translations for API screens ([#4567](https://github.com/cds-snc/platform-forms-client/issues/4567)) ([d97e322](https://github.com/cds-snc/platform-forms-client/commit/d97e322cd9c909e21054affdd0ce3edfcdf555c1))
+- Pass the submitForm server action as a prop ([#4634](https://github.com/cds-snc/platform-forms-client/issues/4634)) ([ddc730e](https://github.com/cds-snc/platform-forms-client/commit/ddc730ea1a544876618c9e6471d2ed59f85c37da))
+- Pass the submitForm server action as a prop ([#4637](https://github.com/cds-snc/platform-forms-client/issues/4637)) ([8ef97f7](https://github.com/cds-snc/platform-forms-client/commit/8ef97f7ffbefc4e87295ba7b07767be4893cfba4))
+- Remove barrel file for form-builder hooks ([#4626](https://github.com/cds-snc/platform-forms-client/issues/4626)) ([8f54a6b](https://github.com/cds-snc/platform-forms-client/commit/8f54a6b6f738ffe0a4661e7d30a420c0e3d31cc4))
+- Remove barrel file from form-builder shared components ([#4627](https://github.com/cds-snc/platform-forms-client/issues/4627)) ([76af04e](https://github.com/cds-snc/platform-forms-client/commit/76af04e5c6dab1c242e1f742a8eeec2dd2b5cd65))
+- Remove comment ([#4638](https://github.com/cds-snc/platform-forms-client/issues/4638)) ([8eae8d2](https://github.com/cds-snc/platform-forms-client/commit/8eae8d2294ee8009ae337927f1e81ae6c7bb6156))
+- Remove revalidate New tab on download ([#4569](https://github.com/cds-snc/platform-forms-client/issues/4569)) ([3dfc33c](https://github.com/cds-snc/platform-forms-client/commit/3dfc33c30a67309074e072edcdfeb49e7f946832))
+- Revert Pass the submitForm server action as a prop ([#4634](https://github.com/cds-snc/platform-forms-client/issues/4634)) ([#4635](https://github.com/cds-snc/platform-forms-client/issues/4635)) ([a005e4b](https://github.com/cds-snc/platform-forms-client/commit/a005e4bf36c2573690af92925f77c51a48927a68))
+- Revert Pass the submitForm server action as a prop ([#4637](https://github.com/cds-snc/platform-forms-client/issues/4637)) ([#4639](https://github.com/cds-snc/platform-forms-client/issues/4639)) ([f096c32](https://github.com/cds-snc/platform-forms-client/commit/f096c327f5ec3e312368d043b154f4531952bf70))
+- Split up key exists function + add error handling ([#4599](https://github.com/cds-snc/platform-forms-client/issues/4599)) ([4d1cb02](https://github.com/cds-snc/platform-forms-client/commit/4d1cb02035369d57259503db0ca5026ff40efc32))
+- try refresh ([#4643](https://github.com/cds-snc/platform-forms-client/issues/4643)) ([86a56b1](https://github.com/cds-snc/platform-forms-client/commit/86a56b18cb527ed81535c50e5f8a9be9673a8292))
+- Unused files, exports, functions ([#4609](https://github.com/cds-snc/platform-forms-client/issues/4609)) ([797a7f6](https://github.com/cds-snc/platform-forms-client/commit/797a7f687e2068238a13452b77875c5eb1164835))
+- Update departments Managed list ([#4623](https://github.com/cds-snc/platform-forms-client/issues/4623)) ([0b66bd0](https://github.com/cds-snc/platform-forms-client/commit/0b66bd02ae7574bf31e562b7cc7950fe66c0031b))
+- Update departments.json ([#4645](https://github.com/cds-snc/platform-forms-client/issues/4645)) ([7bb11d5](https://github.com/cds-snc/platform-forms-client/commit/7bb11d5d86297af029d36e3e76373dac3a55cf6b))
+- Update i18next and react-i18next to latest ([#4613](https://github.com/cds-snc/platform-forms-client/issues/4613)) ([df39968](https://github.com/cds-snc/platform-forms-client/commit/df39968b066fc1a8efd7d68a5ce85a05aaf40c65))
+- update Next JS + React to current latest ([#4618](https://github.com/cds-snc/platform-forms-client/issues/4618)) ([2e596a9](https://github.com/cds-snc/platform-forms-client/commit/2e596a91e343001f612600c6b03b595a9d5af7a7))
+- Update to Node 22 lts ([#4616](https://github.com/cds-snc/platform-forms-client/issues/4616)) ([09125ed](https://github.com/cds-snc/platform-forms-client/commit/09125ed6838f05b5a9b5b677530df7af6f88b407))
 
 ## [3.25.2](https://github.com/cds-snc/platform-forms-client/compare/v3.25.1...v3.25.2) (2024-11-05)
 
-
 ### Bug Fixes
 
-* Invitation emails should be case insensitive ([#4580](https://github.com/cds-snc/platform-forms-client/issues/4580)) ([b3ef278](https://github.com/cds-snc/platform-forms-client/commit/b3ef278323f264a011b667712f53762712453b37))
-
+- Invitation emails should be case insensitive ([#4580](https://github.com/cds-snc/platform-forms-client/issues/4580)) ([b3ef278](https://github.com/cds-snc/platform-forms-client/commit/b3ef278323f264a011b667712f53762712453b37))
 
 ### Miscellaneous Chores
 
-* Add Delete key dialog ([#4581](https://github.com/cds-snc/platform-forms-client/issues/4581)) ([cb25ed8](https://github.com/cds-snc/platform-forms-client/commit/cb25ed8861cf88c67c6f285bbea8d25b3d24391c))
+- Add Delete key dialog ([#4581](https://github.com/cds-snc/platform-forms-client/issues/4581)) ([cb25ed8](https://github.com/cds-snc/platform-forms-client/commit/cb25ed8861cf88c67c6f285bbea8d25b3d24391c))
 
 ## [3.25.1](https://github.com/cds-snc/platform-forms-client/compare/v3.25.0...v3.25.1) (2024-11-05)
 
