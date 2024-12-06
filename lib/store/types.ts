@@ -26,6 +26,7 @@ export interface TemplateStoreState extends TemplateStoreProps {
   };
   getId: () => string;
   setId: (id: string) => void;
+  getPathString: (id: number) => string;
   setLang: (lang: Language) => void;
   toggleLang: () => void;
   toggleTranslationLanguagePriority: () => void;
