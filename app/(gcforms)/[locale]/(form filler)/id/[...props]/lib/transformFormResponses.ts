@@ -83,8 +83,11 @@ const _transformCheckboxResponse = (response: Response) => {
 function _transformDynamicRow(key: string, value: Response, transformed: TransformedResponse) {
   const [parentKey, subKey, subSubKey] = key.split("-");
   transformed[parentKey] = transformed[parentKey] || [];
+
+  // @ts-expect-error - intentionally skipping type check
   transformed[parentKey][subKey] = transformed[parentKey][subKey] || {};
 
+  // @ts-expect-error - intentionally skipping type check
   transformed[parentKey][subKey][subSubKey] = _isCheckbox(value as string)
     ? _transformCheckboxResponse(value)
     : value;
