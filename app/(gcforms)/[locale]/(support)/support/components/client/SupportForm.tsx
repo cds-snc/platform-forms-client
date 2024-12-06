@@ -17,6 +17,8 @@ import { SubmitButton } from "../../../components/client/SubmitButton";
 import { useState } from "react";
 import { email, minLength, object, safeParse, string, toLowerCase, toTrimmed } from "valibot";
 import { Success } from "../../../components/client/Success";
+import { useFeatureFlags } from "@lib/hooks/useFeatureFlags";
+import { FeatureFlags } from "@lib/cache/types";
 
 export const SupportForm = () => {
   const {
@@ -26,6 +28,9 @@ export const SupportForm = () => {
 
   const [errors, setErrors] = useState<ErrorStates>({ validationErrors: [] });
   const [submitted, setSubmitted] = useState(false);
+
+  const { getFlag } = useFeatureFlags();
+  const apiFlag = getFlag(FeatureFlags.apiAccess);
 
   const getError = (fieldKey: string) => {
     return errors.validationErrors.find((e) => e.fieldKey === fieldKey)?.fieldValue || "";
@@ -174,6 +179,16 @@ export const SupportForm = () => {
                     name: "technical",
                     label: t("support.request.option2"),
                   },
+                  ...(apiFlag
+                    ? [
+                        {
+                          id: "request-technical-api",
+                          name: "technical-api",
+                          label: t("support.request.apiOption"),
+                        },
+                      ]
+                    : []),
+
                   {
                     id: "request-form",
                     name: "form",

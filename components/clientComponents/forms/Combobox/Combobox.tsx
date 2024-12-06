@@ -14,7 +14,6 @@ export const Combobox = (props: ComboboxProps): React.ReactElement => {
   const { id, name, className, choices = [], required, ariaDescribedBy } = props;
   const classes = cn("gc-combobox gcds-input-wrapper", className);
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [field, meta, helpers] = useField(props);
   const { setValue } = helpers;
 
@@ -32,6 +31,7 @@ export const Combobox = (props: ComboboxProps): React.ReactElement => {
       onSelectedItemChange({ selectedItem }) {
         setValue(selectedItem);
       },
+      initialInputValue: field.value || "",
     });
 
   return (
