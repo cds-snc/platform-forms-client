@@ -50,7 +50,7 @@ export function transformFormResponses(payload: Submission): TransformedResponse
     } else {
       // Checkboxes need a bit of massaging
       if (_isCheckbox(value as string)) {
-        transformed[key] = _transformCheckboxResponse(value);
+        transformed[key] = _transformCheckboxResponse(value as string);
       } else {
         transformed[key] = value as string;
       }
@@ -66,17 +66,17 @@ const _isCheckbox = (key: string) => key.startsWith('{"value"');
 
 /**
  * Cleans up a checkbox response
- * @param response
+ * @param response i.e. {"value":["b"]}
  * @returns
  */
-const _transformCheckboxResponse = (response: Response) => {
-  return safeJSONParse<{ value: string[] }>(response as string)?.value || [];
+const _transformCheckboxResponse = (response: string): string[] => {
+  return safeJSONParse<{ value: string[] }>(response)?.value || [];
 };
 
 /**
  * Add structure to Dynamic Row responses
  *
- * @param key
+ * @param key i.e. 5-0-0 or 5-0-1
  * @param value
  * @param transformed
  */
@@ -87,8 +87,9 @@ function _transformDynamicRow(key: string, value: Response, transformed: Transfo
   // @ts-expect-error - intentionally skipping type check
   transformed[parentKey][subKey] = transformed[parentKey][subKey] || {};
 
+  // transformed[5][0] = { 0: 'repeated 1', 1: ['a'] }
   // @ts-expect-error - intentionally skipping type check
   transformed[parentKey][subKey][subSubKey] = _isCheckbox(value as string)
-    ? _transformCheckboxResponse(value)
-    : value;
+    ? _transformCheckboxResponse(value as string)
+    : (value as string | string[]);
 }
