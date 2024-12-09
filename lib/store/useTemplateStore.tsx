@@ -42,52 +42,16 @@ import { defaultField, defaultForm } from "./defaults";
 import { storage } from "./storage";
 import { clearTemplateStorage } from "./utils";
 import { orderGroups } from "@lib/utils/form-builder/orderUsingGroupsLayout";
+import { initStore } from "./initStore";
 
 const createTemplateStore = (initProps?: Partial<InitialTemplateStoreProps>) => {
-  const DEFAULT_PROPS: TemplateStoreProps = {
-    id: "",
-    lang: (initProps?.locale as Language) || "en",
-    translationLanguagePriority: (initProps?.locale as Language) || "en",
-    focusInput: false,
-    hasHydrated: false,
-    form: defaultForm,
-    isPublished: false,
-    name: "",
-    securityAttribute: "Protected A",
-    formPurpose: "",
-    publishReason: "",
-    publishFormType: "",
-    publishDesc: "",
-    closingDate: initProps?.closingDate,
-    changeKey: String(new Date().getTime()),
-    allowGroupsFlag: initProps?.allowGroupsFlag || false,
-  };
-
-  // Ensure any required properties by Form Builder are defaulted by defaultForm
-  if (initProps?.form) {
-    initProps.form = {
-      ...defaultForm,
-      ...initProps?.form,
-    };
-
-    initProps.form = initializeGroups(initProps.form, initProps?.allowGroupsFlag || false);
-
-    // Ensure order by groups layout
-    if (!initProps.form.groupsLayout) {
-      /* No need to order as the groups layout does not exist */
-      initProps.form.groupsLayout = [];
-    } else {
-      initProps.form.groups = orderGroups(initProps.form.groups, initProps.form.groupsLayout);
-    }
-  }
-
+  const props = initStore(initProps);
   return createStore<TemplateStoreState>()(
     immer(
       subscribeWithSelector(
         persist(
           (set, get) => ({
-            ...DEFAULT_PROPS,
-            ...initProps,
+            ...props,
             setChangeKey: (key: string) => {
               set((state) => {
                 state.changeKey = key;
@@ -105,6 +69,9 @@ const createTemplateStore = (initProps?: Partial<InitialTemplateStoreProps>) => 
               set((state) => {
                 state.id = id;
               }),
+            getPathString(id) {
+              return getPathString(id, get().form.elements);
+            },
             setLang: (lang) =>
               set((state) => {
                 state.lang = lang;

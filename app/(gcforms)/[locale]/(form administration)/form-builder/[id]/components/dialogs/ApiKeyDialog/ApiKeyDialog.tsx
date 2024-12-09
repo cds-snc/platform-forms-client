@@ -16,6 +16,7 @@ import { logMessage } from "@lib/logger";
 import { sendResponsesToVault } from "@formBuilder/actions";
 import { useFormBuilderConfig } from "@lib/hooks/useFormBuilderConfig";
 import { GenerateKeySuccess } from "./GenerateKeySuccess";
+import { useTemplateStore } from "@lib/store/useTemplateStore";
 
 type APIKeyCustomEventDetails = {
   id: string;
@@ -30,6 +31,10 @@ export const ApiKeyDialog = ({ isVaultDelivery = false }: { isVaultDelivery?: bo
   const dialog = useDialogRef();
   const { Event } = useCustomEvent();
   const { t } = useTranslation("form-builder");
+
+  const { resetDeliveryOption } = useTemplateStore((s) => ({
+    resetDeliveryOption: s.resetDeliveryOption,
+  }));
 
   // Setup + Open dialog
   const [id, setId] = useState<string>("");
@@ -93,6 +98,9 @@ export const ApiKeyDialog = ({ isVaultDelivery = false }: { isVaultDelivery?: bo
           // Handling as generic as we're in the process of creating a key
           throw new Error(result.error);
         }
+
+        // Sync the template store with the new delivery option
+        resetDeliveryOption();
       }
 
       const key = await _createKey(id);
