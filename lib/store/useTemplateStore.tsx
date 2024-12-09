@@ -69,6 +69,9 @@ const createTemplateStore = (initProps?: Partial<InitialTemplateStoreProps>) => 
               set((state) => {
                 state.id = id;
               }),
+            getPathString(id) {
+              return getPathString(id, get().form.elements);
+            },
             setLang: (lang) =>
               set((state) => {
                 state.lang = lang;
