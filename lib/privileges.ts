@@ -473,7 +473,7 @@ const _retrieveSubjects = async (
  * @param rules An array of rules to verify
  * @param logic Use an AND or OR logic comparison
  */
-const authorizationCheck = async (
+const _authorizationCheck = async (
   ability: UserAbility,
   rules: {
     action: Action;
@@ -542,7 +542,7 @@ const authorizationCheck = async (
 };
 
 export const authorization = {
-  check: authorizationCheck,
+  check: _authorizationCheck,
   /**
    * Check if a user has the ability to perform an action on a subject and return a boolean
    * @param ability The ability instance associated to a User
@@ -550,8 +550,8 @@ export const authorization = {
    * @param logic Use an AND or OR logic comparison
    * @returns A boolean value
    */
-  checkAsBoolean: async (...args: Parameters<typeof authorizationCheck>) => {
-    return authorizationCheck(...args)
+  checkAsBoolean: async (...args: Parameters<typeof _authorizationCheck>) => {
+    return _authorizationCheck(...args)
       .then(() => true)
       .catch(() => false);
   },
@@ -560,7 +560,7 @@ export const authorization = {
    * @param ability The ability instance associated to a User
    */
   hasAdministrationPrivileges: async (ability: UserAbility) => {
-    return authorizationCheck(
+    return _authorizationCheck(
       ability,
       [
         {
@@ -592,7 +592,7 @@ export const authorization = {
    * @param ability The ability instance associated to a User
    */
   canCreateForm: async (ability: UserAbility) => {
-    return authorizationCheck(ability, [
+    return _authorizationCheck(ability, [
       {
         action: "create",
         subject: { type: "FormRecord", scope: "all" },
@@ -605,7 +605,7 @@ export const authorization = {
    * @param formId The ID of the form
    */
   canViewForm: async (ability: UserAbility, formId: string) => {
-    return authorizationCheck(ability, [
+    return _authorizationCheck(ability, [
       {
         action: "view",
         subject: { type: "FormRecord", scope: { subjectId: formId } },
@@ -618,7 +618,7 @@ export const authorization = {
    * @param formId The ID of the form
    */
   canEditForm: async (ability: UserAbility, formId: string) => {
-    return authorizationCheck(ability, [
+    return _authorizationCheck(ability, [
       {
         action: "update",
         subject: { type: "FormRecord", scope: { subjectId: formId } },
@@ -631,7 +631,7 @@ export const authorization = {
    * @param formId The ID of the form
    */
   canDeleteForm: async (ability: UserAbility, formId: string) => {
-    return authorizationCheck(ability, [
+    return _authorizationCheck(ability, [
       {
         action: "delete",
         subject: { type: "FormRecord", scope: { subjectId: formId } },
@@ -644,7 +644,7 @@ export const authorization = {
    * @param formId The ID of the form
    */
   canPublishForm: async (ability: UserAbility, formId: string) => {
-    return authorizationCheck(ability, [
+    return _authorizationCheck(ability, [
       {
         action: "update",
         subject: { type: "FormRecord", scope: { subjectId: formId } },
@@ -669,7 +669,7 @@ export const authorization = {
    * @param ability The ability instance associated to a User
    */
   canManageAllForms: async (ability: UserAbility) => {
-    return authorizationCheck(ability, [
+    return _authorizationCheck(ability, [
       {
         action: "update",
         subject: { type: "FormRecord", scope: "all" },
@@ -682,7 +682,7 @@ export const authorization = {
    * @param userId The ID of the user
    */
   canManageUser: async (ability: UserAbility, userId: string) => {
-    return authorizationCheck(ability, [
+    return _authorizationCheck(ability, [
       {
         action: "update",
         subject: { type: "User", scope: { subjectId: userId } },
@@ -696,7 +696,7 @@ export const authorization = {
    * @param userId The ID of the user
    */
   canUpdateSecurityQuestions: async (ability: UserAbility, userId: string) => {
-    return authorizationCheck(ability, [
+    return _authorizationCheck(ability, [
       {
         action: "update",
         subject: { type: "User", scope: { subjectId: userId } },
@@ -710,7 +710,7 @@ export const authorization = {
    * @param userId The ID of the user
    */
   canChangeUserName: async (ability: UserAbility, userId: string) => {
-    return authorizationCheck(ability, [
+    return _authorizationCheck(ability, [
       {
         action: "update",
         subject: { type: "User", scope: { subjectId: userId } },
@@ -723,7 +723,7 @@ export const authorization = {
    * @param ability The ability instance associated to a User
    */
   canManageAllUsers: async (ability: UserAbility) => {
-    return authorizationCheck(ability, [
+    return _authorizationCheck(ability, [
       {
         action: "update",
         subject: { type: "User", scope: "all" },
@@ -735,7 +735,7 @@ export const authorization = {
    * @param ability The ability instance associated to a User
    */
   canAccessFlags: async (ability: UserAbility) => {
-    return authorizationCheck(ability, [
+    return _authorizationCheck(ability, [
       {
         action: "view",
         subject: { type: "Flag", scope: "all" },
@@ -747,7 +747,7 @@ export const authorization = {
    * @param ability The ability instance associated to a User
    */
   canManageFlags: async (ability: UserAbility) => {
-    return authorizationCheck(ability, [
+    return _authorizationCheck(ability, [
       {
         action: "update",
         subject: { type: "Flag", scope: "all" },
@@ -759,7 +759,7 @@ export const authorization = {
    * @param ability The ability instance associated to a User
    */
   canAccessSettings: async (ability: UserAbility) => {
-    return authorizationCheck(ability, [
+    return _authorizationCheck(ability, [
       {
         action: "view",
         subject: { type: "Setting", scope: "all" },
@@ -771,7 +771,7 @@ export const authorization = {
    * @param ability The ability instance associated to a User
    */
   canManageSettings: async (ability: UserAbility) => {
-    return authorizationCheck(ability, [
+    return _authorizationCheck(ability, [
       {
         action: "update",
         subject: { type: "Setting", scope: "all" },
@@ -783,7 +783,7 @@ export const authorization = {
    * @param ability The ability instance associated to a User
    */
   canAccessPrivileges: async (ability: UserAbility) => {
-    return authorizationCheck(ability, [
+    return _authorizationCheck(ability, [
       {
         action: "view",
         subject: { type: "Privilege", scope: "all" },
