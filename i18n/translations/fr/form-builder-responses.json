@@ -145,16 +145,16 @@
       "noNewResponsesMessage": "Les réponses aux formulaires soumis apparaîtront ici et seront disponibles dans Formulaires GC pendant 45 jours.",
       "noDownloadedResponses": "Aucune réponse téléchargée",
       "noDownloadedResponsesMessage": "Les réponses téléchargées apparaîtront ici jusqu'à ce que vous approuviez leur suppression de Formulaires GC.",
-      "noDeletedResponses": "Aucune réponse à supprimer",
+      "noDeletedResponses": "Aucune réponse confirmée pour suppression",
       "noDeletedResponsesMessage": "Une fois que vous aurez téléchargé et approuvé la suppression des réponses, celles-ci seront disponibles ici pendant 30 jours.",
       "noProblemResponses": "Aucune réponse signalée avec problème",
       "noProblemResponsesMessage": "Les réponses signalées avec problèmes apparaîtront ici jusqu'à ce qu'elles soient approuvées pour leur suppression de Formulaires GC.",
-      "noNewResponsesApiTitle": "Aucune réponse en attente de récupération avec l'API",
-      "noNewResponsesApiMessage": "<p className='mb-2'>Une fois récupérées avec l'API, les réponses apparaîtront ici et seront disponibles dans Formulaires GC pendant 30 jours.</p><p>Pour en savoir plus sur la récupération de données avec l'API consultez notre <a href='https://cds-snc.github.io/forms-api/accueil' target='_blank'>documentation API</a> (ouvre un nouvel onglet)</p>",
-      "apiResponsesAvailableTitle": "Réponses en attente de récupération avec l'API",
-      "apiResponsesAvailableMessage": "<p className='mb-2'>Une fois récupérées avec l'API, les réponses confirmées apparaîtront ici et seront disponibles dans Formulaires GC pendant 30 jours.</p><p>Pour en savoir plus sur la récupération de données avec l'API consultez notre <a href='https://cds-snc.github.io/forms-api/accueil' target='_blank'>documentation API</a> (ouvre un nouvel onglet)</p>",
-      "apiResponsesAwaitingConfirmTitle": "État : En attente de récupération",
-      "apiResponsesAwaitingConfirmMessage": "Réponses en attente de confirmation avec l'API"
+      "noNewResponsesApiTitle": "Aucune réponse en attente de récupération",
+      "noNewResponsesApiMessage": "<p className='mb-2'>Une fois récupérées du point de terminaison API, les soumissions de formulaires apparaîtront ici et seront disponibles dans Formulaires GC pendant 30 jours.</p><p>Pour en savoir plus sur la configuration de l'intégration consultez notre <a href='https://cds-snc.github.io/forms-api/accueil' target='_blank'>documentation API</a>)</p>",
+      "apiResponsesAvailableTitle": "Réponses en attente de récupération",
+      "apiResponsesAvailableMessage": "<p className='mb-2'>Récupérez les nouvelles soumissions via l'API.</p><p>Pour en savoir plus sur les demandes API, consultez notre <a href='https://cds-snc.github.io/forms-api/effectuer-des-demandes/' target='_blank'>documentation API</a></p>",
+      "apiResponsesAwaitingConfirmTitle": "Réponses en attente de confirmation",
+      "apiResponsesAwaitingConfirmMessage": "<p className='mb-2'>Confirmez que les soumissions de formulaire ont bien été récupérées via l'API.</p><p>Pour en savoir plus sur les demandes API, consultez notre  <a href='https://cds-snc.github.io/forms-api/effectuer-des-demandes/' target='_blank'>Documentation API</a>.</p>"
     },
     "notifications": {
       "downloadComplete": "Réponses déplacées vers l'onglet « Téléchargements »",

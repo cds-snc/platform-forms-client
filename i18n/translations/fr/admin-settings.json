@@ -42,10 +42,10 @@
     "tooltip": "Le fait de cocher cette case ne programmera pas le débit de l'API pour une période de temps spécifique. Pour programmer une fin, décochez cette case et l'entrée 'semaines' sera activée.",
     "succcessUpdate": {
       "title": "Le débit de l'API a été augmenté",
-      "description": "Ce débit restera en vigueur jusqu'à ce que : {{success}}"
+      "description": "Le débit restera en vigueur jusqu'à : {{success}}"
     },
     "succcessReset": {
-      "title": "Le débit de l'API a été réinitialisé avec succès."
+      "title": "Le débit de l'API a été réinitialisé."
     },
     "error": "Le débit de l'API n'a pas pu être modifié. Veuillez réessayer plus tard."
   }
