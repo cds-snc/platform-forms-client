@@ -5,6 +5,20 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.30.2](https://github.com/cds-snc/platform-forms-client/compare/v3.30.1...v3.30.2) (2024-12-09)
+
+
+### Miscellaneous Chores
+
+* add path helper to template store ([#4795](https://github.com/cds-snc/platform-forms-client/issues/4795)) ([0fed760](https://github.com/cds-snc/platform-forms-client/commit/0fed7600ad58f22053791b35cea20314fa555b7b))
+* move store setup to standalone function ([#4799](https://github.com/cds-snc/platform-forms-client/issues/4799)) ([b74f6e6](https://github.com/cds-snc/platform-forms-client/commit/b74f6e68f20c0afe19f1aad68eead5de6164a7c1))
+* Reset delivery option when creating API key ([#4794](https://github.com/cds-snc/platform-forms-client/issues/4794)) ([efe6d7d](https://github.com/cds-snc/platform-forms-client/commit/efe6d7d1614f41bb829ae720045dfb1b01fb7c66))
+
+
+### Code Refactoring
+
+* Privilege Library ([#4520](https://github.com/cds-snc/platform-forms-client/issues/4520)) ([0f44bea](https://github.com/cds-snc/platform-forms-client/commit/0f44bea35f528b6db296ea60f1aab0e83cb0c6dd))
+
 ## [3.30.1](https://github.com/cds-snc/platform-forms-client/compare/v3.30.0...v3.30.1) (2024-12-05)
 
 ### Bug Fixes
