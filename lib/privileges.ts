@@ -543,11 +543,22 @@ const authorizationCheck = async (
 
 export const authorization = {
   check: authorizationCheck,
+  /**
+   * Check if a user has the ability to perform an action on a subject and return a boolean
+   * @param ability The ability instance associated to a User
+   * @param rules An array of rules to verify
+   * @param logic Use an AND or OR logic comparison
+   * @returns A boolean value
+   */
   checkAsBoolean: async (...args: Parameters<typeof authorizationCheck>) => {
     return authorizationCheck(...args)
       .then(() => true)
       .catch(() => false);
   },
+  /**
+   * Does the user have any privileges above Base and PublishForms
+   * @param ability The ability instance associated to a User
+   */
   hasAdministrationPrivileges: async (ability: UserAbility) => {
     return authorizationCheck(
       ability,
@@ -576,6 +587,10 @@ export const authorization = {
       "one"
     );
   },
+  /**
+   * Can the user create a new form
+   * @param ability The ability instance associated to a User
+   */
   canCreateForm: async (ability: UserAbility) => {
     return authorizationCheck(ability, [
       {
@@ -584,6 +599,11 @@ export const authorization = {
       },
     ]);
   },
+  /**
+   * Can the user view this specific form
+   * @param ability The ability instance associated to a User
+   * @param formId The ID of the form
+   */
   canViewForm: async (ability: UserAbility, formId: string) => {
     return authorizationCheck(ability, [
       {
@@ -592,6 +612,11 @@ export const authorization = {
       },
     ]);
   },
+  /**
+   * Can the user edit this specific form
+   * @param ability The ability instance associated to a User
+   * @param formId The ID of the form
+   */
   canEditForm: async (ability: UserAbility, formId: string) => {
     return authorizationCheck(ability, [
       {
@@ -600,6 +625,11 @@ export const authorization = {
       },
     ]);
   },
+  /**
+   * Can the user delete this specific form
+   * @param ability The ability instance associated to a User
+   * @param formId The ID of the form
+   */
   canDeleteForm: async (ability: UserAbility, formId: string) => {
     return authorizationCheck(ability, [
       {
@@ -608,6 +638,11 @@ export const authorization = {
       },
     ]);
   },
+  /**
+   * Can the user publish this specific form
+   * @param ability The ability instance associated to a User
+   * @param formId The ID of the form
+   */
   canPublishForm: async (ability: UserAbility, formId: string) => {
     return authorizationCheck(ability, [
       {
@@ -617,6 +652,10 @@ export const authorization = {
       },
     ]);
   },
+  /**
+   * Can the user view all forms in the application
+   * @param ability The ability instance associated to a User
+   */
   canViewAllForms: async (ability: UserAbility) => {
     return authorization.check(ability, [
       {
@@ -625,6 +664,10 @@ export const authorization = {
       },
     ]);
   },
+  /**
+   * Can the user modify any form in the application
+   * @param ability The ability instance associated to a User
+   */
   canManageAllForms: async (ability: UserAbility) => {
     return authorizationCheck(ability, [
       {
@@ -633,6 +676,11 @@ export const authorization = {
       },
     ]);
   },
+  /**
+   * Can the user administratively manage this specific user
+   * @param ability The ability instance associated to a User
+   * @param userId The ID of the user
+   */
   canManageUser: async (ability: UserAbility, userId: string) => {
     return authorizationCheck(ability, [
       {
@@ -642,6 +690,11 @@ export const authorization = {
       },
     ]);
   },
+  /**
+   * Can the user update security questions on this specific user
+   * @param ability The ability instance associated to a User
+   * @param userId The ID of the user
+   */
   canUpdateSecurityQuestions: async (ability: UserAbility, userId: string) => {
     return authorizationCheck(ability, [
       {
@@ -651,6 +704,11 @@ export const authorization = {
       },
     ]);
   },
+  /**
+   * Can the user update the name on this specific user
+   * @param ability The ability instance associated to a User
+   * @param userId The ID of the user
+   */
   canChangeUserName: async (ability: UserAbility, userId: string) => {
     return authorizationCheck(ability, [
       {
@@ -660,6 +718,10 @@ export const authorization = {
       },
     ]);
   },
+  /**
+   * Can the user modify all users in the application
+   * @param ability The ability instance associated to a User
+   */
   canManageAllUsers: async (ability: UserAbility) => {
     return authorizationCheck(ability, [
       {
@@ -668,6 +730,10 @@ export const authorization = {
       },
     ]);
   },
+  /**
+   * Can the user view application flags
+   * @param ability The ability instance associated to a User
+   */
   canAccessFlags: async (ability: UserAbility) => {
     return authorizationCheck(ability, [
       {
@@ -676,6 +742,10 @@ export const authorization = {
       },
     ]);
   },
+  /**
+   * Can the user manage application flags
+   * @param ability The ability instance associated to a User
+   */
   canManageFlags: async (ability: UserAbility) => {
     return authorizationCheck(ability, [
       {
@@ -684,6 +754,10 @@ export const authorization = {
       },
     ]);
   },
+  /**
+   * Can the user view application settings
+   * @param ability The ability instance associated to a User
+   */
   canAccessSettings: async (ability: UserAbility) => {
     return authorizationCheck(ability, [
       {
@@ -692,6 +766,10 @@ export const authorization = {
       },
     ]);
   },
+  /**
+   * Can the user manage application settings
+   * @param ability The ability instance associated to a User
+   */
   canManageSettings: async (ability: UserAbility) => {
     return authorizationCheck(ability, [
       {
@@ -700,6 +778,10 @@ export const authorization = {
       },
     ]);
   },
+  /**
+   * Can the user view application privileges
+   * @param ability The ability instance associated to a User
+   */
   canAccessPrivileges: async (ability: UserAbility) => {
     return authorizationCheck(ability, [
       {
