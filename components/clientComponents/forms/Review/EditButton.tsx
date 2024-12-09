@@ -1,15 +1,14 @@
 import { useGCFormsContext } from "@lib/hooks/useGCFormContext";
 import { Button } from "@clientComponents/globals";
 import { Theme } from "@clientComponents/globals/Buttons/themes";
-import { ReviewItem } from "./reviewUtils";
 
 export const EditButton = ({
-  reviewItem,
+  reviewItemId,
   theme,
   children,
   onClick,
 }: {
-  reviewItem: ReviewItem;
+  reviewItemId: string;
   theme: Theme;
   children: React.ReactElement | string;
   onClick?: () => void;
@@ -17,11 +16,10 @@ export const EditButton = ({
   const { setGroup, clearHistoryAfterId } = useGCFormsContext();
   return (
     <Button
-      type="button"
       theme={theme}
       onClick={() => {
-        setGroup(reviewItem.id);
-        clearHistoryAfterId(reviewItem.id);
+        setGroup(reviewItemId);
+        clearHistoryAfterId(reviewItemId);
         // Focus groups heading on navigation
         onClick && onClick();
       }}

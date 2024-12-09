@@ -137,19 +137,16 @@ export function getReviewItemElements(
         const canadaOnly = element.properties?.addressComponents?.canadianOnly;
 
         const titleSet = {
-          streetAddress: parentTitle + " - " + addressCompleteStrings.streetAddress,
-          city: parentTitle + " - " + addressCompleteStrings.city,
-          province:
-            parentTitle +
-            " - " +
-            (canadaOnly ? addressCompleteStrings.province : addressCompleteStrings.provinceOrState),
-          postalCode:
-            parentTitle +
-            " - " +
-            (canadaOnly
-              ? addressCompleteStrings.postalCode
-              : addressCompleteStrings.postalCodeOrZip),
-          country: parentTitle + " - " + addressCompleteStrings.country,
+          streetAddress: `${parentTitle} - ${addressCompleteStrings.streetAddress}`,
+          city: `${parentTitle} - ${addressCompleteStrings.city}`,
+          province: `${parentTitle} - 
+            ${
+              canadaOnly ? addressCompleteStrings.province : addressCompleteStrings.provinceOrState
+            }`,
+          postalCode: `${parentTitle} - ${
+            canadaOnly ? addressCompleteStrings.postalCode : addressCompleteStrings.postalCodeOrZip
+          }`,
+          country: `${parentTitle} - ${addressCompleteStrings.country}`,
         } as AddressElements;
 
         const subAddressValues = getAddressAsReviewElements(

@@ -76,7 +76,7 @@ export const Review = ({ language }: { language: Language }): React.ReactElement
               >
                 <h3 className="text-slate-700">
                   <EditButton
-                    reviewItem={reviewItem}
+                    reviewItemId={reviewItem.id}
                     theme="link"
                     onClick={() => {
                       groupsHeadingRef.current?.focus();
@@ -89,7 +89,7 @@ export const Review = ({ language }: { language: Language }): React.ReactElement
                   <QuestionsAnswersList reviewItem={reviewItem} />
                 </div>
                 <EditButton
-                  reviewItem={reviewItem}
+                  reviewItemId={reviewItem.id}
                   theme="secondary"
                   onClick={() => {
                     groupsHeadingRef.current?.focus();
