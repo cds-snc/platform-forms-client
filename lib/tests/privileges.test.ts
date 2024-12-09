@@ -862,8 +862,82 @@ describe("Authorization Helpers", () => {
     adminUser.session.user.privileges = mockUserPrivileges(ManageUsers, {
       user: { id: adminUser.session.user.id },
     });
+    (prismaMock.user.findUniqueOrThrow as jest.MockedFunction<any>).mockResolvedValue(user1.db);
     const ability = createAbility(adminUser.session);
     await authorization.canManageUser(ability, user1.session.user.id);
+  });
+  it("Can not manage other users", async () => {
+    (prismaMock.user.findUniqueOrThrow as jest.MockedFunction<any>).mockResolvedValue(user1.db);
+    const ability = createAbility(user2.session);
+    await expect(
+      authorization.canManageUser(ability, user2.session.user.id)
+    ).rejects.toBeInstanceOf(AccessControlError);
+  });
+  it("Can update security question on user", async () => {
+    (prismaMock.user.findUniqueOrThrow as jest.MockedFunction<any>).mockResolvedValue(user1.db);
+    const ability = createAbility(user1.session);
+    await authorization.canUpdateSecurityQuestions(ability, user1.session.user.id);
+  });
+  it("Can not update security questions on another user", async () => {
+    (prismaMock.user.findUniqueOrThrow as jest.MockedFunction<any>).mockResolvedValue(user1.db);
+    const ability = createAbility(user2.session);
+    await expect(
+      authorization.canUpdateSecurityQuestions(ability, user1.session.user.id)
+    ).rejects.toBeInstanceOf(AccessControlError);
+  });
+  it("Can update name on user", async () => {
+    (prismaMock.user.findUniqueOrThrow as jest.MockedFunction<any>).mockResolvedValue(user1.db);
+    const ability = createAbility(user1.session);
+    await authorization.canChangeUserName(ability, user1.session.user.id);
+  });
+  it("Can not update name on another user", async () => {
+    (prismaMock.user.findUniqueOrThrow as jest.MockedFunction<any>).mockResolvedValue(user1.db);
+    const ability = createAbility(user2.session);
+    await expect(
+      authorization.canChangeUserName(ability, user1.session.user.id)
+    ).rejects.toBeInstanceOf(AccessControlError);
+  });
+  it("Can manage all users", async () => {
+    adminUser.session.user.privileges = mockUserPrivileges(ManageUsers, {
+      user: { id: adminUser.session.user.id },
+    });
+    const ability = createAbility(adminUser.session);
+    await authorization.canManageAllUsers(ability);
+  });
+  it("Can access Flags", async () => {
+    adminUser.session.user.privileges = mockUserPrivileges(ViewApplicationSettings, {
+      user: { id: adminUser.session.user.id },
+    });
+    const ability = createAbility(adminUser.session);
+    await authorization.canAccessFlags(ability);
+  });
+  it("Can manage Flags", async () => {
+    adminUser.session.user.privileges = mockUserPrivileges(ManageApplicationSettings, {
+      user: { id: adminUser.session.user.id },
+    });
+    const ability = createAbility(adminUser.session);
+    await authorization.canManageFlags(ability);
+  });
+  it("Can access Settings", async () => {
+    adminUser.session.user.privileges = mockUserPrivileges(ViewApplicationSettings, {
+      user: { id: adminUser.session.user.id },
+    });
+    const ability = createAbility(adminUser.session);
+    await authorization.canAccessSettings(ability);
+  });
+  it("Can manage Settings", async () => {
+    adminUser.session.user.privileges = mockUserPrivileges(ManageApplicationSettings, {
+      user: { id: adminUser.session.user.id },
+    });
+    const ability = createAbility(adminUser.session);
+    await authorization.canManageSettings(ability);
+  });
+  it("Can access Privileges", async () => {
+    adminUser.session.user.privileges = mockUserPrivileges(ViewUserPrivileges, {
+      user: { id: adminUser.session.user.id },
+    });
+    const ability = createAbility(adminUser.session);
+    await authorization.canAccessPrivileges(ability);
   });
 });
 
