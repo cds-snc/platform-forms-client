@@ -4,7 +4,7 @@ Vos responsabilités relatives à l’utilisation de Formulaires GC sont décrit
 
 - Obtenir les approbations nécessaires pour l’utilisation de Formulaires GC.
 - Accepter toutes les conditions et tous les risques, y compris nos [niveaux de services](/fr/sla).
-- Pratiquer la sécurité en continu.
+- Pratiquer la sécurité en continu et une maintenance adéquate des clés API.
 - Publier le formulaire dans les deux langues officielles.
 - Fournir des canaux multiples pour la prestation de services et de programmes.
 - Contribuer à offrir une expérience fiable avec une image de marque et un contenu uniformes et des URL accessibles.

@@ -149,12 +149,12 @@
       "noDeletedResponsesMessage": "Once you’ve downloaded and signed off on the removal of responses, they will be available here for 30 days.",
       "noProblemResponses": "No responses reported with problems",
       "noProblemResponsesMessage": "Problem responses will appear here until signed off for removal from GC Forms.",
-      "noNewResponsesApiTitle": "No responses awaiting retrieval with API",
-      "noNewResponsesApiMessage": "<p className='mb-2'>Once retrieved through the API, the responses will appear here and be available in GC Forms for 30 days.</p><p>Read more about data retrieval via API in our <a href='https://cds-snc.github.io/forms-api/home/' target='_blank'>API documentation</a>.</p>",
-      "apiResponsesAvailableTitle": "Responses waiting to be retrieved via API",
-      "apiResponsesAvailableMessage": "<p className='mb-2'>Once retrieved with the API, the confirmed responses will appear here and be available in GC Forms for 30 days.</p><p>Read more about data retrieval via API in our <a href='https://cds-snc.github.io/forms-api/home/' target='_blank'>API documentation</a>.</p>",
-      "apiResponsesAwaitingConfirmTitle": "Status: Waiting on retrieval",
-      "apiResponsesAwaitingConfirmMessage": "Responses awaiting confirmation via API"
+      "noNewResponsesApiTitle": "No responses awaiting retrieval",
+      "noNewResponsesApiMessage": "<p className='mb-2'>Once retrieved from the API endpoint, the form submissions will appear here and be available in GC Forms for 30 days.</p><p>Read more about setting up the integration in our <a href='https://cds-snc.github.io/forms-api/home/' target='_blank'>API documentation</a>.</p>",
+      "apiResponsesAvailableTitle": "Responses waiting for retrieval",
+      "apiResponsesAvailableMessage": "<p className='mb-2'>Retrieve new form submissions via the API.</p><p>Read more about making API requests in our <a href='https://cds-snc.github.io/forms-api/making-requests/' target='_blank'>API documentation</a>.</p>",
+      "apiResponsesAwaitingConfirmTitle": "Responses waiting on confirmation",
+      "apiResponsesAwaitingConfirmMessage": "<p className='mb-2'>Confirm that form submissions were successfully retrieved via the API.</p><p>Read more about making API requests in our <a href='https://cds-snc.github.io/forms-api/making-requests/' target='_blank'>API documentation</a>.</p>"
     },
     "notifications": {
       "downloadComplete": "Responses moved to the “Downloaded” tab",

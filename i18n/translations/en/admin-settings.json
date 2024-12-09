@@ -42,10 +42,10 @@
     "tooltip": "Checking this will not schedule the API rate for a specific period of time. To schedule an end to the API rate, uncheck this and the 'weeks' input will be enabled.",
     "succcessUpdate": {
       "title": "API rate increased",
-      "description": "This API rate will stay in effect until: {{success}}"
+      "description": "The API rate will stay in effect until: {{success}}"
     },
     "succcessReset": {
-      "title": "API rate was reset successfully."
+      "title": "API rate was reset."
     },
     "error": "API rate could not be modified. Try again later."
   }
