@@ -1,9 +1,9 @@
-import { useEffect, useMemo, useRef } from "react";
+import { useMemo, useRef } from "react";
 import { useTranslation } from "@i18n/client";
 import { useFocusIt } from "@lib/hooks/useFocusIt";
 import { useGCFormsContext } from "@lib/hooks/useGCFormContext";
 import { Language } from "@lib/types/form-builder-types";
-import { AddressCompleteLabels } from "../AddressComplete/types";
+// import { AddressCompleteLabels } from "../AddressComplete/types";
 import { EditButton } from "./EditButton";
 import { QuestionsAnswersList } from "./QuestionsAnswersList";
 // import { getReviewItems, ReviewItem } from "./reviewUtils";
@@ -11,6 +11,7 @@ import { FileInputResponse, FormElement } from "@lib/types";
 import { DateObject } from "../FormattedDate/types";
 import { filterShownElements, filterValuesForShownElements, FormValues, getElementIdsAsNumber, Group } from "@lib/formContext";
 import { getLocalizedProperty } from "@lib/utils";
+import { logMessage } from "@lib/logger";
 
 export type ReviewItem = {
   id: string;
@@ -88,7 +89,7 @@ export const Review = ({ language }: { language: Language }): React.ReactElement
       } as ReviewItem
     });
 
-    console.log(reviewItems);
+    logMessage.info("reviewItems", reviewItems);
     return reviewItems;
   },[formRecord.form.elements, getGroupHistory, getGroupTitle, getValues, groups, language, matchedIds])
 
@@ -121,7 +122,7 @@ export const Review = ({ language }: { language: Language }): React.ReactElement
                   </EditButton>
                 </h3>
                 <div className="mb-10 ml-1">
-                  <QuestionsAnswersList reviewItem={reviewItem} />
+                  <QuestionsAnswersList reviewItem={reviewItem}  language={language} />
                 </div>
                 <EditButton
                   reviewItemId={reviewItem.id}

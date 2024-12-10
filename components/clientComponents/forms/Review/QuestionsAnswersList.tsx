@@ -3,13 +3,15 @@ import { FormElementTypes } from "@lib/types";
 import { BaseElement } from "./BaseElement";
 import { BaseElementArray } from "./BaseElementArray";
 import { DynamicRowElement } from "./DynamicRowElement";
-import { FormValues } from "@lib/formContext";
+// import { FormValues } from "@lib/formContext";
 // import { ReviewElement, ReviewItem } from "./reviewUtils";
 
 export const QuestionsAnswersList = ({
   reviewItem,
+  language,
 }: {
   reviewItem: ReviewItem;
+  language: string;
 }): React.ReactElement => {
   if (!Array.isArray(reviewItem.formItems)) {
     return <></>;
@@ -20,7 +22,7 @@ export const QuestionsAnswersList = ({
       {reviewItem.formItems.map((formItem) => {
         if (Array.isArray(formItem.values)) {
           if (formItem.originalFormElement?.type === FormElementTypes.dynamicRow) {
-            return <DynamicRowElement formItem={formItem} />
+            return <DynamicRowElement key={formItem.originalFormElement.id} formItem={formItem} language={language} />
           }
 
           if (formItem.originalFormElement?.type === FormElementTypes.addressComplete) {
