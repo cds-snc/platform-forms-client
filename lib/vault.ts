@@ -340,10 +340,10 @@ export async function retrieveSubmissions(
             Vault: {
               Keys: keys,
               ProjectionExpression:
-                "FormID,SubmissionID,FormSubmission,ConfirmationCode,#status,SecurityAttribute,#name,CreatedAt,LastDownloadedBy,ConfirmTimestamp,DownloadedAt,RemovalDate",
+                "FormID,SubmissionID,FormSubmission,ConfirmationCode,#statusCreatedAtKey,SecurityAttribute,#name,CreatedAt,LastDownloadedBy,ConfirmTimestamp,DownloadedAt,RemovalDate",
               ExpressionAttributeNames: {
                 "#name": "Name",
-                "#status": "Status",
+                "#statusCreatedAtKey": "Status#CreatedAt",
               },
             },
           },
@@ -360,7 +360,7 @@ export async function retrieveSubmissions(
                 submissionID: item.SubmissionID,
                 formSubmission: item.FormSubmission,
                 confirmationCode: item.ConfirmationCode,
-                status: item.Status as VaultStatus,
+                status: vaultStatusFromStatusCreatedAt(item["Status#CreatedAt"]),
                 securityAttribute: item.SecurityAttribute,
                 name: item.Name,
                 createdAt: item.CreatedAt,
@@ -454,21 +454,17 @@ export async function updateLastDownloadedBy(
               NAME_OR_CONF: `NAME#${response.id}`,
             },
             UpdateExpression: "SET LastDownloadedBy = :email, DownloadedAt = :downloadedAt".concat(
-              isNewResponse
-                ? ", #status = :statusUpdate, #statusCreatedAtKey = :statusCreatedAtValue"
-                : ""
+              isNewResponse ? ", #statusCreatedAtKey = :statusCreatedAtValue" : ""
             ),
             ExpressionAttributeValues: {
               ":email": email,
               ":downloadedAt": Date.now(),
               ...(isNewResponse && {
-                ":statusUpdate": "Downloaded",
                 ":statusCreatedAtValue": `Downloaded#${response.createdAt}`,
               }),
             },
             ...(isNewResponse && {
               ExpressionAttributeNames: {
-                "#status": "Status",
                 "#statusCreatedAtKey": "Status#CreatedAt",
               },
             }),
@@ -779,13 +775,11 @@ export const confirmResponses = async (
                     NAME_OR_CONF: `NAME#${submission.name}`,
                   },
                   UpdateExpression:
-                    "SET #status = :status, #statusCreatedAtKey = :statusCreatedAtValue, ConfirmTimestamp = :confirmTimestamp, RemovalDate = :removalDate",
+                    "SET #statusCreatedAtKey = :statusCreatedAtValue, ConfirmTimestamp = :confirmTimestamp, RemovalDate = :removalDate",
                   ExpressionAttributeNames: {
-                    "#status": "Status",
                     "#statusCreatedAtKey": "Status#CreatedAt",
                   },
                   ExpressionAttributeValues: {
-                    ":status": "Confirmed",
                     ":statusCreatedAtValue": `Confirmed#${submission.createdAt}`,
                     ":confirmTimestamp": confirmationTimestamp,
                     ":removalDate": removalDate,
@@ -845,3 +839,19 @@ export const confirmResponses = async (
     }),
   };
 };
+
+export function vaultStatusFromStatusCreatedAt(statusCreatedAtAttribute: string): VaultStatus {
+  const status = statusCreatedAtAttribute.split("#")[0];
+  switch (status) {
+    case "New":
+      return VaultStatus.NEW;
+    case "Downloaded":
+      return VaultStatus.DOWNLOADED;
+    case "Confirmed":
+      return VaultStatus.CONFIRMED;
+    case "Problem":
+      return VaultStatus.PROBLEM;
+    default:
+      throw new Error(`Unsupported Status#CreatedAt value. Value = ${statusCreatedAtAttribute}.`);
+  }
+}
