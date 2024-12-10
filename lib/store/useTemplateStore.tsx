@@ -23,9 +23,7 @@ import { TreeRefProvider } from "@formBuilder/components/shared/right-panel/tree
 import { FlowRefProvider } from "@formBuilder/[id]/edit/logic/components/flow/provider/FlowRefProvider";
 import { initializeGroups } from "@formBuilder/components/shared/right-panel/treeview/util/initializeGroups";
 import {
-  moveDown,
   moveElementDown,
-  moveUp,
   moveElementUp,
   removeElementById,
   removeById,
@@ -43,6 +41,9 @@ import { storage } from "./storage";
 import { clearTemplateStorage } from "./utils";
 import { orderGroups } from "@lib/utils/form-builder/orderUsingGroupsLayout";
 import { initStore } from "./initStore";
+
+import { moveUp } from "./helpers/move/moveUp";
+import { moveDown } from "./helpers/move/moveDown";
 
 const createTemplateStore = (initProps?: Partial<InitialTemplateStoreProps>) => {
   const props = initStore(initProps);
@@ -118,20 +119,8 @@ const createTemplateStore = (initProps?: Partial<InitialTemplateStoreProps>) => 
               set((state) => {
                 unset(state, path);
               }),
-            moveUp: (elIndex, groupId) =>
-              set((state) => {
-                state.form.layout = moveUp(state.form.layout, elIndex);
-                const allowGroups = state.allowGroupsFlag;
-                if (allowGroups && groupId) {
-                  const group = state.form.groups && state.form.groups[groupId];
-                  if (group) {
-                    // Convert the elements array to a number array
-                    const els = group.elements.map((el) => Number(el));
-                    // Move the element up and convert back to string array
-                    group.elements = moveUp(els, elIndex).map((el) => String(el));
-                  }
-                }
-              }),
+            moveUp: moveUp(set),
+            moveDown: moveDown(set),
             subMoveUp: (elId, subIndex) =>
               set((state) => {
                 const parentIndex = getParentIndex(elId, state.form.elements);
@@ -145,20 +134,6 @@ const createTemplateStore = (initProps?: Partial<InitialTemplateStoreProps>) => 
                     elements,
                     subIndex
                   );
-                }
-              }),
-            moveDown: (elIndex, groupId) =>
-              set((state) => {
-                state.form.layout = moveDown(state.form.layout, elIndex);
-                const allowGroups = state.allowGroupsFlag;
-                if (allowGroups && groupId) {
-                  const group = state.form.groups && state.form.groups[groupId];
-                  if (group) {
-                    // Convert the elements array to a number array
-                    const els = group.elements.map((el) => Number(el));
-                    // Move the element down and convert back to string array
-                    group.elements = moveDown(els, elIndex).map((el) => String(el));
-                  }
                 }
               }),
             subMoveDown: (elId, subIndex = 0) => {
