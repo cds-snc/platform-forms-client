@@ -7,6 +7,7 @@ import { Form } from "@clientComponents/forms/Form/Form";
 import { Language } from "@lib/types/form-builder-types";
 
 import type { JSX } from "react";
+import { useGCFormsContext } from "@lib/hooks/useGCFormContext";
 
 export const FormWrapper = ({
   formRecord,
@@ -24,8 +25,11 @@ export const FormWrapper = ({
   } = useTranslation(["common", "welcome", "confirmation", "form-closed"]);
   const router = useRouter();
 
+  const { restoreProgress } = useGCFormsContext();
+
   return (
     <Form
+      initialValues={restoreProgress()}
       formRecord={formRecord}
       language={language}
       onSuccess={(formID) => {

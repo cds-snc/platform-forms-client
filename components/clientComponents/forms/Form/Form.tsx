@@ -338,6 +338,7 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
 
 interface FormProps {
   formRecord: PublicFormRecord;
+  initialValues?: Responses | undefined;
   language: string;
   isPreview?: boolean;
   renderSubmit?: ({
@@ -367,7 +368,8 @@ export const Form = withFormik<FormProps, Responses>({
 
   enableReinitialize: true, // needed when switching languages
 
-  mapPropsToValues: (props) => getFormInitialValues(props.formRecord, props.language),
+  mapPropsToValues: (props) =>
+    getFormInitialValues(props.formRecord, props.language, props.initialValues),
 
   validate: (values, props) => validateOnSubmit(values, props),
 

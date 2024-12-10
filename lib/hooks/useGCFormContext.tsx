@@ -41,6 +41,8 @@ interface GCFormsContextValueType {
   pushIdToHistory: (groupId: string) => string[];
   clearHistoryAfterId: (groupId: string) => string[];
   getGroupTitle: (groupId: string | null, language: Language) => string;
+  saveForm: (formValues: FormValues) => void;
+  restoreProgress: () => FormValues;
 }
 
 const GCFormsContext = createContext<GCFormsContextValueType | undefined>(undefined);
@@ -128,6 +130,8 @@ export const GCFormsProvider = ({
     if (!idArraysMatch(matchedIds, valueIds)) {
       setMatchedIds(valueIds);
     }
+
+    saveForm(formValues);
   };
 
   // Helper to not expose the setter
@@ -160,6 +164,38 @@ export const GCFormsProvider = ({
     return groups?.[groupId]?.[titleLanguageKey] || "";
   };
 
+  const saveForm = (formValues: FormValues) => {
+    const base64 = Buffer.from(
+      JSON.stringify({
+        id: formRecord.id,
+        values: formValues,
+        history: history.current,
+        currentGroup: currentGroup,
+      })
+    ).toString("base64");
+
+    // Save to session storage
+    sessionStorage.setItem("form-data", base64);
+  };
+
+  const restoreProgress = (): FormValues => {
+    const formData = sessionStorage.getItem("form-data");
+
+    if (formData) {
+      const decodedData = Buffer.from(formData, "base64").toString("utf-8");
+      const parsedData = JSON.parse(decodedData);
+
+      if (parsedData.id === formRecord.id) {
+        // values.current = parsedData.values;
+        // history.current = parsedData.history;
+        //setCurrentGroup(parsedData.currentGroup);
+        return parsedData.values;
+      }
+    }
+
+    return {};
+  };
+
   return (
     <GCFormsContext.Provider
       value={{
@@ -181,6 +217,8 @@ export const GCFormsProvider = ({
         pushIdToHistory,
         clearHistoryAfterId,
         getGroupTitle,
+        saveForm,
+        restoreProgress,
       }}
     >
       {children}
@@ -215,6 +253,10 @@ export const useGCFormsContext = () => {
       pushIdToHistory: () => [],
       clearHistoryAfterId: () => [],
       getGroupTitle: () => "",
+      saveForm: (formValues: FormValues) => JSON.stringify(formValues),
+      restoreProgress: () => {
+        return {};
+      },
     };
   }
   return formsContext;
