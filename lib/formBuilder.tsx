@@ -338,7 +338,11 @@ export const getRenderedForm = (formRecord: PublicFormRecord, language: string) 
  * @param element
  * @param language
  */
-const _getElementInitialValue = (element: FormElement, language: string): Response => {
+const _getElementInitialValue = (
+  element: FormElement,
+  language: string,
+  initialValues: Responses | undefined
+): Response => {
   switch (element.type) {
     // Radio and dropdown resolve to string values
     case FormElementTypes.radio:
@@ -348,9 +352,9 @@ const _getElementInitialValue = (element: FormElement, language: string): Respon
     case FormElementTypes.textField:
     case FormElementTypes.textArea:
     case FormElementTypes.addressComplete:
-      return "";
+      return initialValues && initialValues[element.id] ? initialValues[element.id] : "";
     case FormElementTypes.checkbox:
-      return [];
+      return initialValues && initialValues[element.id] ? initialValues[element.id] : [];
     case FormElementTypes.fileInput:
       return { name: null, size: null, based64EncodedFile: null };
     case FormElementTypes.dynamicRow: {
@@ -358,7 +362,11 @@ const _getElementInitialValue = (element: FormElement, language: string): Respon
         element.properties.subElements?.reduce((accumulator, currentValue, currentIndex) => {
           const subElementID = `${currentIndex}`;
           if (![FormElementTypes.richText].includes(currentValue.type)) {
-            accumulator[subElementID] = _getElementInitialValue(currentValue, language);
+            accumulator[subElementID] = _getElementInitialValue(
+              currentValue,
+              language,
+              initialValues
+            );
           }
           return accumulator;
         }, {} as Responses) ?? {};
@@ -375,17 +383,19 @@ const _getElementInitialValue = (element: FormElement, language: string): Respon
  * @param formRecord
  * @param language
  */
-export const getFormInitialValues = (formRecord: PublicFormRecord, language: string): Responses => {
+export const getFormInitialValues = (
+  formRecord: PublicFormRecord,
+  language: string,
+  initialValues: Responses | undefined = {}
+): Responses => {
   if (!formRecord?.form) {
     return {};
   }
 
-  const initialValues: Responses = {};
-
   formRecord.form.elements
     .filter((element) => ![FormElementTypes.richText].includes(element.type))
     .forEach((element: FormElement) => {
-      initialValues[element.id] = _getElementInitialValue(element, language);
+      initialValues[element.id] = _getElementInitialValue(element, language, initialValues);
     });
 
   // Used to track the current group dynamically
