@@ -82,6 +82,8 @@ export interface TemplateStoreState extends TemplateStoreProps {
   generateElementId: () => number;
 }
 
+export type SetStateFunction = (fn: (state: TemplateStoreState) => void) => void;
+
 export interface InitialTemplateStoreProps extends TemplateStoreProps {
   locale?: Language;
 }
