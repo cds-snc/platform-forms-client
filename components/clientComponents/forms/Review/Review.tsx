@@ -3,29 +3,10 @@ import { useTranslation } from "@i18n/client";
 import { useFocusIt } from "@lib/hooks/useFocusIt";
 import { useGCFormsContext } from "@lib/hooks/useGCFormContext";
 import { Language } from "@lib/types/form-builder-types";
-// import { AddressCompleteLabels } from "../AddressComplete/types";
 import { EditButton } from "./EditButton";
-import { QuestionsAnswersList } from "./QuestionsAnswersList";
-// import { getReviewItems, ReviewItem } from "./reviewUtils";
-import { FileInputResponse, FormElement } from "@lib/types";
-import { DateObject } from "../FormattedDate/types";
-import { filterShownElements, filterValuesForShownElements, FormValues, getElementIdsAsNumber, Group } from "@lib/formContext";
-import { getLocalizedProperty } from "@lib/utils";
 import { logMessage } from "@lib/logger";
-
-export type ReviewItem = {
-  id: string;
-  name: string;
-  title: string;
-  formItems: FormItem[];
-};
-
-// FormItems is used by sub Components that decide how to render it e.g. may be an array, or recursive etc.
-export type FormItem = {
-  label: string;
-  values: string | FileInputResponse | DateObject | FormItem[];
-  originalFormElement: FormElement | undefined;
-};
+import { FormItemBuilder } from "./FormItemBuilder";
+import { FormItem, getGroupsWithElements, getReviewItems } from "./helpers";
 
 export const Review = ({ language }: { language: Language }): React.ReactElement => {
   const { t } = useTranslation(["review", "common"]);
@@ -36,62 +17,35 @@ export const Review = ({ language }: { language: Language }): React.ReactElement
   const groupsHeadingRef = useRef<HTMLHeadingElement>(null);
   useFocusIt({ elRef: groupsHeadingRef });
 
-  // util general?
-  const getFormElements = (elementIds: number[], formElements: FormElement[]) => {
-    if (!Array.isArray(elementIds) || !formElements) {
-      return [];
-    }
-    return elementIds.map(elementId => formElements.find((item) => item.id === elementId))
-  }
-
+  // Get Review Items that are used below to print out each question-answer
   const reviewItems = useMemo(() => {
-    // util specific
-    const createFormItems = (formElements:(FormElement | undefined)[], formValues:FormValues) => {
-      if (!Array.isArray(formElements) || !formValues) {
-        return [];
-      }
-      return formElements.map(formElement => {
-        return {
-          label: formElement?.properties?.[getLocalizedProperty("title", language)] as string,
-          values: formValues[formElement?.id as unknown as keyof typeof formValues] as string,
-          originalFormElement: formElement,
-        } as FormItem
-      });
-    }
-
     const formValues = getValues();
-    if (!formValues || !groups) return {};  // TODO - probably split some of below out - not sure about !groups
-
     const groupHistoryIds = getGroupHistory();
-    const groupsWithElementIds = groupHistoryIds.filter((key) => key !== "review").map(groupId => {
-      const group: Group = groups[groupId as keyof typeof groups] || {};
-      // Remove any hidden elements from Show-Hide (only include elements interacted with by the user)
-      const shownFormElements = filterShownElements(formRecord.form.elements, matchedIds);
-      const elementIds = getElementIdsAsNumber(
-        filterValuesForShownElements(group.elements, shownFormElements)
-      );
-      return {
-        groupId: groupId,
-        group,      // Group with name, title,.. plus elements that may have invisible (not shown elements) - don't use this one
-        elementIds  // Group elementIds that are visible (not hidden)
-      }
-    });
-
-    // Construct and populate the list of Review Items useful for the Review page
-    const reviewItems = groupsWithElementIds.map(groupWithElementIds => {
-      const formElements = getFormElements(groupWithElementIds.elementIds, formRecord.form.elements);
-      const formItems = createFormItems(formElements, formValues);
-      return {
-        id: groupWithElementIds.groupId,
-        name: groupWithElementIds.group.name,
-        title: getGroupTitle(groupWithElementIds.groupId, language),
-        formItems,
-      } as ReviewItem
-    });
-
+    const groupsWithElementIds = getGroupsWithElements(
+      formRecord.form.elements,
+      formValues,
+      groups,
+      groupHistoryIds,
+      matchedIds
+    );
+    const reviewItems = getReviewItems(
+      formRecord.form.elements,
+      formValues,
+      groupsWithElementIds,
+      language,
+      getGroupTitle
+    );
     logMessage.info("reviewItems", reviewItems);
     return reviewItems;
-  },[formRecord.form.elements, getGroupHistory, getGroupTitle, getValues, groups, language, matchedIds])
+  }, [
+    formRecord.form.elements,
+    getGroupHistory,
+    getGroupTitle,
+    getValues,
+    groups,
+    language,
+    matchedIds,
+  ]);
 
   return (
     <>
@@ -99,7 +53,7 @@ export const Review = ({ language }: { language: Language }): React.ReactElement
         {t("reviewForm", { lng: language })}
       </h2>
       <div className="my-16">
-      {Array.isArray(reviewItems) &&
+        {Array.isArray(reviewItems) &&
           reviewItems.map((reviewItem) => {
             const title =
               reviewItem.id === "start"
@@ -122,7 +76,10 @@ export const Review = ({ language }: { language: Language }): React.ReactElement
                   </EditButton>
                 </h3>
                 <div className="mb-10 ml-1">
-                  <QuestionsAnswersList reviewItem={reviewItem}  language={language} />
+                  {reviewItem.formItems &&
+                    reviewItem.formItems.map((formItem: FormItem) => (
+                      <FormItemBuilder key={formItem.originalFormElement?.id} formItem={formItem} />
+                    ))}
                 </div>
                 <EditButton
                   reviewItemId={reviewItem.id}
