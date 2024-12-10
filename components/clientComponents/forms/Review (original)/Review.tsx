@@ -1,12 +1,12 @@
-import { useMemo, useRef } from "react";
+import { useEffect, useMemo, useRef } from "react";
 import { useTranslation } from "@i18n/client";
 import { useFocusIt } from "@lib/hooks/useFocusIt";
 import { useGCFormsContext } from "@lib/hooks/useGCFormContext";
 import { Language } from "@lib/types/form-builder-types";
+import { AddressCompleteLabels } from "../AddressComplete/types";
 import { EditButton } from "./EditButton";
-import { logMessage } from "@lib/logger";
-import { FormItemBuilder } from "./FormItemBuilder";
-import { FormItem, getGroupsWithElements, getReviewItems } from "./helpers";
+import { QuestionsAnswersList } from "./QuestionsAnswersList";
+import { getReviewItems, ReviewItem } from "./reviewUtils";
 
 export const Review = ({ language }: { language: Language }): React.ReactElement => {
   const { t } = useTranslation(["review", "common"]);
@@ -17,34 +17,44 @@ export const Review = ({ language }: { language: Language }): React.ReactElement
   const groupsHeadingRef = useRef<HTMLHeadingElement>(null);
   useFocusIt({ elRef: groupsHeadingRef });
 
-  // Get Review Items that are used below to print out each question-answer
-  const reviewItems = useMemo(() => {
-    const formValues = getValues();
-    const groupHistoryIds = getGroupHistory();
-    const groupsWithElementIds = getGroupsWithElements(
-      formRecord.form.elements,
-      formValues,
-      groups,
-      groupHistoryIds,
-      matchedIds
-    );
-    const reviewItems = getReviewItems(
-      formRecord.form.elements,
-      formValues,
-      groupsWithElementIds,
-      language,
-      getGroupTitle
-    );
-    logMessage.info("reviewItems", reviewItems);
-    return reviewItems;
+  const addressCompleteStrings = useMemo(() => {
+    return {
+      streetAddress: t("addressComponents.streetName", { lng: language }),
+      city: t("addressComponents.city", { lng: language }),
+      province: t("addressComponents.province", { lng: language }),
+      postalCode: t("addressComponents.postalCode", { lng: language }),
+      provinceOrState: t("addressComponents.provinceOrState", { lng: language }),
+      postalCodeOrZip: t("addressComponents.postalCodeOrZip", { lng: language }),
+      country: t("addressComponents.country", { lng: language }),
+    } as AddressCompleteLabels;
+  }, [t, language]);
+
+  const reviewItemsRef = useRef<ReviewItem[]>([]);
+  useEffect(() => {
+    // TODO move address strings to server lookup in a future async-await call (why async below)
+    // and split out functions to be more generic/reusable
+    const getItems = async () => {
+      reviewItemsRef.current = getReviewItems(
+        getValues(),
+        groups,
+        getGroupHistory(),
+        getGroupTitle,
+        language,
+        formRecord.form.elements,
+        matchedIds,
+        addressCompleteStrings
+      );
+    };
+    getItems();
   }, [
-    formRecord.form.elements,
+    groups,
+    getValues,
     getGroupHistory,
     getGroupTitle,
-    getValues,
-    groups,
     language,
+    formRecord.form.elements,
     matchedIds,
+    addressCompleteStrings,
   ]);
 
   return (
@@ -53,8 +63,8 @@ export const Review = ({ language }: { language: Language }): React.ReactElement
         {t("reviewForm", { lng: language })}
       </h2>
       <div className="my-16">
-        {Array.isArray(reviewItems) &&
-          reviewItems.map((reviewItem) => {
+        {Array.isArray(reviewItemsRef.current) &&
+          reviewItemsRef.current.map((reviewItem) => {
             const title =
               reviewItem.id === "start"
                 ? t("logic.start", { ns: "common", lng: language })
@@ -76,10 +86,7 @@ export const Review = ({ language }: { language: Language }): React.ReactElement
                   </EditButton>
                 </h3>
                 <div className="mb-10 ml-1">
-                  {reviewItem.formItems &&
-                    reviewItem.formItems.map((formItem: FormItem) => (
-                      <FormItemBuilder key={formItem.originalFormElement?.id} formItem={formItem} />
-                    ))}
+                  <QuestionsAnswersList reviewItem={reviewItem} />
                 </div>
                 <EditButton
                   reviewItemId={reviewItem.id}
