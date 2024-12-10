@@ -546,7 +546,7 @@ export const ResponseDelivery = ({ isFormsAdmin }: { isFormsAdmin: boolean }) =>
           </div>
 
           <Button disabled={!isValid || isPublished} theme="secondary" onClick={saveFormPurpose}>
-            {t("settingsResponseDelivery.saveButton")}
+            {t("settingsPurposeAndUse.saveButton")}
           </Button>
           <FormPurposeHelpButton />
         </div>
