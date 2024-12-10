@@ -16,7 +16,7 @@ RUN yarn workspaces focus gcforms flag_initialization
 RUN yarn build
 RUN yarn workspaces focus gcforms flag_initialization --production
 
-FROM node:20.12.0-alpine as final
+FROM node:22-alpine as final
 LABEL maintainer="-"
 
 ENV NODE_ENV=production
