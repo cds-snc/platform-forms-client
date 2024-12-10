@@ -161,12 +161,10 @@ export const ResponseDelivery = ({ isFormsAdmin }: { isFormsAdmin: boolean }) =>
       if (!completeEmailAddressRegex.test(inputEmailValue)) {
         return false;
       }
-      return (
-        isValidDeliveryOption && (emailDeliveryOptionsChanged || purposeOption !== formPurpose)
-      );
+      return isValidDeliveryOption && emailDeliveryOptionsChanged;
     }
 
-    if (deliveryOptionValue === initialDeliveryOption && purposeOption === formPurpose) {
+    if (deliveryOptionValue === initialDeliveryOption) {
       return false;
     }
 
@@ -183,8 +181,6 @@ export const ResponseDelivery = ({ isFormsAdmin }: { isFormsAdmin: boolean }) =>
     initialSubjectFr,
     classification,
     securityAttribute,
-    purposeOption,
-    formPurpose,
   ]);
 
   /*--------------------------------------------*
@@ -545,7 +541,7 @@ export const ResponseDelivery = ({ isFormsAdmin }: { isFormsAdmin: boolean }) =>
             </div>
           </div>
 
-          <Button disabled={!isValid || isPublished} theme="secondary" onClick={saveFormPurpose}>
+          <Button disabled={isPublished} theme="secondary" onClick={saveFormPurpose}>
             {t("settingsPurposeAndUse.saveButton")}
           </Button>
           <FormPurposeHelpButton />
