@@ -9,7 +9,7 @@ import { useStoreWithEqualityFn } from "zustand/traditional";
 import { immer } from "zustand/middleware/immer";
 import { original } from "immer";
 import { shallow } from "zustand/shallow";
-import { persist, createJSONStorage, subscribeWithSelector } from "zustand/middleware";
+import { persist, subscribeWithSelector } from "zustand/middleware";
 import update from "lodash.set";
 import unset from "lodash.unset";
 import { getParentIndex } from "@lib/utils/form-builder/getPath";
@@ -32,12 +32,11 @@ import {
   cleanInput,
   removeGroupElement,
 } from "../utils/form-builder";
-import { logMessage } from "@lib/logger";
 import { decrementChoiceIds, decrementNextActionChoiceIds } from "@lib/formContext";
 import { Language } from "../types/form-builder-types";
 import { FormElementTypes } from "@lib/types";
 import { defaultField, defaultForm } from "./defaults";
-import { storage } from "./storage";
+import { storageOptions } from "./storage";
 import { clearTemplateStorage } from "./utils";
 import { orderGroups } from "@lib/utils/form-builder/orderUsingGroupsLayout";
 import { initStore } from "./initStore";
@@ -496,18 +495,7 @@ const createTemplateStore = (initProps?: Partial<InitialTemplateStoreProps>) => 
               return get().form.lastGeneratedElementId || 1;
             },
           }),
-          {
-            name: "form-storage",
-            storage: createJSONStorage(() => storage),
-            skipHydration: true,
-            onRehydrateStorage: () => {
-              logMessage.debug("Template Store Hydration starting");
-              return (state) => {
-                logMessage.debug("Template Store Hydrationfinished");
-                state?.setHasHydrated();
-              };
-            },
-          }
+          storageOptions
         )
       )
     )
