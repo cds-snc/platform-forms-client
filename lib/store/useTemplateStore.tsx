@@ -42,8 +42,7 @@ import { clearTemplateStorage } from "./utils";
 import { orderGroups } from "@lib/utils/form-builder/orderUsingGroupsLayout";
 import { initStore } from "./initStore";
 
-import { moveUp } from "./helpers/move/moveUp";
-import { moveDown } from "./helpers/move/moveDown";
+import { moveUp, moveDown } from "./helpers/move";
 
 const createTemplateStore = (initProps?: Partial<InitialTemplateStoreProps>) => {
   const props = initStore(initProps);
