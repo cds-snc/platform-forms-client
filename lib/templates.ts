@@ -566,6 +566,10 @@ export async function updateIsPublishedForTemplate(
   try {
     await authorization.canPublishForm(ability, formID);
 
+    // Delete all form responses created during draft mode
+    if (isPublished && process.env.APP_ENV !== "test")
+      await deleteDraftFormResponses(ability, formID);
+
     // We use a where unique input to ensure we are only updating the form if it is not published
     const updatedTemplate = await prisma.template
       .update({
@@ -588,10 +592,6 @@ export async function updateIsPublishedForTemplate(
       .catch((e) => prismaErrors(e, null));
 
     if (updatedTemplate === null) return updatedTemplate;
-
-    // Delete all form responses created during draft mode
-    if (isPublished && process.env.APP_ENV !== "test")
-      await deleteDraftFormResponses(ability, formID);
 
     if (formCache.cacheAvailable) formCache.invalidate(formID);
 
