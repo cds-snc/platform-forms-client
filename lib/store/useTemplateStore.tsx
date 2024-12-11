@@ -23,8 +23,6 @@ import { TreeRefProvider } from "@formBuilder/components/shared/right-panel/tree
 import { FlowRefProvider } from "@formBuilder/[id]/edit/logic/components/flow/provider/FlowRefProvider";
 import { initializeGroups } from "@formBuilder/components/shared/right-panel/treeview/util/initializeGroups";
 import {
-  moveElementDown,
-  moveElementUp,
   removeElementById,
   removeById,
   getSchemaFromState,
@@ -41,7 +39,7 @@ import { clearTemplateStorage } from "./utils";
 import { orderGroups } from "@lib/utils/form-builder/orderUsingGroupsLayout";
 import { initStore } from "./initStore";
 
-import { moveUp, moveDown } from "./helpers/move";
+import { moveUp, moveDown, subMoveUp, subMoveDown } from "./helpers/move";
 
 const createTemplateStore = (initProps?: Partial<InitialTemplateStoreProps>) => {
   const props = initStore(initProps);
@@ -119,37 +117,8 @@ const createTemplateStore = (initProps?: Partial<InitialTemplateStoreProps>) => 
               }),
             moveUp: moveUp(set),
             moveDown: moveDown(set),
-            subMoveUp: (elId, subIndex) =>
-              set((state) => {
-                const parentIndex = getParentIndex(elId, state.form.elements);
-
-                if (parentIndex === undefined) return;
-
-                const elements = state.form.elements[parentIndex].properties.subElements;
-
-                if (elements) {
-                  state.form.elements[parentIndex].properties.subElements = moveElementUp(
-                    elements,
-                    subIndex
-                  );
-                }
-              }),
-            subMoveDown: (elId, subIndex = 0) => {
-              set((state) => {
-                const parentIndex = getParentIndex(elId, state.form.elements);
-
-                if (parentIndex === undefined) return;
-
-                const elements = state.form.elements[parentIndex].properties.subElements;
-
-                if (elements) {
-                  state.form.elements[parentIndex].properties.subElements = moveElementDown(
-                    elements,
-                    subIndex
-                  );
-                }
-              });
-            },
+            subMoveUp: subMoveUp(set),
+            subMoveDown: subMoveDown(set),
             add: async (elIndex = 0, type = FormElementTypes.radio, data, groupId) => {
               const id = get().generateElementId();
 
