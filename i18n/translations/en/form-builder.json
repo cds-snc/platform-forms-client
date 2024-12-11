@@ -743,8 +743,7 @@
       "admin": "Administrative purposes",
       "nonAdmin": "Non-administrative purposes",
       "unset": "Unset"
-    },
-    "saveButton": "Save changes"
+    }
   },
   "settingsResponseDelivery": {
     "selectClassification": "Data classification",

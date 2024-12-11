@@ -161,10 +161,12 @@ export const ResponseDelivery = ({ isFormsAdmin }: { isFormsAdmin: boolean }) =>
       if (!completeEmailAddressRegex.test(inputEmailValue)) {
         return false;
       }
-      return isValidDeliveryOption && emailDeliveryOptionsChanged;
+      return (
+        isValidDeliveryOption && (emailDeliveryOptionsChanged || purposeOption !== formPurpose)
+      );
     }
 
-    if (deliveryOptionValue === initialDeliveryOption) {
+    if (deliveryOptionValue === initialDeliveryOption && purposeOption === formPurpose) {
       return false;
     }
 
@@ -181,6 +183,8 @@ export const ResponseDelivery = ({ isFormsAdmin }: { isFormsAdmin: boolean }) =>
     initialSubjectFr,
     classification,
     securityAttribute,
+    purposeOption,
+    formPurpose,
   ]);
 
   /*--------------------------------------------*
@@ -271,6 +275,17 @@ export const ResponseDelivery = ({ isFormsAdmin }: { isFormsAdmin: boolean }) =>
       return;
     }
 
+    updateField("formPurpose", purposeOption);
+    result = (await updateTemplateFormPurpose({
+      id,
+      formPurpose: formPurpose,
+    })) as FormServerError;
+
+    if (result?.error) {
+      toast.error(<ErrorSaving errorCode={FormServerErrorCodes.FORM_PURPOSE} />, "wide");
+      return;
+    }
+
     toast.success(t("settingsResponseDelivery.savedSuccessMessage"));
 
     refreshData && refreshData();
@@ -283,27 +298,10 @@ export const ResponseDelivery = ({ isFormsAdmin }: { isFormsAdmin: boolean }) =>
     classification,
     setToDatabaseDelivery,
     setToEmailDelivery,
+    updateField,
+    purposeOption,
+    formPurpose,
   ]);
-
-  /*--------------------------------------------*
-   * Save form purpose option
-   *--------------------------------------------*/
-
-  const saveFormPurpose = useCallback(async () => {
-    const result = await updateTemplateFormPurpose({
-      id,
-      formPurpose: purposeOption,
-    });
-
-    if (result?.error) {
-      toast.error(<ErrorSaving errorCode={FormServerErrorCodes.FORM_PURPOSE} />, "wide");
-      return;
-    }
-
-    toast.success(t("settingsResponseDelivery.savedSuccessMessage"));
-
-    refreshData && refreshData();
-  }, [t, refreshData, id, purposeOption]);
 
   // Update local state
   const updateDeliveryOption = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
@@ -485,10 +483,6 @@ export const ResponseDelivery = ({ isFormsAdmin }: { isFormsAdmin: boolean }) =>
               )}
             </div>
 
-            {/*--------------------------------------------*
-             * Purpose option section
-             *--------------------------------------------*/}
-
             <div className="mb-10">
               <h2>{t("settingsPurposeAndUse.title")}</h2>
               <p className="mb-2">
@@ -541,8 +535,12 @@ export const ResponseDelivery = ({ isFormsAdmin }: { isFormsAdmin: boolean }) =>
             </div>
           </div>
 
-          <Button disabled={isPublished} theme="secondary" onClick={saveFormPurpose}>
-            {t("settingsPurposeAndUse.saveButton")}
+          <Button
+            disabled={!isValid || isPublished}
+            theme="secondary"
+            onClick={saveDeliveryOptions}
+          >
+            {t("settingsResponseDelivery.saveButton")}
           </Button>
           <FormPurposeHelpButton />
         </div>
