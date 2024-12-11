@@ -10,6 +10,8 @@ import { useEffect, useState, type JSX } from "react";
 import { useGCFormsContext } from "@lib/hooks/useGCFormContext";
 import { FormValues } from "@lib/formContext";
 
+import { SaveProgressButton } from "@clientComponents/forms/SaveProgress/SaveProgressButton";
+
 export const FormWrapper = ({
   formRecord,
   currentForm,
@@ -47,12 +49,15 @@ export const FormWrapper = ({
       t={t}
       renderSubmit={({ validateForm, fallBack }) => {
         return (
-          <NextButton
-            formRecord={formRecord}
-            language={language as Language}
-            validateForm={validateForm}
-            fallBack={fallBack}
-          />
+          <>
+            <NextButton
+              formRecord={formRecord}
+              language={language as Language}
+              validateForm={validateForm}
+              fallBack={fallBack}
+            />
+            <SaveProgressButton />
+          </>
         );
       }}
       allowGrouping={allowGrouping}
