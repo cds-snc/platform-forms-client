@@ -7,7 +7,13 @@ import {
   GetCommand,
 } from "@aws-sdk/lib-dynamodb";
 import { prisma, prismaErrors } from "@lib/integration/prismaConnector";
-import { VaultSubmissionOverview, UserAbility, VaultStatus, VaultSubmission } from "@lib/types";
+import {
+  VaultSubmissionOverview,
+  UserAbility,
+  VaultStatus,
+  VaultSubmission,
+  StartFromExclusiveResponse,
+} from "@lib/types";
 import { logEvent } from "./auditLogs";
 import {
   unprocessedSubmissionsCacheCheck,
@@ -137,11 +143,11 @@ export async function listAllSubmissions(
   formID: string,
   status?: VaultStatus,
   responseDownloadLimit?: number,
-  lastEvaluatedKey: Record<string, string> | null | undefined = null
+  startFromExclusiveResponse?: StartFromExclusiveResponse
 ): Promise<{
   submissions: VaultSubmissionOverview[];
   submissionsRemaining: boolean;
-  lastEvaluatedKey: Record<string, string> | null | undefined;
+  startFromExclusiveResponse?: StartFromExclusiveResponse;
 }> {
   // Check access control first
   try {
@@ -158,15 +164,22 @@ export async function listAllSubmissions(
         );
       throw e;
     });
+
     if (!responseDownloadLimit) {
       responseDownloadLimit = Number(await getAppSetting("responseDownloadLimit"));
     }
+
     // We're going to request one more than the limit so we can consistently determine if there are more responses
     const responseRetrievalLimit = responseDownloadLimit + 1;
 
     let accumulatedResponses: VaultSubmissionOverview[] = [];
-    let submissionsRemaining = false;
-    let paginationLastEvaluatedKey = null;
+    let lastEvaluatedKey: Record<string, unknown> | undefined | null = startFromExclusiveResponse
+      ? {
+          NAME_OR_CONF: `NAME#${startFromExclusiveResponse.name}`,
+          "Status#CreatedAt": `${startFromExclusiveResponse.status}#${startFromExclusiveResponse.createdAt}`,
+          FormID: formID,
+        }
+      : null;
 
     while (lastEvaluatedKey !== undefined) {
       const queryCommand: QueryCommand = new QueryCommand({
@@ -212,20 +225,21 @@ export async function listAllSubmissions(
       }
     }
 
+    let submissionsRemaining = false;
+    let paginationStartFromExclusiveResponse: StartFromExclusiveResponse | undefined = undefined;
+
     if (accumulatedResponses.length > responseDownloadLimit) {
       // Since we're requesting one more than the limit, we need to remove the last item
       const lastResponse = accumulatedResponses[accumulatedResponses.length - 2];
       accumulatedResponses = accumulatedResponses.slice(0, responseDownloadLimit);
 
-      // Create a lastEvaluatedKey from lastResponse for pagination
-      paginationLastEvaluatedKey = {
-        Status: lastResponse.status,
-        NAME_OR_CONF: `NAME#${lastResponse.name}`,
-        FormID: lastResponse.formID,
-      };
       submissionsRemaining = true;
+      paginationStartFromExclusiveResponse = {
+        name: lastResponse.name,
+        status: lastResponse.status,
+        createdAt: lastResponse.createdAt,
+      };
     } else {
-      paginationLastEvaluatedKey = null;
       submissionsRemaining = false;
     }
 
@@ -244,7 +258,7 @@ export async function listAllSubmissions(
     return {
       submissions: accumulatedResponses,
       submissionsRemaining: submissionsRemaining,
-      lastEvaluatedKey: paginationLastEvaluatedKey,
+      startFromExclusiveResponse: paginationStartFromExclusiveResponse,
     };
   } catch (e) {
     // Expected to error in APP_ENV test mode as dynamodb is not available
@@ -252,7 +266,8 @@ export async function listAllSubmissions(
       logMessage.info("HealthCheck: list submissions failure");
       logMessage.error(e);
     }
-    return { submissions: [], submissionsRemaining: true, lastEvaluatedKey: undefined };
+
+    return { submissions: [], submissionsRemaining: true };
   }
 }
 
