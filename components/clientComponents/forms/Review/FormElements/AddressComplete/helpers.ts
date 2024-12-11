@@ -18,6 +18,7 @@ export const getCombinedAddressAsFormItem = (
   }
 
   const parentTitle = element?.properties?.[getLocalizedProperty("title", language)];
+  // TODO just use Object.values() instead
   const addressValuesCombined = Object.keys(addressValues).map(
     (key) => addressValues[key as keyof typeof addressValues]
   );

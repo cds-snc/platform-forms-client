@@ -4,8 +4,7 @@ import { useFocusIt } from "@lib/hooks/useFocusIt";
 import { useGCFormsContext } from "@lib/hooks/useGCFormContext";
 import { Language } from "@lib/types/form-builder-types";
 import { EditButton } from "./EditButton";
-import { logMessage } from "@lib/logger";
-import { FormItemFactory} from "./FormItemFactory";
+import { FormItemFactory } from "./FormItemFactory";
 import { FormItem, getGroupsWithElements, getReviewItems } from "./helpers";
 
 export const Review = ({ language }: { language: Language }): React.ReactElement => {
@@ -17,7 +16,7 @@ export const Review = ({ language }: { language: Language }): React.ReactElement
   const groupsHeadingRef = useRef<HTMLHeadingElement>(null);
   useFocusIt({ elRef: groupsHeadingRef });
 
-  // Get Review Items that are used below to print out each question-answer
+  // Get Review Items that are used below to print out each question-answer by type
   const reviewItems = useMemo(() => {
     const formValues = getValues();
     const groupHistoryIds = getGroupHistory();
@@ -35,7 +34,6 @@ export const Review = ({ language }: { language: Language }): React.ReactElement
       language,
       getGroupTitle
     );
-    logMessage.info("reviewItems", reviewItems);
     return reviewItems;
   }, [
     formRecord.form.elements,
@@ -78,7 +76,11 @@ export const Review = ({ language }: { language: Language }): React.ReactElement
                 <div className="mb-10 ml-1">
                   {reviewItem.formItems &&
                     reviewItem.formItems.map((formItem: FormItem) => (
-                      <FormItemFactory key={formItem.originalFormElement?.id} formItem={formItem} language={language} />
+                      <FormItemFactory
+                        key={formItem.originalFormElement?.id}
+                        formItem={formItem}
+                        language={language}
+                      />
                     ))}
                 </div>
                 <EditButton

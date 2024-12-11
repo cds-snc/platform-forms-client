@@ -12,6 +12,8 @@ import { BaseElementArray } from "../BaseElementArray";
 import { BaseElement } from "../BaseElement";
 import { getCombinedAddressAsFormItem, getSplitAddressAsFormItem } from "./helpers";
 
+// TODO: Fix Canada not showing up in the output (other countries do) - on staging as well
+
 export const AddressComplete = ({
   formItem,
   language,
