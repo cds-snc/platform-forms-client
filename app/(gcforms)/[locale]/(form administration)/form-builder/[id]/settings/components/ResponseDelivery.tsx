@@ -300,10 +300,13 @@ export const ResponseDelivery = ({ isFormsAdmin }: { isFormsAdmin: boolean }) =>
       return;
     }
 
+    // Update the template store
+    updateField("formPurpose", purposeOption);
+
     toast.success(t("settingsResponseDelivery.savedSuccessMessage"));
 
     refreshData && refreshData();
-  }, [t, refreshData, id, purposeOption]);
+  }, [t, refreshData, id, purposeOption, updateField]);
 
   // Update local state
   const updateDeliveryOption = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
