@@ -149,11 +149,15 @@ export function getReviewItemElements(
           country: `${parentTitle} - ${addressCompleteStrings.country}`,
         } as AddressElements;
 
-        const subAddressValues = getAddressAsReviewElements(
-          addressValues,
-          element,
-          titleSet
-        ) as ReviewElement[];
+        const subAddressValues = getAddressAsReviewElements(addressValues, element, titleSet).map(
+          (subAddress) => {
+            return {
+              title: subAddress.label,
+              values: subAddress.values,
+              element: subAddress.originalFormElement,
+            };
+          }
+        );
 
         resultValues = [];
 
