@@ -401,34 +401,31 @@ export const Form = withFormik<FormProps, Responses>({
           ? removeFormContextValues(getValuesForConditionalLogic())
           : removeFormContextValues(values);
 
-      const handleSubmission = async (retryCount = 0) => {
-        const result = await submitForm(
-          formValues,
-          formikBag.props.language,
-          formikBag.props.formRecord
-        );
+      const result = await submitForm(
+        formValues,
+        formikBag.props.language,
+        formikBag.props.formRecord
+      );
 
-        if (result.error) {
-          if (result.error.message.includes("FileValidationResult")) {
-            formikBag.setStatus("FileError");
-          } else if (result.error.name === "ServerActionChangedError" && retryCount < 3) {
-            formikBag.props.saveProgress();
-            formikBag.props.router.refresh();
-
-            // Try submitting again
-            await handleSubmission(retryCount + 1);
-          } else {
-            formikBag.setStatus("Error");
-          }
+      if (result.error) {
+        if (result.error.message.includes("FileValidationResult")) {
+          formikBag.setStatus("FileError");
         } else {
-          formikBag.props.onSuccess(result.id);
+          formikBag.setStatus("Error");
         }
-      };
-
-      await handleSubmission();
+      } else {
+        formikBag.props.onSuccess(result.id);
+      }
     } catch (err) {
-      logMessage.error(err as Error);
-      formikBag.setStatus("Error");
+      if ((err as Error).message.includes("Failed to find Server Action")) {
+        formikBag.props.saveProgress();
+        formikBag.props.router.refresh();
+        sessionStorage.clear();
+        formikBag.setStatus("Error");
+      } else {
+        logMessage.error(err as Error);
+        formikBag.setStatus("Error");
+      }
     } finally {
       if (formikBag.props && !formikBag.props.isPreview) {
         window.dataLayer = window.dataLayer || [];
