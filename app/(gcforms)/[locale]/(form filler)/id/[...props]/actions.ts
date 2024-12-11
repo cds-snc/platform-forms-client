@@ -6,6 +6,13 @@ import { processFormData } from "./lib/processFormData";
 import { MissingFormDataError, MissingFormIdError } from "./lib/exceptions";
 import { logMessage } from "@lib/logger";
 
+// class ServerActionChangedError extends Error {
+//   constructor() {
+//     super("Server action changed. Please try again.");
+//     this.name = "ServerActionChangedError";
+//   }
+// }
+
 export async function submitForm(
   values: Responses,
   language: string,
@@ -21,6 +28,8 @@ export async function submitForm(
     if (Object.entries(formDataObject).length <= 2) {
       throw new MissingFormDataError("No form data submitted with request");
     }
+
+    // throw new ServerActionChangedError();
 
     const data = await parseRequestData(formDataObject as SubmissionRequestBody);
 

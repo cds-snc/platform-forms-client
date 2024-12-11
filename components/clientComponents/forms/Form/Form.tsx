@@ -29,6 +29,7 @@ import { filterShownElements, filterValuesByShownElements } from "@lib/formConte
 import { formHasGroups } from "@lib/utils/form-builder/formHasGroups";
 import { showReviewPage } from "@lib/utils/form-builder/showReviewPage";
 import { useFormDelay } from "@lib/hooks/useFormDelayContext";
+import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime";
 
 interface SubmitButtonProps {
   getFormDelay: () => number;
@@ -354,6 +355,8 @@ interface FormProps {
   allowGrouping?: boolean | undefined;
   groupHistory?: string[];
   matchedIds?: string[];
+  saveProgress: () => void;
+  router: AppRouterInstance;
 }
 
 /**
@@ -407,6 +410,26 @@ export const Form = withFormik<FormProps, Responses>({
       if (result.error) {
         if (result.error.message.includes("FileValidationResult")) {
           formikBag.setStatus("FileError");
+        } else if (result.error.name === "ServerActionChangedError") {
+          formikBag.props.saveProgress();
+          formikBag.props.router.refresh();
+
+          // Try submitting again
+          const result = await submitForm(
+            formValues,
+            formikBag.props.language,
+            formikBag.props.formRecord
+          );
+
+          if (result.error) {
+            if (result.error.message.includes("FileValidationResult")) {
+              formikBag.setStatus("FileError");
+            } else {
+              formikBag.setStatus("Error");
+            }
+          } else {
+            formikBag.props.onSuccess(result.id);
+          }
         } else {
           formikBag.setStatus("Error");
         }
