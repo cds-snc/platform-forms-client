@@ -9,7 +9,7 @@ import { useStoreWithEqualityFn } from "zustand/traditional";
 import { immer } from "zustand/middleware/immer";
 import { original } from "immer";
 import { shallow } from "zustand/shallow";
-import { persist, createJSONStorage, subscribeWithSelector } from "zustand/middleware";
+import { persist, subscribeWithSelector } from "zustand/middleware";
 import update from "lodash.set";
 import unset from "lodash.unset";
 import { getParentIndex } from "@lib/utils/form-builder/getPath";
@@ -23,9 +23,7 @@ import { TreeRefProvider } from "@formBuilder/components/shared/right-panel/tree
 import { FlowRefProvider } from "@formBuilder/[id]/edit/logic/components/flow/provider/FlowRefProvider";
 import { initializeGroups } from "@formBuilder/components/shared/right-panel/treeview/util/initializeGroups";
 import {
-  moveDown,
   moveElementDown,
-  moveUp,
   moveElementUp,
   removeElementById,
   removeById,
@@ -34,60 +32,25 @@ import {
   cleanInput,
   removeGroupElement,
 } from "../utils/form-builder";
-import { logMessage } from "@lib/logger";
 import { decrementChoiceIds, decrementNextActionChoiceIds } from "@lib/formContext";
 import { Language } from "../types/form-builder-types";
 import { FormElementTypes } from "@lib/types";
 import { defaultField, defaultForm } from "./defaults";
-import { storage } from "./storage";
+import { storageOptions } from "./storage";
 import { clearTemplateStorage } from "./utils";
 import { orderGroups } from "@lib/utils/form-builder/orderUsingGroupsLayout";
+import { initStore } from "./initStore";
+
+import { moveUp, moveDown } from "./helpers/move";
 
 const createTemplateStore = (initProps?: Partial<InitialTemplateStoreProps>) => {
-  const DEFAULT_PROPS: TemplateStoreProps = {
-    id: "",
-    lang: (initProps?.locale as Language) || "en",
-    translationLanguagePriority: (initProps?.locale as Language) || "en",
-    focusInput: false,
-    hasHydrated: false,
-    form: defaultForm,
-    isPublished: false,
-    name: "",
-    securityAttribute: "Protected A",
-    formPurpose: "",
-    publishReason: "",
-    publishFormType: "",
-    publishDesc: "",
-    closingDate: initProps?.closingDate,
-    changeKey: String(new Date().getTime()),
-    allowGroupsFlag: initProps?.allowGroupsFlag || false,
-  };
-
-  // Ensure any required properties by Form Builder are defaulted by defaultForm
-  if (initProps?.form) {
-    initProps.form = {
-      ...defaultForm,
-      ...initProps?.form,
-    };
-
-    initProps.form = initializeGroups(initProps.form, initProps?.allowGroupsFlag || false);
-
-    // Ensure order by groups layout
-    if (!initProps.form.groupsLayout) {
-      /* No need to order as the groups layout does not exist */
-      initProps.form.groupsLayout = [];
-    } else {
-      initProps.form.groups = orderGroups(initProps.form.groups, initProps.form.groupsLayout);
-    }
-  }
-
+  const props = initStore(initProps);
   return createStore<TemplateStoreState>()(
     immer(
       subscribeWithSelector(
         persist(
           (set, get) => ({
-            ...DEFAULT_PROPS,
-            ...initProps,
+            ...props,
             setChangeKey: (key: string) => {
               set((state) => {
                 state.changeKey = key;
@@ -105,6 +68,9 @@ const createTemplateStore = (initProps?: Partial<InitialTemplateStoreProps>) => 
               set((state) => {
                 state.id = id;
               }),
+            getPathString(id) {
+              return getPathString(id, get().form.elements);
+            },
             setLang: (lang) =>
               set((state) => {
                 state.lang = lang;
@@ -151,20 +117,8 @@ const createTemplateStore = (initProps?: Partial<InitialTemplateStoreProps>) => 
               set((state) => {
                 unset(state, path);
               }),
-            moveUp: (elIndex, groupId) =>
-              set((state) => {
-                state.form.layout = moveUp(state.form.layout, elIndex);
-                const allowGroups = state.allowGroupsFlag;
-                if (allowGroups && groupId) {
-                  const group = state.form.groups && state.form.groups[groupId];
-                  if (group) {
-                    // Convert the elements array to a number array
-                    const els = group.elements.map((el) => Number(el));
-                    // Move the element up and convert back to string array
-                    group.elements = moveUp(els, elIndex).map((el) => String(el));
-                  }
-                }
-              }),
+            moveUp: moveUp(set),
+            moveDown: moveDown(set),
             subMoveUp: (elId, subIndex) =>
               set((state) => {
                 const parentIndex = getParentIndex(elId, state.form.elements);
@@ -178,20 +132,6 @@ const createTemplateStore = (initProps?: Partial<InitialTemplateStoreProps>) => 
                     elements,
                     subIndex
                   );
-                }
-              }),
-            moveDown: (elIndex, groupId) =>
-              set((state) => {
-                state.form.layout = moveDown(state.form.layout, elIndex);
-                const allowGroups = state.allowGroupsFlag;
-                if (allowGroups && groupId) {
-                  const group = state.form.groups && state.form.groups[groupId];
-                  if (group) {
-                    // Convert the elements array to a number array
-                    const els = group.elements.map((el) => Number(el));
-                    // Move the element down and convert back to string array
-                    group.elements = moveDown(els, elIndex).map((el) => String(el));
-                  }
                 }
               }),
             subMoveDown: (elId, subIndex = 0) => {
@@ -555,18 +495,7 @@ const createTemplateStore = (initProps?: Partial<InitialTemplateStoreProps>) => 
               return get().form.lastGeneratedElementId || 1;
             },
           }),
-          {
-            name: "form-storage",
-            storage: createJSONStorage(() => storage),
-            skipHydration: true,
-            onRehydrateStorage: () => {
-              logMessage.debug("Template Store Hydration starting");
-              return (state) => {
-                logMessage.debug("Template Store Hydrationfinished");
-                state?.setHasHydrated();
-              };
-            },
-          }
+          storageOptions
         )
       )
     )

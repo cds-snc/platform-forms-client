@@ -1,9 +1,11 @@
 import { useTranslation } from "@i18n/client";
 import { getDaysPassed } from "@lib/client/clientHelpers";
-import { TypeOmit, VaultSubmission } from "@lib/types";
+import { VaultSubmissionOverview } from "@lib/types";
 import { ExclamationIcon } from "@serverComponents/icons";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { StatusFilter } from "../types";
+import Skeleton from "react-loading-skeleton";
+import { getSubmissionRemovalDate } from "../actions";
 
 const ExclamationText = ({
   text,
@@ -22,6 +24,36 @@ const ExclamationText = ({
   );
 };
 
+const RemovalDateLabel = ({ submission }: { submission: VaultSubmissionOverview }) => {
+  const { t } = useTranslation("form-builder-responses");
+  const [label, setLabel] = useState<string | null>(null);
+
+  const getRemovalByMessage = (removalAt?: Date | number) => {
+    const daysLeft = removalAt && getDaysPassed(removalAt);
+    if (daysLeft && daysLeft > 0) {
+      return t("downloadResponsesTable.status.removeWithinXDays", { daysLeft });
+    }
+    return "";
+  };
+
+  useEffect(() => {
+    getSubmissionRemovalDate(submission.formID, submission.name).then((value) => {
+      if (typeof value === "number") {
+        setLabel(getRemovalByMessage(value));
+      } else {
+        setLabel("-");
+      }
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  if (label === null) {
+    return <Skeleton count={1} className="my-4 ml-4 w-[300px]" />;
+  }
+
+  return <p>{label}</p>;
+};
+
 export const NextStep = ({
   statusFilter,
   submission,
@@ -29,7 +61,7 @@ export const NextStep = ({
   removedRows,
 }: {
   statusFilter: StatusFilter;
-  submission: TypeOmit<VaultSubmission, "formSubmission" | "submissionID" | "confirmationCode">;
+  submission: VaultSubmissionOverview;
   overdueAfter: number | undefined;
   removedRows: string[];
 }) => {
@@ -59,14 +91,6 @@ export const NextStep = ({
     return t("downloadResponsesTable.status.confirmWithinXDays", { daysLeft });
   };
 
-  const getRemovalByMessage = (removalAt?: Date | number) => {
-    const daysLeft = removalAt && getDaysPassed(removalAt);
-    if (daysLeft && daysLeft > 0) {
-      return t("downloadResponsesTable.status.removeWithinXDays", { daysLeft });
-    }
-    return "";
-  };
-
   return (
     <>
       {statusFilter === StatusFilter.NEW && (
@@ -85,9 +109,7 @@ export const NextStep = ({
       {statusFilter === StatusFilter.DOWNLOADED && (
         <p>{getSignOffByMessage(daysPassed, overdueAfter)}</p>
       )}
-      {statusFilter === StatusFilter.CONFIRMED && (
-        <p>{getRemovalByMessage(submission.removedAt)}</p>
-      )}
+      {statusFilter === StatusFilter.CONFIRMED && <RemovalDateLabel submission={submission} />}
       {statusFilter === StatusFilter.PROBLEM && (
         <p className="text-red">
           <strong>{t("supportWillContact")}</strong>

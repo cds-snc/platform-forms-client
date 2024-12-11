@@ -26,6 +26,7 @@ export interface TemplateStoreState extends TemplateStoreProps {
   };
   getId: () => string;
   setId: (id: string) => void;
+  getPathString: (id: number) => string;
   setLang: (lang: Language) => void;
   toggleLang: () => void;
   toggleTranslationLanguagePriority: () => void;
@@ -80,6 +81,8 @@ export interface TemplateStoreState extends TemplateStoreProps {
   getHighestElementId: () => number;
   generateElementId: () => number;
 }
+
+export type SetStateFunction = (fn: (state: TemplateStoreState) => void) => void;
 
 export interface InitialTemplateStoreProps extends TemplateStoreProps {
   locale?: Language;
