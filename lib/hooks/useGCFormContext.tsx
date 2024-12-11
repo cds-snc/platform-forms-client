@@ -56,7 +56,6 @@ export const GCFormsProvider = ({
 }) => {
   const groups: GroupsType = formRecord.form.groups || {};
   const initialGroup = groups ? LockedSections.START : null;
-  const progressRestored = React.useRef(false);
   const values = React.useRef({});
   const history = React.useRef<string[]>([LockedSections.START]);
   const [matchedIds, setMatchedIds] = React.useState<string[]>([]);
@@ -177,12 +176,6 @@ export const GCFormsProvider = ({
   };
 
   const restoreProgress = (): FormValues | false => {
-    if (progressRestored.current !== false) {
-      // return false;
-    }
-
-    progressRestored.current = true;
-
     const formData = sessionStorage.getItem("form-data");
 
     if (formData) {
