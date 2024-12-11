@@ -9,7 +9,7 @@ import { useStoreWithEqualityFn } from "zustand/traditional";
 import { immer } from "zustand/middleware/immer";
 import { original } from "immer";
 import { shallow } from "zustand/shallow";
-import { persist, createJSONStorage, subscribeWithSelector } from "zustand/middleware";
+import { persist, subscribeWithSelector } from "zustand/middleware";
 import update from "lodash.set";
 import unset from "lodash.unset";
 import { getParentIndex } from "@lib/utils/form-builder/getPath";
@@ -23,10 +23,6 @@ import { TreeRefProvider } from "@formBuilder/components/shared/right-panel/tree
 import { FlowRefProvider } from "@formBuilder/[id]/edit/logic/components/flow/provider/FlowRefProvider";
 import { initializeGroups } from "@formBuilder/components/shared/right-panel/treeview/util/initializeGroups";
 import {
-  moveDown,
-  moveElementDown,
-  moveUp,
-  moveElementUp,
   removeElementById,
   removeById,
   getSchemaFromState,
@@ -34,15 +30,16 @@ import {
   cleanInput,
   removeGroupElement,
 } from "../utils/form-builder";
-import { logMessage } from "@lib/logger";
 import { decrementChoiceIds, decrementNextActionChoiceIds } from "@lib/formContext";
 import { Language } from "../types/form-builder-types";
 import { FormElementTypes } from "@lib/types";
 import { defaultField, defaultForm } from "./defaults";
-import { storage } from "./storage";
+import { storageOptions } from "./storage";
 import { clearTemplateStorage } from "./utils";
 import { orderGroups } from "@lib/utils/form-builder/orderUsingGroupsLayout";
 import { initStore } from "./initStore";
+
+import { moveUp, moveDown, subMoveUp, subMoveDown } from "./helpers/move";
 
 const createTemplateStore = (initProps?: Partial<InitialTemplateStoreProps>) => {
   const props = initStore(initProps);
@@ -118,65 +115,10 @@ const createTemplateStore = (initProps?: Partial<InitialTemplateStoreProps>) => 
               set((state) => {
                 unset(state, path);
               }),
-            moveUp: (elIndex, groupId) =>
-              set((state) => {
-                state.form.layout = moveUp(state.form.layout, elIndex);
-                const allowGroups = state.allowGroupsFlag;
-                if (allowGroups && groupId) {
-                  const group = state.form.groups && state.form.groups[groupId];
-                  if (group) {
-                    // Convert the elements array to a number array
-                    const els = group.elements.map((el) => Number(el));
-                    // Move the element up and convert back to string array
-                    group.elements = moveUp(els, elIndex).map((el) => String(el));
-                  }
-                }
-              }),
-            subMoveUp: (elId, subIndex) =>
-              set((state) => {
-                const parentIndex = getParentIndex(elId, state.form.elements);
-
-                if (parentIndex === undefined) return;
-
-                const elements = state.form.elements[parentIndex].properties.subElements;
-
-                if (elements) {
-                  state.form.elements[parentIndex].properties.subElements = moveElementUp(
-                    elements,
-                    subIndex
-                  );
-                }
-              }),
-            moveDown: (elIndex, groupId) =>
-              set((state) => {
-                state.form.layout = moveDown(state.form.layout, elIndex);
-                const allowGroups = state.allowGroupsFlag;
-                if (allowGroups && groupId) {
-                  const group = state.form.groups && state.form.groups[groupId];
-                  if (group) {
-                    // Convert the elements array to a number array
-                    const els = group.elements.map((el) => Number(el));
-                    // Move the element down and convert back to string array
-                    group.elements = moveDown(els, elIndex).map((el) => String(el));
-                  }
-                }
-              }),
-            subMoveDown: (elId, subIndex = 0) => {
-              set((state) => {
-                const parentIndex = getParentIndex(elId, state.form.elements);
-
-                if (parentIndex === undefined) return;
-
-                const elements = state.form.elements[parentIndex].properties.subElements;
-
-                if (elements) {
-                  state.form.elements[parentIndex].properties.subElements = moveElementDown(
-                    elements,
-                    subIndex
-                  );
-                }
-              });
-            },
+            moveUp: moveUp(set),
+            moveDown: moveDown(set),
+            subMoveUp: subMoveUp(set),
+            subMoveDown: subMoveDown(set),
             add: async (elIndex = 0, type = FormElementTypes.radio, data, groupId) => {
               const id = get().generateElementId();
 
@@ -522,18 +464,7 @@ const createTemplateStore = (initProps?: Partial<InitialTemplateStoreProps>) => 
               return get().form.lastGeneratedElementId || 1;
             },
           }),
-          {
-            name: "form-storage",
-            storage: createJSONStorage(() => storage),
-            skipHydration: true,
-            onRehydrateStorage: () => {
-              logMessage.debug("Template Store Hydration starting");
-              return (state) => {
-                logMessage.debug("Template Store Hydrationfinished");
-                state?.setHasHydrated();
-              };
-            },
-          }
+          storageOptions
         )
       )
     )

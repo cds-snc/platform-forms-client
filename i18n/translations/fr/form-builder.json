@@ -743,7 +743,8 @@
       "admin": "Fins administratives",
       "nonAdmin": "Fins non-administratives",
       "unset": "Pas défini"
-    }
+    },
+    "saveButton": "Enregistrer les modifications"
   },
   "settingsResponseDelivery": {
     "selectClassification": "Classification des données",

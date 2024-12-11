@@ -1,2 +1,3 @@
 # Ignore build folder
 .next
+*.md

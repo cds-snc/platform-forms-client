@@ -10,7 +10,7 @@ import {
   ClosedDetails,
 } from "@lib/types";
 import { Prisma } from "@prisma/client";
-import { AccessControlError, checkPrivileges } from "./privileges";
+import { AccessControlError, authorization } from "./privileges";
 import { logEvent } from "./auditLogs";
 import { logMessage } from "@lib/logger";
 import { unprocessedSubmissions, deleteDraftFormResponses } from "./vault";
@@ -78,105 +78,6 @@ const _parseTemplate = (template: {
   };
 };
 
-/**
- * Get a form template by ID (no permission required) for internal use only.
- * @param formID ID of form template
- * @returns FormRecord
- */
-async function _unprotectedGetTemplateByID(formID: string): Promise<FormRecord | null> {
-  if (formCache.cacheAvailable) {
-    // This value will always be the latest if it exists because
-    // the cache is invalidated on change of a template
-    const cachedValue = await formCache.formID.check(formID);
-    if (cachedValue) {
-      return cachedValue;
-    }
-  }
-
-  const template = await prisma.template
-    .findUnique({
-      where: {
-        id: formID,
-      },
-      select: {
-        id: true,
-        created_at: true,
-        updated_at: true,
-        name: true,
-        jsonConfig: true,
-        isPublished: true,
-        deliveryOption: true,
-        securityAttribute: true,
-        formPurpose: true,
-        publishReason: true,
-        publishFormType: true,
-        publishDesc: true,
-        closingDate: true,
-        closedDetails: true,
-        ttl: true,
-      },
-    })
-    .catch((e) => prismaErrors(e, null));
-
-  // Short circuit the public record filtering if no form record is found or the form is marked as deleted (ttl != null)
-  if (!template || template.ttl) return null;
-
-  const parsedTemplate = _parseTemplate(template);
-
-  if (formCache.cacheAvailable) formCache.formID.set(formID, parsedTemplate);
-
-  return parsedTemplate;
-}
-
-/**
- * This function is for internal use only since it does not require any permission.
- * There is an exported version `_getTemplateWithAssociatedUsers` that checks for permissions.
- */
-async function _unprotectedGetTemplateWithAssociatedUsers(formID: string): Promise<{
-  formRecord: FormRecord;
-  users: { id: string; name: string | null; email: string }[];
-} | null> {
-  const templateWithUsers = await prisma.template
-    .findUnique({
-      where: {
-        id: formID,
-      },
-      select: {
-        id: true,
-        created_at: true,
-        updated_at: true,
-        name: true,
-        jsonConfig: true,
-        isPublished: true,
-        deliveryOption: true,
-        securityAttribute: true,
-        formPurpose: true,
-        publishReason: true,
-        publishFormType: true,
-        publishDesc: true,
-        closingDate: true,
-        ttl: true,
-        users: {
-          select: {
-            id: true,
-            name: true,
-            email: true,
-          },
-        },
-      },
-    })
-    .catch((e) => prismaErrors(e, null));
-
-  if (!templateWithUsers || templateWithUsers.ttl) return null;
-
-  const parsedTemplate = _parseTemplate(templateWithUsers);
-
-  return {
-    formRecord: parsedTemplate,
-    users: templateWithUsers.users,
-  };
-}
-
 // ******************************************
 // Exportable Module Functions
 // ******************************************
@@ -226,10 +127,18 @@ export class TemplateHasUnprocessedSubmissions extends Error {
  * @returns Form Record or null if creation was not sucessfull.
  */
 export async function createTemplate(command: CreateTemplateCommand): Promise<FormRecord | null> {
-  try {
-    checkPrivileges(command.ability, [{ action: "create", subject: "FormRecord" }]);
+  await authorization.canCreateForm(command.ability).catch((e) => {
+    logEvent(
+      command.ability.userID,
+      { type: "Form" },
+      "AccessDenied",
+      "Attempted to create a Form"
+    );
+    throw e;
+  });
 
-    const createdTemplate = await prisma.template.create({
+  const createdTemplate = await prisma.template
+    .create({
       data: {
         jsonConfig: command.formConfig as Prisma.JsonObject,
         ...(command.name && {
@@ -266,22 +175,14 @@ export async function createTemplate(command: CreateTemplateCommand): Promise<Fo
         publishFormType: true,
         publishDesc: true,
       },
-    });
+    })
+    .catch((e) => prismaErrors(e, null));
 
-    logEvent(command.ability.userID, { type: "Form", id: createdTemplate?.id }, "CreateForm");
+  if (createdTemplate === null) return null;
 
-    return _parseTemplate(createdTemplate);
-  } catch (e) {
-    if (e instanceof AccessControlError)
-      logEvent(
-        command.ability.userID,
-        { type: "Form" },
-        "AccessDenied",
-        "Attempted to create a Form"
-      );
+  logEvent(command.ability.userID, { type: "Form", id: createdTemplate?.id }, "CreateForm");
 
-    return prismaErrors(e, null);
-  }
+  return _parseTemplate(createdTemplate);
 }
 
 /**
@@ -297,12 +198,8 @@ export async function getAllTemplates(
 ): Promise<Array<FormRecord>> {
   try {
     const { requestedWhere, sortByDateUpdated } = options ?? {};
-    checkPrivileges(ability, [
-      {
-        action: "view",
-        subject: "FormRecord",
-      },
-    ]);
+    // Can a user view any Template
+    await authorization.canViewAllForms(ability);
 
     const templates = await prisma.template
       .findMany({
@@ -421,8 +318,49 @@ export async function getAllTemplatesForUser(
  */
 export async function getPublicTemplateByID(formID: string): Promise<PublicFormRecord | null> {
   try {
-    const formRecord = await _unprotectedGetTemplateByID(formID);
-    return formRecord ? onlyIncludePublicProperties(formRecord) : null;
+    if (formCache.cacheAvailable) {
+      // This value will always be the latest if it exists because
+      // the cache is invalidated on change of a template
+      const cachedValue = await formCache.check(formID);
+      if (cachedValue) {
+        return cachedValue;
+      }
+    }
+
+    const template = await prisma.template
+      .findUnique({
+        where: {
+          id: formID,
+        },
+        select: {
+          id: true,
+          created_at: true,
+          updated_at: true,
+          name: true,
+          jsonConfig: true,
+          isPublished: true,
+          deliveryOption: true,
+          securityAttribute: true,
+          formPurpose: true,
+          publishReason: true,
+          publishFormType: true,
+          publishDesc: true,
+          closingDate: true,
+          closedDetails: true,
+          ttl: true,
+        },
+      })
+      .catch((e) => prismaErrors(e, null));
+
+    // Short circuit the public record filtering if no form record is found or the form is marked as deleted (ttl != null)
+    if (!template || template.ttl) return null;
+
+    const parsedTemplate = _parseTemplate(template);
+    const publicFormRecord = onlyIncludePublicProperties(parsedTemplate);
+
+    if (formCache.cacheAvailable) formCache.set(formID, publicFormRecord);
+
+    return publicFormRecord;
   } catch (e) {
     logMessage.error(e);
     return null;
@@ -439,24 +377,24 @@ export async function getFullTemplateByID(
   formID: string
 ): Promise<FormRecord | null> {
   try {
-    const templateWithAssociatedUsers = await _unprotectedGetTemplateWithAssociatedUsers(formID);
-    if (!templateWithAssociatedUsers) return null;
+    await authorization.canViewForm(ability, formID);
 
-    checkPrivileges(ability, [
-      {
-        action: "view",
-        subject: {
-          type: "FormRecord",
-          object: {
-            ...templateWithAssociatedUsers.formRecord,
-            users: templateWithAssociatedUsers.users,
-          },
+    const template = await prisma.template
+      .findUnique({
+        where: {
+          id: formID,
         },
-      },
-    ]);
+        include: {
+          deliveryOption: true,
+        },
+      })
+      .catch((e) => prismaErrors(e, null));
+
+    if (!template) return null;
+
     logEvent(ability.userID, { type: "Form", id: formID }, "ReadForm");
 
-    return templateWithAssociatedUsers.formRecord;
+    return _parseTemplate(template);
   } catch (e) {
     if (e instanceof AccessControlError) {
       logEvent(
@@ -479,16 +417,25 @@ export async function getTemplateWithAssociatedUsers(
   users: { id: string; name: string | null; email: string }[];
 } | null> {
   try {
-    const templateWithAssociatedUsers = await _unprotectedGetTemplateWithAssociatedUsers(formID);
+    await authorization.canViewForm(ability, formID);
+
+    const templateWithAssociatedUsers = await prisma.template.findUnique({
+      where: {
+        id: formID,
+      },
+      include: {
+        deliveryOption: true,
+        users: {
+          select: {
+            id: true,
+            name: true,
+            email: true,
+          },
+        },
+      },
+    });
 
     if (!templateWithAssociatedUsers) return null;
-
-    checkPrivileges(ability, [
-      {
-        action: "view",
-        subject: { type: "FormRecord", object: { users: templateWithAssociatedUsers.users } },
-      },
-    ]);
 
     logEvent(
       ability.userID,
@@ -496,7 +443,10 @@ export async function getTemplateWithAssociatedUsers(
       "ReadForm",
       "Retrieved users associated with Form"
     );
-    return templateWithAssociatedUsers;
+    return {
+      formRecord: _parseTemplate(templateWithAssociatedUsers),
+      users: templateWithAssociatedUsers.users,
+    };
   } catch (e) {
     if (e instanceof AccessControlError)
       logEvent(
@@ -517,32 +467,13 @@ export async function getTemplateWithAssociatedUsers(
  */
 export async function updateTemplate(command: UpdateTemplateCommand): Promise<FormRecord | null> {
   try {
-    const templateWithAssociatedUsers = await _unprotectedGetTemplateWithAssociatedUsers(
-      command.formID
-    );
-    if (!templateWithAssociatedUsers) return null;
-
-    checkPrivileges(command.ability, [
-      {
-        action: "update",
-        subject: {
-          type: "FormRecord",
-          object: {
-            ...templateWithAssociatedUsers.formRecord,
-            users: templateWithAssociatedUsers.users,
-          },
-        },
-      },
-    ]);
-
-    // Prevent already published templates from being updated
-    if (templateWithAssociatedUsers.formRecord.isPublished)
-      throw new TemplateAlreadyPublishedError();
+    await authorization.canEditForm(command.ability, command.formID);
 
     const updatedTemplate = await prisma.template
       .update({
         where: {
           id: command.formID,
+          isPublished: false,
         },
         data: {
           jsonConfig: command.formConfig as Prisma.JsonObject,
@@ -568,26 +499,15 @@ export async function updateTemplate(command: UpdateTemplateCommand): Promise<Fo
           }),
           ...(command.formPurpose && { formPurpose: command.formPurpose }),
         },
-        select: {
-          id: true,
-          created_at: true,
-          updated_at: true,
-          name: true,
-          jsonConfig: true,
-          isPublished: true,
+        include: {
           deliveryOption: true,
-          securityAttribute: true,
-          formPurpose: true,
-          publishReason: true,
-          publishFormType: true,
-          publishDesc: true,
         },
       })
       .catch((e) => prismaErrors(e, null));
 
-    if (updatedTemplate === null) return updatedTemplate;
+    if (updatedTemplate === null) throw new TemplateAlreadyPublishedError();
 
-    if (formCache.cacheAvailable) formCache.formID.invalidate(command.formID);
+    if (formCache.cacheAvailable) formCache.invalidate(command.formID);
 
     // Log the audit events
     logEvent(
@@ -644,45 +564,20 @@ export async function updateIsPublishedForTemplate(
   publishDescription: string
 ): Promise<FormRecord | null> {
   try {
-    // Check ability to update the form based on publishing or unpublishing action
-    if (isPublished) {
-      const templateWithAssociatedUsers = await _unprotectedGetTemplateWithAssociatedUsers(formID);
-      if (!templateWithAssociatedUsers) return null;
+    await authorization.canPublishForm(ability, formID);
 
-      checkPrivileges(ability, [
-        {
-          action: "update",
-          subject: {
-            type: "FormRecord",
-            object: {
-              ...templateWithAssociatedUsers.formRecord,
-              users: templateWithAssociatedUsers.users,
-            },
-          },
-          field: "isPublished",
-        },
-      ]);
-      // Check we are not trying to publish an already published form
-      if (templateWithAssociatedUsers.formRecord.isPublished) {
-        throw new TemplateAlreadyPublishedError();
-      }
-    } else {
-      checkPrivileges(ability, [
-        {
-          action: "update",
-          subject: "FormRecord",
-        },
-      ]);
-    }
-
-    // Delete all form responses created during draft mode before changing status to published
+    // Delete all form responses created during draft mode
     if (isPublished && process.env.APP_ENV !== "test")
       await deleteDraftFormResponses(ability, formID);
 
+    // We use a where unique input to ensure we are only updating the form if it is not published
     const updatedTemplate = await prisma.template
       .update({
         where: {
           id: formID,
+          isPublished: {
+            not: isPublished,
+          },
         },
         data: {
           isPublished: isPublished,
@@ -690,26 +585,15 @@ export async function updateIsPublishedForTemplate(
           publishFormType: publishFormType,
           publishDesc: publishDescription,
         },
-        select: {
-          id: true,
-          created_at: true,
-          updated_at: true,
-          name: true,
-          jsonConfig: true,
-          isPublished: true,
+        include: {
           deliveryOption: true,
-          securityAttribute: true,
-          formPurpose: true,
-          publishReason: true,
-          publishFormType: true,
-          publishDesc: true,
         },
       })
       .catch((e) => prismaErrors(e, null));
 
     if (updatedTemplate === null) return updatedTemplate;
 
-    if (formCache.cacheAvailable) formCache.formID.invalidate(formID);
+    if (formCache.cacheAvailable) formCache.invalidate(formID);
 
     logEvent(ability.userID, { type: "Form", id: formID }, "PublishForm");
 
@@ -742,7 +626,22 @@ export async function removeAssignedUserFromTemplate(
   userID: string
 ): Promise<void> {
   try {
-    const template = await getTemplateWithAssociatedUsers(ability, formID);
+    await authorization.canEditForm(ability, formID);
+
+    const template = await prisma.template.findUnique({
+      where: {
+        id: formID,
+      },
+      select: {
+        users: {
+          select: {
+            id: true,
+            name: true,
+            email: true,
+          },
+        },
+      },
+    });
 
     if (template === null) {
       logMessage.warn(
@@ -751,19 +650,11 @@ export async function removeAssignedUserFromTemplate(
       throw new TemplateNotFoundError();
     }
 
-    const userToRemove = await prisma.user.findUnique({
-      where: {
-        id: userID,
-      },
-      select: {
-        name: true,
-        email: true,
-      },
-    });
+    const userToRemove = template.users.find((user) => user.id === userID);
 
-    if (userToRemove === null) {
+    if (!userToRemove) {
       logMessage.warn(
-        `Can not remove assigned user ${userID} on template ${formID}.  User does not exist`
+        `Can not remove assigned user ${userID} on template ${formID}.  User is not assigned`
       );
       throw new UserNotFoundError();
     }
@@ -774,19 +665,13 @@ export async function removeAssignedUserFromTemplate(
           id: formID,
         },
         select: {
-          id: true,
-          created_at: true,
-          updated_at: true,
-          name: true,
           jsonConfig: true,
-          isPublished: true,
-          deliveryOption: true,
-          securityAttribute: true,
-          formPurpose: true,
-          publishReason: true,
-          publishFormType: true,
-          publishDesc: true,
-          users: true,
+          users: {
+            select: {
+              id: true,
+              email: true,
+            },
+          },
         },
         data: {
           users: {
@@ -837,24 +722,31 @@ export async function assignUserToTemplate(
   userID: string
 ): Promise<void> {
   try {
-    const template = await getTemplateWithAssociatedUsers(ability, formID);
+    await authorization.canEditForm(ability, formID);
+
+    const template = await prisma.template.findUnique({
+      where: {
+        id: formID,
+      },
+      select: {
+        users: {
+          select: {
+            id: true,
+            name: true,
+            email: true,
+          },
+        },
+      },
+    });
 
     if (template === null) {
       logMessage.warn(`Can not add user ${userID} to template ${formID}.  Template does not exist`);
       throw new TemplateNotFoundError();
     }
 
-    const userToAdd = await prisma.user.findUnique({
-      where: {
-        id: userID,
-      },
-      select: {
-        name: true,
-        email: true,
-      },
-    });
+    const userToAdd = template.users.find((user) => user.id === userID);
 
-    if (userToAdd === null) {
+    if (!userToAdd) {
       logMessage.warn(`Can not add user ${userID} to template ${formID}.  User does not exist`);
       throw new UserNotFoundError();
     }
@@ -866,7 +758,12 @@ export async function assignUserToTemplate(
         },
         select: {
           jsonConfig: true,
-          users: true,
+          users: {
+            select: {
+              id: true,
+              email: true,
+            },
+          },
         },
         data: {
           users: {
@@ -983,6 +880,7 @@ export async function updateAssignedUsersForTemplate(
 ): Promise<FormRecord | null> {
   try {
     if (!users.length) throw new Error("No users provided");
+    await authorization.canEditForm(ability, formID);
 
     const template = await prisma.template.findFirst({
       where: {
@@ -1001,11 +899,6 @@ export async function updateAssignedUsersForTemplate(
       );
       return null;
     }
-
-    checkPrivileges(ability, [
-      { action: "update", subject: { type: "FormRecord", object: { users: template.users } } },
-      { action: "update", subject: { type: "User", object: { id: ability.userID } } },
-    ]);
 
     const previouslyAssigned =
       template?.users.map((user) => {
@@ -1094,8 +987,6 @@ export async function updateAssignedUsersForTemplate(
         `Access revoked for ${usersToRemove.map((user) => user.email ?? user.id).toString()}`
       );
 
-    if (formCache.cacheAvailable) formCache.formID.invalidate(formID);
-
     return _parseTemplate(updatedTemplate);
   } catch (e) {
     if (e instanceof AccessControlError)
@@ -1109,36 +1000,20 @@ export async function updateAssignedUsersForTemplate(
   }
 }
 
+/// START HERE TO CONTINUE REFACTORING
 export async function updateFormPurpose(
   ability: UserAbility,
   formID: string,
   formPurpose: string
 ): Promise<FormRecord | null> {
   try {
-    const templateWithAssociatedUsers = await _unprotectedGetTemplateWithAssociatedUsers(formID);
-    if (!templateWithAssociatedUsers) return null;
-
-    checkPrivileges(ability, [
-      {
-        action: "update",
-        subject: {
-          type: "FormRecord",
-          object: {
-            ...templateWithAssociatedUsers.formRecord,
-            users: templateWithAssociatedUsers.users,
-          },
-        },
-      },
-    ]);
-
-    // Prevent already published templates from being updated
-    if (templateWithAssociatedUsers.formRecord.isPublished)
-      throw new TemplateAlreadyPublishedError();
+    await authorization.canEditForm(ability, formID);
 
     const updatedTemplate = await prisma.template
       .update({
         where: {
           id: formID,
+          isPublished: false,
         },
         data: {
           formPurpose: formPurpose,
@@ -1158,7 +1033,14 @@ export async function updateFormPurpose(
           publishReason: true,
         },
       })
-      .catch((e) => prismaErrors(e, null));
+      .catch((e) => {
+        if (e instanceof Prisma.PrismaClientKnownRequestError) {
+          if (e.code === "P2025") {
+            throw new TemplateAlreadyPublishedError();
+          }
+        }
+        return prismaErrors(e, null);
+      });
 
     if (updatedTemplate === null) return updatedTemplate;
 
@@ -1169,7 +1051,6 @@ export async function updateFormPurpose(
       `Form Purpose set to ${formPurpose}`
     );
 
-    if (formCache.cacheAvailable) formCache.formID.invalidate(formID);
     return _parseTemplate(updatedTemplate);
   } catch (e) {
     if (e instanceof AccessControlError)
@@ -1189,30 +1070,13 @@ export async function updateResponseDeliveryOption(
   deliveryOption: DeliveryOption
 ): Promise<FormRecord | null> {
   try {
-    const templateWithAssociatedUsers = await _unprotectedGetTemplateWithAssociatedUsers(formID);
-    if (!templateWithAssociatedUsers) return null;
-
-    checkPrivileges(ability, [
-      {
-        action: "update",
-        subject: {
-          type: "FormRecord",
-          object: {
-            ...templateWithAssociatedUsers.formRecord,
-            users: templateWithAssociatedUsers.users,
-          },
-        },
-      },
-    ]);
-
-    // Prevent already published templates from being updated
-    if (templateWithAssociatedUsers.formRecord.isPublished)
-      throw new TemplateAlreadyPublishedError();
+    await authorization.canEditForm(ability, formID);
 
     const updatedTemplate = await prisma.template
       .update({
         where: {
           id: formID,
+          isPublished: false,
         },
         data: {
           deliveryOption: {
@@ -1245,7 +1109,14 @@ export async function updateResponseDeliveryOption(
           publishDesc: true,
         },
       })
-      .catch((e) => prismaErrors(e, null));
+      .catch((e) => {
+        if (e instanceof Prisma.PrismaClientKnownRequestError) {
+          if (e.code === "P2025") {
+            throw new TemplateAlreadyPublishedError();
+          }
+        }
+        return prismaErrors(e, null);
+      });
 
     if (updatedTemplate === null) return updatedTemplate;
 
@@ -1256,7 +1127,6 @@ export async function updateResponseDeliveryOption(
       `Delivery Option set to ${deliveryOption.emailAddress}`
     );
 
-    if (formCache.cacheAvailable) formCache.formID.invalidate(formID);
     return _parseTemplate(updatedTemplate);
   } catch (e) {
     if (e instanceof AccessControlError)
@@ -1280,38 +1150,16 @@ export async function removeDeliveryOption(
   formID: string
 ): Promise<FormRecord | null> {
   try {
-    const templateWithAssociatedUsers = await _unprotectedGetTemplateWithAssociatedUsers(formID);
-    if (!templateWithAssociatedUsers) return null;
-
-    checkPrivileges(ability, [
-      {
-        action: "update",
-        subject: {
-          type: "FormRecord",
-          object: {
-            ...templateWithAssociatedUsers.formRecord,
-            users: templateWithAssociatedUsers.users,
-          },
-        },
-      },
-    ]);
-
-    // Prevent already published templates from being updated
-    if (templateWithAssociatedUsers.formRecord.isPublished)
-      throw new TemplateAlreadyPublishedError();
-
-    /**
-     * In case we try to delete the `deliveryOption` twice in a row.
-     * There is a limitation in Prisma https://github.com/prisma/docs/issues/1321 that forces us to do so.
-     */
-    if (templateWithAssociatedUsers.formRecord.deliveryOption === undefined) {
-      return templateWithAssociatedUsers.formRecord;
-    }
+    await authorization.canEditForm(ability, formID);
 
     const updatedTemplate = await prisma.template
       .update({
         where: {
           id: formID,
+          isPublished: false,
+          deliveryOption: {
+            isNot: null,
+          },
         },
         data: {
           deliveryOption: {
@@ -1333,7 +1181,14 @@ export async function removeDeliveryOption(
           publishDesc: true,
         },
       })
-      .catch((e) => prismaErrors(e, null));
+      .catch((e) => {
+        if (e instanceof Prisma.PrismaClientKnownRequestError) {
+          if (e.code === "P2025") {
+            throw new TemplateAlreadyPublishedError();
+          }
+        }
+        return prismaErrors(e, null);
+      });
 
     if (updatedTemplate === null) return updatedTemplate;
 
@@ -1344,7 +1199,6 @@ export async function removeDeliveryOption(
       "Delivery Option set to the Vault"
     );
 
-    if (formCache.cacheAvailable) formCache.formID.invalidate(formID);
     return _parseTemplate(updatedTemplate);
   } catch (e) {
     if (e instanceof AccessControlError)
@@ -1368,21 +1222,7 @@ export async function deleteTemplate(
   formID: string
 ): Promise<FormRecord | null> {
   try {
-    const templateWithAssociatedUsers = await _unprotectedGetTemplateWithAssociatedUsers(formID);
-    if (!templateWithAssociatedUsers) return null;
-
-    checkPrivileges(ability, [
-      {
-        action: "delete",
-        subject: {
-          type: "FormRecord",
-          object: {
-            ...templateWithAssociatedUsers.formRecord,
-            users: templateWithAssociatedUsers.users,
-          },
-        },
-      },
-    ]);
+    await authorization.canDeleteForm(ability, formID);
 
     // Ignore cache (last boolean parameter) because we want to make sure we did not get new submissions while in the flow of deleting a form
     const numOfUnprocessedSubmissions = await unprocessedSubmissions(ability, formID, true);
@@ -1423,7 +1263,7 @@ export async function deleteTemplate(
     // Check and delete any API keys from IDP
     await deleteKey(formID);
 
-    if (formCache.cacheAvailable) formCache.formID.invalidate(formID);
+    if (formCache.cacheAvailable) formCache.invalidate(formID);
 
     return _parseTemplate(templateMarkedAsDeleted);
   } catch (e) {
@@ -1438,37 +1278,9 @@ export async function deleteTemplate(
   }
 }
 
+// Remove and replace this utility with new authorization object in code
 export const checkUserHasTemplateOwnership = async (ability: UserAbility, formID: string) => {
-  const templateUsers = await prisma.template
-    .findUnique({
-      where: {
-        id: formID,
-      },
-      select: {
-        users: {
-          select: {
-            id: true,
-            name: true,
-          },
-        },
-      },
-    })
-    .catch((e) => prismaErrors(e, null));
-
-  // Template does not exist or error, no one has ownership
-  if (!templateUsers) throw new AccessControlError(`Access Control Forbidden Action`);
-
-  return checkPrivileges(ability, [
-    {
-      action: "view",
-      subject: {
-        type: "FormRecord",
-        object: {
-          users: templateUsers.users,
-        },
-      },
-    },
-  ]);
+  await authorization.canEditForm(ability, formID);
 };
 
 /*
@@ -1497,21 +1309,8 @@ export const updateClosedData = async (
   closingDate: string | null,
   details?: ClosedDetails
 ) => {
-  const templateWithAssociatedUsers = await _unprotectedGetTemplateWithAssociatedUsers(formID);
-  if (!templateWithAssociatedUsers) return null;
+  await authorization.canEditForm(ability, formID);
 
-  checkPrivileges(ability, [
-    {
-      action: "update",
-      subject: {
-        type: "FormRecord",
-        object: {
-          ...templateWithAssociatedUsers.formRecord,
-          users: templateWithAssociatedUsers.users,
-        },
-      },
-    },
-  ]);
   let detailsData: ClosedDetails | null = null;
 
   if (closingDate !== null && !isValidISODate(String(closingDate))) {
@@ -1542,7 +1341,7 @@ export const updateClosedData = async (
       })
       .catch((e) => prismaErrors(e, null));
 
-    if (formCache.cacheAvailable) formCache.formID.invalidate(formID);
+    if (formCache.cacheAvailable) formCache.invalidate(formID);
   } catch (e) {
     if (e instanceof AccessControlError)
       logEvent(
@@ -1562,27 +1361,13 @@ export const updateSecurityAttribute = async (
   securityAttribute: string
 ) => {
   try {
-    const templateWithAssociatedUsers = await _unprotectedGetTemplateWithAssociatedUsers(formID);
-    if (!templateWithAssociatedUsers) return null;
-
-    checkPrivileges(ability, [
-      {
-        action: "update",
-        subject: {
-          type: "FormRecord",
-          object: {
-            ...templateWithAssociatedUsers.formRecord,
-            users: templateWithAssociatedUsers.users,
-          },
-        },
-        field: "securityAttribute",
-      },
-    ]);
+    await authorization.canEditForm(ability, formID);
 
     const updatedTemplate = await prisma.template
       .update({
         where: {
           id: formID,
+          isPublished: false,
         },
         data: { securityAttribute },
         select: {
@@ -1604,7 +1389,7 @@ export const updateSecurityAttribute = async (
 
     if (updatedTemplate === null) return updatedTemplate;
 
-    if (formCache.cacheAvailable) formCache.formID.invalidate(formID);
+    if (formCache.cacheAvailable) formCache.invalidate(formID);
 
     logEvent(ability.userID, { type: "Form", id: formID }, "ChangeSecurityAttribute");
 
