@@ -24,7 +24,7 @@ export type ReviewItem = {
 export type FormItem = {
   type: FormElementTypes;
   label: string;
-  values: string | FileInputResponse | DateObject | FormItem[];
+  values: string | string[] | FileInputResponse | DateObject | FormItem[];
   originalFormElement: FormElement | undefined;
 };
 
