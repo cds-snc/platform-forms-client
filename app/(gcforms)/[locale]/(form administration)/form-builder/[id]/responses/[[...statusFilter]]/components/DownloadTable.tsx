@@ -1,5 +1,11 @@
 import React, { useEffect, useReducer, useState } from "react";
-import { NagwareResult, VaultStatus, VaultSubmissionOverview } from "@lib/types";
+import {
+  NagwareResult,
+  TypeOmit,
+  VaultStatus,
+  VaultSubmission,
+  VaultSubmissionList,
+} from "@lib/types";
 import { useTranslation } from "@i18n/client";
 import { SkipLinkReusable } from "@clientComponents/globals/SkipLinkReusable";
 import Link from "next/link";
@@ -23,7 +29,7 @@ import { StatusFilter } from "../types";
 import { useFormBuilderConfig } from "@lib/hooks/useFormBuilderConfig";
 
 interface DownloadTableProps {
-  vaultSubmissions: VaultSubmissionOverview[];
+  vaultSubmissions: VaultSubmissionList[];
   formName: string;
   formId: string;
   nagwareResult: NagwareResult | null;
@@ -77,7 +83,9 @@ export const DownloadTable = ({
     }
   };
 
-  const blockDownload = (submission: VaultSubmissionOverview) => {
+  const blockDownload = (
+    submission: TypeOmit<VaultSubmission, "formSubmission" | "submissionID" | "confirmationCode">
+  ) => {
     const daysPast = getDaysPassed(submission.createdAt);
 
     if (
