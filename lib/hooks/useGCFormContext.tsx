@@ -41,8 +41,8 @@ interface GCFormsContextValueType {
   pushIdToHistory: (groupId: string) => string[];
   clearHistoryAfterId: (groupId: string) => string[];
   getGroupTitle: (groupId: string | null, language: Language) => string;
-  saveForm: (formValues: FormValues) => void;
-  restoreProgress: () => FormValues;
+  saveProgress: (formValues: FormValues) => void;
+  restoreProgress: () => FormValues | false;
 }
 
 const GCFormsContext = createContext<GCFormsContextValueType | undefined>(undefined);
@@ -56,6 +56,7 @@ export const GCFormsProvider = ({
 }) => {
   const groups: GroupsType = formRecord.form.groups || {};
   const initialGroup = groups ? LockedSections.START : null;
+  const progressRestored = React.useRef(false);
   const values = React.useRef({});
   const history = React.useRef<string[]>([LockedSections.START]);
   const [matchedIds, setMatchedIds] = React.useState<string[]>([]);
@@ -109,6 +110,8 @@ export const GCFormsProvider = ({
         pushIdToHistory(nextAction);
       }
     }
+
+    saveProgress(values.current as FormValues);
   };
 
   const handlePreviousAction = () => {
@@ -130,8 +133,6 @@ export const GCFormsProvider = ({
     if (!idArraysMatch(matchedIds, valueIds)) {
       setMatchedIds(valueIds);
     }
-
-    saveForm(formValues);
   };
 
   // Helper to not expose the setter
@@ -164,36 +165,40 @@ export const GCFormsProvider = ({
     return groups?.[groupId]?.[titleLanguageKey] || "";
   };
 
-  const saveForm = (formValues: FormValues) => {
-    const base64 = Buffer.from(
-      JSON.stringify({
-        id: formRecord.id,
-        values: formValues,
-        history: history.current,
-        currentGroup: currentGroup,
-      })
-    ).toString("base64");
-
+  const saveProgress = (formValues: FormValues) => {
+    const formData = JSON.stringify({
+      id: formRecord.id,
+      values: formValues,
+      history: history.current,
+      currentGroup: currentGroup,
+    });
     // Save to session storage
-    sessionStorage.setItem("form-data", base64);
+    sessionStorage.setItem("form-data", formData);
   };
 
-  const restoreProgress = (): FormValues => {
+  const restoreProgress = (): FormValues | false => {
+    if (progressRestored.current !== false) {
+      // return false;
+    }
+
+    progressRestored.current = true;
+
     const formData = sessionStorage.getItem("form-data");
 
     if (formData) {
-      const decodedData = Buffer.from(formData, "base64").toString("utf-8");
-      const parsedData = JSON.parse(decodedData);
+      const parsedData = JSON.parse(formData);
 
       if (parsedData.id === formRecord.id) {
         // values.current = parsedData.values;
-        // history.current = parsedData.history;
-        //setCurrentGroup(parsedData.currentGroup);
+        history.current = parsedData.history;
+        if (parsedData.currentGroup !== currentGroup) {
+          setCurrentGroup(parsedData.currentGroup);
+        }
         return parsedData.values;
       }
     }
 
-    return {};
+    return false;
   };
 
   return (
@@ -217,7 +222,7 @@ export const GCFormsProvider = ({
         pushIdToHistory,
         clearHistoryAfterId,
         getGroupTitle,
-        saveForm,
+        saveProgress,
         restoreProgress,
       }}
     >
