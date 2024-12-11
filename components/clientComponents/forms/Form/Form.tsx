@@ -401,41 +401,31 @@ export const Form = withFormik<FormProps, Responses>({
           ? removeFormContextValues(getValuesForConditionalLogic())
           : removeFormContextValues(values);
 
-      const result = await submitForm(
-        formValues,
-        formikBag.props.language,
-        formikBag.props.formRecord
-      );
+      const handleSubmission = async (retryCount = 0) => {
+        const result = await submitForm(
+          formValues,
+          formikBag.props.language,
+          formikBag.props.formRecord
+        );
 
-      if (result.error) {
-        if (result.error.message.includes("FileValidationResult")) {
-          formikBag.setStatus("FileError");
-        } else if (result.error.name === "ServerActionChangedError") {
-          formikBag.props.saveProgress();
-          formikBag.props.router.refresh();
+        if (result.error) {
+          if (result.error.message.includes("FileValidationResult")) {
+            formikBag.setStatus("FileError");
+          } else if (result.error.name === "ServerActionChangedError" && retryCount < 3) {
+            formikBag.props.saveProgress();
+            formikBag.props.router.refresh();
 
-          // Try submitting again
-          const result = await submitForm(
-            formValues,
-            formikBag.props.language,
-            formikBag.props.formRecord
-          );
-
-          if (result.error) {
-            if (result.error.message.includes("FileValidationResult")) {
-              formikBag.setStatus("FileError");
-            } else {
-              formikBag.setStatus("Error");
-            }
+            // Try submitting again
+            await handleSubmission(retryCount + 1);
           } else {
-            formikBag.props.onSuccess(result.id);
+            formikBag.setStatus("Error");
           }
         } else {
-          formikBag.setStatus("Error");
+          formikBag.props.onSuccess(result.id);
         }
-      } else {
-        formikBag.props.onSuccess(result.id);
-      }
+      };
+
+      await handleSubmission();
     } catch (err) {
       logMessage.error(err as Error);
       formikBag.setStatus("Error");
