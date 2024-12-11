@@ -11,6 +11,7 @@ import { getLocalizedProperty } from "@lib/utils";
 import { Language } from "@lib/types/form-builder-types";
 import { DateObject } from "../FormattedDate/types";
 
+// Created for the Review page to help structure printing out questions-and-answers
 export type ReviewItem = {
   id: string;
   name: string;
@@ -18,7 +19,8 @@ export type ReviewItem = {
   formItems: FormItem[];
 };
 
-// FormItems is used by sub Components with a type that helps choose a component that can ".toString()" itself
+// Used by sub components that know enough to "toString" themselves via a factory that determines
+// which FormItem by look at the FormItem.type
 export type FormItem = {
   type: FormElementTypes;
   label: string;
@@ -26,7 +28,7 @@ export type FormItem = {
   originalFormElement: FormElement | undefined;
 };
 
-// Temporary type only used here
+// Local type to help structure an intermediary object used to construct Review Items
 type GroupsWithElementIds = {
   groupId: string;
   group: Group;

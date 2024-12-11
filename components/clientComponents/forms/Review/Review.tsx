@@ -5,7 +5,7 @@ import { useGCFormsContext } from "@lib/hooks/useGCFormContext";
 import { Language } from "@lib/types/form-builder-types";
 import { EditButton } from "./EditButton";
 import { logMessage } from "@lib/logger";
-import { FormItemBuilder } from "./FormItemBuilder";
+import { FormItemFactory} from "./FormItemFactory";
 import { FormItem, getGroupsWithElements, getReviewItems } from "./helpers";
 
 export const Review = ({ language }: { language: Language }): React.ReactElement => {
@@ -78,7 +78,7 @@ export const Review = ({ language }: { language: Language }): React.ReactElement
                 <div className="mb-10 ml-1">
                   {reviewItem.formItems &&
                     reviewItem.formItems.map((formItem: FormItem) => (
-                      <FormItemBuilder key={formItem.originalFormElement?.id} formItem={formItem} />
+                      <FormItemFactory key={formItem.originalFormElement?.id} formItem={formItem} language={language} />
                     ))}
                 </div>
                 <EditButton
