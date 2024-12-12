@@ -15,6 +15,6 @@ export const authorizationPass = () => {
 export const authorizationFail = () => {
   const mockedAuth: MockedAuthFunction = jest.mocked(authorization);
   for (const property in authorization) {
-    mockedAuth[property] = jest.fn().mockRejectedValue(new AccessControlError());
+    mockedAuth[property] = jest.fn().mockRejectedValue(new AccessControlError("userId"));
   }
 };

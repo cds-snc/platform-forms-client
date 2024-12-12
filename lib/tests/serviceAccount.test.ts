@@ -67,11 +67,11 @@ describe("Service Account functions", () => {
       expect(result).toBe(undefined);
     });
     it("should throw and error is user is not authentiated to perform the action", async () => {
-      mockedAuthCheckAndThrow.mockRejectedValueOnce(new AccessControlError());
+      mockedAuthCheckAndThrow.mockRejectedValueOnce(new AccessControlError("user1"));
       await expect(checkMachineUserExists("blah")).rejects.toThrow(AccessControlError);
     });
     it("should throw and error is user is not authorized to perform the action", async () => {
-      mockedCheckUserHasTemplateOwnership.mockRejectedValueOnce(new AccessControlError());
+      mockedCheckUserHasTemplateOwnership.mockRejectedValueOnce(new AccessControlError("user1"));
       await expect(checkMachineUserExists("blah")).rejects.toThrow(AccessControlError);
     });
   });
@@ -121,11 +121,11 @@ describe("Service Account functions", () => {
       expect(result).toBe(false);
     });
     it("should throw and error is user is not authentiated to perform the action", async () => {
-      mockedAuthCheckAndThrow.mockRejectedValueOnce(new AccessControlError());
+      mockedAuthCheckAndThrow.mockRejectedValueOnce(new AccessControlError("user1"));
       await expect(checkKeyExists("blah")).rejects.toThrow(AccessControlError);
     });
     it("should throw and error is user is not authorized to perform the action", async () => {
-      mockedCheckUserHasTemplateOwnership.mockRejectedValueOnce(new AccessControlError());
+      mockedCheckUserHasTemplateOwnership.mockRejectedValueOnce(new AccessControlError("user1"));
       await expect(checkKeyExists("blah")).rejects.toThrow(AccessControlError);
     });
   });
@@ -172,11 +172,11 @@ describe("Service Account functions", () => {
       );
     });
     it("should throw and error is user is not authentiated to perform the action", async () => {
-      mockedAuthCheckAndThrow.mockRejectedValueOnce(new AccessControlError());
+      mockedAuthCheckAndThrow.mockRejectedValueOnce(new AccessControlError("user1"));
       await expect(createKey("templateId")).rejects.toThrow(AccessControlError);
     });
     it("should throw and error is user is not authorized to perform the action", async () => {
-      mockedCheckUserHasTemplateOwnership.mockRejectedValueOnce(new AccessControlError());
+      mockedCheckUserHasTemplateOwnership.mockRejectedValueOnce(new AccessControlError("user1"));
       await expect(createKey("templateId")).rejects.toThrow(AccessControlError);
     });
   });
@@ -255,11 +255,11 @@ describe("Service Account functions", () => {
       );
     });
     it("should throw and error is user is not authentiated to perform the action", async () => {
-      mockedAuthCheckAndThrow.mockRejectedValueOnce(new AccessControlError());
+      mockedAuthCheckAndThrow.mockRejectedValueOnce(new AccessControlError("user1"));
       await expect(refreshKey("templateId")).rejects.toThrow(AccessControlError);
     });
     it("should throw and error is user is not authorized to perform the action", async () => {
-      mockedCheckUserHasTemplateOwnership.mockRejectedValueOnce(new AccessControlError());
+      mockedCheckUserHasTemplateOwnership.mockRejectedValueOnce(new AccessControlError("user1"));
       await expect(refreshKey("templateId")).rejects.toThrow(AccessControlError);
     });
   });
@@ -321,11 +321,11 @@ describe("Service Account functions", () => {
     });
 
     it("should throw and error is user is not authentiated to perform the action", async () => {
-      mockedAuthCheckAndThrow.mockRejectedValueOnce(new AccessControlError());
+      mockedAuthCheckAndThrow.mockRejectedValueOnce(new AccessControlError("user1"));
       await expect(deleteKey("templateId")).rejects.toThrow(AccessControlError);
     });
     it("should throw and error is user is not authorized to perform the action", async () => {
-      mockedCheckUserHasTemplateOwnership.mockRejectedValueOnce(new AccessControlError());
+      mockedCheckUserHasTemplateOwnership.mockRejectedValueOnce(new AccessControlError("user1"));
       await expect(deleteKey("templateId")).rejects.toThrow(AccessControlError);
     });
   });
