@@ -191,14 +191,14 @@ export async function listAllSubmissions(
         KeyConditionExpression:
           "FormID = :formID" + (status ? " AND begins_with(#statusCreatedAtKey, :status)" : ""),
         ExpressionAttributeNames: {
-          ...(status && { "#statusCreatedAtKey": "Status#CreatedAt" }),
+          "#statusCreatedAtKey": "Status#CreatedAt",
           "#name": "Name",
         },
         ExpressionAttributeValues: {
           ":formID": formID,
           ...(status && { ":status": status }),
         },
-        ProjectionExpression: "FormID,#name,CreatedAt",
+        ProjectionExpression: "FormID,#name,CreatedAt,#statusCreatedAtKey",
       });
 
       // eslint-disable-next-line no-await-in-loop
@@ -207,9 +207,14 @@ export async function listAllSubmissions(
       if (response.Items?.length) {
         accumulatedResponses = accumulatedResponses.concat(
           response.Items.map(
-            ({ FormID: formID, Status: status, CreatedAt: createdAt, Name: name }) => ({
+            ({
+              FormID: formID,
+              "Status#CreatedAt": statusCreatedAt,
+              CreatedAt: createdAt,
+              Name: name,
+            }) => ({
               formID,
-              status,
+              status: vaultStatusFromStatusCreatedAt(statusCreatedAt),
               name,
               createdAt,
             })
@@ -860,3 +865,19 @@ export const confirmResponses = async (
     }),
   };
 };
+
+export function vaultStatusFromStatusCreatedAt(statusCreatedAtAttribute: string): VaultStatus {
+  const status = statusCreatedAtAttribute.split("#")[0];
+  switch (status) {
+    case "New":
+      return VaultStatus.NEW;
+    case "Downloaded":
+      return VaultStatus.DOWNLOADED;
+    case "Confirmed":
+      return VaultStatus.CONFIRMED;
+    case "Problem":
+      return VaultStatus.PROBLEM;
+    default:
+      throw new Error(`Unsupported Status#CreatedAt value. Value = ${statusCreatedAtAttribute}.`);
+  }
+}
