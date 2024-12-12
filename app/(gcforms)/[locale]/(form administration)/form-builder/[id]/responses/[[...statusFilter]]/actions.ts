@@ -204,7 +204,7 @@ export const getSubmissionsByFormat = async ({
       );
     }
 
-    const fullFormTemplate = await getFullTemplateByID(ability, formID);
+    const fullFormTemplate = await getFullTemplateByID(formID);
 
     if (fullFormTemplate === null) {
       logMessage.warn(`getSubmissionsByFormat form not found: ${formID}`);
