@@ -553,6 +553,13 @@
     "notify_organisation_id": "00aaac61-cafd-4edd-9bcc-bea78342d92d"
   },
   {
+    "id": "001OO00000K0yNHYAZ",
+    "name_eng": "Military Police Complaints Commission of Canada",
+    "name_fra": "Commission d'examen des plaintes concernant la police militaire du Canada",
+    "type": "GC Department",
+    "notify_organisation_id": null
+  },
+  {
     "id": "001I9000004Vt61IAC",
     "name_eng": "National Defence",
     "name_fra": "Défense nationale et les Forces armées canadiennes",
