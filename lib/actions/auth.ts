@@ -4,8 +4,8 @@ import { redirect } from "next/navigation";
 import { getCurrentLanguage } from "@i18n";
 import { getAbility } from "@lib/privileges";
 
-export const AuthenticatedAction = <Output>(
-  action: (...args: unknown[]) => Promise<Output>,
+export const AuthenticatedAction = <Input, Output>(
+  action: (args: Input) => Promise<Output>,
   redirectOnFail?: boolean
 ) => {
   return async (...args: unknown[]) => {
@@ -18,7 +18,7 @@ export const AuthenticatedAction = <Output>(
         throw new Error("User is not Authenticated");
       }
     }
-    return action(...args);
+    return action(...(args as Parameters<typeof action>));
   };
 };
 
