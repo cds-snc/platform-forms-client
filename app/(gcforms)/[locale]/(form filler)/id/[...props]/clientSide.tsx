@@ -38,7 +38,7 @@ export const FormWrapper = ({
     if (restoredValues) {
       setInitialValues(restoredValues);
     }
-  }, []);
+  }, [restoreProgress]);
 
   return (
     <Form
