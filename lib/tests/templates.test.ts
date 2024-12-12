@@ -522,37 +522,20 @@ describe("Template CRUD functions", () => {
     });
 
     it("Remove DeliveryOption from template", async () => {
-      (prismaMock.template.update as jest.MockedFunction<any>).mockResolvedValue(
-        buildPrismaResponse("formtestID", formConfiguration)
-      );
+      (prismaMock.template.findFirstOrThrow as jest.MockedFunction<any>).mockResolvedValue({
+        isPublished: false,
+      });
 
-      const updatedTemplate = await removeDeliveryOption(user1Ability, "formtestID");
+      await removeDeliveryOption(user1Ability, "formtestID");
 
-      expect(prismaMock.template.update).toHaveBeenCalledWith(
+      expect(prismaMock.deliveryOption.deleteMany).toHaveBeenCalledWith(
         expect.objectContaining({
           where: {
-            id: "formtestID",
-            isPublished: false,
-            deliveryOption: {
-              isNot: null,
-            },
-          },
-          data: {
-            deliveryOption: {
-              delete: true,
-            },
+            templateId: "formtestID",
           },
         })
       );
 
-      expect(updatedTemplate).toEqual(
-        expect.objectContaining({
-          id: "formtestID",
-          form: formConfiguration,
-          isPublished: false,
-          securityAttribute: "Unclassified",
-        })
-      );
       expect(mockedLogEvent).toHaveBeenCalledWith(
         user1Ability.userID,
         { id: "formtestID", type: "Form" },

@@ -1143,21 +1143,31 @@ export async function updateResponseDeliveryOption(
 /**
  * Remove DeliveryOption from template. Form responses will be sent to the Vault.
  * @param formID The unique identifier of the form you want to modify
- * @returns The updated form template or null if the record does not exist
+ * @returns void
  */
 export async function removeDeliveryOption(ability: UserAbility, formID: string): Promise<void> {
   try {
     await authorization.canEditForm(ability, formID);
 
-    await prisma.deliveryOption
-      .deleteMany({
-        where: {
-          templateId: formID,
-        },
-      })
-      .catch((e) => {
-        return prismaErrors(e, null);
-      });
+    // Don't change delivery option if the form is published
+    const template = await prisma.template.findFirstOrThrow({
+      where: {
+        id: formID,
+      },
+      select: {
+        isPublished: true,
+      },
+    });
+
+    if (!template) throw new TemplateNotFoundError();
+
+    if (template.isPublished) throw new TemplateAlreadyPublishedError();
+
+    await prisma.deliveryOption.deleteMany({
+      where: {
+        templateId: formID,
+      },
+    });
 
     logEvent(
       ability.userID,
