@@ -50,9 +50,7 @@ export const Pagination = ({
     } catch (e) {
       // If the base64 encoded string has been tampered with, redirect to the first page
       router.push(
-        `/${language}/form-builder/${formId}/responses/${
-          statusFilter ? `/${statusFilter}` : "/new"
-        }`
+        `/${language}/form-builder/${formId}/responses/${statusFilter ? `/${statusFilter}` : "/"}`
       );
       // Needed to satisfy typescript as router.push returns void and not never
       return ["start"];
@@ -95,13 +93,13 @@ export const Pagination = ({
     <>
       <Link
         href={`/${language}/form-builder/${formId}/responses${
-          statusFilter ? `/${statusFilter}` : "/new"
+          statusFilter ? `/${statusFilter}` : "/"
         }`}
         legacyBehavior
       >
         <a
           href={`/${language}/form-builder/${formId}/responses${
-            statusFilter ? `/${statusFilter}` : "/new"
+            statusFilter ? `/${statusFilter}` : "/"
           }`}
           className={`group mr-4 inline-block ${
             isFirstPage ? "pointer-events-none opacity-50" : ""
@@ -116,13 +114,13 @@ export const Pagination = ({
       <div className="float-right inline-block">
         <Link
           href={`/${language}/form-builder/${formId}/responses${
-            statusFilter ? `/${statusFilter}` : "/new"
+            statusFilter ? `/${statusFilter}` : "/"
           }${previousLink}`}
           legacyBehavior
         >
           <a
             href={`/${language}/form-builder/${formId}/responses${
-              statusFilter ? `/${statusFilter}` : "/new"
+              statusFilter ? `/${statusFilter}` : "/"
             }${previousLink}`}
             className={`group mr-4 inline-block ${
               isFirstPage ? "pointer-events-none opacity-50" : ""
@@ -136,13 +134,13 @@ export const Pagination = ({
         {t("downloadResponsesTable.header.pagination.showing", { start, end })}
         <Link
           href={`/${language}/form-builder/${formId}/responses${
-            statusFilter ? `/${statusFilter}` : "/new"
+            statusFilter ? `/${statusFilter}` : "/"
           }?keys=${encodeBase64Url(keys.join(","))}&lastKey=${lastEvaluatedResponse}`}
           legacyBehavior
         >
           <a
             href={`/${language}/form-builder/${formId}/responses${
-              statusFilter ? `/${statusFilter}` : "/new"
+              statusFilter ? `/${statusFilter}` : "/"
             }?keys=${encodeBase64Url(keys.join(","))}&lastKey=${lastEvaluatedResponse}`}
             className={`group ml-4 inline-block ${
               isLastPage ? "pointer-events-none opacity-50" : ""
