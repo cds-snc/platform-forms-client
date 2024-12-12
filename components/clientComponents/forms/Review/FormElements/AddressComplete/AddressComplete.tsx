@@ -7,7 +7,7 @@ import {
 import { Language } from "@lib/types/form-builder-types";
 import { AddressComponents } from "@lib/types";
 import { useGCFormsContext } from "@lib/hooks/useGCFormContext";
-import { safeJSONParse } from "@lib/utils";
+import { getLocalizedProperty, safeJSONParse } from "@lib/utils";
 import { BaseElementArray } from "../BaseElementArray";
 import { BaseElement } from "../BaseElement";
 import { getCombinedAddressAsFormItem, getSplitAddressAsFormItem } from "./helpers";
@@ -49,6 +49,7 @@ export const AddressComplete = ({
     );
     return (
       <div className="mb-8">
+        <h4>{String(element?.properties?.[getLocalizedProperty("title", language)])}</h4>
         {splitAddress &&
           splitAddress.map((addressAsFormItem, index) => (
             <BaseElement

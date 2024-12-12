@@ -18,10 +18,7 @@ export const getCombinedAddressAsFormItem = (
   }
 
   const parentTitle = element?.properties?.[getLocalizedProperty("title", language)];
-  // TODO just use Object.values() instead
-  const addressValuesCombined = Object.keys(addressValues).map(
-    (key) => addressValues[key as keyof typeof addressValues]
-  );
+  const addressValuesCombined = Object.values(addressValues);
 
   return {
     type: FormElementTypes.textField,
@@ -41,17 +38,16 @@ export const getSplitAddressAsFormItem = (
     return;
   }
 
-  const parentTitle = element?.properties?.[getLocalizedProperty("title", language)];
   const canadaOnly = element.properties.addressComponents?.canadianOnly;
   const titleSet = {
-    streetAddress: `${parentTitle} - ${addressCompleteStrings.streetAddress}`,
-    city: `${parentTitle} - ${addressCompleteStrings.city}`,
-    province: `${parentTitle} - 
+    streetAddress: `${addressCompleteStrings.streetAddress}`,
+    city: `${addressCompleteStrings.city}`,
+    province: `
       ${canadaOnly ? addressCompleteStrings.province : addressCompleteStrings.provinceOrState}`,
-    postalCode: `${parentTitle} - ${
+    postalCode: `${
       canadaOnly ? addressCompleteStrings.postalCode : addressCompleteStrings.postalCodeOrZip
     }`,
-    country: `${parentTitle} - ${addressCompleteStrings.country}`,
+    country: `${addressCompleteStrings.country}`,
   };
 
   return getAddressAsReviewElements(addressValues, element, titleSet);
