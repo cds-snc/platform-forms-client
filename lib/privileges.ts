@@ -39,8 +39,11 @@ const abilityCache = new InMemoryCache(100, 60);
 export const getAbility = async (): Promise<UserAbility> => {
   const session = await auth();
   if (!session) throw new Error("No session found");
+  // If the privileges are cached, we can use them as a check that no changes have been made
+  // and it is safe to use the cached ability
+  const cachedPrivilegesRules = await privilegeCheck(session.user.id);
   const cachedAbility = abilityCache.get(session.user.id);
-  if (cachedAbility) {
+  if (cachedAbility && cachedPrivilegesRules !== null) {
     logMessage.debug(`Using cached ability for user ${session.user.id}`);
     return cachedAbility as UserAbility;
   } else {
