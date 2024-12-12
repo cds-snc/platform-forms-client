@@ -10,8 +10,6 @@ import { useEffect, useState, type JSX } from "react";
 import { useGCFormsContext } from "@lib/hooks/useGCFormContext";
 import { FormValues } from "@lib/formContext";
 
-import { SaveProgressButton } from "@clientComponents/forms/SaveProgress/SaveProgressButton";
-
 export const FormWrapper = ({
   formRecord,
   currentForm,
@@ -36,7 +34,7 @@ export const FormWrapper = ({
     if (restoredValues) {
       setInitialValues(restoredValues);
     }
-  }, []);
+  }, [restoreProgress]);
 
   return (
     <Form
@@ -56,7 +54,6 @@ export const FormWrapper = ({
               validateForm={validateForm}
               fallBack={fallBack}
             />
-            <SaveProgressButton />
           </>
         );
       }}
