@@ -4,19 +4,12 @@ import { redirect } from "next/navigation";
 import { getCurrentLanguage } from "@i18n";
 import { getAbility } from "@lib/privileges";
 
-export const AuthenticatedAction = <Input, Output>(
-  action: (args: Input) => Promise<Output>,
-  redirectOnFail?: boolean
-) => {
+export const AuthenticatedAction = <Input, Output>(action: (args: Input) => Promise<Output>) => {
   return async (...args: unknown[]) => {
     const session = await auth();
     if (session === null) {
-      if (redirectOnFail) {
-        const language = await getCurrentLanguage();
-        redirect(`/${language}/auth/login`);
-      } else {
-        throw new Error("User is not Authenticated");
-      }
+      const language = await getCurrentLanguage();
+      redirect(`/${language}/auth/login`);
     }
     return action(...(args as Parameters<typeof action>));
   };
@@ -24,6 +17,9 @@ export const AuthenticatedAction = <Input, Output>(
 
 export const authCheckAndThrow = async () => {
   const session = await auth();
+  if (session === null) {
+    throw new Error("User is not Authenticated");
+  }
   const ability = await getAbility();
   return { ability, session };
 };
