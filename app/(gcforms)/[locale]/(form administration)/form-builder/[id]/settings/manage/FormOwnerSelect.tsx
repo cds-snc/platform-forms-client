@@ -68,6 +68,7 @@ export const FormOwnerSelect = ({
       unstyled
       styles={{
         ...styleProxy,
+        // @ts-expect-error -- TODO: fix this
         input: (base) => ({
           ...base,
           "input:focus": {
@@ -76,17 +77,20 @@ export const FormOwnerSelect = ({
         }),
         // On mobile, the label will truncate automatically, so we want to
         // override that behaviour.
+        // @ts-expect-error -- TODO: fix this
         multiValueLabel: (base) => ({
           ...base,
           whiteSpace: "normal",
           overflow: "visible",
         }),
+        // @ts-expect-error -- TODO: fix this
         control: (base) => ({
           ...base,
           transition: "none",
         }),
       }}
       classNames={{
+        // @ts-expect-error -- TODO: fix this
         control: ({ isFocused }) =>
           cn(isFocused ? controlStyles.focus : controlStyles.nonFocus, controlStyles.base),
         placeholder: () => placeholderStyles,
@@ -102,6 +106,7 @@ export const FormOwnerSelect = ({
         dropdownIndicator: () => dropdownIndicatorStyles,
         menu: () => menuStyles,
         groupHeading: () => groupHeadingStyles,
+        // @ts-expect-error -- TODO: fix this
         option: ({ isFocused, isSelected }) =>
           cn(
             isFocused && optionStyles.focus,
@@ -112,6 +117,7 @@ export const FormOwnerSelect = ({
       }}
       options={usersToOptions(allUsers)}
       value={selectedUsers}
+      // @ts-expect-error -- TODO: fix this
       onChange={(value) => setSelectedUsers(value as { value: string; label: string | null }[])}
     />
   );
