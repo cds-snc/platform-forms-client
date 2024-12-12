@@ -44,7 +44,7 @@ export default async function Page({
   searchParams: { status?: string };
 }) {
   try {
-    const { ability, session } = await authCheckAndRedirect();
+    const { session } = await authCheckAndRedirect();
 
     const { t } = await serverTranslation("my-forms", { lang: locale });
 
@@ -55,7 +55,7 @@ export default async function Page({
       },
       sortByDateUpdated: "desc",
     };
-    const templates = (await getAllTemplatesForUser(ability, options)).map((template) => {
+    const templates = (await getAllTemplatesForUser(options)).map((template) => {
       const {
         id,
         form: { titleEn = "", titleFr = "" },

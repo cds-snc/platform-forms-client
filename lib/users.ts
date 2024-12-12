@@ -288,7 +288,7 @@ export const getUnprocessedSubmissionsForUser = async (ability: UserAbility, use
   const overdue: Overdue = {};
 
   try {
-    const templates = (await getAllTemplatesForUser(ability)).map((template) => {
+    const templates = (await getAllTemplatesForUser()).map((template) => {
       const {
         id,
         form: { titleEn, titleFr },

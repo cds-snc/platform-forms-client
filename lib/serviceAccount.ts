@@ -75,7 +75,7 @@ const uploadKey = async (publicKey: string, userId: string): Promise<string> => 
 
 export const deleteKey = async (templateId: string) => {
   const { ability } = await authCheckAndThrow();
-  await checkUserHasTemplateOwnership(ability, templateId);
+  await checkUserHasTemplateOwnership(templateId);
 
   const serviceAccountID = await checkMachineUserExists(templateId);
 
@@ -102,8 +102,8 @@ export const deleteKey = async (templateId: string) => {
 };
 
 export const checkMachineUserExists = async (templateId: string) => {
-  const { ability } = await authCheckAndThrow();
-  await checkUserHasTemplateOwnership(ability, templateId);
+  await authCheckAndThrow();
+  await checkUserHasTemplateOwnership(templateId);
   return getMachineUser(templateId);
 };
 
@@ -118,8 +118,8 @@ export const _getApiUserPublicKeyId = async (templateId: string) => {
     return result;
   }
 
-  const { ability } = await authCheckAndThrow();
-  await checkUserHasTemplateOwnership(ability, templateId);
+  await authCheckAndThrow();
+  await checkUserHasTemplateOwnership(templateId);
 
   const { id: userId, publicKeyId } =
     (await prisma.apiServiceAccount.findUnique({
@@ -169,7 +169,7 @@ export const checkKeyExists = async (templateId: string) => {
 
 export const refreshKey = async (templateId: string) => {
   const { ability } = await authCheckAndThrow();
-  await checkUserHasTemplateOwnership(ability, templateId);
+  await checkUserHasTemplateOwnership(templateId);
 
   // Check if we're in a weird state and return an error to get support involved
   const remoteServiceAccountId = await checkMachineUserExists(templateId).then(
@@ -239,7 +239,7 @@ export const refreshKey = async (templateId: string) => {
 
 export const createKey = async (templateId: string) => {
   const { ability } = await authCheckAndThrow();
-  await checkUserHasTemplateOwnership(ability, templateId);
+  await checkUserHasTemplateOwnership(templateId);
 
   const serviceAccountId = await getMachineUser(templateId).then((user) => {
     // If a user does not exist then create one

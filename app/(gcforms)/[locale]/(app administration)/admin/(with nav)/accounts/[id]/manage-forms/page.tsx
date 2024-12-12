@@ -44,7 +44,7 @@ export default async function Page({
   const formUser = await getUser(ability, id);
 
   const templates = (
-    await getAllTemplates(ability, {
+    await getAllTemplates({
       requestedWhere: {
         users: {
           some: {

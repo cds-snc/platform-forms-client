@@ -205,7 +205,7 @@ export const PUT = middleware(
 
     // Ensure the user has owernship of this form
     try {
-      await checkUserHasTemplateOwnership(ability, formId);
+      await checkUserHasTemplateOwnership(formId);
     } catch (e) {
       if (e instanceof AccessControlError) {
         logEvent(

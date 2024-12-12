@@ -942,7 +942,6 @@ export async function updateAssignedUsersForTemplate(
   return _parseTemplate(updatedTemplate);
 }
 
-/// START HERE TO CONTINUE REFACTORING
 export async function updateFormPurpose(
   formID: string,
   formPurpose: string
