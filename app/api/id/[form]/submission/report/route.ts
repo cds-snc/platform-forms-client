@@ -6,7 +6,7 @@ import downloadReportProblemSchema from "@lib/middleware/schemas/download-report
 import { BatchGetCommand, TransactWriteCommand } from "@aws-sdk/lib-dynamodb";
 import { MiddlewareProps, VaultStatus, WithRequired } from "@lib/types";
 import { dynamoDBDocumentClient } from "@lib/integration/awsServicesConnector";
-import { createAbility, AccessControlError } from "@lib/privileges";
+import { getAbility, AccessControlError } from "@lib/privileges";
 import { checkUserHasTemplateOwnership } from "@lib/templates";
 import { logEvent } from "@lib/auditLogs";
 
@@ -201,7 +201,7 @@ export const PUT = middleware(
       );
     }
 
-    const ability = createAbility(session);
+    const ability = await getAbility(session);
 
     // Ensure the user has owernship of this form
     try {

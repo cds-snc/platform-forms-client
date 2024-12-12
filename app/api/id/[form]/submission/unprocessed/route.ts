@@ -1,4 +1,4 @@
-import { AccessControlError, createAbility } from "@lib/privileges";
+import { AccessControlError, getAbility } from "@lib/privileges";
 import { middleware, sessionExists } from "@lib/middleware";
 import { NextResponse } from "next/server";
 import { MiddlewareProps, WithRequired } from "@lib/types";
@@ -17,7 +17,7 @@ export const GET = middleware([sessionExists()], async (req, props) => {
       return NextResponse.json({ error: "Bad request" }, { status: 400 });
     }
 
-    const result = await unprocessedSubmissions(createAbility(session), formId);
+    const result = await unprocessedSubmissions(await getAbility(session), formId);
     return NextResponse.json({ unprocessedSubmissions: result });
   } catch (err) {
     if (err instanceof AccessControlError)

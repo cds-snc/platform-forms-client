@@ -2,7 +2,7 @@
 import * as v from "valibot";
 import { serverTranslation } from "@i18n";
 import { createSecurityAnswers } from "@lib/auth";
-import { createAbility } from "@lib/privileges";
+import { getAbility } from "@lib/privileges";
 import { logMessage } from "@lib/logger";
 import { authCheckAndThrow } from "@lib/actions";
 
@@ -77,7 +77,7 @@ export const setupQuestions = async (
   const { session } = await authCheckAndThrow().catch(() => ({ session: null }));
   if (!session) return { generalError: t("errors.serverError.title") };
 
-  const ability = createAbility(session);
+  const ability = await getAbility(session);
 
   const rawFormData = Object.fromEntries(formData.entries());
 
