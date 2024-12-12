@@ -11,6 +11,7 @@ import { getLocalizedProperty } from "@lib/utils";
 import { Language } from "@lib/types/form-builder-types";
 import { DateObject } from "../FormattedDate/types";
 
+// TODO: rename to ReviewContainer?
 // Created for the Review page to help structure printing out questions-and-answers
 export type ReviewItem = {
   id: string;
@@ -19,6 +20,7 @@ export type ReviewItem = {
   formItems: FormItem[];
 };
 
+// TODO: rename to ReviewItem?
 // Used by sub components that know enough to "toString" themselves via a factory that determines
 // which FormItem by look at the FormItem.type
 export type FormItem = {
