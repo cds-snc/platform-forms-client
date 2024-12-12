@@ -1,11 +1,26 @@
-"use server";
-
 import { auth } from "@lib/auth";
 
-import { serverTranslation } from "@i18n";
 import { redirect } from "next/navigation";
-
+import { getCurrentLanguage } from "@i18n";
 import { getAbility } from "@lib/privileges";
+
+export const AuthenticatedAction = <Output>(
+  action: (...args: unknown[]) => Promise<Output>,
+  redirectOnFail?: boolean
+) => {
+  return async (...args: unknown[]) => {
+    const session = await auth();
+    if (session === null) {
+      if (redirectOnFail) {
+        const language = await getCurrentLanguage();
+        redirect(`/${language}/auth/login`);
+      } else {
+        throw new Error("User is not Authenticated");
+      }
+    }
+    return action(...args);
+  };
+};
 
 export const authCheckAndThrow = async () => {
   const session = await auth();
@@ -14,10 +29,8 @@ export const authCheckAndThrow = async () => {
 };
 
 export const authCheckAndRedirect = async () => {
-  const {
-    i18n: { language },
-  } = await serverTranslation();
-  return authCheckAndThrow().catch(() => {
+  return authCheckAndThrow().catch(async () => {
+    const language = await getCurrentLanguage();
     redirect(`/${language}/auth/login`);
   });
 };
