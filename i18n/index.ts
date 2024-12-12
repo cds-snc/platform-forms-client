@@ -36,3 +36,10 @@ export async function serverTranslation(
     i18n: i18nextInstance,
   };
 }
+
+export async function getCurrentLanguage() {
+  const path = headers().get("x-path") ?? "";
+  const pathLang = pathLanguageDetection(path, languages);
+  const cookieLang = cookies().get("i18next")?.value;
+  return pathLang || cookieLang || languages[0];
+}
