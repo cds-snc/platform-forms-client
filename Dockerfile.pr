@@ -42,7 +42,7 @@ ENV PORT=3000
 ENV REVIEW_ENV=1
 
 WORKDIR /src
-COPY package.json yarn.lock .yarnrc.yml next.config.mjs ./
+COPY package.json yarn.lock .yarnrc.yml next.config.mjs nextCacheHandler.mjs ./
 COPY .yarn ./.yarn
 COPY public ./public
 COPY prisma ./prisma
