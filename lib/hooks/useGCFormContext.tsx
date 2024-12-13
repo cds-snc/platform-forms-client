@@ -179,12 +179,27 @@ export const GCFormsProvider = ({
     if (formData) {
       const parsedData = JSON.parse(formData);
 
+      if (parsedData.restored) {
+        return false;
+      }
+
       if (parsedData.id === formRecord.id) {
         // values.current = parsedData.values;
-        history.current = parsedData.history;
+
+        // history.current = parsedData.history;
+
         if (parsedData.currentGroup !== currentGroup) {
-          setCurrentGroup(parsedData.currentGroup);
+          // setCurrentGroup(parsedData.currentGroup);
         }
+
+        sessionStorage.setItem(
+          "form-data",
+          JSON.stringify({
+            restored: true,
+            ...parsedData.values,
+          })
+        );
+
         return parsedData.values;
       }
     }

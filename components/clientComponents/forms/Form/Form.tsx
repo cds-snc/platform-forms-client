@@ -139,6 +139,14 @@ const SubmitButton: React.FC<SubmitButtonProps> = ({ getFormDelay, formID, formT
 
 type InnerFormProps = FormProps & FormikProps<Responses>;
 
+const FormStatusErrorLink = ({ linkUrl, text }: { linkUrl: string; text: string }) => {
+  if (!linkUrl) {
+    return null;
+  }
+
+  return <a href={linkUrl}>{text}</a>;
+};
+
 /**
  * This is the "inner" form component that isn't connected to Formik and just renders a simple form
  * @param props
@@ -170,12 +178,25 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
   const errorList = props.errors ? getErrorList(props) : null;
   const errorId = "gc-form-errors";
   const serverErrorId = `${errorId}-server`;
-  const formStatusError =
+
+  let formStatusErrorChildren = null;
+
+  let formStatusError =
     props.status === "FileError"
       ? t("input-validation.file-submission")
       : props.status === "Error"
       ? t("server-error")
       : null;
+
+  if (props.status === "ServerIDError") {
+    formStatusError = t("input-validation.something-went-wrong");
+    formStatusErrorChildren = (
+      <FormStatusErrorLink
+        linkUrl={`/${language}/id/${formID}`}
+        text={t("input-validation.try-again")}
+      />
+    );
+  }
 
   //  If there are errors on the page, set focus the first error field
   useEffect(() => {
@@ -203,7 +224,9 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
   ) : (
     <>
       {formStatusError && (
-        <Alert type={ErrorStatus.ERROR} heading={formStatusError} tabIndex={0} id={serverErrorId} />
+        <Alert type={ErrorStatus.ERROR} heading={formStatusError} tabIndex={0} id={serverErrorId}>
+          {formStatusErrorChildren && formStatusErrorChildren}
+        </Alert>
       )}
       {errorList && (
         <Alert
@@ -410,6 +433,8 @@ export const Form = withFormik<FormProps, Responses>({
       if (result.error) {
         if (result.error.message.includes("FileValidationResult")) {
           formikBag.setStatus("FileError");
+        } else if (result.error.message.includes("Failed to find Server Action")) {
+          throw new Error("Failed to find Server Action");
         } else {
           formikBag.setStatus("Error");
         }
@@ -419,9 +444,8 @@ export const Form = withFormik<FormProps, Responses>({
     } catch (err) {
       if ((err as Error).message.includes("Failed to find Server Action")) {
         formikBag.props.saveProgress();
-        formikBag.props.router.refresh();
-        sessionStorage.clear();
-        formikBag.setStatus("Error");
+        formikBag.setStatus("ServerIDError");
+        // sessionStorage.clear();
       } else {
         logMessage.error(err as Error);
         formikBag.setStatus("Error");
