@@ -1,3 +1,6 @@
 import { add } from "./add";
 import { addSubItem } from "./addSubItem";
-export { add, addSubItem };
+import { addChoice } from "./addChoice";
+import { addLabeledChoice } from "./addLabeledChoice";
+import { addSubChoice } from "./addSubChoice";
+export { add, addSubItem, addChoice, addLabeledChoice, addSubChoice };

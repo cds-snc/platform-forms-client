@@ -37,7 +37,7 @@ import { clearTemplateStorage } from "./utils";
 import { orderGroups } from "@lib/utils/form-builder/orderUsingGroupsLayout";
 import { initStore } from "./initStore";
 
-import { add, addSubItem } from "./helpers/add";
+import { add, addSubItem, addChoice, addLabeledChoice, addSubChoice } from "./helpers/add";
 import { moveUp, moveDown, subMoveUp, subMoveDown } from "./helpers/move";
 
 const createTemplateStore = (initProps?: Partial<InitialTemplateStoreProps>) => {
@@ -114,11 +114,15 @@ const createTemplateStore = (initProps?: Partial<InitialTemplateStoreProps>) => 
               set((state) => {
                 unset(state, path);
               }),
-            moveUp: moveUp(set, get),
-            moveDown: moveDown(set, get),
-            subMoveUp: subMoveUp(set, get),
-            subMoveDown: subMoveDown(set, get),
+            moveUp: moveUp(set),
+            moveDown: moveDown(set),
+            subMoveUp: subMoveUp(set),
+            subMoveDown: subMoveDown(set),
             add: add(set, get),
+            addSubItem: addSubItem(set, get),
+            addChoice: addChoice(set),
+            addLabeledChoice: addLabeledChoice(set),
+            addSubChoice: addSubChoice(set),
             removeChoiceFromRules: (elId: string, choiceIndex: number) => {
               set((state) => {
                 const choiceId = `${elId}.${choiceIndex}`;
@@ -138,7 +142,6 @@ const createTemplateStore = (initProps?: Partial<InitialTemplateStoreProps>) => 
                 state.form.groups = groups;
               });
             },
-            addSubItem: addSubItem(set, get),
             remove: (elementId, groupId = "") => {
               set((state) => {
                 const allowGroups = state.allowGroupsFlag;
@@ -169,32 +172,6 @@ const createTemplateStore = (initProps?: Partial<InitialTemplateStoreProps>) => 
                   );
                 }
               }),
-            addChoice: (elIndex) =>
-              set((state) => {
-                state.form.elements[elIndex].properties.choices?.push({ en: "", fr: "" });
-              }),
-            addLabeledChoice: async (elIndex, label) => {
-              return new Promise((resolve) => {
-                set((state) => {
-                  state.form.elements[elIndex].properties.choices?.push({
-                    en: label.en,
-                    fr: label.fr,
-                  });
-
-                  const lastChoice = state.form.elements[elIndex].properties.choices?.length ?? 0;
-                  resolve(lastChoice);
-                });
-              });
-            },
-            addSubChoice: (elId, subIndex) => {
-              set((state) => {
-                const parentIndex = getParentIndex(elId, state.form.elements);
-                if (parentIndex === undefined) return;
-                state.form.elements[parentIndex].properties.subElements?.[
-                  subIndex
-                ].properties.choices?.push({ en: "", fr: "" });
-              });
-            },
             removeChoice: (elIndex, choiceIndex) =>
               set((state) => {
                 state.form.elements[elIndex].properties.choices?.splice(choiceIndex, 1);

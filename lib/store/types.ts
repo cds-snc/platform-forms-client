@@ -4,7 +4,7 @@ import { StoreApi } from "zustand";
 
 export type TemplateStore<T extends keyof TemplateStoreState> = (
   set: (fn: (state: TemplateStoreState) => void) => void,
-  get: StoreApi<TemplateStoreState>["getState"]
+  get?: StoreApi<TemplateStoreState>["getState"]
 ) => TemplateStoreState[T];
 
 import {
