@@ -1,9 +1,7 @@
-import { TemplateStoreState, SetStateFunction } from "../../types";
+import { type TemplateStore } from "../../types";
 import { moveUp as moveElementUp } from "@lib/utils/form-builder";
 
-type MoveUpType = (set: SetStateFunction) => TemplateStoreState["moveUp"];
-
-export const moveUp: MoveUpType = (set) => (elIndex, groupId) =>
+export const moveUp: TemplateStore<"moveUp"> = (set) => (elIndex, groupId) =>
   set((state) => {
     state.form.layout = moveElementUp(state.form.layout, elIndex);
     const allowGroups = state.allowGroupsFlag;

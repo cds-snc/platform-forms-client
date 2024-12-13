@@ -1,10 +1,8 @@
-import { TemplateStoreState, SetStateFunction } from "../../types";
+import { type TemplateStore } from "../../types";
 import { moveElementUp } from "@lib/utils/form-builder";
 import { getParentIndex } from "@lib/utils/form-builder/getPath";
 
-type SubMoveUpType = (set: SetStateFunction) => TemplateStoreState["subMoveUp"];
-
-export const subMoveUp: SubMoveUpType = (set) => (elId, subIndex) =>
+export const subMoveUp: TemplateStore<"subMoveUp"> = (set) => (elId, subIndex) =>
   set((state) => {
     const parentIndex = getParentIndex(elId, state.form.elements);
 

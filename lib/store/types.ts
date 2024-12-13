@@ -1,5 +1,12 @@
 import { FormElementWithIndex, Language } from "../types/form-builder-types";
 
+import { StoreApi } from "zustand";
+
+export type TemplateStore<T extends keyof TemplateStoreState> = (
+  set: (fn: (state: TemplateStoreState) => void) => void,
+  get: StoreApi<TemplateStoreState>["getState"]
+) => TemplateStoreState[T];
+
 import {
   FormElement,
   FormProperties,
@@ -81,8 +88,6 @@ export interface TemplateStoreState extends TemplateStoreProps {
   getHighestElementId: () => number;
   generateElementId: () => number;
 }
-
-export type SetStateFunction = (fn: (state: TemplateStoreState) => void) => void;
 
 export interface InitialTemplateStoreProps extends TemplateStoreProps {
   locale?: Language;
