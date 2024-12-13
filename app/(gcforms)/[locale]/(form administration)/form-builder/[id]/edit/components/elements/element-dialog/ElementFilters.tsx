@@ -18,7 +18,7 @@ const Pill = ({
   setSelectedGroup: React.Dispatch<React.SetStateAction<SelectedGroupState>>;
 }) => {
   const selected = group === selectedGroup.group;
-  const ref = useRef<HTMLButtonElement>(null);
+  const ref = useRef<HTMLButtonElement | null>(null);
   const groupObj = { group, ref } as SelectedGroupState;
 
   const disabled = false;

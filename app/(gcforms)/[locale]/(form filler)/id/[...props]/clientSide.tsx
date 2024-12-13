@@ -29,6 +29,8 @@ export const FormWrapper = ({
   const { restoreProgress } = useGCFormsContext();
   const [initialValues, setInitialValues] = useState<FormValues | undefined>();
 
+  const { saveProgress } = useGCFormsContext();
+
   useEffect(() => {
     const restoredValues = restoreProgress();
     if (restoredValues) {
@@ -45,6 +47,8 @@ export const FormWrapper = ({
         router.push(`/${language}/id/${formID}/confirmation`);
       }}
       t={t}
+      saveProgress={saveProgress}
+      router={router}
       renderSubmit={({ validateForm, fallBack }) => {
         return (
           <>

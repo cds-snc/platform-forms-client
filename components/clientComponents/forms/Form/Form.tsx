@@ -29,6 +29,7 @@ import { filterShownElements, filterValuesByShownElements } from "@lib/formConte
 import { formHasGroups } from "@lib/utils/form-builder/formHasGroups";
 import { showReviewPage } from "@lib/utils/form-builder/showReviewPage";
 import { useFormDelay } from "@lib/hooks/useFormDelayContext";
+import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime";
 
 interface SubmitButtonProps {
   getFormDelay: () => number;
@@ -354,6 +355,8 @@ interface FormProps {
   allowGrouping?: boolean | undefined;
   groupHistory?: string[];
   matchedIds?: string[];
+  saveProgress: () => void;
+  router: AppRouterInstance;
 }
 
 /**
@@ -414,8 +417,15 @@ export const Form = withFormik<FormProps, Responses>({
         formikBag.props.onSuccess(result.id);
       }
     } catch (err) {
-      logMessage.error(err as Error);
-      formikBag.setStatus("Error");
+      if ((err as Error).message.includes("Failed to find Server Action")) {
+        formikBag.props.saveProgress();
+        formikBag.props.router.refresh();
+        sessionStorage.clear();
+        formikBag.setStatus("Error");
+      } else {
+        logMessage.error(err as Error);
+        formikBag.setStatus("Error");
+      }
     } finally {
       if (formikBag.props && !formikBag.props.isPreview) {
         window.dataLayer = window.dataLayer || [];
