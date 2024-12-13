@@ -7,6 +7,9 @@ import { EditButton } from "./EditButton";
 import { FormItemFactory } from "./FormItemFactory";
 import { FormItem, getGroupsWithElements, getReviewItems } from "./helpers";
 
+// TODO: see if we can share Elements between the HTMLDownloadFormats, especially components that are complex with a helper file
+// even just prove it out with a single component
+
 export const Review = ({ language }: { language: Language }): React.ReactElement => {
   const { t } = useTranslation(["review", "common"]);
   const { groups, getValues, formRecord, getGroupHistory, getGroupTitle, matchedIds } =

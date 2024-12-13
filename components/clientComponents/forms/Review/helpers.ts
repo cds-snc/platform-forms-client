@@ -11,7 +11,7 @@ import { getLocalizedProperty } from "@lib/utils";
 import { Language } from "@lib/types/form-builder-types";
 import { DateObject } from "../FormattedDate/types";
 
-// TODO: rename to ReviewContainer?
+// TODO: rename to ReviewSection
 // Created for the Review page to help structure printing out questions-and-answers
 export type ReviewItem = {
   id: string;
@@ -20,16 +20,16 @@ export type ReviewItem = {
   formItems: FormItem[];
 };
 
-// TODO: rename to ReviewItem?
 // Used by sub components that know enough to "toString" themselves via a factory that determines
 // which FormItem by look at the FormItem.type
 export type FormItem = {
   type: FormElementTypes;
   label: string;
   values: string | string[] | FileInputResponse | DateObject | FormItem[];
-  originalFormElement: FormElement | undefined;
+  originalFormElement: FormElement | undefined; // TODO: rename element
 };
 
+// TODO: GroupsType - search for and see if can use, reuse an existing type if possible
 // Local type to help structure an intermediary object used to construct Review Items
 type GroupsWithElementIds = {
   groupId: string;
@@ -45,6 +45,7 @@ export const getFormElements = (elementIds: number[], formElements: FormElement[
   return elementIds.map((elementId) => formElements.find((item) => item.id === elementId));
 };
 
+// TODO Group  elements array - may be able to use what is allready written in the group history utils
 export const getGroupsWithElements = (
   formElements: FormElement[],
   formValues: FormValues | void,

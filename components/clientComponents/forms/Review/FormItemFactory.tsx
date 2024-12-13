@@ -45,6 +45,7 @@ export const FormItemFactory = ({
     case FormElementTypes.attestation:
       return <BaseElementArray formItem={formItem} />;
 
+    // TODO: just the label should be printed (no empty value below)
     case FormElementTypes.richText:
       return <></>;
 
