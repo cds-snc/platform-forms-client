@@ -64,4 +64,4 @@ fi
 load_non_existing_envs
 
 echo "INFO Starting lambda handler"
-exec node server.js
+exec npx next start
