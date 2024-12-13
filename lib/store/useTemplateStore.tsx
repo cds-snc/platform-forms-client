@@ -26,19 +26,18 @@ import {
   removeElementById,
   removeById,
   getSchemaFromState,
-  incrementSubElementId,
   cleanInput,
   removeGroupElement,
 } from "../utils/form-builder";
 import { decrementChoiceIds, decrementNextActionChoiceIds } from "@lib/formContext";
 import { Language } from "../types/form-builder-types";
-import { FormElementTypes } from "@lib/types";
-import { defaultField, defaultForm } from "./defaults";
+import { defaultForm } from "./defaults";
 import { storageOptions } from "./storage";
 import { clearTemplateStorage } from "./utils";
 import { orderGroups } from "@lib/utils/form-builder/orderUsingGroupsLayout";
 import { initStore } from "./initStore";
 
+import { add, addSubItem } from "./helpers/add";
 import { moveUp, moveDown, subMoveUp, subMoveDown } from "./helpers/move";
 
 const createTemplateStore = (initProps?: Partial<InitialTemplateStoreProps>) => {
@@ -115,46 +114,11 @@ const createTemplateStore = (initProps?: Partial<InitialTemplateStoreProps>) => 
               set((state) => {
                 unset(state, path);
               }),
-            moveUp: moveUp(set),
-            moveDown: moveDown(set),
-            subMoveUp: subMoveUp(set),
-            subMoveDown: subMoveDown(set),
-            add: async (elIndex = 0, type = FormElementTypes.radio, data, groupId) => {
-              const id = get().generateElementId();
-
-              return new Promise((resolve) => {
-                set((state) => {
-                  const allowGroups = state.allowGroupsFlag;
-
-                  const item = {
-                    ...defaultField,
-                    ...data,
-                    id,
-                    type,
-                  };
-
-                  groupId = allowGroups && groupId ? groupId : "";
-
-                  if (allowGroups && groupId) {
-                    if (!state.form.groups) state.form.groups = {};
-                    if (!state.form.groups[groupId])
-                      state.form.groups[groupId] = {
-                        name: "",
-                        titleEn: "",
-                        titleFr: "",
-                        elements: [],
-                      };
-                    state.form.groups &&
-                      state.form.groups[groupId].elements.splice(elIndex + 1, 0, String(id));
-                  }
-
-                  state.form.layout.splice(elIndex + 1, 0, id);
-                  state.form.elements.splice(elIndex + 1, 0, item);
-
-                  resolve(id);
-                });
-              });
-            },
+            moveUp: moveUp(set, get),
+            moveDown: moveDown(set, get),
+            subMoveUp: subMoveUp(set, get),
+            subMoveDown: subMoveDown(set, get),
+            add: add(set, get),
             removeChoiceFromRules: (elId: string, choiceIndex: number) => {
               set((state) => {
                 const choiceId = `${elId}.${choiceIndex}`;
@@ -174,37 +138,7 @@ const createTemplateStore = (initProps?: Partial<InitialTemplateStoreProps>) => 
                 state.form.groups = groups;
               });
             },
-            addSubItem: (elId, subIndex = 0, type = FormElementTypes.radio, data) => {
-              return new Promise((resolve) => {
-                set((state) => {
-                  let parentIndex = getParentIndex(elId, state.form.elements);
-
-                  if (parentIndex === undefined) {
-                    parentIndex = 0;
-                  }
-
-                  // remove subElements array property given we're adding a sub item
-                  const subDefaultField = { ...defaultField };
-                  // eslint-disable-next-line  @typescript-eslint/no-unused-vars
-                  const { subElements, ...rest } = subDefaultField.properties;
-                  subDefaultField.properties = rest;
-
-                  const id = incrementSubElementId(
-                    state.form.elements[parentIndex].properties.subElements || [],
-                    state.form.elements[parentIndex].id
-                  );
-
-                  state.form.elements[parentIndex].properties.subElements?.splice(subIndex + 1, 0, {
-                    ...subDefaultField,
-                    ...data,
-                    id,
-                    type,
-                  });
-
-                  resolve(id);
-                });
-              });
-            },
+            addSubItem: addSubItem(set, get),
             remove: (elementId, groupId = "") => {
               set((state) => {
                 const allowGroups = state.allowGroupsFlag;
