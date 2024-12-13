@@ -8,7 +8,6 @@ const __dirname = path.dirname(__filename);
 
 const require = createRequire(import.meta.url);
 
-const isOutputStandalone = process.env.NEXT_OUTPUT_STANDALONE === "true";
 const securityHeaders = [
   {
     key: "Strict-Transport-Security",
@@ -37,7 +36,6 @@ const nextConfig = {
     // Remove all console.* calls
     // removeConsole: false,
   },
-  output: isOutputStandalone ? "standalone" : undefined,
   ...(process.env.REVIEW_ENV && {
     cacheHandler: require.resolve("./nextCacheHandler.mjs"),
     cacheMaxMemorySize: 0, // disable default in-memory caching

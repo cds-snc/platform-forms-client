@@ -3,7 +3,6 @@
 FROM node:22-alpine as build
 
 ENV NODE_ENV=production
-ENV NEXT_OUTPUT_STANDALONE=true
 ENV NEXT_PUBLIC_ADDRESSCOMPLETE_API_KEY=UR78-BU29-RU35-EP49 
 # Address Complete API key is domain locked, and provided to the client browser, where the API is processed.
 
@@ -18,6 +17,7 @@ ENV INDEX_SITE=$INDEX_SITE
 RUN corepack enable && yarn set version berry
 RUN yarn workspaces focus gcforms flag_initialization
 RUN yarn build
+RUN yarn workspaces focus gcforms flag_initialization --production
 
 FROM node:22-alpine as final
 LABEL maintainer="-"
@@ -42,18 +42,15 @@ ENV PORT=3000
 ENV REVIEW_ENV=1
 
 WORKDIR /src
-
-COPY --from=build /src/.next/standalone ./
-COPY --from=build /src/.next/static ./.next/static
-
 COPY package.json yarn.lock .yarnrc.yml next.config.mjs ./
 COPY .yarn ./.yarn
 COPY public ./public
 COPY prisma ./prisma
 COPY form-builder-templates ./form-builder-templates
+COPY --from=build /src/node_modules ./node_modules
+COPY --from=build /src/.next ./.next
 COPY bin/pr-review-entrypoint.sh ./entrypoint.sh
-# Update to latest yarn version
-RUN corepack enable && yarn set version berry
+
 # Required by the entrypoint.sh to load the SSM ParameterStore environment variables
 RUN apk update && apk add --no-cache aws-cli
 
