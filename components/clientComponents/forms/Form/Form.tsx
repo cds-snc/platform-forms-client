@@ -377,8 +377,12 @@ export const Form = withFormik<FormProps, Responses>({
 
   enableReinitialize: true, // needed when switching languages
 
-  mapPropsToValues: (props) =>
-    getFormInitialValues(props.formRecord, props.language, props.initialValues),
+  mapPropsToValues: (props) => {
+    if (props.initialValues) {
+      return props.initialValues;
+    }
+    return getFormInitialValues(props.formRecord, props.language);
+  },
 
   validate: (values, props) => validateOnSubmit(values, props),
 
