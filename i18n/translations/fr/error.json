@@ -14,7 +14,7 @@
     "body": "Il y a un problème avec le service en ce moment. Veuillez réessayer plus tard."
   },
   "sever-error": {
-    "title": "Server error",
-    "body": "Sorry, it seems there was a problem submitting your form. Please refresh and try again"
+    "title": "Erreur de serveur",
+    "body": "Un problème est survenu lors de la soumission de votre formulaire. Veuillez <a href='{{formLink}}'>réactualiser et réessayer</a>"
   }
 }

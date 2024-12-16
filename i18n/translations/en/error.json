@@ -15,6 +15,6 @@
   },
   "sever-error": {
     "title": "Server error",
-    "body": "Sorry, it seems there was a problem submitting your form. Please refresh and try again"
+    "body": "There was a problem submitting your form. Please <a href='{{formLink}}'>refresh and try again</a>."
   }
 }

@@ -207,7 +207,10 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
         <Alert type={ErrorStatus.ERROR} heading={formStatusError} tabIndex={0} id={serverErrorId} />
       )}
 
-      <StatusError formId={formID} language={language as Language} />
+      {/* ServerId error */}
+      {props.status === "ServerIDError" && (
+        <StatusError formId={formID} language={language as Language} />
+      )}
 
       {errorList && (
         <Alert
