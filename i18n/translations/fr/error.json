@@ -15,6 +15,6 @@
   },
   "sever-error": {
     "title": "Erreur de serveur",
-    "body": "Un problème est survenu lors de la soumission de votre formulaire. Veuillez <a href='{{formLink}}'>réactualiser et réessayer</a>"
+    "body": "Un problème est survenu lors de la soumission de votre formulaire. Veuillez <a href='{{formLink}}'>réactualiser et réessayer</a>."
   }
 }
