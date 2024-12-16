@@ -37,7 +37,14 @@ import { clearTemplateStorage } from "./utils";
 import { orderGroups } from "@lib/utils/form-builder/orderUsingGroupsLayout";
 import { initStore } from "./initStore";
 
-import { add, addSubItem, addChoice, addLabeledChoice, addSubChoice } from "./helpers/add";
+import {
+  add,
+  addSubItem,
+  addChoice,
+  addLabeledChoice,
+  addSubChoice,
+  duplicateElement,
+} from "./helpers/add";
 import { moveUp, moveDown, subMoveUp, subMoveDown } from "./helpers/move";
 
 const createTemplateStore = (initProps?: Partial<InitialTemplateStoreProps>) => {
@@ -188,40 +195,7 @@ const createTemplateStore = (initProps?: Partial<InitialTemplateStoreProps>) => 
               const elIndex = get().form.elements.findIndex((el) => el.id === elId);
               return get().form.elements[elIndex]?.properties.choices?.[choiceIndex];
             },
-            duplicateElement: (itemId, groupId = "", copyEn = "", copyFr = "") => {
-              const elIndex = get().form.elements.findIndex((el) => el.id === itemId);
-              const id = get().generateElementId();
-              set((state) => {
-                // deep copy the element
-                const element = JSON.parse(JSON.stringify(state.form.elements[elIndex]));
-                element.id = id;
-                if (element.type !== "richText" && element.properties["titleEn"]) {
-                  element.properties["titleEn"] = `${element.properties["titleEn"]} ${copyEn}`;
-                }
-                if (element.type !== "richText" && element.properties["titleFr"]) {
-                  element.properties["titleFr"] = `${element.properties["titleFr"]} ${copyFr}`;
-                }
-                state.form.elements.splice(elIndex + 1, 0, element);
-                state.form.layout.splice(elIndex + 1, 0, id);
-
-                // Handle groups
-                const allowGroups = state.allowGroupsFlag;
-                groupId = allowGroups && groupId ? groupId : "";
-                if (allowGroups && groupId) {
-                  if (!state.form.groups) state.form.groups = {};
-                  if (!state.form.groups[groupId])
-                    state.form.groups[groupId] = {
-                      name: "",
-                      titleEn: "",
-                      titleFr: "",
-                      elements: [],
-                    };
-                  state.form.groups &&
-                    state.form.groups[groupId].elements.splice(elIndex + 1, 0, String(id));
-                }
-                // end groups
-              });
-            },
+            duplicateElement: duplicateElement(set, get),
             getSchema: () => {
               return JSON.stringify(getSchemaFromState(get(), get().allowGroupsFlag), null, 2);
             },
