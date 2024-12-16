@@ -165,6 +165,10 @@ export const GCFormsProvider = ({
     return groups?.[groupId]?.[titleLanguageKey] || "";
   };
 
+  const removeProgressStorage = () => {
+    sessionStorage.removeItem(SESSION_STORAGE_KEY);
+  };
+
   const saveProgress = () => {
     const formData = JSON.stringify({
       id: formRecord.id,
@@ -172,15 +176,24 @@ export const GCFormsProvider = ({
       history: history.current,
       currentGroup: currentGroup,
     });
+
     // Save to session storage
-    sessionStorage.setItem(SESSION_STORAGE_KEY, formData);
+    const encodedformData = Buffer.from(formData).toString("base64");
+    sessionStorage.setItem(SESSION_STORAGE_KEY, encodedformData);
   };
 
   const restoreProgress = (): FormValues | false => {
-    const formData = sessionStorage.getItem(SESSION_STORAGE_KEY);
-    sessionStorage.removeItem(SESSION_STORAGE_KEY);
+    const encodedformData = sessionStorage.getItem(SESSION_STORAGE_KEY);
+    if (!encodedformData) return false;
 
-    if (formData) {
+    // Clear the session storage as we now have the data
+    removeProgressStorage();
+
+    try {
+      const formData = Buffer.from(encodedformData, "base64").toString("utf8");
+
+      if (!formData) return false;
+
       const parsedData = JSON.parse(formData);
 
       if (parsedData.id === formRecord.id) {
@@ -200,6 +213,8 @@ export const GCFormsProvider = ({
 
         return parsedData.values;
       }
+    } catch (e) {
+      return false;
     }
 
     return false;
