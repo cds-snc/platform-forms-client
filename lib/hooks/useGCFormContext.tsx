@@ -97,6 +97,8 @@ export const GCFormsProvider = ({
   };
 
   const handleNextAction = () => {
+    sessionStorage.removeItem(SESSION_STORAGE_KEY);
+
     if (!currentGroup) return;
 
     if (hasNextAction(currentGroup)) {
