@@ -31,7 +31,7 @@ export const AddressComplete = ({
   const addressFormValue = formValues[elementId as keyof typeof elementId];
   const addressValues = safeJSONParse(addressFormValue) as AddressElements; // TODO or should an error be thrown or handled?
 
-  if (addressComponents.splitAddress) {
+  if (addressComponents?.splitAddress) {
     const addressCompleteStrings = {
       streetAddress: t("addressComponents.streetName", { lng: language }),
       city: t("addressComponents.city", { lng: language }),
