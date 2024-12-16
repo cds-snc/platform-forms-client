@@ -1143,54 +1143,31 @@ export async function updateResponseDeliveryOption(
 /**
  * Remove DeliveryOption from template. Form responses will be sent to the Vault.
  * @param formID The unique identifier of the form you want to modify
- * @returns The updated form template or null if the record does not exist
+ * @returns void
  */
-export async function removeDeliveryOption(
-  ability: UserAbility,
-  formID: string
-): Promise<FormRecord | null> {
+export async function removeDeliveryOption(ability: UserAbility, formID: string): Promise<void> {
   try {
     await authorization.canEditForm(ability, formID);
 
-    const updatedTemplate = await prisma.template
-      .update({
-        where: {
-          id: formID,
-          isPublished: false,
-          deliveryOption: {
-            isNot: null,
-          },
-        },
-        data: {
-          deliveryOption: {
-            delete: true,
-          },
-        },
-        select: {
-          id: true,
-          created_at: true,
-          updated_at: true,
-          name: true,
-          jsonConfig: true,
-          isPublished: true,
-          deliveryOption: true,
-          securityAttribute: true,
-          formPurpose: true,
-          publishReason: true,
-          publishFormType: true,
-          publishDesc: true,
-        },
-      })
-      .catch((e) => {
-        if (e instanceof Prisma.PrismaClientKnownRequestError) {
-          if (e.code === "P2025") {
-            throw new TemplateAlreadyPublishedError();
-          }
-        }
-        return prismaErrors(e, null);
-      });
+    // Don't change delivery option if the form is published
+    const template = await prisma.template.findFirstOrThrow({
+      where: {
+        id: formID,
+      },
+      select: {
+        isPublished: true,
+      },
+    });
 
-    if (updatedTemplate === null) return updatedTemplate;
+    if (!template) throw new TemplateNotFoundError();
+
+    if (template.isPublished) throw new TemplateAlreadyPublishedError();
+
+    await prisma.deliveryOption.deleteMany({
+      where: {
+        templateId: formID,
+      },
+    });
 
     logEvent(
       ability.userID,
@@ -1198,8 +1175,6 @@ export async function removeDeliveryOption(
       "ChangeDeliveryOption",
       "Delivery Option set to the Vault"
     );
-
-    return _parseTemplate(updatedTemplate);
   } catch (e) {
     if (e instanceof AccessControlError)
       logEvent(
