@@ -348,20 +348,19 @@ export const sendResponsesToVault = async ({
 }: {
   id: string;
 }): Promise<{
-  formRecord: FormRecord | null;
+  success?: boolean;
   error?: string;
 }> => {
   try {
     const { ability } = await authCheckAndThrow();
 
-    const response = await removeDeliveryOption(ability, formID);
-    if (!response) {
-      throw new Error(`Template API response was null. Request information: { ${formID} }`);
-    }
+    await removeDeliveryOption(ability, formID);
 
-    return { formRecord: response };
+    return {
+      success: true,
+    };
   } catch (error) {
-    return { formRecord: null, error: (error as Error).message };
+    return { success: false, error: (error as Error).message };
   }
 };
 

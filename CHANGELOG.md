@@ -5,6 +5,36 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.30.2](https://github.com/cds-snc/platform-forms-client/compare/v3.30.1...v3.30.2) (2024-12-16)
+
+
+### Bug Fixes
+
+* On form publish delete draft responses before switching to Published status ([#4815](https://github.com/cds-snc/platform-forms-client/issues/4815)) ([ff47186](https://github.com/cds-snc/platform-forms-client/commit/ff4718644d9c130a6efb05cf87ef2626f1d44863))
+* pagination feature is broken due to integration of new StatusCreatedAt Global Secondary Index ([#4818](https://github.com/cds-snc/platform-forms-client/issues/4818)) ([0ffdaca](https://github.com/cds-snc/platform-forms-client/commit/0ffdacadc17f64ad50378e2e772e6fd2d8cfed2d))
+
+
+### Miscellaneous Chores
+
+* add helpers for moving sub elements ([#4814](https://github.com/cds-snc/platform-forms-client/issues/4814)) ([e0e90d4](https://github.com/cds-snc/platform-forms-client/commit/e0e90d43ee2ae1841b76f4a1fe553c0d65d3a658))
+* add move helpers ([#4802](https://github.com/cds-snc/platform-forms-client/issues/4802)) ([e860a68](https://github.com/cds-snc/platform-forms-client/commit/e860a68913b34aa6f2cf753b59d8f147aee7a431))
+* add path helper to template store ([#4795](https://github.com/cds-snc/platform-forms-client/issues/4795)) ([0fed760](https://github.com/cds-snc/platform-forms-client/commit/0fed7600ad58f22053791b35cea20314fa555b7b))
+* break out save for purpose option ([#4812](https://github.com/cds-snc/platform-forms-client/issues/4812)) ([46fbd48](https://github.com/cds-snc/platform-forms-client/commit/46fbd486a14005bd75a571f3077dbb1c0ba89fdb))
+* create "Add helpers" for template store ([#4837](https://github.com/cds-snc/platform-forms-client/issues/4837)) ([967cd50](https://github.com/cds-snc/platform-forms-client/commit/967cd506a09c2dd1679f38763cf14e94b3d3ce54))
+* fix docker version ([#4804](https://github.com/cds-snc/platform-forms-client/issues/4804)) ([d8061fe](https://github.com/cds-snc/platform-forms-client/commit/d8061fe3afdac3ddb59a5df6dfc76402d91cd5a9))
+* move store setup to standalone function ([#4799](https://github.com/cds-snc/platform-forms-client/issues/4799)) ([b74f6e6](https://github.com/cds-snc/platform-forms-client/commit/b74f6e68f20c0afe19f1aad68eead5de6164a7c1))
+* move template storage options ([#4803](https://github.com/cds-snc/platform-forms-client/issues/4803)) ([9d53af2](https://github.com/cds-snc/platform-forms-client/commit/9d53af28a530ca7ed8cce36daa3c0d3a19167573))
+* Replace update with simple delete for removeDeliveryOption ([#4825](https://github.com/cds-snc/platform-forms-client/issues/4825)) ([daa33f3](https://github.com/cds-snc/platform-forms-client/commit/daa33f30c932212d392f3392f945fb4fbd812d2f))
+* Reset delivery option when creating API key ([#4794](https://github.com/cds-snc/platform-forms-client/issues/4794)) ([efe6d7d](https://github.com/cds-snc/platform-forms-client/commit/efe6d7d1614f41bb829ae720045dfb1b01fb7c66))
+* reword misleading error message in notifyConnector.ts ([#4822](https://github.com/cds-snc/platform-forms-client/issues/4822)) ([085dec3](https://github.com/cds-snc/platform-forms-client/commit/085dec3015a11e87ed24450d8d1f6a0f8be2d69e))
+* save purpose option to template store ([#4813](https://github.com/cds-snc/platform-forms-client/issues/4813)) ([b040896](https://github.com/cds-snc/platform-forms-client/commit/b040896bdc641ea2d19508e1b86e14183b21639f))
+* Updates organization list to latest ([#4820](https://github.com/cds-snc/platform-forms-client/issues/4820)) ([9c5759f](https://github.com/cds-snc/platform-forms-client/commit/9c5759f34760bee096b837bd052becafce68dc5c))
+
+
+### Code Refactoring
+
+* Privilege Library ([#4520](https://github.com/cds-snc/platform-forms-client/issues/4520)) ([0f44bea](https://github.com/cds-snc/platform-forms-client/commit/0f44bea35f528b6db296ea60f1aab0e83cb0c6dd))
+
 ## [3.30.1](https://github.com/cds-snc/platform-forms-client/compare/v3.30.0...v3.30.1) (2024-12-05)
 
 ### Bug Fixes
