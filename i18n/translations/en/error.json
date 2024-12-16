@@ -12,5 +12,9 @@
   "500": {
     "title": "Something went wrong",
     "body": "There’s currently a problem with the service. Please try again later."
+  },
+  "sever-error": {
+    "title": "Server error",
+    "body": "Sorry, it seems there was a problem submitting your form. Please refresh and try again"
   }
 }

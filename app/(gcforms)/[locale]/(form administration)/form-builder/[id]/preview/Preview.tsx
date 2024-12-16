@@ -10,7 +10,6 @@ import { RichText } from "@clientComponents/forms";
 import { Button } from "@clientComponents/globals";
 import { NextButton } from "@clientComponents/forms/NextButton/NextButton";
 import { ClosingNotice } from "@clientComponents/forms/ClosingNotice/ClosingNotice";
-import { useRouter } from "next/navigation";
 import { useGCFormsContext } from "@lib/hooks/useGCFormContext";
 
 import {
@@ -88,8 +87,6 @@ export const Preview = ({
   const [sent, setSent] = useState<string | null>();
 
   const { saveProgress } = useGCFormsContext();
-
-  const router = useRouter();
 
   const clearSent = () => {
     setSent(null);
@@ -191,7 +188,6 @@ export const Preview = ({
                 <Form
                   formRecord={formRecord}
                   saveProgress={saveProgress}
-                  router={router}
                   isPreview={true}
                   language={language}
                   t={t}

@@ -48,7 +48,6 @@ export const FormWrapper = ({
       }}
       t={t}
       saveProgress={saveProgress}
-      router={router}
       renderSubmit={({ validateForm, fallBack }) => {
         return (
           <>

@@ -21,6 +21,7 @@ import { LockedSections } from "@formBuilder/components/shared/right-panel/treev
 import { BackButton } from "@formBuilder/[id]/preview/BackButton";
 import { Language } from "@lib/types/form-builder-types";
 import { BackButtonGroup } from "../BackButtonGroup/BackButtonGroup";
+import { StatusError } from "../StatusError/StatusError";
 import {
   removeFormContextValues,
   getInputHistoryValues,
@@ -29,7 +30,6 @@ import { filterShownElements, filterValuesByShownElements } from "@lib/formConte
 import { formHasGroups } from "@lib/utils/form-builder/formHasGroups";
 import { showReviewPage } from "@lib/utils/form-builder/showReviewPage";
 import { useFormDelay } from "@lib/hooks/useFormDelayContext";
-import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime";
 
 interface SubmitButtonProps {
   getFormDelay: () => number;
@@ -139,14 +139,6 @@ const SubmitButton: React.FC<SubmitButtonProps> = ({ getFormDelay, formID, formT
 
 type InnerFormProps = FormProps & FormikProps<Responses>;
 
-const FormStatusErrorLink = ({ linkUrl, text }: { linkUrl: string; text: string }) => {
-  if (!linkUrl) {
-    return null;
-  }
-
-  return <a href={linkUrl}>{text}</a>;
-};
-
 /**
  * This is the "inner" form component that isn't connected to Formik and just renders a simple form
  * @param props
@@ -179,24 +171,12 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
   const errorId = "gc-form-errors";
   const serverErrorId = `${errorId}-server`;
 
-  let formStatusErrorChildren = null;
-
-  let formStatusError =
+  const formStatusError =
     props.status === "FileError"
       ? t("input-validation.file-submission")
       : props.status === "Error"
       ? t("server-error")
       : null;
-
-  if (props.status === "ServerIDError") {
-    formStatusError = t("input-validation.something-went-wrong");
-    formStatusErrorChildren = (
-      <FormStatusErrorLink
-        linkUrl={`/${language}/id/${formID}`}
-        text={t("input-validation.try-again")}
-      />
-    );
-  }
 
   //  If there are errors on the page, set focus the first error field
   useEffect(() => {
@@ -224,10 +204,11 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
   ) : (
     <>
       {formStatusError && (
-        <Alert type={ErrorStatus.ERROR} heading={formStatusError} tabIndex={0} id={serverErrorId}>
-          {formStatusErrorChildren && formStatusErrorChildren}
-        </Alert>
+        <Alert type={ErrorStatus.ERROR} heading={formStatusError} tabIndex={0} id={serverErrorId} />
       )}
+
+      <StatusError formId={formID} language={language as Language} />
+
       {errorList && (
         <Alert
           type={ErrorStatus.ERROR}
@@ -379,7 +360,6 @@ interface FormProps {
   groupHistory?: string[];
   matchedIds?: string[];
   saveProgress: () => void;
-  router: AppRouterInstance;
 }
 
 /**
@@ -445,7 +425,6 @@ export const Form = withFormik<FormProps, Responses>({
       if ((err as Error).message.includes("Failed to find Server Action")) {
         formikBag.props.saveProgress();
         formikBag.setStatus("ServerIDError");
-        // sessionStorage.clear();
       } else {
         logMessage.error(err as Error);
         formikBag.setStatus("Error");
