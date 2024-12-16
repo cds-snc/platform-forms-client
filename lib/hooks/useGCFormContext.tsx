@@ -54,6 +54,7 @@ export const GCFormsProvider = ({
   children: ReactNode;
   formRecord: PublicFormRecord;
 }) => {
+  const SESSION_STORAGE_KEY = "form-data";
   const groups: GroupsType = formRecord.form.groups || {};
   const initialGroup = groups ? LockedSections.START : null;
   const values = React.useRef({});
@@ -170,30 +171,25 @@ export const GCFormsProvider = ({
       currentGroup: currentGroup,
     });
     // Save to session storage
-    sessionStorage.setItem("form-data", formData);
+    sessionStorage.setItem(SESSION_STORAGE_KEY, formData);
   };
 
   const restoreProgress = (): FormValues | false => {
-    const formData = sessionStorage.getItem("form-data");
+    const formData = sessionStorage.getItem(SESSION_STORAGE_KEY);
+    sessionStorage.removeItem(SESSION_STORAGE_KEY);
 
     if (formData) {
       const parsedData = JSON.parse(formData);
 
-      if (parsedData.restored) {
-        return false;
-      }
-
       if (parsedData.id === formRecord.id) {
-        // values.current = parsedData.values;
-
-        // history.current = parsedData.history;
+        history.current = parsedData.history;
 
         if (parsedData.currentGroup !== currentGroup) {
-          // setCurrentGroup(parsedData.currentGroup);
+          setCurrentGroup(parsedData.currentGroup);
         }
 
         sessionStorage.setItem(
-          "form-data",
+          SESSION_STORAGE_KEY,
           JSON.stringify({
             restored: true,
             ...parsedData.values,
