@@ -163,6 +163,10 @@ export const GCFormsProvider = ({
     return groups?.[groupId]?.[titleLanguageKey] || "";
   };
 
+  const removeProgressStorage = () => {
+    sessionStorage.removeItem(SESSION_STORAGE_KEY);
+  };
+
   const saveProgress = () => {
     const formData = JSON.stringify({
       id: formRecord.id,
@@ -181,7 +185,7 @@ export const GCFormsProvider = ({
     if (!encodedformData) return false;
 
     // Clear the session storage as we now have the data
-    sessionStorage.removeItem(SESSION_STORAGE_KEY);
+    removeProgressStorage();
 
     try {
       const formData = Buffer.from(encodedformData, "base64").toString("utf8");
