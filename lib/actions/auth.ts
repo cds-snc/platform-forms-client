@@ -18,7 +18,7 @@ export const AuthenticatedAction = <Input, Output>(action: (args: Input) => Prom
 export const authCheckAndThrow = async () => {
   const session = await auth();
   if (session === null) {
-    throw new Error("User is not Authenticated");
+    throw new Error("User not authenticated");
   }
   const ability = await getAbility();
   return { ability, session };

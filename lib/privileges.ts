@@ -26,7 +26,7 @@ import { logEvent } from "./auditLogs";
 import { redirect } from "next/navigation";
 import { checkOne } from "./cache/flags";
 import { InMemoryCache } from "./cache/inMemoryCache";
-import { auth } from "@lib/auth";
+import { auth, AccessControlError } from "@lib/auth";
 /*
 This file contains references to server side only modules.
 Any attempt to import these functions into a browser will cause compilation failures
@@ -61,16 +61,6 @@ export const createAbility = (session: Session): UserAbility => {
   ability.userID = session.user.id;
   return ability;
 };
-
-// Creates a new custom Error Class
-export class AccessControlError extends Error {
-  public userId: string;
-  constructor(userId: string, message: string = "AccessControlError") {
-    super(message);
-    Object.setPrototypeOf(this, AccessControlError.prototype);
-    this.userId = userId;
-  }
-}
 
 export function interpolatePermissionCondition(
   condition: MongoQuery<AnyObject>,

@@ -1,4 +1,5 @@
-import { AccessControlError, getAbility } from "@lib/privileges";
+import { getAbility } from "@lib/privileges";
+import { AccessControlError } from "@lib/auth";
 import { middleware, sessionExists } from "@lib/middleware";
 import { NextResponse } from "next/server";
 import { MiddlewareProps, WithRequired } from "@lib/types";

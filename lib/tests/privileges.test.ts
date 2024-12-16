@@ -1,10 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import {
-  interpolatePermissionCondition,
-  authorization,
-  createAbility,
-  AccessControlError,
-} from "@lib/privileges";
+import { interpolatePermissionCondition, authorization, createAbility } from "@lib/privileges";
+import { AccessControlError } from "@lib/auth";
 import {
   Base,
   mockUserPrivileges,
@@ -733,7 +729,7 @@ describe("Authorization Helpers", () => {
       });
       const ability = createAbility(adminUser.session);
 
-      await authorization.hasAdministrationPrivileges(ability);
+      await authorization.hasAdministrationPrivileges();
     });
     it.each([{ priv: Base }, { priv: PublishForms }])("should fail", async (set) => {
       adminUser.session.user.privileges = mockUserPrivileges(set.priv, {

@@ -6,7 +6,8 @@ import {
   updateAppSetting,
   deleteAppSetting,
 } from "@lib/appSettings";
-import { AccessControlError, createAbility } from "@lib/privileges";
+import { createAbility } from "@lib/privileges";
+import { AccessControlError } from "@lib/auth";
 import {
   Base,
   mockUserPrivileges,

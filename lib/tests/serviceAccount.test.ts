@@ -10,7 +10,8 @@ import {
   deleteKey,
 } from "@lib/serviceAccount";
 import { Base, mockUserPrivileges } from "__utils__/permissions";
-import { AccessControlError, createAbility } from "@lib/privileges";
+import { createAbility } from "@lib/privileges";
+import { AccessControlError } from "@lib/auth";
 import { prismaMock } from "@jestUtils";
 import { authCheckAndThrow } from "@lib/actions";
 import { logEvent } from "@lib/auditLogs";

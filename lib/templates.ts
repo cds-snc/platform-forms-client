@@ -444,7 +444,7 @@ export async function getTemplateWithAssociatedUsers(formID: string): Promise<{
 export async function updateTemplate(command: UpdateTemplateCommand): Promise<FormRecord | null> {
   const { user } = await authorization.canEditForm(command.formID).catch((e) => {
     logEvent(
-      e.userID,
+      e.userId,
       { type: "Form", id: command.formID },
       "AccessDenied",
       "Attempted to update Form"
@@ -531,7 +531,7 @@ export async function updateIsPublishedForTemplate(
   publishDescription: string
 ): Promise<FormRecord | null> {
   const { user } = await authorization.canPublishForm(formID).catch((e) => {
-    logEvent(e.userID, { type: "Form", id: formID }, "AccessDenied", "Attempted to publish form");
+    logEvent(e.userId, { type: "Form", id: formID }, "AccessDenied", "Attempted to publish form");
     throw e;
   });
 
@@ -1081,7 +1081,7 @@ export async function updateResponseDeliveryOption(
 export async function removeDeliveryOption(formID: string): Promise<FormRecord | null> {
   const { user } = await authorization.canEditForm(formID).catch((e) => {
     logEvent(
-      e.userID,
+      e.userId,
       { type: "Form", id: formID },
       "AccessDenied",
       "Attempted to set Delivery Option to the Vault"
@@ -1146,7 +1146,7 @@ export async function removeDeliveryOption(formID: string): Promise<FormRecord |
  */
 export async function deleteTemplate(formID: string): Promise<FormRecord | null> {
   const { user } = await authorization.canDeleteForm(formID).catch((e) => {
-    logEvent(e.userID, { type: "Form", id: formID }, "AccessDenied", "Attempted to delete Form");
+    logEvent(e.userId, { type: "Form", id: formID }, "AccessDenied", "Attempted to delete Form");
     throw e;
   });
 

@@ -6,9 +6,10 @@ import downloadReportProblemSchema from "@lib/middleware/schemas/download-report
 import { BatchGetCommand, TransactWriteCommand } from "@aws-sdk/lib-dynamodb";
 import { MiddlewareProps, VaultStatus, WithRequired } from "@lib/types";
 import { dynamoDBDocumentClient } from "@lib/integration/awsServicesConnector";
-import { getAbility, AccessControlError } from "@lib/privileges";
+import { getAbility } from "@lib/privileges";
 import { checkUserHasTemplateOwnership } from "@lib/templates";
 import { logEvent } from "@lib/auditLogs";
+import { AccessControlError } from "@lib/auth";
 
 const MAXIMUM_SUBMISSION_NAMES_PER_REQUEST = 20;
 

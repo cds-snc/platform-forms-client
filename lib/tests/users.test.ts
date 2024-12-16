@@ -3,7 +3,8 @@
 import { prismaMock } from "@jestUtils";
 import { getUsers, getOrCreateUser } from "@lib/users";
 import { Prisma } from "@prisma/client";
-import { AccessControlError, createAbility } from "@lib/privileges";
+import { createAbility } from "@lib/privileges";
+import { AccessControlError } from "@lib/auth";
 import { ManageUsers, ViewUserPrivileges, Base } from "__utils__/permissions";
 import { Session } from "next-auth";
 import { logEvent } from "@lib/auditLogs";

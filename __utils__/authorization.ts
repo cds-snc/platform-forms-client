@@ -1,5 +1,6 @@
-import { AccessControlError, authorization, getAbility } from "@lib/privileges";
+import { authorization, getAbility } from "@lib/privileges";
 import { UserAbility } from "@lib/types";
+import { AccessControlError } from "@lib/auth";
 
 type MockedAuthFunction = {
   [key: string]: jest.Mock;
@@ -8,20 +9,26 @@ type MockedAuthFunction = {
 export const authorizationPass = (userID: string) => {
   const mockedAuth: MockedAuthFunction = jest.mocked(authorization);
   for (const property in authorization) {
-    mockedAuth[property] = jest.fn().mockReturnValue(Promise.resolve({ user: { id: userID } }));
+    mockedAuth[property] = jest
+      .fn()
+      .mockImplementation(() => Promise.resolve({ user: { id: userID } }));
   }
 };
 
-export const authorizationFail = (userID: string) => {
+export const authorizationFail = (userID = "unknown") => {
   const mockedAuth: MockedAuthFunction = jest.mocked(authorization);
   for (const property in authorization) {
-    mockedAuth[property] = jest.fn().mockRejectedValue(new AccessControlError(userID));
+    mockedAuth[property] = jest
+      .fn()
+      .mockImplementation(() => Promise.reject(new AccessControlError(userID)));
   }
 };
 
 export const getAbilityMock = (userID: string) => {
   const mockedAbility = jest.mocked(getAbility);
-  mockedAbility.mockResolvedValue({
-    userID,
-  } as UserAbility);
+  mockedAbility.mockImplementation(() =>
+    Promise.resolve({
+      userID,
+    } as UserAbility)
+  );
 };

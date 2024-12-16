@@ -3,7 +3,7 @@ import { LeftNavigation } from "./components/LeftNavigation";
 import { ToastContainer } from "@formBuilder/components/shared/Toast";
 import { SkipLink, Footer } from "@clientComponents/globals";
 import { Header } from "@clientComponents/globals/Header/Header";
-import { AccessControlError } from "@lib/privileges";
+import { AccessControlError } from "@lib/auth";
 import { getFullTemplateByID } from "@lib/templates";
 import { redirect } from "next/navigation";
 import { SaveTemplateProvider } from "@lib/hooks/form-builder/useTemplateContext";

@@ -19,7 +19,7 @@ import {
   uniqueIDValidator,
 } from "@lib/middleware/jsonIDValidator";
 import { FormProperties, DeliveryOption, SecurityAttribute } from "@lib/types";
-import { AccessControlError } from "@lib/privileges";
+import { AccessControlError } from "@lib/auth";
 import { logMessage } from "@lib/logger";
 import { authCheckAndThrow } from "@lib/actions";
 

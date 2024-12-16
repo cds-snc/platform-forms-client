@@ -1,4 +1,4 @@
-import { AccessControlError } from "@lib/privileges";
+import { AccessControlError } from "@lib/auth";
 import { middleware, sessionExists, jsonValidator } from "@lib/middleware";
 import {
   createTemplate,
