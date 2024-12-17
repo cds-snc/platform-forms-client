@@ -19,13 +19,10 @@ import { TemplateStoreProps, TemplateStoreState, InitialTemplateStoreProps } fro
 import { getPathString } from "../utils/form-builder/getPath";
 import { TreeRefProvider } from "@formBuilder/components/shared/right-panel/treeview/provider/TreeRefProvider";
 import { FlowRefProvider } from "@formBuilder/[id]/edit/logic/components/flow/provider/FlowRefProvider";
-import { initializeGroups } from "@formBuilder/components/shared/right-panel/treeview/util/initializeGroups";
 import { getSchemaFromState, cleanInput } from "../utils/form-builder";
 import { Language } from "../types/form-builder-types";
-import { defaultForm } from "./defaults";
 import { storageOptions } from "./storage";
 import { clearTemplateStorage } from "./utils";
-import { orderGroups } from "@lib/utils/form-builder/orderUsingGroupsLayout";
 import { initStore } from "./initStore";
 
 import {
@@ -47,6 +44,7 @@ import {
 } from "./helpers/remove";
 
 import { moveUp, moveDown, subMoveUp, subMoveDown } from "./helpers/move";
+import { initialize, importTemplate } from "./helpers/init";
 
 const createTemplateStore = (initProps?: Partial<InitialTemplateStoreProps>) => {
   const props = initStore(initProps);
@@ -210,58 +208,8 @@ const createTemplateStore = (initProps?: Partial<InitialTemplateStoreProps>) => 
                 state.closingDate = value;
               });
             },
-            initialize: async (language = "en") => {
-              set((state) => {
-                const allowGroups = state.allowGroupsFlag;
-                state.id = "";
-                state.lang = language as Language;
-                state.translationLanguagePriority = language as Language;
-                state.form = initializeGroups({ ...defaultForm }, allowGroups);
-
-                // Ensure order by groups layout
-                if (!state.form.groupsLayout) {
-                  /* No need to order as the groups layout does not exist */
-                  state.form.groupsLayout = [];
-                } else {
-                  state.form.groups = orderGroups(state.form.groups, state.form.groupsLayout);
-                }
-
-                state.isPublished = false;
-                state.name = "";
-                state.deliveryOption = undefined;
-                state.formPurpose = "";
-                state.publishReason = "";
-                state.publishFormType = "";
-                state.publishDesc = "";
-                state.closingDate = null;
-              });
-            },
-            importTemplate: async (jsonConfig) => {
-              set((state) => {
-                const allowGroups = state.allowGroupsFlag;
-                state.id = "";
-                state.lang = "en";
-                state.form = initializeGroups({ ...defaultForm, ...jsonConfig }, allowGroups);
-
-                // Ensure order by groups layout
-                if (!state.form.groupsLayout) {
-                  /* No need to order as the groups layout does not exist */
-                  state.form.groupsLayout = [];
-                } else {
-                  state.form.groups = orderGroups(state.form.groups, state.form.groupsLayout);
-                }
-
-                state.isPublished = false;
-                state.name = "";
-                state.securityAttribute = "Protected A";
-                state.deliveryOption = undefined;
-                state.formPurpose = "";
-                state.publishReason = "";
-                state.publishFormType = "";
-                state.publishDesc = "";
-                state.closingDate = null;
-              });
-            },
+            initialize: initialize(set),
+            importTemplate: importTemplate(set),
             getGroupsEnabled: () => get().allowGroupsFlag,
             setGroupsLayout: (layout) => {
               set((state) => {
