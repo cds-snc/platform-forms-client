@@ -7,7 +7,7 @@ import { AddressComplete } from "./FormElements/AddressComplete/AddressComplete"
 import { FormattedDate } from "./FormElements/FormattedDate";
 import { FileInput } from "./FormElements/FileInput";
 import { DynamicRow } from "./FormElements/DyanmicRow/DynamicRow";
-import { BaseElementLabel } from "./FormElements/BaseElementLabel";
+import { RichText } from "./FormElements/RichText";
 
 export const FormItemFactory = ({
   formItem,
@@ -47,7 +47,7 @@ export const FormItemFactory = ({
 
     // Single label without a value
     case FormElementTypes.richText:
-      return <BaseElementLabel formItem={formItem} />;
+      return <RichText formItem={formItem} language={language} stripMarkdown={true} />;
 
     // Single value base Form elements e.g. input, textarea, radio, select, combobox, departments...
     default:
