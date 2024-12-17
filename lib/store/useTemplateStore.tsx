@@ -50,6 +50,7 @@ import {
   propertyPath,
   getPathString,
   getChoice,
+  localizeField,
 } from "./helpers/elements";
 
 const createTemplateStore = (initProps?: Partial<InitialTemplateStoreProps>) => {
@@ -67,11 +68,6 @@ const createTemplateStore = (initProps?: Partial<InitialTemplateStoreProps>) => 
             },
             setHasHydrated: () => {
               set({ hasHydrated: true });
-            },
-            localizeField: (path, lang = get().lang) => {
-              const langUpperCaseFirst = (lang.charAt(0).toUpperCase() +
-                lang.slice(1)) as Capitalize<Language>;
-              return `${path}${langUpperCaseFirst}`;
             },
             setId: (id) =>
               set((state) => {
@@ -116,6 +112,7 @@ const createTemplateStore = (initProps?: Partial<InitialTemplateStoreProps>) => 
               set((state) => {
                 unset(state, path);
               }),
+            localizeField: localizeField(set, get),
             getPathString: getPathString(set, get),
             propertyPath: propertyPath(set, get),
             moveUp: moveUp(set),
