@@ -45,6 +45,7 @@ import {
 import { moveUp, moveDown, subMoveUp, subMoveDown } from "./helpers/move";
 import { initialize, importTemplate } from "./helpers/init";
 import { generateElementId, getHighestElementId } from "./helpers/id";
+import { getFormElementById, getFormElementWithIndexById } from "./helpers/elements";
 
 const createTemplateStore = (initProps?: Partial<InitialTemplateStoreProps>) => {
   const props = initStore(initProps);
@@ -150,51 +151,8 @@ const createTemplateStore = (initProps?: Partial<InitialTemplateStoreProps>) => 
                 state.isPublished = isPublished;
               });
             },
-            getFormElementById: (id) => {
-              const elements = get().form.elements;
-
-              for (const element of elements) {
-                if (element.id === id) {
-                  return element;
-                }
-
-                if (element.properties?.subElements) {
-                  for (const subElement of element.properties.subElements) {
-                    if (subElement.id === id) {
-                      return subElement;
-                    }
-                  }
-                }
-              }
-
-              return undefined;
-            },
-            getFormElementWithIndexById: (id) => {
-              const elements = get().form.elements;
-
-              // for (const element of elements) {
-              for (let index = 0; index < elements.length; index++) {
-                const element = elements[index];
-                if (element.id === id) {
-                  return { ...element, index };
-                }
-
-                if (element.properties?.subElements) {
-                  for (
-                    let subIndex = 0;
-                    subIndex < element.properties.subElements.length;
-                    subIndex++
-                  ) {
-                    const subElement = element.properties.subElements[subIndex];
-                    if (subElement.id === id) {
-                      return { ...subElement, index: subIndex };
-                    }
-                  }
-                }
-              }
-
-              return undefined;
-            },
+            getFormElementById: getFormElementById(set, get),
+            getFormElementWithIndexById: getFormElementWithIndexById(set, get),
             getName: () => get().name,
             getDeliveryOption: () => get().deliveryOption,
             resetDeliveryOption: () => {
