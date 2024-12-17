@@ -30,8 +30,8 @@ export type FormItem = {
 // Local type to help structure an intermediary object used to construct Review Items
 type GroupsWithElementIds = {
   groupId: string;
-  group: Group;
-  elementIds: number[];
+  group: Group; // Mainly used to later get the group name, entire group added for future flexibility
+  elementIds: number[]; // ElementIds from this group that are visible (not hidden)
 };
 
 export const getFormElements = (elementIds: number[], formElements: FormElement[]) => {
@@ -49,11 +49,11 @@ export const getGroupsWithElementIds = (
   groupHistoryIds: string[],
   matchedIds: string[]
 ) => {
-  if (!formValues || !groups) {
+  if (!formValues || !groups || !Array.isArray(groupHistoryIds)) {
     return [] as GroupsWithElementIds[];
   }
 
-  const groupsWithElements = groupHistoryIds
+  return groupHistoryIds
     .filter((key) => key !== "review")
     .map((groupId) => {
       const group: Group = groups[groupId as keyof typeof groups] || {};
@@ -66,12 +66,10 @@ export const getGroupsWithElementIds = (
 
       return {
         groupId: groupId,
-        group, // Mainly used to later get the group title
-        elementIds, // ElementIds from this group that are visible (not hidden)
+        group,
+        elementIds,
       } as GroupsWithElementIds;
     });
-
-  return groupsWithElements;
 };
 
 export const createFormItems = (

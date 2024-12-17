@@ -31,7 +31,7 @@ export const AddressComplete = ({
   const addressComponents = element?.properties?.addressComponents as AddressComponents;
   const elementId = element?.id; // For TS next line...
   const addressFormValue = formValues[elementId as keyof typeof elementId];
-  const addressValues = safeJSONParse(addressFormValue) as AddressElements; // TODO or should an error be thrown or handled?
+  const addressValues = safeJSONParse(addressFormValue) as AddressElements;
 
   if (addressComponents?.splitAddress || forceSplitAddress) {
     const addressCompleteStrings = {

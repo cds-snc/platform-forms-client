@@ -20,12 +20,12 @@ export const FormItemFactory = ({
     return <></>;
   }
 
-  // Overides as fileInput type to print the custom element below (vs. as an Input)
+  // Overides with fileInput type to print the custom element below (vs. as an Input)
   if ((formItem.values as FileInputResponse)?.based64EncodedFile !== undefined) {
     formItem.type = FormElementTypes.fileInput;
   }
 
-  // Note: order may matter, from more specific higher higher to more generic lower
+  // Note: order matters, from more specific to more generic
   switch (formItem.type) {
     case FormElementTypes.dynamicRow:
       return <DynamicRow formItem={formItem} language={language} />;
