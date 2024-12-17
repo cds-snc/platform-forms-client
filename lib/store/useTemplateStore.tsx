@@ -42,9 +42,9 @@ import {
   removeChoice,
   removeSubChoice,
 } from "./helpers/remove";
-
 import { moveUp, moveDown, subMoveUp, subMoveDown } from "./helpers/move";
 import { initialize, importTemplate } from "./helpers/init";
+import { generateElementId, getHighestElementId } from "./helpers/id";
 
 const createTemplateStore = (initProps?: Partial<InitialTemplateStoreProps>) => {
   const props = initStore(initProps);
@@ -216,32 +216,8 @@ const createTemplateStore = (initProps?: Partial<InitialTemplateStoreProps>) => 
                 state.form.groupsLayout = layout;
               });
             },
-            getHighestElementId: () => {
-              const validIds = get()
-                .form.elements.filter(
-                  (element) => element && typeof element.id === "number" && !isNaN(element.id)
-                )
-                .map((element) => Number(element.id));
-
-              return validIds.length > 0 ? Math.max(...validIds) : 0;
-            },
-            generateElementId: () => {
-              set((state) => {
-                const lastId = state.form.lastGeneratedElementId || 0;
-
-                // Ensure backwards compatibility with existing forms
-                const highestId = state.getHighestElementId();
-
-                if (lastId < highestId) {
-                  state.form.lastGeneratedElementId = highestId + 1;
-                  return;
-                }
-
-                state.form.lastGeneratedElementId = lastId + 1;
-              });
-
-              return get().form.lastGeneratedElementId || 1;
-            },
+            getHighestElementId: getHighestElementId(set, get),
+            generateElementId: generateElementId(set, get),
           }),
           storageOptions
         )
