@@ -2,8 +2,7 @@ import crypto from "crypto";
 import { prisma, prismaErrors } from "@lib/integration/prismaConnector";
 import { logMessage } from "@lib/logger";
 import { logEvent } from "@lib/auditLogs";
-import { authCheckAndThrow } from "@lib/actions";
-import { checkUserHasTemplateOwnership } from "@lib/templates";
+import { authorization } from "@lib/privileges";
 import { getZitadelClient } from "@lib/integration/zitadelConnector";
 
 type ApiPrivateKey = {
@@ -74,8 +73,7 @@ const uploadKey = async (publicKey: string, userId: string): Promise<string> => 
 };
 
 export const deleteKey = async (templateId: string) => {
-  const { ability } = await authCheckAndThrow();
-  await checkUserHasTemplateOwnership(templateId);
+  const { user } = await authorization.canEditForm(templateId);
 
   const serviceAccountID = await checkMachineUserExists(templateId);
 
@@ -92,18 +90,17 @@ export const deleteKey = async (templateId: string) => {
     .catch((e) => prismaErrors(e, null));
 
   logEvent(
-    ability.userID,
+    user.id,
     { type: "ServiceAccount" },
     "DeleteAPIKey",
-    `User :${ability.userID} deleted service account ${
+    `User :${user.id} deleted service account ${
       serviceAccountID ? `${serviceAccountID}` : `for template ${templateId}`
     }`
   );
 };
 
 export const checkMachineUserExists = async (templateId: string) => {
-  await authCheckAndThrow();
-  await checkUserHasTemplateOwnership(templateId);
+  await authorization.canEditForm(templateId);
   return getMachineUser(templateId);
 };
 
@@ -111,15 +108,14 @@ export const checkMachineUserExists = async (templateId: string) => {
  * This function is used to get the public key id of the service account
  * associated with the templateId.
  */
-export const _getApiUserPublicKeyId = async (templateId: string) => {
+const _getApiUserPublicKeyId = async (templateId: string) => {
   const result = { userId: null, publicKeyId: null };
 
   if (templateId === "0000") {
     return result;
   }
 
-  await authCheckAndThrow();
-  await checkUserHasTemplateOwnership(templateId);
+  await authorization.canEditForm(templateId);
 
   const { id: userId, publicKeyId } =
     (await prisma.apiServiceAccount.findUnique({
@@ -144,11 +140,11 @@ export const _getApiUserPublicKeyId = async (templateId: string) => {
  * If false the DB and the machine key may be out of sync.
  */
 export const checkKeyExists = async (templateId: string) => {
+  await authorization.canEditForm(templateId);
   const { userId, publicKeyId } = await _getApiUserPublicKeyId(templateId);
   if (!userId || !publicKeyId) {
     return false;
   }
-
   try {
     const zitadel = await getZitadelClient();
     const remoteKey = await zitadel.getMachineKeyByIDs({
@@ -168,8 +164,7 @@ export const checkKeyExists = async (templateId: string) => {
 };
 
 export const refreshKey = async (templateId: string) => {
-  const { ability } = await authCheckAndThrow();
-  await checkUserHasTemplateOwnership(templateId);
+  const { user } = await authorization.canEditForm(templateId);
 
   // Check if we're in a weird state and return an error to get support involved
   const remoteServiceAccountId = await checkMachineUserExists(templateId).then(
@@ -228,18 +223,17 @@ export const refreshKey = async (templateId: string) => {
   });
 
   logEvent(
-    ability.userID,
+    user.id,
     { type: "ServiceAccount" },
     "RefreshAPIKey",
-    `User :${ability.userID} refreshed API key for service account ${serviceAccountId}`
+    `User :${user.id} refreshed API key for service account ${serviceAccountId}`
   );
 
   return buildApiPrivateKeyData(keyId, privateKey, serviceAccountId, templateId);
 };
 
 export const createKey = async (templateId: string) => {
-  const { ability } = await authCheckAndThrow();
-  await checkUserHasTemplateOwnership(templateId);
+  const { user } = await authorization.canEditForm(templateId);
 
   const serviceAccountId = await getMachineUser(templateId).then((user) => {
     // If a user does not exist then create one
@@ -263,10 +257,10 @@ export const createKey = async (templateId: string) => {
   });
 
   logEvent(
-    ability.userID,
+    user.id,
     { type: "ServiceAccount" },
     "CreateAPIKey",
-    `User :${ability.userID} created API key for service account ${serviceAccountId}`
+    `User :${user.id} created API key for service account ${serviceAccountId}`
   );
 
   return buildApiPrivateKeyData(keyId, privateKey, serviceAccountId, templateId);
