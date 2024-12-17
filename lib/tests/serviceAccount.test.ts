@@ -1,6 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
-import { checkUserHasTemplateOwnership } from "@lib/templates";
 import { getZitadelClient } from "@lib/integration/zitadelConnector";
 import {
   checkMachineUserExists,
@@ -10,7 +9,7 @@ import {
   deleteKey,
 } from "@lib/serviceAccount";
 
-import { authorizationPass, authorizationFail } from "__utils__/authorization";
+import { mockAuthorizationPass, mockAuthorizationFail } from "__utils__/authorization";
 import { AccessControlError } from "@lib/auth";
 import { prismaMock } from "@jestUtils";
 import { logEvent } from "@lib/auditLogs";
@@ -21,15 +20,12 @@ jest.mock("@lib/privileges");
 const mockedLogEvent = jest.mocked(logEvent, { shallow: true });
 jest.mock("@lib/integration/zitadelConnector");
 const mockedZitadel: jest.MockedFunction<any> = jest.mocked(getZitadelClient, { shallow: true });
-const mockedCheckUserHasTemplateOwnership = jest.mocked(checkUserHasTemplateOwnership, {
-  shallow: true,
-});
 
 const userId = "1";
 
 describe("Service Account functions", () => {
   beforeEach(() => {
-    authorizationPass(userId);
+    mockAuthorizationPass(userId);
   });
 
   describe("checkMachineUserExists", () => {
@@ -56,11 +52,11 @@ describe("Service Account functions", () => {
       expect(result).toBe(undefined);
     });
     it("should throw and error is user is not authentiated to perform the action", async () => {
-      authorizationFail(userId);
+      mockAuthorizationFail(userId);
       await expect(checkMachineUserExists("blah")).rejects.toThrow(AccessControlError);
     });
     it("should throw and error is user is not authorized to perform the action", async () => {
-      authorizationFail(userId);
+      mockAuthorizationFail(userId);
       await expect(checkMachineUserExists("blah")).rejects.toThrow(AccessControlError);
     });
   });
@@ -110,11 +106,11 @@ describe("Service Account functions", () => {
       expect(result).toBe(false);
     });
     it("should throw and error is user is not authentiated to perform the action", async () => {
-      authorizationFail(userId);
+      mockAuthorizationFail(userId);
       await expect(checkKeyExists("blah")).rejects.toThrow(AccessControlError);
     });
     it("should throw and error is user is not authorized to perform the action", async () => {
-      authorizationFail(userId);
+      mockAuthorizationFail(userId);
       await expect(checkKeyExists("blah")).rejects.toThrow(AccessControlError);
     });
   });
@@ -161,11 +157,11 @@ describe("Service Account functions", () => {
       );
     });
     it("should throw and error is user is not authentiated to perform the action", async () => {
-      authorizationFail(userId);
+      mockAuthorizationFail(userId);
       await expect(createKey("templateId")).rejects.toThrow(AccessControlError);
     });
     it("should throw and error is user is not authorized to perform the action", async () => {
-      authorizationFail(userId);
+      mockAuthorizationFail(userId);
       await expect(createKey("templateId")).rejects.toThrow(AccessControlError);
     });
   });
@@ -244,11 +240,11 @@ describe("Service Account functions", () => {
       );
     });
     it("should throw and error is user is not authentiated to perform the action", async () => {
-      authorizationFail(userId);
+      mockAuthorizationFail(userId);
       await expect(refreshKey("templateId")).rejects.toThrow(AccessControlError);
     });
     it("should throw and error is user is not authorized to perform the action", async () => {
-      authorizationFail(userId);
+      mockAuthorizationFail(userId);
       await expect(refreshKey("templateId")).rejects.toThrow(AccessControlError);
     });
   });
@@ -310,11 +306,11 @@ describe("Service Account functions", () => {
     });
 
     it("should throw and error is user is not authentiated to perform the action", async () => {
-      authorizationFail(userId);
+      mockAuthorizationFail(userId);
       await expect(deleteKey("templateId")).rejects.toThrow(AccessControlError);
     });
     it("should throw and error is user is not authorized to perform the action", async () => {
-      authorizationFail(userId);
+      mockAuthorizationFail(userId);
       await expect(deleteKey("templateId")).rejects.toThrow(AccessControlError);
     });
   });

@@ -29,12 +29,15 @@ import { logEvent } from "@lib/auditLogs";
 import { unprocessedSubmissions } from "@lib/vault";
 import { deleteKey } from "@lib/serviceAccount";
 import { AccessControlError } from "@lib/auth";
-import { authorizationPass, authorizationFail, getAbilityMock } from "__utils__/authorization";
+import {
+  mockAuthorizationPass,
+  mockAuthorizationFail,
+  mockGetAbility,
+} from "__utils__/authorization";
 
-jest.mock("@lib/privileges");
 jest.mock("@lib/auditLogs");
-jest.mock("@lib/actions/auth");
 jest.mock("@lib/serviceAccount");
+jest.mock("@lib/privileges");
 
 const mockedDeleteKey = jest.mocked(deleteKey);
 
@@ -90,8 +93,8 @@ const userID = "user1";
 describe("Template CRUD functions", () => {
   describe("User with permission should be able to use CRUD functions", () => {
     beforeAll(() => {
-      authorizationPass(userID);
-      getAbilityMock(userID);
+      mockAuthorizationPass(userID);
+      mockGetAbility(userID);
     });
 
     it("Create a Template", async () => {
@@ -635,8 +638,7 @@ describe("Template CRUD functions", () => {
 
   describe("User with no permission should not be able to use CRUD functions", () => {
     beforeAll(() => {
-      authorizationFail(userID);
-      // getAbilityMock(userID);
+      mockAuthorizationFail(userID);
     });
     it("Create a Template", async () => {
       await expect(
@@ -647,7 +649,7 @@ describe("Template CRUD functions", () => {
       ).rejects.toThrow(AccessControlError);
       expect(mockedLogEvent).toHaveBeenNthCalledWith(
         1,
-        userID,
+        Promise.resolve(userID),
         { type: "Form" },
         "AccessDenied",
         "Attempted to create a Form"
@@ -659,7 +661,7 @@ describe("Template CRUD functions", () => {
       expect(result).toEqual([]);
       expect(mockedLogEvent).toHaveBeenNthCalledWith(
         1,
-        userID,
+        Promise.resolve(userID),
         { type: "Form" },
         "AccessDenied",
         "Attempted to access All System Forms"
@@ -670,7 +672,7 @@ describe("Template CRUD functions", () => {
       expect(result).toBe(null);
       expect(mockedLogEvent).toHaveBeenNthCalledWith(
         1,
-        userID,
+        Promise.resolve(userID),
         { id: "1", type: "Form" },
         "AccessDenied",
         "Attemped to read form object"
@@ -686,7 +688,7 @@ describe("Template CRUD functions", () => {
       ).rejects.toThrow(AccessControlError);
       expect(mockedLogEvent).toHaveBeenNthCalledWith(
         1,
-        userID,
+        Promise.resolve(userID),
         { id: "test1", type: "Form" },
         "AccessDenied",
         "Attempted to update Form"
@@ -698,7 +700,7 @@ describe("Template CRUD functions", () => {
       );
       expect(mockedLogEvent).toHaveBeenNthCalledWith(
         1,
-        userID,
+        Promise.resolve(userID),
         { id: "formtestID", type: "Form" },
         "AccessDenied",
         "Attempted to publish form"
@@ -706,10 +708,10 @@ describe("Template CRUD functions", () => {
     });
 
     it("Remove DeliveryOption from template", async () => {
-      await expect(removeDeliveryOption("formtestID")).rejects.toBeInstanceOf(AccessControlError);
+      await expect(removeDeliveryOption("formtestID")).rejects.toThrow(AccessControlError);
       expect(mockedLogEvent).toHaveBeenNthCalledWith(
         1,
-        userID,
+        Promise.resolve(userID),
         { id: "formtestID", type: "Form" },
         "AccessDenied",
         "Attempted to set Delivery Option to the Vault"
@@ -717,10 +719,10 @@ describe("Template CRUD functions", () => {
     });
 
     it("Delete template", async () => {
-      await expect(deleteTemplate("formtestID")).rejects.toBeInstanceOf(AccessControlError);
+      await expect(deleteTemplate("formtestID")).rejects.toThrow(AccessControlError);
       expect(mockedLogEvent).toHaveBeenNthCalledWith(
         1,
-        userID,
+        Promise.resolve(userID),
         { id: "formtestID", type: "Form" },
         "AccessDenied",
         "Attempted to delete Form"

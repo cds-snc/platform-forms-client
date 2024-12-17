@@ -8,7 +8,7 @@ type MockedAuthFunction = {
   [key: string]: jest.Mock;
 };
 
-export const authorizationPass = (userID: string) => {
+export const mockAuthorizationPass = (userID: string) => {
   const mockedAuth: MockedAuthFunction = jest.mocked(authorization);
   for (const property in authorization) {
     mockedAuth[property] = jest
@@ -17,9 +17,9 @@ export const authorizationPass = (userID: string) => {
   }
 };
 
-export const authorizationFail = (userID: string) => {
+export const mockAuthorizationFail = (userID: string) => {
   const mockedAuth: MockedAuthFunction = jest.mocked(authorization);
-  getAbilityMock(userID);
+  mockGetAbility(userID);
   for (const property in authorization) {
     mockedAuth[property] = jest
       .fn()
@@ -27,7 +27,7 @@ export const authorizationFail = (userID: string) => {
   }
 };
 
-export const getAbilityMock = (userID: string) => {
+export const mockGetAbility = (userID: string) => {
   const mockedAbility = jest.mocked(getAbility);
   mockedAbility.mockImplementation(() =>
     Promise.resolve({

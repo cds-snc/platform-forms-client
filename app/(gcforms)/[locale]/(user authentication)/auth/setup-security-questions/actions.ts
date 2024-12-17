@@ -77,7 +77,7 @@ export const setupQuestions = async (
   const { session } = await authCheckAndThrow().catch(() => ({ session: null }));
   if (!session) return { generalError: t("errors.serverError.title") };
 
-  const ability = await getAbility(session);
+  const ability = await getAbility();
 
   const rawFormData = Object.fromEntries(formData.entries());
 

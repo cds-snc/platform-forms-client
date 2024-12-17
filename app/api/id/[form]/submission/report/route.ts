@@ -202,7 +202,7 @@ export const PUT = middleware(
       );
     }
 
-    const ability = await getAbility(session);
+    const ability = await getAbility();
 
     // Ensure the user has owernship of this form
     try {

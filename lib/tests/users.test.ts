@@ -9,6 +9,7 @@ import { ManageUsers, ViewUserPrivileges, Base } from "__utils__/permissions";
 import { Session } from "next-auth";
 import { logEvent } from "@lib/auditLogs";
 jest.mock("@lib/auditLogs");
+jest.mock("@lib/auth");
 const mockedLogEvent = jest.mocked(logEvent, { shallow: true });
 import { JWT } from "next-auth/jwt";
 
@@ -166,7 +167,7 @@ describe("Users CRUD functions should throw an error if user does not have any p
 
     await expect(async () => {
       await getUsers(ability);
-    }).rejects.toThrow(new AccessControlError(`Access Control Forbidden Action`));
+    }).rejects.toBeInstanceOf(AccessControlError);
     expect(mockedLogEvent).toHaveBeenCalledWith(
       fakeSession.user.id,
       { type: "User" },

@@ -2,7 +2,6 @@ import { getAbility } from "@lib/privileges";
 import { AccessControlError } from "@lib/auth";
 import { middleware, sessionExists } from "@lib/middleware";
 import { NextResponse } from "next/server";
-import { MiddlewareProps, WithRequired } from "@lib/types";
 import { unprocessedSubmissions } from "@lib/vault";
 
 // Needed because NextJS attempts to cache the response of this route
@@ -10,15 +9,13 @@ export const dynamic = "force-dynamic";
 
 export const GET = middleware([sessionExists()], async (req, props) => {
   try {
-    const { session } = props as WithRequired<MiddlewareProps, "session">;
-
     const formId = props.params?.form;
 
     if (!formId || typeof formId !== "string") {
       return NextResponse.json({ error: "Bad request" }, { status: 400 });
     }
 
-    const result = await unprocessedSubmissions(await getAbility(session), formId);
+    const result = await unprocessedSubmissions(await getAbility(), formId);
     return NextResponse.json({ unprocessedSubmissions: result });
   } catch (err) {
     if (err instanceof AccessControlError)
