@@ -2,7 +2,11 @@ import { authCheckAndRedirect } from "@lib/actions";
 import { checkPrivilegesAsBoolean } from "@lib/privileges";
 import { serverTranslation } from "@i18n";
 import Link from "next/link";
-import { ManageAccountsIcon, SettingsApplicationsIcon } from "@serverComponents/icons";
+import {
+  ManageAccountsIcon,
+  NumericFieldIcon,
+  SettingsApplicationsIcon,
+} from "@serverComponents/icons";
 import { Metadata } from "next";
 import { redirect } from "next/navigation";
 
@@ -85,6 +89,20 @@ export default async function Page({ params: { locale } }: { params: { locale: s
               </Link>
             </li>
           </ul>
+        </div>
+      </div>
+
+      <div className="flex flex-row justify-center mt-8">
+        <div className="rounded-lg border bg-white p-10">
+          <h2>
+            <NumericFieldIcon className="inline-block h-14 w-14" /> {t("dashboardMetrics")}
+          </h2>
+          <p>{t("whatToDoWithMetrics")}</p>
+          <p>
+            <Link href={`/${locale}/admin/metrics`} legacyBehavior>
+              <a href={`/${locale}/admin/metrics`}>{t("metrics")}</a>
+            </Link>
+          </p>
         </div>
       </div>
     </>

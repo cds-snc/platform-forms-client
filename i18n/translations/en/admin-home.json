@@ -10,5 +10,8 @@
   "configureHowTheApplicationWorks": " Configure how the application works",
   "typography": "Typography",
   "upload": "Upload",
-  "viewTemplates": "View templates"
+  "viewTemplates": "View templates",
+  "dashboardMetrics": "Dashboard metrics",
+  "whatToDoWithMetrics": "Metrics can be viewed here",
+  "metrics": "Metrics"
 }
