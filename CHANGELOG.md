@@ -5,6 +5,18 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.30.3](https://github.com/cds-snc/platform-forms-client/compare/v3.30.2...v3.30.3) (2024-12-16)
+
+
+### Bug Fixes
+
+* Pin to Node Alpine 3.20 ([#4841](https://github.com/cds-snc/platform-forms-client/issues/4841)) ([cb91ee7](https://github.com/cds-snc/platform-forms-client/commit/cb91ee7e0cbc91aff982d10f440306fbab3a4f76))
+
+
+### Miscellaneous Chores
+
+* additional "add" helpers ([#4840](https://github.com/cds-snc/platform-forms-client/issues/4840)) ([50f6736](https://github.com/cds-snc/platform-forms-client/commit/50f6736afdd2ab2a83ffe574f558fb86cf17be73))
+
 ## [3.30.2](https://github.com/cds-snc/platform-forms-client/compare/v3.30.1...v3.30.2) (2024-12-16)
 
 
