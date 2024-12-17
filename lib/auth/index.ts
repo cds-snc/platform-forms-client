@@ -44,10 +44,12 @@ export { GET, POST, auth, signIn, signOut } from "./nextAuth";
 
 // Creates a new custom Error Class
 export class AccessControlError extends Error {
-  public userId: string;
+  public user: {
+    id: string;
+  } = { id: "" };
   constructor(userId: string, message: string = "AccessControlError") {
     super(message);
     Object.setPrototypeOf(this, AccessControlError.prototype);
-    this.userId = userId;
+    this.user.id = userId;
   }
 }
