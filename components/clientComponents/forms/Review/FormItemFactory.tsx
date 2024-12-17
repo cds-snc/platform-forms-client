@@ -38,16 +38,15 @@ export const FormItemFactory = ({
 
     case FormElementTypes.addressComplete:
     case FormElementTypes.address: // TODO deprecated?
-      return <AddressComplete formItem={formItem} language={language} />;
+      return <AddressComplete formItem={formItem} language={language} forceSplitAddress={true} />;
+
+    case FormElementTypes.richText:
+      return <RichText formItem={formItem} language={language} showNothing={true} />;
 
     // Multi-value base Form elements
     case FormElementTypes.checkbox:
     case FormElementTypes.attestation:
       return <BaseElementArray formItem={formItem} />;
-
-    // Single label without a value
-    case FormElementTypes.richText:
-      return <RichText formItem={formItem} language={language} stripMarkdown={true} />;
 
     // Single value base Form elements e.g. input, textarea, radio, select, combobox, departments...
     default:

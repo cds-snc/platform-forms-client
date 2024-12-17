@@ -8,16 +8,18 @@ export const RichText = ({
   formItem,
   language,
   stripMarkdown = false,
+  showNothing = false,
 }: {
   formItem: FormItem | undefined;
   language: Language;
   stripMarkdown?: boolean;
+  showNothing?: boolean;
 }): React.ReactElement => {
   const text = formItem?.element?.properties?.[
     getLocalizedProperty("description", language)
   ] as string;
 
-  if (!text) {
+  if (!text || showNothing) {
     return <></>;
   }
 
