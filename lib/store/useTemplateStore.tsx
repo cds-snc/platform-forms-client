@@ -26,19 +26,25 @@ import {
   removeElementById,
   removeById,
   getSchemaFromState,
-  incrementSubElementId,
   cleanInput,
   removeGroupElement,
 } from "../utils/form-builder";
 import { decrementChoiceIds, decrementNextActionChoiceIds } from "@lib/formContext";
 import { Language } from "../types/form-builder-types";
-import { FormElementTypes } from "@lib/types";
-import { defaultField, defaultForm } from "./defaults";
+import { defaultForm } from "./defaults";
 import { storageOptions } from "./storage";
 import { clearTemplateStorage } from "./utils";
 import { orderGroups } from "@lib/utils/form-builder/orderUsingGroupsLayout";
 import { initStore } from "./initStore";
 
+import {
+  add,
+  addSubItem,
+  addChoice,
+  addLabeledChoice,
+  addSubChoice,
+  duplicateElement,
+} from "./helpers/add";
 import { moveUp, moveDown, subMoveUp, subMoveDown } from "./helpers/move";
 
 const createTemplateStore = (initProps?: Partial<InitialTemplateStoreProps>) => {
@@ -119,42 +125,11 @@ const createTemplateStore = (initProps?: Partial<InitialTemplateStoreProps>) => 
             moveDown: moveDown(set),
             subMoveUp: subMoveUp(set),
             subMoveDown: subMoveDown(set),
-            add: async (elIndex = 0, type = FormElementTypes.radio, data, groupId) => {
-              const id = get().generateElementId();
-
-              return new Promise((resolve) => {
-                set((state) => {
-                  const allowGroups = state.allowGroupsFlag;
-
-                  const item = {
-                    ...defaultField,
-                    ...data,
-                    id,
-                    type,
-                  };
-
-                  groupId = allowGroups && groupId ? groupId : "";
-
-                  if (allowGroups && groupId) {
-                    if (!state.form.groups) state.form.groups = {};
-                    if (!state.form.groups[groupId])
-                      state.form.groups[groupId] = {
-                        name: "",
-                        titleEn: "",
-                        titleFr: "",
-                        elements: [],
-                      };
-                    state.form.groups &&
-                      state.form.groups[groupId].elements.splice(elIndex + 1, 0, String(id));
-                  }
-
-                  state.form.layout.splice(elIndex + 1, 0, id);
-                  state.form.elements.splice(elIndex + 1, 0, item);
-
-                  resolve(id);
-                });
-              });
-            },
+            add: add(set, get),
+            addSubItem: addSubItem(set, get),
+            addChoice: addChoice(set),
+            addLabeledChoice: addLabeledChoice(set),
+            addSubChoice: addSubChoice(set),
             removeChoiceFromRules: (elId: string, choiceIndex: number) => {
               set((state) => {
                 const choiceId = `${elId}.${choiceIndex}`;
@@ -172,37 +147,6 @@ const createTemplateStore = (initProps?: Partial<InitialTemplateStoreProps>) => 
                 const choiceId = `${elId}.${choiceIndex}`;
                 const groups = decrementNextActionChoiceIds({ ...state.form.groups }, choiceId);
                 state.form.groups = groups;
-              });
-            },
-            addSubItem: (elId, subIndex = 0, type = FormElementTypes.radio, data) => {
-              return new Promise((resolve) => {
-                set((state) => {
-                  let parentIndex = getParentIndex(elId, state.form.elements);
-
-                  if (parentIndex === undefined) {
-                    parentIndex = 0;
-                  }
-
-                  // remove subElements array property given we're adding a sub item
-                  const subDefaultField = { ...defaultField };
-                  // eslint-disable-next-line  @typescript-eslint/no-unused-vars
-                  const { subElements, ...rest } = subDefaultField.properties;
-                  subDefaultField.properties = rest;
-
-                  const id = incrementSubElementId(
-                    state.form.elements[parentIndex].properties.subElements || [],
-                    state.form.elements[parentIndex].id
-                  );
-
-                  state.form.elements[parentIndex].properties.subElements?.splice(subIndex + 1, 0, {
-                    ...subDefaultField,
-                    ...data,
-                    id,
-                    type,
-                  });
-
-                  resolve(id);
-                });
               });
             },
             remove: (elementId, groupId = "") => {
@@ -235,32 +179,6 @@ const createTemplateStore = (initProps?: Partial<InitialTemplateStoreProps>) => 
                   );
                 }
               }),
-            addChoice: (elIndex) =>
-              set((state) => {
-                state.form.elements[elIndex].properties.choices?.push({ en: "", fr: "" });
-              }),
-            addLabeledChoice: async (elIndex, label) => {
-              return new Promise((resolve) => {
-                set((state) => {
-                  state.form.elements[elIndex].properties.choices?.push({
-                    en: label.en,
-                    fr: label.fr,
-                  });
-
-                  const lastChoice = state.form.elements[elIndex].properties.choices?.length ?? 0;
-                  resolve(lastChoice);
-                });
-              });
-            },
-            addSubChoice: (elId, subIndex) => {
-              set((state) => {
-                const parentIndex = getParentIndex(elId, state.form.elements);
-                if (parentIndex === undefined) return;
-                state.form.elements[parentIndex].properties.subElements?.[
-                  subIndex
-                ].properties.choices?.push({ en: "", fr: "" });
-              });
-            },
             removeChoice: (elIndex, choiceIndex) =>
               set((state) => {
                 state.form.elements[elIndex].properties.choices?.splice(choiceIndex, 1);
@@ -277,40 +195,7 @@ const createTemplateStore = (initProps?: Partial<InitialTemplateStoreProps>) => 
               const elIndex = get().form.elements.findIndex((el) => el.id === elId);
               return get().form.elements[elIndex]?.properties.choices?.[choiceIndex];
             },
-            duplicateElement: (itemId, groupId = "", copyEn = "", copyFr = "") => {
-              const elIndex = get().form.elements.findIndex((el) => el.id === itemId);
-              const id = get().generateElementId();
-              set((state) => {
-                // deep copy the element
-                const element = JSON.parse(JSON.stringify(state.form.elements[elIndex]));
-                element.id = id;
-                if (element.type !== "richText" && element.properties["titleEn"]) {
-                  element.properties["titleEn"] = `${element.properties["titleEn"]} ${copyEn}`;
-                }
-                if (element.type !== "richText" && element.properties["titleFr"]) {
-                  element.properties["titleFr"] = `${element.properties["titleFr"]} ${copyFr}`;
-                }
-                state.form.elements.splice(elIndex + 1, 0, element);
-                state.form.layout.splice(elIndex + 1, 0, id);
-
-                // Handle groups
-                const allowGroups = state.allowGroupsFlag;
-                groupId = allowGroups && groupId ? groupId : "";
-                if (allowGroups && groupId) {
-                  if (!state.form.groups) state.form.groups = {};
-                  if (!state.form.groups[groupId])
-                    state.form.groups[groupId] = {
-                      name: "",
-                      titleEn: "",
-                      titleFr: "",
-                      elements: [],
-                    };
-                  state.form.groups &&
-                    state.form.groups[groupId].elements.splice(elIndex + 1, 0, String(id));
-                }
-                // end groups
-              });
-            },
+            duplicateElement: duplicateElement(set, get),
             getSchema: () => {
               return JSON.stringify(getSchemaFromState(get(), get().allowGroupsFlag), null, 2);
             },

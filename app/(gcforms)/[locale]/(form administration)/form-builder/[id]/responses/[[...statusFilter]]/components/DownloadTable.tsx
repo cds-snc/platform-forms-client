@@ -1,5 +1,10 @@
 import React, { useEffect, useReducer, useState } from "react";
-import { NagwareResult, VaultStatus, VaultSubmissionOverview } from "@lib/types";
+import {
+  NagwareResult,
+  StartFromExclusiveResponse,
+  VaultStatus,
+  VaultSubmissionOverview,
+} from "@lib/types";
 import { useTranslation } from "@i18n/client";
 import { SkipLinkReusable } from "@clientComponents/globals/SkipLinkReusable";
 import Link from "next/link";
@@ -28,7 +33,7 @@ interface DownloadTableProps {
   formId: string;
   nagwareResult: NagwareResult | null;
   responseDownloadLimit: number;
-  lastEvaluatedKey?: Record<string, string> | null;
+  startFromExclusiveResponse: StartFromExclusiveResponse | null;
   overdueAfter: number;
   statusFilter: StatusFilter;
 }
@@ -39,7 +44,7 @@ export const DownloadTable = ({
   formId,
   nagwareResult,
   responseDownloadLimit,
-  lastEvaluatedKey,
+  startFromExclusiveResponse,
   overdueAfter,
   statusFilter,
 }: DownloadTableProps) => {
@@ -184,7 +189,7 @@ export const DownloadTable = ({
             <tr className="border-y-1 border-slate-400 bg-slate-100 py-2">
               <td colSpan={5} className="px-4 py-2">
                 <Pagination
-                  lastEvaluatedKey={lastEvaluatedKey}
+                  startFromExclusiveResponse={startFromExclusiveResponse}
                   formId={formId}
                   responseDownloadLimit={responseDownloadLimit}
                   recordCount={vaultSubmissions.length}
@@ -266,7 +271,7 @@ export const DownloadTable = ({
             <tr className="border-y-1 border-slate-300 bg-slate-100 py-2">
               <td colSpan={5} className="px-4 py-2">
                 <Pagination
-                  lastEvaluatedKey={lastEvaluatedKey}
+                  startFromExclusiveResponse={startFromExclusiveResponse}
                   formId={formId}
                   responseDownloadLimit={responseDownloadLimit}
                   recordCount={vaultSubmissions.length}

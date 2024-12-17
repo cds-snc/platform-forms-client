@@ -1,10 +1,8 @@
-import { TemplateStoreState, SetStateFunction } from "../../types";
+import { type TemplateStore } from "../../types";
 import { moveElementDown } from "@lib/utils/form-builder";
 import { getParentIndex } from "@lib/utils/form-builder/getPath";
 
-type SubMoveDownType = (set: SetStateFunction) => TemplateStoreState["subMoveDown"];
-
-export const subMoveDown: SubMoveDownType =
+export const subMoveDown: TemplateStore<"subMoveDown"> =
   (set) =>
   (elId, subIndex = 0) =>
     set((state) => {

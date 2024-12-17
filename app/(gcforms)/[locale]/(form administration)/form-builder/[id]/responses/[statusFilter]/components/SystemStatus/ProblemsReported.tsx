@@ -13,20 +13,18 @@ export const ProblemsReported = ({ formId }: { formId: string }) => {
   const [problemSubmissions, setProblemSubmissions] = useState<{
     loading: boolean;
     submissions: VaultSubmissionOverview[];
-    lastEvaluatedKey: Record<string, string> | null | undefined;
     error: boolean;
-  }>({ loading: true, submissions: [], lastEvaluatedKey: null, error: false });
+  }>({ loading: true, submissions: [], error: false });
 
   useEffect(() => {
     fetchSubmissions({
       formId,
-      lastKey: null,
       status: VaultStatus.PROBLEM,
+      lastKey: null,
     })
       .then(({ submissions, error }) => {
         setProblemSubmissions({
           loading: false,
-          lastEvaluatedKey: null,
           submissions,
           error: Boolean(error),
         });
@@ -35,7 +33,6 @@ export const ProblemsReported = ({ formId }: { formId: string }) => {
         setProblemSubmissions({
           loading: false,
           submissions: [],
-          lastEvaluatedKey: null,
           error: true,
         })
       );
