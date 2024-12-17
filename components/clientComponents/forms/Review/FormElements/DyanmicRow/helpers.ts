@@ -8,7 +8,7 @@ export const getReviewItemFromDynamicRows = (
   formValues: FormValues | void,
   language: Language
 ) => {
-  const element = formItem.originalFormElement;
+  const element = formItem.element;
 
   if (!formValues || !element) {
     return null;
@@ -37,7 +37,7 @@ export const getReviewItemFromDynamicRows = (
         type: subElement?.type,
         label,
         values: formValue,
-        originalFormElement: subElement,
+        element: subElement,
       } as FormItem;
     });
 
@@ -46,7 +46,7 @@ export const getReviewItemFromDynamicRows = (
       type: element.type,
       label: parentDynamicRowLabel,
       values: childFormItems,
-      originalFormElement: element,
+      element,
     } as FormItem;
   });
 
@@ -55,6 +55,6 @@ export const getReviewItemFromDynamicRows = (
     type: element.type,
     label: parentTitle as string,
     values: subFormItems,
-    originalFormElement: element,
+    element,
   } as FormItem;
 };

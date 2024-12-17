@@ -25,7 +25,7 @@ export const AddressComplete = ({
   const { getValues } = useGCFormsContext();
 
   const formValues = getValues();
-  const element = formItem.originalFormElement;
+  const element = formItem.element;
   const addressComponents = element?.properties?.addressComponents as AddressComponents;
   const elementId = element?.id; // For TS next line...
   const addressFormValue = formValues[elementId as keyof typeof elementId];
@@ -41,19 +41,16 @@ export const AddressComplete = ({
       postalCodeOrZip: t("addressComponents.postalCodeOrZip", { lng: language }),
       country: t("addressComponents.country", { lng: language }),
     } as AddressCompleteLabels;
-    const splitAddress = getSplitAddressAsFormItem(
-      element,
-      addressValues,
-      language,
-      addressCompleteStrings
-    );
+
+    const splitAddress = getSplitAddressAsFormItem(element, addressValues, addressCompleteStrings);
+
     return (
       <div className="mb-8">
         <h4>{String(element?.properties?.[getLocalizedProperty("title", language)])}</h4>
         {splitAddress &&
           splitAddress.map((addressAsFormItem, index) => (
             <BaseElement
-              key={`${addressAsFormItem.originalFormElement.id}-${index}`}
+              key={`${addressAsFormItem.element.id}-${index}`}
               formItem={addressAsFormItem}
             />
           ))}

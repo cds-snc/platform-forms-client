@@ -11,25 +11,22 @@ import { getLocalizedProperty } from "@lib/utils";
 import { Language } from "@lib/types/form-builder-types";
 import { DateObject } from "../FormattedDate/types";
 
-// TODO: rename to ReviewSection
 // Created for the Review page to help structure printing out questions-and-answers
-export type ReviewItem = {
+export type ReviewSection = {
   id: string;
   name: string;
   title: string;
   formItems: FormItem[];
 };
 
-// Used by sub components that know enough to "toString" themselves via a factory that determines
-// which FormItem by look at the FormItem.type
+// Used by sub components to print themself using the element type
 export type FormItem = {
   type: FormElementTypes;
   label: string;
   values: string | string[] | FileInputResponse | DateObject | FormItem[];
-  originalFormElement: FormElement | undefined; // TODO: rename element
+  element: FormElement | undefined;
 };
 
-// TODO: GroupsType - search for and see if can use, reuse an existing type if possible
 // Local type to help structure an intermediary object used to construct Review Items
 type GroupsWithElementIds = {
   groupId: string;
@@ -45,8 +42,7 @@ export const getFormElements = (elementIds: number[], formElements: FormElement[
   return elementIds.map((elementId) => formElements.find((item) => item.id === elementId));
 };
 
-// TODO Group  elements array - may be able to use what is allready written in the group history utils
-export const getGroupsWithElements = (
+export const getGroupsWithElementIds = (
   formElements: FormElement[],
   formValues: FormValues | void,
   groups: GroupsType | undefined,
@@ -70,8 +66,8 @@ export const getGroupsWithElements = (
 
       return {
         groupId: groupId,
-        group, // Group with name, title,.. plus elements that may have invisible (not shown elements) - don't use this one
-        elementIds, // Group elementIds that are visible (not hidden)
+        group, // Mainly used to later get the group title
+        elementIds, // ElementIds from this group that are visible (not hidden)
       } as GroupsWithElementIds;
     });
 
@@ -92,7 +88,7 @@ export const createFormItems = (
       type: formElement?.type,
       label: formElement?.properties?.[getLocalizedProperty("title", language)] as string,
       values: formValues[formElement?.id as unknown as keyof typeof formValues] as string,
-      originalFormElement: formElement,
+      element: formElement,
     } as FormItem;
   });
 };
@@ -108,7 +104,7 @@ export const getReviewItems = (
     return [];
   }
 
-  const reviewItems = groupsWithElementIds.map((groupWithElementIds) => {
+  return groupsWithElementIds.map((groupWithElementIds) => {
     const elements = getFormElements(groupWithElementIds.elementIds, formElements);
     const formItems = createFormItems(elements, formValues, language);
     return {
@@ -116,8 +112,6 @@ export const getReviewItems = (
       name: groupWithElementIds.group.name,
       title: getGroupTitle(groupWithElementIds.groupId, language),
       formItems,
-    } as ReviewItem;
+    } as ReviewSection;
   });
-  // logMessage.info("reviewItems", reviewItems);
-  return reviewItems;
 };

@@ -5,10 +5,7 @@ import { useGCFormsContext } from "@lib/hooks/useGCFormContext";
 import { Language } from "@lib/types/form-builder-types";
 import { EditButton } from "./EditButton";
 import { FormItemFactory } from "./FormItemFactory";
-import { FormItem, getGroupsWithElements, getReviewItems } from "./helpers";
-
-// TODO: see if we can share Elements between the HTMLDownloadFormats, especially components that are complex with a helper file
-// even just prove it out with a single component
+import { FormItem, getGroupsWithElementIds, getReviewItems } from "./helpers";
 
 export const Review = ({ language }: { language: Language }): React.ReactElement => {
   const { t } = useTranslation(["review", "common"]);
@@ -19,25 +16,25 @@ export const Review = ({ language }: { language: Language }): React.ReactElement
   const groupsHeadingRef = useRef<HTMLHeadingElement>(null);
   useFocusIt({ elRef: groupsHeadingRef });
 
-  // Get Review Items that are used below to print out each question-answer by type
+  // Get Review Items that are used below to print out each question-answer by element type
   const reviewItems = useMemo(() => {
     const formValues = getValues();
     const groupHistoryIds = getGroupHistory();
-    const groupsWithElementIds = getGroupsWithElements(
+    const groupsWithElementIds = getGroupsWithElementIds(
       formRecord.form.elements,
       formValues,
       groups,
       groupHistoryIds,
       matchedIds
     );
-    const reviewItems = getReviewItems(
+
+    return getReviewItems(
       formRecord.form.elements,
       formValues,
       groupsWithElementIds,
       language,
       getGroupTitle
     );
-    return reviewItems;
   }, [
     formRecord.form.elements,
     getGroupHistory,
@@ -80,7 +77,7 @@ export const Review = ({ language }: { language: Language }): React.ReactElement
                   {reviewItem.formItems &&
                     reviewItem.formItems.map((formItem: FormItem) => (
                       <FormItemFactory
-                        key={formItem.originalFormElement?.id}
+                        key={formItem.element?.id}
                         formItem={formItem}
                         language={language}
                       />

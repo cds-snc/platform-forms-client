@@ -132,7 +132,7 @@ export const getAddressAsReviewElements = (
       type: FormElementTypes.textField,
       label: titleSet[key as keyof AddressElements],
       values: address[key as keyof AddressElements],
-      originalFormElement: element,
+      element,
     });
   }
   return returnArray;

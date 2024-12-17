@@ -24,14 +24,13 @@ export const getCombinedAddressAsFormItem = (
     type: FormElementTypes.textField,
     label: parentTitle,
     values: addressValuesCombined,
-    originalFormElement: element,
+    element,
   } as FormItem;
 };
 
 export const getSplitAddressAsFormItem = (
   element: FormElement | undefined,
   addressValues: AddressElements,
-  language: Language,
   addressCompleteStrings: AddressCompleteLabels
 ) => {
   if (!element) {

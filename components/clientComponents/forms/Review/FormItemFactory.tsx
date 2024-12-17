@@ -19,12 +19,12 @@ export const FormItemFactory = ({
     return <></>;
   }
 
-  // TODO see if this can be set near the fileInput code, or will that break something else?
+  // Adds fileInput type for convenience
   if ((formItem.values as FileInputResponse)?.based64EncodedFile !== undefined) {
     formItem.type = FormElementTypes.fileInput;
   }
 
-  // Note: order may matter, so place the more specif higher and the more generic lower
+  // Note: order may matter, from more specific higher higher to more generic lower
   switch (formItem.type) {
     case FormElementTypes.dynamicRow:
       return <DynamicRow formItem={formItem} language={language} />;
