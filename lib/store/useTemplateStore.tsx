@@ -16,7 +16,6 @@ import unset from "lodash.unset";
  * Internal dependencies
  */
 import { TemplateStoreProps, TemplateStoreState, InitialTemplateStoreProps } from "./types";
-import { getPathString } from "../utils/form-builder/getPath";
 import { TreeRefProvider } from "@formBuilder/components/shared/right-panel/treeview/provider/TreeRefProvider";
 import { FlowRefProvider } from "@formBuilder/[id]/edit/logic/components/flow/provider/FlowRefProvider";
 import { getSchemaFromState, cleanInput } from "../utils/form-builder";
@@ -45,7 +44,13 @@ import {
 import { moveUp, moveDown, subMoveUp, subMoveDown } from "./helpers/move";
 import { initialize, importTemplate } from "./helpers/init";
 import { generateElementId, getHighestElementId } from "./helpers/id";
-import { getFormElementById, getFormElementWithIndexById } from "./helpers/elements";
+import {
+  getFormElementById,
+  getFormElementWithIndexById,
+  propertyPath,
+  getPathString,
+  getChoice,
+} from "./helpers/elements";
 
 const createTemplateStore = (initProps?: Partial<InitialTemplateStoreProps>) => {
   const props = initStore(initProps);
@@ -72,9 +77,6 @@ const createTemplateStore = (initProps?: Partial<InitialTemplateStoreProps>) => 
               set((state) => {
                 state.id = id;
               }),
-            getPathString(id) {
-              return getPathString(id, get().form.elements);
-            },
             setLang: (lang) =>
               set((state) => {
                 state.lang = lang;
@@ -110,17 +112,12 @@ const createTemplateStore = (initProps?: Partial<InitialTemplateStoreProps>) => 
               set((state) => {
                 state.securityAttribute = value;
               }),
-            propertyPath: (id: number, field: string, lang?: Language) => {
-              const path = getPathString(id, get().form.elements);
-              if (lang) {
-                return `${path}.${get().localizeField(field, lang)}` ?? "";
-              }
-              return `${path}.${field}` ?? "";
-            },
             unsetField: (path) =>
               set((state) => {
                 unset(state, path);
               }),
+            getPathString: getPathString(set, get),
+            propertyPath: propertyPath(set, get),
             moveUp: moveUp(set),
             moveDown: moveDown(set),
             subMoveUp: subMoveUp(set),
@@ -136,10 +133,7 @@ const createTemplateStore = (initProps?: Partial<InitialTemplateStoreProps>) => 
             removeSubItem: removeSubItem(set),
             removeChoice: removeChoice(set),
             removeSubChoice: removeSubChoice(set),
-            getChoice: (elId, choiceIndex) => {
-              const elIndex = get().form.elements.findIndex((el) => el.id === elId);
-              return get().form.elements[elIndex]?.properties.choices?.[choiceIndex];
-            },
+            getChoice: getChoice(set, get),
             duplicateElement: duplicateElement(set, get),
             getSchema: () => {
               return JSON.stringify(getSchemaFromState(get(), get().allowGroupsFlag), null, 2);
