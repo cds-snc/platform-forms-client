@@ -397,7 +397,7 @@ export async function getTemplateWithAssociatedUsers(formID: string): Promise<{
 } | null> {
   const { user } = await authorization.canViewForm(formID).catch((e) => {
     logEvent(
-      e.userID,
+      e.userId,
       { type: "Form", id: formID },
       "AccessDenied",
       "Attempted to retrieve users associated with Form"
@@ -586,7 +586,7 @@ export async function removeAssignedUserFromTemplate(
 ): Promise<void> {
   const { user } = await authorization.canEditForm(formID).catch((e) => {
     logEvent(
-      e.userID,
+      e.userId,
       { type: "Form", id: formID },
       "AccessDenied",
       "Attempted to remove assigned user for form"
@@ -675,7 +675,7 @@ export async function removeAssignedUserFromTemplate(
 export async function assignUserToTemplate(formID: string, userID: string): Promise<void> {
   const { user } = await authorization.canEditForm(formID).catch((e) => {
     logEvent(
-      e.userID,
+      e.userId,
       { type: "Form", id: formID },
       "AccessDenied",
       "Attempted to remove assigned user for form"
@@ -824,7 +824,7 @@ export async function updateAssignedUsersForTemplate(
   if (!users.length) throw new Error("No users provided");
   const { user } = await authorization.canEditForm(formID).catch((e) => {
     logEvent(
-      e.userID,
+      e.userId,
       { type: "Form", id: formID },
       "AccessDenied",
       "Attempted to update assigned users for form"
@@ -948,7 +948,7 @@ export async function updateFormPurpose(
 ): Promise<FormRecord | null> {
   const { user } = await authorization.canEditForm(formID).catch((e) => {
     logEvent(
-      e.userID,
+      e.userId,
       { type: "Form", id: formID },
       "AccessDenied",
       "Attempted to set Form Purpose"
@@ -1007,7 +1007,7 @@ export async function updateResponseDeliveryOption(
 ): Promise<FormRecord | null> {
   const { user } = await authorization.canEditForm(formID).catch((e) => {
     logEvent(
-      e.userID,
+      e.userId,
       { type: "Form", id: formID },
       "AccessDenied",
       "Attempted to set Delivery Option to the Vault"
@@ -1076,9 +1076,9 @@ export async function updateResponseDeliveryOption(
 /**
  * Remove DeliveryOption from template. Form responses will be sent to the Vault.
  * @param formID The unique identifier of the form you want to modify
- * @returns The updated form template or null if the record does not exist
+ * @returns void
  */
-export async function removeDeliveryOption(formID: string): Promise<FormRecord | null> {
+export async function removeDeliveryOption(formID: string): Promise<void> {
   const { user } = await authorization.canEditForm(formID).catch((e) => {
     logEvent(
       e.userId,
@@ -1089,45 +1089,25 @@ export async function removeDeliveryOption(formID: string): Promise<FormRecord |
     throw e;
   });
 
-  const updatedTemplate = await prisma.template
-    .update({
-      where: {
-        id: formID,
-        isPublished: false,
-        deliveryOption: {
-          isNot: null,
-        },
-      },
-      data: {
-        deliveryOption: {
-          delete: true,
-        },
-      },
-      select: {
-        id: true,
-        created_at: true,
-        updated_at: true,
-        name: true,
-        jsonConfig: true,
-        isPublished: true,
-        deliveryOption: true,
-        securityAttribute: true,
-        formPurpose: true,
-        publishReason: true,
-        publishFormType: true,
-        publishDesc: true,
-      },
-    })
-    .catch((e) => {
-      if (e instanceof Prisma.PrismaClientKnownRequestError) {
-        if (e.code === "P2025") {
-          throw new TemplateAlreadyPublishedError();
-        }
-      }
-      return prismaErrors(e, null);
-    });
+  // Don't change delivery option if the form is published
+  const template = await prisma.template.findFirstOrThrow({
+    where: {
+      id: formID,
+    },
+    select: {
+      isPublished: true,
+    },
+  });
 
-  if (updatedTemplate === null) return updatedTemplate;
+  if (!template) throw new TemplateNotFoundError();
+
+  if (template.isPublished) throw new TemplateAlreadyPublishedError();
+
+  await prisma.deliveryOption.deleteMany({
+    where: {
+      templateId: formID,
+    },
+  });
 
   logEvent(
     user.id,
@@ -1135,8 +1115,6 @@ export async function removeDeliveryOption(formID: string): Promise<FormRecord |
     "ChangeDeliveryOption",
     "Delivery Option set to the Vault"
   );
-
-  return _parseTemplate(updatedTemplate);
 }
 
 /**
@@ -1227,7 +1205,7 @@ export const updateClosedData = async (
 ) => {
   const { user } = await authorization.canEditForm(formID).catch((e) => {
     logEvent(
-      e.userID,
+      e.userId,
       { type: "Form", id: formID },
       "AccessDenied",
       "Attempted to update closing date for Form"
@@ -1272,7 +1250,7 @@ export const updateClosedData = async (
 export const updateSecurityAttribute = async (formID: string, securityAttribute: string) => {
   const { user } = await authorization.canEditForm(formID).catch((e) => {
     logEvent(
-      e.userID,
+      e.userId,
       { type: "Form", id: formID },
       "AccessDenied",
       "Attempted to update security attribute"

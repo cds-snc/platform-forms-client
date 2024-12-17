@@ -189,12 +189,6 @@ export const PUT = middleware(
         return NextResponse.json(response);
       } else if (sendResponsesToVault) {
         const response = await removeDeliveryOption(formID);
-        if (!response)
-          throw new Error(
-            `Template API response was null. Request information: method = ${
-              req.method
-            } ; query = ${JSON.stringify(props.params)} ; body = ${JSON.stringify(props.body)}`
-          );
         return NextResponse.json(response);
       }
       throw new MalformedAPIRequest(

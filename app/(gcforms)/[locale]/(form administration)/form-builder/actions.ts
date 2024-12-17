@@ -349,18 +349,17 @@ export const sendResponsesToVault = AuthenticatedAction(
   }: {
     id: string;
   }): Promise<{
-    formRecord: FormRecord | null;
+    success?: boolean;
     error?: string;
   }> => {
     try {
-      const response = await removeDeliveryOption(formID);
-      if (!response) {
-        throw new Error(`Template API response was null. Request information: { ${formID} }`);
-      }
+      await removeDeliveryOption(formID);
 
-      return { formRecord: response };
+      return {
+        success: true,
+      };
     } catch (error) {
-      return { formRecord: null, error: (error as Error).message };
+      return { success: false, error: (error as Error).message };
     }
   }
 );

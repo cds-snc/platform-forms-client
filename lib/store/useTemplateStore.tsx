@@ -7,12 +7,10 @@ import React, { createContext, useRef, useContext, useEffect } from "react";
 import { createStore } from "zustand";
 import { useStoreWithEqualityFn } from "zustand/traditional";
 import { immer } from "zustand/middleware/immer";
-import { original } from "immer";
 import { shallow } from "zustand/shallow";
 import { persist, subscribeWithSelector } from "zustand/middleware";
 import update from "lodash.set";
 import unset from "lodash.unset";
-import { getParentIndex } from "@lib/utils/form-builder/getPath";
 
 /**
  * Internal dependencies
@@ -21,24 +19,32 @@ import { TemplateStoreProps, TemplateStoreState, InitialTemplateStoreProps } fro
 import { getPathString } from "../utils/form-builder/getPath";
 import { TreeRefProvider } from "@formBuilder/components/shared/right-panel/treeview/provider/TreeRefProvider";
 import { FlowRefProvider } from "@formBuilder/[id]/edit/logic/components/flow/provider/FlowRefProvider";
-import { initializeGroups } from "@formBuilder/components/shared/right-panel/treeview/util/initializeGroups";
-import {
-  removeElementById,
-  removeById,
-  getSchemaFromState,
-  cleanInput,
-  removeGroupElement,
-} from "../utils/form-builder";
-import { decrementChoiceIds, decrementNextActionChoiceIds } from "@lib/formContext";
+import { getSchemaFromState, cleanInput } from "../utils/form-builder";
 import { Language } from "../types/form-builder-types";
-import { defaultForm } from "./defaults";
 import { storageOptions } from "./storage";
 import { clearTemplateStorage } from "./utils";
-import { orderGroups } from "@lib/utils/form-builder/orderUsingGroupsLayout";
 import { initStore } from "./initStore";
 
-import { add, addSubItem } from "./helpers/add";
+import {
+  add,
+  addSubItem,
+  addChoice,
+  addLabeledChoice,
+  addSubChoice,
+  duplicateElement,
+} from "./helpers/add";
+
+import {
+  removeChoiceFromRules,
+  removeChoiceFromNextActions,
+  remove,
+  removeSubItem,
+  removeChoice,
+  removeSubChoice,
+} from "./helpers/remove";
+
 import { moveUp, moveDown, subMoveUp, subMoveDown } from "./helpers/move";
+import { initialize, importTemplate } from "./helpers/init";
 
 const createTemplateStore = (initProps?: Partial<InitialTemplateStoreProps>) => {
   const props = initStore(initProps);
@@ -114,137 +120,26 @@ const createTemplateStore = (initProps?: Partial<InitialTemplateStoreProps>) => 
               set((state) => {
                 unset(state, path);
               }),
-            moveUp: moveUp(set, get),
-            moveDown: moveDown(set, get),
-            subMoveUp: subMoveUp(set, get),
-            subMoveDown: subMoveDown(set, get),
+            moveUp: moveUp(set),
+            moveDown: moveDown(set),
+            subMoveUp: subMoveUp(set),
+            subMoveDown: subMoveDown(set),
             add: add(set, get),
-            removeChoiceFromRules: (elId: string, choiceIndex: number) => {
-              set((state) => {
-                const choiceId = `${elId}.${choiceIndex}`;
-                const rules = decrementChoiceIds({ formElements: state.form.elements, choiceId });
-                state.form.elements.forEach((element) => {
-                  // If element id is in the rules array, update the conditionalRules property
-                  if (rules[element.id]) {
-                    element.properties.conditionalRules = rules[element.id];
-                  }
-                });
-              });
-            },
-            removeChoiceFromNextActions: (elId: string, choiceIndex: number) => {
-              set((state) => {
-                const choiceId = `${elId}.${choiceIndex}`;
-                const groups = decrementNextActionChoiceIds({ ...state.form.groups }, choiceId);
-                state.form.groups = groups;
-              });
-            },
             addSubItem: addSubItem(set, get),
-            remove: (elementId, groupId = "") => {
-              set((state) => {
-                const allowGroups = state.allowGroupsFlag;
-                state.form.elements = removeElementById(state.form.elements, elementId);
-                state.form.layout = removeById(state.form.layout, elementId);
-
-                if (allowGroups && groupId && state.form.groups) {
-                  const groups = removeGroupElement(
-                    { ...original(state.form.groups) },
-                    groupId,
-                    elementId
-                  );
-                  state.form.groups = { ...groups };
-                }
-              });
-            },
-            removeSubItem: (elId, elementId) =>
-              set((state) => {
-                const parentIndex = getParentIndex(elId, state.form.elements);
-
-                if (parentIndex === undefined) return;
-
-                const subElements = state.form.elements[parentIndex].properties?.subElements;
-                if (subElements) {
-                  state.form.elements[parentIndex].properties.subElements = removeElementById(
-                    subElements,
-                    elementId
-                  );
-                }
-              }),
-            addChoice: (elIndex) =>
-              set((state) => {
-                state.form.elements[elIndex].properties.choices?.push({ en: "", fr: "" });
-              }),
-            addLabeledChoice: async (elIndex, label) => {
-              return new Promise((resolve) => {
-                set((state) => {
-                  state.form.elements[elIndex].properties.choices?.push({
-                    en: label.en,
-                    fr: label.fr,
-                  });
-
-                  const lastChoice = state.form.elements[elIndex].properties.choices?.length ?? 0;
-                  resolve(lastChoice);
-                });
-              });
-            },
-            addSubChoice: (elId, subIndex) => {
-              set((state) => {
-                const parentIndex = getParentIndex(elId, state.form.elements);
-                if (parentIndex === undefined) return;
-                state.form.elements[parentIndex].properties.subElements?.[
-                  subIndex
-                ].properties.choices?.push({ en: "", fr: "" });
-              });
-            },
-            removeChoice: (elIndex, choiceIndex) =>
-              set((state) => {
-                state.form.elements[elIndex].properties.choices?.splice(choiceIndex, 1);
-              }),
-            removeSubChoice: (elId, subIndex, choiceIndex) =>
-              set((state) => {
-                const parentIndex = getParentIndex(elId, state.form.elements);
-                if (parentIndex === undefined) return;
-                state.form.elements[parentIndex].properties.subElements?.[
-                  subIndex
-                ].properties.choices?.splice(choiceIndex, 1);
-              }),
+            addChoice: addChoice(set),
+            addLabeledChoice: addLabeledChoice(set),
+            addSubChoice: addSubChoice(set),
+            removeChoiceFromRules: removeChoiceFromRules(set),
+            removeChoiceFromNextActions: removeChoiceFromNextActions(set),
+            remove: remove(set),
+            removeSubItem: removeSubItem(set),
+            removeChoice: removeChoice(set),
+            removeSubChoice: removeSubChoice(set),
             getChoice: (elId, choiceIndex) => {
               const elIndex = get().form.elements.findIndex((el) => el.id === elId);
               return get().form.elements[elIndex]?.properties.choices?.[choiceIndex];
             },
-            duplicateElement: (itemId, groupId = "", copyEn = "", copyFr = "") => {
-              const elIndex = get().form.elements.findIndex((el) => el.id === itemId);
-              const id = get().generateElementId();
-              set((state) => {
-                // deep copy the element
-                const element = JSON.parse(JSON.stringify(state.form.elements[elIndex]));
-                element.id = id;
-                if (element.type !== "richText" && element.properties["titleEn"]) {
-                  element.properties["titleEn"] = `${element.properties["titleEn"]} ${copyEn}`;
-                }
-                if (element.type !== "richText" && element.properties["titleFr"]) {
-                  element.properties["titleFr"] = `${element.properties["titleFr"]} ${copyFr}`;
-                }
-                state.form.elements.splice(elIndex + 1, 0, element);
-                state.form.layout.splice(elIndex + 1, 0, id);
-
-                // Handle groups
-                const allowGroups = state.allowGroupsFlag;
-                groupId = allowGroups && groupId ? groupId : "";
-                if (allowGroups && groupId) {
-                  if (!state.form.groups) state.form.groups = {};
-                  if (!state.form.groups[groupId])
-                    state.form.groups[groupId] = {
-                      name: "",
-                      titleEn: "",
-                      titleFr: "",
-                      elements: [],
-                    };
-                  state.form.groups &&
-                    state.form.groups[groupId].elements.splice(elIndex + 1, 0, String(id));
-                }
-                // end groups
-              });
-            },
+            duplicateElement: duplicateElement(set, get),
             getSchema: () => {
               return JSON.stringify(getSchemaFromState(get(), get().allowGroupsFlag), null, 2);
             },
@@ -313,58 +208,8 @@ const createTemplateStore = (initProps?: Partial<InitialTemplateStoreProps>) => 
                 state.closingDate = value;
               });
             },
-            initialize: async (language = "en") => {
-              set((state) => {
-                const allowGroups = state.allowGroupsFlag;
-                state.id = "";
-                state.lang = language as Language;
-                state.translationLanguagePriority = language as Language;
-                state.form = initializeGroups({ ...defaultForm }, allowGroups);
-
-                // Ensure order by groups layout
-                if (!state.form.groupsLayout) {
-                  /* No need to order as the groups layout does not exist */
-                  state.form.groupsLayout = [];
-                } else {
-                  state.form.groups = orderGroups(state.form.groups, state.form.groupsLayout);
-                }
-
-                state.isPublished = false;
-                state.name = "";
-                state.deliveryOption = undefined;
-                state.formPurpose = "";
-                state.publishReason = "";
-                state.publishFormType = "";
-                state.publishDesc = "";
-                state.closingDate = null;
-              });
-            },
-            importTemplate: async (jsonConfig) => {
-              set((state) => {
-                const allowGroups = state.allowGroupsFlag;
-                state.id = "";
-                state.lang = "en";
-                state.form = initializeGroups({ ...defaultForm, ...jsonConfig }, allowGroups);
-
-                // Ensure order by groups layout
-                if (!state.form.groupsLayout) {
-                  /* No need to order as the groups layout does not exist */
-                  state.form.groupsLayout = [];
-                } else {
-                  state.form.groups = orderGroups(state.form.groups, state.form.groupsLayout);
-                }
-
-                state.isPublished = false;
-                state.name = "";
-                state.securityAttribute = "Protected A";
-                state.deliveryOption = undefined;
-                state.formPurpose = "";
-                state.publishReason = "";
-                state.publishFormType = "";
-                state.publishDesc = "";
-                state.closingDate = null;
-              });
-            },
+            initialize: initialize(set),
+            importTemplate: importTemplate(set),
             getGroupsEnabled: () => get().allowGroupsFlag,
             setGroupsLayout: (layout) => {
               set((state) => {
