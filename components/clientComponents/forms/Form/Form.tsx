@@ -21,6 +21,7 @@ import { LockedSections } from "@formBuilder/components/shared/right-panel/treev
 import { BackButton } from "@formBuilder/[id]/preview/BackButton";
 import { Language } from "@lib/types/form-builder-types";
 import { BackButtonGroup } from "../BackButtonGroup/BackButtonGroup";
+import { StatusError } from "../StatusError/StatusError";
 import {
   removeFormContextValues,
   getInputHistoryValues,
@@ -169,6 +170,7 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
   const errorList = props.errors ? getErrorList(props) : null;
   const errorId = "gc-form-errors";
   const serverErrorId = `${errorId}-server`;
+
   const formStatusError =
     props.status === "FileError"
       ? t("input-validation.file-submission")
@@ -204,6 +206,12 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
       {formStatusError && (
         <Alert type={ErrorStatus.ERROR} heading={formStatusError} tabIndex={0} id={serverErrorId} />
       )}
+
+      {/* ServerId error */}
+      {props.status === "ServerIDError" && (
+        <StatusError formId={formID} language={language as Language} />
+      )}
+
       {errorList && (
         <Alert
           type={ErrorStatus.ERROR}
@@ -338,6 +346,7 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
 
 interface FormProps {
   formRecord: PublicFormRecord;
+  initialValues?: Responses | undefined;
   language: string;
   isPreview?: boolean;
   renderSubmit?: ({
@@ -353,6 +362,7 @@ interface FormProps {
   allowGrouping?: boolean | undefined;
   groupHistory?: string[];
   matchedIds?: string[];
+  saveProgress: () => void;
 }
 
 /**
@@ -367,7 +377,12 @@ export const Form = withFormik<FormProps, Responses>({
 
   enableReinitialize: true, // needed when switching languages
 
-  mapPropsToValues: (props) => getFormInitialValues(props.formRecord, props.language),
+  mapPropsToValues: (props) => {
+    if (props.initialValues) {
+      return props.initialValues;
+    }
+    return getFormInitialValues(props.formRecord, props.language);
+  },
 
   validate: (values, props) => validateOnSubmit(values, props),
 
@@ -405,6 +420,8 @@ export const Form = withFormik<FormProps, Responses>({
       if (result.error) {
         if (result.error.message.includes("FileValidationResult")) {
           formikBag.setStatus("FileError");
+        } else if (result.error.message.includes("Failed to find Server Action")) {
+          throw new Error("Failed to find Server Action");
         } else {
           formikBag.setStatus("Error");
         }
@@ -412,8 +429,13 @@ export const Form = withFormik<FormProps, Responses>({
         formikBag.props.onSuccess(result.id);
       }
     } catch (err) {
-      logMessage.error(err as Error);
-      formikBag.setStatus("Error");
+      if ((err as Error).message.includes("Failed to find Server Action")) {
+        formikBag.props.saveProgress();
+        formikBag.setStatus("ServerIDError");
+      } else {
+        logMessage.error(err as Error);
+        formikBag.setStatus("Error");
+      }
     } finally {
       if (formikBag.props && !formikBag.props.isPreview) {
         window.dataLayer = window.dataLayer || [];
