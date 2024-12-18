@@ -48,7 +48,11 @@ import { getAbility } from "@lib/privileges";
 export class AccessControlError extends Error {
   public user: {
     id: Promise<string>;
-  } = { id: getAbility().then((ability) => ability.userID) };
+  } = {
+    id: getAbility()
+      .then((ability) => ability.userID)
+      .catch(() => "unauthenticated"),
+  };
 
   constructor(message: string = "AccessControlError") {
     super(message);
