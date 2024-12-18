@@ -86,11 +86,12 @@ const getQueueURL = async () => {
 };
 
 export const logEvent = async (
-  userId: string,
+  userId: string | Promise<string>,
   subject: { type: keyof typeof AuditSubjectType; id?: string },
   event: AuditLogEventStrings,
   description?: string
 ): Promise<void> => {
+  if (userId instanceof Promise) userId = await userId;
   const auditLog = JSON.stringify({
     userId,
     event,
