@@ -6,6 +6,7 @@ import { Language } from "@lib/types/form-builder-types";
 import { EditButton } from "./EditButton";
 import { FormItemFactory } from "./FormItemFactory";
 import { FormItem, getGroupsWithElementIds, getReviewItems } from "./helpers";
+import { FormValues } from "@lib/formContext";
 
 export const Review = ({ language }: { language: Language }): React.ReactElement => {
   const { t } = useTranslation(["review", "common"]);
@@ -16,12 +17,11 @@ export const Review = ({ language }: { language: Language }): React.ReactElement
   const groupsHeadingRef = useRef<HTMLHeadingElement>(null);
   useFocusIt({ elRef: groupsHeadingRef });
 
-  // Get Review Items that are used below to print out each question-answer by element type
   const formValues: void | FormValues = getValues();
   const groupHistoryIds = getGroupHistory();
-        
   if (!formValues || !groups) throw new Error("Form values or groups are missing");
-      
+
+  // Get Review Items that are used below to print out each question-answer by element type
   const groupsWithElementIds = getGroupsWithElementIds(
     formRecord.form.elements,
     formValues,
@@ -29,7 +29,6 @@ export const Review = ({ language }: { language: Language }): React.ReactElement
     groupHistoryIds,
     matchedIds
   );
-
   const reviewItems = getReviewItems(
     formRecord.form.elements,
     formValues,
