@@ -1,8 +1,11 @@
 "use server";
+
 import { serverTranslation } from "@i18n";
 import { createTicket } from "@lib/integration/freshdesk";
 import { logMessage } from "@lib/logger";
 import { email, minLength, object, safeParse, string, toLowerCase, toTrimmed } from "valibot";
+
+// Public facing functions - they can be used by anyone who finds the associated server action identifer
 
 export interface ErrorStates {
   validationErrors: {
@@ -11,36 +14,6 @@ export interface ErrorStates {
   }[];
   error?: string;
 }
-
-const validate = async (
-  language: string,
-  formEntries: {
-    [k: string]: FormDataEntryValue;
-  }
-) => {
-  const { t } = await serverTranslation(["signup", "common"], { lang: language });
-
-  const SupportSchema = object({
-    // checkbox input can send a non-string value when empty
-    request: string(t("input-validation.required", { ns: "common" }), [
-      minLength(1, t("input-validation.required", { ns: "common" })),
-    ]),
-    description: string([minLength(1, t("input-validation.required", { ns: "common" }))]),
-    name: string([minLength(1, t("input-validation.required", { ns: "common" }))]),
-    email: string([
-      toLowerCase(),
-      toTrimmed(),
-      minLength(1, t("input-validation.required", { ns: "common" })),
-      email(t("input-validation.email", { ns: "common" })),
-    ]),
-    department: string([minLength(1, t("input-validation.required", { ns: "common" }))]),
-    // Note: branch and jobTitle are not required/validated
-    branch: string(),
-    jobTitle: string(),
-  });
-
-  return safeParse(SupportSchema, formEntries, { abortPipeEarly: true });
-};
 
 export async function contact(
   language: string,
@@ -129,3 +102,35 @@ ${description}<br/>
   }
   return { error: "", validationErrors: [] };
 }
+
+// Internal and private functions - won't be converted into server actions
+
+const validate = async (
+  language: string,
+  formEntries: {
+    [k: string]: FormDataEntryValue;
+  }
+) => {
+  const { t } = await serverTranslation(["signup", "common"], { lang: language });
+
+  const SupportSchema = object({
+    // checkbox input can send a non-string value when empty
+    request: string(t("input-validation.required", { ns: "common" }), [
+      minLength(1, t("input-validation.required", { ns: "common" })),
+    ]),
+    description: string([minLength(1, t("input-validation.required", { ns: "common" }))]),
+    name: string([minLength(1, t("input-validation.required", { ns: "common" }))]),
+    email: string([
+      toLowerCase(),
+      toTrimmed(),
+      minLength(1, t("input-validation.required", { ns: "common" })),
+      email(t("input-validation.email", { ns: "common" })),
+    ]),
+    department: string([minLength(1, t("input-validation.required", { ns: "common" }))]),
+    // Note: branch and jobTitle are not required/validated
+    branch: string(),
+    jobTitle: string(),
+  });
+
+  return safeParse(SupportSchema, formEntries, { abortPipeEarly: true });
+};

@@ -1,9 +1,12 @@
 "use server";
+
 import { serverTranslation } from "@i18n";
 import { createTicket } from "@lib/integration/freshdesk";
 import { logMessage } from "@lib/logger";
 
 import { email, minLength, object, safeParse, string, toLowerCase, toTrimmed } from "valibot";
+
+// Public facing functions - they can be used by anyone who finds the associated server action identifer
 
 export interface ErrorStates {
   validationErrors: {
@@ -12,30 +15,6 @@ export interface ErrorStates {
   }[];
   error?: string;
 }
-
-const validate = async (
-  language: string,
-  formEntries: {
-    [k: string]: FormDataEntryValue;
-  }
-) => {
-  const { t } = await serverTranslation(["common"], { lang: language });
-
-  const SupportSchema = object({
-    name: string([minLength(1, t("input-validation.required"))]),
-    email: string([
-      toLowerCase(),
-      toTrimmed(),
-      minLength(1, t("input-validation.required")),
-      email(t("input-validation.email")),
-    ]),
-    // radio input can send a non-string value when empty
-    request: string(t("input-validation.required"), [minLength(1, t("input-validation.required"))]),
-    description: string([minLength(1, t("input-validation.required"))]),
-  });
-
-  return safeParse(SupportSchema, formEntries, { abortPipeEarly: true });
-};
 
 export async function support(
   language: string,
@@ -106,3 +85,29 @@ ${description}<br/>
   }
   return { error: "", validationErrors: [] };
 }
+
+// Internal and private functions - won't be converted into server actions
+
+const validate = async (
+  language: string,
+  formEntries: {
+    [k: string]: FormDataEntryValue;
+  }
+) => {
+  const { t } = await serverTranslation(["common"], { lang: language });
+
+  const SupportSchema = object({
+    name: string([minLength(1, t("input-validation.required"))]),
+    email: string([
+      toLowerCase(),
+      toTrimmed(),
+      minLength(1, t("input-validation.required")),
+      email(t("input-validation.email")),
+    ]),
+    // radio input can send a non-string value when empty
+    request: string(t("input-validation.required"), [minLength(1, t("input-validation.required"))]),
+    description: string([minLength(1, t("input-validation.required"))]),
+  });
+
+  return safeParse(SupportSchema, formEntries, { abortPipeEarly: true });
+};

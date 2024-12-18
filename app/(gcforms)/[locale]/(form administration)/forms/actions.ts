@@ -9,6 +9,8 @@ import { revalidatePath } from "next/cache";
 import { FormRecord } from "@lib/types";
 import { authCheckAndThrow } from "@lib/actions";
 
+// Public facing functions - they can be used by anyone who finds the associated server action identifer
+
 export async function getForm(
   formId: string
 ): Promise<{ formRecord: FormRecord | null; error?: string }> {

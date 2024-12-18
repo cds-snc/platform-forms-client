@@ -1,9 +1,12 @@
 "use server";
+
 import { createKey, deleteKey, refreshKey } from "@lib/serviceAccount";
 import { revalidatePath } from "next/cache";
 
 import { promises as fs } from "fs";
 import path from "path";
+
+// Public facing functions - they can be used by anyone who finds the associated server action identifer
 
 // Privilege Checks are done at the lib/serviceAccount.ts level
 

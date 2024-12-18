@@ -20,11 +20,11 @@ import {
   updateResponseDeliveryOption,
   updateFormPurpose,
 } from "@lib/templates";
-
 import { serverTranslation } from "@i18n";
 import { revalidatePath } from "next/cache";
-import { checkOne } from "@lib/cache/flags";
 import { isValidDateString } from "@lib/utils/date/isValidDateString";
+
+// Public facing functions - they can be used by anyone who finds the associated server action identifer
 
 export type CreateOrUpdateTemplateType = {
   id?: string;
@@ -47,6 +47,8 @@ export const createOrUpdateTemplate = async ({
   error?: string;
 }> => {
   try {
+    const { session, ability } = await authCheckAndThrow();
+
     revalidatePath("/[locale]/forms", "page");
 
     if (id) {
@@ -59,36 +61,6 @@ export const createOrUpdateTemplate = async ({
         formPurpose,
       });
     }
-    return await createTemplate({
-      formConfig,
-      name,
-      deliveryOption,
-      securityAttribute,
-      formPurpose,
-    });
-  } catch (e) {
-    return { formRecord: null, error: (e as Error).message };
-  }
-};
-
-const createTemplate = async ({
-  formConfig,
-  name,
-  deliveryOption,
-  securityAttribute,
-  formPurpose,
-}: {
-  formConfig: FormProperties;
-  name?: string;
-  deliveryOption?: DeliveryOption;
-  securityAttribute?: SecurityAttribute;
-  formPurpose?: FormPurpose;
-}): Promise<{
-  formRecord: FormRecord | null;
-  error?: string;
-}> => {
-  try {
-    const { session, ability } = await authCheckAndThrow();
 
     const response = await createDbTemplate({
       ability: ability,
@@ -107,8 +79,8 @@ const createTemplate = async ({
     }
 
     return { formRecord: response };
-  } catch (error) {
-    return { formRecord: null, error: (error as Error).message };
+  } catch (e) {
+    return { formRecord: null, error: (e as Error).message };
   }
 };
 
@@ -401,7 +373,3 @@ export const getTranslatedDynamicRowProperties = async () => {
     removeButtonTextFr: fr("dynamicRow.defaultRemoveButtonText"),
   };
 };
-
-export async function checkFlag(id: string) {
-  return checkOne(id);
-}

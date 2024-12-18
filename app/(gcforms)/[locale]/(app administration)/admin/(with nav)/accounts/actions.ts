@@ -5,6 +5,8 @@ import { revalidatePath } from "next/cache";
 import { getUsers, updateActiveStatus } from "@lib/users";
 import { authCheckAndThrow } from "@lib/actions";
 
+// Public facing functions - they can be used by anyone who finds the associated server action identifer
+
 export const updatePublishing = async (
   userID: string,
   publishFormsId: string,
@@ -19,7 +21,6 @@ export const updatePublishing = async (
 
 export const updateActive = async (userID: string, active: boolean) => {
   const { ability } = await authCheckAndThrow();
-
   if (checkPrivilegesAsBoolean(ability, [{ action: "update", subject: "User" }])) {
     await updateActiveStatus(ability, userID, active);
     revalidatePath("(gcforms)/[locale]/(app administration)/admin/(with nav)/accounts", "page");

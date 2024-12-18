@@ -11,15 +11,11 @@ import { logMessage } from "@lib/logger";
 import { authCheckAndThrow } from "@lib/actions";
 import { redirect } from "next/navigation";
 
-function nullCheck(formData: FormData, key: string) {
-  const result = formData.get(key);
-  if (!result) throw new Error(`No value found for ${key}`);
-  return result as string;
-}
+// Public facing functions - they can be used by anyone who finds the associated server action identifer
 
 export async function getSetting(internalId: string) {
   const { ability } = await authCheckAndThrow();
-  logMessage.error("Getting setting with internalId: " + internalId);
+  logMessage.info("Getting setting with internalId: " + internalId);
   return getFullAppSetting(ability, internalId);
 }
 
@@ -73,4 +69,12 @@ export async function deleteSetting(internalId: string) {
     throw new Error("Error deleting setting");
   });
   revalidatePath("(gcforms)/[locale]/(app administration)/admin/(with nav)/settings", "page");
+}
+
+// Internal and private functions - won't be converted into server actions
+
+function nullCheck(formData: FormData, key: string) {
+  const result = formData.get(key);
+  if (!result) throw new Error(`No value found for ${key}`);
+  return result as string;
 }

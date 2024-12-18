@@ -1,10 +1,13 @@
 "use server";
+
 import * as v from "valibot";
 import { serverTranslation } from "@i18n";
 import { createSecurityAnswers } from "@lib/auth";
 import { createAbility } from "@lib/privileges";
 import { logMessage } from "@lib/logger";
 import { authCheckAndThrow } from "@lib/actions";
+
+// Public facing functions - they can be used by anyone who finds the associated server action identifer
 
 export interface ErrorStates {
   validationErrors?: {
@@ -13,6 +16,43 @@ export interface ErrorStates {
   }[];
   generalError?: string;
 }
+
+export const setupQuestions = async (
+  language: string,
+  _: ErrorStates,
+  formData: FormData
+): Promise<ErrorStates> => {
+  const { session } = await authCheckAndThrow().catch(() => ({ session: null }));
+  const { t } = await serverTranslation(["setup-security-questions"], { lang: language });
+  if (!session) return { generalError: t("errors.serverError.title") };
+
+  const ability = createAbility(session);
+
+  const rawFormData = Object.fromEntries(formData.entries());
+
+  const result = await validateData(rawFormData, language);
+  if (!result.success) {
+    return {
+      validationErrors: result.issues.map((issue) => ({
+        fieldKey: issue.path?.[0].key as string,
+        fieldValue: issue.message,
+      })),
+    };
+  }
+
+  return createSecurityAnswers(ability, [
+    { questionId: result.output.question1, answer: result.output.answer1 },
+    { questionId: result.output.question2, answer: result.output.answer2 },
+    { questionId: result.output.question3, answer: result.output.answer3 },
+  ])
+    .then(() => ({}))
+    .catch((error) => {
+      logMessage.warn(error);
+      return { generalError: t("errors.serverError.title") };
+    });
+};
+
+// Internal and private functions - won't be converted into server actions
 
 const validateData = async (formData: { [k: string]: FormDataEntryValue }, language: string) => {
   const { t } = await serverTranslation(["setup-security-questions"], { lang: language });
@@ -66,39 +106,4 @@ const validateData = async (formData: { [k: string]: FormDataEntryValue }, langu
   );
 
   return v.safeParse(schema, formData, { abortPipeEarly: true });
-};
-
-export const setupQuestions = async (
-  language: string,
-  _: ErrorStates,
-  formData: FormData
-): Promise<ErrorStates> => {
-  const { t } = await serverTranslation(["setup-security-questions"], { lang: language });
-  const { session } = await authCheckAndThrow().catch(() => ({ session: null }));
-  if (!session) return { generalError: t("errors.serverError.title") };
-
-  const ability = createAbility(session);
-
-  const rawFormData = Object.fromEntries(formData.entries());
-
-  const result = await validateData(rawFormData, language);
-  if (!result.success) {
-    return {
-      validationErrors: result.issues.map((issue) => ({
-        fieldKey: issue.path?.[0].key as string,
-        fieldValue: issue.message,
-      })),
-    };
-  }
-
-  return createSecurityAnswers(ability, [
-    { questionId: result.output.question1, answer: result.output.answer1 },
-    { questionId: result.output.question2, answer: result.output.answer2 },
-    { questionId: result.output.question3, answer: result.output.answer3 },
-  ])
-    .then(() => ({}))
-    .catch((error) => {
-      logMessage.warn(error);
-      return { generalError: t("errors.serverError.title") };
-    });
 };
