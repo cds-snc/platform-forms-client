@@ -417,6 +417,8 @@ export const Form = withFormik<FormProps, Responses>({
         formikBag.props.formRecord
       );
 
+      logMessage.info(`Form submission result: ${JSON.stringify(result)}`);
+
       if (result.error) {
         if (result.error.message.includes("FileValidationResult")) {
           formikBag.setStatus("FileError");
