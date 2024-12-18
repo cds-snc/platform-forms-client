@@ -61,22 +61,6 @@ const createTemplateStore = (initProps?: Partial<InitialTemplateStoreProps>) => 
         persist(
           (set, get) => ({
             ...props,
-            setChangeKey: (key: string) => {
-              set((state) => {
-                state.changeKey = key;
-              });
-            },
-            setHasHydrated: () => {
-              set({ hasHydrated: true });
-            },
-            setId: (id) =>
-              set((state) => {
-                state.id = id;
-              }),
-            setLang: (lang) =>
-              set((state) => {
-                state.lang = lang;
-              }),
             toggleLang: () =>
               set((state) => {
                 state.lang = state.lang === "en" ? "fr" : "en";
@@ -85,14 +69,6 @@ const createTemplateStore = (initProps?: Partial<InitialTemplateStoreProps>) => 
               set((state) => {
                 state.translationLanguagePriority =
                   state.translationLanguagePriority === "en" ? "fr" : "en";
-              }),
-            setTranslationLanguagePriority: (lang: Language) =>
-              set((state) => {
-                state.translationLanguagePriority = lang;
-              }),
-            setFocusInput: (isSet) =>
-              set((state) => {
-                state.focusInput = isSet;
               }),
             getFocusInput: () => get().focusInput,
             // Use on a child element to declare the language when the parent element lang attribute is different
@@ -103,10 +79,6 @@ const createTemplateStore = (initProps?: Partial<InitialTemplateStoreProps>) => 
             updateField: (path, value) =>
               set((state) => {
                 update(state, path, cleanInput(value));
-              }),
-            updateSecurityAttribute: (value) =>
-              set((state) => {
-                state.securityAttribute = value;
               }),
             unsetField: (path) =>
               set((state) => {
@@ -132,41 +104,36 @@ const createTemplateStore = (initProps?: Partial<InitialTemplateStoreProps>) => 
             removeSubChoice: removeSubChoice(set),
             getChoice: getChoice(set, get),
             duplicateElement: duplicateElement(set, get),
-            getSchema: () => {
-              return JSON.stringify(getSchemaFromState(get(), get().allowGroupsFlag), null, 2);
-            },
+            initialize: initialize(set),
+            importTemplate: importTemplate(set),
+            getHighestElementId: getHighestElementId(set, get),
+            generateElementId: generateElementId(set, get),
+            getSchema: () =>
+              JSON.stringify(getSchemaFromState(get(), get().allowGroupsFlag), null, 2),
             getId: () => get().id,
             getIsPublished: () => get().isPublished,
-            setIsPublished: (isPublished) => {
-              set((state) => {
-                state.isPublished = isPublished;
-              });
-            },
             getFormElementById: getFormElementById(set, get),
             getFormElementWithIndexById: getFormElementWithIndexById(set, get),
             getName: () => get().name,
             getDeliveryOption: () => get().deliveryOption,
-            resetDeliveryOption: () => {
-              set((state) => {
-                state.deliveryOption = undefined;
-              });
-            },
             getSecurityAttribute: () => get().securityAttribute,
-            setClosingDate: (value) => {
-              set((state) => {
-                state.closingDate = value;
-              });
-            },
-            initialize: initialize(set),
-            importTemplate: importTemplate(set),
             getGroupsEnabled: () => get().allowGroupsFlag,
+            setChangeKey: (key: string) => set({ changeKey: key }),
+            setHasHydrated: () => set({ hasHydrated: true }),
+            setId: (id) => set({ id }),
+            setLang: (lang) => set({ lang }),
+            setTranslationLanguagePriority: (lang: Language) =>
+              set({ translationLanguagePriority: lang }),
+            setFocusInput: (isSet) => set({ focusInput: isSet }),
+            setIsPublished: (isPublished) => set({ isPublished }),
+            setClosingDate: (value) => set({ closingDate: value }),
             setGroupsLayout: (layout) => {
               set((state) => {
                 state.form.groupsLayout = layout;
               });
             },
-            getHighestElementId: getHighestElementId(set, get),
-            generateElementId: generateElementId(set, get),
+            updateSecurityAttribute: (value) => set({ securityAttribute: value }),
+            resetDeliveryOption: () => set({ deliveryOption: undefined }),
           }),
           storageOptions
         )
