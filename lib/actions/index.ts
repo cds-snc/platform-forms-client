@@ -1,2 +1,2 @@
 import "server-only";
-export { authCheckAndRedirect, authCheckAndThrow } from "./auth";
+export { authCheckAndRedirect, authCheckAndThrow, AuthenticatedAction } from "./auth";

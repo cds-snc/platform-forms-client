@@ -1,6 +1,7 @@
 "use server";
 
-import { authCheckAndThrow } from "@lib/actions";
+import { AuthenticatedAction } from "@lib/actions";
+import { getAbility } from "@lib/privileges";
 import {
   DeliveryOption,
   FormProperties,
@@ -35,41 +36,43 @@ export type CreateOrUpdateTemplateType = {
   formPurpose?: FormPurpose;
 };
 
-export const createOrUpdateTemplate = async ({
-  id,
-  formConfig,
-  name,
-  deliveryOption,
-  securityAttribute,
-  formPurpose,
-}: CreateOrUpdateTemplateType): Promise<{
-  formRecord: FormRecord | null;
-  error?: string;
-}> => {
-  try {
-    revalidatePath("/[locale]/forms", "page");
+export const createOrUpdateTemplate = AuthenticatedAction(
+  async ({
+    id,
+    formConfig,
+    name,
+    deliveryOption,
+    securityAttribute,
+    formPurpose,
+  }: CreateOrUpdateTemplateType): Promise<{
+    formRecord: FormRecord | null;
+    error?: string;
+  }> => {
+    try {
+      revalidatePath("/[locale]/forms", "page");
 
-    if (id) {
-      return await updateTemplate({
-        id,
+      if (id) {
+        return await updateTemplate({
+          id,
+          formConfig,
+          name,
+          deliveryOption,
+          securityAttribute,
+          formPurpose,
+        });
+      }
+      return await createTemplate({
         formConfig,
         name,
         deliveryOption,
         securityAttribute,
         formPurpose,
       });
+    } catch (e) {
+      return { formRecord: null, error: (e as Error).message };
     }
-    return await createTemplate({
-      formConfig,
-      name,
-      deliveryOption,
-      securityAttribute,
-      formPurpose,
-    });
-  } catch (e) {
-    return { formRecord: null, error: (e as Error).message };
   }
-};
+);
 
 const createTemplate = async ({
   formConfig,
@@ -88,11 +91,10 @@ const createTemplate = async ({
   error?: string;
 }> => {
   try {
-    const { session, ability } = await authCheckAndThrow();
+    const ability = await getAbility();
 
     const response = await createDbTemplate({
-      ability: ability,
-      userID: session.user.id,
+      userID: ability.userID,
       formConfig: formConfig,
       name: name,
       deliveryOption: deliveryOption,
@@ -112,257 +114,255 @@ const createTemplate = async ({
   }
 };
 
-export const updateTemplate = async ({
-  id: formID,
-  formConfig,
-  name,
-  deliveryOption,
-  securityAttribute,
-  formPurpose,
-}: {
-  id: string;
-  formConfig: FormProperties;
-  name?: string;
-  deliveryOption?: DeliveryOption;
-  securityAttribute?: SecurityAttribute;
-  formPurpose?: FormPurpose;
-}): Promise<{
-  formRecord: FormRecord | null;
-  error?: string;
-}> => {
-  try {
-    const { ability } = await authCheckAndThrow();
+export const updateTemplate = AuthenticatedAction(
+  async ({
+    id: formID,
+    formConfig,
+    name,
+    deliveryOption,
+    securityAttribute,
+    formPurpose,
+  }: {
+    id: string;
+    formConfig: FormProperties;
+    name?: string;
+    deliveryOption?: DeliveryOption;
+    securityAttribute?: SecurityAttribute;
+    formPurpose?: FormPurpose;
+  }): Promise<{
+    formRecord: FormRecord | null;
+    error?: string;
+  }> => {
+    try {
+      const response = await updateDbTemplate({
+        formID: formID,
+        formConfig: formConfig,
+        name: name,
+        deliveryOption: deliveryOption,
+        securityAttribute: securityAttribute,
+        formPurpose: formPurpose,
+      });
+      if (!response) {
+        throw new Error(
+          `Template API response was null. Request information: { formConfig: ${formConfig}, name: ${name}, deliveryOption: ${deliveryOption}, securityAttribute: ${securityAttribute}`
+        );
+      }
+      return { formRecord: response };
+    } catch (error) {
+      return { formRecord: null, error: (error as Error).message };
+    }
+  }
+);
 
-    const response = await updateDbTemplate({
-      ability: ability,
-      formID: formID,
-      formConfig: formConfig,
-      name: name,
-      deliveryOption: deliveryOption,
-      securityAttribute: securityAttribute,
-      formPurpose: formPurpose,
-    });
-    if (!response) {
-      throw new Error(
-        `Template API response was null. Request information: { formConfig: ${formConfig}, name: ${name}, deliveryOption: ${deliveryOption}, securityAttribute: ${securityAttribute}`
+export const updateTemplatePublishedStatus = AuthenticatedAction(
+  async ({
+    id: formID,
+    isPublished,
+    publishReason,
+    publishFormType,
+    publishDescription,
+  }: {
+    id: string;
+    isPublished: boolean;
+    publishReason: string;
+    publishFormType: string;
+    publishDescription: string;
+  }): Promise<{
+    formRecord: FormRecord | null;
+    error?: string;
+  }> => {
+    try {
+      const response = await updateIsPublishedForTemplate(
+        formID,
+        isPublished,
+        publishReason,
+        publishFormType,
+        publishDescription
       );
+      if (!response) {
+        throw new Error(
+          `Template API response was null. Request information: { ${formID}, ${isPublished} }`
+        );
+      }
+
+      revalidatePath("/form-builder/[id]", "layout");
+
+      return { formRecord: response };
+    } catch (error) {
+      return { formRecord: null, error: (error as Error).message };
     }
-    return { formRecord: response };
-  } catch (error) {
-    return { formRecord: null, error: (error as Error).message };
   }
-};
+);
 
-export const updateTemplatePublishedStatus = async ({
-  id: formID,
-  isPublished,
-  publishReason,
-  publishFormType,
-  publishDescription,
-}: {
-  id: string;
-  isPublished: boolean;
-  publishReason: string;
-  publishFormType: string;
-  publishDescription: string;
-}): Promise<{
-  formRecord: FormRecord | null;
-  error?: string;
-}> => {
-  try {
-    const { ability } = await authCheckAndThrow();
+export const updateTemplateFormPurpose = AuthenticatedAction(
+  async ({
+    id: formID,
+    formPurpose,
+  }: {
+    id: string;
+    formPurpose: string;
+  }): Promise<{
+    formRecord: FormRecord | null;
+    error?: string;
+  }> => {
+    try {
+      const response = await updateFormPurpose(formID, formPurpose);
+      if (!response) {
+        throw new Error(
+          `Template API response was null. Request information: { ${formID}, ${formPurpose} }`
+        );
+      }
 
-    const response = await updateIsPublishedForTemplate(
-      ability,
-      formID,
-      isPublished,
-      publishReason,
-      publishFormType,
-      publishDescription
-    );
-    if (!response) {
-      throw new Error(
-        `Template API response was null. Request information: { ${formID}, ${isPublished} }`
-      );
+      return { formRecord: response };
+    } catch (error) {
+      return { formRecord: null, error: (error as Error).message };
     }
-
-    revalidatePath("/form-builder/[id]", "layout");
-
-    return { formRecord: response };
-  } catch (error) {
-    return { formRecord: null, error: (error as Error).message };
   }
-};
+);
 
-export const updateTemplateFormPurpose = async ({
-  id: formID,
-  formPurpose,
-}: {
-  id: string;
-  formPurpose: string;
-}): Promise<{
-  formRecord: FormRecord | null;
-  error?: string;
-}> => {
-  try {
-    const { ability } = await authCheckAndThrow();
+export const updateTemplateSecurityAttribute = AuthenticatedAction(
+  async ({
+    id: formID,
+    securityAttribute,
+  }: {
+    id: string;
+    securityAttribute: SecurityAttribute;
+  }): Promise<{
+    formRecord: FormRecord | null;
+    error?: string;
+  }> => {
+    try {
+      const response = await updateSecurityAttribute(formID, securityAttribute);
+      if (!response) {
+        throw new Error(
+          `Template API response was null. Request information: { ${formID}, ${securityAttribute} }`
+        );
+      }
 
-    const response = await updateFormPurpose(ability, formID, formPurpose);
-    if (!response) {
-      throw new Error(
-        `Template API response was null. Request information: { ${formID}, ${formPurpose} }`
-      );
+      return { formRecord: response };
+    } catch (error) {
+      return { formRecord: null, error: (error as Error).message };
     }
-
-    return { formRecord: response };
-  } catch (error) {
-    return { formRecord: null, error: (error as Error).message };
   }
-};
+);
 
-export const updateTemplateSecurityAttribute = async ({
-  id: formID,
-  securityAttribute,
-}: {
-  id: string;
-  securityAttribute: SecurityAttribute;
-}): Promise<{
-  formRecord: FormRecord | null;
-  error?: string;
-}> => {
-  try {
-    const { ability } = await authCheckAndThrow();
+export const closeForm = AuthenticatedAction(
+  async ({
+    id: formID,
+    closingDate,
+    closedDetails,
+  }: {
+    id: string;
+    closingDate: string | null;
+    closedDetails?: ClosedDetails;
+  }): Promise<{
+    formID: string;
+    closingDate: string | null;
+    error?: string;
+  }> => {
+    try {
+      // closingDate: null means the form is open, or will be set to be open
+      // closingDate: a current or past date means the form is closed
+      // closingDate: a future date means the form is scheduled to close in the future
 
-    const response = await updateSecurityAttribute(ability, formID, securityAttribute);
-    if (!response) {
-      throw new Error(
-        `Template API response was null. Request information: { ${formID}, ${securityAttribute} }`
-      );
+      if (closingDate && !isValidDateString(closingDate)) {
+        throw new Error(`Invalid closing date. Request information: { ${formID}, ${closingDate} }`);
+      }
+
+      const response = await updateClosedData(formID, closingDate, closedDetails);
+      if (!response) {
+        throw new Error(
+          `Template API response was null. Request information: { ${formID}, ${closingDate} }`
+        );
+      }
+
+      return response;
+    } catch (error) {
+      return { formID: "", closingDate: null, error: (error as Error).message };
     }
-
-    return { formRecord: response };
-  } catch (error) {
-    return { formRecord: null, error: (error as Error).message };
   }
-};
+);
 
-export const closeForm = async ({
-  id: formID,
-  closingDate,
-  closedDetails,
-}: {
-  id: string;
-  closingDate: string | null;
-  closedDetails?: ClosedDetails;
-}): Promise<{
-  formID: string;
-  closingDate: string | null;
-  error?: string;
-}> => {
-  try {
-    const { ability } = await authCheckAndThrow();
-
-    // closingDate: null means the form is open, or will be set to be open
-    // closingDate: a current or past date means the form is closed
-    // closingDate: a future date means the form is scheduled to close in the future
-
-    if (closingDate && !isValidDateString(closingDate)) {
-      throw new Error(`Invalid closing date. Request information: { ${formID}, ${closingDate} }`);
+export const updateTemplateUsers = AuthenticatedAction(
+  async ({
+    id: formID,
+    users,
+  }: {
+    id: string;
+    users: { id: string }[];
+  }): Promise<{
+    success: boolean;
+    error?: string;
+  }> => {
+    if (!users.length) {
+      return { success: false, error: "mustHaveAtLeastOneUser" };
     }
 
-    const response = await updateClosedData(ability, formID, closingDate, closedDetails);
-    if (!response) {
-      throw new Error(
-        `Template API response was null. Request information: { ${formID}, ${closingDate} }`
-      );
+    try {
+      const response = await updateAssignedUsersForTemplate(formID, users);
+      if (!response) {
+        throw new Error(
+          `Template API response was null. Request information: { ${formID}, ${users} }`
+        );
+      }
+
+      return { success: true };
+    } catch (error) {
+      return { success: false, error: (error as Error).message };
     }
-
-    return response;
-  } catch (error) {
-    return { formID: "", closingDate: null, error: (error as Error).message };
   }
-};
+);
 
-export const updateTemplateUsers = async ({
-  id: formID,
-  users,
-}: {
-  id: string;
-  users: { id: string }[];
-}): Promise<{
-  success: boolean;
-  error?: string;
-}> => {
-  if (!users.length) {
-    return { success: false, error: "mustHaveAtLeastOneUser" };
-  }
+export const updateTemplateDeliveryOption = AuthenticatedAction(
+  async ({
+    id: formID,
+    deliveryOption,
+  }: {
+    id: string;
+    deliveryOption: DeliveryOption | undefined;
+  }): Promise<{
+    formRecord: FormRecord | null;
+    error?: string;
+  }> => {
+    try {
+      if (!deliveryOption) {
+        throw new Error("Require Delivery Option Data");
+      }
 
-  try {
-    const { ability } = await authCheckAndThrow();
+      const response = await updateResponseDeliveryOption(formID, deliveryOption);
+      if (!response) {
+        throw new Error(
+          `Template API response was null. Request information: { ${formID}, ${deliveryOption} }`
+        );
+      }
 
-    const response = await updateAssignedUsersForTemplate(ability, formID, users);
-    if (!response) {
-      throw new Error(
-        `Template API response was null. Request information: { ${formID}, ${users} }`
-      );
+      return { formRecord: response };
+    } catch (error) {
+      return { formRecord: null, error: (error as Error).message };
     }
-
-    return { success: true };
-  } catch (error) {
-    return { success: false, error: (error as Error).message };
   }
-};
+);
 
-export const updateTemplateDeliveryOption = async ({
-  id: formID,
-  deliveryOption,
-}: {
-  id: string;
-  deliveryOption: DeliveryOption | undefined;
-}): Promise<{
-  formRecord: FormRecord | null;
-  error?: string;
-}> => {
-  try {
-    if (!deliveryOption) {
-      throw new Error("Require Delivery Option Data");
+export const sendResponsesToVault = AuthenticatedAction(
+  async ({
+    id: formID,
+  }: {
+    id: string;
+  }): Promise<{
+    success?: boolean;
+    error?: string;
+  }> => {
+    try {
+      await removeDeliveryOption(formID);
+
+      return {
+        success: true,
+      };
+    } catch (error) {
+      return { success: false, error: (error as Error).message };
     }
-
-    const { ability } = await authCheckAndThrow();
-
-    const response = await updateResponseDeliveryOption(ability, formID, deliveryOption);
-    if (!response) {
-      throw new Error(
-        `Template API response was null. Request information: { ${formID}, ${deliveryOption} }`
-      );
-    }
-
-    return { formRecord: response };
-  } catch (error) {
-    return { formRecord: null, error: (error as Error).message };
   }
-};
-
-export const sendResponsesToVault = async ({
-  id: formID,
-}: {
-  id: string;
-}): Promise<{
-  success?: boolean;
-  error?: string;
-}> => {
-  try {
-    const { ability } = await authCheckAndThrow();
-
-    await removeDeliveryOption(ability, formID);
-
-    return {
-      success: true,
-    };
-  } catch (error) {
-    return { success: false, error: (error as Error).message };
-  }
-};
+);
 
 export const getTranslatedElementProperties = async (type: string) => {
   const { t: en } = await serverTranslation("form-builder", { lang: "en" });

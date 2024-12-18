@@ -46,7 +46,7 @@ export default async function Page(props: { params: Promise<{ id: string; locale
   const formUser = await getUser(ability, id);
 
   const templates = (
-    await getAllTemplates(ability, {
+    await getAllTemplates({
       requestedWhere: {
         users: {
           some: {

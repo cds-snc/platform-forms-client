@@ -21,7 +21,8 @@ import {
 } from "./cache/unprocessedSubmissionsCache";
 import { dynamoDBDocumentClient } from "./integration/awsServicesConnector";
 import { logMessage } from "./logger";
-import { AccessControlError, checkPrivileges } from "./privileges";
+import { checkPrivileges } from "./privileges";
+import { AccessControlError } from "@lib/auth";
 import { chunkArray } from "@lib/utils";
 import { TemplateAlreadyPublishedError } from "@lib/templates";
 import { getAppSetting } from "./appSettings";

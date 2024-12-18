@@ -9,7 +9,7 @@ import { languages } from "@i18n/settings";
 import { Noto_Sans, Lato } from "next/font/google";
 import { googleTagManager } from "@lib/cspScripts";
 import { headers } from "next/headers";
-import { authCheckAndThrow } from "@lib/actions";
+import { auth } from "@lib/auth";
 
 const notoSans = Noto_Sans({
   weight: ["100", "200", "300", "400", "500", "600", "700", "800", "900"],
@@ -40,7 +40,7 @@ const NoIndexMetaTag =
 export default async function Layout({ children }: { children: React.ReactNode }) {
   const locale = (await cookies()).get("i18next")?.value ?? languages[0];
   const nonce = (await headers()).get("x-nonce") ?? "";
-  const { session } = await authCheckAndThrow().catch(() => ({ session: null }));
+  const session = await auth();
   return (
     <html lang={locale} dir={dir(locale)} className={`${notoSans.variable} ${lato.variable}`}>
       <head>

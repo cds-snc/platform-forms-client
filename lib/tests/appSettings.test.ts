@@ -6,7 +6,8 @@ import {
   updateAppSetting,
   deleteAppSetting,
 } from "@lib/appSettings";
-import { AccessControlError, createAbility } from "@lib/privileges";
+import { createAbility } from "@lib/privileges";
+import { AccessControlError } from "@lib/auth";
 import {
   Base,
   mockUserPrivileges,
@@ -18,6 +19,7 @@ import { Session } from "next-auth";
 import { logEvent } from "@lib/auditLogs";
 
 const mockedLogEvent = jest.mocked(logEvent, { shallow: true });
+jest.mock("@lib/auth");
 
 // Needed because of a TypeScript error not allowing for non-default exported spyOn items.
 jest.mock("@lib/cache/settingCache", () => ({
@@ -156,7 +158,7 @@ describe("Application Settings", () => {
 
       await expect(async () => {
         await createAppSetting(ability, data);
-      }).rejects.toThrowError(new AccessControlError(`Access Control Forbidden Action`));
+      }).rejects.toBeInstanceOf(AccessControlError);
       // Ensure audit logging is called
       expect(mockedLogEvent).toHaveBeenCalledTimes(1);
       expect(mockedLogEvent).toHaveBeenCalledWith(
@@ -228,7 +230,7 @@ describe("Application Settings", () => {
 
       await expect(async () => {
         await updateAppSetting(ability, data.internalId, data);
-      }).rejects.toThrowError(new AccessControlError(`Access Control Forbidden Action`));
+      }).rejects.toBeInstanceOf(AccessControlError);
 
       expect(cacheSpy).not.toHaveBeenCalled();
       // Ensure audit logging is called
@@ -284,7 +286,7 @@ describe("Application Settings", () => {
 
       await expect(async () => {
         await deleteAppSetting(ability, "testSetting");
-      }).rejects.toThrowError(new AccessControlError(`Access Control Forbidden Action`));
+      }).rejects.toBeInstanceOf(AccessControlError);
 
       expect(cacheSpy).not.toHaveBeenCalled();
       // Ensure audit logging is called

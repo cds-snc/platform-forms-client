@@ -97,8 +97,7 @@ export default async function Page(props: { params: Promise<{ id: string }> }) {
     );
   }
 
-  const templateWithAssociatedUsers =
-    ability && (await getTemplateWithAssociatedUsers(ability, id));
+  const templateWithAssociatedUsers = ability && (await getTemplateWithAssociatedUsers(id));
 
   if (!templateWithAssociatedUsers) {
     throw new Error("Template not found");
