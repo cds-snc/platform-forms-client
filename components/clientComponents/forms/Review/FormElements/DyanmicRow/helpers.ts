@@ -3,7 +3,7 @@ import { FormItem } from "../../helpers";
 import { Language } from "@lib/types/form-builder-types";
 import { getLocalizedProperty } from "@lib/utils";
 
-export const getReviewItemFromDynamicRows = (
+export const getReviewSectionFromDynamicRows = (
   formItem: FormItem,
   formValues: FormValues | void,
   language: Language
