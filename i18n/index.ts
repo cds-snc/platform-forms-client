@@ -24,9 +24,9 @@ export async function serverTranslation(
   ns?: string | string[],
   options?: { keyPrefix?: string; lang?: string }
 ) {
-  const path = headers().get("x-path") ?? "";
+  const path = (await headers()).get("x-path") ?? "";
   const pathLang = pathLanguageDetection(path, languages);
-  const cookieLang = cookies().get("i18next")?.value;
+  const cookieLang = (await cookies()).get("i18next")?.value;
 
   const i18nLang = options?.lang || pathLang || cookieLang || languages[0];
 

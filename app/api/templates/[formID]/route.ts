@@ -40,7 +40,8 @@ const runValidationCondition = async (body: Record<string, unknown>) => {
   return body.formConfig !== undefined;
 };
 
-export const GET = async (req: NextRequest, { params }: { params: Record<string, string> }) => {
+export const GET = async (req: NextRequest, props: { params: Promise<Record<string, string>> }) => {
+  const params = await props.params;
   try {
     const formID = params?.formID;
 

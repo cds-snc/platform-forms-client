@@ -23,15 +23,18 @@ const Info = async ({ locale }: { locale: string }) => {
   );
 };
 
-export default async function Layout({
-  children,
-  params: { locale },
-}: {
+export default async function Layout(props: {
   children: React.ReactNode;
-  params: { locale: string };
+  params: Promise<{ locale: string }>;
 }) {
+  const params = await props.params;
+
+  const { locale } = params;
+
+  const { children } = props;
+
   const { t } = await serverTranslation("common", { lang: locale });
-  const headersList = headers();
+  const headersList = await headers();
   const currentPath = headersList.get("x-path")?.replace(`/${locale}`, "");
 
   return (
