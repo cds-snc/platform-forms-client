@@ -2,9 +2,9 @@
 import { Language, FormServerErrorCodes, ServerActionError } from "@lib/types/form-builder-types";
 import { getAppSetting } from "@lib/appSettings";
 import { logEvent } from "@lib/auditLogs";
-
+import { AccessControlError } from "@lib/auth";
 import { ucfirst } from "@lib/client/clientHelpers";
-import { AccessControlError, createAbility } from "@lib/privileges";
+import { createAbility } from "@lib/privileges";
 import {
   Answer,
   CSVResponse,
@@ -16,7 +16,13 @@ import {
   JSONResponse,
 } from "@lib/responseDownloadFormats/types";
 import { getFullTemplateByID } from "@lib/templates";
-import { AddressComponents, FormElement, FormElementTypes, VaultStatus } from "@lib/types";
+import {
+  AddressComponents,
+  FormElement,
+  FormElementTypes,
+  StartFromExclusiveResponse,
+  VaultStatus,
+} from "@lib/types";
 import { isResponseId } from "@lib/validation/validation";
 import {
   confirmResponses,
@@ -70,7 +76,6 @@ export const fetchSubmissions = async ({
     if (!formId) {
       return {
         submissions: [],
-        lastEvaluatedKey: null,
       };
     }
 
@@ -80,29 +85,38 @@ export const fetchSubmissions = async ({
       ? (ucfirst(status) as VaultStatus)
       : VaultStatus.NEW;
 
-    let currentLastEvaluatedKey = null;
+    let startFromExclusiveResponse: StartFromExclusiveResponse | undefined = undefined;
 
-    // build up lastEvaluatedKey from lastKey url param
-    if (lastKey && isResponseId(String(lastKey))) {
-      currentLastEvaluatedKey = {
-        Status: selectedStatus,
-        NAME_OR_CONF: `NAME#${lastKey}`,
-        FormID: formId,
-      };
+    // build up startFromExclusiveResponse from lastKey url param
+    if (lastKey) {
+      const splitLastKey = lastKey.split("_");
+
+      // Make sure both components of lastKey are valid
+      if (
+        isResponseId(String(splitLastKey[0])) &&
+        isNaN(new Date(Number(splitLastKey[1])).getTime()) === false
+      ) {
+        startFromExclusiveResponse = {
+          name: splitLastKey[0],
+          status: selectedStatus,
+          createdAt: Number(splitLastKey[1]),
+        };
+      }
     }
 
-    const { submissions, lastEvaluatedKey } = await listAllSubmissions(
-      ability,
-      formId,
-      selectedStatus,
-      undefined,
-      currentLastEvaluatedKey
-    );
+    const { submissions, startFromExclusiveResponse: nextStartFromExclusiveResponse } =
+      await listAllSubmissions(
+        ability,
+        formId,
+        selectedStatus,
+        undefined,
+        startFromExclusiveResponse
+      );
 
-    return { submissions, lastEvaluatedKey };
+    return { submissions, startFromExclusiveResponse: nextStartFromExclusiveResponse };
   } catch (e) {
     logMessage.error(`Error fetching submissions for form ${formId}: ${(e as Error).message}`);
-    return { error: true, submissions: [], lastEvaluatedKey: null };
+    return { error: true, submissions: [] };
   }
 };
 
@@ -204,7 +218,7 @@ export const getSubmissionsByFormat = async ({
       );
     }
 
-    const fullFormTemplate = await getFullTemplateByID(ability, formID);
+    const fullFormTemplate = await getFullTemplateByID(formID);
 
     if (fullFormTemplate === null) {
       logMessage.warn(`getSubmissionsByFormat form not found: ${formID}`);

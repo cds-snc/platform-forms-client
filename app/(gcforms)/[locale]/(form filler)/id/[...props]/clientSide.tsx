@@ -6,7 +6,9 @@ import { FormRecord, TypeOmit } from "@lib/types";
 import { Form } from "@clientComponents/forms/Form/Form";
 import { Language } from "@lib/types/form-builder-types";
 
-import type { JSX } from "react";
+import { useEffect, useState, type JSX } from "react";
+import { useGCFormsContext } from "@lib/hooks/useGCFormContext";
+import { FormValues } from "@lib/formContext";
 
 export const FormWrapper = ({
   formRecord,
@@ -24,22 +26,38 @@ export const FormWrapper = ({
   } = useTranslation(["common", "welcome", "confirmation", "form-closed"]);
   const router = useRouter();
 
+  const { restoreProgress } = useGCFormsContext();
+  const [initialValues, setInitialValues] = useState<FormValues | undefined>();
+
+  const { saveProgress } = useGCFormsContext();
+
+  useEffect(() => {
+    const restoredValues = restoreProgress();
+    if (restoredValues) {
+      setInitialValues(restoredValues);
+    }
+  }, [restoreProgress]);
+
   return (
     <Form
+      initialValues={initialValues || undefined}
       formRecord={formRecord}
       language={language}
       onSuccess={(formID) => {
         router.push(`/${language}/id/${formID}/confirmation`);
       }}
       t={t}
+      saveProgress={saveProgress}
       renderSubmit={({ validateForm, fallBack }) => {
         return (
-          <NextButton
-            formRecord={formRecord}
-            language={language as Language}
-            validateForm={validateForm}
-            fallBack={fallBack}
-          />
+          <>
+            <NextButton
+              formRecord={formRecord}
+              language={language as Language}
+              validateForm={validateForm}
+              fallBack={fallBack}
+            />
+          </>
         );
       }}
       allowGrouping={allowGrouping}

@@ -37,7 +37,7 @@ export const inviteUserByEmail = async (
     throw new UserNotFoundError();
   });
 
-  const template = await getTemplateWithAssociatedUsers(ability, formId);
+  const template = await getTemplateWithAssociatedUsers(formId);
 
   if (!template) {
     throw new TemplateNotFoundError();

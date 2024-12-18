@@ -27,7 +27,7 @@ export const cancelInvitation = async (ability: UserAbility, invitationId: strin
     throw new InvitationNotFoundError();
   }
 
-  const template = await getTemplateWithAssociatedUsers(ability, invitation.templateId);
+  const template = await getTemplateWithAssociatedUsers(invitation.templateId);
 
   if (!template) {
     throw new TemplateNotFoundError();

@@ -1,5 +1,5 @@
 "use client";
-import { useState, useCallback, KeyboardEvent, useRef } from "react";
+import { useState, useCallback, KeyboardEvent, useRef, type JSX } from "react";
 interface PanelButton {
   id: number;
   txt: string;
