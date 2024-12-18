@@ -34,18 +34,18 @@
   },
   "throttling": {
     "title": "API rate limit",
-    "description": "Increase API rate limit for up to 12 weeks",
+    "description": "Increase API rate limit to 1000 requests per minute",
     "weeks": "weeks",
     "permanent": "Increase API rate limit indefinitely",
     "updateRate": "Modify API rate",
-    "resetRate": "Reset API rate",
-    "tooltip": "Checking this will not schedule the API rate for a specific period of time. To schedule an end to the API rate, uncheck this and the 'weeks' input will be enabled.",
+    "resetRate": "Reset API rate to 500 requests per minute",
+    "tooltip": "Checking this will not schedule the API rate for a specific period of time. To schedule an end to the API rate, uncheck this and the 'weeks' input will be enabled, for up to 12 weeks.",
     "succcessUpdate": {
-      "title": "API rate increased",
-      "description": "The API rate will stay in effect until: {{success}}"
+      "title": "API rate increased to 1000 requests per minute",
+      "description": "New rate will stay in effect until: {{success}}"
     },
     "succcessReset": {
-      "title": "API rate was reset."
+      "title": "API rate was reset to 500 requests per minute."
     },
     "error": "API rate could not be modified. Try again later."
   }
