@@ -16,5 +16,5 @@
     "postalCodeOrZip": "Code postal ou zip",
     "country": "Pays"
   },
-  "instance": "[FR]instance"
+  "instance": "[FR]Instance - {{index}}"
 }

@@ -36,7 +36,7 @@ export const DynamicRow = ({ formItem, language }: { formItem: FormItem; languag
         const dynamicRowElements = getDynamicRowElements(formItem as FormItem, language);
         return (
           <dl className="my-10" key={`${(formItem as FormItem).element?.id}-${index}`}>
-            <h5 className="mb-8">{`${t("instance")} - ${index + 1}`}</h5>
+            <h5 className="mb-8">{t("instance", { index: index + 1 })}</h5>
             {dynamicRowElements}
           </dl>
         );
