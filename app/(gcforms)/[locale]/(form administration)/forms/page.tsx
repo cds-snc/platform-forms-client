@@ -25,24 +25,31 @@ export type FormsTemplate = {
   overdue: boolean;
 };
 
-export async function generateMetadata({
-  params: { locale },
-}: {
-  params: { locale: string };
+export async function generateMetadata(props: {
+  params: Promise<{ locale: string }>;
 }): Promise<Metadata> {
+  const params = await props.params;
+
+  const { locale } = params;
+
   const { t } = await serverTranslation("my-forms", { lang: locale });
   return {
     title: t("title"),
   };
 }
 
-export default async function Page({
-  params: { locale },
-  searchParams: { status },
-}: {
-  params: { locale: string };
-  searchParams: { status?: string };
+export default async function Page(props: {
+  params: Promise<{ locale: string }>;
+  searchParams: Promise<{ status?: string }>;
 }) {
+  const searchParams = await props.searchParams;
+
+  const { status } = searchParams;
+
+  const params = await props.params;
+
+  const { locale } = params;
+
   try {
     const { session } = await authCheckAndRedirect();
 

@@ -1,10 +1,10 @@
-import { headers } from "next/headers";
+import { headers, type UnsafeUnwrappedHeaders } from "next/headers";
 
 /**
  * Extract the origin from the request's headers.
  */
 export function getOrigin(): string {
-  const h = headers();
+  const h = headers() as unknown as UnsafeUnwrappedHeaders;
 
   const detectedHost = h.get("host");
   const detectedProtocol = h.get("x-forwarded-proto") ?? "https";
