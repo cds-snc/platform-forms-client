@@ -1,6 +1,6 @@
-import { createManagementClient, ManagementServiceClient } from "@zitadel/node/dist/api";
-import { ServiceAccount } from "@zitadel/node/dist/credentials";
-import type { AuthenticationOptions } from "@zitadel/node/dist/credentials/service-account";
+import { createManagementClient, ManagementServiceClient } from "@zitadel/node/api";
+import { ServiceAccount } from "@zitadel/node/credentials";
+import type { AuthenticationOptions } from "@zitadel/node/dist/esm/credentials/service-account";
 import type { CallOptions, ClientMiddleware, ClientMiddlewareCall } from "nice-grpc";
 import { Metadata } from "nice-grpc-common";
 
