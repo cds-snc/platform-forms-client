@@ -7,12 +7,10 @@ import React, { createContext, useRef, useContext, useEffect } from "react";
 import { createStore } from "zustand";
 import { useStoreWithEqualityFn } from "zustand/traditional";
 import { immer } from "zustand/middleware/immer";
-import { original } from "immer";
 import { shallow } from "zustand/shallow";
 import { persist, subscribeWithSelector } from "zustand/middleware";
 import update from "lodash.set";
 import unset from "lodash.unset";
-import { getParentIndex } from "@lib/utils/form-builder/getPath";
 
 /**
  * Internal dependencies
@@ -21,20 +19,10 @@ import { TemplateStoreProps, TemplateStoreState, InitialTemplateStoreProps } fro
 import { getPathString } from "../utils/form-builder/getPath";
 import { TreeRefProvider } from "@formBuilder/components/shared/right-panel/treeview/provider/TreeRefProvider";
 import { FlowRefProvider } from "@formBuilder/[id]/edit/logic/components/flow/provider/FlowRefProvider";
-import { initializeGroups } from "@formBuilder/components/shared/right-panel/treeview/util/initializeGroups";
-import {
-  removeElementById,
-  removeById,
-  getSchemaFromState,
-  cleanInput,
-  removeGroupElement,
-} from "../utils/form-builder";
-import { decrementChoiceIds, decrementNextActionChoiceIds } from "@lib/formContext";
+import { getSchemaFromState, cleanInput } from "../utils/form-builder";
 import { Language } from "../types/form-builder-types";
-import { defaultForm } from "./defaults";
 import { storageOptions } from "./storage";
 import { clearTemplateStorage } from "./utils";
-import { orderGroups } from "@lib/utils/form-builder/orderUsingGroupsLayout";
 import { initStore } from "./initStore";
 
 import {
@@ -45,7 +33,18 @@ import {
   addSubChoice,
   duplicateElement,
 } from "./helpers/add";
+
+import {
+  removeChoiceFromRules,
+  removeChoiceFromNextActions,
+  remove,
+  removeSubItem,
+  removeChoice,
+  removeSubChoice,
+} from "./helpers/remove";
 import { moveUp, moveDown, subMoveUp, subMoveDown } from "./helpers/move";
+import { initialize, importTemplate } from "./helpers/init";
+import { generateElementId, getHighestElementId } from "./helpers/id";
 
 const createTemplateStore = (initProps?: Partial<InitialTemplateStoreProps>) => {
   const props = initStore(initProps);
@@ -130,67 +129,12 @@ const createTemplateStore = (initProps?: Partial<InitialTemplateStoreProps>) => 
             addChoice: addChoice(set),
             addLabeledChoice: addLabeledChoice(set),
             addSubChoice: addSubChoice(set),
-            removeChoiceFromRules: (elId: string, choiceIndex: number) => {
-              set((state) => {
-                const choiceId = `${elId}.${choiceIndex}`;
-                const rules = decrementChoiceIds({ formElements: state.form.elements, choiceId });
-                state.form.elements.forEach((element) => {
-                  // If element id is in the rules array, update the conditionalRules property
-                  if (rules[element.id]) {
-                    element.properties.conditionalRules = rules[element.id];
-                  }
-                });
-              });
-            },
-            removeChoiceFromNextActions: (elId: string, choiceIndex: number) => {
-              set((state) => {
-                const choiceId = `${elId}.${choiceIndex}`;
-                const groups = decrementNextActionChoiceIds({ ...state.form.groups }, choiceId);
-                state.form.groups = groups;
-              });
-            },
-            remove: (elementId, groupId = "") => {
-              set((state) => {
-                const allowGroups = state.allowGroupsFlag;
-                state.form.elements = removeElementById(state.form.elements, elementId);
-                state.form.layout = removeById(state.form.layout, elementId);
-
-                if (allowGroups && groupId && state.form.groups) {
-                  const groups = removeGroupElement(
-                    { ...original(state.form.groups) },
-                    groupId,
-                    elementId
-                  );
-                  state.form.groups = { ...groups };
-                }
-              });
-            },
-            removeSubItem: (elId, elementId) =>
-              set((state) => {
-                const parentIndex = getParentIndex(elId, state.form.elements);
-
-                if (parentIndex === undefined) return;
-
-                const subElements = state.form.elements[parentIndex].properties?.subElements;
-                if (subElements) {
-                  state.form.elements[parentIndex].properties.subElements = removeElementById(
-                    subElements,
-                    elementId
-                  );
-                }
-              }),
-            removeChoice: (elIndex, choiceIndex) =>
-              set((state) => {
-                state.form.elements[elIndex].properties.choices?.splice(choiceIndex, 1);
-              }),
-            removeSubChoice: (elId, subIndex, choiceIndex) =>
-              set((state) => {
-                const parentIndex = getParentIndex(elId, state.form.elements);
-                if (parentIndex === undefined) return;
-                state.form.elements[parentIndex].properties.subElements?.[
-                  subIndex
-                ].properties.choices?.splice(choiceIndex, 1);
-              }),
+            removeChoiceFromRules: removeChoiceFromRules(set),
+            removeChoiceFromNextActions: removeChoiceFromNextActions(set),
+            remove: remove(set),
+            removeSubItem: removeSubItem(set),
+            removeChoice: removeChoice(set),
+            removeSubChoice: removeSubChoice(set),
             getChoice: (elId, choiceIndex) => {
               const elIndex = get().form.elements.findIndex((el) => el.id === elId);
               return get().form.elements[elIndex]?.properties.choices?.[choiceIndex];
@@ -264,90 +208,16 @@ const createTemplateStore = (initProps?: Partial<InitialTemplateStoreProps>) => 
                 state.closingDate = value;
               });
             },
-            initialize: async (language = "en") => {
-              set((state) => {
-                const allowGroups = state.allowGroupsFlag;
-                state.id = "";
-                state.lang = language as Language;
-                state.translationLanguagePriority = language as Language;
-                state.form = initializeGroups({ ...defaultForm }, allowGroups);
-
-                // Ensure order by groups layout
-                if (!state.form.groupsLayout) {
-                  /* No need to order as the groups layout does not exist */
-                  state.form.groupsLayout = [];
-                } else {
-                  state.form.groups = orderGroups(state.form.groups, state.form.groupsLayout);
-                }
-
-                state.isPublished = false;
-                state.name = "";
-                state.deliveryOption = undefined;
-                state.formPurpose = "";
-                state.publishReason = "";
-                state.publishFormType = "";
-                state.publishDesc = "";
-                state.closingDate = null;
-              });
-            },
-            importTemplate: async (jsonConfig) => {
-              set((state) => {
-                const allowGroups = state.allowGroupsFlag;
-                state.id = "";
-                state.lang = "en";
-                state.form = initializeGroups({ ...defaultForm, ...jsonConfig }, allowGroups);
-
-                // Ensure order by groups layout
-                if (!state.form.groupsLayout) {
-                  /* No need to order as the groups layout does not exist */
-                  state.form.groupsLayout = [];
-                } else {
-                  state.form.groups = orderGroups(state.form.groups, state.form.groupsLayout);
-                }
-
-                state.isPublished = false;
-                state.name = "";
-                state.securityAttribute = "Protected A";
-                state.deliveryOption = undefined;
-                state.formPurpose = "";
-                state.publishReason = "";
-                state.publishFormType = "";
-                state.publishDesc = "";
-                state.closingDate = null;
-              });
-            },
+            initialize: initialize(set),
+            importTemplate: importTemplate(set),
             getGroupsEnabled: () => get().allowGroupsFlag,
             setGroupsLayout: (layout) => {
               set((state) => {
                 state.form.groupsLayout = layout;
               });
             },
-            getHighestElementId: () => {
-              const validIds = get()
-                .form.elements.filter(
-                  (element) => element && typeof element.id === "number" && !isNaN(element.id)
-                )
-                .map((element) => Number(element.id));
-
-              return validIds.length > 0 ? Math.max(...validIds) : 0;
-            },
-            generateElementId: () => {
-              set((state) => {
-                const lastId = state.form.lastGeneratedElementId || 0;
-
-                // Ensure backwards compatibility with existing forms
-                const highestId = state.getHighestElementId();
-
-                if (lastId < highestId) {
-                  state.form.lastGeneratedElementId = highestId + 1;
-                  return;
-                }
-
-                state.form.lastGeneratedElementId = lastId + 1;
-              });
-
-              return get().form.lastGeneratedElementId || 1;
-            },
+            getHighestElementId: getHighestElementId(set, get),
+            generateElementId: generateElementId(set, get),
           }),
           storageOptions
         )

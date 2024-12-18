@@ -12,5 +12,9 @@
   "500": {
     "title": "Quelque chose a mal tourné",
     "body": "Il y a un problème avec le service en ce moment. Veuillez réessayer plus tard."
+  },
+  "sever-error": {
+    "title": "Erreur de serveur",
+    "body": "Un problème est survenu lors de la soumission de votre formulaire. Veuillez <a href='{{formLink}}'>réactualiser et réessayer</a>."
   }
 }

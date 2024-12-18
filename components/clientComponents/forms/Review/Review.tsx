@@ -1,4 +1,4 @@
-import { useMemo, useRef } from "react";
+import { useRef } from "react";
 import { useTranslation } from "@i18n/client";
 import { useFocusIt } from "@lib/hooks/useFocusIt";
 import { useGCFormsContext } from "@lib/hooks/useGCFormContext";
@@ -17,33 +17,26 @@ export const Review = ({ language }: { language: Language }): React.ReactElement
   useFocusIt({ elRef: groupsHeadingRef });
 
   // Get Review Items that are used below to print out each question-answer by element type
-  const reviewItems = useMemo(() => {
-    const formValues = getValues();
-    const groupHistoryIds = getGroupHistory();
-    const groupsWithElementIds = getGroupsWithElementIds(
-      formRecord.form.elements,
-      formValues,
-      groups,
-      groupHistoryIds,
-      matchedIds
-    );
-
-    return getReviewItems(
-      formRecord.form.elements,
-      formValues,
-      groupsWithElementIds,
-      language,
-      getGroupTitle
-    );
-  }, [
+  const formValues: void | FormValues = getValues();
+  const groupHistoryIds = getGroupHistory();
+        
+  if (!formValues || !groups) throw new Error("Form values or groups are missing");
+      
+  const groupsWithElementIds = getGroupsWithElementIds(
     formRecord.form.elements,
-    getGroupHistory,
-    getGroupTitle,
-    getValues,
+    formValues,
     groups,
+    groupHistoryIds,
+    matchedIds
+  );
+
+  const reviewItems = getReviewItems(
+    formRecord.form.elements,
+    formValues,
+    groupsWithElementIds,
     language,
-    matchedIds,
-  ]);
+    getGroupTitle
+  );
 
   return (
     <>
