@@ -1,10 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import {
-  interpolatePermissionCondition,
-  authorization,
-  createAbility,
-  AccessControlError,
-} from "@lib/privileges";
+import { interpolatePermissionCondition, authorization } from "@lib/privileges";
+import { AccessControlError, auth } from "@lib/auth";
 import {
   Base,
   mockUserPrivileges,
@@ -22,8 +18,16 @@ import { Action } from "@lib/types/privileges-types";
 import { checkOne } from "@lib/cache/flags";
 
 jest.mock("@lib/cache/flags");
+jest.mock("@lib/auth", () => {
+  const originalModule = jest.requireActual("@lib/auth");
+  return {
+    ...originalModule,
+    auth: jest.fn(),
+  };
+});
 
 const mockedCheckOne = checkOne as jest.MockedFunction<typeof checkOne>;
+const mockedAuth = auth as unknown as jest.MockedFunction<() => Promise<Session | null>>;
 
 type TestUser = {
   session: Session;
@@ -166,6 +170,7 @@ describe("Privilege Checks", () => {
   describe("Base permissions", () => {
     beforeAll(() => {
       user1.session.user.privileges = mockUserPrivileges(Base, { user: { id: "1" } });
+      mockedAuth.mockResolvedValue(user1.session);
     });
     afterAll(() => {
       user1.session.user.privileges = mockUserPrivileges(Base, { user: { id: "1" } });
@@ -173,20 +178,16 @@ describe("Privilege Checks", () => {
     describe("Form Record", () => {
       describe("User can", () => {
         it("create a Form Record", async () => {
-          const ability = createAbility(user1.session);
-
-          await authorization.check(ability, [
+          await authorization.check([
             { action: "create", subject: { type: "FormRecord", scope: "all" } },
           ]);
         });
         it.each(["view", "update", "delete"])("%s Form Record they own", async (action) => {
-          const ability = createAbility(user1.session);
-
           (prismaMock.template.findUniqueOrThrow as jest.MockedFunction<any>).mockResolvedValue(
             user1.formRecord
           );
 
-          await authorization.check(ability, [
+          await authorization.check([
             {
               action: action as Action,
               subject: { type: "FormRecord", scope: { subjectId: user1.formRecord.id } },
@@ -196,14 +197,12 @@ describe("Privilege Checks", () => {
       });
       describe("User cannot", () => {
         it.each(["view", "update", "delete"])("%s Form Record they do not own", async (action) => {
-          const ability = createAbility(user1.session);
-
           (prismaMock.template.findUniqueOrThrow as jest.MockedFunction<any>).mockResolvedValue(
             user2.formRecord
           );
 
           await expect(
-            authorization.check(ability, [
+            authorization.check([
               {
                 action: action as Action,
                 subject: { type: "FormRecord", scope: { subjectId: user2.formRecord.id } },
@@ -213,12 +212,11 @@ describe("Privilege Checks", () => {
         });
 
         it("publish a form", async () => {
-          const ability = createAbility(user1.session);
           (prismaMock.template.findUniqueOrThrow as jest.MockedFunction<any>).mockResolvedValue(
             user1.formRecord
           );
           await expect(
-            authorization.check(ability, [
+            authorization.check([
               {
                 action: "update",
                 subject: {
@@ -235,13 +233,11 @@ describe("Privilege Checks", () => {
     describe("User", () => {
       describe("User can", () => {
         it("modify their own security questions", async () => {
-          const ability = createAbility(user1.session);
-
           (prismaMock.user.findUniqueOrThrow as jest.MockedFunction<any>).mockResolvedValue(
             user1.db
           );
 
-          await authorization.check(ability, [
+          await authorization.check([
             {
               action: "update",
               subject: {
@@ -253,13 +249,11 @@ describe("Privilege Checks", () => {
           ]);
         });
         it("modify their own name", async () => {
-          const ability = createAbility(user1.session);
-
           (prismaMock.user.findUniqueOrThrow as jest.MockedFunction<any>).mockResolvedValue(
             user1.db
           );
 
-          await authorization.check(ability, [
+          await authorization.check([
             {
               action: "update",
               subject: {
@@ -273,14 +267,12 @@ describe("Privilege Checks", () => {
       });
       describe("User cannot", () => {
         it("modify email address", async () => {
-          const ability = createAbility(user1.session);
-
           (prismaMock.user.findUniqueOrThrow as jest.MockedFunction<any>).mockResolvedValue(
             user1.db
           );
 
           await expect(
-            authorization.check(ability, [
+            authorization.check([
               {
                 action: "update",
                 subject: {
@@ -293,14 +285,12 @@ describe("Privilege Checks", () => {
           ).rejects.toThrow(AccessControlError);
         });
         it("modify another user", async () => {
-          const ability = createAbility(user1.session);
-
           (prismaMock.user.findUniqueOrThrow as jest.MockedFunction<any>).mockResolvedValue(
             user2.db
           );
 
           await expect(
-            authorization.check(ability, [
+            authorization.check([
               {
                 action: "update",
                 subject: {
@@ -317,10 +307,8 @@ describe("Privilege Checks", () => {
     describe("Setting", () => {
       describe("User cannot", () => {
         it.each(["create", "view", "update", "delete"])("perform %s action", async (action) => {
-          const ability = createAbility(user1.session);
-
           await expect(
-            authorization.check(ability, [
+            authorization.check([
               { action: action as Action, subject: { type: "Setting", scope: "all" } },
             ])
           ).rejects.toThrow(AccessControlError);
@@ -330,10 +318,8 @@ describe("Privilege Checks", () => {
     describe("Privilege", () => {
       describe("User cannot", () => {
         it.each(["create", "view", "update", "delete"])("perform %s action", async (action) => {
-          const ability = createAbility(user1.session);
-
           await expect(
-            authorization.check(ability, [
+            authorization.check([
               { action: action as Action, subject: { type: "Flag", scope: "all" } },
             ])
           ).rejects.toThrow(AccessControlError);
@@ -344,10 +330,8 @@ describe("Privilege Checks", () => {
     describe("Flag", () => {
       describe("User cannot", () => {
         it.each(["create", "view", "update", "delete"])("perform %s action", async (action) => {
-          const ability = createAbility(user1.session);
-
           await expect(
-            authorization.check(ability, [
+            authorization.check([
               { action: action as Action, subject: { type: "Flag", scope: "all" } },
             ])
           ).rejects.toThrow(AccessControlError);
@@ -360,6 +344,7 @@ describe("Privilege Checks", () => {
       user1.session.user.privileges = mockUserPrivileges(PublishForms, {
         user: { id: user1.session.user.id },
       });
+      mockedAuth.mockResolvedValue(user1.session);
     });
     afterAll(() => {
       user1.session.user.privileges = mockUserPrivileges(Base, {
@@ -368,13 +353,11 @@ describe("Privilege Checks", () => {
     });
     describe("User can", () => {
       it("publish a form they own", async () => {
-        const ability = createAbility(user1.session);
-
         (prismaMock.template.findUniqueOrThrow as jest.MockedFunction<any>).mockResolvedValue(
           user1.formRecord
         );
 
-        await authorization.check(ability, [
+        await authorization.check([
           {
             action: "update",
             subject: {
@@ -388,14 +371,12 @@ describe("Privilege Checks", () => {
     });
     describe("User cannot", () => {
       it("publish a form they do not own", async () => {
-        const ability = createAbility(user1.session);
-
         (prismaMock.template.findUniqueOrThrow as jest.MockedFunction<any>).mockResolvedValue(
           user2.formRecord
         );
 
         await expect(
-          authorization.check(ability, [
+          authorization.check([
             {
               action: "update",
               subject: {
@@ -414,6 +395,7 @@ describe("Privilege Checks", () => {
       adminUser.session.user.privileges = mockUserPrivileges(ManageForms, {
         user: { id: adminUser.session.user.id },
       });
+      mockedAuth.mockResolvedValue(adminUser.session);
     });
     afterAll(() => {
       adminUser.session.user.privileges = mockUserPrivileges(Base, {
@@ -422,19 +404,16 @@ describe("Privilege Checks", () => {
     });
     describe("User can", () => {
       it.each(["create", "view", "update", "delete"])("%s Form Record", async (action) => {
-        const ability = createAbility(adminUser.session);
-
-        await authorization.check(ability, [
+        await authorization.check([
           { action: action as Action, subject: { type: "FormRecord", scope: "all" } },
         ]);
       });
 
       it.each(["view", "update", "delete"])("%s another users form record", async (action) => {
-        const ability = createAbility(adminUser.session);
         (prismaMock.template.findUniqueOrThrow as jest.MockedFunction<any>).mockResolvedValue(
           user1.formRecord
         );
-        await authorization.check(ability, [
+        await authorization.check([
           {
             action: action as Action,
             subject: { type: "FormRecord", scope: { subjectId: user1.formRecord.id } },
@@ -448,6 +427,7 @@ describe("Privilege Checks", () => {
       adminUser.session.user.privileges = mockUserPrivileges(ViewUserPrivileges, {
         user: { id: adminUser.session.user.id },
       });
+      mockedAuth.mockResolvedValue(adminUser.session);
     });
     afterAll(() => {
       adminUser.session.user.privileges = mockUserPrivileges(Base, {
@@ -456,18 +436,13 @@ describe("Privilege Checks", () => {
     });
     describe("User can", () => {
       it("view all Users", async () => {
-        const ability = createAbility(adminUser.session);
-
-        await authorization.check(ability, [
-          { action: "view", subject: { type: "User", scope: "all" } },
-        ]);
+        await authorization.check([{ action: "view", subject: { type: "User", scope: "all" } }]);
       });
 
       it("view any user", async () => {
-        const ability = createAbility(adminUser.session);
         (prismaMock.user.findUniqueOrThrow as jest.MockedFunction<any>).mockResolvedValue(user1.db);
 
-        await authorization.check(ability, [
+        await authorization.check([
           {
             action: "view",
             subject: { type: "User", scope: { subjectId: user1.session.user.id } },
@@ -476,21 +451,17 @@ describe("Privilege Checks", () => {
       });
 
       it("view all Privileges", async () => {
-        const ability = createAbility(adminUser.session);
-
-        await authorization.check(ability, [
+        await authorization.check([
           { action: "view", subject: { type: "Privilege", scope: "all" } },
         ]);
       });
     });
     describe("User cannot", () => {
       it.each(["update", "delete"])("%s a User", async (action) => {
-        const ability = createAbility(adminUser.session);
-
         (prismaMock.user.findUniqueOrThrow as jest.MockedFunction<any>).mockResolvedValue(user1.db);
 
         await expect(
-          authorization.check(ability, [
+          authorization.check([
             {
               action: action as Action,
               subject: { type: "User", scope: { subjectId: user1.session.user.id } },
@@ -499,14 +470,12 @@ describe("Privilege Checks", () => {
         ).rejects.toThrow(AccessControlError);
       });
       it.each(["create", "update", "delete"])("%s a privilege", async (action) => {
-        const ability = createAbility(adminUser.session);
-
         (prismaMock.privilege.findUniqueOrThrow as jest.MockedFunction<any>).mockResolvedValue({
           id: "1",
         });
 
         await expect(
-          authorization.check(ability, [
+          authorization.check([
             {
               action: action as Action,
               subject: { type: "Privilege", scope: { subjectId: "1" } },
@@ -521,6 +490,7 @@ describe("Privilege Checks", () => {
       adminUser.session.user.privileges = mockUserPrivileges(ManageUsers, {
         user: { id: adminUser.session.user.id },
       });
+      mockedAuth.mockResolvedValue(adminUser.session);
     });
     afterAll(() => {
       adminUser.session.user.privileges = mockUserPrivileges(Base, {
@@ -529,10 +499,9 @@ describe("Privilege Checks", () => {
     });
     describe("User can", () => {
       it.each(["view", "update"])("%s any User", async (action) => {
-        const ability = createAbility(adminUser.session);
         (prismaMock.user.findUniqueOrThrow as jest.MockedFunction<any>).mockResolvedValue(user1.db);
 
-        await authorization.check(ability, [
+        await authorization.check([
           {
             action: action as Action,
             subject: { type: "User", scope: { subjectId: user1.session.user.id } },
@@ -540,20 +509,17 @@ describe("Privilege Checks", () => {
         ]);
       });
       it("View any privilege", async () => {
-        const ability = createAbility(adminUser.session);
-
-        await authorization.check(ability, [
+        await authorization.check([
           { action: "view", subject: { type: "Privilege", scope: "all" } },
         ]);
       });
     });
     describe("User cannot", () => {
       it.each(["create", "delete"])("%s a User", async (action) => {
-        const ability = createAbility(adminUser.session);
         (prismaMock.user.findUniqueOrThrow as jest.MockedFunction<any>).mockResolvedValue(user1.db);
 
         await expect(
-          authorization.check(ability, [
+          authorization.check([
             {
               action: action as Action,
               subject: { type: "User", scope: { subjectId: user1.session.user.id } },
@@ -562,11 +528,10 @@ describe("Privilege Checks", () => {
         ).rejects.toThrow(AccessControlError);
       });
       it.each(["create", "update", "delete"])("%s a Privilege", async (action) => {
-        const ability = createAbility(adminUser.session);
         (prismaMock.user.findUniqueOrThrow as jest.MockedFunction<any>).mockResolvedValue(user1.db);
 
         await expect(
-          authorization.check(ability, [
+          authorization.check([
             {
               action: action as Action,
               subject: { type: "Privilege", scope: { subjectId: user1.session.user.id } },
@@ -581,6 +546,7 @@ describe("Privilege Checks", () => {
       adminUser.session.user.privileges = mockUserPrivileges(ViewApplicationSettings, {
         user: { id: adminUser.session.user.id },
       });
+      mockedAuth.mockResolvedValue(adminUser.session);
     });
     afterAll(() => {
       adminUser.session.user.privileges = mockUserPrivileges(Base, {
@@ -589,34 +555,23 @@ describe("Privilege Checks", () => {
     });
     describe("User can", () => {
       it("view all Flags", async () => {
-        const ability = createAbility(adminUser.session);
-
-        await authorization.check(ability, [
-          { action: "view", subject: { type: "Flag", scope: "all" } },
-        ]);
+        await authorization.check([{ action: "view", subject: { type: "Flag", scope: "all" } }]);
       });
       it("can view any Flag", async () => {
-        const ability = createAbility(adminUser.session);
-
         mockedCheckOne.mockResolvedValue(true);
 
-        await authorization.check(ability, [
+        await authorization.check([
           { action: "view", subject: { type: "Flag", scope: { subjectId: "test" } } },
         ]);
       });
       it("view all Settings", async () => {
-        const ability = createAbility(adminUser.session);
-
-        await authorization.check(ability, [
-          { action: "view", subject: { type: "Setting", scope: "all" } },
-        ]);
+        await authorization.check([{ action: "view", subject: { type: "Setting", scope: "all" } }]);
       });
       it("can view any Setting", async () => {
-        const ability = createAbility(adminUser.session);
         (prismaMock.setting.findUniqueOrThrow as jest.MockedFunction<any>).mockResolvedValue({
           id: "1",
         });
-        await authorization.check(ability, [
+        await authorization.check([
           {
             action: "view",
             subject: { type: "Setting", scope: { subjectId: "1" } },
@@ -626,21 +581,19 @@ describe("Privilege Checks", () => {
     });
     describe("User cannot", () => {
       it.each(["create", "update", "delete"])("%s a Flag", async (action) => {
-        const ability = createAbility(adminUser.session);
         mockedCheckOne.mockResolvedValue(true);
         await expect(
-          authorization.check(ability, [
+          authorization.check([
             { action: action as Action, subject: { type: "Flag", scope: { subjectId: "test" } } },
           ])
         ).rejects.toThrow(AccessControlError);
       });
       it.each(["create", "update", "delete"])("%s a Setting", async (action) => {
-        const ability = createAbility(adminUser.session);
         (prismaMock.setting.findUniqueOrThrow as jest.MockedFunction<any>).mockResolvedValue({
           id: "1",
         });
         await expect(
-          authorization.check(ability, [
+          authorization.check([
             {
               action: action as Action,
               subject: { type: "Setting", scope: { subjectId: "1" } },
@@ -663,25 +616,25 @@ describe("Privilege Checks", () => {
     });
     describe("User can", () => {
       it.each(["view", "update"])("%s any Flag", async (action) => {
-        const ability = createAbility(adminUser.session);
+        mockedAuth.mockResolvedValue(adminUser.session);
         mockedCheckOne.mockResolvedValue(true);
-        await authorization.check(ability, [
+        await authorization.check([
           { action: action as Action, subject: { type: "Flag", scope: { subjectId: "test" } } },
         ]);
       });
       it("create any Setting", async () => {
-        const ability = createAbility(adminUser.session);
+        mockedAuth.mockResolvedValue(adminUser.session);
 
-        await authorization.check(ability, [
+        await authorization.check([
           { action: "create", subject: { type: "Setting", scope: "all" } },
         ]);
       });
       it.each(["view", "update", "delete"])("%s any Setting", async (action) => {
-        const ability = createAbility(adminUser.session);
+        mockedAuth.mockResolvedValue(adminUser.session);
         (prismaMock.setting.findUniqueOrThrow as jest.MockedFunction<any>).mockResolvedValue({
           id: "1",
         });
-        await authorization.check(ability, [
+        await authorization.check([
           {
             action: action as Action,
             subject: { type: "Setting", scope: { subjectId: "1" } },
@@ -691,10 +644,10 @@ describe("Privilege Checks", () => {
     });
     describe("User cannot", () => {
       it.each(["create", "delete"])("%s a Flag", async (action) => {
-        const ability = createAbility(adminUser.session);
+        mockedAuth.mockResolvedValue(adminUser.session);
         mockedCheckOne.mockResolvedValue(true);
         await expect(
-          authorization.check(ability, [
+          authorization.check([
             { action: action as Action, subject: { type: "Flag", scope: { subjectId: "test" } } },
           ])
         ).rejects.toThrow(AccessControlError);
@@ -720,6 +673,7 @@ describe("Authorization Helpers", () => {
       adminUser.session.user.privileges = mockUserPrivileges(Base, {
         user: { id: adminUser.session.user.id },
       });
+      mockedAuth.mockResolvedValue(adminUser.session);
     });
     it.each([
       { priv: ManageUsers },
@@ -731,83 +685,81 @@ describe("Authorization Helpers", () => {
       adminUser.session.user.privileges = mockUserPrivileges(set.priv, {
         user: { id: adminUser.session.user.id },
       });
-      const ability = createAbility(adminUser.session);
 
-      await authorization.hasAdministrationPrivileges(ability);
+      await authorization.hasAdministrationPrivileges();
     });
     it.each([{ priv: Base }, { priv: PublishForms }])("should fail", async (set) => {
       adminUser.session.user.privileges = mockUserPrivileges(set.priv, {
         user: { id: adminUser.session.user.id },
       });
-      const ability = createAbility(adminUser.session);
 
-      await expect(authorization.hasAdministrationPrivileges(ability)).rejects.toBeInstanceOf(
+      await expect(authorization.hasAdministrationPrivileges()).rejects.toBeInstanceOf(
         AccessControlError
       );
     });
   });
   it("Can create Form", async () => {
-    const ability = createAbility(user1.session);
+    mockedAuth.mockResolvedValue(user1.session);
 
-    await authorization.canCreateForm(ability);
+    await authorization.canCreateForm();
   });
   it("Can view Form", async () => {
-    const ability = createAbility(user1.session);
+    mockedAuth.mockResolvedValue(user1.session);
 
     (prismaMock.template.findUniqueOrThrow as jest.MockedFunction<any>).mockResolvedValue(
       user1.formRecord
     );
 
-    await authorization.canViewForm(ability, user1.formRecord.id);
+    await authorization.canViewForm(user1.formRecord.id);
   });
   it("Can not view Form", async () => {
-    const ability = createAbility(user1.session);
+    mockedAuth.mockResolvedValue(user1.session);
 
     (prismaMock.template.findUniqueOrThrow as jest.MockedFunction<any>).mockResolvedValue(
       user2.formRecord
     );
 
-    await expect(authorization.canViewForm(ability, user2.formRecord.id)).rejects.toBeInstanceOf(
+    await expect(authorization.canViewForm(user2.formRecord.id)).rejects.toBeInstanceOf(
       AccessControlError
     );
   });
   it("Can Edit Form", async () => {
-    const ability = createAbility(user1.session);
+    mockedAuth.mockResolvedValue(user1.session);
 
     (prismaMock.template.findUniqueOrThrow as jest.MockedFunction<any>).mockResolvedValue(
       user1.formRecord
     );
 
-    await authorization.canEditForm(ability, user1.formRecord.id);
+    await authorization.canEditForm(user1.formRecord.id);
   });
   it("Can not Edit Form", async () => {
-    const ability = createAbility(user1.session);
+    mockedAuth.mockResolvedValue(user1.session);
 
     (prismaMock.template.findUniqueOrThrow as jest.MockedFunction<any>).mockResolvedValue(
       user2.formRecord
     );
 
-    await expect(authorization.canEditForm(ability, user2.formRecord.id)).rejects.toBeInstanceOf(
+    await expect(authorization.canEditForm(user2.formRecord.id)).rejects.toBeInstanceOf(
       AccessControlError
     );
   });
   it("Can Delete Form", async () => {
-    const ability = createAbility(user1.session);
+    mockedAuth.mockResolvedValue(user1.session);
 
     (prismaMock.template.findUniqueOrThrow as jest.MockedFunction<any>).mockResolvedValue(
       user1.formRecord
     );
 
-    await authorization.canDeleteForm(ability, user1.formRecord.id);
+    await authorization.canDeleteForm(user1.formRecord.id);
   });
   it("Can not Delete Form", async () => {
-    const ability = createAbility(user1.session);
+    mockedAuth.mockResolvedValue(user1.session);
 
     (prismaMock.template.findUniqueOrThrow as jest.MockedFunction<any>).mockResolvedValue(
       user2.formRecord
     );
 
-    await expect(authorization.canDeleteForm(ability, user2.formRecord.id)).rejects.toBeInstanceOf(
+    await expect(authorization.canDeleteForm(user2.formRecord.id)).rejects.toBeInstanceOf(
       AccessControlError
     );
   });
@@ -815,22 +767,22 @@ describe("Authorization Helpers", () => {
     user1.session.user.privileges = mockUserPrivileges(PublishForms, {
       user: { id: user1.session.user.id },
     });
-    const ability = createAbility(user1.session);
+    mockedAuth.mockResolvedValue(user1.session);
 
     (prismaMock.template.findUniqueOrThrow as jest.MockedFunction<any>).mockResolvedValue(
       user1.formRecord
     );
 
-    await authorization.canPublishForm(ability, user1.formRecord.id);
+    await authorization.canPublishForm(user1.formRecord.id);
   });
   it("Can not Publish Form", async () => {
-    const ability = createAbility(user1.session);
+    mockedAuth.mockResolvedValue(user1.session);
 
     (prismaMock.template.findUniqueOrThrow as jest.MockedFunction<any>).mockResolvedValue(
       user1.formRecord
     );
 
-    await expect(authorization.canPublishForm(ability, user1.formRecord.id)).rejects.toBeInstanceOf(
+    await expect(authorization.canPublishForm(user1.formRecord.id)).rejects.toBeInstanceOf(
       AccessControlError
     );
   });
@@ -838,106 +790,104 @@ describe("Authorization Helpers", () => {
     adminUser.session.user.privileges = mockUserPrivileges(ManageForms, {
       user: { id: adminUser.session.user.id },
     });
-    const ability = createAbility(adminUser.session);
-    await authorization.canViewAllForms(ability);
+    mockedAuth.mockResolvedValue(adminUser.session);
+    await authorization.canViewAllForms();
   });
   it("Can not view all Forms", async () => {
-    const ability = createAbility(user1.session);
-    await expect(authorization.canViewAllForms(ability)).rejects.toBeInstanceOf(AccessControlError);
+    mockedAuth.mockResolvedValue(user1.session);
+    await expect(authorization.canViewAllForms()).rejects.toBeInstanceOf(AccessControlError);
   });
   it("Can manage all Forms", async () => {
     adminUser.session.user.privileges = mockUserPrivileges(ManageForms, {
       user: { id: adminUser.session.user.id },
     });
-    const ability = createAbility(adminUser.session);
-    await authorization.canManageAllForms(ability);
+    mockedAuth.mockResolvedValue(adminUser.session);
+    await authorization.canManageAllForms();
   });
   it("Can not manage all Form Records", async () => {
-    const ability = createAbility(user1.session);
-    await expect(authorization.canManageAllForms(ability)).rejects.toBeInstanceOf(
-      AccessControlError
-    );
+    mockedAuth.mockResolvedValue(user1.session);
+    await expect(authorization.canManageAllForms()).rejects.toBeInstanceOf(AccessControlError);
   });
   it("Can manage users", async () => {
     adminUser.session.user.privileges = mockUserPrivileges(ManageUsers, {
       user: { id: adminUser.session.user.id },
     });
     (prismaMock.user.findUniqueOrThrow as jest.MockedFunction<any>).mockResolvedValue(user1.db);
-    const ability = createAbility(adminUser.session);
-    await authorization.canManageUser(ability, user1.session.user.id);
+    mockedAuth.mockResolvedValue(adminUser.session);
+    await authorization.canManageUser(user1.session.user.id);
   });
   it("Can not manage other users", async () => {
     (prismaMock.user.findUniqueOrThrow as jest.MockedFunction<any>).mockResolvedValue(user1.db);
-    const ability = createAbility(user2.session);
-    await expect(
-      authorization.canManageUser(ability, user2.session.user.id)
-    ).rejects.toBeInstanceOf(AccessControlError);
+    mockedAuth.mockResolvedValue(user2.session);
+    await expect(authorization.canManageUser(user2.session.user.id)).rejects.toBeInstanceOf(
+      AccessControlError
+    );
   });
   it("Can update security question on user", async () => {
     (prismaMock.user.findUniqueOrThrow as jest.MockedFunction<any>).mockResolvedValue(user1.db);
-    const ability = createAbility(user1.session);
-    await authorization.canUpdateSecurityQuestions(ability, user1.session.user.id);
+    mockedAuth.mockResolvedValue(user1.session);
+    await authorization.canUpdateSecurityQuestions(user1.session.user.id);
   });
   it("Can not update security questions on another user", async () => {
     (prismaMock.user.findUniqueOrThrow as jest.MockedFunction<any>).mockResolvedValue(user1.db);
-    const ability = createAbility(user2.session);
+    mockedAuth.mockResolvedValue(user2.session);
     await expect(
-      authorization.canUpdateSecurityQuestions(ability, user1.session.user.id)
+      authorization.canUpdateSecurityQuestions(user1.session.user.id)
     ).rejects.toBeInstanceOf(AccessControlError);
   });
   it("Can update name on user", async () => {
     (prismaMock.user.findUniqueOrThrow as jest.MockedFunction<any>).mockResolvedValue(user1.db);
-    const ability = createAbility(user1.session);
-    await authorization.canChangeUserName(ability, user1.session.user.id);
+    mockedAuth.mockResolvedValue(user1.session);
+    await authorization.canChangeUserName(user1.session.user.id);
   });
   it("Can not update name on another user", async () => {
     (prismaMock.user.findUniqueOrThrow as jest.MockedFunction<any>).mockResolvedValue(user1.db);
-    const ability = createAbility(user2.session);
-    await expect(
-      authorization.canChangeUserName(ability, user1.session.user.id)
-    ).rejects.toBeInstanceOf(AccessControlError);
+    mockedAuth.mockResolvedValue(user2.session);
+    await expect(authorization.canChangeUserName(user1.session.user.id)).rejects.toBeInstanceOf(
+      AccessControlError
+    );
   });
   it("Can manage all users", async () => {
     adminUser.session.user.privileges = mockUserPrivileges(ManageUsers, {
       user: { id: adminUser.session.user.id },
     });
-    const ability = createAbility(adminUser.session);
-    await authorization.canManageAllUsers(ability);
+    mockedAuth.mockResolvedValue(adminUser.session);
+    await authorization.canManageAllUsers();
   });
   it("Can access Flags", async () => {
     adminUser.session.user.privileges = mockUserPrivileges(ViewApplicationSettings, {
       user: { id: adminUser.session.user.id },
     });
-    const ability = createAbility(adminUser.session);
-    await authorization.canAccessFlags(ability);
+    mockedAuth.mockResolvedValue(adminUser.session);
+    await authorization.canAccessFlags();
   });
   it("Can manage Flags", async () => {
     adminUser.session.user.privileges = mockUserPrivileges(ManageApplicationSettings, {
       user: { id: adminUser.session.user.id },
     });
-    const ability = createAbility(adminUser.session);
-    await authorization.canManageFlags(ability);
+    mockedAuth.mockResolvedValue(adminUser.session);
+    await authorization.canManageFlags();
   });
   it("Can access Settings", async () => {
     adminUser.session.user.privileges = mockUserPrivileges(ViewApplicationSettings, {
       user: { id: adminUser.session.user.id },
     });
-    const ability = createAbility(adminUser.session);
-    await authorization.canAccessSettings(ability);
+    mockedAuth.mockResolvedValue(adminUser.session);
+    await authorization.canAccessSettings();
   });
   it("Can manage Settings", async () => {
     adminUser.session.user.privileges = mockUserPrivileges(ManageApplicationSettings, {
       user: { id: adminUser.session.user.id },
     });
-    const ability = createAbility(adminUser.session);
-    await authorization.canManageSettings(ability);
+    mockedAuth.mockResolvedValue(adminUser.session);
+    await authorization.canManageSettings();
   });
   it("Can access Privileges", async () => {
     adminUser.session.user.privileges = mockUserPrivileges(ViewUserPrivileges, {
       user: { id: adminUser.session.user.id },
     });
-    const ability = createAbility(adminUser.session);
-    await authorization.canAccessPrivileges(ability);
+    mockedAuth.mockResolvedValue(adminUser.session);
+    await authorization.canAccessPrivileges();
   });
 });
 

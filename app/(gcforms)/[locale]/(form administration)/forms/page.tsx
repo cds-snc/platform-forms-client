@@ -1,7 +1,7 @@
 import { serverTranslation } from "@i18n";
 import { Metadata } from "next";
 import { authCheckAndRedirect } from "@lib/actions";
-import { AccessControlError } from "@lib/privileges";
+import { AccessControlError } from "@lib/auth";
 import { redirect } from "next/navigation";
 import { Navigation } from "./components/server/Navigation";
 import { Cards } from "./components/server/Cards";
@@ -51,7 +51,7 @@ export default async function Page(props: {
   const { locale } = params;
 
   try {
-    const { ability, session } = await authCheckAndRedirect();
+    const { session } = await authCheckAndRedirect();
 
     const { t } = await serverTranslation("my-forms", { lang: locale });
 
@@ -62,7 +62,7 @@ export default async function Page(props: {
       },
       sortByDateUpdated: "desc",
     };
-    const templates = (await getAllTemplatesForUser(ability, options)).map((template) => {
+    const templates = (await getAllTemplatesForUser(options)).map((template) => {
       const {
         id,
         form: { titleEn = "", titleFr = "" },

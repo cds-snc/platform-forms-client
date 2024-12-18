@@ -25,11 +25,34 @@ import { logMessage } from "./logger";
 import { logEvent } from "./auditLogs";
 import { redirect } from "next/navigation";
 import { checkOne } from "./cache/flags";
-
+import { InMemoryCache } from "./cache/inMemoryCache";
+import { auth, AccessControlError } from "@lib/auth";
 /*
 This file contains references to server side only modules.
 Any attempt to import these functions into a browser will cause compilation failures
  */
+
+// Maximum number of items to store in the cache: 100
+// TTL for items in the cache: 1 minutes
+const abilityCache = new InMemoryCache(100, 60);
+
+export const getAbility = async (): Promise<UserAbility> => {
+  const session = await auth();
+  if (!session) throw new Error("No session found");
+  // If the privileges are cached, we can use them as a check that no changes have been made
+  // and it is safe to use the cached ability
+  const cachedPrivilegesRules = await privilegeCheck(session.user.id);
+  const cachedAbility = abilityCache.get(session.user.id);
+  if (cachedAbility && cachedPrivilegesRules !== null) {
+    logMessage.debug(`Using cached ability for user ${session.user.id}`);
+    return cachedAbility as UserAbility;
+  } else {
+    logMessage.debug(`Creating new ability for user ${session.user.id}`);
+    const ability = createAbility(session);
+    abilityCache.set(session.user.id, ability);
+    return ability;
+  }
+};
 
 export const createAbility = (session: Session): UserAbility => {
   const ability = createMongoAbility<MongoAbility<Abilities>>(
@@ -38,14 +61,6 @@ export const createAbility = (session: Session): UserAbility => {
   ability.userID = session.user.id;
   return ability;
 };
-
-// Creates a new custom Error Class
-export class AccessControlError extends Error {
-  constructor(message: string = "AccessControlError") {
-    super(message);
-    Object.setPrototypeOf(this, AccessControlError.prototype);
-  }
-}
 
 export function interpolatePermissionCondition(
   condition: MongoQuery<AnyObject>,
@@ -474,7 +489,6 @@ const _retrieveSubjects = async (
  * @param logic Use an AND or OR logic comparison
  */
 const _authorizationCheck = async (
-  ability: UserAbility,
   rules: {
     action: Action;
     subject: {
@@ -484,9 +498,10 @@ const _authorizationCheck = async (
     fields?: string[];
   }[],
   logic: "all" | "one" = "all"
-): Promise<void> => {
+): Promise<{ user: { id: string } }> => {
   // Create a local scoped memory cache to store the subject objects between rules
   const cache = new Map();
+  const ability = await getAbility();
 
   const result = await Promise.all(
     rules.flatMap(async ({ action, subject, fields }) => {
@@ -539,13 +554,13 @@ const _authorizationCheck = async (
   if (!accessAllowed) {
     throw new AccessControlError(`Access Control Forbidden Action`);
   }
+  return { user: { id: ability.userID } };
 };
 
 export const authorization = {
   check: _authorizationCheck,
   /**
    * Check if a user has the ability to perform an action on a subject and return a boolean
-   * @param ability The ability instance associated to a User
    * @param rules An array of rules to verify
    * @param logic Use an AND or OR logic comparison
    * @returns A boolean value
@@ -557,11 +572,9 @@ export const authorization = {
   },
   /**
    * Does the user have any privileges above Base and PublishForms
-   * @param ability The ability instance associated to a User
    */
-  hasAdministrationPrivileges: async (ability: UserAbility) => {
+  hasAdministrationPrivileges: async () => {
     return _authorizationCheck(
-      ability,
       [
         {
           action: "update",
@@ -589,10 +602,9 @@ export const authorization = {
   },
   /**
    * Can the user create a new form
-   * @param ability The ability instance associated to a User
    */
-  canCreateForm: async (ability: UserAbility) => {
-    return _authorizationCheck(ability, [
+  canCreateForm: async () => {
+    return _authorizationCheck([
       {
         action: "create",
         subject: { type: "FormRecord", scope: "all" },
@@ -601,11 +613,10 @@ export const authorization = {
   },
   /**
    * Can the user view this specific form
-   * @param ability The ability instance associated to a User
    * @param formId The ID of the form
    */
-  canViewForm: async (ability: UserAbility, formId: string) => {
-    return _authorizationCheck(ability, [
+  canViewForm: async (formId: string) => {
+    return _authorizationCheck([
       {
         action: "view",
         subject: { type: "FormRecord", scope: { subjectId: formId } },
@@ -614,11 +625,10 @@ export const authorization = {
   },
   /**
    * Can the user edit this specific form
-   * @param ability The ability instance associated to a User
    * @param formId The ID of the form
    */
-  canEditForm: async (ability: UserAbility, formId: string) => {
-    return _authorizationCheck(ability, [
+  canEditForm: async (formId: string) => {
+    return _authorizationCheck([
       {
         action: "update",
         subject: { type: "FormRecord", scope: { subjectId: formId } },
@@ -627,11 +637,10 @@ export const authorization = {
   },
   /**
    * Can the user delete this specific form
-   * @param ability The ability instance associated to a User
    * @param formId The ID of the form
    */
-  canDeleteForm: async (ability: UserAbility, formId: string) => {
-    return _authorizationCheck(ability, [
+  canDeleteForm: async (formId: string) => {
+    return _authorizationCheck([
       {
         action: "delete",
         subject: { type: "FormRecord", scope: { subjectId: formId } },
@@ -640,11 +649,10 @@ export const authorization = {
   },
   /**
    * Can the user publish this specific form
-   * @param ability The ability instance associated to a User
    * @param formId The ID of the form
    */
-  canPublishForm: async (ability: UserAbility, formId: string) => {
-    return _authorizationCheck(ability, [
+  canPublishForm: async (formId: string) => {
+    return _authorizationCheck([
       {
         action: "update",
         subject: { type: "FormRecord", scope: { subjectId: formId } },
@@ -654,10 +662,9 @@ export const authorization = {
   },
   /**
    * Can the user view all forms in the application
-   * @param ability The ability instance associated to a User
    */
-  canViewAllForms: async (ability: UserAbility) => {
-    return authorization.check(ability, [
+  canViewAllForms: async () => {
+    return authorization.check([
       {
         action: "view",
         subject: { type: "FormRecord", scope: "all" },
@@ -666,10 +673,9 @@ export const authorization = {
   },
   /**
    * Can the user modify any form in the application
-   * @param ability The ability instance associated to a User
    */
-  canManageAllForms: async (ability: UserAbility) => {
-    return _authorizationCheck(ability, [
+  canManageAllForms: async () => {
+    return _authorizationCheck([
       {
         action: "update",
         subject: { type: "FormRecord", scope: "all" },
@@ -678,11 +684,10 @@ export const authorization = {
   },
   /**
    * Can the user administratively manage this specific user
-   * @param ability The ability instance associated to a User
    * @param userId The ID of the user
    */
-  canManageUser: async (ability: UserAbility, userId: string) => {
-    return _authorizationCheck(ability, [
+  canManageUser: async (userId: string) => {
+    return _authorizationCheck([
       {
         action: "update",
         subject: { type: "User", scope: { subjectId: userId } },
@@ -692,11 +697,10 @@ export const authorization = {
   },
   /**
    * Can the user update security questions on this specific user
-   * @param ability The ability instance associated to a User
    * @param userId The ID of the user
    */
-  canUpdateSecurityQuestions: async (ability: UserAbility, userId: string) => {
-    return _authorizationCheck(ability, [
+  canUpdateSecurityQuestions: async (userId: string) => {
+    return _authorizationCheck([
       {
         action: "update",
         subject: { type: "User", scope: { subjectId: userId } },
@@ -706,11 +710,10 @@ export const authorization = {
   },
   /**
    * Can the user update the name on this specific user
-   * @param ability The ability instance associated to a User
    * @param userId The ID of the user
    */
-  canChangeUserName: async (ability: UserAbility, userId: string) => {
-    return _authorizationCheck(ability, [
+  canChangeUserName: async (userId: string) => {
+    return _authorizationCheck([
       {
         action: "update",
         subject: { type: "User", scope: { subjectId: userId } },
@@ -720,10 +723,9 @@ export const authorization = {
   },
   /**
    * Can the user modify all users in the application
-   * @param ability The ability instance associated to a User
    */
-  canManageAllUsers: async (ability: UserAbility) => {
-    return _authorizationCheck(ability, [
+  canManageAllUsers: async () => {
+    return _authorizationCheck([
       {
         action: "update",
         subject: { type: "User", scope: "all" },
@@ -732,10 +734,9 @@ export const authorization = {
   },
   /**
    * Can the user view application flags
-   * @param ability The ability instance associated to a User
    */
-  canAccessFlags: async (ability: UserAbility) => {
-    return _authorizationCheck(ability, [
+  canAccessFlags: async () => {
+    return _authorizationCheck([
       {
         action: "view",
         subject: { type: "Flag", scope: "all" },
@@ -744,10 +745,9 @@ export const authorization = {
   },
   /**
    * Can the user manage application flags
-   * @param ability The ability instance associated to a User
    */
-  canManageFlags: async (ability: UserAbility) => {
-    return _authorizationCheck(ability, [
+  canManageFlags: async () => {
+    return _authorizationCheck([
       {
         action: "update",
         subject: { type: "Flag", scope: "all" },
@@ -756,10 +756,9 @@ export const authorization = {
   },
   /**
    * Can the user view application settings
-   * @param ability The ability instance associated to a User
    */
-  canAccessSettings: async (ability: UserAbility) => {
-    return _authorizationCheck(ability, [
+  canAccessSettings: async () => {
+    return _authorizationCheck([
       {
         action: "view",
         subject: { type: "Setting", scope: "all" },
@@ -768,10 +767,9 @@ export const authorization = {
   },
   /**
    * Can the user manage application settings
-   * @param ability The ability instance associated to a User
    */
-  canManageSettings: async (ability: UserAbility) => {
-    return _authorizationCheck(ability, [
+  canManageSettings: async () => {
+    return _authorizationCheck([
       {
         action: "update",
         subject: { type: "Setting", scope: "all" },
@@ -780,10 +778,9 @@ export const authorization = {
   },
   /**
    * Can the user view application privileges
-   * @param ability The ability instance associated to a User
    */
-  canAccessPrivileges: async (ability: UserAbility) => {
-    return _authorizationCheck(ability, [
+  canAccessPrivileges: async () => {
+    return _authorizationCheck([
       {
         action: "view",
         subject: { type: "Privilege", scope: "all" },

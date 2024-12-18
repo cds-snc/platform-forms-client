@@ -1,5 +1,6 @@
 import { prisma, prismaErrors } from "@lib/integration/prismaConnector";
-import { AccessControlError, checkPrivileges } from "./privileges";
+import { checkPrivileges } from "./privileges";
+import { AccessControlError } from "@lib/auth";
 import { logEvent } from "./auditLogs";
 import { logMessage } from "@lib/logger";
 import { UserAbility } from "./types";
