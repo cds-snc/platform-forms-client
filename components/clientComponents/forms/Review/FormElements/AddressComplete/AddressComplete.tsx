@@ -17,11 +17,11 @@ import { getCombinedAddressAsFormItem, getSplitAddressAsFormItem } from "./helpe
 export const AddressComplete = ({
   formItem,
   language,
-  forceSplitAddress = false,
+  splitValues = false,
 }: {
   formItem: FormItem;
   language: Language;
-  forceSplitAddress?: boolean;
+  splitValues?: boolean;
 }): React.ReactElement => {
   const { t } = useTranslation(["review", "common"]);
   const { getValues } = useGCFormsContext();
@@ -33,7 +33,7 @@ export const AddressComplete = ({
   const addressFormValue = formValues[elementId as keyof typeof elementId];
   const addressValues = safeJSONParse(addressFormValue) as AddressElements;
 
-  if (addressComponents?.splitAddress || forceSplitAddress) {
+  if (addressComponents?.splitAddress || splitValues) {
     const addressCompleteStrings = {
       streetAddress: t("addressComponents.streetName", { lng: language }),
       city: t("addressComponents.city", { lng: language }),

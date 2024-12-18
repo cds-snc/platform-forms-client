@@ -38,7 +38,7 @@ export const FormItemFactory = ({
 
     case FormElementTypes.addressComplete:
     case FormElementTypes.address: // TODO deprecated?
-      return <AddressComplete formItem={formItem} language={language} forceSplitAddress={true} />;
+      return <AddressComplete formItem={formItem} language={language} splitValues={true} />;
 
     case FormElementTypes.richText:
       return <RichText formItem={formItem} language={language} showNothing={true} />;
@@ -46,7 +46,7 @@ export const FormItemFactory = ({
     // Multi-value base Form elements
     case FormElementTypes.checkbox:
     case FormElementTypes.attestation:
-      return <BaseElementArray formItem={formItem} />;
+      return <BaseElementArray formItem={formItem} splitValues={true} />;
 
     // Single value base Form elements e.g. input, textarea, radio, select, combobox, departments...
     default:
