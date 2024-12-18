@@ -3,7 +3,7 @@ export class InMemoryCache {
   private defaultTTL: number;
   private maxSize: number;
   constructor(maxSize = 200, defaultTTL = 60) {
-    // default TTL is 60 seconds in milliseconds
+    // default TTL is 60 seconds
     this.cache = new Map();
     this.defaultTTL = defaultTTL;
     this.maxSize = maxSize;
