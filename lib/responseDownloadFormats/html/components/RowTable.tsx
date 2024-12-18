@@ -1,4 +1,4 @@
-import React from "react";
+import React, { type JSX } from "react";
 import { capitalize } from "./ResponseSection";
 import { customTranslate, getProperty, orderLanguageStrings } from "@lib/i18nHelpers";
 import { Answer, Submission } from "../../types";

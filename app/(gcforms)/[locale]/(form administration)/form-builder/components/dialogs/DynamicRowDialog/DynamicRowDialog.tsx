@@ -19,6 +19,7 @@ export const TextInput = ({ label, children }: { label: string; children: React.
         {label}
       </label>
       {React.cloneElement(children, {
+        // @ts-expect-error -- Fix this
         className: "block w-full rounded-r-md p-2 outline-offset-[-5px]",
       })}
     </div>

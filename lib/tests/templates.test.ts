@@ -17,7 +17,7 @@ import {
   TemplateHasUnprocessedSubmissions,
 } from "../templates";
 
-import { DeliveryOption, FormProperties, FormRecord, UserAbility } from "@lib/types";
+import { DeliveryOption, FormProperties, FormRecord } from "@lib/types";
 import formConfiguration from "@jestFixtures/cdsIntakeTestForm.json";
 
 // structuredClone is available starting in Node 17.
@@ -28,13 +28,16 @@ import { Prisma } from "@prisma/client";
 import { logEvent } from "@lib/auditLogs";
 import { unprocessedSubmissions } from "@lib/vault";
 import { deleteKey } from "@lib/serviceAccount";
-import { AccessControlError } from "@lib/privileges";
-import { authorizationPass, authorizationFail } from "__utils__/authorization";
+import { AccessControlError } from "@lib/auth";
+import {
+  mockAuthorizationPass,
+  mockAuthorizationFail,
+  mockGetAbility,
+} from "__utils__/authorization";
 
-jest.mock("@lib/privileges");
 jest.mock("@lib/auditLogs");
-jest.mock("@lib/actions/auth");
 jest.mock("@lib/serviceAccount");
+jest.mock("@lib/privileges");
 
 const mockedDeleteKey = jest.mocked(deleteKey);
 
@@ -85,12 +88,13 @@ const buildPrismaResponse = (
   };
 };
 
-const user1Ability = { userID: "1" } as unknown as UserAbility;
+const userID = "user1";
 
 describe("Template CRUD functions", () => {
   describe("User with permission should be able to use CRUD functions", () => {
     beforeAll(() => {
-      authorizationPass();
+      mockAuthorizationPass(userID);
+      mockGetAbility(userID);
     });
 
     it("Create a Template", async () => {
@@ -103,7 +107,6 @@ describe("Template CRUD functions", () => {
       );
 
       const newTemplate = await createTemplate({
-        ability: user1Ability,
         userID: "1",
         formConfig: formConfiguration as FormProperties,
       });
@@ -129,7 +132,7 @@ describe("Template CRUD functions", () => {
       );
 
       expect(mockedLogEvent).toHaveBeenCalledWith(
-        user1Ability.userID,
+        userID,
         { id: "formtestID", type: "Form" },
         "CreateForm"
       );
@@ -141,7 +144,7 @@ describe("Template CRUD functions", () => {
         buildPrismaResponse("formtestID2", formConfiguration),
       ]);
 
-      const templates = await getAllTemplates(user1Ability);
+      const templates = await getAllTemplates();
 
       expect(templates).toEqual([
         expect.objectContaining({
@@ -158,7 +161,7 @@ describe("Template CRUD functions", () => {
         }),
       ]);
       expect(mockedLogEvent).toHaveBeenCalledWith(
-        user1Ability.userID,
+        userID,
         { type: "Form" },
         "ReadForm",
         "Accessed Forms: All System Forms"
@@ -168,7 +171,7 @@ describe("Template CRUD functions", () => {
     it("No templates returned", async () => {
       (prismaMock.template.findMany as jest.MockedFunction<any>).mockResolvedValue([]);
 
-      const template = await getAllTemplates(user1Ability);
+      const template = await getAllTemplates();
       expect(template).toEqual([]);
       expect(mockedLogEvent).toHaveBeenCalledTimes(0);
     });
@@ -178,7 +181,7 @@ describe("Template CRUD functions", () => {
         buildPrismaResponse("formtestID", formConfiguration),
       ]);
 
-      await getAllTemplatesForUser(user1Ability);
+      await getAllTemplatesForUser();
 
       expect(prismaMock.template.findMany).toHaveBeenCalledWith(
         expect.objectContaining({
@@ -186,14 +189,14 @@ describe("Template CRUD functions", () => {
             ttl: null,
             users: {
               some: {
-                id: "1",
+                id: userID,
               },
             },
           },
         })
       );
       expect(mockedLogEvent).toHaveBeenCalledWith(
-        user1Ability.userID,
+        userID,
         { type: "Form" },
         "ReadForm",
         "Accessed Forms: formtestID"
@@ -232,7 +235,7 @@ describe("Template CRUD functions", () => {
         buildPrismaResponse("formtestID", formConfiguration)
       );
 
-      const template = await getFullTemplateByID(user1Ability, "formTestID");
+      const template = await getFullTemplateByID("formTestID");
 
       expect(prismaMock.template.findUnique).toHaveBeenCalledWith(
         expect.objectContaining({
@@ -251,7 +254,7 @@ describe("Template CRUD functions", () => {
         })
       );
       expect(mockedLogEvent).toHaveBeenCalledWith(
-        user1Ability.userID,
+        userID,
         { type: "Form", id: "formTestID" },
         "ReadForm"
       );
@@ -281,7 +284,7 @@ describe("Template CRUD functions", () => {
         buildPrismaResponse("formtestID", formConfiguration)
       );
 
-      await getTemplateWithAssociatedUsers(user1Ability, "formtestID");
+      await getTemplateWithAssociatedUsers("formtestID");
 
       expect(prismaMock.template.findUnique).toHaveBeenCalledWith(
         expect.objectContaining({
@@ -291,7 +294,7 @@ describe("Template CRUD functions", () => {
         })
       );
       expect(mockedLogEvent).toHaveBeenCalledWith(
-        user1Ability.userID,
+        userID,
         { id: "formtestID", type: "Form" },
         "ReadForm",
         "Retrieved users associated with Form"
@@ -306,7 +309,6 @@ describe("Template CRUD functions", () => {
       );
 
       const updatedTemplate = await updateTemplate({
-        ability: user1Ability,
         formID: "test1",
         formConfig: updatedFormConfig,
       });
@@ -332,7 +334,7 @@ describe("Template CRUD functions", () => {
         })
       );
       expect(mockedLogEvent).toHaveBeenCalledWith(
-        user1Ability.userID,
+        userID,
         { id: "test1", type: "Form" },
         "UpdateForm",
         "Form content updated"
@@ -349,14 +351,7 @@ describe("Template CRUD functions", () => {
         buildPrismaResponse("formtestID", formConfiguration, true)
       );
 
-      const updatedTemplate = await updateIsPublishedForTemplate(
-        user1Ability,
-        "formtestID",
-        true,
-        "",
-        "",
-        ""
-      );
+      const updatedTemplate = await updateIsPublishedForTemplate("formtestID", true, "", "", "");
 
       expect(prismaMock.template.update).toHaveBeenCalledWith(
         expect.objectContaining({
@@ -384,7 +379,7 @@ describe("Template CRUD functions", () => {
         })
       );
       expect(mockedLogEvent).toHaveBeenCalledWith(
-        user1Ability.userID,
+        userID,
         { id: "formtestID", type: "Form" },
         "PublishForm"
       );
@@ -406,7 +401,7 @@ describe("Template CRUD functions", () => {
       // We're just adding an additional user (2)
       const users: { id: string }[] = [{ id: "1" }, { id: "2" }];
 
-      await updateAssignedUsersForTemplate(user1Ability, "formTestID", users);
+      await updateAssignedUsersForTemplate("formTestID", users);
 
       // Should just connect the new user
       expect(prismaMock.template.update).toHaveBeenCalledWith(
@@ -426,7 +421,7 @@ describe("Template CRUD functions", () => {
       // should just log the new user
       expect(mockedLogEvent).toHaveBeenNthCalledWith(
         1,
-        user1Ability.userID,
+        userID,
         { id: "formTestID", type: "Form" },
         "GrantFormAccess",
         "Access granted to user2@test.ca"
@@ -456,7 +451,7 @@ describe("Template CRUD functions", () => {
       // We're removing two (2,4) and adding one (1)
       const users2: { id: string }[] = [{ id: "1" }, { id: "3" }];
 
-      await updateAssignedUsersForTemplate(user1Ability, "formTestID", users2);
+      await updateAssignedUsersForTemplate("formTestID", users2);
 
       // Connect 1, disconnect 2,4
       expect(prismaMock.template.update).toHaveBeenCalledWith(
@@ -491,7 +486,7 @@ describe("Template CRUD functions", () => {
       // Log one added
       expect(mockedLogEvent).toHaveBeenNthCalledWith(
         2,
-        user1Ability.userID,
+        userID,
         { id: "formTestID", type: "Form" },
         "GrantFormAccess",
         "Access granted to user1@test.ca"
@@ -500,7 +495,7 @@ describe("Template CRUD functions", () => {
       // Log two removed
       expect(mockedLogEvent).toHaveBeenNthCalledWith(
         3,
-        user1Ability.userID,
+        userID,
         { id: "formTestID", type: "Form" },
         "RevokeFormAccess",
         "Access revoked for user2@test.ca,user4@test.ca"
@@ -513,7 +508,6 @@ describe("Template CRUD functions", () => {
 
       await expect(async () => {
         await updateTemplate({
-          ability: user1Ability,
           formID: "test1",
           formConfig: updatedFormConfig,
         });
@@ -526,7 +520,7 @@ describe("Template CRUD functions", () => {
         isPublished: false,
       });
 
-      await removeDeliveryOption(user1Ability, "formtestID");
+      await removeDeliveryOption("formtestID");
 
       expect(prismaMock.deliveryOption.deleteMany).toHaveBeenCalledWith(
         expect.objectContaining({
@@ -537,7 +531,7 @@ describe("Template CRUD functions", () => {
       );
 
       expect(mockedLogEvent).toHaveBeenCalledWith(
-        user1Ability.userID,
+        userID,
         { id: "formtestID", type: "Form" },
         "ChangeDeliveryOption",
         "Delivery Option set to the Vault"
@@ -556,7 +550,7 @@ describe("Template CRUD functions", () => {
 
       mockUnprocessedSubmissions.mockResolvedValueOnce(false);
 
-      const deletedTemplate = await deleteTemplate(user1Ability, "formtestID");
+      const deletedTemplate = await deleteTemplate("formtestID");
 
       expect(prismaMock.template.update).toHaveBeenCalledWith(
         expect.objectContaining({
@@ -593,7 +587,7 @@ describe("Template CRUD functions", () => {
       );
 
       expect(mockedLogEvent).toHaveBeenCalledWith(
-        user1Ability.userID,
+        userID,
         { id: "formtestID", type: "Form" },
         "DeleteForm"
       );
@@ -613,7 +607,7 @@ describe("Template CRUD functions", () => {
       mockUnprocessedSubmissions.mockResolvedValueOnce(true);
 
       await expect(async () => {
-        await deleteTemplate(user1Ability, "formtestID");
+        await deleteTemplate("formtestID");
       }).rejects.toThrow(TemplateHasUnprocessedSubmissions);
     });
 
@@ -644,19 +638,18 @@ describe("Template CRUD functions", () => {
 
   describe("User with no permission should not be able to use CRUD functions", () => {
     beforeAll(() => {
-      authorizationFail();
+      mockAuthorizationFail(userID);
     });
     it("Create a Template", async () => {
       await expect(
         createTemplate({
-          ability: user1Ability,
           userID: "1",
           formConfig: formConfiguration as FormProperties,
         })
-      ).rejects.toBeInstanceOf(AccessControlError);
+      ).rejects.toThrow(AccessControlError);
       expect(mockedLogEvent).toHaveBeenNthCalledWith(
         1,
-        user1Ability.userID,
+        Promise.resolve(userID),
         { type: "Form" },
         "AccessDenied",
         "Attempted to create a Form"
@@ -664,22 +657,22 @@ describe("Template CRUD functions", () => {
     });
 
     it("Get multiple Templates", async () => {
-      await expect(getAllTemplates(user1Ability)).rejects.toBeInstanceOf(AccessControlError);
+      const result = await getAllTemplates();
+      expect(result).toEqual([]);
       expect(mockedLogEvent).toHaveBeenNthCalledWith(
         1,
-        user1Ability.userID,
+        Promise.resolve(userID),
         { type: "Form" },
         "AccessDenied",
-        "Attempted to list all Forms"
+        "Attempted to access All System Forms"
       );
     });
     it("Get a template", async () => {
-      await expect(getFullTemplateByID(user1Ability, "1")).rejects.toBeInstanceOf(
-        AccessControlError
-      );
+      const result = await getFullTemplateByID("1");
+      expect(result).toBe(null);
       expect(mockedLogEvent).toHaveBeenNthCalledWith(
         1,
-        user1Ability.userID,
+        Promise.resolve(userID),
         { id: "1", type: "Form" },
         "AccessDenied",
         "Attemped to read form object"
@@ -689,26 +682,25 @@ describe("Template CRUD functions", () => {
     it("Update a template", async () => {
       await expect(
         updateTemplate({
-          ability: user1Ability,
           formID: "test1",
           formConfig: structuredClone(formConfiguration as FormProperties),
         })
-      ).rejects.toBeInstanceOf(AccessControlError);
+      ).rejects.toThrow(AccessControlError);
       expect(mockedLogEvent).toHaveBeenNthCalledWith(
         1,
-        user1Ability.userID,
+        Promise.resolve(userID),
         { id: "test1", type: "Form" },
         "AccessDenied",
         "Attempted to update Form"
       );
     });
     it("Update `isPublished` on a specific form", async () => {
-      await expect(
-        updateIsPublishedForTemplate(user1Ability, "formtestID", true, "", "", "")
-      ).rejects.toBeInstanceOf(AccessControlError);
+      await expect(updateIsPublishedForTemplate("formtestID", true, "", "", "")).rejects.toThrow(
+        AccessControlError
+      );
       expect(mockedLogEvent).toHaveBeenNthCalledWith(
         1,
-        user1Ability.userID,
+        Promise.resolve(userID),
         { id: "formtestID", type: "Form" },
         "AccessDenied",
         "Attempted to publish form"
@@ -716,12 +708,10 @@ describe("Template CRUD functions", () => {
     });
 
     it("Remove DeliveryOption from template", async () => {
-      await expect(removeDeliveryOption(user1Ability, "formtestID")).rejects.toBeInstanceOf(
-        AccessControlError
-      );
+      await expect(removeDeliveryOption("formtestID")).rejects.toThrow(AccessControlError);
       expect(mockedLogEvent).toHaveBeenNthCalledWith(
         1,
-        user1Ability.userID,
+        Promise.resolve(userID),
         { id: "formtestID", type: "Form" },
         "AccessDenied",
         "Attempted to set Delivery Option to the Vault"
@@ -729,12 +719,10 @@ describe("Template CRUD functions", () => {
     });
 
     it("Delete template", async () => {
-      await expect(deleteTemplate(user1Ability, "formtestID")).rejects.toBeInstanceOf(
-        AccessControlError
-      );
+      await expect(deleteTemplate("formtestID")).rejects.toThrow(AccessControlError);
       expect(mockedLogEvent).toHaveBeenNthCalledWith(
         1,
-        user1Ability.userID,
+        Promise.resolve(userID),
         { id: "formtestID", type: "Form" },
         "AccessDenied",
         "Attempted to delete Form"

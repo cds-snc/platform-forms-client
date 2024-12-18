@@ -5,6 +5,10 @@ import { defaultField } from "../../defaults";
 export const add: TemplateStore<"add"> =
   (set, get) =>
   (elIndex = 0, type = FormElementTypes.radio, data, groupId) => {
+    if (!get) {
+      throw new Error("get is not defined");
+    }
+
     const id = get().generateElementId();
 
     return new Promise((resolve) => {

@@ -1,4 +1,4 @@
-import { useMemo, useRef } from "react";
+import { useRef } from "react";
 import { useTranslation } from "@i18n/client";
 import { Button } from "@clientComponents/globals";
 import { Theme } from "@clientComponents/globals/Buttons/themes";
@@ -206,37 +206,28 @@ export const Review = ({ language }: { language: Language }): React.ReactElement
   addressCompleteStrings.country = t("addressComponents.country", { lng: language });
   //This is done here, as useTranslation is inacessible inside useMemo.
 
-  const reviewItems: ReviewItem[] = useMemo(() => {
-    const formValues: void | FormValues = getValues();
-    if (!formValues || !groups) return [];
+  const formValues: void | FormValues = getValues();
 
-    const groupHistory = getGroupHistory();
-    return groupHistory
-      .filter((key) => key !== "review") // Removed to avoid showing as a group
-      .map((groupId) => {
-        const group: Group = groups[groupId as keyof typeof groups] || {};
-        return {
-          id: groupId,
-          name: group.name,
-          title: getGroupTitle(groupId, language),
-          elements: getReviewItemElements(
-            group.elements,
-            formRecord.form.elements,
-            matchedIds,
-            formValues,
-            language
-          ),
-        };
-      });
-  }, [
-    groups,
-    getValues,
-    getGroupHistory,
-    getGroupTitle,
-    language,
-    formRecord.form.elements,
-    matchedIds,
-  ]);
+  if (!formValues || !groups) throw new Error("Form values or groups are missing");
+
+  const groupHistory = getGroupHistory();
+  const reviewItems: ReviewItem[] = groupHistory
+    .filter((key) => key !== "review") // Removed to avoid showing as a group
+    .map((groupId) => {
+      const group: Group = groups[groupId as keyof typeof groups] || {};
+      return {
+        id: groupId,
+        name: group.name,
+        title: getGroupTitle(groupId, language),
+        elements: getReviewItemElements(
+          group.elements,
+          formRecord.form.elements,
+          matchedIds,
+          formValues,
+          language
+        ),
+      };
+    });
 
   return (
     <>

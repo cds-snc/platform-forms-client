@@ -1,9 +1,9 @@
 "use server";
 
-import { authCheckAndThrow } from "@lib/actions";
+import { authCheckAndThrow, AuthenticatedAction } from "@lib/actions";
 import { prisma } from "@lib/integration/prismaConnector";
 import { TemplateUser } from "./types";
-import { AccessControlError } from "@lib/privileges";
+import { AccessControlError } from "@lib/auth";
 import {
   InvalidDomainError,
   MismatchedEmailDomainError,
@@ -70,9 +70,9 @@ export const sendInvitation = async (emails: string[], templateId: string, messa
 };
 
 export const removeUserFromForm = async (userId: string, formId: string) => {
-  const { ability } = await authCheckAndThrow();
+  await authCheckAndThrow();
   try {
-    await removeAssignedUserFromTemplate(ability, formId, userId);
+    await removeAssignedUserFromTemplate(formId, userId);
     return {
       success: true,
       message: "User removed",
@@ -85,10 +85,8 @@ export const removeUserFromForm = async (userId: string, formId: string) => {
   }
 };
 
-export const getTemplateUsers = async (formId: string) => {
-  const { ability } = await authCheckAndThrow();
-
-  const template = await getTemplateWithAssociatedUsers(ability, formId);
+export const getTemplateUsers = AuthenticatedAction(async (formId: string) => {
+  const template = await getTemplateWithAssociatedUsers(formId);
 
   if (!template) {
     throw new TemplateNotFoundError();
@@ -115,7 +113,7 @@ export const getTemplateUsers = async (formId: string) => {
   ];
 
   return combinedUsers as TemplateUser[];
-};
+});
 
 export const cancelInvitation = async (id: string) => {
   const { ability } = await authCheckAndThrow();

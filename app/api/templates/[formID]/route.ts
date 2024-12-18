@@ -18,14 +18,8 @@ import {
   subElementsIDValidator,
   uniqueIDValidator,
 } from "@lib/middleware/jsonIDValidator";
-import {
-  MiddlewareProps,
-  FormProperties,
-  DeliveryOption,
-  SecurityAttribute,
-  WithRequired,
-} from "@lib/types";
-import { AccessControlError, createAbility } from "@lib/privileges";
+import { FormProperties, DeliveryOption, SecurityAttribute } from "@lib/types";
+import { AccessControlError } from "@lib/auth";
 import { logMessage } from "@lib/logger";
 import { authCheckAndThrow } from "@lib/actions";
 
@@ -40,7 +34,8 @@ const runValidationCondition = async (body: Record<string, unknown>) => {
   return body.formConfig !== undefined;
 };
 
-export const GET = async (req: NextRequest, { params }: { params: Record<string, string> }) => {
+export const GET = async (req: NextRequest, props: { params: Promise<Record<string, string>> }) => {
+  const params = await props.params;
   try {
     const formID = params?.formID;
 
@@ -48,9 +43,8 @@ export const GET = async (req: NextRequest, { params }: { params: Record<string,
       throw new MalformedAPIRequest("Invalid or missing formID");
     }
 
-    const { session, ability } = await authCheckAndThrow().catch(() => ({
+    const { session } = await authCheckAndThrow().catch(() => ({
       session: null,
-      ability: null,
     }));
 
     if (!session) {
@@ -68,7 +62,7 @@ export const GET = async (req: NextRequest, { params }: { params: Record<string,
       return NextResponse.json(response);
     }
 
-    const response = await getFullTemplateByID(ability, formID);
+    const response = await getFullTemplateByID(formID);
     if (response === null) {
       throw new Error(
         `Template API response was null. Request information: method = ${
@@ -131,9 +125,6 @@ export const PUT = middleware(
   ],
   async (req, props) => {
     try {
-      const { session } = props as WithRequired<MiddlewareProps, "session">;
-
-      const ability = createAbility(session);
       const {
         formConfig,
         name,
@@ -157,7 +148,6 @@ export const PUT = middleware(
 
       if (formConfig) {
         response = await updateTemplate({
-          ability: ability,
           formID: formID,
           formConfig: formConfig,
           name: name,
@@ -173,7 +163,6 @@ export const PUT = middleware(
         return NextResponse.json(response);
       } else if (isPublished !== undefined) {
         const response = await updateIsPublishedForTemplate(
-          ability,
           formID,
           isPublished,
           publishReason || "",
@@ -191,7 +180,7 @@ export const PUT = middleware(
         if (!users.length) {
           return NextResponse.json({ error: true, message: "mustHaveAtLeastOneUser" });
         }
-        const response = await updateAssignedUsersForTemplate(ability, formID, users);
+        const response = await updateAssignedUsersForTemplate(formID, users);
         if (!response)
           throw new Error(
             `Template API response was null. Request information: method = ${
@@ -200,7 +189,7 @@ export const PUT = middleware(
           );
         return NextResponse.json(response);
       } else if (sendResponsesToVault) {
-        const response = await removeDeliveryOption(ability, formID);
+        const response = await removeDeliveryOption(formID);
         return NextResponse.json(response);
       }
       throw new MalformedAPIRequest(
@@ -231,15 +220,12 @@ export const PUT = middleware(
 
 export const DELETE = middleware([sessionExists()], async (req, props) => {
   try {
-    const { session } = props as WithRequired<MiddlewareProps, "session">;
-
-    const ability = createAbility(session);
     const formID = props.params?.formID;
 
     if (!formID || typeof formID !== "string") {
       throw new MalformedAPIRequest("Invalid or missing formID");
     }
-    const response = await deleteTemplate(ability, formID);
+    const response = await deleteTemplate(formID);
     if (!response)
       throw new Error(
         `Template API response was null. Request information: method = ${
