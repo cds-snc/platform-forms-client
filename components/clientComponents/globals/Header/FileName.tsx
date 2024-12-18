@@ -22,10 +22,10 @@ export const FileNameInput = () => {
   const [isEditing, setIsEditing] = useState(false);
   const [isInitialFocus, setIsInitialFocus] = useState(false);
   const [width, setWidth] = useState(0);
-  const span = useRef<HTMLElement>(null);
+  const span = useRef<HTMLElement | null>(null);
 
-  const fileNameInput = useRef<HTMLInputElement>(null);
-  const remoteRef = useRef<HTMLInputElement>(null);
+  const fileNameInput = useRef<HTMLInputElement | null>(null);
+  const remoteRef = useRef<HTMLInputElement | null>(null);
   const { setRef, removeRef } = useRefStore();
 
   const { title } = useTemplateStore((s) => ({
@@ -34,6 +34,7 @@ export const FileNameInput = () => {
   }));
 
   useEffect(() => {
+    // @ts-expect-error -- TODO: fix this
     setRef("fileNameInput", remoteRef);
 
     return () => {

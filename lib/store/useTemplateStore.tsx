@@ -16,7 +16,6 @@ import unset from "lodash.unset";
  * Internal dependencies
  */
 import { TemplateStoreProps, TemplateStoreState, InitialTemplateStoreProps } from "./types";
-import { getPathString } from "../utils/form-builder/getPath";
 import { TreeRefProvider } from "@formBuilder/components/shared/right-panel/treeview/provider/TreeRefProvider";
 import { FlowRefProvider } from "@formBuilder/[id]/edit/logic/components/flow/provider/FlowRefProvider";
 import { getSchemaFromState, cleanInput } from "../utils/form-builder";
@@ -45,6 +44,14 @@ import {
 import { moveUp, moveDown, subMoveUp, subMoveDown } from "./helpers/move";
 import { initialize, importTemplate } from "./helpers/init";
 import { generateElementId, getHighestElementId } from "./helpers/id";
+import {
+  getFormElementById,
+  getFormElementWithIndexById,
+  propertyPath,
+  getPathString,
+  getChoice,
+  localizeField,
+} from "./helpers/elements";
 
 const createTemplateStore = (initProps?: Partial<InitialTemplateStoreProps>) => {
   const props = initStore(initProps);
@@ -54,30 +61,6 @@ const createTemplateStore = (initProps?: Partial<InitialTemplateStoreProps>) => 
         persist(
           (set, get) => ({
             ...props,
-            setChangeKey: (key: string) => {
-              set((state) => {
-                state.changeKey = key;
-              });
-            },
-            setHasHydrated: () => {
-              set({ hasHydrated: true });
-            },
-            localizeField: (path, lang = get().lang) => {
-              const langUpperCaseFirst = (lang.charAt(0).toUpperCase() +
-                lang.slice(1)) as Capitalize<Language>;
-              return `${path}${langUpperCaseFirst}`;
-            },
-            setId: (id) =>
-              set((state) => {
-                state.id = id;
-              }),
-            getPathString(id) {
-              return getPathString(id, get().form.elements);
-            },
-            setLang: (lang) =>
-              set((state) => {
-                state.lang = lang;
-              }),
             toggleLang: () =>
               set((state) => {
                 state.lang = state.lang === "en" ? "fr" : "en";
@@ -86,14 +69,6 @@ const createTemplateStore = (initProps?: Partial<InitialTemplateStoreProps>) => 
               set((state) => {
                 state.translationLanguagePriority =
                   state.translationLanguagePriority === "en" ? "fr" : "en";
-              }),
-            setTranslationLanguagePriority: (lang: Language) =>
-              set((state) => {
-                state.translationLanguagePriority = lang;
-              }),
-            setFocusInput: (isSet) =>
-              set((state) => {
-                state.focusInput = isSet;
               }),
             getFocusInput: () => get().focusInput,
             // Use on a child element to declare the language when the parent element lang attribute is different
@@ -105,21 +80,13 @@ const createTemplateStore = (initProps?: Partial<InitialTemplateStoreProps>) => 
               set((state) => {
                 update(state, path, cleanInput(value));
               }),
-            updateSecurityAttribute: (value) =>
-              set((state) => {
-                state.securityAttribute = value;
-              }),
-            propertyPath: (id: number, field: string, lang?: Language) => {
-              const path = getPathString(id, get().form.elements);
-              if (lang) {
-                return `${path}.${get().localizeField(field, lang)}` ?? "";
-              }
-              return `${path}.${field}` ?? "";
-            },
             unsetField: (path) =>
               set((state) => {
                 unset(state, path);
               }),
+            localizeField: localizeField(set, get),
+            getPathString: getPathString(set, get),
+            propertyPath: propertyPath(set, get),
             moveUp: moveUp(set),
             moveDown: moveDown(set),
             subMoveUp: subMoveUp(set),
@@ -135,89 +102,38 @@ const createTemplateStore = (initProps?: Partial<InitialTemplateStoreProps>) => 
             removeSubItem: removeSubItem(set),
             removeChoice: removeChoice(set),
             removeSubChoice: removeSubChoice(set),
-            getChoice: (elId, choiceIndex) => {
-              const elIndex = get().form.elements.findIndex((el) => el.id === elId);
-              return get().form.elements[elIndex]?.properties.choices?.[choiceIndex];
-            },
+            getChoice: getChoice(set, get),
             duplicateElement: duplicateElement(set, get),
-            getSchema: () => {
-              return JSON.stringify(getSchemaFromState(get(), get().allowGroupsFlag), null, 2);
-            },
-            getId: () => get().id,
-            getIsPublished: () => get().isPublished,
-            setIsPublished: (isPublished) => {
-              set((state) => {
-                state.isPublished = isPublished;
-              });
-            },
-            getFormElementById: (id) => {
-              const elements = get().form.elements;
-
-              for (const element of elements) {
-                if (element.id === id) {
-                  return element;
-                }
-
-                if (element.properties?.subElements) {
-                  for (const subElement of element.properties.subElements) {
-                    if (subElement.id === id) {
-                      return subElement;
-                    }
-                  }
-                }
-              }
-
-              return undefined;
-            },
-            getFormElementWithIndexById: (id) => {
-              const elements = get().form.elements;
-
-              // for (const element of elements) {
-              for (let index = 0; index < elements.length; index++) {
-                const element = elements[index];
-                if (element.id === id) {
-                  return { ...element, index };
-                }
-
-                if (element.properties?.subElements) {
-                  for (
-                    let subIndex = 0;
-                    subIndex < element.properties.subElements.length;
-                    subIndex++
-                  ) {
-                    const subElement = element.properties.subElements[subIndex];
-                    if (subElement.id === id) {
-                      return { ...subElement, index: subIndex };
-                    }
-                  }
-                }
-              }
-
-              return undefined;
-            },
-            getName: () => get().name,
-            getDeliveryOption: () => get().deliveryOption,
-            resetDeliveryOption: () => {
-              set((state) => {
-                state.deliveryOption = undefined;
-              });
-            },
-            getSecurityAttribute: () => get().securityAttribute,
-            setClosingDate: (value) => {
-              set((state) => {
-                state.closingDate = value;
-              });
-            },
             initialize: initialize(set),
             importTemplate: importTemplate(set),
+            getHighestElementId: getHighestElementId(set, get),
+            generateElementId: generateElementId(set, get),
+            getSchema: () =>
+              JSON.stringify(getSchemaFromState(get(), get().allowGroupsFlag), null, 2),
+            getId: () => get().id,
+            getIsPublished: () => get().isPublished,
+            getFormElementById: getFormElementById(set, get),
+            getFormElementWithIndexById: getFormElementWithIndexById(set, get),
+            getName: () => get().name,
+            getDeliveryOption: () => get().deliveryOption,
+            getSecurityAttribute: () => get().securityAttribute,
             getGroupsEnabled: () => get().allowGroupsFlag,
+            setChangeKey: (key: string) => set({ changeKey: key }),
+            setHasHydrated: () => set({ hasHydrated: true }),
+            setId: (id) => set({ id }),
+            setLang: (lang) => set({ lang }),
+            setTranslationLanguagePriority: (lang: Language) =>
+              set({ translationLanguagePriority: lang }),
+            setFocusInput: (isSet) => set({ focusInput: isSet }),
+            setIsPublished: (isPublished) => set({ isPublished }),
+            setClosingDate: (value) => set({ closingDate: value }),
             setGroupsLayout: (layout) => {
               set((state) => {
                 state.form.groupsLayout = layout;
               });
             },
-            getHighestElementId: getHighestElementId(set, get),
-            generateElementId: generateElementId(set, get),
+            updateSecurityAttribute: (value) => set({ securityAttribute: value }),
+            resetDeliveryOption: () => set({ deliveryOption: undefined }),
           }),
           storageOptions
         )
@@ -234,7 +150,7 @@ export const TemplateStoreProvider = ({
   children,
   ...props
 }: React.PropsWithChildren<Partial<TemplateStoreProps>>) => {
-  const storeRef = useRef<TemplateStore>();
+  const storeRef = useRef<TemplateStore>(null);
   if (!storeRef.current) {
     // When there is an incoming form with a different id clear it first
     if (props.id) {

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { type JSX } from "react";
 
 export enum HeadingLevel {
   H1 = "h1",
