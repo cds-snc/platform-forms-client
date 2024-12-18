@@ -422,6 +422,7 @@ export const Form = withFormik<FormProps, Responses>({
         formikBag.props.saveProgress();
         logMessage.info("Failed to find Server Action caught and session saved");
         formikBag.setStatus("ServerIDError");
+        return;
       }
 
       if (result.error) {
