@@ -1,4 +1,4 @@
-FROM node:22-alpine3.20
+FROM node:22-alpine
 
 ARG USERNAME=node
 ARG USER_UID=1000
@@ -10,7 +10,7 @@ COPY .yarnrc.yml /src
 WORKDIR /src
 RUN yarn install
 
-FROM node:22-alpine3.20
+FROM node:22-alpine
 
 ARG USERNAME=node
 ARG USER_UID=1000
