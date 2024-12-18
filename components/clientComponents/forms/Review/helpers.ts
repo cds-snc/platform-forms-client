@@ -30,8 +30,39 @@ export type FormItem = {
 // Local type to help structure an intermediary object used to construct Review Items
 type GroupsWithElementIds = {
   groupId: string;
-  group: Group; // Mainly used to later get the group name, entire group added for future flexibility
+  group: Group; // Mainly used for convenience to get group values easily
   elementIds: number[]; // ElementIds from this group that are visible (not hidden)
+};
+
+export const getReviewSections = (
+  formElements: FormElement[],
+  formValues: FormValues | void,
+  groupsWithElementIds: GroupsWithElementIds[],
+  language: Language,
+  getGroupTitle: (() => string) | ((groupId: string | null, language: Language) => string)
+) => {
+  if (!Array.isArray(groupsWithElementIds) || !formValues) {
+    return [];
+  }
+
+  return groupsWithElementIds
+    .map((groupWithElementIds) => {
+      const elements = getFormElements(groupWithElementIds.elementIds, formElements);
+      const formItems = createFormItems(elements, formValues, language);
+
+      return {
+        id: groupWithElementIds.groupId,
+        name: groupWithElementIds.group.name,
+        title: getGroupTitle(groupWithElementIds.groupId, language),
+        formItems,
+      } as ReviewSection;
+    })
+    .filter(filterReviewSectionsWithoutQuestions);
+};
+
+const filterReviewSectionsWithoutQuestions = (reviewSection: ReviewSection) => {
+  const formItemsWithQuestions = reviewSection.formItems.filter((formItem) => formItem.label);
+  return formItemsWithQuestions.length > 0;
 };
 
 export const getFormElements = (elementIds: number[], formElements: FormElement[]) => {
@@ -88,28 +119,5 @@ export const createFormItems = (
       values: formValues[formElement?.id as unknown as keyof typeof formValues] as string,
       element: formElement,
     } as FormItem;
-  });
-};
-
-export const getReviewItems = (
-  formElements: FormElement[],
-  formValues: FormValues | void,
-  groupsWithElementIds: GroupsWithElementIds[],
-  language: Language,
-  getGroupTitle: (() => string) | ((groupId: string | null, language: Language) => string)
-) => {
-  if (!Array.isArray(groupsWithElementIds) || !formValues) {
-    return [];
-  }
-
-  return groupsWithElementIds.map((groupWithElementIds) => {
-    const elements = getFormElements(groupWithElementIds.elementIds, formElements);
-    const formItems = createFormItems(elements, formValues, language);
-    return {
-      id: groupWithElementIds.groupId,
-      name: groupWithElementIds.group.name,
-      title: getGroupTitle(groupWithElementIds.groupId, language),
-      formItems,
-    } as ReviewSection;
   });
 };

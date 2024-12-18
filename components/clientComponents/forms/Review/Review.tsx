@@ -5,7 +5,7 @@ import { useGCFormsContext } from "@lib/hooks/useGCFormContext";
 import { Language } from "@lib/types/form-builder-types";
 import { EditButton } from "./EditButton";
 import { FormItemFactory } from "./FormItemFactory";
-import { FormItem, getGroupsWithElementIds, getReviewItems } from "./helpers";
+import { FormItem, getGroupsWithElementIds, getReviewSections } from "./helpers";
 import { FormValues } from "@lib/formContext";
 
 export const Review = ({ language }: { language: Language }): React.ReactElement => {
@@ -29,7 +29,7 @@ export const Review = ({ language }: { language: Language }): React.ReactElement
     groupHistoryIds,
     matchedIds
   );
-  const reviewItems = getReviewItems(
+  const reviewItems = getReviewSections(
     formRecord.form.elements,
     formValues,
     groupsWithElementIds,
