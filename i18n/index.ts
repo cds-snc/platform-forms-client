@@ -38,8 +38,8 @@ export async function serverTranslation(
 }
 
 export async function getCurrentLanguage() {
-  const path = headers().get("x-path") ?? "";
+  const path = (await headers()).get("x-path") ?? "";
   const pathLang = pathLanguageDetection(path, languages);
-  const cookieLang = cookies().get("i18next")?.value;
+  const cookieLang = (await cookies()).get("i18next")?.value;
   return pathLang || cookieLang || languages[0];
 }
