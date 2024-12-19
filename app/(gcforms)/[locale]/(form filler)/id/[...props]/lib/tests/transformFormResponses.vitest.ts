@@ -1,4 +1,4 @@
-import { rehydrateFormResponses } from "../rehydrateFormResponses";
+import { transformFormResponses } from "../transformFormResponses";
 import { submission as baseSubmission } from "./fixtures/base";
 import { submission as simpleSubmission, result as simpleResult } from "./fixtures/simple";
 import { submission as checkboxSubmission, result as checkboxResult } from "./fixtures/checkbox";
@@ -21,8 +21,8 @@ import {
 } from "./fixtures/paged";
 import merge from "lodash.merge";
 
-describe("rehydrateFormResponses", () => {
-  it("should rehydrate responses", () => {
+describe("transformFormResponses", () => {
+  it("should transform responses for storage", () => {
     const types = [
       {
         submission: simpleSubmission,
@@ -57,7 +57,7 @@ describe("rehydrateFormResponses", () => {
     types.forEach((type) => {
       const payload = merge({}, baseSubmission, type.submission);
 
-      const result = rehydrateFormResponses(payload);
+      const result = transformFormResponses(payload);
 
       expect(result).toEqual(type.result);
     });
