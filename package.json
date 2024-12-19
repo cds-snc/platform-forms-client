@@ -57,7 +57,7 @@
     "@aws-sdk/client-sqs": "3.515.0",
     "@aws-sdk/lib-dynamodb": "3.515.0",
     "@bufbuild/protobuf": "^2.2.3",
-    "@casl/ability": "6.7.1",
+    "@casl/ability": "6.7.2",
     "@cdssnc/gcds-tokens": "^1.20.0",
     "@headlessui/react": "^2.2.0",
     "@lexical/react": "^0.12.6",
@@ -65,11 +65,11 @@
     "@next/mdx": "^15.1.0",
     "@prisma/client": "6",
     "@radix-ui/react-alert-dialog": "^1.1.1",
-    "@radix-ui/react-dropdown-menu": "2.1.1",
+    "@radix-ui/react-dropdown-menu": "2.1.2",
     "@radix-ui/react-tooltip": "^1.1.1",
     "@types/mdx": "^2.0.13",
     "@zitadel/node": "2.0.37",
-    "axios": "1.7.7",
+    "axios": "1.7.9",
     "clsx": "^2.1.1",
     "copy-to-clipboard": "3.3.3",
     "csv-writer": "^1.6.0",
@@ -118,7 +118,7 @@
     "usehooks-ts": "2.9.1",
     "uuid": "9.0.1",
     "valibot": "^0.30.0",
-    "zustand": "5.0.1"
+    "zustand": "5.0.2"
   },
   "devDependencies": {
     "@aws-sdk/types": "^3.515.0",
