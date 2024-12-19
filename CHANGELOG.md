@@ -5,6 +5,31 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.31.0](https://github.com/cds-snc/platform-forms-client/compare/v3.30.3...v3.31.0) (2024-12-19)
+
+
+### Features
+
+* In memory cached Ability and Authenticated Action wrapper. ([#4829](https://github.com/cds-snc/platform-forms-client/issues/4829)) ([9aa78e9](https://github.com/cds-snc/platform-forms-client/commit/9aa78e9d1067f358c7a31a35b3d90fe8e2ea6e95))
+
+
+### Miscellaneous Chores
+
+* add element helpers ([#4857](https://github.com/cds-snc/platform-forms-client/issues/4857)) ([b1f3b33](https://github.com/cds-snc/platform-forms-client/commit/b1f3b33ac952287afb4b5d08fb7d6f2a5b615f5a))
+* add helpers for generate element ([#4855](https://github.com/cds-snc/platform-forms-client/issues/4855)) ([0b55c8a](https://github.com/cds-snc/platform-forms-client/commit/0b55c8ad14580c2d363a2c945dbe574ec19ce809))
+* add init helpers ([#4845](https://github.com/cds-snc/platform-forms-client/issues/4845)) ([973d136](https://github.com/cds-snc/platform-forms-client/commit/973d136f5f8f2fb1297d9aa33b14698984a3bfe0))
+* Add log message when session saved ([#4862](https://github.com/cds-snc/platform-forms-client/issues/4862)) ([415d355](https://github.com/cds-snc/platform-forms-client/commit/415d355027e45185706acb4c884305efb7b6bb63))
+* Add remove helpers ([#4844](https://github.com/cds-snc/platform-forms-client/issues/4844)) ([9541e69](https://github.com/cds-snc/platform-forms-client/commit/9541e69f80847c2e0d84d50eb5f65c7df0f38e76))
+* Add temporary session storage for form progress ([#4811](https://github.com/cds-snc/platform-forms-client/issues/4811)) ([c219d48](https://github.com/cds-snc/platform-forms-client/commit/c219d4828bea132a5fe15aec2ce662d680b10a16))
+* bump ([#4859](https://github.com/cds-snc/platform-forms-client/issues/4859)) ([055acc3](https://github.com/cds-snc/platform-forms-client/commit/055acc30ed7520dca4badd63aae1753c235d3857))
+* Catch failed to find server action result ([#4861](https://github.com/cds-snc/platform-forms-client/issues/4861)) ([e364a15](https://github.com/cds-snc/platform-forms-client/commit/e364a15c0665f787b4d41c0e5402396984a5b202))
+* Clarify what the API rate limit increase means in admin ([#4860](https://github.com/cds-snc/platform-forms-client/issues/4860)) ([2a11d22](https://github.com/cds-snc/platform-forms-client/commit/2a11d22e4e604f276ef9eb42535a3ad6cf2c3d79))
+* move getters and setters ([#4858](https://github.com/cds-snc/platform-forms-client/issues/4858)) ([ca0483f](https://github.com/cds-snc/platform-forms-client/commit/ca0483ffee4dff23ae8a8592d7efd3e25561c462))
+* move useTemplate store hooks ([#4864](https://github.com/cds-snc/platform-forms-client/issues/4864)) ([386216f](https://github.com/cds-snc/platform-forms-client/commit/386216fb229af8545f7db966f1854be593b4ffcf))
+* Return (exit) after catching missing server action ([#4863](https://github.com/cds-snc/platform-forms-client/issues/4863)) ([8facfd4](https://github.com/cds-snc/platform-forms-client/commit/8facfd4eeeddb81d1d4ce329ceb1f24c62809aa5))
+* update prisma v6 ([#4843](https://github.com/cds-snc/platform-forms-client/issues/4843)) ([b203f92](https://github.com/cds-snc/platform-forms-client/commit/b203f92123c6683aa956b9f09124c2def8ecaab4))
+* upgrade to Next 15.x ([#4823](https://github.com/cds-snc/platform-forms-client/issues/4823)) ([cbf5255](https://github.com/cds-snc/platform-forms-client/commit/cbf5255628c6b003b659c0ab03a76b68ae5d41f9))
+
 ## [3.30.3](https://github.com/cds-snc/platform-forms-client/compare/v3.30.2...v3.30.3) (2024-12-16)
 
 
