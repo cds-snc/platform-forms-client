@@ -21,8 +21,8 @@ import {
 } from "./fixtures/paged";
 import merge from "lodash.merge";
 
-describe("rehydrateFormResponses", () => {
-  it("should rehydrate responses", () => {
+describe("transformFormResponses", () => {
+  it("should transform responses for storage", () => {
     const types = [
       {
         submission: simpleSubmission,
