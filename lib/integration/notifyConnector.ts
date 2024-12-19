@@ -67,6 +67,6 @@ export const sendEmail = async (
       })
     );
 
-    throw new Error(`Failed to send submission through GC Notify.`);
+    throw new Error(`Failed to send email through GC Notify.`);
   }
 };

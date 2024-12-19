@@ -3,7 +3,7 @@ import { LeftNavigation } from "./components/LeftNavigation";
 import { ToastContainer } from "@formBuilder/components/shared/Toast";
 import { SkipLink, Footer } from "@clientComponents/globals";
 import { Header } from "@clientComponents/globals/Header/Header";
-import { AccessControlError } from "@lib/privileges";
+import { AccessControlError } from "@lib/auth";
 import { getFullTemplateByID } from "@lib/templates";
 import { redirect } from "next/navigation";
 import { SaveTemplateProvider } from "@lib/hooks/form-builder/useTemplateContext";
@@ -22,16 +22,19 @@ import {
   formBuilderConfigDefault,
 } from "@lib/hooks/useFormBuilderConfig";
 
-export default async function Layout({
-  children,
-  params: { locale, id },
-}: {
+export default async function Layout(props: {
   children: React.ReactNode;
-  params: { locale: string; id: string };
+  params: Promise<{ locale: string; id: string }>;
 }) {
+  const params = await props.params;
+
+  const { locale, id } = params;
+
+  const { children } = props;
+
   let initialForm: FormRecord | null = null;
 
-  const { session, ability } = await authCheckAndThrow().catch(() => ({
+  const { session } = await authCheckAndThrow().catch(() => ({
     session: null,
     ability: null,
   }));
@@ -41,7 +44,7 @@ export default async function Layout({
   const allowGroupsFlag = allowGrouping();
 
   if (session && formID && formID !== "0000") {
-    initialForm = await getFullTemplateByID(ability, formID).catch((e) => {
+    initialForm = await getFullTemplateByID(formID).catch((e) => {
       if (e instanceof AccessControlError) {
         redirect(`/${locale}/admin/unauthorized`);
       }

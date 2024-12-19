@@ -1,6 +1,5 @@
 "use client";
-
-import { useFormState } from "react-dom";
+import { useActionState } from "react";
 import { Alert, ErrorListItem, Label, TextInput } from "../../../../components/client/forms";
 import { useTranslation } from "@i18n/client";
 import { login, ErrorStates } from "../../actions";
@@ -24,7 +23,7 @@ export const LoginForm = () => {
     }
     return result;
   };
-  const [state, formAction] = useFormState(localFormAction, {});
+  const [state, formAction] = useActionState(localFormAction, {});
   const router = useRouter();
 
   return (

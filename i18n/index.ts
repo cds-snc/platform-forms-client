@@ -24,9 +24,9 @@ export async function serverTranslation(
   ns?: string | string[],
   options?: { keyPrefix?: string; lang?: string }
 ) {
-  const path = headers().get("x-path") ?? "";
+  const path = (await headers()).get("x-path") ?? "";
   const pathLang = pathLanguageDetection(path, languages);
-  const cookieLang = cookies().get("i18next")?.value;
+  const cookieLang = (await cookies()).get("i18next")?.value;
 
   const i18nLang = options?.lang || pathLang || cookieLang || languages[0];
 
@@ -35,4 +35,11 @@ export async function serverTranslation(
     t: i18nextInstance.getFixedT(i18nLang, ns, options?.keyPrefix),
     i18n: i18nextInstance,
   };
+}
+
+export async function getCurrentLanguage() {
+  const path = (await headers()).get("x-path") ?? "";
+  const pathLang = pathLanguageDetection(path, languages);
+  const cookieLang = (await cookies()).get("i18next")?.value;
+  return pathLang || cookieLang || languages[0];
 }

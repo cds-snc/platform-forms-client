@@ -7,7 +7,7 @@ export const csrfProtected = (): MiddlewareRequest => {
   return async (req: NextRequest): Promise<MiddlewareReturn> => {
     if (req.method === "GET") return { next: true };
     const csrfToken = await internalCsrfToken(req).catch(() => "");
-    const csrfHeader = headers().get("x-csrf-token");
+    const csrfHeader = (await headers()).get("x-csrf-token");
     if (csrfToken && csrfToken === csrfHeader) {
       // Compare csrfToken with csrfCookie
       return { next: true };

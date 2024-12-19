@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useRouter, useSearchParams, useParams } from "next/navigation";
 import { BackArrowIcon, ForwardArrowIcon, StartIcon } from "@serverComponents/icons";
 import { useTranslation } from "@i18n/client";
+import { StartFromExclusiveResponse } from "@lib/types";
 
 const decodeBase64Url = (base64Url: string) => {
   const pureBase64 = base64Url.replace(/-/g, "+").replace(/_/g, "/");
@@ -15,12 +16,12 @@ const encodeBase64Url = (payload: string) => {
 };
 
 export const Pagination = ({
-  lastEvaluatedKey,
+  startFromExclusiveResponse,
   formId,
   responseDownloadLimit,
   recordCount,
 }: {
-  lastEvaluatedKey: Record<string, string> | null | undefined;
+  startFromExclusiveResponse: StartFromExclusiveResponse | null;
   formId: string;
   responseDownloadLimit: number;
   recordCount: number;
@@ -33,12 +34,11 @@ export const Pagination = ({
   const searchParams = useSearchParams();
   const { statusFilter } = useParams<{ statusFilter: string }>();
 
-  // Extract responseId from lastEvaluatedKey object
-  const lastEvaluatedResponseId = lastEvaluatedKey
-    ? lastEvaluatedKey.NAME_OR_CONF.split("#")[1]
-    : "end"; // If lastEvaluatedKey is null, we're on the last page
+  const lastEvaluatedResponse = startFromExclusiveResponse
+    ? `${startFromExclusiveResponse.name}_${startFromExclusiveResponse.createdAt}`
+    : "end"; // If startFromExclusiveResponse is null, we're on the last page
 
-  // Keep track of the last evaluated key for each of our pages.
+  // Keep track of the startFromExclusiveResponse for each of our pages.
   // The first item in the array is always "start" and the last item is always "end"
   const [keys, setKeys] = useState<string[]>(() => {
     try {
@@ -50,9 +50,7 @@ export const Pagination = ({
     } catch (e) {
       // If the base64 encoded string has been tampered with, redirect to the first page
       router.push(
-        `/${language}/form-builder/${formId}/responses/${
-          statusFilter ? `/${statusFilter}` : "/new"
-        }`
+        `/${language}/form-builder/${formId}/responses/${statusFilter ? `/${statusFilter}` : "/"}`
       );
       // Needed to satisfy typescript as router.push returns void and not never
       return ["start"];
@@ -62,30 +60,30 @@ export const Pagination = ({
   // When going back, we pop the last item off the keys array
   const previousKeys = keys.slice(0, -1);
 
-  // When going back, we need the lastEvaluatedResponseId of the previous page
-  const previousLastEvaluatedResponseId = keys[keys.indexOf(lastEvaluatedResponseId) - 2];
+  // When going back, we need the lastEvaluatedResponse of the previous page
+  const previousLastEvaluatedResponse = keys[keys.indexOf(lastEvaluatedResponse) - 2];
 
   // Used to determine "start" and "end" for the current page
-  const currentPageNumber = keys.indexOf(lastEvaluatedResponseId);
+  const currentPageNumber = keys.indexOf(lastEvaluatedResponse);
 
   // If we're going back to the first page, just load the base url in case there are newer responses waiting
   let previousLink = "";
-  if (previousLastEvaluatedResponseId !== "start") {
+  if (previousLastEvaluatedResponse !== "start") {
     previousLink = `?keys=${encodeBase64Url(
       previousKeys.join(",")
-    )}&lastKey=${previousLastEvaluatedResponseId}`;
+    )}&lastKey=${previousLastEvaluatedResponse}`;
   }
 
-  // Only append the lastEvaluatedResponseId to the keys array if it's not already there
-  if (!keys.includes(lastEvaluatedResponseId)) {
-    setKeys([...keys, lastEvaluatedResponseId]);
+  // Only append the lastEvaluatedResponse to the keys array if it's not already there
+  if (!keys.includes(lastEvaluatedResponse)) {
+    setKeys([...keys, lastEvaluatedResponse]);
   }
 
-  // lastEvaluatedKey is null when we're on the last page
-  const isLastPage = lastEvaluatedKey === null;
+  // startFromExclusiveResponse is null when we're on the last page
+  const isLastPage = startFromExclusiveResponse === null;
 
-  // previousLastEvaluatedResponseId is undefined when we're on the first page
-  const isFirstPage = previousLastEvaluatedResponseId === undefined;
+  // previousLastEvaluatedResponse is undefined when we're on the first page
+  const isFirstPage = previousLastEvaluatedResponse === undefined;
 
   // Calculate the start and end of the current page
   const start = responseDownloadLimit * (currentPageNumber - 1) + 1;
@@ -95,13 +93,13 @@ export const Pagination = ({
     <>
       <Link
         href={`/${language}/form-builder/${formId}/responses${
-          statusFilter ? `/${statusFilter}` : "/new"
+          statusFilter ? `/${statusFilter}` : "/"
         }`}
         legacyBehavior
       >
         <a
           href={`/${language}/form-builder/${formId}/responses${
-            statusFilter ? `/${statusFilter}` : "/new"
+            statusFilter ? `/${statusFilter}` : "/"
           }`}
           className={`group mr-4 inline-block ${
             isFirstPage ? "pointer-events-none opacity-50" : ""
@@ -116,13 +114,13 @@ export const Pagination = ({
       <div className="float-right inline-block">
         <Link
           href={`/${language}/form-builder/${formId}/responses${
-            statusFilter ? `/${statusFilter}` : "/new"
+            statusFilter ? `/${statusFilter}` : "/"
           }${previousLink}`}
           legacyBehavior
         >
           <a
             href={`/${language}/form-builder/${formId}/responses${
-              statusFilter ? `/${statusFilter}` : "/new"
+              statusFilter ? `/${statusFilter}` : "/"
             }${previousLink}`}
             className={`group mr-4 inline-block ${
               isFirstPage ? "pointer-events-none opacity-50" : ""
@@ -136,14 +134,14 @@ export const Pagination = ({
         {t("downloadResponsesTable.header.pagination.showing", { start, end })}
         <Link
           href={`/${language}/form-builder/${formId}/responses${
-            statusFilter ? `/${statusFilter}` : "/new"
-          }?keys=${encodeBase64Url(keys.join(","))}&lastKey=${lastEvaluatedResponseId}`}
+            statusFilter ? `/${statusFilter}` : "/"
+          }?keys=${encodeBase64Url(keys.join(","))}&lastKey=${lastEvaluatedResponse}`}
           legacyBehavior
         >
           <a
             href={`/${language}/form-builder/${formId}/responses${
-              statusFilter ? `/${statusFilter}` : "/new"
-            }?keys=${encodeBase64Url(keys.join(","))}&lastKey=${lastEvaluatedResponseId}`}
+              statusFilter ? `/${statusFilter}` : "/"
+            }?keys=${encodeBase64Url(keys.join(","))}&lastKey=${lastEvaluatedResponse}`}
             className={`group ml-4 inline-block ${
               isLastPage ? "pointer-events-none opacity-50" : ""
             }`}

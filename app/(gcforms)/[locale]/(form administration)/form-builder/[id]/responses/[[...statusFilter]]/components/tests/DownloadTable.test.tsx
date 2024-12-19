@@ -48,6 +48,7 @@ describe("Download Table", () => {
         nagwareResult={null}
         responseDownloadLimit={0}
         overdueAfter={0}
+        startFromExclusiveResponse={null}
       />
     );
     const table = rendered.getByRole("table");

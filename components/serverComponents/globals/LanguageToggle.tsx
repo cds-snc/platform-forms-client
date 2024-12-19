@@ -7,7 +7,7 @@ const LanguageToggle = async () => {
     t,
     i18n: { language: currentLang },
   } = await serverTranslation("common");
-  const pathname = headers().get("x-path") ?? "";
+  const pathname = (await headers()).get("x-path") ?? "";
 
   return (
     <Link
