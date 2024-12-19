@@ -5,6 +5,8 @@ import { revalidatePath } from "next/cache";
 import { getUsers, updateActiveStatus } from "@lib/users";
 import { authCheckAndThrow } from "@lib/actions";
 
+// Public facing functions - they can be used by anyone who finds the associated server action identifer
+
 export const updatePublishing = async (
   userID: string,
   publishFormsId: string,
