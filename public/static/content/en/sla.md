@@ -8,18 +8,20 @@ GC Forms is a cloud-based service that is owned and operated by the Canadian Dig
 
 - Hosting and supporting the GC Forms system.
 - Handling support requests and inquiries during regular business hours (9am to 5pm Eastern Time).
-- Responding to API integration support within the [timelines provided](#service-contacts-and-response-time).
+- Responding to API support requests within the [timelines provided](#service-contacts-and-response-time).
 - Ensuring data transfer to the client via email is able to support Protected A data or meet the same security requirements as other email-based data delivery options.
 - Ensuring data transfer to the client via the response database is able to support up to PROTECTED B data.
 - Patching security vulnerabilities in a timely manner, where CDS determines the level of threat a security vulnerability possesses. Major vulnerabilities are patched as soon as possible but no more than a week after the root cause is found. External dependencies for code are subject to longer timelines. Any infrastructure-level patching is the responsibility of [Amazon Web Services (AWS)](https://aws.amazon.com/service-terms/).
 - Restoring the system to operation in case of any unplanned outages.
 - Alerting clients if GC Forms is inaccessible for whatever reasons as soon as CDS learns of this. See our real-time [Status page](https://status-statut.cds-snc.ca/history/gc-forms-formulaires-gc).
-- Ensuring the GC Forms system sends form responses and two-factor authentication to clients in a timely manner, as provided by [GC Notify](https://notification.canada.ca/service-level-agreement).
+- Ensuring the GC Forms system sends form responses and two-factor authentication to clients in a timely manner.
 - Ensuring the infrastructure providers do not disconnect the GC Forms or GC Notify system due to misuse by clients.
 - Ensuring the system is available for use, with page load time less than 10 seconds in Canada on high-speed Internet, unless the product is experiencing a denial of service attack or there are issues with AWS.
 - Limiting the rate at which end users can submit responses to preserve the security of CDS and client systems.
 - Responding quickly to incidents. GC Forms follows the [TBS Directive on Security Management](https://www.tbs-sct.canada.ca/pol/doc-eng.aspx?id=32611) and follows an Incident Response process to resolve issues in a timely manner.
+- Staffing on-call personnel 24/7, 365 days of the year to respond to Severity 1 incidents within 2 hours of detection.
 - Sharing application logs with the Canadian Centre for Cyber Security (CCCS). GC Forms follows the [Direction on the Secure Use of Commercial Cloud Services: Security Policy Implementation Notice (SPIN)](https://www.canada.ca/en/government/system/digital-government/digital-government-innovations/cloud-services/direction-secure-use-commercial-cloud-services-spin.html).
+- Deactivating accounts when an account holder's email is no longer active (For example: an employee has left their department). Account deactivation would result in the permanent deletion of all forms and responses associated with the account.
 
 CDS can suspend a service at any time for anything deemed as inappropriate use. Notices of disconnect with a rationale will be provided when necessary.
 
@@ -51,9 +53,9 @@ CDS provides reactive support services to monitor, track, and remedy issues rais
 
 | Issue                                                                               | Initial response                       | Ongoing updates            |
 | :---------------------------------------------------------------------------------- | :------------------------------------- | :------------------------- |
-| Service is **unavailable**                                                          | 8 hours, during regular business hours | Every two hours thereafter |
-| Service is **affected** (performance issues, intermittent errors)                   | 1 business day                         | 1 per (business) day       |
-| Service is **\*functioning** (e.g., data is being collected and received by client) | 2 business days                        | 2 business days            |
+| Service is **unavailable**                                                          | 4 hours | Every 8 hours thereafter |
+| Service is **affected** (performance issues, intermittent errors)                   | 1 business day                         | 2 business days       |
+| Service is **\*functioning** (e.g., data is being collected and received by client) | 2 business days                        | None            |
 
 ### Service contacts and response time
 
@@ -75,10 +77,12 @@ A loss of service availability during a planned maintenance period shall not be 
 
 ### Notice of service deprecation
 
-In case CDS is no longer able to support and operate GC Forms or GC Notify due to factors beyond its control, it will notify clients 2 months in advance via email to the address associated with their GC Forms account.
+GC Forms has ongoing funding from the Treasury Board of Canada Secretariat.
 
-In the event that CDS needs to decommission the service, GC Forms will work with clients to ensure they have the data collected and still retained by the product, as well as provide an options analysis for alternative solutions.
+In the case CDS is no longer able to operate GC Forms, due to factors beyond its control, it will notify clients 6 months in advance using the email address associated with their GC Forms account. GC Forms will work with clients to ensure they are able to retrieve the data associated with their forms and responses, and that the data collected is retained. GC Forms will also provide  options analysis of alternative solutions. 
+
+In some cases, features provided by GC Forms may need to be depreciated. If a feature in GC Forms will no longer be available, CDS will notify clients 2 months in advance.
 
 GC Forms is open source and available for others to stand up their own version based on the code found in [GitHub](https://github.com/cds-snc/platform-forms-client).
 
-**Last update:** July 2, 2024
+**Last update:** December 17, 2024
