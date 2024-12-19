@@ -1,4 +1,5 @@
 "use server";
+
 import * as v from "valibot";
 import {
   isValidGovEmail,
@@ -34,63 +35,7 @@ export interface ErrorStates {
   };
 }
 
-const validate = async (
-  language: string,
-  formEntries: {
-    [k: string]: FormDataEntryValue;
-  }
-) => {
-  const { t } = await serverTranslation(["signup", "common"], { lang: language });
-
-  const formValidationSchema = v.object(
-    {
-      name: v.string([
-        v.minLength(1, t("input-validation.required", { ns: "common" })),
-        v.maxLength(50, t("signUpRegistration.fields.name.error.maxLength")),
-      ]),
-      username: v.string([
-        v.toLowerCase(),
-        v.toTrimmed(),
-        v.minLength(1, t("input-validation.required", { ns: "common" })),
-        v.custom((input) => isValidGovEmail(input), t("input-validation.validGovEmail")),
-      ]),
-      password: v.string([
-        v.minLength(1, t("input-validation.required", { ns: "common" })),
-        v.minLength(8, t("account.fields.password.error.minLength", { ns: "common" })),
-        v.maxLength(50, t("account.fields.password.error.maxLength", { ns: "common" })),
-        v.custom(
-          (password) => containsLowerCaseCharacter(password),
-          t("account.fields.password.error.oneLowerCase", { ns: "common" })
-        ),
-        v.custom(
-          (password) => containsUpperCaseCharacter(password),
-          t("account.fields.password.error.oneUpperCase", { ns: "common" })
-        ),
-        v.custom(
-          (password) => containsNumber(password),
-          t("account.fields.password.error.oneNumber", { ns: "common" })
-        ),
-        v.custom(
-          (password) => containsSymbol(password),
-          t("account.fields.password.error.oneSymbol", { ns: "common" })
-        ),
-      ]),
-      passwordConfirmation: v.string([
-        v.minLength(1, t("input-validation.required", { ns: "common" })),
-      ]),
-    },
-    [
-      v.forward(
-        v.custom(
-          (input) => input.password === input.passwordConfirmation,
-          t("account.fields.passwordConfirmation.error.mustMatch", { ns: "common" })
-        ),
-        ["passwordConfirmation"]
-      ),
-    ]
-  );
-  return v.safeParse(formValidationSchema, formEntries, { abortPipeEarly: true });
-};
+// Public facing functions - they can be used by anyone who finds the associated server action identifer
 
 export const register = async (
   language: string,
@@ -154,4 +99,64 @@ export const register = async (
   }
 
   return { validationErrors: [], authError: { title: t("InternalServiceException") } };
+};
+
+// Internal and private functions - won't be converted into server actions
+
+const validate = async (
+  language: string,
+  formEntries: {
+    [k: string]: FormDataEntryValue;
+  }
+) => {
+  const { t } = await serverTranslation(["signup", "common"], { lang: language });
+
+  const formValidationSchema = v.object(
+    {
+      name: v.string([
+        v.minLength(1, t("input-validation.required", { ns: "common" })),
+        v.maxLength(50, t("signUpRegistration.fields.name.error.maxLength")),
+      ]),
+      username: v.string([
+        v.toLowerCase(),
+        v.toTrimmed(),
+        v.minLength(1, t("input-validation.required", { ns: "common" })),
+        v.custom((input) => isValidGovEmail(input), t("input-validation.validGovEmail")),
+      ]),
+      password: v.string([
+        v.minLength(1, t("input-validation.required", { ns: "common" })),
+        v.minLength(8, t("account.fields.password.error.minLength", { ns: "common" })),
+        v.maxLength(50, t("account.fields.password.error.maxLength", { ns: "common" })),
+        v.custom(
+          (password) => containsLowerCaseCharacter(password),
+          t("account.fields.password.error.oneLowerCase", { ns: "common" })
+        ),
+        v.custom(
+          (password) => containsUpperCaseCharacter(password),
+          t("account.fields.password.error.oneUpperCase", { ns: "common" })
+        ),
+        v.custom(
+          (password) => containsNumber(password),
+          t("account.fields.password.error.oneNumber", { ns: "common" })
+        ),
+        v.custom(
+          (password) => containsSymbol(password),
+          t("account.fields.password.error.oneSymbol", { ns: "common" })
+        ),
+      ]),
+      passwordConfirmation: v.string([
+        v.minLength(1, t("input-validation.required", { ns: "common" })),
+      ]),
+    },
+    [
+      v.forward(
+        v.custom(
+          (input) => input.password === input.passwordConfirmation,
+          t("account.fields.passwordConfirmation.error.mustMatch", { ns: "common" })
+        ),
+        ["passwordConfirmation"]
+      ),
+    ]
+  );
+  return v.safeParse(formValidationSchema, formEntries, { abortPipeEarly: true });
 };
