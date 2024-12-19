@@ -2,7 +2,7 @@ import { useTranslation } from "@i18n/client";
 import { ClosedDetails } from "@lib/types";
 import { Editor } from "@formBuilder/[id]/edit/components/elements/lexical-editor/Editor";
 import { LanguageLabel } from "@formBuilder/components/shared/LanguageLabel";
-import { useRehydrate } from "@lib/store/useTemplateStore";
+import { useRehydrate } from "@lib/store/hooks/useRehydrate";
 import Skeleton from "react-loading-skeleton";
 import React from "react";
 

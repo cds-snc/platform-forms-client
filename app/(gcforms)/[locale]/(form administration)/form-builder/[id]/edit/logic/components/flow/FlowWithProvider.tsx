@@ -32,7 +32,7 @@ import { layoutOptions } from "./options";
 import { edgeOptions } from "./options";
 
 import { useFlowRef } from "./provider/FlowRefProvider";
-import { useRehydrate } from "@lib/store/useTemplateStore";
+import { useRehydrate } from "@lib/store/hooks/useRehydrate";
 import { Language } from "@lib/types/form-builder-types";
 
 import { useTemplateStore } from "@lib/store/useTemplateStore";
