@@ -4,7 +4,7 @@ import { isFutureDate } from "lib/utils/date/isFutureDate";
 import { useTranslation } from "@i18n/client";
 import { formClosingDateEst } from "lib/utils/date/utcToEst";
 import { logMessage } from "@lib/logger";
-import { useRehydrate } from "@lib/store/useTemplateStore";
+import { useRehydrate } from "@lib/store/hooks/useRehydrate";
 
 export const ScheduledClosingDate = ({
   closingDate,

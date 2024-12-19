@@ -1,5 +1,6 @@
 "use client";
-import { useTemplateStore, useRehydrate } from "@lib/store/useTemplateStore";
+import { useTemplateStore } from "@lib/store/useTemplateStore";
+import { useRehydrate } from "@lib/store/hooks/useRehydrate";
 import { isEmailDelivery } from "@lib/utils/form-builder";
 import { DeliveryOptionEmail } from "./DeliveryOptionEmail";
 import { NavigationTabs } from "./NavigationTabs";
