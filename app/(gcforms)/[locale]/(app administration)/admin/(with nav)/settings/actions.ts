@@ -7,7 +7,6 @@ import {
   updateAppSetting,
 } from "@lib/appSettings";
 import { revalidatePath } from "next/cache";
-import { logMessage } from "@lib/logger";
 import { authCheckAndThrow } from "@lib/actions";
 import { redirect } from "next/navigation";
 
@@ -15,7 +14,6 @@ import { redirect } from "next/navigation";
 
 export async function getSetting(internalId: string) {
   const { ability } = await authCheckAndThrow();
-  logMessage.error("Getting setting with internalId: " + internalId);
   return getFullAppSetting(ability, internalId);
 }
 
