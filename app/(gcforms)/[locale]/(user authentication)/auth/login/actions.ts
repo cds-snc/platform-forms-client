@@ -1,4 +1,5 @@
 "use server";
+
 import * as v from "valibot";
 import { serverTranslation } from "@i18n";
 import { begin2FAAuthentication, initiateSignIn } from "@lib/auth";
@@ -25,28 +26,8 @@ export interface ErrorStates {
   };
 }
 
-const validate = async (
-  language: string,
-  formEntries: {
-    [k: string]: FormDataEntryValue;
-  }
-) => {
-  const { t } = await serverTranslation(["login", "common"], { lang: language });
+// Public facing functions - they can be used by anyone who finds the associated server action identifer
 
-  const formValidationSchema = v.object({
-    username: v.string([
-      v.toLowerCase(),
-      v.toTrimmed(),
-      v.minLength(1, t("input-validation.required", { ns: "common" })),
-      v.custom((input) => isValidGovEmail(input), t("input-validation.validGovEmail")),
-    ]),
-    password: v.string([
-      v.minLength(1, t("input-validation.required", { ns: "common" })),
-      v.maxLength(50, t("fields.password.errors.maxLength")),
-    ]),
-  });
-  return v.safeParse(formValidationSchema, formEntries, { abortPipeEarly: true });
-};
 export const login = async (
   language: string,
   _: ErrorStates,
@@ -143,4 +124,29 @@ export const login = async (
     validationErrors: [],
     authError: await handleErrorById("InternalServiceExceptionLogin", language),
   };
+};
+
+// Internal and private functions - won't be converted into server actions
+
+const validate = async (
+  language: string,
+  formEntries: {
+    [k: string]: FormDataEntryValue;
+  }
+) => {
+  const { t } = await serverTranslation(["login", "common"], { lang: language });
+
+  const formValidationSchema = v.object({
+    username: v.string([
+      v.toLowerCase(),
+      v.toTrimmed(),
+      v.minLength(1, t("input-validation.required", { ns: "common" })),
+      v.custom((input) => isValidGovEmail(input), t("input-validation.validGovEmail")),
+    ]),
+    password: v.string([
+      v.minLength(1, t("input-validation.required", { ns: "common" })),
+      v.maxLength(50, t("fields.password.errors.maxLength")),
+    ]),
+  });
+  return v.safeParse(formValidationSchema, formEntries, { abortPipeEarly: true });
 };
