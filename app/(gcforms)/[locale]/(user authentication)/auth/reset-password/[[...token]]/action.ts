@@ -256,7 +256,7 @@ const validatePasswordResetForm = async (
   const schema = v.object(
     {
       confirmationCode: v.coerce(
-        v.number("resetPassword.fields.confirmationCode.error.number"),
+        v.number(t("resetPassword.fields.confirmationCode.error.number")),
         Number
       ),
       username: v.string([
