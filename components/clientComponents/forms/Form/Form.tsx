@@ -417,13 +417,17 @@ export const Form = withFormik<FormProps, Responses>({
         formikBag.props.formRecord
       );
 
-      logMessage.info(`Form submission result: ${JSON.stringify(result)}`);
+      // Failed to find Server Action (likely due to newer deployment)
+      if (result === undefined) {
+        formikBag.props.saveProgress();
+        logMessage.info("Failed to find Server Action caught and session saved");
+        formikBag.setStatus("ServerIDError");
+        return;
+      }
 
       if (result.error) {
         if (result.error.message.includes("FileValidationResult")) {
           formikBag.setStatus("FileError");
-        } else if (result.error.message.includes("Failed to find Server Action")) {
-          throw new Error("Failed to find Server Action");
         } else {
           formikBag.setStatus("Error");
         }
@@ -431,13 +435,8 @@ export const Form = withFormik<FormProps, Responses>({
         formikBag.props.onSuccess(result.id);
       }
     } catch (err) {
-      if ((err as Error).message.includes("Failed to find Server Action")) {
-        formikBag.props.saveProgress();
-        formikBag.setStatus("ServerIDError");
-      } else {
-        logMessage.error(err as Error);
-        formikBag.setStatus("Error");
-      }
+      logMessage.error(err as Error);
+      formikBag.setStatus("Error");
     } finally {
       if (formikBag.props && !formikBag.props.isPreview) {
         window.dataLayer = window.dataLayer || [];

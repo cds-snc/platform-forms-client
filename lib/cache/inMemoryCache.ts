@@ -12,7 +12,10 @@ export class InMemoryCache {
   private staticSize() {
     while (this.cache.size >= this.maxSize) {
       const iterator = this.cache.entries();
-      this.cache.delete(iterator.next().value[0]);
+      const entry = iterator.next().value;
+      if (entry) {
+        this.cache.delete(entry[0]);
+      }
     }
   }
 
