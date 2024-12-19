@@ -1,6 +1,7 @@
 "use client";
 import React from "react";
-import { useRehydrate, useTemplateStore } from "@lib/store/useTemplateStore";
+import { useTemplateStore } from "@lib/store/useTemplateStore";
+import { useRehydrate } from "@lib/store/hooks/useRehydrate";
 import { useTranslation } from "@i18n/client";
 import { RichText } from "./RichText";
 import { Title } from "./Title";

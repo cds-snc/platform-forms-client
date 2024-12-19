@@ -8,7 +8,7 @@ export const propertyPath: TemplateStore<"propertyPath"> = (set, get) => (id, fi
 
   const path = getPathString(id, get().form.elements);
   if (lang) {
-    return `${path}.${get().localizeField(field, lang)}` ?? "";
+    return `${path}.${get().localizeField(field, lang)}`;
   }
-  return `${path}.${field}` ?? "";
+  return `${path}.${field}`;
 };

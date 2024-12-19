@@ -17,7 +17,8 @@ import {
   LocalizedElementProperties,
   LocalizedFormProperties,
 } from "@lib/types/form-builder-types";
-import { useRehydrate, useTemplateStore } from "@lib/store/useTemplateStore";
+import { useTemplateStore } from "@lib/store/useTemplateStore";
+import { useRehydrate } from "@lib/store/hooks/useRehydrate";
 import { BackArrowIcon } from "@serverComponents/icons";
 import Brand from "@clientComponents/globals/Brand";
 import { GCFormsProvider } from "@lib/hooks/useGCFormContext";

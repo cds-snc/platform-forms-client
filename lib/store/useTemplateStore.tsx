@@ -3,7 +3,7 @@
 /**
  * External dependencies
  */
-import React, { createContext, useRef, useContext, useEffect } from "react";
+import React, { createContext, useRef, useContext } from "react";
 import { createStore } from "zustand";
 import { useStoreWithEqualityFn } from "zustand/traditional";
 import { immer } from "zustand/middleware/immer";
@@ -175,31 +175,4 @@ export const useTemplateStore = <T,>(
   const store = useContext(TemplateStoreContext);
   if (!store) throw new Error("Missing Template Store Provider in tree");
   return useStoreWithEqualityFn(store, selector, equalityFn ?? shallow);
-};
-
-export const useSubscibeToTemplateStore = <T,>(
-  selector: (state: TemplateStoreState) => T,
-  listener: (selectedState: T, previousSelectedState: T) => void
-) => {
-  const store = useContext(TemplateStoreContext);
-  if (!store) throw new Error("Missing Template Store Provider in tree");
-  useEffect(
-    () => store.subscribe(selector, listener, { equalityFn: shallow }),
-    [store, selector, listener]
-  );
-};
-
-export const useRehydrate = () => {
-  const store = useContext(TemplateStoreContext);
-  const hasHydrated = useTemplateStore((s) => s.hasHydrated);
-
-  if (!store) throw new Error("Missing Template Store Provider in tree");
-
-  useEffect(() => {
-    if (!hasHydrated) {
-      store.persist.rehydrate();
-    }
-  }, [store, hasHydrated]);
-
-  return hasHydrated;
 };
