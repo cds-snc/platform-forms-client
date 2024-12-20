@@ -4,7 +4,7 @@ import { getOrigin } from "./origin";
 
 export const sendDeactivationEmail = async (email: string) => {
   try {
-    const HOST = getOrigin();
+    const HOST = await getOrigin();
 
     await sendEmail(email, {
       subject: "Account deactivated | Compte désactivé",
