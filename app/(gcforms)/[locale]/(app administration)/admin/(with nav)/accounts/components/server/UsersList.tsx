@@ -38,7 +38,7 @@ export const UsersList = async ({ filter }: { filter?: string }) => {
                   user={user}
                   canManageUser={canManageUser}
                   canManageForms={canManageForms}
-                  currentUserId={ability.userID}
+                  currentUserId={ability.user.id}
                   publishFormsId={publishFormsId}
                 />
               </li>
