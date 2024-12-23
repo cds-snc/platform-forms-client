@@ -153,7 +153,7 @@ export const getUser = async (ability: UserAbility, id: string): Promise<AppUser
   } catch (e) {
     if (e instanceof AccessControlError) {
       logEvent(
-        ability.userID,
+        ability.user.id,
         { type: "User" },
         "AccessDenied",
         `Attempted to get user by id ${id}`
@@ -205,7 +205,7 @@ export const getUsers = async (
     return users;
   } catch (e) {
     if (e instanceof AccessControlError) {
-      logEvent(ability.userID, { type: "User" }, "AccessDenied", "Attempted to list users");
+      logEvent(ability.user.id, { type: "User" }, "AccessDenied", "Attempted to list users");
     }
     throw e;
   }
@@ -242,7 +242,7 @@ export const updateActiveStatus = async (ability: UserAbility, userID: string, a
       }),
       prisma.user.findUniqueOrThrow({
         where: {
-          id: ability.userID,
+          id: ability.user.id,
         },
         select: {
           email: true,
@@ -260,7 +260,7 @@ export const updateActiveStatus = async (ability: UserAbility, userID: string, a
       active ? "UserActivated" : "UserDeactivated",
       `User ${user.email} (userID: ${userID}) was ${active ? "activated" : "deactivated"} by user ${
         privilegedUser.email
-      } (userID: ${ability.userID})`
+      } (userID: ${ability.user.id})`
     );
 
     if (!active && user.email) {
@@ -271,7 +271,7 @@ export const updateActiveStatus = async (ability: UserAbility, userID: string, a
   } catch (error) {
     if (error instanceof AccessControlError) {
       logEvent(
-        ability.userID,
+        ability.user.id,
         { type: "User" },
         "AccessDenied",
         `Attempted to get user by id ${userID}`
@@ -285,7 +285,7 @@ export const updateActiveStatus = async (ability: UserAbility, userID: string, a
 
 type Overdue = { [key: string]: NagwareResult };
 
-export const getUnprocessedSubmissionsForUser = async (ability: UserAbility, userId: string) => {
+export const getUnprocessedSubmissionsForUser = async (userId: string) => {
   const overdue: Overdue = {};
 
   try {
@@ -308,7 +308,7 @@ export const getUnprocessedSubmissionsForUser = async (ability: UserAbility, use
 
     await Promise.all(
       templates.map(async (template) => {
-        const allSubmissions = await listAllSubmissions(ability, template.id);
+        const allSubmissions = await listAllSubmissions(template.id);
 
         const unprocessed = await detectOldUnprocessedSubmissions(allSubmissions.submissions);
 
@@ -320,7 +320,7 @@ export const getUnprocessedSubmissionsForUser = async (ability: UserAbility, use
   } catch (e) {
     if (e instanceof AccessControlError) {
       logEvent(
-        ability.userID,
+        e.user.id,
         { type: "User" },
         "AccessDenied",
         `Attempted to get unprocessed submssions for user ${userId}`
