@@ -2,7 +2,8 @@
 import React, { useCallback, useState } from "react";
 import { useTranslation } from "@i18n/client";
 import { useRouter } from "next/navigation";
-import { useRehydrate, useTemplateStore } from "@lib/store/useTemplateStore";
+import { useTemplateStore } from "@lib/store/useTemplateStore";
+import { useRehydrate } from "@lib/store/hooks/useRehydrate";
 import { CancelIcon, CircleCheckIcon, LockIcon } from "@serverComponents/icons";
 import { Button, Alert } from "@clientComponents/globals";
 import Link from "next/link";
