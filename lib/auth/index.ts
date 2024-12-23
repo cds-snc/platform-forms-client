@@ -50,7 +50,7 @@ export class AccessControlError extends Error {
     id: Promise<string>;
   } = {
     id: getAbility()
-      .then((ability) => ability.userID)
+      .then((ability) => ability.user.id)
       .catch(() => "unauthenticated"),
   };
 

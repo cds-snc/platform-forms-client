@@ -16,11 +16,11 @@ export const enableFlag = async (ability: UserAbility, key: string): Promise<voi
     checkPrivileges(ability, [{ action: "update", subject: "Flag" }]);
     const redis = await getRedisInstance();
     await redis.multi().sadd("flags", key).set(`flag:${key}`, "1").exec();
-    logEvent(ability.userID, { type: "Flag", id: key }, "EnableFlag");
+    logEvent(ability.user.id, { type: "Flag", id: key }, "EnableFlag");
   } catch (e) {
     if (e instanceof AccessControlError) {
       logEvent(
-        ability.userID,
+        ability.user.id,
         { type: "Flag", id: key },
         "AccessDenied",
         `Attempted to enable ${key}`
@@ -40,11 +40,11 @@ export const disableFlag = async (ability: UserAbility, key: string): Promise<vo
     checkPrivileges(ability, [{ action: "update", subject: "Flag" }]);
     const redis = await getRedisInstance();
     await redis.set(`flag:${key}`, "0");
-    logEvent(ability.userID, { type: "Flag", id: key }, "DisableFlag");
+    logEvent(ability.user.id, { type: "Flag", id: key }, "DisableFlag");
   } catch (e) {
     if (e instanceof AccessControlError) {
       logEvent(
-        ability.userID,
+        ability.user.id,
         { type: "Flag", id: key },
         "AccessDenied",
         `Attempted to disable ${key}`
@@ -84,12 +84,12 @@ export const checkAll = async (ability: UserAbility): Promise<{ [k: string]: boo
   try {
     checkPrivileges(ability, [{ action: "view", subject: "Flag" }]);
     const keys = await getKeys();
-    logEvent(ability.userID, { type: "Flag" }, "ListAllFlags");
+    logEvent(ability.user.id, { type: "Flag" }, "ListAllFlags");
     return checkMulti(keys);
   } catch (e) {
     if (e instanceof AccessControlError)
       logEvent(
-        ability.userID,
+        ability.user.id,
         { type: "Flag" },
         "AccessDenied",
         "Attemped to list all Feature Flags"
