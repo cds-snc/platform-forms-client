@@ -23,5 +23,5 @@ export const submission = <Submission>{
     isPublished: false,
     securityAttribute: "Protected A",
   },
-  responses: { "1": "test", formID: "cm41ifzhg0000kgike1emtkd2", securityAttribute: "Protected A" },
+  responses: { formID: "cm41ifzhg0000kgike1emtkd2", securityAttribute: "Protected A" }, // @TODO: do we need these defaults?
 };
