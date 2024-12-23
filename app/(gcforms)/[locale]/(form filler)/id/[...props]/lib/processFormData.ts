@@ -3,7 +3,7 @@ import { ProcessedFile } from "@lib/types/submission-types";
 import { logMessage } from "@lib/logger";
 import { getPublicTemplateByID } from "@lib/templates";
 import { pushFileToS3, deleteObject } from "@lib/s3-upload";
-import { rehydrateFormResponses } from "./rehydrateFormResponses";
+import { transformFormResponses } from "./transformFormResponses";
 import { callLambda } from "./callLambda";
 import { FormIsClosedError, FormNotFoundError, MissingFormDataError } from "./exceptions";
 
@@ -37,7 +37,7 @@ export const processFormData = async (
       throw new FormIsClosedError("Form is closed and not accepting submissions");
     }
 
-    const fields = rehydrateFormResponses({
+    const fields = transformFormResponses({
       form,
       responses: reqFields,
     });
