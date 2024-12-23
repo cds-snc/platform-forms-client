@@ -15,6 +15,5 @@
     "provinceOrState": "Province, territoire ou état",
     "postalCodeOrZip": "Code postal ou zip",
     "country": "Pays"
-  },
-  "instance": "[FR]Instance - {{index}}"
+  }
 }
