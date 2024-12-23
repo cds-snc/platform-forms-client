@@ -455,6 +455,11 @@
     "downloadBtnText": "Download form file",
     "title": "Download form file"
   },
+  "switchToApiMode": {
+    "title": "Switch to API delivery",
+    "description": "New responses will be available through the API endpoint",
+    "btnText": "Switch to API delivery"
+  },
   "formIntroduction": "Form introduction",
   "formInvalidProperty": "Invalid: {{property}}",
   "formMissingProperty": "Missing: {{property}}",
@@ -548,6 +553,7 @@
     "text2": "",
     "vaultOption": "Responses to be downloaded",
     "emailOption": "Responses delivered by email — ",
+    "apiOption": "Responses retrieved by API",
     "change": "Change settings"
   },
   "logicPublishWarning": {
@@ -644,8 +650,8 @@
         "responseLinkText": "Responses page"
       },
       "generateKeySuccess": {
-        "title": "API key generated",
-        "message": "New responses are now available through the API . Instructions and code examples are available in our",
+        "title": "API key created",
+        "message": "New responses are available through the API. Find out more about integration set-up in ",
         "docsLinkText": "API documentation",
         "docsLink": "https://cds-snc.github.io/forms-api/home/"
       },
@@ -674,10 +680,10 @@
         "title": "Create API key",
         "heading": "GC Forms API keys are PROTECTED B",
         "responsibility": "It is your responsibility to:",
-        "responsibility1": "Save this key in a secure location.",
-        "responsibility2": "Share the key only with people who need it.",
-        "responsibility3": "Send the key through secure channels, like encrypted email.",
-        "responsibility4": "Understand the <a href='canada.ca' target='_blank'>required security procedures.</a>",
+        "responsibility1": "Save this key in a secure location on a Government of Canada machine.",
+        "responsibility2": "Share the key only with people who are authorized, if there is a need.",
+        "responsibility3": "Send the key using encrypted email if needed for the purpose of setting up the integration",
+        "responsibility4": "Manage the key, deleting and re-creating it if it's suspected to have been compromised.",
         "text1": "Do not lose your key",
         "text2": "This key is provided once as it can give access to form response data. If you lose this key, or if it becomes compromised, you will have to create a new one.",
         "cancelButton": "Cancel",
@@ -685,12 +691,12 @@
         "confirm": {
           "label": "Confirmation",
           "required": "(required)",
-          "description": "Type <strong>AGREE</strong> in the box below to confirm you understand your responsibilities and agree to the <a href='canada.ca' target='_blank'>required security procedures</a> while storing and sharing this key."
+          "description": "Type <strong>AGREE</strong> in the box below to confirm you understand your responsibilities and agree to the <a href='https://forms-formulaires.alpha.canada.ca/en/terms-of-use' target='_blank'>terms of use</a> while storing and sharing this key."
         },
         "error": {
           "createFailed": {
             "title": "The API key could not be created",
-            "message": "There was an error creating the API key. Please try again later."
+            "message": "There was an error creating the API key. Save your form and try again later."
           }
         }
       }
@@ -737,7 +743,8 @@
       "admin": "Administrative purposes",
       "nonAdmin": "Non-administrative purposes",
       "unset": "Unset"
-    }
+    },
+    "saveButton": "Save changes"
   },
   "settingsResponseDelivery": {
     "selectClassification": "Data classification",
@@ -885,10 +892,10 @@
   "startP2": "Edit a form that was created and downloaded from GC Forms.",
   "submit": "Submit",
   "submittedResponsesText": "Submitted responses will be sent to {{email}}.",
-  "submittedResponsesChange": "Change how responses delivered",
+  "submittedResponsesChange": "Change delivery option",
   "submittedResponsesTextVault": {
-    "text1": "Clicking submit will make responses available for retrieval.",
-    "text2": "Go to Responses page"
+    "text1": "Clicking submit will make responses available for retrieval:",
+    "text2": "Go to Responses"
   },
   "support": {
     "contactUs": "contact form",
@@ -905,7 +912,8 @@
     "lookingForADemo": "Looking to learn more about GC Forms?",
     "request": {
       "option1": "Ask a question",
-      "option2": "Get technical support",
+      "option2": "Get help using GC Forms",
+      "apiOption": "Request technical support with the API",
       "option3": "Report a problem with a published form",
       "option4": "Other",
       "title": "Reason for reaching out"
@@ -985,13 +993,13 @@
       "note": "Not available for PROTECTED B"
     },
     "apiOption": {
-      "label": "Receive responses via API",
-      "note": "Submitted responses will be available for retrieval through an API endpoint and the Response page.",
-      "startNote": "Start your API integration by creating a private API Key"
+      "label": "Integrate with API",
+      "note": "Submitted responses will be available for retrieval from an API endpoint.",
+      "startNote": "Start by creating an API key"
     },
     "apiDocNotes": {
-      "title": "API documentation",
-      "text1": "To connect to our endpoint follow instructions and code examples in our <a href='https://cds-snc.github.io/forms-api/home' target='_blank'>Technical documentation</a>."
+      "title": "Set up your API integration",
+      "text1": "To connect to our API endpoint and retrieve responses, follow the <a href='https://cds-snc.github.io/forms-api/home' target='_blank'>API documentation</a> for developers."
     },
     "vaultNote": {
       "text1": "PROTECTED B form responses must be downloaded from GC Forms.",
@@ -1057,7 +1065,7 @@
     "selectQuestion": "Select a question"
   },
   "saved": "Saved",
-  "opensInNewTab": "opens in a new tab",
+  "opensInNewTab": "opens in new tab",
   "rightPanel": {
     "title": "Form set-up panel",
     "openPanel": "Form set-up",
@@ -1083,7 +1091,7 @@
     "saveNote": "Branches deactivate the automatic linear flow that would link form pages.",
     "resetRules": "Reset to linear flow",
     "resetRulesHelp": "Reset help",
-    "resetRulesDescription": "This will remove branching logic and reset the progression between pages to a simple linear flow, overriding any existing rules that were applied.",
+    "resetRulesDescription": "This will remove branching logic and reset the progression between pages to a simple linear flow, overriding any custom page flows that were applied.",
     "resetRulesDialog": {
       "title": "Reset to linear flow?",
       "areYouSure": "Are you sure you want to reset the form flow?",
@@ -1228,9 +1236,9 @@
   "goBack": "Go back",
   "disabled": "disabled",
   "dynamicRow": {
-    "defaultRowTitle": "Instance",
-    "rowTitleTextA11yEn": "Instance",
-    "rowTitleTextA11yFr": "Instance",
+    "defaultRowTitle": "Entry",
+    "rowTitleTextA11yEn": "Entry",
+    "rowTitleTextA11yFr": "Entry",
     "defaultAddButtonText": "Add",
     "addButtonTextA11yEn": "Add to set button text in English",
     "addButtonTextA11yFr": "Add to set button text in French",
@@ -1238,7 +1246,7 @@
     "removeButtonTextA11yEn": "Remove from set button text in English",
     "removeButtonTextA11yFr": "Remove from set button text in French",
     "translate": {
-      "rowTitleText": "Instance label",
+      "rowTitleText": "Entry label",
       "repeatingSet": "Repeating set",
       "addButtonText": "Button label - Add to set",
       "removeButtonText": "Button label - Remove from set"
@@ -1292,6 +1300,6 @@
     }
   },
   "systemHealthCheck": {
-    "title": "System health check"
+    "title": "System health"
   }
 }

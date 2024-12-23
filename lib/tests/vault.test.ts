@@ -3,7 +3,8 @@ import Redis from "ioredis-mock";
 import { mockClient } from "aws-sdk-client-mock";
 import { prismaMock } from "@jestUtils";
 import { DynamoDBDocumentClient, QueryCommand, BatchWriteCommand } from "@aws-sdk/lib-dynamodb";
-import { AccessControlError, createAbility } from "@lib/privileges";
+import { createAbility } from "@lib/privileges";
+import { AccessControlError } from "@lib/auth";
 import { Base, mockUserPrivileges } from "__utils__/permissions";
 import { Session } from "next-auth";
 import { deleteDraftFormResponses, unprocessedSubmissions } from "@lib/vault";
@@ -14,6 +15,7 @@ import { getAppSetting } from "@lib/appSettings";
 import { getRedisInstance } from "@lib/integration/redisConnector";
 
 jest.mock("@lib/appSettings");
+jest.mock("@lib/auth");
 
 const mockedGetAppSetting = jest.mocked(getAppSetting, { shallow: true });
 
@@ -250,7 +252,7 @@ describe("Deleting test responses (submissions)", () => {
 
     await expect(async () => {
       await deleteDraftFormResponses(ability, "formtestID");
-    }).rejects.toThrowError(new AccessControlError(`Access Control Forbidden Action`));
+    }).rejects.toBeInstanceOf(AccessControlError);
   });
 
   it("Should not be able to delete responses if the form is published", async () => {
@@ -269,7 +271,7 @@ describe("Deleting test responses (submissions)", () => {
 
     await expect(async () => {
       await deleteDraftFormResponses(ability, "formtestID");
-    }).rejects.toThrowError(
+    }).rejects.toThrow(
       new TemplateAlreadyPublishedError("Form is published. Cannot delete draft form responses.")
     );
   });

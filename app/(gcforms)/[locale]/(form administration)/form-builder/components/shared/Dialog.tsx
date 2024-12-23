@@ -5,6 +5,7 @@ import { useTranslation } from "@i18n/client";
 import { Button } from "@clientComponents/globals";
 import { Close } from "@serverComponents/icons/Close";
 import { cn } from "@lib/utils";
+import { randomId } from "@lib/client/clientHelpers";
 
 export const useDialogRef = () => {
   const ref = useRef<CDSHTMLDialogElement>(null);
@@ -19,7 +20,7 @@ export const Dialog = ({
   className,
   handleClose,
 }: {
-  dialogRef: React.RefObject<CDSHTMLDialogElement>;
+  dialogRef: React.RefObject<CDSHTMLDialogElement | null>;
   children: React.ReactElement;
   title?: string;
   actions?: React.ReactElement;
@@ -58,10 +59,13 @@ export const Dialog = ({
     return () => document.removeEventListener("keydown", handleKeyDown);
   }, [close, handleClose]);
 
+  // Avoids duplicate id for the case of more than one dialog in the DOM
+  const modalRandomId = useRef(randomId());
+
   return (
     <dialog
       className="size-full bg-transparent bg-clip-padding p-0"
-      aria-labelledby="modal-title"
+      {...(title && { "aria-labelledby": `modal-title-${modalRandomId.current}` })}
       ref={dialogRef}
       data-testid="dialog"
     >
@@ -73,7 +77,11 @@ export const Dialog = ({
       >
         {title && (
           <div className="border-b-[0.5px] border-slate-500 bg-slate-50">
-            <h2 className="ml-4 mt-4 inline-block pb-4 text-2xl" tabIndex={-1}>
+            <h2
+              className="ml-4 mt-4 inline-block pb-4 text-2xl"
+              id={`modal-title-${modalRandomId.current}`}
+              tabIndex={-1}
+            >
               {title}
             </h2>
           </div>

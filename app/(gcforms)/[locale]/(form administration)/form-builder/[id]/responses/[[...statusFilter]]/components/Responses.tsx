@@ -9,13 +9,14 @@ import { DownloadTable } from "./DownloadTable";
 import { NoResponses } from "./NoResponses";
 import { useTemplateStore } from "@lib/store/useTemplateStore";
 import { TitleAndDescription } from "./TitleAndDescription";
-import { NagLevel, VaultSubmissionList } from "@lib/types";
+import { NagLevel, StartFromExclusiveResponse, VaultSubmissionOverview } from "@lib/types";
 import { RetrievalError } from "./RetrievalError";
 import { fetchSubmissions } from "../actions";
 import { StatusFilter } from "../types";
 import { SystemStatus } from "../../[statusFilter]/components/SystemStatus/SystemStatus";
 
 export interface ResponsesProps {
+  hasOverdue: boolean;
   responseDownloadLimit: number;
   overdueAfter: number;
   statusFilter: StatusFilter;
@@ -23,6 +24,7 @@ export interface ResponsesProps {
 }
 
 export const Responses = ({
+  hasOverdue,
   responseDownloadLimit,
   overdueAfter,
   statusFilter,
@@ -45,27 +47,27 @@ export const Responses = ({
 
   const [state, setState] = useState<{
     loading: boolean;
-    submissions: VaultSubmissionList[];
-    lastEvaluatedKey: Record<string, string> | null | undefined;
+    submissions: VaultSubmissionOverview[];
+    startFromExclusiveResponse: StartFromExclusiveResponse | null;
     error: boolean;
-  }>({ loading: true, submissions: [], lastEvaluatedKey: null, error: false });
+  }>({ loading: true, submissions: [], startFromExclusiveResponse: null, error: false });
 
   useEffect(() => {
     fetchSubmissions({
       formId,
-      lastKey,
       status: statusFilter,
+      lastKey,
     })
-      .then(({ submissions, lastEvaluatedKey, error }) => {
+      .then(({ submissions, startFromExclusiveResponse, error }) => {
         setState({
           loading: false,
           submissions,
-          lastEvaluatedKey: lastEvaluatedKey,
+          startFromExclusiveResponse: startFromExclusiveResponse ?? null,
           error: Boolean(error),
         });
       })
       .catch(() =>
-        setState({ loading: false, submissions: [], lastEvaluatedKey: null, error: true })
+        setState({ loading: false, submissions: [], startFromExclusiveResponse: null, error: true })
       );
   }, [formId, lastKey, statusFilter, forceRefresh]);
 
@@ -87,7 +89,7 @@ export const Responses = ({
         <div aria-live="polite">
           {state.submissions.length > 0 ? (
             <>
-              <SystemStatus formId={formId} />
+              <SystemStatus formId={formId} hasOverdue={hasOverdue} />
               <DownloadTable
                 statusFilter={statusFilter}
                 vaultSubmissions={state.submissions}
@@ -95,7 +97,7 @@ export const Responses = ({
                 formId={formId}
                 nagwareResult={nagwareResult}
                 responseDownloadLimit={responseDownloadLimit}
-                lastEvaluatedKey={state.lastEvaluatedKey}
+                startFromExclusiveResponse={state.startFromExclusiveResponse}
                 overdueAfter={overdueAfter}
               />
             </>
@@ -130,7 +132,7 @@ export const Responses = ({
               formId={formId}
               nagwareResult={nagwareResult}
               responseDownloadLimit={responseDownloadLimit}
-              lastEvaluatedKey={state.lastEvaluatedKey}
+              startFromExclusiveResponse={state.startFromExclusiveResponse}
               overdueAfter={overdueAfter}
             />
           </>

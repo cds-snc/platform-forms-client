@@ -3,11 +3,13 @@
 import { prismaMock } from "@jestUtils";
 import { getUsers, getOrCreateUser } from "@lib/users";
 import { Prisma } from "@prisma/client";
-import { AccessControlError, createAbility } from "@lib/privileges";
+import { createAbility } from "@lib/privileges";
+import { AccessControlError } from "@lib/auth";
 import { ManageUsers, ViewUserPrivileges, Base } from "__utils__/permissions";
 import { Session } from "next-auth";
 import { logEvent } from "@lib/auditLogs";
 jest.mock("@lib/auditLogs");
+jest.mock("@lib/auth");
 const mockedLogEvent = jest.mocked(logEvent, { shallow: true });
 import { JWT } from "next-auth/jwt";
 
@@ -24,7 +26,7 @@ describe("User query tests should fail gracefully", () => {
 
     const result = await getOrCreateUser({ email: "test-user@test.ca" } as JWT);
     expect(result).toEqual(null);
-    expect(mockedLogEvent).not.toBeCalled();
+    expect(mockedLogEvent).not.toHaveBeenCalled();
   });
 
   it("getOrCreateUser should fail gracefully - lookup", async () => {
@@ -43,7 +45,7 @@ describe("User query tests should fail gracefully", () => {
     );
     const result = await getOrCreateUser({ email: "test-user@test.ca" } as JWT);
     expect(result).toEqual(null);
-    expect(mockedLogEvent).not.toBeCalled();
+    expect(mockedLogEvent).not.toHaveBeenCalled();
   });
 
   it("getUsers should fail silenty", async () => {
@@ -61,7 +63,7 @@ describe("User query tests should fail gracefully", () => {
 
     const result = await getUsers(ability);
     expect(result).toHaveLength(0);
-    expect(mockedLogEvent).not.toBeCalled();
+    expect(mockedLogEvent).not.toHaveBeenCalled();
   });
 });
 
@@ -78,7 +80,7 @@ describe("getOrCreateUser", () => {
 
     const result = await getOrCreateUser({ email: "fads@asdf.ca" } as JWT);
     expect(result).toMatchObject(user);
-    expect(mockedLogEvent).not.toBeCalled();
+    expect(mockedLogEvent).not.toHaveBeenCalled();
   });
 
   it("Creates a new User", async () => {
@@ -101,7 +103,7 @@ describe("getOrCreateUser", () => {
     } as JWT);
 
     expect(result).toMatchObject(user);
-    expect(prismaMock.user.create).toBeCalledWith({
+    expect(prismaMock.user.create).toHaveBeenCalledWith({
       data: {
         email: "fads@asdf.ca",
         image: undefined,
@@ -120,7 +122,7 @@ describe("getOrCreateUser", () => {
         active: true,
       },
     });
-    expect(mockedLogEvent).toBeCalledWith(
+    expect(mockedLogEvent).toHaveBeenCalledWith(
       user.id,
       { id: user.id, type: "User" },
       "UserRegistration"
@@ -165,8 +167,8 @@ describe("Users CRUD functions should throw an error if user does not have any p
 
     await expect(async () => {
       await getUsers(ability);
-    }).rejects.toThrowError(new AccessControlError(`Access Control Forbidden Action`));
-    expect(mockedLogEvent).toBeCalledWith(
+    }).rejects.toBeInstanceOf(AccessControlError);
+    expect(mockedLogEvent).toHaveBeenCalledWith(
       fakeSession.user.id,
       { type: "User" },
       "AccessDenied",

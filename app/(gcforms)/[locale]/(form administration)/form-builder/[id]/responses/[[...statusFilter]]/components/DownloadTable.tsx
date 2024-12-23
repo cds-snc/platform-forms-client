@@ -1,10 +1,9 @@
 import React, { useEffect, useReducer, useState } from "react";
 import {
   NagwareResult,
-  TypeOmit,
+  StartFromExclusiveResponse,
   VaultStatus,
-  VaultSubmission,
-  VaultSubmissionList,
+  VaultSubmissionOverview,
 } from "@lib/types";
 import { useTranslation } from "@i18n/client";
 import { SkipLinkReusable } from "@clientComponents/globals/SkipLinkReusable";
@@ -26,13 +25,15 @@ import { NextStep } from "./NextStep";
 import { Tooltip } from "@formBuilder/components/shared/Tooltip";
 import { StatusFilter } from "../types";
 
+import { useFormBuilderConfig } from "@lib/hooks/useFormBuilderConfig";
+
 interface DownloadTableProps {
-  vaultSubmissions: VaultSubmissionList[];
+  vaultSubmissions: VaultSubmissionOverview[];
   formName: string;
   formId: string;
   nagwareResult: NagwareResult | null;
   responseDownloadLimit: number;
-  lastEvaluatedKey?: Record<string, string> | null;
+  startFromExclusiveResponse: StartFromExclusiveResponse | null;
   overdueAfter: number;
   statusFilter: StatusFilter;
 }
@@ -43,7 +44,7 @@ export const DownloadTable = ({
   formId,
   nagwareResult,
   responseDownloadLimit,
-  lastEvaluatedKey,
+  startFromExclusiveResponse,
   overdueAfter,
   statusFilter,
 }: DownloadTableProps) => {
@@ -59,6 +60,8 @@ export const DownloadTable = ({
   const [showDownloadSuccess, setShowDownloadSuccess] = useState<false | string>(false);
   const [removedRows, setRemovedRows] = useState<string[]>([]);
   const accountEscalated = nagwareResult && nagwareResult.level > 2;
+
+  const { hasApiKeyId } = useFormBuilderConfig();
 
   const [tableItems, tableItemsDispatch] = useReducer(
     reducerTableItems,
@@ -79,9 +82,7 @@ export const DownloadTable = ({
     }
   };
 
-  const blockDownload = (
-    submission: TypeOmit<VaultSubmission, "formSubmission" | "submissionID" | "confirmationCode">
-  ) => {
+  const blockDownload = (submission: VaultSubmissionOverview) => {
     const daysPast = getDaysPassed(submission.createdAt);
 
     if (
@@ -109,9 +110,12 @@ export const DownloadTable = ({
         </Alert.Success>
       )}
       <section>
-        <SkipLinkReusable anchor="#reportProblemButton">
-          {t("downloadResponsesTable.skipLink")}
-        </SkipLinkReusable>
+        {!hasApiKeyId && (
+          <SkipLinkReusable anchor="#reportProblemButton">
+            {t("downloadResponsesTable.skipLink")}
+          </SkipLinkReusable>
+        )}
+
         <div id="notificationsTop">
           {downloadError && (
             <Alert.Danger>
@@ -185,7 +189,7 @@ export const DownloadTable = ({
             <tr className="border-y-1 border-slate-400 bg-slate-100 py-2">
               <td colSpan={5} className="px-4 py-2">
                 <Pagination
-                  lastEvaluatedKey={lastEvaluatedKey}
+                  startFromExclusiveResponse={startFromExclusiveResponse}
                   formId={formId}
                   responseDownloadLimit={responseDownloadLimit}
                   recordCount={vaultSubmissions.length}
@@ -267,7 +271,7 @@ export const DownloadTable = ({
             <tr className="border-y-1 border-slate-300 bg-slate-100 py-2">
               <td colSpan={5} className="px-4 py-2">
                 <Pagination
-                  lastEvaluatedKey={lastEvaluatedKey}
+                  startFromExclusiveResponse={startFromExclusiveResponse}
                   formId={formId}
                   responseDownloadLimit={responseDownloadLimit}
                   recordCount={vaultSubmissions.length}

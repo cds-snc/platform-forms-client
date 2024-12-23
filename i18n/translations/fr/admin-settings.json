@@ -34,18 +34,18 @@
   },
   "throttling": {
     "title": "Limite du débit de l'API",
-    "description": "Augmenter la limite du débit de l'API pour un maximum de 12 semaines",
+    "description": "Augmenter la limite du débit de l'API à 1000 demandes par minute",
     "weeks": "semaines",
     "permanent": "Augmenter la limite du débit de l'API indéfiniment",
     "updateRate": "Modifier le débit de l'API",
-    "resetRate": "Réinitialiser le débit de l'API",
-    "tooltip": "Le fait de cocher cette case ne programmera pas le débit de l'API pour une période de temps spécifique. Pour programmer une fin, décochez cette case et l'entrée 'semaines' sera activée.",
+    "resetRate": "Réinitialiser le débit de l'API à 500 demandes par minute",
+    "tooltip": "Le fait de cocher cette case ne programmera pas le débit de l'API pour une période de temps spécifique. Pour programmer une fin, décochez cette case et l'entrée 'semaines' sera activée (pour un maximum de 12 semaines).",
     "succcessUpdate": {
-      "title": "Le débit de l'API a été augmenté",
-      "description": "Ce débit restera en vigueur jusqu'à ce que : {{success}}"
+      "title": "Le débit de l'API a été augmenté à 1000 demandes par minute",
+      "description": "Le nouveau débit restera en vigueur jusqu'à : {{success}}"
     },
     "succcessReset": {
-      "title": "Le débit de l'API a été réinitialisé avec succès."
+      "title": "Le débit de l'API a été réinitialisé à 500 demandes par minute."
     },
     "error": "Le débit de l'API n'a pas pu être modifié. Veuillez réessayer plus tard."
   }

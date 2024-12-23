@@ -1,5 +1,6 @@
 "use client";
-import { useTemplateStore, useRehydrate } from "@lib/store/useTemplateStore";
+import { useTemplateStore } from "@lib/store/useTemplateStore";
+import { useRehydrate } from "@lib/store/hooks/useRehydrate";
 import { isEmailDelivery } from "@lib/utils/form-builder";
 import { DeliveryOptionEmail } from "./DeliveryOptionEmail";
 import { NavigationTabs } from "./NavigationTabs";
@@ -10,11 +11,13 @@ import { StatusFilter } from "../types";
 import { useTranslation } from "@i18n/client";
 
 export const ResponsesContainer = ({
+  hasOverdue,
   responseDownloadLimit,
   overdueAfter,
   statusFilter,
   isApiRetrieval,
 }: {
+  hasOverdue: boolean;
   responseDownloadLimit: number;
   overdueAfter: number;
   statusFilter: StatusFilter;
@@ -39,6 +42,7 @@ export const ResponsesContainer = ({
         <div className="mr-10">
           <h1>{t("apiDashboard.title")}</h1>
           <Responses
+            hasOverdue={hasOverdue}
             statusFilter={statusFilter}
             responseDownloadLimit={responseDownloadLimit}
             overdueAfter={overdueAfter}
@@ -70,6 +74,7 @@ export const ResponsesContainer = ({
       <div className="mr-10">
         <NavigationTabs formId={id} />
         <Responses
+          hasOverdue={hasOverdue}
           statusFilter={statusFilter}
           responseDownloadLimit={responseDownloadLimit}
           overdueAfter={overdueAfter}

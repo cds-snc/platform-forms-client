@@ -198,6 +198,10 @@
           "type": "boolean"
         }
       }
+    },
+    "lastGeneratedElementId": {
+      "description": "The last generated element id",
+      "type": "number"
     }
   },
   "required": ["titleEn", "titleFr", "privacyPolicy", "confirmation", "layout", "elements"],

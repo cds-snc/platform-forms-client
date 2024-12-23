@@ -81,18 +81,19 @@ const nextConfig = {
       },
     ];
   },
-
+  serverExternalPackages: ["@aws-sdk/lib-dynamodb", "pino"],
   experimental: {
-    instrumentationHook: true,
     // PPR is only supported in Next.js Canary branches
     // ppr: true,
-    serverComponentsExternalPackages: ["@aws-sdk/lib-dynamodb", "pino"],
     serverActions: {
       bodySizeLimit: "5mb",
     },
     turbo: {
       rules: {
-        "*.md": ["raw-loader"],
+        "*.md": {
+          loaders: ["raw-loader"],
+          as: "*.js",
+        },
       },
     },
   },

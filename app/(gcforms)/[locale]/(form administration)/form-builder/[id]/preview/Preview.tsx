@@ -10,13 +10,15 @@ import { RichText } from "@clientComponents/forms";
 import { Button } from "@clientComponents/globals";
 import { NextButton } from "@clientComponents/forms/NextButton/NextButton";
 import { ClosingNotice } from "@clientComponents/forms/ClosingNotice/ClosingNotice";
+import { useGCFormsContext } from "@lib/hooks/useGCFormContext";
 
 import {
   FormServerErrorCodes,
   LocalizedElementProperties,
   LocalizedFormProperties,
 } from "@lib/types/form-builder-types";
-import { useRehydrate, useTemplateStore } from "@lib/store/useTemplateStore";
+import { useTemplateStore } from "@lib/store/useTemplateStore";
+import { useRehydrate } from "@lib/store/hooks/useRehydrate";
 import { BackArrowIcon } from "@serverComponents/icons";
 import Brand from "@clientComponents/globals/Brand";
 import { GCFormsProvider } from "@lib/hooks/useGCFormContext";
@@ -28,7 +30,7 @@ import { ErrorSaving } from "@formBuilder/components/shared/ErrorSaving";
 import { toast } from "@formBuilder/components/shared/Toast";
 import { defaultForm } from "@lib/store/defaults";
 import { showReviewPage } from "@lib/utils/form-builder/showReviewPage";
-import { focusElement } from "@lib/client/clientHelpers";
+import { tryFocusOnPageLoad } from "@lib/client/clientHelpers";
 import { useIsFormClosed } from "@lib/hooks/useIsFormClosed";
 
 export const Preview = ({
@@ -84,6 +86,8 @@ export const Preview = ({
   }
 
   const [sent, setSent] = useState<string | null>();
+
+  const { saveProgress } = useGCFormsContext();
 
   const clearSent = () => {
     setSent(null);
@@ -184,6 +188,7 @@ export const Preview = ({
               <GCFormsProvider formRecord={formRecord}>
                 <Form
                   formRecord={formRecord}
+                  saveProgress={saveProgress}
                   isPreview={true}
                   language={language}
                   t={t}
@@ -202,13 +207,12 @@ export const Preview = ({
                                   {allowGrouping && isShowReviewPage && (
                                     <BackButton
                                       language={language}
-                                      onClick={() => focusElement("h2")}
+                                      onClick={() => tryFocusOnPageLoad("h2")}
                                     />
                                   )}
                                   <Button
                                     type="submit"
                                     id="SubmitButton"
-                                    className="mb-4"
                                     onClick={(e) => {
                                       if (disableSubmit) {
                                         e.preventDefault();

@@ -7,12 +7,15 @@ import { checkKeyExists } from "@lib/serviceAccount";
 import { ResponsesContainer } from "./components/ResponsesContainer";
 import { redirect } from "next/navigation";
 import { StatusFilter } from "./types";
+import { getOverdueTemplateIds } from "@lib/overdue";
 
-export async function generateMetadata({
-  params: { locale },
-}: {
-  params: { locale: string };
+export async function generateMetadata(props: {
+  params: Promise<{ locale: string }>;
 }): Promise<Metadata> {
+  const params = await props.params;
+
+  const { locale } = params;
+
   const { t } = await serverTranslation(["form-builder-responses", "form-builder"], {
     lang: locale,
   });
@@ -91,11 +94,13 @@ const validateStatusFilterOrRedirect = (
   return statusFilter;
 };
 
-export default async function Page({
-  params: { locale, id, statusFilter: statusFilterParams },
-}: {
-  params: { locale: string; id: string; statusFilter: string[] };
+export default async function Page(props: {
+  params: Promise<{ locale: string; id: string; statusFilter: string[] }>;
 }) {
+  const params = await props.params;
+
+  const { locale, id, statusFilter: statusFilterParams } = params;
+
   const { session } = await authCheckAndThrow().catch(() => ({
     session: null,
   }));
@@ -119,8 +124,12 @@ export default async function Page({
     isApiRetrieval
   );
 
+  const overdueTemplateIds = await getOverdueTemplateIds([id]);
+  const hasOverdue = overdueTemplateIds.length > 0;
+
   return (
     <ResponsesContainer
+      hasOverdue={hasOverdue}
       responseDownloadLimit={Number(await getAppSetting("responseDownloadLimit"))}
       overdueAfter={Number(await getAppSetting("nagwarePhaseEncouraged"))}
       statusFilter={statusFilter as StatusFilter}

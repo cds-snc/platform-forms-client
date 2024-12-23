@@ -1,5 +1,12 @@
 import { FormElementWithIndex, Language } from "../types/form-builder-types";
 
+import { StoreApi } from "zustand";
+
+export type TemplateStore<T extends keyof TemplateStoreState> = (
+  set: (fn: (state: TemplateStoreState) => void) => void,
+  get?: StoreApi<TemplateStoreState>["getState"]
+) => TemplateStoreState[T];
+
 import {
   FormElement,
   FormProperties,
@@ -26,6 +33,7 @@ export interface TemplateStoreState extends TemplateStoreProps {
   };
   getId: () => string;
   setId: (id: string) => void;
+  getPathString: (id: number) => string;
   setLang: (lang: Language) => void;
   toggleLang: () => void;
   toggleTranslationLanguagePriority: () => void;
@@ -48,7 +56,7 @@ export interface TemplateStoreState extends TemplateStoreProps {
   removeSubItem: (elIndex: number, id: number) => void;
   addChoice: (elIndex: number) => void;
   addLabeledChoice: (elIndex: number, label: { en: string; fr: string }) => Promise<number>;
-  addSubChoice: (elIndex: number, subIndex: number) => void;
+  addSubChoice: (elId: number, subIndex: number) => void;
   removeChoice: (elIndex: number, choiceIndex: number) => void;
   removeSubChoice: (elId: number, subIndex: number, choiceIndex: number) => void;
   getChoice: (elIndex: number, choiceIndex: number) => { en: string; fr: string } | undefined;
@@ -77,6 +85,8 @@ export interface TemplateStoreState extends TemplateStoreProps {
   setChangeKey: (key: string) => void;
   getGroupsEnabled: () => boolean;
   setGroupsLayout: (layout: string[]) => void;
+  getHighestElementId: () => number;
+  generateElementId: () => number;
 }
 
 export interface InitialTemplateStoreProps extends TemplateStoreProps {

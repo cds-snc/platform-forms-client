@@ -3,9 +3,9 @@ import { TreeEnvironmentRef, TreeRef } from "react-complex-tree";
 import { TreeDataProviderProps } from "../types";
 
 export type treeContextType = {
-  treeView: RefObject<TreeDataProviderProps> | null;
-  environment: RefObject<TreeEnvironmentRef> | null;
-  tree: RefObject<TreeRef> | null;
+  treeView: RefObject<TreeDataProviderProps | null> | null;
+  environment: RefObject<TreeEnvironmentRef | null> | null;
+  tree: RefObject<TreeRef | null> | null;
   open: boolean;
   togglePanel?: (state: boolean) => void;
 };
@@ -15,9 +15,9 @@ const TreeRefContext = createContext<treeContextType | null>(null);
 
 // Create a provider component for the tree ref context
 export const TreeRefProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const treeView = useRef<TreeDataProviderProps>(null);
-  const environment = useRef<TreeEnvironmentRef>(null);
-  const tree = useRef<TreeRef>(null);
+  const treeView = useRef<TreeDataProviderProps | null>(null);
+  const environment = useRef<TreeEnvironmentRef | null>(null);
+  const tree = useRef<TreeRef | null>(null);
   const [open, setOpen] = useState(false);
 
   const togglePanel = (state: boolean) => {

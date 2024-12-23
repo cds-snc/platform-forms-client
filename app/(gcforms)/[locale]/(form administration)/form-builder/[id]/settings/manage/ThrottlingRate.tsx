@@ -14,7 +14,7 @@ import { toast, ToastContainer } from "@formBuilder/components/shared/Toast";
 import { getSecondsInWeeks, getWeeksInSeconds } from "@lib/utils/date/dateConversions";
 import { SubmitButton } from "@clientComponents/globals/Buttons/SubmitButton";
 import { Tooltip } from "@formBuilder/components/shared/Tooltip";
-import { useRehydrate } from "@lib/store/useTemplateStore";
+import { useRehydrate } from "@lib/store/hooks/useRehydrate";
 import Skeleton from "react-loading-skeleton";
 import { formClosingDateEst } from "@lib/utils/date/utcToEst";
 import { logMessage } from "@lib/logger";
@@ -122,7 +122,7 @@ export const ThrottlingRate = ({ formId }: { formId: string }) => {
   }, [formId, throttlingErrorString]);
 
   return (
-    <div className="mb-20">
+    <div className="mb-10">
       <form onSubmit={handleSubmit}>
         <h2>{t("throttling.title")}</h2>
         <div role="alert">

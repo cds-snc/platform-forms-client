@@ -11,12 +11,15 @@ ARG COGNITO_USER_POOL_ID
 ARG INDEX_SITE="false"
 ENV INDEX_SITE=$INDEX_SITE
 
+ARG NEXT_SERVER_ACTIONS_ENCRYPTION_KEY
+ENV NEXT_SERVER_ACTIONS_ENCRYPTION_KEY=$NEXT_SERVER_ACTIONS_ENCRYPTION_KEY
+
 RUN corepack enable && yarn set version berry
 RUN yarn workspaces focus gcforms flag_initialization
 RUN yarn build
 RUN yarn workspaces focus gcforms flag_initialization --production
 
-FROM node:20.12.0-alpine as final
+FROM node:22-alpine as final
 LABEL maintainer="-"
 
 ENV NODE_ENV=production
@@ -29,6 +32,9 @@ ENV COGNITO_USER_POOL_ID=$COGNITO_USER_POOL_ID
 
 ARG INDEX_SITE="false"
 ENV INDEX_SITE=$INDEX_SITE
+
+ARG NEXT_SERVER_ACTIONS_ENCRYPTION_KEY
+ENV NEXT_SERVER_ACTIONS_ENCRYPTION_KEY=$NEXT_SERVER_ACTIONS_ENCRYPTION_KEY
 
 WORKDIR /src
 

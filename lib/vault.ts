@@ -4,9 +4,16 @@ import {
   QueryCommandInput,
   TransactWriteCommand,
   BatchWriteCommand,
+  GetCommand,
 } from "@aws-sdk/lib-dynamodb";
 import { prisma, prismaErrors } from "@lib/integration/prismaConnector";
-import { VaultSubmissionList, UserAbility, VaultStatus, VaultSubmission } from "@lib/types";
+import {
+  VaultSubmissionOverview,
+  UserAbility,
+  VaultStatus,
+  VaultSubmission,
+  StartFromExclusiveResponse,
+} from "@lib/types";
 import { logEvent } from "./auditLogs";
 import {
   unprocessedSubmissionsCacheCheck,
@@ -14,7 +21,8 @@ import {
 } from "./cache/unprocessedSubmissionsCache";
 import { dynamoDBDocumentClient } from "./integration/awsServicesConnector";
 import { logMessage } from "./logger";
-import { AccessControlError, checkPrivileges } from "./privileges";
+import { checkPrivileges } from "./privileges";
+import { AccessControlError } from "@lib/auth";
 import { chunkArray } from "@lib/utils";
 import { TemplateAlreadyPublishedError } from "@lib/templates";
 import { getAppSetting } from "./appSettings";
@@ -90,26 +98,38 @@ export const submissionTypeExists = async (
       );
     throw e;
   });
-  const getItemsDbParams: QueryCommandInput = {
+
+  const shouldNavigateThroughStatusCreatedAtIndexInAscendingOrder = (
+    status: VaultStatus
+  ): boolean => {
+    switch (status) {
+      case VaultStatus.CONFIRMED:
+      case VaultStatus.DOWNLOADED:
+        return true;
+      default:
+        return false;
+    }
+  };
+
+  const queryCommand = new QueryCommand({
     TableName: "Vault",
-    IndexName: "Status",
-    // Limit the amount of responses 1.
+    IndexName: "StatusCreatedAt",
+    // To optimize query since we only need to check whether one type of submission type exists
+    ScanIndexForward: shouldNavigateThroughStatusCreatedAtIndexInAscendingOrder(status),
+    // Limit the amount of responses to 1.
     // A single record existing is enough to trigger the boolean
     Limit: 1,
-    KeyConditionExpression: "FormID = :formID AND #status = :status",
-    // Sort by descending order of Status
-    ScanIndexForward: false,
+    KeyConditionExpression: "FormID = :formID AND begins_with(#statusCreatedAtKey, :status)",
+    ExpressionAttributeNames: {
+      "#statusCreatedAtKey": "Status#CreatedAt",
+    },
     ExpressionAttributeValues: {
       ":formID": formID,
       ":status": status,
     },
-    ExpressionAttributeNames: {
-      "#status": "Status",
-    },
     ProjectionExpression: "FormID",
-  };
-  const queryCommand = new QueryCommand(getItemsDbParams);
-  // eslint-disable-next-line no-await-in-loop
+  });
+
   const response = await dynamoDBDocumentClient.send(queryCommand);
   return Boolean(response.Items?.length);
 };
@@ -124,11 +144,11 @@ export async function listAllSubmissions(
   formID: string,
   status?: VaultStatus,
   responseDownloadLimit?: number,
-  lastEvaluatedKey: Record<string, string> | null | undefined = null
+  startFromExclusiveResponse?: StartFromExclusiveResponse
 ): Promise<{
-  submissions: VaultSubmissionList[];
+  submissions: VaultSubmissionOverview[];
   submissionsRemaining: boolean;
-  lastEvaluatedKey: Record<string, string> | null | undefined;
+  startFromExclusiveResponse?: StartFromExclusiveResponse;
 }> {
   // Check access control first
   try {
@@ -145,38 +165,43 @@ export async function listAllSubmissions(
         );
       throw e;
     });
+
     if (!responseDownloadLimit) {
       responseDownloadLimit = Number(await getAppSetting("responseDownloadLimit"));
     }
+
     // We're going to request one more than the limit so we can consistently determine if there are more responses
     const responseRetrievalLimit = responseDownloadLimit + 1;
 
-    let accumulatedResponses: VaultSubmissionList[] = [];
-    let submissionsRemaining = false;
-    let paginationLastEvaluatedKey = null;
+    let accumulatedResponses: VaultSubmissionOverview[] = [];
+    let lastEvaluatedKey: Record<string, unknown> | undefined | null = startFromExclusiveResponse
+      ? {
+          NAME_OR_CONF: `NAME#${startFromExclusiveResponse.name}`,
+          "Status#CreatedAt": `${startFromExclusiveResponse.status}#${startFromExclusiveResponse.createdAt}`,
+          FormID: formID,
+        }
+      : null;
 
     while (lastEvaluatedKey !== undefined) {
-      const getItemsDbParams: QueryCommandInput = {
+      const queryCommand: QueryCommand = new QueryCommand({
         TableName: "Vault",
-        IndexName: "Status",
+        IndexName: "StatusCreatedAt",
         ExclusiveStartKey: lastEvaluatedKey ?? undefined,
         // Limit the amount of response to responseRetrievalLimit
         Limit: responseRetrievalLimit - accumulatedResponses.length,
-        KeyConditionExpression: "FormID = :formID" + (status ? " AND #status = :status" : ""),
-        // Sort by descending order of Status
-        ScanIndexForward: false,
+        KeyConditionExpression:
+          "FormID = :formID" + (status ? " AND begins_with(#statusCreatedAtKey, :status)" : ""),
+        ExpressionAttributeNames: {
+          "#statusCreatedAtKey": "Status#CreatedAt",
+          "#name": "Name",
+        },
         ExpressionAttributeValues: {
           ":formID": formID,
           ...(status && { ":status": status }),
         },
-        ExpressionAttributeNames: {
-          "#status": "Status",
-          "#name": "Name",
-        },
-        ProjectionExpression:
-          "FormID,#status,SecurityAttribute,#name,CreatedAt,LastDownloadedBy,ConfirmTimestamp,DownloadedAt,RemovalDate",
-      };
-      const queryCommand = new QueryCommand(getItemsDbParams);
+        ProjectionExpression: "FormID,#name,CreatedAt,#statusCreatedAtKey",
+      });
+
       // eslint-disable-next-line no-await-in-loop
       const response = await dynamoDBDocumentClient.send(queryCommand);
 
@@ -185,24 +210,14 @@ export async function listAllSubmissions(
           response.Items.map(
             ({
               FormID: formID,
-              SecurityAttribute: securityAttribute,
-              Status: status,
+              "Status#CreatedAt": statusCreatedAt,
               CreatedAt: createdAt,
-              LastDownloadedBy: lastDownloadedBy,
               Name: name,
-              ConfirmTimestamp: confirmedAt,
-              DownloadedAt: downloadedAt,
-              RemovalDate: removedAt,
             }) => ({
               formID,
-              status,
-              securityAttribute,
+              status: vaultStatusFromStatusCreatedAt(statusCreatedAt),
               name,
               createdAt,
-              lastDownloadedBy: lastDownloadedBy ?? null,
-              confirmedAt: confirmedAt ?? null,
-              downloadedAt: downloadedAt ?? null,
-              removedAt: removedAt ?? null,
             })
           )
         );
@@ -216,20 +231,21 @@ export async function listAllSubmissions(
       }
     }
 
+    let submissionsRemaining = false;
+    let paginationStartFromExclusiveResponse: StartFromExclusiveResponse | undefined = undefined;
+
     if (accumulatedResponses.length > responseDownloadLimit) {
       // Since we're requesting one more than the limit, we need to remove the last item
       const lastResponse = accumulatedResponses[accumulatedResponses.length - 2];
       accumulatedResponses = accumulatedResponses.slice(0, responseDownloadLimit);
 
-      // Create a lastEvaluatedKey from lastResponse for pagination
-      paginationLastEvaluatedKey = {
-        Status: lastResponse.status,
-        NAME_OR_CONF: `NAME#${lastResponse.name}`,
-        FormID: lastResponse.formID,
-      };
       submissionsRemaining = true;
+      paginationStartFromExclusiveResponse = {
+        name: lastResponse.name,
+        status: lastResponse.status,
+        createdAt: lastResponse.createdAt,
+      };
     } else {
-      paginationLastEvaluatedKey = null;
       submissionsRemaining = false;
     }
 
@@ -248,7 +264,7 @@ export async function listAllSubmissions(
     return {
       submissions: accumulatedResponses,
       submissionsRemaining: submissionsRemaining,
-      lastEvaluatedKey: paginationLastEvaluatedKey,
+      startFromExclusiveResponse: paginationStartFromExclusiveResponse,
     };
   } catch (e) {
     // Expected to error in APP_ENV test mode as dynamodb is not available
@@ -256,7 +272,59 @@ export async function listAllSubmissions(
       logMessage.info("HealthCheck: list submissions failure");
       logMessage.error(e);
     }
-    return { submissions: [], submissionsRemaining: true, lastEvaluatedKey: undefined };
+
+    return { submissions: [], submissionsRemaining: true };
+  }
+}
+
+/**
+ * This method returns the `RemovalDate` for a specific submission.
+ * @param formID - The form ID of the response you want to retrieve
+ * @param submissionName - The submission name of the response you want to retrieve
+ */
+export async function retrieveSubmissionRemovalDate(
+  ability: UserAbility,
+  formID: string,
+  submissionName: string
+): Promise<number | undefined> {
+  // Check access control first
+  try {
+    await checkAbilityToAccessSubmissions(ability, formID).catch((e) => {
+      if (e instanceof AccessControlError)
+        logEvent(
+          ability.userID,
+          {
+            type: "Form",
+            id: formID,
+          },
+          "AccessDenied",
+          `Attempted to retrieve response for form ${formID}`
+        );
+      throw e;
+    });
+
+    const getCommand = new GetCommand({
+      TableName: "Vault",
+      Key: {
+        FormID: formID,
+        NAME_OR_CONF: `NAME#${submissionName}`,
+      },
+      ProjectionExpression: "RemovalDate",
+    });
+
+    const response = await dynamoDBDocumentClient.send(getCommand);
+
+    if (response.Item === undefined || response.Item["RemovalDate"] === undefined) {
+      return undefined;
+    }
+
+    return response.Item["RemovalDate"];
+  } catch (e) {
+    // Expected to error in APP_ENV test mode as dynamodb is not available
+    if (process.env.APP_ENV !== "test") {
+      logMessage.error(e);
+    }
+    return undefined;
   }
 }
 
@@ -798,3 +866,19 @@ export const confirmResponses = async (
     }),
   };
 };
+
+export function vaultStatusFromStatusCreatedAt(statusCreatedAtAttribute: string): VaultStatus {
+  const status = statusCreatedAtAttribute.split("#")[0];
+  switch (status) {
+    case "New":
+      return VaultStatus.NEW;
+    case "Downloaded":
+      return VaultStatus.DOWNLOADED;
+    case "Confirmed":
+      return VaultStatus.CONFIRMED;
+    case "Problem":
+      return VaultStatus.PROBLEM;
+    default:
+      throw new Error(`Unsupported Status#CreatedAt value. Value = ${statusCreatedAtAttribute}.`);
+  }
+}

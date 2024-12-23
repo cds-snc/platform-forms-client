@@ -9,8 +9,8 @@ import { ElementPanel } from ".";
 import { ConfirmationDescriptionWithGroups } from "./ConfirmationDescriptionWithGroups";
 import { RichTextLockedWithGroups } from "./elements/RichTextLockedWithGroups";
 import { ExpandingInput } from "@formBuilder/components/shared/ExpandingInput";
-import { useRehydrate, useTemplateStore } from "@lib/store/useTemplateStore";
-import { SettingsPanel } from "./settings/SettingsPanel";
+import { useTemplateStore } from "@lib/store/useTemplateStore";
+import { useRehydrate } from "@lib/store/hooks/useRehydrate";
 import { cleanInput } from "@lib/utils/form-builder";
 import { SaveButton } from "@formBuilder/components/shared/SaveButton";
 import { useGroupStore } from "@formBuilder/components/shared/right-panel/treeview/store/useGroupStore";
@@ -131,7 +131,6 @@ export const EditWithGroups = ({ id, locale }: { id: string; locale: string }) =
         <LangSwitcher descriptionLangKey="editingIn" />
       </div>
       {/* Form Intro + Title Panel */}
-      {groupId === "start" && <SettingsPanel />}
       {groupId === "start" && (
         <RichTextLockedWithGroups
           hydrated={hasHydrated}

@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState, useRef, type JSX } from "react";
 import { FormikProps, withFormik } from "formik";
 import { getFormInitialValues } from "@lib/formBuilder";
 import { getErrorList, setFocusOnErrorMessage, validateOnSubmit } from "@lib/validation/validation";
@@ -21,6 +21,7 @@ import { LockedSections } from "@formBuilder/components/shared/right-panel/treev
 import { BackButton } from "@formBuilder/[id]/preview/BackButton";
 import { Language } from "@lib/types/form-builder-types";
 import { BackButtonGroup } from "../BackButtonGroup/BackButtonGroup";
+import { StatusError } from "../StatusError/StatusError";
 import {
   removeFormContextValues,
   getInputHistoryValues,
@@ -169,6 +170,7 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
   const errorList = props.errors ? getErrorList(props) : null;
   const errorId = "gc-form-errors";
   const serverErrorId = `${errorId}-server`;
+
   const formStatusError =
     props.status === "FileError"
       ? t("input-validation.file-submission")
@@ -204,6 +206,12 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
       {formStatusError && (
         <Alert type={ErrorStatus.ERROR} heading={formStatusError} tabIndex={0} id={serverErrorId} />
       )}
+
+      {/* ServerId error */}
+      {props.status === "ServerIDError" && (
+        <StatusError formId={formID} language={language as Language} />
+      )}
+
       {errorList && (
         <Alert
           type={ErrorStatus.ERROR}
@@ -251,6 +259,14 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
               handleSubmit(e);
             }}
             noValidate
+            // This is needed so dynamic changes e.g. show-hide elements are announced when shown
+            // on the form. Though the relationship between the controlling and shown/hidden element
+            // is not very clear and can hopefully be improved.
+            // For more info and progress see: #4769
+            // Also, this this is not ideal because all child elements will inherit the live=polit
+            // and any "noisy" child elements should be overridden with aria-live="off" for AT
+            // e.g. labels. For more info and caveats see: #4766
+            aria-live="polite"
           >
             {isGroupsCheck &&
               isShowReviewPage &&
@@ -288,14 +304,12 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
                   fallBack: () => {
                     return (
                       <div>
-                        {isGroupsCheck &&
-                          isShowReviewPage &&
-                          currentGroup === LockedSections.REVIEW && (
-                            <BackButton
-                              language={language as Language}
-                              onClick={() => groupsHeadingRef.current?.focus()}
-                            />
-                          )}
+                        {isGroupsCheck && isShowReviewPage && (
+                          <BackButton
+                            language={language as Language}
+                            onClick={() => groupsHeadingRef.current?.focus()}
+                          />
+                        )}
                         <div className="inline-block">
                           <SubmitButton
                             getFormDelay={() =>
@@ -332,6 +346,7 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
 
 interface FormProps {
   formRecord: PublicFormRecord;
+  initialValues?: Responses | undefined;
   language: string;
   isPreview?: boolean;
   renderSubmit?: ({
@@ -347,6 +362,7 @@ interface FormProps {
   allowGrouping?: boolean | undefined;
   groupHistory?: string[];
   matchedIds?: string[];
+  saveProgress: () => void;
 }
 
 /**
@@ -361,7 +377,12 @@ export const Form = withFormik<FormProps, Responses>({
 
   enableReinitialize: true, // needed when switching languages
 
-  mapPropsToValues: (props) => getFormInitialValues(props.formRecord, props.language),
+  mapPropsToValues: (props) => {
+    if (props.initialValues) {
+      return props.initialValues;
+    }
+    return getFormInitialValues(props.formRecord, props.language);
+  },
 
   validate: (values, props) => validateOnSubmit(values, props),
 
@@ -395,6 +416,14 @@ export const Form = withFormik<FormProps, Responses>({
         formikBag.props.language,
         formikBag.props.formRecord
       );
+
+      // Failed to find Server Action (likely due to newer deployment)
+      if (result === undefined) {
+        formikBag.props.saveProgress();
+        logMessage.info("Failed to find Server Action caught and session saved");
+        formikBag.setStatus("ServerIDError");
+        return;
+      }
 
       if (result.error) {
         if (result.error.message.includes("FileValidationResult")) {

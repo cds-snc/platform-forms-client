@@ -1,6 +1,7 @@
 "use client";
 import React, { useRef } from "react";
-import { useFormState, useFormStatus } from "react-dom";
+import { useActionState } from "react";
+import { useFormStatus } from "react-dom";
 import { ErrorListItem, Label, TextInput, Alert } from "../../../../components/client/forms";
 import { Button } from "@clientComponents/globals";
 import { useTranslation } from "@i18n/client";
@@ -49,7 +50,7 @@ export const RegistrationForm = () => {
     return result;
   };
 
-  const [state, formAction] = useFormState(localFormAction, {});
+  const [state, formAction] = useActionState(localFormAction, {});
 
   return (
     <>

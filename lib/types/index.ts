@@ -45,7 +45,11 @@ export type {
   SearchParams,
 } from "./utility-types";
 
-export type { VaultSubmission, VaultSubmissionList } from "./retrieval-types";
+export type {
+  VaultSubmission,
+  VaultSubmissionOverview,
+  StartFromExclusiveResponse,
+} from "./retrieval-types";
 
 export { VaultStatus } from "./retrieval-types";
 

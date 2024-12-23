@@ -1,4 +1,4 @@
-import { AccessControlError, createAbility } from "@lib/privileges";
+import { AccessControlError } from "@lib/auth";
 import { middleware, sessionExists, jsonValidator } from "@lib/middleware";
 import {
   createTemplate,
@@ -51,10 +51,7 @@ export const GET = middleware(
   ],
   async (req, props) => {
     try {
-      const { session } = props as WithRequired<MiddlewareProps, "session">;
-
-      const ability = createAbility(session);
-      const templates = await getAllTemplatesForUser(ability);
+      const templates = await getAllTemplatesForUser();
       const response = templates.map((template) => onlyIncludePublicProperties(template));
 
       if (!response) {
@@ -108,13 +105,10 @@ export const POST = middleware(
     try {
       const { session } = props as WithRequired<MiddlewareProps, "session">;
 
-      const ability = createAbility(session);
-
       const { formConfig, name, deliveryOption, securityAttribute }: PostApiProps = props.body;
 
       if (formConfig) {
         const response = await createTemplate({
-          ability: ability,
           userID: session.user.id,
           formConfig: formConfig,
           name: name,

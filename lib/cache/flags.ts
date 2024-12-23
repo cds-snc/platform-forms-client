@@ -1,6 +1,7 @@
 import { getRedisInstance } from "@lib/integration/redisConnector";
 import flagInitialSettings from "../../flag_initialization/default_flag_settings.json";
-import { AccessControlError, checkPrivileges } from "@lib/privileges";
+import { checkPrivileges } from "@lib/privileges";
+import { AccessControlError } from "@lib/auth";
 import { logEvent } from "@lib/auditLogs";
 import { UserAbility } from "@lib/types";
 import { FeatureFlagKeys, FeatureFlags, PickFlags } from "./types";

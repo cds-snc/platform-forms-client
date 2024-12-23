@@ -145,16 +145,16 @@
       "noNewResponsesMessage": "Les réponses aux formulaires soumis apparaîtront ici et seront disponibles dans Formulaires GC pendant 45 jours.",
       "noDownloadedResponses": "Aucune réponse téléchargée",
       "noDownloadedResponsesMessage": "Les réponses téléchargées apparaîtront ici jusqu'à ce que vous approuviez leur suppression de Formulaires GC.",
-      "noDeletedResponses": "Aucune réponse à supprimer",
+      "noDeletedResponses": "Aucune réponse confirmée pour suppression",
       "noDeletedResponsesMessage": "Une fois que vous aurez téléchargé et approuvé la suppression des réponses, celles-ci seront disponibles ici pendant 30 jours.",
       "noProblemResponses": "Aucune réponse signalée avec problème",
       "noProblemResponsesMessage": "Les réponses signalées avec problèmes apparaîtront ici jusqu'à ce qu'elles soient approuvées pour leur suppression de Formulaires GC.",
-      "noNewResponsesApiTitle": "Aucune réponse en attente de livraison par l'API",
-      "noNewResponsesApiMessage": "<p className='mb-2'>Une fois livrées par l'API, les réponses apparaîtront ici et seront disponibles dans Formulaires GC pendant 30 jours.</p><p>Pour en savoir plus sur la récupération de données avec l'API consultez notre <a href='https://cds-snc.github.io/forms-api/accueil' target='_blank'>documentation technique</a> (ouvre un nouvel onglet)</p>",
-      "apiResponsesAvailableTitle": "Réponses en attente de la livraison par l'API",
-      "apiResponsesAvailableMessage": "<p className='mb-2'>Une fois livrées par l'API, les réponses livrées apparaîtront ici et seront disponibles dans Formulaires GC pendant 30 jours.</p><p>Pour en savoir plus sur la récupération de données avec l'API consultez notre <a href='https://cds-snc.github.io/forms-api/accueil' target='_blank'>documentation technique</a> (ouvre un nouvel onglet)</p>",
-      "apiResponsesAwaitingConfirmTitle": "État de livraison : En attente",
-      "apiResponsesAwaitingConfirmMessage": "Réponses en attente de confirmation de la livraison par l'API"
+      "noNewResponsesApiTitle": "Aucune réponse en attente de récupération",
+      "noNewResponsesApiMessage": "<p className='mb-2'>Une fois récupérées du point de terminaison API, les soumissions de formulaires apparaîtront ici et seront disponibles dans Formulaires GC pendant 30 jours.</p><p>Pour en savoir plus sur la configuration de l'intégration consultez notre <a href='https://cds-snc.github.io/forms-api/accueil' target='_blank'>documentation API</a>)</p>",
+      "apiResponsesAvailableTitle": "Réponses en attente de récupération",
+      "apiResponsesAvailableMessage": "<p className='mb-2'>Récupérez les nouvelles soumissions via l'API.</p><p>Pour en savoir plus sur les demandes API, consultez notre <a href='https://cds-snc.github.io/forms-api/effectuer-des-demandes/' target='_blank'>documentation API</a></p>",
+      "apiResponsesAwaitingConfirmTitle": "Réponses en attente de confirmation",
+      "apiResponsesAwaitingConfirmMessage": "<p className='mb-2'>Confirmez que les soumissions de formulaire ont bien été récupérées via l'API.</p><p>Pour en savoir plus sur les demandes API, consultez notre  <a href='https://cds-snc.github.io/forms-api/effectuer-des-demandes/' target='_blank'>Documentation API</a>.</p>"
     },
     "notifications": {
       "downloadComplete": "Réponses déplacées vers l'onglet « Téléchargements »",
@@ -290,23 +290,27 @@
   },
   "systemHealth": {
     "problemsReported": {
-      "title": "Problèmes signalés",
-      "description": "<a href='' target='_blank'>Obtenir du soutien</a>"
+      "title": "Problèmes signalés avec les soumissions",
+      "description": "<a href='{`/fr/support`}' target='_blank'>Obtenir du soutien</a>"
     },
     "deliveredAndConfirmed": {
-      "title": "État de livraison : OK",
-      "description": "Toutes les réponses ont été livrées avec succès."
+      "title": "État : OK",
+      "description": "Toutes les soumissions ont été livrées et confirmées avec succès."
     },
     "awatingDownload": {
-      "title": "État de livraison : En attente",
-      "description": "Réponses en attente de la livraison par l'API",
+      "title": "État : En attente de livraison",
+      "description": "Les nouvelles soumissions peuvent être téléchargées avec une demande API",
       "new": "Nouvelles",
       "responses": "réponses",
       "available": "disponibles"
     },
     "awatingConfirm": {
-      "title": "État de livraison : En attente",
-      "description": "Réponses en attente de la confirmation de la livraison par l'API"
+      "title": "État : En attente de confirmation",
+      "description": "Les soumissions téléchargées peuvent être confirmées avec une demande API"
+    },
+    "overdue": {
+      "title": "Réponses en retard",
+      "description": "Récupérez et confirmez les soumissions avec l'API"
     }
   }
 }

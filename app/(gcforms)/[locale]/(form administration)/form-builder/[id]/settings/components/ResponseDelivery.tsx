@@ -1,5 +1,5 @@
 "use client";
-import React, { useCallback, useState, useMemo } from "react";
+import React, { useCallback, useState, useMemo, useEffect } from "react";
 import {
   LocalizedFormProperties,
   FormServerError,
@@ -36,7 +36,10 @@ import { toast } from "@formBuilder/components/shared/Toast";
 import { ErrorSaving } from "@formBuilder/components/shared/ErrorSaving";
 import { ApiKeyButton } from "./ApiKeyButton";
 import { ApiDocNotes } from "./ApiDocNotes";
+import { DeleteKeyToChangeOptionsNote } from "./DeleteKeyToChangeOptionsNote";
 import { useFormBuilderConfig } from "@lib/hooks/useFormBuilderConfig";
+
+import { EventKeys, useCustomEvent } from "@lib/hooks/useCustomEvent";
 
 enum DeliveryOption {
   vault = "vault",
@@ -62,6 +65,7 @@ export const ResponseDelivery = ({ isFormsAdmin }: { isFormsAdmin: boolean }) =>
   const { refreshData } = useRefresh();
   const lang = i18n.language === "en" ? "en" : "fr";
   const { apiKeyId } = useFormBuilderConfig();
+  const { Event } = useCustomEvent();
 
   const {
     email,
@@ -112,13 +116,6 @@ export const ResponseDelivery = ({ isFormsAdmin }: { isFormsAdmin: boolean }) =>
     t("formSettingsModal.emailOption.label")
   );
 
-  const apiLabel = (
-    <>
-      <span className="block">{t("formSettingsModal.apiOption.label")}</span>
-      <span className="block">{t("formSettingsModal.apiOption.note")}</span>
-    </>
-  );
-
   const userEmail = session.data?.user.email ?? "";
   let initialDeliveryOption = !email ? DeliveryOption.vault : DeliveryOption.email;
 
@@ -164,12 +161,10 @@ export const ResponseDelivery = ({ isFormsAdmin }: { isFormsAdmin: boolean }) =>
       if (!completeEmailAddressRegex.test(inputEmailValue)) {
         return false;
       }
-      return (
-        isValidDeliveryOption && (emailDeliveryOptionsChanged || purposeOption !== formPurpose)
-      );
+      return isValidDeliveryOption && emailDeliveryOptionsChanged;
     }
 
-    if (deliveryOptionValue === initialDeliveryOption && purposeOption === formPurpose) {
+    if (deliveryOptionValue === initialDeliveryOption) {
       return false;
     }
 
@@ -186,8 +181,6 @@ export const ResponseDelivery = ({ isFormsAdmin }: { isFormsAdmin: boolean }) =>
     initialSubjectFr,
     classification,
     securityAttribute,
-    purposeOption,
-    formPurpose,
   ]);
 
   /*--------------------------------------------*
@@ -278,17 +271,6 @@ export const ResponseDelivery = ({ isFormsAdmin }: { isFormsAdmin: boolean }) =>
       return;
     }
 
-    updateField("formPurpose", purposeOption);
-    result = (await updateTemplateFormPurpose({
-      id,
-      formPurpose: formPurpose,
-    })) as FormServerError;
-
-    if (result?.error) {
-      toast.error(<ErrorSaving errorCode={FormServerErrorCodes.FORM_PURPOSE} />, "wide");
-      return;
-    }
-
     toast.success(t("settingsResponseDelivery.savedSuccessMessage"));
 
     refreshData && refreshData();
@@ -301,10 +283,30 @@ export const ResponseDelivery = ({ isFormsAdmin }: { isFormsAdmin: boolean }) =>
     classification,
     setToDatabaseDelivery,
     setToEmailDelivery,
-    updateField,
-    purposeOption,
-    formPurpose,
   ]);
+
+  /*--------------------------------------------*
+   * Save form purpose option
+   *--------------------------------------------*/
+
+  const saveFormPurpose = useCallback(async () => {
+    const result = await updateTemplateFormPurpose({
+      id,
+      formPurpose: purposeOption,
+    });
+
+    if (result?.error) {
+      toast.error(<ErrorSaving errorCode={FormServerErrorCodes.FORM_PURPOSE} />, "wide");
+      return;
+    }
+
+    // Update the template store
+    updateField("formPurpose", purposeOption);
+
+    toast.success(t("settingsResponseDelivery.savedSuccessMessage"));
+
+    refreshData && refreshData();
+  }, [t, refreshData, id, purposeOption, updateField]);
 
   // Update local state
   const updateDeliveryOption = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
@@ -328,9 +330,25 @@ export const ResponseDelivery = ({ isFormsAdmin }: { isFormsAdmin: boolean }) =>
     setClassification(value);
   }, []);
 
+  const handleDeleteApiKey = useCallback(() => {
+    if (deliveryOptionValue === DeliveryOption.vault) {
+      return;
+    }
+
+    // Set to vault when an API key is deleted
+    setDeliveryOptionValue(DeliveryOption.vault);
+  }, [deliveryOptionValue]);
+
+  useEffect(() => {
+    Event.on(EventKeys.deleteApiKey, handleDeleteApiKey);
+    return () => {
+      Event.off(EventKeys.deleteApiKey, handleDeleteApiKey);
+    };
+  }, [Event, handleDeleteApiKey]);
+
   return (
     <>
-      <p className="mb-10 inline-block bg-purple-200 p-3 text-sm font-bold">
+      <p className="mb-4 w-3/5 rounded-md bg-indigo-50 p-3 font-bold">
         {t("settingsResponseDelivery.beforePublishMessage")}
       </p>
       {status === "authenticated" && (
@@ -350,74 +368,104 @@ export const ResponseDelivery = ({ isFormsAdmin }: { isFormsAdmin: boolean }) =>
 
             <div className="mb-10">
               <h2 className="mb-6">{t("settingsResponseDelivery.title")}</h2>
-              {hasApiKey && (
-                <p className="mb-10 inline-block bg-purple-200 p-3 text-sm font-bold">
-                  {t("settingsResponseDelivery.deleteApiKeyMessage")}
-                </p>
-              )}
               {protectedBSelected ? (
                 <p className="mb-5 inline-block bg-purple-200 p-3 text-sm font-bold">
                   {t("settingsResponseDelivery.protectedBMessage")}
                 </p>
               ) : null}
-              <Radio
-                disabled={isPublished || hasApiKey}
-                id={`delivery-option-${DeliveryOption.vault}`}
-                checked={deliveryOptionValue === DeliveryOption.vault}
-                name="response-delivery"
-                value={DeliveryOption.vault}
-                label={t("settingsResponseDelivery.vaultOption")}
-                onChange={updateDeliveryOption}
-              >
-                <span className="mb-1 ml-3 block text-sm">
-                  {t("settingsResponseDelivery.vaultOptionHint.text1")}{" "}
-                  <a href={responsesLink}>{t("settingsResponseDelivery.vaultOptionHint.text2")}</a>.
-                  {t("settingsResponseDelivery.vaultOptionHint.text3")}
-                </span>
-              </Radio>
-              <Radio
-                disabled={isPublished || protectedBSelected || hasApiKey}
-                id={`delivery-option-${DeliveryOption.email}`}
-                checked={deliveryOptionValue === DeliveryOption.email}
-                name="response-delivery"
-                value={DeliveryOption.email}
-                label={emailLabel}
-                onChange={updateDeliveryOption}
-              />
 
-              {deliveryOptionValue === DeliveryOption.email && (
-                <ResponseEmail
-                  inputEmail={inputEmailValue}
-                  setInputEmail={setInputEmailValue}
-                  subjectEn={subjectEnValue}
-                  setSubjectEn={setSubjectEnValue}
-                  subjectFr={subjectFrValue}
-                  setSubjectFr={setSubjectFrValue}
-                  isInvalidEmailError={isInvalidEmailError}
-                  setIsInvalidEmailError={setIsInvalidEmailError}
-                />
+              {/* Email Option */}
+              {!hasApiKey && (
+                <div className="mb-10">
+                  <Radio
+                    disabled={isPublished || protectedBSelected || hasApiKey}
+                    id={`delivery-option-${DeliveryOption.email}`}
+                    checked={deliveryOptionValue === DeliveryOption.email}
+                    name="response-delivery"
+                    value={DeliveryOption.email}
+                    label={emailLabel}
+                    onChange={updateDeliveryOption}
+                    className="mb-0"
+                  />
+                  {deliveryOptionValue === DeliveryOption.email && (
+                    <ResponseEmail
+                      inputEmail={inputEmailValue}
+                      setInputEmail={setInputEmailValue}
+                      subjectEn={subjectEnValue}
+                      setSubjectEn={setSubjectEnValue}
+                      subjectFr={subjectFrValue}
+                      setSubjectFr={setSubjectFrValue}
+                      isInvalidEmailError={isInvalidEmailError}
+                      setIsInvalidEmailError={setIsInvalidEmailError}
+                    />
+                  )}
+                </div>
               )}
-              {deliveryOptionValue !== DeliveryOption.email && <div className="mb-8"></div>}
+              {/* End Email Option */}
 
-              {apiAccess && (
-                <Radio
-                  disabled={isPublished || hasApiKey || protectedBSelected}
-                  id={`delivery-option-${DeliveryOption.api}`}
-                  checked={deliveryOptionValue === DeliveryOption.api}
-                  name="response-delivery"
-                  value={DeliveryOption.api}
-                  label={apiLabel}
-                  onChange={updateDeliveryOption}
-                />
+              {/* Vault Option */}
+              {!hasApiKey && (
+                <>
+                  <div className="mb-10">
+                    <Radio
+                      disabled={isPublished || hasApiKey}
+                      id={`delivery-option-${DeliveryOption.vault}`}
+                      checked={deliveryOptionValue === DeliveryOption.vault}
+                      name="response-delivery"
+                      value={DeliveryOption.vault}
+                      label={t("settingsResponseDelivery.vaultOption")}
+                      onChange={updateDeliveryOption}
+                      className="mb-0"
+                    >
+                      <span className="ml-3 block text-sm">
+                        {t("settingsResponseDelivery.vaultOptionHint.text1")}{" "}
+                        <a href={responsesLink}>
+                          {t("settingsResponseDelivery.vaultOptionHint.text2")}
+                        </a>
+                        .{t("settingsResponseDelivery.vaultOptionHint.text3")}
+                      </span>
+                    </Radio>
+                  </div>
+                  {/* End Vault Option */}
+
+                  {/* API Option */}
+                  {apiAccess && (
+                    <div className="mb-10">
+                      <div>
+                        <Radio
+                          disabled={isPublished || protectedBSelected || hasApiKey}
+                          id={`delivery-option-${DeliveryOption.api}`}
+                          checked={deliveryOptionValue === DeliveryOption.api}
+                          name="response-delivery"
+                          value={DeliveryOption.api}
+                          label={t("formSettingsModal.apiOption.label")}
+                          onChange={updateDeliveryOption}
+                          className="mb-0"
+                        >
+                          <span className="ml-3 block text-sm">
+                            {t("formSettingsModal.apiOption.note")}
+                          </span>
+                        </Radio>
+                      </div>
+                      {/* End API Option */}
+
+                      {/*  API note */}
+                      {deliveryOptionValue === DeliveryOption.api && (
+                        <div className="mb-10 ml-4 border-l-4 pl-8">
+                          <span className="block py-6 font-bold">
+                            {t("formSettingsModal.apiOption.startNote")}
+                          </span>
+                        </div>
+                      )}
+                      {/*  End API note */}
+                    </div>
+                  )}
+                </>
               )}
 
               {apiAccess && deliveryOptionValue === DeliveryOption.api && (
                 <div>
-                  <div className="mb-10 ml-4 border-l-4 pl-8">
-                    <span className="block py-6 font-bold">
-                      {t("formSettingsModal.apiOption.startNote")}
-                    </span>
-                  </div>
+                  <DeleteKeyToChangeOptionsNote hasApiKey={hasApiKey} />
                   <ApiKeyButton showDelete />
                   <ApiDocNotes />
                 </div>
@@ -440,6 +488,10 @@ export const ResponseDelivery = ({ isFormsAdmin }: { isFormsAdmin: boolean }) =>
               )}
             </div>
 
+            {/*--------------------------------------------*
+             * Purpose option section
+             *--------------------------------------------*/}
+
             <div className="mb-10">
               <h2>{t("settingsPurposeAndUse.title")}</h2>
               <p className="mb-2">
@@ -454,6 +506,7 @@ export const ResponseDelivery = ({ isFormsAdmin }: { isFormsAdmin: boolean }) =>
                 checked={purposeOption === PurposeOption.admin}
                 value={PurposeOption.admin}
                 onChange={updatePurposeOption}
+                className="mb-20"
               />
               <div className="mb-4 ml-12 text-sm">
                 <div>
@@ -491,12 +544,8 @@ export const ResponseDelivery = ({ isFormsAdmin }: { isFormsAdmin: boolean }) =>
             </div>
           </div>
 
-          <Button
-            disabled={!isValid || isPublished}
-            theme="secondary"
-            onClick={saveDeliveryOptions}
-          >
-            {t("settingsResponseDelivery.saveButton")}
+          <Button disabled={isPublished} theme="secondary" onClick={saveFormPurpose}>
+            {t("settingsPurposeAndUse.saveButton")}
           </Button>
           <FormPurposeHelpButton />
         </div>

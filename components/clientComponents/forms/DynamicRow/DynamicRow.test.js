@@ -121,7 +121,9 @@ describe.each([["en"], ["fr"]])("Generate a dynamic row", (lang) => {
       window.HTMLElement.prototype.scrollIntoView = jest.fn();
 
       const titleProp = lang === "en" ? "titleEn" : "titleFr";
+
       await user.click(screen.getByTestId("add-row-button-1"));
+
       // There is only 1 row on initiation
       expect(screen.queryAllByTestId("dynamic-row", { exact: false })).toHaveLength(2);
       const dynamicRow = screen.getByTestId("dynamic-row-1");
@@ -172,7 +174,9 @@ describe.each([["en"], ["fr"]])("Generate a dynamic row", (lang) => {
       await user.click(screen.getByTestId("add-row-button-1"));
 
       const titleProp = lang === "en" ? "titleEn" : "titleFr";
+
       await user.click(screen.getByTestId("delete-row-button-1.1"));
+
       // There is only 1 row on initiation
       expect(screen.queryAllByTestId("dynamic-row", { exact: false })).toHaveLength(1);
       // All children are present in row 1
@@ -217,6 +221,7 @@ describe.each([["en"], ["fr"]])("Generate a dynamic row", (lang) => {
         // userEvent.type needs to be run sequentially
         // eslint-disable-next-line no-await-in-loop
         await user.type(field, index.toString());
+
         index++;
       }
 
