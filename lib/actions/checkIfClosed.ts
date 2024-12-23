@@ -4,6 +4,8 @@ import { prisma, prismaErrors } from "@lib/integration/prismaConnector";
 import { ClosedDetails } from "@lib/types";
 import { dateHasPast } from "@lib/utils";
 
+// Public facing functions - they can be used by anyone who finds the associated server action identifer
+
 export const checkIfClosed = async (formId: string) => {
   try {
     let isPastClosingDate = false;

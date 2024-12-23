@@ -1,11 +1,11 @@
 "use server";
+
 import { createKey, deleteKey, refreshKey } from "@lib/serviceAccount";
 import { revalidatePath } from "next/cache";
-
 import { promises as fs } from "fs";
 import path from "path";
 
-// Privilege Checks are done at the lib/serviceAccount.ts level
+// Public facing functions - they can be used by anyone who finds the associated server action identifer
 
 export const getReadmeContent = async () => {
   try {
@@ -16,6 +16,8 @@ export const getReadmeContent = async () => {
     return { error: true };
   }
 };
+
+// Privilege Checks are done at the lib/serviceAccount.ts level for the next server actions
 
 export const createServiceAccountKey = async (templateId: string) => {
   revalidatePath(
