@@ -175,9 +175,8 @@ export const getErrorText = async (language: string, errorID: string) => {
 };
 
 export const getRedirectPath = async (locale: string) => {
-  const { session, ability } = await authCheckAndThrow().catch(() => ({
+  const { session } = await authCheckAndThrow().catch(() => ({
     session: null,
-    ability: null,
   }));
 
   if (!session) {
@@ -193,7 +192,7 @@ export const getRedirectPath = async (locale: string) => {
   // Get user
   const user = session.user;
 
-  const overdue = await getUnprocessedSubmissionsForUser(ability, user.id).catch((err) => {
+  const overdue = await getUnprocessedSubmissionsForUser(user.id).catch((err) => {
     logMessage.warn(`Error getting unprocessed submissions for user ${user.id}: ${err.message}`);
     // Fail gracefully if we can't get the unprocessed submissions.
     return { callback: `/${locale}/auth/policy` };

@@ -255,7 +255,7 @@ export async function getAllTemplatesForUser(
           ttl: null,
           users: {
             some: {
-              id: ability.userID,
+              id: ability.user.id,
             },
           },
         },
@@ -284,7 +284,7 @@ export async function getAllTemplatesForUser(
     // Only log the event if templates are found
     if (templates.length > 0)
       logEvent(
-        ability.userID,
+        ability.user.id,
         { type: "Form" },
         "ReadForm",
         `Accessed Forms: ${templates.map((template) => template.id).toString()}`
@@ -537,8 +537,7 @@ export async function updateIsPublishedForTemplate(
 
   // Delete all form responses created during draft mode
   if (isPublished && process.env.APP_ENV !== "test") {
-    const ability = await getAbility();
-    await deleteDraftFormResponses(ability, formID);
+    await deleteDraftFormResponses(formID);
   }
 
   // We use a where unique input to ensure we are only updating the form if it is not published
@@ -1129,8 +1128,8 @@ export async function deleteTemplate(formID: string): Promise<FormRecord | null>
   });
 
   // Ignore cache (last boolean parameter) because we want to make sure we did not get new submissions while in the flow of deleting a form
-  const ability = await getAbility();
-  const numOfUnprocessedSubmissions = await unprocessedSubmissions(ability, formID, true);
+
+  const numOfUnprocessedSubmissions = await unprocessedSubmissions(formID, true);
   if (numOfUnprocessedSubmissions) throw new TemplateHasUnprocessedSubmissions();
 
   const dateIn30Days = new Date(Date.now() + 2592000000); // 30 days = 60 (seconds) * 60 (minutes) * 24 (hours) * 30 (days) * 1000 (to ms)

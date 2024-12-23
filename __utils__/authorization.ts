@@ -27,11 +27,14 @@ export const mockAuthorizationFail = (userID: string) => {
   }
 };
 
-export const mockGetAbility = (userID: string) => {
+export const mockGetAbility = (userID: string, email = "test.user@cds-snc.ca") => {
   const mockedAbility = jest.mocked(getAbility);
   mockedAbility.mockImplementation(() =>
     Promise.resolve({
-      userID,
+      user: {
+        id: userID,
+        email,
+      },
     } as UserAbility)
   );
 };

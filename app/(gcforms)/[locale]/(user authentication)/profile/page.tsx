@@ -29,7 +29,7 @@ export default async function Page(props: { params: Promise<{ locale: string }> 
   const hasPublishPrivilege = ability.can("update", "FormRecord", "isPublished");
 
   const [userQuestions, allQuestions] = await Promise.all([
-    retrieveUserSecurityQuestions({ userId: ability.userID }),
+    retrieveUserSecurityQuestions({ userId: ability.user.id }),
     retrievePoolOfSecurityQuestions(),
   ]);
 
