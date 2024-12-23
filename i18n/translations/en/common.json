@@ -1,5 +1,9 @@
 {
   "footer": {
+    "about": {
+      "link": "https://articles.alpha.canada.ca/forms-formulaires/?utm_source=EN_FormsFooter&utm_medium=Product&utm_campaign=forms_product",
+      "desc": "About GC Forms"
+    },
     "terms-and-conditions": {
       "link": "/en/terms-and-conditions",
       "desc": "Terms and conditions"
