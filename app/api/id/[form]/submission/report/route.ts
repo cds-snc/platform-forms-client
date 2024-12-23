@@ -210,7 +210,7 @@ export const PUT = middleware(
     } catch (e) {
       if (e instanceof AccessControlError) {
         logEvent(
-          ability.userID,
+          ability.user.id,
           { type: "Form", id: formId },
           "AccessDenied",
           `Attempted to identify response problem without form ownership`
@@ -239,7 +239,7 @@ export const PUT = middleware(
         );
         submissionsFromSubmissionNames.submissionsToReport.forEach((problem) =>
           logEvent(
-            ability.userID,
+            ability.user.id,
             { type: "Response", id: problem.name },
             "IdentifyProblemResponse",
             `Identified problem response for form ${formId}`

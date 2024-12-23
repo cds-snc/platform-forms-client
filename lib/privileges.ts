@@ -58,7 +58,10 @@ export const createAbility = (session: Session): UserAbility => {
   const ability = createMongoAbility<MongoAbility<Abilities>>(
     session.user.privileges
   ) as UserAbility;
-  ability.userID = session.user.id;
+  ability.user = {
+    id: session.user.id,
+    email: session.user.email,
+  };
   return ability;
 };
 
@@ -192,7 +195,7 @@ export const updatePrivilegesForUser = async (
       }),
       prisma.user.findUniqueOrThrow({
         where: {
-          id: ability.userID,
+          id: ability.user.id,
         },
         select: {
           email: true,
@@ -208,7 +211,7 @@ export const updatePrivilegesForUser = async (
         "GrantPrivilege",
         `Granted privilege : ${privilegesInfo.find((p) => p.id === privilege.id)?.name} to ${
           user.email
-        } (userID: ${user.id}) by ${privilegedUser?.email} (userID: ${ability.userID})`
+        } (userID: ${user.id}) by ${privilegedUser?.email} (userID: ${ability.user.id})`
       )
     );
 
@@ -219,7 +222,7 @@ export const updatePrivilegesForUser = async (
         "RevokePrivilege",
         `Revoked privilege : ${privilegesInfo.find((p) => p.id === privilege.id)?.name} from ${
           user.email
-        } (userID: ${user.id}) by ${privilegedUser?.email} (userID: ${ability.userID})`
+        } (userID: ${user.id}) by ${privilegedUser?.email} (userID: ${ability.user.id})`
       )
     );
 
@@ -235,7 +238,7 @@ export const updatePrivilegesForUser = async (
     }
     if (error instanceof AccessControlError) {
       logEvent(
-        ability.userID,
+        ability.user.id,
         { type: "Privilege" },
         "AccessDenied",
         `Attempted to modify privilege on user ${userID}`
@@ -498,7 +501,7 @@ const _authorizationCheck = async (
     fields?: string[];
   }[],
   logic: "all" | "one" = "all"
-): Promise<{ user: { id: string } }> => {
+) => {
   // Create a local scoped memory cache to store the subject objects between rules
   const cache = new Map();
   const ability = await getAbility();
@@ -554,7 +557,7 @@ const _authorizationCheck = async (
   if (!accessAllowed) {
     throw new AccessControlError(`Access Control Forbidden Action`);
   }
-  return { user: { id: ability.userID } };
+  return { user: ability.user };
 };
 
 export const authorization = {

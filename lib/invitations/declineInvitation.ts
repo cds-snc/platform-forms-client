@@ -24,7 +24,7 @@ export const declineInvitation = async (ability: UserAbility, invitationId: stri
     throw new InvitationNotFoundError();
   }
 
-  const user = await getUser(ability, ability.userID).catch(() => {
+  const user = await getUser(ability, ability.user.id).catch(() => {
     throw new UserNotFoundError();
   });
 
@@ -38,7 +38,7 @@ export const declineInvitation = async (ability: UserAbility, invitationId: stri
   });
 
   logEvent(
-    ability.userID,
+    ability.user.id,
     { type: "Form", id: invitation.templateId },
     "InvitationDeclined",
     `${user.id} has declined an invitation`

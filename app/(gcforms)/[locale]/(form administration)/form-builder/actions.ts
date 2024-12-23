@@ -94,7 +94,7 @@ const createTemplate = async ({
     const ability = await getAbility();
 
     const response = await createDbTemplate({
-      userID: ability.userID,
+      userID: ability.user.id,
       formConfig: formConfig,
       name: name,
       deliveryOption: deliveryOption,

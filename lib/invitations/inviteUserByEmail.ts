@@ -33,7 +33,7 @@ export const inviteUserByEmail = async (
 ) => {
   let invitation: Invitation;
 
-  const sender = await getUser(ability, ability.userID).catch(() => {
+  const sender = await getUser(ability, ability.user.id).catch(() => {
     throw new UserNotFoundError();
   });
 
@@ -75,7 +75,7 @@ export const inviteUserByEmail = async (
     _sendInvitationEmail(sender, invitation, message, template.formRecord);
 
     logEvent(
-      ability.userID,
+      ability.user.id,
       { type: "Form", id: invitation.templateId },
       "InvitationCreated",
       `${sender.id} invited ${invitation.email}`

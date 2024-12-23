@@ -2,9 +2,8 @@
 import { Language, FormServerErrorCodes, ServerActionError } from "@lib/types/form-builder-types";
 import { getAppSetting } from "@lib/appSettings";
 import { logEvent } from "@lib/auditLogs";
-import { AccessControlError } from "@lib/auth";
 import { ucfirst } from "@lib/client/clientHelpers";
-import { createAbility } from "@lib/privileges";
+import { getAbility } from "@lib/privileges";
 import {
   Answer,
   CSVResponse,
@@ -38,7 +37,7 @@ import { transform as htmlTransform } from "@lib/responseDownloadFormats/html";
 import { transform as zipTransform } from "@lib/responseDownloadFormats/html-zipped";
 import { transform as jsonTransform } from "@lib/responseDownloadFormats/json";
 import { logMessage } from "@lib/logger";
-import { authCheckAndRedirect, authCheckAndThrow } from "@lib/actions";
+import { AuthenticatedAction } from "@lib/actions";
 import { FormBuilderError } from "./exceptions";
 import { FormProperties } from "@lib/types";
 import { getLayoutFromGroups } from "@lib/utils/form-builder/groupedFormHelpers";
@@ -54,71 +53,58 @@ import {
 } from "@clientComponents/forms/AddressComplete/utils";
 import { serverTranslation } from "@i18n";
 
-export const fetchSubmissions = async ({
-  formId,
-  status,
-  lastKey,
-}: {
-  formId: string;
-  status: string;
-  lastKey: string | null;
-}) => {
-  try {
-    const { session, ability } = await authCheckAndThrow().catch(() => ({
-      session: null,
-      ability: null,
-    }));
-
-    if (!session) {
-      throw new Error("User is not authenticated");
-    }
-
-    if (!formId) {
-      return {
-        submissions: [],
-      };
-    }
-
-    // get status from url params (default = new) and capitalize/cast to VaultStatus
-    // Protect against invalid status query
-    const selectedStatus = Object.values(VaultStatus).includes(ucfirst(status) as VaultStatus)
-      ? (ucfirst(status) as VaultStatus)
-      : VaultStatus.NEW;
-
-    let startFromExclusiveResponse: StartFromExclusiveResponse | undefined = undefined;
-
-    // build up startFromExclusiveResponse from lastKey url param
-    if (lastKey) {
-      const splitLastKey = lastKey.split("_");
-
-      // Make sure both components of lastKey are valid
-      if (
-        isResponseId(String(splitLastKey[0])) &&
-        isNaN(new Date(Number(splitLastKey[1])).getTime()) === false
-      ) {
-        startFromExclusiveResponse = {
-          name: splitLastKey[0],
-          status: selectedStatus,
-          createdAt: Number(splitLastKey[1]),
+export const fetchSubmissions = AuthenticatedAction(
+  async ({
+    formId,
+    status,
+    lastKey,
+  }: {
+    formId: string;
+    status: string;
+    lastKey: string | null;
+  }) => {
+    try {
+      if (!formId) {
+        return {
+          submissions: [],
         };
       }
+
+      // get status from url params (default = new) and capitalize/cast to VaultStatus
+      // Protect against invalid status query
+      const selectedStatus = Object.values(VaultStatus).includes(ucfirst(status) as VaultStatus)
+        ? (ucfirst(status) as VaultStatus)
+        : VaultStatus.NEW;
+
+      let startFromExclusiveResponse: StartFromExclusiveResponse | undefined = undefined;
+
+      // build up startFromExclusiveResponse from lastKey url param
+      if (lastKey) {
+        const splitLastKey = lastKey.split("_");
+
+        // Make sure both components of lastKey are valid
+        if (
+          isResponseId(String(splitLastKey[0])) &&
+          isNaN(new Date(Number(splitLastKey[1])).getTime()) === false
+        ) {
+          startFromExclusiveResponse = {
+            name: splitLastKey[0],
+            status: selectedStatus,
+            createdAt: Number(splitLastKey[1]),
+          };
+        }
+      }
+
+      const { submissions, startFromExclusiveResponse: nextStartFromExclusiveResponse } =
+        await listAllSubmissions(formId, selectedStatus, undefined, startFromExclusiveResponse);
+
+      return { submissions, startFromExclusiveResponse: nextStartFromExclusiveResponse };
+    } catch (e) {
+      logMessage.error(`Error fetching submissions for form ${formId}: ${(e as Error).message}`);
+      return { error: true, submissions: [] };
     }
-
-    const { submissions, startFromExclusiveResponse: nextStartFromExclusiveResponse } =
-      await listAllSubmissions(
-        ability,
-        formId,
-        selectedStatus,
-        undefined,
-        startFromExclusiveResponse
-      );
-
-    return { submissions, startFromExclusiveResponse: nextStartFromExclusiveResponse };
-  } catch (e) {
-    logMessage.error(`Error fetching submissions for form ${formId}: ${(e as Error).message}`);
-    return { error: true, submissions: [] };
   }
-};
+);
 
 const sortByLayout = ({ layout, elements }: { layout: number[]; elements: Answer[] }) => {
   return elements.sort((a, b) => layout.indexOf(a.questionId) - layout.indexOf(b.questionId));
@@ -164,12 +150,12 @@ const getAnswerAsString = (question: FormElement | undefined, answer: unknown): 
 
 const logDownload = async (
   responseIdStatusArray: { id: string; status: string }[],
-  format: DownloadFormat,
-  ability: ReturnType<typeof createAbility>
+  format: DownloadFormat
 ) => {
+  const ability = await getAbility();
   responseIdStatusArray.forEach((item) => {
     logEvent(
-      ability.userID,
+      ability.user.id,
       { type: "Response", id: item.id },
       "DownloadResponse",
       `Downloaded form response in ${format} for submission ID ${item.id}`
@@ -177,299 +163,284 @@ const logDownload = async (
   });
 };
 
-export const getSubmissionsByFormat = async ({
-  formID,
-  ids,
-  format = DownloadFormat.HTML,
-  lang,
-}: {
-  formID: string;
-  ids: string[];
-  format: DownloadFormat;
-  lang: Language;
-}): Promise<
-  | HtmlResponse
-  | HtmlZippedResponse
-  | HtmlAggregatedResponse
-  | CSVResponse
-  | JSONResponse
-  | ServerActionError
-> => {
-  try {
-    const { session, ability } = await authCheckAndThrow().catch(() => ({
-      session: null,
-      ability: null,
-    }));
+export const getSubmissionsByFormat = AuthenticatedAction(
+  async ({
+    formID,
+    ids,
+    format = DownloadFormat.HTML,
+    lang,
+  }: {
+    formID: string;
+    ids: string[];
+    format: DownloadFormat;
+    lang: Language;
+  }): Promise<
+    | HtmlResponse
+    | HtmlZippedResponse
+    | HtmlAggregatedResponse
+    | CSVResponse
+    | JSONResponse
+    | ServerActionError
+  > => {
+    try {
+      const { t: tEn } = await serverTranslation("form-builder-responses", { lang: "en" });
+      const { t: tFr } = await serverTranslation("form-builder-responses", { lang: "fr" });
 
-    if (!session) {
-      throw new AccessControlError("User is not authenticated");
-    }
+      const responseConfirmLimit = Number(await getAppSetting("responseDownloadLimit"));
 
-    const { t: tEn } = await serverTranslation("form-builder-responses", { lang: "en" });
-    const { t: tFr } = await serverTranslation("form-builder-responses", { lang: "fr" });
+      const fullFormTemplate = await getFullTemplateByID(formID);
 
-    const responseConfirmLimit = Number(await getAppSetting("responseDownloadLimit"));
+      if (fullFormTemplate === null) {
+        logMessage.warn(`getSubmissionsByFormat form not found: ${formID}`);
+        throw new FormBuilderError("Form not found", FormServerErrorCodes.FORM_NOT_FOUND);
+      }
 
-    const userEmail = session.user.email;
+      if (ids.length > responseConfirmLimit) {
+        throw new FormBuilderError(
+          `You can only download a maximum of ${responseConfirmLimit} responses at a time.`,
+          FormServerErrorCodes.DOWNLOAD_LIMIT_EXCEEDED
+        );
+      }
 
-    if (userEmail === null) {
-      throw new AccessControlError(
-        `User does not have an associated email address: ${JSON.stringify(session.user)}`
-      );
-    }
+      const queryResult = await retrieveSubmissions(formID, ids);
 
-    const fullFormTemplate = await getFullTemplateByID(formID);
+      if (!queryResult) {
+        throw new FormBuilderError(
+          "Error retrieving submissions",
+          FormServerErrorCodes.DOWNLOAD_RETRIEVE_SUBMISSIONS
+        );
+      }
 
-    if (fullFormTemplate === null) {
-      logMessage.warn(`getSubmissionsByFormat form not found: ${formID}`);
-      throw new FormBuilderError("Form not found", FormServerErrorCodes.FORM_NOT_FOUND);
-    }
+      const allowGroupsFlag = allowGrouping();
+      // Get responses into a ResponseSubmission array containing questions and answers that can be easily transformed
+      const responses = queryResult
+        .sort((a, b) => a.createdAt - b.createdAt)
+        .map((item) => {
+          const submission = Object.entries(JSON.parse(String(item.formSubmission))).map(
+            ([questionId, answer]) => {
+              const question = fullFormTemplate.form.elements.find(
+                (element) => element.id === Number(questionId)
+              );
 
-    if (ids.length > responseConfirmLimit) {
-      throw new FormBuilderError(
-        `You can only download a maximum of ${responseConfirmLimit} responses at a time.`,
-        FormServerErrorCodes.DOWNLOAD_LIMIT_EXCEEDED
-      );
-    }
+              // Handle Dynamic Rows
+              if (question?.type === FormElementTypes.dynamicRow && answer instanceof Array) {
+                return {
+                  questionId: question.id,
+                  type: question?.type,
+                  questionEn: question?.properties.titleEn,
+                  questionFr: question?.properties.titleFr,
+                  answer: answer.map((item) => {
+                    return Object.values(item).map((value, index) => {
+                      if (question?.properties.subElements) {
+                        const subQuestion = question?.properties.subElements[index];
+                        return {
+                          questionId: question?.id,
+                          type: subQuestion.type,
+                          questionEn: subQuestion.properties.titleEn,
+                          questionFr: subQuestion.properties.titleFr,
+                          answer: getAnswerAsString(subQuestion, value),
+                          ...(subQuestion.type === "formattedDate" && {
+                            dateFormat: subQuestion.properties.dateFormat,
+                          }),
+                        };
+                      }
+                    });
+                  }),
+                } as Answer;
+              }
 
-    const queryResult = await retrieveSubmissions(ability, formID, ids);
+              // Handle "Split" AddressComplete in a similiar manner to dynamic fields.
+              if (
+                question?.type === FormElementTypes.addressComplete &&
+                question.properties.addressComponents?.splitAddress === true
+              ) {
+                const addressObject = JSON.parse(answer as string) as AddressElements;
 
-    if (!queryResult) {
-      throw new FormBuilderError(
-        "Error retrieving submissions",
-        FormServerErrorCodes.DOWNLOAD_RETRIEVE_SUBMISSIONS
-      );
-    }
+                const questionComponents = question.properties
+                  .addressComponents as AddressComponents;
+                if (questionComponents.canadianOnly) {
+                  addressObject.country = "CAN";
+                }
 
-    const allowGroupsFlag = allowGrouping();
-    // Get responses into a ResponseSubmission array containing questions and answers that can be easily transformed
-    const responses = queryResult
-      .sort((a, b) => a.createdAt - b.createdAt)
-      .map((item) => {
-        const submission = Object.entries(JSON.parse(String(item.formSubmission))).map(
-          ([questionId, answer]) => {
-            const question = fullFormTemplate.form.elements.find(
-              (element) => element.id === Number(questionId)
-            );
+                const extraTranslations = {
+                  streetAddress: {
+                    en: tEn("addressComponents.streetAddress"),
+                    fr: tFr("addressComponents.streetAddress"),
+                  },
+                  city: {
+                    en: tEn("addressComponents.city"),
+                    fr: tFr("addressComponents.city"),
+                  },
+                  province: {
+                    en: tEn("addressComponents.province"),
+                    fr: tFr("addressComponents.province"),
+                  },
+                  postalCode: {
+                    en: tEn("addressComponents.postalCode"),
+                    fr: tFr("addressComponents.postalCode"),
+                  },
+                  country: {
+                    en: tEn("addressComponents.country"),
+                    fr: tFr("addressComponents.country"),
+                  },
+                };
 
-            // Handle Dynamic Rows
-            if (question?.type === FormElementTypes.dynamicRow && answer instanceof Array) {
+                const reviewElements = getAddressAsAnswerElements(
+                  question,
+                  addressObject,
+                  extraTranslations
+                );
+
+                const addressElements = [reviewElements];
+
+                return {
+                  questionId: question.id,
+                  type: FormElementTypes.address,
+                  questionEn: question?.properties.titleEn,
+                  questionFr: question?.properties.titleFr,
+                  answer: addressElements,
+                } as Answer;
+              }
+
+              // return the final answer object
               return {
-                questionId: question.id,
+                questionId: question?.id,
                 type: question?.type,
                 questionEn: question?.properties.titleEn,
                 questionFr: question?.properties.titleFr,
-                answer: answer.map((item) => {
-                  return Object.values(item).map((value, index) => {
-                    if (question?.properties.subElements) {
-                      const subQuestion = question?.properties.subElements[index];
-                      return {
-                        questionId: question?.id,
-                        type: subQuestion.type,
-                        questionEn: subQuestion.properties.titleEn,
-                        questionFr: subQuestion.properties.titleFr,
-                        answer: getAnswerAsString(subQuestion, value),
-                        ...(subQuestion.type === "formattedDate" && {
-                          dateFormat: subQuestion.properties.dateFormat,
-                        }),
-                      };
-                    }
-                  });
+                answer: getAnswerAsString(question, answer),
+                ...(question?.type === "formattedDate" && {
+                  dateFormat: question.properties.dateFormat,
                 }),
               } as Answer;
             }
-
-            // Handle "Split" AddressComplete in a similiar manner to dynamic fields.
-            if (
-              question?.type === FormElementTypes.addressComplete &&
-              question.properties.addressComponents?.splitAddress === true
-            ) {
-              const addressObject = JSON.parse(answer as string) as AddressElements;
-
-              const questionComponents = question.properties.addressComponents as AddressComponents;
-              if (questionComponents.canadianOnly) {
-                addressObject.country = "CAN";
-              }
-
-              const extraTranslations = {
-                streetAddress: {
-                  en: tEn("addressComponents.streetAddress"),
-                  fr: tFr("addressComponents.streetAddress"),
-                },
-                city: {
-                  en: tEn("addressComponents.city"),
-                  fr: tFr("addressComponents.city"),
-                },
-                province: {
-                  en: tEn("addressComponents.province"),
-                  fr: tFr("addressComponents.province"),
-                },
-                postalCode: {
-                  en: tEn("addressComponents.postalCode"),
-                  fr: tFr("addressComponents.postalCode"),
-                },
-                country: {
-                  en: tEn("addressComponents.country"),
-                  fr: tFr("addressComponents.country"),
-                },
-              };
-
-              const reviewElements = getAddressAsAnswerElements(
-                question,
-                addressObject,
-                extraTranslations
-              );
-
-              const addressElements = [reviewElements];
-
-              return {
-                questionId: question.id,
-                type: FormElementTypes.address,
-                questionEn: question?.properties.titleEn,
-                questionFr: question?.properties.titleFr,
-                answer: addressElements,
-              } as Answer;
-            }
-
-            // return the final answer object
-            return {
-              questionId: question?.id,
-              type: question?.type,
-              questionEn: question?.properties.titleEn,
-              questionFr: question?.properties.titleFr,
-              answer: getAnswerAsString(question, answer),
-              ...(question?.type === "formattedDate" && {
-                dateFormat: question.properties.dateFormat,
-              }),
-            } as Answer;
+          );
+          let sorted: Answer[];
+          if (allowGroupsFlag && formHasGroups(fullFormTemplate.form)) {
+            sorted = sortByGroups({ form: fullFormTemplate.form, elements: submission });
+          } else {
+            sorted = sortByLayout({ layout: fullFormTemplate.form.layout, elements: submission });
           }
-        );
-        let sorted: Answer[];
-        if (allowGroupsFlag && formHasGroups(fullFormTemplate.form)) {
-          sorted = sortByGroups({ form: fullFormTemplate.form, elements: submission });
-        } else {
-          sorted = sortByLayout({ layout: fullFormTemplate.form.layout, elements: submission });
-        }
 
-        return {
-          id: item.name,
-          createdAt: parseInt(item.createdAt.toString()),
-          confirmationCode: item.confirmationCode,
-          answers: sorted,
-        };
-      }) as FormResponseSubmissions["submissions"];
+          return {
+            id: item.name,
+            createdAt: parseInt(item.createdAt.toString()),
+            confirmationCode: item.confirmationCode,
+            answers: sorted,
+          };
+        }) as FormResponseSubmissions["submissions"];
 
-    if (!responses.length) {
-      throw new FormBuilderError("No responses found.", FormServerErrorCodes.NO_RESPONSES_FOUND);
-    }
-
-    const formResponse = {
-      form: {
-        id: fullFormTemplate.id,
-        titleEn: fullFormTemplate.form.titleEn,
-        titleFr: fullFormTemplate.form.titleFr,
-        securityAttribute: fullFormTemplate.securityAttribute,
-      },
-      submissions: responses,
-    } as FormResponseSubmissions;
-
-    const responseIdStatusArray = queryResult.map((item) => {
-      return {
-        id: item.name,
-        status: item.status,
-        createdAt: item.createdAt,
-      };
-    });
-
-    await updateLastDownloadedBy(responseIdStatusArray, formID, userEmail);
-    await logDownload(responseIdStatusArray, format, ability);
-
-    switch (format) {
-      case DownloadFormat.CSV:
-        return {
-          receipt: await htmlAggregatedTransform(formResponse, lang),
-          responses: csvTransform(formResponse),
-        };
-      case DownloadFormat.HTML_AGGREGATED:
-        return await htmlAggregatedTransform(formResponse, lang);
-
-      case DownloadFormat.HTML:
-        return await htmlTransform(formResponse);
-
-      case DownloadFormat.HTML_ZIPPED: {
-        return await zipTransform(formResponse, lang);
+      if (!responses.length) {
+        throw new FormBuilderError("No responses found.", FormServerErrorCodes.NO_RESPONSES_FOUND);
       }
 
-      case DownloadFormat.JSON:
+      const formResponse = {
+        form: {
+          id: fullFormTemplate.id,
+          titleEn: fullFormTemplate.form.titleEn,
+          titleFr: fullFormTemplate.form.titleFr,
+          securityAttribute: fullFormTemplate.securityAttribute,
+        },
+        submissions: responses,
+      } as FormResponseSubmissions;
+
+      const responseIdStatusArray = queryResult.map((item) => {
         return {
-          receipt: await htmlAggregatedTransform(formResponse, lang),
-          responses: jsonTransform(formResponse),
+          id: item.name,
+          status: item.status,
+          createdAt: item.createdAt,
         };
+      });
 
-      default:
-        throw new FormBuilderError(
-          `Invalid format: ${format}`,
-          FormServerErrorCodes.DOWNLOAD_INVALID_FORMAT
-        );
+      await updateLastDownloadedBy(responseIdStatusArray, formID);
+      await logDownload(responseIdStatusArray, format);
+
+      switch (format) {
+        case DownloadFormat.CSV:
+          return {
+            receipt: await htmlAggregatedTransform(formResponse, lang),
+            responses: csvTransform(formResponse),
+          };
+        case DownloadFormat.HTML_AGGREGATED:
+          return await htmlAggregatedTransform(formResponse, lang);
+
+        case DownloadFormat.HTML:
+          return await htmlTransform(formResponse);
+
+        case DownloadFormat.HTML_ZIPPED: {
+          return await zipTransform(formResponse, lang);
+        }
+
+        case DownloadFormat.JSON:
+          return {
+            receipt: await htmlAggregatedTransform(formResponse, lang),
+            responses: jsonTransform(formResponse),
+          };
+
+        default:
+          throw new FormBuilderError(
+            `Invalid format: ${format}`,
+            FormServerErrorCodes.DOWNLOAD_INVALID_FORMAT
+          );
+      }
+    } catch (err) {
+      logMessage.warn(
+        `Could not create submissions in format ${format} formId: ${formID}: ${
+          (err as Error).message
+        }`
+      );
+
+      if (err instanceof FormBuilderError) {
+        return {
+          error: "There was an error. Please try again later.",
+          code: err.code,
+        } as ServerActionError;
+      } else {
+        return { error: "There was an error. Please try again later." } as ServerActionError;
+      }
     }
-  } catch (err) {
-    logMessage.warn(
-      `Could not create submissions in format ${format} formId: ${formID}: ${
-        (err as Error).message
-      }`
-    );
+  }
+);
 
-    if (err instanceof FormBuilderError) {
-      return {
-        error: "There was an error. Please try again later.",
-        code: err.code,
-      } as ServerActionError;
-    } else {
+export const confirmSubmissionCodes = AuthenticatedAction(
+  async (confirmationCodes: string[], formId: string) => {
+    try {
+      return confirmResponses(confirmationCodes, formId);
+    } catch (e) {
+      logMessage.warn(
+        `Error confirming submission codes for formId ${formId}: ${(e as Error).message}`
+      );
+      // Throw sanitized error back to client
+      throw new Error("There was an error. Please try again later.");
+    }
+  }
+);
+
+export const newResponsesExist = AuthenticatedAction(async (formId: string) => {
+  try {
+    return submissionTypeExists(formId, VaultStatus.NEW);
+  } catch (error) {
+    // Throw sanitized error back to client
+    return { error: "There was an error. Please try again later." } as ServerActionError;
+  }
+});
+
+export const unConfirmedResponsesExist = AuthenticatedAction(async (formId: string) => {
+  try {
+    return submissionTypeExists(formId, VaultStatus.DOWNLOADED);
+  } catch (error) {
+    // Throw sanitized error back to client
+    return { error: "There was an error. Please try again later." } as ServerActionError;
+  }
+});
+
+export const getSubmissionRemovalDate = AuthenticatedAction(
+  async (formId: string, submissionName: string) => {
+    try {
+      return retrieveSubmissionRemovalDate(formId, submissionName);
+    } catch (error) {
+      // Throw sanitized error back to client
       return { error: "There was an error. Please try again later." } as ServerActionError;
     }
   }
-};
-
-export const confirmSubmissionCodes = async (confirmationCodes: string[], formId: string) => {
-  try {
-    const { ability } = await authCheckAndRedirect();
-
-    return confirmResponses(ability, confirmationCodes, formId);
-  } catch (e) {
-    logMessage.warn(
-      `Error confirming submission codes for formId ${formId}: ${(e as Error).message}`
-    );
-    // Throw sanitized error back to client
-    throw new Error("There was an error. Please try again later.");
-  }
-};
-
-export const newResponsesExist = async (formId: string) => {
-  try {
-    const { ability } = await authCheckAndRedirect();
-    return submissionTypeExists(ability, formId, VaultStatus.NEW);
-  } catch (error) {
-    // Throw sanitized error back to client
-    return { error: "There was an error. Please try again later." } as ServerActionError;
-  }
-};
-
-export const unConfirmedResponsesExist = async (formId: string) => {
-  try {
-    const { ability } = await authCheckAndRedirect();
-    return submissionTypeExists(ability, formId, VaultStatus.DOWNLOADED);
-  } catch (error) {
-    // Throw sanitized error back to client
-    return { error: "There was an error. Please try again later." } as ServerActionError;
-  }
-};
-
-export const getSubmissionRemovalDate = async (formId: string, submissionName: string) => {
-  try {
-    const { ability } = await authCheckAndRedirect();
-    return retrieveSubmissionRemovalDate(ability, formId, submissionName);
-  } catch (error) {
-    // Throw sanitized error back to client
-    return { error: "There was an error. Please try again later." } as ServerActionError;
-  }
-};
+);
