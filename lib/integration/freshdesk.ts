@@ -8,6 +8,7 @@ interface createTicketProps {
   email: string;
   description: string;
   language: string;
+  host?: string;
 }
 
 export const formatTicketData = ({
@@ -16,9 +17,9 @@ export const formatTicketData = ({
   email,
   description,
   language,
+  host = "",
 }: createTicketProps) => {
-  const HOST = getOrigin() || "";
-  const hostTag = tagHost(HOST);
+  const hostTag = tagHost(host);
 
   const ticket = {
     branding: {
@@ -89,7 +90,8 @@ export const createTicket = async ({
 
   const username = process.env.FRESHDESK_API_KEY;
   const password = "X";
-  const data = formatTicketData({ type, name, email, description, language });
+  const HOST = await getOrigin();
+  const data = formatTicketData({ type, name, email, description, language, host: HOST });
 
   if (!username) throw new Error("Freshdesk API key not found");
 
