@@ -62,7 +62,8 @@ export default async function Layout(props: {
   try {
     // No need to fetch in test, it will always not exist
     if (formID) {
-      apiKeyId = process.env.APP_ENV === "test" ? false : await checkKeyExists(formID);
+      apiKeyId =
+        process.env.APP_ENV === "test" || formID === "0000" ? false : await checkKeyExists(formID);
     }
   } catch (e) {
     // no-op
