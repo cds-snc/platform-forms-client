@@ -15,7 +15,7 @@ export const BaseElementArray = ({
     <div className="mb-8">
       <dt className="mb-2 font-bold">{formItem.label}</dt>
       <dd>
-        {Array.isArray(formItem.values) ? (
+        {Array.isArray(formItem.values) && formItem.values.length > 0 ? (
           splitValues ? (
             <ul className="list-none px-0">
               {formItem.values.map((value, index) => (
