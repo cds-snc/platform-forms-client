@@ -116,7 +116,24 @@ const sortByGroups = ({ form, elements }: { form: FormProperties; elements: Answ
   return sortByLayout({ layout, elements });
 };
 
+// @TODO: moved to lib/responses
+export type TaggedResponse = {
+  tag: string;
+  answer: string;
+};
+
+const extractAnswerFromTaggedResponse = (answer: unknown): string => {
+  try {
+    const answerObject = JSON.parse(answer as string) as TaggedResponse;
+    return answerObject.answer;
+  } catch (e) {
+    return answer as string;
+  }
+};
+
 const getAnswerAsString = (question: FormElement | undefined, answer: unknown): string => {
+  answer = extractAnswerFromTaggedResponse(answer);
+
   if (question && question.type === "checkbox") {
     return Array(answer).join(", ");
   }
@@ -126,6 +143,7 @@ const getAnswerAsString = (question: FormElement | undefined, answer: unknown): 
     if (!answer) {
       return "";
     }
+
     const dateFormat = (question.properties.dateFormat || "YYYY-MM-DD") as DateFormat;
     const dateObject = JSON.parse(answer as string) as DateObject;
 
