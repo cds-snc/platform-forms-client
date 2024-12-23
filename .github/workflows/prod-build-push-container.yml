@@ -11,6 +11,7 @@ env:
   TAG_VERSION: ${{  github.ref_name }}
   COGNITO_APP_CLIENT_ID: ${{secrets.PRODUCTION_COGNITO_APP_CLIENT_ID}}
   COGNITO_USER_POOL_ID: ${{ secrets.PRODUCTION_COGNITO_USER_POOL_ID}}
+  NEXT_SERVER_ACTIONS_ENCRYPTION_KEY: ${{ secrets.PRODUCTION_NEXT_SERVER_ACTIONS_ENCRYPTION_KEY }}
 
 permissions:
   id-token: write
@@ -29,8 +30,9 @@ jobs:
         run: |
           docker build -t base \
           --build-arg COGNITO_APP_CLIENT_ID=$COGNITO_APP_CLIENT_ID \
-          --build-arg COGNITO_USER_POOL_ID=$COGNITO_USER_POOL_ID . \
-          --build-arg INDEX_SITE=true
+          --build-arg COGNITO_USER_POOL_ID=$COGNITO_USER_POOL_ID \
+          --build-arg INDEX_SITE=true \
+          --build-arg NEXT_SERVER_ACTIONS_ENCRYPTION_KEY=$NEXT_SERVER_ACTIONS_ENCRYPTION_KEY .
 
       - name: Configure AWS credentials using OIDC
         uses: aws-actions/configure-aws-credentials@e3dd6a429d7300a6a4c196c26e071d42e0343502 # v4.0.2
