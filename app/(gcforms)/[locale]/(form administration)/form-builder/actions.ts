@@ -1,5 +1,8 @@
 "use server";
 
+import { promises as fs } from "fs";
+import path from "path";
+
 import { AuthenticatedAction } from "@lib/actions";
 import { getAbility } from "@lib/privileges";
 import {
@@ -26,6 +29,8 @@ import { serverTranslation } from "@i18n";
 import { revalidatePath } from "next/cache";
 import { checkOne } from "@lib/cache/flags";
 import { isValidDateString } from "@lib/utils/date/isValidDateString";
+
+import { allowedTemplates } from "@lib/utils/form-builder";
 
 export type CreateOrUpdateTemplateType = {
   id?: string;
@@ -405,3 +410,32 @@ export const getTranslatedDynamicRowProperties = async () => {
 export async function checkFlag(id: string) {
   return checkOne(id);
 }
+
+export const loadBlocks = AuthenticatedAction(
+  async ({
+    elementType,
+  }: {
+    elementType: string;
+  }): Promise<{
+    template?: string;
+    error?: string;
+  }> => {
+    try {
+      if (!allowedTemplates.includes(elementType)) {
+        return { error: "Invalid element type" };
+      }
+
+      //Find the absolute path of the json directory
+      const jsonDirectory = path.join(process.cwd(), "templates");
+
+      //Read the json data file data.json
+      const fileContents = await fs.readFile(jsonDirectory + `/${elementType}.json`, "utf8");
+
+      return {
+        template: fileContents,
+      };
+    } catch (error) {
+      return { template: "", error: (error as Error).message };
+    }
+  }
+);
