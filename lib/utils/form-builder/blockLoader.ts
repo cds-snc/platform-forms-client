@@ -8,7 +8,7 @@ export const blockLoader = async (
   onData: (data: FormElement, position: number) => void
 ) => {
   if (!allowedTemplates.includes(type)) {
-    return;
+    throw new Error("Invalid template type");
   }
 
   const result = await loadBlockTemplate({ type });

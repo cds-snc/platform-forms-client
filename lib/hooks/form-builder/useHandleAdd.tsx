@@ -17,12 +17,17 @@ import {
 } from "@formBuilder/actions";
 import { useTreeRef } from "@formBuilder/components/shared/right-panel/treeview/provider/TreeRefProvider";
 
+import { toast } from "@formBuilder/components/shared/Toast";
+import { useTranslation } from "@i18n/client";
+
 export const useHandleAdd = () => {
   const { add, addSubItem, setChangeKey } = useTemplateStore((s) => ({
     add: s.add,
     addSubItem: s.addSubItem,
     setChangeKey: s.setChangeKey,
   }));
+
+  const { t } = useTranslation("form-builder");
 
   const { treeView } = useTreeRef();
 
@@ -52,15 +57,21 @@ export const useHandleAdd = () => {
     return item;
   }, []);
 
+  const loadError = t("failedToReadFormFile");
+
   /* Note this callback is also in ElementPanel */
   const handleAddElement = useCallback(
     async (index: number, type?: FormElementTypes) => {
       let id;
 
       if (allowedTemplates.includes(type as TemplateTypes)) {
-        blockLoader(type as TemplateTypes, index, async (data, position) => {
-          id = await add(position, data.type, data, groupId);
-        });
+        try {
+          await blockLoader(type as TemplateTypes, index, async (data, position) => {
+            id = await add(position, data.type, data, groupId);
+          });
+        } catch (e) {
+          toast.error(loadError);
+        }
         return id;
       }
 
@@ -93,11 +104,15 @@ export const useHandleAdd = () => {
       window && window.dispatchEvent(closeAll);
 
       if (allowedTemplates.includes(type as TemplateTypes)) {
-        blockLoader(type as TemplateTypes, subIndex, (data, position) => {
-          id = addSubItem(elId, position, data.type, data);
-          setChangeKey(String(new Date().getTime())); //Force a re-render
-        });
-        return id;
+        try {
+          blockLoader(type as TemplateTypes, subIndex, (data, position) => {
+            id = addSubItem(elId, position, data.type, data);
+            setChangeKey(String(new Date().getTime())); //Force a re-render
+          });
+          return id;
+        } catch (e) {
+          toast.error(loadError);
+        }
       }
 
       const item = await create(type as FormElementTypes);
