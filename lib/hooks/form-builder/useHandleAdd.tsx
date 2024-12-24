@@ -2,8 +2,8 @@
 import { useCallback } from "react";
 import { FormElementTypes } from "@lib/types";
 import { useTemplateStore } from "@lib/store/useTemplateStore";
-import { blockLoader, LoaderType } from "../../utils/form-builder/blockLoader";
-import { allowedTemplates } from "@lib/utils/form-builder";
+import { blockLoader } from "../../utils/form-builder/blockLoader";
+import { allowedTemplates, TemplateTypes } from "@lib/utils/form-builder";
 import {
   defaultField,
   createElement,
@@ -16,6 +16,8 @@ import {
   getTranslatedDynamicRowProperties,
 } from "@formBuilder/actions";
 import { useTreeRef } from "@formBuilder/components/shared/right-panel/treeview/provider/TreeRefProvider";
+import { toast } from "@formBuilder/components/shared/Toast";
+import { useTranslation } from "@i18n/client";
 
 export const useHandleAdd = () => {
   const { add, addSubItem, setChangeKey } = useTemplateStore((s) => ({
@@ -23,6 +25,8 @@ export const useHandleAdd = () => {
     addSubItem: s.addSubItem,
     setChangeKey: s.setChangeKey,
   }));
+
+  const { t } = useTranslation("form-builder");
 
   const { treeView } = useTreeRef();
 
@@ -52,16 +56,21 @@ export const useHandleAdd = () => {
     return item;
   }, []);
 
+  const loadError = t("failedToReadFormFile");
+
   /* Note this callback is also in ElementPanel */
   const handleAddElement = useCallback(
     async (index: number, type?: FormElementTypes) => {
       let id;
 
-      if (allowedTemplates.includes(type as LoaderType)) {
-        blockLoader(type as LoaderType, index, async (data, position) => {
-          // Note add() returns the element id -- we're not using it yet
-          id = await add(position, data.type, data, groupId);
-        });
+      if (allowedTemplates.includes(type as TemplateTypes)) {
+        try {
+          await blockLoader(type as TemplateTypes, index, async (data, position) => {
+            id = await add(position, data.type, data, groupId);
+          });
+        } catch (e) {
+          toast.error(loadError);
+        }
         return id;
       }
 
@@ -93,12 +102,16 @@ export const useHandleAdd = () => {
       const closeAll = new CustomEvent("close-all-panel-menus");
       window && window.dispatchEvent(closeAll);
 
-      if (allowedTemplates.includes(type as LoaderType)) {
-        blockLoader(type as LoaderType, subIndex, (data, position) => {
-          id = addSubItem(elId, position, data.type, data);
-          setChangeKey(String(new Date().getTime())); //Force a re-render
-        });
-        return id;
+      if (allowedTemplates.includes(type as TemplateTypes)) {
+        try {
+          blockLoader(type as TemplateTypes, subIndex, (data, position) => {
+            id = addSubItem(elId, position, data.type, data);
+            setChangeKey(String(new Date().getTime())); //Force a re-render
+          });
+          return id;
+        } catch (e) {
+          toast.error(loadError);
+        }
       }
 
       const item = await create(type as FormElementTypes);

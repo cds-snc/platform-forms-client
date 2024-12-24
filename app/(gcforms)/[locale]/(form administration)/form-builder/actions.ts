@@ -1,5 +1,7 @@
 "use server";
 
+import { promises as fs } from "fs";
+
 import { AuthenticatedAction } from "@lib/actions";
 import { getAbility } from "@lib/privileges";
 import {
@@ -26,6 +28,7 @@ import { serverTranslation } from "@i18n";
 import { revalidatePath } from "next/cache";
 import { checkOne } from "@lib/cache/flags";
 import { isValidDateString } from "@lib/utils/date/isValidDateString";
+import { allowedTemplates, TemplateTypes } from "@lib/utils/form-builder";
 
 export type CreateOrUpdateTemplateType = {
   id?: string;
@@ -405,3 +408,23 @@ export const getTranslatedDynamicRowProperties = async () => {
 export async function checkFlag(id: string) {
   return checkOne(id);
 }
+
+export const loadBlockTemplate = async ({
+  type,
+}: {
+  type: TemplateTypes;
+}): Promise<{
+  data?: [];
+  error?: string;
+}> => {
+  try {
+    if (!allowedTemplates.includes(type)) {
+      throw new Error("Invalid template type");
+    }
+    const dir = "public/static/templates";
+    const fileContents = await fs.readFile(dir + `/${type}.json`, "utf8");
+    return { data: JSON.parse(fileContents) };
+  } catch (error) {
+    return { data: [], error: (error as Error).message };
+  }
+};
