@@ -1,11 +1,9 @@
 import { FormElement } from "@lib/types";
-import axios from "axios";
-import { allowedTemplates } from "@lib/utils/form-builder";
-
-export type LoaderType = (typeof allowedTemplates)[number];
+import { allowedTemplates, TemplateTypes } from "@lib/utils/form-builder";
+import { loadBlockTemplate } from "@formBuilder/actions";
 
 export const blockLoader = async (
-  type: LoaderType,
+  type: TemplateTypes,
   startIndex: number,
   onData: (data: FormElement, position: number) => void
 ) => {
@@ -13,14 +11,11 @@ export const blockLoader = async (
     return;
   }
 
-  const result = await axios({
-    url: "/api/form-builder/load-blocks",
-    method: "POST",
-    data: {
-      elementType: type,
-    },
-    timeout: 5000,
-  });
+  const result = await loadBlockTemplate({ type });
+
+  if (result.error || !result.data) {
+    throw new Error("Invalid template type");
+  }
 
   result.data.forEach((data: FormElement, index: number) => {
     onData(data, startIndex + index);

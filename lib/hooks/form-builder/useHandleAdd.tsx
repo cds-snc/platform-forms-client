@@ -2,8 +2,8 @@
 import { useCallback } from "react";
 import { FormElementTypes } from "@lib/types";
 import { useTemplateStore } from "@lib/store/useTemplateStore";
-import { blockLoader, LoaderType } from "../../utils/form-builder/blockLoader";
-import { allowedTemplates } from "@lib/utils/form-builder";
+import { blockLoader } from "../../utils/form-builder/blockLoader";
+import { allowedTemplates, TemplateTypes } from "@lib/utils/form-builder";
 import {
   defaultField,
   createElement,
@@ -57,8 +57,8 @@ export const useHandleAdd = () => {
     async (index: number, type?: FormElementTypes) => {
       let id;
 
-      if (allowedTemplates.includes(type as LoaderType)) {
-        blockLoader(type as LoaderType, index, async (data, position) => {
+      if (allowedTemplates.includes(type as TemplateTypes)) {
+        blockLoader(type as TemplateTypes, index, async (data, position) => {
           // Note add() returns the element id -- we're not using it yet
           id = await add(position, data.type, data, groupId);
         });
@@ -93,8 +93,8 @@ export const useHandleAdd = () => {
       const closeAll = new CustomEvent("close-all-panel-menus");
       window && window.dispatchEvent(closeAll);
 
-      if (allowedTemplates.includes(type as LoaderType)) {
-        blockLoader(type as LoaderType, subIndex, (data, position) => {
+      if (allowedTemplates.includes(type as TemplateTypes)) {
+        blockLoader(type as TemplateTypes, subIndex, (data, position) => {
           id = addSubItem(elId, position, data.type, data);
           setChangeKey(String(new Date().getTime())); //Force a re-render
         });

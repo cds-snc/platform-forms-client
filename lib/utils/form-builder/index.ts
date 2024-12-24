@@ -283,6 +283,8 @@ export const allowedTemplates = [
   FormElementTypes.departments,
 ] as const;
 
+export type TemplateTypes = (typeof allowedTemplates)[number];
+
 export const isVaultDelivery = (deliveryOption: DeliveryOption | undefined) => {
   return !deliveryOption;
 };
