@@ -47,9 +47,6 @@ COPY prisma ./prisma
 COPY flag_initialization ./flag_initialization
 COPY --from=build /src/node_modules ./node_modules
 COPY --from=build /src/.next ./.next
-COPY form-builder-templates ./form-builder-templates
-
-
 
 ENV PORT 3000
 
