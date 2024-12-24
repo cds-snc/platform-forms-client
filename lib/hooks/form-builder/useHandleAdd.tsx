@@ -16,7 +16,6 @@ import {
   getTranslatedDynamicRowProperties,
 } from "@formBuilder/actions";
 import { useTreeRef } from "@formBuilder/components/shared/right-panel/treeview/provider/TreeRefProvider";
-
 import { toast } from "@formBuilder/components/shared/Toast";
 import { useTranslation } from "@i18n/client";
 
