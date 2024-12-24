@@ -422,7 +422,7 @@ export const loadBlockTemplate = async ({
     if (!allowedTemplates.includes(type)) {
       throw new Error("Invalid template type");
     }
-    const dir = "app/(gcforms)/[locale]/(form administration)/form-builder/templates";
+    const dir = "public/static/templates";
     const fileContents = await fs.readFile(dir + `/${type}.json`, "utf8");
     return { data: JSON.parse(fileContents) };
   } catch (error) {

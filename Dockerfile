@@ -48,6 +48,8 @@ COPY flag_initialization ./flag_initialization
 COPY --from=build /src/node_modules ./node_modules
 COPY --from=build /src/.next ./.next
 
+
+
 ENV PORT 3000
 
 EXPOSE 3000
