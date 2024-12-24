@@ -28,7 +28,6 @@ import { serverTranslation } from "@i18n";
 import { revalidatePath } from "next/cache";
 import { checkOne } from "@lib/cache/flags";
 import { isValidDateString } from "@lib/utils/date/isValidDateString";
-
 import { allowedTemplates, TemplateTypes } from "@lib/utils/form-builder";
 
 export type CreateOrUpdateTemplateType = {
