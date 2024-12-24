@@ -59,7 +59,6 @@ export const useHandleAdd = () => {
 
       if (allowedTemplates.includes(type as TemplateTypes)) {
         blockLoader(type as TemplateTypes, index, async (data, position) => {
-          // Note add() returns the element id -- we're not using it yet
           id = await add(position, data.type, data, groupId);
         });
         return id;
