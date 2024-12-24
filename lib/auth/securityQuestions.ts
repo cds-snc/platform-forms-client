@@ -1,7 +1,8 @@
 import { prisma, prismaErrors } from "@lib/integration/prismaConnector";
-import { UserAbility } from "@lib/types";
 import { scrypt, randomBytes } from "crypto";
-import { checkPrivileges } from "@lib/privileges";
+import { authorization } from "@lib/privileges";
+import { AccessControlError } from ".";
+import { logEvent } from "@lib/auditLogs";
 
 export type SecurityQuestionId = string;
 
@@ -85,17 +86,16 @@ export async function retrievePoolOfSecurityQuestions(): Promise<SecurityQuestio
 }
 
 export async function createSecurityAnswers(
-  ability: UserAbility,
   questionsWithAssociatedAnswers: { questionId: SecurityQuestionId; answer: string }[]
 ): Promise<void> {
-  checkPrivileges(ability, [
-    {
-      action: "update",
-      subject: { type: "User", object: { id: ability.user.id } },
-      field: "securityAnswers",
-    },
-  ]);
-  const userSecurityAnswers = await _retrieveUserSecurityAnswers({ userId: ability.user.id });
+  const { user } = await authorization.canUpdateSecurityQuestions().catch((e) => {
+    if (e instanceof AccessControlError) {
+      logEvent(e.user.id, { type: "User" }, "AccessDenied", "Attempted to create security answers");
+    }
+    throw e;
+  });
+
+  const userSecurityAnswers = await _retrieveUserSecurityAnswers({ userId: user.id });
   if (userSecurityAnswers.length > 0) throw new AlreadyHasSecurityAnswers();
 
   const questionIds = questionsWithAssociatedAnswers.map(
@@ -124,7 +124,7 @@ export async function createSecurityAnswers(
   const operationResult = await prisma.user
     .update({
       where: {
-        id: ability.user.id,
+        id: user.id,
       },
       data: {
         securityAnswers: {
@@ -135,24 +135,20 @@ export async function createSecurityAnswers(
     .catch((e) => prismaErrors(e, null));
 
   if (!operationResult) throw new SecurityQuestionDatabaseOperationFailed();
+  logEvent(user.id, { type: "User" }, "CreateSecurityAnswers");
 }
 
-export async function updateSecurityAnswer(
-  ability: UserAbility,
-  command: UpdateSecurityAnswerCommand
-): Promise<void> {
-  checkPrivileges(ability, [
-    {
-      action: "update",
-      subject: { type: "User", object: { id: ability.user.id } },
-      field: "securityAnswers",
-    },
-  ]);
-
+export async function updateSecurityAnswer(command: UpdateSecurityAnswerCommand): Promise<void> {
+  const { user } = await authorization.canUpdateSecurityQuestions().catch((e) => {
+    if (e instanceof AccessControlError) {
+      logEvent(e.user.id, { type: "User" }, "AccessDenied", "Attempted to update security answers");
+    }
+    throw e;
+  });
   const areQuestionIdsValidResult = await areQuestionIdsValid([command.newQuestionId]);
   if (!areQuestionIdsValidResult) throw new InvalidSecurityQuestionId();
 
-  const userSecurityAnswers = await _retrieveUserSecurityAnswers({ userId: ability.user.id });
+  const userSecurityAnswers = await _retrieveUserSecurityAnswers({ userId: user.id });
   if (userSecurityAnswers.length === 0) throw new SecurityAnswersNotFound();
 
   const oldAnswer = userSecurityAnswers.find(
@@ -182,6 +178,7 @@ export async function updateSecurityAnswer(
     .catch((e) => prismaErrors(e, null));
 
   if (!operationResult) throw new SecurityQuestionDatabaseOperationFailed();
+  logEvent(user.id, { type: "User" }, "ChangeSecurityAnswers");
 }
 
 export async function retrieveUserSecurityQuestions({

@@ -37,6 +37,8 @@ export enum AuditLogEvent {
   UserTooManyFailedAttempts = "UserTooManyFailedAttempts",
   GrantPrivilege = "GrantPrivilege",
   RevokePrivilege = "RevokePrivilege",
+  CreateSecurityAnswers = "CreateSecurityAnswers",
+  ChangeSecurityAnswers = "ChangeSecurityAnswers",
   // Application events
   EnableFlag = "EnableFlag",
   DisableFlag = "DisableFlag",

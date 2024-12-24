@@ -700,26 +700,26 @@ export const authorization = {
   },
   /**
    * Can the user update security questions on this specific user
-   * @param userId The ID of the user
    */
-  canUpdateSecurityQuestions: async (userId: string) => {
+  canUpdateSecurityQuestions: async () => {
+    const ability = await getAbility();
     return _authorizationCheck([
       {
         action: "update",
-        subject: { type: "User", scope: { subjectId: userId } },
+        subject: { type: "User", scope: { subjectId: ability.user.id } },
         fields: ["securityAnswers"],
       },
     ]);
   },
   /**
    * Can the user update the name on this specific user
-   * @param userId The ID of the user
    */
-  canChangeUserName: async (userId: string) => {
+  canChangeUserName: async () => {
+    const ability = await getAbility();
     return _authorizationCheck([
       {
         action: "update",
-        subject: { type: "User", scope: { subjectId: userId } },
+        subject: { type: "User", scope: { subjectId: ability.user.id } },
         fields: ["name"],
       },
     ]);
