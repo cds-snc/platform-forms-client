@@ -2343,12 +2343,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@casl/ability@npm:6.7.1":
-  version: 6.7.1
-  resolution: "@casl/ability@npm:6.7.1"
+"@casl/ability@npm:6.7.2":
+  version: 6.7.2
+  resolution: "@casl/ability@npm:6.7.2"
   dependencies:
     "@ucast/mongo2js": "npm:^1.3.0"
-  checksum: 10c0/451a7636f242cae0ea3dc8eb5a54d8c9d8aec6caddb8c5ae8d6b6a378595b8e49c6c25e294f12be70e0867c1328b4beeb74b65f27fba881727fe3b0b9079ecfc
+  checksum: 10c0/967f81837e235fce928c63cf0e452387e574d416c1e3a18a8776cfd93bf714c00b7772c29f856afeb13b298a8ea4820b6da2881b4f3578e16e7d7ecd7f72e546
   languageName: node
   linkType: hard
 
@@ -9904,7 +9904,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"axios@npm:^1.6.3, axios@npm:^1.7.7":
+"axios@npm:1.7.9, axios@npm:^1.6.3, axios@npm:^1.7.7":
   version: 1.7.9
   resolution: "axios@npm:1.7.9"
   dependencies:
@@ -13348,7 +13348,7 @@ __metadata:
     "@babel/core": "npm:^7.23.6"
     "@babel/preset-typescript": "npm:^7.24.7"
     "@bufbuild/protobuf": "npm:^2.2.3"
-    "@casl/ability": "npm:6.7.1"
+    "@casl/ability": "npm:6.7.2"
     "@cdssnc/gcds-tokens": "npm:^1.20.0"
     "@headlessui/react": "npm:^2.2.0"
     "@jest/globals": "npm:^29.7.0"
@@ -13390,7 +13390,7 @@ __metadata:
     autoprefixer: "npm:^10.4.16"
     aws-sdk-client-mock: "npm:^3.0.0"
     axe-core: "npm:^4.8.3"
-    axios: "npm:1.7.7"
+    axios: "npm:1.7.9"
     babel-loader: "npm:^8.3.0"
     babel-plugin-dynamic-import-node: "npm:^2.3.3"
     babel-plugin-transform-require-context: "npm:^0.1.1"
@@ -13481,7 +13481,7 @@ __metadata:
     vite-tsconfig-paths: "npm:^4.3.2"
     vitest: "npm:^1.5.2"
     webpack: "npm:^5.89.0"
-    zustand: "npm:5.0.1"
+    zustand: "npm:5.0.2"
   languageName: unknown
   linkType: soft
 
@@ -21127,9 +21127,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"zustand@npm:5.0.1":
-  version: 5.0.1
-  resolution: "zustand@npm:5.0.1"
+"zustand@npm:5.0.2":
+  version: 5.0.2
+  resolution: "zustand@npm:5.0.2"
   peerDependencies:
     "@types/react": ">=18.0.0"
     immer: ">=9.0.6"
@@ -21144,7 +21144,7 @@ __metadata:
       optional: true
     use-sync-external-store:
       optional: true
-  checksum: 10c0/b4239c8bf3988bfdaaed1c48f3958d0b047b721c4908a76bd78e73387d107963cda774541cf303c2ea89261481c995aa6666e7e77c30717ad440cdb499d9e5ca
+  checksum: 10c0/d9bb048d8129fd1aaed3fda974991b15a7c9c31ef06f78e9bf5c4b3678f249850764a6dadb8c93127257d07831995cf7a048281658a37c5d1143ad6f397fe37c
   languageName: node
   linkType: hard
 
