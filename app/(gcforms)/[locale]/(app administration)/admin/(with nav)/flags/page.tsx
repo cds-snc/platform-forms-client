@@ -31,7 +31,7 @@ export default async function Page() {
       <h1 className="border-0 mb-10">{t("title")}</h1>
       <p className="pb-8">{t("subTitle")}</p>
       <Suspense fallback={<Loader />}>
-        <FlagList ability={ability} />
+        <FlagList />
       </Suspense>
     </>
   );

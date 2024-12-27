@@ -1,9 +1,8 @@
 import { getRedisInstance } from "@lib/integration/redisConnector";
 import flagInitialSettings from "../../flag_initialization/default_flag_settings.json";
-import { checkPrivileges } from "@lib/privileges";
-import { AccessControlError } from "@lib/auth";
+import { authorization } from "@lib/privileges";
+import { AccessControlError } from "@lib/auth/errors";
 import { logEvent } from "@lib/auditLogs";
-import { UserAbility } from "@lib/types";
 import { FeatureFlagKeys, FeatureFlags, PickFlags } from "./types";
 
 /**
@@ -11,23 +10,16 @@ import { FeatureFlagKeys, FeatureFlags, PickFlags } from "./types";
  * @param ability User's Ability Instance
  * @param key Applicaiton setting flag key
  */
-export const enableFlag = async (ability: UserAbility, key: string): Promise<void> => {
-  try {
-    checkPrivileges(ability, [{ action: "update", subject: "Flag" }]);
-    const redis = await getRedisInstance();
-    await redis.multi().sadd("flags", key).set(`flag:${key}`, "1").exec();
-    logEvent(ability.user.id, { type: "Flag", id: key }, "EnableFlag");
-  } catch (e) {
+export const enableFlag = async (key: string): Promise<void> => {
+  const { user } = await authorization.canManageFlags().catch((e) => {
     if (e instanceof AccessControlError) {
-      logEvent(
-        ability.user.id,
-        { type: "Flag", id: key },
-        "AccessDenied",
-        `Attempted to enable ${key}`
-      );
+      logEvent(e.user.id, { type: "Flag", id: key }, "AccessDenied", `Attempted to enable ${key}`);
     }
     throw e;
-  }
+  });
+  const redis = await getRedisInstance();
+  await redis.multi().sadd("flags", key).set(`flag:${key}`, "1").exec();
+  logEvent(user.id, { type: "Flag", id: key }, "EnableFlag");
 };
 
 /**
@@ -35,23 +27,16 @@ export const enableFlag = async (ability: UserAbility, key: string): Promise<voi
  * @param ability User's Ability Instance
  * @param key Application setting flag key
  */
-export const disableFlag = async (ability: UserAbility, key: string): Promise<void> => {
-  try {
-    checkPrivileges(ability, [{ action: "update", subject: "Flag" }]);
-    const redis = await getRedisInstance();
-    await redis.set(`flag:${key}`, "0");
-    logEvent(ability.user.id, { type: "Flag", id: key }, "DisableFlag");
-  } catch (e) {
+export const disableFlag = async (key: string): Promise<void> => {
+  const { user } = await authorization.canManageFlags().catch((e) => {
     if (e instanceof AccessControlError) {
-      logEvent(
-        ability.user.id,
-        { type: "Flag", id: key },
-        "AccessDenied",
-        `Attempted to disable ${key}`
-      );
+      logEvent(e.user.id, { type: "Flag", id: key }, "AccessDenied", `Attempted to disable ${key}`);
     }
     throw e;
-  }
+  });
+  const redis = await getRedisInstance();
+  await redis.set(`flag:${key}`, "0");
+  logEvent(user.id, { type: "Flag", id: key }, "DisableFlag");
 };
 
 const getKeys = async (): Promise<FeatureFlagKeys[]> => {
@@ -80,22 +65,16 @@ export const checkOne = async (key: string): Promise<boolean> => {
  * @param ability User's Ability Instance
  * @returns An object of {flag: value ...}
  */
-export const checkAll = async (ability: UserAbility): Promise<{ [k: string]: boolean }> => {
-  try {
-    checkPrivileges(ability, [{ action: "view", subject: "Flag" }]);
-    const keys = await getKeys();
-    logEvent(ability.user.id, { type: "Flag" }, "ListAllFlags");
-    return checkMulti(keys);
-  } catch (e) {
-    if (e instanceof AccessControlError)
-      logEvent(
-        ability.user.id,
-        { type: "Flag" },
-        "AccessDenied",
-        "Attemped to list all Feature Flags"
-      );
+export const checkAll = async (): Promise<{ [k: string]: boolean }> => {
+  const { user } = await authorization.canManageFlags().catch((e) => {
+    if (e instanceof AccessControlError) {
+      logEvent(e.user.id, { type: "Flag" }, "AccessDenied", "Attemped to list all Feature Flags");
+    }
     throw e;
-  }
+  });
+  const keys = await getKeys();
+  logEvent(user.id, { type: "Flag" }, "ListAllFlags");
+  return checkMulti(keys);
 };
 
 const checkMulti = async <T extends FeatureFlagKeys[]>(keys: T): Promise<PickFlags<T>> => {
