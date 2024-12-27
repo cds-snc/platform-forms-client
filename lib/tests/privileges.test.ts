@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { interpolatePermissionCondition, authorization } from "@lib/privileges";
-import { AccessControlError, auth } from "@lib/auth";
+import { auth } from "@lib/auth/nextAuth";
+import { AccessControlError } from "@lib/auth/errors";
 import {
   Base,
   mockUserPrivileges,
@@ -18,13 +19,7 @@ import { Action } from "@lib/types/privileges-types";
 import { checkOne } from "@lib/cache/flags";
 
 jest.mock("@lib/cache/flags");
-jest.mock("@lib/auth", () => {
-  const originalModule = jest.requireActual("@lib/auth");
-  return {
-    ...originalModule,
-    auth: jest.fn(),
-  };
-});
+jest.mock("@lib/auth/nextAuth");
 
 const mockedCheckOne = checkOne as jest.MockedFunction<typeof checkOne>;
 const mockedAuth = auth as unknown as jest.MockedFunction<() => Promise<Session | null>>;
@@ -826,26 +821,24 @@ describe("Authorization Helpers", () => {
   it("Can update security question on user", async () => {
     (prismaMock.user.findUniqueOrThrow as jest.MockedFunction<any>).mockResolvedValue(user1.db);
     mockedAuth.mockResolvedValue(user1.session);
-    await authorization.canUpdateSecurityQuestions(user1.session.user.id);
+    await authorization.canUpdateSecurityQuestions();
   });
   it("Can not update security questions on another user", async () => {
     (prismaMock.user.findUniqueOrThrow as jest.MockedFunction<any>).mockResolvedValue(user1.db);
     mockedAuth.mockResolvedValue(user2.session);
-    await expect(
-      authorization.canUpdateSecurityQuestions(user1.session.user.id)
-    ).rejects.toBeInstanceOf(AccessControlError);
+    await expect(authorization.canUpdateSecurityQuestions()).rejects.toBeInstanceOf(
+      AccessControlError
+    );
   });
   it("Can update name on user", async () => {
     (prismaMock.user.findUniqueOrThrow as jest.MockedFunction<any>).mockResolvedValue(user1.db);
     mockedAuth.mockResolvedValue(user1.session);
-    await authorization.canChangeUserName(user1.session.user.id);
+    await authorization.canChangeUserName();
   });
   it("Can not update name on another user", async () => {
     (prismaMock.user.findUniqueOrThrow as jest.MockedFunction<any>).mockResolvedValue(user1.db);
     mockedAuth.mockResolvedValue(user2.session);
-    await expect(authorization.canChangeUserName(user1.session.user.id)).rejects.toBeInstanceOf(
-      AccessControlError
-    );
+    await expect(authorization.canChangeUserName()).rejects.toBeInstanceOf(AccessControlError);
   });
   it("Can manage all users", async () => {
     adminUser.session.user.privileges = mockUserPrivileges(ManageUsers, {

@@ -10,7 +10,7 @@ import {
 } from "@lib/serviceAccount";
 
 import { mockAuthorizationPass, mockAuthorizationFail } from "__utils__/authorization";
-import { AccessControlError } from "@lib/auth";
+import { AccessControlError } from "@lib/auth/errors";
 import { prismaMock } from "@jestUtils";
 import { logEvent } from "@lib/auditLogs";
 

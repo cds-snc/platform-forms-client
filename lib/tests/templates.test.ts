@@ -28,7 +28,7 @@ import { Prisma } from "@prisma/client";
 import { logEvent } from "@lib/auditLogs";
 import { unprocessedSubmissions } from "@lib/vault";
 import { deleteKey } from "@lib/serviceAccount";
-import { AccessControlError } from "@lib/auth";
+import { AccessControlError } from "@lib/auth/errors";
 import {
   mockAuthorizationPass,
   mockAuthorizationFail,

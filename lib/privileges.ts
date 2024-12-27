@@ -26,7 +26,8 @@ import { logEvent } from "./auditLogs";
 import { redirect } from "next/navigation";
 import { checkOne } from "./cache/flags";
 import { InMemoryCache } from "./cache/inMemoryCache";
-import { auth, AccessControlError } from "@lib/auth";
+import { auth } from "@lib/auth/nextAuth";
+import { AccessControlError } from "@lib/auth/errors";
 /*
 This file contains references to server side only modules.
 Any attempt to import these functions into a browser will cause compilation failures

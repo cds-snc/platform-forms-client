@@ -2,7 +2,7 @@ jest.mock("@lib/privileges");
 
 import { authorization, getAbility } from "@lib/privileges";
 import { UserAbility } from "@lib/types";
-import { AccessControlError } from "@lib/auth";
+import { AccessControlError } from "@lib/auth/errors";
 
 type MockedAuthFunction = {
   [key: string]: jest.Mock;

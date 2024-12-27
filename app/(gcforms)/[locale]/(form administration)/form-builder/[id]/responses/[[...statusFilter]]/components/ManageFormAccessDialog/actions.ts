@@ -3,7 +3,7 @@
 import { authCheckAndThrow, AuthenticatedAction } from "@lib/actions";
 import { prisma } from "@lib/integration/prismaConnector";
 import { TemplateUser } from "./types";
-import { AccessControlError } from "@lib/auth";
+import { AccessControlError } from "@lib/auth/errors";
 import {
   InvalidDomainError,
   MismatchedEmailDomainError,

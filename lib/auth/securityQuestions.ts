@@ -1,7 +1,7 @@
 import { prisma, prismaErrors } from "@lib/integration/prismaConnector";
 import { scrypt, randomBytes } from "crypto";
 import { authorization } from "@lib/privileges";
-import { AccessControlError } from ".";
+import { AccessControlError } from "@lib/auth/errors";
 import { logEvent } from "@lib/auditLogs";
 
 export type SecurityQuestionId = string;
