@@ -34,7 +34,7 @@ export default async function Page(props: { params: Promise<{ id: string; locale
     ],
     { logic: "all", redirect: true }
   );
-  const formUser = await getUser(ability, id as string);
+  const formUser = await getUser(id);
 
   const allPrivileges = (await getAllPrivileges(ability)).map(
     ({ id, name, descriptionFr, descriptionEn }) => ({

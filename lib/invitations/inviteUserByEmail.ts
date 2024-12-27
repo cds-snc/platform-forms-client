@@ -1,4 +1,4 @@
-import { FormRecord, UserAbility } from "@lib/types";
+import { FormRecord } from "@lib/types";
 import { getUser } from "@lib/users";
 import {
   InvalidDomainError,
@@ -17,6 +17,8 @@ import { logMessage } from "@lib/logger";
 import { Invitation } from "@prisma/client";
 import { logEvent } from "@lib/auditLogs";
 import { isValidGovEmail } from "@lib/validation/validation";
+import { authorization } from "@lib/privileges";
+import { AccessControlError } from "@lib/auth/errors";
 
 /**
  * Invite someone to the form by email
@@ -25,15 +27,22 @@ import { isValidGovEmail } from "@lib/validation/validation";
  * @param email
  * @param formId
  */
-export const inviteUserByEmail = async (
-  ability: UserAbility,
-  email: string,
-  formId: string,
-  message: string
-) => {
+export const inviteUserByEmail = async (email: string, formId: string, message: string) => {
   let invitation: Invitation;
 
-  const sender = await getUser(ability, ability.user.id).catch(() => {
+  const { user } = await authorization.canEditForm(formId).catch((e) => {
+    if (e instanceof AccessControlError) {
+      logEvent(
+        e.user.id,
+        { type: "Form", id: formId },
+        "AccessDenied",
+        `User ${e.user.id} does not have permission to invite user`
+      );
+    }
+    throw e;
+  });
+
+  const sender = await getUser(user.id).catch(() => {
     throw new UserNotFoundError();
   });
 
@@ -75,7 +84,7 @@ export const inviteUserByEmail = async (
     _sendInvitationEmail(sender, invitation, message, template.formRecord);
 
     logEvent(
-      ability.user.id,
+      user.id,
       { type: "Form", id: invitation.templateId },
       "InvitationCreated",
       `${sender.id} invited ${invitation.email}`

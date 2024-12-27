@@ -687,6 +687,30 @@ export const authorization = {
     ]);
   },
   /**
+   * Can view a users information
+   * @param userId the ID of the user
+   */
+  canViewUser: async (userId: string) => {
+    return _authorizationCheck([
+      {
+        action: "view",
+        subject: { type: "User", scope: { subjectId: userId } },
+      },
+    ]);
+  },
+  /**
+   * Can view all users information
+   * @param userId the ID of the user
+   */
+  canViewAllUsers: async () => {
+    return _authorizationCheck([
+      {
+        action: "view",
+        subject: { type: "User", scope: "all" },
+      },
+    ]);
+  },
+  /**
    * Can the user administratively manage this specific user
    * @param userId The ID of the user
    */
@@ -712,6 +736,7 @@ export const authorization = {
       },
     ]);
   },
+
   /**
    * Can the user update the name on this specific user
    */

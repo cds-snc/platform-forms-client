@@ -1,9 +1,8 @@
 import { prisma } from "@lib/integration/prismaConnector";
-import { InvitationNotFoundError, TemplateNotFoundError } from "./exceptions";
-import { checkPrivileges } from "@lib/privileges";
-import { UserAbility } from "@lib/types";
-import { getTemplateWithAssociatedUsers } from "@lib/templates";
+import { InvitationNotFoundError } from "./exceptions";
+import { authorization } from "@lib/privileges";
 import { logEvent } from "@lib/auditLogs";
+import { AccessControlError } from "@lib/auth/errors";
 
 /**
  * Cancel an invitation
@@ -11,7 +10,7 @@ import { logEvent } from "@lib/auditLogs";
  * @param ability
  * @param invitationId
  */
-export const cancelInvitation = async (ability: UserAbility, invitationId: string) => {
+export const cancelInvitation = async (invitationId: string) => {
   // Retrieve the invitation
   const invitation = await prisma.invitation.findUnique({
     where: {
@@ -27,24 +26,26 @@ export const cancelInvitation = async (ability: UserAbility, invitationId: strin
     throw new InvitationNotFoundError();
   }
 
-  const template = await getTemplateWithAssociatedUsers(invitation.templateId);
-
-  if (!template) {
-    throw new TemplateNotFoundError();
-  }
-
-  checkPrivileges(ability, [
-    { action: "update", subject: { type: "FormRecord", object: template } },
-  ]);
+  const { user } = await authorization.canEditForm(invitation.templateId).catch((e) => {
+    if (e instanceof AccessControlError) {
+      logEvent(
+        e.user.id,
+        { type: "Form", id: invitation.templateId },
+        "AccessDenied",
+        `User ${e.user.id} does not have permission to cancel invitation`
+      );
+    }
+    throw e;
+  });
 
   // Delete the invitation
   await _deleteInvitation(invitationId);
 
   logEvent(
-    ability.user.id,
+    user.id,
     { type: "Form", id: invitation.templateId },
     "InvitationCancelled",
-    `${ability.user.id} cancelled invitation for ${invitation.email}`
+    `${user.id} cancelled invitation for ${invitation.email}`
   );
 };
 

@@ -43,7 +43,7 @@ export default async function Page(props: { params: Promise<{ id: string; locale
     { redirect: true }
   );
 
-  const formUser = await getUser(ability, id);
+  const formUser = await getUser(id);
 
   const templates = (
     await getAllTemplates({

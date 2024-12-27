@@ -1,6 +1,5 @@
 import { prisma, prismaErrors } from "@lib/integration/prismaConnector";
-
-import { checkPrivileges } from "@lib/privileges";
+import { authorization } from "@lib/privileges";
 import { AccessControlError } from "@lib/auth/errors";
 import { NagwareResult, UserAbility } from "./types";
 import { logEvent } from "./auditLogs";
@@ -125,14 +124,50 @@ export const getOrCreateUser = async ({
  * Get User by id
  * @returns User if found
  */
-export const getUser = async (ability: UserAbility, id: string): Promise<AppUser> => {
-  try {
-    checkPrivileges(ability, [{ action: "view", subject: { type: "User", object: { id } } }]);
+export const getUser = async (id: string): Promise<AppUser> => {
+  await authorization.canViewUser(id).catch((e) => {
+    if (e instanceof AccessControlError) {
+      logEvent(e.user.id, { type: "User" }, "AccessDenied", `Attempted to get user by id ${id}`);
+    }
+    throw e;
+  });
 
-    const user = await prisma.user.findFirstOrThrow({
-      where: {
-        id: id,
+  return prisma.user.findFirstOrThrow({
+    where: {
+      id: id,
+    },
+    select: {
+      id: true,
+      name: true,
+      email: true,
+      active: true,
+      privileges: {
+        select: {
+          id: true,
+          name: true,
+          descriptionEn: true,
+          descriptionFr: true,
+        },
       },
+    },
+  });
+};
+
+/**
+ * Get all Users
+ * @returns An array of all Users
+ */
+export const getUsers = async (where?: Prisma.UserWhereInput): Promise<AppUser[] | never[]> => {
+  await authorization.canViewAllUsers().catch((e) => {
+    if (e instanceof AccessControlError) {
+      logEvent(e.user.id, { type: "User" }, "AccessDenied", "Attempted to list users");
+    }
+    throw e;
+  });
+
+  const users = await prisma.user
+    .findMany({
+      ...(where && { where }),
       select: {
         id: true,
         name: true,
@@ -147,68 +182,13 @@ export const getUser = async (ability: UserAbility, id: string): Promise<AppUser
           },
         },
       },
-    });
-
-    return user;
-  } catch (e) {
-    if (e instanceof AccessControlError) {
-      logEvent(
-        ability.user.id,
-        { type: "User" },
-        "AccessDenied",
-        `Attempted to get user by id ${id}`
-      );
-    }
-    throw e;
-  }
-};
-
-/**
- * Get all Users
- * @returns An array of all Users
- */
-export const getUsers = async (
-  ability: UserAbility,
-  where?: Prisma.UserWhereInput
-): Promise<AppUser[] | never[]> => {
-  try {
-    checkPrivileges(ability, [
-      {
-        action: "view",
-        subject: "User",
+      orderBy: {
+        id: "asc",
       },
-    ]);
+    })
+    .catch((e) => prismaErrors(e, []));
 
-    const users = await prisma.user
-      .findMany({
-        ...(where && { where }),
-        select: {
-          id: true,
-          name: true,
-          email: true,
-          active: true,
-          privileges: {
-            select: {
-              id: true,
-              name: true,
-              descriptionEn: true,
-              descriptionFr: true,
-            },
-          },
-        },
-        orderBy: {
-          id: "asc",
-        },
-      })
-      .catch((e) => prismaErrors(e, []));
-
-    return users;
-  } catch (e) {
-    if (e instanceof AccessControlError) {
-      logEvent(ability.user.id, { type: "User" }, "AccessDenied", "Attempted to list users");
-    }
-    throw e;
-  }
+  return users;
 };
 
 /**
@@ -219,12 +199,17 @@ export const getUsers = async (
  */
 export const updateActiveStatus = async (ability: UserAbility, userID: string, active: boolean) => {
   try {
-    checkPrivileges(ability, [
-      {
-        action: "update",
-        subject: "User",
-      },
-    ]);
+    authorization.canManageAllUsers().catch((e) => {
+      if (e instanceof AccessControlError) {
+        logEvent(
+          ability.user.id,
+          { type: "User" },
+          "AccessDenied",
+          `Attempted to update user ${userID} active status`
+        );
+      }
+      throw e;
+    });
 
     const [user, privilegedUser] = await Promise.all([
       prisma.user.update({
@@ -269,15 +254,6 @@ export const updateActiveStatus = async (ability: UserAbility, userID: string, a
 
     return user;
   } catch (error) {
-    if (error instanceof AccessControlError) {
-      logEvent(
-        ability.user.id,
-        { type: "User" },
-        "AccessDenied",
-        `Attempted to get user by id ${userID}`
-      );
-    }
-
     logMessage.error(error as Error);
     throw error;
   }
