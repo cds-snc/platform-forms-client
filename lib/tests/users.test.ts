@@ -4,7 +4,7 @@ import { prismaMock } from "@jestUtils";
 import { getUsers, getOrCreateUser } from "@lib/users";
 import { Prisma } from "@prisma/client";
 import { createAbility } from "@lib/privileges";
-import { AccessControlError } from "@lib/auth";
+import { AccessControlError } from "@lib/auth/errors";
 import { ManageUsers, ViewUserPrivileges, Base } from "__utils__/permissions";
 import { Session } from "next-auth";
 import { logEvent } from "@lib/auditLogs";
