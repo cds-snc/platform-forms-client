@@ -19,6 +19,7 @@ import {
   AddressComponents,
   FormElement,
   FormElementTypes,
+  Response,
   StartFromExclusiveResponse,
   VaultStatus,
 } from "@lib/types";
@@ -52,6 +53,8 @@ import {
   getAddressAsString,
 } from "@clientComponents/forms/AddressComplete/utils";
 import { serverTranslation } from "@i18n";
+import { safeJSONParse } from "@lib/utils";
+import { TaggedResponse } from "@lib/types/form-response-types";
 
 export const fetchSubmissions = AuthenticatedAction(
   async ({
@@ -116,23 +119,30 @@ const sortByGroups = ({ form, elements }: { form: FormProperties; elements: Answ
   return sortByLayout({ layout, elements });
 };
 
-// @TODO: moved to lib/responses
-export type TaggedResponse = {
-  tag: string;
-  answer: string;
+const isTaggedResponse = (value: unknown): boolean => {
+  if (typeof value === "object" && value !== null) {
+    return Object.prototype.hasOwnProperty.call(value, "tag");
+  }
+
+  const parsed = safeJSONParse(value as string);
+
+  if (parsed) {
+    return Object.prototype.hasOwnProperty.call(parsed, "tag");
+  }
+
+  return false;
 };
 
-const extractAnswerFromTaggedResponse = (answer: unknown): string => {
-  try {
-    const answerObject = JSON.parse(answer as string) as TaggedResponse;
-    return answerObject.answer;
-  } catch (e) {
-    return answer as string;
+const extractAnswerFromTaggedResponse = (response: Response): Response => {
+  if (isTaggedResponse(response)) {
+    return (response as TaggedResponse).answer;
   }
+
+  return response;
 };
 
 const getAnswerAsString = (question: FormElement | undefined, answer: unknown): string => {
-  answer = extractAnswerFromTaggedResponse(answer);
+  answer = extractAnswerFromTaggedResponse(answer as Response);
 
   if (question && question.type === "checkbox") {
     return Array(answer).join(", ");
