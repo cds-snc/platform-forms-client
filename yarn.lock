@@ -4061,18 +4061,18 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@next/eslint-plugin-next@npm:15.1.0":
-  version: 15.1.0
-  resolution: "@next/eslint-plugin-next@npm:15.1.0"
+"@next/eslint-plugin-next@npm:15.1.2":
+  version: 15.1.2
+  resolution: "@next/eslint-plugin-next@npm:15.1.2"
   dependencies:
     fast-glob: "npm:3.3.1"
-  checksum: 10c0/d20c396d9c298523e31b4402d126e28d536cfa151bc6a9a9da3e74bddd5770547c76d5fbda59fe4332ffaea3af1e7f489b2358336cb2f921d3561577a0f4cd1a
+  checksum: 10c0/9caf0763247cba8925d89596b7fdb21ec5d3cd0f5251e1e3f70c19815c7439cf358c694e59f0eedf08520c3a75c063395288af92661c75781bd7441de1063dc2
   languageName: node
   linkType: hard
 
 "@next/mdx@npm:^15.1.0":
-  version: 15.1.1
-  resolution: "@next/mdx@npm:15.1.1"
+  version: 15.1.3
+  resolution: "@next/mdx@npm:15.1.3"
   dependencies:
     source-map: "npm:^0.7.0"
   peerDependencies:
@@ -4083,7 +4083,7 @@ __metadata:
       optional: true
     "@mdx-js/react":
       optional: true
-  checksum: 10c0/f68177f80690e23457d2ffed8d51d3696260e4a88c293fdf9d771c04b7cea5cd65c843a2804ec01d30b53f61a3dccf525bb3772517270b4e6dd972ced2bfc1bc
+  checksum: 10c0/485b96007631f24fa12421c78fba48530932ce39014cba0af9e4df73ff05b0eb6a96bfe098ce4ca4a21abeb19728513bfdb73baa7befe8a3047890727e757e8f
   languageName: node
   linkType: hard
 
@@ -8639,12 +8639,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/react@npm:19.0.1":
-  version: 19.0.1
-  resolution: "@types/react@npm:19.0.1"
+"@types/react@npm:19.0.2":
+  version: 19.0.2
+  resolution: "@types/react@npm:19.0.2"
   dependencies:
     csstype: "npm:^3.0.2"
-  checksum: 10c0/25eb69114abb9a6d5fc4414ee584388275bbc9ac32976449cf58b95fe9880efe6b3f936c3842be9bed8c571546a9752e8d3e2095288381e9c809269f5f574f2e
+  checksum: 10c0/8992f39701fcf1bf893ef8f94a56196445667baf08fe4f6050a14e229a17aad3265ad3efc01595ff3b4d5d5c69da885f9aa4ff80f164a613018734efcff1eb8f
   languageName: node
   linkType: hard
 
@@ -12365,11 +12365,11 @@ __metadata:
   languageName: node
   linkType: hard
 
-"eslint-config-next@npm:15.1.0":
-  version: 15.1.0
-  resolution: "eslint-config-next@npm:15.1.0"
+"eslint-config-next@npm:15.1.2":
+  version: 15.1.2
+  resolution: "eslint-config-next@npm:15.1.2"
   dependencies:
-    "@next/eslint-plugin-next": "npm:15.1.0"
+    "@next/eslint-plugin-next": "npm:15.1.2"
     "@rushstack/eslint-patch": "npm:^1.10.3"
     "@typescript-eslint/eslint-plugin": "npm:^5.4.2 || ^6.0.0 || ^7.0.0 || ^8.0.0"
     "@typescript-eslint/parser": "npm:^5.4.2 || ^6.0.0 || ^7.0.0 || ^8.0.0"
@@ -12385,7 +12385,7 @@ __metadata:
   peerDependenciesMeta:
     typescript:
       optional: true
-  checksum: 10c0/53f244e49964bb6bfd89d5b6978b5c1650f927c913f7c6d8f251fc2528a9fbae04e5a6371c9856886b0b1e008c23f6aba1e1270537f8cb97c5306288052c0a1d
+  checksum: 10c0/570775cc12ae044d85f9a44774aa5288695ab47b937e8a97cc707455daff4281e9f61823213bf3f7da9bd4067f8e6e2373ff74781aaa52a148e1a6c4e667763e
   languageName: node
   linkType: hard
 
@@ -13354,7 +13354,7 @@ __metadata:
     "@jest/globals": "npm:^29.7.0"
     "@lexical/react": "npm:^0.12.6"
     "@neshca/cache-handler": "npm:^1.2.1"
-    "@next/eslint-plugin-next": "npm:15.1.0"
+    "@next/eslint-plugin-next": "npm:15.1.2"
     "@next/mdx": "npm:^15.1.0"
     "@prisma/client": "npm:6"
     "@radix-ui/react-alert-dialog": "npm:^1.1.4"
@@ -13408,7 +13408,7 @@ __metadata:
     d3-hierarchy: "npm:^3.1.2"
     downshift: "npm:^8.3.1"
     eslint: "npm:^8.56.0"
-    eslint-config-next: "npm:15.1.0"
+    eslint-config-next: "npm:15.1.2"
     eslint-plugin-cypress: "npm:2.15.2"
     eslint-plugin-jest-dom: "npm:^5.1.0"
     eslint-plugin-jsx-a11y: "npm:^6.8.0"
