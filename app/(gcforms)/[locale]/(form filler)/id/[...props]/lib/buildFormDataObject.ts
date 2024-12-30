@@ -24,12 +24,12 @@ export function buildFormDataObject(formRecord: PublicFormRecord, values: Respon
       formData[tuple[0]] = tuple[1];
 
       // If there is a question tag, store it with the response
-      // if (element.properties.tag) {
-      //   formData[tuple[0]] = JSON.stringify({
-      //     answer: tuple[1],
-      //     tag: element.properties.tag,
-      //   });
-      // }
+      if (element.properties.tag) {
+        formData[tuple[0]] = JSON.stringify({
+          answer: tuple[1],
+          tag: element.properties.tag,
+        });
+      }
     }
   }
 
