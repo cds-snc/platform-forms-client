@@ -1,16 +1,61 @@
-/**
- * This file contains all type definitions relevant with dealing with form configuration
- * and templates.
- */
-import { ChangeEvent } from "react";
-import { HTMLTextInputTypeAttribute } from "./utility-types";
-import { ClosedDetails, TypeOmit } from ".";
-import { GroupsType } from "@lib/formContext";
-import { dynamicRowType } from "@cdssnc/gcforms-types";
+export type FormChangeEvent = {
+  target: {
+    value: string | number | boolean | string[];
+    name?: string;
+    type?: string;
+    checked?: boolean;
+  };
+};
 
-/**
- * form element types which is used to configure a single field or element in a form
- */
+export type Group = {
+  name: string;
+  titleEn: string;
+  titleFr: string;
+  nextAction?: string | NextActionRule[];
+  elements: string[]; // NOTE: these are elementIds
+  autoFlow?: boolean;
+  exitUrlEn?: string; // Used when a nextAction is set to "exit"
+  exitUrlFr?: string; // Used when a nextAction is set to "exit"
+};
+
+export type GroupsType = Record<string, Group>;
+export type FormValues = Record<string, string | string[]>;
+export type ChoiceRule = { elementId: string; choiceId: string };
+export type NextActionRule = { groupId: string; choiceId: string };
+export type HTMLTextInputTypeAttribute =
+  | "text"
+  | "email"
+  | "name"
+  | "number"
+  | "password"
+  | "search"
+  | "tel"
+  | "url";
+
+// all the possible types of form elements
+export enum FormElementTypes {
+  textField = "textField",
+  textArea = "textArea",
+  dropdown = "dropdown",
+  radio = "radio",
+  checkbox = "checkbox",
+  fileInput = "fileInput",
+  richText = "richText",
+  dynamicRow = "dynamicRow",
+  attestation = "attestation",
+  address = "address",
+  addressComplete = "addressComplete",
+  name = "name",
+  firstMiddleLastName = "firstMiddleLastName",
+  departments = "departments",
+  contact = "contact",
+  combobox = "combobox",
+  formattedDate = "formattedDate",
+}
+
+export type ConditionalRule = {
+  choiceId: string;
+};
 
 // used to define attributes on the validation object which controls form validation for
 // individual field
@@ -31,14 +76,18 @@ export interface PropertyChoices {
   [key: string]: string;
 }
 
-export type ConditionalRule = {
-  choiceId: string;
-};
-
 export type AddressComponents = {
   canadianOnly?: boolean;
   splitAddress?: boolean;
 };
+
+// defines the fields in the object that controls how form submissions are delivered
+export interface DeliveryOption {
+  emailAddress: string;
+  emailSubjectEn?: string;
+  emailSubjectFr?: string;
+  [key: string]: string | undefined;
+}
 
 // used to define attributes for the properties of an element in the form
 export interface ElementProperties {
@@ -75,40 +124,6 @@ export interface ElementProperties {
     | undefined;
 }
 
-// all the possible types of form elements
-export enum FormElementTypes {
-  textField = "textField",
-  textArea = "textArea",
-  dropdown = "dropdown",
-  radio = "radio",
-  checkbox = "checkbox",
-  fileInput = "fileInput",
-  richText = "richText",
-  dynamicRow = "dynamicRow",
-  attestation = "attestation",
-  address = "address",
-  addressComplete = "addressComplete",
-  name = "name",
-  firstMiddleLastName = "firstMiddleLastName",
-  departments = "departments",
-  contact = "contact",
-  combobox = "combobox",
-  formattedDate = "formattedDate",
-}
-// used to define attributes for a form element or field
-export interface FormElement {
-  id: number;
-  subId?: string;
-  type: FormElementTypes;
-  properties: ElementProperties;
-  onchange?: (event: ChangeEvent) => void;
-  brand?: BrandProperties;
-}
-
-/**
- * types to define form configuration objects
- */
-
 // defines the fields in the object that controls form branding
 export interface BrandProperties {
   name?: string;
@@ -121,6 +136,16 @@ export interface BrandProperties {
   // if set to true the GC branding will be removed from the footer
   disableGcBranding?: boolean;
   [key: string]: string | boolean | undefined;
+}
+
+// used to define attributes for a form element or field
+export interface FormElement {
+  id: number;
+  subId?: string;
+  type: FormElementTypes;
+  properties: ElementProperties;
+  onchange?: (event: FormChangeEvent) => void;
+  brand?: BrandProperties;
 }
 
 // defines the fields for the main form configuration object
@@ -149,31 +174,11 @@ export interface FormProperties {
     | undefined;
 }
 
-// defines the fields in the object that controls how form submissions are delivered
-export interface DeliveryOption {
-  emailAddress: string;
-  emailSubjectEn?: string;
-  emailSubjectFr?: string;
-  [key: string]: string | undefined;
-}
-
-export type SecurityAttribute = "Unclassified" | "Protected A" | "Protected B";
-export type FormPurpose = "" | "admin" | "nonAdmin";
-
-// defines the fields for the form record that is available in authenticated spaces and backend processes
-export type FormRecord = {
-  id: string;
-  createdAt?: string;
-  updatedAt?: string;
-  name: string;
-  form: FormProperties;
-  isPublished: boolean;
-  deliveryOption?: DeliveryOption;
-  securityAttribute: SecurityAttribute;
-  closingDate?: string;
-  closedDetails?: ClosedDetails;
-  [key: string]: string | boolean | FormProperties | DeliveryOption | ClosedDetails | undefined;
+export type dynamicRowType = {
+  rowTitleEn: string;
+  rowTitleFr: string;
+  addButtonTextEn: string;
+  removeButtonTextEn: string;
+  addButtonTextFr: string;
+  removeButtonTextFr: string;
 };
-
-// defines the fields for the form record that is available to unauthenticated users
-export type PublicFormRecord = TypeOmit<FormRecord, "name" | "deliveryOption">;
