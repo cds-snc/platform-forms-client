@@ -18,6 +18,10 @@ const FormBuilderLinks = () => {
   const { t } = useTranslation("common");
   return (
     <span className="mr-10 inline-block">
+      <a className="whitespace-nowrap" href={t("footer.about.link")} target="_blank">
+        {t("footer.about.desc")}
+      </a>
+      <BulletPoint />
       <a className="whitespace-nowrap" href={t("footer.terms-of-use.link")}>
         {t("footer.terms-of-use.desc")}
       </a>

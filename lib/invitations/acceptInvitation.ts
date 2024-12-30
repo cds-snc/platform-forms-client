@@ -66,14 +66,14 @@ export const acceptInvitation = async (ability: UserAbility, invitationId: strin
   });
 
   logEvent(
-    ability.userID,
+    ability.user.id,
     { type: "Form", id: invitation.templateId },
     "InvitationAccepted",
     `${user.id} has accepted an invitation`
   );
 
   logEvent(
-    ability.userID,
+    ability.user.id,
     { type: "Form", id: invitation.templateId },
     "GrantFormAccess",
     `Access granted to ${user.id}`

@@ -4,14 +4,16 @@ import { redirect } from "next/navigation";
 import { getCurrentLanguage } from "@i18n";
 import { getAbility } from "@lib/privileges";
 
-export const AuthenticatedAction = <Input, Output>(action: (args: Input) => Promise<Output>) => {
-  return async (...args: unknown[]) => {
+export const AuthenticatedAction = <Input extends unknown[], R>(
+  action: (...args: Input) => Promise<R>
+) => {
+  return async (...args: Input) => {
     const session = await auth();
     if (session === null) {
       const language = await getCurrentLanguage();
       redirect(`/${language}/auth/login`);
     }
-    return action(...(args as Parameters<typeof action>));
+    return action(...args);
   };
 };
 

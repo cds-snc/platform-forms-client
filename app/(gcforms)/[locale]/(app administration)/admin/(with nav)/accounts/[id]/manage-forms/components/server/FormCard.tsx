@@ -54,7 +54,7 @@ export const FormCard = async ({
       <div className="mt-10 flex flex-row items-end justify-between">
         <div>
           <LinkButton.Secondary
-            href={`/${language}/form-builder/${id}/settings/manage?backLink=${ability.userID}`}
+            href={`/${language}/form-builder/${id}/settings/manage?backLink=${ability.user.id}`}
             className="mb-2 mr-3"
           >
             {t("manageOwnerships")}

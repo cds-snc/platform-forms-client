@@ -1,4 +1,4 @@
-import { FormElement } from "@lib/types";
+import { FormElement, FormElementTypes } from "@lib/types";
 import { AddressCompleteChoice, AddressCompleteResult, AddressElements } from "./types";
 import { Answer } from "@lib/responseDownloadFormats/types";
 
@@ -129,9 +129,10 @@ export const getAddressAsReviewElements = (
 
   for (const key in address) {
     returnArray.push({
-      title: titleSet[key as keyof AddressElements],
+      type: FormElementTypes.textField,
+      label: titleSet[key as keyof AddressElements],
       values: address[key as keyof AddressElements],
-      element: element,
+      element,
     });
   }
   return returnArray;

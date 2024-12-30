@@ -53,7 +53,6 @@ COPY package.json yarn.lock .yarnrc.yml next.config.mjs ./
 COPY .yarn ./.yarn
 COPY public ./public
 COPY prisma ./prisma
-COPY form-builder-templates ./form-builder-templates
 COPY bin/pr-review-entrypoint.sh ./entrypoint.sh
 # Update to latest yarn version
 RUN corepack enable && yarn set version berry

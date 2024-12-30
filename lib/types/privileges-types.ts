@@ -42,7 +42,10 @@ export type Privilege = PrismaPrivilege & {
 };
 
 export type UserAbility = MongoAbility & {
-  userID: string;
+  user: {
+    id: string;
+    email: string;
+  };
 };
 
 export type AnyObject = {

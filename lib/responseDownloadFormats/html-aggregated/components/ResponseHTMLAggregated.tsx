@@ -15,11 +15,13 @@ import { formatDateTimeUTC } from "@lib/utils/form-builder";
 interface HTMLDownloadProps {
   lang: string;
   formResponseSubmissions: FormResponseSubmissions;
+  host: string;
 }
 
 export const ResponseHtmlAggregated = ({
   lang = "en",
   formResponseSubmissions,
+  host = "",
 }: HTMLDownloadProps) => {
   const { t } = customTranslate("my-forms");
   const form = formResponseSubmissions.form;
@@ -96,6 +98,7 @@ export const ResponseHtmlAggregated = ({
               <p className="mb-4">{t("responseAggregatedTemplate.needToVerify", { lng: lang })}</p>
               <p className="mb-8">{t("responseAggregatedTemplate.useTheCopy", { lng: lang })}</p>
               <CopyCodes
+                host={host}
                 confirmationCodes={confirmationCodes}
                 formId={formResponseSubmissions.form.id}
                 lang={lang}
