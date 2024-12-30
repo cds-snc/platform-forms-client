@@ -1,0 +1,23 @@
+{
+  "name": "@cdssnc/gcforms-types",
+  "version": "1.0.2",
+  "description": "",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsc",
+    "prepare": "yarn && yarn build"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "@types/node": "^20.11.0",
+    "typescript": "^5.3.3"
+  }
+}
