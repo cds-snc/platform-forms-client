@@ -54,7 +54,7 @@ import {
 } from "@clientComponents/forms/AddressComplete/utils";
 import { serverTranslation } from "@i18n";
 import { safeJSONParse } from "@lib/utils";
-import { TaggedResponse } from "@lib/types/form-response-types";
+import { TaggedResponse } from "@cdssnc/gcforms-types";
 
 export const fetchSubmissions = AuthenticatedAction(
   async ({

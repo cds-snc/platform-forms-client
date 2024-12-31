@@ -18,7 +18,7 @@ import {
   ClosedDetails,
 } from "./form-types";
 
-import { Response, Responses, FileInputResponse } from "./form-response-types";
+import { Response, Responses, FileInputResponse, TaggedResponse } from "./form-response-types";
 
 export { type dynamicRowType };
 export type { FormElement };
@@ -42,3 +42,4 @@ export type { ClosedDetails };
 export type { Responses };
 export type { Response };
 export type { FileInputResponse };
+export type { TaggedResponse };

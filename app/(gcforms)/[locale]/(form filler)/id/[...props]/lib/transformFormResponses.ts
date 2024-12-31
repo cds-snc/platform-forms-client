@@ -1,7 +1,7 @@
 import { Submission } from "@lib/types/submission-types";
 import { Response } from "@lib/types";
 import { safeJSONParse } from "@lib/utils";
-import { TaggedResponse } from "@lib/types/form-response-types";
+import { TaggedResponse } from "@cdssnc/gcforms-types";
 
 const IGNORED_KEYS = ["formID", "securityAttribute"];
 
