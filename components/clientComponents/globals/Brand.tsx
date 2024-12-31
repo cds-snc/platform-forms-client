@@ -1,6 +1,6 @@
 "use client";
 import React from "react";
-import { BrandProperties } from "@lib/types/form-types";
+import { BrandProperties } from "@lib/types";
 import { getLocalizedProperty } from "@lib/utils";
 import { useTranslation } from "@i18n/client";
 import { Language } from "@lib/types/form-builder-types";
