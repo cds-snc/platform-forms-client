@@ -1,6 +1,6 @@
 import { type NextRequest, NextResponse } from "next/server";
 import { MiddlewareRequest, MiddlewareReturn } from "@lib/types";
-import { FormElement, FormElementTypes } from "@lib/types/form-types";
+import { FormElement, FormElementTypes } from "@lib/types";
 
 export type ValidateOptions = {
   runValidationIf?: (body: Record<string, unknown>) => Promise<boolean>;

@@ -1,3 +1,8 @@
+// Utility type creator
+export type TypeOmit<Type, Key extends PropertyKey> = {
+  [Property in keyof Type as Exclude<Property, Key>]: Type[Property];
+};
+
 export type FormChangeEvent = {
   target: {
     value: string | number | boolean | string[];
@@ -182,3 +187,29 @@ export type dynamicRowType = {
   addButtonTextFr: string;
   removeButtonTextFr: string;
 };
+
+// defines the fields for the form record that is available in authenticated spaces and backend processes
+export type FormRecord = {
+  id: string;
+  createdAt?: string;
+  updatedAt?: string;
+  name: string;
+  form: FormProperties;
+  isPublished: boolean;
+  deliveryOption?: DeliveryOption;
+  securityAttribute: SecurityAttribute;
+  closingDate?: string;
+  closedDetails?: ClosedDetails;
+  [key: string]: string | boolean | FormProperties | DeliveryOption | ClosedDetails | undefined;
+};
+
+export type SecurityAttribute = "Unclassified" | "Protected A" | "Protected B";
+export type FormPurpose = "" | "admin" | "nonAdmin";
+
+export type ClosedDetails = {
+  messageEn?: string;
+  messageFr?: string;
+};
+
+// defines the fields for the form record that is available to unauthenticated users
+export type PublicFormRecord = TypeOmit<FormRecord, "name" | "deliveryOption">;
