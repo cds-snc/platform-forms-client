@@ -15,7 +15,7 @@ import {
   ElementProperties,
   SecurityAttribute,
 } from "@lib/types";
-import { BrandProperties } from "@lib/types/form-types";
+import { BrandProperties } from "@lib/types";
 
 export interface TemplateStoreState extends TemplateStoreProps {
   focusInput: boolean;

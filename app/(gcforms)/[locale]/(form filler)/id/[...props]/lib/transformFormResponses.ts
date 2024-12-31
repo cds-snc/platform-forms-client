@@ -92,7 +92,7 @@ export function transformFormResponses(payload: Submission): TransformedResponse
 
     // DynamicRow
     if (_isDynamicRow(key)) {
-      transformed = _handleDynamicRow(key, value, { ...transformed });
+      transformed = _handleDynamicRow(key, value as Response, { ...transformed });
     } else {
       transformed[key] = _getResponseValue(value as string);
     }

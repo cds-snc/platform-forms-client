@@ -33,6 +33,9 @@ jobs:
       - name: "Install dependencies"
         run: yarn workspaces focus gcforms flag_initialization
 
+      - name: "Setup types"
+        run: yarn workspace @cdssnc/gcforms-types build
+
       - name: Cypress Component Tests
         uses: cypress-io/github-action@57b70560982e6a11d23d4b8bec7f8a487cdbb71b # v6.7.8
         with:
