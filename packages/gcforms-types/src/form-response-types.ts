@@ -9,8 +9,7 @@ export type Response =
   | Record<string, unknown>[]
   | FileInputResponse
   | FileInputResponse[]
-  | Record<string, unknown>
-  | TaggedResponse;
+  | Record<string, unknown>;
 
 export type FileInputResponse = {
   name: string | null;
