@@ -1,4 +1,4 @@
-export const dateSubmission = {
+export const dateTaggedSubmission = {
   form: {
     form: {
       elements: [
@@ -10,10 +10,12 @@ export const dateSubmission = {
     },
   },
   responses: {
-    "1": '{"YYYY":2024,"MM":11,"DD":28}',
+    "1": '{ answer: {"YYYY":2024,"MM":11,"DD":28}, tag: "a-tag-or-guid" }',
     formID: "cm41ifzhg0000kgike1emtkd2",
     securityAttribute: "Protected A",
   },
 };
 
-export const dateResult = { "1": '{"YYYY":2024,"MM":11,"DD":28}' };
+export const dateTaggedResult = {
+  "1": '{ answer: {"YYYY":2024,"MM":11,"DD":28}, tag: "a-tag-or-guid" }',
+};

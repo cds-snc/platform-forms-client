@@ -1,4 +1,4 @@
-export const kitchenSinkSubmission = {
+export const kitchenSinkTaggedSubmission = {
   form: {
     form: {
       elements: [
@@ -159,7 +159,7 @@ export const kitchenSinkSubmission = {
   },
 };
 
-export const kitchenSinkResult = {
+export const kitchenSinkTaggedResult = {
   "1": "answer",
   "2": "long one",
   "3": "one",

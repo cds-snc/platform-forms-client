@@ -1,4 +1,4 @@
-export const submission = {
+export const simpleSubmission = {
   form: {
     form: {
       elements: [
@@ -12,6 +12,6 @@ export const submission = {
   responses: { "1": "test", formID: "cm41ifzhg0000kgike1emtkd2", securityAttribute: "Protected A" },
 };
 
-export const result = {
+export const simpleResult = {
   "1": "test",
 };

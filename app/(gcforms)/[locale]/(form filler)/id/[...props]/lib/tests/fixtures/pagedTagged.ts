@@ -1,4 +1,4 @@
-export const pagedFormSubmission = {
+export const pagedFormTaggedSubmission = {
   form: {
     form: {
       elements: [
@@ -72,7 +72,7 @@ export const pagedFormSubmission = {
   },
 };
 
-export const pagedFormResult = {
+export const pagedFormTaggedResult = {
   "1": "answer",
   "2": ["one", "two"],
   "3": "another",

@@ -1,4 +1,4 @@
-export const submission = {
+export const addressSubmission = {
   form: {
     form: {
       elements: [
@@ -16,6 +16,6 @@ export const submission = {
   },
 };
 
-export const result = {
+export const addressResult = {
   "1": '{"streetAddress":"555 A street","city":"Ottawa","province":"Ontario","postalCode":"K2P 1P4","country":"Canada"}',
 };
