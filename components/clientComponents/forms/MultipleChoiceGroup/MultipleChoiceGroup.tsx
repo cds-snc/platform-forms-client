@@ -22,7 +22,7 @@ export const MultipleChoiceGroup = (props: MultipleChoiceGroupProps): React.Reac
         key={index}
         name={field.name}
         className={className}
-        ariaDescribedBy={ariaDescribedBy}
+        {...(ariaDescribedBy && { ariaDescribedBy: ariaDescribedBy })}
       />
     ) : (
       <Radio
@@ -30,7 +30,7 @@ export const MultipleChoiceGroup = (props: MultipleChoiceGroupProps): React.Reac
         key={index}
         name={field.name}
         className={className}
-        ariaDescribedBy={ariaDescribedBy}
+        {...(ariaDescribedBy && { ariaDescribedBy: ariaDescribedBy })}
       />
     );
   });
