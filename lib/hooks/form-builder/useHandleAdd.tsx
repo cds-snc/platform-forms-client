@@ -91,7 +91,7 @@ export const useHandleAdd = () => {
 
       el?.focus();
     },
-    [add, create, groupId, treeView]
+    [add, create, groupId, treeView, loadError]
   );
 
   const handleAddSubElement = useCallback(
