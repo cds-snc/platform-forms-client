@@ -1,6 +1,7 @@
 import { Submission } from "@lib/types/submission-types";
 import { Response } from "@lib/types";
 import { safeJSONParse } from "@lib/utils";
+import { TaggedResponse } from "@lib/types/form-response-types";
 
 const IGNORED_KEYS = ["formID", "securityAttribute"];
 
@@ -27,12 +28,51 @@ const _isDynamicRow = (key: string) => key.includes("-");
 const _isCheckbox = (value: string) => value.startsWith('{"value"');
 
 /**
+ * Determine if a response is a TaggedResponse
+ *
+ * @param value string
+ * @returns boolean
+ */
+const _isTaggedResponse = (value: string): boolean => {
+  const parsed = safeJSONParse(value);
+  if (parsed) {
+    return Object.prototype.hasOwnProperty.call(parsed, "tag");
+  }
+
+  return false;
+};
+
+/**
  * Cleans up a checkbox response
+ *
  * @param response i.e. {"value":["b"]}
  * @returns
  */
 const _transformCheckboxResponse = (response: string): string[] => {
   return safeJSONParse<{ value: string[] }>(response)?.value || [];
+};
+
+/**
+ * Gets the cleaned up response
+ *
+ * @param value
+ * @returns
+ */
+const _getResponseValue = (value: string): string | string[] | TaggedResponse => {
+  if (_isTaggedResponse(value)) {
+    const tag = (safeJSONParse(value) as TaggedResponse).tag;
+    const answer = (safeJSONParse(value) as TaggedResponse).answer;
+    return {
+      tag,
+      answer: _getResponseValue(String(answer)),
+    };
+  }
+
+  if (_isCheckbox(value)) {
+    return _transformCheckboxResponse(value);
+  }
+
+  return value;
 };
 
 /**
@@ -54,12 +94,7 @@ export function transformFormResponses(payload: Submission): TransformedResponse
     if (_isDynamicRow(key)) {
       transformed = _handleDynamicRow(key, value, { ...transformed });
     } else {
-      // Checkboxes need a bit of massaging
-      if (_isCheckbox(value as string)) {
-        transformed[key] = _transformCheckboxResponse(value as string);
-      } else {
-        transformed[key] = value as string;
-      }
+      transformed[key] = _getResponseValue(value as string);
     }
   }
 
@@ -85,12 +120,7 @@ function _handleDynamicRow(key: string, value: Response, response: TransformedRe
 
   response[parentKey][subKeyInt] = response[parentKey][subKeyInt] || {};
 
-  if (_isCheckbox(value as string)) {
-    response[parentKey][subKeyInt][subSubKey] = _transformCheckboxResponse(value as string);
-    return response;
-  }
-
-  response[parentKey][subKeyInt][subSubKey] = value as string | string[];
+  response[parentKey][subKeyInt][subSubKey] = _getResponseValue(value as string);
 
   return response;
 }
