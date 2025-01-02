@@ -75,11 +75,21 @@ export const TextInput = (
         {...(type === "number" && {
           inputMode: "numeric",
           pattern: "[0-9]+",
+          // "onBeforeInput" and e.data could also be used but I'm not sure how cross-browser consistent it is
           onKeyDown: (e) => {
+            // Allow control keys
+            if (
+              e.key.includes("Arrow") ||
+              e.key === "Backspace" ||
+              e.key === "Enter" ||
+              e.key === "Shift" ||
+              e.key === "Tab"
+            ) {
+              return;
+            }
             // Restrict a user from entering anything but a number
-            const re = new RegExp(String((e.target as HTMLInputElement).getAttribute("pattern")));
-            const userInput = e.key;
-            if (!re.test(userInput)) {
+            const re = new RegExp(String((e.target as HTMLInputElement).pattern));
+            if (!re.test(e.key)) {
               e.preventDefault();
             }
           },
