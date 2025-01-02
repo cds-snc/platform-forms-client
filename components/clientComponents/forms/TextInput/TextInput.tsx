@@ -72,7 +72,18 @@ export const TextInput = (
         {...ariaDescribedByIds()}
         {...field}
         onChange={handleTextInputChange}
-        {...(type === "number" && { inputMode: "numeric", pattern: "[0-9]*" })}
+        {...(type === "number" && {
+          inputMode: "numeric",
+          pattern: "[0-9]+",
+          onKeyDown: (e) => {
+            // Restrict a user from entering anything but a number
+            const re = new RegExp(String((e.target as HTMLInputElement).getAttribute("pattern")));
+            const userInput = e.key;
+            if (!re.test(userInput)) {
+              e.preventDefault();
+            }
+          },
+        })}
       />
       {characterCountMessages &&
         maxLength &&
