@@ -32,8 +32,6 @@ jobs:
 
       - name: "Install dependencies"
         run: |
-          yarn install
-          yarn workspace @cdssnc/gcforms-types build
           yarn workspaces focus gcforms flag_initialization
         env:
           CI: TRUE
@@ -69,8 +67,6 @@ jobs:
 
       - name: "Install dependencies"
         run: |
-          yarn install
-          yarn workspace @cdssnc/gcforms-types build
           yarn workspaces focus gcforms flag_initialization
         env:
           CI: TRUE
