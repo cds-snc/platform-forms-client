@@ -7,6 +7,8 @@ import { useTranslation } from "@i18n/client";
 import { cn } from "@lib/utils";
 
 export interface TextInputProps extends InputFieldProps {
+  // Note: using inputmode=numeric over type=number for UX reasons.
+  // See: #4851 and https://tinyurl.com/2p9tm5vk
   type: HTMLTextInputTypeAttribute;
   placeholder?: string;
 }
@@ -63,13 +65,14 @@ export const TextInput = (
         data-testid="textInput"
         className={classes}
         id={id}
-        type={type}
+        type={type === "number" ? "text" : type}
         required={required}
         autoComplete={autoComplete ? autoComplete : "off"}
         placeholder={placeholder}
         {...ariaDescribedByIds()}
         {...field}
         onChange={handleTextInputChange}
+        {...(type === "number" && { inputMode: "numeric", pattern: "[0-9]*" })}
       />
       {characterCountMessages &&
         maxLength &&
