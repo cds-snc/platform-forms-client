@@ -14,7 +14,6 @@ import { Alert } from "@clientComponents/globals";
 import { CheckAll } from "./CheckAll";
 import { DownloadButton } from "./DownloadButton";
 import { ActionsPanel } from "./ActionsPanel";
-import { DeleteButton } from "./DeleteButton";
 import { ConfirmDeleteNewDialog } from "./Dialogs/ConfirmDeleteNewDialog";
 import { DownloadDialog } from "./Dialogs/DownloadDialog";
 import { formatDateTime } from "@lib/utils/form-builder";
@@ -208,11 +207,11 @@ export const DownloadTable = ({
                   key={submission.name}
                   className={cn(
                     "border-y-1 border-slate-300 hover:ring-2 hover:ring-purple-500" +
-                    (tableItems.statusItems.get(submission.name) ? " bg-purple-50" : "") +
-                    (isBlocked ? " opacity-50" : "") +
-                    (statusFilter === StatusFilter.NEW && removedRows.includes(submission.name)
-                      ? " transition-opacity opacity-50 ease-in-out duration-500"
-                      : "")
+                      (tableItems.statusItems.get(submission.name) ? " bg-purple-50" : "") +
+                      (isBlocked ? " opacity-50" : "") +
+                      (statusFilter === StatusFilter.NEW && removedRows.includes(submission.name)
+                        ? " transition-opacity opacity-50 ease-in-out duration-500"
+                        : "")
                   )}
                 >
                   <td className="flex whitespace-nowrap pb-2 pl-9 pr-4">
@@ -302,9 +301,6 @@ export const DownloadTable = ({
             setShowDownloadDialog={setShowDownloadDialog}
             onClick={() => setDownloadError(false)}
           />
-          {(statusFilter === StatusFilter.NEW && false) && (
-            <DeleteButton setShowConfirmNewDialog={setShowConfirmNewDialog} />
-          )}
         </ActionsPanel>
       )}
 
