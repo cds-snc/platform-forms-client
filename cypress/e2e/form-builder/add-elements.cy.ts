@@ -101,7 +101,7 @@ describe("Test FormBuilder Add Elements", () => {
 
     cy.visitPage("/en/form-builder/0000/preview");
     cy.get('[data-testid="textInput"]').should("have.attr", "inputmode", "numeric");
-    cy.get('[data-testid="textInput"]').should("have.attr", "pattern", "[0-9]*");
+    cy.get('[data-testid="textInput"]').should("have.attr", "pattern", "[0-9]+");
   });
 
   it("Renders attestation block", () => {
