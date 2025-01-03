@@ -1,10 +1,13 @@
 "use server";
+
 import { PublicFormRecord, Responses, SubmissionRequestBody } from "@lib/types";
 import { buildFormDataObject } from "./lib/buildFormDataObject";
 import { parseRequestData } from "./lib/parseRequestData";
 import { processFormData } from "./lib/processFormData";
 import { MissingFormDataError, MissingFormIdError } from "./lib/exceptions";
 import { logMessage } from "@lib/logger";
+
+// Public facing functions - they can be used by anyone who finds the associated server action identifer
 
 export async function submitForm(
   values: Responses,

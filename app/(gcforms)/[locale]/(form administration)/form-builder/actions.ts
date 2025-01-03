@@ -1,7 +1,6 @@
 "use server";
 
 import { promises as fs } from "fs";
-
 import { AuthenticatedAction } from "@lib/actions";
 import { getAbility } from "@lib/privileges";
 import {
@@ -23,7 +22,6 @@ import {
   updateResponseDeliveryOption,
   updateFormPurpose,
 } from "@lib/templates";
-
 import { serverTranslation } from "@i18n";
 import { revalidatePath } from "next/cache";
 import { checkOne } from "@lib/cache/flags";
@@ -38,6 +36,8 @@ export type CreateOrUpdateTemplateType = {
   securityAttribute?: SecurityAttribute;
   formPurpose?: FormPurpose;
 };
+
+// Public facing functions - they can be used by anyone who finds the associated server action identifer
 
 export const createOrUpdateTemplate = AuthenticatedAction(
   async ({
@@ -64,58 +64,30 @@ export const createOrUpdateTemplate = AuthenticatedAction(
           formPurpose,
         });
       }
-      return await createTemplate({
-        formConfig,
-        name,
-        deliveryOption,
-        securityAttribute,
-        formPurpose,
+
+      const ability = await getAbility();
+
+      const response = await createDbTemplate({
+        userID: ability.user.id,
+        formConfig: formConfig,
+        name: name,
+        deliveryOption: deliveryOption,
+        securityAttribute: securityAttribute,
+        formPurpose: formPurpose,
       });
+
+      if (!response) {
+        throw new Error(
+          `Template API response was null. Request information: { formConfig: ${formConfig}, name: ${name}, deliveryOption: ${deliveryOption}, securityAttribute: ${securityAttribute}`
+        );
+      }
+
+      return { formRecord: response };
     } catch (e) {
       return { formRecord: null, error: (e as Error).message };
     }
   }
 );
-
-const createTemplate = async ({
-  formConfig,
-  name,
-  deliveryOption,
-  securityAttribute,
-  formPurpose,
-}: {
-  formConfig: FormProperties;
-  name?: string;
-  deliveryOption?: DeliveryOption;
-  securityAttribute?: SecurityAttribute;
-  formPurpose?: FormPurpose;
-}): Promise<{
-  formRecord: FormRecord | null;
-  error?: string;
-}> => {
-  try {
-    const ability = await getAbility();
-
-    const response = await createDbTemplate({
-      userID: ability.user.id,
-      formConfig: formConfig,
-      name: name,
-      deliveryOption: deliveryOption,
-      securityAttribute: securityAttribute,
-      formPurpose: formPurpose,
-    });
-
-    if (!response) {
-      throw new Error(
-        `Template API response was null. Request information: { formConfig: ${formConfig}, name: ${name}, deliveryOption: ${deliveryOption}, securityAttribute: ${securityAttribute}`
-      );
-    }
-
-    return { formRecord: response };
-  } catch (error) {
-    return { formRecord: null, error: (error as Error).message };
-  }
-};
 
 export const updateTemplate = AuthenticatedAction(
   async ({
