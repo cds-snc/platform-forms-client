@@ -7,6 +7,8 @@ import { useTranslation } from "@i18n/client";
 import { cn } from "@lib/utils";
 
 export interface TextInputProps extends InputFieldProps {
+  // Note: using inputmode=numeric over type=number for UX reasons.
+  // See: #4851 and https://tinyurl.com/2p9tm5vk
   type: HTMLTextInputTypeAttribute;
   placeholder?: string;
 }
@@ -63,13 +65,35 @@ export const TextInput = (
         data-testid="textInput"
         className={classes}
         id={id}
-        type={type}
+        type={type === "number" ? "text" : type}
         required={required}
         autoComplete={autoComplete ? autoComplete : "off"}
         placeholder={placeholder}
         {...ariaDescribedByIds()}
         {...field}
         onChange={handleTextInputChange}
+        {...(type === "number" && {
+          inputMode: "numeric",
+          pattern: "[0-9]+",
+          // "onBeforeInput" and e.data could also be used but I'm not sure how cross-browser consistent it is
+          onKeyDown: (e) => {
+            // Allow control keys
+            if (
+              e.key.includes("Arrow") ||
+              e.key === "Backspace" ||
+              e.key === "Enter" ||
+              e.key === "Shift" ||
+              e.key === "Tab"
+            ) {
+              return;
+            }
+            // Restrict a user from entering anything but a number
+            const re = new RegExp(String((e.target as HTMLInputElement).pattern));
+            if (!re.test(e.key)) {
+              e.preventDefault();
+            }
+          },
+        })}
       />
       {characterCountMessages &&
         maxLength &&
