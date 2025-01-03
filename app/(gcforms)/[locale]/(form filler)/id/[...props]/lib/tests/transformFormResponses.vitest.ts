@@ -17,6 +17,7 @@ import { kitchenSinkSubmission, kitchenSinkResult } from "./fixtures/kitchenSink
 import { kitchenSinkTaggedSubmission, kitchenSinkTaggedResult } from "./fixtures/kitchenSinkTagged";
 import { pagedFormSubmission, pagedFormResult } from "./fixtures/paged";
 import { pagedFormTaggedSubmission, pagedFormTaggedResult } from "./fixtures/pagedTagged";
+import { mixedInputsSubmission, mixedInputsResult } from "./fixtures/mixedInputs";
 import merge from "lodash.merge";
 
 describe("transformFormResponses", () => {
@@ -100,5 +101,11 @@ describe("transformFormResponses", () => {
 
       expect(result).toEqual(type.result);
     });
+  });
+
+  it("should transform mixed tagged and untagged responses", () => {
+    const payload = merge({}, baseSubmission, mixedInputsSubmission);
+    const result = transformFormResponses(payload);
+    expect(result).toEqual(mixedInputsResult);
   });
 });
