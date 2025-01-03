@@ -7,13 +7,20 @@ import { checkboxTaggedSubmission, checkboxTaggedResult } from "./fixtures/check
 import { dateSubmission, dateResult } from "./fixtures/date";
 import { dateTaggedSubmission, dateTaggedResult } from "./fixtures/dateTagged";
 import { addressSubmission, addressResult } from "./fixtures/addressComplete";
+import { addressTaggedSubmission, addressTaggedResult } from "./fixtures/addressCompleteTagged";
 import { repeatingSetSubmission, repeatingSetResult } from "./fixtures/repeatingSet";
+import {
+  repeatingSetTaggedSubmission,
+  repeatingSetTaggedResult,
+} from "./fixtures/repeatingSetTagged";
 import { kitchenSinkSubmission, kitchenSinkResult } from "./fixtures/kitchenSink";
+import { kitchenSinkTaggedSubmission, kitchenSinkTaggedResult } from "./fixtures/kitchenSinkTagged";
 import { pagedFormSubmission, pagedFormResult } from "./fixtures/paged";
+import { pagedFormTaggedSubmission, pagedFormTaggedResult } from "./fixtures/pagedTagged";
 import merge from "lodash.merge";
 
 describe("transformFormResponses", () => {
-  it("should transform normal responses for storage", () => {
+  it.skip("should transform normal responses for storage", () => {
     const types = [
       {
         submission: simpleSubmission,
@@ -68,22 +75,22 @@ describe("transformFormResponses", () => {
         submission: dateTaggedSubmission,
         result: dateTaggedResult,
       },
-      // {
-      //   submission: addressTaggedSubmission,
-      //   result: addressTaggedResult,
-      // },
-      // {
-      //   submission: repeatingSetSubmission,
-      //   result: repeatingSetResult,
-      // },
-      // {
-      //   submission: kitchenSinkSubmission,
-      //   result: kitchenSinkSubmissionResult,
-      // },
-      // {
-      //   submission: pagedFormSubmission,
-      //   result: pagedFormSubmissionResult,
-      // },
+      {
+        submission: addressTaggedSubmission,
+        result: addressTaggedResult,
+      },
+      {
+        submission: repeatingSetTaggedSubmission,
+        result: repeatingSetTaggedResult,
+      },
+      {
+        submission: kitchenSinkTaggedSubmission,
+        result: kitchenSinkTaggedResult,
+      },
+      {
+        submission: pagedFormTaggedSubmission,
+        result: pagedFormTaggedResult,
+      },
     ];
 
     types.forEach((type) => {

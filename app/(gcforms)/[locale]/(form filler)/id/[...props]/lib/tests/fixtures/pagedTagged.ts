@@ -59,26 +59,32 @@ export const pagedFormTaggedSubmission = {
     },
   },
   responses: {
-    "1": "answer",
-    "2": '{"value":["one","two"]}',
-    "3": "another",
-    "4": '{"value":["two","three"]}',
-    "5-0-0": "Lorem ipsum",
-    "5-0-1": '{"value":["two"]}',
-    "5-1-0": "Hola mi amigo",
-    "5-1-1": '{"value":["two","three"]}',
+    "1": '{"answer": "answer", "tag": "a-tag-or-guid" }',
+    "2": '{"answer": "{\\"value\\":[\\"one\\",\\"two\\"]}","tag":"a-tag-or-guid"}',
+    "3": '{"answer": "another", "tag": "a-tag-or-guid" }',
+    "4": '{"answer": "{\\"value\\":[\\"two\\", \\"three\\"]}","tag":"a-tag-or-guid"}',
+    "5-0-0": '{"answer": "Lorem ipsum", "tag": "a-tag-or-guid" }',
+    "5-0-1": '{"answer": "{\\"value\\":[\\"two\\"]}","tag":"a-tag-or-guid"}',
+    "5-1-0": '{"answer": "Hola mi amigo", "tag": "a-tag-or-guid" }',
+    "5-1-1": '{"answer": "{\\"value\\":[\\"two\\", \\"three\\"]}","tag":"a-tag-or-guid"}',
     formID: "cm40ey4m40003pznady0wtty2",
     securityAttribute: "Protected A",
   },
 };
 
 export const pagedFormTaggedResult = {
-  "1": "answer",
-  "2": ["one", "two"],
-  "3": "another",
-  "4": ["two", "three"],
+  "1": { answer: "answer", tag: "a-tag-or-guid" },
+  "2": { answer: ["one", "two"], tag: "a-tag-or-guid" },
+  "3": { answer: "another", tag: "a-tag-or-guid" },
+  "4": { answer: ["two", "three"], tag: "a-tag-or-guid" },
   "5": [
-    { "0": "Lorem ipsum", "1": ["two"] },
-    { "0": "Hola mi amigo", "1": ["two", "three"] },
+    {
+      "0": { answer: "Lorem ipsum", tag: "a-tag-or-guid" },
+      "1": { answer: ["two"], tag: "a-tag-or-guid" },
+    },
+    {
+      "0": { answer: "Hola mi amigo", tag: "a-tag-or-guid" },
+      "1": { answer: ["two", "three"], tag: "a-tag-or-guid" },
+    },
   ],
 };
