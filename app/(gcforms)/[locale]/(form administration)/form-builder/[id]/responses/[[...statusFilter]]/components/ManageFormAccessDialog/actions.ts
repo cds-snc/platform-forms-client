@@ -16,6 +16,8 @@ import { logMessage } from "@lib/logger";
 import { inviteUserByEmail } from "@lib/invitations/inviteUserByEmail";
 import { cancelInvitation as cancelInvitationAction } from "@lib/invitations/cancelInvitation";
 
+// Public facing functions - they can be used by anyone who finds the associated server action identifer
+
 export const sendInvitation = async (emails: string[], templateId: string, message: string) => {
   const { ability } = await authCheckAndThrow();
   const { t } = await serverTranslation("manage-form-access");
