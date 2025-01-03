@@ -1,18 +1,11 @@
 "use server";
-import { cache } from "react";
 
 import { deleteTemplate } from "@lib/templates";
 import { TemplateHasUnprocessedSubmissions } from "@lib/templates";
-import { getAppSetting } from "@lib/appSettings";
 import { revalidatePath } from "next/cache";
 import { AuthenticatedAction } from "@lib/actions";
 
-export const overdueSettings = cache(async () => {
-  const promptPhaseDays = await getAppSetting("nagwarePhasePrompted");
-  const warnPhaseDays = await getAppSetting("nagwarePhaseWarned");
-  const responseDownloadLimit = await getAppSetting("responseDownloadLimit");
-  return { promptPhaseDays, warnPhaseDays, responseDownloadLimit };
-});
+// Public facing functions - they can be used by anyone who finds the associated server action identifer
 
 export const deleteForm = AuthenticatedAction(async (id: string) => {
   try {
