@@ -26,6 +26,10 @@ const eslintConfig = [
         {
           caughtErrors: "none",
         },
+        "e",
+        {
+          caughtErrors: "none",
+        },
       ],
     },
     ignorePatterns: [
