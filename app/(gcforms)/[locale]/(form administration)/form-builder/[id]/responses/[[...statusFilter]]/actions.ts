@@ -20,6 +20,7 @@ import {
   AddressComponents,
   FormElement,
   FormElementTypes,
+  Response,
   StartFromExclusiveResponse,
   VaultStatus,
 } from "@lib/types";
@@ -53,6 +54,8 @@ import {
   getAddressAsString,
 } from "@clientComponents/forms/AddressComplete/utils";
 import { serverTranslation } from "@i18n";
+import { safeJSONParse } from "@lib/utils";
+import { TaggedResponse } from "@cdssnc/gcforms-types";
 
 // Public facing functions - they can be used by anyone who finds the associated server action identifer
 
@@ -403,7 +406,31 @@ const sortByGroups = ({ form, elements }: { form: FormProperties; elements: Answ
   return sortByLayout({ layout, elements });
 };
 
+const isTaggedResponse = (value: unknown): boolean => {
+  if (typeof value === "object" && value !== null) {
+    return Object.prototype.hasOwnProperty.call(value, "tag");
+  }
+
+  const parsed = safeJSONParse(value as string);
+
+  if (parsed) {
+    return Object.prototype.hasOwnProperty.call(parsed, "tag");
+  }
+
+  return false;
+};
+
+const extractAnswerFromTaggedResponse = (response: Response): Response => {
+  if (isTaggedResponse(response)) {
+    return (response as TaggedResponse).answer;
+  }
+
+  return response;
+};
+
 const getAnswerAsString = (question: FormElement | undefined, answer: unknown): string => {
+  answer = extractAnswerFromTaggedResponse(answer as Response);
+
   if (question && question.type === "checkbox") {
     return Array(answer).join(", ");
   }
@@ -413,6 +440,7 @@ const getAnswerAsString = (question: FormElement | undefined, answer: unknown): 
     if (!answer) {
       return "";
     }
+
     const dateFormat = (question.properties.dateFormat || "YYYY-MM-DD") as DateFormat;
     const dateObject = JSON.parse(answer as string) as DateObject;
 
