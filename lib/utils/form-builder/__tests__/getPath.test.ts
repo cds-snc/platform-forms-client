@@ -41,7 +41,6 @@ describe("Get array indexes for path by element ID", () => {
     const [elIndex, subIndex] = getElementIndexes(1210, elements);
     expect(elIndex).toEqual(3);
     expect(subIndex).toEqual(2);
-    expect;
   });
 });
 
