@@ -5,11 +5,7 @@ const compat = new FlatCompat({
 
 const eslintConfig = [
   ...compat.config({
-    extends: [
-      "next/core-web-vitals",
-      "next/typescript",
-      "prettier",
-    ],
+    extends: ["next/core-web-vitals", "next/typescript", "prettier"],
     settings: {
       "import/resolver": {
         typescript: {
@@ -25,6 +21,12 @@ const eslintConfig = [
       "no-return-await": "error",
       "import/no-unresolved": "error",
       "@typescript-eslint/no-require-imports": "off",
+      "no-unused-vars": [
+        "error",
+        {
+          caughtErrors: "none",
+        },
+      ],
     },
     ignorePatterns: [
       "/utils",
