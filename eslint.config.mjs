@@ -21,14 +21,15 @@ const eslintConfig = [
       "no-return-await": "error",
       "import/no-unresolved": "error",
       "@typescript-eslint/no-require-imports": "off",
-      "no-unused-vars": [
+      "no-unused-vars": "off", // Turn off base rule
+      "@typescript-eslint/no-unused-vars": [
         "error",
         {
-          caughtErrors: "none",
-        },
-        "e",
-        {
-          caughtErrors: "none",
+          vars: "all",
+          args: "after-used",
+          ignoreRestSiblings: true,
+          argsIgnorePattern: "^_",
+          caughtErrors: "none", // This allows unused catch parameters
         },
       ],
     },
