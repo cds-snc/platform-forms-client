@@ -150,7 +150,6 @@ function _buildForm(element: FormElement, lang: string): ReactElement {
             type={FormElementTypes.checkbox}
             name={`${id}`}
             choicesProps={checkboxItems}
-            ariaDescribedBy={labelText ? labelText : undefined}
           />
         </FormGroup>
       );
@@ -174,7 +173,6 @@ function _buildForm(element: FormElement, lang: string): ReactElement {
             type={FormElementTypes.radio}
             name={`${id}`}
             choicesProps={radioItems}
-            ariaDescribedBy={labelText ? labelText : undefined}
           />
         </FormGroup>
       );

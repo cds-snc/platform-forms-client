@@ -11,6 +11,8 @@ import {
   UserNotFoundError,
 } from "@lib/invitations/exceptions";
 
+// Public facing functions - they can be used by anyone who finds the associated server action identifer
+
 export const accept = async (id: string) => {
   const { ability } = await authCheckAndThrow();
   const { t } = await serverTranslation("manage-form-access");

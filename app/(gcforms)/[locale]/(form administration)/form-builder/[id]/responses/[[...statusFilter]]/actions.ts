@@ -1,4 +1,5 @@
 "use server";
+
 import { Language, FormServerErrorCodes, ServerActionError } from "@lib/types/form-builder-types";
 import { getAppSetting } from "@lib/appSettings";
 import { logEvent } from "@lib/auditLogs";
@@ -56,6 +57,8 @@ import { serverTranslation } from "@i18n";
 import { safeJSONParse } from "@lib/utils";
 import { TaggedResponse } from "@cdssnc/gcforms-types";
 
+// Public facing functions - they can be used by anyone who finds the associated server action identifer
+
 export const fetchSubmissions = AuthenticatedAction(
   async ({
     formId,
@@ -108,88 +111,6 @@ export const fetchSubmissions = AuthenticatedAction(
     }
   }
 );
-
-const sortByLayout = ({ layout, elements }: { layout: number[]; elements: Answer[] }) => {
-  return elements.sort((a, b) => layout.indexOf(a.questionId) - layout.indexOf(b.questionId));
-};
-
-const sortByGroups = ({ form, elements }: { form: FormProperties; elements: Answer[] }) => {
-  const groups = orderGroups(form.groups, form.groupsLayout) ?? {};
-  const layout = getLayoutFromGroups(form, groups);
-  return sortByLayout({ layout, elements });
-};
-
-const isTaggedResponse = (value: unknown): boolean => {
-  if (typeof value === "object" && value !== null) {
-    return Object.prototype.hasOwnProperty.call(value, "tag");
-  }
-
-  const parsed = safeJSONParse(value as string);
-
-  if (parsed) {
-    return Object.prototype.hasOwnProperty.call(parsed, "tag");
-  }
-
-  return false;
-};
-
-const extractAnswerFromTaggedResponse = (response: Response): Response => {
-  if (isTaggedResponse(response)) {
-    return (response as TaggedResponse).answer;
-  }
-
-  return response;
-};
-
-const getAnswerAsString = (question: FormElement | undefined, answer: unknown): string => {
-  answer = extractAnswerFromTaggedResponse(answer as Response);
-
-  if (question && question.type === "checkbox") {
-    return Array(answer).join(", ");
-  }
-
-  if (question && question.type === "formattedDate") {
-    // Could be empty if the date was not required
-    if (!answer) {
-      return "";
-    }
-
-    const dateFormat = (question.properties.dateFormat || "YYYY-MM-DD") as DateFormat;
-    const dateObject = JSON.parse(answer as string) as DateObject;
-
-    return getFormattedDateFromObject(dateFormat, dateObject);
-  }
-
-  if (question && question.type === "addressComplete") {
-    if (!answer) {
-      return "";
-    }
-
-    if (question.properties.addressComponents?.splitAddress === true) {
-      return answer as string; //Address was split, return as is.
-    }
-
-    const addressObject = JSON.parse(answer as string) as AddressElements;
-    return getAddressAsString(addressObject);
-  }
-
-  return answer as string;
-};
-
-const logDownload = async (
-  responseIdStatusArray: { id: string; status: string }[],
-  format: DownloadFormat
-) => {
-  const ability = await getAbility();
-  responseIdStatusArray.forEach((item) => {
-    logEvent(
-      ability.user.id,
-      { type: "Response", id: item.id },
-      "DownloadResponse",
-      `Downloaded form response in ${format} for submission ID ${item.id}`
-    );
-  });
-};
 
 export const getSubmissionsByFormat = AuthenticatedAction(
   async ({
@@ -472,3 +393,87 @@ export const getSubmissionRemovalDate = AuthenticatedAction(
     }
   }
 );
+
+// Internal and private functions - won't be converted into server actions
+
+const sortByLayout = ({ layout, elements }: { layout: number[]; elements: Answer[] }) => {
+  return elements.sort((a, b) => layout.indexOf(a.questionId) - layout.indexOf(b.questionId));
+};
+
+const sortByGroups = ({ form, elements }: { form: FormProperties; elements: Answer[] }) => {
+  const groups = orderGroups(form.groups, form.groupsLayout) ?? {};
+  const layout = getLayoutFromGroups(form, groups);
+  return sortByLayout({ layout, elements });
+};
+
+const isTaggedResponse = (value: unknown): boolean => {
+  if (typeof value === "object" && value !== null) {
+    return Object.prototype.hasOwnProperty.call(value, "tag");
+  }
+
+  const parsed = safeJSONParse(value as string);
+
+  if (parsed) {
+    return Object.prototype.hasOwnProperty.call(parsed, "tag");
+  }
+
+  return false;
+};
+
+const extractAnswerFromTaggedResponse = (response: Response): Response => {
+  if (isTaggedResponse(response)) {
+    return (response as TaggedResponse).answer;
+  }
+
+  return response;
+};
+
+const getAnswerAsString = (question: FormElement | undefined, answer: unknown): string => {
+  answer = extractAnswerFromTaggedResponse(answer as Response);
+
+  if (question && question.type === "checkbox") {
+    return Array(answer).join(", ");
+  }
+
+  if (question && question.type === "formattedDate") {
+    // Could be empty if the date was not required
+    if (!answer) {
+      return "";
+    }
+
+    const dateFormat = (question.properties.dateFormat || "YYYY-MM-DD") as DateFormat;
+    const dateObject = JSON.parse(answer as string) as DateObject;
+
+    return getFormattedDateFromObject(dateFormat, dateObject);
+  }
+
+  if (question && question.type === "addressComplete") {
+    if (!answer) {
+      return "";
+    }
+
+    if (question.properties.addressComponents?.splitAddress === true) {
+      return answer as string; //Address was split, return as is.
+    }
+
+    const addressObject = JSON.parse(answer as string) as AddressElements;
+    return getAddressAsString(addressObject);
+  }
+
+  return answer as string;
+};
+
+const logDownload = async (
+  responseIdStatusArray: { id: string; status: string }[],
+  format: DownloadFormat
+) => {
+  const ability = await getAbility();
+  responseIdStatusArray.forEach((item) => {
+    logEvent(
+      ability.user.id,
+      { type: "Response", id: item.id },
+      "DownloadResponse",
+      `Downloaded form response in ${format} for submission ID ${item.id}`
+    );
+  });
+};
