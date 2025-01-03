@@ -24,6 +24,7 @@ import {
 } from "@lib/templates";
 import { serverTranslation } from "@i18n";
 import { revalidatePath } from "next/cache";
+import { checkOne } from "@lib/cache/flags";
 import { isValidDateString } from "@lib/utils/date/isValidDateString";
 import { allowedTemplates, TemplateTypes } from "@lib/utils/form-builder";
 
@@ -67,7 +68,7 @@ export const createOrUpdateTemplate = AuthenticatedAction(
       const ability = await getAbility();
 
       const response = await createDbTemplate({
-        userID: ability.userID,
+        userID: ability.user.id,
         formConfig: formConfig,
         name: name,
         deliveryOption: deliveryOption,
