@@ -259,6 +259,8 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
               handleSubmit(e);
             }}
             noValidate
+            // TODO: Remove this and handle dynamic content case by case
+            //
             // This is needed so dynamic changes e.g. show-hide elements are announced when shown
             // on the form. Though the relationship between the controlling and shown/hidden element
             // is not very clear and can hopefully be improved.
