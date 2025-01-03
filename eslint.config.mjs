@@ -5,10 +5,13 @@ const compat = new FlatCompat({
 });
 const eslintConfig = [
   ...compat.config({
-    extends: ['next', 'prettier'],
+    extends: ["next", "prettier"],
     rules: {
       "react/no-unescaped-entities": "off",
       "@next/next/no-page-custom-font": "off",
+      "no-console": "error",
+      "no-await-in-loop": "error",
+      "no-return-await": "error",
     },
     ignorePatterns: ["/utils", "/public/static/scripts/", "/__tests__/api/"],
   }),
