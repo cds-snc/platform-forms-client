@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 import { CacheHandler } from "@neshca/cache-handler";
 import createLruHandler from "@neshca/cache-handler/local-lru";
 

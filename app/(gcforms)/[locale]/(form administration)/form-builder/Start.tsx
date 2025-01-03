@@ -75,8 +75,6 @@ export const Start = () => {
   const boxClass =
     "group mx-4 mb-4 flex h-80 w-80 flex-col rounded-xl border-[0.5px] border-slate-500 bg-gray-background pl-6 pr-5 pt-28 text-left outline-none hover:cursor-pointer hover:border-[1px] hover:border-indigo-700 hover:bg-indigo-50 focus:cursor-pointer focus:border-[3px] focus:border-slate-700";
 
-  /* eslint-disable jsx-a11y/no-noninteractive-element-interactions */
-  /* eslint-disable jsx-a11y/no-noninteractive-tabindex */
   return (
     <>
       <h1 className="visually-hidden">{t("start")}</h1>

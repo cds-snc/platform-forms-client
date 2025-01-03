@@ -118,10 +118,10 @@ export const Branding = ({ hasBrandingRequestForm }: { hasBrandingRequestForm: b
       {/* Logo preview */}
       <div className="my-5">
         <div className="mb-3 text-sm font-bold">{t("branding.preview")}</div>
-        {/* eslint-disable @next/next/no-img-element  */}
         <Brand brand={brand} />
       </div>
       <div className="mt-10">
+        pShareModal
         <Button disabled={isPublished as boolean} theme="secondary" onClick={handleSave}>
           {t("settingsResponseDelivery.saveButton")}
         </Button>

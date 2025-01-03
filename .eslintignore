@@ -1,8 +1,0 @@
-# Ignore Utils Folder
-/utils
-
-# Ignore polyfills
-/public/static/scripts/
-
-# Ignore old API tests folder
-/__tests__/api/

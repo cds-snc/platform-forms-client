@@ -119,7 +119,6 @@ export const DynamicGroup = (props: DynamicGroupProps): React.ReactElement => {
   const deleteButtonLabel = removeButtonText || t("dynamicRow.delete") + " " + rowLabel;
 
   return (
-    // eslint-disable-next-line jsx-a11y/no-noninteractive-tabindex
     <div id={field.name} data-testid={`formGroup-${field.name}`} className={classes} tabIndex={0}>
       {title && <div className="gc-label">{title}</div>}
       {description && <Description id={`${field.name}-desc`}>{description}</Description>}

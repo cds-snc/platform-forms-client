@@ -17,7 +17,6 @@ export const addSubItem: TemplateStore<"addSubItem"> =
 
         // remove subElements array property given we're adding a sub item
         const subDefaultField = { ...defaultField };
-        // eslint-disable-next-line  @typescript-eslint/no-unused-vars
         const { subElements, ...rest } = subDefaultField.properties;
         subDefaultField.properties = rest;
 
