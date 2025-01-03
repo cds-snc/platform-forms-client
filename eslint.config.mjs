@@ -34,6 +34,7 @@ const eslintConfig = [
           caughtErrors: "none", // This allows unused catch parameters
         },
       ],
+      "@typescript-eslint/no-unused-expressions": "off",
     },
     ignorePatterns: [
       "/utils",
