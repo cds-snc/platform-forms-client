@@ -1,4 +1,8 @@
 import { FlatCompat } from "@eslint/eslintrc";
+
+import { jsxA11y } from "eslint-plugin-jsx-a11y";
+import tseslint from "typescript-eslint";
+
 const compat = new FlatCompat({
   baseDirectory: new URL(".", import.meta.url).pathname,
 });
@@ -6,6 +10,10 @@ const compat = new FlatCompat({
 const eslintConfig = [
   ...compat.config({
     extends: ["next/core-web-vitals", "next/typescript", "prettier"],
+    plugins: {
+      "jsx-a11y": jsxA11y,
+      "@typescript-eslint/eslint-plugin": tseslint,
+    },
     settings: {
       "import/resolver": {
         typescript: {
