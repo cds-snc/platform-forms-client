@@ -9,7 +9,7 @@ import { languages } from "@i18n/settings";
 import { Noto_Sans, Lato } from "next/font/google";
 import { googleTagManager } from "@lib/cspScripts";
 import { headers } from "next/headers";
-import { auth } from "@lib/auth";
+import { auth } from "@lib/auth"
 
 const notoSans = Noto_Sans({
   weight: ["100", "200", "300", "400", "500", "600", "700", "800", "900"],
