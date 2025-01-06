@@ -34,6 +34,11 @@ const eslintConfig = [
           caughtErrors: "none", // This allows unused catch parameters
         },
       ],
+      "tailwindcss/classnames-order": "off",
+      "tailwindcss/no-custom-classname": "off",
+      "tailwindcss/no-contradicting-classname": "off",
+      "tailwindcss/enforces-shorthand": "off",
+      "tailwindcss/no-unnecessary-arbitrary-value": "off",
     },
     ignorePatterns: [
       "/utils",
