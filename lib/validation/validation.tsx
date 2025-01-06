@@ -405,7 +405,6 @@ export const containsNumber = (field: string): boolean => {
  * @returns {boolean} The validation result
  */
 export const containsSymbol = (field: string): boolean => {
-  // eslint-disable-next-line no-useless-escape
   const reg = /^(?=.*?[\^\$\*\.\[\]\{\}\(\)\?\"\!\@\#\%\&\/\\\,\>\<\'\:\;\|\_\~\`\=\+\-])/;
   if (!field || !reg.test(field)) {
     return false;
