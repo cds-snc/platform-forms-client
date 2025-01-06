@@ -121,7 +121,6 @@ export const Branding = ({ hasBrandingRequestForm }: { hasBrandingRequestForm: b
         <Brand brand={brand} />
       </div>
       <div className="mt-10">
-        pShareModal
         <Button disabled={isPublished as boolean} theme="secondary" onClick={handleSave}>
           {t("settingsResponseDelivery.saveButton")}
         </Button>
