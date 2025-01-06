@@ -1,6 +1,7 @@
+import type { Config } from "tailwindcss";
 import tokens from "@cdssnc/gcds-tokens/build/figma/figma.tokens.json";
 
-const colors = require("tailwindcss/colors");
+import colors from "tailwindcss/colors";
 
 const { red, green, blue, grayscale } = tokens.Tokens.color;
 
@@ -218,4 +219,4 @@ module.exports = {
   },
   content: ["./app/**/*.{js,ts,jsx,tsx,mdx}", "./components/**/*.{js,ts,jsx,tsx,mdx}"],
   plugins: [],
-};
+} satisfies Config;
