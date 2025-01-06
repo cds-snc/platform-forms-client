@@ -37,10 +37,6 @@ const nextConfig = {
     // Remove all console.* calls
     // removeConsole: false,
   },
-  eslint: {
-    dirs: ['app', 'lib', 'components'], // Only run ESLint on these directories
-    ignoreDuringBuilds: false,
-  },
   output: isOutputStandalone ? "standalone" : undefined,
   ...(process.env.REVIEW_ENV && {
     cacheHandler: require.resolve("./nextCacheHandler.mjs"),
