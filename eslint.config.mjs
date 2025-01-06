@@ -1,6 +1,7 @@
 import { dirname } from "path";
 import { fileURLToPath } from "url";
 import { FlatCompat } from "@eslint/eslintrc";
+import tailwind from "eslint-plugin-tailwindcss";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -10,7 +11,9 @@ const compat = new FlatCompat({
 });
 
 const eslintConfig = [
-  ...compat.config({
+  ...tailwind.configs["flat/recommended"],
+  ...compat.config(
+    { 
     extends: [
       "next/core-web-vitals",
       "next/typescript",
@@ -40,6 +43,33 @@ const eslintConfig = [
       "dist/",
       "coverage/",
     ],
+    settings: {
+      tailwindcss: {
+        whitelist: [
+          "(gc\\-).*",
+          "(gcds\\-).*",
+          "form-builder",
+          "form-builder-editor",
+          "page-container",
+          "visually-hidden",
+          "buttons",
+          "required",
+          "focus-group",
+          "canada-flag",
+          "account-wrapper",
+          "input-sizer",
+          "stacked",
+          "disabled",
+          "origin-radix-dropdown-menu",
+          "radio-label-text",
+          "checkbox-label-text",
+          "example-text",
+          "section",
+          "maple-leaf-loader",
+          "flow-container",
+        ],
+      },
+    },
   }),
 ];
 
