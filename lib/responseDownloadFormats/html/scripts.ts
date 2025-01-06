@@ -2,7 +2,6 @@ import React from "react";
 
 export const ClipboardJSScript = React.createElement("script", {
   dangerouslySetInnerHTML: {
-    // eslint-disable-next-line no-useless-escape
     __html: `
       /*!
       * clipboard.js v2.0.11
@@ -17,7 +16,6 @@ export const ClipboardJSScript = React.createElement("script", {
 
 export const UpdateDLStylesScript = React.createElement("script", {
   dangerouslySetInnerHTML: {
-    // eslint-disable-next-line no-useless-escape
     __html: `
       // Row layout question element height depends on content. Give a consistent height using JS.
       document.addEventListener("DOMContentLoaded", function() {
