@@ -38,7 +38,6 @@ const eslintConfig = [
       "tailwindcss/no-custom-classname": "off",
       "tailwindcss/no-contradicting-classname": "off",
       "tailwindcss/enforces-shorthand": "off",
-      "tailwindcss/no-unnecessary-arbitrary-value": "off",
     },
     ignorePatterns: [
       "/utils",

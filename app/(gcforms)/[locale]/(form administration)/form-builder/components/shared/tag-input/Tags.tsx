@@ -20,7 +20,7 @@ export const Tag = ({ tag, onRemove }: TagProps) => {
       <span className="inline-bock">
         {tag}
         <button
-          className="ml-2 p-[1px] align-middle [&_svg]:fill-gray-500 [&_svg]:hover:fill-red-500 [&_svg]:focus:fill-red-500"
+          className="ml-2 p-px align-middle [&_svg]:fill-gray-500 [&_svg]:hover:fill-red-500 [&_svg]:focus:fill-red-500"
           onClick={() => onRemove(tag)}
           aria-label={label}
         >

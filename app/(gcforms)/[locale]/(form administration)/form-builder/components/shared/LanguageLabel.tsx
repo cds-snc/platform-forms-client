@@ -1,4 +1,5 @@
 "use client";
+import { cn } from "@lib/utils";
 import { Language } from "@lib/types/form-builder-types";
 import React, { ReactElement } from "react";
 
@@ -16,9 +17,10 @@ export const LanguageLabel = ({
   return (
     <div
       id={id}
-      className={`absolute bottom-0 right-0 mb-[1px] mr-[1px] rounded-sm border px-2 text-sm${
-        lang === "en" ? `border-violet-400 bg-violet-300` : "border-fucsia-400 bg-fuchsia-300"
-      }`}
+      className={cn(
+        "absolute bottom-0 right-0 mb-px mr-px rounded-sm border px-2 text-sm",
+        lang === "en" ? "border-violet-400 bg-violet-300" : "border-fucsia-400 bg-fuchsia-300"
+      )}
     >
       {children}
     </div>
