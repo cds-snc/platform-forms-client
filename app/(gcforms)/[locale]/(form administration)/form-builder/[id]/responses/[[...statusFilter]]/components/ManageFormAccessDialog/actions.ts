@@ -87,7 +87,7 @@ export const removeUserFromForm = async (userId: string, formId: string) => {
   }
 };
 
-export const getTemplateUsers = AuthenticatedAction(async (formId: string) => {
+export const getTemplateUsers = AuthenticatedAction(async (_, formId: string) => {
   const template = await getTemplateWithAssociatedUsers(formId);
 
   if (!template) {

@@ -57,15 +57,18 @@ import { serverTranslation } from "@i18n";
 // Public facing functions - they can be used by anyone who finds the associated server action identifer
 
 export const fetchSubmissions = AuthenticatedAction(
-  async ({
-    formId,
-    status,
-    lastKey,
-  }: {
-    formId: string;
-    status: string;
-    lastKey: string | null;
-  }) => {
+  async (
+    _,
+    {
+      formId,
+      status,
+      lastKey,
+    }: {
+      formId: string;
+      status: string;
+      lastKey: string | null;
+    }
+  ) => {
     try {
       if (!formId) {
         return {
@@ -110,17 +113,20 @@ export const fetchSubmissions = AuthenticatedAction(
 );
 
 export const getSubmissionsByFormat = AuthenticatedAction(
-  async ({
-    formID,
-    ids,
-    format = DownloadFormat.HTML,
-    lang,
-  }: {
-    formID: string;
-    ids: string[];
-    format: DownloadFormat;
-    lang: Language;
-  }): Promise<
+  async (
+    _,
+    {
+      formID,
+      ids,
+      format = DownloadFormat.HTML,
+      lang,
+    }: {
+      formID: string;
+      ids: string[];
+      format: DownloadFormat;
+      lang: Language;
+    }
+  ): Promise<
     | HtmlResponse
     | HtmlZippedResponse
     | HtmlAggregatedResponse
@@ -349,7 +355,7 @@ export const getSubmissionsByFormat = AuthenticatedAction(
 );
 
 export const confirmSubmissionCodes = AuthenticatedAction(
-  async (confirmationCodes: string[], formId: string) => {
+  async (_, confirmationCodes: string[], formId: string) => {
     try {
       return confirmResponses(confirmationCodes, formId);
     } catch (e) {
@@ -362,7 +368,7 @@ export const confirmSubmissionCodes = AuthenticatedAction(
   }
 );
 
-export const newResponsesExist = AuthenticatedAction(async (formId: string) => {
+export const newResponsesExist = AuthenticatedAction(async (_, formId: string) => {
   try {
     return submissionTypeExists(formId, VaultStatus.NEW);
   } catch (error) {
@@ -371,7 +377,7 @@ export const newResponsesExist = AuthenticatedAction(async (formId: string) => {
   }
 });
 
-export const unConfirmedResponsesExist = AuthenticatedAction(async (formId: string) => {
+export const unConfirmedResponsesExist = AuthenticatedAction(async (_, formId: string) => {
   try {
     return submissionTypeExists(formId, VaultStatus.DOWNLOADED);
   } catch (error) {
@@ -381,7 +387,7 @@ export const unConfirmedResponsesExist = AuthenticatedAction(async (formId: stri
 });
 
 export const getSubmissionRemovalDate = AuthenticatedAction(
-  async (formId: string, submissionName: string) => {
+  async (_, formId: string, submissionName: string) => {
     try {
       return retrieveSubmissionRemovalDate(formId, submissionName);
     } catch (error) {

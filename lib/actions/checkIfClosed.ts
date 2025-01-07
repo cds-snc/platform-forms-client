@@ -7,7 +7,7 @@ import { AuthenticatedAction } from "@lib/actions";
 
 // Public facing functions - they can be used by anyone who finds the associated server action identifer
 
-export const checkIfClosed = AuthenticatedAction(async (formId: string) => {
+export const checkIfClosed = AuthenticatedAction(async (_, formId: string) => {
   try {
     let isPastClosingDate = false;
 

@@ -1,6 +1,5 @@
 "use server";
 
-import { authCheckAndRedirect } from "@lib/actions";
 import { serverTranslation } from "@i18n";
 import { createTicket } from "@lib/integration/freshdesk";
 import { logMessage } from "@lib/logger";
@@ -16,6 +15,8 @@ import {
   toTrimmed,
 } from "valibot";
 import { isValidGovEmail } from "@lib/validation/validation";
+import { AuthenticatedAction } from "@lib/actions";
+import { Session } from "next-auth";
 
 export interface ErrorStates {
   validationErrors: {
@@ -27,63 +28,64 @@ export interface ErrorStates {
 
 // Public facing functions - they can be used by anyone who finds the associated server action identifer
 
-export async function unlockPublishing(
-  language: string,
-  userEmail: string,
-  _: ErrorStates,
-  formData: FormData
-): Promise<ErrorStates> {
-  const { session } = await authCheckAndRedirect();
+export const unlockPublishing = AuthenticatedAction(
+  async (
+    session: Session,
+    language: string,
+    userEmail: string,
+    _: ErrorStates,
+    formData: FormData
+  ) => {
+    const rawData = Object.fromEntries(formData.entries());
+    const validatedData = await validate(language, userEmail, rawData);
 
-  const rawData = Object.fromEntries(formData.entries());
-  const validatedData = await validate(language, userEmail, rawData);
+    if (!validatedData.success) {
+      return {
+        validationErrors: validatedData.issues.map((issue) => ({
+          fieldKey: issue.path?.[0].key as string,
+          fieldValue: issue.message,
+        })),
+      };
+    }
 
-  if (!validatedData.success) {
-    return {
-      validationErrors: validatedData.issues.map((issue) => ({
-        fieldKey: issue.path?.[0].key as string,
-        fieldValue: issue.message,
-      })),
-    };
+    const { managerEmail, department, goals } = validatedData.output;
+
+    const emailBody = `
+    ${session.user.name} (${session.user.email}) from ${department} has requested permission to publish forms.<br/>
+    <br/>
+    Goals:<br/>
+    ${goals}<br/>
+    <br/>
+    Manager email address: ${managerEmail} .<br/><br/>
+    ****<br/><br/>
+    ${session.user.name} (${session.user.email}) du ${department} a demandé l'autorisation de publier des formulaires.<br/>
+    <br/>
+    Objectifs:<br/>
+    ${goals}<br/>
+    <br/>
+    Adresse email du responsable: ${managerEmail} .<br/>
+    `;
+
+    if (!session.user.name || !session.user.email) {
+      throw new Error("User name or email not found");
+    }
+
+    try {
+      await createTicket({
+        type: "publishing",
+        name: session.user.name,
+        email: session.user.email,
+        description: emailBody,
+        language: language,
+      });
+    } catch (error) {
+      logMessage.error(`Failed to unlock publishing: ${(error as Error).message}`);
+      return { error: "Failed to send request", validationErrors: [] };
+    }
+
+    return { error: "", validationErrors: [] };
   }
-
-  const { managerEmail, department, goals } = validatedData.output;
-
-  const emailBody = `
-  ${session.user.name} (${session.user.email}) from ${department} has requested permission to publish forms.<br/>
-  <br/>
-  Goals:<br/>
-  ${goals}<br/>
-  <br/>
-  Manager email address: ${managerEmail} .<br/><br/>
-  ****<br/><br/>
-  ${session.user.name} (${session.user.email}) du ${department} a demandé l'autorisation de publier des formulaires.<br/>
-  <br/>
-  Objectifs:<br/>
-  ${goals}<br/>
-  <br/>
-  Adresse email du responsable: ${managerEmail} .<br/>
-  `;
-
-  if (!session.user.name || !session.user.email) {
-    throw new Error("User name or email not found");
-  }
-
-  try {
-    await createTicket({
-      type: "publishing",
-      name: session.user.name,
-      email: session.user.email,
-      description: emailBody,
-      language: language,
-    });
-  } catch (error) {
-    logMessage.error(`Failed to unlock publishing: ${(error as Error).message}`);
-    return { error: "Failed to send request", validationErrors: [] };
-  }
-
-  return { error: "", validationErrors: [] };
-}
+);
 
 // Internal and private functions - won't be converted into server actions
 
