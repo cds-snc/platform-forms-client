@@ -80,7 +80,8 @@ const eslintConfig = [
           "wave",
           "bkd-soft",
           "legend-fieldset",
-          "confirmation"
+          "confirmation",
+          "active"
         ],
       },
     },
