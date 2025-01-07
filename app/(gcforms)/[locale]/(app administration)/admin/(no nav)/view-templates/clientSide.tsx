@@ -49,7 +49,7 @@ export const DataView = ({ templates }: { templates: DataViewObject[] }) => {
 
   return (
     <>
-      <h1 className="border-0 mb-0">{t("view.title")}</h1>
+      <h1 className="mb-0 border-0">{t("view.title")}</h1>
       <div className="flex flex-row">
         <form className="m-6 basis-3/4" onSubmit={getSingleTemplate}>
           <Label id={"label-formID"} htmlFor={"formID"} className="w-32">
@@ -87,7 +87,7 @@ export const DataView = ({ templates }: { templates: DataViewObject[] }) => {
         <tbody>
           {dataView.map((template) => {
             return (
-              <tr key={template.id} className="border-t-4 border-b-1 border-gray-400">
+              <tr key={template.id} className="border-b-1 border-t-4 border-gray-400">
                 <td className="pl-4">{template.id} </td>
                 <td className="pl-4">{template[getLocalizedProperty("title", i18n.language)]} </td>
                 <td className="text-center">

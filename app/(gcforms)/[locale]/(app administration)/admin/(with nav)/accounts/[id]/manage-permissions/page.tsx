@@ -68,7 +68,7 @@ export default async function Page(props: { params: Promise<{ id: string; locale
       <BackLink href={`/${locale}/admin/accounts?id=${formUser.id}`}>
         {t("backToAccounts")}
       </BackLink>
-      <h1 className="mb-6 border-0 flex flex-col gap-4">
+      <h1 className="mb-6 flex flex-col gap-4 border-0">
         <div>
           <span className="block text-base">{formUser.name}</span>
           <span className="block text-base font-normal">{formUser.email}</span>

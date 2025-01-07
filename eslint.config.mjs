@@ -23,6 +23,7 @@ const eslintConfig = [
       "no-console": "error",
       "no-await-in-loop": "error",
       "no-return-await": "error",
+      "@typescript-eslint/no-require-imports": "off",
       "@typescript-eslint/no-unused-expressions": "off",
       "@typescript-eslint/no-unused-vars": [
         "error",
@@ -34,7 +35,6 @@ const eslintConfig = [
           caughtErrors: "none", // This allows unused catch parameters
         },
       ],
-      "tailwindcss/classnames-order": "off",
       "tailwindcss/no-custom-classname": "off",
       "tailwindcss/no-contradicting-classname": "off",
       "tailwindcss/enforces-shorthand": "off",

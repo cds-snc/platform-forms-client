@@ -22,7 +22,7 @@ export default async function Layout(props: {
   return (
     <TemplateStoreProvider {...{ locale }}>
       <SaveTemplateProvider>
-        <div className="flex h-full flex-col bkd-soft">
+        <div className="bkd-soft flex h-full flex-col">
           <SkipLink />
           <Header context={"default"} />
           <div className="mx-4 shrink-0 grow basis-auto laptop:mx-32 desktop:mx-64">

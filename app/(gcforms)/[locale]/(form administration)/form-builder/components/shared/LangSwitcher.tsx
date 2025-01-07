@@ -26,7 +26,7 @@ export const LangSwitcher = (props: LangSwitcherProps) => {
     <div className="flex items-baseline">
       <span
         id="switch-heading"
-        className="font-bold text-sm whitespace-nowrap mr-2"
+        className="mr-2 whitespace-nowrap text-sm font-bold"
         aria-hidden="true"
       >
         {t(descriptionLangKey)}
@@ -44,11 +44,11 @@ export const LangSwitcher = (props: LangSwitcherProps) => {
             switchLang();
           }
         }}
-        className="whitespace-nowrap cursor-pointer"
+        className="cursor-pointer whitespace-nowrap"
       >
         <span
           id="switch-english"
-          className="text-sm mr-1"
+          className="mr-1 text-sm"
           aria-label={`${t(descriptionLangKey)} ${t("english")}`}
         >
           {t("english")}
@@ -61,7 +61,7 @@ export const LangSwitcher = (props: LangSwitcherProps) => {
         )}
         <span
           id="switch-french"
-          className="text-sm ml-1"
+          className="ml-1 text-sm"
           aria-label={`${t(descriptionLangKey)} ${t("french")}`}
         >
           {t("french")}
