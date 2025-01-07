@@ -79,7 +79,10 @@ export const AddressComplete = (props: AddressCompleteProps): React.ReactElement
           city: "",
           province: "",
           postalCode: "",
-          country: "",
+          // Make sure the initial default is CAN to avoid null cases when:
+          // - the address is "Canada only"
+          // - the address is not "Canada only" and the country drop down was not interacted with
+          country: "CAN",
         }
   );
 
@@ -205,7 +208,7 @@ export const AddressComplete = (props: AddressCompleteProps): React.ReactElement
         city: "",
         province: "",
         postalCode: "",
-        country: "",
+        country: "CAN",
       };
     } else {
       baseAddressObject = addressObject;
