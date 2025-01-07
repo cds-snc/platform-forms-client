@@ -87,11 +87,11 @@ export const ReVerify = (): ReactElement => {
           ) : undefined}
         </Alert>
       )}
-      <h1 ref={headingRef} className="border-0 mt-6 mb-6">
+      <h1 ref={headingRef} className="mb-6 mt-6 border-0">
         {t("reVerify.title")}
       </h1>
       <p className="mt-10">{t("reVerify.description")}</p>
-      <div className="flex mt-16">
+      <div className="mt-16 flex">
         <Button theme="primary" className="mr-4" onClick={handleReVerify} disabled={resending}>
           {t("reVerify.buttons.reSendCode")}
         </Button>

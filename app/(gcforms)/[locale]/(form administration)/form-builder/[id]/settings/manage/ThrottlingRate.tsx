@@ -159,7 +159,7 @@ export const ThrottlingRate = ({ formId }: { formId: string }) => {
             {hasHydrated && loadedSetting ? (
               <>
                 <Input
-                  className="w-16 disabled:bg-gray-light disabled:!border-none"
+                  className="w-16 disabled:!border-none disabled:bg-gray-light"
                   id="throttling-weeks"
                   name="throttling-weeks"
                   value={weeks}

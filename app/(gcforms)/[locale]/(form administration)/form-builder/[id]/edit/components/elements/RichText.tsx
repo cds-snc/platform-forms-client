@@ -32,7 +32,7 @@ export const RichText = ({ id, elIndex }: { id: number; elIndex: number }) => {
   }
 
   return (
-    <div key={translationLanguagePriority} className="flex border-2 rounded" data-testid="richText">
+    <div key={translationLanguagePriority} className="flex rounded border-2" data-testid="richText">
       <RichTextEditor
         path={path}
         content={content || ""}

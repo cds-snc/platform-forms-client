@@ -8,7 +8,7 @@ export const Input = ({
   onBlur?: (e: { target: HTMLInputElement }) => void;
 }) => {
   return (
-    <div className="grow my-[4px] mx-[8px]">
+    <div className="mx-[8px] my-[4px] grow">
       <input
         data-testid="tag-input"
         className="w-full border-none p-1 outline-none"

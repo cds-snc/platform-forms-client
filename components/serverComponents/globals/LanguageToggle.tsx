@@ -12,7 +12,7 @@ const LanguageToggle = async () => {
   return (
     <Link
       href={pathname.replace(`/${currentLang}`, `/${currentLang === "en" ? "fr" : "en"}`)}
-      className="text-base text-right"
+      className="text-right text-base"
       locale={currentLang === "en" ? "fr" : "en"}
       aria-label={`${t("lang-toggle")}: ${currentLang == "en" ? "Français" : "English"}`}
       lang={currentLang === "en" ? "fr" : "en"}
