@@ -12,14 +12,14 @@ export const Flag = ({ flagKey, value }: { flagKey: string; value: boolean }) =>
         <p className="font-bold">{t(`features.${flagKey}.title`)}</p>
         <p>{t(`features.${flagKey}.description`)}</p>
       </td>
-      <td className="p-2 border-2 border-dashed text-center">
+      <td className="border-2 border-dashed p-2 text-center">
         {value ? t("enabled") : t("disabled")}
       </td>
       <td className="p-2 text-center">
         <Button
           type="submit"
           theme="primary"
-          className="text-sm whitespace-nowrap"
+          className="whitespace-nowrap text-sm"
           onClick={async () => {
             await modifyFlag(flagKey, !value);
           }}

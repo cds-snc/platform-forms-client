@@ -22,7 +22,7 @@ export const DeleteSettingsButton = ({ id }: { id: string }) => {
     <Button
       type="button"
       theme="destructive"
-      className="text-sm whitespace-nowrap"
+      className="whitespace-nowrap text-sm"
       onClick={() => deleteSettingWrapper(id)}
     >
       {t("deleteSetting")}

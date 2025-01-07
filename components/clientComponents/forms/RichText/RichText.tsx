@@ -41,7 +41,7 @@ const Table = ({ children, ...props }: { children: React.ReactElement }) => {
 
 const TableTH = ({ children, ...props }: { children: React.ReactElement }) => {
   return (
-    <th {...props} className="p-2 border-1 border-black-default">
+    <th {...props} className="border-1 border-black-default p-2">
       {children}
     </th>
   );
@@ -49,7 +49,7 @@ const TableTH = ({ children, ...props }: { children: React.ReactElement }) => {
 
 const TableTD = ({ children, ...props }: { children: React.ReactElement }) => {
   return (
-    <td {...props} className="p-2 border-1 border-black-default">
+    <td {...props} className="border-1 border-black-default p-2">
       {children}
     </td>
   );

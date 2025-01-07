@@ -32,7 +32,7 @@ const TermsAndConditions = async (props: { params: Promise<{ locale: string }> }
   const { locale } = params;
 
   return (
-    <RichText className="w-[100%] tablet:w-[90%] laptop:w-[70%]">
+    <RichText className="w-full tablet:w-[90%] laptop:w-[70%]">
       {locale === "fr" ? frContent : enContent}
     </RichText>
   );

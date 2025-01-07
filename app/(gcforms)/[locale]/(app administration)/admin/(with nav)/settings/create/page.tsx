@@ -27,7 +27,7 @@ export default async function Page() {
 
   return (
     <>
-      <h1 className="border-0 mb-10">{t("title-create")}</h1>
+      <h1 className="mb-10 border-0">{t("title-create")}</h1>
       <ManageSettingForm />
     </>
   );
