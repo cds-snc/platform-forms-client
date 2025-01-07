@@ -218,10 +218,19 @@ export const options = [
   {
     name: "transport",
     urlEn: "https://tc.canada.ca/en",
-    urlFr: "hhttps://tc.canada.ca/fr",
+    urlFr: "https://tc.canada.ca/fr",
     logoEn: "/img/branding/tc-en.svg",
     logoFr: "/img/branding/tc-fr.svg",
     logoTitleEn: "Transport Canada",
     logoTitleFr: "Transports Canada",
+  },
+  {
+    name: "ircc",
+    urlEn: " https://www.canada.ca/en/immigration-refugees-citizenship.html",
+    urlFr: " https://www.canada.ca/fr/immigration-refugies-citoyennete.html",
+    logoEn: "/img/branding/IRCC_EN.svg",
+    logoFr: "/img/branding/IRCC_FR.svg",
+    logoTitleEn: "Immigration, Refugees and Citizenship Canada",
+    logoTitleFr: "Immigration, Réfugiés et Citoyenneté Canada",
   },
 ];
