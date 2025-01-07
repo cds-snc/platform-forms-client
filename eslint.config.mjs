@@ -35,7 +35,6 @@ const eslintConfig = [
           caughtErrors: "none", // This allows unused catch parameters
         },
       ],
-      "tailwindcss/no-custom-classname": "off",
       "tailwindcss/enforces-shorthand": "off",
     },
     ignorePatterns: [
@@ -70,6 +69,18 @@ const eslintConfig = [
           "section",
           "maple-leaf-loader",
           "flow-container",
+          "rich-text-wrapper",
+          "editor",
+          "editor-input",
+          "link-editor",
+          "link-input",
+          "choice",
+          "text-entry",
+          "action",
+          "wave",
+          "bkd-soft",
+          "legend-fieldset",
+          "confirmation"
         ],
       },
     },

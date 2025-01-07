@@ -110,7 +110,7 @@ describe("<PanelActions />", () => {
   it.skip("can keyboard navigate", () => {
     cy.viewport(800, 80);
     cy.mount(
-      <div className="active group">
+      <div className="group">
         <PanelActions
           item={item}
           isFirstItem={false}
