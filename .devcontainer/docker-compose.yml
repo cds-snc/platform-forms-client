@@ -14,7 +14,7 @@ services:
       - 3000
 
   db:
-    image: postgres:13.17@sha256:b6438360e1d7be36610a17cfb8dcefeb57c3f7b120ad6dcd4dc6d89644ef843a
+    image: postgres:13.18@sha256:6161de79c8ea9fd11b5c103ef1d6ebabe0595a8dba5dd3ed14facc809e157780
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: chummy
