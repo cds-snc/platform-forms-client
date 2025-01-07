@@ -24,7 +24,7 @@ export const RichText = ({
   }
 
   return (
-    <div className="mb-2 mb-8">
+    <div className="mb-8">
       {stripMarkdown ? (
         <div className="font-bold">{removeMarkdown(text)}</div>
       ) : (

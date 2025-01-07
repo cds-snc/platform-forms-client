@@ -48,7 +48,7 @@ export const LinksSubMenu = () => {
           <DropdownMenuPrimitive.Item asChild>
             <button
               data-share="form-builder-link"
-              className="mr-2 inline-block flex text-blue focus:outline focus:outline-offset-2 focus:outline-white-default [&_span]:focus-within:no-underline"
+              className="mr-2 inline-block text-blue focus:outline focus:outline-offset-2 focus:outline-white-default [&_span]:focus-within:no-underline"
               onClick={() => {
                 handleCopyToClipboard(url);
               }}
