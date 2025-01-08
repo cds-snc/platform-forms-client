@@ -87,7 +87,7 @@ export const ReVerify = (): ReactElement => {
           ) : undefined}
         </Alert>
       )}
-      <h1 ref={headingRef} className="mb-6 mt-6 border-0">
+      <h1 ref={headingRef} className="my-6 border-0">
         {t("reVerify.title")}
       </h1>
       <p className="mt-10">{t("reVerify.description")}</p>

@@ -121,7 +121,7 @@ export const ContactForm = () => {
           </Alert.Warning>
           <form id="contactus" action={submitForm} noValidate>
             {errors.error && (
-              <Alert.Danger focussable={true} title={t("error")} className="mb-2 mt-2">
+              <Alert.Danger focussable={true} title={t("error")} className="my-2">
                 <p>{t(errors.error)}</p>
               </Alert.Danger>
             )}

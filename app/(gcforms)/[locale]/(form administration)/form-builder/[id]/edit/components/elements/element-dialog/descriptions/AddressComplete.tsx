@@ -10,7 +10,7 @@ export const AddressComplete = () => {
 
   return (
     <div>
-      <div className="mb-4 mt-4">
+      <div className="my-4">
         <Image
           src="/img/address-complete.png"
           width="179"

@@ -106,7 +106,7 @@ export const Pagination = ({
           }`}
           aria-disabled={isFirstPage}
         >
-          <StartIcon className="inline-block h-6 w-6 group-focus:fill-white" />
+          <StartIcon className="inline-block size-6 group-focus:fill-white" />
           {t("downloadResponsesTable.header.pagination.start")}
         </a>
       </Link>
@@ -127,7 +127,7 @@ export const Pagination = ({
             }`}
             aria-disabled={isFirstPage}
           >
-            <BackArrowIcon className="inline-block h-6 w-6 group-focus:fill-white" />
+            <BackArrowIcon className="inline-block size-6 group-focus:fill-white" />
             {t("downloadResponsesTable.header.pagination.previous")}
           </a>
         </Link>
@@ -148,7 +148,7 @@ export const Pagination = ({
             aria-disabled={isLastPage}
           >
             {t("downloadResponsesTable.header.pagination.next")}
-            <ForwardArrowIcon className="inline-block h-6 w-6 group-focus:fill-white" />
+            <ForwardArrowIcon className="inline-block size-6 group-focus:fill-white" />
           </a>
         </Link>
       </div>

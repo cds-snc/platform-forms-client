@@ -335,7 +335,7 @@ export const DownloadDialog = ({
               </Button>
               {isDownloading && (
                 <div role="status" className="mt-2">
-                  <SpinnerIcon className="h-8 w-8 animate-spin fill-blue-600 text-gray-200 dark:text-gray-600" />
+                  <SpinnerIcon className="size-8 animate-spin fill-blue-600 text-gray-200 dark:text-gray-600" />
                   <span className="sr-only">{t("loading")}</span>
                 </div>
               )}

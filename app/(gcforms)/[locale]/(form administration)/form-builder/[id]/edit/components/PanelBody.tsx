@@ -174,7 +174,7 @@ export const PanelBody = ({
                       t("addElementDialog.addressComplete.components.postalCodeOrZip")}
                   </div>
                 </div>
-                <div className="mb-4 ml-4 mt-4 w-1/2 self-end">
+                <div className="my-4 ml-4 w-1/2 self-end">
                   <ElementRequired
                     onRequiredChange={onRequiredChange}
                     item={item}
