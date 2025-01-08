@@ -35,7 +35,7 @@ const EmptySection = () => {
 const AddElementEmpty = () => {
   return (
     <div className="mt-6 flex max-w-[800px] flex-col items-center">
-      <div className="my-10 block h-1 w-[100%] border-b-1 border-dashed border-slate-500"></div>
+      <div className="my-10 block h-1 w-full border-b-1 border-dashed border-slate-500"></div>
       <EmptySection />
       <div className="my-4">
         <AddElement />

@@ -148,33 +148,33 @@ export const PanelBody = ({
           </div>
           <div>
             {isAddressComplete && (
-              <div className="text-sm flex">
+              <div className="flex text-sm">
                 <div className="w-1/2">
                   {!item.properties.addressComponents?.canadianOnly && (
-                    <div className="description-text mt-5 cursor-not-allowed rounded-sm p-2 bg-gray-100 text-slate-600">
+                    <div className="mt-5 cursor-not-allowed rounded-sm bg-gray-100 p-2 text-slate-600">
                       {t("addElementDialog.addressComplete.country")}
                     </div>
                   )}
-                  <div className="description-text mt-5 cursor-not-allowed rounded-sm p-2 bg-gray-100 text-slate-600">
+                  <div className="mt-5 cursor-not-allowed rounded-sm bg-gray-100 p-2 text-slate-600">
                     {t("addElementDialog.addressComplete.street.label")}
                   </div>
-                  <div className="description-text mt-5 cursor-not-allowed rounded-sm p-2 bg-gray-100 text-slate-600">
+                  <div className="mt-5 cursor-not-allowed rounded-sm bg-gray-100 p-2 text-slate-600">
                     {t("addElementDialog.addressComplete.city")}
                   </div>
-                  <div className="description-text mt-5 cursor-not-allowed rounded-sm p-2 bg-gray-100 text-slate-600">
+                  <div className="mt-5 cursor-not-allowed rounded-sm bg-gray-100 p-2 text-slate-600">
                     {item.properties.addressComponents?.canadianOnly &&
                       t("addElementDialog.addressComplete.components.province")}
                     {!item.properties.addressComponents?.canadianOnly &&
                       t("addElementDialog.addressComplete.components.provinceOrState")}
                   </div>
-                  <div className="description-text mt-5 cursor-not-allowed rounded-sm p-2 bg-gray-100 text-slate-600">
+                  <div className="mt-5 cursor-not-allowed rounded-sm bg-gray-100 p-2 text-slate-600">
                     {item.properties.addressComponents?.canadianOnly &&
                       t("addElementDialog.addressComplete.components.postalCode")}
                     {!item.properties.addressComponents?.canadianOnly &&
                       t("addElementDialog.addressComplete.components.postalCodeOrZip")}
                   </div>
                 </div>
-                <div className="mb-4 mt-4 ml-4 self-end w-1/2">
+                <div className="mb-4 ml-4 mt-4 w-1/2 self-end">
                   <ElementRequired
                     onRequiredChange={onRequiredChange}
                     item={item}

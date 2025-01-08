@@ -33,7 +33,7 @@ export default async function Page(props: { params: Promise<{ settingId: string 
 
   return (
     <>
-      <h1 className="border-0 mb-10">{t("title-update")}</h1>
+      <h1 className="mb-10 border-0">{t("title-update")}</h1>
       <Suspense fallback={<Loader />}>
         <ManageSettingForm settingId={settingId} />
       </Suspense>
