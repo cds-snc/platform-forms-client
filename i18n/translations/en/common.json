@@ -205,5 +205,6 @@
     "text1": "Form accepting submissions until:",
     "text2": "{{month}} {{day}}, {{year}} at {{hour}}:{{minute}} ET."
   },
-  "cancel": "Cancel"
+  "cancel": "Cancel",
+  "number": "Number"
 }

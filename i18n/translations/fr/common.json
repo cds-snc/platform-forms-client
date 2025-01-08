@@ -205,5 +205,6 @@
     "text1": "Les soumissions sont acceptées jusqu'au :",
     "text2": "{{day}} {{month}} {{year}} à {{hour}} h {{minute}} HE"
   },
-  "cancel": "Annuler"
+  "cancel": "Annuler",
+  "number": "Numéro"
 }

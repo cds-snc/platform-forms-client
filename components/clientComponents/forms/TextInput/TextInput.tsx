@@ -7,8 +7,6 @@ import { useTranslation } from "@i18n/client";
 import { cn } from "@lib/utils";
 
 export interface TextInputProps extends InputFieldProps {
-  // Note: using inputmode=numeric over type=number for UX reasons.
-  // See: #4851 and https://tinyurl.com/2p9tm5vk
   type: HTMLTextInputTypeAttribute;
   placeholder?: string;
 }
@@ -72,10 +70,17 @@ export const TextInput = (
         {...ariaDescribedByIds()}
         {...field}
         onChange={handleTextInputChange}
+        // Note: using inputmode=numeric over type=number for UX reasons.
+        // See: #4851 and https://tinyurl.com/2p9tm5vk
         {...(type === "number" && {
+          // For mobile phones to switch the keypad to numeric
           inputMode: "numeric",
-          pattern: "[0-9]+",
-          // "onBeforeInput" and e.data could also be used but I'm not sure how cross-browser consistent it is
+          // For AT to identify the input as a number
+          "aria-label": t("number"),
+          // Just encase..
+          spellCheck: "false",
+          // Note: "onBeforeInput" and e.data could also be used but I'm not sure how cross-browser
+          // consistent it is
           onKeyDown: (e) => {
             // Allow control keys
             if (
@@ -88,8 +93,7 @@ export const TextInput = (
               return;
             }
             // Restrict a user from entering anything but a number
-            const re = new RegExp(String((e.target as HTMLInputElement).pattern));
-            if (!re.test(e.key)) {
+            if (!/[0-9]+/.test(e.key)) {
               e.preventDefault();
             }
           },
