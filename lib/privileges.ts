@@ -664,10 +664,22 @@ export const authorization = {
     ]);
   },
   /**
+   * Does the user has publishing permissions
+   */
+  hasPermissionToPublishForms: async () => {
+    return getAbility().then((ability) => {
+      return ability.can(
+        "update",
+        setSubjectType("FormRecord", { users: [{ id: ability.user.id }] }),
+        "isPublished"
+      );
+    });
+  },
+  /**
    * Can the user view all forms in the application
    */
   canViewAllForms: async () => {
-    return authorization.check([
+    return _authorizationCheck([
       {
         action: "view",
         subject: { type: "FormRecord", scope: "all" },

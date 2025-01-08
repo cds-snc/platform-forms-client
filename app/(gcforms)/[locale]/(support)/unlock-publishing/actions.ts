@@ -17,6 +17,7 @@ import {
 import { isValidGovEmail } from "@lib/validation/validation";
 import { AuthenticatedAction } from "@lib/actions";
 import { Session } from "next-auth";
+import { authorization } from "@lib/privileges";
 
 export interface ErrorStates {
   validationErrors: {
@@ -71,6 +72,10 @@ export const unlockPublishing = AuthenticatedAction(
     }
 
     try {
+      const userHasPermissionToPublishForms = await authorization.hasPermissionToPublishForms();
+      if (userHasPermissionToPublishForms)
+        throw new Error("Permissiong to publish forms has already been granted");
+
       await createTicket({
         type: "publishing",
         name: session.user.name,

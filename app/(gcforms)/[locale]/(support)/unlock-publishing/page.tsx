@@ -1,5 +1,5 @@
 import { serverTranslation } from "@i18n";
-import { checkPrivilegesAsBoolean } from "@lib/privileges";
+import { authorization } from "@lib/privileges";
 import { Metadata } from "next";
 import { RedirectType, redirect } from "next/navigation";
 import { UnlockPublishingForm } from "./components/client/UnlockPublishingForm";
@@ -23,17 +23,9 @@ export default async function Page(props: { params: Promise<{ locale: string }> 
 
   const { locale } = params;
 
-  const { ability, session } = await authCheckAndRedirect();
+  const { session } = await authCheckAndRedirect();
 
-  if (
-    checkPrivilegesAsBoolean(ability, [
-      {
-        action: "update",
-        subject: { type: "FormRecord", object: { users: [{ id: session.user.id }] } },
-        field: "isPublished",
-      },
-    ])
-  ) {
+  if (await authorization.hasPermissionToPublishForms()) {
     redirect(`/${locale}/forms`, RedirectType.replace);
   }
 
