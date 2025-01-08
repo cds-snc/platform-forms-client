@@ -5,6 +5,20 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.31.1](https://github.com/cds-snc/platform-forms-client/compare/v3.31.0...v3.31.1) (2025-01-08)
+
+
+### Bug Fixes
+
+* await for param for unprocessed api route ([#4932](https://github.com/cds-snc/platform-forms-client/issues/4932)) ([5ee3e64](https://github.com/cds-snc/platform-forms-client/commit/5ee3e6420f287f422cd0cdc71e9047d67fc0726f))
+* Fix case of an empty formatted date on a groups page ([#4938](https://github.com/cds-snc/platform-forms-client/issues/4938)) ([5b6c4fb](https://github.com/cds-snc/platform-forms-client/commit/5b6c4fb033924f11faf11f2f377b79a73ff6ab03))
+
+
+### Miscellaneous Chores
+
+* synced file(s) with cds-snc/site-reliability-engineering ([#4930](https://github.com/cds-snc/platform-forms-client/issues/4930)) ([2fa5c63](https://github.com/cds-snc/platform-forms-client/commit/2fa5c63b6df141342f3c52e5256dc2bce613cf24))
+* Turn on lint rule for tailwind enforces-shorthand ([#4929](https://github.com/cds-snc/platform-forms-client/issues/4929)) ([06604a4](https://github.com/cds-snc/platform-forms-client/commit/06604a4768a77368821a3b37df746ddce698d15d))
+
 ## [3.31.0](https://github.com/cds-snc/platform-forms-client/compare/v3.30.3...v3.31.0) (2025-01-08)
 
 
