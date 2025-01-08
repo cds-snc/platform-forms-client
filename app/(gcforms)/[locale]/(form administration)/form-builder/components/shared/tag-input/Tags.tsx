@@ -15,9 +15,9 @@ export const Tag = ({ tag, onRemove }: TagProps) => {
   return (
     <div
       data-testid="tag"
-      className="border-grey-default m-1 inline-block rounded-l-xl rounded-r-xl border-2 px-2"
+      className="m-1 inline-block rounded-l-xl rounded-r-xl border-2 border-gray-default px-2"
     >
-      <span className="inline-bock">
+      <span className="inline-block">
         {tag}
         <button
           className="ml-2 p-px align-middle [&_svg]:fill-gray-500 [&_svg]:hover:fill-red-500 [&_svg]:focus:fill-red-500"

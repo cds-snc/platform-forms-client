@@ -52,7 +52,7 @@ export const Header = ({ context = "default", className }: HeaderParams) => {
       >
         {isBannerEnabled && (
           <div className="bg-slate-800 px-4 py-4 text-white">
-            <div className="border-white-500 mr-4 inline-block border-2 px-2 py-1">
+            <div className="mr-4 inline-block border-2 border-white-default px-2 py-1">
               {bannerType}
             </div>
             <div className="inline-block">
