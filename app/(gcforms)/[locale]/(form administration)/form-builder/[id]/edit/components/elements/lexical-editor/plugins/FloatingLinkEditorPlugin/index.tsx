@@ -258,7 +258,7 @@ function FloatingLinkEditor({
               }}
             >
               {linkUrl}
-              <EditIcon title={t("editLink")} className="absolute right-0 inline-block h-5 w-5" />
+              <EditIcon title={t("editLink")} className="absolute right-0 inline-block size-5" />
             </button>
           </div>
           {/* <LinkPreview url={linkUrl} /> */}

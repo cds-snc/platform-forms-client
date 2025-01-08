@@ -34,8 +34,7 @@ const eslintConfig = [
           argsIgnorePattern: "^_",
           caughtErrors: "none", // This allows unused catch parameters
         },
-      ],
-      "tailwindcss/enforces-shorthand": "off",
+      ]
     },
     ignorePatterns: [
       "/utils",

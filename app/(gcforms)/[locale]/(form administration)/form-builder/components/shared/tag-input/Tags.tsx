@@ -15,7 +15,7 @@ export const Tag = ({ tag, onRemove }: TagProps) => {
   return (
     <div
       data-testid="tag"
-      className="m-1 inline-block rounded-l-xl rounded-r-xl border-2 border-gray-default px-2"
+      className="m-1 inline-block rounded-xl border-2 border-gray-default px-2"
     >
       <span className="inline-block">
         {tag}
