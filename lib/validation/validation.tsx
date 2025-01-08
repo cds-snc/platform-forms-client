@@ -325,6 +325,7 @@ export const getErrorList = (
       } else {
         return (
           <ErrorListItem
+            elements={props.formRecord.form.elements}
             key={`error-${formElementKey}`}
             errorKey={`${formElementKey}`}
             value={`${formElementErrorValue}`}
