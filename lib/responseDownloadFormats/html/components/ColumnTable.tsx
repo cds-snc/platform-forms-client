@@ -18,7 +18,7 @@ const QuestionColumns = ({
   const renderRow = (index: number, lang: string, item: Answer) => {
     return (
       <div className="flex w-full flex-row border-b border-gray py-4">
-        <dt key="" className="w-120 py-4 font-bold">
+        <dt key="" className="w-96 py-4 font-bold">
           {orderLanguageStrings({ stringEn: item.questionEn, stringFr: item.questionFr, lang })}
           {item.type === FormElementTypes.formattedDate && item.dateFormat ? (
             <>
@@ -74,7 +74,7 @@ export const ColumnTable = (props: TableProps): React.ReactElement => {
   return (
     <dl id={`responseTableCol${capitalize(lang)}`} className="border-y-2 border-gray">
       <div className="flex border-b border-gray py-4">
-        <dt className="w-120 py-4 font-bold">
+        <dt className="w-96 py-4 font-bold">
           {orderLanguageStrings({
             stringEn: t("responseTemplate.responseNumber", { lng: "en" }),
             stringFr: t("responseTemplate.responseNumber", { lng: "fr" }),
@@ -84,7 +84,7 @@ export const ColumnTable = (props: TableProps): React.ReactElement => {
         <dd className="py-4 pl-8">{responseID}</dd>
       </div>
       <div className="flex border-b border-gray py-4">
-        <dt className="w-120 py-4 font-bold">
+        <dt className="w-96 py-4 font-bold">
           {orderLanguageStrings({
             stringEn: t("responseTemplate.submissionDate", { lng: "en" }),
             stringFr: t("responseTemplate.submissionDate", { lng: "fr" }),

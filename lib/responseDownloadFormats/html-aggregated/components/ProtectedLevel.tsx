@@ -24,7 +24,7 @@ export const ProtectedLevel = ({
 
   // Note: "self-start" for case of embedding in flex container, stops vertically stretching
   return (
-    <div className="self-start whitespace-nowrap border border-gray-300 bg-white px-4 py-2 font-bold rounded">
+    <div className="self-start whitespace-nowrap rounded border border-gray-300 bg-white px-4 py-2 font-bold">
       {renderSecurityAttribute().toUpperCase()}
     </div>
   );

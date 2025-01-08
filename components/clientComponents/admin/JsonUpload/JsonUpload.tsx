@@ -117,7 +117,7 @@ export const JSONUpload = (props: JSONUploadProps): React.ReactElement => {
                 id="jsonInput"
                 rows={20}
                 name="jsonInput"
-                className="gc-textarea full-height font-mono"
+                className="gc-textarea h-full font-mono"
                 data-testid="jsonInput"
                 defaultValue={jsonConfig}
                 onChange={(e) => {

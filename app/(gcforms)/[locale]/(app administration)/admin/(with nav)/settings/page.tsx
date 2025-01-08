@@ -39,7 +39,7 @@ export default async function Page(props: {
 
   return (
     <>
-      <h1 className="border-0 mb-10">{t("title")}</h1>
+      <h1 className="mb-10 border-0">{t("title")}</h1>
       <Messages success={success} error={error} />
       <Suspense fallback={<Loader />}>
         <Settings />

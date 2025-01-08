@@ -145,7 +145,7 @@ export const MFAForm = () => {
             </ol>
           </Alert>
         )}
-      <h1 data-testid="verify-title" ref={headingRef} className="mb-6 mt-6 border-0">
+      <h1 data-testid="verify-title" ref={headingRef} className="my-6 border-0">
         {t("verify.title")}
       </h1>
       <p className="mb-12 mt-10">{t("verify.emailHasBeenSent")}</p>

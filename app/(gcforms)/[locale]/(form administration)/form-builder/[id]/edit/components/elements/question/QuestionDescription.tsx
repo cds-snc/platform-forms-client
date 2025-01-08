@@ -24,7 +24,7 @@ export const QuestionDescription = ({
       {description && (
         <div
           data-testid="description-text"
-          className="description-text mt-5 cursor-not-allowed rounded-sm p-2 bg-gray-100 text-slate-600"
+          className="mt-5 cursor-not-allowed rounded-sm bg-gray-100 p-2 text-slate-600"
           id={describedById}
         >
           {description}

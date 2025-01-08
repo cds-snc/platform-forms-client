@@ -32,7 +32,7 @@ export const Overlay = ({
     <div
       data-testid="overlay"
       onClick={handleCallback}
-      className={`z-40 w-screen h-screen fixed top-0 left-0${hasOpacity ? " bg-black/10" : ""}${
+      className={`fixed left-0 top-0 z-40 h-screen w-screen${hasOpacity ? " bg-black/10" : ""}${
         hasCursor ? " cursor-pointer" : ""
       }`}
       aria-hidden="true" // Not necessary but being ovious

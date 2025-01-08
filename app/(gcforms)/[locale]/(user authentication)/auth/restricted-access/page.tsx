@@ -25,7 +25,7 @@ export default async function Page(props: { params: Promise<{ locale: string }> 
   const { t } = await serverTranslation("restricted-access", { lang: locale });
   return (
     <div>
-      <h2 className="mt-4 mb-6 p-0">{t("title")}</h2>
+      <h2 className="mb-6 mt-4 p-0">{t("title")}</h2>
       <p className="mb-10">{t("text1")}</p>
       <p className="mb-10">
         {t("text2")} <Link href={`/${locale}/terms-of-use`}>{t("text3")}</Link> {t("text4")}

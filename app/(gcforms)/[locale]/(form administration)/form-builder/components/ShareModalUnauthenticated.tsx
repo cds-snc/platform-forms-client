@@ -50,7 +50,7 @@ export const ShareModalUnauthenticated = ({
         dialogRef={dialog}
         handleClose={handleClose}
         actions={actions}
-        className="overflow-y-scroll max-h-[80%]"
+        className="max-h-[80%] overflow-y-scroll"
       >
         <div className="p-4">
           <section>
@@ -81,7 +81,7 @@ export const ShareModalUnauthenticated = ({
           </section>
 
           <InfoDetails summary={t("share.seePreview")}>
-            <div className="p-5 border-4 border-dashed border-blue-focus mt-4">
+            <div className="mt-4 border-4 border-dashed border-blue-focus p-5">
               <h4>{t("share.someoneHasShared", { name: t("share.formUser") })}</h4>
               <div className="mt-4">
                 {t("share.toPreview")}
