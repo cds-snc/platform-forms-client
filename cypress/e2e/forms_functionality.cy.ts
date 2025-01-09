@@ -15,7 +15,7 @@ describe("Forms Functionality", () => {
       cy.get("div.gc-alert__body a").contains("Enter an answer for:");
       cy.get("div.gc-alert__body a").click();
       cy.get("input[id='2']").should("have.focus");
-      cy.get(".gc-error-message").contains("Enter an answer for:");
+      cy.get(".gc-error-message").contains("Complete the required field to continue.");
     });
     it("fills the text field successfully and submits the form", () => {
       cy.typeInField("input[id='2']", "Test Value");
