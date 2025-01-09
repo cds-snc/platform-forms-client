@@ -1,12 +1,10 @@
 "use client";
 import React from "react";
 
-import { FormElement } from "@lib/types";
-
 export interface ErrorListProps {
-  elements: FormElement[];
   errorKey: string;
   value: string | undefined;
+  children?: React.ReactNode;
 }
 
 /**
@@ -28,10 +26,7 @@ const scrollErrorInView = (id: string) => {
  * @param value The error to be displayed
  */
 export const ErrorListItem = (props: ErrorListProps): React.ReactElement => {
-  const { errorKey, value, elements } = props;
-
-  // Find the element that has the error based on the key
-  const element = elements.find((element) => String(element.id) === errorKey);
+  const { errorKey, value, children } = props;
 
   return (
     <li>
@@ -49,7 +44,7 @@ export const ErrorListItem = (props: ErrorListProps): React.ReactElement => {
           scrollErrorInView(errorKey);
         }}
       >
-        {value} {element?.properties.titleEn}
+        {children || value}
       </a>
     </li>
   );

@@ -10,6 +10,7 @@ import {
 import { FormikProps } from "formik";
 import { TFunction } from "i18next";
 import { ErrorListItem } from "@clientComponents/forms";
+import { ErrorListMessage } from "@clientComponents/forms/ErrorListItem/ErrorListMessage";
 import { isServer } from "../tsUtils";
 import uuidArraySchema from "@lib/middleware/schemas/uuid-array.schema.json";
 import formNameArraySchema from "@lib/middleware/schemas/submission-name-array.schema.json";
@@ -289,7 +290,7 @@ export const validateOnSubmit = (
  */
 
 export const getErrorList = (
-  props: { formRecord: PublicFormRecord } & FormikProps<Responses>
+  props: { formRecord: PublicFormRecord; language: string } & FormikProps<Responses>
 ): JSX.Element | null => {
   if (!props.formRecord?.form || !props.errors) {
     return null;
@@ -325,11 +326,17 @@ export const getErrorList = (
       } else {
         return (
           <ErrorListItem
-            elements={props.formRecord.form.elements}
             key={`error-${formElementKey}`}
             errorKey={`${formElementKey}`}
             value={`${formElementErrorValue}`}
-          />
+          >
+            <ErrorListMessage
+              language={props.language || "en"}
+              id={formElementKey}
+              elements={props.formRecord.form.elements}
+              defaultValue={formElementErrorValue}
+            />
+          </ErrorListItem>
         );
       }
     });
