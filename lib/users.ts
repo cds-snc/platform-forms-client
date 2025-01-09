@@ -1,6 +1,6 @@
 import { prisma, prismaErrors } from "@lib/integration/prismaConnector";
 
-import { checkPrivileges } from "@lib/privileges";
+import { checkPrivileges, getAbility } from "@lib/privileges";
 import { AccessControlError } from "@lib/auth";
 import { NagwareResult, UserAbility } from "./types";
 import { logEvent } from "./auditLogs";
@@ -167,10 +167,9 @@ export const getUser = async (ability: UserAbility, id: string): Promise<AppUser
  * Get all Users
  * @returns An array of all Users
  */
-export const getUsers = async (
-  ability: UserAbility,
-  where?: Prisma.UserWhereInput
-): Promise<AppUser[] | never[]> => {
+export const getUsers = async (where?: Prisma.UserWhereInput): Promise<AppUser[] | never[]> => {
+  const ability = await getAbility();
+
   try {
     checkPrivileges(ability, [
       {
@@ -217,7 +216,9 @@ export const getUsers = async (
  * @param active activate or deactivate user
  * @returns User
  */
-export const updateActiveStatus = async (ability: UserAbility, userID: string, active: boolean) => {
+export const updateActiveStatus = async (userID: string, active: boolean) => {
+  const ability = await getAbility();
+
   try {
     checkPrivileges(ability, [
       {

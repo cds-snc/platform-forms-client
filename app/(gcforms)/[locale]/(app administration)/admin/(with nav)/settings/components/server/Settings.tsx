@@ -18,7 +18,7 @@ export const Settings = async () => {
   const canCreateSettings = ability?.can("create", "Setting") ?? false;
   const canDeleteSettings = ability?.can("delete", "Setting") ?? false;
 
-  const settings = await getAllAppSettings(ability);
+  const settings = await getAllAppSettings();
 
   return (
     <div>

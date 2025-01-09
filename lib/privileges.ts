@@ -144,16 +144,16 @@ export const getPrivilegeRulesForUser = async (userId: string) => {
 
 /**
  * Update and overwrite existing privileges on a User
- * @param ability Ability instance for session
  * @param userID id of the user to be updated
  * @param privileges Array of privileges to be connect to user
  * @returns
  */
 export const updatePrivilegesForUser = async (
-  ability: UserAbility,
   userID: string,
   privileges: { id: string; action: "add" | "remove" }[]
 ) => {
+  const ability = await getAbility();
+
   try {
     checkPrivileges(ability, [{ action: "update", subject: "User" }]);
 
@@ -273,9 +273,12 @@ export const getAllPrivileges = async (ability: UserAbility) => {
   }
 };
 
-export const getPrivilege = async (ability: UserAbility, where: Prisma.PrivilegeWhereInput) => {
+export const getPrivilege = async (where: Prisma.PrivilegeWhereInput) => {
+  const ability = await getAbility();
+
   try {
     checkPrivileges(ability, [{ action: "view", subject: "Privilege" }]);
+
     return await prisma.privilege.findFirst({
       where,
       select: {

@@ -1,4 +1,4 @@
-import { FormRecord, UserAbility } from "@lib/types";
+import { FormRecord } from "@lib/types";
 import { getUser } from "@lib/users";
 import {
   InvalidDomainError,
@@ -17,21 +17,18 @@ import { logMessage } from "@lib/logger";
 import { Invitation } from "@prisma/client";
 import { logEvent } from "@lib/auditLogs";
 import { isValidGovEmail } from "@lib/validation/validation";
+import { getAbility } from "@lib/privileges";
 
 /**
  * Invite someone to the form by email
  *
- * @param ability
  * @param email
  * @param formId
  */
-export const inviteUserByEmail = async (
-  ability: UserAbility,
-  email: string,
-  formId: string,
-  message: string
-) => {
+export const inviteUserByEmail = async (email: string, formId: string, message: string) => {
   let invitation: Invitation;
+
+  const ability = await getAbility();
 
   const sender = await getUser(ability, ability.user.id).catch(() => {
     throw new UserNotFoundError();

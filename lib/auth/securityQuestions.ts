@@ -1,7 +1,6 @@
 import { prisma, prismaErrors } from "@lib/integration/prismaConnector";
-import { UserAbility } from "@lib/types";
 import { scrypt, randomBytes } from "crypto";
-import { checkPrivileges } from "@lib/privileges";
+import { checkPrivileges, getAbility } from "@lib/privileges";
 
 export type SecurityQuestionId = string;
 
@@ -85,9 +84,10 @@ export async function retrievePoolOfSecurityQuestions(): Promise<SecurityQuestio
 }
 
 export async function createSecurityAnswers(
-  ability: UserAbility,
   questionsWithAssociatedAnswers: { questionId: SecurityQuestionId; answer: string }[]
 ): Promise<void> {
+  const ability = await getAbility();
+
   checkPrivileges(ability, [
     {
       action: "update",
@@ -95,6 +95,7 @@ export async function createSecurityAnswers(
       field: "securityAnswers",
     },
   ]);
+
   const userSecurityAnswers = await _retrieveUserSecurityAnswers({ userId: ability.user.id });
   if (userSecurityAnswers.length > 0) throw new AlreadyHasSecurityAnswers();
 
@@ -137,10 +138,9 @@ export async function createSecurityAnswers(
   if (!operationResult) throw new SecurityQuestionDatabaseOperationFailed();
 }
 
-export async function updateSecurityAnswer(
-  ability: UserAbility,
-  command: UpdateSecurityAnswerCommand
-): Promise<void> {
+export async function updateSecurityAnswer(command: UpdateSecurityAnswerCommand): Promise<void> {
+  const ability = await getAbility();
+
   checkPrivileges(ability, [
     {
       action: "update",

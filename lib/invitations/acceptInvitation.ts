@@ -1,12 +1,12 @@
 import { prisma } from "@lib/integration/prismaConnector";
-import { FormProperties, UserAbility } from "@lib/types";
+import { FormProperties } from "@lib/types";
 import {
   InvitationIsExpiredError,
   InvitationNotFoundError,
   UnableToAssignUserToTemplateError,
   UserNotFoundError,
 } from "./exceptions";
-import { checkPrivileges } from "@lib/privileges";
+import { checkPrivileges, getAbility } from "@lib/privileges";
 import { logEvent } from "@lib/auditLogs";
 import { notifyOwnersOwnerAdded } from "@lib/templates";
 import { logMessage } from "@lib/logger";
@@ -15,11 +15,12 @@ import { logMessage } from "@lib/logger";
  * Accept an invitation.
  * User has created their account or logged into their existing account.
  *
- * @param ability (logged in user)
  * @param invitationId
  * @returns
  */
-export const acceptInvitation = async (ability: UserAbility, invitationId: string) => {
+export const acceptInvitation = async (invitationId: string) => {
+  const ability = await getAbility();
+
   // Retrieve the invitation
   const invitation = await prisma.invitation.findUnique({
     where: {

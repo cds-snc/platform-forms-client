@@ -1,6 +1,6 @@
 import { getRedisInstance } from "@lib/integration/redisConnector";
 import flagInitialSettings from "../../flag_initialization/default_flag_settings.json";
-import { checkPrivileges } from "@lib/privileges";
+import { checkPrivileges, getAbility } from "@lib/privileges";
 import { AccessControlError } from "@lib/auth";
 import { logEvent } from "@lib/auditLogs";
 import { UserAbility } from "@lib/types";
@@ -8,12 +8,14 @@ import { FeatureFlagKeys, FeatureFlags, PickFlags } from "./types";
 
 /**
  * Enables an Application Setting Flag
- * @param ability User's Ability Instance
  * @param key Applicaiton setting flag key
  */
-export const enableFlag = async (ability: UserAbility, key: string): Promise<void> => {
+export const enableFlag = async (key: string): Promise<void> => {
+  const ability = await getAbility();
+
   try {
     checkPrivileges(ability, [{ action: "update", subject: "Flag" }]);
+
     const redis = await getRedisInstance();
     await redis.multi().sadd("flags", key).set(`flag:${key}`, "1").exec();
     logEvent(ability.user.id, { type: "Flag", id: key }, "EnableFlag");
@@ -32,10 +34,11 @@ export const enableFlag = async (ability: UserAbility, key: string): Promise<voi
 
 /**
  * Disables an Application Setting Flag
- * @param ability User's Ability Instance
  * @param key Application setting flag key
  */
-export const disableFlag = async (ability: UserAbility, key: string): Promise<void> => {
+export const disableFlag = async (key: string): Promise<void> => {
+  const ability = await getAbility();
+
   try {
     checkPrivileges(ability, [{ action: "update", subject: "Flag" }]);
     const redis = await getRedisInstance();

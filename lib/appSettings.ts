@@ -1,14 +1,16 @@
 import { prisma, prismaErrors } from "@lib/integration/prismaConnector";
-import { checkPrivileges } from "./privileges";
+import { checkPrivileges, getAbility } from "./privileges";
 import { AccessControlError } from "@lib/auth";
 import { logEvent } from "./auditLogs";
 import { logMessage } from "@lib/logger";
-import { UserAbility } from "./types";
 import { settingCheck, settingPut, settingDelete } from "@lib/cache/settingCache";
 
-export const getAllAppSettings = async (ability: UserAbility) => {
+export const getAllAppSettings = async () => {
+  const ability = await getAbility();
+
   try {
     checkPrivileges(ability, [{ action: "view", subject: "Setting" }]);
+
     const settings = await prisma.setting
       .findMany({
         select: {
@@ -54,8 +56,11 @@ export const getAppSetting = async (internalId: string) => {
   return uncachedSetting?.value ?? null;
 };
 
-export const getFullAppSetting = async (ability: UserAbility, internalId: string) => {
+export const getFullAppSetting = async (internalId: string) => {
+  const ability = await getAbility();
+
   checkPrivileges(ability, [{ action: "view", subject: "Setting" }]);
+
   // Note: the setting is not cached here because it's not expected to be called frequently
   const result = prisma.setting
     .findUnique({
@@ -95,11 +100,9 @@ interface SettingUpdateData {
   descriptionFr?: string;
   value?: string;
 }
-export const updateAppSetting = async (
-  ability: UserAbility,
-  internalId: string,
-  settingData: SettingUpdateData
-) => {
+export const updateAppSetting = async (internalId: string, settingData: SettingUpdateData) => {
+  const ability = await getAbility();
+
   try {
     checkPrivileges(ability, [{ action: "update", subject: "Setting" }]);
 
@@ -143,7 +146,9 @@ interface SettingCreateData extends SettingUpdateData {
   nameEn: string;
   nameFr: string;
 }
-export const createAppSetting = async (ability: UserAbility, settingData: SettingCreateData) => {
+export const createAppSetting = async (settingData: SettingCreateData) => {
+  const ability = await getAbility();
+
   try {
     checkPrivileges(ability, [{ action: "create", subject: "Setting" }]);
 
@@ -174,7 +179,9 @@ export const createAppSetting = async (ability: UserAbility, settingData: Settin
   }
 };
 
-export const deleteAppSetting = async (ability: UserAbility, internalId: string) => {
+export const deleteAppSetting = async (internalId: string) => {
+  const ability = await getAbility();
+
   try {
     checkPrivileges(ability, [{ action: "delete", subject: "Setting" }]);
 

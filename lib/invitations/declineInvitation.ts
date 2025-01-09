@@ -1,19 +1,19 @@
 import { prisma } from "@lib/integration/prismaConnector";
-import { UserAbility } from "@lib/types";
 import { InvitationNotFoundError, UserNotFoundError } from "./exceptions";
 import { getUser } from "@lib/users";
 import { logEvent } from "@lib/auditLogs";
-import { checkPrivileges } from "@lib/privileges";
+import { checkPrivileges, getAbility } from "@lib/privileges";
 import { logMessage } from "@lib/logger";
 
 /**
  * Decline an invitation
  *
- * @param ability
  * @param invitationId
  * @returns
  */
-export const declineInvitation = async (ability: UserAbility, invitationId: string) => {
+export const declineInvitation = async (invitationId: string) => {
+  const ability = await getAbility();
+
   const invitation = await prisma.invitation.findUnique({
     where: {
       id: invitationId,

@@ -55,8 +55,8 @@ const getCanSetClosingDate = (
   return session ? true : false;
 };
 
-const getAllUsers = async (ability: UserAbility) => {
-  const users = await getUsers(ability);
+const getAllUsers = async () => {
+  const users = await getUsers();
   return users.map((user) => ({
     id: user.id,
     name: user.name || "",
@@ -103,7 +103,7 @@ export default async function Page(props: { params: Promise<{ id: string }> }) {
     throw new Error("Template not found");
   }
 
-  const allUsers = await getAllUsers(ability);
+  const allUsers = await getAllUsers();
 
   const isPublished = templateWithAssociatedUsers.formRecord.isPublished;
   const isVaultDelivery = !templateWithAssociatedUsers.formRecord.deliveryMethod;

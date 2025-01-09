@@ -1,17 +1,17 @@
 import { prisma } from "@lib/integration/prismaConnector";
 import { InvitationNotFoundError, TemplateNotFoundError } from "./exceptions";
-import { checkPrivileges } from "@lib/privileges";
-import { UserAbility } from "@lib/types";
+import { checkPrivileges, getAbility } from "@lib/privileges";
 import { getTemplateWithAssociatedUsers } from "@lib/templates";
 import { logEvent } from "@lib/auditLogs";
 
 /**
  * Cancel an invitation
  *
- * @param ability
  * @param invitationId
  */
-export const cancelInvitation = async (ability: UserAbility, invitationId: string) => {
+export const cancelInvitation = async (invitationId: string) => {
+  const ability = await getAbility();
+
   // Retrieve the invitation
   const invitation = await prisma.invitation.findUnique({
     where: {
