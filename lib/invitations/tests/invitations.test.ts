@@ -33,10 +33,13 @@ jest.mock("@lib/logger");
 jest.mock("@lib/auditLogs");
 jest.mock("@lib/users");
 jest.mock("@lib/templates");
-jest.mock("@lib/origin");
 jest.mock("@lib/invitations/emailTemplates/inviteToFormsEmailTemplate");
 jest.mock("@lib/invitations/emailTemplates/inviteToCollaborateEmailTemplate");
 jest.mock("@lib/invitations/emailTemplates/ownerAddedEmailTemplate");
+
+jest.mock("@lib/origin", () => ({
+  getOrigin: jest.fn().mockReturnValue("http://localhost:3000"),
+}));
 
 describe("Invitations", () => {
   beforeEach(() => {
