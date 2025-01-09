@@ -67,12 +67,12 @@ export const inviteUserByEmail = async (
     // if invitation is expired, delete and recreate
     if (previousInvitation.expires < new Date()) {
       // check js dates vs prisma dates (see 2fa)
-      _deleteInvitation(previousInvitation.id);
+      await _deleteInvitation(previousInvitation.id);
       invitation = await _createInvitation(email, formId);
     }
 
     // send or resend invitation email
-    _sendInvitationEmail(sender, invitation, message, template.formRecord);
+    await _sendInvitationEmail(sender, invitation, message, template.formRecord);
 
     logEvent(
       ability.user.id,
@@ -86,7 +86,7 @@ export const inviteUserByEmail = async (
 
   // No previous invitation, create one
   invitation = await _createInvitation(email, formId);
-  _sendInvitationEmail(sender, invitation, message, template.formRecord);
+  await _sendInvitationEmail(sender, invitation, message, template.formRecord);
 
   return;
 };
