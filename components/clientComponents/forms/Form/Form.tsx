@@ -26,8 +26,7 @@ import {
   removeFormContextValues,
   getInputHistoryValues,
 } from "@lib/utils/form-builder/groupsHistory";
-import { filterShownElements, filterValuesByShownElements } from "@lib/formContext";
-import { formHasGroups } from "@lib/utils/form-builder/formHasGroups";
+import { filterShownElements, filterResponsesByShownElements } from "@lib/formContext";
 import { showReviewPage } from "@lib/utils/form-builder/showReviewPage";
 import { useFormDelay } from "@lib/hooks/useFormDelayContext";
 
@@ -387,7 +386,7 @@ export const Form = withFormik<FormProps, Responses>({
   validate: (values, props) => validateOnSubmit(values, props),
 
   handleSubmit: async (values, formikBag) => {
-    const getValuesForConditionalLogic = () => {
+    const getValues = () => {
       const inputHistoryValues = getInputHistoryValues(
         values,
         values.groupHistory as string[],
@@ -397,22 +396,15 @@ export const Form = withFormik<FormProps, Responses>({
         formikBag.props.formRecord.form.elements,
         values.matchedIds as string[]
       );
-      return filterValuesByShownElements(inputHistoryValues, shownElements);
+      const shownResponses = filterResponsesByShownElements(inputHistoryValues, shownElements);
+      return removeFormContextValues(shownResponses);
     };
 
     // Needed so the Loader is displayed
     formikBag.setStatus("submitting");
     try {
-      const hasGroups =
-        formHasGroups(formikBag.props.formRecord.form) && formikBag.props.allowGrouping;
-      const hasShowHideRules = (values.matchedIds as string[])?.length > 0;
-      const formValues =
-        hasGroups && hasShowHideRules
-          ? removeFormContextValues(getValuesForConditionalLogic())
-          : removeFormContextValues(values);
-
       const result = await submitForm(
-        formValues,
+        getValues(),
         formikBag.props.language,
         formikBag.props.formRecord
       );
