@@ -51,6 +51,8 @@ export enum AuditLogEvent {
   CreateAPIKey = "CreateAPIKey",
   RefreshAPIKey = "RefreshAPIKey",
   DeleteAPIKey = "DeleteAPIKey",
+  IncreaseThrottlingRate = "IncreaseThrottlingRate",
+  ResetThrottlingRate = "ResetThrottlingRate",
 }
 export type AuditLogEventStrings = keyof typeof AuditLogEvent;
 
