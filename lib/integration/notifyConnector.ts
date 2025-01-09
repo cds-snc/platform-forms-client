@@ -5,7 +5,7 @@ import axios from "axios";
 
 const NotifyClient = axios.create({
   baseURL: "https://api.notification.canada.ca",
-  timeout: 2000,
+  timeout: 5000,
   headers: {
     "Content-Type": "application/json",
     Authorization: `ApiKey-v1 ${process.env.NOTIFY_API_KEY}`,
@@ -84,6 +84,6 @@ export const sendEmail = async (
       })
     );
 
-    throw new Error(`Failed to send submission through GC Notify.`);
+    throw new Error(`Failed to send email through GC Notify.`);
   }
 };

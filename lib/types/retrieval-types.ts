@@ -1,5 +1,11 @@
-import { Responses } from "./form-response-types";
-import { TypeOmit } from ".";
+import { Responses } from "@lib/types";
+
+export enum VaultStatus {
+  NEW = "New",
+  DOWNLOADED = "Downloaded",
+  CONFIRMED = "Confirmed",
+  PROBLEM = "Problem",
+}
 
 export type VaultSubmission = {
   formID: string;
@@ -18,14 +24,15 @@ export type VaultSubmission = {
   removedAt?: number;
 };
 
-export type VaultSubmissionList = TypeOmit<
-  VaultSubmission,
-  "formSubmission" | "submissionID" | "confirmationCode"
->;
+export type VaultSubmissionOverview = {
+  formID: string;
+  name: string;
+  createdAt: number;
+  status: VaultStatus;
+};
 
-export enum VaultStatus {
-  NEW = "New",
-  DOWNLOADED = "Downloaded",
-  CONFIRMED = "Confirmed",
-  PROBLEM = "Problem",
-}
+export type StartFromExclusiveResponse = {
+  name: string;
+  status: string;
+  createdAt: number;
+};

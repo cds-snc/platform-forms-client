@@ -23,21 +23,15 @@ const Info = async ({ locale }: { locale: string }) => {
   );
 };
 
-export default async function Layout(
-  props: {
-    children: React.ReactNode;
-    params: Promise<{ locale: string }>;
-  }
-) {
+export default async function Layout(props: {
+  children: React.ReactNode;
+  params: Promise<{ locale: string }>;
+}) {
   const params = await props.params;
 
-  const {
-    locale
-  } = params;
+  const { locale } = params;
 
-  const {
-    children
-  } = props;
+  const { children } = props;
 
   const { t } = await serverTranslation("common", { lang: locale });
   const headersList = await headers();

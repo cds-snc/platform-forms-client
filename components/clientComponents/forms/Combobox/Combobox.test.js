@@ -1,11 +1,10 @@
 /**
  * @jest-environment jsdom
  */
-import React from "react";
+import React, { act } from "react";
 import { cleanup, render, screen, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { GenerateElement } from "@lib/formBuilder";
-import { act } from "react";
 
 jest.mock("formik", () => ({
   ...jest.requireActual("formik"),

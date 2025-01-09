@@ -1,7 +1,7 @@
 import { serverTranslation } from "@i18n";
 import { Metadata } from "next";
 import { authCheckAndRedirect } from "@lib/actions";
-import { AccessControlError } from "@lib/privileges";
+import { AccessControlError } from "@lib/auth";
 import { redirect } from "next/navigation";
 import { Navigation } from "./components/server/Navigation";
 import { Cards } from "./components/server/Cards";
@@ -25,16 +25,12 @@ export type FormsTemplate = {
   overdue: boolean;
 };
 
-export async function generateMetadata(
-  props: {
-    params: Promise<{ locale: string }>;
-  }
-): Promise<Metadata> {
+export async function generateMetadata(props: {
+  params: Promise<{ locale: string }>;
+}): Promise<Metadata> {
   const params = await props.params;
 
-  const {
-    locale
-  } = params;
+  const { locale } = params;
 
   const { t } = await serverTranslation("my-forms", { lang: locale });
   return {
@@ -42,26 +38,20 @@ export async function generateMetadata(
   };
 }
 
-export default async function Page(
-  props: {
-    params: Promise<{ locale: string }>;
-    searchParams: Promise<{ status?: string }>;
-  }
-) {
+export default async function Page(props: {
+  params: Promise<{ locale: string }>;
+  searchParams: Promise<{ status?: string }>;
+}) {
   const searchParams = await props.searchParams;
 
-  const {
-    status
-  } = searchParams;
+  const { status } = searchParams;
 
   const params = await props.params;
 
-  const {
-    locale
-  } = params;
+  const { locale } = params;
 
   try {
-    const { ability, session } = await authCheckAndRedirect();
+    const { session } = await authCheckAndRedirect();
 
     const { t } = await serverTranslation("my-forms", { lang: locale });
 
@@ -72,7 +62,7 @@ export default async function Page(
       },
       sortByDateUpdated: "desc",
     };
-    const templates = (await getAllTemplatesForUser(ability, options)).map((template) => {
+    const templates = (await getAllTemplatesForUser(options)).map((template) => {
       const {
         id,
         form: { titleEn = "", titleFr = "" },

@@ -79,7 +79,10 @@ export const AddressComplete = (props: AddressCompleteProps): React.ReactElement
           city: "",
           province: "",
           postalCode: "",
-          country: "",
+          // Make sure the initial default is CAN to avoid null cases when:
+          // - the address is "Canada only"
+          // - the address is not "Canada only" and the country drop down was not interacted with
+          country: "CAN",
         }
   );
 
@@ -205,7 +208,7 @@ export const AddressComplete = (props: AddressCompleteProps): React.ReactElement
         city: "",
         province: "",
         postalCode: "",
-        country: "",
+        country: "CAN",
       };
     } else {
       baseAddressObject = addressObject;
@@ -229,8 +232,17 @@ export const AddressComplete = (props: AddressCompleteProps): React.ReactElement
       (country) => country[i18n.language as Language] === countryText
     );
     if (country) {
-      // set the country in the address object to the ID of the country.
-      setAddressData("country", country.id);
+      // Reset the addressObject
+      setAddressObject({
+        streetAddress: "",
+        city: "",
+        province: "",
+        postalCode: "",
+        country: country.id,
+      });
+      if (comboboxRef.current) {
+        comboboxRef.current.changeInputValue("", false);
+      }
       setAddressResultCache([]); // Clear the cache.
     }
   };
@@ -300,7 +312,7 @@ export const AddressComplete = (props: AddressCompleteProps): React.ReactElement
           {!isReady && (
             <>
               <div role="status" className="mt-2">
-                <SpinnerIcon className="h-8 w-8 animate-spin fill-blue-600 text-gray-200 dark:text-gray-600" />
+                <SpinnerIcon className="size-8 animate-spin fill-blue-600 text-gray-200 dark:text-gray-600" />
                 <span className="sr-only">{t("loading")}</span>
               </div>
             </>

@@ -9,21 +9,15 @@ import { YourAccountDropdown } from "@clientComponents/globals/Header/YourAccoun
 import { authCheckAndRedirect } from "@lib/actions";
 import { SkipLink } from "@serverComponents/globals/SkipLink";
 import { Footer } from "@serverComponents/globals/Footer";
-export default async function Layout(
-  props: {
-    children: React.ReactNode;
-    params: Promise<{ locale: string }>;
-  }
-) {
+export default async function Layout(props: {
+  children: React.ReactNode;
+  params: Promise<{ locale: string }>;
+}) {
   const params = await props.params;
 
-  const {
-    locale
-  } = params;
+  const { locale } = params;
 
-  const {
-    children
-  } = props;
+  const { children } = props;
 
   await authCheckAndRedirect();
 
@@ -37,7 +31,6 @@ export default async function Layout(
           <div className="grid w-full grid-flow-col">
             <div className="flex">
               <Link href={`/${locale}/form-builder`} legacyBehavior>
-                {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
                 <a
                   id="logo"
                   className="mr-5 flex border-r-1 pr-[0.77rem] text-3xl font-semibold !text-black no-underline focus:bg-white"

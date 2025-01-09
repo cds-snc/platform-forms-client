@@ -28,7 +28,7 @@ const item = {
 };
 
 describe("<PanelActions />", () => {
-  it.skip("enables move buttons for item that is not first or last", () => {
+  it("enables move buttons for item that is not first or last", () => {
     cy.viewport(800, 80);
     // see: https://on.cypress.io/mounting-react
     cy.mount(
@@ -59,7 +59,7 @@ describe("<PanelActions />", () => {
     cy.get('[data-testid="moveDown"]').should("not.be.disabled");
   });
 
-  it.skip("disables move buttons for first and last item", () => {
+  it("disables move buttons for first and last item", () => {
     cy.viewport(800, 80);
     // see: https://on.cypress.io/mounting-react
     cy.mount(
@@ -106,10 +106,11 @@ describe("<PanelActions />", () => {
     cy.focused().should("have.attr", "data-testid", "remove");
   });
 
+  // Works locally but not on CI
   it.skip("can keyboard navigate", () => {
     cy.viewport(800, 80);
     cy.mount(
-      <div className="group active">
+      <div className="active group">
         <PanelActions
           item={item}
           isFirstItem={false}

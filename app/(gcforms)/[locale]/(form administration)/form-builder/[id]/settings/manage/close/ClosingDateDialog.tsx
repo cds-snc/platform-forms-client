@@ -1,6 +1,6 @@
 import { getMaxMonthDay } from "@clientComponents/forms/FormattedDate/utils";
 import { Button } from "@clientComponents/globals";
-import { Dialog, useDialogRef } from "@formBuilder/components/shared";
+import { Dialog, useDialogRef } from "@formBuilder/components/shared/Dialog";
 import { useTranslation } from "@i18n/client";
 import { useEffect, useState } from "react";
 import { toast } from "@formBuilder/components/shared/Toast";
@@ -117,8 +117,8 @@ export const ClosingDateDialog = ({
                 <legend className="mb-4">{t("scheduleClosingPage.dialog.text2")}</legend>
                 <div role="alert">
                   {hasErrors && (
-                    <div className="mb-4 text-red-700 flex align-middle">
-                      <WarningIcon className="fill-red-800 mr-2" />
+                    <div className="mb-4 flex align-middle text-red-700">
+                      <WarningIcon className="mr-2 fill-red-800" />
                       {t("scheduleClosingPage.dialog.error.notFutureDate")}
                     </div>
                   )}
@@ -138,7 +138,7 @@ export const ClosingDateDialog = ({
                       {t("scheduleClosingPage.dialog.datePicker.day")}
                     </label>
                     <input
-                      className={"!w-16 !mr-2"}
+                      className={"!mr-2 !w-16"}
                       name="date-picker-day"
                       id="date-picker-day"
                       type="number"

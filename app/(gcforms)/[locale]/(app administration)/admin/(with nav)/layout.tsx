@@ -8,21 +8,15 @@ import { YourAccountDropdown } from "@clientComponents/globals/Header/YourAccoun
 import { SkipLink } from "@serverComponents/globals/SkipLink";
 import { Footer } from "@serverComponents/globals/Footer";
 
-export default async function Layout(
-  props: {
-    children: React.ReactNode;
-    params: Promise<{ locale: string }>;
-  }
-) {
+export default async function Layout(props: {
+  children: React.ReactNode;
+  params: Promise<{ locale: string }>;
+}) {
   const params = await props.params;
 
-  const {
-    locale
-  } = params;
+  const { locale } = params;
 
-  const {
-    children
-  } = props;
+  const { children } = props;
 
   const { t } = await serverTranslation(["common", "admin-login"], { lang: locale });
 

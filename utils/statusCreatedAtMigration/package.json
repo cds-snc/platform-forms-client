@@ -1,0 +1,18 @@
+{
+  "name": "status_created_at_vault_name_items_migration",
+  "version": "0.1.0",
+  "description": "Add or update `StatusCreatedAt` property (using the existing `Status` and `CreatedAt` properties from the same item) in `NAME#` items.",
+  "main": "main.ts",
+  "scripts": {
+    "migrate": "tsx main.ts"
+  },
+  "keywords": [],
+  "author": "Clément Janin",
+  "dependencies": {
+    "@aws-sdk/client-dynamodb": "^3.693.0",
+    "@aws-sdk/lib-dynamodb": "^3.693.0",
+    "dotenv": "^16.4.5",
+    "tsx": "^4.19.2"
+  },
+  "packageManager": "yarn@4.0.2"
+}

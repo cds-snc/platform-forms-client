@@ -20,6 +20,7 @@ export async function generateMetadata(props: {
 
 export default async function Page(props: { params: Promise<{ locale: string }> }) {
   const params = await props.params;
+
   const { locale } = params;
 
   const { ability, session } = await authCheckAndRedirect();

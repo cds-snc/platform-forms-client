@@ -1,4 +1,4 @@
-import { FormProperties } from "@lib/types/form-types";
+import { FormProperties } from "@lib/types";
 import { LockedSections } from "../types";
 import { getStartLabels, getReviewLabels, getEndLabels } from "@lib/utils/form-builder/i18nHelpers";
 

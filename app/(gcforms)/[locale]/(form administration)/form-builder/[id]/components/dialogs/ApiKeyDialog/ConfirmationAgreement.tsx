@@ -12,7 +12,7 @@ export const ConfirmationAgreement = ({
 
   return (
     <div className="mb-4">
-      <label className="mb-2 block font-bold">
+      <label className="mb-2 block font-bold" id="enterAgreeInput">
         {t("settings.api.dialog.confirm.label")}{" "}
         <span className="text-gcds-red-500">{t("settings.api.dialog.confirm.required")}</span>
       </label>
@@ -33,6 +33,7 @@ export const ConfirmationAgreement = ({
             setAgreeValue(e.target.value);
             handleAgreement(e.target.value);
           }}
+          aria-labelledby="enterAgreeInput"
         />
       </div>
     </div>

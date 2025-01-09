@@ -1,24 +1,26 @@
 "use server";
+
 import { getAllTemplates } from "@lib/templates";
-import { authCheckAndThrow } from "@lib/actions";
+import { AuthenticatedAction } from "@lib/actions";
 import { FormRecord } from "@lib/types";
 
-export const getTemplates = async () => {
-  const { ability } = await authCheckAndThrow();
-  const templates = await getAllTemplates(ability);
+// Public facing functions - they can be used by anyone who finds the associated server action identifer
+
+export const getTemplates = AuthenticatedAction(async () => {
+  const templates = await getAllTemplates();
   return filterTemplateProperties(templates);
-};
+});
 
-export const getLatestPublishedTemplates = async () => {
-  const { ability } = await authCheckAndThrow();
-
-  const templates = await getAllTemplates(ability, {
+export const getLatestPublishedTemplates = AuthenticatedAction(async () => {
+  const templates = await getAllTemplates({
     requestedWhere: { isPublished: true },
     sortByDateUpdated: "desc",
   });
 
   return filterTemplateProperties(templates);
-};
+});
+
+// Internal and private functions - won't be converted into server actions
 
 const filterTemplateProperties = (templates: FormRecord[]) => {
   return templates.map((template) => {

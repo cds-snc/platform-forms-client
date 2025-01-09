@@ -8,7 +8,7 @@ import Loader from "../../globals/Loader";
 import { logMessage } from "@lib/logger";
 import { useRefresh } from "@lib/hooks/useRefresh";
 import { safeJSONParse } from "@lib/utils";
-import { toast } from "@formBuilder/components/shared";
+import { toast } from "@formBuilder/components/shared/Toast";
 import { Button } from "@clientComponents/globals";
 
 interface JSONUploadProps {
@@ -117,7 +117,7 @@ export const JSONUpload = (props: JSONUploadProps): React.ReactElement => {
                 id="jsonInput"
                 rows={20}
                 name="jsonInput"
-                className="gc-textarea full-height font-mono"
+                className="gc-textarea h-full font-mono"
                 data-testid="jsonInput"
                 defaultValue={jsonConfig}
                 onChange={(e) => {

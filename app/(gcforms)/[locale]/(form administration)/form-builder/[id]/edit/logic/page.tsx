@@ -9,16 +9,12 @@ import { Legend } from "./components/flow/Legend";
 import { Language } from "@lib/types/form-builder-types";
 import { EndMarker } from "./components/flow/EndMarker";
 
-export async function generateMetadata(
-  props: {
-    params: Promise<{ locale: string }>;
-  }
-): Promise<Metadata> {
+export async function generateMetadata(props: {
+  params: Promise<{ locale: string }>;
+}): Promise<Metadata> {
   const params = await props.params;
 
-  const {
-    locale
-  } = params;
+  const { locale } = params;
 
   const { t } = await serverTranslation("form-builder", { lang: locale });
   return {
@@ -26,17 +22,10 @@ export async function generateMetadata(
   };
 }
 
-export default async function Page(
-  props: {
-    params: Promise<{ id: string; locale: string }>;
-  }
-) {
+export default async function Page(props: { params: Promise<{ id: string; locale: string }> }) {
   const params = await props.params;
 
-  const {
-    id,
-    locale
-  } = params;
+  const { id, locale } = params;
 
   const { t } = await serverTranslation("form-builder", { lang: locale });
   const Loading = () => (

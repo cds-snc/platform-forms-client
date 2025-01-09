@@ -6,16 +6,12 @@ import { ManageAccountsIcon, SettingsApplicationsIcon } from "@serverComponents/
 import { Metadata } from "next";
 import { redirect } from "next/navigation";
 
-export async function generateMetadata(
-  props: {
-    params: Promise<{ locale: string }>;
-  }
-): Promise<Metadata> {
+export async function generateMetadata(props: {
+  params: Promise<{ locale: string }>;
+}): Promise<Metadata> {
   const params = await props.params;
 
-  const {
-    locale
-  } = params;
+  const { locale } = params;
 
   const { t } = await serverTranslation("admin-home", { lang: locale });
   return {
@@ -27,9 +23,7 @@ export async function generateMetadata(
 export default async function Page(props: { params: Promise<{ locale: string }> }) {
   const params = await props.params;
 
-  const {
-    locale
-  } = params;
+  const { locale } = params;
 
   const { t } = await serverTranslation(["admin-home", "common"]);
 
@@ -49,7 +43,7 @@ export default async function Page(props: { params: Promise<{ locale: string }> 
       <div className="flex flex-row justify-center">
         <div className="rounded-lg border bg-white p-10">
           <h2>
-            <ManageAccountsIcon className="inline-block h-14 w-14" /> {t("accountAdministration")}
+            <ManageAccountsIcon className="inline-block size-14" /> {t("accountAdministration")}
           </h2>
           <p>{t("manageUsersAndTheirForms")}</p>
           <p>
@@ -61,7 +55,7 @@ export default async function Page(props: { params: Promise<{ locale: string }> 
 
         <div className="ml-20 rounded-lg border bg-white p-10">
           <h2>
-            <SettingsApplicationsIcon className="inline-block h-14 w-14" />
+            <SettingsApplicationsIcon className="inline-block size-14" />
             {t("systemAdministration")}
           </h2>
           <p>{t("configureHowTheApplicationWorks")}</p>

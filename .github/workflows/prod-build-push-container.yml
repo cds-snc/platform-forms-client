@@ -11,6 +11,7 @@ env:
   TAG_VERSION: ${{  github.ref_name }}
   COGNITO_APP_CLIENT_ID: ${{secrets.PRODUCTION_COGNITO_APP_CLIENT_ID}}
   COGNITO_USER_POOL_ID: ${{ secrets.PRODUCTION_COGNITO_USER_POOL_ID}}
+  NEXT_SERVER_ACTIONS_ENCRYPTION_KEY: ${{ secrets.PRODUCTION_NEXT_SERVER_ACTIONS_ENCRYPTION_KEY }}
 
 permissions:
   id-token: write
@@ -21,7 +22,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@eef61447b9ff4aafe5dcd4e0bbf5d482be7e7871 # v4.2.1
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
         with:
           ref: ${{ env.TAG_VERSION }}
 
@@ -29,8 +30,9 @@ jobs:
         run: |
           docker build -t base \
           --build-arg COGNITO_APP_CLIENT_ID=$COGNITO_APP_CLIENT_ID \
-          --build-arg COGNITO_USER_POOL_ID=$COGNITO_USER_POOL_ID . \
-          --build-arg INDEX_SITE=true
+          --build-arg COGNITO_USER_POOL_ID=$COGNITO_USER_POOL_ID \
+          --build-arg INDEX_SITE=true \
+          --build-arg NEXT_SERVER_ACTIONS_ENCRYPTION_KEY=$NEXT_SERVER_ACTIONS_ENCRYPTION_KEY .
 
       - name: Configure AWS credentials using OIDC
         uses: aws-actions/configure-aws-credentials@e3dd6a429d7300a6a4c196c26e071d42e0343502 # v4.0.2
@@ -41,7 +43,7 @@ jobs:
 
       - name: Login to Production Amazon ECR
         id: login-ecr-production
-        uses: aws-actions/amazon-ecr-login@6f9c6fad87720db87041e25e3ecf5b609c0368a0
+        uses: aws-actions/amazon-ecr-login@7038bfba688e1aaf9ebe723b50b7519042f44c8e
 
       - name: Tag Images for Production
         env:

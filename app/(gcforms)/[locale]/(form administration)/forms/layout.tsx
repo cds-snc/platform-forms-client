@@ -7,28 +7,22 @@ import { TemplateStoreProvider } from "@lib/store/useTemplateStore";
 import { SkipLink } from "@serverComponents/globals/SkipLink";
 import { Footer } from "@serverComponents/globals/Footer";
 
-export default async function Layout(
-  props: {
-    children: React.ReactNode;
-    params: Promise<{ locale: string }>;
-  }
-) {
+export default async function Layout(props: {
+  children: React.ReactNode;
+  params: Promise<{ locale: string }>;
+}) {
   const params = await props.params;
 
-  const {
-    locale
-  } = params;
+  const { locale } = params;
 
-  const {
-    children
-  } = props;
+  const { children } = props;
 
   await authCheckAndRedirect();
 
   return (
     <TemplateStoreProvider {...{ locale }}>
       <SaveTemplateProvider>
-        <div className="flex h-full flex-col bkd-soft">
+        <div className="bkd-soft flex h-full flex-col">
           <SkipLink />
           <Header context={"default"} />
           <div className="mx-4 shrink-0 grow basis-auto laptop:mx-32 desktop:mx-64">

@@ -5,7 +5,7 @@ export const CopyCodes = ({
   confirmationCodes,
   formId,
   lang,
-  host = "https://forms-formulaires.canada.ca",
+  host,
 }: {
   confirmationCodes: string;
   formId: string;

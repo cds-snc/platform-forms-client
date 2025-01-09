@@ -26,3 +26,27 @@ export const isFormElementType = (item: TreeItem) => {
 export const isGhostElementType = (item: TreeItem) => {
   return ["intro", "policy", "end"].includes(String(item?.index));
 };
+
+export const removeMarkdown = (text: string): string => {
+  return (
+    text
+      // Remove headers
+      .replace(/^#{1,6}\s+/gm, "")
+      // Remove emphasis (bold, italic, strikethrough)
+      .replace(/(\*\*|__)(.*?)\1/g, "$2")
+      .replace(/(\*|_)(.*?)\1/g, "$2")
+      .replace(/~~(.*?)~~/g, "$1")
+      // Remove links
+      .replace(/\[([^\]]+)\]\([^)]+\)/g, "$1")
+      // Remove unordered lists
+      .replace(/^\s*[-+*]\s+/gm, "")
+      // Remove ordered lists
+      .replace(/^\s*\d+\.\s+/gm, "")
+      // Remove extra spaces
+      .replace(/\s{2,}/g, " ")
+      // Remove remaining Markdown characters
+      .replace(/[*_~`]/g, "")
+      // Trim leading and trailing whitespace
+      .trim()
+  );
+};

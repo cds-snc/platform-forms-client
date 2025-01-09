@@ -6,7 +6,7 @@ import Link from "next/link";
 import { Logos, options } from ".";
 import { useTemplateStore } from "@lib/store/useTemplateStore";
 import { LoggedOutTabName, LoggedOutTab } from "@formBuilder/components/LoggedOutTab";
-import { toast } from "@formBuilder/components/shared";
+import { toast } from "@formBuilder/components/shared/Toast";
 import { Button } from "@clientComponents/globals";
 import Brand from "@clientComponents/globals/Brand";
 import { ExternalLinkIcon } from "@serverComponents/icons";
@@ -118,7 +118,6 @@ export const Branding = ({ hasBrandingRequestForm }: { hasBrandingRequestForm: b
       {/* Logo preview */}
       <div className="my-5">
         <div className="mb-3 text-sm font-bold">{t("branding.preview")}</div>
-        {/* eslint-disable @next/next/no-img-element  */}
         <Brand brand={brand} />
       </div>
       <div className="mt-10">

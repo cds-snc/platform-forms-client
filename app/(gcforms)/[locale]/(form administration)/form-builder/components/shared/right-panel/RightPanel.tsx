@@ -104,7 +104,7 @@ export const RightPanel = ({ id, lang }: { id: string; lang: Language }) => {
 
   // Observe if the header is offscreen
   // Used to determine the position of the right panel button "toggle" button
-  const observer = useRef<IntersectionObserver>(undefined);
+  const observer = useRef<IntersectionObserver | null>(null);
   useEffect(() => {
     observer.current = new IntersectionObserver(
       ([entry]) => {

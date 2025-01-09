@@ -1,6 +1,7 @@
 "use client";
 import React from "react";
-import { useRehydrate, useTemplateStore } from "@lib/store/useTemplateStore";
+import { useTemplateStore } from "@lib/store/useTemplateStore";
+import { useRehydrate } from "@lib/store/hooks/useRehydrate";
 import { useTranslation } from "@i18n/client";
 import { RichText } from "./RichText";
 import { Title } from "./Title";
@@ -147,7 +148,7 @@ export const Translate = () => {
                   <>{primaryLanguage}</>
                 </LanguageLabel>
                 <textarea
-                  className="h-full w-full p-4 focus:outline-blue-focus"
+                  className="size-full p-4 focus:outline-blue-focus"
                   id="form-title-en"
                   aria-describedby="form-title-en-language"
                   value={form[localizeField(LocalizedFormProperties.TITLE, primaryLanguage)]}

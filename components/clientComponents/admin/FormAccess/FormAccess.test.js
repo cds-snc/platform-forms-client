@@ -7,7 +7,6 @@ import userEvent from "@testing-library/user-event";
 
 import mockedAxios from "axios";
 import FormAccess from "./FormAccess";
-import { act } from "react";
 
 jest.mock("axios");
 
@@ -54,9 +53,7 @@ describe("Form Access Component", () => {
 
     const input = await screen.findByLabelText("settings.formAccess.addEmailAriaLabel");
 
-    await act(async () => {
-      await user.type(input, testEmailAddress);
-    });
+    await user.type(input, testEmailAddress);
 
     mockedAxios.mockResolvedValueOnce({
       status: 200,
@@ -67,9 +64,7 @@ describe("Form Access Component", () => {
       },
     });
 
-    await act(async () => {
-      await user.click(screen.getByTestId("add-email"));
-    });
+    await user.click(screen.getByTestId("add-email"));
 
     expect(mockedAxios.mock.calls.length).toBe(2);
     expect(mockedAxios).toHaveBeenCalledWith(
@@ -102,11 +97,8 @@ describe("Form Access Component", () => {
 
     const input = await screen.findByLabelText("settings.formAccess.addEmailAriaLabel");
 
-    await act(async () => {
-      await user.type(input, testEmailAddress);
-
-      await user.click(screen.getByTestId("add-email"));
-    });
+    await user.type(input, testEmailAddress);
+    await user.click(screen.getByTestId("add-email"));
 
     expect(await screen.findByTestId("alert")).toBeInTheDocument;
   });
@@ -134,10 +126,9 @@ describe("Form Access Component", () => {
     render(<FormAccess formID={formConfig.id}></FormAccess>);
 
     const input = await screen.findByLabelText("settings.formAccess.addEmailAriaLabel");
-    await act(async () => {
-      await user.type(input, testEmailAddress);
-      await user.click(screen.getByTestId("add-email"));
-    });
+
+    await user.type(input, testEmailAddress);
+    await user.click(screen.getByTestId("add-email"));
 
     expect(await screen.findByRole("alert")).toBeInTheDocument;
   });

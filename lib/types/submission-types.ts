@@ -1,5 +1,4 @@
-import { Response, Responses } from "./form-response-types";
-import { PublicFormRecord } from "./form-types";
+import { Response, Responses, PublicFormRecord } from "@lib/types";
 
 export interface Submission {
   form: PublicFormRecord;

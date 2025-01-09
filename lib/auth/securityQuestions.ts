@@ -90,12 +90,12 @@ export async function createSecurityAnswers(
 ): Promise<void> {
   checkPrivileges(ability, [
     {
-      action: "create",
-      subject: { type: "User", object: { id: ability.userID } },
+      action: "update",
+      subject: { type: "User", object: { id: ability.user.id } },
       field: "securityAnswers",
     },
   ]);
-  const userSecurityAnswers = await _retrieveUserSecurityAnswers({ userId: ability.userID });
+  const userSecurityAnswers = await _retrieveUserSecurityAnswers({ userId: ability.user.id });
   if (userSecurityAnswers.length > 0) throw new AlreadyHasSecurityAnswers();
 
   const questionIds = questionsWithAssociatedAnswers.map(
@@ -124,7 +124,7 @@ export async function createSecurityAnswers(
   const operationResult = await prisma.user
     .update({
       where: {
-        id: ability.userID,
+        id: ability.user.id,
       },
       data: {
         securityAnswers: {
@@ -144,7 +144,7 @@ export async function updateSecurityAnswer(
   checkPrivileges(ability, [
     {
       action: "update",
-      subject: { type: "User", object: { id: ability.userID } },
+      subject: { type: "User", object: { id: ability.user.id } },
       field: "securityAnswers",
     },
   ]);
@@ -152,7 +152,7 @@ export async function updateSecurityAnswer(
   const areQuestionIdsValidResult = await areQuestionIdsValid([command.newQuestionId]);
   if (!areQuestionIdsValidResult) throw new InvalidSecurityQuestionId();
 
-  const userSecurityAnswers = await _retrieveUserSecurityAnswers({ userId: ability.userID });
+  const userSecurityAnswers = await _retrieveUserSecurityAnswers({ userId: ability.user.id });
   if (userSecurityAnswers.length === 0) throw new SecurityAnswersNotFound();
 
   const oldAnswer = userSecurityAnswers.find(

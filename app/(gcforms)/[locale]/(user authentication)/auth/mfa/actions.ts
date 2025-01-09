@@ -1,4 +1,5 @@
 "use server";
+
 import * as v from "valibot";
 import { serverTranslation } from "@i18n";
 import { redirect } from "next/navigation";
@@ -28,51 +29,7 @@ export interface ErrorStates {
   success?: boolean;
 }
 
-const validate = async (
-  language: string,
-  formEntries: {
-    [k: string]: FormDataEntryValue;
-  }
-) => {
-  const { t } = await serverTranslation(["auth-verify"], { lang: language });
-
-  const formValidationSchema = v.object({
-    verificationCode: v.string([
-      v.minLength(1, t("verify.fields.confirmationCode.error.notEmpty")),
-      v.length(5, t("verify.fields.confirmationCode.error.length")),
-      v.regex(/^[a-z0-9]*$/i, t("verify.fields.confirmationCode.error.noSymbols")),
-    ]),
-    authenticationFlowToken: v.string([v.minLength(1)]),
-    email: v.string([v.toTrimmed(), v.toLowerCase(), v.minLength(1)]),
-  });
-  return v.safeParse(formValidationSchema, formEntries, { abortPipeEarly: true });
-};
-
-const isUserActive = async (email: string) => {
-  // Check if user is active and is allowed to sign in
-  const prismaUser = await prisma.user.findUnique({
-    where: {
-      email: email,
-    },
-    select: {
-      id: true,
-      active: true,
-    },
-  });
-
-  if (prismaUser === null) {
-    // The user is logging in for the first time and doesn't yet exist in the db
-    return true;
-  }
-  return prismaUser.active;
-};
-
-const isUserLockedOut = async (email: string) => {
-  const userInAuthFlow = await prisma.cognitoCustom2FA.exists({
-    email: email,
-  });
-  return !userInAuthFlow;
-};
+// Public facing functions - they can be used by anyone who finds the associated server action identifer
 
 export const verify = async (
   language: string,
@@ -175,9 +132,8 @@ export const getErrorText = async (language: string, errorID: string) => {
 };
 
 export const getRedirectPath = async (locale: string) => {
-  const { session, ability } = await authCheckAndThrow().catch(() => ({
+  const { session } = await authCheckAndThrow().catch(() => ({
     session: null,
-    ability: null,
   }));
 
   if (!session) {
@@ -193,7 +149,7 @@ export const getRedirectPath = async (locale: string) => {
   // Get user
   const user = session.user;
 
-  const overdue = await getUnprocessedSubmissionsForUser(ability, user.id).catch((err) => {
+  const overdue = await getUnprocessedSubmissionsForUser(user.id).catch((err) => {
     logMessage.warn(`Error getting unprocessed submissions for user ${user.id}: ${err.message}`);
     // Fail gracefully if we can't get the unprocessed submissions.
     return { callback: `/${locale}/auth/policy` };
@@ -213,4 +169,52 @@ export const getRedirectPath = async (locale: string) => {
   }
 
   return { callback: `/${locale}/auth/policy` };
+};
+
+// Internal and private functions - won't be converted into server actions
+
+const validate = async (
+  language: string,
+  formEntries: {
+    [k: string]: FormDataEntryValue;
+  }
+) => {
+  const { t } = await serverTranslation(["auth-verify"], { lang: language });
+
+  const formValidationSchema = v.object({
+    verificationCode: v.string([
+      v.minLength(1, t("verify.fields.confirmationCode.error.notEmpty")),
+      v.length(5, t("verify.fields.confirmationCode.error.length")),
+      v.regex(/^[a-z0-9]*$/i, t("verify.fields.confirmationCode.error.noSymbols")),
+    ]),
+    authenticationFlowToken: v.string([v.minLength(1)]),
+    email: v.string([v.toTrimmed(), v.toLowerCase(), v.minLength(1)]),
+  });
+  return v.safeParse(formValidationSchema, formEntries, { abortPipeEarly: true });
+};
+
+const isUserActive = async (email: string) => {
+  // Check if user is active and is allowed to sign in
+  const prismaUser = await prisma.user.findUnique({
+    where: {
+      email: email,
+    },
+    select: {
+      id: true,
+      active: true,
+    },
+  });
+
+  if (prismaUser === null) {
+    // The user is logging in for the first time and doesn't yet exist in the db
+    return true;
+  }
+  return prismaUser.active;
+};
+
+const isUserLockedOut = async (email: string) => {
+  const userInAuthFlow = await prisma.cognitoCustom2FA.exists({
+    email: email,
+  });
+  return !userInAuthFlow;
 };

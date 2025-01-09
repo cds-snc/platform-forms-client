@@ -6,16 +6,12 @@ import { BackLink } from "@clientComponents/admin/LeftNav/BackLink";
 import { Metadata } from "next";
 import { PrivilegeList } from "./components/server/PrivilegeList";
 
-export async function generateMetadata(
-  props: {
-    params: Promise<{ locale: string }>;
-  }
-): Promise<Metadata> {
+export async function generateMetadata(props: {
+  params: Promise<{ locale: string }>;
+}): Promise<Metadata> {
   const params = await props.params;
 
-  const {
-    locale
-  } = params;
+  const { locale } = params;
 
   const { t } = await serverTranslation("admin-users", { lang: locale });
   return {
@@ -23,17 +19,10 @@ export async function generateMetadata(
   };
 }
 
-export default async function Page(
-  props: {
-    params: Promise<{ id: string; locale: string }>;
-  }
-) {
+export default async function Page(props: { params: Promise<{ id: string; locale: string }> }) {
   const params = await props.params;
 
-  const {
-    id,
-    locale
-  } = params;
+  const { id, locale } = params;
 
   const { ability } = await authCheckAndRedirect();
 
@@ -79,7 +68,7 @@ export default async function Page(
       <BackLink href={`/${locale}/admin/accounts?id=${formUser.id}`}>
         {t("backToAccounts")}
       </BackLink>
-      <h1 className="mb-6 border-0 flex flex-col gap-4">
+      <h1 className="mb-6 flex flex-col gap-4 border-0">
         <div>
           <span className="block text-base">{formUser.name}</span>
           <span className="block text-base font-normal">{formUser.email}</span>

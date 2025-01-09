@@ -1,6 +1,8 @@
 import { useTranslation } from "@i18n/client";
 import { Button, Alert } from "@clientComponents/globals";
-import { Dialog, useDialogRef, Radio, TextArea } from "@formBuilder/components/shared";
+import { Dialog, useDialogRef } from "@formBuilder/components/shared/Dialog";
+import { Radio } from "@formBuilder/components/shared/MultipleChoice";
+import { TextArea } from "@formBuilder/components/shared/TextArea";
 import React, { useState } from "react";
 import { cn } from "@lib/utils";
 
@@ -104,7 +106,7 @@ export const PrePublishDialog = ({
           className="max-h-[80%] overflow-y-scroll"
           handleClose={handleClose}
         >
-          <div className="my-8 mx-5 flex flex-col gap-4">
+          <div className="mx-5 my-8 flex flex-col gap-4">
             <h3 className="gc-h4 mb-1 pb-0 text-lg">{t("prePublishFormDialog.text1")}</h3>
             {error && (
               <Alert.Danger focussable={true} className="mb-5">
@@ -154,7 +156,7 @@ export const PrePublishDialog = ({
           className="max-h-[80%] overflow-y-scroll"
           handleClose={handleClose}
         >
-          <div className="my-8 mx-5 flex flex-col gap-4">
+          <div className="mx-5 my-8 flex flex-col gap-4">
             <h3 className="gc-h4 mb-1 pb-0 text-lg">{t("prePublishFormDialog.text2")}</h3>
             {error && (
               <Alert.Danger focussable={true} className="mb-5">
@@ -162,7 +164,7 @@ export const PrePublishDialog = ({
                 <p className="mb-2">{t("prePublishFormDialog.error.message")} </p>
               </Alert.Danger>
             )}
-            <p className="text-sm mb-4">{t("prePublishFormDialog.thisInformation")}</p>
+            <p className="mb-4 text-sm">{t("prePublishFormDialog.thisInformation")}</p>
             <label>{t("prePublishFormDialog.whatType")}</label>
             <div className="mb-1">
               <select

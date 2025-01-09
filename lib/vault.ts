@@ -4,9 +4,15 @@ import {
   QueryCommandInput,
   TransactWriteCommand,
   BatchWriteCommand,
+  GetCommand,
 } from "@aws-sdk/lib-dynamodb";
 import { prisma, prismaErrors } from "@lib/integration/prismaConnector";
-import { VaultSubmissionList, UserAbility, VaultStatus, VaultSubmission } from "@lib/types";
+import {
+  VaultSubmissionOverview,
+  VaultStatus,
+  VaultSubmission,
+  StartFromExclusiveResponse,
+} from "@lib/types";
 import { logEvent } from "./auditLogs";
 import {
   unprocessedSubmissionsCacheCheck,
@@ -14,57 +20,12 @@ import {
 } from "./cache/unprocessedSubmissionsCache";
 import { dynamoDBDocumentClient } from "./integration/awsServicesConnector";
 import { logMessage } from "./logger";
-import { AccessControlError, checkPrivileges } from "./privileges";
+import { authorization } from "./privileges";
+import { AccessControlError } from "@lib/auth";
 import { chunkArray } from "@lib/utils";
 import { TemplateAlreadyPublishedError } from "@lib/templates";
 import { getAppSetting } from "./appSettings";
 import { delay, getExponentialBackoffTimeInMS } from "./utils/retryability";
-
-/**
- * Returns the users associated with a Template
- * Used in checkPrivileges to verify access control
- * @param formID - The form ID to check for access control
- */
-async function getUsersForForm(formID: string) {
-  const templateOwners = await prisma.template
-    .findUnique({
-      where: {
-        id: formID,
-      },
-      select: {
-        users: {
-          select: {
-            id: true,
-            name: true,
-          },
-        },
-      },
-    })
-    .catch((e) => prismaErrors(e, null));
-
-  return templateOwners?.users;
-}
-
-async function checkAbilityToAccessSubmissions(ability: UserAbility, formID: string) {
-  const templateOwners = await getUsersForForm(formID);
-  if (!templateOwners)
-    throw new AccessControlError(
-      `Template ${formID} must have associated owners to access responses`
-    );
-
-  // Will throw an access control error if not authorized to access
-  checkPrivileges(ability, [
-    {
-      action: "view",
-      subject: {
-        type: "FormRecord",
-        object: {
-          users: templateOwners,
-        },
-      },
-    },
-  ]);
-}
 
 /**
  * Checks if any submissions exist for a given form and type
@@ -72,41 +33,52 @@ async function checkAbilityToAccessSubmissions(ability: UserAbility, formID: str
  * @param status - The vault status to verify
  */
 
-const submissionTypeExists = async (ability: UserAbility, formID: string, status: VaultStatus) => {
-  await checkAbilityToAccessSubmissions(ability, formID).catch((e) => {
+export const submissionTypeExists = async (formID: string, status: VaultStatus) => {
+  await authorization.canViewForm(formID).catch((e) => {
     if (e instanceof AccessControlError)
       logEvent(
-        ability.userID,
+        e.user.id,
         {
           type: "Form",
           id: formID,
         },
         "AccessDenied",
-        `Attempted to list responses for form ${formID}`
+        `Attempted to check response status for form ${formID}`
       );
     throw e;
   });
-  const getItemsDbParams: QueryCommandInput = {
+
+  const shouldNavigateThroughStatusCreatedAtIndexInAscendingOrder = (
+    status: VaultStatus
+  ): boolean => {
+    switch (status) {
+      case VaultStatus.CONFIRMED:
+      case VaultStatus.DOWNLOADED:
+        return true;
+      default:
+        return false;
+    }
+  };
+
+  const queryCommand = new QueryCommand({
     TableName: "Vault",
-    IndexName: "Status",
-    // Limit the amount of responses 1.
+    IndexName: "StatusCreatedAt",
+    // To optimize query since we only need to check whether one type of submission type exists
+    ScanIndexForward: shouldNavigateThroughStatusCreatedAtIndexInAscendingOrder(status),
+    // Limit the amount of responses to 1.
     // A single record existing is enough to trigger the boolean
     Limit: 1,
-    KeyConditionExpression: "FormID = :formID AND #status = :status",
-    // Sort by descending order of Status
-    ScanIndexForward: false,
+    KeyConditionExpression: "FormID = :formID AND begins_with(#statusCreatedAtKey, :status)",
+    ExpressionAttributeNames: {
+      "#statusCreatedAtKey": "Status#CreatedAt",
+    },
     ExpressionAttributeValues: {
       ":formID": formID,
       ":status": status,
     },
-    ExpressionAttributeNames: {
-      "#status": "Status",
-      "#name": "Name",
-    },
-    ProjectionExpression: "FormID,#status,#name",
-  };
-  const queryCommand = new QueryCommand(getItemsDbParams);
-  // eslint-disable-next-line no-await-in-loop
+    ProjectionExpression: "FormID",
+  });
+
   const response = await dynamoDBDocumentClient.send(queryCommand);
   return Boolean(response.Items?.length);
 };
@@ -117,22 +89,21 @@ const submissionTypeExists = async (ability: UserAbility, formID: string, status
  * @param formID - The form ID from which to retrieve responses
  */
 export async function listAllSubmissions(
-  ability: UserAbility,
   formID: string,
   status?: VaultStatus,
   responseDownloadLimit?: number,
-  lastEvaluatedKey: Record<string, string> | null | undefined = null
+  startFromExclusiveResponse?: StartFromExclusiveResponse
 ): Promise<{
-  submissions: VaultSubmissionList[];
+  submissions: VaultSubmissionOverview[];
   submissionsRemaining: boolean;
-  lastEvaluatedKey: Record<string, string> | null | undefined;
+  startFromExclusiveResponse?: StartFromExclusiveResponse;
 }> {
   // Check access control first
   try {
-    await checkAbilityToAccessSubmissions(ability, formID).catch((e) => {
+    const { user } = await authorization.canViewForm(formID).catch((e) => {
       if (e instanceof AccessControlError)
         logEvent(
-          ability.userID,
+          e.user.id,
           {
             type: "Form",
             id: formID,
@@ -142,38 +113,43 @@ export async function listAllSubmissions(
         );
       throw e;
     });
+
     if (!responseDownloadLimit) {
       responseDownloadLimit = Number(await getAppSetting("responseDownloadLimit"));
     }
+
     // We're going to request one more than the limit so we can consistently determine if there are more responses
     const responseRetrievalLimit = responseDownloadLimit + 1;
 
-    let accumulatedResponses: VaultSubmissionList[] = [];
-    let submissionsRemaining = false;
-    let paginationLastEvaluatedKey = null;
+    let accumulatedResponses: VaultSubmissionOverview[] = [];
+    let lastEvaluatedKey: Record<string, unknown> | undefined | null = startFromExclusiveResponse
+      ? {
+          NAME_OR_CONF: `NAME#${startFromExclusiveResponse.name}`,
+          "Status#CreatedAt": `${startFromExclusiveResponse.status}#${startFromExclusiveResponse.createdAt}`,
+          FormID: formID,
+        }
+      : null;
 
     while (lastEvaluatedKey !== undefined) {
-      const getItemsDbParams: QueryCommandInput = {
+      const queryCommand: QueryCommand = new QueryCommand({
         TableName: "Vault",
-        IndexName: "Status",
+        IndexName: "StatusCreatedAt",
         ExclusiveStartKey: lastEvaluatedKey ?? undefined,
         // Limit the amount of response to responseRetrievalLimit
         Limit: responseRetrievalLimit - accumulatedResponses.length,
-        KeyConditionExpression: "FormID = :formID" + (status ? " AND #status = :status" : ""),
-        // Sort by descending order of Status
-        ScanIndexForward: false,
+        KeyConditionExpression:
+          "FormID = :formID" + (status ? " AND begins_with(#statusCreatedAtKey, :status)" : ""),
+        ExpressionAttributeNames: {
+          "#statusCreatedAtKey": "Status#CreatedAt",
+          "#name": "Name",
+        },
         ExpressionAttributeValues: {
           ":formID": formID,
           ...(status && { ":status": status }),
         },
-        ExpressionAttributeNames: {
-          "#status": "Status",
-          "#name": "Name",
-        },
-        ProjectionExpression:
-          "FormID,#status,SecurityAttribute,#name,CreatedAt,LastDownloadedBy,ConfirmTimestamp,DownloadedAt,RemovalDate",
-      };
-      const queryCommand = new QueryCommand(getItemsDbParams);
+        ProjectionExpression: "FormID,#name,CreatedAt,#statusCreatedAtKey",
+      });
+
       // eslint-disable-next-line no-await-in-loop
       const response = await dynamoDBDocumentClient.send(queryCommand);
 
@@ -182,24 +158,14 @@ export async function listAllSubmissions(
           response.Items.map(
             ({
               FormID: formID,
-              SecurityAttribute: securityAttribute,
-              Status: status,
+              "Status#CreatedAt": statusCreatedAt,
               CreatedAt: createdAt,
-              LastDownloadedBy: lastDownloadedBy,
               Name: name,
-              ConfirmTimestamp: confirmedAt,
-              DownloadedAt: downloadedAt,
-              RemovalDate: removedAt,
             }) => ({
               formID,
-              status,
-              securityAttribute,
+              status: vaultStatusFromStatusCreatedAt(statusCreatedAt),
               name,
               createdAt,
-              lastDownloadedBy: lastDownloadedBy ?? null,
-              confirmedAt: confirmedAt ?? null,
-              downloadedAt: downloadedAt ?? null,
-              removedAt: removedAt ?? null,
             })
           )
         );
@@ -213,25 +179,26 @@ export async function listAllSubmissions(
       }
     }
 
+    let submissionsRemaining = false;
+    let paginationStartFromExclusiveResponse: StartFromExclusiveResponse | undefined = undefined;
+
     if (accumulatedResponses.length > responseDownloadLimit) {
       // Since we're requesting one more than the limit, we need to remove the last item
       const lastResponse = accumulatedResponses[accumulatedResponses.length - 2];
       accumulatedResponses = accumulatedResponses.slice(0, responseDownloadLimit);
 
-      // Create a lastEvaluatedKey from lastResponse for pagination
-      paginationLastEvaluatedKey = {
-        Status: lastResponse.status,
-        NAME_OR_CONF: `NAME#${lastResponse.name}`,
-        FormID: lastResponse.formID,
-      };
       submissionsRemaining = true;
+      paginationStartFromExclusiveResponse = {
+        name: lastResponse.name,
+        status: lastResponse.status,
+        createdAt: lastResponse.createdAt,
+      };
     } else {
-      paginationLastEvaluatedKey = null;
       submissionsRemaining = false;
     }
 
     logEvent(
-      ability.userID,
+      user.id,
       {
         type: "Form",
         id: formID,
@@ -245,7 +212,7 @@ export async function listAllSubmissions(
     return {
       submissions: accumulatedResponses,
       submissionsRemaining: submissionsRemaining,
-      lastEvaluatedKey: paginationLastEvaluatedKey,
+      startFromExclusiveResponse: paginationStartFromExclusiveResponse,
     };
   } catch (e) {
     // Expected to error in APP_ENV test mode as dynamodb is not available
@@ -253,7 +220,58 @@ export async function listAllSubmissions(
       logMessage.info("HealthCheck: list submissions failure");
       logMessage.error(e);
     }
-    return { submissions: [], submissionsRemaining: true, lastEvaluatedKey: undefined };
+
+    return { submissions: [], submissionsRemaining: true };
+  }
+}
+
+/**
+ * This method returns the `RemovalDate` for a specific submission.
+ * @param formID - The form ID of the response you want to retrieve
+ * @param submissionName - The submission name of the response you want to retrieve
+ */
+export async function retrieveSubmissionRemovalDate(
+  formID: string,
+  submissionName: string
+): Promise<number | undefined> {
+  // Check access control first
+  try {
+    await authorization.canViewForm(formID).catch((e) => {
+      if (e instanceof AccessControlError)
+        logEvent(
+          e.user.id,
+          {
+            type: "Form",
+            id: formID,
+          },
+          "AccessDenied",
+          `Attempted to retrieve response for form ${formID}`
+        );
+      throw e;
+    });
+
+    const getCommand = new GetCommand({
+      TableName: "Vault",
+      Key: {
+        FormID: formID,
+        NAME_OR_CONF: `NAME#${submissionName}`,
+      },
+      ProjectionExpression: "RemovalDate",
+    });
+
+    const response = await dynamoDBDocumentClient.send(getCommand);
+
+    if (response.Item === undefined || response.Item["RemovalDate"] === undefined) {
+      return undefined;
+    }
+
+    return response.Item["RemovalDate"];
+  } catch (e) {
+    // Expected to error in APP_ENV test mode as dynamodb is not available
+    if (process.env.APP_ENV !== "test") {
+      logMessage.error(e);
+    }
+    return undefined;
   }
 }
 
@@ -263,13 +281,24 @@ export async function listAllSubmissions(
  * @param formID - The form ID from which to retrieve responses
  */
 export async function retrieveSubmissions(
-  ability: UserAbility,
   formID: string,
   ids: string[]
 ): Promise<VaultSubmission[]> {
   // Check access control first
   try {
-    await checkAbilityToAccessSubmissions(ability, formID);
+    const { user } = await authorization.canViewForm(formID).catch((e) => {
+      if (e instanceof AccessControlError)
+        logEvent(
+          e.user.id,
+          {
+            type: "Form",
+            id: formID,
+          },
+          "AccessDenied",
+          `Attempted to retrieve responses for form ${formID}`
+        );
+      throw e;
+    });
 
     const keys = ids.map((id) => {
       return { FormID: formID, NAME_OR_CONF: `NAME#${id.trim()}` };
@@ -290,10 +319,10 @@ export async function retrieveSubmissions(
             Vault: {
               Keys: keys,
               ProjectionExpression:
-                "FormID,SubmissionID,FormSubmission,ConfirmationCode,#status,SecurityAttribute,#name,CreatedAt,LastDownloadedBy,ConfirmTimestamp,DownloadedAt,RemovalDate",
+                "FormID,SubmissionID,FormSubmission,ConfirmationCode,#statusCreatedAtKey,SecurityAttribute,#name,CreatedAt,LastDownloadedBy,ConfirmTimestamp,DownloadedAt,RemovalDate",
               ExpressionAttributeNames: {
                 "#name": "Name",
-                "#status": "Status",
+                "#statusCreatedAtKey": "Status#CreatedAt",
               },
             },
           },
@@ -310,7 +339,7 @@ export async function retrieveSubmissions(
                 submissionID: item.SubmissionID,
                 formSubmission: item.FormSubmission,
                 confirmationCode: item.ConfirmationCode,
-                status: item.Status as VaultStatus,
+                status: vaultStatusFromStatusCreatedAt(item["Status#CreatedAt"]),
                 securityAttribute: item.SecurityAttribute,
                 name: item.Name,
                 createdAt: item.CreatedAt,
@@ -342,7 +371,7 @@ export async function retrieveSubmissions(
       // Log each response retrieved
       accumulatedResponses.forEach((item) => {
         logEvent(
-          ability.userID,
+          user.id,
           {
             type: "Response",
             id: item.submissionID,
@@ -357,17 +386,6 @@ export async function retrieveSubmissions(
 
     return submissions;
   } catch (e) {
-    if (e instanceof AccessControlError)
-      logEvent(
-        ability.userID,
-        {
-          type: "Form",
-          id: formID,
-        },
-        "AccessDenied",
-        `Attempted to retrieve responses for form ${formID}`
-      );
-
     // Expected to error in APP_ENV test mode as dynamodb is not available
     if (process.env.APP_ENV !== "test") {
       logMessage.info("HealthCheck: retrieve submissions failure");
@@ -386,10 +404,10 @@ export async function retrieveSubmissions(
  * @param email Email address of the user downloading the Submission
  */
 export async function updateLastDownloadedBy(
-  responses: Array<{ id: string; status: string }>,
-  formID: string,
-  email: string
+  responses: Array<{ id: string; status: string; createdAt: number }>,
+  formID: string
 ) {
+  const { user } = await authorization.canViewForm(formID);
   const chunkedResponses = chunkArray(responses, 20);
 
   for (const [index, chunk] of chunkedResponses.entries()) {
@@ -404,16 +422,18 @@ export async function updateLastDownloadedBy(
               NAME_OR_CONF: `NAME#${response.id}`,
             },
             UpdateExpression: "SET LastDownloadedBy = :email, DownloadedAt = :downloadedAt".concat(
-              isNewResponse ? ", #status = :statusUpdate" : ""
+              isNewResponse ? ", #statusCreatedAtKey = :statusCreatedAtValue" : ""
             ),
             ExpressionAttributeValues: {
-              ":email": email,
+              ":email": user.email,
               ":downloadedAt": Date.now(),
-              ...(isNewResponse && { ":statusUpdate": "Downloaded" }),
+              ...(isNewResponse && {
+                ":statusCreatedAtValue": `Downloaded#${response.createdAt}`,
+              }),
             },
             ...(isNewResponse && {
               ExpressionAttributeNames: {
-                "#status": "Status",
+                "#statusCreatedAtKey": "Status#CreatedAt",
               },
             }),
           },
@@ -437,18 +457,18 @@ export async function updateLastDownloadedBy(
  */
 
 export async function unprocessedSubmissions(
-  ability: UserAbility,
   formID: string,
   ignoreCache = false
 ): Promise<boolean> {
+  await authorization.canViewForm(formID);
   const cachedUnprocessedSubmissions = await unprocessedSubmissionsCacheCheck(formID);
 
   if (cachedUnprocessedSubmissions && !ignoreCache) {
     return cachedUnprocessedSubmissions;
   } else {
     const responseArray = await Promise.all([
-      submissionTypeExists(ability, formID, VaultStatus.NEW),
-      submissionTypeExists(ability, formID, VaultStatus.DOWNLOADED),
+      submissionTypeExists(formID, VaultStatus.NEW),
+      submissionTypeExists(formID, VaultStatus.DOWNLOADED),
     ]);
 
     // If one of the responses is true then there are unprocessed submissions
@@ -464,19 +484,20 @@ export async function unprocessedSubmissions(
  * @param ability
  * @param formID
  */
-export async function deleteDraftFormResponses(ability: UserAbility, formID: string) {
+export async function deleteDraftFormResponses(formID: string) {
   try {
-    // Ensure users are owners of the form
-    await checkAbilityToAccessSubmissions(ability, formID).catch((error) => {
-      if (error instanceof AccessControlError) {
+    const { user } = await authorization.canViewForm(formID).catch((e) => {
+      if (e instanceof AccessControlError)
         logEvent(
-          ability.userID,
-          { type: "Form", id: formID },
+          e.user.id,
+          {
+            type: "Form",
+            id: formID,
+          },
           "AccessDenied",
           `Attempted to delete all responses for form ${formID}`
         );
-      }
-      throw error;
+      throw e;
     });
     // Ensure the form is not published
     const template = await prisma.template
@@ -551,7 +572,7 @@ export async function deleteDraftFormResponses(ability: UserAbility, formID: str
     }
 
     logEvent(
-      ability.userID,
+      user.id,
       { type: "Form", id: formID },
       "DeleteResponses",
       `Deleted draft responses for form ${formID}.`
@@ -570,28 +591,29 @@ export async function deleteDraftFormResponses(ability: UserAbility, formID: str
 }
 
 async function getSubmissionsFromConfirmationCodes(
-  ability: UserAbility,
   formId: string,
   confirmationCodes: string[]
 ): Promise<{
-  submissionsToConfirm: { name: string; confirmationCode: string }[];
+  submissionsToConfirm: { name: string; createdAt: number; confirmationCode: string }[];
   confirmationCodesAlreadyUsed: string[];
   confirmationCodesNotFound: string[];
 }> {
-  await checkAbilityToAccessSubmissions(ability, formId).catch((error) => {
-    if (error instanceof AccessControlError) {
+  await authorization.canViewForm(formId).catch((e) => {
+    if (e instanceof AccessControlError)
       logEvent(
-        ability.userID,
-        { type: "Form", id: formId },
+        e.user.id,
+        {
+          type: "Form",
+          id: formId,
+        },
         "AccessDenied",
-        `Attempted to delete all responses for form ${formId}`
+        `Attempted to confirm responses for form ${formId}`
       );
-    }
-    throw error;
+    throw e;
   });
 
   const accumulatedSubmissions: {
-    [confCode: string]: { name: string; removalDate?: number };
+    [confCode: string]: { name: string; createdAt: number; removalDate?: number };
   } = {};
 
   let requestedKeys = confirmationCodes.map((code) => {
@@ -603,7 +625,7 @@ async function getSubmissionsFromConfirmationCodes(
       RequestItems: {
         Vault: {
           Keys: requestedKeys,
-          ProjectionExpression: "#name,ConfirmationCode,RemovalDate",
+          ProjectionExpression: "#name,CreatedAt,ConfirmationCode,RemovalDate",
           ExpressionAttributeNames: {
             "#name": "Name",
           },
@@ -618,6 +640,7 @@ async function getSubmissionsFromConfirmationCodes(
       response.Responses.Vault.forEach((record) => {
         accumulatedSubmissions[record["ConfirmationCode"]] = {
           name: record["Name"],
+          createdAt: record["CreatedAt"],
           removalDate: record["RemovalDate"],
         };
       });
@@ -644,42 +667,40 @@ async function getSubmissionsFromConfirmationCodes(
       } else {
         acc.submissionsToConfirm.push({
           name: submission.name,
+          createdAt: submission.createdAt,
           confirmationCode: currentConfirmationCode,
         });
       }
       return acc;
     },
     {
-      submissionsToConfirm: Array<{ name: string; confirmationCode: string }>(),
+      submissionsToConfirm: Array<{ name: string; createdAt: number; confirmationCode: string }>(),
       confirmationCodesAlreadyUsed: Array<string>(),
       confirmationCodesNotFound: Array<string>(),
     }
   );
 }
 
-export const confirmResponses = async (
-  ability: UserAbility,
-  confirmationCodes: string[],
-  formId: string
-) => {
-  await checkAbilityToAccessSubmissions(ability, formId).catch((error) => {
-    if (error instanceof AccessControlError) {
+export const confirmResponses = async (confirmationCodes: string[], formId: string) => {
+  const { user } = await authorization.canViewForm(formId).catch((e) => {
+    if (e instanceof AccessControlError)
       logEvent(
-        ability.userID,
-        { type: "Form", id: formId },
+        e.user.id,
+        {
+          type: "Form",
+          id: formId,
+        },
         "AccessDenied",
-        `Attempted to delete all responses for form ${formId}`
+        `Attempted to confirm responses for form ${formId}`
       );
-    }
-    throw error;
+    throw e;
   });
-
   const chunkedCodes = chunkArray(confirmationCodes, 50);
   const accumulatedResults = [];
 
   for (const codes of chunkedCodes) {
     // eslint-disable-next-line no-await-in-loop
-    accumulatedResults.push(await getSubmissionsFromConfirmationCodes(ability, formId, codes));
+    accumulatedResults.push(await getSubmissionsFromConfirmationCodes(formId, codes));
   }
 
   const submissionsFromConfirmationCodes = accumulatedResults.reduce(
@@ -721,12 +742,12 @@ export const confirmResponses = async (
                     NAME_OR_CONF: `NAME#${submission.name}`,
                   },
                   UpdateExpression:
-                    "SET #status = :status, ConfirmTimestamp = :confirmTimestamp, RemovalDate = :removalDate",
+                    "SET #statusCreatedAtKey = :statusCreatedAtValue, ConfirmTimestamp = :confirmTimestamp, RemovalDate = :removalDate",
                   ExpressionAttributeNames: {
-                    "#status": "Status",
+                    "#statusCreatedAtKey": "Status#CreatedAt",
                   },
                   ExpressionAttributeValues: {
-                    ":status": "Confirmed",
+                    ":statusCreatedAtValue": `Confirmed#${submission.createdAt}`,
                     ":confirmTimestamp": confirmationTimestamp,
                     ":removalDate": removalDate,
                   },
@@ -754,7 +775,7 @@ export const confirmResponses = async (
         // Done asychronously to not block response back to client
         submissions.forEach((confirmation) =>
           logEvent(
-            ability.userID,
+            user.id,
             { type: "Response", id: confirmation.name },
             "ConfirmResponse",
             `Confirmed response for form ${formId}`
@@ -785,3 +806,19 @@ export const confirmResponses = async (
     }),
   };
 };
+
+export function vaultStatusFromStatusCreatedAt(statusCreatedAtAttribute: string): VaultStatus {
+  const status = statusCreatedAtAttribute.split("#")[0];
+  switch (status) {
+    case "New":
+      return VaultStatus.NEW;
+    case "Downloaded":
+      return VaultStatus.DOWNLOADED;
+    case "Confirmed":
+      return VaultStatus.CONFIRMED;
+    case "Problem":
+      return VaultStatus.PROBLEM;
+    default:
+      throw new Error(`Unsupported Status#CreatedAt value. Value = ${statusCreatedAtAttribute}.`);
+  }
+}

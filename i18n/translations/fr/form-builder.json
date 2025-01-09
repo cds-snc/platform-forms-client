@@ -455,6 +455,11 @@
     "downloadBtnText": "Télécharger le fichier du formulaire",
     "title": "Télécharger le fichier du formulaire"
   },
+  "switchToApiMode": {
+    "title": "Passer à la livraison par API",
+    "description": "Les nouvelles soumissions seront disponibles via le point de terminaison de l'API.",
+    "btnText": "Passer à la livraison par API"
+  },
   "formIntroduction": "Introduction du formulaire ",
   "formInvalidProperty": "Invalide : {{property}}",
   "formMissingProperty": "Il manque : {{property}}",
@@ -548,6 +553,7 @@
     "text2": "",
     "vaultOption": "Réponses à télécharger",
     "emailOption": "Réponses envoyées par courriel — ",
+    "apiOption": "Réponses récupérées avec l'API",
     "change": "Modifier ces paramètres"
   },
   "logicPublishWarning": {
@@ -621,22 +627,33 @@
   "selectAutocompleteHint": "Cette option est utile lorsque les personnes qui remplissent le formulaire fournissent des informations personnelles telles que leur adresse, courriel ou numéro de téléphone.",
   "selectElement": "Sélectionnez un type d'élément",
   "send": "Envoyer",
+  "copy": "copie",
   "settings": {
     "formManagement": "Gestion du formulaire",
     "api": {
       "keyId": "Identifiant de la clé API",
-      "title": "Accès API",
+      "title": "Accès pour l'API",
       "generateKey": "Créer une clé API",
       "refreshKey": "Rafraîchir la clé",
       "deleteKey": "Supprimer la clé API",
       "deleteKeyFailed": {
-        "title": "API key failed to delete [FR]",
-        "message": "API key failed to delete [FR]"
+        "title": "Quelque chose a mal tourné",
+        "message": "La clé API n'a pas pu être supprimée"
       },
       "deleteKeySuccess": {
-        "title": "API key deleted [FR]",
-        "message": "New responses are now available for download on the [FR]",
-        "responseLinkText": "responses page [FR]"
+        "title": "La clé API a été supprimée",
+        "message": "Les nouvelles réponses peuvent maintenant être téléchargées sur la",
+        "responseLinkText": "page Réponses"
+      },
+      "deleteApiKeyToChangeOptions": {
+        "title": "Supprimer la clé API pour modifier la méthode de livraison",
+        "message": "Afin de sélectionner une autre option, vous devez d'abord supprimer la clé API."
+      },
+      "generateKeySuccess": {
+        "title": "La clé API a été créée",
+        "message": "Les nouvelles réponses seront disponibles par l'API. Trouvez des instructions pour la configuration de l'intégration dans ",
+        "docsLinkText": "la documentation API",
+        "docsLink": "https://cds-snc.github.io/forms-api/accueil/"
       },
       "keyExists": "La clé existe déjà",
       "keyIdToolTip": {
@@ -644,29 +661,29 @@
         "text2": "L'identifiant de la clé API n'est pas la clé elle-même. Il s'agit d'un moyen d'identifier une clé sans partager des informations protégées."
       },
       "deleteApiKeyDialog": {
-        "title": "Delete API key [FR]",
-        "cautionTitle": "Caution: [FR]",
-        "cautionText": "Deleting this API key cannot be undone. Deletion will permanently stop the delivery of responses to all integrated systems. You will need to generate a new key and add it to your integration to restart API delivery. [FR]",
-        "stopText": "To temporarily stop submissions to this form consider",
-        "stopText1": "closing the form [FR]",
-        "stopText2": "instead. [FR]",
-        "cancelButton": "Annuler [FR]",
-        "deleteKeyButton": "Delete key [FR]",
+        "title": "Supprimer la clé API",
+        "cautionTitle": "Attention :",
+        "cautionText": "La suppression de cette clé API ne peut être annulée. Supprimer la clé interrompt définitivement la livraison de réponses à tous les systèmes intégrés. Vous devrez créer une nouvelle clé et l'ajouter à votre intégration pour relancer la livraison à partir de l'API.",
+        "stopText": "<strong>Pour arrêter les soumissions</strong> à ce formulaire de façon temporaire, veuillez considérer",
+        "stopText1": "la fermeture du formulaire",
+        "stopText2": "à la place.",
+        "cancelButton": "Annuler",
+        "deleteKeyButton": "Supprimer la clé",
         "error": {
           "deleteFailed": {
-            "title": "Error deleting API key",
-            "message": "There was an error deleting the API key. Please try again later."
+            "title": "La clé API n'a pas pu être supprimée",
+            "message": "Une erreur s'est produite lors de la suppression de la clé API. Veuillez réessayer plus tard."
           }
         }
       },
       "dialog": {
-        "title": "[FR]Generate API key",
+        "title": "Créer la clé API",
         "heading": "Les clés API de Formulaires GC sont PROTÉGÉES B",
         "responsibility": "Vous êtes responsable de :",
-        "responsibility1": "L'enregistrement de cette clé dans un endroit sûr.",
-        "responsibility2": "Le partage de cette clé uniquement avec les personnes qui en ont besoin.",
-        "responsibility3": "L'envoi de cette clé par des voies sécurisées, comme un courriel crypté.",
-        "responsibility4": "La compréhension des <a href='canada.ca' target='_blank'>procédures de sécurité requises.</a>",
+        "responsibility1": "L'enregistrement de cette clé dans un endroit sûr d'une machine du gouvernement du Canada.",
+        "responsibility2": "Le partage de cette clé uniquement avec les personnes qui ont les autorisations, s'il y a un besoin.",
+        "responsibility3": "L'envoi de cette clé en utilisant un courriel crypté, s'il est nécessaire pour la configuration de l'intégration.",
+        "responsibility4": "La gestion de la clé, supprimant et recréant celle-ci si l'on soupçonne qu'elle a été compromise.",
         "text1": "Ne perdez pas votre clé ",
         "text2": "Cette clé n'est fournie qu'une seule fois, car elle permet d'accéder aux données des réponses au formulaire. Si vous perdez cette clé ou si elle est compromise, vous devrez en créer une nouvelle.",
         "cancelButton": "Annuler",
@@ -674,12 +691,12 @@
         "confirm": {
           "label": "Confirmation",
           "required": "(obligatoire)",
-          "description": "Saisissez <strong>ACCEPTE</strong> dans la case ci-dessous pour confirmer que vous comprenez vos responsabilités et que vous acceptez les <a href='canada.ca' target='_blank'>procédures de sécurité requises</a> lors de l'enregistrement et du partage de cette clé."
+          "description": "Saisissez <strong>ACCEPTE</strong> dans la case ci-dessous pour confirmer que vous comprenez vos responsabilités et que vous acceptez les <a href='https://forms-formulaires.alpha.canada.ca/fr/terms-of-use' target='_blank'>conditions d'utilisation</a> lors de l'enregistrement et du partage de cette clé."
         },
         "error": {
           "createFailed": {
-            "title": "[FR]Error creating API key",
-            "message": "[FR]There was an error creating the API key. Please try again later."
+            "title": "La clé API n'a pas pu être créée",
+            "message": "Une erreur s'est produite lors de la création de la clé API. Veuillez enregistrer le formulaire et réessayer plus tard."
           }
         }
       }
@@ -726,11 +743,13 @@
       "admin": "Fins administratives",
       "nonAdmin": "Fins non-administratives",
       "unset": "Pas défini"
-    }
+    },
+    "saveButton": "Enregistrer les modifications"
   },
   "settingsResponseDelivery": {
     "selectClassification": "Classification des données",
     "beforePublishMessage": "Ces paramètres ne peuvent être modifiés qu’avant la publication.",
+    "deleteApiKeyMessage": "Vous devez supprimer la clé API avant de pouvoir modifier l'option de livraison.",
     "protectedBMessage": "Les réponses classifiées PROTÉGÉ B doivent être téléchargées de Formulaires GC.",
     "settingsMessage": "Pour modifier ces paramètres, sélectionnez la classification des données de vos réponses au formulaire.",
     "title": "Option de livraison",
@@ -738,7 +757,7 @@
     "vaultOptionHint": {
       "text1": " Les réponses soumises apparaîtront sur",
       "text2": "la page Réponses",
-      "text3": " Formulaires GC conserve les données temporairement pour 30 hours."
+      "text3": " Formulaires GC conserve les données temporairement pour 30 jours."
     },
     "emailOption": "Recevoir les réponses par courriel",
     "saveButton": "Enregistrer les modifications",
@@ -769,32 +788,32 @@
       }
     },
     "responseDeliveryHelpWithApi": {
-      "cta": "Help choosing an option [FR]",
-      "title": "Choosing a response delivery option [FR]",
-      "description": "There are two options for getting submitted form responses. Use the chart below to help pick which option best fits your needs. [FR]",
+      "cta": "Conseils pour le choix d'une option",
+      "title": "Choisir une option de livraison des réponses",
+      "description": "Il y a trois options pour obtenir les réponses des formulaires soumis. Le tableau ci-dessous vous aidera à choisir l’option qui répond le mieux à vos besoins.",
       "inbox": {
-        "title": "Email to an inbox [FR]",
-        "text1": "For up to PROTECTED A forms [FR]",
-        "text2": "Responses are delivered directly to an inbox in real time [FR]",
-        "text3": "One email address can receive response emails. This can be a shared inbox. [FR]",
-        "text4": "One email address set for delivery. This can be a shared inbox. [FR]",
-        "text5": "No technical resources required. [FR]"
+        "title": "Courriel à une boîte de réception",
+        "text1": "Pour les formulaires avec une classification jusqu’à PROTÉGÉ A.",
+        "text2": "Les réponses sont envoyées directement dans une boîte de réception en temps réel.",
+        "text3": "Une seule adresse courriel peut recevoir les courriel de réponses.",
+        "text4": "Il peut s'agir d'une boîte de réception partagée.",
+        "text5": "Aucune ressource de développement de logiciel n'est requise."
       },
       "vault": {
-        "title": "Download from GC Forms [FR]",
-        "text1": "For up to PROTECTED B forms [FR]",
-        "text2": "Download responses within 30 days [FR]",
-        "text3": "Can be switched to API delivery after publishing [FR]",
-        "text4": "Multiple account holders can access responses. [FR]",
-        "text5": "No technical resources required. [FR]"
+        "title": "Téléchargement des réponses dans Formulaires GC",
+        "text1": "Pour les formulaires avec une classification jusqu’à PROTÉGÉ B.",
+        "text2": "Téléchargement des réponses de Formulaires GC dans un délai de 30 jours.",
+        "text3": "Possibilité de passer à la livraison par API après la publication.",
+        "text4": "Plusieurs titulaires de comptes peuvent accéder aux réponses.",
+        "text5": "Aucune ressource de développement de logiciel n'est requise."
       },
       "api": {
-        "title": "API response retrieval [FR]",
-        "text1": "For up to PROTECTED A forms. (PROTECTED B coming soon) [FR]",
-        "text2": "API pull requests & download delivery [FR]",
-        "text3": "Can be switched to download only delivery after publishing [FR]",
-        "text4": "One API key available per form. [FR]",
-        "text5": "Technical resources needed to develop the API integration. [FR]"
+        "title": "Récupération des réponses par API",
+        "text1": "Pour les formulaires avec une classification jusqu’à PROTÉGÉ A (Bientôt disponible : PROTÉGÉ B).",
+        "text2": "Appels à l'API pour extraire les réponses de formulaire.",
+        "text3": "Possibilité de passer à la méthode de téléchargement après la publication.",
+        "text4": "Une clé API par formulaire",
+        "text5": "Ressources de développement de logiciel requises pour l'intégration API."
       }
     }
   },
@@ -873,10 +892,10 @@
   "startP2": "Modifiez un formulaire qui a été créé et téléchargé à partir de Formulaires GC.",
   "submit": "Soumettre",
   "submittedResponsesText": "Les réponses soumises seront envoyées à {{email}}.",
-  "submittedResponsesChange": "Modifier où les réponses soumises sont envoyées",
+  "submittedResponsesChange": "Modifier l'option de livraison",
   "submittedResponsesTextVault": {
-    "text1": "En cliquant sur « Soumettre », la réponse sera transmise à la page",
-    "text2": "Réponses"
+    "text1": "En cliquant sur « Soumettre », la réponse sera disponible pour récupération :",
+    "text2": "Allez aux Réponses"
   },
   "support": {
     "contactUs": "formulaire de contact",
@@ -893,7 +912,8 @@
     "lookingForADemo": "Vous cherchez à en savoir plus sur Formulaires GC?",
     "request": {
       "option1": "Poser une question",
-      "option2": "Obtenir du soutien technique",
+      "option2": "Obtenir de l'aide pour utiliser Formulaires GC",
+      "apiOption": "Demander de l'assistance technique avec l'API",
       "option3": "Signaler un problème avec un formulaire publié",
       "option4": "Autre",
       "title": "Raison pour laquelle vous nous contactez"
@@ -973,13 +993,13 @@
       "note": "Non disponible pour PROTÉGÉ B"
     },
     "apiOption": {
-      "label": "Receive responses through an API endpoint [FR]",
-      "note": "Submitted responses will be available for retrieval through an API endpoint and response page. [FR]",
-      "startNote": "Start your API integration by generating a private API Key [FR]"
+      "label": "Intégrer avec l'API",
+      "note": "Les réponses soumises seront disponibles par l'intermédiaire d'un point de terminaison API.",
+      "startNote": "Commencez par créer une clé API."
     },
     "apiDocNotes": {
-      "title": "API documentation & guidance [FR]",
-      "text1": "To connect to our endpoint follow instructions and code examples in our <a href='http://canada.ca' target='_blank'>API documentation</a>. Read more about the API development process on our <a href='http://canada.ca' target='_blank'>guidance pages</a>. [FR]"
+      "title": "Configurez votre intégration API",
+      "text1": "Pour vous connecter à notre point de terminaison afin de récupérer des réponses, suivez la <a href='https://cds-snc.github.io/forms-api/accueil' target='_blank'>Documentation API</a> pour développeurs."
     },
     "vaultNote": {
       "text1": "Les réponses aux formulaires PROTÉGÉ B doivent être téléchargées de Formulaires GC",
@@ -1000,7 +1020,7 @@
   "closingDate": {
     "title": "Accepter les soumissions de formulaires",
     "description": "Une fois que vous avez publié un formulaire, il est ouvert aux soumissions. Vous pouvez fermer le formulaire pour empêcher les soumissions.",
-    "status": "État du formulaire",
+    "status": "du formulaire",
     "open": "Ouvert",
     "closed": "Fermé",
     "saveButton": "Enregistrer les modifications",
@@ -1216,9 +1236,9 @@
   "goBack": "Retourner",
   "disabled": "désactivé",
   "dynamicRow": {
-    "defaultRowTitle": "Instance",
-    "rowTitleTextA11yEn": "Instance",
-    "rowTitleTextA11yFr": "Instance",
+    "defaultRowTitle": "Entrée",
+    "rowTitleTextA11yEn": "Entrée",
+    "rowTitleTextA11yFr": "Entrée",
     "defaultAddButtonText": "Ajouter",
     "addButtonTextA11yEn": "Texte du bouton pour ajouter à l'ensemble en anglais",
     "addButtonTextA11yFr": "Texte du bouton pour ajouter à l'ensemble en français",
@@ -1226,7 +1246,7 @@
     "removeButtonTextA11yEn": "Texte du bouton pour supprimer de l'ensemble en anglais",
     "removeButtonTextA11yFr": "Texte du bouton pour supprimer de l'ensemble en français",
     "translate": {
-      "rowTitleText": "Étiquette pour l'instance",
+      "rowTitleText": "Étiquette pour l'entrée",
       "repeatingSet": "Ensemble récurrent",
       "addButtonText": "Étiquette pour le bouton qui permet l'ajout à l'ensemble",
       "removeButtonText": "Étiquette pour le bouton qui permet la suppression de l'ensemble"
@@ -1243,7 +1263,7 @@
         "message": "Assurez-vous de remplir tous les champs."
       },
       "rowTitle": {
-        "title": "Nom de l'ensemble de questions",
+        "title": "Nom de l'entrée",
         "description": "Créez un titre pour le groupe de questions récurrentes. Ces ensembles seront numérotés. Par exemple : « Adresse -1, Adresse 2 »"
       },
       "addButton": {
@@ -1278,5 +1298,8 @@
       "save": "Enregistrer",
       "cancel": "Annuler"
     }
+  },
+  "systemHealthCheck": {
+    "title": "Santé du système"
   }
 }

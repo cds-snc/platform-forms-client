@@ -1,7 +1,7 @@
 import { useTranslation } from "@i18n/client";
 import { LocalizedElementProperties } from "@lib/types/form-builder-types";
 import { Label } from "./Label";
-import { Input } from "@formBuilder/components/shared";
+import { Input } from "@formBuilder/components/shared/Input";
 import { useTemplateStore } from "@lib/store/useTemplateStore";
 import { FormElement } from "@lib/types";
 

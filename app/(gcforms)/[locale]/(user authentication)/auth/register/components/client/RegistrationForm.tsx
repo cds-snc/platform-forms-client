@@ -1,5 +1,6 @@
 "use client";
 import React, { useRef } from "react";
+import { useActionState } from "react";
 import { useFormStatus } from "react-dom";
 import { ErrorListItem, Label, TextInput, Alert } from "../../../../components/client/forms";
 import { Button } from "@clientComponents/globals";
@@ -8,7 +9,6 @@ import { ErrorStates, register } from "../../action";
 import Link from "next/link";
 import { ErrorStatus } from "@clientComponents/forms/Alert/Alert";
 import { useRouter } from "next/navigation";
-import { useActionState } from "react";
 
 const SubmitButton = () => {
   const { t } = useTranslation("signup");

@@ -13,6 +13,9 @@ WORKDIR /src
 ARG COGNITO_APP_CLIENT_ID
 ARG COGNITO_USER_POOL_ID
 
+ARG NEXT_SERVER_ACTIONS_ENCRYPTION_KEY
+ENV NEXT_SERVER_ACTIONS_ENCRYPTION_KEY=$NEXT_SERVER_ACTIONS_ENCRYPTION_KEY
+
 ARG INDEX_SITE="false"
 ENV INDEX_SITE=$INDEX_SITE
 RUN corepack enable && yarn set version berry
@@ -50,7 +53,6 @@ COPY package.json yarn.lock .yarnrc.yml next.config.mjs ./
 COPY .yarn ./.yarn
 COPY public ./public
 COPY prisma ./prisma
-COPY form-builder-templates ./form-builder-templates
 COPY bin/pr-review-entrypoint.sh ./entrypoint.sh
 # Update to latest yarn version
 RUN corepack enable && yarn set version berry

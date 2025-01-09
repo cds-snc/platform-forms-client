@@ -11,7 +11,7 @@ jobs:
       # Label used to access the service container
       postgres:
         # Docker Hub image
-        image: postgres@sha256:8d3be35b184e70d81e54cbcbd3df3c0b47f37d06482c0dd1c140db5dbcc6a808
+        image: postgres@sha256:888402a8cd6075c5dc83a31f58287f13306c318eaad016661ed12e076f3e6341
         env:
           POSTGRES_PASSWORD: postgres
         # Set health checks to wait until postgres has started
@@ -24,7 +24,7 @@ jobs:
           - 5432:5432
       redis:
         # Docker Hub image
-        image: redis@sha256:a06cea905344470eb49c972f3d030e22f28f632c1b4f43bbe4a26a4329dd6be5
+        image: redis@sha256:bb142a9c18ac18a16713c1491d779697b4e107c22a97266616099d288237ef47
         options: >-
           --health-cmd "redis-cli ping"
           --health-interval 10s
@@ -43,7 +43,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@50fbc622fc4ef5163becd7fab6573eac35f8462e # v1.2.0
       - name: Node.JS Setup
-        uses: actions/setup-node@0a44ba7841725637a19e28fa30b79a866c81b0a6 # v4.0.4
+        uses: actions/setup-node@39370e3970a6d050c480ffad4ff0ed4d3fdee5af # v4.1.0
         with:
           node-version-file: .nvmrc
 
@@ -54,10 +54,13 @@ jobs:
         id: yarn-cache-dir-path
         run: echo "dir=$(yarn config get cacheFolder)" >> $GITHUB_OUTPUT
 
-      - uses: actions/cache@3624ceb22c1c5a301c8db4169662070a689d9ea8 # v4.1.1
+      - uses: actions/cache@1bd1e32a3bdc45362d1e726936510720a7c30a57 # v4.2.0
         id: yarn-cache # use this to check for `cache-hit` (`steps.yarn-cache.outputs.cache-hit != 'true'`)
         with:
-          path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
+          path:  |
+            ${{ steps.yarn-cache-dir-path.outputs.dir }}
+            ${{ github.workspace }}/.next/cache
+
           key: linux-yarn-${{ hashFiles('**/yarn.lock') }}
           restore-keys: |
             linux-yarn-
@@ -66,7 +69,7 @@ jobs:
         run: yarn workspaces focus gcforms flag_initialization
 
       - name: Cypress Tests
-        uses: cypress-io/github-action@0da3c06ed8217b912deea9d8ee69630baed1737e # v6.7.6
+        uses: cypress-io/github-action@57b70560982e6a11d23d4b8bec7f8a487cdbb71b # v6.7.8
         with:
           # we have already installed all dependencies above
           install: false
@@ -76,7 +79,7 @@ jobs:
           start: yarn start:test
           wait-on: "http://localhost:3000"
           config: baseUrl=http://localhost:3000
-      - uses: actions/upload-artifact@b4b15b8c7c6ac21ea08fcf65892d2ee8f75cf882 # v4.4.3
+      - uses: actions/upload-artifact@6f51ac03b9356f520e9adb1b1b7802705f340c2b # v4.5.0
         if: failure()
         with:
           name: cypress-screenshots

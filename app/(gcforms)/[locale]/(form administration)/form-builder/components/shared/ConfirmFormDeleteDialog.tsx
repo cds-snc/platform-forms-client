@@ -78,7 +78,7 @@ export const ConfirmFormDeleteDialog = ({
     return (
       <Dialog handleClose={handleClose} dialogRef={dialog}>
         <div className="flex min-h-[150px] p-5">
-          <div className="w-[100%] p-10">
+          <div className="w-full p-10">
             <Alert.Danger>
               <Alert.Title>{t("formDelete.error")}</Alert.Title>
               <p>{t("formDelete.somethingWentWrong")}</p>
@@ -115,7 +115,7 @@ export const ConfirmFormDeleteDialog = ({
     </>
   );
 
-  const responsesLink = `/${i18n.language}/form-builder/${formId}/responses/new`;
+  const responsesLink = `/${i18n.language}/form-builder/${formId}/responses`;
 
   if (data && data.error === "unprocessed") {
     return (

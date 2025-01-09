@@ -1,7 +1,7 @@
 "use client";
 import { useTranslation } from "@i18n/client";
-import { Checkbox, Radio } from "@formBuilder/components/shared";
-import { AddressComponents, FormElement, FormElementTypes } from "@lib/types";
+import { Checkbox, Radio } from "@formBuilder/components/shared/MultipleChoice";
+import { AddressComponents, FormElementTypes, FormElement } from "@lib/types";
 
 export const AddressCompleteOptions = ({
   item,

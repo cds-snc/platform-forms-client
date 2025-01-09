@@ -2,14 +2,16 @@
 import React, { useCallback, useState } from "react";
 import { useTranslation } from "@i18n/client";
 import { useRouter } from "next/navigation";
-import { useRehydrate, useTemplateStore } from "@lib/store/useTemplateStore";
+import { useTemplateStore } from "@lib/store/useTemplateStore";
+import { useRehydrate } from "@lib/store/hooks/useRehydrate";
 import { CancelIcon, CircleCheckIcon, LockIcon } from "@serverComponents/icons";
 import { Button, Alert } from "@clientComponents/globals";
 import Link from "next/link";
 import { isVaultDelivery } from "@lib/utils/form-builder";
 import { classificationOptions } from "@formBuilder/components/ClassificationSelect";
 import { logMessage } from "@lib/logger";
-import { DownloadFileButton, toast } from "@formBuilder/components/shared";
+import { DownloadFileButton } from "@formBuilder/components/shared/DownloadFileButton";
+import { toast } from "@formBuilder/components/shared/Toast";
 import Skeleton from "react-loading-skeleton";
 import LinkButton from "@serverComponents/globals/Buttons/LinkButton";
 import { updateTemplate, updateTemplatePublishedStatus } from "@formBuilder/actions";
@@ -20,6 +22,7 @@ import { FormServerErrorCodes } from "@lib/types/form-builder-types";
 import { PrePublishDialog } from "./PrePublishDialog";
 import { FormProperties } from "@lib/types";
 import { useGroupStore } from "@formBuilder/components/shared/right-panel/treeview/store/useGroupStore";
+import { useFormBuilderConfig } from "@lib/hooks/useFormBuilderConfig";
 
 export const Publish = ({ id }: { id: string }) => {
   const { t, i18n } = useTranslation("form-builder");
@@ -75,6 +78,8 @@ export const Publish = ({ id }: { id: string }) => {
   let securityAttributeText: string = securityOption?.[lang] || securityAttribute;
   // remove (default) from the string
   securityAttributeText = securityAttributeText.replace(/\(.*?\)/g, "");
+
+  const { hasApiKeyId } = useFormBuilderConfig();
 
   const Icon = ({ checked }: { checked: boolean }) => {
     return checked ? (
@@ -290,7 +295,13 @@ export const Publish = ({ id }: { id: string }) => {
               <li>
                 <strong>{t("publishYourFormInstructions.deliveryOption")}:&nbsp;</strong>
                 {isVaultDelivery(getDeliveryOption()) ? (
-                  <span>{t("publishYourFormInstructions.vaultOption")}</span>
+                  <>
+                    {hasApiKeyId ? (
+                      <span>{t("publishYourFormInstructions.apiOption")}</span>
+                    ) : (
+                      <span>{t("publishYourFormInstructions.vaultOption")}</span>
+                    )}
+                  </>
                 ) : (
                   <span>{t("publishYourFormInstructions.emailOption")}</span>
                 )}

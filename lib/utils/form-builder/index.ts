@@ -68,14 +68,6 @@ export const swapElement = (arr: FormElement[], index1: number, index2: number) 
   });
 };
 
-export const incrementElementId = (elements: FormElement[]) => {
-  if (!elements || !elements.length) {
-    return 1;
-  }
-  const ids = elements.map((element) => element.id).sort((a, b) => a - b);
-  return ids[ids.length - 1] + 1;
-};
-
 export const incrementSubElementId = (subElements: FormElement[], elId: number) => {
   if (!subElements || !subElements.length) {
     return Number(elId.toString() + "01");
@@ -126,6 +118,7 @@ export const getSchemaFromState = (state: TemplateStoreState, allowGroups = fals
       layout,
       groups,
       groupsLayout,
+      lastGeneratedElementId,
     },
   } = state;
 
@@ -141,6 +134,7 @@ export const getSchemaFromState = (state: TemplateStoreState, allowGroups = fals
     brand,
     groups,
     groupsLayout,
+    lastGeneratedElementId,
   };
 
   // Force this is off until a enable in a follow-up PR
@@ -288,6 +282,8 @@ export const allowedTemplates = [
   FormElementTypes.contact,
   FormElementTypes.departments,
 ] as const;
+
+export type TemplateTypes = (typeof allowedTemplates)[number];
 
 export const isVaultDelivery = (deliveryOption: DeliveryOption | undefined) => {
   return !deliveryOption;

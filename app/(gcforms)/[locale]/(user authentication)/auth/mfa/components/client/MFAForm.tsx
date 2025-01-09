@@ -1,5 +1,6 @@
 "use client";
 import React, { useRef, useState, useEffect } from "react";
+import { useActionState } from "react";
 import { TextInput, Label, Alert, ErrorListItem } from "../../../../components/client/forms";
 import { useTranslation } from "@i18n/client";
 import { verify, getRedirectPath, ErrorStates } from "../../actions";
@@ -13,7 +14,6 @@ import { useFocusIt } from "@lib/hooks/useFocusIt";
 import { Loader } from "@clientComponents/globals/Loader";
 import { useRouter } from "next/navigation";
 import { updateSessionProvider } from "@lib/hooks/auth/updateSessionProvider";
-import { useActionState } from "react";
 
 export const MFAForm = () => {
   const {
@@ -145,7 +145,7 @@ export const MFAForm = () => {
             </ol>
           </Alert>
         )}
-      <h1 data-testid="verify-title" ref={headingRef} className="mb-6 mt-6 border-0">
+      <h1 data-testid="verify-title" ref={headingRef} className="my-6 border-0">
         {t("verify.title")}
       </h1>
       <p className="mb-12 mt-10">{t("verify.emailHasBeenSent")}</p>

@@ -2,9 +2,8 @@
 import React, { useCallback, useEffect } from "react";
 import { useTranslation } from "@i18n/client";
 import { Button } from "@clientComponents/globals";
-import { getPathString } from "@lib/utils/form-builder/getPath";
 import { useTemplateStore } from "@lib/store/useTemplateStore";
-import { Dialog, useDialogRef } from "@formBuilder/components/shared";
+import { Dialog, useDialogRef } from "@formBuilder/components/shared/Dialog";
 import { useCustomEvent } from "@lib/hooks/useCustomEvent";
 import { Question } from "./Question";
 import { Description } from "./Description";
@@ -18,14 +17,16 @@ import { useRefsContext } from "@formBuilder/[id]/edit/components/RefsContext";
 import { FormElement } from "@lib/types";
 
 export const MoreDialog = () => {
-  const { elements, updateField, setChangeKey, getFormElementById } = useTemplateStore((s) => ({
-    lang: s.lang,
-    updateField: s.updateField,
-    elements: s.form.elements,
-    getFocusInput: s.getFocusInput,
-    setChangeKey: s.setChangeKey,
-    getFormElementById: s.getFormElementById,
-  }));
+  const { getPathString, updateField, setChangeKey, getFormElementById } = useTemplateStore(
+    (s) => ({
+      lang: s.lang,
+      updateField: s.updateField,
+      getFocusInput: s.getFocusInput,
+      setChangeKey: s.setChangeKey,
+      getFormElementById: s.getFormElementById,
+      getPathString: s.getPathString,
+    })
+  );
 
   const [item, setItem] = React.useState<FormElement | undefined>(undefined);
   const [isOpen, setIsOpen] = React.useState(false);
@@ -81,7 +82,7 @@ export const MoreDialog = () => {
         className="ml-5"
         theme="primary"
         onClick={() => {
-          updateField(getPathString(item.id, elements), item.properties);
+          updateField(getPathString(item.id), item.properties);
           setChangeKey(String(new Date().getTime()));
           handleClose();
         }}

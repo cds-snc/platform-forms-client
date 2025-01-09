@@ -148,7 +148,13 @@
       "noDeletedResponses": "No responses for removal",
       "noDeletedResponsesMessage": "Once you’ve downloaded and signed off on the removal of responses, they will be available here for 30 days.",
       "noProblemResponses": "No responses reported with problems",
-      "noProblemResponsesMessage": "Problem responses will appear here until signed off for removal from GC Forms."
+      "noProblemResponsesMessage": "Problem responses will appear here until signed off for removal from GC Forms.",
+      "noNewResponsesApiTitle": "No responses awaiting retrieval",
+      "noNewResponsesApiMessage": "<p className='mb-2'>Once retrieved from the API endpoint, the form submissions will appear here and be available in GC Forms for 30 days.</p><p>Read more about setting up the integration in our <a href='https://cds-snc.github.io/forms-api/home/' target='_blank'>API documentation</a>.</p>",
+      "apiResponsesAvailableTitle": "Responses waiting for retrieval",
+      "apiResponsesAvailableMessage": "<p className='mb-2'>Retrieve new form submissions via the API.</p><p>Read more about making API requests in our <a href='https://cds-snc.github.io/forms-api/making-requests/' target='_blank'>API documentation</a>.</p>",
+      "apiResponsesAwaitingConfirmTitle": "Responses waiting on confirmation",
+      "apiResponsesAwaitingConfirmMessage": "<p className='mb-2'>Confirm that form submissions were successfully retrieved via the API.</p><p>Read more about making API requests in our <a href='https://cds-snc.github.io/forms-api/making-requests/' target='_blank'>API documentation</a>.</p>"
     },
     "notifications": {
       "downloadComplete": "Responses moved to the “Downloaded” tab",
@@ -278,5 +284,33 @@
     "province": "Province, territory, or state",
     "postalCode": "Postal or zip code",
     "country": "Country"
+  },
+  "apiDashboard": {
+    "title": "Responses"
+  },
+  "systemHealth": {
+    "problemsReported": {
+      "title": "Problems reported about submissions",
+      "description": "<a href={`/en/support`} target='_blank'>Get support</a>"
+    },
+    "deliveredAndConfirmed": {
+      "title": "Status: OK",
+      "description": "All submissions have been retrieved and confirmed"
+    },
+    "awatingDownload": {
+      "title": "Status: Awaiting retrieval",
+      "description": "Waiting for the API request to download new submissions",
+      "new": "New",
+      "responses": "responses",
+      "available": "available"
+    },
+    "awatingConfirm": {
+      "title": "Status: Awaiting confirmation",
+      "description": "Waiting for the API request to confirm retrieved submissions."
+    },
+    "overdue": {
+      "title": "Overdue responses",
+      "description": "Retrieve and confirm submissions via the API"
+    }
   }
 }

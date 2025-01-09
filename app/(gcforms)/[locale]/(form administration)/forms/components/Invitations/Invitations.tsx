@@ -6,7 +6,7 @@ import { useRouter } from "next/navigation";
 import { useTranslation } from "@i18n/client";
 import { Trans } from "react-i18next";
 import { Button } from "@clientComponents/globals";
-import { toast } from "@formBuilder/components/shared";
+import { toast } from "@formBuilder/components/shared/Toast";
 
 export const Invitations = ({ invitations }: { invitations: Invitation[] }) => {
   const { t } = useTranslation("manage-form-access");

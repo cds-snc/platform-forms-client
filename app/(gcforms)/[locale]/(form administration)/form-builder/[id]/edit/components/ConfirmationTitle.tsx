@@ -12,7 +12,7 @@ export const ConfirmationTitle = ({ language }: { language: Language }) => {
   return (
     <div className="mb-8 text-[1rem]">
       <div
-        className="mb-10 h-[1px]"
+        className="mb-10 h-px"
         style={{
           backgroundImage: "linear-gradient(to right, #1E293B 50%, transparent 50%)",
           backgroundSize: "16px 1px",

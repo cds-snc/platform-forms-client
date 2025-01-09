@@ -41,6 +41,8 @@ interface GCFormsContextValueType {
   pushIdToHistory: (groupId: string) => string[];
   clearHistoryAfterId: (groupId: string) => string[];
   getGroupTitle: (groupId: string | null, language: Language) => string;
+  saveProgress: () => void;
+  restoreProgress: () => FormValues | false;
 }
 
 const GCFormsContext = createContext<GCFormsContextValueType | undefined>(undefined);
@@ -52,6 +54,7 @@ export const GCFormsProvider = ({
   children: ReactNode;
   formRecord: PublicFormRecord;
 }) => {
+  const SESSION_STORAGE_KEY = "form-data";
   const groups: GroupsType = formRecord.form.groups || {};
   const initialGroup = groups ? LockedSections.START : null;
   const values = React.useRef({});
@@ -94,6 +97,8 @@ export const GCFormsProvider = ({
   };
 
   const handleNextAction = () => {
+    removeProgressStorage();
+
     if (!currentGroup) return;
 
     if (hasNextAction(currentGroup)) {
@@ -160,6 +165,61 @@ export const GCFormsProvider = ({
     return groups?.[groupId]?.[titleLanguageKey] || "";
   };
 
+  const removeProgressStorage = () => {
+    sessionStorage.removeItem(SESSION_STORAGE_KEY);
+  };
+
+  const saveProgress = () => {
+    const formData = JSON.stringify({
+      id: formRecord.id,
+      values: values.current,
+      history: history.current,
+      currentGroup: currentGroup,
+    });
+
+    // Save to session storage
+    const encodedformData = Buffer.from(formData).toString("base64");
+    sessionStorage.setItem(SESSION_STORAGE_KEY, encodedformData);
+  };
+
+  const restoreProgress = (): FormValues | false => {
+    const encodedformData = sessionStorage.getItem(SESSION_STORAGE_KEY);
+    if (!encodedformData) return false;
+
+    // Clear the session storage as we now have the data
+    removeProgressStorage();
+
+    try {
+      const formData = Buffer.from(encodedformData, "base64").toString("utf8");
+
+      if (!formData) return false;
+
+      const parsedData = JSON.parse(formData);
+
+      if (parsedData.id === formRecord.id) {
+        history.current = parsedData.history;
+
+        if (parsedData.currentGroup !== currentGroup) {
+          setCurrentGroup(parsedData.currentGroup);
+        }
+
+        sessionStorage.setItem(
+          SESSION_STORAGE_KEY,
+          JSON.stringify({
+            restored: true,
+            ...parsedData.values,
+          })
+        );
+
+        return parsedData.values;
+      }
+    } catch (e) {
+      return false;
+    }
+
+    return false;
+  };
+
   return (
     <GCFormsContext.Provider
       value={{
@@ -181,6 +241,8 @@ export const GCFormsProvider = ({
         pushIdToHistory,
         clearHistoryAfterId,
         getGroupTitle,
+        saveProgress,
+        restoreProgress,
       }}
     >
       {children}
@@ -215,6 +277,10 @@ export const useGCFormsContext = () => {
       pushIdToHistory: () => [],
       clearHistoryAfterId: () => [],
       getGroupTitle: () => "",
+      saveProgress: () => void 0,
+      restoreProgress: () => {
+        return {};
+      },
     };
   }
   return formsContext;

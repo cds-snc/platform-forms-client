@@ -43,7 +43,7 @@ yarn install
 
 ### Set your environment variables
 
-Create an `.env` file at the root of the project and use the `.env.example` as a template. If you want you can find a ready to use version of the `.env` file in 1Password > Local Development .ENV secure note.
+Create an `.env` file at the root of the project and use the `.env.example` as a template. If you want you can find a ready to use version of the `.env` file in 1Password > Local Development .ENV secure note
 
 ### Run the web application in development mode
 

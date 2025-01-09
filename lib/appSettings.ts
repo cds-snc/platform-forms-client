@@ -1,5 +1,6 @@
 import { prisma, prismaErrors } from "@lib/integration/prismaConnector";
-import { AccessControlError, checkPrivileges } from "./privileges";
+import { checkPrivileges } from "./privileges";
+import { AccessControlError } from "@lib/auth";
 import { logEvent } from "./auditLogs";
 import { logMessage } from "@lib/logger";
 import { UserAbility } from "./types";
@@ -20,11 +21,11 @@ export const getAllAppSettings = async (ability: UserAbility) => {
         },
       })
       .catch((e) => prismaErrors(e, []));
-    logEvent(ability.userID, { type: "Setting" }, "ListAllSettings");
+    logEvent(ability.user.id, { type: "Setting" }, "ListAllSettings");
     return settings;
   } catch (e) {
     if (e instanceof AccessControlError) {
-      logEvent(ability.userID, { type: "Setting" }, "AccessDenied", "Attempted to list all Forms");
+      logEvent(ability.user.id, { type: "Setting" }, "AccessDenied", "Attempted to list all Forms");
       throw e;
     }
     logMessage.error(e);
@@ -73,7 +74,7 @@ export const getFullAppSetting = async (ability: UserAbility, internalId: string
     .catch((e) => {
       if (e instanceof AccessControlError) {
         logEvent(
-          ability.userID,
+          ability.user.id,
           { type: "Setting", id: internalId },
           "AccessDenied",
           "Attempted to get full setting"
@@ -83,7 +84,7 @@ export const getFullAppSetting = async (ability: UserAbility, internalId: string
       prismaErrors(e, null);
     });
 
-  logEvent(ability.userID, { type: "Setting" }, "ListSetting");
+  logEvent(ability.user.id, { type: "Setting" }, "ListSetting");
   return result;
 };
 
@@ -109,7 +110,7 @@ export const updateAppSetting = async (
       data: settingData,
     });
     logEvent(
-      ability.userID,
+      ability.user.id,
       { type: "Setting", id: internalId },
       "ChangeSetting",
       `Updated setting with ${JSON.stringify(settingData)}`
@@ -121,7 +122,7 @@ export const updateAppSetting = async (
   } catch (e) {
     if (e instanceof AccessControlError) {
       logEvent(
-        ability.userID,
+        ability.user.id,
         { type: "Setting", id: internalId },
         "AccessDenied",
         "Attempted to update setting"
@@ -150,7 +151,7 @@ export const createAppSetting = async (ability: UserAbility, settingData: Settin
       data: settingData,
     });
     logEvent(
-      ability.userID,
+      ability.user.id,
       { type: "Setting", id: createdSetting.internalId },
       "CreateSetting",
       `Created setting with ${JSON.stringify(settingData)}`
@@ -161,7 +162,7 @@ export const createAppSetting = async (ability: UserAbility, settingData: Settin
     return createdSetting;
   } catch (e) {
     if (e instanceof AccessControlError) {
-      logEvent(ability.userID, { type: "Setting" }, "AccessDenied", "Attempted to create setting");
+      logEvent(ability.user.id, { type: "Setting" }, "AccessDenied", "Attempted to create setting");
       throw e;
     }
     if (e instanceof Error) {
@@ -183,7 +184,7 @@ export const deleteAppSetting = async (ability: UserAbility, internalId: string)
       },
     });
     logEvent(
-      ability.userID,
+      ability.user.id,
       { type: "Setting", id: internalId },
       "DeleteSetting",
       `Deleted setting with ${JSON.stringify(deletedSetting)}`
@@ -192,7 +193,7 @@ export const deleteAppSetting = async (ability: UserAbility, internalId: string)
   } catch (e) {
     if (e instanceof AccessControlError) {
       logEvent(
-        ability.userID,
+        ability.user.id,
         { id: internalId, type: "Setting" },
         "AccessDenied",
         "Attempted to delete setting"

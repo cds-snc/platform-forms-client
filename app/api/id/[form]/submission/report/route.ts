@@ -6,9 +6,11 @@ import downloadReportProblemSchema from "@lib/middleware/schemas/download-report
 import { BatchGetCommand, TransactWriteCommand } from "@aws-sdk/lib-dynamodb";
 import { MiddlewareProps, VaultStatus, WithRequired } from "@lib/types";
 import { dynamoDBDocumentClient } from "@lib/integration/awsServicesConnector";
-import { createAbility, AccessControlError } from "@lib/privileges";
+import { getAbility } from "@lib/privileges";
 import { checkUserHasTemplateOwnership } from "@lib/templates";
 import { logEvent } from "@lib/auditLogs";
+import { vaultStatusFromStatusCreatedAt } from "@lib/vault";
+import { AccessControlError } from "@lib/auth";
 
 const MAXIMUM_SUBMISSION_NAMES_PER_REQUEST = 20;
 
@@ -16,12 +18,12 @@ async function getSubmissionsFromSubmissionNames(
   formId: string,
   submissionNames: string[]
 ): Promise<{
-  submissionsToReport: { name: string; confirmationCode: string }[];
+  submissionsToReport: { name: string; createdAt: number; confirmationCode: string }[];
   submissionNamesAlreadyUsed: string[];
   submissionNamesNotFound: string[];
 }> {
   const accumulatedSubmissions: {
-    [name: string]: { status: VaultStatus; confirmationCode: string };
+    [name: string]: { status: VaultStatus; createdAt: number; confirmationCode: string };
   } = {};
 
   let requestedKeys = submissionNames.map((name) => {
@@ -33,10 +35,10 @@ async function getSubmissionsFromSubmissionNames(
       RequestItems: {
         Vault: {
           Keys: requestedKeys,
-          ProjectionExpression: "#name,#status,ConfirmationCode",
+          ProjectionExpression: "#name,#statusCreatedAtKey,ConfirmationCode,CreatedAt",
           ExpressionAttributeNames: {
             "#name": "Name",
-            "#status": "Status",
+            "#statusCreatedAtKey": "Status#CreatedAt",
           },
         },
       },
@@ -48,7 +50,8 @@ async function getSubmissionsFromSubmissionNames(
     if (response.Responses?.Vault) {
       response.Responses.Vault.forEach((record) => {
         accumulatedSubmissions[record["Name"]] = {
-          status: record["Status"],
+          status: vaultStatusFromStatusCreatedAt(record["Status#CreatedAt"]),
+          createdAt: record["CreatedAt"],
           confirmationCode: record["ConfirmationCode"],
         };
       });
@@ -75,13 +78,14 @@ async function getSubmissionsFromSubmissionNames(
       } else {
         acc.submissionsToReport.push({
           name: currentSubmissionName,
+          createdAt: submission.createdAt,
           confirmationCode: submission.confirmationCode,
         });
       }
       return acc;
     },
     {
-      submissionsToReport: Array<{ name: string; confirmationCode: string }>(),
+      submissionsToReport: Array<{ name: string; createdAt: number; confirmationCode: string }>(),
       submissionNamesAlreadyUsed: Array<string>(),
       submissionNamesNotFound: Array<string>(),
     }
@@ -90,7 +94,7 @@ async function getSubmissionsFromSubmissionNames(
 
 async function report(
   formId: string,
-  submissionsToReport: { name: string; confirmationCode: string }[]
+  submissionsToReport: { name: string; createdAt: number; confirmationCode: string }[]
 ): Promise<void> {
   const request = new TransactWriteCommand({
     TransactItems: submissionsToReport.flatMap((submission) => {
@@ -103,12 +107,12 @@ async function report(
               NAME_OR_CONF: `NAME#${submission.name}`,
             },
             UpdateExpression:
-              "SET #status = :status, ProblemTimestamp = :problemTimestamp REMOVE RemovalDate",
+              "SET #statusCreatedAtKey = :statusCreatedAtValue, ProblemTimestamp = :problemTimestamp REMOVE RemovalDate",
             ExpressionAttributeNames: {
-              "#status": "Status",
+              "#statusCreatedAtKey": "Status#CreatedAt",
             },
             ExpressionAttributeValues: {
-              ":status": "Problem",
+              ":statusCreatedAtValue": `Problem#${submission.createdAt}`,
               ":problemTimestamp": Date.now(),
             },
           },
@@ -197,15 +201,15 @@ export const PUT = middleware(
       );
     }
 
-    const ability = createAbility(session);
+    const ability = await getAbility();
 
     // Ensure the user has owernship of this form
     try {
-      await checkUserHasTemplateOwnership(ability, formId);
+      await checkUserHasTemplateOwnership(formId);
     } catch (e) {
       if (e instanceof AccessControlError) {
         logEvent(
-          ability.userID,
+          ability.user.id,
           { type: "Form", id: formId },
           "AccessDenied",
           `Attempted to identify response problem without form ownership`
@@ -234,7 +238,7 @@ export const PUT = middleware(
         );
         submissionsFromSubmissionNames.submissionsToReport.forEach((problem) =>
           logEvent(
-            ability.userID,
+            ability.user.id,
             { type: "Response", id: problem.name },
             "IdentifyProblemResponse",
             `Identified problem response for form ${formId}`

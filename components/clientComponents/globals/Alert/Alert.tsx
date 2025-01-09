@@ -1,7 +1,7 @@
 "use client";
+import React, { ReactNode, useEffect, useRef, useState, type JSX } from "react";
 import { CircleCheckIcon, InfoIcon, WarningIcon } from "@serverComponents/icons";
 import { cn } from "@lib/utils";
-import React, { ReactNode, useEffect, useRef, useState, type JSX } from "react";
 import { useTranslation } from "@i18n/client";
 
 export enum ErrorStatus {
@@ -87,7 +87,7 @@ const defaultClasses = {
   },
   icon: {
     [ErrorStatus.SUCCESS]: "[&_svg]:fill-emerald-700",
-    [ErrorStatus.WARNING]: "[&_svg]:fill-slate-950",
+    [ErrorStatus.WARNING]: "[&_svg]:fill-yellow-700",
     [ErrorStatus.ERROR]: "[&_svg]:fill-red-700",
     [ErrorStatus.INFO]: "[&_svg]:fill-slate-950",
   },
@@ -101,7 +101,7 @@ const defaultClasses = {
 
 const defaultIconClasses = "h-12 w-12";
 
-const defaultIcons = {
+export const defaultIcons = {
   [ErrorStatus.SUCCESS]: (
     <IconWrapper status={ErrorStatus.SUCCESS}>
       <CircleCheckIcon className={defaultIconClasses} />
@@ -177,7 +177,7 @@ const AlertContainer = ({
     if (!React.isValidElement(child)) return;
     if (child.type === Title) {
       alertTitle = React.cloneElement(child, {
-        // @ts-expect-error fix this
+        // @ts-expect-error -- TODO: fix this
         ...child.props,
         status: status,
       });
@@ -185,7 +185,7 @@ const AlertContainer = ({
       alertBody = child;
     } else if (child.type === IconWrapper) {
       alertIcon = React.cloneElement(child, {
-        // @ts-expect-error fix this
+        // @ts-expect-error -- TODO: fix this
         ...child.props,
         status: status,
       });
@@ -208,7 +208,7 @@ const AlertContainer = ({
           data-testid="alert-dismiss"
           id="dismissButton"
           aria-label={t("alert.dismissAlert")}
-          className="absolute right-0 mr-4 h-10 w-10 rounded-full border border-slate-950 bg-white text-2xl text-slate-950"
+          className="absolute right-0 mr-4 size-10 rounded-full border border-slate-950 bg-white text-2xl text-slate-950"
           onClick={onDismiss}
         >
           x

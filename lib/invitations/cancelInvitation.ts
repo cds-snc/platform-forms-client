@@ -27,7 +27,7 @@ export const cancelInvitation = async (ability: UserAbility, invitationId: strin
     throw new InvitationNotFoundError();
   }
 
-  const template = await getTemplateWithAssociatedUsers(ability, invitation.templateId);
+  const template = await getTemplateWithAssociatedUsers(invitation.templateId);
 
   if (!template) {
     throw new TemplateNotFoundError();
@@ -41,10 +41,10 @@ export const cancelInvitation = async (ability: UserAbility, invitationId: strin
   await _deleteInvitation(invitationId);
 
   logEvent(
-    ability.userID,
+    ability.user.id,
     { type: "Form", id: invitation.templateId },
     "InvitationCancelled",
-    `${ability.userID} cancelled invitation for ${invitation.email}`
+    `${ability.user.id} cancelled invitation for ${invitation.email}`
   );
 };
 

@@ -1,6 +1,7 @@
 "use client";
 import React from "react";
-import { useRehydrate, useTemplateStore } from "@lib/store/useTemplateStore";
+import { useTemplateStore } from "@lib/store/useTemplateStore";
+import { useRehydrate } from "@lib/store/hooks/useRehydrate";
 import { useTranslation } from "@i18n/client";
 import { RichText } from "./RichText";
 import { Title } from "./Title";
@@ -53,7 +54,7 @@ const GroupSection = ({
                 <>{primaryLanguage}</>
               </LanguageLabel>
               <textarea
-                className="h-full w-full p-4 focus:outline-blue-focus"
+                className="size-full p-4 focus:outline-blue-focus"
                 id={`group-${groupId}-title-${primaryLanguage}`}
                 aria-describedby={`group-${groupId}-title-${primaryLanguage}-language`}
                 value={group[localizeField(LocalizedGroupProperties.TITLE, primaryLanguage)]}
@@ -73,7 +74,7 @@ const GroupSection = ({
                 <>{secondaryLanguage}</>
               </LanguageLabel>
               <textarea
-                className="h-full w-full p-4 focus:outline-blue-focus"
+                className="size-full p-4 focus:outline-blue-focus"
                 id={`group-${groupId}-title-${secondaryLanguage}`}
                 aria-describedby={`group-${groupId}-title-${secondaryLanguage}-language`}
                 value={group[localizeField(LocalizedGroupProperties.TITLE, secondaryLanguage)]}
