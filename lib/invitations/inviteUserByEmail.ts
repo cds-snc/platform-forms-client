@@ -149,7 +149,7 @@ const _sendInvitationEmail = async (
     `Sending invitation email to ${email} for form ${templateId} with message ${message}`
   );
 
-  const HOST = getOrigin();
+  const HOST = await getOrigin();
 
   // Determine whether to send an invitation to register or an invitation to the form
   const user = await prisma.user.findFirst({
