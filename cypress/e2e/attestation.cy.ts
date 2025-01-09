@@ -14,14 +14,14 @@ describe("Attestation functionality", () => {
 
   it("Displays error when submitting form without checking both boxes", () => {
     cy.get("[type='submit']").click();
-    cy.get("li").contains("Read and check all boxes to confirm the items in this section.");
+    cy.get("li").contains("Check off the boxes");
     cy.get("p").contains("Read and check all boxes to confirm the items in this section.");
   });
 
   it("Displays error when submitting form with a single checkbox selected", () => {
     cy.get("div[data-testid='1.0']").find("label").click();
     cy.get("[type='submit']").click();
-    cy.get("li").contains("Read and check all boxes to confirm the items in this section.");
+    cy.get("li").contains("Check off the boxes");
     cy.get("p").contains("Read and check all boxes to confirm the items in this section.");
   });
 
