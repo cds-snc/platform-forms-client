@@ -1,6 +1,11 @@
-// import { useTranslation } from "@i18n/client";
+import { useTranslation } from "@i18n/client";
 import { FormElement, FormElementTypes } from "@lib/types";
 import { getProperty } from "@lib/i18nHelpers";
+
+const truncateString = (str: string, maxLength: number = 50): string => {
+  if (!str) return "";
+  return str.length > maxLength ? `${str.slice(0, maxLength)}...` : str;
+};
 
 export const ErrorListMessage = ({
   id,
@@ -13,7 +18,7 @@ export const ErrorListMessage = ({
   elements: FormElement[];
   language: string;
 }) => {
-  // const { t } = useTranslation("form-builder");
+  const { t } = useTranslation("form-builder");
 
   const element = elements.find((element) => String(element.id) === String(id));
 
@@ -21,20 +26,21 @@ export const ErrorListMessage = ({
     return defaultValue;
   }
 
-  let title: string = "";
+  let question = "";
 
   try {
-    title = element.properties?.[getProperty("title", language)] as string;
+    question = element.properties?.[getProperty("title", language)] as string;
+    question = truncateString(question);
   } catch (error) {
     return defaultValue;
   }
 
   switch (element?.type) {
-    case FormElementTypes.textField:
-      return `Error: Text Field Element not found ${title}`;
-    case FormElementTypes.textArea:
-      return "Error: Text Area Element not found";
+    case FormElementTypes.checkbox:
+      return t("finput-validation.error-list.default", { question, lng: language });
+    case FormElementTypes.dropdown:
+      return t("input-validation.error-list.checkbox", { question, lng: language });
     default:
-      return "Error: Form Element not found";
+      return t("input-validation.error-list.default", { question, lng: language });
   }
 };
