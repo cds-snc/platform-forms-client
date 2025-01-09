@@ -36,7 +36,15 @@ export const ErrorListMessage = ({
     return defaultValue;
   }
 
-  switch (element?.type) {
+  let elementType = element?.type;
+
+  if (element.properties.validation?.all === true) {
+    elementType = FormElementTypes.attestation;
+  }
+
+  switch (elementType) {
+    case FormElementTypes.attestation:
+      return t("input-validation.error-list.check-all", { question, lng: language });
     case FormElementTypes.checkbox:
       return t("input-validation.error-list.checkbox", { question, lng: language });
     case FormElementTypes.dropdown:
