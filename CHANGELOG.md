@@ -5,6 +5,14 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.31.2](https://github.com/cds-snc/platform-forms-client/compare/v3.31.1...v3.31.2) (2025-01-09)
+
+
+### Bug Fixes
+
+* ensure array is sent for checkbox elements when they are in a hidden state ([caeb3fb](https://github.com/cds-snc/platform-forms-client/commit/caeb3fb926ace3148d015aa2461cf4b815f29862))
+* Fix invitation email links ([764d3cc](https://github.com/cds-snc/platform-forms-client/commit/764d3cc93921519fbd12b014f58b7a6632d0d45a))
+
 ## [3.31.1](https://github.com/cds-snc/platform-forms-client/compare/v3.31.0...v3.31.1) (2025-01-08)
 
 
