@@ -38,9 +38,9 @@ export const ErrorListMessage = ({
 
   switch (element?.type) {
     case FormElementTypes.checkbox:
-      return t("finput-validation.error-list.default", { question, lng: language });
-    case FormElementTypes.dropdown:
       return t("input-validation.error-list.checkbox", { question, lng: language });
+    case FormElementTypes.dropdown:
+      return t("input-validation.error-list.select", { question, lng: language });
     default:
       return t("input-validation.error-list.default", { question, lng: language });
   }
