@@ -20,15 +20,16 @@ export const ErrorListMessage = ({
 }) => {
   const { t } = useTranslation("form-builder");
 
-  const element = elements.find((element) => String(element.id) === String(id));
-
-  if (!element?.type || !defaultValue || !id) {
-    return defaultValue;
-  }
-
   let question = "";
+  let element: FormElement | null = null;
 
   try {
+    element = (elements && elements.find((element) => String(element.id) === String(id))) || null;
+
+    if (!element?.type || !defaultValue || !id) {
+      throw new Error("Invalid element");
+    }
+
     question = element.properties?.[getProperty("title", language)] as string;
     question = truncateString(question);
   } catch (error) {
