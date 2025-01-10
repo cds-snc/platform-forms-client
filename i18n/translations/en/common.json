@@ -59,7 +59,7 @@
       "default": "Enter an answer for: {{question}}",
       "select": "Select an option for: {{question}}",
       "checkbox": "Select one or multiple options for: {{question}}",
-      "check-all": "Check off the boxes for: {{question}}"
+      "check-all": "Check off all the boxes for: {{question}}"
     }
   },
   "required": "required",
