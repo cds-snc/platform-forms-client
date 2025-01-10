@@ -4,7 +4,6 @@ import { Language, FormServerErrorCodes, ServerActionError } from "@lib/types/fo
 import { getAppSetting } from "@lib/appSettings";
 import { logEvent } from "@lib/auditLogs";
 import { ucfirst } from "@lib/client/clientHelpers";
-import { getAbility } from "@lib/privileges";
 import {
   Answer,
   CSVResponse,
@@ -114,7 +113,7 @@ export const fetchSubmissions = AuthenticatedAction(
 
 export const getSubmissionsByFormat = AuthenticatedAction(
   async (
-    _,
+    session,
     {
       formID,
       ids,
@@ -305,7 +304,7 @@ export const getSubmissionsByFormat = AuthenticatedAction(
       });
 
       await updateLastDownloadedBy(responseIdStatusArray, formID);
-      await logDownload(responseIdStatusArray, format);
+      await logDownload(responseIdStatusArray, format, session.user.id);
 
       switch (format) {
         case DownloadFormat.CSV:
@@ -443,12 +442,12 @@ const getAnswerAsString = (question: FormElement | undefined, answer: unknown): 
 
 const logDownload = async (
   responseIdStatusArray: { id: string; status: string }[],
-  format: DownloadFormat
+  format: DownloadFormat,
+  userId: string
 ) => {
-  const ability = await getAbility();
   responseIdStatusArray.forEach((item) => {
     logEvent(
-      ability.user.id,
+      userId,
       { type: "Response", id: item.id },
       "DownloadResponse",
       `Downloaded form response in ${format} for submission ID ${item.id}`

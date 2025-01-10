@@ -2,7 +2,6 @@
 
 import { promises as fs } from "fs";
 import { AuthenticatedAction } from "@lib/actions";
-import { getAbility } from "@lib/privileges";
 import {
   DeliveryOption,
   FormProperties,
@@ -41,7 +40,7 @@ export type CreateOrUpdateTemplateType = {
 
 export const createOrUpdateTemplate = AuthenticatedAction(
   async (
-    _,
+    session,
     {
       id,
       formConfig,
@@ -68,10 +67,8 @@ export const createOrUpdateTemplate = AuthenticatedAction(
         });
       }
 
-      const ability = await getAbility();
-
       const response = await createDbTemplate({
-        userID: ability.user.id,
+        userID: session.user.id,
         formConfig: formConfig,
         name: name,
         deliveryOption: deliveryOption,
