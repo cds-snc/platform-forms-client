@@ -321,7 +321,7 @@ export const getUnprocessedSubmissionsForUser = async (userId: string) => {
   } catch (e) {
     if (e instanceof AccessControlError) {
       logEvent(
-        e.user.id,
+        e.userId,
         { type: "User" },
         "AccessDenied",
         `Attempted to get unprocessed submssions for user ${userId}`

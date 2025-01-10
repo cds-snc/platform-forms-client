@@ -370,12 +370,12 @@ export const checkPrivileges = (
         break;
     }
     if (!accessAllowed) {
-      throw new AccessControlError(`Access Control Forbidden Action`);
+      throw new AccessControlError(ability.user.id, "Access Control Forbidden Action");
     }
   } catch {
     // If there is any error in privilege checking default to forbidden
     // Do not create an audit log as the error is with the system itself
-    throw new AccessControlError(`Access Control Forbidden Action`);
+    throw new AccessControlError(ability.user.id, "Access Control Forbidden Action");
   }
 };
 
@@ -543,7 +543,7 @@ const _authorizationCheck = async (
     .catch((e) => {
       logMessage.error(`Error in privilege check: ${e}`);
       //  On any error in the promise chain, default to forbidden
-      throw new AccessControlError(`Access Control Forbidden Action`);
+      throw new AccessControlError(ability.user.id, "Access Control Forbidden Action");
     });
 
   let accessAllowed = false;
@@ -558,7 +558,7 @@ const _authorizationCheck = async (
       break;
   }
   if (!accessAllowed) {
-    throw new AccessControlError(`Access Control Forbidden Action`);
+    throw new AccessControlError(ability.user.id, "Access Control Forbidden Action");
   }
   return { user: ability.user };
 };

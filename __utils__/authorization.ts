@@ -23,7 +23,7 @@ export const mockAuthorizationFail = (userID: string) => {
   for (const property in authorization) {
     mockedAuth[property] = jest
       .fn()
-      .mockImplementation(() => Promise.reject(new AccessControlError()));
+      .mockImplementation(() => Promise.reject(new AccessControlError("test-user")));
   }
 };
 
