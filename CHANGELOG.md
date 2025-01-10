@@ -5,6 +5,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.31.3](https://github.com/cds-snc/platform-forms-client/compare/v3.31.2...v3.31.3) (2025-01-10)
+
+
+### Bug Fixes
+
+* Rollback GCDS version and pin  ([#4954](https://github.com/cds-snc/platform-forms-client/issues/4954)) ([ba30680](https://github.com/cds-snc/platform-forms-client/commit/ba30680818d1736a59ab592e30c1d1f85b59360a))
+
 ## [3.31.2](https://github.com/cds-snc/platform-forms-client/compare/v3.31.1...v3.31.2) (2025-01-09)
 
 
