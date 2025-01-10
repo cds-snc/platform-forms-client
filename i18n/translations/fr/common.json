@@ -59,7 +59,8 @@
       "default": "Saisissez une réponse pour : {{question}}",
       "select": "Sélectionnez une option pour : {{question}}",
       "checkbox": "Sélectionnez une ou plusieurs options pour : {{question}}",
-      "check-all": "Cochez toutes les cases pour : {{question}}"
+      "check-all": "Cochez toutes les cases pour : {{question}}",
+      "file-input": "Choisissez un fichier pour : {{question}}"
     }
   },
   "required": "obligatoire",

@@ -59,7 +59,8 @@
       "default": "Enter an answer for: {{question}}",
       "select": "Select an option for: {{question}}",
       "checkbox": "Select one or multiple options for: {{question}}",
-      "check-all": "Check off all the boxes for: {{question}}"
+      "check-all": "Check off all the boxes for: {{question}}",
+      "file-input": "Choose a file for: {{question}}"
     }
   },
   "required": "required",
