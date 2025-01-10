@@ -1,6 +1,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
 import { prismaMock } from "@jestUtils";
+import { Base, mockUserPrivileges } from "__utils__/permissions";
+import { Session } from "next-auth";
 import {
   createSecurityAnswers,
   updateSecurityAnswer,
@@ -8,17 +10,24 @@ import {
   InvalidSecurityQuestionId,
   DuplicatedQuestionsNotAllowed,
   SecurityAnswersNotFound,
-} from "@lib/auth/securityQuestions";
-import { createAbility } from "@lib/privileges";
-import { Base, mockUserPrivileges } from "__utils__/permissions";
-import { Session } from "next-auth";
+  auth,
+} from "@lib/auth";
+
+jest.mock("@lib/auth", () => {
+  const originalModule = jest.requireActual("@lib/auth");
+  return {
+    ...originalModule,
+    auth: jest.fn(),
+  };
+});
+
+const mockedAuth = auth as unknown as jest.MockedFunction<() => Promise<Session | null>>;
 
 describe("Create Security Questions", () => {
   it("Allows a user to create their security questions", async () => {
-    const fakeSession = {
+    mockedAuth.mockResolvedValueOnce({
       user: { id: "1", privileges: mockUserPrivileges(Base, { user: { id: "1" } }) },
-    };
-    const ability = createAbility(fakeSession as Session);
+    } as Session);
 
     //_retrieveUserSecurityAnswers
     (prismaMock.user.findUnique as jest.MockedFunction<any>).mockResolvedValue({
@@ -32,7 +41,7 @@ describe("Create Security Questions", () => {
 
     const userUpdate = (prismaMock.user.update as jest.MockedFunction<any>).mockResolvedValue({});
 
-    await createSecurityAnswers(ability, [{ questionId: "10", answer: "answer" }]);
+    await createSecurityAnswers([{ questionId: "10", answer: "answer" }]);
     expect(userUpdate).toHaveBeenCalledTimes(1);
     expect(userUpdate).toHaveBeenCalledWith({
       where: { id: "1" },
@@ -49,10 +58,9 @@ describe("Create Security Questions", () => {
     });
   });
   it("Throws an error if the user already has security questions", async () => {
-    const fakeSession = {
+    mockedAuth.mockResolvedValueOnce({
       user: { id: "1", privileges: mockUserPrivileges(Base, { user: { id: "1" } }) },
-    };
-    const ability = createAbility(fakeSession as Session);
+    } as Session);
 
     //_retrieveUserSecurityAnswers
     (prismaMock.user.findUnique as jest.MockedFunction<any>).mockResolvedValue({
@@ -65,14 +73,13 @@ describe("Create Security Questions", () => {
       ],
     });
     await expect(async () => {
-      await createSecurityAnswers(ability, [{ questionId: "10", answer: "answer" }]);
+      await createSecurityAnswers([{ questionId: "10", answer: "answer" }]);
     }).rejects.toThrow(new AlreadyHasSecurityAnswers());
   });
   it("Throws an error if the user tries to create security questions with invalid question ids", async () => {
-    const fakeSession = {
+    mockedAuth.mockResolvedValueOnce({
       user: { id: "1", privileges: mockUserPrivileges(Base, { user: { id: "1" } }) },
-    };
-    const ability = createAbility(fakeSession as Session);
+    } as Session);
 
     //_retrieveUserSecurityAnswers
     (prismaMock.user.findUnique as jest.MockedFunction<any>).mockResolvedValue({
@@ -86,16 +93,15 @@ describe("Create Security Questions", () => {
 
     const userUpdate = (prismaMock.user.update as jest.MockedFunction<any>).mockResolvedValue({});
     await expect(async () => {
-      await createSecurityAnswers(ability, [{ questionId: "10", answer: "answer" }]);
+      await createSecurityAnswers([{ questionId: "10", answer: "answer" }]);
     }).rejects.toThrow(new InvalidSecurityQuestionId());
 
     expect(userUpdate).toHaveBeenCalledTimes(0);
   });
   it("Throws and error if the user tries to create security questions with duplicated question ids", async () => {
-    const fakeSession = {
+    mockedAuth.mockResolvedValueOnce({
       user: { id: "1", privileges: mockUserPrivileges(Base, { user: { id: "1" } }) },
-    };
-    const ability = createAbility(fakeSession as Session);
+    } as Session);
 
     //_retrieveUserSecurityAnswers
     (prismaMock.user.findUnique as jest.MockedFunction<any>).mockResolvedValue({
@@ -109,7 +115,7 @@ describe("Create Security Questions", () => {
 
     const userUpdate = (prismaMock.user.update as jest.MockedFunction<any>).mockResolvedValue({});
     await expect(async () => {
-      await createSecurityAnswers(ability, [
+      await createSecurityAnswers([
         { questionId: "10", answer: "answer" },
         { questionId: "10", answer: "answer" },
       ]);
@@ -119,10 +125,9 @@ describe("Create Security Questions", () => {
 });
 describe("Update Security Questions", () => {
   it("Allows a user to update their security questions", async () => {
-    const fakeSession = {
+    mockedAuth.mockResolvedValueOnce({
       user: { id: "1", privileges: mockUserPrivileges(Base, { user: { id: "1" } }) },
-    };
-    const ability = createAbility(fakeSession as Session);
+    } as Session);
 
     //_retrieveUserSecurityAnswers
     (prismaMock.user.findUnique as jest.MockedFunction<any>).mockResolvedValue({
@@ -144,7 +149,7 @@ describe("Update Security Questions", () => {
       prismaMock.securityAnswer.update as jest.MockedFunction<any>
     ).mockResolvedValue({});
 
-    await updateSecurityAnswer(ability, {
+    await updateSecurityAnswer({
       oldQuestionId: "10",
       newQuestionId: "10",
       newAnswer: "answer",
@@ -159,10 +164,9 @@ describe("Update Security Questions", () => {
     });
   });
   it("Allows a user to change their security questions", async () => {
-    const fakeSession = {
+    mockedAuth.mockResolvedValueOnce({
       user: { id: "1", privileges: mockUserPrivileges(Base, { user: { id: "1" } }) },
-    };
-    const ability = createAbility(fakeSession as Session);
+    } as Session);
 
     //_retrieveUserSecurityAnswers
     (prismaMock.user.findUnique as jest.MockedFunction<any>).mockResolvedValue({
@@ -185,7 +189,7 @@ describe("Update Security Questions", () => {
       prismaMock.securityAnswer.update as jest.MockedFunction<any>
     ).mockResolvedValue({});
 
-    await updateSecurityAnswer(ability, {
+    await updateSecurityAnswer({
       oldQuestionId: "10",
       newQuestionId: "9",
       newAnswer: "answer",
@@ -200,10 +204,9 @@ describe("Update Security Questions", () => {
     });
   });
   it("Throws an error if securityQuestions are not yet set", async () => {
-    const fakeSession = {
+    mockedAuth.mockResolvedValueOnce({
       user: { id: "1", privileges: mockUserPrivileges(Base, { user: { id: "1" } }) },
-    };
-    const ability = createAbility(fakeSession as Session);
+    } as Session);
 
     //_retrieveUserSecurityAnswers
     (prismaMock.user.findUnique as jest.MockedFunction<any>).mockResolvedValue({
@@ -220,7 +223,7 @@ describe("Update Security Questions", () => {
     ).mockResolvedValue({});
 
     await expect(async () => {
-      await updateSecurityAnswer(ability, {
+      await updateSecurityAnswer({
         oldQuestionId: "10",
         newQuestionId: "10",
         newAnswer: "answer",
@@ -229,10 +232,9 @@ describe("Update Security Questions", () => {
     expect(userUpdate).toHaveBeenCalledTimes(0);
   });
   it("Throws an error if the user tries to update security questions with invalid question ids", async () => {
-    const fakeSession = {
+    mockedAuth.mockResolvedValueOnce({
       user: { id: "1", privileges: mockUserPrivileges(Base, { user: { id: "1" } }) },
-    };
-    const ability = createAbility(fakeSession as Session);
+    } as Session);
 
     //_retrieveUserSecurityAnswers
     (prismaMock.user.findUnique as jest.MockedFunction<any>).mockResolvedValue({
@@ -252,7 +254,7 @@ describe("Update Security Questions", () => {
     ]);
 
     await expect(async () => {
-      await updateSecurityAnswer(ability, {
+      await updateSecurityAnswer({
         oldQuestionId: "9",
         newQuestionId: "6",
         newAnswer: "answer",
@@ -260,10 +262,9 @@ describe("Update Security Questions", () => {
     }).rejects.toThrow(new InvalidSecurityQuestionId());
   });
   it("Throws an error if the user tries to create security questions with duplicated question ids", async () => {
-    const fakeSession = {
+    mockedAuth.mockResolvedValueOnce({
       user: { id: "1", privileges: mockUserPrivileges(Base, { user: { id: "1" } }) },
-    };
-    const ability = createAbility(fakeSession as Session);
+    } as Session);
 
     //_retrieveUserSecurityAnswers
     (prismaMock.user.findUnique as jest.MockedFunction<any>).mockResolvedValue({
@@ -289,7 +290,7 @@ describe("Update Security Questions", () => {
 
     const userUpdate = (prismaMock.user.update as jest.MockedFunction<any>).mockResolvedValue({});
     await expect(async () => {
-      await updateSecurityAnswer(ability, {
+      await updateSecurityAnswer({
         oldQuestionId: "9",
         newQuestionId: "10",
         newAnswer: "answer",
