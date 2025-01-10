@@ -404,7 +404,18 @@ type GenerateElementProps = {
 };
 export const GenerateElement = (props: GenerateElementProps): React.ReactElement => {
   const { element, language } = props;
+
+  // TODO
+  // Can determin show-hide by element.properties.choices e.g. choices[{A:..}, {B:...}]
+  // e.g. see gov.us
+  //
+  // Update Something like:
+  //  _buildeForm to handle that and add aria-controls={choices[e.g.A].id} and aria-expanded=true/false
+  //
+  // May want to first make a prototype how our case would work to test with AT?
+
   const generatedElement = _buildForm(element, language);
+
   return (
     <ConditionalWrapper element={element} rules={element.properties.conditionalRules || null}>
       {generatedElement}
