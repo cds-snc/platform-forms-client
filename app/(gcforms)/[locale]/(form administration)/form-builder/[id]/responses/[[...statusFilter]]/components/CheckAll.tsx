@@ -93,13 +93,13 @@ export const CheckAll = ({
         }}
       >
         {checkAllStatus === allCheckedState.ALL && (
-          <CheckAllIcon title={tooltip} className="h-6 w-6" />
+          <CheckAllIcon title={tooltip} className="size-6" />
         )}
         {checkAllStatus === allCheckedState.SOME && (
-          <CheckIndeterminateIcon title={tooltip} className="h-6 w-6" />
+          <CheckIndeterminateIcon title={tooltip} className="size-6" />
         )}
         {checkAllStatus === allCheckedState.NONE && (
-          <CheckBoxEmptyIcon title={tooltip} className="h-6 w-6" />
+          <CheckBoxEmptyIcon title={tooltip} className="size-6" />
         )}
       </span>
     </Tooltip.Simple>

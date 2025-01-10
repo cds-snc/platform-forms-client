@@ -95,7 +95,7 @@ export default async function Layout(props: {
                     <GroupStoreProvider>
                       <main
                         id="content"
-                        className="form-builder my-7 w-full min-h-[calc(100vh-300px)]"
+                        className="form-builder my-7 min-h-[calc(100vh-300px)] w-full"
                       >
                         {children}
                       </main>

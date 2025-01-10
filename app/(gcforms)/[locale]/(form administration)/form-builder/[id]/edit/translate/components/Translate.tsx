@@ -148,7 +148,7 @@ export const Translate = () => {
                   <>{primaryLanguage}</>
                 </LanguageLabel>
                 <textarea
-                  className="h-full w-full p-4 focus:outline-blue-focus"
+                  className="size-full p-4 focus:outline-blue-focus"
                   id="form-title-en"
                   aria-describedby="form-title-en-language"
                   value={form[localizeField(LocalizedFormProperties.TITLE, primaryLanguage)]}

@@ -43,7 +43,7 @@ export default async function Page(props: { params: Promise<{ locale: string }> 
       <div className="flex flex-row justify-center">
         <div className="rounded-lg border bg-white p-10">
           <h2>
-            <ManageAccountsIcon className="inline-block h-14 w-14" /> {t("accountAdministration")}
+            <ManageAccountsIcon className="inline-block size-14" /> {t("accountAdministration")}
           </h2>
           <p>{t("manageUsersAndTheirForms")}</p>
           <p>
@@ -55,7 +55,7 @@ export default async function Page(props: { params: Promise<{ locale: string }> 
 
         <div className="ml-20 rounded-lg border bg-white p-10">
           <h2>
-            <SettingsApplicationsIcon className="inline-block h-14 w-14" />
+            <SettingsApplicationsIcon className="inline-block size-14" />
             {t("systemAdministration")}
           </h2>
           <p>{t("configureHowTheApplicationWorks")}</p>

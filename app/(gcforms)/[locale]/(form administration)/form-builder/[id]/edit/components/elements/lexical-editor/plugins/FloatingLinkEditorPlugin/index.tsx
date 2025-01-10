@@ -241,7 +241,7 @@ function FloatingLinkEditor({
             <button
               title={t("editLink")}
               aria-label={t("editLink")}
-              className="relative w-full pr-5 truncate"
+              className="relative w-full truncate pr-5"
               onMouseDown={(event) => event.preventDefault()}
               onKeyDown={(event) => {
                 if (event.key === "Escape") {
@@ -258,7 +258,7 @@ function FloatingLinkEditor({
               }}
             >
               {linkUrl}
-              <EditIcon title={t("editLink")} className="w-5 h-5 inline-block absolute right-0" />
+              <EditIcon title={t("editLink")} className="absolute right-0 inline-block size-5" />
             </button>
           </div>
           {/* <LinkPreview url={linkUrl} /> */}

@@ -46,7 +46,7 @@ describe("<Alert />", () => {
         <Alert.Success
           title="This is a title"
           body="This is a body"
-          icon={<CircleCheckIcon className="mr-1 h-12 w-12" />}
+          icon={<CircleCheckIcon className="mr-1 size-12" />}
         />
       );
 

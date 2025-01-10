@@ -55,7 +55,7 @@ describe("Question", () => {
     expect(question).toHaveAttribute("placeholder", "question");
     expect(question).toHaveValue("phone input");
 
-    expect(rendered.container.querySelector(".description-text")).toBeNull();
+    expect(rendered.container.querySelector('[data-testid="description-text"]')).toBeNull();
 
     // see: https://kentcdodds.com/blog/fix-the-not-wrapped-in-act-warning#an-alternative-waiting-for-the-mocked-promise
     // > especially if there's no visual indication of the async task completing.
