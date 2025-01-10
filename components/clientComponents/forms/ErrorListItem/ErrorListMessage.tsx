@@ -49,6 +49,8 @@ export const ErrorListMessage = ({
       return t("input-validation.error-list.checkbox", { question, lng: language });
     case FormElementTypes.dropdown:
       return t("input-validation.error-list.select", { question, lng: language });
+    case FormElementTypes.fileInput:
+      return t("input-validation.error-list.file-input", { question, lng: language });
     default:
       return t("input-validation.error-list.default", { question, lng: language });
   }
