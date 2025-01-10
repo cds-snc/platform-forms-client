@@ -170,7 +170,7 @@ export const FormattedDate = (props: FormattedDateProps): React.ReactElement => 
                 name={`${name}-${part}`}
                 id={`${name}-${part}`}
                 type="number"
-                min={1900}
+                min={1000}
                 autoComplete={autocomplete ? "bday-year" : undefined}
                 className={cn("!w-28", meta.error && "gc-error-input")}
                 value={dateObject?.YYYY || ""}
