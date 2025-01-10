@@ -56,10 +56,10 @@
     "min-length-4-characters": "Doit comporter au moins 4 caractères.",
     "MB": "Mo",
     "error-list": {
-      "default": "Saisissez une réponse pour: {{question}}",
-      "select": "Sélectionnez une option pour: {{question}}",
-      "checkbox": "Sélectionnez une ou plusieurs options pour: {{question}}",
-      "check-all": "Cochez toutes les cases pou: {{question}}"
+      "default": "Saisissez une réponse pour : {{question}}",
+      "select": "Sélectionnez une option pour : {{question}}",
+      "checkbox": "Sélectionnez une ou plusieurs options pour : {{question}}",
+      "check-all": "Cochez toutes les cases pour : {{question}}"
     }
   },
   "required": "obligatoire",
