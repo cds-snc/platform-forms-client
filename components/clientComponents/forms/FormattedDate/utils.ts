@@ -45,7 +45,7 @@ export const isValidDate = (dateObject: DateObject): boolean => {
     return false;
   }
 
-  if (dateObject.YYYY < 1900) {
+  if (dateObject.YYYY < 1000) {
     return false;
   }
 
