@@ -19,6 +19,7 @@ import { inGroup } from "@lib/formContext";
 import { isFileExtensionValid, isAllFilesSizeValid } from "./fileValidationClientSide";
 import { DateObject } from "@clientComponents/forms/FormattedDate/types";
 import { isValidDate } from "@clientComponents/forms/FormattedDate/utils";
+import { serverTranslation } from "@i18n";
 
 /**
  * getRegexByType [private] defines a mapping between the types of fields that need to be validated
@@ -220,6 +221,48 @@ const isFieldResponseValid = (
       throw `Validation for component ${componentType} is not handled`;
   }
   return null;
+};
+
+/**
+ * Server-side validation the form responses
+ */
+export const validateResponses = async ({
+  values,
+  formRecord,
+  language,
+}: {
+  values: Responses;
+  formRecord: PublicFormRecord;
+  language: string;
+}) => {
+  const errors: Responses = {};
+  const { t } = await serverTranslation(["common"], { lang: language });
+
+  for (const item in values) {
+    const formElement = formRecord.form.elements.find((element) => element.id == parseInt(item));
+
+    if (!formElement) {
+      errors[item] = t("input-validation.unknown-field");
+      continue;
+    }
+
+    if (formElement.properties.validation) {
+      const result = isFieldResponseValid(
+        values[item],
+        values,
+        formElement.type,
+        formElement,
+        formElement.properties.validation,
+        t
+      );
+
+      if (result) {
+        errors[item] = result;
+      }
+    }
+  }
+
+  return errors;
 };
 
 /**
