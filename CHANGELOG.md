@@ -5,6 +5,15 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.31.4](https://github.com/cds-snc/platform-forms-client/compare/v3.31.3...v3.31.4) (2025-01-13)
+
+
+### Bug Fixes
+
+* Date component- set lower threshold for year validation ([#4959](https://github.com/cds-snc/platform-forms-client/issues/4959)) ([e16477f](https://github.com/cds-snc/platform-forms-client/commit/e16477f3d66f5afd35da4dc328b3817583faee61))
+* fix translation strings for failed password reset ([#4962](https://github.com/cds-snc/platform-forms-client/issues/4962)) ([c62c2b4](https://github.com/cds-snc/platform-forms-client/commit/c62c2b45c999ef12358bd253de122f1fe2aed5ef))
+* Repeating set changes not being saved ([#4967](https://github.com/cds-snc/platform-forms-client/issues/4967)) ([405f67a](https://github.com/cds-snc/platform-forms-client/commit/405f67aedf1f26e53b552fefbacc76a841ed32f7))
+
 ## [3.31.3](https://github.com/cds-snc/platform-forms-client/compare/v3.31.2...v3.31.3) (2025-01-10)
 
 
