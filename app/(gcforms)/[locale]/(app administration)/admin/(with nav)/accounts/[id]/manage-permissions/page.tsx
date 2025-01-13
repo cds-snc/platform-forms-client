@@ -1,6 +1,6 @@
 import { serverTranslation } from "@i18n";
-import { authCheckAndRedirect } from "@lib/actions";
-import { checkPrivilegesAsBoolean, getAllPrivileges } from "@lib/privileges";
+
+import { authorization, getAllPrivileges } from "@lib/privileges";
 import { getUser } from "@lib/users";
 import { BackLink } from "@clientComponents/admin/LeftNav/BackLink";
 import { Metadata } from "next";
@@ -24,19 +24,12 @@ export default async function Page(props: { params: Promise<{ id: string; locale
 
   const { id, locale } = params;
 
-  const { ability } = await authCheckAndRedirect();
+  authorization.canViewAllUsers();
+  authorization.canAccessPrivileges();
 
-  checkPrivilegesAsBoolean(
-    ability,
-    [
-      { action: "view", subject: "User" },
-      { action: "view", subject: "Privilege" },
-    ],
-    { logic: "all", redirect: true }
-  );
   const formUser = await getUser(id);
 
-  const allPrivileges = (await getAllPrivileges(ability)).map(
+  const allPrivileges = (await getAllPrivileges()).map(
     ({ id, name, descriptionFr, descriptionEn }) => ({
       id,
       name,
@@ -45,7 +38,11 @@ export default async function Page(props: { params: Promise<{ id: string; locale
     })
   );
 
-  const canManageUsers = checkPrivilegesAsBoolean(ability, [{ action: "update", subject: "User" }]);
+  const canManageUsers = await authorization
+    .canManageAllUsers()
+    .then(() => true)
+    .catch(() => false);
+
   const userPrivileges = allPrivileges.filter(
     (privilege) => privilege.name === "Base" || privilege.name === "PublishForms"
   );

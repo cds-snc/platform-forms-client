@@ -1,18 +1,12 @@
 "use server";
 import { updatePrivilegesForUser } from "@lib/privileges";
-import { checkPrivilegesAsBoolean } from "@lib/privileges";
 import { revalidatePath } from "next/cache";
-import { authCheckAndThrow } from "@lib/actions";
+import { AuthenticatedAction } from "@lib/actions";
 
-export const updatePrivileges = async (
-  userID: string,
-  privilegeID: string,
-  action: "add" | "remove"
-) => {
-  const { ability } = await authCheckAndThrow();
-  if (checkPrivilegesAsBoolean(ability, [{ action: "update", subject: "User" }])) {
+export const updatePrivileges = AuthenticatedAction(
+  async (userID: string, privilegeID: string, action: "add" | "remove") => {
     try {
-      const result = await updatePrivilegesForUser(ability, userID, [{ id: privilegeID, action }]);
+      const result = await updatePrivilegesForUser(userID, [{ id: privilegeID, action }]);
       revalidatePath(
         "(gcforms)/[locale]/(app administration)/admin/(with nav)/accounts/[id]/manage-permissions",
         "page"
@@ -22,4 +16,4 @@ export const updatePrivileges = async (
       return { error: "Failed to update permissions." };
     }
   }
-};
+);

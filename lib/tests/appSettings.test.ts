@@ -6,20 +6,16 @@ import {
   updateAppSetting,
   deleteAppSetting,
 } from "@lib/appSettings";
-import { createAbility } from "@lib/privileges";
+
 import { AccessControlError } from "@lib/auth/errors";
-import {
-  Base,
-  mockUserPrivileges,
-  ViewApplicationSettings,
-  ManageApplicationSettings,
-} from "__utils__/permissions";
+
 import * as settingCache from "@lib/cache/settingCache";
-import { Session } from "next-auth";
+
 import { logEvent } from "@lib/auditLogs";
+import { mockAuthorizationFail, mockAuthorizationPass } from "__utils__/authorization";
 
 const mockedLogEvent = jest.mocked(logEvent, { shallow: true });
-jest.mock("@lib/auth");
+jest.mock("@lib/privileges");
 
 // Needed because of a TypeScript error not allowing for non-default exported spyOn items.
 jest.mock("@lib/cache/settingCache", () => ({
@@ -27,10 +23,12 @@ jest.mock("@lib/cache/settingCache", () => ({
   ...jest.requireActual("@lib/cache/settingCache"),
 }));
 
-const viewPrivilege = Base.concat(ViewApplicationSettings);
-const managePrivilege = Base.concat(ViewApplicationSettings, ManageApplicationSettings);
+const userId = "1";
 
 describe("Application Settings", () => {
+  beforeEach(() => {
+    mockAuthorizationPass(userId);
+  });
   test("Get an application setting", async () => {
     const cacheSpy = jest.spyOn(settingCache, "settingCheck");
     prismaMock.setting.findUnique.mockResolvedValue({
@@ -50,64 +48,53 @@ describe("Application Settings", () => {
     expect(mockedLogEvent).not.toHaveBeenCalled();
     expect(setting).toEqual("123");
   });
-  test.each([[viewPrivilege], [managePrivilege]])(
-    "Get all application settings",
-    async (privilege) => {
-      const fakeSession = {
-        user: { id: "1", privileges: mockUserPrivileges(privilege, { user: { id: "1" } }) },
-      };
-      const ability = createAbility(fakeSession as Session);
+  test("Get all application settings", async () => {
+    prismaMock.setting.findMany.mockResolvedValue([
+      {
+        internalId: "testSetting",
+        nameEn: "Test Setting",
+        nameFr: "[FR] Test Setting",
+        descriptionEn: null,
+        descriptionFr: null,
+        value: "123",
+      },
+      {
+        internalId: "testSetting 2",
+        nameEn: "Test Setting 2",
+        nameFr: "[FR] Test Setting 2",
+        descriptionEn: null,
+        descriptionFr: null,
+        value: "456",
+      },
+    ]);
+    const settings = await getAllAppSettings();
+    // Ensure audit logging is called
+    expect(mockedLogEvent).toHaveBeenCalledTimes(1);
+    expect(mockedLogEvent).toHaveBeenCalledWith("1", { type: "Setting" }, "ListAllSettings");
 
-      prismaMock.setting.findMany.mockResolvedValue([
-        {
-          internalId: "testSetting",
-          nameEn: "Test Setting",
-          nameFr: "[FR] Test Setting",
-          descriptionEn: null,
-          descriptionFr: null,
-          value: "123",
-        },
-        {
-          internalId: "testSetting 2",
-          nameEn: "Test Setting 2",
-          nameFr: "[FR] Test Setting 2",
-          descriptionEn: null,
-          descriptionFr: null,
-          value: "456",
-        },
-      ]);
-      const settings = await getAllAppSettings(ability);
-      // Ensure audit logging is called
-      expect(mockedLogEvent).toHaveBeenCalledTimes(1);
-      expect(mockedLogEvent).toHaveBeenCalledWith("1", { type: "Setting" }, "ListAllSettings");
-
-      expect(settings).toMatchObject([
-        {
-          internalId: "testSetting",
-          nameEn: "Test Setting",
-          nameFr: "[FR] Test Setting",
-          descriptionEn: null,
-          descriptionFr: null,
-          value: "123",
-        },
-        {
-          internalId: "testSetting 2",
-          nameEn: "Test Setting 2",
-          nameFr: "[FR] Test Setting 2",
-          descriptionEn: null,
-          descriptionFr: null,
-          value: "456",
-        },
-      ]);
-    }
-  );
+    expect(settings).toMatchObject([
+      {
+        internalId: "testSetting",
+        nameEn: "Test Setting",
+        nameFr: "[FR] Test Setting",
+        descriptionEn: null,
+        descriptionFr: null,
+        value: "123",
+      },
+      {
+        internalId: "testSetting 2",
+        nameEn: "Test Setting 2",
+        nameFr: "[FR] Test Setting 2",
+        descriptionEn: null,
+        descriptionFr: null,
+        value: "456",
+      },
+    ]);
+  });
   describe("Create an application setting", () => {
     test("Create an application setting sucessfully", async () => {
       const cacheSpy = jest.spyOn(settingCache, "settingPut");
-      const fakeSession = {
-        user: { id: "1", privileges: mockUserPrivileges(managePrivilege, { user: { id: "1" } }) },
-      };
-      const ability = createAbility(fakeSession as Session);
+
       const data = {
         internalId: "testSetting",
         nameEn: "Test Setting",
@@ -121,12 +108,12 @@ describe("Application Settings", () => {
         descriptionFr: null,
       });
 
-      const newSetting = await createAppSetting(ability, data);
+      const newSetting = await createAppSetting(data);
       expect(cacheSpy).toHaveBeenCalledWith("testSetting", "123");
       // Ensure audit logging is called
       expect(mockedLogEvent).toHaveBeenCalledTimes(1);
       expect(mockedLogEvent).toHaveBeenCalledWith(
-        "1",
+        userId,
         { id: "testSetting", type: "Setting" },
         "CreateSetting",
         'Created setting with {"internalId":"testSetting","nameEn":"Test Setting","nameFr":"[FR] Test Setting","value":"123"}'
@@ -141,14 +128,9 @@ describe("Application Settings", () => {
       });
     });
     test("Only users with correct privileges can create app settings", async () => {
+      mockAuthorizationFail(userId);
       const cacheSpy = jest.spyOn(settingCache, "settingPut");
-      const fakeSession = {
-        user: {
-          id: "1",
-          privileges: mockUserPrivileges(viewPrivilege, { user: { id: "1" } }),
-        },
-      };
-      const ability = createAbility(fakeSession as Session);
+
       const data = {
         internalId: "testSetting",
         nameEn: "Test Setting",
@@ -156,13 +138,11 @@ describe("Application Settings", () => {
         value: "123",
       };
 
-      await expect(async () => {
-        await createAppSetting(ability, data);
-      }).rejects.toBeInstanceOf(AccessControlError);
+      await expect(createAppSetting(data)).rejects.toBeInstanceOf(AccessControlError);
       // Ensure audit logging is called
       expect(mockedLogEvent).toHaveBeenCalledTimes(1);
       expect(mockedLogEvent).toHaveBeenCalledWith(
-        "1",
+        Promise.resolve(userId),
         { type: "Setting" },
         "AccessDenied",
         "Attempted to create setting"
@@ -173,13 +153,7 @@ describe("Application Settings", () => {
   describe("Update an application setting", () => {
     test("Update an application setting sucessfully", async () => {
       const cacheSpy = jest.spyOn(settingCache, "settingPut");
-      const fakeSession = {
-        user: {
-          id: "1",
-          privileges: mockUserPrivileges(managePrivilege, { user: { id: "1" } }),
-        },
-      };
-      const ability = createAbility(fakeSession as Session);
+
       const data = {
         internalId: "testSetting",
         nameEn: "Test Setting",
@@ -193,12 +167,12 @@ describe("Application Settings", () => {
         descriptionFr: null,
       });
 
-      const newSetting = await updateAppSetting(ability, data.internalId, data);
+      const newSetting = await updateAppSetting(data.internalId, data);
       expect(cacheSpy).toHaveBeenCalledWith("testSetting", "123");
       // Ensure audit logging is called
       expect(mockedLogEvent).toHaveBeenCalledTimes(1);
       expect(mockedLogEvent).toHaveBeenCalledWith(
-        "1",
+        userId,
         { id: "testSetting", type: "Setting" },
         "ChangeSetting",
         'Updated setting with {"internalId":"testSetting","nameEn":"Test Setting","nameFr":"[FR] Test Setting","value":"123"}'
@@ -214,13 +188,8 @@ describe("Application Settings", () => {
     });
     test("Only users with correct privileges can update app settings", async () => {
       const cacheSpy = jest.spyOn(settingCache, "settingPut");
-      const fakeSession = {
-        user: {
-          id: "1",
-          privileges: mockUserPrivileges(viewPrivilege, { user: { id: "1" } }),
-        },
-      };
-      const ability = createAbility(fakeSession as Session);
+      mockAuthorizationFail(userId);
+
       const data = {
         internalId: "testSetting",
         nameEn: "Test Setting",
@@ -228,15 +197,15 @@ describe("Application Settings", () => {
         value: "123",
       };
 
-      await expect(async () => {
-        await updateAppSetting(ability, data.internalId, data);
-      }).rejects.toBeInstanceOf(AccessControlError);
+      await expect(updateAppSetting(data.internalId, data)).rejects.toBeInstanceOf(
+        AccessControlError
+      );
 
       expect(cacheSpy).not.toHaveBeenCalled();
       // Ensure audit logging is called
       expect(mockedLogEvent).toHaveBeenCalledTimes(1);
       expect(mockedLogEvent).toHaveBeenCalledWith(
-        "1",
+        Promise.resolve(userId),
         { id: "testSetting", type: "Setting" },
         "AccessDenied",
         "Attempted to update setting"
@@ -246,13 +215,6 @@ describe("Application Settings", () => {
   describe("Delete an application setting", () => {
     test("Delete an application setting sucessfully", async () => {
       const cacheSpy = jest.spyOn(settingCache, "settingDelete");
-      const fakeSession = {
-        user: {
-          id: "1",
-          privileges: mockUserPrivileges(managePrivilege, { user: { id: "1" } }),
-        },
-      };
-      const ability = createAbility(fakeSession as Session);
 
       prismaMock.setting.delete.mockResolvedValue({
         internalId: "testSetting",
@@ -263,12 +225,12 @@ describe("Application Settings", () => {
         value: "123",
       });
 
-      await deleteAppSetting(ability, "testSetting");
+      await deleteAppSetting("testSetting");
       expect(cacheSpy).toHaveBeenCalledWith("testSetting");
       // Ensure audit logging is called
       expect(mockedLogEvent).toHaveBeenCalledTimes(1);
       expect(mockedLogEvent).toHaveBeenCalledWith(
-        "1",
+        userId,
         { id: "testSetting", type: "Setting" },
         "DeleteSetting",
         'Deleted setting with {"internalId":"testSetting","nameEn":"Test Setting","nameFr":"[FR] Test Setting","descriptionEn":null,"descriptionFr":null,"value":"123"}'
@@ -276,23 +238,15 @@ describe("Application Settings", () => {
     });
     test("Only users with correct privileges can delete app settings", async () => {
       const cacheSpy = jest.spyOn(settingCache, "settingDelete");
-      const fakeSession = {
-        user: {
-          id: "1",
-          privileges: mockUserPrivileges(viewPrivilege, { user: { id: "1" } }),
-        },
-      };
-      const ability = createAbility(fakeSession as Session);
+      mockAuthorizationFail(userId);
 
-      await expect(async () => {
-        await deleteAppSetting(ability, "testSetting");
-      }).rejects.toBeInstanceOf(AccessControlError);
+      await expect(deleteAppSetting("testSetting")).rejects.toBeInstanceOf(AccessControlError);
 
       expect(cacheSpy).not.toHaveBeenCalled();
       // Ensure audit logging is called
       expect(mockedLogEvent).toHaveBeenCalledTimes(1);
       expect(mockedLogEvent).toHaveBeenCalledWith(
-        "1",
+        Promise.resolve(userId),
         { id: "testSetting", type: "Setting" },
         "AccessDenied",
         "Attempted to delete setting"

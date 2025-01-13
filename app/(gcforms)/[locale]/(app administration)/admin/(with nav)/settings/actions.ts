@@ -8,7 +8,7 @@ import {
 } from "@lib/appSettings";
 import { revalidatePath } from "next/cache";
 import { logMessage } from "@lib/logger";
-import { authCheckAndThrow } from "@lib/actions";
+import { AuthenticatedAction } from "@lib/actions";
 import { redirect } from "next/navigation";
 
 function nullCheck(formData: FormData, key: string) {
@@ -17,15 +17,13 @@ function nullCheck(formData: FormData, key: string) {
   return result as string;
 }
 
-export async function getSetting(internalId: string) {
-  const { ability } = await authCheckAndThrow();
-  logMessage.error("Getting setting with internalId: " + internalId);
-  return getFullAppSetting(ability, internalId);
-}
+export const getSetting = AuthenticatedAction(async (internalId: string) => {
+  logMessage.warn("Getting setting with internalId: " + internalId);
+  return getFullAppSetting(internalId);
+});
 
-export async function updateSetting(language: string, formData: FormData) {
+export const updateSetting = AuthenticatedAction(async (language: string, formData: FormData) => {
   try {
-    const { ability } = await authCheckAndThrow();
     const setting = {
       internalId: nullCheck(formData, "internalId"),
       nameEn: nullCheck(formData, "nameEn"),
@@ -35,16 +33,15 @@ export async function updateSetting(language: string, formData: FormData) {
       value: nullCheck(formData, "value"),
     };
 
-    await updateAppSetting(ability, setting.internalId, setting);
+    await updateAppSetting(setting.internalId, setting);
   } catch (e) {
     redirect(`/${language}/admin/settings?error=errorUpdating`);
   }
   redirect(`/${language}/admin/settings?success=updated`);
-}
+});
 
-export async function createSetting(language: string, formData: FormData) {
+export const createSetting = AuthenticatedAction(async (language: string, formData: FormData) => {
   try {
-    const { ability } = await authCheckAndThrow();
     const setting = {
       internalId: nullCheck(formData, "internalId"),
       nameEn: nullCheck(formData, "nameEn"),
@@ -54,7 +51,6 @@ export async function createSetting(language: string, formData: FormData) {
       value: nullCheck(formData, "value"),
     };
     await createAppSetting(
-      ability,
       setting as {
         internalId: string;
         nameEn: string;
@@ -65,12 +61,11 @@ export async function createSetting(language: string, formData: FormData) {
     redirect(`/${language}/admin/settings?error=errorCreating`);
   }
   redirect(`/${language}/admin/settings?success=created`);
-}
+});
 
-export async function deleteSetting(internalId: string) {
-  const { ability } = await authCheckAndThrow();
-  await deleteAppSetting(ability, internalId).catch(() => {
+export const deleteSetting = AuthenticatedAction(async (internalId: string) => {
+  await deleteAppSetting(internalId).catch(() => {
     throw new Error("Error deleting setting");
   });
   revalidatePath("(gcforms)/[locale]/(app administration)/admin/(with nav)/settings", "page");
-}
+});

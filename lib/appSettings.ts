@@ -1,36 +1,32 @@
 import { prisma, prismaErrors } from "@lib/integration/prismaConnector";
-import { checkPrivileges } from "./privileges";
+import { authorization } from "./privileges";
 import { AccessControlError } from "@lib/auth/errors";
 import { logEvent } from "./auditLogs";
 import { logMessage } from "@lib/logger";
-import { UserAbility } from "./types";
 import { settingCheck, settingPut, settingDelete } from "@lib/cache/settingCache";
 
-export const getAllAppSettings = async (ability: UserAbility) => {
-  try {
-    checkPrivileges(ability, [{ action: "view", subject: "Setting" }]);
-    const settings = await prisma.setting
-      .findMany({
-        select: {
-          internalId: true,
-          nameEn: true,
-          nameFr: true,
-          descriptionEn: true,
-          descriptionFr: true,
-          value: true,
-        },
-      })
-      .catch((e) => prismaErrors(e, []));
-    logEvent(ability.user.id, { type: "Setting" }, "ListAllSettings");
-    return settings;
-  } catch (e) {
+export const getAllAppSettings = async () => {
+  const { user } = await authorization.canAccessSettings().catch((e) => {
     if (e instanceof AccessControlError) {
-      logEvent(ability.user.id, { type: "Setting" }, "AccessDenied", "Attempted to list all Forms");
-      throw e;
+      logEvent(e.user.id, { type: "Setting" }, "AccessDenied", "Attempted to list all Settings");
     }
-    logMessage.error(e);
-    return [];
-  }
+    throw e;
+  });
+
+  const settings = await prisma.setting
+    .findMany({
+      select: {
+        internalId: true,
+        nameEn: true,
+        nameFr: true,
+        descriptionEn: true,
+        descriptionFr: true,
+        value: true,
+      },
+    })
+    .catch((e) => prismaErrors(e, []));
+  logEvent(user.id, { type: "Setting" }, "ListAllSettings");
+  return settings;
 };
 
 export const getAppSetting = async (internalId: string) => {
@@ -54,8 +50,18 @@ export const getAppSetting = async (internalId: string) => {
   return uncachedSetting?.value ?? null;
 };
 
-export const getFullAppSetting = async (ability: UserAbility, internalId: string) => {
-  checkPrivileges(ability, [{ action: "view", subject: "Setting" }]);
+export const getFullAppSetting = async (internalId: string) => {
+  const { user } = await authorization.canAccessSettings().catch((e) => {
+    if (e instanceof AccessControlError) {
+      logEvent(
+        e.user.id,
+        { type: "Setting", id: internalId },
+        "AccessDenied",
+        "Attempted to list full app Setting"
+      );
+    }
+    throw e;
+  });
   // Note: the setting is not cached here because it's not expected to be called frequently
   const result = prisma.setting
     .findUnique({
@@ -72,19 +78,10 @@ export const getFullAppSetting = async (ability: UserAbility, internalId: string
       },
     })
     .catch((e) => {
-      if (e instanceof AccessControlError) {
-        logEvent(
-          ability.user.id,
-          { type: "Setting", id: internalId },
-          "AccessDenied",
-          "Attempted to get full setting"
-        );
-        throw e;
-      }
       prismaErrors(e, null);
     });
 
-  logEvent(ability.user.id, { type: "Setting" }, "ListSetting");
+  logEvent(user.id, { type: "Setting" }, "ListSetting");
   return result;
 };
 
@@ -95,47 +92,45 @@ interface SettingUpdateData {
   descriptionFr?: string;
   value?: string;
 }
-export const updateAppSetting = async (
-  ability: UserAbility,
-  internalId: string,
-  settingData: SettingUpdateData
-) => {
-  try {
-    checkPrivileges(ability, [{ action: "update", subject: "Setting" }]);
-
-    const updatedSetting = await prisma.setting.update({
-      where: {
-        internalId,
-      },
-      data: settingData,
-    });
-    logEvent(
-      ability.user.id,
-      { type: "Setting", id: internalId },
-      "ChangeSetting",
-      `Updated setting with ${JSON.stringify(settingData)}`
-    );
-    if (settingData.value) {
-      settingPut(internalId, settingData.value);
-    }
-    return updatedSetting;
-  } catch (e) {
+export const updateAppSetting = async (internalId: string, settingData: SettingUpdateData) => {
+  const { user } = await authorization.canManageSettings().catch((e) => {
     if (e instanceof AccessControlError) {
       logEvent(
-        ability.user.id,
+        e.user.id,
         { type: "Setting", id: internalId },
         "AccessDenied",
         "Attempted to update setting"
       );
-      throw e;
     }
-    if (e instanceof Error) {
+    throw e;
+  });
+
+  const updatedSetting = await prisma.setting
+    .update({
+      where: {
+        internalId,
+      },
+      data: settingData,
+    })
+    .catch((e) => {
       logMessage.warn(
         `Could not update setting with internalId: ${internalId} due to error: ${e.message}`
       );
-    }
-    return null;
+      return prismaErrors(e, null);
+    });
+  // If there was a prisma error return early
+  if (updatedSetting === null) return null;
+
+  logEvent(
+    user.id,
+    { type: "Setting", id: internalId },
+    "ChangeSetting",
+    `Updated setting with ${JSON.stringify(settingData)}`
+  );
+  if (settingData.value) {
+    settingPut(internalId, settingData.value);
   }
+  return updatedSetting;
 };
 
 interface SettingCreateData extends SettingUpdateData {
@@ -143,67 +138,72 @@ interface SettingCreateData extends SettingUpdateData {
   nameEn: string;
   nameFr: string;
 }
-export const createAppSetting = async (ability: UserAbility, settingData: SettingCreateData) => {
-  try {
-    checkPrivileges(ability, [{ action: "create", subject: "Setting" }]);
-
-    const createdSetting = await prisma.setting.create({
-      data: settingData,
-    });
-    logEvent(
-      ability.user.id,
-      { type: "Setting", id: createdSetting.internalId },
-      "CreateSetting",
-      `Created setting with ${JSON.stringify(settingData)}`
-    );
-    if (settingData.value) {
-      settingPut(settingData.internalId, settingData.value);
-    }
-    return createdSetting;
-  } catch (e) {
+export const createAppSetting = async (settingData: SettingCreateData) => {
+  const { user } = await authorization.canManageSettings().catch((e) => {
     if (e instanceof AccessControlError) {
-      logEvent(ability.user.id, { type: "Setting" }, "AccessDenied", "Attempted to create setting");
-      throw e;
+      logEvent(e.user.id, { type: "Setting" }, "AccessDenied", "Attempted to create setting");
     }
-    if (e instanceof Error) {
+    throw e;
+  });
+
+  const createdSetting = await prisma.setting
+    .create({
+      data: settingData,
+    })
+    .catch((e) => {
       logMessage.warn(
         `Could not create setting with name: ${settingData.nameEn} due to error: ${e.message}`
       );
-    }
-    return null;
+      return prismaErrors(e, null);
+    });
+  // If there was a prisma error return early
+  if (createdSetting === null) return null;
+
+  logEvent(
+    user.id,
+    { type: "Setting", id: createdSetting.internalId },
+    "CreateSetting",
+    `Created setting with ${JSON.stringify(settingData)}`
+  );
+  if (settingData.value) {
+    settingPut(settingData.internalId, settingData.value);
   }
+  return createdSetting;
 };
 
-export const deleteAppSetting = async (ability: UserAbility, internalId: string) => {
-  try {
-    checkPrivileges(ability, [{ action: "delete", subject: "Setting" }]);
-
-    const deletedSetting = await prisma.setting.delete({
-      where: {
-        internalId,
-      },
-    });
-    logEvent(
-      ability.user.id,
-      { type: "Setting", id: internalId },
-      "DeleteSetting",
-      `Deleted setting with ${JSON.stringify(deletedSetting)}`
-    );
-    settingDelete(internalId);
-  } catch (e) {
+export const deleteAppSetting = async (internalId: string) => {
+  const { user } = await authorization.canManageSettings().catch((e) => {
     if (e instanceof AccessControlError) {
       logEvent(
-        ability.user.id,
-        { id: internalId, type: "Setting" },
+        e.user.id,
+        { type: "Setting", id: internalId },
         "AccessDenied",
         "Attempted to delete setting"
       );
-      throw e;
     }
-    if (e instanceof Error) {
+    throw e;
+  });
+
+  const deletedSetting = await prisma.setting
+    .delete({
+      where: {
+        internalId,
+      },
+    })
+    .catch((e) => {
       logMessage.warn(
         `Could not delete setting with internalId: ${internalId} due to error: ${e.message}`
       );
-    }
-  }
+      return prismaErrors(e, null);
+    });
+  // return early if there was a prisma error
+  if (deletedSetting === null) return null;
+
+  logEvent(
+    user.id,
+    { type: "Setting", id: internalId },
+    "DeleteSetting",
+    `Deleted setting with ${JSON.stringify(deletedSetting)}`
+  );
+  settingDelete(internalId);
 };

@@ -1,7 +1,7 @@
 import { prisma, prismaErrors } from "@lib/integration/prismaConnector";
 import { authorization } from "@lib/privileges";
 import { AccessControlError } from "@lib/auth/errors";
-import { NagwareResult, UserAbility } from "./types";
+import { NagwareResult } from "./types";
 import { logEvent } from "./auditLogs";
 import { logMessage } from "@lib/logger";
 import { Privilege, Prisma } from "@prisma/client";
@@ -197,12 +197,12 @@ export const getUsers = async (where?: Prisma.UserWhereInput): Promise<AppUser[]
  * @param active activate or deactivate user
  * @returns User
  */
-export const updateActiveStatus = async (ability: UserAbility, userID: string, active: boolean) => {
+export const updateActiveStatus = async (userID: string, active: boolean) => {
   try {
-    authorization.canManageAllUsers().catch((e) => {
+    const { user: abilityUser } = await authorization.canManageAllUsers().catch((e) => {
       if (e instanceof AccessControlError) {
         logEvent(
-          ability.user.id,
+          e.user.id,
           { type: "User" },
           "AccessDenied",
           `Attempted to update user ${userID} active status`
@@ -227,7 +227,7 @@ export const updateActiveStatus = async (ability: UserAbility, userID: string, a
       }),
       prisma.user.findUniqueOrThrow({
         where: {
-          id: ability.user.id,
+          id: abilityUser.id,
         },
         select: {
           email: true,
@@ -245,7 +245,7 @@ export const updateActiveStatus = async (ability: UserAbility, userID: string, a
       active ? "UserActivated" : "UserDeactivated",
       `User ${user.email} (userID: ${userID}) was ${active ? "activated" : "deactivated"} by user ${
         privilegedUser.email
-      } (userID: ${ability.user.id})`
+      } (userID: ${abilityUser.id})`
     );
 
     if (!active && user.email) {
