@@ -3,7 +3,7 @@ import { LinkButton } from "@serverComponents/globals/Buttons/LinkButton";
 import { BackArrowIcon } from "@serverComponents/icons";
 
 export const CannotReset = async ({ locale }: { locale: string }) => {
-  const { t } = await serverTranslation("reset-password", { lang: locale });
+  const { t } = await serverTranslation(["reset-password", "common"], { lang: locale });
 
   const homeHref = `/${locale}/auth/login`;
   const supportHref = `/${locale}/support`;
