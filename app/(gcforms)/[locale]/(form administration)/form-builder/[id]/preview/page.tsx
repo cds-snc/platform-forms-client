@@ -41,7 +41,8 @@ export default async function Page(props: { params: Promise<{ id: string }> }) {
     return notFound();
   }
 
-  const closedDetails = await checkIfClosed(id);
+  // A non authenticated user can't set a closing date on a form.
+  const closedDetails = session ? await checkIfClosed(id) : null;
 
   if (closedDetails && closedDetails.isPastClosingDate) {
     return <PreviewClosed closedDetails={closedDetails.closedDetails as ClosedDetails} />;
