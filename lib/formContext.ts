@@ -688,7 +688,7 @@ export const filterValuesByShownElements = (values: Responses, elementsShown: Fo
       // Note: want to keep original value type (e.g. Checkbox=Array) or Formik may get confused
       filteredValues[key] = values[key];
     } else {
-      filteredValues[key] = "";
+      filteredValues[key] = Array.isArray(values[key]) ? [] : "";
     }
   });
   return filteredValues;

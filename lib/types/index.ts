@@ -1,25 +1,29 @@
-import { FormRecord, Responses } from "@lib/types";
-import { FormikErrors } from "formik";
+import { FormRecord, Responses, FormElementTypes } from "@cdssnc/gcforms-types";
 
 export type {
-  ValidationProperties,
-  PropertyChoices,
-  ElementProperties,
-  AddressComponents,
-  FormElement,
-  PublicFormRecord,
-  DeliveryOption,
+  ConditionalRule,
   FormRecord,
-  FormProperties,
   SecurityAttribute,
   FormPurpose,
-  ConditionalRule,
-} from "./form-types";
-export { FormElementTypes } from "./form-types";
+  PublicFormRecord,
+  Response,
+  Responses,
+  FileInputResponse,
+  ElementProperties,
+  ValidationProperties,
+  DeliveryOption,
+  FormProperties,
+  FormElement,
+  PropertyChoices,
+  AddressComponents,
+  BrandProperties,
+  ClosedDetails,
+} from "@cdssnc/gcforms-types";
+
+import { FormikErrors } from "formik";
+export { FormElementTypes };
 
 export type { Submission, SubmissionRequestBody } from "./submission-types";
-
-export type { Response, Responses, FileInputResponse } from "./form-response-types";
 
 export type FormBuilderPageProps = {
   tab: string;
@@ -68,8 +72,3 @@ export { NagLevel } from "./nagware-types";
 export interface Validate {
   validateForm: () => Promise<FormikErrors<Responses>>;
 }
-
-export type ClosedDetails = {
-  messageEn?: string;
-  messageFr?: string;
-};

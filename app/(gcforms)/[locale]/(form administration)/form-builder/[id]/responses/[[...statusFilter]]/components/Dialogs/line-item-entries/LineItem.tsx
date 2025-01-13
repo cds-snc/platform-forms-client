@@ -18,7 +18,7 @@ export const LineItem = ({ value, isInvalid = false, onRemove }: LineItemProps) 
         <span className={`${isInvalid ? " text-red" : ""}`}>{value}</span>
         <button
           className={`
-            my-[5px] mr-[5px] rounded-full border border-black align-middle focus:m-[0px] focus:border-[4px] focus:border-[#3242bc]
+            my-[5px] mr-[5px] rounded-full border border-black align-middle focus:m-0 focus:border-4 focus:border-[#3242bc]
             focus:p-[2px] [&_rect]:fill-black 
             [&_rect]:hover:fill-white [&_rect]:focus:fill-white [&_svg]:fill-white [&_svg]:hover:fill-gray-600 [&_svg]:focus:fill-[#3242bc]
           `}

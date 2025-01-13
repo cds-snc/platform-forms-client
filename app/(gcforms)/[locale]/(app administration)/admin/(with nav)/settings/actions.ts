@@ -11,11 +11,7 @@ import { logMessage } from "@lib/logger";
 import { AuthenticatedAction } from "@lib/actions";
 import { redirect } from "next/navigation";
 
-function nullCheck(formData: FormData, key: string) {
-  const result = formData.get(key);
-  if (!result) throw new Error(`No value found for ${key}`);
-  return result as string;
-}
+// Public facing functions - they can be used by anyone who finds the associated server action identifer
 
 export const getSetting = AuthenticatedAction(async (internalId: string) => {
   logMessage.warn("Getting setting with internalId: " + internalId);
@@ -69,3 +65,11 @@ export const deleteSetting = AuthenticatedAction(async (internalId: string) => {
   });
   revalidatePath("(gcforms)/[locale]/(app administration)/admin/(with nav)/settings", "page");
 });
+
+// Internal and private functions - won't be converted into server actions
+
+function nullCheck(formData: FormData, key: string) {
+  const result = formData.get(key);
+  if (!result) throw new Error(`No value found for ${key}`);
+  return result as string;
+}

@@ -31,7 +31,6 @@ export default AuthenticatedLayout(
             <div className="grid w-full grid-flow-col">
               <div className="flex">
                 <Link href={`/${locale}/form-builder`} legacyBehavior>
-                  {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
                   <a
                     id="logo"
                     className="mr-5 flex border-r-1 pr-[0.77rem] text-3xl font-semibold !text-black no-underline focus:bg-white"

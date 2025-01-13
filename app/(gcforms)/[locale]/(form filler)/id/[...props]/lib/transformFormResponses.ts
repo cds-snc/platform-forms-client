@@ -52,7 +52,7 @@ export function transformFormResponses(payload: Submission): TransformedResponse
 
     // DynamicRow
     if (_isDynamicRow(key)) {
-      transformed = _handleDynamicRow(key, value, { ...transformed });
+      transformed = _handleDynamicRow(key, value as Response, { ...transformed });
     } else {
       // Checkboxes need a bit of massaging
       if (_isCheckbox(value as string)) {

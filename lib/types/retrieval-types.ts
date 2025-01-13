@@ -1,4 +1,4 @@
-import { Responses } from "./form-response-types";
+import { Responses } from "@lib/types";
 
 export enum VaultStatus {
   NEW = "New",

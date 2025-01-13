@@ -28,7 +28,7 @@ export const AggregatedTable = ({
       <thead>
         <tr key="" className="flex">
           {headers.map(({ title, type }) => (
-            <th key="" className={`${type === "dynamicRow" ? "w-120" : "w-64"} p-4 font-bold`}>
+            <th key="" className={`${type === "dynamicRow" ? "w-96" : "w-64"} p-4 font-bold`}>
               {title}
             </th>
           ))}
@@ -53,7 +53,7 @@ export const AggregatedTable = ({
                 submission.answers.map((item) => {
                   if (Array.isArray(item.answer)) {
                     return (
-                      <td key="" className="w-120 pl-4">
+                      <td key="" className="w-96 pl-4">
                         <table className="ml-4 table-fixed text-left">
                           {item.answer.map((subItem) => {
                             return (

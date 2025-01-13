@@ -208,7 +208,7 @@ const AlertContainer = ({
           data-testid="alert-dismiss"
           id="dismissButton"
           aria-label={t("alert.dismissAlert")}
-          className="absolute right-0 mr-4 h-10 w-10 rounded-full border border-slate-950 bg-white text-2xl text-slate-950"
+          className="absolute right-0 mr-4 size-10 rounded-full border border-slate-950 bg-white text-2xl text-slate-950"
           onClick={onDismiss}
         >
           x

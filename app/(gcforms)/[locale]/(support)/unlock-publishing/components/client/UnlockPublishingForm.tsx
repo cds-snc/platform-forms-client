@@ -123,7 +123,7 @@ export const UnlockPublishingForm = ({ userEmail }: { userEmail: string }) => {
           <p className="mb-14">{t("unlockPublishing.paragraph1")}</p>
           <form id="unlock-publishing" action={submitForm} noValidate>
             {errors.error && (
-              <Alert.Danger focussable={true} title={t("error")} className="mb-2 mt-2">
+              <Alert.Danger focussable={true} title={t("error")} className="my-2">
                 <p>{t(errors.error)}</p>
               </Alert.Danger>
             )}

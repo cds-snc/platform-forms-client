@@ -10,28 +10,16 @@ interface MultipleChoiceGroupProps extends InputFieldProps {
 }
 
 export const MultipleChoiceGroup = (props: MultipleChoiceGroupProps): React.ReactElement => {
-  const { className, choicesProps, type, ariaDescribedBy } = props;
+  const { className, choicesProps, type } = props;
 
   // field contains name, value, onChange, and other required Form attributes.
   const [field, meta] = useField(props);
 
   const choices = choicesProps.map((choice, index) => {
     return type == "checkbox" ? (
-      <Checkbox
-        {...choice}
-        key={index}
-        name={field.name}
-        className={className}
-        ariaDescribedBy={ariaDescribedBy}
-      />
+      <Checkbox {...choice} key={index} name={field.name} className={className} />
     ) : (
-      <Radio
-        {...choice}
-        key={index}
-        name={field.name}
-        className={className}
-        ariaDescribedBy={ariaDescribedBy}
-      />
+      <Radio {...choice} key={index} name={field.name} className={className} />
     );
   });
 

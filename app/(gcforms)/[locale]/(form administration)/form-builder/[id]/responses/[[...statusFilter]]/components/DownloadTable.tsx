@@ -14,7 +14,6 @@ import { Alert } from "@clientComponents/globals";
 import { CheckAll } from "./CheckAll";
 import { DownloadButton } from "./DownloadButton";
 import { ActionsPanel } from "./ActionsPanel";
-import { DeleteButton } from "./DeleteButton";
 import { ConfirmDeleteNewDialog } from "./Dialogs/ConfirmDeleteNewDialog";
 import { DownloadDialog } from "./Dialogs/DownloadDialog";
 import { formatDateTime } from "@lib/utils/form-builder";
@@ -302,9 +301,6 @@ export const DownloadTable = ({
             setShowDownloadDialog={setShowDownloadDialog}
             onClick={() => setDownloadError(false)}
           />
-          {statusFilter === StatusFilter.NEW && false && (
-            <DeleteButton setShowConfirmNewDialog={setShowConfirmNewDialog} />
-          )}
         </ActionsPanel>
       )}
 

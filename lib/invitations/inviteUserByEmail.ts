@@ -76,12 +76,12 @@ export const inviteUserByEmail = async (email: string, formId: string, message: 
     // if invitation is expired, delete and recreate
     if (previousInvitation.expires < new Date()) {
       // check js dates vs prisma dates (see 2fa)
-      _deleteInvitation(previousInvitation.id);
+      await _deleteInvitation(previousInvitation.id);
       invitation = await _createInvitation(email, formId);
     }
 
     // send or resend invitation email
-    _sendInvitationEmail(sender, invitation, message, template.formRecord);
+    await _sendInvitationEmail(sender, invitation, message, template.formRecord);
 
     logEvent(
       user.id,
@@ -95,7 +95,7 @@ export const inviteUserByEmail = async (email: string, formId: string, message: 
 
   // No previous invitation, create one
   invitation = await _createInvitation(email, formId);
-  _sendInvitationEmail(sender, invitation, message, template.formRecord);
+  await _sendInvitationEmail(sender, invitation, message, template.formRecord);
 
   return;
 };
@@ -158,7 +158,7 @@ const _sendInvitationEmail = async (
     `Sending invitation email to ${email} for form ${templateId} with message ${message}`
   );
 
-  const HOST = getOrigin();
+  const HOST = await getOrigin();
 
   // Determine whether to send an invitation to register or an invitation to the form
   const user = await prisma.user.findFirst({

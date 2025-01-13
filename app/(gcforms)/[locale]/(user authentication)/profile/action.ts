@@ -4,14 +4,7 @@ import { updateSecurityAnswer } from "@lib/auth";
 import { revalidatePath } from "next/cache";
 import * as v from "valibot";
 
-const validateData = (formData: { [k: string]: unknown }) => {
-  const schema = v.object({
-    oldQuestionId: v.string("Field is required", [v.minLength(1)]),
-    newQuestionId: v.string("Field is required", [v.minLength(1)]),
-    newAnswer: v.string("Field is required", [v.toLowerCase(), v.toTrimmed(), v.minLength(4)]),
-  });
-  return v.safeParse(schema, formData, { abortPipeEarly: true });
-};
+// Public facing functions - they can be used by anyone who finds the associated server action identifer
 
 export const updateSecurityQuestion = AuthenticatedAction(
   async (oldQuestionId: string, newQuestionId: string, answer: string | undefined) => {
@@ -32,3 +25,14 @@ export const updateSecurityQuestion = AuthenticatedAction(
     return response;
   }
 );
+
+// Internal and private functions - won't be converted into server actions
+
+const validateData = (formData: { [k: string]: unknown }) => {
+  const schema = v.object({
+    oldQuestionId: v.string("Field is required", [v.minLength(1)]),
+    newQuestionId: v.string("Field is required", [v.minLength(1)]),
+    newAnswer: v.string("Field is required", [v.toLowerCase(), v.toTrimmed(), v.minLength(4)]),
+  });
+  return v.safeParse(schema, formData, { abortPipeEarly: true });
+};

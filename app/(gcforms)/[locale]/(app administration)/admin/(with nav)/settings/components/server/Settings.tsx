@@ -24,9 +24,9 @@ export const Settings = async () => {
         {settings.map((setting) => (
           <li
             key={setting.internalId}
-            className="border-2 hover:border-blue-hover rounded-md p-2 m-2 flex flex-row"
+            className="m-2 flex flex-row rounded-md border-2 p-2 hover:border-blue-hover"
           >
-            <div className="grow basis-2/3 m-auto">
+            <div className="m-auto grow basis-2/3">
               <p>{language === "fr" ? setting.nameFr : setting.nameEn}</p>
               <p className="italic">
                 {language === "fr" ? setting.descriptionFr : setting.descriptionEn}
