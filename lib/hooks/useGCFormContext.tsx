@@ -8,7 +8,7 @@ import {
   GroupsType,
   getNextAction,
   filterShownElements,
-  filterValuesByShownElements,
+  filterResponsesByShownElements,
 } from "@lib/formContext";
 import { LockedSections } from "@formBuilder/components/shared/right-panel/treeview/types";
 import { formHasGroups } from "@lib/utils/form-builder/formHasGroups";
@@ -69,7 +69,7 @@ export const GCFormsProvider = ({
     groups
   );
   const shownElements = filterShownElements(formRecord.form.elements, matchedIds as string[]);
-  const filteredResponses = filterValuesByShownElements(inputHistoryValues, shownElements);
+  const filteredResponses = filterResponsesByShownElements(inputHistoryValues, shownElements);
   const filteredMatchedIds = matchedIds.filter((id) => {
     const parentId = id.split(".")[0];
     if (filteredResponses[parentId]) {
