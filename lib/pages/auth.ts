@@ -31,9 +31,9 @@ export function AuthenticatedPage(
     if (session === null) {
       redirect(`/${language}/auth/login`);
     }
-    props.session = session;
+
     if (typeof arg1 === "function") {
-      return arg1(props);
+      return arg1({ ...props, session });
     } else {
       if (arg2 === undefined) {
         throw new Error("Page function is undefined");
@@ -42,7 +42,7 @@ export function AuthenticatedPage(
         // redirect to unauthorized page
         redirect(`/${language}/unauthorized`);
       });
-      return arg2(props);
+      return arg2({ ...props, session });
     }
   };
 }
@@ -67,9 +67,8 @@ export function AuthenticatedLayout(
     if (session === null) {
       redirect(`/${language}/auth/login`);
     }
-    props.session = session;
     if (typeof arg1 === "function") {
-      return arg1(props);
+      return arg1({ ...props, session });
     } else {
       if (arg2 === undefined) {
         throw new Error("Page function is undefined");
@@ -78,7 +77,7 @@ export function AuthenticatedLayout(
         // redirect to unauthorized page
         redirect(`/${language}/unauthorized`);
       });
-      return arg2(props);
+      return arg2({ ...props, session });
     }
   };
 }

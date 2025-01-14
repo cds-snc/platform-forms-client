@@ -1,9 +1,9 @@
 import { serverTranslation } from "@i18n";
-import { checkPrivilegesAsBoolean } from "@lib/privileges";
+import { prisma } from "@lib/integration/prismaConnector";
 import { Metadata } from "next";
 import { RedirectType, redirect } from "next/navigation";
 import { UnlockPublishingForm } from "./components/client/UnlockPublishingForm";
-import { authCheckAndRedirect } from "@lib/actions";
+import { AuthenticatedPage } from "@lib/pages/auth";
 
 export async function generateMetadata(props: {
   params: Promise<{ locale: string }>;
@@ -18,24 +18,23 @@ export async function generateMetadata(props: {
   };
 }
 
-export default async function Page(props: { params: Promise<{ locale: string }> }) {
-  const params = await props.params;
+export default AuthenticatedPage(async ({ params, session }) => {
+  const { locale } = await params;
 
-  const { locale } = params;
-
-  const { ability, session } = await authCheckAndRedirect();
-
-  if (
-    checkPrivilegesAsBoolean(ability, [
-      {
-        action: "update",
-        subject: { type: "FormRecord", object: { users: [{ id: session.user.id }] } },
-        field: "isPublished",
+  const hasPublishPrivilege = await prisma.user.count({
+    where: {
+      email: session.user.email,
+      privileges: {
+        some: {
+          name: "PublishForms",
+        },
       },
-    ])
-  ) {
+    },
+  });
+
+  if (hasPublishPrivilege > 0) {
     redirect(`/${locale}/forms`, RedirectType.replace);
   }
 
   return <UnlockPublishingForm userEmail={session.user.email} />;
-}
+});
