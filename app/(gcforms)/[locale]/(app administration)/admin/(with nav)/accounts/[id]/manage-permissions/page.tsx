@@ -19,14 +19,10 @@ export async function generateMetadata(props: {
   };
 }
 
-export default AuthenticatedPage(
+export default AuthenticatedPage<{ id: string }>(
   [authorization.canViewAllUsers, authorization.canAccessPrivileges],
   async ({ params }) => {
     const { id, locale } = await params;
-
-    if (Array.isArray(id)) {
-      throw new Error("Invalid user id");
-    }
 
     const formUser = await getUser(id);
 

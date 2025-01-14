@@ -19,22 +19,22 @@ export async function generateMetadata(props: {
   };
 }
 
-export default AuthenticatedPage([authorization.canManageSettings], async ({ params }) => {
-  const { settingId } = await params;
-  if (Array.isArray(settingId)) {
-    throw new Error("Invalid setting id");
+export default AuthenticatedPage<{ settingId: string }>(
+  [authorization.canManageSettings],
+  async ({ params }) => {
+    const { settingId } = await params;
+
+    await authorization.canManageSettings().catch(() => authorization.unauthorizedRedirect());
+
+    const { t } = await serverTranslation("admin-settings");
+
+    return (
+      <>
+        <h1 className="mb-10 border-0">{t("title-update")}</h1>
+        <Suspense fallback={<Loader />}>
+          <ManageSettingForm settingId={settingId} />
+        </Suspense>
+      </>
+    );
   }
-
-  await authorization.canManageSettings().catch(() => authorization.unauthorizedRedirect());
-
-  const { t } = await serverTranslation("admin-settings");
-
-  return (
-    <>
-      <h1 className="mb-10 border-0">{t("title-update")}</h1>
-      <Suspense fallback={<Loader />}>
-        <ManageSettingForm settingId={settingId} />
-      </Suspense>
-    </>
-  );
-});
+);

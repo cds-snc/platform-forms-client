@@ -5,27 +5,27 @@ import { JSX } from "react";
 import { Session } from "next-auth";
 
 type WithSession<T> = T & { session: Session };
-type Layout = {
+type Layout<T> = {
   children: React.ReactNode;
-  params: Promise<{ [key: string]: string | string[]; locale: string }>;
+  params: Promise<{ [key: string]: string | string[]; locale: string } & T>;
 };
-type Page = {
-  params: Promise<{ [key: string]: string | string[]; locale: string }>;
+type Page<T> = {
+  params: Promise<{ [key: string]: string | string[]; locale: string } & T>;
   searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 };
 
-export function AuthenticatedPage(
-  page: (props: WithSession<Page>) => Promise<JSX.Element>
-): (props: WithSession<Page>) => Promise<JSX.Element>;
-export function AuthenticatedPage(
+export function AuthenticatedPage<T>(
+  page: (props: WithSession<Page<T>>) => Promise<JSX.Element>
+): (props: WithSession<Page<T>>) => Promise<JSX.Element>;
+export function AuthenticatedPage<T>(
   authorizations: (() => Promise<unknown>)[],
-  page: (props: WithSession<Page>) => Promise<JSX.Element>
-): (props: WithSession<Page>) => Promise<JSX.Element>;
-export function AuthenticatedPage(
-  arg1: (() => Promise<unknown>)[] | ((props: WithSession<Page>) => Promise<JSX.Element>),
-  arg2?: (props: WithSession<Page>) => Promise<JSX.Element>
-): (props: WithSession<Page>) => Promise<JSX.Element> {
-  return async (props: WithSession<Page>) => {
+  page: (props: WithSession<Page<T>>) => Promise<JSX.Element>
+): (props: WithSession<Page<T>>) => Promise<JSX.Element>;
+export function AuthenticatedPage<T>(
+  arg1: (() => Promise<unknown>)[] | ((props: WithSession<Page<T>>) => Promise<JSX.Element>),
+  arg2?: (props: WithSession<Page<T>>) => Promise<JSX.Element>
+): (props: WithSession<Page<T>>) => Promise<JSX.Element> {
+  return async (props: WithSession<Page<T>>) => {
     const session = await auth();
     const language: string = await getCurrentLanguage();
     if (session === null) {
@@ -50,18 +50,18 @@ export function AuthenticatedPage(
 // Creating a second function that seperates the concern for Layouts
 // in case we need to change or tweak implementation between pages and layouts in the future.
 
-export function AuthenticatedLayout(
-  page: (props: WithSession<Layout>) => Promise<JSX.Element>
-): (props: WithSession<Layout>) => Promise<JSX.Element>;
-export function AuthenticatedLayout(
+export function AuthenticatedLayout<T>(
+  page: (props: WithSession<Layout<T>>) => Promise<JSX.Element>
+): (props: WithSession<Layout<T>>) => Promise<JSX.Element>;
+export function AuthenticatedLayout<T>(
   authorizations: (() => Promise<unknown>)[],
-  page: (props: WithSession<Layout>) => Promise<JSX.Element>
-): (props: WithSession<Layout>) => Promise<JSX.Element>;
-export function AuthenticatedLayout(
-  arg1: (() => Promise<unknown>)[] | ((props: WithSession<Layout>) => Promise<JSX.Element>),
-  arg2?: (props: WithSession<Layout>) => Promise<JSX.Element>
+  page: (props: WithSession<Layout<T>>) => Promise<JSX.Element>
+): (props: WithSession<Layout<T>>) => Promise<JSX.Element>;
+export function AuthenticatedLayout<T>(
+  arg1: (() => Promise<unknown>)[] | ((props: WithSession<Layout<T>>) => Promise<JSX.Element>),
+  arg2?: (props: WithSession<Layout<T>>) => Promise<JSX.Element>
 ) {
-  return async (props: WithSession<Layout>) => {
+  return async (props: WithSession<Layout<T>>) => {
     const session = await auth();
     const language: string = await getCurrentLanguage();
     if (session === null) {
