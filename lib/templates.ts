@@ -106,12 +106,20 @@ export type UpdateTemplateCommand = {
   publishDesc?: string;
 };
 
+export class InvalidFormConfigError extends Error {
+  constructor(message?: string) {
+    super(message ?? "InvalidFormConfigError");
+    Object.setPrototypeOf(this, InvalidFormConfigError.prototype);
+  }
+}
+
 export class TemplateAlreadyPublishedError extends Error {
   constructor(message?: string) {
     super(message ?? "TemplateAlreadyPublishedError");
     Object.setPrototypeOf(this, TemplateAlreadyPublishedError.prototype);
   }
 }
+
 export class TemplateHasUnprocessedSubmissions extends Error {
   constructor(message?: string) {
     super(message ?? "TemplateHasUnprocessedSubmissions");
@@ -133,7 +141,12 @@ export async function createTemplate(command: CreateTemplateCommand): Promise<Fo
   const validationResult = validateTemplate(command.formConfig);
 
   if (!validationResult.valid) {
-    return null;
+    logMessage.warn(
+      `[templates][createTemplate] Form config is invalid. ${JSON.stringify(
+        validationResult.errors
+      )}`
+    );
+    throw new InvalidFormConfigError();
   }
 
   const createdTemplate = await prisma.template
@@ -462,9 +475,12 @@ export async function updateTemplate(command: UpdateTemplateCommand): Promise<Fo
   const validationResult = validateTemplate(command.formConfig);
 
   if (!validationResult.valid) {
-    throw new Error(
-      `Template failed validation. Request information: { ${command.formID}, ${command.formConfig} }`
+    logMessage.warn(
+      `[templates][updateTemplate] Form config is invalid. ${JSON.stringify(
+        validationResult.errors
+      )}`
     );
+    throw new InvalidFormConfigError();
   }
 
   const updatedTemplate = await prisma.template

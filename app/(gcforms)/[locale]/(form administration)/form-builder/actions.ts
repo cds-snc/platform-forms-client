@@ -47,10 +47,7 @@ export const createOrUpdateTemplate = AuthenticatedAction(
     deliveryOption,
     securityAttribute,
     formPurpose,
-  }: CreateOrUpdateTemplateType): Promise<{
-    formRecord: FormRecord | null;
-    error?: string;
-  }> => {
+  }: CreateOrUpdateTemplateType): Promise<{ id: string; updatedAt?: string } | null> => {
     try {
       revalidatePath("/[locale]/forms", "page");
 
@@ -67,7 +64,7 @@ export const createOrUpdateTemplate = AuthenticatedAction(
 
       const ability = await getAbility();
 
-      const response = await createDbTemplate({
+      const formRecord = await createDbTemplate({
         userID: ability.user.id,
         formConfig: formConfig,
         name: name,
@@ -76,15 +73,13 @@ export const createOrUpdateTemplate = AuthenticatedAction(
         formPurpose: formPurpose,
       });
 
-      if (!response) {
-        throw new Error(
-          `Template API response was null. Request information: { formConfig: ${formConfig}, name: ${name}, deliveryOption: ${deliveryOption}, securityAttribute: ${securityAttribute}`
-        );
+      if (!formRecord) {
+        return null;
       }
 
-      return { formRecord: response };
+      return { id: formRecord.id, updatedAt: formRecord.updatedAt };
     } catch (e) {
-      return { formRecord: null, error: (e as Error).message };
+      return null;
     }
   }
 );
@@ -104,12 +99,9 @@ export const updateTemplate = AuthenticatedAction(
     deliveryOption?: DeliveryOption;
     securityAttribute?: SecurityAttribute;
     formPurpose?: FormPurpose;
-  }): Promise<{
-    formRecord: FormRecord | null;
-    error?: string;
-  }> => {
+  }): Promise<{ id: string; updatedAt?: string } | null> => {
     try {
-      const response = await updateDbTemplate({
+      const formRecord = await updateDbTemplate({
         formID: formID,
         formConfig: formConfig,
         name: name,
@@ -117,14 +109,14 @@ export const updateTemplate = AuthenticatedAction(
         securityAttribute: securityAttribute,
         formPurpose: formPurpose,
       });
-      if (!response) {
-        throw new Error(
-          `Template API response was null. Request information: { formConfig: ${formConfig}, name: ${name}, deliveryOption: ${deliveryOption}, securityAttribute: ${securityAttribute}`
-        );
+
+      if (!formRecord) {
+        return null;
       }
-      return { formRecord: response };
+
+      return { id: formRecord.id, updatedAt: formRecord.updatedAt };
     } catch (error) {
-      return { formRecord: null, error: (error as Error).message };
+      return null;
     }
   }
 );
