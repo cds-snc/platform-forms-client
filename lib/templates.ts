@@ -19,6 +19,7 @@ import { sendEmail } from "./integration/notifyConnector";
 import { youHaveBeenRemovedEmailTemplate } from "./invitations/emailTemplates/youHaveBeenRemovedEmailTemplate";
 import { ownerAddedEmailTemplate } from "./invitations/emailTemplates/ownerAddedEmailTemplate";
 import { isValidISODate } from "./utils/date/isValidISODate";
+import { validateTemplate } from "@lib/utils/form-builder/validate";
 
 // ******************************************
 // Internal Module Functions
@@ -128,6 +129,12 @@ export async function createTemplate(command: CreateTemplateCommand): Promise<Fo
     logEvent(e.user.id, { type: "Form" }, "AccessDenied", "Attempted to create a Form");
     throw e;
   });
+
+  const validationResult = validateTemplate(command.formConfig);
+
+  if (!validationResult.valid) {
+    return null;
+  }
 
   const createdTemplate = await prisma.template
     .create({
