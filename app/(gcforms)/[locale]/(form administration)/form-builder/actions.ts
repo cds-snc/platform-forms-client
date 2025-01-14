@@ -27,6 +27,7 @@ import { revalidatePath } from "next/cache";
 import { checkOne } from "@lib/cache/flags";
 import { isValidDateString } from "@lib/utils/date/isValidDateString";
 import { allowedTemplates, TemplateTypes } from "@lib/utils/form-builder";
+import { validateTemplate } from "@lib/utils/form-builder/validate";
 
 export type CreateOrUpdateTemplateType = {
   id?: string;
@@ -109,6 +110,14 @@ export const updateTemplate = AuthenticatedAction(
     error?: string;
   }> => {
     try {
+      const validationResult = validateTemplate(formConfig);
+
+      if (!validationResult.valid) {
+        throw new Error(
+          `Template API response failed validation. Request information: { formConfig: ${formConfig}, name: ${name}, deliveryOption: ${deliveryOption}, securityAttribute: ${securityAttribute}`
+        );
+      }
+
       const response = await updateDbTemplate({
         formID: formID,
         formConfig: formConfig,
