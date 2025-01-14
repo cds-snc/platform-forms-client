@@ -255,7 +255,6 @@ const valueMatchesType = (value: unknown, type: string, formElement: FormElement
 
       let valid = true;
 
-      // const groupErrors = (value as Array<Responses>).map((row) => {
       for (const row of value as Array<Responses>) {
         for (const [responseKey, responseValue] of Object.entries(row)) {
           if (
