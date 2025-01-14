@@ -1,7 +1,7 @@
 import { Suspense } from "react";
 import { serverTranslation } from "@i18n";
-import { authCheckAndRedirect } from "@lib/actions";
-import { checkPrivilegesAsBoolean } from "@lib/privileges";
+import { AuthenticatedPage } from "@lib/pages/auth";
+import { authorization } from "@lib/privileges";
 import { Metadata } from "next";
 import { NavigtationFrame } from "./components/server/NavigationFrame";
 import { Loader } from "@clientComponents/globals/Loader";
@@ -21,40 +21,31 @@ export async function generateMetadata(props: {
   };
 }
 
-export default async function Page(props: {
-  params: Promise<{ locale: string }>;
-  searchParams: Promise<{ userState?: string }>;
-}) {
-  const searchParams = await props.searchParams;
+export default AuthenticatedPage(
+  [authorization.canViewAllUsers, authorization.canAccessPrivileges],
+  async (props: {
+    params: Promise<{ locale: string }>;
+    searchParams: Promise<{ userState?: string }>;
+  }) => {
+    const searchParams = await props.searchParams;
 
-  const { userState } = searchParams;
+    const { userState } = searchParams;
 
-  const params = await props.params;
+    const params = await props.params;
 
-  const { locale } = params;
+    const { locale } = params;
 
-  const { ability } = await authCheckAndRedirect();
+    const { t } = await serverTranslation("admin-users", { lang: locale });
 
-  // Can the user view this page
-  checkPrivilegesAsBoolean(
-    ability,
-    [
-      { action: "view", subject: "User" },
-      { action: "view", subject: "Privilege" },
-    ],
-    { logic: "all", redirect: true }
-  );
-
-  const { t } = await serverTranslation("admin-users", { lang: locale });
-
-  return (
-    <>
-      <h1 className="mb-0 border-0">{t("accounts")}</h1>
-      <NavigtationFrame userState={userState}>
-        <Suspense key={userState} fallback={<Loader />}>
-          <UsersList filter={userState} />
-        </Suspense>
-      </NavigtationFrame>
-    </>
-  );
-}
+    return (
+      <>
+        <h1 className="mb-0 border-0">{t("accounts")}</h1>
+        <NavigtationFrame userState={userState}>
+          <Suspense key={userState} fallback={<Loader />}>
+            <UsersList filter={userState} />
+          </Suspense>
+        </NavigtationFrame>
+      </>
+    );
+  }
+);

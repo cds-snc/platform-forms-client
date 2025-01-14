@@ -26,6 +26,8 @@ import { checkOne } from "./cache/flags";
 import { InMemoryCache } from "./cache/inMemoryCache";
 import { auth } from "@lib/auth/nextAuth";
 import { AccessControlError } from "@lib/auth/errors";
+import { getCurrentLanguage } from "@i18n";
+import { redirect } from "next/navigation";
 /*
 This file contains references to server side only modules.
 Any attempt to import these functions into a browser will cause compilation failures
@@ -713,5 +715,9 @@ export const authorization = {
         subject: { type: "Privilege", scope: "all" },
       },
     ]);
+  },
+  unauthorizedRedirect: async () => {
+    const language = await getCurrentLanguage();
+    redirect(`/${language}/unauthorized`);
   },
 };

@@ -1,6 +1,5 @@
 import { serverTranslation } from "@i18n";
-import { authCheckAndRedirect } from "@lib/actions";
-import { checkPrivilegesAsBoolean } from "@lib/privileges";
+import { authorization } from "@lib/privileges";
 import { Metadata } from "next";
 import { DataView } from "./clientSide";
 import { getTemplates } from "./actions";
@@ -19,10 +18,8 @@ export async function generateMetadata(props: {
 }
 
 export default async function Page() {
-  const { ability } = await authCheckAndRedirect();
-
-  checkPrivilegesAsBoolean(ability, [{ action: "update", subject: "FormRecord" }], {
-    redirect: true,
+  await authorization.canManageAllForms().catch(() => {
+    authorization.unauthorizedRedirect();
   });
 
   const templates = await getTemplates();

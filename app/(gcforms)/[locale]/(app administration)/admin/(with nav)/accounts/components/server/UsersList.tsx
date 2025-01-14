@@ -1,19 +1,22 @@
 import { UserCard } from "./UserCard";
 import { getPublishedFormsPrivilegeId, getAllUsers } from "../../actions";
-
 import { authCheckAndThrow } from "@lib/actions";
 import { serverTranslation } from "@i18n";
 import { Card } from "@serverComponents/globals/card/Card";
 import { ScrollHelper } from "../client/ScrollHelper";
-import { checkPrivilegesAsBoolean } from "@lib/privileges";
+import { authorization } from "@lib/privileges";
 
 export const UsersList = async ({ filter }: { filter?: string }) => {
   const { ability } = await authCheckAndThrow();
 
-  const canManageUser = checkPrivilegesAsBoolean(ability, [{ action: "update", subject: "User" }]);
-  const canManageForms = checkPrivilegesAsBoolean(ability, [
-    { action: "update", subject: "FormRecord" },
-  ]);
+  const canManageUser = await authorization
+    .canManageAllUsers()
+    .then(() => true)
+    .catch(() => false);
+  const canManageForms = await authorization
+    .canManageAllForms()
+    .then(() => true)
+    .catch(() => false);
 
   const publishFormsId = await getPublishedFormsPrivilegeId();
   if (!publishFormsId) throw new Error("No publish forms privilege found in global privileges.");

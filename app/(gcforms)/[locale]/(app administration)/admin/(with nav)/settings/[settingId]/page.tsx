@@ -1,10 +1,11 @@
 import { serverTranslation } from "@i18n";
-import { checkPrivilegesAsBoolean } from "@lib/privileges";
+import { authorization } from "@lib/privileges";
+import { AuthenticatedPage } from "@lib/pages/auth";
 import { Metadata } from "next";
 import { ManageSettingForm } from "../components/server/ManageSettingForm";
 import { Suspense } from "react";
 import Loader from "@clientComponents/globals/Loader";
-import { authCheckAndRedirect } from "@lib/actions";
+
 export async function generateMetadata(props: {
   params: Promise<{ locale: string }>;
 }): Promise<Metadata> {
@@ -18,16 +19,13 @@ export async function generateMetadata(props: {
   };
 }
 
-export default async function Page(props: { params: Promise<{ settingId: string }> }) {
-  const params = await props.params;
+export default AuthenticatedPage([authorization.canManageSettings], async ({ params }) => {
+  const { settingId } = await params;
+  if (Array.isArray(settingId)) {
+    throw new Error("Invalid setting id");
+  }
 
-  const { settingId } = params;
-
-  const { ability } = await authCheckAndRedirect();
-
-  checkPrivilegesAsBoolean(ability, [{ action: "update", subject: "Setting" }], {
-    redirect: true,
-  });
+  await authorization.canManageSettings().catch(() => authorization.unauthorizedRedirect());
 
   const { t } = await serverTranslation("admin-settings");
 
@@ -39,4 +37,4 @@ export default async function Page(props: { params: Promise<{ settingId: string 
       </Suspense>
     </>
   );
-}
+});

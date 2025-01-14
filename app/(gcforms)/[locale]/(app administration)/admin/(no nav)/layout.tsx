@@ -14,12 +14,8 @@ import { authorization } from "@lib/privileges";
 
 export default AuthenticatedLayout(
   [authorization.hasAdministrationPrivileges],
-  async (props: { children: React.ReactNode; params: Promise<{ locale: string }> }) => {
-    const params = await props.params;
-
-    const { locale } = params;
-
-    const { children } = props;
+  async ({ children, params }) => {
+    const { locale } = await params;
 
     const { t } = await serverTranslation(["common", "admin-login"], { lang: locale });
 
