@@ -29,7 +29,12 @@ export async function submitForm(
     });
 
     if (Object.keys(validateOnSubmitResult).length !== 0) {
-      throw new MissingFormDataError("Form data validation failed");
+      logMessage.error(
+        `Form data validation failed for form ${formId}. Received error: ${validateOnSubmitResult} record: ${formRecord}`
+      );
+
+      // Turn this on after we've monitored the logs for a while
+      // throw new MissingFormDataError("Form data validation failed");
     }
 
     const formDataObject = buildFormDataObject(formRecord, values);
