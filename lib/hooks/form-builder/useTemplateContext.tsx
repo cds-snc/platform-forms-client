@@ -20,7 +20,10 @@ interface TemplateApiType {
         name,
         deliveryOption,
         securityAttribute,
-      }: CreateOrUpdateTemplateType) => Promise<{ id: string; updatedAt?: string } | null>)
+      }: CreateOrUpdateTemplateType) => Promise<{
+        id: string;
+        updatedAt: string | undefined;
+      } | null>)
     | null;
   resetState: () => void;
 }
