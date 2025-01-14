@@ -37,7 +37,7 @@ export const submissionTypeExists = async (formID: string, status: VaultStatus) 
   await authorization.canViewForm(formID).catch((e) => {
     if (e instanceof AccessControlError)
       logEvent(
-        e.userId,
+        e.user.id,
         {
           type: "Form",
           id: formID,
@@ -103,7 +103,7 @@ export async function listAllSubmissions(
     const { user } = await authorization.canViewForm(formID).catch((e) => {
       if (e instanceof AccessControlError)
         logEvent(
-          e.userId,
+          e.user.id,
           {
             type: "Form",
             id: formID,
@@ -239,7 +239,7 @@ export async function retrieveSubmissionRemovalDate(
     await authorization.canViewForm(formID).catch((e) => {
       if (e instanceof AccessControlError)
         logEvent(
-          e.userId,
+          e.user.id,
           {
             type: "Form",
             id: formID,
@@ -289,7 +289,7 @@ export async function retrieveSubmissions(
     const { user } = await authorization.canViewForm(formID).catch((e) => {
       if (e instanceof AccessControlError)
         logEvent(
-          e.userId,
+          e.user.id,
           {
             type: "Form",
             id: formID,
@@ -489,7 +489,7 @@ export async function deleteDraftFormResponses(formID: string) {
     const { user } = await authorization.canViewForm(formID).catch((e) => {
       if (e instanceof AccessControlError)
         logEvent(
-          e.userId,
+          e.user.id,
           {
             type: "Form",
             id: formID,
@@ -601,7 +601,7 @@ async function getSubmissionsFromConfirmationCodes(
   await authorization.canViewForm(formId).catch((e) => {
     if (e instanceof AccessControlError)
       logEvent(
-        e.userId,
+        e.user.id,
         {
           type: "Form",
           id: formId,
@@ -685,7 +685,7 @@ export const confirmResponses = async (confirmationCodes: string[], formId: stri
   const { user } = await authorization.canViewForm(formId).catch((e) => {
     if (e instanceof AccessControlError)
       logEvent(
-        e.userId,
+        e.user.id,
         {
           type: "Form",
           id: formId,

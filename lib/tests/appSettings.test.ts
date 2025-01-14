@@ -142,7 +142,7 @@ describe("Application Settings", () => {
       // Ensure audit logging is called
       expect(mockedLogEvent).toHaveBeenCalledTimes(1);
       expect(mockedLogEvent).toHaveBeenCalledWith(
-        Promise.resolve(userId),
+        userId,
         { type: "Setting" },
         "AccessDenied",
         "Attempted to create setting"
@@ -205,7 +205,7 @@ describe("Application Settings", () => {
       // Ensure audit logging is called
       expect(mockedLogEvent).toHaveBeenCalledTimes(1);
       expect(mockedLogEvent).toHaveBeenCalledWith(
-        Promise.resolve(userId),
+        userId,
         { id: "testSetting", type: "Setting" },
         "AccessDenied",
         "Attempted to update setting"
@@ -246,7 +246,7 @@ describe("Application Settings", () => {
       // Ensure audit logging is called
       expect(mockedLogEvent).toHaveBeenCalledTimes(1);
       expect(mockedLogEvent).toHaveBeenCalledWith(
-        Promise.resolve(userId),
+        userId,
         { id: "testSetting", type: "Setting" },
         "AccessDenied",
         "Attempted to delete setting"

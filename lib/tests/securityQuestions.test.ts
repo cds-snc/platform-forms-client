@@ -1,8 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
 import { prismaMock } from "@jestUtils";
-import { Base, mockUserPrivileges } from "__utils__/permissions";
-import { Session } from "next-auth";
 import {
   createSecurityAnswers,
   updateSecurityAnswer,

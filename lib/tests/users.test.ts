@@ -10,7 +10,7 @@ import { ManageUsers, Base } from "__utils__/permissions";
 import { logEvent } from "@lib/auditLogs";
 jest.mock("@lib/auditLogs");
 jest.mock("@lib/privileges");
-const mockedLogEvent = jest.mocked(logEvent, { shallow: true });
+
 import { JWT } from "next-auth/jwt";
 import { mockAuthorizationFail, mockAuthorizationPass } from "__utils__/authorization";
 
@@ -23,8 +23,6 @@ jest.mock("@lib/auth", () => {
     auth: jest.fn(),
   };
 });
-
-const mockedAuth = auth as unknown as jest.MockedFunction<() => Promise<Session | null>>;
 
 jest.mock("@lib/auditLogs");
 const mockedLogEvent = jest.mocked(logEvent, { shallow: true });
@@ -175,7 +173,7 @@ describe("Users CRUD functions should throw an error if user does not have any p
   it("User with no permission should not be able to use CRUD functions", async () => {
     await expect(getUsers()).rejects.toThrow(AccessControlError);
     expect(mockedLogEvent).toHaveBeenCalledWith(
-      Promise.resolve(userId),
+      userId,
       { type: "User" },
       "AccessDenied",
       "Attempted to list users"

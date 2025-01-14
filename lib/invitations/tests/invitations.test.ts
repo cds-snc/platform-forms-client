@@ -50,19 +50,10 @@ jest.mock("@lib/auth", () => {
   };
 });
 
-const mockedAuth = auth as unknown as jest.MockedFunction<() => Promise<Session | null>>;
-
 describe("Invitations", () => {
   beforeEach(() => {
     mockAuthorizationPass(userId);
     jest.clearAllMocks();
-
-    mockedAuth.mockResolvedValueOnce({
-      user: {
-        id: "test-user-id",
-        privileges: mockUserPrivileges(Base, { user: { id: "test-user-id" } }),
-      },
-    } as Session);
   });
 
   describe("inviteUserByEmail", () => {
