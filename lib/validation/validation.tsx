@@ -223,6 +223,40 @@ const isFieldResponseValid = (
   return null;
 };
 
+const valueMatchesType = (value: unknown, type: string) => {
+  switch (type) {
+    case FormElementTypes.formattedDate:
+      if (value && isValidDate(JSON.parse(value as string) as DateObject)) {
+        return true;
+      }
+      return false;
+    case FormElementTypes.checkbox: {
+      if (Array.isArray(value)) {
+        return true;
+      }
+      return false;
+    }
+    case FormElementTypes.fileInput: {
+      const fileInputResponse = value as FileInputResponse;
+      if (
+        fileInputResponse &&
+        fileInputResponse.name &&
+        fileInputResponse.size &&
+        fileInputResponse.based64EncodedFile
+      ) {
+        return true;
+      }
+      return false;
+    }
+    default:
+      if (typeof value === "string") {
+        return true;
+      }
+  }
+
+  return false;
+};
+
 /**
  * Server-side validation the form responses
  */
@@ -246,6 +280,14 @@ export const validateResponses = async ({
       continue;
     }
 
+    // Check if the incoming value matches the type of the form element
+    const result = valueMatchesType(values[item], formElement.type);
+
+    if (!result) {
+      errors[item] = t("input-validation.unknown-field");
+    }
+
+    // Check for required fields
     if (formElement.properties.validation) {
       const result = isFieldResponseValid(
         values[item],
