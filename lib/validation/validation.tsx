@@ -11,7 +11,7 @@ import { FormikProps } from "formik";
 import { TFunction } from "i18next";
 import { ErrorListItem } from "@clientComponents/forms";
 import { ErrorListMessage } from "@clientComponents/forms/ErrorListItem/ErrorListMessage";
-import { isServer } from "../tsUtils";
+import { hasOwnProperty, isServer } from "../tsUtils";
 import uuidArraySchema from "@lib/middleware/schemas/uuid-array.schema.json";
 import formNameArraySchema from "@lib/middleware/schemas/submission-name-array.schema.json";
 import { matchRule, FormValues, GroupsType } from "@lib/formContext";
@@ -223,7 +223,7 @@ const isFieldResponseValid = (
   return null;
 };
 
-const valueMatchesType = (value: unknown, type: string) => {
+const valueMatchesType = (value: unknown, type: string, formElement: FormElement) => {
   switch (type) {
     case FormElementTypes.formattedDate:
       if (value && isValidDate(JSON.parse(value as string) as DateObject)) {
@@ -240,13 +240,40 @@ const valueMatchesType = (value: unknown, type: string) => {
       const fileInputResponse = value as FileInputResponse;
       if (
         fileInputResponse &&
-        fileInputResponse.name &&
-        fileInputResponse.size &&
-        fileInputResponse.based64EncodedFile
+        hasOwnProperty(fileInputResponse, "name") &&
+        hasOwnProperty(fileInputResponse, "size") &&
+        hasOwnProperty(fileInputResponse, "based64EncodedFile")
       ) {
         return true;
       }
       return false;
+    }
+    case FormElementTypes.dynamicRow: {
+      if (!Array.isArray(value)) {
+        return false;
+      }
+
+      let valid = true;
+
+      // const groupErrors = (value as Array<Responses>).map((row) => {
+      for (const row of value as Array<Responses>) {
+        for (const [responseKey, responseValue] of Object.entries(row)) {
+          if (
+            formElement.properties.subElements &&
+            formElement.properties.subElements[parseInt(responseKey)]
+          ) {
+            const subElement = formElement.properties.subElements[parseInt(responseKey)];
+            const result = valueMatchesType(responseValue, subElement.type, subElement);
+
+            if (!result) {
+              valid = false;
+              break;
+            }
+          }
+        }
+      }
+
+      return valid;
     }
     default:
       if (typeof value === "string") {
@@ -281,7 +308,7 @@ export const validateResponses = async ({
     }
 
     // Check if the incoming value matches the type of the form element
-    const result = valueMatchesType(values[item], formElement.type);
+    const result = valueMatchesType(values[item], formElement.type, formElement);
 
     if (!result) {
       errors[item] = t("input-validation.unknown-field");
