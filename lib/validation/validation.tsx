@@ -310,7 +310,7 @@ export const validateResponses = async ({
     const result = valueMatchesType(values[item], formElement.type, formElement);
 
     if (!result) {
-      errors[item] = t("input-validation.unknown-field");
+      errors[item] = t("input-validation.unknown-value-for-field");
     }
 
     // Check for required fields
