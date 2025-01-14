@@ -459,6 +459,14 @@ export async function updateTemplate(command: UpdateTemplateCommand): Promise<Fo
     throw e;
   });
 
+  const validationResult = validateTemplate(command.formConfig);
+
+  if (!validationResult.valid) {
+    throw new Error(
+      `Template failed validation. Request information: { ${command.formID}, ${command.formConfig} }`
+    );
+  }
+
   const updatedTemplate = await prisma.template
     .update({
       where: {
