@@ -145,7 +145,6 @@ export const getPrivilegeRulesForUser = async (userId: string) => {
 
 /**
  * Update and overwrite existing privileges on a User
- * @param ability Ability instance for session
  * @param userID id of the user to be updated
  * @param privileges Array of privileges to be connect to user
  * @returns
@@ -441,7 +440,7 @@ const _authorizationCheck = async (
     .catch((e) => {
       logMessage.error(`Error in privilege check: ${e}`);
       //  On any error in the promise chain, default to forbidden
-      throw new AccessControlError(`Access Control Forbidden Action`);
+      throw new AccessControlError(ability.user.id, "Access Control Forbidden Action");
     });
 
   let accessAllowed = false;
@@ -456,7 +455,7 @@ const _authorizationCheck = async (
       break;
   }
   if (!accessAllowed) {
-    throw new AccessControlError(`Access Control Forbidden Action`);
+    throw new AccessControlError(ability.user.id, "Access Control Forbidden Action");
   }
   return { user: ability.user };
 };

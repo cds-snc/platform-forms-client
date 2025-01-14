@@ -17,12 +17,13 @@ export interface ErrorStates {
 // Public facing functions - they can be used by anyone who finds the associated server action identifer
 
 export const setupQuestions = AuthenticatedAction(
-  async (language: string, _: ErrorStates, formData: FormData): Promise<ErrorStates> => {
+  async (_, language: string, __: ErrorStates, formData: FormData): Promise<ErrorStates> => {
     const { t } = await serverTranslation(["setup-security-questions"], { lang: language });
 
     const rawFormData = Object.fromEntries(formData.entries());
 
     const result = await validateData(rawFormData, language);
+
     if (!result.success) {
       return {
         validationErrors: result.issues.map((issue) => ({

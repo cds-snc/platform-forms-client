@@ -1,5 +1,4 @@
 import { prisma } from "@lib/integration/prismaConnector";
-
 import { InvitationNotFoundError, UserNotFoundError } from "./exceptions";
 import { getUser } from "@lib/users";
 import { logEvent } from "@lib/auditLogs";
@@ -10,7 +9,6 @@ import { AccessControlError } from "@lib/auth/errors";
 /**
  * Decline an invitation
  *
- * @param ability
  * @param invitationId
  * @returns
  */

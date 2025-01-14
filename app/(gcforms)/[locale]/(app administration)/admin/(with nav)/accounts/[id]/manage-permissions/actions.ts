@@ -7,7 +7,7 @@ import { AuthenticatedAction } from "@lib/actions";
 // Public facing functions - they can be used by anyone who finds the associated server action identifer
 
 export const updatePrivileges = AuthenticatedAction(
-  async (userID: string, privilegeID: string, action: "add" | "remove") => {
+  async (_, userID: string, privilegeID: string, action: "add" | "remove") => {
     try {
       const result = await updatePrivilegesForUser(userID, [{ id: privilegeID, action }]);
       revalidatePath(

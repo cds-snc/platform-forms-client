@@ -7,7 +7,6 @@ import { FeatureFlagKeys, FeatureFlags, PickFlags } from "./types";
 
 /**
  * Enables an Application Setting Flag
- * @param ability User's Ability Instance
  * @param key Applicaiton setting flag key
  */
 export const enableFlag = async (key: string): Promise<void> => {
@@ -24,7 +23,6 @@ export const enableFlag = async (key: string): Promise<void> => {
 
 /**
  * Disables an Application Setting Flag
- * @param ability User's Ability Instance
  * @param key Application setting flag key
  */
 export const disableFlag = async (key: string): Promise<void> => {

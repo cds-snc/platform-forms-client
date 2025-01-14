@@ -17,7 +17,7 @@ import { inviteUserByEmail } from "@lib/invitations/inviteUserByEmail";
 import { cancelInvitation as cancelInvitationAction } from "@lib/invitations/cancelInvitation";
 
 export const sendInvitation = AuthenticatedAction(
-  async (emails: string[], templateId: string, message: string) => {
+  async (_, emails: string[], templateId: string, message: string) => {
     const { t } = await serverTranslation("manage-form-access");
 
     const errors: string[] = [];
@@ -70,7 +70,7 @@ export const sendInvitation = AuthenticatedAction(
   }
 );
 
-export const removeUserFromForm = AuthenticatedAction(async (userId: string, formId: string) => {
+export const removeUserFromForm = AuthenticatedAction(async (_, userId: string, formId: string) => {
   try {
     await removeAssignedUserFromTemplate(formId, userId);
     return {
@@ -85,7 +85,7 @@ export const removeUserFromForm = AuthenticatedAction(async (userId: string, for
   }
 });
 
-export const getTemplateUsers = AuthenticatedAction(async (formId: string) => {
+export const getTemplateUsers = AuthenticatedAction(async (_, formId: string) => {
   const template = await getTemplateWithAssociatedUsers(formId);
 
   if (!template) {
@@ -115,6 +115,6 @@ export const getTemplateUsers = AuthenticatedAction(async (formId: string) => {
   return combinedUsers as TemplateUser[];
 });
 
-export const cancelInvitation = AuthenticatedAction(async (id: string) => {
-  return cancelInvitationAction(id);
+export const cancelInvitation = AuthenticatedAction(async (_, id: string) => {
+  cancelInvitationAction(id);
 });

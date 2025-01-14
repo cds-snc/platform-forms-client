@@ -23,7 +23,6 @@ import { AccessControlError } from "@lib/auth/errors";
 /**
  * Invite someone to the form by email
  *
- * @param ability
  * @param email
  * @param formId
  */

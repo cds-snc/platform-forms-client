@@ -7,59 +7,61 @@ import {
   updateAppSetting,
 } from "@lib/appSettings";
 import { revalidatePath } from "next/cache";
-import { logMessage } from "@lib/logger";
-import { AuthenticatedAction } from "@lib/actions";
 import { redirect } from "next/navigation";
+import { AuthenticatedAction } from "@lib/actions";
 
 // Public facing functions - they can be used by anyone who finds the associated server action identifer
 
-export const getSetting = AuthenticatedAction(async (internalId: string) => {
-  logMessage.warn("Getting setting with internalId: " + internalId);
+export const getSetting = AuthenticatedAction(async (_, internalId: string) => {
   return getFullAppSetting(internalId);
 });
 
-export const updateSetting = AuthenticatedAction(async (language: string, formData: FormData) => {
-  try {
-    const setting = {
-      internalId: nullCheck(formData, "internalId"),
-      nameEn: nullCheck(formData, "nameEn"),
-      nameFr: nullCheck(formData, "nameFr"),
-      descriptionEn: formData.get("descriptionEn") as string,
-      descriptionFr: formData.get("descriptionFr") as string,
-      value: nullCheck(formData, "value"),
-    };
+export const updateSetting = AuthenticatedAction(
+  async (_, language: string, formData: FormData) => {
+    try {
+      const setting = {
+        internalId: nullCheck(formData, "internalId"),
+        nameEn: nullCheck(formData, "nameEn"),
+        nameFr: nullCheck(formData, "nameFr"),
+        descriptionEn: formData.get("descriptionEn") as string,
+        descriptionFr: formData.get("descriptionFr") as string,
+        value: nullCheck(formData, "value"),
+      };
 
-    await updateAppSetting(setting.internalId, setting);
-  } catch (e) {
-    redirect(`/${language}/admin/settings?error=errorUpdating`);
+      await updateAppSetting(setting.internalId, setting);
+    } catch (e) {
+      redirect(`/${language}/admin/settings?error=errorUpdating`);
+    }
+    redirect(`/${language}/admin/settings?success=updated`);
   }
-  redirect(`/${language}/admin/settings?success=updated`);
-});
+);
 
-export const createSetting = AuthenticatedAction(async (language: string, formData: FormData) => {
-  try {
-    const setting = {
-      internalId: nullCheck(formData, "internalId"),
-      nameEn: nullCheck(formData, "nameEn"),
-      nameFr: nullCheck(formData, "nameFr"),
-      descriptionEn: formData.get("descriptionEn") as string,
-      descriptionFr: formData.get("descriptionFr") as string,
-      value: nullCheck(formData, "value"),
-    };
-    await createAppSetting(
-      setting as {
-        internalId: string;
-        nameEn: string;
-        nameFr: string;
-      }
-    );
-  } catch (e) {
-    redirect(`/${language}/admin/settings?error=errorCreating`);
+export const createSetting = AuthenticatedAction(
+  async (_, language: string, formData: FormData) => {
+    try {
+      const setting = {
+        internalId: nullCheck(formData, "internalId"),
+        nameEn: nullCheck(formData, "nameEn"),
+        nameFr: nullCheck(formData, "nameFr"),
+        descriptionEn: formData.get("descriptionEn") as string,
+        descriptionFr: formData.get("descriptionFr") as string,
+        value: nullCheck(formData, "value"),
+      };
+      await createAppSetting(
+        setting as {
+          internalId: string;
+          nameEn: string;
+          nameFr: string;
+        }
+      );
+    } catch (e) {
+      redirect(`/${language}/admin/settings?error=errorCreating`);
+    }
+    redirect(`/${language}/admin/settings?success=created`);
   }
-  redirect(`/${language}/admin/settings?success=created`);
-});
+);
 
-export const deleteSetting = AuthenticatedAction(async (internalId: string) => {
+export const deleteSetting = AuthenticatedAction(async (_, internalId: string) => {
   await deleteAppSetting(internalId).catch(() => {
     throw new Error("Error deleting setting");
   });

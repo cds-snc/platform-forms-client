@@ -125,7 +125,7 @@ export class TemplateHasUnprocessedSubmissions extends Error {
  */
 export async function createTemplate(command: CreateTemplateCommand): Promise<FormRecord | null> {
   const { user } = await authorization.canCreateForm().catch((e) => {
-    logEvent(e.user.id, { type: "Form" }, "AccessDenied", "Attempted to create a Form");
+    logEvent(e.userId, { type: "Form" }, "AccessDenied", "Attempted to create a Form");
     throw e;
   });
 
@@ -189,7 +189,7 @@ export async function getAllTemplates(options?: {
     const { requestedWhere, sortByDateUpdated } = options ?? {};
     // Can a user view any Template
     const { user } = await authorization.canViewAllForms().catch((e) => {
-      logEvent(e.user.id, { type: "Form" }, "AccessDenied", "Attempted to access All System Forms");
+      logEvent(e.userId, { type: "Form" }, "AccessDenied", "Attempted to access All System Forms");
       throw e;
     });
 
@@ -362,7 +362,7 @@ export async function getFullTemplateByID(formID: string): Promise<FormRecord | 
   try {
     const { user } = await authorization.canViewForm(formID).catch((e) => {
       logEvent(
-        e.user.id,
+        e.userId,
         { type: "Form", id: formID },
         "AccessDenied",
         "Attemped to read form object"
@@ -397,7 +397,7 @@ export async function getTemplateWithAssociatedUsers(formID: string): Promise<{
 } | null> {
   const { user } = await authorization.canViewForm(formID).catch((e) => {
     logEvent(
-      e.user.id,
+      e.userId,
       { type: "Form", id: formID },
       "AccessDenied",
       "Attempted to retrieve users associated with Form"
@@ -444,7 +444,7 @@ export async function getTemplateWithAssociatedUsers(formID: string): Promise<{
 export async function updateTemplate(command: UpdateTemplateCommand): Promise<FormRecord | null> {
   const { user } = await authorization.canEditForm(command.formID).catch((e) => {
     logEvent(
-      e.user.id,
+      e.userId,
       { type: "Form", id: command.formID },
       "AccessDenied",
       "Attempted to update Form"
@@ -531,7 +531,7 @@ export async function updateIsPublishedForTemplate(
   publishDescription: string
 ): Promise<FormRecord | null> {
   const { user } = await authorization.canPublishForm(formID).catch((e) => {
-    logEvent(e.user.id, { type: "Form", id: formID }, "AccessDenied", "Attempted to publish form");
+    logEvent(e.userId, { type: "Form", id: formID }, "AccessDenied", "Attempted to publish form");
     throw e;
   });
 
@@ -585,7 +585,7 @@ export async function removeAssignedUserFromTemplate(
 ): Promise<void> {
   const { user } = await authorization.canEditForm(formID).catch((e) => {
     logEvent(
-      e.user.id,
+      e.userId,
       { type: "Form", id: formID },
       "AccessDenied",
       "Attempted to remove assigned user for form"
@@ -674,7 +674,7 @@ export async function removeAssignedUserFromTemplate(
 export async function assignUserToTemplate(formID: string, userID: string): Promise<void> {
   const { user } = await authorization.canEditForm(formID).catch((e) => {
     logEvent(
-      e.user.id,
+      e.userId,
       { type: "Form", id: formID },
       "AccessDenied",
       "Attempted to remove assigned user for form"
@@ -823,7 +823,7 @@ export async function updateAssignedUsersForTemplate(
   if (!users.length) throw new Error("No users provided");
   const { user } = await authorization.canEditForm(formID).catch((e) => {
     logEvent(
-      e.user.id,
+      e.userId,
       { type: "Form", id: formID },
       "AccessDenied",
       "Attempted to update assigned users for form"
@@ -947,7 +947,7 @@ export async function updateFormPurpose(
 ): Promise<FormRecord | null> {
   const { user } = await authorization.canEditForm(formID).catch((e) => {
     logEvent(
-      e.user.id,
+      e.userId,
       { type: "Form", id: formID },
       "AccessDenied",
       "Attempted to set Form Purpose"
@@ -1006,7 +1006,7 @@ export async function updateResponseDeliveryOption(
 ): Promise<FormRecord | null> {
   const { user } = await authorization.canEditForm(formID).catch((e) => {
     logEvent(
-      e.user.id,
+      e.userId,
       { type: "Form", id: formID },
       "AccessDenied",
       "Attempted to set Delivery Option to the Vault"
@@ -1080,7 +1080,7 @@ export async function updateResponseDeliveryOption(
 export async function removeDeliveryOption(formID: string): Promise<void> {
   const { user } = await authorization.canEditForm(formID).catch((e) => {
     logEvent(
-      e.user.id,
+      e.userId,
       { type: "Form", id: formID },
       "AccessDenied",
       "Attempted to set Delivery Option to the Vault"
@@ -1123,7 +1123,7 @@ export async function removeDeliveryOption(formID: string): Promise<void> {
  */
 export async function deleteTemplate(formID: string): Promise<FormRecord | null> {
   const { user } = await authorization.canDeleteForm(formID).catch((e) => {
-    logEvent(e.user.id, { type: "Form", id: formID }, "AccessDenied", "Attempted to delete Form");
+    logEvent(e.userId, { type: "Form", id: formID }, "AccessDenied", "Attempted to delete Form");
     throw e;
   });
 
@@ -1204,7 +1204,7 @@ export const updateClosedData = async (
 ) => {
   const { user } = await authorization.canEditForm(formID).catch((e) => {
     logEvent(
-      e.user.id,
+      e.userId,
       { type: "Form", id: formID },
       "AccessDenied",
       "Attempted to update closing date for Form"
@@ -1249,7 +1249,7 @@ export const updateClosedData = async (
 export const updateSecurityAttribute = async (formID: string, securityAttribute: string) => {
   const { user } = await authorization.canEditForm(formID).catch((e) => {
     logEvent(
-      e.user.id,
+      e.userId,
       { type: "Form", id: formID },
       "AccessDenied",
       "Attempted to update security attribute"

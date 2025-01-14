@@ -12,7 +12,7 @@ import { CredentialsSignin } from "next-auth";
 import { getUnprocessedSubmissionsForUser } from "@lib/users";
 import { logMessage } from "@lib/logger";
 import { revalidatePath } from "next/cache";
-import { authCheckAndThrow } from "@lib/actions";
+import { AuthenticatedAction } from "@lib/actions";
 
 export interface ErrorStates {
   authError?: {
@@ -131,17 +131,7 @@ export const getErrorText = async (language: string, errorID: string) => {
   return handleErrorById(errorID, language);
 };
 
-export const getRedirectPath = async (locale: string) => {
-  const { session } = await authCheckAndThrow().catch(() => ({
-    session: null,
-  }));
-
-  if (!session) {
-    // The sessions between client and server are not in sync.
-    // Try to redirect to auth policy page and let logic handle there.
-    return { callback: `/${locale}/auth/policy` };
-  }
-
+export const getRedirectPath = AuthenticatedAction(async (session, locale: string) => {
   if (session.user.newlyRegistered || !session.user.hasSecurityQuestions) {
     return { callback: `/${locale}/auth/setup-security-questions` };
   }
@@ -169,7 +159,7 @@ export const getRedirectPath = async (locale: string) => {
   }
 
   return { callback: `/${locale}/auth/policy` };
-};
+});
 
 // Internal and private functions - won't be converted into server actions
 

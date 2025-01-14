@@ -8,7 +8,7 @@ import { AuthenticatedAction } from "@lib/actions";
 
 // Note: any thrown errors will be caught in the Error boundary/component
 
-export const modifyFlag = AuthenticatedAction(async (id: string, value: boolean) => {
+export const modifyFlag = AuthenticatedAction(async (_, id: string, value: boolean) => {
   if (value) {
     await enableFlag(id);
   } else {

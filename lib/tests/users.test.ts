@@ -16,6 +16,19 @@ import { mockAuthorizationFail, mockAuthorizationPass } from "__utils__/authoriz
 
 const userId = "1";
 
+jest.mock("@lib/auth", () => {
+  const originalModule = jest.requireActual("@lib/auth");
+  return {
+    ...originalModule,
+    auth: jest.fn(),
+  };
+});
+
+const mockedAuth = auth as unknown as jest.MockedFunction<() => Promise<Session | null>>;
+
+jest.mock("@lib/auditLogs");
+const mockedLogEvent = jest.mocked(logEvent, { shallow: true });
+
 describe("User query tests should fail gracefully", () => {
   beforeEach(() => {
     mockAuthorizationPass(userId);

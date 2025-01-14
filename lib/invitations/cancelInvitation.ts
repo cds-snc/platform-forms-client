@@ -7,7 +7,6 @@ import { AccessControlError } from "@lib/auth/errors";
 /**
  * Cancel an invitation
  *
- * @param ability
  * @param invitationId
  */
 export const cancelInvitation = async (invitationId: string) => {

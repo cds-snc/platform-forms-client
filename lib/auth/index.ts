@@ -41,3 +41,15 @@ export {
 } from "./passwordReset";
 
 export { GET, POST, auth, signIn, signOut } from "./nextAuth";
+
+// Creates a new custom Error Class
+export class AccessControlError extends Error {
+  public userId: string;
+
+  constructor(userId: string, message: string = "AccessControlError") {
+    super(message);
+    Object.setPrototypeOf(this, AccessControlError.prototype);
+
+    this.userId = userId;
+  }
+}

@@ -7,7 +7,7 @@ import * as v from "valibot";
 // Public facing functions - they can be used by anyone who finds the associated server action identifer
 
 export const updateSecurityQuestion = AuthenticatedAction(
-  async (oldQuestionId: string, newQuestionId: string, answer: string | undefined) => {
+  async (_, oldQuestionId: string, newQuestionId: string, answer: string | undefined) => {
     const data = validateData({ oldQuestionId, newQuestionId, newAnswer: answer });
 
     if (!data.success) {
