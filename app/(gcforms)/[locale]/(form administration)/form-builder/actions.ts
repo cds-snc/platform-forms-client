@@ -47,7 +47,7 @@ export const createOrUpdateTemplate = AuthenticatedAction(
     deliveryOption,
     securityAttribute,
     formPurpose,
-  }: CreateOrUpdateTemplateType): Promise<{ id: string; updatedAt?: string } | null> => {
+  }: CreateOrUpdateTemplateType): Promise<{ id: string; updatedAt: string | undefined } | null> => {
     try {
       revalidatePath("/[locale]/forms", "page");
 
@@ -99,7 +99,7 @@ export const updateTemplate = AuthenticatedAction(
     deliveryOption?: DeliveryOption;
     securityAttribute?: SecurityAttribute;
     formPurpose?: FormPurpose;
-  }): Promise<{ id: string; updatedAt?: string } | null> => {
+  }): Promise<{ id: string; updatedAt: string | undefined } | null> => {
     try {
       const formRecord = await updateDbTemplate({
         formID: formID,
