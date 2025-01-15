@@ -153,11 +153,7 @@ export const FormattedDate = (props: FormattedDateProps): React.ReactElement => 
               <input
                 name={`${name}-${part}`}
                 id={`${name}-${part}`}
-                // Trying removing number for better UX See: #4897
-                // type="number"
-                // Note: min/max is not announced to AT and only restricts numbers when using the stepper
-                // min={1}
-                // max={12}
+                // Trying removing type=number  for better UX See: #4897
                 inputMode="numeric"
                 aria-describedby={`${id}-description-month`}
                 autoComplete={autocomplete ? "bday-month" : undefined}
@@ -179,9 +175,7 @@ export const FormattedDate = (props: FormattedDateProps): React.ReactElement => 
               <input
                 name={`${name}-${part}`}
                 id={`${name}-${part}`}
-                // Trying removing number for better UX See: #4897
-                // type="number"
-                // min={1900}
+                // Trying removing type=number for better UX See: #4897
                 inputMode="numeric"
                 aria-describedby={`${id}-description-year`}
                 autoComplete={autocomplete ? "bday-year" : undefined}
@@ -204,13 +198,6 @@ export const FormattedDate = (props: FormattedDateProps): React.ReactElement => 
                 name={`${name}-${part}`}
                 id={`${name}-${part}`}
                 // Trying removing number for better UX See: #4897
-                // type="number"
-                // min={1}
-                // max={
-                //   dateObject?.MM && dateObject?.YYYY
-                //     ? getMaxMonthDay(dateObject.MM, dateObject.YYYY)
-                //     : 31
-                // }
                 inputMode="numeric"
                 aria-describedby={`${id}-description-day`}
                 autoComplete={autocomplete ? "bday-day" : undefined}
