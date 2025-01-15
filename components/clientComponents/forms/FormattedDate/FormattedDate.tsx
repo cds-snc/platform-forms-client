@@ -121,7 +121,7 @@ export const FormattedDate = (props: FormattedDateProps): React.ReactElement => 
       {meta.error && <ErrorMessage id={"errorMessage" + id}>{meta.error}</ErrorMessage>}
 
       <div className="inline-flex gap-2">
-        <input type="hidden" {...field} />
+        <input type="hidden" {...field} value={field.value || ""} />
         {dateParts.map((part) => {
           // Not currently an option, for future use
           return part === DatePart.MM && monthSelector === "select" ? (
