@@ -2,7 +2,6 @@
 import React, { createContext, useState, useContext, useRef } from "react";
 import { logMessage } from "@lib/logger";
 import { CreateOrUpdateTemplateType, createOrUpdateTemplate } from "@formBuilder/actions";
-import { FormRecord } from "@lib/types";
 import { useTemplateStore } from "@lib/store/useTemplateStore";
 import { useSubscibeToTemplateStore } from "@lib/store/hooks/useSubscibeToTemplateStore";
 
@@ -22,9 +21,9 @@ interface TemplateApiType {
         deliveryOption,
         securityAttribute,
       }: CreateOrUpdateTemplateType) => Promise<{
-        formRecord: FormRecord | null;
-        error?: string;
-      }>)
+        id: string;
+        updatedAt: string | undefined;
+      } | null>)
     | null;
   resetState: () => void;
 }

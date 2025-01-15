@@ -63,13 +63,13 @@ export const Branding = ({ hasBrandingRequestForm }: { hasBrandingRequestForm: b
       return;
     }
 
-    const result = await updateTemplate({
+    const operationResult = await updateTemplate({
       id,
       formConfig,
       name: getName(),
     });
 
-    if (!result?.error) {
+    if (operationResult !== null) {
       toast.success(savedSuccessMessage);
       return;
     }
