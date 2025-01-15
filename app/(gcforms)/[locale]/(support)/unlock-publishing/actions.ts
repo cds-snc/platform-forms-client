@@ -16,7 +16,7 @@ import {
 } from "valibot";
 import { isValidGovEmail } from "@lib/validation/validation";
 import { AuthenticatedAction } from "@lib/actions";
-import { authorization } from "@lib/privileges";
+import { prisma } from "@lib/integration/prismaConnector";
 
 export interface ErrorStates {
   validationErrors: {
@@ -65,8 +65,17 @@ export const unlockPublishing = AuthenticatedAction(
     }
 
     try {
-      const userHasPermissionToPublishForms = await authorization.hasPermissionToPublishForms();
-      if (userHasPermissionToPublishForms)
+      const userHasPermissionToPublishForms = await prisma.user.count({
+        where: {
+          email: session.user.email,
+          privileges: {
+            some: {
+              name: "PublishForms",
+            },
+          },
+        },
+      });
+      if (userHasPermissionToPublishForms > 0)
         throw new Error("Permissiong to publish forms has already been granted");
 
       await createTicket({
