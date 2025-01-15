@@ -21,7 +21,7 @@ export async function generateMetadata(props: {
 export default AuthenticatedPage(async ({ params, session }) => {
   const { locale } = await params;
 
-  const hasPublishPrivilege = await authorization.hasPublishFormsPrivileges();
+  const hasPublishPrivilege = await authorization.hasPublishFormsPrivilege();
 
   if (hasPublishPrivilege) {
     redirect(`/${locale}/forms`, RedirectType.replace);

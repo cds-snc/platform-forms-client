@@ -65,7 +65,7 @@ export const unlockPublishing = AuthenticatedAction(
     }
 
     try {
-      const userHasPermissionToPublishForms = await authorization.hasPublishFormsPrivileges();
+      const userHasPermissionToPublishForms = await authorization.hasPublishFormsPrivilege();
       if (userHasPermissionToPublishForms)
         throw new Error("Permissiong to publish forms has already been granted");
 

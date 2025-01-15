@@ -25,7 +25,7 @@ export default async function Page(props: { params: Promise<{ locale: string }> 
 
   const { session, ability } = await authCheckAndRedirect();
 
-  const userCanPublish = await authorization.hasPermissionToPublishForms();
+  const userCanPublish = await authorization.hasPublishFormsPrivilege();
 
   const [userQuestions, allQuestions] = await Promise.all([
     retrieveUserSecurityQuestions({ userId: ability.user.id }),

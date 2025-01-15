@@ -507,7 +507,7 @@ export const authorization = {
    * Verify if the user has the privilege to publish forms
    * @returns boolean
    */
-  hasPublishFormsPrivileges: async () => {
+  hasPublishFormsPrivilege: async () => {
     const ability = await getAbility();
     const result = await prisma.user.count({
       where: {
