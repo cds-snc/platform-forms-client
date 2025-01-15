@@ -16,7 +16,6 @@ import {
 } from "valibot";
 import { isValidGovEmail } from "@lib/validation/validation";
 import { AuthenticatedAction } from "@lib/actions";
-import { Session } from "next-auth";
 import { authorization } from "@lib/privileges";
 
 export interface ErrorStates {
@@ -30,13 +29,7 @@ export interface ErrorStates {
 // Public facing functions - they can be used by anyone who finds the associated server action identifer
 
 export const unlockPublishing = AuthenticatedAction(
-  async (
-    session: Session,
-    language: string,
-    userEmail: string,
-    _: ErrorStates,
-    formData: FormData
-  ) => {
+  async (session, language: string, userEmail: string, _: ErrorStates, formData: FormData) => {
     const rawData = Object.fromEntries(formData.entries());
     const validatedData = await validate(language, userEmail, rawData);
 
