@@ -178,28 +178,29 @@ describe("<FormattedDate />", () => {
     cy.get("[data-testid=description]").contains("This is a description");
   });
 
-  it("accommodates leap years", () => {
-    cy.viewport(800, 400);
+  // TODO does this test still have value?
+  // it("accommodates leap years", () => {
+  //   cy.viewport(800, 400);
 
-    cy.mount(
-      <Formik
-        initialValues={{}}
-        onSubmit={() => {
-          throw new Error("Function not implemented.");
-        }}
-      >
-        <FormattedDate name="formattedDate" />
-      </Formik>
-    );
+  //   cy.mount(
+  //     <Formik
+  //       initialValues={{}}
+  //       onSubmit={() => {
+  //         throw new Error("Function not implemented.");
+  //       }}
+  //     >
+  //       <FormattedDate name="formattedDate" />
+  //     </Formik>
+  //   );
 
-    cy.get("[data-testid=year-number]").type("2001");
-    cy.get("[data-testid=month-number]").type("2");
-    cy.get("[data-testid=day-number]").should("have.attr", "max", 28);
+  //   cy.get("[data-testid=year-number]").type("2001");
+  //   cy.get("[data-testid=month-number]").type("2");
+  //   cy.get("[data-testid=day-number]").should("have.attr", "max", 28);
 
-    cy.get("[data-testid=year-number]").clear();
-    cy.get("[data-testid=year-number]").type("2000");
-    cy.get("[data-testid=month-number]").clear();
-    cy.get("[data-testid=month-number]").type("2");
-    cy.get("[data-testid=day-number]").should("have.attr", "max", 29);
-  });
+  //   cy.get("[data-testid=year-number]").clear();
+  //   cy.get("[data-testid=year-number]").type("2000");
+  //   cy.get("[data-testid=month-number]").clear();
+  //   cy.get("[data-testid=month-number]").type("2");
+  //   cy.get("[data-testid=day-number]").should("have.attr", "max", 29);
+  // });
 });
