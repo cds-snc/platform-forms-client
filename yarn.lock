@@ -2352,10 +2352,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@cdssnc/gcds-tokens@npm:^1.20.0":
-  version: 1.20.2
-  resolution: "@cdssnc/gcds-tokens@npm:1.20.2"
-  checksum: 10c0/27d658b532c03b0411d32e4acd90450c17617a3e4073c3991987afa11438eaf42e6c446bace61f1e43915ce1f34500c31177fad4ea3111397db2a095ed253057
+"@cdssnc/gcds-tokens@npm:1.20.1":
+  version: 1.20.1
+  resolution: "@cdssnc/gcds-tokens@npm:1.20.1"
+  checksum: 10c0/85d18dc2002942b990eea69c98c66fad88430c76143525a0136eb5034de68686434c08975e4f8d3f373355848f761e602b14a48fee68220613c64d053d3b8049
   languageName: node
   linkType: hard
 
@@ -13249,7 +13249,7 @@ __metadata:
     "@babel/preset-typescript": "npm:^7.24.7"
     "@bufbuild/protobuf": "npm:^2.2.3"
     "@casl/ability": "npm:6.7.2"
-    "@cdssnc/gcds-tokens": "npm:^1.20.0"
+    "@cdssnc/gcds-tokens": "npm:1.20.1"
     "@cdssnc/gcforms-types": "workspace:*"
     "@eslint/eslintrc": "npm:^3"
     "@headlessui/react": "npm:^2.2.0"
