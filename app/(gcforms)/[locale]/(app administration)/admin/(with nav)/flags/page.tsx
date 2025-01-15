@@ -1,7 +1,7 @@
 import { Suspense } from "react";
 import { serverTranslation } from "@i18n";
-import { authCheckAndRedirect } from "@lib/actions";
-import { checkPrivilegesAsBoolean } from "@lib/privileges";
+import { authorization } from "@lib/privileges";
+import { AuthenticatedPage } from "@lib/pages/auth";
 import { Metadata } from "next";
 import { FlagList } from "./components/server/FlagList";
 import { Loader } from "@clientComponents/globals/Loader";
@@ -19,11 +19,7 @@ export async function generateMetadata(props: {
   };
 }
 
-export default async function Page() {
-  const { ability } = await authCheckAndRedirect();
-
-  checkPrivilegesAsBoolean(ability, [{ action: "view", subject: "Flag" }], { redirect: true });
-
+export default AuthenticatedPage([authorization.canAccessFlags], async () => {
   const { t } = await serverTranslation("admin-flags");
 
   return (
@@ -31,8 +27,8 @@ export default async function Page() {
       <h1 className="mb-10 border-0">{t("title")}</h1>
       <p className="pb-8">{t("subTitle")}</p>
       <Suspense fallback={<Loader />}>
-        <FlagList ability={ability} />
+        <FlagList />
       </Suspense>
     </>
   );
-}
+});

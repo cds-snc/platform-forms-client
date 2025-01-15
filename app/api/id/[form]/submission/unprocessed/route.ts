@@ -1,4 +1,4 @@
-import { AccessControlError } from "@lib/auth";
+import { AccessControlError } from "@lib/auth/errors";
 import { middleware, sessionExists } from "@lib/middleware";
 import { NextResponse } from "next/server";
 import { unprocessedSubmissions } from "@lib/vault";

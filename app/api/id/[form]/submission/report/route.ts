@@ -9,8 +9,8 @@ import { dynamoDBDocumentClient } from "@lib/integration/awsServicesConnector";
 import { getAbility } from "@lib/privileges";
 import { checkUserHasTemplateOwnership } from "@lib/templates";
 import { logEvent } from "@lib/auditLogs";
+import { AccessControlError } from "@lib/auth/errors";
 import { vaultStatusFromStatusCreatedAt } from "@lib/vault";
-import { AccessControlError } from "@lib/auth";
 
 const MAXIMUM_SUBMISSION_NAMES_PER_REQUEST = 20;
 

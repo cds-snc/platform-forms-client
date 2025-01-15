@@ -1,23 +1,14 @@
 import React from "react";
 import { ToastContainer } from "@formBuilder/components/shared/Toast";
 import { Header } from "@clientComponents/globals/Header/Header";
-import { authCheckAndRedirect } from "@lib/actions";
 import { SaveTemplateProvider } from "@lib/hooks/form-builder/useTemplateContext";
 import { TemplateStoreProvider } from "@lib/store/useTemplateStore";
 import { SkipLink } from "@serverComponents/globals/SkipLink";
 import { Footer } from "@serverComponents/globals/Footer";
+import { AuthenticatedLayout } from "@lib/pages/auth";
 
-export default async function Layout(props: {
-  children: React.ReactNode;
-  params: Promise<{ locale: string }>;
-}) {
-  const params = await props.params;
-
-  const { locale } = params;
-
-  const { children } = props;
-
-  await authCheckAndRedirect();
+export default AuthenticatedLayout(async ({ children, params }) => {
+  const { locale } = await params;
 
   return (
     <TemplateStoreProvider {...{ locale }}>
@@ -36,4 +27,4 @@ export default async function Layout(props: {
       </SaveTemplateProvider>
     </TemplateStoreProvider>
   );
-}
+});

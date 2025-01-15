@@ -1,11 +1,10 @@
 import { serverTranslation } from "@i18n";
 import { checkAll } from "@lib/cache/flags";
-import { UserAbility } from "@lib/types";
 import { Flag } from "../client/Flag";
 
-export const FlagList = async ({ ability }: { ability: UserAbility }) => {
+export const FlagList = async () => {
   const { t } = await serverTranslation("admin-flags");
-  const flags = await checkAll(ability);
+  const flags = await checkAll();
   return (
     <table className="table-auto border-4">
       <thead>

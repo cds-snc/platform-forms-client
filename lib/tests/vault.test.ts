@@ -3,7 +3,7 @@ import Redis from "ioredis-mock";
 import { mockClient } from "aws-sdk-client-mock";
 import { prismaMock } from "@jestUtils";
 import { DynamoDBDocumentClient, QueryCommand, BatchWriteCommand } from "@aws-sdk/lib-dynamodb";
-import { AccessControlError } from "@lib/auth";
+import { AccessControlError } from "@lib/auth/errors";
 import { deleteDraftFormResponses, unprocessedSubmissions } from "@lib/vault";
 import formConfiguration from "@jestFixtures/cdsIntakeTestForm.json";
 import { DeliveryOption } from "@lib/types";

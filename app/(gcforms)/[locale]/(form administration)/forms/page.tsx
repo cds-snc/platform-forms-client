@@ -1,7 +1,7 @@
 import { serverTranslation } from "@i18n";
 import { Metadata } from "next";
 import { authCheckAndRedirect } from "@lib/actions";
-import { AccessControlError } from "@lib/auth";
+import { AccessControlError } from "@lib/auth/errors";
 import { redirect } from "next/navigation";
 import { Navigation } from "./components/server/Navigation";
 import { Cards } from "./components/server/Cards";

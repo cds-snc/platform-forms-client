@@ -1,10 +1,7 @@
-import { authCheckAndRedirect } from "@lib/actions";
-import { checkPrivilegesAsBoolean } from "@lib/privileges";
 import { serverTranslation } from "@i18n";
 import Link from "next/link";
 import { ManageAccountsIcon, SettingsApplicationsIcon } from "@serverComponents/icons";
 import { Metadata } from "next";
-import { redirect } from "next/navigation";
 
 export async function generateMetadata(props: {
   params: Promise<{ locale: string }>;
@@ -26,16 +23,6 @@ export default async function Page(props: { params: Promise<{ locale: string }> 
   const { locale } = params;
 
   const { t } = await serverTranslation(["admin-home", "common"]);
-
-  const { ability } = await authCheckAndRedirect();
-
-  const canViewUsers = checkPrivilegesAsBoolean(ability, [{ action: "view", subject: "User" }], {
-    redirect: true,
-  });
-
-  if (!canViewUsers) {
-    redirect(`/${locale}/forms`);
-  }
 
   return (
     <>

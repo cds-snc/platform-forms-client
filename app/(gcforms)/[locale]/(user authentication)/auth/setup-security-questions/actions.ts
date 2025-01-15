@@ -3,9 +3,8 @@
 import * as v from "valibot";
 import { serverTranslation } from "@i18n";
 import { createSecurityAnswers } from "@lib/auth";
-import { getAbility } from "@lib/privileges";
 import { logMessage } from "@lib/logger";
-import { authCheckAndThrow } from "@lib/actions";
+import { AuthenticatedAction } from "@lib/actions";
 
 export interface ErrorStates {
   validationErrors?: {
@@ -17,40 +16,35 @@ export interface ErrorStates {
 
 // Public facing functions - they can be used by anyone who finds the associated server action identifer
 
-export const setupQuestions = async (
-  language: string,
-  _: ErrorStates,
-  formData: FormData
-): Promise<ErrorStates> => {
-  const { t } = await serverTranslation(["setup-security-questions"], { lang: language });
-  const { session } = await authCheckAndThrow().catch(() => ({ session: null }));
-  if (!session) return { generalError: t("errors.serverError.title") };
+export const setupQuestions = AuthenticatedAction(
+  async (_, language: string, __: ErrorStates, formData: FormData): Promise<ErrorStates> => {
+    const { t } = await serverTranslation(["setup-security-questions"], { lang: language });
 
-  const ability = await getAbility();
+    const rawFormData = Object.fromEntries(formData.entries());
 
-  const rawFormData = Object.fromEntries(formData.entries());
+    const result = await validateData(rawFormData, language);
 
-  const result = await validateData(rawFormData, language);
-  if (!result.success) {
-    return {
-      validationErrors: result.issues.map((issue) => ({
-        fieldKey: issue.path?.[0].key as string,
-        fieldValue: issue.message,
-      })),
-    };
+    if (!result.success) {
+      return {
+        validationErrors: result.issues.map((issue) => ({
+          fieldKey: issue.path?.[0].key as string,
+          fieldValue: issue.message,
+        })),
+      };
+    }
+
+    return createSecurityAnswers([
+      { questionId: result.output.question1, answer: result.output.answer1 },
+      { questionId: result.output.question2, answer: result.output.answer2 },
+      { questionId: result.output.question3, answer: result.output.answer3 },
+    ])
+      .then(() => ({}))
+      .catch((error) => {
+        logMessage.warn(error);
+        return { generalError: t("errors.serverError.title") };
+      });
   }
-
-  return createSecurityAnswers(ability, [
-    { questionId: result.output.question1, answer: result.output.answer1 },
-    { questionId: result.output.question2, answer: result.output.answer2 },
-    { questionId: result.output.question3, answer: result.output.answer3 },
-  ])
-    .then(() => ({}))
-    .catch((error) => {
-      logMessage.warn(error);
-      return { generalError: t("errors.serverError.title") };
-    });
-};
+);
 
 // Internal and private functions - won't be converted into server actions
 

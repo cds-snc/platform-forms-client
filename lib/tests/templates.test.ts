@@ -28,7 +28,7 @@ import { Prisma } from "@prisma/client";
 import { logEvent } from "@lib/auditLogs";
 import { unprocessedSubmissions } from "@lib/vault";
 import { deleteKey } from "@lib/serviceAccount";
-import { AccessControlError } from "@lib/auth";
+import { AccessControlError } from "@lib/auth/errors";
 import {
   mockAuthorizationPass,
   mockAuthorizationFail,
@@ -649,7 +649,7 @@ describe("Template CRUD functions", () => {
       ).rejects.toThrow(AccessControlError);
       expect(mockedLogEvent).toHaveBeenNthCalledWith(
         1,
-        Promise.resolve(userID),
+        userID,
         { type: "Form" },
         "AccessDenied",
         "Attempted to create a Form"
@@ -661,7 +661,7 @@ describe("Template CRUD functions", () => {
       expect(result).toEqual([]);
       expect(mockedLogEvent).toHaveBeenNthCalledWith(
         1,
-        Promise.resolve(userID),
+        userID,
         { type: "Form" },
         "AccessDenied",
         "Attempted to access All System Forms"
@@ -672,7 +672,7 @@ describe("Template CRUD functions", () => {
       expect(result).toBe(null);
       expect(mockedLogEvent).toHaveBeenNthCalledWith(
         1,
-        Promise.resolve(userID),
+        userID,
         { id: "1", type: "Form" },
         "AccessDenied",
         "Attemped to read form object"
@@ -688,7 +688,7 @@ describe("Template CRUD functions", () => {
       ).rejects.toThrow(AccessControlError);
       expect(mockedLogEvent).toHaveBeenNthCalledWith(
         1,
-        Promise.resolve(userID),
+        userID,
         { id: "test1", type: "Form" },
         "AccessDenied",
         "Attempted to update Form"
@@ -700,7 +700,7 @@ describe("Template CRUD functions", () => {
       );
       expect(mockedLogEvent).toHaveBeenNthCalledWith(
         1,
-        Promise.resolve(userID),
+        userID,
         { id: "formtestID", type: "Form" },
         "AccessDenied",
         "Attempted to publish form"
@@ -711,7 +711,7 @@ describe("Template CRUD functions", () => {
       await expect(removeDeliveryOption("formtestID")).rejects.toThrow(AccessControlError);
       expect(mockedLogEvent).toHaveBeenNthCalledWith(
         1,
-        Promise.resolve(userID),
+        userID,
         { id: "formtestID", type: "Form" },
         "AccessDenied",
         "Attempted to set Delivery Option to the Vault"
@@ -722,7 +722,7 @@ describe("Template CRUD functions", () => {
       await expect(deleteTemplate("formtestID")).rejects.toThrow(AccessControlError);
       expect(mockedLogEvent).toHaveBeenNthCalledWith(
         1,
-        Promise.resolve(userID),
+        userID,
         { id: "formtestID", type: "Form" },
         "AccessDenied",
         "Attempted to delete Form"
