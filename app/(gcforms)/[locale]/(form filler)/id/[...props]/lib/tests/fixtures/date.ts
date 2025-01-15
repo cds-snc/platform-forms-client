@@ -1,4 +1,4 @@
-export const submission = {
+export const dateSubmission = {
   form: {
     form: {
       elements: [
@@ -16,4 +16,4 @@ export const submission = {
   },
 };
 
-export const result = { "1": '{"YYYY":2024,"MM":11,"DD":28}' };
+export const dateResult = { "1": '{"YYYY":2024,"MM":11,"DD":28}' };
