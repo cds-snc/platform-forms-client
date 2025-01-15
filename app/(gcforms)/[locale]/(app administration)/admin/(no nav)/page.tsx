@@ -46,11 +46,18 @@ export default async function Page(props: { params: Promise<{ locale: string }> 
             <ManageAccountsIcon className="inline-block size-14" /> {t("accountAdministration")}
           </h2>
           <p>{t("manageUsersAndTheirForms")}</p>
-          <p>
-            <Link href={`/${locale}/admin/accounts`} legacyBehavior>
-              <a href={`/${locale}/admin/accounts`}>{t("accounts")}</a>
-            </Link>
-          </p>
+          <ul className="list-none pl-0">
+            <li>
+              <Link href={`/${locale}/admin/accounts`} legacyBehavior>
+                <a href={`/${locale}/admin/accounts`}>{t("accounts")}</a>
+              </Link>
+            </li>
+            <li>
+              <Link href={`/${locale}/admin/accounts/recent`} legacyBehavior>
+                <a href={`/${locale}/admin/accounts/recent`}>Recent accounts created</a>
+              </Link>
+            </li>
+          </ul>
         </div>
 
         <div className="ml-20 rounded-lg border bg-white p-10">
