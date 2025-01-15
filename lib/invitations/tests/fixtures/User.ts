@@ -9,6 +9,7 @@ export const mockUser = (overrides: Partial<User> = {}): User => {
     emailVerified: new Date(),
     active: true,
     lastLogin: new Date(),
+    createdAt: new Date(),
   };
 
   return { ...defaultInvitation, ...overrides };
