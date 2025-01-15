@@ -1,5 +1,5 @@
 import { serverTranslation } from "@i18n";
-import { prisma } from "@lib/integration/prismaConnector";
+import { authorization } from "@lib/privileges";
 import { Metadata } from "next";
 import { RedirectType, redirect } from "next/navigation";
 import { UnlockPublishingForm } from "./components/client/UnlockPublishingForm";
@@ -21,18 +21,9 @@ export async function generateMetadata(props: {
 export default AuthenticatedPage(async ({ params, session }) => {
   const { locale } = await params;
 
-  const hasPublishPrivilege = await prisma.user.count({
-    where: {
-      email: session.user.email,
-      privileges: {
-        some: {
-          name: "PublishForms",
-        },
-      },
-    },
-  });
+  const hasPublishPrivilege = await authorization.hasPublishFormsPrivileges();
 
-  if (hasPublishPrivilege > 0) {
+  if (hasPublishPrivilege) {
     redirect(`/${locale}/forms`, RedirectType.replace);
   }
 
