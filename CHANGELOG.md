@@ -5,6 +5,14 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.31.5](https://github.com/cds-snc/platform-forms-client/compare/v3.31.4...v3.31.5) (2025-01-14)
+
+
+### Miscellaneous Chores
+
+* log details for Privilege Check error ([#4979](https://github.com/cds-snc/platform-forms-client/issues/4979)) ([e3eb8a5](https://github.com/cds-snc/platform-forms-client/commit/e3eb8a59d6005e50f4a8a3ca2bc5dd65b95bebdc))
+* Update error summary for specific field types ([#4934](https://github.com/cds-snc/platform-forms-client/issues/4934)) ([3612cb8](https://github.com/cds-snc/platform-forms-client/commit/3612cb8ece090c2c9f7f4e100f7227b472271fd0))
+
 ## [3.31.4](https://github.com/cds-snc/platform-forms-client/compare/v3.31.3...v3.31.4) (2025-01-13)
 
 
