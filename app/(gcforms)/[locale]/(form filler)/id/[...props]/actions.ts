@@ -4,7 +4,7 @@ import { Responses, SubmissionRequestBody } from "@lib/types";
 import { buildFormDataObject } from "./lib/buildFormDataObject";
 import { parseRequestData } from "./lib/parseRequestData";
 import { processFormData } from "./lib/processFormData";
-import { MissingFormDataError, MissingFormIdError } from "./lib/exceptions";
+import { MissingFormDataError } from "./lib/exceptions";
 import { logMessage } from "@lib/logger";
 import { getPublicTemplateByID } from "@lib/templates";
 import { validateResponses } from "@lib/validation/validation";
@@ -20,17 +20,16 @@ export async function submitForm(
     const formRecord = await getPublicTemplateByID(formId);
 
     if (!formRecord) {
-      throw new Error("Form data validation failed");
+      throw new Error(`Could not find any form associated to identifier ${formId}`);
     }
-    const validateOnSubmitResult = await validateResponses({
-      values,
-      formRecord,
-      language,
-    });
 
-    if (Object.keys(validateOnSubmitResult).length !== 0) {
-      logMessage.error(
-        `Form data validation failed for form ${formId}. Received error: ${validateOnSubmitResult} record: ${formRecord}`
+    const validateResponsesResult = await validateResponses(values, formRecord, language);
+
+    if (Object.keys(validateResponsesResult).length !== 0) {
+      logMessage.warn(
+        `[server-action][submitForm] Detected invalid response(s) in submission on form ${formId}. Errors: ${JSON.stringify(
+          validateResponsesResult
+        )}`
       );
 
       // Turn this on after we've monitored the logs for a while
@@ -38,10 +37,6 @@ export async function submitForm(
     }
 
     const formDataObject = buildFormDataObject(formRecord, values);
-
-    if (!formDataObject.formID) {
-      throw new MissingFormIdError("No form ID submitted with request");
-    }
 
     if (Object.entries(formDataObject).length <= 2) {
       throw new MissingFormDataError("No form data submitted with request");

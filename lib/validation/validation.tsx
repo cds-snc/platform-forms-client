@@ -286,15 +286,11 @@ const valueMatchesType = (value: unknown, type: string, formElement: FormElement
 /**
  * Server-side validation the form responses
  */
-export const validateResponses = async ({
-  values,
-  formRecord,
-  language,
-}: {
-  values: Responses;
-  formRecord: PublicFormRecord;
-  language: string;
-}) => {
+export const validateResponses = async (
+  values: Responses,
+  formRecord: PublicFormRecord,
+  language: string
+) => {
   const errors: Responses = {};
   const { t } = await serverTranslation(["common"], { lang: language });
 
@@ -302,7 +298,7 @@ export const validateResponses = async ({
     const formElement = formRecord.form.elements.find((element) => element.id == parseInt(item));
 
     if (!formElement) {
-      errors[item] = t("input-validation.unknown-field");
+      errors[item] = "response-to-non-existing-question";
       continue;
     }
 
@@ -310,7 +306,7 @@ export const validateResponses = async ({
     const result = valueMatchesType(values[item], formElement.type, formElement);
 
     if (!result) {
-      errors[item] = t("input-validation.unknown-value-for-field");
+      errors[item] = "invalid-response-data-type";
     }
 
     // Check for required fields
