@@ -5,6 +5,23 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.31.6](https://github.com/cds-snc/platform-forms-client/compare/v3.31.5...v3.31.6) (2025-01-15)
+
+
+### Bug Fixes
+
+* **deps:** update all patch dependencies ([#4965](https://github.com/cds-snc/platform-forms-client/issues/4965)) ([4471fac](https://github.com/cds-snc/platform-forms-client/commit/4471fac94d691333401c720c293b98525595a95f))
+
+
+### Miscellaneous Chores
+
+* Add createdAt column to User table ([#4981](https://github.com/cds-snc/platform-forms-client/issues/4981)) ([dbe015b](https://github.com/cds-snc/platform-forms-client/commit/dbe015bbe530947ff9c14c53615aa203730eaebd))
+* **deps:** lock file maintenance ([#4966](https://github.com/cds-snc/platform-forms-client/issues/4966)) ([b987312](https://github.com/cds-snc/platform-forms-client/commit/b9873122559a037650c1d9b380b4b5bab0b86f88))
+* **deps:** update all non-major docker images ([#4964](https://github.com/cds-snc/platform-forms-client/issues/4964)) ([f2c17d5](https://github.com/cds-snc/platform-forms-client/commit/f2c17d500cb54b084021933b27a63db7561773f9))
+* **deps:** update all non-major github action dependencies ([#4963](https://github.com/cds-snc/platform-forms-client/issues/4963)) ([42bd7ff](https://github.com/cds-snc/platform-forms-client/commit/42bd7ff6fe34436d5786bc60d633861d9fa40577))
+* update renovate config ([#4983](https://github.com/cds-snc/platform-forms-client/issues/4983)) ([a9774ef](https://github.com/cds-snc/platform-forms-client/commit/a9774efd38f3070a3555aea56b1d00f12c787c14))
+* validate on submit for server action ([#4970](https://github.com/cds-snc/platform-forms-client/issues/4970)) ([b5ee731](https://github.com/cds-snc/platform-forms-client/commit/b5ee731a130c80380274bbc43fc369f9b94a27d6))
+
 ## [3.31.5](https://github.com/cds-snc/platform-forms-client/compare/v3.31.4...v3.31.5) (2025-01-14)
 
 
