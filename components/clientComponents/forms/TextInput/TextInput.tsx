@@ -59,6 +59,12 @@ export const TextInput = (
   return (
     <>
       {meta.error && <ErrorMessage id={"errorMessage" + id}>{meta.error}</ErrorMessage>}
+      {/* For AT to help identify the input as a number */}
+      {type === "number" && (
+        <div id={`${id}-description-number`} hidden>
+          {t("number")}
+        </div>
+      )}
       <input
         data-testid="textInput"
         className={classes}
@@ -75,10 +81,7 @@ export const TextInput = (
         {...(type === "number" && {
           // For mobile phones to switch the keypad to numeric
           inputMode: "numeric",
-          // For AT to identify the input as a number
-          "aria-label": t("number"),
-          // Just encase..
-          spellCheck: "false",
+          "aria-describedby": `${id}-description-number`,
           // Note: "onBeforeInput" and e.data could also be used but I'm not sure how cross-browser
           // consistent it is
           onKeyDown: (e) => {
