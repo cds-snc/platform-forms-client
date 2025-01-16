@@ -5,7 +5,7 @@ import { notFound } from "next/navigation";
 import { Preview } from "./Preview";
 import { allowGrouping } from "@formBuilder/components/shared/right-panel/treeview/util/allowGrouping";
 import { ClientContainer } from "./ClientContainer";
-import { checkIfClosed } from "@lib/actions/checkIfClosed";
+import { checkIfClosed } from "@lib/templates";
 import { ClosedDetails } from "@lib/types";
 import { PreviewClosed } from "./PreviewClosed";
 

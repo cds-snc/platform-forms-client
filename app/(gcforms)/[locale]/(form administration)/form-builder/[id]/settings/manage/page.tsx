@@ -1,11 +1,10 @@
 import { serverTranslation } from "@i18n";
-import { getTemplateWithAssociatedUsers } from "@lib/templates";
+import { getTemplateWithAssociatedUsers, checkIfClosed } from "@lib/templates";
 import { authorization } from "@lib/privileges";
 import { getUsers } from "@lib/users";
 import { ManageForm } from "./ManageForm";
 import { Metadata } from "next";
 import { getNonce } from "./actions";
-import { checkIfClosed } from "@lib/actions/checkIfClosed";
 import { ApiKeyDialog } from "../../components/dialogs/ApiKeyDialog/ApiKeyDialog";
 import { DeleteApiKeyDialog } from "../../components/dialogs/DeleteApiKeyDialog/DeleteApiKeyDialog";
 import { AuthenticatedPage } from "@lib/pages/auth";
