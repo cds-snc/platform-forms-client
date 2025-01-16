@@ -42,14 +42,6 @@ jest.mock("@lib/origin", () => ({
   getOrigin: jest.fn().mockReturnValue("http://localhost:3000"),
 }));
 
-jest.mock("@lib/auth", () => {
-  const originalModule = jest.requireActual("@lib/auth");
-  return {
-    ...originalModule,
-    auth: jest.fn(),
-  };
-});
-
 describe("Invitations", () => {
   beforeEach(() => {
     mockAuthorizationPass(userId);

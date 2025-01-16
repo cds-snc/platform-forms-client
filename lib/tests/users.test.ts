@@ -16,14 +16,6 @@ import { mockAuthorizationFail, mockAuthorizationPass } from "__utils__/authoriz
 
 const userId = "1";
 
-jest.mock("@lib/auth", () => {
-  const originalModule = jest.requireActual("@lib/auth");
-  return {
-    ...originalModule,
-    auth: jest.fn(),
-  };
-});
-
 jest.mock("@lib/auditLogs");
 const mockedLogEvent = jest.mocked(logEvent, { shallow: true });
 
