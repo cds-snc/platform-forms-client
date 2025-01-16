@@ -4,7 +4,7 @@ export class AccessControlError extends Error {
     id: string;
   };
 
-  constructor(userId: string, message: string = "AccessControlError") {
+  constructor(userId: string, message: string) {
     super(message);
     Object.setPrototypeOf(this, AccessControlError.prototype);
     this.user = {

@@ -30,7 +30,10 @@ export const declineInvitation = async (invitationId: string) => {
 
   // Ensures the logged in user is the user that was invited
   if (ability.user.id !== user.id) {
-    throw new AccessControlError("You do not have permission to decline this invitation");
+    throw new AccessControlError(
+      ability.user.id,
+      "You do not have permission to decline this invitation"
+    );
   }
 
   _deleteInvitation(invitationId).catch((e) => {

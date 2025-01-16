@@ -57,7 +57,10 @@ export const acceptInvitation = async (invitationId: string) => {
   // Ensures the logged in user is the user that was invited
   const ability = await getAbility();
   if (ability.user.id !== user.id) {
-    throw new AccessControlError("You do not have permission to accept this invitation");
+    throw new AccessControlError(
+      ability.user.id,
+      "You do not have permission to accept this invitation"
+    );
   }
 
   // assign user to form
