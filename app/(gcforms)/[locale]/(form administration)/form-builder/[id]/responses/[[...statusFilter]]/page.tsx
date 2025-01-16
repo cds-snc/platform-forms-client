@@ -101,10 +101,6 @@ export default async function Page(props: {
 
   const { locale, id, statusFilter: statusFilterParams } = params;
 
-  if (id === "0000") {
-    redirect(`/${locale}/form-builder/${id}/edit`);
-  }
-
   const { session } = await authCheckAndThrow().catch(() => ({
     session: null,
   }));
@@ -119,7 +115,7 @@ export default async function Page(props: {
     );
   }
 
-  const isApiRetrieval = !!(await checkKeyExists(id));
+  const isApiRetrieval = id !== "0000" && !!(await checkKeyExists(id));
 
   const statusFilter = validateStatusFilterOrRedirect(
     statusFilterParams,
