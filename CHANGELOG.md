@@ -5,6 +5,37 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.31.7](https://github.com/cds-snc/platform-forms-client/compare/v3.31.6...v3.31.7) (2025-01-16)
+
+
+### Miscellaneous Chores
+
+* Update submitForm signature to accept either id or PublicFormRecord ([#4992](https://github.com/cds-snc/platform-forms-client/issues/4992)) ([597875b](https://github.com/cds-snc/platform-forms-client/commit/597875b5d671f8c4cfea3e1b8e6829f112bf2560))
+
+## [3.31.6](https://github.com/cds-snc/platform-forms-client/compare/v3.31.5...v3.31.6) (2025-01-16)
+
+
+### Bug Fixes
+
+* **deps:** update all patch dependencies ([#4965](https://github.com/cds-snc/platform-forms-client/issues/4965)) ([4471fac](https://github.com/cds-snc/platform-forms-client/commit/4471fac94d691333401c720c293b98525595a95f))
+* Email Text not Appearing in Manage User Access (for Submissions) ([5bc7cd3](https://github.com/cds-snc/platform-forms-client/commit/5bc7cd3695b06db1dfaa930f83bef3795ba40e2f))
+* Email Text not Appearing in Manage User Access (for Submissions) ([917cdb2](https://github.com/cds-snc/platform-forms-client/commit/917cdb2b48b20b8e77330513a011842fd1b2b6a9))
+* Email Text not Appearing in Manage User Access (for Submissions) ([15fb90d](https://github.com/cds-snc/platform-forms-client/commit/15fb90d80bb41cd1a92d80229f07bc3a9fb047de))
+* Prevent access to Edit on Published forms ([#4985](https://github.com/cds-snc/platform-forms-client/issues/4985)) ([1026406](https://github.com/cds-snc/platform-forms-client/commit/1026406d318b2d0cc027cc796c33f742cf20bca6))
+* Prevent access to Responses on unsaved form ([#4986](https://github.com/cds-snc/platform-forms-client/issues/4986)) ([3b72583](https://github.com/cds-snc/platform-forms-client/commit/3b72583f89585bca20d17a99291742094d7d3da4))
+* Publish Checklist confirmation message always checked. ([99b178d](https://github.com/cds-snc/platform-forms-client/commit/99b178ddbea3f105d00fcdf6b9155636805c1f07))
+* Publish Checklist confirmation message always checked. ([62ff957](https://github.com/cds-snc/platform-forms-client/commit/62ff9573f593ffb22dec6243f38474d17a496f6b))
+
+
+### Miscellaneous Chores
+
+* Add createdAt column to User table ([#4981](https://github.com/cds-snc/platform-forms-client/issues/4981)) ([dbe015b](https://github.com/cds-snc/platform-forms-client/commit/dbe015bbe530947ff9c14c53615aa203730eaebd))
+* **deps:** lock file maintenance ([#4966](https://github.com/cds-snc/platform-forms-client/issues/4966)) ([b987312](https://github.com/cds-snc/platform-forms-client/commit/b9873122559a037650c1d9b380b4b5bab0b86f88))
+* **deps:** update all non-major docker images ([#4964](https://github.com/cds-snc/platform-forms-client/issues/4964)) ([f2c17d5](https://github.com/cds-snc/platform-forms-client/commit/f2c17d500cb54b084021933b27a63db7561773f9))
+* **deps:** update all non-major github action dependencies ([#4963](https://github.com/cds-snc/platform-forms-client/issues/4963)) ([42bd7ff](https://github.com/cds-snc/platform-forms-client/commit/42bd7ff6fe34436d5786bc60d633861d9fa40577))
+* update renovate config ([#4983](https://github.com/cds-snc/platform-forms-client/issues/4983)) ([a9774ef](https://github.com/cds-snc/platform-forms-client/commit/a9774efd38f3070a3555aea56b1d00f12c787c14))
+* validate on submit for server action ([#4970](https://github.com/cds-snc/platform-forms-client/issues/4970)) ([b5ee731](https://github.com/cds-snc/platform-forms-client/commit/b5ee731a130c80380274bbc43fc369f9b94a27d6))
+
 ## [3.31.5](https://github.com/cds-snc/platform-forms-client/compare/v3.31.4...v3.31.5) (2025-01-14)
 
 
