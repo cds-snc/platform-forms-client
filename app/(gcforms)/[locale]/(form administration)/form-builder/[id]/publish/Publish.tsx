@@ -268,7 +268,7 @@ export const Publish = ({ id }: { id: string }) => {
           </Button>
         </li>
         <li className="my-4">
-          {hasHydrated ? <Icon checked={confirmationMessage !== undefined} /> : IconLoading}
+          {hasHydrated ? <Icon checked={confirmationMessage} /> : IconLoading}
           <Button theme={"link"} onClick={routeToConfirmation}>
             {t("formConfirmationMessage")}
           </Button>
