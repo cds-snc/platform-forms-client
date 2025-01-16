@@ -1,25 +1,42 @@
 "use server";
 
-import { PublicFormRecord, Responses, SubmissionRequestBody } from "@lib/types";
+import { Responses, SubmissionRequestBody } from "@lib/types";
 import { buildFormDataObject } from "./lib/buildFormDataObject";
 import { parseRequestData } from "./lib/parseRequestData";
 import { processFormData } from "./lib/processFormData";
-import { MissingFormDataError, MissingFormIdError } from "./lib/exceptions";
+import { MissingFormDataError } from "./lib/exceptions";
 import { logMessage } from "@lib/logger";
+import { getPublicTemplateByID } from "@lib/templates";
+import { validateResponses } from "@lib/validation/validation";
 
 // Public facing functions - they can be used by anyone who finds the associated server action identifer
 
 export async function submitForm(
   values: Responses,
   language: string,
-  formRecord: PublicFormRecord
+  formId: string
 ): Promise<{ id: string; error?: Error }> {
   try {
-    const formDataObject = buildFormDataObject(formRecord, values);
+    const formRecord = await getPublicTemplateByID(formId);
 
-    if (!formDataObject.formID) {
-      throw new MissingFormIdError("No form ID submitted with request");
+    if (!formRecord) {
+      throw new Error(`Could not find any form associated to identifier ${formId}`);
     }
+
+    const validateResponsesResult = await validateResponses(values, formRecord, language);
+
+    if (Object.keys(validateResponsesResult).length !== 0) {
+      logMessage.warn(
+        `[server-action][submitForm] Detected invalid response(s) in submission on form ${formId}. Errors: ${JSON.stringify(
+          validateResponsesResult
+        )}`
+      );
+
+      // Turn this on after we've monitored the logs for a while
+      // throw new MissingFormDataError("Form data validation failed");
+    }
+
+    const formDataObject = buildFormDataObject(formRecord, values);
 
     if (Object.entries(formDataObject).length <= 2) {
       throw new MissingFormDataError("No form data submitted with request");
@@ -32,9 +49,9 @@ export async function submitForm(
     return { id: formRecord.id };
   } catch (e) {
     logMessage.error(
-      `Could not submit response for form ${formRecord.id}. Received error: ${(e as Error).message}`
+      `Could not submit response for form ${formId}. Received error: ${(e as Error).message}`
     );
 
-    return { id: formRecord.id, error: { name: (e as Error).name, message: (e as Error).message } };
+    return { id: formId, error: { name: (e as Error).name, message: (e as Error).message } };
   }
 }

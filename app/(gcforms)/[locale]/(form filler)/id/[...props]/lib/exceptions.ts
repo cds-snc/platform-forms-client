@@ -1,9 +1,3 @@
-export class MissingFormIdError extends Error {
-  constructor(message?: string) {
-    super(message ?? "MissingFormIdError");
-    Object.setPrototypeOf(this, MissingFormIdError.prototype);
-  }
-}
 export class MissingFormDataError extends Error {
   constructor(message?: string) {
     super(message ?? "MissingFormDataError");
