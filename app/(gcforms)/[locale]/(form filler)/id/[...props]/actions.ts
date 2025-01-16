@@ -1,6 +1,6 @@
 "use server";
 
-import { Responses, SubmissionRequestBody } from "@lib/types";
+import { PublicFormRecord, Responses, SubmissionRequestBody } from "@lib/types";
 import { buildFormDataObject } from "./lib/buildFormDataObject";
 import { parseRequestData } from "./lib/parseRequestData";
 import { processFormData } from "./lib/processFormData";
@@ -14,16 +14,18 @@ import { validateResponses } from "@lib/validation/validation";
 export async function submitForm(
   values: Responses,
   language: string,
-  formId: string
+  formRecordOrId: PublicFormRecord | string
 ): Promise<{ id: string; error?: Error }> {
-  try {
-    const formRecord = await getPublicTemplateByID(formId);
+  const formId = typeof formRecordOrId === "string" ? formRecordOrId : formRecordOrId.id;
 
-    if (!formRecord) {
+  try {
+    const template = await getPublicTemplateByID(formId);
+
+    if (!template) {
       throw new Error(`Could not find any form associated to identifier ${formId}`);
     }
 
-    const validateResponsesResult = await validateResponses(values, formRecord, language);
+    const validateResponsesResult = await validateResponses(values, template, language);
 
     if (Object.keys(validateResponsesResult).length !== 0) {
       logMessage.warn(
@@ -36,7 +38,7 @@ export async function submitForm(
       // throw new MissingFormDataError("Form data validation failed");
     }
 
-    const formDataObject = buildFormDataObject(formRecord, values);
+    const formDataObject = buildFormDataObject(template, values);
 
     if (Object.entries(formDataObject).length <= 2) {
       throw new MissingFormDataError("No form data submitted with request");
@@ -46,7 +48,7 @@ export async function submitForm(
 
     await processFormData(data.fields, data.files, language);
 
-    return { id: formRecord.id };
+    return { id: formId };
   } catch (e) {
     logMessage.error(
       `Could not submit response for form ${formId}. Received error: ${(e as Error).message}`
