@@ -22,6 +22,8 @@ import {
 import { getLocalizedProperty } from "@lib/utils";
 import { Language } from "@lib/types/form-builder-types";
 
+import { toggleSavedValues } from "@i18n/toggleSavedValues";
+
 interface GCFormsContextValueType {
   updateValues: ({ formValues }: { formValues: FormValues }) => void;
   getValues: () => FormValues;
@@ -42,7 +44,7 @@ interface GCFormsContextValueType {
   clearHistoryAfterId: (groupId: string) => string[];
   getGroupTitle: (groupId: string | null, language: Language) => string;
   saveProgress: () => void;
-  restoreProgress: () => FormValues | false;
+  restoreProgress: (language: Language) => FormValues | false;
 }
 
 const GCFormsContext = createContext<GCFormsContextValueType | undefined>(undefined);
@@ -177,13 +179,29 @@ export const GCFormsProvider = ({
       currentGroup: currentGroup,
     });
 
+    const formDataFr = JSON.stringify({
+      id: formRecord.id,
+      values: toggleSavedValues(formRecord.form, { values: values.current }, "en") as FormValues,
+      history: history.current,
+      currentGroup: currentGroup,
+    });
+
     // Save to session storage
-    const encodedformData = Buffer.from(formData).toString("base64");
-    sessionStorage.setItem(SESSION_STORAGE_KEY, encodedformData);
+    const encodedformDataEn = Buffer.from(formData).toString("base64");
+    sessionStorage.setItem(SESSION_STORAGE_KEY, encodedformDataEn);
+
+    const encodedformDataFr = Buffer.from(formDataFr).toString("base64");
+    sessionStorage.setItem(`${SESSION_STORAGE_KEY}-fr`, JSON.stringify(encodedformDataFr));
   };
 
-  const restoreProgress = (): FormValues | false => {
-    const encodedformData = sessionStorage.getItem(SESSION_STORAGE_KEY);
+  const restoreProgress = (language: Language): FormValues | false => {
+    let STORAGE_KEY = SESSION_STORAGE_KEY;
+    if (language === "fr") {
+      STORAGE_KEY = `${SESSION_STORAGE_KEY}-fr`;
+    }
+
+    const encodedformData = sessionStorage.getItem(STORAGE_KEY);
+
     if (!encodedformData) return false;
 
     // Clear the session storage as we now have the data

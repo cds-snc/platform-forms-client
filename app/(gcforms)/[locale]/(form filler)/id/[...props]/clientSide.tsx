@@ -33,11 +33,11 @@ export const FormWrapper = ({
   const { saveProgress } = useGCFormsContext();
 
   useEffect(() => {
-    const restoredValues = restoreProgress();
+    const restoredValues = restoreProgress(language as Language);
     if (restoredValues) {
       setInitialValues(restoredValues);
     }
-  }, [restoreProgress]);
+  }, [restoreProgress, language]);
 
   return (
     <Form
