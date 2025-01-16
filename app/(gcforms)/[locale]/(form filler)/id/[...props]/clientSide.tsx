@@ -9,6 +9,7 @@ import { Language } from "@lib/types/form-builder-types";
 import { useEffect, useState, type JSX } from "react";
 import { useGCFormsContext } from "@lib/hooks/useGCFormContext";
 import { FormValues } from "@lib/formContext";
+import { SaveProgressButton } from "@clientComponents/forms/SaveProgressButton/SaveProgressButton";
 
 export const FormWrapper = ({
   formRecord,
@@ -57,6 +58,7 @@ export const FormWrapper = ({
               validateForm={validateForm}
               fallBack={fallBack}
             />
+            <SaveProgressButton />
           </>
         );
       }}
