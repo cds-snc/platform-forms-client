@@ -25,7 +25,7 @@ export async function submitForm(
       throw new Error(`Could not find any form associated to identifier ${formId}`);
     }
 
-    const validateResponsesResult = await validateResponses(values, template, language);
+    const validateResponsesResult = await validateResponses(values, template);
 
     if (Object.keys(validateResponsesResult).length !== 0) {
       logMessage.warn(
