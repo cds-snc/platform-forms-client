@@ -5,6 +5,14 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.31.10](https://github.com/cds-snc/platform-forms-client/compare/v3.31.9...v3.31.10) (2025-01-17)
+
+
+### Bug Fixes
+
+* Renumber subElements on duplicate ([#4998](https://github.com/cds-snc/platform-forms-client/issues/4998)) ([0f166ca](https://github.com/cds-snc/platform-forms-client/commit/0f166cac7f35ac3cdafd4b4993a9f8473687b6db))
+* Save on preview to prevent error on uploaded form file ([#5000](https://github.com/cds-snc/platform-forms-client/issues/5000)) ([b0049b2](https://github.com/cds-snc/platform-forms-client/commit/b0049b2064f1a0275505d2ee6fddc20b86008a69))
+
 ## [3.31.9](https://github.com/cds-snc/platform-forms-client/compare/v3.31.8...v3.31.9) (2025-01-17)
 
 
