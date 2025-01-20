@@ -2,7 +2,8 @@ import { serverTranslation } from "@i18n";
 import { authorization } from "@lib/privileges";
 import { Metadata } from "next";
 import { DataView } from "./clientSide";
-import { getTemplates } from "./actions";
+import { getAllTemplates } from "@lib/templates";
+import { AuthenticatedPage } from "@lib/pages/auth";
 
 export async function generateMetadata(props: {
   params: Promise<{ locale: string }>;
@@ -17,12 +18,19 @@ export async function generateMetadata(props: {
   };
 }
 
-export default async function Page() {
-  await authorization.canManageAllForms().catch(() => {
-    authorization.unauthorizedRedirect();
+export default AuthenticatedPage([authorization.canManageAllForms], async () => {
+  const allTemplates = await getAllTemplates();
+
+  const templatesToDataViewObject = allTemplates.map((template) => {
+    const {
+      id,
+      form: { titleEn, titleFr },
+      isPublished,
+      updatedAt,
+    } = template;
+
+    return { id, titleEn, titleFr, isPublished, updatedAt };
   });
 
-  const templates = await getTemplates();
-
-  return <DataView templates={templates} />;
-}
+  return <DataView templates={templatesToDataViewObject} />;
+});
