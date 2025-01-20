@@ -1,4 +1,5 @@
 "use server";
+
 import { AuthenticatedAction } from "@lib/actions";
 import { updateSecurityAnswer } from "@lib/auth";
 import { revalidatePath } from "next/cache";
