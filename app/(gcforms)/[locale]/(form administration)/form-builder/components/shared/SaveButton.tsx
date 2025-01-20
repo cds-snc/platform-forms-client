@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState, useRef, useCallback } from "react";
 import { useTranslation } from "@i18n/client";
 import { useSession } from "next-auth/react";
 import { cn, safeJSONParse } from "@lib/utils";
@@ -111,7 +111,7 @@ export const SaveButton = () => {
   const pathname = usePathname();
   const timeRef = useRef(new Date().getTime());
 
-  const handleSave = async () => {
+  const handleSave = useCallback(async () => {
     if (status !== "authenticated") {
       return;
     }
@@ -151,7 +151,33 @@ export const SaveButton = () => {
       toast.error(<ErrorSaving />, "wide");
       setError(true);
     }
-  };
+  }, [
+    createOrUpdateTemplate,
+    getId,
+    getName,
+    getDeliveryOption,
+    getSchema,
+    resetState,
+    securityAttribute,
+    setId,
+    setUpdatedAt,
+    status,
+  ]);
+
+  // Try to auto-save before the user leaves the page
+  useEffect(() => {
+    const beforeUnloadHandler = (e: BeforeUnloadEvent) => {
+      e.preventDefault();
+      e.returnValue = "";
+      handleSave();
+    };
+
+    window.addEventListener("beforeunload", beforeUnloadHandler);
+
+    return () => {
+      window.removeEventListener("beforeunload", beforeUnloadHandler);
+    };
+  }, [templateIsDirty, handleSave]);
 
   useEffect(() => {
     return () => {

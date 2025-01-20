@@ -1,17 +1,11 @@
-import { useEffect, use } from "react";
-import { useTemplateStore, TemplateStoreContext } from "../useTemplateStore";
+import { useEffect, useState } from "react";
 
 export const useRehydrate = () => {
-  const store = use(TemplateStoreContext);
-  const hasHydrated = useTemplateStore((s) => s.hasHydrated);
-
-  if (!store) throw new Error("Missing Template Store Provider in tree");
+  const [hydrated, setHydrated] = useState(false);
 
   useEffect(() => {
-    if (!hasHydrated) {
-      store.persist.rehydrate();
-    }
-  }, [store, hasHydrated]);
+    setHydrated(true);
+  }, []);
 
-  return hasHydrated;
+  return hydrated;
 };

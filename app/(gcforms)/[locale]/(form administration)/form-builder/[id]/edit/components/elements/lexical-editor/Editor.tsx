@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useId } from "react";
 import { LexicalComposer } from "@lexical/react/LexicalComposer";
 import { ListPlugin } from "@lexical/react/LexicalListPlugin";
 import { RichTextPlugin } from "@lexical/react/LexicalRichTextPlugin";
@@ -37,7 +37,7 @@ export const Editor = ({ content, onChange, ariaLabel, ariaDescribedBy, lang }: 
     undefined
   );
 
-  const editorId = "editor-" + Math.random().toString(36).substr(2, 9);
+  const editorId = "editor-" + useId();
 
   const onRef = (_floatingAnchorElem: HTMLDivElement) => {
     if (_floatingAnchorElem !== null) {
