@@ -44,14 +44,44 @@ export const ErrorListMessage = ({
 
   switch (elementType) {
     case FormElementTypes.attestation:
-      return t("input-validation.error-list.check-all", { question, lng: language });
+      return t("input-validation.error-list.check-all", {
+        question,
+        lng: language,
+        interpolation: {
+          escapeValue: false,
+        },
+      });
     case FormElementTypes.checkbox:
-      return t("input-validation.error-list.checkbox", { question, lng: language });
+      return t("input-validation.error-list.checkbox", {
+        question,
+        lng: language,
+        interpolation: {
+          escapeValue: false,
+        },
+      });
     case FormElementTypes.dropdown:
-      return t("input-validation.error-list.select", { question, lng: language });
+      return t("input-validation.error-list.select", {
+        question,
+        lng: language,
+        interpolation: {
+          escapeValue: false,
+        },
+      });
     case FormElementTypes.fileInput:
-      return t("input-validation.error-list.file-input", { question, lng: language });
+      return t("input-validation.error-list.file-input", {
+        question,
+        lng: language,
+        interpolation: {
+          escapeValue: false,
+        },
+      });
     default:
-      return t("input-validation.error-list.default", { question, lng: language });
+      return t("input-validation.error-list.default", {
+        question,
+        lng: language,
+        interpolation: {
+          escapeValue: false,
+        },
+      });
   }
 };
