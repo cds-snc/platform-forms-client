@@ -169,7 +169,7 @@ export const SaveButton = () => {
     const beforeUnloadHandler = (e: BeforeUnloadEvent) => {
       e.preventDefault();
       e.returnValue = "";
-      handleSave();
+      // handleSave();
     };
 
     window.addEventListener("beforeunload", beforeUnloadHandler);
