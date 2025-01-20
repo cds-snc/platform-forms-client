@@ -61,6 +61,14 @@ export const toggleSavedValues = (
         return acc;
       }
 
+      if (Array.isArray(value)) {
+        acc[key] = value.map((v) => {
+          const found = getToggledValue(form, key, v, fromLang);
+          return found ? found : v;
+        });
+        return acc;
+      }
+
       const found = getToggledValue(form, key, value, fromLang);
       acc[key] = found ? found : value;
 
