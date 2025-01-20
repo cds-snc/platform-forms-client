@@ -5,6 +5,35 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.31.11](https://github.com/cds-snc/platform-forms-client/compare/v3.31.10...v3.31.11) (2025-01-20)
+
+
+### Bug Fixes
+
+* Allow free text in searchable list input ([#5001](https://github.com/cds-snc/platform-forms-client/issues/5001)) ([74c80fc](https://github.com/cds-snc/platform-forms-client/commit/74c80fc9a45be3faf4e415e872898a9f22135fae))
+
+## [3.31.10](https://github.com/cds-snc/platform-forms-client/compare/v3.31.9...v3.31.10) (2025-01-17)
+
+
+### Bug Fixes
+
+* Renumber subElements on duplicate ([#4998](https://github.com/cds-snc/platform-forms-client/issues/4998)) ([0f166ca](https://github.com/cds-snc/platform-forms-client/commit/0f166cac7f35ac3cdafd4b4993a9f8473687b6db))
+* Save on preview to prevent error on uploaded form file ([#5000](https://github.com/cds-snc/platform-forms-client/issues/5000)) ([b0049b2](https://github.com/cds-snc/platform-forms-client/commit/b0049b2064f1a0275505d2ee6fddc20b86008a69))
+
+## [3.31.9](https://github.com/cds-snc/platform-forms-client/compare/v3.31.8...v3.31.9) (2025-01-17)
+
+
+### Miscellaneous Chores
+
+* remove log message  ([#4996](https://github.com/cds-snc/platform-forms-client/issues/4996)) ([fa7316d](https://github.com/cds-snc/platform-forms-client/commit/fa7316dc09b2883846ba302dffe20ffc9b513b39))
+
+## [3.31.8](https://github.com/cds-snc/platform-forms-client/compare/v3.31.7...v3.31.8) (2025-01-17)
+
+
+### Miscellaneous Chores
+
+* update server validation ([#4994](https://github.com/cds-snc/platform-forms-client/issues/4994)) ([09a2fd6](https://github.com/cds-snc/platform-forms-client/commit/09a2fd62c9bf685421b547060ae2df7592c04dd1))
+
 ## [3.31.7](https://github.com/cds-snc/platform-forms-client/compare/v3.31.6...v3.31.7) (2025-01-16)
 
 
