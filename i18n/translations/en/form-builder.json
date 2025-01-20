@@ -1,7 +1,7 @@
 {
   "addElement": "Add form element",
   "addElementDialog": {
-    "example": "Example",
+    "example": "example",
     "filters": {
       "all": "All",
       "basic": "Basic",
