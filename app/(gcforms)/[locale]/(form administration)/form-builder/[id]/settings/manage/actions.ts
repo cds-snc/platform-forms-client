@@ -7,7 +7,6 @@ import {
   resetThrottling,
 } from "@lib/cache/throttlingCache";
 import { AuthenticatedAction } from "@lib/actions";
-import { headers } from "next/headers";
 import { ServerActionError } from "@lib/types/form-builder-types";
 import { logEvent } from "@lib/auditLogs";
 
@@ -67,10 +66,3 @@ export const resetThrottlingRate = AuthenticatedAction(async (session, formId: s
     return { error: "There was an error. Please try again later." } as ServerActionError;
   }
 });
-
-// Can throw because it is not called by Client Components
-// @todo Should these types of functions be moved to a different file?
-export const getNonce = async () => {
-  const nonce = (await headers()).get("x-nonce");
-  return nonce;
-};
