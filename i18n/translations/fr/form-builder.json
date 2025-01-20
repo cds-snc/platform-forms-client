@@ -634,7 +634,6 @@
       "keyId": "Identifiant de la clé API",
       "title": "Accès pour l'API",
       "generateKey": "Créer une clé API",
-      "refreshKey": "Rafraîchir la clé",
       "deleteKey": "Supprimer la clé API",
       "deleteKeyFailed": {
         "title": "Quelque chose a mal tourné",
