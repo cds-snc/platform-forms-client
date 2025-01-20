@@ -76,7 +76,7 @@ export const TextInput = (
         {...ariaDescribedByIds()}
         {...field}
         onChange={handleTextInputChange}
-        // Note: using inputmode=numeric over type=number for UX reasons.
+        // Note: not using type=number for numbers for UX reasons.
         // See: #4851 and https://tinyurl.com/2p9tm5vk
         {...(type === "number" && {
           // For mobile phones to switch the keypad to numeric
