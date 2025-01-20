@@ -5,6 +5,18 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.31.12](https://github.com/cds-snc/platform-forms-client/compare/v3.31.11...v3.31.12) (2025-01-20)
+
+
+### Bug Fixes
+
+* Unescape question in validation message ([#5011](https://github.com/cds-snc/platform-forms-client/issues/5011)) ([a35a104](https://github.com/cds-snc/platform-forms-client/commit/a35a10489d63bf16ebc46a11a068e004d3c6bc58))
+
+
+### Miscellaneous Chores
+
+* Add missing "example" string ([#5007](https://github.com/cds-snc/platform-forms-client/issues/5007)) ([67bc168](https://github.com/cds-snc/platform-forms-client/commit/67bc168b262a42ef5e6ed828ef11ada4da685d00))
+
 ## [3.31.11](https://github.com/cds-snc/platform-forms-client/compare/v3.31.10...v3.31.11) (2025-01-20)
 
 
