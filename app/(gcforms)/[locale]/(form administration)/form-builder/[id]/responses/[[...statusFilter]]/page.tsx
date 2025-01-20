@@ -115,7 +115,7 @@ export default async function Page(props: {
     );
   }
 
-  const isApiRetrieval = !!(await checkKeyExists(id));
+  const isApiRetrieval = id !== "0000" && !!(await checkKeyExists(id));
 
   const statusFilter = validateStatusFilterOrRedirect(
     statusFilterParams,
