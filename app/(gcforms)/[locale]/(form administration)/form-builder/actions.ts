@@ -23,7 +23,6 @@ import {
 } from "@lib/templates";
 import { serverTranslation } from "@i18n";
 import { revalidatePath } from "next/cache";
-import { checkOne } from "@lib/cache/flags";
 import { isValidDateString } from "@lib/utils/date/isValidDateString";
 import { allowedTemplates, TemplateTypes } from "@lib/utils/form-builder";
 
@@ -400,10 +399,6 @@ export const getTranslatedDynamicRowProperties = async () => {
     removeButtonTextFr: fr("dynamicRow.defaultRemoveButtonText"),
   };
 };
-
-export async function checkFlag(id: string) {
-  return checkOne(id);
-}
 
 export const loadBlockTemplate = async ({
   type,
