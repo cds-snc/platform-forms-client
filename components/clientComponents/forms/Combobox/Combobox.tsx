@@ -26,6 +26,7 @@ export const Combobox = (props: ComboboxProps): React.ReactElement => {
             return inputValue ? choice.toLowerCase().includes(inputValue.toLowerCase()) : true;
           })
         );
+        setValue(inputValue);
       },
       items,
       onSelectedItemChange({ selectedItem }) {
