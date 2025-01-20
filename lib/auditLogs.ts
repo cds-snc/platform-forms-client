@@ -51,7 +51,6 @@ export enum AuditLogEvent {
   AccessDenied = "AccessDenied",
   // API Management
   CreateAPIKey = "CreateAPIKey",
-  RefreshAPIKey = "RefreshAPIKey",
   DeleteAPIKey = "DeleteAPIKey",
   IncreaseThrottlingRate = "IncreaseThrottlingRate",
   ResetThrottlingRate = "ResetThrottlingRate",

@@ -1,6 +1,6 @@
 "use server";
 
-import { createKey, deleteKey, refreshKey } from "@lib/serviceAccount";
+import { createKey, deleteKey } from "@lib/serviceAccount";
 import { revalidatePath } from "next/cache";
 import { promises as fs } from "fs";
 import path from "path";
@@ -24,10 +24,6 @@ export const createServiceAccountKey = AuthenticatedAction(async (_, templateId:
     "page"
   );
   return createKey(templateId);
-});
-
-export const refreshServiceAccountKey = AuthenticatedAction(async (_, templateId: string) => {
-  return refreshKey(templateId);
 });
 
 export const deleteServiceAccountKey = AuthenticatedAction(async (_, templateId: string) => {
