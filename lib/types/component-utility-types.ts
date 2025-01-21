@@ -6,6 +6,7 @@ export interface InputFieldProps {
   required?: boolean;
   disabled?: boolean;
   ariaDescribedBy?: string;
+  lang?: string;
 }
 
 export interface ChoiceFieldProps extends InputFieldProps {
