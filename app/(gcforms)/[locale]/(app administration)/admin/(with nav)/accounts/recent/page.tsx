@@ -7,6 +7,8 @@ import { redirect } from "next/navigation";
 import { UserCard } from "./components/UserCard";
 import { FilterAll } from "./components/FilterAll";
 import { FilterFlagged } from "./components/FilterFlagged";
+import { ConfirmDeactivateDialog } from "./components/ConfirmDeactivateDialog";
+import { AddNoteDialog } from "./components/AddNoteDialog";
 
 export default async function Page(props: { params: Promise<{ locale: string }> }) {
   const params = await props.params;
@@ -114,6 +116,8 @@ export default async function Page(props: { params: Promise<{ locale: string }> 
           </Card>
         )}
       </div>
+      <ConfirmDeactivateDialog />
+      <AddNoteDialog />
     </>
   );
 }
