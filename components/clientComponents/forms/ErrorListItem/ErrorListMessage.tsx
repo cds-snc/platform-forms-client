@@ -75,6 +75,14 @@ export const ErrorListMessage = ({
           escapeValue: false,
         },
       });
+    case FormElementTypes.formattedDate:
+      return t("input-validation.error-list.date-invalid", {
+        question,
+        lng: language,
+        interpolation: {
+          escapeValue: false,
+        },
+      });
     default:
       return t("input-validation.error-list.default", {
         question,
