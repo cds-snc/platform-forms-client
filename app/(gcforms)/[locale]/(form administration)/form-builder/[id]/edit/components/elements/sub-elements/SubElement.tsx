@@ -76,7 +76,7 @@ export const SubElement = ({
 
   if (!subElements || subElements.length < 1)
     return (
-      <div className="ml-4 mt-10">
+      <div className="ml-4 mt-10" data-id={item.id}>
         <AddToSetButton
           handleAdd={async (type?: FormElementTypes) => {
             const id = await handleAddSubElement(item.id, 0, type);
@@ -95,6 +95,7 @@ export const SubElement = ({
         return (
           <div key={`sub-element-${item.id}-${subIndex}`}>
             <PanelHightLight
+              id={item.id}
               conditionalChildren={
                 <PanelActions
                   item={item}
@@ -138,7 +139,7 @@ export const SubElement = ({
       })}
 
       {subElements.length >= 1 && (
-        <div className="mb-2 ml-4 mt-4">
+        <div className="mb-2 ml-4 mt-4" data-id={item.id}>
           <AddToSetButton
             handleAdd={async (type?: FormElementTypes) => {
               const id = await handleAddSubElement(item.id, subElements.length, type);

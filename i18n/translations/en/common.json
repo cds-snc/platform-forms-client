@@ -54,7 +54,15 @@
     "validGovEmail": "Enter a valid government email address.",
     "notSameAsUserEmail": "This cannot be your email address. Enter the email of the person in charge of your team. Enter the email of the person in charge of your team. If that's you, add a colleague.",
     "min-length-4-characters": "Must be at least 4 characters.",
-    "MB": "MB"
+    "MB": "MB",
+    "error-list": {
+      "default": "Enter an answer for: {{question}}",
+      "select": "Select an option for: {{question}}",
+      "checkbox": "Select one or multiple options for: {{question}}",
+      "check-all": "Check off all the boxes for: {{question}}",
+      "file-input": "Choose a file for: {{question}}",
+      "date-invalid": "Enter a valid date for: {{question}}"
+    }
   },
   "required": "required",
   "all-required": "all checkboxes required",
@@ -205,5 +213,6 @@
     "text1": "Form accepting submissions until:",
     "text2": "{{month}} {{day}}, {{year}} at {{hour}}:{{minute}} ET."
   },
-  "cancel": "Cancel"
+  "cancel": "Cancel",
+  "number": "Number"
 }
