@@ -127,6 +127,14 @@ export const RulesDialog = () => {
               >
                 {t("save")}
               </Button>
+              <Button
+                theme="secondary"
+                onClick={() => {
+                  handleClose();
+                }}
+              >
+                {t("cancel")}
+              </Button>
             </>
           }
           handleClose={handleClose}
