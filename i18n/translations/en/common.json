@@ -60,7 +60,8 @@
       "select": "Select an option for: {{question}}",
       "checkbox": "Select one or multiple options for: {{question}}",
       "check-all": "Check off all the boxes for: {{question}}",
-      "file-input": "Choose a file for: {{question}}"
+      "file-input": "Choose a file for: {{question}}",
+      "date-invalid": "Enter a valid date for: {{question}}"
     }
   },
   "required": "required",
@@ -212,5 +213,6 @@
     "text1": "Form accepting submissions until:",
     "text2": "{{month}} {{day}}, {{year}} at {{hour}}:{{minute}} ET."
   },
-  "cancel": "Cancel"
+  "cancel": "Cancel",
+  "number": "Number"
 }
