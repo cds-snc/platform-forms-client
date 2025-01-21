@@ -215,5 +215,8 @@
     "text2": "{{month}} {{day}}, {{year}} at {{hour}}:{{minute}} ET."
   },
   "cancel": "Cancel",
-  "number": "Number"
+  "number": "Number",
+  "conditional": {
+    "activated": "Control with name {{name}} activated a sub form element"
+  }
 }

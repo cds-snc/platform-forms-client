@@ -215,5 +215,8 @@
     "text2": "{{day}} {{month}} {{year}} à {{hour}} h {{minute}} HE"
   },
   "cancel": "Annuler",
-  "number": "Numéro"
+  "number": "Numéro",
+  "conditional": {
+    "activated": "[FR]Control with name {{name}} activated a sub form element"
+  }
 }

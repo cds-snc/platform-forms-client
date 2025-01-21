@@ -72,7 +72,7 @@ export const LiveMessage = () => {
  *   <button onClick={() => speak("Hello World")}>Click me</button>
  */
 export const useLiveMessage = () => {
-  const { /*message,*/ setMessage } = useContext(LiveMessageContext);
+  const { message, setMessage } = useContext(LiveMessageContext);
   /**
    * Updates the app-wide live-region with the passed in content.
    * @param content text message to be announced
@@ -87,6 +87,8 @@ export const useLiveMessage = () => {
     priority: Priority = Priority.LOW,
     delayInSeconds: number = 0
   ) {
+    // DOM/AT should handle identical updates but let's handle it just encase
+    if (message.content === content) return;
     setTimeout(() => setMessage({ content, priority } as Message), delayInSeconds);
   }
   return [speak];
