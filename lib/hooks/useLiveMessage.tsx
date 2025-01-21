@@ -1,12 +1,11 @@
 import { createContext, useContext, useState } from "react";
 
 // TODO:
-// - try adding a utility to reset the live region once announced
 // - think about queueing announcements to avoid overflowing an ATs buffer.
 
 /**
  * Why would I use this?
- * When adding ARIA semantics becomes very complex, is simply not possible, or you would simply like
+ * When adding ARIA semantics become very complex, is simply not possible, or you would simply like
  * more control over what is announced to the AT user.
  */
 
@@ -60,13 +59,13 @@ export const useLiveMessage = () => {
    * Updates the app-wide live-region with the passed in content to be announced by AT.
    * @param content text message to be announced
    * @param priority ARIA live region priority. Use HIGH sparingly e.g. an imporatnt error message
-   * @param delayInSeconds default of 0 (next tick) helps the message be announced after other
+   * @param delayInSeconds default of 40 (next-ish tick) helps the message be announced after other
    * browser or ARIA updates complete. The delay can also be increased if desired.
    */
   function speak(
     content: string = "",
     priority: Priority = Priority.LOW,
-    delayInSeconds: number = 0
+    delayInSeconds: number = 40
   ) {
     // Handle just encase an AT or the DOM decides to treat an identical update as a new one
     if (message.content === content) return;
