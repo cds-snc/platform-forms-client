@@ -7,7 +7,7 @@ export interface FormOwner {
   active: boolean;
 }
 
-export interface AppUser extends Omit<User, "image" | "emailVerified" | "lastLogin" | "createdAt"> {
+export interface AppUser extends Omit<User, "image" | "emailVerified" | "lastLogin"> {
   privileges: {
     id: string;
     name: string;
