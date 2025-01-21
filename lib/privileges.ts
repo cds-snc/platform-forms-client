@@ -438,7 +438,8 @@ const _authorizationCheck = async (
   )
     .then((results) => results.flat())
     .catch((e) => {
-      logMessage.error(`Error in privilege check: ${e}`);
+      const data = JSON.stringify(rules);
+      logMessage.error(`Error in privilege check: ${e} data: ${data}`);
       //  On any error in the promise chain, default to forbidden
       throw new AccessControlError(ability.user.id, "Access Control Forbidden Action");
     });

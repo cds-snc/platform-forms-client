@@ -1,6 +1,7 @@
 {
   "addElement": "Ajouter un élément",
   "addElementDialog": {
+    "example": "exemple",
     "filters": {
       "all": "Tout",
       "basic": "De base",

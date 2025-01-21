@@ -414,7 +414,7 @@ export const Form = withFormik<FormProps, Responses>({
       const result = await submitForm(
         formValues,
         formikBag.props.language,
-        formikBag.props.formRecord
+        formikBag.props.formRecord.id
       );
 
       // Failed to find Server Action (likely due to newer deployment)

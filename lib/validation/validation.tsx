@@ -11,7 +11,7 @@ import { FormikProps } from "formik";
 import { TFunction } from "i18next";
 import { ErrorListItem } from "@clientComponents/forms";
 import { ErrorListMessage } from "@clientComponents/forms/ErrorListItem/ErrorListMessage";
-import { isServer } from "../tsUtils";
+import { hasOwnProperty, isServer } from "../tsUtils";
 import uuidArraySchema from "@lib/middleware/schemas/uuid-array.schema.json";
 import formNameArraySchema from "@lib/middleware/schemas/submission-name-array.schema.json";
 import { matchRule, FormValues, GroupsType } from "@lib/formContext";
@@ -220,6 +220,90 @@ const isFieldResponseValid = (
       throw `Validation for component ${componentType} is not handled`;
   }
   return null;
+};
+
+const valueMatchesType = (value: unknown, type: string, formElement: FormElement) => {
+  switch (type) {
+    case FormElementTypes.formattedDate:
+      if (value && isValidDate(JSON.parse(value as string) as DateObject)) {
+        return true;
+      }
+      return false;
+    case FormElementTypes.checkbox: {
+      if (Array.isArray(value)) {
+        return true;
+      }
+      return false;
+    }
+    case FormElementTypes.fileInput: {
+      const fileInputResponse = value as FileInputResponse;
+      if (
+        fileInputResponse &&
+        hasOwnProperty(fileInputResponse, "name") &&
+        hasOwnProperty(fileInputResponse, "size") &&
+        hasOwnProperty(fileInputResponse, "based64EncodedFile")
+      ) {
+        return true;
+      }
+      return false;
+    }
+    case FormElementTypes.dynamicRow: {
+      if (!Array.isArray(value)) {
+        return false;
+      }
+
+      let valid = true;
+
+      for (const row of value as Array<Responses>) {
+        for (const [responseKey, responseValue] of Object.entries(row)) {
+          if (
+            formElement.properties.subElements &&
+            formElement.properties.subElements[parseInt(responseKey)]
+          ) {
+            const subElement = formElement.properties.subElements[parseInt(responseKey)];
+            const result = valueMatchesType(responseValue, subElement.type, subElement);
+
+            if (!result) {
+              valid = false;
+              break;
+            }
+          }
+        }
+      }
+
+      return valid;
+    }
+    default:
+      if (typeof value === "string") {
+        return true;
+      }
+  }
+
+  return false;
+};
+
+/**
+ * Server-side validation the form responses
+ */
+export const validateResponses = async (values: Responses, formRecord: PublicFormRecord) => {
+  const errors: Responses = {};
+  for (const item in values) {
+    const formElement = formRecord.form.elements.find((element) => element.id == parseInt(item));
+
+    if (!formElement) {
+      errors[item] = "response-to-non-existing-question";
+      continue;
+    }
+
+    // Check if the incoming value matches the type of the form element
+    const result = valueMatchesType(values[item], formElement.type, formElement);
+
+    if (!result) {
+      errors[item] = "invalid-response-data-type";
+    }
+  }
+
+  return errors;
 };
 
 /**
