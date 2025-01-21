@@ -5,6 +5,7 @@ import { TabNavLink } from "@clientComponents/globals/TabNavLink";
 import { usePathname } from "next/navigation";
 import { useTranslation } from "@i18n/client";
 import { ManageFormAccessButton } from "./ManageFormAccessDialog/ManageFormAccessButton";
+import { useTemplateStore } from "@lib/store/useTemplateStore";
 
 export const NavigationTabs = ({ formId }: { formId: string }) => {
   const {
@@ -12,6 +13,11 @@ export const NavigationTabs = ({ formId }: { formId: string }) => {
     i18n: { language: locale },
   } = useTranslation("form-builder-responses");
   const pathname = usePathname();
+  const { isPublished } = useTemplateStore((s) => {
+    return {
+      isPublished: s.isPublished,
+    };
+  });
 
   return (
     <nav className="relative mb-10 flex border-b border-black" aria-label={t("responses.navLabel")}>
@@ -46,9 +52,11 @@ export const NavigationTabs = ({ formId }: { formId: string }) => {
         </span>
       </TabNavLink>
 
-      <div className="absolute right-0">
-        <ManageFormAccessButton />
-      </div>
+      {isPublished && (
+        <div className="absolute right-0">
+          <ManageFormAccessButton />
+        </div>
+      )}
     </nav>
   );
 };
