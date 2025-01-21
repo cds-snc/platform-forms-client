@@ -7,6 +7,7 @@ import { FormElement } from "@lib/types";
 import { Description } from "@clientComponents/forms";
 import { Button } from "@clientComponents/globals";
 import { useTranslation } from "@i18n/client";
+import { useLiveMessage } from "@lib/hooks/useLiveMessage";
 
 interface DynamicGroupProps {
   name: string;
@@ -63,6 +64,8 @@ export const DynamicGroup = (props: DynamicGroupProps): React.ReactElement => {
 
   const { t } = useTranslation();
 
+  const [speak] = useLiveMessage();
+
   useEffect(() => {
     if (focusedRow.current !== null) {
       try {
@@ -95,6 +98,8 @@ export const DynamicGroup = (props: DynamicGroupProps): React.ReactElement => {
     rowRefs.current.push(createRef<HTMLFieldSetElement>());
     // Do not subtract one because the rows state has not yet updated it's length when this is called
     focusedRow.current = rows.length;
+    // Let an AT user know a new repeating set was added
+    speak(t("dynamicRow.addedMessage", { title, count: rows.length + 1 }));
   };
 
   const deleteRow = (index: number) => {

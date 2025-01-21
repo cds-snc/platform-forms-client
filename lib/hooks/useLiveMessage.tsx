@@ -53,6 +53,7 @@ export const LiveMessage = () => {
   const { message } = useContext(LiveMessageContext);
 
   // TODO:
+  // - try adding a utility to reset the live region once announced
   // - think about queueing announcements to avoid overflowing an ATs buffer.
 
   return (
@@ -71,10 +72,22 @@ export const LiveMessage = () => {
  *   <button onClick={() => speak("Hello World")}>Click me</button>
  */
 export const useLiveMessage = () => {
-  const { message, setMessage } = useContext(LiveMessageContext);
-  function speak(content: string = "", priority: Priority = Priority.LOW) {
-    if (message.content === content) return;
-    setMessage({ content, priority } as Message);
+  const { /*message,*/ setMessage } = useContext(LiveMessageContext);
+  /**
+   * Updates the app-wide live-region with the passed in content.
+   * @param content text message to be announced
+   * @param priority ARIA live region priority. Only set to HIGH (assertive) if this message is
+   * time sensitive and important, like an error message
+   * @param delayInSeconds by default sets announcement to run on the next tick so the message
+   * has a chance to run after other actions like a focus and not be easily missed. Or set this
+   * to a number in seconds to have a delay before the message is announced.
+   */
+  function speak(
+    content: string = "",
+    priority: Priority = Priority.LOW,
+    delayInSeconds: number = 0
+  ) {
+    setTimeout(() => setMessage({ content, priority } as Message), delayInSeconds);
   }
   return [speak];
 };

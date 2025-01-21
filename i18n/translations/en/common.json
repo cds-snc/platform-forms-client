@@ -111,7 +111,8 @@
   },
   "dynamicRow": {
     "add": "Add",
-    "delete": "Delete"
+    "delete": "Delete",
+    "addedMessage": "Added a copy of {{title}} ({{count}})"
   },
   "acceptableUsePage": {
     "agree": "Agree",
