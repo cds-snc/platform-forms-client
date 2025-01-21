@@ -95,6 +95,7 @@ export const SubElement = ({
         return (
           <div key={`sub-element-${item.id}-${subIndex}`}>
             <PanelHightLight
+              id={item.id}
               conditionalChildren={
                 <PanelActions
                   item={item}

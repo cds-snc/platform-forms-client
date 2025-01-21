@@ -70,7 +70,7 @@ export const PanelBody = ({
           </div>
         </div>
       ) : (
-        <>
+        <div data-id={item.id}>
           <div className="flex text-sm">
             <div className="mt-4 w-full laptop:mt-0">
               <Question
@@ -81,11 +81,11 @@ export const PanelBody = ({
             </div>
           </div>
 
-          <div className="mb-4 flex gap-4 text-sm ">
+          <div className="mb-4 flex gap-4 text-sm">
             <div className="grow">
               <QuestionDescription item={item} describedById={describedById} />
               <div className="flex">
-                <div>
+                <div className="pointer-events-none">
                   <SelectedElement item={item} elIndex={elIndex} formId={formId} />
                 </div>
                 {isFormattedDate && (
@@ -102,7 +102,7 @@ export const PanelBody = ({
                 )}
               </div>
               {maxLength && (
-                <div className="disabled">
+                <div className="disabled pointer-events-none">
                   {t("maxCharacterLength")}
                   {maxLength}
                 </div>
@@ -192,7 +192,7 @@ export const PanelBody = ({
               </div>
             )}
           </div>
-        </>
+        </div>
       )}
     </>
   );
