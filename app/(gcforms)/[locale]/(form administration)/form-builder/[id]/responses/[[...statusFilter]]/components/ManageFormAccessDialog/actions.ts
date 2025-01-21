@@ -10,7 +10,11 @@ import {
   TemplateNotFoundError,
   UserAlreadyHasAccessError,
 } from "@lib/invitations/exceptions";
-import { getTemplateWithAssociatedUsers, removeAssignedUserFromTemplate } from "@lib/templates";
+import {
+  getPublicTemplateByID,
+  getTemplateWithAssociatedUsers,
+  removeAssignedUserFromTemplate,
+} from "@lib/templates";
 import { serverTranslation } from "@i18n";
 import { logMessage } from "@lib/logger";
 import { inviteUserByEmail } from "@lib/invitations/inviteUserByEmail";
@@ -23,6 +27,17 @@ export const sendInvitation = async (emails: string[], templateId: string, messa
   const { t } = await serverTranslation("manage-form-access");
 
   const errors: string[] = [];
+
+  const template = await getPublicTemplateByID(templateId);
+  if (!template?.isPublished) {
+    logMessage.error(`Invitation failed - draft form ${templateId}`);
+    errors.push(t("draftFormError"));
+
+    return {
+      success: false,
+      errors,
+    };
+  }
 
   const invites = emails.map(async (email) => {
     try {
