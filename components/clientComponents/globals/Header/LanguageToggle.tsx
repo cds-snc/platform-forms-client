@@ -25,7 +25,6 @@ const LanguageToggle = () => {
     <Link
       href={href}
       className="text-right text-base"
-      locale={currentLang === "en" ? "fr" : "en"}
       aria-label={`${t("lang-toggle")}: ${currentLang == "en" ? "Français" : "English"}`}
       lang={currentLang === "en" ? "fr" : "en"}
       prefetch={false}
