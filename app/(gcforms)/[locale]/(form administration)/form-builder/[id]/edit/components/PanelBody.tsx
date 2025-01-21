@@ -85,7 +85,7 @@ export const PanelBody = ({
             <div className="grow">
               <QuestionDescription item={item} describedById={describedById} />
               <div className="flex">
-                <div className="pointer-events-none">
+                <div>
                   <SelectedElement item={item} elIndex={elIndex} formId={formId} />
                 </div>
                 {isFormattedDate && (
