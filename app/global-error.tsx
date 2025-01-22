@@ -21,6 +21,9 @@ const lato = Lato({
 
 // Catches errors thrown from the root layout.tsx
 // Other cases: router error
+
+// https://nextjs.org/docs/app/api-reference/file-conventions/error#global-error
+// https://github.com/vercel/next.js/discussions/68048#discussioncomment-10119674
 export default function GlobalError({ error }: { error: Error & { digest?: string } }) {
   useEffect(() => {
     logMessage.error(`Global Error Handler Reached: ${(error as Error).message}`);
