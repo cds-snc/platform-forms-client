@@ -218,6 +218,7 @@ function _buildForm(element: FormElement, lang: string): ReactElement {
             ariaDescribedBy={description ? `desc-${id}` : `label-${id}`}
             fileType={element.properties.fileType}
             required={isRequired}
+            lang={lang}
           />
         </div>
       );
