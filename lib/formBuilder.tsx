@@ -287,6 +287,8 @@ function _buildForm(element: FormElement, lang: string): ReactElement {
             key={`${id}-${lang}`}
             splitAddress={addressComponents?.splitAddress}
             canadianOnly={addressComponents?.canadianOnly}
+            required={isRequired}
+            lang={lang}
           />
         </div>
       );
