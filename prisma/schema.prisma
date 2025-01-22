@@ -96,8 +96,8 @@ model User {
   sessions        Session[]
   templates       Template[]
   securityAnswers SecurityAnswer[]
-  createdAt       DateTime         @default(now()) @db.Timestamptz(6)
   notes           String?
+  createdAt       DateTime         @default(now()) @db.Timestamptz(6)
 }
 
 model VerificationToken {
