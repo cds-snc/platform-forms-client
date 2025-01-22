@@ -59,17 +59,48 @@ export const TextInput = (
   return (
     <>
       {meta.error && <ErrorMessage id={"errorMessage" + id}>{meta.error}</ErrorMessage>}
+      {/* For AT to help identify the input as a number */}
+      {type === "number" && (
+        <div id={`${id}-description-number`} hidden>
+          {t("number")}
+        </div>
+      )}
       <input
         data-testid="textInput"
         className={classes}
         id={id}
-        type={type}
+        type={type === "number" ? "text" : type}
         required={required}
         autoComplete={autoComplete ? autoComplete : "off"}
         placeholder={placeholder}
         {...ariaDescribedByIds()}
         {...field}
         onChange={handleTextInputChange}
+        // Note: not using type=number for numbers for UX reasons.
+        // See: #4851 and https://tinyurl.com/2p9tm5vk
+        {...(type === "number" && {
+          // For mobile phones to switch the keypad to numeric
+          inputMode: "numeric",
+          "aria-describedby": `${id}-description-number`,
+          // Note: "onBeforeInput" and e.data could also be used but I'm not sure how cross-browser
+          // consistent it is
+          onKeyDown: (e) => {
+            // Allow control keys
+            if (
+              e.key.includes("Arrow") ||
+              e.key === "Backspace" ||
+              e.key === "Enter" ||
+              e.key === "Shift" ||
+              e.key === "Tab"
+            ) {
+              return;
+            }
+            // Restrict a user from entering anything but a number
+            if (!/[0-9]+/.test(e.key)) {
+              e.preventDefault();
+            }
+          },
+        })}
       />
       {characterCountMessages &&
         maxLength &&

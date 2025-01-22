@@ -168,7 +168,8 @@ export const SaveButton = () => {
     return null;
   }
 
-  const showSave = pathname?.includes("edit") || pathname?.includes("translate");
+  const showSave =
+    pathname?.includes("edit") || pathname?.includes("translate") || pathname?.includes("preview");
 
   if (!showSave) {
     return null;
