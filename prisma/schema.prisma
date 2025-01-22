@@ -97,6 +97,7 @@ model User {
   templates       Template[]
   securityAnswers SecurityAnswer[]
   createdAt       DateTime         @default(now()) @db.Timestamptz(6)
+  notes           String?
 }
 
 model VerificationToken {
