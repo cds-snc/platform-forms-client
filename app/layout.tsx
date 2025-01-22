@@ -93,9 +93,7 @@ export default async function Layout({ children }: { children: React.ReactNode }
         </noscript>
       </head>
 
-      <body className={"has-[.bkd-soft]:bg-gray-soft"}>
-        <>{children}</>
-      </body>
+      <body className={"has-[.bkd-soft]:bg-gray-soft"}>{children}</body>
     </html>
   );
 }
