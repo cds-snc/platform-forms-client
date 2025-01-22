@@ -2,7 +2,7 @@
 import { Button } from "@clientComponents/globals";
 import { Dialog, useDialogRef } from "@formBuilder/components/shared/Dialog";
 import { useTranslation } from "@i18n/client";
-import { useCustomEvent } from "@lib/hooks/useCustomEvent";
+import { EventKeys, useCustomEvent } from "@lib/hooks/useCustomEvent";
 import { useEffect, useState } from "react";
 
 export const ConfirmDeactivateDialog = () => {
@@ -22,10 +22,10 @@ export const ConfirmDeactivateDialog = () => {
   };
 
   useEffect(() => {
-    Event.on("open-more-dialog", handleOpenDialog);
+    Event.on(EventKeys.openDeactivateUserDialog, handleOpenDialog);
 
     return () => {
-      Event.off("open-more-dialog", handleOpenDialog);
+      Event.off(EventKeys.openDeactivateUserDialog, handleOpenDialog);
     };
   });
 

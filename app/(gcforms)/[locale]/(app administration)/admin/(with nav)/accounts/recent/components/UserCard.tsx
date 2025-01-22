@@ -1,8 +1,10 @@
+"use client";
 import { Button } from "@clientComponents/globals";
 import { AppUser } from "@lib/types/user-types";
 import { Flagged } from "./Flagged";
+import { EventKeys, useCustomEvent } from "@lib/hooks/useCustomEvent";
 
-export const UserCard = async ({
+export const UserCard = ({
   user,
   canManageUser,
   flagged,
@@ -11,6 +13,7 @@ export const UserCard = async ({
   canManageUser: boolean;
   flagged: boolean;
 }) => {
+  const { Event } = useCustomEvent();
   return (
     <>
       <div className="p-4">
@@ -25,8 +28,22 @@ export const UserCard = async ({
             <>
               {user.active && (
                 <div className="mt-4 flex gap-4">
-                  <Button theme="secondary">Add note</Button>
-                  <Button theme="primary">Deactivate</Button>
+                  <Button
+                    theme="secondary"
+                    onClick={() => {
+                      Event.fire(EventKeys.openAddUserNoteDialog);
+                    }}
+                  >
+                    Add note
+                  </Button>
+                  <Button
+                    theme="primary"
+                    onClick={() => {
+                      Event.fire(EventKeys.openDeactivateUserDialog);
+                    }}
+                  >
+                    Deactivate
+                  </Button>
                 </div>
               )}
             </>
