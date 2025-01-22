@@ -3,7 +3,6 @@ import React from "react";
 import { PublicFormRecord } from "@lib/types";
 import Brand from "./Brand";
 import { cn } from "@lib/utils";
-import { FakeError } from "@clientComponents/globals/FakeError";
 
 export const Fip = ({
   formRecord,
@@ -21,7 +20,6 @@ export const Fip = ({
         <Brand brand={brand} />
       </div>
       <div className="inline-flex gap-4">{children}</div>
-      <FakeError condition={true} />
     </div>
   );
 };
