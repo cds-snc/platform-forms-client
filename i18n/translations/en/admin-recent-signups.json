@@ -1,0 +1,11 @@
+{
+  "recentAccounts": "Recent accounts",
+  "cancel": "Cancel",
+  "addNote": "Add a note",
+  "confirmDeactivate": "Deactivate account",
+  "accountsCreatedFromTo": "Accounts created {{from}} to {{to}}",
+  "all": "All",
+  "accountsFlagged": "Accounts flagged",
+  "deactivate": "Deactivate",
+  "save": "Save"
+}

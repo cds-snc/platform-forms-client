@@ -20,7 +20,7 @@ export default async function Page(props: {
 
   const { locale } = params;
 
-  const { t } = await serverTranslation(["admin-accounts"]);
+  const { t } = await serverTranslation(["admin-recent-signups"]);
 
   const { ability } = await authCheckAndRedirect();
 
@@ -86,10 +86,13 @@ export default async function Page(props: {
 
   return (
     <>
-      <h1>{t("title")}</h1>
+      <h1>{t("recentAccounts")}</h1>
       <p>
-        Accounts created {from.toLocaleDateString("en-GB")} to{" "}
-        {new Date().toLocaleDateString("en-GB")}
+        {t("accountsCreatedFromTo", {
+          from: from.toLocaleDateString("en-GB"),
+          to: new Date().toLocaleDateString("en-GB"),
+          interpolation: { escapeValue: false },
+        })}
       </p>
 
       <div className="my-4 flex gap-4">

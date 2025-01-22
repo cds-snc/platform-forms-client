@@ -1,6 +1,7 @@
 "use client";
 import { RoundedButton } from "@clientComponents/globals";
 import { useRouter } from "next/navigation";
+import { useTranslation } from "react-i18next";
 
 export const FilterFlagged = ({
   flaggedSignupsCount,
@@ -10,6 +11,8 @@ export const FilterFlagged = ({
   active: boolean;
 }) => {
   const router = useRouter();
+  const { t } = useTranslation("admin-recent-signups");
+
   return (
     <RoundedButton
       theme={active ? "primary" : "secondary"}
@@ -17,7 +20,9 @@ export const FilterFlagged = ({
         router.push("/admin/accounts/recent?filter=flagged");
       }}
     >
-      <>Accounts flagged ({flaggedSignupsCount})</>
+      <>
+        {t("accountsFlagged")} ({flaggedSignupsCount})
+      </>
     </RoundedButton>
   );
 };

@@ -10,7 +10,7 @@ export const ConfirmDeactivateDialog = () => {
   const { Event } = useCustomEvent();
   const [isOpen, setIsOpen] = useState(false);
 
-  const { t } = useTranslation("admin-users");
+  const { t } = useTranslation("admin-recent-signups");
 
   const handleClose = () => {
     dialogRef.current?.close();
@@ -33,19 +33,34 @@ export const ConfirmDeactivateDialog = () => {
     isOpen && (
       <Dialog
         dialogRef={dialogRef}
+        handleClose={handleClose}
+        title={t("confirmDeactivate")}
         actions={
-          <Button
-            theme="secondary"
-            onClick={() => {
-              dialogRef.current?.close();
-              handleClose && handleClose();
-            }}
-          >
-            {t("cancel")}
-          </Button>
+          <div className="flex gap-4">
+            <Button
+              theme="secondary"
+              onClick={() => {
+                dialogRef.current?.close();
+                handleClose && handleClose();
+              }}
+            >
+              {t("cancel")}
+            </Button>
+            <Button
+              theme="destructive"
+              onClick={() => {
+                dialogRef.current?.close();
+              }}
+            >
+              {t("deactivate")}
+            </Button>
+          </div>
         }
       >
-        <>Huzzah</>
+        <div className="p-5">
+          <h2>Are you sure you would like to deactivate this account?</h2>
+          <p>Deactivating this account will notify the user.</p>
+        </div>
       </Dialog>
     )
   );
