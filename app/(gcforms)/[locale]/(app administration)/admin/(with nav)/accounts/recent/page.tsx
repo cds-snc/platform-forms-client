@@ -10,8 +10,13 @@ import { FilterFlagged } from "./components/FilterFlagged";
 import { ConfirmDeactivateDialog } from "./components/ConfirmDeactivateDialog";
 import { AddNoteDialog } from "./components/AddNoteDialog";
 
-export default async function Page(props: { params: Promise<{ locale: string }> }) {
+export default async function Page(props: {
+  params: Promise<{ locale: string }>;
+  searchParams: Promise<{ filter?: string }>;
+}) {
   const params = await props.params;
+  const searchParams = await props.searchParams;
+  const filter = searchParams.filter && searchParams.filter === "flagged" ? "flagged" : "all";
 
   const { locale } = params;
 
@@ -39,6 +44,10 @@ export default async function Page(props: { params: Promise<{ locale: string }> 
   });
 
   const flaggedSignups = await getUsers(ability, {
+    active: true,
+    createdAt: {
+      gte: from,
+    },
     OR: [
       {
         email: {
@@ -69,10 +78,11 @@ export default async function Page(props: { params: Promise<{ locale: string }> 
     ],
   });
 
-  const recentSignupsCount = recentSignups.length;
-  const flaggedSignupsCount = recentSignups.filter((user) =>
-    flaggedSignups.some((flaggedUser) => flaggedUser.id === user.id)
-  ).length;
+  let filteredSignups = recentSignups;
+
+  if (filter === "flagged") {
+    filteredSignups = flaggedSignups;
+  }
 
   return (
     <>
@@ -83,17 +93,17 @@ export default async function Page(props: { params: Promise<{ locale: string }> 
       </p>
 
       <div className="my-4 flex gap-4">
-        <FilterAll recentSignupsCount={recentSignupsCount} />
-        <FilterFlagged flaggedSignupsCount={flaggedSignupsCount} />
+        <FilterAll recentSignupsCount={recentSignups.length} active={filter === "all"} />
+        <FilterFlagged flaggedSignupsCount={flaggedSignups.length} active={filter === "flagged"} />
       </div>
 
       <div className="mb-10">
-        {recentSignups?.length > 0 ? (
+        {filteredSignups?.length > 0 ? (
           <ul
             data-testid="accountsList"
             className="m-0 flex list-none flex-row flex-wrap gap-4 p-0"
           >
-            {recentSignups?.map((user) => {
+            {filteredSignups?.map((user) => {
               return (
                 <div
                   className="w-1/3 overflow-x-hidden rounded-md border-2 border-black p-2"
