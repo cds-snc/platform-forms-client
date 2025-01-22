@@ -193,6 +193,7 @@ describe("Invitations", () => {
         name: "sender",
         privileges: [],
         active: true,
+        notes: null,
       }); // sender
 
       (
