@@ -39,7 +39,9 @@ export const UserCard = ({
                   <Button
                     theme="primary"
                     onClick={() => {
-                      Event.fire(EventKeys.openDeactivateUserDialog);
+                      Event.fire(EventKeys.openDeactivateUserDialog, {
+                        userId: user.id,
+                      });
                     }}
                   >
                     Deactivate

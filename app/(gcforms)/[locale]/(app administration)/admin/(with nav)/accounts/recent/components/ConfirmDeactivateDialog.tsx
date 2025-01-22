@@ -4,11 +4,17 @@ import { Dialog, useDialogRef } from "@formBuilder/components/shared/Dialog";
 import { useTranslation } from "@i18n/client";
 import { EventKeys, useCustomEvent } from "@lib/hooks/useCustomEvent";
 import { useEffect, useState } from "react";
+import { updateActive } from "../../actions";
+
+type ConfirmDeactivateDialogEventDetails = {
+  userId: string;
+};
 
 export const ConfirmDeactivateDialog = () => {
   const dialogRef = useDialogRef();
   const { Event } = useCustomEvent();
   const [isOpen, setIsOpen] = useState(false);
+  const [userId, setUserId] = useState<string | null>(null);
 
   const { t } = useTranslation("admin-recent-signups");
 
@@ -17,8 +23,11 @@ export const ConfirmDeactivateDialog = () => {
     setIsOpen(false);
   };
 
-  const handleOpenDialog = () => {
-    setIsOpen(true);
+  const handleOpenDialog = (detail: ConfirmDeactivateDialogEventDetails) => {
+    if (detail) {
+      setUserId(detail.userId);
+      setIsOpen(true);
+    }
   };
 
   useEffect(() => {
@@ -30,7 +39,8 @@ export const ConfirmDeactivateDialog = () => {
   });
 
   return (
-    isOpen && (
+    isOpen &&
+    userId && (
       <Dialog
         dialogRef={dialogRef}
         handleClose={handleClose}
@@ -41,15 +51,17 @@ export const ConfirmDeactivateDialog = () => {
               theme="secondary"
               onClick={() => {
                 dialogRef.current?.close();
-                handleClose && handleClose();
+                handleClose();
               }}
             >
               {t("cancel")}
             </Button>
             <Button
               theme="destructive"
-              onClick={() => {
+              onClick={async () => {
+                await updateActive(userId, false);
                 dialogRef.current?.close();
+                handleClose();
               }}
             >
               {t("deactivate")}
