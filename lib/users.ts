@@ -138,6 +138,8 @@ export const getUser = async (ability: UserAbility, id: string): Promise<AppUser
         name: true,
         email: true,
         active: true,
+        createdAt: true,
+        notes: true,
         privileges: {
           select: {
             id: true,
@@ -187,6 +189,8 @@ export const getUsers = async (
           name: true,
           email: true,
           active: true,
+          createdAt: true,
+          notes: true,
           privileges: {
             select: {
               id: true,
