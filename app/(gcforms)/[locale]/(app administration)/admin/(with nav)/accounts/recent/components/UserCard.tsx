@@ -3,6 +3,7 @@ import { Button } from "@clientComponents/globals";
 import { AppUser } from "@lib/types/user-types";
 import { Flagged } from "./Flagged";
 import { EventKeys, useCustomEvent } from "@lib/hooks/useCustomEvent";
+import { OnHold } from "./OnHold";
 
 export const UserCard = ({
   user,
@@ -14,6 +15,7 @@ export const UserCard = ({
   flagged: boolean;
 }) => {
   const { Event } = useCustomEvent();
+  const hasNote = user.notes !== null;
   return (
     <>
       <div className="p-4">
@@ -21,7 +23,10 @@ export const UserCard = ({
         <p className="mb-4">{user.email}</p>
         <p className="mb-4">Date created: {user.createdAt.toLocaleDateString("en-GB")}</p>
 
-        {flagged && <Flagged />}
+        <div className="flex gap-2">
+          {flagged && <Flagged />}
+          {hasNote && <OnHold />}
+        </div>
 
         <div className="flex flex-wrap gap-2">
           {canManageUser && (
