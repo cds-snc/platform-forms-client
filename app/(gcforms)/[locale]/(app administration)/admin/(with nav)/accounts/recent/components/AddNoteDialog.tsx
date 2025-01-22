@@ -10,6 +10,7 @@ export const AddNoteDialog = () => {
   const dialogRef = useDialogRef();
   const { Event } = useCustomEvent();
   const [isOpen, setIsOpen] = useState(false);
+  const [note, setNote] = useState<string | null>(null);
 
   const { t } = useTranslation("admin-recent-signups");
 
@@ -42,7 +43,7 @@ export const AddNoteDialog = () => {
               theme="secondary"
               onClick={() => {
                 dialogRef.current?.close();
-                handleClose && handleClose();
+                handleClose();
               }}
             >
               {t("cancel")}
@@ -51,6 +52,7 @@ export const AddNoteDialog = () => {
               theme="primary"
               onClick={() => {
                 dialogRef.current?.close();
+                handleClose();
               }}
             >
               {t("save")}
@@ -68,8 +70,9 @@ export const AddNoteDialog = () => {
           <TextArea
             className="h-40 w-full"
             id={""}
-            onChange={() => {
-              //
+            value={note || ""}
+            onChange={(e) => {
+              setNote(e.target.value);
             }}
           />
         </div>

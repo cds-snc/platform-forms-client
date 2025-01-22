@@ -54,7 +54,7 @@ export default async function Page(props: { params: Promise<{ locale: string }> 
             </li>
             <li>
               <Link href={`/${locale}/admin/accounts/recent`} legacyBehavior>
-                <a href={`/${locale}/admin/accounts/recent`}>Recent accounts created</a>
+                <a href={`/${locale}/admin/accounts/recent`}>Recent accounts</a>
               </Link>
             </li>
           </ul>
