@@ -167,7 +167,7 @@ export const Publish = ({ id }: { id: string }) => {
         formConfig,
       });
 
-      if (operationResult === null) {
+      if (operationResult.formRecord === null) {
         throw new Error("Failed to publish form");
       }
 

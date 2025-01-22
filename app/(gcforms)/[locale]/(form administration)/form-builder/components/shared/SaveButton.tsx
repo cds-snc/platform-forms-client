@@ -139,12 +139,16 @@ export const SaveButton = () => {
         securityAttribute: securityAttribute,
       });
 
-      if (operationResult === null) {
+      if (operationResult.formRecord === null) {
         throw new Error("Error saving template");
       }
 
-      setId(operationResult.id);
-      setUpdatedAt(new Date(operationResult.updatedAt ? operationResult.updatedAt : "").getTime());
+      setId(operationResult.formRecord.id);
+      setUpdatedAt(
+        new Date(
+          operationResult.formRecord.updatedAt ? operationResult.formRecord.updatedAt : ""
+        ).getTime()
+      );
       setError(false);
       resetState();
     } catch (error) {

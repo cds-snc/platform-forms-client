@@ -69,7 +69,7 @@ export const Branding = ({ hasBrandingRequestForm }: { hasBrandingRequestForm: b
       name: getName(),
     });
 
-    if (operationResult !== null) {
+    if (operationResult.formRecord !== null) {
       toast.success(savedSuccessMessage);
       return;
     }

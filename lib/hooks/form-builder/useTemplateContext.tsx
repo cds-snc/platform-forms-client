@@ -21,9 +21,9 @@ interface TemplateApiType {
         deliveryOption,
         securityAttribute,
       }: CreateOrUpdateTemplateType) => Promise<{
-        id: string;
-        updatedAt: string | undefined;
-      } | null>)
+        formRecord: { id: string; updatedAt: string | undefined } | null;
+        error?: string;
+      }>)
     | null;
   resetState: () => void;
 }

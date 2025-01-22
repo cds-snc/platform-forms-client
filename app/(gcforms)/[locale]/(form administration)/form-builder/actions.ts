@@ -47,7 +47,10 @@ export const createOrUpdateTemplate = AuthenticatedAction(
     deliveryOption,
     securityAttribute,
     formPurpose,
-  }: CreateOrUpdateTemplateType): Promise<{ id: string; updatedAt: string | undefined } | null> => {
+  }: CreateOrUpdateTemplateType): Promise<{
+    formRecord: { id: string; updatedAt: string | undefined } | null;
+    error?: string;
+  }> => {
     try {
       revalidatePath("/[locale]/forms", "page");
 
@@ -74,12 +77,12 @@ export const createOrUpdateTemplate = AuthenticatedAction(
       });
 
       if (!formRecord) {
-        return null;
+        throw new Error("Failed to create template");
       }
 
-      return { id: formRecord.id, updatedAt: formRecord.updatedAt };
-    } catch (e) {
-      return null;
+      return { formRecord: { id: formRecord.id, updatedAt: formRecord.updatedAt } };
+    } catch (_) {
+      return { formRecord: null, error: "error" };
     }
   }
 );
@@ -99,7 +102,10 @@ export const updateTemplate = AuthenticatedAction(
     deliveryOption?: DeliveryOption;
     securityAttribute?: SecurityAttribute;
     formPurpose?: FormPurpose;
-  }): Promise<{ id: string; updatedAt: string | undefined } | null> => {
+  }): Promise<{
+    formRecord: { id: string; updatedAt: string | undefined } | null;
+    error?: string;
+  }> => {
     try {
       const formRecord = await updateDbTemplate({
         formID: formID,
@@ -111,12 +117,12 @@ export const updateTemplate = AuthenticatedAction(
       });
 
       if (!formRecord) {
-        return null;
+        throw new Error("Failed to update template");
       }
 
-      return { id: formRecord.id, updatedAt: formRecord.updatedAt };
-    } catch (error) {
-      return null;
+      return { formRecord: { id: formRecord.id, updatedAt: formRecord.updatedAt } };
+    } catch (_) {
+      return { formRecord: null, error: "error" };
     }
   }
 );
