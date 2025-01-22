@@ -63,6 +63,7 @@ const user1: TestUser = {
     image: null,
     emailVerified: null,
     createdAt: new Date(Date.now() - 86400),
+    notes: null,
   },
   formRecord: {
     id: "222222",
@@ -80,6 +81,7 @@ const user1: TestUser = {
         emailVerified: null,
         lastLogin: new Date(Date.now() - 3600),
         createdAt: new Date(Date.now() - 86400),
+        notes: null,
       },
     ],
   },
@@ -106,6 +108,7 @@ const user2: TestUser = {
     image: null,
     emailVerified: null,
     createdAt: new Date(Date.now() - 86400),
+    notes: null,
   },
   formRecord: {
     id: "333333",
@@ -123,6 +126,7 @@ const user2: TestUser = {
         emailVerified: null,
         lastLogin: new Date(Date.now() - 3600),
         createdAt: new Date(Date.now() - 86400),
+        notes: null,
       },
     ],
   },
@@ -150,6 +154,7 @@ const adminUser: TestUser = {
     image: null,
     emailVerified: null,
     createdAt: new Date(Date.now() - 86400),
+    notes: null,
   },
   formRecord: {
     id: "444444",
@@ -167,6 +172,7 @@ const adminUser: TestUser = {
         emailVerified: null,
         lastLogin: new Date(Date.now() - 3600),
         createdAt: new Date(Date.now() - 86400),
+        notes: null,
       },
     ],
   },
