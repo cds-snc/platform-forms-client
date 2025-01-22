@@ -97,7 +97,7 @@ export default async function Page(props: {
         <FilterFlagged flaggedSignupsCount={flaggedSignups.length} active={filter === "flagged"} />
       </div>
 
-      <div className="mb-10">
+      <div className="mb-10" aria-live="polite">
         {filteredSignups?.length > 0 ? (
           <ul
             data-testid="accountsList"
