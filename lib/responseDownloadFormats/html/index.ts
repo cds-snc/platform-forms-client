@@ -10,11 +10,11 @@ export const transform = async (formResponseSubmissions: FormResponseSubmissions
       html: renderToStaticMarkup(
         ResponseHtml({
           response: response,
-          form: formResponseSubmissions.form,
+          form: formResponseSubmissions.formRecord,
           confirmationCode: response.confirmationCode,
           responseID: response.id,
           createdAt: response.createdAt,
-          securityAttribute: formResponseSubmissions.form.securityAttribute,
+          securityAttribute: formResponseSubmissions.formRecord.securityAttribute,
         })
       ),
     };
