@@ -5,7 +5,7 @@ import { notFound } from "next/navigation";
 import { Preview } from "./Preview";
 import { allowGrouping } from "@formBuilder/components/shared/right-panel/treeview/util/allowGrouping";
 import { ClientContainer } from "./ClientContainer";
-import { checkIfClosed } from "@lib/actions/checkIfClosed";
+import { checkIfClosed } from "@lib/templates";
 import { ClosedDetails } from "@lib/types";
 import { PreviewClosed } from "./PreviewClosed";
 
@@ -41,7 +41,8 @@ export default async function Page(props: { params: Promise<{ id: string }> }) {
     return notFound();
   }
 
-  const closedDetails = await checkIfClosed(id);
+  // A non authenticated user can't set a closing date on a form.
+  const closedDetails = session ? await checkIfClosed(id) : null;
 
   if (closedDetails && closedDetails.isPastClosingDate) {
     return <PreviewClosed closedDetails={closedDetails.closedDetails as ClosedDetails} />;

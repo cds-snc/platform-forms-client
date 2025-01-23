@@ -635,7 +635,6 @@
       "keyId": "API key ID",
       "title": "API access",
       "generateKey": "Create API key",
-      "refreshKey": "Refresh key",
       "deleteKey": "Delete API key",
       "deleteKeyFailed": {
         "title": "Something went wrong",

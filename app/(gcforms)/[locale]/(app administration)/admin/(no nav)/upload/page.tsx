@@ -1,7 +1,6 @@
 import JSONUpload from "@clientComponents/admin/JsonUpload/JsonUpload";
 import { serverTranslation } from "@i18n";
-import { authCheckAndRedirect } from "@lib/actions";
-import { checkPrivilegesAsBoolean } from "@lib/privileges";
+import { authorization } from "@lib/privileges";
 import { Metadata } from "next";
 
 export async function generateMetadata(props: {
@@ -19,12 +18,10 @@ export async function generateMetadata(props: {
 
 export default async function Page() {
   const { t } = await serverTranslation("admin-templates");
-
-  const { ability } = await authCheckAndRedirect();
-
-  checkPrivilegesAsBoolean(ability, [{ action: "update", subject: "FormRecord" }], {
-    redirect: true,
+  await authorization.canManageAllForms().catch(() => {
+    authorization.unauthorizedRedirect();
   });
+
   return (
     <>
       <h1>{t("upload.title")}</h1>

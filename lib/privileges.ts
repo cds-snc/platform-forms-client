@@ -12,7 +12,6 @@ import {
   Privilege,
   Action,
   Subject,
-  ForcedSubjectType,
   AnyObject,
   UserAbility,
 } from "@lib/types/privileges-types";
@@ -23,10 +22,12 @@ import get from "lodash/get";
 
 import { logMessage } from "./logger";
 import { logEvent } from "./auditLogs";
-import { redirect } from "next/navigation";
 import { checkOne } from "./cache/flags";
 import { InMemoryCache } from "./cache/inMemoryCache";
-import { auth, AccessControlError } from "@lib/auth";
+import { auth } from "@lib/auth/nextAuth";
+import { AccessControlError } from "@lib/auth/errors";
+import { getCurrentLanguage } from "@i18n";
+import { redirect } from "next/navigation";
 /*
 This file contains references to server side only modules.
 Any attempt to import these functions into a browser will cause compilation failures
@@ -144,18 +145,26 @@ export const getPrivilegeRulesForUser = async (userId: string) => {
 
 /**
  * Update and overwrite existing privileges on a User
- * @param ability Ability instance for session
  * @param userID id of the user to be updated
  * @param privileges Array of privileges to be connect to user
  * @returns
  */
 export const updatePrivilegesForUser = async (
-  ability: UserAbility,
   userID: string,
   privileges: { id: string; action: "add" | "remove" }[]
 ) => {
   try {
-    checkPrivileges(ability, [{ action: "update", subject: "User" }]);
+    const { user: abilityUser } = await authorization.canManageUser(userID).catch((e) => {
+      if (e instanceof AccessControlError) {
+        logEvent(
+          e.user.id,
+          { type: "Privilege" },
+          "AccessDenied",
+          `Attempted to modify privilege on user ${userID}`
+        );
+      }
+      throw e;
+    });
 
     const addPrivileges: { id: string }[] = [];
     const removePrivileges: { id: string }[] = [];
@@ -195,7 +204,7 @@ export const updatePrivilegesForUser = async (
       }),
       prisma.user.findUniqueOrThrow({
         where: {
-          id: ability.user.id,
+          id: abilityUser.id,
         },
         select: {
           email: true,
@@ -211,7 +220,7 @@ export const updatePrivilegesForUser = async (
         "GrantPrivilege",
         `Granted privilege : ${privilegesInfo.find((p) => p.id === privilege.id)?.name} to ${
           user.email
-        } (userID: ${user.id}) by ${privilegedUser?.email} (userID: ${ability.user.id})`
+        } (userID: ${user.id}) by ${privilegedUser?.email} (userID: ${abilityUser.id})`
       )
     );
 
@@ -222,7 +231,7 @@ export const updatePrivilegesForUser = async (
         "RevokePrivilege",
         `Revoked privilege : ${privilegesInfo.find((p) => p.id === privilege.id)?.name} from ${
           user.email
-        } (userID: ${user.id}) by ${privilegedUser?.email} (userID: ${ability.user.id})`
+        } (userID: ${user.id}) by ${privilegedUser?.email} (userID: ${abilityUser.id})`
       )
     );
 
@@ -236,14 +245,7 @@ export const updatePrivilegesForUser = async (
       // Error P2025: Record to update not found.
       return null;
     }
-    if (error instanceof AccessControlError) {
-      logEvent(
-        ability.user.id,
-        { type: "Privilege" },
-        "AccessDenied",
-        `Attempted to modify privilege on user ${userID}`
-      );
-    }
+
     throw error;
   }
 };
@@ -252,9 +254,9 @@ export const updatePrivilegesForUser = async (
  * Get all privileges availabe in the application
  * @returns an array of privealges
  */
-export const getAllPrivileges = async (ability: UserAbility) => {
+export const getAllPrivileges = async () => {
   try {
-    checkPrivileges(ability, [{ action: "view", subject: "Privilege" }]);
+    await authorization.canAccessPrivileges();
     return await prisma.privilege.findMany({
       select: {
         id: true,
@@ -273,9 +275,9 @@ export const getAllPrivileges = async (ability: UserAbility) => {
   }
 };
 
-export const getPrivilege = async (ability: UserAbility, where: Prisma.PrivilegeWhereInput) => {
+export const getPrivilege = async (where: Prisma.PrivilegeWhereInput) => {
   try {
-    checkPrivileges(ability, [{ action: "view", subject: "Privilege" }]);
+    await authorization.canAccessPrivileges();
     return await prisma.privilege.findFirst({
       where,
       select: {
@@ -292,108 +294,6 @@ export const getPrivilege = async (ability: UserAbility, where: Prisma.Privilege
     });
   } catch (e) {
     return prismaErrors(e, null);
-  }
-};
-
-/**
- * Helper function to determine which Subject Type is being passed
- * @param subject  Rule subject
- * @returns True is subject is of type ForcedSubjectType
- */
-function _isForceTyping(subject: Subject | ForcedSubjectType): subject is ForcedSubjectType {
-  return (
-    (subject as ForcedSubjectType).type !== undefined &&
-    (subject as ForcedSubjectType).object !== undefined
-  );
-}
-
-/**
- * Checks the privileges requested against an ability instance and throws and error if the action is not permitted.
- * @param ability The ability instance associated to a User
- * @param rules An array of rules to verify
- * @param logic Use an AND or OR logic comparison
- */
-export const checkPrivileges = (
-  ability: UserAbility,
-  rules: {
-    action: Action;
-    subject: Subject | ForcedSubjectType;
-    field?: string | string[];
-  }[],
-  logic: "all" | "one" = "all"
-): void => {
-  // helper to define if we are force typing a passed object
-  try {
-    const result = rules.map(({ action, subject, field }) => {
-      let ruleResult = false;
-      if (Array.isArray(field)) {
-        field.forEach((f) => {
-          try {
-            checkPrivileges(ability, [{ action, subject, field: f }], logic);
-            ruleResult = true;
-          } catch (error) {
-            ruleResult = false;
-          }
-        });
-        return ruleResult;
-      }
-      if (_isForceTyping(subject)) {
-        ruleResult = ability.can(action, setSubjectType(subject.type, subject.object), field);
-        logMessage.debug(
-          `Privilege Check ${ruleResult ? "PASS" : "FAIL"}: Can ${action} on ${subject.type} `
-        );
-      } else {
-        if (typeof subject !== "string") {
-          throw new Error("Subject must be a string or ForcedSubjectType");
-        }
-        // If the object is not forced typed, we need to pass in an empty object to ensure a global privilege check
-        ruleResult = ability.can(action, setSubjectType(subject, {}), field);
-        logMessage.debug(
-          `Privilege Check ${ruleResult ? "PASS" : "FAIL"}: Can ${action} on ${subject} `
-        );
-      }
-      return ruleResult;
-    });
-
-    let accessAllowed = false;
-
-    switch (logic) {
-      case "all":
-        // The initial value needs to be true because of the AND logic
-        accessAllowed = result.reduce((prev, curr) => prev && curr, true);
-        break;
-      case "one":
-        accessAllowed = result.reduce((prev, curr) => prev || curr, false);
-        break;
-    }
-    if (!accessAllowed) {
-      throw new AccessControlError(`Access Control Forbidden Action`);
-    }
-  } catch {
-    // If there is any error in privilege checking default to forbidden
-    // Do not create an audit log as the error is with the system itself
-    throw new AccessControlError(`Access Control Forbidden Action`);
-  }
-};
-
-export const checkPrivilegesAsBoolean = (
-  ability: UserAbility,
-  rules: {
-    action: Action;
-    subject: Subject | ForcedSubjectType;
-    field?: string;
-  }[],
-  options?: {
-    logic?: "all" | "one";
-    redirect?: boolean;
-  }
-): boolean => {
-  try {
-    checkPrivileges(ability, rules, options?.logic ?? "all");
-    return true;
-  } catch (error) {
-    if (options?.redirect) redirect(`/admin/unauthorized`);
-    return false;
   }
 };
 
@@ -541,7 +441,7 @@ const _authorizationCheck = async (
       const data = JSON.stringify(rules);
       logMessage.error(`Error in privilege check: ${e} data: ${data}`);
       //  On any error in the promise chain, default to forbidden
-      throw new AccessControlError(`Access Control Forbidden Action`);
+      throw new AccessControlError(ability.user.id, "Access Control Forbidden Action");
     });
 
   let accessAllowed = false;
@@ -556,7 +456,7 @@ const _authorizationCheck = async (
       break;
   }
   if (!accessAllowed) {
-    throw new AccessControlError(`Access Control Forbidden Action`);
+    throw new AccessControlError(ability.user.id, "Access Control Forbidden Action");
   }
   return { user: ability.user };
 };
@@ -603,6 +503,24 @@ export const authorization = {
       ],
       "one"
     );
+  },
+  /**
+   * Verify if the user has the privilege to publish forms
+   * @returns boolean
+   */
+  hasPublishFormsPrivilege: async () => {
+    const ability = await getAbility();
+    const result = await prisma.user.count({
+      where: {
+        id: ability.user.id,
+        privileges: {
+          some: {
+            name: "PublishForms",
+          },
+        },
+      },
+    });
+    return result > 0;
   },
   /**
    * Can the user create a new form
@@ -668,7 +586,7 @@ export const authorization = {
    * Can the user view all forms in the application
    */
   canViewAllForms: async () => {
-    return authorization.check([
+    return _authorizationCheck([
       {
         action: "view",
         subject: { type: "FormRecord", scope: "all" },
@@ -687,6 +605,30 @@ export const authorization = {
     ]);
   },
   /**
+   * Can view a users information
+   * @param userId the ID of the user
+   */
+  canViewUser: async (userId: string) => {
+    return _authorizationCheck([
+      {
+        action: "view",
+        subject: { type: "User", scope: { subjectId: userId } },
+      },
+    ]);
+  },
+  /**
+   * Can view all users information
+   * @param userId the ID of the user
+   */
+  canViewAllUsers: async () => {
+    return _authorizationCheck([
+      {
+        action: "view",
+        subject: { type: "User", scope: "all" },
+      },
+    ]);
+  },
+  /**
    * Can the user administratively manage this specific user
    * @param userId The ID of the user
    */
@@ -701,26 +643,27 @@ export const authorization = {
   },
   /**
    * Can the user update security questions on this specific user
-   * @param userId The ID of the user
    */
-  canUpdateSecurityQuestions: async (userId: string) => {
+  canUpdateSecurityQuestions: async () => {
+    const ability = await getAbility();
     return _authorizationCheck([
       {
         action: "update",
-        subject: { type: "User", scope: { subjectId: userId } },
+        subject: { type: "User", scope: { subjectId: ability.user.id } },
         fields: ["securityAnswers"],
       },
     ]);
   },
+
   /**
    * Can the user update the name on this specific user
-   * @param userId The ID of the user
    */
-  canChangeUserName: async (userId: string) => {
+  canChangeUserName: async () => {
+    const ability = await getAbility();
     return _authorizationCheck([
       {
         action: "update",
-        subject: { type: "User", scope: { subjectId: userId } },
+        subject: { type: "User", scope: { subjectId: ability.user.id } },
         fields: ["name"],
       },
     ]);
@@ -790,5 +733,9 @@ export const authorization = {
         subject: { type: "Privilege", scope: "all" },
       },
     ]);
+  },
+  unauthorizedRedirect: async () => {
+    const language = await getCurrentLanguage();
+    redirect(`/${language}/unauthorized`);
   },
 };
