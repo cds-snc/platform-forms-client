@@ -1,13 +1,9 @@
-"use server";
-
 import { createInstance } from "i18next";
 import resourcesToBackend from "i18next-resources-to-backend";
 import { initReactI18next } from "react-i18next/initReactI18next";
 import { getOptions, languages } from "./settings";
 import { headers, cookies } from "next/headers";
 import { pathLanguageDetection } from "./utils";
-
-// Public facing functions - they can be used by anyone who finds the associated server action identifer
 
 export async function serverTranslation(
   ns?: string | string[],
@@ -32,8 +28,6 @@ export async function getCurrentLanguage() {
   const cookieLang = (await cookies()).get("i18next")?.value;
   return pathLang || cookieLang || languages[0];
 }
-
-// Internal and private functions - won't be converted into server actions
 
 const initI18next = async (lang: string, ns: string | string[]) => {
   const i18nInstance = createInstance();

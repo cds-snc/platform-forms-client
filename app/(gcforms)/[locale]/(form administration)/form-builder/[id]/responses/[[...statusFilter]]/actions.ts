@@ -4,7 +4,6 @@ import { Language, FormServerErrorCodes, ServerActionError } from "@lib/types/fo
 import { getAppSetting } from "@lib/appSettings";
 import { logEvent } from "@lib/auditLogs";
 import { ucfirst } from "@lib/client/clientHelpers";
-import { getAbility } from "@lib/privileges";
 import {
   Answer,
   CSVResponse,
@@ -57,15 +56,18 @@ import { serverTranslation } from "@i18n";
 // Public facing functions - they can be used by anyone who finds the associated server action identifer
 
 export const fetchSubmissions = AuthenticatedAction(
-  async ({
-    formId,
-    status,
-    lastKey,
-  }: {
-    formId: string;
-    status: string;
-    lastKey: string | null;
-  }) => {
+  async (
+    _,
+    {
+      formId,
+      status,
+      lastKey,
+    }: {
+      formId: string;
+      status: string;
+      lastKey: string | null;
+    }
+  ) => {
     try {
       if (!formId) {
         return {
@@ -110,17 +112,20 @@ export const fetchSubmissions = AuthenticatedAction(
 );
 
 export const getSubmissionsByFormat = AuthenticatedAction(
-  async ({
-    formID,
-    ids,
-    format = DownloadFormat.HTML,
-    lang,
-  }: {
-    formID: string;
-    ids: string[];
-    format: DownloadFormat;
-    lang: Language;
-  }): Promise<
+  async (
+    session,
+    {
+      formID,
+      ids,
+      format = DownloadFormat.HTML,
+      lang,
+    }: {
+      formID: string;
+      ids: string[];
+      format: DownloadFormat;
+      lang: Language;
+    }
+  ): Promise<
     | HtmlResponse
     | HtmlZippedResponse
     | HtmlAggregatedResponse
@@ -299,7 +304,7 @@ export const getSubmissionsByFormat = AuthenticatedAction(
       });
 
       await updateLastDownloadedBy(responseIdStatusArray, formID);
-      await logDownload(responseIdStatusArray, format);
+      await logDownload(responseIdStatusArray, format, session.user.id);
 
       switch (format) {
         case DownloadFormat.CSV:
@@ -349,7 +354,7 @@ export const getSubmissionsByFormat = AuthenticatedAction(
 );
 
 export const confirmSubmissionCodes = AuthenticatedAction(
-  async (confirmationCodes: string[], formId: string) => {
+  async (_, confirmationCodes: string[], formId: string) => {
     try {
       return confirmResponses(confirmationCodes, formId);
     } catch (e) {
@@ -362,7 +367,7 @@ export const confirmSubmissionCodes = AuthenticatedAction(
   }
 );
 
-export const newResponsesExist = AuthenticatedAction(async (formId: string) => {
+export const newResponsesExist = AuthenticatedAction(async (_, formId: string) => {
   try {
     return submissionTypeExists(formId, VaultStatus.NEW);
   } catch (error) {
@@ -371,7 +376,7 @@ export const newResponsesExist = AuthenticatedAction(async (formId: string) => {
   }
 });
 
-export const unConfirmedResponsesExist = AuthenticatedAction(async (formId: string) => {
+export const unConfirmedResponsesExist = AuthenticatedAction(async (_, formId: string) => {
   try {
     return submissionTypeExists(formId, VaultStatus.DOWNLOADED);
   } catch (error) {
@@ -381,7 +386,7 @@ export const unConfirmedResponsesExist = AuthenticatedAction(async (formId: stri
 });
 
 export const getSubmissionRemovalDate = AuthenticatedAction(
-  async (formId: string, submissionName: string) => {
+  async (_, formId: string, submissionName: string) => {
     try {
       return retrieveSubmissionRemovalDate(formId, submissionName);
     } catch (error) {
@@ -437,12 +442,12 @@ const getAnswerAsString = (question: FormElement | undefined, answer: unknown): 
 
 const logDownload = async (
   responseIdStatusArray: { id: string; status: string }[],
-  format: DownloadFormat
+  format: DownloadFormat,
+  userId: string
 ) => {
-  const ability = await getAbility();
   responseIdStatusArray.forEach((item) => {
     logEvent(
-      ability.user.id,
+      userId,
       { type: "Response", id: item.id },
       "DownloadResponse",
       `Downloaded form response in ${format} for submission ID ${item.id}`

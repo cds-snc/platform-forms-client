@@ -1,9 +1,9 @@
 import { serverTranslation } from "@i18n";
 import { Metadata } from "next";
 import { retrievePoolOfSecurityQuestions, retrieveUserSecurityQuestions } from "@lib/auth";
-
 import { Profile } from "./components/server/Profile";
 import { authCheckAndRedirect } from "@lib/actions";
+import { authorization } from "@lib/privileges";
 
 export async function generateMetadata(props: {
   params: Promise<{ locale: string }>;
@@ -25,8 +25,7 @@ export default async function Page(props: { params: Promise<{ locale: string }> 
 
   const { session, ability } = await authCheckAndRedirect();
 
-  // Check is a user can update at least one FormRecord and has the privilege to publish
-  const hasPublishPrivilege = ability.can("update", "FormRecord", "isPublished");
+  const userCanPublish = await authorization.hasPublishFormsPrivilege();
 
   const [userQuestions, allQuestions] = await Promise.all([
     retrieveUserSecurityQuestions({ userId: ability.user.id }),
@@ -37,7 +36,7 @@ export default async function Page(props: { params: Promise<{ locale: string }> 
     <Profile
       locale={locale}
       email={session.user.email}
-      {...{ publishingStatus: hasPublishPrivilege, userQuestions, allQuestions }}
+      {...{ publishingStatus: userCanPublish, userQuestions, allQuestions }}
     />
   );
 }

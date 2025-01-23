@@ -20,6 +20,7 @@ import { youHaveBeenRemovedEmailTemplate } from "./invitations/emailTemplates/yo
 import { ownerAddedEmailTemplate } from "./invitations/emailTemplates/ownerAddedEmailTemplate";
 import { isValidISODate } from "./utils/date/isValidISODate";
 import { validateTemplate } from "@lib/utils/form-builder/validate";
+import { dateHasPast } from "@lib/utils";
 
 // ******************************************
 // Internal Module Functions
@@ -1319,4 +1320,39 @@ export const updateSecurityAttribute = async (formID: string, securityAttribute:
   logEvent(user.id, { type: "Form", id: formID }, "ChangeSecurityAttribute");
 
   return _parseTemplate(updatedTemplate);
+};
+
+export const checkIfClosed = async (formId: string) => {
+  try {
+    let isPastClosingDate = false;
+
+    // Note these are the only fields we need from the template
+    // They are public fields so no privilege check is needed
+    const template = await prisma.template
+      .findUnique({
+        where: {
+          id: formId,
+        },
+        select: {
+          closingDate: true,
+          closedDetails: true,
+        },
+      })
+      .catch((e) => prismaErrors(e, null));
+
+    if (!template) {
+      throw new Error("Template not found");
+    }
+
+    if (template.closingDate) {
+      isPastClosingDate = dateHasPast(Date.parse(String(template.closingDate)));
+    }
+
+    return {
+      isPastClosingDate,
+      closedDetails: template.closedDetails as ClosedDetails,
+    };
+  } catch (e) {
+    return null;
+  }
 };
