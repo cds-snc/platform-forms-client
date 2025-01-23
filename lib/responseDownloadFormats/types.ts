@@ -1,5 +1,4 @@
-import { FormElement, SecurityAttribute } from "@lib/types";
-import { FormRecord, GroupsType } from "packages/gcforms-types/src/form-types";
+import { FormRecord } from "packages/gcforms-types/src/form-types";
 
 export interface Answer {
   questionId: number;
@@ -14,16 +13,6 @@ export interface Submission {
   createdAt: number;
   confirmationCode: string;
   answers: Answer[];
-}
-
-export interface Form {
-  id: string;
-  titleEn: string;
-  titleFr: string;
-  securityAttribute: SecurityAttribute;
-  groups: GroupsType;
-  layout: number[];
-  elements: FormElement[];
 }
 
 export interface FormResponseSubmissions {
