@@ -1,7 +1,6 @@
 "use server";
 
 import { serverTranslation } from "@i18n";
-import { authCheckAndThrow } from "@lib/actions";
 import { acceptInvitation } from "@lib/invitations/acceptInvitation";
 import { declineInvitation } from "@lib/invitations/declineInvitation";
 import {
@@ -10,15 +9,15 @@ import {
   UnableToAssignUserToTemplateError,
   UserNotFoundError,
 } from "@lib/invitations/exceptions";
+import { AuthenticatedAction } from "@lib/actions";
 
 // Public facing functions - they can be used by anyone who finds the associated server action identifer
 
-export const accept = async (id: string) => {
-  const { ability } = await authCheckAndThrow();
+export const accept = AuthenticatedAction(async (_, id: string) => {
   const { t } = await serverTranslation("manage-form-access");
 
   try {
-    await acceptInvitation(ability, id);
+    await acceptInvitation(id);
     return true;
   } catch (e) {
     if (e instanceof InvitationNotFoundError) {
@@ -34,17 +33,16 @@ export const accept = async (id: string) => {
       return { message: t("error") };
     }
   }
-};
+});
 
-export const decline = async (id: string) => {
-  const { ability } = await authCheckAndThrow();
+export const decline = AuthenticatedAction(async (_, id: string) => {
   const { t } = await serverTranslation("manage-form-access");
 
   try {
-    await declineInvitation(ability, id);
+    await declineInvitation(id);
   } catch (e) {
     if (e instanceof InvitationNotFoundError) {
       return { message: t("invitationNotFound") };
     }
   }
-};
+});

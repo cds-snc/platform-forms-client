@@ -3,11 +3,11 @@ import { useEffect, useRef, useState } from "react";
 import { useTranslation } from "@i18n/client";
 import { Alert, Button } from "@clientComponents/globals";
 import {
-  getThrottling,
-  setPermanentThrottling,
-  setThrottlingExpiry,
-  resetThrottling,
-} from "@lib/cache/throttlingCache";
+  getCurrentThrottlingRate,
+  temporarilyIncreaseThrottlingRate,
+  permanentlyIncreaseThrottlingRate,
+  resetThrottlingRate,
+} from "./actions";
 import { Checkbox } from "@formBuilder/components/shared/MultipleChoice";
 import { Input } from "@formBuilder/components/shared/Input";
 import { toast, ToastContainer } from "@formBuilder/components/shared/Toast";
@@ -76,19 +76,34 @@ export const ThrottlingRate = ({ formId }: { formId: string }) => {
     setSubmitting(true);
     try {
       if (permanent) {
-        await setPermanentThrottling(formId);
+        const response = await permanentlyIncreaseThrottlingRate(formId);
+
+        if (response !== undefined) {
+          throw new Error("Failed to permanently increase throttling rate");
+        }
+
         setSuccess(THROTTLE_EXPIRY.permanent);
         return;
       }
 
       if (weeks) {
-        await setThrottlingExpiry(formId, Number(weeks));
+        const response = await temporarilyIncreaseThrottlingRate(formId, Number(weeks));
+
+        if (response !== undefined) {
+          throw new Error("Failed to temporarily increase throttling rate");
+        }
+
         setSuccess(THROTTLE_EXPIRY.weeks);
         return;
       }
 
       // Reset throttling back to default
-      await resetThrottling(formId);
+      const response = await resetThrottlingRate(formId);
+
+      if (response !== undefined) {
+        throw new Error("Failed to reset throttling rate");
+      }
+
       setSuccess(THROTTLE_EXPIRY.default);
     } catch (error) {
       toast.error(t("throttling.error"));
@@ -101,7 +116,14 @@ export const ThrottlingRate = ({ formId }: { formId: string }) => {
   useEffect(() => {
     const getThrottlingSetting = async () => {
       try {
-        const { rate, expires } = await getThrottling(formId);
+        const response = await getCurrentThrottlingRate(formId);
+
+        if ("error" in response) {
+          throw new Error("Failed to get current throttling rate");
+        }
+
+        const { rate, expires } = response;
+
         if (rate && expires < 0) {
           setWeeksDisabled(true);
           setPermanent(true);
