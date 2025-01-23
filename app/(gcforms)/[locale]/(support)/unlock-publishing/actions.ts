@@ -28,10 +28,20 @@ export interface ErrorStates {
 
 // Public facing functions - they can be used by anyone who finds the associated server action identifer
 
-export const unlockPublishing = AuthenticatedAction(
-  async (session, language: string, userEmail: string, _: ErrorStates, formData: FormData) => {
-    const rawData = Object.fromEntries(formData.entries());
-    const validatedData = await validate(language, userEmail, rawData);
+export async function unlockPublishing(
+  language: string,
+  userEmail: string,
+  _: ErrorStates,
+  formData: FormData
+): Promise<ErrorStates> {
+  /**
+   * After noticing that switching from regular to Lambda function forces the server action ID to be changed
+   * we decided to rollback this server action signature to its original form while still leveraging the new
+   * AuthenticatedAction wrapper within the function logic.
+   */
+  return AuthenticatedAction(async (session, lang: string, usrEmail: string, data: FormData) => {
+    const rawData = Object.fromEntries(data.entries());
+    const validatedData = await validate(lang, usrEmail, rawData);
 
     if (!validatedData.success) {
       return {
@@ -45,20 +55,20 @@ export const unlockPublishing = AuthenticatedAction(
     const { managerEmail, department, goals } = validatedData.output;
 
     const emailBody = `
-    ${session.user.name} (${session.user.email}) from ${department} has requested permission to publish forms.<br/>
-    <br/>
-    Goals:<br/>
-    ${goals}<br/>
-    <br/>
-    Manager email address: ${managerEmail} .<br/><br/>
-    ****<br/><br/>
-    ${session.user.name} (${session.user.email}) du ${department} a demandé l'autorisation de publier des formulaires.<br/>
-    <br/>
-    Objectifs:<br/>
-    ${goals}<br/>
-    <br/>
-    Adresse email du responsable: ${managerEmail} .<br/>
-    `;
+      ${session.user.name} (${session.user.email}) from ${department} has requested permission to publish forms.<br/>
+      <br/>
+      Goals:<br/>
+      ${goals}<br/>
+      <br/>
+      Manager email address: ${managerEmail} .<br/><br/>
+      ****<br/><br/>
+      ${session.user.name} (${session.user.email}) du ${department} a demandé l'autorisation de publier des formulaires.<br/>
+      <br/>
+      Objectifs:<br/>
+      ${goals}<br/>
+      <br/>
+      Adresse email du responsable: ${managerEmail} .<br/>
+      `;
 
     if (!session.user.name || !session.user.email) {
       throw new Error("User name or email not found");
@@ -74,7 +84,7 @@ export const unlockPublishing = AuthenticatedAction(
         name: session.user.name,
         email: session.user.email,
         description: emailBody,
-        language: language,
+        language: lang,
       });
     } catch (error) {
       logMessage.error(`Failed to unlock publishing: ${(error as Error).message}`);
@@ -82,8 +92,8 @@ export const unlockPublishing = AuthenticatedAction(
     }
 
     return { error: "", validationErrors: [] };
-  }
-);
+  })(language, userEmail, formData);
+}
 
 // Internal and private functions - won't be converted into server actions
 
