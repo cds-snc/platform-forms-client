@@ -1,7 +1,5 @@
+import { logMessage } from "@lib/logger";
 import { createContext, useContext, useState } from "react";
-
-// TODO:
-// - think about queueing announcements to avoid overflowing an ATs buffer.
 
 /**
  * Why would I use this?
@@ -9,39 +7,46 @@ import { createContext, useContext, useState } from "react";
  * more control over what is announced to the AT user.
  */
 
+// TODO:
+// - think about queueing announcements to avoid overflowing an ATs buffer.
+// - does cleaning up (clear text) a live region improve stability?
+
 export enum Priority {
   LOW = "polite",
   HIGH = "assertive",
 }
 
-export interface Message {
-  content: string;
-  priority: Priority;
-}
-
-const messageDefault = { content: "", priority: Priority.LOW };
-
 const LiveMessageContext = createContext({
-  message: messageDefault,
+  messageLow: "",
+  messageHigh: "",
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  setMessage: (message: Message) => {},
+  setMessageLow: (messageLow: string) => {},
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  setMessageHigh: (messageHigh: string) => {},
 });
 
 export const LiveMessagePovider = ({ children }: { children: React.ReactNode }) => {
-  const [message, setMessage] = useState<Message>(messageDefault);
+  const [messageLow, setMessageLow] = useState<string>("");
+  const [messageHigh, setMessageHigh] = useState<string>("");
   return (
-    <LiveMessageContext.Provider value={{ message, setMessage }}>
+    <LiveMessageContext.Provider value={{ messageLow, messageHigh, setMessageLow, setMessageHigh }}>
       {children}
     </LiveMessageContext.Provider>
   );
 };
 
 export const LiveMessage = () => {
-  const { message } = useContext(LiveMessageContext);
+  const { messageLow, messageHigh } = useContext(LiveMessageContext);
+  // Prime the live regions and add redundant aria-live attribute for best AT support
   return (
-    <div aria-live={message.priority} className="sr-only">
-      {message.content}
-    </div>
+    <>
+      <div role="status" aria-live="polite" className="sr-only">
+        {messageLow}
+      </div>
+      <div role="alert" aria-live="assertive" className="sr-only">
+        {messageHigh}
+      </div>
+    </>
   );
 };
 
@@ -54,22 +59,27 @@ export const LiveMessage = () => {
  *   <button onClick={() => speak("Hello World")}>Click me</button>
  */
 export const useLiveMessage = () => {
-  const { message, setMessage } = useContext(LiveMessageContext);
+  const { messageLow, messageHigh, setMessageLow, setMessageHigh } = useContext(LiveMessageContext);
   /**
    * Updates the app-wide live-region with the passed in content to be announced by AT.
-   * @param content text message to be announced
+   * @param message text content to be announced
    * @param priority ARIA live region priority. Use HIGH sparingly e.g. an imporatnt error message
-   * @param delayInSeconds default of 40 (next-ish tick) helps the message be announced after other
-   * browser or ARIA updates complete. The delay can also be increased if desired.
+   * @param delayInSeconds by default announces after next-tick-ish to avoid react hydration issue.
    */
   function speak(
-    content: string = "",
+    message: string = "",
     priority: Priority = Priority.LOW,
     delayInSeconds: number = 40
   ) {
-    // Handle just encase an AT or the DOM decides to treat an identical update as a new one
-    if (message.content === content) return;
-    setTimeout(() => setMessage({ content, priority } as Message), delayInSeconds);
+    setTimeout(() => {
+      if (priority === Priority.LOW && messageLow !== message) {
+        logMessage.info(`LiveMessage announcing (low): ${message}`);
+        setMessageLow(message);
+      } else if (priority === Priority.HIGH && messageHigh !== message) {
+        logMessage.info(`LiveMessage announcing (high): ${message}`);
+        setMessageHigh(message);
+      }
+    }, delayInSeconds);
   }
   return [speak];
 };
