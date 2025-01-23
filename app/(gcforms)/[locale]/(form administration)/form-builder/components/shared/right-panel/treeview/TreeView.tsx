@@ -319,11 +319,11 @@ const ControlledTree: ForwardRefRenderFunction<unknown, TreeDataProviderProps> =
             expandedItems,
             getTreeData,
             getConfirmMovePromise,
-            setOpenConfirmMoveDialog,
-            autoFlowAll
+            setOpenConfirmMoveDialog
           );
 
           updateGroupsLayout();
+          autoFlowAll();
           forceRefresh();
         }}
         onFocusItem={(item) => {
