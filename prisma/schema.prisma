@@ -98,7 +98,6 @@ model User {
   securityAnswers SecurityAnswer[]
   notes           String?
   createdAt       DateTime         @default(now()) @db.Timestamptz(6)
-  notes           String?
 }
 
 model VerificationToken {
