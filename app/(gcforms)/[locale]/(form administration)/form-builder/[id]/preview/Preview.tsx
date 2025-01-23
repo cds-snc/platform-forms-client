@@ -78,8 +78,13 @@ export const Preview = ({
     }));
 
   const { t } = useTranslation(["common", "form-builder", "form-closed"]);
+
   const language = translationLanguagePriority;
   const currentForm = getRenderedForm(formRecord, language);
+
+  const translatedT = useTranslation(["common", "form-builder", "form-closed"], {
+    lng: language,
+  }).t;
 
   if (!currentForm.length) {
     disableSubmit = true;
@@ -191,7 +196,7 @@ export const Preview = ({
                   saveProgress={saveProgress}
                   isPreview={true}
                   language={language}
-                  t={t}
+                  t={translatedT}
                   onSuccess={setSent}
                   renderSubmit={({ validateForm }) => {
                     return (
