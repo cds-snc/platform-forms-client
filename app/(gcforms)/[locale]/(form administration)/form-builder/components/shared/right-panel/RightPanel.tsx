@@ -30,7 +30,7 @@ const TabButton = ({
   className?: string;
 }) => {
   const { t } = useTranslation("form-builder");
-  const [speak] = useLiveMessage();
+  const { speak } = useLiveMessage();
   const loadTab = () => {
     onClick();
     speak(t("rightPanel.loadTab", { tabPanelLabel: text }));

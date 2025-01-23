@@ -64,7 +64,7 @@ export const DynamicGroup = (props: DynamicGroupProps): React.ReactElement => {
 
   const { t } = useTranslation();
 
-  const [speak] = useLiveMessage();
+  const { speakByKey } = useLiveMessage();
 
   useEffect(() => {
     if (focusedRow.current !== null) {
@@ -99,7 +99,7 @@ export const DynamicGroup = (props: DynamicGroupProps): React.ReactElement => {
     // Do not subtract one because the rows state has not yet updated it's length when this is called
     focusedRow.current = rows.length;
     // Let an AT user know a new repeating set was added
-    speak(t("dynamicRow.addedMessage", { title, count: rows.length + 1 }));
+    speakByKey("DynamicRowAdded", { title, count: rows.length + 1 });
   };
 
   const deleteRow = (index: number) => {

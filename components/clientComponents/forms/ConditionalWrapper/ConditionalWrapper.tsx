@@ -3,10 +3,7 @@ import React from "react";
 import { useGCFormsContext } from "@lib/hooks/useGCFormContext";
 import { ConditionalRule, FormElement } from "@lib/types";
 import { inGroup, validConditionalRules, checkRelatedRulesAsBoolean } from "@lib/formContext";
-import { useTranslation } from "@i18n/client";
 import { useLiveMessage } from "@lib/hooks/useLiveMessage";
-import { useTemplateStore } from "@lib/store/useTemplateStore";
-import { LocalizedElementProperties } from "@lib/types/form-builder-types";
 
 export const ConditionalWrapper = ({
   children,
@@ -18,12 +15,7 @@ export const ConditionalWrapper = ({
   rules: ConditionalRule[] | null;
 }) => {
   const { matchedIds, currentGroup, groups, formRecord } = useGCFormsContext();
-  const { localizeField, translationLanguagePriority } = useTemplateStore((s) => ({
-    localizeField: s.localizeField,
-    translationLanguagePriority: s.translationLanguagePriority,
-  }));
-  const { t } = useTranslation();
-  const [speak] = useLiveMessage();
+  const { speakByKey } = useLiveMessage();
 
   // Check if the element is a child of a dynamic element
   if (element.subId) {
@@ -48,13 +40,7 @@ export const ConditionalWrapper = ({
   if (hasMatchedRule) {
     // Ensure rules for elements tied to the element are also matched.
     if (checkRelatedRulesAsBoolean(formRecord.form.elements, rules, matchedIds)) {
-      speak(
-        t("conditional.activated", {
-          name: element.properties[
-            localizeField(LocalizedElementProperties.TITLE, translationLanguagePriority)
-          ],
-        })
-      );
+      speakByKey("conditionalActivated", element);
       return children;
     }
   }

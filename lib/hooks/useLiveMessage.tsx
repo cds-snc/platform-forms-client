@@ -1,5 +1,11 @@
+import { FormElement } from "@cdssnc/gcforms-types";
+import { useTranslation } from "@i18n/client";
 import { logMessage } from "@lib/logger";
+import { useTemplateStore } from "@lib/store/useTemplateStore";
+import { LocalizedElementProperties } from "@lib/types/form-builder-types";
 import { createContext, useContext, useState } from "react";
+
+// TODO check if shown element is on the next page and if so DO not announce
 
 /**
  * Why would I use this?
@@ -60,6 +66,12 @@ export const LiveMessage = () => {
  */
 export const useLiveMessage = () => {
   const { messageLow, messageHigh, setMessageLow, setMessageHigh } = useContext(LiveMessageContext);
+  const { localizeField, translationLanguagePriority } = useTemplateStore((s) => ({
+    localizeField: s.localizeField,
+    translationLanguagePriority: s.translationLanguagePriority,
+  }));
+  const { t } = useTranslation();
+
   /**
    * Updates the app-wide live-region with the passed in content to be announced by AT.
    * @param message text content to be announced
@@ -73,7 +85,7 @@ export const useLiveMessage = () => {
   ) {
     setTimeout(() => {
       if (priority === Priority.LOW && messageLow !== message) {
-        logMessage.info(`LiveMessage announcing (low): ${message}`);
+        logMessage.info(`LiveMessage announcing: ${message}`);
         setMessageLow(message);
       } else if (priority === Priority.HIGH && messageHigh !== message) {
         logMessage.info(`LiveMessage announcing (high): ${message}`);
@@ -81,5 +93,52 @@ export const useLiveMessage = () => {
       }
     }, delayInSeconds);
   }
-  return [speak];
+
+  //
+  //
+  // TRYING SOMETHING
+  //
+  //
+  // TODO Try with events next
+
+  const getConditionalActivatedString = (element: FormElement) => {
+    return t("conditional.activated", {
+      name: element.properties[
+        localizeField(LocalizedElementProperties.TITLE, translationLanguagePriority)
+      ],
+    });
+  };
+
+  const getDynamicRowAddedString = ({ title, count }: { title: string; count: number }) => {
+    return t("dynamicRow.addedMessage", { title, count });
+  };
+
+  /* eslint-disable @typescript-eslint/no-explicit-any */
+  const getMessage = (key: string, obj: any) => {
+    // TODO generic  for type?
+    try {
+      switch (key) {
+        case "conditionalActivated":
+          return getConditionalActivatedString(obj);
+        case "DynamicRowAdded":
+          return getDynamicRowAddedString(obj);
+        default:
+          return "";
+      }
+    } catch (e) {
+      logMessage.error("Error looking up live message");
+    }
+  };
+
+  // TODO better name please!
+  function speakByKey(key: string, obj: any) {
+    // TODO generic  for type?
+    const message = getMessage(key, obj);
+
+    if (message) {
+      speak(message);
+    }
+  }
+
+  return { speak, speakByKey };
 };
