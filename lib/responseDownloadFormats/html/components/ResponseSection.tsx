@@ -1,8 +1,9 @@
 import React from "react";
-import { Form, Submission } from "../../types";
+import { Submission } from "../../types";
 import { ColumnTable } from "./ColumnTable";
 import { RowTable } from "./RowTable";
 import { customTranslate, getProperty } from "@lib/i18nHelpers";
+import { FormRecord } from "@cdssnc/gcforms-types";
 
 export interface ResponseSectionProps {
   confirmReceiptCode: string;
@@ -10,7 +11,7 @@ export interface ResponseSectionProps {
   responseID: string;
   submissionDate: number;
   formResponse: Submission;
-  form: Form;
+  form: FormRecord;
 }
 
 export function capitalize(string: string) {
