@@ -3,17 +3,26 @@
 import { prismaMock } from "@jestUtils";
 import { getUsers, getOrCreateUser } from "@lib/users";
 import { Prisma } from "@prisma/client";
-import { createAbility } from "@lib/privileges";
-import { AccessControlError } from "@lib/auth";
-import { ManageUsers, ViewUserPrivileges, Base } from "__utils__/permissions";
-import { Session } from "next-auth";
+
+import { AccessControlError } from "@lib/auth/errors";
+import { ManageUsers, Base } from "__utils__/permissions";
+
 import { logEvent } from "@lib/auditLogs";
 jest.mock("@lib/auditLogs");
-jest.mock("@lib/auth");
-const mockedLogEvent = jest.mocked(logEvent, { shallow: true });
+jest.mock("@lib/privileges");
+
 import { JWT } from "next-auth/jwt";
+import { mockAuthorizationFail, mockAuthorizationPass } from "__utils__/authorization";
+
+const userId = "1";
+
+jest.mock("@lib/auditLogs");
+const mockedLogEvent = jest.mocked(logEvent, { shallow: true });
 
 describe("User query tests should fail gracefully", () => {
+  beforeEach(() => {
+    mockAuthorizationPass(userId);
+  });
   it("getOrCreateUser should fail gracefully - create", async () => {
     prismaMock.user.findUnique.mockResolvedValue(null);
     (prismaMock.privilege.findUnique as jest.MockedFunction<any>).mockResolvedValue({ id: "2" });
@@ -49,11 +58,6 @@ describe("User query tests should fail gracefully", () => {
   });
 
   it("getUsers should fail silenty", async () => {
-    const fakeSession = {
-      user: { id: "1", privileges: ManageUsers },
-    };
-    const ability = createAbility(fakeSession as Session);
-
     prismaMock.user.findMany.mockRejectedValue(
       new Prisma.PrismaClientKnownRequestError("Timed out", {
         code: "P2024",
@@ -61,7 +65,7 @@ describe("User query tests should fail gracefully", () => {
       })
     );
 
-    const result = await getUsers(ability);
+    const result = await getUsers();
     expect(result).toHaveLength(0);
     expect(mockedLogEvent).not.toHaveBeenCalled();
   });
@@ -131,11 +135,7 @@ describe("getOrCreateUser", () => {
 });
 
 describe("getUsers", () => {
-  it.each([[ViewUserPrivileges], [ManageUsers]])("Returns a list of users", async (privileges) => {
-    const fakeSession = {
-      user: { id: "1", privileges },
-    };
-    const ability = createAbility(fakeSession as Session);
+  it("Returns a list of users", async () => {
     const returnedUsers = [
       {
         id: "3",
@@ -153,23 +153,19 @@ describe("getUsers", () => {
 
     (prismaMock.user.findMany as jest.MockedFunction<any>).mockResolvedValue(returnedUsers);
 
-    const result = await getUsers(ability);
+    const result = await getUsers();
     expect(result).toMatchObject(returnedUsers);
   });
 });
 
 describe("Users CRUD functions should throw an error if user does not have any permissions", () => {
+  beforeEach(() => {
+    mockAuthorizationFail(userId);
+  });
   it("User with no permission should not be able to use CRUD functions", async () => {
-    const fakeSession = {
-      user: { id: "1", privileges: Base },
-    };
-    const ability = createAbility(fakeSession as Session);
-
-    await expect(async () => {
-      await getUsers(ability);
-    }).rejects.toBeInstanceOf(AccessControlError);
+    await expect(getUsers()).rejects.toThrow(AccessControlError);
     expect(mockedLogEvent).toHaveBeenCalledWith(
-      fakeSession.user.id,
+      userId,
       { type: "User" },
       "AccessDenied",
       "Attempted to list users"

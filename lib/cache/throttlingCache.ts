@@ -1,8 +1,7 @@
-"use server";
-
 import { logMessage } from "@lib/logger";
 import { getRedisInstance } from "../integration/redisConnector";
 import { getWeeksInSeconds } from "@lib/utils/date/dateConversions";
+import { authorization } from "@lib/privileges";
 
 const REDIS_RATE_LIMIT_KEY_PREFIX: string = "rate-limit";
 
@@ -13,11 +12,11 @@ const THROTTLE_SETTING = {
 
 export type ThrottleSetting = keyof typeof THROTTLE_SETTING; // For completeness, even though not currently used
 
-// Public facing functions - they can be used by anyone who finds the associated server action identifer
-
 export const getThrottling = async (
   formId: string
 ): Promise<{ rate: string | null; expires: number }> => {
+  await authorization.canManageAllForms();
+
   const getParameter = `${REDIS_RATE_LIMIT_KEY_PREFIX}:${formId}`;
   try {
     const redis = await getRedisInstance();
@@ -33,6 +32,8 @@ export const getThrottling = async (
 // Increases the throttling rate for a limited duration by leveraging the Redis built-in expiration
 // feature by setting an expiryDelay
 export const setThrottlingExpiry = async (formId: string, weeks: number) => {
+  await authorization.canManageAllForms();
+
   const modifyParameter = `${REDIS_RATE_LIMIT_KEY_PREFIX}:${formId}`;
   try {
     const redis = await getRedisInstance();
@@ -52,6 +53,8 @@ export const setThrottlingExpiry = async (formId: string, weeks: number) => {
 
 // Permanently increases the throttling rate (uses high capacity token bucket)
 export const setPermanentThrottling = async (formId: string) => {
+  await authorization.canManageAllForms();
+
   const modifyParameter = `${REDIS_RATE_LIMIT_KEY_PREFIX}:${formId}`;
   try {
     const redis = await getRedisInstance();
@@ -65,6 +68,8 @@ export const setPermanentThrottling = async (formId: string) => {
 
 // Goes back to the initial throttling rate (uses low capacity token bucket)
 export const resetThrottling = async (formId: string) => {
+  await authorization.canManageAllForms();
+
   const modifyParameter = `${REDIS_RATE_LIMIT_KEY_PREFIX}:${formId}`;
   try {
     const redis = await getRedisInstance();

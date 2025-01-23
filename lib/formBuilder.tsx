@@ -186,6 +186,7 @@ function _buildForm(element: FormElement, lang: string): ReactElement {
             name={`${id}`}
             ariaDescribedBy={description ? `desc-${id}` : undefined}
             choices={choices}
+            lang={lang}
           />
         </div>
       );
@@ -205,6 +206,7 @@ function _buildForm(element: FormElement, lang: string): ReactElement {
               id={`label-${id}`}
               className={isRequired ? "required" : ""}
               required={isRequired}
+              lang={lang}
             >
               {labelText}
             </Label>
@@ -216,6 +218,7 @@ function _buildForm(element: FormElement, lang: string): ReactElement {
             ariaDescribedBy={description ? `desc-${id}` : `label-${id}`}
             fileType={element.properties.fileType}
             required={isRequired}
+            lang={lang}
           />
         </div>
       );
@@ -285,6 +288,8 @@ function _buildForm(element: FormElement, lang: string): ReactElement {
             key={`${id}-${lang}`}
             splitAddress={addressComponents?.splitAddress}
             canadianOnly={addressComponents?.canadianOnly}
+            required={isRequired}
+            lang={lang}
           />
         </div>
       );

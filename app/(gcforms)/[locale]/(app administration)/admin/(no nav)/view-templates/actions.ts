@@ -2,14 +2,8 @@
 
 import { getAllTemplates } from "@lib/templates";
 import { AuthenticatedAction } from "@lib/actions";
-import { FormRecord } from "@lib/types";
 
 // Public facing functions - they can be used by anyone who finds the associated server action identifer
-
-export const getTemplates = AuthenticatedAction(async () => {
-  const templates = await getAllTemplates();
-  return filterTemplateProperties(templates);
-});
 
 export const getLatestPublishedTemplates = AuthenticatedAction(async () => {
   const templates = await getAllTemplates({
@@ -17,12 +11,6 @@ export const getLatestPublishedTemplates = AuthenticatedAction(async () => {
     sortByDateUpdated: "desc",
   });
 
-  return filterTemplateProperties(templates);
-});
-
-// Internal and private functions - won't be converted into server actions
-
-const filterTemplateProperties = (templates: FormRecord[]) => {
   return templates.map((template) => {
     const {
       id,
@@ -30,6 +18,7 @@ const filterTemplateProperties = (templates: FormRecord[]) => {
       isPublished,
       updatedAt,
     } = template;
+
     return { id, titleEn, titleFr, isPublished, updatedAt };
   });
-};
+});
