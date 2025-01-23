@@ -26,11 +26,11 @@ interface ManagedComboboxRef {
 }
 
 export const AddressComplete = (props: AddressCompleteProps): React.ReactElement => {
-  const { id, name, required, ariaDescribedBy, label } = props;
+  const { id, name, required, ariaDescribedBy, label, lang } = props;
 
   const [field, meta, helpers] = useField(props);
 
-  const { t, i18n } = useTranslation("form-builder");
+  const { t, i18n } = useTranslation("form-builder", { lng: lang });
 
   //Address Complete elements
   const [choices, setChoices] = useState<string[]>([]);
@@ -270,7 +270,12 @@ export const AddressComplete = (props: AddressCompleteProps): React.ReactElement
         )}
         {!props.canadianOnly && (
           <div className="mb-6 mt-4">
-            <Label htmlFor={`${name}-country`}>
+            <Label
+              htmlFor={`${name}-country`}
+              className={props.required ? "gc-label required" : "gc-label"}
+              required={props.required}
+              lang={lang}
+            >
               {t("addElementDialog.addressComplete.country")}
             </Label>
             <ManagedCombobox
@@ -279,7 +284,7 @@ export const AddressComplete = (props: AddressCompleteProps): React.ReactElement
               choices={countryChoices}
               onSetValue={(val) => setCountry(val)}
               className={cn(meta.error && "gc-error-input")}
-              required={required}
+              required={props.required}
               baseValue="Canada"
               useFilter={true}
               data-testid="addresscomplete-input-country"
@@ -288,7 +293,12 @@ export const AddressComplete = (props: AddressCompleteProps): React.ReactElement
         )}
 
         <div className="mb-6">
-          <Label htmlFor={`${name}-streetAddress`} className="gc-label">
+          <Label
+            htmlFor={`${name}-streetAddress`}
+            className={props.required ? "gc-label required" : "gc-label"}
+            required={props.required}
+            lang={lang}
+          >
             {t("addElementDialog.addressComplete.street.label")}
           </Label>
           <Description id={`${name}-streetDesc`}>
@@ -304,7 +314,7 @@ export const AddressComplete = (props: AddressCompleteProps): React.ReactElement
               onChange={onAddressSearch}
               onSetValue={onAddressSet}
               baseValue={addressObject.streetAddress}
-              required={required}
+              required={props.required}
               placeholderText={allow ? t("addElementDialog.addressComplete.startTyping") : ""}
               ariaDescribedBy={`${name}-streetDesc`}
             />
@@ -331,7 +341,7 @@ export const AddressComplete = (props: AddressCompleteProps): React.ReactElement
             value={addressObject.city}
             onChange={(e) => setAddressData("city", e.target.value)}
             className={cn("gc-input-text", meta.error && "gc-error-input")}
-            required={required}
+            required={props.required}
             data-testid="addresscomplete-input-city"
           />
         </div>

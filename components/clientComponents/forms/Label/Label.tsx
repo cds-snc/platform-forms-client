@@ -42,7 +42,7 @@ export const Label = (props: LabelProps): React.ReactElement => {
     className
   );
 
-  const { t } = useTranslation("common");
+  const { t } = useTranslation("common", { lng: lang });
 
   const childrenElements = (
     <>
@@ -50,7 +50,7 @@ export const Label = (props: LabelProps): React.ReactElement => {
       {required && (
         <span data-testid="required" aria-hidden>
           {" "}
-          ({validation?.all ? t("all-required", { lng: lang }) : t("required", { lng: lang })})
+          ({validation?.all ? t("all-required") : t("required")})
         </span>
       )}
       {group && required && (

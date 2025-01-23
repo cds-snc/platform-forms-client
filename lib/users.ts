@@ -141,6 +141,8 @@ export const getUser = async (id: string): Promise<AppUser> => {
       name: true,
       email: true,
       active: true,
+      createdAt: true,
+      notes: true,
       privileges: {
         select: {
           id: true,
@@ -173,6 +175,8 @@ export const getUsers = async (where?: Prisma.UserWhereInput): Promise<AppUser[]
         name: true,
         email: true,
         active: true,
+        createdAt: true,
+        notes: true,
         privileges: {
           select: {
             id: true,
