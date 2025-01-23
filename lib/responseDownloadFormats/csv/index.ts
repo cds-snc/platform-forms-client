@@ -55,7 +55,7 @@ export const transform = (formResponseSubmissions: FormResponseSubmissions) => {
     alwaysQuote: true,
   });
 
-  const records2 = submissions.map((response) => {
+  const records = submissions.map((response) => {
     const answers = sortedElements.map((element) => {
       const answer = response.answers.find((answer) => answer.questionId === element.id);
       if (!answer) {
@@ -97,5 +97,5 @@ export const transform = (formResponseSubmissions: FormResponseSubmissions) => {
     ];
   });
 
-  return csvStringifier.getHeaderString() + csvStringifier.stringifyRecords(records2);
+  return csvStringifier.getHeaderString() + csvStringifier.stringifyRecords(records);
 };
