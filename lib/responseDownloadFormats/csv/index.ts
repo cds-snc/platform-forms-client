@@ -2,35 +2,18 @@ import { createArrayCsvStringifier as createCsvStringifier } from "csv-writer";
 import { FormResponseSubmissions } from "../types";
 import { FormElementTypes } from "@lib/types";
 import { customTranslate } from "@lib/i18nHelpers";
-import { sortByLayout } from "@lib/utils/form-builder";
-import { getLayoutFromGroups } from "@lib/utils/form-builder/groupedFormHelpers";
+import { sortByGroups } from "@lib/utils/form-builder";
 
 const specialChars = ["=", "+", "-", "@"];
-
-const sortByGroups = ({
-  formResponseSubmissions: formResponseSubmissions,
-}: {
-  formResponseSubmissions: FormResponseSubmissions;
-}) => {
-  if (!formResponseSubmissions.formRecord.form.groups) {
-    return sortByLayout({
-      layout: formResponseSubmissions.formRecord.form.layout,
-      elements: formResponseSubmissions.formRecord.form.elements,
-    });
-  }
-
-  const layout = getLayoutFromGroups(
-    formResponseSubmissions.formRecord.form,
-    formResponseSubmissions.formRecord.form.groups
-  );
-  return sortByLayout({ layout, elements: formResponseSubmissions.formRecord.form.elements });
-};
 
 export const transform = (formResponseSubmissions: FormResponseSubmissions) => {
   const { t } = customTranslate("common");
   const { submissions } = formResponseSubmissions;
 
-  const sortedElements = sortByGroups({ formResponseSubmissions: formResponseSubmissions });
+  const sortedElements = sortByGroups({
+    form: formResponseSubmissions.formRecord.form,
+    elements: formResponseSubmissions.formRecord.form.elements,
+  });
 
   const header = sortedElements.map((element) => {
     return `${element.properties.titleEn}\n${element.properties.titleFr}${
