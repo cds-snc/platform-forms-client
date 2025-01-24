@@ -26,6 +26,7 @@ export const FormWrapper = ({
   } = useTranslation(["common", "welcome", "confirmation", "form-closed"]);
   const router = useRouter();
 
+  // @todo --- set history + current group
   const values = useMemo(
     () => restoreSession({ id: formRecord.id, language: language as Language }),
     [formRecord.id, language]
@@ -33,7 +34,12 @@ export const FormWrapper = ({
 
   const initialValues = values ? values : undefined;
 
+  // @todo --- pass current group + history
   const { saveProgress } = useGCFormsContext();
+
+  if (initialValues) {
+    // console.log("initialValues", initialValues.currentGroup);
+  }
 
   return (
     <Form

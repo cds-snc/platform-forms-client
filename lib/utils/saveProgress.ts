@@ -18,6 +18,10 @@ export const saveProgress = (
   language: string = "en",
   { id, values, history, currentGroup }: Options
 ) => {
+  if (typeof sessionStorage === "undefined") {
+    return false;
+  }
+
   let STORAGE_KEY = SESSION_STORAGE_KEY;
 
   if (language === "fr") {
@@ -47,6 +51,10 @@ export const restoreProgress = ({
 
   if (language === "fr") {
     STORAGE_KEY = `${SESSION_STORAGE_KEY}-fr`;
+  }
+
+  if (typeof sessionStorage === "undefined") {
+    return false;
   }
 
   const encodedformData = sessionStorage.getItem(STORAGE_KEY);

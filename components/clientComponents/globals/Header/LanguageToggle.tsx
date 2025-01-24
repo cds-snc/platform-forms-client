@@ -1,7 +1,6 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import { useTranslation } from "@i18n/client";
-import Link from "next/link";
 import { usePathname } from "next/navigation";
 
 const LanguageToggle = () => {
@@ -22,15 +21,14 @@ const LanguageToggle = () => {
   }, [pathname, currentLang]);
 
   return (
-    <Link
+    <a
       href={href}
       className="text-right text-base"
       aria-label={`${t("lang-toggle")}: ${currentLang == "en" ? "Français" : "English"}`}
       lang={currentLang === "en" ? "fr" : "en"}
-      prefetch={false}
     >
       {currentLang === "en" ? "Français" : "English"}
-    </Link>
+    </a>
   );
 };
 
