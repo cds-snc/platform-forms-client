@@ -77,14 +77,12 @@ export const Preview = ({
       email: s.deliveryOption?.emailAddress,
     }));
 
-  const { t } = useTranslation(["common", "form-builder", "form-closed"]);
+  const translationNamespaces = ["common", "form-builder", "form-closed"];
+  const { t } = useTranslation(translationNamespaces);
+  const translatedT = useTranslation(translationNamespaces, { lng: translationLanguagePriority }).t;
 
   const language = translationLanguagePriority;
   const currentForm = getRenderedForm(formRecord, language);
-
-  const translatedT = useTranslation(["common", "form-builder", "form-closed"], {
-    lng: language,
-  }).t;
 
   if (!currentForm.length) {
     disableSubmit = true;
