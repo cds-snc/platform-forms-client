@@ -21,6 +21,8 @@ export const EventKeys = {
   openDeleteApiKeyDialog: "open-delete-api-key-dialog",
   openRulesDialog: "open-rules-dialog",
   deleteApiKey: "delete-api-key",
+  liveMessage: "live-message",
+  liveMessageKey: "live-message-key",
 } as const;
 
 export const useCustomEvent = () => {

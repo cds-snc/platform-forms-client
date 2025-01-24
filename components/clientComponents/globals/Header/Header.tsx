@@ -12,6 +12,7 @@ import LanguageToggle from "./LanguageToggle";
 import { YourAccountDropdown } from "./YourAccountDropdown";
 import { LiveMessage } from "@lib/hooks/useLiveMessage";
 import Markdown from "markdown-to-jsx";
+import { LiveRegion } from "../LiveRegion";
 
 type HeaderParams = {
   context?: "admin" | "formBuilder" | "default";
@@ -119,6 +120,7 @@ export const Header = ({ context = "default", className }: HeaderParams) => {
           </nav>
         </div>
         <LiveMessage />
+        <LiveRegion />
       </header>
     </>
   );

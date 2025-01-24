@@ -142,3 +142,9 @@ export const useLiveMessage = () => {
 
   return { speak, speakByKey };
 };
+
+// Or what if each message was a separate function / thing?
+
+// Or try old way, but  as a returned component :)
+
+// Or would moving the string translation bit out into another file help?
