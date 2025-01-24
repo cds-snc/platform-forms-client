@@ -362,7 +362,7 @@ interface FormProps {
   allowGrouping?: boolean | undefined;
   groupHistory?: string[];
   matchedIds?: string[];
-  saveProgress: () => void;
+  saveProgress: (language?: Language) => void;
 }
 
 /**

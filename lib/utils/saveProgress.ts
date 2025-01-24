@@ -7,17 +7,23 @@ export const removeProgressStorage = () => {
   sessionStorage.removeItem(SESSION_STORAGE_KEY);
 };
 
-export const saveProgress = ({
-  id,
-  values,
-  history,
-  currentGroup,
-}: {
+type Options = {
   id: string;
   values: FormValues;
   history: string[];
   currentGroup: string;
-}) => {
+};
+
+export const saveProgress = (
+  language: string = "en",
+  { id, values, history, currentGroup }: Options
+) => {
+  let STORAGE_KEY = SESSION_STORAGE_KEY;
+
+  if (language === "fr") {
+    STORAGE_KEY = `${SESSION_STORAGE_KEY}-fr`;
+  }
+
   const formData = JSON.stringify({
     id: id,
     values: values,
@@ -27,7 +33,7 @@ export const saveProgress = ({
 
   // Save to session storage
   const encodedformDataEn = Buffer.from(formData).toString("base64");
-  sessionStorage.setItem(SESSION_STORAGE_KEY, encodedformDataEn);
+  sessionStorage.setItem(STORAGE_KEY, encodedformDataEn);
 };
 
 export const restoreProgress = ({
@@ -39,7 +45,6 @@ export const restoreProgress = ({
 }): FormValues | false => {
   let STORAGE_KEY = SESSION_STORAGE_KEY;
 
-  // @todo pull from FR session storage
   if (language === "fr") {
     STORAGE_KEY = `${SESSION_STORAGE_KEY}-fr`;
   }

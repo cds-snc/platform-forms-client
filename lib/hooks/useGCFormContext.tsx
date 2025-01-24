@@ -27,6 +27,8 @@ import {
   restoreProgress as restoreSession,
 } from "@lib/utils/saveProgress";
 
+import { toggleSavedValues } from "@i18n/toggleSavedValues";
+
 interface GCFormsContextValueType {
   updateValues: ({ formValues }: { formValues: FormValues }) => void;
   getValues: () => FormValues;
@@ -46,7 +48,7 @@ interface GCFormsContextValueType {
   pushIdToHistory: (groupId: string) => string[];
   clearHistoryAfterId: (groupId: string) => string[];
   getGroupTitle: (groupId: string | null, language: Language) => string;
-  saveProgress: () => void;
+  saveProgress: (language: Language | undefined) => void;
   restoreProgress: (language: Language) => FormValues | false;
 }
 
@@ -169,10 +171,15 @@ export const GCFormsProvider = ({
     return groups?.[groupId]?.[titleLanguageKey] || "";
   };
 
-  const saveProgress = () => {
-    saveToSession({
+  const saveProgress = (language: Language = "en") => {
+    const vals =
+      language === "en"
+        ? values.current
+        : (toggleSavedValues(formRecord.form, { values: values.current }, "en") as FormValues);
+
+    saveToSession(language, {
       id: formRecord.id,
-      values: values.current as FormValues,
+      values: vals,
       history: history.current,
       currentGroup: currentGroup || "",
     });
