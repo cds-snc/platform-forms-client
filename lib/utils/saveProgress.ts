@@ -3,7 +3,7 @@ import { type FormValues } from "@lib/formContext";
 
 export const SESSION_STORAGE_KEY = "form-data";
 
-const removeProgressStorage = () => {
+export const removeProgressStorage = () => {
   sessionStorage.removeItem(SESSION_STORAGE_KEY);
 };
 
@@ -49,7 +49,7 @@ export const restoreProgress = ({
   if (!encodedformData) return false;
 
   // Clear the session storage as we now have the data
-  removeProgressStorage();
+  // removeProgressStorage();
 
   try {
     const formData = Buffer.from(encodedformData, "base64").toString("utf8");
