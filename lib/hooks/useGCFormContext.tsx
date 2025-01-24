@@ -38,6 +38,7 @@ interface GCFormsContextValueType {
   currentGroup: string | null;
   previousGroup: string | null;
   setGroup: (group: string | null) => void;
+  setHistory: (newHistory: string[]) => void;
   handleNextAction: () => void;
   handlePreviousAction: () => void;
   hasNextAction: (group: string) => boolean;
@@ -146,6 +147,10 @@ export const GCFormsProvider = ({
     setCurrentGroup(group);
   };
 
+  const setHistory = (newHistory: string[]) => {
+    history.current = newHistory;
+  };
+
   const getValues = () => {
     return values.current as FormValues;
   };
@@ -201,6 +206,7 @@ export const GCFormsProvider = ({
         currentGroup,
         previousGroup,
         setGroup,
+        setHistory,
         handleNextAction,
         handlePreviousAction,
         hasNextAction,
@@ -236,6 +242,7 @@ export const useGCFormsContext = () => {
       currentGroup: "",
       previousGroup: "",
       setGroup: () => void 0,
+      setHistory: () => void 0,
       hasNextAction: () => void 0,
       isOffBoardSection: () => false,
       handleNextAction: () => void 0,
