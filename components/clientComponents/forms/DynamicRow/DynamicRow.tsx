@@ -7,7 +7,7 @@ import { FormElement } from "@lib/types";
 import { Description } from "@clientComponents/forms";
 import { Button } from "@clientComponents/globals";
 import { useTranslation } from "@i18n/client";
-import { useLiveMessage } from "@lib/hooks/useLiveMessage";
+import { EventKeys, useCustomEvent } from "@lib/hooks/useCustomEvent";
 
 interface DynamicGroupProps {
   name: string;
@@ -61,10 +61,9 @@ export const DynamicGroup = (props: DynamicGroupProps): React.ReactElement => {
   );
   const focusedRow = useRef<number | null>(null);
   const [hasReachedMaxNumberOfRows, setHasReachedMaxNumberOfRows] = useState<boolean>(false);
+  const { Event } = useCustomEvent();
 
   const { t } = useTranslation();
-
-  const { speakByKey } = useLiveMessage();
 
   useEffect(() => {
     if (focusedRow.current !== null) {
@@ -99,7 +98,10 @@ export const DynamicGroup = (props: DynamicGroupProps): React.ReactElement => {
     // Do not subtract one because the rows state has not yet updated it's length when this is called
     focusedRow.current = rows.length;
     // Let an AT user know a new repeating set was added
-    speakByKey("DynamicRowAdded", { title, count: rows.length + 1 });
+    Event.fire(EventKeys.liveMessageObject, {
+      key: "dynamicRowAdded",
+      obj: { title, count: rows.length + 1 },
+    });
   };
 
   const deleteRow = (index: number) => {

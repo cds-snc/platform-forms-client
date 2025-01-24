@@ -22,7 +22,7 @@ export const EventKeys = {
   openRulesDialog: "open-rules-dialog",
   deleteApiKey: "delete-api-key",
   liveMessage: "live-message",
-  liveMessageKey: "live-message-key",
+  liveMessageObject: "live-message-object",
 } as const;
 
 export const useCustomEvent = () => {

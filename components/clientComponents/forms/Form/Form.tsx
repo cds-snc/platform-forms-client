@@ -30,7 +30,6 @@ import { filterShownElements, filterValuesByShownElements } from "@lib/formConte
 import { formHasGroups } from "@lib/utils/form-builder/formHasGroups";
 import { showReviewPage } from "@lib/utils/form-builder/showReviewPage";
 import { useFormDelay } from "@lib/hooks/useFormDelayContext";
-import { EventKeys, useCustomEvent } from "@lib/hooks/useCustomEvent";
 
 interface SubmitButtonProps {
   getFormDelay: () => number;
@@ -163,8 +162,6 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
 
   const { t } = useTranslation();
 
-    const { Event } = useCustomEvent();
-
   // Used to set any values we'd like added for use in the below withFormik handleSubmit().
   useFormValuesChanged();
 
@@ -229,11 +226,6 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
 
       {
         <>
-
-        <button onClick={()=> {
-          Event.fire(EventKeys.liveMessage, { message:"testing it!" });
-        }}>TEST</button>
-
           {showIntro && (
             <RichText>
               {form.introduction &&

@@ -217,6 +217,6 @@
   "cancel": "Cancel",
   "number": "Number",
   "conditional": {
-    "activated": "Control with name {{name}} activated a sub form element"
+    "activated": "Form element with name {{name}} was shown"
   }
 }
