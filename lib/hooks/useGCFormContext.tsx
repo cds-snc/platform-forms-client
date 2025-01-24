@@ -22,7 +22,10 @@ import {
 import { getLocalizedProperty } from "@lib/utils";
 import { Language } from "@lib/types/form-builder-types";
 
-import { toggleSavedValues } from "@i18n/toggleSavedValues";
+import {
+  saveProgress as saveToSession,
+  restoreProgress as restoreSession,
+} from "@lib/utils/saveProgress";
 
 interface GCFormsContextValueType {
   updateValues: ({ formValues }: { formValues: FormValues }) => void;
@@ -56,7 +59,6 @@ export const GCFormsProvider = ({
   children: ReactNode;
   formRecord: PublicFormRecord;
 }) => {
-  const SESSION_STORAGE_KEY = "form-data";
   const groups: GroupsType = formRecord.form.groups || {};
   const initialGroup = groups ? LockedSections.START : null;
   const values = React.useRef({});
@@ -99,7 +101,7 @@ export const GCFormsProvider = ({
   };
 
   const handleNextAction = () => {
-    removeProgressStorage();
+    // removeProgressStorage();
 
     if (!currentGroup) return;
 
@@ -167,75 +169,17 @@ export const GCFormsProvider = ({
     return groups?.[groupId]?.[titleLanguageKey] || "";
   };
 
-  const removeProgressStorage = () => {
-    sessionStorage.removeItem(SESSION_STORAGE_KEY);
-  };
-
   const saveProgress = () => {
-    const formData = JSON.stringify({
+    saveToSession({
       id: formRecord.id,
-      values: values.current,
+      values: values.current as FormValues,
       history: history.current,
-      currentGroup: currentGroup,
+      currentGroup: currentGroup || "",
     });
-
-    const formDataFr = JSON.stringify({
-      id: formRecord.id,
-      values: toggleSavedValues(formRecord.form, { values: values.current }, "en") as FormValues,
-      history: history.current,
-      currentGroup: currentGroup,
-    });
-
-    // Save to session storage
-    const encodedformDataEn = Buffer.from(formData).toString("base64");
-    sessionStorage.setItem(SESSION_STORAGE_KEY, encodedformDataEn);
-
-    const encodedformDataFr = Buffer.from(formDataFr).toString("base64");
-    sessionStorage.setItem(`${SESSION_STORAGE_KEY}-fr`, JSON.stringify(encodedformDataFr));
   };
 
-  const restoreProgress = (language: Language): FormValues | false => {
-    let STORAGE_KEY = SESSION_STORAGE_KEY;
-    if (language === "fr") {
-      STORAGE_KEY = `${SESSION_STORAGE_KEY}-fr`;
-    }
-
-    const encodedformData = sessionStorage.getItem(STORAGE_KEY);
-
-    if (!encodedformData) return false;
-
-    // Clear the session storage as we now have the data
-    removeProgressStorage();
-
-    try {
-      const formData = Buffer.from(encodedformData, "base64").toString("utf8");
-
-      if (!formData) return false;
-
-      const parsedData = JSON.parse(formData);
-
-      if (parsedData.id === formRecord.id) {
-        history.current = parsedData.history;
-
-        if (parsedData.currentGroup !== currentGroup) {
-          setCurrentGroup(parsedData.currentGroup);
-        }
-
-        sessionStorage.setItem(
-          SESSION_STORAGE_KEY,
-          JSON.stringify({
-            restored: true,
-            ...parsedData.values,
-          })
-        );
-
-        return parsedData.values;
-      }
-    } catch (e) {
-      return false;
-    }
-
-    return false;
+  const restoreProgress = (language: Language) => {
+    return restoreSession({ id: formRecord.id, language });
   };
 
   return (

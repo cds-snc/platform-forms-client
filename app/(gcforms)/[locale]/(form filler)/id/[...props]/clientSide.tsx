@@ -6,10 +6,13 @@ import { FormRecord, TypeOmit } from "@lib/types";
 import { Form } from "@clientComponents/forms/Form/Form";
 import { Language } from "@lib/types/form-builder-types";
 
-import { useEffect, useState, type JSX } from "react";
+import { type JSX } from "react";
 import { useGCFormsContext } from "@lib/hooks/useGCFormContext";
-import { FormValues } from "@lib/formContext";
 import { SaveProgressButton } from "@clientComponents/forms/SaveProgressButton/SaveProgressButton";
+
+import { restoreProgress as restoreSession } from "@lib/utils/saveProgress";
+
+const values = restoreSession({ id: "cm6aosiep0002nc6nszp3p259", language: "en" as Language });
 
 export const FormWrapper = ({
   formRecord,
@@ -27,17 +30,22 @@ export const FormWrapper = ({
   } = useTranslation(["common", "welcome", "confirmation", "form-closed"]);
   const router = useRouter();
 
-  const { restoreProgress } = useGCFormsContext();
-  const [initialValues, setInitialValues] = useState<FormValues | undefined>();
+  // const { restoreProgress } = useGCFormsContext();
+
+  const initialValues = values ? values : undefined;
+
+  //const [initialValues, setInitialValues] = useState<FormValues | undefined>();
 
   const { saveProgress } = useGCFormsContext();
 
+  /*
   useEffect(() => {
     const restoredValues = restoreProgress(language as Language);
     if (restoredValues) {
       setInitialValues(restoredValues);
     }
   }, [restoreProgress, language]);
+  */
 
   return (
     <Form
