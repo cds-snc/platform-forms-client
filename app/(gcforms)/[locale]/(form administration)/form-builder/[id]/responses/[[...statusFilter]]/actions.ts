@@ -288,7 +288,6 @@ export const getSubmissionsByFormat = AuthenticatedAction(
       const formResponse = {
         formRecord: fullFormTemplate,
         submissions: responses,
-        securityAttribute: fullFormTemplate.securityAttribute,
       } as FormResponseSubmissions;
 
       const responseIdStatusArray = queryResult.map((item) => {
