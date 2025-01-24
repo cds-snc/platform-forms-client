@@ -217,6 +217,6 @@
   "cancel": "Annuler",
   "number": "Numéro",
   "conditional": {
-    "activated": "[FR]Control with name {{name}} activated a sub form element"
+    "activated": "[FR]Form element with name {{name}} was shown"
   }
 }
