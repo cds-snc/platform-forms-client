@@ -1,6 +1,6 @@
 import { serverTranslation } from "@i18n";
-import { authCheckAndThrow } from "@lib/actions";
-import { checkPrivilegesAsBoolean } from "@lib/privileges";
+import { authorization } from "@lib/privileges";
+import { AuthenticatedPage } from "@lib/pages/auth";
 import { Metadata } from "next";
 import { ManageSettingForm } from "../components/server/ManageSettingForm";
 
@@ -17,12 +17,7 @@ export async function generateMetadata(props: {
   };
 }
 
-export default async function Page() {
-  const { ability } = await authCheckAndThrow();
-  checkPrivilegesAsBoolean(ability, [{ action: "create", subject: "Setting" }], {
-    redirect: true,
-  });
-
+export default AuthenticatedPage([authorization.canManageSettings], async () => {
   const { t } = await serverTranslation("admin-settings");
 
   return (
@@ -31,4 +26,4 @@ export default async function Page() {
       <ManageSettingForm />
     </>
   );
-}
+});

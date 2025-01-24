@@ -5,6 +5,38 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.31.13](https://github.com/cds-snc/platform-forms-client/compare/v3.31.12...v3.31.13) (2025-01-23)
+
+
+### Bug Fixes
+
+* Add missing Close button to Rules dialog. ([#5019](https://github.com/cds-snc/platform-forms-client/issues/5019)) ([5a8f313](https://github.com/cds-snc/platform-forms-client/commit/5a8f313e4e1963fedb66166a5787130955de4891))
+* Correct "required", "no selection", "Select file" in preview being only english. ([#5021](https://github.com/cds-snc/platform-forms-client/issues/5021)) ([6a81c68](https://github.com/cds-snc/platform-forms-client/commit/6a81c68ce0fe150a202dc11a69f09e1e5cb10907))
+* global error handling ([#5022](https://github.com/cds-snc/platform-forms-client/issues/5022)) ([27a3db5](https://github.com/cds-snc/platform-forms-client/commit/27a3db5061267e7af2f371907587467ff078da0d))
+* Prevent invitations to draft forms ([#5017](https://github.com/cds-snc/platform-forms-client/issues/5017)) ([22f6067](https://github.com/cds-snc/platform-forms-client/commit/22f6067d14075806e57ea8b43cd5505f6eb12031))
+* Updates number component to have more consistent UX ([#4897](https://github.com/cds-snc/platform-forms-client/issues/4897)) ([2d0c635](https://github.com/cds-snc/platform-forms-client/commit/2d0c635c007840b9ab685cff5f13f95c0b45ebdf))
+
+
+### Miscellaneous Chores
+
+* Add notes column to User ([#5023](https://github.com/cds-snc/platform-forms-client/issues/5023)) ([74bc965](https://github.com/cds-snc/platform-forms-client/commit/74bc96579ab936d04ac948487b5c03cf398a6c60))
+* **deps:** update all non-major github action dependencies ([#5003](https://github.com/cds-snc/platform-forms-client/issues/5003)) ([d95e0a6](https://github.com/cds-snc/platform-forms-client/commit/d95e0a6a1d5b739d2cf1ca80d68a6959c59fbdee))
+* **deps:** update all patch dependencies ([#5002](https://github.com/cds-snc/platform-forms-client/issues/5002)) ([3c9bbb1](https://github.com/cds-snc/platform-forms-client/commit/3c9bbb1cda5edc9f57f0209827e61840fdf0c832))
+* handle panel clicks for sub elements ([#5015](https://github.com/cds-snc/platform-forms-client/issues/5015)) ([54ebb7f](https://github.com/cds-snc/platform-forms-client/commit/54ebb7f623542912e1e76efecc49d21cb578054d))
+* remove locale prop for Language toggle ([#5020](https://github.com/cds-snc/platform-forms-client/issues/5020)) ([7485d83](https://github.com/cds-snc/platform-forms-client/commit/7485d83f79a5db4e8e09502a921914ed83de7141))
+
+## [3.31.12](https://github.com/cds-snc/platform-forms-client/compare/v3.31.11...v3.31.12) (2025-01-20)
+
+
+### Bug Fixes
+
+* Unescape question in validation message ([#5011](https://github.com/cds-snc/platform-forms-client/issues/5011)) ([a35a104](https://github.com/cds-snc/platform-forms-client/commit/a35a10489d63bf16ebc46a11a068e004d3c6bc58))
+
+
+### Miscellaneous Chores
+
+* Add missing "example" string ([#5007](https://github.com/cds-snc/platform-forms-client/issues/5007)) ([67bc168](https://github.com/cds-snc/platform-forms-client/commit/67bc168b262a42ef5e6ed828ef11ada4da685d00))
+
 ## [3.31.11](https://github.com/cds-snc/platform-forms-client/compare/v3.31.10...v3.31.11) (2025-01-20)
 
 

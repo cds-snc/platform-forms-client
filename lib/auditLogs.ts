@@ -37,6 +37,8 @@ export enum AuditLogEvent {
   UserTooManyFailedAttempts = "UserTooManyFailedAttempts",
   GrantPrivilege = "GrantPrivilege",
   RevokePrivilege = "RevokePrivilege",
+  CreateSecurityAnswers = "CreateSecurityAnswers",
+  ChangeSecurityAnswers = "ChangeSecurityAnswers",
   // Application events
   EnableFlag = "EnableFlag",
   DisableFlag = "DisableFlag",
@@ -49,8 +51,9 @@ export enum AuditLogEvent {
   AccessDenied = "AccessDenied",
   // API Management
   CreateAPIKey = "CreateAPIKey",
-  RefreshAPIKey = "RefreshAPIKey",
   DeleteAPIKey = "DeleteAPIKey",
+  IncreaseThrottlingRate = "IncreaseThrottlingRate",
+  ResetThrottlingRate = "ResetThrottlingRate",
 }
 export type AuditLogEventStrings = keyof typeof AuditLogEvent;
 
@@ -86,12 +89,11 @@ const getQueueURL = async () => {
 };
 
 export const logEvent = async (
-  userId: string | Promise<string>,
+  userId: string,
   subject: { type: keyof typeof AuditSubjectType; id?: string },
   event: AuditLogEventStrings,
   description?: string
 ): Promise<void> => {
-  if (userId instanceof Promise) userId = await userId;
   const auditLog = JSON.stringify({
     userId,
     event,

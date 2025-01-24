@@ -1,6 +1,6 @@
 {
   "name": "gcforms",
-  "version": "3.31.11",
+  "version": "3.31.13",
   "private": true,
   "prisma": {
     "seed": "tsx prisma/seeds/seed_cli.ts --environment=development"
@@ -144,8 +144,8 @@
     "@types/node": "^20.11.6",
     "@types/node-fetch": "^2.6.9",
     "@types/pg": "^8.10.9",
-    "@types/react": "19.0.3",
-    "@types/react-dom": "19.0.2",
+    "@types/react": "19.0.7",
+    "@types/react-dom": "19.0.3",
     "@types/unorm": "^1",
     "@types/uuid": "^8.3.4",
     "autoprefixer": "^10.4.16",
@@ -198,7 +198,7 @@
   ],
   "packageManager": "yarn@4.6.0",
   "resolutions": {
-    "@types/react": "19.0.3",
-    "@types/react-dom": "19.0.2"
+    "@types/react": "19.0.7",
+    "@types/react-dom": "19.0.3"
   }
 }
