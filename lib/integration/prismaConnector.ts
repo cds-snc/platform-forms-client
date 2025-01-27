@@ -44,7 +44,7 @@ export const prismaErrors = <Error, T>(e: Error, returnValue: T): T => {
 
   // Return the backup value if a Prisma Error occurs
   if (e instanceof Prisma.PrismaClientKnownRequestError) {
-    logMessage.warn(e);
+    logMessage.info(e);
     return returnValue;
   }
 
