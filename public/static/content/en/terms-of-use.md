@@ -87,4 +87,4 @@ We ask that clients not interfere with the format of JSON files, as any updates 
 
 For questions related to these terms of use, [contact us](/en/contact).
 
-**Last update:** December 3, 2024
+**Last update:** January 27, 2025
