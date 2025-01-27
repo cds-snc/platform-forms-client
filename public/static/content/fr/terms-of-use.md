@@ -85,4 +85,4 @@ Nous vous demandons de ne pas intervenir sur le format des fichiers JSON, car to
 
 Pour toute question en lien avec les présentes conditions d’utilisation, veuillez [nous contacter](/fr/contact).
 
-**Dernière mise à jour :** 3 décembre 2024
+**Dernière mise à jour :** 27 janvier 2025
