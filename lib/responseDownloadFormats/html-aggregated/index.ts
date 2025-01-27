@@ -1,4 +1,4 @@
-import { FormResponseSubmissions } from "../types";
+import { type FormResponseSubmissions } from "../types";
 import { ResponseHtmlAggregated } from "./components/ResponseHTMLAggregated";
 import { getOrigin } from "@lib/origin";
 
