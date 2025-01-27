@@ -1,15 +1,15 @@
-import { SecurityAttribute } from "@lib/types";
+import { FormRecord, SecurityAttribute } from "@lib/types";
 import React from "react";
 import { ClipboardJSScript, UpdateDLStylesScript } from "../scripts";
 import { ProtectedWarning } from "./ProtectedWarning";
 import Fip from "./Fip";
 import { ResponseSection } from "./ResponseSection";
 import { css } from "../css/compiled";
-import { Form, Submission } from "../../types";
+import { Submission } from "../../types";
 
 interface HTMLDownloadProps {
   response: Submission;
-  form: Form;
+  form: FormRecord;
   confirmationCode: string;
   responseID: string;
   createdAt: number;
