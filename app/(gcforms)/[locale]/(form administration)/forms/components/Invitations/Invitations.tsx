@@ -8,7 +8,7 @@ import { Trans } from "react-i18next";
 import { Button } from "@clientComponents/globals";
 import { toast } from "@formBuilder/components/shared/Toast";
 
-export const Invitations = ({ invitations }: { invitations: Invitation[] }) => {
+export const Invitations = ({ invitations }: { invitations: Omit<Invitation, "invitedBy">[] }) => {
   const { t } = useTranslation("manage-form-access");
   const router = useRouter();
 
