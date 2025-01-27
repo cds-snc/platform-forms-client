@@ -26,9 +26,9 @@ export const FileInput = (props: FileInputProps): React.ReactElement => {
   const [field, meta, helpers] = useField(props);
   const { setValue } = helpers;
 
-  const { t } = useTranslation("common");
+  const { name, disabled, allowMulti, required, ariaDescribedBy, lang } = props;
 
-  const { name, disabled, allowMulti, required, ariaDescribedBy } = props;
+  const { t } = useTranslation("common", { lng: lang });
 
   const fileInputRef = useRef<HTMLInputElement>(null);
   const { value } = field;

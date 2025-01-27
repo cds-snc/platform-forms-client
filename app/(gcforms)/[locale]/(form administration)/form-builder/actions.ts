@@ -2,7 +2,6 @@
 
 import { promises as fs } from "fs";
 import { AuthenticatedAction } from "@lib/actions";
-import { getAbility } from "@lib/privileges";
 import {
   DeliveryOption,
   FormProperties,
@@ -24,7 +23,6 @@ import {
 } from "@lib/templates";
 import { serverTranslation } from "@i18n";
 import { revalidatePath } from "next/cache";
-import { checkOne } from "@lib/cache/flags";
 import { isValidDateString } from "@lib/utils/date/isValidDateString";
 import { allowedTemplates, TemplateTypes } from "@lib/utils/form-builder";
 
@@ -40,14 +38,17 @@ export type CreateOrUpdateTemplateType = {
 // Public facing functions - they can be used by anyone who finds the associated server action identifer
 
 export const createOrUpdateTemplate = AuthenticatedAction(
-  async ({
-    id,
-    formConfig,
-    name,
-    deliveryOption,
-    securityAttribute,
-    formPurpose,
-  }: CreateOrUpdateTemplateType): Promise<{
+  async (
+    session,
+    {
+      id,
+      formConfig,
+      name,
+      deliveryOption,
+      securityAttribute,
+      formPurpose,
+    }: CreateOrUpdateTemplateType
+  ): Promise<{
     formRecord: FormRecord | null;
     error?: string;
   }> => {
@@ -65,10 +66,8 @@ export const createOrUpdateTemplate = AuthenticatedAction(
         });
       }
 
-      const ability = await getAbility();
-
       const response = await createDbTemplate({
-        userID: ability.user.id,
+        userID: session.user.id,
         formConfig: formConfig,
         name: name,
         deliveryOption: deliveryOption,
@@ -90,21 +89,24 @@ export const createOrUpdateTemplate = AuthenticatedAction(
 );
 
 export const updateTemplate = AuthenticatedAction(
-  async ({
-    id: formID,
-    formConfig,
-    name,
-    deliveryOption,
-    securityAttribute,
-    formPurpose,
-  }: {
-    id: string;
-    formConfig: FormProperties;
-    name?: string;
-    deliveryOption?: DeliveryOption;
-    securityAttribute?: SecurityAttribute;
-    formPurpose?: FormPurpose;
-  }): Promise<{
+  async (
+    _,
+    {
+      id: formID,
+      formConfig,
+      name,
+      deliveryOption,
+      securityAttribute,
+      formPurpose,
+    }: {
+      id: string;
+      formConfig: FormProperties;
+      name?: string;
+      deliveryOption?: DeliveryOption;
+      securityAttribute?: SecurityAttribute;
+      formPurpose?: FormPurpose;
+    }
+  ): Promise<{
     formRecord: FormRecord | null;
     error?: string;
   }> => {
@@ -130,19 +132,22 @@ export const updateTemplate = AuthenticatedAction(
 );
 
 export const updateTemplatePublishedStatus = AuthenticatedAction(
-  async ({
-    id: formID,
-    isPublished,
-    publishReason,
-    publishFormType,
-    publishDescription,
-  }: {
-    id: string;
-    isPublished: boolean;
-    publishReason: string;
-    publishFormType: string;
-    publishDescription: string;
-  }): Promise<{
+  async (
+    _,
+    {
+      id: formID,
+      isPublished,
+      publishReason,
+      publishFormType,
+      publishDescription,
+    }: {
+      id: string;
+      isPublished: boolean;
+      publishReason: string;
+      publishFormType: string;
+      publishDescription: string;
+    }
+  ): Promise<{
     formRecord: FormRecord | null;
     error?: string;
   }> => {
@@ -170,13 +175,16 @@ export const updateTemplatePublishedStatus = AuthenticatedAction(
 );
 
 export const updateTemplateFormPurpose = AuthenticatedAction(
-  async ({
-    id: formID,
-    formPurpose,
-  }: {
-    id: string;
-    formPurpose: string;
-  }): Promise<{
+  async (
+    _,
+    {
+      id: formID,
+      formPurpose,
+    }: {
+      id: string;
+      formPurpose: string;
+    }
+  ): Promise<{
     formRecord: FormRecord | null;
     error?: string;
   }> => {
@@ -196,13 +204,16 @@ export const updateTemplateFormPurpose = AuthenticatedAction(
 );
 
 export const updateTemplateSecurityAttribute = AuthenticatedAction(
-  async ({
-    id: formID,
-    securityAttribute,
-  }: {
-    id: string;
-    securityAttribute: SecurityAttribute;
-  }): Promise<{
+  async (
+    _,
+    {
+      id: formID,
+      securityAttribute,
+    }: {
+      id: string;
+      securityAttribute: SecurityAttribute;
+    }
+  ): Promise<{
     formRecord: FormRecord | null;
     error?: string;
   }> => {
@@ -222,15 +233,18 @@ export const updateTemplateSecurityAttribute = AuthenticatedAction(
 );
 
 export const closeForm = AuthenticatedAction(
-  async ({
-    id: formID,
-    closingDate,
-    closedDetails,
-  }: {
-    id: string;
-    closingDate: string | null;
-    closedDetails?: ClosedDetails;
-  }): Promise<{
+  async (
+    _,
+    {
+      id: formID,
+      closingDate,
+      closedDetails,
+    }: {
+      id: string;
+      closingDate: string | null;
+      closedDetails?: ClosedDetails;
+    }
+  ): Promise<{
     formID: string;
     closingDate: string | null;
     error?: string;
@@ -259,13 +273,16 @@ export const closeForm = AuthenticatedAction(
 );
 
 export const updateTemplateUsers = AuthenticatedAction(
-  async ({
-    id: formID,
-    users,
-  }: {
-    id: string;
-    users: { id: string }[];
-  }): Promise<{
+  async (
+    _,
+    {
+      id: formID,
+      users,
+    }: {
+      id: string;
+      users: { id: string }[];
+    }
+  ): Promise<{
     success: boolean;
     error?: string;
   }> => {
@@ -289,13 +306,16 @@ export const updateTemplateUsers = AuthenticatedAction(
 );
 
 export const updateTemplateDeliveryOption = AuthenticatedAction(
-  async ({
-    id: formID,
-    deliveryOption,
-  }: {
-    id: string;
-    deliveryOption: DeliveryOption | undefined;
-  }): Promise<{
+  async (
+    _,
+    {
+      id: formID,
+      deliveryOption,
+    }: {
+      id: string;
+      deliveryOption: DeliveryOption | undefined;
+    }
+  ): Promise<{
     formRecord: FormRecord | null;
     error?: string;
   }> => {
@@ -319,11 +339,14 @@ export const updateTemplateDeliveryOption = AuthenticatedAction(
 );
 
 export const sendResponsesToVault = AuthenticatedAction(
-  async ({
-    id: formID,
-  }: {
-    id: string;
-  }): Promise<{
+  async (
+    _,
+    {
+      id: formID,
+    }: {
+      id: string;
+    }
+  ): Promise<{
     success?: boolean;
     error?: string;
   }> => {
@@ -376,10 +399,6 @@ export const getTranslatedDynamicRowProperties = async () => {
     removeButtonTextFr: fr("dynamicRow.defaultRemoveButtonText"),
   };
 };
-
-export async function checkFlag(id: string) {
-  return checkOne(id);
-}
 
 export const loadBlockTemplate = async ({
   type,
