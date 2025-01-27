@@ -130,10 +130,10 @@ export const Branding = ({ hasBrandingRequestForm }: { hasBrandingRequestForm: b
           <p className="mb-2 text-sm font-bold">{t("branding.notFound")}</p>
           <p className="text-sm">
             <Link
-              href={`https://articles.alpha.canada.ca/forms-formulaires/${
+              href={`https://forms-formulaires.alpha.canada.ca/${
                 i18n.language === "fr"
-                  ? "fr/demander-une-autre-image-de-marque/"
-                  : "request-alternate-branding/"
+                  ? "fr/id/cm6f4sci50083vt68djorvzjg/"
+                  : "en/id/cm6f4sci50083vt68djorvzjg/"
               }`}
               passHref
               rel="noopener noreferrer"
