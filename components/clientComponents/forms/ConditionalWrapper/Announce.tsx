@@ -5,6 +5,7 @@ import { LocalizedElementProperties } from "@lib/types/form-builder-types";
 import { useCallback, useRef } from "react";
 import { useTranslation } from "react-i18next";
 
+// Component created to  keep all the translation related and event code separate
 export const Announce = ({
   children,
   element,

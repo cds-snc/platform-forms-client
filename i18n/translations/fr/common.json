@@ -112,7 +112,7 @@
   "dynamicRow": {
     "add": "Ajouter",
     "delete": "Supprimer",
-    "addedMessage": "[FR]Added a copy of {{title}}"
+    "addedMessage": "[FR]Adding {{rowLabelTitle}} - {{rowLabelCount}} for {{rowTitle}}"
   },
   "acceptableUsePage": {
     "agree": "Accepter",
