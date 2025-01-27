@@ -71,10 +71,10 @@ export const inviteUserByEmail = async (email: string, formId: string, message: 
     .then((previousInvitation) => {
       if (previousInvitation && previousInvitation.expires < new Date()) {
         _deleteInvitation(previousInvitation.id);
-        return _createInvitation(email, formId);
+        return _createInvitation(email, formId, user.id);
       }
       if (previousInvitation === null) {
-        return _createInvitation(email, formId);
+        return _createInvitation(email, formId, user.id);
       }
       return previousInvitation;
     })
@@ -86,7 +86,7 @@ export const inviteUserByEmail = async (email: string, formId: string, message: 
     user.id,
     { type: "Form", id: invitation.templateId },
     "InvitationCreated",
-    `${user.id} invited ${invitation.email}`
+    `${user.email} invited ${invitation.email}`
   );
 
   await _sendInvitationEmail(sender, invitation, message, template.formRecord);
@@ -124,7 +124,7 @@ const _retrieveFormInvitationByEmail = async (email: string, formId: string) => 
  * @param formId
  * @returns
  */
-const _createInvitation = async (email: string, formId: string) => {
+const _createInvitation = async (email: string, formId: string, senderUserId: string) => {
   const expires = new Date();
   expires.setDate(expires.getDate() + 7);
 
@@ -134,6 +134,7 @@ const _createInvitation = async (email: string, formId: string) => {
         email,
         templateId: formId,
         expires,
+        invitedBy: senderUserId,
       },
     })
     .catch((e) => {
