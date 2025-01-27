@@ -5,10 +5,10 @@ import { useTranslation } from "@i18n/client";
 import { FormRecord, TypeOmit } from "@lib/types";
 import { Form } from "@clientComponents/forms/Form/Form";
 import { Language } from "@lib/types/form-builder-types";
-import { useMemo, type JSX } from "react";
+import { useEffect, useMemo, type JSX } from "react";
 import { useGCFormsContext } from "@lib/hooks/useGCFormContext";
 import { SaveProgressButton } from "@clientComponents/forms/SaveProgressButton/SaveProgressButton";
-import { restoreProgress as restoreSession } from "@lib/utils/saveProgress";
+import { restoreProgress as restoreSession, removeProgressStorage } from "@lib/utils/saveProgress";
 
 export const FormWrapper = ({
   formRecord,
@@ -26,14 +26,21 @@ export const FormWrapper = ({
   } = useTranslation(["common", "confirmation", "form-closed"]);
   const router = useRouter();
 
+  const { saveProgress } = useGCFormsContext();
+
   const values = useMemo(
     () => restoreSession({ id: formRecord.id, language: language as Language }),
     [formRecord.id, language]
   );
 
-  const initialValues = values ? values : undefined;
+  useEffect(() => {
+    if (values) {
+      // Clear session storage after values are restored
+      removeProgressStorage();
+    }
+  }, [values, formRecord.id]);
 
-  const { saveProgress } = useGCFormsContext();
+  const initialValues = values ? values : undefined;
 
   return (
     <Form
