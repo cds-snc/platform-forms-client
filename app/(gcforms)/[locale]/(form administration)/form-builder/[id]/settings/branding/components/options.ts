@@ -226,11 +226,20 @@ export const options = [
   },
   {
     name: "ircc",
-    urlEn: " https://www.canada.ca/en/immigration-refugees-citizenship.html",
-    urlFr: " https://www.canada.ca/fr/immigration-refugies-citoyennete.html",
+    urlEn: "https://www.canada.ca/en/immigration-refugees-citizenship.html",
+    urlFr: "https://www.canada.ca/fr/immigration-refugies-citoyennete.html",
     logoEn: "/img/branding/IRCC_EN.svg",
     logoFr: "/img/branding/IRCC_FR.svg",
     logoTitleEn: "Immigration, Refugees and Citizenship Canada",
     logoTitleFr: "Immigration, Réfugiés et Citoyenneté Canada",
+  },
+  {
+    name: "cbsa",
+    urlEn: "https://www.cbsa-asfc.gc.ca/menu-eng.html",
+    urlFr: "https://www.cbsa-asfc.gc.ca/menu-fra.html",
+    logoEn: "/img/branding/cbsa_en.svg",
+    logoFr: "/img/branding/cbsa_fr.svg",
+    logoTitleEn: "Canada Border Services Agency",
+    logoTitleFr: "Agence des services frontaliers du Canada",
   },
 ];
