@@ -23,7 +23,7 @@ export const FormWrapper = ({
   const {
     t,
     i18n: { language },
-  } = useTranslation(["common", "welcome", "confirmation", "form-closed"]);
+  } = useTranslation(["common", "confirmation", "form-closed"]);
   const router = useRouter();
 
   const { restoreProgress } = useGCFormsContext();
