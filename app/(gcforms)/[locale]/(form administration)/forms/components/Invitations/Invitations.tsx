@@ -45,7 +45,7 @@ export const Invitations = ({ invitations }: { invitations: Omit<Invitation, "in
 
   return (
     <div className="mb-4 flex flex-col gap-2">
-      {invitations.map((invitation: Invitation) => {
+      {invitations.map((invitation: Omit<Invitation, "invitedBy">) => {
         return (
           <div key={invitation.id} className="rounded-md bg-violet-50 p-4">
             <StarIcon className="mr-1 inline-block size-8" />
