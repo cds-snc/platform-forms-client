@@ -1,13 +1,6 @@
-import { FormElement } from "@cdssnc/gcforms-types";
-import { useTranslation } from "@i18n/client";
 import { EventKeys, useCustomEvent } from "@lib/hooks/useCustomEvent";
 import { logMessage } from "@lib/logger";
-import { useTemplateStore } from "@lib/store/useTemplateStore";
-import { LocalizedElementProperties } from "@lib/types/form-builder-types";
 import { useCallback, useEffect, useRef } from "react";
-
-// TODO:
-// -clean up getMessage stuff
 
 export enum Priority {
   LOW = "polite",
@@ -20,11 +13,6 @@ export interface Message {
 }
 
 export const LiveRegion = () => {
-  const { localizeField, translationLanguagePriority } = useTemplateStore((s) => ({
-    localizeField: s.localizeField,
-    translationLanguagePriority: s.translationLanguagePriority,
-  }));
-  const { t } = useTranslation();
   const { Event } = useCustomEvent();
 
   // Use refs to avoid unnecessary rerenders of this component
@@ -60,67 +48,13 @@ export const LiveRegion = () => {
     }
   }, []);
 
-  //////////////////////////////////////////////////
-  const getConditionalActivatedString = useCallback(
-    (element: FormElement) => {
-      return t("conditional.activated", {
-        name: element.properties[
-          localizeField(LocalizedElementProperties.TITLE, translationLanguagePriority)
-        ],
-      });
-    },
-    [t, localizeField, translationLanguagePriority]
-  );
-
-  const getDynamicRowAddedString = useCallback(
-    ({ title, count }: { title: string; count: number }) => {
-      return t("dynamicRow.addedMessage", { title, count });
-    },
-    [t]
-  );
-
-  /* eslint-disable @typescript-eslint/no-explicit-any */
-  const getMessage = useCallback(
-    (key: string, obj: any) => {
-      // TODO generic  for type?
-      try {
-        switch (key) {
-          case "conditionalActivated":
-            return getConditionalActivatedString(obj);
-          case "dynamicRowAdded":
-            return getDynamicRowAddedString(obj);
-          default:
-            return "";
-        }
-      } catch (e) {
-        logMessage.error("Error looking up live message");
-        return "";
-      }
-    },
-    [getConditionalActivatedString, getDynamicRowAddedString]
-  );
-
-  const speakObject = useCallback(
-    (detail: any) => {
-      if (!detail || !detail.key) {
-        return;
-      }
-      const message = getMessage(detail.key, detail.obj);
-      speak({ message, priority: detail.priority });
-    },
-    [getMessage, speak]
-  );
-  //////////////////////////////////////////////////
-
   useEffect(() => {
     Event.on(EventKeys.liveMessage, speak);
-    Event.on(EventKeys.liveMessageObject, speakObject);
 
     return () => {
       Event.off(EventKeys.liveMessage, speak);
-      Event.off(EventKeys.liveMessageObject, speakObject);
     };
-  }, [Event, speak, getMessage, speakObject]);
+  }, [Event, speak]);
 
   // Prime the live regions and add redundant aria-live attribute for best AT support
   return (
