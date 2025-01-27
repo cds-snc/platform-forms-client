@@ -54,7 +54,15 @@
     "validGovEmail": "Entrer une adresse courriel valide du gouvernement.",
     "notSameAsUserEmail": "Il ne peut s'agir de votre propre adresse courriel. Entrez le courriel de la personne responsable de votre équipe. S'il s'agit de vous, ajoutez un·e collègue.",
     "min-length-4-characters": "Doit comporter au moins 4 caractères.",
-    "MB": "Mo"
+    "MB": "Mo",
+    "error-list": {
+      "default": "Saisissez une réponse pour : {{question}}",
+      "select": "Sélectionnez une option pour : {{question}}",
+      "checkbox": "Sélectionnez une ou plusieurs options pour : {{question}}",
+      "check-all": "Cochez toutes les cases pour : {{question}}",
+      "file-input": "Choisissez un fichier pour : {{question}}",
+      "date-invalid": "Entrer une date valide pour: {{question}}"
+    }
   },
   "required": "obligatoire",
   "all-required": "toutes les cases à cocher sont obligatoires",
@@ -205,5 +213,6 @@
     "text1": "Les soumissions sont acceptées jusqu'au :",
     "text2": "{{day}} {{month}} {{year}} à {{hour}} h {{minute}} HE"
   },
-  "cancel": "Annuler"
+  "cancel": "Annuler",
+  "number": "Numéro"
 }

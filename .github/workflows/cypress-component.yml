@@ -34,14 +34,14 @@ jobs:
         run: yarn workspaces focus gcforms flag_initialization
 
       - name: Cypress Component Tests
-        uses: cypress-io/github-action@57b70560982e6a11d23d4b8bec7f8a487cdbb71b # v6.7.8
+        uses: cypress-io/github-action@b86ab8d33218c786a7c2d17dfea9724eb8aa8b6b # v6.7.9
         with:
           # we have already installed all dependencies above
           install: false
           browser: chrome
           component: true
           headed: false
-      - uses: actions/upload-artifact@6f51ac03b9356f520e9adb1b1b7802705f340c2b # v4.5.0
+      - uses: actions/upload-artifact@65c4c4a1ddee5b72f698fdd19549f0f0fb45cf08 # v4.6.0
         if: failure()
         with:
           name: cypress-screenshots

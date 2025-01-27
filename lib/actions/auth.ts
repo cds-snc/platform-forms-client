@@ -3,9 +3,10 @@ import { auth } from "@lib/auth";
 import { redirect } from "next/navigation";
 import { getCurrentLanguage } from "@i18n";
 import { getAbility } from "@lib/privileges";
+import { Session } from "next-auth";
 
 export const AuthenticatedAction = <Input extends unknown[], R>(
-  action: (...args: Input) => Promise<R>
+  action: (session: Session, ...args: Input) => Promise<R>
 ) => {
   return async (...args: Input) => {
     const session = await auth();
@@ -13,7 +14,7 @@ export const AuthenticatedAction = <Input extends unknown[], R>(
       const language = await getCurrentLanguage();
       redirect(`/${language}/auth/login`);
     }
-    return action(...args);
+    return action(session, ...args);
   };
 };
 

@@ -1,5 +1,6 @@
 import { prisma } from "@lib/integration/prismaConnector";
 import { prismaMock } from "@jestUtils";
+import { mockAuthorizationPass, mockGetAbility } from "__utils__/authorization";
 import { getUser } from "@lib/users";
 import { getTemplateWithAssociatedUsers } from "@lib/templates";
 import { sendEmail } from "@lib/integration/notifyConnector";
@@ -15,7 +16,6 @@ import {
 import { inviteToFormsEmailTemplate } from "../emailTemplates/inviteToFormsEmailTemplate";
 import { inviteToCollaborateEmailTemplate } from "../emailTemplates/inviteToCollaborateEmailTemplate";
 import { mockAppUser } from "./fixtures/AppUser";
-import { mockAbility } from "./fixtures/Ability";
 import { mockTemplateWithUsers } from "./fixtures/TemplateWithUsers";
 import { mockInvitation } from "./fixtures/Invitation";
 import { mockUser } from "./fixtures/User";
@@ -26,20 +26,25 @@ import { cancelInvitation } from "../cancelInvitation";
 import { declineInvitation } from "../declineInvitation";
 import { logEvent } from "@lib/auditLogs";
 import { mockTemplate } from "./fixtures/Template";
-
+jest.mock("@lib/privileges");
 jest.mock("@lib/integration/prismaConnector");
 jest.mock("@lib/integration/notifyConnector");
 jest.mock("@lib/logger");
 jest.mock("@lib/auditLogs");
 jest.mock("@lib/users");
 jest.mock("@lib/templates");
-jest.mock("@lib/origin");
 jest.mock("@lib/invitations/emailTemplates/inviteToFormsEmailTemplate");
 jest.mock("@lib/invitations/emailTemplates/inviteToCollaborateEmailTemplate");
 jest.mock("@lib/invitations/emailTemplates/ownerAddedEmailTemplate");
 
+const userId = "test-user-id";
+jest.mock("@lib/origin", () => ({
+  getOrigin: jest.fn().mockReturnValue("http://localhost:3000"),
+}));
+
 describe("Invitations", () => {
   beforeEach(() => {
+    mockAuthorizationPass(userId);
     jest.clearAllMocks();
   });
 
@@ -51,9 +56,9 @@ describe("Invitations", () => {
         getTemplateWithAssociatedUsers as jest.MockedFunction<typeof getTemplateWithAssociatedUsers>
       ).mockResolvedValue(mockTemplateWithUsers());
 
-      await expect(
-        inviteUserByEmail(mockAbility(), "test@cds-snc.ca", "form-id", "message")
-      ).rejects.toThrow(UserAlreadyHasAccessError);
+      await expect(inviteUserByEmail("test@cds-snc.ca", "form-id", "message")).rejects.toThrow(
+        UserAlreadyHasAccessError
+      );
     });
 
     it("should throw MismatchedEmailDomainError if email domain does not match sender's domain", async () => {
@@ -68,7 +73,7 @@ describe("Invitations", () => {
       ).mockResolvedValue(mockTemplateWithUsers());
 
       await expect(
-        inviteUserByEmail(mockAbility(), "test@servicecanada.gc.ca", "form-id", "message")
+        inviteUserByEmail("test@servicecanada.gc.ca", "form-id", "message")
       ).rejects.toThrow(MismatchedEmailDomainError);
     });
 
@@ -79,9 +84,9 @@ describe("Invitations", () => {
         getTemplateWithAssociatedUsers as jest.MockedFunction<typeof getTemplateWithAssociatedUsers>
       ).mockResolvedValue(mockTemplateWithUsers());
 
-      await expect(
-        inviteUserByEmail(mockAbility(), "test@notagovdomain", "form-id", "message")
-      ).rejects.toThrow(InvalidDomainError);
+      await expect(inviteUserByEmail("test@notagovdomain", "form-id", "message")).rejects.toThrow(
+        InvalidDomainError
+      );
     });
 
     it("should throw TemplateNotFoundError if template is not found", async () => {
@@ -89,9 +94,9 @@ describe("Invitations", () => {
         getTemplateWithAssociatedUsers as jest.MockedFunction<typeof getTemplateWithAssociatedUsers>
       ).mockResolvedValue(null);
 
-      await expect(
-        inviteUserByEmail(mockAbility(), "test@example.com", "form-id", "message")
-      ).rejects.toThrow(TemplateNotFoundError);
+      await expect(inviteUserByEmail("test@example.com", "form-id", "message")).rejects.toThrow(
+        TemplateNotFoundError
+      );
     });
 
     it("should invite a user who doesn't have a Forms account", async () => {
@@ -117,7 +122,7 @@ describe("Invitations", () => {
 
       (inviteToFormsEmailTemplate as jest.Mock).mockReturnValue("email contents");
 
-      await inviteUserByEmail(mockAbility(), "invited@cds-snc.ca", "form-id", "message");
+      await inviteUserByEmail("invited@cds-snc.ca", "form-id", "message");
 
       expect(prisma.invitation.create).toHaveBeenCalledTimes(1);
 
@@ -167,7 +172,7 @@ describe("Invitations", () => {
         >
       ).mockReturnValue("email contents");
 
-      await inviteUserByEmail(mockAbility(), "invited@cds-snc.ca", "form-id", "message");
+      await inviteUserByEmail("invited@cds-snc.ca", "form-id", "message");
 
       expect(prisma.invitation.create).toHaveBeenCalledTimes(1);
       expect(inviteToCollaborateEmailTemplate).toHaveBeenCalledTimes(1);
@@ -190,6 +195,7 @@ describe("Invitations", () => {
         name: "sender",
         privileges: [],
         active: true,
+        notes: null,
       }); // sender
 
       (
@@ -229,7 +235,7 @@ describe("Invitations", () => {
         inviteToFormsEmailTemplate as jest.MockedFunction<typeof inviteToFormsEmailTemplate>
       ).mockReturnValue("email contents");
 
-      await inviteUserByEmail(mockAbility(), "invited2@cds-snc.ca", "form-id", "message");
+      await inviteUserByEmail("invited2@cds-snc.ca", "form-id", "message");
 
       expect(prisma.invitation.delete).toHaveBeenCalledTimes(1); // delete expired
       expect(prisma.invitation.delete).toHaveBeenCalledWith({ where: { id: "invitation-id" } });
@@ -250,9 +256,7 @@ describe("Invitations", () => {
   describe("acceptInvitation", () => {
     it("should throw InvitationNotFoundError if invitation is not found", async () => {
       prismaMock.invitation.findUnique.mockResolvedValue(null);
-      await expect(acceptInvitation(mockAbility(), "invitation-id")).rejects.toThrow(
-        InvitationNotFoundError
-      );
+      await expect(acceptInvitation("invitation-id")).rejects.toThrow(InvitationNotFoundError);
     });
 
     it("should throw InvitationIsExpiredError if invitation is expired", async () => {
@@ -263,12 +267,12 @@ describe("Invitations", () => {
           expires: new Date(Date.now() - 10000),
         })
       );
-      await expect(acceptInvitation(mockAbility(), "invitation-id")).rejects.toThrow(
-        InvitationIsExpiredError
-      );
+      await expect(acceptInvitation("invitation-id")).rejects.toThrow(InvitationIsExpiredError);
     });
 
     it("should accept an invitation", async () => {
+      mockGetAbility("invited-user-id");
+
       prismaMock.invitation.findUnique.mockResolvedValueOnce(
         mockInvitation({
           id: "invitation-id",
@@ -301,9 +305,7 @@ describe("Invitations", () => {
         ownerAddedEmailTemplate as jest.MockedFunction<typeof ownerAddedEmailTemplate>
       ).mockReturnValue("email contents");
 
-      const ability = mockAbility({ userID: "invited-user-id" });
-
-      await acceptInvitation(ability, "invitation-id");
+      await acceptInvitation("invitation-id");
 
       // Delete the invitation
       expect(prisma.invitation.delete).toHaveBeenCalledWith({
@@ -338,6 +340,8 @@ describe("Invitations", () => {
 
   describe("cancelInvitation", () => {
     it("should cancel an invitation", async () => {
+      mockAuthorizationPass("user-id");
+
       prismaMock.invitation.findUnique.mockResolvedValue(
         mockInvitation({
           id: "invitation-id",
@@ -360,7 +364,7 @@ describe("Invitations", () => {
         })
       );
 
-      await cancelInvitation(mockAbility({ userID: "user-id" }), "invitation-id");
+      await cancelInvitation("invitation-id");
 
       expect(prismaMock.invitation.delete).toHaveBeenCalledWith({
         where: { id: "invitation-id" },
@@ -370,25 +374,22 @@ describe("Invitations", () => {
     it("should throw InvitationNotFoundError if invitation is not found", async () => {
       prismaMock.invitation.findUnique.mockResolvedValue(null);
 
-      await expect(cancelInvitation(mockAbility(), "invitation-id")).rejects.toThrow(
-        InvitationNotFoundError
-      );
+      await expect(cancelInvitation("invitation-id")).rejects.toThrow(InvitationNotFoundError);
     });
   });
 
   describe("declineInvitation", () => {
     it("should decline an invitation", async () => {
+      mockGetAbility("test-user-id");
       prismaMock.invitation.findUnique.mockResolvedValue(
         mockInvitation({
           id: "invitation-id",
           email: "test@cds-snc.ca",
         })
       );
-      prismaMock.user.findFirst.mockResolvedValueOnce(
-        mockUser({ id: "user-id", email: "test@cds-snc.ca" })
-      );
+      (getUser as jest.MockedFunction<typeof getUser>).mockResolvedValue(mockAppUser());
 
-      await declineInvitation(mockAbility(), "invitation-id");
+      await declineInvitation("invitation-id");
 
       expect(prismaMock.invitation.delete).toHaveBeenCalled();
     });
@@ -396,9 +397,7 @@ describe("Invitations", () => {
     it("should throw InvitationNotFoundError if invitation is not found", async () => {
       prismaMock.invitation.findUnique.mockResolvedValueOnce(null);
 
-      await expect(declineInvitation(mockAbility(), "invitation-id")).rejects.toThrow(
-        InvitationNotFoundError
-      );
+      await expect(declineInvitation("invitation-id")).rejects.toThrow(InvitationNotFoundError);
     });
 
     it("should throw UserNotFoundError if user is not found", async () => {
@@ -411,9 +410,7 @@ describe("Invitations", () => {
 
       (getUser as jest.Mock).mockRejectedValueOnce(new UserNotFoundError());
 
-      await expect(declineInvitation(mockAbility(), "invitation-id")).rejects.toThrow(
-        UserNotFoundError
-      );
+      await expect(declineInvitation("invitation-id")).rejects.toThrow(UserNotFoundError);
     });
   });
 });

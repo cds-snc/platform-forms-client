@@ -1,9 +1,10 @@
 import { serverTranslation } from "@i18n";
-import { createSetting, getSetting, updateSetting } from "../../actions";
 import { LinkButton } from "@serverComponents/globals/Buttons/LinkButton";
 import { SaveButton } from "../client/SaveButton";
 import { Danger } from "@clientComponents/globals/Alert/Alert";
 import { Label } from "@clientComponents/forms";
+import { getFullAppSetting, createAppSetting, updateAppSetting } from "@lib/appSettings";
+import { redirect } from "next/navigation";
 
 export const ManageSettingForm = async ({ settingId }: { settingId?: string }) => {
   const {
@@ -17,7 +18,7 @@ export const ManageSettingForm = async ({ settingId }: { settingId?: string }) =
   if (settingId) {
     // An access control error will redirect the user to the login page
     // Other errors will hit the nearest error boundary
-    setting = await getSetting(settingId);
+    setting = await getFullAppSetting(settingId);
   } else {
     setting = {
       internalId: "",
@@ -33,9 +34,13 @@ export const ManageSettingForm = async ({ settingId }: { settingId?: string }) =
     "use server";
     // use server is needed to expose the function to the form component
     if (isCreateSetting) {
-      await createSetting(language, formData);
+      await createSetting(formData)
+        .then(redirect(`/${language}/admin/settings?success=created`))
+        .catch(redirect(`/${language}/admin/settings?error=errorCreating`));
     } else {
-      await updateSetting(language, formData);
+      await updateSetting(formData)
+        .then(redirect(`/${language}/admin/settings?success=updated`))
+        .catch(redirect(`/${language}/admin/settings?error=errorUpdating`));
     }
   };
 
@@ -126,3 +131,41 @@ export const ManageSettingForm = async ({ settingId }: { settingId?: string }) =
     </>
   );
 };
+
+async function createSetting(formData: FormData) {
+  const setting = {
+    internalId: nullCheck(formData, "internalId"),
+    nameEn: nullCheck(formData, "nameEn"),
+    nameFr: nullCheck(formData, "nameFr"),
+    descriptionEn: formData.get("descriptionEn") as string,
+    descriptionFr: formData.get("descriptionFr") as string,
+    value: nullCheck(formData, "value"),
+  };
+
+  await createAppSetting(
+    setting as {
+      internalId: string;
+      nameEn: string;
+      nameFr: string;
+    }
+  );
+}
+
+async function updateSetting(formData: FormData) {
+  const setting = {
+    internalId: nullCheck(formData, "internalId"),
+    nameEn: nullCheck(formData, "nameEn"),
+    nameFr: nullCheck(formData, "nameFr"),
+    descriptionEn: formData.get("descriptionEn") as string,
+    descriptionFr: formData.get("descriptionFr") as string,
+    value: nullCheck(formData, "value"),
+  };
+
+  await updateAppSetting(setting.internalId, setting);
+}
+
+function nullCheck(formData: FormData, key: string) {
+  const result = formData.get(key);
+  if (!result) throw new Error(`No value found for ${key}`);
+  return result as string;
+}

@@ -1,4 +1,4 @@
-import { AccessControlError } from "@lib/auth";
+import { AccessControlError } from "@lib/auth/errors";
 import { middleware, sessionExists } from "@lib/middleware";
 import { NextResponse } from "next/server";
 import { unprocessedSubmissions } from "@lib/vault";
@@ -8,7 +8,7 @@ export const dynamic = "force-dynamic";
 
 export const GET = middleware([sessionExists()], async (req, props) => {
   try {
-    const formId = props.params?.form;
+    const formId = await props.params?.form;
 
     if (!formId || typeof formId !== "string") {
       return NextResponse.json({ error: "Bad request" }, { status: 400 });

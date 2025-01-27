@@ -14,6 +14,11 @@ export const FormattedDate = ({
   }
 
   const formattedDateKeyValues = safeJSONParse(formItem.values as string) as DateObject;
+
+  if (!formattedDateKeyValues) {
+    return <BaseElement formItem={formItem} />;
+  }
+
   const formattedDateFormat = Object.keys(formattedDateKeyValues).join("-") as DateFormat;
   const formattedDate = getFormattedDateFromObject(formattedDateFormat, formattedDateKeyValues);
   const formItemAsDate = {

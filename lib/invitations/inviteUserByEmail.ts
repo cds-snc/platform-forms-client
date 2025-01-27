@@ -1,4 +1,4 @@
-import { FormRecord, UserAbility } from "@lib/types";
+import { FormRecord } from "@lib/types";
 import { getUser } from "@lib/users";
 import {
   InvalidDomainError,
@@ -17,23 +17,31 @@ import { logMessage } from "@lib/logger";
 import { Invitation } from "@prisma/client";
 import { logEvent } from "@lib/auditLogs";
 import { isValidGovEmail } from "@lib/validation/validation";
+import { authorization } from "@lib/privileges";
+import { AccessControlError } from "@lib/auth/errors";
 
 /**
  * Invite someone to the form by email
  *
- * @param ability
  * @param email
  * @param formId
  */
-export const inviteUserByEmail = async (
-  ability: UserAbility,
-  email: string,
-  formId: string,
-  message: string
-) => {
+export const inviteUserByEmail = async (email: string, formId: string, message: string) => {
   let invitation: Invitation;
 
-  const sender = await getUser(ability, ability.user.id).catch(() => {
+  const { user } = await authorization.canEditForm(formId).catch((e) => {
+    if (e instanceof AccessControlError) {
+      logEvent(
+        e.user.id,
+        { type: "Form", id: formId },
+        "AccessDenied",
+        `User ${e.user.id} does not have permission to invite user`
+      );
+    }
+    throw e;
+  });
+
+  const sender = await getUser(user.id).catch(() => {
     throw new UserNotFoundError();
   });
 
@@ -67,15 +75,15 @@ export const inviteUserByEmail = async (
     // if invitation is expired, delete and recreate
     if (previousInvitation.expires < new Date()) {
       // check js dates vs prisma dates (see 2fa)
-      _deleteInvitation(previousInvitation.id);
+      await _deleteInvitation(previousInvitation.id);
       invitation = await _createInvitation(email, formId);
     }
 
     // send or resend invitation email
-    _sendInvitationEmail(sender, invitation, message, template.formRecord);
+    await _sendInvitationEmail(sender, invitation, message, template.formRecord);
 
     logEvent(
-      ability.user.id,
+      user.id,
       { type: "Form", id: invitation.templateId },
       "InvitationCreated",
       `${sender.id} invited ${invitation.email}`
@@ -86,7 +94,7 @@ export const inviteUserByEmail = async (
 
   // No previous invitation, create one
   invitation = await _createInvitation(email, formId);
-  _sendInvitationEmail(sender, invitation, message, template.formRecord);
+  await _sendInvitationEmail(sender, invitation, message, template.formRecord);
 
   return;
 };
@@ -149,7 +157,7 @@ const _sendInvitationEmail = async (
     `Sending invitation email to ${email} for form ${templateId} with message ${message}`
   );
 
-  const HOST = getOrigin();
+  const HOST = await getOrigin();
 
   // Determine whether to send an invitation to register or an invitation to the form
   const user = await prisma.user.findFirst({
