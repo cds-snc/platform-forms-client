@@ -154,7 +154,7 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
   const [canFocusOnError, setCanFocusOnError] = useState(false);
   const [lastSubmitCount, setLastSubmitCount] = useState(-1);
 
-  const { currentGroup, groupsCheck, getGroupTitle, setGroup, setHistory } = useGCFormsContext();
+  const { currentGroup, groupsCheck, getGroupTitle } = useGCFormsContext();
   const isGroupsCheck = groupsCheck(props.allowGrouping);
   const isShowReviewPage = showReviewPage(form);
   const showIntro = isGroupsCheck ? currentGroup === LockedSections.START : true;
@@ -195,14 +195,6 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [formStatusError, errorList, lastSubmitCount, canFocusOnError]);
-
-  useEffect(() => {
-    if (props.initialValues.currentGroup && props.initialValues.groupHistory) {
-      setGroup(props.initialValues.currentGroup as string);
-      setHistory(props.initialValues.groupHistory as string[]);
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
 
   return status === "submitting" ? (
     <>
