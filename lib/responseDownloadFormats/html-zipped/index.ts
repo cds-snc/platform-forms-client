@@ -13,7 +13,7 @@ export const transform = async (formResponseSubmissions: FormResponseSubmissions
       html: renderToStaticMarkup(
         ResponseHtml({
           response: response,
-          form: formResponseSubmissions.formRecord,
+          formRecord: formResponseSubmissions.formRecord,
           confirmationCode: response.confirmationCode,
           responseID: response.id,
           createdAt: response.createdAt,
