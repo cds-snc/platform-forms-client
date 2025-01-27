@@ -53,7 +53,7 @@ Vous avez pour responsabilité :
 
 ## Pratique de sécurité en continu
 
-- Utilisez une adresse courriel gouvernementale individuelle pour créer votre compte et pour l’authentification à deux facteurs.
+- Utilisez une adresse courriel gouvernementale individuelle appartenant à un·e employé·e (et non une boîte de réception partagée) pour créer votre compte et pour l’authentification à deux facteurs.
 - Ne communiquez pas votre mot de passe à personne et ne le conservez pas dans un endroit où d’autres personnes pourraient le trouver. Si quelqu’un d’autre a besoin d’accéder à un formulaire, [contactez-nous](/fr/support).
 - Protégez vos clés API. Si vous pensez qu'une clé API a été compromise, supprimez-la et recréez-en une nouvelle pour sécuriser l'accès aux réponses de formulaire.
 - Assurer la confidentialité et la sécurité des renseignements protégées lors du téléchargement des réponses aux formulaires de Formulaires GC.
