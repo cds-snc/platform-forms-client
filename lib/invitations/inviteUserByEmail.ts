@@ -78,8 +78,11 @@ export const inviteUserByEmail = async (email: string, formId: string, message: 
       }
       return previousInvitation;
     })
-    .catch(() => {
-      throw new Error(`Unable process inviting user ${email} for form ${formId} by ${user.email}`);
+    .catch((e) => {
+      logMessage.info(e);
+      throw new Error(
+        `Unable to process inviting user ${email} for form ${formId} by ${user.email}`
+      );
     });
 
   logEvent(
