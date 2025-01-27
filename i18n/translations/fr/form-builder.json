@@ -1,6 +1,7 @@
 {
   "addElement": "Ajouter un élément",
   "addElementDialog": {
+    "example": "exemple",
     "filters": {
       "all": "Tout",
       "basic": "De base",
@@ -634,7 +635,6 @@
       "keyId": "Identifiant de la clé API",
       "title": "Accès pour l'API",
       "generateKey": "Créer une clé API",
-      "refreshKey": "Rafraîchir la clé",
       "deleteKey": "Supprimer la clé API",
       "deleteKeyFailed": {
         "title": "Quelque chose a mal tourné",
@@ -1142,7 +1142,7 @@
     },
     "tryitout": {
       "button": "Formulaire complexe? Considérez des embranchements +",
-      "text": "<p class='mb-4'>Utilisez les embranchements pour diriger les personnes qui remplissent le formulaire vers différentes pages en fonction de leurs réponses.</p> <p>Visualisez et configurez l'enchaînement du formulaire dans l’onglet Embranchements du panneau de configuration du formulaire.</p>",
+      "text": "<p className='mb-4'>Utilisez les embranchements pour diriger les personnes qui remplissent le formulaire vers différentes pages en fonction de leurs réponses.</p> <p>Visualisez et configurez l'enchaînement du formulaire dans l’onglet Embranchements du panneau de configuration du formulaire.</p>",
       "open": "Allez à Embranchements"
     },
     "exitBadge": "Sortie",

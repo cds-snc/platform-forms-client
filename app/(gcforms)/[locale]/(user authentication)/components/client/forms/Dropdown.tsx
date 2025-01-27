@@ -36,8 +36,9 @@ export const Dropdown = (props: DropdownProps): React.ReactElement => {
     ariaDescribedBy,
     validationError,
     onChange,
+    lang,
   } = props;
-  const { t } = useTranslation("common");
+  const { t } = useTranslation("common", { lng: lang });
   const classes = cn("gc-dropdown", className);
 
   const initialDropdownOption = <option value="">{t("dropdown-initial-option-text")}</option>;

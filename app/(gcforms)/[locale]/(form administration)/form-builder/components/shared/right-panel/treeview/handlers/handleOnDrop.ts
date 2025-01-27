@@ -118,8 +118,7 @@ export const handleOnDrop = async (
   expandedItems: TreeItemIndex[],
   getTreeData: () => TreeItems,
   getPromise: () => Promise<boolean>,
-  setOpenDialog: (value: boolean) => void,
-  autoFlowAll: () => void
+  setOpenDialog: (value: boolean) => void
 ) => {
   // Current state of the tree in Groups format
   let currentGroups = getGroups() as GroupsType;
@@ -217,10 +216,6 @@ export const handleOnDrop = async (
 
     replaceGroups(newGroups);
     setSelectedItems(selectedItems);
-
-    // Temporary solution: If no custom rules are present, autoFlow all items
-    autoFlowAll();
-
     return;
   }
 

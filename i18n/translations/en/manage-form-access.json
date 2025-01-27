@@ -32,5 +32,6 @@
   "resend": "Re-send invitation to {{email}}",
   "templateNotFound": "Template not found {{templateId}}",
   "userAlreadyHasAccess": "{{email}} already has access",
-  "userNotFound": "User not found"
+  "userNotFound": "User not found",
+  "draftFormError": "Can't send invitations to draft forms"
 }
