@@ -7,7 +7,7 @@ import { Form } from "@clientComponents/forms/Form/Form";
 import { Language } from "@lib/types/form-builder-types";
 import { useEffect, useMemo, type JSX } from "react";
 import { useGCFormsContext } from "@lib/hooks/useGCFormContext";
-import { restoreProgress as restoreSession, removeProgressStorage } from "@lib/utils/saveProgress";
+import { restoreProgress, removeProgressStorage } from "@lib/utils/saveProgress";
 
 export const FormWrapper = ({
   formRecord,
@@ -29,7 +29,7 @@ export const FormWrapper = ({
 
   const values = useMemo(
     () =>
-      restoreSession({ id: formRecord.id, form: formRecord.form, language: language as Language }),
+      restoreProgress({ id: formRecord.id, form: formRecord.form, language: language as Language }),
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [language]
   );
