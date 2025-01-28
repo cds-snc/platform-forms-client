@@ -1,3 +1,4 @@
+"use client";
 import { EventKeys, useCustomEvent } from "@lib/hooks/useCustomEvent";
 import { logMessage } from "@lib/logger";
 import { useCallback, useEffect, useRef } from "react";

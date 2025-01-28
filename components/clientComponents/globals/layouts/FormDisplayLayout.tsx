@@ -5,6 +5,7 @@ import { Footer, SkipLink, Fip } from "@clientComponents/globals";
 import LanguageToggle from "../Header/LanguageToggle";
 import { DateModified } from "../DateModified";
 import { cn } from "@lib/utils";
+import { LiveRegion } from "../LiveRegion";
 
 interface FormDisplayLayoutProps extends React.PropsWithChildren {
   formRecord: PublicFormRecord;
@@ -31,6 +32,7 @@ const FormDisplayLayout = ({ children, formRecord }: FormDisplayLayoutProps) => 
           </main>
         </div>
         <Footer className="mt-4" disableGcBranding={formRecord?.form.brand?.disableGcBranding} />
+        <LiveRegion />
       </div>
     </>
   );

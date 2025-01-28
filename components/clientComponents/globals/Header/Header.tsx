@@ -11,7 +11,6 @@ import { ShareDropdown } from "./ShareDropdown";
 import LanguageToggle from "./LanguageToggle";
 import { YourAccountDropdown } from "./YourAccountDropdown";
 import Markdown from "markdown-to-jsx";
-import { LiveRegion } from "../LiveRegion";
 
 type HeaderParams = {
   context?: "admin" | "formBuilder" | "default";
@@ -118,7 +117,6 @@ export const Header = ({ context = "default", className }: HeaderParams) => {
             </ul>
           </nav>
         </div>
-        <LiveRegion />
       </header>
     </>
   );
