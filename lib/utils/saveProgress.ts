@@ -61,9 +61,6 @@ export const restoreProgress = ({
 
   if (!encodedformData) return false;
 
-  // Clear the session storage as we now have the data
-  // removeProgressStorage();
-
   try {
     const formData = Buffer.from(encodedformData, "base64").toString("utf8");
 
