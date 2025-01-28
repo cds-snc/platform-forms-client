@@ -68,7 +68,6 @@ export const restoreProgress = ({
         return values ? (values as FormValues) : false;
       }
 
-      // Need to set the current group
       return parsedData.values;
     }
   } catch (e) {
