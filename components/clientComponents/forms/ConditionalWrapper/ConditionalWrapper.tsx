@@ -9,10 +9,12 @@ export const ConditionalWrapper = ({
   children,
   element,
   rules,
+  lang,
 }: {
   children: React.ReactElement;
   element: FormElement;
   rules: ConditionalRule[] | null;
+  lang: string;
 }) => {
   const { matchedIds, currentGroup, groups, formRecord } = useGCFormsContext();
 
@@ -40,7 +42,11 @@ export const ConditionalWrapper = ({
     // Ensure rules for elements tied to the element are also matched.
     if (checkRelatedRulesAsBoolean(formRecord.form.elements, rules, matchedIds)) {
       // Announce conditional shown. The check above ensures the element is on the current page
-      return <Announce element={element}>{children}</Announce>;
+      return (
+        <Announce element={element} lang={lang}>
+          {children}
+        </Announce>
+      );
     }
   }
 

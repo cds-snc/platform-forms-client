@@ -112,7 +112,7 @@
   "dynamicRow": {
     "add": "Ajouter",
     "delete": "Supprimer",
-    "addedMessage": "[FR]Adding {{rowLabelTitle}} - {{rowLabelCount}} for {{rowTitle}}"
+    "addedMessage": "[FR]Fieldset {{rowTitle}} was added to the form"
   },
   "acceptableUsePage": {
     "agree": "Accepter",

@@ -98,12 +98,9 @@ export const DynamicGroup = (props: DynamicGroupProps): React.ReactElement => {
     // Do not subtract one because the rows state has not yet updated it's length when this is called
     focusedRow.current = rows.length;
     // Let an AT user know a new repeating set was added
-    const message = t("dynamicRow.addedMessage", {
-      rowTitle: title,
-      rowLabelTitle: rowLabel ? rowLabel : "Item",
-      rowLabelCount: rows.length + 1,
+    Event.fire(EventKeys.liveMessage, {
+      message: t("dynamicRow.addedMessage", { rowTitle: title }),
     });
-    Event.fire(EventKeys.liveMessage, { message });
   };
 
   const deleteRow = (index: number) => {

@@ -1,39 +1,30 @@
 import { FormElement } from "@cdssnc/gcforms-types";
+import { truncateString } from "@lib/client/clientHelpers";
 import { EventKeys, useCustomEvent } from "@lib/hooks/useCustomEvent";
-import { useTemplateStore } from "@lib/store/useTemplateStore";
-import { LocalizedElementProperties } from "@lib/types/form-builder-types";
-import { useCallback, useRef } from "react";
+import { getProperty } from "@lib/i18nHelpers";
+import { useRef } from "react";
 import { useTranslation } from "react-i18next";
 
 // Component created to  keep all the translation related and event code separate
 export const Announce = ({
   children,
   element,
+  lang,
 }: {
   children: React.ReactNode;
   element: FormElement;
+  lang: string;
 }) => {
   const { t } = useTranslation();
-  const { localizeField, translationLanguagePriority } = useTemplateStore((s) => ({
-    localizeField: s.localizeField,
-    translationLanguagePriority: s.translationLanguagePriority,
-  }));
   const { Event } = useCustomEvent();
   const messageRef = useRef("");
 
-  const getConditionalActivatedString = useCallback(
-    (element: FormElement) => {
-      return t("conditional.activated", {
-        name: element?.properties[
-          localizeField(LocalizedElementProperties.TITLE, translationLanguagePriority)
-        ],
-      });
-    },
-    [t, localizeField, translationLanguagePriority]
-  );
+  const maxTitleLength = 25;
 
-  messageRef.current = getConditionalActivatedString(element);
-
+  messageRef.current = t("conditional.activated", {
+    title: truncateString(String(element?.properties[getProperty("title", lang)]), maxTitleLength),
+    lng: lang,
+  });
   if (messageRef.current !== "") {
     Event.fire(EventKeys.liveMessage, { message: messageRef.current });
   }
