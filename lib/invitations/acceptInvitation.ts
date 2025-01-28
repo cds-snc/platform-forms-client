@@ -76,8 +76,11 @@ export const acceptInvitation = async (invitationId: string) => {
     `${user.id} has accepted an invitation`
   );
 
+  // some existing events may not yet have the 'invitedBy' attribute.
+  // fallback to previous behavior
+
   logEvent(
-    ability.user.id,
+    invitation.invitedBy ?? ability.user.id,
     { type: "Form", id: invitation.templateId },
     "GrantFormAccess",
     `Access granted to ${user.id}`
