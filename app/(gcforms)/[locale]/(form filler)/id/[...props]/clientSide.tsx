@@ -28,8 +28,10 @@ export const FormWrapper = ({
   const { saveProgress } = useGCFormsContext();
 
   const values = useMemo(
-    () => restoreSession({ id: formRecord.id, language: language as Language }),
-    [formRecord.id, language]
+    () =>
+      restoreSession({ id: formRecord.id, form: formRecord.form, language: language as Language }),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [language]
   );
 
   useEffect(() => {

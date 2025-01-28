@@ -1,6 +1,8 @@
 import { FormProperties, Response, FormElement, Responses } from "@cdssnc/gcforms-types";
 import { Language } from "@lib/types/form-builder-types";
 
+// Note: These function are for future use, they are not used in the current codebase
+
 const findElement = (form: FormProperties, id: string | number) => {
   if (!form || !form.elements) {
     return;

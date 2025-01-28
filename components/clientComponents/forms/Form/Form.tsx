@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useState, useRef, type JSX } from "react";
+import React, { useEffect, useState, useRef, type JSX, useCallback } from "react";
 import { FormikProps, withFormik } from "formik";
 import { getFormInitialValues } from "@lib/formBuilder";
 import { getErrorList, setFocusOnErrorMessage, validateOnSubmit } from "@lib/validation/validation";
@@ -196,6 +196,23 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [formStatusError, errorList, lastSubmitCount, canFocusOnError]);
 
+  const handleSessionSave = useCallback(() => {
+    props.saveProgress && props.saveProgress(language as Language);
+  }, [language, props]);
+
+  useEffect(() => {
+    const beforeUnloadHandler = () => {
+      handleSessionSave();
+      return null;
+    };
+
+    window.addEventListener("beforeunload", beforeUnloadHandler);
+
+    return () => {
+      window.removeEventListener("beforeunload", beforeUnloadHandler);
+    };
+  }, [handleSessionSave]);
+
   return status === "submitting" ? (
     <>
       <title>{t("loading")}</title>
@@ -250,9 +267,6 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
              * to the URL
              */
             method="POST"
-            onBlur={() => {
-              props.saveProgress && props.saveProgress(language as Language);
-            }}
             onSubmit={(e) => {
               e.preventDefault();
               // For groups enabled forms only allow submitting on the Review page

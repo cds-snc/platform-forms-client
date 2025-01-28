@@ -184,7 +184,7 @@ export const GCFormsProvider = ({
   };
 
   const restoreProgress = (language: Language) => {
-    return restoreSession({ id: formRecord.id, language });
+    return restoreSession({ id: formRecord.id, form: formRecord.form, language });
   };
 
   return (

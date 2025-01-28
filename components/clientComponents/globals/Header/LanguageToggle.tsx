@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { useTranslation } from "@i18n/client";
 import { usePathname } from "next/navigation";
 
@@ -20,12 +20,19 @@ const LanguageToggle = () => {
     }
   }, [pathname, currentLang]);
 
+  const handleClick = useCallback(() => {
+    // Dispatch beforeunload event
+    const event = new Event("beforeunload", { bubbles: true, cancelable: true });
+    window.dispatchEvent(event);
+  }, []);
+
   return (
     <a
       href={href}
       className="text-right text-base"
       aria-label={`${t("lang-toggle")}: ${currentLang == "en" ? "Français" : "English"}`}
       lang={currentLang === "en" ? "fr" : "en"}
+      onClick={handleClick}
     >
       {currentLang === "en" ? "Français" : "English"}
     </a>
