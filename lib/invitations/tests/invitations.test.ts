@@ -93,6 +93,7 @@ describe("Invitations", () => {
       (
         getTemplateWithAssociatedUsers as jest.MockedFunction<typeof getTemplateWithAssociatedUsers>
       ).mockResolvedValue(null);
+      (getUser as jest.MockedFunction<typeof getUser>).mockResolvedValue(mockAppUser());
 
       await expect(inviteUserByEmail("test@example.com", "form-id", "message")).rejects.toThrow(
         TemplateNotFoundError
@@ -119,6 +120,9 @@ describe("Invitations", () => {
 
       // invitee does not have an account
       (prisma.user.findFirst as jest.Mock).mockResolvedValueOnce(null);
+
+      // Previous invitation does not exist
+      (prismaMock.invitation.findFirst as jest.Mock).mockResolvedValue(null);
 
       (inviteToFormsEmailTemplate as jest.Mock).mockReturnValue("email contents");
 
@@ -166,6 +170,9 @@ describe("Invitations", () => {
       // invitee does not have an account
       prismaMock.user.findFirst.mockResolvedValueOnce(mockUser());
 
+      // Previous invitation does not exist
+      (prismaMock.invitation.findFirst as jest.Mock).mockResolvedValue(null);
+
       (
         inviteToCollaborateEmailTemplate as jest.MockedFunction<
           typeof inviteToCollaborateEmailTemplate
@@ -197,6 +204,9 @@ describe("Invitations", () => {
         active: true,
         notes: null,
       }); // sender
+
+      // Mock out invitation delete
+      (prismaMock.invitation.delete as jest.Mock).mockResolvedValue(null);
 
       (
         getTemplateWithAssociatedUsers as jest.MockedFunction<typeof getTemplateWithAssociatedUsers>
@@ -230,6 +240,9 @@ describe("Invitations", () => {
 
       // invitee does not have an account
       prismaMock.user.findFirst.mockResolvedValueOnce(null);
+
+      // Previous invitation does not exist
+      (prismaMock.invitation.findFirst as jest.Mock).mockResolvedValue(null);
 
       (
         inviteToFormsEmailTemplate as jest.MockedFunction<typeof inviteToFormsEmailTemplate>
