@@ -161,11 +161,15 @@ export const Publish = ({ id }: { id: string }) => {
     }
 
     try {
-      updateTemplate({
+      const operationResult = await updateTemplate({
         id,
         name: getName(),
         formConfig,
       });
+
+      if (operationResult.formRecord === null) {
+        throw new Error("Failed to publish form");
+      }
 
       router.push(`/${i18n.language}/unlock-publishing`);
     } catch (e) {
