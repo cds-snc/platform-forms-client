@@ -16,7 +16,7 @@ import { BackArrowIcon } from "@serverComponents/icons";
 interface TextPageProps {
   formRecord: PublicFormRecord;
   language: "en" | "fr";
-  isPreview: boolean;
+  isPreview?: boolean;
 }
 
 interface PageContextProps {
