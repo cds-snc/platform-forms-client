@@ -19,6 +19,7 @@ import { sendEmail } from "./integration/notifyConnector";
 import { youHaveBeenRemovedEmailTemplate } from "./invitations/emailTemplates/youHaveBeenRemovedEmailTemplate";
 import { ownerAddedEmailTemplate } from "./invitations/emailTemplates/ownerAddedEmailTemplate";
 import { isValidISODate } from "./utils/date/isValidISODate";
+import { validateTemplate } from "@lib/utils/form-builder/validate";
 import { dateHasPast } from "@lib/utils";
 
 // ******************************************
@@ -106,12 +107,20 @@ export type UpdateTemplateCommand = {
   publishDesc?: string;
 };
 
+export class InvalidFormConfigError extends Error {
+  constructor(message?: string) {
+    super(message ?? "InvalidFormConfigError");
+    Object.setPrototypeOf(this, InvalidFormConfigError.prototype);
+  }
+}
+
 export class TemplateAlreadyPublishedError extends Error {
   constructor(message?: string) {
     super(message ?? "TemplateAlreadyPublishedError");
     Object.setPrototypeOf(this, TemplateAlreadyPublishedError.prototype);
   }
 }
+
 export class TemplateHasUnprocessedSubmissions extends Error {
   constructor(message?: string) {
     super(message ?? "TemplateHasUnprocessedSubmissions");
@@ -129,6 +138,17 @@ export async function createTemplate(command: CreateTemplateCommand): Promise<Fo
     logEvent(e.user.id, { type: "Form" }, "AccessDenied", "Attempted to create a Form");
     throw e;
   });
+
+  const validationResult = validateTemplate(command.formConfig);
+
+  if (!validationResult.valid) {
+    logMessage.warn(
+      `[templates][createTemplate] Form config is invalid. ${JSON.stringify(
+        validationResult.errors
+      )}`
+    );
+    throw new InvalidFormConfigError();
+  }
 
   const createdTemplate = await prisma.template
     .create({
@@ -452,6 +472,17 @@ export async function updateTemplate(command: UpdateTemplateCommand): Promise<Fo
     );
     throw e;
   });
+
+  const validationResult = validateTemplate(command.formConfig);
+
+  if (!validationResult.valid) {
+    logMessage.warn(
+      `[templates][updateTemplate] Form config is invalid. ${JSON.stringify(
+        validationResult.errors
+      )}`
+    );
+    throw new InvalidFormConfigError();
+  }
 
   const updatedTemplate = await prisma.template
     .update({
