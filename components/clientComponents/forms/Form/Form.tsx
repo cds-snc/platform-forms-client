@@ -251,7 +251,7 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
              */
             method="POST"
             onBlur={() => {
-              props.saveProgress(language as Language);
+              props.saveProgress && props.saveProgress(language as Language);
             }}
             onSubmit={(e) => {
               e.preventDefault();
