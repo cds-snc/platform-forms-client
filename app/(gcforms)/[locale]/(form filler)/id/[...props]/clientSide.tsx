@@ -7,7 +7,6 @@ import { Form } from "@clientComponents/forms/Form/Form";
 import { Language } from "@lib/types/form-builder-types";
 import { useEffect, useMemo, type JSX } from "react";
 import { useGCFormsContext } from "@lib/hooks/useGCFormContext";
-import { SaveProgressButton } from "@clientComponents/forms/SaveProgressButton/SaveProgressButton";
 import { restoreProgress as restoreSession, removeProgressStorage } from "@lib/utils/saveProgress";
 
 export const FormWrapper = ({
@@ -61,7 +60,6 @@ export const FormWrapper = ({
               validateForm={validateForm}
               fallBack={fallBack}
             />
-            <SaveProgressButton />
           </>
         );
       }}

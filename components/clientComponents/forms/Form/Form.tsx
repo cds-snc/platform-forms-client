@@ -250,6 +250,9 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
              * to the URL
              */
             method="POST"
+            onBlur={() => {
+              props.saveProgress(language as Language);
+            }}
             onSubmit={(e) => {
               e.preventDefault();
               // For groups enabled forms only allow submitting on the Review page
