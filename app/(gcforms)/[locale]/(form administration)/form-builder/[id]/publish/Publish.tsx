@@ -303,7 +303,10 @@ export const Publish = ({ id }: { id: string }) => {
                     )}
                   </>
                 ) : (
-                  <span>{t("publishYourFormInstructions.emailOption")}</span>
+                  <span>
+                    {t("publishYourFormInstructions.emailOption")}
+                    {getDeliveryOption()?.emailAddress}
+                  </span>
                 )}
               </li>
               <li>
