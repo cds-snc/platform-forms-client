@@ -112,7 +112,7 @@
   "dynamicRow": {
     "add": "Add",
     "delete": "Delete",
-    "addedMessage": "Fieldset {{rowTitle}} was added to the form"
+    "addedMessage": "Fieldset {{rowTitle}} - {{count}} was added to the form"
   },
   "acceptableUsePage": {
     "agree": "Agree",

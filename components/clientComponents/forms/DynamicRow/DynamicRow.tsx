@@ -99,7 +99,7 @@ export const DynamicGroup = (props: DynamicGroupProps): React.ReactElement => {
     focusedRow.current = rows.length;
     // Let an AT user know a new repeating set was added
     Event.fire(EventKeys.liveMessage, {
-      message: t("dynamicRow.addedMessage", { rowTitle: title }),
+      message: t("dynamicRow.addedMessage", { rowTitle: title, count: rows.length + 1 }),
     });
   };
 
