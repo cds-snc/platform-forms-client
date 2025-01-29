@@ -35,11 +35,11 @@ export const FormWrapper = ({
   );
 
   useEffect(() => {
+    // Clear session storage after values are restored
     if (values) {
-      // Clear session storage after values are restored
       removeProgressStorage();
     }
-  }, [values, formRecord.id]);
+  }, [values]);
 
   const initialValues = values ? values : undefined;
 
