@@ -62,6 +62,10 @@ export const toggleSavedValues = (
   savedValues: Responses,
   fromLang: Language
 ) => {
+  if (!savedValues.values) {
+    return savedValues;
+  }
+
   const savedToggled: Responses = Object.entries(savedValues.values).reduce(
     (acc: { [key: string]: Response }, [key, value]) => {
       if (isNaN(Number(key))) {
