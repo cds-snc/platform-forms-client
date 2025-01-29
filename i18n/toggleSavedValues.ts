@@ -5,11 +5,11 @@ type FormElements = {
   elements: FormElement[];
 };
 
-export const findElement = (form: FormElements, id: string | number) => {
+export const findElement = (form: FormElements, elId: string | number) => {
   if (!form || !form.elements) {
     return;
   }
-  return form.elements.find((element) => Number(element.id) === Number(id));
+  return form.elements.find((element) => Number(element.id) === Number(elId));
 };
 
 export const findChoiceByValue = (
@@ -35,12 +35,12 @@ export const findChoiceByValue = (
 };
 
 export const getToggledValue = (
-  form: FormProperties,
-  valueId: string,
+  form: FormElements,
+  elId: number | string,
   value: Response,
   lang: Language
 ) => {
-  const el = findElement(form, valueId);
+  const el = findElement(form, elId);
 
   if (!el) {
     return;
