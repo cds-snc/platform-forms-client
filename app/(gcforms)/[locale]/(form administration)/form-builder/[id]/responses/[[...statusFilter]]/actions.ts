@@ -32,6 +32,7 @@ import {
   retrieveSubmissionRemovalDate,
 } from "@lib/vault";
 import { transform as csvTransform } from "@lib/responseDownloadFormats/csv";
+import { getAnswerCounts } from "@lib/responseDownloadFormats/csv/getAnswerCounts";
 import { transform as htmlAggregatedTransform } from "@lib/responseDownloadFormats/html-aggregated";
 import { transform as htmlTransform } from "@lib/responseDownloadFormats/html";
 import { transform as zipTransform } from "@lib/responseDownloadFormats/html-zipped";
@@ -303,6 +304,10 @@ export const getSubmissionsByFormat = AuthenticatedAction(
 
       switch (format) {
         case DownloadFormat.CSV:
+          const counts = getAnswerCounts(formResponse.submissions);
+          if (!counts.allEqual) {
+            // Use CSV format for non-uniform answers i.e. different number of answers per submission
+          }
           return {
             receipt: await htmlAggregatedTransform(formResponse, lang),
             responses: csvTransform(formResponse),
