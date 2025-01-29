@@ -2,26 +2,19 @@ import { createArrayCsvStringifier as createCsvStringifier } from "csv-writer";
 import { FormResponseSubmissions } from "../types";
 import { FormElementTypes } from "@lib/types";
 import { customTranslate } from "@lib/i18nHelpers";
-import { sortByGroups } from "@lib/utils/form-builder";
 
 const specialChars = ["=", "+", "-", "@"];
 
 export const transform = (formResponseSubmissions: FormResponseSubmissions) => {
   const { t } = customTranslate("common");
-  const { submissions } = formResponseSubmissions;
 
-  const sortedElements = sortByGroups({
-    form: formResponseSubmissions.formRecord.form,
-    elements: formResponseSubmissions.formRecord.form.elements,
-  });
-
-  const header = sortedElements.map((element) => {
-    return `${element.properties.titleEn}\n${element.properties.titleFr}${
-      element.type === FormElementTypes.formattedDate && element.properties.dateFormat
+  const header = formResponseSubmissions.submissions[0].answers.map((item) => {
+    return `${item.questionEn}\n${item.questionFr}${
+      item.type === FormElementTypes.formattedDate && item.dateFormat
         ? "\n" +
-          t(`formattedDate.${element.properties.dateFormat}`, { lng: "en" }) +
+          t(`formattedDate.${item.dateFormat}`, { lng: "en" }) +
           "/" +
-          t(`formattedDate.${element.properties.dateFormat}`, { lng: "fr" })
+          t(`formattedDate.${item.dateFormat}`, { lng: "fr" })
         : ""
     }`;
   });
@@ -38,43 +31,38 @@ export const transform = (formResponseSubmissions: FormResponseSubmissions) => {
     alwaysQuote: true,
   });
 
-  const records = submissions.map((response) => {
-    const answers = sortedElements.map((element) => {
-      const answer = response.answers.find((answer) => answer.questionId === element.id);
-      if (!answer) {
-        return "-";
-      }
-      if (answer.answer instanceof Array) {
-        return answer.answer
-          .map((answer) =>
-            answer
-              .map((subAnswer) => {
-                let answerText = `${subAnswer.questionEn}\n${subAnswer.questionFr}: ${subAnswer.answer}\n`;
-                if (specialChars.some((char) => answerText.startsWith(char))) {
-                  answerText = `'${answerText}`;
-                }
-                if (answerText == "") {
-                  answerText = "-";
-                }
-                return answerText;
-              })
-              .join("")
-          )
-          .join("\n");
-      }
-      let answerText = answer.answer;
-      if (specialChars.some((char) => answerText.startsWith(char))) {
-        answerText = `'${answerText}`;
-      }
-      if (answerText == "") {
-        answerText = "-";
-      }
-      return answerText;
-    });
+  const records = formResponseSubmissions.submissions.map((response) => {
     return [
       response.id,
       new Date(response.createdAt).toISOString(),
-      ...answers,
+      ...response.answers.map((item) => {
+        if (item.answer instanceof Array) {
+          return item.answer
+            .map((answer) =>
+              answer
+                .map((subAnswer) => {
+                  let answerText = `${subAnswer.questionEn}\n${subAnswer.questionFr}: ${subAnswer.answer}\n`;
+                  if (specialChars.some((char) => answerText.startsWith(char))) {
+                    answerText = `'${answerText}`;
+                  }
+                  if (answerText == "") {
+                    answerText = "-";
+                  }
+                  return answerText;
+                })
+                .join("")
+            )
+            .join("\n");
+        }
+        let answerText = item.answer;
+        if (specialChars.some((char) => answerText.startsWith(char))) {
+          answerText = `'${answerText}`;
+        }
+        if (answerText == "") {
+          answerText = "-";
+        }
+        return answerText;
+      }),
       "Receipt codes are in the Official receipt and record of responses\n" +
         "Les codes de réception sont dans le Reçu et registre officiel des réponses",
     ];
