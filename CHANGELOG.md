@@ -5,6 +5,18 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.31.15](https://github.com/cds-snc/platform-forms-client/compare/v3.31.14...v3.31.15) (2025-01-29)
+
+
+### Bug Fixes
+
+* revert previous CSV output changes ([#5053](https://github.com/cds-snc/platform-forms-client/issues/5053)) ([c7d90c3](https://github.com/cds-snc/platform-forms-client/commit/c7d90c360539ad6b44098d8e67bf1d0f4e28f26d))
+
+
+### Miscellaneous Chores
+
+* add validate template check ([#4974](https://github.com/cds-snc/platform-forms-client/issues/4974)) ([2cd76b5](https://github.com/cds-snc/platform-forms-client/commit/2cd76b5fc903e94c095cc6484d6fba8da40fb4a9))
+
 ## [3.31.14](https://github.com/cds-snc/platform-forms-client/compare/v3.31.13...v3.31.14) (2025-01-28)
 
 
