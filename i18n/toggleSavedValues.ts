@@ -1,14 +1,18 @@
 import { FormProperties, Response, FormElement, Responses } from "@cdssnc/gcforms-types";
 import { Language } from "@lib/types/form-builder-types";
 
-const findElement = (form: FormProperties, id: string | number) => {
+type FormElements = {
+  elements: FormElement[];
+};
+
+export const findElement = (form: FormElements, id: string | number) => {
   if (!form || !form.elements) {
     return;
   }
   return form.elements.find((element) => Number(element.id) === Number(id));
 };
 
-const findChoiceByValue = (
+export const findChoiceByValue = (
   element: FormElement,
   value: Response,
   lang: Language
@@ -18,7 +22,10 @@ const findChoiceByValue = (
   if (!element || !element.properties.choices || !choiceTypes.includes(element.type)) {
     return false;
   }
-  const found = element.properties.choices.find((choice) => choice[lang] === value);
+
+  const found = element.properties.choices.find(
+    (choice) => choice[lang]?.toLowerCase() === value?.toString().toLowerCase()
+  );
 
   if (!found) {
     return false;
@@ -27,7 +34,7 @@ const findChoiceByValue = (
   return found;
 };
 
-const getToggledValue = (
+export const getToggledValue = (
   form: FormProperties,
   valueId: string,
   value: Response,
