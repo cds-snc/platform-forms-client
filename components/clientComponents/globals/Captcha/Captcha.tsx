@@ -1,23 +1,30 @@
 import HCaptcha from "@hcaptcha/react-hcaptcha";
 import { logMessage } from "@lib/logger";
 import { verifyHCaptchaToken } from "./helpers";
+// import { getAppSetting } from "@lib/appSettings";
+
+// const captchaLoaded = false;  // Could also use a singleton pattern
 
 // IT BEGINS!!! This definitely doesn't work yet \o/
 export const Captcha = ({
   successCb,
   failCb,
-  hCaptchaSiteKey,
   hCaptchaRef,
   lang,
+  hCaptchaSiteKey,
 }: {
   successCb: () => void;
   failCb: () => void;
-  hCaptchaSiteKey: string;
   hCaptchaRef: React.RefObject<HCaptcha | null>;
   lang: string;
+  hCaptchaSiteKey: string;
 }) => {
+  // if (captchaLoaded) {
+  //   return null;
+  // }
+
   if (!successCb || typeof successCb !== "function") {
-    return;
+    return null;
   }
 
   // For more info on the React lib https://github.com/hCaptcha/react-hcaptcha
@@ -25,6 +32,8 @@ export const Captcha = ({
     <HCaptcha
       sitekey={hCaptchaSiteKey || ""}
       onVerify={async (token: string) => {
+        // TODO pull out and try catch instead
+
         logMessage.info(`Captcha token = ${token}`); // TODO remove
         const success = await verifyHCaptchaToken(token);
         if (!success) {
