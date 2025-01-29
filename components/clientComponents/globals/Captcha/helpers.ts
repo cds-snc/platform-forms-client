@@ -3,7 +3,7 @@ import axios from "axios";
 import { getClientIP } from "@lib/ip";
 import { logMessage } from "@lib/logger";
 
-// TODO any ideas to protect/* this public end point?
+// TODO these will both be public endpoints, should we protected it from abuse?
 
 /**
  * Verifties the client hCaptcha token is valid using the hCaptcha API
@@ -42,8 +42,8 @@ export const verifyHCaptchaToken = async (token: string): Promise<boolean> => {
   return captchaData?.success === true;
 };
 
-// TODO instead just log the error and return an empty string? - probably not worth crashing the app?
 export const getHCaptchaSettings = async () => {
+  // TODO instead just log the error and return an empty string? - probably not worth crashing the app?
   if (!process.env.HCAPTCHA_SITE_VERIFY_KEY) {
     throw new Error("No value set for hCaptcha Site Verify Key");
   }
