@@ -21,7 +21,8 @@ const LanguageToggle = () => {
   }, [pathname, currentLang]);
 
   const handleClick = useCallback(() => {
-    // Dispatch beforeunload event
+    // Dispatch beforeunload event using a custom event
+    // This will trigger a save to session when a user changes the language
     const event = new Event("beforeunload", { bubbles: true, cancelable: true });
     window.dispatchEvent(event);
   }, []);
