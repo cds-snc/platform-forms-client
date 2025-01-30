@@ -19,7 +19,8 @@ export const Announce = ({
   const { Event } = useCustomEvent();
   const messageRef = useRef("");
 
-  const maxTitleLength = 25;
+  // Length based on what a sighted person can comfortably read on one line
+  const maxTitleLength = 65;
 
   messageRef.current = t("conditional.activated", {
     title: truncateString(String(element?.properties[getProperty("title", lang)]), maxTitleLength),
