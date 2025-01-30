@@ -15,6 +15,10 @@ import { getHCaptchaSettings } from "./helpers";
 export const verifyHCaptchaToken = async (token: string): Promise<boolean> => {
   const { siteVerifyKey } = getHCaptchaSettings();
 
+  if (!siteVerifyKey) {
+    // TODO - along with below. probably disable hCAPTCHA on 5XX-like cases
+  }
+
   // API expects data to be sent in the request body (not default axios of params)
   const data = new FormData();
   data.append("secret", siteVerifyKey);

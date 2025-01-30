@@ -59,7 +59,7 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
   const { t } = useTranslation();
 
   const { getFlag } = useFeatureFlags();
-  const captchaEnabled = hCaptchaEnabled(getFlag("hCaptcha"));
+  const captchaEnabled = hCaptchaEnabled(getFlag("hCaptcha"), props.isPreview);
   const hCaptchaRef = createRef<HCaptcha>();
 
   // Used to set any values we'd like added for use in the below withFormik handleSubmit().
@@ -277,7 +277,7 @@ interface FormProps {
   groupHistory?: string[];
   matchedIds?: string[];
   saveProgress: () => void;
-  hCaptchaSiteKey: string;
+  hCaptchaSiteKey?: string;
 }
 
 /**

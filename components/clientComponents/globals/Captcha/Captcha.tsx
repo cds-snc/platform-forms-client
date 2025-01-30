@@ -15,8 +15,12 @@ export const Captcha = ({
   failCb: () => void;
   hCaptchaRef: React.RefObject<HCaptcha | null>;
   lang: string;
-  hCaptchaSiteKey: string;
+  hCaptchaSiteKey?: string;
 }) => {
+  if (!hCaptchaSiteKey) {
+    return null;
+  }
+
   logMessage.info("catpcha component loaded");
 
   const verify = async (token: string) => {
