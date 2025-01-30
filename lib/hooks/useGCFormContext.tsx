@@ -50,6 +50,12 @@ interface GCFormsContextValueType {
   getGroupTitle: (groupId: string | null, language: Language) => string;
   saveProgress: (language: Language | undefined) => void;
   restoreProgress: (language: Language) => FormValues | false;
+  getProgressData: () => {
+    id: string;
+    values: FormValues;
+    history: string[];
+    currentGroup: string;
+  };
 }
 
 const GCFormsContext = createContext<GCFormsContextValueType | undefined>(undefined);
@@ -169,6 +175,15 @@ export const GCFormsProvider = ({
     return groups?.[groupId]?.[titleLanguageKey] || "";
   };
 
+  const getProgressData = () => {
+    return {
+      id: formRecord.id,
+      values: values.current,
+      history: history.current,
+      currentGroup: currentGroup || "",
+    };
+  };
+
   const saveProgress = (language: Language = "en") => {
     const vals =
       language === "en"
@@ -209,6 +224,7 @@ export const GCFormsProvider = ({
         clearHistoryAfterId,
         getGroupTitle,
         saveProgress,
+        getProgressData,
         restoreProgress,
       }}
     >
@@ -245,6 +261,14 @@ export const useGCFormsContext = () => {
       clearHistoryAfterId: () => [],
       getGroupTitle: () => "",
       saveProgress: () => void 0,
+      getProgressData: () => {
+        return {
+          id: "",
+          values: {},
+          history: [],
+          currentGroup: "",
+        };
+      },
       restoreProgress: () => {
         return {};
       },
