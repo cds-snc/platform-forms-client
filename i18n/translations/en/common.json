@@ -111,7 +111,8 @@
   },
   "dynamicRow": {
     "add": "Add",
-    "delete": "Delete"
+    "delete": "Delete",
+    "addedMessage": "Fieldset {{rowTitle}} - {{count}} was added to the form"
   },
   "acceptableUsePage": {
     "agree": "Agree",
@@ -214,5 +215,8 @@
     "text2": "{{month}} {{day}}, {{year}} at {{hour}}:{{minute}} ET."
   },
   "cancel": "Cancel",
-  "number": "Number"
+  "number": "Number",
+  "conditional": {
+    "activated": "The form element {{title}} was added to the form"
+  }
 }

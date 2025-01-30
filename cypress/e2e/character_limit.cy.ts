@@ -8,17 +8,19 @@ describe("Forms Functionality - Character Counts", () => {
 
   it("does not display any message when not enough characters have been typed in", () => {
     cy.typeInField("input[id='2']", "This is 21 characters");
-    cy.get("div[id='characterCountMessage2']").should("not.exist");
+    cy.get("div[id='characterCountMessage2']").should("be.hidden").should("be.empty");
   });
 
   it("displays a message with the number of characters remaining", () => {
     cy.typeInField("input[id='2']", "This is 35 characters This is 35 ch");
-    cy.get("div[id='characterCountMessage2']").contains("You have 5 characters left.");
+    cy.get("div[id='characterCountMessage2']")
+      .should("be.visible")
+      .contains("You have 5 characters left.");
   });
 
   it("displays an error message indicating too many characters", () => {
     cy.typeInField("input[id='2']", "This is 48 characters This is 48 characters This");
-    cy.get("div[id='characterCountMessage2']").contains("exceeded the limit");
+    cy.get("div[id='characterCountMessage2']").should("be.visible").contains("exceeded the limit");
   });
 
   it("won't submit the form if the number of characters is too many", () => {

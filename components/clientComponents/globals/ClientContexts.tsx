@@ -3,7 +3,6 @@
 import { SessionProvider } from "next-auth/react";
 import { Session } from "next-auth";
 import { AccessControlProvider } from "@lib/hooks/useAccessControl";
-import { LiveMessagePovider } from "@lib/hooks/useLiveMessage";
 import { RefsProvider } from "@formBuilder/[id]/edit/components/RefsContext";
 import { FeatureFlagsProvider } from "@lib/hooks/useFeatureFlags";
 import { Flags } from "@lib/cache/types";
@@ -24,9 +23,7 @@ export const ClientContexts: React.FC<{
     >
       <AccessControlProvider>
         <RefsProvider>
-          <FeatureFlagsProvider featureFlags={featureFlags}>
-            <LiveMessagePovider>{children}</LiveMessagePovider>
-          </FeatureFlagsProvider>
+          <FeatureFlagsProvider featureFlags={featureFlags}>{children}</FeatureFlagsProvider>
         </RefsProvider>
       </AccessControlProvider>
     </SessionProvider>

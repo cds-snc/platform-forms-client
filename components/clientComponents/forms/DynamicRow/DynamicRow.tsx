@@ -7,6 +7,7 @@ import { FormElement } from "@lib/types";
 import { Description } from "@clientComponents/forms";
 import { Button } from "@clientComponents/globals";
 import { useTranslation } from "@i18n/client";
+import { EventKeys, useCustomEvent } from "@lib/hooks/useCustomEvent";
 
 interface DynamicGroupProps {
   name: string;
@@ -60,6 +61,7 @@ export const DynamicGroup = (props: DynamicGroupProps): React.ReactElement => {
   );
   const focusedRow = useRef<number | null>(null);
   const [hasReachedMaxNumberOfRows, setHasReachedMaxNumberOfRows] = useState<boolean>(false);
+  const { Event } = useCustomEvent();
 
   const { t } = useTranslation();
 
@@ -96,6 +98,10 @@ export const DynamicGroup = (props: DynamicGroupProps): React.ReactElement => {
     rowRefs.current.push(createRef<HTMLFieldSetElement>());
     // Do not subtract one because the rows state has not yet updated it's length when this is called
     focusedRow.current = rows.length;
+    // Let an AT user know a new repeating set was added
+    Event.fire(EventKeys.liveMessage, {
+      message: t("dynamicRow.addedMessage", { rowTitle: title, count: rows.length + 1 }),
+    });
   };
 
   const deleteRow = (index: number) => {

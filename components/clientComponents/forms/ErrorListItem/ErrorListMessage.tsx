@@ -1,11 +1,7 @@
 import { useTranslation } from "@i18n/client";
 import { FormElement, FormElementTypes } from "@lib/types";
 import { getProperty } from "@lib/i18nHelpers";
-
-const truncateString = (str: string, maxLength: number = 50): string => {
-  if (!str) return "";
-  return str.length > maxLength ? `${str.slice(0, maxLength)}...` : str;
-};
+import { truncateString } from "@lib/client/clientHelpers";
 
 export const ErrorListMessage = ({
   id,
