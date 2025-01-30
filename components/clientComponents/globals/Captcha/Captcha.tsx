@@ -17,10 +17,7 @@ export const Captcha = ({
   lang: string;
   hCaptchaSiteKey: string;
 }) => {
-  // Avoid instantiating multiple times (really necessary?)
-  if (hCaptchaRef.current !== null) {
-    return null;
-  }
+  logMessage.info("catpcha component loaded");
 
   const verify = async (token: string) => {
     try {
