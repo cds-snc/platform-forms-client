@@ -53,7 +53,7 @@ export const DynamicGroup = (props: DynamicGroupProps): React.ReactElement => {
     removeButtonText,
     maxNumberOfRows,
   } = props;
-  const [field, meta, helpers] = useField(props);
+  const [field, , helpers] = useField(props);
   const [rows, setRows] = useState(() => Array(field.value.length).fill(rowElements));
   const rowRefs = useRef<Array<React.RefObject<HTMLFieldSetElement | null>>>(
     Array(field.value.length).fill(createRef<HTMLFieldSetElement>())
@@ -87,7 +87,8 @@ export const DynamicGroup = (props: DynamicGroupProps): React.ReactElement => {
     if (hasReachedMaxNumberOfRows) return;
     // Set the newly added row'initial value (plucked out of initialValues)
     const newValue = [...field.value];
-    newValue.push(meta.initialValue ? meta.initialValue[0] : {});
+    // @todo check if the next line is needed.
+    // newValue.push(meta.initialValue ? {} : {});
     helpers.setValue(newValue);
     // Add the new row to the rows state
     setRows([...rows, rowElements]);
