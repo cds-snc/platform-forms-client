@@ -355,11 +355,7 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
                 />
               )}
             </div>
-            {props.downloadProgress ? (
-              <div className="flex">
-                <SaveProgressButton />
-              </div>
-            ) : null}
+            {props.downloadProgress ? <SaveProgressButton formId={formID} /> : null}
           </form>
         </>
       }
