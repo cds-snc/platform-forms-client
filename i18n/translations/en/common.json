@@ -217,6 +217,6 @@
   "cancel": "Cancel",
   "number": "Number",
   "conditional": {
-    "activated": "Field {{title}} was added to the form"
+    "activated": "The form element {{title}} was added to the form"
   }
 }
