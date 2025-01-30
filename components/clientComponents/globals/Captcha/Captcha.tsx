@@ -1,6 +1,6 @@
 import HCaptcha from "@hcaptcha/react-hcaptcha";
 import { logMessage } from "@lib/logger";
-import { verifyHCaptchaToken } from "./helpers";
+import { verifyHCaptchaToken } from "./actions";
 
 // Running in 100% passive mode
 // For more info on the React lib https://github.com/hCaptcha/react-hcaptcha

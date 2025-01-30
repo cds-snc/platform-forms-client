@@ -66,7 +66,7 @@ export default async function Page(props0: {
   const formTitle = formRecord.form[getLocalizedProperty("title", language)] as string;
   const isAllowGrouping = allowGrouping();
 
-  const { hCaptchaSiteKey } = await getHCaptchaSettings();
+  const { hCaptchaSiteKey } = getHCaptchaSettings();
 
   let isPastClosingDate = false;
 
