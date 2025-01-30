@@ -29,6 +29,10 @@
     "apiAccess": {
       "title": "Accès API",
       "description": "Activer les écrans et fonctionnalités d'accès à l'API"
+    },
+    "saveAndResume": {
+      "title": "Save and Resume",
+      "description": "Enable save and resume functionality"
     }
   }
 }
