@@ -23,9 +23,9 @@ import { getLocalizedProperty } from "@lib/utils";
 import { Language } from "@lib/types/form-builder-types";
 
 import {
-  saveProgress as saveToSession,
-  restoreProgress as restoreSession,
-} from "@lib/utils/saveProgress";
+  saveSessionProgress as saveToSession,
+  restoreSessionProgress as restoreSession,
+} from "@lib/utils/saveSessionProgress";
 
 import { toggleSavedValues } from "@i18n/toggleSavedValues";
 
@@ -48,8 +48,8 @@ interface GCFormsContextValueType {
   pushIdToHistory: (groupId: string) => string[];
   clearHistoryAfterId: (groupId: string) => string[];
   getGroupTitle: (groupId: string | null, language: Language) => string;
-  saveProgress: (language: Language | undefined) => void;
-  restoreProgress: (language: Language) => FormValues | false;
+  saveSessionProgress: (language: Language | undefined) => void;
+  restoreSessionProgress: (language: Language) => FormValues | false;
   getProgressData: () => {
     id: string;
     values: FormValues;
@@ -184,7 +184,7 @@ export const GCFormsProvider = ({
     };
   };
 
-  const saveProgress = (language: Language = "en") => {
+  const saveSessionProgress = (language: Language = "en") => {
     const vals =
       language === "en"
         ? values.current
@@ -198,7 +198,7 @@ export const GCFormsProvider = ({
     });
   };
 
-  const restoreProgress = (language: Language) => {
+  const restoreSessionProgress = (language: Language) => {
     return restoreSession({ id: formRecord.id, form: formRecord.form, language });
   };
 
@@ -223,9 +223,9 @@ export const GCFormsProvider = ({
         pushIdToHistory,
         clearHistoryAfterId,
         getGroupTitle,
-        saveProgress,
+        saveSessionProgress,
         getProgressData,
-        restoreProgress,
+        restoreSessionProgress,
       }}
     >
       {children}
@@ -260,7 +260,7 @@ export const useGCFormsContext = () => {
       pushIdToHistory: () => [],
       clearHistoryAfterId: () => [],
       getGroupTitle: () => "",
-      saveProgress: () => void 0,
+      saveSessionProgress: () => void 0,
       getProgressData: () => {
         return {
           id: "",
@@ -269,7 +269,7 @@ export const useGCFormsContext = () => {
           currentGroup: "",
         };
       },
-      restoreProgress: () => {
+      restoreSessionProgress: () => {
         return {};
       },
     };

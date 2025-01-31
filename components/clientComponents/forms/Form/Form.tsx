@@ -198,7 +198,7 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
   }, [formStatusError, errorList, lastSubmitCount, canFocusOnError]);
 
   const handleSessionSave = useCallback(() => {
-    props.saveProgress && props.saveProgress(language as Language);
+    props.saveSessionProgress && props.saveSessionProgress(language as Language);
   }, [language, props]);
 
   useEffect(() => {
@@ -388,7 +388,7 @@ interface FormProps {
   allowGrouping?: boolean | undefined;
   groupHistory?: string[];
   matchedIds?: string[];
-  saveProgress: (language?: Language) => void;
+  saveSessionProgress: (language?: Language) => void;
   downloadProgress?: boolean;
 }
 
@@ -446,7 +446,7 @@ export const Form = withFormik<FormProps, Responses>({
 
       // Failed to find Server Action (likely due to newer deployment)
       if (result === undefined) {
-        formikBag.props.saveProgress();
+        formikBag.props.saveSessionProgress();
         logMessage.info("Failed to find Server Action caught and session saved");
         formikBag.setStatus("ServerIDError");
         return;

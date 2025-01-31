@@ -4,7 +4,7 @@ import { useTranslation } from "@i18n/client";
 import { useRouter } from "next/navigation";
 import { InternalLinkIcon } from "@serverComponents/icons";
 import { ExternalLinkIcon } from "@serverComponents/icons";
-import { saveProgress } from "@lib/utils/saveProgress";
+import { saveSessionProgress } from "@lib/utils/saveSessionProgress";
 
 export const ResumeForm = ({
   formId,
@@ -44,7 +44,7 @@ export const ResumeForm = ({
         const parsed = JSON.parse(formData);
         const id = parsed.id;
 
-        saveProgress(language, {
+        saveSessionProgress(language, {
           id: id,
           values: parsed.values,
           history: parsed.history,

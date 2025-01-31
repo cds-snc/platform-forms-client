@@ -7,7 +7,7 @@ import { Form } from "@clientComponents/forms/Form/Form";
 import { Language } from "@lib/types/form-builder-types";
 import { useEffect, useMemo, type JSX } from "react";
 import { useGCFormsContext } from "@lib/hooks/useGCFormContext";
-import { restoreProgress, removeProgressStorage } from "@lib/utils/saveProgress";
+import { restoreSessionProgress, removeProgressStorage } from "@lib/utils/saveSessionProgress";
 
 export const FormWrapper = ({
   formRecord,
@@ -25,11 +25,15 @@ export const FormWrapper = ({
   } = useTranslation(["common", "confirmation", "form-closed"]);
   const router = useRouter();
 
-  const { saveProgress } = useGCFormsContext();
+  const { saveSessionProgress } = useGCFormsContext();
 
   const values = useMemo(
     () =>
-      restoreProgress({ id: formRecord.id, form: formRecord.form, language: language as Language }),
+      restoreSessionProgress({
+        id: formRecord.id,
+        form: formRecord.form,
+        language: language as Language,
+      }),
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [language]
   );
@@ -52,7 +56,7 @@ export const FormWrapper = ({
         router.push(`/${language}/id/${formID}/confirmation`);
       }}
       t={t}
-      saveProgress={saveProgress}
+      saveSessionProgress={saveSessionProgress}
       downloadProgress={true}
       renderSubmit={({ validateForm, fallBack }) => {
         return (
