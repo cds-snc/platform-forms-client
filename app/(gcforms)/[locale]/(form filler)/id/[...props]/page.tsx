@@ -13,6 +13,7 @@ import { allowGrouping } from "@formBuilder/components/shared/right-panel/treevi
 import { serverTranslation } from "@i18n";
 import { ClosingNotice } from "@clientComponents/forms/ClosingNotice/ClosingNotice";
 import { FormDelayProvider } from "@lib/hooks/useFormDelayContext";
+import { ResumeForm } from "@clientComponents/forms/ResumeForm/ResumeForm";
 
 export async function generateMetadata(props0: {
   params: Promise<{ locale: string; props: string[] }>;
@@ -47,6 +48,7 @@ export default async function Page(props0: {
 
   const formID = props[0];
   const step = props[1] ?? "";
+
   const formRecord = await getPublicTemplateByID(formID);
 
   // Redirect if form doesn't exist and only retrieve published forms
@@ -75,6 +77,14 @@ export default async function Page(props0: {
     return (
       <FormDisplayLayout formRecord={formRecord}>
         <ClosedPage language={language} formRecord={formRecord} />
+      </FormDisplayLayout>
+    );
+  }
+
+  if (step === "resume") {
+    return (
+      <FormDisplayLayout formRecord={formRecord}>
+        <ResumeForm formId={formID} />
       </FormDisplayLayout>
     );
   }

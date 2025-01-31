@@ -2,10 +2,11 @@
 import React from "react";
 import { useTranslation } from "@i18n/client";
 import { useRouter } from "next/navigation";
+import { InternalLinkIcon } from "@serverComponents/icons";
 import { ExternalLinkIcon } from "@serverComponents/icons";
 import { saveProgress } from "@lib/utils/saveProgress";
 
-export const Upload = () => {
+export const ResumeForm = ({ formId }: { formId: string }) => {
   const {
     t,
     i18n: { language },
@@ -58,6 +59,22 @@ export const Upload = () => {
     <>
       <h1 className="visually-hidden">{t("start")}</h1>
       <div className="flex flex-col justify-center tablet:flex-row">
+        {/* Start again */}
+        <button
+          className={boxClass}
+          onClick={async (e) => {
+            e.preventDefault();
+            router.push(`/${language}/id/${formId}`);
+          }}
+        >
+          <InternalLinkIcon className="mb-2 scale-125" />
+          <h2 className="mb-1 p-0 group-hover:underline group-focus:underline">
+            {t("saveAndResume.resumePage.restart.title")}
+          </h2>
+          <p className="text-sm">{t("saveAndResume.resumePage.restart.description")}</p>
+        </button>
+
+        {/* Upload and resume */}
         <label>
           <div
             tabIndex={0}
@@ -71,8 +88,10 @@ export const Upload = () => {
             }}
           >
             <ExternalLinkIcon className="mb-2 scale-125" />
-            <h2 className="mb-1 p-0 group-hover:underline group-focus:underline">{t("startH3")}</h2>
-            <p className="text-sm">{t("startP2")}</p>
+            <h2 className="mb-1 p-0 group-hover:underline group-focus:underline">
+              {t("saveAndResume.resumePage.upload.title")}
+            </h2>
+            <p className="text-sm">{t("saveAndResume.resumePage.upload.description")}</p>
             <input id="file-upload" type="file" onChange={handleChange} className="hidden" />
           </div>
         </label>

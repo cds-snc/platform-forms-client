@@ -82,3 +82,4 @@ export { HelpIcon } from "./HelpIcon";
 export { RightPanelOpen } from "./RightPanelOpen";
 export { SortIcon } from "./SortIcon";
 export { BoltIcon } from "./BoltIcon";
+export { InternalLinkIcon } from "./InternalLinkIcon";
