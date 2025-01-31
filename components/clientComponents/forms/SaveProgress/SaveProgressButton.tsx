@@ -1,5 +1,7 @@
+import { useCallback, useState } from "react";
 import { useGCFormsContext } from "@lib/hooks/useGCFormContext";
-import { Button } from "@clientComponents/globals/Buttons/Button";
+import { SubmitButton as DownloadProgress } from "@clientComponents/globals/Buttons/SubmitButton";
+import { useTranslation } from "@i18n/client";
 
 declare global {
   interface Window {
@@ -8,50 +10,55 @@ declare global {
   }
 }
 
+async function promptToSave(fileName: string, data: string) {
+  const handle = await window?.showSaveFilePicker({
+    suggestedName: fileName,
+    types: [
+      {
+        accept: { "text/plain": [".txt"] },
+      },
+    ],
+  });
+
+  const writable = await handle.createWritable();
+  await writable.write(data);
+  await writable.close();
+}
+
 export const SaveProgressButton = ({ formId }: { formId: string }) => {
   const { getProgressData } = useGCFormsContext();
+  const { t } = useTranslation(["review", "common"]);
+  const [saving, setSaving] = useState(false);
 
-  const handleSave = async () => {
+  const handleSave = useCallback(async () => {
     try {
-      const formData = getProgressData();
-      const encodedformDataEn = btoa(JSON.stringify(formData));
+      setSaving(true);
 
-      const handle = await window?.showSaveFilePicker({
-        suggestedName: `form-progress-${formId}.txt`,
-        types: [
-          {
-            description: "Text Files",
-            accept: { "text/plain": [".txt"] },
-          },
-        ],
-      });
+      const fileName = `${formId}.txt`;
 
-      try {
-        const writable = await handle.createWritable();
-        await writable.write(encodedformDataEn);
-        await writable.close();
-      } catch (error) {
-        if (error instanceof Error) {
-          // console.error("Error writing file:", error.message);
-        }
-        // Ensure stream is closed on error
-        // await writable?.abort();
+      const data = btoa(JSON.stringify(getProgressData()));
+
+      if (!window?.showSaveFilePicker) {
+        const downloadLink = document.createElement("a");
+        const blob = new Blob([data], { type: "text/plain" });
+        downloadLink.href = URL.createObjectURL(blob);
+        downloadLink.download = fileName;
+        downloadLink.click();
+        URL.revokeObjectURL(downloadLink.href);
+      } else {
+        await promptToSave(fileName, data);
       }
+      setSaving(false);
     } catch (error) {
-      // Handle user abort or permissions error
-      /*
-      if (error.name !== "AbortError") {
-        console.error("Save failed:", error);
-      }
-      */
+      setSaving(false);
     }
-  };
+  }, [formId, getProgressData]);
 
   return (
     <div className="flex pt-10">
-      <Button theme="secondary" onClick={handleSave}>
-        Save Progress
-      </Button>
+      <DownloadProgress type="button" loading={saving} theme="secondary" onClick={handleSave}>
+        {t("saveAndResume.saveBtn")}
+      </DownloadProgress>
     </div>
   );
 };

@@ -214,5 +214,8 @@
     "text2": "{{month}} {{day}}, {{year}} at {{hour}}:{{minute}} ET."
   },
   "cancel": "Cancel",
-  "number": "Number"
+  "number": "Number",
+  "saveAndResume": {
+    "saveBtn": "Save Progress"
+  }
 }

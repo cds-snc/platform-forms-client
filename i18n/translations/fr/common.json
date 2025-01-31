@@ -214,5 +214,8 @@
     "text2": "{{day}} {{month}} {{year}} à {{hour}} h {{minute}} HE"
   },
   "cancel": "Annuler",
-  "number": "Numéro"
+  "number": "Numéro",
+  "saveAndResume": {
+    "saveBtn": "Save Progress FR"
+  }
 }
