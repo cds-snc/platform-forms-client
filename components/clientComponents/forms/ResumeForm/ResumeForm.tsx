@@ -6,7 +6,15 @@ import { InternalLinkIcon } from "@serverComponents/icons";
 import { ExternalLinkIcon } from "@serverComponents/icons";
 import { saveProgress } from "@lib/utils/saveProgress";
 
-export const ResumeForm = ({ formId }: { formId: string }) => {
+export const ResumeForm = ({
+  formId,
+  titleEn,
+  titleFr,
+}: {
+  formId: string;
+  titleEn: string;
+  titleFr: string;
+}) => {
   const {
     t,
     i18n: { language },
@@ -55,9 +63,11 @@ export const ResumeForm = ({ formId }: { formId: string }) => {
   const boxClass =
     "group mx-4 mb-4 flex h-80 w-80 flex-col rounded-xl border-[0.5px] border-slate-500 bg-gray-background pl-6 pr-5 pt-28 text-left outline-none hover:cursor-pointer hover:border-[1px] hover:border-indigo-700 hover:bg-indigo-50 focus:cursor-pointer focus:border-[3px] focus:border-slate-700";
 
+  const title = language === "en" ? titleEn : titleFr;
+
   return (
     <>
-      <h1 className="visually-hidden">{t("start")}</h1>
+      <h1>{title}</h1>
       <div className="flex flex-col justify-center tablet:flex-row">
         {/* Start again */}
         <button

@@ -84,7 +84,11 @@ export default async function Page(props0: {
   if (step === "resume") {
     return (
       <FormDisplayLayout formRecord={formRecord} dateModified={false}>
-        <ResumeForm formId={formID} />
+        <ResumeForm
+          titleEn={formRecord.form.titleEn}
+          titleFr={formRecord.form.titleFr}
+          formId={formID}
+        />
       </FormDisplayLayout>
     );
   }
