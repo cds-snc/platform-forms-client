@@ -2,5 +2,6 @@
   "repeatingSets": false,
   "addressComplete": false,
   "scheduleClosingDate": false,
-  "apiAccess": false
+  "apiAccess": false,
+  "saveAndResume": false
 }
