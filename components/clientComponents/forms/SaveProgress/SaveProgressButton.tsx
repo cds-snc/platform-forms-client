@@ -4,6 +4,7 @@ import { LinkButton } from "@serverComponents/globals/Buttons/LinkButton";
 import { SubmitButton as DownloadProgress } from "@clientComponents/globals/Buttons/SubmitButton";
 import { useTranslation } from "@i18n/client";
 import { Language } from "@lib/types/form-builder-types";
+import { slugify } from "@lib/client/clientHelpers";
 
 declare global {
   interface Window {
@@ -29,9 +30,13 @@ async function promptToSave(fileName: string, data: string) {
 
 export const SaveProgressButton = ({
   formId,
+  formTitleEn,
+  formTitleFr,
   language,
 }: {
   formId: string;
+  formTitleEn: string;
+  formTitleFr: string;
   language: Language;
 }) => {
   const { getProgressData } = useGCFormsContext();
@@ -42,7 +47,9 @@ export const SaveProgressButton = ({
     try {
       setSaving(true);
 
-      const fileName = `${formId}.txt`;
+      const title = language === "en" ? formTitleEn : formTitleFr;
+
+      const fileName = `${slugify(title)}.txt`;
 
       const data = btoa(JSON.stringify(getProgressData()));
 

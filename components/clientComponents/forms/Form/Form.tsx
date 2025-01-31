@@ -356,7 +356,12 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
               )}
             </div>
             {props.downloadProgress ? (
-              <SaveProgressButton language={language as Language} formId={formID} />
+              <SaveProgressButton
+                formTitleEn={form.titleEn}
+                formTitleFr={form.titleFr}
+                language={language as Language}
+                formId={formID}
+              />
             ) : null}
           </form>
         </>
