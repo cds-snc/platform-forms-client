@@ -29,6 +29,10 @@
     "apiAccess": {
       "title": "Accès API",
       "description": "Activer les écrans et fonctionnalités d'accès à l'API"
+    },
+    "hCaptcha": {
+      "title": "hCaptcha",
+      "description": "[FR]Enable hCaptcha spam prevention"
     }
   }
 }
