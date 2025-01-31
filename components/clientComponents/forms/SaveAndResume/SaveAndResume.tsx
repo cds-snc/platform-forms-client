@@ -28,7 +28,7 @@ async function promptToSave(fileName: string, data: string) {
   await writable.close();
 }
 
-export const SaveProgressButton = ({
+export const SaveAndResume = ({
   formId,
   formTitleEn,
   formTitleFr,

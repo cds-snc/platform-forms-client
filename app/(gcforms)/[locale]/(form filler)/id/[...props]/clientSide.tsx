@@ -57,7 +57,7 @@ export const FormWrapper = ({
       }}
       t={t}
       saveSessionProgress={saveSessionProgress}
-      downloadProgress={true}
+      saveAndResume={true}
       renderSubmit={({ validateForm, fallBack }) => {
         return (
           <>

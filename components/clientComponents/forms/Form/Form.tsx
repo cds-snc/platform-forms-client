@@ -30,7 +30,7 @@ import { filterShownElements, filterValuesByShownElements } from "@lib/formConte
 import { formHasGroups } from "@lib/utils/form-builder/formHasGroups";
 import { showReviewPage } from "@lib/utils/form-builder/showReviewPage";
 import { useFormDelay } from "@lib/hooks/useFormDelayContext";
-import { SaveProgressButton } from "@clientComponents/forms/SaveProgress/SaveProgressButton";
+import { SaveAndResume } from "@clientComponents/forms/SaveAndResume/SaveAndResume";
 
 interface SubmitButtonProps {
   getFormDelay: () => number;
@@ -355,8 +355,8 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
                 />
               )}
             </div>
-            {props.downloadProgress ? (
-              <SaveProgressButton
+            {props.saveAndResume ? (
+              <SaveAndResume
                 formTitleEn={form.titleEn}
                 formTitleFr={form.titleFr}
                 language={language as Language}
@@ -389,7 +389,7 @@ interface FormProps {
   groupHistory?: string[];
   matchedIds?: string[];
   saveSessionProgress: (language?: Language) => void;
-  downloadProgress?: boolean;
+  saveAndResume?: boolean;
 }
 
 /**
