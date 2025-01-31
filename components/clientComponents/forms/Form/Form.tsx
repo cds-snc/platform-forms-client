@@ -30,6 +30,7 @@ import { filterShownElements, filterValuesByShownElements } from "@lib/formConte
 import { formHasGroups } from "@lib/utils/form-builder/formHasGroups";
 import { showReviewPage } from "@lib/utils/form-builder/showReviewPage";
 import { useFormDelay } from "@lib/hooks/useFormDelayContext";
+import { SaveAndResume } from "@clientComponents/forms/SaveAndResume/SaveAndResume";
 
 interface SubmitButtonProps {
   getFormDelay: () => number;
@@ -197,7 +198,7 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
   }, [formStatusError, errorList, lastSubmitCount, canFocusOnError]);
 
   const handleSessionSave = useCallback(() => {
-    props.saveProgress && props.saveProgress(language as Language);
+    props.saveSessionProgress && props.saveSessionProgress(language as Language);
   }, [language, props]);
 
   useEffect(() => {
@@ -354,6 +355,14 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
                 />
               )}
             </div>
+            {props.saveAndResume ? (
+              <SaveAndResume
+                formTitleEn={form.titleEn}
+                formTitleFr={form.titleFr}
+                language={language as Language}
+                formId={formID}
+              />
+            ) : null}
           </form>
         </>
       }
@@ -379,7 +388,8 @@ interface FormProps {
   allowGrouping?: boolean | undefined;
   groupHistory?: string[];
   matchedIds?: string[];
-  saveProgress: (language?: Language) => void;
+  saveSessionProgress: (language?: Language) => void;
+  saveAndResume?: boolean;
 }
 
 /**
@@ -436,7 +446,7 @@ export const Form = withFormik<FormProps, Responses>({
 
       // Failed to find Server Action (likely due to newer deployment)
       if (result === undefined) {
-        formikBag.props.saveProgress();
+        formikBag.props.saveSessionProgress();
         logMessage.info("Failed to find Server Action caught and session saved");
         formikBag.setStatus("ServerIDError");
         return;
