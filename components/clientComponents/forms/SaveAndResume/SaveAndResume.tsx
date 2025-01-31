@@ -18,6 +18,7 @@ async function promptToSave(fileName: string, data: string) {
     suggestedName: fileName,
     types: [
       {
+        description: "Form Progress (Save to resume later)",
         accept: { "text/plain": [".txt"] },
       },
     ],
