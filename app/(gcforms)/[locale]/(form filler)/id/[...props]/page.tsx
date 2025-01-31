@@ -83,7 +83,7 @@ export default async function Page(props0: {
 
   if (step === "resume") {
     return (
-      <FormDisplayLayout formRecord={formRecord}>
+      <FormDisplayLayout formRecord={formRecord} dateModified={false}>
         <ResumeForm formId={formID} />
       </FormDisplayLayout>
     );
