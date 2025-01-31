@@ -63,7 +63,7 @@ export const SaveProgressButton = ({
   }, [formId, getProgressData]);
 
   return (
-    <div className="flex pt-10">
+    <div className="sticky bottom-0 z-50 mt-10 flex border-t-2 border-gcds-blue-900 bg-gcds-blue-100 p-4">
       <DownloadProgress
         className="mr-4"
         type="button"
