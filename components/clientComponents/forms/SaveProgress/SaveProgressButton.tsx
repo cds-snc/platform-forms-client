@@ -1,7 +1,9 @@
 import { useCallback, useState } from "react";
 import { useGCFormsContext } from "@lib/hooks/useGCFormContext";
+import { LinkButton } from "@serverComponents/globals/Buttons/LinkButton";
 import { SubmitButton as DownloadProgress } from "@clientComponents/globals/Buttons/SubmitButton";
 import { useTranslation } from "@i18n/client";
+import { Language } from "@lib/types/form-builder-types";
 
 declare global {
   interface Window {
@@ -25,7 +27,13 @@ async function promptToSave(fileName: string, data: string) {
   await writable.close();
 }
 
-export const SaveProgressButton = ({ formId }: { formId: string }) => {
+export const SaveProgressButton = ({
+  formId,
+  language,
+}: {
+  formId: string;
+  language: Language;
+}) => {
   const { getProgressData } = useGCFormsContext();
   const { t } = useTranslation(["review", "common"]);
   const [saving, setSaving] = useState(false);
@@ -56,9 +64,18 @@ export const SaveProgressButton = ({ formId }: { formId: string }) => {
 
   return (
     <div className="flex pt-10">
-      <DownloadProgress type="button" loading={saving} theme="secondary" onClick={handleSave}>
+      <DownloadProgress
+        className="mr-4"
+        type="button"
+        loading={saving}
+        theme="secondary"
+        onClick={handleSave}
+      >
         {t("saveAndResume.saveBtn")}
       </DownloadProgress>
+      <LinkButton.Secondary href={`/${language}/id/${formId}/resume`}>
+        {t("saveAndResume.resumeBtn")}
+      </LinkButton.Secondary>
     </div>
   );
 };

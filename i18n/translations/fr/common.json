@@ -216,6 +216,17 @@
   "cancel": "Annuler",
   "number": "Numéro",
   "saveAndResume": {
-    "saveBtn": "Save Progress FR"
+    "saveBtn": "Save Progress FR",
+    "resumeBtn": "Resume FR",
+    "resumePage": {
+      "upload": {
+        "title": "Upload form FR",
+        "description": "Continue filling out a form FR"
+      },
+      "restart": {
+        "title": "Start again FR",
+        "description": "Fill out a blank form FR"
+      }
+    }
   }
 }

@@ -217,6 +217,7 @@
   "number": "Number",
   "saveAndResume": {
     "saveBtn": "Save Progress",
+    "resumeBtn": "Resume",
     "resumePage": {
       "upload": {
         "title": "Upload form",
