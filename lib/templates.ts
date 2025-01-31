@@ -143,9 +143,9 @@ export async function createTemplate(command: CreateTemplateCommand): Promise<Fo
 
   if (!validationResult.valid) {
     logMessage.warn(
-      `[templates][createTemplate] Form config is invalid. ${JSON.stringify(
+      `[templates][createTemplate] Form config is invalid.\nReasons: ${JSON.stringify(
         validationResult.errors
-      )}`
+      )}.\nConfig: ${JSON.stringify(command.formConfig)}`
     );
     throw new InvalidFormConfigError();
   }
@@ -477,9 +477,9 @@ export async function updateTemplate(command: UpdateTemplateCommand): Promise<Fo
 
   if (!validationResult.valid) {
     logMessage.warn(
-      `[templates][updateTemplate] Form config is invalid. ${JSON.stringify(
+      `[templates][updateTemplate] Form config is invalid.\nReasons: ${JSON.stringify(
         validationResult.errors
-      )}`
+      )}.\nConfig: ${JSON.stringify(command.formConfig)}`
     );
     throw new InvalidFormConfigError();
   }
