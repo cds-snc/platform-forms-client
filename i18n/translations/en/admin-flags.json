@@ -31,7 +31,7 @@
       "description": "Enable API access screens and functionality"
     },
     "saveAndResume": {
-      "title": "Save and Resume",
+      "title": "Save and resume later",
       "description": "Enable save and resume functionality"
     }
   }
