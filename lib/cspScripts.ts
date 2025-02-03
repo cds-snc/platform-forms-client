@@ -43,7 +43,7 @@ export const generateCSP = (): { csp: string; nonce: string } => {
   //     upgrade-insecure-requests;
   // `;
 
-  // TODO self-host hCAPTCHA script and revert to original (above)
+  // TODO: Revist using a reverse proxy before releasing to prod. Pros cons etc.
   const cspHeader = `
       default-src 'self';
       script-src 'self' 'nonce-${nonce}' 'strict-dynamic';
@@ -53,9 +53,9 @@ export const generateCSP = (): { csp: string; nonce: string } => {
       object-src 'none';
       base-uri 'self';
       form-action 'self';
-      frame-src www.googletagmanager.com https://hcaptcha.com https://*.hcaptcha.com;
+      frame-src www.googletagmanager.com hcaptcha.com *.hcaptcha.com;
       frame-ancestors 'none';
-      connect-src 'self' www.googletagmanager.com www.google-analytics.com ws1.postescanada-canadapost.ca https://hcaptcha.com https://*.hcaptcha.com;
+      connect-src 'self' www.googletagmanager.com www.google-analytics.com ws1.postescanada-canadapost.ca hcaptcha.com *.hcaptcha.com;
       block-all-mixed-content;
       upgrade-insecure-requests;
     `;
