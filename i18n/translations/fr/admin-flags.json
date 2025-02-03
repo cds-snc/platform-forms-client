@@ -31,8 +31,8 @@
       "description": "Activer les écrans et fonctionnalités d'accès à l'API"
     },
     "saveAndResume": {
-      "title": "Save and Resume",
-      "description": "Enable save and resume functionality"
+      "title": "Enregistrer et reprendre plus tard",
+      "description": "Activer la fonctionnalité d'enregistrement et de reprise"
     }
   }
 }
