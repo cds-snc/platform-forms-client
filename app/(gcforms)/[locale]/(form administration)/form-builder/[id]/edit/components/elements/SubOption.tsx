@@ -12,14 +12,12 @@ import { Language } from "@lib/types/form-builder-types";
 type RenderIcon = (index: number) => ReactElement | string | undefined;
 
 export const SubOption = ({
-  elIndex,
   subIndex,
   index,
   id,
   renderIcon,
   initialValue,
 }: {
-  elIndex: number;
   subIndex: number;
   index: number;
   id: number;
@@ -37,6 +35,7 @@ export const SubOption = ({
     translationLanguagePriority,
     getLocalizationAttribute,
     setChangeKey,
+    getFormElementWithIndexById,
   } = useTemplateStore((s) => ({
     addSubChoice: s.addSubChoice,
     removeSubChoice: s.removeSubChoice,
@@ -46,6 +45,7 @@ export const SubOption = ({
     translationLanguagePriority: s.translationLanguagePriority,
     getLocalizationAttribute: s.getLocalizationAttribute,
     setChangeKey: s.setChangeKey,
+    getFormElementWithIndexById: s.getFormElementWithIndexById,
   }));
 
   const icon = renderIcon && renderIcon(index);
@@ -96,6 +96,10 @@ export const SubOption = ({
     [setValue, translationLanguagePriority]
   );
 
+  const parentIndex = getFormElementWithIndexById(id)?.index;
+
+  if (parentIndex === undefined) return null;
+
   return (
     <div className="mt-3 flex">
       <div className="mt-2 flex w-5 justify-end">{icon}</div>
@@ -105,9 +109,9 @@ export const SubOption = ({
         type="text"
         value={value}
         placeholder={`${t("option")} ${index + 1}`}
-        onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-          updateValue(elIndex, subIndex, index, e.target.value)
-        }
+        onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+          updateValue(parentIndex, subIndex, index, e.target.value);
+        }}
         onKeyDown={handleKeyDown}
         className="!my-0 ml-5 max-h-9 w-full"
         {...getLocalizationAttribute()}
