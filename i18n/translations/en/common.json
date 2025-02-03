@@ -227,6 +227,12 @@
         "title": "Start again",
         "description": "Fill out a blank form"
       }
+    },
+    "prompt": {
+      "title": "Save your progress",
+      "description": "Warning you are responsible for protecting the downloaded file. If you lose it, you will not be able to resume your form.",
+      "okay": "Okay",
+      "cancel": "Cancel"
     }
   }
 }

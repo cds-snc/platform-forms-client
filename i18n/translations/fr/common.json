@@ -227,6 +227,12 @@
         "title": "Start again FR",
         "description": "Fill out a blank form FR"
       }
+    },
+    "prompt": {
+      "title": "Save your progress [FR]",
+      "description": "Warning you are responsible for protecting the downloaded file. If you lose it, you will not be able to resume your form. [FR]",
+      "okay": "Okay [FR]",
+      "cancel": "Cancel [FR]"
     }
   }
 }
