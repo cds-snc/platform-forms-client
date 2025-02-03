@@ -4,6 +4,7 @@ export const FeatureFlags = {
   repeatingSets: "repeatingSets",
   scheduleClosingDate: "scheduleClosingDate",
   apiAccess: "apiAccess",
+  saveAndResume: "saveAndResume",
 } as const;
 
 export type FeatureFlagKeys = keyof typeof FeatureFlags;
