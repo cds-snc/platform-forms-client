@@ -83,7 +83,7 @@ export const ConfirmDownload = ({
     <AlertDialog.Root open={open}>
       <AlertDialog.Portal>
         <AlertDialog.Overlay className="fixed inset-0 z-[200] h-screen w-screen bg-gray-500/70" />
-        <AlertDialog.Content className="absolute left-1/2 top-1/2 z-[201] w-full max-w-xl -translate-x-1/2 -translate-y-1/2 rounded-2xl bg-white p-4 shadow-2xl">
+        <AlertDialog.Content className="fixed left-1/2 top-1/2 z-[201] w-full max-w-xl -translate-x-1/2 -translate-y-1/2 rounded-2xl bg-white p-4 shadow-2xl">
           <AlertDialog.Title className="text-2xl font-extrabold leading-tight">
             {t("saveAndResume.prompt.title")}
           </AlertDialog.Title>
