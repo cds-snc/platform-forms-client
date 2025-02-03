@@ -6,6 +6,8 @@ import { TextArea } from "@formBuilder/components/shared/TextArea";
 import React, { useState } from "react";
 import { cn } from "@lib/utils";
 
+import { Label } from "@clientComponents/forms";
+
 export const PrePublishDialog = ({
   handleClose,
   handleConfirm,
@@ -107,7 +109,16 @@ export const PrePublishDialog = ({
           handleClose={handleClose}
         >
           <div className="mx-5 my-8 flex flex-col gap-4">
-            <h3 className="gc-h4 mb-1 pb-0 text-lg">{t("prePublishFormDialog.text1")}</h3>
+            <h3 className="gc-h4 mb-1 pb-0 text-lg">
+              <div className="flex-col">
+                <span className="">{t("prePublishFormDialog.text1")}</span>
+                <legend className="gc-label required">
+                  <span data-testid="required" aria-hidden>
+                    ({t("required")})
+                  </span>
+                </legend>
+              </div>
+            </h3>
             {error && (
               <Alert.Danger focussable={true} className="mb-5">
                 <Alert.Title headingTag="h3">{t("prePublishFormDialog.error.title")}</Alert.Title>
@@ -165,7 +176,9 @@ export const PrePublishDialog = ({
               </Alert.Danger>
             )}
             <p className="mb-4 text-sm">{t("prePublishFormDialog.thisInformation")}</p>
-            <label>{t("prePublishFormDialog.whatType")}</label>
+            <Label className="gc-label required" required={true}>
+              {t("prePublishFormDialog.whatType")}
+            </Label>
             <div className="mb-1">
               <select
                 className={cn(
@@ -183,7 +196,9 @@ export const PrePublishDialog = ({
                 ))}
               </select>
             </div>
-            <label>{t("prePublishFormDialog.briefDesc")}</label>
+            <Label className="gc-label required" required={true}>
+              {t("prePublishFormDialog.briefDesc")}
+            </Label>
             <p>
               <TextArea id="txtDescription" className="w-11/12" onChange={onDescriptionChange} />
             </p>

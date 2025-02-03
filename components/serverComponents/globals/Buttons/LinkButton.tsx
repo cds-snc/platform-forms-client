@@ -26,6 +26,7 @@ type LinkButtonProps = {
   onClick?: () => void;
   isActive?: boolean;
   testid?: string;
+  target?: string;
 };
 
 export const Default = ({ href, children, className, scroll }: LinkButtonProps) => {
@@ -36,12 +37,13 @@ export const Default = ({ href, children, className, scroll }: LinkButtonProps) 
   );
 };
 
-export const Primary = ({ href, children, className, scroll }: LinkButtonProps) => {
+export const Primary = ({ href, children, className, scroll, target }: LinkButtonProps) => {
   return (
     <Link
       scroll={scroll}
       href={href}
       className={cn(themes.primary, themes.base, themes.htmlLink, className)}
+      target={target}
     >
       {children}
     </Link>

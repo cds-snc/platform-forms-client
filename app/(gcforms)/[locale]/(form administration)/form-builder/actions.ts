@@ -49,7 +49,7 @@ export const createOrUpdateTemplate = AuthenticatedAction(
       formPurpose,
     }: CreateOrUpdateTemplateType
   ): Promise<{
-    formRecord: FormRecord | null;
+    formRecord: { id: string; updatedAt: string | undefined } | null;
     error?: string;
   }> => {
     try {
@@ -66,7 +66,7 @@ export const createOrUpdateTemplate = AuthenticatedAction(
         });
       }
 
-      const response = await createDbTemplate({
+      const formRecord = await createDbTemplate({
         userID: session.user.id,
         formConfig: formConfig,
         name: name,
@@ -75,15 +75,13 @@ export const createOrUpdateTemplate = AuthenticatedAction(
         formPurpose: formPurpose,
       });
 
-      if (!response) {
-        throw new Error(
-          `Template API response was null. Request information: { formConfig: ${formConfig}, name: ${name}, deliveryOption: ${deliveryOption}, securityAttribute: ${securityAttribute}`
-        );
+      if (!formRecord) {
+        throw new Error("Failed to create template");
       }
 
-      return { formRecord: response };
-    } catch (e) {
-      return { formRecord: null, error: (e as Error).message };
+      return { formRecord: { id: formRecord.id, updatedAt: formRecord.updatedAt } };
+    } catch (_) {
+      return { formRecord: null, error: "error" };
     }
   }
 );
@@ -107,11 +105,11 @@ export const updateTemplate = AuthenticatedAction(
       formPurpose?: FormPurpose;
     }
   ): Promise<{
-    formRecord: FormRecord | null;
+    formRecord: { id: string; updatedAt: string | undefined } | null;
     error?: string;
   }> => {
     try {
-      const response = await updateDbTemplate({
+      const formRecord = await updateDbTemplate({
         formID: formID,
         formConfig: formConfig,
         name: name,
@@ -119,14 +117,14 @@ export const updateTemplate = AuthenticatedAction(
         securityAttribute: securityAttribute,
         formPurpose: formPurpose,
       });
-      if (!response) {
-        throw new Error(
-          `Template API response was null. Request information: { formConfig: ${formConfig}, name: ${name}, deliveryOption: ${deliveryOption}, securityAttribute: ${securityAttribute}`
-        );
+
+      if (!formRecord) {
+        throw new Error("Failed to update template");
       }
-      return { formRecord: response };
-    } catch (error) {
-      return { formRecord: null, error: (error as Error).message };
+
+      return { formRecord: { id: formRecord.id, updatedAt: formRecord.updatedAt } };
+    } catch (_) {
+      return { formRecord: null, error: "error" };
     }
   }
 );

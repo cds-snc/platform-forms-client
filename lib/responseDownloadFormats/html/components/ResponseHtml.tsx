@@ -9,7 +9,7 @@ import { Submission } from "../../types";
 
 interface HTMLDownloadProps {
   response: Submission;
-  form: FormRecord;
+  formRecord: FormRecord;
   confirmationCode: string;
   responseID: string;
   createdAt: number;
@@ -18,7 +18,7 @@ interface HTMLDownloadProps {
 
 export const ResponseHtml = ({
   response,
-  form,
+  formRecord,
   confirmationCode,
   responseID,
   createdAt,
@@ -29,7 +29,7 @@ export const ResponseHtml = ({
       {/* eslint-disable-next-line @next/next/no-head-element */}
       <head>
         <meta charSet="utf-8" />
-        <title>{`${form.titleEn} - ${form.titleFr}`}</title>
+        <title>{`${formRecord.form.titleEn} - ${formRecord.form.titleFr}`}</title>
         <style dangerouslySetInnerHTML={{ __html: css }}></style>
       </head>
       <body>
@@ -40,13 +40,13 @@ export const ResponseHtml = ({
         </div>
         <div id="page-container">
           <main id="content">
-            <h1 className="sr-only">{`${form.titleEn} - ${form.titleFr}`}</h1>
+            <h1 className="sr-only">{`${formRecord.form.titleEn} - ${formRecord.form.titleFr}`}</h1>
             <div className="mt-14" />
             <ProtectedWarning securityAttribute={securityAttribute} lang="en" />
             <Fip language="en" />
             <div className="mt-14" />
             <ResponseSection
-              form={form}
+              formRecord={formRecord}
               confirmReceiptCode={confirmationCode}
               lang={"en"}
               responseID={responseID}
@@ -59,7 +59,7 @@ export const ResponseHtml = ({
               <Fip language="fr" />
               <div className="mt-14" />
               <ResponseSection
-                form={form}
+                formRecord={formRecord}
                 confirmReceiptCode={confirmationCode}
                 lang={"fr"}
                 responseID={responseID}

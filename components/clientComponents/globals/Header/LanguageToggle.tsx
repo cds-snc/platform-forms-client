@@ -1,7 +1,6 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { useTranslation } from "@i18n/client";
-import Link from "next/link";
 import { usePathname } from "next/navigation";
 
 const LanguageToggle = () => {
@@ -21,16 +20,23 @@ const LanguageToggle = () => {
     }
   }, [pathname, currentLang]);
 
+  const handleClick = useCallback(() => {
+    // Dispatch beforeunload event using a custom event
+    // This will trigger a save to session when a user changes the language
+    const event = new Event("beforeunload", { bubbles: true, cancelable: true });
+    window.dispatchEvent(event);
+  }, []);
+
   return (
-    <Link
+    <a
       href={href}
       className="text-right text-base"
       aria-label={`${t("lang-toggle")}: ${currentLang == "en" ? "Français" : "English"}`}
       lang={currentLang === "en" ? "fr" : "en"}
-      prefetch={false}
+      onClick={handleClick}
     >
       {currentLang === "en" ? "Français" : "English"}
-    </Link>
+    </a>
   );
 };
 
