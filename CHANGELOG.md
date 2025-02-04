@@ -5,6 +5,29 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.32.0](https://github.com/cds-snc/platform-forms-client/compare/v3.31.15...v3.32.0) (2025-02-04)
+
+
+### Features
+
+* Session storage for front facing forms ([#4989](https://github.com/cds-snc/platform-forms-client/issues/4989)) ([88b84e1](https://github.com/cds-snc/platform-forms-client/commit/88b84e19ce38af1f247a9a6991a3f9b8ec670515))
+
+
+### Bug Fixes
+
+* Add required status to Prepublish labels ([#5050](https://github.com/cds-snc/platform-forms-client/issues/5050)) ([cca4598](https://github.com/cds-snc/platform-forms-client/commit/cca45981dca9cb24e83619c022c4e1e15c79673a))
+* **deps:** update all patch dependencies ([#5075](https://github.com/cds-snc/platform-forms-client/issues/5075)) ([31a228d](https://github.com/cds-snc/platform-forms-client/commit/31a228d7d47d8b9a711318e9e666df77b99c6753))
+* sort layout and filter out richtext when generating CSVs ([#5066](https://github.com/cds-snc/platform-forms-client/issues/5066)) ([dd4746b](https://github.com/cds-snc/platform-forms-client/commit/dd4746bcbf96f8aefdd8df0169ceef83ba35be1b))
+
+
+### Miscellaneous Chores
+
+* Add feature flag for "save and resume" ([#5068](https://github.com/cds-snc/platform-forms-client/issues/5068)) ([804284a](https://github.com/cds-snc/platform-forms-client/commit/804284acb619ca9501c743e3210fd43643ac67c1))
+* Add the migration to produce a perm template to user view object. ([#5067](https://github.com/cds-snc/platform-forms-client/issues/5067)) ([9e2491b](https://github.com/cds-snc/platform-forms-client/commit/9e2491bd5f050593f29b6686075a8062dc60636d))
+* **deps:** update all non-major github action dependencies ([#5076](https://github.com/cds-snc/platform-forms-client/issues/5076)) ([56e4af1](https://github.com/cds-snc/platform-forms-client/commit/56e4af1d99f24ecb6c8937cf5cba0b90a19450b2))
+* dump form JSON config in log when detected as invalid ([#5074](https://github.com/cds-snc/platform-forms-client/issues/5074)) ([ac13498](https://github.com/cds-snc/platform-forms-client/commit/ac134985cbbeae0a16786161e2765a717d610630))
+* update deactivation email ([#5081](https://github.com/cds-snc/platform-forms-client/issues/5081)) ([24e4471](https://github.com/cds-snc/platform-forms-client/commit/24e4471e2283ec82b0db5e1218597fd885eddd19))
+
 ## [3.31.15](https://github.com/cds-snc/platform-forms-client/compare/v3.31.14...v3.31.15) (2025-01-29)
 
 
