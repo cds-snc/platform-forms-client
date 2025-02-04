@@ -68,7 +68,8 @@ export const DynamicGroup = (props: DynamicGroupProps): React.ReactElement => {
   useEffect(() => {
     if (focusedRow.current !== null) {
       try {
-        rowRefs.current[focusedRow.current].current?.focus();
+        // TODO: does focusing just the legend reduce verbosity? (fix other issue from Carolyn?)
+        rowRefs.current[focusedRow.current].current?.querySelector("legend")?.focus();
         rowRefs.current[focusedRow.current].current?.scrollIntoView();
         focusedRow.current = null;
       } catch (e) {
@@ -137,9 +138,8 @@ export const DynamicGroup = (props: DynamicGroupProps): React.ReactElement => {
             className="gc-item-row"
             data-testid={`dynamic-row-${index + 1}`}
             ref={rowRefs.current[index]}
-            tabIndex={-1}
           >
-            <legend>
+            <legend tabIndex={-1}>
               {rowLabel ? rowLabel : "Item"}
               {((maxNumberOfRows && maxNumberOfRows != 1) || !maxNumberOfRows) &&
                 ` - ${index + 1} `}
