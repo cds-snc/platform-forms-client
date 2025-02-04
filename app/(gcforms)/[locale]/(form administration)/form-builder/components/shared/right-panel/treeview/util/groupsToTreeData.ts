@@ -17,6 +17,8 @@ export const subElementsToTreeData = (parentId: number, subElements: FormElement
   let subIndex = 0;
 
   for (const element of subElements) {
+    if (!element || !element.id) continue;
+
     const item = {
       index: element.id.toString(),
       isFolder: false,
