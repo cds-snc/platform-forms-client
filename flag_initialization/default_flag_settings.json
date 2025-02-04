@@ -3,5 +3,6 @@
   "addressComplete": false,
   "scheduleClosingDate": false,
   "apiAccess": false,
+  "saveAndResume": false,
   "hCaptcha": false
 }

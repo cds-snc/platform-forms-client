@@ -4,6 +4,7 @@ export const FeatureFlags = {
   repeatingSets: "repeatingSets",
   scheduleClosingDate: "scheduleClosingDate",
   apiAccess: "apiAccess",
+  saveAndResume: "saveAndResume",
   hCaptcha: "hCaptcha",
 } as const;
 

@@ -30,9 +30,13 @@
       "title": "Accès API",
       "description": "Activer les écrans et fonctionnalités d'accès à l'API"
     },
-    "hCaptcha": {
+    "saveAndResume": {
+      "title": "Enregistrer et reprendre plus tard",
+      "description": "Activer la fonctionnalité d'enregistrement et de reprise"
+    },
+      "hCaptcha": {
       "title": "hCaptcha",
       "description": "[FR]Enable hCaptcha spam prevention"
-    }
+      }
   }
 }

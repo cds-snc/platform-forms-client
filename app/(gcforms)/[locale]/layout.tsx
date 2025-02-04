@@ -11,6 +11,7 @@ export default async function Layout({ children }: { children: React.ReactNode }
     FeatureFlags.repeatingSets,
     FeatureFlags.scheduleClosingDate,
     FeatureFlags.apiAccess,
+    FeatureFlags.saveAndResume,
     FeatureFlags.hCaptcha,
   ]);
 

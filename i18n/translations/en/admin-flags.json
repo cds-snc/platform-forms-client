@@ -30,7 +30,11 @@
       "title": "API Access",
       "description": "Enable API access screens and functionality"
     },
-    "hCaptcha": {
+    "saveAndResume": {
+      "title": "Save and resume later",
+      "description": "Enable save and resume functionality"
+    },
+      "hCaptcha": {
       "title": "hCaptcha",
       "description": "Enable hCaptcha spam prevention"
     }
