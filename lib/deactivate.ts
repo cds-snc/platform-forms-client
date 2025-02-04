@@ -31,6 +31,7 @@ L’équipe Formulaires GC
 const sharedAccountEmail = (email: string) => {
   return `
 (la version française suit)
+
 Hello,
 
 As mentioned in an email on January 28, 2025, GC Forms is removing all accounts that use a shared email as they do not follow the GC Forms [terms of use](https://forms-formulaires.alpha.canada.ca/terms-of-use).  This includes access to your account for ${email}, which has now been removed.
