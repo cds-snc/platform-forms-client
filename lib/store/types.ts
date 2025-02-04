@@ -17,7 +17,7 @@ import {
 } from "@lib/types";
 import { BrandProperties } from "@lib/types";
 
-import { Indexes } from "@lib/utils/form-builder/getPath";
+import { type Indexes } from "@lib/utils/form-builder/getPath";
 
 export interface TemplateStoreState extends TemplateStoreProps {
   focusInput: boolean;
