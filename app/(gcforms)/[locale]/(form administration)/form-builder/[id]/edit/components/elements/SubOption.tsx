@@ -99,7 +99,8 @@ export const SubOption = ({
 
   // Ensure we have the correct (latest) indexes
   const indexes = getFormElementIndexes(id);
-  if (!indexes || !indexes[0]) return null;
+
+  if (indexes.length < 1) return null;
 
   return (
     <div className="mt-3 flex" data-id={id}>
