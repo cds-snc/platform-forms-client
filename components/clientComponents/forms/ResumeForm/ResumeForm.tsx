@@ -40,7 +40,23 @@ export const ResumeForm = ({
           return;
         }
 
-        const formData = Buffer.from(data, "base64").toString("utf8");
+        const parser = new DOMParser();
+        const htmlDoc = parser.parseFromString(data, "text/html");
+
+        if (!htmlDoc.getElementById("form-data")) {
+          target.value = "";
+          return;
+        }
+
+        const jsonData = htmlDoc.getElementById("form-data")?.textContent;
+        if (!jsonData) {
+          target.value = "";
+          return;
+        }
+
+        const parsedHTMLData = JSON.parse(jsonData);
+        const parsedJsonData = parsedHTMLData.data;
+        const formData = Buffer.from(parsedJsonData, "base64").toString("utf8");
         const parsed = JSON.parse(formData);
         const id = parsed.id;
 

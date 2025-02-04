@@ -8,6 +8,8 @@ import { Button } from "@clientComponents/globals";
 import { useGCFormsContext } from "@lib/hooks/useGCFormContext";
 import { slugify } from "@lib/client/clientHelpers";
 
+import { saveProgressData } from "./actions";
+
 export type handleCloseType = (value: boolean) => void;
 
 declare global {
@@ -23,7 +25,7 @@ async function promptToSave(fileName: string, data: string) {
     types: [
       {
         description: "Form Progress (Save to resume later)",
-        accept: { "text/plain": [".txt"] },
+        accept: { "text/html": [".html"] },
       },
     ],
   });
@@ -53,19 +55,34 @@ export const ConfirmDownload = ({
   const { getProgressData } = useGCFormsContext();
   const [saving, setSaving] = useState(false);
 
+  const getFile = useCallback(
+    async ({ formTitle, formData }: { formTitle: string; formData: string }) => {
+      const data = await saveProgressData({ formTitle, formData });
+      return data;
+    },
+    []
+  );
+
   const handleSave = useCallback(async () => {
     try {
       setSaving(true);
 
       const title = language === "en" ? formTitleEn : formTitleFr;
 
-      const fileName = `${slugify(title)}-${formId}.txt`;
+      const fileName = `${slugify(title)}-${formId}.html`;
 
-      const data = btoa(JSON.stringify(getProgressData()));
+      const data = (
+        await getFile({ formTitle: formTitleEn, formData: btoa(JSON.stringify(getProgressData())) })
+      ).data;
+
+      if (!data) {
+        setSaving(false);
+        return;
+      }
 
       if (!window?.showSaveFilePicker) {
         const downloadLink = document.createElement("a");
-        const blob = new Blob([data], { type: "text/plain" });
+        const blob = new Blob([data], { type: "text/html" });
         downloadLink.href = URL.createObjectURL(blob);
         downloadLink.download = fileName;
         downloadLink.click();
@@ -77,7 +94,7 @@ export const ConfirmDownload = ({
     } catch (error) {
       setSaving(false);
     }
-  }, [formId, formTitleEn, formTitleFr, getProgressData, language]);
+  }, [formId, formTitleEn, formTitleFr, getProgressData, language, getFile]);
 
   return (
     <AlertDialog.Root open={open}>
