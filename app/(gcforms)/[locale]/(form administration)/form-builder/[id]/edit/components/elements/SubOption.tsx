@@ -3,23 +3,22 @@ import React, { useRef, useEffect, ReactElement, useCallback, useState } from "r
 import { useTranslation } from "@i18n/client";
 import debounce from "lodash.debounce";
 
+import { type Language } from "@lib/types/form-builder-types";
+
 import { Close } from "@serverComponents/icons";
 import { Button } from "@clientComponents/globals";
 import { Input } from "@formBuilder/components/shared/Input";
 import { useTemplateStore } from "@lib/store/useTemplateStore";
-import { Language } from "@lib/types/form-builder-types";
 
 type RenderIcon = (index: number) => ReactElement | string | undefined;
 
 export const SubOption = ({
-  elIndex,
   subIndex,
   index,
   id,
   renderIcon,
   initialValue,
 }: {
-  elIndex: number;
   subIndex: number;
   index: number;
   id: number;
@@ -37,6 +36,7 @@ export const SubOption = ({
     translationLanguagePriority,
     getLocalizationAttribute,
     setChangeKey,
+    getFormElementIndexes,
   } = useTemplateStore((s) => ({
     addSubChoice: s.addSubChoice,
     removeSubChoice: s.removeSubChoice,
@@ -46,6 +46,7 @@ export const SubOption = ({
     translationLanguagePriority: s.translationLanguagePriority,
     getLocalizationAttribute: s.getLocalizationAttribute,
     setChangeKey: s.setChangeKey,
+    getFormElementIndexes: s.getFormElementIndexes,
   }));
 
   const icon = renderIcon && renderIcon(index);
@@ -96,8 +97,13 @@ export const SubOption = ({
     [setValue, translationLanguagePriority]
   );
 
+  // Ensure we have the correct (latest) indexes
+  const indexes = getFormElementIndexes(id);
+
+  if (indexes.length < 1) return null;
+
   return (
-    <div className="mt-3 flex">
+    <div className="mt-3 flex" data-id={id}>
       <div className="mt-2 flex w-5 justify-end">{icon}</div>
       <Input
         id={`option--${id}--${index + 1}`}
@@ -105,9 +111,9 @@ export const SubOption = ({
         type="text"
         value={value}
         placeholder={`${t("option")} ${index + 1}`}
-        onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-          updateValue(elIndex, subIndex, index, e.target.value)
-        }
+        onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+          updateValue(Number(indexes[0]), subIndex, index, e.target.value);
+        }}
         onKeyDown={handleKeyDown}
         className="!my-0 ml-5 max-h-9 w-full"
         {...getLocalizationAttribute()}

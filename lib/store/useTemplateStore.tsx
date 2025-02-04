@@ -51,6 +51,7 @@ import {
   getPathString,
   getChoice,
   localizeField,
+  getFormElementIndexes,
 } from "./helpers/elements";
 
 const createTemplateStore = (initProps?: Partial<InitialTemplateStoreProps>) => {
@@ -114,6 +115,7 @@ const createTemplateStore = (initProps?: Partial<InitialTemplateStoreProps>) => 
             getIsPublished: () => get().isPublished,
             getFormElementById: getFormElementById(set, get),
             getFormElementWithIndexById: getFormElementWithIndexById(set, get),
+            getFormElementIndexes: getFormElementIndexes(set, get),
             getName: () => get().name,
             getDeliveryOption: () => get().deliveryOption,
             getSecurityAttribute: () => get().securityAttribute,
