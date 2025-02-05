@@ -29,6 +29,10 @@
     "apiAccess": {
       "title": "Accès API",
       "description": "Activer les écrans et fonctionnalités d'accès à l'API"
+    },
+    "saveAndResume": {
+      "title": "Enregistrer et reprendre plus tard",
+      "description": "Activer la fonctionnalité d'enregistrement et de reprise"
     }
   }
 }

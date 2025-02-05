@@ -1,6 +1,10 @@
 "use client";
 import React, { createContext, useContext, ReactNode } from "react";
-import { PublicFormRecord } from "@lib/types";
+
+import { type Language } from "@lib/types/form-builder-types";
+import { type PublicFormRecord } from "@lib/types";
+import { LockedSections } from "@formBuilder/components/shared/right-panel/treeview/types";
+
 import {
   mapIdsToValues,
   FormValues,
@@ -10,7 +14,6 @@ import {
   filterShownElements,
   filterValuesByShownElements,
 } from "@lib/formContext";
-import { LockedSections } from "@formBuilder/components/shared/right-panel/treeview/types";
 import { formHasGroups } from "@lib/utils/form-builder/formHasGroups";
 import {
   getGroupHistory as _getGroupHistory,
@@ -19,8 +22,7 @@ import {
   getPreviousIdFromCurrentId,
   getInputHistoryValues,
 } from "@lib/utils/form-builder/groupsHistory";
-import { getLocalizedProperty } from "@lib/utils";
-import { Language } from "@lib/types/form-builder-types";
+import { getGroupTitle as groupTitle } from "@lib/utils/getGroupTitle";
 
 import {
   saveProgress as saveToSession,
@@ -163,12 +165,6 @@ export const GCFormsProvider = ({
   // Note: this only removes the group entry and not the values
   const clearHistoryAfterId = (groupId: string) => _clearHistoryAfterId(groupId, history.current);
 
-  const getGroupTitle = (groupId: string | null, language: Language) => {
-    if (!groupId) return "";
-    const titleLanguageKey = getLocalizedProperty("title", language) as "titleEn" | "titleFr";
-    return groups?.[groupId]?.[titleLanguageKey] || "";
-  };
-
   const saveProgress = (language: Language = "en") => {
     const vals =
       language === "en"
@@ -185,6 +181,10 @@ export const GCFormsProvider = ({
 
   const restoreProgress = (language: Language) => {
     return restoreSession({ id: formRecord.id, form: formRecord.form, language });
+  };
+
+  const getGroupTitle = (groupId: string | null, language: Language) => {
+    return groupTitle({ groups, groupId, language });
   };
 
   return (

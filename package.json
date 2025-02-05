@@ -1,6 +1,6 @@
 {
   "name": "gcforms",
-  "version": "3.31.15",
+  "version": "3.32.1",
   "private": true,
   "prisma": {
     "seed": "tsx prisma/seeds/seed_cli.ts --environment=development"
@@ -92,7 +92,7 @@
     "lodash.set": "4.3.2",
     "lodash.unset": "4.5.2",
     "markdown-to-jsx": "7.5.0",
-    "next": "15.1.5",
+    "next": "15.1.6",
     "next-auth": "5.0.0-beta.25",
     "node-fetch": "^3.3.2",
     "pino": "9.1.0",
@@ -144,7 +144,7 @@
     "@types/node": "^20.11.6",
     "@types/node-fetch": "^2.6.9",
     "@types/pg": "^8.10.9",
-    "@types/react": "19.0.7",
+    "@types/react": "19.0.8",
     "@types/react-dom": "19.0.3",
     "@types/unorm": "^1",
     "@types/uuid": "^8.3.4",
@@ -163,7 +163,7 @@
     "cypress-terminal-report": "^7.1.0",
     "cypress-wait-until": "^3.0.2",
     "eslint": "^9.17.0",
-    "eslint-config-next": "15.1.5",
+    "eslint-config-next": "15.1.6",
     "eslint-config-prettier": "^9.1.0",
     "eslint-plugin-tailwindcss": "^3.17.5",
     "husky": "^9.0.10",
@@ -198,7 +198,7 @@
   ],
   "packageManager": "yarn@4.6.0",
   "resolutions": {
-    "@types/react": "19.0.7",
+    "@types/react": "19.0.8",
     "@types/react-dom": "19.0.3"
   }
 }

@@ -11,6 +11,8 @@ import { getLocalizedProperty } from "@lib/utils";
 import { Language } from "@lib/types/form-builder-types";
 import { DateObject } from "../FormattedDate/types";
 
+import { getGroupTitle as groupTitle } from "@lib/utils/getGroupTitle";
+
 // Created for the Review page to help structure printing out questions-and-answers
 export type ReviewSection = {
   id: string;
@@ -120,4 +122,41 @@ export const createFormItems = (
       element: formElement,
     } as FormItem;
   });
+};
+
+export const getReviewItems = ({
+  formElements,
+  formValues,
+  groups,
+  groupHistoryIds,
+  matchedIds,
+  language,
+}: {
+  formElements: FormElement[];
+  formValues: FormValues;
+  groups: GroupsType;
+  groupHistoryIds: string[];
+  matchedIds: string[];
+  language: Language;
+}) => {
+  // Get Review Items that are used below to print out each question-answer by element type
+  const groupsWithElementIds = getGroupsWithElementIds(
+    formElements,
+    formValues,
+    groups,
+    groupHistoryIds,
+    matchedIds
+  );
+
+  const getGroupTitle = (groupId: string | null) => groupTitle({ groups, groupId, language });
+
+  const reviewItems = getReviewSections(
+    formElements,
+    formValues,
+    groupsWithElementIds,
+    language,
+    getGroupTitle
+  );
+
+  return reviewItems;
 };
