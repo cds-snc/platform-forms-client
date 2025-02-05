@@ -33,7 +33,9 @@ export const Review = ({ language }: { language: Language }): React.ReactElement
     language,
   });
 
-  const renderEditButton = ({ id, title, theme }: { id: string; title: string; theme: Theme }) => {
+  const renderEditButton = ({ id, title, theme }: { id: string; title?: string; theme: Theme }) => {
+    const editText = t("edit", { lng: language });
+
     return (
       <EditButton
         reviewItemId={id}
@@ -42,7 +44,7 @@ export const Review = ({ language }: { language: Language }): React.ReactElement
           groupsHeadingRef.current?.focus();
         }}
       >
-        {title}
+        {title ? title : editText}
       </EditButton>
     );
   };
