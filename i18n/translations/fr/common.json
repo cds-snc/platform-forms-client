@@ -214,25 +214,25 @@
     "text2": "{{day}} {{month}} {{year}} à {{hour}} h {{minute}} HE"
   },
   "cancel": "Annuler",
-  "number": "Numéro",
+  "number": "Number",
   "saveAndResume": {
-    "saveBtn": "Save Progress FR",
-    "resumeBtn": "Resume FR",
+    "saveBtn": "Enregistrer",
+    "resumeBtn": "Poursuivre",
     "resumePage": {
       "upload": {
-        "title": "Upload form FR",
-        "description": "Continue filling out a form FR"
+        "title": "Poursuivre",
+        "description": "Téléversez vos réponses enregistrées pour continuer à remplir le formulaire."
       },
       "restart": {
-        "title": "Start again FR",
-        "description": "Fill out a blank form FR"
+        "title": "Commencer",
+        "description": "Remplissez un nouveau formulaire."
       }
     },
     "prompt": {
-      "title": "Save your progress [FR]",
-      "description": "Warning you are responsible for protecting the downloaded file. If you lose it, you will not be able to resume your form. [FR]",
-      "okay": "Okay [FR]",
-      "cancel": "Cancel [FR]"
+      "title": "Enregistrer pour reprendre plus tard",
+      "description": "Téléchargez vos réponses jusqu'à présent, pour faire une pause et reprendre plus tard là où vous vous êtes arrêté. Vous devrez téléverser vos réponses. Conservez ce fichier dans un endroit sûr pour pouvoir revenir au formulaire en cours.",
+      "okay": "Télécharger les réponses",
+      "cancel": "Annuler"
     }
   }
 }
