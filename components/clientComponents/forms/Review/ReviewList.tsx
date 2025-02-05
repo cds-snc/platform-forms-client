@@ -1,5 +1,6 @@
 import { type Language } from "@lib/types/form-builder-types";
 import { type FormItem, type ReviewSection } from "./helpers";
+import { type Theme } from "@clientComponents/globals/Buttons/themes";
 
 import { FormItemFactory } from "./FormItemFactory";
 
@@ -12,7 +13,15 @@ export const ReviewList = ({
   language: Language;
   reviewItems: ReviewSection[];
   groupsHeadingRef?: React.RefObject<HTMLHeadingElement | null>;
-  renderEditButton?: ({ id, title }: { id: string; title: string }) => React.ReactElement;
+  renderEditButton?: ({
+    id,
+    title,
+    theme,
+  }: {
+    id: string;
+    title: string;
+    theme: Theme;
+  }) => React.ReactElement;
   startSectionTitle: string;
 }): React.ReactElement => {
   return (
@@ -21,13 +30,20 @@ export const ReviewList = ({
         {Array.isArray(reviewItems) &&
           reviewItems.map((reviewItem) => {
             const title = reviewItem.id === "start" ? startSectionTitle : reviewItem.title;
-            const editButton = renderEditButton ? renderEditButton(reviewItem) : null;
+            const editLink = renderEditButton
+              ? renderEditButton({ id: reviewItem.id, title: reviewItem.title, theme: "link" })
+              : null;
+
+            const editButton = renderEditButton
+              ? renderEditButton({ id: reviewItem.id, title: reviewItem.title, theme: "secondary" })
+              : null;
+
             return (
               <div
                 key={reviewItem.id}
                 className="mb-10 rounded-lg border-2 border-slate-400 px-6 py-4"
               >
-                <h3 className="text-slate-700">{editButton ? editButton : title}</h3>
+                <h3 className="text-slate-700">{editLink ? editLink : title}</h3>
                 <div className="mb-10 ml-1">
                   {reviewItem.formItems &&
                     reviewItem.formItems.map((formItem: FormItem) => (

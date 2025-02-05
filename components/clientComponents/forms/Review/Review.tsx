@@ -2,6 +2,7 @@ import { useRef } from "react";
 
 import { type Language } from "@lib/types/form-builder-types";
 import { type FormValues } from "@lib/formContext";
+import { type Theme } from "@clientComponents/globals/Buttons/themes";
 import { useTranslation } from "@i18n/client";
 
 import { useFocusIt } from "@lib/hooks/useFocusIt";
@@ -32,11 +33,11 @@ export const Review = ({ language }: { language: Language }): React.ReactElement
     language,
   });
 
-  const renderEditButton = ({ id, title }: { id: string; title: string }) => {
+  const renderEditButton = ({ id, title, theme }: { id: string; title: string; theme: Theme }) => {
     return (
       <EditButton
         reviewItemId={id}
-        theme="link"
+        theme={theme}
         onClick={() => {
           groupsHeadingRef.current?.focus();
         }}
