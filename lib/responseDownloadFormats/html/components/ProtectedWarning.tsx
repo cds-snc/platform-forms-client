@@ -19,6 +19,8 @@ export const ProtectedWarning = (props: ProtectedWarningProps) => {
         return t("dataClassification.protectedA", { lng: lang });
       case "Protected B":
         return t("dataClassification.protectedB", { lng: lang });
+      default:
+        return "";
     }
   };
 

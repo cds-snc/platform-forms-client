@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useTranslation } from "@i18n/client";
 
 import { type Language } from "@lib/types/form-builder-types";
+import { type SecurityAttribute } from "@lib/types";
 import { LinkButton } from "@serverComponents/globals/Buttons/LinkButton";
 import { SubmitButton as DownloadProgress } from "@clientComponents/globals/Buttons/SubmitButton";
 import { ConfirmDownload } from "./ConfirmDownload";
@@ -10,11 +11,13 @@ export const SaveAndResume = ({
   formId,
   formTitleEn,
   formTitleFr,
+  securityAttribute,
   language,
 }: {
   formId: string;
   formTitleEn: string;
   formTitleFr: string;
+  securityAttribute: SecurityAttribute;
   language: Language;
 }) => {
   const { t } = useTranslation(["review", "common"]);
@@ -38,6 +41,7 @@ export const SaveAndResume = ({
         formId={formId}
         formTitleEn={formTitleEn}
         formTitleFr={formTitleFr}
+        securityAttribute={securityAttribute}
         language={language}
         open={confirm}
         handleClose={() => setConfirm(false)}

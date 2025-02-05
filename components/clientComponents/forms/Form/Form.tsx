@@ -150,7 +150,7 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
     handleSubmit,
     status,
     language,
-    formRecord: { id: formID, form },
+    formRecord: { id: formID, form, securityAttribute },
   }: InnerFormProps = props;
   const [canFocusOnError, setCanFocusOnError] = useState(false);
   const [lastSubmitCount, setLastSubmitCount] = useState(-1);
@@ -359,6 +359,7 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
               <SaveAndResume
                 formTitleEn={form.titleEn}
                 formTitleFr={form.titleFr}
+                securityAttribute={securityAttribute}
                 language={language as Language}
                 formId={formID}
               />

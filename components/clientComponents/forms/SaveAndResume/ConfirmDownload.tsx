@@ -5,6 +5,7 @@ import Markdown from "markdown-to-jsx";
 
 import { type FormValues } from "@lib/formContext";
 import { type Language } from "@lib/types/form-builder-types";
+import { type SecurityAttribute } from "@lib/types";
 import { Button } from "@clientComponents/globals";
 import { useGCFormsContext } from "@lib/hooks/useGCFormContext";
 import { slugify } from "@lib/client/clientHelpers";
@@ -44,6 +45,7 @@ export const ConfirmDownload = ({
   formId,
   formTitleEn,
   formTitleFr,
+  securityAttribute,
   language,
 }: {
   open: boolean;
@@ -51,6 +53,7 @@ export const ConfirmDownload = ({
   formId: string;
   formTitleEn: string;
   formTitleFr: string;
+  securityAttribute: SecurityAttribute;
   language: Language;
 }) => {
   const { t } = useTranslation("form-builder");
@@ -75,14 +78,21 @@ export const ConfirmDownload = ({
   const getFile = useCallback(
     async ({
       formTitle,
+      securityAttribute,
       formData,
       reviewItems,
     }: {
       formTitle: string;
+      securityAttribute: SecurityAttribute;
       formData: string;
       reviewItems: ReviewSection[];
     }) => {
-      const data = await saveProgressData({ formTitle, responseData: formData, reviewItems });
+      const data = await saveProgressData({
+        formTitle,
+        responseData: formData,
+        reviewItems,
+        securityAttribute,
+      });
       return data;
     },
     []
@@ -99,6 +109,7 @@ export const ConfirmDownload = ({
       const data = (
         await getFile({
           formTitle: formTitleEn,
+          securityAttribute,
           reviewItems,
           formData: btoa(JSON.stringify(getProgressData())),
         })
@@ -123,7 +134,16 @@ export const ConfirmDownload = ({
     } catch (error) {
       setSaving(false);
     }
-  }, [formId, formTitleEn, formTitleFr, getProgressData, language, getFile, reviewItems]);
+  }, [
+    formId,
+    formTitleEn,
+    formTitleFr,
+    getProgressData,
+    language,
+    getFile,
+    reviewItems,
+    securityAttribute,
+  ]);
 
   return (
     <AlertDialog.Root open={open}>

@@ -3,30 +3,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-
-    <meta
-      name="description"
-      content="Add a description to provide a brief summary of the content."
-    />
-
     <title>{{FORM_TITLE}}</title>
-    <link
-      rel="stylesheet"
-      href="https://cdn.design-system.alpha.canada.ca/@cdssnc/gcds-utility@1.5.0/dist/gcds-utility.min.css"
-    />
-    <link
-      rel="stylesheet"
-      href="https://cdn.design-system.alpha.canada.ca/@cdssnc/gcds-components@0.30.0/dist/gcds/gcds.css"
-    />
-    <script
-      type="module"
-      src="https://cdn.design-system.alpha.canada.ca/@cdssnc/gcds-components@0.30.0/dist/gcds/gcds.esm.js"
-    ></script>
-    <script
-      nomodule
-      src="https://cdn.design-system.alpha.canada.ca/@cdssnc/gcds-components@0.30.0/dist/gcds/gcds.js"
-    ></script>
-
     <script type="application/json" id="form-data" style="display: none">
       {
         "data": "{{FORM_DATA_BASE64}}"
@@ -35,21 +12,23 @@
 
     {{CSS}}
   </head>
-
   <body>
-    <gcds-header lang-href="#" skip-to-href="#main-content"> </gcds-header>
-    <gcds-container id="main-content" main-container size="xl" centered tag="main">
-      <section>
-        <gcds-heading tag="h1">{{FORM_TITLE}}</gcds-heading>
-        <gcds-text> {{FORM_REVIEW}} </gcds-text>
-      </section>
-    </gcds-container>
-
-    <gcds-footer
-      display="compact"
-      contextual-heading="Canadian Digital Service"
-      contextual-links='{ "Why GC Notify": "#","Features": "#", "Activity on GC Notify": "#"}'
-    >
-    </gcds-footer>
+    <body>
+      <div id="skip-link-container">
+        <a href="#content" id="skip-link">
+          Skip to main content
+        </a>
+      </div>
+      <div id="page-container">
+        <main id="content">
+          <div className="mt-14" />
+          {{ProtectedWarning}}
+          {{Fip}}
+          <div className="mt-14" >
+          <h1>{{FORM_TITLE}}</h1>
+          {{FORM_REVIEW}}
+          </div> 
+        </main>
+      </div>
   </body>
 </html>
