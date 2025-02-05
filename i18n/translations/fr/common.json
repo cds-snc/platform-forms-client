@@ -206,7 +206,9 @@
     "type": "À VENIR",
     "message": "<strong>En août</strong> : Créez des formulaires multipages avec une logique d’embranchement. <a href='/fr/contact' className='text-white hover:text-white'>S’abonner aux mises à jour</a>",
     "type2": "NOUVEAUTÉ",
-    "message2": "Créez des formulaires complexes de plusieurs pages avec logique d’affichage et d’embranchement. <a href='https://articles.alpha.canada.ca/forms-formulaires/fr/configurer-formulaire-avec-logique/' className='text-white hover:text-white'>En savoir plus</a>"
+    "message2": "Créez des formulaires complexes de plusieurs pages avec logique d’affichage et d’embranchement. <a href='https://articles.alpha.canada.ca/forms-formulaires/fr/configurer-formulaire-avec-logique/' className='text-white hover:text-white'>En savoir plus</a>",
+    "type3": "Période électorale",
+    "message3": "Consultez l’équipe des communications de votre ministère au sujet de <a href='https://www.canada.ca/fr/conseil-prive/services/publications/lignes-directrices-regissant-conduite-ministres-etat-membres-personnel-exonere-fonctionnaires-periode-electorale.html' className='text-white hover:text-white'>La Convention de transition</a>"
   },
   "closingNotice": {
     "title": "Fermeture du formulaire",
