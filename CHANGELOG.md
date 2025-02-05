@@ -5,6 +5,15 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.32.1](https://github.com/cds-snc/platform-forms-client/compare/v3.32.0...v3.32.1) (2025-02-05)
+
+
+### Miscellaneous Chores
+
+* add banner for caretaker period behind feature flag ([#5055](https://github.com/cds-snc/platform-forms-client/issues/5055)) ([299f59d](https://github.com/cds-snc/platform-forms-client/commit/299f59de3a118cf569a860fa90ba621a248c4b03))
+* **deps:** update dependency vitest to v1.6.1 [security] ([#5084](https://github.com/cds-snc/platform-forms-client/issues/5084)) ([65cbdf3](https://github.com/cds-snc/platform-forms-client/commit/65cbdf355b2f39f8329f1fd4d43a2f9dd6a41bfd))
+* revert deactivation email  ([#5082](https://github.com/cds-snc/platform-forms-client/issues/5082)) ([02bcd8f](https://github.com/cds-snc/platform-forms-client/commit/02bcd8f695d05790ec0649d00dfe52cc09bb7111))
+
 ## [3.32.0](https://github.com/cds-snc/platform-forms-client/compare/v3.31.15...v3.32.0) (2025-02-04)
 
 
