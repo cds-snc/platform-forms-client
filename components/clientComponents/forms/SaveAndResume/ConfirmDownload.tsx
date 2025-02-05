@@ -3,10 +3,13 @@ import * as AlertDialog from "@radix-ui/react-alert-dialog";
 import { useTranslation } from "@i18n/client";
 import Markdown from "markdown-to-jsx";
 
+import { type FormValues } from "@lib/formContext";
 import { type Language } from "@lib/types/form-builder-types";
 import { Button } from "@clientComponents/globals";
 import { useGCFormsContext } from "@lib/hooks/useGCFormContext";
 import { slugify } from "@lib/client/clientHelpers";
+import { getReviewItems } from "../Review/helpers";
+import { type ReviewSection } from "../Review/helpers";
 
 import { saveProgressData } from "./actions";
 
@@ -52,12 +55,34 @@ export const ConfirmDownload = ({
 }) => {
   const { t } = useTranslation("form-builder");
 
-  const { getProgressData } = useGCFormsContext();
+  const { groups, getValues, formRecord, getGroupHistory, matchedIds, getProgressData } =
+    useGCFormsContext();
   const [saving, setSaving] = useState(false);
 
+  const formValues: void | FormValues = getValues();
+  const groupHistoryIds = getGroupHistory();
+  if (!formValues || !groups) throw new Error("Form values or groups are missing");
+
+  const reviewItems = getReviewItems({
+    formElements: formRecord.form.elements,
+    formValues,
+    groups,
+    groupHistoryIds,
+    matchedIds,
+    language,
+  });
+
   const getFile = useCallback(
-    async ({ formTitle, formData }: { formTitle: string; formData: string }) => {
-      const data = await saveProgressData({ formTitle, formData });
+    async ({
+      formTitle,
+      formData,
+      reviewItems,
+    }: {
+      formTitle: string;
+      formData: string;
+      reviewItems: ReviewSection[];
+    }) => {
+      const data = await saveProgressData({ formTitle, responseData: formData, reviewItems });
       return data;
     },
     []
@@ -72,7 +97,11 @@ export const ConfirmDownload = ({
       const fileName = `${slugify(title)}-${formId}.html`;
 
       const data = (
-        await getFile({ formTitle: formTitleEn, formData: btoa(JSON.stringify(getProgressData())) })
+        await getFile({
+          formTitle: formTitleEn,
+          reviewItems,
+          formData: btoa(JSON.stringify(getProgressData())),
+        })
       ).data;
 
       if (!data) {
@@ -94,7 +123,7 @@ export const ConfirmDownload = ({
     } catch (error) {
       setSaving(false);
     }
-  }, [formId, formTitleEn, formTitleFr, getProgressData, language, getFile]);
+  }, [formId, formTitleEn, formTitleFr, getProgressData, language, getFile, reviewItems]);
 
   return (
     <AlertDialog.Root open={open}>
