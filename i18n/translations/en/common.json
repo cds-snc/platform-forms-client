@@ -216,22 +216,22 @@
   "cancel": "Cancel",
   "number": "Number",
   "saveAndResume": {
-    "saveBtn": "Save Progress",
+    "saveBtn": "Save",
     "resumeBtn": "Resume",
     "resumePage": {
       "upload": {
-        "title": "Upload form",
-        "description": "Continue filling out a form"
+        "title": "Resume",
+        "description": "Upload your saved answers to continue filling out a form."
       },
       "restart": {
-        "title": "Start again",
-        "description": "Fill out a blank form"
+        "title": "Start",
+        "description": "Fill out a new form."
       }
     },
     "prompt": {
-      "title": "Save your progress",
-      "description": "Warning you are responsible for protecting the downloaded file. If you lose it, you will not be able to resume your form.",
-      "okay": "Okay",
+      "title": "Save to resume later",
+      "description": "Download your answers so far, to pause and resume later from where you left off. You'll need to upload your answers. Keep this file in a secure place to be able to return to the form in progress.",
+      "okay": "Download answers",
       "cancel": "Cancel"
     }
   }
