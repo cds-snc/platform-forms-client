@@ -31,7 +31,7 @@ export const NextSteps = ({
 
           <div>
             <h3 className="!my-6 !text-2xl font-bold">Keep your information safe</h3>
-            <p className="italic max-w-56">
+            <p className="max-w-56 italic">
               Make sure to keep this file in a secure spot on your device
             </p>
           </div>

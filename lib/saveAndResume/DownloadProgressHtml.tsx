@@ -1,13 +1,13 @@
 import React from "react";
+
 import { type SecurityAttribute } from "@lib/types";
 import { type ReviewSection } from "@clientComponents/forms/Review/helpers";
+import { type Language } from "@lib/types/form-builder-types";
 
-import { ReviewList } from "@clientComponents/forms/Review/ReviewList";
 import Fip from "@lib/responseDownloadFormats/html/components/Fip";
 import { css } from "@lib/responseDownloadFormats/html/css/compiled";
-import { Language } from "@lib/types/form-builder-types";
-
 import { NextSteps } from "./NextSteps";
+import { ReviewList } from "@clientComponents/forms/Review/ReviewList";
 
 export interface HTMLProps {
   language: Language;
@@ -55,15 +55,16 @@ export const DownloadProgressHtml = ({
         <div id="page-container">
           <main id="content">
             <div className="mt-14" />
-            <Fip language="en" />
-            <div className="mt-14" />
-            <h1>{formTitle}</h1>
-            <NextSteps securityAttribute={securityAttribute} language={language} />
-            <ReviewList
-              reviewItems={reviewItems}
-              language={language}
-              startSectionTitle={startSectionTitle}
-            />
+            <Fip language={language} showLangLink={false} />
+            <div className="mt-14">
+              <h1>{formTitle}</h1>
+              <NextSteps securityAttribute={securityAttribute} language={language} />
+              <ReviewList
+                reviewItems={reviewItems}
+                language={language}
+                startSectionTitle={startSectionTitle}
+              />
+            </div>
           </main>
         </div>
       </body>

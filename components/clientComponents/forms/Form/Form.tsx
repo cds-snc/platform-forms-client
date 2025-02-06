@@ -151,6 +151,7 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
     status,
     language,
     formRecord: { id: formID, form, securityAttribute },
+    dirty,
   }: InnerFormProps = props;
   const [canFocusOnError, setCanFocusOnError] = useState(false);
   const [lastSubmitCount, setLastSubmitCount] = useState(-1);
@@ -355,7 +356,7 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
                 />
               )}
             </div>
-            {props.saveAndResume ? (
+            {props.saveAndResume && dirty ? (
               <SaveAndResume
                 formTitleEn={form.titleEn}
                 formTitleFr={form.titleFr}
