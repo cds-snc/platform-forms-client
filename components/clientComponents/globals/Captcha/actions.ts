@@ -12,8 +12,7 @@ import { logMessage } from "@lib/logger";
  * @returns boolean true if the token is valid, false otherwise
  */
 export const verifyHCaptchaToken = async (token: string): Promise<boolean> => {
-  // TODO use "await getOrigin();" to differentiate bewteen staging and production environments?
-  // "what you could do is only run the hcatpcha function in staging using the getOrigin.  Once we’re ready for prod we can remove it and then it’ll get the right key automatically from the public env var."
+  // TODO handle Prod vs staging
   const siteVerifyKey = process.env.HCAPTCHA_SITE_VERIFY_KEY;
 
   if (!siteVerifyKey) {
