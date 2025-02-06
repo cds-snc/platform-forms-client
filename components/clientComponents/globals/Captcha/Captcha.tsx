@@ -2,8 +2,14 @@ import HCaptcha from "@hcaptcha/react-hcaptcha";
 import { logMessage } from "@lib/logger";
 import { verifyHCaptchaToken } from "./actions";
 
+// Known issue: "Only one captcha is permitted per parent container." happens when navigating back to a form page (kind of an edge case)
+// https://github.com/hCaptcha/react-hcaptcha/issues/189
+
+// Not an issue on local? "Cookie “__cflb” has been rejected because it is in a cross-site context..."
+// I think this is because of local not being http  vs should be https - verify on Staging
+
 // Running in 100% passive mode
-// For more info on the React lib https://github.com/hCaptcha/react-hcaptcha
+// See https://github.com/hCaptcha/react-hcaptcha
 export const Captcha = ({
   successCb,
   failCb,
@@ -21,38 +27,42 @@ export const Captcha = ({
     return null;
   }
 
-  logMessage.info("catpcha component loaded");
+  logMessage.info("catpcha component loaded"); //temp
 
   const verify = async (token: string) => {
     try {
       const success = await verifyHCaptchaToken(token);
       if (!success) {
-        logMessage.info("Captcha token verification failed");
+        logMessage.info("hCaptcha verification failed"); // temp
         failCb();
       } else {
-        logMessage.info("Captcha token verification succeeded");
+        logMessage.info("hCaptcha verification succeeded"); //temp
         successCb();
       }
     } catch (err) {
-      logMessage.info(`Capcha error: ${err}`);
+      logMessage.error(`Capcha error, pass through: ${err}`);
+
+      // TODO: Fall through?
+      // successCb();
     }
   };
 
-  const failed = (code: string) => {
-    // TODO - do we just allow submitting at this point? (probably)
+  // Component will reset immediately after an error.
+  // See https://docs.hcaptcha.com/#siteverify-error-codes-table
+  const clientComponentError = (code: string) => {
+    // TODO: How many times to let retry? e.g. after 5 failed attempts, just pass through?
 
-    // See hCAPTCHA error codes: https://docs.hcaptcha.com/#siteverify-error-codes-table
-    logMessage.error(`Captcha error: ${code}`);
+    logMessage.error(`clientComponentError error: ${code}`);
   };
 
-  // TODO
+  // TODO will the SDK just reset itself? any way to trigger?
   const expired = () => logMessage.info("Captcha Expired");
 
   return (
     <HCaptcha
       sitekey={hCaptchaSiteKey}
       onVerify={verify}
-      onError={failed}
+      onError={clientComponentError}
       onExpire={expired}
       ref={hCaptchaRef}
       languageOverride={lang}
