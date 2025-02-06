@@ -30,7 +30,7 @@ import { useFormDelay } from "@lib/hooks/useFormDelayContext";
 import { SubmitButton } from "./SubmitButton";
 import HCaptcha from "@hcaptcha/react-hcaptcha";
 import { Captcha } from "@clientComponents/globals/Captcha/Captcha";
-import { useFeatureFlags } from "@lib/hooks/useFeatureFlags";
+// import { useFeatureFlags } from "@lib/hooks/useFeatureFlags";
 import { hCaptchaEnabled } from "@clientComponents/globals/Captcha/helpers";
 
 type InnerFormProps = FormProps & FormikProps<Responses>;
@@ -58,8 +58,9 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
 
   const { t } = useTranslation();
 
-  const { getFlag } = useFeatureFlags();
-  const captchaEnabled = hCaptchaEnabled(getFlag("hCaptcha"), props.isPreview);
+  // @TODO add back the feature flag check when going to staging
+  // const { getFlag } = useFeatureFlags();
+  const captchaEnabled = hCaptchaEnabled(/*getFlag("hCaptcha")*/ true, props.isPreview);
   const hCaptchaRef = createRef<HCaptcha>();
 
   // Used to set any values we'd like added for use in the below withFormik handleSubmit().
