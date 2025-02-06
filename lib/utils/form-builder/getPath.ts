@@ -31,7 +31,7 @@ interface Element {
   };
 }
 
-type Indexes = [] | [elIndex: number | null, subIndex: number | null];
+export type Indexes = [] | [elIndex: number | null, subIndex: number | null];
 
 export const getElementIndexes = <T extends Element>(id: number, elements: T[]): Indexes => {
   const elId = parseRootId(id, elements);

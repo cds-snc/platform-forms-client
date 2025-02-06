@@ -2,13 +2,8 @@ import { sendEmail } from "./integration/notifyConnector";
 import { logMessage } from "@lib/logger";
 import { getOrigin } from "./origin";
 
-export const sendDeactivationEmail = async (email: string) => {
-  try {
-    const HOST = await getOrigin();
-
-    await sendEmail(email, {
-      subject: "Account deactivated | Compte désactivé",
-      formResponse: `
+const emailTemplate = (email: string, HOST: string) => {
+  return `
 (la version française suit)
 
 Hello,
@@ -28,7 +23,16 @@ Pour en savoir plus ou pour demander la réactivation de votre compte, n’hési
 
 Merci,
 L’équipe Formulaires GC
-`,
+`;
+};
+
+export const sendDeactivationEmail = async (email: string) => {
+  try {
+    const HOST = await getOrigin();
+
+    await sendEmail(email, {
+      subject: "Account deactivated | Compte désactivé",
+      formResponse: emailTemplate(email, HOST),
     });
   } catch (err) {
     logMessage.error(
