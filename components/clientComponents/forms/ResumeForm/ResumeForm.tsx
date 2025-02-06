@@ -83,7 +83,7 @@ export const ResumeForm = ({
 
   return (
     <>
-      <h1>{title}</h1>
+      <h1 className="sr-only">{title}</h1>
       <div className="flex flex-col justify-center tablet:flex-row">
         {/* Start again */}
         <button
