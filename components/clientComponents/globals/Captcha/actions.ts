@@ -2,7 +2,22 @@
 import axios from "axios";
 import { getClientIP } from "@lib/ip";
 import { logMessage } from "@lib/logger";
-import { getHCaptchaSettings } from "./helpers";
+
+const getHCaptchaSettings = () => {
+  // TODO instead just log the error and return an empty string? - probably not worth crashing the app?
+  if (!process.env.HCAPTCHA_SITE_VERIFY_KEY) {
+    throw new Error("No value set for hCaptcha Site Verify Key");
+  }
+
+  if (!process.env.HCAPTCHA_SITE_KEY) {
+    throw new Error("hCaptcha Site Key is not set");
+  }
+
+  return {
+    siteVerifyKey: process.env.HCAPTCHA_SITE_VERIFY_KEY,
+    hCaptchaSiteKey: process.env.HCAPTCHA_SITE_KEY,
+  };
+};
 
 // @TODO public endpoint, any kind of abuse/* to think about?
 
