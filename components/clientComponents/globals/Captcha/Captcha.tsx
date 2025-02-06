@@ -2,6 +2,8 @@ import HCaptcha from "@hcaptcha/react-hcaptcha";
 import { logMessage } from "@lib/logger";
 import { verifyHCaptchaToken } from "./actions";
 
+const HCAPTCHA_SITE_KEY = "f2fcabe4-0608-4208-9f84-1a3e1f0a43f2";
+
 // Known issue: "Only one captcha is permitted per parent container." happens when navigating back to a form page (kind of an edge case)
 // https://github.com/hCaptcha/react-hcaptcha/issues/189
 
@@ -15,18 +17,12 @@ export const Captcha = ({
   failCb,
   hCaptchaRef,
   lang,
-  hCaptchaSiteKey,
 }: {
   successCb: () => void;
   failCb: () => void;
   hCaptchaRef: React.RefObject<HCaptcha | null>;
   lang: string;
-  hCaptchaSiteKey?: string;
 }) => {
-  if (!hCaptchaSiteKey) {
-    return null;
-  }
-
   logMessage.info("catpcha component loaded"); //temp
 
   const verify = async (token: string) => {
@@ -60,7 +56,7 @@ export const Captcha = ({
 
   return (
     <HCaptcha
-      sitekey={hCaptchaSiteKey}
+      sitekey={HCAPTCHA_SITE_KEY}
       onVerify={verify}
       onError={clientComponentError}
       onExpire={expired}

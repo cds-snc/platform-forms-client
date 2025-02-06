@@ -13,7 +13,6 @@ import { allowGrouping } from "@formBuilder/components/shared/right-panel/treevi
 import { serverTranslation } from "@i18n";
 import { ClosingNotice } from "@clientComponents/forms/ClosingNotice/ClosingNotice";
 import { FormDelayProvider } from "@lib/hooks/useFormDelayContext";
-import { getHCaptchaSettings } from "@clientComponents/globals/Captcha/helpers";
 
 export async function generateMetadata(props0: {
   params: Promise<{ locale: string; props: string[] }>;
@@ -66,8 +65,6 @@ export default async function Page(props0: {
   const formTitle = formRecord.form[getLocalizedProperty("title", language)] as string;
   const isAllowGrouping = allowGrouping();
 
-  const { hCaptchaSiteKey } = getHCaptchaSettings();
-
   let isPastClosingDate = false;
 
   if (formRecord.closingDate) {
@@ -104,7 +101,6 @@ export default async function Page(props0: {
               formRecord={formRecord}
               currentForm={currentForm}
               allowGrouping={isAllowGrouping}
-              hCaptchaSiteKey={hCaptchaSiteKey}
             />
           </FormDelayProvider>
         </GCFormsProvider>
