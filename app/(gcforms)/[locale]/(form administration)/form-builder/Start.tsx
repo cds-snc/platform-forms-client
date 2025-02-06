@@ -9,7 +9,6 @@ import { useTemplateStore } from "@lib/store/useTemplateStore";
 import { clearTemplateStore } from "@lib/store/utils";
 import { safeJSONParse } from "@lib/utils";
 import { FormProperties } from "@lib/types";
-import { NextSteps } from "@clientComponents/forms/SaveAndResume/html/NextSteps";
 
 export const Start = () => {
   const {
@@ -79,8 +78,6 @@ export const Start = () => {
   return (
     <>
       <h1 className="visually-hidden">{t("start")}</h1>
-
-      <NextSteps />
 
       <div role="alert">
         {errors && (
