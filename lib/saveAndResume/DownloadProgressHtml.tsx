@@ -12,7 +12,7 @@ import { ReviewList } from "@clientComponents/forms/Review/ReviewList";
 export interface HTMLProps {
   language: Language;
   formTitle: string;
-  formId;
+  formId: string;
   formResponse: string;
   reviewItems: ReviewSection[];
   securityAttribute: SecurityAttribute;
@@ -64,7 +64,7 @@ export const DownloadProgressHtml = ({
               <h1>{formTitle}</h1>
               <NextSteps
                 language={language}
-                host={host}
+                host={host || ""}
                 formId={formId}
                 securityAttribute={securityAttribute}
               />

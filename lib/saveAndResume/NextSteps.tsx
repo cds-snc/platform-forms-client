@@ -25,8 +25,10 @@ export const NextSteps = ({
             <div className="mb-4 rounded-lg border-2 border-slate-400 p-4">
               <h3 className="!mb-2 !text-2xl font-bold">Resume completing your form</h3>
               <p>
-                <a href={`${host}${lang}/id/${formId}`}>Upload this file to resume</a> completing
-                your form
+                <a className="underline" href={`${host}/${language}/id/${formId}/resume`}>
+                  Upload this file to resume
+                </a>{" "}
+                completing your form
               </p>
             </div>
 

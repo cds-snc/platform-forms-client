@@ -6,7 +6,6 @@ import Markdown from "markdown-to-jsx";
 import { type FormValues } from "@lib/formContext";
 import { type Language } from "@lib/types/form-builder-types";
 import { type SecurityAttribute } from "@lib/types";
-import { type HTMLProps } from "@lib/saveAndResume/DownloadProgressHtml";
 
 import { Button } from "@clientComponents/globals";
 import { useGCFormsContext } from "@lib/hooks/useGCFormContext";
@@ -15,6 +14,8 @@ import { getReviewItems } from "../Review/helpers";
 import { getStartLabels } from "@lib/utils/form-builder/i18nHelpers";
 
 import { generateDownloadProgressHtml } from "./actions";
+
+import { logMessage } from "@lib/logger";
 
 export type handleCloseType = (value: boolean) => void;
 
@@ -77,11 +78,6 @@ export const ConfirmDownload = ({
     language,
   });
 
-  const getFile = useCallback(async (props: HTMLProps) => {
-    const data = await generateDownloadProgressHtml(props);
-    return data;
-  }, []);
-
   const handleSave = useCallback(async () => {
     try {
       setSaving(true);
@@ -90,47 +86,37 @@ export const ConfirmDownload = ({
 
       const fileName = `${slugify(title)}-${formId}.html`;
 
-      const data = (
-        await getFile({
-          formTitle: formTitleEn,
-          formId,
-          securityAttribute,
-          reviewItems,
-          formResponse: btoa(JSON.stringify(getProgressData())),
-          language,
-          startSectionTitle: getStartLabels()[language],
-        })
-      ).data;
+      const html = await generateDownloadProgressHtml({
+        formTitle: formTitleEn,
+        formId,
+        securityAttribute,
+        reviewItems,
+        formResponse: btoa(JSON.stringify(getProgressData())),
+        language,
+        startSectionTitle: getStartLabels()[language],
+      });
 
-      if (!data) {
+      if (!html.data) {
         setSaving(false);
         return;
       }
 
       if (!window?.showSaveFilePicker) {
         const downloadLink = document.createElement("a");
-        const blob = new Blob([data], { type: "text/html" });
+        const blob = new Blob([html.data], { type: "text/html" });
         downloadLink.href = URL.createObjectURL(blob);
         downloadLink.download = fileName;
         downloadLink.click();
         URL.revokeObjectURL(downloadLink.href);
       } else {
-        await promptToSave(fileName, data);
+        await promptToSave(fileName, html.data);
       }
       setSaving(false);
     } catch (error) {
       setSaving(false);
+      logMessage.warn("Error saving form progress", error);
     }
-  }, [
-    formId,
-    formTitleEn,
-    formTitleFr,
-    getProgressData,
-    language,
-    getFile,
-    reviewItems,
-    securityAttribute,
-  ]);
+  }, [formId, formTitleEn, formTitleFr, getProgressData, language, reviewItems, securityAttribute]);
 
   return (
     <AlertDialog.Root open={open}>
