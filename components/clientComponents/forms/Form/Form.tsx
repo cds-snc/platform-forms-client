@@ -266,6 +266,7 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
               failCb={() => logMessage.info("TEMP fail failCb")} //TODO
               hCaptchaRef={hCaptchaRef}
               lang={language}
+              hCaptchaSiteKey={props.hCaptchaSiteKey}
             />
           )}
         </>
@@ -293,6 +294,7 @@ interface FormProps {
   groupHistory?: string[];
   matchedIds?: string[];
   saveProgress: (language?: Language) => void;
+  hCaptchaSiteKey?: string | undefined;
 }
 
 /**
