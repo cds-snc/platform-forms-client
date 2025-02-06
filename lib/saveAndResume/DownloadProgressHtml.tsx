@@ -12,19 +12,23 @@ import { ReviewList } from "@clientComponents/forms/Review/ReviewList";
 export interface HTMLProps {
   language: Language;
   formTitle: string;
+  formId;
   formResponse: string;
   reviewItems: ReviewSection[];
   securityAttribute: SecurityAttribute;
   startSectionTitle: string;
+  host?: string;
 }
 
 export const DownloadProgressHtml = ({
   language,
   formTitle,
+  formId,
   formResponse,
   reviewItems,
   securityAttribute,
   startSectionTitle,
+  host,
 }: HTMLProps) => {
   const formData = JSON.stringify({
     data: formResponse,
@@ -58,7 +62,12 @@ export const DownloadProgressHtml = ({
             <Fip language={language} showLangLink={false} />
             <div className="mt-14">
               <h1>{formTitle}</h1>
-              <NextSteps securityAttribute={securityAttribute} language={language} />
+              <NextSteps
+                language={language}
+                host={host}
+                formId={formId}
+                securityAttribute={securityAttribute}
+              />
               <ReviewList
                 reviewItems={reviewItems}
                 language={language}

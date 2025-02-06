@@ -93,6 +93,7 @@ export const ConfirmDownload = ({
       const data = (
         await getFile({
           formTitle: formTitleEn,
+          formId,
           securityAttribute,
           reviewItems,
           formResponse: btoa(JSON.stringify(getProgressData())),
