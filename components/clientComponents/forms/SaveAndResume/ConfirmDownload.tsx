@@ -6,13 +6,15 @@ import Markdown from "markdown-to-jsx";
 import { type FormValues } from "@lib/formContext";
 import { type Language } from "@lib/types/form-builder-types";
 import { type SecurityAttribute } from "@lib/types";
+import { type HTMLProps } from "./html/DownloadProgressHtml";
+
 import { Button } from "@clientComponents/globals";
 import { useGCFormsContext } from "@lib/hooks/useGCFormContext";
 import { slugify } from "@lib/client/clientHelpers";
 import { getReviewItems } from "../Review/helpers";
-import { type ReviewSection } from "../Review/helpers";
+import { getStartLabels } from "@lib/utils/form-builder/i18nHelpers";
 
-import { saveProgressData } from "./actions";
+import { generateDownloadProgressHtml } from "./actions";
 
 export type handleCloseType = (value: boolean) => void;
 
@@ -75,28 +77,10 @@ export const ConfirmDownload = ({
     language,
   });
 
-  const getFile = useCallback(
-    async ({
-      formTitle,
-      securityAttribute,
-      formData,
-      reviewItems,
-    }: {
-      formTitle: string;
-      securityAttribute: SecurityAttribute;
-      formData: string;
-      reviewItems: ReviewSection[];
-    }) => {
-      const data = await saveProgressData({
-        formTitle,
-        responseData: formData,
-        reviewItems,
-        securityAttribute,
-      });
-      return data;
-    },
-    []
-  );
+  const getFile = useCallback(async (props: HTMLProps) => {
+    const data = await generateDownloadProgressHtml(props);
+    return data;
+  }, []);
 
   const handleSave = useCallback(async () => {
     try {
@@ -111,7 +95,9 @@ export const ConfirmDownload = ({
           formTitle: formTitleEn,
           securityAttribute,
           reviewItems,
-          formData: btoa(JSON.stringify(getProgressData())),
+          formResponse: btoa(JSON.stringify(getProgressData())),
+          language,
+          startSectionTitle: getStartLabels()[language],
         })
       ).data;
 
