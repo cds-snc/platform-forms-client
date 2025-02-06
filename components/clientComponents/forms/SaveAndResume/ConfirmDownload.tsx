@@ -6,7 +6,7 @@ import Markdown from "markdown-to-jsx";
 import { type FormValues } from "@lib/formContext";
 import { type Language } from "@lib/types/form-builder-types";
 import { type SecurityAttribute } from "@lib/types";
-import { type HTMLProps } from "./html/DownloadProgressHtml";
+import { type HTMLProps } from "@lib/saveAndResume/DownloadProgressHtml";
 
 import { Button } from "@clientComponents/globals";
 import { useGCFormsContext } from "@lib/hooks/useGCFormContext";

@@ -1,6 +1,6 @@
 "use server";
 
-import { DownloadProgressHtml, type HTMLProps } from "./html/DownloadProgressHtml";
+import { DownloadProgressHtml, type HTMLProps } from "@lib/saveAndResume/DownloadProgressHtml";
 
 const renderToStaticMarkup = (await import("react-dom/server")).renderToStaticMarkup;
 

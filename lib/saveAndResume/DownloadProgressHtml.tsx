@@ -1,11 +1,9 @@
 import React from "react";
-
-import { type ReviewSection } from "../../Review/helpers";
 import { type SecurityAttribute } from "@lib/types";
+import { type ReviewSection } from "@clientComponents/forms/Review/helpers";
 
+import { ReviewList } from "@clientComponents/forms/Review/ReviewList";
 import Fip from "@lib/responseDownloadFormats/html/components/Fip";
-import { ReviewList } from "../../Review/ReviewList";
-
 import { css } from "@lib/responseDownloadFormats/html/css/compiled";
 import { Language } from "@lib/types/form-builder-types";
 

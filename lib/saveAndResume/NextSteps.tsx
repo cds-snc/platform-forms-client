@@ -5,16 +5,16 @@ export const NextSteps = ({
   securityAttribute,
   language,
 }: {
-  securityAttribute: SecurityAttribute;
-  language: Language;
+  securityAttribute?: SecurityAttribute;
+  language?: Language;
 }) => {
   return (
     <>
       <div className="hidden">
-        {securityAttribute}
-        {language}
+        {securityAttribute && securityAttribute}
+        {language && language}
       </div>
-      <div className="rounded-lg bg-gcds-green-100 p-4">
+      <div className="mb-10 rounded-lg bg-gcds-green-100 p-4">
         <h2 className="!mb-4 !text-2xl font-bold underline">What to do next - </h2>
         <div className="grid grid-cols-2 gap-28">
           <div>
