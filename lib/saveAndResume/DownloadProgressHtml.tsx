@@ -8,6 +8,7 @@ import Fip from "@lib/responseDownloadFormats/html/components/Fip";
 import { css } from "@lib/responseDownloadFormats/html/css/compiled";
 import { NextSteps } from "./NextSteps";
 import { ReviewList } from "@clientComponents/forms/Review/ReviewList";
+import { InProgressBadge } from "./InProgressBadge";
 
 export interface HTMLProps {
   language: Language;
@@ -58,9 +59,16 @@ export const DownloadProgressHtml = ({
         </div>
         <div id="page-container">
           <main id="content">
-            <div className="mt-14" />
-            <Fip language={language} showLangLink={false} />
-            <div className="mt-14">
+            <div className="mt-6" />
+            <Fip
+              language={language}
+              showLangLink={false}
+              className="mb-10 mt-0 border-b-4 border-blue-dark py-9"
+            />
+            <div>
+              <div className="mb-14">
+                <InProgressBadge language={language} />
+              </div>
               <h1>{formTitle}</h1>
               <NextSteps
                 language={language}

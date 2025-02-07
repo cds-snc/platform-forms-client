@@ -15,7 +15,6 @@ export const NextSteps = ({
 }) => {
   const { t } = customTranslate("common");
   const formLink = `${host}/${language}/id/${formId}/resume`;
-
   return (
     <>
       <div className="hidden">
@@ -48,12 +47,11 @@ export const NextSteps = ({
               ></p>
             </div>
           </div>
-
           <div>
             <h3 className="!my-6 !text-2xl font-bold">
               {t("saveAndResume.downloadProgressHtml.keepSafe.title", { lng: language })}
             </h3>
-            <p className="mb-20 max-w-56 italic">
+            <p className="mb-6 max-w-56 italic">
               {t("saveAndResume.downloadProgressHtml.keepSafe.description", { lng: language })}
             </p>
           </div>
