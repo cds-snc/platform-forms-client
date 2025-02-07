@@ -250,7 +250,7 @@
       },
       "badge": {
         "text": "In - Progress [FR]",
-        "lastSaved": "Saved: {{date}}"
+        "lastSaved": "Saved:  {{month}} {{day}}, {{year}}"
       }
     }
   }
