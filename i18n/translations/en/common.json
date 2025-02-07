@@ -247,6 +247,9 @@
       "keepSafe": {
         "title": "Keep your form safe",
         "description": " Make sure to keep this file in a secure spot on your device."
+      },
+      "badge": {
+        "text": "In - Progress"
       }
     }
   }
