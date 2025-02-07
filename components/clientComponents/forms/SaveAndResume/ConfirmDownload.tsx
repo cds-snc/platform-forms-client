@@ -11,7 +11,6 @@ import { useGCFormsContext } from "@lib/hooks/useGCFormContext";
 import { slugify } from "@lib/client/clientHelpers";
 import { getReviewItems } from "../Review/helpers";
 import { getStartLabels } from "@lib/utils/form-builder/i18nHelpers";
-import { logMessage } from "@lib/logger";
 
 import { generateDownloadProgressHtml } from "./actions";
 
@@ -109,8 +108,6 @@ export const ConfirmDownload = ({
       setSaving(false);
     } catch (error) {
       setSaving(false);
-      alert("Error saving form progress");
-      logMessage.warn("error", "Error saving form progress", error);
     }
   }, [formId, formTitleEn, formTitleFr, getProgressData, language, reviewItems]);
 
