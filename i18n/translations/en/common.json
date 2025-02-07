@@ -235,6 +235,19 @@
       "description": "Save a copy of your form answers so far. Resume later by finding the file on your device. Protect your data by keeping the downloaded file in a safe place.",
       "okay": "Save to device",
       "cancel": "Cancel"
+    },
+    "downloadProgressHtml": {
+      "nextSteps": {
+        "title": "What to do next - ",
+        "resumeBox": {
+          "title": "Resume your form",
+          "description": "<a class='underline' href='{{formLink}}'>Upload this file</a> to complete and submit your form"
+        }
+      },
+      "keepSafe": {
+        "title": "Keep your form safe",
+        "description": " Make sure to keep this file in a secure spot on your device."
+      }
     }
   }
 }
