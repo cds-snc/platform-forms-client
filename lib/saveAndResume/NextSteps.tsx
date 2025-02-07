@@ -1,14 +1,11 @@
-import { type SecurityAttribute } from "@lib/types";
 import { type Language } from "@lib/types/form-builder-types";
 import { customTranslate } from "@lib/i18nHelpers";
 
 export const NextSteps = ({
-  securityAttribute,
   language,
   host,
   formId,
 }: {
-  securityAttribute?: SecurityAttribute;
   language: Language;
   host: string;
   formId: string;
@@ -17,11 +14,6 @@ export const NextSteps = ({
   const formLink = `${host}/${language}/id/${formId}/resume`;
   return (
     <>
-      <div className="hidden">
-        {securityAttribute && securityAttribute}
-        {language && language}
-        {formLink && formLink}
-      </div>
       <div className="mb-10 rounded-lg bg-gcds-green-100 p-4">
         <h2 className="!mb-4 !text-2xl font-bold underline">
           {t("saveAndResume.downloadProgressHtml.nextSteps.title", { lng: language })}

@@ -218,7 +218,7 @@
   "cancel": "Cancel",
   "number": "Number",
   "saveAndResume": {
-    "saveBtn": "Save",
+    "saveBtn": "Save to device",
     "resumeBtn": "Resume",
     "resumePage": {
       "upload": {

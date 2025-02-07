@@ -5,7 +5,6 @@ import Markdown from "markdown-to-jsx";
 
 import { type FormValues } from "@lib/formContext";
 import { type Language } from "@lib/types/form-builder-types";
-import { type SecurityAttribute } from "@lib/types";
 
 import { Button } from "@clientComponents/globals";
 import { useGCFormsContext } from "@lib/hooks/useGCFormContext";
@@ -48,7 +47,6 @@ export const ConfirmDownload = ({
   formId,
   formTitleEn,
   formTitleFr,
-  securityAttribute,
   language,
 }: {
   open: boolean;
@@ -56,7 +54,6 @@ export const ConfirmDownload = ({
   formId: string;
   formTitleEn: string;
   formTitleFr: string;
-  securityAttribute: SecurityAttribute;
   language: Language;
 }) => {
   const { t } = useTranslation("form-builder");
@@ -89,7 +86,6 @@ export const ConfirmDownload = ({
       const html = await generateDownloadProgressHtml({
         formTitle: title,
         formId,
-        securityAttribute,
         reviewItems,
         formResponse: btoa(JSON.stringify(getProgressData())),
         language,
@@ -116,7 +112,7 @@ export const ConfirmDownload = ({
       setSaving(false);
       logMessage.warn("Error saving form progress", error);
     }
-  }, [formId, formTitleEn, formTitleFr, getProgressData, language, reviewItems, securityAttribute]);
+  }, [formId, formTitleEn, formTitleFr, getProgressData, language, reviewItems]);
 
   return (
     <AlertDialog.Root open={open}>

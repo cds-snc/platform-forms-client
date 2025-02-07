@@ -1,6 +1,4 @@
 import React from "react";
-
-import { type SecurityAttribute } from "@lib/types";
 import { type ReviewSection } from "@clientComponents/forms/Review/helpers";
 import { type Language } from "@lib/types/form-builder-types";
 
@@ -16,7 +14,6 @@ export interface HTMLProps {
   formId: string;
   formResponse: string;
   reviewItems: ReviewSection[];
-  securityAttribute: SecurityAttribute;
   startSectionTitle: string;
   host?: string;
 }
@@ -27,7 +24,6 @@ export const DownloadProgressHtml = ({
   formId,
   formResponse,
   reviewItems,
-  securityAttribute,
   startSectionTitle,
   host,
 }: HTMLProps) => {
@@ -70,12 +66,7 @@ export const DownloadProgressHtml = ({
                 <InProgressBadge language={language} />
               </div>
               <h1>{formTitle}</h1>
-              <NextSteps
-                language={language}
-                host={host || ""}
-                formId={formId}
-                securityAttribute={securityAttribute}
-              />
+              <NextSteps language={language} host={host || ""} formId={formId} />
               <ReviewList
                 reviewItems={reviewItems}
                 language={language}
