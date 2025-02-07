@@ -6,6 +6,29 @@ import { InternalLinkIcon } from "@serverComponents/icons";
 import { ExternalLinkIcon } from "@serverComponents/icons";
 import { saveSessionProgress } from "@lib/utils/saveSessionProgress";
 
+import { Language } from "@lib/types/form-builder-types";
+
+export const InProgressBadge = ({ language }: { language: Language }) => {
+  // const { t } = customTranslate("common");
+
+  const { t } = useTranslation("common");
+
+  return (
+    <div>
+      <div className="mr-4 inline-block max-w-fit rounded-lg bg-gcds-green-100 px-4 py-2">
+        {t("saveAndResume.downloadProgressHtml.badge.text", {
+          lng: language,
+        })}
+      </div>
+      <div className="inline-block">
+        {t("saveAndResume.downloadProgressHtml.badge.lastSaved", {
+          lng: language,
+        })}
+      </div>
+    </div>
+  );
+};
+
 export const ResumeForm = ({
   formId,
   titleEn,
@@ -122,6 +145,8 @@ export const ResumeForm = ({
           </div>
         </label>
       </div>
+
+      <InProgressBadge language={language as Language} />
     </>
   );
 };
