@@ -223,7 +223,7 @@
     "resumePage": {
       "upload": {
         "title": "Resume",
-        "description": "Upload your saved answers to continue filling out a form."
+        "description": "Continue filling out a form in progress from saved file."
       },
       "restart": {
         "title": "Start",
@@ -231,9 +231,9 @@
       }
     },
     "prompt": {
-      "title": "Save to resume later",
-      "description": "Download your answers so far, to pause and resume later from where you left off. You'll need to upload your answers. Keep this file in a secure place to be able to return to the form in progress.",
-      "okay": "Download answers",
+      "title": "Save to device",
+      "description": "Save a copy of your form answers so far. Resume later by finding the file on your device. Protect your data by keeping the downloaded file in a safe place.",
+      "okay": "Save to device",
       "cancel": "Cancel"
     }
   }
