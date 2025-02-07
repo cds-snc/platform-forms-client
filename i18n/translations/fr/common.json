@@ -223,7 +223,7 @@
     "resumePage": {
       "upload": {
         "title": "Poursuivre",
-        "description": "Téléversez vos réponses enregistrées pour continuer à remplir le formulaire."
+        "description": "Continuer un formulaire en cours à partir d’un fichier sauvegardé."
       },
       "restart": {
         "title": "Commencer",
@@ -231,8 +231,8 @@
       }
     },
     "prompt": {
-      "title": "Enregistrer pour reprendre plus tard",
-      "description": "Téléchargez vos réponses jusqu'à présent, pour faire une pause et reprendre plus tard là où vous vous êtes arrêté. Vous devrez téléverser vos réponses. Conservez ce fichier dans un endroit sûr pour pouvoir revenir au formulaire en cours.",
+      "title": "Sauvegarder sur l’appareil",
+      "description": "Sauvegarder une copie du formulaire rempli jusqu’à présent. Poursuivez le formulaire plus tard en trouvant le fichier sur votre appareil. Assurez-vous de protéger vos données en conservant le fichier téléchargé en lieu sûr.",
       "okay": "Télécharger les réponses",
       "cancel": "Annuler"
     }
