@@ -87,7 +87,7 @@ export const ConfirmDownload = ({
       const fileName = `${slugify(title)}-${formId}.html`;
 
       const html = await generateDownloadProgressHtml({
-        formTitle: formTitleEn,
+        formTitle: title,
         formId,
         securityAttribute,
         reviewItems,
