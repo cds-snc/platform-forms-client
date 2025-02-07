@@ -8,7 +8,8 @@ export const generateDownloadProgressHtml = async (props: HTMLProps) => {
   try {
     const renderToStaticMarkup = (await import("react-dom/server")).renderToStaticMarkup;
     const host = await getOrigin();
-    return { data: renderToStaticMarkup(DownloadProgressHtml({ ...props, host })) };
+    const html = DownloadProgressHtml({ ...props, host });
+    return { data: renderToStaticMarkup(html) };
   } catch (error) {
     return { data: "", error: (error as Error).message };
   }

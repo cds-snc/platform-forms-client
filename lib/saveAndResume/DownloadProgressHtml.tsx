@@ -5,7 +5,7 @@ import { type Language } from "@lib/types/form-builder-types";
 import Fip from "@lib/responseDownloadFormats/html/components/Fip";
 import { css } from "@lib/responseDownloadFormats/html/css/compiled";
 import { NextSteps } from "./NextSteps";
-import { ReviewList } from "@clientComponents/forms/Review/ReviewList";
+// import { ReviewList } from "@clientComponents/forms/Review/ReviewList";
 import { InProgressBadge } from "./InProgressBadge";
 
 export interface HTMLProps {
@@ -23,8 +23,8 @@ export const DownloadProgressHtml = ({
   formTitle,
   formId,
   formResponse,
-  reviewItems,
-  startSectionTitle,
+  // reviewItems,
+  // startSectionTitle,
   host,
 }: HTMLProps) => {
   const formData = JSON.stringify({
@@ -67,11 +67,13 @@ export const DownloadProgressHtml = ({
               </div>
               <h1>{formTitle}</h1>
               <NextSteps language={language} host={host || ""} formId={formId} />
+              {/* 
               <ReviewList
                 reviewItems={reviewItems}
                 language={language}
                 startSectionTitle={startSectionTitle}
               />
+              */}
             </div>
           </main>
         </div>

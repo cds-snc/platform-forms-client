@@ -11,10 +11,9 @@ import { useGCFormsContext } from "@lib/hooks/useGCFormContext";
 import { slugify } from "@lib/client/clientHelpers";
 import { getReviewItems } from "../Review/helpers";
 import { getStartLabels } from "@lib/utils/form-builder/i18nHelpers";
+import { logMessage } from "@lib/logger";
 
 import { generateDownloadProgressHtml } from "./actions";
-
-import { logMessage } from "@lib/logger";
 
 export type handleCloseType = (value: boolean) => void;
 
@@ -94,7 +93,7 @@ export const ConfirmDownload = ({
 
       if (!html.data) {
         setSaving(false);
-        return;
+        throw new Error("Error generating download progress html");
       }
 
       if (!window?.showSaveFilePicker) {
@@ -110,7 +109,8 @@ export const ConfirmDownload = ({
       setSaving(false);
     } catch (error) {
       setSaving(false);
-      logMessage.warn("Error saving form progress", error);
+      alert("Error saving form progress");
+      logMessage.warn("error", "Error saving form progress", error);
     }
   }, [formId, formTitleEn, formTitleFr, getProgressData, language, reviewItems]);
 
