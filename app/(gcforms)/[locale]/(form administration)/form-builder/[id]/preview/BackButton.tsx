@@ -3,6 +3,7 @@ import { useGCFormsContext } from "@lib/hooks/useGCFormContext";
 import { Button } from "@clientComponents/globals";
 import { Language } from "@lib/types/form-builder-types";
 import { LockedSections } from "@formBuilder/components/shared/right-panel/treeview/types";
+import { BackArrowIcon24x24 } from "@serverComponents/icons";
 
 // Must be placed withing context of the GCFormsContext.Provider
 export const BackButton = ({ language, onClick }: { language: Language; onClick?: () => void }) => {
@@ -23,7 +24,12 @@ export const BackButton = ({ language, onClick }: { language: Language; onClick?
         onClick && onClick();
       }}
     >
-      {t("goBack", { lng: language })}
+      <>
+        <span className="hidden tablet:block">{t("goBack", { lng: language })}</span>
+        <span className="block tablet:hidden">
+          <BackArrowIcon24x24 />
+        </span>
+      </>
     </Button>
   );
 };

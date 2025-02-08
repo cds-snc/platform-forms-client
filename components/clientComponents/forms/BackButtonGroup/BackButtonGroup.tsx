@@ -3,7 +3,7 @@ import { useGCFormsContext } from "@lib/hooks/useGCFormContext";
 import { Button } from "@clientComponents/globals";
 import { LockedSections } from "@formBuilder/components/shared/right-panel/treeview/types";
 import { Language } from "@lib/types/form-builder-types";
-import { BackArrowIcon } from "@serverComponents/icons";
+import { BackArrowIcon24x24 } from "@serverComponents/icons";
 
 export const BackButtonGroup = ({
   language,
@@ -44,7 +44,7 @@ export const BackButtonGroup = ({
         <>
           <span className="hidden tablet:block">{t("goBack", { lng: language })}</span>
           <span className="block tablet:hidden">
-            <BackArrowIcon />
+            <BackArrowIcon24x24 />
           </span>
         </>
       </Button>
