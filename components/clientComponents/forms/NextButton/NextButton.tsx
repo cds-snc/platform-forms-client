@@ -14,6 +14,7 @@ import { getLocalizedProperty } from "@lib/utils";
 import { showReviewPage } from "@lib/utils/form-builder/showReviewPage";
 import { tryFocusOnPageLoad } from "@lib/client/clientHelpers";
 import { useFormDelay } from "@lib/hooks/useFormDelayContext";
+import { ForwardArrowIcon } from "@serverComponents/icons";
 
 export const NextButton = ({
   validateForm,
@@ -97,7 +98,12 @@ export const NextButton = ({
           }
         }}
       >
-        {t("next", { lng: language })}
+        <>
+          <span className="hidden tablet:block">{t("next", { lng: language })}</span>
+          <span className="block tablet:hidden">
+            <ForwardArrowIcon />
+          </span>
+        </>
       </Button>
     </>
   );
