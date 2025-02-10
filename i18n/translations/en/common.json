@@ -220,6 +220,7 @@
   "saveAndResume": {
     "saveBtn": "Save to device",
     "resumeBtn": "Resume",
+    "formRestored": "Form values restored from saved file.",
     "resumePage": {
       "upload": {
         "title": "Resume",

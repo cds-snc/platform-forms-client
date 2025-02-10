@@ -5,11 +5,14 @@ import { useTranslation } from "@i18n/client";
 import { FormRecord, TypeOmit } from "@lib/types";
 import { Form } from "@clientComponents/forms/Form/Form";
 import { Language } from "@lib/types/form-builder-types";
-import { useEffect, useMemo, type JSX } from "react";
+import { useEffect, useMemo, useRef, type JSX } from "react";
 import { useGCFormsContext } from "@lib/hooks/useGCFormContext";
 import { restoreSessionProgress, removeProgressStorage } from "@lib/utils/saveSessionProgress";
 import { useFeatureFlags } from "@lib/hooks/useFeatureFlags";
 import { FeatureFlags } from "@lib/cache/types";
+
+import { toast } from "@formBuilder/components/shared/Toast";
+import { ToastContainer } from "@formBuilder/components/shared/Toast";
 
 export const FormWrapper = ({
   formRecord,
@@ -26,11 +29,12 @@ export const FormWrapper = ({
     i18n: { language },
   } = useTranslation(["common", "confirmation", "form-closed"]);
   const router = useRouter();
-
   const { saveSessionProgress } = useGCFormsContext();
 
   const { getFlag } = useFeatureFlags();
   const saveAndResumeEnabled = getFlag(FeatureFlags.saveAndResume);
+  const formRestoredMessage = t("saveAndResume.formRestored");
+  const hasShownResumeMessage = useRef(false);
 
   const values = useMemo(
     () =>
@@ -47,38 +51,46 @@ export const FormWrapper = ({
     // Clear session storage after values are restored
     if (values) {
       removeProgressStorage();
+
+      if (!hasShownResumeMessage.current) {
+        hasShownResumeMessage.current = true;
+        toast.success(formRestoredMessage, "public-facing-form");
+      }
     }
-  }, [values]);
+  }, [values, formRestoredMessage]);
 
   const initialValues = values ? values : undefined;
 
   return (
-    <Form
-      initialValues={initialValues || undefined}
-      formRecord={formRecord}
-      language={language}
-      onSuccess={(formID) => {
-        router.push(`/${language}/id/${formID}/confirmation`);
-      }}
-      t={t}
-      saveSessionProgress={saveSessionProgress}
-      saveAndResumeEnabled={saveAndResumeEnabled}
-      renderSubmit={({ validateForm, fallBack }) => {
-        return (
-          <>
-            <NextButton
-              formRecord={formRecord}
-              language={language as Language}
-              validateForm={validateForm}
-              fallBack={fallBack}
-              saveAndResumeEnabled={saveAndResumeEnabled}
-            />
-          </>
-        );
-      }}
-      allowGrouping={allowGrouping}
-    >
-      {currentForm}
-    </Form>
+    <>
+      <Form
+        initialValues={initialValues || undefined}
+        formRecord={formRecord}
+        language={language}
+        onSuccess={(formID) => {
+          router.push(`/${language}/id/${formID}/confirmation`);
+        }}
+        t={t}
+        saveSessionProgress={saveSessionProgress}
+        saveAndResumeEnabled={saveAndResumeEnabled}
+        renderSubmit={({ validateForm, fallBack }) => {
+          return (
+            <>
+              <NextButton
+                formRecord={formRecord}
+                language={language as Language}
+                validateForm={validateForm}
+                fallBack={fallBack}
+                saveAndResumeEnabled={saveAndResumeEnabled}
+              />
+            </>
+          );
+        }}
+        allowGrouping={allowGrouping}
+      >
+        {currentForm}
+      </Form>
+      <ToastContainer limit={1} autoClose={5000} containerId="public-facing-form" />
+    </>
   );
 };

@@ -220,6 +220,7 @@
   "saveAndResume": {
     "saveBtn": "Enregistrer",
     "resumeBtn": "Poursuivre",
+    "formRestored": "Form values restored from saved file.",
     "resumePage": {
       "upload": {
         "title": "Poursuivre",
