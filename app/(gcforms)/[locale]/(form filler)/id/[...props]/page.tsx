@@ -48,7 +48,6 @@ export default async function Page(props0: {
 
   const formID = props[0];
   const step = props[1] ?? "";
-
   const formRecord = await getPublicTemplateByID(formID);
 
   // Redirect if form doesn't exist and only retrieve published forms
