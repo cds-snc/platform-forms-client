@@ -5,6 +5,9 @@ import { useRouter } from "next/navigation";
 import { InternalLinkIcon } from "@serverComponents/icons";
 import { ExternalLinkIcon } from "@serverComponents/icons";
 import { saveSessionProgress } from "@lib/utils/saveSessionProgress";
+import { useFeatureFlags } from "@lib/hooks/useFeatureFlags";
+import { FeatureFlags } from "@lib/cache/types";
+import { ErrorPanel } from "@clientComponents/globals/ErrorPanel";
 
 export const ResumeForm = ({
   formId,
@@ -19,7 +22,11 @@ export const ResumeForm = ({
     t,
     i18n: { language },
   } = useTranslation("form-builder");
+
   const router = useRouter();
+
+  const { getFlag } = useFeatureFlags();
+  const saveAndResumeEnabled = getFlag(FeatureFlags.saveAndResume);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (!e.target || !e.target.files) {
@@ -80,6 +87,10 @@ export const ResumeForm = ({
     "group mx-4 mb-4 flex h-80 w-80 flex-col rounded-xl border-[0.5px] border-slate-500 bg-gray-background pl-6 pr-5 pt-28 text-left outline-none hover:cursor-pointer hover:border-[1px] hover:border-indigo-700 hover:bg-indigo-50 focus:cursor-pointer focus:border-[3px] focus:border-slate-700";
 
   const title = language === "en" ? titleEn : titleFr;
+
+  if (!saveAndResumeEnabled) {
+    return <ErrorPanel supportLink={false} />;
+  }
 
   return (
     <>
