@@ -63,7 +63,7 @@ export default AuthenticatedLayout(
             </div>
           </header>
           <div className="shrink-0 grow basis-auto">
-            <ToastContainer containerId="default" />
+            <ToastContainer limit={1} containerId="default" />
             <ToastContainer limit={1} containerId="wide" autoClose={false} width="600px" />
             <>
               <div>

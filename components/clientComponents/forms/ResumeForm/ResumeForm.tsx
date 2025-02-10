@@ -8,6 +8,8 @@ import { saveSessionProgress } from "@lib/utils/saveSessionProgress";
 import { useFeatureFlags } from "@lib/hooks/useFeatureFlags";
 import { FeatureFlags } from "@lib/cache/types";
 import { ErrorPanel } from "@clientComponents/globals/ErrorPanel";
+import { toast } from "@formBuilder/components/shared/Toast";
+import { ToastContainer } from "@formBuilder/components/shared/Toast";
 
 export const ResumeForm = ({
   formId,
@@ -21,12 +23,14 @@ export const ResumeForm = ({
   const {
     t,
     i18n: { language },
-  } = useTranslation("form-builder");
+  } = useTranslation(["form-builder", "common"]);
 
   const router = useRouter();
 
   const { getFlag } = useFeatureFlags();
   const saveAndResumeEnabled = getFlag(FeatureFlags.saveAndResume);
+
+  const resumeError = t("errorPanel.defaultTitle", { lng: language, ns: "common" });
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (!e.target || !e.target.files) {
@@ -77,9 +81,7 @@ export const ResumeForm = ({
         router.push(`/${language}/id/${id}`);
       };
     } catch (e) {
-      if (e instanceof Error) {
-        // no-op
-      }
+      toast.error(resumeError, "resume");
     }
   };
 
@@ -133,6 +135,7 @@ export const ResumeForm = ({
           </div>
         </label>
       </div>
+      <ToastContainer limit={1} autoClose={false} containerId="resume" />
     </>
   );
 };
