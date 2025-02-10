@@ -106,7 +106,7 @@ export const NextButton = ({
           <>
             <span className="hidden tablet:block">{t("next", { lng: language })}</span>
             <span className="block tablet:hidden">
-              <ForwardArrowIcon24x24 className="fill-white" />
+              <ForwardArrowIcon24x24 className="fill-white" title={t("next", { lng: language })} />
             </span>
           </>
         )}

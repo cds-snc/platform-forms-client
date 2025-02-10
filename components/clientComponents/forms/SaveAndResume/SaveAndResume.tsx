@@ -23,7 +23,7 @@ export const SaveAndResume = ({
   return (
     <div>
       <DownloadProgress
-        className="mr-4"
+        className="group mr-4"
         type="button"
         loading={confirm}
         theme="secondary"
@@ -34,7 +34,10 @@ export const SaveAndResume = ({
             {t("saveAndResume.saveBtn", { lng: language })}
           </span>
           <span className="block tablet:hidden">
-            <SaveProgressIcon />
+            <SaveProgressIcon
+              className="fill-[#2B4380] group-focus:fill-white group-active:fill-white"
+              title={t("saveAndResume.saveBtn", { lng: language })}
+            />
           </span>
         </>
       </DownloadProgress>

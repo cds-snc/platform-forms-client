@@ -40,7 +40,7 @@ export const BackButtonGroup = ({
           onClick && onClick();
         }}
         type="button"
-        className="mr-4"
+        className="group mr-4"
         theme="secondary"
       >
         {!saveAndResumeEnabled ? (
@@ -49,7 +49,10 @@ export const BackButtonGroup = ({
           <>
             <span className="hidden tablet:block">{t("goBack", { lng: language })}</span>
             <span className="block tablet:hidden">
-              <BackArrowIcon24x24 />
+              <BackArrowIcon24x24
+                className="group-focus:fill-white group-active:fill-white"
+                title={t("goBack", { lng: language })}
+              />
             </span>
           </>
         )}
