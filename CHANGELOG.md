@@ -5,6 +5,15 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.32.2](https://github.com/cds-snc/platform-forms-client/compare/v3.32.1...v3.32.2) (2025-02-07)
+
+
+### Miscellaneous Chores
+
+* Parks canada branding ([#5095](https://github.com/cds-snc/platform-forms-client/issues/5095)) ([6b15e72](https://github.com/cds-snc/platform-forms-client/commit/6b15e72739a2254329c603f4e22952cd36233ffb))
+* Update review component to make it server renderable  ([#5086](https://github.com/cds-snc/platform-forms-client/issues/5086)) ([1441eec](https://github.com/cds-snc/platform-forms-client/commit/1441eec2f090c8e60cbcf8626dba5f2aceb54a2e))
+* use not found page for 0000 ([#5094](https://github.com/cds-snc/platform-forms-client/issues/5094)) ([4f2d9d9](https://github.com/cds-snc/platform-forms-client/commit/4f2d9d97f79062e8425b3e9906529c30da4c8b70))
+
 ## [3.32.1](https://github.com/cds-snc/platform-forms-client/compare/v3.32.0...v3.32.1) (2025-02-05)
 
 
