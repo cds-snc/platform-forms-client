@@ -13,7 +13,9 @@ export const generateDownloadProgressHtml = async (props: HTMLProps) => {
     return { data: renderToStaticMarkup(html) };
   } catch (error) {
     if (error instanceof Error) {
-      logMessage.warn(`Error generating HTML due to error: ${error.message}`);
+      logMessage.warn(
+        `Error generating HTML due to error: ${error.message} -  formID: {${props.formId}}`
+      );
     }
     return { data: "", error: (error as Error).message };
   }
