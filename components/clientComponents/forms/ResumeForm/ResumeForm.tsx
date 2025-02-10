@@ -39,11 +39,17 @@ export const ResumeForm = ({
 
     const target = e.target;
 
-    try {
-      const fileReader = new FileReader();
+    const fileReader = new FileReader();
 
-      fileReader.readAsText(e.target.files[0], "UTF-8");
-      fileReader.onload = (e) => {
+    fileReader.readAsText(e.target.files[0], "UTF-8");
+
+    fileReader.onerror = () => {
+      toast.error(resumeError, "resume");
+      target.value = "";
+    };
+
+    fileReader.onload = (e) => {
+      try {
         if (!e.target || !e.target.result || typeof e.target.result !== "string") {
           throw new Error("Resume: Target result is not a string");
         }
@@ -84,12 +90,11 @@ export const ResumeForm = ({
           history: parsed.history,
           currentGroup: parsed.currentGroup,
         });
-
         router.push(`/${language}/id/${id}`);
-      };
-    } catch (e) {
-      toast.error(resumeError, "resume");
-    }
+      } catch (e) {
+        toast.error(resumeError, "resume");
+      }
+    };
   };
 
   const boxClass =
