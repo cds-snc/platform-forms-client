@@ -39,7 +39,7 @@ export const PrimaryFormButtons = ({
           validateForm: props.validateForm,
           fallBack: () => {
             return (
-              <div>
+              <div className="flex">
                 {isGroupsCheck && isShowReviewPage && (
                   <BackButton
                     saveAndResumeEnabled={saveAndResumeEnabled}
@@ -47,9 +47,7 @@ export const PrimaryFormButtons = ({
                     onClick={() => groupsHeadingRef.current?.focus()}
                   />
                 )}
-                <div className="inline-block">
-                  <SubmitButton getFormDelay={getFormDelay} formID={formId} formTitle={formTitle} />
-                </div>
+                <SubmitButton getFormDelay={getFormDelay} formID={formId} formTitle={formTitle} />
               </div>
             );
           },
