@@ -13,6 +13,7 @@ export const PrimaryFormButtons = ({
   formTitle,
   props,
   getFormDelay,
+  saveAndResumeEnabled,
 }: {
   isGroupsCheck: boolean;
   isShowReviewPage: boolean;
@@ -22,6 +23,7 @@ export const PrimaryFormButtons = ({
   formTitle: string;
   props: InnerFormProps;
   getFormDelay: () => number;
+  saveAndResumeEnabled?: boolean;
 }) => {
   return (
     <div className="flex">
@@ -39,6 +41,7 @@ export const PrimaryFormButtons = ({
               <div>
                 {isGroupsCheck && isShowReviewPage && (
                   <BackButton
+                    saveAndResumeEnabled={saveAndResumeEnabled}
                     language={language as Language}
                     onClick={() => groupsHeadingRef.current?.focus()}
                   />

@@ -21,11 +21,13 @@ export const NextButton = ({
   fallBack,
   language,
   formRecord,
+  saveAndResumeEnabled = false,
 }: {
   validateForm: Validate["validateForm"];
   fallBack?: () => JSX.Element;
   language: Language;
   formRecord: PublicFormRecord;
+  saveAndResumeEnabled?: boolean;
 }) => {
   const { currentGroup, hasNextAction, handleNextAction, isOffBoardSection } = useGCFormsContext();
   const { updateFormDelay } = useFormDelay();
@@ -98,12 +100,16 @@ export const NextButton = ({
           }
         }}
       >
-        <>
-          <span className="hidden tablet:block">{t("next", { lng: language })}</span>
-          <span className="block tablet:hidden">
-            <ForwardArrowIcon24x24 className="fill-white" />
-          </span>
-        </>
+        {!saveAndResumeEnabled ? (
+          t("next", { lng: language })
+        ) : (
+          <>
+            <span className="hidden tablet:block">{t("next", { lng: language })}</span>
+            <span className="block tablet:hidden">
+              <ForwardArrowIcon24x24 className="fill-white" />
+            </span>
+          </>
+        )}
       </Button>
     </>
   );

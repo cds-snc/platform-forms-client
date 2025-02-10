@@ -203,13 +203,14 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
             )}
 
             <FormActions
-              saveAndResumeEnabled={props.saveAndResume || false}
+              saveAndResumeEnabled={props.saveAndResumeEnabled || false}
               formId={formID}
               language={language as Language}
               form={form}
               dirty={dirty}
             >
               <PrimaryFormButtons
+                saveAndResumeEnabled={props.saveAndResumeEnabled || false}
                 isGroupsCheck={isGroupsCheck}
                 isShowReviewPage={isShowReviewPage}
                 groupsHeadingRef={groupsHeadingRef}

@@ -12,7 +12,7 @@ export const FormActions = ({
 }: {
   children: React.ReactNode;
   language: Language;
-  saveAndResumeEnabled: boolean;
+  saveAndResumeEnabled?: boolean;
   form: FormProperties;
   formId: string;
   dirty: boolean;

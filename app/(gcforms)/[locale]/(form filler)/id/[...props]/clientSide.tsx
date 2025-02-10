@@ -8,6 +8,8 @@ import { Language } from "@lib/types/form-builder-types";
 import { useEffect, useMemo, type JSX } from "react";
 import { useGCFormsContext } from "@lib/hooks/useGCFormContext";
 import { restoreSessionProgress, removeProgressStorage } from "@lib/utils/saveSessionProgress";
+import { useFeatureFlags } from "@lib/hooks/useFeatureFlags";
+import { FeatureFlags } from "@lib/cache/types";
 
 export const FormWrapper = ({
   formRecord,
@@ -26,6 +28,9 @@ export const FormWrapper = ({
   const router = useRouter();
 
   const { saveSessionProgress } = useGCFormsContext();
+
+  const { getFlag } = useFeatureFlags();
+  const saveAndResumeEnabled = getFlag(FeatureFlags.saveAndResume);
 
   const values = useMemo(
     () =>
@@ -57,7 +62,7 @@ export const FormWrapper = ({
       }}
       t={t}
       saveSessionProgress={saveSessionProgress}
-      saveAndResume={true}
+      saveAndResumeEnabled={saveAndResumeEnabled}
       renderSubmit={({ validateForm, fallBack }) => {
         return (
           <>
@@ -66,6 +71,7 @@ export const FormWrapper = ({
               language={language as Language}
               validateForm={validateForm}
               fallBack={fallBack}
+              saveAndResumeEnabled={saveAndResumeEnabled}
             />
           </>
         );

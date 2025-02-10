@@ -24,7 +24,7 @@ export interface FormProps {
   groupHistory?: string[];
   matchedIds?: string[];
   saveSessionProgress: (language?: Language) => void;
-  saveAndResume?: boolean;
+  saveAndResumeEnabled?: boolean;
 }
 
 export type InnerFormProps = FormProps & FormikProps<Responses>;
