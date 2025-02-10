@@ -44,25 +44,28 @@ export const ResumeForm = ({
 
       fileReader.readAsText(e.target.files[0], "UTF-8");
       fileReader.onload = (e) => {
-        if (!e.target || !e.target.result || typeof e.target.result !== "string") return;
+        if (!e.target || !e.target.result || typeof e.target.result !== "string") {
+          throw new Error("Resume: Target result is not a string");
+        }
+
         const data = e.target.result;
+
         if (!data) {
           target.value = "";
-          return;
+          throw new Error("Resume: No data found in file");
         }
 
         const parser = new DOMParser();
         const htmlDoc = parser.parseFromString(data, "text/html");
 
         if (!htmlDoc.getElementById("form-data")) {
-          target.value = "";
-          return;
+          throw new Error("Resume: Failed to parse HTML");
         }
 
         const jsonData = htmlDoc.getElementById("form-data")?.textContent;
+
         if (!jsonData) {
-          target.value = "";
-          return;
+          throw new Error("Resume: Failed to find form-data");
         }
 
         const parsedHTMLData = JSON.parse(jsonData);
@@ -70,6 +73,10 @@ export const ResumeForm = ({
         const formData = Buffer.from(parsedJsonData, "base64").toString("utf8");
         const parsed = JSON.parse(formData);
         const id = parsed.id;
+
+        if (!id || id !== formId) {
+          throw new Error("Resume: Invalid form ID");
+        }
 
         saveSessionProgress(language, {
           id: id,
