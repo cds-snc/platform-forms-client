@@ -2,9 +2,9 @@ import { useState } from "react";
 import { useTranslation } from "@i18n/client";
 
 import { type Language } from "@lib/types/form-builder-types";
-import { LinkButton } from "@serverComponents/globals/Buttons/LinkButton";
 import { SubmitButton as DownloadProgress } from "@clientComponents/globals/Buttons/SubmitButton";
 import { ConfirmDownload } from "./ConfirmDownload";
+import { SaveProgressIcon } from "@serverComponents/icons/SaveProgressIcon";
 
 export const SaveAndResume = ({
   formId,
@@ -29,11 +29,15 @@ export const SaveAndResume = ({
         theme="secondary"
         onClick={() => setConfirm(true)}
       >
-        {t("saveAndResume.saveBtn")}
+        <>
+          <span className="hidden tablet:block">
+            {t("saveAndResume.saveBtn", { lng: language })}
+          </span>
+          <span className="block tablet:hidden">
+            <SaveProgressIcon />
+          </span>
+        </>
       </DownloadProgress>
-      <LinkButton.Secondary href={`/${language}/id/${formId}/resume`}>
-        {t("saveAndResume.resumeBtn")}
-      </LinkButton.Secondary>
       <ConfirmDownload
         formId={formId}
         formTitleEn={formTitleEn}
