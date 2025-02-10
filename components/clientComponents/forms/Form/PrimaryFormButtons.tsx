@@ -29,6 +29,7 @@ export const PrimaryFormButtons = ({
     <div className="flex">
       {isGroupsCheck && isShowReviewPage && (
         <BackButtonGroup
+          saveAndResumeEnabled={saveAndResumeEnabled}
           language={language as Language}
           onClick={() => groupsHeadingRef.current?.focus()}
         />

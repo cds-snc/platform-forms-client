@@ -8,9 +8,11 @@ import { BackArrowIcon24x24 } from "@serverComponents/icons";
 export const BackButtonGroup = ({
   language,
   onClick,
+  saveAndResumeEnabled,
 }: {
   language: Language;
   onClick?: () => void;
+  saveAndResumeEnabled?: boolean;
 }) => {
   const { currentGroup, getGroupHistory, handlePreviousAction } = useGCFormsContext();
   const { t } = useTranslation("form-builder");
@@ -41,12 +43,16 @@ export const BackButtonGroup = ({
         className="mr-4"
         theme="secondary"
       >
-        <>
-          <span className="hidden tablet:block">{t("goBack", { lng: language })}</span>
-          <span className="block tablet:hidden">
-            <BackArrowIcon24x24 />
-          </span>
-        </>
+        {!saveAndResumeEnabled ? (
+          t("goBack", { lng: language })
+        ) : (
+          <>
+            <span className="hidden tablet:block">{t("goBack", { lng: language })}</span>
+            <span className="block tablet:hidden">
+              <BackArrowIcon24x24 />
+            </span>
+          </>
+        )}
       </Button>
     </>
   );
