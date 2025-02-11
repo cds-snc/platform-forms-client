@@ -33,6 +33,7 @@ export type CreateOrUpdateTemplateType = {
   deliveryOption?: DeliveryOption;
   securityAttribute?: SecurityAttribute;
   formPurpose?: FormPurpose;
+  saveAndResume?: boolean;
 };
 
 // Public facing functions - they can be used by anyone who finds the associated server action identifer
