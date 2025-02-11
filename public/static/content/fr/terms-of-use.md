@@ -22,7 +22,7 @@ Vous avez pour responsabilité :
 - de déterminer le niveau de confidentialité des renseignements collectés dans vos formulaires. Formulaires GC prend en charge la collecte de données classées jusqu’à PROTÉGÉ B. Apprenez-en davantage sur la détermination du niveau de confidentialité en consultant la [norme sur la catégorisation de sécurité](https://www.tbs-sct.canada.ca/pol/doc-fra.aspx?id=32614).
 - de respecter la [_Loi sur la protection des renseignements personnels_](https://laws-lois.justice.gc.ca/fra/lois/p-21/) et la [_Loi sur l’accès à l’information_](https://laws-lois.justice.gc.ca/fra/lois/a-1/) concernant les renseignements personnels et sensibles contenus dans les réponses soumises dans vos formulaires en cas de demande, d’incident ou d’atteinte à la sécurité des données.
 - de récupérer les réponses directement à partir de la base de données lors du traitement d’informations plus sensibles de type Protégé B. La réception de réponses par courriel ou la récupération avec une intégration à API n’est possible que pour les informations de type Protégé A.
-- Veiller à ce que les autres membres de votre équipe qui ont accès à vos formulaires et à vos réponses disposent des autorités appropriées et de l'autorisation de sécurité nécessaire pour accéder aux données recueillies.
+- Veiller à ce que les autres membres de votre équipe qui ont accès à vos formulaires et à vos réponses disposent des autorités appropriées et de l'autorisation de sécurité nécessaire pour accéder aux données recueillies. Pour cette raison, les comptes de courriel partagés ne sont pas autorisés dans Formulaires GC. Tout accès doit être accordé à des employés autorisés qui utilisent une adresse courriel valide du gouvernement du Canada.
 
 ### Réponses envoyées par courriel (jusqu’à PROTÉGÉ A)
 
@@ -53,7 +53,7 @@ Vous avez pour responsabilité :
 
 ## Pratique de sécurité en continu
 
-- Utilisez une adresse courriel gouvernementale individuelle pour créer votre compte et pour l’authentification à deux facteurs.
+- Utilisez une adresse courriel gouvernementale individuelle appartenant à un·e employé·e (et non une boîte de réception partagée) pour créer votre compte et pour l’authentification à deux facteurs.
 - Ne communiquez pas votre mot de passe à personne et ne le conservez pas dans un endroit où d’autres personnes pourraient le trouver. Si quelqu’un d’autre a besoin d’accéder à un formulaire, [contactez-nous](/fr/support).
 - Protégez vos clés API. Si vous pensez qu'une clé API a été compromise, supprimez-la et recréez-en une nouvelle pour sécuriser l'accès aux réponses de formulaire.
 - Assurer la confidentialité et la sécurité des renseignements protégées lors du téléchargement des réponses aux formulaires de Formulaires GC.
@@ -85,4 +85,4 @@ Nous vous demandons de ne pas intervenir sur le format des fichiers JSON, car to
 
 Pour toute question en lien avec les présentes conditions d’utilisation, veuillez [nous contacter](/fr/contact).
 
-**Dernière mise à jour :** 3 décembre 2024
+**Dernière mise à jour :** 27 janvier 2025

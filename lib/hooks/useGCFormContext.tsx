@@ -1,6 +1,11 @@
 "use client";
 import React, { createContext, useContext, ReactNode } from "react";
-import { PublicFormRecord } from "@lib/types";
+
+import { type Language } from "@lib/types/form-builder-types";
+import { type PublicFormRecord } from "@lib/types";
+import { LockedSections } from "@formBuilder/components/shared/right-panel/treeview/types";
+import { getGroupTitle as groupTitle } from "@lib/utils/getGroupTitle";
+
 import {
   mapIdsToValues,
   FormValues,
@@ -10,7 +15,6 @@ import {
   filterShownElements,
   filterValuesByShownElements,
 } from "@lib/formContext";
-import { LockedSections } from "@formBuilder/components/shared/right-panel/treeview/types";
 import { formHasGroups } from "@lib/utils/form-builder/formHasGroups";
 import {
   getGroupHistory as _getGroupHistory,
@@ -19,8 +23,13 @@ import {
   getPreviousIdFromCurrentId,
   getInputHistoryValues,
 } from "@lib/utils/form-builder/groupsHistory";
-import { getLocalizedProperty } from "@lib/utils";
-import { Language } from "@lib/types/form-builder-types";
+
+import {
+  saveSessionProgress as saveToSession,
+  restoreSessionProgress as restoreSession,
+} from "@lib/utils/saveSessionProgress";
+
+import { toggleSavedValues } from "@i18n/toggleSavedValues";
 
 interface GCFormsContextValueType {
   updateValues: ({ formValues }: { formValues: FormValues }) => void;
@@ -41,8 +50,14 @@ interface GCFormsContextValueType {
   pushIdToHistory: (groupId: string) => string[];
   clearHistoryAfterId: (groupId: string) => string[];
   getGroupTitle: (groupId: string | null, language: Language) => string;
-  saveProgress: () => void;
-  restoreProgress: () => FormValues | false;
+  saveSessionProgress: (language: Language | undefined) => void;
+  restoreSessionProgress: (language: Language) => FormValues | false;
+  getProgressData: () => {
+    id: string;
+    values: FormValues;
+    history: string[];
+    currentGroup: string;
+  };
 }
 
 const GCFormsContext = createContext<GCFormsContextValueType | undefined>(undefined);
@@ -54,7 +69,6 @@ export const GCFormsProvider = ({
   children: ReactNode;
   formRecord: PublicFormRecord;
 }) => {
-  const SESSION_STORAGE_KEY = "form-data";
   const groups: GroupsType = formRecord.form.groups || {};
   const initialGroup = groups ? LockedSections.START : null;
   const values = React.useRef({});
@@ -97,8 +111,6 @@ export const GCFormsProvider = ({
   };
 
   const handleNextAction = () => {
-    removeProgressStorage();
-
     if (!currentGroup) return;
 
     if (hasNextAction(currentGroup)) {
@@ -159,65 +171,35 @@ export const GCFormsProvider = ({
   // Note: this only removes the group entry and not the values
   const clearHistoryAfterId = (groupId: string) => _clearHistoryAfterId(groupId, history.current);
 
-  const getGroupTitle = (groupId: string | null, language: Language) => {
-    if (!groupId) return "";
-    const titleLanguageKey = getLocalizedProperty("title", language) as "titleEn" | "titleFr";
-    return groups?.[groupId]?.[titleLanguageKey] || "";
-  };
-
-  const removeProgressStorage = () => {
-    sessionStorage.removeItem(SESSION_STORAGE_KEY);
-  };
-
-  const saveProgress = () => {
-    const formData = JSON.stringify({
+  const getProgressData = () => {
+    return {
       id: formRecord.id,
       values: values.current,
       history: history.current,
-      currentGroup: currentGroup,
-    });
-
-    // Save to session storage
-    const encodedformData = Buffer.from(formData).toString("base64");
-    sessionStorage.setItem(SESSION_STORAGE_KEY, encodedformData);
+      currentGroup: currentGroup || "",
+    };
   };
 
-  const restoreProgress = (): FormValues | false => {
-    const encodedformData = sessionStorage.getItem(SESSION_STORAGE_KEY);
-    if (!encodedformData) return false;
+  const saveSessionProgress = (language: Language = "en") => {
+    const vals =
+      language === "en"
+        ? values.current
+        : (toggleSavedValues(formRecord.form, { values: values.current }, "en") as FormValues);
 
-    // Clear the session storage as we now have the data
-    removeProgressStorage();
+    saveToSession(language, {
+      id: formRecord.id,
+      values: vals,
+      history: history.current,
+      currentGroup: currentGroup || "",
+    });
+  };
 
-    try {
-      const formData = Buffer.from(encodedformData, "base64").toString("utf8");
+  const restoreSessionProgress = (language: Language) => {
+    return restoreSession({ id: formRecord.id, form: formRecord.form, language });
+  };
 
-      if (!formData) return false;
-
-      const parsedData = JSON.parse(formData);
-
-      if (parsedData.id === formRecord.id) {
-        history.current = parsedData.history;
-
-        if (parsedData.currentGroup !== currentGroup) {
-          setCurrentGroup(parsedData.currentGroup);
-        }
-
-        sessionStorage.setItem(
-          SESSION_STORAGE_KEY,
-          JSON.stringify({
-            restored: true,
-            ...parsedData.values,
-          })
-        );
-
-        return parsedData.values;
-      }
-    } catch (e) {
-      return false;
-    }
-
-    return false;
+  const getGroupTitle = (groupId: string | null, language: Language) => {
+    return groupTitle({ groups, groupId, language });
   };
 
   return (
@@ -241,8 +223,9 @@ export const GCFormsProvider = ({
         pushIdToHistory,
         clearHistoryAfterId,
         getGroupTitle,
-        saveProgress,
-        restoreProgress,
+        saveSessionProgress,
+        getProgressData,
+        restoreSessionProgress,
       }}
     >
       {children}
@@ -277,8 +260,16 @@ export const useGCFormsContext = () => {
       pushIdToHistory: () => [],
       clearHistoryAfterId: () => [],
       getGroupTitle: () => "",
-      saveProgress: () => void 0,
-      restoreProgress: () => {
+      saveSessionProgress: () => void 0,
+      getProgressData: () => {
+        return {
+          id: "",
+          values: {},
+          history: [],
+          currentGroup: "",
+        };
+      },
+      restoreSessionProgress: () => {
         return {};
       },
     };

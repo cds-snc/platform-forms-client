@@ -206,7 +206,9 @@
     "type": "À VENIR",
     "message": "<strong>En août</strong> : Créez des formulaires multipages avec une logique d’embranchement. <a href='/fr/contact' className='text-white hover:text-white'>S’abonner aux mises à jour</a>",
     "type2": "NOUVEAUTÉ",
-    "message2": "Créez des formulaires complexes de plusieurs pages avec logique d’affichage et d’embranchement. <a href='https://articles.alpha.canada.ca/forms-formulaires/fr/configurer-formulaire-avec-logique/' className='text-white hover:text-white'>En savoir plus</a>"
+    "message2": "Créez des formulaires complexes de plusieurs pages avec logique d’affichage et d’embranchement. <a href='https://articles.alpha.canada.ca/forms-formulaires/fr/configurer-formulaire-avec-logique/' className='text-white hover:text-white'>En savoir plus</a>",
+    "type3": "Période électorale",
+    "message3": "Consultez l’équipe des communications de votre ministère au sujet de <a href='https://www.canada.ca/fr/conseil-prive/services/publications/lignes-directrices-regissant-conduite-ministres-etat-membres-personnel-exonere-fonctionnaires-periode-electorale.html' className='text-white hover:text-white'>La Convention de transition</a>"
   },
   "closingNotice": {
     "title": "Fermeture du formulaire",
@@ -214,5 +216,43 @@
     "text2": "{{day}} {{month}} {{year}} à {{hour}} h {{minute}} HE"
   },
   "cancel": "Annuler",
-  "number": "Numéro"
+  "number": "Number",
+  "saveAndResume": {
+    "saveBtn": "Enregistrer",
+    "resumeBtn": "Poursuivre",
+    "formRestored": "Form values restored from saved file.",
+    "resumePage": {
+      "upload": {
+        "title": "Poursuivre",
+        "description": "Continuer un formulaire en cours à partir d’un fichier sauvegardé."
+      },
+      "restart": {
+        "title": "Commencer",
+        "description": "Remplissez un nouveau formulaire."
+      }
+    },
+    "prompt": {
+      "title": "Sauvegarder sur l’appareil",
+      "description": "Sauvegarder une copie du formulaire rempli jusqu’à présent. Poursuivez le formulaire plus tard en trouvant le fichier sur votre appareil. Assurez-vous de protéger vos données en conservant le fichier téléchargé en lieu sûr.",
+      "okay": "Télécharger les réponses",
+      "cancel": "Annuler"
+    },
+    "downloadProgressHtml": {
+      "nextSteps": {
+        "title": "What to do next - [FR]",
+        "resumeBox": {
+          "title": "Resume your form [FR]",
+          "description": "<a class='underline' href='{{formLink}}'>Upload this file</a> to complete and submit your form [FR]"
+        }
+      },
+      "keepSafe": {
+        "title": "Keep your form safe [FR]",
+        "description": " Make sure to keep this file in a secure spot on your device. [FR]"
+      },
+      "badge": {
+        "text": "In - Progress [FR]",
+        "lastSaved": "Saved:  {{month}} {{day}}, {{year}}"
+      }
+    }
+  }
 }

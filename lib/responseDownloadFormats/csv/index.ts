@@ -2,7 +2,7 @@ import { createArrayCsvStringifier as createCsvStringifier } from "csv-writer";
 import { FormResponseSubmissions } from "../types";
 import { FormElementTypes } from "@lib/types";
 import { customTranslate } from "@lib/i18nHelpers";
-import { sortByGroups } from "@lib/utils/form-builder";
+import { sortByLayout } from "@lib/utils/form-builder";
 
 const specialChars = ["=", "+", "-", "@"];
 
@@ -10,10 +10,10 @@ export const transform = (formResponseSubmissions: FormResponseSubmissions) => {
   const { t } = customTranslate("common");
   const { submissions } = formResponseSubmissions;
 
-  const sortedElements = sortByGroups({
-    form: formResponseSubmissions.formRecord.form,
+  const sortedElements = sortByLayout({
+    layout: formResponseSubmissions.formRecord.form.layout,
     elements: formResponseSubmissions.formRecord.form.elements,
-  });
+  }).filter((element) => ![FormElementTypes.richText].includes(element.type));
 
   const header = sortedElements.map((element) => {
     return `${element.properties.titleEn}\n${element.properties.titleFr}${

@@ -90,7 +90,7 @@ export const Preview = ({
 
   const [sent, setSent] = useState<string | null>();
 
-  const { saveProgress } = useGCFormsContext();
+  const { saveSessionProgress } = useGCFormsContext();
 
   const clearSent = () => {
     setSent(null);
@@ -191,7 +191,7 @@ export const Preview = ({
               <GCFormsProvider formRecord={formRecord}>
                 <Form
                   formRecord={formRecord}
-                  saveProgress={saveProgress}
+                  saveSessionProgress={saveSessionProgress}
                   isPreview={true}
                   language={language}
                   t={translatedT}
