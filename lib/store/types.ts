@@ -82,6 +82,7 @@ export interface TemplateStoreState extends TemplateStoreProps {
   resetDeliveryOption: () => void;
   getSecurityAttribute: () => SecurityAttribute;
   setClosingDate: (closingDate: string | null) => void;
+  setSaveAndResume: (val: boolean | undefined) => void;
   initialize: (language?: string) => void;
   removeChoiceFromRules: (elId: string, choiceIndex: number) => void;
   removeChoiceFromNextActions: (elId: string, choiceIndex: number) => void;
@@ -114,4 +115,5 @@ export interface TemplateStoreProps {
   closingDate?: string | null;
   changeKey: string;
   allowGroupsFlag: boolean;
+  saveAndResume: boolean;
 }

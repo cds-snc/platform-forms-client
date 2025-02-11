@@ -61,6 +61,7 @@ model Template {
   users             User[]
   closingDate       DateTime?       @db.Timestamptz(6)
   closedDetails     Json?
+  saveAndResume     Boolean         @default(false)
   invitations       Invitation[]
 }
 

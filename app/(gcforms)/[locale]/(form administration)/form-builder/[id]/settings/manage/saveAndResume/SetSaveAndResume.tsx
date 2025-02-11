@@ -1,7 +1,7 @@
 "use client";
 import React, { useCallback, useState } from "react";
 import { useTranslation } from "@i18n/client";
-// import { useTemplateStore } from "@lib/store/useTemplateStore";
+import { useTemplateStore } from "@lib/store/useTemplateStore";
 import { toast } from "@formBuilder/components/shared/Toast";
 import { Button } from "@clientComponents/globals";
 
@@ -12,32 +12,21 @@ import { SaveAndResumeToggle } from "./SaveAndResumeToggle";
 export const SetSaveAndResume = ({ formId }: { formId: string }) => {
   const { t } = useTranslation("form-builder");
 
-  /*
-  const { closingDate, setClosingDate } = useTemplateStore((s) => ({
-    closingDate: s.closingDate,
-    setClosingDate: s.setClosingDate,
+  const { saveAndResume, setSaveAndResume } = useTemplateStore((s) => ({
+    saveAndResume: s.saveAndResume,
+    setSaveAndResume: s.setSaveAndResume,
   }));
-  */
 
-  const [status, setStatus] = useState("off");
+  const [status, setStatus] = useState(saveAndResume ? "on" : "off");
 
   const handleToggle = (value: boolean) => {
     setStatus(value == true ? "off" : "on");
   };
 
   const saveFormStatus = useCallback(async () => {
-    /*
-    if (!result || result.error) {
-      toast.error(t("closingDate.savedErrorMessage"));
-      return;
-    }
-    */
-
-    // Setting local store
-    // setClosingDate(closeDate || null);
-
+    setSaveAndResume(status === "off" ? false : true);
     toast.success(t("saveAndResume.savedSuccessMessage"));
-  }, [status, t]);
+  }, [status, t, setSaveAndResume]);
 
   // const { getFlag } = useFeatureFlags();
   // const hasScheduleClosingDate = getFlag();

@@ -44,6 +44,7 @@ const _parseTemplate = (template: {
   publishDesc: string;
   closingDate?: Date | null;
   closedDetails?: Prisma.JsonValue | null;
+  saveAndResume: boolean;
 }): FormRecord => {
   return {
     id: template.id,
@@ -76,6 +77,7 @@ const _parseTemplate = (template: {
       closingDate: template.closingDate.toString(),
     }),
     closedDetails: template.closedDetails as ClosedDetails,
+    saveAndResume: template.saveAndResume,
   };
 };
 
@@ -187,6 +189,7 @@ export async function createTemplate(command: CreateTemplateCommand): Promise<Fo
         publishReason: true,
         publishFormType: true,
         publishDesc: true,
+        saveAndResume: true,
       },
     })
     .catch((e) => prismaErrors(e, null));
@@ -233,6 +236,7 @@ export async function getAllTemplates(options?: {
           publishReason: true,
           publishFormType: true,
           publishDesc: true,
+          saveAndResume: true,
         },
         ...(sortByDateUpdated && {
           orderBy: {
@@ -293,6 +297,7 @@ export async function getAllTemplatesForUser(
           publishReason: true,
           publishFormType: true,
           publishDesc: true,
+          saveAndResume: true,
         },
         ...(sortByDateUpdated && {
           orderBy: {
@@ -354,6 +359,7 @@ export async function getPublicTemplateByID(formID: string): Promise<PublicFormR
           publishDesc: true,
           closingDate: true,
           closedDetails: true,
+          saveAndResume: true,
           ttl: true,
         },
       })
@@ -916,6 +922,7 @@ export async function updateAssignedUsersForTemplate(
         publishFormType: true,
         publishDesc: true,
         users: true,
+        saveAndResume: true,
       },
     })
     .catch((e) => prismaErrors(e, null));
@@ -1009,6 +1016,7 @@ export async function updateFormPurpose(
         publishDesc: true,
         publishFormType: true,
         publishReason: true,
+        saveAndResume: true,
       },
     })
     .catch((e) => {
@@ -1081,6 +1089,7 @@ export async function updateResponseDeliveryOption(
         publishReason: true,
         publishFormType: true,
         publishDesc: true,
+        saveAndResume: true,
       },
     })
     .catch((e) => {
@@ -1187,6 +1196,7 @@ export async function deleteTemplate(formID: string): Promise<FormRecord | null>
         publishReason: true,
         publishFormType: true,
         publishDesc: true,
+        saveAndResume: true,
       },
     })
     .catch((e) => prismaErrors(e, null));
@@ -1309,6 +1319,7 @@ export const updateSecurityAttribute = async (formID: string, securityAttribute:
         publishReason: true,
         publishFormType: true,
         publishDesc: true,
+        saveAndResume: true,
       },
     })
     .catch((e) => prismaErrors(e, null));
