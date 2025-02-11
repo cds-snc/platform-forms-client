@@ -113,7 +113,7 @@
     "add": "Ajouter",
     "delete": "Supprimer",
     "addedMessage": "Le champ {{rowTitle}} - {{count}} a été ajouté au formulaire",
-    "removedMessage": "[FR]Fieldset {{rowTitle}} - {{count}} was removed from the form"
+    "removedMessage": "Le champ {{rowTitle}} - {{count}} a été supprimé du formulaire"
   },
   "acceptableUsePage": {
     "agree": "Accepter",
