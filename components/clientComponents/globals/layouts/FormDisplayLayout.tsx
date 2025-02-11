@@ -8,9 +8,14 @@ import { cn } from "@lib/utils";
 
 interface FormDisplayLayoutProps extends React.PropsWithChildren {
   formRecord: PublicFormRecord;
+  dateModified?: boolean;
 }
 
-const FormDisplayLayout = ({ children, formRecord }: FormDisplayLayoutProps) => {
+const FormDisplayLayout = ({
+  children,
+  formRecord,
+  dateModified = true,
+}: FormDisplayLayoutProps) => {
   return (
     <>
       <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
@@ -27,7 +32,7 @@ const FormDisplayLayout = ({ children, formRecord }: FormDisplayLayoutProps) => 
         <div className={cn("gc-formview", "shrink-0 grow basis-auto px-[4rem] py-0 laptop:px-32")}>
           <main id="content" className="h-full">
             {children}
-            <DateModified updatedAt={formRecord.updatedAt} />
+            {dateModified && <DateModified updatedAt={formRecord.updatedAt} />}
           </main>
         </div>
         <Footer className="mt-4" disableGcBranding={formRecord?.form.brand?.disableGcBranding} />
