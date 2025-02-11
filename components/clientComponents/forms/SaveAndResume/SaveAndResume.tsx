@@ -3,7 +3,7 @@ import { useTranslation } from "@i18n/client";
 
 import { type Language } from "@lib/types/form-builder-types";
 import { SubmitButton as DownloadProgress } from "@clientComponents/globals/Buttons/SubmitButton";
-import { ConfirmDownload } from "./ConfirmDownload";
+import { ConfirmDownloadDialog } from "./ConfirmDownloadDialog";
 import { SaveProgressIcon } from "@serverComponents/icons/SaveProgressIcon";
 
 export const SaveAndResume = ({
@@ -41,7 +41,7 @@ export const SaveAndResume = ({
           </span>
         </>
       </DownloadProgress>
-      <ConfirmDownload
+      <ConfirmDownloadDialog
         formId={formId}
         formTitleEn={formTitleEn}
         formTitleFr={formTitleFr}

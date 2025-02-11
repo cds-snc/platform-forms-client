@@ -39,7 +39,7 @@ async function promptToSave(fileName: string, data: string) {
   await writable.close();
 }
 
-export const ConfirmDownload = ({
+export const ConfirmDownloadDialog = ({
   open,
   handleClose,
   formId,
