@@ -14,6 +14,8 @@ import { serverTranslation } from "@i18n";
 import { ClosingNotice } from "@clientComponents/forms/ClosingNotice/ClosingNotice";
 import { FormDelayProvider } from "@lib/hooks/useFormDelayContext";
 import { ResumeForm } from "@clientComponents/forms/ResumeForm/ResumeForm";
+import { getSomeFlags } from "@lib/cache/flags";
+import { FeatureFlags } from "@lib/cache/types";
 
 export async function generateMetadata(props0: {
   params: Promise<{ locale: string; props: string[] }>;
@@ -80,7 +82,9 @@ export default async function Page(props0: {
     );
   }
 
-  if (step === "resume") {
+  const { saveAndResume } = await getSomeFlags([FeatureFlags.saveAndResume]);
+
+  if (saveAndResume && step === "resume") {
     return (
       <FormDisplayLayout formRecord={formRecord} dateModified={false}>
         <ResumeForm
