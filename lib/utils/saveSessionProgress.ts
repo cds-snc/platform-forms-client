@@ -16,7 +16,7 @@ type Options = {
   currentGroup: string;
 };
 
-export const saveProgress = (
+export const saveSessionProgress = (
   language: string = "en",
   { id, values, history, currentGroup }: Options
 ) => {
@@ -37,7 +37,7 @@ export const saveProgress = (
   sessionStorage.setItem(SESSION_STORAGE_KEY, encodedformDataEn);
 };
 
-export const restoreProgress = ({
+export const restoreSessionProgress = ({
   id,
   form,
   language,
