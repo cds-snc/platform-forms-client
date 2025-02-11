@@ -23,7 +23,7 @@ export const SaveAndResume = ({
   return (
     <div>
       <DownloadProgress
-        className="group mr-4"
+        className="group"
         type="button"
         loading={confirm}
         theme="secondary"

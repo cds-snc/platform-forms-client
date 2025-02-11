@@ -75,15 +75,13 @@ export const FormWrapper = ({
         saveAndResumeEnabled={saveAndResumeEnabled}
         renderSubmit={({ validateForm, fallBack }) => {
           return (
-            <>
-              <NextButton
-                formRecord={formRecord}
-                language={language as Language}
-                validateForm={validateForm}
-                fallBack={fallBack}
-                saveAndResumeEnabled={saveAndResumeEnabled}
-              />
-            </>
+            <NextButton
+              formRecord={formRecord}
+              language={language as Language}
+              validateForm={validateForm}
+              fallBack={fallBack}
+              saveAndResumeEnabled={saveAndResumeEnabled}
+            />
           );
         }}
         allowGrouping={allowGrouping}
