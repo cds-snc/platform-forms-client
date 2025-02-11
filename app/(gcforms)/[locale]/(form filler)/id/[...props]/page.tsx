@@ -82,7 +82,8 @@ export default async function Page(props0: {
     );
   }
 
-  const { saveAndResume } = await getSomeFlags([FeatureFlags.saveAndResume]);
+  const { saveAndResume: saveAndResumeEnabled } = await getSomeFlags([FeatureFlags.saveAndResume]);
+  const saveAndResume = formRecord?.saveAndResume && saveAndResumeEnabled;
 
   if (saveAndResume && step === "resume") {
     return (

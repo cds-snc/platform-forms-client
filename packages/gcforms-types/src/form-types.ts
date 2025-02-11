@@ -200,6 +200,7 @@ export type FormRecord = {
   securityAttribute: SecurityAttribute;
   closingDate?: string;
   closedDetails?: ClosedDetails;
+  saveAndResume?: boolean;
   [key: string]: string | boolean | FormProperties | DeliveryOption | ClosedDetails | undefined;
 };
 
