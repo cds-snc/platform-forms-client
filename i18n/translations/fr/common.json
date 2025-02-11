@@ -111,7 +111,9 @@
   },
   "dynamicRow": {
     "add": "Ajouter",
-    "delete": "Supprimer"
+    "delete": "Supprimer",
+    "addedMessage": "Le champ {{rowTitle}} - {{count}} a été ajouté au formulaire",
+    "removedMessage": "Le champ {{rowTitle}} - {{count}} a été supprimé du formulaire"
   },
   "acceptableUsePage": {
     "agree": "Accepter",
@@ -216,7 +218,7 @@
     "text2": "{{day}} {{month}} {{year}} à {{hour}} h {{minute}} HE"
   },
   "cancel": "Annuler",
-  "number": "Number",
+  "number": "Numéro",
   "saveAndResume": {
     "saveBtn": "Enregistrer",
     "resumeBtn": "Poursuivre",
@@ -254,5 +256,8 @@
         "lastSaved": "Saved:  {{month}} {{day}}, {{year}}"
       }
     }
+  },
+  "conditional": {
+    "activated": "L'élément {{title}} a été ajouté au formulaire"
   }
 }

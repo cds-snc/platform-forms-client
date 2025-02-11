@@ -111,7 +111,9 @@
   },
   "dynamicRow": {
     "add": "Add",
-    "delete": "Delete"
+    "delete": "Delete",
+    "addedMessage": "Fieldset {{rowTitle}} - {{count}} was added to the form",
+    "removedMessage": "Fieldset {{rowTitle}} - {{count}} was removed from the form"
   },
   "acceptableUsePage": {
     "agree": "Agree",
@@ -254,5 +256,8 @@
         "lastSaved": "Saved:  {{month}} {{day}}, {{year}}"
       }
     }
+  },
+  "conditional": {
+    "activated": "The form element {{title}} was added to the form"
   }
 }
