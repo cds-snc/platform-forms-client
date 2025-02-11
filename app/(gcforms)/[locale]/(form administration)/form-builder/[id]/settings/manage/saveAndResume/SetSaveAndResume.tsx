@@ -10,7 +10,13 @@ import { FeatureFlags } from "@lib/cache/types";
 import { SaveAndResumeToggle } from "./SaveAndResumeToggle";
 import { updateTemplateFormSaveAndResume } from "@formBuilder/actions";
 
-export const SetSaveAndResume = ({ formId }: { formId: string }) => {
+export const SetSaveAndResume = ({
+  formId,
+  isPublished,
+}: {
+  formId: string;
+  isPublished: boolean;
+}) => {
   const { t } = useTranslation("form-builder");
 
   const { saveAndResume, setSaveAndResume } = useTemplateStore((s) => ({
@@ -27,6 +33,8 @@ export const SetSaveAndResume = ({ formId }: { formId: string }) => {
   const saveFormStatus = useCallback(async () => {
     const saveAndResume = status === "off" ? false : true;
 
+    if (isPublished) return;
+
     const result = await updateTemplateFormSaveAndResume({
       id: formId,
       saveAndResume,
@@ -39,12 +47,12 @@ export const SetSaveAndResume = ({ formId }: { formId: string }) => {
 
     setSaveAndResume(status === "off" ? false : true);
     toast.success(t("saveAndResume.savedSuccessMessage"));
-  }, [status, t, setSaveAndResume, formId]);
+  }, [status, t, setSaveAndResume, formId, isPublished]);
 
   const { getFlag } = useFeatureFlags();
   const saveAndResumeEnabled = getFlag(FeatureFlags.saveAndResume);
 
-  if (!saveAndResumeEnabled) {
+  if (!saveAndResumeEnabled || isPublished) {
     return null;
   }
 

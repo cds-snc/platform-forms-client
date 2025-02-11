@@ -1049,7 +1049,7 @@ export async function updateFormSaveAndResume(
       e.user.id,
       { type: "Form", id: formID },
       "AccessDenied",
-      "Attempted to set Form Purpose"
+      "Attempted to set save and resume"
     );
     throw e;
   });
