@@ -22,7 +22,7 @@ export const FormActions = ({
   }
 
   return (
-    <div className="sticky bottom-0 z-50 mt-10 flex border-t-2 border-gcds-blue-900 bg-gcds-blue-100 p-4">
+    <div className="sticky bottom-0 mt-10 flex border-t-2 border-gcds-blue-900 bg-gcds-blue-100 p-4">
       <div className="flex w-full justify-between">
         {children}
         <SaveAndResume
