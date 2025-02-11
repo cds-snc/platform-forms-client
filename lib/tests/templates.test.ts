@@ -34,7 +34,6 @@ import {
   mockAuthorizationFail,
   mockGetAbility,
 } from "__utils__/authorization";
-import { SaveAndResume } from "@clientComponents/forms/SaveAndResume/SaveAndResume";
 
 jest.mock("@lib/auditLogs");
 jest.mock("@lib/serviceAccount");
