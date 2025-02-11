@@ -123,7 +123,7 @@ export const DynamicGroup = (props: DynamicGroupProps): React.ReactElement => {
     Event.fire(EventKeys.liveMessage, {
       message: t("dynamicRow.removedMessage", {
         rowTitle: title,
-        count: index > 0 ? index - 1 : 0,
+        count: index > 0 ? index : 0,
       }),
     });
   };
