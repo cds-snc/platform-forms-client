@@ -10,7 +10,6 @@ import { FileNameInput } from "./FileName";
 import { ShareDropdown } from "./ShareDropdown";
 import LanguageToggle from "./LanguageToggle";
 import { YourAccountDropdown } from "./YourAccountDropdown";
-import { LiveMessage } from "@lib/hooks/useLiveMessage";
 import Markdown from "markdown-to-jsx";
 
 type HeaderParams = {
@@ -118,7 +117,6 @@ export const Header = ({ context = "default", className }: HeaderParams) => {
             </ul>
           </nav>
         </div>
-        <LiveMessage />
       </header>
     </>
   );

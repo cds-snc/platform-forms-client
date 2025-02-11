@@ -102,19 +102,15 @@ export const TextInput = (
           },
         })}
       />
-      {characterCountMessages &&
-        maxLength &&
-        remainingCharacters < maxLength * 0.25 &&
-        remainingCharacters >= 0 && (
-          <div id={"characterCountMessage" + id} aria-live="polite">
-            {remainingCharactersMessage}
-          </div>
-        )}
-      {characterCountMessages && maxLength && remainingCharacters < 0 && (
-        <div id={"characterCountMessage" + id} className="gc-error-message" aria-live="polite">
-          {tooManyCharactersMessage}
-        </div>
-      )}
+      <div id={"characterCountMessage" + id} aria-live="polite">
+        {characterCountMessages &&
+          maxLength &&
+          remainingCharacters < maxLength * 0.25 &&
+          remainingCharacters >= 0 &&
+          remainingCharactersMessage}
+
+        {characterCountMessages && maxLength && remainingCharacters < 0 && tooManyCharactersMessage}
+      </div>
     </>
   );
 };
