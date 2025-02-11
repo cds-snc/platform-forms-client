@@ -5,7 +5,8 @@ import { getProperty } from "@lib/i18nHelpers";
 import { useRef } from "react";
 import { useTranslation } from "react-i18next";
 
-// Component created to  keep all the translation related and event code separate
+// Announces the title from the first child element of the shown element group.
+// Component created to keep all the translation related and event code separate.
 export const Announce = ({
   children,
   element,
