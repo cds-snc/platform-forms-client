@@ -219,6 +219,44 @@
   },
   "cancel": "Cancel",
   "number": "Number",
+  "saveAndResume": {
+    "saveBtn": "Save to device",
+    "resumeBtn": "Resume",
+    "formRestored": "Form values restored from saved file.",
+    "resumePage": {
+      "upload": {
+        "title": "Resume",
+        "description": "Continue filling out a form in progress from saved file."
+      },
+      "restart": {
+        "title": "Start",
+        "description": "Fill out a new form."
+      }
+    },
+    "prompt": {
+      "title": "Save to device",
+      "description": "Save a copy of your form answers so far. Resume later by finding the file on your device. Protect your data by keeping the downloaded file in a safe place.",
+      "okay": "Save to device",
+      "cancel": "Cancel"
+    },
+    "downloadProgressHtml": {
+      "nextSteps": {
+        "title": "What to do next - ",
+        "resumeBox": {
+          "title": "Resume your form",
+          "description": "<a class='underline' href='{{formLink}}'>Upload this file</a> to complete and submit your form"
+        }
+      },
+      "keepSafe": {
+        "title": "Keep your form safe",
+        "description": " Make sure to keep this file in a secure spot on your device."
+      },
+      "badge": {
+        "text": "In - Progress",
+        "lastSaved": "Saved:  {{month}} {{day}}, {{year}}"
+      }
+    }
+  },
   "conditional": {
     "activated": "The form element {{title}} was added to the form"
   }
