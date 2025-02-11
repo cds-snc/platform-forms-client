@@ -9,7 +9,7 @@ import { updateTemplateUsers } from "@formBuilder/actions";
 import { ManageApiKey } from "./ManageApiKey";
 import { ThrottlingRate } from "./ThrottlingRate";
 import { useFormBuilderConfig } from "@lib/hooks/useFormBuilderConfig";
-import { SaveAndResumeToggle } from "./saveAndResume/SaveAndResumeToggle";
+import { SetSaveAndResume } from "./saveAndResume/SetSaveAndResume";
 
 interface User {
   id: string;
@@ -58,7 +58,7 @@ export const ManageForm = (props: ManageFormProps) => {
   return (
     <>
       {canSetClosingDate && <SetClosingDate formId={id} closedDetails={closedDetails} />}
-      <SaveAndResumeToggle />
+      <SetSaveAndResume formId={id} />
       <FormOwnership
         nonce={nonce}
         formRecord={formRecord}

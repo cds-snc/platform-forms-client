@@ -41,13 +41,13 @@ export const SaveAndResumeToggle = ({
     >
       <div className="cursor-pointer whitespace-nowrap">
         <span className="sr-only">{description && description}</span>
-        <span id="switch-on" className={`mr-1 text-sm ${boldOff} mr-2`} aria-hidden="true">
-          {onLabel}
+        <span id="switch-off" className={`mr-1 text-sm ${boldOff} mr-2`} aria-hidden="true">
+          {offLabel}
         </span>
         {!isChecked && <ToggleLeft className="inline-block w-12 fill-slate-500" />}
         {isChecked && <ToggleRight className="inline-block w-12 fill-emerald-500" />}
-        <span id="switch-off" className={`ml-1 text-sm ${boldOn} ml-2`} aria-hidden="true">
-          {offLabel}
+        <span id="switch-on" className={`ml-1 text-sm ${boldOn} ml-2`} aria-hidden="true">
+          {onLabel}
         </span>
       </div>
     </div>

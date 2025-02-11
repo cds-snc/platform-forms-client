@@ -6,7 +6,6 @@ import { toast } from "@formBuilder/components/shared/Toast";
 import { Button } from "@clientComponents/globals";
 
 import { SaveAndResumeToggle } from "./SaveAndResumeToggle";
-import { SaveSuccess } from "./SaveSuccess";
 
 // import { useFeatureFlags } from "@lib/hooks/useFeatureFlags";
 
@@ -20,10 +19,10 @@ export const SetSaveAndResume = ({ formId }: { formId: string }) => {
   }));
   */
 
-  const [status, setStatus] = useState("closed");
+  const [status, setStatus] = useState("off");
 
   const handleToggle = (value: boolean) => {
-    setStatus(value == true ? "closed" : "open");
+    setStatus(value == true ? "off" : "on");
   };
 
   const saveFormStatus = useCallback(async () => {
@@ -37,11 +36,7 @@ export const SetSaveAndResume = ({ formId }: { formId: string }) => {
     // Setting local store
     // setClosingDate(closeDate || null);
 
-    if (status === "closed") {
-      toast.success(<SaveSuccess />, "wide");
-    } else {
-      toast.success(t("closingDate.savedSuccessMessage"));
-    }
+    toast.success(t("saveAndResume.savedSuccessMessage"));
   }, [status, t]);
 
   // const { getFlag } = useFeatureFlags();
@@ -49,21 +44,21 @@ export const SetSaveAndResume = ({ formId }: { formId: string }) => {
 
   return (
     <div className="mb-10">
-      <h2>
-        {t("closingDate.title")} {formId}
-      </h2>
+      <h2 data-form-id={formId}>{t("saveAndResume.title")}</h2>
+      <p className="mb-2 font-bold">{t("saveAndResume.toggleDescription.text1")}</p>
+      <p>{t("saveAndResume.toggleDescription.text2")}</p>
       <div className="mb-4">
         <SaveAndResumeToggle
-          isChecked={status === "closed" ? false : true}
+          isChecked={status === "off" ? false : true}
           setIsChecked={handleToggle}
-          onLabel={t("closingDate.closed")}
-          offLabel={t("closingDate.open")}
-          description={t("closingDate.status")}
+          onLabel={t("saveAndResume.toggleOn")}
+          offLabel={t("saveAndResume.toggleOff")}
+          description={t("saveAndResume.a11yDescription")}
         />
       </div>
 
       <Button theme="secondary" onClick={saveFormStatus}>
-        {t("closingDate.saveButton")}
+        {t("saveAndResume.saveButton")}
       </Button>
     </div>
   );
