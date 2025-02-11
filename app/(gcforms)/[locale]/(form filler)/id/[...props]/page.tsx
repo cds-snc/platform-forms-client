@@ -13,6 +13,9 @@ import { allowGrouping } from "@formBuilder/components/shared/right-panel/treevi
 import { serverTranslation } from "@i18n";
 import { ClosingNotice } from "@clientComponents/forms/ClosingNotice/ClosingNotice";
 import { FormDelayProvider } from "@lib/hooks/useFormDelayContext";
+import { ResumeForm } from "@clientComponents/forms/ResumeForm/ResumeForm";
+import { getSomeFlags } from "@lib/cache/flags";
+import { FeatureFlags } from "@lib/cache/types";
 import { getAppSetting } from "@lib/appSettings";
 
 export async function generateMetadata(props0: {
@@ -78,6 +81,20 @@ export default async function Page(props0: {
     return (
       <FormDisplayLayout formRecord={formRecord}>
         <ClosedPage language={language} formRecord={formRecord} />
+      </FormDisplayLayout>
+    );
+  }
+
+  const { saveAndResume } = await getSomeFlags([FeatureFlags.saveAndResume]);
+
+  if (saveAndResume && step === "resume") {
+    return (
+      <FormDisplayLayout formRecord={formRecord} dateModified={false}>
+        <ResumeForm
+          titleEn={formRecord.form.titleEn}
+          titleFr={formRecord.form.titleFr}
+          formId={formID}
+        />
       </FormDisplayLayout>
     );
   }

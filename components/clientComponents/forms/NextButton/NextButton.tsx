@@ -14,17 +14,20 @@ import { getLocalizedProperty } from "@lib/utils";
 import { showReviewPage } from "@lib/utils/form-builder/showReviewPage";
 import { tryFocusOnPageLoad } from "@lib/client/clientHelpers";
 import { useFormDelay } from "@lib/hooks/useFormDelayContext";
+import { ForwardArrowIcon24x24 } from "@serverComponents/icons";
 
 export const NextButton = ({
   validateForm,
   fallBack,
   language,
   formRecord,
+  saveAndResumeEnabled = false,
 }: {
   validateForm: Validate["validateForm"];
   fallBack?: () => JSX.Element;
   language: Language;
   formRecord: PublicFormRecord;
+  saveAndResumeEnabled?: boolean;
 }) => {
   const { currentGroup, hasNextAction, handleNextAction, isOffBoardSection } = useGCFormsContext();
   const { updateFormDelay } = useFormDelay();
@@ -97,7 +100,16 @@ export const NextButton = ({
           }
         }}
       >
-        {t("next", { lng: language })}
+        {!saveAndResumeEnabled ? (
+          t("next", { lng: language })
+        ) : (
+          <>
+            <span className="hidden tablet:block">{t("next", { lng: language })}</span>
+            <span className="block tablet:hidden">
+              <ForwardArrowIcon24x24 className="fill-white" title={t("next", { lng: language })} />
+            </span>
+          </>
+        )}
       </Button>
     </>
   );

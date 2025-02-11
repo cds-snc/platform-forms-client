@@ -82,3 +82,7 @@ export { HelpIcon } from "./HelpIcon";
 export { RightPanelOpen } from "./RightPanelOpen";
 export { SortIcon } from "./SortIcon";
 export { BoltIcon } from "./BoltIcon";
+export { InternalLinkIcon } from "./InternalLinkIcon";
+export { BackArrowIcon24x24 } from "./BackArrowIcon24x24";
+export { ForwardArrowIcon24x24 } from "./ForwardArrowIcon24x24";
+export { SaveProgressIcon } from "./SaveProgressIcon";

@@ -4,6 +4,7 @@ import React, { createContext, useContext, ReactNode } from "react";
 import { type Language } from "@lib/types/form-builder-types";
 import { type PublicFormRecord } from "@lib/types";
 import { LockedSections } from "@formBuilder/components/shared/right-panel/treeview/types";
+import { getGroupTitle as groupTitle } from "@lib/utils/getGroupTitle";
 
 import {
   mapIdsToValues,
@@ -22,12 +23,11 @@ import {
   getPreviousIdFromCurrentId,
   getInputHistoryValues,
 } from "@lib/utils/form-builder/groupsHistory";
-import { getGroupTitle as groupTitle } from "@lib/utils/getGroupTitle";
 
 import {
-  saveProgress as saveToSession,
-  restoreProgress as restoreSession,
-} from "@lib/utils/saveProgress";
+  saveSessionProgress as saveToSession,
+  restoreSessionProgress as restoreSession,
+} from "@lib/utils/saveSessionProgress";
 
 import { toggleSavedValues } from "@i18n/toggleSavedValues";
 
@@ -50,8 +50,14 @@ interface GCFormsContextValueType {
   pushIdToHistory: (groupId: string) => string[];
   clearHistoryAfterId: (groupId: string) => string[];
   getGroupTitle: (groupId: string | null, language: Language) => string;
-  saveProgress: (language: Language | undefined) => void;
-  restoreProgress: (language: Language) => FormValues | false;
+  saveSessionProgress: (language: Language | undefined) => void;
+  restoreSessionProgress: (language: Language) => FormValues | false;
+  getProgressData: () => {
+    id: string;
+    values: FormValues;
+    history: string[];
+    currentGroup: string;
+  };
 }
 
 const GCFormsContext = createContext<GCFormsContextValueType | undefined>(undefined);
@@ -165,7 +171,16 @@ export const GCFormsProvider = ({
   // Note: this only removes the group entry and not the values
   const clearHistoryAfterId = (groupId: string) => _clearHistoryAfterId(groupId, history.current);
 
-  const saveProgress = (language: Language = "en") => {
+  const getProgressData = () => {
+    return {
+      id: formRecord.id,
+      values: values.current,
+      history: history.current,
+      currentGroup: currentGroup || "",
+    };
+  };
+
+  const saveSessionProgress = (language: Language = "en") => {
     const vals =
       language === "en"
         ? values.current
@@ -179,7 +194,7 @@ export const GCFormsProvider = ({
     });
   };
 
-  const restoreProgress = (language: Language) => {
+  const restoreSessionProgress = (language: Language) => {
     return restoreSession({ id: formRecord.id, form: formRecord.form, language });
   };
 
@@ -208,8 +223,9 @@ export const GCFormsProvider = ({
         pushIdToHistory,
         clearHistoryAfterId,
         getGroupTitle,
-        saveProgress,
-        restoreProgress,
+        saveSessionProgress,
+        getProgressData,
+        restoreSessionProgress,
       }}
     >
       {children}
@@ -244,8 +260,16 @@ export const useGCFormsContext = () => {
       pushIdToHistory: () => [],
       clearHistoryAfterId: () => [],
       getGroupTitle: () => "",
-      saveProgress: () => void 0,
-      restoreProgress: () => {
+      saveSessionProgress: () => void 0,
+      getProgressData: () => {
+        return {
+          id: "",
+          values: {},
+          history: [],
+          currentGroup: "",
+        };
+      },
+      restoreSessionProgress: () => {
         return {};
       },
     };

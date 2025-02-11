@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useTranslation } from "@i18n/client";
 import { Button } from "@clientComponents/globals";
 import { logMessage } from "@lib/logger";
