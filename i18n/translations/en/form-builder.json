@@ -1301,5 +1301,18 @@
   },
   "systemHealthCheck": {
     "title": "System health"
+  },
+  "saveAndResume": {
+    "savedErrorMessage": "There was an error saving your changes.",
+    "savedSuccessMessage": "Your changes have been saved.",
+    "title": "Save and resume form",
+    "toggleOn": "Enabled",
+    "toggleOff": "Disable",
+    "toggleDescription": {
+      "text1": "Download and upload form to continue",
+      "text2": "Allow form fillers to save a copy of their form progress, to upload and continue at a later time.  "
+    },
+    "a11yDescription": "Save and resume form progress",
+    "saveButton": "Save"
   }
 }

@@ -129,6 +129,7 @@ const createTemplateStore = (initProps?: Partial<InitialTemplateStoreProps>) => 
             setFocusInput: (isSet) => set({ focusInput: isSet }),
             setIsPublished: (isPublished) => set({ isPublished }),
             setClosingDate: (value) => set({ closingDate: value }),
+            setSaveAndResume: (value) => set({ saveAndResume: value }),
             setGroupsLayout: (layout) => {
               set((state) => {
                 state.form.groupsLayout = layout;

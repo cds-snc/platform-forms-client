@@ -12,6 +12,7 @@ export enum AuditLogEvent {
   ChangeFormName = "ChangeFormName",
   ChangeDeliveryOption = "ChangeDeliveryOption",
   ChangeFormPurpose = "ChangeFormPurpose",
+  ChangeFormSaveAndResume = "ChangeFormSaveAndResume",
   ChangeSecurityAttribute = "ChangeSecurityAttribute",
   GrantFormAccess = "GrantFormAccess",
   RevokeFormAccess = "RevokeFormAccess",
