@@ -5,6 +5,8 @@ import { useTemplateStore } from "@lib/store/useTemplateStore";
 import { toast } from "@formBuilder/components/shared/Toast";
 import { Button } from "@clientComponents/globals";
 
+import { useFeatureFlags } from "@lib/hooks/useFeatureFlags";
+import { FeatureFlags } from "@lib/cache/types";
 import { SaveAndResumeToggle } from "./SaveAndResumeToggle";
 import { updateTemplateFormSaveAndResume } from "@formBuilder/actions";
 
@@ -39,8 +41,12 @@ export const SetSaveAndResume = ({ formId }: { formId: string }) => {
     toast.success(t("saveAndResume.savedSuccessMessage"));
   }, [status, t, setSaveAndResume, formId]);
 
-  // const { getFlag } = useFeatureFlags();
-  // const hasScheduleClosingDate = getFlag();
+  const { getFlag } = useFeatureFlags();
+  const saveAndResumeEnabled = getFlag(FeatureFlags.saveAndResume);
+
+  if (!saveAndResumeEnabled) {
+    return null;
+  }
 
   return (
     <div className="mb-10">
