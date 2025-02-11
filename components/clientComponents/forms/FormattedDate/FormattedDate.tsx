@@ -28,13 +28,14 @@ export const FormattedDate = (props: FormattedDateProps): React.ReactElement => 
     dateFormat: initialDateFormat = "YYYY-MM-DD",
     monthSelector = "numeric",
     autocomplete = false,
+    lang,
   } = props;
 
   const [field, meta, helpers] = useField(props);
   const [dateObject, setDateObject] = useState<DateObject | null>(
     field.value ? JSON.parse(field.value) : null
   );
-  const { t } = useTranslation("common");
+  const { t } = useTranslation("common", { lng: lang });
 
   let dateFormat = initialDateFormat;
 
