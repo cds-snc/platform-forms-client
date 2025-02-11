@@ -107,7 +107,6 @@ export type UpdateTemplateCommand = {
   publishReason?: string;
   publishFormType?: string;
   publishDesc?: string;
-  saveAndResume?: boolean;
 };
 
 export class InvalidFormConfigError extends Error {
@@ -520,7 +519,6 @@ export async function updateTemplate(command: UpdateTemplateCommand): Promise<Fo
           securityAttribute: command.securityAttribute as string,
         }),
         ...(command.formPurpose && { formPurpose: command.formPurpose }),
-        ...(command.saveAndResume && { saveAndResume: command.saveAndResume }),
       },
       include: {
         deliveryOption: true,

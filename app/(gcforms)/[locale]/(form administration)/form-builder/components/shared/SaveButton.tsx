@@ -92,7 +92,6 @@ export const SaveButton = () => {
     getDeliveryOption,
     securityAttribute,
     setId,
-    saveAndResume,
   } = useTemplateStore((s) => ({
     isPublished: s.isPublished,
     id: s.id,
@@ -102,7 +101,6 @@ export const SaveButton = () => {
     getDeliveryOption: s.getDeliveryOption,
     securityAttribute: s.securityAttribute,
     setId: s.setId,
-    saveAndResume: s.saveAndResume,
   }));
 
   const { templateIsDirty, createOrUpdateTemplate, resetState, updatedAt, setUpdatedAt } =
@@ -139,7 +137,6 @@ export const SaveButton = () => {
         name: getName(),
         deliveryOption: getDeliveryOption(),
         securityAttribute: securityAttribute,
-        saveAndResume,
       });
 
       if (operationResult.formRecord === null) {
