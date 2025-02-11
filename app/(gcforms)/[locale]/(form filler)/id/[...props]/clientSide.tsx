@@ -52,12 +52,12 @@ export const FormWrapper = ({
     if (values) {
       removeProgressStorage();
 
-      if (!hasShownResumeMessage.current) {
+      if (!hasShownResumeMessage.current && saveAndResumeEnabled) {
         hasShownResumeMessage.current = true;
         toast.success(formRestoredMessage, "public-facing-form");
       }
     }
-  }, [values, formRestoredMessage]);
+  }, [values, formRestoredMessage, saveAndResumeEnabled]);
 
   const initialValues = values ? values : undefined;
 
@@ -88,7 +88,9 @@ export const FormWrapper = ({
       >
         {currentForm}
       </Form>
-      <ToastContainer limit={1} autoClose={5000} containerId="public-facing-form" />
+      {saveAndResumeEnabled && (
+        <ToastContainer limit={1} autoClose={5000} containerId="public-facing-form" />
+      )}
     </>
   );
 };
