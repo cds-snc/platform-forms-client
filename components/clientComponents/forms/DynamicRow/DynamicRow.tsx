@@ -119,6 +119,13 @@ export const DynamicGroup = (props: DynamicGroupProps): React.ReactElement => {
     // Remove ref from the rowRefs state
     rowRefs.current.splice(index, 1);
     focusedRow.current = index > 0 ? index - 1 : 0;
+    // Let an AT user know a new repeating set was removed
+    Event.fire(EventKeys.liveMessage, {
+      message: t("dynamicRow.removedMessage", {
+        rowTitle: title,
+        count: index > 0 ? index - 1 : 0,
+      }),
+    });
   };
 
   const classes = cn("gc-form-group", { "gc-form-group--error": error }, className);
