@@ -59,6 +59,8 @@
     "@casl/ability": "6.7.3",
     "@cdssnc/gcds-tokens": "1.20.1",
     "@cdssnc/gcforms-types": "workspace:*",
+    "@hcaptcha/react-hcaptcha": "^1.11.2",
+    "@hcaptcha/types": "^1.0.4",
     "@headlessui/react": "^2.2.0",
     "@lexical/react": "^0.12.6",
     "@neshca/cache-handler": "^1.2.1",

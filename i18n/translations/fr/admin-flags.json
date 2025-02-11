@@ -33,6 +33,10 @@
     "saveAndResume": {
       "title": "Enregistrer et reprendre plus tard",
       "description": "Activer la fonctionnalité d'enregistrement et de reprise"
+    },
+    "hCaptcha": {
+      "title": "hCaptcha",
+      "description": "Enable hCaptcha spam prevention"
     }
   }
 }

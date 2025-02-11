@@ -18,10 +18,12 @@ export const FormWrapper = ({
   formRecord,
   currentForm,
   allowGrouping,
+  hCaptchaSiteKey,
 }: {
   formRecord: TypeOmit<FormRecord, "name" | "deliveryOption">;
   currentForm: JSX.Element[];
   allowGrouping?: boolean | undefined;
+  hCaptchaSiteKey?: string | undefined;
 }) => {
   // TODO cast language as "en" | "fr" in TS below
   const {
@@ -85,6 +87,7 @@ export const FormWrapper = ({
           );
         }}
         allowGrouping={allowGrouping}
+        hCaptchaSiteKey={hCaptchaSiteKey}
       >
         {currentForm}
       </Form>
