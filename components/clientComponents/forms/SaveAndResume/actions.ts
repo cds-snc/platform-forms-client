@@ -2,10 +2,7 @@
 
 import { DownloadProgressHtml, type HTMLProps } from "@lib/saveAndResume/DownloadProgressHtml";
 import { logMessage } from "@lib/logger";
-
 import { getOrigin } from "@lib/origin";
-
-import { getPublicTemplateByID } from "@lib/templates";
 
 export const generateDownloadProgressHtml = async (props: HTMLProps) => {
   try {
@@ -13,11 +10,6 @@ export const generateDownloadProgressHtml = async (props: HTMLProps) => {
 
     if (!formId) {
       throw new Error("formId is required to generate download progress html");
-    }
-
-    // Ensure the form exists
-    if (!(await getPublicTemplateByID(formId))) {
-      throw new Error(`Could not find any form associated to identifier ${formId}`);
     }
 
     const renderToStaticMarkup = (await import("react-dom/server")).renderToStaticMarkup;
