@@ -20,6 +20,7 @@ import {
   updateSecurityAttribute,
   updateResponseDeliveryOption,
   updateFormPurpose,
+  updateFormSaveAndResume,
 } from "@lib/templates";
 import { serverTranslation } from "@i18n";
 import { revalidatePath } from "next/cache";
@@ -33,6 +34,7 @@ export type CreateOrUpdateTemplateType = {
   deliveryOption?: DeliveryOption;
   securityAttribute?: SecurityAttribute;
   formPurpose?: FormPurpose;
+  saveAndResume?: boolean;
 };
 
 // Public facing functions - they can be used by anyone who finds the associated server action identifer
@@ -191,6 +193,35 @@ export const updateTemplateFormPurpose = AuthenticatedAction(
       if (!response) {
         throw new Error(
           `Template API response was null. Request information: { ${formID}, ${formPurpose} }`
+        );
+      }
+
+      return { formRecord: response };
+    } catch (error) {
+      return { formRecord: null, error: (error as Error).message };
+    }
+  }
+);
+
+export const updateTemplateFormSaveAndResume = AuthenticatedAction(
+  async (
+    _,
+    {
+      id: formID,
+      saveAndResume,
+    }: {
+      id: string;
+      saveAndResume: boolean;
+    }
+  ): Promise<{
+    formRecord: FormRecord | null;
+    error?: string;
+  }> => {
+    try {
+      const response = await updateFormSaveAndResume(formID, saveAndResume);
+      if (!response) {
+        throw new Error(
+          `Template API response was null. Request information: { ${formID}, ${saveAndResume} }`
         );
       }
 
