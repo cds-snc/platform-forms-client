@@ -216,5 +216,43 @@
     "text2": "{{day}} {{month}} {{year}} à {{hour}} h {{minute}} HE"
   },
   "cancel": "Annuler",
-  "number": "Numéro"
+  "number": "Number",
+  "saveAndResume": {
+    "saveBtn": "Enregistrer",
+    "resumeBtn": "Poursuivre",
+    "formRestored": "Form values restored from saved file.",
+    "resumePage": {
+      "upload": {
+        "title": "Poursuivre",
+        "description": "Continuer un formulaire en cours à partir d’un fichier sauvegardé."
+      },
+      "restart": {
+        "title": "Commencer",
+        "description": "Remplissez un nouveau formulaire."
+      }
+    },
+    "prompt": {
+      "title": "Sauvegarder sur l’appareil",
+      "description": "Sauvegarder une copie du formulaire rempli jusqu’à présent. Poursuivez le formulaire plus tard en trouvant le fichier sur votre appareil. Assurez-vous de protéger vos données en conservant le fichier téléchargé en lieu sûr.",
+      "okay": "Télécharger les réponses",
+      "cancel": "Annuler"
+    },
+    "downloadProgressHtml": {
+      "nextSteps": {
+        "title": "What to do next - [FR]",
+        "resumeBox": {
+          "title": "Resume your form [FR]",
+          "description": "<a class='underline' href='{{formLink}}'>Upload this file</a> to complete and submit your form [FR]"
+        }
+      },
+      "keepSafe": {
+        "title": "Keep your form safe [FR]",
+        "description": " Make sure to keep this file in a secure spot on your device. [FR]"
+      },
+      "badge": {
+        "text": "In - Progress [FR]",
+        "lastSaved": "Saved:  {{month}} {{day}}, {{year}}"
+      }
+    }
+  }
 }
