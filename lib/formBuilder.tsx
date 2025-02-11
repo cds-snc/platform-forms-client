@@ -310,6 +310,7 @@ function _buildForm(element: FormElement, lang: string): ReactElement {
                 : undefined
             }
             autocomplete={element.properties.autoComplete}
+            lang={lang}
           />
         </div>
       );
