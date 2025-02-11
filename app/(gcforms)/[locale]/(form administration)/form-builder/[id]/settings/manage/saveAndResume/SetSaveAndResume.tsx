@@ -6,8 +6,7 @@ import { toast } from "@formBuilder/components/shared/Toast";
 import { Button } from "@clientComponents/globals";
 
 import { SaveAndResumeToggle } from "./SaveAndResumeToggle";
-
-// import { useFeatureFlags } from "@lib/hooks/useFeatureFlags";
+import { updateTemplateFormSaveAndResume } from "@formBuilder/actions";
 
 export const SetSaveAndResume = ({ formId }: { formId: string }) => {
   const { t } = useTranslation("form-builder");
@@ -24,9 +23,21 @@ export const SetSaveAndResume = ({ formId }: { formId: string }) => {
   };
 
   const saveFormStatus = useCallback(async () => {
+    const saveAndResume = status === "off" ? false : true;
+
+    const result = await updateTemplateFormSaveAndResume({
+      id: formId,
+      saveAndResume,
+    });
+
+    if (result?.error) {
+      toast.error(t("saveAndResume.savedErrorMessage"));
+      return;
+    }
+
     setSaveAndResume(status === "off" ? false : true);
     toast.success(t("saveAndResume.savedSuccessMessage"));
-  }, [status, t, setSaveAndResume]);
+  }, [status, t, setSaveAndResume, formId]);
 
   // const { getFlag } = useFeatureFlags();
   // const hasScheduleClosingDate = getFlag();

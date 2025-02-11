@@ -1042,6 +1042,66 @@ export async function updateFormPurpose(
   return _parseTemplate(updatedTemplate);
 }
 
+export async function updateFormSaveAndResume(
+  formID: string,
+  saveAndResume: boolean
+): Promise<FormRecord | null> {
+  const { user } = await authorization.canEditForm(formID).catch((e) => {
+    logEvent(
+      e.user.id,
+      { type: "Form", id: formID },
+      "AccessDenied",
+      "Attempted to set Form Purpose"
+    );
+    throw e;
+  });
+
+  const updatedTemplate = await prisma.template
+    .update({
+      where: {
+        id: formID,
+        isPublished: false,
+      },
+      data: {
+        saveAndResume: saveAndResume ?? false,
+      },
+      select: {
+        id: true,
+        created_at: true,
+        updated_at: true,
+        name: true,
+        jsonConfig: true,
+        isPublished: true,
+        deliveryOption: true,
+        securityAttribute: true,
+        formPurpose: true,
+        publishDesc: true,
+        publishFormType: true,
+        publishReason: true,
+        saveAndResume: true,
+      },
+    })
+    .catch((e) => {
+      if (e instanceof Prisma.PrismaClientKnownRequestError) {
+        if (e.code === "P2025") {
+          throw new TemplateAlreadyPublishedError();
+        }
+      }
+      return prismaErrors(e, null);
+    });
+
+  if (updatedTemplate === null) return updatedTemplate;
+
+  logEvent(
+    user.id,
+    { type: "Form", id: formID },
+    "ChangeFormSaveAndResume",
+    `Form save and resume set to ${saveAndResume}`
+  );
+
+  return _parseTemplate(updatedTemplate);
+}
+
 export async function updateResponseDeliveryOption(
   formID: string,
   deliveryOption: DeliveryOption
