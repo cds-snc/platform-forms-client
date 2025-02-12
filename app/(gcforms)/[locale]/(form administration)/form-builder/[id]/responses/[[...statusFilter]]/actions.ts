@@ -183,7 +183,19 @@ export const getSubmissionsByFormat = AuthenticatedAction(
                   answer: answer.map((item) => {
                     return Object.values(item).map((value, index) => {
                       if (question?.properties.subElements) {
-                        const subQuestion = question?.properties.subElements[index];
+                        // Filter out richText elements from subElements since we access them by index
+                        const subQuestions = question?.properties.subElements.filter(
+                          (subElement) => {
+                            return subElement.type !== FormElementTypes.richText;
+                          }
+                        );
+
+                        if (!subQuestions.length || !subQuestions[index]) {
+                          throw new Error("No subQuestions found for dynamicRow");
+                        }
+
+                        const subQuestion = subQuestions[index];
+
                         return {
                           questionId: question?.id,
                           type: subQuestion.type,
