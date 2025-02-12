@@ -15,6 +15,8 @@ export const UserCard = ({ user, flagged }: { user: AppUser; flagged: boolean })
         <p className="mb-4">{user.email}</p>
         <p className="mb-4">Date created: {user.createdAt.toLocaleDateString("en-GB")}</p>
 
+        {hasNote && <p className="mb-2">&quot;{user.notes}&quot;</p>}
+
         <div className="flex gap-2">
           {flagged && <Flagged />}
           {hasNote && <OnHold />}
@@ -26,7 +28,9 @@ export const UserCard = ({ user, flagged }: { user: AppUser; flagged: boolean })
               <Button
                 theme="secondary"
                 onClick={() => {
-                  Event.fire(EventKeys.openAddUserNoteDialog);
+                  Event.fire(EventKeys.openAddUserNoteDialog, {
+                    userId: user.id,
+                  });
                 }}
               >
                 Add note

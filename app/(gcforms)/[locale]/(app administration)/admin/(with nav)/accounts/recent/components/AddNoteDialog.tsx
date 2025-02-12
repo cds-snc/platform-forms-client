@@ -5,12 +5,18 @@ import { TextArea } from "@formBuilder/components/shared/TextArea";
 import { useTranslation } from "@i18n/client";
 import { EventKeys, useCustomEvent } from "@lib/hooks/useCustomEvent";
 import { useEffect, useState } from "react";
+import { addNote } from "../actions";
+
+type AddNoteDialogEventDetails = {
+  userId: string;
+};
 
 export const AddNoteDialog = () => {
   const dialogRef = useDialogRef();
   const { Event } = useCustomEvent();
   const [isOpen, setIsOpen] = useState(false);
   const [note, setNote] = useState<string | null>(null);
+  const [userId, setUserId] = useState<string | null>(null);
 
   const { t } = useTranslation("admin-recent-signups");
 
@@ -19,8 +25,11 @@ export const AddNoteDialog = () => {
     setIsOpen(false);
   };
 
-  const handleOpenDialog = () => {
-    setIsOpen(true);
+  const handleOpenDialog = (detail: AddNoteDialogEventDetails) => {
+    if (detail) {
+      setUserId(detail.userId);
+      setIsOpen(true);
+    }
   };
 
   useEffect(() => {
@@ -32,7 +41,8 @@ export const AddNoteDialog = () => {
   });
 
   return (
-    isOpen && (
+    isOpen &&
+    userId && (
       <Dialog
         dialogRef={dialogRef}
         handleClose={handleClose}
@@ -51,6 +61,7 @@ export const AddNoteDialog = () => {
             <Button
               theme="primary"
               onClick={() => {
+                addNote(userId, note || "");
                 dialogRef.current?.close();
                 handleClose();
               }}
