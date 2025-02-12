@@ -64,10 +64,7 @@ export const FormWrapper = ({
   const initialValues = values ? values : undefined;
 
   return (
-    <div
-      data-save-and-resume-flag={saveAndResumeEnabled}
-      data-save-and-resume={formRecord?.saveAndResume || false}
-    >
+    <>
       <Form
         initialValues={initialValues || undefined}
         formRecord={formRecord}
@@ -96,6 +93,6 @@ export const FormWrapper = ({
       {saveAndResume && (
         <ToastContainer limit={1} autoClose={5000} containerId="public-facing-form" />
       )}
-    </div>
+    </>
   );
 };
