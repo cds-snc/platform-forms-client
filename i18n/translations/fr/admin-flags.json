@@ -34,9 +34,13 @@
       "title": "Enregistrer et reprendre plus tard",
       "description": "Activer la fonctionnalité d'enregistrement et de reprise"
     },
+    "formTimer": {
+      "title": "formTimer",
+      "description": "[FR]Enable formTimer to delay a form submission and help prevent spam"
+    },
     "hCaptcha": {
       "title": "hCaptcha",
-      "description": "Enable hCaptcha spam prevention"
+      "description": "[FR]Enable hCaptcha spam prevention"
     }
   }
 }

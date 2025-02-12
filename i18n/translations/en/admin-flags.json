@@ -34,9 +34,13 @@
       "title": "Save and resume later",
       "description": "Enable save and resume functionality"
     },
+    "formTimer": {
+      "title": "formTimer",
+      "description": "Enable formTimer to delay a form submission and help prevent spam"
+    },
     "hCaptcha": {
       "title": "hCaptcha",
-      "description": "[FR]Enable hCaptcha spam prevention"
+      "description": "Enable hCaptcha spam prevention"
     }
   }
 }

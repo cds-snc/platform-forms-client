@@ -4,5 +4,6 @@
   "scheduleClosingDate": false,
   "apiAccess": false,
   "saveAndResume": false,
-  "hCaptcha": false
+  "hCaptcha": false,
+  "formTimer": false
 }

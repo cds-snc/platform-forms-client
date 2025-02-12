@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useState, useRef, useCallback, createRef } from "react";
+import React, { useEffect, useState, useRef, useCallback } from "react";
 import { withFormik } from "formik";
 import { getFormInitialValues } from "@lib/formBuilder";
 import { getErrorList, setFocusOnErrorMessage, validateOnSubmit } from "@lib/validation/validation";
@@ -67,7 +67,7 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
   // @TODO add back the feature flag check when going to staging
   // const { getFlag } = useFeatureFlags();
   const captchaEnabled = hCaptchaEnabled(/*getFlag("hCaptcha")*/ true, props.isPreview);
-  const hCaptchaRef = createRef<HCaptcha>();
+  const hCaptchaRef = useRef<HCaptcha>(null);
 
   // Used to set any values we'd like added for use in the below withFormik handleSubmit().
   useFormValuesChanged();
