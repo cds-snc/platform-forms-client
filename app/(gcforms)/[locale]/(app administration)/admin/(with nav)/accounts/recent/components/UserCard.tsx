@@ -5,15 +5,7 @@ import { Flagged } from "./Flagged";
 import { EventKeys, useCustomEvent } from "@lib/hooks/useCustomEvent";
 import { OnHold } from "./OnHold";
 
-export const UserCard = ({
-  user,
-  canManageUser,
-  flagged,
-}: {
-  user: AppUser;
-  canManageUser: boolean;
-  flagged: boolean;
-}) => {
+export const UserCard = ({ user, flagged }: { user: AppUser; flagged: boolean }) => {
   const { Event } = useCustomEvent();
   const hasNote = user.notes !== null;
   return (
@@ -29,31 +21,27 @@ export const UserCard = ({
         </div>
 
         <div className="flex flex-wrap gap-2">
-          {canManageUser && (
-            <>
-              {user.active && (
-                <div className="mt-4 flex gap-4">
-                  <Button
-                    theme="secondary"
-                    onClick={() => {
-                      Event.fire(EventKeys.openAddUserNoteDialog);
-                    }}
-                  >
-                    Add note
-                  </Button>
-                  <Button
-                    theme="primary"
-                    onClick={() => {
-                      Event.fire(EventKeys.openDeactivateUserDialog, {
-                        userId: user.id,
-                      });
-                    }}
-                  >
-                    Deactivate
-                  </Button>
-                </div>
-              )}
-            </>
+          {user.active && (
+            <div className="mt-4 flex gap-4">
+              <Button
+                theme="secondary"
+                onClick={() => {
+                  Event.fire(EventKeys.openAddUserNoteDialog);
+                }}
+              >
+                Add note
+              </Button>
+              <Button
+                theme="primary"
+                onClick={() => {
+                  Event.fire(EventKeys.openDeactivateUserDialog, {
+                    userId: user.id,
+                  });
+                }}
+              >
+                Deactivate
+              </Button>
+            </div>
           )}
         </div>
       </div>
