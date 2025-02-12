@@ -12,8 +12,8 @@ import { AuthenticatedPage } from "@lib/pages/auth";
 export default AuthenticatedPage(
   [authorization.canViewAllUsers, authorization.canManageAllUsers],
   async ({ searchParams }) => {
-    const { filterParam } = await searchParams;
-    const filter = filterParam && filterParam === "flagged" ? "flagged" : "all";
+    let { filter } = await searchParams;
+    filter = filter && filter === "flagged" ? "flagged" : "all";
 
     const { t } = await serverTranslation(["admin-recent-signups"]);
 
