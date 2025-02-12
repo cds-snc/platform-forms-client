@@ -32,6 +32,8 @@ import { defaultForm } from "@lib/store/defaults";
 import { showReviewPage } from "@lib/utils/form-builder/showReviewPage";
 import { tryFocusOnPageLoad } from "@lib/client/clientHelpers";
 import { useIsFormClosed } from "@lib/hooks/useIsFormClosed";
+import { useFeatureFlags } from "@lib/hooks/useFeatureFlags";
+import { FeatureFlags } from "@lib/cache/types";
 
 export const Preview = ({
   disableSubmit = true,
@@ -69,13 +71,19 @@ export const Preview = ({
     securityAttribute: getSecurityAttribute(),
   };
 
-  const { localizeField, translationLanguagePriority, getLocalizationAttribute, email } =
-    useTemplateStore((s) => ({
-      localizeField: s.localizeField,
-      translationLanguagePriority: s.translationLanguagePriority,
-      getLocalizationAttribute: s.getLocalizationAttribute,
-      email: s.deliveryOption?.emailAddress,
-    }));
+  const {
+    localizeField,
+    translationLanguagePriority,
+    getLocalizationAttribute,
+    email,
+    saveAndResume,
+  } = useTemplateStore((s) => ({
+    localizeField: s.localizeField,
+    translationLanguagePriority: s.translationLanguagePriority,
+    getLocalizationAttribute: s.getLocalizationAttribute,
+    email: s.deliveryOption?.emailAddress,
+    saveAndResume: s.saveAndResume,
+  }));
 
   const translationNamespaces = ["common", "form-builder", "form-closed"];
   const { t } = useTranslation(translationNamespaces);
@@ -102,6 +110,9 @@ export const Preview = ({
   const brand = formRecord?.form ? formRecord.form.brand : null;
 
   const hasHydrated = useRehydrate();
+
+  const { getFlag } = useFeatureFlags();
+  const saveAndResumeEnabled = getFlag(FeatureFlags.saveAndResume);
 
   const isShowReviewPage = showReviewPage(formRecord.form);
 
@@ -189,63 +200,68 @@ export const Preview = ({
             {!hasHydrated && <Skeleton count={5} height={40} className="mb-4" />}
             {hasHydrated && (
               <GCFormsProvider formRecord={formRecord}>
-                <Form
-                  formRecord={formRecord}
-                  saveSessionProgress={saveSessionProgress}
-                  isPreview={true}
-                  language={language}
-                  t={translatedT}
-                  onSuccess={setSent}
-                  renderSubmit={({ validateForm }) => {
-                    return (
-                      <div id="PreviewSubmitButton">
-                        <span {...getLocalizationAttribute()}>
-                          <NextButton
-                            formRecord={formRecord}
-                            language={language}
-                            validateForm={validateForm}
-                            fallBack={() => {
-                              return (
-                                <>
-                                  {allowGrouping && isShowReviewPage && (
-                                    <BackButton
-                                      language={language}
-                                      onClick={() => tryFocusOnPageLoad("h2")}
-                                    />
-                                  )}
-                                  <Button
-                                    type="submit"
-                                    id="SubmitButton"
-                                    onClick={(e) => {
-                                      if (disableSubmit) {
-                                        e.preventDefault();
-                                      }
-                                    }}
-                                  >
-                                    {t("submitButton", { ns: "common", lng: language })}
-                                  </Button>
-                                </>
-                              );
-                            }}
-                          />
-                        </span>
-                        {status !== "authenticated" && (
-                          <div
-                            className="inline-block bg-purple-200 px-4 py-1"
-                            {...getLocalizationAttribute()}
-                          >
-                            <Markdown options={{ forceBlock: true }}>
-                              {t("signInToTest", { ns: "form-builder", lng: language })}
-                            </Markdown>
-                          </div>
-                        )}
-                      </div>
-                    );
-                  }}
-                  allowGrouping={allowGrouping}
+                <div
+                  data-save-and-resume-flag={saveAndResumeEnabled}
+                  data-save-and-resume={saveAndResume || false}
                 >
-                  {currentForm}
-                </Form>
+                  <Form
+                    formRecord={formRecord}
+                    saveSessionProgress={saveSessionProgress}
+                    isPreview={true}
+                    language={language}
+                    t={translatedT}
+                    onSuccess={setSent}
+                    renderSubmit={({ validateForm }) => {
+                      return (
+                        <div id="PreviewSubmitButton">
+                          <span {...getLocalizationAttribute()}>
+                            <NextButton
+                              formRecord={formRecord}
+                              language={language}
+                              validateForm={validateForm}
+                              fallBack={() => {
+                                return (
+                                  <>
+                                    {allowGrouping && isShowReviewPage && (
+                                      <BackButton
+                                        language={language}
+                                        onClick={() => tryFocusOnPageLoad("h2")}
+                                      />
+                                    )}
+                                    <Button
+                                      type="submit"
+                                      id="SubmitButton"
+                                      onClick={(e) => {
+                                        if (disableSubmit) {
+                                          e.preventDefault();
+                                        }
+                                      }}
+                                    >
+                                      {t("submitButton", { ns: "common", lng: language })}
+                                    </Button>
+                                  </>
+                                );
+                              }}
+                            />
+                          </span>
+                          {status !== "authenticated" && (
+                            <div
+                              className="inline-block bg-purple-200 px-4 py-1"
+                              {...getLocalizationAttribute()}
+                            >
+                              <Markdown options={{ forceBlock: true }}>
+                                {t("signInToTest", { ns: "form-builder", lng: language })}
+                              </Markdown>
+                            </div>
+                          )}
+                        </div>
+                      );
+                    }}
+                    allowGrouping={allowGrouping}
+                  >
+                    {currentForm}
+                  </Form>
+                </div>
               </GCFormsProvider>
             )}
           </div>
