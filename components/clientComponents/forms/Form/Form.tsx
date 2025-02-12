@@ -33,6 +33,12 @@ import { useFormDelay } from "@lib/hooks/useFormDelayContext";
 import { FormActions } from "./FormActions";
 import { PrimaryFormButtons } from "./PrimaryFormButtons";
 
+// @TODO add back the feature flag check when going to staging
+// import { useFeatureFlags } from "@lib/hooks/useFeatureFlags";
+import { Captcha } from "@clientComponents/globals/Captcha/Captcha";
+import HCaptcha from "@hcaptcha/react-hcaptcha";
+import { hCaptchaEnabled } from "@clientComponents/globals/Captcha/helpers";
+
 /**
  * This is the "inner" form component that isn't connected to Formik and just renders a simple form
  * @param props
@@ -57,6 +63,11 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
   const showIntro = isGroupsCheck ? currentGroup === LockedSections.START : true;
   const groupsHeadingRef = useRef<HTMLHeadingElement>(null);
   const { getFormDelayWithGroups, getFormDelayWithoutGroups } = useFormDelay();
+
+  // @TODO add back the feature flag check when going to staging
+  // const { getFlag } = useFeatureFlags();
+  const captchaEnabled = hCaptchaEnabled(/*getFlag("hCaptcha")*/ true, props.isPreview);
+  const hCaptchaRef = useRef<HCaptcha>(null);
 
   // Used to set any values we'd like added for use in the below withFormik handleSubmit().
   useFormValuesChanged();
@@ -167,7 +178,11 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
               if (isGroupsCheck && isShowReviewPage && currentGroup !== LockedSections.REVIEW) {
                 return;
               }
-              handleSubmit(e);
+              if (captchaEnabled) {
+                hCaptchaRef.current?.execute();
+              } else {
+                handleSubmit(e);
+              }
             }}
             noValidate
           >
@@ -218,6 +233,14 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
               />
             </FormActions>
           </form>
+          {captchaEnabled && (
+            <Captcha
+              successCb={handleSubmit}
+              hCaptchaRef={hCaptchaRef}
+              lang={language}
+              hCaptchaSiteKey={props.hCaptchaSiteKey}
+            />
+          )}
         </>
       }
     </>
