@@ -236,7 +236,6 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
           {captchaEnabled && (
             <Captcha
               successCb={handleSubmit}
-              failCb={() => logMessage.info("TEMP fail failCb")} //TODO
               hCaptchaRef={hCaptchaRef}
               lang={language}
               hCaptchaSiteKey={props.hCaptchaSiteKey}

@@ -12,7 +12,7 @@ import { logMessage } from "@lib/logger";
  * @returns boolean true if the token is valid, false otherwise
  */
 export const verifyHCaptchaToken = async (token: string): Promise<boolean> => {
-  // TODO handle Prod vs staging
+  // @TODO handle Prod vs staging
   const siteVerifyKey = process.env.HCAPTCHA_SITE_VERIFY_KEY;
 
   if (!siteVerifyKey) {
@@ -35,16 +35,15 @@ export const verifyHCaptchaToken = async (token: string): Promise<boolean> => {
     },
     timeout: process.env.NODE_ENV === "production" ? 60000 : 0, // TODO right delay? - consider fallback logic
   }).catch((error) => {
-    // 5XX error, want to pass through. e.g. siteverify is down
-    logMessage.error(error);
-    throw error.message; // TODO sanitize anything?
+    // 5XX error e.g. siteverify is down
+    throw error.message;
   });
 
   // 4XX request error, want to fail. e.g. site secret mismatch
   // See https://docs.hcaptcha.com/#siteverify-error-codes-table
   const captchaData: { success: boolean; score: number; "error-codes"?: string[] } = result.data;
   if (captchaData && captchaData["error-codes"]) {
-    logMessage.info(`hCaptcha client error: ${JSON.stringify(captchaData["error-codes"])}`);
+    logMessage.info(`hCaptcha Client error: ${JSON.stringify(captchaData["error-codes"])}`);
     return false;
   }
 

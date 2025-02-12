@@ -1,6 +1,7 @@
 import HCaptcha from "@hcaptcha/react-hcaptcha";
 import { logMessage } from "@lib/logger";
 import { verifyHCaptchaToken } from "./actions";
+import { useRouter } from "next/navigation";
 
 // Known issue: "Only one captcha is permitted per parent container." happens when navigating back to a form page (kind of an edge case)
 // https://github.com/hCaptcha/react-hcaptcha/issues/189
@@ -8,50 +9,46 @@ import { verifyHCaptchaToken } from "./actions";
 // Not an issue on local? "Cookie “__cflb” has been rejected because it is in a cross-site context..."
 // I think this is because of local not being http  vs should be https - verify on Staging
 
-// Running in 100% passive mode
+// Running in 100% passive mode - nope running 99,9% at the moment
 // See https://github.com/hCaptcha/react-hcaptcha
 export const Captcha = ({
   successCb,
-  failCb,
   hCaptchaRef,
   lang,
   hCaptchaSiteKey,
 }: {
   successCb: () => void;
-  failCb: () => void;
   hCaptchaRef: React.RefObject<HCaptcha | null>;
   lang: string;
   hCaptchaSiteKey: string | undefined;
 }) => {
+  const router = useRouter();
+
   if (!hCaptchaSiteKey) {
-    logMessage.error("hCaptcha Site Key not set");
+    logMessage.error("hCaptcha not loaded because hCaptchaSiteKey is not set");
     return null;
   }
-
-  logMessage.info("catpcha component loaded"); //temp
 
   const verify = async (token: string) => {
     try {
       const success = await verifyHCaptchaToken(token);
       if (!success) {
-        logMessage.info("hCaptcha verification failed"); // temp
-        failCb();
+        logMessage.info("hCaptcha verification failed");
+        router.push(`/${lang}/error`);
       } else {
-        logMessage.info("hCaptcha verification succeeded"); //temp
+        logMessage.info("hCaptcha verification succeeded");
         successCb();
       }
     } catch (err) {
-      logMessage.error(`Capcha error, pass through: ${err}`);
-
-      // TODO: Fall through?
-      // successCb();
+      logMessage.error(`hCapcha system error, do success: ${err}`);
+      successCb();
     }
   };
 
   // Component will reset immediately after an error.
   // See https://docs.hcaptcha.com/#siteverify-error-codes-table
   const clientComponentError = (code: string) => {
-    // TODO: How many times to let retry? e.g. after 5 failed attempts, just pass through?
+    // @TODO: How many times to let retry? e.g. after 5 failed attempts, just pass through?
 
     logMessage.error(`clientComponentError error: ${code}`);
   };
