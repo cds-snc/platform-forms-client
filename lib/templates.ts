@@ -1049,7 +1049,7 @@ export async function updateFormSaveAndResume(
       e.user.id,
       { type: "Form", id: formID },
       "AccessDenied",
-      "Attempted to set Form Purpose"
+      "Attempted to set save and resume"
     );
     throw e;
   });
@@ -1296,6 +1296,7 @@ export const onlyIncludePublicProperties = (template: FormRecord): PublicFormRec
     form: template.form,
     isPublished: template.isPublished,
     securityAttribute: template.securityAttribute,
+    saveAndResume: template.saveAndResume,
   };
 };
 

@@ -33,6 +33,8 @@ export const FormWrapper = ({
 
   const { getFlag } = useFeatureFlags();
   const saveAndResumeEnabled = getFlag(FeatureFlags.saveAndResume);
+  const saveAndResume = formRecord?.saveAndResume && saveAndResumeEnabled;
+
   const formRestoredMessage = t("saveAndResume.formRestored");
   const hasShownResumeMessage = useRef(false);
 
@@ -72,7 +74,7 @@ export const FormWrapper = ({
         }}
         t={t}
         saveSessionProgress={saveSessionProgress}
-        saveAndResumeEnabled={saveAndResumeEnabled}
+        saveAndResumeEnabled={saveAndResume}
         renderSubmit={({ validateForm, fallBack }) => {
           return (
             <NextButton
@@ -80,7 +82,7 @@ export const FormWrapper = ({
               language={language as Language}
               validateForm={validateForm}
               fallBack={fallBack}
-              saveAndResumeEnabled={saveAndResumeEnabled}
+              saveAndResumeEnabled={saveAndResume}
             />
           );
         }}
@@ -88,7 +90,7 @@ export const FormWrapper = ({
       >
         {currentForm}
       </Form>
-      {saveAndResumeEnabled && (
+      {saveAndResume && (
         <ToastContainer limit={1} autoClose={5000} containerId="public-facing-form" />
       )}
     </>
