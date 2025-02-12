@@ -1,0 +1,23 @@
+{
+  "name": "@gcforms/connectors",
+  "version": "0.0.1",
+  "author": "Canadian Digital Service",
+  "license": "MIT",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsc",
+    "prepare": "yarn && yarn build"
+  },
+  "dependencies": {
+    "axios": "^1.7.9"
+  },
+  "devDependencies": {
+    "@types/node": "^20.11.0",
+    "typescript": "^5.3.3"
+  },
+  "packageManager": "yarn@4.6.0"
+}
