@@ -35,9 +35,9 @@ import { PrimaryFormButtons } from "./PrimaryFormButtons";
 
 // @TODO add back the feature flag check when going to staging
 // import { useFeatureFlags } from "@lib/hooks/useFeatureFlags";
+// import { hCaptchaEnabled } from "@clientComponents/globals/Captcha/helpers";
 import { Captcha } from "@clientComponents/globals/Captcha/Captcha";
 import HCaptcha from "@hcaptcha/react-hcaptcha";
-import { hCaptchaEnabled } from "@clientComponents/globals/Captcha/helpers";
 
 /**
  * This is the "inner" form component that isn't connected to Formik and just renders a simple form
@@ -66,7 +66,8 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
 
   // @TODO add back the feature flag check when going to staging
   // const { getFlag } = useFeatureFlags();
-  const captchaEnabled = hCaptchaEnabled(/*getFlag("hCaptcha")*/ true, props.isPreview);
+  // const captchaEnabled = hCaptchaEnabled(getFlag("hCaptcha"), props.isPreview);
+  const captchaEnabled = true;
   const hCaptchaRef = useRef<HCaptcha>(null);
 
   // Used to set any values we'd like added for use in the below withFormik handleSubmit().
