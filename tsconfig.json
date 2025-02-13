@@ -28,8 +28,7 @@
       "@i18n/*": ["i18n/*"],
       "@content/*": ["public/static/content/*"],
       "@public/*": ["public/*"],
-      "@cdssnc/gcforms-types": ["packages/gcforms-types/src"],
-      "@gcforms/connectors": ["packages/connectors/src"]
+      "@cdssnc/gcforms-types": ["packages/gcforms-types/src"]
     },
     "incremental": true,
     "plugins": [
