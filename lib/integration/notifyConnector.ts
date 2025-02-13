@@ -1,10 +1,7 @@
 import { GCNotifyConnector, type Personalisation } from "@gcforms/connectors";
 import { logMessage } from "@lib/logger";
 
-if (!process.env.NOTIFY_API_KEY)
-  throw new Error("Environment variable NOTIFY_API_KEY is undefined");
-
-const gcNotifyConnector = GCNotifyConnector.default(process.env.NOTIFY_API_KEY);
+const gcNotifyConnector = GCNotifyConnector.default(process.env.NOTIFY_API_KEY ?? "");
 
 export const sendEmail = async (email: string, personalisation: Personalisation) => {
   try {

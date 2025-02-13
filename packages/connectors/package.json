@@ -1,20 +1,29 @@
 {
   "name": "@gcforms/connectors",
-  "version": "0.0.3",
+  "version": "0.0.7",
   "author": "Canadian Digital Service",
   "license": "MIT",
   "publishConfig": {
     "access": "public"
   },
   "type": "module",
-  "main": "dist/index.js",
-  "types": "dist/index.d.ts",
+  "main": "./dist/cjs/index.js",
+  "module": "./dist/esm/index.js",
+  "exports": {
+    ".": {
+      "node": {
+        "import": "./dist/esm/index.js",
+        "require": "./dist/cjs/index.js"
+      }
+    },
+    "./package.json": "./package.json"
+  },
   "files": [
     "dist"
   ],
   "scripts": {
-    "build": "tsc",
-    "prepare": "yarn && yarn build"
+    "build": "rm -rf dist && sh ./build.sh",
+    "prepare": "yarn install && yarn build"
   },
   "dependencies": {
     "axios": "^1.7.9"
