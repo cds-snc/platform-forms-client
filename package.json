@@ -59,7 +59,7 @@
     "@casl/ability": "6.7.3",
     "@cdssnc/gcds-tokens": "1.20.1",
     "@cdssnc/gcforms-types": "workspace:*",
-    "@gcforms/connectors": "workspace:*",
+    "@gcforms/connectors": "^0.0.7",
     "@headlessui/react": "^2.2.0",
     "@lexical/react": "^0.12.6",
     "@neshca/cache-handler": "^1.2.1",
