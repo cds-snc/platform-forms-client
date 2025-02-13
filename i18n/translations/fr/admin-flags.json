@@ -8,7 +8,7 @@
   "disable": "Désactiver",
   "featureTitle": "Fonctionnalité",
   "featureStatus": "Statut",
-  "featureSwitch": "Activé/Déactivé",
+  "featureSwitch": "Activé/Désactivé",
   "features": {
     "repeatingSets": {
       "title": "Ensemble récurrent",
