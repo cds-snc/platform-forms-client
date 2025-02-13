@@ -69,8 +69,8 @@ export const FormWrapper = ({
         initialValues={initialValues || undefined}
         formRecord={formRecord}
         language={language}
-        onSuccess={(formID) => {
-          router.push(`/${language}/id/${formID}/confirmation`);
+        onSuccess={(formID, submissionId) => {
+          router.push(`/${language}/id/${formID}/confirmation/${submissionId || ""}`);
         }}
         t={t}
         saveSessionProgress={saveSessionProgress}
