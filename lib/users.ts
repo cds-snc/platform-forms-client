@@ -311,3 +311,26 @@ export const getUnprocessedSubmissionsForUser = async (userId: string) => {
 
   return overdue;
 };
+
+export const addNoteToUser = async (id: string, note: string) => {
+  await authorization.canManageUser(id).catch((e) => {
+    if (e instanceof AccessControlError) {
+      logEvent(
+        e.user.id,
+        { type: "User" },
+        "AccessDenied",
+        `Attempted to add a note to user ${id}`
+      );
+    }
+    throw e;
+  });
+
+  await prisma.user.update({
+    where: {
+      id: id,
+    },
+    data: {
+      notes: note,
+    },
+  });
+};
