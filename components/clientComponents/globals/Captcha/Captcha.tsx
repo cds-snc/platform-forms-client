@@ -40,6 +40,7 @@ export const Captcha = ({
       if (!success) {
         router.push(`/${lang}/error`);
       } else {
+        logMessage.info(`hCapcha token verified`);
         successCb();
       }
     } catch (err) {

@@ -3,8 +3,6 @@ import axios from "axios";
 import { getClientIP } from "@lib/ip";
 import { logMessage } from "@lib/logger";
 
-// @TODO public endpoint, any kind of abuse/* to think about?
-
 /**
  * Verifies the client hCaptcha token is valid using the hCaptcha API
  *
@@ -12,7 +10,6 @@ import { logMessage } from "@lib/logger";
  * @returns boolean true if the token is valid, false otherwise
  */
 export const verifyHCaptchaToken = async (token: string): Promise<boolean> => {
-  // @TODO handle Prod vs staging, assuming we will be using separate keys
   const siteVerifyKey = process.env.HCAPTCHA_SITE_VERIFY_KEY;
 
   if (!siteVerifyKey) {
