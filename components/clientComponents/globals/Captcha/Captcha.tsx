@@ -3,18 +3,6 @@ import { logMessage } from "@lib/logger";
 import { verifyHCaptchaToken } from "./actions";
 import { useRouter } from "next/navigation";
 
-/**
- * Notes:
- * - Running in 100% passive mode - nope running 99.9% at the moment
- * - an invalid sitekey will cause the HCaptcha component fail without calling the onError callback
- *    (easy to spot looking in the network console)
- * - Seeing this error means an accessible cookie is set. None should be set, check the config.
- *    "Cookie “__cflb” has been rejected because it is in a cross-site context..."
- * - Known issue: "Only one captcha is permitted per parent container." happens when navigating
- *    back to a form page (kind of an edge case).
- *    See https://github.com/hCaptcha/react-hcaptcha/issues/189
- * - Local 192.* IPs will auto pass validation but be ignored by session evaluation (not in analytitics)
- */
 export const Captcha = ({
   successCb,
   hCaptchaRef,
@@ -40,11 +28,11 @@ export const Captcha = ({
       if (!success) {
         router.push(`/${lang}/error`);
       } else {
-        logMessage.info(`hCapcha token verified`);
+        logMessage.info(`hCaptcha token verified`);
         successCb();
       }
     } catch (err) {
-      logMessage.error(`hCapcha system error. Let user submit: ${err}`);
+      logMessage.error(`hCaptcha system error. Let user submit: ${err}`);
       successCb();
     }
   };
@@ -65,7 +53,10 @@ export const Captcha = ({
     hCaptchaRef.current?.resetCaptcha();
   };
 
-  // See https://github.com/hCaptcha/react-hcaptcha
+  // Running in 100% passive mode.
+  // For component info see https://github.com/hCaptcha/react-hcaptcha
+  // Note: An invalid sitekey will cause the HCaptcha component to fail without calling the onError
+  // Note: The '"Cookie “__cflb” has been rejected' error is probably related to the accesible cookie (see if we can ditch it)
   return (
     <HCaptcha
       sitekey={hCaptchaSiteKey}

@@ -36,7 +36,7 @@ export const verifyHCaptchaToken = async (token: string): Promise<boolean> => {
   // See https://docs.hcaptcha.com/#siteverify-error-codes-table
   const captchaData: { success: boolean; score: number; "error-codes"?: string[] } = result.data;
   if (captchaData && captchaData["error-codes"]) {
-    logMessage.info(`hCaptcha Client error: ${JSON.stringify(captchaData["error-codes"])}`);
+    logMessage.error(`hCaptcha Client error: ${JSON.stringify(captchaData["error-codes"])}`);
     return false;
   }
 
