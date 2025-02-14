@@ -4,6 +4,7 @@ import Fip from "@lib/responseDownloadFormats/html/components/Fip";
 import { css } from "@lib/responseDownloadFormats/html/css/compiled";
 import { ReviewList } from "@clientComponents/forms/Review/ReviewList";
 import { SubmittedBadge } from "./SubmittedBadge";
+import { KeepSafe } from "./KeepSafe";
 import { HTMLProps } from "./types";
 
 export const DownloadConfirmHtml = ({
@@ -57,6 +58,7 @@ export const DownloadConfirmHtml = ({
                 <SubmittedBadge submissionId={submissionId} language={language} />
               </div>
               <h1>{formTitle}</h1>
+              <KeepSafe language={language} />
               <ReviewList
                 reviewItems={reviewItems}
                 language={language}

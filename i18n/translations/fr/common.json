@@ -268,12 +268,12 @@
     },
     "downloadHtml": {
       "keepSafe": {
-        "title": "Keep your form safe",
         "description": " Make sure to keep this file in a secure spot on your device."
       },
       "badge": {
-        "text": "Submitted",
-        "lastSaved": "Saved:  {{month}} {{day}}, {{year}}"
+        "text": "Submitted on ",
+        "lastSaved": "{{month}} {{day}}, {{year}}",
+        "submissionId": "Submission ID: {{submissionId}}"
       }
     }
   },

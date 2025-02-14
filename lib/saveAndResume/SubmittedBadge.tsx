@@ -14,25 +14,32 @@ export const SubmittedBadge = ({
   return (
     <div>
       <div className="mr-4 inline-block max-w-fit rounded-lg bg-gcds-green-100 px-4 py-2">
-        {t("saveResponse.downloadHtml.badge.text", {
-          lng: language,
-        })}
-        {submissionId && (
-          <span className="ml-2">
-            <strong>{submissionId}</strong>
+        <div>
+          <span className="font-bold">
+            {t("saveResponse.downloadHtml.badge.text", {
+              lng: language,
+            })}
           </span>
-        )}
-      </div>
-      <div className="inline-block">
-        {t("saveResponse.downloadHtml.badge.lastSaved", {
-          lng: language,
-          day,
-          month,
-          year,
-          interpolation: {
-            escapeValue: false,
-          },
-        })}
+          <div className="inline-block">
+            {t("saveResponse.downloadHtml.badge.lastSaved", {
+              lng: language,
+              day,
+              month,
+              year,
+              interpolation: {
+                escapeValue: false,
+              },
+            })}
+          </div>
+          {submissionId && (
+            <span className="ml-2 mt-1 block">
+              {t("saveResponse.downloadHtml.badge.submissionId", {
+                lng: language,
+                submissionId,
+              })}
+            </span>
+          )}
+        </div>
       </div>
     </div>
   );
