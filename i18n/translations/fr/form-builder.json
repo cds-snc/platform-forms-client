@@ -1219,8 +1219,8 @@
       "cancel": "Non, déplacer sans modifier les règles",
       "confirm": "Oui, appliquer un enchaînement linéaire"
     },
-    "cannotDeleteGroup": "Cannot delete page as it will lead to a broken form",
-    "cannotSetNextAction": "Cannot set next action to exit as it will lead to a broken form"
+    "cannotDeleteGroup": "Cette page ne peut pas être supprimée car cela briserait la logique du formulaire.",
+    "cannotSetNextAction": "Cette page ne peut pas aller à une page de sortie car cela briserait la logique du formulaire."
   },
   "confirmation": {
     "title": "Votre formulaire a été soumis",
