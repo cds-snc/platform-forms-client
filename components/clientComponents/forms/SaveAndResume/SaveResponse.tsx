@@ -24,17 +24,18 @@ export const SaveResponse = ({
   const [confirm, setConfirm] = useState(false);
 
   return (
-    <div>
+    <div className="mr-4 inline-block max-w-fit rounded-lg bg-gcds-green-100 px-4 py-2">
+      <div className="mr-4 inline-block font-bold">
+        {t("saveResponse.saveBtnDescription", { lng: language })}
+      </div>
       <DownloadConfirm
         className="group"
         type="button"
         loading={confirm}
-        theme="secondary"
+        theme="primary"
         onClick={() => setConfirm(true)}
       >
-        <>
-          <span>{t("saveResponse.saveBtn", { lng: language })}</span>
-        </>
+        <span>{t("saveResponse.saveBtn", { lng: language })}</span>
       </DownloadConfirm>
       <ConfirmDownloadDialog
         type="confirm"

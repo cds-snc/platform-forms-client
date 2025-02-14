@@ -32,7 +32,7 @@ export const SubmittedBadge = ({
             })}
           </div>
           {submissionId && (
-            <span className="ml-2 mt-1 block">
+            <span className="mt-1 block">
               {t("saveResponse.downloadHtml.badge.submissionId", {
                 lng: language,
                 submissionId,
