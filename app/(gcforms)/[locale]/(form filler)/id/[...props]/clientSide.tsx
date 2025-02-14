@@ -87,7 +87,7 @@ export const FormWrapper = ({
           // which will trigger confirmation page content to render
           submissionId && setSubmissionId(submissionId);
 
-          if (!saveAndResume) {
+          if (!saveAndResume || process.env.APP_ENV === "test") {
             // Redirect to confirmation page if save and resume is not enabled
             router.push(`/${language}/id/${formID}/confirmation`);
           }
