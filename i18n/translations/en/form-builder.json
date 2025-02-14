@@ -1218,7 +1218,9 @@
       "description": " It seems the items you are moving have display or branching rules applied. Would you like to overwrite those rules and apply a linear autoflow?",
       "cancel": "No, move without changing rules",
       "confirm": "Yes, apply linear autoflow"
-    }
+    },
+    "cannotDeleteGroup": "Cannot delete page as it will lead to a broken form",
+    "cannotSetNextAction": "Cannot set next action to exit as it will lead to a broken form"
   },
   "confirmation": {
     "title": "Your form has been submitted",
