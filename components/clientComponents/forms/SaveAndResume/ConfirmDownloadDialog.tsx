@@ -49,6 +49,7 @@ export const ConfirmDownloadDialog = ({
   formTitleEn,
   formTitleFr,
   language,
+  submissionId,
 }: {
   open: boolean;
   type: "confirm" | "progress";
@@ -57,6 +58,7 @@ export const ConfirmDownloadDialog = ({
   formTitleEn: string;
   formTitleFr: string;
   language: Language;
+  submissionId?: string;
 }) => {
   const { t } = useTranslation("form-builder");
 
@@ -95,6 +97,7 @@ export const ConfirmDownloadDialog = ({
         formResponse: btoa(JSON.stringify(getProgressData())),
         language,
         startSectionTitle: getStartLabels()[language],
+        submissionId,
       };
 
       const html = await generateDownloadHtml(options);

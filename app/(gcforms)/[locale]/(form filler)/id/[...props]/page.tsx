@@ -16,7 +16,6 @@ import { FormDelayProvider } from "@lib/hooks/useFormDelayContext";
 import { ResumeForm } from "@clientComponents/forms/ResumeForm/ResumeForm";
 import { getSomeFlags } from "@lib/cache/flags";
 import { FeatureFlags } from "@lib/cache/types";
-import { SaveResponse } from "@clientComponents/forms/SaveAndResume/SaveResponse";
 
 export async function generateMetadata(props0: {
   params: Promise<{ locale: string; props: string[] }>;
@@ -49,9 +48,9 @@ export default async function Page(props0: {
 
   const { locale, props } = params;
 
-  const formID = props[0];
+  const formId = props[0];
   const step = props[1] ?? "";
-  const formRecord = await getPublicTemplateByID(formID);
+  const formRecord = await getPublicTemplateByID(formId);
 
   // Redirect if form doesn't exist and only retrieve published forms
   if (!formRecord || !formRecord?.isPublished) {
@@ -92,7 +91,7 @@ export default async function Page(props0: {
       <ResumeForm
         titleEn={formRecord.form.titleEn}
         titleFr={formRecord.form.titleFr}
-        formId={formID}
+        formId={formId}
       />
     );
   }
@@ -103,13 +102,7 @@ export default async function Page(props0: {
   if (step === "confirmation") {
     pageContent = (
       <div className={classes}>
-        <TextPage formRecord={formRecord} />
-        <SaveResponse
-          formId={formID}
-          formTitleEn={formRecord.form.titleEn}
-          formTitleFr={formRecord.form.titleFr}
-          language={language}
-        />
+        <TextPage formId={formId} formRecord={formRecord} />
       </div>
     );
   }

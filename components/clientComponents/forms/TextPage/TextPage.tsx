@@ -5,21 +5,27 @@ import { RichText } from "@clientComponents/forms";
 import { getLocalizedProperty } from "@lib/utils";
 import { PublicFormRecord } from "@lib/types";
 import { useGCFormsContext } from "@lib/hooks/useGCFormContext";
+import { SaveResponse } from "@clientComponents/forms/SaveAndResume/SaveResponse";
+import { Language } from "@lib/types/form-builder-types";
 
 /*
   This is the component for text pages within the form flow (start pages, end pages)
 */
 
 interface TextPageProps {
+  formId: string;
   formRecord: PublicFormRecord;
 }
 
 interface PageContextProps {
+  formId: string;
+  formRecord: PublicFormRecord;
   pageText: string;
   urlQuery: string | null;
+  language: Language;
 }
 
-const PageContent = ({ pageText, urlQuery }: PageContextProps) => {
+const PageContent = ({ formId, formRecord, pageText, urlQuery, language }: PageContextProps) => {
   const { t } = useTranslation("confirmation");
   const { submissionId } = useGCFormsContext();
 
@@ -29,6 +35,13 @@ const PageContent = ({ pageText, urlQuery }: PageContextProps) => {
       <>
         <input type="hidden" value={submissionId} name="submissionId" />
         <RichText className="confirmation">{pageText}</RichText>
+        <SaveResponse
+          submissionId={submissionId}
+          formId={formId}
+          formTitleEn={formRecord.form.titleEn}
+          formTitleFr={formRecord.form.titleFr}
+          language={language}
+        />
       </>
     );
   }
@@ -69,7 +82,13 @@ export const TextPage = (props: TextPageProps): React.ReactElement => {
   return (
     <>
       <h1 tabIndex={-1}>{t("title")}</h1>
-      <PageContent pageText={pageText} urlQuery={urlQuery} />
+      <PageContent
+        formId={props.formId}
+        formRecord={props.formRecord}
+        language={language as Language}
+        pageText={pageText}
+        urlQuery={urlQuery}
+      />
     </>
   );
 };

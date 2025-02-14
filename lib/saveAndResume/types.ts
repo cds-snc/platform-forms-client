@@ -8,6 +8,7 @@ export interface HTMLProps {
   formResponse: string;
   reviewItems: ReviewSection[];
   startSectionTitle: string;
+  submissionId?: string;
   host?: string;
   type: "confirm" | "progress";
 }

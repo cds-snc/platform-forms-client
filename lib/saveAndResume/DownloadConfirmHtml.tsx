@@ -14,6 +14,7 @@ export const DownloadConfirmHtml = ({
   reviewItems,
   startSectionTitle,
   host,
+  submissionId,
 }: HTMLProps) => {
   const formData = JSON.stringify({
     data: formResponse,
@@ -53,7 +54,7 @@ export const DownloadConfirmHtml = ({
             />
             <div>
               <div className="mb-14">
-                <SubmittedBadge language={language} />
+                <SubmittedBadge submissionId={submissionId} language={language} />
               </div>
               <h1>{formTitle}</h1>
               <ReviewList

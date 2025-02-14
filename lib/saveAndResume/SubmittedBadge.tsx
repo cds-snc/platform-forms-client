@@ -2,7 +2,13 @@ import { type Language } from "@lib/types/form-builder-types";
 import { customTranslate } from "@lib/i18nHelpers";
 import { formClosingDateEst as utcToEst } from "lib/utils/date/utcToEst";
 
-export const SubmittedBadge = ({ language }: { language: Language }) => {
+export const SubmittedBadge = ({
+  language,
+  submissionId,
+}: {
+  language: Language;
+  submissionId?: string;
+}) => {
   const { t } = customTranslate("common");
   const { month, day, year } = utcToEst(new Date().toISOString(), language);
   return (
@@ -11,6 +17,11 @@ export const SubmittedBadge = ({ language }: { language: Language }) => {
         {t("saveResponse.downloadHtml.badge.text", {
           lng: language,
         })}
+        {submissionId && (
+          <span className="ml-2">
+            <strong>{submissionId}</strong>
+          </span>
+        )}
       </div>
       <div className="inline-block">
         {t("saveResponse.downloadHtml.badge.lastSaved", {
