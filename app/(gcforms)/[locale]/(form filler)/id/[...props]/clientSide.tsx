@@ -1,5 +1,5 @@
 "use client";
-// import { useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { NextButton } from "@clientComponents/forms/NextButton/NextButton";
 import { useTranslation } from "@i18n/client";
 import { FormRecord, TypeOmit } from "@lib/types";
@@ -39,7 +39,7 @@ export const FormWrapper = ({
 
   const formRestoredMessage = t("saveAndResume.formRestored");
   const hasShownResumeMessage = useRef(false);
-  //const router = useRouter();
+  const router = useRouter();
 
   const values = useMemo(
     () =>
@@ -89,7 +89,7 @@ export const FormWrapper = ({
 
           if (!saveAndResume) {
             // Redirect to confirmation page if save and resume is not enabled
-            // router.push(`/${language}/id/${formID}/confirmation`);
+            router.push(`/${language}/id/${formID}/confirmation`);
           }
         }}
         t={t}

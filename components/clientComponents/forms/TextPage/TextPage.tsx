@@ -7,6 +7,8 @@ import { PublicFormRecord } from "@lib/types";
 import { useGCFormsContext } from "@lib/hooks/useGCFormContext";
 import { SaveResponse } from "@clientComponents/forms/SaveAndResume/SaveResponse";
 import { Language } from "@lib/types/form-builder-types";
+import { useFeatureFlags } from "@lib/hooks/useFeatureFlags";
+import { FeatureFlags } from "@lib/cache/types";
 
 /*
   This is the component for text pages within the form flow (start pages, end pages)
@@ -29,19 +31,25 @@ const PageContent = ({ formId, formRecord, pageText, urlQuery, language }: PageC
   const { t } = useTranslation("confirmation");
   const { submissionId } = useGCFormsContext();
 
+  const { getFlag } = useFeatureFlags();
+  const saveAndResumeEnabled = getFlag(FeatureFlags.saveAndResume);
+  const saveAndResume = formRecord?.saveAndResume && saveAndResumeEnabled;
+
   // Check if there's a custom text for the end page specified in the form's JSON config
   if (pageText && pageText !== undefined) {
     return (
       <>
         <input type="hidden" value={submissionId} name="submissionId" />
         <RichText className="confirmation">{pageText}</RichText>
-        <SaveResponse
-          submissionId={submissionId}
-          formId={formId}
-          formTitleEn={formRecord.form.titleEn}
-          formTitleFr={formRecord.form.titleFr}
-          language={language}
-        />
+        {saveAndResume && (
+          <SaveResponse
+            submissionId={submissionId}
+            formId={formId}
+            formTitleEn={formRecord.form.titleEn}
+            formTitleFr={formRecord.form.titleFr}
+            language={language}
+          />
+        )}
       </>
     );
   }
