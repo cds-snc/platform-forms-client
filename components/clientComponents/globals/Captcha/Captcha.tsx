@@ -17,7 +17,7 @@ export const Captcha = ({
   const router = useRouter();
 
   if (!hCaptchaSiteKey) {
-    logMessage.error("hCaptcha not loaded because hCaptchaSiteKey is not set");
+    logMessage.error("hCaptchaSiteKey is missing");
     return null;
   }
 
@@ -26,13 +26,14 @@ export const Captcha = ({
     try {
       const success = await verifyHCaptchaToken(token);
       if (!success) {
+        logMessage.info(`hCaptcha token denied`);
         router.push(`/${lang}/error`);
       } else {
         logMessage.info(`hCaptcha token verified`);
         successCb();
       }
     } catch (err) {
-      logMessage.error(`hCaptcha system error. Let user submit: ${err}`);
+      logMessage.error(`hCaptcha system error. Alowing user to submit. Error: ${err}`);
       successCb();
     }
   };

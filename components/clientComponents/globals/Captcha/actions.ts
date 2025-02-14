@@ -6,7 +6,7 @@ import { logMessage } from "@lib/logger";
 /**
  * Verifies the client hCaptcha token is valid using the hCaptcha API
  *
- * @param token Client captcha token to verify
+ * @param token captcha token to verify
  * @returns boolean true if the token is valid, false otherwise
  */
 export const verifyHCaptchaToken = async (token: string): Promise<boolean> => {
