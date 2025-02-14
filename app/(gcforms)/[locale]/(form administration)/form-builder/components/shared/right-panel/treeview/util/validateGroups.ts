@@ -33,11 +33,11 @@ export const canModifyNextAction = (
  * as this would lead to a broken flow.
  *
  * @param formGroups GroupsType
- * @param nextAction string
+ * @param currentGroupNextAction string
  * @returns boolean
  */
-export const canDeleteGroup = (formGroups: GroupsType, nextAction: string) => {
+export const canDeleteGroup = (formGroups: GroupsType, currentGroupNextAction: string) => {
   const reviewCount = _getNextActionReviewCount(formGroups);
 
-  return !(reviewCount <= 1 && nextAction === "review");
+  return !(reviewCount <= 1 && currentGroupNextAction === "review");
 };
