@@ -11,6 +11,7 @@ import { SaveNote } from "./SaveNote";
 import { toast } from "@formBuilder/components/shared/Toast";
 import { Checkbox } from "@formBuilder/components/shared/MultipleChoice";
 import { LockedSections } from "../treeview/types";
+import { canModifyNextAction } from "../treeview/util/validateGroups";
 
 const ExitIcon = () => {
   return (
@@ -34,6 +35,8 @@ export const SingleActionSelect = ({
   const id = useGroupStore((state) => state.id);
   const findParentGroup = useGroupStore((state) => state.findParentGroup);
   const setGroupNextAction = useGroupStore((state) => state.setGroupNextAction);
+  const getGroups = useGroupStore((state) => state.getGroups);
+
   const { t } = useTranslation(["form-builder", "common"]);
   const currentGroup = id;
   const [nextActionId, setNextActionId] = useState(nextAction);
@@ -51,7 +54,7 @@ export const SingleActionSelect = ({
       };
     }
 
-    return { label: item.name, value: key };
+    return { label: item.name, value: key, nextAction: item.nextAction };
   });
 
   // Filter out the current group
@@ -128,13 +131,21 @@ export const SingleActionSelect = ({
         <Button
           className="ml-0 px-4 py-1"
           onClick={() => {
-            if (item) {
-              const group = findParentGroup(String(item.id));
-              const parent = group?.index;
-              parent && setGroupNextAction(parent as string, nextActionId);
-            } else {
-              currentGroup && setGroupNextAction(currentGroup, nextActionId);
+            const group = item ? findParentGroup(String(item.id))?.index : currentGroup;
+
+            // Check if this nextAction can be set
+            if (
+              !canModifyNextAction(
+                getGroups() || {},
+                formGroups[group as string].nextAction,
+                nextActionId
+              )
+            ) {
+              toast.error(t("groups.cannotSetNextAction"));
+              return;
             }
+
+            setGroupNextAction(group as string, nextActionId);
 
             // Add a delay to allow group state to update calling for redraw
             setTimeout(() => {
