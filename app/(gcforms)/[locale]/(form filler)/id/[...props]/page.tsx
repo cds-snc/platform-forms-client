@@ -98,8 +98,7 @@ export default async function Page(props0: {
 
   // Confirmation
   // Note: We can look to remove this route in the future
-  // as we're now re-using re-render the form with the confirmation page content
-  // Keeping this for now to avoid any potential issues
+  // With save and resume enabled we will re-render the form vs have a confirmation page route
   if (step === "confirmation") {
     pageContent = (
       <div className={classes}>
