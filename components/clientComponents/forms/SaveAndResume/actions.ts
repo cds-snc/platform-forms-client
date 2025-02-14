@@ -1,10 +1,12 @@
 "use server";
 
-import { DownloadProgressHtml, type HTMLProps } from "@lib/saveAndResume/DownloadProgressHtml";
+import { DownloadProgressHtml } from "@lib/saveAndResume/DownloadProgressHtml";
+import { DownloadConfirmHtml } from "@lib/saveAndResume/DownloadConfirmHtml";
+import { type HTMLProps } from "@lib/saveAndResume/types";
 import { logMessage } from "@lib/logger";
 import { getOrigin } from "@lib/origin";
 
-export const generateDownloadProgressHtml = async (props: HTMLProps) => {
+export const generateDownloadHtml = async (props: HTMLProps) => {
   try {
     const formId = props.formId;
 
@@ -14,7 +16,19 @@ export const generateDownloadProgressHtml = async (props: HTMLProps) => {
 
     const renderToStaticMarkup = (await import("react-dom/server")).renderToStaticMarkup;
     const host = await getOrigin();
-    const html = DownloadProgressHtml({ ...props, host });
+
+    let html = DownloadProgressHtml({ ...props, host });
+    switch (props.type) {
+      case "confirm":
+        html = DownloadConfirmHtml({ ...props, host });
+        break;
+      case "progress":
+        html = DownloadProgressHtml({ ...props, host });
+        break;
+      default:
+        throw new Error(`Invalid type: ${props.type}`);
+    }
+
     return { data: renderToStaticMarkup(html) };
   } catch (error) {
     if (error instanceof Error) {

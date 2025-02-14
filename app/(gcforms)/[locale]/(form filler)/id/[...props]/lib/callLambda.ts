@@ -31,6 +31,14 @@ export const callLambda = async (
     if (response.FunctionError || !JSON.parse(payload).status) {
       throw new SubmissionApiError("Submission API could not process form response");
     }
+
+    const result = JSON.parse(payload);
+
+    if (result.status === true && result.submissionId) {
+      return result.submissionId;
+    }
+
+    return false;
   } catch (err) {
     logMessage.error(err as Error);
     throw new SubmissionApiError("Could not process request with Lambda Submission function");

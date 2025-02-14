@@ -17,7 +17,7 @@ export interface FormProps {
     validateForm: Validate["validateForm"];
     fallBack?: () => JSX.Element;
   }) => JSX.Element;
-  onSuccess: (id: string) => void;
+  onSuccess: (id: string, submissionId?: string) => void;
   children?: (JSX.Element | undefined)[] | null;
   t: TFunction;
   allowGrouping?: boolean | undefined;

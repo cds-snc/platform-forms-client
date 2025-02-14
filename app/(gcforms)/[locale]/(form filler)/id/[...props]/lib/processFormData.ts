@@ -88,14 +88,15 @@ export const processFormData = async (
       }
     }
     try {
-      await callLambda(
+      const result = await callLambda(
         form.id,
         fields,
         contentLanguage ? contentLanguage : "en",
         reqFields.securityAttribute ? (reqFields.securityAttribute as string) : "Protected A"
       );
+
       logMessage.info(`Response submitted for Form ID: ${form.id}`);
-      return true;
+      return result;
     } catch (err) {
       logMessage.info(`Attempted response submission for Form ID: ${form.id} failed`);
       logMessage.error(err as Error);
