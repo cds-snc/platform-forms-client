@@ -4,6 +4,7 @@ import { useTranslation } from "@i18n/client";
 import { RichText } from "@clientComponents/forms";
 import { getLocalizedProperty } from "@lib/utils";
 import { PublicFormRecord } from "@lib/types";
+import { useGCFormsContext } from "@lib/hooks/useGCFormContext";
 
 /*
   This is the component for text pages within the form flow (start pages, end pages)
@@ -20,10 +21,16 @@ interface PageContextProps {
 
 const PageContent = ({ pageText, urlQuery }: PageContextProps) => {
   const { t } = useTranslation("confirmation");
+  const { submissionId } = useGCFormsContext();
 
   // Check if there's a custom text for the end page specified in the form's JSON config
   if (pageText && pageText !== undefined) {
-    return <RichText className="confirmation">{pageText}</RichText>;
+    return (
+      <>
+        <input type="hidden" value={submissionId} name="submissionId" />
+        <RichText className="confirmation">{pageText}</RichText>
+      </>
+    );
   }
 
   // Otherwise, display the default confirmation text

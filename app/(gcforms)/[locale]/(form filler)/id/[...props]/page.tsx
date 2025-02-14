@@ -69,60 +69,69 @@ export default async function Page(props0: {
   const isAllowGrouping = allowGrouping();
 
   let isPastClosingDate = false;
-
   if (formRecord.closingDate) {
     isPastClosingDate = dateHasPast(Date.parse(formRecord.closingDate));
   }
 
+  let pageContent = null;
+  let dateModified = true;
+
+  // Closed page
   if (isPastClosingDate) {
-    return (
-      <FormDisplayLayout formRecord={formRecord}>
-        <ClosedPage language={language} formRecord={formRecord} />
-      </FormDisplayLayout>
-    );
+    pageContent = <ClosedPage language={language} formRecord={formRecord} />;
   }
 
   const { saveAndResume: saveAndResumeEnabled } = await getSomeFlags([FeatureFlags.saveAndResume]);
   const saveAndResume = formRecord?.saveAndResume && saveAndResumeEnabled;
 
+  // Resume form page
   if (saveAndResume && step === "resume") {
-    return (
-      <FormDisplayLayout formRecord={formRecord} dateModified={false}>
-        <ResumeForm
-          titleEn={formRecord.form.titleEn}
-          titleFr={formRecord.form.titleFr}
-          formId={formID}
-        />
-      </FormDisplayLayout>
+    dateModified = false;
+    pageContent = (
+      <ResumeForm
+        titleEn={formRecord.form.titleEn}
+        titleFr={formRecord.form.titleFr}
+        formId={formID}
+      />
     );
   }
 
-  // render text pages
+  // Confirmation
+  // Note: We can look to remove this route in the future
+  // as we're now re-using re-render the form with the confirmation page content
+  // Keeping this for now to avoid any potential issues
   if (step === "confirmation") {
-    return (
-      <FormDisplayLayout formRecord={formRecord}>
-        <div className={classes}>
-          <TextPage formRecord={formRecord} />
-        </div>
-      </FormDisplayLayout>
+    pageContent = (
+      <div className={classes}>
+        <TextPage formRecord={formRecord} />
+      </div>
+    );
+  }
+
+  // Form page
+  if (!pageContent) {
+    pageContent = (
+      <div className={classes}>
+        <FormDelayProvider>
+          <FormWrapper
+            header={
+              <>
+                <ClosingNotice language={language} closingDate={formRecord.closingDate} />
+                <h1>{formTitle}</h1>
+              </>
+            }
+            formRecord={formRecord}
+            currentForm={currentForm}
+            allowGrouping={isAllowGrouping}
+          />
+        </FormDelayProvider>
+      </div>
     );
   }
 
   return (
-    <FormDisplayLayout formRecord={formRecord}>
-      <div className={classes}>
-        <ClosingNotice language={language} closingDate={formRecord.closingDate} />
-        <h1>{formTitle}</h1>
-        <GCFormsProvider formRecord={formRecord}>
-          <FormDelayProvider>
-            <FormWrapper
-              formRecord={formRecord}
-              currentForm={currentForm}
-              allowGrouping={isAllowGrouping}
-            />
-          </FormDelayProvider>
-        </GCFormsProvider>
-      </div>
+    <FormDisplayLayout formRecord={formRecord} dateModified={dateModified}>
+      <GCFormsProvider formRecord={formRecord}>{pageContent}</GCFormsProvider>
     </FormDisplayLayout>
   );
 }

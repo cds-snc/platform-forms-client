@@ -45,6 +45,8 @@ interface GCFormsContextValueType {
   hasNextAction: (group: string) => boolean;
   isOffBoardSection: (group: string) => boolean;
   formRecord: PublicFormRecord;
+  submissionId: string | undefined;
+  setSubmissionId: (submissionId: string) => void;
   groupsCheck: (groupsFlag: boolean | undefined) => boolean;
   getGroupHistory: () => string[];
   pushIdToHistory: (groupId: string) => string[];
@@ -76,6 +78,7 @@ export const GCFormsProvider = ({
   const [matchedIds, setMatchedIds] = React.useState<string[]>([]);
   const [currentGroup, setCurrentGroup] = React.useState<string | null>(initialGroup);
   const [previousGroup, setPreviousGroup] = React.useState<string | null>(initialGroup);
+  const [submissionId, setSubmissionId] = React.useState<string | undefined>(undefined);
 
   const inputHistoryValues = getInputHistoryValues(
     (values.current || []) as FormValues,
@@ -206,6 +209,8 @@ export const GCFormsProvider = ({
     <GCFormsContext.Provider
       value={{
         formRecord,
+        submissionId,
+        setSubmissionId,
         updateValues,
         getValues,
         matchedIds,
@@ -244,6 +249,8 @@ export const useGCFormsContext = () => {
       getValues: () => {
         return;
       },
+      submissionId: undefined,
+      setSubmissionId: () => void 0,
       matchedIds: [""],
       filteredMatchedIds: [""],
       groups: {},
