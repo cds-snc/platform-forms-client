@@ -1,14 +1,11 @@
 {
+  "extends": "./tsconfig.json",
   "compilerOptions": {
-    "declaration": true,
-    "removeComments": true,
-    "skipLibCheck": true,
-    "strict": true,
-    "target": "ES2022",
-    "module": "NodeNext",
-    "moduleResolution": "NodeNext",
-    "outDir": "./dist/esm"
+    "module": "ESNext",
+    "outDir": "./dist/esm",
+    "declarationDir": "./dist/types/esm"
   },
-  "include": ["src"],
-  "exclude": ["node_modules", "dist"]
+  "include": [
+    "src/**/*"
+  ]
 }

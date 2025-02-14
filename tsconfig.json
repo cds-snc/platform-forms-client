@@ -1,9 +1,17 @@
 {
   "compilerOptions": {
-    "typeRoots": ["./types", "./node_modules/@types", "@testing-library/jest-dom"],
+    "typeRoots": [
+      "./types",
+      "./node_modules/@types",
+      "@testing-library/jest-dom"
+    ],
     "target": "es2020",
     "downlevelIteration": true,
-    "lib": ["dom", "dom.iterable", "esnext"],
+    "lib": [
+      "dom",
+      "dom.iterable",
+      "esnext"
+    ],
     "allowJs": true,
     "skipLibCheck": true,
     "strict": true,
@@ -17,19 +25,42 @@
     "jsx": "preserve",
     "baseUrl": ".",
     "paths": {
-      "@lib/*": ["lib/*"],
-      "@api/*": ["app/api/*"],
-      "@formBuilder/*": ["app/(gcforms)/[locale]/(form administration)/form-builder/*"],
-      "@serverComponents/*": ["components/serverComponents/*"],
-      "@clientComponents/*": ["components/clientComponents/*"],
-      "@jestFixtures/*": ["__fixtures__/*"],
-      "@jestUtils": ["__utils__"],
-      "@i18n": ["i18n"],
-      "@i18n/*": ["i18n/*"],
-      "@content/*": ["public/static/content/*"],
-      "@public/*": ["public/*"],
-      "@cdssnc/gcforms-types": ["packages/gcforms-types/src"],
-      "@gcforms/connectors": ["packages/connectors/src"]
+      "@lib/*": [
+        "lib/*"
+      ],
+      "@api/*": [
+        "app/api/*"
+      ],
+      "@formBuilder/*": [
+        "app/(gcforms)/[locale]/(form administration)/form-builder/*"
+      ],
+      "@serverComponents/*": [
+        "components/serverComponents/*"
+      ],
+      "@clientComponents/*": [
+        "components/clientComponents/*"
+      ],
+      "@jestFixtures/*": [
+        "__fixtures__/*"
+      ],
+      "@jestUtils": [
+        "__utils__"
+      ],
+      "@i18n": [
+        "i18n"
+      ],
+      "@i18n/*": [
+        "i18n/*"
+      ],
+      "@content/*": [
+        "public/static/content/*"
+      ],
+      "@public/*": [
+        "public/*"
+      ],
+      "@cdssnc/gcforms-types": [
+        "packages/gcforms-types/src"
+      ]
     },
     "incremental": true,
     "plugins": [

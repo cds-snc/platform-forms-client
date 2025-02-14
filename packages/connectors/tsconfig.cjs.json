@@ -1,14 +1,11 @@
 {
+  "extends": "./tsconfig.json",
   "compilerOptions": {
-    "declaration": true,
-    "removeComments": true,
-    "skipLibCheck": true,
-    "strict": true,
-    "target": "ES2022",
     "module": "CommonJS",
-    "moduleResolution": "Node",
-    "outDir": "./dist/cjs"
+    "outDir": "./dist/cjs",
+    "declarationDir": "./dist/types/cjs"
   },
-  "include": ["src"],
-  "exclude": ["node_modules", "dist"]
+  "include": [
+    "src/**/*"
+  ]
 }
