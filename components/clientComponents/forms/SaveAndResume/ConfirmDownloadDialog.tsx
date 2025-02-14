@@ -1,3 +1,5 @@
+"use client";
+
 import { useCallback, useState } from "react";
 import * as AlertDialog from "@radix-ui/react-alert-dialog";
 import { useTranslation } from "@i18n/client";
@@ -12,7 +14,7 @@ import { slugify } from "@lib/client/clientHelpers";
 import { getReviewItems } from "../Review/helpers";
 import { getStartLabels } from "@lib/utils/form-builder/i18nHelpers";
 
-import { generateDownloadProgressHtml } from "./actions";
+import { generateDownloadHtml } from "./actions";
 
 export type handleCloseType = (value: boolean) => void;
 
@@ -41,6 +43,7 @@ async function promptToSave(fileName: string, data: string) {
 
 export const ConfirmDownloadDialog = ({
   open,
+  type,
   handleClose,
   formId,
   formTitleEn,
@@ -48,6 +51,7 @@ export const ConfirmDownloadDialog = ({
   language,
 }: {
   open: boolean;
+  type: "confirm" | "progress";
   handleClose: handleCloseType;
   formId: string;
   formTitleEn: string;
@@ -73,6 +77,8 @@ export const ConfirmDownloadDialog = ({
     language,
   });
 
+  const tParent = type === "confirm" ? "saveResponse" : "saveAndResume";
+
   const handleSave = useCallback(async () => {
     try {
       setSaving(true);
@@ -81,14 +87,17 @@ export const ConfirmDownloadDialog = ({
 
       const fileName = `${slugify(title)}-${formId}.html`;
 
-      const html = await generateDownloadProgressHtml({
+      const options = {
         formTitle: title,
+        type,
         formId,
         reviewItems,
         formResponse: btoa(JSON.stringify(getProgressData())),
         language,
         startSectionTitle: getStartLabels()[language],
-      });
+      };
+
+      const html = await generateDownloadHtml(options);
 
       if (!html.data) {
         setSaving(false);
@@ -109,7 +118,7 @@ export const ConfirmDownloadDialog = ({
     } catch (error) {
       setSaving(false);
     }
-  }, [formId, formTitleEn, formTitleFr, getProgressData, language, reviewItems]);
+  }, [formId, type, formTitleEn, formTitleFr, getProgressData, language, reviewItems]);
 
   return (
     <AlertDialog.Root open={open}>
@@ -117,17 +126,17 @@ export const ConfirmDownloadDialog = ({
         <AlertDialog.Overlay className="fixed inset-0 z-[200] h-screen w-screen bg-gray-500/70" />
         <AlertDialog.Content className="fixed left-1/2 top-1/2 z-[201] w-full max-w-xl -translate-x-1/2 -translate-y-1/2 rounded-2xl bg-white p-4 shadow-2xl">
           <AlertDialog.Title className="text-2xl font-extrabold leading-tight">
-            {t("saveAndResume.prompt.title")}
+            {t(`${tParent}.prompt.title`)}
           </AlertDialog.Title>
           <AlertDialog.Description className="pb-6">
             <Markdown options={{ forceBlock: false }}>
-              {t("saveAndResume.prompt.description")}
+              {t(`${tParent}.prompt.description`)}
             </Markdown>
           </AlertDialog.Description>
           <div style={{ display: "flex", gap: 15, justifyContent: "flex-end" }}>
             <AlertDialog.Cancel asChild>
               <Button onClick={() => handleClose(false)} theme="secondary">
-                {t("saveAndResume.prompt.cancel")}
+                {t(`${tParent}.prompt.cancel`)}
               </Button>
             </AlertDialog.Cancel>
             <AlertDialog.Action asChild>
@@ -139,7 +148,7 @@ export const ConfirmDownloadDialog = ({
                 }}
                 theme="primary"
               >
-                {t("saveAndResume.prompt.okay")}
+                {t(`${tParent}.prompt.okay`)}
               </Button>
             </AlertDialog.Action>
           </div>

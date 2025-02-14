@@ -16,6 +16,7 @@ import { FormDelayProvider } from "@lib/hooks/useFormDelayContext";
 import { ResumeForm } from "@clientComponents/forms/ResumeForm/ResumeForm";
 import { getSomeFlags } from "@lib/cache/flags";
 import { FeatureFlags } from "@lib/cache/types";
+import { SaveResponse } from "@clientComponents/forms/SaveAndResume/SaveResponse";
 
 export async function generateMetadata(props0: {
   params: Promise<{ locale: string; props: string[] }>;
@@ -103,6 +104,12 @@ export default async function Page(props0: {
     pageContent = (
       <div className={classes}>
         <TextPage formRecord={formRecord} />
+        <SaveResponse
+          formId={formID}
+          formTitleEn={formRecord.form.titleEn}
+          formTitleFr={formRecord.form.titleFr}
+          language={language}
+        />
       </div>
     );
   }

@@ -1,12 +1,13 @@
+"use client";
+
 import { useState } from "react";
 import { useTranslation } from "@i18n/client";
 
 import { type Language } from "@lib/types/form-builder-types";
-import { SubmitButton as DownloadProgress } from "@clientComponents/globals/Buttons/SubmitButton";
+import { SubmitButton as DownloadConfirm } from "@clientComponents/globals/Buttons/SubmitButton";
 import { ConfirmDownloadDialog } from "./ConfirmDownloadDialog";
-import { SaveProgressIcon } from "@serverComponents/icons/SaveProgressIcon";
 
-export const SaveAndResume = ({
+export const SaveResponse = ({
   formId,
   formTitleEn,
   formTitleFr,
@@ -22,7 +23,7 @@ export const SaveAndResume = ({
 
   return (
     <div>
-      <DownloadProgress
+      <DownloadConfirm
         className="group"
         type="button"
         loading={confirm}
@@ -30,19 +31,11 @@ export const SaveAndResume = ({
         onClick={() => setConfirm(true)}
       >
         <>
-          <span className="hidden tablet:block">
-            {t("saveAndResume.saveBtn", { lng: language })}
-          </span>
-          <span className="block tablet:hidden">
-            <SaveProgressIcon
-              className="fill-[#2B4380] group-focus:fill-white group-active:fill-white"
-              title={t("saveAndResume.saveBtn", { lng: language })}
-            />
-          </span>
+          <span>{t("saveResponse.saveBtn", { lng: language })}</span>
         </>
-      </DownloadProgress>
+      </DownloadConfirm>
       <ConfirmDownloadDialog
-        type="progress"
+        type="confirm"
         formId={formId}
         formTitleEn={formTitleEn}
         formTitleFr={formTitleFr}

@@ -257,6 +257,26 @@
       }
     }
   },
+  "saveResponse": {
+    "saveBtn": "Download",
+    "saveBtnDescription": "Get a copy of your answers",
+    "prompt": {
+      "title": "Save to device",
+      "description": "Save a copy of your form answers.",
+      "okay": "Save to device",
+      "cancel": "Cancel"
+    },
+    "downloadHtml": {
+      "keepSafe": {
+        "title": "Keep your form safe",
+        "description": " Make sure to keep this file in a secure spot on your device."
+      },
+      "badge": {
+        "text": "Submitted",
+        "lastSaved": "Saved:  {{month}} {{day}}, {{year}}"
+      }
+    }
+  },
   "conditional": {
     "activated": "L'élément {{title}} a été ajouté au formulaire"
   }
