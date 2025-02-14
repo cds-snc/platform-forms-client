@@ -1219,8 +1219,8 @@
       "cancel": "No, move without changing rules",
       "confirm": "Yes, apply linear autoflow"
     },
-    "cannotDeleteGroup": "Cannot delete page as it will lead to a broken form",
-    "cannotSetNextAction": "Cannot set next action to exit as it will lead to a broken form"
+    "cannotDeleteGroup": "This page cannot be deleted as it would break the form logic.",
+    "cannotSetNextAction": "This page cannot go to an exit page as it would break the form logic"
   },
   "confirmation": {
     "title": "Your form has been submitted",
