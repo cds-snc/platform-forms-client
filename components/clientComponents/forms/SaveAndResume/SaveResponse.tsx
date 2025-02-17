@@ -12,15 +12,11 @@ export const SaveResponse = ({
   formTitleEn,
   formTitleFr,
   language,
-  submissionId,
-  submissionDate,
 }: {
   formId: string;
   formTitleEn: string;
   formTitleFr: string;
   language: Language;
-  submissionId?: string;
-  submissionDate?: string;
 }) => {
   const { t } = useTranslation(["review", "common"]);
   const [confirm, setConfirm] = useState(false);
@@ -41,8 +37,6 @@ export const SaveResponse = ({
       </DownloadConfirm>
       <ConfirmDownloadDialog
         type="confirm"
-        submissionId={submissionId}
-        submissionDate={submissionDate}
         formId={formId}
         formTitleEn={formTitleEn}
         formTitleFr={formTitleFr}

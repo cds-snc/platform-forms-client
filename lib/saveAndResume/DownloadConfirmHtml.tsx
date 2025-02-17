@@ -16,7 +16,7 @@ export const DownloadConfirmHtml = ({
   startSectionTitle,
   host,
   submissionId,
-  submittedDate,
+  submissionDate,
 }: HTMLProps) => {
   const formData = JSON.stringify({
     data: formResponse,
@@ -58,7 +58,7 @@ export const DownloadConfirmHtml = ({
               <div className="mb-14">
                 <SubmittedBadge
                   submissionId={submissionId}
-                  submittedDate={submittedDate}
+                  submissionDate={submissionDate}
                   language={language}
                 />
               </div>

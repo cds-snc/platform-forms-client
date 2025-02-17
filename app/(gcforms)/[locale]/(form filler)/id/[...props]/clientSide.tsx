@@ -31,7 +31,7 @@ export const FormWrapper = ({
     t,
     i18n: { language },
   } = useTranslation(["common", "confirmation", "form-closed"]);
-  const { saveSessionProgress, setSubmissionId, submissionId, setSubmissionDate } =
+  const { saveSessionProgress, setSubmissionId, submissionId, submissionDate, setSubmissionDate } =
     useGCFormsContext();
 
   const { getFlag } = useFeatureFlags();
@@ -68,7 +68,7 @@ export const FormWrapper = ({
   const initialValues = values ? values : undefined;
 
   // Show confirmation page if submissionId is present
-  if (submissionId) {
+  if (submissionId && submissionDate) {
     return (
       <div className="gc-form-wrapper">
         <TextPage formId={formRecord.id} formRecord={formRecord} />
@@ -87,7 +87,8 @@ export const FormWrapper = ({
           // Set submissionId in context
           // which will trigger confirmation page content to render
           submissionId && setSubmissionId(submissionId);
-          setSubmissionDate(new Date().getTime().toString());
+          const submissionDate = new Date().toISOString();
+          setSubmissionDate(submissionDate);
 
           if (!saveAndResume || process.env.APP_ENV === "test") {
             // Redirect to confirmation page if save and resume is not enabled

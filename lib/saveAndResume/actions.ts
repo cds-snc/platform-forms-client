@@ -17,7 +17,6 @@ export const generateDownloadHtml = async (props: HTMLProps) => {
 
     const { getOrigin } = await import("@lib/origin");
     const host = await getOrigin();
-
     let html = DownloadProgressHtml({ ...props, host });
     switch (props.type) {
       case "confirm":

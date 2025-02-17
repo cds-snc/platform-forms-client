@@ -40,6 +40,7 @@ const PageContent = ({ formId, formRecord, pageText, urlQuery, language }: PageC
     return (
       <>
         <input type="hidden" value={submissionId} name="submissionId" />
+        <input type="hidden" value={submissionDate} name="submissionDate" />
         <RichText className="confirmation">{pageText}</RichText>
         {saveAndResume && (
           <SaveResponse
@@ -47,8 +48,6 @@ const PageContent = ({ formId, formRecord, pageText, urlQuery, language }: PageC
             formTitleEn={formRecord.form.titleEn}
             formTitleFr={formRecord.form.titleFr}
             language={language}
-            submissionId={submissionId}
-            submissionDate={submissionDate}
           />
         )}
       </>

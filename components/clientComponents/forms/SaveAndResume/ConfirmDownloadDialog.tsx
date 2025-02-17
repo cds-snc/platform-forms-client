@@ -49,8 +49,6 @@ export const ConfirmDownloadDialog = ({
   formTitleEn,
   formTitleFr,
   language,
-  submissionId,
-  submissionDate,
 }: {
   open: boolean;
   type: "confirm" | "progress";
@@ -59,13 +57,19 @@ export const ConfirmDownloadDialog = ({
   formTitleEn: string;
   formTitleFr: string;
   language: Language;
-  submissionId?: string;
-  submissionDate?: string;
 }) => {
   const { t } = useTranslation("form-builder");
 
-  const { groups, getValues, formRecord, getGroupHistory, matchedIds, getProgressData } =
-    useGCFormsContext();
+  const {
+    groups,
+    getValues,
+    formRecord,
+    getGroupHistory,
+    matchedIds,
+    getProgressData,
+    submissionId,
+    submissionDate,
+  } = useGCFormsContext();
   const [saving, setSaving] = useState(false);
 
   const formValues: void | FormValues = getValues();

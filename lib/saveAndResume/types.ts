@@ -11,5 +11,5 @@ export interface HTMLProps {
   reviewItems: ReviewSection[];
   startSectionTitle: string;
   submissionId?: string;
-  submittedDate?: string;
+  submissionDate?: string;
 }

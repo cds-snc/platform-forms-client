@@ -5,16 +5,32 @@ import { formClosingDateEst as utcToEst } from "lib/utils/date/utcToEst";
 export const SubmittedBadge = ({
   language,
   submissionId,
-  submittedDate,
+  submissionDate,
 }: {
   language: Language;
   submissionId?: string;
-  submittedDate?: string;
+  submissionDate?: string;
 }) => {
   const { t } = customTranslate("common");
-  const { month, day, year } = utcToEst(new Date().toISOString(), language);
 
-  if (!submittedDate) {
+  let month = "";
+  let day = "";
+  let year = "";
+
+  try {
+    const dates = (submissionDate && utcToEst(submissionDate, language)) || {
+      month: "",
+      day: "",
+      year: "",
+    };
+    month = dates.month || "";
+    day = dates.day || "";
+    year = dates.year || "";
+  } catch (e) {
+    // noop
+  }
+
+  if (!month || !day || !year) {
     return null;
   }
 
