@@ -5,6 +5,30 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.33.0](https://github.com/cds-snc/platform-forms-client/compare/v3.32.2...v3.33.0) (2025-02-17)
+
+
+### Features
+
+* adds feature flags for hCaptcha ([#5124](https://github.com/cds-snc/platform-forms-client/issues/5124)) ([d966e8e](https://github.com/cds-snc/platform-forms-client/commit/d966e8e5d6a6f8782bca8f538338808537b8f206))
+* handle dynamic content case by case ([#4905](https://github.com/cds-snc/platform-forms-client/issues/4905)) ([3d86646](https://github.com/cds-snc/platform-forms-client/commit/3d8664614cfec4b0e5d159b9a179daee934fb84f))
+* Save and Resume progress (featured flagged) ([#5069](https://github.com/cds-snc/platform-forms-client/issues/5069)) ([24c16c0](https://github.com/cds-snc/platform-forms-client/commit/24c16c00427862d10508a03ce28beb541422af67))
+
+
+### Bug Fixes
+
+* Don't run date validation if entry has been cleared ([#5127](https://github.com/cds-snc/platform-forms-client/issues/5127)) ([00bb889](https://github.com/cds-snc/platform-forms-client/commit/00bb88955203dcef04fb7c2cd99d429e7718741f))
+* Filter out richText elements from repeatingSet arrays when mapping responses/questions ([#5113](https://github.com/cds-snc/platform-forms-client/issues/5113)) ([0a12bc4](https://github.com/cds-snc/platform-forms-client/commit/0a12bc4e463265f65e0736e78056f9746fd30e1d))
+* Pass lang prop into formattedDate component ([#5106](https://github.com/cds-snc/platform-forms-client/issues/5106)) ([4f1a31f](https://github.com/cds-snc/platform-forms-client/commit/4f1a31f1ff0067aa64f3ee6ac7c16187f1a5164e))
+
+
+### Miscellaneous Chores
+
+* Add check for save and resume setting at the form level ([#5108](https://github.com/cds-snc/platform-forms-client/issues/5108)) ([db0de61](https://github.com/cds-snc/platform-forms-client/commit/db0de6129b0135b2c7862252e0fede76c3d51ea3))
+* Add manage save and resume to manage forms ([#5107](https://github.com/cds-snc/platform-forms-client/issues/5107)) ([571bf5e](https://github.com/cds-snc/platform-forms-client/commit/571bf5e0f01a4ab2f8eaffe72adb458d5d796ce7))
+* Add nfb email to valid ([#5117](https://github.com/cds-snc/platform-forms-client/issues/5117)) ([20a6ffe](https://github.com/cds-snc/platform-forms-client/commit/20a6ffeefd0c5cec5a510c2cd1c850e7f2311594))
+* AddressComplete use form values and customTranslate ([#5104](https://github.com/cds-snc/platform-forms-client/issues/5104)) ([5038103](https://github.com/cds-snc/platform-forms-client/commit/5038103280edbd6f790ccb1124a369b945e380d2))
+
 ## [3.32.2](https://github.com/cds-snc/platform-forms-client/compare/v3.32.1...v3.32.2) (2025-02-07)
 
 
