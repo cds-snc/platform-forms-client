@@ -119,7 +119,6 @@ export const FormWrapper = ({
       {saveAndResume && (
         <ToastContainer limit={1} autoClose={5000} containerId="public-facing-form" />
       )}
-      <div className="mt-6">aha</div>
     </>
   );
 };
