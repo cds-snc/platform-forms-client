@@ -144,6 +144,14 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
         </Alert>
       )}
 
+      {captchaEnabled && (
+        <Captcha
+          hCaptchaRef={hCaptchaRef}
+          lang={language}
+          hCaptchaSiteKey={props.hCaptchaSiteKey}
+        />
+      )}
+
       {
         <>
           {showIntro && (
@@ -176,11 +184,14 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
               if (isGroupsCheck && isShowReviewPage && currentGroup !== LockedSections.REVIEW) {
                 return;
               }
+
               if (captchaEnabled) {
+                // Let hCaptcha run in the background for now
                 hCaptchaRef.current?.execute();
-              } else {
-                handleSubmit(e);
               }
+
+              // TODO: Something in handleSubmit is causing the above to fail and it requires a big timeout to work
+              setTimeout(() => handleSubmit(e), 1000);
             }}
             noValidate
           >
@@ -231,14 +242,6 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
               />
             </FormActions>
           </form>
-          {captchaEnabled && (
-            <Captcha
-              successCb={handleSubmit}
-              hCaptchaRef={hCaptchaRef}
-              lang={language}
-              hCaptchaSiteKey={props.hCaptchaSiteKey}
-            />
-          )}
         </>
       }
     </>

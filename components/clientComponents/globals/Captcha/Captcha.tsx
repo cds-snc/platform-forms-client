@@ -1,7 +1,6 @@
 import HCaptcha from "@hcaptcha/react-hcaptcha";
 import { logMessage } from "@lib/logger";
 import { verifyHCaptchaToken } from "./actions";
-import { useRouter } from "next/navigation";
 
 export const Captcha = ({
   successCb,
@@ -9,15 +8,13 @@ export const Captcha = ({
   lang,
   hCaptchaSiteKey,
 }: {
-  successCb: () => void;
+  successCb?: () => void;
   hCaptchaRef: React.RefObject<HCaptcha | null>;
   lang: string;
   hCaptchaSiteKey: string | undefined;
 }) => {
-  const router = useRouter();
-
   if (!hCaptchaSiteKey) {
-    logMessage.error("hCaptchaSiteKey is missing");
+    logMessage.error("hCaptcha: hCaptchaSiteKey is missing");
     return null;
   }
 
@@ -25,32 +22,27 @@ export const Captcha = ({
   const verify = async (token: string) => {
     try {
       const success = await verifyHCaptchaToken(token);
-      if (!success) {
-        logMessage.info(`hCaptcha token denied`);
-        router.push(`/${lang}/error`);
-      } else {
-        logMessage.info(`hCaptcha token verified`);
+      if (success && typeof successCb === "function") {
         successCb();
       }
     } catch (err) {
-      logMessage.error(`hCaptcha system error. Alowing user to submit. Error: ${err}`);
-      successCb();
+      logMessage.error(`hCaptcha: system error: ${err}`);
     }
   };
 
   // Component will reset immediately after an error.
   // See https://docs.hcaptcha.com/#siteverify-error-codes-table
   const clientComponentError = (code: string) => {
-    logMessage.error(`clientComponentError error: ${code}`);
+    logMessage.error(`hCatpcha: clientComponentError error. Error: ${code}`);
   };
 
   const tokenExpired = () => {
-    logMessage.info("hCaptcha token expired");
+    logMessage.info("hCaptcha: token expired");
     hCaptchaRef.current?.resetCaptcha();
   };
 
   const challengeExpired = () => {
-    logMessage.info("hCaptcha challenge expired");
+    logMessage.info("hCaptcha: challenge expired");
     hCaptchaRef.current?.resetCaptcha();
   };
 

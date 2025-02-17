@@ -36,11 +36,24 @@ export const verifyHCaptchaToken = async (token: string): Promise<boolean> => {
   // See https://docs.hcaptcha.com/#siteverify-error-codes-table
   const captchaData: { success: boolean; score: number; "error-codes"?: string[] } = result.data;
   if (captchaData && captchaData["error-codes"]) {
-    logMessage.error(`hCaptcha Client error: ${JSON.stringify(captchaData["error-codes"])}`);
+    logMessage.error(
+      `hCaptcha: client error. Error: ${JSON.stringify(captchaData["error-codes"])}`
+    );
     return false;
   }
 
-  return checkIfVerified(captchaData.success, captchaData.score);
+  const verified = checkIfVerified(captchaData.success, captchaData.score);
+  if (!verified) {
+    logMessage.info(
+      `hCaptcha: failed verification. Success=${captchaData.success}, Score=${captchaData.score}`
+    );
+    return false;
+  }
+
+  logMessage.info(
+    `hCaptcha: passed verification. Success=${captchaData.success}, Score=${captchaData.score}`
+  );
+  return true;
 };
 
 // Looks at the success and score to determine a pass or fail. We can tweak the score over time.
@@ -56,7 +69,7 @@ const checkIfVerified = (success: boolean, score: number) => {
   }
   if (!success) {
     // Token is expired or invalid
-    throw new Error("Token is expired or invalid");
+    throw new Error("hCaptcha: token is expired or invalid");
   }
   // Verified success
   return true;
