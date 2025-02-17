@@ -1,6 +1,6 @@
 "use client";
 import React from "react";
-import { DownloadProgressHtml } from "./DownloadProgressHtml";
+import { DownloadConfirmHtml } from "./DownloadConfirmHtml";
 
 import { formResponse, reviewItems } from "./fixtures/data";
 
@@ -8,8 +8,8 @@ describe("<DownloadProgressHtml />", () => {
   describe("DownloadProgressHtml", () => {
     it("Renders a DownloadProgressHtml", () => {
       cy.mount(
-        <DownloadProgressHtml
-          type="progress"
+        <DownloadConfirmHtml
+          type="confirm"
           formResponse={formResponse}
           reviewItems={reviewItems}
           language={"en"}

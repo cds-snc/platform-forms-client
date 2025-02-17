@@ -58,11 +58,13 @@ export const DownloadProgressHtml = ({
               </div>
               <h1>{formTitle}</h1>
               <NextSteps language={language} host={host || ""} formId={formId} />
-              <ReviewList
-                reviewItems={reviewItems}
-                language={language}
-                startSectionTitle={startSectionTitle}
-              />
+              <div className="mb-10" data-testid="review-list">
+                <ReviewList
+                  reviewItems={reviewItems}
+                  language={language}
+                  startSectionTitle={startSectionTitle}
+                />
+              </div>
             </div>
           </main>
         </div>
