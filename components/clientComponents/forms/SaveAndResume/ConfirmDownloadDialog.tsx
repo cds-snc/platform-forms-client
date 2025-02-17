@@ -13,6 +13,7 @@ import { useGCFormsContext } from "@lib/hooks/useGCFormContext";
 import { slugify } from "@lib/client/clientHelpers";
 import { getReviewItems } from "../Review/helpers";
 import { getStartLabels } from "@lib/utils/form-builder/i18nHelpers";
+import { toast } from "@formBuilder/components/shared/Toast";
 
 import { generateDownloadHtml } from "@lib/saveAndResume/actions";
 
@@ -86,6 +87,7 @@ export const ConfirmDownloadDialog = ({
   });
 
   const tParent = type === "confirm" ? "saveResponse" : "saveAndResume";
+  const generateHtmlError = t("errorPanel.defaultTitle", { lng: language, ns: "common" });
 
   const handleSave = useCallback(async () => {
     try {
@@ -109,7 +111,7 @@ export const ConfirmDownloadDialog = ({
 
       const html = await generateDownloadHtml(options);
 
-      if (!html.data) {
+      if (!html.data || html.data === "") {
         setSaving(false);
         throw new Error("Error generating download progress html");
       }
@@ -127,6 +129,7 @@ export const ConfirmDownloadDialog = ({
       setSaving(false);
     } catch (error) {
       setSaving(false);
+      toast.error(generateHtmlError, "public-facing-form");
     }
   }, [
     formId,
@@ -138,6 +141,7 @@ export const ConfirmDownloadDialog = ({
     reviewItems,
     submissionId,
     submissionDate,
+    generateHtmlError,
   ]);
 
   return (
