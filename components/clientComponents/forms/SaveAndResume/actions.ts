@@ -4,7 +4,6 @@ import { DownloadProgressHtml } from "@lib/saveAndResume/DownloadProgressHtml";
 import { DownloadConfirmHtml } from "@lib/saveAndResume/DownloadConfirmHtml";
 import { type HTMLProps } from "@lib/saveAndResume/types";
 import { logMessage } from "@lib/logger";
-import { getOrigin } from "@lib/origin";
 
 export const generateDownloadHtml = async (props: HTMLProps) => {
   try {
@@ -15,6 +14,9 @@ export const generateDownloadHtml = async (props: HTMLProps) => {
     }
 
     const renderToStaticMarkup = (await import("react-dom/server")).renderToStaticMarkup;
+
+    const { getOrigin } = await import("@lib/origin");
+
     const host = await getOrigin();
 
     let html = DownloadProgressHtml({ ...props, host });
