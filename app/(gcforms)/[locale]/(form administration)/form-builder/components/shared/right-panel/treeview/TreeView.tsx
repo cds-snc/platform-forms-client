@@ -38,6 +38,7 @@ import { isTitleElementType } from "./util/itemType";
 import { useAutoFlowIfNoCustomRules } from "@lib/hooks/useAutoFlowAll";
 import { useTemplateStore } from "@lib/store/useTemplateStore";
 import { useUpdateGroupLayout } from "./util/useUpdateGroupLayout";
+import { canDeleteGroup } from "./util/validateGroups";
 
 export interface TreeDataProviderProps {
   children?: ReactElement;
@@ -200,6 +201,12 @@ const ControlledTree: ForwardRefRenderFunction<unknown, TreeDataProviderProps> =
                   ? undefined
                   : async (e) => {
                       e.stopPropagation();
+                      // Check if this group can be deleted
+                      if (!canDeleteGroup(getGroups() || {}, item.data.nextAction)) {
+                        toast.error(t("groups.cannotDeleteGroup"));
+                        return;
+                      }
+
                       setOpenConfirmDeleteDialog(true);
                       const confirm = await getConfirmDeletePromise();
                       if (confirm) {
