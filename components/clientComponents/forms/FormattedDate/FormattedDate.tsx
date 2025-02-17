@@ -67,11 +67,16 @@ export const FormattedDate = (props: FormattedDateProps): React.ReactElement => 
     }
   }, [dateObject, helpers]);
 
+  const unsetDate = () => setDateObject(null);
+
   const setSelectedYear = (year: string) =>
     setDateObject((prev) => {
       const newObj = { ...prev };
       if (year === "") {
         delete newObj.YYYY;
+        if (!newObj.MM && !newObj.DD) {
+          unsetDate();
+        }
       } else {
         newObj.YYYY = Number(year);
       }
@@ -83,6 +88,9 @@ export const FormattedDate = (props: FormattedDateProps): React.ReactElement => 
       const newObj = { ...prev };
       if (month === "") {
         delete newObj.MM;
+        if (!newObj.YYYY && !newObj.DD) {
+          unsetDate();
+        }
       } else {
         newObj.MM = Number(month);
       }
@@ -93,6 +101,9 @@ export const FormattedDate = (props: FormattedDateProps): React.ReactElement => 
     setDateObject((prev) => {
       const newObj = { ...prev };
       if (day === "") {
+        if (!newObj.YYYY && !newObj.MM) {
+          unsetDate();
+        }
         delete newObj.DD;
       } else {
         newObj.DD = Number(day);
