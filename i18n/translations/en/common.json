@@ -243,8 +243,8 @@
       "nextSteps": {
         "title": "What to do next - ",
         "resumeBox": {
-          "title": "Resume your form",
-          "description": "<a class='underline' href='{{formLink}}'>Upload this file</a> to complete and submit your form"
+          "title": "Resume completing form",
+          "description": "Upload this file to complete and submit your form"
         }
       },
       "keepSafe": {

@@ -7,7 +7,7 @@ export const InProgressBadge = ({ language }: { language: Language }) => {
   const { month, day, year } = utcToEst(new Date().toISOString(), language);
   return (
     <div data-testid="in-progress-badge">
-      <div className="mr-4 inline-block max-w-fit rounded-lg bg-gcds-green-100 px-4 py-2">
+      <div className="mr-4 inline-block max-w-fit rounded-lg bg-violet-50 px-4 py-2">
         {t("saveAndResume.downloadProgressHtml.badge.text", {
           lng: language,
         })}
