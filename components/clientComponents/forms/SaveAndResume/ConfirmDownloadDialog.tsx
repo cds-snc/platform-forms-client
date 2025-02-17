@@ -50,6 +50,7 @@ export const ConfirmDownloadDialog = ({
   formTitleFr,
   language,
   submissionId,
+  submissionDate,
 }: {
   open: boolean;
   type: "confirm" | "progress";
@@ -59,6 +60,7 @@ export const ConfirmDownloadDialog = ({
   formTitleFr: string;
   language: Language;
   submissionId?: string;
+  submissionDate?: string;
 }) => {
   const { t } = useTranslation("form-builder");
 
@@ -98,6 +100,7 @@ export const ConfirmDownloadDialog = ({
         language,
         startSectionTitle: getStartLabels()[language],
         submissionId,
+        submissionDate,
       };
 
       const html = await generateDownloadHtml(options);
@@ -121,7 +124,17 @@ export const ConfirmDownloadDialog = ({
     } catch (error) {
       setSaving(false);
     }
-  }, [formId, type, formTitleEn, formTitleFr, getProgressData, language, reviewItems]);
+  }, [
+    formId,
+    type,
+    formTitleEn,
+    formTitleFr,
+    getProgressData,
+    language,
+    reviewItems,
+    submissionId,
+    submissionDate,
+  ]);
 
   return (
     <AlertDialog.Root open={open}>

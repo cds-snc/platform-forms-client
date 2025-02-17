@@ -29,7 +29,7 @@ interface PageContextProps {
 
 const PageContent = ({ formId, formRecord, pageText, urlQuery, language }: PageContextProps) => {
   const { t } = useTranslation("confirmation");
-  const { submissionId } = useGCFormsContext();
+  const { submissionId, submissionDate } = useGCFormsContext();
 
   const { getFlag } = useFeatureFlags();
   const saveAndResumeEnabled = getFlag(FeatureFlags.saveAndResume);
@@ -43,11 +43,12 @@ const PageContent = ({ formId, formRecord, pageText, urlQuery, language }: PageC
         <RichText className="confirmation">{pageText}</RichText>
         {saveAndResume && (
           <SaveResponse
-            submissionId={submissionId}
             formId={formId}
             formTitleEn={formRecord.form.titleEn}
             formTitleFr={formRecord.form.titleFr}
             language={language}
+            submissionId={submissionId}
+            submissionDate={submissionDate}
           />
         )}
       </>
