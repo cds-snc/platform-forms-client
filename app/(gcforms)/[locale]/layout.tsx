@@ -12,6 +12,8 @@ export default async function Layout({ children }: { children: React.ReactNode }
     FeatureFlags.scheduleClosingDate,
     FeatureFlags.apiAccess,
     FeatureFlags.saveAndResume,
+    FeatureFlags.formTimer,
+    FeatureFlags.hCaptcha,
   ]);
 
   return (
