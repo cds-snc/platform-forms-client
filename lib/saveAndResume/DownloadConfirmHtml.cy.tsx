@@ -18,7 +18,7 @@ describe("<DownloadProgressHtml />", () => {
           formTitle="test"
           startSectionTitle="start"
           submissionId="123"
-          submittedDate={Date.now().toString()}
+          submissionDate={new Date().toISOString()}
         />
       );
 
