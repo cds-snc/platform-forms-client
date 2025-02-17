@@ -3,12 +3,13 @@ import { type Language } from "@lib/types/form-builder-types";
 
 export interface HTMLProps {
   language: Language;
+  host?: string;
+  type: "confirm" | "progress";
   formTitle: string;
   formId: string;
   formResponse: string;
   reviewItems: ReviewSection[];
   startSectionTitle: string;
   submissionId?: string;
-  host?: string;
-  type: "confirm" | "progress";
+  submittedDate?: string;
 }

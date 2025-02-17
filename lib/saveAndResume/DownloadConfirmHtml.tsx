@@ -16,6 +16,7 @@ export const DownloadConfirmHtml = ({
   startSectionTitle,
   host,
   submissionId,
+  submittedDate,
 }: HTMLProps) => {
   const formData = JSON.stringify({
     data: formResponse,
@@ -55,15 +56,21 @@ export const DownloadConfirmHtml = ({
             />
             <div>
               <div className="mb-14">
-                <SubmittedBadge submissionId={submissionId} language={language} />
+                <SubmittedBadge
+                  submissionId={submissionId}
+                  submittedDate={submittedDate}
+                  language={language}
+                />
               </div>
               <h1>{formTitle}</h1>
               <KeepSafe language={language} />
-              <ReviewList
-                reviewItems={reviewItems}
-                language={language}
-                startSectionTitle={startSectionTitle}
-              />
+              <div className="mb-10" data-testid="review-list">
+                <ReviewList
+                  reviewItems={reviewItems}
+                  language={language}
+                  startSectionTitle={startSectionTitle}
+                />
+              </div>
             </div>
           </main>
         </div>

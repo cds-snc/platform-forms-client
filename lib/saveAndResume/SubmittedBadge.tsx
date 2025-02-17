@@ -5,14 +5,21 @@ import { formClosingDateEst as utcToEst } from "lib/utils/date/utcToEst";
 export const SubmittedBadge = ({
   language,
   submissionId,
+  submittedDate,
 }: {
   language: Language;
   submissionId?: string;
+  submittedDate?: string;
 }) => {
   const { t } = customTranslate("common");
   const { month, day, year } = utcToEst(new Date().toISOString(), language);
+
+  if (!submittedDate) {
+    return null;
+  }
+
   return (
-    <div>
+    <div data-testid="submitted-badge">
       <div className="mr-4 inline-block max-w-fit rounded-lg bg-gcds-green-100 px-4 py-2">
         <div>
           <span className="font-bold">

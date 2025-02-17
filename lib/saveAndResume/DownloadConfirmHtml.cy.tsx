@@ -17,10 +17,12 @@ describe("<DownloadProgressHtml />", () => {
           formId={"123"}
           formTitle="test"
           startSectionTitle="start"
+          submissionId="123"
+          submittedDate={Date.now().toString()}
         />
       );
 
-      cy.get("[data-testid='in-progress-badge']").should("be.visible");
+      cy.get("[data-testid='submitted-badge']").should("be.visible");
 
       cy.get("[data-testid='review-list']")
         .should("be.visible")
