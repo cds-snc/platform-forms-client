@@ -1218,7 +1218,9 @@
       "description": " Il semble que des éléments déplacés comportent des règles d'affichage ou d'embranchement. Souhaitez-vous remplacer ces règles par un enchaînement linéaire automatique?",
       "cancel": "Non, déplacer sans modifier les règles",
       "confirm": "Oui, appliquer un enchaînement linéaire"
-    }
+    },
+    "cannotDeleteGroup": "Cette page ne peut pas être supprimée car cela briserait la logique du formulaire.",
+    "cannotSetNextAction": "Cette page ne peut pas aller à une page de sortie car cela briserait la logique du formulaire."
   },
   "confirmation": {
     "title": "Votre formulaire a été soumis",
