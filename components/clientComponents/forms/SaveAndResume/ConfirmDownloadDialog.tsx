@@ -14,7 +14,7 @@ import { slugify } from "@lib/client/clientHelpers";
 import { getReviewItems } from "../Review/helpers";
 import { getStartLabels } from "@lib/utils/form-builder/i18nHelpers";
 
-import { generateDownloadHtml } from "./actions";
+import { generateDownloadHtml } from "@lib/saveAndResume/actions";
 
 export type handleCloseType = (value: boolean) => void;
 

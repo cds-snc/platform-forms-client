@@ -16,7 +16,6 @@ export const generateDownloadHtml = async (props: HTMLProps) => {
     const renderToStaticMarkup = (await import("react-dom/server")).renderToStaticMarkup;
 
     const { getOrigin } = await import("@lib/origin");
-
     const host = await getOrigin();
 
     let html = DownloadProgressHtml({ ...props, host });
