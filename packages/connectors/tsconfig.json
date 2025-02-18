@@ -7,7 +7,7 @@
     "outDir": "./dist",
     "strict": true,
     "esModuleInterop": true,
-    "typeRoots": ["./src/@types"],
+    "typeRoots": ["./node_modules/@types"],
     "moduleResolution": "node"
   },
   "include": ["src"],
