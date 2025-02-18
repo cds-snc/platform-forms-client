@@ -243,8 +243,8 @@
       "nextSteps": {
         "title": "What to do next - [FR]",
         "resumeBox": {
-          "title": "Resume your form [FR]",
-          "description": "<a class='underline' href='{{formLink}}'>Upload this file</a> to complete and submit your form [FR]"
+          "title": "Resume completing form [FR]",
+          "description": "Upload this file to complete and submit your form [FR]"
         }
       },
       "keepSafe": {
@@ -254,6 +254,26 @@
       "badge": {
         "text": "In - Progress [FR]",
         "lastSaved": "Saved:  {{month}} {{day}}, {{year}}"
+      }
+    }
+  },
+  "saveResponse": {
+    "saveBtn": "Download",
+    "saveBtnDescription": "Get a copy of your answers",
+    "prompt": {
+      "title": "Save to device",
+      "description": "Save a copy of your form answers.",
+      "okay": "Save to device",
+      "cancel": "Cancel"
+    },
+    "downloadHtml": {
+      "keepSafe": {
+        "description": " Make sure to keep this file in a secure spot on your device."
+      },
+      "badge": {
+        "text": "Submitted on ",
+        "lastSaved": "{{month}} {{day}}, {{year}}",
+        "submissionId": "Submission ID: {{submissionId}}"
       }
     }
   },

@@ -14,30 +14,23 @@ export const NextSteps = ({
   const formLink = `${host}/${language}/id/${formId}/resume`;
   return (
     <>
-      <div className="mb-10 rounded-lg bg-gcds-green-100 p-4">
+      <div className="mb-10 rounded-lg bg-violet-50 p-4">
         <h2 className="!mb-4 !text-2xl font-bold underline">
           {t("saveAndResume.downloadProgressHtml.nextSteps.title", { lng: language })}
         </h2>
-        <div className="grid grid-cols-2 gap-28">
+        <div className="grid grid-cols-2 gap-4 tablet:gap-28">
           <div>
-            <div className="mb-4 rounded-lg border-2 border-slate-400 p-4">
+            <a
+              href={formLink}
+              className="mb-4 block rounded-lg border-2 border-slate-400 p-4 !no-underline"
+            >
               <h3 className="!mb-2 !text-2xl font-bold">
                 {t("saveAndResume.downloadProgressHtml.nextSteps.resumeBox.title", {
                   lng: language,
                 })}
               </h3>
-              <p
-                dangerouslySetInnerHTML={{
-                  __html: t("saveAndResume.downloadProgressHtml.nextSteps.resumeBox.description", {
-                    lng: language,
-                    formLink,
-                    interpolation: {
-                      escapeValue: false,
-                    },
-                  }),
-                }}
-              ></p>
-            </div>
+              <p>{t("saveAndResume.downloadProgressHtml.nextSteps.resumeBox.description")}</p>
+            </a>
           </div>
           <div>
             <h3 className="!my-6 !text-2xl font-bold">
