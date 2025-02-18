@@ -40,6 +40,8 @@ export const Captcha = ({
   // See https://docs.hcaptcha.com/#siteverify-error-codes-table
   const clientComponentError = (code: string) => {
     logMessage.error(`hCatpcha: clientComponentError error. Error: ${code}`);
+    // TODO: This error (almost?) always happens when the user has tamperred with the data in some
+    // way. Do we want to show an error or just fail silently?
   };
 
   const tokenExpired = () => {

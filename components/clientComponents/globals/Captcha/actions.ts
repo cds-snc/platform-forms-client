@@ -65,11 +65,11 @@ export const verifyHCaptchaToken = async (
 // See https://docs.hcaptcha.com/enterprise#handling-siteverify-responses
 const checkIfVerified = (success: boolean, score: number) => {
   if (score >= 0.8) {
-    // Session is bad
+    // Session is bad - identifying separately for potential future use
     return false;
   }
   if (score >= 0.7) {
-    // Score is suspicious
+    // Score is suspicious - we may want to tweak this to 0.79 if we have too many false positives
     return false;
   }
   if (!success) {
