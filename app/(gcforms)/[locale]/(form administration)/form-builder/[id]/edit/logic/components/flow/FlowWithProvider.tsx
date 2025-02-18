@@ -5,7 +5,6 @@ import React, {
   forwardRef,
   ReactElement,
   ForwardRefRenderFunction,
-  useEffect,
   useState,
   useRef,
 } from "react";
@@ -16,9 +15,9 @@ import ReactFlow, {
   ReactFlowProvider,
   useNodesState,
   useEdgesState,
-  useReactFlow,
   Background,
-  ReactFlowInstance,
+  useOnViewportChange,
+  Viewport,
 } from "reactflow";
 
 import "reactflow/dist/style.css";
@@ -73,10 +72,9 @@ const Flow: ForwardRefRenderFunction<unknown, FlowProps> = ({ children, lang }, 
   } = useFlowData(lang, showReviewNode, hasReview);
   const [nodes, setNodes, onNodesChange] = useNodesState(flowNodes);
   const [, setEdges, onEdgesChange] = useEdgesState(flowEdges as Edge[]);
-  const { fitView } = useReactFlow();
   const reset = useRef(false);
   const [redrawing, setRedrawing] = useState(false);
-  const [rfInstance, setRfInstance] = useState<ReactFlowInstance | null>();
+  const [viewport, setViewport] = useState<Viewport | null>(null);
 
   // temp fix see: https://github.com/xyflow/xyflow/issues/3243
   const store = useStoreApi();
@@ -88,23 +86,11 @@ const Flow: ForwardRefRenderFunction<unknown, FlowProps> = ({ children, lang }, 
     };
   }
 
-  useEffect(() => {
-    let flowZoom = 0.5;
-    if (rfInstance && reset.current === false) {
-      const obj = rfInstance.toObject();
-      if (obj.viewport.zoom) {
-        flowZoom = obj.viewport.zoom;
-      }
-    }
-
-    if (flowZoom > 0.5) {
-      return;
-    }
-
-    // Only fit view if the user has not zoomed in
-    fitView();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [fitView, nodes]);
+  useOnViewportChange({
+    onChange: (viewport: Viewport) => {
+      setViewport(viewport);
+    },
+  });
 
   const { runLayout } = useAutoLayout({
     ...layoutOptions,
@@ -157,8 +143,13 @@ const Flow: ForwardRefRenderFunction<unknown, FlowProps> = ({ children, lang }, 
         onEdgesChange={onEdgesChange}
         defaultEdgeOptions={edgeOptions}
         onInit={(instance) => {
-          // Keep a reference to the instance so we can check zoom level for fitView.
-          setRfInstance(instance);
+          // If the user has modified the vieport (zoom, scroll, pan) restore it
+          // Otherwise use fitView to automatically zoom/center the flow
+          if (viewport) {
+            instance.setViewport(viewport);
+          } else {
+            instance.fitView();
+          }
         }}
       >
         <Controls showInteractive={false} showZoom={true} showFitView={false} />
