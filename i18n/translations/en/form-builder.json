@@ -898,30 +898,30 @@
     "text2": "Go to Responses"
   },
   "support": {
-    "contactUs": "contact form",
-    "description": {
-      "description": "Provide more context around the problem you are experiencing.",
-      "title": "Tell us more"
-    },
-    "name": "Your name",
-    "email": "Your email address",
-    "gcFormsTeamLink": "Government of Canada contacts",
-    "gcFormsTeamPart1": "Please note that the GC Forms team provides services to people who work in the government. We cannot give general advice to the public about the forms that we host. For other enquiries, go to the",
-    "gcFormsTeamPart2": "page to find the department or agency that can help.",
-    "ifYouWouldLike": "Fill out the ",
-    "lookingForADemo": "Looking to learn more about GC Forms?",
-    "request": {
-      "option1": "Ask a question",
-      "option2": "Get help using GC Forms",
-      "apiOption": "Request technical support with the API",
-      "option3": "Report a problem with a published form",
-      "option4": "Other",
-      "title": "Reason for reaching out"
-    },
     "title": "Get support",
     "experience": "Explore our ",
     "guidanceLink": "guidance articles",
     "useThisForm": " or get technical help from our team through this form.",
+    "gcFormsTeamPart1": "Please note that the GC Forms team provides services to people who work in the government. We cannot give general advice to the public about the forms that we host. For other enquiries, go to the",
+    "gcFormsTeamLink": "Government of Canada contacts",
+    "gcFormsTeamPart2": "page to find the department or agency that can help.",
+    "lookingForADemo": "Looking to learn more about GC Forms?",
+    "ifYouWouldLike": "Fill out the ",
+    "contactUs": "contact form",
+    "description": {
+      "title": "Tell us more",
+      "description": "Provide more context around the problem you are experiencing."
+    },
+    "name": "Your name",
+    "email": "Your email address",
+    "request": {
+      "title": "Reason for reaching out",
+      "option1": "Ask a question",
+      "option2": "Get help using GC Forms",
+      "apiOption": "Request technical support with the API",
+      "option3": "Report a problem with a published form",
+      "option4": "Other"
+    },
     "errors": {
       "submissionError": "Something went wrong. Please try again later."
     }
