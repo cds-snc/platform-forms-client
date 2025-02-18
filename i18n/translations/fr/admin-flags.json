@@ -3,7 +3,7 @@
   "subTitle": "Les indicateurs de fonctionnalité vous permettent de contrôler les différentes fonctionnalités activées dans l'application",
   "loading": "Chargement des indicateurs de fonctionnalité",
   "enabled": "Activé",
-  "disabled": "Déactivé",
+  "disabled": "Désactivé",
   "enable": "Activer",
   "disable": "Désactiver",
   "featureTitle": "Fonctionnalité",
