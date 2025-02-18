@@ -51,7 +51,7 @@ export default async function Page(props0: {
 
   const hCaptchaSiteKey = (await getAppSetting("hCaptchaSiteKey")) || "";
 
-  const formID = props[0];
+  const formId = props[0];
   const step = props[1] ?? "";
   const formRecord = await getPublicTemplateByID(formId);
 
