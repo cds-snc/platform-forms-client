@@ -33,6 +33,14 @@
     "saveAndResume": {
       "title": "Enregistrer et reprendre plus tard",
       "description": "Activer la fonctionnalité d'enregistrement et de reprise"
+    },
+    "formTimer": {
+      "title": "formTimer",
+      "description": "Activez formTimer pour retarder l'envoi d'un formulaire et contribuer à prévenir le spam"
+    },
+    "hCaptcha": {
+      "title": "hCaptcha",
+      "description": "Activer la prévention anti-spam hCaptcha"
     }
   }
 }
