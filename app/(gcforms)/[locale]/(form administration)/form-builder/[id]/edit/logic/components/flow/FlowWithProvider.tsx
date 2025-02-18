@@ -152,7 +152,7 @@ const Flow: ForwardRefRenderFunction<unknown, FlowProps> = ({ children, lang }, 
           }
         }}
       >
-        <Controls showInteractive={false} showZoom={true} showFitView={false} />
+        <Controls showInteractive={false} showZoom={true} showFitView={true} />
         <Background />
         {children}
       </ReactFlow>
