@@ -1305,16 +1305,16 @@
     "title": "Santé du système"
   },
   "saveAndResume": {
-    "savedErrorMessage": "There was an error saving your changes. [FR]",
-    "savedSuccessMessage": "Your changes have been saved. [FR]",
-    "title": "Save and resume form [FR]",
-    "toggleOn": "Enabled [FR]",
-    "toggleOff": "Disable [FR]",
+    "savedErrorMessage": "Une erreur s'est produite lors de l'enregistrement de vos modifications.",
+    "savedSuccessMessage": "Vos modifications ont été enregistrées.",
+    "title": "Reprendre le remplissage du formulaire",
+    "toggleOn": "Activé",
+    "toggleOff": "Désactivé",
     "toggleDescription": {
-      "text1": "Download and upload form to continue [FR]",
-      "text2": "Allow form fillers to save a copy of their form progress, to upload and continue at a later time. [FR] "
+      "text1": "Permettre l'enregistrement des réponses en cours",
+      "text2": "Les personnes peuvent prendre une pause et poursuivre le formulaire plus tard avec la possibilité d'enregistrer une copie de la progression dans le formulaire. Elles peuvent continuer plus tard en téléversant le fichier contenant les réponses remplies jusqu’à présent."
     },
-    "a11yDescription": "Save and resume form progress [FR]",
-    "saveButton": "Save [FR]"
+    "a11yDescription": "Enregistrer la progression et reprendre le formulaire plus tard",
+    "saveButton": "Enregistrer"
   }
 }
