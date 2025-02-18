@@ -220,60 +220,60 @@
   "cancel": "Annuler",
   "number": "Numéro",
   "saveAndResume": {
-    "saveBtn": "Enregistrer",
-    "resumeBtn": "Poursuivre",
-    "formRestored": "Form values restored from saved file.",
+    "saveBtn": "Sauvegarder sur l'appareil",
+    "resumeBtn": "Poursuivre le formulaire",
+    "formRestored": "Your form answers so far were successfully uploaded.",
     "resumePage": {
       "upload": {
         "title": "Poursuivre",
-        "description": "Continuer un formulaire en cours à partir d’un fichier sauvegardé."
+        "description": "Téléversez votre formulaire en cours"
       },
       "restart": {
         "title": "Commencer",
-        "description": "Remplissez un nouveau formulaire."
+        "description": "Remplissez un nouveau formulaire"
       }
     },
     "prompt": {
       "title": "Sauvegarder sur l’appareil",
-      "description": "Sauvegarder une copie du formulaire rempli jusqu’à présent. Poursuivez le formulaire plus tard en trouvant le fichier sur votre appareil. Assurez-vous de protéger vos données en conservant le fichier téléchargé en lieu sûr.",
-      "okay": "Télécharger les réponses",
+      "description": "Sauvegarder une copie du formulaire rempli jusqu’à présent. Poursuivez le formulaire plus tard en trouvant le fichier sur votre appareil. Protégez vos données en conservant le fichier téléchargé en lieu sûr sur un appareil de confiance.",
+      "okay": "Sauvegarder sur l'appareil",
       "cancel": "Annuler"
     },
     "downloadProgressHtml": {
       "nextSteps": {
-        "title": "What to do next - [FR]",
+        "title": "Quand vous serez prêt :",
         "resumeBox": {
-          "title": "Resume completing form [FR]",
-          "description": "Upload this file to complete and submit your form [FR]"
+          "title": "Poursuivre le formulaire",
+          "description": "Continuez à remplir le formulaire en téléversant ce fichier."
         }
       },
       "keepSafe": {
-        "title": "Keep your form safe [FR]",
-        "description": " Make sure to keep this file in a secure spot on your device. [FR]"
+        "title": "Protégez vos renseignements personnels",
+        "description": " Conservez le fichier téléchargé dans un endroit sûr d'un appareil de confiance."
       },
       "badge": {
-        "text": "In - Progress [FR]",
-        "lastSaved": "Saved:  {{month}} {{day}}, {{year}}"
+        "text": "En cours",
+        "lastSaved": "Sauvegardé : le {{day}} {{month}} {{year}}"
       }
     }
   },
   "saveResponse": {
-    "saveBtn": "Download",
-    "saveBtnDescription": "Get a copy of your answers",
+    "saveBtn": "Télécharger",
+    "saveBtnDescription": "Obtenez une copie de vos réponses",
     "prompt": {
-      "title": "Save to device",
-      "description": "Save a copy of your form answers.",
-      "okay": "Save to device",
-      "cancel": "Cancel"
+      "title": "Sauvegarder sur l'appareil",
+      "description": "Téléchargez une copie du formulaire rempli jusqu'à présent.",
+      "okay": "Sauvegarder sur l'appareil",
+      "cancel": "Annuler"
     },
     "downloadHtml": {
       "keepSafe": {
-        "description": " Make sure to keep this file in a secure spot on your device."
+        "description": " Conservez ce fichier dans un endroit sûr de votre appareil afin de protéger vos renseignements."
       },
       "badge": {
-        "text": "Submitted on ",
-        "lastSaved": "{{month}} {{day}}, {{year}}",
-        "submissionId": "Submission ID: {{submissionId}}"
+        "text": "Formulaire soumis le ",
+        "lastSaved": "{{day}} {{month}} {{year}}",
+        "submissionId": "Numéro de référence : {{submissionId}}"
       }
     }
   },

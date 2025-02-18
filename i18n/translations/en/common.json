@@ -221,16 +221,16 @@
   "number": "Number",
   "saveAndResume": {
     "saveBtn": "Save to device",
-    "resumeBtn": "Resume",
-    "formRestored": "Form values restored from saved file.",
+    "resumeBtn": "Resume form",
+    "formRestored": "Your form answers so far were successfully uploaded.",
     "resumePage": {
       "upload": {
         "title": "Resume",
-        "description": "Continue filling out a form in progress from saved file."
+        "description": "Upload your saved form answers"
       },
       "restart": {
         "title": "Start",
-        "description": "Fill out a new form."
+        "description": "Fill out a new form"
       }
     },
     "prompt": {
@@ -241,18 +241,18 @@
     },
     "downloadProgressHtml": {
       "nextSteps": {
-        "title": "What to do next - ",
+        "title": "When you're ready: ",
         "resumeBox": {
-          "title": "Resume completing form",
-          "description": "Upload this file to complete and submit your form"
+          "title": "Resume form",
+          "description": "Continue filling the form by uploading this file"
         }
       },
       "keepSafe": {
-        "title": "Keep your form safe",
-        "description": " Make sure to keep this file in a secure spot on your device."
+        "title": "Protect your personal information",
+        "description": " Keep this file in a secure spot on your device to protect your information."
       },
       "badge": {
-        "text": "In - Progress",
+        "text": "In progress",
         "lastSaved": "Saved:  {{month}} {{day}}, {{year}}"
       }
     }
@@ -262,16 +262,16 @@
     "saveBtnDescription": "Get a copy of your answers",
     "prompt": {
       "title": "Save to device",
-      "description": "Save a copy of your form answers.",
+      "description": "Download a copy of your answers so far to keep filling out the form later. Resume later by finding the file on your device. Protect your data by keeping the downloaded file in a safe place on a trusted device.",
       "okay": "Save to device",
       "cancel": "Cancel"
     },
     "downloadHtml": {
       "keepSafe": {
-        "description": " Make sure to keep this file in a secure spot on your device."
+        "description": " Keep this file in a secure spot on your device to protect your information."
       },
       "badge": {
-        "text": "Submitted on ",
+        "text": "Form submitted on ",
         "lastSaved": "{{month}} {{day}}, {{year}}",
         "submissionId": "Submission ID: {{submissionId}}"
       }
