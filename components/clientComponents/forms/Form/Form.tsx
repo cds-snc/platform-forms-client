@@ -150,7 +150,7 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
           lang={language}
           hCaptchaSiteKey={props.hCaptchaSiteKey}
           successCb={handleSubmit}
-          passiveMode={true}
+          passiveMode={false}
         />
       )}
 
@@ -188,8 +188,15 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
               }
 
               if (captchaEnabled) {
-                // Let hCaptcha run in the background for now
                 hCaptchaRef.current?.execute();
+
+                // TODO: consider how to handle the unlikely "never going to happend" cases
+                // 1. what if the above ref is undefined?
+                // 2. what if the react hCaptcha component has a bug and the submission is left hanging indefinitely?
+                // 3. Any others?
+                //
+                // A fallback could be created that kills hCaptcha and calls handleSubmit(e) directly here
+                // e.g. hCaptchaRef.current?.resetCaptcha(); handleSubmit(e);
               } else {
                 handleSubmit(e);
               }
