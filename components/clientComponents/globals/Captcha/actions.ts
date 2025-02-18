@@ -2,6 +2,7 @@
 import axios from "axios";
 import { getClientIP } from "@lib/ip";
 import { logMessage } from "@lib/logger";
+import { redirect } from "next/navigation";
 
 /**
  * Verifies the client hCaptcha token is valid using the hCaptcha API
@@ -9,7 +10,11 @@ import { logMessage } from "@lib/logger";
  * @param token captcha token to verify
  * @returns boolean true if the token is valid, false otherwise
  */
-export const verifyHCaptchaToken = async (token: string): Promise<boolean> => {
+export const verifyHCaptchaToken = async (
+  token: string,
+  lang: string,
+  passiveMode: boolean
+): Promise<boolean | void> => {
   const siteVerifyKey = process.env.HCAPTCHA_SITE_VERIFY_KEY;
 
   if (!siteVerifyKey) {
@@ -39,7 +44,7 @@ export const verifyHCaptchaToken = async (token: string): Promise<boolean> => {
     logMessage.error(
       `hCaptcha: client error. Error: ${JSON.stringify(captchaData["error-codes"])}`
     );
-    return false;
+    !passiveMode && redirect(`/${lang}/unable-to-process`);
   }
 
   const verified = checkIfVerified(captchaData.success, captchaData.score);
@@ -47,7 +52,7 @@ export const verifyHCaptchaToken = async (token: string): Promise<boolean> => {
     logMessage.info(
       `hCaptcha: failed verification. Success=${captchaData.success}, Score=${captchaData.score}`
     );
-    return false;
+    !passiveMode && redirect(`/${lang}/unable-to-process`);
   }
 
   logMessage.info(

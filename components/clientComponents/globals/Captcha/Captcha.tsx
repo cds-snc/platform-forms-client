@@ -7,11 +7,13 @@ export const Captcha = ({
   hCaptchaRef,
   lang,
   hCaptchaSiteKey,
+  passiveMode = true,
 }: {
   successCb?: () => void;
   hCaptchaRef: React.RefObject<HCaptcha | null>;
   lang: string;
   hCaptchaSiteKey: string | undefined;
+  passiveMode: boolean;
 }) => {
   if (!hCaptchaSiteKey) {
     logMessage.error("hCaptcha: hCaptchaSiteKey is missing");
@@ -21,12 +23,16 @@ export const Captcha = ({
   // Verify the token on the server side.
   const verify = async (token: string) => {
     try {
-      const success = await verifyHCaptchaToken(token);
+      const success = await verifyHCaptchaToken(token, lang, passiveMode);
       if (success && typeof successCb === "function") {
         successCb();
       }
     } catch (err) {
       logMessage.error(`hCaptcha: system error: ${err}`);
+      // Don't block the user from submittion on a system error (our fault not theirs)
+      if (typeof successCb === "function") {
+        successCb();
+      }
     }
   };
 

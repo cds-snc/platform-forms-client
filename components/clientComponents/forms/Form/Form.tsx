@@ -149,6 +149,8 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
           hCaptchaRef={hCaptchaRef}
           lang={language}
           hCaptchaSiteKey={props.hCaptchaSiteKey}
+          successCb={handleSubmit}
+          passiveMode={true}
         />
       )}
 
@@ -188,10 +190,9 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
               if (captchaEnabled) {
                 // Let hCaptcha run in the background for now
                 hCaptchaRef.current?.execute();
+              } else {
+                handleSubmit(e);
               }
-
-              // TODO: Something in handleSubmit is causing the above to fail and it requires a big timeout to work
-              setTimeout(() => handleSubmit(e), 1000);
             }}
             noValidate
           >
