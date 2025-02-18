@@ -3,5 +3,7 @@
   "addressComplete": false,
   "scheduleClosingDate": false,
   "apiAccess": false,
-  "saveAndResume": false
+  "saveAndResume": false,
+  "formTimer": false,
+  "hCaptcha": false
 }

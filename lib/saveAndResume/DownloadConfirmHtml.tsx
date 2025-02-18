@@ -1,13 +1,13 @@
 import React from "react";
 
-import { type HTMLProps } from "./types";
 import Fip from "@lib/responseDownloadFormats/html/components/Fip";
 import { css } from "@lib/responseDownloadFormats/html/css/compiled";
 import { ReviewList } from "@clientComponents/forms/Review/ReviewList";
-import { InProgressBadge } from "./InProgressBadge";
-import { NextSteps } from "./NextSteps";
+import { SubmittedBadge } from "./SubmittedBadge";
+import { KeepSafe } from "./KeepSafe";
+import { HTMLProps } from "./types";
 
-export const DownloadProgressHtml = ({
+export const DownloadConfirmHtml = ({
   language,
   formTitle,
   formId,
@@ -15,6 +15,8 @@ export const DownloadProgressHtml = ({
   reviewItems,
   startSectionTitle,
   host,
+  submissionId,
+  submissionDate,
 }: HTMLProps) => {
   const formData = JSON.stringify({
     data: formResponse,
@@ -54,10 +56,14 @@ export const DownloadProgressHtml = ({
             />
             <div>
               <div className="mb-14">
-                <InProgressBadge language={language} />
+                <SubmittedBadge
+                  submissionId={submissionId}
+                  submissionDate={submissionDate}
+                  language={language}
+                />
               </div>
               <h1>{formTitle}</h1>
-              <NextSteps language={language} host={host || ""} formId={formId} />
+              <KeepSafe language={language} />
               <div className="mb-10" data-testid="review-list">
                 <ReviewList
                   reviewItems={reviewItems}
