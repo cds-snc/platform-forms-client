@@ -899,18 +899,18 @@
   },
   "support": {
     "title": "Get support",
-    "experience": "Explore our ",
+    "experience": "We support government employees using GC Forms. We cannot give general advice to the public about the forms that we host. Explore our ",
     "guidanceLink": "guidance articles",
     "useThisForm": " or get technical help from our team through this form.",
-    "gcFormsTeamPart1": "Please note that the GC Forms team provides services to people who work in the government. We cannot give general advice to the public about the forms that we host. For other enquiries, go to the",
-    "gcFormsTeamLink": "Government of Canada contacts",
-    "gcFormsTeamPart2": "page to find the department or agency that can help.",
+    "gcFormsTeamPart1": "For other enquiries, go to the",
+    "gcFormsTeamLink": "Government of Canada contacts page",
+    "gcFormsTeamPart2": "to find the department or agency that can help.",
     "lookingForADemo": "Looking to learn more about GC Forms?",
     "ifYouWouldLike": "Fill out the ",
     "contactUs": "contact form",
     "description": {
       "title": "Tell us more",
-      "description": "Provide more context around the problem you are experiencing."
+      "description": "Please do not include any protected or personal information."
     },
     "name": "Your name",
     "email": "Your email address",

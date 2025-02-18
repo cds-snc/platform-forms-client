@@ -899,10 +899,10 @@
   },
   "support": {
     "title": "Obtenir du soutien",
-    "experience": "Explorez nos ",
-    "guidanceLink": "guides de références",
+    "experience": "Nous soutenons les fonctionnaires qui utilisent Formulaires GC. Nous ne pouvons pas conseiller le public au sujet des formulaires que nous hébergeons. Explorez nos ",
+    "guidanceLink": "guides de référence",
     "useThisForm": " ou obtenez du soutien de notre équipe en remplissant ce formulaire.",
-    "gcFormsTeamPart1": "Veuillez noter que l'équipe Formulaires GC fournit des services aux personnes qui travaillent au sein du gouvernement. Nous ne pouvons pas donner de conseils généraux au public sur les formulaires que nous hébergeons. Pour toute autre question, allez à la page ",
+    "gcFormsTeamPart1": "Pour toute autre demande, allez à la page ",
     "gcFormsTeamLink": "Coordonnées du Gouvernement du Canada",
     "gcFormsTeamPart2": "pour trouver le ministère ou l'organisme qui peut vous aider.",
     "lookingForADemo": "Vous cherchez à en savoir plus sur Formulaires GC?",
@@ -910,7 +910,7 @@
     "contactUs": "formulaire de contact",
     "description": {
       "title": "Dites-nous en plus",
-      "description": "Fournissez plus d'informations ou de contexte."
+      "description": "Veuillez ne pas inclure de renseignements protégés ou personnels."
     },
     "name": "Votre nom",
     "email": "Votre adresse courriel",
