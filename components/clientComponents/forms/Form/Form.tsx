@@ -316,7 +316,7 @@ export const Form = withFormik<FormProps, Responses>({
           formikBag.setStatus("Error");
         }
       } else {
-        formikBag.props.onSuccess(result.id);
+        formikBag.props.onSuccess(result.id, result?.submissionId || undefined);
       }
     } catch (err) {
       logMessage.error(err as Error);

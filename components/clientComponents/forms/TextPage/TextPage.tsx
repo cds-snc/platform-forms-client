@@ -4,26 +4,54 @@ import { useTranslation } from "@i18n/client";
 import { RichText } from "@clientComponents/forms";
 import { getLocalizedProperty } from "@lib/utils";
 import { PublicFormRecord } from "@lib/types";
+import { useGCFormsContext } from "@lib/hooks/useGCFormContext";
+import { SaveResponse } from "@clientComponents/forms/SaveAndResume/SaveResponse";
+import { Language } from "@lib/types/form-builder-types";
+import { useFeatureFlags } from "@lib/hooks/useFeatureFlags";
+import { FeatureFlags } from "@lib/cache/types";
 
 /*
   This is the component for text pages within the form flow (start pages, end pages)
 */
 
 interface TextPageProps {
+  formId: string;
   formRecord: PublicFormRecord;
 }
 
 interface PageContextProps {
+  formId: string;
+  formRecord: PublicFormRecord;
   pageText: string;
   urlQuery: string | null;
+  language: Language;
 }
 
-const PageContent = ({ pageText, urlQuery }: PageContextProps) => {
+const PageContent = ({ formId, formRecord, pageText, urlQuery, language }: PageContextProps) => {
   const { t } = useTranslation("confirmation");
+  const { submissionId, submissionDate } = useGCFormsContext();
+
+  const { getFlag } = useFeatureFlags();
+  const saveAndResumeEnabled = getFlag(FeatureFlags.saveAndResume);
+  const saveAndResume = formRecord?.saveAndResume && saveAndResumeEnabled;
 
   // Check if there's a custom text for the end page specified in the form's JSON config
   if (pageText && pageText !== undefined) {
-    return <RichText className="confirmation">{pageText}</RichText>;
+    return (
+      <>
+        <input type="hidden" value={submissionId} name="submissionId" />
+        <input type="hidden" value={submissionDate} name="submissionDate" />
+        <RichText className="confirmation">{pageText}</RichText>
+        {saveAndResume && (
+          <SaveResponse
+            formId={formId}
+            formTitleEn={formRecord.form.titleEn}
+            formTitleFr={formRecord.form.titleFr}
+            language={language}
+          />
+        )}
+      </>
+    );
   }
 
   // Otherwise, display the default confirmation text
@@ -62,7 +90,13 @@ export const TextPage = (props: TextPageProps): React.ReactElement => {
   return (
     <>
       <h1 tabIndex={-1}>{t("title")}</h1>
-      <PageContent pageText={pageText} urlQuery={urlQuery} />
+      <PageContent
+        formId={props.formId}
+        formRecord={props.formRecord}
+        language={language as Language}
+        pageText={pageText}
+        urlQuery={urlQuery}
+      />
     </>
   );
 };
