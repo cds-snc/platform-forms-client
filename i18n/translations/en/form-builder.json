@@ -1307,14 +1307,14 @@
   "saveAndResume": {
     "savedErrorMessage": "There was an error saving your changes.",
     "savedSuccessMessage": "Your changes have been saved.",
-    "title": "Save and resume form",
-    "toggleOn": "Enabled",
-    "toggleOff": "Disable",
+    "title": "Resume filling out form later",
+    "toggleOn": "On",
+    "toggleOff": "Off",
     "toggleDescription": {
-      "text1": "Download and upload form to continue",
-      "text2": "Allow form fillers to save a copy of their form progress, to upload and continue at a later time.  "
+      "text1": "Enable saving answers in progress",
+      "text2": "Allow people to pause and resume later with the option to save a copy of their form. They can continue later by uploading the file containing the answers filled out so far."
     },
-    "a11yDescription": "Save and resume form progress",
+    "a11yDescription": "Save progress and resume form later",
     "saveButton": "Save"
   }
 }
