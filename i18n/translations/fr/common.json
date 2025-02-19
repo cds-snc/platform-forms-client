@@ -222,7 +222,7 @@
   "saveAndResume": {
     "saveBtn": "Sauvegarder sur l'appareil",
     "resumeBtn": "Poursuivre le formulaire",
-    "formRestored": "Your form answers so far were successfully uploaded.",
+    "formRestored": "Vos réponses jusqu'à présent ont été ajoutées au formulaire.",
     "resumeUploadError": {
       "description": "Quelque chose a mal tourné en téléversant les réponses. Réessayez plus tard ou recommencez le formulaire."
     },
