@@ -308,8 +308,8 @@
   "contactSupportIfYouHaveQuestions": "<a href=\"/fr/support\" target=\"_blank\">Veuillez contacter</a> l’équipe de soutien si vous avez des questions. ",
   "contactus": {
     "title": "Nous contacter",
-    "useThisForm": "Utilisez ce formulaire pour vous inscrire à notre infolettre, nous faire part de vos commentaires ou suggérer une nouvelle fonctionnalité pour Formulaires GC.",
-    "gcFormsTeamPart1": "Veuillez noter que l'équipe Formulaires GC fournit des services aux personnes qui travaillent au sein du gouvernement. Nous ne pouvons pas conseiller le public au sujet des formulaires que nous hébergeons. Pour toute autre demande, allez à la page",
+    "useThisForm": "Nous soutenons les fonctionnaires qui utilisent Formulaires GC. Nous ne pouvons pas conseiller le public au sujet des formulaires que nous hébergeons. Utilisez ce formulaire pour vous inscrire à notre infolettre, fournir de la rétroaction, ou suggérer une nouvelle fonctionnalité.",
+    "gcFormsTeamPart1": "Pour toute autre demande, allez à la page",
     "gcFormsTeamLink": "Coordonnées du Gouvernement du Canada",
     "gcFormsTeamPart2": "pour trouver le ministère ou l'organisme qui peut vous aider.",
     "needSupport": "Besoin d'aide pour l'utilisation de Formulaires GC?",
@@ -324,7 +324,7 @@
     },
     "description": {
       "title": "Dites-nous en plus",
-      "description": "Ajouter plus de contexte ou d'informations."
+      "description": "Veuillez ne pas inclure de renseignements protégés ou personnels."
     },
     "followUp": "Fournissez vos coordonnées pour que nous puissions vous contacter.",
     "name": "Nom",

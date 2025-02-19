@@ -308,10 +308,10 @@
   "contactSupportIfYouHaveQuestions": "<a href=\"/en/support\" target=\"_blank\">Contact support</a> if you have any questions.",
   "contactus": {
     "title": "Contact us",
-    "useThisForm": "Use this form to sign up for our newsletter, provide feedback, or suggest a new feature for GC Forms.",
-    "gcFormsTeamPart1": "The GC Forms team provides services to people who work in the government. We cannot give general advice to the public about the forms that we host. For other enquiries, go to the",
-    "gcFormsTeamLink": "Government of Canada contacts",
-    "gcFormsTeamPart2": "page to find the department or agency that can help.",
+    "useThisForm": "We support government employees using GC Forms. We cannot give general advice to the public about the forms that we host. Use this form to sign up for our newsletter, provide feedback, or suggest a new feature.",
+    "gcFormsTeamPart1": "For other enquiries, go to the",
+    "gcFormsTeamLink": "Government of Canada contacts page",
+    "gcFormsTeamPart2": "to find the department or agency that can help.",
     "needSupport": "Need help using GC Forms?",
     "ifYouExperience": "To get technical support, use the ",
     "supportFormLink": "support form",
@@ -324,7 +324,7 @@
     },
     "description": {
       "title": "Tell us more",
-      "description": "Provide more information or context."
+      "description": "Please do not include any protected or personal information."
     },
     "followUp": "Provide your contact information so we can follow up with you.",
     "name": "Name",
