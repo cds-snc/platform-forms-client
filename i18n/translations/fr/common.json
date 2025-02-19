@@ -274,6 +274,9 @@
         "text": "Formulaire soumis le ",
         "lastSaved": "{{day}} {{month}} {{year}}",
         "submissionId": "Numéro de référence : {{submissionId}}"
+      },
+      "generateHtmlError": {
+        "description": "There was an error generating the file. Please try again."
       }
     }
   },

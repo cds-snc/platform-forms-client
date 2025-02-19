@@ -274,6 +274,9 @@
         "text": "Form submitted on ",
         "lastSaved": "{{month}} {{day}}, {{year}}",
         "submissionId": "Submission ID: {{submissionId}}"
+      },
+      "generateHtmlError": {
+        "description": "There was an error generating the file. Please try again."
       }
     }
   },
