@@ -1,11 +1,11 @@
 import { prisma, prismaErrors } from "@lib/integration/prismaConnector";
 import { authorization } from "@lib/privileges";
 import { AccessControlError } from "@lib/auth/errors";
-import { NagwareResult } from "./types";
+import { DeactivationReason, NagwareResult } from "./types";
 import { logEvent } from "./auditLogs";
 import { logMessage } from "@lib/logger";
 import { Privilege, Prisma } from "@prisma/client";
-import { DeactivationReason, sendDeactivationEmail } from "@lib/deactivate";
+import { sendDeactivationEmail } from "@lib/deactivate";
 import { getAllTemplatesForUser } from "./templates";
 import { listAllSubmissions } from "./vault";
 import { detectOldUnprocessedSubmissions } from "./nagware";

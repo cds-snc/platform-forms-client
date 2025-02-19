@@ -1,11 +1,7 @@
 import { sendEmail } from "./integration/notifyConnector";
 import { logMessage } from "@lib/logger";
 import { getOrigin } from "./origin";
-
-export enum DeactivationReason {
-  DEFAULT,
-  GROUP_EMAIL,
-}
+import { DeactivationReason } from "./types";
 
 const defaultTemplate = (email: string, HOST: string) => {
   return `

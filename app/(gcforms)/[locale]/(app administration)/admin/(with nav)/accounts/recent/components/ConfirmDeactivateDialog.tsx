@@ -5,7 +5,7 @@ import { useTranslation } from "@i18n/client";
 import { EventKeys, useCustomEvent } from "@lib/hooks/useCustomEvent";
 import { useEffect, useState } from "react";
 import { updateActive } from "../../actions";
-import { DeactivationReason } from "@lib/deactivate";
+import { DeactivationReason } from "@lib/types";
 
 type ConfirmDeactivateDialogEventDetails = {
   userId: string;

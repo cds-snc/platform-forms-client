@@ -72,3 +72,8 @@ export { NagLevel } from "./nagware-types";
 export interface Validate {
   validateForm: () => Promise<FormikErrors<Responses>>;
 }
+
+export enum DeactivationReason {
+  DEFAULT,
+  GROUP_EMAIL,
+}
