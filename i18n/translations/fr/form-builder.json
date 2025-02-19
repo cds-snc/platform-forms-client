@@ -307,31 +307,31 @@
   "contactSupport": "Contacter l’équipe de soutien",
   "contactSupportIfYouHaveQuestions": "<a href=\"/fr/support\" target=\"_blank\">Veuillez contacter</a> l’équipe de soutien si vous avez des questions. ",
   "contactus": {
-    "description": {
-      "description": "Ajouter plus de contexte ou d'informations.",
-      "title": "Dites-nous en plus"
+    "title": "Nous contacter",
+    "useThisForm": "Utilisez ce formulaire pour vous inscrire à notre infolettre, nous faire part de vos commentaires ou suggérer une nouvelle fonctionnalité pour Formulaires GC.",
+    "gcFormsTeamPart1": "Veuillez noter que l'équipe Formulaires GC fournit des services aux personnes qui travaillent au sein du gouvernement. Nous ne pouvons pas conseiller le public au sujet des formulaires que nous hébergeons. Pour toute autre demande, allez à la page",
+    "gcFormsTeamLink": "Coordonnées du Gouvernement du Canada",
+    "gcFormsTeamPart2": "pour trouver le ministère ou l'organisme qui peut vous aider.",
+    "needSupport": "Besoin d'aide pour l'utilisation de Formulaires GC?",
+    "ifYouExperience": "Pour obtenir du soutien technique, veuillez remplir le ",
+    "supportFormLink": "formulaire de soutien",
+    "request": {
+      "title": "Que souhaitez-vous faire?",
+      "option1": "S'inscrire à la liste de diffusion",
+      "option2": "Donner un avis sur le produit",
+      "option3": "Suggérer une nouvelle fonctionnalité",
+      "option4": "Autre"
     },
+    "description": {
+      "title": "Dites-nous en plus",
+      "description": "Ajouter plus de contexte ou d'informations."
+    },
+    "followUp": "Fournissez vos coordonnées pour que nous puissions vous contacter.",
     "name": "Nom",
     "email": "Adresse courriel",
     "department": "Ministère ou organisme",
     "branch": "Direction ou secteur",
     "jobTitle": "Titre de poste",
-    "gcFormsTeamLink": "Coordonnées du Gouvernement du Canada",
-    "gcFormsTeamPart1": "Veuillez noter que l'équipe Formulaires GC fournit des services aux personnes qui travaillent au sein du gouvernement. Nous ne pouvons pas conseiller le public au sujet des formulaires que nous hébergeons. Pour toute autre demande, allez à la page",
-    "gcFormsTeamPart2": "pour trouver le ministère ou l'organisme qui peut vous aider.",
-    "ifYouExperience": "Pour obtenir du soutien technique, veuillez remplir le ",
-    "followUp": "Fournissez vos coordonnées pour que nous puissions vous contacter.",
-    "needSupport": "Besoin d'aide pour l'utilisation de Formulaires GC?",
-    "request": {
-      "option1": "S'inscrire à la liste de diffusion",
-      "option2": "Donner un avis sur le produit",
-      "option3": "Suggérer une nouvelle fonctionnalité",
-      "option4": "Autre",
-      "title": "Que souhaitez-vous faire?"
-    },
-    "supportFormLink": "formulaire de soutien",
-    "title": "Nous contacter",
-    "useThisForm": "Utilisez ce formulaire pour vous inscrire à notre infolettre, nous faire part de vos commentaires ou suggérer une nouvelle fonctionnalité pour Formulaires GC.",
     "errors": {
       "submissionError": "Il y a eu une erreur. Veuillez réessayer plus tard."
     }

@@ -307,31 +307,31 @@
   "contactSupport": "Contact support",
   "contactSupportIfYouHaveQuestions": "<a href=\"/en/support\" target=\"_blank\">Contact support</a> if you have any questions.",
   "contactus": {
-    "description": {
-      "description": "Provide more information or context.",
-      "title": "Tell us more"
+    "title": "Contact us",
+    "useThisForm": "Use this form to sign up for our newsletter, provide feedback, or suggest a new feature for GC Forms.",
+    "gcFormsTeamPart1": "The GC Forms team provides services to people who work in the government. We cannot give general advice to the public about the forms that we host. For other enquiries, go to the",
+    "gcFormsTeamLink": "Government of Canada contacts",
+    "gcFormsTeamPart2": "page to find the department or agency that can help.",
+    "needSupport": "Need help using GC Forms?",
+    "ifYouExperience": "To get technical support, use the ",
+    "supportFormLink": "support form",
+    "request": {
+      "title": "What would you like to do?",
+      "option1": "Join the mailing list",
+      "option2": "Give feedback on the product",
+      "option3": "Suggest a new feature",
+      "option4": "Other"
     },
+    "description": {
+      "title": "Tell us more",
+      "description": "Provide more information or context."
+    },
+    "followUp": "Provide your contact information so we can follow up with you.",
     "name": "Name",
     "email": "Email address",
     "department": "Department or agency",
     "branch": "Branch or sector",
     "jobTitle": "Job title",
-    "gcFormsTeamLink": "Government of Canada contacts",
-    "gcFormsTeamPart1": "The GC Forms team provides services to people who work in the government. We cannot give general advice to the public about the forms that we host. For other enquiries, go to the",
-    "gcFormsTeamPart2": "page to find the department or agency that can help.",
-    "ifYouExperience": "To get technical support, use the ",
-    "followUp": "Provide your contact information so we can follow up with you.",
-    "needSupport": "Need help using GC Forms?",
-    "request": {
-      "option1": "Join the mailing list",
-      "option2": "Give feedback on the product",
-      "option3": "Suggest a new feature",
-      "option4": "Other",
-      "title": "What would you like to do?"
-    },
-    "supportFormLink": "support form",
-    "title": "Contact us",
-    "useThisForm": "Use this form to sign up for our newsletter, provide feedback, or suggest a new feature for GC Forms.",
     "errors": {
       "submissionError": "Something went wrong. Please try again later."
     }
