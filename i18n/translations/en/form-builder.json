@@ -308,8 +308,8 @@
   "contactSupportIfYouHaveQuestions": "<a href=\"/en/support\" target=\"_blank\">Contact support</a> if you have any questions.",
   "contactus": {
     "title": "Contact us",
-    "useThisForm": "We support government employees using GC Forms. We cannot give general advice to the public about the forms that we host. Use this form to sign up for our newsletter, provide feedback, or suggest a new feature.",
-    "gcFormsTeamPart1": "For other enquiries, go to the",
+    "useThisForm": "We support government employees using GC Forms. We cannot give general advice to the public about the forms that we host.",
+    "gcFormsTeamPart1": "Use this form to sign up for our newsletter, provide feedback, or suggest a new feature. For other enquiries, go to the",
     "gcFormsTeamLink": "Government of Canada contacts page",
     "gcFormsTeamPart2": "to find the department or agency that can help.",
     "needSupport": "Need help using GC Forms?",
