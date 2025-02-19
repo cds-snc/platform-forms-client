@@ -8,7 +8,6 @@ import {
   TypeOptions,
   ToastPosition,
 } from "react-toastify";
-import "react-toastify/dist/ReactToastify.min.css";
 
 const contextClass = {
   success: {
@@ -63,23 +62,17 @@ export const ToastContainer = ({
 }) => {
   return (
     <OriginalContainer
-      enableMultiContainer
       containerId={containerId}
       toastClassName={(context?: ToastContext) => {
         return `${
           contextClass[context?.type || "default"]["background"]
         } relative flex drop-shadow-md p-1 rounded-md justify-between overflow-hidden p-4 cursor-pointer`;
       }}
-      bodyClassName={(context?: {
-        type?: TypeOptions;
-        defaultClassName?: string;
-        position?: ToastPosition;
-        rtl?: boolean;
-      }) => {
-        return `${contextClass[context?.type || "default"]["text"]} flex text-base`;
+      className={(context?: ToastContext) => {
+        return `${contextClass[context?.type || "default"]["background"]} flex text-base`;
       }}
       style={{ width: width }}
-      position={originalToast.POSITION.TOP_CENTER}
+      position="top-center"
       autoClose={autoClose}
       hideProgressBar={true}
       closeOnClick={true}
