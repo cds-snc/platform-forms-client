@@ -5,7 +5,7 @@ import { NagwareResult } from "./types";
 import { logEvent } from "./auditLogs";
 import { logMessage } from "@lib/logger";
 import { Privilege, Prisma } from "@prisma/client";
-import { sendDeactivationEmail } from "@lib/deactivate";
+import { DeactivationReason, sendDeactivationEmail } from "@lib/deactivate";
 import { getAllTemplatesForUser } from "./templates";
 import { listAllSubmissions } from "./vault";
 import { detectOldUnprocessedSubmissions } from "./nagware";
@@ -201,7 +201,11 @@ export const getUsers = async (where?: Prisma.UserWhereInput): Promise<AppUser[]
  * @param active activate or deactivate user
  * @returns User
  */
-export const updateActiveStatus = async (userID: string, active: boolean) => {
+export const updateActiveStatus = async (
+  userID: string,
+  active: boolean,
+  reason: DeactivationReason = DeactivationReason.DEFAULT
+) => {
   try {
     const { user: abilityUser } = await authorization.canManageAllUsers().catch((e) => {
       if (e instanceof AccessControlError) {
@@ -253,7 +257,7 @@ export const updateActiveStatus = async (userID: string, active: boolean) => {
     );
 
     if (!active && user.email) {
-      sendDeactivationEmail(user.email);
+      sendDeactivationEmail(user.email, reason);
     }
 
     return user;
