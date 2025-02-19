@@ -87,7 +87,10 @@ export const ConfirmDownloadDialog = ({
   });
 
   const tParent = type === "confirm" ? "saveResponse" : "saveAndResume";
-  const generateHtmlError = t("errorPanel.defaultTitle", { lng: language, ns: "common" });
+  const generateHtmlError = t("saveResponse.downloadHtml.generateHtmlError.description", {
+    lng: language,
+    ns: "common",
+  });
 
   const handleSave = useCallback(async () => {
     try {
