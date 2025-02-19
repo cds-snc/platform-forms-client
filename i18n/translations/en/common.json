@@ -222,7 +222,7 @@
   "saveAndResume": {
     "saveBtn": "Save to device",
     "resumeBtn": "Resume form",
-    "formRestored": "Your form answers so far were successfully uploaded.",
+    "formRestored": "Your answers so far were added to the form.",
     "resumeUploadError": {
       "description": "There was a problem uploading the answers. Try again later, or restart the form."
     },
