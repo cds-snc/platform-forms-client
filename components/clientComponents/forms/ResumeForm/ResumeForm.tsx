@@ -30,7 +30,7 @@ export const ResumeForm = ({
   const { getFlag } = useFeatureFlags();
   const saveAndResumeEnabled = getFlag(FeatureFlags.saveAndResume);
 
-  const resumeError = t("saveResponse.resumeUploadError.description", {
+  const resumeError = t("saveAndResume.resumeUploadError.description", {
     lng: language,
     ns: "common",
   });
@@ -81,7 +81,9 @@ export const ResumeForm = ({
         const parsedJsonData = parsedHTMLData.data;
         const formData = Buffer.from(parsedJsonData, "base64").toString("utf8");
         const parsed = JSON.parse(formData);
-        const id = parsed.id;
+
+        //const id = parsed.id;
+        const id = false;
 
         if (!id || id !== formId) {
           throw new Error("Resume: Invalid form ID");
