@@ -224,7 +224,7 @@
     "resumeBtn": "Poursuivre le formulaire",
     "formRestored": "Your form answers so far were successfully uploaded.",
     "resumeUploadError": {
-      "description": "Resume upload failed. Please try again."
+      "description": "Resume upload failed. Please try again. [FR]"
     },
     "resumePage": {
       "upload": {
@@ -279,7 +279,7 @@
         "submissionId": "Numéro de référence : {{submissionId}}"
       },
       "generateHtmlError": {
-        "description": "There was an error generating the file. Please try again."
+        "description": "There was an error generating the file. Please try again. [FR]"
       }
     }
   },
