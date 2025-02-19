@@ -82,8 +82,7 @@ export const ResumeForm = ({
         const formData = Buffer.from(parsedJsonData, "base64").toString("utf8");
         const parsed = JSON.parse(formData);
 
-        //const id = parsed.id;
-        const id = false;
+        const id = parsed.id;
 
         if (!id || id !== formId) {
           throw new Error("Resume: Invalid form ID");
