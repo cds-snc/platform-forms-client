@@ -1,11 +1,11 @@
 "use client";
-import { NextButton } from "@clientComponents/forms/NextButton/NextButton";
 import { useRouter } from "next/navigation";
+import { NextButton } from "@clientComponents/forms/NextButton/NextButton";
 import { useTranslation } from "@i18n/client";
 import { FormRecord, TypeOmit } from "@lib/types";
 import { Form } from "@clientComponents/forms/Form/Form";
 import { Language } from "@lib/types/form-builder-types";
-import { useEffect, useMemo, useRef, type JSX } from "react";
+import React, { useEffect, useMemo, useRef, type JSX } from "react";
 import { useGCFormsContext } from "@lib/hooks/useGCFormContext";
 import { restoreSessionProgress, removeProgressStorage } from "@lib/utils/saveSessionProgress";
 import { useFeatureFlags } from "@lib/hooks/useFeatureFlags";
@@ -13,13 +13,16 @@ import { FeatureFlags } from "@lib/cache/types";
 
 import { toast } from "@formBuilder/components/shared/Toast";
 import { ToastContainer } from "@formBuilder/components/shared/Toast";
+import { TextPage } from "@clientComponents/forms";
 
 export const FormWrapper = ({
   formRecord,
+  header,
   currentForm,
   allowGrouping,
 }: {
   formRecord: TypeOmit<FormRecord, "name" | "deliveryOption">;
+  header: React.ReactNode;
   currentForm: JSX.Element[];
   allowGrouping?: boolean | undefined;
 }) => {
@@ -28,8 +31,8 @@ export const FormWrapper = ({
     t,
     i18n: { language },
   } = useTranslation(["common", "confirmation", "form-closed"]);
-  const router = useRouter();
-  const { saveSessionProgress } = useGCFormsContext();
+  const { saveSessionProgress, setSubmissionId, submissionId, submissionDate, setSubmissionDate } =
+    useGCFormsContext();
 
   const { getFlag } = useFeatureFlags();
   const saveAndResumeEnabled = getFlag(FeatureFlags.saveAndResume);
@@ -37,6 +40,7 @@ export const FormWrapper = ({
 
   const formRestoredMessage = t("saveAndResume.formRestored");
   const hasShownResumeMessage = useRef(false);
+  const router = useRouter();
 
   const values = useMemo(
     () =>
@@ -63,14 +67,36 @@ export const FormWrapper = ({
 
   const initialValues = values ? values : undefined;
 
+  // Show confirmation page if submissionId is present
+  if (submissionId && submissionDate) {
+    return (
+      <div className="gc-form-wrapper">
+        <TextPage formId={formRecord.id} formRecord={formRecord} />
+        {saveAndResume && (
+          <ToastContainer limit={1} autoClose={5000} containerId="public-facing-form" />
+        )}
+      </div>
+    );
+  }
+
   return (
     <>
+      {header}
       <Form
         initialValues={initialValues || undefined}
         formRecord={formRecord}
         language={language}
-        onSuccess={(formID) => {
-          router.push(`/${language}/id/${formID}/confirmation`);
+        onSuccess={(formID, submissionId) => {
+          // Set submissionId in context
+          // which will trigger confirmation page content to render
+          submissionId && setSubmissionId(submissionId);
+          const submissionDate = new Date().toISOString();
+          setSubmissionDate(submissionDate);
+
+          if (!saveAndResume || process.env.APP_ENV === "test") {
+            // Redirect to confirmation page if save and resume is not enabled
+            router.push(`/${language}/id/${formID}/confirmation`);
+          }
         }}
         t={t}
         saveSessionProgress={saveSessionProgress}
