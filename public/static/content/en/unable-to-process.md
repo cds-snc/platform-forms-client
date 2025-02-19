@@ -1,5 +1,7 @@
-# We're unable to process your request
+# There was a problem processing this submission
 
 You can:
-- disable your virtual private network (VPN), or browser or proxy server, if you use one
-- try another device
+- Turn off any virtual private network (VPN), firewall, or proxy server
+- Use a different browser, device, or network
+- Try submitting your form again later
+

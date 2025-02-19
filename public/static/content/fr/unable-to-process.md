@@ -1,5 +1,7 @@
-# [FR] We're unable to process your request
+# Il y a eu un problème dans le traitement de cette soumission
 
-[fr]You can:
-- [fr]disable your virtual private network (VPN), or browser or proxy server, if you use one
-- [fr]try another device
+Vous pouvez :
+- Désactiver tout réseau privé virtuel (VPN), pare-feu ou serveur proxy
+- Utiliser un autre navigateur, appareil ou réseau
+- Réessayer de soumettre votre formulaire plus tard
+
