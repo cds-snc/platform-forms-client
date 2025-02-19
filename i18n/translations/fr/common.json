@@ -223,6 +223,9 @@
     "saveBtn": "Sauvegarder sur l'appareil",
     "resumeBtn": "Poursuivre le formulaire",
     "formRestored": "Your form answers so far were successfully uploaded.",
+    "resumeUploadError": {
+      "description": "Resume upload failed. Please try again."
+    },
     "resumePage": {
       "upload": {
         "title": "Poursuivre",

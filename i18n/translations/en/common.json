@@ -223,6 +223,9 @@
     "saveBtn": "Save to device",
     "resumeBtn": "Resume form",
     "formRestored": "Your form answers so far were successfully uploaded.",
+    "resumeUploadError": {
+      "description": "Resume upload failed. Please try again."
+    },
     "resumePage": {
       "upload": {
         "title": "Resume",
