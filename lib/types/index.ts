@@ -1,4 +1,4 @@
-import { FormRecord, Responses, FormElementTypes } from "@cdssnc/gcforms-types";
+import { FormRecord, Responses, FormElementTypes } from "@gcforms/types";
 
 export type {
   ConditionalRule,
@@ -18,7 +18,7 @@ export type {
   AddressComponents,
   BrandProperties,
   ClosedDetails,
-} from "@cdssnc/gcforms-types";
+} from "@gcforms/types";
 
 import { FormikErrors } from "formik";
 export { FormElementTypes };

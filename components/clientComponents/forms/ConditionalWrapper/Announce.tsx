@@ -1,4 +1,4 @@
-import { FormElement } from "@cdssnc/gcforms-types";
+import { FormElement } from "@gcforms/types";
 import { truncateString } from "@lib/client/clientHelpers";
 import { EventKeys, useCustomEvent } from "@lib/hooks/useCustomEvent";
 import { getProperty } from "@lib/i18nHelpers";
