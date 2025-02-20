@@ -13,7 +13,7 @@ import { redirect } from "next/navigation";
 export const verifyHCaptchaToken = async (
   token: string,
   lang: string,
-  passiveMode: boolean
+  blockSubmitMode: boolean
 ): Promise<boolean | void> => {
   const siteVerifyKey = process.env.HCAPTCHA_SITE_VERIFY_KEY;
 
@@ -44,7 +44,7 @@ export const verifyHCaptchaToken = async (
     logMessage.error(
       `hCaptcha: client error. Error: ${JSON.stringify(captchaData["error-codes"])}`
     );
-    !passiveMode && redirect(`/${lang}/unable-to-process`);
+    !blockSubmitMode && redirect(`/${lang}/unable-to-process`);
   }
 
   const verified = checkIfVerified(captchaData.success, captchaData.score);
@@ -52,7 +52,7 @@ export const verifyHCaptchaToken = async (
     logMessage.info(
       `hCaptcha: failed verification. Success=${captchaData.success}, Score=${captchaData.score}`
     );
-    !passiveMode && redirect(`/${lang}/unable-to-process`);
+    !blockSubmitMode && redirect(`/${lang}/unable-to-process`);
   }
 
   logMessage.info(

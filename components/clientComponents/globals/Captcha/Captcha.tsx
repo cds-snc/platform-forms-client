@@ -7,13 +7,13 @@ export const Captcha = ({
   hCaptchaRef,
   lang,
   hCaptchaSiteKey,
-  passiveMode = true,
+  blockSubmitMode = true,
 }: {
   successCb?: () => void;
   hCaptchaRef: React.RefObject<HCaptcha | null>;
   lang: string;
   hCaptchaSiteKey: string | undefined;
-  passiveMode: boolean;
+  blockSubmitMode: boolean;
 }) => {
   if (!hCaptchaSiteKey) {
     logMessage.error("hCaptcha: hCaptchaSiteKey is missing");
@@ -23,7 +23,7 @@ export const Captcha = ({
   // Verify the token on the server side.
   const verify = async (token: string) => {
     try {
-      const success = await verifyHCaptchaToken(token, lang, passiveMode);
+      const success = await verifyHCaptchaToken(token, lang, blockSubmitMode);
       if (success && typeof successCb === "function") {
         successCb();
       }

@@ -144,16 +144,6 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
         </Alert>
       )}
 
-      {captchaEnabled && (
-        <Captcha
-          hCaptchaRef={hCaptchaRef}
-          lang={language}
-          hCaptchaSiteKey={props.hCaptchaSiteKey}
-          successCb={handleSubmit}
-          passiveMode={false}
-        />
-      )}
-
       {
         <>
           {showIntro && (
@@ -250,6 +240,16 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
               />
             </FormActions>
           </form>
+
+          {captchaEnabled && (
+            <Captcha
+              hCaptchaRef={hCaptchaRef}
+              lang={language}
+              hCaptchaSiteKey={props.hCaptchaSiteKey}
+              successCb={handleSubmit}
+              blockSubmitMode={false}
+            />
+          )}
         </>
       }
     </>
