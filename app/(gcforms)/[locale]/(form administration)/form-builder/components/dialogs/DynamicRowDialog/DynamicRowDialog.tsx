@@ -7,7 +7,7 @@ import { Dialog, useDialogRef } from "@formBuilder/components/shared/Dialog";
 import { EventKeys, useCustomEvent } from "@lib/hooks/useCustomEvent";
 import { FormElementWithIndex } from "@lib/types/form-builder-types";
 
-import { dynamicRowType } from "@cdssnc/gcforms-types";
+import { dynamicRowType } from "@gcforms/types";
 
 type DynamicRowDialogEventDetails = {
   item: FormElementWithIndex;
