@@ -64,12 +64,9 @@ export const ToastContainer = ({
     <OriginalContainer
       containerId={containerId}
       toastClassName={(context?: ToastContext) => {
-        return `${
-          contextClass[context?.type || "default"]["background"]
-        } relative flex drop-shadow-md p-1 rounded-md justify-between overflow-hidden p-4 cursor-pointer`;
-      }}
-      className={(context?: ToastContext) => {
-        return `${contextClass[context?.type || "default"]["background"]} flex text-base`;
+        return `${contextClass[context?.type || "default"]["background"]} 
+        ${contextClass[context?.type || "default"]["text"]}
+        relative flex drop-shadow-md p-1 rounded-md justify-between overflow-hidden p-4 cursor-pointer text-base`;
       }}
       style={{ width: width }}
       position="top-center"
