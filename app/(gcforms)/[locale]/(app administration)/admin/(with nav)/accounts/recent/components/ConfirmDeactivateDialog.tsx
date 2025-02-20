@@ -5,7 +5,7 @@ import { useTranslation } from "@i18n/client";
 import { EventKeys, useCustomEvent } from "@lib/hooks/useCustomEvent";
 import { useEffect, useState } from "react";
 import { updateActive } from "../../actions";
-import { DeactivationReason } from "@lib/types";
+import { DeactivationReasons } from "@lib/types";
 
 type ConfirmDeactivateDialogEventDetails = {
   userId: string;
@@ -60,7 +60,7 @@ export const ConfirmDeactivateDialog = () => {
             <Button
               theme="destructive"
               onClick={async () => {
-                await updateActive(userId, false, DeactivationReason.GROUP_EMAIL);
+                await updateActive(userId, false, DeactivationReasons.GROUP_EMAIL);
                 dialogRef.current?.close();
                 handleClose();
               }}

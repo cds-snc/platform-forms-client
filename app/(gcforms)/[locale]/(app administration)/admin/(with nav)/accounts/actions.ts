@@ -3,7 +3,7 @@ import { AuthenticatedAction } from "@lib/actions";
 import { updatePrivilegesForUser } from "@lib/privileges";
 import { revalidatePath } from "next/cache";
 import { updateActiveStatus } from "@lib/users";
-import { DeactivationReason } from "@lib/types";
+import { DeactivationReason, DeactivationReasons } from "@lib/types";
 
 export const updatePublishing = AuthenticatedAction(
   async (_, userID: string, publishFormsId: string, action: "add" | "remove") => {
@@ -17,7 +17,7 @@ export const updateActive = AuthenticatedAction(
     _,
     userID: string,
     active: boolean,
-    reason: DeactivationReason = DeactivationReason.DEFAULT
+    reason: DeactivationReason = DeactivationReasons.DEFAULT
   ) => {
     await updateActiveStatus(userID, active, reason);
     revalidatePath("(gcforms)/[locale]/(app administration)/admin/(with nav)/accounts", "page");

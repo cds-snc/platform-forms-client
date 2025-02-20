@@ -1,7 +1,7 @@
 import { prisma, prismaErrors } from "@lib/integration/prismaConnector";
 import { authorization } from "@lib/privileges";
 import { AccessControlError } from "@lib/auth/errors";
-import { DeactivationReason, NagwareResult } from "./types";
+import { DeactivationReason, DeactivationReasons, NagwareResult } from "./types";
 import { logEvent } from "./auditLogs";
 import { logMessage } from "@lib/logger";
 import { Privilege, Prisma } from "@prisma/client";
@@ -204,7 +204,7 @@ export const getUsers = async (where?: Prisma.UserWhereInput): Promise<AppUser[]
 export const updateActiveStatus = async (
   userID: string,
   active: boolean,
-  reason: DeactivationReason = DeactivationReason.DEFAULT
+  reason: DeactivationReason = DeactivationReasons.DEFAULT
 ) => {
   try {
     const { user: abilityUser } = await authorization.canManageAllUsers().catch((e) => {

@@ -73,7 +73,9 @@ export interface Validate {
   validateForm: () => Promise<FormikErrors<Responses>>;
 }
 
-export enum DeactivationReason {
-  DEFAULT,
-  GROUP_EMAIL,
-}
+export const DeactivationReasons = {
+  DEFAULT: "default",
+  GROUP_EMAIL: "group_email",
+} as const;
+
+export type DeactivationReason = (typeof DeactivationReasons)[keyof typeof DeactivationReasons];

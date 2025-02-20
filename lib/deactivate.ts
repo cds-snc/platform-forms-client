@@ -1,7 +1,7 @@
 import { sendEmail } from "./integration/notifyConnector";
 import { logMessage } from "@lib/logger";
 import { getOrigin } from "./origin";
-import { DeactivationReason } from "./types";
+import { DeactivationReason, DeactivationReasons } from "./types";
 
 const defaultTemplate = (email: string, HOST: string) => {
   return `
@@ -57,7 +57,7 @@ L’équipe Formulaires GC
 
 export const sendDeactivationEmail = async (
   email: string,
-  reason: DeactivationReason = DeactivationReason.DEFAULT
+  reason: DeactivationReason = DeactivationReasons.DEFAULT
 ) => {
   try {
     const HOST = await getOrigin();
@@ -65,7 +65,7 @@ export const sendDeactivationEmail = async (
     await sendEmail(email, {
       subject: "Account deactivated | Compte désactivé",
       formResponse:
-        reason === DeactivationReason.DEFAULT
+        reason === DeactivationReasons.DEFAULT
           ? defaultTemplate(email, HOST)
           : sharedTemplate(email, HOST),
     });
