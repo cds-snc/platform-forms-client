@@ -6,8 +6,9 @@
     "declaration": true,
     "outDir": "./dist",
     "strict": true,
-    "esModuleInterop": false,
-    "typeRoots": ["./src/@types"]
+    "esModuleInterop": true,
+    "typeRoots": ["./node_modules/@types"],
+    "moduleResolution": "node"
   },
   "include": ["src"],
   "exclude": ["node_modules", "dist"]

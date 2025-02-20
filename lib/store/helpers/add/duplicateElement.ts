@@ -1,4 +1,4 @@
-import { FormElement } from "@cdssnc/gcforms-types";
+import { FormElement } from "@gcforms/types";
 import { type TemplateStore } from "../../types";
 
 export const duplicateElement: TemplateStore<"duplicateElement"> =
