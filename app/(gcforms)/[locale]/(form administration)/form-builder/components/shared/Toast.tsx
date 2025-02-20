@@ -57,7 +57,6 @@ export const ToastContainer = ({
 }) => {
   return (
     <OriginalContainer
-      role="alert"
       containerId={containerId}
       toastClassName={(context?: ToastContext) => {
         return `${contextClass[context?.type || "default"]["classes"]} 
