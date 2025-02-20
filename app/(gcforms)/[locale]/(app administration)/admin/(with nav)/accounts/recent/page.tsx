@@ -8,6 +8,7 @@ import { ConfirmDeactivateDialog } from "./components/ConfirmDeactivateDialog";
 import { AddNoteDialog } from "./components/AddNoteDialog";
 import { authorization } from "@lib/privileges";
 import { AuthenticatedPage } from "@lib/pages/auth";
+import { authCheckAndThrow } from "@lib/actions";
 
 export default AuthenticatedPage(
   [authorization.canViewAllUsers, authorization.canManageAllUsers],
@@ -16,6 +17,7 @@ export default AuthenticatedPage(
     filter = filter && filter === "flagged" ? "flagged" : "all";
 
     const { t } = await serverTranslation(["admin-recent-signups"]);
+    const { ability } = await authCheckAndThrow();
 
     const from = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000);
 
@@ -93,19 +95,21 @@ export default AuthenticatedPage(
               className="m-0 flex list-none flex-row flex-wrap gap-4 p-0"
             >
               {filteredSignups?.map((user) => {
-                return (
-                  <div
-                    className="w-1/3 overflow-x-hidden rounded-md border-2 border-black p-2"
-                    id={`user-${user.id}`}
-                    key={user.id}
-                    data-testid={user.email}
-                  >
-                    <UserCard
-                      user={user}
-                      flagged={flaggedSignups.some((flaggedUser) => flaggedUser.id === user.id)}
-                    />
-                  </div>
-                );
+                if (user.id !== ability.user.id) {
+                  return (
+                    <div
+                      className="w-1/3 overflow-x-hidden rounded-md border-2 border-black p-2"
+                      id={`user-${user.id}`}
+                      key={user.id}
+                      data-testid={user.email}
+                    >
+                      <UserCard
+                        user={user}
+                        flagged={flaggedSignups.some((flaggedUser) => flaggedUser.id === user.id)}
+                      />
+                    </div>
+                  );
+                }
               })}
             </ul>
           ) : (
