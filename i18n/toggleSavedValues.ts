@@ -1,4 +1,4 @@
-import { FormProperties, Response, FormElement, Responses } from "@cdssnc/gcforms-types";
+import { FormProperties, Response, FormElement, Responses } from "@gcforms/types";
 import { Language } from "@lib/types/form-builder-types";
 
 type FormElements = {
