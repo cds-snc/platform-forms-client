@@ -27,6 +27,10 @@ export const useFeatureFlags = () => {
   const { flags } = useContext(FeatureFlagsContext);
   return {
     getFlag: (key: string) => {
+      if (key === "saveAndResume") {
+        return true;
+      }
+
       return flags[key as keyof typeof flags];
     },
   };
