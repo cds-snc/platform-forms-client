@@ -13,7 +13,7 @@ export const UserCard = ({ user, flagged }: { user: AppUser; flagged: boolean })
       <div className="p-4">
         <h2 className="text-base">{user.name}</h2>
         <p className="mb-4">{user.email}</p>
-        <p className="mb-4">Date created: {user.createdAt.toLocaleDateString("en-GB")}</p>
+        <p className="mb-4">Date created: {user.createdAt.toLocaleDateString("en-CA")}</p>
 
         {hasNote && <p className="mb-2">&quot;{user.notes}&quot;</p>}
 

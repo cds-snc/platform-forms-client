@@ -72,8 +72,8 @@ export default AuthenticatedPage(
         <h1>{t("recentAccounts")}</h1>
         <p>
           {t("accountsCreatedFromTo", {
-            from: from.toLocaleDateString("en-GB"),
-            to: new Date().toLocaleDateString("en-GB"),
+            from: from.toLocaleDateString("en-CA"),
+            to: new Date().toLocaleDateString("en-CA"),
             interpolation: { escapeValue: false },
           })}
         </p>
