@@ -13,32 +13,32 @@ const contextClass = {
   success: {
     background: "bg-green-50",
     text: "text-green-800",
-    icon: <CircleCheckIcon className="fill-green-800" />,
+    icon: <CircleCheckIcon className="size-10 fill-green-800" />,
   },
   error: {
     background: "bg-red-100",
     text: "text-red-800",
-    icon: <WarningIcon className="fill-red-800" />,
+    icon: <WarningIcon className="size-10 fill-red-800" />,
   },
   info: {
     background: "bg-blue-50",
     text: "text-blue-600",
-    icon: <InfoIcon className="fill-blue-600" />,
+    icon: <InfoIcon className="size-10 fill-blue-600" />,
   },
   warn: {
     background: "bg-yellow-50",
     text: "text-yellow-700",
-    icon: <WarningIcon className="fill-yellow-700" />,
+    icon: <WarningIcon className="size-10 fill-yellow-700" />,
   },
   warning: {
     background: "bg-yellow-50",
     text: "text-yellow-700",
-    icon: <WarningIcon className="fill-yellow-700" />,
+    icon: <WarningIcon className="size-10 fill-yellow-700" />,
   },
   default: {
     background: "bg-white",
     text: "text-black",
-    icon: <InfoIcon className="fill-black" />,
+    icon: <InfoIcon className="size-10 fill-black" />,
   },
 };
 
@@ -66,7 +66,10 @@ export const ToastContainer = ({
       toastClassName={(context?: ToastContext) => {
         return `${contextClass[context?.type || "default"]["background"]} 
         ${contextClass[context?.type || "default"]["text"]}
-        relative flex drop-shadow-md p-1 rounded-md justify-between overflow-hidden p-4 cursor-pointer text-base`;
+        relative drop-shadow-md p-1 rounded-md justify-between overflow-hidden p-4 cursor-pointer text-base`;
+      }}
+      bodyClassName={(context?: ToastContext) => {
+        return `${contextClass[context?.type || "default"]["text"]} flex flex-row px-4`;
       }}
       style={{ width: width }}
       position="top-center"
