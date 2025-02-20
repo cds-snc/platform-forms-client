@@ -71,8 +71,12 @@ export const ConfirmDeactivateDialog = () => {
         }
       >
         <div className="p-5">
-          <h2>Are you sure you would like to deactivate this account?</h2>
-          <p>Deactivating this account will notify the user.</p>
+          <h2>{t("areYouSure")}</h2>
+          <p>
+            {t("deactivateAccountWarning")}
+            <br />
+            {t("deactivateAccountWarning2")}
+          </p>
         </div>
       </Dialog>
     )

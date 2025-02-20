@@ -46,7 +46,7 @@ export const AddNoteDialog = () => {
       <Dialog
         dialogRef={dialogRef}
         handleClose={handleClose}
-        title={t("addNote")}
+        title={t("addANote")}
         actions={
           <div className="flex gap-4">
             <Button
@@ -72,11 +72,11 @@ export const AddNoteDialog = () => {
         }
       >
         <div className="p-5">
-          <h2>Provide context</h2>
-          <p>Add a note to the account to reference at a later date.</p>
+          <h2>{t("provideContext")}</h2>
+          <p>{t("addNoteNote")}</p>
 
           <label htmlFor="" className="mb-2 block font-[700]">
-            Add note (optional)
+            {t("addNote")}
           </label>
           <TextArea
             className="h-40 w-full"

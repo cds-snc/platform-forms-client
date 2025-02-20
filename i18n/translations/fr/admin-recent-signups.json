@@ -1,7 +1,20 @@
 {
-  "recentAccounts": "(fr) Recent accounts",
-  "cancel": "(fr) Cancel",
-  "addNote": "(fr) Add a note",
-  "confirmDeactivate": "(fr) Deactivate account",
-  "accountsCreatedFromTo": "(fr) Accounts created {{from}} to {{to}}"
+  "recentAccounts": "Recent accounts",
+  "cancel": "Cancel",
+  "addANote": "Add a note",
+  "addNote": "Add note",
+  "confirmDeactivate": "Deactivate account",
+  "accountsCreatedFromTo": "Accounts created {{from}} to {{to}}",
+  "all": "All",
+  "accountsFlagged": "Accounts flagged",
+  "deactivate": "Deactivate",
+  "save": "Save",
+  "dateCreated": "Date created:",
+  "flagged": "Flagged",
+  "areYouSure": "Are you sure you would like to deactivate this account?",
+  "deactivateAccountWarning": "After you deactivate an account, the account will not longer have access to GC Forms.",
+  "deactivateAccountWarning2": "You can reactivate the account under the All Accounts page.",
+  "provideContext": "Provide context",
+  "addNoteNote": "Add a note to the account to reference at a later date.",
+  "noFlaggedUsersFound": "No flagged users found"
 }

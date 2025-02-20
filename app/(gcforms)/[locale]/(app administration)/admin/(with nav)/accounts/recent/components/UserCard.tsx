@@ -4,16 +4,20 @@ import { AppUser } from "@lib/types/user-types";
 import { Flagged } from "./Flagged";
 import { EventKeys, useCustomEvent } from "@lib/hooks/useCustomEvent";
 import { OnHold } from "./OnHold";
+import { useTranslation } from "@i18n/client";
 
 export const UserCard = ({ user, flagged }: { user: AppUser; flagged: boolean }) => {
   const { Event } = useCustomEvent();
+  const { t } = useTranslation("admin-recent-signups");
   const hasNote = user.notes !== null;
   return (
     <>
       <div className="p-4">
         <h2 className="text-base">{user.name}</h2>
         <p className="mb-4">{user.email}</p>
-        <p className="mb-4">Date created: {user.createdAt.toLocaleDateString("en-CA")}</p>
+        <p className="mb-4">
+          {t("dateCreated")} {user.createdAt.toLocaleDateString("en-CA")}
+        </p>
 
         {hasNote && <p className="mb-2">&quot;{user.notes}&quot;</p>}
 
@@ -33,7 +37,7 @@ export const UserCard = ({ user, flagged }: { user: AppUser; flagged: boolean })
                   });
                 }}
               >
-                Add note
+                {t("addNote")}
               </Button>
               <Button
                 theme="primary"
@@ -43,7 +47,7 @@ export const UserCard = ({ user, flagged }: { user: AppUser; flagged: boolean })
                   });
                 }}
               >
-                Deactivate
+                {t("deactivate")}
               </Button>
             </div>
           )}

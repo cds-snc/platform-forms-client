@@ -114,7 +114,7 @@ export default AuthenticatedPage(
             </ul>
           ) : (
             <Card>
-              <p className="text-[#748094]">No flagged users found</p>
+              <p className="text-[#748094]">{t("noFlaggedUsersFound")}</p>
             </Card>
           )}
         </div>
