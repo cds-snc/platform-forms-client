@@ -27,8 +27,7 @@
       "@i18n": ["i18n"],
       "@i18n/*": ["i18n/*"],
       "@content/*": ["public/static/content/*"],
-      "@public/*": ["public/*"],
-      "@cdssnc/gcforms-types": ["packages/gcforms-types/src"]
+      "@public/*": ["public/*"]
     },
     "incremental": true,
     "plugins": [
@@ -53,6 +52,7 @@
     "cypress.config.ts",
     "**/*.cy.ts",
     "**/*.cy.tsx",
-    "__tests__"
+    "__tests__",
+    "packages"
   ]
 }
