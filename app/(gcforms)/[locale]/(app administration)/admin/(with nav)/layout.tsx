@@ -68,7 +68,7 @@ export default AuthenticatedLayout(
               limit={1}
               containerId="wide"
               autoClose={false}
-              aria-label="Notifications: Alt+T"
+              ariaLabel="Notifications: Alt+T"
               width="600px"
             />
             <>

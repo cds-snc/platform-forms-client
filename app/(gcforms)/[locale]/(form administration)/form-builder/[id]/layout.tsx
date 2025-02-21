@@ -90,7 +90,7 @@ export default async function Layout(props: {
                     limit={1}
                     containerId="wide"
                     autoClose={10000}
-                    aria-label="Notifications: Alt+T"
+                    ariaLabel="Notifications: Alt+T"
                     width="600px"
                   />
                   <div className="flex h-full flex-row gap-7">

@@ -49,11 +49,13 @@ export const ToastContainer = ({
   width = "",
   containerId = "",
   limit,
+  ariaLabel,
 }: {
   autoClose?: number | false | undefined;
   width?: string;
   containerId?: string;
   limit?: number;
+  ariaLabel?: string;
 }) => {
   return (
     <OriginalContainer
@@ -69,6 +71,7 @@ export const ToastContainer = ({
       closeOnClick={true}
       transition={Bounce}
       limit={limit}
+      {...(ariaLabel && { "aria-label": ariaLabel })}
       icon={() => null}
     />
   );
