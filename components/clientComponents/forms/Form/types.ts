@@ -25,6 +25,7 @@ export interface FormProps {
   matchedIds?: string[];
   saveSessionProgress: (language?: Language) => void;
   saveAndResumeEnabled?: boolean;
+  hCaptchaSiteKey?: string | undefined;
 }
 
 export type InnerFormProps = FormProps & FormikProps<Responses>;

@@ -33,6 +33,11 @@ import { useFormDelay } from "@lib/hooks/useFormDelayContext";
 import { FormActions } from "./FormActions";
 import { PrimaryFormButtons } from "./PrimaryFormButtons";
 
+import { useFeatureFlags } from "@lib/hooks/useFeatureFlags";
+import { hCaptchaEnabled } from "@clientComponents/globals/Captcha/helpers";
+import { Captcha } from "@clientComponents/globals/Captcha/Captcha";
+import HCaptcha from "@hcaptcha/react-hcaptcha";
+
 /**
  * This is the "inner" form component that isn't connected to Formik and just renders a simple form
  * @param props
@@ -57,6 +62,10 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
   const showIntro = isGroupsCheck ? currentGroup === LockedSections.START : true;
   const groupsHeadingRef = useRef<HTMLHeadingElement>(null);
   const { getFormDelayWithGroups, getFormDelayWithoutGroups } = useFormDelay();
+
+  const { getFlag } = useFeatureFlags();
+  const captchaEnabled = hCaptchaEnabled(getFlag("hCaptcha"), props.isPreview);
+  const hCaptchaRef = useRef<HCaptcha>(null);
 
   // Used to set any values we'd like added for use in the below withFormik handleSubmit().
   useFormValuesChanged();
@@ -167,7 +176,20 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
               if (isGroupsCheck && isShowReviewPage && currentGroup !== LockedSections.REVIEW) {
                 return;
               }
-              handleSubmit(e);
+
+              if (captchaEnabled) {
+                hCaptchaRef.current?.execute();
+
+                // TODO: consider how to handle the unlikely "never going to happend" cases
+                // 1. what if the above ref is undefined?
+                // 2. what if the react hCaptcha component has a bug and the submission is left hanging indefinitely?
+                // 3. Any others?
+                //
+                // A fallback could be created that kills hCaptcha and calls handleSubmit(e) directly here
+                // e.g. hCaptchaRef.current?.resetCaptcha(); handleSubmit(e);
+              } else {
+                handleSubmit(e);
+              }
             }}
             noValidate
           >
@@ -217,6 +239,16 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
               />
             </FormActions>
           </form>
+
+          {captchaEnabled && (
+            <Captcha
+              hCaptchaRef={hCaptchaRef}
+              lang={language}
+              hCaptchaSiteKey={props.hCaptchaSiteKey}
+              successCb={handleSubmit}
+              blockSubmitMode={false}
+            />
+          )}
         </>
       }
     </>

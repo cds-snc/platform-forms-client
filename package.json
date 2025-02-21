@@ -59,6 +59,8 @@
     "@cdssnc/gcds-tokens": "1.20.1",
     "@gcforms/connectors": "^1.0.0",
     "@gcforms/types": "^1.0.0",
+    "@hcaptcha/react-hcaptcha": "^1.11.2",
+    "@hcaptcha/types": "^1.0.4",
     "@headlessui/react": "^2.2.0",
     "@lexical/react": "^0.12.6",
     "@neshca/cache-handler": "^1.2.1",
