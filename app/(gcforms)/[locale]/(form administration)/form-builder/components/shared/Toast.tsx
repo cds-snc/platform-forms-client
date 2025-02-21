@@ -5,43 +5,37 @@ import {
   ToastContainer as OriginalContainer,
   toast as originalToast,
   Bounce,
-  TypeOptions,
   ToastPosition,
 } from "react-toastify";
-import "react-toastify/dist/ReactToastify.min.css";
 
 const contextClass = {
   success: {
-    background: "bg-green-50",
-    text: "text-green-800",
-    icon: <CircleCheckIcon className="fill-green-800" />,
+    classes: "bg-green-50 text-green-800 [&_svg]:fill-green-800",
+    icon: <CircleCheckIcon className="my-2 mr-2 size-6 fill-green-800" />,
   },
   error: {
-    background: "bg-red-100",
-    text: "text-red-800",
-    icon: <WarningIcon className="fill-red-800" />,
+    classes: "bg-red-100 text-red-800 [&_svg]:fill-red-800",
+    icon: <WarningIcon className="my-2 mr-2 size-6 fill-red-800" />,
   },
   info: {
-    background: "bg-blue-50",
-    text: "text-blue-600",
-    icon: <InfoIcon className="fill-blue-600" />,
+    classes: "bg-blue-50 text-blue-600 [&_svg]:fill-blue-600",
+    icon: <InfoIcon className="my-2 mr-2 size-6 fill-blue-600" />,
   },
   warn: {
-    background: "bg-yellow-50",
-    text: "text-yellow-700",
-    icon: <WarningIcon className="fill-yellow-700" />,
+    classes: "bg-yellow-50 text-yellow-700 [&_svg]:fill-yellow-700",
+    icon: <WarningIcon className="my-2 mr-2 size-6 fill-yellow-700" />,
   },
   warning: {
-    background: "bg-yellow-50",
-    text: "text-yellow-700",
-    icon: <WarningIcon className="fill-yellow-700" />,
+    classes: "bg-yellow-50 text-yellow-700 [&_svg]:fill-yellow-700",
+    icon: <WarningIcon className="my-2 mr-2 size-6 fill-yellow-700" />,
   },
   default: {
-    background: "bg-white",
-    text: "text-black",
-    icon: <InfoIcon className="fill-black" />,
+    classes: "bg-white text-black [&_svg]:fill-black",
+    icon: <InfoIcon className="my-2 mr-2 size-6 fill-black" />,
   },
 };
+
+type TypeOptions = keyof typeof contextClass;
 
 type ToastContext = {
   type?: TypeOptions;
@@ -55,64 +49,66 @@ export const ToastContainer = ({
   width = "",
   containerId = "",
   limit,
+  ariaLabel,
 }: {
   autoClose?: number | false | undefined;
   width?: string;
   containerId?: string;
   limit?: number;
+  ariaLabel?: string;
 }) => {
   return (
     <OriginalContainer
-      enableMultiContainer
       containerId={containerId}
       toastClassName={(context?: ToastContext) => {
-        return `${
-          contextClass[context?.type || "default"]["background"]
-        } relative flex drop-shadow-md p-1 rounded-md justify-between overflow-hidden p-4 cursor-pointer`;
-      }}
-      bodyClassName={(context?: {
-        type?: TypeOptions;
-        defaultClassName?: string;
-        position?: ToastPosition;
-        rtl?: boolean;
-      }) => {
-        return `${contextClass[context?.type || "default"]["text"]} flex text-base`;
+        return `${contextClass[context?.type || "default"]["classes"]} 
+        relative drop-shadow-md p-1 rounded-md justify-between overflow-hidden p-4 cursor-pointer text-base`;
       }}
       style={{ width: width }}
-      position={originalToast.POSITION.TOP_CENTER}
+      position="top-center"
       autoClose={autoClose}
       hideProgressBar={true}
       closeOnClick={true}
       transition={Bounce}
       limit={limit}
-      icon={(context?: ToastContext) => {
-        return contextClass[context?.type || "default"]["icon"];
-      }}
+      {...(ariaLabel && { "aria-label": ariaLabel })}
+      icon={() => null}
     />
   );
 };
 
-const toastContent = (message: string | JSX.Element) => {
-  return React.isValidElement(message) ? message : <p className="py-2">{message}</p>;
+const toastIcon = (type: TypeOptions) => {
+  return contextClass[type]["icon"];
+};
+
+const toastContent = (message: string | JSX.Element, type: TypeOptions) => {
+  return React.isValidElement(message) ? (
+    message
+  ) : (
+    <div className="flex flex-row px-4">
+      {toastIcon(type)}
+      <p className="py-2">{message}</p>
+    </div>
+  );
 };
 
 export const toast = {
   success: (message: string | JSX.Element, containerId = "default") => {
-    originalToast.success(toastContent(message), { containerId });
+    originalToast.success(toastContent(message, "success"), { containerId });
   },
   error: (message: string | JSX.Element, containerId = "default") => {
-    originalToast.error(toastContent(message), { containerId });
+    originalToast.error(toastContent(message, "error"), { containerId });
   },
   info: (message: string | JSX.Element, containerId = "default") => {
-    originalToast.info(toastContent(message), { containerId });
+    originalToast.info(toastContent(message, "info"), { containerId });
   },
   warn: (message: string | JSX.Element, containerId = "default") => {
-    originalToast.warn(toastContent(message), { containerId });
+    originalToast.warn(toastContent(message, "warn"), { containerId });
   },
   warning: (message: string | JSX.Element, containerId = "") => {
-    originalToast.warning(toastContent(message), { containerId });
+    originalToast.warning(toastContent(message, "warning"), { containerId });
   },
   default: (message: string | JSX.Element, containerId = "default") => {
-    originalToast(toastContent(message), { containerId });
+    originalToast(toastContent(message, "default"), { containerId });
   },
 };
