@@ -1,7 +1,7 @@
-# There was a problem processing this submission
+# Your form could not be submitted
 
-You can:
-- Turn off any virtual private network (VPN), firewall, or proxy server
-- Use a different browser, device, or network
-- Try submitting your form again later
+You might try to:
+- Turn off a virtual private network (VPN), firewall, or proxy server, if you use one.
+- Use a different browser, device, or network, if an alternate is available.
+- Submit your form again later or contact the program or service directly.
 

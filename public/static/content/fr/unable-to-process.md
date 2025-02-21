@@ -1,7 +1,7 @@
-# Il y a eu un problème dans le traitement de cette soumission
+# Votre formulaire n'a pas pu être soumis
 
-Vous pouvez :
-- Désactiver tout réseau privé virtuel (VPN), pare-feu ou serveur proxy
-- Utiliser un autre navigateur, appareil ou réseau
-- Réessayer de soumettre votre formulaire plus tard
+Vous pouvez essayer de :
+- Désactiver un réseau privé virtuel (VPN), un pare-feu ou un serveur proxy, si vous en utilisez un.
+- Utiliser un autre navigateur, un autre appareil ou un autre réseau, si une alternative est disponible.
+- Soumettre à nouveau votre formulaire plus tard ou contacter directement le programme ou le service.
 
