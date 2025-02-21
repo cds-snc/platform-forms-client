@@ -1,5 +1,5 @@
 import { type Language } from "@lib/types/form-builder-types";
-import { FormProperties } from "@cdssnc/gcforms-types";
+import { FormProperties } from "@gcforms/types";
 import { type FormValues } from "@lib/formContext";
 import { toggleSavedValues } from "@i18n/toggleSavedValues";
 
