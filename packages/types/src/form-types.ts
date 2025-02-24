@@ -201,7 +201,15 @@ export type FormRecord = {
   closingDate?: string;
   closedDetails?: ClosedDetails;
   saveAndResume?: boolean;
-  [key: string]: string | boolean | FormProperties | DeliveryOption | ClosedDetails | undefined;
+  associatedUsersCount?: number;
+  [key: string]:
+    | string
+    | boolean
+    | number
+    | FormProperties
+    | DeliveryOption
+    | ClosedDetails
+    | undefined;
 };
 
 export type SecurityAttribute = "Unclassified" | "Protected A" | "Protected B";
