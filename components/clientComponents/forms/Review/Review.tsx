@@ -11,6 +11,7 @@ import { ReviewList } from "./ReviewList";
 import { getReviewItems } from "./helpers";
 
 import { EditButton } from "./EditButton";
+import { tryFocusOnPageLoad } from "@lib/client/clientHelpers";
 
 export const Review = ({ language }: { language: Language }): React.ReactElement | null => {
   const { groups, getValues, formRecord, getGroupHistory, matchedIds } = useGCFormsContext();
@@ -41,7 +42,7 @@ export const Review = ({ language }: { language: Language }): React.ReactElement
         reviewItemId={id}
         theme={theme}
         onClick={() => {
-          groupsHeadingRef.current?.focus();
+          tryFocusOnPageLoad("h2");
         }}
       >
         {title ? title : editText}
