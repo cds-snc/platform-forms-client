@@ -37,7 +37,7 @@ export const ConfirmDeactivateDialog = () => {
     return () => {
       Event.off(EventKeys.openDeactivateUserDialog, handleOpenDialog);
     };
-  });
+  }, [Event]);
 
   return (
     isOpen &&
