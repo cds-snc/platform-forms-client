@@ -7,13 +7,13 @@ export const Captcha = ({
   hCaptchaRef,
   lang,
   hCaptchaSiteKey,
-  blockSubmitMode = true,
+  blockableMode = true,
 }: {
   successCb?: () => void;
   hCaptchaRef: React.RefObject<HCaptcha | null>;
   lang: string;
   hCaptchaSiteKey: string | undefined;
-  blockSubmitMode: boolean;
+  blockableMode: boolean;
 }) => {
   if (!hCaptchaSiteKey) {
     logMessage.error("hCaptcha: hCaptchaSiteKey is missing");
@@ -23,7 +23,7 @@ export const Captcha = ({
   // Verify the token on the server side.
   const verify = async (token: string) => {
     try {
-      const success = await verifyHCaptchaToken(token, lang, blockSubmitMode);
+      const success = await verifyHCaptchaToken(token, lang, blockableMode);
       logMessage.info(`hCaptcha: ${success ? "success" : "failed"}`);
       if (success && typeof successCb === "function") {
         successCb();
@@ -37,12 +37,10 @@ export const Captcha = ({
     }
   };
 
-  // Component will reset immediately after an error.
-  // See https://docs.hcaptcha.com/#siteverify-error-codes-table
+  // Component will reset immediately after a Client sends bad data.
   const clientComponentError = (code: string) => {
+    // For more error info from the code see https://docs.hcaptcha.com/#siteverify-error-codes-table
     logMessage.error(`hCatpcha: clientComponentError error. Error: ${code}`);
-    // TODO: This error (almost?) always happens when the user has tamperred with the data in some
-    // way. Do we want to show an error or just fail silently?
   };
 
   const tokenExpired = () => {
@@ -56,9 +54,9 @@ export const Captcha = ({
   };
 
   // Running in 100% passive mode.
-  // For component info see https://github.com/hCaptcha/react-hcaptcha
-  // Note: An invalid sitekey will cause the HCaptcha component to fail without calling the onError
-  // Note: The '"Cookie “__cflb” has been rejected' error is probably related to the accesible cookie (see if we can ditch it)
+  // For React component info see https://github.com/hCaptcha/react-hcaptcha
+  // Note: An invalid sitekey will cause the HCaptcha component to fail without calling onError
+  // Note: Error '"Cookie “__cflb” has been rejected' is probably related to the accesible cookie (hoping to remove)
   return (
     <HCaptcha
       sitekey={hCaptchaSiteKey}
