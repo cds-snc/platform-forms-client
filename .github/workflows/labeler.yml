@@ -1,6 +1,6 @@
 name: "Add labels to Pull Requests"
 
-on: pull_request
+on: pull_request_target
 
 jobs:
   labeler:
