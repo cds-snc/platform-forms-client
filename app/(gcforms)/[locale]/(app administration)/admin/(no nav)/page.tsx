@@ -38,7 +38,7 @@ export default async function Page(props: { params: Promise<{ locale: string }> 
               <Link href={`/${locale}/admin/accounts`}>{t("accounts")}</Link>
             </li>
             <li>
-              <Link href={`/${locale}/admin/accounts/recent`}>Recent accounts</Link>
+              <Link href={`/${locale}/admin/accounts/recent`}>{t("recentAccounts")}</Link>
             </li>
           </ul>
         </div>
