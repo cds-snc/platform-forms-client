@@ -26,10 +26,10 @@ export const DynamicRow = ({ formItem, language }: { formItem: FormItem; languag
       {reviewSection.values.map((formItem, index) => {
         const dynamicRowElements = getDynamicRowElements(formItem as FormItem, language);
         return (
-          <dl className="mb-10 mt-12" key={`${(formItem as FormItem).element?.id}-${index}`}>
+          <div className="mb-10 mt-12" key={`${(formItem as FormItem).element?.id}-${index}`}>
             <h5 className="mb-8">{(formItem as FormItem).label}</h5>
             {dynamicRowElements}
-          </dl>
+          </div>
         );
       })}
     </div>
