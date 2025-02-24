@@ -3,11 +3,11 @@ import { BackButton } from "@formBuilder/[id]/preview/BackButton";
 import { BackButtonGroup } from "../BackButtonGroup/BackButtonGroup";
 import { SubmitButton } from "./SubmitButton";
 import { InnerFormProps } from "./types";
+import { tryFocusOnPageLoad } from "@lib/client/clientHelpers";
 
 export const PrimaryFormButtons = ({
   isGroupsCheck,
   isShowReviewPage,
-  groupsHeadingRef,
   language,
   formId,
   formTitle,
@@ -17,7 +17,6 @@ export const PrimaryFormButtons = ({
 }: {
   isGroupsCheck: boolean;
   isShowReviewPage: boolean;
-  groupsHeadingRef: React.RefObject<HTMLHeadingElement | null>;
   language: string;
   formId: string;
   formTitle: string;
@@ -31,7 +30,7 @@ export const PrimaryFormButtons = ({
         <BackButtonGroup
           saveAndResumeEnabled={saveAndResumeEnabled}
           language={language as Language}
-          onClick={() => groupsHeadingRef.current?.focus()}
+          onClick={() => tryFocusOnPageLoad("h2")}
         />
       )}
       {props.renderSubmit ? (
@@ -44,7 +43,7 @@ export const PrimaryFormButtons = ({
                   <BackButton
                     saveAndResumeEnabled={saveAndResumeEnabled}
                     language={language as Language}
-                    onClick={() => groupsHeadingRef.current?.focus()}
+                    onClick={() => tryFocusOnPageLoad("h2")}
                   />
                 )}
                 <SubmitButton getFormDelay={getFormDelay} formID={formId} formTitle={formTitle} />

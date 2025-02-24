@@ -5,7 +5,7 @@ import { useTranslation } from "@i18n/client";
 import { FormRecord, TypeOmit } from "@lib/types";
 import { Form } from "@clientComponents/forms/Form/Form";
 import { Language } from "@lib/types/form-builder-types";
-import React, { useEffect, useMemo, useRef, type JSX } from "react";
+import React, { useEffect, useMemo, type JSX } from "react";
 import { useGCFormsContext } from "@lib/hooks/useGCFormContext";
 import { restoreSessionProgress, removeProgressStorage } from "@lib/utils/saveSessionProgress";
 import { useFeatureFlags } from "@lib/hooks/useFeatureFlags";
@@ -39,7 +39,6 @@ export const FormWrapper = ({
   const saveAndResume = formRecord?.saveAndResume && saveAndResumeEnabled;
 
   const formRestoredMessage = t("saveAndResume.formRestored");
-  const hasShownResumeMessage = useRef(false);
   const router = useRouter();
 
   const values = useMemo(
@@ -58,8 +57,7 @@ export const FormWrapper = ({
     if (values) {
       removeProgressStorage();
 
-      if (!hasShownResumeMessage.current && saveAndResumeEnabled) {
-        hasShownResumeMessage.current = true;
+      if (saveAndResumeEnabled) {
         toast.success(formRestoredMessage, "public-facing-form");
       }
     }
@@ -117,7 +115,7 @@ export const FormWrapper = ({
         {currentForm}
       </Form>
       {saveAndResume && (
-        <ToastContainer limit={1} autoClose={5000} containerId="public-facing-form" />
+        <ToastContainer limit={1} autoClose={false} containerId="public-facing-form" />
       )}
     </>
   );
