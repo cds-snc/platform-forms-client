@@ -19,6 +19,7 @@ export default AuthenticatedPage(
     const { t } = await serverTranslation(["admin-recent-signups"]);
     const { ability } = await authCheckAndThrow();
 
+    // Last 30 days
     const from = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000);
 
     const recentSignups = await getUsers({
