@@ -29,6 +29,7 @@ const securityHeaders = [
 ];
 
 const nextConfig = {
+  deploymentId: process.env.NEXT_DEPLOYMENT_ID,
   sassOptions: {
     includePaths: [path.join(__dirname, "styles")],
   },
