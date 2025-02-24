@@ -5,6 +5,37 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.34.0](https://github.com/cds-snc/platform-forms-client/compare/v3.33.0...v3.34.0) (2025-02-24)
+
+
+### Features
+
+* Download a copy of your form responses - feature flagged. ([#5120](https://github.com/cds-snc/platform-forms-client/issues/5120)) ([4c2a612](https://github.com/cds-snc/platform-forms-client/commit/4c2a61227ea09b69326d2044dceeeffa8035a2be))
+
+
+### Bug Fixes
+
+* a11y updates for front facing form(s) ([#5148](https://github.com/cds-snc/platform-forms-client/issues/5148)) ([dfee606](https://github.com/cds-snc/platform-forms-client/commit/dfee606d7d7b55fbf477a97ad7b251a5bd1b1cc9))
+* enable using Tab key to indent/outdent lists in RichText editor ([#5138](https://github.com/cds-snc/platform-forms-client/issues/5138)) ([25bc440](https://github.com/cds-snc/platform-forms-client/commit/25bc440a67344219d78fa7fdaf8be63cd0a94a9e))
+* French typos ([#5140](https://github.com/cds-snc/platform-forms-client/issues/5140)) ([d8edafa](https://github.com/cds-snc/platform-forms-client/commit/d8edafab4d200d510f9d3d1730a854cfcc9a03f5))
+* Prevent changes to groups that would lead to a broken form/flow ([#5121](https://github.com/cds-snc/platform-forms-client/issues/5121)) ([479601b](https://github.com/cds-snc/platform-forms-client/commit/479601bc82ad5b064b472cf818edb7e2df4f0dd0))
+* Restore user-set viewport on init ([#5137](https://github.com/cds-snc/platform-forms-client/issues/5137)) ([dc35701](https://github.com/cds-snc/platform-forms-client/commit/dc3570167c0365d7b05cc8e730d159a5cf24df5e))
+* TreeView - Page name should only be bolded when focused ([#5114](https://github.com/cds-snc/platform-forms-client/issues/5114)) ([2487513](https://github.com/cds-snc/platform-forms-client/commit/248751333d77ddf691a2c72abd13791726502303))
+
+
+### Miscellaneous Chores
+
+* add email for debates-debats ([#5151](https://github.com/cds-snc/platform-forms-client/issues/5151)) ([9343b99](https://github.com/cds-snc/platform-forms-client/commit/9343b99e918bfa2f19fa2681ffe31eae62c8e0d3))
+* Bilingual content for "Save and resume" ([#5139](https://github.com/cds-snc/platform-forms-client/issues/5139)) ([20ff1b3](https://github.com/cds-snc/platform-forms-client/commit/20ff1b3ac8573538712254b1924befd41b097f95))
+* fix id for upload ([#5142](https://github.com/cds-snc/platform-forms-client/issues/5142)) ([bfa5e59](https://github.com/cds-snc/platform-forms-client/commit/bfa5e59f3cea9e168fbe89600db0b5865b6de3b4))
+* Update Contact form and Support form disclaimers ([#5141](https://github.com/cds-snc/platform-forms-client/issues/5141)) ([e1dfc03](https://github.com/cds-snc/platform-forms-client/commit/e1dfc031d9eebd1ea1281b667bb9d2b89523cf2d))
+* update react-toastify ([#5144](https://github.com/cds-snc/platform-forms-client/issues/5144)) ([6cc77d8](https://github.com/cds-snc/platform-forms-client/commit/6cc77d865673d555b2fe8ee63d0f9a5bf4e10e1b))
+
+
+### Code Refactoring
+
+* introduce new connectors package ([#5119](https://github.com/cds-snc/platform-forms-client/issues/5119)) ([10bcdfe](https://github.com/cds-snc/platform-forms-client/commit/10bcdfe87a7483f4afed13e6e5b49ef88cb1ebf2))
+
 ## [3.33.0](https://github.com/cds-snc/platform-forms-client/compare/v3.32.2...v3.33.0) (2025-02-17)
 
 
