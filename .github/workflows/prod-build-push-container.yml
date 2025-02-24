@@ -32,7 +32,8 @@ jobs:
           --build-arg COGNITO_APP_CLIENT_ID=$COGNITO_APP_CLIENT_ID \
           --build-arg COGNITO_USER_POOL_ID=$COGNITO_USER_POOL_ID \
           --build-arg INDEX_SITE=true \
-          --build-arg NEXT_SERVER_ACTIONS_ENCRYPTION_KEY=$NEXT_SERVER_ACTIONS_ENCRYPTION_KEY .
+          --build-arg NEXT_SERVER_ACTIONS_ENCRYPTION_KEY=$NEXT_SERVER_ACTIONS_ENCRYPTION_KEY \
+          --build-arg NEXT_DEPLOYMENT_ID=$TAG_VERSION .
 
       - name: Configure AWS credentials using OIDC
         uses: aws-actions/configure-aws-credentials@e3dd6a429d7300a6a4c196c26e071d42e0343502 # v4.0.2
