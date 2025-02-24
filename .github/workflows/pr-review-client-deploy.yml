@@ -21,6 +21,7 @@ env:
   COGNITO_APP_CLIENT_ID: ${{secrets.STAGING_COGNITO_APP_CLIENT_ID}}
   COGNITO_USER_POOL_ID: ${{ secrets.STAGING_COGNITO_USER_POOL_ID}}
   NEXT_SERVER_ACTIONS_ENCRYPTION_KEY: ${{ secrets.STAGING_NEXT_SERVER_ACTIONS_ENCRYPTION_KEY }}
+  GITHUB_SHA: ${{ github.sha }}
 
 permissions:
   id-token: write
@@ -69,7 +70,8 @@ jobs:
             -f Dockerfile.pr \
             --build-arg COGNITO_APP_CLIENT_ID=$COGNITO_APP_CLIENT_ID \
             --build-arg COGNITO_USER_POOL_ID=$COGNITO_USER_POOL_ID \
-            --build-arg NEXT_SERVER_ACTIONS_ENCRYPTION_KEY=$NEXT_SERVER_ACTIONS_ENCRYPTION_KEY .
+            --build-arg NEXT_SERVER_ACTIONS_ENCRYPTION_KEY=$NEXT_SERVER_ACTIONS_ENCRYPTION_KEY \
+            --build-arg NEXT_DEPLOYMENT_ID=$GITHUB_SHA .
 
       - name: Push Docker image to ECR
         run: |
