@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useState } from "react";
+import { useCallback, useRef, useState } from "react";
 import * as AlertDialog from "@radix-ui/react-alert-dialog";
 import { useTranslation } from "@i18n/client";
 import Markdown from "markdown-to-jsx";
@@ -92,6 +92,8 @@ export const ConfirmDownloadDialog = ({
     ns: "common",
   });
 
+  const previousActiveElement = useRef<HTMLElement | null>(null);
+
   const handleSave = useCallback(async () => {
     try {
       setSaving(true);
@@ -147,11 +149,23 @@ export const ConfirmDownloadDialog = ({
     generateHtmlError,
   ]);
 
+  const doClose = () => {
+    handleClose(false);
+    previousActiveElement.current?.focus();
+  };
+
   return (
     <AlertDialog.Root open={open}>
       <AlertDialog.Portal>
         <AlertDialog.Overlay className="fixed inset-0 z-[200] h-screen w-screen bg-gray-500/70" />
-        <AlertDialog.Content className="fixed left-1/2 top-1/2 z-[201] w-full max-w-xl -translate-x-1/2 -translate-y-1/2 rounded-2xl bg-white p-4 shadow-2xl">
+        <AlertDialog.Content
+          className="fixed left-1/2 top-1/2 z-[201] w-full max-w-xl -translate-x-1/2 -translate-y-1/2 rounded-2xl bg-white p-4 shadow-2xl"
+          onOpenAutoFocus={() =>
+            (previousActiveElement.current = document.activeElement as HTMLElement)
+          }
+          onCloseAutoFocus={doClose}
+          onEscapeKeyDown={doClose}
+        >
           <AlertDialog.Title className="text-2xl font-extrabold leading-tight">
             {t(`${tParent}.prompt.title`)}
           </AlertDialog.Title>
