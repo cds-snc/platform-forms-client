@@ -11,9 +11,9 @@
   "dateCreated": "Date created:",
   "deactivate": "Deactivate",
   "deactivateAccountWarning": "After you deactivate an account, the account will not longer have access to GC Forms.",
-  "deactivateAccountWarning2": "You can reactivate the account under the All Accounts page.",
+  "deactivateAccountWarning2": "You can reactivate the account under the \"All Accounts\" page.",
   "flagged": "Flagged",
-  "noFlaggedUsersFound": "No flagged users found",
+  "noFlaggedUsersFound": "No flagged accounts found",
   "provideContext": "Provide context",
   "recentAccounts": "Recent accounts",
   "save": "Save"
