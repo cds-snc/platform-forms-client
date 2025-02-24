@@ -24,6 +24,7 @@ export const Captcha = ({
   const verify = async (token: string) => {
     try {
       const success = await verifyHCaptchaToken(token, lang, blockSubmitMode);
+      logMessage.info(`hCaptcha: ${success ? "success" : "failed"}`);
       if (success && typeof successCb === "function") {
         successCb();
       }
