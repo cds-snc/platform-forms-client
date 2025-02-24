@@ -119,7 +119,7 @@ export default async function Page(props0: {
             header={
               <>
                 <ClosingNotice language={language} closingDate={formRecord.closingDate} />
-                <h1>{formTitle}</h1>
+                <h1 tabIndex={-1}>{formTitle}</h1>
               </>
             }
             formRecord={formRecord}
