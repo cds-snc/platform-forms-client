@@ -37,25 +37,20 @@ export const verifyHCaptchaToken = async (
     timeout: 5000,
   });
 
-  // 4XX request error, want to fail. e.g. site secret mismatch
-  // See https://docs.hcaptcha.com/#siteverify-error-codes-table
+  // 4XX request error, want to fail. See https://docs.hcaptcha.com/#siteverify-error-codes-table
   const captchaData: { success: boolean; score: number; "error-codes"?: string[] } = result.data;
   if (captchaData && captchaData["error-codes"]) {
-    logMessage.warn(`hCaptcha: client error. Error: ${JSON.stringify(captchaData["error-codes"])}`);
+    logMessage.warn(`hCaptcha: client error ${JSON.stringify(captchaData["error-codes"])}`);
     blockableMode && redirect(`/${lang}/unable-to-process`);
   }
 
   const verified = checkIfVerified(captchaData.success, captchaData.score);
   if (!verified) {
-    logMessage.info(
-      `hCaptcha: failed verification. Success=${captchaData.success}, Score=${captchaData.score}`
-    );
+    logMessage.info(`hCaptcha: failed with score ${captchaData.score}`);
     blockableMode && redirect(`/${lang}/unable-to-process`);
   }
 
-  logMessage.info(
-    `hCaptcha: passed verification. Success=${captchaData.success}, Score=${captchaData.score}`
-  );
+  logMessage.info(`hCaptcha: passed with score ${captchaData.score}`);
   return true;
 };
 

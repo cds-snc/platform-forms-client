@@ -16,6 +16,7 @@ export const Captcha = ({
   hCaptchaRef: React.RefObject<HCaptcha | null>;
   lang: string;
   hCaptchaSiteKey: string | undefined;
+  // Determines whether to block a user from submitting a form that is marked as a bot by siteverify
   blockableMode?: boolean;
 }) => {
   if (!hCaptchaSiteKey) {
@@ -32,7 +33,7 @@ export const Captcha = ({
         successCb();
       }
     } catch (err) {
-      logMessage.error(`hCaptcha: system error: ${err}`);
+      logMessage.error(`hCaptcha: system error ${err}`);
       // Don't block the user from submittion on a system error (our fault not theirs)
       if (typeof successCb === "function") {
         successCb();

@@ -177,16 +177,9 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
                 return;
               }
 
+              // when enabled hCaptcha is passed control of submitting the form
               if (captchaEnabled) {
                 hCaptchaRef.current?.execute();
-
-                // TODO: consider how to handle the unlikely "never going to happend" cases
-                // 1. what if the above ref is undefined?
-                // 2. what if the react hCaptcha component has a bug and the submission is left hanging indefinitely?
-                // 3. Any others?
-                //
-                // A fallback could be created that kills hCaptcha and calls handleSubmit(e) directly here
-                // e.g. hCaptchaRef.current?.resetCaptcha(); handleSubmit(e);
               } else {
                 handleSubmit(e);
               }
@@ -216,6 +209,16 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
               <Review language={language as Language} />
             )}
 
+            {captchaEnabled && (
+              <Captcha
+                hCaptchaRef={hCaptchaRef}
+                lang={language}
+                hCaptchaSiteKey={props.hCaptchaSiteKey}
+                successCb={handleSubmit}
+                blockableMode={false}
+              />
+            )}
+
             <FormActions
               saveAndResumeEnabled={props.saveAndResumeEnabled || false}
               formId={formID}
@@ -239,15 +242,6 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
               />
             </FormActions>
           </form>
-
-          {captchaEnabled && (
-            <Captcha
-              hCaptchaRef={hCaptchaRef}
-              lang={language}
-              hCaptchaSiteKey={props.hCaptchaSiteKey}
-              successCb={handleSubmit}
-            />
-          )}
         </>
       }
     </>
