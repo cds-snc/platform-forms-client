@@ -1,5 +1,7 @@
 FROM node:22-alpine as build
+
 ENV NODE_ENV=production
+ENV NEXT_OUTPUT_STANDALONE=true
 ENV NEXT_PUBLIC_ADDRESSCOMPLETE_API_KEY=UR78-BU29-RU35-EP49 
 
 COPY . /src
@@ -54,10 +56,7 @@ COPY flag_initialization ./flag_initialization
 COPY --from=build /src/node_modules ./node_modules
 COPY --from=build /src/.next ./.next
 
-
-
 ENV PORT 3000
-
 EXPOSE 3000
 
-ENTRYPOINT [ "yarn", "start"]
+ENTRYPOINT [ "node ", "server.js"]
