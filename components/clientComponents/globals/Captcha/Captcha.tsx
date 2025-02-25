@@ -2,6 +2,9 @@ import HCaptcha from "@hcaptcha/react-hcaptcha";
 import { logMessage } from "@lib/logger";
 import { verifyHCaptchaToken } from "./actions";
 
+// Running in "100% Passive" mode that will never challenge users. The mode is set at account level.
+// In the future we hope to use "99.9% Passive hybrid" that will show an A11Y prompt for the .1%
+// suspicious users.
 export const Captcha = ({
   successCb,
   hCaptchaRef,
@@ -38,8 +41,9 @@ export const Captcha = ({
   };
 
   // Component will reset immediately after a Client sends bad data.
+  // Note: An invalid sitekey will cause the HCaptcha component to fail without calling onError
   const clientComponentError = (code: string) => {
-    // For more error info from the code see https://docs.hcaptcha.com/#siteverify-error-codes-table
+    // see https://docs.hcaptcha.com/#siteverify-error-codes-table
     logMessage.warn(`hCatpcha: clientComponentError error. Error: ${code}`);
   };
 
@@ -53,10 +57,7 @@ export const Captcha = ({
     hCaptchaRef.current?.resetCaptcha();
   };
 
-  // Running in 100% passive mode.
-  // For React component info see https://github.com/hCaptcha/react-hcaptcha
-  // Note: An invalid sitekey will cause the HCaptcha component to fail without calling onError
-  // Note: Error '"Cookie “__cflb” has been rejected' is probably related to the accesible cookie (hoping to remove)
+  // see https://github.com/hCaptcha/react-hcaptcha
   return (
     <HCaptcha
       sitekey={hCaptchaSiteKey}
@@ -66,6 +67,7 @@ export const Captcha = ({
       onExpire={tokenExpired}
       ref={hCaptchaRef}
       languageOverride={lang}
+      // No checkbox is used
       size="invisible"
     />
   );
