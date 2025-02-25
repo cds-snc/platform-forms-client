@@ -97,7 +97,7 @@ export const ResumeForm = ({
         });
         router.push(`/${language}/id/${id}`);
       } catch (e) {
-        logMessage.error(e as Error);
+        logMessage.warn(e as Error);
         toast.error(resumeError, "resume");
       }
     };
