@@ -1,4 +1,4 @@
-name: PR review sync envionment variables
+name: Lambda env sync environment variables
 
 on:
   workflow_run:
@@ -31,4 +31,4 @@ jobs:
 
       - name: Sync environment variables
         run: |
-          ./bin/pr-review-sync-vars.sh > /dev/null 2>&1
+          ./bin/lambda-env-sync-vars.sh > /dev/null 2>&1
