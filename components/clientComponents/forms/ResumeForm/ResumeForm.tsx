@@ -10,6 +10,7 @@ import { FeatureFlags } from "@lib/cache/types";
 import { ErrorPanel } from "@clientComponents/globals/ErrorPanel";
 import { toast } from "@formBuilder/components/shared/Toast";
 import { ToastContainer } from "@formBuilder/components/shared/Toast";
+import { logMessage } from "@lib/logger";
 
 export const ResumeForm = ({
   formId,
@@ -96,6 +97,7 @@ export const ResumeForm = ({
         });
         router.push(`/${language}/id/${id}`);
       } catch (e) {
+        logMessage.error(e as Error);
         toast.error(resumeError, "resume");
       }
     };
