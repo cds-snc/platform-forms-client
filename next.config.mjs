@@ -39,7 +39,7 @@ const nextConfig = {
     // removeConsole: false,
   },
   output: isOutputStandalone ? "standalone" : undefined,
-  ...(process.env.REVIEW_ENV && {
+  ...(process.env.LAMBDA_ENV && {
     cacheHandler: require.resolve("./nextCacheHandler.mjs"),
     cacheMaxMemorySize: 0, // disable default in-memory caching
   }),

@@ -3,14 +3,14 @@
 #
 # Retrieves the latest task definition for the Form viewer service and updates
 # the SSM ParameterStore `/form-viewer/env` value with the latest environment
-# variable and secret values.  This is then used by the PR review environment
-# lambda functions as its source of values.
+# variable and secret values.  This is then used by the Lambda environment
+# functions as its source of values.
 #
 # This script expects to be run with an `AWS_REGION` environment variable
 # in the execution context and depends on the AWS cli and jq being installed.
 #
 # export AWS_REGION="ca-central-1"
-# ./pr-review-update-vars.sh
+# ./lambda-env-sync-vars.sh
 #
 
 set -euo pipefail
