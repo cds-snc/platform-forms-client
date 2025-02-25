@@ -1,4 +1,5 @@
 {
+  "accept": "accepter",
   "accessControlError": "Vous n'avez pas la permission de gérer l'accès aux réponses.",
   "addPeopleToShareAccess": "Partager l'accès",
   "areYouSure": "Êtes-vous certain?",
@@ -8,6 +9,7 @@
   "delete": "Supprimer",
   "deleteInvitation": "Delete invitation for {{email}}",
   "downloadForm": "Télécharger le formulaire",
+  "draftFormError": "Impossible d'envoyer des invitations à rédiger des formulaires",
   "emailAlreadyInList": "{{email}} a déjà été ajouté",
   "emailDomainMismatch": "{{email}} ne semble pas appartenir à votre organisation. Vous ne pouvez ajouter des collaborateurs qu'avec le même domaine d'adresse courriel.",
   "error": "Il y a eu une erreur.",
@@ -17,7 +19,7 @@
   "invitationFailed": "Impossible d'envoyer une invitation à {{email}}",
   "invitationNotFound": "Invitation not found",
   "invitationSent": "Invitation envoyée",
-  "invitationToAccessForm": "Vous avez été invité à accéder aux réponses de formulaire - Veuillez <accept>accepter</accept> ou <decline>refuser</decline> l'invitation.",
+  "invitationToAccessForm": "Vous avez été invité à accéder aux réponses de formulaire - Veuillez <accept></accept> ou <decline>refuser</decline> l'invitation.",
   "invite": "Inviter",
   "invited": "Invité",
   "inviteToForm": "Inviter à gérer les réponses",
@@ -29,9 +31,9 @@
   "optionalMessage": "Message (optionnel)",
   "peopleWithAccess": "Personnes ayant accès",
   "remove": "Supprimer l'invitation pour {{email}}",
+  "requestPermission": "request to manage a form",
   "resend": "Renvoyer l'invitation pour {{email}}",
   "templateNotFound": "Gabarit non trouvé {{templateId}}",
   "userAlreadyHasAccess": "{{email}} a déjà accès",
-  "userNotFound": "User not found",
-  "draftFormError": "Impossible d'envoyer des invitations à rédiger des formulaires"
+  "userNotFound": "User not found"
 }

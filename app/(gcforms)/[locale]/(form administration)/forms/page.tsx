@@ -12,6 +12,8 @@ import { DeliveryOption } from "@lib/types";
 import { getOverdueTemplateIds } from "@lib/overdue";
 import { Invitations } from "./components/Invitations/Invitations";
 import { prisma } from "@lib/integration/prismaConnector";
+import { authorization } from "@lib/privileges";
+import { Language } from "@lib/types/form-builder-types";
 
 export type FormsTemplate = {
   id: string;
@@ -23,6 +25,7 @@ export type FormsTemplate = {
   date: string;
   url: string;
   overdue: boolean;
+  associatedUsersCount?: number;
 };
 
 export async function generateMetadata(props: {
@@ -70,6 +73,7 @@ export default async function Page(props: {
         deliveryOption = { emailAddress: "" },
         isPublished,
         updatedAt,
+        associatedUsersCount,
       } = template;
       return {
         id,
@@ -81,8 +85,11 @@ export default async function Page(props: {
         date: updatedAt ?? Date.now().toString(),
         url: `/${locale}/id/${id}`,
         overdue: false,
+        associatedUsersCount,
       };
     });
+
+    const hasPublishFormsPrivilege = await authorization.hasPublishFormsPrivilege();
 
     const invitations = await prisma.invitation.findMany({
       where: {
@@ -109,13 +116,21 @@ export default async function Page(props: {
     return (
       <div className="mx-auto w-[980px]">
         <h1 className="mb-8 border-b-0">{t("title")}</h1>
-        <Invitations invitations={invitations} />
+        <Invitations
+          invitations={invitations}
+          hasPublishFormsPrivilege={hasPublishFormsPrivilege}
+          locale={locale as Language}
+        />
         <div className="flex w-full justify-between">
           <Navigation filter={status} />
           <NewFormButton />
         </div>
         <ResumeEditingForm />
-        <Cards templates={templates} overdueTemplateIds={overdueTemplateIds} />
+        <Cards
+          templates={templates}
+          overdueTemplateIds={overdueTemplateIds}
+          hasPublishFormsPrivilege={hasPublishFormsPrivilege}
+        />
       </div>
     );
   } catch (e) {
