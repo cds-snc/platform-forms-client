@@ -1,7 +1,7 @@
 import { prisma, prismaErrors } from "@lib/integration/prismaConnector";
 import { authorization } from "@lib/privileges";
 import { AccessControlError } from "@lib/auth/errors";
-import { NagwareResult } from "./types";
+import { DeactivationReason, DeactivationReasons, NagwareResult } from "./types";
 import { logEvent } from "./auditLogs";
 import { logMessage } from "@lib/logger";
 import { Privilege, Prisma } from "@prisma/client";
@@ -201,7 +201,11 @@ export const getUsers = async (where?: Prisma.UserWhereInput): Promise<AppUser[]
  * @param active activate or deactivate user
  * @returns User
  */
-export const updateActiveStatus = async (userID: string, active: boolean) => {
+export const updateActiveStatus = async (
+  userID: string,
+  active: boolean,
+  reason: DeactivationReason = DeactivationReasons.DEFAULT
+) => {
   try {
     const { user: abilityUser } = await authorization.canManageAllUsers().catch((e) => {
       if (e instanceof AccessControlError) {
@@ -253,7 +257,7 @@ export const updateActiveStatus = async (userID: string, active: boolean) => {
     );
 
     if (!active && user.email) {
-      sendDeactivationEmail(user.email);
+      sendDeactivationEmail(user.email, reason);
     }
 
     return user;
@@ -310,4 +314,27 @@ export const getUnprocessedSubmissionsForUser = async (userId: string) => {
   }
 
   return overdue;
+};
+
+export const addNoteToUser = async (id: string, note: string) => {
+  await authorization.canManageUser(id).catch((e) => {
+    if (e instanceof AccessControlError) {
+      logEvent(
+        e.user.id,
+        { type: "User" },
+        "AccessDenied",
+        `Attempted to add a note to user ${id}`
+      );
+    }
+    throw e;
+  });
+
+  await prisma.user.update({
+    where: {
+      id: id,
+    },
+    data: {
+      notes: note,
+    },
+  });
 };
