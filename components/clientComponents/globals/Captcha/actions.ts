@@ -41,10 +41,8 @@ export const verifyHCaptchaToken = async (
   // See https://docs.hcaptcha.com/#siteverify-error-codes-table
   const captchaData: { success: boolean; score: number; "error-codes"?: string[] } = result.data;
   if (captchaData && captchaData["error-codes"]) {
-    logMessage.error(
-      `hCaptcha: client error. Error: ${JSON.stringify(captchaData["error-codes"])}`
-    );
-    !blockableMode && redirect(`/${lang}/unable-to-process`);
+    logMessage.warn(`hCaptcha: client error. Error: ${JSON.stringify(captchaData["error-codes"])}`);
+    blockableMode && redirect(`/${lang}/unable-to-process`);
   }
 
   const verified = checkIfVerified(captchaData.success, captchaData.score);
@@ -52,7 +50,7 @@ export const verifyHCaptchaToken = async (
     logMessage.info(
       `hCaptcha: failed verification. Success=${captchaData.success}, Score=${captchaData.score}`
     );
-    !blockableMode && redirect(`/${lang}/unable-to-process`);
+    blockableMode && redirect(`/${lang}/unable-to-process`);
   }
 
   logMessage.info(

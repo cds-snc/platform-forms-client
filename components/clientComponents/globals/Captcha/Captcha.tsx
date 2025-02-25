@@ -13,7 +13,7 @@ export const Captcha = ({
   hCaptchaRef: React.RefObject<HCaptcha | null>;
   lang: string;
   hCaptchaSiteKey: string | undefined;
-  blockableMode: boolean;
+  blockableMode?: boolean;
 }) => {
   if (!hCaptchaSiteKey) {
     logMessage.error("hCaptcha: hCaptchaSiteKey is missing");
@@ -40,7 +40,7 @@ export const Captcha = ({
   // Component will reset immediately after a Client sends bad data.
   const clientComponentError = (code: string) => {
     // For more error info from the code see https://docs.hcaptcha.com/#siteverify-error-codes-table
-    logMessage.error(`hCatpcha: clientComponentError error. Error: ${code}`);
+    logMessage.warn(`hCatpcha: clientComponentError error. Error: ${code}`);
   };
 
   const tokenExpired = () => {

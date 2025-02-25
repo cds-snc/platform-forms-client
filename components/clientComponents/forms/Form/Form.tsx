@@ -246,7 +246,6 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
               lang={language}
               hCaptchaSiteKey={props.hCaptchaSiteKey}
               successCb={handleSubmit}
-              blockableMode={true}
             />
           )}
         </>
