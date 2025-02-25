@@ -10,7 +10,50 @@ import { FeatureFlags } from "@lib/cache/types";
 import { ErrorPanel } from "@clientComponents/globals/ErrorPanel";
 import { toast } from "@formBuilder/components/shared/Toast";
 import { ToastContainer } from "@formBuilder/components/shared/Toast";
-import { logMessage } from "@lib/logger";
+import { FormServerErrorCodes } from "@lib/types/form-builder-types";
+import { safeJSONParse } from "@lib/utils";
+import { type FormValues } from "@lib/formContext";
+import { WarningIcon } from "@serverComponents/icons";
+
+// Prevent prototype pollution in JSON.parse https://stackoverflow.com/a/63927372
+const cleaner = (key: string, value: string) =>
+  ["__proto__", "constructor"].includes(key) ? undefined : value;
+
+type ResumeFormResponse = {
+  id: string;
+  values: FormValues;
+  history: string[];
+  currentGroup: string;
+};
+
+export const ErrorResuming = ({ errorCode }: { errorCode?: string }) => {
+  const {
+    t,
+    i18n: { language },
+  } = useTranslation(["form-builder", "common"]);
+
+  const title = t("saveAndResume.resumeUploadError.title", {
+    lng: language,
+    ns: "common",
+  });
+
+  const message = t("saveAndResume.resumeUploadError.description", {
+    lng: language,
+    ns: "common",
+  });
+
+  return (
+    <div className="w-full">
+      <h3 className="!mb-0 pb-2 text-xl font-semibold">
+        <WarningIcon className="mr-1 mt-[-4] inline-block size-8 fill-red-800" /> {title}
+      </h3>
+      <p className="mb-2 text-black">{message} </p>
+      <p className="mb-5 text-sm text-black">
+        {errorCode && t("saveAndResume.resumeUploadError.errorCode", { code: errorCode })}
+      </p>
+    </div>
+  );
+};
 
 export const ResumeForm = ({
   formId,
@@ -31,11 +74,6 @@ export const ResumeForm = ({
   const { getFlag } = useFeatureFlags();
   const saveAndResumeEnabled = getFlag(FeatureFlags.saveAndResume);
 
-  const resumeError = t("saveAndResume.resumeUploadError.description", {
-    lng: language,
-    ns: "common",
-  });
-
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (!e.target || !e.target.files) {
       return;
@@ -43,50 +81,78 @@ export const ResumeForm = ({
 
     const target = e.target;
 
+    let errorCode: string = FormServerErrorCodes.FORM_RESUME_DEFAULT;
+
     const fileReader = new FileReader();
 
     fileReader.readAsText(e.target.files[0], "UTF-8");
 
     fileReader.onerror = () => {
-      toast.error(resumeError, "resume");
+      toast.error(<ErrorResuming errorCode={FormServerErrorCodes.FORM_RESUME_DEFAULT} />, "resume");
       target.value = "";
     };
 
     fileReader.onload = (e) => {
       try {
         if (!e.target || !e.target.result || typeof e.target.result !== "string") {
-          throw new Error("Resume: Target result is not a string");
+          errorCode = FormServerErrorCodes.FORM_RESUME_NO_TARGET;
+          throw new Error(errorCode);
         }
 
         const data = e.target.result;
 
         if (!data) {
           target.value = "";
-          throw new Error("Resume: No data found in file");
+          errorCode = FormServerErrorCodes.FORM_RESUME_NO_DATA;
+          throw new Error(errorCode);
         }
 
         const parser = new DOMParser();
         const htmlDoc = parser.parseFromString(data, "text/html");
 
         if (!htmlDoc.getElementById("form-data")) {
-          throw new Error("Resume: Failed to parse HTML");
+          errorCode = FormServerErrorCodes.FORM_RESUME_NO_ELEMENT;
+          throw new Error(errorCode);
         }
 
         const jsonData = htmlDoc.getElementById("form-data")?.textContent;
 
         if (!jsonData) {
-          throw new Error("Resume: Failed to find form-data");
+          errorCode = FormServerErrorCodes.FORM_RESUME_NO_FORM_ELEMENT_DATA;
+          throw new Error(errorCode);
         }
 
         const parsedHTMLData = JSON.parse(jsonData);
         const parsedJsonData = parsedHTMLData.data;
+
+        if (typeof parsedJsonData !== "string") {
+          errorCode = FormServerErrorCodes.FORM_RESUME_INVALID_BASE64_STRING;
+          throw new Error(errorCode);
+        }
+
         const formData = Buffer.from(parsedJsonData, "base64").toString("utf8");
-        const parsed = JSON.parse(formData);
+        const parsed = safeJSONParse<ResumeFormResponse>(formData, cleaner);
+
+        if (!parsed) {
+          errorCode = FormServerErrorCodes.FORM_RESUME_INVALID_JSON;
+          throw new Error(errorCode);
+        }
 
         const id = parsed.id;
 
-        if (!id || id !== formId) {
-          throw new Error("Resume: Invalid form ID");
+        if (!id) {
+          errorCode = FormServerErrorCodes.FORM_RESUME_INVALID_FORM_ID;
+          throw new Error(errorCode);
+        }
+
+        if (id !== formId) {
+          errorCode = FormServerErrorCodes.FORM_RESUME_INVALID_MISMATCHED_FORM_ID;
+          throw new Error(errorCode);
+        }
+
+        if (!parsed.values || !parsed.history || !parsed.currentGroup) {
+          errorCode = FormServerErrorCodes.FORM_RESUME_INVALID_DATA;
+          throw new Error(errorCode);
         }
 
         saveSessionProgress(language, {
@@ -97,8 +163,7 @@ export const ResumeForm = ({
         });
         router.push(`/${language}/id/${id}`);
       } catch (e) {
-        logMessage.warn(e as Error);
-        toast.error(resumeError, "resume");
+        toast.error(<ErrorResuming errorCode={errorCode} />, "resume");
       }
     };
   };
