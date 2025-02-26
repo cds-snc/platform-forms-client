@@ -5,6 +5,27 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.35.0](https://github.com/cds-snc/platform-forms-client/compare/v3.34.0...v3.35.0) (2025-02-26)
+
+
+### Features
+
+* Add labels to PRs for db migrations and package changes. ([#5157](https://github.com/cds-snc/platform-forms-client/issues/5157)) ([4392a81](https://github.com/cds-snc/platform-forms-client/commit/4392a818ecbee2ac64e68d23e407ab68cc124ddb))
+* Deployment IDs ([#5155](https://github.com/cds-snc/platform-forms-client/issues/5155)) ([443634c](https://github.com/cds-snc/platform-forms-client/commit/443634c166e2af907ddaa6323da1cf99e5954a0e))
+* hCaptcha - staging ([#5111](https://github.com/cds-snc/platform-forms-client/issues/5111)) ([cea7d4e](https://github.com/cds-snc/platform-forms-client/commit/cea7d4e16723feef17b06bbc265b2dcc90029dbc))
+
+
+### Bug Fixes
+
+* skip link and back button ([#5156](https://github.com/cds-snc/platform-forms-client/issues/5156)) ([09531d8](https://github.com/cds-snc/platform-forms-client/commit/09531d89d82f243b68731dd66b7922763fcd832a))
+
+
+### Miscellaneous Chores
+
+* add error log for upload error ([#5159](https://github.com/cds-snc/platform-forms-client/issues/5159)) ([5e95b98](https://github.com/cds-snc/platform-forms-client/commit/5e95b984811369f525237753184083f7e485806f))
+* Update aws modules ([#5153](https://github.com/cds-snc/platform-forms-client/issues/5153)) ([94da68f](https://github.com/cds-snc/platform-forms-client/commit/94da68ff6013fc625781993e5b2754354b92787c))
+* Update resume toast error ([#5160](https://github.com/cds-snc/platform-forms-client/issues/5160)) ([f745005](https://github.com/cds-snc/platform-forms-client/commit/f74500597accf048a3ca63edb49eb32aa53271c4))
+
 ## [3.34.0](https://github.com/cds-snc/platform-forms-client/compare/v3.33.0...v3.34.0) (2025-02-24)
 
 
