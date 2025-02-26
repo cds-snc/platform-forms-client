@@ -14,23 +14,31 @@ import { TextInput } from "../../../components/client/TextInput";
 import { MultipleChoiceGroup } from "../../../components/client/MultipleChoiceGroup";
 import { TextArea } from "../../../components/client/TextArea";
 import { SubmitButton } from "../../../components/client/SubmitButton";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { email, minLength, object, safeParse, string, toLowerCase, toTrimmed } from "valibot";
 import { Success } from "../../../components/client/Success";
 import { useFeatureFlags } from "@lib/hooks/useFeatureFlags";
 import { FeatureFlags } from "@lib/cache/types";
+import { Captcha } from "@clientComponents/globals/Captcha/Captcha";
+import { hCaptchaEnabled } from "@clientComponents/globals/Captcha/helpers";
+import HCaptcha from "@hcaptcha/react-hcaptcha";
 
-export const SupportForm = () => {
+export const SupportForm = ({ hCaptchaSiteKey }: { hCaptchaSiteKey: string }) => {
   const {
     t,
     i18n: { language },
   } = useTranslation(["form-builder", "common"]);
+
+  const supportFormRef = useRef<HTMLFormElement>(null);
 
   const [errors, setErrors] = useState<ErrorStates>({ validationErrors: [] });
   const [submitted, setSubmitted] = useState(false);
 
   const { getFlag } = useFeatureFlags();
   const apiFlag = getFlag(FeatureFlags.apiAccess);
+
+  const captchaEnabled = hCaptchaEnabled(getFlag("hCaptcha"));
+  const hCaptchaRef = useRef<HCaptcha>(null);
 
   const getError = (fieldKey: string) => {
     return errors.validationErrors.find((e) => e.fieldKey === fieldKey)?.fieldValue || "";
@@ -127,7 +135,23 @@ export const SupportForm = () => {
               <Link href={`/${language}/contact`}>{t("support.contactUs")}</Link>.
             </p>
           </Alert.Warning>
-          <form id="support" action={submitForm} noValidate>
+          {/* <form id="support" action={submitForm} noValidate> */}
+          <form
+            ref={supportFormRef}
+            method="POST"
+            onSubmit={(e) => {
+              e.preventDefault();
+
+              // when enabled hCaptcha is passed control of submitting the form
+              if (captchaEnabled) {
+                hCaptchaRef.current?.execute();
+              } else {
+                const formData = new FormData(e.target as HTMLFormElement);
+                submitForm(formData);
+              }
+            }}
+            noValidate
+          >
             {errors.error && (
               <Alert.Danger focussable={true} title={t("error")} className="my-2">
                 <p>{t(errors.error)}</p>
@@ -218,6 +242,19 @@ export const SupportForm = () => {
               />
             </div>
             <SubmitButton>{t("submitButton", { ns: "common" })}</SubmitButton>
+            {captchaEnabled && (
+              <Captcha
+                hCaptchaRef={hCaptchaRef}
+                lang={language}
+                hCaptchaSiteKey={hCaptchaSiteKey}
+                successCb={() => {
+                  // const formData = new FormData(document.getElementById("support") as HTMLFormElement);
+                  const formData = new FormData(supportFormRef.current as HTMLFormElement);
+                  submitForm(formData);
+                }}
+                blockableMode={false}
+              />
+            )}
           </form>
         </>
       )}

@@ -1,6 +1,7 @@
 import { serverTranslation } from "@i18n";
 import { Metadata } from "next";
 import { SupportForm } from "./components/client/SupportForm";
+import { getAppSetting } from "@lib/appSettings";
 
 export async function generateMetadata(props: {
   params: Promise<{ locale: string }>;
@@ -16,5 +17,7 @@ export async function generateMetadata(props: {
 }
 
 export default async function Page() {
-  return <SupportForm />;
+  const hCaptchaSiteKey = (await getAppSetting("hCaptchaSiteKey")) || "";
+
+  return <SupportForm hCaptchaSiteKey={hCaptchaSiteKey} />;
 }
