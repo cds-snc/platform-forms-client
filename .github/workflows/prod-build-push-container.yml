@@ -36,7 +36,7 @@ jobs:
           --build-arg NEXT_DEPLOYMENT_ID=$TAG_VERSION .
 
       - name: Configure AWS credentials using OIDC
-        uses: aws-actions/configure-aws-credentials@e3dd6a429d7300a6a4c196c26e071d42e0343502 # v4.0.2
+        uses: aws-actions/configure-aws-credentials@ececac1a45f3b08a01d2dd070d28d111c5fe6722 # v4.1.0
         with:
           role-to-assume: arn:aws:iam::${{ env.AWS_ACCOUNT_ID }}:role/platform-forms-client-release
           role-session-name: ECRPush
@@ -44,7 +44,7 @@ jobs:
 
       - name: Login to Production Amazon ECR
         id: login-ecr-production
-        uses: aws-actions/amazon-ecr-login@21a7588699d87a47d51abd55e077cb0fcf66fe7c
+        uses: aws-actions/amazon-ecr-login@ab791e3b55f08992ffb9dda338aa30bfe2aeed28
 
       - name: Tag Images for Production
         env:
