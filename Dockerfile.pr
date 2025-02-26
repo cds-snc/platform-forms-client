@@ -23,6 +23,7 @@ ARG INDEX_SITE="false"
 ENV INDEX_SITE=$INDEX_SITE
 RUN corepack enable && yarn set version berry
 RUN yarn workspaces focus gcforms flag_initialization
+RUN yarn link packages/types
 RUN yarn build
 
 FROM node:22-alpine as final
