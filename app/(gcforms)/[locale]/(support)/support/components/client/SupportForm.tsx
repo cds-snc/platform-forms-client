@@ -135,7 +135,6 @@ export const SupportForm = ({ hCaptchaSiteKey }: { hCaptchaSiteKey: string }) =>
               <Link href={`/${language}/contact`}>{t("support.contactUs")}</Link>.
             </p>
           </Alert.Warning>
-          {/* <form id="support" action={submitForm} noValidate> */}
           <form
             ref={supportFormRef}
             method="POST"
@@ -248,7 +247,6 @@ export const SupportForm = ({ hCaptchaSiteKey }: { hCaptchaSiteKey: string }) =>
                 lang={language}
                 hCaptchaSiteKey={hCaptchaSiteKey}
                 successCb={() => {
-                  // const formData = new FormData(document.getElementById("support") as HTMLFormElement);
                   const formData = new FormData(supportFormRef.current as HTMLFormElement);
                   submitForm(formData);
                 }}
