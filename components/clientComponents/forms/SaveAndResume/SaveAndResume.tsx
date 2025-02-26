@@ -21,7 +21,7 @@ export const SaveAndResume = ({
   const [confirm, setConfirm] = useState(false);
 
   return (
-    <div>
+    <div id="save-and-resume">
       <DownloadProgress
         className="group"
         type="button"
