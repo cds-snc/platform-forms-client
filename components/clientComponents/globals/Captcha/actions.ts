@@ -2,23 +2,21 @@
 import axios from "axios";
 import { getClientIP } from "@lib/ip";
 import { logMessage } from "@lib/logger";
-import { redirect } from "next/navigation";
 
 /**
  * Verifies the client hCaptcha token is valid using the hCaptcha API
  *
  * @param token captcha token to verify
- * @returns boolean true if the token is valid, false otherwise
+ * @returns boolean true if the token is valid
  */
-export const verifyHCaptchaToken = async (
-  token: string,
-  lang: string,
-  blockableMode: boolean
-): Promise<boolean | void> => {
-  const siteVerifyKey = process.env.HCAPTCHA_SITE_VERIFY_KEY;
+export const verifyHCaptchaToken = async (token: string): Promise<boolean> => {
+  if (!token) {
+    throw new Error("hCaptcha: missing token");
+  }
 
+  const siteVerifyKey = process.env.HCAPTCHA_SITE_VERIFY_KEY;
   if (!siteVerifyKey) {
-    throw new Error("hCaptcha siteVerifyKey is not set");
+    throw new Error("hCaptcha: missing siteVerifyKey");
   }
 
   // API expects data to be sent in the request body
@@ -41,13 +39,14 @@ export const verifyHCaptchaToken = async (
   const captchaData: { success: boolean; score: number; "error-codes"?: string[] } = result.data;
   if (captchaData && captchaData["error-codes"]) {
     logMessage.warn(`hCaptcha: client error ${JSON.stringify(captchaData["error-codes"])}`);
-    blockableMode && redirect(`/${lang}/unable-to-process`);
+    return false;
   }
 
   const verified = checkIfVerified(captchaData.success, captchaData.score);
+
   if (!verified) {
     logMessage.info(`hCaptcha: failed with score ${captchaData.score}`);
-    blockableMode && redirect(`/${lang}/unable-to-process`);
+    return false;
   }
 
   logMessage.info(`hCaptcha: passed with score ${captchaData.score}`);
