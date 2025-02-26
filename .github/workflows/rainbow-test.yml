@@ -89,6 +89,8 @@ jobs:
             --code ImageUri=$REGISTRY/forms_app_legacy:9db4b85d768ec3fd59171617ddef4405fb7a8372 \
             --vpc-config SubnetIds=${{ secrets.PR_REVIEW_ENV_SUBNET_IDS }},SecurityGroupIds=${{ secrets.PR_REVIEW_ENV_SECURITY_GROUP_IDS }} | jq -r ".FunctionArn")
 
+          aws lambda wait function-active --function-name rainbow-test-9db4b85d768ec3fd59171617ddef4405fb7a8372
+
           aws lambda add-permission \
             --function-name rainbow-test-9db4b85d768ec3fd59171617ddef4405fb7a8372 \
             --statement-id elb-invoke-v1 \
@@ -98,8 +100,6 @@ jobs:
           targetGroupArn=$(aws elbv2 create-target-group \
             --name rainbow-test-v1 \
             --target-type lambda | jq -r ".TargetGroups[0].TargetGroupArn")
-
-          sleep 10
 
           aws elbv2 register-targets \
             --target-group-arn $targetGroupArn \
