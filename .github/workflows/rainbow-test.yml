@@ -106,6 +106,10 @@ jobs:
             --target-group-arn $targetGroupArn \
             --targets Id=$lambdaArn
 
+          aws elbv2 wait target-in-service \
+            --target-group-arn $targetGroupArn \
+            --targets Id=$lambdaArn
+
           headerValue=rainbow
 
           aws elbv2 create-rule \
