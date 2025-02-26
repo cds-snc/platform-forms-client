@@ -20,6 +20,7 @@ env:
   COGNITO_USER_POOL_ID: ${{ secrets.STAGING_COGNITO_USER_POOL_ID}}
   NEXT_SERVER_ACTIONS_ENCRYPTION_KEY: ${{ secrets.STAGING_NEXT_SERVER_ACTIONS_ENCRYPTION_KEY }}
   ROLE_ARN: arn:aws:iam::${{ vars.STAGING_AWS_ACCOUNT_ID }}:role/forms-lambda-client
+  LISTENER_ARN: arn:aws:elasticloadbalancing:ca-central-1:${{ vars.STAGING_AWS_ACCOUNT_ID }}:listener/app/form-viewer/5e6bc2d9ab810b68/028e8eeeed9c3a34
 
 permissions:
   id-token: write
@@ -104,3 +105,12 @@ jobs:
           aws elbv2 register-targets \
             --target-group-arn $targetGroupArn \
             --targets Id=$lambdaArn
+
+          headerValue=rainbow
+
+          aws elbv2 create-rule \
+            --listener-arn $LISTENER_ARN \
+            --conditions "[{\"Field\":\"http-header\",\"HttpHeaderConfig\":{\"HttpHeaderName\":\"x-deployment-id\",\"Values\":[\"$headerValue\"]}}]" \
+            --priority 1 \
+            --actions Type=forward,TargetGroupArn=$targetGroupArn \
+            --tags Key=Name,Value=rainbow-test-v1 > /dev/null 2>&1
