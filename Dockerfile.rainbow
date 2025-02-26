@@ -1,0 +1,52 @@
+ARG BASE_IMAGE
+FROM $BASE_IMAGE as base
+
+FROM node:22-alpine as final
+LABEL maintainer="-"
+
+ARG COGNITO_APP_CLIENT_ID
+ENV COGNITO_APP_CLIENT_ID=$COGNITO_APP_CLIENT_ID
+
+ARG COGNITO_USER_POOL_ID
+ENV COGNITO_USER_POOL_ID=$COGNITO_USER_POOL_ID
+
+ARG INDEX_SITE="false"
+ENV INDEX_SITE=$INDEX_SITE
+
+ARG NEXT_DEPLOYMENT_ID
+ENV NEXT_DEPLOYMENT_ID=$NEXT_DEPLOYMENT_ID
+
+ENV AWS_LWA_ENABLE_COMPRESSION=true
+ENV HOSTNAME=localhost
+ENV PORT=3000
+
+# Use the LAMBDA_ENV environment variable to determine if the app is running in a Lambda environment
+# Enables memory caching for the prerendering of pages
+ENV LAMBDA_ENV=1
+
+WORKDIR /src
+
+COPY --from=base /src/.next/standalone ./
+COPY --from=base /src/.next/static ./.next/static
+COPY package.json yarn.lock .yarnrc.yml next.config.mjs ./
+COPY .yarn ./.yarn
+COPY public ./public
+COPY prisma ./prisma
+COPY bin/lambda-env-entrypoint.sh ./entrypoint.sh
+
+# Update to latest yarn version
+RUN corepack enable && yarn set version berry
+
+# Required by the entrypoint.sh to load the SSM ParameterStore environment variables
+RUN apk update && apk add --no-cache aws-cli
+
+# Lambda web adapter: https://github.com/awslabs/aws-lambda-web-adapter
+# The public.ecr.aws/awsguru/aws-lambda-adapter:0.7.0 image reference in the docs has
+# been pushed to the public CDS ECR to avoid rate limiting when pulling the image.
+COPY --from=public.ecr.aws/cds-snc/aws-lambda-adapter:0.7.0@sha256:00b1441858fb3f4ce3d67882ef6153bacf8ff4bb8bf271750c133667202926af /lambda-adapter /opt/extensions/lambda-adapter
+
+RUN ln -s /tmp ./.next/cache
+
+EXPOSE 3000
+
+ENTRYPOINT ["./entrypoint.sh"]
