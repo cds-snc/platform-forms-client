@@ -1,7 +1,7 @@
 #!/bin/sh
 
 #
-# Entrypoint for the PR review environment lambda function.  This script loads the function's
+# Entrypoint for the Lambda environment function.  This script loads the function's
 # environment variables from the SSM ParameterStore `/form-viewer/env` and exports them
 # into the current execution environment.  If a matching value has already been set as one
 # of the function's environment variables, it takes precedence.
