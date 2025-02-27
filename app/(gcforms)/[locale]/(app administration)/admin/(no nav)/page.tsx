@@ -33,11 +33,14 @@ export default async function Page(props: { params: Promise<{ locale: string }> 
             <ManageAccountsIcon className="inline-block size-14" /> {t("accountAdministration")}
           </h2>
           <p>{t("manageUsersAndTheirForms")}</p>
-          <p>
-            <Link href={`/${locale}/admin/accounts`} legacyBehavior>
-              <a href={`/${locale}/admin/accounts`}>{t("accounts")}</a>
-            </Link>
-          </p>
+          <ul className="list-none pl-0">
+            <li>
+              <Link href={`/${locale}/admin/accounts`}>{t("accounts")}</Link>
+            </li>
+            <li>
+              <Link href={`/${locale}/admin/accounts/recent`}>{t("recentAccounts")}</Link>
+            </li>
+          </ul>
         </div>
 
         <div className="ml-20 rounded-lg border bg-white p-10">
@@ -48,34 +51,22 @@ export default async function Page(props: { params: Promise<{ locale: string }> 
           <p>{t("configureHowTheApplicationWorks")}</p>
           <ul className="list-none pl-0">
             <li>
-              <Link href={`/${locale}/admin/settings`} legacyBehavior>
-                <a href={`/${locale}/admin/settings`}>{t("systemSettings")}</a>
-              </Link>
+              <Link href={`/${locale}/admin/settings`}>{t("systemSettings")}</Link>
             </li>
             <li>
-              <Link href={`/${locale}/admin/flags`} legacyBehavior>
-                <a href={`/${locale}/admin/flags`}>{t("featureFlags")}</a>
-              </Link>
+              <Link href={`/${locale}/admin/flags`}>{t("featureFlags")}</Link>
             </li>
             <li>
-              <Link href={`/${locale}/admin/typography`} legacyBehavior>
-                <a href={`/${locale}/admin/typography`}>{t("typography")}</a>
-              </Link>
+              <Link href={`/${locale}/admin/typography`}>{t("typography")}</Link>
             </li>
             <li>
-              <Link href={`/${locale}/admin/buttons`} legacyBehavior>
-                <a href={`/${locale}/admin/buttons`}>{t("buttons")}</a>
-              </Link>
+              <Link href={`/${locale}/admin/buttons`}>{t("buttons")}</Link>
             </li>
             <li>
-              <Link href={`/${locale}/admin/upload`} legacyBehavior>
-                <a href={`/${locale}/admin/upload`}>{t("upload")}</a>
-              </Link>
+              <Link href={`/${locale}/admin/upload`}>{t("upload")}</Link>
             </li>
             <li>
-              <Link href={`/${locale}/admin/view-templates`} legacyBehavior>
-                <a href={`/${locale}/admin/view-templates`}>{t("viewTemplates")}</a>
-              </Link>
+              <Link href={`/${locale}/admin/view-templates`}>{t("viewTemplates")}</Link>
             </li>
           </ul>
         </div>
