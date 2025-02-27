@@ -21,6 +21,8 @@ export const EventKeys = {
   openDeleteApiKeyDialog: "open-delete-api-key-dialog",
   openRulesDialog: "open-rules-dialog",
   deleteApiKey: "delete-api-key",
+  openAddUserNoteDialog: "open-add-user-note-dialog",
+  openDeactivateUserDialog: "open-deactivate-user-dialog",
   liveMessage: "live-message",
   liveMessageObject: "live-message-object",
 } as const;
