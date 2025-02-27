@@ -16,7 +16,7 @@ import { FormDelayProvider } from "@lib/hooks/useFormDelayContext";
 import { ResumeForm } from "@clientComponents/forms/ResumeForm/ResumeForm";
 import { getSomeFlags } from "@lib/cache/flags";
 import { FeatureFlags } from "@lib/cache/types";
-import { getAppSetting } from "@lib/appSettings";
+// import { getAppSetting } from "@lib/appSettings";
 
 export async function generateMetadata(props0: {
   params: Promise<{ locale: string; props: string[] }>;
@@ -49,7 +49,9 @@ export default async function Page(props0: {
 
   const { locale, props } = params;
 
-  const hCaptchaSiteKey = (await getAppSetting("hCaptchaSiteKey")) || "";
+  // TEMP hardcoded - do not merge
+  // const hCaptchaSiteKey = (await getAppSetting("hCaptchaSiteKey")) || "";
+  const hCaptchaSiteKey = "72924bde-40f6-4f84-b86a-85ca705ce0c6";
 
   const formId = props[0];
   const step = props[1] ?? "";
