@@ -209,8 +209,8 @@
     "message": "<strong>In August</strong>: Build multi-page forms with branching logic. <a href='/en/contact' className='text-white hover:text-white'>Subscribe for updates</a>",
     "type2": "NEW",
     "message2": "Build complex multi-page forms with display logic and branching. <a href='https://articles.alpha.canada.ca/forms-formulaires/setting-up-form-logic/' className='text-white hover:text-white'>Learn more</a>",
-    "type3": "Election period",
-    "message3": "Consult with your department’s communications team about the <a href='https://www.canada.ca/en/privy-council/services/publications/guidelines-conduct-ministers-state-exempt-staff-public-servants-election.html' className='text-white hover:text-white'>Caretaker Convention</a>"
+    "type3": "Federal election",
+    "message3": "Check with your department’s communications team about announcements during the <a href='https://www.canada.ca/en/privy-council/services/publications/guidelines-conduct-ministers-state-exempt-staff-public-servants-election.html' className='text-white hover:text-white'>caretaker period</a>"
   },
   "closingNotice": {
     "title": "Form closing",
