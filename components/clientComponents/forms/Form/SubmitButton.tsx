@@ -4,6 +4,7 @@ import useFormTimer from "@lib/hooks/useFormTimer";
 import { cn } from "@lib/utils";
 import { useTranslation } from "@i18n/client";
 import { logMessage } from "@lib/logger";
+import { useFeatureFlags } from "@lib/hooks/useFeatureFlags";
 
 interface SubmitButtonProps {
   getFormDelay: () => number;
@@ -17,10 +18,14 @@ export const SubmitButton: React.FC<SubmitButtonProps> = ({ getFormDelay, formID
   const screenReaderRemainingTime = useRef(formTimerState.remainingTime);
   const formDelay = useRef(getFormDelay());
 
+  const { getFlag } = useFeatureFlags();
+  const timerEnabled = getFlag("formTimer");
+
   // If the formDelay is less than 0 or the app is in test mode, disable the timer
   // because the user has already spent enough time on the form.
 
-  const formTimerEnabled = process.env.NEXT_PUBLIC_APP_ENV !== "test" && formDelay.current > 0;
+  const formTimerEnabled =
+    process.env.NEXT_PUBLIC_APP_ENV !== "test" && timerEnabled && formDelay.current > 0;
 
   // The empty array of dependencies ensures that this useEffect only runs once on mount
   useEffect(() => {

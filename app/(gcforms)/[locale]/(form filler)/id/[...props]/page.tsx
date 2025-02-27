@@ -16,6 +16,7 @@ import { FormDelayProvider } from "@lib/hooks/useFormDelayContext";
 import { ResumeForm } from "@clientComponents/forms/ResumeForm/ResumeForm";
 import { getSomeFlags } from "@lib/cache/flags";
 import { FeatureFlags } from "@lib/cache/types";
+import { getAppSetting } from "@lib/appSettings";
 
 export async function generateMetadata(props0: {
   params: Promise<{ locale: string; props: string[] }>;
@@ -47,6 +48,8 @@ export default async function Page(props0: {
   const params = await props0.params;
 
   const { locale, props } = params;
+
+  const hCaptchaSiteKey = (await getAppSetting("hCaptchaSiteKey")) || "";
 
   const formId = props[0];
   const step = props[1] ?? "";
@@ -116,12 +119,13 @@ export default async function Page(props0: {
             header={
               <>
                 <ClosingNotice language={language} closingDate={formRecord.closingDate} />
-                <h1>{formTitle}</h1>
+                <h1 tabIndex={-1}>{formTitle}</h1>
               </>
             }
             formRecord={formRecord}
             currentForm={currentForm}
             allowGrouping={isAllowGrouping}
+            hCaptchaSiteKey={hCaptchaSiteKey}
           />
         </FormDelayProvider>
       </div>

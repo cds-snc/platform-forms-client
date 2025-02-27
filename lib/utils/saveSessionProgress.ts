@@ -9,7 +9,7 @@ export const removeProgressStorage = () => {
   sessionStorage.removeItem(SESSION_STORAGE_KEY);
 };
 
-type Options = {
+export type Options = {
   id: string;
   values: FormValues;
   history: string[];

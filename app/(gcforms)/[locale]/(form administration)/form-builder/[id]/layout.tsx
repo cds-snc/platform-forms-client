@@ -86,7 +86,13 @@ export default async function Layout(props: {
                 <Header context="formBuilder" className="mb-0" />
                 <div className="shrink-0 grow basis-auto bg-gray-soft">
                   <ToastContainer containerId="default" />
-                  <ToastContainer limit={1} containerId="wide" autoClose={10000} width="600px" />
+                  <ToastContainer
+                    limit={1}
+                    containerId="wide"
+                    autoClose={10000}
+                    ariaLabel="Notifications: Alt+T"
+                    width="600px"
+                  />
                   <div className="flex h-full flex-row gap-7">
                     <div id="left-nav" className="z-10 border-r border-slate-200 bg-white">
                       <div className="sticky top-0">

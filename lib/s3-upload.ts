@@ -94,4 +94,4 @@ const deleteObject = async (fileKey: string): Promise<void> => {
   }
 };
 
-export { uploadFileToS3, readStream2buffer, deleteObject, pushFileToS3 };
+export { deleteObject, pushFileToS3 };

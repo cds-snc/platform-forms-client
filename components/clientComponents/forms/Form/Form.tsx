@@ -33,6 +33,11 @@ import { useFormDelay } from "@lib/hooks/useFormDelayContext";
 import { FormActions } from "./FormActions";
 import { PrimaryFormButtons } from "./PrimaryFormButtons";
 
+import { useFeatureFlags } from "@lib/hooks/useFeatureFlags";
+import { hCaptchaEnabled } from "@clientComponents/globals/Captcha/helpers";
+import { Captcha } from "@clientComponents/globals/Captcha/Captcha";
+import HCaptcha from "@hcaptcha/react-hcaptcha";
+
 /**
  * This is the "inner" form component that isn't connected to Formik and just renders a simple form
  * @param props
@@ -57,6 +62,10 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
   const showIntro = isGroupsCheck ? currentGroup === LockedSections.START : true;
   const groupsHeadingRef = useRef<HTMLHeadingElement>(null);
   const { getFormDelayWithGroups, getFormDelayWithoutGroups } = useFormDelay();
+
+  const { getFlag } = useFeatureFlags();
+  const captchaEnabled = hCaptchaEnabled(getFlag("hCaptcha"), props.isPreview);
+  const hCaptchaRef = useRef<HCaptcha>(null);
 
   // Used to set any values we'd like added for use in the below withFormik handleSubmit().
   useFormValuesChanged();
@@ -167,7 +176,13 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
               if (isGroupsCheck && isShowReviewPage && currentGroup !== LockedSections.REVIEW) {
                 return;
               }
-              handleSubmit(e);
+
+              // when enabled hCaptcha is passed control of submitting the form
+              if (captchaEnabled) {
+                hCaptchaRef.current?.execute();
+              } else {
+                handleSubmit(e);
+              }
             }}
             noValidate
           >
@@ -194,6 +209,16 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
               <Review language={language as Language} />
             )}
 
+            {captchaEnabled && (
+              <Captcha
+                hCaptchaRef={hCaptchaRef}
+                lang={language}
+                hCaptchaSiteKey={props.hCaptchaSiteKey}
+                successCb={handleSubmit}
+                blockableMode={false}
+              />
+            )}
+
             <FormActions
               saveAndResumeEnabled={props.saveAndResumeEnabled || false}
               formId={formID}
@@ -205,7 +230,6 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
                 saveAndResumeEnabled={props.saveAndResumeEnabled || false}
                 isGroupsCheck={isGroupsCheck}
                 isShowReviewPage={isShowReviewPage}
-                groupsHeadingRef={groupsHeadingRef}
                 language={language}
                 formId={formID}
                 formTitle={form.titleEn}
