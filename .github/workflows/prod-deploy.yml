@@ -35,7 +35,7 @@ jobs:
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
 
       - name: Configure AWS credentials using OIDC
-        uses: aws-actions/configure-aws-credentials@e3dd6a429d7300a6a4c196c26e071d42e0343502 # v4.0.2
+        uses: aws-actions/configure-aws-credentials@ececac1a45f3b08a01d2dd070d28d111c5fe6722 # v4.1.0
         with:
           role-to-assume: arn:aws:iam::957818836222:role/platform-forms-client-apply
           role-session-name: ECSDeploy
@@ -44,7 +44,7 @@ jobs:
       - name: Login to Amazon ECR
         id: login-ecr
         # v1 as of Jan 28 2021
-        uses: aws-actions/amazon-ecr-login@21a7588699d87a47d51abd55e077cb0fcf66fe7c
+        uses: aws-actions/amazon-ecr-login@ab791e3b55f08992ffb9dda338aa30bfe2aeed28
 
       - name: Download Form Viewer task definition
         id: download-taskdef-form-viewer
@@ -55,7 +55,7 @@ jobs:
       - name: Render image for form viewer service
         id: taskdef-form-viewer
         # v1.0.10
-        uses: aws-actions/amazon-ecs-render-task-definition@1048d8f8eb80d018c1bed7b5e3b252148bd6dfe5
+        uses: aws-actions/amazon-ecs-render-task-definition@810fbfaf318eaa52893178d534f0c9289a1eda3c
         with:
           task-definition: form_viewer.json
           container-name: ${{ steps.download-taskdef-form-viewer.outputs.container_name }}
@@ -71,7 +71,7 @@ jobs:
       - name: Deploy image for Form Viewer
         timeout-minutes: 10
         # v1.4.11
-        uses: aws-actions/amazon-ecs-deploy-task-definition@67a620cba2e6cae43356b56e67f0d324e1c38dd4
+        uses: aws-actions/amazon-ecs-deploy-task-definition@b2ef113d6fc835825221bc592415d4ce3b538b23
         with:
           task-definition: ${{ steps.taskdef-form-viewer.outputs.task-definition }}
           service: form-viewer
