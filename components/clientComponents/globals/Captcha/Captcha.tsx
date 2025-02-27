@@ -35,10 +35,10 @@ export const Captcha = ({
         logMessage.info(`hCaptcha: success`);
         successCb();
       } else if (blockableMode) {
-        logMessage.info(`hCaptcha: hCaptcha failed and submission blocked`);
+        logMessage.info(`hCaptcha: failed and submission blocked`);
         router.push(`/${lang}/unable-to-process`);
       } else {
-        logMessage.info(`hCaptcha: hCaptcha failed and submission allowed`);
+        logMessage.info(`hCaptcha: failed and submission allowed`);
         successCb();
       }
     } catch (err) {
