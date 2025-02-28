@@ -4,8 +4,7 @@
 1. Add `HCAPTCHA_SITE_VERIFY_KEY` to your `.env` file. The value can be found in 1Password. This also needs to be added to GitHub secrets if it hasn't already been done.
 2. Add a new app setting with name `hCaptchaSiteKey`. The value can be found in 1Password.
 3. Turn on the hCAPTCHA feature flag.
-4. Open `captcha/helpers.ts` and comment out lines 6-9 and 12. This removes an intentionally annoying log and a check that disables hCAPTCHA in the developement environment.
-5. When you submit a form you should see a hCAPTCHA log message in your browser and a server log message with a score.
+4. When you submit a form you should see a hCAPTCHA log message in your browser and a server log message with a score.
 
 ## Adding hCAPTCHA
 For an example of how to add hCAPTCHA to a form see PR [5165](https://github.com/cds-snc/platform-forms-client/pull/5165)
