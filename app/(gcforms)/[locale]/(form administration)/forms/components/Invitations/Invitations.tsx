@@ -7,8 +7,17 @@ import { useTranslation } from "@i18n/client";
 import { Trans } from "react-i18next";
 import { Button } from "@clientComponents/globals";
 import { toast } from "@formBuilder/components/shared/Toast";
+import { Language } from "@lib/types/form-builder-types";
 
-export const Invitations = ({ invitations }: { invitations: Omit<Invitation, "invitedBy">[] }) => {
+export const Invitations = ({
+  invitations,
+  hasPublishFormsPrivilege,
+  locale,
+}: {
+  invitations: Omit<Invitation, "invitedBy">[];
+  hasPublishFormsPrivilege: boolean;
+  locale: Language;
+}) => {
   const { t } = useTranslation("manage-form-access");
   const router = useRouter();
 
@@ -19,6 +28,11 @@ export const Invitations = ({ invitations }: { invitations: Omit<Invitation, "in
       return;
     }
 
+    if (!hasPublishFormsPrivilege) {
+      // redirect to request permission page @TODO: toast message?
+      router.push(`/${locale}/unlock-publishing`);
+    }
+
     router.refresh();
   };
 
@@ -27,10 +41,10 @@ export const Invitations = ({ invitations }: { invitations: Omit<Invitation, "in
     router.refresh();
   };
 
-  const AcceptLink = ({ id, children }: { id: string; children?: string }) => {
+  const AcceptLink = ({ id }: { id: string; children?: string }) => {
     return (
       <Button theme="link" onClick={() => handleAcceptInvitation(id)}>
-        {children}
+        {hasPublishFormsPrivilege ? t("accept") : t("requestPermission")}
       </Button>
     );
   };
@@ -54,6 +68,7 @@ export const Invitations = ({ invitations }: { invitations: Omit<Invitation, "in
               i18nKey="invitationToAccessForm"
               components={{
                 accept: <AcceptLink id={invitation.id} />,
+                requestPermission: <AcceptLink id={invitation.id} />,
                 decline: <DeclineLink id={invitation.id} />,
               }}
             />

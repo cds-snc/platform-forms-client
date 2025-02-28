@@ -22,6 +22,7 @@ ENV NEXT_DEPLOYMENT_ID=$NEXT_DEPLOYMENT_ID
 ARG INDEX_SITE="false"
 ENV INDEX_SITE=$INDEX_SITE
 RUN corepack enable && yarn set version berry
+RUN yarn link packages/types
 RUN yarn workspaces focus gcforms flag_initialization
 RUN yarn build
 

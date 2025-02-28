@@ -45,6 +45,9 @@ const _parseTemplate = (template: {
   closingDate?: Date | null;
   closedDetails?: Prisma.JsonValue | null;
   saveAndResume: boolean;
+  _count?: {
+    users: number;
+  };
 }): FormRecord => {
   return {
     id: template.id,
@@ -78,6 +81,7 @@ const _parseTemplate = (template: {
     }),
     closedDetails: template.closedDetails as ClosedDetails,
     saveAndResume: template.saveAndResume,
+    associatedUsersCount: template._count?.users,
   };
 };
 
@@ -298,6 +302,11 @@ export async function getAllTemplatesForUser(
           publishFormType: true,
           publishDesc: true,
           saveAndResume: true,
+          _count: {
+            select: {
+              users: true,
+            },
+          },
         },
         ...(sortByDateUpdated && {
           orderBy: {
