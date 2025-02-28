@@ -33,19 +33,18 @@ export const CaptchaForm = ({
 }) => {
   const router = useRouter();
 
+  const formEventRef = useRef<FormEvent<HTMLFormElement>>(null);
+
   const { getFlag } = useFeatureFlags();
   const captchaEnabled = hCaptchaEnabled(getFlag("hCaptcha"), hCaptchaSiteKey);
   const hCaptchaRef = useRef<HCaptcha>(null);
-
-  // Hopefully there is a better way to do this :(
-  const formEventRef = useRef<FormEvent<HTMLFormElement>>(null);
 
   if (captchaEnabled && !hCaptchaSiteKey) {
     logMessage.error("hCaptcha: hCaptchaSiteKey is missing");
     return null;
   }
 
-  // Verify the hCAPTCHA token on the server side.
+  // Verify the hCAPTCHA token on the server side
   const verify = async (token: string) => {
     try {
       const success = await verifyHCaptchaToken(token);
@@ -61,7 +60,7 @@ export const CaptchaForm = ({
       }
     } catch (err) {
       logMessage.error(`hCaptcha: system error ${err}`);
-      // Don't block the user from submittion on a system error (our fault not theirs)
+      // Don't block the user from submitting on a system error
       onSubmit(formEventRef.current as FormEvent<HTMLFormElement>);
     }
   };
