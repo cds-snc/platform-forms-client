@@ -3,6 +3,7 @@ import { ClientContexts } from "@clientComponents/globals/ClientContexts";
 import { ReactHydrationCheck } from "@clientComponents/globals";
 import { getSomeFlags } from "@lib/cache/flags";
 import { FeatureFlags } from "@lib/cache/types";
+import { getAllAppSettings } from "@lib/appSettings";
 
 export default async function Layout({ children }: { children: React.ReactNode }) {
   const session = await auth();
@@ -16,10 +17,12 @@ export default async function Layout({ children }: { children: React.ReactNode }
     FeatureFlags.hCaptcha,
   ]);
 
+  const appSettings = await getAllAppSettings();
+
   return (
     <>
       <ReactHydrationCheck />
-      <ClientContexts session={session} featureFlags={featureFlags}>
+      <ClientContexts session={session} featureFlags={featureFlags} appSettings={appSettings}>
         {children}
       </ClientContexts>
     </>

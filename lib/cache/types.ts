@@ -19,3 +19,14 @@ export type Flags = {
 export type PickFlags<T extends FeatureFlagKeys[]> = {
   [K in T[number]]: boolean;
 };
+
+export type AllAppSettings =
+  | {
+      internalId: string;
+      descriptionEn: string | null;
+      descriptionFr: string | null;
+      nameEn: string;
+      nameFr: string;
+      value: string | null;
+    }[]
+  | never[];
