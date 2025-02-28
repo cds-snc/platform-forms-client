@@ -32,11 +32,7 @@ import { useFormDelay } from "@lib/hooks/useFormDelayContext";
 
 import { FormActions } from "./FormActions";
 import { PrimaryFormButtons } from "./PrimaryFormButtons";
-
-import { useFeatureFlags } from "@lib/hooks/useFeatureFlags";
-import { hCaptchaEnabled } from "@clientComponents/globals/Captcha/helpers";
-import { Captcha } from "@clientComponents/globals/Captcha/Captcha";
-import HCaptcha from "@hcaptcha/react-hcaptcha";
+import { CaptchaForm } from "@clientComponents/globals/CaptchaForm/CaptchaForm";
 
 /**
  * This is the "inner" form component that isn't connected to Formik and just renders a simple form
@@ -62,10 +58,6 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
   const showIntro = isGroupsCheck ? currentGroup === LockedSections.START : true;
   const groupsHeadingRef = useRef<HTMLHeadingElement>(null);
   const { getFormDelayWithGroups, getFormDelayWithoutGroups } = useFormDelay();
-
-  const { getFlag } = useFeatureFlags();
-  const captchaEnabled = hCaptchaEnabled(getFlag("hCaptcha"), props.isPreview);
-  const hCaptchaRef = useRef<HCaptcha>(null);
 
   // Used to set any values we'd like added for use in the below withFormik handleSubmit().
   useFormValuesChanged();
@@ -161,30 +153,20 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
             </RichText>
           )}
 
-          <form
+          <CaptchaForm
             id="form"
             data-testid="form"
-            /**
-             * method attribute needs to stay here in case javascript does not load
-             * otherwise GET request will be sent which will result in leaking all the user data
-             * to the URL
-             */
-            method="POST"
-            onSubmit={(e) => {
-              e.preventDefault();
+            lang={language}
+            onSubmit={() => {
               // For groups enabled forms only allow submitting on the Review page
               if (isGroupsCheck && isShowReviewPage && currentGroup !== LockedSections.REVIEW) {
                 return;
               }
-
-              // when enabled hCaptcha is passed control of submitting the form
-              if (captchaEnabled) {
-                hCaptchaRef.current?.execute();
-              } else {
-                handleSubmit(e);
-              }
+              handleSubmit();
             }}
-            noValidate
+            noValidate={true}
+            hCaptchaSiteKey={props.hCaptchaSiteKey}
+            blockableMode={false}
           >
             {isGroupsCheck &&
               isShowReviewPage &&
@@ -209,16 +191,6 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
               <Review language={language as Language} />
             )}
 
-            {captchaEnabled && (
-              <Captcha
-                hCaptchaRef={hCaptchaRef}
-                lang={language}
-                hCaptchaSiteKey={props.hCaptchaSiteKey}
-                successCb={handleSubmit}
-                blockableMode={false}
-              />
-            )}
-
             <FormActions
               saveAndResumeEnabled={props.saveAndResumeEnabled || false}
               formId={formID}
@@ -241,7 +213,7 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
                 props={props}
               />
             </FormActions>
-          </form>
+          </CaptchaForm>
         </>
       }
     </>
