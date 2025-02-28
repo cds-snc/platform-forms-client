@@ -27,7 +27,7 @@ export const useAppSettings = () => {
   const { settings } = useContext(AppSettingsContext);
   return {
     getAppSetting: (internalId: string) => {
-      if (!Array.isArray(settings)) {
+      if (!Array.isArray(settings) || settings.length === 0) {
         logMessage.warn("Client tried to access an app setting but there were no settings loaded.");
         return;
       }
