@@ -37,6 +37,7 @@ import { useFeatureFlags } from "@lib/hooks/useFeatureFlags";
 import { hCaptchaEnabled } from "@clientComponents/globals/Captcha/helpers";
 import { Captcha } from "@clientComponents/globals/Captcha/Captcha";
 import HCaptcha from "@hcaptcha/react-hcaptcha";
+import { useAppSettings } from "@lib/hooks/useAppSettings";
 
 /**
  * This is the "inner" form component that isn't connected to Formik and just renders a simple form
@@ -66,6 +67,9 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
   const { getFlag } = useFeatureFlags();
   const captchaEnabled = hCaptchaEnabled(getFlag("hCaptcha"), props.isPreview);
   const hCaptchaRef = useRef<HCaptcha>(null);
+
+  const { getAppSetting } = useAppSettings();
+  const hCaptchaSiteKey = getAppSetting("hCaptchaSiteKey") || "";
 
   // Used to set any values we'd like added for use in the below withFormik handleSubmit().
   useFormValuesChanged();
@@ -213,7 +217,7 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
               <Captcha
                 hCaptchaRef={hCaptchaRef}
                 lang={language}
-                hCaptchaSiteKey={props.hCaptchaSiteKey}
+                hCaptchaSiteKey={hCaptchaSiteKey}
                 successCb={handleSubmit}
                 blockableMode={false}
               />
