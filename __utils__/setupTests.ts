@@ -127,6 +127,11 @@ jest.mock("@lib/logger", () => {
   };
 });
 
+jest.mock("@lib/hooks/useAppSettings", () => ({
+  __esModule: true,
+  getAppSetting: jest.fn((setting: string) => (setting)),
+}));
+
 // Common secrets needed for functionality
 // Overwrite incase accidently injected
 process.env = {

@@ -2,6 +2,7 @@ import HCaptcha from "@hcaptcha/react-hcaptcha";
 import { logMessage } from "@lib/logger";
 import { verifyHCaptchaToken } from "./actions";
 import { useRouter } from "next/navigation";
+import { useAppSettings } from "@lib/hooks/useAppSettings";
 
 // Running in "100% Passive" mode that will never challenge users. The mode is set at account level.
 // In the future we hope to use "99.9% Passive hybrid" that will show an A11Y prompt for the .1%
@@ -10,17 +11,17 @@ export const Captcha = ({
   successCb,
   hCaptchaRef,
   lang,
-  hCaptchaSiteKey,
   blockableMode = true,
 }: {
   successCb: () => void;
   hCaptchaRef: React.RefObject<HCaptcha | null>;
   lang: string;
-  hCaptchaSiteKey: string | undefined;
   // Determines whether or not to block a user marked as a bot by siteverify from submitting a form
   blockableMode?: boolean;
 }) => {
   const router = useRouter();
+  const { getAppSetting } = useAppSettings();
+  const hCaptchaSiteKey = getAppSetting("hCaptchaSiteKey") || "";
 
   if (!hCaptchaSiteKey) {
     logMessage.error("hCaptcha: hCaptchaSiteKey is missing");

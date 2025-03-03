@@ -4,7 +4,7 @@ import { logMessage } from "@lib/logger";
 import { createContext, useContext, useState } from "react";
 
 const AppSettingsContext = createContext({
-  settings: {} as AllAppSettings,
+  settings: [] as AllAppSettings,
   getAppSetting: () => {},
 });
 
