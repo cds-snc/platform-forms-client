@@ -5,13 +5,15 @@ import { Session } from "next-auth";
 import { AccessControlProvider } from "@lib/hooks/useAccessControl";
 import { RefsProvider } from "@formBuilder/[id]/edit/components/RefsContext";
 import { FeatureFlagsProvider } from "@lib/hooks/useFeatureFlags";
-import { Flags } from "@lib/cache/types";
+import { AllAppSettings, Flags } from "@lib/cache/types";
+import { AppSettingsProvider } from "@lib/hooks/useAppSettings";
 
 export const ClientContexts: React.FC<{
   session: Session | null;
   children: React.ReactNode;
   featureFlags: Flags;
-}> = ({ session, children, featureFlags }) => {
+  appSettings: AllAppSettings;
+}> = ({ session, children, featureFlags, appSettings }) => {
   return (
     <SessionProvider
       // initial session
@@ -23,7 +25,9 @@ export const ClientContexts: React.FC<{
     >
       <AccessControlProvider>
         <RefsProvider>
-          <FeatureFlagsProvider featureFlags={featureFlags}>{children}</FeatureFlagsProvider>
+          <FeatureFlagsProvider featureFlags={featureFlags}>
+            <AppSettingsProvider appSettings={appSettings}>{children}</AppSettingsProvider>
+          </FeatureFlagsProvider>
         </RefsProvider>
       </AccessControlProvider>
     </SessionProvider>
