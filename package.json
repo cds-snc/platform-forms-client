@@ -108,7 +108,7 @@
     "react-loading-skeleton": "^3.4.0",
     "react-roving-tabindex": "^3.2.0",
     "react-select": "5.9.0",
-    "react-toastify": "11.0.3",
+    "react-toastify": "11.0.5",
     "reactflow": "^11.11.3",
     "server-only": "^0.0.1",
     "swr": "2.2.5",
