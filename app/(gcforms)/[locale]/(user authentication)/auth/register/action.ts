@@ -86,8 +86,18 @@ export const register = async (
     return { validationErrors: [], authError: { title: t("InternalServiceException") } };
   }
 
-  // Continue sign in process with 2FA
+  // @TODO: Check email for potential shared access email and flag to Slack if found
+  const addressPart = result.output.username.split("@")[0];
 
+  if (
+    (addressPart.includes("-") && !addressPart.includes(".")) ||
+    (!addressPart.includes(".") && !addressPart.includes("-"))
+  ) {
+    // Flag to Slack or handle the case where email contains dash but no dot or no dot or dash before the @
+    logMessage.warn(`Potential shared access email detected: ${result.output.username}`);
+  }
+
+  // Continue sign in process with 2FA
   const cognitoToken = await initiateSignIn({
     username: result.output.username,
     password: result.output.password,
