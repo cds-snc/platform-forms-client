@@ -5,6 +5,20 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.35.1](https://github.com/cds-snc/platform-forms-client/compare/v3.35.0...v3.35.1) (2025-03-03)
+
+
+### Bug Fixes
+
+* **deps:** update all patch dependencies ([#5122](https://github.com/cds-snc/platform-forms-client/issues/5122)) ([809c1c4](https://github.com/cds-snc/platform-forms-client/commit/809c1c4ece682161fa3669440fc90244ce61e99c))
+
+
+### Miscellaneous Chores
+
+* bump eslint config next ([#5177](https://github.com/cds-snc/platform-forms-client/issues/5177)) ([906b3fe](https://github.com/cds-snc/platform-forms-client/commit/906b3fe901965e5d8f87f5705352ed26be1b6158))
+* **deps:** update all non-major github action dependencies ([#5175](https://github.com/cds-snc/platform-forms-client/issues/5175)) ([e4b7cdd](https://github.com/cds-snc/platform-forms-client/commit/e4b7cdd4807affd9216a16fcd2901613d1b02f04))
+* **deps:** update postgres docker digest to 81f32a8 ([#5174](https://github.com/cds-snc/platform-forms-client/issues/5174)) ([79090c7](https://github.com/cds-snc/platform-forms-client/commit/79090c7abca673a9b47c2552873df1bc0046a387))
+
 ## [3.35.0](https://github.com/cds-snc/platform-forms-client/compare/v3.34.0...v3.35.0) (2025-02-28)
 
 
