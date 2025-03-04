@@ -94,7 +94,7 @@ export const register = async (
     (!addressPart.includes(".") && !addressPart.includes("-"))
   ) {
     logMessage.warn(
-      `Severity level 2: Potential shared access email detected ${result.output.username}`
+      `Potential shared access email detected ${result.output.username} \n\nSeverity level: 2`
     );
   }
 
