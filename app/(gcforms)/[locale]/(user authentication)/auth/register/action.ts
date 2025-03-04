@@ -93,7 +93,9 @@ export const register = async (
     (addressPart.includes("-") && !addressPart.includes(".")) ||
     (!addressPart.includes(".") && !addressPart.includes("-"))
   ) {
-    logMessage.warn(`Potential shared access email detected: ${result.output.username}`);
+    logMessage.warn(
+      `Severity level 2: Potential shared access email detected ${result.output.username}`
+    );
   }
 
   // Continue sign in process with 2FA
