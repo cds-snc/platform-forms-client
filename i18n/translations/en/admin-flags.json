@@ -10,10 +10,6 @@
   "featureStatus": "Status",
   "featureSwitch": "On/Off",
   "features": {
-    "repeatingSets": {
-      "title": "Repeating sets",
-      "description": "Enable repeating sets"
-    },
     "zitadelAuth": {
       "title": "Zitadel Auth",
       "description": "Enable API authentication with Zitadel"
@@ -21,10 +17,6 @@
     "addressComplete": {
       "title": "Address Complete",
       "description": "Enable CanadaPost address completion for forms"
-    },
-    "scheduleClosingDate": {
-      "title": "Schedule Closing Date",
-      "description": "Enable scheduling a form closing date"
     },
     "apiAccess": {
       "title": "API Access",
