@@ -156,7 +156,7 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
 
           <CaptchaForm
             id="form"
-            data-testid="form"
+            dataTestId="form"
             lang={language}
             handleSubmit={handleSubmit}
             noValidate={true}
