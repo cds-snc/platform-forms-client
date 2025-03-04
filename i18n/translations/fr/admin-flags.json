@@ -10,10 +10,6 @@
   "featureStatus": "Statut",
   "featureSwitch": "Activé/Désactivé",
   "features": {
-    "repeatingSets": {
-      "title": "Ensemble récurrent",
-      "description": "Activer les ensembles récurrents"
-    },
     "zitadelAuth": {
       "title": "AuthenticationZitadel",
       "description": "Authentification Zitadel pour API"
@@ -21,10 +17,6 @@
     "addressComplete": {
       "title": "Adresse complète",
       "description": "Activer la complétion d'adresse CanadaPost pour les formulaires"
-    },
-    "scheduleClosingDate": {
-      "title": "Date de clôture du calendrier",
-      "description": "Activer la planification d'une date de clôture de formulaire"
     },
     "apiAccess": {
       "title": "Accès API",
