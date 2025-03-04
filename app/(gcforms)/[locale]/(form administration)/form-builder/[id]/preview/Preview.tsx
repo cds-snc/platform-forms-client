@@ -90,7 +90,7 @@ export const Preview = ({
 
   const [sent, setSent] = useState<string | null>();
 
-  const { saveSessionProgress } = useGCFormsContext();
+  const { saveSessionProgress, currentGroup } = useGCFormsContext();
 
   const clearSent = () => {
     setSent(null);
@@ -243,6 +243,7 @@ export const Preview = ({
                     );
                   }}
                   allowGrouping={allowGrouping}
+                  currentGroup={currentGroup}
                 >
                   {currentForm}
                 </Form>

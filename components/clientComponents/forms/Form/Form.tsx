@@ -53,6 +53,7 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
   const [lastSubmitCount, setLastSubmitCount] = useState(-1);
 
   const { currentGroup, groupsCheck, getGroupTitle } = useGCFormsContext();
+  // TODO: This can be removed in the next refactor.
   const isGroupsCheck = groupsCheck(props.allowGrouping);
   const isShowReviewPage = showReviewPage(form);
   const showIntro = isGroupsCheck ? currentGroup === LockedSections.START : true;
@@ -157,16 +158,11 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
             id="form"
             data-testid="form"
             lang={language}
-            onSubmit={() => {
-              // For groups enabled forms only allow submitting on the Review page
-              if (isGroupsCheck && isShowReviewPage && currentGroup !== LockedSections.REVIEW) {
-                return;
-              }
-              handleSubmit();
-            }}
+            handleSubmit={handleSubmit}
             noValidate={true}
             hCaptchaSiteKey={props.hCaptchaSiteKey}
             blockableMode={false}
+            isPreview={props.isPreview}
           >
             {isGroupsCheck &&
               isShowReviewPage &&
@@ -242,6 +238,12 @@ export const Form = withFormik<FormProps, Responses>({
   validate: (values, props) => validateOnSubmit(values, props),
 
   handleSubmit: async (values, formikBag) => {
+    // For groups enabled forms only allow submitting on the Review page
+    const isShowReviewPage = showReviewPage(formikBag.props.formRecord.form);
+    if (isShowReviewPage && formikBag.props.currentGroup !== LockedSections.REVIEW) {
+      return;
+    }
+
     const getValuesForConditionalLogic = () => {
       const inputHistoryValues = getInputHistoryValues(
         values,
