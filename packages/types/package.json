@@ -21,7 +21,8 @@
   ],
   "scripts": {
     "build": "tsup src/index.ts --format cjs,esm --dts --clean",
-    "prepare": "yarn && yarn build"
+    "types:build:watch": "tsup src/index.ts --format cjs,esm --dts --watch",
+    "types:prepare": "yarn && yarn build"
   },
   "devDependencies": {
     "@types/node": "^20.11.6",
