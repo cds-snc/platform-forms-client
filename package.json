@@ -1,6 +1,6 @@
 {
   "name": "gcforms",
-  "version": "3.34.0",
+  "version": "3.35.0",
   "private": true,
   "prisma": {
     "seed": "tsx prisma/seeds/seed_cli.ts --environment=development"
@@ -108,7 +108,7 @@
     "react-loading-skeleton": "^3.4.0",
     "react-roving-tabindex": "^3.2.0",
     "react-select": "5.9.0",
-    "react-toastify": "11.0.3",
+    "react-toastify": "11.0.5",
     "reactflow": "^11.11.3",
     "server-only": "^0.0.1",
     "swr": "2.2.5",
@@ -165,7 +165,7 @@
     "cypress-terminal-report": "^7.1.0",
     "cypress-wait-until": "^3.0.2",
     "eslint": "^9.17.0",
-    "eslint-config-next": "15.1.6",
+    "eslint-config-next": "15.1.7",
     "eslint-config-prettier": "^9.1.0",
     "eslint-plugin-tailwindcss": "^3.17.5",
     "husky": "^9.0.10",
