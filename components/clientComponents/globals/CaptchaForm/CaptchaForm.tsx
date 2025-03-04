@@ -77,7 +77,7 @@ export const CaptchaForm = ({
     return (
       <form
         {...(id ? { id } : {})}
-        {...(dataTestId ? { "data-test-id": dataTestId } : {})}
+        {...(dataTestId ? { "data-testid": dataTestId } : {})}
         {...(className ? { className } : {})}
         {...(noValidate ? { noValidate } : {})}
         /**
@@ -100,7 +100,7 @@ export const CaptchaForm = ({
   return (
     <form
       {...(id ? { id } : {})}
-      {...(dataTestId ? { "data-test-id": dataTestId } : {})}
+      {...(dataTestId ? { "data-testid": dataTestId } : {})}
       {...(className ? { className } : {})}
       {...(noValidate ? { noValidate } : {})}
       method="POST"
