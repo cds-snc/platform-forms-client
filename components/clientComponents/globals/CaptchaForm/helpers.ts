@@ -5,7 +5,7 @@ import { logMessage } from "@lib/logger";
 export const hCaptchaEnabled = (
   featureFlag: boolean,
   hCaptchaSiteKey: string,
-  isPreview? = false
+  isPreview = false
 ) => {
   if (process.env.NEXT_PUBLIC_APP_ENV === "test" || !featureFlag || isPreview) {
     return false;
