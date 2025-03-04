@@ -7,14 +7,15 @@ export const Cards = async ({
   filter,
   templates,
   overdueTemplateIds,
+  hasPublishFormsPrivilege,
 }: {
   filter?: string;
   templates: FormsTemplate[];
   overdueTemplateIds: string[];
+  hasPublishFormsPrivilege: boolean;
 }) => {
   const { t } = await serverTranslation("my-forms");
 
-  // TODO: more testing with below live region. it may need to be placed higher in the tree
   return (
     <div aria-live="polite">
       <div
@@ -29,6 +30,16 @@ export const Cards = async ({
               // Check if the form has an overdue submission
               if (overdueTemplateIds.includes(card.id)) {
                 card.overdue = true;
+              }
+
+              // If this is a shared form and I don't have permissionToPublish, don't show it
+              // @TODO: need to gate the form access itself as well!
+              if (
+                !hasPublishFormsPrivilege &&
+                card.associatedUsersCount &&
+                card.associatedUsersCount > 1
+              ) {
+                return null;
               }
 
               return (
