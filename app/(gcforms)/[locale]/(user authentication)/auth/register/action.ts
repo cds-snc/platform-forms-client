@@ -94,7 +94,7 @@ export const register = async (
     (!addressPart.includes(".") && !addressPart.includes("-"))
   ) {
     logMessage.warn(
-      `Potential shared access email detected ${result.output.username} \n\nSeverity level: 2`
+      `Flagged new GC Forms account \nPotential shared access email address: ${result.output.username} \nReview and deactivate account if it's a shared inbox \n\nSeverity level: 2`
     );
   }
 
