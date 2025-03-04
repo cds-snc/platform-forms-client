@@ -344,9 +344,10 @@ describe("<ElementDialog />", () => {
     cy.get('[data-testid="listbox"] li[role="option"]').should("have.length", 7);
     cy.get('[data-testid="preset-filter').click();
     cy.get('[data-testid="listbox"] li[role="option"]').should("have.length", 7);
-    cy.get('[data-testid="other-filter').click();
 
-    cy.get('[data-testid="listbox"] li[role="option"]').should("have.length", 1);
+    // Other filter has 2 elements
+    cy.get('[data-testid="other-filter').click();
+    cy.get('[data-testid="listbox"] li[role="option"]').should("have.length", 2);
 
     cy.get('[data-testid="all-filter').click();
     cy.get('[data-testid="listbox"] li[role="option"]').should("have.length", 15);
