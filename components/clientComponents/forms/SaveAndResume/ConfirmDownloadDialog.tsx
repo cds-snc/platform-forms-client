@@ -107,7 +107,7 @@ export const ConfirmDownloadDialog = ({
         type,
         formId,
         reviewItems,
-        formResponse: btoa(JSON.stringify(getProgressData())),
+        formResponse: Buffer.from(JSON.stringify(getProgressData()), "utf8").toString("base64"),
         language,
         startSectionTitle: getStartLabels()[language],
         submissionId,
