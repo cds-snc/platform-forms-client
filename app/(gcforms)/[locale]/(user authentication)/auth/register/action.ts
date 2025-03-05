@@ -86,8 +86,19 @@ export const register = async (
     return { validationErrors: [], authError: { title: t("InternalServiceException") } };
   }
 
-  // Continue sign in process with 2FA
+  // Check email for potential shared access email and flag to Slack if found
+  const addressPart = result.output.username.split("@")[0];
 
+  if (
+    (addressPart.includes("-") && !addressPart.includes(".")) ||
+    (!addressPart.includes(".") && !addressPart.includes("-"))
+  ) {
+    logMessage.warn(
+      `Flagged new GC Forms account \nPotential shared access email address: ${result.output.username} \nReview and deactivate account if it's a shared inbox \n\nSeverity level: 2`
+    );
+  }
+
+  // Continue sign in process with 2FA
   const cognitoToken = await initiateSignIn({
     username: result.output.username,
     password: result.output.password,
