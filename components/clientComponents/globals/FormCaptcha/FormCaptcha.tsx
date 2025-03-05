@@ -15,7 +15,7 @@ import { FormEvent, useRef } from "react";
  * @param param0
  * @returns
  */
-export const CaptchaForm = ({
+export const FormCaptcha = ({
   children,
   hCaptchaSiteKey = "",
   blockableMode = false,
@@ -40,12 +40,11 @@ export const CaptchaForm = ({
   noValidate?: boolean;
 }) => {
   const router = useRouter();
-
+  const hCaptchaRef = useRef<HCaptcha>(null);
   const formSubmitEventRef = useRef<FormEvent<HTMLFormElement>>(null);
 
   const { getFlag } = useFeatureFlags();
   const captchaEnabled = hCaptchaEnabled(getFlag("hCaptcha"), hCaptchaSiteKey, isPreview);
-  const hCaptchaRef = useRef<HCaptcha>(null);
 
   if (captchaEnabled && !hCaptchaSiteKey) {
     logMessage.error("hCaptcha: hCaptchaSiteKey is missing");

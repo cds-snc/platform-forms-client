@@ -32,7 +32,7 @@ import { useFormDelay } from "@lib/hooks/useFormDelayContext";
 
 import { FormActions } from "./FormActions";
 import { PrimaryFormButtons } from "./PrimaryFormButtons";
-import { CaptchaForm } from "@clientComponents/globals/CaptchaForm/CaptchaForm";
+import { FormCaptcha } from "@clientComponents/globals/FormCaptcha/FormCaptcha";
 
 /**
  * This is the "inner" form component that isn't connected to Formik and just renders a simple form
@@ -154,7 +154,7 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
             </RichText>
           )}
 
-          <CaptchaForm
+          <FormCaptcha
             id="form"
             dataTestId="form"
             lang={language}
@@ -209,7 +209,7 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
                 props={props}
               />
             </FormActions>
-          </CaptchaForm>
+          </FormCaptcha>
         </>
       }
     </>
