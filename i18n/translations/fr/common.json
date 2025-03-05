@@ -240,16 +240,16 @@
     },
     "prompt": {
       "title": "Sauvegarder sur l’appareil",
-      "description": "Sauvegarder une copie du formulaire rempli jusqu’à présent. Poursuivez le formulaire plus tard en trouvant le fichier sur votre appareil. Protégez vos données en conservant le fichier téléchargé en lieu sûr sur un appareil de confiance.",
-      "okay": "Sauvegarder sur l'appareil",
+      "description": "Sauvegardez une copie du formulaire rempli jusqu’à présent. Poursuivez le formulaire plus tard en trouvant le fichier sur votre appareil et téléversant vos réponses. Protégez vos données en conservant le fichier téléchargé en lieu sûr sur un appareil de confiance.",
+      "okay": "Sauvegarder",
       "cancel": "Annuler"
     },
     "downloadProgressHtml": {
       "nextSteps": {
-        "title": "Quand vous serez prêt :",
+        "title": "Quand vous êtes prêt :",
         "resumeBox": {
-          "title": "Poursuivre le formulaire",
-          "description": "Continuez à remplir le formulaire en téléversant ce fichier."
+          "title": "Reprendre le formulaire",
+          "description": "Continuez à remplir en téléversant vos réponses en cours."
         }
       },
       "keepSafe": {
@@ -267,8 +267,8 @@
     "saveBtnDescription": "Obtenez une copie de vos réponses",
     "prompt": {
       "title": "Sauvegarder sur l'appareil",
-      "description": "Téléchargez une copie du formulaire rempli jusqu'à présent.",
-      "okay": "Sauvegarder sur l'appareil",
+      "description": "Protégez vos données en conservant ce fichier en lieu sûr.",
+      "okay": "Sauvegarder",
       "cancel": "Annuler"
     },
     "downloadHtml": {
