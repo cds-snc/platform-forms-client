@@ -21,7 +21,7 @@ export const DownloadProgressHtml = ({
     formData = JSON.stringify({
       data: formResponse,
     });
-  } catch (e) {
+  } catch (err) {
     throw new Error(`Failed to stringify: ${(err as Error).message} `);
   }
 
