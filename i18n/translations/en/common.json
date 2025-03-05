@@ -241,7 +241,7 @@
     "prompt": {
       "title": "Save to device",
       "description": "Save a copy of your form progress. Resume later by finding the file on your device and loading your answers. Protect your data by keeping the downloaded file in a safe place.",
-      "okay": "Save to device",
+      "okay": "Save",
       "cancel": "Cancel"
     },
     "downloadProgressHtml": {
@@ -268,7 +268,7 @@
     "prompt": {
       "title": "Save to device",
       "description": "Protect your data by keeping this file in a safe place.",
-      "okay": "Save to device",
+      "okay": "Save",
       "cancel": "Cancel"
     },
     "downloadHtml": {
