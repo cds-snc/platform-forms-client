@@ -267,7 +267,7 @@
     "saveBtnDescription": "Get a copy of your answers",
     "prompt": {
       "title": "Save to device",
-      "description": "Download a copy of your answers so far to keep filling out the form later. Resume later by finding the file on your device. Protect your data by keeping the downloaded file in a safe place on a trusted device.",
+      "description": "Protect your data by keeping this file in a safe place.",
       "okay": "Save to device",
       "cancel": "Cancel"
     },

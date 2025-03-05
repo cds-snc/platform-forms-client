@@ -267,7 +267,7 @@
     "saveBtnDescription": "Obtenez une copie de vos réponses",
     "prompt": {
       "title": "Sauvegarder sur l'appareil",
-      "description": "Téléchargez une copie du formulaire rempli jusqu'à présent.",
+      "description": "Protégez vos données en conservant ce fichier en lieu sûr.",
       "okay": "Sauvegarder sur l'appareil",
       "cancel": "Annuler"
     },
