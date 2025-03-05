@@ -7,13 +7,11 @@ import { hCaptchaEnabled } from "./helpers";
 import { FormEvent, useRef } from "react";
 
 /**
- * Acts a HCaptcha wrapper to simplify the wiring around adding hCaptcha to a form. When hCaptcha
+ * Acts as a HCaptcha wrapper to simplify the wiring around adding hCaptcha to a form. When hCaptcha
  * is enable a form is wired up to use hCaptcha and returned. Otherwise a default form is returned.
  *
  * Note: hCaptcha is currently running in "100% Passive" mode that will never challenge users. The
  * mode is set at account level.
- * @param param0
- * @returns
  */
 export const FormCaptcha = ({
   children,
