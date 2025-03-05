@@ -240,7 +240,7 @@
     },
     "prompt": {
       "title": "Save to device",
-      "description": "Save a copy of your form answers so far. Resume later by finding the file on your device. Protect your data by keeping the downloaded file in a safe place.",
+      "description": "Save a copy of your form progress. Resume later by finding the file on your device and loading your answers. Protect your data by keeping the downloaded file in a safe place.",
       "okay": "Save to device",
       "cancel": "Cancel"
     },

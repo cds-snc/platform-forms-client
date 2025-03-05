@@ -240,7 +240,7 @@
     },
     "prompt": {
       "title": "Sauvegarder sur l’appareil",
-      "description": "Sauvegarder une copie du formulaire rempli jusqu’à présent. Poursuivez le formulaire plus tard en trouvant le fichier sur votre appareil. Protégez vos données en conservant le fichier téléchargé en lieu sûr sur un appareil de confiance.",
+      "description": "Sauvegarder une copie du formulaire rempli jusqu’à présent. Poursuivez le formulaire plus tard en trouvant le fichier sur votre appareil et téléversant vos réponses. Protégez vos données en conservant le fichier téléchargé en lieu sûr sur un appareil de confiance.",
       "okay": "Sauvegarder sur l'appareil",
       "cancel": "Annuler"
     },
