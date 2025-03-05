@@ -24,7 +24,7 @@ export const DownloadConfirmHtml = ({
       data: formResponse,
     });
   } catch (e) {
-    throw new Error(`Failed to stringify: ${e.message}`);
+    throw new Error(`Failed to stringify: ${(err as Error).message} `);
   }
 
   return (
