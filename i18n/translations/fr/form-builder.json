@@ -1312,7 +1312,7 @@
     "toggleOff": "Désactivé",
     "toggleDescription": {
       "text1": "Permettre l'enregistrement des réponses en cours",
-      "text2": "Les personnes peuvent prendre une pause et poursuivre le formulaire plus tard avec la possibilité d'enregistrer une copie de la progression dans le formulaire. Elles peuvent continuer plus tard en téléversant le fichier contenant les réponses remplies jusqu’à présent."
+      "text2": "Permettre aux personnes de prendre une pause et de reprendre le formulaire plus tard. Avec la possibilité d'enregistré une copie des réponses remplies jusqu’à présent sur leur appareil. Celles-ci peuvent être téléversées dans le formulaire plus tard."
     },
     "a11yDescription": "Enregistrer la progression et reprendre le formulaire plus tard",
     "saveButton": "Enregistrer"
