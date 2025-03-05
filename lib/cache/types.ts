@@ -1,8 +1,6 @@
 // TODO: in the future these could pulled in from default_flag_settings.json
 export const FeatureFlags = {
   addressComplete: "addressComplete",
-  repeatingSets: "repeatingSets",
-  scheduleClosingDate: "scheduleClosingDate",
   apiAccess: "apiAccess",
   saveAndResume: "saveAndResume",
   formTimer: "formTimer",

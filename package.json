@@ -1,6 +1,6 @@
 {
   "name": "gcforms",
-  "version": "3.34.0",
+  "version": "3.35.0",
   "private": true,
   "prisma": {
     "seed": "tsx prisma/seeds/seed_cli.ts --environment=development"
@@ -108,7 +108,7 @@
     "react-loading-skeleton": "^3.4.0",
     "react-roving-tabindex": "^3.2.0",
     "react-select": "5.9.0",
-    "react-toastify": "11.0.3",
+    "react-toastify": "11.0.5",
     "reactflow": "^11.11.3",
     "server-only": "^0.0.1",
     "swr": "2.2.5",
@@ -116,7 +116,7 @@
     "ts-command-line-args": "2.5.1",
     "tsx": "^4.7.0",
     "unorm": "^1.6.0",
-    "usehooks-ts": "3.1.0",
+    "usehooks-ts": "3.1.1",
     "uuid": "9.0.1",
     "valibot": "^0.30.0",
     "zustand": "5.0.3"
@@ -146,8 +146,8 @@
     "@types/node": "^20.11.6",
     "@types/node-fetch": "^2.6.9",
     "@types/pg": "^8.10.9",
-    "@types/react": "19.0.8",
-    "@types/react-dom": "19.0.3",
+    "@types/react": "19.0.10",
+    "@types/react-dom": "19.0.4",
     "@types/unorm": "^1",
     "@types/uuid": "^8.3.4",
     "autoprefixer": "^10.4.16",
@@ -165,7 +165,7 @@
     "cypress-terminal-report": "^7.1.0",
     "cypress-wait-until": "^3.0.2",
     "eslint": "^9.17.0",
-    "eslint-config-next": "15.1.6",
+    "eslint-config-next": "15.1.7",
     "eslint-config-prettier": "^9.1.0",
     "eslint-plugin-tailwindcss": "^3.17.5",
     "husky": "^9.0.10",
@@ -198,9 +198,5 @@
     "not ie < 11",
     "not op_mini all"
   ],
-  "packageManager": "yarn@4.6.0",
-  "resolutions": {
-    "@types/react": "19.0.8",
-    "@types/react-dom": "19.0.3"
-  }
+  "packageManager": "yarn@4.6.0"
 }

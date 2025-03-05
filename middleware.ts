@@ -234,7 +234,9 @@ const setCSP = (
 
   // Create base Next Response with CSP header and i18n cookie
   const response = NextResponse.next({
-    headers: requestHeaders,
+    request: {
+      headers: requestHeaders,
+    },
   });
 
   // Set the CSP header on the response to the browser on the built version of the app only

@@ -5,6 +5,37 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.35.0](https://github.com/cds-snc/platform-forms-client/compare/v3.34.0...v3.35.0) (2025-02-28)
+
+
+### Features
+
+* Add labels to PRs for db migrations and package changes. ([#5157](https://github.com/cds-snc/platform-forms-client/issues/5157)) ([4392a81](https://github.com/cds-snc/platform-forms-client/commit/4392a818ecbee2ac64e68d23e407ab68cc124ddb))
+* Deployment IDs ([#5155](https://github.com/cds-snc/platform-forms-client/issues/5155)) ([443634c](https://github.com/cds-snc/platform-forms-client/commit/443634c166e2af907ddaa6323da1cf99e5954a0e))
+* hCaptcha - staging ([#5111](https://github.com/cds-snc/platform-forms-client/issues/5111)) ([cea7d4e](https://github.com/cds-snc/platform-forms-client/commit/cea7d4e16723feef17b06bbc265b2dcc90029dbc))
+
+
+### Bug Fixes
+
+* NextResponse header forwarding ([#5172](https://github.com/cds-snc/platform-forms-client/issues/5172)) ([745e7e1](https://github.com/cds-snc/platform-forms-client/commit/745e7e111abe0eae8cf855ec898915e59dd4f528))
+* skip link and back button ([#5156](https://github.com/cds-snc/platform-forms-client/issues/5156)) ([09531d8](https://github.com/cds-snc/platform-forms-client/commit/09531d89d82f243b68731dd66b7922763fcd832a))
+
+
+### Miscellaneous Chores
+
+* add error log for upload error ([#5159](https://github.com/cds-snc/platform-forms-client/issues/5159)) ([5e95b98](https://github.com/cds-snc/platform-forms-client/commit/5e95b984811369f525237753184083f7e485806f))
+* adjust content for election period banner  ([#5146](https://github.com/cds-snc/platform-forms-client/issues/5146)) ([ce7a55c](https://github.com/cds-snc/platform-forms-client/commit/ce7a55ce87654f5ad4ff30ecfc5654d127e8ef5f))
+* **deps:** update all non-major docker images ([#5100](https://github.com/cds-snc/platform-forms-client/issues/5100)) ([247e679](https://github.com/cds-snc/platform-forms-client/commit/247e679d3011d3e342b29bbcdcd8726e5ce6fffe))
+* **deps:** update all non-major github action dependencies ([#5101](https://github.com/cds-snc/platform-forms-client/issues/5101)) ([f4e88f7](https://github.com/cds-snc/platform-forms-client/commit/f4e88f7468a21ce0e06fe471f0d3685b6ed5ba87))
+* fix lock file ([#5171](https://github.com/cds-snc/platform-forms-client/issues/5171)) ([b566bce](https://github.com/cds-snc/platform-forms-client/commit/b566bce2a463ded194f068d66584450067198989))
+* Manage recent signups ([#4987](https://github.com/cds-snc/platform-forms-client/issues/4987)) ([7eadb5f](https://github.com/cds-snc/platform-forms-client/commit/7eadb5ff07916ac271ceb3f32794fbc3885d5fa0))
+* package updates ([#5168](https://github.com/cds-snc/platform-forms-client/issues/5168)) ([1901352](https://github.com/cds-snc/platform-forms-client/commit/190135273602b7508b38eb02cae012dc1fd08d22))
+* package.json cleanup ([#5170](https://github.com/cds-snc/platform-forms-client/issues/5170)) ([17168e9](https://github.com/cds-snc/platform-forms-client/commit/17168e9807a53621438c3d1dd8d53c82fd3bdc53))
+* synced file(s) with cds-snc/site-reliability-engineering ([#5102](https://github.com/cds-snc/platform-forms-client/issues/5102)) ([0d33c55](https://github.com/cds-snc/platform-forms-client/commit/0d33c554e9638ef0588148d6dbaa563ad709cefe))
+* Update aws modules ([#5153](https://github.com/cds-snc/platform-forms-client/issues/5153)) ([94da68f](https://github.com/cds-snc/platform-forms-client/commit/94da68ff6013fc625781993e5b2754354b92787c))
+* Update Next 15.2.0 ([#5166](https://github.com/cds-snc/platform-forms-client/issues/5166)) ([1dc3828](https://github.com/cds-snc/platform-forms-client/commit/1dc3828958de047eb60bd4b39e1bd69746c5793f))
+* Update resume toast error ([#5160](https://github.com/cds-snc/platform-forms-client/issues/5160)) ([f745005](https://github.com/cds-snc/platform-forms-client/commit/f74500597accf048a3ca63edb49eb32aa53271c4))
+
 ## [3.34.0](https://github.com/cds-snc/platform-forms-client/compare/v3.33.0...v3.34.0) (2025-02-24)
 
 
