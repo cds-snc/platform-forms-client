@@ -18,9 +18,14 @@ export const DownloadConfirmHtml = ({
   submissionId,
   submissionDate,
 }: HTMLProps) => {
-  const formData = JSON.stringify({
-    data: formResponse,
-  });
+  let formData;
+  try {
+    formData = JSON.stringify({
+      data: formResponse,
+    });
+  } catch (e) {
+    throw new Error(`Failed to stringify: ${e.message}`);
+  }
 
   return (
     <html lang={language}>
