@@ -1023,7 +1023,7 @@
     "status": "Form status",
     "open": "Open",
     "closed": "Closed",
-    "saveButton": "Save changes",
+    "saveButton": "Save",
     "savedSuccessMessage": "Your changes have been saved.",
     "formClosedSuccessMessage": {
       "title": "This form is now closed",
@@ -1307,12 +1307,12 @@
   "saveAndResume": {
     "savedErrorMessage": "There was an error saving your changes.",
     "savedSuccessMessage": "Your changes have been saved.",
-    "title": "Resume filling out form later",
+    "title": "Resume filling out the form later",
     "toggleOn": "On",
     "toggleOff": "Off",
     "toggleDescription": {
       "text1": "Enable saving answers in progress",
-      "text2": "Allow people to pause and resume later with the option to save a copy of their form. They can continue later by uploading the file containing the answers filled out so far."
+      "text2": "Allow people to pause and resume the form later. With the option to save a copy of their answers so far on their device. These can then be uploaded into the form later."
     },
     "a11yDescription": "Save progress and resume form later",
     "saveButton": "Save"
