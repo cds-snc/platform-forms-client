@@ -246,10 +246,10 @@
     },
     "downloadProgressHtml": {
       "nextSteps": {
-        "title": "Quand vous serez prêt :",
+        "title": "Quand vous êtes prêt :",
         "resumeBox": {
-          "title": "Poursuivre le formulaire",
-          "description": "Continuez à remplir le formulaire en téléversant ce fichier."
+          "title": "Reprendre le formulaire",
+          "description": "Continuez à remplir en téléversant vos réponses en cours."
         }
       },
       "keepSafe": {

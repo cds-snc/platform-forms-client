@@ -246,10 +246,10 @@
     },
     "downloadProgressHtml": {
       "nextSteps": {
-        "title": "When you're ready: ",
+        "title": "Ready to resume? ",
         "resumeBox": {
-          "title": "Resume form",
-          "description": "Continue filling the form by uploading this file"
+          "title": "Go to form",
+          "description": "Continue filling out the form, by loading your answers so far."
         }
       },
       "keepSafe": {
