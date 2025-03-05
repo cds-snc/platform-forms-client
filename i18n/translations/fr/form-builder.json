@@ -1023,7 +1023,7 @@
     "status": "État du formulaire",
     "open": "Ouvert",
     "closed": "Fermé",
-    "saveButton": "Enregistrer les modifications",
+    "saveButton": "Enregistrer",
     "savedSuccessMessage": "Vos modifications ont été enregistrées.",
     "formClosedSuccessMessage": {
       "title": "Ce formulaire est maintenant fermé",

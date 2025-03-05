@@ -1023,7 +1023,7 @@
     "status": "Form status",
     "open": "Open",
     "closed": "Closed",
-    "saveButton": "Save changes",
+    "saveButton": "Save",
     "savedSuccessMessage": "Your changes have been saved.",
     "formClosedSuccessMessage": {
       "title": "This form is now closed",
