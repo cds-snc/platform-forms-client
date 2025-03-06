@@ -14,8 +14,17 @@ export interface TextInputProps extends InputFieldProps {
 export const TextInput = (
   props: TextInputProps & JSX.IntrinsicElements["input"]
 ): React.ReactElement => {
-  const { id, type, className, required, ariaDescribedBy, placeholder, autoComplete, maxLength } =
-    props;
+  const {
+    id,
+    type,
+    className,
+    required,
+    ariaDescribedBy,
+    placeholder,
+    autoComplete,
+    maxLength,
+    spellCheck,
+  } = props;
   const [field, meta, helpers] = useField(props);
   const { t } = useTranslation("common");
 
@@ -70,6 +79,7 @@ export const TextInput = (
         className={classes}
         id={id}
         type={type === "number" ? "text" : type}
+        spellCheck={spellCheck}
         required={required}
         autoComplete={autoComplete ? autoComplete : "off"}
         placeholder={placeholder}
