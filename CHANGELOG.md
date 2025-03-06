@@ -5,6 +5,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.35.2](https://github.com/cds-snc/platform-forms-client/compare/v3.35.1...v3.35.2) (2025-03-06)
+
+
+### Miscellaneous Chores
+
+* Fix DND branding ([#5209](https://github.com/cds-snc/platform-forms-client/issues/5209)) ([8d06746](https://github.com/cds-snc/platform-forms-client/commit/8d067465eebd5166ff29f1d1a7dab231eaf710da))
+
 ## [3.35.1](https://github.com/cds-snc/platform-forms-client/compare/v3.35.0...v3.35.1) (2025-03-06)
 
 
