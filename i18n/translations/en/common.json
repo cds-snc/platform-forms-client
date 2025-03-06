@@ -240,16 +240,16 @@
     },
     "prompt": {
       "title": "Save to device",
-      "description": "Save a copy of your form answers so far. Resume later by finding the file on your device. Protect your data by keeping the downloaded file in a safe place.",
-      "okay": "Save to device",
+      "description": "Save a copy of your form progress. Resume later by finding the file on your device and loading your answers. Protect your data by keeping the downloaded file in a safe place.",
+      "okay": "Save",
       "cancel": "Cancel"
     },
     "downloadProgressHtml": {
       "nextSteps": {
-        "title": "When you're ready: ",
+        "title": "Ready to resume? ",
         "resumeBox": {
-          "title": "Resume form",
-          "description": "Continue filling the form by uploading this file"
+          "title": "Go to form",
+          "description": "Continue filling out the form, by loading your answers so far."
         }
       },
       "keepSafe": {
@@ -267,8 +267,8 @@
     "saveBtnDescription": "Get a copy of your answers",
     "prompt": {
       "title": "Save to device",
-      "description": "Download a copy of your answers so far to keep filling out the form later. Resume later by finding the file on your device. Protect your data by keeping the downloaded file in a safe place on a trusted device.",
-      "okay": "Save to device",
+      "description": "Protect your data by keeping this file in a safe place.",
+      "okay": "Save",
       "cancel": "Cancel"
     },
     "downloadHtml": {
