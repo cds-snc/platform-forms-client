@@ -93,7 +93,7 @@ function _buildForm(element: FormElement, lang: string): ReactElement {
 
   const spellCheck =
     element.properties?.validation?.type &&
-    ["email", "name"].includes(element.properties.validation.type)
+    ["email", "name", "password", "tel", "url"].includes(element.properties.validation.type)
       ? false
       : true;
 
