@@ -9,6 +9,7 @@ import { cn } from "@lib/utils";
 export interface TextInputProps extends InputFieldProps {
   type: HTMLTextInputTypeAttribute;
   placeholder?: string;
+  spellCheck?: boolean;
 }
 
 export const TextInput = (
