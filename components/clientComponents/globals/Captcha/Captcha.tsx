@@ -2,6 +2,7 @@ import HCaptcha from "@hcaptcha/react-hcaptcha";
 import { logMessage } from "@lib/logger";
 import { verifyHCaptchaToken } from "./actions";
 import { useRouter } from "next/navigation";
+import { theme } from "./theme";
 
 // Running in "100% Passive" mode that will never challenge users. The mode is set at account level.
 // In the future we hope to use "99.9% Passive hybrid" that will show an A11Y prompt for the .1%
@@ -77,6 +78,7 @@ export const Captcha = ({
       languageOverride={lang}
       // Do not show a checkbox
       size="invisible"
+      theme={theme}
     />
   );
 };
