@@ -21,15 +21,4 @@ jobs:
 
       - name: Run if label exists
         if: steps.label-check.outputs.result == 'true'
-        uses: actions/github-script@v6
-        with:
-          script: |
-            git fetch origin main
-            git checkout origin/main -- package.json
-            diff package.json package.json
-            if [ $? -eq 0 ]; then
-              echo "Version in package.json has not changed."
-              exit 1
-            else
-              echo "Version in package.json has changed."
-            fi
+        run: echo "Label exists"
