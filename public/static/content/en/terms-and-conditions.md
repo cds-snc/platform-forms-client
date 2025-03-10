@@ -13,6 +13,10 @@ The department or agency you’re communicating with also protects your personal
 
 Personal information is also collected in compliance with the [Privacy Act](https://laws.justice.gc.ca/eng/acts/P-21/index.html).
 
+### We use hCaptcha to protect form security
+
+The use of [hCaptcha](https://www.hcaptcha.com/) helps us detect spam and automated abuse or threats from bots. Learn more about this third-party provider's [privacy policy](https://www.hcaptcha.com/privacy) and [terms of service](https://www.hcaptcha.com/terms).
+
 ### We use web analytics to help improve your experience
 
 Web analytics show us measures such as the type of browser used to visit the website, the pages visited, and the links clicked. This information helps us learn how our website is being used to improve your experience.
