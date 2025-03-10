@@ -1,0 +1,24 @@
+name: Check package version
+
+on:
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Check for specific label
+        id: label-check
+        uses: actions/github-script@v6
+        with:
+          script: |
+            const label = '!! Package Update !!';
+            const labels = context.payload.pull_request.labels.map(l => l.name);
+            return labels.includes(label);
+
+      - name: Run if label exists
+        if: steps.label-check.outputs.result == 'true'
+        run: echo "Label exists"
