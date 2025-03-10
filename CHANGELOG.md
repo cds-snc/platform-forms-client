@@ -5,6 +5,23 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.35.3](https://github.com/cds-snc/platform-forms-client/compare/v3.35.2...v3.35.3) (2025-03-10)
+
+
+### Bug Fixes
+
+* **deps:** update dependency axios to v1.8.2 [security] ([#5216](https://github.com/cds-snc/platform-forms-client/issues/5216)) ([fb2dca0](https://github.com/cds-snc/platform-forms-client/commit/fb2dca048a2a50cb332ea86a98c863d81115e4a0))
+
+
+### Miscellaneous Chores
+
+* Bump Next JS 15.2.1 ([#5218](https://github.com/cds-snc/platform-forms-client/issues/5218)) ([fc344d0](https://github.com/cds-snc/platform-forms-client/commit/fc344d025903a79eae5947864ada27b418a3e35e))
+* **deps:** lock file maintenance ([#5214](https://github.com/cds-snc/platform-forms-client/issues/5214)) ([69ae64c](https://github.com/cds-snc/platform-forms-client/commit/69ae64c488813a82ef17caea6c1ca586d53b059b))
+* **deps:** update all non-major docker images ([#5213](https://github.com/cds-snc/platform-forms-client/issues/5213)) ([b0a7a72](https://github.com/cds-snc/platform-forms-client/commit/b0a7a728ab9eb2c100e8d7a9885dcc448d614c2f))
+* **deps:** update all non-major github action dependencies ([#5212](https://github.com/cds-snc/platform-forms-client/issues/5212)) ([95f4538](https://github.com/cds-snc/platform-forms-client/commit/95f45385a828057970893ff9e3cb4fd2b29f3ba0))
+* Disable Spellcheck on Name/Address/Email/Telephone ([#5206](https://github.com/cds-snc/platform-forms-client/issues/5206)) ([fa295e2](https://github.com/cds-snc/platform-forms-client/commit/fa295e2e906efb3f09a73712d557ffc0a35e5ea1))
+* update lock ([#5221](https://github.com/cds-snc/platform-forms-client/issues/5221)) ([1e16b15](https://github.com/cds-snc/platform-forms-client/commit/1e16b151ad64160f5b412e3221041e436ed549dc))
+
 ## [3.35.2](https://github.com/cds-snc/platform-forms-client/compare/v3.35.1...v3.35.2) (2025-03-06)
 
 
