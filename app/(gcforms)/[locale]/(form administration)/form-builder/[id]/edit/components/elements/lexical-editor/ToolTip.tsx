@@ -17,7 +17,7 @@ export const ToolTip = ({ children, text }: { children: React.ReactElement; text
       })}
       <span
         id={id}
-        className={`invisible z-[1000] absolute -left-14 -top-10 w-36 whitespace-nowrap rounded bg-gray-800 p-1 text-center text-sm text-white after:absolute after:left-1/2 after:top-full after:-translate-x-1/2 after:border-8 after:border-x-transparent after:border-b-transparent after:border-t-gray-700 after:content-[''] peer-hover:visible peer-focus:visible`}
+        className={`invisible absolute -left-14 -top-10 z-[1000] w-36 whitespace-nowrap rounded bg-gray-800 p-1 text-center text-sm text-white after:absolute after:left-1/2 after:top-full after:-translate-x-1/2 after:border-8 after:border-x-transparent after:border-b-transparent after:border-t-gray-700 after:content-[''] peer-hover:visible peer-focus:visible`}
       >
         {text}
       </span>
