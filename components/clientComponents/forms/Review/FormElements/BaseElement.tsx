@@ -13,7 +13,7 @@ export const BaseElement = ({
   return (
     <dl className="mb-8">
       <dt className="mb-2 font-bold">{formItem.label}</dt>
-      <dd>{formItem.values ? htmlNewline(formItem.values) : "-"}</dd>
+      <dd dangerouslySetInnerHTML={{ __html: htmlNewline(formItem.values) }} />
     </dl>
   );
 };
