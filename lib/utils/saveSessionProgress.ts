@@ -32,8 +32,8 @@ export const saveSessionProgress = (
     language: language,
   });
 
-  // Save to session storage
-  const encodedformDataEn = Buffer.from(formData).toString("base64");
+  // Encode UTF-8 string to base64
+  const encodedformDataEn = Buffer.from(formData, "utf8").toString("base64");
   sessionStorage.setItem(SESSION_STORAGE_KEY, encodedformDataEn);
 };
 

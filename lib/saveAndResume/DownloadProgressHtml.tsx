@@ -16,9 +16,14 @@ export const DownloadProgressHtml = ({
   startSectionTitle,
   host,
 }: HTMLProps) => {
-  const formData = JSON.stringify({
-    data: formResponse,
-  });
+  let formData;
+  try {
+    formData = JSON.stringify({
+      data: formResponse,
+    });
+  } catch (err) {
+    throw new Error(`Failed to stringify: ${(err as Error).message} `);
+  }
 
   return (
     <html lang={language}>

@@ -31,7 +31,7 @@ export const ReviewList = ({
           reviewItems.map((reviewItem) => {
             const title = reviewItem.id === "start" ? startSectionTitle : reviewItem.title;
             const editLink = renderEditButton
-              ? renderEditButton({ id: reviewItem.id, title: reviewItem.title, theme: "link" })
+              ? renderEditButton({ id: reviewItem.id, title: title, theme: "link" })
               : null;
 
             const editButton = renderEditButton

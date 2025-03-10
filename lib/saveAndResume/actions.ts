@@ -30,12 +30,11 @@ export const generateDownloadHtml = async (props: HTMLProps) => {
     }
 
     return { data: renderToStaticMarkup(html) };
-  } catch (error) {
-    if (error instanceof Error) {
-      logMessage.warn(
-        `Error generating HTML due to error: ${error.message} -  formID: {${props.formId}}`
-      );
-    }
-    return { data: "", error: (error as Error).message };
+  } catch (err) {
+    logMessage.warn(
+      `Error generating HTML due to error: ${(err as Error).message} -  formID: {${props?.formId}}`
+    );
+
+    return { data: "", error: (err as Error).message };
   }
 };
