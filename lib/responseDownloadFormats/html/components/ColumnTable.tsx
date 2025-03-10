@@ -5,6 +5,7 @@ import { Answer, Submission } from "../../types";
 import { TableProps } from "../types";
 import { formatDateTimeUTC } from "@lib/utils/form-builder";
 import { FormElementTypes } from "@lib/types";
+import { newLineToHtml } from "@lib/utils/htmlNewline";
 
 const QuestionColumns = ({
   submission,
@@ -33,7 +34,10 @@ const QuestionColumns = ({
             ""
           )}
         </dt>
-        <dd className={`py-4 pl-8`}>{String(item.answer) || "-"}</dd>
+        <dd
+          className={`py-4 pl-8`}
+          dangerouslySetInnerHTML={{ __html: newLineToHtml(item.answer) }}
+        />
       </div>
     );
   };

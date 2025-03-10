@@ -1,6 +1,7 @@
 import { FormItem } from "@clientComponents/forms/Review/helpers";
+import { Answer } from "@lib/responseDownloadFormats/types";
 
-export const htmlNewline = (html: FormItem["values"]): string => {
+export const newLineToHtml = (html: FormItem["values"] | Answer[][]): string => {
   if (!html) {
     return "-";
   }
