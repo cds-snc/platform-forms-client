@@ -21,4 +21,15 @@ jobs:
 
       - name: Run if label exists
         if: steps.label-check.outputs.result == 'true'
-        run: echo "Label exists"
+        run: |
+          git fetch origin main
+          git checkout origin/main -- package.json
+          current_version=$(jq -r '.version' package.json)
+          git checkout $GITHUB_HEAD_REF -- package.json
+          new_version=$(jq -r '.version' package.json)
+          if [ "$current_version" == "$new_version" ]; then
+            echo "Version in package.json has not changed."
+            exit 1
+          else
+            echo "Version in package.json has changed."
+          fi
