@@ -13,6 +13,10 @@ Le ministère ou l’organisme avec lequel vous communiquez protège également 
 
 Les renseignements personnels sont recueillis conformément à la [Loi sur la protection des renseignements personnels](https://laws.justice.gc.ca/fra/lois/p-21/index.html).
 
+### Nous utilisons hCaptcha pour protéger la sécurité des formulaires
+
+L'utilisation de [hCaptcha](https://www.hcaptcha.com/) nous aide à détecter le spam, les abus automatisés et les menaces des robots. Apprenez-en plus sur la [politique de confidentialité](https://www.hcaptcha.com/privacy) et les [conditions d'utilisation](https://www.hcaptcha.com/terms) de ce fournisseur de services tiers.
+
 ### Analytique Web pour améliorer votre expérience  
 
 L’analytique Web nous renseigne sur des données telles que le type de navigateur utilisé pour visiter le site Web, les pages visitées et les liens suivis. Ces renseignements nous aident à savoir comment s’utilise notre site Web afin d’améliorer votre expérience.
