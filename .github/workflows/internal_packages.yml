@@ -45,17 +45,3 @@ jobs:
             fi
           done
           exit $status
-
-      # - name: Run if label exists
-      #   if: steps.label-check.outputs.result == 'true'
-      #   run: |
-      #     git fetch origin main
-      #     main_version=$(git show origin/main:package.json | jq -r .version)
-      #     current_version=$(jq -r .version package.json)
-      #     if [ "$main_version" != "$current_version" ]; then
-      #       echo "Version mismatch: main branch version is $main_version, current branch version is $current_version"
-      #       exit 1
-      #     else
-      #       echo "Version matches: $current_version"
-      #       exit -1
-      #     fi
