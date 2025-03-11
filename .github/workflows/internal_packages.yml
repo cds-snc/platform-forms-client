@@ -30,9 +30,9 @@ jobs:
             main_version=$(git show origin/main:packages/$dir/package.json | jq -r .version)
             current_version=$(jq -r .version packages/$dir/package.json)
             if [ "$main_version" != "$current_version" ]; then
-              echo -e "\033[0;32m$dir : Version has been updated from $main_version to $current_version\033[0m"
+              echo -e ":white_check_mark: \033[0;32m$dir : Version has been updated from $main_version to $current_version\033[0m"
             else
-                echo -e "\033[0;31m$dir : Version $current_version unchanged but changes detected in package\033[0m"
+                echo -e ":skull: \033[0;31m$dir : Version $current_version unchanged but changes detected in package\033[0m"
               status=-1
             fi
           done
