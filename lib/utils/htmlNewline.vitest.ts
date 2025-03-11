@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { newLineToHtml } from "./htmlNewline";
+import { newLineToHtml } from "./newLineToHtml";
 
 describe("htmlNewline", () => {
   it("should replace \n with <br />", () => {

@@ -5,7 +5,7 @@ import { Answer, Submission } from "../../types";
 import { TableProps } from "../types";
 import { formatDateTimeUTC } from "@lib/utils/form-builder";
 import { FormElementTypes } from "@lib/types";
-import { newLineToHtml } from "@lib/utils/htmlNewline";
+import { newLineToHtml } from "@lib/utils/newLineToHtml";
 
 const QuestionColumns = ({
   submission,

@@ -1,5 +1,5 @@
 import { FormItem } from "../helpers";
-import { newLineToHtml } from "@lib/utils/htmlNewline";
+import { newLineToHtml } from "@lib/utils/newLineToHtml";
 
 export const BaseElement = ({
   formItem,
