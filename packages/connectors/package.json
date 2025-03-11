@@ -21,7 +21,8 @@
   ],
   "scripts": {
     "build": "tsup src/index.ts --format cjs,esm --dts --clean",
-    "prepare": "yarn && yarn build"
+    "connectors:build:watch": "tsup src/index.ts --format cjs,esm --dts --watch",
+    "connectors:prepare": "yarn && yarn build"
   },
   "dependencies": {
     "@aws-sdk/client-secrets-manager": "^3.750.0",
