@@ -4,13 +4,6 @@ import { serverTranslation } from "@i18n";
 import { Metadata } from "next";
 import frContent from "@content/fr/unable-to-process.md";
 import enContent from "@content/en/unable-to-process.md";
-import { languages } from "@i18n/settings";
-
-export async function generateStaticParams() {
-  return languages.map((lang) => ({
-    locale: lang,
-  }));
-}
 
 export async function generateMetadata(props: {
   params: Promise<{ locale: string }>;

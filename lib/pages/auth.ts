@@ -1,5 +1,5 @@
 import { redirect } from "next/navigation";
-import { getCurrentLanguage } from "@i18n";
+import { getCurrentLanguage } from "@i18n/utils";
 import { auth } from "@lib/auth/nextAuth";
 import { JSX } from "react";
 import { Session } from "next-auth";
