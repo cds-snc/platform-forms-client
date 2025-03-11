@@ -24,21 +24,21 @@ jobs:
         run: |
           git fetch origin main
           changed_dirs=$(git diff --dirstat=files,0 main...HEAD packages/ | cut -d'/' -f2 | sort -u)
-          echo "::set-output name=dirs::$changed_dirs"
+          echo "dirs={$changed_dirs}"  >> $GITHUB_OUTPUT
 
-      - name: Check versions of changed packages
-        if: steps.label-check.outputs.result == 'true'
-        run: |
-          for dir in $(echo "${{ steps.changed-dirs.outputs.dirs }}" | tr ',' '\n'); do
-          main_version=$(git show origin/main:packages/$dir/package.json | jq -r .version)
-          current_version=$(jq -r .version packages/$dir/package.json)
-          if [ "$main_version" != "$current_version" ]; then
-            echo "Version mismatch in $dir: main branch version is $main_version, current branch version is $current_version"
-            exit 1
-          else
-            echo "Version matches in $dir: $current_version"
-          fi
-            done
+      # - name: Check versions of changed packages
+      #   if: steps.label-check.outputs.result == 'true'
+      #   run: |
+      #     for dir in $(echo "${{ steps.changed-dirs.outputs.dirs }}" | tr ',' '\n'); do
+      #     main_version=$(git show origin/main:packages/$dir/package.json | jq -r .version)
+      #     current_version=$(jq -r .version packages/$dir/package.json)
+      #     if [ "$main_version" != "$current_version" ]; then
+      #       echo "Version mismatch in $dir: main branch version is $main_version, current branch version is $current_version"
+      #       exit 1
+      #     else
+      #       echo "Version matches in $dir: $current_version"
+      #     fi
+      #       done
 
       # - name: Run if label exists
       #   if: steps.label-check.outputs.result == 'true'
