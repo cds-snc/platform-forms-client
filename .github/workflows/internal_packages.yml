@@ -23,6 +23,7 @@ jobs:
         id: changed-dirs
         run: |
           git fetch origin main
+          git --version
           changed_dirs=$(git diff --dirstat=files,0 main...HEAD packages/ | cut -d'/' -f2 | sort -u)
           echo "dirs={$changed_dirs}"  >> $GITHUB_OUTPUT
 
