@@ -1,4 +1,5 @@
 import { FormItem } from "../helpers";
+import { newLineToHtml } from "@lib/utils/newLineToHtml";
 
 export const BaseElement = ({
   formItem,
@@ -12,7 +13,7 @@ export const BaseElement = ({
   return (
     <dl className="mb-8">
       <dt className="mb-2 font-bold">{formItem.label}</dt>
-      <dd>{formItem.values ? String(formItem.values) : "-"}</dd>
+      <dd dangerouslySetInnerHTML={{ __html: newLineToHtml(formItem.values) }} />
     </dl>
   );
 };
