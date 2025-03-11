@@ -41,6 +41,8 @@ jobs:
             exit 1
           else
             echo "Version matches in $dir: $current_version"
+            echo "You should update the version in $dir"
+            exit -1
           fi
             done
 
