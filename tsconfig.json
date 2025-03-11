@@ -28,7 +28,7 @@
       "@i18n/*": ["i18n/*"],
       "@content/*": ["public/static/content/*"],
       "@public/*": ["public/*"],
-      "@gcforms/types": ["packages/types/src"]
+      "@gcforms/*": ["packages/*"]
     },
     "incremental": true,
     "plugins": [
