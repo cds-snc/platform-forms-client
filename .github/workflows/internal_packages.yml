@@ -40,8 +40,7 @@ jobs:
             if [ "$main_version" != "$current_version" ]; then
               echo "Version has been updated from $main_version to $current_version"
             else
-              echo "Version matches in $dir: $current_version"
-              echo "You should update the version in $dir"
+              echo "$dir Version: $current_version unchanged but changes detected in package"
               status=-1
             fi
           done
