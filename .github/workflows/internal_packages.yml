@@ -12,16 +12,8 @@ jobs:
       - uses: actions/checkout@v2
         with:
           fetch-depth: 0
-      - name: Check for specific label
-        id: label-check
-        uses: actions/github-script@v6
-        with:
-          script: |
-            const label = '!! Package Update !!';
-            const labels = context.payload.pull_request.labels.map(l => l.name);
-            return labels.includes(label);
 
-      - name: Get changed directories
+      - name: Check package directories for changes
         id: changed-dirs
         run: |
           git fetch origin main:main
@@ -30,17 +22,17 @@ jobs:
           echo "dirs=$(echo $changed_dirs | tr ' ' ',')" >> $GITHUB_OUTPUT
 
       - name: Check versions of changed packages
-        if: steps.label-check.outputs.result == 'true'
+        if: steps.changed-dirs.outputs.dirs != ''
         run: |
-          echo "Checking versions in updated packages: ${{ steps.changed-dirs.outputs.dirs }}"
+          echo "Checking versions in packages with changes: ${{ steps.changed-dirs.outputs.dirs }}"
           status=1
           for dir in $(echo "${{ steps.changed-dirs.outputs.dirs }}" | tr ',' '\n'); do
             main_version=$(git show origin/main:packages/$dir/package.json | jq -r .version)
             current_version=$(jq -r .version packages/$dir/package.json)
             if [ "$main_version" != "$current_version" ]; then
-              echo "$dir Version has been updated from $main_version to $current_version"
+              echo -e "\033[0;32m$dir : Version has been updated from $main_version to $current_version\033[0m"
             else
-              echo "$dir Version: $current_version unchanged but changes detected in package"
+                echo -e "\033[0;31m$dir : Version $current_version unchanged but changes detected in package\033[0m"
               status=-1
             fi
           done
