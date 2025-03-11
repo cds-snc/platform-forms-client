@@ -22,9 +22,10 @@ jobs:
       - name: Get changed directories
         id: changed-dirs
         run: |
-          git fetch origin main:main
-          git branch
-          changed_dirs=$(git diff --dirstat=files,0 main...HEAD packages/ | cut -d'/' -f2 | sort -u)
+          git fetch origin main
+          git checkout main
+          git checkout -
+          changed_dirs=$(git diff --dirstat=files,0 origin/main...HEAD packages/ | cut -d'/' -f2 | sort -u)
           echo "dirs={$changed_dirs}"  >> $GITHUB_OUTPUT
 
       # - name: Check versions of changed packages
