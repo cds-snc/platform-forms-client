@@ -44,8 +44,8 @@ jobs:
               echo "You should update the version in $dir"
               status=-1
             fi
-            exit $status
           done
+          exit $status
 
       # - name: Run if label exists
       #   if: steps.label-check.outputs.result == 'true'
