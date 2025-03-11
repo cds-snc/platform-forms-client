@@ -33,18 +33,19 @@ jobs:
         if: steps.label-check.outputs.result == 'true'
         run: |
           echo "${{ steps.changed-dirs.outputs.dirs }}"
+          status=1
           for dir in $(echo "${{ steps.changed-dirs.outputs.dirs }}" | tr ',' '\n'); do
-          main_version=$(git show origin/main:packages/$dir/package.json | jq -r .version)
-          current_version=$(jq -r .version packages/$dir/package.json)
-          if [ "$main_version" != "$current_version" ]; then
-            echo "Version mismatch in $dir: main branch version is $main_version, current branch version is $current_version"
-            exit 1
-          else
-            echo "Version matches in $dir: $current_version"
-            echo "You should update the version in $dir"
-            exit -1
-          fi
-            done
+            main_version=$(git show origin/main:packages/$dir/package.json | jq -r .version)
+            current_version=$(jq -r .version packages/$dir/package.json)
+            if [ "$main_version" != "$current_version" ]; then
+              echo "Version has been updated from $main_version to $current_version"
+            else
+              echo "Version matches in $dir: $current_version"
+              echo "You should update the version in $dir"
+              status=-1
+            fi
+            exit $status
+          done
 
       # - name: Run if label exists
       #   if: steps.label-check.outputs.result == 'true'
