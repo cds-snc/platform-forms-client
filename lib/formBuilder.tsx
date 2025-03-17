@@ -91,6 +91,23 @@ function _buildForm(element: FormElement, lang: string): ReactElement {
       ? element.properties.validation.type
       : "text";
 
+  const spellCheck =
+    element.properties?.autoComplete &&
+    [
+      "email",
+      "name",
+      "tel",
+      "given-name",
+      "additional-name",
+      "family-name",
+      "address-line1",
+      "address-level2",
+      "address-level1",
+      "postal-code",
+    ].includes(element.properties?.autoComplete)
+      ? false
+      : undefined;
+
   const placeHolderPerLocale = element.properties[getLocalizedProperty("placeholder", lang)];
   const placeHolder = placeHolderPerLocale ? placeHolderPerLocale.toString() : "";
 
@@ -105,6 +122,7 @@ function _buildForm(element: FormElement, lang: string): ReactElement {
           {description && <Description id={`${id}`}>{description}</Description>}
           <TextInput
             type={textType}
+            spellCheck={spellCheck}
             id={`${id}`}
             name={`${id}`}
             required={isRequired}

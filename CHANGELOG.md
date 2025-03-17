@@ -5,6 +5,37 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.35.2](https://github.com/cds-snc/platform-forms-client/compare/v3.35.1...v3.35.2) (2025-03-06)
+
+
+### Miscellaneous Chores
+
+* Fix DND branding ([#5209](https://github.com/cds-snc/platform-forms-client/issues/5209)) ([8d06746](https://github.com/cds-snc/platform-forms-client/commit/8d067465eebd5166ff29f1d1a7dab231eaf710da))
+
+## [3.35.1](https://github.com/cds-snc/platform-forms-client/compare/v3.35.0...v3.35.1) (2025-03-06)
+
+
+### Bug Fixes
+
+* **deps:** update all patch dependencies ([#5122](https://github.com/cds-snc/platform-forms-client/issues/5122)) ([809c1c4](https://github.com/cds-snc/platform-forms-client/commit/809c1c4ece682161fa3669440fc90244ce61e99c))
+* Fix encoding for chars / save and resume ([#5199](https://github.com/cds-snc/platform-forms-client/issues/5199)) ([a06e5ee](https://github.com/cds-snc/platform-forms-client/commit/a06e5ee9bfa451417b2a3daeab12ed7a510b5412))
+* Fix typo in French asking for valid dates. ([#5190](https://github.com/cds-snc/platform-forms-client/issues/5190)) ([018d25b](https://github.com/cds-snc/platform-forms-client/commit/018d25b2631b0b44843c6cfc884b4e8deca69c27))
+* Start section title on Review page sometimes appears in English on French interface ([#5207](https://github.com/cds-snc/platform-forms-client/issues/5207)) ([725ec32](https://github.com/cds-snc/platform-forms-client/commit/725ec32370b30bc518b0cf16edbf089c814b0b9d))
+
+
+### Miscellaneous Chores
+
+* bump eslint config next ([#5177](https://github.com/cds-snc/platform-forms-client/issues/5177)) ([906b3fe](https://github.com/cds-snc/platform-forms-client/commit/906b3fe901965e5d8f87f5705352ed26be1b6158))
+* **deps:** lock file maintenance ([#5103](https://github.com/cds-snc/platform-forms-client/issues/5103)) ([10610dc](https://github.com/cds-snc/platform-forms-client/commit/10610dcef2074e04dd5073c69c049cb638ea4d29))
+* **deps:** update all non-major github action dependencies ([#5175](https://github.com/cds-snc/platform-forms-client/issues/5175)) ([e4b7cdd](https://github.com/cds-snc/platform-forms-client/commit/e4b7cdd4807affd9216a16fcd2901613d1b02f04))
+* **deps:** update postgres docker digest to 81f32a8 ([#5174](https://github.com/cds-snc/platform-forms-client/issues/5174)) ([79090c7](https://github.com/cds-snc/platform-forms-client/commit/79090c7abca673a9b47c2552873df1bc0046a387))
+* handle missing form id for warning ([#5205](https://github.com/cds-snc/platform-forms-client/issues/5205)) ([2cc901c](https://github.com/cds-snc/platform-forms-client/commit/2cc901c885f31884c5202ace4347f57870e80cf3))
+* Log a message on suspected shared access email registration ([#5187](https://github.com/cds-snc/platform-forms-client/issues/5187)) ([d46b5d0](https://github.com/cds-snc/platform-forms-client/commit/d46b5d06c3c06f41f42ba8538eac9cd1ba2ce3bb))
+* refine content for "save and resume" ([#5196](https://github.com/cds-snc/platform-forms-client/issues/5196)) ([6bd7998](https://github.com/cds-snc/platform-forms-client/commit/6bd79980a7ff55d92743a7cbe9f8ca76731039c4))
+* remove feature flags for repeating sets and set closing date ([#5189](https://github.com/cds-snc/platform-forms-client/issues/5189)) ([f3aea17](https://github.com/cds-snc/platform-forms-client/commit/f3aea17fc3fbe04eee47da93ef2b29919a52f80c))
+* update warn for save and resume ([#5203](https://github.com/cds-snc/platform-forms-client/issues/5203)) ([9a3780a](https://github.com/cds-snc/platform-forms-client/commit/9a3780a93859f0985cae44e8239065da36c93cd8))
+* wrap try catch for generate ([#5204](https://github.com/cds-snc/platform-forms-client/issues/5204)) ([0d36c36](https://github.com/cds-snc/platform-forms-client/commit/0d36c361538787c243b4d19cb7d0b171046a0092))
+
 ## [3.35.0](https://github.com/cds-snc/platform-forms-client/compare/v3.34.0...v3.35.0) (2025-02-28)
 
 
