@@ -131,7 +131,7 @@ export const SaveButton = () => {
         return;
       }
 
-      const { formRecord: template, error } = await createOrUpdateTemplate({
+      const operationResult = await createOrUpdateTemplate({
         id: getId(),
         formConfig,
         name: getName(),
@@ -139,12 +139,16 @@ export const SaveButton = () => {
         securityAttribute: securityAttribute,
       });
 
-      if (!template || error) {
+      if (operationResult.formRecord === null) {
         throw new Error("Error saving template");
       }
 
-      setId(template.id);
-      setUpdatedAt(new Date(template.updatedAt ? template.updatedAt : "").getTime());
+      setId(operationResult.formRecord.id);
+      setUpdatedAt(
+        new Date(
+          operationResult.formRecord.updatedAt ? operationResult.formRecord.updatedAt : ""
+        ).getTime()
+      );
       setError(false);
       resetState();
     } catch (error) {
@@ -164,7 +168,8 @@ export const SaveButton = () => {
     return null;
   }
 
-  const showSave = pathname?.includes("edit") || pathname?.includes("translate");
+  const showSave =
+    pathname?.includes("edit") || pathname?.includes("translate") || pathname?.includes("preview");
 
   if (!showSave) {
     return null;

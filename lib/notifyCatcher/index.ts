@@ -1,10 +1,8 @@
+import { type Personalisation } from "@gcforms/connectors";
 import { getRedisInstance } from "@lib/integration/redisConnector";
 import { logMessage } from "@lib/logger";
 
-export const notifyCatcher = async (
-  email: string,
-  personalisation: Record<string, string | Record<string, string>>
-) => {
+export const notifyCatcher = async (email: string, personalisation: Personalisation) => {
   try {
     const redis = await getRedisInstance();
     await redis.lpush("notifyEmails", JSON.stringify({ email, personalisation }));

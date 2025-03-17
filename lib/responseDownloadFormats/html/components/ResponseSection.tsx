@@ -1,8 +1,9 @@
 import React from "react";
-import { Form, Submission } from "../../types";
+import { Submission } from "../../types";
 import { ColumnTable } from "./ColumnTable";
 import { RowTable } from "./RowTable";
 import { customTranslate, getProperty } from "@lib/i18nHelpers";
+import { FormRecord } from "@gcforms/types";
 
 export interface ResponseSectionProps {
   confirmReceiptCode: string;
@@ -10,7 +11,7 @@ export interface ResponseSectionProps {
   responseID: string;
   submissionDate: number;
   formResponse: Submission;
-  form: Form;
+  formRecord: FormRecord;
 }
 
 export function capitalize(string: string) {
@@ -27,7 +28,7 @@ export const ResponseSection = ({
   responseID,
   submissionDate,
   formResponse,
-  form,
+  formRecord,
 }: ResponseSectionProps) => {
   const { t } = customTranslate("my-forms");
 
@@ -125,7 +126,7 @@ export const ResponseSection = ({
         </ul>
       </nav>
 
-      <h2 className="gc-h1 mt-20">{String(form[getProperty("title", lang)])}</h2>
+      <h2 className="gc-h1 mt-20">{String(formRecord.form[getProperty("title", lang)])}</h2>
       <h3 id={`columnTable${capitalizedLang}`} className="gc-h2 mt-20" tabIndex={-1}>
         {t("responseTemplate.columnTable", { lng: lang })}
       </h3>

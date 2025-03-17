@@ -77,7 +77,7 @@ export const Item = ({
   const interactiveGhostElementClasses = "inline-block w-full relative";
   const interactiveTitleElementClasses = cn("text-gray-500 italic");
 
-  const sectionElementClasses = cn("w-[100%] h-[60px]", context.isExpanded && "font-bold");
+  const sectionElementClasses = cn("w-[100%] h-[60px]", context.isFocused && "font-bold");
 
   const formElementClasses = cn(
     "rounded-md px-3 w-5/6 border-1 bg-white min-h-[50px]",

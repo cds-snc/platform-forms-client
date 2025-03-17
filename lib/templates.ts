@@ -19,6 +19,8 @@ import { sendEmail } from "./integration/notifyConnector";
 import { youHaveBeenRemovedEmailTemplate } from "./invitations/emailTemplates/youHaveBeenRemovedEmailTemplate";
 import { ownerAddedEmailTemplate } from "./invitations/emailTemplates/ownerAddedEmailTemplate";
 import { isValidISODate } from "./utils/date/isValidISODate";
+import { validateTemplate } from "@lib/utils/form-builder/validate";
+import { dateHasPast } from "@lib/utils";
 
 // ******************************************
 // Internal Module Functions
@@ -42,6 +44,7 @@ const _parseTemplate = (template: {
   publishDesc: string;
   closingDate?: Date | null;
   closedDetails?: Prisma.JsonValue | null;
+  saveAndResume: boolean;
 }): FormRecord => {
   return {
     id: template.id,
@@ -74,6 +77,7 @@ const _parseTemplate = (template: {
       closingDate: template.closingDate.toString(),
     }),
     closedDetails: template.closedDetails as ClosedDetails,
+    saveAndResume: template.saveAndResume,
   };
 };
 
@@ -105,12 +109,20 @@ export type UpdateTemplateCommand = {
   publishDesc?: string;
 };
 
+export class InvalidFormConfigError extends Error {
+  constructor(message?: string) {
+    super(message ?? "InvalidFormConfigError");
+    Object.setPrototypeOf(this, InvalidFormConfigError.prototype);
+  }
+}
+
 export class TemplateAlreadyPublishedError extends Error {
   constructor(message?: string) {
     super(message ?? "TemplateAlreadyPublishedError");
     Object.setPrototypeOf(this, TemplateAlreadyPublishedError.prototype);
   }
 }
+
 export class TemplateHasUnprocessedSubmissions extends Error {
   constructor(message?: string) {
     super(message ?? "TemplateHasUnprocessedSubmissions");
@@ -128,6 +140,17 @@ export async function createTemplate(command: CreateTemplateCommand): Promise<Fo
     logEvent(e.user.id, { type: "Form" }, "AccessDenied", "Attempted to create a Form");
     throw e;
   });
+
+  const validationResult = validateTemplate(command.formConfig);
+
+  if (!validationResult.valid) {
+    logMessage.warn(
+      `[templates][createTemplate] Form config is invalid.\nReasons: ${JSON.stringify(
+        validationResult.errors
+      )}.\nConfig: ${JSON.stringify(command.formConfig)}`
+    );
+    throw new InvalidFormConfigError();
+  }
 
   const createdTemplate = await prisma.template
     .create({
@@ -166,6 +189,7 @@ export async function createTemplate(command: CreateTemplateCommand): Promise<Fo
         publishReason: true,
         publishFormType: true,
         publishDesc: true,
+        saveAndResume: true,
       },
     })
     .catch((e) => prismaErrors(e, null));
@@ -212,6 +236,7 @@ export async function getAllTemplates(options?: {
           publishReason: true,
           publishFormType: true,
           publishDesc: true,
+          saveAndResume: true,
         },
         ...(sortByDateUpdated && {
           orderBy: {
@@ -272,6 +297,7 @@ export async function getAllTemplatesForUser(
           publishReason: true,
           publishFormType: true,
           publishDesc: true,
+          saveAndResume: true,
         },
         ...(sortByDateUpdated && {
           orderBy: {
@@ -333,6 +359,7 @@ export async function getPublicTemplateByID(formID: string): Promise<PublicFormR
           publishDesc: true,
           closingDate: true,
           closedDetails: true,
+          saveAndResume: true,
           ttl: true,
         },
       })
@@ -451,6 +478,17 @@ export async function updateTemplate(command: UpdateTemplateCommand): Promise<Fo
     );
     throw e;
   });
+
+  const validationResult = validateTemplate(command.formConfig);
+
+  if (!validationResult.valid) {
+    logMessage.warn(
+      `[templates][updateTemplate] Form config is invalid.\nReasons: ${JSON.stringify(
+        validationResult.errors
+      )}.\nConfig: ${JSON.stringify(command.formConfig)}`
+    );
+    throw new InvalidFormConfigError();
+  }
 
   const updatedTemplate = await prisma.template
     .update({
@@ -884,6 +922,7 @@ export async function updateAssignedUsersForTemplate(
         publishFormType: true,
         publishDesc: true,
         users: true,
+        saveAndResume: true,
       },
     })
     .catch((e) => prismaErrors(e, null));
@@ -977,6 +1016,7 @@ export async function updateFormPurpose(
         publishDesc: true,
         publishFormType: true,
         publishReason: true,
+        saveAndResume: true,
       },
     })
     .catch((e) => {
@@ -995,6 +1035,66 @@ export async function updateFormPurpose(
     { type: "Form", id: formID },
     "ChangeFormPurpose",
     `Form Purpose set to ${formPurpose}`
+  );
+
+  return _parseTemplate(updatedTemplate);
+}
+
+export async function updateFormSaveAndResume(
+  formID: string,
+  saveAndResume: boolean
+): Promise<FormRecord | null> {
+  const { user } = await authorization.canEditForm(formID).catch((e) => {
+    logEvent(
+      e.user.id,
+      { type: "Form", id: formID },
+      "AccessDenied",
+      "Attempted to set save and resume"
+    );
+    throw e;
+  });
+
+  const updatedTemplate = await prisma.template
+    .update({
+      where: {
+        id: formID,
+        isPublished: false,
+      },
+      data: {
+        saveAndResume: saveAndResume ?? false,
+      },
+      select: {
+        id: true,
+        created_at: true,
+        updated_at: true,
+        name: true,
+        jsonConfig: true,
+        isPublished: true,
+        deliveryOption: true,
+        securityAttribute: true,
+        formPurpose: true,
+        publishDesc: true,
+        publishFormType: true,
+        publishReason: true,
+        saveAndResume: true,
+      },
+    })
+    .catch((e) => {
+      if (e instanceof Prisma.PrismaClientKnownRequestError) {
+        if (e.code === "P2025") {
+          throw new TemplateAlreadyPublishedError();
+        }
+      }
+      return prismaErrors(e, null);
+    });
+
+  if (updatedTemplate === null) return updatedTemplate;
+
+  logEvent(
+    user.id,
+    { type: "Form", id: formID },
+    "ChangeFormSaveAndResume",
+    `Form save and resume set to ${saveAndResume}`
   );
 
   return _parseTemplate(updatedTemplate);
@@ -1049,6 +1149,7 @@ export async function updateResponseDeliveryOption(
         publishReason: true,
         publishFormType: true,
         publishDesc: true,
+        saveAndResume: true,
       },
     })
     .catch((e) => {
@@ -1155,6 +1256,7 @@ export async function deleteTemplate(formID: string): Promise<FormRecord | null>
         publishReason: true,
         publishFormType: true,
         publishDesc: true,
+        saveAndResume: true,
       },
     })
     .catch((e) => prismaErrors(e, null));
@@ -1194,6 +1296,7 @@ export const onlyIncludePublicProperties = (template: FormRecord): PublicFormRec
     form: template.form,
     isPublished: template.isPublished,
     securityAttribute: template.securityAttribute,
+    saveAndResume: template.saveAndResume,
   };
 };
 
@@ -1277,6 +1380,7 @@ export const updateSecurityAttribute = async (formID: string, securityAttribute:
         publishReason: true,
         publishFormType: true,
         publishDesc: true,
+        saveAndResume: true,
       },
     })
     .catch((e) => prismaErrors(e, null));
@@ -1288,4 +1392,39 @@ export const updateSecurityAttribute = async (formID: string, securityAttribute:
   logEvent(user.id, { type: "Form", id: formID }, "ChangeSecurityAttribute");
 
   return _parseTemplate(updatedTemplate);
+};
+
+export const checkIfClosed = async (formId: string) => {
+  try {
+    let isPastClosingDate = false;
+
+    // Note these are the only fields we need from the template
+    // They are public fields so no privilege check is needed
+    const template = await prisma.template
+      .findUnique({
+        where: {
+          id: formId,
+        },
+        select: {
+          closingDate: true,
+          closedDetails: true,
+        },
+      })
+      .catch((e) => prismaErrors(e, null));
+
+    if (!template) {
+      throw new Error("Template not found");
+    }
+
+    if (template.closingDate) {
+      isPastClosingDate = dateHasPast(Date.parse(String(template.closingDate)));
+    }
+
+    return {
+      isPastClosingDate,
+      closedDetails: template.closedDetails as ClosedDetails,
+    };
+  } catch (e) {
+    return null;
+  }
 };

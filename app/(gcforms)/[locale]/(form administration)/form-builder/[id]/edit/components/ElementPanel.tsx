@@ -94,6 +94,7 @@ export const ElementPanel = ({
       onClick={(e) => {
         const el = e.target as HTMLElement;
         if (el.tagName === "DIV") {
+          // Rich text editor
           if (item.type === "richText") {
             if (el.querySelector("[id^='editor-']")) {
               (el?.querySelector("[id^='editor-']") as HTMLElement).focus();
@@ -103,8 +104,18 @@ export const ElementPanel = ({
             return;
           }
 
+          // Non-repeating set panel
           if (!hasSubPanel) {
             refs?.current?.[item.id]?.focus();
+          }
+
+          // Repeating set panel
+          if (hasSubPanel) {
+            // find the closest data-id
+            const closestDataId = el.closest("[data-id]");
+            if (closestDataId) {
+              refs?.current?.[Number(closestDataId?.getAttribute("data-id"))]?.focus();
+            }
           }
         }
       }}

@@ -16,6 +16,9 @@ ARG COGNITO_USER_POOL_ID
 ARG NEXT_SERVER_ACTIONS_ENCRYPTION_KEY
 ENV NEXT_SERVER_ACTIONS_ENCRYPTION_KEY=$NEXT_SERVER_ACTIONS_ENCRYPTION_KEY
 
+ARG NEXT_DEPLOYMENT_ID
+ENV NEXT_DEPLOYMENT_ID=$NEXT_DEPLOYMENT_ID
+
 ARG INDEX_SITE="false"
 ENV INDEX_SITE=$INDEX_SITE
 RUN corepack enable && yarn set version berry
@@ -36,6 +39,9 @@ ENV INDEX_SITE=$INDEX_SITE
 
 ARG TAG_VERSION
 ENV TAG_VERSION=$TAG_VERSION
+
+ARG NEXT_DEPLOYMENT_ID
+ENV NEXT_DEPLOYMENT_ID=$NEXT_DEPLOYMENT_ID
 
 ENV AWS_LWA_ENABLE_COMPRESSION=true
 ENV HOSTNAME=localhost
@@ -62,7 +68,7 @@ RUN apk update && apk add --no-cache aws-cli
 # Lambda web adapter: https://github.com/awslabs/aws-lambda-web-adapter
 # The public.ecr.aws/awsguru/aws-lambda-adapter:0.7.0 image reference in the docs has
 # been pushed to the public CDS ECR to avoid rate limiting when pulling the image.
-COPY --from=public.ecr.aws/cds-snc/aws-lambda-adapter:0.7.0@sha256:00b1441858fb3f4ce3d67882ef6153bacf8ff4bb8bf271750c133667202926af /lambda-adapter /opt/extensions/lambda-adapter
+COPY --from=public.ecr.aws/cds-snc/aws-lambda-adapter:0.9.0@sha256:19cd0b92bc4a376b2b63e3b02d8b9ad3b4031ea3549fd5e54faa848c49948e09 /lambda-adapter /opt/extensions/lambda-adapter
 RUN ln -s /tmp ./.next/cache
 
 EXPOSE 3000

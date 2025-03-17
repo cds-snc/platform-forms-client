@@ -1,25 +1,25 @@
 import { prisma } from "@lib/integration/prismaConnector";
-import { FormProperties, UserAbility } from "@lib/types";
+import { FormProperties } from "@lib/types";
 import {
   InvitationIsExpiredError,
   InvitationNotFoundError,
   UnableToAssignUserToTemplateError,
   UserNotFoundError,
 } from "./exceptions";
-import { checkPrivileges } from "@lib/privileges";
+import { getAbility } from "@lib/privileges";
 import { logEvent } from "@lib/auditLogs";
 import { notifyOwnersOwnerAdded } from "@lib/templates";
 import { logMessage } from "@lib/logger";
+import { AccessControlError } from "@lib/auth/errors";
 
 /**
  * Accept an invitation.
  * User has created their account or logged into their existing account.
  *
- * @param ability (logged in user)
  * @param invitationId
  * @returns
  */
-export const acceptInvitation = async (ability: UserAbility, invitationId: string) => {
+export const acceptInvitation = async (invitationId: string) => {
   // Retrieve the invitation
   const invitation = await prisma.invitation.findUnique({
     where: {
@@ -55,9 +55,13 @@ export const acceptInvitation = async (ability: UserAbility, invitationId: strin
   }
 
   // Ensures the logged in user is the user that was invited
-  checkPrivileges(ability, [
-    { action: "view", subject: { type: "User", object: { id: user.id } } },
-  ]);
+  const ability = await getAbility();
+  if (ability.user.id !== user.id) {
+    throw new AccessControlError(
+      ability.user.id,
+      "You do not have permission to accept this invitation"
+    );
+  }
 
   // assign user to form
   const updatedTemplate = await _assignUserToTemplate(user.id, invitation.templateId).catch((e) => {
@@ -72,8 +76,11 @@ export const acceptInvitation = async (ability: UserAbility, invitationId: strin
     `${user.id} has accepted an invitation`
   );
 
+  // some existing events may not yet have the 'invitedBy' attribute.
+  // fallback to previous behavior
+
   logEvent(
-    ability.user.id,
+    invitation.invitedBy ?? ability.user.id,
     { type: "Form", id: invitation.templateId },
     "GrantFormAccess",
     `Access granted to ${user.id}`

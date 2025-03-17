@@ -1,4 +1,4 @@
-import { FormRecord, UserAbility } from "@lib/types";
+import { FormRecord } from "@lib/types";
 import { getUser } from "@lib/users";
 import {
   InvalidDomainError,
@@ -17,23 +17,29 @@ import { logMessage } from "@lib/logger";
 import { Invitation } from "@prisma/client";
 import { logEvent } from "@lib/auditLogs";
 import { isValidGovEmail } from "@lib/validation/validation";
+import { authorization } from "@lib/privileges";
+import { AccessControlError } from "@lib/auth/errors";
 
 /**
  * Invite someone to the form by email
  *
- * @param ability
  * @param email
  * @param formId
  */
-export const inviteUserByEmail = async (
-  ability: UserAbility,
-  email: string,
-  formId: string,
-  message: string
-) => {
-  let invitation: Invitation;
+export const inviteUserByEmail = async (email: string, formId: string, message: string) => {
+  const { user } = await authorization.canEditForm(formId).catch((e) => {
+    if (e instanceof AccessControlError) {
+      logEvent(
+        e.user.id,
+        { type: "Form", id: formId },
+        "AccessDenied",
+        `User ${e.user.id} does not have permission to invite user`
+      );
+    }
+    throw e;
+  });
 
-  const sender = await getUser(ability, ability.user.id).catch(() => {
+  const sender = await getUser(user.id).catch(() => {
     throw new UserNotFoundError();
   });
 
@@ -61,32 +67,32 @@ export const inviteUserByEmail = async (
   }
 
   // check if user is already invited to the form
-  const previousInvitation = await _retrieveFormInvitationByEmail(email, formId);
-  if (previousInvitation) {
-    invitation = previousInvitation;
-    // if invitation is expired, delete and recreate
-    if (previousInvitation.expires < new Date()) {
-      // check js dates vs prisma dates (see 2fa)
-      _deleteInvitation(previousInvitation.id);
-      invitation = await _createInvitation(email, formId);
-    }
+  const invitation = await _retrieveFormInvitationByEmail(email, formId)
+    .then((previousInvitation) => {
+      if (previousInvitation && previousInvitation.expires < new Date()) {
+        _deleteInvitation(previousInvitation.id);
+        return _createInvitation(email, formId, user.id);
+      }
+      if (previousInvitation === null) {
+        return _createInvitation(email, formId, user.id);
+      }
+      return previousInvitation;
+    })
+    .catch((e) => {
+      logMessage.info(e);
+      throw new Error(
+        `Unable to process inviting user ${email} for form ${formId} by ${user.email}`
+      );
+    });
 
-    // send or resend invitation email
-    _sendInvitationEmail(sender, invitation, message, template.formRecord);
+  logEvent(
+    user.id,
+    { type: "Form", id: invitation.templateId },
+    "InvitationCreated",
+    `${user.email} invited ${invitation.email}`
+  );
 
-    logEvent(
-      ability.user.id,
-      { type: "Form", id: invitation.templateId },
-      "InvitationCreated",
-      `${sender.id} invited ${invitation.email}`
-    );
-
-    return;
-  }
-
-  // No previous invitation, create one
-  invitation = await _createInvitation(email, formId);
-  _sendInvitationEmail(sender, invitation, message, template.formRecord);
+  await _sendInvitationEmail(sender, invitation, message, template.formRecord);
 
   return;
 };
@@ -99,12 +105,17 @@ export const inviteUserByEmail = async (
  * @returns Invitation
  */
 const _retrieveFormInvitationByEmail = async (email: string, formId: string) => {
-  const invitation = await prisma.invitation.findFirst({
-    where: {
-      email,
-      templateId: formId,
-    },
-  });
+  const invitation = await prisma.invitation
+    .findFirst({
+      where: {
+        email,
+        templateId: formId,
+      },
+    })
+    .catch((e) => {
+      logMessage.info(e);
+      throw new Error(`Error checking if invitation for email ${email} and form ${formId} exists`);
+    });
 
   return invitation;
 };
@@ -116,17 +127,23 @@ const _retrieveFormInvitationByEmail = async (email: string, formId: string) => 
  * @param formId
  * @returns
  */
-const _createInvitation = async (email: string, formId: string) => {
+const _createInvitation = async (email: string, formId: string, senderUserId: string) => {
   const expires = new Date();
   expires.setDate(expires.getDate() + 7);
 
-  const invitation = await prisma.invitation.create({
-    data: {
-      email,
-      templateId: formId,
-      expires,
-    },
-  });
+  const invitation = await prisma.invitation
+    .create({
+      data: {
+        email,
+        templateId: formId,
+        expires,
+        invitedBy: senderUserId,
+      },
+    })
+    .catch((e) => {
+      logMessage.info(e);
+      throw new Error(`Unable to create invitation for email ${email} and form ${formId}`);
+    });
 
   return invitation;
 };
@@ -149,7 +166,7 @@ const _sendInvitationEmail = async (
     `Sending invitation email to ${email} for form ${templateId} with message ${message}`
   );
 
-  const HOST = getOrigin();
+  const HOST = await getOrigin();
 
   // Determine whether to send an invitation to register or an invitation to the form
   const user = await prisma.user.findFirst({
@@ -203,9 +220,14 @@ const _sendInvitationEmail = async (
  * @param id
  */
 const _deleteInvitation = async (id: string) => {
-  await prisma.invitation.delete({
-    where: {
-      id,
-    },
-  });
+  await prisma.invitation
+    .delete({
+      where: {
+        id,
+      },
+    })
+    .catch((e) => {
+      logMessage.info(e);
+      throw new Error(`Unable to delete invitation with id ${id}`);
+    });
 };

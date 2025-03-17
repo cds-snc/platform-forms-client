@@ -54,7 +54,15 @@
     "validGovEmail": "Enter a valid government email address.",
     "notSameAsUserEmail": "This cannot be your email address. Enter the email of the person in charge of your team. Enter the email of the person in charge of your team. If that's you, add a colleague.",
     "min-length-4-characters": "Must be at least 4 characters.",
-    "MB": "MB"
+    "MB": "MB",
+    "error-list": {
+      "default": "Enter an answer for: {{question}}",
+      "select": "Select an option for: {{question}}",
+      "checkbox": "Select one or multiple options for: {{question}}",
+      "check-all": "Check off all the boxes for: {{question}}",
+      "file-input": "Choose a file for: {{question}}",
+      "date-invalid": "Enter a valid date for: {{question}}"
+    }
   },
   "required": "required",
   "all-required": "all checkboxes required",
@@ -103,7 +111,9 @@
   },
   "dynamicRow": {
     "add": "Add",
-    "delete": "Delete"
+    "delete": "Delete",
+    "addedMessage": "Fieldset {{rowTitle}} - {{count}} was added to the form",
+    "removedMessage": "Fieldset {{rowTitle}} - {{count}} was removed from the form"
   },
   "acceptableUsePage": {
     "agree": "Agree",
@@ -198,12 +208,84 @@
     "type": "COMING SOON",
     "message": "<strong>In August</strong>: Build multi-page forms with branching logic. <a href='/en/contact' className='text-white hover:text-white'>Subscribe for updates</a>",
     "type2": "NEW",
-    "message2": "Build complex multi-page forms with display logic and branching. <a href='https://articles.alpha.canada.ca/forms-formulaires/setting-up-form-logic/' className='text-white hover:text-white'>Learn more</a>"
+    "message2": "Build complex multi-page forms with display logic and branching. <a href='https://articles.alpha.canada.ca/forms-formulaires/setting-up-form-logic/' className='text-white hover:text-white'>Learn more</a>",
+    "type3": "Federal election",
+    "message3": "Check with your department’s communications team about announcements during the <a href='https://www.canada.ca/en/privy-council/services/publications/guidelines-conduct-ministers-state-exempt-staff-public-servants-election.html' className='text-white hover:text-white'>caretaker period</a>"
   },
   "closingNotice": {
     "title": "Form closing",
     "text1": "Form accepting submissions until:",
     "text2": "{{month}} {{day}}, {{year}} at {{hour}}:{{minute}} ET."
   },
-  "cancel": "Cancel"
+  "cancel": "Cancel",
+  "number": "Number",
+  "saveAndResume": {
+    "saveBtn": "Save to device",
+    "resumeBtn": "Resume form",
+    "formRestored": "Your answers so far were added to the form.",
+    "resumeUploadError": {
+      "title": "Something went wrong",
+      "description": "There was a problem uploading the answers. Try again later, or restart the form.",
+      "errorCode": "Error code: {{code}}"
+    },
+    "resumePage": {
+      "upload": {
+        "title": "Resume",
+        "description": "Upload your saved form answers"
+      },
+      "restart": {
+        "title": "Start",
+        "description": "Fill out a new form"
+      }
+    },
+    "prompt": {
+      "title": "Save to device",
+      "description": "Save a copy of your form progress. Resume later by finding the file on your device and loading your answers. Protect your data by keeping the downloaded file in a safe place.",
+      "okay": "Save",
+      "cancel": "Cancel"
+    },
+    "downloadProgressHtml": {
+      "nextSteps": {
+        "title": "Ready to resume? ",
+        "resumeBox": {
+          "title": "Go to form",
+          "description": "Continue filling out the form, by loading your answers so far."
+        }
+      },
+      "keepSafe": {
+        "title": "Protect your personal information",
+        "description": " Keep this file in a secure spot on your device to protect your information."
+      },
+      "badge": {
+        "text": "In progress",
+        "lastSaved": "Saved:  {{month}} {{day}}, {{year}}"
+      }
+    }
+  },
+  "saveResponse": {
+    "saveBtn": "Download",
+    "saveBtnDescription": "Get a copy of your answers",
+    "prompt": {
+      "title": "Save to device",
+      "description": "Protect your data by keeping this file in a safe place.",
+      "okay": "Save",
+      "cancel": "Cancel"
+    },
+    "downloadHtml": {
+      "keepSafe": {
+        "description": " Keep this file in a secure spot on your device to protect your information."
+      },
+      "badge": {
+        "text": "Form submitted on ",
+        "lastSaved": "{{month}} {{day}}, {{year}}",
+        "submissionId": "Submission ID: {{submissionId}}"
+      },
+      "generateHtmlError": {
+        "description": "There was an error downloading the file. Please try again."
+      }
+    }
+  },
+  "conditional": {
+    "activated": "The form element {{title}} was added to the form"
+  }
 }

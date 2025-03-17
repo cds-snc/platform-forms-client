@@ -1,8 +1,9 @@
 import { serverTranslation } from "@i18n";
 import { Metadata } from "next";
 import { Publish } from "./Publish";
-import { checkPrivilegesAsBoolean } from "@lib/privileges";
+import { authorization } from "@lib/privileges";
 import { authCheckAndThrow } from "@lib/actions";
+import { notFound } from "next/navigation";
 
 import Markdown from "markdown-to-jsx";
 
@@ -31,22 +32,22 @@ export default async function Page(props: { params: Promise<{ id: string; locale
 
   const { t } = await serverTranslation("form-builder", { lang: locale });
 
-  const { session, ability } = await authCheckAndThrow().catch(() => ({
+  const { session } = await authCheckAndThrow().catch(() => ({
     session: null,
-    ability: null,
   }));
 
   if (!session) {
     return <LoggedOutTab tabName={LoggedOutTabName.PUBLISH} />;
   }
 
-  const userCanPublish = checkPrivilegesAsBoolean(ability, [
-    {
-      action: "update",
-      subject: { type: "FormRecord", object: { users: [{ id: session.user.id }] } },
-      field: "isPublished",
-    },
-  ]);
+  if (id === "0000") {
+    return notFound();
+  }
+
+  const userCanPublish = await authorization
+    .canPublishForm(id)
+    .then(() => true)
+    .catch(() => false);
 
   return (
     <ClientContainer>

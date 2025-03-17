@@ -65,7 +65,7 @@ export const PreviewClosed = ({ closedDetails }: { closedDetails: ClosedDetails 
           <div className="mb-20 mt-0 border-b-4 border-blue-dark py-9">
             <Brand brand={brand} lang={language} className="max-w-[360px]" />
           </div>
-          <ClosedPage language={language} formRecord={formRecord} />
+          <ClosedPage language={language} formRecord={formRecord} isPreview={true} />
         </div>
       </div>
     </div>

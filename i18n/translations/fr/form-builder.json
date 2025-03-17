@@ -1,6 +1,7 @@
 {
   "addElement": "Ajouter un élément",
   "addElementDialog": {
+    "example": "exemple",
     "filters": {
       "all": "Tout",
       "basic": "De base",
@@ -306,31 +307,31 @@
   "contactSupport": "Contacter l’équipe de soutien",
   "contactSupportIfYouHaveQuestions": "<a href=\"/fr/support\" target=\"_blank\">Veuillez contacter</a> l’équipe de soutien si vous avez des questions. ",
   "contactus": {
-    "description": {
-      "description": "Ajouter plus de contexte ou d'informations.",
-      "title": "Dites-nous en plus"
+    "title": "Nous contacter",
+    "useThisForm": "Nous soutenons les fonctionnaires qui utilisent Formulaires GC. Nous ne pouvons pas conseiller le public au sujet des formulaires que nous hébergeons.",
+    "gcFormsTeamPart1": "Utilisez ce formulaire pour vous inscrire à notre infolettre, fournir de la rétroaction, ou suggérer une nouvelle fonctionnalité. Pour toute autre demande, allez à la page",
+    "gcFormsTeamLink": "Coordonnées du Gouvernement du Canada",
+    "gcFormsTeamPart2": "pour trouver le ministère ou l'organisme qui peut vous aider.",
+    "needSupport": "Besoin d'aide pour l'utilisation de Formulaires GC?",
+    "ifYouExperience": "Pour obtenir du soutien technique, veuillez remplir le ",
+    "supportFormLink": "formulaire de soutien",
+    "request": {
+      "title": "Que souhaitez-vous faire?",
+      "option1": "S'inscrire à la liste de diffusion",
+      "option2": "Donner un avis sur le produit",
+      "option3": "Suggérer une nouvelle fonctionnalité",
+      "option4": "Autre"
     },
+    "description": {
+      "title": "Dites-nous en plus",
+      "description": "Veuillez ne pas inclure de renseignements protégés ou personnels."
+    },
+    "followUp": "Fournissez vos coordonnées pour que nous puissions vous contacter.",
     "name": "Nom",
     "email": "Adresse courriel",
     "department": "Ministère ou organisme",
     "branch": "Direction ou secteur",
     "jobTitle": "Titre de poste",
-    "gcFormsTeamLink": "Coordonnées du Gouvernement du Canada",
-    "gcFormsTeamPart1": "Veuillez noter que l'équipe Formulaires GC fournit des services aux personnes qui travaillent au sein du gouvernement. Nous ne pouvons pas conseiller le public au sujet des formulaires que nous hébergeons. Pour toute autre demande, allez à la page",
-    "gcFormsTeamPart2": "pour trouver le ministère ou l'organisme qui peut vous aider.",
-    "ifYouExperience": "Pour obtenir du soutien technique, veuillez remplir le ",
-    "followUp": "Fournissez vos coordonnées pour que nous puissions vous contacter.",
-    "needSupport": "Besoin d'aide pour l'utilisation de Formulaires GC?",
-    "request": {
-      "option1": "S'inscrire à la liste de diffusion",
-      "option2": "Donner un avis sur le produit",
-      "option3": "Suggérer une nouvelle fonctionnalité",
-      "option4": "Autre",
-      "title": "Que souhaitez-vous faire?"
-    },
-    "supportFormLink": "formulaire de soutien",
-    "title": "Nous contacter",
-    "useThisForm": "Utilisez ce formulaire pour vous inscrire à notre infolettre, nous faire part de vos commentaires ou suggérer une nouvelle fonctionnalité pour Formulaires GC.",
     "errors": {
       "submissionError": "Il y a eu une erreur. Veuillez réessayer plus tard."
     }
@@ -634,7 +635,6 @@
       "keyId": "Identifiant de la clé API",
       "title": "Accès pour l'API",
       "generateKey": "Créer une clé API",
-      "refreshKey": "Rafraîchir la clé",
       "deleteKey": "Supprimer la clé API",
       "deleteKeyFailed": {
         "title": "Quelque chose a mal tourné",
@@ -898,30 +898,30 @@
     "text2": "Allez aux Réponses"
   },
   "support": {
+    "title": "Obtenir du soutien",
+    "experience": "Nous soutenons les fonctionnaires qui utilisent Formulaires GC. Nous ne pouvons pas conseiller le public au sujet des formulaires que nous hébergeons. Explorez nos ",
+    "guidanceLink": "guides de référence",
+    "useThisForm": " ou obtenez du soutien de notre équipe en remplissant ce formulaire.",
+    "gcFormsTeamPart1": "Pour toute autre demande, allez à la page ",
+    "gcFormsTeamLink": "Coordonnées du Gouvernement du Canada",
+    "gcFormsTeamPart2": "pour trouver le ministère ou l'organisme qui peut vous aider.",
+    "lookingForADemo": "Vous cherchez à en savoir plus sur Formulaires GC?",
+    "ifYouWouldLike": "Veuillez remplir le ",
     "contactUs": "formulaire de contact",
     "description": {
-      "description": "Fournissez plus d'informations ou de contexte.",
-      "title": "Dites-nous en plus"
+      "title": "Dites-nous en plus",
+      "description": "Veuillez ne pas inclure de renseignements protégés ou personnels."
     },
     "name": "Votre nom",
     "email": "Votre adresse courriel",
-    "gcFormsTeamLink": "Coordonnées du Gouvernement du Canada",
-    "gcFormsTeamPart1": "Veuillez noter que l'équipe Formulaires GC fournit des services aux personnes qui travaillent au sein du gouvernement. Nous ne pouvons pas donner de conseils généraux au public sur les formulaires que nous hébergeons. Pour toute autre question, allez à la page ",
-    "gcFormsTeamPart2": "pour trouver le ministère ou l'organisme qui peut vous aider.",
-    "ifYouWouldLike": "Veuillez remplir le ",
-    "lookingForADemo": "Vous cherchez à en savoir plus sur Formulaires GC?",
     "request": {
+      "title": "Raison pour laquelle vous nous contactez",
       "option1": "Poser une question",
       "option2": "Obtenir de l'aide pour utiliser Formulaires GC",
       "apiOption": "Demander de l'assistance technique avec l'API",
       "option3": "Signaler un problème avec un formulaire publié",
-      "option4": "Autre",
-      "title": "Raison pour laquelle vous nous contactez"
+      "option4": "Autre"
     },
-    "title": "Obtenir du soutien",
-    "experience": "Explorer nos ",
-    "guidanceLink": "guides de références",
-    "useThisForm": " ou obtenez du soutien de notre équipe en remplissant ce formulaire.",
     "errors": {
       "submissionError": "Il y a eu une erreur. Veuillez réessayer plus tard."
     }
@@ -1018,12 +1018,12 @@
     "label": "Sélectionnez l'image de marque de votre formulaire"
   },
   "closingDate": {
-    "title": "Accepter les soumissions de formulaires",
+    "title": "Accepter les soumissions de formulaire",
     "description": "Une fois que vous avez publié un formulaire, il est ouvert aux soumissions. Vous pouvez fermer le formulaire pour empêcher les soumissions.",
-    "status": "du formulaire",
+    "status": "État du formulaire",
     "open": "Ouvert",
     "closed": "Fermé",
-    "saveButton": "Enregistrer les modifications",
+    "saveButton": "Enregistrer",
     "savedSuccessMessage": "Vos modifications ont été enregistrées.",
     "formClosedSuccessMessage": {
       "title": "Ce formulaire est maintenant fermé",
@@ -1142,7 +1142,7 @@
     },
     "tryitout": {
       "button": "Formulaire complexe? Considérez des embranchements +",
-      "text": "<p class='mb-4'>Utilisez les embranchements pour diriger les personnes qui remplissent le formulaire vers différentes pages en fonction de leurs réponses.</p> <p>Visualisez et configurez l'enchaînement du formulaire dans l’onglet Embranchements du panneau de configuration du formulaire.</p>",
+      "text": "<p className='mb-4'>Utilisez les embranchements pour diriger les personnes qui remplissent le formulaire vers différentes pages en fonction de leurs réponses.</p> <p>Visualisez et configurez l'enchaînement du formulaire dans l’onglet Embranchements du panneau de configuration du formulaire.</p>",
       "open": "Allez à Embranchements"
     },
     "exitBadge": "Sortie",
@@ -1218,7 +1218,9 @@
       "description": " Il semble que des éléments déplacés comportent des règles d'affichage ou d'embranchement. Souhaitez-vous remplacer ces règles par un enchaînement linéaire automatique?",
       "cancel": "Non, déplacer sans modifier les règles",
       "confirm": "Oui, appliquer un enchaînement linéaire"
-    }
+    },
+    "cannotDeleteGroup": "Cette page ne peut pas être supprimée car cela briserait la logique du formulaire.",
+    "cannotSetNextAction": "Cette page ne peut pas aller à une page de sortie car cela briserait la logique du formulaire."
   },
   "confirmation": {
     "title": "Votre formulaire a été soumis",
@@ -1301,5 +1303,18 @@
   },
   "systemHealthCheck": {
     "title": "Santé du système"
+  },
+  "saveAndResume": {
+    "savedErrorMessage": "Une erreur s'est produite lors de l'enregistrement de vos modifications.",
+    "savedSuccessMessage": "Vos modifications ont été enregistrées.",
+    "title": "Reprendre le remplissage du formulaire",
+    "toggleOn": "Activé",
+    "toggleOff": "Désactivé",
+    "toggleDescription": {
+      "text1": "Permettre l'enregistrement des réponses en cours",
+      "text2": "Permettre aux personnes de prendre une pause et de reprendre le formulaire plus tard. Avec la possibilité d'enregistré une copie des réponses remplies jusqu’à présent sur leur appareil. Celles-ci peuvent être téléversées dans le formulaire plus tard."
+    },
+    "a11yDescription": "Enregistrer la progression et reprendre le formulaire plus tard",
+    "saveButton": "Enregistrer"
   }
 }

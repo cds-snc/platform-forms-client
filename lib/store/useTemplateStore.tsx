@@ -51,6 +51,7 @@ import {
   getPathString,
   getChoice,
   localizeField,
+  getFormElementIndexes,
 } from "./helpers/elements";
 
 const createTemplateStore = (initProps?: Partial<InitialTemplateStoreProps>) => {
@@ -114,6 +115,7 @@ const createTemplateStore = (initProps?: Partial<InitialTemplateStoreProps>) => 
             getIsPublished: () => get().isPublished,
             getFormElementById: getFormElementById(set, get),
             getFormElementWithIndexById: getFormElementWithIndexById(set, get),
+            getFormElementIndexes: getFormElementIndexes(set, get),
             getName: () => get().name,
             getDeliveryOption: () => get().deliveryOption,
             getSecurityAttribute: () => get().securityAttribute,
@@ -127,6 +129,7 @@ const createTemplateStore = (initProps?: Partial<InitialTemplateStoreProps>) => 
             setFocusInput: (isSet) => set({ focusInput: isSet }),
             setIsPublished: (isPublished) => set({ isPublished }),
             setClosingDate: (value) => set({ closingDate: value }),
+            setSaveAndResume: (value) => set({ saveAndResume: value }),
             setGroupsLayout: (layout) => {
               set((state) => {
                 state.form.groupsLayout = layout;

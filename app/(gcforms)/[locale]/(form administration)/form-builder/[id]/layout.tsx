@@ -3,7 +3,7 @@ import { LeftNavigation } from "./components/LeftNavigation";
 import { ToastContainer } from "@formBuilder/components/shared/Toast";
 import { SkipLink, Footer } from "@clientComponents/globals";
 import { Header } from "@clientComponents/globals/Header/Header";
-import { AccessControlError } from "@lib/auth";
+import { AccessControlError } from "@lib/auth/errors";
 import { getFullTemplateByID } from "@lib/templates";
 import { redirect } from "next/navigation";
 import { SaveTemplateProvider } from "@lib/hooks/form-builder/useTemplateContext";
@@ -21,6 +21,7 @@ import {
   FormBuilderConfig,
   formBuilderConfigDefault,
 } from "@lib/hooks/useFormBuilderConfig";
+import { LiveRegion } from "@clientComponents/globals/LiveRegion";
 
 export default async function Layout(props: {
   children: React.ReactNode;
@@ -85,7 +86,13 @@ export default async function Layout(props: {
                 <Header context="formBuilder" className="mb-0" />
                 <div className="shrink-0 grow basis-auto bg-gray-soft">
                   <ToastContainer containerId="default" />
-                  <ToastContainer limit={1} containerId="wide" autoClose={10000} width="600px" />
+                  <ToastContainer
+                    limit={1}
+                    containerId="wide"
+                    autoClose={10000}
+                    ariaLabel="Notifications: Alt+T"
+                    width="600px"
+                  />
                   <div className="flex h-full flex-row gap-7">
                     <div id="left-nav" className="z-10 border-r border-slate-200 bg-white">
                       <div className="sticky top-0">
@@ -105,6 +112,7 @@ export default async function Layout(props: {
                 </div>
               </div>
               <Footer displayFormBuilderFooter className="mt-0 lg:mt-0" />
+              <LiveRegion />
             </div>
           </RefStoreProvider>
         </SaveTemplateProvider>

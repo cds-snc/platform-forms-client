@@ -32,5 +32,6 @@
   "resend": "Renvoyer l'invitation pour {{email}}",
   "templateNotFound": "Gabarit non trouvé {{templateId}}",
   "userAlreadyHasAccess": "{{email}} a déjà accès",
-  "userNotFound": "User not found"
+  "userNotFound": "User not found",
+  "draftFormError": "Impossible d'envoyer des invitations à rédiger des formulaires"
 }

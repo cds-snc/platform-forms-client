@@ -8,7 +8,7 @@ export const themes = {
   primary:
     "border-blue bg-blue-default text-white-default hover:border-blue-light hover:bg-blue-light hover:text-white-default",
   secondary:
-    "border-blue-default bg-white-default text-blue-default visited:text-blue-default hover:bg-gray-600 hover:text-white-default",
+    "border-gcds-blue-800 bg-white-default text-gcds-blue-800 visited:text-gcds-blue-800 hover:bg-gcds-blue-100 hover:text-gcds-blue-800 active:border-black",
   destructive:
     "border-red-destructive bg-red-destructive text-white-default hover:border-red-hover hover:bg-red-hover",
   link: "!border-none bg-transparent !p-0 text-blue-default underline hover:no-underline focus:!text-white-default",
@@ -26,6 +26,7 @@ type LinkButtonProps = {
   onClick?: () => void;
   isActive?: boolean;
   testid?: string;
+  target?: string;
 };
 
 export const Default = ({ href, children, className, scroll }: LinkButtonProps) => {
@@ -36,12 +37,13 @@ export const Default = ({ href, children, className, scroll }: LinkButtonProps) 
   );
 };
 
-export const Primary = ({ href, children, className, scroll }: LinkButtonProps) => {
+export const Primary = ({ href, children, className, scroll, target }: LinkButtonProps) => {
   return (
     <Link
       scroll={scroll}
       href={href}
       className={cn(themes.primary, themes.base, themes.htmlLink, className)}
+      target={target}
     >
       {children}
     </Link>

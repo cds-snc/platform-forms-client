@@ -96,9 +96,7 @@ export const SelectedElement = ({
       break;
     case "radio":
       if (elIndex !== -1) {
-        element = (
-          <SubOptions elIndex={elIndex} item={item} renderIcon={() => <RadioEmptyIcon />} />
-        );
+        element = <SubOptions item={item} renderIcon={() => <RadioEmptyIcon />} />;
       } else {
         element = (
           <>
@@ -110,9 +108,7 @@ export const SelectedElement = ({
       break;
     case "checkbox":
       if (elIndex !== -1) {
-        element = (
-          <SubOptions elIndex={elIndex} item={item} renderIcon={() => <CheckBoxEmptyIcon />} />
-        );
+        element = <SubOptions item={item} renderIcon={() => <CheckBoxEmptyIcon />} />;
       } else {
         element = (
           <>
@@ -129,9 +125,7 @@ export const SelectedElement = ({
       break;
     case "dropdown":
       if (elIndex !== -1) {
-        element = (
-          <SubOptions elIndex={elIndex} item={item} renderIcon={(index) => `${index + 1}.`} />
-        );
+        element = <SubOptions item={item} renderIcon={(index) => `${index + 1}.`} />;
       } else {
         element = (
           <>
@@ -149,7 +143,7 @@ export const SelectedElement = ({
           <>
             <ShortAnswer>{t("addElementDialog.combobox.title")}</ShortAnswer>
             {!item.properties.managedChoices && (
-              <SubOptions elIndex={elIndex} item={item} renderIcon={(index) => `${index + 1}.`} />
+              <SubOptions item={item} renderIcon={(index) => `${index + 1}.`} />
             )}
           </>
         );

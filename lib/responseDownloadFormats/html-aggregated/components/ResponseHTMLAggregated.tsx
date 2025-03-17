@@ -24,7 +24,7 @@ export const ResponseHtmlAggregated = ({
   host = "",
 }: HTMLDownloadProps) => {
   const { t } = customTranslate("my-forms");
-  const form = formResponseSubmissions.form;
+  const formRecord = formResponseSubmissions.formRecord;
 
   // Newline deliniated will work to paste multiple codes in the confirmation dialog.
   // Note: The "\r\n" delimiter may be OS dependent. If so use an actual newline with .join(`
@@ -69,7 +69,7 @@ export const ResponseHtmlAggregated = ({
       {/* eslint-disable-next-line @next/next/no-head-element */}
       <head>
         <meta charSet="utf-8" />
-        <title>{`${form[getProperty("title", lang)]}`}</title>
+        <title>{`${formRecord.form[getProperty("title", lang)]}`}</title>
         <style dangerouslySetInnerHTML={{ __html: css }}></style>
       </head>
       <body>
@@ -82,12 +82,17 @@ export const ResponseHtmlAggregated = ({
           <main id="content">
             <Fip language="en" showLangLink={false} />
 
-            <h1 id="main-header" className="mt-14">{`${form[getProperty("title", lang)]}`}</h1>
+            <h1 id="main-header" className="mt-14">{`${
+              formRecord.form[getProperty("title", lang)]
+            }`}</h1>
 
             <div className="mb-14 border-2 border-dashed border-black bg-slate-50 p-8">
               <div className="mb-4 flex justify-between">
                 <h2>{t("responseAggregatedTemplate.officialReceipt", { lng: lang })}</h2>
-                <ProtectedLevel securityAttribute={form.securityAttribute} lang={lang} />
+                <ProtectedLevel
+                  securityAttribute={formResponseSubmissions.formRecord.securityAttribute}
+                  lang={lang}
+                />
               </div>
               <p className="mb-4">
                 <strong>{submissions.length}</strong>
@@ -100,7 +105,7 @@ export const ResponseHtmlAggregated = ({
               <CopyCodes
                 host={host}
                 confirmationCodes={confirmationCodes}
-                formId={formResponseSubmissions.form.id}
+                formId={formResponseSubmissions.formRecord.id}
                 lang={lang}
               />
             </div>

@@ -5,7 +5,7 @@ import React, { useEffect, useState } from "react";
 import { Description } from "../Description/Description";
 import { useTranslation } from "@i18n/client";
 import { DateFormat, DateObject, DatePart } from "./types";
-import { getMaxMonthDay, isValidDateFormat } from "./utils";
+import { isValidDateFormat } from "./utils";
 import { ErrorMessage } from "@clientComponents/forms";
 import { cn } from "@lib/utils";
 import { logMessage } from "@lib/logger";
@@ -28,13 +28,14 @@ export const FormattedDate = (props: FormattedDateProps): React.ReactElement => 
     dateFormat: initialDateFormat = "YYYY-MM-DD",
     monthSelector = "numeric",
     autocomplete = false,
+    lang,
   } = props;
 
   const [field, meta, helpers] = useField(props);
   const [dateObject, setDateObject] = useState<DateObject | null>(
     field.value ? JSON.parse(field.value) : null
   );
-  const { t } = useTranslation("common");
+  const { t } = useTranslation("common", { lng: lang });
 
   let dateFormat = initialDateFormat;
 
@@ -66,11 +67,16 @@ export const FormattedDate = (props: FormattedDateProps): React.ReactElement => 
     }
   }, [dateObject, helpers]);
 
+  const unsetDate = () => setDateObject(null);
+
   const setSelectedYear = (year: string) =>
     setDateObject((prev) => {
       const newObj = { ...prev };
       if (year === "") {
         delete newObj.YYYY;
+        if (!newObj.MM && !newObj.DD) {
+          unsetDate();
+        }
       } else {
         newObj.YYYY = Number(year);
       }
@@ -82,6 +88,9 @@ export const FormattedDate = (props: FormattedDateProps): React.ReactElement => 
       const newObj = { ...prev };
       if (month === "") {
         delete newObj.MM;
+        if (!newObj.YYYY && !newObj.DD) {
+          unsetDate();
+        }
       } else {
         newObj.MM = Number(month);
       }
@@ -92,6 +101,9 @@ export const FormattedDate = (props: FormattedDateProps): React.ReactElement => 
     setDateObject((prev) => {
       const newObj = { ...prev };
       if (day === "") {
+        if (!newObj.YYYY && !newObj.MM) {
+          unsetDate();
+        }
         delete newObj.DD;
       } else {
         newObj.DD = Number(day);
@@ -121,7 +133,7 @@ export const FormattedDate = (props: FormattedDateProps): React.ReactElement => 
       {meta.error && <ErrorMessage id={"errorMessage" + id}>{meta.error}</ErrorMessage>}
 
       <div className="inline-flex gap-2">
-        <input type="hidden" {...field} />
+        <input type="hidden" {...field} value={field.value || ""} />
         {dateParts.map((part) => {
           // Not currently an option, for future use
           return part === DatePart.MM && monthSelector === "select" ? (
@@ -147,12 +159,15 @@ export const FormattedDate = (props: FormattedDateProps): React.ReactElement => 
               <label className="mb-2" htmlFor={`${name}-${part}`}>
                 {t(`formattedDate.${part}`)}
               </label>
+              <div id={`${id}-description-month`} hidden>
+                {t("number")}
+              </div>
               <input
                 name={`${name}-${part}`}
                 id={`${name}-${part}`}
-                type="number"
-                min={1}
-                max={12}
+                // Trying removing type=number  for better UX See: #4897
+                inputMode="numeric"
+                aria-describedby={`${id}-description-month`}
                 autoComplete={autocomplete ? "bday-month" : undefined}
                 className={cn("!w-16", meta.error && "gc-error-input")}
                 value={dateObject?.MM || ""}
@@ -166,11 +181,15 @@ export const FormattedDate = (props: FormattedDateProps): React.ReactElement => 
               <label className="mb-2" htmlFor={`${name}-${part}`}>
                 {t(`formattedDate.${part}`)}
               </label>
+              <div id={`${id}-description-year`} hidden>
+                {t("number")}
+              </div>
               <input
                 name={`${name}-${part}`}
                 id={`${name}-${part}`}
-                type="number"
-                min={1900}
+                // Trying removing type=number for better UX See: #4897
+                inputMode="numeric"
+                aria-describedby={`${id}-description-year`}
                 autoComplete={autocomplete ? "bday-year" : undefined}
                 className={cn("!w-28", meta.error && "gc-error-input")}
                 value={dateObject?.YYYY || ""}
@@ -184,16 +203,15 @@ export const FormattedDate = (props: FormattedDateProps): React.ReactElement => 
               <label className="!mr-2 mb-2" htmlFor={`${name}-${part}`}>
                 {t(`formattedDate.${part}`)}
               </label>
+              <div id={`${id}-description-day`} hidden>
+                {t("number")}
+              </div>
               <input
                 name={`${name}-${part}`}
                 id={`${name}-${part}`}
-                type="number"
-                min={1}
-                max={
-                  dateObject?.MM && dateObject?.YYYY
-                    ? getMaxMonthDay(dateObject.MM, dateObject.YYYY)
-                    : 31
-                }
+                // Trying removing number for better UX See: #4897
+                inputMode="numeric"
+                aria-describedby={`${id}-description-day`}
                 autoComplete={autocomplete ? "bday-day" : undefined}
                 className={cn("!w-16 !mr-2", meta.error && "gc-error-input")}
                 value={dateObject?.DD || ""}

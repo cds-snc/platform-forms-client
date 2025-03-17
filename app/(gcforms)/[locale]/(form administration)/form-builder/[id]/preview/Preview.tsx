@@ -77,7 +77,10 @@ export const Preview = ({
       email: s.deliveryOption?.emailAddress,
     }));
 
-  const { t } = useTranslation(["common", "form-builder", "form-closed"]);
+  const translationNamespaces = ["common", "form-builder", "form-closed"];
+  const { t } = useTranslation(translationNamespaces);
+  const translatedT = useTranslation(translationNamespaces, { lng: translationLanguagePriority }).t;
+
   const language = translationLanguagePriority;
   const currentForm = getRenderedForm(formRecord, language);
 
@@ -87,7 +90,7 @@ export const Preview = ({
 
   const [sent, setSent] = useState<string | null>();
 
-  const { saveProgress } = useGCFormsContext();
+  const { saveSessionProgress } = useGCFormsContext();
 
   const clearSent = () => {
     setSent(null);
@@ -188,10 +191,10 @@ export const Preview = ({
               <GCFormsProvider formRecord={formRecord}>
                 <Form
                   formRecord={formRecord}
-                  saveProgress={saveProgress}
+                  saveSessionProgress={saveSessionProgress}
                   isPreview={true}
                   language={language}
-                  t={t}
+                  t={translatedT}
                   onSuccess={setSent}
                   renderSubmit={({ validateForm }) => {
                     return (

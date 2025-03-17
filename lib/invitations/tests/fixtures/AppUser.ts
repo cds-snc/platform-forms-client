@@ -7,6 +7,8 @@ export const mockAppUser = (overrides: Partial<AppUser> = {}): AppUser => {
     name: "test",
     privileges: [],
     active: true,
+    createdAt: new Date(),
+    notes: null,
   };
 
   return { ...defaultUser, ...overrides };

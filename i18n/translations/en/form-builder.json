@@ -1,6 +1,7 @@
 {
   "addElement": "Add form element",
   "addElementDialog": {
+    "example": "example",
     "filters": {
       "all": "All",
       "basic": "Basic",
@@ -306,31 +307,31 @@
   "contactSupport": "Contact support",
   "contactSupportIfYouHaveQuestions": "<a href=\"/en/support\" target=\"_blank\">Contact support</a> if you have any questions.",
   "contactus": {
-    "description": {
-      "description": "Provide more information or context.",
-      "title": "Tell us more"
+    "title": "Contact us",
+    "useThisForm": "We support government employees using GC Forms. We cannot give general advice to the public about the forms that we host.",
+    "gcFormsTeamPart1": "Use this form to sign up for our newsletter, provide feedback, or suggest a new feature. For other enquiries, go to the",
+    "gcFormsTeamLink": "Government of Canada contacts page",
+    "gcFormsTeamPart2": "to find the department or agency that can help.",
+    "needSupport": "Need help using GC Forms?",
+    "ifYouExperience": "To get technical support, use the ",
+    "supportFormLink": "support form",
+    "request": {
+      "title": "What would you like to do?",
+      "option1": "Join the mailing list",
+      "option2": "Give feedback on the product",
+      "option3": "Suggest a new feature",
+      "option4": "Other"
     },
+    "description": {
+      "title": "Tell us more",
+      "description": "Please do not include any protected or personal information."
+    },
+    "followUp": "Provide your contact information so we can follow up with you.",
     "name": "Name",
     "email": "Email address",
     "department": "Department or agency",
     "branch": "Branch or sector",
     "jobTitle": "Job title",
-    "gcFormsTeamLink": "Government of Canada contacts",
-    "gcFormsTeamPart1": "The GC Forms team provides services to people who work in the government. We cannot give general advice to the public about the forms that we host. For other enquiries, go to the",
-    "gcFormsTeamPart2": "page to find the department or agency that can help.",
-    "ifYouExperience": "To get technical support, use the ",
-    "followUp": "Provide your contact information so we can follow up with you.",
-    "needSupport": "Need help using GC Forms?",
-    "request": {
-      "option1": "Join the mailing list",
-      "option2": "Give feedback on the product",
-      "option3": "Suggest a new feature",
-      "option4": "Other",
-      "title": "What would you like to do?"
-    },
-    "supportFormLink": "support form",
-    "title": "Contact us",
-    "useThisForm": "Use this form to sign up for our newsletter, provide feedback, or suggest a new feature for GC Forms.",
     "errors": {
       "submissionError": "Something went wrong. Please try again later."
     }
@@ -634,7 +635,6 @@
       "keyId": "API key ID",
       "title": "API access",
       "generateKey": "Create API key",
-      "refreshKey": "Refresh key",
       "deleteKey": "Delete API key",
       "deleteKeyFailed": {
         "title": "Something went wrong",
@@ -898,30 +898,30 @@
     "text2": "Go to Responses"
   },
   "support": {
+    "title": "Get support",
+    "experience": "We support government employees using GC Forms. We cannot give general advice to the public about the forms that we host. Explore our ",
+    "guidanceLink": "guidance articles",
+    "useThisForm": " or get technical help from our team through this form.",
+    "gcFormsTeamPart1": "For other enquiries, go to the",
+    "gcFormsTeamLink": "Government of Canada contacts page",
+    "gcFormsTeamPart2": "to find the department or agency that can help.",
+    "lookingForADemo": "Looking to learn more about GC Forms?",
+    "ifYouWouldLike": "Fill out the ",
     "contactUs": "contact form",
     "description": {
-      "description": "Provide more context around the problem you are experiencing.",
-      "title": "Tell us more"
+      "title": "Tell us more",
+      "description": "Please do not include any protected or personal information."
     },
     "name": "Your name",
     "email": "Your email address",
-    "gcFormsTeamLink": "Government of Canada contacts",
-    "gcFormsTeamPart1": "Please note that the GC Forms team provides services to people who work in the government. We cannot give general advice to the public about the forms that we host. For other enquiries, go to the",
-    "gcFormsTeamPart2": "page to find the department or agency that can help.",
-    "ifYouWouldLike": "Fill out the ",
-    "lookingForADemo": "Looking to learn more about GC Forms?",
     "request": {
+      "title": "Reason for reaching out",
       "option1": "Ask a question",
       "option2": "Get help using GC Forms",
       "apiOption": "Request technical support with the API",
       "option3": "Report a problem with a published form",
-      "option4": "Other",
-      "title": "Reason for reaching out"
+      "option4": "Other"
     },
-    "title": "Get support",
-    "experience": "Explore our ",
-    "guidanceLink": "guidance articles",
-    "useThisForm": " or get technical help from our team through this form.",
     "errors": {
       "submissionError": "Something went wrong. Please try again later."
     }
@@ -1023,7 +1023,7 @@
     "status": "Form status",
     "open": "Open",
     "closed": "Closed",
-    "saveButton": "Save changes",
+    "saveButton": "Save",
     "savedSuccessMessage": "Your changes have been saved.",
     "formClosedSuccessMessage": {
       "title": "This form is now closed",
@@ -1142,7 +1142,7 @@
     },
     "tryitout": {
       "button": "Complex form? Try branching instead +",
-      "text": "<p class='mb-4'>Use branching to route people filling out the form toward different pages based on their answers.</p> <p> Visualize the form flow and configure branches in the Branching tab of the form set-up panel.</p>",
+      "text": "<p className='mb-4'>Use branching to route people filling out the form toward different pages based on their answers.</p> <p> Visualize the form flow and configure branches in the Branching tab of the form set-up panel.</p>",
       "open": "Go to Branching"
     },
     "exitBadge": "Exit",
@@ -1218,7 +1218,9 @@
       "description": " It seems the items you are moving have display or branching rules applied. Would you like to overwrite those rules and apply a linear autoflow?",
       "cancel": "No, move without changing rules",
       "confirm": "Yes, apply linear autoflow"
-    }
+    },
+    "cannotDeleteGroup": "This page cannot be deleted as it would break the form logic.",
+    "cannotSetNextAction": "This page cannot go to an exit page as it would break the form logic"
   },
   "confirmation": {
     "title": "Your form has been submitted",
@@ -1301,5 +1303,18 @@
   },
   "systemHealthCheck": {
     "title": "System health"
+  },
+  "saveAndResume": {
+    "savedErrorMessage": "There was an error saving your changes.",
+    "savedSuccessMessage": "Your changes have been saved.",
+    "title": "Resume filling out the form later",
+    "toggleOn": "On",
+    "toggleOff": "Off",
+    "toggleDescription": {
+      "text1": "Enable saving answers in progress",
+      "text2": "Allow people to pause and resume the form later. With the option to save a copy of their answers so far on their device. These can then be uploaded into the form later."
+    },
+    "a11yDescription": "Save progress and resume form later",
+    "saveButton": "Save"
   }
 }

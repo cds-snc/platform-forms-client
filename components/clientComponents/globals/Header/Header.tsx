@@ -10,7 +10,6 @@ import { FileNameInput } from "./FileName";
 import { ShareDropdown } from "./ShareDropdown";
 import LanguageToggle from "./LanguageToggle";
 import { YourAccountDropdown } from "./YourAccountDropdown";
-import { LiveMessage } from "@lib/hooks/useLiveMessage";
 import Markdown from "markdown-to-jsx";
 
 type HeaderParams = {
@@ -34,8 +33,8 @@ export const Header = ({ context = "default", className }: HeaderParams) => {
     async function fetchBannerData() {
       const isEnabled = t("campaignBanner.enabled") === "true";
       setBannerData(isEnabled);
-      setBannerMessage(t("campaignBanner.message2"));
-      setBannerType(t("campaignBanner.type2"));
+      setBannerMessage(t("campaignBanner.message3"));
+      setBannerType(t("campaignBanner.type3"));
     }
     fetchBannerData();
   }, [t]);
@@ -118,7 +117,6 @@ export const Header = ({ context = "default", className }: HeaderParams) => {
             </ul>
           </nav>
         </div>
-        <LiveMessage />
       </header>
     </>
   );

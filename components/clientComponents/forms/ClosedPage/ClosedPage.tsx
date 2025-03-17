@@ -16,6 +16,7 @@ import { BackArrowIcon } from "@serverComponents/icons";
 interface TextPageProps {
   formRecord: PublicFormRecord;
   language: "en" | "fr";
+  isPreview?: boolean;
 }
 
 interface PageContextProps {
@@ -73,6 +74,7 @@ export const ClosedPage = (props: TextPageProps): React.ReactElement => {
       closedDetails,
     },
     language,
+    isPreview,
   } = props;
 
   let homeHref = "https://canada.ca";
@@ -92,6 +94,8 @@ export const ClosedPage = (props: TextPageProps): React.ReactElement => {
     pageText = message ? message : pageText;
   }
 
+  const target = isPreview ? "_blank" : "_self";
+
   // autoFocus h1 element of page to ensure its read out
   useEffect(() => {
     document.getElementsByTagName("h1").item(0)?.focus();
@@ -106,7 +110,7 @@ export const ClosedPage = (props: TextPageProps): React.ReactElement => {
           pageText={pageText}
         />
       </div>
-      <LinkButton.Primary href={homeHref} className="mb-2 mr-3">
+      <LinkButton.Primary href={homeHref} target={target} className="mb-2 mr-3">
         <span>
           <BackArrowIcon className="mr-2 inline-block self-stretch fill-white" />
           {t("backButton")}

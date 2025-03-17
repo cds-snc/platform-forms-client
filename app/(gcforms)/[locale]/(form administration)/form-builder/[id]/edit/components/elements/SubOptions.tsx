@@ -37,11 +37,9 @@ type RenderIcon = (index: number) => ReactElement | string | undefined;
 
 export const SubOptions = ({
   item,
-  elIndex,
   renderIcon,
 }: {
   item: FormElementWithIndex;
-  elIndex: number;
   renderIcon?: RenderIcon;
 }) => {
   const { translationLanguagePriority, getFormElementById } = useTemplateStore((s) => ({
@@ -67,7 +65,6 @@ export const SubOptions = ({
       <div key={`child-${item.id}-${choiceIndex}`}>
         <SubOption
           renderIcon={renderIcon}
-          elIndex={elIndex}
           subIndex={item.index}
           id={item.id}
           index={choiceIndex}

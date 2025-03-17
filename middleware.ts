@@ -80,7 +80,7 @@ export const config = {
 // TOMORROW
 // Stop files like .map.js from being included in the middleware
 
-export default function middlware(req: NextRequest) {
+export default function middleware(req: NextRequest) {
   const pathname = req.nextUrl.pathname;
   const searchParams = req.nextUrl.searchParams.toString();
 
@@ -234,7 +234,9 @@ const setCSP = (
 
   // Create base Next Response with CSP header and i18n cookie
   const response = NextResponse.next({
-    headers: requestHeaders,
+    request: {
+      headers: requestHeaders,
+    },
   });
 
   // Set the CSP header on the response to the browser on the built version of the app only

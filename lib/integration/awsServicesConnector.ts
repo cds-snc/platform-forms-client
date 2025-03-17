@@ -15,12 +15,13 @@ const localstackConfig = {
 
 export const cognitoIdentityProviderClient = new CognitoIdentityProviderClient({
   ...globalConfig,
-  ...((process.env.NODE_ENV === "development" || process.env.LOCAL_AWS_ENDPOINT) && {
-    credentials: {
-      accessKeyId: process.env.COGNITO_ACCESS_KEY ?? "",
-      secretAccessKey: process.env.COGNITO_SECRET_KEY ?? "",
-    },
-  }),
+  ...(process.env.COGNITO_ACCESS_KEY &&
+    process.env.COGNITO_SECRET_KEY && {
+      credentials: {
+        accessKeyId: process.env.COGNITO_ACCESS_KEY ?? "",
+        secretAccessKey: process.env.COGNITO_SECRET_KEY ?? "",
+      },
+    }),
 });
 
 export const dynamoDBDocumentClient = DynamoDBDocumentClient.from(

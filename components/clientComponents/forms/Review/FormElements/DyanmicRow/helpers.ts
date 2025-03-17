@@ -1,20 +1,21 @@
-import { FormValues } from "@lib/formContext";
-import { FormItem } from "../../helpers";
-import { Language } from "@lib/types/form-builder-types";
+import { type Language } from "@lib/types/form-builder-types";
 import { getLocalizedProperty } from "@lib/utils";
+import { FormItem } from "../../helpers";
 
-export const getReviewSectionFromDynamicRows = (
-  formItem: FormItem,
-  formValues: FormValues | void,
-  language: Language
-) => {
+export const getReviewSectionFromDynamicRows = (formItem: FormItem, language: Language) => {
   const element = formItem.element;
 
-  if (!formValues || !element) {
+  if (!element) {
     return null;
   }
 
-  const parentId = element.id;
+  const { values } = formItem;
+
+  if (!Array.isArray(values) || !values.length) {
+    return null;
+  }
+
+  //const parentId = element.id;
   const parentTitle = element.properties?.[getLocalizedProperty("title", language)];
   const childTitle =
     element.properties?.dynamicRow?.[
@@ -23,7 +24,7 @@ export const getReviewSectionFromDynamicRows = (
   const subElements = element.properties?.subElements;
 
   // Get the children elements of the Dynamic Row
-  const subFormItems = (formValues[parentId] as string[]).map((valueRows, parentRowIndex) => {
+  const subFormItems = values.map((valueRows, parentRowIndex) => {
     // Use FormValues as the source of truth and for each FormValue value, map the related
     // subElement title to the FormValue value
     const valueRowsAsArray = Object.keys(valueRows).map(

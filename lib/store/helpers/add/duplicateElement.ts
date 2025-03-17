@@ -1,3 +1,4 @@
+import { FormElement } from "@gcforms/types";
 import { type TemplateStore } from "../../types";
 
 export const duplicateElement: TemplateStore<"duplicateElement"> =
@@ -12,6 +13,7 @@ export const duplicateElement: TemplateStore<"duplicateElement"> =
     set((state) => {
       // deep copy the element
       const element = JSON.parse(JSON.stringify(state.form.elements[elIndex]));
+
       element.id = id;
       if (element.type !== "richText" && element.properties["titleEn"]) {
         element.properties["titleEn"] = `${element.properties["titleEn"]} ${copyEn}`;
@@ -19,6 +21,15 @@ export const duplicateElement: TemplateStore<"duplicateElement"> =
       if (element.type !== "richText" && element.properties["titleFr"]) {
         element.properties["titleFr"] = `${element.properties["titleFr"]} ${copyFr}`;
       }
+
+      // Renumber sub elements so they match the new parentId
+      if (element.type === "dynamicRow") {
+        const subElementId = Number(element.id.toString() + "01");
+        element.properties.subElements.forEach((subElement: FormElement, index: number) => {
+          subElement.id = index === 0 ? subElementId : subElementId + index;
+        });
+      }
+
       state.form.elements.splice(elIndex + 1, 0, element);
       state.form.layout.splice(elIndex + 1, 0, id);
 
