@@ -16,11 +16,12 @@ jobs:
         with:
           fetch-depth: 2
 
-      - name: "Install dependencies"
-        run: yarn
-
-      - name: "Publish packages"
-        run: |
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20.x"
+          registry-url: "https://registry.npmjs.org"
+      - run: yarn
+      - run: |
           changed_dirs=$(git diff --dirstat=files,0 HEAD~1 packages/ | cut -d'/' -f2 | sort -u)
           echo "Changed directories: $changed_dirs"
           echo "dirs=$(echo $changed_dirs | tr ' ' ',')" >> $GITHUB_ENV
@@ -28,6 +29,8 @@ jobs:
           for dir in $(echo "${changed_dirs}" | tr ',' '\n'); do
             echo "Publishing package: $dir"
             cd packages/$dir
-            # @TODO: yarn publish --access public
+            yarn npm publish --access public
             cd ../..
           done
+        env:
+          YARN_NPM_AUTH_TOKEN: ${{secrets.NPM_TOKEN}}
