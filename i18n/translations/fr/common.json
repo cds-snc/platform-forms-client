@@ -236,6 +236,13 @@
       "restart": {
         "title": "Start blank form",
         "description": "Remplissez un nouveau formulaire"
+      },
+      "readyToContinue": {
+        "title": "Ready to continue? [FR]",
+        "intro": "To load these answers: [FR]",
+        "text1": "1. Save your form progress to your device [FR]",
+        "text2": "2. Find this file on your device [FR]",
+        "text3": "3. Upload it to load your answers [FR]"
       }
     },
     "prompt": {

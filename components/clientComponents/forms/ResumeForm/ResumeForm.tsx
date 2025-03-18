@@ -209,9 +209,10 @@ export const ResumeForm = ({
         <div className="mb-6 flex border-b-1 border-slate-500 pb-8">
           <LightBulbIcon className="mr-4" />
           <div>
-            <h2 className="!mb-0 p-0 !text-2xl">
+            <h2 className="!mb-1 p-0 !text-2xl">
               {t("saveAndResume.resumePage.readyToContinue.title")}
             </h2>
+            <p className="text-sm">{t("saveAndResume.resumePage.readyToContinue.intro")}</p>
             <p className="text-sm">{t("saveAndResume.resumePage.readyToContinue.text1")}</p>
             <p className="text-sm">{t("saveAndResume.resumePage.readyToContinue.text2")}</p>
             <p className="text-sm">{t("saveAndResume.resumePage.readyToContinue.text3")}</p>

@@ -239,6 +239,7 @@
       },
       "readyToContinue": {
         "title": "Ready to continue?",
+        "intro": "To load these answers:",
         "text1": "1. Save your form progress to your device",
         "text2": "2. Find this file on your device",
         "text3": "3. Upload it to load your answers"
