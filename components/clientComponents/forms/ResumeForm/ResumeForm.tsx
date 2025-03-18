@@ -15,6 +15,7 @@ import { type FormValues } from "@lib/formContext";
 import { WarningIcon } from "@serverComponents/icons";
 import { ResumeUploadIcon } from "@serverComponents/icons/ResumeUploadIcon";
 import { LightBulbIcon } from "@serverComponents/icons/LightBulbIcon";
+import { GcdsH1 } from "@serverComponents/globals/GcdsH1";
 
 // Prevent prototype pollution in JSON.parse https://stackoverflow.com/a/63927372
 const cleaner = (key: string, value: string) =>
@@ -178,9 +179,7 @@ export const ResumeForm = ({
   return (
     <>
       <div className="mb-4 flex flex-col items-center justify-center">
-        <h1 className="relative !mb-12 inline-block border-none after:absolute after:-bottom-1 after:left-0 after:h-[var(--gcds-heading-h1-border-height)] after:w-[var(--gcds-heading-h1-border-width)] after:bg-[var(--gcds-heading-h1-border-background)] after:content-['']">
-          {title}
-        </h1>
+        <GcdsH1>{title}</GcdsH1>
         {/* Upload and resume */}
         <label>
           <div
