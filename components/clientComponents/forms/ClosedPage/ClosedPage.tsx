@@ -8,6 +8,7 @@ import { ClosedFormIcon } from "@serverComponents/icons";
 
 import { LinkButton } from "@serverComponents/globals/Buttons/LinkButton";
 import { BackArrowIcon } from "@serverComponents/icons";
+import { GcdsH1 } from "@serverComponents/globals/GcdsH1";
 
 /*
   This is the component for text pages within the form flow (start pages, end pages)
@@ -56,12 +57,12 @@ const PageContent = ({ title, language, pageText }: PageContextProps) => {
 const ClosedHeading = ({ language }: { language: "en" | "fr" }) => {
   const { t } = useTranslation("form-closed");
   return (
-    <h1 tabIndex={-1} className="!mb-6 border-none">
+    <GcdsH1 tabIndex={-1}>
       <span>
         <ClosedFormIcon className="mr-5 mt-[-5px] inline-block" />{" "}
         {t("title", { ns: "form-closed", lng: language })}
       </span>
-    </h1>
+    </GcdsH1>
   );
 };
 
