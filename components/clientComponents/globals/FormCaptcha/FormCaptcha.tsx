@@ -58,7 +58,7 @@ export const FormCaptcha = ({
         handleSubmit(formSubmitEventRef.current as FormEvent<HTMLFormElement>);
       } else if (blockableMode) {
         logMessage.info(`hCaptcha: failed and submission blocked`);
-        router.push(`/${lang}/unable-to-process`);
+        router.push(`/${lang}/captcha`);
       } else {
         logMessage.info(`hCaptcha: failed and submission allowed`);
         handleSubmit(formSubmitEventRef.current as FormEvent<HTMLFormElement>);
