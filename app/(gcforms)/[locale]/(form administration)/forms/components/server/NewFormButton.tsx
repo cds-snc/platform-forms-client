@@ -8,7 +8,7 @@ export const NewFormButton = async () => {
   } = await serverTranslation("my-forms");
 
   return (
-    <div className="inline">
+    <div className="mr-6 inline">
       <LinkButton.Primary href={`/${language}/form-builder`}>
         <>
           <span aria-hidden="true" className="mr-2 inline-block">
