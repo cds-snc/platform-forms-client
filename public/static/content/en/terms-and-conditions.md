@@ -120,4 +120,4 @@ Many social media platforms have multiple language options and provide instructi
 
 
 
-**Last update:** April 24, 2024
+**Last update:** March 18, 2025
