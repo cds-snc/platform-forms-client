@@ -9444,6 +9444,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"body-scroll-lock@npm:^3.0.1":
+  version: 3.1.5
+  resolution: "body-scroll-lock@npm:3.1.5"
+  checksum: 10c0/657c948d64ffe17d2c89958f57c2c636203cf5216e3ba33ad76604bf1b5144fd8f4b5d832d09105f8782d5b8bc96f38780331ec55f3af5f27694dff38a0cc9d7
+  languageName: node
+  linkType: hard
+
 "boolbase@npm:^1.0.0":
   version: 1.0.0
   resolution: "boolbase@npm:1.0.0"
@@ -9933,6 +9940,13 @@ __metadata:
     strip-ansi: "npm:^6.0.1"
     wrap-ansi: "npm:^7.0.0"
   checksum: 10c0/4bda0f09c340cbb6dfdc1ed508b3ca080f12992c18d68c6be4d9cf51756033d5266e61ec57529e610dacbf4da1c634423b0c1b11037709cc6b09045cbd815df5
+  languageName: node
+  linkType: hard
+
+"clsx@npm:^1.1.1":
+  version: 1.2.1
+  resolution: "clsx@npm:1.2.1"
+  checksum: 10c0/34dead8bee24f5e96f6e7937d711978380647e936a22e76380290e35486afd8634966ce300fc4b74a32f3762c7d4c0303f442c3e259f4ce02374eb0c82834f27
   languageName: node
   linkType: hard
 
@@ -12768,6 +12782,7 @@ __metadata:
     react: "npm:19.0.0"
     react-app-polyfill: "npm:3.0.0"
     react-aria: "npm:3.36.0"
+    react-bottom-drawer: "npm:^0.1.1"
     react-complex-tree: "npm:^2.4.5"
     react-dom: "npm:19.0.0"
     react-i18next: "npm:^15.1.0"
@@ -17291,6 +17306,22 @@ __metadata:
   languageName: node
   linkType: hard
 
+"react-bottom-drawer@npm:^0.1.1":
+  version: 0.1.1
+  resolution: "react-bottom-drawer@npm:0.1.1"
+  dependencies:
+    body-scroll-lock: "npm:^3.0.1"
+    clsx: "npm:^1.1.1"
+    lodash.debounce: "npm:^4.0.8"
+    react-swipeable: "npm:^5.5.1"
+    react-transition-group: "npm:^4.3.0"
+  peerDependencies:
+    react: ^16.8.0
+    react-dom: ^16.8.0
+  checksum: 10c0/6fac7aebb487d009e0882e99870b14259d34330f6e8f9d63aa8383874fe6fcd65e0a03fd7b5ec3b1efe6ab749cec9190ac657227530a4121cd45e1b038906ff3
+  languageName: node
+  linkType: hard
+
 "react-complex-tree@npm:^2.4.5":
   version: 2.6.0
   resolution: "react-complex-tree@npm:2.6.0"
@@ -17457,6 +17488,17 @@ __metadata:
     "@types/react":
       optional: true
   checksum: 10c0/841938ff16d16a6b76895f4cb2e1fea957e5fe3b30febbf03a54892dae1c9153f2383e231dea0b3ba41192ad2f2849448fa859caccd288943bce32639e971bee
+  languageName: node
+  linkType: hard
+
+"react-swipeable@npm:^5.5.1":
+  version: 5.5.1
+  resolution: "react-swipeable@npm:5.5.1"
+  dependencies:
+    prop-types: "npm:^15.6.2"
+  peerDependencies:
+    react: ^16.0.0-0
+  checksum: 10c0/7f1d6ae93f1516c1f2298dadddf80632337a07b87a242db68df3ff8a3716aff582e7e9b1eb5597028764f598e413fdde3baa81eb54630bb1eef1f63f1ed61476
   languageName: node
   linkType: hard
 

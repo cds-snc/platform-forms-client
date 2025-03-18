@@ -30,7 +30,12 @@ const FormDisplayLayout = ({
             <LanguageToggle />
           </Fip>
         </header>
-        <div className={cn("gc-formview", "shrink-0 grow basis-auto px-[4rem] py-0 laptop:px-32")}>
+        <div
+          className={cn(
+            "gc-formview",
+            "shrink-0 grow basis-auto px-[1rem] tablet:px-[4rem] py-0 laptop:px-32"
+          )}
+        >
           <main id="content" className="h-full" tabIndex={-1}>
             {children}
             {dateModified && <DateModified updatedAt={formRecord.updatedAt} />}
