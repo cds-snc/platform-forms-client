@@ -37,7 +37,13 @@ export const verifyHCaptchaToken = async (token: string): Promise<boolean> => {
 
   // 4XX request error, want to fail. See https://docs.hcaptcha.com/#siteverify-error-codes-table
   const captchaData: { success: boolean; score: number; "error-codes"?: string[] } = result.data;
-  if (captchaData && captchaData["error-codes"]) {
+
+  if (!captchaData) {
+    logMessage.warn(`hCaptcha: missing captchaData`);
+    return false;
+  }
+
+  if (captchaData["error-codes"]) {
     logMessage.warn(`hCaptcha: client error ${JSON.stringify(captchaData["error-codes"])}`);
     return false;
   }
