@@ -3,7 +3,6 @@ import React from "react";
 import { useTranslation } from "@i18n/client";
 import { useRouter } from "next/navigation";
 import { InternalLinkIcon } from "@serverComponents/icons";
-import { ExternalLinkIcon } from "@serverComponents/icons";
 import { saveSessionProgress } from "@lib/utils/saveSessionProgress";
 import { useFeatureFlags } from "@lib/hooks/useFeatureFlags";
 import { FeatureFlags } from "@lib/cache/types";
@@ -14,6 +13,8 @@ import { FormServerErrorCodes } from "@lib/types/form-builder-types";
 import { safeJSONParse } from "@lib/utils";
 import { type FormValues } from "@lib/formContext";
 import { WarningIcon } from "@serverComponents/icons";
+import { ResumeUploadIcon } from "@serverComponents/icons/ResumeUploadIcon";
+import { LightBulbIcon } from "@serverComponents/icons/LightBulbIcon";
 
 // Prevent prototype pollution in JSON.parse https://stackoverflow.com/a/63927372
 const cleaner = (key: string, value: string) =>
@@ -168,9 +169,6 @@ export const ResumeForm = ({
     };
   };
 
-  const boxClass =
-    "group mx-4 mb-4 flex h-80 w-80 flex-col rounded-xl border-[0.5px] border-slate-500 bg-gray-background pl-6 pr-5 pt-28 text-left outline-none hover:cursor-pointer hover:border-[1px] hover:border-indigo-700 hover:bg-indigo-50 focus:cursor-pointer focus:border-[3px] focus:border-slate-700";
-
   const title = language === "en" ? titleEn : titleFr;
 
   if (!saveAndResumeEnabled) {
@@ -179,29 +177,16 @@ export const ResumeForm = ({
 
   return (
     <>
-      <h1 className="sr-only">{title}</h1>
-      <div className="flex flex-col justify-center tablet:flex-row">
-        {/* Start again */}
-        <button
-          className={boxClass}
-          onClick={async (e) => {
-            e.preventDefault();
-            router.push(`/${language}/id/${formId}`);
-          }}
-        >
-          <InternalLinkIcon className="mb-2 scale-125" />
-          <h2 className="mb-1 p-0 group-hover:underline group-focus:underline">
-            {t("saveAndResume.resumePage.restart.title")}
-          </h2>
-          <p className="text-sm">{t("saveAndResume.resumePage.restart.description")}</p>
-        </button>
-
+      <div className="mb-4 flex flex-col items-center justify-center">
+        <h1 className="relative !mb-12 inline-block border-none after:absolute after:-bottom-1 after:left-0 after:h-[var(--gcds-heading-h1-border-height)] after:w-[var(--gcds-heading-h1-border-width)] after:bg-[var(--gcds-heading-h1-border-background)] after:content-['']">
+          {title}
+        </h1>
         {/* Upload and resume */}
         <label>
           <div
             tabIndex={0}
             role="button"
-            className={boxClass}
+            className="group mx-4 mb-8 flex size-72 flex-col items-center justify-center rounded-3xl border-3 border-dashed border-indigo-500 bg-violet-50 text-left outline-none hover:cursor-pointer hover:border-indigo-700 hover:bg-gray-background focus:cursor-pointer focus:border-gcds-blue-850 focus:bg-gcds-blue-850 focus:text-white-default focus:outline focus:outline-[3px] focus:outline-offset-2 focus:outline-gcds-blue-850 tablet:size-[22rem]"
             onKeyDown={(e) => {
               if (e.key === "Enter" || e.key === " ") {
                 const uploadButton = document.getElementById("file-upload");
@@ -209,14 +194,43 @@ export const ResumeForm = ({
               }
             }}
           >
-            <ExternalLinkIcon className="mb-2 scale-125" />
-            <h2 className="mb-1 p-0 group-hover:underline group-focus:underline">
-              {t("saveAndResume.resumePage.upload.title")}
-            </h2>
-            <p className="text-sm">{t("saveAndResume.resumePage.upload.description")}</p>
-            <input id="file-upload" type="file" onChange={handleChange} className="hidden" />
+            <div className="m-10">
+              <ResumeUploadIcon className="group-focus:fill-white" />
+              <h2 className="!mb-1 p-0 text-2xl tablet:!text-3xl">
+                {t("saveAndResume.resumePage.upload.title")}
+              </h2>
+              <p className="text-sm">{t("saveAndResume.resumePage.upload.description")}</p>
+              <input id="file-upload" type="file" onChange={handleChange} className="hidden" />
+            </div>
           </div>
         </label>
+
+        {/* Instructions*/}
+        <div className="mb-6 flex border-b-1 border-slate-500 pb-8">
+          <LightBulbIcon className="mr-4" />
+          <div>
+            <h2 className="!mb-0 p-0 !text-2xl">
+              {t("saveAndResume.resumePage.readyToContinue.title")}
+            </h2>
+            <p className="text-sm">{t("saveAndResume.resumePage.readyToContinue.text1")}</p>
+            <p className="text-sm">{t("saveAndResume.resumePage.readyToContinue.text2")}</p>
+            <p className="text-sm">{t("saveAndResume.resumePage.readyToContinue.text3")}</p>
+          </div>
+        </div>
+
+        {/* Start again */}
+        <button
+          className="group flex items-center rounded-full border-1 border-slate-500 bg-gray-background p-2 hover:cursor-pointer hover:border-indigo-700 hover:bg-violet-50 focus:cursor-pointer focus:border-gcds-blue-850 focus:bg-gcds-blue-850 focus:text-white-default focus:outline focus:outline-[3px] focus:outline-offset-2 focus:outline-gcds-blue-850 tablet:px-14"
+          onClick={async (e) => {
+            e.preventDefault();
+            router.push(`/${language}/id/${formId}`);
+          }}
+        >
+          <InternalLinkIcon className="mr-4 inline-block scale-125 group-focus:fill-white" />
+          <h2 className="!mb-0 inline-block p-0 !text-2xl tablet:!text-3xl">
+            {t("saveAndResume.resumePage.restart.title")}
+          </h2>
+        </button>
       </div>
       <ToastContainer limit={1} autoClose={false} containerId="resume" />
     </>

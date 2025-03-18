@@ -230,12 +230,18 @@
     },
     "resumePage": {
       "upload": {
-        "title": "Resume",
+        "title": "Load your answers",
         "description": "Upload your saved form answers"
       },
       "restart": {
-        "title": "Start",
+        "title": "Start blank form",
         "description": "Fill out a new form"
+      },
+      "readyToContinue": {
+        "title": "Ready to continue?",
+        "text1": "1. Save your form progress to your device",
+        "text2": "2. Find this file on your device",
+        "text3": "3. Upload it to load your answers"
       }
     },
     "prompt": {

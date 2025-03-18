@@ -230,11 +230,11 @@
     },
     "resumePage": {
       "upload": {
-        "title": "Poursuivre",
-        "description": "Téléversez votre formulaire en cours"
+        "title": "Load your answers [FR]",
+        "description": "Upload your saved form answers [FR]"
       },
       "restart": {
-        "title": "Commencer",
+        "title": "Start blank form",
         "description": "Remplissez un nouveau formulaire"
       }
     },
