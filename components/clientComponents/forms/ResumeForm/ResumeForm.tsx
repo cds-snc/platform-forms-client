@@ -157,7 +157,7 @@ export const ResumeForm = ({
           <div
             tabIndex={0}
             role="button"
-            className="group mx-4 mb-8 flex size-72 flex-col items-center justify-center rounded-3xl border-3 border-dashed border-indigo-500 bg-violet-50 text-left outline-none hover:cursor-pointer hover:border-indigo-700 hover:bg-violet-200 focus:cursor-pointer focus:border-gcds-blue-850 focus:bg-gcds-blue-850 focus:text-white-default focus:outline focus:outline-[3px] focus:outline-offset-2 focus:outline-gcds-blue-850 active:outline-[3px] active:outline-offset-2 active:outline-gcds-blue-850  tablet:size-[22rem]"
+            className="group tablet:mx-4 mb-8 flex w-full h-auto flex-col items-center justify-center rounded-3xl border-3 border-dashed border-indigo-500 bg-violet-50 text-left outline-none hover:cursor-pointer hover:border-indigo-700 hover:bg-violet-200 focus:cursor-pointer focus:border-gcds-blue-850 focus:bg-gcds-blue-850 focus:text-white-default focus:outline focus:outline-[3px] focus:outline-offset-2 focus:outline-gcds-blue-850 active:outline-[3px] active:outline-offset-2 active:outline-gcds-blue-850 tablet:size-[22rem]"
             onKeyDown={(e) => {
               if (e.key === "Enter" || e.key === " ") {
                 const uploadButton = document.getElementById("file-upload");
@@ -166,10 +166,12 @@ export const ResumeForm = ({
             }}
           >
             <div className="m-10">
-              <ResumeUploadIcon className="group-focus:fill-white" />
-              <h2 className="!mb-1 p-0 text-2xl tablet:!text-3xl">
-                {t("saveAndResume.resumePage.upload.title")}
-              </h2>
+              <div className="flex items-center tablet:block">
+                <ResumeUploadIcon className="group-focus:fill-white" />
+                <h2 className="!mb-1 p-0 !text-2xl tablet:!text-3xl">
+                  {t("saveAndResume.resumePage.upload.title")}
+                </h2>
+              </div>
               <p className="text-sm">{t("saveAndResume.resumePage.upload.description")}</p>
               <input id="file-upload" type="file" onChange={handleChange} className="hidden" />
             </div>
