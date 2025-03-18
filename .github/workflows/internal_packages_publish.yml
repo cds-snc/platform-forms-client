@@ -14,19 +14,20 @@ jobs:
     steps:
       - uses: actions/checkout@v2
         with:
-          fetch-depth: 0
+          fetch-depth: 2
 
       - name: "Install dependencies"
-        run: yarn install
+        run: yarn
 
       - name: "Publish packages"
         run: |
-          changed_dirs=$(git diff --dirstat=files,0 origin/main...HEAD packages/ | cut -d'/' -f2 | sort -u)
+          changed_dirs=$(git diff --dirstat=files,0 HEAD~1 packages/ | cut -d'/' -f2 | sort -u)
+          echo "Changed directories: $changed_dirs"
           echo "dirs=$(echo $changed_dirs | tr ' ' ',')" >> $GITHUB_ENV
 
           for dir in $(echo "${changed_dirs}" | tr ',' '\n'); do
             echo "Publishing package: $dir"
             cd packages/$dir
-            # yarn publish --access public
+            # @TODO: yarn publish --access public
             cd ../..
           done
