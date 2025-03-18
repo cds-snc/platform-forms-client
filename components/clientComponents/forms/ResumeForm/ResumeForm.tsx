@@ -220,7 +220,7 @@ export const ResumeForm = ({
 
         {/* Start again */}
         <button
-          className="group flex items-center rounded-full border-1 border-slate-500 bg-gray-background p-2 hover:cursor-pointer hover:border-indigo-700 hover:bg-violet-50 focus:cursor-pointer focus:border-gcds-blue-850 focus:bg-gcds-blue-850 focus:text-white-default focus:outline focus:outline-[3px] focus:outline-offset-2 focus:outline-gcds-blue-850 tablet:px-14"
+          className="group flex items-center rounded-full border-1 border-slate-500 bg-gray-background p-2 px-6 hover:cursor-pointer hover:border-indigo-700 hover:bg-violet-50 focus:cursor-pointer focus:border-gcds-blue-850 focus:bg-gcds-blue-850 focus:text-white-default focus:outline focus:outline-[3px] focus:outline-offset-2 focus:outline-gcds-blue-850 tablet:px-14"
           onClick={async (e) => {
             e.preventDefault();
             router.push(`/${language}/id/${formId}`);
