@@ -48,7 +48,7 @@ jobs:
           node-version-file: .nvmrc
 
       - name: Yarn update to V4
-        run: corepack enable && yarn set version berry
+        run: corepack enable && yarn set version stable
 
       - name: Get yarn cache directory path
         id: yarn-cache-dir-path
@@ -57,7 +57,7 @@ jobs:
       - uses: actions/cache@d4323d4df104b026a6aa633fdb11d772146be0bf # v4.2.2
         id: yarn-cache # use this to check for `cache-hit` (`steps.yarn-cache.outputs.cache-hit != 'true'`)
         with:
-          path:  |
+          path: |
             ${{ steps.yarn-cache-dir-path.outputs.dir }}
             ${{ github.workspace }}/.next/cache
 
