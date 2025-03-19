@@ -15,12 +15,17 @@ jobs:
       - uses: actions/checkout@v2
         with:
           fetch-depth: 2
-
-      - uses: actions/setup-node@v4
+          
+      - name: Node.JS Setup
+        uses: actions/setup-node@1d0ff469b7ec7b3cb9d8673fde0c81c44821de2a # v4.2.0
         with:
-          node-version: "20.x"
+          node-version-file: .nvmrc
           registry-url: "https://registry.npmjs.org"
-      - run: yarn
+
+      - name: Yarn update to V4
+        run: corepack enable && yarn set version stable
+
+      - run: yarn install
       - run: |
           changed_dirs=$(git diff --dirstat=files,0 HEAD~1 packages/ | cut -d'/' -f2 | sort -u)
           echo "Changed directories: $changed_dirs"
