@@ -36,7 +36,7 @@ export const MobileDrawer = ({
         Protect your data by keeping the downloaded file in a safe place on a trusted device.
       </p>
 
-      <div className="sticky bottom-0 border-gcds-blue-900 bg-gcds-blue-100 p-4">
+      <div className="sticky bottom-0 -mx-3 border-2 border-t-gcds-blue-900 bg-gcds-blue-100 p-4">
         <Button
           theme="secondary"
           className="rounded-full bg-white"
