@@ -1,5 +1,6 @@
 import { type Language } from "@lib/types/form-builder-types";
 import { customTranslate } from "@lib/i18nHelpers";
+import { LightBulbIcon } from "@serverComponents/icons/LightBulbIcon";
 
 export const NextSteps = ({
   language,
@@ -16,7 +17,7 @@ export const NextSteps = ({
   return (
     <>
       <div className="mb-10 rounded-lg border-1 border-blue bg-violet-50 p-4">
-        <h2 className="!mb-4 !text-xl font-bold">
+        <h2 className="!mb-0 !text-lg font-bold">
           {t("saveAndResume.downloadProgressHtml.nextSteps.title", { lng: language })}
         </h2>
         <div className="!mb-2">
@@ -54,10 +55,13 @@ export const NextSteps = ({
       </div>
       {/* Keep this info safe */}
       <div>
-        <h3 className="!my-2 !text-xl font-bold">
-          {t("saveAndResume.downloadProgressHtml.keepSafe.title", { lng: language })}
-        </h3>
-        <p className="mb-6 italic">
+        <div>
+          <LightBulbIcon className="-mt-2 mr-2 inline-block" />
+          <h3 className="!my-0 inline-block !text-xl font-bold">
+            {t("saveAndResume.downloadProgressHtml.keepSafe.title", { lng: language })}
+          </h3>
+        </div>
+        <p className="mb-6 italic ml-8">
           {t("saveAndResume.downloadProgressHtml.keepSafe.description", { lng: language })}
         </p>
       </div>
