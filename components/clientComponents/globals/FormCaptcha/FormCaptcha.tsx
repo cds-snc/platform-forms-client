@@ -1,7 +1,6 @@
 import HCaptcha from "@hcaptcha/react-hcaptcha";
 import { logMessage } from "@lib/logger";
 import { verifyHCaptchaToken } from "./actions";
-import { useRouter } from "next/navigation";
 import { useFeatureFlags } from "@lib/hooks/useFeatureFlags";
 import { hCaptchaEnabled } from "./helpers";
 import { FormEvent, useRef } from "react";
@@ -18,6 +17,7 @@ export const FormCaptcha = ({
   hCaptchaSiteKey = "",
   blockableMode = false,
   handleSubmit,
+  handleCaptchaFail = () => {},
   lang,
   id = "",
   dataTestId = "",
@@ -30,6 +30,7 @@ export const FormCaptcha = ({
   // Determines whether or not to block a user marked as a bot by siteverify from submitting a form
   blockableMode?: boolean;
   handleSubmit: (e?: FormEvent<HTMLFormElement>) => void;
+  handleCaptchaFail: () => void;
   lang: string;
   id?: string;
   dataTestId?: string;
@@ -37,7 +38,6 @@ export const FormCaptcha = ({
   isPreview?: boolean;
   noValidate?: boolean;
 }) => {
-  const router = useRouter();
   const hCaptchaRef = useRef<HCaptcha>(null);
   const formSubmitEventRef = useRef<FormEvent<HTMLFormElement>>(null);
 
@@ -57,8 +57,11 @@ export const FormCaptcha = ({
         logMessage.info(`hCaptcha: success`);
         handleSubmit(formSubmitEventRef.current as FormEvent<HTMLFormElement>);
       } else if (blockableMode) {
+        if (typeof handleCaptchaFail !== "function") {
+          throw Error("hCaptcha: handleCaptchaFail is not a function");
+        }
         logMessage.info(`hCaptcha: failed and submission blocked`);
-        router.push(`/${lang}/captcha`);
+        handleCaptchaFail();
       } else {
         logMessage.info(`hCaptcha: failed and submission allowed`);
         handleSubmit(formSubmitEventRef.current as FormEvent<HTMLFormElement>);
@@ -117,6 +120,7 @@ export const FormCaptcha = ({
         // Component will reset immediately after a Client sends bad data.
         // Note: An invalid sitekey will cause the HCaptcha component to fail without calling onError
         onError={(code: string) => {
+          // @TODO investigate cases where the submission should be allowed through based on error code
           // see https://docs.hcaptcha.com/#siteverify-error-codes-table
           logMessage.warn(`hCatpcha: clientComponentError error ${code}`);
         }}
