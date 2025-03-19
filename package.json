@@ -7,7 +7,8 @@
   },
   "workspaces": [
     "flag_initialization",
-    "utils/*"
+    "utils/*",
+    "packages/*"
   ],
   "prettier": {
     "trailingComma": "es5",
@@ -57,8 +58,8 @@
     "@bufbuild/protobuf": "^2.2.3",
     "@casl/ability": "6.7.3",
     "@cdssnc/gcds-tokens": "1.20.1",
-    "@gcforms/connectors": "^1.0.0",
-    "@gcforms/types": "^1.0.0",
+    "@gcforms/connectors": "workspace:*",
+    "@gcforms/types": "workspace:*",
     "@hcaptcha/react-hcaptcha": "^1.11.2",
     "@hcaptcha/types": "^1.0.4",
     "@headlessui/react": "^2.2.0",

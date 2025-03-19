@@ -14,7 +14,7 @@ jobs:
         with:
           node-version-file: .nvmrc
       - name: Yarn update to V4
-        run: corepack enable && yarn set version berry
+        run: corepack enable && yarn set version stable
 
       - name: Get yarn cache directory path
         id: yarn-cache-dir-path
