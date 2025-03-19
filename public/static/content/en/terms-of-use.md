@@ -24,7 +24,7 @@ You are responsible for:
 - Retrieving responses directly from our database when handling more sensitive Protected B information. Receiving responses via email or retrieving with an API integration is only available for up to Protected A information.
 - Ensuring that other team members given access to your forms and responses have the appropriate authorities and the security clearance needed to access the data collected. For this reason, shared email accounts are not permitted in GC Forms. Any access must be given to authorized employees only using a valid Government of Canada email address.
 
-### Responses delivered by email (up to PROTECTED A)
+### Responses delivered by email (up to and including PROTECTED A)
 
 You are responsible for:
 
@@ -33,7 +33,7 @@ You are responsible for:
 - Addressing service or operational impacts due to end users uploading documents to submissions for the purpose of spamming.
 - Accepting [GC Notify's terms of use](https://notification.canada.ca/terms).
 
-### Responses retrieved via the API (up to Protected A)
+### Responses retrieved via the API (up to and including Protected A)
 
 You are responsible for:
 
@@ -41,10 +41,10 @@ Ensuring the API key associated with your form is secure to protect access to fo
 
 - Storing the API key in a safe place on a Government of Canada machine.
 - Not sharing the API key by email, support requests, or in a plain text file in a source repository as this would compromise the privacy and security of responses.
-- Using encrypted email, if there is an absolute need to transfer the private API key to authorized staff, for the purpose of setting up the API integration.
+- Using encrypted email on the Government of Canada network, if there is an absolute need to transfer the private API key to authorized staff, for the purpose of setting up the API integration.
 - Deleting and re-creating your form's API key, if it's suspected to have been compromised.
 
-### Responses downloaded from GC Forms (up to PROTECTED B)
+### Responses downloaded from GC Forms (up to and including PROTECTED B)
 
 You are responsible for:
 
@@ -57,7 +57,7 @@ You are responsible for:
 
 - Use a valid individual government email belonging to an employee (not a shared inbox) to create your account and for two-factor authentication (2FA).
 - Do not share your password with anyone or store it where others could find it. If someone else needs access to a form, [contact us](/en/support).
-- Safeguard your API keys. If you suspect an API key has been compromised, delete and re-create a new API key to secure access to form responses.
+- Safeguard your API keys. If you suspect an API key has been compromised, notify us, and delete and re-create a new API key to secure access to form responses.
 - Ensure the privacy and security of protected information upon downloading form responses from GC Forms. If Responses are not saved and confirmed within 45 days, we will take necessary steps to ensure they are retrieved by the responsible program or service.
 - Report any security breach or vulnerability using the steps outlined in our [Security notice](https://digital.canada.ca/security-notice/).
 
@@ -87,4 +87,4 @@ We ask that clients not interfere with the format of JSON files, as any updates 
 
 For questions related to these terms of use, [contact us](/en/contact).
 
-**Last update:** January 27, 2025
+**Last update:** March 19, 2025
