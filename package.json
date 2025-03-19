@@ -19,7 +19,6 @@
     "singleQuote": false
   },
   "scripts": {
-    "prepare": "yarn connectors:prepare && yarn types:prepare",
     "dev": "yarn prisma:dev && yarn initialize && next dev --turbopack",
     "dev:secure": "yarn prisma:dev && yarn initialize && next dev --experimental-https --turbopack",
     "build": "DATABASE_URL=postgres://postgres:chummy@localhost:5432/forms next build --debug",
