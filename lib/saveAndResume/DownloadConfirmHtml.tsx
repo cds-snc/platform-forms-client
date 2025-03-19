@@ -6,6 +6,7 @@ import { ReviewList } from "@clientComponents/forms/Review/ReviewList";
 import { SubmittedBadge } from "./SubmittedBadge";
 import { KeepSafe } from "./KeepSafe";
 import { HTMLProps } from "./types";
+import { GcdsH1 } from "@serverComponents/globals/GcdsH1";
 
 export const DownloadConfirmHtml = ({
   language,
@@ -67,7 +68,7 @@ export const DownloadConfirmHtml = ({
                   language={language}
                 />
               </div>
-              <h1>{formTitle}</h1>
+              <GcdsH1>{formTitle}</GcdsH1>
               <KeepSafe language={language} />
               <div className="mb-10" data-testid="review-list">
                 <ReviewList

@@ -17,6 +17,7 @@ import { ResumeForm } from "@clientComponents/forms/ResumeForm/ResumeForm";
 import { getSomeFlags } from "@lib/cache/flags";
 import { FeatureFlags } from "@lib/cache/types";
 import { getAppSetting } from "@lib/appSettings";
+import { GcdsH1 } from "@serverComponents/globals/GcdsH1";
 
 export async function generateMetadata(props0: {
   params: Promise<{ locale: string; props: string[] }>;
@@ -119,7 +120,7 @@ export default async function Page(props0: {
             header={
               <>
                 <ClosingNotice language={language} closingDate={formRecord.closingDate} />
-                <h1 tabIndex={-1}>{formTitle}</h1>
+                <GcdsH1 tabIndex={-1}>{formTitle}</GcdsH1>
               </>
             }
             formRecord={formRecord}
