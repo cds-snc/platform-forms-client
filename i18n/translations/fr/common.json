@@ -246,10 +246,14 @@
     },
     "downloadProgressHtml": {
       "nextSteps": {
-        "title": "Quand vous êtes prêt :",
+        "title": "Ready to continue? [FR]",
         "resumeBox": {
-          "title": "Reprendre le formulaire",
-          "description": "Continuez à remplir en téléversant vos réponses en cours."
+          "title": "To load these answers: [FR]",
+          "text1": "1. Go to the online form [FR]",
+          "text2": "2. Click resume [FR]",
+          "text3": "3. Find this file on your computer [FR]",
+          "text4": "4. Upload it to load your answers [FR]",
+          "link": "Go to the online form [FR]"
         }
       },
       "keepSafe": {
@@ -273,7 +277,8 @@
     },
     "downloadHtml": {
       "keepSafe": {
-        "description": " Conservez ce fichier dans un endroit sûr de votre appareil afin de protéger vos renseignements."
+        "title": "Keep your information safe [FR]",
+        "description": " Make sure to keep the file that contains your form answers in a secure spot on your device. [FR]"
       },
       "badge": {
         "text": "Formulaire soumis le ",
