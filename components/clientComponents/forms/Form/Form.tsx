@@ -159,6 +159,7 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
             dataTestId="form"
             lang={language}
             handleSubmit={handleSubmit}
+            handleCaptchaFail={() => props.setCaptchaFail && props.setCaptchaFail(true)}
             noValidate={true}
             hCaptchaSiteKey={props.hCaptchaSiteKey}
             blockableMode={false}
