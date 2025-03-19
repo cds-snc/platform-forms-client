@@ -7,10 +7,7 @@ import { PreviewNavigation } from "./PreviewNavigation";
 import { getRenderedForm } from "@lib/formBuilder";
 import { FormProperties, PublicFormRecord } from "@lib/types";
 import { RichText } from "@clientComponents/forms";
-import { Button } from "@clientComponents/globals";
-import { NextButton } from "@clientComponents/forms/NextButton/NextButton";
 import { ClosingNotice } from "@clientComponents/forms/ClosingNotice/ClosingNotice";
-import { useGCFormsContext } from "@lib/hooks/useGCFormContext";
 
 import {
   FormServerErrorCodes,
@@ -23,15 +20,12 @@ import { BackArrowIcon } from "@serverComponents/icons";
 import Brand from "@clientComponents/globals/Brand";
 import { GCFormsProvider } from "@lib/hooks/useGCFormContext";
 import Skeleton from "react-loading-skeleton";
-import { Form } from "@clientComponents/forms/Form/Form";
-import { BackButton } from "./BackButton";
 import { safeJSONParse } from "@lib/utils";
 import { ErrorSaving } from "@formBuilder/components/shared/ErrorSaving";
 import { toast } from "@formBuilder/components/shared/Toast";
 import { defaultForm } from "@lib/store/defaults";
-import { showReviewPage } from "@lib/utils/form-builder/showReviewPage";
-import { tryFocusOnPageLoad } from "@lib/client/clientHelpers";
 import { useIsFormClosed } from "@lib/hooks/useIsFormClosed";
+import { PreviewFormWrapper } from "./PreviewFormWrapper";
 
 export const Preview = ({
   disableSubmit = true,
@@ -79,7 +73,6 @@ export const Preview = ({
 
   const translationNamespaces = ["common", "form-builder", "form-closed"];
   const { t } = useTranslation(translationNamespaces);
-  const translatedT = useTranslation(translationNamespaces, { lng: translationLanguagePriority }).t;
 
   const language = translationLanguagePriority;
   const currentForm = getRenderedForm(formRecord, language);
@@ -89,8 +82,6 @@ export const Preview = ({
   }
 
   const [sent, setSent] = useState<string | null>();
-
-  const { saveSessionProgress } = useGCFormsContext();
 
   const clearSent = () => {
     setSent(null);
@@ -102,8 +93,6 @@ export const Preview = ({
   const brand = formRecord?.form ? formRecord.form.brand : null;
 
   const hasHydrated = useRehydrate();
-
-  const isShowReviewPage = showReviewPage(formRecord.form);
 
   if (isPastClosingDate) {
     // Force a hard refresh to the preview page to show the closed message
@@ -189,63 +178,14 @@ export const Preview = ({
             {!hasHydrated && <Skeleton count={5} height={40} className="mb-4" />}
             {hasHydrated && (
               <GCFormsProvider formRecord={formRecord}>
-                <Form
+                <PreviewFormWrapper
                   formRecord={formRecord}
-                  saveSessionProgress={saveSessionProgress}
-                  isPreview={true}
-                  language={language}
-                  t={translatedT}
-                  onSuccess={setSent}
-                  renderSubmit={({ validateForm }) => {
-                    return (
-                      <div id="PreviewSubmitButton">
-                        <span {...getLocalizationAttribute()}>
-                          <NextButton
-                            formRecord={formRecord}
-                            language={language}
-                            validateForm={validateForm}
-                            fallBack={() => {
-                              return (
-                                <>
-                                  {allowGrouping && isShowReviewPage && (
-                                    <BackButton
-                                      language={language}
-                                      onClick={() => tryFocusOnPageLoad("h2")}
-                                    />
-                                  )}
-                                  <Button
-                                    type="submit"
-                                    id="SubmitButton"
-                                    onClick={(e) => {
-                                      if (disableSubmit) {
-                                        e.preventDefault();
-                                      }
-                                    }}
-                                  >
-                                    {t("submitButton", { ns: "common", lng: language })}
-                                  </Button>
-                                </>
-                              );
-                            }}
-                          />
-                        </span>
-                        {status !== "authenticated" && (
-                          <div
-                            className="inline-block bg-purple-200 px-4 py-1"
-                            {...getLocalizationAttribute()}
-                          >
-                            <Markdown options={{ forceBlock: true }}>
-                              {t("signInToTest", { ns: "form-builder", lng: language })}
-                            </Markdown>
-                          </div>
-                        )}
-                      </div>
-                    );
-                  }}
+                  disableSubmit={disableSubmit}
                   allowGrouping={allowGrouping}
+                  setSent={setSent}
                 >
                   {currentForm}
-                </Form>
+                </PreviewFormWrapper>
               </GCFormsProvider>
             )}
           </div>
