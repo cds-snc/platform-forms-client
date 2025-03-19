@@ -57,12 +57,12 @@ const PageContent = ({ title, language, pageText }: PageContextProps) => {
 const ClosedHeading = ({ language }: { language: "en" | "fr" }) => {
   const { t } = useTranslation("form-closed");
   return (
-    <GcdsH1 tabIndex={-1} className="!mb-6">
-      <span>
-        <ClosedFormIcon className="mr-5 mt-[-5px] inline-block" />{" "}
-        {t("title", { ns: "form-closed", lng: language })}
-      </span>
-    </GcdsH1>
+    <>
+      <ClosedFormIcon className="mr-5 mt-[-5px] inline-block" />{" "}
+      <GcdsH1 tabIndex={-1} className="!mb-6">
+        <span>{t("title", { ns: "form-closed", lng: language })}</span>
+      </GcdsH1>
+    </>
   );
 };
 
