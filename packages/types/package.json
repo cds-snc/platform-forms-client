@@ -1,6 +1,6 @@
 {
   "name": "@gcforms/types",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "author": "Canadian Digital Service",
   "license": "MIT",
   "publishConfig": {
@@ -21,11 +21,13 @@
   ],
   "scripts": {
     "build": "tsup src/index.ts --format cjs,esm --dts --clean",
-    "prepare": "yarn && yarn build"
+    "prepack": "yarn build",
+    "types:prepack": "yarn prepack"
   },
   "devDependencies": {
     "@types/node": "^20.11.6",
     "tsup": "^8.3.6",
     "typescript": "^5.5.2"
-  }
+  },
+  "packageManager": "yarn@4.6.0"
 }
