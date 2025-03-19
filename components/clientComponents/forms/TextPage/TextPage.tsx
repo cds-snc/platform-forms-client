@@ -9,6 +9,7 @@ import { SaveResponse } from "@clientComponents/forms/SaveAndResume/SaveResponse
 import { Language } from "@lib/types/form-builder-types";
 import { useFeatureFlags } from "@lib/hooks/useFeatureFlags";
 import { FeatureFlags } from "@lib/cache/types";
+import { GcdsH1 } from "@serverComponents/globals/GcdsH1";
 
 /*
   This is the component for text pages within the form flow (start pages, end pages)
@@ -89,7 +90,7 @@ export const TextPage = (props: TextPageProps): React.ReactElement => {
 
   return (
     <>
-      <h1 tabIndex={-1}>{t("title")}</h1>
+      <GcdsH1 tabIndex={-1}>{t("title")}</GcdsH1>
       <PageContent
         formId={props.formId}
         formRecord={props.formRecord}

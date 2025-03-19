@@ -52,7 +52,7 @@ export const Footer = ({
   return (
     <footer
       className={cn(
-        "mt-16 flex-none border-0 bg-gray-100 px-[4rem] py-0 lg:mt-10 laptop:px-32",
+        "mt-16 flex-none border-0 bg-gray-100 px-[1rem] tablet:px-[4rem] py-0 lg:mt-10 laptop:px-32",
         className
       )}
       data-testid="footer"
