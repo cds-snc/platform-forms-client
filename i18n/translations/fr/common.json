@@ -230,19 +230,19 @@
     },
     "resumePage": {
       "upload": {
-        "title": "Load your answers [FR]",
-        "description": "Upload your saved form answers [FR]"
+        "title": "Load your answers [fr]",
+        "description": "Upload your saved form answers [fr]"
       },
       "restart": {
         "title": "Start blank form",
         "description": "Remplissez un nouveau formulaire"
       },
       "readyToContinue": {
-        "title": "Ready to continue? [FR]",
-        "intro": "To load these answers: [FR]",
-        "text1": "1. Save your form progress to your device [FR]",
-        "text2": "2. Find this file on your device [FR]",
-        "text3": "3. Upload it to load your answers [FR]"
+        "title": "Ready to continue? [fr]",
+        "intro": "To load these answers: [fr]",
+        "text1": "1. Save your form progress to your device [fr]",
+        "text2": "2. Find this file on your device [fr]",
+        "text3": "3. Upload it to load your answers [fr]"
       }
     },
     "prompt": {
@@ -253,14 +253,14 @@
     },
     "downloadProgressHtml": {
       "nextSteps": {
-        "title": "Ready to continue? [FR]!",
+        "title": "Ready to continue? [fr]",
         "resumeBox": {
-          "title": "To load these answers: [FR]",
-          "text1": "1. Go to the online form [FR]",
-          "text2": "2. Click resume [FR]",
-          "text3": "3. Find this file on your computer [FR]",
-          "text4": "4. Upload it to load your answers [FR]",
-          "link": "Go to the online form [FR]"
+          "title": "To load these answers: [fr]",
+          "text1": "1. Go to the online form [fr]",
+          "text2": "2. Click resume [fr]",
+          "text3": "3. Find this file on your computer [fr]",
+          "text4": "4. Upload it to load your answers [fr]",
+          "link": "Go to the online form [fr]"
         }
       },
       "keepSafe": {
@@ -284,7 +284,7 @@
     },
     "downloadHtml": {
       "keepSafe": {
-        "title": "Keep your information safe [FR]",
+        "title": "Keep your information safe [fr]",
         "description": " Make sure to keep the file that contains your form answers in a secure spot on your device. [FR]"
       },
       "badge": {
