@@ -34,9 +34,9 @@ export class FileObjectInvalid extends Error {
     Object.setPrototypeOf(this, FileObjectInvalid.prototype);
   }
 }
-export class SubmissionApiError extends Error {
+export class SubmissionLambdaInvokationError extends Error {
   constructor(message?: string) {
-    super(message ?? "SubmissionApiError");
-    Object.setPrototypeOf(this, SubmissionApiError.prototype);
+    super(message ?? "SubmissionLambdaInvokationError");
+    Object.setPrototypeOf(this, SubmissionLambdaInvokationError.prototype);
   }
 }
