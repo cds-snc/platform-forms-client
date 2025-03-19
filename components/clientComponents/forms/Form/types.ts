@@ -27,7 +27,7 @@ export interface FormProps {
   saveAndResumeEnabled?: boolean;
   hCaptchaSiteKey?: string | undefined;
   currentGroup: string | null;
-  setCaptchaFail: React.Dispatch<React.SetStateAction<boolean>>;
+  setCaptchaFail?: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 export type InnerFormProps = FormProps & FormikProps<Responses>;
