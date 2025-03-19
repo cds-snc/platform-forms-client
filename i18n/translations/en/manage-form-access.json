@@ -24,7 +24,7 @@
   "loading": "Loading...",
   "manageFormAccess": "Manage access",
   "manageOwnership": "Manage ownership",
-  "mustBeAGovernmentAddress": "Add people with their government email address",
+  "mustBeAGovernmentAddress": "Add colleagues using their individual government email address, not a shared inbox as per our <a href='/en/terms-of-use' target='_blank'>terms of use</a>.",
   "next": "Continue",
   "optionalMessage": "Message (optional)",
   "peopleWithAccess": "People with access",

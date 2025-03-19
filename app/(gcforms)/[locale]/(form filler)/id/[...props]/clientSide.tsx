@@ -33,8 +33,14 @@ export const FormWrapper = ({
     t,
     i18n: { language },
   } = useTranslation(["common", "confirmation", "form-closed"]);
-  const { saveSessionProgress, setSubmissionId, submissionId, submissionDate, setSubmissionDate } =
-    useGCFormsContext();
+  const {
+    saveSessionProgress,
+    setSubmissionId,
+    submissionId,
+    submissionDate,
+    setSubmissionDate,
+    currentGroup,
+  } = useGCFormsContext();
 
   const { getFlag } = useFeatureFlags();
   const saveAndResumeEnabled = getFlag(FeatureFlags.saveAndResume);
@@ -114,6 +120,8 @@ export const FormWrapper = ({
         }}
         allowGrouping={allowGrouping}
         hCaptchaSiteKey={hCaptchaSiteKey}
+        // Used in Formik handleSubmit where there is no access to useGCFormsContext
+        currentGroup={currentGroup}
       >
         {currentForm}
       </Form>
