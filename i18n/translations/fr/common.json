@@ -253,7 +253,7 @@
     },
     "downloadProgressHtml": {
       "nextSteps": {
-        "title": "Ready to continue? [FR]",
+        "title": "Ready to continue? [FR]!",
         "resumeBox": {
           "title": "To load these answers: [FR]",
           "text1": "1. Go to the online form [FR]",
