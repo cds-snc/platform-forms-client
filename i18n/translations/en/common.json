@@ -246,15 +246,19 @@
     },
     "downloadProgressHtml": {
       "nextSteps": {
-        "title": "Ready to resume? ",
+        "title": "Ready to continue?",
         "resumeBox": {
-          "title": "Go to form",
-          "description": "Continue filling out the form, by loading your answers so far."
+          "title": "To load these answers:",
+          "text1": "1. Go to the online form",
+          "text2": "2. Click resume",
+          "text3": "3. Find this file on your computer",
+          "text4": "4. Upload it to load your answers",
+          "link": "Go to the online form"
         }
       },
       "keepSafe": {
-        "title": "Protect your personal information",
-        "description": " Keep this file in a secure spot on your device to protect your information."
+        "title": "Keep your information safe",
+        "description": "Make sure to keep the file that contains your form answers in a secure spot on your device."
       },
       "badge": {
         "text": "In progress",
