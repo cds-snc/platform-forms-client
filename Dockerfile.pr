@@ -21,7 +21,7 @@ ENV NEXT_DEPLOYMENT_ID=$NEXT_DEPLOYMENT_ID
 
 ARG INDEX_SITE="false"
 ENV INDEX_SITE=$INDEX_SITE
-RUN corepack enable && yarn set version berry
+RUN corepack enable && yarn set version stable
 RUN yarn workspaces focus gcforms flag_initialization
 RUN yarn build
 
@@ -61,7 +61,7 @@ COPY public ./public
 COPY prisma ./prisma
 COPY bin/pr-review-entrypoint.sh ./entrypoint.sh
 # Update to latest yarn version
-RUN corepack enable && yarn set version berry
+RUN corepack enable && yarn set version stable
 # Required by the entrypoint.sh to load the SSM ParameterStore environment variables
 RUN apk update && apk add --no-cache aws-cli
 
