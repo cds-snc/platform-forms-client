@@ -157,7 +157,7 @@ export const ResumeForm = ({
           <div
             tabIndex={0}
             role="button"
-            className="group tablet:mx-4 mb-8 flex w-full h-auto flex-col items-center justify-center rounded-3xl border-3 border-dashed border-indigo-500 bg-violet-50 text-left outline-none hover:cursor-pointer hover:border-indigo-700 hover:bg-violet-200 focus:cursor-pointer focus:border-gcds-blue-850 focus:bg-gcds-blue-850 focus:text-white-default focus:outline focus:outline-[3px] focus:outline-offset-2 focus:outline-gcds-blue-850 active:outline-[3px] active:outline-offset-2 active:outline-gcds-blue-850 tablet:size-[22rem]"
+            className="group mb-8 flex h-auto w-full flex-col items-center justify-center rounded-3xl border-3 border-dashed border-indigo-500 bg-violet-50 text-left outline-none hover:cursor-pointer hover:border-indigo-700 hover:bg-violet-200 focus:cursor-pointer focus:border-gcds-blue-850 focus:bg-gcds-blue-850 focus:text-white-default focus:outline focus:outline-[3px] focus:outline-offset-2 focus:outline-gcds-blue-850 active:outline-[3px] active:outline-offset-2 active:outline-gcds-blue-850 tablet:mx-4 tablet:size-[22rem]"
             onKeyDown={(e) => {
               if (e.key === "Enter" || e.key === " ") {
                 const uploadButton = document.getElementById("file-upload");
