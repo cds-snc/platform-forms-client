@@ -17,7 +17,7 @@ ENV NEXT_SERVER_ACTIONS_ENCRYPTION_KEY=$NEXT_SERVER_ACTIONS_ENCRYPTION_KEY
 ARG NEXT_DEPLOYMENT_ID
 ENV NEXT_DEPLOYMENT_ID=$NEXT_DEPLOYMENT_ID
 
-RUN corepack enable && yarn set version berry
+RUN corepack enable && yarn set version stable
 RUN yarn workspaces focus gcforms flag_initialization
 RUN yarn build
 RUN yarn workspaces focus gcforms flag_initialization --production
@@ -47,7 +47,7 @@ WORKDIR /src
 COPY package.json yarn.lock .yarnrc.yml next.config.mjs ./
 COPY .yarn ./.yarn
 # Update to latest yarn version
-RUN corepack enable && yarn set version berry
+RUN corepack enable && yarn set version stable
 COPY public ./public
 COPY prisma ./prisma
 COPY flag_initialization ./flag_initialization
