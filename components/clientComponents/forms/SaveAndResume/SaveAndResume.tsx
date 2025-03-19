@@ -54,7 +54,12 @@ export const SaveAndResume = ({
         open={confirm}
         handleClose={() => setConfirm(false)}
       />
-      <MobileDrawer drawerOpen={drawerOpen} setDrawerOpen={setDrawerOpen} />
+      <MobileDrawer
+        drawerOpen={drawerOpen}
+        setDrawerOpen={setDrawerOpen}
+        formId={formId}
+        language={language}
+      />
     </div>
   );
 };
