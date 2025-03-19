@@ -16,7 +16,7 @@ export const NextSteps = ({
 
   return (
     <>
-      <div className="mb-10 rounded-lg border-1 border-blue bg-violet-50 p-4">
+      <div className="mb-4 rounded-lg border-1 border-blue bg-violet-50 p-4">
         <h2 className="!mb-0 !text-lg font-bold">
           {t("saveAndResume.downloadProgressHtml.nextSteps.title", { lng: language })}
         </h2>
@@ -61,7 +61,7 @@ export const NextSteps = ({
             {t("saveAndResume.downloadProgressHtml.keepSafe.title", { lng: language })}
           </h3>
         </div>
-        <p className="mb-6 italic ml-8">
+        <p className="ml-8 italic">
           {t("saveAndResume.downloadProgressHtml.keepSafe.description", { lng: language })}
         </p>
       </div>
