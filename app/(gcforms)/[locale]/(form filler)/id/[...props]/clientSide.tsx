@@ -5,7 +5,7 @@ import { useTranslation } from "@i18n/client";
 import { FormRecord, TypeOmit } from "@lib/types";
 import { Form } from "@clientComponents/forms/Form/Form";
 import { Language } from "@lib/types/form-builder-types";
-import React, { useEffect, useMemo, type JSX } from "react";
+import React, { useEffect, useMemo, useState, type JSX } from "react";
 import { useGCFormsContext } from "@lib/hooks/useGCFormContext";
 import { restoreSessionProgress, removeProgressStorage } from "@lib/utils/saveSessionProgress";
 import { useFeatureFlags } from "@lib/hooks/useFeatureFlags";
@@ -14,6 +14,7 @@ import { FeatureFlags } from "@lib/cache/types";
 import { toast } from "@formBuilder/components/shared/Toast";
 import { ToastContainer } from "@formBuilder/components/shared/Toast";
 import { TextPage } from "@clientComponents/forms";
+import { CaptchaFail } from "@clientComponents/globals/FormCaptcha/CaptchaFail";
 
 export const FormWrapper = ({
   formRecord,
@@ -41,6 +42,7 @@ export const FormWrapper = ({
     setSubmissionDate,
     currentGroup,
   } = useGCFormsContext();
+  const [captchaFail, setCaptchaFail] = useState(false);
 
   const { getFlag } = useFeatureFlags();
   const saveAndResumeEnabled = getFlag(FeatureFlags.saveAndResume);
@@ -85,6 +87,10 @@ export const FormWrapper = ({
     );
   }
 
+  if (captchaFail) {
+    return <CaptchaFail />;
+  }
+
   return (
     <>
       {header}
@@ -122,6 +128,7 @@ export const FormWrapper = ({
         hCaptchaSiteKey={hCaptchaSiteKey}
         // Used in Formik handleSubmit where there is no access to useGCFormsContext
         currentGroup={currentGroup}
+        setCaptchaFail={setCaptchaFail}
       >
         {currentForm}
       </Form>
