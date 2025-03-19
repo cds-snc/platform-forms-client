@@ -29,7 +29,6 @@ import { filterShownElements, filterValuesByShownElements } from "@lib/formConte
 import { formHasGroups } from "@lib/utils/form-builder/formHasGroups";
 import { showReviewPage } from "@lib/utils/form-builder/showReviewPage";
 import { useFormDelay } from "@lib/hooks/useFormDelayContext";
-
 import { FormActions } from "./FormActions";
 import { PrimaryFormButtons } from "./PrimaryFormButtons";
 import { FormCaptcha } from "@clientComponents/globals/FormCaptcha/FormCaptcha";
@@ -72,6 +71,10 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
       ? t("input-validation.file-submission")
       : props.status === "Error"
       ? t("server-error")
+      : props.status === "FormClosedError"
+      ? (language === "en"
+          ? props.formRecord.closedDetails?.messageEn
+          : props.formRecord.closedDetails?.messageFr) || t("form-closed-error")
       : null;
 
   //  If there are errors on the page, set focus the first error field
@@ -286,6 +289,8 @@ export const Form = withFormik<FormProps, Responses>({
       if (result.error) {
         if (result.error.message.includes("FileValidationResult")) {
           formikBag.setStatus("FileError");
+        } else if (result.error.name === "FormClosedError") {
+          formikBag.setStatus("FormClosedError");
         } else {
           formikBag.setStatus("Error");
         }

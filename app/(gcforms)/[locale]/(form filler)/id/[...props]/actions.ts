@@ -7,6 +7,8 @@ import { processFormData } from "./lib/processFormData";
 import { MissingFormDataError } from "./lib/exceptions";
 import { logMessage } from "@lib/logger";
 import { getPublicTemplateByID } from "@lib/templates";
+import { dateHasPast } from "@lib/utils";
+
 // import { validateResponses } from "@lib/validation/validation";
 
 // Public facing functions - they can be used by anyone who finds the associated server action identifer
@@ -23,6 +25,10 @@ export async function submitForm(
 
     if (!template) {
       throw new Error(`Could not find any form associated to identifier ${formId}`);
+    }
+
+    if (template.closingDate && dateHasPast(Date.parse(template.closingDate))) {
+      return { id: formId, error: { name: "FormClosedError", message: "Form is closed" } };
     }
 
     // const validateResponsesResult = await validateResponses(values, template);
