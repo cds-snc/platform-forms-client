@@ -8,6 +8,7 @@ import { getRenderedForm } from "@lib/formBuilder";
 import { FormProperties, PublicFormRecord } from "@lib/types";
 import { RichText } from "@clientComponents/forms";
 import { ClosingNotice } from "@clientComponents/forms/ClosingNotice/ClosingNotice";
+import { GcdsH1 } from "@serverComponents/globals/GcdsH1";
 
 import {
   FormServerErrorCodes,
@@ -159,7 +160,7 @@ export const Preview = ({
 
         {sent ? (
           <div className="gc-formview">
-            <h1 tabIndex={-1}>{t("title", { ns: "confirmation", lng: language })}</h1>
+            <GcdsH1 tabIndex={-1}>{t("title", { ns: "confirmation", lng: language })}</GcdsH1>
             <RichText {...getLocalizationAttribute()}>
               {formRecord.form.confirmation
                 ? formRecord.form.confirmation[
@@ -171,10 +172,10 @@ export const Preview = ({
         ) : (
           <div className="gc-formview">
             {closingDate && <ClosingNotice language={language} closingDate={closingDate} />}
-            <h1 className="mt-4">
+            <GcdsH1 className="mt-4">
               {formRecord.form[localizeField(LocalizedFormProperties.TITLE, language)] ||
                 t("gcFormsTest", { ns: "form-builder" })}
-            </h1>
+            </GcdsH1>
             {!hasHydrated && <Skeleton count={5} height={40} className="mb-4" />}
             {hasHydrated && (
               <GCFormsProvider formRecord={formRecord}>

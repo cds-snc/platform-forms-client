@@ -6,6 +6,7 @@ import { css } from "@lib/responseDownloadFormats/html/css/compiled";
 import { ReviewList } from "@clientComponents/forms/Review/ReviewList";
 import { InProgressBadge } from "./InProgressBadge";
 import { NextSteps } from "./NextSteps";
+import { GcdsH1 } from "@serverComponents/globals/GcdsH1";
 
 export const DownloadProgressHtml = ({
   language,
@@ -61,7 +62,7 @@ export const DownloadProgressHtml = ({
               <div className="mb-14">
                 <InProgressBadge language={language} />
               </div>
-              <h1>{formTitle}</h1>
+              <GcdsH1>{formTitle}</GcdsH1>
               <NextSteps language={language} host={host || ""} formId={formId} />
               <div className="mb-10" data-testid="review-list">
                 <ReviewList
