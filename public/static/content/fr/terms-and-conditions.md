@@ -13,7 +13,7 @@ Le ministère ou l’organisme avec lequel vous communiquez protège également 
 
 Les renseignements personnels sont recueillis conformément à la [Loi sur la protection des renseignements personnels](https://laws.justice.gc.ca/fra/lois/p-21/index.html).
 
-### Nous utilisons hCaptcha pour protéger la sécurité des formulaires
+### hCaptcha pour protéger la sécurité des formulaires
 
 L'utilisation de [hCaptcha](https://www.hcaptcha.com/) nous aide à détecter le spam, les abus automatisés et les menaces des robots. Apprenez-en plus sur la [politique de confidentialité](https://www.hcaptcha.com/privacy) et les [conditions d'utilisation](https://www.hcaptcha.com/terms) de ce fournisseur de services tiers.
 
@@ -120,4 +120,4 @@ Bon nombre de plateformes de médias sociaux offrent plusieurs choix de langues 
 
 
 
-**Dernière mise à jour :** 18 mars 2025
+**Dernière mise à jour :** 19 mars 2025
