@@ -4,6 +4,11 @@ import { BackButtonGroup } from "../BackButtonGroup/BackButtonGroup";
 import { SubmitButton } from "./SubmitButton";
 import { InnerFormProps } from "./types";
 import { tryFocusOnPageLoad } from "@lib/client/clientHelpers";
+import { FormStatus } from "@gcforms/types";
+
+const isFormClosed = (status: FormStatus) => {
+  return status === FormStatus.FORM_CLOSED_ERROR;
+};
 
 export const PrimaryFormButtons = ({
   isGroupsCheck,
@@ -46,13 +51,23 @@ export const PrimaryFormButtons = ({
                     onClick={() => tryFocusOnPageLoad("h2")}
                   />
                 )}
-                <SubmitButton getFormDelay={getFormDelay} formID={formId} formTitle={formTitle} />
+                <SubmitButton
+                  disabled={isFormClosed(props.status)}
+                  getFormDelay={getFormDelay}
+                  formID={formId}
+                  formTitle={formTitle}
+                />
               </div>
             );
           },
         })
       ) : (
-        <SubmitButton getFormDelay={getFormDelay} formID={formId} formTitle={formTitle} />
+        <SubmitButton
+          disabled={props.status === FormStatus.FORM_CLOSED_ERROR}
+          getFormDelay={getFormDelay}
+          formID={formId}
+          formTitle={formTitle}
+        />
       )}
     </div>
   );

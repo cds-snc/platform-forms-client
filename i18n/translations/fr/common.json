@@ -72,6 +72,7 @@
   "file-upload-no-file-selected": "Aucun fichier actuellement sélectionné",
   "dropdown-initial-option-text": "Pas de sélection",
   "server-error": "Désolé, il semble qu'un problème est survenu lors de l'envoi de votre formulaire. Veuillez réessayer plus tard.",
+  "form-closed-error": "Ce formulaire est fermé et n'accepte plus de soumissions. Réinitialisez cette page pour un message plus spécifique par rapport à la fermeture du formulaire.",
   "title-full": "Formulaires GC - GC Forms",
   "title": "Formulaires GC",
   "loading": "Nous traitons votre soumission de formulaire. Veuillez patienter.",
