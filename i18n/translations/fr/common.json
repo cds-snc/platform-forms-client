@@ -225,8 +225,8 @@
     "resumeBtn": "Poursuivre le formulaire",
     "formRestored": "Vos réponses jusqu'à présent ont été ajoutées au formulaire.",
     "resumeUploadError": {
-      "title": "Quelque chose a mal tourné",
-      "description": "Quelque chose a mal tourné en téléversant les réponses. Réessayez plus tard ou recommencez le formulaire.",
+      "title": "Problème de téléversement",
+      "description": "Essayez de téléverser à nouveau le fichier ou recommencez un nouveau formulaire et copiez-collez vos réponses du fichier.",
       "errorCode": "Code d'erreur : {{code}}"
     },
     "resumePage": {
@@ -293,7 +293,7 @@
         "submissionId": "Numéro de référence : {{submissionId}}"
       },
       "generateHtmlError": {
-        "description": "Une erreur s'est produite lors du téléchargement du fichier. Veuillez réessayer."
+        "description": "Il y a eu un problème lors de l'enregistrement de vos réponses au formulaire. Le fichier n'a pas pu être téléchargé. Veuillez réessayer plus tard."
       }
     }
   },

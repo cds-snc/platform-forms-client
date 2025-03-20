@@ -223,10 +223,10 @@
   "saveAndResume": {
     "saveBtn": "Save to device",
     "resumeBtn": "Resume form",
-    "formRestored": "Your answers so far were added to the form.",
+    "formRestored": "Your answers were loaded to the form.",
     "resumeUploadError": {
-      "title": "Something went wrong",
-      "description": "There was a problem uploading the answers. Try again later, or restart the form.",
+      "title": "Problem loading answers",
+      "description": "Try uploading the file again or restart a new form and copy-paste your answers from the file.",
       "errorCode": "Error code: {{code}}"
     },
     "resumePage": {
@@ -293,7 +293,7 @@
         "submissionId": "Submission ID: {{submissionId}}"
       },
       "generateHtmlError": {
-        "description": "There was an error downloading the file. Please try again."
+        "description": "There was a problem saving your form answers. The file could not be downloaded. Try again later."
       }
     }
   },
