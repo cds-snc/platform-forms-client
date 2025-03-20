@@ -1,0 +1,84 @@
+name: Rainbow deployment
+
+inputs:
+  deployment-process-identifier:
+    required: true
+  legacy-version-git-ref:
+    required: true
+  ecr-registry-uri:
+    required: true
+  ecr-registry-form-viewer-repository-name:
+    required: true
+  cognito-app-client-id:
+    required: true
+  cognito-user-pool-id:
+    required: true
+  load-balancer-listener-arn:
+    required: true
+  forms-lambda-client-role-arn:
+    required: true
+  forms-lambda-client-subnet-ids:
+    required: true
+  forms-lambda-client-security-group-ids:
+    required: true
+  hostname:
+    required: true
+
+runs:
+  using: "composite"
+  steps:
+    - name: Build Rainbow Lambda image
+      shell: bash
+      run: |
+        docker build -t rainbow \
+          -f Dockerfile.rainbow \
+          --build-arg BASE_IMAGE=${{ inputs.ecr-registry-uri }}/${{ inputs.ecr-registry-form-viewer-repository-name }}:${{ inputs.legacy-version-git-ref }} \
+          --build-arg COGNITO_APP_CLIENT_ID=${{ inputs.cognito-app-client-id }} \
+          --build-arg COGNITO_USER_POOL_ID=${{ inputs.cognito-user-pool-id }} .
+
+    - name: Tag and Push Rainbow Lambda image
+      shell: bash
+      run: |
+        docker tag rainbow ${{ inputs.ecr-registry-uri }}/forms_app_legacy:${{ inputs.deployment-process-identifier }}
+        docker push ${{ inputs.ecr-registry-uri }}/forms_app_legacy:${{ inputs.deployment-process-identifier }}
+
+    - name: Rainbow magic
+      shell: bash
+      run: |
+        ./bin/bump-load-balancer-listener-rainbow-rules-priority.sh ${{ inputs.load-balancer-listener-arn }} > /dev/null 2>&1
+
+        lambdaArn=$(aws lambda create-function \
+          --function-name rainbow-${{ inputs.deployment-process-identifier }} \
+          --package-type Image \
+          --role ${{ inputs.forms-lambda-client-role-arn }} \
+          --timeout 15 \
+          --memory-size 2048 \
+          --code ImageUri=${{ inputs.ecr-registry-uri }}/forms_app_legacy:${{ inputs.deployment-process-identifier }} \
+          --vpc-config SubnetIds=${{ inputs.forms-lambda-client-subnet-ids }},SecurityGroupIds=${{ inputs.forms-lambda-client-security-group-ids }} | jq -r ".FunctionArn")
+
+        aws lambda wait function-active --function-name rainbow-${{ inputs.deployment-process-identifier }}
+
+        ./bin/set-rainbow-lambda-env-vars.sh rainbow-${{ inputs.deployment-process-identifier }} > /dev/null 2>&1
+
+        aws lambda add-permission \
+          --function-name rainbow-${{ inputs.deployment-process-identifier }} \
+          --statement-id rainbow-elb-invoke-permission \
+          --principal elasticloadbalancing.amazonaws.com \
+          --action lambda:InvokeFunction > /dev/null 2>&1
+
+        editableDeploymentProcessIdentifier=${{ inputs.deployment-process-identifier }}
+
+        targetGroupArn=$(aws elbv2 create-target-group \
+          --name rainbow-${editableDeploymentProcessIdentifier:0:24} \
+          --target-type lambda | jq -r ".TargetGroups[0].TargetGroupArn")
+
+        aws elbv2 register-targets \
+          --target-group-arn $targetGroupArn \
+          --targets Id=$lambdaArn
+
+        aws elbv2 create-rule \
+          --listener-arn ${{ inputs.load-balancer-listener-arn }} \
+          --conditions "[{\"Field\":\"host-header\",\"Values\":[\"${{ inputs.hostname }}\"]},{\"Field\":\"http-header\",\"HttpHeaderConfig\":{\"HttpHeaderName\":\"x-deployment-id\",\"Values\":[\"${{ inputs.legacy-version-git-ref }}\"]}}]" \
+          --priority 1 \
+          --actions Type=forward,TargetGroupArn=$targetGroupArn \
+          --tags Key=Name,Value=rainbow-${{ inputs.deployment-process-identifier }} > /dev/null 2>&1
