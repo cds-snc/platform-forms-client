@@ -5,6 +5,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.36.1](https://github.com/cds-snc/platform-forms-client/compare/v3.36.0...v3.36.1) (2025-03-20)
+
+
+### Miscellaneous Chores
+
+* content updates for resume form ([#5247](https://github.com/cds-snc/platform-forms-client/issues/5247)) ([e4a9d31](https://github.com/cds-snc/platform-forms-client/commit/e4a9d31070545f2ea7c711380b5f083499e81e30))
+
 ## [3.36.0](https://github.com/cds-snc/platform-forms-client/compare/v3.35.2...v3.36.0) (2025-03-20)
 
 
