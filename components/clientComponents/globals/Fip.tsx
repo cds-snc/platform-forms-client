@@ -15,7 +15,10 @@ export const Fip = ({
 }) => {
   const brand = formRecord?.form ? formRecord.form.brand : null;
   return (
-    <div data-testid="fip" className={cn("gc-fip", "my-20 py-0 px-[4rem] laptop:px-32", className)}>
+    <div
+      data-testid="fip"
+      className={cn("gc-fip", "my-20 py-0 px-[1rem] tablet:px-[4rem] laptop:px-32", className)}
+    >
       <div className="canada-flag">
         <Brand brand={brand} />
       </div>
