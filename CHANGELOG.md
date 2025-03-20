@@ -5,6 +5,48 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.36.0](https://github.com/cds-snc/platform-forms-client/compare/v3.35.2...v3.36.0) (2025-03-20)
+
+
+### Features
+
+* add status description to GC Notify callback warning log ([#5223](https://github.com/cds-snc/platform-forms-client/issues/5223)) ([81d370f](https://github.com/cds-snc/platform-forms-client/commit/81d370f878e96b1288482a698e201f75bbcb40c9))
+
+
+### Bug Fixes
+
+* **deps:** update dependency axios to v1.8.2 [security] ([#5216](https://github.com/cds-snc/platform-forms-client/issues/5216)) ([fb2dca0](https://github.com/cds-snc/platform-forms-client/commit/fb2dca048a2a50cb332ea86a98c863d81115e4a0))
+* fix wrapping for share menu when no name ([#5230](https://github.com/cds-snc/platform-forms-client/issues/5230)) ([096b14b](https://github.com/cds-snc/platform-forms-client/commit/096b14bbe4abcf4bb16f398ef446cb1a6b1c645b))
+* Prevent submissions to closed forms ([#5251](https://github.com/cds-snc/platform-forms-client/issues/5251)) ([c506429](https://github.com/cds-snc/platform-forms-client/commit/c506429569b516e5942de3e83a4129209044bfd6))
+
+
+### Miscellaneous Chores
+
+* Add a small margin to the create new form button. ([#5229](https://github.com/cds-snc/platform-forms-client/issues/5229)) ([98e79ee](https://github.com/cds-snc/platform-forms-client/commit/98e79ee2bfe7aa4fe7b44f99dfe4a70ec1f7b740))
+* Add focusable to form error block ([#5264](https://github.com/cds-snc/platform-forms-client/issues/5264)) ([b8a7a91](https://github.com/cds-snc/platform-forms-client/commit/b8a7a9145a11e85bf12dfc3e28b57d6f07055c74))
+* adds caretaker feature flag ([#5256](https://github.com/cds-snc/platform-forms-client/issues/5256)) ([5fa26dd](https://github.com/cds-snc/platform-forms-client/commit/5fa26ddfc1fa73f1f5bc311d6e969d11a59660a0))
+* Bump Next JS 15.2.1 ([#5218](https://github.com/cds-snc/platform-forms-client/issues/5218)) ([fc344d0](https://github.com/cds-snc/platform-forms-client/commit/fc344d025903a79eae5947864ada27b418a3e35e))
+* captcha fail page update ([#5243](https://github.com/cds-snc/platform-forms-client/issues/5243)) ([ee79e84](https://github.com/cds-snc/platform-forms-client/commit/ee79e848f94c20c6c2d6d374591bca97a2563c2b))
+* content tweaks ([#5237](https://github.com/cds-snc/platform-forms-client/issues/5237)) ([f22e1c3](https://github.com/cds-snc/platform-forms-client/commit/f22e1c3ced4ff67d9e3152ed0a5f0994685ae23b))
+* **deps:** lock file maintenance ([#5214](https://github.com/cds-snc/platform-forms-client/issues/5214)) ([69ae64c](https://github.com/cds-snc/platform-forms-client/commit/69ae64c488813a82ef17caea6c1ca586d53b059b))
+* **deps:** lock file maintenance ([#5232](https://github.com/cds-snc/platform-forms-client/issues/5232)) ([f8aa0c7](https://github.com/cds-snc/platform-forms-client/commit/f8aa0c7148700adb8f1e0fbe7c5e6f1f4f4f3b95))
+* **deps:** update all non-major docker images ([#5213](https://github.com/cds-snc/platform-forms-client/issues/5213)) ([b0a7a72](https://github.com/cds-snc/platform-forms-client/commit/b0a7a728ab9eb2c100e8d7a9885dcc448d614c2f))
+* **deps:** update all non-major github action dependencies ([#5212](https://github.com/cds-snc/platform-forms-client/issues/5212)) ([95f4538](https://github.com/cds-snc/platform-forms-client/commit/95f45385a828057970893ff9e3cb4fd2b29f3ba0))
+* **deps:** update all non-major github action dependencies ([#5231](https://github.com/cds-snc/platform-forms-client/issues/5231)) ([99f022d](https://github.com/cds-snc/platform-forms-client/commit/99f022d75708fcc73d3145b832a741075c880fab))
+* Disable Spellcheck on Name/Address/Email/Telephone ([#5206](https://github.com/cds-snc/platform-forms-client/issues/5206)) ([fa295e2](https://github.com/cds-snc/platform-forms-client/commit/fa295e2e906efb3f09a73712d557ffc0a35e5ea1))
+* hCAPTCHA updates ([#5169](https://github.com/cds-snc/platform-forms-client/issues/5169)) ([1d47247](https://github.com/cds-snc/platform-forms-client/commit/1d47247c765b104fc73e71d33d3facd2ec20cb83))
+* move closed icon ([#5249](https://github.com/cds-snc/platform-forms-client/issues/5249)) ([9a963af](https://github.com/cds-snc/platform-forms-client/commit/9a963afc0c5aa459d7d687d4c403c0b160ed798c))
+* Privacy and Terms for hCaptcha and Data Lake ([#5220](https://github.com/cds-snc/platform-forms-client/issues/5220)) ([5f53fb7](https://github.com/cds-snc/platform-forms-client/commit/5f53fb727d2f6fd1f71ed420d068d2348f867266))
+* Push the z-Index for tooltips up to the top, so they aren't cut off. ([#5226](https://github.com/cds-snc/platform-forms-client/issues/5226)) ([6831ed3](https://github.com/cds-snc/platform-forms-client/commit/6831ed3120d4a7e1a129d020ca7d0f09cf9e6402))
+* remove invalid "hint text" from richtext fields in translate page. ([#5224](https://github.com/cds-snc/platform-forms-client/issues/5224)) ([f50e3c5](https://github.com/cds-snc/platform-forms-client/commit/f50e3c510355d470b2cb4d3e89e46c30cf045610))
+* small opitmizations ([#5228](https://github.com/cds-snc/platform-forms-client/issues/5228)) ([142d1d4](https://github.com/cds-snc/platform-forms-client/commit/142d1d4468dfdd649eae0874ce3c499cda29cedd))
+* synced file(s) with cds-snc/site-reliability-engineering ([#5227](https://github.com/cds-snc/platform-forms-client/issues/5227)) ([429ef77](https://github.com/cds-snc/platform-forms-client/commit/429ef7702e2a009259169c5d8093b794f1cfa4c3))
+* synced local '.github/workflows/ossf-scorecard.yml' with remote 'tools/sre_file_sync/ossf-scorecard.yml' ([429ef77](https://github.com/cds-snc/platform-forms-client/commit/429ef7702e2a009259169c5d8093b794f1cfa4c3))
+* update lock ([#5221](https://github.com/cds-snc/platform-forms-client/issues/5221)) ([1e16b15](https://github.com/cds-snc/platform-forms-client/commit/1e16b151ad64160f5b412e3221041e436ed549dc))
+* update progress html content ([#5245](https://github.com/cds-snc/platform-forms-client/issues/5245)) ([d523c25](https://github.com/cds-snc/platform-forms-client/commit/d523c25afa9f5c941460eaac66a3b5e3a2c2ff57))
+* Update styles for resume page ([#5239](https://github.com/cds-snc/platform-forms-client/issues/5239)) ([bee36c2](https://github.com/cds-snc/platform-forms-client/commit/bee36c2301b155cc56785a3510bb6252f7bfb59a))
+* Updated messaging for invitations dialog ([#5240](https://github.com/cds-snc/platform-forms-client/issues/5240)) ([7836afe](https://github.com/cds-snc/platform-forms-client/commit/7836afe305f28ce2c7c1f6cd688fdcf99afb52b6))
+
 ## [3.35.2](https://github.com/cds-snc/platform-forms-client/compare/v3.35.1...v3.35.2) (2025-03-06)
 
 
