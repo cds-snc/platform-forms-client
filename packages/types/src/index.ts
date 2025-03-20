@@ -16,13 +16,13 @@ import {
   FormProperties,
   AddressComponents,
   ClosedDetails,
+  FormStatus,
 } from "./form-types";
 
 export type { Response, Responses, FileInputResponse } from "./form-response-types";
 
-export { type dynamicRowType };
+export type { dynamicRowType };
 export type { FormElement };
-export { FormElementTypes };
 export type { Group };
 export type { ElementProperties };
 export type { PropertyChoices };
@@ -37,3 +37,6 @@ export type { ValidationProperties };
 export type { FormProperties };
 export type { AddressComponents };
 export type { ClosedDetails };
+
+export { FormElementTypes };
+export { FormStatus };

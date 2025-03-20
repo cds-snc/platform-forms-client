@@ -8,6 +8,7 @@ import { MissingFormDataError } from "./lib/exceptions";
 import { logMessage } from "@lib/logger";
 import { checkIfClosed, getPublicTemplateByID } from "@lib/templates";
 import { dateHasPast } from "@lib/utils";
+import { FormStatus } from "@gcforms/types";
 
 // import { validateResponses } from "@lib/validation/validation";
 
@@ -38,7 +39,10 @@ export async function submitForm(
     }
 
     if (template.closingDate && dateHasPast(Date.parse(template.closingDate))) {
-      return { id: formId, error: { name: "FormClosedError", message: "Form is closed" } };
+      return {
+        id: formId,
+        error: { name: FormStatus.FORM_CLOSED_ERROR, message: "Form is closed" },
+      };
     }
 
     // const validateResponsesResult = await validateResponses(values, template);

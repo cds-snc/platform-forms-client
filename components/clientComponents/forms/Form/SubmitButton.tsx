@@ -10,8 +10,14 @@ interface SubmitButtonProps {
   getFormDelay: () => number;
   formID: string;
   formTitle: string;
+  disabled: boolean;
 }
-export const SubmitButton: React.FC<SubmitButtonProps> = ({ getFormDelay, formID, formTitle }) => {
+export const SubmitButton: React.FC<SubmitButtonProps> = ({
+  getFormDelay,
+  formID,
+  formTitle,
+  disabled,
+}) => {
   const { t } = useTranslation();
   const [formTimerState, { startTimer, checkTimer, disableTimer }] = useFormTimer();
   const [submitTooEarly, setSubmitTooEarly] = useState(false);
@@ -89,6 +95,7 @@ export const SubmitButton: React.FC<SubmitButtonProps> = ({ getFormDelay, formID
       <Button
         id="form-submit-button"
         type="submit"
+        disabled={disabled}
         onClick={(e) => {
           if (formTimerEnabled) checkTimer();
           screenReaderRemainingTime.current = formTimerState.remainingTime;
