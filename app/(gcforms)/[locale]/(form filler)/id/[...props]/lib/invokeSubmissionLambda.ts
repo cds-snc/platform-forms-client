@@ -32,7 +32,7 @@ export const invokeSubmissionLambda = async (
 
     const lambdaProcessingResult = JSON.parse(
       lambdaInvokeResponse.Payload?.transformToString() ?? "{}"
-    ) as { status: boolean; submissionId: string };
+    ) as { status?: boolean; submissionId?: string };
 
     if (lambdaProcessingResult.status === true && lambdaProcessingResult.submissionId) {
       return lambdaProcessingResult.submissionId;
