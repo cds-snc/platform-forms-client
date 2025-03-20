@@ -4,35 +4,49 @@ import { RichTextPlugin } from "@lexical/react/LexicalRichTextPlugin";
 import { LexicalErrorBoundary } from "@lexical/react/LexicalErrorBoundary";
 import { HistoryPlugin } from "@lexical/react/LexicalHistoryPlugin";
 import { AutoFocusPlugin } from "@lexical/react/LexicalAutoFocusPlugin";
-import { logMessage } from "@lib/logger";
+import { HeadingNode, QuoteNode } from "@lexical/rich-text";
+import { ListItemNode, ListNode } from "@lexical/list";
+import { AutoLinkNode, LinkNode } from "@lexical/link";
+import { LinkPlugin } from "@lexical/react/LexicalLinkPlugin";
+import { ListPlugin } from "@lexical/react/LexicalListPlugin";
+import ToolbarPlugin from "./plugins/ToolbarPlugin";
+import TreeViewPlugin from "./plugins/TreeViewPlugin";
+import basicTheme from "./themes/BasicTheme";
 
-const theme = {};
+function Placeholder() {
+  return <div className="editor-placeholder">Enter some rich text...</div>;
+}
 
-const onError = (error: Error) => {
-  // @TODO: probably shouldn't use this in a package
-  logMessage.info("error", error.message);
+const editorConfig = {
+  theme: basicTheme,
+
+  onError(error: Error) {
+    throw error;
+  },
+
+  nodes: [HeadingNode, ListNode, ListItemNode, QuoteNode, AutoLinkNode, LinkNode],
+
+  namespace: "MyEditorNamespace",
 };
 
 export const Editor = () => {
-  const initialConfig = {
-    namespace: "MyEditor",
-    theme,
-    onError,
-  };
-
   return (
-    <LexicalComposer initialConfig={initialConfig}>
-      <RichTextPlugin
-        contentEditable={
-          <ContentEditable
-            aria-placeholder={"Enter some text..."}
-            placeholder={<div>Enter some text...</div>}
+    <LexicalComposer initialConfig={editorConfig}>
+      <div className="editor-container">
+        <ToolbarPlugin />
+        <div className="editor-inner">
+          <RichTextPlugin
+            contentEditable={<ContentEditable className="editor-input" />}
+            placeholder={<Placeholder />}
+            ErrorBoundary={LexicalErrorBoundary}
           />
-        }
-        ErrorBoundary={LexicalErrorBoundary}
-      />
-      <HistoryPlugin />
-      <AutoFocusPlugin />
+          <HistoryPlugin />
+          <TreeViewPlugin />
+          <AutoFocusPlugin />
+          <ListPlugin />
+          <LinkPlugin />
+        </div>
+      </div>
     </LexicalComposer>
   );
 };
