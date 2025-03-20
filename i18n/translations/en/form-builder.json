@@ -819,15 +819,15 @@
   },
   "loggedOutTab": {
     "publish": {
-      "title": "You cannot publish",
+      "title": "You can't publish yet",
       "text1": "To publish this form,"
     },
     "responses": {
-      "title": "You cannot access responses",
+      "title": "You can't access responses yet",
       "text1": "To access form responses,"
     },
     "settings": {
-      "title": "You cannot change settings",
+      "title": "You can't change settings yet",
       "text1": "To change the settings of this form,"
     },
     "text2": "sign in to your account",

@@ -819,15 +819,15 @@
   },
   "loggedOutTab": {
     "publish": {
-      "title": "Vous ne pouvez pas publier",
+      "title": "Vous ne pouvez pas encore publier",
       "text1": "Pour publier ce formulaire,"
     },
     "responses": {
-      "title": "Vous ne pouvez pas accéder aux réponses",
+      "title": "Vous ne pouvez pas encore accéder aux réponses",
       "text1": "Pour accéder aux réponses du formulaire,"
     },
     "settings": {
-      "title": "Vous ne pouvez pas modifier les paramètres",
+      "title": "Vous ne pouvez pas encore modifier les paramètres",
       "text1": "Pour modifier les paramètres de ce formulaire,"
     },
     "text2": "connectez-vous",
