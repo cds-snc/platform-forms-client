@@ -63,7 +63,7 @@ export const PrimaryFormButtons = ({
         })
       ) : (
         <SubmitButton
-          disabled={props.status === FormStatus.FORM_CLOSED_ERROR}
+          disabled={isFormClosed(props.status)}
           getFormDelay={getFormDelay}
           formID={formId}
           formTitle={formTitle}

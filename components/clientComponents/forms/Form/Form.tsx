@@ -143,6 +143,7 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
           validation={true}
           id={errorId}
           tabIndex={0}
+          focussable={true}
         >
           {errorList}
         </Alert>
