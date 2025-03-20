@@ -13,6 +13,16 @@ import { dateHasPast } from "@lib/utils";
 
 // Public facing functions - they can be used by anyone who finds the associated server action identifer
 
+export async function isFormClosed(formId: string): Promise<boolean> {
+  const template = await getPublicTemplateByID(formId);
+
+  if (!template) {
+    throw new Error(`Could not find any form associated to identifier ${formId}`);
+  }
+
+  return (template.closingDate && dateHasPast(Date.parse(template.closingDate))) || false;
+}
+
 export async function submitForm(
   values: Responses,
   language: string,
