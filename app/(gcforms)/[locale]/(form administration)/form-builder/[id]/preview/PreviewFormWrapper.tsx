@@ -1,7 +1,7 @@
 "use client";
 import { useGCFormsContext } from "@lib/hooks/useGCFormContext";
 import { Form } from "@clientComponents/forms/Form/Form";
-import { NextButton } from "@clientComponents/forms";
+import { NextButton } from "@clientComponents/forms/NextButton/NextButton";
 import { tryFocusOnPageLoad } from "@lib/client/clientHelpers";
 import { BackButton } from "./BackButton";
 import { Button } from "@clientComponents/globals";
