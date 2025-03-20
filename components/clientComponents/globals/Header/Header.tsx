@@ -11,6 +11,7 @@ import { ShareDropdown } from "./ShareDropdown";
 import LanguageToggle from "./LanguageToggle";
 import { YourAccountDropdown } from "./YourAccountDropdown";
 import Markdown from "markdown-to-jsx";
+import { useFeatureFlags } from "@lib/hooks/useFeatureFlags";
 
 type HeaderParams = {
   context?: "admin" | "formBuilder" | "default";
@@ -29,9 +30,11 @@ export const Header = ({ context = "default", className }: HeaderParams) => {
   const [bannerType, setBannerType] = useState("");
   const [bannerMessage, setBannerMessage] = useState("");
 
+  const { getFlag } = useFeatureFlags();
+
   useEffect(() => {
     async function fetchBannerData() {
-      const isEnabled = t("campaignBanner.enabled") === "true";
+      const isEnabled = getFlag("caretakerPeriod");
       setBannerData(isEnabled);
       setBannerMessage(t("campaignBanner.message3"));
       setBannerType(t("campaignBanner.type3"));
