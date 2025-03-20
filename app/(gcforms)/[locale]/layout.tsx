@@ -12,7 +12,7 @@ export default async function Layout({ children }: { children: React.ReactNode }
     FeatureFlags.saveAndResume,
     FeatureFlags.formTimer,
     FeatureFlags.hCaptcha,
-    FeatureFlags.careTakerPeriod,
+    FeatureFlags.caretakerPeriod,
   ]);
 
   return (

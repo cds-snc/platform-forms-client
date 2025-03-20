@@ -34,8 +34,8 @@
       "title": "hCaptcha",
       "description": "Activer la prévention anti-spam hCaptcha"
     },
-    "careTakerPeriod": {
-      "title": "careTakerPeriod",
+    "caretakerPeriod": {
+      "title": "caretakerPeriod",
       "description": "Activer l'avertissement de période de garde pour qu'il soit visible"
     }
   }
