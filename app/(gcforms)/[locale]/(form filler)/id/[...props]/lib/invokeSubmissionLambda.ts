@@ -1,6 +1,6 @@
 import { Responses } from "@lib/types";
 import { InvokeCommand } from "@aws-sdk/client-lambda";
-import { SubmissionLambdaInvokationError } from "./exceptions";
+import { SubmissionLambdaInvocationError } from "./exceptions";
 import { lambdaClient } from "@lib/integration/awsServicesConnector";
 import { logMessage } from "@lib/logger";
 
@@ -44,6 +44,6 @@ export const invokeSubmissionLambda = async (
   } catch (error) {
     // Logging error as info for debugging purpose
     logMessage.info(error);
-    throw new SubmissionLambdaInvokationError((error as Error).message);
+    throw new SubmissionLambdaInvocationError((error as Error).message);
   }
 };
