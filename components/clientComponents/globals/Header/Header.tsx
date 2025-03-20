@@ -12,6 +12,7 @@ import LanguageToggle from "./LanguageToggle";
 import { YourAccountDropdown } from "./YourAccountDropdown";
 import Markdown from "markdown-to-jsx";
 import { useFeatureFlags } from "@lib/hooks/useFeatureFlags";
+import { FeatureFlags } from "@lib/cache/types";
 
 type HeaderParams = {
   context?: "admin" | "formBuilder" | "default";
@@ -31,7 +32,7 @@ export const Header = ({ context = "default", className }: HeaderParams) => {
   const [bannerMessage, setBannerMessage] = useState("");
 
   const { getFlag } = useFeatureFlags();
-  const isEnabled = getFlag("caretakerPeriod");
+  const isEnabled = getFlag(FeatureFlags.caretakerPeriod);
 
   useEffect(() => {
     async function fetchBannerData() {
