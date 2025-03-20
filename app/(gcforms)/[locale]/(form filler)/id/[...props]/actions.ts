@@ -6,7 +6,7 @@ import { parseRequestData } from "./lib/parseRequestData";
 import { processFormData } from "./lib/processFormData";
 import { MissingFormDataError } from "./lib/exceptions";
 import { logMessage } from "@lib/logger";
-import { getPublicTemplateByID } from "@lib/templates";
+import { checkIfClosed, getPublicTemplateByID } from "@lib/templates";
 import { dateHasPast } from "@lib/utils";
 
 // import { validateResponses } from "@lib/validation/validation";
@@ -14,13 +14,13 @@ import { dateHasPast } from "@lib/utils";
 // Public facing functions - they can be used by anyone who finds the associated server action identifer
 
 export async function isFormClosed(formId: string): Promise<boolean> {
-  const template = await getPublicTemplateByID(formId);
+  const closedDetails = await checkIfClosed(formId);
 
-  if (!template) {
-    throw new Error(`Could not find any form associated to identifier ${formId}`);
+  if (closedDetails && closedDetails.isPastClosingDate) {
+    return true;
   }
 
-  return (template.closingDate && dateHasPast(Date.parse(template.closingDate))) || false;
+  return false;
 }
 
 export async function submitForm(
