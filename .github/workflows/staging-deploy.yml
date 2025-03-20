@@ -34,6 +34,12 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          fetch-depth: 0
+
+      - name: Get second to last release commit identifier
+        id: get-second-to-last-release
+        run: echo "ref=$(git rev-parse @~)" >> $GITHUB_OUTPUT
 
       - name: Configure AWS credentials using OIDC
         uses: aws-actions/configure-aws-credentials@ececac1a45f3b08a01d2dd070d28d111c5fe6722 # v4.1.0
@@ -44,8 +50,22 @@ jobs:
 
       - name: Login to Amazon ECR
         id: login-ecr
-        # v1 as of Jan 28 2021
-        uses: aws-actions/amazon-ecr-login@2d7337f0d3b7665fe22167bece86286325804cb6
+        uses: aws-actions/amazon-ecr-login@062b18b96a7aff071d4dc91bc00c4c1a7945b076 # v2.0.1
+
+      - name: Rainbow deployment
+        uses: ./.github/workflows/rainbow-deployment
+        with:
+          deployment-process-identifier: ${{ github.sha }}
+          legacy-version-git-ref: ${{ steps.get-second-to-last-release.outputs.ref }}
+          ecr-registry-uri: ${{ env.AWS_ACCOUNT_ID }}.dkr.ecr.ca-central-1.amazonaws.com
+          ecr-registry-form-viewer-repository-name: form_viewer_staging
+          cognito-app-client-id: ${{ secrets.STAGING_COGNITO_APP_CLIENT_ID }}
+          cognito-user-pool-id: ${{ secrets.STAGING_COGNITO_USER_POOL_ID }}
+          load-balancer-listener-arn: arn:aws:elasticloadbalancing:ca-central-1:${{ env.AWS_ACCOUNT_ID }}:listener/app/form-viewer/5e6bc2d9ab810b68/028e8eeeed9c3a34
+          forms-lambda-client-role-arn: arn:aws:iam::${{ env.AWS_ACCOUNT_ID }}:role/forms-lambda-client
+          forms-lambda-client-subnet-ids: ${{ secrets.FORMS_LAMBDA_CLIENT_SUBNET_IDS }}
+          forms-lambda-client-security-group-ids: ${{ secrets.FORMS_LAMBDA_CLIENT_SECURITY_GROUP_IDS }}
+          hostname: forms-staging.cdssandbox.xyz
 
       - name: Download Form Viewer task definition
         id: download-taskdef-form-viewer
