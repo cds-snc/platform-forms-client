@@ -31,16 +31,16 @@ export const Header = ({ context = "default", className }: HeaderParams) => {
   const [bannerMessage, setBannerMessage] = useState("");
 
   const { getFlag } = useFeatureFlags();
+  const isEnabled = getFlag("caretakerPeriod");
 
   useEffect(() => {
     async function fetchBannerData() {
-      const isEnabled = getFlag("caretakerPeriod");
       setBannerData(isEnabled);
       setBannerMessage(t("campaignBanner.message3"));
       setBannerType(t("campaignBanner.type3"));
     }
     fetchBannerData();
-  }, [t]);
+  }, [t, isEnabled]);
 
   const paddingTop = isBannerEnabled ? "py-0" : "py-2";
 
