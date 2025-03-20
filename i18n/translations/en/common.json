@@ -72,7 +72,7 @@
   "file-upload-no-file-selected": "No file currently selected",
   "dropdown-initial-option-text": "No selection",
   "server-error": "Sorry, it seems there was a problem submitting your form. Please try again later.",
-  "form-closed-error": "This form is closed and not accepting form submissions.",
+  "form-closed-error": "This form is closed and no longer accepting form submissions. Refresh this page for a more specific message about this closed form.",
   "title-full": "GC Forms - Formulaires GC",
   "title": "GC Forms",
   "loading": "We are processing your form submission. Please wait.",
