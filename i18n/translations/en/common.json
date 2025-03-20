@@ -231,7 +231,7 @@
     "resumePage": {
       "upload": {
         "title": "Load your answers",
-        "description": "Upload your saved form answers"
+        "description": "Upload your saved form in progress"
       },
       "restart": {
         "title": "Start blank form",
@@ -239,10 +239,10 @@
       },
       "readyToContinue": {
         "title": "Ready to continue?",
-        "intro": "To load these answers:",
-        "text1": "1. Save your form progress to your device",
-        "text2": "2. Find this file on your device",
-        "text3": "3. Upload it to load your answers"
+        "intro": "To continue the form you started:",
+        "text1": "1. Find the file saved on your device",
+        "text2": "2. Upload it to add your answers to the form",
+        "text3": "3. Continue filling out the form"
       }
     },
     "prompt": {
@@ -258,14 +258,14 @@
           "title": "To load these answers:",
           "text1": "1. Go to the online form",
           "text2": "2. Click resume",
-          "text3": "3. Find this file on your computer",
-          "text4": "4. Upload it to load your answers",
+          "text3": "3. Find this file on your device",
+          "text4": "4. Upload it to load your answers to the form",
           "link": "Go to the online form"
         }
       },
       "keepSafe": {
-        "title": "Keep your information safe",
-        "description": "Make sure to keep the file that contains your form answers in a secure spot on your device."
+        "title": "Keep your personal information safe",
+        "description": "Make sure to save this file containing form answers in a secure spot on your device."
       },
       "badge": {
         "text": "In progress",
