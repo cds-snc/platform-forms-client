@@ -3,5 +3,6 @@
   "apiAccess": false,
   "saveAndResume": false,
   "formTimer": false,
-  "hCaptcha": false
+  "hCaptcha": false,
+  "careTakerPeriod": false
 }

@@ -5,6 +5,7 @@ export const FeatureFlags = {
   saveAndResume: "saveAndResume",
   formTimer: "formTimer",
   hCaptcha: "hCaptcha",
+  careTakerPeriod: "careTakerPeriod",
 } as const;
 
 export type FeatureFlagKeys = keyof typeof FeatureFlags;

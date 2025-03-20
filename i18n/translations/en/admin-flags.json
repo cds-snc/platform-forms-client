@@ -33,6 +33,10 @@
     "hCaptcha": {
       "title": "hCaptcha",
       "description": "Enable hCaptcha spam prevention"
+    },
+    "careTakerPeriod": {
+      "title": "careTakerPeriod",
+      "description": "Enable care taker period warning to be visible"
     }
   }
 }
