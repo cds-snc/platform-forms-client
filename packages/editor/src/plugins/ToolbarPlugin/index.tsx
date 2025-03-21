@@ -26,17 +26,17 @@ import {
 } from "lexical";
 
 import { $wrapNodes } from "@lexical/selection";
-import { sanitizeUrl } from "../utils/url";
+import { sanitizeUrl } from "../../utils/url";
 // import { useEditorFocus } from "./useEditorFocus";
-import { getSelectedNode } from "../utils/getSelectedNode";
-import { ToolTip } from "../ToolTip";
-import { H2Icon } from "../icons/H2Icon";
-import { H3Icon } from "../icons/H3Icon";
-import { BoldIcon } from "../icons/BoldIcon";
-import { ItalicIcon } from "../icons/ItalicIcon";
-import { BulletListIcon } from "../icons/BulletListIcon";
-import { NumberedListIcon } from "../icons/NumberedListIcon";
-import { LinkIcon } from "../icons/LinkIcon";
+import { getSelectedNode } from "../../utils/getSelectedNode";
+import { ToolTip } from "../../ToolTip";
+import { H2Icon } from "../../icons/H2Icon";
+import { H3Icon } from "../../icons/H3Icon";
+import { BoldIcon } from "../../icons/BoldIcon";
+import { ItalicIcon } from "../../icons/ItalicIcon";
+import { BulletListIcon } from "../../icons/BulletListIcon";
+import { NumberedListIcon } from "../../icons/NumberedListIcon";
+import { LinkIcon } from "../../icons/LinkIcon";
 
 const blockTypeToBlockName = {
   bullet: "Bulleted List",
@@ -56,7 +56,7 @@ const blockTypeToBlockName = {
 const LowPriority = 1;
 type HeadingTagType = "h2" | "h3" | "h4" | "h5";
 
-export const ToolbarPlugin = ({ editorId }: { editorId: string }) => {
+export default function ToolbarPlugin({ editorId }: { editorId: string }) {
   const [editor] = useLexicalComposerContext();
   const [isBold, setIsBold] = useState(false);
   const [isItalic, setIsItalic] = useState(false);
@@ -391,4 +391,4 @@ export const ToolbarPlugin = ({ editorId }: { editorId: string }) => {
       </div>
     </>
   );
-};
+}
