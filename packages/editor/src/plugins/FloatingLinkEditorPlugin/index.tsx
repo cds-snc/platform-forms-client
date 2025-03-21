@@ -5,6 +5,8 @@
  * LICENSE file in the root directory of this source tree.
  *
  */
+import type { JSX } from "react";
+
 import "./index.css";
 
 import { $isAutoLinkNode, $isLinkNode, TOGGLE_LINK_COMMAND } from "@lexical/link";
@@ -19,6 +21,7 @@ import {
   COMMAND_PRIORITY_HIGH,
   COMMAND_PRIORITY_LOW,
   COMMAND_PRIORITY_NORMAL,
+  getDOMSelection,
   KEY_ESCAPE_COMMAND,
   KEY_TAB_COMMAND,
   LexicalEditor,
@@ -26,7 +29,7 @@ import {
   RangeSelection,
   SELECTION_CHANGE_COMMAND,
 } from "lexical";
-import { Dispatch, useCallback, useEffect, useRef, useState, type JSX } from "react";
+import { Dispatch, useCallback, useEffect, useRef, useState } from "react";
 import * as React from "react";
 import { createPortal } from "react-dom";
 
@@ -76,7 +79,7 @@ function FloatingLinkEditor({
       }
     }
     const editorElem = editorRef.current;
-    const nativeSelection = window.getSelection();
+    const nativeSelection = getDOMSelection(editor._window);
     const activeElement = document.activeElement;
 
     if (editorElem === null) {
@@ -92,25 +95,12 @@ function FloatingLinkEditor({
       rootElement.contains(nativeSelection.anchorNode) &&
       editor.isEditable()
     ) {
-      const domRange = nativeSelection.getRangeAt(0);
-      let rect;
-      if (nativeSelection.anchorNode === rootElement) {
-        let inner = rootElement;
-        while (inner.firstElementChild != null) {
-          inner = inner.firstElementChild as HTMLElement;
-        }
-        rect = inner.getBoundingClientRect();
-      } else if (domRange.startContainer.firstChild) {
-        // we've got the anchor node but we want the inner text node
-        // this happens when you backspace to the end of a link node
-        const child = domRange.startContainer.firstChild as HTMLElement;
-
-        rect = child.getBoundingClientRect();
-      } else {
-        rect = domRange.getBoundingClientRect();
+      const domRect: DOMRect | undefined =
+        nativeSelection.focusNode?.parentElement?.getBoundingClientRect();
+      if (domRect) {
+        domRect.y += 40;
+        setFloatingElemPositionForLinkEditor(domRect, editorElem, anchorElem);
       }
-
-      setFloatingElemPositionForLinkEditor(rect, editorElem, anchorElem);
       setLastSelection(selection);
     } else if (!activeElement || activeElement.className !== "link-input") {
       if (rootElement !== null) {
