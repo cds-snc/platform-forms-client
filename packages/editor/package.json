@@ -9,6 +9,12 @@
   "packageManager": "yarn@4.6.0",
   "dependencies": {
     "@lexical/react": "^0.28.0",
-    "lexical": "^0.28.0"
+    "lexical": "^0.28.0",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0"
+  },
+  "devDependencies": {
+    "@types/react": "^19",
+    "@types/react-dom": "^19"
   }
 }
