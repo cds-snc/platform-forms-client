@@ -30,12 +30,12 @@ import { Dispatch, useCallback, useEffect, useRef, useState, type JSX } from "re
 import * as React from "react";
 import { createPortal } from "react-dom";
 
-// import LinkPreview from "../../ui/LinkPreview";
 import { getSelectedNode } from "../../utils/getSelectedNode";
-import { setFloatingElemPositionForLinkEditor } from "../../utils/setFloatingElemPositionForLinkEditor";
+
 import { sanitizeUrl } from "../../utils/url";
-import { EditIcon } from "@serverComponents/icons/EditIcon";
-import { useTranslation } from "@i18n/client";
+import { setFloatingElemPositionForLinkEditor } from "../../utils/setFloatingElemPositionForLinkEditor";
+import { EditIcon } from "../../icons/EditIcon";
+import { useTranslation } from "@i18n/client"; // @TODO: inject i18n
 
 function FloatingLinkEditor({
   editor,
