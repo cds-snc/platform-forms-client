@@ -5,7 +5,7 @@ import createLruHandler from "@neshca/cache-handler/local-lru";
 // Once Next.js config supports TypeScript this file can be converted to `ts` module format
 
 CacheHandler.onCreation(async () => {
-  // Create an in-memory Least Recently Used cache for use in PR review environments
+  // Create an in-memory Least Recently Used cache to be used when running the web app in a Lambda function
   const localHandler = createLruHandler({
     maxItemsNumber: 25, // 25 items
     maxItemSizeBytes: 1024 * 1024 * 2, // 2 MB
