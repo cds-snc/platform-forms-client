@@ -42,16 +42,19 @@ function FloatingLinkEditor({
   isLink,
   setIsLink,
   anchorElem,
+  isLinkEditMode,
+  setIsLinkEditMode,
 }: {
   editor: LexicalEditor;
   isLink: boolean;
   setIsLink: Dispatch<boolean>;
   anchorElem: HTMLElement;
+  isLinkEditMode: boolean;
+  setIsLinkEditMode: Dispatch<boolean>;
 }): JSX.Element {
   const editorRef = useRef<HTMLDivElement | null>(null);
   const inputRef = useRef<HTMLInputElement>(null);
   const [linkUrl, setLinkUrl] = useState("");
-  const [isEditMode, setEditMode] = useState(false);
   const [lastSelection, setLastSelection] = useState<
     RangeSelection | NodeSelection | BaseSelection | null
   >(null);
@@ -114,7 +117,7 @@ function FloatingLinkEditor({
         setFloatingElemPosition(null, editorElem, anchorElem);
       }
       setLastSelection(null);
-      setEditMode(false);
+      setIsLinkEditMode(false);
       setLinkUrl("");
     }
 
@@ -208,14 +211,14 @@ function FloatingLinkEditor({
   }, [editor, updateLinkEditor]);
 
   useEffect(() => {
-    if (isEditMode && inputRef.current) {
+    if (isLinkEditMode && inputRef.current) {
       inputRef.current.focus();
     }
-  }, [isEditMode]);
+  }, [isLinkEditMode]);
 
   return (
     <div ref={editorRef} className="link-editor" data-testid="link-editor">
-      {isEditMode ? (
+      {isLinkEditMode ? (
         <input
           ref={inputRef}
           className="link-input"
@@ -230,7 +233,7 @@ function FloatingLinkEditor({
                 if (linkUrl !== "") {
                   editor.dispatchCommand(TOGGLE_LINK_COMMAND, sanitizeUrl(linkUrl));
                 }
-                setEditMode(false);
+                setIsLinkEditMode(false);
               }
             }
           }}
@@ -254,7 +257,7 @@ function FloatingLinkEditor({
               }}
               onClick={() => {
                 popped.current = true;
-                setEditMode(true);
+                setIsLinkEditMode(true);
               }}
             >
               {linkUrl}
@@ -270,7 +273,9 @@ function FloatingLinkEditor({
 
 function useFloatingLinkEditorToolbar(
   editor: LexicalEditor,
-  anchorElem: HTMLElement
+  anchorElem: HTMLElement,
+  isLinkEditMode: boolean,
+  setIsLinkEditMode: Dispatch<boolean>
 ): JSX.Element | null {
   const [activeEditor, setActiveEditor] = useState(editor);
   const [isLink, setIsLink] = useState(false);
@@ -310,6 +315,8 @@ function useFloatingLinkEditorToolbar(
           isLink={isLink}
           anchorElem={anchorElem}
           setIsLink={setIsLink}
+          isLinkEditMode={isLinkEditMode}
+          setIsLinkEditMode={setIsLinkEditMode}
         />,
         anchorElem
       )
@@ -318,9 +325,13 @@ function useFloatingLinkEditorToolbar(
 
 export default function FloatingLinkEditorPlugin({
   anchorElem = document.body,
+  isLinkEditMode,
+  setIsLinkEditMode,
 }: {
   anchorElem?: HTMLElement;
+  isLinkEditMode: boolean;
+  setIsLinkEditMode: Dispatch<boolean>;
 }): JSX.Element | null {
   const [editor] = useLexicalComposerContext();
-  return useFloatingLinkEditorToolbar(editor, anchorElem);
+  return useFloatingLinkEditorToolbar(editor, anchorElem, isLinkEditMode, setIsLinkEditMode);
 }
