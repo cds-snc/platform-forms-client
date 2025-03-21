@@ -40,17 +40,17 @@ export const SupportFlow = () => {
       </p>
       <div role="alert">{emailError && <InvalidEmail />}</div>
       <div className="mb-4">
-        <div className="inline-block rounded-sm border-1 border-solid  border-slate-500">
+        <div className="inline-block rounded-md border-1 border-solid  border-slate-500">
           <label
             htmlFor="support-flow-email"
-            className="inline-block h-full bg-slate-100 px-4 py-2"
+            className="inline-block h-full rounded-md border-l-1 bg-slate-100 px-4 py-2"
           >
             {t("supportFLowAddEmail.email")}
           </label>
           <input
             id="support-flow-email"
             name="support-flow-email"
-            className="w-96 border-l-1 border-solid  border-slate-500 p-2"
+            className="w-96 rounded-r-md border-x-1 border-l-slate-500  p-2"
             type="email"
             aria-describedby="support-flow-description"
           />
