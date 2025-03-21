@@ -1321,6 +1321,12 @@
     "title": "[fr]Support channels",
     "description": "[fr]Add contact information to your form in case there is an issue.",
     "email": "[fr]email",
-    "submit": "[fr]Save changes"
+    "submit": "[fr]Save changes",
+    "error": {
+      "validEmail": {
+        "title": "[fr]Please enter a valid email.",
+        "description": "[fr]Must be a Government of Canada email address."
+      }
+    }
   }
 }
