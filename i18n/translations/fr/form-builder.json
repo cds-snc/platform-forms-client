@@ -1316,5 +1316,11 @@
     },
     "a11yDescription": "Enregistrer la progression et reprendre le formulaire plus tard",
     "saveButton": "Enregistrer"
+  },
+  "supportFLowAddEmail": {
+    "title": "[fr]Support channels",
+    "description": "[fr]Add contact information to your form in case there is an issue.",
+    "email": "[fr]email",
+    "submit": "[fr]Save changes"
   }
 }

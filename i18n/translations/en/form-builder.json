@@ -1316,5 +1316,11 @@
     },
     "a11yDescription": "Save progress and resume form later",
     "saveButton": "Save"
+  },
+  "supportFLowAddEmail": {
+    "title": "Support channels",
+    "description": "Add contact information to your form in case there is an issue.",
+    "email": "email",
+    "submit": "Save changes"
   }
 }
