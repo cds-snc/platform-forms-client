@@ -32,7 +32,7 @@ import { createPortal } from "react-dom";
 
 // import LinkPreview from "../../ui/LinkPreview";
 import { getSelectedNode } from "../../utils/getSelectedNode";
-import { setFloatingElemPosition } from "../../utils/setFloatingElemPosition";
+import { setFloatingElemPositionForLinkEditor } from "../../utils/setFloatingElemPositionForLinkEditor";
 import { sanitizeUrl } from "../../utils/url";
 import { EditIcon } from "@serverComponents/icons/EditIcon";
 import { useTranslation } from "@i18n/client";
@@ -110,11 +110,11 @@ function FloatingLinkEditor({
         rect = domRange.getBoundingClientRect();
       }
 
-      setFloatingElemPosition(rect, editorElem, anchorElem);
+      setFloatingElemPositionForLinkEditor(rect, editorElem, anchorElem);
       setLastSelection(selection);
     } else if (!activeElement || activeElement.className !== "link-input") {
       if (rootElement !== null) {
-        setFloatingElemPosition(null, editorElem, anchorElem);
+        setFloatingElemPositionForLinkEditor(null, editorElem, anchorElem);
       }
       setLastSelection(null);
       setIsLinkEditMode(false);
