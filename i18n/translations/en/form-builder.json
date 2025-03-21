@@ -1322,6 +1322,7 @@
     "description": "Add contact information to your form in case there is an issue.",
     "email": "email",
     "submit": "Save changes",
+    "emailSaved": "Email saved",
     "error": {
       "validEmail": {
         "title": "Please enter a valid email.",

@@ -4,14 +4,20 @@ import { Button } from "@clientComponents/globals";
 import { isValidGovEmail } from "@lib/validation/validation";
 import { cn } from "@lib/utils";
 import { logMessage } from "@lib/logger";
+import {
+  MessageType,
+  ValidationMessage,
+} from "@clientComponents/globals/ValidationMessage/ValidationMessage";
 
 export const SupportFlow = () => {
   const { t } = useTranslation("form-builder");
   const [emailError, setEmailError] = useState(false);
+  const [emailSaved, setEmailSaved] = useState(false);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     setEmailError(false);
+    setEmailSaved(false);
 
     const formData = new FormData(e.target as HTMLFormElement);
     const email = formData.get("support-flow-email") as string;
@@ -21,16 +27,9 @@ export const SupportFlow = () => {
       return;
     }
 
-    logMessage.info(`SupportFlow email set to - TODO send to DB: ${email}`);
-  };
-
-  const InvalidEmail = () => {
-    return (
-      <div className="mb-4 w-3/5 bg-red-100 p-2 text-sm" id="support-flow-invalid-email">
-        <p>{t("supportFLowAddEmail.error.validEmail.title")}</p>
-        <p> {t("supportFLowAddEmail.error.validEmail.description")}</p>
-      </div>
-    );
+    // @TODO DB call to save email
+    logMessage.info(`SupportFlow email saved for email: ${email}`);
+    setEmailSaved(true);
   };
 
   const cssBorderDefault = "border-1 border-slate-500";
@@ -43,7 +42,14 @@ export const SupportFlow = () => {
       <p className="mb-4" id="support-flow-description">
         {t("supportFLowAddEmail.description")}
       </p>
-      <div role="alert">{emailError && <InvalidEmail />}</div>
+      <div className="mb-4">
+        <ValidationMessage show={emailError} messageType={MessageType.ERROR}>
+          {t("supportFLowAddEmail.error.validEmail.description")}
+        </ValidationMessage>
+        <ValidationMessage show={emailSaved} messageType={MessageType.SUCCESS}>
+          {t("supportFLowAddEmail.emailSaved")}
+        </ValidationMessage>
+      </div>
       <div className="mb-4">
         <label
           htmlFor="support-flow-email"
@@ -61,8 +67,6 @@ export const SupportFlow = () => {
           type="email"
           aria-describedby="support-flow-description"
           required
-          // aria-invalid={emailError}
-          // aria-errormessage="support-flow-invalid-email"
         />
       </div>
       <Button theme="secondary" type="submit">
