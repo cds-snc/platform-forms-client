@@ -10,6 +10,7 @@ import { ManageApiKey } from "./ManageApiKey";
 import { ThrottlingRate } from "./ThrottlingRate";
 import { useFormBuilderConfig } from "@lib/hooks/useFormBuilderConfig";
 import { SetSaveAndResume } from "./saveAndResume/SetSaveAndResume";
+import { SupportFlow } from "./SupportFlow";
 
 interface User {
   id: string;
@@ -58,6 +59,7 @@ export const ManageForm = (props: ManageFormProps) => {
   return (
     <>
       {canSetClosingDate && <SetClosingDate formId={id} closedDetails={closedDetails} />}
+      <SupportFlow />
       <SetSaveAndResume formId={id} isPublished={formRecord.isPublished} />
       <FormOwnership
         nonce={nonce}
