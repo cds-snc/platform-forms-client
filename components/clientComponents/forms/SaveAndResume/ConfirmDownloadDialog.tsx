@@ -16,31 +16,9 @@ import { getStartLabels } from "@lib/utils/form-builder/i18nHelpers";
 import { toast } from "@formBuilder/components/shared/Toast";
 
 import { generateDownloadHtml } from "@lib/saveAndResume/actions";
+import { downloadDataAsBlob } from "@lib/downloadDataAsBlob";
 
 export type handleCloseType = (value: boolean) => void;
-
-declare global {
-  interface Window {
-    showSaveFilePicker: ({}) => Promise<FileSystemFileHandle>;
-    createWritable: () => Promise<FileSystemWritableFileStream>;
-  }
-}
-
-async function promptToSave(fileName: string, data: string) {
-  const handle = await window?.showSaveFilePicker({
-    suggestedName: fileName,
-    types: [
-      {
-        description: "Form Progress (Save to resume later)",
-        accept: { "text/html": [".html"] },
-      },
-    ],
-  });
-
-  const writable = await handle.createWritable();
-  await writable.write(data);
-  await writable.close();
-}
 
 export const ConfirmDownloadDialog = ({
   open,
@@ -121,16 +99,8 @@ export const ConfirmDownloadDialog = ({
         throw new Error("Error generating download progress html");
       }
 
-      if (!window?.showSaveFilePicker) {
-        const downloadLink = document.createElement("a");
-        const blob = new Blob([html.data], { type: "text/html" });
-        downloadLink.href = URL.createObjectURL(blob);
-        downloadLink.download = fileName;
-        downloadLink.click();
-        URL.revokeObjectURL(downloadLink.href);
-      } else {
-        await promptToSave(fileName, html.data);
-      }
+      await downloadDataAsBlob(html.data, fileName, { "text/html": [".html"] });
+
       setSaving(false);
     } catch (error) {
       setSaving(false);
