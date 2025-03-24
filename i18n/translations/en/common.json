@@ -254,7 +254,7 @@
     },
     "prompt": {
       "title": "Save to device",
-      "description": "Save a copy of your form progress. Resume later by finding the file on your device and loading your answers. Protect your data by keeping the downloaded file in a safe place.",
+      "description": "1. Download a copy of your answers so far to keep filling out the form later.\n2. Next time, resume from where you left off by uploading your saved answers.\n\n \n\n **Protect your data by keeping the downloaded file in a safe place on a trusted device.**",
       "okay": "Save",
       "cancel": "Cancel"
     },
