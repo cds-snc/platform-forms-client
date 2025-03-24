@@ -42,7 +42,7 @@ export const SaveAndResume = ({
           theme="secondary"
           onClick={() => setDrawerOpen(true)}
         >
-          <>More...</>
+          <>{t("saveResponse.more")}...</>
         </Button>
       </span>
       <ConfirmDownloadDialog

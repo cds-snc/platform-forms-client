@@ -10,6 +10,7 @@ import { slugify } from "@lib/client/clientHelpers";
 import { getStartLabels } from "@lib/utils/form-builder/i18nHelpers";
 import { generateDownloadHtml } from "@lib/saveAndResume/actions";
 import { downloadDataAsBlob } from "@lib/downloadDataAsBlob";
+import { useTranslation } from "@i18n/client";
 
 export const MobileDrawer = ({
   drawerOpen,
@@ -28,6 +29,8 @@ export const MobileDrawer = ({
   formTitleFr: string;
   type: "confirm" | "progress";
 }) => {
+  const { t } = useTranslation("common");
+
   const {
     groups,
     getValues,
@@ -78,7 +81,7 @@ export const MobileDrawer = ({
 
   return (
     <Drawer isVisible={drawerOpen} onClose={() => setDrawerOpen(false)} className="">
-      <h2>More</h2>
+      <h2>{t("saveResponse.more")}</h2>
       <div className="flex flex-col gap-4">
         <Button
           theme="secondary"
@@ -87,7 +90,7 @@ export const MobileDrawer = ({
         >
           <>
             <SaveProgressIcon className="mr-4 size-8" />
-            Save to device
+            {t("saveResponse.saveToDevice")}
           </>
         </Button>
         <Link
@@ -96,13 +99,11 @@ export const MobileDrawer = ({
         >
           <>
             <UploadIcon className="mr-4 size-8" />
-            Load answers
+            {t("saveResponse.resumeForm")}
           </>
         </Link>
       </div>
-      <p className="my-6 px-4">
-        Protect your data by keeping the downloaded file in a safe place on a trusted device.
-      </p>
+      <p className="my-6 px-4">{t("saveResponse.protectYourDataNote")}</p>
 
       <div className="sticky bottom-0 -mx-3 border-2 border-t-gcds-blue-900 bg-gcds-blue-100 p-4">
         <Button
@@ -110,7 +111,7 @@ export const MobileDrawer = ({
           className="rounded-full bg-white"
           onClick={() => setDrawerOpen(false)}
         >
-          Cancel
+          {t("saveResponse.cancel")}
         </Button>
       </div>
     </Drawer>

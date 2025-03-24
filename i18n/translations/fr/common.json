@@ -277,6 +277,11 @@
   "saveResponse": {
     "saveBtn": "Télécharger",
     "saveBtnDescription": "Obtenez une copie de vos réponses",
+    "saveToDevice": "Save to device [FR]",
+    "resumeForm": "Resume form [FR]",
+    "protectYourDataNote": "Protect your data by keeping the downloaded file in a safe place on a trusted device. [FR]",
+    "more": "More [FR]",
+    "cancel": "Annuler",
     "prompt": {
       "title": "Sauvegarder sur l'appareil",
       "description": "Protégez vos données en conservant ce fichier en lieu sûr.",

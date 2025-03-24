@@ -277,6 +277,11 @@
   "saveResponse": {
     "saveBtn": "Download",
     "saveBtnDescription": "Get a copy of your answers",
+    "saveToDevice": "Save to device",
+    "resumeForm": "Resume form",
+    "protectYourDataNote": "Protect your data by keeping the downloaded file in a safe place on a trusted device.",
+    "more": "More",
+    "cancel": "Cancel",
     "prompt": {
       "title": "Save to device",
       "description": "Protect your data by keeping this file in a safe place.",
