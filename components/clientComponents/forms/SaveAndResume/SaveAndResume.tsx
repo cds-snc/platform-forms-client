@@ -6,6 +6,8 @@ import { SubmitButton as DownloadProgress } from "@clientComponents/globals/Butt
 import { ConfirmDownloadDialog } from "./ConfirmDownloadDialog";
 import { MobileDrawer } from "./MobileDrawer";
 import { Button } from "@clientComponents/globals";
+import { LinkButton } from "@serverComponents/globals/Buttons/LinkButton";
+import { SaveProgressIcon } from "@serverComponents/icons";
 
 export const SaveAndResume = ({
   formId,
@@ -32,8 +34,17 @@ export const SaveAndResume = ({
           theme="secondary"
           onClick={() => setConfirm(true)}
         >
-          <>{t("saveAndResume.saveBtn", { lng: language })}</>
+          <>
+            {t("saveAndResume.saveBtn", { lng: language })}
+            <SaveProgressIcon />
+          </>
         </DownloadProgress>
+        <LinkButton.Secondary
+          className="ml-4 rounded-md py-2.5"
+          href={`/${language}/id/${formId}/resume`}
+        >
+          {t("saveAndResume.loadAnswers", { lng: language })}
+        </LinkButton.Secondary>
       </span>
       <span className="block tablet:hidden">
         <Button
@@ -42,7 +53,7 @@ export const SaveAndResume = ({
           theme="secondary"
           onClick={() => setDrawerOpen(true)}
         >
-          <>{t("saveResponse.more")}...</>
+          <>{t("saveAndResume.more")}...</>
         </Button>
       </span>
       <ConfirmDownloadDialog

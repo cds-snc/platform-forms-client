@@ -81,7 +81,7 @@ export const MobileDrawer = ({
 
   return (
     <Drawer isVisible={drawerOpen} onClose={() => setDrawerOpen(false)} className="">
-      <h2>{t("saveResponse.more")}</h2>
+      <h2>{t("saveAndResume.more")}</h2>
       <div className="flex flex-col gap-4">
         <Button
           theme="secondary"
@@ -90,7 +90,7 @@ export const MobileDrawer = ({
         >
           <>
             <SaveProgressIcon className="mr-4 size-8" />
-            {t("saveResponse.saveToDevice")}
+            {t("saveAndResume.saveToDevice")}
           </>
         </Button>
         <Link
@@ -99,11 +99,11 @@ export const MobileDrawer = ({
         >
           <>
             <UploadIcon className="mr-4 size-8" />
-            {t("saveResponse.resumeForm")}
+            {t("saveAndResume.resumeForm")}
           </>
         </Link>
       </div>
-      <p className="my-6 px-4">{t("saveResponse.protectYourDataNote")}</p>
+      <p className="my-6 px-4">{t("saveAndResume.protectYourDataNote")}</p>
 
       <div className="sticky bottom-0 -mx-3 border-2 border-t-gcds-blue-900 bg-gcds-blue-100 p-4">
         <Button
@@ -111,7 +111,7 @@ export const MobileDrawer = ({
           className="rounded-full bg-white"
           onClick={() => setDrawerOpen(false)}
         >
-          {t("saveResponse.cancel")}
+          {t("saveAndResume.cancel")}
         </Button>
       </div>
     </Drawer>
