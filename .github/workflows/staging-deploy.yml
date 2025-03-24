@@ -61,7 +61,7 @@ jobs:
           ecr-registry-form-viewer-repository-name: form_viewer_staging
           cognito-app-client-id: ${{ secrets.STAGING_COGNITO_APP_CLIENT_ID }}
           cognito-user-pool-id: ${{ secrets.STAGING_COGNITO_USER_POOL_ID }}
-          load-balancer-listener-arn: arn:aws:elasticloadbalancing:ca-central-1:${{ env.AWS_ACCOUNT_ID }}:listener/app/form-viewer/5e6bc2d9ab810b68/028e8eeeed9c3a34
+          load-balancer-listener-arn: ${{ vars.STAGING_LOAD_BALANCER_LISTENER_ARN }}
           forms-lambda-client-role-arn: arn:aws:iam::${{ env.AWS_ACCOUNT_ID }}:role/forms-lambda-client
           forms-lambda-client-subnet-ids: ${{ secrets.FORMS_LAMBDA_CLIENT_SUBNET_IDS }}
           forms-lambda-client-security-group-ids: ${{ secrets.FORMS_LAMBDA_CLIENT_SECURITY_GROUP_IDS }}
