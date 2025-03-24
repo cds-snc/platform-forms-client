@@ -17,7 +17,6 @@ export { DynamicGroup } from "./DynamicRow/DynamicRow";
 export { Description } from "./Description/Description";
 export { MultipleChoiceGroup } from "./MultipleChoiceGroup/MultipleChoiceGroup";
 export { ConditionalWrapper } from "./ConditionalWrapper/ConditionalWrapper";
-export { NextButton } from "./NextButton/NextButton";
 export { Combobox } from "./Combobox/Combobox";
 export { ManagedCombobox } from "./AddressComplete/ManagedCombobox";
 export { AddressComplete } from "./AddressComplete/AddressComplete";

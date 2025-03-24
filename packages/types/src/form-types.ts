@@ -214,3 +214,12 @@ export type ClosedDetails = {
 
 // defines the fields for the form record that is available to unauthenticated users
 export type PublicFormRecord = TypeOmit<FormRecord, "name" | "deliveryOption">;
+
+export const FormStatus = {
+  ERROR: "Error",
+  FILE_ERROR: "FileError",
+  FORM_CLOSED_ERROR: "FormClosedError",
+  SERVER_ID_ERROR: "ServerIDError",
+} as const;
+
+export type FormStatus = (typeof FormStatus)[keyof typeof FormStatus];

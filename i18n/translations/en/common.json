@@ -72,6 +72,7 @@
   "file-upload-no-file-selected": "No file currently selected",
   "dropdown-initial-option-text": "No selection",
   "server-error": "Sorry, it seems there was a problem submitting your form. Please try again later.",
+  "form-closed-error": "This form is closed and no longer accepting form submissions. Refresh this page for a more specific message about this closed form.",
   "title-full": "GC Forms - Formulaires GC",
   "title": "GC Forms",
   "loading": "We are processing your form submission. Please wait.",
@@ -222,16 +223,16 @@
   "saveAndResume": {
     "saveBtn": "Save to device",
     "resumeBtn": "Resume form",
-    "formRestored": "Your answers so far were added to the form.",
+    "formRestored": "Your answers were loaded to the form.",
     "resumeUploadError": {
-      "title": "Something went wrong",
-      "description": "There was a problem uploading the answers. Try again later, or restart the form.",
+      "title": "Problem loading answers",
+      "description": "Try uploading the file again or restart a new form and copy-paste your answers from the file.",
       "errorCode": "Error code: {{code}}"
     },
     "resumePage": {
       "upload": {
         "title": "Load your answers",
-        "description": "Upload your saved form answers"
+        "description": "Upload your saved form in progress"
       },
       "restart": {
         "title": "Start blank form",
@@ -239,10 +240,10 @@
       },
       "readyToContinue": {
         "title": "Ready to continue?",
-        "intro": "To load these answers:",
-        "text1": "1. Save your form progress to your device",
-        "text2": "2. Find this file on your device",
-        "text3": "3. Upload it to load your answers"
+        "intro": "To continue the form you started:",
+        "text1": "1. Find the file saved on your device",
+        "text2": "2. Upload it to add your answers to the form",
+        "text3": "3. Continue filling out the form"
       }
     },
     "prompt": {
@@ -253,19 +254,19 @@
     },
     "downloadProgressHtml": {
       "nextSteps": {
-        "title": "Ready to continue?",
+        "title": "Ready to continue? ",
         "resumeBox": {
           "title": "To load these answers:",
           "text1": "1. Go to the online form",
-          "text2": "2. Click resume",
-          "text3": "3. Find this file on your computer",
-          "text4": "4. Upload it to load your answers",
+          "text2": "2. Click Resume form",
+          "text3": "3. Find this file on your device",
+          "text4": "4. Upload it to load your answers to the form",
           "link": "Go to the online form"
         }
       },
       "keepSafe": {
-        "title": "Keep your information safe",
-        "description": "Make sure to keep the file that contains your form answers in a secure spot on your device."
+        "title": "Keep your personal information safe",
+        "description": "Make sure to save this file containing form answers in a secure spot on your device."
       },
       "badge": {
         "text": "In progress",
@@ -292,7 +293,7 @@
         "submissionId": "Submission ID: {{submissionId}}"
       },
       "generateHtmlError": {
-        "description": "There was an error downloading the file. Please try again."
+        "description": "There was a problem saving your form answers. The file could not be downloaded. Try again later."
       }
     }
   },

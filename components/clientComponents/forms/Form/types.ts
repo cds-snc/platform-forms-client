@@ -28,6 +28,7 @@ export interface FormProps {
   hCaptchaSiteKey?: string | undefined;
   currentGroup: string | null;
   setCaptchaFail?: React.Dispatch<React.SetStateAction<boolean>>;
+  captchaFail?: boolean;
 }
 
 export type InnerFormProps = FormProps & FormikProps<Responses>;
