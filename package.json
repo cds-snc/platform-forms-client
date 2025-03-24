@@ -72,7 +72,7 @@
     "@radix-ui/react-tooltip": "^1.1.6",
     "@types/mdx": "^2.0.13",
     "@zitadel/node": "2.0.37",
-    "axios": "1.8.2",
+    "axios": "1.8.3",
     "clsx": "^2.1.1",
     "copy-to-clipboard": "3.3.3",
     "csv-writer": "^1.6.0",
