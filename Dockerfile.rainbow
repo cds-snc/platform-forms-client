@@ -29,10 +29,7 @@ ENV LAMBDA_ENV=1
 
 WORKDIR /src
 
-COPY --from=base /src/public ./public
-COPY --from=base /src/package.json ./package.json
-COPY --from=base /src/.next/standalone ./
-COPY --from=base /src/.next/static ./.next/static
+COPY --from=base /src ./
 
 RUN ln -s /tmp ./.next/cache
 
