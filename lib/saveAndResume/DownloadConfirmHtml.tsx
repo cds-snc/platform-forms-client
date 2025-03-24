@@ -68,7 +68,7 @@ export const DownloadConfirmHtml = ({
                   language={language}
                 />
               </div>
-              <GcdsH1>{formTitle}</GcdsH1>
+              <GcdsH1 className="mb-3">{formTitle}</GcdsH1>
               <KeepSafe language={language} />
               <div className="mb-10" data-testid="review-list">
                 <ReviewList

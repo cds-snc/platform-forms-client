@@ -182,9 +182,9 @@ export const ResumeForm = ({
         <div className="mb-6 flex border-b-1 border-slate-500 pb-8">
           <LightBulbIcon className="mr-4" />
           <div>
-            <h2 className="!mb-1 p-0 !text-2xl">
+            <div className="mb-2 p-0 !text-xl">
               {t("saveAndResume.resumePage.readyToContinue.title")}
-            </h2>
+            </div>
             <p className="text-sm">{t("saveAndResume.resumePage.readyToContinue.intro")}</p>
             <p className="text-sm">{t("saveAndResume.resumePage.readyToContinue.text1")}</p>
             <p className="text-sm">{t("saveAndResume.resumePage.readyToContinue.text2")}</p>
@@ -201,9 +201,9 @@ export const ResumeForm = ({
           }}
         >
           <InternalLinkIcon className="mr-4 inline-block scale-125 group-focus:fill-white" />
-          <h2 className="!mb-0 inline-block p-0 !text-2xl tablet:!text-3xl">
+          <div className="!mb-0 inline-block p-0 !text-2xl tablet:!text-3xl">
             {t("saveAndResume.resumePage.restart.title")}
-          </h2>
+          </div>
         </button>
       </div>
       <ToastContainer limit={1} autoClose={false} containerId="resume" />
