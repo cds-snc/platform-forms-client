@@ -5,6 +5,12 @@ declare global {
   }
 }
 
+/**
+ * Download data as blob
+ * @param data string
+ * @param filename string ex: "file.html"
+ * @param accept object ex: { "text/html": [".html"] }
+ */
 export const downloadDataAsBlob = async (data: string, filename: string, accept: object) => {
   if (!window?.showSaveFilePicker) {
     const downloadLink = document.createElement("a");
@@ -20,6 +26,7 @@ export const downloadDataAsBlob = async (data: string, filename: string, accept:
 
 async function promptToSave(data: string, filename: string, accept: object) {
   const handle = await window?.showSaveFilePicker({
+    excludeAcceptAllOption: true,
     suggestedName: filename,
     types: [
       {
