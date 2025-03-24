@@ -59,6 +59,9 @@ export const SaveAndResume = ({
         setDrawerOpen={setDrawerOpen}
         formId={formId}
         language={language}
+        formTitleEn={formTitleEn}
+        formTitleFr={formTitleFr}
+        type="progress"
       />
     </div>
   );
