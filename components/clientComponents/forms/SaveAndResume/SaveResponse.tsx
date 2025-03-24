@@ -23,7 +23,7 @@ export const SaveResponse = ({
 
   return (
     <div className="mr-4 inline-block max-w-fit rounded-lg bg-gcds-green-100 px-4 py-2">
-      <div className="mr-4 inline-block font-bold">
+      <div className="mb-4 mr-4 inline-block">
         {t("saveResponse.saveBtnDescription", { lng: language })}
       </div>
       <DownloadConfirm
