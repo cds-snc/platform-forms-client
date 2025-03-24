@@ -62,7 +62,7 @@ export const DownloadProgressHtml = ({
               <div className="mb-14">
                 <InProgressBadge language={language} />
               </div>
-              <GcdsH1>{formTitle}</GcdsH1>
+              <GcdsH1 className="mb-12">{formTitle}</GcdsH1>
               <NextSteps language={language} host={host || ""} formId={formId} />
               <div className="mb-10" data-testid="review-list">
                 <ReviewList

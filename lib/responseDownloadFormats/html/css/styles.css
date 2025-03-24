@@ -1,6 +1,63 @@
 @tailwind base;
 @tailwind components;
 
+:root {
+  --gcds-heading-character-limit-h1: 31ch;
+  --gcds-heading-character-limit-h2: 35ch;
+  --gcds-heading-character-limit-h3: 40ch;
+  --gcds-heading-character-limit-h4: 45ch;
+  --gcds-heading-character-limit-h5: 50ch;
+  --gcds-heading-character-limit-h6: 57ch;
+  --gcds-heading-default-text: #333333;
+  --gcds-heading-h1-border-background: #d3080c;
+  --gcds-heading-h1-border-height: 0.375rem;
+  --gcds-heading-h1-border-margin: 0.5rem;
+  --gcds-heading-h1-border-width: 4.5rem;
+  --gcds-heading-h1-desktop: 700 2.5625rem/117% "Lato", sans-serif;
+  --gcds-heading-h1-mobile: 700 2.3125rem/119% "Lato", sans-serif;
+  --gcds-heading-h2-desktop: 700 2.4375rem/123% "Lato", sans-serif;
+  --gcds-heading-h2-mobile: 700 2.1875rem/125% "Lato", sans-serif;
+  --gcds-heading-h3-desktop: 700 1.8125rem/137% "Lato", sans-serif;
+  --gcds-heading-h3-mobile: 700 1.625rem/123% "Lato", sans-serif;
+  --gcds-heading-h4-desktop: 700 1.6875rem/133% "Lato", sans-serif;
+  --gcds-heading-h4-mobile: 700 1.5rem/133% "Lato", sans-serif;
+  --gcds-heading-h5-desktop: 700 1.5rem/133% "Lato", sans-serif;
+  --gcds-heading-h5-mobile: 700 1.375rem/127% "Lato", sans-serif;
+  --gcds-heading-h6-desktop: 700 1.375rem/145% "Lato", sans-serif;
+  --gcds-heading-h6-mobile: 700 1.25rem/140% "Lato", sans-serif;
+  --gcds-heading-spacing-0: 0rem;
+  --gcds-heading-spacing-25: 0.125rem;
+  --gcds-heading-spacing-50: 0.25rem;
+  --gcds-heading-spacing-75: 0.375rem;
+  --gcds-heading-spacing-100: 0.5rem;
+  --gcds-heading-spacing-125: 0.625rem;
+  --gcds-heading-spacing-150: 0.75rem;
+  --gcds-heading-spacing-175: 0.875rem;
+  --gcds-heading-spacing-200: 1rem;
+  --gcds-heading-spacing-225: 1.125rem;
+  --gcds-heading-spacing-250: 1.25rem;
+  --gcds-heading-spacing-300: 1.5rem;
+  --gcds-heading-spacing-350: 1.75rem;
+  --gcds-heading-spacing-400: 2rem;
+  --gcds-heading-spacing-450: 2.25rem;
+  --gcds-heading-spacing-500: 2.5rem;
+  --gcds-heading-spacing-550: 2.75rem;
+  --gcds-heading-spacing-600: 3rem;
+  --gcds-heading-spacing-650: 3.25rem;
+  --gcds-heading-spacing-700: 3.5rem;
+  --gcds-heading-spacing-750: 3.75rem;
+  --gcds-heading-spacing-800: 4rem;
+  --gcds-heading-spacing-850: 4.25rem;
+  --gcds-heading-spacing-900: 4.5rem;
+  --gcds-heading-spacing-950: 4.75rem;
+  --gcds-heading-spacing-1000: 5rem;
+  --gcds-heading-spacing-1050: 5.25rem;
+  --gcds-heading-spacing-1100: 5.5rem;
+  --gcds-heading-spacing-1150: 5.75rem;
+  --gcds-heading-spacing-1200: 6rem;
+  --gcds-heading-spacing-1250: 6.25rem;
+}
+
 @layer base {
   body {
     @apply text-xl leading-7 text-gray-front;
@@ -14,9 +71,25 @@
     @apply font-lato font-bold;
   }
 
-  h1,
-  .gc-h1 {
-    @apply border-b border-red pb-2 mb-16 text-[34px] tablet:text-[38px];
+  h1 {
+    max-width: var(--gcds-heading-character-limit-h1);
+    font: var(--gcds-heading-h1-desktop);
+    -webkit-margin-before: var(--gcds-heading-spacing-0);
+    margin-block-start: var(--gcds-heading-spacing-0);
+  }
+  h1:after {
+    display: block;
+    content: "";
+    width: var(--gcds-heading-h1-border-width);
+    -webkit-margin-before: var(--gcds-heading-h1-border-margin);
+    margin-block-start: var(--gcds-heading-h1-border-margin);
+    height: var(--gcds-heading-h1-border-height);
+    background-color: var(--gcds-heading-h1-border-background);
+  }
+  @media only screen and (width < 48em) {
+    h1 {
+      font: var(--gcds-heading-h1-mobile);
+    }
   }
 
   h2,
