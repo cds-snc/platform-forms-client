@@ -25,17 +25,25 @@ export const downloadDataAsBlob = async (data: string, filename: string, accept:
 };
 
 async function promptToSave(data: string, filename: string, accept: object) {
-  const handle = await window?.showSaveFilePicker({
-    excludeAcceptAllOption: true,
-    suggestedName: filename,
-    types: [
-      {
-        accept,
-      },
-    ],
-  });
+  try {
+    const handle = await window?.showSaveFilePicker({
+      excludeAcceptAllOption: true,
+      suggestedName: filename,
+      types: [
+        {
+          accept,
+        },
+      ],
+    });
 
-  const writable = await handle.createWritable();
-  await writable.write(data);
-  await writable.close();
+    const writable = await handle.createWritable();
+    await writable.write(data);
+    await writable.close();
+  } catch (error) {
+    if ((error as Error).name === "AbortError") {
+      // User cancelled the file picker
+      return;
+    }
+    throw error;
+  }
 }
