@@ -81,23 +81,19 @@ export const ConfirmDownloadDialog = ({
           }
           onCloseAutoFocus={doClose}
           onEscapeKeyDown={doClose}
+          aria-describedby="alert-dialog-description"
         >
           <AlertDialog.Title className="text-2xl font-extrabold leading-tight">
             {t(`${tParent}.prompt.title`)}
           </AlertDialog.Title>
 
-          <div>
-            <div className="mb-2 flex">
-              <span className="mr-4 inline-block text-2xl font-bold"> 1 </span>
-              {t(`${tParent}.prompt.text1`)}
-            </div>
+          <div id="alert-dialog-description">
+            <ol className="list-outside list-decimal">
+              <li className="marker:text-2xl marker:font-bold">{t(`${tParent}.prompt.text1`)}</li>
+              <li className="marker:text-2xl marker:font-bold">{t(`${tParent}.prompt.text2`)}</li>
+            </ol>
 
-            <div className="mb-6 flex">
-              <span className="mr-4 inline-block text-2xl font-bold"> 2 </span>{" "}
-              {t(`${tParent}.prompt.text2`)}
-            </div>
-
-            <div className="mb-2 ml-6 font-bold italic">{t(`${tParent}.prompt.text3`)}</div>
+            <div className="mb-2 ml-6 mt-6 font-bold italic">{t(`${tParent}.prompt.text3`)}</div>
           </div>
 
           <div style={{ display: "flex", gap: 15, justifyContent: "flex-end" }}>
