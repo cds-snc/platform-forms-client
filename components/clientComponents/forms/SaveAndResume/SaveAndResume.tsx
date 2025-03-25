@@ -26,7 +26,7 @@ export const SaveAndResume = ({ formId, language }: { formId: string; language: 
         >
           <>
             {t("saveAndResume.saveBtn", { lng: language })}
-            <SaveProgressIcon className="group-focus:fill-white group-active:fill-white" />
+            <SaveProgressIcon className="ml-2 fill-gcds-blue-800 group-focus:fill-white group-active:fill-white" />
           </>
         </DownloadProgress>
         <LinkButton.Secondary
