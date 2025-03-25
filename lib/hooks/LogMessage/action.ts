@@ -11,6 +11,5 @@ export const logMessageError = async (code: string) => {
   if (!codeMatch(code)) {
     return;
   }
-  // TODO: any other info to send?
   logMessage.error(`Client Error: ${code}`);
 };
