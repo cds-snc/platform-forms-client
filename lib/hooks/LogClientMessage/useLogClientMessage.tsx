@@ -4,7 +4,7 @@ import { logMessageError } from "./action";
 import { useEffect, useState } from "react";
 
 // Use to send an error code from the client (browser) to the server to be loggeed.
-export const useLogMessage = () => {
+export const useLogClientMessage = () => {
   const [code, setCode] = useState<FormServerErrorCodes>();
 
   useEffect(() => {

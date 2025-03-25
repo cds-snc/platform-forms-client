@@ -17,7 +17,7 @@ import { ErrorResuming } from "./ErrorResuming";
 import { ResumeUploadIcon } from "@serverComponents/icons/ResumeUploadIcon";
 import { LightBulbIcon } from "@serverComponents/icons/LightBulbIcon";
 import { GcdsH1 } from "@serverComponents/globals/GcdsH1";
-import { useLogMessage } from "@lib/hooks/LogMessage/useLogMessage";
+import { useLogClientMessage } from "@lib/hooks/LogClientMessage/useLogClientMessage";
 
 // Prevent prototype pollution in JSON.parse https://stackoverflow.com/a/63927372
 const cleaner = (key: string, value: string) =>
@@ -45,7 +45,7 @@ export const ResumeForm = ({
   } = useTranslation(["form-builder", "common"]);
 
   const router = useRouter();
-  const { logClientError } = useLogMessage();
+  const { logClientError } = useLogClientMessage();
 
   const { getFlag } = useFeatureFlags();
   const saveAndResumeEnabled = getFlag(FeatureFlags.saveAndResume);
