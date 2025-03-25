@@ -8,7 +8,8 @@
     "test": "test",
     "prebuild": "rimraf dist",
     "build": "tsc",
-    "prepublishOnly": "yarn build"
+    "prepack": "yarn build",
+    "drawer:prepack": "yarn prepack"
   },
   "keywords": [
     "react",
