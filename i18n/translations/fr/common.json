@@ -254,7 +254,9 @@
     },
     "prompt": {
       "title": "Sauvegarder sur l’appareil",
-      "description": "1. Download a copy of your answers so far to keep filling out the form later.\n2. Next time, resume from where you left off by uploading your saved answers.\n\n \n\n **Protect your data by keeping the downloaded file in a safe place on a trusted device.**",
+      "text1": "Download a copy of your answers so far to keep filling out the form later. [FR]",
+      "text2": "Next time, resume from where you left off by uploading your saved answers. [FR]",
+      "text3": "Protect your data by keeping the downloaded file in a safe place on a trusted device. [FR]",
       "okay": "Sauvegarder",
       "cancel": "Annuler"
     },

@@ -3,7 +3,6 @@
 import { useCallback, useRef, useState } from "react";
 import * as AlertDialog from "@radix-ui/react-alert-dialog";
 import { useTranslation } from "@i18n/client";
-import Markdown from "markdown-to-jsx";
 
 import { type FormValues } from "@lib/formContext";
 import { type Language } from "@lib/types/form-builder-types";
@@ -87,9 +86,17 @@ export const ConfirmDownloadDialog = ({
             {t(`${tParent}.prompt.title`)}
           </AlertDialog.Title>
           <AlertDialog.Description className="pb-6">
-            <Markdown options={{ forceBlock: false }}>
-              {t(`${tParent}.prompt.description`)}
-            </Markdown>
+            <div className="mb-2 flex">
+              <span className="mr-4 inline-block text-2xl font-bold"> 1 </span>
+              {t(`${tParent}.prompt.text1`)}
+            </div>
+
+            <div className="mb-6 flex">
+              <span className="mr-4 inline-block text-2xl font-bold"> 2 </span>{" "}
+              {t(`${tParent}.prompt.text2`)}
+            </div>
+
+            <div className="mb-2 ml-6 font-bold italic">{t(`${tParent}.prompt.text3`)}</div>
           </AlertDialog.Description>
           <div style={{ display: "flex", gap: 15, justifyContent: "flex-end" }}>
             <AlertDialog.Cancel asChild>
