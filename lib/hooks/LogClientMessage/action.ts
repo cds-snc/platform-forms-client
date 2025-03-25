@@ -7,17 +7,27 @@ const codeMatch = (code: string): boolean => {
   return Boolean(found);
 };
 
-export const logMessageError = async (message: { code: string; formId: string }) => {
-  if (!message || !message.code || !message.formId) {
-    return;
+// Logs an error message from the client.
+// e.g. log message:
+// {"level":"error","time":1742927527001,"msg":"Client Error: FR05-1742927526697 - formID: cm70y5cl70000yo69tgxe9j25"}
+export const logErrorMessage = async (
+  code: string,
+  formId: string,
+  timestamp: number
+): Promise<boolean> => {
+  if (!code || !formId || !timestamp) {
+    return false;
   }
 
-  // Only allow specific error codes to be logged
-  const { code, formId } = message;
-  const codeWithoutTimestamp = code.split("-")[0];
-  if (!codeMatch(codeWithoutTimestamp)) {
-    return;
-  }
+  try {
+    // Only allow specific error codes to be logged
+    if (!codeMatch(code)) {
+      return false;
+    }
 
-  logMessage.error(`Client Error: ${code} - formID: ${formId}`);
+    logMessage.error(`Client Error: ${code}-${timestamp} - formID: ${formId}`);
+    return true;
+  } catch (e) {
+    return false;
+  }
 };
