@@ -166,7 +166,7 @@ export const GCFormsProvider = ({
   };
 
   const getNonce = () => {
-    return nonce;
+    return nonce || "";
   };
 
   // TODO: once groups flag is on, just use formHasGroups
