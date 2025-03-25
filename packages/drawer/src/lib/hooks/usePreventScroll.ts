@@ -1,21 +1,24 @@
 import * as React from "react";
-import {disableBodyScroll, enableBodyScroll} from "body-scroll-lock";
+import { disableBodyScroll, enableBodyScroll } from "body-scroll-lock";
 
 function usePreventScroll(enabled: boolean, contentWrapperClass: string) {
   React.useLayoutEffect(() => {
     if (typeof document === "undefined" || !enabled) {
       return;
     }
-    
+
     const scrollableElement = document.querySelector(`.${contentWrapperClass}`);
 
-    disableBodyScroll(scrollableElement);
-    console.log("Disable body scrol");
+    if (scrollableElement) {
+      disableBodyScroll(scrollableElement);
+    }
 
     return () => {
-      enableBodyScroll(scrollableElement);
-    }
-  }, [enabled]);
+      if (scrollableElement) {
+        enableBodyScroll(scrollableElement);
+      }
+    };
+  }, [contentWrapperClass, enabled]);
 }
 
 export default usePreventScroll;
