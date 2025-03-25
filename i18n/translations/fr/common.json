@@ -254,9 +254,10 @@
     },
     "prompt": {
       "title": "Sauvegarder sur l’appareil",
-      "text1": "Download a copy of your answers so far to keep filling out the form later. [FR]",
-      "text2": "Next time, resume from where you left off by uploading your saved answers. [FR]",
-      "text3": "Protect your data by keeping the downloaded file in a safe place on a trusted device. [FR]",
+```suggestion
+      "text1": "Téléchargez une copie du formulaire rempli jusqu'à présent.",
+      "text2": "Poursuivez le formulaire plus tard en trouvant le fichier sur votre appareil et téléversant vos réponses sauvegardées.",
+      "text3": "Assurez vous de protéger vos données en conservant le fichier téléchargé en lieu sûr sur un appareil de confiance.",
       "okay": "Sauvegarder",
       "cancel": "Annuler"
     },
