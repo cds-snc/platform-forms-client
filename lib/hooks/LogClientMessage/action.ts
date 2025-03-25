@@ -7,9 +7,17 @@ const codeMatch = (code: string): boolean => {
   return Boolean(found);
 };
 
-export const logMessageError = async (code: string) => {
-  if (!codeMatch(code)) {
+export const logMessageError = async (message: { code: string; formId: string }) => {
+  if (!message || !message.code || !message.formId) {
     return;
   }
-  logMessage.error(`Client Error: ${code}`);
+
+  // Only allow specific error codes to be logged
+  const { code, formId } = message;
+  const codeWithoutTimestamp = code.split("-")[0];
+  if (!codeMatch(codeWithoutTimestamp)) {
+    return;
+  }
+
+  logMessage.error(`Client Error: ${code} - formID: ${formId}`);
 };

@@ -139,7 +139,7 @@ export const ResumeForm = ({
         });
         router.push(`/${language}/id/${id}`);
       } catch (e) {
-        logClientError(errorCode as FormServerErrorCodes);
+        logClientError(errorCode as FormServerErrorCodes, formId);
         toast.error(<ErrorResuming errorCode={errorCode} />, "resume");
       }
     };
