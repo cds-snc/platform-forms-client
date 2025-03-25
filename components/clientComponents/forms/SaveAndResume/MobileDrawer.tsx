@@ -1,4 +1,4 @@
-import Drawer from "react-bottom-drawer";
+import Drawer from "@gcforms/drawer";
 import { SaveProgressIcon, UploadIcon } from "@serverComponents/icons";
 import { Button } from "@clientComponents/globals";
 import Link from "next/link";
@@ -7,6 +7,7 @@ import { generateDownloadHtml } from "@lib/saveAndResume/actions";
 import { downloadDataAsBlob } from "@lib/downloadDataAsBlob";
 import { useTranslation } from "@i18n/client";
 import { useFormSubmissionData } from "@lib/hooks/useFormSubmissionData";
+import { useGCFormsContext } from "@lib/hooks/useGCFormContext";
 
 export const MobileDrawer = ({
   drawerOpen,
@@ -22,6 +23,7 @@ export const MobileDrawer = ({
   type: "confirm" | "progress";
 }) => {
   const { t } = useTranslation("common");
+  const { getNonce } = useGCFormsContext();
 
   const { fileName, getOptions } = useFormSubmissionData({ language, type });
 
@@ -32,9 +34,9 @@ export const MobileDrawer = ({
   };
 
   return (
-    <Drawer isVisible={drawerOpen} onClose={() => setDrawerOpen(false)} className="">
+    <Drawer isVisible={drawerOpen} onClose={() => setDrawerOpen(false)} nonce={getNonce()}>
       <h2>{t("saveAndResume.more")}</h2>
-      <div className="flex flex-col gap-4">
+      <div className="mx-4 flex flex-col gap-4">
         <Button
           theme="secondary"
           className="group flex w-full items-center justify-center rounded-full border border-slate-900 bg-slate-100 py-4"
@@ -57,7 +59,7 @@ export const MobileDrawer = ({
       </div>
       <p className="my-6 px-4">{t("saveAndResume.protectYourDataNote")}</p>
 
-      <div className="sticky bottom-0 -mx-3 border-2 border-t-gcds-blue-900 bg-gcds-blue-100 p-4">
+      <div className="sticky bottom-0 -mx-2 border-2 border-t-gcds-blue-900 bg-gcds-blue-100 p-4">
         <Button
           theme="secondary"
           className="rounded-full bg-white"
