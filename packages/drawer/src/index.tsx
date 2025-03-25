@@ -68,7 +68,6 @@ const SlideUpTransition = ({
     };
   };
 
-  // @ts-nocheck
   return (
     <>
       <Transition
