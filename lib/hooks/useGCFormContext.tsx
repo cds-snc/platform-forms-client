@@ -62,6 +62,7 @@ interface GCFormsContextValueType {
     history: string[];
     currentGroup: string;
   };
+  getNonce: () => string;
 }
 
 const GCFormsContext = createContext<GCFormsContextValueType | undefined>(undefined);
@@ -69,9 +70,11 @@ const GCFormsContext = createContext<GCFormsContextValueType | undefined>(undefi
 export const GCFormsProvider = ({
   children,
   formRecord,
+  nonce,
 }: {
   children: ReactNode;
   formRecord: PublicFormRecord;
+  nonce?: string;
 }) => {
   const groups: GroupsType = formRecord.form.groups || {};
   const initialGroup = groups ? LockedSections.START : null;
@@ -162,6 +165,10 @@ export const GCFormsProvider = ({
     return values.current as FormValues;
   };
 
+  const getNonce = () => {
+    return nonce;
+  };
+
   // TODO: once groups flag is on, just use formHasGroups
   const groupsCheck = (groupsFlag: boolean | undefined) => {
     // Check that the conditional logic flag is on and that this is a groups enabled form
@@ -236,6 +243,7 @@ export const GCFormsProvider = ({
         saveSessionProgress,
         getProgressData,
         restoreSessionProgress,
+        getNonce,
       }}
     >
       {children}
@@ -286,6 +294,7 @@ export const useGCFormsContext = () => {
       restoreSessionProgress: () => {
         return {};
       },
+      getNonce: () => "",
     };
   }
   return formsContext;

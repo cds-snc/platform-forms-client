@@ -18,6 +18,7 @@ import { getSomeFlags } from "@lib/cache/flags";
 import { FeatureFlags } from "@lib/cache/types";
 import { getAppSetting } from "@lib/appSettings";
 import { GcdsH1 } from "@serverComponents/globals/GcdsH1";
+import { headers } from "next/headers";
 
 export async function generateMetadata(props0: {
   params: Promise<{ locale: string; props: string[] }>;
@@ -46,6 +47,7 @@ export async function generateMetadata(props0: {
 export default async function Page(props0: {
   params: Promise<{ locale: string; props: string[] }>;
 }) {
+  const nonce = (await headers()).get("x-nonce") ?? "";
   const params = await props0.params;
 
   const { locale, props } = params;
@@ -135,7 +137,9 @@ export default async function Page(props0: {
 
   return (
     <FormDisplayLayout formRecord={formRecord} dateModified={dateModified}>
-      <GCFormsProvider formRecord={formRecord}>{pageContent}</GCFormsProvider>
+      <GCFormsProvider formRecord={formRecord} nonce={nonce}>
+        {pageContent}
+      </GCFormsProvider>
     </FormDisplayLayout>
   );
 }
