@@ -85,19 +85,21 @@ export const ConfirmDownloadDialog = ({
           <AlertDialog.Title className="text-2xl font-extrabold leading-tight">
             {t(`${tParent}.prompt.title`)}
           </AlertDialog.Title>
-          <AlertDialog.Description className="pb-6">
-            <div className="mb-2 flex">
-              <span className="mr-4 inline-block text-2xl font-bold"> 1 </span>
-              {t(`${tParent}.prompt.text1`)}
-            </div>
+          <AlertDialog.Content className="pb-6">
+            <div>
+              <div className="mb-2 flex">
+                <span className="mr-4 inline-block text-2xl font-bold"> 1 </span>
+                {t(`${tParent}.prompt.text1`)}
+              </div>
 
-            <div className="mb-6 flex">
-              <span className="mr-4 inline-block text-2xl font-bold"> 2 </span>{" "}
-              {t(`${tParent}.prompt.text2`)}
-            </div>
+              <div className="mb-6 flex">
+                <span className="mr-4 inline-block text-2xl font-bold"> 2 </span>{" "}
+                {t(`${tParent}.prompt.text2`)}
+              </div>
 
-            <div className="mb-2 ml-6 font-bold italic">{t(`${tParent}.prompt.text3`)}</div>
-          </AlertDialog.Description>
+              <div className="mb-2 ml-6 font-bold italic">{t(`${tParent}.prompt.text3`)}</div>
+            </div>
+          </AlertDialog.Content>
           <div style={{ display: "flex", gap: 15, justifyContent: "flex-end" }}>
             <AlertDialog.Cancel asChild>
               <Button onClick={() => handleClose(false)} theme="secondary">
