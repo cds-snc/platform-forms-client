@@ -46,8 +46,12 @@ ENV NEXT_DEPLOYMENT_ID=$NEXT_DEPLOYMENT_ID
 ENV AWS_LWA_ENABLE_COMPRESSION=true
 ENV HOSTNAME=localhost
 ENV PORT=3000
-# Use the REVIEW_ENV environment variable to determine if the app is running in a review environment
+
+# Use the LAMBDA_ENV environment variable to determine if the app is running in a Lambda environment
 # Enables memory caching for the prerendering of pages
+ENV LAMBDA_ENV=1
+
+# Use the REVIEW_ENV environment variable to determine if the app is running in a Review environment
 ENV REVIEW_ENV=1
 
 WORKDIR /src

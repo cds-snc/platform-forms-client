@@ -4,14 +4,14 @@ import { logMessage } from "@lib/logger";
 import { getPublicTemplateByID } from "@lib/templates";
 import { pushFileToS3, deleteObject } from "@lib/s3-upload";
 import { transformFormResponses } from "./transformFormResponses";
-import { callLambda } from "./callLambda";
+import { invokeSubmissionLambda } from "./invokeSubmissionLambda";
 import { FormIsClosedError, FormNotFoundError, MissingFormDataError } from "./exceptions";
 
 export const processFormData = async (
   reqFields: Record<string, Response>,
   files: Record<string, ProcessedFile | ProcessedFile[]>,
   contentLanguage: string
-) => {
+): Promise<string> => {
   const uploadedFilesKeyUrlMapping: Map<string, string> = new Map();
   try {
     // Do not process if in TEST mode
@@ -19,7 +19,7 @@ export const processFormData = async (
       logMessage.info(
         `TEST MODE - Not submitting Form ID: ${reqFields ? reqFields.formID : "No form attached"}`
       );
-      return;
+      return "test-mode";
     }
 
     if (!reqFields) {
@@ -87,8 +87,9 @@ export const processFormData = async (
         }
       }
     }
+
     try {
-      const result = await callLambda(
+      const submissionId = await invokeSubmissionLambda(
         form.id,
         fields,
         contentLanguage ? contentLanguage : "en",
@@ -96,20 +97,20 @@ export const processFormData = async (
       );
 
       logMessage.info(`Response submitted for Form ID: ${form.id}`);
-      return result;
-    } catch (err) {
+
+      return submissionId;
+    } catch (error) {
       logMessage.info(`Attempted response submission for Form ID: ${form.id} failed`);
-      logMessage.error(err as Error);
-      throw err;
+      throw error;
     }
-  } catch (err) {
+  } catch (error) {
     // it is true if file(s) has/have been already uploaded.It'll try a deletion of the file(s) on S3.
     if (uploadedFilesKeyUrlMapping.size > 0) {
       uploadedFilesKeyUrlMapping.forEach(async (value, key) => {
         await deleteObject(key);
       });
     }
-    logMessage.error(err as Error);
-    throw err;
+
+    throw error;
   }
 };
