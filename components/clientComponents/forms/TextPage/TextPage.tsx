@@ -28,7 +28,7 @@ interface PageContextProps {
   language: Language;
 }
 
-const PageContent = ({ formId, formRecord, pageText, urlQuery, language }: PageContextProps) => {
+const PageContent = ({ formRecord, pageText, urlQuery, language }: PageContextProps) => {
   const { t } = useTranslation("confirmation");
   const { submissionId, submissionDate } = useGCFormsContext();
 
@@ -43,14 +43,7 @@ const PageContent = ({ formId, formRecord, pageText, urlQuery, language }: PageC
         <input type="hidden" value={submissionId} name="submissionId" />
         <input type="hidden" value={submissionDate} name="submissionDate" />
         <RichText className="confirmation">{pageText}</RichText>
-        {saveAndResume && (
-          <SaveResponse
-            formId={formId}
-            formTitleEn={formRecord.form.titleEn}
-            formTitleFr={formRecord.form.titleFr}
-            language={language}
-          />
-        )}
+        {saveAndResume && <SaveResponse language={language} />}
       </>
     );
   }
