@@ -59,6 +59,7 @@
     "@casl/ability": "6.7.3",
     "@cdssnc/gcds-tokens": "1.20.1",
     "@gcforms/connectors": "workspace:*",
+    "@gcforms/drawer": "workspace:*",
     "@gcforms/types": "workspace:*",
     "@hcaptcha/react-hcaptcha": "^1.11.2",
     "@hcaptcha/types": "^1.0.4",
