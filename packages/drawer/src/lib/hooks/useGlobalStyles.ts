@@ -4,9 +4,7 @@ import globalStylesheet, { getClassNames } from "../styles";
 function useGlobalStyles(duration: number, hideScrollbars: boolean, nonce?: string) {
   const identifier = React.useMemo(() => Math.random().toString(36).substr(2), []);
   const classNames = React.useMemo(() => getClassNames(identifier), [identifier]);
-  if (nonce) {
-    // nothing
-  }
+
   React.useEffect(() => {
     if (typeof document === "undefined") {
       return;
@@ -15,7 +13,7 @@ function useGlobalStyles(duration: number, hideScrollbars: boolean, nonce?: stri
 
     const tag = document.createElement("style");
     tag.setAttribute("data-react-bottom-drawer", identifier);
-    // nonce && tag.setAttribute("nonce", nonce);
+    nonce && tag.setAttribute("nonce", nonce);
     tag.innerHTML = styles;
 
     document.head.appendChild(tag);
@@ -26,7 +24,7 @@ function useGlobalStyles(duration: number, hideScrollbars: boolean, nonce?: stri
         stylesheet.remove();
       }
     };
-  }, [duration, hideScrollbars]);
+  }, [duration, hideScrollbars, identifier, nonce]);
 
   return classNames;
 }
