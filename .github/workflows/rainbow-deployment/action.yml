@@ -54,7 +54,8 @@ runs:
           --timeout 15 \
           --memory-size 2048 \
           --code ImageUri=${{ inputs.ecr-registry-uri }}/forms_app_legacy:${{ inputs.deployment-process-identifier }} \
-          --vpc-config SubnetIds=${{ inputs.forms-lambda-client-subnet-ids }},SecurityGroupIds=${{ inputs.forms-lambda-client-security-group-ids }} | jq -r ".FunctionArn")
+          --vpc-config SubnetIds=${{ inputs.forms-lambda-client-subnet-ids }},SecurityGroupIds=${{ inputs.forms-lambda-client-security-group-ids }} | jq -r ".FunctionArn") \
+          --logging-config LogFormat=Text,LogGroup=Forms
 
         aws lambda wait function-active --function-name rainbow-${{ inputs.deployment-process-identifier }}
 
