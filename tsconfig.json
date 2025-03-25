@@ -54,6 +54,7 @@
     "**/*.cy.ts",
     "**/*.cy.tsx",
     "__tests__",
-    "packages/drawer/**/*"
+    "packages/drawer/**/*.ts",
+    "packages/drawer/**/*.tsx"
   ]
 }
