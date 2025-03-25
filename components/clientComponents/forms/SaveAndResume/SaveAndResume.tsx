@@ -26,13 +26,10 @@ export const SaveAndResume = ({ formId, language }: { formId: string; language: 
         >
           <>
             {t("saveAndResume.saveBtn", { lng: language })}
-            <SaveProgressIcon className="group-focus:fill-white group-active:fill-white" />
+            <SaveProgressIcon className="ml-2 fill-gcds-blue-800 group-focus:fill-white group-active:fill-white" />
           </>
         </DownloadProgress>
-        <LinkButton.Secondary
-          className="ml-4 rounded-md py-2.5"
-          href={`/${language}/id/${formId}/resume`}
-        >
+        <LinkButton.Secondary className="ml-4 rounded-md" href={`/${language}/id/${formId}/resume`}>
           {t("saveAndResume.loadAnswers", { lng: language })}
         </LinkButton.Secondary>
       </span>
