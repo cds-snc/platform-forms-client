@@ -223,11 +223,11 @@
   "saveAndResume": {
     "saveBtn": "Sauvegarder sur l'appareil",
     "resumeBtn": "Poursuivre le formulaire",
-    "loadAnswers": "Load answers [FR]",
-    "saveToDevice": "Save to device [FR]",
-    "resumeForm": "Resume form [FR]",
-    "protectYourDataNote": "Protect your data by keeping the downloaded file in a safe place on a trusted device. [FR]",
-    "more": "More [FR]",
+    "loadAnswers": "Téléverser vos réponses",
+    "saveToDevice": "Sauvegarder sur l'appareil",
+    "resumeForm": "Poursuivre le formulaire",
+    "protectYourDataNote": "Protégez vos données en conservant le fichier téléchargé en lieu sûr sur un appareil de confiance.",
+    "more": "Plus",
     "cancel": "Annuler",
     "formRestored": "Vos réponses jusqu'à présent ont été ajoutées au formulaire.",
     "resumeUploadError": {
