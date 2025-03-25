@@ -10,9 +10,7 @@ import { type Language } from "@lib/types/form-builder-types";
 
 import { Button } from "@clientComponents/globals";
 import { useGCFormsContext } from "@lib/hooks/useGCFormContext";
-import { slugify } from "@lib/client/clientHelpers";
-import { getReviewItems } from "../Review/helpers";
-import { getStartLabels } from "@lib/utils/form-builder/i18nHelpers";
+import { useFormSubmissionData } from "@lib/hooks/useFormSubmissionData";
 import { toast } from "@formBuilder/components/shared/Toast";
 
 import { generateDownloadHtml } from "@lib/saveAndResume/actions";
@@ -24,45 +22,22 @@ export const ConfirmDownloadDialog = ({
   open,
   type,
   handleClose,
-  formId,
-  formTitleEn,
-  formTitleFr,
   language,
 }: {
   open: boolean;
   type: "confirm" | "progress";
   handleClose: handleCloseType;
-  formId: string;
-  formTitleEn: string;
-  formTitleFr: string;
   language: Language;
 }) => {
   const { t } = useTranslation("form-builder");
 
-  const {
-    groups,
-    getValues,
-    formRecord,
-    getGroupHistory,
-    matchedIds,
-    getProgressData,
-    submissionId,
-    submissionDate,
-  } = useGCFormsContext();
+  const { groups, getValues } = useGCFormsContext();
   const [saving, setSaving] = useState(false);
 
   const formValues: void | FormValues = getValues();
-  const groupHistoryIds = getGroupHistory();
   if (!formValues || !groups) throw new Error("Form values or groups are missing");
 
-  const reviewItems = getReviewItems({
-    formElements: formRecord.form.elements,
-    formValues,
-    groups,
-    groupHistoryIds,
-    matchedIds,
-    language,
-  });
+  const { fileName, getOptions } = useFormSubmissionData({ language, type });
 
   const tParent = type === "confirm" ? "saveResponse" : "saveAndResume";
   const generateHtmlError = t("saveResponse.downloadHtml.generateHtmlError.description", {
@@ -75,24 +50,7 @@ export const ConfirmDownloadDialog = ({
   const handleSave = useCallback(async () => {
     try {
       setSaving(true);
-
-      const title = language === "en" ? formTitleEn : formTitleFr;
-
-      const fileName = `${slugify(title)}-${formId}.html`;
-
-      const options = {
-        formTitle: title,
-        type,
-        formId,
-        reviewItems,
-        formResponse: Buffer.from(JSON.stringify(getProgressData()), "utf8").toString("base64"),
-        language,
-        startSectionTitle: getStartLabels()[language],
-        submissionId,
-        submissionDate,
-      };
-
-      const html = await generateDownloadHtml(options);
+      const html = await generateDownloadHtml(getOptions());
 
       if (!html.data || html.data === "") {
         setSaving(false);
@@ -106,18 +64,7 @@ export const ConfirmDownloadDialog = ({
       setSaving(false);
       toast.error(generateHtmlError, "public-facing-form");
     }
-  }, [
-    formId,
-    type,
-    formTitleEn,
-    formTitleFr,
-    getProgressData,
-    language,
-    reviewItems,
-    submissionId,
-    submissionDate,
-    generateHtmlError,
-  ]);
+  }, [generateHtmlError, fileName, getOptions]);
 
   const doClose = () => {
     handleClose(false);

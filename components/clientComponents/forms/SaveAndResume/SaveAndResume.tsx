@@ -9,17 +9,7 @@ import { Button } from "@clientComponents/globals";
 import { LinkButton } from "@serverComponents/globals/Buttons/LinkButton";
 import { SaveProgressIcon } from "@serverComponents/icons";
 
-export const SaveAndResume = ({
-  formId,
-  formTitleEn,
-  formTitleFr,
-  language,
-}: {
-  formId: string;
-  formTitleEn: string;
-  formTitleFr: string;
-  language: Language;
-}) => {
+export const SaveAndResume = ({ formId, language }: { formId: string; language: Language }) => {
   const { t } = useTranslation(["review", "common"]);
   const [confirm, setConfirm] = useState(false);
   const [drawerOpen, setDrawerOpen] = useState(false);
@@ -58,9 +48,6 @@ export const SaveAndResume = ({
       </span>
       <ConfirmDownloadDialog
         type="progress"
-        formId={formId}
-        formTitleEn={formTitleEn}
-        formTitleFr={formTitleFr}
         language={language}
         open={confirm}
         handleClose={() => setConfirm(false)}
@@ -70,8 +57,6 @@ export const SaveAndResume = ({
         setDrawerOpen={setDrawerOpen}
         formId={formId}
         language={language}
-        formTitleEn={formTitleEn}
-        formTitleFr={formTitleFr}
         type="progress"
       />
     </div>
