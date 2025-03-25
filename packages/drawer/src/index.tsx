@@ -83,12 +83,12 @@ const SlideUpTransition = ({
             <div
               onClick={onClose}
               className={clsx(className && `${className}__backdrop`, classNames.backdrop)}
-              style={BackdropStyles[state]}
+              style={BackdropStyles[state as keyof typeof BackdropStyles] || {}}
             />
             <div
               className={clsx(className, classNames.drawer)}
               style={{
-                ...TransitionStyles[state],
+                ...(TransitionStyles[state as keyof typeof TransitionStyles] || {}),
                 ...getTransforms(),
               }}
             >
