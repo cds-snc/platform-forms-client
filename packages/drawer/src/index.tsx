@@ -84,6 +84,7 @@ const SlideUpTransition = ({
               onClick={onClose}
               className={clsx(className && `${className}__backdrop`, classNames.backdrop)}
               style={BackdropStyles[state as keyof typeof BackdropStyles] || {}}
+              nonce={nonce}
             />
             <div
               className={clsx(className, classNames.drawer)}
@@ -91,6 +92,7 @@ const SlideUpTransition = ({
                 ...(TransitionStyles[state as keyof typeof TransitionStyles] || {}),
                 ...getTransforms(),
               }}
+              nonce={nonce}
             >
               <div
                 {...swipeHandlers}
