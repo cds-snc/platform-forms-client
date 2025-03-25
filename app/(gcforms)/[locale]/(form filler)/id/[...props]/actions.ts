@@ -28,7 +28,7 @@ export async function submitForm(
   values: Responses,
   language: string,
   formRecordOrId: PublicFormRecord | string
-): Promise<{ id: string; submissionId?: string | false; error?: Error }> {
+): Promise<{ id: string; submissionId?: string; error?: Error }> {
   const formId = typeof formRecordOrId === "string" ? formRecordOrId : formRecordOrId.id;
 
   try {
@@ -69,9 +69,9 @@ export async function submitForm(
 
     const data = await parseRequestData(formDataObject as SubmissionRequestBody);
 
-    const result = await processFormData(data.fields, data.files, language);
+    const submissionId = await processFormData(data.fields, data.files, language);
 
-    return { id: formId, submissionId: result };
+    return { id: formId, submissionId };
   } catch (e) {
     logMessage.error(
       `Could not submit response for form ${formId}. Received error: ${(e as Error).message}`
