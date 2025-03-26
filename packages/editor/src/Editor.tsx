@@ -88,7 +88,7 @@ export const Editor = ({
           />
           <HistoryPlugin />
           {showTreeview && <TreeViewPlugin />}
-          <OnChangePlugin
+          <OnChangePlugin // @TODO: make the following configurable
             onChange={(editorState) => {
               editorState.read(() => {
                 // Read the contents of the EditorState here.
