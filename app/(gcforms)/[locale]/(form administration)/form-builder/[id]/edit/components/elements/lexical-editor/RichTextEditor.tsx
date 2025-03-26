@@ -1,10 +1,10 @@
 "use client";
 import React, { useCallback, useState, useEffect } from "react";
-import { Editor } from "./Editor";
 import { useTemplateStore } from "@lib/store/useTemplateStore";
 import { Language } from "@lib/types/form-builder-types";
 import debounce from "lodash.debounce";
 import { useTranslation } from "@i18n/client";
+import { Editor } from "@gcforms/editor";
 
 const _debounced = debounce((updater) => {
   updater();
@@ -47,7 +47,7 @@ export const RichTextEditor = ({
         content={value}
         onChange={updateValue}
         ariaLabel={ariaLabel || t("richTextEditor")}
-        ariaDescribedBy={ariaDescribedBy}
+        ariaDescribedBy={ariaDescribedBy || ""}
         {...getLocalizationAttribute()}
       />
     </div>
