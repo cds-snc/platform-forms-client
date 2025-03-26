@@ -53,8 +53,6 @@
     "cypress.config.ts",
     "**/*.cy.ts",
     "**/*.cy.tsx",
-    "__tests__",
-    "packages/drawer/**/*.ts",
-    "packages/drawer/**/*.tsx"
+    "__tests__"
   ]
 }

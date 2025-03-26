@@ -6,7 +6,6 @@ import useEscButton from "./lib/hooks/useEscButton";
 import usePreventScroll from "./lib/hooks/usePreventScroll";
 import { BackdropStyles, TransitionStyles } from "./lib/styles";
 import useGlobalStyles from "./lib/hooks/useGlobalStyles";
-import clsx from "clsx";
 
 interface IProps {
   isVisible: boolean;
@@ -29,7 +28,6 @@ const SlideUpTransition = ({
   mountOnEnter = true,
   duration = 250,
   hideScrollbars = false,
-  className = "",
   nonce,
 }: IProps) => {
   const classNames = useGlobalStyles(duration, hideScrollbars, nonce);
@@ -82,30 +80,20 @@ const SlideUpTransition = ({
           <div ref={nodeRef}>
             <div
               onClick={onClose}
-              className={clsx(className && `${className}__backdrop`, classNames.backdrop)}
+              className={classNames.backdrop}
               style={BackdropStyles[state as keyof typeof BackdropStyles] || {}}
             />
             <div
-              className={clsx(className, classNames.drawer)}
+              className={classNames.drawer}
               style={{
                 ...(TransitionStyles[state as keyof typeof TransitionStyles] || {}),
                 ...getTransforms(),
               }}
             >
-              <div
-                {...swipeHandlers}
-                className={clsx(
-                  className && `${className}__handle-wrapper`,
-                  classNames.handleWrapper
-                )}
-              >
-                <div className={clsx(className && `${className}__handle`, classNames.handle)} />
+              <div {...swipeHandlers} className={classNames.handleWrapper}>
+                <div className={classNames.handle} />
               </div>
-              <div
-                className={clsx(className && `${className}__content`, classNames.contentWrapper)}
-              >
-                {children}
-              </div>
+              <div className={classNames.contentWrapper}>{children}</div>
             </div>
           </div>
         )}

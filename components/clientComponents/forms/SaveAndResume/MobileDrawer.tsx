@@ -1,4 +1,4 @@
-import Drawer from "@gcforms/drawer";
+import Drawer from "./Drawer";
 import { SaveProgressIcon, UploadIcon } from "@serverComponents/icons";
 import { Button } from "@clientComponents/globals";
 import Link from "next/link";

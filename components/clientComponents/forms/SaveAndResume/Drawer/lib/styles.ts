@@ -25,10 +25,7 @@ export const getClassNames = (identifier: string) => ({
   contentWrapper: `rbd-${identifier}-cw`,
 });
 
-const globalStylesheet = (
-  identifier: string,
-  { duration, hideScrollbars }: ICustomizations
-) => {
+const globalStylesheet = (identifier: string, { duration, hideScrollbars }: ICustomizations) => {
   const classNames = getClassNames(identifier);
   return `
   .${classNames.backdrop} {

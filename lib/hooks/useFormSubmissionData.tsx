@@ -41,7 +41,7 @@ export const useFormSubmissionData = ({
   });
 
   const title = language === "en" ? formRecord.form.titleEn : formRecord.form.titleFr;
-  const formId = formRecord.form.id;
+  const formId = formRecord.id;
   const fileName = `${slugify(title)}-${formId}.html`;
 
   const getOptions = useCallback(() => {
