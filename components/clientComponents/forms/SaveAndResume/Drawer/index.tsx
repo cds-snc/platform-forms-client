@@ -1,3 +1,6 @@
+// Code modified from the original source to fit the project's needs
+// https://github.com/fpellicero/react-bottom-drawer
+
 import debounce from "lodash.debounce";
 import * as React from "react";
 import { useSwipeable } from "react-swipeable";
