@@ -4,17 +4,6 @@ ARG USERNAME=node
 ARG USER_UID=1000
 ARG USER_GID=$USER_UID
 
-COPY .yarn /src/.yarn
-COPY .yarnrc.yml /src
-WORKDIR /src
-RUN yarn install
-
-FROM node:22-alpine
-
-ARG USERNAME=node
-ARG USER_UID=1000
-ARG USER_GID=$USER_UID
-
 COPY . /src
 WORKDIR /src
 
