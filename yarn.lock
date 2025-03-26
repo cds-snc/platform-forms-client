@@ -7141,6 +7141,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/body-scroll-lock@npm:^3.1.2":
+  version: 3.1.2
+  resolution: "@types/body-scroll-lock@npm:3.1.2"
+  checksum: 10c0/e766e44ef16e2b9a50488944eb8310247df7a8acfbbc4ed6d9f19ba83987404080aa02eae0256a57b5dd29bf5b9d39f6fa357abcabc3fbc47b8772dc681a1fac
+  languageName: node
+  linkType: hard
+
 "@types/cookie@npm:0.6.0":
   version: 0.6.0
   resolution: "@types/cookie@npm:0.6.0"
@@ -12323,6 +12330,7 @@ __metadata:
     "@testing-library/jest-dom": "npm:^6.6.3"
     "@testing-library/react": "npm:^16.0.1"
     "@testing-library/user-event": "npm:^14.5.2"
+    "@types/body-scroll-lock": "npm:^3.1.2"
     "@types/d3-hierarchy": "npm:^3"
     "@types/eslint-plugin-tailwindcss": "npm:^3"
     "@types/formidable": "npm:^2.0.6"
