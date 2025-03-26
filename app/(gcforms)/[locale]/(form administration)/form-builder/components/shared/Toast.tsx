@@ -7,7 +7,7 @@ import { Bounce, ToastPosition } from "react-toastify";
 import {
   ToastContainer as OriginalContainer,
   toast as originalToast,
-} from "react-toastify/dist/unstyled.mjs";
+} from "react-toastify/unstyled";
 
 const contextClass = {
   success: {
