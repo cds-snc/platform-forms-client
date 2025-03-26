@@ -223,6 +223,12 @@
   "saveAndResume": {
     "saveBtn": "Sauvegarder sur l'appareil",
     "resumeBtn": "Poursuivre le formulaire",
+    "loadAnswers": "Téléverser vos réponses",
+    "saveToDevice": "Sauvegarder sur l'appareil",
+    "resumeForm": "Poursuivre le formulaire",
+    "protectYourDataNote": "Protégez vos données en conservant le fichier téléchargé en lieu sûr sur un appareil de confiance.",
+    "more": "Plus",
+    "cancel": "Annuler",
     "formRestored": "Vos réponses jusqu'à présent ont été ajoutées au formulaire.",
     "resumeUploadError": {
       "title": "Problème de téléversement",
@@ -248,7 +254,9 @@
     },
     "prompt": {
       "title": "Sauvegarder sur l’appareil",
-      "description": "Sauvegardez une copie du formulaire rempli jusqu’à présent. Poursuivez le formulaire plus tard en trouvant le fichier sur votre appareil et téléversant vos réponses. Protégez vos données en conservant le fichier téléchargé en lieu sûr sur un appareil de confiance.",
+      "text1": "Téléchargez une copie du formulaire rempli jusqu'à présent.",
+      "text2": "Poursuivez le formulaire plus tard en trouvant le fichier sur votre appareil et téléversant vos réponses sauvegardées.",
+      "text3": "Assurez vous de protéger vos données en conservant le fichier téléchargé en lieu sûr sur un appareil de confiance.",
       "okay": "Sauvegarder",
       "cancel": "Annuler"
     },
