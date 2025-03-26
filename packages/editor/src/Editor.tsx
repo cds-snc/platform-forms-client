@@ -3,35 +3,47 @@ import { RichTextPlugin } from "@lexical/react/LexicalRichTextPlugin";
 import { LexicalErrorBoundary } from "@lexical/react/LexicalErrorBoundary";
 import { HistoryPlugin } from "@lexical/react/LexicalHistoryPlugin";
 import { AutoFocusPlugin } from "@lexical/react/LexicalAutoFocusPlugin";
-import { HeadingNode, QuoteNode } from "@lexical/rich-text";
-import { ListItemNode, ListNode } from "@lexical/list";
-import { AutoLinkNode, LinkNode } from "@lexical/link";
 import { LinkPlugin } from "@lexical/react/LexicalLinkPlugin";
 import { ListPlugin } from "@lexical/react/LexicalListPlugin";
-import basicTheme from "./themes/BasicTheme";
 import ContentEditable from "./ui/ContentEditable";
 import TabControlPlugin from "./plugins/TabControlPlugin";
 import ToolbarPlugin from "./plugins/ToolbarPlugin";
 import TreeViewPlugin from "./plugins/TreeViewPlugin";
 import ListMaxIndentLevelPlugin from "./plugins/ListMaxIndentPlugin";
 import FloatingLinkEditorPlugin from "./plugins/FloatingLinkEditorPlugin";
-import { useState } from "react";
+import { useId, useState } from "react";
+import { editorConfig } from "./config";
+import "./styles.css";
+import { $createParagraphNode, $getRoot } from "lexical";
+import {
+  $convertFromMarkdownString,
+  // $convertToMarkdownString,
+  TRANSFORMERS,
+} from "@lexical/markdown";
 
-const editorConfig = {
-  theme: basicTheme,
+interface EditorProps {
+  id?: string;
+  content?: string;
+  showTreeview?: boolean;
+  ariaLabel: string;
+  ariaDescribedBy: string;
+  lang: string;
 
-  onError(error: Error) {
-    throw error;
-  },
+  onChange: (...args: unknown[]) => unknown;
+}
 
-  nodes: [HeadingNode, ListNode, ListItemNode, QuoteNode, AutoLinkNode, LinkNode],
-
-  namespace: "MyEditorNamespace",
-};
-
-export const Editor = () => {
+export const Editor = ({
+  id,
+  content = "",
+  showTreeview = false,
+  ariaLabel,
+  ariaDescribedBy,
+}: EditorProps) => {
   const [floatingAnchorElem, setFloatingAnchorElem] = useState<HTMLDivElement | null>(null);
   const [isLinkEditMode, setIsLinkEditMode] = useState<boolean>(false);
+
+  const randomId = useId();
+  const editorId = id || `editor-${randomId}`;
 
   const onRef = (_floatingAnchorElem: HTMLDivElement) => {
     if (_floatingAnchorElem !== null) {
@@ -41,20 +53,39 @@ export const Editor = () => {
 
   return (
     <div className="rich-text-wrapper gc-formview">
-      <LexicalComposer initialConfig={editorConfig}>
+      <LexicalComposer
+        initialConfig={{
+          ...editorConfig,
+          editorState: () => {
+            // @TODO: how to make this configurable
+            if (!content) {
+              const root = $getRoot();
+              const paragraphNode = $createParagraphNode();
+              root.append(paragraphNode);
+              return;
+            }
+            $convertFromMarkdownString(content, TRANSFORMERS);
+          },
+        }}
+      >
         <div className="editor-container">
           <ToolbarPlugin editorId={""} />
 
           <RichTextPlugin
             contentEditable={
               <div className="editor" ref={onRef}>
-                <ContentEditable placeholder={""} />
+                <ContentEditable
+                  placeholder={""}
+                  id={editorId}
+                  ariaLabel={ariaLabel && ariaLabel}
+                  ariaDescribedBy={ariaDescribedBy && ariaDescribedBy}
+                />
               </div>
             }
             ErrorBoundary={LexicalErrorBoundary}
           />
           <HistoryPlugin />
-          <TreeViewPlugin />
+          {showTreeview && <TreeViewPlugin />}
           <AutoFocusPlugin />
           <ListPlugin />
           <LinkPlugin />

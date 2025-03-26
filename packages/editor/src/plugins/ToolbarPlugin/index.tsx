@@ -27,7 +27,7 @@ import {
 
 import { $wrapNodes } from "@lexical/selection";
 import { sanitizeUrl } from "../../utils/url";
-// import { useEditorFocus } from "./useEditorFocus";
+import { useEditorFocus } from "../../hooks/useEditorFocus";
 import { getSelectedNode } from "../../utils/getSelectedNode";
 import { ToolTip } from "../../ToolTip";
 import { H2Icon } from "../../icons/H2Icon";
@@ -227,12 +227,12 @@ export default function ToolbarPlugin({ editorId }: { editorId: string }) {
   }, [editor, updateToolbar]);
 
   const { t } = useTranslation("form-builder");
-  const editorHasFocus = true; // useEditorFocus();
+  const editorHasFocus = useEditorFocus();
 
   return (
     <>
       <div
-        className="flex flex-row gap-4 rounded-t-[2px] border-b border-slate-200 bg-slate-100 p-[10px]"
+        className="gc-toolbar-container rounded-t-[2px] border-b border-slate-200 bg-slate-100 p-[10px]"
         role="toolbar"
         aria-label={t("textFormatting")}
         aria-controls={editorId}
