@@ -10,28 +10,11 @@ export async function register() {
       console.log("No REDIS_URL environment variable found, skipping privilege cache flush");
       return;
     }
-    const Redis = await import("ioredis").then((m) => m.default);
-    const redis = new Redis(process.env.REDIS_URL);
-
-    const stream = redis.scanStream({
-      match: "auth:privileges:*",
+    await import("@lib/flags/initialization").then(async (m) => {
+      m.initiateFlags();
     });
-    stream.on("data", function (keys: string[]) {
-      // `keys` is an array of strings representing key names
-      if (keys.length) {
-        const pipeline = redis.pipeline();
-        keys.forEach(function (key: string) {
-          pipeline.del(key);
-        });
-        pipeline.exec();
-      }
+    await import("@lib/cache/privilegeCache").then(async (m) => {
+      m.flushValues();
     });
-    return new Promise<void>((resolve) =>
-      stream.on("end", () => {
-        // eslint-disable-next-line no-console
-        console.log("Cached Privileges have been cleared");
-        resolve();
-      })
-    );
   }
 }
