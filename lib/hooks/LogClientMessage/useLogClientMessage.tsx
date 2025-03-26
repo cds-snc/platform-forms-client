@@ -16,7 +16,7 @@ export const useLogClientMessage = () => {
   useEffect(() => {
     (async () => {
       if (message) {
-        await logErrorMessage(message.code, message.formId, Date.now());
+        await logErrorMessage(message.code, message.formId, message.timestamp);
         setMessage(undefined);
       }
     })();
@@ -30,7 +30,7 @@ export const useLogClientMessage = () => {
     }: {
       code: FormServerErrorCodes;
       formId: string;
-      timestamp: number;
-    }) => setMessage({ code, formId, timestamp }),
+      timestamp?: number;
+    }) => setMessage({ code, formId, timestamp: timestamp || Date.now() }),
   };
 };
