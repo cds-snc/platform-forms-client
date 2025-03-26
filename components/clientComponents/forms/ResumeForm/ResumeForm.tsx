@@ -17,6 +17,7 @@ import { ErrorResuming } from "./ErrorResuming";
 import { ResumeUploadIcon } from "@serverComponents/icons/ResumeUploadIcon";
 import { LightBulbIcon } from "@serverComponents/icons/LightBulbIcon";
 import { GcdsH1 } from "@serverComponents/globals/GcdsH1";
+import { useLogClient } from "@lib/hooks/LogClient/useLogClient";
 
 // Prevent prototype pollution in JSON.parse https://stackoverflow.com/a/63927372
 const cleaner = (key: string, value: string) =>
@@ -44,6 +45,7 @@ export const ResumeForm = ({
   } = useTranslation(["form-builder", "common"]);
 
   const router = useRouter();
+  const { logClientError } = useLogClient();
 
   const { getFlag } = useFeatureFlags();
   const saveAndResumeEnabled = getFlag(FeatureFlags.saveAndResume);
@@ -137,7 +139,9 @@ export const ResumeForm = ({
         });
         router.push(`/${language}/id/${id}`);
       } catch (e) {
-        toast.error(<ErrorResuming errorCode={errorCode} />, "resume");
+        const timestamp = Date.now();
+        logClientError({ code: errorCode as FormServerErrorCodes, formId, timestamp });
+        toast.error(<ErrorResuming errorCode={`${errorCode}-${timestamp}`} />, "resume");
       }
     };
   };
