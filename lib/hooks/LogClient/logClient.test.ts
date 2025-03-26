@@ -29,7 +29,7 @@ describe("logMessageError function", () => {
   it("Succees with a valid code and formId", async () => {
     const spy = jest.spyOn(logMessage, "error");
     await logErrorMessage(FormServerErrorCodes.FORM_RESUME_INVALID_DATA, "1234", 1742927526697);
-    expect(spy).toHaveBeenCalled();
+    expect(spy).toHaveBeenCalledTimes(1);
     expect(spy).toHaveBeenCalledWith("Client Error: FR08-1742927526697 - formID: 1234");
     spy.mockRestore();
   });
