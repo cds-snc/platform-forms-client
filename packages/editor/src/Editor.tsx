@@ -1,3 +1,5 @@
+"use client";
+import React, { useId, useState } from "react";
 import { LexicalComposer } from "@lexical/react/LexicalComposer";
 import { RichTextPlugin } from "@lexical/react/LexicalRichTextPlugin";
 import { LexicalErrorBoundary } from "@lexical/react/LexicalErrorBoundary";
@@ -11,7 +13,6 @@ import ToolbarPlugin from "./plugins/ToolbarPlugin";
 import TreeViewPlugin from "./plugins/TreeViewPlugin";
 import ListMaxIndentLevelPlugin from "./plugins/ListMaxIndentPlugin";
 import FloatingLinkEditorPlugin from "./plugins/FloatingLinkEditorPlugin";
-import { useId, useState } from "react";
 import { editorConfig } from "./config";
 import { $createParagraphNode, $getRoot } from "lexical";
 import {
@@ -26,8 +27,8 @@ interface EditorProps {
   id?: string;
   content?: string;
   showTreeview?: boolean;
-  ariaLabel: string;
-  ariaDescribedBy: string;
+  ariaLabel?: string;
+  ariaDescribedBy?: string;
   lang?: string;
 
   onChange?(...args: unknown[]): unknown;
@@ -37,8 +38,8 @@ export const Editor = ({
   id,
   content = "",
   showTreeview = false,
-  ariaLabel,
-  ariaDescribedBy,
+  ariaLabel = "AriaLabel",
+  ariaDescribedBy = "AriaDescribedBy",
   onChange,
 }: EditorProps) => {
   const [floatingAnchorElem, setFloatingAnchorElem] = useState<HTMLDivElement | null>(null);
