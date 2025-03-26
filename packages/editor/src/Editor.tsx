@@ -17,9 +17,10 @@ import "./styles.css";
 import { $createParagraphNode, $getRoot } from "lexical";
 import {
   $convertFromMarkdownString,
-  // $convertToMarkdownString,
+  $convertToMarkdownString,
   TRANSFORMERS,
 } from "@lexical/markdown";
+import { OnChangePlugin } from "@lexical/react/LexicalOnChangePlugin";
 
 interface EditorProps {
   id?: string;
@@ -38,6 +39,7 @@ export const Editor = ({
   showTreeview = false,
   ariaLabel,
   ariaDescribedBy,
+  onChange,
 }: EditorProps) => {
   const [floatingAnchorElem, setFloatingAnchorElem] = useState<HTMLDivElement | null>(null);
   const [isLinkEditMode, setIsLinkEditMode] = useState<boolean>(false);
@@ -86,6 +88,26 @@ export const Editor = ({
           />
           <HistoryPlugin />
           {showTreeview && <TreeViewPlugin />}
+          <OnChangePlugin
+            onChange={(editorState) => {
+              editorState.read(() => {
+                // Read the contents of the EditorState here.
+                const markdown = $convertToMarkdownString(TRANSFORMERS);
+
+                // Add two spaces to previous line for linebreaks (this is not handled properly by $convertToMarkdownString)
+                const lines = markdown.split("\n");
+                lines.forEach((currentLine, i) => {
+                  if (i > 0) {
+                    const previousLine = lines[i - 1];
+                    if (previousLine !== "" && currentLine !== "") {
+                      lines[i - 1] = previousLine.trim() + "  ";
+                    }
+                  }
+                });
+                onChange && onChange(lines.join("\n"));
+              });
+            }}
+          />
           <AutoFocusPlugin />
           <ListPlugin />
           <LinkPlugin />
