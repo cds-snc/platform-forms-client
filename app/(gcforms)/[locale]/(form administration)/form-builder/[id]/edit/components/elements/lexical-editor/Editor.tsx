@@ -19,12 +19,10 @@ import {
 } from "@lexical/markdown";
 import TabControlPlugin from "./plugins/TabControlPlugin";
 
-const FloatingLinkEditorPlugin = dynamic(() => import("./plugins/FloatingLinkEditorPlugin.ts"), {
+const FloatingLinkEditorPlugin = dynamic(() => import("./plugins/FloatingLinkEditorPlugin"), {
   ssr: false,
 });
-const ListMaxIndentPlugin = dynamic(() => import("./plugins/ListMaxIndentPlugin.tsx"), {
-  ssr: false,
-});
+const ListMaxIndentPlugin = dynamic(() => import("./plugins/ListMaxIndentPlugin"), { ssr: false });
 
 interface EditorProps {
   id?: string;

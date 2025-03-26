@@ -4,10 +4,7 @@ import React, { type JSX } from "react";
 import { Bounce, ToastPosition } from "react-toastify";
 
 // https://github.com/fkhadra/react-toastify/issues/1215#issuecomment-2674902485
-import {
-  ToastContainer as OriginalContainer,
-  toast as originalToast,
-} from "react-toastify/unstyled";
+import { ToastContainer as OriginalContainer, toast as originalToast } from "@toast/unstyled";
 
 const contextClass = {
   success: {
