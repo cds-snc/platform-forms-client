@@ -37,10 +37,6 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Get second to last release commit identifier
-        id: get-second-to-last-release
-        run: echo "ref=$(git rev-parse @~)" >> $GITHUB_OUTPUT
-
       - name: Configure AWS credentials using OIDC
         uses: aws-actions/configure-aws-credentials@ececac1a45f3b08a01d2dd070d28d111c5fe6722 # v4.1.0
         with:
@@ -56,7 +52,6 @@ jobs:
         uses: ./.github/workflows/rainbow-deployment
         with:
           deployment-process-identifier: ${{ github.sha }}
-          legacy-version-git-ref: ${{ steps.get-second-to-last-release.outputs.ref }}
           ecr-registry-uri: ${{ env.AWS_ACCOUNT_ID }}.dkr.ecr.ca-central-1.amazonaws.com
           ecr-registry-form-viewer-repository-name: form_viewer_staging
           cognito-app-client-id: ${{ secrets.STAGING_COGNITO_APP_CLIENT_ID }}

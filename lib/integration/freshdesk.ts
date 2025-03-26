@@ -118,7 +118,7 @@ export const createTicket = async ({
       );
     } else if (axios.isCancel(error)) {
       // No response was received from FreshDesk
-      logMessage.error(`Call to FreshDesk timed out.  Could not submit: ${JSON.stringify(data)}`);
+      logMessage.error(`Call to FreshDesk timed out. Could not submit: ${JSON.stringify(data)}`);
     } else {
       // Unknown Error
       logMessage.error(`Could not connect to FreshDesk: ${error.message}`);
