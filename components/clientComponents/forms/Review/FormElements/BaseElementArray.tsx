@@ -12,7 +12,7 @@ export const BaseElementArray = ({
   }
 
   return (
-    <div className="mb-8">
+    <dl className="mb-8">
       <dt className="mb-2 font-bold">{formItem.label}</dt>
       <dd>
         {Array.isArray(formItem.values) && formItem.values.length > 0 ? (
@@ -31,6 +31,6 @@ export const BaseElementArray = ({
           "-"
         )}
       </dd>
-    </div>
+    </dl>
   );
 };

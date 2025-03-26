@@ -17,6 +17,8 @@ import {
 } from "@lib/types";
 import { BrandProperties } from "@lib/types";
 
+import { type Indexes } from "@lib/utils/form-builder/getPath";
+
 export interface TemplateStoreState extends TemplateStoreProps {
   focusInput: boolean;
   setHasHydrated: () => void;
@@ -74,11 +76,13 @@ export interface TemplateStoreState extends TemplateStoreProps {
   setIsPublished: (isPublished: boolean) => void;
   getFormElementById: (id: number) => FormElement | undefined;
   getFormElementWithIndexById: (id: number) => FormElementWithIndex | undefined;
+  getFormElementIndexes: (id: number) => Indexes;
   getName: () => string;
   getDeliveryOption: () => DeliveryOption | undefined;
   resetDeliveryOption: () => void;
   getSecurityAttribute: () => SecurityAttribute;
   setClosingDate: (closingDate: string | null) => void;
+  setSaveAndResume: (val: boolean | undefined) => void;
   initialize: (language?: string) => void;
   removeChoiceFromRules: (elId: string, choiceIndex: number) => void;
   removeChoiceFromNextActions: (elId: string, choiceIndex: number) => void;
@@ -111,4 +115,5 @@ export interface TemplateStoreProps {
   closingDate?: string | null;
   changeKey: string;
   allowGroupsFlag: boolean;
+  saveAndResume: boolean;
 }

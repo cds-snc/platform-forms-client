@@ -63,8 +63,14 @@ export default AuthenticatedLayout(
             </div>
           </header>
           <div className="shrink-0 grow basis-auto">
-            <ToastContainer containerId="default" />
-            <ToastContainer limit={1} containerId="wide" autoClose={false} width="600px" />
+            <ToastContainer limit={1} containerId="default" />
+            <ToastContainer
+              limit={1}
+              containerId="wide"
+              autoClose={false}
+              ariaLabel="Notifications: Alt+T"
+              width="600px"
+            />
             <>
               <div>
                 <div className="flex flex-row gap-10 pr-12">

@@ -160,3 +160,8 @@ export async function runPromisesSynchronously<T>(
 
   return accumulator;
 }
+
+export const truncateString = (str: string, maxLength: number = 50): string => {
+  if (!str) return "";
+  return str.length > maxLength ? `${str.slice(0, maxLength)}...` : str;
+};

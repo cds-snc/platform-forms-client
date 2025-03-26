@@ -127,7 +127,7 @@ describe("Template CRUD functions", () => {
           id: "formtestID",
           form: formConfiguration,
           isPublished: false,
-          securityAttribute: "Unclassified",
+          securityAttribute: "Unclassified"
         })
       );
 
@@ -152,6 +152,7 @@ describe("Template CRUD functions", () => {
           form: formConfiguration,
           isPublished: false,
           securityAttribute: "Unclassified",
+
         }),
         expect.objectContaining({
           id: "formtestID2",
@@ -375,7 +376,7 @@ describe("Template CRUD functions", () => {
           id: "formtestID",
           form: formConfiguration,
           isPublished: true,
-          securityAttribute: "Unclassified",
+          securityAttribute: "Unclassified"
         })
       );
       expect(mockedLogEvent).toHaveBeenCalledWith(
@@ -479,6 +480,7 @@ describe("Template CRUD functions", () => {
             publishDesc: true,
             securityAttribute: true,
             users: true,
+            saveAndResume: true,
           },
         })
       );
@@ -573,6 +575,7 @@ describe("Template CRUD functions", () => {
             publishFormType: true,
             publishDesc: true,
             securityAttribute: true,
+            saveAndResume: true,
           },
         })
       );

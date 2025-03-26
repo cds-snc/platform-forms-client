@@ -105,7 +105,7 @@ export const ContactForm = () => {
             </ValidationMessage>
           )}
           <h1>{t("contactus.title")}</h1>
-          <p className="-mt-8 mb-6 text-[1.6rem]">{t("contactus.useThisForm")}</p>
+          <p className="-mt-8 mb-6">{t("contactus.useThisForm")}</p>
           <p className="mb-14">
             {t("contactus.gcFormsTeamPart1")}{" "}
             <Link href={`https://www.canada.ca/${language}/contact.html`}>

@@ -10,5 +10,6 @@
   "configureHowTheApplicationWorks": "Configurer le fonctionnement de l’application.",
   "typography": "Typographie",
   "upload": "Téléverser",
-  "viewTemplates": "Afficher les modèles"
+  "viewTemplates": "Afficher les modèles",
+  "recentAccounts": "Comptes récents"
 }

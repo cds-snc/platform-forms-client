@@ -1,6 +1,4 @@
-import { FormValues } from "@lib/formContext";
 import { FormItem } from "../../helpers";
-import { useGCFormsContext } from "@lib/hooks/useGCFormContext";
 import { FormItemFactory } from "../../FormItemFactory";
 import { Language } from "@lib/types/form-builder-types";
 import { randomId } from "@lib/client/clientHelpers";
@@ -17,10 +15,7 @@ const getDynamicRowElements = (formItem: FormItem, language: Language) => {
 
 // Note: DynamicRow = Sub Elements = Repeating Sets = {more names ?}
 export const DynamicRow = ({ formItem, language }: { formItem: FormItem; language: Language }) => {
-  const { getValues } = useGCFormsContext();
-
-  const formValues: FormValues | void = getValues();
-  const reviewSection = getReviewSectionFromDynamicRows(formItem, formValues, language);
+  const reviewSection = getReviewSectionFromDynamicRows(formItem, language);
   if (!Array.isArray(reviewSection?.values)) {
     return <></>;
   }
@@ -31,10 +26,10 @@ export const DynamicRow = ({ formItem, language }: { formItem: FormItem; languag
       {reviewSection.values.map((formItem, index) => {
         const dynamicRowElements = getDynamicRowElements(formItem as FormItem, language);
         return (
-          <dl className="mb-10 mt-12" key={`${(formItem as FormItem).element?.id}-${index}`}>
+          <div className="mb-10 mt-12" key={`${(formItem as FormItem).element?.id}-${index}`}>
             <h5 className="mb-8">{(formItem as FormItem).label}</h5>
             {dynamicRowElements}
-          </dl>
+          </div>
         );
       })}
     </div>

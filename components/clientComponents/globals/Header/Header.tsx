@@ -10,8 +10,9 @@ import { FileNameInput } from "./FileName";
 import { ShareDropdown } from "./ShareDropdown";
 import LanguageToggle from "./LanguageToggle";
 import { YourAccountDropdown } from "./YourAccountDropdown";
-import { LiveMessage } from "@lib/hooks/useLiveMessage";
 import Markdown from "markdown-to-jsx";
+import { useFeatureFlags } from "@lib/hooks/useFeatureFlags";
+import { FeatureFlags } from "@lib/cache/types";
 
 type HeaderParams = {
   context?: "admin" | "formBuilder" | "default";
@@ -30,15 +31,17 @@ export const Header = ({ context = "default", className }: HeaderParams) => {
   const [bannerType, setBannerType] = useState("");
   const [bannerMessage, setBannerMessage] = useState("");
 
+  const { getFlag } = useFeatureFlags();
+  const isEnabled = getFlag(FeatureFlags.caretakerPeriod);
+
   useEffect(() => {
     async function fetchBannerData() {
-      const isEnabled = t("campaignBanner.enabled") === "true";
       setBannerData(isEnabled);
-      setBannerMessage(t("campaignBanner.message2"));
-      setBannerType(t("campaignBanner.type2"));
+      setBannerMessage(t("campaignBanner.message3"));
+      setBannerType(t("campaignBanner.type3"));
     }
     fetchBannerData();
-  }, [t]);
+  }, [t, isEnabled]);
 
   const paddingTop = isBannerEnabled ? "py-0" : "py-2";
 
@@ -118,7 +121,6 @@ export const Header = ({ context = "default", className }: HeaderParams) => {
             </ul>
           </nav>
         </div>
-        <LiveMessage />
       </header>
     </>
   );

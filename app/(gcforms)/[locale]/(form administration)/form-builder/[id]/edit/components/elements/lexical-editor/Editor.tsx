@@ -17,6 +17,7 @@ import {
   $convertToMarkdownString,
   TRANSFORMERS,
 } from "@lexical/markdown";
+import TabControlPlugin from "./plugins/TabControlPlugin";
 
 const FloatingLinkEditorPlugin = dynamic(() => import("./plugins/FloatingLinkEditorPlugin"), {
   ssr: false,
@@ -104,6 +105,7 @@ export const Editor = ({ content, onChange, ariaLabel, ariaDescribedBy, lang }: 
         <LinkPlugin />
         <FloatingLinkEditorPlugin anchorElem={floatingAnchorElem} />
         <ListPlugin />
+        <TabControlPlugin />
         <ListMaxIndentPlugin maxDepth={5} />
       </LexicalComposer>
     </div>

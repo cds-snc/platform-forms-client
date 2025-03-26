@@ -1,18 +1,15 @@
-import { useTranslation } from "@i18n/client";
-import { FormItem } from "../../helpers";
 import {
-  AddressCompleteLabels,
-  AddressElements,
+  type AddressCompleteLabels,
+  type AddressElements,
 } from "@clientComponents/forms/AddressComplete/types";
-import { Language } from "@lib/types/form-builder-types";
-import { AddressComponents } from "@lib/types";
-import { useGCFormsContext } from "@lib/hooks/useGCFormContext";
+import { type Language } from "@lib/types/form-builder-types";
+import { type AddressComponents } from "@lib/types";
+import { FormItem } from "../../helpers";
 import { getLocalizedProperty, safeJSONParse } from "@lib/utils";
 import { BaseElementArray } from "../BaseElementArray";
 import { BaseElement } from "../BaseElement";
 import { getCombinedAddressAsFormItem, getSplitAddressAsFormItem } from "./helpers";
-
-// TODO: Fix Canada not showing up in the output (other countries do) - on staging as well
+import { customTranslate } from "@lib/i18nHelpers";
 
 export const AddressComplete = ({
   formItem,
@@ -23,15 +20,11 @@ export const AddressComplete = ({
   language: Language;
   splitValues?: boolean;
 }): React.ReactElement => {
-  const { t } = useTranslation(["review", "common"]);
-  const { getValues } = useGCFormsContext();
-
-  const formValues = getValues();
+  const { t } = customTranslate("review");
   const element = formItem.element;
   const addressComponents = element?.properties?.addressComponents as AddressComponents;
-  const elementId = element?.id; // For TS next line...
-  const addressFormValue = formValues[elementId as keyof typeof elementId];
-  const addressValues = safeJSONParse(addressFormValue) as AddressElements;
+  const addressFormValue = formItem.values;
+  const addressValues = safeJSONParse(addressFormValue as string) as AddressElements;
 
   if (addressComponents?.splitAddress || splitValues) {
     const addressCompleteStrings = {

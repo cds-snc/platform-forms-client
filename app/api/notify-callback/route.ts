@@ -112,6 +112,7 @@ export const validAuthorizationHeader = (): MiddlewareRequest => {
 export const POST = middleware([validAuthorizationHeader()], async (req, props) => {
   const submissionID: string = props.body.reference as string;
   const deliveryStatus: string = props.body.status as string;
+  const statusDescription: string = props.body.status_description as string;
 
   if (submissionID === undefined || deliveryStatus === undefined) {
     return NextResponse.json(
@@ -138,7 +139,7 @@ export const POST = middleware([validAuthorizationHeader()], async (req, props) 
 
   if (deliveryStatus === "technical-failure" || deliveryStatus === "permanent-failure") {
     logMessage.warn(
-      `HealthCheck Notify Callback: Form submission ${submissionID} will never be delivered because of a ${deliveryStatus} (GC Notify)`
+      `HealthCheck Notify Callback: Form submission ${submissionID} will never be delivered because of a ${deliveryStatus} (reason: ${statusDescription})`
     );
     await removeProcessedMark(submissionID);
     return NextResponse.json({

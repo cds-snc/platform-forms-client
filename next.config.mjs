@@ -29,6 +29,7 @@ const securityHeaders = [
 ];
 
 const nextConfig = {
+  deploymentId: process.env.NEXT_DEPLOYMENT_ID,
   sassOptions: {
     includePaths: [path.join(__dirname, "styles")],
   },
@@ -38,7 +39,7 @@ const nextConfig = {
     // removeConsole: false,
   },
   output: isOutputStandalone ? "standalone" : undefined,
-  ...(process.env.REVIEW_ENV && {
+  ...(process.env.LAMBDA_ENV && {
     cacheHandler: require.resolve("./nextCacheHandler.mjs"),
     cacheMaxMemorySize: 0, // disable default in-memory caching
   }),

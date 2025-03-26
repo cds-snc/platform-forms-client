@@ -9,6 +9,7 @@ import { getPrivilegeRulesForUser } from "@lib/privileges";
 import { logEvent } from "@lib/auditLogs";
 import { activeStatusCheck, activeStatusUpdate } from "@lib/cache/userActiveStatus";
 import { JWT } from "next-auth/jwt";
+import { cache } from "react";
 // import ZitadelProvider from "next-auth/providers/zitadel";
 
 /**
@@ -40,7 +41,7 @@ const checkUserActiveStatus = async (userID: string): Promise<boolean> => {
   return user?.active ?? false;
 };
 
-export const {
+const {
   handlers: { GET, POST },
   auth,
   signIn,
@@ -267,3 +268,7 @@ export const {
     },
   },
 });
+
+const cachedAuth = cache(auth);
+
+export { GET, POST, signIn, signOut, cachedAuth as auth };

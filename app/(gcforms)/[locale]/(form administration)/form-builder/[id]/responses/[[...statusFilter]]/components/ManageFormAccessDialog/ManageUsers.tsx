@@ -9,6 +9,7 @@ import { hasOwnProperty } from "@lib/tsUtils";
 import { useTranslation } from "@i18n/client";
 import { cn } from "@lib/utils";
 import { UserActions } from "./UserActions";
+import { Trans } from "react-i18next";
 
 export const ManageUsers = () => {
   const { t } = useTranslation("manage-form-access");
@@ -133,7 +134,14 @@ export const ManageUsers = () => {
         <label htmlFor="email" className="font-bold">
           {t("addPeopleToShareAccess")}
         </label>
-        <p className="pb-3">{t("mustBeAGovernmentAddress")}</p>
+        <p className="pb-3">
+          <Trans
+            t={t}
+            i18nKey="mustBeAGovernmentAddress"
+            defaults="<a></a>"
+            components={{ a: <a /> }}
+          />
+        </p>
 
         <div role="alert">
           {errors.length > 0 && (

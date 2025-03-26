@@ -12,6 +12,7 @@ export enum AuditLogEvent {
   ChangeFormName = "ChangeFormName",
   ChangeDeliveryOption = "ChangeDeliveryOption",
   ChangeFormPurpose = "ChangeFormPurpose",
+  ChangeFormSaveAndResume = "ChangeFormSaveAndResume",
   ChangeSecurityAttribute = "ChangeSecurityAttribute",
   GrantFormAccess = "GrantFormAccess",
   RevokeFormAccess = "RevokeFormAccess",
@@ -112,7 +113,6 @@ export const logEvent = async (
     );
   } catch (e) {
     // Only log the error in Production environment.
-    // Development may be running without LocalStack setup
     if (process.env.NODE_ENV === "development" || process.env.APP_ENV === "test")
       return logMessage.info(`AuditLog:${auditLog}`);
 

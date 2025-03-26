@@ -3,7 +3,7 @@ import { Submission } from "../../types";
 import { ColumnTable } from "./ColumnTable";
 import { RowTable } from "./RowTable";
 import { customTranslate, getProperty } from "@lib/i18nHelpers";
-import { FormRecord } from "@cdssnc/gcforms-types";
+import { FormRecord } from "@gcforms/types";
 
 export interface ResponseSectionProps {
   confirmReceiptCode: string;

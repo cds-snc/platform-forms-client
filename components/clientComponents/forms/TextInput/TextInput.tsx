@@ -9,13 +9,23 @@ import { cn } from "@lib/utils";
 export interface TextInputProps extends InputFieldProps {
   type: HTMLTextInputTypeAttribute;
   placeholder?: string;
+  spellCheck?: boolean;
 }
 
 export const TextInput = (
   props: TextInputProps & JSX.IntrinsicElements["input"]
 ): React.ReactElement => {
-  const { id, type, className, required, ariaDescribedBy, placeholder, autoComplete, maxLength } =
-    props;
+  const {
+    id,
+    type,
+    className,
+    required,
+    ariaDescribedBy,
+    placeholder,
+    autoComplete,
+    maxLength,
+    spellCheck,
+  } = props;
   const [field, meta, helpers] = useField(props);
   const { t } = useTranslation("common");
 
@@ -70,6 +80,7 @@ export const TextInput = (
         className={classes}
         id={id}
         type={type === "number" ? "text" : type}
+        spellCheck={spellCheck}
         required={required}
         autoComplete={autoComplete ? autoComplete : "off"}
         placeholder={placeholder}
@@ -102,19 +113,15 @@ export const TextInput = (
           },
         })}
       />
-      {characterCountMessages &&
-        maxLength &&
-        remainingCharacters < maxLength * 0.25 &&
-        remainingCharacters >= 0 && (
-          <div id={"characterCountMessage" + id} aria-live="polite">
-            {remainingCharactersMessage}
-          </div>
-        )}
-      {characterCountMessages && maxLength && remainingCharacters < 0 && (
-        <div id={"characterCountMessage" + id} className="gc-error-message" aria-live="polite">
-          {tooManyCharactersMessage}
-        </div>
-      )}
+      <div id={"characterCountMessage" + id} aria-live="polite">
+        {characterCountMessages &&
+          maxLength &&
+          remainingCharacters < maxLength * 0.25 &&
+          remainingCharacters >= 0 &&
+          remainingCharactersMessage}
+
+        {characterCountMessages && maxLength && remainingCharacters < 0 && tooManyCharactersMessage}
+      </div>
     </>
   );
 };

@@ -14,7 +14,7 @@ export const getFormElementById: TemplateStore<"getFormElementById"> = (set, get
 
     if (element.properties?.subElements) {
       for (const subElement of element.properties.subElements) {
-        if (subElement.id === id) {
+        if (subElement && subElement.id === id) {
           return subElement;
         }
       }

@@ -73,16 +73,14 @@ export const TextArea = (
       >
         {children}
       </textarea>
-      {maxLength && remainingCharacters < maxLength * 0.25 && remainingCharacters >= 0 && (
-        <div id={"characterCountMessage" + id} aria-live="polite">
-          {remainingCharactersMessage}
-        </div>
-      )}
-      {maxLength && remainingCharacters < 0 && (
-        <div id={"characterCountMessage" + id} className="gc-error-message" aria-live="polite">
-          {tooManyCharactersMessage}
-        </div>
-      )}
+      <div id={"characterCountMessage" + id} className="gc-error-message" aria-live="polite">
+        {maxLength &&
+          remainingCharacters < maxLength * 0.25 &&
+          remainingCharacters >= 0 &&
+          remainingCharactersMessage}
+
+        {maxLength && remainingCharacters < 0 && tooManyCharactersMessage}
+      </div>
     </>
   );
 };

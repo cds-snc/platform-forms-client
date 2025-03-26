@@ -74,7 +74,7 @@ describe("Test FormBuilder", () => {
 
     // publish form
     cy.get('[data-testid="publish"]').click();
-    cy.get("h1").should("contain", "You cannot publish");
+    cy.get("h1").should("contain", "You can't publish yet");
     cy.get("a").contains("create one now").click();
 
     // can visit create account

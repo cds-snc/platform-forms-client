@@ -1,6 +1,11 @@
 "use client";
 import React, { createContext, useContext, ReactNode } from "react";
-import { PublicFormRecord } from "@lib/types";
+
+import { type Language } from "@lib/types/form-builder-types";
+import { type PublicFormRecord } from "@lib/types";
+import { LockedSections } from "@formBuilder/components/shared/right-panel/treeview/types";
+import { getGroupTitle as groupTitle } from "@lib/utils/getGroupTitle";
+
 import {
   mapIdsToValues,
   FormValues,
@@ -10,7 +15,6 @@ import {
   filterShownElements,
   filterValuesByShownElements,
 } from "@lib/formContext";
-import { LockedSections } from "@formBuilder/components/shared/right-panel/treeview/types";
 import { formHasGroups } from "@lib/utils/form-builder/formHasGroups";
 import {
   getGroupHistory as _getGroupHistory,
@@ -19,13 +23,11 @@ import {
   getPreviousIdFromCurrentId,
   getInputHistoryValues,
 } from "@lib/utils/form-builder/groupsHistory";
-import { getLocalizedProperty } from "@lib/utils";
-import { Language } from "@lib/types/form-builder-types";
 
 import {
-  saveProgress as saveToSession,
-  restoreProgress as restoreSession,
-} from "@lib/utils/saveProgress";
+  saveSessionProgress as saveToSession,
+  restoreSessionProgress as restoreSession,
+} from "@lib/utils/saveSessionProgress";
 
 import { toggleSavedValues } from "@i18n/toggleSavedValues";
 
@@ -43,13 +45,24 @@ interface GCFormsContextValueType {
   hasNextAction: (group: string) => boolean;
   isOffBoardSection: (group: string) => boolean;
   formRecord: PublicFormRecord;
+  submissionId: string | undefined;
+  setSubmissionId: (submissionId: string) => void;
+  submissionDate: string | undefined;
+  setSubmissionDate: (date: string) => void;
   groupsCheck: (groupsFlag: boolean | undefined) => boolean;
   getGroupHistory: () => string[];
   pushIdToHistory: (groupId: string) => string[];
   clearHistoryAfterId: (groupId: string) => string[];
   getGroupTitle: (groupId: string | null, language: Language) => string;
-  saveProgress: (language: Language | undefined) => void;
-  restoreProgress: (language: Language) => FormValues | false;
+  saveSessionProgress: (language: Language | undefined) => void;
+  restoreSessionProgress: (language: Language) => FormValues | false;
+  getProgressData: () => {
+    id: string;
+    values: FormValues;
+    history: string[];
+    currentGroup: string;
+  };
+  getNonce: () => string;
 }
 
 const GCFormsContext = createContext<GCFormsContextValueType | undefined>(undefined);
@@ -57,9 +70,11 @@ const GCFormsContext = createContext<GCFormsContextValueType | undefined>(undefi
 export const GCFormsProvider = ({
   children,
   formRecord,
+  nonce,
 }: {
   children: ReactNode;
   formRecord: PublicFormRecord;
+  nonce?: string;
 }) => {
   const groups: GroupsType = formRecord.form.groups || {};
   const initialGroup = groups ? LockedSections.START : null;
@@ -68,6 +83,8 @@ export const GCFormsProvider = ({
   const [matchedIds, setMatchedIds] = React.useState<string[]>([]);
   const [currentGroup, setCurrentGroup] = React.useState<string | null>(initialGroup);
   const [previousGroup, setPreviousGroup] = React.useState<string | null>(initialGroup);
+  const [submissionId, setSubmissionId] = React.useState<string | undefined>(undefined);
+  const [submissionDate, setSubmissionDate] = React.useState<string | undefined>(undefined);
 
   const inputHistoryValues = getInputHistoryValues(
     (values.current || []) as FormValues,
@@ -148,6 +165,10 @@ export const GCFormsProvider = ({
     return values.current as FormValues;
   };
 
+  const getNonce = () => {
+    return nonce || "";
+  };
+
   // TODO: once groups flag is on, just use formHasGroups
   const groupsCheck = (groupsFlag: boolean | undefined) => {
     // Check that the conditional logic flag is on and that this is a groups enabled form
@@ -163,13 +184,16 @@ export const GCFormsProvider = ({
   // Note: this only removes the group entry and not the values
   const clearHistoryAfterId = (groupId: string) => _clearHistoryAfterId(groupId, history.current);
 
-  const getGroupTitle = (groupId: string | null, language: Language) => {
-    if (!groupId) return "";
-    const titleLanguageKey = getLocalizedProperty("title", language) as "titleEn" | "titleFr";
-    return groups?.[groupId]?.[titleLanguageKey] || "";
+  const getProgressData = () => {
+    return {
+      id: formRecord.id,
+      values: values.current,
+      history: history.current,
+      currentGroup: currentGroup || "",
+    };
   };
 
-  const saveProgress = (language: Language = "en") => {
+  const saveSessionProgress = (language: Language = "en") => {
     const vals =
       language === "en"
         ? values.current
@@ -183,14 +207,22 @@ export const GCFormsProvider = ({
     });
   };
 
-  const restoreProgress = (language: Language) => {
+  const restoreSessionProgress = (language: Language) => {
     return restoreSession({ id: formRecord.id, form: formRecord.form, language });
+  };
+
+  const getGroupTitle = (groupId: string | null, language: Language) => {
+    return groupTitle({ groups, groupId, language });
   };
 
   return (
     <GCFormsContext.Provider
       value={{
         formRecord,
+        submissionId,
+        setSubmissionId,
+        submissionDate,
+        setSubmissionDate,
         updateValues,
         getValues,
         matchedIds,
@@ -208,8 +240,10 @@ export const GCFormsProvider = ({
         pushIdToHistory,
         clearHistoryAfterId,
         getGroupTitle,
-        saveProgress,
-        restoreProgress,
+        saveSessionProgress,
+        getProgressData,
+        restoreSessionProgress,
+        getNonce,
       }}
     >
       {children}
@@ -228,6 +262,10 @@ export const useGCFormsContext = () => {
       getValues: () => {
         return;
       },
+      submissionId: undefined,
+      setSubmissionId: () => void 0,
+      submissionDate: undefined,
+      setSubmissionDate: () => void 0,
       matchedIds: [""],
       filteredMatchedIds: [""],
       groups: {},
@@ -244,10 +282,19 @@ export const useGCFormsContext = () => {
       pushIdToHistory: () => [],
       clearHistoryAfterId: () => [],
       getGroupTitle: () => "",
-      saveProgress: () => void 0,
-      restoreProgress: () => {
+      saveSessionProgress: () => void 0,
+      getProgressData: () => {
+        return {
+          id: "",
+          values: {},
+          history: [],
+          currentGroup: "",
+        };
+      },
+      restoreSessionProgress: () => {
         return {};
       },
+      getNonce: () => "",
     };
   }
   return formsContext;

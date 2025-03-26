@@ -1,7 +1,7 @@
 import { auth } from "@lib/auth";
 
 import { redirect } from "next/navigation";
-import { getCurrentLanguage } from "@i18n";
+import { getCurrentLanguage } from "@i18n/utils";
 import { getAbility } from "@lib/privileges";
 import { Session } from "next-auth";
 

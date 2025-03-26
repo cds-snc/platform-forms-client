@@ -10,7 +10,7 @@
     "forceConsistentCasingInFileNames": true,
     "noEmit": true,
     "esModuleInterop": true,
-    "module": "esnext",
+    "module": "ESNext",
     "moduleResolution": "node",
     "resolveJsonModule": true,
     "isolatedModules": true,
@@ -28,7 +28,8 @@
       "@i18n/*": ["i18n/*"],
       "@content/*": ["public/static/content/*"],
       "@public/*": ["public/*"],
-      "@cdssnc/gcforms-types": ["packages/gcforms-types/src"]
+      "@gcforms/*": ["packages/*/src"],
+      "@toast/*": ["node_modules/react-toastify/dist/*"]
     },
     "incremental": true,
     "plugins": [

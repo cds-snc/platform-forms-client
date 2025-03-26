@@ -8,6 +8,7 @@
 @include meta.load-css("_forms");
 @include meta.load-css("_form-builder");
 @include meta.load-css("_header");
+@include meta.load-css("_toast");
 @include meta.load-css("animations");
 
 // Tailwind Utilities needs to be loaded last to use inline

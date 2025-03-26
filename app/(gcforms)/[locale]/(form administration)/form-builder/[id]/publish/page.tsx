@@ -3,6 +3,7 @@ import { Metadata } from "next";
 import { Publish } from "./Publish";
 import { authorization } from "@lib/privileges";
 import { authCheckAndThrow } from "@lib/actions";
+import { notFound } from "next/navigation";
 
 import Markdown from "markdown-to-jsx";
 
@@ -37,6 +38,10 @@ export default async function Page(props: { params: Promise<{ id: string; locale
 
   if (!session) {
     return <LoggedOutTab tabName={LoggedOutTabName.PUBLISH} />;
+  }
+
+  if (id === "0000") {
+    return notFound();
   }
 
   const userCanPublish = await authorization

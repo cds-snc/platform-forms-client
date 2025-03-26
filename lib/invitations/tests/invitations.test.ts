@@ -203,6 +203,7 @@ describe("Invitations", () => {
         privileges: [],
         active: true,
         notes: null,
+        createdAt: new Date(),
       }); // sender
 
       // Mock out invitation delete

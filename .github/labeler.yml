@@ -1,0 +1,12 @@
+# Add package change label
+"!! Package Update !!":
+  - changed-files:
+      - any-glob-to-any-file: packages/**
+
+# Add database migration label
+
+"!! Database Migration !!":
+  - changed-files:
+      - any-glob-to-any-file:
+          - prisma/migrations/**
+          - prisma/schema.prisma

@@ -1,4 +1,4 @@
-import { Language } from "../../types/form-builder-types";
+import { type Language } from "@lib/types/form-builder-types";
 
 import { customTranslate } from "@lib/i18nHelpers";
 

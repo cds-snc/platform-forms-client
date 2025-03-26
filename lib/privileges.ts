@@ -26,8 +26,9 @@ import { checkOne } from "./cache/flags";
 import { InMemoryCache } from "./cache/inMemoryCache";
 import { auth } from "@lib/auth/nextAuth";
 import { AccessControlError } from "@lib/auth/errors";
-import { getCurrentLanguage } from "@i18n";
+import { getCurrentLanguage } from "@i18n/utils";
 import { redirect } from "next/navigation";
+import { cache } from "react";
 /*
 This file contains references to server side only modules.
 Any attempt to import these functions into a browser will cause compilation failures
@@ -37,7 +38,7 @@ Any attempt to import these functions into a browser will cause compilation fail
 // TTL for items in the cache: 1 minutes
 const abilityCache = new InMemoryCache(100, 60);
 
-export const getAbility = async (): Promise<UserAbility> => {
+export const getAbility = cache(async (): Promise<UserAbility> => {
   const session = await auth();
   if (!session) throw new Error("No session found");
   // If the privileges are cached, we can use them as a check that no changes have been made
@@ -53,7 +54,7 @@ export const getAbility = async (): Promise<UserAbility> => {
     abilityCache.set(session.user.id, ability);
     return ability;
   }
-};
+});
 
 export const createAbility = (session: Session): UserAbility => {
   const ability = createMongoAbility<MongoAbility<Abilities>>(

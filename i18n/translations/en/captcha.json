@@ -1,0 +1,9 @@
+{
+  "title": "Your form could not be submitted",
+  "helpOptions": {
+    "title": "You might try to:",
+    "item1": "Turn off a virtual private network (VPN), firewall, or proxy server, if you use one.",
+    "item2": "Use a different browser, device, or network, if an alternate is available.",
+    "item3": "Submit your form again later or contact the program or service directly."
+  }
+}

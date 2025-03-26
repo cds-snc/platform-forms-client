@@ -36,12 +36,12 @@ export const generateCSP = (): { csp: string; nonce: string } => {
     object-src 'none';
     base-uri 'self';
     form-action 'self';
-    frame-src www.googletagmanager.com;
+    frame-src www.googletagmanager.com hcaptcha.com *.hcaptcha.com;
     frame-ancestors 'none';
-    connect-src 'self' www.googletagmanager.com www.google-analytics.com ws1.postescanada-canadapost.ca;
+    connect-src 'self' www.googletagmanager.com www.google-analytics.com ws1.postescanada-canadapost.ca hcaptcha.com *.hcaptcha.com;
     block-all-mixed-content;
     upgrade-insecure-requests;
-`;
+  `;
 
   // replace newline characters with spaces
   return { csp: cspHeader.replace(/\s{2,}/g, " ").trim(), nonce };

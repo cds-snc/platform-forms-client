@@ -18,7 +18,7 @@ export const getFormElementWithIndexById: TemplateStore<"getFormElementWithIndex
       if (element.properties?.subElements) {
         for (let subIndex = 0; subIndex < element.properties.subElements.length; subIndex++) {
           const subElement = element.properties.subElements[subIndex];
-          if (subElement.id === id) {
+          if (subElement && subElement.id === id) {
             return { ...subElement, index: subIndex };
           }
         }

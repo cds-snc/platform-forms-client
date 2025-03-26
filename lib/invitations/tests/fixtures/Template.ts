@@ -21,6 +21,7 @@ interface Template {
   bearerToken: string;
   ttl: Date;
   closedDetails: string;
+  saveAndResume: boolean;
 }
 
 export const mockTemplate = (overrides: Partial<Template> = {}): Template => {
@@ -41,6 +42,7 @@ export const mockTemplate = (overrides: Partial<Template> = {}): Template => {
     bearerToken: "",
     ttl: new Date(),
     closedDetails: "",
+    saveAndResume: false,
   };
 
   return { ...defaultTemplate, ...overrides };

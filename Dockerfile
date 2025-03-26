@@ -1,5 +1,7 @@
-FROM node:22-alpine as build
+FROM node:22-alpine as base
+
 ENV NODE_ENV=production
+ENV NEXT_OUTPUT_STANDALONE=true
 ENV NEXT_PUBLIC_ADDRESSCOMPLETE_API_KEY=UR78-BU29-RU35-EP49 
 
 COPY . /src
@@ -14,7 +16,10 @@ ENV INDEX_SITE=$INDEX_SITE
 ARG NEXT_SERVER_ACTIONS_ENCRYPTION_KEY
 ENV NEXT_SERVER_ACTIONS_ENCRYPTION_KEY=$NEXT_SERVER_ACTIONS_ENCRYPTION_KEY
 
-RUN corepack enable && yarn set version berry
+ARG NEXT_DEPLOYMENT_ID
+ENV NEXT_DEPLOYMENT_ID=$NEXT_DEPLOYMENT_ID
+
+RUN corepack enable && yarn set version stable
 RUN yarn workspaces focus gcforms flag_initialization
 RUN yarn build
 RUN yarn workspaces focus gcforms flag_initialization --production
@@ -22,6 +27,7 @@ RUN yarn workspaces focus gcforms flag_initialization --production
 FROM node:22-alpine as final
 LABEL maintainer="-"
 
+ENV PORT 3000
 ENV NODE_ENV=production
 
 ARG COGNITO_APP_CLIENT_ID
@@ -38,20 +44,11 @@ ENV NEXT_SERVER_ACTIONS_ENCRYPTION_KEY=$NEXT_SERVER_ACTIONS_ENCRYPTION_KEY
 
 WORKDIR /src
 
-COPY package.json yarn.lock .yarnrc.yml next.config.mjs ./
-COPY .yarn ./.yarn
-# Update to latest yarn version
-RUN corepack enable && yarn set version berry
-COPY public ./public
-COPY prisma ./prisma
-COPY flag_initialization ./flag_initialization
-COPY --from=build /src/node_modules ./node_modules
-COPY --from=build /src/.next ./.next
-
-
-
-ENV PORT 3000
+COPY --from=base /src/public ./public
+COPY --from=base /src/package.json ./package.json
+COPY --from=base /src/.next/standalone ./
+COPY --from=base /src/.next/static ./.next/static
 
 EXPOSE 3000
 
-ENTRYPOINT [ "yarn", "start"]
+CMD ["node", "server.js"]

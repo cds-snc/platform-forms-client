@@ -1,0 +1,41 @@
+name: "Publish internal packages"
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - "packages/**/package.json"
+
+jobs:
+  publish-internal-packages:
+    name: "Publish internal packages"
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 2
+          
+      - name: Node.JS Setup
+        uses: actions/setup-node@1d0ff469b7ec7b3cb9d8673fde0c81c44821de2a # v4.2.0
+        with:
+          node-version-file: .nvmrc
+          registry-url: "https://registry.npmjs.org"
+
+      - name: Yarn update to V4
+        run: corepack enable && yarn set version stable
+
+      - run: yarn install
+      - run: |
+          changed_dirs=$(git diff --dirstat=files,0 HEAD~1 packages/ | cut -d'/' -f2 | sort -u)
+          echo "Changed directories: $changed_dirs"
+          echo "dirs=$(echo $changed_dirs | tr ' ' ',')" >> $GITHUB_ENV
+
+          for dir in $(echo "${changed_dirs}" | tr ',' '\n'); do
+            echo "Publishing package: $dir"
+            cd packages/$dir
+            yarn npm publish --access public
+            cd ../..
+          done
+        env:
+          YARN_NPM_AUTH_TOKEN: ${{secrets.NPM_TOKEN}}

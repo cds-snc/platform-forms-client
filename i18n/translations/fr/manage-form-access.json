@@ -24,7 +24,7 @@
   "loading": "Téléchargement...",
   "manageFormAccess": "Gérer l'accès",
   "manageOwnership": "Gérer le propriétaire",
-  "mustBeAGovernmentAddress": "Ajouter des personnes avec leur adresse courriel du gouvernement",
+  "mustBeAGovernmentAddress": "Ajoutez des collègues en utilisant leur adresse courriel individuelle, et non une boîte de réception partagée conformément à nos <a href='/fr/terms-of-use' target='_blank'>conditions d'utilisation</a>.",
   "next": "Continuer",
   "optionalMessage": "Message (optionnel)",
   "peopleWithAccess": "Personnes ayant accès",

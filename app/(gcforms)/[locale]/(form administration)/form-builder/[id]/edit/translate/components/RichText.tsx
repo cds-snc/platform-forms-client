@@ -30,9 +30,7 @@ export const RichText = ({
   return (
     <>
       <div className="text-entry">
-        <FieldsetLegend>
-          {t(element.type)}: {t("inputDescription")}
-        </FieldsetLegend>
+        <FieldsetLegend>{t(element.type)}</FieldsetLegend>
         <div className="mb-10 flex gap-px divide-x-2 border border-gray-300">
           <div className="relative w-1/2 flex-1">
             <LanguageLabel

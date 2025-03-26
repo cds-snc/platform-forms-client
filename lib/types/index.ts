@@ -1,4 +1,4 @@
-import { FormRecord, Responses, FormElementTypes } from "@cdssnc/gcforms-types";
+import { FormRecord, Responses, FormElementTypes } from "@gcforms/types";
 
 export type {
   ConditionalRule,
@@ -18,7 +18,7 @@ export type {
   AddressComponents,
   BrandProperties,
   ClosedDetails,
-} from "@cdssnc/gcforms-types";
+} from "@gcforms/types";
 
 import { FormikErrors } from "formik";
 export { FormElementTypes };
@@ -72,3 +72,10 @@ export { NagLevel } from "./nagware-types";
 export interface Validate {
   validateForm: () => Promise<FormikErrors<Responses>>;
 }
+
+export const DeactivationReasons = {
+  DEFAULT: "default",
+  GROUP_EMAIL: "group_email",
+} as const;
+
+export type DeactivationReason = (typeof DeactivationReasons)[keyof typeof DeactivationReasons];

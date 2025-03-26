@@ -9,24 +9,20 @@ const globalConfig = {
   region: process.env.AWS_REGION ?? "ca-central-1",
 };
 
-const localstackConfig = {
-  ...(process.env.LOCAL_AWS_ENDPOINT && { endpoint: process.env.LOCAL_AWS_ENDPOINT }),
-};
-
 export const cognitoIdentityProviderClient = new CognitoIdentityProviderClient({
   ...globalConfig,
-  ...((process.env.NODE_ENV === "development" || process.env.LOCAL_AWS_ENDPOINT) && {
-    credentials: {
-      accessKeyId: process.env.COGNITO_ACCESS_KEY ?? "",
-      secretAccessKey: process.env.COGNITO_SECRET_KEY ?? "",
-    },
-  }),
+  ...(process.env.COGNITO_ACCESS_KEY &&
+    process.env.COGNITO_SECRET_KEY && {
+      credentials: {
+        accessKeyId: process.env.COGNITO_ACCESS_KEY ?? "",
+        secretAccessKey: process.env.COGNITO_SECRET_KEY ?? "",
+      },
+    }),
 });
 
 export const dynamoDBDocumentClient = DynamoDBDocumentClient.from(
   new DynamoDBClient({
     ...globalConfig,
-    ...localstackConfig,
     // SDK retries use exponential backoff with jitter by default
     maxAttempts: 15,
   })
@@ -34,17 +30,14 @@ export const dynamoDBDocumentClient = DynamoDBDocumentClient.from(
 
 export const lambdaClient = new LambdaClient({
   ...globalConfig,
-  ...localstackConfig,
   retryMode: "standard",
 });
 
 export const sqsClient = new SQSClient({
   ...globalConfig,
-  ...localstackConfig,
 });
 
 export const s3Client = new S3Client({
   ...globalConfig,
-  ...localstackConfig,
   ...(process.env.LOCAL_AWS_ENDPOINT && { forcePathStyle: true }),
 });

@@ -68,22 +68,11 @@ export const useElementOptions = (filterElements?: ElementOptionsFilter | undefi
 
   const { getFlag } = useFeatureFlags();
 
-  //Check feature flags for Repeating Sets
-  const allowRepeatingSets = getFlag(FeatureFlags.repeatingSets);
   const fileInputOption: ElementOption = {
     id: "fileInput",
     value: t("addElementDialog.fileInput.title"),
     icon: UploadIcon,
     description: FileInput,
-    className: "",
-    group: groups.other,
-  };
-
-  const repeatingSetsOption: ElementOption = {
-    id: "dynamicRow",
-    value: t("dyanamicRow"),
-    icon: AddIcon,
-    description: QuestionSet,
     className: "",
     group: groups.other,
   };
@@ -223,7 +212,14 @@ export const useElementOptions = (filterElements?: ElementOptionsFilter | undefi
       className: "separator",
       group: groups.preset,
     },
-    ...(allowRepeatingSets ? [{ ...(repeatingSetsOption as ElementOption) }] : []),
+    {
+      id: "dynamicRow",
+      value: t("dyanamicRow"),
+      icon: AddIcon,
+      description: QuestionSet,
+      className: "",
+      group: groups.other,
+    },
   ];
 
   return filterElements

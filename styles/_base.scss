@@ -23,7 +23,7 @@ header {
 }
 
 .gc-richText {
-  @apply xxs:w-cr-label-fold xs:w-cr-label-5s sm:w-cr-label-6s md:w-cr-label-duo md:mt-10px lg:w-cr-label-ipad xl:w-cr-label-1025 w-cr-label-desktop mt-2;
+  @apply w-auto tablet:w-9/12;
 }
 
 /* Adjustments for tailwind defaults that conflict with the node-starter-app defaults */

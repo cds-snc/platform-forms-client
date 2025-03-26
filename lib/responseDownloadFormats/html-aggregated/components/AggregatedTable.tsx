@@ -2,6 +2,7 @@ import React from "react";
 import { Submission } from "@lib/responseDownloadFormats/types";
 import { getProperty } from "@lib/i18nHelpers";
 import { formatDate } from "@lib/client/clientHelpers";
+import { newLineToHtml } from "@lib/utils/newLineToHtml";
 
 export interface TableHeader {
   title: string;
@@ -18,10 +19,6 @@ export const AggregatedTable = ({
   submissions: Submission[];
 }) => {
   const capitalizedLang = lang === "en" ? "En" : "Fr";
-
-  function formatAnswer(answer: string) {
-    return answer || "-";
-  }
 
   return (
     <table id={`responseTableRow${capitalizedLang}`} className="table-fixed text-left">
@@ -64,7 +61,13 @@ export const AggregatedTable = ({
                                 return (
                                   <tr key="" className="flex">
                                     <th className="w-64 p-4">{question}</th>
-                                    <td className="p-4">{formatAnswer(response as string)}</td>
+                                    <td className="p-4">
+                                      <span
+                                        dangerouslySetInnerHTML={{
+                                          __html: newLineToHtml(response),
+                                        }}
+                                      ></span>
+                                    </td>
                                   </tr>
                                 );
                               })
@@ -76,7 +79,11 @@ export const AggregatedTable = ({
                   }
                   return (
                     <td key="" className="w-64 p-4">
-                      {formatAnswer(item.answer)}
+                      <span
+                        dangerouslySetInnerHTML={{
+                          __html: newLineToHtml(item.answer),
+                        }}
+                      ></span>
                     </td>
                   );
                 })}

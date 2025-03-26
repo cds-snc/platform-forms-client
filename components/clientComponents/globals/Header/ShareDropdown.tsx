@@ -62,10 +62,13 @@ export const ShareDropdown = () => {
                   "flex cursor-pointer items-center rounded-md p-2 text-sm outline-none hover:bg-gray-600 hover:text-white-default focus:bg-gray-600 focus:text-white-default [&_svg]:hover:fill-white [&_svg]:focus:fill-white"
                 }
               >
-                {t("share.missingName.message1")}
-                <span className="mx-1 underline">{t("share.missingName.message2")}</span>
-                {t("share.missingName.message3")}
-                <span className="sr-only">{t("share.missingName.message4")}</span>
+                <span>
+                  {t("share.missingName.message1")}
+                  <span className="mx-1 underline">{t("share.missingName.message2")}</span>
+
+                  {t("share.missingName.message3")}
+                  <span className="sr-only">{t("share.missingName.message4")}</span>
+                </span>
               </DropdownMenuPrimitive.Item>
             )}
 

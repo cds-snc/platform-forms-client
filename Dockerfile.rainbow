@@ -1,0 +1,36 @@
+ARG BASE_IMAGE
+FROM $BASE_IMAGE as base
+
+FROM node:22-alpine as final
+LABEL maintainer="-"
+
+# Lambda web adapter: https://github.com/awslabs/aws-lambda-web-adapter
+# The public.ecr.aws/awsguru/aws-lambda-adapter:0.9.0 image reference in the docs has
+# been pushed to the public CDS ECR to avoid rate limiting when pulling the image.
+COPY --from=public.ecr.aws/cds-snc/aws-lambda-adapter:0.9.0 /lambda-adapter /opt/extensions/lambda-adapter
+
+ENV AWS_LWA_ENABLE_COMPRESSION=true
+ENV PORT=3000
+
+ENV NODE_ENV=production
+
+ARG COGNITO_APP_CLIENT_ID
+ENV COGNITO_APP_CLIENT_ID=$COGNITO_APP_CLIENT_ID
+
+ARG COGNITO_USER_POOL_ID
+ENV COGNITO_USER_POOL_ID=$COGNITO_USER_POOL_ID
+
+ARG INDEX_SITE="false"
+ENV INDEX_SITE=$INDEX_SITE
+
+# Use the LAMBDA_ENV environment variable to determine if the app is running in a Lambda environment
+# Enables memory caching for the prerendering of pages
+ENV LAMBDA_ENV=1
+
+WORKDIR /src
+
+COPY --from=base /src ./
+
+RUN ln -s /tmp ./.next/cache
+
+CMD ["node", "server.js"]

@@ -17,7 +17,6 @@ import { ClosingDateDialog } from "./ClosingDateDialog";
 
 import { ScheduledClosingDate } from "./ScheduledClosingDate";
 import { dateHasPast } from "@lib/utils";
-import { useFeatureFlags } from "@lib/hooks/useFeatureFlags";
 import { isFutureDate } from "@lib/utils/date/isFutureDate";
 
 export const SetClosingDate = ({
@@ -130,9 +129,6 @@ export const SetClosingDate = ({
     }
   }, [status, formId, setClosingDate, t, closedMessage, closingDate]);
 
-  const { getFlag } = useFeatureFlags();
-  const hasScheduleClosingDate = getFlag("scheduleClosingDate");
-
   return (
     <div className="mb-10">
       <h2>{t("closingDate.title")}</h2>
@@ -151,19 +147,14 @@ export const SetClosingDate = ({
         />
       </div>
       <div className="mb-4" id="closing-date">
-        {hasScheduleClosingDate && closingDate && (
-          <ScheduledClosingDate closingDate={closingDate} language="en" />
-        )}
-
-        {hasScheduleClosingDate && (
-          <Button
-            data-closing-date={closingDate}
-            theme="link"
-            onClick={() => setShowDateTimeDialog(true)}
-          >
-            {t("scheduleClosingPage.linkText")}
-          </Button>
-        )}
+        {closingDate && <ScheduledClosingDate closingDate={closingDate} language="en" />}
+        <Button
+          data-closing-date={closingDate}
+          theme="link"
+          onClick={() => setShowDateTimeDialog(true)}
+        >
+          {t("scheduleClosingPage.linkText")}
+        </Button>
       </div>
       <div className="mb-4 w-3/5">
         <ClosedMessage

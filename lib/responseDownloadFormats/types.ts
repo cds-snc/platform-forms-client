@@ -1,4 +1,4 @@
-import { FormRecord } from "packages/gcforms-types/src/form-types";
+import { FormRecord } from "@gcforms/types";
 
 export interface Answer {
   questionId: number;

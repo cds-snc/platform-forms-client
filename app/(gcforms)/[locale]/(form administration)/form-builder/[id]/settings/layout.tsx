@@ -2,6 +2,7 @@ import { serverTranslation } from "@i18n";
 import { LoggedOutTab, LoggedOutTabName } from "@serverComponents/form-builder/LoggedOutTab";
 import { authCheckAndThrow } from "@lib/actions";
 import { SettingsNavigation } from "./components/SettingsNavigation";
+import { notFound } from "next/navigation";
 
 export default async function Layout(props: {
   children: React.ReactNode;
@@ -19,6 +20,10 @@ export default async function Layout(props: {
 
   if (!session) {
     return <LoggedOutTab tabName={LoggedOutTabName.SETTINGS} />;
+  }
+
+  if (id === "0000") {
+    return notFound();
   }
 
   return (

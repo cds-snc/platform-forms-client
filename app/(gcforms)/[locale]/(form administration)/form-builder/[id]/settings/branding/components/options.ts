@@ -242,4 +242,13 @@ export const options = [
     logoTitleEn: "Canada Border Services Agency",
     logoTitleFr: "Agence des services frontaliers du Canada",
   },
+  {
+    name: "parks",
+    urlEn: "https://parks.canada.ca",
+    urlFr: "https://parcs.canada.ca",
+    logoEn: "/img/branding/parks-canada-en.svg",
+    logoFr: "/img/branding/parcs-canada-fr.svg",
+    logoTitleEn: "Parks Canada",
+    logoTitleFr: "Parcs Canada",
+  },
 ];

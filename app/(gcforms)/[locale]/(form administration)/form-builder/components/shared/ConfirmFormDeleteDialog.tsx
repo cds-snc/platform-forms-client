@@ -168,8 +168,8 @@ export const ConfirmFormDeleteDialog = ({
           {isPublished ? (
             <>
               <p className="mb-6">{t("formDelete.published.message1")}</p>
+              <p>{t("formDelete.published.message2")} </p>
               <p>
-                {t("formDelete.published.message2")}{" "}
                 <span className="font-bold">{t("formDelete.published.message3")}</span>
               </p>
             </>

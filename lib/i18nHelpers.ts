@@ -3,28 +3,32 @@ import myFormsEn from "@i18n/translations/en/my-forms.json";
 import myFormsFr from "@i18n/translations/fr/my-forms.json";
 import commonEn from "@i18n/translations/en/common.json";
 import commonFr from "@i18n/translations/fr/common.json";
+import reviewEn from "@i18n/translations/en/review.json";
+import reviewFr from "@i18n/translations/fr/review.json";
 
 /**
  * This custom translation function works like useTranslation() from react-i18next which was not working in this context.
  * The language resources are hard coded to avoid having to async load them from the file system.
  * @param translationFile
  */
-export const customTranslate = (translationFile: "my-forms" | "common") => {
+export const customTranslate = (translationFile: "my-forms" | "common" | "review") => {
   if (!i18next.isInitialized) {
     i18next.init({
       fallbackLng: "en",
       supportedLngs: ["en", "fr"],
       preload: ["en", "fr"],
       debug: true,
-      ns: ["my-forms", "common", "form-builder"],
+      ns: ["my-forms", "common", "review"],
       resources: {
         en: {
           "my-forms": myFormsEn,
           common: commonEn,
+          review: reviewEn,
         },
         fr: {
           "my-forms": myFormsFr,
           common: commonFr,
+          review: reviewFr,
         },
       },
     });
