@@ -408,7 +408,8 @@ export async function getFullTemplateByID(formID: string): Promise<FormRecord | 
       })
       .catch((e) => prismaErrors(e, null));
 
-    if (!template) return null;
+    // Short circuit the public record filtering if no form record is found or the form is marked as deleted (ttl != null)
+    if (!template || template.ttl) return null;
 
     logEvent(user.id, { type: "Form", id: formID }, "ReadForm");
 
