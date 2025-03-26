@@ -1,12 +1,14 @@
 "use client";
 import { CircleCheckIcon, InfoIcon, WarningIcon } from "@serverComponents/icons";
 import React, { type JSX } from "react";
+
+// https://github.com/fkhadra/react-toastify/issues/1215#issuecomment-2674902485
 import {
   ToastContainer as OriginalContainer,
   toast as originalToast,
-  Bounce,
   ToastPosition,
-} from "react-toastify";
+  Bounce,
+} from "@toast/unstyled";
 
 const contextClass = {
   success: {
