@@ -13,7 +13,6 @@ import ListMaxIndentLevelPlugin from "./plugins/ListMaxIndentPlugin";
 import FloatingLinkEditorPlugin from "./plugins/FloatingLinkEditorPlugin";
 import { useId, useState } from "react";
 import { editorConfig } from "./config";
-import "./styles.css";
 import { $createParagraphNode, $getRoot } from "lexical";
 import {
   $convertFromMarkdownString,
@@ -21,6 +20,7 @@ import {
   TRANSFORMERS,
 } from "@lexical/markdown";
 import { OnChangePlugin } from "@lexical/react/LexicalOnChangePlugin";
+import "./styles.css";
 
 interface EditorProps {
   id?: string;
@@ -28,9 +28,9 @@ interface EditorProps {
   showTreeview?: boolean;
   ariaLabel: string;
   ariaDescribedBy: string;
-  lang: string;
+  lang?: string;
 
-  onChange: (...args: unknown[]) => unknown;
+  onChange?(...args: unknown[]): unknown;
 }
 
 export const Editor = ({
@@ -70,7 +70,7 @@ export const Editor = ({
           },
         }}
       >
-        <div className="editor-container">
+        <div>
           <ToolbarPlugin editorId={""} />
 
           <RichTextPlugin

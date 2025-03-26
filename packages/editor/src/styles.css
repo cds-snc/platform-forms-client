@@ -4,30 +4,6 @@
 
 .rich-text-wrapper {
   height: 100%;
-
-  .editor-input {
-    padding: 20px;
-
-    &:focus {
-      outline: 2px #303fc3 solid;
-    }
-
-    p:first-child {
-      margin-top: 0;
-    }
-
-    p {
-      margin: 40px 0;
-    }
-
-    .editor-nested-listitem {
-      list-style-type: none;
-    }
-
-    .editor-list-ol {
-      padding-left: 20px;
-    }
-  }
 }
 
 .editor-list-ul li {
