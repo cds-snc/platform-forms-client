@@ -3,15 +3,15 @@ import { FormServerErrorCodes } from "@lib/types/form-builder-types";
 import { logErrorMessage } from "./action";
 import { useEffect, useState } from "react";
 
-interface ClientLogMessage {
+interface ClientLog {
   code: FormServerErrorCodes;
   formId: string;
   timestamp: number;
 }
 
 // Use to send an error code from the client (browser) to the server to be loggeed.
-export const useLogClientMessage = () => {
-  const [message, setMessage] = useState<ClientLogMessage>();
+export const useLogClient = () => {
+  const [message, setMessage] = useState<ClientLog>();
 
   useEffect(() => {
     (async () => {
