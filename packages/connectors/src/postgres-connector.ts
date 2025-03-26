@@ -5,16 +5,11 @@ export class PostgresConnector {
   private postgresInstance: Sql;
 
   public static defaultUsingPostgresConnectionUrlFromAwsSecret(
-    postgresConnectionUrlSecretIdentifier: string,
-    isRunningInLocalStack: boolean
+    postgresConnectionUrlSecretIdentifier: string
   ): Promise<PostgresConnector> {
     return getAwsSecret(postgresConnectionUrlSecretIdentifier).then((postgresConnectionUrl) => {
       if (postgresConnectionUrl === undefined) {
         throw new Error("Postgres connection URL is undefined");
-      }
-
-      if (isRunningInLocalStack) {
-        return new PostgresConnector(postgresConnectionUrl.replace("5432", "4510"));
       }
 
       return new PostgresConnector(postgresConnectionUrl);
