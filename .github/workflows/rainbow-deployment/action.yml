@@ -3,8 +3,6 @@ name: Rainbow deployment
 inputs:
   deployment-process-identifier:
     required: true
-  legacy-version-git-ref:
-    required: true
   ecr-registry-uri:
     required: true
   ecr-registry-form-viewer-repository-name:
@@ -27,12 +25,21 @@ inputs:
 runs:
   using: "composite"
   steps:
+    - name: Find latest release identifier
+      id: latest-release-identifier
+      shell: bash
+      run: |
+        latestReleaseIdentifier=$(aws ecr describe-images \
+          --repository-name ${{ inputs.ecr-registry-form-viewer-repository-name }} \
+          --query 'sort_by(imageDetails, &imagePushedAt)[-2]' | jq -r ".imageTags[0]")
+        echo "value=$latestReleaseIdentifier" >> $GITHUB_OUTPUT
+
     - name: Build Rainbow Lambda image
       shell: bash
       run: |
         docker build -t rainbow \
           -f Dockerfile.rainbow \
-          --build-arg BASE_IMAGE=${{ inputs.ecr-registry-uri }}/${{ inputs.ecr-registry-form-viewer-repository-name }}:${{ inputs.legacy-version-git-ref }} \
+          --build-arg BASE_IMAGE=${{ inputs.ecr-registry-uri }}/${{ inputs.ecr-registry-form-viewer-repository-name }}:${{ steps.latest-release-identifier.outputs.value }} \
           --build-arg COGNITO_APP_CLIENT_ID=${{ inputs.cognito-app-client-id }} \
           --build-arg COGNITO_USER_POOL_ID=${{ inputs.cognito-user-pool-id }} .
 
@@ -49,13 +56,13 @@ runs:
 
         lambdaArn=$(aws lambda create-function \
           --function-name rainbow-${{ inputs.deployment-process-identifier }} \
+          --logging-config LogFormat=Text,LogGroup=Forms \
           --package-type Image \
           --role ${{ inputs.forms-lambda-client-role-arn }} \
           --timeout 15 \
           --memory-size 2048 \
           --code ImageUri=${{ inputs.ecr-registry-uri }}/forms_app_legacy:${{ inputs.deployment-process-identifier }} \
-          --vpc-config SubnetIds=${{ inputs.forms-lambda-client-subnet-ids }},SecurityGroupIds=${{ inputs.forms-lambda-client-security-group-ids }} | jq -r ".FunctionArn") \
-          --logging-config LogFormat=Text,LogGroup=Forms
+          --vpc-config SubnetIds=${{ inputs.forms-lambda-client-subnet-ids }},SecurityGroupIds=${{ inputs.forms-lambda-client-security-group-ids }} | jq -r ".FunctionArn")
 
         aws lambda wait function-active --function-name rainbow-${{ inputs.deployment-process-identifier }}
 
@@ -79,7 +86,7 @@ runs:
 
         aws elbv2 create-rule \
           --listener-arn ${{ inputs.load-balancer-listener-arn }} \
-          --conditions "[{\"Field\":\"host-header\",\"Values\":[\"${{ inputs.hostname }}\"]},{\"Field\":\"http-header\",\"HttpHeaderConfig\":{\"HttpHeaderName\":\"x-deployment-id\",\"Values\":[\"${{ inputs.legacy-version-git-ref }}\"]}}]" \
+          --conditions "[{\"Field\":\"host-header\",\"Values\":[\"${{ inputs.hostname }}\"]},{\"Field\":\"http-header\",\"HttpHeaderConfig\":{\"HttpHeaderName\":\"x-deployment-id\",\"Values\":[\"${{ steps.latest-release-identifier.outputs.value }}\"]}}]" \
           --priority 1 \
           --actions Type=forward,TargetGroupArn=$targetGroupArn \
           --tags Key=Name,Value=rainbow-${{ inputs.deployment-process-identifier }} > /dev/null 2>&1
