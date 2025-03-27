@@ -2,8 +2,6 @@ import { logMessage } from "@lib/logger";
 import { getRedisInstance } from "../integration/redisConnector";
 import initialFlags from "./default_flag_settings.json";
 
-const cacheAvailable: boolean = process.env.APP_ENV !== "test" && Boolean(process.env.REDIS_URL);
-
 const checkAll = async () => {
   const redis = await getRedisInstance();
   const keys = await redis.smembers("flags");
@@ -40,11 +38,9 @@ const createFlag = async (key: string, value: boolean) => {
 };
 export const initiateFlags = async () => {
   logMessage.info("Running flag initiation");
-  if (!cacheAvailable) {
-    process.env.APP_ENV !== "test" &&
-      logMessage.info("Application is TEST mode, skipping flag initiation");
-    Boolean(process.env.REDIS_URL) ??
-      logMessage.info("No REDIS_URL environment variable found, skipping flag initiation");
+  if (process.env.APP_ENV === "test") {
+    logMessage.info("Application is TEST mode, skipping flag initialization");
+    return;
   }
   const redis = await getRedisInstance();
 
@@ -78,7 +74,7 @@ export const initiateFlags = async () => {
         );
       }
     }
-    return await Promise.all(addFlags);
+    await Promise.all(addFlags);
   } catch (err) {
     logMessage.error(err);
   } finally {
