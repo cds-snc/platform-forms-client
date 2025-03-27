@@ -4,18 +4,6 @@ ARG USERNAME=node
 ARG USER_UID=1000
 ARG USER_GID=$USER_UID
 
-COPY flag_initialization /src
-COPY .yarn /src/.yarn
-COPY .yarnrc.yml /src
-WORKDIR /src
-RUN yarn install
-
-FROM node:22-alpine
-
-ARG USERNAME=node
-ARG USER_UID=1000
-ARG USER_GID=$USER_UID
-
 COPY . /src
 WORKDIR /src
 
@@ -42,7 +30,6 @@ RUN apt-get update \
 
 WORKDIR /src
 
-COPY --from=0 /src/node_modules ./flag_initialization/node_modules
 COPY --from=1 /src/node_modules ./node_modules
 
 ENV PORT 3000

@@ -32,7 +32,7 @@ jobs:
 
       - name: "Install dependencies"
         run: |
-          yarn workspaces focus gcforms flag_initialization
+          yarn workspaces focus gcforms
         env:
           CI: TRUE
       - name: Test Code Linting on Merge
@@ -67,7 +67,7 @@ jobs:
 
       - name: "Install dependencies"
         run: |
-          yarn workspaces focus gcforms flag_initialization
+          yarn workspaces focus gcforms
         env:
           CI: TRUE
       - name: Test Code Linting on Pull Request

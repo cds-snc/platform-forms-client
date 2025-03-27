@@ -28,7 +28,7 @@ jobs:
           restore-keys: |
             linux-yarn-
       - name: "Install dependencies"
-        run: yarn workspaces focus gcforms flag_initialization
+        run: yarn workspaces focus gcforms
 
       - name: Vitest Tests
         run: yarn test:vitest
