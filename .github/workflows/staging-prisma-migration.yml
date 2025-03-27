@@ -38,7 +38,7 @@ jobs:
 
       - name: Copy Prisma Files to S3
         run: |
-          aws s3 sync prisma s3://forms-staging-prisma-migration-storage/ --recursive
+          aws s3 sync ./prisma s3://forms-staging-prisma-migration-storage/
 
   trigger-migration-lambda:
     name: "Trigger Migration Lambda"
