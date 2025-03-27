@@ -10,3 +10,4 @@
       - any-glob-to-any-file:
           - prisma/migrations/**
           - prisma/schema.prisma
+          - prisma/seeds/**
