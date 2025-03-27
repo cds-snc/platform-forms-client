@@ -1,0 +1,38 @@
+.drawer-backdrop {
+  position: fixed;
+  z-index: 10;
+  background: rgba(0, 0, 0, 0.5);
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  transition: opacity 250ms;
+}
+.drawer {
+  position: fixed;
+  z-index: 11;
+  left: 0;
+  bottom: 0;
+  width: 100vw;
+  background: white;
+  border-top-left-radius: 15px;
+  border-top-right-radius: 15px;
+  transition: transform 250ms;
+}
+.drawer-handle-wrapper {
+  display: flex;
+  justify-content: center;
+  padding: 10px 0;
+}
+.drawer-handle {
+  background: #e3e3e3;
+  height: 5px;
+  width: 70px;
+  border-radius: 5px;
+}
+.drawer-content-wrapper {
+  padding: 0 10px;
+  max-height: calc(70vh - 25px);
+  overflow-x: hidden;
+  overflow-y: auto;
+}

@@ -7,8 +7,8 @@ import { useSwipeable } from "react-swipeable";
 import { Transition } from "react-transition-group";
 import useEscButton from "./lib/hooks/useEscButton";
 import usePreventScroll from "./lib/hooks/usePreventScroll";
-import { BackdropStyles, TransitionStyles } from "./lib/styles";
-import useGlobalStyles from "./lib/hooks/useGlobalStyles";
+import { BackdropStyles, classNames, TransitionStyles } from "./lib/styles";
+import "./lib/styles.css";
 
 interface IProps {
   isVisible: boolean;
@@ -30,10 +30,8 @@ const SlideUpTransition = ({
   unmountOnExit = true,
   mountOnEnter = true,
   duration = 250,
-  hideScrollbars = false,
-  nonce,
 }: IProps) => {
-  const classNames = useGlobalStyles(duration, hideScrollbars, nonce);
+  // const classNames = useGlobalStyles(duration, hideScrollbars, nonce);
   const nodeRef = React.useRef(null);
 
   // Actions to close
