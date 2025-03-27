@@ -2,7 +2,7 @@ export async function register() {
   if (process.env.NEXT_RUNTIME === "nodejs") {
     if (!process.env.REDIS_URL) {
       // eslint-disable-next-line no-console
-      console.log("No REDIS_URL environment variable found, skipping privilege cache flush");
+      console.log("No REDIS_URL environment variable found, skipping flags initialization and privilege cache flush");
       return;
     }
     // Initialize the feature flags when the app server is started
