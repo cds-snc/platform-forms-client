@@ -20,9 +20,9 @@ ARG NEXT_DEPLOYMENT_ID
 ENV NEXT_DEPLOYMENT_ID=$NEXT_DEPLOYMENT_ID
 
 RUN corepack enable && yarn set version stable
-RUN yarn workspaces focus gcforms flag_initialization
+RUN yarn workspaces focus gcforms
 RUN yarn build
-RUN yarn workspaces focus gcforms flag_initialization --production
+RUN yarn workspaces focus gcforms --production
 
 FROM node:22-alpine as final
 LABEL maintainer="-"
