@@ -8,6 +8,7 @@ import { downloadDataAsBlob } from "@lib/downloadDataAsBlob";
 import { useTranslation } from "@i18n/client";
 import { useFormSubmissionData } from "@lib/hooks/useFormSubmissionData";
 import { useGCFormsContext } from "@lib/hooks/useGCFormContext";
+import { logMessage } from "@lib/logger";
 
 export const MobileDrawer = ({
   drawerOpen,
@@ -24,6 +25,9 @@ export const MobileDrawer = ({
 }) => {
   const { t } = useTranslation("common");
   const { getNonce } = useGCFormsContext();
+
+  const nonce = getNonce();
+  logMessage.info({ nonce });
 
   const { fileName, getOptions } = useFormSubmissionData({ language, type });
 
