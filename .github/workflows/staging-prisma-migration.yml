@@ -1,5 +1,9 @@
 name: "Prisma Migration"
 
+permissions:
+  id-token: write
+  contents: read
+
 on:
   push:
     branches:
@@ -35,6 +39,18 @@ jobs:
       - name: Copy Prisma Files to S3
         run: |
           aws s3 sync prisma s3://forms-staging-prisma-migration-storage/ --recursive
-      - name: Trigger Migratoin Lambda
+
+  trigger-migration-lambda:
+    name: "Trigger Migration Lambda"
+    runs-on: ubuntu-latest
+    steps:
+      - name: Configure AWS credentials using OIDC
+        uses: aws-actions/configure-aws-credentials@ececac1a45f3b08a01d2dd070d28d111c5fe6722 # v4.1.0
+        with:
+          role-to-assume: arn:aws:iam::${{ env.AWS_ACCOUNT_ID }}:role/platform-forms-client-apply
+          role-session-name: ECSDeploy
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: Trigger Migration Lambda
         run: |
           aws lambda invoke --function-name prisma-migration --region ${{ env.AWS_REGION }} --payload '{}' > /dev/null 2>&1
