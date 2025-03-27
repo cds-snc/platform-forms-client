@@ -8,7 +8,7 @@ import { Transition } from "react-transition-group";
 import useEscButton from "./lib/hooks/useEscButton";
 import usePreventScroll from "./lib/hooks/usePreventScroll";
 import { BackdropStyles, classNames, TransitionStyles } from "./lib/styles";
-import "./lib/styles.css";
+import clsx from "clsx";
 
 interface IProps {
   isVisible: boolean;
@@ -31,7 +31,6 @@ const SlideUpTransition = ({
   mountOnEnter = true,
   duration = 250,
 }: IProps) => {
-  // const classNames = useGlobalStyles(duration, hideScrollbars, nonce);
   const nodeRef = React.useRef(null);
 
   // Actions to close
@@ -81,20 +80,38 @@ const SlideUpTransition = ({
           <div ref={nodeRef}>
             <div
               onClick={onClose}
-              className={classNames.backdrop}
+              className={clsx(
+                classNames.backdrop,
+                "fixed left-0 top-0 z-10 size-full bg-gray-600/50 transition-opacity duration-[250ms]"
+              )}
               style={BackdropStyles[state as keyof typeof BackdropStyles] || {}}
             />
             <div
-              className={classNames.drawer}
+              className={clsx(
+                classNames.drawer,
+                "fixed bottom-0 left-0 z-[11] w-screen rounded-t-[15px] bg-white transition-transform duration-[250ms]"
+              )}
               style={{
                 ...(TransitionStyles[state as keyof typeof TransitionStyles] || {}),
                 ...getTransforms(),
               }}
             >
-              <div {...swipeHandlers} className={classNames.handleWrapper}>
-                <div className={classNames.handle} />
+              <div
+                {...swipeHandlers}
+                className={clsx(classNames.handleWrapper, "flex justify-center px-0 py-2.5")}
+              >
+                <div
+                  className={clsx(classNames.handle, "h-[5px] w-[70px] rounded-[5px] bg-gray-400")}
+                />
               </div>
-              <div className={classNames.contentWrapper}>{children}</div>
+              <div
+                className={clsx(
+                  classNames.contentWrapper,
+                  "max-h-[calc(70vh_-_25px)] overflow-y-auto overflow-x-hidden px-2.5 py-0"
+                )}
+              >
+                {children}
+              </div>
             </div>
           </div>
         )}
