@@ -20,6 +20,7 @@ import { GcdsH1 } from "@serverComponents/globals/GcdsH1";
 import { useLogClient } from "@lib/hooks/LogClient/useLogClient";
 import { useGCFormsContext } from "@lib/hooks/useGCFormContext";
 import { logMessage } from "@lib/logger";
+import Drawer from "../SaveAndResume/Drawer";
 
 // Prevent prototype pollution in JSON.parse https://stackoverflow.com/a/63927372
 const cleaner = (key: string, value: string) =>
@@ -217,6 +218,9 @@ export const ResumeForm = ({
         </button>
       </div>
       <ToastContainer limit={1} autoClose={false} containerId="resume" />
+      <Drawer isVisible={false} onClose={() => null} nonce={nonce}>
+        <></>
+      </Drawer>
     </>
   );
 };
