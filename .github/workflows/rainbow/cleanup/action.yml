@@ -1,0 +1,42 @@
+name: Rainbow cleanup
+
+inputs:
+  deployment-identifier:
+    required: true
+  load-balancer-listener-arn:
+    required: true
+
+runs:
+  using: "composite"
+  steps:
+    - name: Highlighting deployment identifier
+      shell: bash
+      run: echo -e "\033[0;32mDeployment identifier => ${{ inputs.deployment-identifier }}\033[0m"
+
+    - name: Rainbow magic
+      shell: bash
+      run: |
+        editableDeploymentIdentifier=${{ inputs.deployment-identifier }}
+
+        existingLoadBalancerListenerRule=$(aws elbv2 describe-rules \
+          --listener-arn ${{ inputs.load-balancer-listener-arn }} \
+          --no-paginate \
+          --query "Rules[?contains(Actions[0].ForwardConfig.TargetGroups[0].TargetGroupArn, '/rainbow-${editableDeploymentIdentifier:0:24}/')].RuleArn" \
+          | jq -r ".[0]")
+
+        if [ "$existingLoadBalancerListenerRule" != "null" ]; then
+          aws elbv2 delete-rule --rule-arn $existingLoadBalancerListenerRule > /dev/null 2>&1
+        fi
+
+        lastCommandOutput=$(aws elbv2 describe-target-groups --names rainbow-${editableDeploymentIdentifier:0:24} 2>/dev/null || echo "null")
+
+        if [ "$lastCommandOutput" != "null" ]; then
+          existingLoadBalancerTargetGroup=$(echo "$lastCommandOutput" | jq -r ".TargetGroups[0].TargetGroupArn")
+          aws elbv2 delete-target-group --target-group-arn $existingLoadBalancerTargetGroup > /dev/null 2>&1
+        fi
+
+        aws lambda delete-function --function-name rainbow-$editableDeploymentIdentifier > /dev/null 2>&1 || true
+
+        aws ecr batch-delete-image \
+          --repository-name forms_app_legacy \
+          --image-ids imageTag=${{ inputs.deployment-identifier }} > /dev/null 2>&1
