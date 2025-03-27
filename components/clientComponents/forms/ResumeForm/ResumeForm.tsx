@@ -18,6 +18,8 @@ import { ResumeUploadIcon } from "@serverComponents/icons/ResumeUploadIcon";
 import { LightBulbIcon } from "@serverComponents/icons/LightBulbIcon";
 import { GcdsH1 } from "@serverComponents/globals/GcdsH1";
 import { useLogClient } from "@lib/hooks/LogClient/useLogClient";
+import { useGCFormsContext } from "@lib/hooks/useGCFormContext";
+import { logMessage } from "@lib/logger";
 
 // Prevent prototype pollution in JSON.parse https://stackoverflow.com/a/63927372
 const cleaner = (key: string, value: string) =>
@@ -43,6 +45,10 @@ export const ResumeForm = ({
     t,
     i18n: { language },
   } = useTranslation(["form-builder", "common"]);
+
+  const { getNonce } = useGCFormsContext();
+  const nonce = getNonce();
+  logMessage.info({ nonce });
 
   const router = useRouter();
   const { logClientError } = useLogClient();
