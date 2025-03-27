@@ -32,8 +32,8 @@ jobs:
       - name: Configure AWS credentials using OIDC
         uses: aws-actions/configure-aws-credentials@ececac1a45f3b08a01d2dd070d28d111c5fe6722 # v4.1.0
         with:
-          role-to-assume: arn:aws:iam::${{ env.AWS_ACCOUNT_ID }}:role/platform-forms-client-apply
-          role-session-name: ECSDeploy
+          role-to-assume: arn:aws:iam::${{ env.AWS_ACCOUNT_ID }}:role/platform-forms-client-pr-review-env
+          role-session-name: PRReviewECRPush
           aws-region: ${{ env.AWS_REGION }}
 
       - name: Copy Prisma Files to S3
