@@ -20,7 +20,6 @@ interface IProps {
   className?: string;
   backdropClassname?: string;
   children: React.ReactNode;
-  nonce?: string;
 }
 
 const SlideUpTransition = ({
