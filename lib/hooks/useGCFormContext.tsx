@@ -166,6 +166,14 @@ export const GCFormsProvider = ({
   };
 
   const getNonce = () => {
+    const urlParams =
+      typeof window !== "undefined"
+        ? new URLSearchParams(window.location.search)
+        : new URLSearchParams();
+    const urlNonce = urlParams.get("nonce");
+    if (urlNonce) {
+      return urlNonce;
+    }
     return nonce || "";
   };
 
