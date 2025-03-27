@@ -1,7 +1,7 @@
 "use client";
 import React from "react";
 import { useTemplateStore } from "@lib/store/useTemplateStore";
-import { RichTextEditor } from "./lexical-editor/RichTextEditor";
+import { RichTextEditor } from "./RichTextEditor";
 import { AddElementButton } from "./element-dialog/AddElementButton";
 import { LocalizedElementProperties } from "@lib/types/form-builder-types";
 import { EssentialBadge } from "@formBuilder/components/shared/EssentialBadge";

@@ -4,7 +4,6 @@ import { LexicalComposer } from "@lexical/react/LexicalComposer";
 import { RichTextPlugin } from "@lexical/react/LexicalRichTextPlugin";
 import { LexicalErrorBoundary } from "@lexical/react/LexicalErrorBoundary";
 import { HistoryPlugin } from "@lexical/react/LexicalHistoryPlugin";
-import { AutoFocusPlugin } from "@lexical/react/LexicalAutoFocusPlugin";
 import { LinkPlugin } from "@lexical/react/LexicalLinkPlugin";
 import { ListPlugin } from "@lexical/react/LexicalListPlugin";
 import ContentEditable from "./ui/ContentEditable";
@@ -72,7 +71,7 @@ export const Editor = ({
         }}
       >
         <div>
-          <ToolbarPlugin editorId={""} />
+          <ToolbarPlugin editorId={id || ""} />
 
           <RichTextPlugin
             contentEditable={
@@ -109,7 +108,6 @@ export const Editor = ({
               });
             }}
           />
-          <AutoFocusPlugin />
           <ListPlugin />
           <LinkPlugin />
           <TabControlPlugin />
