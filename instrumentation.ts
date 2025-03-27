@@ -7,7 +7,7 @@ export async function register() {
     // with this runtime. We need to use the native console.log function instead.
     if (!process.env.REDIS_URL) {
       // eslint-disable-next-line no-console
-      console.log("No REDIS_URL environment variable found, skipping privilege cache flush");
+      console.log("No REDIS_URL environment variable found, skipping flags initialization and privilege cache flush");
       return;
     }
     await import("@lib/flags/initialization").then(async (m) => {
