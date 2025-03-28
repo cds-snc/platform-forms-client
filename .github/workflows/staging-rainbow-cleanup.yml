@@ -2,8 +2,7 @@ name: Rainbow cleanup (staging)
 
 on:
   workflow_run:
-    # workflows: ["Deploy to Staging"]
-    workflows: ["CodeQL"]
+    workflows: ["Deploy to Staging"]
     types:
       - completed
   workflow_dispatch:
@@ -12,18 +11,22 @@ on:
         description: "Deployment identifier"
         type: string
         required: true
+  schedule:
+    - cron: "0 4 * * *" # Nightly at 4am
+  pull_request:
+    branches:
+      - main
+      - feature/*
+    types:
+      - labeled
+      - opened
+      - reopened
+      - synchronize
 
 env:
   AWS_ACCOUNT_ID: ${{ vars.STAGING_AWS_ACCOUNT_ID }}
   AWS_REGION: ca-central-1
-  FUNCTION_NAME: "forms-client-pr"
-  IMAGE: pr_review
-  REGISTRY: ${{ vars.STAGING_AWS_ACCOUNT_ID }}.dkr.ecr.ca-central-1.amazonaws.com
-  ROLE_ARN: arn:aws:iam::${{ vars.STAGING_AWS_ACCOUNT_ID }}:role/forms-lambda-client
-  COGNITO_APP_CLIENT_ID: ${{secrets.STAGING_COGNITO_APP_CLIENT_ID}}
-  COGNITO_USER_POOL_ID: ${{ secrets.STAGING_COGNITO_USER_POOL_ID}}
-  NEXT_SERVER_ACTIONS_ENCRYPTION_KEY: ${{ secrets.STAGING_NEXT_SERVER_ACTIONS_ENCRYPTION_KEY }}
-  GITHUB_SHA: ${{ github.sha }}
+  LOAD_BALANCER_LISTENER_ARN: ${{ vars.STAGING_LOAD_BALANCER_LISTENER_ARN }}
 
 permissions:
   id-token: write
@@ -44,15 +47,25 @@ jobs:
           aws-region: ${{ env.AWS_REGION }}
 
       - name: Rainbow cleanup on workflow_run event
-        if: ${{ github.event_name == 'workflow_run' }} && ${{ github.event.workflow_run.conclusion == 'failure' }}
+        if: ${{ github.event_name == 'workflow_run' && github.event.workflow_run.conclusion == 'failure' }}
         uses: ./.github/workflows/rainbow/cleanup
         with:
           deployment-identifier: ${{ github.event.workflow_run.head_sha }}
-          load-balancer-listener-arn: ${{ vars.STAGING_LOAD_BALANCER_LISTENER_ARN }}
+          load-balancer-listener-arn: ${{ env.LOAD_BALANCER_LISTENER_ARN }}
 
       - name: Rainbow cleanup on workflow_dispatch event
         if: ${{ github.event_name == 'workflow_dispatch' }}
         uses: ./.github/workflows/rainbow/cleanup
         with:
           deployment-identifier: ${{ inputs.deployment-identifier }}
-          load-balancer-listener-arn: ${{ vars.STAGING_LOAD_BALANCER_LISTENER_ARN }}
+          load-balancer-listener-arn: ${{ env.LOAD_BALANCER_LISTENER_ARN }}
+
+      - name: Rainbow cleanup on schedule event
+        # if: ${{ github.event_name == 'schedule' }}
+        id: find-old-rainbow-deployments
+        run: |
+          aws elbv2 describe-rules \
+            --listener-arn ${{ env.LOAD_BALANCER_LISTENER_ARN }} \
+            --no-paginate \
+            --query "Rules[?Priority > '0' && contains(Actions[0].ForwardConfig.TargetGroups[0].TargetGroupArn, 'rainbow')].RuleArn" \
+            | jq -r '. | join(",")'
