@@ -74,10 +74,7 @@ jobs:
       - name: Rainbow cleanup on schedule event part 2
         # if: ${{ github.event_name == 'schedule' }}
         run: |
-          arnList=(${{ env.arnList }})
-          for arn in "${arnList[@]}"; do
-            echo "Processing item: $arn"
-            # uses: username/repo-name@v1  # Replace with your actual composite action
-            # with:
-            #   item_name: $item  # Passing each item as an input to the composite action
+          for arn in $(echo ${{ env.arnList }} | sed "s/,/ /g")
+          do
+            echo "$arn"
           done
