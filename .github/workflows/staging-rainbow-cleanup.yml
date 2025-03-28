@@ -60,12 +60,24 @@ jobs:
           deployment-identifier: ${{ inputs.deployment-identifier }}
           load-balancer-listener-arn: ${{ env.LOAD_BALANCER_LISTENER_ARN }}
 
-      - name: Rainbow cleanup on schedule event
+      - name: Rainbow cleanup on schedule event part 1
         # if: ${{ github.event_name == 'schedule' }}
         id: find-old-rainbow-deployments
         run: |
-          aws elbv2 describe-rules \
+          arnList=$(aws elbv2 describe-rules \
             --listener-arn ${{ env.LOAD_BALANCER_LISTENER_ARN }} \
             --no-paginate \
             --query "Rules[?Priority > '0' && contains(Actions[0].ForwardConfig.TargetGroups[0].TargetGroupArn, 'rainbow')].RuleArn" \
-            | jq -r '. | join(",")'
+            | jq -r '. | join(",")')
+          echo "arnList=$arnList" >> $GITHUB_ENV
+
+      - name: Rainbow cleanup on schedule event part 2
+        # if: ${{ github.event_name == 'schedule' }}
+        run: |
+          arnList=(${{ env.arnList }})
+          for arn in "${arnList[@]}"; do
+            echo "Processing item: $item"
+            # uses: username/repo-name@v1  # Replace with your actual composite action
+            # with:
+            #   item_name: $item  # Passing each item as an input to the composite action
+          done
