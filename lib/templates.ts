@@ -221,7 +221,7 @@ export async function getAllTemplates(options?: {
       .findMany({
         where: {
           ...(requestedWhere && requestedWhere),
-          ttl: null,
+          ttl: null, // exclude deleted forms
         },
         select: {
           id: true,
@@ -277,7 +277,7 @@ export async function getAllTemplatesForUser(
       .findMany({
         where: {
           ...(requestedWhere && requestedWhere),
-          ttl: null,
+          ttl: null, // exclude deleted forms
           users: {
             some: {
               id: ability.user.id,
@@ -343,6 +343,7 @@ export async function getPublicTemplateByID(formID: string): Promise<PublicFormR
       .findUnique({
         where: {
           id: formID,
+          ttl: null, // exclude deleted forms
         },
         select: {
           id: true,
@@ -365,8 +366,8 @@ export async function getPublicTemplateByID(formID: string): Promise<PublicFormR
       })
       .catch((e) => prismaErrors(e, null));
 
-    // Short circuit the public record filtering if no form record is found or the form is marked as deleted (ttl != null)
-    if (!template || template.ttl) return null;
+    // Short circuit the public record filtering if no form record is found
+    if (!template) return null;
 
     const parsedTemplate = _parseTemplate(template);
     const publicFormRecord = onlyIncludePublicProperties(parsedTemplate);
@@ -401,6 +402,7 @@ export async function getFullTemplateByID(formID: string): Promise<FormRecord | 
       .findUnique({
         where: {
           id: formID,
+          ttl: null, // exclude deleted forms
         },
         include: {
           deliveryOption: true,
@@ -408,6 +410,7 @@ export async function getFullTemplateByID(formID: string): Promise<FormRecord | 
       })
       .catch((e) => prismaErrors(e, null));
 
+    // Short circuit the public record filtering if no form record is found
     if (!template) return null;
 
     logEvent(user.id, { type: "Form", id: formID }, "ReadForm");
@@ -435,6 +438,7 @@ export async function getTemplateWithAssociatedUsers(formID: string): Promise<{
     .findUnique({
       where: {
         id: formID,
+        ttl: null, // exclude deleted forms
       },
       include: {
         deliveryOption: true,
@@ -495,6 +499,7 @@ export async function updateTemplate(command: UpdateTemplateCommand): Promise<Fo
       where: {
         id: command.formID,
         isPublished: false,
+        ttl: null, // exclude deleted forms
       },
       data: {
         jsonConfig: command.formConfig as Prisma.JsonObject,
@@ -586,6 +591,7 @@ export async function updateIsPublishedForTemplate(
         isPublished: {
           not: isPublished,
         },
+        ttl: null, // exclude deleted forms
       },
       data: {
         isPublished: isPublished,
@@ -634,6 +640,7 @@ export async function removeAssignedUserFromTemplate(
   const template = await prisma.template.findUnique({
     where: {
       id: formID,
+      ttl: null, // exclude deleted forms
     },
     select: {
       users: {
@@ -666,6 +673,7 @@ export async function removeAssignedUserFromTemplate(
     .update({
       where: {
         id: formID,
+        ttl: null, // exclude deleted forms
       },
       select: {
         jsonConfig: true,
@@ -723,6 +731,7 @@ export async function assignUserToTemplate(formID: string, userID: string): Prom
   const template = await prisma.template.findUnique({
     where: {
       id: formID,
+      ttl: null, // exclude deleted forms
     },
     select: {
       users: {
@@ -751,6 +760,7 @@ export async function assignUserToTemplate(formID: string, userID: string): Prom
     .update({
       where: {
         id: formID,
+        ttl: null, // exclude deleted forms
       },
       select: {
         jsonConfig: true,
@@ -873,6 +883,7 @@ export async function updateAssignedUsersForTemplate(
     .findFirst({
       where: {
         id: formID,
+        ttl: null, // exclude deleted forms
       },
       include: {
         users: true,
@@ -901,6 +912,7 @@ export async function updateAssignedUsersForTemplate(
     .update({
       where: {
         id: formID,
+        ttl: null, // exclude deleted forms
       },
       data: {
         users: {
@@ -999,6 +1011,7 @@ export async function updateFormPurpose(
       where: {
         id: formID,
         isPublished: false,
+        ttl: null, // exclude deleted forms
       },
       data: {
         formPurpose: formPurpose,
@@ -1059,6 +1072,7 @@ export async function updateFormSaveAndResume(
       where: {
         id: formID,
         isPublished: false,
+        ttl: null, // exclude deleted forms
       },
       data: {
         saveAndResume: saveAndResume ?? false,
@@ -1119,6 +1133,7 @@ export async function updateResponseDeliveryOption(
       where: {
         id: formID,
         isPublished: false,
+        ttl: null, // exclude deleted forms
       },
       data: {
         deliveryOption: {
@@ -1193,6 +1208,7 @@ export async function removeDeliveryOption(formID: string): Promise<void> {
   const template = await prisma.template.findFirstOrThrow({
     where: {
       id: formID,
+      ttl: null, // exclude deleted forms
     },
     select: {
       isPublished: true,
@@ -1365,6 +1381,7 @@ export const updateSecurityAttribute = async (formID: string, securityAttribute:
       where: {
         id: formID,
         isPublished: false,
+        ttl: null, // exclude deleted forms
       },
       data: { securityAttribute },
       select: {
