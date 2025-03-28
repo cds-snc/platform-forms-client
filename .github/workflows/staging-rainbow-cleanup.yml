@@ -33,8 +33,9 @@ permissions:
   contents: read
 
 jobs:
-  cleanup:
+  cleanup-single-deployment-identifier:
     runs-on: ubuntu-latest
+    if: ${{ github.event_name == 'workflow_run' || github.event_name == 'workflow_dispatch' }}
     steps:
       - name: Checkout
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
@@ -42,8 +43,9 @@ jobs:
       - name: Configure AWS credentials using OIDC
         uses: aws-actions/configure-aws-credentials@ececac1a45f3b08a01d2dd070d28d111c5fe6722 # v4.1.0
         with:
+          # role-to-assume: arn:aws:iam::${{ env.AWS_ACCOUNT_ID }}:role/platform-forms-client-apply
           role-to-assume: arn:aws:iam::${{ env.AWS_ACCOUNT_ID }}:role/platform-forms-client-pr-review-env
-          role-session-name: PRReviewECRPush
+          role-session-name: RainbowCleanup
           aws-region: ${{ env.AWS_REGION }}
 
       - name: Rainbow cleanup on workflow_run event
@@ -60,26 +62,56 @@ jobs:
           deployment-identifier: ${{ inputs.deployment-identifier }}
           load-balancer-listener-arn: ${{ env.LOAD_BALANCER_LISTENER_ARN }}
 
-      - name: Rainbow cleanup on schedule event part 1
-        # if: ${{ github.event_name == 'schedule' }}
-        id: find-old-rainbow-deployments
+  cleanup-multiple-deployment-identifier-1:
+    runs-on: ubuntu-latest
+    # if: ${{ github.event_name == 'schedule' }}
+    outputs:
+      ids: ${{ steps.find-rainbow-deployments-ids.outputs.ids }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+
+      - name: Configure AWS credentials using OIDC
+        uses: aws-actions/configure-aws-credentials@ececac1a45f3b08a01d2dd070d28d111c5fe6722 # v4.1.0
+        with:
+          # role-to-assume: arn:aws:iam::${{ env.AWS_ACCOUNT_ID }}:role/platform-forms-client-apply
+          role-to-assume: arn:aws:iam::${{ env.AWS_ACCOUNT_ID }}:role/platform-forms-client-pr-review-env
+          role-session-name: RainbowCleanup
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: Find rainbow deployments to clean up
+        id: find-rainbow-deployments-ids
         run: |
-          arnList=$(aws elbv2 describe-rules \
+          arnList=($(aws elbv2 describe-rules \
             --listener-arn ${{ env.LOAD_BALANCER_LISTENER_ARN }} \
             --no-paginate \
-            --query "Rules[?Priority > '1' && contains(Actions[0].ForwardConfig.TargetGroups[0].TargetGroupArn, 'rainbow')].RuleArn" \
-            | jq -r '. | join(",")')
-          echo "arnList=$arnList" >> $GITHUB_ENV
+            --query "Rules[?Priority > '0' && contains(Actions[0].ForwardConfig.TargetGroups[0].TargetGroupArn, 'rainbow')].RuleArn" \
+            | jq -r '.[]'))
 
-      - name: Rainbow cleanup on schedule event part 2
-        # if: ${{ github.event_name == 'schedule' }}
+          deploymentIds=$(aws elbv2 describe-tags \
+            --resource-arns "${arnList[@]}" \
+            | jq -r '[.TagDescriptions[].Tags[] | select(.Key == "Name") | .Value | sub("^rainbow-"; "")]')
+
+          echo "ids=$deploymentIds" >> "$GITHUB_OUTPUT"
+
+  cleanup-multiple-deployment-identifier-2:
+    runs-on: ubuntu-latest
+    needs: cleanup-multiple-deployment-identifier-1
+    strategy:
+      matrix:
+        deployment-identifier: ${{ fromJSON(needs.cleanup-multiple-deployment-identifier-1.outputs.ids) }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+
+      - name: Configure AWS credentials using OIDC
+        uses: aws-actions/configure-aws-credentials@ececac1a45f3b08a01d2dd070d28d111c5fe6722 # v4.1.0
+        with:
+          # role-to-assume: arn:aws:iam::${{ env.AWS_ACCOUNT_ID }}:role/platform-forms-client-apply
+          role-to-assume: arn:aws:iam::${{ env.AWS_ACCOUNT_ID }}:role/platform-forms-client-pr-review-env
+          role-session-name: RainbowCleanup
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: Cleanup
         run: |
-          for arn in $(echo ${{ env.arnList }} | sed "s/,/ /g")
-          do
-            deploymentIdentifier=$(aws elbv2 describe-tags --resource-arns $arn | jq '.TagDescriptions[0].Tags[] | select(.Key == "Name") | .Value | sub("^rainbow-"; "")')
-            
-            uses: ./.github/workflows/rainbow/cleanup
-            with:
-              deployment-identifier: $deploymentIdentifier
-              load-balancer-listener-arn: ${{ env.LOAD_BALANCER_LISTENER_ARN }}
-          done
+          echo ${{ matrix.deployment-identifier }}
