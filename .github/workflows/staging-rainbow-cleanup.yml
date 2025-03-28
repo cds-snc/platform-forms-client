@@ -76,7 +76,7 @@ jobs:
         run: |
           arnList=(${{ env.arnList }})
           for arn in "${arnList[@]}"; do
-            echo "Processing item: $item"
+            echo "Processing item: $arn"
             # uses: username/repo-name@v1  # Replace with your actual composite action
             # with:
             #   item_name: $item  # Passing each item as an input to the composite action
