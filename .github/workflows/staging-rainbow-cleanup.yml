@@ -67,7 +67,7 @@ jobs:
           arnList=$(aws elbv2 describe-rules \
             --listener-arn ${{ env.LOAD_BALANCER_LISTENER_ARN }} \
             --no-paginate \
-            --query "Rules[?Priority > '0' && contains(Actions[0].ForwardConfig.TargetGroups[0].TargetGroupArn, 'rainbow')].RuleArn" \
+            --query "Rules[?Priority > '1' && contains(Actions[0].ForwardConfig.TargetGroups[0].TargetGroupArn, 'rainbow')].RuleArn" \
             | jq -r '. | join(",")')
           echo "arnList=$arnList" >> $GITHUB_ENV
 
@@ -76,5 +76,10 @@ jobs:
         run: |
           for arn in $(echo ${{ env.arnList }} | sed "s/,/ /g")
           do
-            echo "$arn"
+            deploymentIdentifier=$(aws elbv2 describe-tags --resource-arns $arn | jq '.TagDescriptions[0].Tags[] | select(.Key == "Name") | .Value | sub("^rainbow-"; "")')
+            
+            uses: ./.github/workflows/rainbow/cleanup
+            with:
+              deployment-identifier: $deploymentIdentifier
+              load-balancer-listener-arn: ${{ env.LOAD_BALANCER_LISTENER_ARN }}
           done
