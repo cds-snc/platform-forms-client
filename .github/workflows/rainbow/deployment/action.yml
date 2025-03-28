@@ -1,7 +1,7 @@
 name: Rainbow deployment
 
 inputs:
-  deployment-process-identifier:
+  deployment-identifier:
     required: true
   ecr-registry-uri:
     required: true
@@ -25,6 +25,10 @@ inputs:
 runs:
   using: "composite"
   steps:
+    - name: Highlighting deployment identifier
+      shell: bash
+      run: echo -e "\033[0;32mDeployment identifier => ${{ inputs.deployment-identifier }}\033[0m"
+
     - name: Find latest release identifier
       id: latest-release-identifier
       shell: bash
@@ -46,8 +50,8 @@ runs:
     - name: Tag and Push Rainbow Lambda image
       shell: bash
       run: |
-        docker tag rainbow ${{ inputs.ecr-registry-uri }}/forms_app_legacy:${{ inputs.deployment-process-identifier }}
-        docker push ${{ inputs.ecr-registry-uri }}/forms_app_legacy:${{ inputs.deployment-process-identifier }}
+        docker tag rainbow ${{ inputs.ecr-registry-uri }}/forms_app_legacy:${{ inputs.deployment-identifier }}
+        docker push ${{ inputs.ecr-registry-uri }}/forms_app_legacy:${{ inputs.deployment-identifier }}
 
     - name: Rainbow magic
       shell: bash
@@ -55,29 +59,29 @@ runs:
         ./bin/bump-load-balancer-listener-rainbow-rules-priority.sh ${{ inputs.load-balancer-listener-arn }} > /dev/null 2>&1
 
         lambdaArn=$(aws lambda create-function \
-          --function-name rainbow-${{ inputs.deployment-process-identifier }} \
+          --function-name rainbow-${{ inputs.deployment-identifier }} \
           --logging-config LogFormat=Text,LogGroup=Forms \
           --package-type Image \
           --role ${{ inputs.forms-lambda-client-role-arn }} \
           --timeout 15 \
           --memory-size 2048 \
-          --code ImageUri=${{ inputs.ecr-registry-uri }}/forms_app_legacy:${{ inputs.deployment-process-identifier }} \
+          --code ImageUri=${{ inputs.ecr-registry-uri }}/forms_app_legacy:${{ inputs.deployment-identifier }} \
           --vpc-config SubnetIds=${{ inputs.forms-lambda-client-subnet-ids }},SecurityGroupIds=${{ inputs.forms-lambda-client-security-group-ids }} | jq -r ".FunctionArn")
 
-        aws lambda wait function-active --function-name rainbow-${{ inputs.deployment-process-identifier }}
+        aws lambda wait function-active --function-name rainbow-${{ inputs.deployment-identifier }}
 
-        ./bin/set-rainbow-lambda-env-vars.sh rainbow-${{ inputs.deployment-process-identifier }} > /dev/null 2>&1
+        ./bin/set-rainbow-lambda-env-vars.sh rainbow-${{ inputs.deployment-identifier }} > /dev/null 2>&1
 
         aws lambda add-permission \
-          --function-name rainbow-${{ inputs.deployment-process-identifier }} \
+          --function-name rainbow-${{ inputs.deployment-identifier }} \
           --statement-id rainbow-elb-invoke-permission \
           --principal elasticloadbalancing.amazonaws.com \
           --action lambda:InvokeFunction > /dev/null 2>&1
 
-        editableDeploymentProcessIdentifier=${{ inputs.deployment-process-identifier }}
+        editableDeploymentIdentifier=${{ inputs.deployment-identifier }}
 
         targetGroupArn=$(aws elbv2 create-target-group \
-          --name rainbow-${editableDeploymentProcessIdentifier:0:24} \
+          --name rainbow-${editableDeploymentIdentifier:0:24} \
           --target-type lambda | jq -r ".TargetGroups[0].TargetGroupArn")
 
         aws elbv2 register-targets \
@@ -89,4 +93,4 @@ runs:
           --conditions "[{\"Field\":\"host-header\",\"Values\":[\"${{ inputs.hostname }}\"]},{\"Field\":\"http-header\",\"HttpHeaderConfig\":{\"HttpHeaderName\":\"x-deployment-id\",\"Values\":[\"${{ steps.latest-release-identifier.outputs.value }}\"]}}]" \
           --priority 1 \
           --actions Type=forward,TargetGroupArn=$targetGroupArn \
-          --tags Key=Name,Value=rainbow-${{ inputs.deployment-process-identifier }} > /dev/null 2>&1
+          --tags Key=Name,Value=rainbow-${{ inputs.deployment-identifier }} > /dev/null 2>&1
