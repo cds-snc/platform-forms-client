@@ -9,6 +9,7 @@ import { cn } from "@lib/utils";
 interface DropdownProps extends InputFieldProps {
   children?: React.ReactElement;
   choices?: string[];
+  sortOrder?: string;
 }
 
 interface DropdownOptionProps {
@@ -26,7 +27,17 @@ const DropdownOption = (props: DropdownOptionProps): React.ReactElement => {
 };
 
 export const Dropdown = (props: DropdownProps): React.ReactElement => {
-  const { children, id, name, className, choices = [], required, ariaDescribedBy, lang } = props;
+  const {
+    children,
+    id,
+    name,
+    className,
+    choices = [],
+    required,
+    ariaDescribedBy,
+    lang,
+    sortOrder,
+  } = props;
   const { t } = useTranslation("common", { lng: lang });
   const [field, meta] = useField(props);
 
@@ -38,7 +49,15 @@ export const Dropdown = (props: DropdownProps): React.ReactElement => {
       index: i,
       innerId: `${id}.${i}`,
     }))
-    .sort((a, b) => a.choice.localeCompare(b.choice))
+    .sort((a, b) => {
+      if (sortOrder === "ascending") {
+        return a.choice.localeCompare(b.choice);
+      }
+      if (sortOrder === "descending") {
+        return b.choice.localeCompare(a.choice);
+      }
+      return 0;
+    })
     .map(({ choice, innerId }) => (
       <DropdownOption id={innerId} key={`key-${innerId}`} value={choice} name={choice} />
     ));

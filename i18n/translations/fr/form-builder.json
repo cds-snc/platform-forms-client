@@ -1316,5 +1316,11 @@
     },
     "a11yDescription": "Enregistrer la progression et reprendre le formulaire plus tard",
     "saveButton": "Enregistrer"
+  },
+  "sortOptions": {
+    "label": "Sort by",
+    "none": "none [FR]",
+    "ascending": "ascending [FR]",
+    "descending": "descending [FR]"
   }
 }
