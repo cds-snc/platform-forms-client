@@ -130,6 +130,14 @@ export const SelectedElement = ({
         element = (
           <>
             <ShortAnswer>{t("addElementDialog.dropdown.title")}</ShortAnswer>
+            {item.properties.sortOrder && (
+              <div className="inline-block text-sm text-slate-600">
+                <span className="mr-2 inline-block">{t("sortOptions.label")}</span>
+                {t(`sortOptions.${item.properties.sortOrder}`, {
+                  sortOrder: item.properties.sortOrder,
+                })}
+              </div>
+            )}
             {!item.properties.managedChoices && (
               <Options item={item} renderIcon={() => <CheckBoxEmptyIcon />} formId={formId} />
             )}

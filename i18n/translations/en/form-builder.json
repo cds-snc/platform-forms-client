@@ -1318,7 +1318,7 @@
     "saveButton": "Save"
   },
   "sortOptions": {
-    "label": "Sort by",
+    "label": "Sort order:",
     "none": "none",
     "ascending": "ascending",
     "descending": "descending"

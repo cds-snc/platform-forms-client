@@ -1318,7 +1318,7 @@
     "saveButton": "Enregistrer"
   },
   "sortOptions": {
-    "label": "Sort by",
+    "label": "Sort order:",
     "none": "none [FR]",
     "ascending": "ascending [FR]",
     "descending": "descending [FR]"
