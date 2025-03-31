@@ -16,6 +16,10 @@ export const SortOptions = ({
     { value: "descending", label: t("sortOptions.descending") },
   ];
 
+  if (item.type !== "dropdown") {
+    return null;
+  }
+
   return (
     <section className="mb-4">
       <Label htmlFor={`sort--modal--${item.id}`}>{t("sortOptions.label")}</Label>
