@@ -23,27 +23,29 @@ export const SortOptions = ({
   return (
     <section className="mb-4">
       <Label htmlFor={`sort--modal--${item.id}`}>{t("sortOptions.label")}</Label>
-      <select
-        data-testid="autocomplete"
-        className="gc-dropdown mb-4 inline-block"
-        id={`sort--modal--${item.id}`}
-        value={item.properties.sortOrder || ""}
-        onChange={(e: React.ChangeEvent<HTMLSelectElement>) => {
-          setItem({
-            ...item,
-            properties: {
-              ...item.properties,
-              ...{ sortOrder: e.target.value },
-            },
-          });
-        }}
-      >
-        {sortOptions.map((option) => (
-          <option key={option.value} value={option.value}>
-            {option.label}
-          </option>
-        ))}
-      </select>
+      <div className="gcds-select-wrapper">
+        <select
+          data-testid="autocomplete"
+          className="gc-dropdown mb-4 inline-block"
+          id={`sort--modal--${item.id}`}
+          value={item.properties.sortOrder || ""}
+          onChange={(e: React.ChangeEvent<HTMLSelectElement>) => {
+            setItem({
+              ...item,
+              properties: {
+                ...item.properties,
+                ...{ sortOrder: e.target.value },
+              },
+            });
+          }}
+        >
+          {sortOptions.map((option) => (
+            <option key={option.value} value={option.value}>
+              {option.label.charAt(0).toUpperCase() + option.label.slice(1)}
+            </option>
+          ))}
+        </select>
+      </div>
     </section>
   );
 };
