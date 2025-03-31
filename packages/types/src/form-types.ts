@@ -116,7 +116,7 @@ export interface ElementProperties {
   full?: boolean;
   addressComponents?: AddressComponents | undefined;
   dynamicRow?: dynamicRowType;
-  sortOrder: string;
+  sortOrder?: string;
   [key: string]:
     | string
     | number

@@ -49,6 +49,7 @@ export const AddOther = ({
         descriptionFr: "",
         placeholderEn: "",
         placeholderFr: "",
+        sortOrder: "",
       },
     };
 
