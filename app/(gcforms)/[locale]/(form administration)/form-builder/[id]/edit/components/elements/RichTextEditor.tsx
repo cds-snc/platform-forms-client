@@ -47,7 +47,7 @@ export const RichTextEditor = ({
         content={value}
         onChange={updateValue}
         ariaLabel={ariaLabel || t("richTextEditor")}
-        ariaDescribedBy={ariaDescribedBy || ""}
+        ariaDescribedBy={ariaDescribedBy}
         {...getLocalizationAttribute()}
       />
     </div>
