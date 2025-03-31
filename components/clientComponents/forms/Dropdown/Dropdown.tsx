@@ -32,10 +32,16 @@ export const Dropdown = (props: DropdownProps): React.ReactElement => {
 
   const initialDropdownOption = <option value="">{t("dropdown-initial-option-text")}</option>;
 
-  const options = choices.map((choice, i) => {
-    const innerId = `${id}.${i}`;
-    return <DropdownOption id={innerId} key={`key-${innerId}`} value={choice} name={choice} />;
-  });
+  const options = choices
+    .map((choice, i) => ({
+      choice,
+      index: i,
+      innerId: `${id}.${i}`,
+    }))
+    .sort((a, b) => a.choice.localeCompare(b.choice))
+    .map(({ choice, innerId }) => (
+      <DropdownOption id={innerId} key={`key-${innerId}`} value={choice} name={choice} />
+    ));
 
   const classes = cn("gc-dropdown", className, meta.error && "gcds-error");
 
