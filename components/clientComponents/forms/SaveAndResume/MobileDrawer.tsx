@@ -7,7 +7,6 @@ import { generateDownloadHtml } from "@lib/saveAndResume/actions";
 import { downloadDataAsBlob } from "@lib/downloadDataAsBlob";
 import { useTranslation } from "@i18n/client";
 import { useFormSubmissionData } from "@lib/hooks/useFormSubmissionData";
-import { useGCFormsContext } from "@lib/hooks/useGCFormContext";
 
 export const MobileDrawer = ({
   drawerOpen,
@@ -23,7 +22,6 @@ export const MobileDrawer = ({
   type: "confirm" | "progress";
 }) => {
   const { t } = useTranslation("common");
-  const { getNonce } = useGCFormsContext();
 
   const { fileName, getOptions } = useFormSubmissionData({ language, type });
 
@@ -34,7 +32,7 @@ export const MobileDrawer = ({
   };
 
   return (
-    <Drawer isVisible={drawerOpen} onClose={() => setDrawerOpen(false)} nonce={getNonce()}>
+    <Drawer isVisible={drawerOpen} onClose={() => setDrawerOpen(false)}>
       <h2>{t("saveAndResume.more")}</h2>
       <div className="mx-4 flex flex-col gap-4">
         <Button
