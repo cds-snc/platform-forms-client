@@ -42,7 +42,6 @@ jobs:
 
       - name: Trigger Migration Lambda
         run: |
-          aws lambda wait function-active --function-name prisma-migration --region ${{ env.AWS_REGION }}
           aws lambda invoke --function-name prisma-migration --region ${{ env.AWS_REGION }} response.text
           cat response.text
           if grep -q '"errorMessage":' response.text; then
