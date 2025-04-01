@@ -42,4 +42,4 @@ jobs:
 
       - name: Trigger Migration Lambda
         run: |
-          aws lambda invoke --function-name prisma-migration --region ${{ env.AWS_REGION }} --payload '{}' > /dev/null 2>&1
+          aws lambda invoke --function-name prisma-migration --region ${{ env.AWS_REGION }} --payload '{}'
