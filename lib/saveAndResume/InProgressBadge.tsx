@@ -5,6 +5,11 @@ import { formClosingDateEst as utcToEst } from "lib/utils/date/utcToEst";
 export const InProgressBadge = ({ language }: { language: Language }) => {
   const { t } = customTranslate("common");
   const { month, day, year } = utcToEst(new Date().toISOString(), language);
+
+  // Strip leading zero from day
+  let formattedDay = day;
+  formattedDay = day && day.replace(/^0+/, "");
+
   return (
     <div data-testid="in-progress-badge">
       <div className="mr-4 inline-block max-w-fit rounded-lg bg-violet-50 px-4 py-2">
@@ -15,7 +20,7 @@ export const InProgressBadge = ({ language }: { language: Language }) => {
       <div className="inline-block">
         {t("saveAndResume.downloadProgressHtml.badge.lastSaved", {
           lng: language,
-          day,
+          day: formattedDay,
           month,
           year,
           interpolation: {
