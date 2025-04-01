@@ -1318,9 +1318,9 @@
     "saveButton": "Enregistrer"
   },
   "sortOptions": {
-    "label": "Sort order:",
-    "none": "none [FR]",
-    "ascending": "ascending [FR]",
-    "descending": "descending [FR]"
+    "label": "Ordonner la liste :",
+    "none": "telle que saisie",
+    "ascending": "alphabétique (A-Z)",
+    "descending": "alphabétique inversé (Z-A)"
   }
 }
