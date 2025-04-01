@@ -1318,9 +1318,9 @@
     "saveButton": "Save"
   },
   "sortOptions": {
-    "label": "Sort order:",
-    "none": "none",
-    "ascending": "ascending",
-    "descending": "descending"
+    "label": "Order list:",
+    "none": "as entered",
+    "ascending": "alphabetically (A-Z)",
+    "descending": "reverse alphabetical (Z-A)"
   }
 }
