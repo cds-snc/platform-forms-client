@@ -1,5 +1,8 @@
 import { useTranslation } from "@i18n/client";
 import { FormElement } from "@lib/types";
+
+import { SortOption, SortValue } from "@gcforms/types";
+
 import { Label } from "./Label";
 
 export const SortOptions = ({
@@ -10,10 +13,11 @@ export const SortOptions = ({
   setItem: (item: FormElement) => void;
 }) => {
   const { t } = useTranslation("form-builder");
+
   const sortOptions = [
-    { value: "none", label: t("sortOptions.none") },
-    { value: "ascending", label: t("sortOptions.ascending") },
-    { value: "descending", label: t("sortOptions.descending") },
+    { value: SortOption.NONE, label: t("sortOptions.none") },
+    { value: SortOption.ASCENDING, label: t("sortOptions.ascending") },
+    { value: SortOption.DESCENDING, label: t("sortOptions.descending") },
   ];
 
   if (item.type !== "dropdown") {
@@ -30,11 +34,17 @@ export const SortOptions = ({
           id={`sort--modal--${item.id}`}
           value={item.properties.sortOrder || ""}
           onChange={(e: React.ChangeEvent<HTMLSelectElement>) => {
+            const selectedOption = sortOptions.find((option) => option.value === e.target.value);
+
+            if (!selectedOption) {
+              return;
+            }
+
             setItem({
               ...item,
               properties: {
                 ...item.properties,
-                ...{ sortOrder: e.target.value },
+                ...{ sortOrder: selectedOption.value as SortValue },
               },
             });
           }}
