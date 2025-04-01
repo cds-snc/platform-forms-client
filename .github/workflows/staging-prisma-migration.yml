@@ -42,9 +42,10 @@ jobs:
 
       - name: Trigger Migration Lambda
         run: |
-          aws lambda invoke --function-name prisma-migration --region ${{ env.AWS_REGION }} response.json
-          cat response.json
-          if grep -q '"errorMessage":' response.json; then
+          aws lambda wait function-active --function-name prisma-migration --region ${{ env.AWS_REGION }}
+          aws lambda invoke --function-name prisma-migration --region ${{ env.AWS_REGION }} response.text
+          cat response.text
+          if grep -q '"errorMessage":' response.text; then
             echo "Migration failed. Check the logs for details."
             exit 1
           else
