@@ -127,17 +127,15 @@ export const SelectedElement = ({
       if (elIndex !== -1) {
         element = <SubOptions item={item} renderIcon={(index) => `${index + 1}.`} />;
       } else {
+        const sortOrder = item.properties.sortOrder;
+        const sortOptions = sortOrder ? t(`sortOptions.${sortOrder}`) : t("sortOptions.none");
         element = (
           <>
             <ShortAnswer>{t("addElementDialog.dropdown.title")}</ShortAnswer>
-            {item.properties.sortOrder && (
-              <div className="inline-block text-sm text-slate-600">
-                <span className="mr-2 inline-block">{t("sortOptions.label")}</span>
-                {t(`sortOptions.${item.properties.sortOrder}`, {
-                  sortOrder: item.properties.sortOrder,
-                })}
-              </div>
-            )}
+            <div className="inline-block text-sm text-slate-600">
+              <span className="mr-2 inline-block">{t("sortOptions.label")}</span>
+              {sortOptions}
+            </div>
             {!item.properties.managedChoices && (
               <Options item={item} renderIcon={() => <CheckBoxEmptyIcon />} formId={formId} />
             )}
