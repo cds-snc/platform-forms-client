@@ -444,7 +444,7 @@
   "formDeleteDialogTitleFailed": "Error",
   "formDownload": {
     "btnText": "What can I do with a form file?",
-    "description": "Keep a version of your form on your computer",
+    "description": "Keep a version of your form on your computer.",
     "dialog": {
       "downloadButtonText": "Download a copy",
       "message1": "Download a form file to share a draft form with others. Collaborators can upload the form file and view the progress that has been made.",

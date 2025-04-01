@@ -444,7 +444,7 @@
   "formDeleteDialogTitleFailed": "Erreur",
   "formDownload": {
     "btnText": "Que puis-je faire avec un fichier de formulaire?",
-    "description": "Conservez une version du formulaire sur votre ordinateur",
+    "description": "Conservez une version du formulaire sur votre ordinateur.",
     "dialog": {
       "downloadButtonText": "Télécharger une copie",
       "message1": "Téléchargez un fichier de formulaire pour partager l’ébauche avec d'autres personnes. Les collaborateur·rice·s peuvent ainsi ouvrir le fichier dans Formulaires GC et visualiser les progrès réalisés.",
