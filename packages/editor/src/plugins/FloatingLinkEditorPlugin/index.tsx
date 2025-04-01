@@ -98,13 +98,12 @@ function FloatingLinkEditor({
       const domRect: DOMRect | undefined =
         nativeSelection.focusNode?.parentElement?.getBoundingClientRect();
       if (domRect) {
-        domRect.y += 40;
-        setFloatingElemPositionForLinkEditor(domRect, editorElem, anchorElem);
+        setFloatingElemPositionForLinkEditor(domRect, editorElem, anchorElem, -30, -10);
       }
       setLastSelection(selection);
     } else if (!activeElement || activeElement.className !== "link-input") {
       if (rootElement !== null) {
-        setFloatingElemPositionForLinkEditor(null, editorElem, anchorElem);
+        setFloatingElemPositionForLinkEditor(null, editorElem, anchorElem, -30, -10);
       }
       setLastSelection(null);
       setIsLinkEditMode(false);
