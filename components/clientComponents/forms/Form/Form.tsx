@@ -174,7 +174,7 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
             handleCaptchaFail={() => props.setCaptchaFail && props.setCaptchaFail(true)}
             noValidate={true}
             hCaptchaSiteKey={props.hCaptchaSiteKey}
-            blockableMode={false}
+            blockableMode={true}
             isPreview={props.isPreview}
           >
             {isGroupsCheck &&
