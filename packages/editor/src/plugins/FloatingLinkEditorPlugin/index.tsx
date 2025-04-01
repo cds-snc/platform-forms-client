@@ -206,7 +206,7 @@ function FloatingLinkEditor({
   }, [isLinkEditMode]);
 
   return (
-    <div ref={editorRef} className="link-editor" data-testid="link-editor">
+    <div ref={editorRef} className="gc-link-editor" data-testid="link-editor">
       {isLinkEditMode ? (
         <input
           ref={inputRef}

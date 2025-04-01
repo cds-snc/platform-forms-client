@@ -1,7 +1,7 @@
 /*********************
   * link editor   *
   *********************/
-.link-editor {
+.gc-link-editor {
   position: absolute;
   top: 0;
   left: 0;
@@ -13,12 +13,12 @@
   border-radius: 8px;
 }
 
-.link-editor button.active,
+.gc-link-editor button.active,
 .toolbar button.active {
   background-color: #fff;
 }
 
-.link-editor .link-input {
+.gc-link-editor .link-input {
   display: inline-block;
   width: calc(100% - 24px);
   box-sizing: border-box;
@@ -34,7 +34,7 @@
   font-family: inherit;
 }
 
-.link-editor button.link-edit {
+.gc-link-editor button.link-edit {
   background-size: 16px;
   background-position: center;
   background-repeat: no-repeat;
@@ -47,7 +47,7 @@
   cursor: pointer;
 }
 
-.link-editor .link-input span {
+.gc-link-editor .link-input span {
   color: #216fdb;
   text-decoration: none;
   display: block;
@@ -57,13 +57,13 @@
   text-overflow: ellipsis;
 }
 
-.link-editor .font-size-wrapper,
-.link-editor .font-family-wrapper {
+.gc-link-editor .font-size-wrapper,
+.gc-link-editor .font-family-wrapper {
   display: flex;
   margin: 0 4px;
 }
 
-.link-editor select {
+.gc-link-editor select {
   padding: 6px;
   border: none;
   background-color: #00000013;
