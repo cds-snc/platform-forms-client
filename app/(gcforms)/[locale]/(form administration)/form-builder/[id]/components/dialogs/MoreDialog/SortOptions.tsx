@@ -1,8 +1,6 @@
 import { useTranslation } from "@i18n/client";
 import { FormElement } from "@lib/types";
-
 import { SortOption, SortValue } from "@gcforms/types";
-
 import { Label } from "./Label";
 
 export const SortOptions = ({
