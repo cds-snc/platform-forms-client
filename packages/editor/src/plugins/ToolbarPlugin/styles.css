@@ -1,0 +1,24 @@
+.gc-toolbar-container {
+  padding: 10px;
+  border-radius: 2px 2px 0 0;
+  background-color: rgb(243 244 246 / var(--tw-bg-opacity, 1));
+  border-bottom: 1px solid #e9ecef;
+
+  &:focus-within {
+    margin: -2px;
+    border: 2px solid #015ecc;
+  }
+
+  button {
+    padding: 4px;
+    border: 1.5px solid transparent;
+    border-radius: 4px;
+    margin-right: 5px;
+    svg {
+      display: block;
+    }
+    &.active {
+      border: 1.5px solid #015ecc;
+    }
+  }
+}

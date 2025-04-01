@@ -42,7 +42,7 @@ export const RichTextEditor = ({
   );
 
   return (
-    <div className="w-full rounded bg-white">
+    <div className="gc-formview w-full rounded bg-white">
       <Editor
         content={value}
         onChange={updateValue}

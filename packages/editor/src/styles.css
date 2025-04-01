@@ -2,30 +2,10 @@
   * Rich text editor
   *--------------------------------------------*/
 
-.rich-text-wrapper {
-  height: 100%;
-}
-
 .editor-list-ul li {
   margin-bottom: 0.25rem;
 }
 
-.gc-toolbar-container {
-  &:focus-within {
-    margin: -2px;
-    border: 2px solid #015ecc;
-  }
-
-  button {
-    padding: 4px;
-    border: 1.5px solid transparent;
-    border-radius: 4px;
-    margin-right: 5px;
-    svg {
-      display: block;
-    }
-    &.active {
-      border: 1.5px solid #015ecc;
-    }
-  }
+.gc-editor-container {
+  position: relative;
 }

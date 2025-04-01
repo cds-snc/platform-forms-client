@@ -6,7 +6,7 @@ import { mergeRegister, $getNearestNodeOfType } from "@lexical/utils";
 
 import { $isLinkNode, TOGGLE_LINK_COMMAND } from "@lexical/link";
 
-// @TODO: pass in this dependency
+// @TODO: pass in this dependency or otherwise incorporate into package
 import { useTranslation } from "@i18n/client";
 
 import {
@@ -37,6 +37,7 @@ import { ItalicIcon } from "../../icons/ItalicIcon";
 import { BulletListIcon } from "../../icons/BulletListIcon";
 import { NumberedListIcon } from "../../icons/NumberedListIcon";
 import { LinkIcon } from "../../icons/LinkIcon";
+import "./styles.css";
 
 const blockTypeToBlockName = {
   bullet: "Bulleted List",
@@ -232,7 +233,7 @@ export default function ToolbarPlugin({ editorId }: { editorId: string }) {
   return (
     <>
       <div
-        className="gc-toolbar-container rounded-t-[2px] border-b border-slate-200 bg-slate-100 p-[10px]"
+        className="gc-toolbar-container"
         role="toolbar"
         aria-label={t("textFormatting")}
         aria-controls={editorId}

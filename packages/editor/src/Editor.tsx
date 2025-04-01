@@ -54,75 +54,73 @@ export const Editor = ({
   };
 
   return (
-    <div className="rich-text-wrapper gc-formview">
-      <LexicalComposer
-        initialConfig={{
-          ...editorConfig,
-          editorState: () => {
-            // @TODO: how to make this configurable
-            if (!content) {
-              const root = $getRoot();
-              const paragraphNode = $createParagraphNode();
-              root.append(paragraphNode);
-              return;
-            }
-            $convertFromMarkdownString(content, TRANSFORMERS);
-          },
-        }}
-      >
-        <div>
-          <ToolbarPlugin editorId={id || ""} />
+    <LexicalComposer
+      initialConfig={{
+        ...editorConfig,
+        editorState: () => {
+          // @TODO: how to make this configurable
+          if (!content) {
+            const root = $getRoot();
+            const paragraphNode = $createParagraphNode();
+            root.append(paragraphNode);
+            return;
+          }
+          $convertFromMarkdownString(content, TRANSFORMERS);
+        },
+      }}
+    >
+      <div>
+        <ToolbarPlugin editorId={id || ""} />
 
-          <RichTextPlugin
-            contentEditable={
-              <div className="editor" ref={onRef}>
-                <ContentEditable
-                  placeholder={""}
-                  id={editorId}
-                  ariaLabel={ariaLabel && ariaLabel}
-                  ariaDescribedBy={ariaDescribedBy && ariaDescribedBy}
-                />
-              </div>
-            }
-            ErrorBoundary={LexicalErrorBoundary}
-          />
-          <HistoryPlugin />
-          {showTreeview && <TreeViewPlugin />}
-          <OnChangePlugin // @TODO: make the following configurable
-            onChange={(editorState) => {
-              editorState.read(() => {
-                // Read the contents of the EditorState here.
-                const markdown = $convertToMarkdownString(TRANSFORMERS);
-
-                // Add two spaces to previous line for linebreaks (this is not handled properly by $convertToMarkdownString)
-                const lines = markdown.split("\n");
-                lines.forEach((currentLine, i) => {
-                  if (i > 0) {
-                    const previousLine = lines[i - 1];
-                    if (previousLine !== "" && currentLine !== "") {
-                      lines[i - 1] = previousLine.trim() + "  ";
-                    }
-                  }
-                });
-                onChange && onChange(lines.join("\n"));
-              });
-            }}
-          />
-          <ListPlugin />
-          <LinkPlugin />
-          <TabControlPlugin />
-          <ListMaxIndentLevelPlugin maxDepth={5} />
-          {floatingAnchorElem && (
-            <>
-              <FloatingLinkEditorPlugin
-                anchorElem={floatingAnchorElem}
-                isLinkEditMode={isLinkEditMode}
-                setIsLinkEditMode={setIsLinkEditMode}
+        <RichTextPlugin
+          contentEditable={
+            <div className="gc-editor-container" ref={onRef}>
+              <ContentEditable
+                placeholder={""}
+                id={editorId}
+                ariaLabel={ariaLabel && ariaLabel}
+                ariaDescribedBy={ariaDescribedBy && ariaDescribedBy}
               />
-            </>
-          )}
-        </div>
-      </LexicalComposer>
-    </div>
+            </div>
+          }
+          ErrorBoundary={LexicalErrorBoundary}
+        />
+        <HistoryPlugin />
+        {showTreeview && <TreeViewPlugin />}
+        <OnChangePlugin // @TODO: make the following configurable
+          onChange={(editorState) => {
+            editorState.read(() => {
+              // Read the contents of the EditorState here.
+              const markdown = $convertToMarkdownString(TRANSFORMERS);
+
+              // Add two spaces to previous line for linebreaks (this is not handled properly by $convertToMarkdownString)
+              const lines = markdown.split("\n");
+              lines.forEach((currentLine, i) => {
+                if (i > 0) {
+                  const previousLine = lines[i - 1];
+                  if (previousLine !== "" && currentLine !== "") {
+                    lines[i - 1] = previousLine.trim() + "  ";
+                  }
+                }
+              });
+              onChange && onChange(lines.join("\n"));
+            });
+          }}
+        />
+        <ListPlugin />
+        <LinkPlugin />
+        <TabControlPlugin />
+        <ListMaxIndentLevelPlugin maxDepth={5} />
+        {floatingAnchorElem && (
+          <>
+            <FloatingLinkEditorPlugin
+              anchorElem={floatingAnchorElem}
+              isLinkEditMode={isLinkEditMode}
+              setIsLinkEditMode={setIsLinkEditMode}
+            />
+          </>
+        )}
+      </div>
+    </LexicalComposer>
   );
 };
