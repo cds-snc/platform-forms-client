@@ -14,7 +14,7 @@ if [ "$lambda_status" != "Active" ]; then
 
   echo "Awaiting Lambda function to wake up..."
   # Wait for the Lambda function to become active
-  aws lambda wait function-active \
+  aws lambda wait function-active-v2 \
     --function-name $lambda_name
 fi
 echo "Lambda function is active. Proceeding with migration."
