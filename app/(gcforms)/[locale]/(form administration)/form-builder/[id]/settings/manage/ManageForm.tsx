@@ -58,7 +58,7 @@ export const ManageForm = (props: ManageFormProps) => {
   return (
     <>
       {canSetClosingDate && <SetClosingDate formId={id} closedDetails={closedDetails} />}
-      <SetSaveAndResume formId={id} isPublished={formRecord.isPublished} />
+      <SetSaveAndResume formId={id} />
       <FormOwnership
         nonce={nonce}
         formRecord={formRecord}
