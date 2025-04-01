@@ -1,4 +1,4 @@
-.ContentEditable__root {
+.gc-contenteditable {
   padding: 20px;
 
   &:focus {
@@ -22,7 +22,7 @@
   }
 }
 
-.ContentEditable__placeholder {
+.gc-contenteditable-placeholder {
   font-size: 15px;
   color: #999;
   overflow: hidden;
@@ -37,7 +37,7 @@
   pointer-events: none;
 }
 @media (max-width: 1025px) {
-  .ContentEditable__placeholder {
+  .gc-contenteditable-placeholder {
     left: 8px;
     right: 8px;
   }

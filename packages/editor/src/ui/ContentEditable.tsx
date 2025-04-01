@@ -24,13 +24,15 @@ export default function LexicalContentEditable({
 }: Props): JSX.Element {
   return (
     <ContentEditable
-      className={className ?? "ContentEditable__root"}
+      className={className ?? "gc-contenteditable"}
       aria-placeholder={placeholder}
       id={id}
       aria-label={ariaLabel}
       aria-describedby={ariaDescribedBy}
       placeholder={
-        <div className={placeholderClassName ?? "ContentEditable__placeholder"}>{placeholder}</div>
+        <div className={placeholderClassName ?? "gc-contenteditable-placeholder"}>
+          {placeholder}
+        </div>
       }
     />
   );
