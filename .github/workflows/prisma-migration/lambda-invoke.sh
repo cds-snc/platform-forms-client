@@ -24,4 +24,4 @@ aws lambda invoke \
   --function-name $lambda_name \
   response.json
 
-echo response.json
+cat response.json
