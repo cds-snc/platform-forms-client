@@ -19,7 +19,7 @@ import {
   FormStatus,
 } from "./form-types";
 
-export type { Response, Responses, FileInputResponse } from "./form-response-types";
+export type { Response, Responses, FileInputResponse, TaggedResponse } from "./form-response-types";
 
 export type { dynamicRowType };
 export type { FormElement };
