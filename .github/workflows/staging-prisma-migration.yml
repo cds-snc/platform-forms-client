@@ -13,8 +13,6 @@ on:
       - prisma/schema.prisma
       # We include the ./seeds/** directory to trigger the workflow when a seed file is added or modified
       - prisma/seeds/**
-  pull_request:
-    branches: [main]
 
 env:
   AWS_ACCOUNT_ID: ${{ vars.STAGING_AWS_ACCOUNT_ID }}
