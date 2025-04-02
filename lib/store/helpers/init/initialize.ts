@@ -30,5 +30,6 @@ export const initialize: TemplateStore<"initialize"> =
       state.publishFormType = "";
       state.publishDesc = "";
       state.closingDate = null;
+      state.saveAndResume = true;
     });
   };
