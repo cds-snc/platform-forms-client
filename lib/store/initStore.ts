@@ -22,7 +22,7 @@ export const initStore = (initProps?: Partial<InitialTemplateStoreProps>) => {
     closingDate: initProps?.closingDate,
     changeKey: String(new Date().getTime()),
     allowGroupsFlag: initProps?.allowGroupsFlag || false,
-    saveAndResume: false,
+    saveAndResume: true,
   };
 
   // Ensure any required properties by Form Builder are defaulted by defaultForm
@@ -46,5 +46,6 @@ export const initStore = (initProps?: Partial<InitialTemplateStoreProps>) => {
   return {
     ...DEFAULT_PROPS,
     ...initProps,
+    SaveAndResume: true,
   };
 };
