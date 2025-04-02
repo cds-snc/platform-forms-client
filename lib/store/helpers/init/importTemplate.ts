@@ -27,5 +27,6 @@ export const importTemplate: TemplateStore<"importTemplate"> = (set) => async (j
     state.publishFormType = "";
     state.publishDesc = "";
     state.closingDate = null;
+    state.saveAndResume = true;
   });
 };
