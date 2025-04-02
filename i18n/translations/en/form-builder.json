@@ -444,7 +444,7 @@
   "formDeleteDialogTitleFailed": "Error",
   "formDownload": {
     "btnText": "What can I do with a form file?",
-    "description": "Keep a version of your form on your computer",
+    "description": "Keep a version of your form on your computer.",
     "dialog": {
       "downloadButtonText": "Download a copy",
       "message1": "Download a form file to share a draft form with others. Collaborators can upload the form file and view the progress that has been made.",
@@ -1307,14 +1307,14 @@
   "saveAndResume": {
     "savedErrorMessage": "There was an error saving your changes.",
     "savedSuccessMessage": "Your changes have been saved.",
-    "title": "Resume filling out the form later",
+    "title": "Enable saving answers",
     "toggleOn": "On",
     "toggleOff": "Off",
     "toggleDescription": {
-      "text1": "Enable saving answers in progress",
-      "text2": "Allow people to pause and resume the form later. With the option to save a copy of their answers so far on their device. These can then be uploaded into the form later."
+      "text1": "Resuming filling out a form in progress",
+      "text2": "Gives users the option to pause and finish filling out the form later. People filling out the form can get a copy of their answers filled in so far, as well as a copy of their answers once the form has been submitted."
     },
-    "a11yDescription": "Save progress and resume form later",
+    "a11yDescription": "Save progress and resume the form later",
     "saveButton": "Save"
   },
   "sortOptions": {
