@@ -1316,5 +1316,11 @@
     },
     "a11yDescription": "Save progress and resume form later",
     "saveButton": "Save"
+  },
+  "sortOptions": {
+    "label": "Order list:",
+    "none": "as entered",
+    "ascending": "alphabetically (A-Z)",
+    "descending": "reverse alphabetical (Z-A)"
   }
 }
