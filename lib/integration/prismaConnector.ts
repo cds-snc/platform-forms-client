@@ -22,7 +22,7 @@ const prismaClientSingleton = () => {
       template: {
         $allOperations({ operation, args, query }) {
           // Add the ttl check to these operations. The remaining commented out operations are
-          // below for convenience.
+          // below for convenience/awareness.
           const filteredOperations = [
             "findFirst",
             "findUnique",
