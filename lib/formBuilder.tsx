@@ -114,6 +114,8 @@ function _buildForm(element: FormElement, lang: string): ReactElement {
   const descriptionPerLocale = element.properties[getLocalizedProperty("description", lang)];
   const description = descriptionPerLocale ? descriptionPerLocale.toString() : "";
 
+  const sortOrder = element.properties.sortOrder ? element.properties.sortOrder.toString() : "none";
+
   switch (element.type) {
     case FormElementTypes.textField:
       return (
@@ -201,6 +203,7 @@ function _buildForm(element: FormElement, lang: string): ReactElement {
           {description && <Description id={`${id}`}>{description}</Description>}
           <Dropdown
             id={`${id}`}
+            sortOrder={sortOrder}
             name={`${id}`}
             ariaDescribedBy={description ? `desc-${id}` : undefined}
             choices={choices}

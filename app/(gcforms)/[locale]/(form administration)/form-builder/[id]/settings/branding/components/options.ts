@@ -251,4 +251,13 @@ export const options = [
     logoTitleEn: "Parks Canada",
     logoTitleFr: "Parcs Canada",
   },
+  {
+    name: "sc",
+    urlEn: "https://scc-csc.gc.ca/home-accueil",
+    urlFr: "https://scc-csc.gc.ca/fr/home-accueil",
+    logoEn: "/img/branding/sc-en.svg",
+    logoFr: "/img/branding/sc-fr.svg",
+    logoTitleEn: "Supreme Court of Canada",
+    logoTitleFr: "Cour suprême du Canada",
+  },
 ];
