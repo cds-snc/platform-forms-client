@@ -1058,7 +1058,6 @@ export async function updateFormSaveAndResume(
     .update({
       where: {
         id: formID,
-        isPublished: false,
       },
       data: {
         saveAndResume: saveAndResume ?? false,
@@ -1080,11 +1079,6 @@ export async function updateFormSaveAndResume(
       },
     })
     .catch((e) => {
-      if (e instanceof Prisma.PrismaClientKnownRequestError) {
-        if (e.code === "P2025") {
-          throw new TemplateAlreadyPublishedError();
-        }
-      }
       return prismaErrors(e, null);
     });
 

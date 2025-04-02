@@ -5,10 +5,12 @@ import { useTranslation } from "@i18n/client";
 import { ErrorMessage } from "@clientComponents/forms";
 import { InputFieldProps } from "@lib/types";
 import { cn } from "@lib/utils";
+import { orderChoices } from "@lib/utils/orderChoices";
 
 interface DropdownProps extends InputFieldProps {
   children?: React.ReactElement;
   choices?: string[];
+  sortOrder?: string;
 }
 
 interface DropdownOptionProps {
@@ -26,16 +28,25 @@ const DropdownOption = (props: DropdownOptionProps): React.ReactElement => {
 };
 
 export const Dropdown = (props: DropdownProps): React.ReactElement => {
-  const { children, id, name, className, choices = [], required, ariaDescribedBy, lang } = props;
+  const {
+    children,
+    id,
+    name,
+    className,
+    choices = [],
+    required,
+    ariaDescribedBy,
+    lang,
+    sortOrder,
+  } = props;
   const { t } = useTranslation("common", { lng: lang });
   const [field, meta] = useField(props);
 
   const initialDropdownOption = <option value="">{t("dropdown-initial-option-text")}</option>;
 
-  const options = choices.map((choice, i) => {
-    const innerId = `${id}.${i}`;
-    return <DropdownOption id={innerId} key={`key-${innerId}`} value={choice} name={choice} />;
-  });
+  const options = orderChoices(id, choices, sortOrder).map(({ choice, innerId }) => (
+    <DropdownOption id={innerId} key={`key-${innerId}`} value={choice} name={choice} />
+  ));
 
   const classes = cn("gc-dropdown", className, meta.error && "gcds-error");
 

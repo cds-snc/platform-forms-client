@@ -13,6 +13,9 @@ WORKDIR /src
 ARG COGNITO_APP_CLIENT_ID
 ARG COGNITO_USER_POOL_ID
 
+ARG NEXT_SERVER_ACTIONS_ENCRYPTION_KEY
+ENV NEXT_SERVER_ACTIONS_ENCRYPTION_KEY=$NEXT_SERVER_ACTIONS_ENCRYPTION_KEY
+
 ARG NEXT_DEPLOYMENT_ID
 ENV NEXT_DEPLOYMENT_ID=$NEXT_DEPLOYMENT_ID
 
@@ -60,7 +63,7 @@ COPY package.json yarn.lock .yarnrc.yml next.config.mjs ./
 COPY .yarn ./.yarn
 COPY public ./public
 COPY prisma ./prisma
-COPY bin/pr-review-entrypoint.sh ./entrypoint.sh
+COPY scripts/pr-review-entrypoint.sh ./entrypoint.sh
 # Update to latest yarn version
 RUN corepack enable && yarn set version stable
 # Required by the entrypoint.sh to load the SSM ParameterStore environment variables

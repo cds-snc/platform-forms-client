@@ -49,7 +49,7 @@ jobs:
 
       - name: Set ECS tasks to INACTIVE
         run: |
-          ./bin/delete-ecs-task-defs.sh DEREGISTER task-def-active-arns.txt
+          ./scripts/delete-ecs-task-defs.sh DEREGISTER task-def-active-arns.txt
 
       # Retrieves all INACTIVE task definitions except for the 100 most recent
       - name: Get INACTIVE ECS task definitions
@@ -67,4 +67,4 @@ jobs:
 
       - name: Delete INACTIVE ECS task definitions
         run: |
-          ./bin/delete-ecs-task-defs.sh DELETE task-def-inactive-arns.txt
+          ./scripts/delete-ecs-task-defs.sh DELETE task-def-inactive-arns.txt
