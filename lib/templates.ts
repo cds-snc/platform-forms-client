@@ -363,8 +363,8 @@ export async function getPublicTemplateByID(formID: string): Promise<PublicFormR
       })
       .catch((e) => prismaErrors(e, null));
 
-    // Short circuit the public record filtering if no form record is found
-    if (!template) return null;
+    // Short circuit the public record filtering if no form record is found or the form is marked as deleted (ttl != null)
+    if (!template || template.ttl) return null;
 
     const parsedTemplate = _parseTemplate(template);
     const publicFormRecord = onlyIncludePublicProperties(parsedTemplate);
