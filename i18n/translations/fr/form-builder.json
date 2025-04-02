@@ -1316,5 +1316,11 @@
     },
     "a11yDescription": "Enregistrer la progression et reprendre le formulaire plus tard",
     "saveButton": "Enregistrer"
+  },
+  "sortOptions": {
+    "label": "Ordonner la liste :",
+    "none": "telle que saisie",
+    "ascending": "alphabétique (A-Z)",
+    "descending": "alphabétique inversé (Z-A)"
   }
 }
