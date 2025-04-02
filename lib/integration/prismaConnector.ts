@@ -23,7 +23,6 @@ const prismaClientSingleton = () => {
         $allOperations({ operation, args, query }) {
           // Add the ttl check to these operations. The remaining commented out operations are
           // below for convenience.
-          // Note: the ttl:null here can be overrided in a prisma query.
           const filteredOperations = [
             "findFirst",
             "findUnique",
@@ -45,6 +44,7 @@ const prismaClientSingleton = () => {
             // findRaw",
             // aggregateRaw",
           ];
+          // Note: the ttl:null can be overrided in a prisma query.
           if (filteredOperations.includes(operation)) {
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
             (args as any).where = { ...(args as any).where, ttl: null };
