@@ -51,7 +51,7 @@ jobs:
       - name: Rainbow deployment
         uses: ./.github/workflows/rainbow-deployment
         with:
-          deployment-process-identifier: ${{ github.sha }}
+          deployment-identifier: ${{ github.sha }}
           ecr-registry-uri: ${{ env.AWS_ACCOUNT_ID }}.dkr.ecr.ca-central-1.amazonaws.com
           ecr-registry-form-viewer-repository-name: form_viewer_staging
           cognito-app-client-id: ${{ secrets.STAGING_COGNITO_APP_CLIENT_ID }}
