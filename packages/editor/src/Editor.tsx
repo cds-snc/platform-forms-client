@@ -13,7 +13,6 @@ import TreeViewPlugin from "./plugins/TreeViewPlugin";
 import ListMaxIndentLevelPlugin from "./plugins/ListMaxIndentPlugin";
 import FloatingLinkEditorPlugin from "./plugins/FloatingLinkEditorPlugin";
 import { editorConfig } from "./config";
-import { $createParagraphNode, $getRoot } from "lexical";
 import {
   $convertFromMarkdownString,
   $convertToMarkdownString,
@@ -21,6 +20,7 @@ import {
 } from "@lexical/markdown";
 import { OnChangePlugin } from "@lexical/react/LexicalOnChangePlugin";
 import "./styles.css";
+import { LINE_BREAK_FIX } from "./transformers";
 
 interface EditorProps {
   id?: string;
@@ -58,14 +58,7 @@ export const Editor = ({
       initialConfig={{
         ...editorConfig,
         editorState: () => {
-          // @TODO: how to make this configurable
-          if (!content) {
-            const root = $getRoot();
-            const paragraphNode = $createParagraphNode();
-            root.append(paragraphNode);
-            return;
-          }
-          $convertFromMarkdownString(content, TRANSFORMERS);
+          $convertFromMarkdownString(content, [...TRANSFORMERS]);
         },
       }}
     >
@@ -87,23 +80,11 @@ export const Editor = ({
         />
         <HistoryPlugin />
         {showTreeview && <TreeViewPlugin />}
-        <OnChangePlugin // @TODO: make the following configurable
+        <OnChangePlugin
           onChange={(editorState) => {
             editorState.read(() => {
-              // Read the contents of the EditorState here.
-              const markdown = $convertToMarkdownString(TRANSFORMERS);
-
-              // Add two spaces to previous line for linebreaks (this is not handled properly by $convertToMarkdownString)
-              const lines = markdown.split("\n");
-              lines.forEach((currentLine, i) => {
-                if (i > 0) {
-                  const previousLine = lines[i - 1];
-                  if (previousLine !== "" && currentLine !== "") {
-                    lines[i - 1] = previousLine.trim() + "  ";
-                  }
-                }
-              });
-              onChange && onChange(lines.join("\n"));
+              const markdown = $convertToMarkdownString([...TRANSFORMERS, LINE_BREAK_FIX]);
+              onChange && onChange(markdown);
             });
           }}
         />
