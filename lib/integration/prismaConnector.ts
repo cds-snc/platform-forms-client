@@ -20,7 +20,7 @@ const prismaClientSingleton = () => {
     },
     query: {
       template: {
-        $allOperations({ _, args, query }) {
+        $allOperations({ args, query }) {
           if ("where" in args) {
             args.where = { ...args.where, ttl: null };
           }
