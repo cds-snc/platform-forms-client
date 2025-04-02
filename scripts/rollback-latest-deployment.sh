@@ -35,7 +35,7 @@ new_deployment_identifier=$(
   aws deploy create-deployment \
     --application-name AppECS-Forms-form-viewer \
     --deployment-group-name DgpECS-Forms-form-viewer \
-    --revision revisionType=AppSpecContent,appSpecContent={sha256=a72b5abc6eb1a424b958104085eec8a6fa0bce28ee32d307204dd3c125a8ce8b} \
+    --revision revisionType=AppSpecContent,appSpecContent={sha256=$previous_revision_sha256} \
     --output text
 )
 
