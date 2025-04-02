@@ -18,7 +18,6 @@ if [ "$lambda_status" != "Active" ]; then
     --function-name $lambda_name
 fi
 echo "Lambda function is active. Proceeding with migration."
-# Check if the migration is already in progress
 
 aws lambda invoke \
   --function-name $lambda_name \
