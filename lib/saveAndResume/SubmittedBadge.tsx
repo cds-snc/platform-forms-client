@@ -30,7 +30,11 @@ export const SubmittedBadge = ({
     // noop
   }
 
-  if (!month || !day || !year) {
+  // Strip leading zero from day
+  let formattedDay = day;
+  formattedDay = day && day.replace(/^0+/, "");
+
+  if (!month || !formattedDay || !year) {
     return null;
   }
 
@@ -46,7 +50,7 @@ export const SubmittedBadge = ({
           <div className="inline-block">
             {t("saveResponse.downloadHtml.badge.lastSaved", {
               lng: language,
-              day,
+              day: formattedDay,
               month,
               year,
               interpolation: {
