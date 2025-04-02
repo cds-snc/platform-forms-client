@@ -18,6 +18,27 @@ const prismaClientSingleton = () => {
         },
       },
     },
+    query: {
+      template: {
+        $allOperations({ operation, args, query }) {
+          // Add the ttl check to these operations
+          const allowedOperations = [
+            "findFirst",
+            "findUnique",
+            "findFirstOrThrow",
+            "findMany",
+            "findUniqueOrThrow",
+            "update",
+            "updateMany",
+          ];
+          if (allowedOperations.includes(operation)) {
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            (args as any).where = { ...(args as any).where, ttl: null };
+          }
+          return query(args);
+        },
+      },
+    },
   });
 };
 

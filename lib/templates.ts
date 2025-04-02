@@ -221,7 +221,6 @@ export async function getAllTemplates(options?: {
       .findMany({
         where: {
           ...(requestedWhere && requestedWhere),
-          ttl: null,
         },
         select: {
           id: true,
@@ -277,7 +276,6 @@ export async function getAllTemplatesForUser(
       .findMany({
         where: {
           ...(requestedWhere && requestedWhere),
-          ttl: null,
           users: {
             some: {
               id: ability.user.id,
@@ -365,8 +363,8 @@ export async function getPublicTemplateByID(formID: string): Promise<PublicFormR
       })
       .catch((e) => prismaErrors(e, null));
 
-    // Short circuit the public record filtering if no form record is found or the form is marked as deleted (ttl != null)
-    if (!template || template.ttl) return null;
+    // Short circuit the public record filtering if no form record is found
+    if (!template) return null;
 
     const parsedTemplate = _parseTemplate(template);
     const publicFormRecord = onlyIncludePublicProperties(parsedTemplate);
@@ -1233,8 +1231,10 @@ export async function deleteTemplate(formID: string): Promise<FormRecord | null>
   const numOfUnprocessedSubmissions = await unprocessedSubmissions(formID, true);
   if (numOfUnprocessedSubmissions) throw new TemplateHasUnprocessedSubmissions();
 
-  const dateIn30Days = new Date(Date.now() + 2592000000); // 30 days = 60 (seconds) * 60 (minutes) * 24 (hours) * 30 (days) * 1000 (to ms)
+  // Check and delete any API keys from IDP
+  await deleteKey(formID);
 
+  const dateIn30Days = new Date(Date.now() + 2592000000); // 30 days = 60 (seconds) * 60 (minutes) * 24 (hours) * 30 (days) * 1000 (to ms)
   const templateMarkedAsDeleted = await prisma.template
     .update({
       where: {
@@ -1265,9 +1265,6 @@ export async function deleteTemplate(formID: string): Promise<FormRecord | null>
   if (templateMarkedAsDeleted === null) return templateMarkedAsDeleted;
 
   logEvent(user.id, { type: "Form", id: formID }, "DeleteForm");
-
-  // Check and delete any API keys from IDP
-  await deleteKey(formID);
 
   if (formCache.cacheAvailable) formCache.invalidate(formID);
 
