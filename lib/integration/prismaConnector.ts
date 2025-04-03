@@ -18,6 +18,16 @@ const prismaClientSingleton = () => {
         },
       },
     },
+    query: {
+      template: {
+        $allOperations({ args, query }) {
+          if ("where" in args) {
+            args.where = { ...args.where, ttl: null };
+          }
+          return query(args);
+        },
+      },
+    },
   });
 };
 
