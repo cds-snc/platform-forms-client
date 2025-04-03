@@ -1,13 +1,6 @@
 name: "Prisma Migration"
 
 inputs:
-  aws-account-id:
-    description: "AWS Account ID"
-    required: true
-  aws-region:
-    description: "AWS Region"
-    required: false
-    default: "ca-central-1"
   app-env:
     description: "App Environment"
     required: true
@@ -15,13 +8,6 @@ inputs:
 runs:
   using: "composite"
   steps:
-    - name: Configure AWS credentials using OIDC
-      uses: aws-actions/configure-aws-credentials@ececac1a45f3b08a01d2dd070d28d111c5fe6722 # v4.1.0
-      with:
-        role-to-assume: arn:aws:iam::${{ inputs.aws-account-id }}:role/platform-forms-client-db-migration
-        role-session-name: PrismaMigrationSession
-        aws-region: ${{ inputs.aws-region }}
-
     - name: Copy Prisma Files to S3
       shell: bash
       run: aws s3 sync ./prisma s3://forms-${{ inputs.app-env }}-prisma-migration-storage/
@@ -29,5 +15,3 @@ runs:
     - name: Invoke Prisma Migration Lambda
       shell: bash
       run: bash ./scripts/prisma_lambda_invoke.sh
-
-
