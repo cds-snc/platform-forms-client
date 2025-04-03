@@ -70,8 +70,8 @@ jobs:
             aws elbv2 describe-rules \
               --listener-arn ${{ env.LOAD_BALANCER_LISTENER_ARN }} \
               --no-paginate \
-              --query "Rules[?Priority > '${{ env.MAXIMUM_NUMBER_OF_RAINBOW_DEPLOYMENTS_TO_KEEP_ALIVE }}' && contains(Actions[0].ForwardConfig.TargetGroups[0].TargetGroupArn, 'rainbow')].RuleArn" \
-              | jq -r '.[]'
+              --query "Rules[?contains(Actions[0].ForwardConfig.TargetGroups[0].TargetGroupArn, 'rainbow')]" \
+              | jq -r '.[] | select(.Priority | tonumber > ${{ env.MAXIMUM_NUMBER_OF_RAINBOW_DEPLOYMENTS_TO_KEEP_ALIVE }}) | .RuleArn'
           ))
 
           if [ ${#arn_list[*]} -gt 0 ]; then
