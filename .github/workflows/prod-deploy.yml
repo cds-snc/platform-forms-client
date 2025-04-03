@@ -7,6 +7,7 @@ on:
       - completed
 
 env:
+  AWS_ACCOUNT_ID: ${{ vars.PRODUCTION_AWS_ACCOUNT_ID }}
   AWS_REGION: ca-central-1
 
 permissions:
@@ -37,7 +38,7 @@ jobs:
       - name: Configure AWS credentials using OIDC
         uses: aws-actions/configure-aws-credentials@ececac1a45f3b08a01d2dd070d28d111c5fe6722 # v4.1.0
         with:
-          role-to-assume: arn:aws:iam::957818836222:role/platform-forms-client-apply
+          role-to-assume: arn:aws:iam::${{ env.AWS_ACCOUNT_ID }}:role/platform-forms-client-apply
           role-session-name: ECSDeploy
           aws-region: ${{ env.AWS_REGION }}
 
@@ -67,6 +68,14 @@ jobs:
           CONTAINER_NAME=${{ steps.download-taskdef-form-viewer.outputs.container_name }}
           TASKDEF_ARN=`jq -r '.taskDefinitionArn' form_viewer.json | cut -f 1-6 -d "/"`
           jq --argjson port "$CONTAINER_PORT" --arg cname "$CONTAINER_NAME" --arg taskdefarn "$TASKDEF_ARN" '.Resources[0].TargetService.Properties.TaskDefinition = $taskdefarn | .Resources[0].TargetService.Properties.LoadBalancerInfo.ContainerName = $cname | .Resources[0].TargetService.Properties.LoadBalancerInfo.ContainerPort = $port' config/infrastructure/aws/appspec-template.json > form-viewer-appspec.json
+
+      - name: Run Prisma Migrations
+        id: prisma-migration
+        uses: ./.github/workflows/prisma-migration
+        with:
+          aws-account-id: ${{ env.AWS_ACCOUNT_ID }}
+          aws-region: ${{ env.AWS_REGION }}
+          app-env: production
 
       - name: Deploy image for Form Viewer
         timeout-minutes: 10
