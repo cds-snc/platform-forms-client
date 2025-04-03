@@ -11,6 +11,7 @@ on:
         required: false
         default: "ca-central-1"
 
+
 inputs:
   aws-account-id:
     description: "AWS Account ID"
