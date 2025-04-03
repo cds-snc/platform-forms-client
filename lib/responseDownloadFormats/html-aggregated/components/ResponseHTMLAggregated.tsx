@@ -82,7 +82,7 @@ export const ResponseHtmlAggregated = ({
           <main id="content">
             <Fip language="en" showLangLink={false} />
 
-            <h1 id="main-header" className="mt-14">{`${
+            <h1 id="main-header" className="mb-6 mt-14">{`${
               formRecord.form[getProperty("title", lang)]
             }`}</h1>
 

@@ -187,7 +187,6 @@ describe("Template CRUD functions", () => {
       expect(prismaMock.template.findMany).toHaveBeenCalledWith(
         expect.objectContaining({
           where: {
-            ttl: null,
             users: {
               some: {
                 id: userID,
