@@ -5,6 +5,7 @@ on:
     workflows: ["Staging — Push container to ECR"]
     types:
       - completed
+  workflow_dispatch:
 
 env:
   AWS_ACCOUNT_ID: ${{ vars.STAGING_AWS_ACCOUNT_ID }}
