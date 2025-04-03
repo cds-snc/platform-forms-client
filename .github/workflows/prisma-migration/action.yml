@@ -8,6 +8,9 @@ inputs:
     description: "AWS Region"
     required: false
     default: "ca-central-1"
+  app-env:
+    description: "App Environment"
+    required: true
 
 runs:
   using: "composite"
@@ -22,7 +25,7 @@ runs:
 
       - name: Copy Prisma Files to S3
          run: |
-          aws s3 sync ./prisma s3://forms-staging-prisma-migration-storage/
+          aws s3 sync ./prisma s3://forms-${{ inputs.app-env }}-prisma-migration-storage/
       - name: Invoke Prisma Migration Lambda
            run: |
           bash ./scripts/prisma_lambda_invoke.sh

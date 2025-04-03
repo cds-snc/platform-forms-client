@@ -74,6 +74,7 @@ jobs:
         with:
           aws-account-id: ${{ env.AWS_ACCOUNT_ID }}
           aws-region: ${{ env.AWS_REGION }}
+          app-env: production
 
       - name: Deploy image for Form Viewer
         timeout-minutes: 10
