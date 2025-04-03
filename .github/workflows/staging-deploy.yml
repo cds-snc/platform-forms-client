@@ -52,7 +52,7 @@ jobs:
         uses: ./.github/workflows/rainbow-deployment
         with:
           deployment-identifier: ${{ github.sha }}
-          ecr-registry-uri: ${{ env.AWS_ACCOUNT_ID }}.dkr.ecr.ca-central-1.amazonaws.com
+          ecr-registry-uri: ${{ steps.login-ecr.outputs.registry }}
           ecr-registry-form-viewer-repository-name: form_viewer_staging
           cognito-app-client-id: ${{ secrets.STAGING_COGNITO_APP_CLIENT_ID }}
           cognito-user-pool-id: ${{ secrets.STAGING_COGNITO_USER_POOL_ID }}
