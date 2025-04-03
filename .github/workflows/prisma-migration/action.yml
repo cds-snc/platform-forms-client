@@ -1,7 +1,15 @@
 name: "Prisma Migration"
 
 on:
-  workflow_dispatch
+  workflow_dispatch:
+    inputs:
+      aws-account-id:
+        description: "AWS Account ID"
+        required: true
+      aws-region:
+        description: "AWS Region"
+        required: false
+        default: "ca-central-1"
 
 inputs:
   aws-account-id:
