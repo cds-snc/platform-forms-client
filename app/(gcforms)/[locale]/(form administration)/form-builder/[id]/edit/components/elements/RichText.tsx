@@ -1,7 +1,7 @@
 "use client";
 import React from "react";
 import { useTemplateStore } from "@lib/store/useTemplateStore";
-import { RichTextEditor } from "./lexical-editor/RichTextEditor";
+import { RichTextEditor } from "./RichTextEditor";
 import { LocalizedElementProperties } from "@lib/types/form-builder-types";
 import { getPath } from "@lib/utils/form-builder/getPath";
 import { useTranslation } from "@i18n/client";

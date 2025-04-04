@@ -5,7 +5,9 @@
  * LICENSE file in the root directory of this source tree.
  *
  */
-// import "./index.css";
+import type { JSX } from "react";
+
+import "./index.css";
 
 import { $isAutoLinkNode, $isLinkNode, TOGGLE_LINK_COMMAND } from "@lexical/link";
 import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext";
@@ -19,6 +21,7 @@ import {
   COMMAND_PRIORITY_HIGH,
   COMMAND_PRIORITY_LOW,
   COMMAND_PRIORITY_NORMAL,
+  getDOMSelection,
   KEY_ESCAPE_COMMAND,
   KEY_TAB_COMMAND,
   LexicalEditor,
@@ -26,32 +29,35 @@ import {
   RangeSelection,
   SELECTION_CHANGE_COMMAND,
 } from "lexical";
-import { Dispatch, useCallback, useEffect, useRef, useState, type JSX } from "react";
+import { Dispatch, useCallback, useEffect, useRef, useState } from "react";
 import * as React from "react";
 import { createPortal } from "react-dom";
 
-// import LinkPreview from "../../ui/LinkPreview";
 import { getSelectedNode } from "../../utils/getSelectedNode";
-import { setFloatingElemPosition } from "../../utils/setFloatingElemPosition";
+
 import { sanitizeUrl } from "../../utils/url";
-import { EditIcon } from "@serverComponents/icons/EditIcon";
-import { useTranslation } from "@i18n/client";
+import { setFloatingElemPositionForLinkEditor } from "../../utils/setFloatingElemPositionForLinkEditor";
+import { EditIcon } from "../../icons/EditIcon";
+import { useTranslation } from "@i18n/client"; // @TODO: inject i18n
 
 function FloatingLinkEditor({
   editor,
   isLink,
   setIsLink,
   anchorElem,
+  isLinkEditMode,
+  setIsLinkEditMode,
 }: {
   editor: LexicalEditor;
   isLink: boolean;
   setIsLink: Dispatch<boolean>;
   anchorElem: HTMLElement;
+  isLinkEditMode: boolean;
+  setIsLinkEditMode: Dispatch<boolean>;
 }): JSX.Element {
   const editorRef = useRef<HTMLDivElement | null>(null);
   const inputRef = useRef<HTMLInputElement>(null);
   const [linkUrl, setLinkUrl] = useState("");
-  const [isEditMode, setEditMode] = useState(false);
   const [lastSelection, setLastSelection] = useState<
     RangeSelection | NodeSelection | BaseSelection | null
   >(null);
@@ -73,7 +79,7 @@ function FloatingLinkEditor({
       }
     }
     const editorElem = editorRef.current;
-    const nativeSelection = window.getSelection();
+    const nativeSelection = getDOMSelection(editor._window);
     const activeElement = document.activeElement;
 
     if (editorElem === null) {
@@ -89,37 +95,23 @@ function FloatingLinkEditor({
       rootElement.contains(nativeSelection.anchorNode) &&
       editor.isEditable()
     ) {
-      const domRange = nativeSelection.getRangeAt(0);
-      let rect;
-      if (nativeSelection.anchorNode === rootElement) {
-        let inner = rootElement;
-        while (inner.firstElementChild != null) {
-          inner = inner.firstElementChild as HTMLElement;
-        }
-        rect = inner.getBoundingClientRect();
-      } else if (domRange.startContainer.firstChild) {
-        // we've got the anchor node but we want the inner text node
-        // this happens when you backspace to the end of a link node
-        const child = domRange.startContainer.firstChild as HTMLElement;
-
-        rect = child.getBoundingClientRect();
-      } else {
-        rect = domRange.getBoundingClientRect();
+      const domRect: DOMRect | undefined =
+        nativeSelection.focusNode?.parentElement?.getBoundingClientRect();
+      if (domRect) {
+        setFloatingElemPositionForLinkEditor(domRect, editorElem, anchorElem, -30, -10);
       }
-
-      setFloatingElemPosition(rect, editorElem, anchorElem);
       setLastSelection(selection);
     } else if (!activeElement || activeElement.className !== "link-input") {
       if (rootElement !== null) {
-        setFloatingElemPosition(null, editorElem, anchorElem);
+        setFloatingElemPositionForLinkEditor(null, editorElem, anchorElem, -30, -10);
       }
       setLastSelection(null);
-      setEditMode(false);
+      setIsLinkEditMode(false);
       setLinkUrl("");
     }
 
     return true;
-  }, [anchorElem, editor]);
+  }, [anchorElem, editor, setIsLinkEditMode]);
 
   useEffect(() => {
     const scrollerElem = anchorElem.parentElement;
@@ -208,14 +200,14 @@ function FloatingLinkEditor({
   }, [editor, updateLinkEditor]);
 
   useEffect(() => {
-    if (isEditMode && inputRef.current) {
+    if (isLinkEditMode && inputRef.current) {
       inputRef.current.focus();
     }
-  }, [isEditMode]);
+  }, [isLinkEditMode]);
 
   return (
-    <div ref={editorRef} className="link-editor" data-testid="link-editor">
-      {isEditMode ? (
+    <div ref={editorRef} className="gc-link-editor" data-testid="link-editor">
+      {isLinkEditMode ? (
         <input
           ref={inputRef}
           className="link-input"
@@ -230,7 +222,7 @@ function FloatingLinkEditor({
                 if (linkUrl !== "") {
                   editor.dispatchCommand(TOGGLE_LINK_COMMAND, sanitizeUrl(linkUrl));
                 }
-                setEditMode(false);
+                setIsLinkEditMode(false);
               }
             }
           }}
@@ -254,7 +246,7 @@ function FloatingLinkEditor({
               }}
               onClick={() => {
                 popped.current = true;
-                setEditMode(true);
+                setIsLinkEditMode(true);
               }}
             >
               {linkUrl}
@@ -270,7 +262,9 @@ function FloatingLinkEditor({
 
 function useFloatingLinkEditorToolbar(
   editor: LexicalEditor,
-  anchorElem: HTMLElement
+  anchorElem: HTMLElement,
+  isLinkEditMode: boolean,
+  setIsLinkEditMode: Dispatch<boolean>
 ): JSX.Element | null {
   const [activeEditor, setActiveEditor] = useState(editor);
   const [isLink, setIsLink] = useState(false);
@@ -310,6 +304,8 @@ function useFloatingLinkEditorToolbar(
           isLink={isLink}
           anchorElem={anchorElem}
           setIsLink={setIsLink}
+          isLinkEditMode={isLinkEditMode}
+          setIsLinkEditMode={setIsLinkEditMode}
         />,
         anchorElem
       )
@@ -318,9 +314,13 @@ function useFloatingLinkEditorToolbar(
 
 export default function FloatingLinkEditorPlugin({
   anchorElem = document.body,
+  isLinkEditMode,
+  setIsLinkEditMode,
 }: {
   anchorElem?: HTMLElement;
+  isLinkEditMode: boolean;
+  setIsLinkEditMode: Dispatch<boolean>;
 }): JSX.Element | null {
   const [editor] = useLexicalComposerContext();
-  return useFloatingLinkEditorToolbar(editor, anchorElem);
+  return useFloatingLinkEditorToolbar(editor, anchorElem, isLinkEditMode, setIsLinkEditMode);
 }

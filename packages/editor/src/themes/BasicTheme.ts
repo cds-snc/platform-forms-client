@@ -1,8 +1,4 @@
-import { HeadingNode } from "@lexical/rich-text";
-import { LinkNode } from "@lexical/link";
-import { ListItemNode, ListNode } from "@lexical/list";
-
-const theme = {
+const basicTheme = {
   ltr: "ltr",
   rtl: "rtl",
   placeholder: "editor-placeholder",
@@ -13,15 +9,15 @@ const theme = {
     h2: "editor-heading-h2",
     h3: "editor-heading-h3",
     h4: "editor-heading-h4",
-    h5: "editor-heading-h5",
+    h5: "editor-heading-h5"
   },
   list: {
     nested: {
-      listitem: "editor-nested-listitem",
+      listitem: "editor-nested-listitem"
     },
     ol: "editor-list-ol",
     ul: "editor-list-ul",
-    listitem: "editor-listitem",
+    listitem: "editor-listitem"
   },
   image: "editor-image",
   link: "editor-link",
@@ -33,7 +29,7 @@ const theme = {
     underline: "editor-text-underline",
     strikethrough: "editor-text-strikethrough",
     underlineStrikethrough: "editor-text-underlineStrikethrough",
-    code: "editor-text-code",
+    code: "editor-text-code"
   },
   code: "editor-code",
   codeHighlight: {
@@ -66,18 +62,8 @@ const theme = {
     symbol: "editor-tokenProperty",
     tag: "editor-tokenProperty",
     url: "editor-tokenOperator",
-    variable: "editor-tokenVariable",
-  },
+    variable: "editor-tokenVariable"
+  }
 };
 
-export const editorConfig = {
-  namespace: "FormBuilder",
-  // The editor theme
-  theme: theme,
-  // Handling of errors during update
-  onError(error: Error) {
-    throw error;
-  },
-  // Any custom nodes go here
-  nodes: [HeadingNode, LinkNode, ListItemNode, ListNode],
-};
+export default basicTheme;

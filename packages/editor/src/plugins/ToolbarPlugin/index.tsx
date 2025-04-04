@@ -4,17 +4,9 @@ import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext
 import { $isHeadingNode, $createHeadingNode } from "@lexical/rich-text";
 import { mergeRegister, $getNearestNodeOfType } from "@lexical/utils";
 
-import {
-  H2Icon,
-  H3Icon,
-  BoldIcon,
-  ItalicIcon,
-  BulletListIcon,
-  NumberedListIcon,
-  LinkIcon,
-} from "@serverComponents/icons";
-
 import { $isLinkNode, TOGGLE_LINK_COMMAND } from "@lexical/link";
+
+// @TODO: pass in this dependency or otherwise incorporate into package
 import { useTranslation } from "@i18n/client";
 
 import {
@@ -34,10 +26,18 @@ import {
 } from "lexical";
 
 import { $wrapNodes } from "@lexical/selection";
-import { sanitizeUrl } from "./utils/url";
-import { useEditorFocus } from "./useEditorFocus";
-import { getSelectedNode } from "./utils/getSelectedNode";
-import { ToolTip } from "./ToolTip";
+import { sanitizeUrl } from "../../utils/url";
+import { useEditorFocus } from "../../hooks/useEditorFocus";
+import { getSelectedNode } from "../../utils/getSelectedNode";
+import { ToolTip } from "../../ToolTip";
+import { H2Icon } from "../../icons/H2Icon";
+import { H3Icon } from "../../icons/H3Icon";
+import { BoldIcon } from "../../icons/BoldIcon";
+import { ItalicIcon } from "../../icons/ItalicIcon";
+import { BulletListIcon } from "../../icons/BulletListIcon";
+import { NumberedListIcon } from "../../icons/NumberedListIcon";
+import { LinkIcon } from "../../icons/LinkIcon";
+import "./styles.css";
 
 const blockTypeToBlockName = {
   bullet: "Bulleted List",
@@ -57,7 +57,7 @@ const blockTypeToBlockName = {
 const LowPriority = 1;
 type HeadingTagType = "h2" | "h3" | "h4" | "h5";
 
-export const Toolbar = ({ editorId }: { editorId: string }) => {
+export default function ToolbarPlugin({ editorId }: { editorId: string }) {
   const [editor] = useLexicalComposerContext();
   const [isBold, setIsBold] = useState(false);
   const [isItalic, setIsItalic] = useState(false);
@@ -233,7 +233,7 @@ export const Toolbar = ({ editorId }: { editorId: string }) => {
   return (
     <>
       <div
-        className="gc-toolbar-container rounded-t-[2px] border-b border-slate-200 bg-slate-100 p-[10px]"
+        className="gc-toolbar-container"
         role="toolbar"
         aria-label={t("textFormatting")}
         aria-controls={editorId}
@@ -392,4 +392,4 @@ export const Toolbar = ({ editorId }: { editorId: string }) => {
       </div>
     </>
   );
-};
+}
