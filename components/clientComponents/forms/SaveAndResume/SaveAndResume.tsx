@@ -8,6 +8,7 @@ import { MobileDrawer } from "./MobileDrawer";
 import { Button } from "@clientComponents/globals";
 import { LinkButton } from "@serverComponents/globals/Buttons/LinkButton";
 import { SaveProgressIcon } from "@serverComponents/icons";
+import { UploadIcon } from "@serverComponents/icons";
 
 export const SaveAndResume = ({ formId, language }: { formId: string; language: Language }) => {
   const { t } = useTranslation(["review", "common"]);
@@ -29,9 +30,17 @@ export const SaveAndResume = ({ formId, language }: { formId: string; language: 
             <SaveProgressIcon className="ml-2 fill-gcds-blue-800 group-focus:fill-white group-active:fill-white" />
           </>
         </DownloadProgress>
-        <LinkButton.Secondary className="ml-4 rounded-md" href={`/${language}/id/${formId}/resume`}>
-          {t("saveAndResume.loadAnswers", { lng: language })}
-        </LinkButton.Secondary>
+        <div className="group inline-block">
+          <LinkButton.Secondary
+            className="ml-4 rounded-md"
+            href={`/${language}/id/${formId}/resume`}
+          >
+            <>
+              {t("saveAndResume.loadAnswers", { lng: language })}
+              <UploadIcon className="ml-2 fill-gcds-blue-800 group-focus:fill-white group-active:fill-white" />
+            </>
+          </LinkButton.Secondary>
+        </div>
       </span>
       <span className="block tablet:hidden">
         <Button

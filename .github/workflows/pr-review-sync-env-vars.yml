@@ -31,4 +31,4 @@ jobs:
 
       - name: Sync environment variables
         run: |
-          ./bin/pr-review-sync-vars.sh > /dev/null 2>&1
+          ./scripts/pr-review-sync-vars.sh > /dev/null 2>&1

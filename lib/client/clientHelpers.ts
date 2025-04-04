@@ -58,6 +58,14 @@ export const tryFocusOnPageLoad = (fallbackSelector = "H1") => {
     }
 
     focusEl?.focus();
+    // scrollItem into view if it is not visible
+    if (focusEl && focusEl.scrollIntoView) {
+      focusEl.scrollIntoView({
+        behavior: "smooth",
+        block: "center",
+        inline: "nearest",
+      });
+    }
   }, NEXT_TICK);
 };
 

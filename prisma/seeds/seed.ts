@@ -6,11 +6,6 @@ import seedSettings from "./fixtures/settings";
 import seedUsers, { UserWithoutSecurityAnswers } from "./fixtures/users";
 import seedSecurityQuestions from "./fixtures/security-questions";
 
-type AnyObject = {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  [key: string]: any;
-};
-
 const prisma = new PrismaClient();
 
 async function createTemplates(env: string) {
@@ -133,156 +128,6 @@ async function createSecurityQuestions() {
   });
 }
 
-//Can be removed once we know that the migration is completed
-async function publishingStatusMigration() {
-  const templates = await prisma.template.findMany({
-    select: {
-      id: true,
-      jsonConfig: true,
-    },
-  });
-
-  const templatesToMigrate = templates
-    .filter((template) => {
-      return (template.jsonConfig as Record<string, unknown>).publishingStatus !== undefined;
-    })
-    .map((template) => {
-      const { publishingStatus, ...jsonConfigWithoutPublishingStatus } =
-        template.jsonConfig as Record<string, unknown>;
-
-      return prisma.template.update({
-        where: {
-          id: template.id,
-        },
-        data: {
-          jsonConfig: jsonConfigWithoutPublishingStatus as Prisma.JsonObject,
-          isPublished: publishingStatus as boolean,
-        },
-      });
-    });
-
-  await Promise.all(templatesToMigrate);
-
-  console.log(`${templatesToMigrate.length} were migrated for Publishing Status`);
-}
-
-async function templateSchemaMigration() {
-  const templates = await prisma.template.findMany({
-    select: {
-      id: true,
-      jsonConfig: true,
-    },
-  });
-
-  const templatesToMigrate = templates
-    .filter((template) => (template.jsonConfig as Record<string, unknown>).submission !== undefined)
-    .map((template) => {
-      const formProperties = template.jsonConfig as AnyObject;
-
-      const newJsonConfiguration = {
-        titleEn: formProperties.form.titleEn ?? "",
-        titleFr: formProperties.form.titleFr ?? "",
-        introduction: {
-          descriptionEn: formProperties.form.introduction?.descriptionEn ?? "",
-          descriptionFr: formProperties.form.introduction?.descriptionFr ?? "",
-        },
-        privacyPolicy: {
-          descriptionEn: formProperties.form.privacyPolicy?.descriptionEn ?? "",
-          descriptionFr: formProperties.form.privacyPolicy?.descriptionFr ?? "",
-        },
-        confirmation: {
-          descriptionEn: formProperties.form.endPage?.descriptionEn ?? "",
-          descriptionFr: formProperties.form.endPage?.descriptionFr ?? "",
-          referrerUrlEn: formProperties.form.endPage?.referrerUrlEn ?? "",
-          referrerUrlFr: formProperties.form.endPage?.referrerUrlFr ?? "",
-        },
-        layout: formProperties.form.layout,
-        elements: formProperties.form.elements,
-      };
-
-      const name = formProperties.internalTitleEn ?? "";
-
-      const findDeliveryOption = () => {
-        if (formProperties.submission.email && formProperties.submission.email !== "") {
-          return {
-            emailAddress: formProperties.submission.email,
-            emailSubjectEn: formProperties.form.emailSubjectEn,
-            emailSubjectFr: formProperties.form.emailSubjectFr,
-          };
-        }
-        return null;
-      };
-
-      const deliveryOption = findDeliveryOption();
-
-      const securityAttribute = formProperties.form.securityAttribute ?? "Protected A";
-
-      return prisma.template.update({
-        where: {
-          id: template.id,
-        },
-        data: {
-          name: name,
-          jsonConfig: newJsonConfiguration as Prisma.JsonObject,
-          ...(deliveryOption && {
-            deliveryOption: {
-              create: {
-                emailAddress: deliveryOption.emailAddress as string,
-                emailSubjectEn: deliveryOption.emailSubjectEn as string,
-                emailSubjectFr: deliveryOption.emailSubjectFr as string,
-              },
-            },
-          }),
-          securityAttribute: securityAttribute as string,
-        },
-      });
-    });
-
-  await Promise.all(templatesToMigrate);
-
-  console.log(`${templatesToMigrate.length} were migrated for new Template schema`);
-}
-
-async function lowercaseEmailAddressMigration() {
-  const users = (await prisma.user.findMany({
-    select: {
-      id: true,
-      email: true,
-    },
-  })) as {
-    id: string;
-    email: string;
-  }[];
-
-  const usersToMigrate = users
-    .filter((user) => /[A-Z]/.test(user.email))
-    .map((user) => {
-      return prisma.user
-        .update({
-          where: {
-            id: user.id,
-          },
-          data: {
-            email: user.email.toLowerCase(),
-          },
-        })
-        .then(() =>
-          console.log(`Converted email address ${user.email} to ${user.email.toLowerCase()}.`)
-        )
-        .catch((e: Error) =>
-          console.log(
-            `Failed to migrate user email address ${user.email} because of following error: ${e.message}`
-          )
-        );
-    });
-
-  await Promise.all(usersToMigrate);
-
-  console.log(
-    `${usersToMigrate.length} users required migration to lowercase email address but some may have failed (see logs above)`
-  );
-}
-
 async function main(environment: string) {
   try {
     console.log(`Seeding Database for ${environment} enviroment`);
@@ -308,15 +153,6 @@ async function main(environment: string) {
         }
       }
     }
-
-    console.log("Running 'publishingStatus' migration");
-    await publishingStatusMigration();
-
-    console.log("Running 'templateSchema' migration");
-    await templateSchemaMigration();
-
-    console.log("Running 'lowercaseEmailAddress' migration");
-    await lowercaseEmailAddressMigration();
   } catch (e) {
     console.error(e);
   } finally {

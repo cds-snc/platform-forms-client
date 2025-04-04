@@ -444,7 +444,7 @@
   "formDeleteDialogTitleFailed": "Erreur",
   "formDownload": {
     "btnText": "Que puis-je faire avec un fichier de formulaire?",
-    "description": "Conservez une version du formulaire sur votre ordinateur",
+    "description": "Conservez une version du formulaire sur votre ordinateur.",
     "dialog": {
       "downloadButtonText": "Télécharger une copie",
       "message1": "Téléchargez un fichier de formulaire pour partager l’ébauche avec d'autres personnes. Les collaborateur·rice·s peuvent ainsi ouvrir le fichier dans Formulaires GC et visualiser les progrès réalisés.",
@@ -1307,14 +1307,20 @@
   "saveAndResume": {
     "savedErrorMessage": "Une erreur s'est produite lors de l'enregistrement de vos modifications.",
     "savedSuccessMessage": "Vos modifications ont été enregistrées.",
-    "title": "Reprendre le remplissage du formulaire",
+    "title": "Permettre la sauvegarde des réponses",
     "toggleOn": "Activé",
     "toggleOff": "Désactivé",
     "toggleDescription": {
-      "text1": "Permettre l'enregistrement des réponses en cours",
-      "text2": "Permettre aux personnes de prendre une pause et de reprendre le formulaire plus tard. Avec la possibilité d'enregistré une copie des réponses remplies jusqu’à présent sur leur appareil. Celles-ci peuvent être téléversées dans le formulaire plus tard."
+      "text1": "Reprendre le remplissage d'un formulaire en cours",
+      "text2": "Donne la possiblité aux utilisateur·rice·s de prendre une pause et de compléter le formulaire plus tard. Les personnes qui remplissent le formulaire peuvent obtenir une copie des réponses remplies jusqu’à présent, ainsi qu'une copie de leur réponses une fois le formulaire soumis."
     },
     "a11yDescription": "Enregistrer la progression et reprendre le formulaire plus tard",
     "saveButton": "Enregistrer"
+  },
+  "sortOptions": {
+    "label": "Ordonner la liste :",
+    "none": "telle que saisie",
+    "ascending": "alphabétique (A-Z)",
+    "descending": "alphabétique inversé (Z-A)"
   }
 }
