@@ -58,8 +58,8 @@ jobs:
           cognito-user-pool-id: ${{ secrets.STAGING_COGNITO_USER_POOL_ID }}
           load-balancer-listener-arn: ${{ vars.STAGING_LOAD_BALANCER_LISTENER_ARN }}
           forms-lambda-client-role-arn: arn:aws:iam::${{ env.AWS_ACCOUNT_ID }}:role/forms-lambda-client
-          forms-lambda-client-subnet-ids: ${{ secrets.FORMS_LAMBDA_CLIENT_SUBNET_IDS }}
-          forms-lambda-client-security-group-ids: ${{ secrets.FORMS_LAMBDA_CLIENT_SECURITY_GROUP_IDS }}
+          forms-lambda-client-subnet-ids: ${{ secrets.STAGING_FORMS_LAMBDA_CLIENT_SUBNET_IDS }}
+          forms-lambda-client-security-group-ids: ${{ secrets.STAGING_FORMS_LAMBDA_CLIENT_SECURITY_GROUP_IDS }}
           hostname: forms-staging.cdssandbox.xyz
 
       - name: Download Form Viewer task definition
