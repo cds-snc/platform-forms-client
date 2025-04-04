@@ -1,10 +1,11 @@
 import React, { useEffect, useRef, useState } from "react";
-import { Button } from "@clientComponents/globals";
+import { Button, themes } from "@clientComponents/globals";
 import useFormTimer from "@lib/hooks/useFormTimer";
 import { cn } from "@lib/utils";
 import { useTranslation } from "@i18n/client";
 import { logMessage } from "@lib/logger";
 import { useFeatureFlags } from "@lib/hooks/useFeatureFlags";
+import { SpinnerIcon } from "@serverComponents/icons/SpinnerIcon";
 
 interface SubmitButtonProps {
   getFormDelay: () => number;
@@ -23,6 +24,12 @@ export const SubmitButton: React.FC<SubmitButtonProps> = ({
   const [submitTooEarly, setSubmitTooEarly] = useState(false);
   const screenReaderRemainingTime = useRef(formTimerState.remainingTime);
   const formDelay = useRef(getFormDelay());
+
+  const [submitting, setSubmitting] = useState(false);
+  const disabledClass = `
+    focus:bg-[#e2e8ef] focus:text-[#748094] focus:border-none focus:outline-offset-0 focus:outline-0
+    active:bg-[#e2e8ef] active:text-[#748094] active:border-none active:outline-offset-0 active:outline-0
+  `;
 
   const { getFlag } = useFeatureFlags();
   const timerEnabled = getFlag("formTimer");
@@ -115,9 +122,24 @@ export const SubmitButton: React.FC<SubmitButtonProps> = ({
           }
           // Only change state if submitTooEarly is already set to true
           submitTooEarly && setSubmitTooEarly(false);
+
+          if (submitting) {
+            return;
+          }
+          setSubmitting(true);
         }}
+        {...(submitting ? { className: cn(themes["base"], themes.disabled, disabledClass) } : {})}
       >
-        {t("submitButton")}
+        <>
+          {t("submitButton")}
+
+          {submitting && (
+            <SpinnerIcon className="ml-2 size-7 animate-spin fill-blue-600 text-white dark:text-white" />
+          )}
+          <div aria-live="polite" className="sr-only">
+            {submitting && `${t("loadingResult")}`}
+          </div>
+        </>
       </Button>
     </>
   );
