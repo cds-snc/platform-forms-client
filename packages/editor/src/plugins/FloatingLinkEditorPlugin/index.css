@@ -1,71 +1,43 @@
-/*********************
-  * link editor   *
-  *********************/
 .gc-link-editor {
+  display: flex;
   position: absolute;
   top: 0;
   left: 0;
   z-index: 10;
   max-width: 400px;
   width: 100%;
+  opacity: 0;
   background-color: #fff;
-  border: 2px solid black;
-  border-radius: 8px;
-}
-
-.gc-link-editor button.active,
-.toolbar button.active {
-  background-color: #fff;
-}
-
-.gc-link-editor .link-input {
-  display: inline-block;
-  width: calc(100% - 24px);
-  box-sizing: border-box;
-  margin: 8px 12px;
-  padding: 8px 12px;
-  border-radius: 8px;
-  background-color: #eee;
-  font-size: 15px;
-  color: #050505;
-  border: 0;
-  outline: 0;
-  position: relative;
-  font-family: inherit;
-}
-
-.gc-link-editor button.link-edit {
-  background-size: 16px;
-  background-position: center;
-  background-repeat: no-repeat;
-  width: 35px;
-  vertical-align: -0.25em;
-  position: absolute;
-  right: 0;
-  top: 0;
-  bottom: 0;
-  cursor: pointer;
-}
-
-.gc-link-editor .link-input span {
-  color: #216fdb;
-  text-decoration: none;
-  display: block;
-  white-space: nowrap;
-  overflow: hidden;
-  margin-right: 30px;
-  text-overflow: ellipsis;
-}
-
-.gc-link-editor .font-size-wrapper,
-.gc-link-editor .font-family-wrapper {
-  display: flex;
-  margin: 0 4px;
-}
-
-.gc-link-editor select {
-  padding: 6px;
-  border: none;
-  background-color: #00000013;
+  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.3);
   border-radius: 4px;
+  transition: opacity 0.5s;
+  will-change: transform;
+}
+
+.gc-link-editor-container {
+  width: 100%;
+  padding: 8px;
+  gap: 4px;
+  display: flex;
+  justify-content: space-between;
+  input {
+    font-size: 0.9rem;
+    padding: 2px 6px;
+    width: 100%;
+  }
+  a {
+    font-size: 0.9rem;
+  }
+}
+
+.gc-link-editor-actions {
+  display: flex;
+  background-color: #fff;
+  border-radius: 8px;
+  padding: 4px 12px;
+  svg {
+    width: 20px;
+    height: 20px;
+    margin-right: 4px;
+  }
 }

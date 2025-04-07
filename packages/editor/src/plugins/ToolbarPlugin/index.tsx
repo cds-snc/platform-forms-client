@@ -57,7 +57,13 @@ const blockTypeToBlockName = {
 const LowPriority = 1;
 type HeadingTagType = "h2" | "h3" | "h4" | "h5";
 
-export default function ToolbarPlugin({ editorId }: { editorId: string }) {
+export default function ToolbarPlugin({
+  editorId,
+  setIsLinkEditMode,
+}: {
+  editorId: string;
+  setIsLinkEditMode: (isLinkEditMode: boolean) => void;
+}) {
   const [editor] = useLexicalComposerContext();
   const [isBold, setIsBold] = useState(false);
   const [isItalic, setIsItalic] = useState(false);
@@ -69,6 +75,7 @@ export default function ToolbarPlugin({ editorId }: { editorId: string }) {
 
   const insertLink = useCallback(() => {
     if (!isLink) {
+      setIsLinkEditMode(true);
       editor.dispatchCommand(TOGGLE_LINK_COMMAND, sanitizeUrl("https://"));
     } else {
       editor.dispatchCommand(TOGGLE_LINK_COMMAND, null);
