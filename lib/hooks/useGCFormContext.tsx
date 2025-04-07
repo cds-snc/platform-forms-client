@@ -55,7 +55,9 @@ interface GCFormsContextValueType {
   clearHistoryAfterId: (groupId: string) => string[];
   getGroupTitle: (groupId: string | null, language: Language) => string;
   saveSessionProgress: (language: Language | undefined) => void;
-  restoreSessionProgress: (language: Language) => FormValues | false;
+  restoreSessionProgress: (
+    language: Language
+  ) => false | { id: number; language: Language; values: FormValues | false };
   getProgressData: () => {
     id: string;
     values: FormValues;
