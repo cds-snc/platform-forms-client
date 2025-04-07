@@ -11,18 +11,22 @@ interface SubmitButtonProps {
   formID: string;
   formTitle: string;
   disabled: boolean;
+  status?: string;
 }
 export const SubmitButton: React.FC<SubmitButtonProps> = ({
   getFormDelay,
   formID,
   formTitle,
   disabled,
+  status,
 }) => {
   const { t } = useTranslation();
   const [formTimerState, { startTimer, checkTimer, disableTimer }] = useFormTimer();
   const [submitTooEarly, setSubmitTooEarly] = useState(false);
   const screenReaderRemainingTime = useRef(formTimerState.remainingTime);
   const formDelay = useRef(getFormDelay());
+
+  // Used to show a spinner for the initial hCAPTCHA verification step
   const [submitting, setSubmitting] = useState(false);
 
   const { getFlag } = useFeatureFlags();
@@ -119,7 +123,7 @@ export const SubmitButton: React.FC<SubmitButtonProps> = ({
 
           setSubmitting(true);
         }}
-        loading={submitting}
+        loading={submitting && status !== "Error"}
       >
         {t("submitButton")}
       </Button>
