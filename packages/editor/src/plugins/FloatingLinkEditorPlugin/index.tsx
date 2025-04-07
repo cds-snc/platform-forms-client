@@ -36,7 +36,8 @@ import { setFloatingElemPositionForLinkEditor } from "../../utils/setFloatingEle
 import { sanitizeUrl } from "../../utils/url";
 import { DeleteIcon } from "../../icons/DeleteIcon";
 import { EditIcon } from "../../icons/EditIcon";
-import { CancelIcon, CheckIcon } from "@serverComponents/icons";
+import { CheckIcon } from "../../icons/CheckIcon";
+import { CancelIcon } from "../../icons/CancelIcon";
 
 function preventDefault(
   event: React.KeyboardEvent<HTMLInputElement> | React.MouseEvent<HTMLElement>
@@ -238,7 +239,7 @@ function FloatingLinkEditor({
           }
         });
       }
-      setEditedLinkUrl("https://");
+      setEditedLinkUrl("");
       setIsLinkEditMode(false);
     }
   };
@@ -258,15 +259,14 @@ function FloatingLinkEditor({
             }}
           />
           <div className="gc-link-editor-actions">
-            <div
-              role="button"
-              tabIndex={0}
+            <button
               onMouseDown={preventDefault}
               onClick={() => {
                 setIsLinkEditMode(false);
               }}
               onKeyDown={(event) => {
                 if (event.key === "Enter") {
+                  event.preventDefault();
                   setIsLinkEditMode(false);
                 }
                 if (event.key === "Escape") {
@@ -277,11 +277,9 @@ function FloatingLinkEditor({
             >
               <span className="sr-only">Cancel edit link</span>
               <CancelIcon />
-            </div>
+            </button>
 
-            <div
-              role="button"
-              tabIndex={0}
+            <button
               onMouseDown={preventDefault}
               onClick={handleLinkSubmission}
               onKeyDown={(event) => {
@@ -296,18 +294,14 @@ function FloatingLinkEditor({
             >
               <span className="sr-only">Save link</span>
               <CheckIcon />
-            </div>
+            </button>
           </div>
         </div>
       ) : (
         <div className="gc-link-editor-container">
-          <a href={sanitizeUrl(linkUrl)} target="_blank" tabIndex={-1} rel="noopener noreferrer">
-            {linkUrl}
-          </a>
-          <div className="gc-link-editor-actions absolute right-0">
-            <div
-              role="button"
-              tabIndex={0}
+          <span>{linkUrl}</span>
+          <div className="gc-link-editor-actions">
+            <button
               onMouseDown={preventDefault}
               onClick={(event) => {
                 event.preventDefault();
@@ -327,10 +321,8 @@ function FloatingLinkEditor({
             >
               <span className="sr-only">Edit link</span>
               <EditIcon />
-            </div>
-            <div
-              role="button"
-              tabIndex={0}
+            </button>
+            <button
               onMouseDown={preventDefault}
               onClick={() => {
                 editor.dispatchCommand(TOGGLE_LINK_COMMAND, null);
@@ -348,7 +340,7 @@ function FloatingLinkEditor({
             >
               <span className="sr-only">Remove link</span>
               <DeleteIcon />
-            </div>
+            </button>
           </div>
         </div>
       )}
