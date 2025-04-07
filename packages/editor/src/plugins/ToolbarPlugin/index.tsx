@@ -26,7 +26,6 @@ import {
 } from "lexical";
 
 import { $wrapNodes } from "@lexical/selection";
-import { sanitizeUrl } from "../../utils/url";
 import { useEditorFocus } from "../../hooks/useEditorFocus";
 import { getSelectedNode } from "../../utils/getSelectedNode";
 import { ToolTip } from "../../ToolTip";
@@ -76,11 +75,11 @@ export default function ToolbarPlugin({
   const insertLink = useCallback(() => {
     if (!isLink) {
       setIsLinkEditMode(true);
-      editor.dispatchCommand(TOGGLE_LINK_COMMAND, sanitizeUrl("https://"));
+      editor.dispatchCommand(TOGGLE_LINK_COMMAND, "");
     } else {
       editor.dispatchCommand(TOGGLE_LINK_COMMAND, null);
     }
-  }, [editor, isLink]);
+  }, [editor, isLink, setIsLinkEditMode]);
 
   const [items] = useState([
     { id: 1, txt: "heading2" },

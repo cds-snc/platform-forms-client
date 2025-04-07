@@ -77,8 +77,10 @@ describe("<RichTextEditor />", () => {
     // Add a link
     cy.get('[id^="editor-"]').setSelection("will be a link");
     cy.get('[data-testid="link-button"]').first().click();
-    cy.get('[data-testid="link-editor"]').first().click();
-    cy.get('[data-testid="link-editor"]').type("example.com{enter}{esc}");
+    cy.get('[data-testid="gc-link-editor"] input').type(
+      "{selectAll}https://example.com{enter}{esc}"
+    );
     cy.get('[id^="editor-"] a').first().contains("will be a link");
+    cy.get('[id^="editor-"] a').first().should("have.attr", "href", "https://example.com");
   });
 });

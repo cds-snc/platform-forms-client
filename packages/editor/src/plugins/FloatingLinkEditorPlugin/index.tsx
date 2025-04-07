@@ -33,7 +33,7 @@ import { createPortal } from "react-dom";
 
 import { getSelectedNode } from "../../utils/getSelectedNode";
 import { setFloatingElemPositionForLinkEditor } from "../../utils/setFloatingElemPositionForLinkEditor";
-import { sanitizeUrl } from "../../utils/url";
+import { isValidUrl, sanitizeUrl } from "../../utils/url";
 import { DeleteIcon } from "../../icons/DeleteIcon";
 import { EditIcon } from "../../icons/EditIcon";
 import { CheckIcon } from "../../icons/CheckIcon";
@@ -63,7 +63,7 @@ function FloatingLinkEditor({
   const editorRef = useRef<HTMLDivElement | null>(null);
   const inputRef = useRef<HTMLInputElement>(null);
   const [linkUrl, setLinkUrl] = useState("");
-  const [editedLinkUrl, setEditedLinkUrl] = useState("https://");
+  const [editedLinkUrl, setEditedLinkUrl] = useState("");
   const [lastSelection, setLastSelection] = useState<BaseSelection | null>(null);
 
   const $updateLinkEditor = useCallback(() => {
@@ -222,7 +222,7 @@ function FloatingLinkEditor({
   ) => {
     event.preventDefault();
     if (lastSelection !== null) {
-      if (linkUrl !== "") {
+      if (editedLinkUrl !== "") {
         editor.update(() => {
           editor.dispatchCommand(TOGGLE_LINK_COMMAND, sanitizeUrl(editedLinkUrl));
           const selection = $getSelection();
@@ -245,12 +245,13 @@ function FloatingLinkEditor({
   };
 
   return (
-    <div ref={editorRef} className="gc-link-editor">
+    <div ref={editorRef} className="gc-link-editor" data-testid="gc-link-editor">
       {!isLink ? null : isLinkEditMode ? (
         <div className="gc-link-editor-container">
           <input
             ref={inputRef}
             value={editedLinkUrl}
+            placeholder="http://"
             onChange={(event) => {
               setEditedLinkUrl(event.target.value);
             }}
@@ -280,6 +281,8 @@ function FloatingLinkEditor({
             </button>
 
             <button
+              className={!isValidUrl(editedLinkUrl) ? "gc-link-editor-button-disabled" : ""}
+              disabled={!isValidUrl(editedLinkUrl)}
               onMouseDown={preventDefault}
               onClick={handleLinkSubmission}
               onKeyDown={(event) => {
