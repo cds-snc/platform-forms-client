@@ -260,4 +260,13 @@ export const options = [
     logoTitleEn: "Supreme Court of Canada",
     logoTitleFr: "Cour suprême du Canada",
   },
+  {
+    name: "fos",
+    urlEn: "https://www.canada.ca/en/canadian-heritage/campaigns/future-sport.html",
+    urlFr: "https://www.canada.ca/fr/patrimoine-canadien/campagnes/avenir-sport.html",
+    logoEn: "/img/branding/fos-en.png",
+    logoFr: "/img/branding/fox-fr.png",
+    logoTitleEn: "The Future of Sport in Canada Commission",
+    logoTitleFr: "Commission sur l’avenir du sport au Canada",
+  },
 ];
