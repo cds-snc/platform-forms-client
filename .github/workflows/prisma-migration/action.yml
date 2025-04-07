@@ -1,0 +1,17 @@
+name: "Prisma Migration"
+
+inputs:
+  app-env:
+    description: "App Environment"
+    required: true
+
+runs:
+  using: "composite"
+  steps:
+    - name: Copy Prisma Files to S3
+      shell: bash
+      run: aws s3 sync ./prisma s3://forms-${{ inputs.app-env }}-prisma-migration-storage/
+
+    - name: Invoke Prisma Migration Lambda
+      shell: bash
+      run: bash ./scripts/prisma_lambda_invoke.sh

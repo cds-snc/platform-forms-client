@@ -28,8 +28,10 @@ const RuleIndicator = ({ choiceId }: { choiceId: string }) => {
   if (!indexes || !indexes[0]) return null;
   const itemId = indexes[0];
   const questionNumber = getQuestionNumber(elements[itemId], sortedElements);
+  // For debugging
+  const elementId = elements[itemId]?.id;
   return (
-    <div>
+    <div data-element-id={elementId}>
       <ConditionalIcon className="mr-2 mt-[-5px] inline-block" />
       <div className="inline-block p-2">
         {t("question")} {questionNumber}
