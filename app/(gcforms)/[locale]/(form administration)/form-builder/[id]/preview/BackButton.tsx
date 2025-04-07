@@ -40,7 +40,7 @@ export const BackButton = ({
             className="group-focus:fill-white group-active:fill-white"
             title={t("goBack", { lng: language })}
           />
-          <span className="hidden tablet:block">{t("goBack", { lng: language })}</span>
+          <span className="hidden laptop:block">{t("goBack", { lng: language })}!!</span>
         </>
       )}
     </Button>
