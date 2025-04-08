@@ -1,9 +1,8 @@
 import React, { createContext, useContext } from "react";
-import { Language } from "../i18n";
+import translations, { Language } from "../i18n";
 
 interface LocaleContextProps {
   locale: Language;
-  setLocale: (locale: Language) => void;
 }
 
 const LocaleContext = createContext<LocaleContextProps | undefined>(undefined);
@@ -12,9 +11,15 @@ export const LocaleProvider: React.FC<{
   initialLocale: Language;
   children: React.ReactNode;
 }> = ({ initialLocale, children }) => {
-  const [locale, setLocale] = React.useState<Language>(initialLocale);
+  let locale = initialLocale;
 
-  return <LocaleContext.Provider value={{ locale, setLocale }}>{children}</LocaleContext.Provider>;
+  if (!translations[initialLocale as Language]) {
+    // eslint-disable-next-line no-console
+    console.warn(`The locale "${initialLocale}" is not supported. Defaulting to "en".`);
+    locale = "en";
+  }
+
+  return <LocaleContext.Provider value={{ locale }}>{children}</LocaleContext.Provider>;
 };
 
 export const useLocale = (): LocaleContextProps => {

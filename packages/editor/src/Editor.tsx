@@ -1,11 +1,18 @@
 "use client";
 import React, { useId, useState } from "react";
+import {
+  $convertFromMarkdownString,
+  $convertToMarkdownString,
+  TRANSFORMERS,
+} from "@lexical/markdown";
 import { LexicalComposer } from "@lexical/react/LexicalComposer";
 import { RichTextPlugin } from "@lexical/react/LexicalRichTextPlugin";
 import { LexicalErrorBoundary } from "@lexical/react/LexicalErrorBoundary";
 import { HistoryPlugin } from "@lexical/react/LexicalHistoryPlugin";
 import { LinkPlugin } from "@lexical/react/LexicalLinkPlugin";
 import { ListPlugin } from "@lexical/react/LexicalListPlugin";
+import { OnChangePlugin } from "@lexical/react/LexicalOnChangePlugin";
+
 import ContentEditable from "./ui/ContentEditable";
 import TabControlPlugin from "./plugins/TabControlPlugin";
 import ToolbarPlugin from "./plugins/ToolbarPlugin";
@@ -13,16 +20,11 @@ import TreeViewPlugin from "./plugins/TreeViewPlugin";
 import ListMaxIndentLevelPlugin from "./plugins/ListMaxIndentPlugin";
 import FloatingLinkEditorPlugin from "./plugins/FloatingLinkEditorPlugin";
 import { editorConfig } from "./config";
-import {
-  $convertFromMarkdownString,
-  $convertToMarkdownString,
-  TRANSFORMERS,
-} from "@lexical/markdown";
-import { OnChangePlugin } from "@lexical/react/LexicalOnChangePlugin";
-import "./styles.css";
 import { LINE_BREAK_FIX } from "./transformers";
-import translations, { Language } from "./i18n";
+import { Language } from "./i18n";
 import { LocaleProvider } from "./hooks/useLocale";
+
+import "./styles.css";
 
 interface EditorProps {
   id?: string;
@@ -46,12 +48,6 @@ export const Editor = ({
   locale = "en",
   contentLocale = "en",
 }: EditorProps) => {
-  if (!translations[locale as Language]) {
-    // eslint-disable-next-line no-console
-    console.warn(`The locale "${locale}" is not supported. Defaulting to "en".`);
-    locale = "en";
-  }
-
   contentLocale = contentLocale || locale;
 
   const [floatingAnchorElem, setFloatingAnchorElem] = useState<HTMLDivElement | null>(null);

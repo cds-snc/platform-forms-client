@@ -68,6 +68,7 @@ export default function ToolbarPlugin({
   const [, setSelectedElementKey] = useState("");
   const [blockType, setBlockType] = useState("paragraph");
   const [isEditable] = useState(() => editor.isEditable());
+
   const { t } = useTranslation();
 
   const insertLink = useCallback(() => {
@@ -235,6 +236,7 @@ export default function ToolbarPlugin({
 
   return (
     <>
+      {t("textFormatting")}
       <div
         className="gc-toolbar-container"
         role="toolbar"
