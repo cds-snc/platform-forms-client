@@ -236,7 +236,6 @@ export default function ToolbarPlugin({
 
   return (
     <>
-      {t("textFormatting")}
       <div
         className="gc-toolbar-container"
         role="toolbar"
