@@ -44,11 +44,11 @@ export const ManageForm = (props: ManageFormProps) => {
 
   if (!canManageAllForms) {
     return (
-      <>
+      <div>
         {canSetClosingDate && <SetClosingDate formId={id} closedDetails={closedDetails} />}
         <SetSaveAndResume formId={id} />
         <DownloadForm />
-      </>
+      </div>
     );
   }
 
