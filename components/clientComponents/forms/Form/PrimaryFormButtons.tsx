@@ -56,6 +56,7 @@ export const PrimaryFormButtons = ({
                   getFormDelay={getFormDelay}
                   formID={formId}
                   formTitle={formTitle}
+                  status={props.status}
                 />
               </div>
             );
@@ -67,6 +68,7 @@ export const PrimaryFormButtons = ({
           getFormDelay={getFormDelay}
           formID={formId}
           formTitle={formTitle}
+          status={props.status}
         />
       )}
     </div>

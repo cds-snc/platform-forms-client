@@ -45,7 +45,7 @@ export const restoreSessionProgress = ({
   id: string;
   form: FormProperties;
   language: Language;
-}): FormValues | false => {
+}): { id: number; language: Language; values: FormValues | false } | false => {
   if (typeof sessionStorage === "undefined") {
     return false;
   }
@@ -64,11 +64,15 @@ export const restoreSessionProgress = ({
     if (parsedData.id === id) {
       // Toggle the values if the language is different
       if (parsedData.language !== language) {
-        const values = toggleSavedValues(form, parsedData, parsedData.language);
-        return values ? (values as FormValues) : false;
+        const vals = toggleSavedValues(form, parsedData, parsedData.language);
+        return {
+          id: parsedData.id,
+          language: parsedData.language,
+          values: vals ? (vals as FormValues) : false,
+        };
       }
 
-      return parsedData.values;
+      return { id: parsedData.id, language: parsedData.language, values: parsedData.values };
     }
   } catch (e) {
     return false;

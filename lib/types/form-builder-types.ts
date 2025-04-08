@@ -116,6 +116,8 @@ export interface CDSHTMLDialogElement extends HTMLElement {
   ): void;
 }
 
+// Add new error codes to this doc for visibility:
+// https://docs.google.com/document/d/1Za03rcuC9YUDtNXuNyHAwUi7wtp-vgVFxBx0Oy2JZz8
 export const FormServerErrorCodes = {
   BRANDING: "550",
   CLASSIFICATION: "551",
