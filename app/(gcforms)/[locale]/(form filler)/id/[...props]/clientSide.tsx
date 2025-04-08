@@ -50,29 +50,34 @@ export const FormWrapper = ({
   const formRestoredMessage = t("saveAndResume.formRestored");
   const router = useRouter();
 
-  const values = useMemo(
-    () =>
-      restoreSessionProgress({
-        id: formRecord.id,
-        form: formRecord.form,
-        language: language as Language,
-      }),
+  const savedValues = useMemo(() => {
+    const result = restoreSessionProgress({
+      id: formRecord.id,
+      form: formRecord.form,
+      language: language as Language,
+    });
+
+    if (!result) {
+      return false;
+    }
+
+    return result;
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [language]
-  );
+  }, [language, formRecord.id]);
 
   useEffect(() => {
     // Clear session storage after values are restored
-    if (values) {
+    if (savedValues) {
       removeProgressStorage();
 
-      if (saveAndResumeEnabled) {
+      if (saveAndResumeEnabled && savedValues.language === language) {
         toast.success(formRestoredMessage, "public-facing-form");
       }
     }
-  }, [values, formRestoredMessage, saveAndResumeEnabled]);
+  }, [savedValues, formRestoredMessage, saveAndResumeEnabled, language]);
 
-  const initialValues = values ? values : undefined;
+  const initialValues = savedValues ? savedValues.values : undefined;
 
   // Show confirmation page if submissionId is present
   if (submissionId && submissionDate) {
