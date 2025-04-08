@@ -5,6 +5,19 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.38.1](https://github.com/cds-snc/platform-forms-client/compare/v3.38.0...v3.38.1) (2025-04-08)
+
+
+### Bug Fixes
+
+* adds a loading indicator for initial step of submitting a form ([#5364](https://github.com/cds-snc/platform-forms-client/issues/5364)) ([1e5e41a](https://github.com/cds-snc/platform-forms-client/commit/1e5e41aab765f7d45b693adfb595e89859ed586c))
+
+
+### Miscellaneous Chores
+
+* fix hover style for get a copy button ([#5379](https://github.com/cds-snc/platform-forms-client/issues/5379)) ([0abd207](https://github.com/cds-snc/platform-forms-client/commit/0abd207c05eec128c8a7dbd776c873fb127b57f6))
+* session language toggle ([#5370](https://github.com/cds-snc/platform-forms-client/issues/5370)) ([8dd4812](https://github.com/cds-snc/platform-forms-client/commit/8dd481292f7eb4add7a3da123a301946c3a32f37))
+
 ## [3.38.0](https://github.com/cds-snc/platform-forms-client/compare/v3.37.0...v3.38.0) (2025-04-08)
 
 
