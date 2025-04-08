@@ -63,7 +63,7 @@ export const Editor = ({
       }}
     >
       <div>
-        <ToolbarPlugin editorId={id || ""} setIsLinkEditMode={setIsLinkEditMode} />
+        <ToolbarPlugin editorId={editorId} setIsLinkEditMode={setIsLinkEditMode} />
 
         <RichTextPlugin
           contentEditable={
@@ -71,8 +71,8 @@ export const Editor = ({
               <ContentEditable
                 placeholder={""}
                 id={editorId}
-                ariaLabel={ariaLabel && ariaLabel}
-                ariaDescribedBy={ariaDescribedBy && ariaDescribedBy}
+                ariaLabel={ariaLabel}
+                ariaDescribedBy={ariaDescribedBy}
               />
             </div>
           }
