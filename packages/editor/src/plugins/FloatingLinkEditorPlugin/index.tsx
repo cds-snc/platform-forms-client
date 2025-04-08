@@ -212,10 +212,15 @@ function FloatingLinkEditor({
 
   const monitorInputInteraction = (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (event.key === "Enter") {
-      handleLinkSubmission(event as React.KeyboardEvent<HTMLInputElement>);
+      if (isValidUrl(editedLinkUrl)) {
+        handleLinkSubmission(event as React.KeyboardEvent<HTMLInputElement>);
+      }
     } else if (event.key === "Escape") {
       event.preventDefault();
       setIsLinkEditMode(false);
+      if (linkUrl === "") {
+        editor.dispatchCommand(TOGGLE_LINK_COMMAND, null);
+      }
     }
   };
 
@@ -259,6 +264,14 @@ function FloatingLinkEditor({
             }}
             onKeyDown={(event) => {
               monitorInputInteraction(event);
+            }}
+            onBlur={() => {
+              setIsLinkEditMode(false);
+              if (isValidUrl(editedLinkUrl)) {
+                editor.dispatchCommand(TOGGLE_LINK_COMMAND, sanitizeUrl(editedLinkUrl));
+              } else {
+                editor.dispatchCommand(TOGGLE_LINK_COMMAND, null);
+              }
             }}
           />
           <div className="gc-link-editor-actions">
