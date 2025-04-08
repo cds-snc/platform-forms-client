@@ -5,6 +5,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.38.2](https://github.com/cds-snc/platform-forms-client/compare/v3.38.1...v3.38.2) (2025-04-08)
+
+
+### Miscellaneous Chores
+
+* Add SaveAndResume to non admin ([#5380](https://github.com/cds-snc/platform-forms-client/issues/5380)) ([bc08314](https://github.com/cds-snc/platform-forms-client/commit/bc08314ee6bc95a86d88aa721fe88fb57234fffc))
+
 ## [3.38.1](https://github.com/cds-snc/platform-forms-client/compare/v3.38.0...v3.38.1) (2025-04-08)
 
 
