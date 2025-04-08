@@ -5,6 +5,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.38.0](https://github.com/cds-snc/platform-forms-client/compare/v3.37.0...v3.38.0) (2025-04-08)
+
+
+### Features
+
+* plug Rainbow deployments in Production release pipeline ([#5344](https://github.com/cds-snc/platform-forms-client/issues/5344)) ([d3bbf4f](https://github.com/cds-snc/platform-forms-client/commit/d3bbf4f378d744336c81da6baa950549e88032eb))
+
 ## [3.37.0](https://github.com/cds-snc/platform-forms-client/compare/v3.36.0...v3.37.0) (2025-04-07)
 
 
