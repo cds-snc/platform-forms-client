@@ -63,7 +63,7 @@ export const ClosedMessage = ({ valid, closedDetails, setClosedDetails }: Closed
           </LanguageLabel>
           <Editor
             id="closed-en"
-            lang="en"
+            locale="en"
             content={closedDetails && closedDetails.messageEn ? closedDetails.messageEn : ""}
             onChange={(value: string) => {
               setClosedDetails({ ...closedDetails, messageEn: value });
@@ -81,7 +81,7 @@ export const ClosedMessage = ({ valid, closedDetails, setClosedDetails }: Closed
           </LanguageLabel>
           <Editor
             id="closed-fr"
-            lang="fr"
+            locale="fr"
             content={closedDetails && closedDetails.messageFr ? closedDetails.messageFr : ""}
             onChange={(value: string) => setClosedDetails({ ...closedDetails, messageFr: value })}
           />

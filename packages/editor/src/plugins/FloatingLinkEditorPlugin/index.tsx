@@ -38,6 +38,7 @@ import { DeleteIcon } from "../../icons/DeleteIcon";
 import { EditIcon } from "../../icons/EditIcon";
 import { CheckIcon } from "../../icons/CheckIcon";
 import { CancelIcon } from "../../icons/CancelIcon";
+import { useTranslation } from "../../hooks/useTranslation";
 
 function preventDefault(
   event: React.KeyboardEvent<HTMLInputElement> | React.MouseEvent<HTMLElement>
@@ -65,6 +66,7 @@ function FloatingLinkEditor({
   const [linkUrl, setLinkUrl] = useState("");
   const [editedLinkUrl, setEditedLinkUrl] = useState("");
   const [lastSelection, setLastSelection] = useState<BaseSelection | null>(null);
+  const { t } = useTranslation();
 
   const $updateLinkEditor = useCallback(() => {
     const selection = $getSelection();
@@ -276,7 +278,7 @@ function FloatingLinkEditor({
                 }
               }}
             >
-              <span className="sr-only">Cancel edit link</span>
+              <span className="sr-only">{t("cancelEditLink")}</span>
               <CancelIcon />
             </button>
 
@@ -295,7 +297,7 @@ function FloatingLinkEditor({
                 }
               }}
             >
-              <span className="sr-only">Save link</span>
+              <span className="sr-only">{t("saveLink")}</span>
               <CheckIcon />
             </button>
           </div>
@@ -322,7 +324,7 @@ function FloatingLinkEditor({
                 }
               }}
             >
-              <span className="sr-only">Edit link</span>
+              <span className="sr-only">{t("editLink")}</span>
               <EditIcon />
             </button>
             <button
@@ -341,7 +343,7 @@ function FloatingLinkEditor({
                 }
               }}
             >
-              <span className="sr-only">Remove link</span>
+              <span className="sr-only">{t("removeLink")}</span>
               <DeleteIcon />
             </button>
           </div>

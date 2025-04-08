@@ -27,7 +27,7 @@ export const RichTextEditor = ({
     getLocalizationAttribute: s.getLocalizationAttribute,
   }));
   const [value, setValue] = useState(content);
-  const { t } = useTranslation("form-builder");
+  const { t, i18n } = useTranslation("form-builder");
 
   useEffect(() => {
     setValue(content);
@@ -44,6 +44,7 @@ export const RichTextEditor = ({
   return (
     <div className="gc-formview w-full rounded bg-white">
       <Editor
+        locale={i18n.language}
         content={value}
         onChange={updateValue}
         ariaLabel={ariaLabel || t("richTextEditor")}

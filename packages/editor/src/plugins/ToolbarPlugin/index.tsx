@@ -6,9 +6,6 @@ import { mergeRegister, $getNearestNodeOfType } from "@lexical/utils";
 
 import { $isLinkNode, TOGGLE_LINK_COMMAND } from "@lexical/link";
 
-// @TODO: pass in this dependency or otherwise incorporate into package
-import { useTranslation } from "@i18n/client";
-
 import {
   $isListNode,
   INSERT_ORDERED_LIST_COMMAND,
@@ -36,6 +33,7 @@ import { ItalicIcon } from "../../icons/ItalicIcon";
 import { BulletListIcon } from "../../icons/BulletListIcon";
 import { NumberedListIcon } from "../../icons/NumberedListIcon";
 import { LinkIcon } from "../../icons/LinkIcon";
+import { useTranslation } from "../../hooks/useTranslation";
 import "./styles.css";
 
 const blockTypeToBlockName = {
@@ -69,8 +67,8 @@ export default function ToolbarPlugin({
   const [isLink, setIsLink] = useState(false);
   const [, setSelectedElementKey] = useState("");
   const [blockType, setBlockType] = useState("paragraph");
-
   const [isEditable] = useState(() => editor.isEditable());
+  const { t } = useTranslation();
 
   const insertLink = useCallback(() => {
     if (!isLink) {
@@ -233,7 +231,6 @@ export default function ToolbarPlugin({
     );
   }, [editor, updateToolbar]);
 
-  const { t } = useTranslation("form-builder");
   const editorHasFocus = useEditorFocus();
 
   return (

@@ -21,6 +21,8 @@ import {
 import { OnChangePlugin } from "@lexical/react/LexicalOnChangePlugin";
 import "./styles.css";
 import { LINE_BREAK_FIX } from "./transformers";
+import translations, { Language } from "./i18n";
+import { LocaleProvider } from "./hooks/useLocale";
 
 interface EditorProps {
   id?: string;
@@ -28,7 +30,7 @@ interface EditorProps {
   showTreeview?: boolean;
   ariaLabel?: string;
   ariaDescribedBy?: string;
-  lang?: string;
+  locale?: string;
 
   onChange?(...args: unknown[]): unknown;
 }
@@ -40,7 +42,14 @@ export const Editor = ({
   ariaLabel = "AriaLabel",
   ariaDescribedBy = "AriaDescribedBy",
   onChange,
+  locale = "en",
 }: EditorProps) => {
+  if (!translations[locale as Language]) {
+    // If the locale is not found, default to English
+    // should we throw exception?
+    locale = "en";
+  }
+
   const [floatingAnchorElem, setFloatingAnchorElem] = useState<HTMLDivElement | null>(null);
   const [isLinkEditMode, setIsLinkEditMode] = useState<boolean>(false);
 
@@ -54,54 +63,56 @@ export const Editor = ({
   };
 
   return (
-    <LexicalComposer
-      initialConfig={{
-        ...editorConfig,
-        editorState: () => {
-          $convertFromMarkdownString(content, [...TRANSFORMERS]);
-        },
-      }}
-    >
-      <div>
-        <ToolbarPlugin editorId={editorId} setIsLinkEditMode={setIsLinkEditMode} />
+    <LocaleProvider initialLocale={locale as Language}>
+      <LexicalComposer
+        initialConfig={{
+          ...editorConfig,
+          editorState: () => {
+            $convertFromMarkdownString(content, [...TRANSFORMERS]);
+          },
+        }}
+      >
+        <div>
+          <ToolbarPlugin editorId={editorId} setIsLinkEditMode={setIsLinkEditMode} />
 
-        <RichTextPlugin
-          contentEditable={
-            <div className="gc-editor-container" ref={onRef}>
-              <ContentEditable
-                placeholder={""}
-                id={editorId}
-                ariaLabel={ariaLabel}
-                ariaDescribedBy={ariaDescribedBy}
+          <RichTextPlugin
+            contentEditable={
+              <div className="gc-editor-container" ref={onRef}>
+                <ContentEditable
+                  placeholder={""}
+                  id={editorId}
+                  ariaLabel={ariaLabel}
+                  ariaDescribedBy={ariaDescribedBy}
+                />
+              </div>
+            }
+            ErrorBoundary={LexicalErrorBoundary}
+          />
+          <HistoryPlugin />
+          {showTreeview && <TreeViewPlugin />}
+          <OnChangePlugin
+            onChange={(editorState) => {
+              editorState.read(() => {
+                const markdown = $convertToMarkdownString([...TRANSFORMERS, LINE_BREAK_FIX]);
+                onChange && onChange(markdown);
+              });
+            }}
+          />
+          <ListPlugin />
+          <LinkPlugin />
+          <TabControlPlugin />
+          <ListMaxIndentLevelPlugin maxDepth={5} />
+          {floatingAnchorElem && (
+            <>
+              <FloatingLinkEditorPlugin
+                anchorElem={floatingAnchorElem}
+                isLinkEditMode={isLinkEditMode}
+                setIsLinkEditMode={setIsLinkEditMode}
               />
-            </div>
-          }
-          ErrorBoundary={LexicalErrorBoundary}
-        />
-        <HistoryPlugin />
-        {showTreeview && <TreeViewPlugin />}
-        <OnChangePlugin
-          onChange={(editorState) => {
-            editorState.read(() => {
-              const markdown = $convertToMarkdownString([...TRANSFORMERS, LINE_BREAK_FIX]);
-              onChange && onChange(markdown);
-            });
-          }}
-        />
-        <ListPlugin />
-        <LinkPlugin />
-        <TabControlPlugin />
-        <ListMaxIndentLevelPlugin maxDepth={5} />
-        {floatingAnchorElem && (
-          <>
-            <FloatingLinkEditorPlugin
-              anchorElem={floatingAnchorElem}
-              isLinkEditMode={isLinkEditMode}
-              setIsLinkEditMode={setIsLinkEditMode}
-            />
-          </>
-        )}
-      </div>
-    </LexicalComposer>
+            </>
+          )}
+        </div>
+      </LexicalComposer>
+    </LocaleProvider>
   );
 };

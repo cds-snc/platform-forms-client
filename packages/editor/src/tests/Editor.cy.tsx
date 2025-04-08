@@ -7,7 +7,7 @@ describe("<RichTextEditor />", () => {
     // see: https://on.cypress.io/mounting-react
     cy.mount(
       <div className="form-builder">
-        <Editor content="" ariaLabel="AriaLabel" lang="en" />
+        <Editor content="" ariaLabel="AriaLabel" locale="en" />
       </div>
     );
 

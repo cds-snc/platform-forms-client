@@ -1,0 +1,17 @@
+{
+  "textFormatting": "Mise en forme du texte",
+  "tooltipFormatBold": "En gras (⌘B)",
+  "tooltipFormatBulletList": "Liste à puces",
+  "tooltipFormatH2": "En-tête niveau 2",
+  "tooltipFormatH3": "En-tête niveau 3",
+  "tooltipFormatItalic": "Italique (⌘I)",
+  "tooltipFormatNumberedList": "Liste numérotée",
+  "tooltipInsertLink": "Insérer un lien",
+  "formatBold": "Mettre en gras",
+  "formatBulletList": "Mettre en liste à puces",
+  "formatH2": "Mettre en en-tête niveau 2",
+  "formatH3": "Mettre en en-tête niveau 3",
+  "formatItalic": "Mettre en italique",
+  "formatNumberedList": "Mettre en liste numérotée",
+  "insertLink": "Insérer un lien"
+}
