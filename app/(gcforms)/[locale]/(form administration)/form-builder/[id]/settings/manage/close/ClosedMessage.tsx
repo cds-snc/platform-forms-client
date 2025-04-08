@@ -20,7 +20,7 @@ type ClosedMessageProps = {
 };
 
 export const ClosedMessage = ({ valid, closedDetails, setClosedDetails }: ClosedMessageProps) => {
-  const { t } = useTranslation("form-builder");
+  const { t, i18n } = useTranslation("form-builder");
   const hasHydrated = useRehydrate();
 
   if (!hasHydrated) {
@@ -63,7 +63,8 @@ export const ClosedMessage = ({ valid, closedDetails, setClosedDetails }: Closed
           </LanguageLabel>
           <Editor
             id="closed-en"
-            locale="en"
+            locale={i18n.language}
+            contentLocale="en"
             content={closedDetails && closedDetails.messageEn ? closedDetails.messageEn : ""}
             onChange={(value: string) => {
               setClosedDetails({ ...closedDetails, messageEn: value });
@@ -81,7 +82,8 @@ export const ClosedMessage = ({ valid, closedDetails, setClosedDetails }: Closed
           </LanguageLabel>
           <Editor
             id="closed-fr"
-            locale="fr"
+            locale={i18n.language}
+            contentLocale="fr"
             content={closedDetails && closedDetails.messageFr ? closedDetails.messageFr : ""}
             onChange={(value: string) => setClosedDetails({ ...closedDetails, messageFr: value })}
           />

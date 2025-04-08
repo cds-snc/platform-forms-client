@@ -31,6 +31,7 @@ interface EditorProps {
   ariaLabel?: string;
   ariaDescribedBy?: string;
   locale?: string;
+  contentLocale?: string;
 
   onChange?(...args: unknown[]): unknown;
 }
@@ -43,12 +44,15 @@ export const Editor = ({
   ariaDescribedBy = "AriaDescribedBy",
   onChange,
   locale = "en",
+  contentLocale = "en",
 }: EditorProps) => {
   if (!translations[locale as Language]) {
-    // If the locale is not found, default to English
-    // should we throw exception?
+    // eslint-disable-next-line no-console
+    console.warn(`The locale "${locale}" is not supported. Defaulting to "en".`);
     locale = "en";
   }
+
+  contentLocale = contentLocale || locale;
 
   const [floatingAnchorElem, setFloatingAnchorElem] = useState<HTMLDivElement | null>(null);
   const [isLinkEditMode, setIsLinkEditMode] = useState<boolean>(false);
@@ -77,7 +81,11 @@ export const Editor = ({
 
           <RichTextPlugin
             contentEditable={
-              <div className="gc-editor-container" ref={onRef}>
+              <div
+                className="gc-editor-container"
+                ref={onRef}
+                {...(contentLocale && { lang: contentLocale })}
+              >
                 <ContentEditable
                   placeholder={""}
                   id={editorId}

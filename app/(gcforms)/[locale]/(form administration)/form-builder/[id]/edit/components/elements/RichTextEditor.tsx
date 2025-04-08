@@ -13,6 +13,7 @@ const _debounced = debounce((updater) => {
 export const RichTextEditor = ({
   path,
   content,
+  lang,
   ariaLabel,
   ariaDescribedBy,
 }: {
@@ -45,6 +46,7 @@ export const RichTextEditor = ({
     <div className="gc-formview w-full rounded bg-white">
       <Editor
         locale={i18n.language}
+        contentLocale={lang}
         content={value}
         onChange={updateValue}
         ariaLabel={ariaLabel || t("richTextEditor")}
