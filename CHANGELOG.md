@@ -5,6 +5,106 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.38.2](https://github.com/cds-snc/platform-forms-client/compare/v3.38.1...v3.38.2) (2025-04-08)
+
+
+### Miscellaneous Chores
+
+* Add SaveAndResume to non admin ([#5380](https://github.com/cds-snc/platform-forms-client/issues/5380)) ([bc08314](https://github.com/cds-snc/platform-forms-client/commit/bc08314ee6bc95a86d88aa721fe88fb57234fffc))
+
+## [3.38.1](https://github.com/cds-snc/platform-forms-client/compare/v3.38.0...v3.38.1) (2025-04-08)
+
+
+### Bug Fixes
+
+* adds a loading indicator for initial step of submitting a form ([#5364](https://github.com/cds-snc/platform-forms-client/issues/5364)) ([1e5e41a](https://github.com/cds-snc/platform-forms-client/commit/1e5e41aab765f7d45b693adfb595e89859ed586c))
+
+
+### Miscellaneous Chores
+
+* fix hover style for get a copy button ([#5379](https://github.com/cds-snc/platform-forms-client/issues/5379)) ([0abd207](https://github.com/cds-snc/platform-forms-client/commit/0abd207c05eec128c8a7dbd776c873fb127b57f6))
+* session language toggle ([#5370](https://github.com/cds-snc/platform-forms-client/issues/5370)) ([8dd4812](https://github.com/cds-snc/platform-forms-client/commit/8dd481292f7eb4add7a3da123a301946c3a32f37))
+
+## [3.38.0](https://github.com/cds-snc/platform-forms-client/compare/v3.37.0...v3.38.0) (2025-04-08)
+
+
+### Features
+
+* plug Rainbow deployments in Production release pipeline ([#5344](https://github.com/cds-snc/platform-forms-client/issues/5344)) ([d3bbf4f](https://github.com/cds-snc/platform-forms-client/commit/d3bbf4f378d744336c81da6baa950549e88032eb))
+
+## [3.37.0](https://github.com/cds-snc/platform-forms-client/compare/v3.36.0...v3.37.0) (2025-04-07)
+
+
+### Features
+
+* add Rainbow deployment cleanup and application deployment rollback scripts ([#5336](https://github.com/cds-snc/platform-forms-client/issues/5336)) ([03e1820](https://github.com/cds-snc/platform-forms-client/commit/03e1820f1ebe74ae94364cf19e40ddc09e1d4657))
+* Add sort order to dropdowns ([#5320](https://github.com/cds-snc/platform-forms-client/issues/5320)) ([0b43877](https://github.com/cds-snc/platform-forms-client/commit/0b4387769fb0f9da6fe44d756799a7b8c2dca4e1))
+* build Docker container using NextJS in standalone mode ([#5186](https://github.com/cds-snc/platform-forms-client/issues/5186)) ([6f0c307](https://github.com/cds-snc/platform-forms-client/commit/6f0c307b5d46e595e16ed6d7d5c3a999916a2b30))
+* client logger ([#5284](https://github.com/cds-snc/platform-forms-client/issues/5284)) ([8ce3b64](https://github.com/cds-snc/platform-forms-client/commit/8ce3b64cfd8222251c7ea75e15ff24f178811dbf))
+* Prisma Migrations in GitHub Action ([#5316](https://github.com/cds-snc/platform-forms-client/issues/5316)) ([fbc4649](https://github.com/cds-snc/platform-forms-client/commit/fbc46497ec83947a3d1262f872c20232a6d7974c))
+* rainbow deployment ([#5161](https://github.com/cds-snc/platform-forms-client/issues/5161)) ([a7f959d](https://github.com/cds-snc/platform-forms-client/commit/a7f959dd2d5642681bfe44b54bcaa073661f121b))
+* rainbow lambda to write logs in existing Forms CloudWatch log group ([#5285](https://github.com/cds-snc/platform-forms-client/issues/5285)) ([a416d23](https://github.com/cds-snc/platform-forms-client/commit/a416d23953d2f5e5217e6e7057bc9fce03c33757))
+* save and resume mobile drawer ([#5242](https://github.com/cds-snc/platform-forms-client/issues/5242)) ([6a56f31](https://github.com/cds-snc/platform-forms-client/commit/6a56f315b50db7e41296b070f54de9bebcc633c7))
+
+
+### Bug Fixes
+
+* adds a check to ignore deleted forms for many template operations ([#5339](https://github.com/cds-snc/platform-forms-client/issues/5339)) ([32b0ac9](https://github.com/cds-snc/platform-forms-client/commit/32b0ac960875283006bd2551198a7e9cf20b54b6))
+* copy all /src directories and files for rainbow container since the base container already has standalone build output in its /src directory ([#5274](https://github.com/cds-snc/platform-forms-client/issues/5274)) ([7db244e](https://github.com/cds-snc/platform-forms-client/commit/7db244ee8901582fb8bcd946c5d8b6906f102f73))
+* **deps:** update all patch dependencies ([#5318](https://github.com/cds-snc/platform-forms-client/issues/5318)) ([8b91710](https://github.com/cds-snc/platform-forms-client/commit/8b9171050f749784f1e389e867dbcabdebdfe5c6))
+* **deps:** update dependency axios to v1.8.3 ([#5269](https://github.com/cds-snc/platform-forms-client/issues/5269)) ([993a757](https://github.com/cds-snc/platform-forms-client/commit/993a757e276ad35601e0877218e63d9941eb52b4))
+* **deps:** update dependency next to v15.2.3 [security] ([#5272](https://github.com/cds-snc/platform-forms-client/issues/5272)) ([0c3a001](https://github.com/cds-snc/platform-forms-client/commit/0c3a001a1b7ac6428e8f34917efd1a2bef08d162))
+* detection of rainbow deployments with a priority greater than 2 ([#5348](https://github.com/cds-snc/platform-forms-client/issues/5348)) ([e7d8558](https://github.com/cds-snc/platform-forms-client/commit/e7d8558c90617f93e7ce13ff1668edcb48f62bd3))
+* disable Rainbow deployment (temporarily) ([#5290](https://github.com/cds-snc/platform-forms-client/issues/5290)) ([4464498](https://github.com/cds-snc/platform-forms-client/commit/44644985945570ff6f9351e5db014901074d382c))
+* extra space in Dockerfile CMD instruction ([#5273](https://github.com/cds-snc/platform-forms-client/issues/5273)) ([64521a6](https://github.com/cds-snc/platform-forms-client/commit/64521a69669d85a0a396eb75c4268210b3a1c807))
+* extra space in log ([#5308](https://github.com/cds-snc/platform-forms-client/issues/5308)) ([70abdb2](https://github.com/cds-snc/platform-forms-client/commit/70abdb25c65a6597e8e23b747475fa0496356151))
+* missing translation in admin settings ([#5365](https://github.com/cds-snc/platform-forms-client/issues/5365)) ([16a9930](https://github.com/cds-snc/platform-forms-client/commit/16a9930d3ff6fd84ed53936d6ad963f21fc1196f))
+* rainbow deployment script should select ECR image identifier that comes just before the latest one ([#5310](https://github.com/cds-snc/platform-forms-client/issues/5310)) ([2115da5](https://github.com/cds-snc/platform-forms-client/commit/2115da54a6aff177eb24e199d8258f4627e73c2b))
+* Updates captcha fail page secondary title to H2 ([#5369](https://github.com/cds-snc/platform-forms-client/issues/5369)) ([31db7ae](https://github.com/cds-snc/platform-forms-client/commit/31db7ae364ccd42e1c3d342c50a32135e7f8dde6))
+
+
+### Miscellaneous Chores
+
+* add CHANGELOG.md files for our packages ([#5374](https://github.com/cds-snc/platform-forms-client/issues/5374)) ([8d8ac5a](https://github.com/cds-snc/platform-forms-client/commit/8d8ac5a83c67168d9f45d6561593afd358060d36))
+* add icon for load answer ([#5350](https://github.com/cds-snc/platform-forms-client/issues/5350)) ([f028ce3](https://github.com/cds-snc/platform-forms-client/commit/f028ce3e11f60a9e386165a2af45d64bc29dd512))
+* Add Supreme Court of Canada branding ([#5331](https://github.com/cds-snc/platform-forms-client/issues/5331)) ([153da4e](https://github.com/cds-snc/platform-forms-client/commit/153da4e9b3eb529d08914e1522866a9c0483377c))
+* Adds a comment with a link to the client error codes doc ([#5359](https://github.com/cds-snc/platform-forms-client/issues/5359)) ([e50f714](https://github.com/cds-snc/platform-forms-client/commit/e50f714d1caa6bd001e7cf1fb504795a76c8c777))
+* adds debug info for the element id ([#5375](https://github.com/cds-snc/platform-forms-client/issues/5375)) ([b5790a5](https://github.com/cds-snc/platform-forms-client/commit/b5790a5c00246218d129d37986048417ca900fbb))
+* content tweak to indicate to form builders that users can download submission as well as answers in progress ([#5337](https://github.com/cds-snc/platform-forms-client/issues/5337)) ([1770df9](https://github.com/cds-snc/platform-forms-client/commit/1770df9b7ca2b1e1af5bb38c093c628f957780e5))
+* content updates for resume form ([#5247](https://github.com/cds-snc/platform-forms-client/issues/5247)) ([e4a9d31](https://github.com/cds-snc/platform-forms-client/commit/e4a9d31070545f2ea7c711380b5f083499e81e30))
+* **deps:** lock file maintenance ([#5271](https://github.com/cds-snc/platform-forms-client/issues/5271)) ([17f520e](https://github.com/cds-snc/platform-forms-client/commit/17f520e46cecae8c74838b784275c192073df768))
+* **deps:** update all non-major docker images ([#5268](https://github.com/cds-snc/platform-forms-client/issues/5268)) ([bfa7a0c](https://github.com/cds-snc/platform-forms-client/commit/bfa7a0c459acc1097b241642b354fc7250eb7230))
+* **deps:** update all non-major github action dependencies ([#5270](https://github.com/cds-snc/platform-forms-client/issues/5270)) ([bf4fe81](https://github.com/cds-snc/platform-forms-client/commit/bf4fe81b2dff41f7b19eae3dd62574e444d138f9))
+* **deps:** update all non-major github action dependencies ([#5360](https://github.com/cds-snc/platform-forms-client/issues/5360)) ([2a68392](https://github.com/cds-snc/platform-forms-client/commit/2a68392ec29b1058d1b45fa5b43f2e56412ba212))
+* Fix drawer button styling ([#5332](https://github.com/cds-snc/platform-forms-client/issues/5332)) ([38d4bd1](https://github.com/cds-snc/platform-forms-client/commit/38d4bd1c0c552cd8da4bc2f061126cf346d5bb2b))
+* fix text for save response download ([#5343](https://github.com/cds-snc/platform-forms-client/issues/5343)) ([5d2f4e0](https://github.com/cds-snc/platform-forms-client/commit/5d2f4e0279be0af1b06b6f1beb443a8c81a3516d))
+* import unstyled toast ([#5286](https://github.com/cds-snc/platform-forms-client/issues/5286)) ([b89a4dd](https://github.com/cds-snc/platform-forms-client/commit/b89a4dd4101c0cb1012157d49a1e6c83a7ee9734))
+* minor content edit ([#5353](https://github.com/cds-snc/platform-forms-client/issues/5353)) ([31068c3](https://github.com/cds-snc/platform-forms-client/commit/31068c324d42b477b58e21e4749fb80c61b9efab))
+* Move flag initialization to internal nextjs startup ([#5309](https://github.com/cds-snc/platform-forms-client/issues/5309)) ([b9c919e](https://github.com/cds-snc/platform-forms-client/commit/b9c919eaa237a3f125c708ef13c2ac6d4cf774d4))
+* package bumps for React + Next ([#5333](https://github.com/cds-snc/platform-forms-client/issues/5333)) ([88f315f](https://github.com/cds-snc/platform-forms-client/commit/88f315ffe7af27cf814ad8c106275d11c39e2554))
+* prisma production action ([#5352](https://github.com/cds-snc/platform-forms-client/issues/5352)) ([e36e8ba](https://github.com/cds-snc/platform-forms-client/commit/e36e8bacbb72e0becb06deb8c917f82ee108047b))
+* re enable Rainbow deployment ([#5306](https://github.com/cds-snc/platform-forms-client/issues/5306)) ([be24ed7](https://github.com/cds-snc/platform-forms-client/commit/be24ed774ba3226e0b5ee9823eaa7dd3a37575c9))
+* remove extra space in log ([#5311](https://github.com/cds-snc/platform-forms-client/issues/5311)) ([c2a1448](https://github.com/cds-snc/platform-forms-client/commit/c2a1448936e75d607832d6e5158e32b2dc28d41c))
+* remove Localstack support for Postgres connector ([#5288](https://github.com/cds-snc/platform-forms-client/issues/5288)) ([9702129](https://github.com/cds-snc/platform-forms-client/commit/9702129990431e18858c30d5dc3f998a1358c083))
+* remove Localstack support in the web app code ([#5287](https://github.com/cds-snc/platform-forms-client/issues/5287)) ([1c3d9b3](https://github.com/cds-snc/platform-forms-client/commit/1c3d9b3096bd96df898b018e4981164168b0a8f4))
+* remove NEXT_SERVER_ACTIONS_ENCRYPTION_KEY ([#5313](https://github.com/cds-snc/platform-forms-client/issues/5313)) ([6d81d7d](https://github.com/cds-snc/platform-forms-client/commit/6d81d7d6f591e51cdd2d05df270e45077177f4d5))
+* responses fix heading margin ([#5342](https://github.com/cds-snc/platform-forms-client/issues/5342)) ([b9d3574](https://github.com/cds-snc/platform-forms-client/commit/b9d35746098b4225f0769b49458cced99d4834c3))
+* try scroll into view ([#5349](https://github.com/cds-snc/platform-forms-client/issues/5349)) ([5cfcd5e](https://github.com/cds-snc/platform-forms-client/commit/5cfcd5ed6ee34f34142fe93d741083ef083e24ff))
+* update date output for download progress + confirm HTML ([#5330](https://github.com/cds-snc/platform-forms-client/issues/5330)) ([8f0d320](https://github.com/cds-snc/platform-forms-client/commit/8f0d320916368d723183960e1f66303e49ab430f))
+* update download button ([#5354](https://github.com/cds-snc/platform-forms-client/issues/5354)) ([ff38040](https://github.com/cds-snc/platform-forms-client/commit/ff380404a54b04b678d55a968025e31485b78a84))
+* update next & back buttons for &lt; laptop width ([#5367](https://github.com/cds-snc/platform-forms-client/issues/5367)) ([e58d746](https://github.com/cds-snc/platform-forms-client/commit/e58d7464df199c4f1c804de39746af1a13719ce1))
+* update save and resume toggle to default to on ([#5329](https://github.com/cds-snc/platform-forms-client/issues/5329)) ([c831610](https://github.com/cds-snc/platform-forms-client/commit/c83161084de0892a333056f2dba767ba22f0b5e3))
+* update styles for progress html ([#5275](https://github.com/cds-snc/platform-forms-client/issues/5275)) ([d91b587](https://github.com/cds-snc/platform-forms-client/commit/d91b5876a94227c29be2d981620c2ee9a58122f4))
+* update styles for resume page ([#5346](https://github.com/cds-snc/platform-forms-client/issues/5346)) ([c9ec48f](https://github.com/cds-snc/platform-forms-client/commit/c9ec48f60ca3af2bf809dc3894031c8a84991a75))
+* update swr ([#5335](https://github.com/cds-snc/platform-forms-client/issues/5335)) ([04d5e08](https://github.com/cds-snc/platform-forms-client/commit/04d5e0836159e6f17b68787b5ce16c0dd16dbc9f))
+* update Vitest ([#5319](https://github.com/cds-snc/platform-forms-client/issues/5319)) ([974eac1](https://github.com/cds-snc/platform-forms-client/commit/974eac1461bd6935e8b47a63a49ec4f62f9f8cab))
+* use new Github secrets for Rainbow deployments ([#5358](https://github.com/cds-snc/platform-forms-client/issues/5358)) ([c30d890](https://github.com/cds-snc/platform-forms-client/commit/c30d8907a43abf5ecbc0749eab8d2f590f8c7a6f))
+
+
+### Code Refactoring
+
+* rework submission lambda invoke implementation ([#5248](https://github.com/cds-snc/platform-forms-client/issues/5248)) ([23fd032](https://github.com/cds-snc/platform-forms-client/commit/23fd03222271181e945b7984dcfb342ba9f55217))
+
 ## [3.36.0](https://github.com/cds-snc/platform-forms-client/compare/v3.35.2...v3.36.0) (2025-03-20)
 
 

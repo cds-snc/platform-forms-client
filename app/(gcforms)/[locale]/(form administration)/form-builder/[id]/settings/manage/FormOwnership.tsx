@@ -75,7 +75,7 @@ export const FormOwnership = ({
   return (
     <>
       <div className="mb-10" data-testid="form-ownership">
-        <h2>{t("Manage ownership")}</h2>
+        <h2>{t("title")}</h2>
         {message && message}
         <p className="mb-4">{t("assignUsersToTemplate")}</p>
         <p className="mb-2 font-bold">{t("enterOwnersEmail")} </p>
