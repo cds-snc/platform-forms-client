@@ -5,6 +5,25 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.38.3](https://github.com/cds-snc/platform-forms-client/compare/v3.38.2...v3.38.3) (2025-04-09)
+
+
+### Bug Fixes
+
+* remove Redis disconnect function call (tentative fix) ([#5385](https://github.com/cds-snc/platform-forms-client/issues/5385)) ([486d4fe](https://github.com/cds-snc/platform-forms-client/commit/486d4fe0afebe23f8c43552c8386c7a35192a5f1))
+
+
+### Miscellaneous Chores
+
+* **deps:** lock file maintenance ([#5361](https://github.com/cds-snc/platform-forms-client/issues/5361)) ([9930a37](https://github.com/cds-snc/platform-forms-client/commit/9930a373fc2258d1559676b123ca64bdad25af9f))
+
+## [3.38.2](https://github.com/cds-snc/platform-forms-client/compare/v3.38.1...v3.38.2) (2025-04-08)
+
+
+### Miscellaneous Chores
+
+* Add SaveAndResume to non admin ([#5380](https://github.com/cds-snc/platform-forms-client/issues/5380)) ([bc08314](https://github.com/cds-snc/platform-forms-client/commit/bc08314ee6bc95a86d88aa721fe88fb57234fffc))
+
 ## [3.38.1](https://github.com/cds-snc/platform-forms-client/compare/v3.38.0...v3.38.1) (2025-04-08)
 
 
