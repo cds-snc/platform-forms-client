@@ -1,0 +1,450 @@
+/* Import Tailwind CSS */
+@import "tailwindcss";
+
+/* Import GCDS tokens */
+@import "@cdssnc/gcds-tokens/build/web/css/tokens.css";
+
+@layer base {
+  *,
+  ::after,
+  ::before,
+  ::backdrop,
+  ::file-selector-button {
+    /* Default border colour */
+    border-color: var(--gcds-border-default, currentColor);
+  }
+
+  /* Prevent mobile overflow */
+  body,
+  html {
+    overflow-x: hidden;
+    width: 100%;
+  }
+
+  /* ----- Default GCDS typography styles ----- */
+  body {
+    font: var(--gcds-font-text);
+  }
+
+  @media only screen and (width < 48em) {
+    body {
+      font: var(--gcds-font-text-mobile);
+    }
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    text-wrap: balance;
+    margin-block-end: var(--gcds-heading-spacing-300);
+  }
+
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    margin-block-start: var(--gcds-heading-spacing-600);
+  }
+
+  h1 {
+    max-width: var(--gcds-heading-character-limit-h1);
+    font: var(--gcds-heading-h1-desktop);
+    margin-block-start: var(--gcds-heading-spacing-0);
+  }
+
+  h1:after {
+    display: block;
+    content: "";
+    width: var(--gcds-heading-h1-border-width);
+    margin-block-start: var(--gcds-heading-h1-border-margin);
+    height: var(--gcds-heading-h1-border-height);
+    background-color: var(--gcds-heading-h1-border-background);
+  }
+
+  @media only screen and (width < 48em) {
+    h1 {
+      font: var(--gcds-heading-h1-mobile);
+    }
+  }
+
+  h2 {
+    max-width: var(--gcds-heading-character-limit-h2);
+    font: var(--gcds-heading-h2-desktop);
+  }
+
+  @media only screen and (width < 48em) {
+    h2 {
+      font: var(--gcds-heading-h2-mobile);
+    }
+  }
+
+  h3 {
+    max-width: var(--gcds-heading-character-limit-h3);
+    font: var(--gcds-heading-h3-desktop);
+  }
+
+  @media only screen and (width < 48em) {
+    h3 {
+      font: var(--gcds-heading-h3-mobile);
+    }
+  }
+
+  h4 {
+    max-width: var(--gcds-heading-character-limit-h4);
+    font: var(--gcds-heading-h4-desktop);
+  }
+
+  @media only screen and (width < 48em) {
+    h4 {
+      font: var(--gcds-heading-h4-mobile);
+    }
+  }
+
+  h5 {
+    max-width: var(--gcds-heading-character-limit-h5);
+    font: var(--gcds-heading-h5-desktop);
+  }
+
+  @media only screen and (width < 48em) {
+    h5 {
+      font: var(--gcds-heading-h5-mobile);
+    }
+  }
+
+  h6 {
+    max-width: var(--gcds-heading-character-limit-h6);
+    font: var(--gcds-heading-h6-desktop);
+  }
+
+  @media only screen and (width < 48em) {
+    h6 {
+      font: var(--gcds-heading-h6-mobile);
+    }
+  }
+
+  p {
+    max-width: var(--gcds-text-character-limit);
+    font: var(--gcds-font-text);
+    margin-block-start: var(--gcds-heading-spacing-0);
+    margin-block-end: var(--gcds-heading-spacing-300);
+  }
+
+  @media only screen and (width < 48em) {
+    p {
+      font: var(--gcds-font-text-mobile);
+    }
+  }
+
+  /* Default font size */
+  .text {
+    font-size: var(--gcds-font-sizes-text);
+  }
+
+  /* ----- Custom class for full width background colour ----- */
+  .bg-full-width {
+    position: relative;
+    width: calc(100% + var(--gcds-spacing-225));
+    margin-inline: calc(-1 * var(--gcds-spacing-100));
+    padding-inline: var(--gcds-spacing-100);
+
+    &:before,
+    &:after {
+      position: absolute;
+      top: 0;
+      width: 100vw;
+      height: 100%;
+      content: '';
+      background-color: inherit;
+    }
+
+    &:before {
+      left: calc(-100vw + 1px);
+    }
+
+    &:after {
+      right: calc(-100vw + 1px);
+    }
+  }
+
+  /* ----- Custom font classes ----- */
+  /* Custom font classes defining font weight, font size/line height and font family in one. */
+  .font-h1 {
+    font: var(--gcds-heading-h1-desktop);
+
+    @media only screen and (width < 48em) {
+      font: var(--gcds-heading-h1-mobile);
+    }
+  }
+
+  .font-h2 {
+    font: var(--gcds-heading-h2-desktop);
+
+    @media only screen and (width < 48em) {
+      font: var(--gcds-heading-h2-mobile);
+    }
+  }
+
+  .font-h3 {
+    font: var(--gcds-heading-h3-desktop);
+
+    @media only screen and (width < 48em) {
+      font: var(--gcds-heading-h3-mobile);
+    }
+  }
+
+  .font-h4 {
+    font: var(--gcds-heading-h4-desktop);
+
+    @media only screen and (width < 48em) {
+      font: var(--gcds-heading-h4-mobile);
+    }
+  }
+
+  .font-h5 {
+    font: var(--gcds-heading-h5-desktop);
+
+    @media only screen and (width < 48em) {
+      font: var(--gcds-heading-h5-mobile);
+    }
+  }
+
+  .font-h6 {
+    font: var(--gcds-heading-h6-desktop);
+
+    @media only screen and (width < 48em) {
+      font: var(--gcds-heading-h6-mobile);
+    }
+  }
+
+  .font-text {
+    font: var(--gcds-font-text);
+
+    @media only screen and (width < 48em) {
+      font: var(--gcds-font-text-mobile);
+    }
+  }
+
+  .font-text-small {
+    font: var(--gcds-font-text-small);
+
+    @media only screen and (width < 48em) {
+      font: var(--gcds-font-text-small-mobile);
+    }
+  }
+
+  /* ----- Custom focus class ----- */
+  .focus:focus {
+    background-color: var(--gcds-link-focus-background);
+    color: var(--gcds-link-focus-text) !important;
+    border-radius: var(--gcds-link-focus-border-radius);
+    box-shadow: var(--gcds-link-focus-box-shadow);
+    outline: var(--gcds-link-focus-outline-width) solid var(--gcds-link-focus-background);
+    outline-offset: var(--gcds-link-focus-outline-offset);
+    text-decoration: none;
+  }
+
+  /* ----- Custom link colours ----- */
+
+  /* Default link colour for links on a white background. */
+  .link-default {
+    color: var(--gcds-link-default);
+  }
+
+  /* Hover link colour for links on a white background. */
+  .link-hover:hover {
+    color: var(--gcds-link-hover);
+  }
+
+  /* Main light link colour for links on darker backgrounds. */
+  .link-light {
+    color: var(--gcds-link-light);
+  }
+
+  /* Visited link color. */
+  .link-visited:visited {
+    color: var(--gcds-link-visited);
+  }
+}
+
+@theme {
+  /* ----- Colours ----- */
+
+  /* Limit Tailwind colours to GCDS colours */
+  --color-*: initial;
+
+  /* Colour: Blue */
+  --color-blue-100: var(--gcds-color-blue-100);
+  --color-blue-500: var(--gcds-color-blue-500);
+  --color-blue-700: var(--gcds-color-blue-700);
+  --color-blue-750: var(--gcds-color-blue-750);
+  --color-blue-800: var(--gcds-color-blue-800);
+  --color-blue-850: var(--gcds-color-blue-850);  /* Focus background colour. */
+  --color-blue-900: var(--gcds-color-blue-900);  /* Primary colour. */
+
+  /* Colour: Grayscale */
+  --color-white: var(--gcds-color-grayscale-0);
+  --color-gray-50: var(--gcds-color-grayscale-50);
+  --color-gray-100: var(--gcds-color-grayscale-100);
+  --color-gray-300: var(--gcds-color-grayscale-300);
+  --color-gray-500: var(--gcds-color-grayscale-500);
+  --color-gray-700: var(--gcds-color-grayscale-700);
+  --color-gray-800: var(--gcds-color-grayscale-800);  /* Secondary text colour. */
+  --color-gray-900: var(--gcds-color-grayscale-900);  /* Primary text colour. */
+  --color-black: var(--gcds-color-grayscale-1000);
+
+  /* Colour: Green */
+  --color-green-100: var(--gcds-color-green-100);
+  --color-green-500: var(--gcds-color-green-500);
+  --color-green-700: var(--gcds-color-green-700);
+  --color-green-800: var(--gcds-color-green-800);
+
+  /* Colour: Orange */
+  --color-orange-700: var(--gcds-color-orange-700);
+
+  /* Colour: Purple */
+  --color-purple-700: var(--gcds-color-purple-700);
+
+  /* Colour: Red */
+  --color-red-100: var(--gcds-color-red-100);
+  --color-red-500: var(--gcds-color-red-500);
+  --color-red-700: var(--gcds-color-red-700);
+  --color-red-900: var(--gcds-color-red-900);
+  --color-red-flag: var(--gcds-color-red-flag);
+
+  /* Colour: Yellow */
+  --color-yellow-100: var(--gcds-color-yellow-100);
+  --color-yellow-500: var(--gcds-color-yellow-500);
+
+  /* Colour: Others */
+  --color-current: currentColor;
+  --color-transparent: transparent;
+
+  /* ----- Font family ----- */
+  --font-sans: var(--gcds-font-families-body);
+  --font-mono: var(--gcds-font-families-monospace);
+  --font-body: var(--gcds-font-families-body);
+  --font-heading: var(--gcds-font-families-heading);
+
+  /* ----- Font size ----- */
+  --text-small-mobile: var(--gcds-font-sizes-text-small-mobile);
+  --text-small: var(--gcds-font-sizes-text-small);
+  --text-text-mobile: var(--gcds-font-sizes-text-mobile);
+  --text-text: var(--gcds-font-sizes-text);
+  --text-h6-mobile: var(--gcds-font-sizes-h6-mobile);
+  --text-h6: var(--gcds-font-sizes-h6);
+  --text-h5-mobile: var(--gcds-font-sizes-h5-mobile);
+  --text-h5: var(--gcds-font-sizes-h5);
+  --text-h4-mobile: var(--gcds-font-sizes-h4-mobile);
+  --text-h4: var(--gcds-font-sizes-h4);
+  --text-h3-mobile: var(--gcds-font-sizes-h3-mobile);
+  --text-h3: var(--gcds-font-sizes-h3);
+  --text-h2-mobile: var(--gcds-font-sizes-h2-mobile);
+  --text-h2: var(--gcds-font-sizes-h2);
+  --text-h1-mobile: var(--gcds-font-sizes-h1-mobile);
+  --text-h1: var(--gcds-font-sizes-h1);
+
+  /* ----- Font weight ----- */
+  --font-weight-light: var(--gcds-font-weights-light);
+  --font-weight-normal: var(--gcds-font-weights-regular);
+  --font-weight-medium: var(--gcds-font-weights-medium);
+  --font-weight-semibold: var(--gcds-font-weights-semibold);
+  --font-weight-bold: var(--gcds-font-weights-bold);
+
+  /* ----- Line height ----- */
+  --leading-text-small-mobile: var(--gcds-line-heights-text-small-mobile);
+  --leading-text-small: var(--gcds-line-heights-text-small);
+  --leading-text-mobile: var(--gcds-line-heights-text-mobile);
+  --leading-text: var(--gcds-line-heights-text);
+  --leading-h6-mobile: var(--gcds-line-heights-h6-mobile);
+  --leading-h6: var(--gcds-line-heights-h6);
+  --leading-h5-mobile: var(--gcds-line-heights-h5-mobile);
+  --leading-h5: var(--gcds-line-heights-h5);
+  --leading-h4-mobile: var(--gcds-line-heights-h4-mobile);
+  --leading-h4: var(--gcds-line-heights-h4);
+  --leading-h3-mobile: var(--gcds-line-heights-h3-mobile);
+  --leading-h3: var(--gcds-line-heights-h3);
+  --leading-h2-mobile: var(--gcds-line-heights-h2-mobile);
+  --leading-h2: var(--gcds-line-heights-h2);
+  --leading-h1-mobile: var(--gcds-line-heights-h1-mobile);
+  --leading-h1: var(--gcds-line-heights-h1);
+
+  /* ----- Screens ----- */
+  --breakpoint-xs: 30em;
+  --breakpoint-sm: 40em;
+  --breakpoint-md: 48em;
+  --breakpoint-lg: 64em;
+  --breakpoint-xl: 80em;
+
+  /* ----- Spacing ----- */
+  /* Define all available spacing options (margin, padding, etc.) */
+  --spacing-0: var(--gcds-spacing-0);
+  --spacing-25: var(--gcds-spacing-25);
+  --spacing-50: var(--gcds-spacing-50);
+  --spacing-75: var(--gcds-spacing-75);
+  --spacing-100: var(--gcds-spacing-100);
+  --spacing-125: var(--gcds-spacing-125);
+  --spacing-150: var(--gcds-spacing-150);
+  --spacing-175: var(--gcds-spacing-175);
+  --spacing-200: var(--gcds-spacing-200);
+  --spacing-225: var(--gcds-spacing-225);
+  --spacing-250: var(--gcds-spacing-250);
+  --spacing-300: var(--gcds-spacing-300);
+  --spacing-350: var(--gcds-spacing-350);
+  --spacing-400: var(--gcds-spacing-400);
+  --spacing-450: var(--gcds-spacing-450);
+  --spacing-500: var(--gcds-spacing-500);
+  --spacing-550: var(--gcds-spacing-550);
+  --spacing-600: var(--gcds-spacing-600);
+  --spacing-650: var(--gcds-spacing-650);
+  --spacing-700: var(--gcds-spacing-700);
+  --spacing-750: var(--gcds-spacing-750);
+  --spacing-800: var(--gcds-spacing-800);
+  --spacing-850: var(--gcds-spacing-850);
+  --spacing-900: var(--gcds-spacing-900);
+  --spacing-950: var(--gcds-spacing-950);
+  --spacing-1000: var(--gcds-spacing-1000);
+  --spacing-1050: var(--gcds-spacing-1050);
+  --spacing-1100: var(--gcds-spacing-1100);
+  --spacing-1150: var(--gcds-spacing-1150);
+  --spacing-1200: var(--gcds-spacing-1200);
+  --spacing-1250: var(--gcds-spacing-1250);
+}
+
+@theme extend {
+  /* ----- Background colours ----- */
+  --background-color-dark: var(--gcds-bg-dark); /* Main dark background colour. */
+  --background-color-danger: var(--gcds-danger-background); /* Background colour for background emphasis on a destructive action or critical feedback. */
+  --background-color-focus: var(--gcds-focus-background); /* Background colour only for focus on interactive elements. */
+  --background-color-light: var(--gcds-bg-light); /* Light background colour (alternative to white). */
+  --background-color-primary: var(--gcds-bg-primary); /* Highlight background colour. */
+  --background-color-white: var(--gcds-bg-white); /* Main background colour. */
+
+  /* ----- Border radius ----- */
+  --radius-sm: var(--gcds-border-radius-sm);
+  --radius-md: var(--gcds-border-radius-md);
+  --radius-lg: var(--gcds-border-radius-lg);
+  --radius-xl: var(--gcds-border-radius-xl);
+
+  /* ----- Border width ----- */
+  --border-width-sm: var(--gcds-border-width-sm);
+  --border-width-md: var(--gcds-border-width-md);
+  --border-width-lg: var(--gcds-border-width-lg);
+  --border-width-xl: var(--gcds-border-width-xl);
+
+  /* ----- Container width - matches GCDS container sizes ----- */
+  --container-xs: var(--gcds-container-xs);
+  --container-sm: var(--gcds-container-sm);
+  --container-md: var(--gcds-container-md);
+  --container-lg: var(--gcds-container-lg);
+  --container-xl: var(--gcds-container-xl);
+  --container-full: var(--gcds-container-full);
+
+  /* ----- Text colours ----- */
+  --text-color-light: var(--gcds-text-light); /* Main light text colour. */
+  --text-color-primary: var(--gcds-text-primary); /* Main text colour. */
+  --text-color-secondary: var(--gcds-text-secondary); /* Contrast text colour (alternative to primary). */
+}
