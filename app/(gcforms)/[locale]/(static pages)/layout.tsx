@@ -12,7 +12,9 @@ export default async function Layout({ children }: { children: React.ReactNode }
         </Fip>
       </header>
       <div id="page-container">
-        <main id="content">{children}</main>
+        <main id="content" className="gc-formview">
+          {children}
+        </main>
       </div>
       <Footer displayFormBuilderFooter={true} />
     </div>

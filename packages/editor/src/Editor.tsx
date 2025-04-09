@@ -34,6 +34,7 @@ interface EditorProps {
   ariaDescribedBy?: string;
   locale?: string;
   contentLocale?: string;
+  className?: string;
 
   onChange?(...args: unknown[]): unknown;
 }
@@ -47,6 +48,7 @@ export const Editor = ({
   onChange,
   locale = "en",
   contentLocale = "en",
+  className,
 }: EditorProps) => {
   contentLocale = contentLocale || locale;
 
@@ -83,6 +85,7 @@ export const Editor = ({
                 {...(contentLocale && { lang: contentLocale })}
               >
                 <ContentEditable
+                  className={className || ""}
                   placeholder={""}
                   id={editorId}
                   ariaLabel={ariaLabel}
