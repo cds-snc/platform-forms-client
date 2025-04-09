@@ -4,12 +4,10 @@ import { initReactI18next } from "react-i18next/initReactI18next";
 import { getOptions } from "./settings";
 import { getCurrentLanguage } from "./utils";
 import { cache } from "react";
-import { logMessage } from "@lib/logger";
 
 export const serverTranslation = cache(
   async (ns?: string | string[], options?: { keyPrefix?: string; lang?: string }) => {
     const i18nLang = options?.lang ?? (await getCurrentLanguage());
-    logMessage.debug(`Server translation for ${i18nLang} and ns: ${ns ?? "common"}`);
 
     const i18nextInstance = await initI18next(i18nLang, ns ?? ["common"]);
     return {
