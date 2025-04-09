@@ -48,7 +48,6 @@ export const FormCaptcha = ({
   }
 
   const onVerified = async (token: string) => {
-    // Pass the token up for use in the submit server action called by handleSubmit
     if (captchaToken) {
       captchaToken.current = token;
     }
