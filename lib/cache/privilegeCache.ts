@@ -35,7 +35,7 @@ export const privilegeDelete = async (userID: string): Promise<void> => {
     const redis = await getRedisInstance();
 
     await redis.del(deleteParameter);
-    logMessage.debug(`Deleting Cached Privileges  for ${deleteParameter}`);
+    logMessage.debug(`Deleting cached privileges for ${deleteParameter}`);
   } catch (e) {
     logMessage.error(e as Error);
     throw new Error("Could not connect to cache");
@@ -61,9 +61,11 @@ export const flushValues = async () => {
   if (!cacheAvailable) return;
   try {
     const redis = await getRedisInstance();
+
     const stream = redis.scanStream({
       match: "auth:privileges:*",
     });
+
     stream.on("data", function (keys: string[]) {
       // `keys` is an array of strings representing key names
       if (keys.length) {
@@ -74,9 +76,10 @@ export const flushValues = async () => {
         pipeline.exec();
       }
     });
+
     return new Promise<void>((resolve) =>
       stream.on("end", () => {
-        logMessage.debug("Cached Privileges have been cleared");
+        logMessage.debug("Cached privileges have been cleared");
         resolve();
       })
     );
