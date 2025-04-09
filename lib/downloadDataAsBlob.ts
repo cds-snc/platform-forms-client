@@ -12,21 +12,30 @@ declare global {
  * @param accept object ex: { "text/html": [".html"] }
  */
 export const downloadDataAsBlob = async (data: string, filename: string, accept: object) => {
+  if (!window?.showSaveFilePicker) {
+    downloadAsLink(data, filename);
+    return;
+  }
+
   try {
     await promptToSave(data, filename, accept);
   } catch (error) {
-    try {
-      const downloadLink = document.createElement("a");
-      const blob = new Blob([data], { type: "text/html" });
-      downloadLink.href = URL.createObjectURL(blob);
-      downloadLink.download = filename;
-      downloadLink.click();
-      URL.revokeObjectURL(downloadLink.href);
-    } catch (error) {
-      throw new Error("FD01 " + (error as Error).message);
-    }
+    downloadAsLink(data, filename);
   }
 };
+
+async function downloadAsLink(data: string, filename: string) {
+  try {
+    const downloadLink = document.createElement("a");
+    const blob = new Blob([data], { type: "text/html" });
+    downloadLink.href = URL.createObjectURL(blob);
+    downloadLink.download = filename;
+    downloadLink.click();
+    URL.revokeObjectURL(downloadLink.href);
+  } catch (error) {
+    throw new Error("FD01 " + (error as Error).message);
+  }
+}
 
 async function promptToSave(data: string, filename: string, accept: object) {
   try {
