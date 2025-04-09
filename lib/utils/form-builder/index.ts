@@ -219,7 +219,7 @@ export const formatDateTimeUTCFr = (timestamp: number | undefined) => {
   const parts = date.split(" ");
   const dateParts = parts[0].split("-");
   const timeParts = parts[1].split(":");
-  const formattedDate = `${dateParts[2]}/${dateParts[1]}/${dateParts[0]} à ${timeParts[0]}h ${timeParts[1]}`;
+  const formattedDate = `${dateParts[0]}-${dateParts[1]}-${dateParts[2]} ${timeParts[0]}h ${timeParts[1]} UTC`;
   return formattedDate;
 };
 
