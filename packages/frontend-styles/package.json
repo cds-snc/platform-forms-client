@@ -4,6 +4,8 @@
   "description": "Frontend styles for the GC Forms project",
   "scripts": {
     "build": "tailwindcss -i ./src/input.css -o ./styles/frontend.css --minify",
+    "build:copy": "yarn build && yarn move",
+    "move": "cp ./styles/frontend.css ../../public/static/styles/frontend.css",
     "prepack": "yarn build",
     "frontend-styles:prepack": "yarn prepack"
   },
