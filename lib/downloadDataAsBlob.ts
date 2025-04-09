@@ -33,7 +33,7 @@ async function downloadAsLink(data: string, filename: string) {
     downloadLink.click();
     URL.revokeObjectURL(downloadLink.href);
   } catch (error) {
-    throw new Error("FD01 " + (error as Error).message);
+    throw new Error(FormServerErrorCodes.FILE_DOWNLOAD_ERROR + " " + (error as Error).message);
   }
 }
 
