@@ -13,14 +13,22 @@ declare global {
  */
 export const downloadDataAsBlob = async (data: string, filename: string, accept: object) => {
   if (!window?.showSaveFilePicker) {
-    const downloadLink = document.createElement("a");
-    const blob = new Blob([data], { type: "text/html" });
-    downloadLink.href = URL.createObjectURL(blob);
-    downloadLink.download = filename;
-    downloadLink.click();
-    URL.revokeObjectURL(downloadLink.href);
+    try {
+      const downloadLink = document.createElement("a");
+      const blob = new Blob([data], { type: "text/html" });
+      downloadLink.href = URL.createObjectURL(blob);
+      downloadLink.download = filename;
+      downloadLink.click();
+      URL.revokeObjectURL(downloadLink.href);
+    } catch (error) {
+      throw new Error("FD01 " + (error as Error).message);
+    }
   } else {
-    await promptToSave(data, filename, accept);
+    try {
+      await promptToSave(data, filename, accept);
+    } catch (error) {
+      throw new Error("FD02 " + (error as Error).message);
+    }
   }
 };
 
