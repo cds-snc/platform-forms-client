@@ -1,6 +1,5 @@
 import HCaptcha from "@hcaptcha/react-hcaptcha";
 import { logMessage } from "@lib/logger";
-import { verifyHCaptchaToken } from "./actions";
 import { useFeatureFlags } from "@lib/hooks/useFeatureFlags";
 import { hCaptchaEnabled } from "./helpers";
 import { FormEvent, useRef } from "react";
@@ -15,28 +14,27 @@ import { FormEvent, useRef } from "react";
 export const FormCaptcha = ({
   children,
   hCaptchaSiteKey = "",
-  blockableMode = false,
   handleSubmit,
-  handleCaptchaFail = () => {},
   lang,
   id = "",
   dataTestId = "",
   className = "",
   isPreview = false,
   noValidate = true,
+  captchaToken,
 }: {
   children: React.ReactNode;
   hCaptchaSiteKey: string | undefined;
   // Determines whether or not to block a user marked as a bot by siteverify from submitting a form
   blockableMode?: boolean;
   handleSubmit: (e?: FormEvent<HTMLFormElement>) => void;
-  handleCaptchaFail: () => void;
   lang: string;
   id?: string;
   dataTestId?: string;
   className?: string;
   isPreview?: boolean;
   noValidate?: boolean;
+  captchaToken: React.RefObject<string> | undefined;
 }) => {
   const hCaptchaRef = useRef<HCaptcha>(null);
   const formSubmitEventRef = useRef<FormEvent<HTMLFormElement>>(null);
@@ -49,28 +47,12 @@ export const FormCaptcha = ({
     return null;
   }
 
-  // Verify the hCAPTCHA token on the server side and then call the callback handleSubmit
   const onVerified = async (token: string) => {
-    try {
-      const success = await verifyHCaptchaToken(token);
-      if (success) {
-        logMessage.info(`hCaptcha: success`);
-        handleSubmit(formSubmitEventRef.current as FormEvent<HTMLFormElement>);
-      } else if (blockableMode) {
-        if (typeof handleCaptchaFail !== "function") {
-          throw Error("hCaptcha: handleCaptchaFail is not a function");
-        }
-        logMessage.info(`hCaptcha: failed and submission blocked`);
-        handleCaptchaFail();
-      } else {
-        logMessage.info(`hCaptcha: failed and submission allowed`);
-        handleSubmit(formSubmitEventRef.current as FormEvent<HTMLFormElement>);
-      }
-    } catch (err) {
-      logMessage.error(`hCaptcha: system error ${err}`);
-      // Don't block the user from submitting on a system error
-      handleSubmit(formSubmitEventRef.current as FormEvent<HTMLFormElement>);
+    // Pass the token up for use in the submit server action called by handleSubmit
+    if (captchaToken) {
+      captchaToken.current = token;
     }
+    handleSubmit(formSubmitEventRef.current as FormEvent<HTMLFormElement>);
   };
 
   if (!captchaEnabled) {
