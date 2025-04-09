@@ -1,5 +1,5 @@
 import { dir } from "i18next";
-import "../styles/app.scss";
+// import "../styles/app.scss";
 import { Viewport } from "next";
 import Script from "next/script";
 import "react-app-polyfill/stable";

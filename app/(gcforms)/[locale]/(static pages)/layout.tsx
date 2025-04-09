@@ -11,8 +11,10 @@ export default async function Layout({ children }: { children: React.ReactNode }
           <LanguageToggle />
         </Fip>
       </header>
-      <div id="page-container">
-        <main id="content">{children}</main>
+      <div id="page-container" className="content-wrapper">
+        <main id="content" className="container mx-auto xl:px-0 sm:px-600 px-225">
+          {children}
+        </main>
       </div>
       <Footer displayFormBuilderFooter={true} />
     </div>
