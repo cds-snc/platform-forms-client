@@ -1,0 +1,17 @@
+{
+  "name": "@gcforms/frontend-styles",
+  "version": "1.0.0",
+  "description": "Frontend styles for the GC Forms project",
+  "scripts": {
+    "build": "tailwindcss -i ./src/input.css -o ./styles/frontend.css --minify",
+    "prepack": "yarn build",
+    "frontend-styles:prepack": "yarn prepack"
+  },
+  "dependencies": {
+    "@cdssnc/gcds-tokens": "^2.8.0",
+    "tailwindcss": "^4.1.3"
+  },
+  "devDependencies": {
+    "@tailwindcss/cli": "^4.1.3"
+  }
+}
