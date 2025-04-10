@@ -2,7 +2,8 @@
 import React from "react";
 import { useTranslation } from "@i18n/client";
 import { cn } from "@lib/utils";
-import packageJson from "../../../package.json"; // Import package.json
+
+import { Version } from "@serverComponents/globals/Version";
 
 interface FooterProps {
   isSplashPage?: boolean;
@@ -50,7 +51,6 @@ export const Footer = ({
   className = "",
 }: FooterProps) => {
   const { t } = useTranslation("common");
-  const version = packageJson.version; // Get version from package.json
 
   return (
     <footer
@@ -60,6 +60,7 @@ export const Footer = ({
       )}
       data-testid="footer"
     >
+      <Version label={t("version")} />
       <div className="flex flex-row items-center justify-between pb-5 pt-10 lg:flex-col lg:items-start lg:gap-4">
         <div>
           {!isSplashPage && (
@@ -68,7 +69,7 @@ export const Footer = ({
             </nav>
           )}
         </div>
-        <div className="text-sm text-gray-600">Version: {version}</div> {/* Display version */}
+
         {!disableGcBranding && (
           <div className="min-w-[168px]">
             <picture>

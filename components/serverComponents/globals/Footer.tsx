@@ -1,7 +1,8 @@
 import React from "react";
 import { serverTranslation } from "@i18n";
 import { cn } from "@lib/utils";
-import packageJson from "../../../package.json"; // Import package.json
+
+import { Version } from "@serverComponents/globals/Version";
 
 interface FooterProps {
   isSplashPage?: boolean;
@@ -50,8 +51,6 @@ export const Footer = async ({
 }: FooterProps) => {
   const { t } = await serverTranslation("common");
 
-  const version = packageJson.version; // Get version from package.json
-
   return (
     <footer
       className={cn(
@@ -61,7 +60,7 @@ export const Footer = async ({
       data-testid="footer"
     >
       <div className="flex flex-row items-center justify-between pb-5 pt-10 lg:flex-col lg:items-start lg:gap-4">
-        <div className="text-sm text-gray-600">Version: {version}</div> {/* Display version */}
+        <Version label={t("version")} />
         <div>
           {!isSplashPage && (
             <nav aria-label={t("footer.ariaLabel")}>
