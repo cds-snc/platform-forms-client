@@ -4,7 +4,7 @@ import React, { Fragment, useState, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { Transition, Tab } from "@headlessui/react";
 import { useTranslation } from "@i18n/client";
-import { Circle } from "@clientComponents/globals/Buttons/Circle";
+import { CircleButton } from "@clientComponents/globals/Buttons/CircleButton";
 
 import { RightPanelOpen, RoundCloseIcon } from "@serverComponents/icons";
 import { cn } from "@lib/utils";
@@ -137,8 +137,8 @@ export const RightPanel = ({ id, lang }: { id: string; lang: Language }) => {
   return (
     <section className="z-10 border-l border-slate-200 bg-white" aria-labelledby="rightPanelTitle">
       <div className={cn("fixed right-0", fixedRange, open && "hidden")}>
-        <div className="mt-4">
-          <Circle
+        <div className="mr-4 mt-4">
+          <CircleButton
             title={t("rightPanel.openPanel")}
             onClick={() => {
               togglePanel && togglePanel(true);
@@ -146,7 +146,7 @@ export const RightPanel = ({ id, lang }: { id: string; lang: Language }) => {
             dataTestId="rightPanelOpenButton"
           >
             <RightPanelOpen className="inline-block" />
-          </Circle>
+          </CircleButton>
         </div>
       </div>
       <Transition.Root show={open} as={Fragment}>

@@ -12,7 +12,13 @@ type CircleProps = {
   onClick?: () => void;
 };
 
-export const Circle = ({ children, title = "", onClick, className, dataTestId }: CircleProps) => {
+export const CircleButton = ({
+  children,
+  title = "",
+  onClick,
+  className,
+  dataTestId,
+}: CircleProps) => {
   return (
     <div className="relative z-10 flex size-[50px]">
       <Tooltip.Simple text={title} side="left">
