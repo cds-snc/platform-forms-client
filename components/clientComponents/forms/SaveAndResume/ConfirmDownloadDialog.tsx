@@ -14,6 +14,7 @@ import { toast } from "@formBuilder/components/shared/Toast";
 
 import { generateDownloadHtml } from "@lib/saveAndResume/actions";
 import { downloadDataAsBlob } from "@lib/downloadDataAsBlob";
+import { logMessage } from "@lib/logger";
 
 export type handleCloseType = (value: boolean) => void;
 
@@ -60,6 +61,7 @@ export const ConfirmDownloadDialog = ({
 
       setSaving(false);
     } catch (error) {
+      logMessage.error(error);
       setSaving(false);
       toast.error(generateHtmlError, "public-facing-form");
     }

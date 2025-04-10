@@ -13,7 +13,7 @@ describe("Test FormBuilder", () => {
     cy.visitPage("/en/form-builder/0000/edit");
     cy.typeInField("#formTitle", "Cypress Test Form");
 
-    cy.get("button").contains("Form set-up").click();
+    cy.get('button[aria-label="Form set-up"]').click();
 
     // Form description
     cy.contains("summary", "Add a description to your form to help set expectations").click();
