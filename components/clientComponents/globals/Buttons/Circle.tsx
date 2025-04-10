@@ -14,7 +14,7 @@ type CircleProps = {
 
 export const Circle = ({ children, title = "", onClick, className, dataTestId }: CircleProps) => {
   return (
-    <div className="relative z-10 flex size-[60px]">
+    <div className="relative z-10 flex size-[50px]">
       <Tooltip.Simple text={title} side="left">
         <Button
           theme="secondary"
