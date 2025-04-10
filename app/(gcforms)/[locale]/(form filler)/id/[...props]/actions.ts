@@ -10,6 +10,8 @@ import { checkIfClosed, getPublicTemplateByID } from "@lib/templates";
 import { dateHasPast } from "@lib/utils";
 import { FormStatus } from "@gcforms/types";
 import { verifyHCaptchaToken } from "@clientComponents/globals/FormCaptcha/actions";
+import { checkOne } from "@lib/cache/flags";
+import { FeatureFlags } from "@lib/cache/types";
 
 // TODO: can be removed once hCaptcha is running in blockable mode (probably not going back)
 const CAPTCHA_BLOCKABLE_MODE = false;
@@ -34,9 +36,9 @@ export async function submitForm(
   formRecordOrId: PublicFormRecord | string,
   captchaToken?: string | undefined
 ): Promise<{ id: string; submissionId?: string; error?: Error }> {
-  // Assume captcha enable when there is a token
-  if (captchaToken) {
-    const captchaVerified = await verifyHCaptchaToken(captchaToken);
+  const captchaEnabled = await checkOne(FeatureFlags.hCaptcha);
+  if (captchaEnabled) {
+    const captchaVerified = await verifyHCaptchaToken(captchaToken || "");
     if (CAPTCHA_BLOCKABLE_MODE && !captchaVerified) {
       throw new Error(FormStatus.CAPTCHA_VERIFICATION_ERROR);
     }
