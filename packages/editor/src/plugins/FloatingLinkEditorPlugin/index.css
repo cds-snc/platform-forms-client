@@ -1,0 +1,63 @@
+.gc-link-editor {
+  display: flex;
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 100;
+  max-width: 400px;
+  width: 100%;
+  opacity: 0;
+  background-color: #fff;
+  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.3);
+  border-radius: 4px;
+  transition: opacity 0.5s;
+  will-change: transform;
+}
+
+.gc-link-editor-container {
+  width: 100%;
+  padding: 8px;
+  gap: 4px;
+  display: flex;
+  justify-content: space-between;
+  input {
+    font-size: 0.9rem;
+    padding: 2px 6px;
+    width: 100%;
+  }
+  span {
+    padding: 2px 0;
+    font-size: 0.9rem;
+  }
+}
+
+.gc-link-editor-button-disabled {
+  cursor: not-allowed;
+  svg {
+    fill: #ccc;
+  }
+}
+
+.gc-link-editor-actions {
+  display: flex;
+  gap: 4px;
+  background-color: #fff;
+  border-radius: 8px;
+  padding: 6px 12px;
+  svg {
+    width: 20px;
+    height: 20px;
+  }
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}

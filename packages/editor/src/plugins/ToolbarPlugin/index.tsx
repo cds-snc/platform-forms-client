@@ -4,18 +4,7 @@ import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext
 import { $isHeadingNode, $createHeadingNode } from "@lexical/rich-text";
 import { mergeRegister, $getNearestNodeOfType } from "@lexical/utils";
 
-import {
-  H2Icon,
-  H3Icon,
-  BoldIcon,
-  ItalicIcon,
-  BulletListIcon,
-  NumberedListIcon,
-  LinkIcon,
-} from "@serverComponents/icons";
-
 import { $isLinkNode, TOGGLE_LINK_COMMAND } from "@lexical/link";
-import { useTranslation } from "@i18n/client";
 
 import {
   $isListNode,
@@ -34,10 +23,18 @@ import {
 } from "lexical";
 
 import { $wrapNodes } from "@lexical/selection";
-import { sanitizeUrl } from "./utils/url";
-import { useEditorFocus } from "./useEditorFocus";
-import { getSelectedNode } from "./utils/getSelectedNode";
-import { ToolTip } from "./ToolTip";
+import { useEditorFocus } from "../../hooks/useEditorFocus";
+import { getSelectedNode } from "../../utils/getSelectedNode";
+import { ToolTip } from "../../ToolTip";
+import { H2Icon } from "../../icons/H2Icon";
+import { H3Icon } from "../../icons/H3Icon";
+import { BoldIcon } from "../../icons/BoldIcon";
+import { ItalicIcon } from "../../icons/ItalicIcon";
+import { BulletListIcon } from "../../icons/BulletListIcon";
+import { NumberedListIcon } from "../../icons/NumberedListIcon";
+import { LinkIcon } from "../../icons/LinkIcon";
+import { useTranslation } from "../../hooks/useTranslation";
+import "./styles.css";
 
 const blockTypeToBlockName = {
   bullet: "Bulleted List",
@@ -57,23 +54,31 @@ const blockTypeToBlockName = {
 const LowPriority = 1;
 type HeadingTagType = "h2" | "h3" | "h4" | "h5";
 
-export const Toolbar = ({ editorId }: { editorId: string }) => {
+export default function ToolbarPlugin({
+  editorId,
+  setIsLinkEditMode,
+}: {
+  editorId: string;
+  setIsLinkEditMode: (isLinkEditMode: boolean) => void;
+}) {
   const [editor] = useLexicalComposerContext();
   const [isBold, setIsBold] = useState(false);
   const [isItalic, setIsItalic] = useState(false);
   const [isLink, setIsLink] = useState(false);
   const [, setSelectedElementKey] = useState("");
   const [blockType, setBlockType] = useState("paragraph");
-
   const [isEditable] = useState(() => editor.isEditable());
+
+  const { t } = useTranslation();
 
   const insertLink = useCallback(() => {
     if (!isLink) {
-      editor.dispatchCommand(TOGGLE_LINK_COMMAND, sanitizeUrl("https://"));
+      setIsLinkEditMode(true);
+      editor.dispatchCommand(TOGGLE_LINK_COMMAND, "");
     } else {
       editor.dispatchCommand(TOGGLE_LINK_COMMAND, null);
     }
-  }, [editor, isLink]);
+  }, [editor, isLink, setIsLinkEditMode]);
 
   const [items] = useState([
     { id: 1, txt: "heading2" },
@@ -227,13 +232,12 @@ export const Toolbar = ({ editorId }: { editorId: string }) => {
     );
   }, [editor, updateToolbar]);
 
-  const { t } = useTranslation("form-builder");
   const editorHasFocus = useEditorFocus();
 
   return (
     <>
       <div
-        className="gc-toolbar-container rounded-t-[2px] border-b border-slate-200 bg-slate-100 p-[10px]"
+        className="gc-toolbar-container"
         role="toolbar"
         aria-label={t("textFormatting")}
         aria-controls={editorId}
@@ -392,4 +396,4 @@ export const Toolbar = ({ editorId }: { editorId: string }) => {
       </div>
     </>
   );
-};
+}
