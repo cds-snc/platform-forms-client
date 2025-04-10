@@ -5,6 +5,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.38.5](https://github.com/cds-snc/platform-forms-client/compare/v3.38.4...v3.38.5) (2025-04-10)
+
+
+### Bug Fixes
+
+* updates CAPTCHA verify to be called in the form submission ([#5396](https://github.com/cds-snc/platform-forms-client/issues/5396)) ([399972c](https://github.com/cds-snc/platform-forms-client/commit/399972c7ef033f93c595536d8c581878aa022d51))
+
 ## [3.38.4](https://github.com/cds-snc/platform-forms-client/compare/v3.38.3...v3.38.4) (2025-04-10)
 
 
