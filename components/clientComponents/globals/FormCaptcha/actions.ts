@@ -11,12 +11,14 @@ import { logMessage } from "@lib/logger";
  */
 export const verifyHCaptchaToken = async (token: string): Promise<boolean> => {
   if (!token) {
-    throw new Error("hCaptcha: missing token");
+    logMessage.info(`hCaptcha: client error missing token`);
+    return false;
   }
 
   const siteVerifyKey = process.env.HCAPTCHA_SITE_VERIFY_KEY;
   if (!siteVerifyKey) {
-    throw new Error("hCaptcha: missing siteVerifyKey");
+    logMessage.info(`hCaptcha: missing siteVerifyKey`);
+    return false;
   }
 
   // API expects data to be sent in the request body
@@ -72,7 +74,8 @@ const checkIfVerified = (success: boolean, score: number) => {
   }
   if (!success) {
     // Token is expired or invalid
-    throw new Error("hCaptcha: token is expired or invalid");
+    logMessage.info(`hCaptcha: token expired or invalid`);
+    return false;
   }
   // Verified success
   return true;

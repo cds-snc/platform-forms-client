@@ -230,6 +230,7 @@ export const FormStatus = {
   FILE_ERROR: "FileError",
   FORM_CLOSED_ERROR: "FormClosedError",
   SERVER_ID_ERROR: "ServerIDError",
+  CAPTCHA_VERIFICATION_ERROR: "CaptchaVerificationError",
 } as const;
 
 export type FormStatus = (typeof FormStatus)[keyof typeof FormStatus];
