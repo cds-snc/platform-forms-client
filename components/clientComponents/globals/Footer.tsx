@@ -2,6 +2,7 @@
 import React from "react";
 import { useTranslation } from "@i18n/client";
 import { cn } from "@lib/utils";
+import packageJson from "../../../package.json"; // Import package.json
 
 interface FooterProps {
   isSplashPage?: boolean;
@@ -49,6 +50,8 @@ export const Footer = ({
   className = "",
 }: FooterProps) => {
   const { t } = useTranslation("common");
+  const version = packageJson.version; // Get version from package.json
+
   return (
     <footer
       className={cn(
@@ -65,6 +68,7 @@ export const Footer = ({
             </nav>
           )}
         </div>
+        <div className="text-sm text-gray-600">Version: {version}</div> {/* Display version */}
         {!disableGcBranding && (
           <div className="min-w-[168px]">
             <picture>
