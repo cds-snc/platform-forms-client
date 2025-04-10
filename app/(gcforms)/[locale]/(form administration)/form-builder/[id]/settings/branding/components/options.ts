@@ -251,4 +251,22 @@ export const options = [
     logoTitleEn: "Parks Canada",
     logoTitleFr: "Parcs Canada",
   },
+  {
+    name: "sc",
+    urlEn: "https://scc-csc.gc.ca/home-accueil",
+    urlFr: "https://scc-csc.gc.ca/fr/home-accueil",
+    logoEn: "/img/branding/sc-en.svg",
+    logoFr: "/img/branding/sc-fr.svg",
+    logoTitleEn: "Supreme Court of Canada",
+    logoTitleFr: "Cour suprême du Canada",
+  },
+  {
+    name: "cas",
+    urlEn: "https://www.cas-satj.gc.ca/en/home",
+    urlFr: "https://www.cas-satj.gc.ca/fr/accueil",
+    logoEn: "/img/branding/cas-en.svg",
+    logoFr: "/img/branding/cas-fr.svg",
+    logoTitleEn: "Courts Administration Service",
+    logoTitleFr: "Service administratif des tribunaux judiciaires",
+  },
 ];

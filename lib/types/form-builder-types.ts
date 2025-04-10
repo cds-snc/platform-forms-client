@@ -116,6 +116,8 @@ export interface CDSHTMLDialogElement extends HTMLElement {
   ): void;
 }
 
+// Add new error codes to this doc for visibility:
+// https://docs.google.com/document/d/1Za03rcuC9YUDtNXuNyHAwUi7wtp-vgVFxBx0Oy2JZz8
 export const FormServerErrorCodes = {
   BRANDING: "550",
   CLASSIFICATION: "551",
@@ -140,6 +142,7 @@ export const FormServerErrorCodes = {
   FORM_RESUME_INVALID_MISMATCHED_FORM_ID: "FR07",
   FORM_RESUME_INVALID_DATA: "FR08",
   FORM_RESUME_INVALID_BASE64_STRING: "FR09",
+  FILE_DOWNLOAD_ERROR: "FD01",
 } as const;
 
 type ObjectValues<T> = T[keyof T];

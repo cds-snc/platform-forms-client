@@ -17,6 +17,8 @@ import {
   AddressComponents,
   ClosedDetails,
   FormStatus,
+  SortValue,
+  SortOption,
 } from "./form-types";
 
 export type { Response, Responses, FileInputResponse, TaggedResponse } from "./form-response-types";
@@ -37,6 +39,8 @@ export type { ValidationProperties };
 export type { FormProperties };
 export type { AddressComponents };
 export type { ClosedDetails };
-
 export { FormElementTypes };
 export { FormStatus };
+
+export { SortOption };
+export type { SortValue };

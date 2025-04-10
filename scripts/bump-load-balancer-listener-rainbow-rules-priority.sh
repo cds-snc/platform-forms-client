@@ -23,5 +23,6 @@ for rule_arn in $rules; do
 done
 
 if [[ ! -z "$rules_priority_to_bump" ]]; then
-   aws elbv2 set-rule-priorities --rule-priorities "[${rules_priority_to_bump:1}]"
+  # In "rules_priority_to_bump:1" we use ":1" to remove the initial "," added on line 20
+  aws elbv2 set-rule-priorities --rule-priorities "[${rules_priority_to_bump:1}]"
 fi

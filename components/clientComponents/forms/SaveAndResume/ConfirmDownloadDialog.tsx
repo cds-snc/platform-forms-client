@@ -14,6 +14,7 @@ import { toast } from "@formBuilder/components/shared/Toast";
 
 import { generateDownloadHtml } from "@lib/saveAndResume/actions";
 import { downloadDataAsBlob } from "@lib/downloadDataAsBlob";
+import { logMessage } from "@lib/logger";
 
 export type handleCloseType = (value: boolean) => void;
 
@@ -60,6 +61,7 @@ export const ConfirmDownloadDialog = ({
 
       setSaving(false);
     } catch (error) {
+      logMessage.error(error);
       setSaving(false);
       toast.error(generateHtmlError, "public-facing-form");
     }
@@ -86,14 +88,26 @@ export const ConfirmDownloadDialog = ({
           <AlertDialog.Title className="text-2xl font-extrabold leading-tight">
             {t(`${tParent}.prompt.title`)}
           </AlertDialog.Title>
-
           <div id="alert-dialog-description">
-            <ol className="list-outside list-decimal">
-              <li className="marker:text-2xl marker:font-bold">{t(`${tParent}.prompt.text1`)}</li>
-              <li className="marker:text-2xl marker:font-bold">{t(`${tParent}.prompt.text2`)}</li>
-            </ol>
-
-            <div className="mb-2 ml-6 mt-6 font-bold italic">{t(`${tParent}.prompt.text3`)}</div>
+            {tParent === "saveAndResume" && (
+              <>
+                <ol className="list-outside list-decimal">
+                  <li className="marker:text-2xl marker:font-bold">
+                    {t(`${tParent}.prompt.text1`)}
+                  </li>
+                  <li className="marker:text-2xl marker:font-bold">
+                    {t(`${tParent}.prompt.text2`)}
+                  </li>
+                </ol>
+                <div className="mb-2 ml-6 mt-6 font-bold italic">
+                  {t(`${tParent}.prompt.text3`)}
+                </div>
+              </>
+            )}
+            {/* Show save response text */}
+            {type === "confirm" && (
+              <div className="mb-4 mt-6">{t(`${tParent}.prompt.description`)}</div>
+            )}
           </div>
 
           <div style={{ display: "flex", gap: 15, justifyContent: "flex-end" }}>

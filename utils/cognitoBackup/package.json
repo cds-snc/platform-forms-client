@@ -13,7 +13,7 @@
     "@aws-sdk/client-cognito-identity-provider": "^3.481.0",
     "@aws-sdk/client-iam": "^3.481.0",
     "@types/node": "^18.19.3",
-    "axios": "^1.6.3",
+    "axios": "^1.8.4",
     "csv-writer": "^1.6.0",
     "dotenv": "^16.3.1",
     "tsx": "^4.7.0",

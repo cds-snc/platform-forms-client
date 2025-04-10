@@ -10,6 +10,7 @@ import { Description } from "./Description";
 import { AddressCompleteOptions } from "./AddressCompleteOptions";
 import { FormattedDateOptions } from "./FormattedDateOptions";
 import { RequiredOptions } from "./RequiredOptions";
+import { SortOptions } from "./SortOptions";
 import { DynamicRowOptions } from "./DynamicRowOptions";
 import { TextFieldOptions } from "./TextFieldOptions";
 import { CharacterLimitOptions } from "./CharacterLimitOptions";
@@ -122,6 +123,8 @@ export const MoreDialog = () => {
               <CharacterLimitOptions item={item} setItem={setItem} />
 
               <QuestionTagOptions item={item} setItem={setItem} />
+
+              <SortOptions item={item} setItem={setItem} />
             </form>
           </div>
         </Dialog>

@@ -1,13 +1,12 @@
 import Drawer from "./Drawer";
 import { SaveProgressIcon, UploadIcon } from "@serverComponents/icons";
 import { Button } from "@clientComponents/globals";
-import Link from "next/link";
 import { Language } from "@lib/types/form-builder-types";
 import { generateDownloadHtml } from "@lib/saveAndResume/actions";
 import { downloadDataAsBlob } from "@lib/downloadDataAsBlob";
 import { useTranslation } from "@i18n/client";
 import { useFormSubmissionData } from "@lib/hooks/useFormSubmissionData";
-import { useGCFormsContext } from "@lib/hooks/useGCFormContext";
+import { LinkButton } from "@serverComponents/globals/Buttons/LinkButton";
 
 export const MobileDrawer = ({
   drawerOpen,
@@ -23,7 +22,6 @@ export const MobileDrawer = ({
   type: "confirm" | "progress";
 }) => {
   const { t } = useTranslation("common");
-  const { getNonce } = useGCFormsContext();
 
   const { fileName, getOptions } = useFormSubmissionData({ language, type });
 
@@ -34,7 +32,7 @@ export const MobileDrawer = ({
   };
 
   return (
-    <Drawer isVisible={drawerOpen} onClose={() => setDrawerOpen(false)} nonce={getNonce()}>
+    <Drawer isVisible={drawerOpen} onClose={() => setDrawerOpen(false)}>
       <h2>{t("saveAndResume.more")}</h2>
       <div className="mx-4 flex flex-col gap-4">
         <Button
@@ -47,15 +45,15 @@ export const MobileDrawer = ({
             {t("saveAndResume.saveToDevice")}
           </>
         </Button>
-        <Link
+        <LinkButton.Secondary
           href={`/${language}/id/${formId}/resume`}
-          className="group flex w-full items-center justify-center rounded-full border border-slate-900 bg-slate-100 py-4 no-underline hover:cursor-pointer hover:border-indigo-700 hover:bg-violet-50 focus:cursor-pointer focus:border-gcds-blue-850 focus:bg-gcds-blue-850 focus:text-white-default focus:outline focus:outline-[3px] focus:outline-offset-2 focus:outline-gcds-blue-850"
+          className="group flex w-full items-center justify-center rounded-full border border-slate-900 bg-slate-100 py-4"
         >
           <>
             <UploadIcon className="mr-4 size-8 group-focus:fill-white" />
             {t("saveAndResume.resumeForm")}
           </>
-        </Link>
+        </LinkButton.Secondary>
       </div>
       <p className="my-6 px-4">{t("saveAndResume.protectYourDataNote")}</p>
 
