@@ -59,7 +59,7 @@
     "@gcforms/connectors": "workspace:*",
     "@gcforms/editor": "workspace:*",
     "@gcforms/types": "workspace:*",
-    "@hcaptcha/react-hcaptcha": "^1.11.2",
+    "@hcaptcha/react-hcaptcha": "^1.12.0",
     "@hcaptcha/types": "^1.0.4",
     "@headlessui/react": "^2.2.0",
     "@neshca/cache-handler": "^1.2.1",

@@ -171,11 +171,10 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
             dataTestId="form"
             lang={language}
             handleSubmit={handleSubmit}
-            handleCaptchaFail={() => props.setCaptchaFail && props.setCaptchaFail(true)}
             noValidate={true}
             hCaptchaSiteKey={props.hCaptchaSiteKey}
-            blockableMode={false}
             isPreview={props.isPreview}
+            captchaToken={props.captchaToken}
           >
             {isGroupsCheck &&
               isShowReviewPage &&
@@ -284,7 +283,8 @@ export const Form = withFormik<FormProps, Responses>({
       const result = await submitForm(
         formValues,
         formikBag.props.language,
-        formikBag.props.formRecord.id
+        formikBag.props.formRecord.id,
+        formikBag.props.captchaToken?.current
       );
 
       // Failed to find Server Action (likely due to newer deployment)
@@ -307,6 +307,13 @@ export const Form = withFormik<FormProps, Responses>({
         formikBag.props.onSuccess(result.id, result?.submissionId);
       }
     } catch (err) {
+      // Captcha found a likely bot, show the Captcha fail screen
+      if ((err as Error).message === FormStatus.CAPTCHA_VERIFICATION_ERROR) {
+        formikBag.setStatus(FormStatus.CAPTCHA_VERIFICATION_ERROR);
+        formikBag.props.setCaptchaFail && formikBag.props.setCaptchaFail(true);
+        return;
+      }
+
       logMessage.error(err as Error);
       formikBag.setStatus("Error");
     } finally {
