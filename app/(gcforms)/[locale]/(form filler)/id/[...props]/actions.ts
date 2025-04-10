@@ -16,8 +16,6 @@ import { FeatureFlags } from "@lib/cache/types";
 // TODO: can be removed once hCaptcha is running in blockable mode (probably not going back)
 const CAPTCHA_BLOCKABLE_MODE = false;
 
-// import { validateResponses } from "@lib/validation/validation";
-
 // Public facing functions - they can be used by anyone who finds the associated server action identifer
 
 export async function isFormClosed(formId: string): Promise<boolean> {
