@@ -68,6 +68,7 @@ export const Footer = ({
               {displayFormBuilderFooter ? <FormBuilderLinks /> : <DefaultLinks />}
             </nav>
           )}
+          {isSplashPage && <Version label={t("version")} />}
         </div>
 
         {!disableGcBranding && (

@@ -68,6 +68,7 @@ export const Footer = async ({
               {displayFormBuilderFooter ? <FormBuilderLinks /> : <DefaultLinks />}
             </nav>
           )}
+          {isSplashPage && <Version label={t("version")} />}
         </div>
         {!disableGcBranding && (
           <div className="min-w-[168px]">
