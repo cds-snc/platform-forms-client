@@ -60,10 +60,11 @@ export const Footer = async ({
       data-testid="footer"
     >
       <div className="flex flex-row items-center justify-between pb-5 pt-10 lg:flex-col lg:items-start lg:gap-4">
-        <Version label={t("version")} />
         <div>
           {!isSplashPage && (
             <nav aria-label={t("footer.ariaLabel")}>
+              <Version label={t("version")} />
+              <BulletPoint />
               {displayFormBuilderFooter ? <FormBuilderLinks /> : <DefaultLinks />}
             </nav>
           )}

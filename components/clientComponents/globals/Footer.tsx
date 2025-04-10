@@ -60,11 +60,11 @@ export const Footer = ({
       )}
       data-testid="footer"
     >
-      <Version label={t("version")} />
       <div className="flex flex-row items-center justify-between pb-5 pt-10 lg:flex-col lg:items-start lg:gap-4">
         <div>
           {!isSplashPage && (
             <nav aria-label={t("footer.ariaLabel")}>
+              <Version label={t("version")} />
               {displayFormBuilderFooter ? <FormBuilderLinks /> : <DefaultLinks />}
             </nav>
           )}

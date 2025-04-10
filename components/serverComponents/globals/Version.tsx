@@ -4,7 +4,7 @@ export const Version = async ({ label }: { label: string }) => {
   const { version } = packageJson;
 
   return (
-    <div className="text-sm text-gray-600">
+    <div className="inline-block text-sm font-bold text-gray-700">
       {label}: {version}
     </div>
   );
