@@ -7,7 +7,7 @@ export const Version = async ({ label }: { label: string }) => {
 
   return (
     <div className="mt-4 text-sm text-slate-800">
-      {label}: {version} <span> - {deploymentId}</span>
+      {label}: {version} <span className="hidden"> - {deploymentId}</span>
     </div>
   );
 };
