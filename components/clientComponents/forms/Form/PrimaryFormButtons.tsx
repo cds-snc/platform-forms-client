@@ -29,6 +29,7 @@ export const PrimaryFormButtons = ({
   getFormDelay: () => number;
   saveAndResumeEnabled?: boolean;
 }) => {
+  const validationError = Object.entries(props.errors).length > 0;
   return (
     <div className="flex">
       {isGroupsCheck && isShowReviewPage && (
@@ -56,7 +57,7 @@ export const PrimaryFormButtons = ({
                   getFormDelay={getFormDelay}
                   formID={formId}
                   formTitle={formTitle}
-                  props={props}
+                  validationError={validationError}
                 />
               </div>
             );
@@ -68,7 +69,7 @@ export const PrimaryFormButtons = ({
           getFormDelay={getFormDelay}
           formID={formId}
           formTitle={formTitle}
-          props={props}
+          validationError={validationError}
         />
       )}
     </div>

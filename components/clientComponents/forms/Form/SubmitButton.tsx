@@ -5,21 +5,20 @@ import { cn } from "@lib/utils";
 import { useTranslation } from "@i18n/client";
 import { logMessage } from "@lib/logger";
 import { useFeatureFlags } from "@lib/hooks/useFeatureFlags";
-import { InnerFormProps } from "./types";
 
 interface SubmitButtonProps {
   getFormDelay: () => number;
   formID: string;
   formTitle: string;
   disabled: boolean;
-  props: InnerFormProps;
+  validationError?: boolean;
 }
 export const SubmitButton: React.FC<SubmitButtonProps> = ({
   getFormDelay,
   formID,
   formTitle,
   disabled,
-  props,
+  validationError,
 }) => {
   const { t } = useTranslation();
   const [formTimerState, { startTimer, checkTimer, disableTimer }] = useFormTimer();
@@ -63,12 +62,11 @@ export const SubmitButton: React.FC<SubmitButtonProps> = ({
     }
   }, [checkTimer, formTimerState.remainingTime, formTimerEnabled]);
 
-  // Keeps loading in sync with the form validation state
   useEffect(() => {
-    if (props.errors) {
+    if (validationError) {
       setLoading(false);
     }
-  }, [props.errors]);
+  }, [validationError]);
 
   return (
     <>
