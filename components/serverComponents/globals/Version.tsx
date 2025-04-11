@@ -6,8 +6,8 @@ export const Version = async ({ label }: { label: string }) => {
   const { version } = packageJson;
 
   return (
-    <div className="mr-12 inline-block text-sm text-gray-700">
-      {label}: {version} <span className="hidden"> - {deploymentId}</span>
+    <div className="mt-4 text-sm text-slate-800">
+      {label}: {version} <span> - {deploymentId}</span>
     </div>
   );
 };
