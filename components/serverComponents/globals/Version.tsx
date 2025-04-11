@@ -6,7 +6,7 @@ export const Version = async ({ label }: { label: string }) => {
   const { version } = packageJson;
 
   return (
-    <div className="mt-4 text-sm text-slate-800">
+    <div className="mt-2 text-sm text-slate-800">
       {label}: {version} <span className="hidden"> - {deploymentId}</span>
     </div>
   );
