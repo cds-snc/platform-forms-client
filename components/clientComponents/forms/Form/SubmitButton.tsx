@@ -11,14 +11,14 @@ interface SubmitButtonProps {
   formID: string;
   formTitle: string;
   disabled: boolean;
-  validationError?: boolean;
+  submissionError?: boolean;
 }
 export const SubmitButton: React.FC<SubmitButtonProps> = ({
   getFormDelay,
   formID,
   formTitle,
   disabled,
-  validationError,
+  submissionError,
 }) => {
   const { t } = useTranslation();
   const [formTimerState, { startTimer, checkTimer, disableTimer }] = useFormTimer();
@@ -63,10 +63,10 @@ export const SubmitButton: React.FC<SubmitButtonProps> = ({
   }, [checkTimer, formTimerState.remainingTime, formTimerEnabled]);
 
   useEffect(() => {
-    if (validationError) {
+    if (submissionError) {
       setLoading(false);
     }
-  }, [validationError]);
+  }, [submissionError]);
 
   return (
     <>
