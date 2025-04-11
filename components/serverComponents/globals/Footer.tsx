@@ -15,8 +15,6 @@ const BulletPoint = () => {
   return <span className="px-3">&#x2022;</span>;
 };
 
-const deploymentId = process.env.NEXT_PUBLIC_DEPLOYMENT_ID || "";
-
 const FormBuilderLinks = async () => {
   const { t } = await serverTranslation("common");
   return (
@@ -65,7 +63,7 @@ export const Footer = async ({
         <div>
           {!isSplashPage && (
             <nav aria-label={t("footer.ariaLabel")}>
-              <Version label={t("version")} deploymentId={deploymentId} />
+              <Version label={t("version")} />
               {displayFormBuilderFooter ? <FormBuilderLinks /> : <DefaultLinks />}
             </nav>
           )}
