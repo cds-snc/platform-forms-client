@@ -1,6 +1,6 @@
 {
   "name": "@gcforms/connectors",
-  "version": "2.0.0",
+  "version": "2.0.2",
   "author": "Canadian Digital Service",
   "license": "MIT",
   "publishConfig": {
@@ -26,7 +26,7 @@
   },
   "dependencies": {
     "@aws-sdk/client-secrets-manager": "^3.750.0",
-    "axios": "^1.7.9",
+    "axios": "^1.8.4",
     "postgres": "^3.4.5"
   },
   "devDependencies": {

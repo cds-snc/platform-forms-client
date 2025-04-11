@@ -18,7 +18,7 @@ export const SaveResponse = ({ language }: { language: Language }) => {
         {t("saveResponse.saveBtnDescription", { lng: language })}
       </div>
       <DownloadConfirm
-        className="group inline-flex w-full items-center justify-center rounded-full px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-gcds-green-100 focus:outline-none focus:ring-2 focus:ring-gcds-green-500 focus:ring-offset-2"
+        className="group inline-flex w-full items-center justify-center rounded-full px-4 py-2 text-sm font-medium "
         type="button"
         loading={confirm}
         theme="primary"
