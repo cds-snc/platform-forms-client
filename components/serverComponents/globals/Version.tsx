@@ -1,11 +1,17 @@
 import packageJson from "../../../package.json";
 
-export const Version = async ({ label }: { label: string }) => {
+export const Version = async ({
+  label,
+  deploymentId,
+}: {
+  label: string;
+  deploymentId?: string;
+}) => {
   const { version } = packageJson;
 
   return (
-    <div className="inline-block text-sm font-bold text-gray-700">
-      {label}: {version}
+    <div className="mr-12 inline-block text-sm text-gray-700">
+      {label}: {version} <span className="hidden"> - {deploymentId}</span>
     </div>
   );
 };
