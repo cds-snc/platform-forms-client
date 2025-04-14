@@ -22,7 +22,7 @@ import FloatingLinkEditorPlugin from "./plugins/FloatingLinkEditorPlugin";
 import { editorConfig } from "./config";
 import { LINE_BREAK_FIX } from "./transformers";
 import { Language } from "./i18n";
-import { LocaleProvider } from "./context/LocaleContext";
+import { LocaleContext } from "./context/LocaleContext";
 
 import "./styles.css";
 
@@ -65,7 +65,7 @@ export const Editor = ({
   };
 
   return (
-    <LocaleProvider initialLocale={locale as Language}>
+    <LocaleContext initialLocale={locale as Language}>
       <LexicalComposer
         initialConfig={{
           ...editorConfig,
@@ -120,6 +120,6 @@ export const Editor = ({
           )}
         </div>
       </LexicalComposer>
-    </LocaleProvider>
+    </LocaleContext>
   );
 };

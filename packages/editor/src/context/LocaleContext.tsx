@@ -5,9 +5,9 @@ interface LocaleContextProps {
   locale: Language;
 }
 
-const LocaleContext = createContext<LocaleContextProps | undefined>(undefined);
+const Context = createContext<LocaleContextProps | undefined>(undefined);
 
-export const LocaleProvider: React.FC<{
+export const LocaleContext: React.FC<{
   initialLocale: Language;
   children: React.ReactNode;
 }> = ({ initialLocale, children }) => {
@@ -19,11 +19,11 @@ export const LocaleProvider: React.FC<{
     locale = "en";
   }
 
-  return <LocaleContext.Provider value={{ locale }}>{children}</LocaleContext.Provider>;
+  return <Context.Provider value={{ locale }}>{children}</Context.Provider>;
 };
 
 export const useLocale = (): LocaleContextProps => {
-  const context = useContext(LocaleContext);
+  const context = useContext(Context);
   if (!context) {
     throw new Error("useLocale must be used within a LocaleProvider");
   }
