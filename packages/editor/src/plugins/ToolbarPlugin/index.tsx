@@ -1,28 +1,19 @@
 "use client";
 import React, { useState, useCallback, useEffect, useRef, KeyboardEvent } from "react";
-import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext";
-import { $isHeadingNode, $createHeadingNode } from "@lexical/rich-text";
+import { $isHeadingNode } from "@lexical/rich-text";
 import { mergeRegister, $getNearestNodeOfType } from "@lexical/utils";
 
 import { $isLinkNode, TOGGLE_LINK_COMMAND } from "@lexical/link";
 
-import {
-  $isListNode,
-  INSERT_ORDERED_LIST_COMMAND,
-  INSERT_UNORDERED_LIST_COMMAND,
-  REMOVE_LIST_COMMAND,
-  ListNode,
-} from "@lexical/list";
+import { $isListNode, ListNode } from "@lexical/list";
 
 import {
   FORMAT_TEXT_COMMAND,
   $getSelection,
   $isRangeSelection,
   SELECTION_CHANGE_COMMAND,
-  $createParagraphNode,
 } from "lexical";
 
-import { $wrapNodes } from "@lexical/selection";
 import { useEditorFocus } from "../../hooks/useEditorFocus";
 import { getSelectedNode } from "../../utils/getSelectedNode";
 import { ToolTip } from "../../ui/ToolTip";
@@ -34,6 +25,8 @@ import { BulletListIcon } from "../../icons/BulletListIcon";
 import { NumberedListIcon } from "../../icons/NumberedListIcon";
 import { LinkIcon } from "../../icons/LinkIcon";
 import { useTranslation } from "../../hooks/useTranslation";
+import { formatBulletList, formatHeading, formatNumberedList } from "./utils";
+import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext";
 import "./styles.css";
 
 const blockTypeToBlockName = {
@@ -52,7 +45,6 @@ const blockTypeToBlockName = {
 };
 
 const LowPriority = 1;
-type HeadingTagType = "h2" | "h3" | "h4" | "h5";
 
 export default function ToolbarPlugin({
   editorId,
@@ -62,6 +54,7 @@ export default function ToolbarPlugin({
   setIsLinkEditMode: (isLinkEditMode: boolean) => void;
 }) {
   const [editor] = useLexicalComposerContext();
+
   const [isBold, setIsBold] = useState(false);
   const [isItalic, setIsItalic] = useState(false);
   const [isLink, setIsLink] = useState(false);
@@ -121,51 +114,6 @@ export default function ToolbarPlugin({
     },
     [items, setCurrentFocusIndex, setToolbarInit, toolbarInit]
   );
-
-  const formatHeading = (level: HeadingTagType) => {
-    if (blockType === level) {
-      formatParagraph();
-    }
-
-    if (blockType !== level) {
-      editor.update(() => {
-        const selection = $getSelection();
-        if ($isRangeSelection(selection)) {
-          $wrapNodes(selection, () => $createHeadingNode(level));
-        }
-      });
-    }
-  };
-
-  const formatParagraph = () => {
-    if (blockType !== "paragraph") {
-      editor.update(() => {
-        const selection = $getSelection();
-
-        if ($isRangeSelection(selection)) {
-          $wrapNodes(selection, () => $createParagraphNode());
-        }
-      });
-    }
-  };
-
-  const formatBulletList = (evt: React.MouseEvent<HTMLButtonElement>) => {
-    evt.preventDefault();
-    if (blockType !== "bullet") {
-      editor.dispatchCommand(INSERT_UNORDERED_LIST_COMMAND, undefined);
-      return;
-    }
-    editor.dispatchCommand(REMOVE_LIST_COMMAND, undefined);
-  };
-
-  const formatNumberedList = (evt: React.MouseEvent<HTMLButtonElement>) => {
-    evt.preventDefault();
-    if (blockType !== "number") {
-      editor.dispatchCommand(INSERT_ORDERED_LIST_COMMAND, undefined);
-      return;
-    }
-    editor.dispatchCommand(REMOVE_LIST_COMMAND, undefined);
-  };
 
   const updateToolbar = useCallback(() => {
     const selection = $getSelection();
@@ -254,7 +202,7 @@ export default function ToolbarPlugin({
               }
             }}
             onClick={() => {
-              formatHeading("h2");
+              formatHeading(editor, blockType, "h2");
             }}
             className={
               "toolbar-item spaced " + (blockType === "h2" && editorHasFocus ? "active" : "")
@@ -277,7 +225,7 @@ export default function ToolbarPlugin({
               }
             }}
             onClick={() => {
-              formatHeading("h3");
+              formatHeading(editor, blockType, "h3");
             }}
             className={
               "peer toolbar-item spaced " + (blockType === "h3" && editorHasFocus ? "active" : "")
@@ -341,7 +289,7 @@ export default function ToolbarPlugin({
                 itemsRef.current[index] = el;
               }
             }}
-            onClick={formatBulletList}
+            onClick={() => formatBulletList(editor, blockType)}
             className={
               "peer toolbar-item " + (blockType === "bullet" && editorHasFocus ? "active" : "")
             }
@@ -362,7 +310,7 @@ export default function ToolbarPlugin({
                 itemsRef.current[index] = el;
               }
             }}
-            onClick={formatNumberedList}
+            onClick={() => formatNumberedList(editor, blockType)}
             className={
               "peer toolbar-item " + (blockType === "number" && editorHasFocus ? "active" : "")
             }
