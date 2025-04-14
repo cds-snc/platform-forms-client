@@ -5,6 +5,27 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.38.5](https://github.com/cds-snc/platform-forms-client/compare/v3.38.4...v3.38.5) (2025-04-14)
+
+
+### Bug Fixes
+
+* adds check for validation errors to submit button loader ([#5406](https://github.com/cds-snc/platform-forms-client/issues/5406)) ([c8454b3](https://github.com/cds-snc/platform-forms-client/commit/c8454b3fe8b3b8efbda5702b4021f8fbf86251c8))
+* small typo in API key switch toast ([#5413](https://github.com/cds-snc/platform-forms-client/issues/5413)) ([7cb7480](https://github.com/cds-snc/platform-forms-client/commit/7cb7480a2eab8fd07d93fec57411e1f9d1dc308a))
+* updates CAPTCHA verify to be called in the form submission ([#5396](https://github.com/cds-snc/platform-forms-client/issues/5396)) ([399972c](https://github.com/cds-snc/platform-forms-client/commit/399972c7ef033f93c595536d8c581878aa022d51))
+
+
+### Miscellaneous Chores
+
+* Add GC Forms version to Footer ([#5402](https://github.com/cds-snc/platform-forms-client/issues/5402)) ([5717831](https://github.com/cds-snc/platform-forms-client/commit/57178313e91f74f6be0087e0dd85dfba3a0da5d4))
+* Add Prairies Economic Development Canada branding ([#5412](https://github.com/cds-snc/platform-forms-client/issues/5412)) ([8e76724](https://github.com/cds-snc/platform-forms-client/commit/8e76724214b849cf8f79ecd9ebf43c3158915e07))
+* **deps:** lock file maintenance ([#5409](https://github.com/cds-snc/platform-forms-client/issues/5409)) ([3ff3bf3](https://github.com/cds-snc/platform-forms-client/commit/3ff3bf374632fd063b30a4434c281b306c400272))
+* **deps:** update all non-major docker images ([#5407](https://github.com/cds-snc/platform-forms-client/issues/5407)) ([f336843](https://github.com/cds-snc/platform-forms-client/commit/f33684379a1aa9c2dfeb54c74a7aa049af2a53ed))
+* **deps:** update all non-major github action dependencies ([#5408](https://github.com/cds-snc/platform-forms-client/issues/5408)) ([4391a4c](https://github.com/cds-snc/platform-forms-client/commit/4391a4cfdedbef6a0ff9d5389dbef626fdfbebba))
+* update string check ([#5416](https://github.com/cds-snc/platform-forms-client/issues/5416)) ([fb84e29](https://github.com/cds-snc/platform-forms-client/commit/fb84e292b1b1f14a5c08cc146f75d32945203d3c))
+* update to next 15.3 ([#5405](https://github.com/cds-snc/platform-forms-client/issues/5405)) ([baf7d1e](https://github.com/cds-snc/platform-forms-client/commit/baf7d1eb52fd26ab0f6a64cc5c2850fd345d886e))
+* version # updates ([#5414](https://github.com/cds-snc/platform-forms-client/issues/5414)) ([ab11a0e](https://github.com/cds-snc/platform-forms-client/commit/ab11a0e20c92861c0c0457e0108081a839accd63))
+
 ## [3.38.4](https://github.com/cds-snc/platform-forms-client/compare/v3.38.3...v3.38.4) (2025-04-10)
 
 
