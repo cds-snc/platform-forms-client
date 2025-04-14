@@ -89,15 +89,15 @@ const nextConfig = {
     serverActions: {
       bodySizeLimit: "5mb",
     },
-    turbo: {
-      rules: {
-        "*.md": {
-          loaders: ["raw-loader"],
-          as: "*.js",
-        },
+  },
+  turbopack: {
+    rules: {
+      "*.md": {
+        loaders: ["raw-loader"],
+        as: "*.js",
       },
     },
-  },
+  }
 };
 
 export default nextConfig;

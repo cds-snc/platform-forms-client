@@ -5,6 +5,42 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.38.4](https://github.com/cds-snc/platform-forms-client/compare/v3.38.3...v3.38.4) (2025-04-10)
+
+
+### Bug Fixes
+
+* File download fallback if showSaveFilePicker api disabled ([#5395](https://github.com/cds-snc/platform-forms-client/issues/5395)) ([6aaddb1](https://github.com/cds-snc/platform-forms-client/commit/6aaddb102a28e4881a43eb08ccec635307f5329d))
+* updates hCaptcha client logging to info level ([#5388](https://github.com/cds-snc/platform-forms-client/issues/5388)) ([426df3d](https://github.com/cds-snc/platform-forms-client/commit/426df3ddd3dbc4537d1714c610d958e5960453ec))
+
+
+### Miscellaneous Chores
+
+* add branding for Courts Administration Service ([#5393](https://github.com/cds-snc/platform-forms-client/issues/5393)) ([cc0b650](https://github.com/cds-snc/platform-forms-client/commit/cc0b650af29513ac2addb0006b4301e9158dea4e))
+* clean log for server translation ([#5387](https://github.com/cds-snc/platform-forms-client/issues/5387)) ([2aa6f72](https://github.com/cds-snc/platform-forms-client/commit/2aa6f724f41cf277e49886612e6222c05720a245))
+* update Axios package to version 1.8.4 ([#5390](https://github.com/cds-snc/platform-forms-client/issues/5390)) ([6618f4b](https://github.com/cds-snc/platform-forms-client/commit/6618f4b4710c6b64ccd87c448073f3bfca036b54))
+* update response receipt date output for FR ([#5389](https://github.com/cds-snc/platform-forms-client/issues/5389)) ([06ae23e](https://github.com/cds-snc/platform-forms-client/commit/06ae23e7f237778dfd2f9cbb7e926bfb7604e30c))
+* Update styling for form setup button ([#5398](https://github.com/cds-snc/platform-forms-client/issues/5398)) ([f483877](https://github.com/cds-snc/platform-forms-client/commit/f4838770a2d844e6f69aa1403a4205e5fdc4956a))
+
+## [3.38.3](https://github.com/cds-snc/platform-forms-client/compare/v3.38.2...v3.38.3) (2025-04-09)
+
+
+### Bug Fixes
+
+* remove Redis disconnect function call (tentative fix) ([#5385](https://github.com/cds-snc/platform-forms-client/issues/5385)) ([486d4fe](https://github.com/cds-snc/platform-forms-client/commit/486d4fe0afebe23f8c43552c8386c7a35192a5f1))
+
+
+### Miscellaneous Chores
+
+* **deps:** lock file maintenance ([#5361](https://github.com/cds-snc/platform-forms-client/issues/5361)) ([9930a37](https://github.com/cds-snc/platform-forms-client/commit/9930a373fc2258d1559676b123ca64bdad25af9f))
+
+## [3.38.2](https://github.com/cds-snc/platform-forms-client/compare/v3.38.1...v3.38.2) (2025-04-08)
+
+
+### Miscellaneous Chores
+
+* Add SaveAndResume to non admin ([#5380](https://github.com/cds-snc/platform-forms-client/issues/5380)) ([bc08314](https://github.com/cds-snc/platform-forms-client/commit/bc08314ee6bc95a86d88aa721fe88fb57234fffc))
+
 ## [3.38.1](https://github.com/cds-snc/platform-forms-client/compare/v3.38.0...v3.38.1) (2025-04-08)
 
 

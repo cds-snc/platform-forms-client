@@ -3,6 +3,8 @@ import React from "react";
 import { useTranslation } from "@i18n/client";
 import { cn } from "@lib/utils";
 
+import { Version } from "@serverComponents/globals/Version";
+
 interface FooterProps {
   isSplashPage?: boolean;
   disableGcBranding?: boolean;
@@ -49,6 +51,7 @@ export const Footer = ({
   className = "",
 }: FooterProps) => {
   const { t } = useTranslation("common");
+
   return (
     <footer
       className={cn(
@@ -60,11 +63,16 @@ export const Footer = ({
       <div className="flex flex-row items-center justify-between pb-5 pt-10 lg:flex-col lg:items-start lg:gap-4">
         <div>
           {!isSplashPage && (
-            <nav aria-label={t("footer.ariaLabel")}>
-              {displayFormBuilderFooter ? <FormBuilderLinks /> : <DefaultLinks />}
-            </nav>
+            <>
+              <nav aria-label={t("footer.ariaLabel")}>
+                {displayFormBuilderFooter ? <FormBuilderLinks /> : <DefaultLinks />}
+              </nav>
+              <Version label={t("version")} />
+            </>
           )}
+          {isSplashPage && <Version label={t("version")} />}
         </div>
+
         {!disableGcBranding && (
           <div className="min-w-[168px]">
             <picture>

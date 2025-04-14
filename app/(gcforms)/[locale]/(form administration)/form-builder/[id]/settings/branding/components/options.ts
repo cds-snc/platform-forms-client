@@ -260,4 +260,22 @@ export const options = [
     logoTitleEn: "Supreme Court of Canada",
     logoTitleFr: "Cour suprême du Canada",
   },
+  {
+    name: "cas",
+    urlEn: "https://www.cas-satj.gc.ca/en/home",
+    urlFr: "https://www.cas-satj.gc.ca/fr/accueil",
+    logoEn: "/img/branding/cas-en.svg",
+    logoFr: "/img/branding/cas-fr.svg",
+    logoTitleEn: "Courts Administration Service",
+    logoTitleFr: "Service administratif des tribunaux judiciaires",
+  },
+  {
+    name: "pedc",
+    urlEn: "https://www.canada.ca/en/prairies-economic-development.html",
+    urlFr: "https://www.canada.ca/fr/developpement-economique-prairies.html",
+    logoEn: "/img/branding/pedc-en.svg",
+    logoFr: "/img/branding/pedc-fr.svg",
+    logoTitleEn: "Prairies Economic Development Canada",
+    logoTitleFr: "Développement économique Canada pour les Prairies",
+  },
 ];

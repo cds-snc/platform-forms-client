@@ -42,6 +42,7 @@ export const FormWrapper = ({
     currentGroup,
   } = useGCFormsContext();
   const [captchaFail, setCaptchaFail] = useState(false);
+  const captchaToken = React.useRef("");
 
   const { getFlag } = useFeatureFlags();
   const saveAndResumeEnabled = getFlag(FeatureFlags.saveAndResume);
@@ -130,6 +131,7 @@ export const FormWrapper = ({
         currentGroup={currentGroup}
         setCaptchaFail={setCaptchaFail}
         captchaFail={captchaFail}
+        captchaToken={captchaToken}
       >
         {currentForm}
       </Form>

@@ -37,17 +37,19 @@ const createFlag = async (key: string, value: boolean) => {
     .exec();
 };
 export const initiateFlags = async () => {
-  logMessage.info("Running flag initiation");
+  logMessage.info("Running flag initialization");
+
   if (process.env.APP_ENV === "test") {
-    logMessage.info("Application is TEST mode, skipping flag initialization");
+    logMessage.info("Application is in TEST mode, skipping flag initialization");
     return;
   }
-  const redis = await getRedisInstance();
 
   try {
     let currentFlags = await checkAll();
     const defaultFlags: { [key: string]: boolean } = initialFlags;
-    logMessage.info("Checking for Depreceated Flags");
+
+    logMessage.info("Checking for deprecated flags");
+
     const removeFlags = [];
     for (const key in currentFlags) {
       if (typeof defaultFlags[key] === "undefined" || defaultFlags[key] === null) {
@@ -62,7 +64,9 @@ export const initiateFlags = async () => {
     await Promise.all(removeFlags);
 
     currentFlags = await checkAll();
-    logMessage.info("Checking for New Flags");
+
+    logMessage.info("Checking for new flags");
+
     const addFlags = [];
     for (const key in initialFlags) {
       if (typeof currentFlags[key] === "undefined" || currentFlags[key] === null) {
@@ -77,7 +81,5 @@ export const initiateFlags = async () => {
     await Promise.all(addFlags);
   } catch (err) {
     logMessage.error(err);
-  } finally {
-    redis.disconnect();
   }
 };

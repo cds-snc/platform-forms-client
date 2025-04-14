@@ -95,20 +95,11 @@ export const Pagination = ({
         href={`/${language}/form-builder/${formId}/responses${
           statusFilter ? `/${statusFilter}` : "/"
         }`}
-        legacyBehavior
+        className={`group mr-4 inline-block ${isFirstPage ? "pointer-events-none opacity-50" : ""}`}
+        aria-disabled={isFirstPage}
       >
-        <a
-          href={`/${language}/form-builder/${formId}/responses${
-            statusFilter ? `/${statusFilter}` : "/"
-          }`}
-          className={`group mr-4 inline-block ${
-            isFirstPage ? "pointer-events-none opacity-50" : ""
-          }`}
-          aria-disabled={isFirstPage}
-        >
-          <StartIcon className="inline-block size-6 group-focus:fill-white" />
-          {t("downloadResponsesTable.header.pagination.start")}
-        </a>
+        <StartIcon className="inline-block size-6 group-focus:fill-white" />
+        {t("downloadResponsesTable.header.pagination.start")}
       </Link>
 
       <div className="float-right inline-block">
@@ -116,40 +107,30 @@ export const Pagination = ({
           href={`/${language}/form-builder/${formId}/responses${
             statusFilter ? `/${statusFilter}` : "/"
           }${previousLink}`}
-          legacyBehavior
+          className={`group mr-4 inline-block ${
+            isFirstPage ? "pointer-events-none opacity-50" : ""
+          }`}
+          aria-disabled={isFirstPage}
         >
-          <a
-            href={`/${language}/form-builder/${formId}/responses${
-              statusFilter ? `/${statusFilter}` : "/"
-            }${previousLink}`}
-            className={`group mr-4 inline-block ${
-              isFirstPage ? "pointer-events-none opacity-50" : ""
-            }`}
-            aria-disabled={isFirstPage}
-          >
+          <>
             <BackArrowIcon className="inline-block size-6 group-focus:fill-white" />
             {t("downloadResponsesTable.header.pagination.previous")}
-          </a>
+          </>
         </Link>
         {t("downloadResponsesTable.header.pagination.showing", { start, end })}
         <Link
           href={`/${language}/form-builder/${formId}/responses${
             statusFilter ? `/${statusFilter}` : "/"
           }?keys=${encodeBase64Url(keys.join(","))}&lastKey=${lastEvaluatedResponse}`}
-          legacyBehavior
+          className={`group ml-4 inline-block ${
+            isLastPage ? "pointer-events-none opacity-50" : ""
+          }`}
+          aria-disabled={isLastPage}
         >
-          <a
-            href={`/${language}/form-builder/${formId}/responses${
-              statusFilter ? `/${statusFilter}` : "/"
-            }?keys=${encodeBase64Url(keys.join(","))}&lastKey=${lastEvaluatedResponse}`}
-            className={`group ml-4 inline-block ${
-              isLastPage ? "pointer-events-none opacity-50" : ""
-            }`}
-            aria-disabled={isLastPage}
-          >
+          <>
             {t("downloadResponsesTable.header.pagination.next")}
             <ForwardArrowIcon className="inline-block size-6 group-focus:fill-white" />
-          </a>
+          </>
         </Link>
       </div>
     </>
