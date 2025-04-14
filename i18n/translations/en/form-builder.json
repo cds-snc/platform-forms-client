@@ -646,7 +646,7 @@
       },
       "deleteKeySuccess": {
         "title": "API key deleted",
-        "message": "New responses can now be downloaded on the",
+        "message": "New responses can now be downloaded on the ",
         "responseLinkText": "Responses page"
       },
       "generateKeySuccess": {
