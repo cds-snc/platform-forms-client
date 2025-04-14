@@ -1,10 +1,10 @@
 {
   "textFormatting": "Mise en forme du texte",
-  "tooltipFormatBold": "En gras (⌘B)",
+  "tooltipFormatBold": "En gras",
   "tooltipFormatBulletList": "Liste à puces",
   "tooltipFormatH2": "En-tête niveau 2",
   "tooltipFormatH3": "En-tête niveau 3",
-  "tooltipFormatItalic": "Italique (⌘I)",
+  "tooltipFormatItalic": "Italique",
   "tooltipFormatNumberedList": "Liste numérotée",
   "tooltipInsertLink": "Insérer un lien",
   "formatBold": "Mettre en gras",

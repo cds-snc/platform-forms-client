@@ -1,10 +1,10 @@
 {
   "textFormatting": "Text formatting",
-  "tooltipFormatBold": "Bold (⌘B)",
+  "tooltipFormatBold": "Bold",
   "tooltipFormatBulletList": "Bulleted list",
   "tooltipFormatH2": "Heading 2",
   "tooltipFormatH3": "Heading 3",
-  "tooltipFormatItalic": "Italic (⌘I)",
+  "tooltipFormatItalic": "Italic",
   "tooltipFormatNumberedList": "Numbered list",
   "tooltipInsertLink": "Insert link",
   "formatBold": "Format bold",
