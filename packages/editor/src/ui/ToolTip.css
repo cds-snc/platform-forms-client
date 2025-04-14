@@ -1,0 +1,34 @@
+.gc-tooltip-container {
+  position: relative;
+}
+
+.gc-tooltip {
+  position: absolute;
+  top: -2rem;
+  left: -3.5rem;
+  visibility: hidden;
+  padding: 0.25rem;
+  border-radius: 0.25rem;
+  width: 9rem;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  text-align: center;
+  color: #ffffff;
+  white-space: nowrap;
+  background-color: #1f2937;
+}
+
+.gc-tooltip:after {
+  content: " ";
+  position: absolute;
+  top: 100%; /* At the bottom of the tooltip */
+  left: 50%;
+  margin-left: -5px;
+  border-width: 5px;
+  border-style: solid;
+  border-color: black transparent transparent transparent;
+}
+
+.gc-tooltip-container .gc-tooltip-target:hover + .gc-tooltip {
+  visibility: visible;
+}
