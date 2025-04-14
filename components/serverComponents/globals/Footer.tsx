@@ -66,10 +66,15 @@ export const Footer = async ({
               <nav aria-label={t("footer.ariaLabel")}>
                 {displayFormBuilderFooter ? <FormBuilderLinks /> : <DefaultLinks />}
               </nav>
-              <Version label={t("version")} />
+              <Version
+                isFormBuilder={displayFormBuilderFooter ? true : false}
+                label={t("version")}
+              />
             </>
           )}
-          {isSplashPage && <Version label={t("version")} />}
+          {isSplashPage && (
+            <Version isFormBuilder={displayFormBuilderFooter ? true : false} label={t("version")} />
+          )}
         </div>
         {!disableGcBranding && (
           <div className="min-w-[168px]">

@@ -64,13 +64,19 @@ export const Footer = ({
         <div>
           {!isSplashPage && (
             <>
-              <nav aria-label={t("footer.ariaLabel")}>
+              <nav aria-label={t("footer.ariaLabel")} className="inline-block">
                 {displayFormBuilderFooter ? <FormBuilderLinks /> : <DefaultLinks />}
               </nav>
-              <Version label={t("version")} />
+
+              <Version
+                isFormBuilder={displayFormBuilderFooter ? true : false}
+                label={t("version")}
+              />
             </>
           )}
-          {isSplashPage && <Version label={t("version")} />}
+          {isSplashPage && (
+            <Version isFormBuilder={displayFormBuilderFooter ? true : false} label={t("version")} />
+          )}
         </div>
 
         {!disableGcBranding && (
