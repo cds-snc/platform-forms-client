@@ -25,9 +25,11 @@
     padding: 2px 6px;
     width: 100%;
   }
-  span {
-    padding: 2px 0;
+  .link {
+    padding: 2px 4px;
     font-size: 0.9rem;
+    width: 100%;
+    text-align: left;
   }
 }
 

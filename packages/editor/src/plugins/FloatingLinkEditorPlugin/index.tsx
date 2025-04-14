@@ -265,14 +265,6 @@ function FloatingLinkEditor({
             onKeyDown={(event) => {
               monitorInputInteraction(event);
             }}
-            onBlur={() => {
-              setIsLinkEditMode(false);
-              if (isValidUrl(editedLinkUrl)) {
-                editor.dispatchCommand(TOGGLE_LINK_COMMAND, sanitizeUrl(editedLinkUrl));
-              } else {
-                editor.dispatchCommand(TOGGLE_LINK_COMMAND, null);
-              }
-            }}
           />
           <div className="gc-link-editor-actions">
             <button
@@ -317,7 +309,20 @@ function FloatingLinkEditor({
         </div>
       ) : (
         <div className="gc-link-editor-container">
-          <span>{linkUrl}</span>
+          <button
+            className="link"
+            tabIndex={0}
+            onKeyDown={(event) => {
+              if (event.key === "Enter") {
+                event.preventDefault();
+                setEditedLinkUrl(linkUrl);
+                setIsLinkEditMode(true);
+              }
+            }}
+          >
+            <span className="sr-only">{t("pressEnterToEditLink")}</span>
+            {linkUrl}
+          </button>
           <div className="gc-link-editor-actions">
             <button
               onMouseDown={preventDefault}
