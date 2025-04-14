@@ -2,7 +2,7 @@ import packageJson from "../../../package.json";
 
 const deploymentId = process.env.NEXT_DEPLOYMENT_ID || "local";
 
-export const Version = async ({ label }: { label: string }) => {
+export const Version = ({ label }: { label: string }) => {
   const { version } = packageJson;
 
   return (
