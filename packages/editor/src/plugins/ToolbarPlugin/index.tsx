@@ -61,11 +61,7 @@ export default function ToolbarPlugin({
   const [editor] = useLexicalComposerContext();
 
   const { toolbarState, updateToolbarState } = useToolbarState();
-  // const [isBold, setIsBold] = useState(false);
-  // const [isItalic, setIsItalic] = useState(false);
-  // const [isLink, setIsLink] = useState(false);
   const [, setSelectedElementKey] = useState("");
-  // const [blockType, setBlockType] = useState("paragraph");
   const [isEditable, setIsEditable] = useState(() => editor.isEditable());
   const [activeEditor, setActiveEditor] = useState(editor);
 
