@@ -1,5 +1,5 @@
 const FORM_ID_SINGLE_PAGE = "cm9h879wr007byn01fswmm9f3"; // staging = "cm9ha7ldb0001x701vocmtevr"
-const FORM_ID_MULTI_PAGE = "cm9hg5nk6009rxa01dde41xes";
+const FORM_ID_MULTI_PAGE = "cm9hg5nk6009rxa01dde41xes"; // staging = "cm9hnmdwm0001vo0111lakpdw"
 
 describe("Production Release Test", async () => {
   // TODO: remove or disable when form-timer removed
@@ -173,6 +173,106 @@ describe("Production Release Test", async () => {
 
       cy.get("button[type='submit']").click();
       clickFormTimer();
+      cy.get("h1").should("contain", "Your form has been submitted");
+    });
+
+    it("Filling all fields succeeds", () => {
+      cy.get("span").contains("Continue").parent().click();
+
+      //
+      // Page 1 - Applicant Information page
+      //
+
+      cy.get("h2").should("contain", "Applicant Information");
+      cy.typeInField("#16", "first");
+      cy.typeInField("#17", "middle");
+      cy.typeInField("#18", "last");
+      cy.typeInField("#19", "alternate");
+
+      // Contact
+      cy.typeInField("#3", "123");
+      cy.typeInField("#4", "test@test.com");
+      cy.get("label[for='5.0']").click();
+
+      // DOB
+      cy.get("#6-year").type("2023");
+      cy.get("#6-month").type("01");
+      cy.get("#6-day").type("01");
+
+      // Date of submission
+      cy.get("#21-year").type("2023");
+      cy.get("#21-month").type("01");
+      cy.get("#21-day").type("01");
+
+      cy.typeInField("#20", "Accessibility Standards Canada").should(
+        "have.value",
+        "Accessibility Standards Canada"
+      );
+
+      cy.get("span").contains("Continue").parent().click();
+
+      //
+      // Page 2 - Eligibility Criteria
+      //
+
+      //#22 - Are you applying as an.. intentionally left blank for testing an empty response
+
+      cy.get("label[for='22.0']").click();
+
+      cy.get("span").contains("Continue").parent().click();
+
+      //
+      // Page 3 - Application Details
+      //
+
+      cy.get("#28").select("Employment").should("have.value", "Employment");
+      cy.typeInField("#29", "request in detail");
+      cy.get("label[for='30.0']").click();
+      cy.get("label[for='30.1']").click();
+
+      cy.get("span").contains("Continue").parent().click();
+
+      //
+      // Page 4 - Additional Information - Funding Support
+      //
+
+      cy.typeInField("#32", "1");
+      cy.typeInField("#33", "Justification for Funding");
+      cy.get("label[for='34.0']").click();
+      cy.typeInField("#38", "application 12345");
+
+      cy.get("span").contains("Continue").parent().click();
+
+      //
+      // Page 5 - Repeating Sets
+      //
+
+      cy.typeInField("input[name='36.0.0']", "Full name1");
+      cy.typeInField("input[name='36.0.1']", "1");
+      cy.typeInField("textarea[name='36.0.2']", "Primary Responsibilities1");
+      cy.get("select[name='36.0.3']")
+        .select("Less than 1 year")
+        .should("have.value", "Less than 1 year");
+
+      cy.get("button").contains("Add another team member").click();
+
+      cy.typeInField("input[name='36.1.0']", "Full name2");
+      cy.typeInField("input[name='36.1.1']", "2");
+      cy.typeInField("textarea[name='36.1.2']", "Primary Responsibilities2");
+      cy.get("select[name='36.1.3']")
+        .select("Less than 1 year")
+        .should("have.value", "Less than 1 year");
+
+      cy.get("span").contains("Continue").parent().click();
+
+      //
+      // Review Page - check all the answers
+      //
+
+      cy.get("h2").should("contain", "Review your answers before submitting the form");
+
+      cy.get("button[type='submit']").click();
+      // clickFormTimer(); -- interesting that enough time passes that the form timer is finished by then end of the form
       cy.get("h1").should("contain", "Your form has been submitted");
     });
   });
