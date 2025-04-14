@@ -1,7 +1,7 @@
 "use client";
 import React, { useState, useCallback, useEffect, useRef, KeyboardEvent } from "react";
 import { $isHeadingNode } from "@lexical/rich-text";
-import { mergeRegister, $getNearestNodeOfType } from "@lexical/utils";
+import { mergeRegister, $getNearestNodeOfType, $findMatchingParent } from "@lexical/utils";
 
 import { $isLinkNode, TOGGLE_LINK_COMMAND } from "@lexical/link";
 
@@ -12,6 +12,10 @@ import {
   $getSelection,
   $isRangeSelection,
   SELECTION_CHANGE_COMMAND,
+  $isRootOrShadowRoot,
+  COMMAND_PRIORITY_CRITICAL,
+  CAN_UNDO_COMMAND,
+  CAN_REDO_COMMAND,
 } from "lexical";
 
 import { useEditorFocus } from "../../hooks/useEditorFocus";
@@ -28,6 +32,9 @@ import { useTranslation } from "../../hooks/useTranslation";
 import { formatBulletList, formatHeading, formatNumberedList } from "./utils";
 import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext";
 import "./styles.css";
+import { SHORTCUTS } from "../ShortcutsPlugin/shortcuts";
+import { useToolbarState } from "../../context/ToolbarContext";
+import { sanitizeUrl } from "../../utils/url";
 
 const blockTypeToBlockName = {
   bullet: "Bulleted List",
@@ -44,8 +51,6 @@ const blockTypeToBlockName = {
   quote: "Quote",
 };
 
-const LowPriority = 1;
-
 export default function ToolbarPlugin({
   editorId,
   setIsLinkEditMode,
@@ -55,23 +60,26 @@ export default function ToolbarPlugin({
 }) {
   const [editor] = useLexicalComposerContext();
 
-  const [isBold, setIsBold] = useState(false);
-  const [isItalic, setIsItalic] = useState(false);
-  const [isLink, setIsLink] = useState(false);
+  const { toolbarState, updateToolbarState } = useToolbarState();
+  // const [isBold, setIsBold] = useState(false);
+  // const [isItalic, setIsItalic] = useState(false);
+  // const [isLink, setIsLink] = useState(false);
   const [, setSelectedElementKey] = useState("");
-  const [blockType, setBlockType] = useState("paragraph");
-  const [isEditable] = useState(() => editor.isEditable());
+  // const [blockType, setBlockType] = useState("paragraph");
+  const [isEditable, setIsEditable] = useState(() => editor.isEditable());
+  const [activeEditor, setActiveEditor] = useState(editor);
 
   const { t } = useTranslation();
 
   const insertLink = useCallback(() => {
-    if (!isLink) {
+    if (!toolbarState.isLink) {
       setIsLinkEditMode(true);
-      editor.dispatchCommand(TOGGLE_LINK_COMMAND, "");
+      activeEditor.dispatchCommand(TOGGLE_LINK_COMMAND, sanitizeUrl("https://"));
     } else {
-      editor.dispatchCommand(TOGGLE_LINK_COMMAND, null);
+      setIsLinkEditMode(false);
+      activeEditor.dispatchCommand(TOGGLE_LINK_COMMAND, null);
     }
-  }, [editor, isLink, setIsLinkEditMode]);
+  }, [activeEditor, setIsLinkEditMode, toolbarState.isLink]);
 
   const [items] = useState([
     { id: 1, txt: "heading2" },
@@ -115,70 +123,100 @@ export default function ToolbarPlugin({
     [items, setCurrentFocusIndex, setToolbarInit, toolbarInit]
   );
 
-  const updateToolbar = useCallback(() => {
+  const $updateToolbar = useCallback(() => {
     const selection = $getSelection();
 
     if ($isRangeSelection(selection)) {
       const anchorNode = selection.anchor.getNode();
-      const element =
-        anchorNode.getKey() === "root" ? anchorNode : anchorNode.getTopLevelElementOrThrow();
+      let element =
+        anchorNode.getKey() === "root"
+          ? anchorNode
+          : $findMatchingParent(anchorNode, (e) => {
+              const parent = e.getParent();
+              return parent !== null && $isRootOrShadowRoot(parent);
+            });
+
+      if (element === null) {
+        element = anchorNode.getTopLevelElementOrThrow();
+      }
+
       const elementKey = element.getKey();
       const elementDOM = editor.getElementByKey(elementKey);
-      if (elementDOM !== null) {
-        setSelectedElementKey(elementKey);
-
-        const type = $isHeadingNode(element) ? element.getTag() : element.getType();
-        setBlockType(type);
-      }
-
-      // Update text format
-      setIsBold(selection.hasFormat("bold"));
-      setIsItalic(selection.hasFormat("italic"));
-
-      // Get current node and parent
-      const node = getSelectedNode(selection);
-      const parent = node.getParent();
 
       // Update links
-      if ($isLinkNode(parent) || $isLinkNode(node)) {
-        setIsLink(true);
-      } else {
-        setIsLink(false);
-      }
+      const node = getSelectedNode(selection);
+      const parent = node.getParent();
+      const isLink = $isLinkNode(parent) || $isLinkNode(node);
+      updateToolbarState("isLink", isLink);
 
       if (elementDOM !== null) {
         setSelectedElementKey(elementKey);
         if ($isListNode(element)) {
           const parentList = $getNearestNodeOfType<ListNode>(anchorNode, ListNode);
           const type = parentList ? parentList.getListType() : element.getListType();
-          setBlockType(type);
+
+          updateToolbarState("blockType", type);
         } else {
           const type = $isHeadingNode(element) ? element.getTag() : element.getType();
           if (type in blockTypeToBlockName) {
-            setBlockType(type as keyof typeof blockTypeToBlockName);
+            updateToolbarState("blockType", type as keyof typeof blockTypeToBlockName);
           }
         }
       }
     }
-  }, [editor]);
+    if ($isRangeSelection(selection)) {
+      // Update text format
+      updateToolbarState("isBold", selection.hasFormat("bold"));
+      updateToolbarState("isItalic", selection.hasFormat("italic"));
+    }
+  }, [editor, updateToolbarState]);
+
+  useEffect(() => {
+    return editor.registerCommand(
+      SELECTION_CHANGE_COMMAND,
+      (_payload, newEditor) => {
+        setActiveEditor(newEditor);
+        $updateToolbar();
+        return false;
+      },
+      COMMAND_PRIORITY_CRITICAL
+    );
+  }, [editor, $updateToolbar, setActiveEditor]);
+
+  useEffect(() => {
+    activeEditor.getEditorState().read(() => {
+      $updateToolbar();
+    });
+  }, [activeEditor, $updateToolbar]);
 
   useEffect(() => {
     return mergeRegister(
-      editor.registerUpdateListener(({ editorState }) => {
+      editor.registerEditableListener((editable) => {
+        setIsEditable(editable);
+      }),
+      activeEditor.registerUpdateListener(({ editorState }) => {
         editorState.read(() => {
-          updateToolbar();
+          $updateToolbar();
         });
       }),
-      editor.registerCommand(
-        SELECTION_CHANGE_COMMAND,
-        () => {
-          updateToolbar();
+      activeEditor.registerCommand<boolean>(
+        CAN_UNDO_COMMAND,
+        (payload) => {
+          updateToolbarState("canUndo", payload);
           return false;
         },
-        LowPriority
+        COMMAND_PRIORITY_CRITICAL
+      ),
+      activeEditor.registerCommand<boolean>(
+        CAN_REDO_COMMAND,
+        (payload) => {
+          updateToolbarState("canRedo", payload);
+          return false;
+        },
+        COMMAND_PRIORITY_CRITICAL
       )
     );
-  }, [editor, updateToolbar]);
+  }, [$updateToolbar, activeEditor, editor, updateToolbarState]);
 
   const editorHasFocus = useEditorFocus();
 
@@ -192,7 +230,7 @@ export default function ToolbarPlugin({
         onKeyDown={handleNav}
         data-testid="toolbar"
       >
-        <ToolTip text={t("tooltipFormatH2")}>
+        <ToolTip text={t("tooltipFormatH2") + ` (${SHORTCUTS.HEADING2})`}>
           <button
             tabIndex={currentFocusIndex == 0 ? 0 : -1}
             ref={(el) => {
@@ -202,20 +240,21 @@ export default function ToolbarPlugin({
               }
             }}
             onClick={() => {
-              formatHeading(editor, blockType, "h2");
+              formatHeading(editor, toolbarState.blockType, "h2");
             }}
             className={
-              "toolbar-item spaced " + (blockType === "h2" && editorHasFocus ? "active" : "")
+              "toolbar-item spaced " +
+              (toolbarState.blockType === "h2" && editorHasFocus ? "active" : "")
             }
             aria-label={t("formatH2")}
-            aria-pressed={blockType === "h2"}
+            aria-pressed={toolbarState.blockType === "h2"}
             data-testid={`h2-button`}
           >
             <H2Icon />
           </button>
         </ToolTip>
 
-        <ToolTip text={t("tooltipFormatH3")}>
+        <ToolTip text={t("tooltipFormatH3") + ` (${SHORTCUTS.HEADING3})`}>
           <button
             tabIndex={currentFocusIndex == 1 ? 0 : -1}
             ref={(el) => {
@@ -225,20 +264,21 @@ export default function ToolbarPlugin({
               }
             }}
             onClick={() => {
-              formatHeading(editor, blockType, "h3");
+              formatHeading(editor, toolbarState.blockType, "h3");
             }}
             className={
-              "peer toolbar-item spaced " + (blockType === "h3" && editorHasFocus ? "active" : "")
+              "peer toolbar-item spaced " +
+              (toolbarState.blockType === "h3" && editorHasFocus ? "active" : "")
             }
             aria-label={t("formatH3")}
-            aria-pressed={blockType === "h3"}
+            aria-pressed={toolbarState.blockType === "h3"}
             data-testid={`h3-button`}
           >
             <H3Icon />
           </button>
         </ToolTip>
 
-        <ToolTip text={t("tooltipFormatBold")}>
+        <ToolTip text={t("tooltipFormatBold") + ` (${SHORTCUTS.BOLD})`}>
           <button
             tabIndex={currentFocusIndex == 2 ? 0 : -1}
             ref={(el) => {
@@ -250,16 +290,18 @@ export default function ToolbarPlugin({
             onClick={() => {
               editor.dispatchCommand(FORMAT_TEXT_COMMAND, "bold");
             }}
-            className={"peer toolbar-item " + (isBold && editorHasFocus ? "active" : "")}
+            className={
+              "peer toolbar-item " + (toolbarState.isBold && editorHasFocus ? "active" : "")
+            }
             aria-label={t("formatBold")}
-            aria-pressed={isBold}
+            aria-pressed={toolbarState.isBold}
             data-testid={`bold-button`}
           >
             <BoldIcon />
           </button>
         </ToolTip>
 
-        <ToolTip text={t("tooltipFormatItalic")}>
+        <ToolTip text={t("tooltipFormatItalic") + ` (${SHORTCUTS.ITALIC})`}>
           <button
             tabIndex={currentFocusIndex == 3 ? 0 : -1}
             ref={(el) => {
@@ -271,16 +313,18 @@ export default function ToolbarPlugin({
             onClick={() => {
               editor.dispatchCommand(FORMAT_TEXT_COMMAND, "italic");
             }}
-            className={"peer toolbar-item " + (isItalic && editorHasFocus ? "active" : "")}
+            className={
+              "peer toolbar-item " + (toolbarState.isItalic && editorHasFocus ? "active" : "")
+            }
             aria-label={t("formatItalic")}
-            aria-pressed={isItalic}
+            aria-pressed={toolbarState.isItalic}
             data-testid={`italic-button`}
           >
             <ItalicIcon />
           </button>
         </ToolTip>
 
-        <ToolTip text={t("tooltipFormatBulletList")}>
+        <ToolTip text={t("tooltipFormatBulletList") + ` (${SHORTCUTS.BULLET_LIST})`}>
           <button
             tabIndex={currentFocusIndex == 4 ? 0 : -1}
             ref={(el) => {
@@ -289,19 +333,20 @@ export default function ToolbarPlugin({
                 itemsRef.current[index] = el;
               }
             }}
-            onClick={() => formatBulletList(editor, blockType)}
+            onClick={() => formatBulletList(editor, toolbarState.blockType)}
             className={
-              "peer toolbar-item " + (blockType === "bullet" && editorHasFocus ? "active" : "")
+              "peer toolbar-item " +
+              (toolbarState.blockType === "bullet" && editorHasFocus ? "active" : "")
             }
             aria-label={t("formatBulletList")}
-            aria-pressed={blockType === "bullet"}
+            aria-pressed={toolbarState.blockType === "bullet"}
             data-testid={`bullet-list-button`}
           >
             <BulletListIcon />
           </button>
         </ToolTip>
 
-        <ToolTip text={t("tooltipFormatNumberedList")}>
+        <ToolTip text={t("tooltipFormatNumberedList") + ` (${SHORTCUTS.NUMBERED_LIST})`}>
           <button
             tabIndex={currentFocusIndex == 5 ? 0 : -1}
             ref={(el) => {
@@ -310,19 +355,20 @@ export default function ToolbarPlugin({
                 itemsRef.current[index] = el;
               }
             }}
-            onClick={() => formatNumberedList(editor, blockType)}
+            onClick={() => formatNumberedList(editor, toolbarState.blockType)}
             className={
-              "peer toolbar-item " + (blockType === "number" && editorHasFocus ? "active" : "")
+              "peer toolbar-item " +
+              (toolbarState.blockType === "number" && editorHasFocus ? "active" : "")
             }
             aria-label={t("formatNumberedList")}
-            aria-pressed={blockType === "number"}
+            aria-pressed={toolbarState.blockType === "number"}
             data-testid={`numbered-list-button`}
           >
             <NumberedListIcon />
           </button>
         </ToolTip>
 
-        <ToolTip text={t("tooltipInsertLink")}>
+        <ToolTip text={t("tooltipInsertLink") + ` (${SHORTCUTS.INSERT_LINK})`}>
           <button
             tabIndex={currentFocusIndex == 6 ? 0 : -1}
             ref={(el) => {
@@ -333,9 +379,11 @@ export default function ToolbarPlugin({
             }}
             disabled={!isEditable}
             onClick={insertLink}
-            className={"peer toolbar-item " + (isLink && editorHasFocus ? "active" : "")}
+            className={
+              "peer toolbar-item " + (toolbarState.isLink && editorHasFocus ? "active" : "")
+            }
             aria-label={t("insertLink")}
-            aria-pressed={isLink}
+            aria-pressed={toolbarState.isLink}
             data-testid={`link-button`}
           >
             <LinkIcon />
