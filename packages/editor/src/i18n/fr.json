@@ -14,9 +14,9 @@
   "formatItalic": "Mettre en italique",
   "formatNumberedList": "Mettre en liste numérotée",
   "insertLink": "Insérer un lien",
-  "cancelEditLink": "Cancel edit link (FR)",
-  "saveLink": "Save link (FR)",
-  "editLink": "Edit link (FR)",
-  "removeLink": "Remove link (FR)",
+  "cancelEditLink": "Annuler la modification du lien",
+  "saveLink": "Enregistrer le lien",
+  "editLink": "Modifier le lien",
+  "removeLink": "Supprimer le lien",
   "pressEnterToEditLink": "Press Enter to edit link (FR)"
 }
