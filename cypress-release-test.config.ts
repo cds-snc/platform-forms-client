@@ -2,9 +2,6 @@ import { defineConfig } from "cypress";
 import { logMessage } from "@lib/logger";
 import terminalReport from "cypress-terminal-report/src/installLogsPrinter";
 
-// Override the baseUrl with a var
-// e.g. CYPRESS_BASE_URL=https://forms-formulaires.alpha.canada.ca cypress run --browser chrome --spec cypress/e2e/release-tests/form_submission.cy.ts
-
 export default defineConfig({
   video: false,
   defaultCommandTimeout: 10000,
