@@ -25,6 +25,8 @@ import { Language } from "./i18n";
 import { LocaleContext } from "./context/LocaleContext";
 
 import "./styles.css";
+import { ToolbarContext } from "./context/ToolbarContext";
+import ShortcutsPlugin from "./plugins/ShortcutsPlugin";
 
 interface EditorProps {
   id?: string;
@@ -66,60 +68,62 @@ export const Editor = ({
 
   return (
     <LocaleContext initialLocale={locale as Language}>
-      <LexicalComposer
-        initialConfig={{
-          ...editorConfig,
-          editorState: () => {
-            $convertFromMarkdownString(content, [...TRANSFORMERS]);
-          },
-        }}
-      >
-        <div>
-          <ToolbarPlugin editorId={editorId} setIsLinkEditMode={setIsLinkEditMode} />
-
-          <RichTextPlugin
-            contentEditable={
-              <div
-                className="gc-editor-container"
-                ref={onRef}
-                {...(contentLocale && { lang: contentLocale })}
-              >
-                <ContentEditable
-                  className={className || ""}
-                  placeholder={""}
-                  id={editorId}
-                  ariaLabel={ariaLabel}
-                  ariaDescribedBy={ariaDescribedBy}
+      <ToolbarContext>
+        <LexicalComposer
+          initialConfig={{
+            ...editorConfig,
+            editorState: () => {
+              $convertFromMarkdownString(content, [...TRANSFORMERS]);
+            },
+          }}
+        >
+          <div>
+            <ToolbarPlugin editorId={editorId} setIsLinkEditMode={setIsLinkEditMode} />
+            <ShortcutsPlugin setIsLinkEditMode={setIsLinkEditMode} />
+            <RichTextPlugin
+              contentEditable={
+                <div
+                  className="gc-editor-container"
+                  ref={onRef}
+                  {...(contentLocale && { lang: contentLocale })}
+                >
+                  <ContentEditable
+                    className={className || ""}
+                    placeholder={""}
+                    id={editorId}
+                    ariaLabel={ariaLabel}
+                    ariaDescribedBy={ariaDescribedBy}
+                  />
+                </div>
+              }
+              ErrorBoundary={LexicalErrorBoundary}
+            />
+            <HistoryPlugin />
+            {showTreeview && <TreeViewPlugin />}
+            <OnChangePlugin
+              onChange={(editorState) => {
+                editorState.read(() => {
+                  const markdown = $convertToMarkdownString([...TRANSFORMERS, LINE_BREAK_FIX]);
+                  onChange && onChange(markdown);
+                });
+              }}
+            />
+            <ListPlugin />
+            <LinkPlugin />
+            <TabControlPlugin />
+            <ListMaxIndentLevelPlugin maxDepth={5} />
+            {floatingAnchorElem && (
+              <>
+                <FloatingLinkEditorPlugin
+                  anchorElem={floatingAnchorElem}
+                  isLinkEditMode={isLinkEditMode}
+                  setIsLinkEditMode={setIsLinkEditMode}
                 />
-              </div>
-            }
-            ErrorBoundary={LexicalErrorBoundary}
-          />
-          <HistoryPlugin />
-          {showTreeview && <TreeViewPlugin />}
-          <OnChangePlugin
-            onChange={(editorState) => {
-              editorState.read(() => {
-                const markdown = $convertToMarkdownString([...TRANSFORMERS, LINE_BREAK_FIX]);
-                onChange && onChange(markdown);
-              });
-            }}
-          />
-          <ListPlugin />
-          <LinkPlugin />
-          <TabControlPlugin />
-          <ListMaxIndentLevelPlugin maxDepth={5} />
-          {floatingAnchorElem && (
-            <>
-              <FloatingLinkEditorPlugin
-                anchorElem={floatingAnchorElem}
-                isLinkEditMode={isLinkEditMode}
-                setIsLinkEditMode={setIsLinkEditMode}
-              />
-            </>
-          )}
-        </div>
-      </LexicalComposer>
+              </>
+            )}
+          </div>
+        </LexicalComposer>
+      </ToolbarContext>
     </LocaleContext>
   );
 };
