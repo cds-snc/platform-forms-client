@@ -14,7 +14,7 @@ import { checkOne } from "@lib/cache/flags";
 import { FeatureFlags } from "@lib/cache/types";
 
 //  Removed once hCaptcha is running in blockable mode https://github.com/cds-snc/platform-forms-client/issues/5401
-const CAPTCHA_BLOCKABLE_MODE = false;
+const CAPTCHA_BLOCKABLE_MODE = true;
 
 // Public facing functions - they can be used by anyone who finds the associated server action identifer
 
