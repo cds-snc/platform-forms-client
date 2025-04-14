@@ -4,7 +4,7 @@
 
 .gc-tooltip {
   position: absolute;
-  top: -2rem;
+  bottom: calc(100% + 0.2rem);
   left: -3.5rem;
   visibility: hidden;
   padding: 0.25rem;
@@ -14,7 +14,7 @@
   line-height: 1.25rem;
   text-align: center;
   color: #ffffff;
-  white-space: nowrap;
+  white-space: wrap;
   background-color: #1f2937;
 }
 
