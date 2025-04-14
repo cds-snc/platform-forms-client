@@ -4,7 +4,7 @@
 
 .gc-tooltip {
   position: absolute;
-  bottom: calc(100% + 0.2rem);
+  bottom: calc(100% + 0.5rem);
   left: -3.5rem;
   visibility: hidden;
   padding: 0.25rem;
@@ -29,6 +29,7 @@
   border-color: black transparent transparent transparent;
 }
 
-.gc-tooltip-container .gc-tooltip-target:hover + .gc-tooltip {
+.gc-tooltip-target:hover + .gc-tooltip,
+.gc-tooltip-target:focus + .gc-tooltip {
   visibility: visible;
 }
