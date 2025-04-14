@@ -22,7 +22,7 @@ import FloatingLinkEditorPlugin from "./plugins/FloatingLinkEditorPlugin";
 import { editorConfig } from "./config";
 import { LINE_BREAK_FIX } from "./transformers";
 import { Language } from "./i18n";
-import { LocaleProvider } from "./hooks/useLocale";
+import { LocaleProvider } from "./context/LocaleContext";
 
 import "./styles.css";
 
