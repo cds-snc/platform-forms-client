@@ -1,7 +1,7 @@
-const FORM_ID_NO_GROUPS = "cm9h879wr007byn01fswmm9f3"; // staging = "cm9ha7ldb0001x701vocmtevr"
-// const FORM_ID_GROUPS = ""; // TODO
+const FORM_ID_SINGLE_PAGE = "cm9h879wr007byn01fswmm9f3"; // staging = "cm9ha7ldb0001x701vocmtevr"
+const FORM_ID_MULTI_PAGE = "cm9hg5nk6009rxa01dde41xes";
 
-describe("Production test", async () => {
+describe("Production Release Test", async () => {
   // TODO: remove or disable when form-timer removed
   const formTimer = true;
   const clickFormTimer = () => {
@@ -30,9 +30,9 @@ describe("Production test", async () => {
     });
   });
 
-  describe("Submit a non-groups form", () => {
+  describe("Single Page Form", () => {
     beforeEach(() => {
-      cy.visitPage(`/en/id/${FORM_ID_NO_GROUPS}`);
+      cy.visitPage(`/en/id/${FORM_ID_SINGLE_PAGE}`);
     });
 
     it("Shows header language picker, title and footer", () => {
@@ -120,6 +120,56 @@ describe("Production test", async () => {
       cy.typeInField("#24", "123");
 
       // TODO - file picker?
+
+      cy.get("button[type='submit']").click();
+      clickFormTimer();
+      cy.get("h1").should("contain", "Your form has been submitted");
+    });
+  });
+
+  describe("Multi-Page Form", () => {
+    beforeEach(() => {
+      cy.visitPage(`/en/id/${FORM_ID_MULTI_PAGE}`);
+    });
+
+    it("Shows header language picker, title and footer", () => {
+      cy.get("header").should("contain", "Français");
+      cy.get("h1").should("contain", "test-kitchen-sink-multi-page");
+      cy.get("footer").should("contain", "Terms and conditions");
+    });
+
+    it("Missing required questions or invalid input causes form validation to show", () => {
+      cy.get("span").contains("Continue").parent().click();
+
+      // Applicant Information page
+      cy.get("h2").should("contain", "Applicant Information");
+      cy.get("span").contains("Continue").parent().click();
+      cy.get("h2").should("contain", "Please correct the errors on the page");
+    });
+
+    it("Filling only required fields succeeds", () => {
+      cy.get("span").contains("Continue").parent().click();
+
+      // Applicant Information page
+      cy.get("h2").should("contain", "Applicant Information");
+      cy.typeInField("#16", "first");
+      cy.typeInField("#18", "last");
+      cy.typeInField("#20", "Accessibility Standards Canada").should(
+        "have.value",
+        "Accessibility Standards Canada"
+      );
+
+      cy.get("span").contains("Continue").parent().click();
+
+      cy.get("label[for='22.0']").click();
+
+      // Next next...
+      cy.get("span").contains("Continue").parent().click();
+      cy.get("span").contains("Continue").parent().click();
+      cy.get("span").contains("Continue").parent().click();
+      cy.get("span").contains("Continue").parent().click();
+
+      cy.get("h2").should("contain", "Review your answers before submitting the form");
 
       cy.get("button[type='submit']").click();
       clickFormTimer();
