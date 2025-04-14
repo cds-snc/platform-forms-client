@@ -43,7 +43,7 @@
     "cypress:run": "CYPRESS_DEBUG=true cypress run --browser chrome",
     "cypress:e2e": "cypress run --browser chrome --e2e",
     "cypress:component": "cypress run --browser chrome --component",
-    "cypress:release-test": "CYPRESS_DEBUG=true CYPRESS_BASE_URL=https://forms-formulaires.alpha.canada.ca cypress run --browser chrome --spec cypress/e2e/release-tests/form_submission.cy.ts",
+    "cypress:release-test": "CYPRESS_DEBUG=true cypress run --config-file ./cypress-manual.config.ts --browser chrome --spec cypress/e2e/release-tests/form_submission.cy.ts",
     "postinstall": "yarn node -e \"process.env.NODE_ENV != 'production' && process.exit(1)\" || husky install"
   },
   "dependencies": {
