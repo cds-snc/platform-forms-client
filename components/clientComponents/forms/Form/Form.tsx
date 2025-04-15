@@ -117,7 +117,6 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
   // Show the Captcha fail screen when hCAPTCHA detects a suspicous user
   // Note: check done here vs higher in the tree so the Form session will still exist on the screen
   if (props.captchaFail) {
-    logMessage.info("captchaFail=true, show component");
     return <CaptchaFail />;
   }
 
@@ -316,8 +315,8 @@ export const Form = withFormik<FormProps, Responses>({
         return;
       }
 
-      logMessage.error(err as Error);
-      formikBag.setStatus("Error");
+      // logMessage.error(err as Error);
+      // formikBag.setStatus("Error");
     } finally {
       if (formikBag.props && !formikBag.props.isPreview) {
         window.dataLayer = window.dataLayer || [];
