@@ -80,9 +80,25 @@ export const config = {
 // TOMORROW
 // Stop files like .map.js from being included in the middleware
 
-export default function middleware(req: NextRequest) {
+export default async function middleware(req: NextRequest) {
   const pathname = req.nextUrl.pathname;
   const searchParams = req.nextUrl.searchParams.toString();
+
+  if (req.headers.get("next-action") !== null) {
+    const contentLength = req.headers.get("content-length");
+    const maxPayloadSize = 5 * 1024 * 1024; // 5 MB
+
+    if (contentLength && parseInt(contentLength, 10) > maxPayloadSize) {
+      logMessage.info(
+        `Middleware: Request payload size exceeds the limit of ${maxPayloadSize} bytes.`
+      );
+    }
+
+    const body = await req.text();
+    if (body.includes("\\") || body.includes("\0")) {
+      logMessage.info("Middleware: Invalid characters in request body.");
+    }
+  }
 
   // Layer 0 - Set CORS on API routes
 
