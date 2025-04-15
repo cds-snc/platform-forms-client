@@ -19,5 +19,5 @@ For example in package.json add:
 ```
 
 Update tests based on environment settings:
+ - Disable Submitting the form e.g. disable for captcha, in `cypress/release-test/includes.ts` and update line `const submitForm = false;`
  - Disable the Form Timer in `cypress/release-test/includes.ts` and update line `const formTimer = false`
- - Disable Submitting the form e.g. disable for captcha, in `cypress/release-test/includes.ts` and update line `submitForm = false;`

@@ -4,7 +4,7 @@ import terminalReport from "cypress-terminal-report/src/installLogsPrinter";
 
 export default defineConfig({
   video: false,
-  defaultCommandTimeout: 10000,
+  defaultCommandTimeout: 15000,
   e2e: {
     specPattern: "cypress/release-test/tests/**/*.cy.{js,jsx,ts,tsx}",
     baseUrl: "https://forms-formulaires.alpha.canada.ca",

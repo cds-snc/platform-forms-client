@@ -6,23 +6,31 @@ export const ignoreExceptions = () =>
     }
   });
 
-// Set to false if the form timer is not enabled
+const submitForm = true;
 const formTimer = true;
-export const clickFormTimer = () => {
-  if (formTimer) {
-    cy.get("p").should("contain", "The button is ready.");
+
+export const submitFormSuccess = (formTimerOverride = true) => {
+  if (submitForm) {
     cy.get("button[type='submit']").click();
+
+    if (formTimer && formTimerOverride) {
+      cy.get("p").should("contain", "The button is ready.");
+      cy.get("button[type='submit']").click();
+    }
+
+    cy.get("h1").should("contain", "Your form has been submitted");
   }
 };
 
-// Set to false if hCAPTCHA is enabled
-const submitForm = true;
-export const clickAndTestSubmit = (doFormTimer = true) => {
+export const submitFormValidation = (formTimerOverride = true) => {
   if (submitForm) {
     cy.get("button[type='submit']").click();
-    if (doFormTimer) {
-      clickFormTimer();
+
+    if (formTimer && formTimerOverride) {
+      cy.get("p").should("contain", "The button is ready.");
+      cy.get("button[type='submit']").click();
     }
-    cy.get("h1").should("contain", "Your form has been submitted");
+
+    cy.get("h2").should("contain", "Please correct the errors on the page");
   }
 };

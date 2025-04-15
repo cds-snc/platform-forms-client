@@ -1,5 +1,5 @@
 import { FORM_ID_MULTI_PAGE } from "../includes";
-import { clickAndTestSubmit, ignoreExceptions } from "../utils";
+import { submitFormSuccess, ignoreExceptions } from "../utils";
 
 describe("Multi-Page Form", () => {
   ignoreExceptions();
@@ -45,7 +45,7 @@ describe("Multi-Page Form", () => {
 
     cy.get("h2").should("contain", "Review your answers before submitting the form");
 
-    clickAndTestSubmit();
+    submitFormSuccess();
   });
 
   it("Filling all fields succeeds", () => {
@@ -236,6 +236,6 @@ describe("Multi-Page Form", () => {
       .contains("Less than 1 year");
 
     // interesting that enough time passes that the form timer is finished by then end of the multi-page form
-    clickAndTestSubmit(false);
+    submitFormSuccess(false);
   });
 });

@@ -1,5 +1,5 @@
 import { FORM_ID_SINGLE_PAGE } from "../includes";
-import { clickAndTestSubmit, clickFormTimer, ignoreExceptions } from "../utils";
+import { submitFormValidation, submitFormSuccess, ignoreExceptions } from "../utils";
 
 describe("Single Page Form", () => {
   ignoreExceptions();
@@ -18,9 +18,8 @@ describe("Single Page Form", () => {
     cy.get("#13-year").type("1");
     cy.get("#13-month").type("1");
     cy.get("#13-day").type("1");
-    cy.get("button[type='submit']").click();
-    clickFormTimer();
-    cy.get("h2").should("contain", "Please correct the errors on the page");
+
+    submitFormValidation();
     cy.get("#errorMessage16").should("contain", "Enter a valid email address");
     cy.get("#errorMessage13").should("contain", "Enter a valid date");
   });
@@ -36,9 +35,7 @@ describe("Single Page Form", () => {
     cy.typeInField("#10", "first");
     cy.typeInField("#12", "last");
 
-    cy.get("button[type='submit']").click();
-    clickFormTimer();
-    cy.get("h1").should("contain", "Your form has been submitted");
+    submitFormSuccess();
   });
 
   it("Filling all fields succeeds", () => {
@@ -92,6 +89,6 @@ describe("Single Page Form", () => {
 
     // TODO - file picker?
 
-    clickAndTestSubmit();
+    submitFormSuccess();
   });
 });
