@@ -6,6 +6,7 @@ export default defineConfig({
   video: false,
   defaultCommandTimeout: 10000,
   e2e: {
+    specPattern: "cypress/release-test/tests/**/*.cy.{js,jsx,ts,tsx}",
     baseUrl: "https://forms-formulaires.alpha.canada.ca",
     setupNodeEvents(on) {
       if (process.env.CYPRESS_DEBUG) {
@@ -14,7 +15,6 @@ export default defineConfig({
       }
     },
   },
-
   component: {
     devServer: {
       framework: "next",
@@ -22,11 +22,7 @@ export default defineConfig({
     },
   },
   retries: {
-    // Configure retry attempts for `cypress run`
-    // Default is 0
     runMode: 3,
-    // Configure retry attempts for `cypress open`
-    // Default is 0
     openMode: 0,
   },
 });

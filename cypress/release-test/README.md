@@ -14,10 +14,10 @@ Override the baseUrl with by setting the environment variable `CYPRESS_BASE_URL`
 For example in package.json add:
 ```
 ...
-"cypress:release-test": "CYPRESS_DEBUG=true CYPRESS_BASE_URL=https://localhost:3000 cypress run --config-file ./cypress-release-test.config.ts --browser chrome --spec cypress/e2e/release-test/release-test.cy.ts",
+"cypress:release-test": "CYPRESS_DEBUG=true CYPRESS_BASE_URL=https://localhost:3000 cypress run --config-file ./cypress/release-test/cypress.config.ts --browser chrome",
 ...
 ```
 
 Update tests based on environment settings:
- - Disable the Form Timer in `release-test.cy.ts` line with `const formTimer = false`
- - Disable Submitting the form e.g. disable for captcha, in `release-test.cy.ts` line with `submitForm = false;`
+ - Disable the Form Timer in `cypress/release-test/includes.ts` and update line `const formTimer = false`
+ - Disable Submitting the form e.g. disable for captcha, in `cypress/release-test/includes.ts` and update line `submitForm = false;`
