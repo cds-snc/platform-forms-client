@@ -102,6 +102,7 @@ export const POST = middleware(
       runValidationIf: runValidationCondition,
       jsonKey: "formConfig",
     }),
+    templateSizeValidator(),
   ],
   async (req, props) => {
     try {

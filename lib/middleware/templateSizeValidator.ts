@@ -1,5 +1,6 @@
 import { MiddlewareReturn } from "@lib/types";
 import { type NextRequest, NextResponse } from "next/server";
+import { validateTemplateSize } from "@lib/utils/validateTemplateSize";
 
 /**
  * Checks if the template size is within the limits
@@ -9,25 +10,19 @@ import { type NextRequest, NextResponse } from "next/server";
 
 export const templateSizeValidator = () => {
   return async (req: NextRequest, reqBody: Record<string, unknown>): Promise<MiddlewareReturn> => {
-    const maxPayloadSize = 1;
-
-    // const maxPayloadSize = 5 * 1024 * 1024; // 5 MB
     const formConfig = reqBody.formConfig;
-
     if (!formConfig) {
       return {
         next: true,
       };
     }
 
-    const formConfigSize = JSON.stringify(formConfig).length;
-    if (formConfigSize > maxPayloadSize) {
+    const isValid = validateTemplateSize(JSON.stringify(formConfig));
+
+    if (!isValid) {
       return {
         next: false,
-        response: NextResponse.json(
-          { error: `Template size exceeds the limit of ${maxPayloadSize} bytes` },
-          { status: 400 }
-        ),
+        response: NextResponse.json({ error: `Template size exceeds the limit` }, { status: 400 }),
       };
     }
     return { next: true };
