@@ -12,7 +12,6 @@ import { COMMAND_PRIORITY_NORMAL, KEY_MODIFIER_COMMAND } from "lexical";
 import { Dispatch, useEffect } from "react";
 
 import { useToolbarState } from "../../context/ToolbarContext";
-import { sanitizeUrl } from "../../utils/url";
 import {
   formatBulletList,
   formatHeading,
@@ -59,7 +58,7 @@ export default function ShortcutsPlugin({
         formatNumberedList(editor, toolbarState.blockType);
       } else if (isInsertLink(event)) {
         event.preventDefault();
-        const url = toolbarState.isLink ? null : sanitizeUrl("https://");
+        const url = toolbarState.isLink ? null : "";
         setIsLinkEditMode(!toolbarState.isLink);
 
         editor.dispatchCommand(TOGGLE_LINK_COMMAND, url);

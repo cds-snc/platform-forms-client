@@ -34,7 +34,6 @@ import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext
 import "./styles.css";
 import { SHORTCUTS } from "../ShortcutsPlugin/shortcuts";
 import { blockTypeToBlockName, useToolbarState } from "../../context/ToolbarContext";
-import { sanitizeUrl } from "../../utils/url";
 
 export default function ToolbarPlugin({
   editorId,
@@ -55,7 +54,7 @@ export default function ToolbarPlugin({
   const insertLink = useCallback(() => {
     if (!toolbarState.isLink) {
       setIsLinkEditMode(true);
-      activeEditor.dispatchCommand(TOGGLE_LINK_COMMAND, sanitizeUrl("https://"));
+      activeEditor.dispatchCommand(TOGGLE_LINK_COMMAND, "");
     } else {
       setIsLinkEditMode(false);
       activeEditor.dispatchCommand(TOGGLE_LINK_COMMAND, null);
