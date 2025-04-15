@@ -33,23 +33,8 @@ import { formatBulletList, formatHeading, formatNumberedList } from "./utils";
 import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext";
 import "./styles.css";
 import { SHORTCUTS } from "../ShortcutsPlugin/shortcuts";
-import { useToolbarState } from "../../context/ToolbarContext";
+import { blockTypeToBlockName, useToolbarState } from "../../context/ToolbarContext";
 import { sanitizeUrl } from "../../utils/url";
-
-const blockTypeToBlockName = {
-  bullet: "Bulleted List",
-  check: "Check List",
-  code: "Code Block",
-  h1: "Heading 1",
-  h2: "Heading 2",
-  h3: "Heading 3",
-  h4: "Heading 4",
-  h5: "Heading 5",
-  h6: "Heading 6",
-  number: "Numbered List",
-  paragraph: "Normal",
-  quote: "Quote",
-};
 
 export default function ToolbarPlugin({
   editorId,
