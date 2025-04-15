@@ -642,7 +642,7 @@
       },
       "deleteKeySuccess": {
         "title": "La clé API a été supprimée",
-        "message": "Les nouvelles réponses peuvent maintenant être téléchargées sur la",
+        "message": "Les nouvelles réponses peuvent maintenant être téléchargées sur la ",
         "responseLinkText": "page Réponses"
       },
       "deleteApiKeyToChangeOptions": {

@@ -29,6 +29,8 @@ export const PrimaryFormButtons = ({
   getFormDelay: () => number;
   saveAndResumeEnabled?: boolean;
 }) => {
+  const submissionError =
+    Object.entries(props.errors).length > 0 || props.status === FormStatus.ERROR;
   return (
     <div className="flex">
       {isGroupsCheck && isShowReviewPage && (
@@ -56,7 +58,7 @@ export const PrimaryFormButtons = ({
                   getFormDelay={getFormDelay}
                   formID={formId}
                   formTitle={formTitle}
-                  status={props.status}
+                  submissionError={submissionError}
                 />
               </div>
             );
@@ -68,7 +70,7 @@ export const PrimaryFormButtons = ({
           getFormDelay={getFormDelay}
           formID={formId}
           formTitle={formTitle}
-          status={props.status}
+          submissionError={submissionError}
         />
       )}
     </div>
