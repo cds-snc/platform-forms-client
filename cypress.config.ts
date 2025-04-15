@@ -9,6 +9,7 @@ export default defineConfig({
   defaultCommandTimeout: 10000,
   e2e: {
     baseUrl: "http://localhost:3000",
+    excludeSpecPattern: "cypress/release-test/**/*",
     setupNodeEvents(on) {
       on("before:run", async () => {
         logMessage.info("Tearing down database");
