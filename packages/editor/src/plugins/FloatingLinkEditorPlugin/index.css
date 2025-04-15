@@ -8,13 +8,13 @@
   width: 100%;
   opacity: 0;
   background-color: #fff;
-  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.3);
   border-radius: 4px;
   transition: opacity 0.5s;
   will-change: transform;
 }
 
 .gc-link-editor-container {
+  border: 1px solid #1e293b;
   width: 100%;
   padding: 8px;
   gap: 4px;
@@ -47,6 +47,7 @@
   border-radius: 8px;
   padding: 6px 12px;
   svg {
+    fill: #1e293b;
     width: 20px;
     height: 20px;
   }

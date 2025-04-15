@@ -319,6 +319,11 @@ function FloatingLinkEditor({
                 setIsLinkEditMode(true);
               }
             }}
+            onClick={(event) => {
+              event.preventDefault();
+              setEditedLinkUrl(linkUrl);
+              setIsLinkEditMode(true);
+            }}
           >
             <span className="sr-only">{t("pressEnterToEditLink")}</span>
             {linkUrl}
