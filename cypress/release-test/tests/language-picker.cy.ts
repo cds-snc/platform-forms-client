@@ -1,7 +1,7 @@
 import { FORM_ID_SINGLE_PAGE } from "../includes";
 import { ignoreExceptions } from "../utils";
 
-describe("Single Page Form", () => {
+describe("Language picker", () => {
   ignoreExceptions();
 
   beforeEach(() => {
