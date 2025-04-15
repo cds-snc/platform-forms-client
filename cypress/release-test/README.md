@@ -14,7 +14,7 @@ Override the baseUrl with by setting the environment variable `CYPRESS_BASE_URL`
 For example in package.json add:
 ```
 ...
-"cypress:release-test": "CYPRESS_DEBUG=true CYPRESS_BASE_URL=https://localhost:3000 cypress run --config-file ./cypress/release-test/cypress.config.ts --browser chrome",
+"cypress:release-test": "CYPRESS_DEBUG=true CYPRESS_BASE_URL=https://forms-staging.cdssandbox.xyz cypress run --config-file ./cypress/release-test/cypress.config.ts --browser chrome",
 ...
 ```
 
