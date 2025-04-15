@@ -63,7 +63,7 @@ export const ClosedMessage = ({ valid, closedDetails, setClosedDetails }: Closed
           </LanguageLabel>
           <Editor
             id="closed-en"
-            className="gc-formview"
+            className="gc-formview gc-richText"
             locale={i18n.language}
             contentLocale="en"
             content={closedDetails && closedDetails.messageEn ? closedDetails.messageEn : ""}
@@ -83,7 +83,7 @@ export const ClosedMessage = ({ valid, closedDetails, setClosedDetails }: Closed
           </LanguageLabel>
           <Editor
             id="closed-fr"
-            className="gc-formview"
+            className="gc-formview gc-richText"
             locale={i18n.language}
             contentLocale="fr"
             content={closedDetails && closedDetails.messageFr ? closedDetails.messageFr : ""}

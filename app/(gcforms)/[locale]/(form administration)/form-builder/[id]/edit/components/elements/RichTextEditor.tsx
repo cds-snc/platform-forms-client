@@ -51,7 +51,7 @@ export const RichTextEditor = ({
         onChange={updateValue}
         ariaLabel={ariaLabel || t("richTextEditor")}
         ariaDescribedBy={ariaDescribedBy}
-        className="gc-formview"
+        className="gc-formview gc-richText"
         {...getLocalizationAttribute()}
       />
     </div>
