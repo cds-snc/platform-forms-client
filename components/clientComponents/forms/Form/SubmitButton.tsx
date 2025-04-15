@@ -11,23 +11,22 @@ interface SubmitButtonProps {
   formID: string;
   formTitle: string;
   disabled: boolean;
-  status?: string;
+  submissionError?: boolean;
 }
 export const SubmitButton: React.FC<SubmitButtonProps> = ({
   getFormDelay,
   formID,
   formTitle,
   disabled,
-  status,
+  submissionError,
 }) => {
   const { t } = useTranslation();
   const [formTimerState, { startTimer, checkTimer, disableTimer }] = useFormTimer();
   const [submitTooEarly, setSubmitTooEarly] = useState(false);
   const screenReaderRemainingTime = useRef(formTimerState.remainingTime);
   const formDelay = useRef(getFormDelay());
-
-  // Used to show a spinner for the initial hCAPTCHA verification step
-  const [submitting, setSubmitting] = useState(false);
+  // Used to show a spinner for the initial validation and hCAPTCHA loading steps
+  const [loading, setLoading] = useState(false);
 
   const { getFlag } = useFeatureFlags();
   const timerEnabled = getFlag("formTimer");
@@ -62,6 +61,12 @@ export const SubmitButton: React.FC<SubmitButtonProps> = ({
       };
     }
   }, [checkTimer, formTimerState.remainingTime, formTimerEnabled]);
+
+  useEffect(() => {
+    if (submissionError) {
+      setLoading(false);
+    }
+  }, [submissionError]);
 
   return (
     <>
@@ -120,10 +125,9 @@ export const SubmitButton: React.FC<SubmitButtonProps> = ({
           }
           // Only change state if submitTooEarly is already set to true
           submitTooEarly && setSubmitTooEarly(false);
-
-          setSubmitting(true);
+          setLoading(true);
         }}
-        loading={submitting && status !== "Error"}
+        loading={loading}
       >
         {t("submitButton")}
       </Button>

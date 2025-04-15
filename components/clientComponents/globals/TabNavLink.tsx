@@ -26,16 +26,14 @@ export const TabNavLink = ({
     "bg-[#475569] !text-white [&_svg]:fill-white ${svgStroke} focus:text-white [&_svg]:focus:stroke-white";
 
   return (
-    <Link href={href} legacyBehavior>
-      <a
-        href={href}
-        className={cn(baseClasses, inactiveClasses, active && activeClasses)}
-        {...(setAriaCurrent && active && { "aria-current": "page" })}
-        {...(id && { id })}
-        onClick={onClick}
-      >
-        {children}
-      </a>
+    <Link
+      href={href}
+      className={cn(baseClasses, inactiveClasses, active && activeClasses)}
+      {...(setAriaCurrent && active && { "aria-current": "page" })}
+      {...(id && { id })}
+      onClick={onClick}
+    >
+      {children}
     </Link>
   );
 };
