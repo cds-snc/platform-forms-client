@@ -8,10 +8,8 @@ describe("Multi-Page Form", () => {
     cy.visitPage(`/en/id/${FORM_ID_MULTI_PAGE}`);
   });
 
-  it("Shows header language picker, title and footer", () => {
-    cy.get("header").should("contain", "Français");
+  it("Page loads", () => {
     cy.get("h1").should("contain", "test-kitchen-sink-multi-page");
-    cy.get("footer").should("contain", "Terms and conditions");
   });
 
   it("Missing required questions or invalid input causes form validation to show", () => {

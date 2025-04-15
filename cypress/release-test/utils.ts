@@ -6,6 +6,7 @@ export const ignoreExceptions = () =>
     }
   });
 
+// Set to false if the form timer is not enabled
 const formTimer = true;
 export const clickFormTimer = () => {
   if (formTimer) {
@@ -14,6 +15,7 @@ export const clickFormTimer = () => {
   }
 };
 
+// Set to false if hCAPTCHA is enabled
 const submitForm = true;
 export const clickAndTestSubmit = (doFormTimer = true) => {
   if (submitForm) {
