@@ -10,7 +10,7 @@ export const Version = ({ label, isFormBuilder }: { label: string; isFormBuilder
     <div
       className={cn(
         isFormBuilder && "mt-2 text-sm text-slate-800",
-        !isFormBuilder && " text-sm text-slate-800 inline-block mr-10"
+        !isFormBuilder && " text-sm text-slate-800 inline-block mr-6"
       )}
     >
       {label}: {version} <span className="hidden"> - {deploymentId}</span>
