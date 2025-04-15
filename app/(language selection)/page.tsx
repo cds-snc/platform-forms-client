@@ -25,16 +25,17 @@ const Home = () => {
 
   const SiteLink = () => {
     return (
-      <Link href={`${i18n.language}/form-builder`} legacyBehavior>
-        <a className="mr-10 inline-flex no-underline focus:bg-white">
-          <span className="">
-            <SiteLogo title={languageT[browserLanguage]("title")} />
-          </span>
-          <h1 className="!mb-6 !ml-3 inline-block whitespace-nowrap border-none !font-noto-sans !text-[24px] font-semibold leading-10 text-[#1B00C2]">
-            <span lang={browserLanguage}>{languageT[browserLanguage]("title")}</span> -{" "}
-            <span lang={secondLanguage}>{languageT[secondLanguage]("title")}</span>
-          </h1>
-        </a>
+      <Link
+        href={`${i18n.language}/form-builder`}
+        className="mr-10 inline-flex no-underline focus:bg-white"
+      >
+        <span className="">
+          <SiteLogo title={languageT[browserLanguage]("title")} />
+        </span>
+        <h1 className="!mb-6 !ml-3 inline-block whitespace-nowrap border-none !font-noto-sans !text-[24px] font-semibold leading-10 text-[#1B00C2]">
+          <span lang={browserLanguage}>{languageT[browserLanguage]("title")}</span> -{" "}
+          <span lang={secondLanguage}>{languageT[secondLanguage]("title")}</span>
+        </h1>
       </Link>
     );
   };
