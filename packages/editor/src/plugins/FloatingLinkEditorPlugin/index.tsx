@@ -271,15 +271,17 @@ function FloatingLinkEditor({
               onMouseDown={preventDefault}
               onClick={() => {
                 setIsLinkEditMode(false);
+                if (linkUrl === "") {
+                  editor.dispatchCommand(TOGGLE_LINK_COMMAND, null);
+                }
               }}
               onKeyDown={(event) => {
                 if (event.key === "Enter") {
                   event.preventDefault();
                   setIsLinkEditMode(false);
-                }
-                if (event.key === "Escape") {
-                  event.preventDefault();
-                  setIsLinkEditMode(false);
+                  if (linkUrl === "") {
+                    editor.dispatchCommand(TOGGLE_LINK_COMMAND, null);
+                  }
                 }
               }}
             >
