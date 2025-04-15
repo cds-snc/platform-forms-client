@@ -271,6 +271,98 @@ describe("Production Release Test", async () => {
 
       cy.get("h2").should("contain", "Review your answers before submitting the form");
 
+      // Page 1
+      cy.get("button").contains("Applicant Information");
+      cy.get("dt").contains("First name").siblings("dd").contains("first");
+      cy.get("dt").contains("Middle name").siblings("dd").contains("middle");
+      cy.get("dt").contains("Last name").siblings("dd").contains("last");
+      cy.get("dt").contains("Alternate name (single field)").siblings("dd").contains("alternate");
+      cy.get("dt").contains("Phone number").siblings("dd").contains("123");
+      cy.get("dt").contains("Email address").siblings("dd").contains("test@test.com");
+      cy.get("dt")
+        .contains("Preferred language for communication")
+        .siblings("dd")
+        .contains("English");
+      cy.get("dt").contains("Date of Birth").siblings("dd").contains("2023-01-01");
+      cy.get("dt").contains("Date of submission").siblings("dd").contains("2023-01-01");
+      cy.get("dt")
+        .contains("Department or agency")
+        .siblings("dd")
+        .contains("Accessibility Standards Canada");
+
+      // Page 2
+      cy.get("button").contains("Eligibility Criteria");
+      cy.get("dt")
+        .contains("Are you applying as an individual or on behalf of an organization?")
+        .siblings("dd")
+        .contains("-");
+      cy.get("dt").contains("Are you applying from within Canada?").siblings("dd").contains("Yes");
+
+      // Page 3
+      cy.get("button").contains("Application Details");
+      cy.get("dt").contains("Application Type").siblings("dd").contains("Employment");
+      cy.get("dt")
+        .contains("escribe your request in detail")
+        .siblings("dd")
+        .contains("request in detail");
+      cy.get("dt")
+        .contains("Relevant Skills or Experience")
+        .siblings("dd")
+        .contains("Project Management");
+      cy.get("dt")
+        .contains("Relevant Skills or Experience")
+        .siblings("dd")
+        .contains("Research and Analysis");
+
+      // Page 4
+      cy.get("button").contains("Additional Information - Funding Support");
+      cy.get("dt").contains("Funding Amount Requested").siblings("dd").contains("1");
+      cy.get("dt")
+        .contains("Have you previously submitted an application?")
+        .siblings("dd")
+        .contains("Yes");
+      cy.get("dt")
+        .contains("Select the type of applicaiton:")
+        .siblings("dd")
+        .contains("application 12345");
+
+      // Page 5
+      cy.get("button").contains("Repeating Sets");
+      cy.get("h4").contains("List Additional Team Members (if applicable)");
+      cy.get("h5").contains("Team Memeber - 1");
+      cy.get("dt").contains("Full name").siblings("dd").contains("Full name1");
+      cy.get("dt").contains("Time Commitment (Hours per week)").siblings("dd").contains("1");
+      cy.get("dt")
+        .contains("Primary Responsibilities")
+        .siblings("dd")
+        .contains("Primary Responsibilities1");
+      cy.get("dt").contains("Years of experience").siblings("dd").contains("Less than 1 year");
+      cy.get("h5").contains("Team Memeber - 2");
+      cy.get("h5")
+        .contains("Team Memeber - 2")
+        .siblings()
+        .contains("Full name")
+        .siblings("dd")
+        .contains("Full name2");
+      cy.get("h5")
+        .contains("Team Memeber - 2")
+        .siblings()
+        .contains("Time Commitment (Hours per week)")
+        .siblings("dd")
+        .contains("2");
+      cy.get("h5")
+        .contains("Team Memeber - 2")
+        .siblings()
+        .contains("Primary Responsibilities")
+        .siblings("dd")
+        .contains("Primary Responsibilities2");
+      cy.get("h5")
+        .contains("Team Memeber - 2")
+        .siblings()
+        .contains("Years of experience")
+        .siblings("dd")
+        .contains("Less than 1 year");
+
       cy.get("button[type='submit']").click();
       // clickFormTimer(); -- interesting that enough time passes that the form timer is finished by then end of the form
       cy.get("h1").should("contain", "Your form has been submitted");

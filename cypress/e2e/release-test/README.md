@@ -15,6 +15,6 @@ Override the baseUrl with by setting the environment variable `CYPRESS_BASE_URL`
 CYPRESS_BASE_URL=https://localhost:3000 cypress run --browser chrome --spec cypress/e2e/release-tests/form_submission.cy.ts
 ```
 
-## Notes
-
 Disable the form-timer check in `release-test.cy.ts`. Find the line with `const formTimer = true` and set it to `false`.
+
+Disable the form sumbissions step in TODO
