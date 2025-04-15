@@ -315,8 +315,8 @@ export const Form = withFormik<FormProps, Responses>({
         return;
       }
 
-      // logMessage.error(err as Error);
-      // formikBag.setStatus("Error");
+      logMessage.error(err as Error);
+      formikBag.setStatus("Error");
     } finally {
       if (formikBag.props && !formikBag.props.isPreview) {
         window.dataLayer = window.dataLayer || [];
