@@ -1,16 +1,26 @@
 const FORM_ID_SINGLE_PAGE = "cm9h879wr007byn01fswmm9f3"; // staging = "cm9ha7ldb0001x701vocmtevr"
 const FORM_ID_MULTI_PAGE = "cm9hg5nk6009rxa01dde41xes"; // staging = "cm9hnmdwm0001vo0111lakpdw"
 
-describe("Production Release Test", async () => {
-  // TODO: remove or disable when form-timer removed
-  const formTimer = true;
-  const clickFormTimer = () => {
-    if (formTimer) {
-      cy.get("p").should("contain", "The button is ready.");
-      cy.get("button[type='submit']").click();
-    }
-  };
+const formTimer = true;
+const clickFormTimer = () => {
+  if (formTimer) {
+    cy.get("p").should("contain", "The button is ready.");
+    cy.get("button[type='submit']").click();
+  }
+};
 
+const submitForm = true;
+const clickAndTestSubmit = (doFormTimer = true) => {
+  if (submitForm) {
+    cy.get("button[type='submit']").click();
+    if (doFormTimer) {
+      clickFormTimer();
+    }
+    cy.get("h1").should("contain", "Your form has been submitted");
+  }
+};
+
+describe("Production Release Test", async () => {
   Cypress.on("uncaught:exception", (err) => {
     // See https://docs.cypress.io/api/cypress-api/catalog-of-events#Uncaught-Exceptions
     if (err.message.includes("Minified React error #418")) {
@@ -121,9 +131,7 @@ describe("Production Release Test", async () => {
 
       // TODO - file picker?
 
-      cy.get("button[type='submit']").click();
-      clickFormTimer();
-      cy.get("h1").should("contain", "Your form has been submitted");
+      clickAndTestSubmit();
     });
   });
 
@@ -171,9 +179,7 @@ describe("Production Release Test", async () => {
 
       cy.get("h2").should("contain", "Review your answers before submitting the form");
 
-      cy.get("button[type='submit']").click();
-      clickFormTimer();
-      cy.get("h1").should("contain", "Your form has been submitted");
+      clickAndTestSubmit();
     });
 
     it("Filling all fields succeeds", () => {
@@ -363,9 +369,8 @@ describe("Production Release Test", async () => {
         .siblings("dd")
         .contains("Less than 1 year");
 
-      cy.get("button[type='submit']").click();
-      // clickFormTimer(); -- interesting that enough time passes that the form timer is finished by then end of the form
-      cy.get("h1").should("contain", "Your form has been submitted");
+      // interesting that enough time passes that the form timer is finished by then end of the form
+      clickAndTestSubmit(false);
     });
   });
 });

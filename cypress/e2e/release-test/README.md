@@ -10,11 +10,14 @@ yarn cypress:release-test
 
 ## Configuration 
 
-Override the baseUrl with by setting the environment variable `CYPRESS_BASE_URL`. For example:
+Override the baseUrl with by setting the environment variable `CYPRESS_BASE_URL`. 
+For example in package.json add:
 ```
-CYPRESS_BASE_URL=https://localhost:3000 cypress run --browser chrome --spec cypress/e2e/release-tests/form_submission.cy.ts
+...
+"cypress:release-test": "CYPRESS_DEBUG=true CYPRESS_BASE_URL=https://localhost:3000 cypress run --config-file ./cypress-release-test.config.ts --browser chrome --spec cypress/e2e/release-test/release-test.cy.ts",
+...
 ```
 
-Disable the form-timer check in `release-test.cy.ts`. Find the line with `const formTimer = true` and set it to `false`.
-
-Disable the form sumbissions step in TODO
+Update tests based on environment settings:
+ - Disable the Form Timer in `release-test.cy.ts` line with `const formTimer = false`
+ - Disable Submitting the form e.g. disable for captcha, in `release-test.cy.ts` line with `submitForm = false;`
