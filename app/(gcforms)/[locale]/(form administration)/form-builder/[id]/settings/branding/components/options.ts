@@ -269,4 +269,13 @@ export const options = [
     logoTitleEn: "Courts Administration Service",
     logoTitleFr: "Service administratif des tribunaux judiciaires",
   },
+  {
+    name: "pedc",
+    urlEn: "https://www.canada.ca/en/prairies-economic-development.html",
+    urlFr: "https://www.canada.ca/fr/developpement-economique-prairies.html",
+    logoEn: "/img/branding/pedc-en.svg",
+    logoFr: "/img/branding/pedc-fr.svg",
+    logoTitleEn: "Prairies Economic Development Canada",
+    logoTitleFr: "Développement économique Canada pour les Prairies",
+  },
 ];
