@@ -15,6 +15,7 @@
 
 .gc-link-editor-container {
   border: 1px solid #1e293b;
+  border-radius: 6px;
   width: 100%;
   padding: 8px;
   gap: 4px;
