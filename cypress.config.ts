@@ -22,12 +22,12 @@ export default defineConfig({
       }
     },
   },
-
   component: {
     devServer: {
       framework: "next",
       bundler: "webpack",
     },
+    excludeSpecPattern: "**/release-test/**",
   },
   retries: {
     // Configure retry attempts for `cypress run`
