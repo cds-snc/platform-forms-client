@@ -1,4 +1,4 @@
-import { maxPayloadSize as maxSize } from "@config/constants";
+import { maxPayloadSize as maxSize } from "../../config/constants";
 
 export const validateTemplateSize = (formConfig: string, maxPayloadSize: number = maxSize) => {
   try {
