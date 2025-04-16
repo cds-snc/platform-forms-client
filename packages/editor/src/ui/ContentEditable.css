@@ -1,6 +1,7 @@
 .gc-contenteditable {
   padding: 20px;
   width: 100%;
+  background-color: #fff;
 
   &:focus {
     outline: 2px #303fc3 solid;
