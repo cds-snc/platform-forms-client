@@ -6,6 +6,8 @@ import { createRequire } from "node:module";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
+export const maxPayloadSize = 5 * 1024 * 1024; // 5MB
+
 const require = createRequire(import.meta.url);
 
 const isOutputStandalone = process.env.NEXT_OUTPUT_STANDALONE === "true";
