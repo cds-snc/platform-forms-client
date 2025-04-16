@@ -100,6 +100,18 @@ export default async function middleware(req: NextRequest) {
     }
 
     const body = await req.text();
+
+    // Check body size
+    if (body.length > maxPayloadSize) {
+      logMessage.info(
+        `Middleware: Request payload size exceeds the limit of ${maxPayloadSize} bytes.`
+      );
+      return NextResponse.json(
+        { error: "Request payload size exceeds the limit." },
+        { status: 413 }
+      );
+    }
+
     if (body.includes("\\") || body.includes("\0")) {
       logMessage.info("Middleware: Invalid characters in request body.");
     }
