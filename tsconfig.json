@@ -29,7 +29,8 @@
       "@content/*": ["public/static/content/*"],
       "@public/*": ["public/*"],
       "@gcforms/*": ["packages/*/src"],
-      "@toast/*": ["node_modules/react-toastify/dist/*"]
+      "@toast/*": ["node_modules/react-toastify/dist/*"],
+      "@deployment/*": ["deployment/*"]
     },
     "incremental": true,
     "plugins": [

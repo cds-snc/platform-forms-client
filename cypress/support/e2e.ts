@@ -23,6 +23,4 @@ import "./commands";
 import "cypress-axe";
 import terminalReport from "cypress-terminal-report/src/installLogsCollector";
 
-// import flagsDefault from "../../flag_initialization/default_flag_settings.json";
-
 if (Cypress.env("DEBUG")) terminalReport();
