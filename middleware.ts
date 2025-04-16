@@ -7,6 +7,7 @@ import { NextAuthRequest } from "next-auth/lib";
 import CredentialsProvider from "next-auth/providers/credentials";
 import NextAuth, { Session } from "next-auth";
 import { JWT } from "next-auth/jwt";
+import { maxPayloadSize } from "@lib/utils/maxPayload";
 
 const verboseDebug = false;
 
@@ -86,7 +87,6 @@ export default async function middleware(req: NextRequest) {
 
   if (req.headers.get("next-action") !== null) {
     const contentLength = req.headers.get("content-length");
-    const maxPayloadSize = 5 * 1024 * 1024; // 5 MB
 
     if (contentLength && parseInt(contentLength, 10) > maxPayloadSize) {
       logMessage.info(

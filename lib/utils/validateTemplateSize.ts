@@ -1,6 +1,6 @@
-export const validateTemplateSize = (formConfig: string) => {
-  const maxPayloadSize = 5 * 1024 * 1024; // 5 MB
+import { maxPayloadSize as maxSize } from "./maxPayload";
 
+export const validateTemplateSize = (formConfig: string, maxPayloadSize: number = maxSize) => {
   try {
     const formConfigSize = formConfig.length;
 
