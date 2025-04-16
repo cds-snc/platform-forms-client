@@ -2,17 +2,18 @@ import { Response } from "@lib/types";
 import { ProcessedFile } from "@lib/types/submission-types";
 import { logMessage } from "@lib/logger";
 import { getPublicTemplateByID } from "@lib/templates";
-import { pushFileToS3, deleteObject } from "@lib/s3-upload";
+import { deleteObject } from "@lib/s3-upload";
 import { transformFormResponses } from "./transformFormResponses";
 import { invokeSubmissionLambda } from "./invokeSubmissionLambda";
 import { FormIsClosedError, FormNotFoundError, MissingFormDataError } from "./exceptions";
+import { handleUpload, type FilesKeyUrlMap } from "./upload";
 
 export const processFormData = async (
   reqFields: Record<string, Response>,
   files: Record<string, ProcessedFile | ProcessedFile[]>,
   contentLanguage: string
 ): Promise<string> => {
-  const uploadedFilesKeyUrlMapping: Map<string, string> = new Map();
+  const uploadedFilesKeyUrlMapping: FilesKeyUrlMap = new Map();
   try {
     // Do not process if in TEST mode
     if (process.env.APP_ENV === "test") {
@@ -42,51 +43,7 @@ export const processFormData = async (
       responses: reqFields,
     });
 
-    // Staging or Production AWS environments
-    for (const [_key, value] of Object.entries(files)) {
-      const fileOrArray = value;
-      if (!Array.isArray(fileOrArray)) {
-        if (fileOrArray.name) {
-          // eslint-disable-next-line no-await-in-loop
-          const { isValid, key } = await pushFileToS3(fileOrArray);
-          if (isValid) {
-            uploadedFilesKeyUrlMapping.set(fileOrArray.name, key);
-            const splitKey = _key.split("-");
-            if (splitKey.length > 1) {
-              const currentValue = fields[splitKey[0]] as Record<string, unknown>[];
-              if (!currentValue[Number(splitKey[1])]) {
-                currentValue[Number(splitKey[1])] = {};
-              }
-              currentValue[Number(splitKey[1])][splitKey[2]] = key;
-            } else {
-              fields[_key] = key;
-            }
-          }
-        }
-      } else {
-        // An array will be returned in a field that includes multiple files
-        for (const fileItem of fileOrArray) {
-          const index = fileOrArray.indexOf(fileItem);
-          if (fileItem.name) {
-            // eslint-disable-next-line no-await-in-loop
-            const { isValid, key } = await pushFileToS3(fileItem);
-            if (isValid) {
-              uploadedFilesKeyUrlMapping.set(fileItem.name, key);
-              const splitKey = _key.split("-");
-              if (splitKey.length > 1) {
-                const currentValue = fields[splitKey[0]] as Record<string, unknown>[];
-                if (!currentValue[Number(splitKey[1])]) {
-                  currentValue[Number(splitKey[1])] = {};
-                }
-                currentValue[Number(splitKey[1])][`${splitKey[2]}-${index}`] = key;
-              } else {
-                fields[`${_key}-${index}`] = key;
-              }
-            }
-          }
-        }
-      }
-    }
+    await handleUpload(files, uploadedFilesKeyUrlMapping, fields);
 
     try {
       const submissionId = await invokeSubmissionLambda(
