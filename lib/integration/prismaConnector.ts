@@ -1,5 +1,6 @@
-import { PrismaClient, Prisma } from "@prisma/client";
+import { Prisma } from "@prisma/client";
 import { logMessage } from "@lib/logger";
+import { PrismaClient } from "prisma/generated/client";
 
 // See https://www.prisma.io/docs/support/help-articles/nextjs-prisma-client-dev-practices
 // Needed to ensure we only instantiate Prisma Client once

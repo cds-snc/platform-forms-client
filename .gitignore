@@ -108,5 +108,7 @@ certificates
 # Ignore private api key files
 *private_api_key.json
 
+# Ignore Generated Prisma Client which is system specific files
+prisma/generated
 
 dist
