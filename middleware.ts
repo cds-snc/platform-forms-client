@@ -7,7 +7,7 @@ import { NextAuthRequest } from "next-auth/lib";
 import CredentialsProvider from "next-auth/providers/credentials";
 import NextAuth, { Session } from "next-auth";
 import { JWT } from "next-auth/jwt";
-import { maxPayloadSize } from "./config/constants";
+import { maxPayloadSize } from "./constants";
 
 const verboseDebug = false;
 
