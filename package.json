@@ -3,7 +3,7 @@
   "version": "3.38.4",
   "private": true,
   "prisma": {
-    "seed": "tsx prisma/seeds/seed_cli.ts --environment=development"
+    "seed": "tsx deployment/prisma/seeds/seed_cli.ts --environment=development"
   },
   "workspaces": [
     "utils/*",
@@ -22,11 +22,11 @@
     "dev:secure": "yarn prisma:dev && next dev --experimental-https --turbopack",
     "build": "DATABASE_URL=postgres://postgres:chummy@localhost:5432/forms next build --debug",
     "start": "yarn prisma:deploy && NODE_OPTIONS=\"--max-old-space-size=3584\" next start -p ${PORT:-3000}",
-    "prisma:deploy": "prisma migrate deploy && tsx prisma/seeds/seed_cli.ts --environment=production",
-    "prisma:dev": "prisma migrate dev --skip-seed && tsx prisma/seeds/seed_cli.ts --environment=development",
+    "prisma:deploy": "prisma migrate deploy && tsx deployment/prisma/seeds/seed_cli.ts --environment=production",
+    "prisma:dev": "prisma migrate dev --skip-seed && tsx deployment/prisma/seeds/seed_cli.ts --environment=development",
     "prisma:reset": "prisma migrate reset",
     "prisma:studio": "prisma studio",
-    "prisma:test": "prisma migrate deploy && tsx prisma/seeds/seed_cli.ts --environment=test",
+    "prisma:test": "prisma migrate deploy && tsx deployment/prisma/seeds/seed_cli.ts --environment=test",
     "start:test": "yarn prisma:test && APP_ENV=test NEXT_PUBLIC_APP_ENV=test next start",
     "dev:test": "prisma migrate reset -f --skip-seed && yarn prisma:test && APP_ENV=test NEXT_PUBLIC_APP_ENV=test next dev --turbo",
     "build:test": "APP_ENV=test NEXT_PUBLIC_APP_ENV=test next build",

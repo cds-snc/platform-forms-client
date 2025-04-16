@@ -1,0 +1,20 @@
+name: "Deployment Initialization"
+
+inputs:
+  app-env:
+    description: "App Environment"
+    required: true
+
+runs:
+  using: "composite"
+  steps:
+    - name: Copy Prisma Files to S3
+      shell: bash
+      run: aws s3 sync ./prisma s3://forms-${{ inputs.app-env }}-deployment-script-storage/prisma
+    - name: Copy App Initialization to S3
+      shell: bash
+      run: aws s3 sync ./deployment s3://forms-${{ inputs.app-env }}-deployment-script-storage/deployment
+
+    - name: Invoke Deployment Initialization Lambda
+      shell: bash
+      run: bash ./scripts/deployment_initialization_invoke.sh

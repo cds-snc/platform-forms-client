@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # This script is used to ensure the AWS Lambda function is active and to invoke it for Prisma migrations.
-lambda_name="prisma-migration"
+lambda_name="deployment-script"
 
 lambda_status=$(aws lambda get-function --function-name $lambda_name --query 'Configuration.[State]' --output text)
 echo "Lambda function status: $lambda_status"
