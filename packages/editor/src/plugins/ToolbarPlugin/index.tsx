@@ -223,8 +223,7 @@ export default function ToolbarPlugin({
               formatHeading(editor, toolbarState.blockType, "h2");
             }}
             className={
-              "toolbar-item spaced " +
-              (toolbarState.blockType === "h2" && editorHasFocus ? "active" : "")
+              "toolbar-item " + (toolbarState.blockType === "h2" && editorHasFocus ? "active" : "")
             }
             aria-label={t("formatH2")}
             aria-pressed={toolbarState.blockType === "h2"}
@@ -247,8 +246,7 @@ export default function ToolbarPlugin({
               formatHeading(editor, toolbarState.blockType, "h3");
             }}
             className={
-              "peer toolbar-item spaced " +
-              (toolbarState.blockType === "h3" && editorHasFocus ? "active" : "")
+              "toolbar-item " + (toolbarState.blockType === "h3" && editorHasFocus ? "active" : "")
             }
             aria-label={t("formatH3")}
             aria-pressed={toolbarState.blockType === "h3"}
@@ -270,9 +268,7 @@ export default function ToolbarPlugin({
             onClick={() => {
               editor.dispatchCommand(FORMAT_TEXT_COMMAND, "bold");
             }}
-            className={
-              "peer toolbar-item " + (toolbarState.isBold && editorHasFocus ? "active" : "")
-            }
+            className={"toolbar-item " + (toolbarState.isBold && editorHasFocus ? "active" : "")}
             aria-label={t("formatBold")}
             aria-pressed={toolbarState.isBold}
             data-testid={`bold-button`}
@@ -293,9 +289,7 @@ export default function ToolbarPlugin({
             onClick={() => {
               editor.dispatchCommand(FORMAT_TEXT_COMMAND, "italic");
             }}
-            className={
-              "peer toolbar-item " + (toolbarState.isItalic && editorHasFocus ? "active" : "")
-            }
+            className={"toolbar-item " + (toolbarState.isItalic && editorHasFocus ? "active" : "")}
             aria-label={t("formatItalic")}
             aria-pressed={toolbarState.isItalic}
             data-testid={`italic-button`}
@@ -315,7 +309,7 @@ export default function ToolbarPlugin({
             }}
             onClick={() => formatBulletList(editor, toolbarState.blockType)}
             className={
-              "peer toolbar-item " +
+              "toolbar-item " +
               (toolbarState.blockType === "bullet" && editorHasFocus ? "active" : "")
             }
             aria-label={t("formatBulletList")}
@@ -337,7 +331,7 @@ export default function ToolbarPlugin({
             }}
             onClick={() => formatNumberedList(editor, toolbarState.blockType)}
             className={
-              "peer toolbar-item " +
+              "toolbar-item " +
               (toolbarState.blockType === "number" && editorHasFocus ? "active" : "")
             }
             aria-label={t("formatNumberedList")}
@@ -359,9 +353,7 @@ export default function ToolbarPlugin({
             }}
             disabled={!isEditable}
             onClick={insertLink}
-            className={
-              "peer toolbar-item " + (toolbarState.isLink && editorHasFocus ? "active" : "")
-            }
+            className={"toolbar-item " + (toolbarState.isLink && editorHasFocus ? "active" : "")}
             aria-label={t("insertLink")}
             aria-pressed={toolbarState.isLink}
             data-testid={`link-button`}
