@@ -8,8 +8,8 @@
   },
   "packageManager": "yarn@4.6.0",
   "dependencies": {
-    "@lexical/react": "^0.29.0",
-    "lexical": "^0.29.0"
+    "@lexical/react": "^0.30.0",
+    "lexical": "^0.30.0"
   },
   "peerDependencies": {
     "react": "^19.1.0",
