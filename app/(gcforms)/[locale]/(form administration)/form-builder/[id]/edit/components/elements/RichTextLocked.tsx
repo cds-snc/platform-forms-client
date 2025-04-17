@@ -20,6 +20,7 @@ export const RichTextLocked = ({
   ariaLabel,
   className,
   hydrated,
+  maxLength,
 }: {
   beforeContent?: React.ReactElement | null;
   summaryText: string;
@@ -30,6 +31,7 @@ export const RichTextLocked = ({
   ariaLabel?: string;
   className?: string;
   hydrated?: boolean;
+  maxLength?: number;
 }) => {
   const { localizeField, form, translationLanguagePriority } = useTemplateStore((s) => ({
     localizeField: s.localizeField,
@@ -68,6 +70,7 @@ export const RichTextLocked = ({
                 content={content}
                 lang={translationLanguagePriority}
                 ariaLabel={ariaLabel}
+                maxLength={maxLength}
               />
             </div>
           )}
