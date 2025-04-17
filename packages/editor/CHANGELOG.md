@@ -11,7 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Only show contentLength/maxLength indicator when contentLength reaches 80% of maxLength
 
-## [1.0.0] - 2025-04-77
+## [1.0.0] - 2025-04-17
 
 ### Changed
 
