@@ -92,6 +92,11 @@ export default async function middleware(req: NextRequest) {
       logMessage.info(
         `Middleware: Request payload size exceeds the limit of ${maxPayloadSize} bytes.`
       );
+
+      return NextResponse.json(
+        { error: "Request payload size exceeds the limit." },
+        { status: 413 }
+      );
     }
 
     const body = await req.text();
