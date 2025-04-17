@@ -27,6 +27,7 @@ import { LocaleContext } from "./context/LocaleContext";
 import "./styles.css";
 import { ToolbarContext } from "./context/ToolbarContext";
 import ShortcutsPlugin from "./plugins/ShortcutsPlugin";
+import { MaxLengthPlugin } from "./plugins/MaxLengthPlugin";
 
 interface EditorProps {
   id?: string;
@@ -37,6 +38,7 @@ interface EditorProps {
   locale?: string;
   contentLocale?: string;
   className?: string;
+  maxLength?: number;
 
   onChange?(...args: unknown[]): unknown;
 }
@@ -51,11 +53,13 @@ export const Editor = ({
   locale = "en",
   contentLocale = "en",
   className,
+  maxLength,
 }: EditorProps) => {
   contentLocale = contentLocale || locale;
 
   const [floatingAnchorElem, setFloatingAnchorElem] = useState<HTMLDivElement | null>(null);
   const [isLinkEditMode, setIsLinkEditMode] = useState<boolean>(false);
+  const [contentLength, setContentLength] = useState<number>(0);
 
   const randomId = useId();
   const editorId = id || `editor-${randomId}`;
@@ -77,7 +81,7 @@ export const Editor = ({
             },
           }}
         >
-          <div>
+          <div className="gc-editor-container">
             <ToolbarPlugin editorId={editorId} setIsLinkEditMode={setIsLinkEditMode} />
             <ShortcutsPlugin setIsLinkEditMode={setIsLinkEditMode} />
             <RichTextPlugin
@@ -112,6 +116,9 @@ export const Editor = ({
             <LinkPlugin />
             <TabControlPlugin />
             <ListMaxIndentLevelPlugin maxDepth={5} />
+            {maxLength && (
+              <MaxLengthPlugin maxLength={maxLength} setContentLength={setContentLength} />
+            )}
             {floatingAnchorElem && (
               <>
                 <FloatingLinkEditorPlugin
@@ -120,6 +127,15 @@ export const Editor = ({
                   setIsLinkEditMode={setIsLinkEditMode}
                 />
               </>
+            )}
+            {maxLength && (
+              <div className="gc-editor-max-length">
+                {maxLength && (
+                  <>
+                    {contentLength}/{maxLength}
+                  </>
+                )}
+              </div>
             )}
           </div>
         </LexicalComposer>
