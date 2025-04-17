@@ -14,8 +14,6 @@ import { serverTranslation } from "@i18n";
 import { ClosingNotice } from "@clientComponents/forms/ClosingNotice/ClosingNotice";
 import { FormDelayProvider } from "@lib/hooks/useFormDelayContext";
 import { ResumeForm } from "@clientComponents/forms/ResumeForm/ResumeForm";
-import { getSomeFlags } from "@lib/cache/flags";
-import { FeatureFlags } from "@lib/cache/types";
 import { getAppSetting } from "@lib/appSettings";
 import { GcdsH1 } from "@serverComponents/globals/GcdsH1";
 import { headers } from "next/headers";
@@ -87,9 +85,7 @@ export default async function Page(props0: {
   if (isPastClosingDate) {
     pageContent = <ClosedPage language={language} formRecord={formRecord} />;
   }
-
-  const { saveAndResume: saveAndResumeEnabled } = await getSomeFlags([FeatureFlags.saveAndResume]);
-  const saveAndResume = formRecord?.saveAndResume && saveAndResumeEnabled;
+  const saveAndResume = formRecord?.saveAndResume;
 
   // Resume form page
   if (saveAndResume && step === "resume") {

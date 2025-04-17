@@ -7,8 +7,6 @@ import { PublicFormRecord } from "@lib/types";
 import { useGCFormsContext } from "@lib/hooks/useGCFormContext";
 import { SaveResponse } from "@clientComponents/forms/SaveAndResume/SaveResponse";
 import { Language } from "@lib/types/form-builder-types";
-import { useFeatureFlags } from "@lib/hooks/useFeatureFlags";
-import { FeatureFlags } from "@lib/cache/types";
 import { GcdsH1 } from "@serverComponents/globals/GcdsH1";
 
 /*
@@ -32,9 +30,7 @@ const PageContent = ({ formRecord, pageText, urlQuery, language }: PageContextPr
   const { t } = useTranslation("confirmation");
   const { submissionId, submissionDate } = useGCFormsContext();
 
-  const { getFlag } = useFeatureFlags();
-  const saveAndResumeEnabled = getFlag(FeatureFlags.saveAndResume);
-  const saveAndResume = formRecord?.saveAndResume && saveAndResumeEnabled;
+  const saveAndResume = formRecord?.saveAndResume;
 
   // Check if there's a custom text for the end page specified in the form's JSON config
   if (pageText && pageText !== undefined) {

@@ -2,7 +2,6 @@
 export const FeatureFlags = {
   addressComplete: "addressComplete",
   apiAccess: "apiAccess",
-  saveAndResume: "saveAndResume",
   formTimer: "formTimer",
   hCaptcha: "hCaptcha",
   caretakerPeriod: "caretakerPeriod",
