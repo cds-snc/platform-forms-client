@@ -174,7 +174,7 @@ export const truncateString = (str: string, maxLength: number = 50): string => {
   return str.length > maxLength ? `${str.slice(0, maxLength)}...` : str;
 };
 
-// Google Tag Manager util to simplify firing an event
+// Google Analytics util to simplify firing an event
 export const ga = (eventName: string, data?: object) => {
   if (!window || !eventName) {
     return;

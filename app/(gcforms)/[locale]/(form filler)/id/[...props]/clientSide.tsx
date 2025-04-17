@@ -12,7 +12,6 @@ import { restoreSessionProgress, removeProgressStorage } from "@lib/utils/saveSe
 import { toast } from "@formBuilder/components/shared/Toast";
 import { ToastContainer } from "@formBuilder/components/shared/Toast";
 import { TextPage } from "@clientComponents/forms";
-import { ga } from "@lib/client/clientHelpers";
 
 export const FormWrapper = ({
   formRecord,
@@ -40,8 +39,6 @@ export const FormWrapper = ({
     setSubmissionDate,
     currentGroup,
   } = useGCFormsContext();
-  ga("form_start", { id: formRecord?.id, language });
-
   const [captchaFail, setCaptchaFail] = useState(false);
   const captchaToken = React.useRef("");
   const saveAndResume = formRecord?.saveAndResume;

@@ -11,7 +11,7 @@ import {
   JSONResponse,
 } from "@lib/responseDownloadFormats/types";
 import JSZip from "jszip";
-import { getDate, slugify } from "@lib/client/clientHelpers";
+import { ga, getDate, slugify } from "@lib/client/clientHelpers";
 import { SpinnerIcon } from "@serverComponents/icons/SpinnerIcon";
 import { getSubmissionsByFormat } from "../../actions";
 import { FormServerErrorCodes, Language, ServerActionError } from "@lib/types/form-builder-types";
@@ -78,9 +78,7 @@ export const DownloadDialog = ({
     downloadType: DownloadFormat,
     numberOfRecords: number
   ) => {
-    window.dataLayer = window.dataLayer || [];
-    window.dataLayer.push({
-      event: "download_format",
+    ga("download_format", {
       formID,
       downloadType,
       numberOfRecords,
