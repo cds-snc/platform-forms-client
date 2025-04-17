@@ -23,8 +23,8 @@ const MaxLengthIndicator = ({
   if (!maxLength) {
     return null;
   }
+
   return (
-    maxLength &&
     contentLength >= 0.8 * maxLength && (
       <div className="gc-editor-max-length">
         {contentLength}/{maxLength}
