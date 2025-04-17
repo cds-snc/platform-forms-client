@@ -1,5 +1,4 @@
 /* eslint-disable no-console */
-import initialFlags from "./default_flag_settings.json";
 import Redis from "ioredis";
 
 let redisConnection: Redis | null = null;
@@ -25,7 +24,7 @@ const checkAll = async () => {
 };
 
 const checkMulti = async (keys: string[]) => {
-  const redis = await getRedisInstance();
+  const redis = getRedisInstance();
   if (keys.length === 0) return {};
 
   const values = await redis.mget(keys.map((key) => `flag:${key}`));
@@ -54,7 +53,7 @@ const createFlag = async (key: string, value: boolean) => {
 };
 
 // Flag initialization function
-const initiateFlags = async () => {
+export const initiateFlags = async (initialFlags: Record<string, boolean>) => {
   console.info("Running flag initialization");
 
   if (process.env.APP_ENV === "test") {
@@ -103,7 +102,7 @@ const initiateFlags = async () => {
 };
 
 // Flush the privileges cache
-const flushPrivilegesCache = async () => {
+export const flushPrivilegesCache = async () => {
   try {
     const redis = getRedisInstance();
 
@@ -133,19 +132,3 @@ const flushPrivilegesCache = async () => {
     throw new Error("Could not connect to cache");
   }
 };
-
-const initialize = async () => {
-  await Promise.all([initiateFlags(), flushPrivilegesCache()]).catch((e) => {
-    console.error("Error during initialization: ", e);
-  });
-};
-
-// Run initialization functions
-initialize()
-  .then(() => {
-    console.info("Initialization complete");
-    process.exit(0);
-  })
-  .catch(() => {
-    process.exit(1);
-  });
