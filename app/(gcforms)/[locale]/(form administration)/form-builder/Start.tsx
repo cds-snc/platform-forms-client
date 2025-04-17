@@ -10,6 +10,7 @@ import { clearTemplateStore } from "@lib/store/utils";
 import { safeJSONParse } from "@lib/utils";
 import { FormProperties } from "@lib/types";
 import { validateTemplateSize } from "@lib/utils/validateTemplateSize";
+import { ga } from "@lib/client/clientHelpers";
 
 export const Start = () => {
   const {
@@ -70,10 +71,7 @@ export const Start = () => {
 
         importTemplate(data);
 
-        window.dataLayer = window.dataLayer || [];
-        window.dataLayer.push({
-          event: "open_form_file",
-        });
+        ga("open_form_file");
         router.push(`/${language}/form-builder/0000/preview`);
       };
     } catch (e) {

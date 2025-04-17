@@ -18,10 +18,6 @@
       "title": "Adresse complète",
       "description": "Activer la complétion d'adresse CanadaPost pour les formulaires"
     },
-    "apiAccess": {
-      "title": "Accès API",
-      "description": "Activer les écrans et fonctionnalités d'accès à l'API"
-    },
     "formTimer": {
       "title": "formTimer",
       "description": "Activez formTimer pour retarder l'envoi d'un formulaire et contribuer à prévenir le spam"
