@@ -101,8 +101,12 @@ export default async function middleware(req: NextRequest) {
       );
     }
 
-    if (body.includes("\\") || body.includes("\0")) {
-      logMessage.info("Middleware: Invalid characters in request body.");
+    if (body.includes("\0")) {
+      logMessage.info("Middleware: Invalid characters or escape sequences in request body.");
+      return NextResponse.json(
+        { error: "Invalid characters or escape sequences in request body." },
+        { status: 400 }
+      );
     }
   }
 
