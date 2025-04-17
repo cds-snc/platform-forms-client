@@ -128,13 +128,9 @@ export const Editor = ({
                 />
               </>
             )}
-            {maxLength && (
+            {maxLength && contentLength >= 0.8 * maxLength && (
               <div className="gc-editor-max-length">
-                {maxLength && (
-                  <>
-                    {contentLength}/{maxLength}
-                  </>
-                )}
+                {contentLength}/{maxLength}
               </div>
             )}
           </div>
