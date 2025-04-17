@@ -50,6 +50,7 @@ export const RichText = () => {
               id="maxLength"
               type="number"
               value={maxLength || ""}
+              disabled={enableMaxLength}
               onChange={useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
                 const value = e.target.value;
                 setMaxLength(value ? parseInt(value, 10) : undefined);
