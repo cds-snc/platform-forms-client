@@ -70,6 +70,8 @@ export const Editor = ({
     }
   };
 
+  const maxLengthValuePercent = maxLength ? (contentLength / maxLength) * 100 : 0;
+
   return (
     <LocaleContext initialLocale={locale as Language}>
       <ToolbarContext>
@@ -128,11 +130,11 @@ export const Editor = ({
                 />
               </>
             )}
-            {maxLength && (
+            {maxLength && maxLengthValuePercent >= 80 && (
               <div className="gc-editor-max-length">
                 {maxLength && (
                   <>
-                    {contentLength}/{maxLength}
+                    {contentLength >= maxLength ? maxLength : contentLength}/{maxLength}
                   </>
                 )}
               </div>
