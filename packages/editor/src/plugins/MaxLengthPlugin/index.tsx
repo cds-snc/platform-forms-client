@@ -10,16 +10,33 @@ import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext
 import { $trimTextContentFromAnchor } from "@lexical/selection";
 import { $restoreEditorState } from "@lexical/utils";
 import { $getSelection, $isRangeSelection, EditorState, RootNode } from "lexical";
-import { useEffect } from "react";
+import { JSX, useEffect, useState } from "react";
+import "./styles.css";
 
-export function MaxLengthPlugin({
+const MaxLengthIndicator = ({
   maxLength,
-  setContentLength,
+  contentLength,
 }: {
-  maxLength: number;
-  setContentLength: (length: number) => void;
-}): null {
+  maxLength?: number;
+  contentLength: number;
+}) => {
+  if (!maxLength) {
+    return null;
+  }
+
+  return (
+    // Only show if contentLength reaches 80% of maxLength
+    contentLength >= 0.8 * maxLength && (
+      <div className="gc-editor-max-length">
+        {contentLength >= maxLength ? maxLength : contentLength}/{maxLength}
+      </div>
+    )
+  );
+};
+
+export function MaxLengthPlugin({ maxLength }: { maxLength: number }): JSX.Element {
   const [editor] = useLexicalComposerContext();
+  const [contentLength, setContentLength] = useState(0);
 
   useEffect(() => {
     let lastRestoredEditorState: EditorState | null = null;
@@ -52,5 +69,5 @@ export function MaxLengthPlugin({
     });
   }, [editor, maxLength, setContentLength]);
 
-  return null;
+  return <MaxLengthIndicator contentLength={contentLength} maxLength={maxLength} />;
 }

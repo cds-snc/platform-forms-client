@@ -59,7 +59,6 @@ export const Editor = ({
 
   const [floatingAnchorElem, setFloatingAnchorElem] = useState<HTMLDivElement | null>(null);
   const [isLinkEditMode, setIsLinkEditMode] = useState<boolean>(false);
-  const [contentLength, setContentLength] = useState<number>(0);
 
   const randomId = useId();
   const editorId = id || `editor-${randomId}`;
@@ -116,9 +115,7 @@ export const Editor = ({
             <LinkPlugin />
             <TabControlPlugin />
             <ListMaxIndentLevelPlugin maxDepth={5} />
-            {maxLength && (
-              <MaxLengthPlugin maxLength={maxLength} setContentLength={setContentLength} />
-            )}
+
             {floatingAnchorElem && (
               <>
                 <FloatingLinkEditorPlugin
@@ -129,13 +126,9 @@ export const Editor = ({
               </>
             )}
             {maxLength && (
-              <div className="gc-editor-max-length">
-                {maxLength && (
-                  <>
-                    {contentLength}/{maxLength}
-                  </>
-                )}
-              </div>
+              <>
+                <MaxLengthPlugin maxLength={maxLength} />
+              </>
             )}
           </div>
         </LexicalComposer>
