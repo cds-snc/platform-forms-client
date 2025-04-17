@@ -176,7 +176,7 @@ export const truncateString = (str: string, maxLength: number = 50): string => {
 
 // Google Tag Manager util to simplify firing an event
 export const ga = (eventName: string, data?: object) => {
-  if (!eventName) {
+  if (!window || !eventName) {
     return;
   }
   window.dataLayer = window.dataLayer || [];

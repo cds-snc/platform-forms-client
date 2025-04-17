@@ -40,6 +40,8 @@ export const FormWrapper = ({
     setSubmissionDate,
     currentGroup,
   } = useGCFormsContext();
+  ga("form_start", { id: formRecord?.id, language });
+
   const [captchaFail, setCaptchaFail] = useState(false);
   const captchaToken = React.useRef("");
   const saveAndResume = formRecord?.saveAndResume;
@@ -87,8 +89,6 @@ export const FormWrapper = ({
       </div>
     );
   }
-
-  ga("form_start", { id: formRecord.id, language });
 
   return (
     <>
