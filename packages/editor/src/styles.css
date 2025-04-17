@@ -1,0 +1,11 @@
+.gc-editor-container {
+  position: relative;
+}
+
+.gc-editor-max-length {
+  position: absolute;
+  bottom: 0;
+  right: 8px;
+  font-size: 0.8rem;
+  color: #999;
+}

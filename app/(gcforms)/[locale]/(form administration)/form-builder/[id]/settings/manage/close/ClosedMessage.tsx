@@ -1,6 +1,5 @@
 import { useTranslation } from "@i18n/client";
 import { ClosedDetails } from "@lib/types";
-import { Editor } from "@formBuilder/[id]/edit/components/elements/lexical-editor/Editor";
 import { LanguageLabel } from "@formBuilder/components/shared/LanguageLabel";
 import { useRehydrate } from "@lib/store/hooks/useRehydrate";
 import Skeleton from "react-loading-skeleton";
@@ -12,6 +11,7 @@ import {
   MessageType,
   ValidationMessage,
 } from "@clientComponents/globals/ValidationMessage/ValidationMessage";
+import { Editor } from "@gcforms/editor";
 
 type ClosedMessageProps = {
   valid: boolean;
@@ -20,7 +20,7 @@ type ClosedMessageProps = {
 };
 
 export const ClosedMessage = ({ valid, closedDetails, setClosedDetails }: ClosedMessageProps) => {
-  const { t } = useTranslation("form-builder");
+  const { t, i18n } = useTranslation("form-builder");
   const hasHydrated = useRehydrate();
 
   if (!hasHydrated) {
@@ -63,7 +63,9 @@ export const ClosedMessage = ({ valid, closedDetails, setClosedDetails }: Closed
           </LanguageLabel>
           <Editor
             id="closed-en"
-            lang="en"
+            className="gc-formview gc-richText"
+            locale={i18n.language}
+            contentLocale="en"
             content={closedDetails && closedDetails.messageEn ? closedDetails.messageEn : ""}
             onChange={(value: string) => {
               setClosedDetails({ ...closedDetails, messageEn: value });
@@ -81,7 +83,9 @@ export const ClosedMessage = ({ valid, closedDetails, setClosedDetails }: Closed
           </LanguageLabel>
           <Editor
             id="closed-fr"
-            lang="fr"
+            className="gc-formview gc-richText"
+            locale={i18n.language}
+            contentLocale="fr"
             content={closedDetails && closedDetails.messageFr ? closedDetails.messageFr : ""}
             onChange={(value: string) => setClosedDetails({ ...closedDetails, messageFr: value })}
           />
