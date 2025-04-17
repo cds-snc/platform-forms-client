@@ -11,7 +11,11 @@ const storage: StateStorage = {
     return sessionStorage.getItem(name) || null;
   },
   setItem: async (name: string, value: string) => {
-    sessionStorage.setItem(name, value);
+    try {
+      sessionStorage.setItem(name, value);
+    } catch (error) {
+      logMessage.info("Error setting item in session storage", error);
+    }
   },
   removeItem: async (name: string) => {
     sessionStorage.removeItem(name);
