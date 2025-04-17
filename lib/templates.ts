@@ -21,6 +21,7 @@ import { ownerAddedEmailTemplate } from "./invitations/emailTemplates/ownerAdded
 import { isValidISODate } from "./utils/date/isValidISODate";
 import { validateTemplate } from "@lib/utils/form-builder/validate";
 import { dateHasPast } from "@lib/utils";
+import { validateTemplateSize } from "@lib/utils/validateTemplateSize";
 
 // ******************************************
 // Internal Module Functions
@@ -148,6 +149,17 @@ export async function createTemplate(command: CreateTemplateCommand): Promise<Fo
       `[templates][createTemplate] Form config is invalid.\nReasons: ${JSON.stringify(
         validationResult.errors
       )}.\nConfig: ${JSON.stringify(command.formConfig)}`
+    );
+    throw new InvalidFormConfigError();
+  }
+
+  const isValid = validateTemplateSize(JSON.stringify(command.formConfig));
+
+  if (!isValid) {
+    logMessage.warn(
+      `[templates][createTemplate] Template size exceeds the limit.\nConfig: ${JSON.stringify(
+        command.formConfig
+      )}`
     );
     throw new InvalidFormConfigError();
   }
@@ -484,6 +496,17 @@ export async function updateTemplate(command: UpdateTemplateCommand): Promise<Fo
       `[templates][updateTemplate] Form config is invalid.\nReasons: ${JSON.stringify(
         validationResult.errors
       )}.\nConfig: ${JSON.stringify(command.formConfig)}`
+    );
+    throw new InvalidFormConfigError();
+  }
+
+  const isValid = validateTemplateSize(JSON.stringify(command.formConfig));
+
+  if (!isValid) {
+    logMessage.warn(
+      `[templates][updateTemplate] Template size exceeds the limit.\nConfig: ${JSON.stringify(
+        command.formConfig
+      )}`
     );
     throw new InvalidFormConfigError();
   }
