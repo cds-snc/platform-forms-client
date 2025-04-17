@@ -1,23 +1,14 @@
 "use client";
 import React from "react";
-// import { RichTextEditor } from "../RichTextEditor";
-const RichTextEditor = () => <></>;
-// import { defaultStore as store, Providers } from "@lib/utils/form-builder/test-utils";
-const store = {};
-const Providers = () => <></>;
-
-// NOTE: This test is skipped because the RichTextEditor component includes useTemplateStore,
-// which includes a call to a server action and causes an error here.
+import { Editor } from "../Editor";
 
 describe("<RichTextEditor />", () => {
-  it.skip("Adds and styles text", () => {
+  it("Adds and styles text", () => {
     // see: https://on.cypress.io/mounting-react
     cy.mount(
-      <Providers form={store}>
-        <div className="form-builder">
-          <RichTextEditor path="path.to.content" content="" ariaLabel="AriaLabel" lang="en" />
-        </div>
-      </Providers>
+      <div className="form-builder">
+        <Editor content="" ariaLabel="AriaLabel" locale="en" />
+      </div>
     );
 
     // Add some strings to get formatted
@@ -86,8 +77,10 @@ describe("<RichTextEditor />", () => {
     // Add a link
     cy.get('[id^="editor-"]').setSelection("will be a link");
     cy.get('[data-testid="link-button"]').first().click();
-    cy.get('[data-testid="link-editor"]').first().click();
-    cy.get('[data-testid="link-editor"]').type("example.com{enter}{esc}");
+    cy.get('[data-testid="gc-link-editor"] input').type(
+      "{selectAll}https://example.com{enter}{esc}"
+    );
     cy.get('[id^="editor-"] a').first().contains("will be a link");
+    cy.get('[id^="editor-"] a').first().should("have.attr", "href", "https://example.com");
   });
 });

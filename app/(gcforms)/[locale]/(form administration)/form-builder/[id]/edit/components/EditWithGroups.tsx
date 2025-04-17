@@ -7,7 +7,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { Language, LocalizedFormProperties } from "@lib/types/form-builder-types";
 import { ElementPanel } from ".";
 import { ConfirmationDescriptionWithGroups } from "./ConfirmationDescriptionWithGroups";
-import { RichTextLockedWithGroups } from "./elements/RichTextLockedWithGroups";
+import { RichTextLocked } from "./elements/RichTextLocked";
 import { ExpandingInput } from "@formBuilder/components/shared/ExpandingInput";
 import { useTemplateStore } from "@lib/store/useTemplateStore";
 import { useRehydrate } from "@lib/store/hooks/useRehydrate";
@@ -142,7 +142,7 @@ export const EditWithGroups = ({ id, locale }: { id: string; locale: string }) =
       </div>
       {/* Form Intro + Title Panel */}
       {groupId === "start" && (
-        <RichTextLockedWithGroups
+        <RichTextLocked
           hydrated={hasHydrated}
           className="rounded-t-lg"
           summaryText={t("startFormIntro")}
@@ -180,7 +180,7 @@ export const EditWithGroups = ({ id, locale }: { id: string; locale: string }) =
       )}
       {/* Privacy Panel */}
       {groupId === "start" && (
-        <RichTextLockedWithGroups
+        <RichTextLocked
           beforeContent={<PrivacyDescriptionBefore />}
           summaryText={t("groups.privacy.summary")}
           detailsText={
@@ -208,7 +208,7 @@ export const EditWithGroups = ({ id, locale }: { id: string; locale: string }) =
       </div>
       {/* Confirmation*/}
       {groupId === "end" && (
-        <RichTextLockedWithGroups
+        <RichTextLocked
           summaryText={t("groups.confirmation.summary")}
           beforeContent={
             <div>
