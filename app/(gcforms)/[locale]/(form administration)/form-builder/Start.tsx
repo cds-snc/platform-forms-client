@@ -48,7 +48,7 @@ export const Start = () => {
         const isValidSize = validateTemplateSize(result);
 
         if (!isValidSize) {
-          setErrors([{ message: t("startErrorParse") }]);
+          setErrors([{ message: t("startErrorTemplateSize") }]);
           target.value = "";
           return;
         }
