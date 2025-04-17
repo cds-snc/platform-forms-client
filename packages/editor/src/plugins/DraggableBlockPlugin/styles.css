@@ -9,20 +9,6 @@
   will-change: transform;
   display: flex;
 }
-
-.draggable-block-menu .icon {
-  opacity: 0.3;
-  background-image: url(../../images/icons/dragIndicator.svg);
-}
-
-.draggable-block-menu .icon-plus {
-  display: inline-block;
-  border: none;
-  cursor: pointer;
-  background-color: transparent;
-  background-image: url(../../images/icons/plus.svg);
-}
-
 .draggable-block-menu:active {
   cursor: grabbing;
 }
