@@ -85,26 +85,15 @@ export default async function middleware(req: NextRequest) {
   const pathname = req.nextUrl.pathname;
   const searchParams = req.nextUrl.searchParams.toString();
 
+  // console.log(`Middleware: ${pathname} ${searchParams}`);
+
   if (req.headers.get("next-action") !== null) {
-    const contentLength = req.headers.get("content-length");
-
-    if (contentLength && parseInt(contentLength, 10) > maxPayloadSize) {
-      logMessage.info(
-        `Middleware: Request payload size exceeds the limit of ${maxPayloadSize} bytes.`
-      );
-
-      return NextResponse.json(
-        { error: "Request payload size exceeds the limit." },
-        { status: 413 }
-      );
-    }
-
     const body = await req.text();
 
     // Check body size
     if (body.length > maxPayloadSize) {
       logMessage.info(
-        `Middleware: Request payload size exceeds the limit of ${maxPayloadSize} bytes.`
+        `Middleware: Request payload size exceeds the limit of ${maxPayloadSize} bytes. Path: ${pathname}`
       );
       return NextResponse.json(
         { error: "Request payload size exceeds the limit." },
