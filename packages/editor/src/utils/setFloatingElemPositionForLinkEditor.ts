@@ -8,8 +8,8 @@
 const VERTICAL_GAP = 10;
 const HORIZONTAL_OFFSET = 5;
 
-export function setFloatingElemPosition(
-  targetRect: ClientRect | null,
+export function setFloatingElemPositionForLinkEditor(
+  targetRect: DOMRect | null,
   floatingElem: HTMLElement,
   anchorElem: HTMLElement,
   verticalGap: number = VERTICAL_GAP,
@@ -27,7 +27,7 @@ export function setFloatingElemPosition(
   const anchorElementRect = anchorElem.getBoundingClientRect();
   const editorScrollerRect = scrollerElem.getBoundingClientRect();
 
-  let top = targetRect.top - floatingElemRect.height - verticalGap;
+  let top = targetRect.top - verticalGap;
   let left = targetRect.left - horizontalOffset;
 
   if (top < editorScrollerRect.top) {
