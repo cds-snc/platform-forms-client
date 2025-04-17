@@ -5,6 +5,28 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.39.0](https://github.com/cds-snc/platform-forms-client/compare/v3.38.5...v3.39.0) (2025-04-17)
+
+
+### Features
+
+* packaged + updated Lexical editor ([#5265](https://github.com/cds-snc/platform-forms-client/issues/5265)) ([51d732a](https://github.com/cds-snc/platform-forms-client/commit/51d732a38bfa64059362bd1ee0927f91d1f44f6d))
+
+
+### Miscellaneous Chores
+
+* Add prop to RichTextEditor to enable maxLength ([#5439](https://github.com/cds-snc/platform-forms-client/issues/5439)) ([e6974db](https://github.com/cds-snc/platform-forms-client/commit/e6974dba82f7cbc1786c1eb126483fd676129972))
+* Add return for middleware check ([#5432](https://github.com/cds-snc/platform-forms-client/issues/5432)) ([5569e4b](https://github.com/cds-snc/platform-forms-client/commit/5569e4b5c00898956207035c9105d708636419ab))
+* adds Cypress manual tests for releases ([#5404](https://github.com/cds-snc/platform-forms-client/issues/5404)) ([cb8bde1](https://github.com/cds-snc/platform-forms-client/commit/cb8bde1192bda64f0ff054e979e4a7b8a2b09c5a))
+* log checks ([#5419](https://github.com/cds-snc/platform-forms-client/issues/5419)) ([d37a305](https://github.com/cds-snc/platform-forms-client/commit/d37a3058aa66193d546418b8d4c7fa588e8d7897))
+* more Google analytics ([#5433](https://github.com/cds-snc/platform-forms-client/issues/5433)) ([1b3c4a9](https://github.com/cds-snc/platform-forms-client/commit/1b3c4a93282cba0bfd3708d0cd606e19b4eb4c13))
+* remove api feature flag ([#5436](https://github.com/cds-snc/platform-forms-client/issues/5436)) ([f617c5d](https://github.com/cds-snc/platform-forms-client/commit/f617c5d79c07d81d493884c4e64608dfdba20210))
+* remove feature flag for save and resume ([#5435](https://github.com/cds-snc/platform-forms-client/issues/5435)) ([d45687e](https://github.com/cds-snc/platform-forms-client/commit/d45687e020941e961609339e5f807c23c60e2c2a))
+* Set contentLength/maxLength indicator threshold for display ([#5440](https://github.com/cds-snc/platform-forms-client/issues/5440)) ([80fe126](https://github.com/cds-snc/platform-forms-client/commit/80fe126e5ec0be033194f48cfa056820d7ff8f5e))
+* update layout to use server rendered footer ([#5417](https://github.com/cds-snc/platform-forms-client/issues/5417)) ([2c45a88](https://github.com/cds-snc/platform-forms-client/commit/2c45a88d9a49891fab783a2a57afed3fdce26d54))
+* update markdown to jsx ([#5438](https://github.com/cds-snc/platform-forms-client/issues/5438)) ([fa2d526](https://github.com/cds-snc/platform-forms-client/commit/fa2d526a8d73da727d14e4dfe70e586d65a89eed))
+* update share modal ([#5427](https://github.com/cds-snc/platform-forms-client/issues/5427)) ([d804f6c](https://github.com/cds-snc/platform-forms-client/commit/d804f6cfc5664218c3609d9d2a15ff428fdb2e30))
+
 ## [3.38.5](https://github.com/cds-snc/platform-forms-client/compare/v3.38.4...v3.38.5) (2025-04-14)
 
 
