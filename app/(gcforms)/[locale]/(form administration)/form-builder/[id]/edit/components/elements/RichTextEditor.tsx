@@ -16,12 +16,14 @@ export const RichTextEditor = ({
   lang,
   ariaLabel,
   ariaDescribedBy,
+  maxLength,
 }: {
   path: string;
   content: string;
   lang: Language;
   ariaLabel?: string;
   ariaDescribedBy?: string;
+  maxLength?: number;
 }) => {
   const { updateField, getLocalizationAttribute } = useTemplateStore((s) => ({
     updateField: s.updateField,
@@ -52,6 +54,7 @@ export const RichTextEditor = ({
         ariaLabel={ariaLabel || t("richTextEditor")}
         ariaDescribedBy={ariaDescribedBy}
         className="gc-formview gc-richText"
+        maxLength={maxLength}
         {...getLocalizationAttribute()}
       />
     </div>
