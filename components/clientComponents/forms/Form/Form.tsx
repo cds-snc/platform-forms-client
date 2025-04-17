@@ -34,6 +34,7 @@ import { PrimaryFormButtons } from "./PrimaryFormButtons";
 import { FormCaptcha } from "@clientComponents/globals/FormCaptcha/FormCaptcha";
 import { FormStatus } from "@gcforms/types";
 import { CaptchaFail } from "@clientComponents/globals/FormCaptcha/CaptchaFail";
+import { ga } from "@lib/client/clientHelpers";
 
 /**
  * This is the "inner" form component that isn't connected to Formik and just renders a simple form
@@ -318,9 +319,7 @@ export const Form = withFormik<FormProps, Responses>({
       formikBag.setStatus("Error");
     } finally {
       if (formikBag.props && !formikBag.props.isPreview) {
-        window.dataLayer = window.dataLayer || [];
-        window.dataLayer.push({
-          event: "form_submission_trigger",
+        ga("form_submission_trigger", {
           formID: formikBag.props.formRecord.id,
           formTitle: formikBag.props.formRecord.form.titleEn,
         });
