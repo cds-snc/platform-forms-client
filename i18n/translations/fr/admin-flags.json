@@ -22,10 +22,6 @@
       "title": "Accès API",
       "description": "Activer les écrans et fonctionnalités d'accès à l'API"
     },
-    "saveAndResume": {
-      "title": "Enregistrer et reprendre plus tard",
-      "description": "Activer la fonctionnalité d'enregistrement et de reprise"
-    },
     "formTimer": {
       "title": "formTimer",
       "description": "Activez formTimer pour retarder l'envoi d'un formulaire et contribuer à prévenir le spam"

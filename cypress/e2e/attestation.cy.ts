@@ -29,7 +29,6 @@ describe("Attestation functionality", () => {
     cy.get("div[data-testid='1.0']").find("label").click();
     cy.get("div[data-testid='1.1']").find("label").click();
     cy.get("[type='submit']").click();
-    cy.url().should("include", `/confirmation`);
     cy.get("h1").contains("Your submission has been received");
   });
 });

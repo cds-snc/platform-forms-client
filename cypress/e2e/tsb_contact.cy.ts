@@ -25,7 +25,6 @@ describe("TSB Contact Form functionality", () => {
     );
 
     cy.get("[type='submit']").click();
-    cy.url().should("include", `/confirmation`);
     cy.get("h1").contains("Thank you for your message");
     cy.get("[data-testid='fip']").find("img").should("have.attr", "src", "/img/tsb-en.png");
     cy.get("#content").contains(

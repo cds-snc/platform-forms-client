@@ -5,8 +5,6 @@ import { useTemplateStore } from "@lib/store/useTemplateStore";
 import { toast } from "@formBuilder/components/shared/Toast";
 import { Button } from "@clientComponents/globals";
 
-import { useFeatureFlags } from "@lib/hooks/useFeatureFlags";
-import { FeatureFlags } from "@lib/cache/types";
 import { SaveAndResumeToggle } from "./SaveAndResumeToggle";
 import { updateTemplateFormSaveAndResume } from "@formBuilder/actions";
 
@@ -41,21 +39,13 @@ export const SetSaveAndResume = ({ formId }: { formId: string }) => {
     toast.success(t("saveAndResume.savedSuccessMessage"));
   }, [status, t, setSaveAndResume, formId]);
 
-  const { getFlag } = useFeatureFlags();
-  const saveAndResumeEnabled = getFlag(FeatureFlags.saveAndResume);
-
-  // Disable save and resume panel if the feature flag is not enabled
-  if (!saveAndResumeEnabled) {
-    return null;
-  }
-
   return (
     <div className="mb-10">
       <h2 data-form-id={formId}>{t("saveAndResume.title")}</h2>
       <p className="mb-2 font-bold">{t("saveAndResume.toggleDescription.text1")}</p>
       <p>{t("saveAndResume.toggleDescription.text2")}</p>
 
-      <div className="mb-4" data-flag-enabled={saveAndResumeEnabled}>
+      <div className="mb-4">
         <SaveAndResumeToggle
           isChecked={status === "off" ? false : true}
           setIsChecked={handleToggle}

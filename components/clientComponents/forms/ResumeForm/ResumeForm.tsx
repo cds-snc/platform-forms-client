@@ -2,10 +2,6 @@
 import React from "react";
 import { useTranslation } from "@i18n/client";
 
-import { useFeatureFlags } from "@lib/hooks/useFeatureFlags";
-import { FeatureFlags } from "@lib/cache/types";
-import { ErrorPanel } from "@clientComponents/globals/ErrorPanel";
-
 import { ToastContainer } from "@formBuilder/components/shared/Toast";
 import { GcdsH1 } from "@serverComponents/globals/GcdsH1";
 import { Upload } from "./Upload";
@@ -25,14 +21,7 @@ export const ResumeForm = ({
     i18n: { language },
   } = useTranslation(["form-builder", "common"]);
 
-  const { getFlag } = useFeatureFlags();
-  const saveAndResumeEnabled = getFlag(FeatureFlags.saveAndResume);
-
   const title = language === "en" ? titleEn : titleFr;
-
-  if (!saveAndResumeEnabled) {
-    return <ErrorPanel supportLink={false} />;
-  }
 
   return (
     <>
