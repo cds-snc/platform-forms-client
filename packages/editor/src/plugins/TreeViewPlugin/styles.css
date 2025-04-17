@@ -1,0 +1,8 @@
+.gc-editor-treeview {
+  padding: 10px;
+  color: white;
+  font-size: 14px;
+  font-family: "Inter", sans-serif;
+  background-color: black;
+  outline: 1px solid black;
+}
