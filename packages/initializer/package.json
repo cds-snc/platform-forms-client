@@ -1,5 +1,5 @@
 {
-  "name": "@gcforms/deployment",
+  "name": "@gcforms/initializer",
   "version": "1.0.0",
   "author": "Canadian Digital Service",
   "license": "MIT",
@@ -26,6 +26,7 @@
   },
   "dependencies": {
     "@aws-sdk/client-secrets-manager": "^3.750.0",
+    "@prisma/client": "^6.6.0",
     "axios": "^1.8.4",
     "ioredis": "^5.6.1",
     "postgres": "^3.4.5"

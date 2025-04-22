@@ -2949,11 +2949,12 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@gcforms/deployment@workspace:packages/deployment":
+"@gcforms/initializer@workspace:packages/initializer":
   version: 0.0.0-use.local
-  resolution: "@gcforms/deployment@workspace:packages/deployment"
+  resolution: "@gcforms/initializer@workspace:packages/initializer"
   dependencies:
     "@aws-sdk/client-secrets-manager": "npm:^3.750.0"
+    "@prisma/client": "npm:^6.6.0"
     "@types/node": "npm:^20.11.6"
     axios: "npm:^1.8.4"
     ioredis: "npm:^5.6.1"
@@ -4228,6 +4229,21 @@ __metadata:
     typescript:
       optional: true
   checksum: 10c0/2bf6a213bd65de20092b2773b9bb105f023558da2214e92542fe745255778dee8386068ec6648d0d651e0af7443ca69ed9278aa505c0342d39a30098fd0090d2
+  languageName: node
+  linkType: hard
+
+"@prisma/client@npm:^6.6.0":
+  version: 6.6.0
+  resolution: "@prisma/client@npm:6.6.0"
+  peerDependencies:
+    prisma: "*"
+    typescript: ">=5.1.0"
+  peerDependenciesMeta:
+    prisma:
+      optional: true
+    typescript:
+      optional: true
+  checksum: 10c0/174e4f445ae671dc16af272743b33312f36be34d8d5c0ab92eba8c81d74dc86967fa316bd4db082f1aa0970abf31899a8305e09a6717cb285bdc700aa9273f70
   languageName: node
   linkType: hard
 

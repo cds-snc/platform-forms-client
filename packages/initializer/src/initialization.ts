@@ -1,6 +1,6 @@
 /* eslint-disable no-console */
 import Redis from "ioredis";
-
+import flags from "./flags/default_flag_settings.json";
 let redisConnection: Redis | null = null;
 
 export const getRedisInstance = (): Redis => {
@@ -53,17 +53,12 @@ const createFlag = async (key: string, value: boolean) => {
 };
 
 // Flag initialization function
-export const initiateFlags = async (initialFlags: Record<string, boolean>) => {
+export const initiateFlags = async () => {
   console.info("Running flag initialization");
-
-  if (process.env.APP_ENV === "test") {
-    console.info("Application is in TEST mode, skipping flag initialization");
-    return;
-  }
 
   try {
     let currentFlags = await checkAll();
-    const defaultFlags: { [key: string]: boolean } = initialFlags;
+    const defaultFlags: { [key: string]: boolean } = flags;
 
     console.info("Checking for deprecated flags");
 
@@ -85,7 +80,7 @@ export const initiateFlags = async (initialFlags: Record<string, boolean>) => {
     console.info("Checking for new flags");
 
     const addFlags = [];
-    for (const key in initialFlags) {
+    for (const key in defaultFlags) {
       if (typeof currentFlags[key] === "undefined" || currentFlags[key] === null) {
         addFlags.push(
           (async () => {

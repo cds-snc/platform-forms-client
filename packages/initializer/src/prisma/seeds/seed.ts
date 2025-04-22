@@ -1,14 +1,12 @@
 /* eslint-disable no-console */
-import { Prisma, PrismaClient } from "@prisma/client";
-import seedTemplates from "./fixtures/templates";
-import seedPrivileges from "./fixtures/privileges";
-import seedSettings from "./fixtures/settings";
-import seedUsers, { UserWithoutSecurityAnswers } from "./fixtures/users";
-import seedSecurityQuestions from "./fixtures/security-questions";
+import type { PrismaClient } from "@prisma/client";
+import seedTemplates from "../fixtures/templates";
+import seedPrivileges from "../fixtures/privileges";
+import seedSettings from "../fixtures/settings";
+import seedUsers, { UserWithoutSecurityAnswers } from "../fixtures/users";
+import seedSecurityQuestions from "../fixtures/security-questions";
 
-const prisma = new PrismaClient();
-
-async function createTemplates(env: string) {
+async function createTemplates(env: string, prisma: PrismaClient) {
   // see https://github.com/prisma/prisma/issues/9247#issuecomment-1249322729 for why this check is needed
   const templatePromises = seedTemplates[env].map((formConfig, index) =>
     prisma.template.upsert({
@@ -19,7 +17,7 @@ async function createTemplates(env: string) {
       create: {
         id: `${index + 1}`,
         name: formConfig.titleEn?.toString() ?? "",
-        jsonConfig: formConfig !== null ? (formConfig as Prisma.JsonObject) : Prisma.JsonNull,
+        jsonConfig: formConfig !== null ? formConfig : null,
       },
     })
   );
@@ -27,10 +25,10 @@ async function createTemplates(env: string) {
   return Promise.all(templatePromises);
 }
 
-async function createPrivileges(env: string) {
+async function createPrivileges(env: string, prisma: PrismaClient) {
   const typeSafePrivilegeData = seedPrivileges[env].map((privilege) => ({
     ...privilege,
-    permissions: privilege.permissions !== null ? privilege.permissions : Prisma.JsonNull,
+    permissions: privilege.permissions !== null ? privilege.permissions : null,
   }));
 
   const privilegePromises = typeSafePrivilegeData.map((privilege) => {
@@ -57,14 +55,14 @@ async function createPrivileges(env: string) {
   await Promise.all(privilegePromises);
 }
 
-async function createSettings(env: string) {
+async function createSettings(env: string, prisma: PrismaClient) {
   return prisma.setting.createMany({
     data: seedSettings[env],
     skipDuplicates: true,
   });
 }
 
-async function createUsers() {
+async function createUsers(prisma: PrismaClient) {
   await prisma.user.upsert({
     where: {
       email: UserWithoutSecurityAnswers.email,
@@ -119,7 +117,7 @@ async function createUsers() {
   await Promise.all(users);
 }
 
-async function createSecurityQuestions() {
+async function createSecurityQuestions(prisma: PrismaClient) {
   return prisma.securityQuestion.createMany({
     data: seedSecurityQuestions.map((question) => {
       return { questionEn: question.en, questionFr: question.fr };
@@ -128,20 +126,20 @@ async function createSecurityQuestions() {
   });
 }
 
-async function main(environment: string) {
+async function main(prisma: PrismaClient, environment: string) {
   try {
     console.log(`Seeding Database for ${environment} enviroment`);
     await Promise.all([
-      createTemplates(environment),
-      createPrivileges(environment),
-      createSettings(environment),
-      createSecurityQuestions(),
+      createTemplates(environment, prisma),
+      createPrivileges(environment, prisma),
+      createSettings(environment, prisma),
+      createSecurityQuestions(prisma),
     ]);
 
     if (environment !== "production") {
       console.log("Creating test Users");
       try {
-        await createUsers();
+        await createUsers(prisma);
       } catch (e) {
         if (e instanceof Prisma.PrismaClientKnownRequestError) {
           // The .code property can be accessed in a type-safe manner

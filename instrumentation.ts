@@ -8,13 +8,16 @@ export async function register() {
       return;
     }
 
-    const initialFlags = await import("./deployment/default_flag_settings.json").then(
-      (m) => m.default
-    );
+    // Import prisma client
+    const prisma = await import("@lib/integration/prismaConnector").then((m) => m.prisma);
 
     // Initialize the feature flags and flush the privilege cache when the app server is started in development mode
-    await import("@gcforms/deployment").then(async (m) => {
-      await Promise.all([m.initiateFlags(initialFlags), m.flushPrivilegesCache()]);
+    await import("@gcforms/initializer").then(async (m) => {
+      await Promise.all([
+        m.initiateFlags(),
+        m.flushPrivilegesCache(),
+        m.prismaSeed(prisma, "development"),
+      ]);
     });
   }
 }
