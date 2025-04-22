@@ -62,7 +62,7 @@ export async function submitForm(
     const validateResponsesResult = await validateResponses(values, template);
 
     if (Object.keys(validateResponsesResult).length !== 0) {
-      logMessage.warn(
+      logMessage.info(
         `[server-action][submitForm] Detected invalid response(s) in submission on form ${formId}. Errors: ${JSON.stringify(
           validateResponsesResult
         )}`
