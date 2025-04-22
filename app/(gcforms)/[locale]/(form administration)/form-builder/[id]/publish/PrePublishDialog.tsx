@@ -186,7 +186,7 @@ export const PrePublishDialog = ({
                 )}
                 onChange={(e) => onFormTypeChange(e)}
               >
-                <option value="" selected disabled hidden>
+                <option value="" disabled hidden>
                   {t("logic.choiceSelect.selectOption")}
                 </option>
                 {elementOptions.map((option) => (

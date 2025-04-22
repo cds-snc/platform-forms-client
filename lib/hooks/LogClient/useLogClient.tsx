@@ -2,6 +2,7 @@
 import { FormServerErrorCodes } from "@lib/types/form-builder-types";
 import { logErrorMessage } from "./action";
 import { useEffect, useState } from "react";
+import { ga } from "@lib/client/clientHelpers";
 
 interface ClientLog {
   code: FormServerErrorCodes;
@@ -18,6 +19,12 @@ export const useLogClient = () => {
       if (message) {
         await logErrorMessage(message.code, message.formId, message.timestamp);
         setMessage(undefined);
+
+        ga("client_error_logged", {
+          code: message.code,
+          formId: message.formId,
+          timestamp: message.timestamp,
+        });
       }
     })();
   }, [message]);

@@ -34,7 +34,7 @@ const Body = ({ children }: { children: React.ReactNode }) => {
   return <div className="flex w-full py-[70px]">{children}</div>;
 };
 
-const Footer = ({ children }: { children: React.ReactNode }) => {
+const ElementDialogFooter = ({ children }: { children: React.ReactNode }) => {
   return (
     <div className="absolute bottom-0 z-[100] flex min-h-[60px] w-full gap-4 border-t border-slate-800 bg-white p-4">
       {children}
@@ -168,7 +168,7 @@ export const ElementDialog = ({
           {/* /DESCRIPTION */}
         </Body>
 
-        <Footer>
+        <ElementDialogFooter>
           <Button dataTestId="element-description-add-element" onClick={handleAdd}>
             <>
               {id
@@ -179,7 +179,7 @@ export const ElementDialog = ({
           <Button theme="secondary" dataTestId="cancel-button" onClick={handleClose}>
             {t("addElementDialog.cancel")}
           </Button>
-        </Footer>
+        </ElementDialogFooter>
       </div>
     </Dialog>
   );

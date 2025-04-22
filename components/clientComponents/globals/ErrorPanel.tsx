@@ -7,6 +7,7 @@ import { Session } from "next-auth";
 import { LinkButton } from "@serverComponents/globals/Buttons/LinkButton";
 import { BackArrowIcon } from "@serverComponents/icons";
 import { useFocusIt } from "@lib/hooks/useFocusIt";
+import { ga } from "@lib/client/clientHelpers";
 
 // Start the async call before the component renders
 const getSessionPromise = getSession();
@@ -29,6 +30,10 @@ export const ErrorPanel = ({
     getSessionPromise.then((session) => {
       setSession(session);
     });
+  });
+
+  useEffect(() => {
+    ga("client_error_page");
   });
 
   const headingRef = useRef(null);

@@ -8,8 +8,6 @@ import { Language } from "@lib/types/form-builder-types";
 import React, { useEffect, useMemo, useState, type JSX } from "react";
 import { useGCFormsContext } from "@lib/hooks/useGCFormContext";
 import { restoreSessionProgress, removeProgressStorage } from "@lib/utils/saveSessionProgress";
-import { useFeatureFlags } from "@lib/hooks/useFeatureFlags";
-import { FeatureFlags } from "@lib/cache/types";
 
 import { toast } from "@formBuilder/components/shared/Toast";
 import { ToastContainer } from "@formBuilder/components/shared/Toast";
@@ -42,10 +40,8 @@ export const FormWrapper = ({
     currentGroup,
   } = useGCFormsContext();
   const [captchaFail, setCaptchaFail] = useState(false);
-
-  const { getFlag } = useFeatureFlags();
-  const saveAndResumeEnabled = getFlag(FeatureFlags.saveAndResume);
-  const saveAndResume = formRecord?.saveAndResume && saveAndResumeEnabled;
+  const captchaToken = React.useRef("");
+  const saveAndResume = formRecord?.saveAndResume;
 
   const formRestoredMessage = t("saveAndResume.formRestored");
   const router = useRouter();
@@ -71,11 +67,11 @@ export const FormWrapper = ({
     if (savedValues) {
       removeProgressStorage();
 
-      if (saveAndResumeEnabled && savedValues.language === language) {
+      if (savedValues.language === language) {
         toast.success(formRestoredMessage, "public-facing-form");
       }
     }
-  }, [savedValues, formRestoredMessage, saveAndResumeEnabled, language]);
+  }, [savedValues, formRestoredMessage, language]);
 
   const initialValues = savedValues ? savedValues.values : undefined;
 
@@ -130,6 +126,7 @@ export const FormWrapper = ({
         currentGroup={currentGroup}
         setCaptchaFail={setCaptchaFail}
         captchaFail={captchaFail}
+        captchaToken={captchaToken}
       >
         {currentForm}
       </Form>

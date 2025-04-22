@@ -1,21 +1,24 @@
 "use client";
 
 import { PublicFormRecord } from "@lib/types";
-import { Footer, SkipLink, Fip } from "@clientComponents/globals";
+import { SkipLink, Fip } from "@clientComponents/globals";
 import LanguageToggle from "../Header/LanguageToggle";
 import { DateModified } from "../DateModified";
 import { cn } from "@lib/utils";
 import { LiveRegion } from "../LiveRegion";
+import { type JSX } from "react";
 
 interface FormDisplayLayoutProps extends React.PropsWithChildren {
   formRecord: PublicFormRecord;
   dateModified?: boolean;
+  footer?: JSX.Element;
 }
 
 const FormDisplayLayout = ({
   children,
   formRecord,
   dateModified = true,
+  footer,
 }: FormDisplayLayoutProps) => {
   return (
     <>
@@ -41,7 +44,7 @@ const FormDisplayLayout = ({
             {dateModified && <DateModified updatedAt={formRecord.updatedAt} />}
           </main>
         </div>
-        <Footer className="mt-4" disableGcBranding={formRecord?.form.brand?.disableGcBranding} />
+        {footer}
         <LiveRegion />
       </div>
     </>

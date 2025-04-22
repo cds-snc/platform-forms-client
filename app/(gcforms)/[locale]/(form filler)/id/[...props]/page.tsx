@@ -14,11 +14,10 @@ import { serverTranslation } from "@i18n";
 import { ClosingNotice } from "@clientComponents/forms/ClosingNotice/ClosingNotice";
 import { FormDelayProvider } from "@lib/hooks/useFormDelayContext";
 import { ResumeForm } from "@clientComponents/forms/ResumeForm/ResumeForm";
-import { getSomeFlags } from "@lib/cache/flags";
-import { FeatureFlags } from "@lib/cache/types";
 import { getAppSetting } from "@lib/appSettings";
 import { GcdsH1 } from "@serverComponents/globals/GcdsH1";
 import { headers } from "next/headers";
+import { Footer } from "@serverComponents/globals/Footer";
 
 export async function generateMetadata(props0: {
   params: Promise<{ locale: string; props: string[] }>;
@@ -86,9 +85,7 @@ export default async function Page(props0: {
   if (isPastClosingDate) {
     pageContent = <ClosedPage language={language} formRecord={formRecord} />;
   }
-
-  const { saveAndResume: saveAndResumeEnabled } = await getSomeFlags([FeatureFlags.saveAndResume]);
-  const saveAndResume = formRecord?.saveAndResume && saveAndResumeEnabled;
+  const saveAndResume = formRecord?.saveAndResume;
 
   // Resume form page
   if (saveAndResume && step === "resume") {
@@ -113,6 +110,10 @@ export default async function Page(props0: {
     );
   }
 
+  const footer = (
+    <Footer className="mt-4" disableGcBranding={formRecord?.form.brand?.disableGcBranding} />
+  );
+
   // Form page
   if (!pageContent) {
     pageContent = (
@@ -136,7 +137,7 @@ export default async function Page(props0: {
   }
 
   return (
-    <FormDisplayLayout formRecord={formRecord} dateModified={dateModified}>
+    <FormDisplayLayout formRecord={formRecord} dateModified={dateModified} footer={footer}>
       <GCFormsProvider formRecord={formRecord} nonce={nonce}>
         {pageContent}
       </GCFormsProvider>

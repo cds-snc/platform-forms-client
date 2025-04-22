@@ -1,8 +1,6 @@
 // TODO: in the future these could pulled in from default_flag_settings.json
 export const FeatureFlags = {
   addressComplete: "addressComplete",
-  apiAccess: "apiAccess",
-  saveAndResume: "saveAndResume",
   formTimer: "formTimer",
   hCaptcha: "hCaptcha",
   caretakerPeriod: "caretakerPeriod",

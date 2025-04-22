@@ -1,7 +1,5 @@
 {
   "addressComplete": false,
-  "apiAccess": false,
-  "saveAndResume": false,
   "formTimer": false,
   "hCaptcha": false,
   "caretakerPeriod": false

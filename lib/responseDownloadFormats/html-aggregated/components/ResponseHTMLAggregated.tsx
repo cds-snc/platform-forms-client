@@ -10,7 +10,7 @@ import { copyCodeToClipboardScript } from "../scripts";
 import { TableHeader } from "./AggregatedTable";
 import { CopyCodes } from "./CopyCodes";
 import { ProtectedLevel } from "./ProtectedLevel";
-import { formatDateTimeUTC } from "@lib/utils/form-builder";
+import { formatDateTimeUTC, formatDateTimeUTCFr } from "@lib/utils/form-builder";
 
 interface HTMLDownloadProps {
   lang: string;
@@ -64,6 +64,8 @@ export const ResponseHtmlAggregated = ({
     }),
   ] as TableHeader[];
 
+  const dateTime = lang === "en" ? formatDateTimeUTC(Date.now()) : formatDateTimeUTCFr(Date.now());
+
   return (
     <html lang={lang}>
       {/* eslint-disable-next-line @next/next/no-head-element */}
@@ -98,7 +100,7 @@ export const ResponseHtmlAggregated = ({
                 <strong>{submissions.length}</strong>
                 {` ${t("responseAggregatedTemplate.responsesDownloaded", {
                   lng: lang,
-                })} ${formatDateTimeUTC(Date.now())}`}
+                })} ${dateTime}`}
               </p>
               <p className="mb-4">{t("responseAggregatedTemplate.needToVerify", { lng: lang })}</p>
               <p className="mb-8">{t("responseAggregatedTemplate.useTheCopy", { lng: lang })}</p>
