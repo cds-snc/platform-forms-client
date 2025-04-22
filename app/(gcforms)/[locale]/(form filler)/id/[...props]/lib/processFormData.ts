@@ -89,7 +89,7 @@ export const processFormData = async (
       }
     }
 
-    const checkPayloadSize = validatePayloadSize(fields, 200);
+    const checkPayloadSize = validatePayloadSize(fields);
 
     if (!checkPayloadSize) {
       logMessage.info(`Payload size is too large for Form ID: ${form.id}.`);
