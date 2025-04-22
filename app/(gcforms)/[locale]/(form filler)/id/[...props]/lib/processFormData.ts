@@ -6,6 +6,7 @@ import { pushFileToS3, deleteObject } from "@lib/s3-upload";
 import { transformFormResponses } from "./transformFormResponses";
 import { invokeSubmissionLambda } from "./invokeSubmissionLambda";
 import { FormIsClosedError, FormNotFoundError, MissingFormDataError } from "./exceptions";
+import { validatePayloadSize } from "@lib/validation/validatePayloadSize";
 
 export const processFormData = async (
   reqFields: Record<string, Response>,
@@ -86,6 +87,13 @@ export const processFormData = async (
           }
         }
       }
+    }
+
+    const checkPayloadSize = validatePayloadSize(fields);
+
+    if (!checkPayloadSize) {
+      logMessage.info(`Payload size is too large for Form ID: ${form.id}.`);
+      throw new Error("Payload size is too large");
     }
 
     try {

@@ -7,7 +7,7 @@ import { NextAuthRequest } from "next-auth/lib";
 import CredentialsProvider from "next-auth/providers/credentials";
 import NextAuth, { Session } from "next-auth";
 import { JWT } from "next-auth/jwt";
-import { maxPayloadSize } from "./constants";
+import { bodySizeLimit } from "./constants";
 
 const verboseDebug = false;
 
@@ -91,9 +91,9 @@ export default async function middleware(req: NextRequest) {
     const body = await req.text();
 
     // Check body size
-    if (body.length > maxPayloadSize) {
+    if (body.length > bodySizeLimit) {
       logMessage.info(
-        `Middleware: Request payload size exceeds the limit of ${maxPayloadSize} bytes. Path: ${pathname}`
+        `Middleware: Request payload size exceeds the limit of ${bodySizeLimit} bytes. Path: ${pathname}`
       );
       return NextResponse.json(
         { error: "Request payload size exceeds the limit." },
