@@ -223,6 +223,14 @@ const isFieldResponseValid = (
   return null;
 };
 
+export const getFieldType = (formElement: FormElement) => {
+  if (formElement.properties.autoComplete === "email") {
+    return "email";
+  }
+
+  return formElement.type;
+};
+
 const valueMatchesType = (value: unknown, type: string, formElement: FormElement) => {
   switch (type) {
     case FormElementTypes.formattedDate:
@@ -310,7 +318,7 @@ export const validateResponses = async (values: Responses, formRecord: PublicFor
     // See: https://gcdigital.slack.com/archives/C05G766KW49/p1737063028759759
     if (values[item] && !result) {
       errors[item] = {
-        type: formElement.type,
+        type: getFieldType(formElement),
         value: values[item],
         message: "response-type-mismatch",
       };
