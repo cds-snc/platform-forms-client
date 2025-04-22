@@ -9,8 +9,13 @@ import { logMessage } from "@lib/logger";
 import { checkIfClosed, getPublicTemplateByID } from "@lib/templates";
 import { dateHasPast } from "@lib/utils";
 import { FormStatus } from "@gcforms/types";
+import { verifyHCaptchaToken } from "@clientComponents/globals/FormCaptcha/actions";
+import { checkOne } from "@lib/cache/flags";
+import { FeatureFlags } from "@lib/cache/types";
+import { validateResponses } from "@lib/validation/validation";
 
-// import { validateResponses } from "@lib/validation/validation";
+//  Removed once hCaptcha is running in blockable mode https://github.com/cds-snc/platform-forms-client/issues/5401
+const CAPTCHA_BLOCKABLE_MODE = false;
 
 // Public facing functions - they can be used by anyone who finds the associated server action identifer
 
@@ -27,8 +32,17 @@ export async function isFormClosed(formId: string): Promise<boolean> {
 export async function submitForm(
   values: Responses,
   language: string,
-  formRecordOrId: PublicFormRecord | string
+  formRecordOrId: PublicFormRecord | string,
+  captchaToken?: string | undefined
 ): Promise<{ id: string; submissionId?: string; error?: Error }> {
+  const captchaEnabled = await checkOne(FeatureFlags.hCaptcha);
+  if (captchaEnabled) {
+    const captchaVerified = await verifyHCaptchaToken(captchaToken || "");
+    if (CAPTCHA_BLOCKABLE_MODE && !captchaVerified) {
+      throw new Error(FormStatus.CAPTCHA_VERIFICATION_ERROR);
+    }
+  }
+
   const formId = typeof formRecordOrId === "string" ? formRecordOrId : formRecordOrId.id;
 
   try {
@@ -45,21 +59,18 @@ export async function submitForm(
       };
     }
 
-    // const validateResponsesResult = await validateResponses(values, template);
+    const validateResponsesResult = await validateResponses(values, template);
 
-    // if (Object.keys(validateResponsesResult).length !== 0) {
-
-    /*
-      logMessage.warn(
+    if (Object.keys(validateResponsesResult).length !== 0) {
+      // See: https://gcdigital.slack.com/archives/C05G766KW49/p1737063028759759
+      logMessage.info(
         `[server-action][submitForm] Detected invalid response(s) in submission on form ${formId}. Errors: ${JSON.stringify(
           validateResponsesResult
         )}`
       );
-      */
-
-    // Turn this on after we've monitored the logs for a while
-    // throw new MissingFormDataError("Form data validation failed");
-    //}
+      // Turn this on after we've monitored the logs for a while
+      // throw new MissingFormDataError("Form data validation failed");
+    }
 
     const formDataObject = buildFormDataObject(template, values);
 

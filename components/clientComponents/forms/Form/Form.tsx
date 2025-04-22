@@ -34,6 +34,7 @@ import { PrimaryFormButtons } from "./PrimaryFormButtons";
 import { FormCaptcha } from "@clientComponents/globals/FormCaptcha/FormCaptcha";
 import { FormStatus } from "@gcforms/types";
 import { CaptchaFail } from "@clientComponents/globals/FormCaptcha/CaptchaFail";
+import { ga } from "@lib/client/clientHelpers";
 
 /**
  * This is the "inner" form component that isn't connected to Formik and just renders a simple form
@@ -171,11 +172,10 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
             dataTestId="form"
             lang={language}
             handleSubmit={handleSubmit}
-            handleCaptchaFail={() => props.setCaptchaFail && props.setCaptchaFail(true)}
             noValidate={true}
             hCaptchaSiteKey={props.hCaptchaSiteKey}
-            blockableMode={false}
             isPreview={props.isPreview}
+            captchaToken={props.captchaToken}
           >
             {isGroupsCheck &&
               isShowReviewPage &&
@@ -284,7 +284,8 @@ export const Form = withFormik<FormProps, Responses>({
       const result = await submitForm(
         formValues,
         formikBag.props.language,
-        formikBag.props.formRecord.id
+        formikBag.props.formRecord.id,
+        formikBag.props.captchaToken?.current
       );
 
       // Failed to find Server Action (likely due to newer deployment)
@@ -307,13 +308,18 @@ export const Form = withFormik<FormProps, Responses>({
         formikBag.props.onSuccess(result.id, result?.submissionId);
       }
     } catch (err) {
+      // Captcha found a likely bot, show the Captcha fail screen
+      if ((err as Error).message === FormStatus.CAPTCHA_VERIFICATION_ERROR) {
+        formikBag.setStatus(FormStatus.CAPTCHA_VERIFICATION_ERROR);
+        formikBag.props.setCaptchaFail && formikBag.props.setCaptchaFail(true);
+        return;
+      }
+
       logMessage.error(err as Error);
       formikBag.setStatus("Error");
     } finally {
       if (formikBag.props && !formikBag.props.isPreview) {
-        window.dataLayer = window.dataLayer || [];
-        window.dataLayer.push({
-          event: "form_submission_trigger",
+        ga("form_submission_trigger", {
           formID: formikBag.props.formRecord.id,
           formTitle: formikBag.props.formRecord.form.titleEn,
         });

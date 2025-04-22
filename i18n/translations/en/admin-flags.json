@@ -18,14 +18,6 @@
       "title": "Address Complete",
       "description": "Enable CanadaPost address completion for forms"
     },
-    "apiAccess": {
-      "title": "API Access",
-      "description": "Enable API access screens and functionality"
-    },
-    "saveAndResume": {
-      "title": "Save and resume later",
-      "description": "Enable save and resume functionality"
-    },
     "formTimer": {
       "title": "formTimer",
       "description": "Enable formTimer to delay a form submission and help prevent spam"
