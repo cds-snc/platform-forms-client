@@ -9,6 +9,7 @@ import { useTemplateStore } from "@lib/store/useTemplateStore";
 import { clearTemplateStore } from "@lib/store/utils";
 import { safeJSONParse } from "@lib/utils";
 import { FormProperties } from "@lib/types";
+import { validateTemplateSize } from "@lib/utils/validateTemplateSize";
 import { ga } from "@lib/client/clientHelpers";
 
 export const Start = () => {
@@ -43,7 +44,17 @@ export const Start = () => {
       fileReader.readAsText(e.target.files[0], "UTF-8");
       fileReader.onload = (e) => {
         if (!e.target || !e.target.result || typeof e.target.result !== "string") return;
-        const data = safeJSONParse<FormProperties>(e.target.result, cleaner);
+
+        const result = e.target.result;
+        const isValidSize = validateTemplateSize(result);
+
+        if (!isValidSize) {
+          setErrors([{ message: t("startErrorTemplateSize") }]);
+          target.value = "";
+          return;
+        }
+
+        const data = safeJSONParse<FormProperties>(result, cleaner);
         if (!data) {
           setErrors([{ message: t("startErrorParse") }]);
           target.value = "";
