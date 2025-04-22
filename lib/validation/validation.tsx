@@ -309,7 +309,11 @@ export const validateResponses = async (values: Responses, formRecord: PublicFor
     // Only invalidate the response if the type has a value
     // See: https://gcdigital.slack.com/archives/C05G766KW49/p1737063028759759
     if (values[item] && !result) {
-      errors[item] = "invalid-response-data-type";
+      errors[item] = {
+        type: formElement.type,
+        value: values[item],
+        message: "response-type-mismatch",
+      };
     }
   }
 
