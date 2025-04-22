@@ -20,6 +20,7 @@ import {
   uniqueIDValidator,
 } from "@lib/middleware/jsonIDValidator";
 import { logMessage } from "@lib/logger";
+import { templateSizeValidator } from "@lib/middleware/templateSizeValidator";
 
 class MalformedAPIRequest extends Error {
   constructor(message?: string) {
@@ -48,6 +49,7 @@ export const GET = middleware(
       runValidationIf: runValidationCondition,
       jsonKey: "formConfig",
     }),
+    templateSizeValidator(),
   ],
   async (req, props) => {
     try {
@@ -100,6 +102,7 @@ export const POST = middleware(
       runValidationIf: runValidationCondition,
       jsonKey: "formConfig",
     }),
+    templateSizeValidator(),
   ],
   async (req, props) => {
     try {
