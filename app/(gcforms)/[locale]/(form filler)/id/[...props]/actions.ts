@@ -12,6 +12,7 @@ import { FormStatus } from "@gcforms/types";
 import { verifyHCaptchaToken } from "@clientComponents/globals/FormCaptcha/actions";
 import { checkOne } from "@lib/cache/flags";
 import { FeatureFlags } from "@lib/cache/types";
+import { validateResponses } from "@lib/validation/validation";
 
 //  Removed once hCaptcha is running in blockable mode https://github.com/cds-snc/platform-forms-client/issues/5401
 const CAPTCHA_BLOCKABLE_MODE = false;
@@ -58,21 +59,18 @@ export async function submitForm(
       };
     }
 
-    // const validateResponsesResult = await validateResponses(values, template);
+    const validateResponsesResult = await validateResponses(values, template);
 
-    // if (Object.keys(validateResponsesResult).length !== 0) {
-
-    /*
-      logMessage.warn(
+    if (Object.keys(validateResponsesResult).length !== 0) {
+      // See: https://gcdigital.slack.com/archives/C05G766KW49/p1737063028759759
+      logMessage.info(
         `[server-action][submitForm] Detected invalid response(s) in submission on form ${formId}. Errors: ${JSON.stringify(
           validateResponsesResult
         )}`
       );
-      */
-
-    // Turn this on after we've monitored the logs for a while
-    // throw new MissingFormDataError("Form data validation failed");
-    //}
+      // Turn this on after we've monitored the logs for a while
+      // throw new MissingFormDataError("Form data validation failed");
+    }
 
     const formDataObject = buildFormDataObject(template, values);
 
