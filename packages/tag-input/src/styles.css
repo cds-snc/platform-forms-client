@@ -1,0 +1,40 @@
+.gc-tag-input {
+  --gc-tag-input-border-color: #d1d5db;
+  --gc-tag-input-background-color: #f9fafb;
+  --gc-tag-input-text-color: #374151;
+
+  display: flex;
+  padding: 0.5rem;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  border-width: 1px;
+  border-color: #000000;
+  border-radius: 0.375rem;
+
+  .tag {
+    display: flex;
+    flex-direction: row;
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+    gap: 0.25rem;
+    align-items: center;
+    border-radius: 0.375rem;
+    border: 1px solid var(--gc-tag-input-border-color);
+    background-color: var(--gc-tag-input-background-color);
+    color: var(--gc-tag-input-text-color);
+    svg {
+      width: 1rem;
+      height: 1rem;
+    }
+  }
+
+  input {
+    display: inline-block;
+    padding-top: 0.25rem;
+    padding-bottom: 0.25rem;
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+    border-style: none;
+    outline-style: none;
+  }
+}
