@@ -30,6 +30,7 @@ import { getFullTemplateByID } from "@lib/templates";
 import { isValidEmail } from "@lib/validation/isValidEmail";
 import { slugify } from "@lib/client/clientHelpers";
 import { sendEmail } from "@lib/integration/notifyConnector";
+import { getOrigin } from "@lib/origin";
 
 export type CreateOrUpdateTemplateType = {
   id?: string;
@@ -496,6 +497,8 @@ export const shareForm = AuthenticatedAction(
         cleanedFilename = cleanedFilename.substring(0, 50);
       }
 
+      const HOST = await getOrigin();
+
       // Here is the documentation for the `sendEmail` function: https://docs.notifications.service.gov.uk/node.html#send-an-email
       await Promise.all(
         emails.map((email: string) => {
@@ -513,7 +516,7 @@ To preview this form:
 - **Step 1**:
   Save the attached JSON form file to your computer.
 - **Step 2**:
-  Go to [GC Forms](https://${host}). No account needed.
+  Go to [GC Forms](https://${HOST}). No account needed.
 - **Step 3**:
   Select open a form file.
 
@@ -525,7 +528,7 @@ Pour prévisualiser ce formulaire :
 - **Étape 1 :**
   Enregistrer le fichier de formulaire JSON ci-joint sur votre ordinateur.
 - **Étape 2 :**
-  Aller sur [Formulaires GC](https://${host}). Aucun compte n'est nécessaire.
+  Aller sur [Formulaires GC](https://${HOST}). Aucun compte n'est nécessaire.
 - **Étape 3 :**
   Sélectionner "Ouvrir un formulaire".`,
           });
