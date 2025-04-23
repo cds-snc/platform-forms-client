@@ -20,7 +20,7 @@ export const checkUnprocessed = AuthenticatedAction(
         throw new Error("Bad request");
       }
 
-      const result = await unprocessedSubmissions(formId);
+      const result = await unprocessedSubmissions(formId, true);
 
       return { unprocessedSubmissions: result };
     } catch (error) {
