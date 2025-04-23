@@ -55,7 +55,9 @@ export const ConfirmFormDeleteDialog = ({
       setUnprocessed(false);
       setError(true);
     } else {
-      setUnprocessed(true);
+      setUnprocessed(false);
+      setError(false);
+      result.unprocessedSubmissions && setUnprocessed(true);
     }
   }, [formId]);
 

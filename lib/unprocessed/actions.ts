@@ -12,7 +12,7 @@ export const checkUnprocessed = AuthenticatedAction(
       formId: string;
     }
   ): Promise<{
-    unprocessedSubmissions?: boolean;
+    unprocessedSubmissions: boolean;
     error?: string;
   }> => {
     try {
