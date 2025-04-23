@@ -458,11 +458,11 @@ export const shareForm = AuthenticatedAction(
   async (
     session,
     {
-      id: formId,
+      formId,
       emails,
       filename,
     }: {
-      id: string;
+      formId: string;
       emails: string[];
       filename: string;
     }
