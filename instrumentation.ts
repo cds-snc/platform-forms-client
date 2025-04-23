@@ -1,5 +1,5 @@
 export async function register() {
-  if (process.env.NEXT_RUNTIME === "nodejs") {
+  if (process.env.NEXT_RUNTIME === "nodejs" && !process.env.LAMBDA_ENV) {
     if (!process.env.REDIS_URL) {
       // eslint-disable-next-line no-console
       console.log(
