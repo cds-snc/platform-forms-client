@@ -1,5 +1,3 @@
-import { headers } from "next/headers";
-
 /**
  * Extract the origin from the request's headers.
  */
@@ -7,6 +5,8 @@ export async function getOrigin(): Promise<string> {
   if (process.env.APP_ENV === "test") {
     return "https://test.forms-formulaires.canada.ca";
   }
+
+  const { headers } = await import("next/headers");
 
   const h = await headers();
 
