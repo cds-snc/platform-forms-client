@@ -1,10 +1,10 @@
-import { maxPayloadSize as maxSize } from "../../constants";
+import { bodySizeLimit as maxSize } from "../../constants";
 
-export const validateTemplateSize = (formConfig: string, maxPayloadSize: number = maxSize) => {
+export const validateTemplateSize = (formConfig: string, bodySizeLimit: number = maxSize) => {
   try {
     const formConfigSize = formConfig.length;
 
-    if (formConfigSize > maxPayloadSize) {
+    if (formConfigSize > bodySizeLimit) {
       return false;
     }
     return true;
