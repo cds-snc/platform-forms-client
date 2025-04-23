@@ -11,7 +11,7 @@
   border-color: #000000;
   border-radius: 0.375rem;
 
-  .tag {
+  .gc-tag {
     display: flex;
     flex-direction: row;
     padding-left: 0.5rem;
@@ -25,6 +25,15 @@
     svg {
       width: 1rem;
       height: 1rem;
+    }
+    &.duplicate {
+      background-color: #fef2f2;
+      color: #b91c1c;
+      border-color: #fee2e2;
+      svg {
+        color: #b91c1c;
+        fill: #b91c1c;
+      }
     }
   }
 
