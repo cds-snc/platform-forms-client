@@ -36,7 +36,7 @@ describe("<TagInput />", () => {
       </div>
     );
 
-    cy.get('input[type="text"]').should("have.attr", "name", "test-name");
+    cy.get("[data-testid='tag-input']").should("have.attr", "name", "test-name");
   });
 
   it("adds a custom label", () => {
@@ -66,9 +66,19 @@ describe("<TagInput />", () => {
       </div>
     );
 
-    cy.get('input[type="text"]').type("New Tag{enter}");
-    cy.get('input[type="text"]').should("have.value", "");
+    cy.get("[data-testid='tag-input']").type("New Tag{enter}");
+    cy.get("[data-testid='tag-input']").should("have.value", "");
     cy.get(".gc-tag").should("contain", "New Tag");
+  });
+
+  it("applies an aria-label to a tag", () => {
+    cy.mount(
+      <div>
+        <TagInput tags={["Tag 1"]} />
+      </div>
+    );
+
+    cy.get(".gc-tag").should("have.attr", "aria-label", `Tag "Tag 1"`);
   });
 
   it("announces that a tag was added", () => {
@@ -77,7 +87,7 @@ describe("<TagInput />", () => {
         <TagInput tags={[]} />
       </div>
     );
-    cy.get('input[type="text"]').type("New Tag{enter}");
+    cy.get("[data-testid='tag-input']").type("New Tag{enter}");
     cy.get('[id^="tag-input-live-region-"]').should("exist").and("contain", `Tag "New Tag" added`);
   });
 
@@ -88,8 +98,8 @@ describe("<TagInput />", () => {
       </div>
     );
 
-    cy.get('input[type="text"]').type("Tag 1{enter}");
-    cy.get('input[type="text"]').should("have.value", "");
+    cy.get("[data-testid='tag-input']").type("Tag 1{enter}");
+    cy.get("[data-testid='tag-input']").should("have.value", "");
     cy.get(".gc-tag").should("have.length", 1);
   });
 
@@ -100,7 +110,7 @@ describe("<TagInput />", () => {
       </div>
     );
 
-    cy.get('input[type="text"]').type("Tag 1{enter}");
+    cy.get("[data-testid='tag-input']").type("Tag 1{enter}");
     cy.get('[id^="tag-input-live-region-"]')
       .should("exist")
       .and("contain", `Duplicate tag "Tag 1"`);
@@ -113,8 +123,8 @@ describe("<TagInput />", () => {
       </div>
     );
 
-    cy.get('input[type="text"]').type("Tag 1{enter}");
-    cy.get('input[type="text"]').should("have.value", "");
+    cy.get("[data-testid='tag-input']").type("Tag 1{enter}");
+    cy.get("[data-testid='tag-input']").should("have.value", "");
     cy.get(".gc-tag").should("have.length", 2);
   });
 
@@ -155,8 +165,8 @@ describe("<TagInput />", () => {
       </div>
     );
 
-    cy.get('input[type="text"]').type("New Tag{enter}");
-    cy.get('input[type="text"]').should("have.value", "");
+    cy.get("[data-testid='tag-input']").type("New Tag{enter}");
+    cy.get("[data-testid='tag-input']").should("have.value", "");
     cy.get(".gc-tag").should("contain", "New Tag");
     cy.get("@onTagAdd").should("have.been.calledWith", "New Tag");
   });
@@ -172,7 +182,59 @@ describe("<TagInput />", () => {
 
     cy.get(".gc-tag").should("contain", "Tag one");
     cy.get(".gc-tag").first().find("button").click();
-    cy.get(".gc-tag-input").should("not.contain", "Tag one");
+    cy.get("[data-testid='tag-input']").should("not.contain", "Tag one");
     cy.get("@onTagRemove").should("have.been.calledWith", "Tag one");
+  });
+
+  it("validates the tag according to the validation function", () => {
+    const validateTag = (tag: string) => {
+      const errors: string[] = [];
+
+      if (tag.length < 3) {
+        errors.push("Tag must be at least 3 characters long");
+      }
+
+      if (/\d/.test(tag)) {
+        errors.push("Tag must not include numbers");
+      }
+
+      if (tag.length > 10) {
+        errors.push("Tag must be at most 10 characters long");
+      }
+
+      return {
+        isValid: errors.length === 0,
+        errors: errors,
+      };
+    };
+
+    cy.mount(
+      <div>
+        <TagInput validateTag={validateTag} />
+      </div>
+    );
+
+    cy.get("[data-testid='tag-input']").type("ab{enter}");
+    cy.get("[data-testid='tag-input-error'] div").should("have.length", 1);
+    cy.get("[data-testid='tag-input-error']").should(
+      "contain",
+      "Tag must be at least 3 characters long"
+    );
+
+    cy.get("[data-testid='tag-input']").type("abcdefghijklmnopqrstuvwxy{enter}");
+    cy.get("[data-testid='tag-input-error'] div").should("have.length", 1);
+    cy.get("[data-testid='tag-input-error']").should(
+      "contain",
+      "Tag must be at most 10 characters long"
+    );
+
+    // Multiple errors
+    cy.get("[data-testid='tag-input']").type("T1{enter}");
+    cy.get("[data-testid='tag-input-error'] div").should("have.length", 2);
+    cy.get("[data-testid='tag-input-error']").should(
+      "contain",
+      "Tag must be at least 3 characters long"
+    );
+    cy.get("[data-testid='tag-input-error']").should("contain", "Tag must not include numbers");
   });
 });

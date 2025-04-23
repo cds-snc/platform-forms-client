@@ -16,14 +16,14 @@ const keys = {
   SEMICOLON: ";",
 };
 
-const announcements = {
+const aria = {
   tag: (tag: string) => `Tag "${tag}"`,
   duplicateTag: (tag: string) => `Duplicate tag "${tag}"`,
-  invalidTag: (tag: string) => `Invalid tag "${tag}"`,
+  invalidTag: (tag: string, reasons: string[]) => `Invalid tag "${tag}" (${reasons.join(", ")})`,
   tagAdded: (tag: string) => `Tag "${tag}" added`,
   tagRemoved: (tag: string) => `Tag "${tag}" removed`,
   inputLabel: (tags: string[]) =>
-    `${tags} tags. Use left and right arrow keys to navigate, enter or tab to create, delete to delete tags.`,
+    `${tags} tags. Use left and right arrow keys to navigate, enter, tab or comma to create, delete to delete tags.`,
 };
 
 export const TagInput = ({
@@ -47,22 +47,39 @@ export const TagInput = ({
   restrictDuplicates?: boolean;
   onTagAdd?: (tag: string) => void;
   onTagRemove?: (tag: string) => void;
-  validateTag?: (tag: string) => boolean;
+  validateTag?: (tag: string) => {
+    isValid: boolean;
+    errors?: string[];
+  };
 }) => {
   const tagInputContainerRef = useRef<HTMLDivElement>(null);
   const [selectedTags, setSelectedTags] = useState<string[]>(tags || []);
+  const [errorMessages, setErrorMessages] = useState<string[]>([]);
+
+  const resetMessages = () => {
+    setErrorMessages([]);
+  };
 
   const handleAddTag = (tag: string) => {
-    if (validateTag && !validateTag(tag)) {
-      // @TODO: Handle invalid tag case (exception?)
-      // Announce invalid tag
-      return;
+    resetMessages();
+
+    if (validateTag) {
+      const { isValid, errors } = validateTag(tag);
+      if (!isValid) {
+        setErrorMessages(errors || []);
+        // Announce invalid tag
+        if (tagInputContainerRef.current) {
+          say(aria.invalidTag(tag, errors || []), tagInputContainerRef.current);
+        }
+
+        return;
+      }
     }
 
     if (restrictDuplicates && selectedTags.includes(tag)) {
       // Announce duplicate tag
       if (tagInputContainerRef.current) {
-        say(announcements.duplicateTag(tag), tagInputContainerRef.current);
+        say(aria.duplicateTag(tag), tagInputContainerRef.current);
       }
 
       // Highlight the duplicate tag momentarily
@@ -77,30 +94,38 @@ export const TagInput = ({
       return;
     }
 
+    // Fire onTagAdd callback
     if (onTagAdd) {
       onTagAdd(tag);
     }
+
+    // Announce tag added
     if (tagInputContainerRef.current) {
-      say(announcements.tagAdded(tag), tagInputContainerRef.current);
+      say(aria.tagAdded(tag), tagInputContainerRef.current);
     }
+
+    // Add the tag to the selected tags
     setSelectedTags((prevTags) => [...prevTags, tag]);
   };
 
   const handleRemoveTag = (tag: string) => {
+    // Fire onTagRemove callback
     if (onTagRemove) {
       onTagRemove(tag);
     }
 
+    // Announce tag removed
     if (tagInputContainerRef.current) {
-      say(announcements.tagRemoved(tag), tagInputContainerRef.current);
+      say(aria.tagRemoved(tag), tagInputContainerRef.current);
     }
 
+    // Remove the tag from the selected tags
     setSelectedTags((prevTags) => prevTags.filter((t) => t !== tag));
   };
 
   const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
     const { key } = event;
-    const acceptKeys = [keys.ENTER, keys.TAB, keys.COMMA, keys.SEMICOLON];
+    const acceptKeys = [keys.ENTER, keys.TAB, keys.COMMA];
 
     if (acceptKeys.includes(key)) {
       event.preventDefault();
@@ -128,7 +153,12 @@ export const TagInput = ({
       {description && <p className="gc-tag-input-description">{description}</p>}
       <div className="gc-tag-input">
         {selectedTags.map((tag, index) => (
-          <div key={`${tag}-${index}`} id={`tag-${index}`} className="gc-tag">
+          <div
+            key={`${tag}-${index}`}
+            id={`tag-${index}`}
+            className="gc-tag"
+            aria-label={aria.tag(tag)}
+          >
             <div className="">{tag}</div>
             <button className="" onClick={() => handleRemoveTag(tag)}>
               <CancelIcon />
@@ -137,6 +167,7 @@ export const TagInput = ({
         ))}
 
         <input
+          data-testid="tag-input"
           id={id}
           name={name}
           type="text"
@@ -144,6 +175,13 @@ export const TagInput = ({
           onKeyDown={handleKeyDown}
         />
       </div>
+      {errorMessages.length > 0 && (
+        <div role="alert" className="gc-tag-input-error" data-testid="tag-input-error">
+          {errorMessages.map((error, index) => (
+            <div key={`error-${index}`}>{error}</div>
+          ))}
+        </div>
+      )}
     </div>
   );
 };

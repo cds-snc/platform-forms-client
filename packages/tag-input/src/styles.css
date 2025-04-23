@@ -47,3 +47,7 @@
     outline-style: none;
   }
 }
+
+.gc-tag-input-error {
+  color: #b91c1c;
+}
