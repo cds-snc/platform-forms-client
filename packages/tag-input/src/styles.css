@@ -57,6 +57,17 @@
   }
 }
 
+.gc-tag-input-label {
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+  display: block;
+}
+
+.gc-tag-input-description {
+  margin-top: 0.25rem;
+  margin-bottom: 0.5rem;
+}
+
 .gc-tag-input-error {
   color: #b91c1c;
 }

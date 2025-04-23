@@ -17,6 +17,7 @@ const keys = {
 };
 
 const aria = {
+  // @TODO: i18n
   tag: (tag: string) => `Tag "${tag}"`,
   duplicateTag: (tag: string) => `Duplicate tag "${tag}"`,
   invalidTag: (tag: string, reasons: string[]) => `Invalid tag "${tag}" (${reasons.join(", ")})`,
