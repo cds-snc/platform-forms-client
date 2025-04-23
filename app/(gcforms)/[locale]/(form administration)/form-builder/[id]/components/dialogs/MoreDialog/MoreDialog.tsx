@@ -16,6 +16,9 @@ import { TextFieldOptions } from "./TextFieldOptions";
 import { CharacterLimitOptions } from "./CharacterLimitOptions";
 import { useRefsContext } from "@formBuilder/[id]/edit/components/RefsContext";
 import { FormElement } from "@lib/types";
+import { QuestionTagOptions } from "./QuestionTagOptions";
+import { QuestionIDOptions } from "./QuestionIDOptions";
+import { InfoDetails } from "@formBuilder/components/shared/InfoDetails";
 
 export const MoreDialog = () => {
   const { getPathString, updateField, setChangeKey, getFormElementById } = useTemplateStore(
@@ -122,6 +125,14 @@ export const MoreDialog = () => {
               <CharacterLimitOptions item={item} setItem={setItem} />
 
               <SortOptions item={item} setItem={setItem} />
+
+              <InfoDetails summary="Customize API data attributes">
+                <p className="mt-6">
+                  Modify how your form fields get encoded for the API integration.
+                </p>
+                <QuestionIDOptions item={item} setItem={setItem} />
+                <QuestionTagOptions item={item} setItem={setItem} />
+              </InfoDetails>
             </form>
           </div>
         </Dialog>
