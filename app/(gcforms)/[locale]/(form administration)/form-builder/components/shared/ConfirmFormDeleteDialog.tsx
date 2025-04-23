@@ -8,7 +8,7 @@ import { LinkButton } from "@serverComponents/globals/Buttons/LinkButton";
 import Loader from "@clientComponents/globals/Loader";
 import { Button, Alert } from "@clientComponents/globals";
 import { useDialogRef, Dialog } from "./Dialog";
-import { checkUnprocessed } from "./actions";
+import { checkUnprocessed } from "@lib/unprocessed/actions";
 
 async function downloadForm(lang: string, id: string) {
   const url = `/api/templates/${id}`;

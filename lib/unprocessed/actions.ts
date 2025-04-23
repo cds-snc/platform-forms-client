@@ -1,3 +1,5 @@
+"use server";
+
 import { unprocessedSubmissions } from "@lib/vault";
 import { AuthenticatedAction } from "@lib/actions";
 
