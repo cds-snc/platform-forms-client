@@ -144,6 +144,18 @@ describe("<TagInput />", () => {
     cy.get("@onTagRemove").should("have.been.calledWith", "Tag 1");
   });
 
+  it("removes a selected tag", () => {
+    cy.mount(
+      <div>
+        <TagInput tags={["one", "two", "three", "four", "five", "six"]} />
+      </div>
+    );
+
+    cy.get("[data-testid='tag-input']").type("{leftarrow}{leftarrow}{leftarrow}{leftarrow}{del}");
+    cy.get('[id^="tag-input-live-region-"]').should("exist").and("contain", `Tag "three" removed`);
+    cy.get(".gc-tag").should("not.contain", "three");
+  });
+
   it("announces when a tag is removed", () => {
     cy.mount(
       <div>

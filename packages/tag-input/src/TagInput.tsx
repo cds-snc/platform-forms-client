@@ -22,6 +22,9 @@ const aria = {
   invalidTag: (tag: string, reasons: string[]) => `Invalid tag "${tag}" (${reasons.join(", ")})`,
   tagAdded: (tag: string) => `Tag "${tag}" added`,
   tagRemoved: (tag: string) => `Tag "${tag}" removed`,
+  tagSelected: (tag: string) => `Tag "${tag}" selected. Press delete to remove.`,
+
+  // @TODO:
   inputLabel: (tags: string[]) =>
     `${tags} tags. Use left and right arrow keys to navigate, enter, tab or comma to create, delete to delete tags.`,
 };
@@ -54,6 +57,7 @@ export const TagInput = ({
 }) => {
   const tagInputContainerRef = useRef<HTMLDivElement>(null);
   const [selectedTags, setSelectedTags] = useState<string[]>(tags || []);
+  const [selectedTagIndex, setSelectedTagIndex] = useState<number | null>(null);
   const [errorMessages, setErrorMessages] = useState<string[]>([]);
 
   const resetMessages = () => {
@@ -137,10 +141,39 @@ export const TagInput = ({
     }
 
     if (key === keys.DELETE) {
+      // If a tag is selected, delete it
+      if (selectedTagIndex !== null) {
+        const tagToRemove = selectedTags[selectedTagIndex];
+        handleRemoveTag(tagToRemove);
+        setSelectedTagIndex(null);
+        return;
+      }
+
+      // Otherwise delete the last tag
       const lastTag = selectedTags[selectedTags.length - 1];
       if (lastTag) {
         handleRemoveTag(lastTag);
         event.currentTarget.value = "";
+      }
+    }
+
+    if (key === keys.ARROW_LEFT) {
+      if (selectedTags.length) {
+        if (selectedTagIndex === null) {
+          setSelectedTagIndex(selectedTags.length - 1);
+        } else if (selectedTagIndex > 0) {
+          setSelectedTagIndex(selectedTagIndex - 1);
+        }
+      }
+    }
+
+    if (key === keys.ARROW_RIGHT) {
+      if (selectedTags.length) {
+        if (selectedTagIndex === null) {
+          setSelectedTagIndex(0);
+        } else if (selectedTagIndex < selectedTags.length - 1) {
+          setSelectedTagIndex(selectedTagIndex + 1);
+        }
       }
     }
   };
@@ -156,7 +189,7 @@ export const TagInput = ({
           <div
             key={`${tag}-${index}`}
             id={`tag-${index}`}
-            className="gc-tag"
+            className={`gc-tag ${selectedTagIndex === index ? "gc-selected-tag" : ""}`}
             aria-label={aria.tag(tag)}
           >
             <div className="">{tag}</div>

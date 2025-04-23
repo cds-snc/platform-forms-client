@@ -35,6 +35,15 @@
         fill: #b91c1c;
       }
     }
+    &.gc-selected-tag {
+      background-color: #d1fae5;
+      color: #065f46;
+      border-color: #bbf7d0;
+      svg {
+        color: #065f46;
+        fill: #065f46;
+      }
+    }
   }
 
   input {
