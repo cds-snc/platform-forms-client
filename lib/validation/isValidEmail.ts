@@ -5,5 +5,13 @@ export const isValidEmail = (email: string) => {
     return false;
   }
 
-  return emailRegex.test(email.trim());
+  const trimmedEmail = email.trim();
+
+  // Check email length based on RFC 5321
+  // https://www.rfc-editor.org/rfc/rfc5321#section-4.5.3
+  if (trimmedEmail.length > 254) {
+    return false;
+  }
+
+  return emailRegex.test(trimmedEmail);
 };
