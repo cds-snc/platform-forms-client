@@ -23,10 +23,10 @@ describe("<TagInput />", () => {
       </div>
     );
 
-    cy.get(".tag").should("have.length", 3);
-    cy.get(".tag").should("contain", "Tag one");
-    cy.get(".tag").should("contain", "Tag two");
-    cy.get(".tag").should("contain", "Tag three");
+    cy.get(".gc-tag").should("have.length", 3);
+    cy.get(".gc-tag").should("contain", "Tag one");
+    cy.get(".gc-tag").should("contain", "Tag two");
+    cy.get(".gc-tag").should("contain", "Tag three");
   });
 
   it("sets the name attribute", () => {
@@ -68,7 +68,17 @@ describe("<TagInput />", () => {
 
     cy.get('input[type="text"]').type("New Tag{enter}");
     cy.get('input[type="text"]').should("have.value", "");
-    cy.get(".tag").should("contain", "New Tag");
+    cy.get(".gc-tag").should("contain", "New Tag");
+  });
+
+  it("announces that a tag was added", () => {
+    cy.mount(
+      <div>
+        <TagInput tags={[]} />
+      </div>
+    );
+    cy.get('input[type="text"]').type("New Tag{enter}");
+    cy.get('[id^="tag-input-live-region-"]').should("exist").and("contain", `Tag "New Tag" added`);
   });
 
   it("restricts duplicates", () => {
@@ -80,7 +90,20 @@ describe("<TagInput />", () => {
 
     cy.get('input[type="text"]').type("Tag 1{enter}");
     cy.get('input[type="text"]').should("have.value", "");
-    cy.get(".tag").should("have.length", 1);
+    cy.get(".gc-tag").should("have.length", 1);
+  });
+
+  it("announces that a duplicate tag was added", () => {
+    cy.mount(
+      <div>
+        <TagInput tags={["Tag 1"]} restrictDuplicates={true} />
+      </div>
+    );
+
+    cy.get('input[type="text"]').type("Tag 1{enter}");
+    cy.get('[id^="tag-input-live-region-"]')
+      .should("exist")
+      .and("contain", `Duplicate tag "Tag 1"`);
   });
 
   it("allows duplicates", () => {
@@ -92,7 +115,7 @@ describe("<TagInput />", () => {
 
     cy.get('input[type="text"]').type("Tag 1{enter}");
     cy.get('input[type="text"]').should("have.value", "");
-    cy.get(".tag").should("have.length", 2);
+    cy.get(".gc-tag").should("have.length", 2);
   });
 
   it("removes a tag", () => {
@@ -104,11 +127,23 @@ describe("<TagInput />", () => {
       </div>
     );
 
-    cy.get(".tag").should("contain", "Tag 1");
-    cy.get(".tag button").click();
-    cy.get(".tag").should("not.exist");
+    cy.get(".gc-tag").should("contain", "Tag 1");
+    cy.get(".gc-tag button").click();
+    cy.get(".gc-tag").should("not.exist");
     cy.get(".gc-tag-input").should("not.contain", "Tag 1");
     cy.get("@onTagRemove").should("have.been.calledWith", "Tag 1");
+  });
+
+  it("announces when a tag is removed", () => {
+    cy.mount(
+      <div>
+        <TagInput tags={["Tag 1"]} onTagAdd={() => {}} onTagRemove={() => {}} />
+      </div>
+    );
+
+    cy.get(".gc-tag").should("contain", "Tag 1");
+    cy.get(".gc-tag button").click();
+    cy.get('[id^="tag-input-live-region-"]').should("exist").and("contain", `Tag "Tag 1" removed`);
   });
 
   it("calls onTagAdd handler when adding a tag", () => {
@@ -122,7 +157,7 @@ describe("<TagInput />", () => {
 
     cy.get('input[type="text"]').type("New Tag{enter}");
     cy.get('input[type="text"]').should("have.value", "");
-    cy.get(".tag").should("contain", "New Tag");
+    cy.get(".gc-tag").should("contain", "New Tag");
     cy.get("@onTagAdd").should("have.been.calledWith", "New Tag");
   });
 
@@ -135,8 +170,8 @@ describe("<TagInput />", () => {
       </div>
     );
 
-    cy.get(".tag").should("contain", "Tag one");
-    cy.get(".tag").first().find("button").click();
+    cy.get(".gc-tag").should("contain", "Tag one");
+    cy.get(".gc-tag").first().find("button").click();
     cy.get(".gc-tag-input").should("not.contain", "Tag one");
     cy.get("@onTagRemove").should("have.been.calledWith", "Tag one");
   });
