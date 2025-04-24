@@ -13,6 +13,9 @@ export const cleanElementRules: TemplateStore<"cleanElementRules"> = (set) => as
         const updatedRules = elementRules.filter((rule) => {
           const parentId = rule.choiceId.split(".")[0];
           const parentElement = state.form.elements.find((el) => el.id === Number(parentId));
+
+          // Remove the rule if the parent element is not found
+          // This can happen if the element was removed but the rule was not cleaned up
           if (!parentElement) {
             return false;
           }
