@@ -311,6 +311,7 @@ export const Form = withFormik<FormProps, Responses>({
       //   formikBag.props.onSuccess(result.id, result?.submissionId);
       // }
     } catch (err) {
+      debugger;
       // Captcha found a likely bot, show the Captcha fail screen
       // if ((err as Error).message === FormStatus.CAPTCHA_VERIFICATION_ERROR) {
       formikBag.setStatus(FormStatus.CAPTCHA_VERIFICATION_ERROR);
