@@ -884,6 +884,8 @@ export const cleanRules = (elements: FormElement[], rules: ConditionalRule[]) =>
     if (!parentElement) {
       return false;
     }
+
+    return true;
   });
 
   return updatedRules;
