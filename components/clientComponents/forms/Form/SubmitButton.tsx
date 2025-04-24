@@ -5,6 +5,7 @@ import { cn } from "@lib/utils";
 import { useTranslation } from "@i18n/client";
 import { logMessage } from "@lib/logger";
 import { useFeatureFlags } from "@lib/hooks/useFeatureFlags";
+import { ga } from "@lib/client/clientHelpers";
 
 interface SubmitButtonProps {
   getFormDelay: () => number;
@@ -111,9 +112,7 @@ export const SubmitButton: React.FC<SubmitButtonProps> = ({
           screenReaderRemainingTime.current = formTimerState.remainingTime;
           if (!formTimerState.canSubmit) {
             e.preventDefault();
-            window.dataLayer = window.dataLayer || [];
-            window.dataLayer.push({
-              event: "form_submission_spam_trigger",
+            ga("form_submission_spam_trigger", {
               formID: formID,
               formTitle: formTitle,
               submitTime: formTimerState.remainingTime,

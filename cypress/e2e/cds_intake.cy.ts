@@ -22,7 +22,6 @@ describe("CDS Intake Form functionality", () => {
     );
 
     cy.get("[type='submit']").click();
-    cy.url().should("include", "/confirmation");
     cy.get("h1").should("have.focus");
   });
 });

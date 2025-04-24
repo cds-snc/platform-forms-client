@@ -884,6 +884,7 @@
   "signInToTest": "<a href=\"/en/auth/login\">Sign in</a> to test how you can submit and view responses",
   "singleChoice": "Radio buttons",
   "start": "Start",
+  "startErrorTemplateSize": "The form file is too large",
   "startErrorParse": "Failed to read form file",
   "startFormIntro": "Add a description to your form to help set expectations",
   "startH2": "Design a form",

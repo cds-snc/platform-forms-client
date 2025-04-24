@@ -89,9 +89,7 @@ export default async function Page(props0: {
   if (isPastClosingDate) {
     pageContent = <ClosedPage language={language} formRecord={formRecord} />;
   }
-
-  const { saveAndResume: saveAndResumeEnabled } = await getSomeFlags([FeatureFlags.saveAndResume]);
-  const saveAndResume = formRecord?.saveAndResume && saveAndResumeEnabled;
+  const saveAndResume = formRecord?.saveAndResume;
 
   // Resume form page
   if (saveAndResume && step === "resume") {

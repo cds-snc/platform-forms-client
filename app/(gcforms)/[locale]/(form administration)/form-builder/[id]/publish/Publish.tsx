@@ -23,6 +23,7 @@ import { PrePublishDialog } from "./PrePublishDialog";
 import { FormProperties } from "@lib/types";
 import { useGroupStore } from "@formBuilder/components/shared/right-panel/treeview/store/useGroupStore";
 import { useFormBuilderConfig } from "@lib/hooks/useFormBuilderConfig";
+import { ga } from "@lib/client/clientHelpers";
 
 export const Publish = ({ id }: { id: string }) => {
   const { t, i18n } = useTranslation("form-builder");
@@ -138,10 +139,7 @@ export const Publish = ({ id }: { id: string }) => {
       setId(formRecord?.id);
       setIsPublished(formRecord?.isPublished);
 
-      window.dataLayer = window.dataLayer || [];
-      window.dataLayer.push({
-        event: "publish_form",
-      });
+      ga("publish_form");
       router.replace(`/${i18n.language}/form-builder/${id}/published`);
     } catch (e) {
       logMessage.error(e);
