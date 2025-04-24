@@ -25,6 +25,8 @@ export const cleanElementRules: TemplateStore<"cleanElementRules"> = (set) => as
           logMessage.info(
             `cleaned rules:${JSON.stringify(elementRules)} -> ${JSON.stringify(updatedRules)}`
           );
+
+          // Update the element with the cleaned rules
           element.properties.conditionalRules = updatedRules;
         }
       }
