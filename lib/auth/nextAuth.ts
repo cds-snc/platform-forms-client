@@ -10,6 +10,7 @@ import { logEvent } from "@lib/auditLogs";
 import { activeStatusCheck, activeStatusUpdate } from "@lib/cache/userActiveStatus";
 import { JWT } from "next-auth/jwt";
 import { cache } from "react";
+import { headers } from "next/headers";
 // import ZitadelProvider from "next-auth/providers/zitadel";
 
 /**
@@ -151,6 +152,12 @@ const {
   adapter: PrismaAdapter(prisma),
   events: {
     async signIn({ user }) {
+      const requestHeaders = await headers();
+
+      if (requestHeaders.get("x-amzn-waf-cognito-login-outside-of-canada")) {
+        logMessage.info("[next-auth][sign-in] Someone signed in from outside of Canada");
+      }
+
       if (!user.email) {
         logMessage.error(
           "Could not produce UserSignIn audit log because of undefined email information"
