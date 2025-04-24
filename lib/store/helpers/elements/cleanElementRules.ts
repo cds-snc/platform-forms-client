@@ -1,3 +1,5 @@
+import { logMessage } from "@lib/logger";
+
 import { type TemplateStore } from "../../types";
 
 export const cleanElementRules: TemplateStore<"cleanElementRules"> = (set) => async () => {
@@ -17,6 +19,9 @@ export const cleanElementRules: TemplateStore<"cleanElementRules"> = (set) => as
         });
 
         if (updatedRules.length !== elementRules.length) {
+          logMessage.info(
+            `cleaned rules:${JSON.stringify(elementRules)} -> ${JSON.stringify(updatedRules)}`
+          );
           element.properties.conditionalRules = updatedRules;
         }
       }
