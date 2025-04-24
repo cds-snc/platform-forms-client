@@ -52,6 +52,7 @@ import {
   getChoice,
   localizeField,
   getFormElementIndexes,
+  cleanElementRules,
 } from "./helpers/elements";
 
 const createTemplateStore = (initProps?: Partial<InitialTemplateStoreProps>) => {
@@ -99,6 +100,7 @@ const createTemplateStore = (initProps?: Partial<InitialTemplateStoreProps>) => 
             addSubChoice: addSubChoice(set),
             removeChoiceFromRules: removeChoiceFromRules(set),
             removeChoiceFromNextActions: removeChoiceFromNextActions(set),
+            cleanElementRules: cleanElementRules(set),
             remove: remove(set),
             removeSubItem: removeSubItem(set),
             removeChoice: removeChoice(set),
@@ -109,8 +111,10 @@ const createTemplateStore = (initProps?: Partial<InitialTemplateStoreProps>) => 
             importTemplate: importTemplate(set),
             getHighestElementId: getHighestElementId(set, get),
             generateElementId: generateElementId(set, get),
-            getSchema: () =>
-              JSON.stringify(getSchemaFromState(get(), get().allowGroupsFlag), null, 2),
+            getSchema: () => {
+              get().cleanElementRules();
+              return JSON.stringify(getSchemaFromState(get(), get().allowGroupsFlag), null, 2);
+            },
             getId: () => get().id,
             getIsPublished: () => get().isPublished,
             getFormElementById: getFormElementById(set, get),
@@ -138,6 +142,7 @@ const createTemplateStore = (initProps?: Partial<InitialTemplateStoreProps>) => 
             updateSecurityAttribute: (value) => set({ securityAttribute: value }),
             resetDeliveryOption: () => set({ deliveryOption: undefined }),
           }),
+
           storageOptions
         )
       )
