@@ -152,12 +152,6 @@ const {
   adapter: PrismaAdapter(prisma),
   events: {
     async signIn({ user }) {
-      const requestHeaders = await headers();
-
-      if (requestHeaders.get("x-amzn-waf-cognito-login-outside-of-canada")) {
-        logMessage.info("[next-auth][sign-in] Someone signed in from outside of Canada");
-      }
-
       if (!user.email) {
         logMessage.error(
           "Could not produce UserSignIn audit log because of undefined email information"
@@ -177,6 +171,14 @@ const {
       if (internalUser === null) {
         logMessage.error("Could not produce UserSignIn audit log because user does not exist");
         return;
+      }
+
+      const requestHeaders = await headers();
+
+      if (requestHeaders.get("x-amzn-waf-cognito-login-outside-of-canada")) {
+        logMessage.info(
+          `[next-auth][sign-in] User ${user.email} (${internalUser.id}) signed in from outside of Canada`
+        );
       }
 
       logEvent(
