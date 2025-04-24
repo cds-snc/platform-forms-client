@@ -15,18 +15,18 @@ import { useTranslation } from "@i18n/client";
 import Loader from "../../globals/Loader";
 
 import { ErrorStatus } from "../Alert/Alert";
-// import { submitForm } from "app/(gcforms)/[locale]/(form filler)/id/[...props]/actions";
+import { submitForm } from "app/(gcforms)/[locale]/(form filler)/id/[...props]/actions";
 import { useFormValuesChanged } from "@lib/hooks/useValueChanged";
 import { useGCFormsContext } from "@lib/hooks/useGCFormContext";
 import { Review } from "../Review/Review";
 import { LockedSections } from "@formBuilder/components/shared/right-panel/treeview/types";
 import { StatusError } from "../StatusError/StatusError";
-// import {
-//   removeFormContextValues,
-//   getInputHistoryValues,
-// } from "@lib/utils/form-builder/groupsHistory";
-// import { filterShownElements, filterValuesByShownElements } from "@lib/formContext";
-// import { formHasGroups } from "@lib/utils/form-builder/formHasGroups";
+import {
+  removeFormContextValues,
+  getInputHistoryValues,
+} from "@lib/utils/form-builder/groupsHistory";
+import { filterShownElements, filterValuesByShownElements } from "@lib/formContext";
+import { formHasGroups } from "@lib/utils/form-builder/formHasGroups";
 import { showReviewPage } from "@lib/utils/form-builder/showReviewPage";
 import { useFormDelay } from "@lib/hooks/useFormDelayContext";
 import { FormActions } from "./FormActions";
@@ -257,47 +257,47 @@ export const Form = withFormik<FormProps, Responses>({
       return;
     }
 
-    // const getValuesForConditionalLogic = () => {
-    //   const inputHistoryValues = getInputHistoryValues(
-    //     values,
-    //     values.groupHistory as string[],
-    //     formikBag.props.formRecord.form.groups
-    //   );
-    //   const shownElements = filterShownElements(
-    //     formikBag.props.formRecord.form.elements,
-    //     values.matchedIds as string[]
-    //   );
-    //   return filterValuesByShownElements(inputHistoryValues, shownElements);
-    // };
+    const getValuesForConditionalLogic = () => {
+      const inputHistoryValues = getInputHistoryValues(
+        values,
+        values.groupHistory as string[],
+        formikBag.props.formRecord.form.groups
+      );
+      const shownElements = filterShownElements(
+        formikBag.props.formRecord.form.elements,
+        values.matchedIds as string[]
+      );
+      return filterValuesByShownElements(inputHistoryValues, shownElements);
+    };
 
     // Needed so the Loader is displayed
     formikBag.setStatus("submitting");
     try {
+      const hasGroups =
+        formHasGroups(formikBag.props.formRecord.form) && formikBag.props.allowGrouping;
+      const hasShowHideRules = (values.matchedIds as string[])?.length > 0;
+      const formValues =
+        hasGroups && hasShowHideRules
+          ? removeFormContextValues(getValuesForConditionalLogic())
+          : removeFormContextValues(values);
+
+      const result = await submitForm(
+        formValues,
+        formikBag.props.language,
+        formikBag.props.formRecord.id,
+        formikBag.props.captchaToken?.current
+      );
+
+      // Failed to find Server Action (likely due to newer deployment)
+      if (result === undefined) {
+        formikBag.props.saveSessionProgress();
+        logMessage.info("Failed to find Server Action caught and session saved");
+        formikBag.setStatus(FormStatus.SERVER_ID_ERROR);
+        return;
+      }
+
       // TEST
-      throw new Error("Captcha verification error TEST");
-
-      // const hasGroups =
-      //   formHasGroups(formikBag.props.formRecord.form) && formikBag.props.allowGrouping;
-      // const hasShowHideRules = (values.matchedIds as string[])?.length > 0;
-      // const formValues =
-      //   hasGroups && hasShowHideRules
-      //     ? removeFormContextValues(getValuesForConditionalLogic())
-      //     : removeFormContextValues(values);
-
-      // const result = await submitForm(
-      //   formValues,
-      //   formikBag.props.language,
-      //   formikBag.props.formRecord.id,
-      //   formikBag.props.captchaToken?.current
-      // );
-
-      // // Failed to find Server Action (likely due to newer deployment)
-      // if (result === undefined) {
-      //   formikBag.props.saveSessionProgress();
-      //   logMessage.info("Failed to find Server Action caught and session saved");
-      //   formikBag.setStatus(FormStatus.SERVER_ID_ERROR);
-      //   return;
-      // }
+      throw new Error(FormStatus.CAPTCHA_VERIFICATION_ERROR);
 
       // if (result.error) {
       //   if (result.error.message.includes("FileValidationResult")) {
@@ -313,12 +313,12 @@ export const Form = withFormik<FormProps, Responses>({
     } catch (err) {
       debugger;
       // Captcha found a likely bot, show the Captcha fail screen
-      // if ((err as Error).message === FormStatus.CAPTCHA_VERIFICATION_ERROR) {
-      formikBag.setStatus(FormStatus.CAPTCHA_VERIFICATION_ERROR);
-      logMessage.info("Captcha verification failed - showing Captcha fail screen");
-      formikBag.props.setCaptchaFail && formikBag.props.setCaptchaFail(true);
-      return;
-      // }
+      if ((err as Error).message === FormStatus.CAPTCHA_VERIFICATION_ERROR) {
+        formikBag.setStatus(FormStatus.CAPTCHA_VERIFICATION_ERROR);
+        logMessage.info("Captcha verification failed - showing Captcha fail screen");
+        formikBag.props.setCaptchaFail && formikBag.props.setCaptchaFail(true);
+        return;
+      }
 
       // logMessage.error(err as Error);
       // formikBag.setStatus("Error");
