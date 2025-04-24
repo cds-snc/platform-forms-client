@@ -9,7 +9,7 @@ export const cleanElementRules: TemplateStore<"cleanElementRules"> = (set) => as
         // Existing rules
         const elementRules = element.properties.conditionalRules;
 
-        // Update rules
+        // Updated rules
         const updatedRules = elementRules.filter((rule) => {
           const parentId = rule.choiceId.split(".")[0];
           const parentElement = state.form.elements.find((el) => el.id === Number(parentId));
