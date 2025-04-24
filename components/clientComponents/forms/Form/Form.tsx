@@ -296,32 +296,30 @@ export const Form = withFormik<FormProps, Responses>({
         return;
       }
 
-      // TEST
-      throw new Error(FormStatus.CAPTCHA_VERIFICATION_ERROR);
-
-      // if (result.error) {
-      //   if (result.error.message.includes("FileValidationResult")) {
-      //     formikBag.setStatus(FormStatus.FILE_ERROR);
-      //   } else if (result.error.name === FormStatus.FORM_CLOSED_ERROR) {
-      //     formikBag.setStatus(FormStatus.FORM_CLOSED_ERROR);
-      //   } else {
-      //     formikBag.setStatus(FormStatus.ERROR);
-      //   }
-      // } else {
-      //   formikBag.props.onSuccess(result.id, result?.submissionId);
-      // }
+      if (result.error) {
+        if (result.error.message.includes("FileValidationResult")) {
+          formikBag.setStatus(FormStatus.FILE_ERROR);
+        } else if (result.error.name === FormStatus.FORM_CLOSED_ERROR) {
+          formikBag.setStatus(FormStatus.FORM_CLOSED_ERROR);
+        } else {
+          formikBag.setStatus(FormStatus.ERROR);
+        }
+      } else {
+        formikBag.props.onSuccess(result.id, result?.submissionId);
+      }
     } catch (err) {
-      debugger;
       // Captcha found a likely bot, show the Captcha fail screen
       if ((err as Error).message === FormStatus.CAPTCHA_VERIFICATION_ERROR) {
         formikBag.setStatus(FormStatus.CAPTCHA_VERIFICATION_ERROR);
         logMessage.info("Captcha verification failed - showing Captcha fail screen");
         formikBag.props.setCaptchaFail && formikBag.props.setCaptchaFail(true);
-        return;
-      }
 
-      // logMessage.error(err as Error);
-      // formikBag.setStatus("Error");
+        // TEST - would fall through before only on staging
+        // return;
+      } else {
+        logMessage.error(err as Error);
+        formikBag.setStatus("Error");
+      }
     } finally {
       if (formikBag.props && !formikBag.props.isPreview) {
         ga("form_submission_trigger", {
