@@ -2,6 +2,8 @@ import { logMessage } from "@lib/logger";
 
 import { type TemplateStore } from "../../types";
 
+import { cleanRules } from "@lib/formContext";
+
 export const cleanElementRules: TemplateStore<"cleanElementRules"> = (set) => async () => {
   set((state) => {
     state.form.elements.forEach((element) => {
@@ -9,17 +11,7 @@ export const cleanElementRules: TemplateStore<"cleanElementRules"> = (set) => as
         // Existing rules
         const elementRules = element.properties.conditionalRules;
 
-        // Updated rules
-        const updatedRules = elementRules.filter((rule) => {
-          const parentId = rule.choiceId.split(".")[0];
-          const parentElement = state.form.elements.find((el) => el.id === Number(parentId));
-
-          // Remove the rule if the parent element is not found
-          // This can happen if the element was removed but the rule was not cleaned up
-          if (!parentElement) {
-            return false;
-          }
-        });
+        const updatedRules = cleanRules(state.form.elements, elementRules);
 
         if (updatedRules.length !== elementRules.length) {
           logMessage.info(

@@ -10,6 +10,8 @@ import { clearTemplateStore } from "@lib/store/utils";
 import { safeJSONParse } from "@lib/utils";
 import { FormProperties } from "@lib/types";
 import { validateTemplateSize } from "@lib/utils/validateTemplateSize";
+import { cleanRules } from "@lib/formContext";
+import { logMessage } from "@lib/logger";
 import { ga } from "@lib/client/clientHelpers";
 
 export const Start = () => {
@@ -68,6 +70,23 @@ export const Start = () => {
           target.value = "";
           return;
         }
+
+        // Clean rules
+        data.elements.forEach((element) => {
+          if (element.properties?.conditionalRules) {
+            const elementRules = element.properties.conditionalRules;
+            const updatedRules = cleanRules(data.elements, elementRules);
+            if (updatedRules.length !== elementRules.length) {
+              logMessage.info(
+                `cleaned imported rules:${JSON.stringify(elementRules)} -> ${JSON.stringify(
+                  updatedRules
+                )}`
+              );
+              element.properties.conditionalRules = updatedRules;
+            }
+          }
+        });
+        // set the form id to the one in the template
 
         importTemplate(data);
 

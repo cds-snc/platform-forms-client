@@ -3,7 +3,7 @@ import { orderGroups } from "@lib/utils/form-builder/orderUsingGroupsLayout";
 import { initializeGroups } from "@formBuilder/components/shared/right-panel/treeview/util/initializeGroups";
 import { defaultForm } from "../../defaults";
 
-export const importTemplate: TemplateStore<"importTemplate"> = (set, get) => async (jsonConfig) => {
+export const importTemplate: TemplateStore<"importTemplate"> = (set) => async (jsonConfig) => {
   set((state) => {
     const allowGroups = state.allowGroupsFlag;
     state.id = "";
@@ -28,11 +28,5 @@ export const importTemplate: TemplateStore<"importTemplate"> = (set, get) => asy
     state.publishDesc = "";
     state.closingDate = null;
     state.saveAndResume = true;
-
-    if (!get) {
-      throw new Error("get is not defined");
-    }
-
-    get().cleanElementRules();
   });
 };
