@@ -10,6 +10,7 @@ import { logEvent } from "@lib/auditLogs";
 import { activeStatusCheck, activeStatusUpdate } from "@lib/cache/userActiveStatus";
 import { JWT } from "next-auth/jwt";
 import { cache } from "react";
+import { headers } from "next/headers";
 // import ZitadelProvider from "next-auth/providers/zitadel";
 
 /**
@@ -170,6 +171,14 @@ const {
       if (internalUser === null) {
         logMessage.error("Could not produce UserSignIn audit log because user does not exist");
         return;
+      }
+
+      const requestHeaders = await headers();
+
+      if (requestHeaders.get("x-amzn-waf-cognito-login-outside-of-canada")) {
+        logMessage.info(
+          `[next-auth][sign-in] User ${user.email} (${internalUser.id}) signed in from outside of Canada`
+        );
       }
 
       logEvent(
