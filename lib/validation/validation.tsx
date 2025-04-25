@@ -19,6 +19,7 @@ import { inGroup } from "@lib/formContext";
 import { isFileExtensionValid, isAllFilesSizeValid } from "./fileValidationClientSide";
 import { DateObject } from "@clientComponents/forms/FormattedDate/types";
 import { isValidDate } from "@clientComponents/forms/FormattedDate/utils";
+import { isValidEmail } from "@lib/validation/isValidEmail";
 
 /**
  * getRegexByType [private] defines a mapping between the types of fields that need to be validated
@@ -222,6 +223,14 @@ const isFieldResponseValid = (
   return null;
 };
 
+export const getFieldType = (formElement: FormElement) => {
+  if (formElement.properties.autoComplete === "email") {
+    return "email";
+  }
+
+  return formElement.type;
+};
+
 const valueMatchesType = (value: unknown, type: string, formElement: FormElement) => {
   switch (type) {
     case FormElementTypes.formattedDate:
@@ -229,6 +238,13 @@ const valueMatchesType = (value: unknown, type: string, formElement: FormElement
         return true;
       }
       return false;
+    case FormElementTypes.textField:
+      if (formElement.properties.autoComplete === "email") {
+        if (value && !isValidEmail(value as string)) {
+          return false;
+        }
+      }
+      return true;
     case FormElementTypes.checkbox: {
       if (Array.isArray(value)) {
         return true;
@@ -298,8 +314,14 @@ export const validateResponses = async (values: Responses, formRecord: PublicFor
     // Check if the incoming value matches the type of the form element
     const result = valueMatchesType(values[item], formElement.type, formElement);
 
-    if (!result) {
-      errors[item] = "invalid-response-data-type";
+    // Only invalidate the response if the type has a value
+    // See: https://gcdigital.slack.com/archives/C05G766KW49/p1737063028759759
+    if (values[item] && !result) {
+      errors[item] = {
+        type: getFieldType(formElement),
+        value: values[item],
+        message: "response-type-mismatch",
+      };
     }
   }
 

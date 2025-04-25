@@ -7,6 +7,7 @@ import { NextAuthRequest } from "next-auth/lib";
 import CredentialsProvider from "next-auth/providers/credentials";
 import NextAuth, { Session } from "next-auth";
 import { JWT } from "next-auth/jwt";
+import { bodySizeLimit } from "./constants";
 
 const verboseDebug = false;
 
@@ -80,9 +81,34 @@ export const config = {
 // TOMORROW
 // Stop files like .map.js from being included in the middleware
 
-export default function middleware(req: NextRequest) {
+export default async function middleware(req: NextRequest) {
   const pathname = req.nextUrl.pathname;
   const searchParams = req.nextUrl.searchParams.toString();
+
+  // console.log(`Middleware: ${pathname} ${searchParams}`);
+
+  if (req.headers.get("next-action") !== null) {
+    const body = await req.text();
+
+    // Check body size
+    if (body.length > bodySizeLimit) {
+      logMessage.info(
+        `Middleware: Request payload size exceeds the limit of ${bodySizeLimit} bytes. Path: ${pathname}`
+      );
+      return NextResponse.json(
+        { error: "Request payload size exceeds the limit." },
+        { status: 413 }
+      );
+    }
+
+    if (body.includes("\0")) {
+      logMessage.info("Middleware: Invalid characters or escape sequences in request body.");
+      return NextResponse.json(
+        { error: "Invalid characters or escape sequences in request body." },
+        { status: 400 }
+      );
+    }
+  }
 
   // Layer 0 - Set CORS on API routes
 

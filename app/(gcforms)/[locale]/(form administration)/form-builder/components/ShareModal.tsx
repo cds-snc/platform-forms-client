@@ -12,6 +12,8 @@ import { useTemplateStore } from "@lib/store/useTemplateStore";
 import { useSession } from "next-auth/react";
 import Markdown from "markdown-to-jsx";
 
+import { isValidEmail } from "@lib/validation/isValidEmail";
+
 export const ShareModal = ({
   handleClose,
 }: {
@@ -28,15 +30,11 @@ export const ShareModal = ({
   const currentLanguage = i18n.language;
   const alternateLanguage = i18n.language === "en" ? "fr" : "en";
 
-  const { getSchema, name, form } = useTemplateStore((s) => ({
-    getSchema: s.getSchema,
+  const { formId, name, form } = useTemplateStore((s) => ({
+    formId: s.id,
     name: s.name,
     form: s.form,
   }));
-
-  const validateEmail = (email: string) => {
-    return new RegExp(/^[\w-\.]+(\+[\w-]*)?@([\w-]+\.)+[\w-]{2,4}$/).test(email);
-  };
 
   const handleSend = async () => {
     setStatus("sending");
@@ -53,7 +51,7 @@ export const ShareModal = ({
         headers: {
           "Content-Type": "application/json",
         },
-        data: { name, form: getSchema(), emails: emails, filename },
+        data: { name, formId, emails: emails, filename },
         timeout: 5000,
       });
 
@@ -138,7 +136,7 @@ export const ShareModal = ({
                 <label htmlFor="email" className="block text-sm font-medium text-gray-700">
                   {t("share.emailLabel")}
                 </label>
-                <TagInput tags={emails} setTags={setEmails} validateTag={validateEmail} />
+                <TagInput tags={emails} setTags={setEmails} validateTag={isValidEmail} />
               </div>
               <InfoDetails summary={t("share.seePreview")}>
                 <div className="mt-4 border-4 border-dashed border-blue-focus p-5">

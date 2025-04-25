@@ -5,19 +5,43 @@ import { logMessage } from "@lib/logger";
 import { MiddlewareProps, WithRequired } from "@lib/types";
 import { slugify } from "@lib/client/clientHelpers";
 import { headers } from "next/headers";
+import { isValidEmail } from "@lib/validation/isValidEmail";
+import { getFullTemplateByID } from "@lib/templates";
+
 export const POST = middleware([sessionExists()], async (req, props) => {
   try {
     const { session } = props as WithRequired<MiddlewareProps, "session">;
     const reqHeaders = await headers();
     const host = reqHeaders.get("host");
 
-    const { emails, form, filename }: { emails?: string[]; form?: string; filename?: string } =
+    const { emails, formId, filename }: { emails?: string[]; formId?: string; filename?: string } =
       props.body;
-    if (!emails || emails.length < 1 || !form || !filename) {
+
+    if (!emails || emails.length < 1 || !formId || !filename) {
       return NextResponse.json({ error: "Malformed request" }, { status: 400 });
     }
 
-    const base64data = Buffer.from(form).toString("base64");
+    const template = await getFullTemplateByID(formId);
+
+    if (!template || !template.form) {
+      return NextResponse.json({ error: "Form not found" }, { status: 404 });
+    }
+
+    const base64data = Buffer.from(JSON.stringify(template.form)).toString("base64");
+
+    // Ensure valid email addresses
+    const cleanedEmails = emails.filter((email) => isValidEmail(email));
+
+    if (cleanedEmails.length < 1) {
+      return NextResponse.json({ error: "Invalid email addresses" }, { status: 400 });
+    }
+
+    let cleanedFilename = slugify(filename);
+
+    // Shorten file name to 50 characters
+    if (cleanedFilename.length > 50) {
+      cleanedFilename = cleanedFilename.substring(0, 50);
+    }
 
     // Here is the documentation for the `sendEmail` function: https://docs.notifications.service.gov.uk/node.html#send-an-email
     await Promise.all(
@@ -25,7 +49,7 @@ export const POST = middleware([sessionExists()], async (req, props) => {
         return sendEmail(email, {
           application_file: {
             file: base64data,
-            filename: `${slugify(filename)}.json`,
+            filename: `${cleanedFilename}.json`,
             sending_method: "attach",
           },
           subject: "Form shared | Formulaire partagé",

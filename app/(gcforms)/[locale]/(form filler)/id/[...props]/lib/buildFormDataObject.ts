@@ -110,6 +110,10 @@ function _handleFormDataFileInput(
 }
 
 function _handleFormDataText(key: string, value: string): [string, string] {
+  if (value === null || value === undefined) {
+    return [key, ""];
+  }
+
   return [key, value];
 }
 

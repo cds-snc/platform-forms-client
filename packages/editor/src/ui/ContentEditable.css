@@ -1,0 +1,30 @@
+.gc-contenteditable {
+  padding: 20px;
+  width: 100%;
+  background-color: #fff;
+
+  &:focus {
+    outline: 2px #303fc3 solid;
+  }
+}
+
+.gc-contenteditable-placeholder {
+  font-size: 15px;
+  color: #999;
+  overflow: hidden;
+  position: absolute;
+  text-overflow: ellipsis;
+  top: 8px;
+  left: 46px;
+  right: 28px;
+  user-select: none;
+  white-space: nowrap;
+  display: inline-block;
+  pointer-events: none;
+}
+@media (max-width: 1025px) {
+  .gc-contenteditable-placeholder {
+    left: 8px;
+    right: 8px;
+  }
+}

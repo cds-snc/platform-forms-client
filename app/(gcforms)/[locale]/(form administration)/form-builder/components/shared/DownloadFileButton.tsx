@@ -6,7 +6,7 @@ import Image from "next/image";
 import { Button } from "@clientComponents/globals";
 import { useTemplateStore } from "@lib/store/useTemplateStore";
 import { InfoIcon } from "@serverComponents/icons";
-import { getDate, slugify } from "@lib/client/clientHelpers";
+import { ga, getDate, slugify } from "@lib/client/clientHelpers";
 import { Dialog, useDialogRef } from "./Dialog";
 
 const FormDownloadDialog = ({ handleClose }: { handleClose: () => void }) => {
@@ -104,9 +104,7 @@ export const DownloadFileButton = ({
     const formTitle = slugify(name ? name : i18n.language === "fr" ? form.titleFr : form.titleEn);
     const formId = form.id;
 
-    window.dataLayer = window.dataLayer || [];
-    window.dataLayer.push({
-      event: "form_download",
+    ga("form_download", {
       formTitle,
       formId,
       submitTime: getDate(true),
