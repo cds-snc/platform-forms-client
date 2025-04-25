@@ -809,7 +809,7 @@
       },
       "api": {
         "title": "API response retrieval",
-        "text1": "For up to PROTECTED A forms. (PROTECTED B coming soon)",
+        "text1": "For up to PROTECTED B forms",
         "text2": "API calls to extract (pull) form responses",
         "text3": "Can be switched to the download delivery method after publishing",
         "text4": "One API key per form",

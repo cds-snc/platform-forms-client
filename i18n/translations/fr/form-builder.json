@@ -809,7 +809,7 @@
       },
       "api": {
         "title": "Récupération des réponses par API",
-        "text1": "Pour les formulaires avec une classification jusqu’à PROTÉGÉ A (Bientôt disponible : PROTÉGÉ B).",
+        "text1": "Pour les formulaires avec une classification jusqu’à PROTÉGÉ B.",
         "text2": "Appels à l'API pour extraire les réponses de formulaire.",
         "text3": "Possibilité de passer à la méthode de téléchargement après la publication.",
         "text4": "Une clé API par formulaire",
