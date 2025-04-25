@@ -16,9 +16,11 @@ export const CheckBox = () => {
           <legend className="gc-label">{t("addElementDialog.checkbox.chooseItems")}</legend>
           <Description>{t("addElementDialog.checkbox.selectAllThatApply")}</Description>
 
-          <Checkbox label={t("addElementDialog.checkboxItem")} id="item1" name={"nameOne"} />
-          <Checkbox label={t("addElementDialog.checkboxItem")} id="item2" name={"nameTwo"} />
-          <Checkbox label={t("addElementDialog.checkboxItem")} id="item3" name={"nameThree"} />
+          <div className="max-w-48 overflow-hidden">
+            <Checkbox label={t("addElementDialog.checkboxItem")} id="item1" name={"nameOne"} />
+            <Checkbox label={t("addElementDialog.checkboxItem")} id="item2" name={"nameTwo"} />
+            <Checkbox label={t("addElementDialog.checkboxItem")} id="item3" name={"nameThree"} />
+          </div>
         </FormGroup>
       </ExampleWrapper>
     </>
