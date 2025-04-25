@@ -88,7 +88,11 @@ export const Dialog = ({
         )}
 
         <>{children}</>
-        {actions && <div className="flex p-4">{actions}</div>}
+        {actions && (
+          <div className="sticky bottom-0 flex border-t-[0.5px] border-slate-500 bg-white p-4">
+            {actions}
+          </div>
+        )}
         <Button
           theme="link"
           className="group absolute right-0 top-0 z-[1000] mr-4 mt-4"
