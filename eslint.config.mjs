@@ -81,7 +81,9 @@ const eslintConfig = [
           "legend-fieldset",
           "confirmation",
           "active",
-          "brand__container"
+          "brand__container",
+          "fip_flag",
+          "fip_text"
         ],
       },
     },

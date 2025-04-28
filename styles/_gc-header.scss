@@ -1,5 +1,6 @@
 @import "../node_modules/@cdssnc/gcds-tokens/build/web/css/components/header.css";
 @import "../node_modules/@cdssnc/gcds-tokens/build/web/css/components/lang-toggle.css";
+@import "../node_modules/@cdssnc/gcds-tokens/build/web/css/components/signature.css";
 
 .gcds-header {
   margin: var(--gcds-header-margin) !important;
@@ -24,22 +25,22 @@
       grid-gap: var(--gcds-header-brand-grid-gap);
       grid-template-columns: 1fr 0.1fr;
       grid-template-areas:
-        'signature toggle'
-        'search search';
+        "signature toggle"
+        "search search";
       width: 90%;
       max-width: var(--gcds-header-container-max-width);
       margin: 0 auto;
 
       &.container--simple {
-        grid-template-areas: 'signature toggle';
+        grid-template-areas: "signature toggle";
       }
 
-      :is(.brand__toggle, slot[name='toggle']) {
+      :is(.brand__toggle, slot[name="toggle"]) {
         grid-area: toggle;
         text-align: right;
       }
 
-      :is(.brand__signature, slot[name='signature']) {
+      :is(.brand__signature, slot[name="signature"]) {
         grid-area: signature;
         align-content: center;
       }
@@ -50,6 +51,38 @@
         display: block;
       }
     }
+  }
+}
+
+// Signature
+@layer reset, default, type.signature, type.wordmark, variant.colour, variant.white, desktop;
+
+.gcds-signature__container {
+  display: block;
+  width: fit-content;
+}
+
+.gcds-signature {
+  display: flex;
+
+  svg {
+    display: block;
+    max-width: 100%;
+
+    .fip_flag {
+      fill: var(--gcds-signature-color-flag);
+    }
+  }
+}
+
+.gcds-signature__container:not([type="wordmark"]) svg {
+  height: var(--gcds-signature-signature-height);
+}
+
+/* Note: viewport specific style decision */
+.gcds-signature__container:not([type="wordmark"]) svg {
+  @media screen and (width >= 64em) {
+    height: var(--gcds-signature-signature-height-desktop);
   }
 }
 
