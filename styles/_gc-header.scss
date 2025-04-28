@@ -80,7 +80,8 @@
 }
 
 /* Note: viewport specific style decision */
-.gcds-signature__container:not([type="wordmark"]) svg {
+.gcds-signature:not([type="wordmark"]) svg {
+  height: var(--gcds-signature-signature-height);
   @media screen and (width >= 64em) {
     height: var(--gcds-signature-signature-height-desktop);
   }
