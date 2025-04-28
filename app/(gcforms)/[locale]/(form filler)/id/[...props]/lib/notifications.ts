@@ -1,6 +1,6 @@
 import { sendEmail } from "@lib/integration/notifyConnector";
 import { logMessage } from "@lib/logger";
-import { getPublicTemplateByID } from "@lib/templates";
+import { getTemplateWithAssociatedUsers } from "@lib/templates";
 import { getRedisInstance } from "@lib/integration/redisConnector";
 import { getOrigin } from "@lib/origin";
 
@@ -10,21 +10,25 @@ export const sendNotification = async (formId: string) => {
     logMessage.info(`sendNotification: ${formId}`);
 
     // Gather template settings
-    const template = await getPublicTemplateByID(formId);
+    const template = await getTemplateWithAssociatedUsers(formId);
+    logMessage.info(`-----------sendNotification: template ${JSON.stringify(template)}`);
     if (!template) {
       throw new Error(`template not found with id ${formId}`);
     }
-    // @TODO: need to add in Schema first
-    // if (!template?.emailNotification) return;
-    // @TODO: SET TO 1-min for testing, remove when done
-    const emailNotification = 1; // 1440=1 day, 10080=1 week
-    if (!Array.isArray(template.users) || template.users.length === 0) {
+    const {
+      users,
+      formRecord: {
+        form: { titleEn, titleFr },
+      },
+    } = template;
+    const emailNotification = 1; // 1440=1 day, 10080=1 week  // @TODO: SET TO 1-min for testing, remove when done // @TODO: need to add in Schema first
+    if (!emailNotification) {
+      return;
+    }
+    if (!Array.isArray(users) || users.length === 0) {
       throw "template missing users";
     }
-    // @TODO: do we want to send to all users?
-    const users = template.users[0];
-    const formTitleEn = template.form.titleEn;
-    const formTitleFr = template.form.titleFr;
+    const email = users[0].email; // TODO: send to all users or just the first one?
 
     // Check if an email has been sent and if so do nothing
     const marker = await getMarker(formId);
@@ -36,7 +40,7 @@ export const sendNotification = async (formId: string) => {
     // No email has been sent, update redis and send an email
     logMessage.info(`sendNotification: marker does not exist`);
     setMarker(formId, emailNotification);
-    sendEmailNotification(users[0], formId, formTitleEn, formTitleFr);
+    sendEmailNotification(email, formId, String(titleEn), String(titleFr));
   } catch (err) {
     // TODO: the error message could be more specific from the function that throws it
     logMessage.error(`sendNotification failed with error: ${err}`);
@@ -54,7 +58,7 @@ const setMarker = async (formId: string, emailNotification: number) => {
   const ttl = emailNotification * 60; // convert to seconds
   const redis = await getRedisInstance();
   await redis.set(`notification:formId${formId}`, 1, "EX", ttl);
-  logMessage.info(`setMarker: "notification:formId${formId} with ttl ${ttl}`);
+  logMessage.info(`setMarker: notification:formId${formId} with ttl ${ttl}`);
 };
 
 // TODO: French version
