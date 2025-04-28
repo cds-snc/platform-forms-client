@@ -1,7 +1,57 @@
 @import "../node_modules/@cdssnc/gcds-tokens/build/web/css/components/header.css";
 @import "../node_modules/@cdssnc/gcds-tokens/build/web/css/components/lang-toggle.css";
 
+.gcds-header {
+  margin: var(--gcds-header-margin) !important;
+}
 
+.gcds-header__brand {
+  container: component brand / inline-size;
+  border-block-end: var(--gcds-header-brand-border-width) solid
+    var(--gcds-header-brand-border-color);
+  padding: var(--gcds-header-brand-padding);
+}
+
+@layer brand {
+  div.gcds-header__brand {
+    container: component brand / inline-size;
+    border-block-end: var(--gcds-header-brand-border-width) solid
+      var(--gcds-header-brand-border-color);
+    padding: var(--gcds-header-brand-padding);
+
+    .brand__container {
+      display: grid;
+      grid-gap: var(--gcds-header-brand-grid-gap);
+      grid-template-columns: 1fr 0.1fr;
+      grid-template-areas:
+        'signature toggle'
+        'search search';
+      width: 90%;
+      max-width: var(--gcds-header-container-max-width);
+      margin: 0 auto;
+
+      &.container--simple {
+        grid-template-areas: 'signature toggle';
+      }
+
+      :is(.brand__toggle, slot[name='toggle']) {
+        grid-area: toggle;
+        text-align: right;
+      }
+
+      :is(.brand__signature, slot[name='signature']) {
+        grid-area: signature;
+        align-content: center;
+      }
+
+      .brand__search {
+        grid-area: search;
+        max-width: 100%;
+        display: block;
+      }
+    }
+  }
+}
 
 .gcds-lang-toggle {
   a {
