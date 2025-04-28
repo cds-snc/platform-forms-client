@@ -4,16 +4,17 @@ import { type Language } from "@lib/types/form-builder-types";
 
 export const GCHeader = ({ language }: { language: Language }) => {
   return (
-    <header className="gcds-header">
-      <div className="gcds-header__brand">
-        <div className="brand__container">
-          <Fip language={language} />
-
-          <section>
-            <LanguageToggle language={language} />
-          </section>
+    <div className="gcds-header__container">
+      <header className="gcds-header">
+        <div className="gcds-header__brand">
+          <div className="brand__container">
+            <div className="brand__toggle">
+              <LanguageToggle language={language} />
+            </div>
+            <Fip language={language} />
+          </div>
         </div>
-      </div>
-    </header>
+      </header>
+    </div>
   );
 };
