@@ -1,4 +1,5 @@
 :host {
+  display: block;
   margin: var(--gcds-header-margin) !important;
 }
 
@@ -7,6 +8,29 @@
   width: 90%;
   max-width: var(--gcds-header-container-max-width);
   margin: 0 auto;
+}
+
+.gcds-header__skip-to-nav {
+  text-align: center;
+  position: absolute;
+  width: 100%;
+  margin-inline: auto;
+  top: var(--gcds-header-skiptonav-top);
+}
+
+.gcds-header__skip-to-nav gcds-link {
+  z-index: 3;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: inherit;
+}
+
+.gcds-header__skip-to-nav gcds-link:not(:focus) {
+  width: 0;
+  height: 0;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
 }
 
 .gcds-header__brand {
@@ -41,11 +65,26 @@
   align-content: center;
 }
 
+.brand__search {
+  grid-area: search;
+  max-width: 100%;
+  display: block;
+}
+
+:host {
+  --gcds-nav-group-mobile-trigger-margin: var(--gcds-header-menu-top-nav-mobile-trigger-margin);
+}
+
 @container brand (width >= 51em) {
   .gcds-header__brand .brand__container {
     grid-template-areas:
       "toggle toggle"
       "signature search";
     grid-template-columns: 1fr 1fr;
+  }
+
+  .brand__search {
+    width: fit-content;
+    margin-inline-start: auto;
   }
 }
