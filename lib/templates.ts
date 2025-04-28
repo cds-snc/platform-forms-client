@@ -46,6 +46,7 @@ const _parseTemplate = (template: {
   closingDate?: Date | null;
   closedDetails?: Prisma.JsonValue | null;
   saveAndResume: boolean;
+  notifcationsInterval?: number | null;
 }): FormRecord => {
   return {
     id: template.id,
@@ -79,6 +80,7 @@ const _parseTemplate = (template: {
     }),
     closedDetails: template.closedDetails as ClosedDetails,
     saveAndResume: template.saveAndResume,
+    ...(template.notifcationsInterval && { notifcationsInterval: template.notifcationsInterval }),
   };
 };
 
@@ -187,6 +189,15 @@ export async function createTemplate(command: CreateTemplateCommand): Promise<Fo
           connect: { id: command.userID },
         },
         ...(command.formPurpose && { formPurpose: command.formPurpose }),
+
+        ///////////////////////////
+        ///////////////////////////
+        //
+        // DO NOT MERGE - FOR TESTING ONLY
+        //
+        ///////////////////////////
+        ///////////////////////////
+        notifcationsInterval: 1,
       },
       select: {
         id: true,
@@ -202,6 +213,7 @@ export async function createTemplate(command: CreateTemplateCommand): Promise<Fo
         publishFormType: true,
         publishDesc: true,
         saveAndResume: true,
+        notifcationsInterval: true,
       },
     })
     .catch((e) => prismaErrors(e, null));
@@ -308,6 +320,7 @@ export async function getAllTemplatesForUser(
           publishFormType: true,
           publishDesc: true,
           saveAndResume: true,
+          notifcationsInterval: true,
         },
         ...(sortByDateUpdated && {
           orderBy: {
@@ -371,6 +384,7 @@ export async function getPublicTemplateByID(formID: string): Promise<PublicFormR
           closedDetails: true,
           saveAndResume: true,
           ttl: true,
+          notifcationsInterval: true,
         },
       })
       .catch((e) => prismaErrors(e, null));

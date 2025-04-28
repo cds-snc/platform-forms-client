@@ -4,7 +4,7 @@ import { getTemplateWithAssociatedUsers } from "@lib/templates";
 import { getRedisInstance } from "@lib/integration/redisConnector";
 import { getOrigin } from "@lib/origin";
 
-// Self-contained function for sending email notifications for new form submissions
+// Self-contained function for sending email notifications when a user has new form submissions
 export const sendNotification = async (formId: string) => {
   try {
     logMessage.info(`sendNotification: ${formId}`);
@@ -21,8 +21,9 @@ export const sendNotification = async (formId: string) => {
         form: { titleEn, titleFr },
       },
     } = template;
-    const emailNotification = 1; // 1440=1 day, 10080=1 week  // @TODO: SET TO 1-min for testing, remove when done // @TODO: need to add in Schema first
-    if (!emailNotification) {
+    // null = off, 1440=1 day, 10080=1 week
+    const notifcationsInterval = template.formRecord.notifcationsInterval;
+    if (!notifcationsInterval) {
       return;
     }
     if (!Array.isArray(users) || users.length === 0) {
@@ -39,7 +40,7 @@ export const sendNotification = async (formId: string) => {
 
     // No email has been sent, update redis and send an email
     logMessage.info(`sendNotification: marker does not exist`);
-    setMarker(formId, emailNotification);
+    setMarker(formId, notifcationsInterval);
     sendEmailNotification(email, formId, String(titleEn), String(titleFr));
   } catch (err) {
     // TODO: the error message could be more specific from the function that throws it
