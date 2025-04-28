@@ -6,6 +6,7 @@ import { logMessage } from "@lib/logger";
 import { NextAuthRequest } from "next-auth/lib";
 import CredentialsProvider from "next-auth/providers/credentials";
 import NextAuth, { Session } from "next-auth";
+import type { AppRouteHandlerFnContext } from "next-auth/lib/types";
 import { JWT } from "next-auth/jwt";
 import { bodySizeLimit } from "./constants";
 
@@ -81,7 +82,7 @@ export const config = {
 // TOMORROW
 // Stop files like .map.js from being included in the middleware
 
-export default async function middleware(req: NextRequest) {
+export default async function middleware(req: NextRequest, ctx: AppRouteHandlerFnContext) {
   const pathname = req.nextUrl.pathname;
   const searchParams = req.nextUrl.searchParams.toString();
 
@@ -147,7 +148,7 @@ export default async function middleware(req: NextRequest) {
     // Final Layer - Set Content Security Policy
 
     return setCSP(reqWithAuth, pathname, cookieLang, pathLang);
-  })(req, {});
+  })(req, ctx);
 }
 
 /**

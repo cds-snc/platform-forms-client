@@ -26,6 +26,11 @@ import { serverTranslation } from "@i18n";
 import { revalidatePath } from "next/cache";
 import { isValidDateString } from "@lib/utils/date/isValidDateString";
 import { allowedTemplates, TemplateTypes } from "@lib/utils/form-builder";
+import { getFullTemplateByID } from "@lib/templates";
+import { isValidEmail } from "@lib/validation/isValidEmail";
+import { slugify } from "@lib/client/clientHelpers";
+import { sendEmail } from "@lib/integration/notifyConnector";
+import { getOrigin } from "@lib/origin";
 
 export type CreateOrUpdateTemplateType = {
   id?: string;
@@ -448,3 +453,91 @@ export const loadBlockTemplate = async ({
     return { data: [], error: (error as Error).message };
   }
 };
+
+export const shareForm = AuthenticatedAction(
+  async (
+    session,
+    {
+      formId,
+      emails,
+      filename,
+    }: {
+      formId: string;
+      emails: string[];
+      filename: string;
+    }
+  ): Promise<{
+    success?: boolean;
+    error?: string;
+  }> => {
+    try {
+      if (!emails || emails.length < 1 || !formId || !filename) {
+        throw new Error("Malformed request");
+      }
+
+      const template = await getFullTemplateByID(formId);
+
+      if (!template || !template.form) {
+        throw new Error("Form not found");
+      }
+
+      const base64data = Buffer.from(JSON.stringify(template.form)).toString("base64");
+
+      // Ensure valid email addresses
+      const cleanedEmails = emails.filter((email) => isValidEmail(email));
+
+      if (cleanedEmails.length < 1) {
+        throw new Error("Invalid email addresses");
+      }
+
+      let cleanedFilename = slugify(filename);
+
+      // Shorten file name to 50 characters
+      if (cleanedFilename.length > 50) {
+        cleanedFilename = cleanedFilename.substring(0, 50);
+      }
+
+      const HOST = await getOrigin();
+
+      // Here is the documentation for the `sendEmail` function: https://docs.notifications.service.gov.uk/node.html#send-an-email
+      await Promise.all(
+        emails.map((email: string) => {
+          return sendEmail(email, {
+            application_file: {
+              file: base64data,
+              filename: `${cleanedFilename}.json`,
+              sending_method: "attach",
+            },
+            subject: "Form shared | Formulaire partagé",
+            formResponse: `
+**${session.user.name} (${session.user.email}) has shared a form with you.**
+
+To preview this form:
+- **Step 1**:
+  Save the attached JSON form file to your computer.
+- **Step 2**:
+  Go to [GC Forms](https://${HOST}). No account needed.
+- **Step 3**:
+  Select open a form file.
+
+****
+
+**${session.user.name} (${session.user.email}) a partagé un formulaire avec vous.**
+
+Pour prévisualiser ce formulaire :
+- **Étape 1 :**
+  Enregistrer le fichier de formulaire JSON ci-joint sur votre ordinateur.
+- **Étape 2 :**
+  Aller sur [Formulaires GC](https://${HOST}). Aucun compte n'est nécessaire.
+- **Étape 3 :**
+  Sélectionner "Ouvrir un formulaire".`,
+          });
+        })
+      );
+
+      return { success: true };
+    } catch (error) {
+      return { success: false, error: (error as Error).message };
+    }
+  }
+);
