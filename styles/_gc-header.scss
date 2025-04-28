@@ -1,0 +1,45 @@
+@import "../node_modules/@cdssnc/gcds-tokens/build/web/css/components/header.css";
+@import "../node_modules/@cdssnc/gcds-tokens/build/web/css/components/lang-toggle.css";
+
+
+
+.gcds-lang-toggle {
+  a {
+    display: inline-block;
+    padding: var(--gcds-lang-toggle-padding);
+  }
+
+  span {
+    display: none;
+  }
+
+  abbr {
+    text-transform: uppercase;
+    text-decoration: none;
+  }
+}
+
+/* Note: viewport specific style decision */
+@media screen and (width >= 48em) {
+  .gcds-lang-toggle {
+    a {
+      font: var(--gcds-lang-toggle-font-desktop);
+      padding-inline: 0 !important;
+    }
+
+    span {
+      display: initial;
+    }
+
+    abbr {
+      display: none;
+    }
+  }
+}
+
+@media screen and (width < 48em) {
+  .gcds-lang-toggle a {
+    font: var(--gcds-lang-toggle-font-mobile);
+    font-weight: 700;
+  }
+}
