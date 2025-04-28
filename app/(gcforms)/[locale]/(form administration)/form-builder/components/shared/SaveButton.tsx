@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState, useRef, useCallback } from "react";
 import { useTranslation } from "@i18n/client";
 import { useSession } from "next-auth/react";
 import { cn, safeJSONParse } from "@lib/utils";
@@ -111,16 +111,13 @@ export const SaveButton = () => {
   const pathname = usePathname();
   const timeRef = useRef(new Date().getTime());
 
-  const handleSave = async () => {
-    if (status !== "authenticated") {
-      return;
-    }
-
+  const handleSave = useCallback(async () => {
     // If the timeRef is within 2 secs of the current time, don't save
-    if (timeRef.current && new Date().getTime() - timeRef.current < 2000) {
+    if (id && timeRef.current && new Date().getTime() - timeRef.current < 2000) {
       return;
     }
     const formConfig = safeJSONParse<FormProperties>(getSchema(true));
+
     if (!formConfig) {
       toast.error(<ErrorSaving errorCode={FormServerErrorCodes.JSON_PARSE} />, "wide");
       return;
@@ -155,14 +152,25 @@ export const SaveButton = () => {
       toast.error(<ErrorSaving />, "wide");
       setError(true);
     }
-  };
+  }, [
+    createOrUpdateTemplate,
+    getId,
+    getName,
+    getSchema,
+    getDeliveryOption,
+    securityAttribute,
+    setId,
+    setUpdatedAt,
+    resetState,
+    setError,
+    id,
+  ]);
 
   useEffect(() => {
     return () => {
       handleSave();
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [handleSave]);
 
   if (isPublished) {
     return null;
