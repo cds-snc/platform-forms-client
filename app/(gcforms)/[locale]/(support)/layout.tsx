@@ -10,7 +10,12 @@ export default async function Layout({ children }: { children: React.ReactNode }
     <div className="flex h-full flex-col">
       <SkipLink />
       <GCHeader language="en" />
-      <div className={cn("gc-formview", "shrink-0 grow basis-auto px-[4rem] py-0 laptop:px-32")}>
+      <div
+        className={cn(
+          "gc-formview",
+          "shrink-0 grow basis-auto px-[2rem] tablet:px-24 py-0 laptop:px-32"
+        )}
+      >
         <main id="content">{children}</main>
       </div>
       <Footer />

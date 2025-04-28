@@ -2,9 +2,7 @@
 @import "../node_modules/@cdssnc/gcds-tokens/build/web/css/components/lang-toggle.css";
 @import "../node_modules/@cdssnc/gcds-tokens/build/web/css/components/signature.css";
 
-.gcds-header {
-  margin: var(--gcds-header-margin) !important;
-}
+
 
 .gcds-header__brand {
   container: component brand / inline-size;
