@@ -8,7 +8,7 @@ export const GCHeader = ({ language }: { language: Language }) => {
     <div className="gcds-header__container">
       <header className="gcds-header">
         <BrandContainer>
-          <Fip language={language} link={""} />
+          <Fip language={language} />
           <LanguageToggle language={language} />
         </BrandContainer>
       </header>
