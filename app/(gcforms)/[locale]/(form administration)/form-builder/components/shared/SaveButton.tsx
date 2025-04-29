@@ -167,11 +167,7 @@ export const SaveButton = () => {
   ]);
 
   useEffect(() => {
-    return () => {
-      if (process.env.APP_ENV !== "test") {
-        handleSave();
-      }
-    };
+    handleSave();
   }, [handleSave]);
 
   if (isPublished) {
