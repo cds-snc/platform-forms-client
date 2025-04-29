@@ -15,6 +15,7 @@ import {
   getRelatedElementsFromRule,
   validConditionalRules,
   getRelatedIdsPassingRules,
+  cleanRules,
 } from "../formContext";
 
 describe("Form Context", () => {
@@ -474,6 +475,45 @@ describe("Form Context", () => {
       const rules = elements[3].properties?.conditionalRules;
       // Expect parent element id to be returned
       expect(getRelatedIdsPassingRules(elements, rules, ["1.0", "2.2"])).toEqual([2]);
+    });
+  });
+
+  describe("Clean rules", () => {
+    const elements = [
+      {
+        id: 1,
+        type: FormElementTypes.radio,
+        properties: {
+          titleEn: "Question 1 en",
+          titleFr: "Question 1 fr",
+          choices: [
+            { en: "ya", fr: "ya fr" }, // 1.0
+            { en: "nope", fr: "nope fr" }, // 1.1
+            { en: "possibly", fr: "possibly fr" }, // 1.2
+          ],
+          conditionalRules: [{ choiceId: "3.0" }],
+        },
+      },
+      {
+        id: 3,
+        type: FormElementTypes.textField,
+        properties: {
+          titleEn: "Question 3 en",
+          titleFr: "Question 3 fr",
+          conditionalRules: [{ choiceId: "4.0" }, { choiceId: "5.1" }, { choiceId: "1.0" }],
+        },
+      },
+    ];
+
+    test("Clean rules - no changes", async () => {
+      const rules = elements[0].properties?.conditionalRules;
+      expect(cleanRules(elements, rules || [])).toEqual([{ choiceId: "3.0" }]);
+    });
+
+    test("Clean rules - remove invalid rule", async () => {
+      const rules = elements[1].properties?.conditionalRules;
+      const cleanedRules = cleanRules(elements, rules || []);
+      expect(cleanedRules).toEqual([{ choiceId: "1.0" }]);
     });
   });
 });

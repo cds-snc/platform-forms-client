@@ -127,7 +127,7 @@ export const ReportDialog = ({
           dialogRef={dialogRef}
           handleClose={handleClose}
         >
-          <div className="px-4">
+          <div>
             <div>
               {status === DialogStates.MIN_ERROR && (
                 <Alert.Danger className="mb-2">
@@ -199,70 +199,75 @@ export const ReportDialog = ({
                 </Alert.Danger>
               )}
             </div>
-            <div className="py-4">
-              <p className="mt-2">{t("downloadResponsesModals.reportProblemsDialog.findForm")}</p>
-              <p className="mb-2 mt-10 font-bold" id={reportInstructionId}>
-                {t("downloadResponsesModals.reportProblemsDialog.enterFormNumbers", {
-                  max: maxEntries,
-                })}{" "}
-                <span className="text-[#bc3332]">({t("required", { ns: "common" })})</span>
-              </p>
+            <div>
+              <div className="px-4">
+                <p className="mt-2">{t("downloadResponsesModals.reportProblemsDialog.findForm")}</p>
+                <p className="mb-2 mt-10 font-bold" id={reportInstructionId}>
+                  {t("downloadResponsesModals.reportProblemsDialog.enterFormNumbers", {
+                    max: maxEntries,
+                  })}{" "}
+                  <span className="text-[#bc3332]">({t("required", { ns: "common" })})</span>
+                </p>
 
-              <LineItemEntries
-                inputs={entries}
-                setInputs={setEntries}
-                validateInput={inputRegex}
-                inputLabelId={reportInstructionId}
-                maxEntries={maxEntries}
-                errorEntriesList={errorEntriesList}
-                status={status}
-                setStatus={setStatus}
-              ></LineItemEntries>
+                <LineItemEntries
+                  inputs={entries}
+                  setInputs={setEntries}
+                  validateInput={inputRegex}
+                  inputLabelId={reportInstructionId}
+                  maxEntries={maxEntries}
+                  errorEntriesList={errorEntriesList}
+                  status={status}
+                  setStatus={setStatus}
+                ></LineItemEntries>
 
-              <label
-                data-testid="label"
-                className="mb-2 mt-10 block font-bold"
-                htmlFor="description"
-                id="description-label"
-              >
-                {t("downloadResponsesModals.reportProblemsDialog.describeProblem")}{" "}
-                <span className="text-[#bc3332]">({t("required", { ns: "common" })})</span>
-              </label>
-
-              <ValidationMessage
-                show={status === DialogStates.DESCRIPTION_EMPTY_ERROR}
-                messageType={MessageType.ERROR}
-              >
-                {t("downloadResponsesModals.reportProblemsDialog.errors.notEmpty")}
-              </ValidationMessage>
-
-              <TextArea
-                id="description"
-                name="description"
-                className="box-border h-32 w-full rounded-md border-2 border-black-default"
-                onChange={(e) => {
-                  if (descriptionRef.current !== undefined) {
-                    descriptionRef.current = e.target.value;
-                  }
-                }}
-              />
-
-              <p className="mt-8">
-                {t("downloadResponsesModals.reportProblemsDialog.problemReported")}
-              </p>
-              <div className="mt-4 flex">
-                <Button
-                  className="mr-4"
-                  onClick={handleSubmit}
-                  disabled={status === DialogStates.SENDING}
+                <label
+                  data-testid="label"
+                  className="mb-2 mt-10 block font-bold"
+                  htmlFor="description"
+                  id="description-label"
                 >
-                  {status === DialogStates.SENDING
-                    ? t("downloadResponsesModals.sending")
-                    : t("downloadResponsesModals.reportProblemsDialog.reportProblems")}
-                </Button>
-                <Button theme="secondary" onClick={handleClose}>
-                  {t("downloadResponsesModals.cancel")}
-                </Button>
+                  {t("downloadResponsesModals.reportProblemsDialog.describeProblem")}{" "}
+                  <span className="text-[#bc3332]">({t("required", { ns: "common" })})</span>
+                </label>
+
+                <ValidationMessage
+                  show={status === DialogStates.DESCRIPTION_EMPTY_ERROR}
+                  messageType={MessageType.ERROR}
+                >
+                  {t("downloadResponsesModals.reportProblemsDialog.errors.notEmpty")}
+                </ValidationMessage>
+
+                <TextArea
+                  id="description"
+                  name="description"
+                  className="box-border h-32 w-full rounded-md border-2 border-black-default"
+                  onChange={(e) => {
+                    if (descriptionRef.current !== undefined) {
+                      descriptionRef.current = e.target.value;
+                    }
+                  }}
+                />
+
+                <p className="mt-8">
+                  {t("downloadResponsesModals.reportProblemsDialog.problemReported")}
+                </p>
+              </div>
+
+              <div className="sticky bottom-0 flex border-t-[0.5px] border-slate-500 bg-white p-4">
+                <div className="mt-4 flex">
+                  <Button
+                    className="mr-4"
+                    onClick={handleSubmit}
+                    disabled={status === DialogStates.SENDING}
+                  >
+                    {status === DialogStates.SENDING
+                      ? t("downloadResponsesModals.sending")
+                      : t("downloadResponsesModals.reportProblemsDialog.reportProblems")}
+                  </Button>
+                  <Button theme="secondary" onClick={handleClose}>
+                    {t("downloadResponsesModals.cancel")}
+                  </Button>
+                </div>
               </div>
             </div>
           </div>
