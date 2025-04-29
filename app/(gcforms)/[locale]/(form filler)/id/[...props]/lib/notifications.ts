@@ -8,11 +8,7 @@ import { NotificationsInterval } from "packages/types/src/form-types";
 // Self-contained function for sending email notifications when a user has new form submissions
 export const sendNotification = async (formId: string) => {
   try {
-    logMessage.info(`sendNotification: ${formId}`); // @TODO temp
-
-    // Gather template settings
     const template = await getTemplateWithAssociatedUsers(formId);
-    logMessage.info(`-----------sendNotification: template ${JSON.stringify(template)}`); // @TODO temp
     if (!template) {
       throw new Error(`template not found with id ${formId}`);
     }
@@ -26,12 +22,10 @@ export const sendNotification = async (formId: string) => {
     // Check if an email has been sent and if so do nothing
     const marker = await getMarker(formId);
     if (marker) {
-      logMessage.info(`sendNotification: marker exists, no need to send email`); // @TODO temp
       return;
     }
-    logMessage.info(`sendNotification: marker does not exist`); // @TODO temp
 
-    // No email has been sent, update redis
+    // No email has been sent, create a new marker if an interval has a falsy value
     const notifcationsInterval = template.formRecord.notifcationsInterval as NotificationsInterval;
     if (!notifcationsInterval) {
       return;
@@ -46,7 +40,6 @@ export const sendNotification = async (formId: string) => {
       sendEmailNotification(email, formId, String(titleEn), String(titleFr))
     );
   } catch (err) {
-    // TODO: the error message could be more specific from the function that throws it
     logMessage.error(`sendNotification failed with error: ${err}`);
   }
 };
