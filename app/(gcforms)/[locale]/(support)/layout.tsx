@@ -3,7 +3,7 @@
 import { cn } from "@lib/utils";
 import { Footer } from "@serverComponents/globals/Footer";
 import { SkipLink } from "@serverComponents/globals/SkipLink";
-import { GCHeader } from "@serverComponents/globals/Header/GCHeader";
+import { GcdsHeader } from "@serverComponents/globals/GcdsHeader/GcdsHeader";
 import { type Language } from "@lib/types/form-builder-types";
 
 export default async function Layout(props: {
@@ -18,7 +18,7 @@ export default async function Layout(props: {
   return (
     <div className="flex h-full flex-col">
       <SkipLink />
-      <GCHeader language={locale as Language} />
+      <GcdsHeader language={locale as Language} />
       <div
         className={cn(
           "gc-formview",
