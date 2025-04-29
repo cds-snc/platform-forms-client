@@ -50,7 +50,7 @@ const Home = () => {
       <div className="flex h-full flex-col">
         <div id="page-container">
           <main id="content">
-            <div className="mt-10 flex items-center justify-center container-xl">
+            <div className="container-xl mt-10 flex items-center justify-center">
               <div className="w-[622px] rounded-2xl border-1 border-[#D1D5DB] bg-white p-8">
                 <div className="flex  flex-col items-center">
                   <SiteLink />
