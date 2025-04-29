@@ -62,7 +62,8 @@ const FormDisplayLayout = ({
         <div
           className={cn(
             "gc-formview",
-            "shrink-0 grow basis-auto px-[1rem] tablet:px-[4rem] py-0 laptop:px-32"
+            "shrink-0 grow basis-auto py-0",
+            "container-xl mx-auto px-[var(--gcds-spacing-225)] sm:px-[var(--gcds-spacing-600)] laptop:px-0"
           )}
         >
           <main id="content" className="h-full" tabIndex={-1}>

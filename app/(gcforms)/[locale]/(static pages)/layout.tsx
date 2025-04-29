@@ -17,7 +17,7 @@ export default async function Layout(props: {
     <div className="flex h-full flex-col bg-white">
       <SkipLink />
       <GcdsHeader language={locale as Language} pathname={pathname} />
-      <div id="page-container">
+      <div className="container-xl mx-auto px-[var(--gcds-spacing-225)] sm:px-[var(--gcds-spacing-600)] laptop:px-0">
         <main id="content" className="gc-formview">
           {children}
         </main>
