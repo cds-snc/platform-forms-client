@@ -700,6 +700,17 @@
           }
         }
       }
+    },
+    "notifications": {
+      "title": "Receive notifications",
+      "description1": "Get notified by email about new form responses",
+      "description2": "Find out when there are new form responses available to download.",
+      "options": {
+        "daily": "Daily",
+        "weekly": "Weekly",
+        "never": "Never"
+      },
+      "save": "Save"
     }
   },
   "settingsDeleteButton": "Delete",
