@@ -113,7 +113,7 @@ export const SaveButton = () => {
 
   const handleSave = useCallback(async () => {
     // If the timeRef is within 2 secs of the current time, don't save
-    if (id && timeRef.current && new Date().getTime() - timeRef.current < 2000) {
+    if (id !== "0000" && timeRef.current && new Date().getTime() - timeRef.current < 2000) {
       return;
     }
     const formConfig = safeJSONParse<FormProperties>(getSchema(true));
