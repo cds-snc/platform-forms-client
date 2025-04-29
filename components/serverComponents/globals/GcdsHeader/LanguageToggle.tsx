@@ -1,6 +1,7 @@
 import { type Language } from "@lib/types/form-builder-types";
 import { customTranslate } from "@lib/i18nHelpers";
 import { headers } from "next/headers";
+import { LanguageToggleScript } from "./LanguageToggleScript"; // Import the client component
 
 const toggledLang = (language: Language) => {
   return language === "en" ? "fr" : "en";
@@ -23,11 +24,13 @@ export const LanguageToggle = async ({ language }: { language: Language }) => {
         <h2 id="lang-toggle__heading" className="sr-only">
           {t("lang-toggle")}
         </h2>
-        <a href={displayLang.link} lang={displayLang.abbr}>
+        <a id="lang-toggle-link" href={displayLang.link} lang={displayLang.abbr}>
           <span>{displayLang.text}</span>
           <abbr title={displayLang.text}>{displayLang.abbr}</abbr>
         </a>
       </div>
+      {/* Include client script */}
+      <LanguageToggleScript />
     </div>
   );
 };
