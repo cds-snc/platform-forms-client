@@ -53,7 +53,7 @@ export const sendNotification = async (formId: string) => {
 
 export const setMarker = async (formId: string, notificationsInterval: NotificationsInterval) => {
   const redis = await getRedisInstance();
-  // Turn notifications off
+  // Turn notifications off if a falsy value is passed
   if (!notificationsInterval) {
     await redis.del(`notification:formId:${formId}`);
     logMessage.info(`setMarker: notification:formId:${formId} deleted`);
