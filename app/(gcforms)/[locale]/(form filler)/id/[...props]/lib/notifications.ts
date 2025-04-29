@@ -3,6 +3,7 @@ import { logMessage } from "@lib/logger";
 import { getTemplateWithAssociatedUsers } from "@lib/templates";
 import { getRedisInstance } from "@lib/integration/redisConnector";
 import { getOrigin } from "@lib/origin";
+import { NotificationsInterval } from "packages/types/src/form-types";
 
 // Self-contained function for sending email notifications when a user has new form submissions
 export const sendNotification = async (formId: string) => {
@@ -31,8 +32,7 @@ export const sendNotification = async (formId: string) => {
     logMessage.info(`sendNotification: marker does not exist`); // @TODO temp
 
     // No email has been sent, update redis
-    // @TODO document somwhere: null = off, 1440=1 day, 10080=1 week
-    const notifcationsInterval = template.formRecord.notifcationsInterval;
+    const notifcationsInterval = template.formRecord.notifcationsInterval as NotificationsInterval;
     if (!notifcationsInterval) {
       return;
     }
@@ -51,10 +51,7 @@ export const sendNotification = async (formId: string) => {
   }
 };
 
-export const setMarker = async (
-  formId: string,
-  notificationsInterval: number | null | undefined
-) => {
+export const setMarker = async (formId: string, notificationsInterval: NotificationsInterval) => {
   const redis = await getRedisInstance();
   // Turn notifications off
   if (!notificationsInterval) {

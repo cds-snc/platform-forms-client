@@ -11,6 +11,7 @@ import { ServerActionError } from "@lib/types/form-builder-types";
 import { logEvent } from "@lib/auditLogs";
 import { updateNotifications } from "@lib/templates";
 import { setMarker } from "app/(gcforms)/[locale]/(form filler)/id/[...props]/lib/notifications";
+import { NotificationsInterval } from "packages/types/src/form-types";
 
 // Public facing functions - they can be used by anyone who finds the associated server action identifer
 
@@ -70,10 +71,11 @@ export const resetThrottlingRate = AuthenticatedAction(async (session, formId: s
 });
 
 export const updateNotificationsInterval = AuthenticatedAction(
-  async (session, formId: string, notificationsInterval: number | null) => {
+  async (session, formId: string, notificationsInterval: NotificationsInterval) => {
     try {
       await updateNotifications(formId, notificationsInterval);
-      await setMarker(formId, notificationsInterval);
+      // Remove the previous marker to allow a new one to be set with the right TTL when a new submission is received
+      await setMarker(formId, null);
       logEvent(
         session.user.id,
         { type: "ServiceAccount" },

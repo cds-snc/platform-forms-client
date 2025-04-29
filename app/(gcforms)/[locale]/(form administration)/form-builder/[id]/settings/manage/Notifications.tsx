@@ -1,18 +1,15 @@
 import { Radio } from "@formBuilder/components/shared/MultipleChoice";
 import { Button } from "@clientComponents/globals";
-import { logMessage } from "@lib/logger";
 import { useCallback, useState } from "react";
 import { updateNotificationsInterval } from "./actions";
-
-// TODO: Add a type
-// TODO: Review throwing errors
+import { NotificationsInterval } from "packages/types/src/form-types";
 
 export const Notifications = ({
   formId,
   notifcationsInterval,
 }: {
   formId: string;
-  notifcationsInterval: number | undefined;
+  notifcationsInterval: NotificationsInterval | undefined;
 }) => {
   const [notificationValue, setNotificationValue] = useState<string>(
     notifcationsInterval ? String(notifcationsInterval) : "off"
@@ -24,8 +21,15 @@ export const Notifications = ({
   }, []);
 
   const saveNotificationsValue = useCallback(async () => {
-    logMessage.info(`saveNotificationsValue: ${formId} ${notificationValue}`);
-    const newNotificationsInterval = notificationValue === "off" ? null : Number(notificationValue);
+    let newNotificationsInterval: NotificationsInterval = NotificationsInterval.OFF;
+    switch (notificationValue) {
+      case "1440":
+        newNotificationsInterval = NotificationsInterval.DAY;
+        break;
+      case "10080":
+        newNotificationsInterval = NotificationsInterval.WEEK;
+        break;
+    }
     await updateNotificationsInterval(formId, newNotificationsInterval);
   }, [formId, notificationValue]);
 
@@ -38,10 +42,9 @@ export const Notifications = ({
         <div className="mb-6">
           <Radio
             id={`notifications-daily`}
-            // TODO update to  1440 when done testing
-            checked={notificationValue === "1"}
+            checked={notificationValue === "1440"}
             name="notifications"
-            value={"1"}
+            value={"1440"}
             label={"Daily"}
             onChange={updateNotificationsValue}
             className="mb-0"

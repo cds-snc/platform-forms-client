@@ -22,6 +22,7 @@ import { isValidISODate } from "./utils/date/isValidISODate";
 import { validateTemplate } from "@lib/utils/form-builder/validate";
 import { dateHasPast } from "@lib/utils";
 import { validateTemplateSize } from "@lib/utils/validateTemplateSize";
+import { NotificationsInterval } from "packages/types/src/form-types";
 
 // ******************************************
 // Internal Module Functions
@@ -80,7 +81,7 @@ const _parseTemplate = (template: {
     }),
     closedDetails: template.closedDetails as ClosedDetails,
     saveAndResume: template.saveAndResume,
-    ...(template.notifcationsInterval && { notifcationsInterval: template.notifcationsInterval }),
+    notifcationsInterval: template.notifcationsInterval as NotificationsInterval,
   };
 };
 
@@ -98,6 +99,7 @@ export type CreateTemplateCommand = {
   publishReason?: string;
   publishFormType?: string;
   publishDesc?: string;
+  notifcationsInterval?: number | null;
 };
 
 export type UpdateTemplateCommand = {
@@ -110,6 +112,7 @@ export type UpdateTemplateCommand = {
   publishReason?: string;
   publishFormType?: string;
   publishDesc?: string;
+  notifcationsInterval?: number | null;
 };
 
 export class InvalidFormConfigError extends Error {
@@ -189,15 +192,9 @@ export async function createTemplate(command: CreateTemplateCommand): Promise<Fo
           connect: { id: command.userID },
         },
         ...(command.formPurpose && { formPurpose: command.formPurpose }),
-
-        ///////////////////////////
-        ///////////////////////////
-        //
-        // DO NOT MERGE - FOR TESTING ONLY
-        //
-        ///////////////////////////
-        ///////////////////////////
-        notifcationsInterval: 1,
+        ...(command.notifcationsInterval !== undefined && {
+          notifcationsInterval: command.notifcationsInterval,
+        }),
       },
       select: {
         id: true,
@@ -554,6 +551,9 @@ export async function updateTemplate(command: UpdateTemplateCommand): Promise<Fo
           securityAttribute: command.securityAttribute as string,
         }),
         ...(command.formPurpose && { formPurpose: command.formPurpose }),
+        ...(command.notifcationsInterval !== undefined && {
+          notifcationsInterval: command.notifcationsInterval as NotificationsInterval,
+        }),
       },
       include: {
         deliveryOption: true,

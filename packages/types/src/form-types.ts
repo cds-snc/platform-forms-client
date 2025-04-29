@@ -210,7 +210,7 @@ export type FormRecord = {
   closingDate?: string;
   closedDetails?: ClosedDetails;
   saveAndResume?: boolean;
-  notifcationsInterval?: number;
+  notifcationsInterval?: NotificationsInterval;
   [key: string]:
     | string
     | boolean
@@ -218,7 +218,8 @@ export type FormRecord = {
     | FormProperties
     | DeliveryOption
     | ClosedDetails
-    | undefined;
+    | undefined
+    | null;
 };
 
 export type SecurityAttribute = "Unclassified" | "Protected A" | "Protected B";
@@ -241,3 +242,14 @@ export const FormStatus = {
 } as const;
 
 export type FormStatus = (typeof FormStatus)[keyof typeof FormStatus];
+
+// Defines the interval for emails to be sent to users when there are new responses available
+// Note: for non OFF values, the value is converted to seconds in REDIS for the ttl
+export const NotificationsInterval = {
+  OFF: null,
+  DAY: 1440,
+  WEEK: 10080,
+} as const;
+
+export type NotificationsInterval =
+  (typeof NotificationsInterval)[keyof typeof NotificationsInterval];
