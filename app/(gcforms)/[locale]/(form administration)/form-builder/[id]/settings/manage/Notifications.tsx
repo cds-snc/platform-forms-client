@@ -14,7 +14,7 @@ export const Notifications = ({
 }) => {
   const { t } = useTranslation("form-builder");
   const [notificationValue, setNotificationValue] = useState<string>(
-    notifcationsInterval ? String(notifcationsInterval) : "off"
+    notifcationsInterval ? String(notifcationsInterval) : String(NotificationsInterval.OFF)
   );
 
   const updateNotificationsValue = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
@@ -24,11 +24,11 @@ export const Notifications = ({
 
   const saveNotificationsValue = useCallback(async () => {
     let newNotificationsInterval: NotificationsInterval = NotificationsInterval.OFF;
-    switch (notificationValue) {
-      case "1440":
+    switch (parseInt(notificationValue)) {
+      case NotificationsInterval.DAY:
         newNotificationsInterval = NotificationsInterval.DAY;
         break;
-      case "10080":
+      case NotificationsInterval.WEEK:
         newNotificationsInterval = NotificationsInterval.WEEK;
         break;
     }
@@ -44,9 +44,9 @@ export const Notifications = ({
         <div className="mb-6">
           <Radio
             id={`notifications-daily`}
-            checked={notificationValue === "1440"}
+            checked={notificationValue === String(NotificationsInterval.DAY)}
             name="notifications"
-            value={"1440"}
+            value={String(NotificationsInterval.DAY)}
             label={t("settings.notifications.options.daily")}
             onChange={updateNotificationsValue}
             className="mb-0"
@@ -55,9 +55,9 @@ export const Notifications = ({
         <div className="mb-6">
           <Radio
             id={`notifications-weekly`}
-            checked={notificationValue === "10080"}
+            checked={notificationValue === String(NotificationsInterval.WEEK)}
             name="notifications"
-            value={"10080"}
+            value={String(NotificationsInterval.WEEK)}
             label={t("settings.notifications.options.weekly")}
             onChange={updateNotificationsValue}
             className="mb-0"
@@ -66,9 +66,9 @@ export const Notifications = ({
         <div className="mb-8">
           <Radio
             id={`notifications-off`}
-            checked={notificationValue === "off"}
+            checked={notificationValue === String(NotificationsInterval.OFF)}
             name="notifications"
-            value={"off"}
+            value={String(NotificationsInterval.OFF)}
             label={t("settings.notifications.options.never")}
             onChange={updateNotificationsValue}
             className="mb-0"
