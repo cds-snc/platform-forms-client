@@ -52,7 +52,7 @@ import {
   getChoice,
   localizeField,
   getFormElementIndexes,
-  transformElement,
+  transforms,
 } from "./helpers/elements";
 
 const createTemplateStore = (initProps?: Partial<InitialTemplateStoreProps>) => {
@@ -100,7 +100,7 @@ const createTemplateStore = (initProps?: Partial<InitialTemplateStoreProps>) => 
             addSubChoice: addSubChoice(set),
             removeChoiceFromRules: removeChoiceFromRules(set),
             removeChoiceFromNextActions: removeChoiceFromNextActions(set),
-            transformElement: transformElement(set),
+            transforms: transforms(set),
             remove: remove(set),
             removeSubItem: removeSubItem(set),
             removeChoice: removeChoice(set),
@@ -113,7 +113,7 @@ const createTemplateStore = (initProps?: Partial<InitialTemplateStoreProps>) => 
             generateElementId: generateElementId(set, get),
             getSchema: (cleanRules?: boolean) => {
               if (cleanRules) {
-                get().transformElement();
+                get().transforms();
               }
               return JSON.stringify(getSchemaFromState(get(), get().allowGroupsFlag), null, 2);
             },
