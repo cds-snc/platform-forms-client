@@ -1,15 +1,18 @@
 import { type Language } from "@lib/types/form-builder-types";
 import { customTranslate } from "@lib/i18nHelpers";
-import { headers } from "next/headers";
 import { LanguageToggleScript } from "./LanguageToggleScript"; // Import the client component
 
 const toggledLang = (language: Language) => {
   return language === "en" ? "fr" : "en";
 };
 
-export const LanguageToggle = async ({ language }: { language: Language }) => {
-  const pathname = (await headers()).get("x-path") ?? "";
-
+export const LanguageToggle = ({
+  pathname = "",
+  language,
+}: {
+  pathname: string;
+  language: Language;
+}) => {
   const lang = {
     en: { text: "English", abbr: "en", link: pathname.replace(`/${language}`, `/en`) },
     fr: { text: "Français", abbr: "fr", link: pathname.replace(`/${language}`, `/fr`) },
