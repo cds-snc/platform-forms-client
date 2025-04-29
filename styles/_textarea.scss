@@ -59,7 +59,7 @@
 }
 
 .gcds-textarea-wrapper:focus-within {
-  color: var(--gcds-textarea-focus-border);
+  color: var(--gcds-textarea-focus-color);
 
   textarea:focus {
     border-color: var(--gcds-textarea-focus-border);

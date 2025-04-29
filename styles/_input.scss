@@ -53,7 +53,7 @@
 }
 
 .gcds-input-wrapper:focus-within {
-  color: var(--gcds-input-focus-border);
+  color: var(--gcds-input-focus-color);
 
   input:focus {
     border-color: var(--gcds-input-focus-border);

@@ -58,7 +58,7 @@
 @layer focus {
   :host {
     .gcds-fieldset:focus-within {
-      color: var(--gcds-fieldset-focus-text);
+      color: var(--gcds-fieldset-focus-color);
     }
   }
 }
