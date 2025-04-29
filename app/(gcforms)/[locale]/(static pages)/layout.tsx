@@ -14,13 +14,11 @@ export default async function Layout(props: {
   const { locale } = params;
   const { children } = props;
   return (
-    <div className="flex h-full flex-col bg-white">
+    <div className="gcds-page flex h-full flex-col bg-white">
       <SkipLink />
       <GcdsHeader language={locale as Language} pathname={pathname} />
       <div className="container-xl mx-auto px-[var(--gcds-spacing-225)] sm:px-[var(--gcds-spacing-600)] laptop:px-0">
-        <main id="content" className="gc-formview">
-          {children}
-        </main>
+        <main id="content">{children}</main>
       </div>
       <Footer displayFormBuilderFooter={true} />
     </div>
