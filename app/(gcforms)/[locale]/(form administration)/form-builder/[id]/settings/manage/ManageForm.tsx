@@ -10,6 +10,7 @@ import { ManageApiKey } from "./ManageApiKey";
 import { ThrottlingRate } from "./ThrottlingRate";
 import { useFormBuilderConfig } from "@lib/hooks/useFormBuilderConfig";
 import { SetSaveAndResume } from "./saveAndResume/SetSaveAndResume";
+import { Notifications } from "./Notifications";
 
 interface User {
   id: string;
@@ -60,6 +61,7 @@ export const ManageForm = (props: ManageFormProps) => {
     <>
       {canSetClosingDate && <SetClosingDate formId={id} closedDetails={closedDetails} />}
       <SetSaveAndResume formId={id} />
+      <Notifications formId={id} notifcationsInterval={formRecord.notifcationsInterval} />
       <FormOwnership
         nonce={nonce}
         formRecord={formRecord}

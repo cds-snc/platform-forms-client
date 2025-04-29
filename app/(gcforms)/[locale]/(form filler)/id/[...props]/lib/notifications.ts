@@ -51,18 +51,28 @@ export const sendNotification = async (formId: string) => {
   }
 };
 
+export const setMarker = async (
+  formId: string,
+  notificationsInterval: number | null | undefined
+) => {
+  const redis = await getRedisInstance();
+  // Turn notifications off
+  if (!notificationsInterval) {
+    await redis.del(`notification:formId:${formId}`);
+    logMessage.info(`setMarker: notification:formId:${formId} deleted`);
+    return;
+  }
+  // Update notifications with a ttl
+  const ttl = notificationsInterval * 60; // convert from minutes to seconds
+  await redis.set(`notification:formId:${formId}`, 1, "EX", ttl);
+  logMessage.info(`setMarker: notification:formId:${formId} with ttl ${ttl}`);
+};
+
 const getMarker = async (formId: string) => {
   logMessage.info(`getMarker: ${formId}`);
   const redis = await getRedisInstance();
-  const marker = await redis.get(`notification:formId${formId}`);
+  const marker = await redis.get(`notification:formId:${formId}`);
   return marker;
-};
-
-const setMarker = async (formId: string, emailNotification: number) => {
-  const ttl = emailNotification * 60; // convert from minutes to seconds
-  const redis = await getRedisInstance();
-  await redis.set(`notification:formId${formId}`, 1, "EX", ttl);
-  logMessage.info(`setMarker: notification:formId${formId} with ttl ${ttl}`);
 };
 
 const defaultEmailTemplate = (

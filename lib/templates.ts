@@ -1456,3 +1456,35 @@ export const checkIfClosed = async (formId: string) => {
     return null;
   }
 };
+
+export const updateNotifications = async (formID: string, notifcationsInterval: number | null) => {
+  const { user } = await authorization.canEditForm(formID).catch((e) => {
+    logEvent(
+      e.user.id,
+      { type: "Form", id: formID },
+      "AccessDenied",
+      "Attempted to update notifications interval for Form"
+    );
+    throw e;
+  });
+
+  if (
+    notifcationsInterval !== null &&
+    (typeof notifcationsInterval !== "number" || notifcationsInterval < 0)
+  ) {
+    throw new Error(`Invalid notifications interval: ${notifcationsInterval}`);
+  }
+
+  await prisma.template
+    .update({
+      where: {
+        id: formID,
+      },
+      data: {
+        notifcationsInterval,
+      },
+    })
+    .catch((e) => prismaErrors(e, null));
+
+  logEvent(user.id, { type: "Form", id: formID }, "UpdateNotificationsInterval");
+};

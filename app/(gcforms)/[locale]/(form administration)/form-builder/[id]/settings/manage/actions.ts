@@ -9,6 +9,8 @@ import {
 import { AuthenticatedAction } from "@lib/actions";
 import { ServerActionError } from "@lib/types/form-builder-types";
 import { logEvent } from "@lib/auditLogs";
+import { updateNotifications } from "@lib/templates";
+import { setMarker } from "app/(gcforms)/[locale]/(form filler)/id/[...props]/lib/notifications";
 
 // Public facing functions - they can be used by anyone who finds the associated server action identifer
 
@@ -66,3 +68,20 @@ export const resetThrottlingRate = AuthenticatedAction(async (session, formId: s
     return { error: "There was an error. Please try again later." } as ServerActionError;
   }
 });
+
+export const updateNotificationsInterval = AuthenticatedAction(
+  async (session, formId: string, notificationsInterval: number | null) => {
+    try {
+      await updateNotifications(formId, notificationsInterval);
+      await setMarker(formId, notificationsInterval);
+      logEvent(
+        session.user.id,
+        { type: "ServiceAccount" },
+        "UpdateNotificationsInterval",
+        `User :${session.user.id} updated notifications interval on form ${formId} to ${notificationsInterval}`
+      );
+    } catch (error) {
+      return { error: "There was an error. Please try again later." } as ServerActionError;
+    }
+  }
+);
