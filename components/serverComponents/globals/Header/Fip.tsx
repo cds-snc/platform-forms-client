@@ -5,7 +5,7 @@ import { SignatureFr } from "./assets/SignatureFr";
 
 export const Fip = ({ language }: { language: Language }) => {
   return (
-    <div className="gcds-signature">
+    <div className="gcds-signature brand__signature">
       {language === "en" ? (
         <a href="">
           <div>

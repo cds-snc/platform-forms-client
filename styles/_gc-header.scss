@@ -3,7 +3,6 @@
 @import "../node_modules/@cdssnc/gcds-tokens/build/web/css/components/signature.css";
 
 
-
 .gcds-header__brand {
   container: component brand / inline-size;
   border-block-end: var(--gcds-header-brand-border-width) solid
@@ -36,22 +35,17 @@
       grid-gap: var(--gcds-header-brand-grid-gap);
       grid-template-columns: 1fr 0.1fr;
       grid-template-areas:
-        "signature toggle"
-        "search search";
+        "signature toggle";
       width: 90%;
       max-width: var(--gcds-header-container-max-width);
       margin: 0 auto;
 
-      &.container--simple {
-        grid-template-areas: "signature toggle";
-      }
-
-      :is(.brand__toggle, slot[name="toggle"]) {
+      :is(.brand__toggle) {
         grid-area: toggle;
         text-align: right;
       }
 
-      :is(.brand__signature, slot[name="signature"]) {
+      :is(.brand__signature) {
         grid-area: signature;
         align-content: center;
       }
@@ -80,6 +74,7 @@
 
 .gcds-signature {
   display: flex;
+  align-items: center;
 
   svg {
     display: block;

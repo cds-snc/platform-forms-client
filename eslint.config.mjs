@@ -84,7 +84,8 @@ const eslintConfig = [
           "brand__container",
           "fip_flag",
           "fip_text",
-          "brand__toggle"
+          "brand__toggle",
+          "brand__signature"
         ],
       },
     },

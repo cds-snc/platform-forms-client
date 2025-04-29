@@ -12,14 +12,16 @@ export const LanguageToggle = ({ language }: { language: Language }) => {
   const displayLang = lang[toggledLang(language)];
 
   return (
-    <div className="gcds-lang-toggle">
-      <h2 id="lang-toggle__heading" className="sr-only">
-        Language selection
-      </h2>
-      <a href={displayLang.link} lang={displayLang.abbr}>
-        <span>{displayLang.text}</span>
-        <abbr title={displayLang.text}>{displayLang.abbr}</abbr>
-      </a>
+    <div className="brand__toggle">
+      <div className="gcds-lang-toggle">
+        <h2 id="lang-toggle__heading" className="sr-only">
+          Language selection
+        </h2>
+        <a href={displayLang.link} lang={displayLang.abbr}>
+          <span>{displayLang.text}</span>
+          <abbr title={displayLang.text}>{displayLang.abbr}</abbr>
+        </a>
+      </div>
     </div>
   );
 };
