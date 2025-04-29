@@ -1,5 +1,3 @@
-// import { Fip } from "@clientComponents/globals";
-// import LanguageToggle from "@clientComponents/globals/Header/LanguageToggle";
 import { cn } from "@lib/utils";
 import { Footer } from "@serverComponents/globals/Footer";
 import { SkipLink } from "@serverComponents/globals/SkipLink";
