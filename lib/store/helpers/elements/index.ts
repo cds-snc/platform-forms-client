@@ -4,7 +4,7 @@ import { getFormElementIndexes } from "./getFormElementIndexes";
 import { propertyPath } from "./propertyPath";
 import { getPathString } from "./getPathString";
 import { getChoice } from "./getChoice";
-import { cleanElementRules } from "./cleanElementRules";
+import { transformElement } from "./transformElement";
 import { localizeField } from "./localizeField";
 
 export {
@@ -15,5 +15,5 @@ export {
   getChoice,
   localizeField,
   getFormElementIndexes,
-  cleanElementRules,
+  transformElement,
 };
