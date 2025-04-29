@@ -22,7 +22,7 @@ export default async function Layout(props: {
       <div
         className={cn(
           "gc-formview",
-          "shrink-0 grow basis-auto px-[2rem] tablet:px-24 py-0 laptop:px-32"
+          "container-xl mx-auto px-[var(--gcds-spacing-225)] tablet:px-[var(--gcds-spacing-600)] laptop:px-0"
         )}
       >
         <main id="content">{children}</main>
