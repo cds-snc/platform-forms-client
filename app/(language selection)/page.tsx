@@ -2,10 +2,11 @@
 import { languages } from "@i18n/settings";
 import { useTranslation } from "@i18n/client";
 import Link from "next/link";
-import { Fip } from "@clientComponents/globals";
 import { themes, ReactHydrationCheck } from "@clientComponents/globals";
 
 import { SiteLogo } from "@serverComponents/icons";
+import { GcdsHeader } from "@serverComponents/globals/GcdsHeader/GcdsHeader";
+import { Language } from "@lib/types/form-builder-types";
 
 const Home = () => {
   // With the automatic language detection we can hopefully remove this page in the
@@ -42,10 +43,7 @@ const Home = () => {
 
   return (
     <>
-      <header>
-        {" "}
-        <Fip className="my-0 py-6" />
-      </header>
+      <GcdsHeader showLanguageToggle={false} pathname="" language={browserLanguage as Language} />
       <ReactHydrationCheck />
       <div className="flex h-full flex-col">
         <div id="page-container">
