@@ -10,7 +10,7 @@ export const GcdsHeader = ({
 }: {
   pathname: string;
   language: Language;
-  showLanguageToggle: boolean;
+  showLanguageToggle?: boolean;
 }) => {
   return (
     <div className="gcds-header__container">
