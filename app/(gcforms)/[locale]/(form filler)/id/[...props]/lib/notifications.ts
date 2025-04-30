@@ -11,12 +11,15 @@ export const Status = {
 } as const;
 export type Status = (typeof Status)[keyof typeof Status];
 
-// Self-contained function for sending email notifications when a user has new form submissions
+// Sends an email notification when a user has new form submissions
 export const sendNotification = async (formId: string, titleEn: string, titleFr: string) => {
   const usersAndNotifications = await getUsersAndNotificationsInterval(formId);
   if (!usersAndNotifications) {
-    throw new Error(`template not found with id ${formId}`);
+    logMessage.error(`sendNotification template not found with id ${formId}`);
+    return;
   }
+
+  const { users } = usersAndNotifications;
   const notifcationsInterval = usersAndNotifications.notifcationsInterval as NotificationsInterval;
 
   if (!notifcationsInterval) {
@@ -24,13 +27,12 @@ export const sendNotification = async (formId: string, titleEn: string, titleFr:
     return;
   }
 
-  const { users } = usersAndNotifications;
   const marker = await getMarker(formId);
   switch (marker) {
     case Status.SINGLE_EMAIL_SENT:
       // Initial email but not multiple submissions has been sent, send multiple submissions email
       Promise.all([
-        sendEmailNotificationsToAllUsers(users, formId, String(titleEn), String(titleFr), true),
+        sendEmailNotificationsToAllUsers(users, formId, titleEn, titleFr, true),
         setMarker(formId, notifcationsInterval, Status.MULTIPLE_EMAIL_SENT),
       ]);
       break;
@@ -40,7 +42,7 @@ export const sendNotification = async (formId: string, titleEn: string, titleFr:
     default:
       // No email has been sent, send single submission email
       Promise.all([
-        sendEmailNotificationsToAllUsers(users, formId, String(titleEn), String(titleFr), false),
+        sendEmailNotificationsToAllUsers(users, formId, titleEn, titleFr, false),
         setMarker(formId, notifcationsInterval),
       ]);
   }
