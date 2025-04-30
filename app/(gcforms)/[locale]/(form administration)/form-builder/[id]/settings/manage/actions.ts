@@ -10,7 +10,7 @@ import { AuthenticatedAction } from "@lib/actions";
 import { ServerActionError } from "@lib/types/form-builder-types";
 import { logEvent } from "@lib/auditLogs";
 import { updateNotifications } from "@lib/templates";
-import { setMarker } from "app/(gcforms)/[locale]/(form filler)/id/[...props]/lib/notifications";
+import { removeMarker } from "app/(gcforms)/[locale]/(form filler)/id/[...props]/lib/notifications";
 import { NotificationsInterval } from "packages/types/src/form-types";
 
 // Public facing functions - they can be used by anyone who finds the associated server action identifer
@@ -74,11 +74,11 @@ export const updateNotificationsInterval = AuthenticatedAction(
   async (session, formId: string, notificationsInterval: NotificationsInterval) => {
     try {
       await updateNotifications(formId, notificationsInterval);
-      // Remove the previous marker to allow a new one to be set with the right TTL when a new submission is received
-      await setMarker(formId, null);
+      // Remove old cache value to allow a new one with the new ttl to be created
+      await removeMarker(formId);
       logEvent(
         session.user.id,
-        { type: "ServiceAccount" },
+        { type: "Form" },
         "UpdateNotificationsInterval",
         `User :${session.user.id} updated notifications interval on form ${formId} to ${notificationsInterval}`
       );

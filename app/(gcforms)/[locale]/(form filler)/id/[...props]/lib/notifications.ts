@@ -6,78 +6,79 @@ import { getOrigin } from "@lib/origin";
 import { NotificationsInterval } from "packages/types/src/form-types";
 
 export const Status = {
-  SENT: "sent",
-  UNSENT: "unsent",
+  SINGLE_EMAIL_SENT: "SINGLE_EMAIL_SENT",
+  MULTIPLE_EMAIL_SENT: "MULTIPLE_EMAIL_SENT",
 } as const;
 export type Status = (typeof Status)[keyof typeof Status];
 
 // Self-contained function for sending email notifications when a user has new form submissions
 export const sendNotification = async (formId: string) => {
-  try {
-    const template = await getTemplateWithAssociatedUsers(formId);
-    if (!template) {
-      throw new Error(`template not found with id ${formId}`);
-    }
-    const {
-      users,
-      formRecord: {
-        form: { titleEn, titleFr },
-      },
-    } = template;
-
-    // Notifcations are turned off, do nothing
-    const notifcationsInterval = template.formRecord.notifcationsInterval as NotificationsInterval;
-    if (!notifcationsInterval) {
-      return;
-    }
-
-    // Initial email for single submission and multiple submissions has been sent, do nothing
-    const marker = await getMarker(formId);
-    if (marker && marker === Status.SENT) {
-      return;
-    }
-
-    // Initial email but not multiple submissions has been sent, send multiple submissions email
-    if (marker && marker === Status.UNSENT) {
-      sendEmailNotificationsToAllUsers(users, formId, String(titleEn), String(titleFr), true);
-      setMarker(formId, notifcationsInterval, Status.SENT);
-      return;
-    }
-
-    // No email has been sent, send single submission email
-    sendEmailNotificationsToAllUsers(users, formId, String(titleEn), String(titleFr), false);
-    setMarker(formId, notifcationsInterval);
-  } catch (err) {
-    logMessage.error(`sendNotification failed with error: ${err}`);
+  const template = await getTemplateWithAssociatedUsers(formId);
+  if (!template) {
+    throw new Error(`template not found with id ${formId}`);
   }
-};
+  const {
+    users,
+    formRecord: {
+      form: { titleEn, titleFr },
+    },
+  } = template;
 
-export const setMarker = async (
-  formId: string,
-  notificationsInterval: NotificationsInterval,
-  status: Status = Status.UNSENT
-) => {
-  const redis = await getRedisInstance();
-
-  if (!notificationsInterval) {
-    await redis.del(`notification:formId:${formId}`);
-    logMessage.info(`setMarker: notification:formId:${formId} deleted`);
+  const notifcationsInterval = template.formRecord.notifcationsInterval as NotificationsInterval;
+  if (!notifcationsInterval) {
+    // Notifcations are turned off, do nothing
     return;
   }
 
+  const marker = await getMarker(formId);
+  switch (marker) {
+    case Status.SINGLE_EMAIL_SENT:
+      // Initial email but not multiple submissions has been sent, send multiple submissions email
+      Promise.all([
+        sendEmailNotificationsToAllUsers(users, formId, String(titleEn), String(titleFr), true),
+        setMarker(formId, notifcationsInterval, Status.MULTIPLE_EMAIL_SENT),
+      ]);
+      break;
+    case Status.MULTIPLE_EMAIL_SENT:
+      // Multiple submissions email has been sent, do nothing
+      break;
+    default:
+      // No email has been sent, send single submission email
+      Promise.all([
+        sendEmailNotificationsToAllUsers(users, formId, String(titleEn), String(titleFr), false),
+        setMarker(formId, notifcationsInterval),
+      ]);
+  }
+};
+
+export const removeMarker = async (formId: string) => {
+  const redis = await getRedisInstance();
+  logMessage.debug(`removeMarker removing marker with ${formId}`);
+  await redis
+    .del(`notification:formId:${formId}`)
+    .catch((err) => logMessage.error(`removeMarker failed to delete ${err}`));
+};
+
+const setMarker = async (
+  formId: string,
+  notificationsInterval: NotificationsInterval,
+  status: Status = Status.SINGLE_EMAIL_SENT
+) => {
+  if (!notificationsInterval) {
+    logMessage.error(`setMarker missing notificationsInterval for formId ${formId}`);
+    return;
+  }
   const ttl = notificationsInterval * 60; // convert from minutes to seconds
+  const redis = await getRedisInstance();
   await redis.set(`notification:formId:${formId}`, status, "EX", ttl);
-  logMessage.info(
-    `setMarker: notification:formId:${formId} with ttl ${ttl} ${
-      status === Status.SENT ? " marked as sent" : "created"
-    }`
-  );
+  logMessage.debug(`setMarker: notification:formId:${formId} with ttl ${ttl} and marked ${status}`);
 };
 
 const getMarker = async (formId: string) => {
-  logMessage.info(`getMarker: ${formId}`);
   const redis = await getRedisInstance();
-  const marker = await redis.get(`notification:formId:${formId}`);
+  const marker = await redis
+    .get(`notification:formId:${formId}`)
+    .catch((err) => logMessage.error(`getMarker: ${err}`));
   return marker;
 };
 
@@ -93,7 +94,8 @@ const sendEmailNotificationsToAllUsers = async (
   multipleSubmissions: boolean = false
 ) => {
   if (!Array.isArray(users) || users.length === 0) {
-    throw "template missing users";
+    logMessage.error("sendEmailNotificationsToAllUsers missing users");
+    return;
   }
   users.forEach(({ email }) =>
     sendEmailNotification(email, formId, formTitleEn, formTitleFr, multipleSubmissions)
@@ -108,16 +110,21 @@ const sendEmailNotification = async (
   multipleSubmissions: boolean = false
 ) => {
   const HOST = await getOrigin();
-  const emailBody = multipleSubmissions
-    ? multipleSubmissionsEmailTemplate(HOST, formId, formTitleEn, formTitleFr)
-    : singleSubmissionEmailTemplate(HOST, formId, formTitleEn, formTitleFr);
+  logMessage.debug(
+    `sendingEmailNotification ${email} ${formId} ${
+      multipleSubmissions ? "multiple email" : "single email"
+    }`
+  );
   await sendEmail(email, {
     subject: multipleSubmissions
       ? "New responses | nouvelles réponses"
       : "Has one new response | A une nouvelle réponse",
-    formResponse: emailBody,
-  });
-  logMessage.info(`sendEmail: ${email} ${formId} ${formTitleEn} | ${formTitleFr}`);
+    formResponse: multipleSubmissions
+      ? multipleSubmissionsEmailTemplate(HOST, formId, formTitleEn, formTitleFr)
+      : singleSubmissionEmailTemplate(HOST, formId, formTitleEn, formTitleFr),
+  }).catch(() =>
+    logMessage.error(`sendEmailNotification failed to send email ${email} with formId ${formId}`)
+  );
 };
 
 const singleSubmissionEmailTemplate = (
