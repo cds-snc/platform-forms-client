@@ -9,7 +9,7 @@ import {
 import { AuthenticatedAction } from "@lib/actions";
 import { ServerActionError } from "@lib/types/form-builder-types";
 import { logEvent } from "@lib/auditLogs";
-import { updateNotifications } from "@lib/templates";
+import { updateNotificationsSetting } from "@lib/templates";
 import { removeMarker } from "app/(gcforms)/[locale]/(form filler)/id/[...props]/lib/notifications";
 import { NotificationsInterval } from "packages/types/src/form-types";
 
@@ -72,18 +72,21 @@ export const resetThrottlingRate = AuthenticatedAction(async (session, formId: s
 
 export const updateNotificationsInterval = AuthenticatedAction(
   async (session, formId: string, notificationsInterval: NotificationsInterval) => {
-    try {
-      await updateNotifications(formId, notificationsInterval);
+    Promise.all([
+      updateNotificationsSetting(formId, notificationsInterval),
       // Remove old cache value to allow a new one with the new ttl to be created
-      await removeMarker(formId);
-      logEvent(
-        session.user.id,
-        { type: "Form" },
-        "UpdateNotificationsInterval",
-        `User :${session.user.id} updated notifications interval on form ${formId} to ${notificationsInterval}`
-      );
-    } catch (error) {
-      return { error: "There was an error. Please try again later." } as ServerActionError;
-    }
+      removeMarker(formId),
+    ])
+      .then(() =>
+        logEvent(
+          session.user.id,
+          { type: "Form" },
+          "UpdateNotificationsInterval",
+          `User :${session.user.id} updated notifications interval on form ${formId} to ${notificationsInterval}`
+        )
+      )
+      .catch(() => {
+        return { error: "There was an error. Please try again later." } as ServerActionError;
+      });
   }
 );

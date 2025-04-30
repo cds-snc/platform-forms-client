@@ -1457,7 +1457,10 @@ export const checkIfClosed = async (formId: string) => {
   }
 };
 
-export const updateNotifications = async (formID: string, notifcationsInterval: number | null) => {
+export const updateNotificationsSetting = async (
+  formID: string,
+  notifcationsInterval: number | null
+) => {
   const { user } = await authorization.canEditForm(formID).catch((e) => {
     logEvent(
       e.user.id,
