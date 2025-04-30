@@ -1492,6 +1492,9 @@ export const updateNotificationsSetting = async (
   logEvent(user.id, { type: "Form", id: formID }, "UpdateNotificationsInterval");
 };
 
+// Note: careful of "select" that includes only specified fields -vs- "include"
+// that includes *all* fields plus specified relations. This function was written
+// to avoid including the entire form jsonConfig in the response query.
 export async function getUsersAndNotificationsInterval(formID: string): Promise<{
   notifcationsInterval: number | null | undefined;
   users: { id: string; name: string | null; email: string }[];
@@ -1511,7 +1514,6 @@ export async function getUsersAndNotificationsInterval(formID: string): Promise<
         id: formID,
       },
       select: {
-        // jsonConfig: true,
         notifcationsInterval: true,
         users: {
           select: {
