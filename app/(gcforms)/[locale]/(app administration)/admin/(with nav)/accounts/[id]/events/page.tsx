@@ -82,9 +82,23 @@ export default AuthenticatedPage<{ id: string }>(
                 <h2 className="mb-2">{eventDay}</h2>
                 {events.map(({ id, event, eventTime, description }) => {
                   return (
-                    <div key={id}>{`${eventTime}: ${event} ${
-                      description ? `- ${description}` : ""
-                    }`}</div>
+                    <div
+                      className="border-b-1 py-2 flex" // Added `break-words` for wrapping
+                      key={id}
+                    >
+                      <div className="w-80 text-slate-600">
+                        <span> {eventTime}</span> - <span>{event}</span>
+                      </div>
+                      <div>
+                        {description ? (
+                          <span className="inline-block max-w-[600px] break-words text-slate-500 ">
+                            {description}
+                          </span>
+                        ) : (
+                          ""
+                        )}
+                      </div>
+                    </div>
                   );
                 })}
               </li>
