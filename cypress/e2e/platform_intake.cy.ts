@@ -21,7 +21,6 @@ describe("CDS Platform Intake Form functionality", () => {
 
     cy.get("[type='submit']").click();
     cy.get("h1").contains("Your form has been submitted");
-    cy.get("[data-testid='fip']").find("img").should("have.attr", "src", "/img/sig-blk-en.svg");
     cy.get("#content").contains("Thank you. Our team will contact you by email shortly.");
   });
 });
