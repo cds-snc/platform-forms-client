@@ -110,12 +110,16 @@ export const SaveButton = () => {
   const [error, setError] = useState(false);
   const pathname = usePathname();
   const timeRef = useRef(new Date().getTime());
+  const hasSaved = useRef(false);
 
   const handleSave = useCallback(async () => {
     // If the timeRef is within 2 secs of the current time, don't save
-    if (id !== "0000" && timeRef.current && new Date().getTime() - timeRef.current < 2000) {
+    if (hasSaved && id && timeRef.current && new Date().getTime() - timeRef.current < 2000) {
       return;
     }
+
+    hasSaved.current = true;
+
     const formConfig = safeJSONParse<FormProperties>(getSchema(true));
 
     if (!formConfig) {
