@@ -19,7 +19,9 @@ header {
 }
 
 #page-container {
-  @apply xs:mx-4 md:mx-8 lg:mx-16 mx-32 grow shrink-0 basis-auto;
+  @apply grow shrink-0 basis-auto px-6 laptop:px-0;
+  max-width: 71.25rem;
+  margin: 0 auto;
 }
 
 .gc-richText {
@@ -42,4 +44,11 @@ li ul {
 
 a {
   @apply underline text-blue-dark hover:text-blue-hover;
+}
+
+@import "../node_modules/@cdssnc/gcds-tokens/build/web/css/global.css";
+
+.container-xl {
+  max-width: var(--gcds-container-xl);
+  width: 100%;
 }
