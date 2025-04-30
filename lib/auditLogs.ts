@@ -142,11 +142,37 @@ export const getEventsForUser = async (userId: string) => {
   if (eventsIndexCount === 0 || eventsIndex === undefined) {
     return [];
   }
+  const eventItems = await retrieveAuditLogs(eventsIndex);
+
+  return eventItems
+    .map((record) => {
+      return {
+        userId: record.UserID,
+        event: record.Event,
+        timestamp: record.TimeStamp,
+        description: record.Description,
+      };
+    })
+    .sort((a, b) => {
+      return b.timestamp - a.timestamp;
+    });
+};
+
+const retrieveAuditLogs = async (keys: Array<Record<string, string>>) => {
+  let retries = 0;
+  const maxRetries = 3;
+  const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
+  const auditLogs: Array<{
+    UserID: string;
+    Event: string;
+    TimeStamp: number;
+    Description: string;
+  }> = [];
 
   const batchRequest = new BatchGetCommand({
     RequestItems: {
       AuditLogs: {
-        Keys: eventsIndex.map((event) => ({
+        Keys: keys.map((event) => ({
           UserID: event.UserID,
           "Event#SubjectID#TimeStamp": event["Event#SubjectID#TimeStamp"],
         })),
@@ -154,30 +180,43 @@ export const getEventsForUser = async (userId: string) => {
     },
   });
 
-  const { Responses, UnprocessedKeys } = await dynamoDBDocumentClient.send(batchRequest);
-  // If there are unprocessed keys, we can retry the batch request
-  if (UnprocessedKeys && UnprocessedKeys.AuditLogs) {
-    const retryBatchRequest = new BatchGetCommand({
-      RequestItems: {
-        AuditLogs: {
-          Keys: UnprocessedKeys.AuditLogs.Keys,
-        },
-      },
-    });
-    const retryResponse = await dynamoDBDocumentClient.send(retryBatchRequest);
-    Responses.AuditLogs = [
-      ...(Responses.AuditLogs || []),
-      ...(retryResponse.Responses?.AuditLogs || []),
-    ];
-  }
-  return Responses?.AuditLogs.map((record) => {
-    return {
-      userId: record.UserID,
-      event: record.Event,
-      timestamp: record.TimeStamp,
-      description: record.Description,
-    };
-  }).sort((a, b) => {
-    return b.timestamp - a.timestamp;
+  await dynamoDBDocumentClient.send(batchRequest).then(async (data) => {
+    auditLogs.push(
+      ...(data?.Responses?.AuditLogs?.map((item) => ({
+        UserID: item.UserID,
+        Event: item.Event,
+        TimeStamp: item.TimeStamp,
+        Description: item.Description,
+      })) ?? [])
+    );
+
+    if (data.UnprocessedKeys?.AuditLogs) {
+      while (retries < maxRetries) {
+        // eslint-disable-next-line no-await-in-loop
+        await delay(200); // Wait for 200ms second before retrying
+        const retryRequest = new BatchGetCommand({
+          RequestItems: {
+            AuditLogs: {
+              Keys: data.UnprocessedKeys.AuditLogs.Keys,
+            },
+          },
+        });
+        // eslint-disable-next-line no-await-in-loop
+        const retryResponse = await dynamoDBDocumentClient.send(retryRequest);
+        auditLogs.push(
+          ...(retryResponse.Responses?.AuditLogs.map((item) => ({
+            UserID: item.UserID,
+            Event: item.Event,
+            TimeStamp: item.TimeStamp,
+            Description: item.Description,
+          })) ?? [])
+        );
+        if (!retryResponse.UnprocessedKeys?.AuditLogs) {
+          break; // Exit the loop if there are no more unprocessed keys
+        }
+        retries++;
+      }
+    }
   });
+  return auditLogs;
 };

@@ -29,7 +29,7 @@ export default AuthenticatedPage<{ id: string }>(
     const { t } = await serverTranslation(["admin-events", "admin-users"], { lang: locale });
     const events = (await getEventsForUser(id)) ?? [];
 
-    const sortedEvents: { [key: string]: Array<Record<string, string>> } = {};
+    const sortedEvents: { [key: string]: Array<Record<string, string | number>> } = {};
     events.forEach(({ event, timestamp, description }) => {
       const eventDate = new Date(timestamp);
       const id = `${event}-${timestamp}`;
