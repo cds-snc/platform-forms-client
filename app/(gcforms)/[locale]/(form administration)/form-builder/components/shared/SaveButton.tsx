@@ -112,6 +112,10 @@ export const SaveButton = () => {
   const timeRef = useRef(new Date().getTime());
 
   const handleSave = useCallback(async () => {
+    if (status !== "authenticated") {
+      return;
+    }
+
     // If the timeRef is within 2 secs of the current time, don't save
     if (id && timeRef.current && new Date().getTime() - timeRef.current < 2000) {
       return;
