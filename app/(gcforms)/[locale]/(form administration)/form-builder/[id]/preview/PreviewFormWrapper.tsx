@@ -83,7 +83,10 @@ export const PreviewFormWrapper = ({
               />
             </span>
             {status !== "authenticated" && (
-              <div className="inline-block bg-purple-200 px-4 py-1" {...getLocalizationAttribute()}>
+              <div
+                className="ml-2 inline-block bg-purple-200 px-4 align-middle"
+                {...getLocalizationAttribute()}
+              >
                 <Markdown options={{ forceBlock: true }}>
                   {t("signInToTest", { ns: "form-builder", lng: translationLanguagePriority })}
                 </Markdown>
