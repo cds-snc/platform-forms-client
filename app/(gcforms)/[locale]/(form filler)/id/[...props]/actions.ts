@@ -83,7 +83,7 @@ export async function submitForm(
 
     const submissionId = await processFormData(data.fields, data.files, language);
 
-    sendNotification(formId);
+    sendNotification(formId, template.form.titleEn, template.form.titleFr);
 
     return { id: formId, submissionId };
   } catch (e) {

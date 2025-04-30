@@ -1,6 +1,6 @@
 import { sendEmail } from "@lib/integration/notifyConnector";
 import { logMessage } from "@lib/logger";
-import { getTemplateWithAssociatedUsers } from "@lib/templates";
+import { getUsersAndNotificationsInterval } from "@lib/templates";
 import { getRedisInstance } from "@lib/integration/redisConnector";
 import { getOrigin } from "@lib/origin";
 import { NotificationsInterval } from "packages/types/src/form-types";
@@ -12,24 +12,19 @@ export const Status = {
 export type Status = (typeof Status)[keyof typeof Status];
 
 // Self-contained function for sending email notifications when a user has new form submissions
-export const sendNotification = async (formId: string) => {
-  const template = await getTemplateWithAssociatedUsers(formId);
-  if (!template) {
+export const sendNotification = async (formId: string, titleEn: string, titleFr: string) => {
+  const usersAndNotifications = await getUsersAndNotificationsInterval(formId);
+  if (!usersAndNotifications) {
     throw new Error(`template not found with id ${formId}`);
   }
-  const {
-    users,
-    formRecord: {
-      form: { titleEn, titleFr },
-    },
-  } = template;
+  const notifcationsInterval = usersAndNotifications.notifcationsInterval as NotificationsInterval;
 
-  const notifcationsInterval = template.formRecord.notifcationsInterval as NotificationsInterval;
   if (!notifcationsInterval) {
     // Notifcations are turned off, do nothing
     return;
   }
 
+  const { users } = usersAndNotifications;
   const marker = await getMarker(formId);
   switch (marker) {
     case Status.SINGLE_EMAIL_SENT:

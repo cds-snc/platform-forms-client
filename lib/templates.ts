@@ -1488,3 +1488,50 @@ export const updateNotifications = async (formID: string, notifcationsInterval: 
 
   logEvent(user.id, { type: "Form", id: formID }, "UpdateNotificationsInterval");
 };
+
+export async function getUsersAndNotificationsInterval(formID: string): Promise<{
+  notifcationsInterval: number | null | undefined;
+  users: { id: string; name: string | null; email: string }[];
+} | null> {
+  const { user } = await authorization.canViewForm(formID).catch((e) => {
+    logEvent(
+      e.user.id,
+      { type: "Form", id: formID },
+      "AccessDenied",
+      "Attempted to retrieve users associated with Form"
+    );
+    throw e;
+  });
+  const usersAndNotificationsInterval = await prisma.template
+    .findUnique({
+      where: {
+        id: formID,
+      },
+      select: {
+        // jsonConfig: true,
+        notifcationsInterval: true,
+        users: {
+          select: {
+            id: true,
+            name: true,
+            email: true,
+          },
+        },
+      },
+    })
+    .catch((e) => prismaErrors(e, null));
+
+  if (!usersAndNotificationsInterval) return null;
+
+  logEvent(
+    user.id,
+    { type: "Form", id: formID },
+    "ReadForm",
+    "Retrieved users and notificationsInterval associated with Form"
+  );
+
+  return {
+    users: usersAndNotificationsInterval.users,
+    notifcationsInterval: usersAndNotificationsInterval.notifcationsInterval,
+  };
+}
