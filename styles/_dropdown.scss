@@ -59,11 +59,11 @@
 }
 
 .gcds-select-wrapper:focus-within {
-  color: var(--gcds-select-focus-text);
+  color: var(--gcds-select-focus-color);
 
   select:focus {
-    border-color: var(--gcds-select-focus-text);
-    outline: var(--gcds-select-outline-width) solid var(--gcds-select-focus-text);
+    border-color: var(--gcds-select-focus-border);
+    outline: var(--gcds-select-outline-width) solid var(--gcds-select-focus-border);
     outline-offset: var(--gcds-select-border-width);
     box-shadow: var(--gcds-select-focus-box-shadow);
   }
