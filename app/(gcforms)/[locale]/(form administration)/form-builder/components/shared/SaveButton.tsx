@@ -116,8 +116,8 @@ export const SaveButton = () => {
       return;
     }
 
-    // If we don't have an id, and we're preview mode --- allow the save without the 2 sec check
-    const isInitialPreview = pathname?.includes("preview") && !id;
+    // Allow the save without the 2 sec check for initial preview
+    const isInitialPreview = pathname?.includes("preview");
 
     // If the timeRef is within 2 secs of the current time, don't save
     if (!isInitialPreview && timeRef.current && new Date().getTime() - timeRef.current < 2000) {
