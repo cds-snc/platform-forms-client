@@ -6,7 +6,7 @@ export const SignatureEn = () => {
       viewBox="0 0 819 78"
       preserveAspectRatio="xMinYMin meet"
       role="img"
-      aria-labelledby="signature-title"
+      aria-labelledby="signature-en-title"
     >
       <title id="signature-en-title">Government of Canada / Gouvernement du Canada</title>
       <path
