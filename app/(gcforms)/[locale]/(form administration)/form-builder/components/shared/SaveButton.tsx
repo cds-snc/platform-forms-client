@@ -161,9 +161,7 @@ export const SaveButton = () => {
   };
 
   useEffect(() => {
-    return () => {
-      handleSave();
-    };
+    handleSave();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
