@@ -113,12 +113,14 @@ export const SaveButton = () => {
 
   const handleSave = async () => {
     if (status !== "authenticated") {
-      //
       return;
     }
 
+    // If we don't have an id, and we're preview mode --- allow the save without the 2 sec check
+    const isInitialPreview = pathname?.includes("preview") && !id;
+
     // If the timeRef is within 2 secs of the current time, don't save
-    if (timeRef.current && new Date().getTime() - timeRef.current < 2000) {
+    if (!isInitialPreview && timeRef.current && new Date().getTime() - timeRef.current < 2000) {
       return;
     }
     const formConfig = safeJSONParse<FormProperties>(getSchema(true));
