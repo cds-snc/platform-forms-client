@@ -1,6 +1,8 @@
 import { GetQueueUrlCommand, SendMessageCommand } from "@aws-sdk/client-sqs";
 import { logMessage } from "./logger";
 import { sqsClient } from "./integration/awsServicesConnector";
+import { dynamoDBDocumentClient } from "@lib/integration/awsServicesConnector";
+import { BatchGetCommand, QueryCommand } from "@aws-sdk/lib-dynamodb";
 
 export enum AuditLogEvent {
   // Form Events
@@ -121,4 +123,61 @@ export const logEvent = async (
     // Ensure the audit event is not lost by sending to console
     logMessage.warn(`AuditLog:${auditLog}`);
   }
+};
+
+export const getEventsForUser = async (userId: string) => {
+  const request = new QueryCommand({
+    TableName: "AuditLogs",
+    IndexName: "UserByTime",
+    Limit: 100,
+    KeyConditionExpression: "UserID = :userId",
+    ExpressionAttributeValues: {
+      ":userId": userId,
+    },
+    ScanIndexForward: false,
+  });
+  const { Items: eventsIndex, Count: eventsIndexCount } = await dynamoDBDocumentClient.send(
+    request
+  );
+  if (eventsIndexCount === 0 || eventsIndex === undefined) {
+    return [];
+  }
+
+  const batchRequest = new BatchGetCommand({
+    RequestItems: {
+      AuditLogs: {
+        Keys: eventsIndex.map((event) => ({
+          UserID: event.UserID,
+          "Event#SubjectID#TimeStamp": event["Event#SubjectID#TimeStamp"],
+        })),
+      },
+    },
+  });
+
+  const { Responses, UnprocessedKeys } = await dynamoDBDocumentClient.send(batchRequest);
+  // If there are unprocessed keys, we can retry the batch request
+  if (UnprocessedKeys && UnprocessedKeys.AuditLogs) {
+    const retryBatchRequest = new BatchGetCommand({
+      RequestItems: {
+        AuditLogs: {
+          Keys: UnprocessedKeys.AuditLogs.Keys,
+        },
+      },
+    });
+    const retryResponse = await dynamoDBDocumentClient.send(retryBatchRequest);
+    Responses.AuditLogs = [
+      ...(Responses.AuditLogs || []),
+      ...(retryResponse.Responses?.AuditLogs || []),
+    ];
+  }
+  return Responses?.AuditLogs.map((record) => {
+    return {
+      userId: record.UserID,
+      event: record.Event,
+      timestamp: record.TimeStamp,
+      description: record.Description,
+    };
+  }).sort((a, b) => {
+    return b.timestamp - a.timestamp;
+  });
 };
