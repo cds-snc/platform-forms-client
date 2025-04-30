@@ -36,7 +36,7 @@ export const MoreMenu = ({
         </DropdownMenuPrimitive.Item>
 
         <DropdownMenuPrimitive.Item
-          className={`${themes.htmlLink} ${themes.base} !block !cursor-pointer`}
+          className={`mt-2 ${themes.htmlLink} ${themes.base} !block !cursor-pointer`}
           onClick={() => {
             router.push(`/${language}/admin/accounts/${user.id}/events`);
           }}
