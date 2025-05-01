@@ -83,7 +83,7 @@ export default AuthenticatedPage<{ id: string }>(
                 {events.map(({ id, event, eventTime, description }) => {
                   return (
                     <div
-                      className="border-b-1 py-2 flex" // Added `break-words` for wrapping
+                      className="flex border-b-1 py-2" // Added `break-words` for wrapping
                       key={id}
                     >
                       <div className="w-80 text-slate-600">
