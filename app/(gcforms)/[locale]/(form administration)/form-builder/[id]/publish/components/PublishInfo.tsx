@@ -8,7 +8,7 @@ export const PublishInfo = async ({ locale }: { locale: Language }) => {
   const { t } = await serverTranslation("form-builder", { lang: locale });
 
   return (
-    <div className="mt-8 min-w-fit max-w-md flex-none laptop:mt-0 laptop:min-w-min">
+    <div className="">
       <InfoCard title={t("whatYouNeedToKnow")}>
         <ul className="list-none p-0">
           <li className="mb-5 bg-gray-50 p-1.5">

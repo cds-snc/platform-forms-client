@@ -10,6 +10,8 @@ import { LoggedOutTab, LoggedOutTabName } from "@serverComponents/form-builder/L
 import { ClientContainer } from "./ClientContainer";
 import { Language } from "@lib/types/form-builder-types";
 
+import { cn } from "@lib/utils";
+
 import { PublishCard } from "./components/PublishCard";
 import { PublishInfo } from "./components/PublishInfo";
 
@@ -50,9 +52,22 @@ export default async function Page(props: { params: Promise<{ id: string; locale
 
   return (
     <ClientContainer>
-      <div className="flex flex-wrap justify-between">
-        <PublishCard id={id} locale={locale as Language} />
-        {userCanPublish && <PublishInfo locale={locale as Language} />}
+      <div className="mr-6">
+        <div
+          className={cn(
+            "grid gap-4",
+            userCanPublish ? "grid-cols-1 laptop:grid-cols-3" : "grid-cols-1"
+          )}
+        >
+          <div className={cn(userCanPublish && "laptop:col-span-2")}>
+            <PublishCard id={id} locale={locale as Language} />
+          </div>
+          {userCanPublish && (
+            <div>
+              <PublishInfo locale={locale as Language} />
+            </div>
+          )}
+        </div>
       </div>
     </ClientContainer>
   );
