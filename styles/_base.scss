@@ -13,6 +13,11 @@ body:has(dialog[open]) {
   overflow: hidden;
 }
 
+html,
+body {
+  color: var(--gcds-text-primary);
+}
+
 footer,
 header {
   background-color: #fff;
