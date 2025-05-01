@@ -706,9 +706,8 @@
       "description1": "Obtenez des notifications par courriel pour les nouvelles réponses",
       "description2": "Vous serez informé lorsques de nouvelles réponses sont disponibles et peuvent être téléchargées.",
       "options": {
-        "daily": "Rythme quotidien",
-        "weekly": "Rythme hebsomadaire",
-        "never": "Jamais"
+        "on": "[FR]On",
+        "off": "[FR]Off"
       },
       "save": "Enregistrer",
       "email": {

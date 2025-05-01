@@ -10,7 +10,7 @@ import { ManageApiKey } from "./ManageApiKey";
 import { ThrottlingRate } from "./ThrottlingRate";
 import { useFormBuilderConfig } from "@lib/hooks/useFormBuilderConfig";
 import { SetSaveAndResume } from "./saveAndResume/SetSaveAndResume";
-import { Notifications } from "./Notifications";
+import { Notifications } from "./notifications/Notifications";
 
 interface User {
   id: string;
