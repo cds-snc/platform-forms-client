@@ -1,6 +1,6 @@
 .gc-tag-input {
-  --gc-tag-input-border-color: #d1d5db;
-  --gc-tag-input-background-color: #f9fafb;
+  --gc-tag-input-border-color: #4338ca;
+  --gc-tag-input-background-color: #eef2ff;
   --gc-tag-input-text-color: #374151;
 
   display: flex;
@@ -28,11 +28,11 @@
     }
     &.duplicate {
       background-color: #fef2f2;
-      color: #b91c1c;
-      border-color: #fee2e2;
+      color: #d3080c;
+      border-color: #d3080c;
       svg {
-        color: #b91c1c;
-        fill: #b91c1c;
+        color: #d3080c;
+        fill: #d3080c;
       }
     }
     &.gc-selected-tag {

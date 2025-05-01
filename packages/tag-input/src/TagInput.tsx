@@ -1,7 +1,6 @@
 import { useRef, useState } from "react";
 import { CancelIcon } from "./icons/CancelIcon";
 import "./styles.css";
-import { say } from "./utils/say";
 
 const keys = {
   ENTER: "Enter",
@@ -25,8 +24,7 @@ const aria = {
   tagRemoved: (tag: string) => `Tag "${tag}" removed`,
   tagSelected: (tag: string) => `Tag "${tag}" selected. Press delete to remove.`,
 
-  // @TODO:
-  inputLabel: (tags: string[]) =>
+  inputLabel: (tags: number) =>
     `${tags} tags. Use left and right arrow keys to navigate, enter, tab or comma to create, delete to delete tags.`,
 };
 
@@ -60,6 +58,11 @@ export const TagInput = ({
   const [selectedTags, setSelectedTags] = useState<string[]>(tags || []);
   const [selectedTagIndex, setSelectedTagIndex] = useState<number | null>(null);
   const [errorMessages, setErrorMessages] = useState<string[]>([]);
+  const [ariaLiveRegionText, setAriaLiveRegionText] = useState<string | null>(null);
+
+  const say = (phrase: string) => {
+    setAriaLiveRegionText(phrase);
+  };
 
   const resetMessages = () => {
     setErrorMessages([]);
@@ -74,7 +77,7 @@ export const TagInput = ({
         setErrorMessages(errors || []);
         // Announce invalid tag
         if (tagInputContainerRef.current) {
-          say(aria.invalidTag(tag, errors || []), tagInputContainerRef.current);
+          say(aria.invalidTag(tag, errors || []));
         }
 
         return;
@@ -84,7 +87,7 @@ export const TagInput = ({
     if (restrictDuplicates && selectedTags.includes(tag)) {
       // Announce duplicate tag
       if (tagInputContainerRef.current) {
-        say(aria.duplicateTag(tag), tagInputContainerRef.current);
+        say(aria.duplicateTag(tag));
       }
 
       // Highlight the duplicate tag momentarily
@@ -106,7 +109,7 @@ export const TagInput = ({
 
     // Announce tag added
     if (tagInputContainerRef.current) {
-      say(aria.tagAdded(tag), tagInputContainerRef.current);
+      say(aria.tagAdded(tag));
     }
 
     // Add the tag to the selected tags
@@ -121,7 +124,7 @@ export const TagInput = ({
 
     // Announce tag removed
     if (tagInputContainerRef.current) {
-      say(aria.tagRemoved(tag), tagInputContainerRef.current);
+      say(aria.tagRemoved(tag));
     }
 
     // Remove the tag from the selected tags
@@ -185,22 +188,27 @@ export const TagInput = ({
         {label}
       </label>
       {description && <p className="gc-tag-input-description">{description}</p>}
+      <span id="input-instructions" aria-live="polite" className="visually-hidden">
+        {aria.inputLabel(selectedTags.length)}
+      </span>
       <div className="gc-tag-input">
         {selectedTags.map((tag, index) => (
           <div
+            tabIndex={0}
             key={`${tag}-${index}`}
             id={`tag-${index}`}
             className={`gc-tag ${selectedTagIndex === index ? "gc-selected-tag" : ""}`}
             aria-label={aria.tag(tag)}
           >
             <div className="">{tag}</div>
-            <button className="" onClick={() => handleRemoveTag(tag)}>
+            <button type="button" className="" onClick={() => handleRemoveTag(tag)}>
               <CancelIcon />
             </button>
           </div>
         ))}
 
         <input
+          aria-describedby="input-instructions"
           data-testid="tag-input"
           id={id}
           name={name}
@@ -208,6 +216,9 @@ export const TagInput = ({
           placeholder={placeholder}
           onKeyDown={handleKeyDown}
         />
+        <span className="visually-hidden" role="alert" aria-live="assertive" aria-atomic="true">
+          {ariaLiveRegionText}
+        </span>
       </div>
       {errorMessages.length > 0 && (
         <div role="alert" className="gc-tag-input-error" data-testid="tag-input-error">
