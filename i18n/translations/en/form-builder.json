@@ -710,7 +710,21 @@
         "weekly": "Weekly",
         "never": "Never"
       },
-      "save": "Save"
+      "save": "Save",
+      "email": {
+        "singleSubmission": {
+          "subject": "New form response | Nouvelle réponse au formulaire",
+          "paragraph1": "Your form: **{{title}}** has one new response to retrieve.",
+          "paragraph2": "Go to GC Forms",
+          "paragraph3": "Turn off notifications for responses for this form"
+        },
+        "multipleSubmissions": {
+          "subject": "New form responses | Nouvelles réponses au formulaire",
+          "paragraph1": "Your form: **{{title}}** has new responses to retrieve",
+          "paragraph2": "Go to GC Forms",
+          "paragraph3": "Turn off notifications for responses for this form"
+        }
+      }
     }
   },
   "settingsDeleteButton": "Delete",

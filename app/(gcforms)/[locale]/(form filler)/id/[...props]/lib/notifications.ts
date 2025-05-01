@@ -4,6 +4,7 @@ import { getUsersAndNotificationsInterval } from "@lib/templates";
 import { getRedisInstance } from "@lib/integration/redisConnector";
 import { getOrigin } from "@lib/origin";
 import { NotificationsInterval } from "packages/types/src/form-types";
+import { serverTranslation } from "@i18n";
 
 export const Status = {
   SINGLE_EMAIL_SENT: "SINGLE_EMAIL_SENT",
@@ -113,14 +114,15 @@ const sendEmailNotification = async (
   formTitleFr: string,
   multipleSubmissions: boolean = false
 ) => {
+  const { t } = await serverTranslation("form-builder");
   const HOST = await getOrigin();
   await sendEmail(email, {
     subject: multipleSubmissions
-      ? "New responses | nouvelles réponses"
-      : "Has one new response | A une nouvelle réponse",
+      ? t("settings.notifications.email.multipleSubmissions.subject")
+      : t("settings.notifications.email.singleSubmission.subject"),
     formResponse: multipleSubmissions
-      ? multipleSubmissionsEmailTemplate(HOST, formId, formTitleEn, formTitleFr)
-      : singleSubmissionEmailTemplate(HOST, formId, formTitleEn, formTitleFr),
+      ? await multipleSubmissionsEmailTemplate(HOST, formId, formTitleEn, formTitleFr)
+      : await singleSubmissionEmailTemplate(HOST, formId, formTitleEn, formTitleFr),
   })
     .then(() =>
       logMessage.debug(
@@ -134,40 +136,68 @@ const sendEmailNotification = async (
     );
 };
 
-const singleSubmissionEmailTemplate = (
+const singleSubmissionEmailTemplate = async (
   HOST: string,
   formId: string,
   formTitleEn: string,
   formTitleFr: string
 ) => {
+  const { t } = await serverTranslation("form-builder");
+  const { t: t_fr } = await serverTranslation("form-builder", { lang: "fr" });
   return `
-${formTitleEn} has one new response.
+${t("settings.notifications.email.singleSubmission.paragraph1", { title: formTitleEn })}
 
-[Open ${formTitleEn}](${HOST}/form-builder/${formId}/responses)
+[${t(
+    "settings.notifications.email.singleSubmission.paragraph2"
+  )}](${HOST}/form-builder/${formId}/responses)
+
+[${t(
+    "settings.notifications.email.singleSubmission.paragraph3"
+  )}](${HOST}/form-builder/${formId}/settings)
 
 ---
 
-${formTitleFr} a une nouvelle réponse.
+${t_fr("settings.notifications.email.singleSubmission.paragraph1", { title: formTitleFr })}
 
-[Ovrir ${formTitleFr}](${HOST}/fr/form-builder/${formId}/responses)
+[${t_fr(
+    "settings.notifications.email.singleSubmission.paragraph2"
+  )}](${HOST}/form-builder/${formId}/responses)
+
+[${t_fr(
+    "settings.notifications.email.singleSubmission.paragraph3"
+  )}](${HOST}/form-builder/${formId}/settings)
     `;
 };
 
-const multipleSubmissionsEmailTemplate = (
+const multipleSubmissionsEmailTemplate = async (
   HOST: string,
   formId: string,
   formTitleEn: string,
   formTitleFr: string
 ) => {
+  const { t } = await serverTranslation("form-builder");
+  const { t: t_fr } = await serverTranslation("form-builder", { lang: "fr" });
   return `
-${formTitleEn} has new responses.
+${t("settings.notifications.email.multipleSubmissions.paragraph1", { title: formTitleEn })}
 
-[Open ${formTitleEn}](${HOST}/form-builder/${formId}/responses)
+[${t(
+    "settings.notifications.email.multipleSubmissions.paragraph2"
+  )}](${HOST}/form-builder/${formId}/responses)
+
+[${t(
+    "settings.notifications.email.multipleSubmissions.paragraph3"
+  )}](${HOST}/form-builder/${formId}/settings)
 
 ---
 
-${formTitleFr} a de nouvelles réponses
+${t_fr("settings.notifications.email.multipleSubmissions.paragraph1", { title: formTitleFr })}
 
-[Ovrir ${formTitleFr}](${HOST}/fr/form-builder/${formId}/responses)
+[${t_fr(
+    "settings.notifications.email.multipleSubmissions.paragraph2"
+  )}](${HOST}/form-builder/${formId}/responses)
+
+[${t_fr(
+    "settings.notifications.email.multipleSubmissions.paragraph3"
+  )}](${HOST}/form-builder/${formId}/settings)
     `;
 };
