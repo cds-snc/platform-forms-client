@@ -30,7 +30,7 @@ export const sendNotification = async (formId: string, titleEn: string, titleFr:
   const marker = await getMarker(formId);
   switch (marker) {
     case Status.SINGLE_EMAIL_SENT:
-      // Initial email but not multiple submissions has been sent, send multiple submissions email
+      // Single submissions email sent but not multiple submissions email, send multiple email
       Promise.all([
         sendEmailNotificationsToAllUsers(users, formId, titleEn, titleFr, true),
         setMarker(formId, notifcationsInterval, Status.MULTIPLE_EMAIL_SENT),
@@ -50,10 +50,10 @@ export const sendNotification = async (formId: string, titleEn: string, titleFr:
 
 export const removeMarker = async (formId: string) => {
   const redis = await getRedisInstance();
-  logMessage.debug(`removeMarker removing marker with ${formId}`);
   await redis
     .del(`notification:formId:${formId}`)
-    .catch((err) => logMessage.error(`removeMarker failed to delete ${err}`));
+    .then(() => logMessage.debug(`removeMarker: notification:formId:${formId} deleted`))
+    .catch((err) => logMessage.error(`removeMarker with ${formId} failed to delete ${err}`));
 };
 
 const setMarker = async (
@@ -67,16 +67,23 @@ const setMarker = async (
   }
   const ttl = notificationsInterval * 60; // convert from minutes to seconds
   const redis = await getRedisInstance();
-  await redis.set(`notification:formId:${formId}`, status, "EX", ttl);
-  logMessage.debug(`setMarker: notification:formId:${formId} with ttl ${ttl} and marked ${status}`);
+  await redis
+    .set(`notification:formId:${formId}`, status, "EX", ttl)
+    .then(() =>
+      logMessage.debug(
+        `setMarker: notification:formId:${formId} set with ttl ${ttl} and marked ${status}`
+      )
+    )
+    .catch((err) =>
+      logMessage.error(`setMarker: notification:formId:${formId} failed to set ${err}`)
+    );
 };
 
 const getMarker = async (formId: string) => {
   const redis = await getRedisInstance();
-  const marker = await redis
+  return redis
     .get(`notification:formId:${formId}`)
     .catch((err) => logMessage.error(`getMarker: ${err}`));
-  return marker;
 };
 
 const sendEmailNotificationsToAllUsers = async (
@@ -107,11 +114,6 @@ const sendEmailNotification = async (
   multipleSubmissions: boolean = false
 ) => {
   const HOST = await getOrigin();
-  logMessage.debug(
-    `sendingEmailNotification ${email} ${formId} ${
-      multipleSubmissions ? "multiple email" : "single email"
-    }`
-  );
   await sendEmail(email, {
     subject: multipleSubmissions
       ? "New responses | nouvelles réponses"
@@ -119,9 +121,17 @@ const sendEmailNotification = async (
     formResponse: multipleSubmissions
       ? multipleSubmissionsEmailTemplate(HOST, formId, formTitleEn, formTitleFr)
       : singleSubmissionEmailTemplate(HOST, formId, formTitleEn, formTitleFr),
-  }).catch(() =>
-    logMessage.error(`sendEmailNotification failed to send email ${email} with formId ${formId}`)
-  );
+  })
+    .then(() =>
+      logMessage.debug(
+        `sendEmailNotification sent email to ${email} with formId ${formId} for type ${
+          multipleSubmissions ? "multiple email" : "single email"
+        }`
+      )
+    )
+    .catch(() =>
+      logMessage.error(`sendEmailNotification failed to send email ${email} with formId ${formId}`)
+    );
 };
 
 const singleSubmissionEmailTemplate = (
@@ -130,7 +140,6 @@ const singleSubmissionEmailTemplate = (
   formTitleEn: string,
   formTitleFr: string
 ) => {
-  // For Notify formatting see: https://documentation.notification.canada.ca/en/send.html#sending-an-email
   return `
 ${formTitleEn} has one new response.
 
@@ -150,7 +159,6 @@ const multipleSubmissionsEmailTemplate = (
   formTitleEn: string,
   formTitleFr: string
 ) => {
-  // For Notify formatting see: https://documentation.notification.canada.ca/en/send.html#sending-an-email
   return `
 ${formTitleEn} has new responses.
 

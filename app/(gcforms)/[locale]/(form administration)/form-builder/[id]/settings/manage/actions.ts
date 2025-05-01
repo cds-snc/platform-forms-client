@@ -74,7 +74,7 @@ export const updateNotificationsInterval = AuthenticatedAction(
   async (session, formId: string, notificationsInterval: NotificationsInterval) => {
     Promise.all([
       updateNotificationsSetting(formId, notificationsInterval),
-      // Remove old cache value to allow a new one with the new ttl to be created
+      // Remove old cache value to allow a new one with the new ttl to be created when the next submission is sent
       removeMarker(formId),
     ])
       .then(() =>

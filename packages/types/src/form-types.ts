@@ -243,8 +243,7 @@ export const FormStatus = {
 
 export type FormStatus = (typeof FormStatus)[keyof typeof FormStatus];
 
-// Defines the interval for emails to be sent to users when there are new responses available
-// Note: for non OFF values, the value is converted to seconds in REDIS for the ttl
+// Interval in minutes for sending email notifications. These are converted to seconds for the Redis ttl
 export const NotificationsInterval = {
   OFF: null,
   DAY: 1440,
