@@ -1,9 +1,11 @@
+import React from "react";
 import { useTranslation } from "@i18n/client";
 import { FormElement, FormElementTypes } from "@lib/types";
 import { Label } from "./Label";
 import { Input } from "@formBuilder/components/shared/Input";
 import { v4 as uuid } from "uuid";
 import { WarningIcon } from "@serverComponents/icons";
+import { useTemplateStore } from "@lib/store/useTemplateStore";
 
 export const QuestionIDOptions = ({
   item,
@@ -13,6 +15,15 @@ export const QuestionIDOptions = ({
   setItem: (item: FormElement) => void;
 }) => {
   const { t } = useTranslation("form-builder");
+  const [error, setError] = React.useState<string | null>(null);
+
+  const { form } = useTemplateStore((s) => ({
+    form: s.form,
+  }));
+
+  const questionIds = form.elements
+    .map((element: FormElement) => element.properties?.questionId)
+    .filter(Boolean);
 
   if (item.type === FormElementTypes.richText) {
     return null;
@@ -25,16 +36,22 @@ export const QuestionIDOptions = ({
         Unique value to consistently refer to a form element so that they can match across
         republished form versions, data structures and systems.
       </p>
-      <div className="my-4 font-bold text-red-600">
-        <WarningIcon className="inline-block fill-red-600" /> Choose a unique value that differs
-        from other questions.
-      </div>
+      {error && (
+        <div className="my-4 font-bold text-red-600">
+          <WarningIcon className="inline-block fill-red-600" /> Choose a unique value that differs
+          from other questions.
+        </div>
+      )}
       <Input
         id={`title--modal--${item.id}`}
         name={`item${item.id}`}
         value={item.properties.questionId || uuid()}
-        className="w-11/12"
+        className={`w-11/12` + (error ? "border-red-600" : "")}
         onChange={(e) => {
+          e.stopPropagation();
+          if (questionIds.includes(e.target.value)) {
+            setError(t("Question ID already exists, should be unique"));
+          }
           setItem({
             ...item,
             properties: {
