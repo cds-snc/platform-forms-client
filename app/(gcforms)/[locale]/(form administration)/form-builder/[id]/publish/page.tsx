@@ -56,10 +56,10 @@ export default async function Page(props: { params: Promise<{ id: string; locale
         <div
           className={cn(
             "grid gap-4",
-            userCanPublish ? "grid-cols-1 laptop:grid-cols-3" : "grid-cols-1"
+            userCanPublish ? "grid-cols-1 tablet:grid-cols-2 laptop:grid-cols-3" : "grid-cols-1"
           )}
         >
-          <div className={cn(userCanPublish && "laptop:col-span-2")}>
+          <div className={cn(userCanPublish && "tablet:col-span-1 laptop:col-span-2")}>
             <PublishCard id={id} locale={locale as Language} />
           </div>
           {userCanPublish && (
