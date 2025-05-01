@@ -5,6 +5,53 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.39.0](https://github.com/cds-snc/platform-forms-client/compare/v3.38.5...v3.39.0) (2025-05-01)
+
+
+### Features
+
+* add info log when someone signs in from outside of Canada ([#5461](https://github.com/cds-snc/platform-forms-client/issues/5461)) ([c770000](https://github.com/cds-snc/platform-forms-client/commit/c770000d41b8d45bbd8a8465ed3dff127b4277e3))
+* packaged + updated Lexical editor ([#5265](https://github.com/cds-snc/platform-forms-client/issues/5265)) ([51d732a](https://github.com/cds-snc/platform-forms-client/commit/51d732a38bfa64059362bd1ee0927f91d1f44f6d))
+
+
+### Bug Fixes
+
+* **deps:** update dependency next-auth to v5.0.0-beta.26 ([#5468](https://github.com/cds-snc/platform-forms-client/issues/5468)) ([32f8911](https://github.com/cds-snc/platform-forms-client/commit/32f89115fea6a145c5cfb94b23b779f1b84f21d2))
+
+
+### Miscellaneous Chores
+
+* add email length check ([#5452](https://github.com/cds-snc/platform-forms-client/issues/5452)) ([5363634](https://github.com/cds-snc/platform-forms-client/commit/5363634934b809f4be8218da9372acc0fcc6d532))
+* Add prop to RichTextEditor to enable maxLength ([#5439](https://github.com/cds-snc/platform-forms-client/issues/5439)) ([e6974db](https://github.com/cds-snc/platform-forms-client/commit/e6974dba82f7cbc1786c1eb126483fd676129972))
+* add response check ([#5447](https://github.com/cds-snc/platform-forms-client/issues/5447)) ([be5907a](https://github.com/cds-snc/platform-forms-client/commit/be5907a2eb9a83237b78699de7f5c67286ba03fc))
+* Add return for middleware check ([#5432](https://github.com/cds-snc/platform-forms-client/issues/5432)) ([5569e4b](https://github.com/cds-snc/platform-forms-client/commit/5569e4b5c00898956207035c9105d708636419ab))
+* add server validation ([#5449](https://github.com/cds-snc/platform-forms-client/issues/5449)) ([81a414b](https://github.com/cds-snc/platform-forms-client/commit/81a414becdf459f4e13776d25f716a0824b92c4d))
+* adds Cypress manual tests for releases ([#5404](https://github.com/cds-snc/platform-forms-client/issues/5404)) ([cb8bde1](https://github.com/cds-snc/platform-forms-client/commit/cb8bde1192bda64f0ff054e979e4a7b8a2b09c5a))
+* bump Next.js 15.3.1 ([#5459](https://github.com/cds-snc/platform-forms-client/issues/5459)) ([9d66425](https://github.com/cds-snc/platform-forms-client/commit/9d66425cfb01eb910a8b6149e6145ffbc95e7ea5))
+* Check template size ([#5428](https://github.com/cds-snc/platform-forms-client/issues/5428)) ([bdce102](https://github.com/cds-snc/platform-forms-client/commit/bdce102abe84e1c68453b0a7f2c402934e7fb231))
+* Create a Lexical "playground" for feature testing and development ([#5443](https://github.com/cds-snc/platform-forms-client/issues/5443)) ([88df295](https://github.com/cds-snc/platform-forms-client/commit/88df29500223c051663ac46fa5cbcb18faf3a9a1))
+* **deps:** lock file maintenance ([#5446](https://github.com/cds-snc/platform-forms-client/issues/5446)) ([bc4cd3d](https://github.com/cds-snc/platform-forms-client/commit/bc4cd3d5e24ea187fcf9a47d160fcdd73952fb8e))
+* **deps:** lock file maintenance ([#5469](https://github.com/cds-snc/platform-forms-client/issues/5469)) ([37b4596](https://github.com/cds-snc/platform-forms-client/commit/37b45968ddc7d24f749400f4fac1b167aa1ba0b9))
+* **deps:** update all non-major github action dependencies ([#5444](https://github.com/cds-snc/platform-forms-client/issues/5444)) ([c7224d3](https://github.com/cds-snc/platform-forms-client/commit/c7224d321a2c79fe720d5083204e0559d0839d6b))
+* **deps:** update all patch dependencies ([#5445](https://github.com/cds-snc/platform-forms-client/issues/5445)) ([f64dd50](https://github.com/cds-snc/platform-forms-client/commit/f64dd50d03820036027696bd8efff24b16cb5935))
+* **deps:** update aws-actions/amazon-ecs-render-task-definition digest to a3b836e ([#5466](https://github.com/cds-snc/platform-forms-client/issues/5466)) ([459cf36](https://github.com/cds-snc/platform-forms-client/commit/459cf3663e4622f0c07d872bb599bf7f909123a2))
+* **deps:** update redis docker digest to 8bc6664 ([#5467](https://github.com/cds-snc/platform-forms-client/issues/5467)) ([816f9d3](https://github.com/cds-snc/platform-forms-client/commit/816f9d3eca50fe3455623f59ef074164f9cbce5a))
+* log checks ([#5419](https://github.com/cds-snc/platform-forms-client/issues/5419)) ([d37a305](https://github.com/cds-snc/platform-forms-client/commit/d37a3058aa66193d546418b8d4c7fa588e8d7897))
+* more Google analytics ([#5433](https://github.com/cds-snc/platform-forms-client/issues/5433)) ([1b3c4a9](https://github.com/cds-snc/platform-forms-client/commit/1b3c4a93282cba0bfd3708d0cd606e19b4eb4c13))
+* remove api feature flag ([#5436](https://github.com/cds-snc/platform-forms-client/issues/5436)) ([f617c5d](https://github.com/cds-snc/platform-forms-client/commit/f617c5d79c07d81d493884c4e64608dfdba20210))
+* remove feature flag for save and resume ([#5435](https://github.com/cds-snc/platform-forms-client/issues/5435)) ([d45687e](https://github.com/cds-snc/platform-forms-client/commit/d45687e020941e961609339e5f807c23c60e2c2a))
+* Remove share api route ([#5455](https://github.com/cds-snc/platform-forms-client/issues/5455)) ([2bbf95d](https://github.com/cds-snc/platform-forms-client/commit/2bbf95d9ea5cf5b692b0052673126f303450ed29))
+* remove unprocessed route ([#5456](https://github.com/cds-snc/platform-forms-client/issues/5456)) ([30a3d25](https://github.com/cds-snc/platform-forms-client/commit/30a3d25aa90d4e989df6c1c64b26a3241e1cb585))
+* Set contentLength/maxLength indicator threshold for display ([#5440](https://github.com/cds-snc/platform-forms-client/issues/5440)) ([80fe126](https://github.com/cds-snc/platform-forms-client/commit/80fe126e5ec0be033194f48cfa056820d7ff8f5e))
+* stick dialog footer ([#5463](https://github.com/cds-snc/platform-forms-client/issues/5463)) ([8ed3428](https://github.com/cds-snc/platform-forms-client/commit/8ed3428452aa159e434cae11ccacf76cf2885016))
+* switch to CDS Release Bot ([#5475](https://github.com/cds-snc/platform-forms-client/issues/5475)) ([dc60e73](https://github.com/cds-snc/platform-forms-client/commit/dc60e732cf1d4962baa2183dec5574b960b9dee6))
+* update body copy color ([#5477](https://github.com/cds-snc/platform-forms-client/issues/5477)) ([bccf11e](https://github.com/cds-snc/platform-forms-client/commit/bccf11e1c088ed78b5846ee6a412ac26d07794e8))
+* Update GC forms Header for public facing pages ([#5472](https://github.com/cds-snc/platform-forms-client/issues/5472)) ([00f0290](https://github.com/cds-snc/platform-forms-client/commit/00f029094dda0a6f1afe7525382f3aaa4d7925d1))
+* update get origin for tests ([#5453](https://github.com/cds-snc/platform-forms-client/issues/5453)) ([ff9cbb4](https://github.com/cds-snc/platform-forms-client/commit/ff9cbb4c57a3a101f08032e5cdace35ffd1f8dd9))
+* update layout to use server rendered footer ([#5417](https://github.com/cds-snc/platform-forms-client/issues/5417)) ([2c45a88](https://github.com/cds-snc/platform-forms-client/commit/2c45a88d9a49891fab783a2a57afed3fdce26d54))
+* update markdown to jsx ([#5438](https://github.com/cds-snc/platform-forms-client/issues/5438)) ([fa2d526](https://github.com/cds-snc/platform-forms-client/commit/fa2d526a8d73da727d14e4dfe70e586d65a89eed))
+* update share modal ([#5427](https://github.com/cds-snc/platform-forms-client/issues/5427)) ([d804f6c](https://github.com/cds-snc/platform-forms-client/commit/d804f6cfc5664218c3609d9d2a15ff428fdb2e30))
+
 ## [3.38.5](https://github.com/cds-snc/platform-forms-client/compare/v3.38.4...v3.38.5) (2025-04-14)
 
 
