@@ -1,5 +1,5 @@
 import { logMessage } from "@lib/logger";
-import { type TemplateStore } from "../../types";
+import { transformSchemaOptions, type TemplateStore } from "../../types";
 import { cleanRules } from "@lib/formContext";
 import { v4 as uuid } from "uuid";
 import { FormElement } from "@gcforms/types";
@@ -26,11 +26,14 @@ const ensureQuestionId = (element: FormElement) => {
   }
 };
 
-export const transforms: TemplateStore<"transforms"> = (set) => async () => {
-  set((state) => {
-    state.form.elements.forEach((element) => {
-      cleanElementRules(state.form.elements, element);
-      ensureQuestionId(element);
+export const transforms: TemplateStore<"transforms"> =
+  (set) => async (options: transformSchemaOptions) => {
+    set((state) => {
+      state.form.elements.forEach((element) => {
+        if (options.cleanRules) {
+          cleanElementRules(state.form.elements, element);
+        }
+        ensureQuestionId(element);
+      });
     });
-  });
-};
+  };

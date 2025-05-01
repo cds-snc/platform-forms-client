@@ -111,10 +111,8 @@ const createTemplateStore = (initProps?: Partial<InitialTemplateStoreProps>) => 
             importTemplate: importTemplate(set),
             getHighestElementId: getHighestElementId(set, get),
             generateElementId: generateElementId(set, get),
-            getSchema: (cleanRules?: boolean) => {
-              if (cleanRules) {
-                get().transforms();
-              }
+            getSchema: (options) => {
+              get().transforms(options);
               return JSON.stringify(getSchemaFromState(get(), get().allowGroupsFlag), null, 2);
             },
             getId: () => get().id,
