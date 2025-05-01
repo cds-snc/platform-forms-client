@@ -9,9 +9,11 @@ import { toast } from "@formBuilder/components/shared/Toast";
 export const Notifications = ({
   formId,
   notifcationsInterval,
+  isPublished,
 }: {
   formId: string;
   notifcationsInterval: NotificationsInterval | undefined;
+  isPublished: boolean;
 }) => {
   const { t } = useTranslation("form-builder");
   const [notificationValue, setNotificationValue] = useState<string>(
@@ -36,10 +38,10 @@ export const Notifications = ({
       notificationValue === String(NotificationsInterval.DAY)
         ? NotificationsInterval.DAY
         : NotificationsInterval.OFF;
-    await updateNotificationsInterval(formId, newNotificationsInterval).catch(() =>
+    await updateNotificationsInterval(formId, newNotificationsInterval, isPublished).catch(() =>
       toast.error(updateNotificationsIntervalError)
     );
-  }, [formId, notificationValue, updateNotificationsIntervalError]);
+  }, [formId, notificationValue, updateNotificationsIntervalError, isPublished]);
 
   return (
     <div className="mb-10" data-testid="form-notifications">
@@ -56,6 +58,7 @@ export const Notifications = ({
         />
       </div>
       <Button
+        disabled={isPublished}
         dataTestId="form-notifications-save"
         theme="secondary"
         // type="submit"
