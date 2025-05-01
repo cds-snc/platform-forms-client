@@ -2,7 +2,7 @@ import { serverTranslation } from "@i18n";
 import { LoggedOutTab, LoggedOutTabName } from "@serverComponents/form-builder/LoggedOutTab";
 import { authCheckAndThrow } from "@lib/actions";
 import { SettingsNavigation } from "./components/SettingsNavigation";
-import { WaitForId } from "./components/WaitForId";
+import { WaitForId } from "../components/WaitForId";
 import { Language } from "@lib/types/form-builder-types";
 
 export default async function Layout(props: {
