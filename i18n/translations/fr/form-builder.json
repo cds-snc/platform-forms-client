@@ -723,6 +723,9 @@
           "paragraph2": "Allez à Formulaires GC",
           "paragraph3": "[FR]Turn off notifications for responses for this form"
         }
+      },
+      "errors": {
+        "updateNotificationsInterval": "[FR]There was an error updating notifications. Please try again later."
       }
     }
   },

@@ -723,6 +723,9 @@
           "paragraph2": "Go to GC Forms",
           "paragraph3": "Turn off notifications for responses for this form"
         }
+      },
+      "errors": {
+        "updateNotificationsInterval": "There was an error updating notifications. Please try again later."
       }
     }
   },

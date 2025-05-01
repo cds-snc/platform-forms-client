@@ -4,6 +4,7 @@ import { NotificationsInterval } from "packages/types/src/form-types";
 import { updateNotificationsInterval } from "../actions";
 import { NotificationsToggle } from "./NotificationsToggle";
 import { Button } from "@clientComponents/globals";
+import { toast } from "@formBuilder/components/shared/Toast";
 
 export const Notifications = ({
   formId,
@@ -27,13 +28,18 @@ export const Notifications = ({
     [notificationValue]
   );
 
+  const updateNotificationsIntervalError = t(
+    "settings.notifications.errors.updateNotificationsInterval"
+  );
   const saveNotificationsValue = useCallback(async () => {
     const newNotificationsInterval: NotificationsInterval =
       notificationValue === String(NotificationsInterval.DAY)
         ? NotificationsInterval.DAY
         : NotificationsInterval.OFF;
-    await updateNotificationsInterval(formId, newNotificationsInterval);
-  }, [formId, notificationValue]);
+    await updateNotificationsInterval(formId, newNotificationsInterval).catch(() =>
+      toast.error(updateNotificationsIntervalError)
+    );
+  }, [formId, notificationValue, updateNotificationsIntervalError]);
 
   return (
     <div className="mb-10" data-testid="form-notifications">
