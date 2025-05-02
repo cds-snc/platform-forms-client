@@ -58,6 +58,7 @@ const GroupSection = ({
               </LanguageLabel>
               <textarea
                 className="size-full p-4 focus:outline-blue-focus"
+                aria-label={group.name + " " + t("logic.translateTitle", { lng: primaryLanguage })}
                 id={`group-${groupId}-title-${primaryLanguage}`}
                 aria-describedby={`group-${groupId}-title-${primaryLanguage}-language`}
                 value={group[localizeField(LocalizedGroupProperties.TITLE, primaryLanguage)]}
@@ -82,6 +83,9 @@ const GroupSection = ({
 
               <textarea
                 className="size-full p-4 focus:outline-blue-focus"
+                aria-label={
+                  group.name + " " + t("logic.translateTitle", { lng: secondaryLanguage })
+                }
                 id={`group-${groupId}-title-${secondaryLanguage}`}
                 aria-describedby={`group-${groupId}-title-${secondaryLanguage}-language`}
                 value={group[localizeField(LocalizedGroupProperties.TITLE, secondaryLanguage)]}
