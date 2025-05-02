@@ -144,7 +144,8 @@ describe("Invitations", () => {
         expect.objectContaining({
           subject: expect.any(String),
           formResponse: "email contents",
-        })
+        }),
+        "formInvitationToFutureUser"
       );
     });
 
@@ -192,7 +193,11 @@ describe("Invitations", () => {
         expect.stringContaining("forms")
       );
       expect(sendEmail).toHaveBeenCalledTimes(1);
-      expect(sendEmail).toHaveBeenCalledWith("invited@cds-snc.ca", expect.any(Object));
+      expect(sendEmail).toHaveBeenCalledWith(
+        "invited@cds-snc.ca",
+        expect.any(Object),
+        "formInvitationToExistingUser"
+      );
     });
 
     it("should reinvite a user whose invitation has expired", async () => {
@@ -263,7 +268,11 @@ describe("Invitations", () => {
         expect.stringContaining("register")
       );
       expect(sendEmail).toHaveBeenCalledTimes(1);
-      expect(sendEmail).toHaveBeenCalledWith("invited2@cds-snc.ca", expect.any(Object));
+      expect(sendEmail).toHaveBeenCalledWith(
+        "invited2@cds-snc.ca",
+        expect.any(Object),
+        "formInvitationToFutureUser"
+      );
     });
   });
 
