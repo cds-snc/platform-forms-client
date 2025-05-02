@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useTranslation } from "@i18n/client";
 import { FormElement, FormElementTypes } from "@lib/types";
 import { Label } from "./Label";
@@ -15,15 +15,24 @@ export const QuestionIDOptions = ({
   setItem: (item: FormElement) => void;
 }) => {
   const { t } = useTranslation("form-builder");
-  const [error, setError] = React.useState<string | null>(null);
+  const [error, setError] = React.useState<boolean>(false);
 
   const { form } = useTemplateStore((s) => ({
     form: s.form,
   }));
 
-  const questionIds = form.elements
-    .map((element: FormElement) => element.properties?.questionId)
-    .filter(Boolean);
+  useEffect(() => {
+    const questionIds = form.elements
+      .filter((element: FormElement) => element.id !== item.id)
+      .map((element: FormElement) => element.properties?.questionId)
+      .filter(Boolean);
+
+    if (questionIds.includes(item.properties.questionId)) {
+      setError(true);
+    } else {
+      setError(false);
+    }
+  }, [item.properties.questionId]);
 
   if (item.type === FormElementTypes.richText) {
     return null;
@@ -46,12 +55,8 @@ export const QuestionIDOptions = ({
         id={`title--modal--${item.id}`}
         name={`item${item.id}`}
         value={item.properties.questionId || uuid()}
-        className={`w-11/12` + (error ? "border-red-600" : "")}
+        className={`w-11/12` + (error ? " !border-red-600 outline-2 !outline-red-600" : "")}
         onChange={(e) => {
-          e.stopPropagation();
-          if (questionIds.includes(e.target.value)) {
-            setError(t("Question ID already exists, should be unique"));
-          }
           setItem({
             ...item,
             properties: {
