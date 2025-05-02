@@ -867,3 +867,26 @@ export const decrementNextActionChoiceIds = (groups: GroupsType, choiceId: strin
 
   return updatedGroups;
 };
+
+/**
+ * Cleans up the rules for elements that have been removed
+ * @param elements - The form elements to search.
+ * @param rules - The rules to search
+ * @returns {Array} - Returns an array of rules that are still valid
+ */
+export const cleanRules = (elements: FormElement[], rules: ConditionalRule[]) => {
+  const updatedRules = rules.filter((rule) => {
+    const parentId = rule.choiceId.split(".")[0];
+    const parentElement = elements.find((el) => el.id === Number(parentId));
+
+    // Remove the rule if the parent element is not found
+    // This can happen if the element was removed but the rule was not cleaned up
+    if (!parentElement) {
+      return false;
+    }
+
+    return true;
+  });
+
+  return updatedRules;
+};

@@ -57,16 +57,22 @@ export default async function Page(props: { params: Promise<{ locale: string }> 
               <Link href={`/${locale}/admin/flags`}>{t("featureFlags")}</Link>
             </li>
             <li>
+              <Link href={`/${locale}/admin/upload`}>{t("upload")}</Link>
+            </li>
+            <li>
+              <Link href={`/${locale}/admin/view-templates`}>{t("viewTemplates")}</Link>
+            </li>
+          </ul>
+          <hr className="my-10" />
+          <ul className="list-none pl-0">
+            <li>
               <Link href={`/${locale}/admin/typography`}>{t("typography")}</Link>
             </li>
             <li>
               <Link href={`/${locale}/admin/buttons`}>{t("buttons")}</Link>
             </li>
             <li>
-              <Link href={`/${locale}/admin/upload`}>{t("upload")}</Link>
-            </li>
-            <li>
-              <Link href={`/${locale}/admin/view-templates`}>{t("viewTemplates")}</Link>
+              <Link href={`/${locale}/admin/lexical`}>{t("lexical")}</Link>
             </li>
           </ul>
         </div>

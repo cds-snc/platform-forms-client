@@ -49,6 +49,7 @@ export default async function Page(props0: {
   params: Promise<{ locale: string; props: string[] }>;
 }) {
   const nonce = (await headers()).get("x-nonce") ?? "";
+  const pathname = (await headers()).get("x-path") ?? "";
   const params = await props0.params;
 
   const { locale, props } = params;
@@ -141,7 +142,13 @@ export default async function Page(props0: {
   }
 
   return (
-    <FormDisplayLayout formRecord={formRecord} dateModified={dateModified} footer={footer}>
+    <FormDisplayLayout
+      pathname={pathname}
+      language={language}
+      formRecord={formRecord}
+      dateModified={dateModified}
+      footer={footer}
+    >
       <GCFormsProvider formRecord={formRecord} nonce={nonce}>
         {pageContent}
       </GCFormsProvider>

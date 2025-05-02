@@ -1,7 +1,6 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "extends": ["local>cds-snc/renovate-config"],
-  "ignoreDeps": ["@cdssnc/gcds-tokens"],
   "packageRules": [
     {
       "description": "Group all non-major GitHub actions",
