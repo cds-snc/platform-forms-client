@@ -152,8 +152,18 @@ export const TagInput = ({
         setSelectedTagIndex(null);
         return;
       }
+    }
 
-      // Otherwise delete the last tag
+    if (key === keys.BACKSPACE) {
+      // If a tag is selected, delete it
+      if (selectedTagIndex !== null) {
+        const tagToRemove = selectedTags[selectedTagIndex];
+        handleRemoveTag(tagToRemove);
+        setSelectedTagIndex(null);
+        return;
+      }
+
+      // Otherwise, delete the last tag
       const lastTag = selectedTags[selectedTags.length - 1];
       if (lastTag) {
         handleRemoveTag(lastTag);
@@ -194,7 +204,6 @@ export const TagInput = ({
       <div className="gc-tag-input">
         {selectedTags.map((tag, index) => (
           <div
-            tabIndex={0}
             key={`${tag}-${index}`}
             id={`tag-${index}`}
             className={`gc-tag ${selectedTagIndex === index ? "gc-selected-tag" : ""}`}
