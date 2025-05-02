@@ -1326,5 +1326,7 @@
   },
   "translations": {
     "formDescription": "Form description"
-  }
+  },
+  "en": "English",
+  "fr": "Français"
 }

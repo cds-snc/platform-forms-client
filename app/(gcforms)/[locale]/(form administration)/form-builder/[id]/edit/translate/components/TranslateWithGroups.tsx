@@ -50,7 +50,10 @@ const GroupSection = ({
             key={primaryLanguage}
           >
             <div className="relative w-1/2 flex-1">
-              <LanguageLabel id="form-introduction-english-language" lang={primaryLanguage}>
+              <LanguageLabel
+                id={`group-${groupId}-title-${primaryLanguage}-language`}
+                lang={primaryLanguage}
+              >
                 <>{primaryLanguage}</>
               </LanguageLabel>
               <textarea
@@ -70,9 +73,13 @@ const GroupSection = ({
               />
             </div>
             <div className="relative w-1/2 flex-1">
-              <LanguageLabel id="form-introduction-french-language" lang={secondaryLanguage}>
+              <LanguageLabel
+                id={`group-${groupId}-title-${secondaryLanguage}-language`}
+                lang={secondaryLanguage}
+              >
                 <>{secondaryLanguage}</>
               </LanguageLabel>
+
               <textarea
                 className="size-full p-4 focus:outline-blue-focus"
                 id={`group-${groupId}-title-${secondaryLanguage}`}
@@ -281,9 +288,6 @@ export const TranslateWithGroups = () => {
                 key={primaryLanguage}
               >
                 <div className="relative w-1/2 flex-1">
-                  <LanguageLabel id="form-introduction-english-language" lang={primaryLanguage}>
-                    <>{primaryLanguage}</>
-                  </LanguageLabel>
                   <RichTextEditor
                     path={`form.introduction.${localizeField(
                       LocalizedElementProperties.DESCRIPTION,
@@ -298,11 +302,11 @@ export const TranslateWithGroups = () => {
                     ariaLabel={t("description")}
                     ariaDescribedBy="form-introduction-english-language"
                   />
+                  <LanguageLabel id="form-introduction-english-language" lang={primaryLanguage}>
+                    <>{primaryLanguage}</>
+                  </LanguageLabel>
                 </div>
                 <div className="relative w-1/2 flex-1">
-                  <LanguageLabel id="form-introduction-french-language" lang={secondaryLanguage}>
-                    <>{secondaryLanguage}</>
-                  </LanguageLabel>
                   <RichTextEditor
                     path={`form.introduction.${localizeField(
                       LocalizedElementProperties.DESCRIPTION,
@@ -317,6 +321,9 @@ export const TranslateWithGroups = () => {
                     ariaLabel={t("description")}
                     ariaDescribedBy="form-introduction-french-language"
                   />
+                  <LanguageLabel id="form-introduction-french-language" lang={secondaryLanguage}>
+                    <>{secondaryLanguage}</>
+                  </LanguageLabel>
                 </div>
               </div>
             </fieldset>
@@ -334,12 +341,6 @@ export const TranslateWithGroups = () => {
               key={primaryLanguage}
             >
               <div className="relative w-1/2 flex-1">
-                <LanguageLabel
-                  id={`privacyPolicy-${primaryLanguage}-language`}
-                  lang={primaryLanguage}
-                >
-                  <>{primaryLanguage}</>
-                </LanguageLabel>
                 <RichTextEditor
                   path={`form.privacyPolicy.${localizeField(
                     LocalizedElementProperties.DESCRIPTION,
@@ -354,14 +355,14 @@ export const TranslateWithGroups = () => {
                   ariaLabel={t("privacyStatement")}
                   ariaDescribedBy={`privacyPolicy-${primaryLanguage}-language`}
                 />
+                <LanguageLabel
+                  id={`privacyPolicy-${primaryLanguage}-language`}
+                  lang={primaryLanguage}
+                >
+                  <>{primaryLanguage}</>
+                </LanguageLabel>
               </div>
               <div className="relative w-1/2 flex-1">
-                <LanguageLabel
-                  id={`privacyPolicy-${secondaryLanguage}->language`}
-                  lang={secondaryLanguage}
-                >
-                  <>{secondaryLanguage}</>
-                </LanguageLabel>
                 <RichTextEditor
                   path={`form.privacyPolicy.${localizeField(
                     LocalizedElementProperties.DESCRIPTION,
@@ -376,6 +377,12 @@ export const TranslateWithGroups = () => {
                   ariaLabel={t("privacyStatement")}
                   ariaDescribedBy={`privacyPolicy-${secondaryLanguage}->language`}
                 />
+                <LanguageLabel
+                  id={`privacyPolicy-${secondaryLanguage}->language`}
+                  lang={secondaryLanguage}
+                >
+                  <>{secondaryLanguage}</>
+                </LanguageLabel>
               </div>
             </div>
           </fieldset>
@@ -449,12 +456,6 @@ export const TranslateWithGroups = () => {
               key={primaryLanguage}
             >
               <div className="relative w-1/2 flex-1">
-                <LanguageLabel
-                  id={`confirmation-${primaryLanguage}-language`}
-                  lang={primaryLanguage}
-                >
-                  <>{primaryLanguage}</>
-                </LanguageLabel>
                 <RichTextEditor
                   path={`form.confirmation.${localizeField(
                     LocalizedElementProperties.DESCRIPTION,
@@ -469,14 +470,14 @@ export const TranslateWithGroups = () => {
                   ariaLabel={t("confirmationMessage")}
                   ariaDescribedBy={`confirmation-${primaryLanguage}-language`}
                 />
+                <LanguageLabel
+                  id={`confirmation-${primaryLanguage}-language`}
+                  lang={primaryLanguage}
+                >
+                  <>{primaryLanguage}</>
+                </LanguageLabel>
               </div>
               <div className="relative w-1/2 flex-1">
-                <LanguageLabel
-                  id={`confirmation-${secondaryLanguage}-language`}
-                  lang={secondaryLanguage}
-                >
-                  <>{secondaryLanguage}</>
-                </LanguageLabel>
                 <RichTextEditor
                   path={`form.confirmation.${localizeField(
                     LocalizedElementProperties.DESCRIPTION,
@@ -491,6 +492,12 @@ export const TranslateWithGroups = () => {
                   ariaLabel={t("confirmationMessage")}
                   ariaDescribedBy={`confirmation-${secondaryLanguage}-language`}
                 />
+                <LanguageLabel
+                  id={`confirmation-${secondaryLanguage}-language`}
+                  lang={secondaryLanguage}
+                >
+                  <>{secondaryLanguage}</>
+                </LanguageLabel>
               </div>
             </div>
           </fieldset>

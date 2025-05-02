@@ -1326,5 +1326,7 @@
   },
   "translations": {
     "formDescription": "Description du formulaire"
-  }
+  },
+  "en": "English",
+  "fr": "Français"
 }
