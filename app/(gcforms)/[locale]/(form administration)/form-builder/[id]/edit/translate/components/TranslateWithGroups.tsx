@@ -213,7 +213,7 @@ export const TranslateWithGroups = () => {
     <>
       <h1 className="sr-only">{t("edit")}</h1>
       <div className="mr-10">
-        <div className="flex w-[800px]">
+        <div className="flex w-[700px]">
           <h2 id="editTranslationsHeading" className="whitespace-nowrap" tabIndex={-1}>
             {t("groups.editTranslationsHeading")}
           </h2>

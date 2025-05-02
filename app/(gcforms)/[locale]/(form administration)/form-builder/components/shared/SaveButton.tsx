@@ -179,7 +179,7 @@ export const SaveButton = () => {
     <div
       data-id={id}
       className={cn(
-        "mb-2 flex w-[800px] text-sm laptop:text-base text-slate-500",
+        "mb-2 flex w-[700px] text-sm laptop:text-base text-slate-500",
         id && error && "text-red-destructive"
       )}
       aria-live="polite"
