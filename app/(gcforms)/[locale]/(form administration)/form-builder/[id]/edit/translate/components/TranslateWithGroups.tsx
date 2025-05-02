@@ -224,9 +224,7 @@ export const TranslateWithGroups = () => {
         <section>
           {/* FORM TITLE */}
           <fieldset>
-            <FieldsetLegend>
-              {t("formIntroduction")} - {t("title")}
-            </FieldsetLegend>
+            <FieldsetLegend>{t("formTitle")}</FieldsetLegend>
             <div className="mb-10 flex gap-px divide-x-2 border border-gray-300">
               <label htmlFor="form-title-en" className="sr-only">
                 <>{primaryLanguage}</>
@@ -277,7 +275,7 @@ export const TranslateWithGroups = () => {
           {/* INTRO */}
           {(form.introduction?.descriptionEn || form.introduction?.descriptionFr) && (
             <fieldset>
-              <FieldsetLegend>{t("description")}</FieldsetLegend>
+              <FieldsetLegend>{t("translations.formDescription")}</FieldsetLegend>
               <div
                 className="mb-10 flex gap-px divide-x-2 border border-gray-300"
                 key={primaryLanguage}
