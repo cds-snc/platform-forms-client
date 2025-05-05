@@ -246,7 +246,7 @@ export type FormStatus = (typeof FormStatus)[keyof typeof FormStatus];
 // Interval in minutes for sending email notifications. These are converted to seconds for the Redis ttl
 export const NotificationsInterval = {
   OFF: null,
-  DAY: 1440,
+  DAY: 1440, // Default in prisma
   WEEK: 10080,
 } as const;
 

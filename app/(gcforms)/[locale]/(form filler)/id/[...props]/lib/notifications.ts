@@ -116,14 +116,18 @@ const sendEmailNotification = async (
 ) => {
   const { t } = await serverTranslation("form-builder");
   const HOST = await getOrigin();
-  await sendEmail(email, {
-    subject: multipleSubmissions
-      ? t("settings.notifications.email.multipleSubmissions.subject")
-      : t("settings.notifications.email.singleSubmission.subject"),
-    formResponse: multipleSubmissions
-      ? await multipleSubmissionsEmailTemplate(HOST, formId, formTitleEn, formTitleFr)
-      : await singleSubmissionEmailTemplate(HOST, formId, formTitleEn, formTitleFr),
-  })
+  await sendEmail(
+    email,
+    {
+      subject: multipleSubmissions
+        ? t("settings.notifications.email.multipleSubmissions.subject")
+        : t("settings.notifications.email.singleSubmission.subject"),
+      formResponse: multipleSubmissions
+        ? await multipleSubmissionsEmailTemplate(HOST, formId, formTitleEn, formTitleFr)
+        : await singleSubmissionEmailTemplate(HOST, formId, formTitleEn, formTitleFr),
+    },
+    "notification"
+  )
     .then(() =>
       logMessage.debug(
         `sendEmailNotification sent email to ${email} with formId ${formId} for type ${

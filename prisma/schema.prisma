@@ -63,7 +63,7 @@ model Template {
   closedDetails     Json?
   saveAndResume     Boolean         @default(true)
   invitations       Invitation[]
-  notifcationsInterval Int?
+  notifcationsInterval Int?         @default(1440)
 }
 
 model DeliveryOption {
