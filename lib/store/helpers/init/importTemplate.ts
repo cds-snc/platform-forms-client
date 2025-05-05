@@ -2,7 +2,7 @@ import { type TemplateStore } from "../../types";
 import { orderGroups } from "@lib/utils/form-builder/orderUsingGroupsLayout";
 import { initializeGroups } from "@formBuilder/components/shared/right-panel/treeview/util/initializeGroups";
 import { defaultForm } from "../../defaults";
-import { NotificationsInterval } from "packages/types/src/form-types";
+import { NotificationsIntervalDefault } from "packages/types/src/form-types";
 
 export const importTemplate: TemplateStore<"importTemplate"> = (set) => async (jsonConfig) => {
   set((state) => {
@@ -29,6 +29,6 @@ export const importTemplate: TemplateStore<"importTemplate"> = (set) => async (j
     state.publishDesc = "";
     state.closingDate = null;
     state.saveAndResume = true;
-    state.notificationsInterval = NotificationsInterval.DAY;
+    state.notificationsInterval = NotificationsIntervalDefault;
   });
 };

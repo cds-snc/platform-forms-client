@@ -250,5 +250,7 @@ export const NotificationsInterval = {
   WEEK: 10080,
 } as const;
 
+export const NotificationsIntervalDefault = NotificationsInterval.DAY;
+
 export type NotificationsInterval =
   (typeof NotificationsInterval)[keyof typeof NotificationsInterval];
