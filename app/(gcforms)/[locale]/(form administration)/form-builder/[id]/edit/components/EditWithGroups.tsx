@@ -127,7 +127,7 @@ export const EditWithGroups = ({ id, locale }: { id: string; locale: string }) =
   return (
     <>
       <h1 className="sr-only">{t("edit")}</h1>
-      <div className="flex w-[800px]">
+      <div className="flex w-[700px]">
         <h2 id="editPagesHeading" className="whitespace-nowrap" tabIndex={-1}>
           {t("groups.editPagesHeading")}
         </h2>
