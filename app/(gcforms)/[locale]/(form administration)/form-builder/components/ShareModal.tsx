@@ -69,6 +69,7 @@ export const ShareModal = ({
       <Button
         data-share="form-builder-email"
         theme="primary"
+        disabled={status === "sending" || !emails.length}
         onClick={() => {
           handleSend();
           setEmails([]);

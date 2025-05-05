@@ -9,21 +9,22 @@ export const EmailTags = ({
   tags: string[];
   setTags: (tag: string[]) => void;
 }) => {
-  const { t } = useTranslation("form-builder");
+  const { t } = useTranslation(["common", "form-builder"]);
+
   return (
     <section className="mb-4 mt-8">
       <TagInput
         validateTag={(tag) => {
-          if (!tag) return { isValid: false, message: "" };
+          if (!tag) return { isValid: false };
           if (tags.includes(tag)) {
-            return { isValid: false, message: "" };
+            return { isValid: false, errors: [t("input-validation.email")] };
           }
           if (!isValidEmail(tag)) {
-            return { isValid: false, message: "" };
+            return { isValid: false, errors: [t("input-validation.email")] };
           }
-          return { isValid: true, message: "" };
+          return { isValid: true };
         }}
-        label={t("share.emailLabel")}
+        label={t("share.emailLabel", { ns: "form-builder" })}
         description=""
         onTagAdd={(tag) => {
           setTags([...new Set([...tags, tag])]);
