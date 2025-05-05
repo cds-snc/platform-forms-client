@@ -189,10 +189,14 @@ const _sendInvitationEmail = async (
       formUrlFr
     );
 
-    await sendEmail(email, {
-      subject: "Invitation to access form | Invitation pour accéder au formulaire",
-      formResponse: emailContent,
-    });
+    await sendEmail(
+      email,
+      {
+        subject: "Invitation to access form | Invitation pour accéder au formulaire",
+        formResponse: emailContent,
+      },
+      "formInvitationToExistingUser"
+    );
 
     return;
   }
@@ -208,10 +212,14 @@ const _sendInvitationEmail = async (
     registerUrlFr
   );
 
-  await sendEmail(email, {
-    subject: "Invitation to access form | Invitation pour accéder au formulaire",
-    formResponse: emailContent,
-  });
+  await sendEmail(
+    email,
+    {
+      subject: "Invitation to access form | Invitation pour accéder au formulaire",
+      formResponse: emailContent,
+    },
+    "formInvitationToFutureUser"
+  );
 };
 
 /**
