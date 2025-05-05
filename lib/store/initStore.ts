@@ -3,6 +3,7 @@ import { Language } from "../types/form-builder-types";
 import { defaultForm } from "./defaults";
 import { initializeGroups } from "@formBuilder/components/shared/right-panel/treeview/util/initializeGroups";
 import { orderGroups } from "@lib/utils/form-builder/orderUsingGroupsLayout";
+import { NotificationsInterval } from "packages/types/src/form-types";
 
 export const initStore = (initProps?: Partial<InitialTemplateStoreProps>) => {
   const DEFAULT_PROPS: TemplateStoreProps = {
@@ -23,6 +24,9 @@ export const initStore = (initProps?: Partial<InitialTemplateStoreProps>) => {
     changeKey: String(new Date().getTime()),
     allowGroupsFlag: initProps?.allowGroupsFlag || false,
     saveAndResume: true,
+
+    // If flag then off
+    notificationsInterval: NotificationsInterval.DAY,
   };
 
   // Ensure any required properties by Form Builder are defaulted by defaultForm

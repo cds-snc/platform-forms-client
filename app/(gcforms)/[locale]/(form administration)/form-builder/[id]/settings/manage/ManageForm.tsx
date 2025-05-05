@@ -63,7 +63,7 @@ export const ManageForm = (props: ManageFormProps) => {
       <SetSaveAndResume formId={id} />
       <Notifications
         formId={id}
-        notifcationsInterval={formRecord.notifcationsInterval}
+        notificationsInterval={formRecord.notificationsInterval}
         isPublished={formRecord.isPublished}
       />
       <FormOwnership

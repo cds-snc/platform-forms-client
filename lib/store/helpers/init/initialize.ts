@@ -3,6 +3,7 @@ import { initializeGroups } from "@formBuilder/components/shared/right-panel/tre
 import { defaultForm } from "../../defaults";
 import { Language } from "../../../types/form-builder-types";
 import { orderGroups } from "@lib/utils/form-builder/orderUsingGroupsLayout";
+import { NotificationsInterval } from "packages/types/src/form-types";
 
 export const initialize: TemplateStore<"initialize"> =
   (set) =>
@@ -31,5 +32,8 @@ export const initialize: TemplateStore<"initialize"> =
       state.publishDesc = "";
       state.closingDate = null;
       state.saveAndResume = true;
+
+      // If flag then off
+      state.notificationsInterval = NotificationsInterval.DAY;
     });
   };

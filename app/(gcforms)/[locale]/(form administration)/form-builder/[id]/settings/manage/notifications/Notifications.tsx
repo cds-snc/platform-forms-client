@@ -8,16 +8,16 @@ import { toast } from "@formBuilder/components/shared/Toast";
 
 export const Notifications = ({
   formId,
-  notifcationsInterval,
+  notificationsInterval,
   isPublished,
 }: {
   formId: string;
-  notifcationsInterval: NotificationsInterval | undefined;
+  notificationsInterval: NotificationsInterval | undefined;
   isPublished: boolean;
 }) => {
   const { t } = useTranslation("form-builder");
   const [notificationValue, setNotificationValue] = useState<string>(
-    notifcationsInterval ? String(notifcationsInterval) : String(NotificationsInterval.OFF)
+    notificationsInterval ? String(notificationsInterval) : String(NotificationsInterval.OFF)
   );
 
   const toggleChecked = useCallback(

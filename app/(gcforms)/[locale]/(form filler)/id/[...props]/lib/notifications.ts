@@ -21,9 +21,10 @@ export const sendNotification = async (formId: string, titleEn: string, titleFr:
   }
 
   const { users } = usersAndNotifications;
-  const notifcationsInterval = usersAndNotifications.notifcationsInterval as NotificationsInterval;
+  const notificationsInterval =
+    usersAndNotifications.notificationsInterval as NotificationsInterval;
 
-  if (!notifcationsInterval) {
+  if (!notificationsInterval) {
     // Notifcations are turned off, do nothing
     return;
   }
@@ -34,7 +35,7 @@ export const sendNotification = async (formId: string, titleEn: string, titleFr:
       // Single submissions email sent but not multiple submissions email, send multiple email
       Promise.all([
         sendEmailNotificationsToAllUsers(users, formId, titleEn, titleFr, true),
-        setMarker(formId, notifcationsInterval, Status.MULTIPLE_EMAIL_SENT),
+        setMarker(formId, notificationsInterval, Status.MULTIPLE_EMAIL_SENT),
       ]);
       break;
     case Status.MULTIPLE_EMAIL_SENT:
@@ -44,7 +45,7 @@ export const sendNotification = async (formId: string, titleEn: string, titleFr:
       // No email has been sent, send single submission email
       Promise.all([
         sendEmailNotificationsToAllUsers(users, formId, titleEn, titleFr, false),
-        setMarker(formId, notifcationsInterval),
+        setMarker(formId, notificationsInterval),
       ]);
   }
 };

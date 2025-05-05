@@ -210,7 +210,7 @@ export type FormRecord = {
   closingDate?: string;
   closedDetails?: ClosedDetails;
   saveAndResume?: boolean;
-  notifcationsInterval?: NotificationsInterval;
+  notificationsInterval?: NotificationsInterval;
   [key: string]:
     | string
     | boolean

@@ -54,6 +54,10 @@ export default async function Layout(props: {
       return null;
     });
 
+    logMessage.debug(
+      `~~~~~~~~~~Form Record for form-builder/[id] Layout: ${JSON.stringify(initialForm, null, 2)}`
+    );
+
     if (initialForm === null) {
       redirect(`/${locale}/404`);
     }
