@@ -48,7 +48,7 @@ export const NotificationsToggle = ({
         }
       }}
     >
-      <div className={`whitespace-nowrap ${disabled && "cursor-not-allowed"}`}>
+      <div className={`whitespace-nowrap ${disabled ? "cursor-not-allowed" : "cursor-pointer"}`}>
         <span className="sr-only">{description && description}</span>
         <span
           id="notifications-switch-on"
