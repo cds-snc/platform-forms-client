@@ -12752,7 +12752,7 @@ __metadata:
     lodash.merge: "npm:^4.6.2"
     lodash.set: "npm:4.3.2"
     lodash.unset: "npm:4.5.2"
-    markdown-to-jsx: "npm:7.7.4"
+    markdown-to-jsx: "npm:7.7.6"
     next: "npm:15.3.1"
     next-auth: "npm:5.0.0-beta.27"
     node-fetch: "npm:^3.3.2"
@@ -15211,12 +15211,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"markdown-to-jsx@npm:7.7.4":
-  version: 7.7.4
-  resolution: "markdown-to-jsx@npm:7.7.4"
+"markdown-to-jsx@npm:7.7.6":
+  version: 7.7.6
+  resolution: "markdown-to-jsx@npm:7.7.6"
   peerDependencies:
     react: ">= 0.14.0"
-  checksum: 10c0/692323e3cb5573ecce5f1f40c3b1a8d67bca40f2b4907ec266c23e7dffa2dcab466f738ea6569f8a5e6234ddcdccacbfeeb97b5e2f647b94bf29fa441f0083be
+  checksum: 10c0/be645e0e07cc54e52f2f934c879b10459e33a83f2592d8d7c03eb9ef2c91cdbd777f667040b3d15a5f6fb3b3d77fb7b3428d49e90573581eb85a21011533ee67
   languageName: node
   linkType: hard
 
