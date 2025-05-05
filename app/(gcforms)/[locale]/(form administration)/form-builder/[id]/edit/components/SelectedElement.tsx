@@ -59,11 +59,18 @@ const useGetSelectedOption = (item: FormElementWithIndex): ElementOption => {
 
   const selected = elementOptions.filter((item) => item.id === selectedType);
 
-  return filterSelected(
+  const filteredItem = filterSelected(
     item,
     selected && selected.length ? selected[0] : elementOptions[1],
     elementOptions
   );
+
+  // For non-standard types, we want to set the id to the type as the type isn't avaliable in the elementOptions
+  if (selectedType === "email") {
+    filteredItem.id = "textField";
+  }
+
+  return filteredItem;
 };
 
 export const SelectedElement = ({
