@@ -837,10 +837,14 @@ export const notifyOwnersOwnerAdded = async (
   );
 
   users.forEach((owner) => {
-    sendEmail(owner.email, {
-      subject: "Ownership change notification | Notification de changement de propriété",
-      formResponse: emailContent,
-    });
+    sendEmail(
+      owner.email,
+      {
+        subject: "Ownership change notification | Notification de changement de propriété",
+        formResponse: emailContent,
+      },
+      "notifyAddedOwner"
+    );
   });
 };
 
@@ -862,10 +866,14 @@ export const notifyOwnersOwnerRemoved = async (
     form.titleFr
   );
 
-  sendEmail(userToRemove.email, {
-    subject: "Form access removed | Accès au formulaire supprimé",
-    formResponse: youHaveBeenRemovedEmailContent,
-  });
+  sendEmail(
+    userToRemove.email,
+    {
+      subject: "Form access removed | Accès au formulaire supprimé",
+      formResponse: youHaveBeenRemovedEmailContent,
+    },
+    "notifyRemovedOwner"
+  );
 
   // Send email to remaining owners
   users.forEach((owner) => {
@@ -875,10 +883,14 @@ export const notifyOwnersOwnerRemoved = async (
       userToRemove.name || "An owner"
     );
 
-    sendEmail(owner.email, {
-      subject: "Form access removed | Accès au formulaire supprimé",
-      formResponse: ownerRemovedEmailContent,
-    });
+    sendEmail(
+      owner.email,
+      {
+        subject: "Form access removed | Accès au formulaire supprimé",
+        formResponse: ownerRemovedEmailContent,
+      },
+      "notifyOtherOwnersOfRemovedOwner"
+    );
   });
 };
 
