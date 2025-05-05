@@ -72,6 +72,14 @@ export const DownloadCSVWithGroups = () => {
       formatText(form.introduction?.descriptionFr ?? ""),
     ]);
 
+    if (form.privacyPolicy?.descriptionEn || form.privacyPolicy?.descriptionFr) {
+      data.push([
+        formatText("Privacy statement/Avis de confidentialité"),
+        formatText(form.privacyPolicy.descriptionEn),
+        formatText(form.privacyPolicy.descriptionFr),
+      ]);
+    }
+
     // Sort thorugh the groups....
     if (form.groups) {
       const groups = form.groups;
@@ -89,14 +97,6 @@ export const DownloadCSVWithGroups = () => {
           parseElement(element);
         });
       });
-    }
-
-    if (form.privacyPolicy?.descriptionEn || form.privacyPolicy?.descriptionFr) {
-      data.push([
-        formatText("Privacy statement/Avis de confidentialité"),
-        formatText(form.privacyPolicy.descriptionEn),
-        formatText(form.privacyPolicy.descriptionFr),
-      ]);
     }
 
     if (form.confirmation?.descriptionEn || form.confirmation?.descriptionFr) {
