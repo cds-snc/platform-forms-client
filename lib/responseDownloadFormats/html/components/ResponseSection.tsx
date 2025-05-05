@@ -143,19 +143,21 @@ export const ResponseSection = ({
       </h3>
       <p className="mt-8">{t("responseTemplate.rowTableInfo", { lng: lang })}</p>
       <div className="mb-8 mt-4">
-        <button
-          className="inline-flex items-center rounded-md border-2 border-solid border-blue bg-blue-default p-3 font-medium leading-[24px] text-white-default transition-all duration-150 ease-in-out hover:border-blue-light hover:bg-blue-light hover:text-white-default focus:border-blue-active focus:bg-blue-focus focus:text-white-default focus:outline focus:outline-[3px] focus:outline-offset-2 focus:outline-blue-focus active:top-0.5 active:border-black active:bg-black active:text-white-default active:outline-[3px] active:outline-offset-2 active:outline-blue-focus disabled:cursor-not-allowed disabled:!border-none disabled:bg-gray-light disabled:text-gray-dark"
-          id={`copyResponseButton${capitalizedLang}`}
-          aria-labelledby={`copyResponseLabel${capitalizedLang}`}
-          data-clipboard-text=""
-        >
-          {t("responseTemplate.copyResponse", { lng: lang })}
-        </button>
-        <span
+        <div>
+          <button
+            className="inline-flex items-center rounded-md border-2 border-solid border-blue bg-blue-default p-3 font-medium leading-[24px] text-white-default transition-all duration-150 ease-in-out hover:border-blue-light hover:bg-blue-light hover:text-white-default focus:border-blue-active focus:bg-blue-focus focus:text-white-default focus:outline focus:outline-[3px] focus:outline-offset-2 focus:outline-blue-focus active:top-0.5 active:border-black active:bg-black active:text-white-default active:outline-[3px] active:outline-offset-2 active:outline-blue-focus disabled:cursor-not-allowed disabled:!border-none disabled:bg-gray-light disabled:text-gray-dark"
+            id={`copyResponseButton${capitalizedLang}`}
+            aria-labelledby={`copyResponseLabel${capitalizedLang}`}
+            data-clipboard-text=""
+          >
+            {t("responseTemplate.copyResponse", { lng: lang })}
+          </button>
+        </div>
+        <div
           id={`copyResponseOutput${capitalizedLang}`}
           aria-live="polite"
-          className="ml-8 hidden text-green"
-        ></span>
+          className="mt-4 hidden text-green"
+        ></div>
       </div>
 
       <RowTable
@@ -175,19 +177,21 @@ export const ResponseSection = ({
         {confirmReceiptCode}
       </div>
       <div className="mb-32 mt-4">
-        <button
-          className="inline-flex items-center rounded-md border-2 border-solid border-blue bg-blue-default p-3 font-medium leading-[24px] text-white-default transition-all duration-150 ease-in-out hover:border-blue-light hover:bg-blue-light hover:text-white-default focus:border-blue-active focus:bg-blue-focus focus:text-white-default focus:outline focus:outline-[3px] focus:outline-offset-2 focus:outline-blue-focus active:top-0.5 active:border-black active:bg-black active:text-white-default active:outline-[3px] active:outline-offset-2 active:outline-blue-focus disabled:cursor-not-allowed disabled:!border-none disabled:bg-gray-light disabled:text-gray-dark"
-          id={`copyCodeButton${capitalizedLang}`}
-          aria-labelledby={`confirmReceiptInfo${capitalizedLang}`}
-          data-clipboard-text={confirmReceiptCode}
-        >
-          {t("responseTemplate.copyCode", { lng: lang })}
-        </button>
-        <span
+        <div>
+          <button
+            className="inline-flex items-center rounded-md border-2 border-solid border-blue bg-blue-default p-3 font-medium leading-[24px] text-white-default transition-all duration-150 ease-in-out hover:border-blue-light hover:bg-blue-light hover:text-white-default focus:border-blue-active focus:bg-blue-focus focus:text-white-default focus:outline focus:outline-[3px] focus:outline-offset-2 focus:outline-blue-focus active:top-0.5 active:border-black active:bg-black active:text-white-default active:outline-[3px] active:outline-offset-2 active:outline-blue-focus disabled:cursor-not-allowed disabled:!border-none disabled:bg-gray-light disabled:text-gray-dark"
+            id={`copyCodeButton${capitalizedLang}`}
+            aria-labelledby={`confirmReceiptInfo${capitalizedLang}`}
+            data-clipboard-text={confirmReceiptCode}
+          >
+            {t("responseTemplate.copyCode", { lng: lang })}
+          </button>
+        </div>
+        <div
           id={`copyCodeOutput${capitalizedLang}`}
           aria-live="polite"
-          className="ml-8 hidden text-green"
-        ></span>
+          className="mt-4 hidden text-green"
+        ></div>
       </div>
 
       {CopyToClipboardScripts}
