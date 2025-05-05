@@ -25,7 +25,7 @@ const aria = {
   tagSelected: (tag: string) => `Tag "${tag}" selected. Press delete to remove.`,
 
   inputLabel: (tags: number) =>
-    `${tags} tags. Use left and right arrow keys to navigate, enter, tab or comma to create, delete to delete tags.`,
+    `${tags} tags. Use left and right arrow keys to navigate, enter, tab or comma to create, backspace or delete to delete tags.`,
 };
 
 export const TagInput = ({
@@ -163,30 +163,35 @@ export const TagInput = ({
         return;
       }
 
-      // Otherwise, delete the last tag
-      const lastTag = selectedTags[selectedTags.length - 1];
-      if (lastTag) {
-        handleRemoveTag(lastTag);
-        event.currentTarget.value = "";
-      }
-    }
-
-    if (key === keys.ARROW_LEFT) {
-      if (selectedTags.length) {
-        if (selectedTagIndex === null) {
-          setSelectedTagIndex(selectedTags.length - 1);
-        } else if (selectedTagIndex > 0) {
-          setSelectedTagIndex(selectedTagIndex - 1);
+      // If the input is empty, delete the last tag
+      if (event.currentTarget.value === "") {
+        // Otherwise, delete the last tag
+        const lastTag = selectedTags[selectedTags.length - 1];
+        if (lastTag) {
+          handleRemoveTag(lastTag);
+          event.currentTarget.value = "";
         }
       }
     }
 
-    if (key === keys.ARROW_RIGHT) {
-      if (selectedTags.length) {
-        if (selectedTagIndex === null) {
-          setSelectedTagIndex(0);
-        } else if (selectedTagIndex < selectedTags.length - 1) {
-          setSelectedTagIndex(selectedTagIndex + 1);
+    if (event.currentTarget.value === "") {
+      if (key === keys.ARROW_LEFT) {
+        if (selectedTags.length) {
+          if (selectedTagIndex === null) {
+            setSelectedTagIndex(selectedTags.length - 1);
+          } else if (selectedTagIndex > 0) {
+            setSelectedTagIndex(selectedTagIndex - 1);
+          }
+        }
+      }
+
+      if (key === keys.ARROW_RIGHT) {
+        if (selectedTags.length) {
+          if (selectedTagIndex === null) {
+            setSelectedTagIndex(0);
+          } else if (selectedTagIndex < selectedTags.length - 1) {
+            setSelectedTagIndex(selectedTagIndex + 1);
+          }
         }
       }
     }
