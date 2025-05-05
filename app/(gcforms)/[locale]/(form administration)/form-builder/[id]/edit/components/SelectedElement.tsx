@@ -101,7 +101,7 @@ export const SelectedElement = ({
         element = (
           <>
             <ShortAnswer>{t("addElementDialog.radio.title")}</ShortAnswer>
-            <Options item={item} renderIcon={() => <RadioEmptyIcon />} formId={formId} />
+            <Options item={item} formId={formId} />
           </>
         );
       }
@@ -148,18 +148,14 @@ export const SelectedElement = ({
         element = (
           <>
             <ShortAnswer>{t("addElementDialog.combobox.title")}</ShortAnswer>
-            {!item.properties.managedChoices && (
-              <SubOptions item={item} renderIcon={(index) => `${index + 1}.`} />
-            )}
+            {!item.properties.managedChoices && <SubOptions item={item} />}
           </>
         );
       } else {
         element = (
           <>
             <ShortAnswer>{t("addElementDialog.combobox.title")}</ShortAnswer>
-            {!item.properties.managedChoices && (
-              <Options item={item} renderIcon={() => <CheckBoxEmptyIcon />} formId={formId} />
-            )}
+            {!item.properties.managedChoices && <Options item={item} formId={formId} />}
           </>
         );
       }
