@@ -502,14 +502,16 @@ export const shareForm = AuthenticatedAction(
       // Here is the documentation for the `sendEmail` function: https://docs.notifications.service.gov.uk/node.html#send-an-email
       await Promise.all(
         emails.map((email: string) => {
-          return sendEmail(email, {
-            application_file: {
-              file: base64data,
-              filename: `${cleanedFilename}.json`,
-              sending_method: "attach",
-            },
-            subject: "Form shared | Formulaire partagé",
-            formResponse: `
+          return sendEmail(
+            email,
+            {
+              application_file: {
+                file: base64data,
+                filename: `${cleanedFilename}.json`,
+                sending_method: "attach",
+              },
+              subject: "Form shared | Formulaire partagé",
+              formResponse: `
 **${session.user.name} (${session.user.email}) has shared a form with you.**
 
 To preview this form:
@@ -531,7 +533,9 @@ Pour prévisualiser ce formulaire :
   Aller sur [Formulaires GC](https://${HOST}). Aucun compte n'est nécessaire.
 - **Étape 3 :**
   Sélectionner "Ouvrir un formulaire".`,
-          });
+            },
+            "shareForm"
+          );
         })
       );
 
