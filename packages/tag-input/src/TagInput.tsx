@@ -99,6 +99,7 @@ export const TagInput = ({
           duplicateTagElement.classList.remove("duplicate");
         }, 4000); // Remove the class after 4 seconds
       }
+      setErrorMessages([aria.duplicateTag(tag)]);
       return;
     }
 
@@ -116,7 +117,9 @@ export const TagInput = ({
     setSelectedTags((prevTags) => [...prevTags, tag]);
   };
 
-  const handleRemoveTag = (tag: string) => {
+  const handleRemoveTag = (index: number) => {
+    const tag = selectedTags[index];
+
     // Fire onTagRemove callback
     if (onTagRemove) {
       onTagRemove(tag);
@@ -128,10 +131,12 @@ export const TagInput = ({
     }
 
     // Remove the tag from the selected tags
-    setSelectedTags((prevTags) => prevTags.filter((t) => t !== tag));
+    setSelectedTags((prevTags) => prevTags.filter((_, i) => i !== index));
   };
 
   const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    resetMessages();
+
     const { key } = event;
     const acceptKeys = [keys.ENTER, keys.TAB, keys.COMMA];
 
@@ -147,8 +152,7 @@ export const TagInput = ({
     if (key === keys.DELETE) {
       // If a tag is selected, delete it
       if (selectedTagIndex !== null) {
-        const tagToRemove = selectedTags[selectedTagIndex];
-        handleRemoveTag(tagToRemove);
+        handleRemoveTag(selectedTagIndex);
         setSelectedTagIndex(null);
         return;
       }
@@ -157,8 +161,7 @@ export const TagInput = ({
     if (key === keys.BACKSPACE) {
       // If a tag is selected, delete it
       if (selectedTagIndex !== null) {
-        const tagToRemove = selectedTags[selectedTagIndex];
-        handleRemoveTag(tagToRemove);
+        handleRemoveTag(selectedTagIndex);
         setSelectedTagIndex(null);
         return;
       }
@@ -166,9 +169,8 @@ export const TagInput = ({
       // If the input is empty, delete the last tag
       if (event.currentTarget.value === "") {
         // Otherwise, delete the last tag
-        const lastTag = selectedTags[selectedTags.length - 1];
-        if (lastTag) {
-          handleRemoveTag(lastTag);
+        if (selectedTags.length) {
+          handleRemoveTag(selectedTags.length - 1);
           event.currentTarget.value = "";
         }
       }
@@ -215,7 +217,7 @@ export const TagInput = ({
             aria-label={aria.tag(tag)}
           >
             <div className="">{tag}</div>
-            <button type="button" className="" onClick={() => handleRemoveTag(tag)}>
+            <button type="button" className="" onClick={() => handleRemoveTag(index)}>
               <CancelIcon />
             </button>
           </div>
