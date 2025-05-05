@@ -30,9 +30,9 @@
       "title": "caretakerPeriod",
       "description": "Activer l'avertissement de période de garde pour qu'il soit visible"
     },
-    "notifications": {
-      "title": "Notifications",
-      "description": "Activer les notifications pour l'application"
+    "emailDelivery": {
+      "title": "Livraison par courrier électronique",
+      "description": "Activer la livraison par e-mail pour les formulaires"
     }
   }
 }

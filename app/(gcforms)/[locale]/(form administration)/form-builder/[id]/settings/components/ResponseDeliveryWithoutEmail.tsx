@@ -37,6 +37,7 @@ import { EventKeys, useCustomEvent } from "@lib/hooks/useCustomEvent";
 enum DeliveryOption {
   vault = "vault",
   api = "api",
+  email = "email",
 }
 
 /*
@@ -86,6 +87,14 @@ export const ResponseDeliveryWithoutEmail = () => {
   );
 
   const protectedBSelected = classification === "Protected B";
+  const emailLabel = protectedBSelected ? (
+    <>
+      <span className="block">{t("formSettingsModal.emailOption.label")}</span>
+      <span className="block">{t("formSettingsModal.emailOption.note")}</span>
+    </>
+  ) : (
+    t("formSettingsModal.emailOption.label")
+  );
 
   let initialDeliveryOption = DeliveryOption.vault;
 
@@ -96,7 +105,9 @@ export const ResponseDeliveryWithoutEmail = () => {
     initialDeliveryOption = DeliveryOption.api;
   }
 
-  const [deliveryOptionValue, setDeliveryOptionValue] = useState(initialDeliveryOption);
+  const [deliveryOptionValue, setDeliveryOptionValue] = useState(
+    initialDeliveryOption as DeliveryOption
+  );
   const [purposeOption, setPurposeOption] = useState(formPurpose as PurposeOption);
 
   /*--------------------------------------------*
@@ -228,6 +239,21 @@ export const ResponseDeliveryWithoutEmail = () => {
                   {t("settingsResponseDelivery.protectedBMessage")}
                 </p>
               ) : null}
+
+              {isPublished && (
+                <div className="mb-10">
+                  <Radio
+                    disabled={isPublished}
+                    id={`delivery-option-${DeliveryOption.email}`}
+                    checked={deliveryOptionValue === DeliveryOption.email}
+                    name="response-delivery"
+                    value={DeliveryOption.email}
+                    label={emailLabel}
+                    onChange={updateDeliveryOption}
+                    className="mb-0"
+                  />
+                </div>
+              )}
 
               {/* Vault Option */}
               {!hasApiKey && (

@@ -3,5 +3,5 @@
   "formTimer": false,
   "hCaptcha": false,
   "caretakerPeriod": false,
-  "notifications": false
+  "emailDelivery": false
 }

@@ -21,11 +21,11 @@ export async function generateMetadata(props: {
 }
 
 export default async function Page() {
-  const { notifications } = await getSomeFlags([FeatureFlags.notifications]);
+  const { emailDelivery } = await getSomeFlags([FeatureFlags.emailDelivery]);
 
   return (
     <>
-      {notifications ? <ResponseDeliveryWithoutEmail /> : <ResponseDelivery />}
+      {!emailDelivery ? <ResponseDeliveryWithoutEmail /> : <ResponseDelivery />}
       <ApiKeyDialog />
       <DeleteApiKeyDialog />
     </>

@@ -5,8 +5,6 @@ import { getRedisInstance } from "@lib/integration/redisConnector";
 import { getOrigin } from "@lib/origin";
 import { NotificationsInterval } from "packages/types/src/form-types";
 import { serverTranslation } from "@i18n";
-import { getSomeFlags } from "@lib/cache/flags";
-import { FeatureFlags } from "@lib/cache/types";
 
 export const Status = {
   SINGLE_EMAIL_SENT: "SINGLE_EMAIL_SENT",
@@ -16,16 +14,6 @@ export type Status = (typeof Status)[keyof typeof Status];
 
 // Sends an email notification when a user has new form submissions
 export const sendNotification = async (formId: string, titleEn: string, titleFr: string) => {
-  const { notifications: notificationsFeatureFlag } = await getSomeFlags([
-    FeatureFlags.notifications,
-  ]);
-
-  logMessage.debug(`sendNotification featureFlags: ${JSON.stringify(notificationsFeatureFlag)}`);
-
-  if (!notificationsFeatureFlag) {
-    return;
-  }
-
   const usersAndNotifications = await getUsersAndNotificationsInterval(formId);
   if (!usersAndNotifications) {
     logMessage.error(`sendNotification template not found with id ${formId}`);

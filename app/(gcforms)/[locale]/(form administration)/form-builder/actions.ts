@@ -341,7 +341,7 @@ export const updateTemplateUsers = AuthenticatedAction(
   }
 );
 
-// TODO: remove this function when the Notifications feature flag is removed
+// TODO: remove this function when the emailDelivery feature flag is removed
 export const updateTemplateDeliveryOption = AuthenticatedAction(
   async (
     _,
@@ -357,8 +357,8 @@ export const updateTemplateDeliveryOption = AuthenticatedAction(
     error?: string;
   }> => {
     try {
-      const { notifications } = await getSomeFlags([FeatureFlags.notifications]);
-      if (notifications) {
+      const { emailDelivery } = await getSomeFlags([FeatureFlags.emailDelivery]);
+      if (!emailDelivery) {
         throw new Error("Email delivery option is not supported");
       }
 
