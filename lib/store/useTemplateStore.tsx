@@ -144,11 +144,7 @@ const createTemplateStore = (initProps?: Partial<InitialTemplateStoreProps>) => 
             },
             updateSecurityAttribute: (value) => set({ securityAttribute: value }),
             resetDeliveryOption: () => set({ deliveryOption: undefined }),
-
-            // getNotificationsInterval: () => get().notificationsInterval as NotificationsInterval,
-            notificationsInterval: get().notificationsInterval,
           }),
-
           storageOptions
         )
       )
