@@ -1,6 +1,7 @@
 import { useRef, useState } from "react";
 import { CancelIcon } from "./icons/CancelIcon";
 import "./styles.css";
+import { useTranslation } from "./i18n/useTranslation";
 
 const keys = {
   ENTER: "Enter",
@@ -15,24 +16,12 @@ const keys = {
   SEMICOLON: ";",
 };
 
-const aria = {
-  // @TODO: i18n
-  tag: (tag: string) => `Tag "${tag}"`,
-  duplicateTag: (tag: string) => `Duplicate tag "${tag}"`,
-  invalidTag: (tag: string, reasons: string[]) => `Invalid tag "${tag}" (${reasons.join(", ")})`,
-  tagAdded: (tag: string) => `Tag "${tag}" added`,
-  tagRemoved: (tag: string) => `Tag "${tag}" removed`,
-  tagSelected: (tag: string) => `Tag "${tag}" selected. Press delete to remove.`,
-
-  inputLabel: (tags: number) =>
-    `${tags} tags. Use left and right arrow keys to navigate, enter, tab or comma to create, backspace or delete to delete tags.`,
-};
-
 export const TagInput = ({
   tags,
   name = "tag-input",
   id = "tag-input",
   label = "Tags",
+  locale = "en",
   placeholder,
   description,
   restrictDuplicates = true,
@@ -44,6 +33,7 @@ export const TagInput = ({
   name?: string;
   id?: string;
   label?: string;
+  locale?: string;
   placeholder?: string;
   description?: string;
   restrictDuplicates?: boolean;
@@ -59,6 +49,7 @@ export const TagInput = ({
   const [selectedTagIndex, setSelectedTagIndex] = useState<number | null>(null);
   const [errorMessages, setErrorMessages] = useState<string[]>([]);
   const [ariaLiveRegionText, setAriaLiveRegionText] = useState<string | null>(null);
+  const { t } = useTranslation(locale);
 
   const say = (phrase: string) => {
     setAriaLiveRegionText(phrase);
@@ -76,7 +67,7 @@ export const TagInput = ({
       if (!isValid) {
         setErrorMessages(errors || []);
         // Announce invalid tag
-        say(aria.invalidTag(tag, errors || []));
+        say(t("invalidTag", { tag, errors: errors?.join(", ") || "" }));
 
         return;
       }
@@ -84,7 +75,7 @@ export const TagInput = ({
 
     if (restrictDuplicates && selectedTags.includes(tag)) {
       // Announce duplicate tag
-      say(aria.duplicateTag(tag));
+      say(t("duplicateTag", { tag }));
 
       // Highlight the duplicate tag momentarily
       const duplicateTagIndex = selectedTags.indexOf(tag);
@@ -95,7 +86,7 @@ export const TagInput = ({
           duplicateTagElement.classList.remove("duplicate");
         }, 4000); // Remove the class after 4 seconds
       }
-      setErrorMessages([aria.duplicateTag(tag)]);
+      setErrorMessages([t("duplicateTag", { tag })]);
       return;
     }
 
@@ -105,7 +96,7 @@ export const TagInput = ({
     }
 
     // Announce tag added
-    say(aria.tagAdded(tag));
+    say(t("tagAdded", { tag }));
 
     // Add the tag to the selected tags
     setSelectedTags((prevTags) => [...prevTags, tag]);
@@ -120,7 +111,7 @@ export const TagInput = ({
     }
 
     // Announce tag removed
-    say(aria.tagRemoved(tag));
+    say(t("tagRemoved", { tag }));
 
     // Remove the tag from the selected tags
     setSelectedTags((prevTags) => prevTags.filter((_, i) => i !== index));
@@ -198,7 +189,7 @@ export const TagInput = ({
       </label>
       {description && <p className="gc-tag-input-description">{description}</p>}
       <span id="input-instructions" aria-live="polite" className="visually-hidden">
-        {aria.inputLabel(selectedTags.length)}
+        {t("inputLabel", { tags: selectedTags.length.toString() })}
       </span>
       <div className="gc-tag-input">
         {selectedTags.map((tag, index) => (
@@ -206,7 +197,7 @@ export const TagInput = ({
             key={`${tag}-${index}`}
             id={`tag-${index}`}
             className={`gc-tag ${selectedTagIndex === index ? "gc-selected-tag" : ""}`}
-            aria-label={aria.tag(tag)}
+            aria-label={t("tag", { tag })}
           >
             <div>{tag}</div>
             <button type="button" onClick={() => handleRemoveTag(index)}>
@@ -225,7 +216,7 @@ export const TagInput = ({
           onKeyDown={handleKeyDown}
           ref={tagInputRef}
         />
-        {/* @TODO: visually-hidden */}
+        {/* @TODO: visually-hidden to css */}
         <span className="visually-hidden" role="alert" aria-live="assertive" aria-atomic="true">
           {ariaLiveRegionText}
         </span>
