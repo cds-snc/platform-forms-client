@@ -1322,5 +1322,10 @@
     "none": "telle que saisie",
     "ascending": "alphabétique (A-Z)",
     "descending": "alphabétique inversé (Z-A)"
-  }
+  },
+  "translations": {
+    "formDescription": "Description du formulaire"
+  },
+  "en": "English",
+  "fr": "Français"
 }

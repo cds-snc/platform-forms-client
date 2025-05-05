@@ -4,9 +4,11 @@ import { serverTranslation } from "@i18n";
 import { Metadata } from "next";
 
 import { ErrorPanel } from "@clientComponents/globals/ErrorPanel";
-
-import { Fip } from "@clientComponents/globals/Fip";
 import { Footer } from "@serverComponents/globals/Footer";
+import { GcdsHeader } from "@serverComponents/globals/GcdsHeader/GcdsHeader";
+import { languages } from "@i18n/settings";
+import { cookies } from "next/headers";
+import { Language } from "@lib/types/form-builder-types";
 
 export async function generateMetadata(): Promise<Metadata> {
   const { t } = await serverTranslation("error");
@@ -17,11 +19,12 @@ export async function generateMetadata(): Promise<Metadata> {
 
 export default async function NotFound() {
   const { t } = await serverTranslation(["error"]);
+
+  const locale = (await cookies()).get("i18next")?.value ?? languages[0];
+
   return (
     <div className="flex h-full flex-col">
-      <header>
-        <Fip />
-      </header>
+      <GcdsHeader pathname="" showLanguageToggle={false} language={locale as Language} />
       <div id="page-container">
         <main id="content">
           <div className="mt-10">

@@ -28,6 +28,7 @@ import "./styles.css";
 import { ToolbarContext } from "./context/ToolbarContext";
 import ShortcutsPlugin from "./plugins/ShortcutsPlugin";
 import { MaxLengthPlugin } from "./plugins/MaxLengthPlugin";
+import DraggableBlockPlugin from "./plugins/DraggableBlockPlugin";
 
 interface EditorProps {
   id?: string;
@@ -39,6 +40,7 @@ interface EditorProps {
   contentLocale?: string;
   className?: string;
   maxLength?: number;
+  enableDraggableBlocks?: boolean;
 
   onChange?(...args: unknown[]): unknown;
 }
@@ -54,6 +56,7 @@ export const Editor = ({
   contentLocale = "en",
   className,
   maxLength,
+  enableDraggableBlocks = false,
 }: EditorProps) => {
   contentLocale = contentLocale || locale;
 
@@ -123,6 +126,7 @@ export const Editor = ({
                   isLinkEditMode={isLinkEditMode}
                   setIsLinkEditMode={setIsLinkEditMode}
                 />
+                {enableDraggableBlocks && <DraggableBlockPlugin anchorElem={floatingAnchorElem} />}
               </>
             )}
             {maxLength && (

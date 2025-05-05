@@ -1322,5 +1322,10 @@
     "none": "as entered",
     "ascending": "alphabetically (A-Z)",
     "descending": "reverse alphabetical (Z-A)"
-  }
+  },
+  "translations": {
+    "formDescription": "Form description"
+  },
+  "en": "English",
+  "fr": "Français"
 }

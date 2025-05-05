@@ -17,6 +17,7 @@ import { SubmitButton } from "../../../components/client/SubmitButton";
 import { useState } from "react";
 import { email, minLength, object, safeParse, string, toLowerCase, toTrimmed } from "valibot";
 import { Success } from "../../../components/client/Success";
+import { GcdsH1 } from "@serverComponents/globals/GcdsH1";
 
 export const SupportForm = () => {
   const {
@@ -101,7 +102,7 @@ export const SupportForm = () => {
             </ValidationMessage>
           )}
 
-          <h1>{t("support.title")}</h1>
+          <GcdsH1>{t("support.title")}</GcdsH1>
           <p className="-mt-8 mb-6">
             {t("support.experience")}
             <Link href={`https://articles.alpha.canada.ca/forms-formulaires/${language}/guidance`}>
