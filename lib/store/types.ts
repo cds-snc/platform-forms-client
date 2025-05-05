@@ -94,8 +94,8 @@ export interface TemplateStoreState extends TemplateStoreProps {
   getHighestElementId: () => number;
   generateElementId: () => number;
 
-  // notificationsInterval: NotificationsInterval;
-  getNotificationsInterval: () => NotificationsInterval;
+  notificationsInterval: NotificationsInterval;
+  // getNotificationsInterval: () => NotificationsInterval;
 }
 
 export interface InitialTemplateStoreProps extends TemplateStoreProps {

@@ -29,6 +29,10 @@
     "caretakerPeriod": {
       "title": "caretakerPeriod",
       "description": "Activer l'avertissement de période de garde pour qu'il soit visible"
+    },
+    "notifications": {
+      "title": "Notifications",
+      "description": "Activer les notifications pour l'application"
     }
   }
 }

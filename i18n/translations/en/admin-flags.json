@@ -29,6 +29,10 @@
     "caretakerPeriod": {
       "title": "caretakerPeriod",
       "description": "Enable care taker period warning to be visible"
+    },
+    "notifications": {
+      "title": "Notifications",
+      "description": "Enable notifications for the application"
     }
   }
 }
