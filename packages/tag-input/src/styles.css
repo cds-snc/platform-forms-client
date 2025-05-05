@@ -69,5 +69,6 @@
 }
 
 .gc-tag-input-error {
+  margin-top: 0.25rem;
   color: #b91c1c;
 }

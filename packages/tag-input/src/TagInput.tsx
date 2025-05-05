@@ -54,7 +54,7 @@ export const TagInput = ({
     errors?: string[];
   };
 }) => {
-  const tagInputContainerRef = useRef<HTMLDivElement>(null);
+  const tagInputRef = useRef<HTMLInputElement>(null);
   const [selectedTags, setSelectedTags] = useState<string[]>(tags || []);
   const [selectedTagIndex, setSelectedTagIndex] = useState<number | null>(null);
   const [errorMessages, setErrorMessages] = useState<string[]>([]);
@@ -76,9 +76,7 @@ export const TagInput = ({
       if (!isValid) {
         setErrorMessages(errors || []);
         // Announce invalid tag
-        if (tagInputContainerRef.current) {
-          say(aria.invalidTag(tag, errors || []));
-        }
+        say(aria.invalidTag(tag, errors || []));
 
         return;
       }
@@ -86,9 +84,7 @@ export const TagInput = ({
 
     if (restrictDuplicates && selectedTags.includes(tag)) {
       // Announce duplicate tag
-      if (tagInputContainerRef.current) {
-        say(aria.duplicateTag(tag));
-      }
+      say(aria.duplicateTag(tag));
 
       // Highlight the duplicate tag momentarily
       const duplicateTagIndex = selectedTags.indexOf(tag);
@@ -109,9 +105,7 @@ export const TagInput = ({
     }
 
     // Announce tag added
-    if (tagInputContainerRef.current) {
-      say(aria.tagAdded(tag));
-    }
+    say(aria.tagAdded(tag));
 
     // Add the tag to the selected tags
     setSelectedTags((prevTags) => [...prevTags, tag]);
@@ -126,9 +120,7 @@ export const TagInput = ({
     }
 
     // Announce tag removed
-    if (tagInputContainerRef.current) {
-      say(aria.tagRemoved(tag));
-    }
+    say(aria.tagRemoved(tag));
 
     // Remove the tag from the selected tags
     setSelectedTags((prevTags) => prevTags.filter((_, i) => i !== index));
@@ -200,7 +192,7 @@ export const TagInput = ({
   };
 
   return (
-    <div className="gc-tag-input-container" ref={tagInputContainerRef}>
+    <div className="gc-tag-input-container" onClick={() => tagInputRef.current?.focus()}>
       <label htmlFor={id} className="gc-tag-input-label">
         {label}
       </label>
@@ -216,8 +208,8 @@ export const TagInput = ({
             className={`gc-tag ${selectedTagIndex === index ? "gc-selected-tag" : ""}`}
             aria-label={aria.tag(tag)}
           >
-            <div className="">{tag}</div>
-            <button type="button" className="" onClick={() => handleRemoveTag(index)}>
+            <div>{tag}</div>
+            <button type="button" onClick={() => handleRemoveTag(index)}>
               <CancelIcon />
             </button>
           </div>
@@ -231,7 +223,9 @@ export const TagInput = ({
           type="text"
           placeholder={placeholder}
           onKeyDown={handleKeyDown}
+          ref={tagInputRef}
         />
+        {/* @TODO: visually-hidden */}
         <span className="visually-hidden" role="alert" aria-live="assertive" aria-atomic="true">
           {ariaLiveRegionText}
         </span>
