@@ -39,6 +39,17 @@ export const QuestionTagOptions = ({
           });
         }}
         tags={item.properties.tags || []}
+        restrictDuplicates={true}
+        validateTag={(tag) => {
+          let isValid = true;
+          const errors: string[] = [];
+
+          if (tag.length > 50) {
+            isValid = false;
+            errors.push(t("Tag must be no longer than 50 characters"));
+          }
+          return { isValid, errors };
+        }}
       />
     </section>
   );
