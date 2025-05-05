@@ -3,7 +3,6 @@ import { useTranslation } from "@i18n/client";
 import { FormElement, FormElementTypes } from "@lib/types";
 import { Label } from "./Label";
 import { Input } from "@formBuilder/components/shared/Input";
-import { v4 as uuid } from "uuid";
 import { WarningIcon } from "@serverComponents/icons";
 import { useTemplateStore } from "@lib/store/useTemplateStore";
 
@@ -54,7 +53,7 @@ export const QuestionIDOptions = ({
       <Input
         id={`title--modal--${item.id}`}
         name={`item${item.id}`}
-        value={item.properties.questionId || uuid()}
+        value={item.properties.questionId || ""}
         className={`w-11/12` + (error ? " !border-red-600 outline-2 !outline-red-600" : "")}
         onChange={(e) => {
           setItem({
