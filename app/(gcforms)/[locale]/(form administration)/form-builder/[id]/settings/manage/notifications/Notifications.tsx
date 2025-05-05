@@ -54,7 +54,8 @@ export const Notifications = ({
           toggleChecked={toggleChecked}
           onLabel={t("settings.notifications.options.off")}
           offLabel={t("settings.notifications.options.on")}
-          description={t("closingDate.status")}
+          description={t("settings.notifications.optionsDescription")}
+          disabled={isPublished}
         />
       </div>
       <Button

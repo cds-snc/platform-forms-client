@@ -9,6 +9,7 @@ interface NotificationsToggleProps {
   offLabel: string;
   tabIndex?: number;
   description?: string;
+  disabled?: boolean;
 }
 
 export const NotificationsToggle = ({
@@ -17,6 +18,7 @@ export const NotificationsToggle = ({
   onLabel,
   offLabel,
   description,
+  disabled,
 }: NotificationsToggleProps) => {
   const boldOn = isChecked ? "font-bold" : "font-normal";
   const boldOff = !isChecked ? "font-bold" : "font-normal";
@@ -26,9 +28,18 @@ export const NotificationsToggle = ({
       className="inline-block"
       role="switch"
       aria-checked={isChecked}
+      {...(disabled && { "aria-disabled": true })}
       tabIndex={0}
-      onClick={toggleChecked}
+      onClick={() => {
+        if (disabled) {
+          return;
+        }
+        toggleChecked();
+      }}
       onKeyDown={(e) => {
+        if (disabled) {
+          return;
+        }
         if (e.key === "Enter" || e.key === " ") {
           // toggle the switch to the opposite state
           toggleChecked();
@@ -37,7 +48,7 @@ export const NotificationsToggle = ({
         }
       }}
     >
-      <div className="cursor-pointer whitespace-nowrap">
+      <div className={`whitespace-nowrap ${disabled && "cursor-not-allowed"}`}>
         <span className="sr-only">{description && description}</span>
         <span
           id="notifications-switch-on"

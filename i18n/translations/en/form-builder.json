@@ -705,6 +705,7 @@
       "title": "Receive notifications",
       "description1": "Get notified by email about new form responses",
       "description2": "Find out when there are new form responses available to download.",
+      "optionsDescription": "Enable to get notified by email about new form responses",
       "options": {
         "on": "On",
         "off": "Off"
