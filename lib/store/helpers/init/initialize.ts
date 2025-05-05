@@ -32,8 +32,6 @@ export const initialize: TemplateStore<"initialize"> =
       state.publishDesc = "";
       state.closingDate = null;
       state.saveAndResume = true;
-
-      // If flag then off
       state.notificationsInterval = NotificationsInterval.DAY;
     });
   };

@@ -11,6 +11,7 @@ import { ThrottlingRate } from "./ThrottlingRate";
 import { useFormBuilderConfig } from "@lib/hooks/useFormBuilderConfig";
 import { SetSaveAndResume } from "./saveAndResume/SetSaveAndResume";
 import { Notifications } from "./notifications/Notifications";
+import { useFeatureFlags } from "@lib/hooks/useFeatureFlags";
 
 interface User {
   id: string;
@@ -43,6 +44,9 @@ export const ManageForm = (props: ManageFormProps) => {
 
   const { apiKeyId } = useFormBuilderConfig();
 
+  const { getFlag } = useFeatureFlags();
+  const notificationsEnabled = getFlag("notifications");
+
   if (!canManageAllForms) {
     return (
       <div>
@@ -61,11 +65,13 @@ export const ManageForm = (props: ManageFormProps) => {
     <>
       {canSetClosingDate && <SetClosingDate formId={id} closedDetails={closedDetails} />}
       <SetSaveAndResume formId={id} />
-      <Notifications
-        formId={id}
-        notificationsInterval={formRecord.notificationsInterval}
-        isPublished={formRecord.isPublished}
-      />
+      {notificationsEnabled && (
+        <Notifications
+          formId={id}
+          notificationsInterval={formRecord.notificationsInterval}
+          isPublished={formRecord.isPublished}
+        />
+      )}
       <FormOwnership
         nonce={nonce}
         formRecord={formRecord}

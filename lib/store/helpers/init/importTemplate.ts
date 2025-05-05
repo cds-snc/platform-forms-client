@@ -29,8 +29,6 @@ export const importTemplate: TemplateStore<"importTemplate"> = (set) => async (j
     state.publishDesc = "";
     state.closingDate = null;
     state.saveAndResume = true;
-
-    // If flag then off
     state.notificationsInterval = NotificationsInterval.DAY;
   });
 };

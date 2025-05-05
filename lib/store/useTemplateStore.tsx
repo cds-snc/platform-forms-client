@@ -54,7 +54,6 @@ import {
   getFormElementIndexes,
   cleanElementRules,
 } from "./helpers/elements";
-// import { NotificationsInterval } from "packages/types/src/form-types";
 
 const createTemplateStore = (initProps?: Partial<InitialTemplateStoreProps>) => {
   const props = initStore(initProps);

@@ -93,9 +93,7 @@ export interface TemplateStoreState extends TemplateStoreProps {
   setGroupsLayout: (layout: string[]) => void;
   getHighestElementId: () => number;
   generateElementId: () => number;
-
-  notificationsInterval?: NotificationsInterval | undefined;
-  // getNotificationsInterval: () => NotificationsInterval;
+  notificationsInterval?: NotificationsInterval;
 }
 
 export interface InitialTemplateStoreProps extends TemplateStoreProps {

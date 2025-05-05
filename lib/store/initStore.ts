@@ -24,8 +24,6 @@ export const initStore = (initProps?: Partial<InitialTemplateStoreProps>) => {
     changeKey: String(new Date().getTime()),
     allowGroupsFlag: initProps?.allowGroupsFlag || false,
     saveAndResume: true,
-
-    // If flag then off
     notificationsInterval: NotificationsInterval.DAY,
   };
 
