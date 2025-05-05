@@ -80,7 +80,13 @@ const eslintConfig = [
           "bkd-soft",
           "legend-fieldset",
           "confirmation",
-          "active"
+          "active",
+          "brand__container",
+          "fip_flag",
+          "fip_text",
+          "brand__toggle",
+          "brand__signature",
+          "container-xl"
         ],
       },
     },

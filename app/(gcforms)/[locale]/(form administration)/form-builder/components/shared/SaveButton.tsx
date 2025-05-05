@@ -120,7 +120,7 @@ export const SaveButton = () => {
     if (timeRef.current && new Date().getTime() - timeRef.current < 2000) {
       return;
     }
-    const formConfig = safeJSONParse<FormProperties>(getSchema());
+    const formConfig = safeJSONParse<FormProperties>(getSchema(true));
     if (!formConfig) {
       toast.error(<ErrorSaving errorCode={FormServerErrorCodes.JSON_PARSE} />, "wide");
       return;
@@ -179,7 +179,7 @@ export const SaveButton = () => {
     <div
       data-id={id}
       className={cn(
-        "mb-2 flex w-[800px] text-sm laptop:text-base text-slate-500",
+        "mb-2 flex w-[700px] text-sm laptop:text-base text-slate-500",
         id && error && "text-red-destructive"
       )}
       aria-live="polite"

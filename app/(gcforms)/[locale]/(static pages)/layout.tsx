@@ -1,20 +1,24 @@
-import { Fip } from "@clientComponents/globals";
-import LanguageToggle from "@clientComponents/globals/Header/LanguageToggle";
 import { Footer } from "@serverComponents/globals/Footer";
+import { GcdsHeader } from "@serverComponents/globals/GcdsHeader/GcdsHeader";
 import { SkipLink } from "@serverComponents/globals/SkipLink";
-export default async function Layout({ children }: { children: React.ReactNode }) {
+
+import { type Language } from "@lib/types/form-builder-types";
+import { headers } from "next/headers";
+
+export default async function Layout(props: {
+  children: React.ReactNode;
+  params: Promise<{ locale: string; id: string }>;
+}) {
+  const params = await props.params;
+  const pathname = (await headers()).get("x-path") ?? "";
+  const { locale } = params;
+  const { children } = props;
   return (
-    <div className="flex h-full flex-col bg-white">
+    <div className="gcds-page flex h-full flex-col bg-white">
       <SkipLink />
-      <header>
-        <Fip className="mb-20 mt-0 border-b-4 border-blue-dark py-9">
-          <LanguageToggle />
-        </Fip>
-      </header>
-      <div id="page-container">
-        <main id="content" className="gc-formview">
-          {children}
-        </main>
+      <GcdsHeader language={locale as Language} pathname={pathname} />
+      <div className="container-xl mx-auto px-[var(--gcds-spacing-225)] tablet:px-[var(--gcds-spacing-600)] laptop:px-0">
+        <main id="content">{children}</main>
       </div>
       <Footer displayFormBuilderFooter={true} />
     </div>

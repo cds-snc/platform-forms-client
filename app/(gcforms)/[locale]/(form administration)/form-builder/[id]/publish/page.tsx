@@ -3,7 +3,7 @@ import { Metadata } from "next";
 import { Publish } from "./Publish";
 import { authorization } from "@lib/privileges";
 import { authCheckAndThrow } from "@lib/actions";
-import { notFound } from "next/navigation";
+import { WaitForId } from "../components/WaitForId";
 
 import Markdown from "markdown-to-jsx";
 
@@ -11,6 +11,7 @@ import { InfoCard } from "@serverComponents/globals/InfoCard/InfoCard";
 import { LoggedOutTab, LoggedOutTabName } from "@serverComponents/form-builder/LoggedOutTab";
 import { VaultDelivery } from "./VaultDelivery";
 import { ClientContainer } from "./ClientContainer";
+import { Language } from "@lib/types/form-builder-types";
 
 export async function generateMetadata(props: {
   params: Promise<{ locale: string }>;
@@ -41,7 +42,7 @@ export default async function Page(props: { params: Promise<{ id: string; locale
   }
 
   if (id === "0000") {
-    return notFound();
+    return <WaitForId locale={locale as Language} path="publish" />;
   }
 
   const userCanPublish = await authorization
