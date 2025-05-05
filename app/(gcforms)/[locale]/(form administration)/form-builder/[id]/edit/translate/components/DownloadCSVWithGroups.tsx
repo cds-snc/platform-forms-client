@@ -88,7 +88,7 @@ export const DownloadCSVWithGroups = () => {
         const groupElements = sortGroup({ form, group });
 
         data.push([
-          formatText(`Section: ` + group.name),
+          formatText(`Page: ` + group.name),
           formatText(group.titleEn),
           formatText(group.titleFr),
         ]);
