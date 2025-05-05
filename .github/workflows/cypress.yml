@@ -11,7 +11,7 @@ jobs:
       # Label used to access the service container
       postgres:
         # Docker Hub image
-        image: postgres@sha256:fe3f571d128e8efadcd8b2fde0e2b73ebab6dbec33f6bfe69d98c682c7d8f7bd
+        image: postgres@sha256:304ab813518754228f9f792f79d6da36359b82d8ecf418096c636725f8c930ad
         env:
           POSTGRES_PASSWORD: postgres
         # Set health checks to wait until postgres has started
@@ -24,7 +24,7 @@ jobs:
           - 5432:5432
       redis:
         # Docker Hub image
-        image: redis@sha256:8bc666424ef252009ed34b0432564cabbd4094cd2ce7829306cb1f5ee69170be
+        image: redis@sha256:7df1eeff67eb0ba84f6b9d2940765a6bb1158081426745c185a03b1507de6a09
         options: >-
           --health-cmd "redis-cli ping"
           --health-interval 10s
