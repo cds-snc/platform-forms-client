@@ -99,7 +99,7 @@ export type CreateTemplateCommand = {
   publishReason?: string;
   publishFormType?: string;
   publishDesc?: string;
-  notificationsInterval?: number | null;
+  notificationsInterval?: NotificationsInterval;
 };
 
 export type UpdateTemplateCommand = {
@@ -112,7 +112,7 @@ export type UpdateTemplateCommand = {
   publishReason?: string;
   publishFormType?: string;
   publishDesc?: string;
-  notificationsInterval?: number | null;
+  notificationsInterval?: NotificationsInterval;
 };
 
 export class InvalidFormConfigError extends Error {

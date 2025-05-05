@@ -1,3 +1,5 @@
+import { NotificationsInterval, NotificationsIntervalDefault } from "packages/types/src/form-types";
+
 interface User {
   id: string;
   name: string | null;
@@ -22,6 +24,7 @@ interface Template {
   ttl: Date;
   closedDetails: string;
   saveAndResume: boolean;
+  notificationsInterval: NotificationsInterval;
 }
 
 export const mockTemplate = (overrides: Partial<Template> = {}): Template => {
@@ -43,6 +46,7 @@ export const mockTemplate = (overrides: Partial<Template> = {}): Template => {
     ttl: new Date(),
     closedDetails: "",
     saveAndResume: false,
+    notificationsInterval: NotificationsIntervalDefault,
   };
 
   return { ...defaultTemplate, ...overrides };
