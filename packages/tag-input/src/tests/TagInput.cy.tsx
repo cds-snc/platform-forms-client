@@ -88,7 +88,7 @@ describe("<TagInput />", () => {
       </div>
     );
     cy.get("[data-testid='tag-input']").type("New Tag{enter}");
-    cy.get('[id^="tag-input-live-region-"]').should("exist").and("contain", `Tag "New Tag" added`);
+    cy.get("#tag-input-live-region").should("exist").and("contain", `Tag "New Tag" added`);
   });
 
   it("restricts duplicates", () => {
@@ -111,9 +111,7 @@ describe("<TagInput />", () => {
     );
 
     cy.get("[data-testid='tag-input']").type("Tag 1{enter}");
-    cy.get('[id^="tag-input-live-region-"]')
-      .should("exist")
-      .and("contain", `Duplicate tag "Tag 1"`);
+    cy.get("#tag-input-live-region").should("exist").and("contain", `Duplicate tag "Tag 1"`);
   });
 
   it("allows duplicates", () => {
@@ -133,14 +131,13 @@ describe("<TagInput />", () => {
 
     cy.mount(
       <div>
-        <TagInput tags={["Tag 1"]} onTagAdd={() => {}} onTagRemove={onTagRemove} />
+        <TagInput tags={["Tag 1", "Tag 2"]} onTagAdd={() => {}} onTagRemove={onTagRemove} />
       </div>
     );
 
-    cy.get(".gc-tag").should("contain", "Tag 1");
-    cy.get(".gc-tag button").click();
-    cy.get(".gc-tag").should("not.exist");
-    cy.get(".gc-tag-input").should("not.contain", "Tag 1");
+    cy.get(".gc-tag").should("contain", "Tag 2").should("contain", "Tag 1");
+    cy.get("#tag-0 button").click();
+    cy.get(".gc-tag").should("contain", "Tag 2").should("not.contain", "Tag 1");
     cy.get("@onTagRemove").should("have.been.calledWith", "Tag 1");
   });
 
@@ -152,7 +149,7 @@ describe("<TagInput />", () => {
     );
 
     cy.get("[data-testid='tag-input']").type("{leftarrow}{leftarrow}{leftarrow}{leftarrow}{del}");
-    cy.get('[id^="tag-input-live-region-"]').should("exist").and("contain", `Tag "three" removed`);
+    cy.get("#tag-input-live-region").should("exist").and("contain", `Tag "three" removed`);
     cy.get(".gc-tag").should("not.contain", "three");
   });
 
@@ -165,7 +162,7 @@ describe("<TagInput />", () => {
 
     cy.get(".gc-tag").should("contain", "Tag 1");
     cy.get(".gc-tag button").click();
-    cy.get('[id^="tag-input-live-region-"]').should("exist").and("contain", `Tag "Tag 1" removed`);
+    cy.get("#tag-input-live-region").should("exist").and("contain", `Tag "Tag 1" removed`);
   });
 
   it("calls onTagAdd handler when adding a tag", () => {
