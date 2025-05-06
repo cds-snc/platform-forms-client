@@ -518,7 +518,7 @@ To preview this form:
 - **Step 1**:
   Save the attached JSON form file to your computer.
 - **Step 2**:
-  Go to [GC Forms](https://${HOST}). No account needed.
+  Go to [GC Forms](${HOST}). No account needed.
 - **Step 3**:
   Select open a form file.
 
@@ -530,7 +530,7 @@ Pour prévisualiser ce formulaire :
 - **Étape 1 :**
   Enregistrer le fichier de formulaire JSON ci-joint sur votre ordinateur.
 - **Étape 2 :**
-  Aller sur [Formulaires GC](https://${HOST}). Aucun compte n'est nécessaire.
+  Aller sur [Formulaires GC](${HOST}). Aucun compte n'est nécessaire.
 - **Étape 3 :**
   Sélectionner "Ouvrir un formulaire".`,
             },
