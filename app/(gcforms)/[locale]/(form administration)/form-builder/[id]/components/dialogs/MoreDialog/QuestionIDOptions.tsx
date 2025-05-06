@@ -31,7 +31,7 @@ export const QuestionIDOptions = ({
     } else {
       setError(false);
     }
-  }, [item.properties.questionId]);
+  }, [item.properties.questionId, form.elements, item.id]);
 
   if (item.type === FormElementTypes.richText) {
     return null;
