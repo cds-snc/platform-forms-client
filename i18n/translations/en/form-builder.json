@@ -509,6 +509,16 @@
       "infoBox": "Which date format should you use?",
       "infoLine1": "Canada’s date standard format is YYYY-MM-DD and should be your first choice unless there is a reason to choose a different format.",
       "infoLine2": "For example, when asking for a date exactly as it’s shown on a passport, card or other document, make the fields match the format of the original. This makes it easier for users to copy the date across accurately."
+    },
+    "questionId": {
+      "title": "Question ID",
+      "description": "Unique value to consistently refer to a form element so that they can match across republished form versions, data structures and systems.",
+      "uniqueWarning": "Choose a unique value that differs from other questions."
+    },
+    "tags": {
+      "title": "Additional tags",
+      "description": "Flexible labels to add metadata to form elements so that related questions can be categorized or so that data can be transformed.",
+      "errorTagTooLong": "Tag must be no longer than 50 characters."
     }
   },
   "moreOptions": "More options",

@@ -18,8 +18,8 @@ export const QuestionTagOptions = ({
   return (
     <section className="mb-4 mt-8">
       <TagInput
-        label={t("Additional tags")}
-        description="Flexible labels to add metadata to form elements so that related questions can be categorized or so that data can be transformed."
+        label={t("moreDialog.tags.title")}
+        description={t("moreDialog.tags.description")}
         onTagAdd={(tag) => {
           setItem({
             ...item,
@@ -46,7 +46,7 @@ export const QuestionTagOptions = ({
 
           if (tag.length > 50) {
             isValid = false;
-            errors.push(t("Tag must be no longer than 50 characters"));
+            errors.push(t("moreDialog.tags.errorTagTooLong"));
           }
           return { isValid, errors };
         }}
