@@ -158,6 +158,7 @@ export interface BrandProperties {
 // used to define attributes for a form element or field
 export interface FormElement {
   id: number;
+  uuid?: string;
   subId?: string;
   type: FormElementTypes;
   properties: ElementProperties;
