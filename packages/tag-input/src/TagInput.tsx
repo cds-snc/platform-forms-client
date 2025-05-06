@@ -217,7 +217,13 @@ export const TagInput = ({
           ref={tagInputRef}
         />
         {/* @TODO: visually-hidden to css */}
-        <span className="visually-hidden" role="alert" aria-live="assertive" aria-atomic="true">
+        <span
+          id="tag-input-live-region"
+          className="visually-hidden"
+          role="alert"
+          aria-live="assertive"
+          aria-atomic="true"
+        >
           {ariaLiveRegionText}
         </span>
       </div>

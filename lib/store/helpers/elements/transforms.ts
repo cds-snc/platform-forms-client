@@ -19,10 +19,10 @@ const cleanElementRules = (elements: FormElement[], element: FormElement) => {
   }
 };
 
-// Ensure questionId is set
-const ensureQuestionId = (element: FormElement) => {
-  if (element.properties?.questionId === undefined) {
-    element.properties.questionId = uuid();
+// Ensure uuid is set
+const ensureUUID = (element: FormElement) => {
+  if (element.uuid === undefined) {
+    element.uuid = uuid();
   }
 };
 
@@ -33,7 +33,7 @@ export const transforms: TemplateStore<"transforms"> =
         if (options && options.cleanRules) {
           cleanElementRules(state.form.elements, element);
         }
-        ensureQuestionId(element);
+        ensureUUID(element);
       });
     });
   };

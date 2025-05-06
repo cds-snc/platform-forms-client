@@ -137,9 +137,10 @@
         },
         {
           "id": 2,
+          "uuid": "12345678-1234-1234-1234-123456789012",
           "type": "radio",
           "properties": {
-            "questionId": "91eac504-d781-4c64-85f2-3233895f907d1",
+            "questionId": "my_custom_id",
             "tags": ["radio", "nomination"],
             "choices": [
               {
@@ -214,6 +215,11 @@
           "description": "The unique id for the object",
           "type": "integer",
           "minimum": 1
+        },
+        "uuid": {
+          "description": "A unique id for the object (future use)",
+          "type": "string",
+          "format": "uuid"
         },
         "type": {
           "type": "string",

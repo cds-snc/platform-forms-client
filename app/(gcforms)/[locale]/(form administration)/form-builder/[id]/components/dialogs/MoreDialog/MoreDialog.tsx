@@ -17,7 +17,7 @@ import { CharacterLimitOptions } from "./CharacterLimitOptions";
 import { useRefsContext } from "@formBuilder/[id]/edit/components/RefsContext";
 import { FormElement } from "@lib/types";
 import { QuestionTagOptions } from "./QuestionTagOptions";
-import { QuestionIDOptions } from "./QuestionIDOptions";
+import { QuestionIdOptions } from "./QuestionIdOptions";
 import { InfoDetails } from "@formBuilder/components/shared/InfoDetails";
 
 export const MoreDialog = () => {
@@ -106,7 +106,14 @@ export const MoreDialog = () => {
           title={t("moreOptions")}
         >
           <div className="p-5">
-            <form onSubmit={(e: React.FormEvent<HTMLFormElement>) => e.preventDefault()}>
+            <form
+              onSubmit={(e: React.FormEvent<HTMLFormElement>) => {
+                updateField(getPathString(item.id), item.properties);
+                setChangeKey(String(new Date().getTime()));
+                handleClose();
+                e.preventDefault();
+              }}
+            >
               <section>
                 <Question item={item} setItem={setItem} />
                 <Description item={item} setItem={setItem} />
@@ -126,13 +133,12 @@ export const MoreDialog = () => {
 
               <SortOptions item={item} setItem={setItem} />
 
-              <InfoDetails summary="Customize API data attributes">
-                <p className="mt-6">
-                  Modify how your form fields get encoded for the API integration.
-                </p>
-                <QuestionIDOptions item={item} setItem={setItem} />
+              <InfoDetails summary={t("moreDialog.apiOptionsSection.title")}>
+                <p className="mt-6">{t("moreDialog.apiOptionsSection.description")}</p>
+                <QuestionIdOptions item={item} setItem={setItem} />
                 <QuestionTagOptions item={item} setItem={setItem} />
               </InfoDetails>
+              <input type="submit" className="hidden" />
             </form>
           </div>
         </Dialog>

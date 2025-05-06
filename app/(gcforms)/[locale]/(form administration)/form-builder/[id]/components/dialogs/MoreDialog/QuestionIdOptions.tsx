@@ -6,7 +6,7 @@ import { Input } from "@formBuilder/components/shared/Input";
 import { WarningIcon } from "@serverComponents/icons";
 import { useTemplateStore } from "@lib/store/useTemplateStore";
 
-export const QuestionIDOptions = ({
+export const QuestionIdOptions = ({
   item,
   setItem,
 }: {
@@ -39,17 +39,8 @@ export const QuestionIDOptions = ({
 
   return (
     <section className="mb-4 mt-6">
-      <Label htmlFor={`title--modal--${item.id}`}>{t("Question ID")}</Label>
-      <p>
-        Unique value to consistently refer to a form element so that they can match across
-        republished form versions, data structures and systems.
-      </p>
-      {error && (
-        <div className="my-4 font-bold text-red-600">
-          <WarningIcon className="inline-block fill-red-600" /> Choose a unique value that differs
-          from other questions.
-        </div>
-      )}
+      <Label htmlFor={`title--modal--${item.id}`}>{t("moreDialog.questionId.title")}</Label>
+      <p>{t("moreDialog.questionId.description")}</p>
       <Input
         id={`title--modal--${item.id}`}
         name={`item${item.id}`}
@@ -65,6 +56,12 @@ export const QuestionIDOptions = ({
           });
         }}
       />
+      {error && (
+        <div className="my-4 font-bold text-red-600">
+          <WarningIcon className="inline-block fill-red-600" />{" "}
+          {t("moreDialog.questionId.uniqueWarning")}
+        </div>
+      )}
     </section>
   );
 };

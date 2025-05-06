@@ -509,6 +509,16 @@
       "infoBox": "Quel format de date utiliser?",
       "infoLine1": "Le format standard de la date au Canada est AAAA-MM-JJ et devrait être votre premier choix, à moins qu'il n'y ait une raison de choisir un format différent.",
       "infoLine2": "Par exemple, lorsque vous demandez la date exacte d'un passeport, d'une carte ou d'un autre document, faites en sorte que les champs correspondent au format de l'original. Il est ainsi plus facile pour les utilisateurs de recopier la date avec précision."
+    },
+    "questionId": {
+      "title": "[FR] Question ID",
+      "description": "[FR] Unique value to consistently refer to a form element so that they can match across republished form versions, data structures and systems.",
+      "uniqueWarning": "[FR] Choose a unique value that differs from other questions."
+    },
+    "tags": {
+      "title": "[FR] Additional tags",
+      "description": "[FR] Flexible labels to add metadata to form elements so that related questions can be categorized or so that data can be transformed.",
+      "errorTagTooLong": "[FR] Tag must be no longer than 50 characters."
     }
   },
   "moreOptions": "Plus d'options  ",

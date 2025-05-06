@@ -1,9 +1,9 @@
 {
-  "tag": "Tag {tag}",
-  "duplicateTag": "Duplicate tag {tag}",
-  "invalidTag": "Invalid tag {tag} ({reasons})",
-  "tagAdded": "Tag {tag} added",
-  "tagRemoved": "Tag {tag} removed",
-  "tagSelected": "Tag {tag} selected. Press delete to remove.",
+  "tag": "Tag \"{tag}\"",
+  "duplicateTag": "Duplicate tag \"{tag}\"",
+  "invalidTag": "Invalid tag \"{tag}\" ({reasons})",
+  "tagAdded": "Tag \"{tag}\" added",
+  "tagRemoved": "Tag \"{tag}\" removed",
+  "tagSelected": "Tag \"{tag}\" selected. Press delete to remove.",
   "inputLabel": "{tags} tags. Use left and right arrow keys to navigate, enter, tab or comma to create, backspace or delete to delete tags."
 }

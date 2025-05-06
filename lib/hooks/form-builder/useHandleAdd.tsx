@@ -35,7 +35,7 @@ export const useHandleAdd = () => {
 
   const create = useCallback(async (type: FormElementTypes) => {
     const defaults = JSON.parse(JSON.stringify(defaultField));
-    defaults.properties.questionId = uuid();
+    defaults.uuid = uuid();
 
     const labels = await getTranslatedElementProperties(type);
     const descriptionEn = labels.description.en;
