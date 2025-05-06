@@ -14,12 +14,9 @@ export const EmailTags = ({
   return (
     <section className="mb-4 mt-8">
       <TagInput
+        restrictDuplicates={true}
         validateTag={(tag) => {
-          if (!tag) return { isValid: false };
-          if (tags.includes(tag)) {
-            return { isValid: false, errors: [t("input-validation.email")] };
-          }
-          if (!isValidEmail(tag)) {
+          if (!tag || !isValidEmail(tag)) {
             return { isValid: false, errors: [t("input-validation.email")] };
           }
           return { isValid: true };
