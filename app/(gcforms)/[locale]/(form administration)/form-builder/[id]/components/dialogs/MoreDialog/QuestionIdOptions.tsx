@@ -6,7 +6,7 @@ import { Input } from "@formBuilder/components/shared/Input";
 import { WarningIcon } from "@serverComponents/icons";
 import { useTemplateStore } from "@lib/store/useTemplateStore";
 
-export const QuestionIDOptions = ({
+export const QuestionIdOptions = ({
   item,
   setItem,
 }: {
