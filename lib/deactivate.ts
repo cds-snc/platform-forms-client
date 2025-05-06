@@ -1,5 +1,4 @@
 import { sendEmail } from "./integration/notifyConnector";
-import { logMessage } from "@lib/logger";
 import { getOrigin } from "./origin";
 import { DeactivationReason, DeactivationReasons } from "./types";
 
@@ -59,22 +58,17 @@ export const sendDeactivationEmail = async (
   email: string,
   reason: DeactivationReason = DeactivationReasons.DEFAULT
 ) => {
-  try {
-    const HOST = await getOrigin();
+  const HOST = await getOrigin();
 
-    await sendEmail(email, {
+  await sendEmail(
+    email,
+    {
       subject: "Account deactivated | Compte désactivé",
       formResponse:
         reason === DeactivationReasons.DEFAULT
           ? defaultTemplate(email, HOST)
           : sharedTemplate(email, HOST),
-    });
-  } catch (err) {
-    logMessage.error(
-      `{"status": "failed", "message": "Notify failed to send deactivation notice to ${email}", "error":${
-        (err as Error).message
-      }}`
-    );
-    throw err;
-  }
+    },
+    "deactivateAccount"
+  );
 };

@@ -494,7 +494,7 @@ export const ResponseDelivery = () => {
               />
               <div className="mb-4 ml-12 text-sm">
                 <div>
-                  <Markdown options={{ forceBlock: true }}>
+                  <Markdown options={{ forceBlock: false }}>
                     {t("settingsPurposeAndUse.personalInfoDetails")}
                   </Markdown>
                 </div>
@@ -515,7 +515,7 @@ export const ResponseDelivery = () => {
               />
               <div className="mb-4 ml-12 text-sm">
                 <div>
-                  <Markdown options={{ forceBlock: true }}>
+                  <Markdown options={{ forceBlock: false }}>
                     {t("settingsPurposeAndUse.nonAdminInfoDetails")}
                   </Markdown>
                 </div>

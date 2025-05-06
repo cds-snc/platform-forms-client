@@ -17,6 +17,7 @@
   "save": "Save",
   "managePermissions": "Manage permissions",
   "viewPermissions": "View permissions",
+  "viewAuditLogs": "View audit logs",
   "managePermissionsFor": "Managing permissions of",
   "assignUsersToTemplate": "Add, remove, or transfer ownership to another GC Forms account within your department or agency.",
   "enterOwnersEmail": "Enter form owner’s email address",

@@ -19,7 +19,7 @@ import { useAllowPublish } from "@lib/hooks/form-builder/useAllowPublish";
 import { safeJSONParse } from "@lib/utils";
 import { ErrorSaving } from "@formBuilder/components/shared/ErrorSaving";
 import { FormServerErrorCodes } from "@lib/types/form-builder-types";
-import { PrePublishDialog } from "./PrePublishDialog";
+import { PrePublishDialog } from "../PrePublishDialog";
 import { FormProperties } from "@lib/types";
 import { useGroupStore } from "@formBuilder/components/shared/right-panel/treeview/store/useGroupStore";
 import { useFormBuilderConfig } from "@lib/hooks/useFormBuilderConfig";

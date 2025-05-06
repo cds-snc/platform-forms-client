@@ -27,10 +27,10 @@ const ensureQuestionId = (element: FormElement) => {
 };
 
 export const transforms: TemplateStore<"transforms"> =
-  (set) => async (options: transformSchemaOptions) => {
+  (set) => async (options?: transformSchemaOptions) => {
     set((state) => {
       state.form.elements.forEach((element) => {
-        if (options.cleanRules) {
+        if (options && options.cleanRules) {
           cleanElementRules(state.form.elements, element);
         }
         ensureQuestionId(element);
