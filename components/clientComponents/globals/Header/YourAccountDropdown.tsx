@@ -17,7 +17,22 @@ export const YourAccountDropdown = ({ isAuthenticated }: YourAccountDropdownProp
   const { ability } = useAccessControl();
 
   const handleLogout = () => {
+    // Clear the template store
     clearTemplateStore();
+
+    const tz = Intl.DateTimeFormat().resolvedOptions().timeZone;
+    const timeOptions = { timeZone: tz };
+    const enTime = new Date().toLocaleString("en-CA", timeOptions);
+    const frTime = new Date().toLocaleString("fr-CA", timeOptions);
+
+    const logoutTime = JSON.stringify({
+      en: enTime,
+      fr: frTime,
+    });
+
+    sessionStorage.setItem("logoutTime", logoutTime);
+
+    // Sign out the user
     signOut({ callbackUrl: `/${i18n.language}/auth/logout` });
   };
 
