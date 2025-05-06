@@ -26,9 +26,7 @@ export default async function Page(props: { params: Promise<{ locale: string }> 
   return (
     <div id="auth-panel">
       <h1 className="mb-12 mt-6 border-b-0">{t("messageContent")}</h1>
-      <div className="items-center pb-10 pt-3 text-sm font-normal not-italic">
-        <LocalTime locale={locale} />
-      </div>
+      <LocalTime locale={locale} />
       <div>
         <LinkButton.Primary href={`/${locale}/auth/login`}>
           {t("goToSignInLabel")}

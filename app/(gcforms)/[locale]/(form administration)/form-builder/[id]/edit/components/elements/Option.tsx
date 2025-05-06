@@ -8,8 +8,9 @@ import { Button } from "@clientComponents/globals";
 import { Input } from "@formBuilder/components/shared/Input";
 import { useTemplateStore } from "@lib/store/useTemplateStore";
 import { Language } from "@lib/types/form-builder-types";
+import { cn } from "@lib/utils";
 
-type RenderIcon = (index: number) => ReactElement | string | undefined;
+type RenderIcon = ((index: number) => ReactElement | string) | undefined;
 
 interface OptionProps {
   parentIndex: number;
@@ -108,9 +109,11 @@ export const Option = ({
 
   return (
     <div className="mt-3 flex">
-      <div className="mt-2 flex w-5 justify-end" role="presentation">
-        {icon}
-      </div>
+      {icon && (
+        <div className="mt-2 flex w-5 justify-end" role="presentation">
+          {icon}
+        </div>
+      )}
       <Input
         id={`option--${id}--${index + 1}`}
         ref={input}
@@ -122,7 +125,7 @@ export const Option = ({
           updateValue(parentIndex, e.target.value)
         }
         onKeyDown={handleKeyDown}
-        className="!my-0 ml-5 max-h-9 w-full"
+        className={cn("!my-0 max-h-9 w-full", icon && "ml-5")}
         {...getLocalizationAttribute()}
         onFocus={onFocus}
         onBlur={onBlur}

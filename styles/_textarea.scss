@@ -59,11 +59,11 @@
 }
 
 .gcds-textarea-wrapper:focus-within {
-  color: var(--gcds-textarea-focus-text);
+  color: var(--gcds-textarea-focus-color);
 
   textarea:focus {
-    border-color: var(--gcds-textarea-focus-text);
-    outline: var(--gcds-textarea-outline-width) solid var(--gcds-textarea-focus-text);
+    border-color: var(--gcds-textarea-focus-border);
+    outline: var(--gcds-textarea-outline-width) solid var(--gcds-textarea-focus-border);
     outline-offset: var(--gcds-textarea-border-width);
     box-shadow: var(--gcds-textarea-focus-box-shadow);
   }

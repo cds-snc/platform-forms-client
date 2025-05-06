@@ -1,4 +1,5 @@
 # Conditions générales
+
 Les présentes conditions d’utilisation définissent les rôles et responsabilités d'[Emploi et Développement social Canada (EDSC)](https://www.canada.ca/fr/emploi-developpement-social.html) quant à l’hébergement de ce formulaire au nom d’un ministère ou organisme.
 
 Pour savoir comment le ministère ou l’organisme gère vos soumissions du formulaire, revenez au formulaire que vous consultiez.  
