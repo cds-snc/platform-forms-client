@@ -151,6 +151,7 @@ export const getEventsForUser = async (userId: string) => {
         event: record.Event,
         timestamp: record.TimeStamp,
         description: record.Description,
+        subject: record.Subject,
       };
     })
     .sort((a, b) => {
@@ -167,6 +168,7 @@ const retrieveAuditLogs = async (keys: Array<Record<string, string>>) => {
     Event: string;
     TimeStamp: number;
     Description: string;
+    Subject: string;
   }> = [];
 
   const batchRequest = new BatchGetCommand({
@@ -187,6 +189,7 @@ const retrieveAuditLogs = async (keys: Array<Record<string, string>>) => {
         Event: item.Event,
         TimeStamp: item.TimeStamp,
         Description: item.Description,
+        Subject: item.Subject,
       })) ?? [])
     );
 
@@ -209,6 +212,7 @@ const retrieveAuditLogs = async (keys: Array<Record<string, string>>) => {
             Event: item.Event,
             TimeStamp: item.TimeStamp,
             Description: item.Description,
+            Subject: item.Subject,
           })) ?? [])
         );
         if (!retryResponse.UnprocessedKeys?.AuditLogs) {

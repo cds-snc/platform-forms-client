@@ -1,4 +1,7 @@
 {
   "title": "Événements du journal d'audit",
-  "noEvents": "Aucun événement trouvé."
+  "noEvents": "Aucun événement trouvé.",
+  "event": "Evénement",
+  "subject": "Sujet",
+  "description": "Description"
 }

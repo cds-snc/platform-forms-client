@@ -30,7 +30,7 @@ export default AuthenticatedPage<{ id: string }>(
     const events = (await getEventsForUser(id)) ?? [];
 
     const sortedEvents: { [key: string]: Array<Record<string, string | number>> } = {};
-    events.forEach(({ event, timestamp, description }) => {
+    events.forEach(({ event, timestamp, description, subject }) => {
       const eventDate = new Date(timestamp);
       const id = `${event}-${timestamp}`;
       const eventDay = eventDate.toLocaleDateString("en-US", {
@@ -52,6 +52,7 @@ export default AuthenticatedPage<{ id: string }>(
         event,
         timestamp,
         description,
+        subject,
         eventTime,
       });
     });
@@ -80,27 +81,28 @@ export default AuthenticatedPage<{ id: string }>(
             return (
               <li key={eventDay} className="mb-4">
                 <h2 className="mb-2">{eventDay}</h2>
-                {events.map(({ id, event, eventTime, description }) => {
-                  return (
-                    <div
-                      className="flex border-b-1 py-2" // Added `break-words` for wrapping
-                      key={id}
-                    >
-                      <div className="w-80 text-slate-600">
-                        <span> {eventTime}</span> - <span>{event}</span>
-                      </div>
-                      <div>
-                        {description ? (
-                          <span className="inline-block max-w-[600px] break-words text-slate-500 ">
-                            {description}
-                          </span>
-                        ) : (
-                          ""
-                        )}
-                      </div>
-                    </div>
-                  );
-                })}
+                <table className="table-fixed">
+                  <thead>
+                    <tr>
+                      <th className="text-left">{t("event")}</th>
+                      <th className="px-4 text-left">{t("subject")}</th>
+                      <th className="text-left">{t("description")}</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {events.map(({ id, event, eventTime, description, subject }) => {
+                      return (
+                        <tr className="border-b-1 " key={id}>
+                          <td className="min-w-80 text-slate-600">
+                            {eventTime} - {event}
+                          </td>
+                          <td className="px-4 text-slate-500">{subject}</td>
+                          <td className="break-words text-slate-500 ">{description ?? ""}</td>
+                        </tr>
+                      );
+                    })}
+                  </tbody>
+                </table>
               </li>
             );
           })}

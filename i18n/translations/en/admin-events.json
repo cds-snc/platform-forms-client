@@ -1,4 +1,7 @@
 {
   "title": "Audit Log Events",
-  "noEvents": "No events found."
+  "noEvents": "No events found.",
+  "event": "Event",
+  "subject": "Subject",
+  "description": "Description"
 }
