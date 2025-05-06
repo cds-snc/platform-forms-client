@@ -55,7 +55,7 @@ export enum PurposeOption {
   nonAdmin = "nonAdmin",
 }
 
-// TODO: replace with ResponseDeliveryWithoutEmail one Notifications feature flag is removed
+// TODO: replace with ResponseDeliveryWithoutEmail once emailDeliverly feature flag is removed
 export const ResponseDelivery = () => {
   const { t, i18n } = useTranslation("form-builder");
   const { status } = useSession();

@@ -24,8 +24,8 @@ export const sendNotification = async (formId: string, titleEn: string, titleFr:
   const notificationsInterval =
     usersAndNotifications.notificationsInterval as NotificationsInterval;
 
+  // Notifcations are turned off, do nothing
   if (!notificationsInterval) {
-    // Notifcations are turned off, do nothing
     return;
   }
 
