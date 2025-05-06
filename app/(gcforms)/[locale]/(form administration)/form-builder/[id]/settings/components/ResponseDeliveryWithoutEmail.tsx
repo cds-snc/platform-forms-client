@@ -216,7 +216,6 @@ export const ResponseDeliveryWithoutEmail = () => {
 
   return (
     <>
-      <h1>WITHOUT EMAIL</h1>
       <p className="mb-4 w-3/5 rounded-md bg-indigo-50 p-3 font-bold">
         {t("settingsResponseDelivery.beforePublishMessage")}
       </p>
