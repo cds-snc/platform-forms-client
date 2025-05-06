@@ -106,7 +106,14 @@ export const MoreDialog = () => {
           title={t("moreOptions")}
         >
           <div className="p-5">
-            <form onSubmit={(e: React.FormEvent<HTMLFormElement>) => e.preventDefault()}>
+            <form
+              onSubmit={(e: React.FormEvent<HTMLFormElement>) => {
+                updateField(getPathString(item.id), item.properties);
+                setChangeKey(String(new Date().getTime()));
+                handleClose();
+                e.preventDefault();
+              }}
+            >
               <section>
                 <Question item={item} setItem={setItem} />
                 <Description item={item} setItem={setItem} />
@@ -131,6 +138,7 @@ export const MoreDialog = () => {
                 <QuestionIdOptions item={item} setItem={setItem} />
                 <QuestionTagOptions item={item} setItem={setItem} />
               </InfoDetails>
+              <input type="submit" className="hidden" />
             </form>
           </div>
         </Dialog>
