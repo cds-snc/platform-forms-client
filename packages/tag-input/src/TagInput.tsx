@@ -124,9 +124,9 @@ export const TagInput = ({
     const acceptKeys = [keys.ENTER, keys.TAB, keys.COMMA];
 
     if (acceptKeys.includes(key)) {
-      event.preventDefault();
       const tag = event.currentTarget.value.trim();
       if (tag) {
+        event.preventDefault();
         handleAddTag(tag);
         event.currentTarget.value = "";
       }
