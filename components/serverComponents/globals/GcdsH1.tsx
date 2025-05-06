@@ -10,7 +10,7 @@ export const GcdsH1 = ({
   className?: string;
 }) => {
   return (
-    <h1 tabIndex={tabIndex || -1} className={cn("!mb-12 inline-block", className)}>
+    <h1 tabIndex={tabIndex || -1} className={cn(className)}>
       {children}
     </h1>
   );
