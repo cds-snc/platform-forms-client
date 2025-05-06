@@ -120,7 +120,7 @@ export const SaveButton = () => {
     if (timeRef.current && new Date().getTime() - timeRef.current < 2000) {
       return;
     }
-    const formConfig = safeJSONParse<FormProperties>(getSchema(true));
+    const formConfig = safeJSONParse<FormProperties>(getSchema({ cleanRules: true }));
     if (!formConfig) {
       toast.error(<ErrorSaving errorCode={FormServerErrorCodes.JSON_PARSE} />, "wide");
       return;

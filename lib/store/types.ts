@@ -75,7 +75,7 @@ export interface TemplateStoreState extends TemplateStoreProps {
   unsetField: (path: string) => void;
   duplicateElement: (id: number, groupId?: string, copyEn?: string, copyFr?: string) => void;
   importTemplate: (jsonConfig: FormProperties) => void;
-  getSchema: (options: transformSchemaOptions) => string;
+  getSchema: (options?: transformSchemaOptions) => string;
   getIsPublished: () => boolean;
   setIsPublished: (isPublished: boolean) => void;
   getFormElementById: (id: number) => FormElement | undefined;
@@ -90,7 +90,7 @@ export interface TemplateStoreState extends TemplateStoreProps {
   initialize: (language?: string) => void;
   removeChoiceFromRules: (elId: string, choiceIndex: number) => void;
   removeChoiceFromNextActions: (elId: string, choiceIndex: number) => void;
-  transforms: (options: transformSchemaOptions) => void;
+  transforms: (options?: transformSchemaOptions) => void;
   setChangeKey: (key: string) => void;
   getGroupsEnabled: () => boolean;
   setGroupsLayout: (layout: string[]) => void;
