@@ -133,11 +133,13 @@ export const MoreDialog = () => {
 
               <SortOptions item={item} setItem={setItem} />
 
-              <InfoDetails summary={t("moreDialog.apiOptionsSection.title")}>
-                <p className="mt-6">{t("moreDialog.apiOptionsSection.description")}</p>
-                <QuestionIdOptions item={item} setItem={setItem} />
-                <QuestionTagOptions item={item} setItem={setItem} />
-              </InfoDetails>
+              {item.type !== "dynamicRow" && (
+                <InfoDetails summary={t("moreDialog.apiOptionsSection.title")}>
+                  <p className="mt-6">{t("moreDialog.apiOptionsSection.description")}</p>
+                  <QuestionIdOptions item={item} setItem={setItem} />
+                  <QuestionTagOptions item={item} setItem={setItem} />
+                </InfoDetails>
+              )}
               <input type="submit" className="hidden" />
             </form>
           </div>
