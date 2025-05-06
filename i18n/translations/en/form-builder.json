@@ -815,6 +815,10 @@
         "text4": "One API key per form",
         "text5": "Software development resources needed for the API integration"
       }
+    },
+    "emailDeliveryDeprecated": {
+      "title": "Email data delivery is no longer available.",
+      "description": "You will not be able to select this delivery option for future forms."
     }
   },
   "loggedOutTab": {

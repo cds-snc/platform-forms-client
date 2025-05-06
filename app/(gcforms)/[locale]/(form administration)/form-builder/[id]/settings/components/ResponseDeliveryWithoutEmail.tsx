@@ -243,18 +243,26 @@ export const ResponseDeliveryWithoutEmail = () => {
               ) : null}
 
               {isPublished && deliveryOptionValue === DeliveryOption.email && (
-                <div className="mb-10">
-                  <Radio
-                    disabled={isPublished}
-                    id={`delivery-option-${DeliveryOption.email}`}
-                    checked={deliveryOptionValue === DeliveryOption.email}
-                    name="response-delivery"
-                    value={DeliveryOption.email}
-                    label={emailLabel}
-                    onChange={updateDeliveryOption}
-                    className="mb-0"
-                  />
-                </div>
+                <>
+                  <div className="mb-8 w-3/5 rounded-md bg-indigo-50 p-3">
+                    <p className="mb-2 font-bold">
+                      {t("settingsResponseDelivery.emailDeliveryDeprecated.title")}
+                    </p>
+                    <p>{t("settingsResponseDelivery.emailDeliveryDeprecated.description")}</p>
+                  </div>
+                  <div className="mb-10">
+                    <Radio
+                      disabled={isPublished}
+                      id={`delivery-option-${DeliveryOption.email}`}
+                      checked={deliveryOptionValue === DeliveryOption.email}
+                      name="response-delivery"
+                      value={DeliveryOption.email}
+                      label={emailLabel}
+                      onChange={updateDeliveryOption}
+                      className="mb-0"
+                    />
+                  </div>
+                </>
               )}
 
               {/* Vault Option */}
