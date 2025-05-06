@@ -36,12 +36,12 @@
       }
     }
     &.gc-selected-tag {
-      background-color: #d1fae5;
-      color: #065f46;
-      border-color: #bbf7d0;
+      background-color: #fff;
+      color: #1e293b;
+      border-color: #1e293b;
       svg {
-        color: #065f46;
-        fill: #065f46;
+        color: #1e293b;
+        fill: #1e293b;
       }
     }
   }
