@@ -2,7 +2,6 @@
 import React, { useState } from "react";
 import { useTranslation } from "@i18n/client";
 import { FormElementTypes } from "@lib/types";
-import axios from "axios";
 
 import { useDialogRef, Dialog } from "./shared/Dialog";
 import { TagInput } from "./shared/tag-input/TagInput";
@@ -12,7 +11,15 @@ import { useTemplateStore } from "@lib/store/useTemplateStore";
 import { useSession } from "next-auth/react";
 import Markdown from "markdown-to-jsx";
 
+import { shareForm } from "../actions";
 import { isValidEmail } from "@lib/validation/isValidEmail";
+import { Loader } from "@clientComponents/globals/Loader";
+
+const Loading = () => (
+  <div className="flex h-full items-center justify-center ">
+    <Loader />
+  </div>
+);
 
 export const ShareModal = ({
   handleClose,
@@ -45,15 +52,12 @@ export const ShareModal = ({
         return;
       }
 
-      await axios({
-        url: "/api/share",
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        data: { name, formId, emails: emails, filename },
-        timeout: 5000,
-      });
+      const result = await shareForm({ emails, formId, filename });
+
+      if (result.error) {
+        setStatus("error");
+        return;
+      }
 
       setStatus("sent");
     } catch (err) {
@@ -124,6 +128,9 @@ export const ShareModal = ({
               <p className="text-red-default">{t("share.messageError")}</p>
             </>
           )}
+
+          {status === "sending" && <Loading />}
+
           {status === "sent" && (
             <>
               <p>{t("share.messageSent")}</p>

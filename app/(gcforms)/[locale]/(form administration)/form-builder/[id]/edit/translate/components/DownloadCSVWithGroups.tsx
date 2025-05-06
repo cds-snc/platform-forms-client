@@ -5,7 +5,6 @@ import { useTemplateStore } from "@lib/store/useTemplateStore";
 import { Button } from "@clientComponents/globals";
 import { FormElement } from "@lib/types";
 import { getDate, slugify } from "@lib/client/clientHelpers";
-import { alphabet } from "@lib/utils/form-builder";
 import { sortGroup } from "@lib/utils/form-builder/groupedFormHelpers";
 
 const formatText = (str: string) => `"${str}"`;
@@ -14,17 +13,13 @@ export const DownloadCSVWithGroups = () => {
   const { form, name } = useTemplateStore((s) => ({ form: s.form, name: s.name }));
   const { t, i18n } = useTranslation("form-builder");
 
-  let elementIndex = 0;
   let data = [];
 
-  const parseElement = (element: FormElement, index: string | number) => {
+  const parseElement = (element: FormElement) => {
     const description =
-      element.type === "richText"
-        ? formatText("Page text/Texte de page")
-        : formatText(`Question ${index}`);
+      element.type === "richText" ? formatText("Page text/Texte de page") : formatText("");
 
     if (element.type === "dynamicRow") {
-      let subElementIndex = -1;
       data.push([
         description,
         formatText(element.properties.titleEn),
@@ -32,8 +27,7 @@ export const DownloadCSVWithGroups = () => {
       ]);
 
       element.properties.subElements?.map((subElement) => {
-        subElementIndex++;
-        parseElement(subElement, alphabet[subElementIndex]);
+        parseElement(subElement);
       });
 
       return;
@@ -58,7 +52,7 @@ export const DownloadCSVWithGroups = () => {
       element.properties.choices.map((choice, choiceIndex) => {
         if (choice.en || choice.fr) {
           data.push([
-            `${description} - Option ${choiceIndex + 1}`,
+            `${description} Option ${choiceIndex + 1}`,
             formatText(choice.en),
             formatText(choice.fr),
           ]);
@@ -78,6 +72,14 @@ export const DownloadCSVWithGroups = () => {
       formatText(form.introduction?.descriptionFr ?? ""),
     ]);
 
+    if (form.privacyPolicy?.descriptionEn || form.privacyPolicy?.descriptionFr) {
+      data.push([
+        formatText("Privacy statement/Avis de confidentialité"),
+        formatText(form.privacyPolicy.descriptionEn),
+        formatText(form.privacyPolicy.descriptionFr),
+      ]);
+    }
+
     // Sort thorugh the groups....
     if (form.groups) {
       const groups = form.groups;
@@ -86,24 +88,15 @@ export const DownloadCSVWithGroups = () => {
         const groupElements = sortGroup({ form, group });
 
         data.push([
-          formatText(`Section: ` + group.name),
+          formatText(`Page: ` + group.name),
           formatText(group.titleEn),
           formatText(group.titleFr),
         ]);
 
         groupElements.map((element) => {
-          elementIndex++;
-          parseElement(element, elementIndex);
+          parseElement(element);
         });
       });
-    }
-
-    if (form.privacyPolicy?.descriptionEn || form.privacyPolicy?.descriptionFr) {
-      data.push([
-        formatText("Privacy statement/Avis de confidentialité"),
-        formatText(form.privacyPolicy.descriptionEn),
-        formatText(form.privacyPolicy.descriptionFr),
-      ]);
     }
 
     if (form.confirmation?.descriptionEn || form.confirmation?.descriptionFr) {

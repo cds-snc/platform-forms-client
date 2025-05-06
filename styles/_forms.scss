@@ -57,7 +57,6 @@
 .gc-richText {
   p {
     @extend .gc-p;
-    @apply text-base;
   }
 
   p:has(+ ul, + ol) {

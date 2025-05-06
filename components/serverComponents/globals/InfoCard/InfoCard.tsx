@@ -10,7 +10,7 @@ export const InfoCard = (props: CardProps) => {
   const { children, icon, title } = props;
 
   return (
-    <article className="mx-5 rounded-lg border-1 pb-5">
+    <article className="rounded-lg border-1 pb-5">
       {icon && <div>{icon}</div>}
       <div className="flex flex-col justify-center">
         {title && (
