@@ -1,10 +1,11 @@
 import { sendEmail } from "@lib/integration/notifyConnector";
 import { logMessage } from "@lib/logger";
-import { getUsersAndNotificationsInterval } from "@lib/templates";
 import { getRedisInstance } from "@lib/integration/redisConnector";
 import { getOrigin } from "@lib/origin";
 import { NotificationsInterval } from "packages/types/src/form-types";
 import { serverTranslation } from "@i18n";
+import { prisma, prismaErrors } from "@lib/integration/prismaConnector";
+import { logEvent } from "@lib/auditLogs";
 
 export const Status = {
   SINGLE_EMAIL_SENT: "SINGLE_EMAIL_SENT",
@@ -50,6 +51,41 @@ export const sendNotification = async (formId: string, titleEn: string, titleFr:
   }
 };
 
+async function getUsersAndNotificationsInterval(formID: string): Promise<{
+  notificationsInterval: number | null | undefined;
+  users: { email: string }[];
+} | null> {
+  const usersAndNotificationsInterval = await prisma.template
+    .findUnique({
+      where: {
+        id: formID,
+      },
+      select: {
+        notificationsInterval: true,
+        users: {
+          select: {
+            email: true,
+          },
+        },
+      },
+    })
+    .catch((e) => prismaErrors(e, null));
+
+  if (!usersAndNotificationsInterval) return null;
+
+  logEvent(
+    "anonymous",
+    { type: "Form", id: formID },
+    "ReadForm",
+    "Retrieved users emails and notificationsInterval associated with Form"
+  );
+
+  return {
+    users: usersAndNotificationsInterval.users,
+    notificationsInterval: usersAndNotificationsInterval.notificationsInterval,
+  };
+}
+
 export const removeMarker = async (formId: string) => {
   const redis = await getRedisInstance();
   await redis
@@ -90,8 +126,6 @@ const getMarker = async (formId: string) => {
 
 const sendEmailNotificationsToAllUsers = async (
   users: {
-    id: string;
-    name: string | null;
     email: string;
   }[],
   formId: string,

@@ -71,27 +71,11 @@ export const resetThrottlingRate = AuthenticatedAction(async (session, formId: s
 });
 
 export const updateNotificationsInterval = AuthenticatedAction(
-  async (
-    session,
-    formId: string,
-    notificationsInterval: NotificationsInterval,
-    isPublished: boolean
-  ) => {
-    // The form config could instead be pulled from the DB to check if the form is published if this needs more security
-    if (isPublished) {
-      return;
-    }
+  async (session, formId: string, notificationsInterval: NotificationsInterval) => {
     Promise.all([
       updateNotificationsSetting(formId, notificationsInterval),
       // Remove old cache value to allow a new one with the new ttl to be created when the next submission is sent
       removeMarker(formId),
-    ]).then(() =>
-      logEvent(
-        session.user.id,
-        { type: "Form" },
-        "UpdateNotificationsInterval",
-        `User :${session.user.id} updated notifications interval on form ${formId} to ${notificationsInterval}`
-      )
-    );
+    ]);
   }
 );

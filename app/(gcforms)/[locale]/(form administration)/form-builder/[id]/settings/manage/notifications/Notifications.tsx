@@ -38,10 +38,10 @@ export const Notifications = ({
       notificationValue === String(NotificationsInterval.DAY)
         ? NotificationsInterval.DAY
         : NotificationsInterval.OFF;
-    await updateNotificationsInterval(formId, newNotificationsInterval, isPublished).catch(() =>
+    await updateNotificationsInterval(formId, newNotificationsInterval).catch(() =>
       toast.error(updateNotificationsIntervalError)
     );
-  }, [formId, notificationValue, updateNotificationsIntervalError, isPublished]);
+  }, [formId, notificationValue, updateNotificationsIntervalError]);
 
   return (
     <div className="mb-10" data-testid="form-notifications">

@@ -1477,13 +1477,13 @@ export const checkIfClosed = async (formId: string) => {
 };
 
 export const updateNotificationsSetting = async (
-  formID: string,
+  formId: string,
   notificationsInterval: number | null
 ) => {
-  const { user } = await authorization.canEditForm(formID).catch((e) => {
+  const { user } = await authorization.canEditForm(formId).catch((e) => {
     logEvent(
       e.user.id,
-      { type: "Form", id: formID },
+      { type: "Form", id: formId },
       "AccessDenied",
       "Attempted to update notifications interval for Form"
     );
@@ -1500,7 +1500,7 @@ export const updateNotificationsSetting = async (
   await prisma.template
     .update({
       where: {
-        id: formID,
+        id: formId,
       },
       data: {
         notificationsInterval,
@@ -1508,51 +1508,10 @@ export const updateNotificationsSetting = async (
     })
     .catch((e) => prismaErrors(e, null));
 
-  logEvent(user.id, { type: "Form", id: formID }, "UpdateNotificationsInterval");
-};
-
-export async function getUsersAndNotificationsInterval(formID: string): Promise<{
-  notificationsInterval: number | null | undefined;
-  users: { id: string; name: string | null; email: string }[];
-} | null> {
-  const { user } = await authorization.canViewForm(formID).catch((e) => {
-    logEvent(
-      e.user.id,
-      { type: "Form", id: formID },
-      "AccessDenied",
-      "Attempted to retrieve users associated with Form"
-    );
-    throw e;
-  });
-  const usersAndNotificationsInterval = await prisma.template
-    .findUnique({
-      where: {
-        id: formID,
-      },
-      select: {
-        notificationsInterval: true,
-        users: {
-          select: {
-            id: true,
-            name: true,
-            email: true,
-          },
-        },
-      },
-    })
-    .catch((e) => prismaErrors(e, null));
-
-  if (!usersAndNotificationsInterval) return null;
-
   logEvent(
     user.id,
-    { type: "Form", id: formID },
-    "ReadForm",
-    "Retrieved users and notificationsInterval associated with Form"
+    { type: "Form" },
+    "UpdateNotificationsInterval",
+    `User :${user.id} updated notifications interval on form ${formId} to ${notificationsInterval}`
   );
-
-  return {
-    users: usersAndNotificationsInterval.users,
-    notificationsInterval: usersAndNotificationsInterval.notificationsInterval,
-  };
-}
+};
