@@ -3,9 +3,6 @@ import { Metadata } from "next";
 import { ResponseDelivery } from "./components/ResponseDelivery";
 import { ApiKeyDialog } from "../components/dialogs/ApiKeyDialog/ApiKeyDialog";
 import { DeleteApiKeyDialog } from "../components/dialogs/DeleteApiKeyDialog/DeleteApiKeyDialog";
-import { getSomeFlags } from "@lib/cache/flags";
-import { FeatureFlags } from "@lib/cache/types";
-import { ResponseDeliveryWithoutEmail } from "./components/ResponseDeliveryWithoutEmail";
 
 export async function generateMetadata(props: {
   params: Promise<{ locale: string }>;
@@ -21,11 +18,9 @@ export async function generateMetadata(props: {
 }
 
 export default async function Page() {
-  const { emailDelivery } = await getSomeFlags([FeatureFlags.emailDelivery]);
-
   return (
     <>
-      {!emailDelivery ? <ResponseDeliveryWithoutEmail /> : <ResponseDelivery />}
+      <ResponseDelivery />
       <ApiKeyDialog />
       <DeleteApiKeyDialog />
     </>

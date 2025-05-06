@@ -2,7 +2,7 @@
 
 import { useTranslation } from "@i18n/client";
 import { SubNavLink } from "@clientComponents/globals/SubNavLink";
-import { ChatIcon, BrandIcon, GearIcon } from "@serverComponents/icons";
+import { EmailIcon, BrandIcon, GearIcon } from "@serverComponents/icons";
 
 export const SettingsNavigation = ({ id }: { id: string }) => {
   const {
@@ -16,7 +16,7 @@ export const SettingsNavigation = ({ id }: { id: string }) => {
         <nav className="mb-6 flex flex-wrap" aria-label={t("navLabelEditor")}>
           <SubNavLink href={`/${language}/form-builder/${id}/settings`}>
             <span className="text-sm laptop:text-base">
-              <ChatIcon className="mr-2 inline-block laptop:mt-[-2px]" />
+              <EmailIcon className="mr-2 inline-block laptop:mt-[-2px]" />
               {t("settingsNavHome")}
             </span>
           </SubNavLink>
