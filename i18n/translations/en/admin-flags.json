@@ -29,6 +29,10 @@
     "caretakerPeriod": {
       "title": "caretakerPeriod",
       "description": "Enable care taker period warning to be visible"
+    },
+    "emailDelivery": {
+      "title": "Email Delivery",
+      "description": "Enable email delivery for forms"
     }
   }
 }
