@@ -97,9 +97,10 @@ export const ResponseHtmlAggregated = ({
                 />
               </div>
               <p className="mb-4">
-                <strong>{submissions.length}</strong>
-                {` ${t("responseAggregatedTemplate.responsesDownloaded", {
+                <strong>{submissions.length}</strong>{" "}
+                {`${t("responseAggregatedTemplate.responsesDownloaded", {
                   lng: lang,
+                  count: submissions.length,
                 })} ${dateTime}`}
               </p>
               <p className="mb-4">{t("responseAggregatedTemplate.needToVerify", { lng: lang })}</p>
