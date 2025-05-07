@@ -22,9 +22,9 @@ export const sendNotification = async (formId: string, titleEn: string, titleFr:
   }
 
   const { users } = usersAndNotifications;
+
   const notificationsInterval =
     usersAndNotifications.notificationsInterval as NotificationsInterval;
-
   // Notifcations are turned off, do nothing
   if (!notificationsInterval) {
     return;
@@ -74,7 +74,7 @@ async function getUsersAndNotificationsInterval(formID: string): Promise<{
   if (!usersAndNotificationsInterval) return null;
 
   logEvent(
-    "anonymous",
+    "unknown",
     { type: "Form", id: formID },
     "ReadForm",
     "Retrieved users emails and notificationsInterval associated with Form"
