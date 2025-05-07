@@ -242,6 +242,7 @@ export const ResponseDeliveryWithoutEmail = () => {
                 </p>
               ) : null}
 
+              {/* Email Option - only show for published legacy forms that have this value */}
               {isPublished && deliveryOptionValue === DeliveryOption.email && (
                 <>
                   <div className="mb-8 w-3/5 rounded-md bg-indigo-50 p-3">
@@ -252,13 +253,12 @@ export const ResponseDeliveryWithoutEmail = () => {
                   </div>
                   <div className="mb-10">
                     <Radio
-                      disabled={isPublished}
+                      disabled={true}
                       id={`delivery-option-${DeliveryOption.email}`}
-                      checked={deliveryOptionValue === DeliveryOption.email}
+                      checked={true}
                       name="response-delivery"
                       value={DeliveryOption.email}
                       label={emailLabel}
-                      onChange={updateDeliveryOption}
                       className="mb-0"
                     />
                   </div>
