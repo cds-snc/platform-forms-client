@@ -5,6 +5,7 @@ import { updateNotificationsInterval } from "../actions";
 import { NotificationsToggle } from "./NotificationsToggle";
 import { Button } from "@clientComponents/globals";
 import { toast } from "@formBuilder/components/shared/Toast";
+import { ga } from "@lib/client/clientHelpers";
 
 export const Notifications = ({
   formId,
@@ -38,6 +39,13 @@ export const Notifications = ({
       notificationValue === String(NotificationsInterval.DAY)
         ? NotificationsInterval.DAY
         : NotificationsInterval.OFF;
+    // To help track if many users are disabling notifications - yes, then default to off
+    if (newNotificationsInterval === NotificationsInterval.OFF) {
+      ga("form_notifications", {
+        formId,
+        action: "disabled",
+      });
+    }
     await updateNotificationsInterval(formId, newNotificationsInterval).catch(() =>
       toast.error(updateNotificationsIntervalError)
     );
