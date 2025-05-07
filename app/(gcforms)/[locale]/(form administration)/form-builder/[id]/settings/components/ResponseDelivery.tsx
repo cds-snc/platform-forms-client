@@ -51,7 +51,7 @@ export enum PurposeOption {
   nonAdmin = "nonAdmin",
 }
 
-export const ResponseDeliveryWithoutEmail = () => {
+export const ResponseDelivery = () => {
   const { t, i18n } = useTranslation("form-builder");
   const { status } = useSession();
   const { refreshData } = useRefresh();
@@ -242,8 +242,8 @@ export const ResponseDeliveryWithoutEmail = () => {
                 </p>
               ) : null}
 
-              {/* Email Option - only show for published legacy forms that have this value */}
-              {isPublished && deliveryOptionValue === DeliveryOption.email && (
+              {/* Email Option - only show for legacy published or draft forms that have this value */}
+              {deliveryOptionValue === DeliveryOption.email && (
                 <>
                   <div className="mb-8 w-3/5 rounded-md bg-indigo-50 p-3">
                     <p className="mb-2 font-bold">
