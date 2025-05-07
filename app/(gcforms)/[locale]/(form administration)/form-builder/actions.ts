@@ -31,8 +31,6 @@ import { isValidEmail } from "@lib/validation/isValidEmail";
 import { slugify } from "@lib/client/clientHelpers";
 import { sendEmail } from "@lib/integration/notifyConnector";
 import { getOrigin } from "@lib/origin";
-import { getSomeFlags } from "@lib/cache/flags";
-import { FeatureFlags } from "@lib/cache/types";
 
 export type CreateOrUpdateTemplateType = {
   id?: string;
@@ -357,11 +355,6 @@ export const updateTemplateDeliveryOption = AuthenticatedAction(
     error?: string;
   }> => {
     try {
-      const { emailDelivery } = await getSomeFlags([FeatureFlags.emailDelivery]);
-      if (!emailDelivery) {
-        throw new Error("Email delivery option is not supported");
-      }
-
       if (!deliveryOption) {
         throw new Error("Require Delivery Option Data");
       }
