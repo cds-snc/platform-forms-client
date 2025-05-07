@@ -12,6 +12,7 @@ import { FormProperties } from "@lib/types";
 import { validateTemplateSize } from "@lib/utils/validateTemplateSize";
 import { ga } from "@lib/client/clientHelpers";
 import { transformFormProperties } from "@lib/utils/form-builder/transformFormProperties";
+import { validateUniqueQuestionIds } from "@lib/utils/validateUniqueQuestionIds";
 
 export const Start = () => {
   const {
@@ -56,6 +57,13 @@ export const Start = () => {
         }
 
         const data = transformFormProperties(safeJSONParse<FormProperties>(result, cleaner));
+
+        if (!validateUniqueQuestionIds(data.elements)) {
+          setErrors([{ message: t("startErrorDuplicateQuestionId") }]);
+          target.value = "";
+          return;
+        }
+
         if (!data) {
           setErrors([{ message: t("startErrorParse") }]);
           target.value = "";

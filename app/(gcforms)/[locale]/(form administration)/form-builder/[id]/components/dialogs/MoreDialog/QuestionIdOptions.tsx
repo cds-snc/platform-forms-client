@@ -5,6 +5,7 @@ import { Label } from "./Label";
 import { Input } from "@formBuilder/components/shared/Input";
 import { WarningIcon } from "@serverComponents/icons";
 import { useTemplateStore } from "@lib/store/useTemplateStore";
+import { isUniqueQuestionId } from "@lib/utils/validateUniqueQuestionIds";
 
 export const QuestionIdOptions = ({
   item,
@@ -21,18 +22,13 @@ export const QuestionIdOptions = ({
   }));
 
   useEffect(() => {
-    const questionIds = form.elements
-      .flatMap((element: FormElement) => [element, ...(element.properties.subElements || [])])
-      .filter((element: FormElement) => element.id !== item.id)
-      .map((element: FormElement) => element.properties?.questionId)
-      .filter(Boolean);
-
-    if (questionIds.includes(item.properties.questionId)) {
-      setError(true);
-    } else {
+    const questionId = item.properties.questionId;
+    if (questionId && isUniqueQuestionId(form.elements, questionId, item)) {
       setError(false);
+    } else {
+      setError(true);
     }
-  }, [item.properties.questionId, form.elements, item.id]);
+  }, [item.properties.questionId, form.elements, item]);
 
   if (item.type === FormElementTypes.richText) {
     return null;
