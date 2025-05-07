@@ -216,10 +216,9 @@ export const TagInput = ({
           onKeyDown={handleKeyDown}
           ref={tagInputRef}
         />
-        {/* @TODO: visually-hidden to css */}
         <span
           id="tag-input-live-region"
-          className="visually-hidden"
+          className="gc-visually-hidden"
           role="alert"
           aria-live="assertive"
           aria-atomic="true"
