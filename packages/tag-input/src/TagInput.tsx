@@ -122,7 +122,14 @@ export const TagInput = ({
 
     const { key } = event;
     const acceptKeys = [keys.ENTER, keys.TAB, keys.COMMA];
+    const navigateKeys = [keys.ARROW_LEFT, keys.ARROW_RIGHT];
 
+    // Clear selection when entering text input
+    if (!navigateKeys.includes(key) && selectedTagIndex !== null) {
+      setSelectedTagIndex(null);
+    }
+
+    // Accept tag input
     if (acceptKeys.includes(key)) {
       const tag = event.currentTarget.value.trim();
       if (tag) {
@@ -132,15 +139,14 @@ export const TagInput = ({
       }
     }
 
-    if (key === keys.DELETE) {
-      // If a tag is selected, delete it
-      if (selectedTagIndex !== null) {
-        handleRemoveTag(selectedTagIndex);
-        setSelectedTagIndex(null);
-        return;
-      }
+    // Delete selected tag
+    if (key === keys.DELETE && selectedTagIndex !== null) {
+      handleRemoveTag(selectedTagIndex);
+      setSelectedTagIndex(null);
+      return;
     }
 
+    // Backspace key handling
     if (key === keys.BACKSPACE) {
       // If a tag is selected, delete it
       if (selectedTagIndex !== null) {
@@ -151,7 +157,6 @@ export const TagInput = ({
 
       // If the input is empty, delete the last tag
       if (event.currentTarget.value === "") {
-        // Otherwise, delete the last tag
         if (selectedTags.length) {
           handleRemoveTag(selectedTags.length - 1);
           event.currentTarget.value = "";
@@ -159,6 +164,7 @@ export const TagInput = ({
       }
     }
 
+    // Roving through tags with arrow keys
     if (event.currentTarget.value === "") {
       if (key === keys.ARROW_LEFT) {
         if (selectedTags.length) {
