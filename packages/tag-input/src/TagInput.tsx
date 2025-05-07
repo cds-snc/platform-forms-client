@@ -2,6 +2,7 @@ import { useRef, useState } from "react";
 import { CancelIcon } from "./icons/CancelIcon";
 import "./styles.css";
 import { useTranslation } from "./i18n/useTranslation";
+import { WarningIcon } from "./icons/WarningIcon";
 
 const keys = {
   ENTER: "Enter",
@@ -25,6 +26,7 @@ export const TagInput = ({
   placeholder,
   description,
   restrictDuplicates = true,
+  maxTags,
   onTagAdd,
   onTagRemove,
   validateTag,
@@ -37,6 +39,7 @@ export const TagInput = ({
   placeholder?: string;
   description?: string;
   restrictDuplicates?: boolean;
+  maxTags?: number;
   onTagAdd?: (tag: string) => void;
   onTagRemove?: (tag: string) => void;
   validateTag?: (tag: string) => {
@@ -61,6 +64,15 @@ export const TagInput = ({
 
   const handleAddTag = (tag: string) => {
     resetMessages();
+
+    if (maxTags && selectedTags.length >= maxTags) {
+      // Announce max tags reached
+      say(t("maxTagsReached", { maxTags: maxTags.toString() }));
+
+      // Highlight the input field momentarily
+      setErrorMessages([t("maxTagsReached", { max: maxTags.toString() })]);
+      return;
+    }
 
     if (validateTag) {
       const { isValid, errors } = validateTag(tag);
@@ -235,7 +247,10 @@ export const TagInput = ({
       {errorMessages.length > 0 && (
         <div role="alert" className="gc-tag-input-error" data-testid="tag-input-error">
           {errorMessages.map((error, index) => (
-            <div key={`error-${index}`}>{error}</div>
+            <div key={`error-${index}`}>
+              <WarningIcon />
+              {error}
+            </div>
           ))}
         </div>
       )}

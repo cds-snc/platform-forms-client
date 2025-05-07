@@ -77,8 +77,15 @@
 }
 
 .gc-tag-input-error {
-  margin-top: 0.25rem;
+  font-weight: 700;
+  margin-top: 1rem;
   color: var(--gc-error-text-color);
+  svg {
+    color: var(--gc-error-text-color);
+    fill: var(--gc-error-text-color);
+    display: inline-block;
+    margin-right: 0.25rem;
+  }
 }
 
 .gc-visually-hidden {
