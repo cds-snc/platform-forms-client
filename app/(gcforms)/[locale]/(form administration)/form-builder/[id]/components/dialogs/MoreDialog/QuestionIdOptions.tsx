@@ -46,7 +46,7 @@ export const QuestionIdOptions = ({
         id={`title--modal--${item.id}`}
         name={`item${item.id}`}
         value={item.properties.questionId || ""}
-        className={`w-11/12` + (error ? " !border-red-600 outline-2 !outline-red-600" : "")}
+        className={`w-11/12` + (error ? " !border-red-700 outline-2 !outline-red-700" : "")}
         onChange={(e) => {
           setItem({
             ...item,
@@ -58,8 +58,8 @@ export const QuestionIdOptions = ({
         }}
       />
       {error && (
-        <div className="my-4 font-bold text-red-600">
-          <WarningIcon className="inline-block fill-red-600" />{" "}
+        <div className="my-4 font-bold text-red-700">
+          <WarningIcon className="inline-block fill-red-700" />{" "}
           {t("moreDialog.questionId.uniqueWarning")}
         </div>
       )}
