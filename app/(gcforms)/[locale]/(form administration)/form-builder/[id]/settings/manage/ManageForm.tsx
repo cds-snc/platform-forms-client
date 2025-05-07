@@ -61,7 +61,12 @@ export const ManageForm = (props: ManageFormProps) => {
     <>
       {canSetClosingDate && <SetClosingDate formId={id} closedDetails={closedDetails} />}
       <SetSaveAndResume formId={id} />
-      <Notifications formId={id} notificationsInterval={formRecord.notificationsInterval} />
+      <Notifications
+        formId={id}
+        notificationsInterval={formRecord.notificationsInterval}
+        disabled={formRecord.deliveryOption !== undefined}
+        off={formRecord.deliveryOption !== undefined}
+      />
       <FormOwnership
         nonce={nonce}
         formRecord={formRecord}

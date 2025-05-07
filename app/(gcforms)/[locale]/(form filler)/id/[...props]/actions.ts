@@ -85,7 +85,7 @@ export async function submitForm(
 
     // Avoid spamming users with emails by only sending one type of email, either an email
     // delivery or a notification
-    if (template.form.deliveryMethod !== "email") {
+    if (!template.deliveryOption) {
       sendNotification(formId, template.form.titleEn, template.form.titleFr);
     }
 
