@@ -10,11 +10,9 @@ import { ga } from "@lib/client/clientHelpers";
 export const Notifications = ({
   formId,
   notificationsInterval,
-  isPublished,
 }: {
   formId: string;
   notificationsInterval: NotificationsInterval | undefined;
-  isPublished: boolean;
 }) => {
   const { t } = useTranslation("form-builder");
   const [notificationValue, setNotificationValue] = useState<string>(
@@ -63,14 +61,11 @@ export const Notifications = ({
           onLabel={t("settings.notifications.options.off")}
           offLabel={t("settings.notifications.options.on")}
           description={t("settings.notifications.optionsDescription")}
-          disabled={isPublished}
         />
       </div>
       <Button
-        disabled={isPublished}
         dataTestId="form-notifications-save"
         theme="secondary"
-        // type="submit"
         onClick={() => saveNotificationsValue()}
       >
         {t("settings.notifications.save")}
