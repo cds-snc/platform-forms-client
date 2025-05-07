@@ -66,7 +66,8 @@
   "responseAggregatedTemplate": {
     "title": "Réponses au formulaire",
     "officialReceipt": "Reçu et registre officiel des réponses",
-    "responsesDownloaded": "réponses téléchargées :",
+    "responsesDownloaded_one": "{{count}} réponse téléchargée",
+    "responsesDownloaded_other": "{{count}} réponses téléchargées",
     "needToVerify": "Vous aurez besoin de ce reçu pour vérifier que toutes les réponses sont bien passées de Formulaires GC à votre ordinateur.",
     "useTheCopy": "Utilisez le bouton « Copier les codes de réception »  pour copier et coller tous les codes, approuvant ainsi la suppression des réponses de Formulaires GC.",
     "copyCodes": {

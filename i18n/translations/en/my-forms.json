@@ -66,7 +66,8 @@
   "responseAggregatedTemplate": {
     "title": "Form responses",
     "officialReceipt": "Official receipt and record of responses",
-    "responsesDownloaded": "responses downloaded:",
+    "responses_one": "{{count}} response downloaded",
+    "responses_other": "{{count}} responses downloaded",
     "needToVerify": "You’ll need this receipt to verify all responses made it safely from GC Forms to your computer.",
     "useTheCopy": "Use the “Copy all receipt codes” button to copy and paste all the codes, signing off on the removal of these responses from GC Forms.",
     "copyCodes": {
