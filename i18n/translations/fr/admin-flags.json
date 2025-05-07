@@ -29,6 +29,10 @@
     "caretakerPeriod": {
       "title": "caretakerPeriod",
       "description": "Activer l'avertissement de période de garde pour qu'il soit visible"
+    },
+    "emailDelivery": {
+      "title": "Livraison par courrier électronique",
+      "description": "Activer la livraison par e-mail pour les formulaires"
     }
   }
 }

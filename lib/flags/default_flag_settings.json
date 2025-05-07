@@ -2,5 +2,6 @@
   "addressComplete": false,
   "formTimer": false,
   "hCaptcha": false,
-  "caretakerPeriod": false
+  "caretakerPeriod": false,
+  "emailDelivery": false
 }
