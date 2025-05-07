@@ -22,6 +22,7 @@ export const QuestionIdOptions = ({
 
   useEffect(() => {
     const questionIds = form.elements
+      .flatMap((element: FormElement) => [element, ...(element.properties.subElements || [])])
       .filter((element: FormElement) => element.id !== item.id)
       .map((element: FormElement) => element.properties?.questionId)
       .filter(Boolean);
