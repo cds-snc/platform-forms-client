@@ -10,9 +10,11 @@ import { isUniqueQuestionId } from "@lib/utils/validateUniqueQuestionIds";
 export const QuestionIdOptions = ({
   item,
   setItem,
+  setIsValid,
 }: {
   item: FormElement;
   setItem: (item: FormElement) => void;
+  setIsValid: (isValid: boolean) => void;
 }) => {
   const { t } = useTranslation("form-builder");
   const [error, setError] = React.useState<boolean>(false);
@@ -25,8 +27,10 @@ export const QuestionIdOptions = ({
     const questionId = item.properties.questionId;
     if (questionId && isUniqueQuestionId(form.elements, questionId, item)) {
       setError(false);
+      setIsValid(true);
     } else {
       setError(true);
+      setIsValid(false);
     }
   }, [item.properties.questionId, form.elements, item]);
 
