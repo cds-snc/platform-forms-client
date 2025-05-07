@@ -339,7 +339,6 @@ export const updateTemplateUsers = AuthenticatedAction(
   }
 );
 
-// TODO: remove this function when the emailDelivery feature flag is removed
 export const updateTemplateDeliveryOption = AuthenticatedAction(
   async (
     _,
