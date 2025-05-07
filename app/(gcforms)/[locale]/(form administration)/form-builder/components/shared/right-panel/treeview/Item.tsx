@@ -138,6 +138,17 @@ export const Item = ({
                 isSectionElement && sectionElementClasses,
                 isFormElement && formElementClasses
               )}
+              {...(isLocked && {
+                onClick: () => {
+                  if (item.index === "intro" || item.index === "policy" || item.index === "end") {
+                    const el = document.getElementById(item.index);
+                    if (el) {
+                      el.open = true;
+                      el.scrollIntoView({ behavior: "smooth", block: "center" });
+                    }
+                  }
+                },
+              })}
               {...(allowRename && {
                 onDoubleClick: () => {
                   context.startRenamingItem();
