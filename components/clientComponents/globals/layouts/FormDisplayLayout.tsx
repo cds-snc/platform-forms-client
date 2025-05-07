@@ -36,7 +36,10 @@ const FormDisplayHeader = ({
 
   return (
     <header>
-      <Fip formRecord={formRecord} className="mb-20 mt-0 border-b-4 border-blue-dark py-9">
+      <Fip
+        formRecord={formRecord}
+        className="mb-20 mt-0 border-b-1 border-[var(--gcds-header-brand-border-color)] py-9"
+      >
         <LanguageToggle />
       </Fip>
     </header>
