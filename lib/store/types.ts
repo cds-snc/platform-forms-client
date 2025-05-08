@@ -72,6 +72,7 @@ export interface TemplateStoreState extends TemplateStoreProps {
   unsetField: (path: string) => void;
   duplicateElement: (id: number, groupId?: string, copyEn?: string, copyFr?: string) => void;
   importTemplate: (jsonConfig: FormProperties) => void;
+  transform: (options?: transformFormPropertiesOptions) => void;
   getSchema: (options?: transformFormPropertiesOptions) => string;
   getIsPublished: () => boolean;
   setIsPublished: (isPublished: boolean) => void;

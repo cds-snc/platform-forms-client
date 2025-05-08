@@ -55,6 +55,8 @@ import {
 } from "./helpers/elements";
 import { transformFormProperties } from "@lib/store/helpers/elements/transformFormProperties";
 
+import { transform } from "./helpers/transform/transform";
+
 const createTemplateStore = (initProps?: Partial<InitialTemplateStoreProps>) => {
   const props = initStore(initProps);
   return createStore<TemplateStoreState>()(
@@ -110,9 +112,15 @@ const createTemplateStore = (initProps?: Partial<InitialTemplateStoreProps>) => 
             importTemplate: importTemplate(set),
             getHighestElementId: getHighestElementId(set, get),
             generateElementId: generateElementId(set, get),
+            transform: transform(set, get),
             getSchema: (options) => {
               const schema = getSchemaFromState(get(), get().allowGroupsFlag);
               const transformedSchema = transformFormProperties(schema, options);
+
+              setTimeout(() => {
+                get().transform(options);
+              }, 10000);
+
               return JSON.stringify(transformedSchema, null, 2);
             },
             getId: () => get().id,
