@@ -3,5 +3,7 @@
   "noEvents": "Aucun événement trouvé.",
   "event": "Evénement",
   "subject": "Sujet",
-  "description": "Description"
+  "description": "Description",
+  "email_or_id": "Courriel ou ID",
+  "search": "Rechercher"
 }
