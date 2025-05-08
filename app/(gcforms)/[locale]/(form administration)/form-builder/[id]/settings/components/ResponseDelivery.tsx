@@ -313,12 +313,15 @@ export const ResponseDelivery = () => {
   const responsesLink = `/${i18n.language}/form-builder/${id}/responses`;
 
   // Update local state
-  const handleUpdateClassification = useCallback((value: ClassificationType) => {
-    if (value === "Protected B" && deliveryOptionValue === DeliveryOption.email) {
-      setDeliveryOptionValue(DeliveryOption.vault);
-    }
-    setClassification(value);
-  }, []);
+  const handleUpdateClassification = useCallback(
+    (value: ClassificationType) => {
+      if (value === "Protected B" && deliveryOptionValue === DeliveryOption.email) {
+        setDeliveryOptionValue(DeliveryOption.vault);
+      }
+      setClassification(value);
+    },
+    [deliveryOptionValue]
+  );
 
   const handleDeleteApiKey = useCallback(() => {
     if (deliveryOptionValue === DeliveryOption.vault) {
@@ -449,7 +452,7 @@ export const ResponseDelivery = () => {
               {deliveryOptionValue === DeliveryOption.api && (
                 <div>
                   <DeleteKeyToChangeOptionsNote hasApiKey={hasApiKey} />
-                  <ApiKeyButton showDelete />
+                  <ApiKeyButton showDelete classification={classification} />
                   <ApiDocNotes />
                 </div>
               )}
