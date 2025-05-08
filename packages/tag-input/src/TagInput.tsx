@@ -69,7 +69,7 @@ export const TagInput = ({
       // Announce max tags reached
       say(t("maxTagsReached", { maxTags: maxTags.toString() }));
 
-      // Highlight the input field momentarily
+      // Display a validation error
       setErrorMessages([t("maxTagsReached", { max: maxTags.toString() })]);
       return;
     }
