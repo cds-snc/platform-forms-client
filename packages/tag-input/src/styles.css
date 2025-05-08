@@ -1,14 +1,22 @@
-.gc-tag-input {
+:root {
   --gc-tag-input-border-color: #4338ca;
   --gc-tag-input-background-color: #eef2ff;
   --gc-tag-input-text-color: #374151;
+  --gc-tag-border-color: #000000;
+  --gc-tag-duplicate-bg-color: #fef2f2;
+  --gc-tag-duplicate-text-color: #d3080c;
+  --gc-tag-selected-bg-color: #ffffff;
+  --gc-tag-selected-text-color: #1e293b;
+  --gc-error-text-color: #b91c1c;
+}
 
+.gc-tag-input {
   display: flex;
   padding: 0.5rem;
   flex-wrap: wrap;
   gap: 0.5rem;
   border-width: 1px;
-  border-color: #000000;
+  border-color: var(--gc-tag-border-color);
   border-radius: 0.375rem;
 
   .gc-tag {
@@ -27,21 +35,21 @@
       height: 1rem;
     }
     &.duplicate {
-      background-color: #fef2f2;
-      color: #d3080c;
-      border-color: #d3080c;
+      background-color: var(--gc-tag-duplicate-bg-color);
+      color: var(--gc-tag-duplicate-text-color);
+      border-color: var(--gc-tag-duplicate-text-color);
       svg {
-        color: #d3080c;
-        fill: #d3080c;
+        color: var(--gc-tag-duplicate-text-color);
+        fill: var(--gc-tag-duplicate-text-color);
       }
     }
     &.gc-selected-tag {
-      background-color: #d1fae5;
-      color: #065f46;
-      border-color: #bbf7d0;
+      background-color: var(--gc-tag-selected-bg-color);
+      color: var(--gc-tag-selected-text-color);
+      border-color: var(--gc-tag-selected-text-color);
       svg {
-        color: #065f46;
-        fill: #065f46;
+        color: var(--gc-tag-selected-text-color);
+        fill: var(--gc-tag-selected-text-color);
       }
     }
   }
@@ -69,6 +77,23 @@
 }
 
 .gc-tag-input-error {
-  margin-top: 0.25rem;
-  color: #b91c1c;
+  font-weight: 700;
+  margin-top: 1rem;
+  color: var(--gc-error-text-color);
+  svg {
+    color: var(--gc-error-text-color);
+    fill: var(--gc-error-text-color);
+    display: inline-block;
+    margin-right: 0.25rem;
+  }
+}
+
+.gc-visually-hidden {
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+  height: 1px;
+  overflow: hidden;
+  position: absolute;
+  white-space: nowrap;
+  width: 1px;
 }

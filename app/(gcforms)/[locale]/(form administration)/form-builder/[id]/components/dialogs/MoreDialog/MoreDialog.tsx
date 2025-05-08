@@ -34,6 +34,7 @@ export const MoreDialog = () => {
 
   const [item, setItem] = React.useState<FormElement | undefined>(undefined);
   const [isOpen, setIsOpen] = React.useState(false);
+  const [isValid, setIsValid] = React.useState(true);
   const { Event } = useCustomEvent();
   const dialog = useDialogRef();
   const { refs } = useRefsContext();
@@ -85,6 +86,7 @@ export const MoreDialog = () => {
         data-testid="more-modal-save-button"
         className="ml-5"
         theme="primary"
+        disabled={!isValid}
         onClick={() => {
           updateField(getPathString(item.id), item.properties);
           setChangeKey(String(new Date().getTime()));
@@ -133,11 +135,13 @@ export const MoreDialog = () => {
 
               <SortOptions item={item} setItem={setItem} />
 
-              <InfoDetails summary={t("moreDialog.apiOptionsSection.title")}>
-                <p className="mt-6">{t("moreDialog.apiOptionsSection.description")}</p>
-                <QuestionIdOptions item={item} setItem={setItem} />
-                <QuestionTagOptions item={item} setItem={setItem} />
-              </InfoDetails>
+              {item.type !== "dynamicRow" && (
+                <InfoDetails summary={t("moreDialog.apiOptionsSection.title")}>
+                  <p className="mt-6">{t("moreDialog.apiOptionsSection.description")}</p>
+                  <QuestionIdOptions setIsValid={setIsValid} item={item} setItem={setItem} />
+                  <QuestionTagOptions item={item} setItem={setItem} />
+                </InfoDetails>
+              )}
               <input type="submit" className="hidden" />
             </form>
           </div>

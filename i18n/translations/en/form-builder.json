@@ -899,6 +899,7 @@
   "singleChoice": "Radio buttons",
   "start": "Start",
   "startErrorTemplateSize": "The form file is too large",
+  "startErrorDuplicateQuestionId": "Question IDs must be unique",
   "startErrorParse": "Failed to read form file",
   "startFormIntro": "Add a description to your form to help set expectations",
   "startH2": "Design a form",

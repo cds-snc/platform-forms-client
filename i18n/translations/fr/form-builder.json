@@ -895,6 +895,7 @@
   "singleChoice": "Boutons radio",
   "start": "Commencer",
   "startErrorTemplateSize": "La taille du fichier de formulaire est trop importante",
+  "startErrorDuplicateQuestionId": "[FR] Question IDs must be unique",
   "startErrorParse": "L’ouverture du fichier de formulaire a échoué",
   "startFormIntro": "Ajoutez une description à votre formulaire pour aider à définir les attentes",
   "startH2": "Créer un formulaire",

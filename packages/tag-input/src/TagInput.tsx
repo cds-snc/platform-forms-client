@@ -2,6 +2,7 @@ import { useRef, useState } from "react";
 import { CancelIcon } from "./icons/CancelIcon";
 import "./styles.css";
 import { useTranslation } from "./i18n/useTranslation";
+import { WarningIcon } from "./icons/WarningIcon";
 
 const keys = {
   ENTER: "Enter",
@@ -25,6 +26,7 @@ export const TagInput = ({
   placeholder,
   description,
   restrictDuplicates = true,
+  maxTags,
   onTagAdd,
   onTagRemove,
   validateTag,
@@ -37,6 +39,7 @@ export const TagInput = ({
   placeholder?: string;
   description?: string;
   restrictDuplicates?: boolean;
+  maxTags?: number;
   onTagAdd?: (tag: string) => void;
   onTagRemove?: (tag: string) => void;
   validateTag?: (tag: string) => {
@@ -61,6 +64,15 @@ export const TagInput = ({
 
   const handleAddTag = (tag: string) => {
     resetMessages();
+
+    if (maxTags && selectedTags.length >= maxTags) {
+      // Announce max tags reached
+      say(t("maxTagsReached", { maxTags: maxTags.toString() }));
+
+      // Highlight the input field momentarily
+      setErrorMessages([t("maxTagsReached", { max: maxTags.toString() })]);
+      return;
+    }
 
     if (validateTag) {
       const { isValid, errors } = validateTag(tag);
@@ -122,25 +134,31 @@ export const TagInput = ({
 
     const { key } = event;
     const acceptKeys = [keys.ENTER, keys.TAB, keys.COMMA];
+    const navigateKeys = [keys.ARROW_LEFT, keys.ARROW_RIGHT];
 
+    // Clear selection when entering text input
+    if (!navigateKeys.includes(key) && selectedTagIndex !== null) {
+      setSelectedTagIndex(null);
+    }
+
+    // Accept tag input
     if (acceptKeys.includes(key)) {
-      event.preventDefault();
       const tag = event.currentTarget.value.trim();
       if (tag) {
+        event.preventDefault();
         handleAddTag(tag);
         event.currentTarget.value = "";
       }
     }
 
-    if (key === keys.DELETE) {
-      // If a tag is selected, delete it
-      if (selectedTagIndex !== null) {
-        handleRemoveTag(selectedTagIndex);
-        setSelectedTagIndex(null);
-        return;
-      }
+    // Delete selected tag
+    if (key === keys.DELETE && selectedTagIndex !== null) {
+      handleRemoveTag(selectedTagIndex);
+      setSelectedTagIndex(null);
+      return;
     }
 
+    // Backspace key handling
     if (key === keys.BACKSPACE) {
       // If a tag is selected, delete it
       if (selectedTagIndex !== null) {
@@ -151,7 +169,6 @@ export const TagInput = ({
 
       // If the input is empty, delete the last tag
       if (event.currentTarget.value === "") {
-        // Otherwise, delete the last tag
         if (selectedTags.length) {
           handleRemoveTag(selectedTags.length - 1);
           event.currentTarget.value = "";
@@ -159,6 +176,7 @@ export const TagInput = ({
       }
     }
 
+    // Roving through tags with arrow keys
     if (event.currentTarget.value === "") {
       if (key === keys.ARROW_LEFT) {
         if (selectedTags.length) {
@@ -216,10 +234,9 @@ export const TagInput = ({
           onKeyDown={handleKeyDown}
           ref={tagInputRef}
         />
-        {/* @TODO: visually-hidden to css */}
         <span
           id="tag-input-live-region"
-          className="visually-hidden"
+          className="gc-visually-hidden"
           role="alert"
           aria-live="assertive"
           aria-atomic="true"
@@ -230,7 +247,10 @@ export const TagInput = ({
       {errorMessages.length > 0 && (
         <div role="alert" className="gc-tag-input-error" data-testid="tag-input-error">
           {errorMessages.map((error, index) => (
-            <div key={`error-${index}`}>{error}</div>
+            <div key={`error-${index}`}>
+              <WarningIcon />
+              {error}
+            </div>
           ))}
         </div>
       )}

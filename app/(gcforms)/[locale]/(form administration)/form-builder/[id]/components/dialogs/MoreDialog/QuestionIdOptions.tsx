@@ -5,13 +5,16 @@ import { Label } from "./Label";
 import { Input } from "@formBuilder/components/shared/Input";
 import { WarningIcon } from "@serverComponents/icons";
 import { useTemplateStore } from "@lib/store/useTemplateStore";
+import { isUniqueQuestionId } from "@lib/utils/validateUniqueQuestionIds";
 
 export const QuestionIdOptions = ({
   item,
   setItem,
+  setIsValid,
 }: {
   item: FormElement;
   setItem: (item: FormElement) => void;
+  setIsValid: (isValid: boolean) => void;
 }) => {
   const { t } = useTranslation("form-builder");
   const [error, setError] = React.useState<boolean>(false);
@@ -21,17 +24,15 @@ export const QuestionIdOptions = ({
   }));
 
   useEffect(() => {
-    const questionIds = form.elements
-      .filter((element: FormElement) => element.id !== item.id)
-      .map((element: FormElement) => element.properties?.questionId)
-      .filter(Boolean);
-
-    if (questionIds.includes(item.properties.questionId)) {
-      setError(true);
-    } else {
+    const questionId = item.properties.questionId;
+    if (questionId && isUniqueQuestionId(form.elements, questionId, item)) {
       setError(false);
+      setIsValid(true);
+    } else {
+      setError(true);
+      setIsValid(false);
     }
-  }, [item.properties.questionId, form.elements, item.id]);
+  }, [item.properties.questionId, form.elements, item]);
 
   if (item.type === FormElementTypes.richText) {
     return null;
@@ -45,7 +46,7 @@ export const QuestionIdOptions = ({
         id={`title--modal--${item.id}`}
         name={`item${item.id}`}
         value={item.properties.questionId || ""}
-        className={`w-11/12` + (error ? " !border-red-600 outline-2 !outline-red-600" : "")}
+        className={`w-11/12` + (error ? " !border-red-700 outline-2 !outline-red-700" : "")}
         onChange={(e) => {
           setItem({
             ...item,
@@ -57,8 +58,8 @@ export const QuestionIdOptions = ({
         }}
       />
       {error && (
-        <div className="my-4 font-bold text-red-600">
-          <WarningIcon className="inline-block fill-red-600" />{" "}
+        <div className="my-4 font-bold text-red-700">
+          <WarningIcon className="inline-block fill-red-700" />{" "}
           {t("moreDialog.questionId.uniqueWarning")}
         </div>
       )}

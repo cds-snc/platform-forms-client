@@ -1,10 +1,12 @@
-import { logMessage } from "@lib/logger";
-import { transformSchemaOptions, type TemplateStore } from "../../types";
+import { FormElement, FormProperties } from "@gcforms/types";
 import { cleanRules } from "@lib/formContext";
+import { logMessage } from "@lib/logger";
 import { v4 as uuid } from "uuid";
-import { FormElement } from "@gcforms/types";
 
-// Clean conditional rules
+export type transformFormPropertiesOptions = {
+  cleanRules: boolean;
+};
+
 const cleanElementRules = (elements: FormElement[], element: FormElement) => {
   if (element.properties?.conditionalRules) {
     const elementRules = element.properties.conditionalRules;
@@ -19,21 +21,28 @@ const cleanElementRules = (elements: FormElement[], element: FormElement) => {
   }
 };
 
-// Ensure uuid is set
 const ensureUUID = (element: FormElement) => {
   if (element.uuid === undefined) {
     element.uuid = uuid();
   }
 };
 
-export const transforms: TemplateStore<"transforms"> =
-  (set) => async (options?: transformSchemaOptions) => {
-    set((state) => {
-      state.form.elements.forEach((element) => {
-        if (options && options.cleanRules) {
-          cleanElementRules(state.form.elements, element);
-        }
-        ensureUUID(element);
-      });
-    });
-  };
+export const transformFormProperties = (
+  form?: FormProperties,
+  options?: transformFormPropertiesOptions
+): FormProperties => {
+  if (!form) {
+    return {} as FormProperties;
+  }
+
+  const transformedForm = { ...form };
+
+  transformedForm.elements.forEach((element) => {
+    if (options && options.cleanRules) {
+      cleanElementRules(transformedForm.elements, element);
+    }
+    ensureUUID(element);
+  });
+
+  return transformedForm;
+};
