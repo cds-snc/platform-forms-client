@@ -77,10 +77,11 @@ export const TagInput = ({
     if (validateTag) {
       const { isValid, errors } = validateTag(tag);
       if (!isValid) {
-        setErrorMessages(errors || []);
         // Announce invalid tag
         say(t("invalidTag", { tag, errors: errors?.join(", ") || "" }));
 
+        // Display validation errors
+        setErrorMessages(errors || []);
         return;
       }
     }
@@ -98,6 +99,8 @@ export const TagInput = ({
           duplicateTagElement.classList.remove("duplicate");
         }, 4000); // Remove the class after 4 seconds
       }
+
+      // Display a validation error
       setErrorMessages([t("duplicateTag", { tag })]);
       return;
     }
