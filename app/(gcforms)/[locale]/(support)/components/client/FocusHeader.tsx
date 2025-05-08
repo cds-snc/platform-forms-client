@@ -4,7 +4,7 @@ import { ReactElement, useRef } from "react";
 
 export const FocusHeader = ({
   children,
-  headingTag: HeadingTag = "h2",
+  headingTag: HeadingTag = "h1",
 }: {
   children: ReactElement | string;
   headingTag?: "h1" | "h2" | "h3" | "h4" | "h5" | "h6";
