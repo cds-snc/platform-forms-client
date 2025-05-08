@@ -13,5 +13,6 @@
   "viewTemplates": "View templates",
   "recentAccounts": "Recent accounts",
   "buttons": "Buttons",
-  "lexical": "Lexical Playground"
+  "lexical": "Lexical Playground",
+  "auditLogs": "Audit logs"
 }
