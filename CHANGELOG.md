@@ -5,6 +5,18 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.40.1](https://github.com/cds-snc/platform-forms-client/compare/v3.40.0...v3.40.1) (2025-05-08)
+
+
+### Bug Fixes
+
+* ensure classification is saved when creating an API key ([#5519](https://github.com/cds-snc/platform-forms-client/issues/5519)) ([6b4e053](https://github.com/cds-snc/platform-forms-client/commit/6b4e053873995e164b668e9a11c87558bcbfac72))
+
+
+### Miscellaneous Chores
+
+* check value before reset for classification type ([#5517](https://github.com/cds-snc/platform-forms-client/issues/5517)) ([bf3b0f7](https://github.com/cds-snc/platform-forms-client/commit/bf3b0f71a650616b05626190f028f86236919005))
+
 ## [3.40.0](https://github.com/cds-snc/platform-forms-client/compare/v3.39.0...v3.40.0) (2025-05-08)
 
 
