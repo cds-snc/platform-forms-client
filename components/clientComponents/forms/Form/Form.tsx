@@ -182,7 +182,7 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
               isShowReviewPage &&
               currentGroup !== LockedSections.REVIEW &&
               currentGroup !== LockedSections.START && (
-                <FocusHeader tag="h2">
+                <FocusHeader headingTag="h2">
                   {getGroupTitle(currentGroup, language as Language)}
                 </FocusHeader>
               )}
