@@ -24,7 +24,7 @@ You are responsible for:
 - Retrieving responses directly from our database when handling more sensitive Protected B information. Receiving responses via email or retrieving with an API integration is only available for up to Protected A information.
 - Ensuring that other team members given access to your forms and responses have the appropriate authorities and the security clearance needed to access the data collected. For this reason, shared email accounts are not permitted in GC Forms. Any access must be given to authorized employees only using a valid Government of Canada email address.
 
-### Responses delivered by email (up to and including PROTECTED A)
+### Responses delivered by email (up to and including Protected A)
 
 You are responsible for:
 
@@ -33,7 +33,7 @@ You are responsible for:
 - Addressing service or operational impacts due to end users uploading documents to submissions for the purpose of spamming.
 - Accepting [GC Notify's terms of use](https://notification.canada.ca/terms).
 
-### Responses retrieved via the API (up to and including Protected A)
+### Responses retrieved via the API (up to and including Protected B)
 
 You are responsible for:
 
