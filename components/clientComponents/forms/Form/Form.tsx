@@ -181,7 +181,7 @@ const InnerForm: React.FC<InnerFormProps> = (props) => {
               isShowReviewPage &&
               currentGroup !== LockedSections.REVIEW &&
               currentGroup !== LockedSections.START && (
-                <h2 className="pb-8" tabIndex={-1} ref={groupsHeadingRef}>
+                <h2 tabIndex={-1} ref={groupsHeadingRef}>
                   {getGroupTitle(currentGroup, language as Language)}
                 </h2>
               )}

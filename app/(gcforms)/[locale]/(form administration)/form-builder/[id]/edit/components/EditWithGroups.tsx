@@ -143,6 +143,7 @@ export const EditWithGroups = ({ id, locale }: { id: string; locale: string }) =
       {/* Form Intro + Title Panel */}
       {groupId === "start" && (
         <RichTextLocked
+          id="intro"
           maxLength={20000}
           hydrated={hasHydrated}
           className="rounded-t-lg"
@@ -182,6 +183,7 @@ export const EditWithGroups = ({ id, locale }: { id: string; locale: string }) =
       {/* Privacy Panel */}
       {groupId === "start" && (
         <RichTextLocked
+          id="policy"
           maxLength={50000}
           beforeContent={<PrivacyDescriptionBefore />}
           summaryText={t("groups.privacy.summary")}
@@ -211,6 +213,7 @@ export const EditWithGroups = ({ id, locale }: { id: string; locale: string }) =
       {/* Confirmation*/}
       {groupId === "end" && (
         <RichTextLocked
+          id={"end"}
           maxLength={20000}
           summaryText={t("groups.confirmation.summary")}
           beforeContent={

@@ -81,11 +81,11 @@ export default async function Layout(props: {
       <TemplateStoreProvider {...{ ...initialForm, locale, allowGroupsFlag }}>
         <SaveTemplateProvider>
           <RefStoreProvider>
-            <div>
-              <div className="flex flex-col">
+            <div className="h-full">
+              <div className="flex min-h-screen flex-col">
                 <SkipLink />
                 <Header context="formBuilder" className="mb-0" />
-                <div className="shrink-0 grow basis-auto bg-gray-soft">
+                <div className="flex shrink-0 grow basis-auto flex-col bg-gray-soft">
                   <ToastContainer containerId="default" />
                   <ToastContainer
                     limit={1}
@@ -94,7 +94,7 @@ export default async function Layout(props: {
                     ariaLabel="Notifications: Alt+T"
                     width="600px"
                   />
-                  <div className="flex h-full flex-row gap-7">
+                  <div className="flex grow flex-row gap-7">
                     <div id="left-nav" className="z-10 border-r border-slate-200 bg-white">
                       <div className="sticky top-0">
                         <LeftNavigation id={id} />
@@ -111,8 +111,8 @@ export default async function Layout(props: {
                     </GroupStoreProvider>
                   </div>
                 </div>
+                <Footer displayFormBuilderFooter className="mt-0 lg:mt-0" />
               </div>
-              <Footer displayFormBuilderFooter className="mt-0 lg:mt-0" />
               <LiveRegion />
             </div>
           </RefStoreProvider>
