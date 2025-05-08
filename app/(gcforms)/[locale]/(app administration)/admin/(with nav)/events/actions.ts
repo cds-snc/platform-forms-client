@@ -160,7 +160,7 @@ const emailSchema = object({
 });
 
 const formSchema = object({
-  subject: string([minLength(1), maxLength(30), toLowerCase(), toTrimmed()]),
+  subject: string([minLength(1), maxLength(100), toLowerCase(), toTrimmed()]),
 });
 
 export const findSubject = async (_: unknown, formData: FormData) => {
