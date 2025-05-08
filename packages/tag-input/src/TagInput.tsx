@@ -18,7 +18,7 @@ const keys = {
 };
 
 export const TagInput = ({
-  tags,
+  initialTags,
   name = "tag-input",
   id = "tag-input",
   label = "Tags",
@@ -31,7 +31,7 @@ export const TagInput = ({
   onTagRemove,
   validateTag,
 }: {
-  tags?: string[];
+  initialTags?: string[];
   name?: string;
   id?: string;
   label?: string;
@@ -48,7 +48,7 @@ export const TagInput = ({
   };
 }) => {
   const tagInputRef = useRef<HTMLInputElement>(null);
-  const [selectedTags, setSelectedTags] = useState<string[]>(tags || []);
+  const [selectedTags, setSelectedTags] = useState<string[]>(initialTags || []);
   const [selectedTagIndex, setSelectedTagIndex] = useState<number | null>(null);
   const [errorMessages, setErrorMessages] = useState<string[]>([]);
   const [ariaLiveRegionText, setAriaLiveRegionText] = useState<string | null>(null);
