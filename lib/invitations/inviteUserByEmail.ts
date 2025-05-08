@@ -68,9 +68,9 @@ export const inviteUserByEmail = async (email: string, formId: string, message: 
 
   // check if user is already invited to the form
   const invitation = await _retrieveFormInvitationByEmail(email, formId)
-    .then((previousInvitation) => {
+    .then(async (previousInvitation) => {
       if (previousInvitation && previousInvitation.expires < new Date()) {
-        _deleteInvitation(previousInvitation.id);
+        await _deleteInvitation(previousInvitation.id);
         return _createInvitation(email, formId, user.id);
       }
       if (previousInvitation === null) {
