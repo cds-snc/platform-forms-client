@@ -7,7 +7,7 @@ describe("<TagInput />", () => {
   it("renders without crashing", () => {
     cy.mount(
       <div>
-        <TagInput tags={[]} />
+        <TagInput initialTags={[]} />
       </div>
     );
   });
@@ -16,7 +16,7 @@ describe("<TagInput />", () => {
     cy.mount(
       <div>
         <TagInput
-          tags={["Tag one", "Tag two", "Tag three"]}
+          initialTags={["Tag one", "Tag two", "Tag three"]}
           onTagAdd={() => {}}
           onTagRemove={() => {}}
         />
@@ -32,7 +32,7 @@ describe("<TagInput />", () => {
   it("sets the name attribute", () => {
     cy.mount(
       <div>
-        <TagInput tags={[]} name="test-name" />
+        <TagInput initialTags={[]} name="test-name" />
       </div>
     );
 
@@ -42,7 +42,7 @@ describe("<TagInput />", () => {
   it("adds a custom label", () => {
     cy.mount(
       <div>
-        <TagInput tags={[]} label="Custom Label" />
+        <TagInput initialTags={[]} label="Custom Label" />
       </div>
     );
 
@@ -52,7 +52,7 @@ describe("<TagInput />", () => {
   it("adds a custom description", () => {
     cy.mount(
       <div>
-        <TagInput tags={[]} description="Custom Description" />
+        <TagInput initialTags={[]} description="Custom Description" />
       </div>
     );
 
@@ -62,7 +62,7 @@ describe("<TagInput />", () => {
   it("adds a tag", () => {
     cy.mount(
       <div>
-        <TagInput tags={[]} />
+        <TagInput initialTags={[]} />
       </div>
     );
 
@@ -74,7 +74,7 @@ describe("<TagInput />", () => {
   it("applies an aria-label to a tag", () => {
     cy.mount(
       <div>
-        <TagInput tags={["Tag 1"]} />
+        <TagInput initialTags={["Tag 1"]} />
       </div>
     );
 
@@ -84,7 +84,7 @@ describe("<TagInput />", () => {
   it("announces that a tag was added", () => {
     cy.mount(
       <div>
-        <TagInput tags={[]} />
+        <TagInput initialTags={[]} />
       </div>
     );
     cy.get("[data-testid='tag-input']").type("New Tag{enter}");
@@ -94,7 +94,7 @@ describe("<TagInput />", () => {
   it("restricts duplicates", () => {
     cy.mount(
       <div>
-        <TagInput tags={["Tag 1"]} restrictDuplicates={true} />
+        <TagInput initialTags={["Tag 1"]} restrictDuplicates={true} />
       </div>
     );
 
@@ -106,7 +106,7 @@ describe("<TagInput />", () => {
   it("announces that a duplicate tag was added", () => {
     cy.mount(
       <div>
-        <TagInput tags={["Tag 1"]} restrictDuplicates={true} />
+        <TagInput initialTags={["Tag 1"]} restrictDuplicates={true} />
       </div>
     );
 
@@ -117,7 +117,7 @@ describe("<TagInput />", () => {
   it("allows duplicates", () => {
     cy.mount(
       <div>
-        <TagInput tags={["Tag 1"]} restrictDuplicates={false} />
+        <TagInput initialTags={["Tag 1"]} restrictDuplicates={false} />
       </div>
     );
 
@@ -131,7 +131,7 @@ describe("<TagInput />", () => {
 
     cy.mount(
       <div>
-        <TagInput tags={["Tag 1", "Tag 2"]} onTagAdd={() => {}} onTagRemove={onTagRemove} />
+        <TagInput initialTags={["Tag 1", "Tag 2"]} onTagAdd={() => {}} onTagRemove={onTagRemove} />
       </div>
     );
 
@@ -144,7 +144,7 @@ describe("<TagInput />", () => {
   it("removes a selected tag", () => {
     cy.mount(
       <div>
-        <TagInput tags={["one", "two", "three", "four", "five", "six"]} />
+        <TagInput initialTags={["one", "two", "three", "four", "five", "six"]} />
       </div>
     );
 
@@ -156,7 +156,7 @@ describe("<TagInput />", () => {
   it("announces when a tag is removed", () => {
     cy.mount(
       <div>
-        <TagInput tags={["Tag 1"]} onTagAdd={() => {}} onTagRemove={() => {}} />
+        <TagInput initialTags={["Tag 1"]} onTagAdd={() => {}} onTagRemove={() => {}} />
       </div>
     );
 
@@ -170,7 +170,7 @@ describe("<TagInput />", () => {
 
     cy.mount(
       <div>
-        <TagInput tags={[]} onTagAdd={onTagAdd} onTagRemove={() => {}} />
+        <TagInput initialTags={[]} onTagAdd={onTagAdd} onTagRemove={() => {}} />
       </div>
     );
 
@@ -185,7 +185,7 @@ describe("<TagInput />", () => {
 
     cy.mount(
       <div>
-        <TagInput tags={["Tag one", "Tag two"]} onTagRemove={onTagRemove} />
+        <TagInput initialTags={["Tag one", "Tag two"]} onTagRemove={onTagRemove} />
       </div>
     );
 
