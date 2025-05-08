@@ -764,7 +764,6 @@
     "selectClassification": "Data classification",
     "beforePublishMessage": "These settings can only be changed before publishing.",
     "deleteApiKeyMessage": "You must delete the API key before you can change the delivery option.",
-    "protectedBMessage": "PROTECTED B responses must be downloaded from GC Forms.",
     "settingsMessage": "To change these settings, select the data classification of your form responses.",
     "title": "Delivery option",
     "vaultOption": "Download responses from GC Forms",
@@ -823,7 +822,7 @@
       },
       "api": {
         "title": "API response retrieval",
-        "text1": "For up to PROTECTED A forms. (PROTECTED B coming soon)",
+        "text1": "For up to PROTECTED B forms",
         "text2": "API calls to extract (pull) form responses",
         "text3": "Can be switched to the download delivery method after publishing",
         "text4": "One API key per form",
