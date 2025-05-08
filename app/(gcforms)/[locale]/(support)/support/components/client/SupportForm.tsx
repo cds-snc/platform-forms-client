@@ -103,7 +103,7 @@ export const SupportForm = () => {
           )}
 
           <GcdsH1>{t("support.title")}</GcdsH1>
-          <p className="-mt-8 mb-6">
+          <p className="mb-6">
             {t("support.experience")}
             <Link href={`https://articles.alpha.canada.ca/forms-formulaires/${language}/guidance`}>
               {t("support.guidanceLink")}

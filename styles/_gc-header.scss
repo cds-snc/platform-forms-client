@@ -2,7 +2,6 @@
 @import "../node_modules/@cdssnc/gcds-tokens/build/web/css/components/lang-toggle.css";
 @import "../node_modules/@cdssnc/gcds-tokens/build/web/css/components/signature.css";
 
-
 .gcds-header__brand {
   container: component brand / inline-size;
   border-block-end: var(--gcds-header-brand-border-width) solid
@@ -34,8 +33,7 @@
       display: grid;
       grid-gap: var(--gcds-header-brand-grid-gap);
       grid-template-columns: 1fr 0.1fr;
-      grid-template-areas:
-        "signature toggle";
+      grid-template-areas: "signature toggle";
       width: 90%;
       max-width: var(--gcds-header-container-max-width);
       margin: 0 auto;
@@ -136,5 +134,13 @@
   .gcds-lang-toggle a {
     font: var(--gcds-lang-toggle-font-mobile);
     font-weight: 700;
+  }
+}
+
+
+/* Override for Preview header  */
+.gc-form-preview-header {
+  .brand__container {
+    width: 100%;
   }
 }
