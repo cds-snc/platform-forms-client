@@ -314,7 +314,7 @@ export const ResponseDelivery = () => {
 
   // Update local state
   const handleUpdateClassification = useCallback((value: ClassificationType) => {
-    if (value === "Protected B") {
+    if (value === "Protected B" && deliveryOptionValue === DeliveryOption.email) {
       setDeliveryOptionValue(DeliveryOption.vault);
     }
     setClassification(value);
