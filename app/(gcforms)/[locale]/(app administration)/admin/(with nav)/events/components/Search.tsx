@@ -38,8 +38,18 @@ export const Search = () => {
         </Button>
       </form>
 
+      <p className="mt-4">
+        {state?.userId
+          ? `${t("user_id")}: ${state?.userId}`
+          : state?.formId
+          ? `${t("form_id")}: ${state?.formId}`
+          : ""}
+      </p>
+
       <div className="pt-6">
-        <EventList formId={state?.formId} userId={state?.userId} />
+        {state?.userId || state?.formId ? (
+          <EventList formId={state?.formId} userId={state?.userId} />
+        ) : null}
       </div>
     </>
   );

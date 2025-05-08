@@ -5,5 +5,7 @@
   "subject": "Sujet",
   "description": "Description",
   "email_or_id": "Courriel ou ID",
-  "search": "Rechercher"
+  "search": "Rechercher",
+  "user_id": "ID de l'utilisateur",
+  "form_id": "ID de formulaire"
 }

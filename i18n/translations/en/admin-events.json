@@ -5,5 +5,7 @@
   "subject": "Subject",
   "description": "Description",
   "email_or_id": "Email or ID",
-  "search": "Search"
+  "search": "Search",
+  "user_id": "User ID",
+  "form_id": "Form ID"
 }
