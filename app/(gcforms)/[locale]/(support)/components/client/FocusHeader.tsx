@@ -12,9 +12,5 @@ export const FocusHeader = ({
   const headingSuccessRef = useRef(null);
   useFocusIt({ elRef: headingSuccessRef });
 
-  if (typeof children !== "string") {
-    return <>{children}</>;
-  }
-
   return <HeadingTag ref={headingSuccessRef}>{children}</HeadingTag>;
 };
