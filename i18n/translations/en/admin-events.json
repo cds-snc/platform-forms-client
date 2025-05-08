@@ -4,7 +4,7 @@
   "event": "Event",
   "subject": "Subject",
   "description": "Description",
-  "email_or_id": "Email or ID",
+  "email_or_id": "Email or Form ID",
   "search": "Search",
   "user_id": "User ID",
   "form_id": "Form ID"
