@@ -7,7 +7,7 @@ export const FocusHeader = ({
   tag = "h1",
 }: {
   children: ReactElement | string;
-  tag: "h1" | "h2" | "h3" | "h4" | "h5" | "h6";
+  tag?: "h1" | "h2" | "h3" | "h4" | "h5" | "h6";
 }) => {
   const headingSuccessRef = useRef(null);
   useFocusIt({ elRef: headingSuccessRef });
