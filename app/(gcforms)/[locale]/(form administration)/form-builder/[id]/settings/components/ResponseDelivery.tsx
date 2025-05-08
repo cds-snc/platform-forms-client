@@ -236,11 +236,6 @@ export const ResponseDelivery = () => {
 
             <div className="mb-10">
               <h2 className="mb-6">{t("settingsResponseDelivery.title")}</h2>
-              {protectedBSelected ? (
-                <p className="mb-5 inline-block bg-purple-200 p-3 text-sm font-bold">
-                  {t("settingsResponseDelivery.protectedBMessage")}
-                </p>
-              ) : null}
 
               {/* Email Option - only show for legacy published or draft forms that have this value */}
               {deliveryOptionValue === DeliveryOption.email && (
@@ -294,7 +289,7 @@ export const ResponseDelivery = () => {
                   <div className="mb-10">
                     <div>
                       <Radio
-                        disabled={isPublished || protectedBSelected || hasApiKey}
+                        disabled={isPublished || hasApiKey}
                         id={`delivery-option-${DeliveryOption.api}`}
                         checked={deliveryOptionValue === DeliveryOption.api}
                         name="response-delivery"
