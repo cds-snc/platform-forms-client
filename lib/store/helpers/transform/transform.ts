@@ -1,15 +1,19 @@
 import { type TemplateStore } from "../../types";
-// import { transformFormProperties } from "@lib/store/helpers/elements/transformFormProperties";
+import { hasCleanedRules } from "../elements/transformFormProperties";
+import { v4 as uuid } from "uuid";
 
-export const transform: TemplateStore<"transform"> = (set) => (options) => {
-  if (!options) {
-    //
-  }
-
+export const transform: TemplateStore<"transform"> = (set) => () => {
   set((state) => {
     state.form.elements.forEach((element, index) => {
-      // console.log("transforming element", element);
-      state.form.elements[index] = { ...element, uuid: "1" };
+      if (element.uuid === undefined) {
+        state.form.elements[index] = { ...element, uuid: uuid() };
+      }
+
+      const rules = hasCleanedRules(state.form.elements, element);
+
+      if (rules) {
+        state.form.elements[index].properties.conditionalRules = rules;
+      }
     });
   });
 };

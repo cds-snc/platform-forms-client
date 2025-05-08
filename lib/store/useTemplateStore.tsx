@@ -118,8 +118,8 @@ const createTemplateStore = (initProps?: Partial<InitialTemplateStoreProps>) => 
               const transformedSchema = transformFormProperties(schema, options);
 
               setTimeout(() => {
-                get().transform(options);
-              }, 10000);
+                get().transform();
+              }, 100);
 
               return JSON.stringify(transformedSchema, null, 2);
             },

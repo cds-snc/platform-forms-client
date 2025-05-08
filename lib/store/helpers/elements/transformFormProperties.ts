@@ -21,6 +21,19 @@ const cleanElementRules = (elements: FormElement[], element: FormElement) => {
   }
 };
 
+export const hasCleanedRules = (elements: FormElement[], element: FormElement) => {
+  if (element.properties?.conditionalRules) {
+    const elementRules = element.properties.conditionalRules;
+    const updatedRules = cleanRules(elements, elementRules);
+
+    if (updatedRules.length !== elementRules.length) {
+      return updatedRules;
+    }
+  }
+
+  return;
+};
+
 const ensureUUID = (element: FormElement) => {
   if (element.uuid === undefined) {
     element.uuid = uuid();
