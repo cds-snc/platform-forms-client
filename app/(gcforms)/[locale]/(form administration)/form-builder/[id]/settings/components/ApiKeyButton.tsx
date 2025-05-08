@@ -16,7 +16,7 @@ type ApiKeyButtonProps = {
   i18nKey?: string;
   theme?: Theme;
   showHelp?: boolean;
-  classification: SecurityAttribute;
+  classification?: SecurityAttribute;
 };
 
 export const ApiKeyButton = ({
