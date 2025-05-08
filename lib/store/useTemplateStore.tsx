@@ -53,6 +53,7 @@ import {
   localizeField,
   getFormElementIndexes,
 } from "./helpers/elements";
+import { transformFormProperties } from "@lib/store/helpers/elements/transformFormProperties";
 
 const createTemplateStore = (initProps?: Partial<InitialTemplateStoreProps>) => {
   const props = initStore(initProps);
@@ -109,8 +110,10 @@ const createTemplateStore = (initProps?: Partial<InitialTemplateStoreProps>) => 
             importTemplate: importTemplate(set),
             getHighestElementId: getHighestElementId(set, get),
             generateElementId: generateElementId(set, get),
-            getSchema: () => {
-              return JSON.stringify(getSchemaFromState(get(), get().allowGroupsFlag), null, 2);
+            getSchema: (options) => {
+              const schema = getSchemaFromState(get(), get().allowGroupsFlag);
+              const transformedSchema = transformFormProperties(schema, options);
+              return JSON.stringify(transformedSchema, null, 2);
             },
             getId: () => get().id,
             getIsPublished: () => get().isPublished,

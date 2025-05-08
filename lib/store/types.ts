@@ -18,6 +18,7 @@ import {
 import { BrandProperties } from "@lib/types";
 
 import { type Indexes } from "@lib/utils/form-builder/getPath";
+import { transformFormPropertiesOptions } from "@lib/store/helpers/elements/transformFormProperties";
 
 export interface TemplateStoreState extends TemplateStoreProps {
   focusInput: boolean;
@@ -71,7 +72,7 @@ export interface TemplateStoreState extends TemplateStoreProps {
   unsetField: (path: string) => void;
   duplicateElement: (id: number, groupId?: string, copyEn?: string, copyFr?: string) => void;
   importTemplate: (jsonConfig: FormProperties) => void;
-  getSchema: () => string;
+  getSchema: (options?: transformFormPropertiesOptions) => string;
   getIsPublished: () => boolean;
   setIsPublished: (isPublished: boolean) => void;
   getFormElementById: (id: number) => FormElement | undefined;

@@ -14,7 +14,6 @@ import { usePathname } from "next/navigation";
 import { ErrorSaving } from "./ErrorSaving";
 import { FormServerErrorCodes } from "@lib/types/form-builder-types";
 import { FormProperties } from "@lib/types";
-import { transformFormProperties } from "@lib/utils/form-builder/transformFormProperties";
 
 const SaveDraft = ({
   updatedAt,
@@ -121,9 +120,11 @@ export const SaveButton = () => {
     if (timeRef.current && new Date().getTime() - timeRef.current < 2000) {
       return;
     }
-    const formConfig = transformFormProperties(safeJSONParse<FormProperties>(getSchema()), {
-      cleanRules: true,
-    });
+    const formConfig = safeJSONParse<FormProperties>(
+      getSchema({
+        cleanRules: true,
+      })
+    );
     if (!formConfig) {
       toast.error(<ErrorSaving errorCode={FormServerErrorCodes.JSON_PARSE} />, "wide");
       return;

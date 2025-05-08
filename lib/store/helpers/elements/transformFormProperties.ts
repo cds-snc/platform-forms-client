@@ -35,7 +35,7 @@ export const transformFormProperties = (
     return {} as FormProperties;
   }
 
-  const transformedForm = { ...form };
+  const transformedForm = JSON.parse(JSON.stringify(form)) as FormProperties;
 
   transformedForm.elements.forEach((element) => {
     if (options && options.cleanRules) {
