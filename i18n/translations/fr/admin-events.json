@@ -4,7 +4,7 @@
   "event": "Evénement",
   "subject": "Sujet",
   "description": "Description",
-  "email_or_id": "Courriel ou ID",
+  "email_or_id": "Courriel ou Identifiant du formulaire",
   "search": "Rechercher",
   "user_id": "ID de l'utilisateur",
   "form_id": "ID de formulaire"
