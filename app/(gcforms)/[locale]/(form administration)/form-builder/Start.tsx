@@ -55,10 +55,8 @@ export const Start = () => {
           target.value = "";
           return;
         }
-        // const data = safeJSONParse<FormProperties>(result, cleaner);
-        const data = transformFormProperties(safeJSONParse<FormProperties>(result, cleaner), {
-          cleanRules: false,
-        });
+
+        const data = transformFormProperties(safeJSONParse<FormProperties>(result, cleaner));
 
         if (data && !validateUniqueQuestionIds(data.elements)) {
           setErrors([{ message: t("startErrorDuplicateQuestionId") }]);

@@ -1,11 +1,8 @@
+import { type TemplateStore } from "../../types";
 import { FormElement, FormProperties } from "@gcforms/types";
 import { cleanRules } from "@lib/formContext";
 import { logMessage } from "@lib/logger";
 import { v4 as uuid } from "uuid";
-
-export type transformFormPropertiesOptions = {
-  cleanRules: boolean;
-};
 
 const cleanElementRules = (elements: FormElement[], element: FormElement) => {
   if (element.properties?.conditionalRules) {
@@ -21,6 +18,27 @@ const cleanElementRules = (elements: FormElement[], element: FormElement) => {
   }
 };
 
+const ensureUUID = (element: FormElement) => {
+  if (element.uuid === undefined) {
+    element.uuid = uuid();
+  }
+};
+
+export const transformFormProperties = (form?: FormProperties): FormProperties => {
+  if (!form) {
+    return {} as FormProperties;
+  }
+
+  const transformedForm = JSON.parse(JSON.stringify(form)) as FormProperties;
+
+  transformedForm.elements.forEach((element) => {
+    cleanElementRules(transformedForm.elements, element);
+    ensureUUID(element);
+  });
+
+  return transformedForm;
+};
+
 export const hasCleanedRules = (elements: FormElement[], element: FormElement) => {
   if (element.properties?.conditionalRules) {
     const elementRules = element.properties.conditionalRules;
@@ -34,28 +52,18 @@ export const hasCleanedRules = (elements: FormElement[], element: FormElement) =
   return;
 };
 
-const ensureUUID = (element: FormElement) => {
-  if (element.uuid === undefined) {
-    element.uuid = uuid();
-  }
-};
+export const transform: TemplateStore<"transform"> = (set) => () => {
+  set((state) => {
+    state.form.elements.forEach((element, index) => {
+      if (element.uuid === undefined) {
+        state.form.elements[index] = { ...element, uuid: uuid() };
+      }
 
-export const transformFormProperties = (
-  form?: FormProperties,
-  options?: transformFormPropertiesOptions
-): FormProperties => {
-  if (!form) {
-    return {} as FormProperties;
-  }
+      const rules = hasCleanedRules(state.form.elements, element);
 
-  const transformedForm = JSON.parse(JSON.stringify(form)) as FormProperties;
-
-  transformedForm.elements.forEach((element) => {
-    if (options && options.cleanRules) {
-      cleanElementRules(transformedForm.elements, element);
-    }
-    ensureUUID(element);
+      if (rules) {
+        state.form.elements[index].properties.conditionalRules = rules;
+      }
+    });
   });
-
-  return transformedForm;
 };
