@@ -561,7 +561,7 @@ export async function updateTemplate(command: UpdateTemplateCommand): Promise<Fo
   command.deliveryOption &&
     logEvent(
       user.id,
-      { type: "DeliveryOption", id: command.formID },
+      { type: "Form", id: command.formID },
       "ChangeDeliveryOption",
       `Change Delivery Option to: ${Object.keys(command.deliveryOption)
         .map((key) => `${key}: ${command.deliveryOption && command.deliveryOption[key]}`)
@@ -570,7 +570,7 @@ export async function updateTemplate(command: UpdateTemplateCommand): Promise<Fo
   command.securityAttribute &&
     logEvent(
       user.id,
-      { type: "SecurityAttribute", id: command.formID },
+      { type: "Form", id: command.formID },
       "ChangeSecurityAttribute",
       `Updated security attribute to ${command.securityAttribute}`
     );
