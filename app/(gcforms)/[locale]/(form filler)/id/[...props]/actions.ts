@@ -35,18 +35,6 @@ export async function submitForm(
   formRecordOrId: PublicFormRecord | string,
   captchaToken?: string | undefined
 ): Promise<{ id: string; submissionId?: string; error?: Error }> {
-  // const captchaEnabled = await checkOne(FeatureFlags.hCaptcha);
-  // if (captchaEnabled) {
-  //   const captchaVerified = await verifyHCaptchaToken(captchaToken || "");
-  //   if (CAPTCHA_BLOCKABLE_MODE && !captchaVerified) {
-  //     const err = new Error(FormStatus.CAPTCHA_VERIFICATION_ERROR);
-  //     logMessage.error(
-  //       `SubmitForm threw a failed captcha verification error. err=${err}, err.message=${err.message}`
-  //     );
-  //     throw err;
-  //   }
-  // }
-
   const formId = typeof formRecordOrId === "string" ? formRecordOrId : formRecordOrId.id;
 
   try {
@@ -67,17 +55,11 @@ export async function submitForm(
     if (captchaEnabled) {
       const captchaVerified = await verifyHCaptchaToken(captchaToken || "");
       if (CAPTCHA_BLOCKABLE_MODE && !captchaVerified) {
-        logMessage.error(
-          `Captcha verification error. err=${{
-            name: FormStatus.CAPTCHA_VERIFICATION_ERROR,
-            message: "Captcha failed verification",
-          }}`
-        );
         return {
           id: formId,
           error: {
             name: FormStatus.CAPTCHA_VERIFICATION_ERROR,
-            message: "Captcha failed verification",
+            message: "Captcha verification failure",
           },
         };
       }
