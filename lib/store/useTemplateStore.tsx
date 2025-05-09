@@ -144,7 +144,6 @@ const createTemplateStore = (initProps?: Partial<InitialTemplateStoreProps>) => 
             updateSecurityAttribute: (value) => set({ securityAttribute: value }),
             resetDeliveryOption: () => set({ deliveryOption: undefined }),
           }),
-
           storageOptions
         )
       )

@@ -50,6 +50,7 @@ export enum AuditLogEvent {
   CreateSetting = "CreateSetting",
   DeleteSetting = "DeleteSetting",
   AccessDenied = "AccessDenied",
+  UpdateNotificationsInterval = "UpdateNotificationsInterval",
   // API Management
   CreateAPIKey = "CreateAPIKey",
   DeleteAPIKey = "DeleteAPIKey",

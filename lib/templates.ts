@@ -22,6 +22,8 @@ import { isValidISODate } from "./utils/date/isValidISODate";
 import { validateTemplate } from "@lib/utils/form-builder/validate";
 import { dateHasPast } from "@lib/utils";
 import { validateTemplateSize } from "@lib/utils/validateTemplateSize";
+import { NotificationsInterval } from "packages/types/src/form-types";
+import { validateNotificationsInterval } from "app/(gcforms)/[locale]/(form filler)/id/[...props]/lib/notifications";
 
 // ******************************************
 // Internal Module Functions
@@ -46,6 +48,7 @@ const _parseTemplate = (template: {
   closingDate?: Date | null;
   closedDetails?: Prisma.JsonValue | null;
   saveAndResume: boolean;
+  notificationsInterval?: number | null;
 }): FormRecord => {
   return {
     id: template.id,
@@ -79,6 +82,7 @@ const _parseTemplate = (template: {
     }),
     closedDetails: template.closedDetails as ClosedDetails,
     saveAndResume: template.saveAndResume,
+    notificationsInterval: template.notificationsInterval as NotificationsInterval,
   };
 };
 
@@ -96,6 +100,7 @@ export type CreateTemplateCommand = {
   publishReason?: string;
   publishFormType?: string;
   publishDesc?: string;
+  notificationsInterval?: NotificationsInterval;
 };
 
 export type UpdateTemplateCommand = {
@@ -108,6 +113,7 @@ export type UpdateTemplateCommand = {
   publishReason?: string;
   publishFormType?: string;
   publishDesc?: string;
+  notificationsInterval?: NotificationsInterval;
 };
 
 export class InvalidFormConfigError extends Error {
@@ -187,6 +193,9 @@ export async function createTemplate(command: CreateTemplateCommand): Promise<Fo
           connect: { id: command.userID },
         },
         ...(command.formPurpose && { formPurpose: command.formPurpose }),
+        ...(command.notificationsInterval !== undefined && {
+          notificationsInterval: command.notificationsInterval,
+        }),
       },
       select: {
         id: true,
@@ -202,6 +211,7 @@ export async function createTemplate(command: CreateTemplateCommand): Promise<Fo
         publishFormType: true,
         publishDesc: true,
         saveAndResume: true,
+        notificationsInterval: true,
       },
     })
     .catch((e) => prismaErrors(e, null));
@@ -248,6 +258,7 @@ export async function getAllTemplates(options?: {
           publishFormType: true,
           publishDesc: true,
           saveAndResume: true,
+          notificationsInterval: true,
         },
         ...(sortByDateUpdated && {
           orderBy: {
@@ -308,6 +319,7 @@ export async function getAllTemplatesForUser(
           publishFormType: true,
           publishDesc: true,
           saveAndResume: true,
+          notificationsInterval: true,
         },
         ...(sortByDateUpdated && {
           orderBy: {
@@ -371,6 +383,7 @@ export async function getPublicTemplateByID(formID: string): Promise<PublicFormR
           closedDetails: true,
           saveAndResume: true,
           ttl: true,
+          notificationsInterval: true,
         },
       })
       .catch((e) => prismaErrors(e, null));
@@ -540,6 +553,9 @@ export async function updateTemplate(command: UpdateTemplateCommand): Promise<Fo
           securityAttribute: command.securityAttribute as string,
         }),
         ...(command.formPurpose && { formPurpose: command.formPurpose }),
+        ...(command.notificationsInterval !== undefined && {
+          notificationsInterval: command.notificationsInterval as NotificationsInterval,
+        }),
       },
       include: {
         deliveryOption: true,
@@ -956,6 +972,7 @@ export async function updateAssignedUsersForTemplate(
         publishDesc: true,
         users: true,
         saveAndResume: true,
+        notificationsInterval: true,
       },
     })
     .catch((e) => prismaErrors(e, null));
@@ -1050,6 +1067,7 @@ export async function updateFormPurpose(
         publishFormType: true,
         publishReason: true,
         saveAndResume: true,
+        notificationsInterval: true,
       },
     })
     .catch((e) => {
@@ -1109,6 +1127,7 @@ export async function updateFormSaveAndResume(
         publishFormType: true,
         publishReason: true,
         saveAndResume: true,
+        notificationsInterval: true,
       },
     })
     .catch((e) => {
@@ -1177,6 +1196,7 @@ export async function updateResponseDeliveryOption(
         publishFormType: true,
         publishDesc: true,
         saveAndResume: true,
+        notificationsInterval: true,
       },
     })
     .catch((e) => {
@@ -1286,6 +1306,7 @@ export async function deleteTemplate(formID: string): Promise<FormRecord | null>
         publishFormType: true,
         publishDesc: true,
         saveAndResume: true,
+        notificationsInterval: true,
       },
     })
     .catch((e) => prismaErrors(e, null));
@@ -1407,6 +1428,7 @@ export const updateSecurityAttribute = async (formID: string, securityAttribute:
         publishFormType: true,
         publishDesc: true,
         saveAndResume: true,
+        notificationsInterval: true,
       },
     })
     .catch((e) => prismaErrors(e, null));
@@ -1453,4 +1475,41 @@ export const checkIfClosed = async (formId: string) => {
   } catch (e) {
     return null;
   }
+};
+
+export const updateNotificationsSetting = async (
+  formId: string,
+  notificationsInterval: NotificationsInterval
+) => {
+  const { user } = await authorization.canEditForm(formId).catch((e) => {
+    logEvent(
+      e.user.id,
+      { type: "Form", id: formId },
+      "AccessDenied",
+      "Attempted to update notifications interval for Form"
+    );
+    throw e;
+  });
+
+  if (!validateNotificationsInterval(notificationsInterval)) {
+    throw new Error(`Invalid notifications interval: ${notificationsInterval}`);
+  }
+
+  await prisma.template
+    .update({
+      where: {
+        id: formId,
+      },
+      data: {
+        notificationsInterval,
+      },
+    })
+    .catch((e) => prismaErrors(e, null));
+
+  logEvent(
+    user.id,
+    { type: "Form" },
+    "UpdateNotificationsInterval",
+    `User :${user.id} updated notifications interval on form ${formId} to ${notificationsInterval}`
+  );
 };
