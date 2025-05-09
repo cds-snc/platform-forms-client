@@ -302,6 +302,10 @@ export const Form = withFormik<FormProps, Responses>({
           formikBag.setStatus(FormStatus.FILE_ERROR);
         } else if (result.error.name === FormStatus.FORM_CLOSED_ERROR) {
           formikBag.setStatus(FormStatus.FORM_CLOSED_ERROR);
+        } else if (result.error.name === FormStatus.CAPTCHA_VERIFICATION_ERROR) {
+          logMessage.info("Showing Captcha fail screen for failed Captcha verification");
+          formikBag.setStatus(FormStatus.CAPTCHA_VERIFICATION_ERROR);
+          formikBag.props.setCaptchaFail && formikBag.props.setCaptchaFail(true);
         } else {
           formikBag.setStatus(FormStatus.ERROR);
         }
@@ -309,28 +313,27 @@ export const Form = withFormik<FormProps, Responses>({
         formikBag.props.onSuccess(result.id, result?.submissionId);
       }
     } catch (err) {
-      logMessage.info(`====================================================`);
-      logMessage.info(`Error: ${JSON.stringify(err)}`);
-      logMessage.info(
-        `error.message=${(err as Error).message}, FormStatus.CAPTCHA_VERIFICATION_ERROR=${
-          FormStatus.CAPTCHA_VERIFICATION_ERROR
-        }, (err as Error).message === FormStatus.CAPTCHA_VERIFICATION_ERROR ${
-          (err as Error).message === FormStatus.CAPTCHA_VERIFICATION_ERROR
-        }`
-      );
+      // logMessage.info(`====================================================`);
+      // logMessage.info(`Error: ${JSON.stringify(err)}`);
+      // logMessage.info(
+      //   `error.message=${(err as Error).message}, FormStatus.CAPTCHA_VERIFICATION_ERROR=${
+      //     FormStatus.CAPTCHA_VERIFICATION_ERROR
+      //   }, (err as Error).message === FormStatus.CAPTCHA_VERIFICATION_ERROR ${
+      //     (err as Error).message === FormStatus.CAPTCHA_VERIFICATION_ERROR
+      //   }`
+      // );
       // Captcha found a likely bot, show the Captcha fail screen
-      if ((err as Error).message === FormStatus.CAPTCHA_VERIFICATION_ERROR) {
-        logMessage.info(`In Captcha verification error: ${JSON.stringify(err)}`);
-        logMessage.info(`====================================================`);
-        formikBag.setStatus(FormStatus.CAPTCHA_VERIFICATION_ERROR);
-        logMessage.info("Captcha verification failed - showing Captcha fail screen");
-        formikBag.props.setCaptchaFail && formikBag.props.setCaptchaFail(true);
-        return;
-      }
-
-      logMessage.info(
-        `~~~~~~Skipped Captcha verification error  and showing a regular error message`
-      );
+      // if ((err as Error).message === FormStatus.CAPTCHA_VERIFICATION_ERROR) {
+      //   logMessage.info(`In Captcha verification error: ${JSON.stringify(err)}`);
+      //   logMessage.info(`====================================================`);
+      //   formikBag.setStatus(FormStatus.CAPTCHA_VERIFICATION_ERROR);
+      //   logMessage.info("Captcha verification failed - showing Captcha fail screen");
+      //   formikBag.props.setCaptchaFail && formikBag.props.setCaptchaFail(true);
+      //   return;
+      // }
+      // logMessage.info(
+      //   `~~~~~~Skipped Captcha verification error  and showing a regular error message`
+      // );
       logMessage.error(err as Error);
       formikBag.setStatus("Error");
     } finally {
