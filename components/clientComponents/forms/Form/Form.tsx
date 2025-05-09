@@ -309,18 +309,30 @@ export const Form = withFormik<FormProps, Responses>({
         formikBag.props.onSuccess(result.id, result?.submissionId);
       }
     } catch (err) {
+      logMessage.info(`====================================================`);
+      logMessage.info(`Error: ${JSON.stringify(err)}`);
+      logMessage.info(
+        `error.message=${(err as Error).message}, FormStatus.CAPTCHA_VERIFICATION_ERROR=${
+          FormStatus.CAPTCHA_VERIFICATION_ERROR
+        }, (err as Error).message === FormStatus.CAPTCHA_VERIFICATION_ERROR ${
+          (err as Error).message === FormStatus.CAPTCHA_VERIFICATION_ERROR
+        }`
+      );
       // Captcha found a likely bot, show the Captcha fail screen
       if ((err as Error).message === FormStatus.CAPTCHA_VERIFICATION_ERROR) {
+        logMessage.info(`In Captcha verification error: ${JSON.stringify(err)}`);
+        logMessage.info(`====================================================`);
         formikBag.setStatus(FormStatus.CAPTCHA_VERIFICATION_ERROR);
         logMessage.info("Captcha verification failed - showing Captcha fail screen");
         formikBag.props.setCaptchaFail && formikBag.props.setCaptchaFail(true);
-
-        // TEST - would fall through before only on staging
-        // return;
-      } else {
-        logMessage.error(err as Error);
-        formikBag.setStatus("Error");
+        return;
       }
+
+      logMessage.info(
+        `~~~~~~Skipped Captcha verification error  and showing a regular error message`
+      );
+      logMessage.error(err as Error);
+      formikBag.setStatus("Error");
     } finally {
       if (formikBag.props && !formikBag.props.isPreview) {
         ga("form_submission_trigger", {
