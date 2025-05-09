@@ -14,7 +14,9 @@ import { serverTranslation } from "@i18n";
 import { ClosingNotice } from "@clientComponents/forms/ClosingNotice/ClosingNotice";
 import { FormDelayProvider } from "@lib/hooks/useFormDelayContext";
 import { ResumeForm } from "@clientComponents/forms/ResumeForm/ResumeForm";
-import { getAppSetting } from "@lib/appSettings";
+// import { getSomeFlags } from "@lib/cache/flags";
+// import { FeatureFlags } from "@lib/cache/types";
+// import { getAppSetting } from "@lib/appSettings";
 import { GcdsH1 } from "@serverComponents/globals/GcdsH1";
 import { headers } from "next/headers";
 import { Footer } from "@serverComponents/globals/Footer";
@@ -52,7 +54,9 @@ export default async function Page(props0: {
 
   const { locale, props } = params;
 
-  const hCaptchaSiteKey = (await getAppSetting("hCaptchaSiteKey")) || "";
+  // const hCaptchaSiteKey = (await getAppSetting("hCaptchaSiteKey")) || "";
+  // TEMP hardcoded - do not merge
+  const hCaptchaSiteKey = "72924bde-40f6-4f84-b86a-85ca705ce0c6";
 
   const formId = props[0];
   const step = props[1] ?? "";
