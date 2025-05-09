@@ -522,7 +522,7 @@
     "tags": {
       "title": "Additional tags",
       "description": "Flexible labels to add metadata to form elements so that related questions can be categorized or so that data can be transformed.",
-      "errorTagTooLong": "Tag must be no longer than 50 characters."
+      "errorTagTooLong": "Tag cannot exceed 50 characters"
     }
   },
   "moreOptions": "More options",
