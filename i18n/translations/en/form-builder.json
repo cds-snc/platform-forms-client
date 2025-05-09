@@ -714,15 +714,15 @@
       "email": {
         "singleSubmission": {
           "subject": "New form response | Nouvelle réponse au formulaire",
-          "paragraph1": "Your form: **{{title}}** has one new response to retrieve.",
-          "paragraph2": "Go to GC Forms",
-          "paragraph3": "Turn off notifications for responses for this form"
+          "paragraph1": "Your form received a new submission:",
+          "paragraph2": "Retrieve response from GC Forms",
+          "paragraph3": "If you'd like to turn off notifications for new responses, go to Settings > Form management."
         },
         "multipleSubmissions": {
           "subject": "New form responses | Nouvelles réponses au formulaire",
-          "paragraph1": "Your form: **{{title}}** has new responses to retrieve",
-          "paragraph2": "Go to GC Forms",
-          "paragraph3": "Turn off notifications for responses for this form"
+          "paragraph1": "Your form received new submissions:",
+          "paragraph2": "Retrieve responses from GC Forms",
+          "paragraph3": "If you'd like to turn off notifications for new responses, go to Settings > Form management."
         }
       },
       "savedSuccessMessage": "Your changes have been saved.",
