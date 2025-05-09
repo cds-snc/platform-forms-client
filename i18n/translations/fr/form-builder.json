@@ -725,6 +725,7 @@
           "paragraph3": "[FR]Turn off notifications for responses for this form"
         }
       },
+      "savedSuccessMessage": "[FR] Your changes have been saved.",
       "errors": {
         "updateNotificationsInterval": "[FR]There was an error updating notifications. Please try again later."
       }

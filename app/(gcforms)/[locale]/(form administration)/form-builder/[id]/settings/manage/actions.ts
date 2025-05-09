@@ -72,12 +72,14 @@ export const resetThrottlingRate = AuthenticatedAction(async (session, formId: s
 
 export const updateNotificationsInterval = AuthenticatedAction(
   async (session, formId: string, notificationsInterval: NotificationsInterval) => {
-    Promise.all([
-      updateNotificationsSetting(formId, notificationsInterval),
-      // Remove old cache value to allow a new one with the new ttl to be created when the next submission is sent
-      removeMarker(formId),
-    ]).catch((_) => {
-      throw { error: "There was an error. Please try again later." } as ServerActionError;
-    });
+    try {
+      await Promise.all([
+        updateNotificationsSetting(formId, notificationsInterval),
+        // Remove old cache value to allow a new one with the new ttl to be created when the next submission is sent
+        removeMarker(formId),
+      ]);
+    } catch (_) {
+      return { error: "There was an error. Please try again later." } as ServerActionError;
+    }
   }
 );

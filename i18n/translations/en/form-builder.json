@@ -725,6 +725,7 @@
           "paragraph3": "Turn off notifications for responses for this form"
         }
       },
+      "savedSuccessMessage": "Your changes have been saved.",
       "errors": {
         "updateNotificationsInterval": "There was an error updating notifications. Please try again later."
       }

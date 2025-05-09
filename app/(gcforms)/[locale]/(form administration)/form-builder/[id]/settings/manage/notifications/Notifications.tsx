@@ -36,6 +36,9 @@ export const Notifications = ({
   const updateNotificationsIntervalError = t(
     "settings.notifications.errors.updateNotificationsInterval"
   );
+
+  const updateNotificationsIntervalSuccess = t("settings.notifications.savedSuccessMessage");
+
   const saveNotificationsValue = useCallback(async () => {
     const newNotificationsInterval: NotificationsInterval =
       notificationValue === String(NotificationsInterval.DAY)
@@ -48,10 +51,20 @@ export const Notifications = ({
         action: "disabled",
       });
     }
-    await updateNotificationsInterval(formId, newNotificationsInterval).catch(() =>
-      toast.error(updateNotificationsIntervalError)
-    );
-  }, [formId, notificationValue, updateNotificationsIntervalError]);
+
+    const result = await updateNotificationsInterval(formId, newNotificationsInterval);
+
+    if (result && result.error) {
+      toast.error(updateNotificationsIntervalError);
+    } else {
+      toast.success(updateNotificationsIntervalSuccess);
+    }
+  }, [
+    formId,
+    notificationValue,
+    updateNotificationsIntervalError,
+    updateNotificationsIntervalSuccess,
+  ]);
 
   return (
     <div className="mb-10" data-testid="form-notifications">
