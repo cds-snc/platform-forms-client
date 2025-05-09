@@ -16,3 +16,8 @@ export type FileInputResponse = {
   size: number | null;
   based64EncodedFile: string | null;
 };
+
+export type TaggedResponse = {
+  tag: string;
+  answer: Response;
+};
