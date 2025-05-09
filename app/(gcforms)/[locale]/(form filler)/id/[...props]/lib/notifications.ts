@@ -25,6 +25,13 @@ export const sendNotification = async (formId: string, titleEn: string, titleFr:
 
   const notificationsInterval =
     usersAndNotifications.notificationsInterval as NotificationsInterval;
+  if (!validateNotificationsInterval(notificationsInterval)) {
+    logMessage.error(
+      `sendNotification template ${formId} has an invalid notificationsInterval ${notificationsInterval}`
+    );
+    return;
+  }
+
   // Notifcations are turned off, do nothing
   if (!notificationsInterval) {
     return;
@@ -52,10 +59,10 @@ export const sendNotification = async (formId: string, titleEn: string, titleFr:
 };
 
 export const validateNotificationsInterval = (notificationsInterval: NotificationsInterval) => {
-  let isValid = true;
+  let isValid = false;
   Object.values(NotificationsInterval).forEach((interval) => {
     if (notificationsInterval !== interval) {
-      isValid = false;
+      isValid = true;
     }
   });
   return isValid;
